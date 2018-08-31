@@ -193,7 +193,7 @@ void MarginView::PaintMargin(Surface *surface, int topLine, PRectangle rc, PRect
 
 	Point ptOrigin = model.GetVisibleOriginInMain();
 	FontAlias fontLineNumber = vs.styles[STYLE_LINENUMBER].font;
-	for (int margin = 0; margin <= SC_MAX_MARGIN; margin++) {
+	for (size_t margin = 0; margin < vs.ms.size(); margin++) {
 		if (vs.ms[margin].width > 0) {
 
 			rcSelMargin.left = rcSelMargin.right;
@@ -215,6 +215,9 @@ void MarginView::PaintMargin(Surface *surface, int topLine, PRectangle rc, PRect
 						break;
 					case SC_MARGIN_FORE:
 						colour = vs.styles[STYLE_DEFAULT].fore;
+						break;
+					case SC_MARGIN_COLOUR:
+						colour = vs.ms[margin].back;
 						break;
 					default:
 						colour = vs.styles[STYLE_LINENUMBER].back;

@@ -127,8 +127,7 @@ enum wxPosixPermissions
       ( \
         defined(__VISUALC__) || \
         defined(__MINGW64_TOOLCHAIN__) || \
-        (defined(__MINGW32__) && !defined(__WINE__) && \
-                                wxCHECK_W32API_VERSION(0, 5)) || \
+        (defined(__MINGW32__) && !defined(__WINE__)) || \
         defined(__BORLANDC__) \
       )
 
@@ -293,8 +292,12 @@ enum wxPosixPermissions
             #define wxCRT_OpenW       _wopen
         #endif
 
+        wxDECL_FOR_STRICT_MINGW32(int, _wopen, (const wchar_t*, int, ...))
+        wxDECL_FOR_STRICT_MINGW32(int, _waccess, (const wchar_t*, int))
+        wxDECL_FOR_STRICT_MINGW32(int, _wchmod, (const wchar_t*, int))
         wxDECL_FOR_STRICT_MINGW32(int, _wmkdir, (const wchar_t*))
         wxDECL_FOR_STRICT_MINGW32(int, _wrmdir, (const wchar_t*))
+        wxDECL_FOR_STRICT_MINGW32(int, _wstati64, (const wchar_t*, struct _stati64*))
 
         #define   wxCRT_AccessW     _waccess
         #define   wxCRT_ChmodW      _wchmod
@@ -592,7 +595,7 @@ WXDLLIMPEXP_BASE bool wxIsExecutable(const wxString &path);
 #elif defined(__MAC__)
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_MAC
   #define wxPATH_SEP          wxPATH_SEP_MAC
-#else   // Windows and OS/2
+#else   // Windows
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_DOS
   #define wxPATH_SEP          wxPATH_SEP_DOS
 #endif  // Unix/Windows
@@ -601,7 +604,7 @@ WXDLLIMPEXP_BASE bool wxIsExecutable(const wxString &path);
 // filename1.IsSameAs(filename2, wxARE_FILENAMES_CASE_SENSITIVE)
 #if defined(__UNIX__) && !defined(__DARWIN__)
   #define wxARE_FILENAMES_CASE_SENSITIVE  true
-#else   // Windows, Mac OS and OS/2
+#else   // Windows and OSX
   #define wxARE_FILENAMES_CASE_SENSITIVE  false
 #endif  // Unix/Windows
 

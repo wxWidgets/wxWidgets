@@ -56,9 +56,10 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog);
 
 - (id)init
 {
-    self = [super init];
-    m_bIsClosed = false;
-
+    if ( self = [super init] )
+    {
+        m_bIsClosed = false;
+    }
     return self;
 }
 
@@ -105,7 +106,7 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
     NSAutoreleasePool *thePool;
     thePool = [[NSAutoreleasePool alloc] init];
 
-    [[NSColorPanel sharedColorPanel] setShowsAlpha:YES];
+    [[NSColorPanel sharedColorPanel] setShowsAlpha:m_colourData.GetChooseAlpha() ? YES : NO];
     if(m_colourData.GetColour().IsOk())
         [[NSColorPanel sharedColorPanel] setColor:m_colourData.GetColour().OSXGetNSColor()];
     else
@@ -139,7 +140,7 @@ int wxColourDialog::ShowModal()
             //
             //	Start the color panel modal loop
             //
-            wxDialog::OSXBeginModalDialog();
+            OSXBeginModalDialog();
             NSModalSession session = [NSApp beginModalSessionForWindow:theColorPanel];
             for (;;)
             {
@@ -150,7 +151,7 @@ int wxColourDialog::ShowModal()
                     break;
             }
             [NSApp endModalSession:session];
-            wxDialog::OSXEndModalDialog();
+            OSXEndModalDialog();
 
     //free up the memory for the delegates - we don't need them anymore
     [theColorPanel setDelegate:nil];

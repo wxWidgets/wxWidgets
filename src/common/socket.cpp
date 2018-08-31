@@ -135,7 +135,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxSocketEvent, wxEvent);
 namespace
 {
 
-void SetTimeValFromMS(timeval& tv, unsigned long ms)
+void SetTimeValFromMS(wxTimeVal_t& tv, unsigned long ms)
 {
     tv.tv_sec  = (ms / 1000);
     tv.tv_usec = (ms % 1000) * 1000;
@@ -928,6 +928,14 @@ wxSocketError wxSocketBase::LastError() const
     return m_impl->GetError();
 }
 
+/* static */
+int wxSocketBase::GetBlockingFlagIfNeeded()
+{
+    return wxIsMainThread() && wxApp::IsMainLoopRunning()
+            ? wxSOCKET_NONE
+            : wxSOCKET_BLOCK;
+}
+
 // --------------------------------------------------------------------------
 // Basic IO calls
 // --------------------------------------------------------------------------
@@ -1296,12 +1304,12 @@ wxSocketBase& wxSocketBase::Discard()
     and it will return a mask indicating which operations can be performed.
  */
 wxSocketEventFlags wxSocketImpl::Select(wxSocketEventFlags flags,
-                                        const timeval *timeout)
+                                        wxTimeVal_t *timeout)
 {
     if ( m_fd == INVALID_SOCKET )
         return (wxSOCKET_LOST_FLAG & flags);
 
-    struct timeval tv;
+    wxTimeVal_t tv;
     if ( timeout )
         tv = *timeout;
     else
@@ -1494,7 +1502,7 @@ wxSocketBase::DoWait(long timeout, wxSocketEventFlags flags)
         else // no event loop or waiting in another thread
         {
             // as explained below, we should always check for wxSOCKET_LOST_FLAG
-            timeval tv;
+            wxTimeVal_t tv;
             SetTimeValFromMS(tv, timeLeft);
             events = m_impl->Select(flags | wxSOCKET_LOST_FLAG, &tv);
         }
@@ -1966,6 +1974,15 @@ bool wxSocketBase::SetLocal(const wxIPV4address& local)
 wxSocketClient::wxSocketClient(wxSocketFlags flags)
               : wxSocketBase(flags, wxSOCKET_CLIENT)
 {
+    // Notice that we don't check for a running event loop here, unlike in
+    // GetBlockingFlagIfNeeded() because it is common to create the sockets
+    // before the event loop is entered and we shouldn't break existing code
+    // doing this as it can still work correctly if it only uses non-blocking
+    // sockets once the event loop is running.
+    wxASSERT_MSG( (flags & wxSOCKET_BLOCK) || wxIsMainThread(),
+                  wxS("Non-blocking sockets may only be created ")
+                  wxS("in the main thread") );
+
     m_initialRecvBufferSize =
     m_initialSendBufferSize = -1;
 }

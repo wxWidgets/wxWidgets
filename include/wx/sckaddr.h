@@ -159,14 +159,14 @@ public:
     wxIPV6address(const wxIPV6address& other) : wxIPaddress(other) { }
 
     // implement wxSockAddress pure virtuals:
-    virtual Family Type() { return IPV6; }
-    virtual wxSockAddress *Clone() const { return new wxIPV6address(*this); }
+    virtual Family Type() wxOVERRIDE { return IPV6; }
+    virtual wxSockAddress *Clone() const wxOVERRIDE { return new wxIPV6address(*this); }
 
 
     // implement wxIPaddress pure virtuals:
-    virtual bool IsLocalHost() const;
+    virtual bool IsLocalHost() const wxOVERRIDE;
 
-    virtual wxString IPAddress() const;
+    virtual wxString IPAddress() const wxOVERRIDE;
 
     // IPv6-specific methods:
     bool Hostname(unsigned char addr[16]);
@@ -174,7 +174,7 @@ public:
     using wxIPaddress::Hostname;
 
 private:
-    virtual void DoInitImpl();
+    virtual void DoInitImpl() wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxIPV6address);
 };

@@ -10,7 +10,7 @@
 
 #include "wx/scrolbar.h"
 
-#include <QtWidgets/QScrollBar>
+class QScrollBar;
 
 class WXDLLIMPEXP_FWD_CORE wxQtScrollBar;
 
@@ -42,7 +42,8 @@ public:
                               int range, int pageSize,
                               bool refresh = true);
 
-    virtual QScrollBar* GetHandle() const;
+    QScrollBar *GetQScrollBar() const { return m_qtScrollBar; }
+    QWidget *GetHandle() const;
 
 private:
     QScrollBar *m_qtScrollBar;

@@ -97,6 +97,9 @@ wxStandardPathsBase::wxStandardPathsBase()
     // Derived classes can call this in their constructors
     // to set the platform-specific settings
     UseAppInfo(AppInfo_AppName);
+
+    // Default for compatibility with the existing config files.
+    SetFileLayout(FileLayout_Classic);
 }
 
 wxStandardPathsBase::~wxStandardPathsBase()

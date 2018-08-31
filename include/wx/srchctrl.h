@@ -41,8 +41,8 @@
 
 extern WXDLLIMPEXP_DATA_CORE(const char) wxSearchCtrlNameStr[];
 
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SEARCHCTRL_CANCEL_BTN, wxCommandEvent);
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SEARCHCTRL_SEARCH_BTN, wxCommandEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SEARCH_CANCEL, wxCommandEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SEARCH, wxCommandEvent);
 
 // ----------------------------------------------------------------------------
 // a search ctrl is a text control with a search button and a cancel button
@@ -68,6 +68,9 @@ public:
     virtual void ShowCancelButton( bool show ) = 0;
     virtual bool IsCancelButtonVisible() const = 0;
 
+    virtual void SetDescriptiveText(const wxString& text) = 0;
+    virtual wxString GetDescriptiveText() const = 0;
+
 private:
     // implement wxTextEntry pure virtual method
     virtual wxWindow *GetEditableWindow() wxOVERRIDE { return this; }
@@ -87,13 +90,20 @@ private:
 // macros for handling search events
 // ----------------------------------------------------------------------------
 
-#define EVT_SEARCHCTRL_CANCEL_BTN(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_SEARCHCTRL_CANCEL_BTN, id, wxCommandEventHandler(fn))
+#define EVT_SEARCH_CANCEL(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_SEARCH_CANCEL, id, wxCommandEventHandler(fn))
 
-#define EVT_SEARCHCTRL_SEARCH_BTN(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_SEARCHCTRL_SEARCH_BTN, id, wxCommandEventHandler(fn))
+#define EVT_SEARCH(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_SEARCH, id, wxCommandEventHandler(fn))
 
-// old wxEVT_COMMAND_* constants
+// old synonyms
+#define wxEVT_SEARCHCTRL_CANCEL_BTN wxEVT_SEARCH_CANCEL
+#define wxEVT_SEARCHCTRL_SEARCH_BTN wxEVT_SEARCH
+
+#define EVT_SEARCHCTRL_CANCEL_BTN(id, fn) EVT_SEARCH_CANCEL(id, fn)
+#define EVT_SEARCHCTRL_SEARCH_BTN(id, fn) EVT_SEARCH(id, fn)
+
+// even older wxEVT_COMMAND_* constants
 #define wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN   wxEVT_SEARCHCTRL_CANCEL_BTN
 #define wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN   wxEVT_SEARCHCTRL_SEARCH_BTN
 

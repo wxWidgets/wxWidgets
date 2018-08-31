@@ -30,7 +30,7 @@ wxWidgets currently supports the following primary platforms:
 
 Most popular C++ compilers are supported including but not limited to:
 
-- Microsoft Visual C++ 2003 or later (up to 2015).
+- Microsoft Visual C++ 2003 or later (up to 2017).
 - g++ 3.4 or later, including MinGW/MinGW-64/TDM under Windows.
 - Clang under OS X and Linux.
 - Intel icc compiler.
@@ -45,6 +45,16 @@ is a modified version of LGPL explicitly allowing not distributing the sources
 of an application using the library even in the case of static linking.
 
 
+Building
+--------
+
+For building the library, please see platform-specific documentation under
+`docs/<port>` directory.
+
+If you're building the sources checked out from Git, and not from a released
+versions, please see these additional [Git-specific notes](README-GIT.md).
+
+
 Further information
 -------------------
 
@@ -55,7 +65,7 @@ If you are looking for support, you can get it from
 - [#wxwidgets IRC channel](https://www.wxwidgets.org/support/irc/)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/wxwidgets)
   (tag your questions with `wxwidgets`)
-- Please report bugs at http://trac.wxwidgets.org/newticket
+- Please report bugs at https://trac.wxwidgets.org/newticket
 
 We would also gladly welcome [your contributions](.github/CONTRIBUTING.md).
 

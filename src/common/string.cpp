@@ -1160,10 +1160,10 @@ int wxString::CmpNoCase(const wxString& s) const
 
 wxString wxString::FromAscii(const char *ascii, size_t len)
 {
-    if (!ascii || len == 0)
-       return wxEmptyString;
-
     wxString res;
+
+    if (!ascii || len == 0)
+       return res;
 
     {
         wxStringInternalBuffer buf(res, len);

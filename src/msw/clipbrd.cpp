@@ -37,6 +37,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/dataobj.h"
+    #include "wx/dcmemory.h"
 #endif
 
 #if wxUSE_METAFILE
@@ -52,10 +53,6 @@
 #if wxUSE_WXDIB
     #include "wx/msw/dib.h"
 #endif
-
-// wxDataObject is tied to OLE/drag and drop implementation, therefore so are
-// the functions using wxDataObject in wxClipboard
-//#define wxUSE_DATAOBJ wxUSE_DRAG_AND_DROP
 
 #if wxUSE_OLE
     // use OLE clipboard
@@ -167,6 +164,7 @@ bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
 }
 
 
+#if !wxUSE_OLE_CLIPBOARD
 bool wxSetClipboardData(wxDataFormat dataFormat,
                         const void *data,
                         int width, int height)
@@ -219,9 +217,51 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 if ( bitmap && bitmap->IsOk() )
                 {
                     wxDIB dib(*bitmap);
+
                     if ( dib.IsOk() )
                     {
-                        handle = ::SetClipboardData(CF_DIB, dib.Detach());
+                        DIBSECTION ds;
+                        int n = ::GetObject(dib.GetHandle(), sizeof(DIBSECTION), &ds);
+                        wxASSERT( n == sizeof(DIBSECTION) && ds.dsBm.bmBits );
+                        // Number of colours in the palette.
+                        int numColors;
+                        switch ( ds.dsBmih.biCompression )
+                        {
+                        case BI_BITFIELDS:
+                            numColors = 3;
+                            break;
+                        case BI_RGB:
+                            numColors = ds.dsBmih.biClrUsed;
+                            if ( !numColors )
+                            {
+                                numColors = ds.dsBmih.biBitCount <= 8 ? 1 << ds.dsBmih.biBitCount : 0;
+                            }
+                            break;
+                        default:
+                            numColors = 0;
+                        }
+
+                        unsigned long bmpSize = wxDIB::GetLineSize(ds.dsBmih.biWidth, ds.dsBmih.biBitCount) *
+                                                                   abs(ds.dsBmih.biHeight);
+                        HANDLE hMem;
+                        hMem = ::GlobalAlloc(GHND, ds.dsBmih.biSize + numColors*sizeof(RGBQUAD) + bmpSize);
+                        if ( hMem )
+                        {
+                            char* pDst = (char*)::GlobalLock(hMem);
+                            memcpy(pDst, &ds.dsBmih, ds.dsBmih.biSize);
+                            pDst += ds.dsBmih.biSize;
+                            if ( numColors > 0 )
+                            {
+                                // Get colour table.
+                                MemoryHDC hDC;
+                                SelectInHDC sDC(hDC, dib.GetHandle());
+                                ::GetDIBColorTable(hDC, 0, numColors, (RGBQUAD*)pDst);
+                                pDst += numColors*sizeof(RGBQUAD);
+                            }
+                            memcpy(pDst, dib.GetData(), bmpSize);
+                            ::GlobalUnlock(hMem);
+                            handle = ::SetClipboardData(CF_DIB, hMem);
+                        }
                     }
                 }
                 break;
@@ -296,6 +336,22 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 handle = SetClipboardData(dataFormat, hGlobalMemory);
                 break;
             }
+
+        case wxDF_UNICODETEXT:
+            {
+                LPWSTR s = (LPWSTR)data;
+                DWORD size = sizeof(WCHAR) * (lstrlenW(s) + 1);
+                HANDLE hGlobalMemory = ::GlobalAlloc(GHND, size);
+                if ( hGlobalMemory )
+                {
+                    LPWSTR lpGlobalMemory = (LPWSTR)::GlobalLock(hGlobalMemory);
+                    memcpy(lpGlobalMemory, s, size);
+                    ::GlobalUnlock(hGlobalMemory);
+                }
+
+                handle = ::SetClipboardData(CF_UNICODETEXT, hGlobalMemory);
+            }
+            break;
 
         case wxDF_HTML:
             {
@@ -375,126 +431,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
 
     return true;
 }
-
-void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
-{
-    void *retval = NULL;
-
-    switch ( dataFormat )
-    {
-        case wxDF_BITMAP:
-            {
-                BITMAP bm;
-                HBITMAP hBitmap = (HBITMAP) GetClipboardData(CF_BITMAP);
-                if (!hBitmap)
-                    break;
-
-                HDC hdcMem = CreateCompatibleDC((HDC) NULL);
-                HDC hdcSrc = CreateCompatibleDC((HDC) NULL);
-
-                HBITMAP old = (HBITMAP) ::SelectObject(hdcSrc, hBitmap);
-                GetObject(hBitmap, sizeof(BITMAP), (LPSTR)&bm);
-
-                HBITMAP hNewBitmap = CreateBitmapIndirect(&bm);
-
-                if (!hNewBitmap)
-                {
-                    SelectObject(hdcSrc, old);
-                    DeleteDC(hdcMem);
-                    DeleteDC(hdcSrc);
-                    break;
-                }
-
-                HBITMAP old1 = (HBITMAP) SelectObject(hdcMem, hNewBitmap);
-                BitBlt(hdcMem, 0, 0, bm.bmWidth, bm.bmHeight,
-                       hdcSrc, 0, 0, SRCCOPY);
-
-                // Select new bitmap out of memory DC
-                SelectObject(hdcMem, old1);
-
-                // Clean up
-                SelectObject(hdcSrc, old);
-                DeleteDC(hdcSrc);
-                DeleteDC(hdcMem);
-
-                // Create and return a new wxBitmap
-                wxBitmap *wxBM = new wxBitmap;
-                wxBM->SetHBITMAP((WXHBITMAP) hNewBitmap);
-                wxBM->SetWidth(bm.bmWidth);
-                wxBM->SetHeight(bm.bmHeight);
-                wxBM->SetDepth(bm.bmPlanes);
-                retval = wxBM;
-                break;
-            }
-        case wxDF_METAFILE:
-        case CF_SYLK:
-        case CF_DIF:
-        case CF_TIFF:
-        case CF_PALETTE:
-        case wxDF_DIB:
-            wxLogError(_("Unsupported clipboard format."));
-            return NULL;
-
-        case wxDF_OEMTEXT:
-            dataFormat = wxDF_TEXT;
-            // fall through
-
-        case wxDF_TEXT:
-            {
-                HANDLE hGlobalMemory = ::GetClipboardData(dataFormat);
-                if (!hGlobalMemory)
-                    break;
-
-                DWORD hsize = ::GlobalSize(hGlobalMemory);
-                if (len)
-                    *len = hsize;
-
-                char *s = new char[hsize];
-                if (!s)
-                    break;
-
-                LPSTR lpGlobalMemory = (LPSTR) GlobalLock(hGlobalMemory);
-
-                memcpy(s, lpGlobalMemory, hsize);
-
-                GlobalUnlock(hGlobalMemory);
-
-                retval = s;
-                break;
-            }
-
-        default:
-            {
-                HANDLE hGlobalMemory = ::GetClipboardData(dataFormat);
-                if ( !hGlobalMemory )
-                    break;
-
-                DWORD size = ::GlobalSize(hGlobalMemory);
-                if ( len )
-                    *len = size;
-
-                void *buf = malloc(size);
-                if ( !buf )
-                    break;
-
-                LPSTR lpGlobalMemory = (LPSTR) GlobalLock(hGlobalMemory);
-
-                memcpy(buf, lpGlobalMemory, size);
-
-                GlobalUnlock(hGlobalMemory);
-
-                retval = buf;
-                break;
-            }
-    }
-
-    if ( !retval )
-    {
-        wxLogSysError(_("Failed to retrieve data from the clipboard."));
-    }
-
-    return retval;
-}
+#endif // !wxUSE_OLE_CLIPBOARD
 
 wxDataFormat wxEnumClipboardFormats(wxDataFormat dataFormat)
 {
@@ -636,6 +573,26 @@ bool wxClipboard::AddData( wxDataObject *data )
 
     wxCHECK_MSG( data, false, wxT("data is invalid") );
 
+    const wxDataFormat format = data->GetPreferredFormat();
+    if ( format == wxDF_BITMAP || format == wxDF_DIB )
+    {
+        wxBitmapDataObject* bmpData = (wxBitmapDataObject*)data;
+        wxBitmap bmp = bmpData->GetBitmap();
+        wxASSERT_MSG( bmp.IsOk(), wxS("Invalid bitmap") );
+        // Replace 0RGB bitmap with its RGB copy
+        // to ensure compatibility with applications
+        // not recognizing bitmaps in 0RGB format.
+        if ( bmp.GetDepth() == 32 && !bmp.HasAlpha() )
+        {
+            wxBitmap bmpRGB(bmp.GetSize(), 24);
+            wxMemoryDC dc(bmpRGB);
+            dc.DrawBitmap(bmp, 0, 0);
+            dc.SelectObject(wxNullBitmap);
+
+            bmpData->SetBitmap(bmpRGB);
+        }
+    }
+
 #if wxUSE_OLE_CLIPBOARD
     HRESULT hr = OleSetClipboard(data->GetInterface());
     if ( FAILED(hr) )
@@ -664,8 +621,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 #elif wxUSE_DATAOBJ
     wxCHECK_MSG( wxIsClipboardOpened(), false, wxT("clipboard not open") );
 
-    wxDataFormat format = data->GetPreferredFormat();
-
+    bool bRet = false;
     switch ( format )
     {
         case wxDF_TEXT:
@@ -673,16 +629,26 @@ bool wxClipboard::AddData( wxDataObject *data )
         {
             wxTextDataObject* textDataObject = (wxTextDataObject*) data;
             wxString str(textDataObject->GetText());
-            return wxSetClipboardData(format, str.c_str());
+            bRet = wxSetClipboardData(format, str.c_str());
         }
+        break;
+
+        case wxDF_UNICODETEXT:
+        {
+            wxTextDataObject* textDataObject = (wxTextDataObject*)data;
+            wxString str(textDataObject->GetText());
+            bRet = wxSetClipboardData(format, str.wc_str());
+        }
+        break;
 
         case wxDF_BITMAP:
         case wxDF_DIB:
         {
             wxBitmapDataObject* bitmapDataObject = (wxBitmapDataObject*) data;
             wxBitmap bitmap(bitmapDataObject->GetBitmap());
-            return wxSetClipboardData(data->GetPreferredFormat(), &bitmap);
+            bRet = wxSetClipboardData(format, &bitmap);
         }
+        break;
 
 #if wxUSE_METAFILE
         case wxDF_METAFILE:
@@ -690,16 +656,16 @@ bool wxClipboard::AddData( wxDataObject *data )
 #if 1
             // TODO
             wxLogError(wxT("Not implemented because wxMetafileDataObject does not contain width and height values."));
-            return false;
 #else
             wxMetafileDataObject* metaFileDataObject =
                 (wxMetafileDataObject*) data;
             wxMetafile metaFile = metaFileDataObject->GetMetafile();
-            return wxSetClipboardData(wxDF_METAFILE, &metaFile,
+            bRet = wxSetClipboardData(wxDF_METAFILE, &metaFile,
                                       metaFileDataObject->GetWidth(),
                                       metaFileDataObject->GetHeight());
 #endif
         }
+        break;
 #endif // wxUSE_METAFILE
 
         default:
@@ -708,9 +674,11 @@ bool wxClipboard::AddData( wxDataObject *data )
 //            return wxSetClipboardData(data);
             // TODO
             wxLogError(wxT("Not implemented."));
-            return false;
         }
     }
+    // Delete owned, no longer necessary data.
+    delete data;
+    return bRet;
 #else // !wxUSE_DATAOBJ
     return false;
 #endif // wxUSE_DATAOBJ/!wxUSE_DATAOBJ
@@ -893,45 +861,76 @@ bool wxClipboard::GetData( wxDataObject& data )
     {
         case wxDF_TEXT:
         case wxDF_OEMTEXT:
-        {
-            wxTextDataObject& textDataObject = (wxTextDataObject &)data;
-            char* s = (char*)wxGetClipboardData(format);
-            if ( !s )
-                return false;
-
-            textDataObject.SetText(wxString::FromAscii(s));
-            delete [] s;
-
-            return true;
-        }
-
+        case wxDF_UNICODETEXT:
+            {
+                // System provides an automatic type conversion
+                // from CF_TEXT and CF_OEMTEXT to CF_UNICODETEXT
+                HANDLE hMem = ::GetClipboardData(CF_UNICODETEXT);
+                if ( hMem )
+                {
+                    wxTextDataObject& textDataObject = (wxTextDataObject &)data;
+                    const void* buf = ::GlobalLock(hMem);
+                    DWORD size = ::GlobalSize(hMem);
+                    bool ok = textDataObject.SetData(size, buf);
+                    ::GlobalUnlock(hMem);
+                    return ok;
+                }
+            }
+            break;
         case wxDF_BITMAP:
+            {
+                HANDLE hBmp = ::GetClipboardData(CF_BITMAP);
+                if ( hBmp )
+                {
+                    wxBitmapDataObject2& bitmapDataObject = (wxBitmapDataObject2 &)data;
+                    return bitmapDataObject.SetData(0, &hBmp);
+                }
+            }
+            break;
         case wxDF_DIB:
-        {
-            wxBitmapDataObject& bitmapDataObject = (wxBitmapDataObject &)data;
-            wxBitmap* bitmap = (wxBitmap *)wxGetClipboardData(data.GetPreferredFormat());
-            if ( !bitmap )
-                return false;
+            {
+                HANDLE hMem = ::GetClipboardData(CF_DIB);
+                if ( hMem )
+                {
+                    wxBitmapDataObject& bitmapDataObject = (wxBitmapDataObject &)data;
+                    const void* buf = ::GlobalLock(hMem);
+                    DWORD size = ::GlobalSize(hMem);
+                    bool ok = bitmapDataObject.SetData(size, buf);
+                    ::GlobalUnlock(hMem);
+                    return ok;
+                }
+            }
+            break;
 
-            bitmapDataObject.SetBitmap(*bitmap);
-            delete bitmap;
-
-            return true;
-        }
-#if wxUSE_METAFILE
+#if wxUSE_METAFILE && !defined(wxMETAFILE_IS_ENH)
         case wxDF_METAFILE:
-        {
-            wxMetafileDataObject& metaFileDataObject = (wxMetafileDataObject &)data;
-            wxMetafile* metaFile = (wxMetafile *)wxGetClipboardData(wxDF_METAFILE);
-            if ( !metaFile )
-                return false;
+            {
+                HANDLE hMem = ::GetClipboardData(CF_METAFILEPICT);
+                if ( hMem )
+                {
+                    wxMetafileDataObject& metaFileDataObject = (wxMetafileDataObject &)data;
+                    const void* buf = ::GlobalLock(hMem);
+                    DWORD size = ::GlobalSize(hMem);
+                    bool ok = metaFileDataObject.SetData(wxDF_METAFILE, size, buf);
+                    ::GlobalUnlock(hMem);
+                    return ok;
+                }
+            }
+            break;
+#endif // wxUSE_METAFILE && !defined(wxMETAFILE_IS_ENH)
 
-            metaFileDataObject.SetMetafile(*metaFile);
-            delete metaFile;
-
-            return true;
-        }
-#endif // wxUSE_METAFILE
+#if wxUSE_ENH_METAFILE
+        case wxDF_ENHMETAFILE:
+            {
+                HANDLE hFile = ::GetClipboardData(CF_ENHMETAFILE);
+                if ( hFile )
+                {
+                    wxMetafileDataObject& metaFileDataObject = (wxMetafileDataObject &)data;
+                    return metaFileDataObject.SetData(wxDF_ENHMETAFILE, 0, &hFile);
+                }
+            }
+            break;
+#endif // wxUSE_ENH_METAFILE
     }
     return false;
 #else // !wxUSE_DATAOBJ

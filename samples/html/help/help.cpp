@@ -163,10 +163,16 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     help.UseConfig(wxConfig::Get());
     bool ret;
     help.SetTempDir(wxT("."));
-    ret = help.AddBook(wxFileName(wxT("helpfiles/testing.hhp"), wxPATH_UNIX));
+
+    wxPathList pathlist;
+    pathlist.Add(wxT("./helpfiles"));
+    pathlist.Add(wxT("../helpfiles"));
+    pathlist.Add(wxT("../../html/help/helpfiles"));
+
+    ret = help.AddBook(wxFileName(pathlist.FindValidPath(wxT("testing.hhp")), wxPATH_UNIX));
     if (! ret)
         wxMessageBox(wxT("Failed adding book helpfiles/testing.hhp"));
-    ret = help.AddBook(wxFileName(wxT("helpfiles/another.hhp"), wxPATH_UNIX));
+    ret = help.AddBook(wxFileName(pathlist.FindValidPath(wxT("another.hhp")), wxPATH_UNIX));
     if (! ret)
         wxMessageBox(_("Failed adding book helpfiles/another.hhp"));
 }

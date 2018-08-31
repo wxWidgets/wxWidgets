@@ -5,6 +5,18 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+
+enum wxRibbonPanelOption
+{
+    wxRIBBON_PANEL_NO_AUTO_MINIMISE,
+    wxRIBBON_PANEL_EXT_BUTTON,
+    wxRIBBON_PANEL_MINIMISE_BUTTON,
+    wxRIBBON_PANEL_STRETCH,
+    wxRIBBON_PANEL_FLEXIBLE,
+    wxRIBBON_PANEL_DEFAULT_STYLE
+};
+
+
 /**
     @class wxRibbonPanelEvent
 
@@ -27,7 +39,7 @@ public:
     */
     wxRibbonPanelEvent(wxEventType command_type = wxEVT_NULL,
                        int win_id = 0,
-                       wxRibbonPanel* panel = NULL)
+                       wxRibbonPanel* panel = NULL);
 
     /**
         Returns the panel relating to this event.
@@ -39,6 +51,9 @@ public:
     */
     void SetPanel(wxRibbonPanel* page);
 };
+
+wxEventType wxEVT_RIBBONPANEL_EXTBUTTON_ACTIVATED;
+
 
 /**
     @class wxRibbonPanel

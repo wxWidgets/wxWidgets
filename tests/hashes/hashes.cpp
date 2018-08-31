@@ -377,7 +377,7 @@ void MakeKeyValuePair(size_t i, size_t count, T*& key, ValueT& value)
 // the test
 template <class HashMapT>
 void
-#ifdef __GNUC__
+#if defined(__GNUC__) && !defined(__clang__)
 // At least g++ 4.8.2 (included in Ubuntu 14.04) is known to miscompile the
 // code in this function and make all the loops below infinite when using -O2,
 // so we need to turn off optimizations for it to allow the tests to run at

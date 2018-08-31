@@ -9,6 +9,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/hashmap.h"
+#include <wx/vector.h>
 
 WX_DECLARE_HASH_MAP(unsigned, wxString, wxIntegerHash, wxIntegerEqual,
                     IntToStringMap);
@@ -196,6 +197,7 @@ class MyListModel: public wxDataViewVirtualListModel
 public:
     enum
     {
+        Col_Toggle,
         Col_EditableText,
         Col_IconText,
         Col_Date,
@@ -223,6 +225,9 @@ public:
 
     virtual wxString GetColumnType( unsigned int col ) const wxOVERRIDE
     {
+        if (col == Col_Toggle)
+            return wxT( "bool" );
+
         if (col == Col_IconText)
             return wxT("wxDataViewIconText");
 
@@ -237,6 +242,7 @@ public:
                                 unsigned int row, unsigned int col ) wxOVERRIDE;
 
 private:
+    wxVector<bool>   m_toggleColValues;
     wxArrayString    m_textColValues;
     wxArrayString    m_iconColValues;
     IntToStringMap   m_customColValues;

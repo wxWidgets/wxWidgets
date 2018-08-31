@@ -55,6 +55,28 @@
 // Recommended setting: 0
 #define wxDIALOG_UNIT_COMPATIBILITY   0
 
+// Provide unsafe implicit conversions in wxString to "const char*" or
+// "std::string" (depending on wxUSE_STD_STRING_CONV_IN_WXSTRING value).
+//
+// Default is 1 but only for compatibility reasons, it is recommended to set
+// this to 0 because converting wxString to a narrow (non-Unicode) string may
+// fail unless a locale using UTF-8 encoding is used, which is never the case
+// under MSW, for example, hence such conversions can result in silent data
+// loss.
+//
+// Recommended setting: 0
+#define wxUSE_UNSAFE_WXSTRING_CONV 1
+
+// If set to 1, enables "reproducible builds", i.e. build output should be
+// exactly the same if the same build is redone again. As using __DATE__ and
+// __TIME__ macros clearly makes the build irreproducible, setting this option
+// to 1 disables their use in the library code.
+//
+// Default is 0
+//
+// Recommended setting: 0
+#define wxUSE_REPRODUCIBLE_BUILD 0
+
 // ----------------------------------------------------------------------------
 // debugging settings
 // ----------------------------------------------------------------------------
@@ -589,6 +611,22 @@
 // wxUSE_LIBPNG
 #define wxUSE_ZLIB          1
 
+// Set to 1 if liblzma is available to enable wxLZMA{Input,Output}Stream
+// classes.
+//
+// Notice that if you enable this build option when not using configure or
+// CMake, you need to ensure that liblzma headers and libraries are available
+// (i.e. by building the library yourself or downloading its binaries) and can
+// be found, either by copying them to one of the locations searched by the
+// compiler/linker by default (e.g. any of the directories in the INCLUDE or
+// LIB environment variables, respectively, when using MSVC) or modify the
+// make- or project files to add references to these directories.
+//
+// Default is 0 under MSW, auto-detected by configure.
+//
+// Recommended setting: 1 if you need LZMA compression.
+#define wxUSE_LIBLZMA       0
+
 // If enabled, the code written by Apple will be used to write, in a portable
 // way, float on the disk. See extended.c for the license which is different
 // from wxWidgets one.
@@ -742,34 +780,45 @@
 // Default is 1 on GTK and OSX
 //
 // Recommended setting: 1
-#if defined(__WXGTK__) || defined(__WXOSX__)
+#if (defined(__WXGTK__) && !defined(__WXGTK3__)) || defined(__WXOSX__)
 #define wxUSE_WEBVIEW_WEBKIT 1
 #else
 #define wxUSE_WEBVIEW_WEBKIT 0
 #endif
 
+// Use the WebKit2 wxWebView backend
+//
+// Default is 1 on GTK3
+//
+// Recommended setting: 1
+#if defined(__WXGTK3__)
+#define wxUSE_WEBVIEW_WEBKIT2 1
+#else
+#define wxUSE_WEBVIEW_WEBKIT2 0
+#endif
+
 // Enable wxGraphicsContext and related classes for a modern 2D drawing API.
 //
-// Default is 1 except if you're using a non-Microsoft compiler under Windows
-// as only MSVC is known to ship with at least gdiplus.h which is required to
-// compile GDI+-based implementation of wxGraphicsContext (MSVC10 and later
-// versions also include d2d1.h required for Direct2D-based implementation).
-// For other compilers (e.g. mingw32) you may need to install the headers (and
-// just the headers) yourself. If you do, change the setting below manually.
+// Default is 1 except if you're using a compiler without support for GDI+
+// under MSW, i.e. gdiplus.h and related headers (MSVC and MinGW >= 4.8 are
+// known to have them). For other compilers (e.g. older mingw32) you may need
+// to install the headers (and just the headers) yourself. If you do, change
+// the setting below manually.
 //
 // Recommended setting: 1 if supported by the compilation environment
 
-// notice that we can't use wxCHECK_VISUALC_VERSION() here as this file is
-// included from wx/platform.h before wxCHECK_VISUALC_VERSION() is defined
-#ifdef _MSC_VER
-#   define wxUSE_GRAPHICS_CONTEXT 1
+// Notice that we can't use wxCHECK_VISUALC_VERSION() nor wxCHECK_GCC_VERSION()
+// here as this file is included from wx/platform.h before they're defined.
+#if defined(_MSC_VER) || \
+    (defined(__MINGW32__) && (__GNUC__ > 4 || __GNUC_MINOR__ >= 8))
+#define wxUSE_GRAPHICS_CONTEXT 1
 #else
-    // Disable support for other Windows compilers, enable it if your compiler
-    // comes with new enough SDK or you installed the headers manually.
-    //
-    // Notice that this will be set by configure under non-Windows platforms
-    // anyhow so the value there is not important.
-#   define wxUSE_GRAPHICS_CONTEXT 0
+// Disable support for other Windows compilers, enable it if your compiler
+// comes with new enough SDK or you installed the headers manually.
+//
+// Notice that this will be set by configure under non-Windows platforms
+// anyhow so the value there is not important.
+#define wxUSE_GRAPHICS_CONTEXT 0
 #endif
 
 // Enable wxGraphicsContext implementation using Cairo library.
@@ -1109,6 +1158,16 @@
 // Recommended setting: 1 (but can be safely disabled if you don't use it)
 #define wxUSE_PREFERENCES_EDITOR 1
 
+// wxFont::AddPrivateFont() allows to use fonts not installed on the system by
+// loading them from font files during run-time.
+//
+// Default is 1 except under Unix where it will be turned off by configure if
+// the required libraries are not available or not new enough.
+//
+// Recommended setting: 1 (but can be safely disabled if you don't use it and
+// want to avoid extra dependencies under Linux, for example).
+#define wxUSE_PRIVATE_FONTS 1
+
 // wxRichToolTip is a customizable tooltip class which has more functionality
 // than the stock (but native, unlike this class) wxToolTip.
 //
@@ -1260,15 +1319,14 @@
 // Metafiles support
 // ----------------------------------------------------------------------------
 
-// Windows supports the graphics format known as metafile which is, though not
-// portable, is widely used under Windows and so is supported by wxWin (under
-// Windows only, of course). Win16 (Win3.1) used the so-called "Window
-// MetaFiles" or WMFs which were replaced with "Enhanced MetaFiles" or EMFs in
-// Win32 (Win9x, NT, 2000). Both of these are supported in wxWin and, by
-// default, WMFs will be used under Win16 and EMFs under Win32. This may be
-// changed by setting wxUSE_WIN_METAFILES_ALWAYS to 1 and/or setting
-// wxUSE_ENH_METAFILE to 0. You may also set wxUSE_METAFILE to 0 to not compile
-// in any metafile related classes at all.
+// Windows supports the graphics format known as metafile which, though not
+// portable, is widely used under Windows and so is supported by wxWidgets
+// (under Windows only, of course). Both the so-called "Window MetaFiles" or
+// WMFs, and "Enhanced MetaFiles" or EMFs are supported in wxWin and, by
+// default, EMFs will be used. This may be changed by setting
+// wxUSE_WIN_METAFILES_ALWAYS to 1 and/or setting wxUSE_ENH_METAFILE to 0.
+// You may also set wxUSE_METAFILE to 0 to not compile in any metafile
+// related classes at all.
 //
 // Default is 1 for wxUSE_ENH_METAFILE and 0 for wxUSE_WIN_METAFILES_ALWAYS.
 //

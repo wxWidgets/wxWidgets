@@ -12,7 +12,7 @@
 
 #include "wx/dataview.h"
 
-#ifndef wxUSE_GENERICDATAVIEWCTRL
+#ifndef wxHAS_GENERIC_DATAVIEWCTRL
 
 wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *renderer,
                   unsigned int model_column, int width,
@@ -316,6 +316,6 @@ void wxDataViewCtrl::DoSetCurrentItem(const wxDataViewItem& item)
 {
 }
 
-#endif // !wxUSE_GENERICDATAVIEWCTRL
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
 
 #endif // wxUSE_DATAVIEWCTRL

@@ -67,9 +67,8 @@ bool wxColourPickerCtrl::Create( wxWindow *parent, wxWindowID id,
     // complete sizer creation
     wxPickerBase::PostCreation();
 
-    m_picker->Connect(wxEVT_COLOURPICKER_CHANGED,
-            wxColourPickerEventHandler(wxColourPickerCtrl::OnColourChange),
-            NULL, this);
+    m_picker->Bind(wxEVT_COLOURPICKER_CHANGED,
+            &wxColourPickerCtrl::OnColourChange, this);
 
     return true;
 }

@@ -35,6 +35,7 @@
     #include "wx/utils.h"       // for wxGetDisplay()
     #include "wx/settings.h"
     #include "wx/gdicmn.h"
+    #include "wx/wxcrtvararg.h" // for wxSscanf
 #endif
 
 #include "wx/fontutil.h"    // for wxNativeFontInfo

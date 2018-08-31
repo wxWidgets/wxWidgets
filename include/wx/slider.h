@@ -87,7 +87,7 @@ public:
     virtual int GetThumbLength() const = 0;
 
     // warning: most of subsequent methods are currently only implemented in
-    //          wxMSW under Win95 and are silently ignored on other platforms
+    //          wxMSW and are silently ignored on other platforms
 
     void SetTickFreq(int freq) { DoSetTickFreq(freq); }
     virtual int GetTickFreq() const { return 0; }

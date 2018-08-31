@@ -762,6 +762,9 @@
     <ClCompile Include="..\..\src\msw\ole\automtn.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\ole\comimpl.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\ole\dataobj.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
@@ -1085,9 +1088,6 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\encinfo.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\wx\evtloopsrc.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\fdrepdlg.h">
@@ -1549,6 +1549,9 @@
     <ClInclude Include="..\..\include\wx\msw\ole\automtn.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\ole\comimpl.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\ole\dataform.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
@@ -1672,9 +1675,6 @@
     <ClInclude Include="..\..\include\wx\msw\uxtheme.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\msw\uxthemep.h">
-      <Filter>MSW Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\window.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
@@ -1708,10 +1708,16 @@
     <ClInclude Include="..\..\include\wx\pen.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\peninfobase.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\persist.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\persist\bookctrl.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\persist\dataview.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\persist\splitter.h">

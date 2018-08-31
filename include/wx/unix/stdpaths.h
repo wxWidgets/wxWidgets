@@ -49,6 +49,9 @@ public:
 #ifndef __VMS
     virtual wxString GetUserDir(Dir userDir) const wxOVERRIDE;
 #endif
+    virtual wxString MakeConfigFileName(const wxString& basename,
+                                        ConfigFileConv conv = ConfigFileConv_Ext
+                                        ) const wxOVERRIDE;
 
 protected:
     // Ctor is protected, use wxStandardPaths::Get() instead of instantiating

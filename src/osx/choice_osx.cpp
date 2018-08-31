@@ -131,7 +131,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
         }
 
         wxString text = items[i];
-        if (text == wxEmptyString)
+        if (text.empty())
             text = " ";  // menu items can't have empty labels
         m_popUpMenu->Insert( idx, i+1, text );
         m_datas.Insert( NULL, idx );

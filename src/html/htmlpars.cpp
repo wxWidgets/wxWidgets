@@ -539,13 +539,15 @@ struct wxHtmlEntityInfo
     unsigned code;
 };
 
-extern "C" int LINKAGEMODE wxHtmlEntityCompare(const void *key, const void *item)
+extern "C" {
+static int LINKAGEMODE wxHtmlEntityCompare(const void *key, const void *item)
 {
 #if wxUSE_UNICODE_UTF8
     return strcmp((char*)key, ((wxHtmlEntityInfo*)item)->name);
 #else
     return wxStrcmp((wxChar*)key, ((wxHtmlEntityInfo*)item)->name);
 #endif
+}
 }
 
 wxChar wxHtmlEntitiesParser::GetEntityChar(const wxString& entity) const

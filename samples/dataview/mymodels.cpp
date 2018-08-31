@@ -336,10 +336,13 @@ MyListModel::MyListModel() :
     // all the others are synthesized on request
     static const unsigned NUMBER_REAL_ITEMS = 100;
 
+    m_toggleColValues.reserve(NUMBER_REAL_ITEMS);
     m_textColValues.reserve(NUMBER_REAL_ITEMS);
+    m_toggleColValues.push_back(false);
     m_textColValues.push_back("first row with long label to test ellipsization");
     for (unsigned int i = 1; i < NUMBER_REAL_ITEMS; i++)
     {
+        m_toggleColValues.push_back(false);
         m_textColValues.push_back(wxString::Format("real row %d", i));
     }
 
@@ -351,6 +354,7 @@ MyListModel::MyListModel() :
 
 void MyListModel::Prepend( const wxString &text )
 {
+    m_toggleColValues.insert( m_toggleColValues.begin(), 0 );
     m_textColValues.Insert( text, 0 );
     RowPrepended();
 }
@@ -358,6 +362,11 @@ void MyListModel::Prepend( const wxString &text )
 void MyListModel::DeleteItem( const wxDataViewItem &item )
 {
     unsigned int row = GetRow( item );
+
+    if (row >= m_toggleColValues.size())
+        return;
+
+    m_toggleColValues.erase( m_toggleColValues.begin()+row );
 
     if (row >= m_textColValues.GetCount())
         return;
@@ -374,7 +383,10 @@ void MyListModel::DeleteItems( const wxDataViewItemArray &items )
     {
         unsigned int row = GetRow( items[i] );
         if (row < m_textColValues.GetCount())
+        {
+            wxASSERT(row < m_toggleColValues.size());
             rows.Add( row );
+        }
     }
 
     if (rows.GetCount() == 0)
@@ -390,7 +402,10 @@ void MyListModel::DeleteItems( const wxDataViewItemArray &items )
     // remaining indeces would all be wrong.
     rows.Sort( my_sort_reverse );
     for (i = 0; i < rows.GetCount(); i++)
+    {
+        m_toggleColValues.erase( m_toggleColValues.begin()+rows[i] );
         m_textColValues.RemoveAt( rows[i] );
+    }
 
     // This is just to test if wxDataViewCtrl can
     // cope with removing rows not sorted in
@@ -409,6 +424,13 @@ void MyListModel::GetValueByRow( wxVariant &variant,
 {
     switch ( col )
     {
+        case Col_Toggle:
+            if (row >= m_toggleColValues.size())
+                variant = false;
+            else
+                variant = m_toggleColValues[row];
+            break;
+
         case Col_EditableText:
             if (row >= m_textColValues.GetCount())
                 variant = wxString::Format( "virtual row %d", row );
@@ -441,8 +463,8 @@ void MyListModel::GetValueByRow( wxVariant &variant,
                     "<span color=\"#87ceeb\">light</span> and "
                         "<span color=\"#000080\">dark</span> blue",
                     "<big>growing green</big>",
-                    "<i>emphatic red</i>",
-                    "<b>bold cyan</b>",
+                    "<i>emphatic &amp; red</i>",
+                    "<b>bold &amp;&amp; cyan</b>",
                     "<small><tt>dull default</tt></small>",
                 };
 
@@ -470,8 +492,20 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
 {
     switch ( col )
     {
+        case Col_Toggle:
+            return false;
+
         case Col_EditableText:
         case Col_Date:
+            if (row < m_toggleColValues.size())
+            {
+                if (m_toggleColValues[row])
+                {
+                    attr.SetColour( wxColour( *wxLIGHT_GREY ) );
+                    attr.SetStrikethrough( true );
+                    return true;
+                }
+            }
             return false;
 
         case Col_IconText:
@@ -482,6 +516,16 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
             break;
 
         case Col_TextWithAttr:
+            if (row < m_toggleColValues.size())
+            {
+                if (m_toggleColValues[row])
+                {
+                    attr.SetColour( wxColour( *wxLIGHT_GREY ) );
+                    attr.SetStrikethrough( true );
+                    return true;
+                }
+            }
+
         case Col_Custom:
             // do what the labels defined in GetValueByRow() hint at
             switch ( row % 5 )
@@ -520,6 +564,13 @@ bool MyListModel::SetValueByRow( const wxVariant &variant,
 {
     switch ( col )
     {
+        case Col_Toggle:
+            if (row >= m_toggleColValues.size())
+                return false;
+
+            m_toggleColValues[row] = variant.GetBool();
+            return true;
+
         case Col_EditableText:
         case Col_IconText:
             if (row >= m_textColValues.GetCount())

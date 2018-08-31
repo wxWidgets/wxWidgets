@@ -86,7 +86,8 @@
 class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_STC wxStyledTextCtrl;           // forward
 class ScintillaWX;
-
+class wxSTCTimer;
+class SurfaceData;
 
 //----------------------------------------------------------------------
 // Helper classes
@@ -121,7 +122,6 @@ public:
     virtual void Finalise() wxOVERRIDE;
     virtual void StartDrag() wxOVERRIDE;
     virtual bool SetIdle(bool on) wxOVERRIDE;
-    virtual void SetTicking(bool on) wxOVERRIDE;
     virtual void SetMouseCapture(bool on) wxOVERRIDE;
     virtual bool HaveMouseCapture() wxOVERRIDE;
     virtual void ScrollText(int linesToMove) wxOVERRIDE;
@@ -149,6 +149,10 @@ public:
     virtual void CancelModes() wxOVERRIDE;
 
     virtual void UpdateSystemCaret() wxOVERRIDE;
+    virtual bool FineTickerAvailable() wxOVERRIDE;
+    virtual bool FineTickerRunning(TickReason reason) wxOVERRIDE;
+    virtual void FineTickerStart(TickReason reason, int millis, int tolerance) wxOVERRIDE;
+    virtual void FineTickerCancel(TickReason reason) wxOVERRIDE;
 
     // Event delegates
     void DoPaint(wxDC* dc, wxRect rect);
@@ -159,6 +163,7 @@ public:
     void DoGainFocus();
     void DoSysColourChange();
     void DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
+    void DoRightButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
     void DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl);
     void DoLeftButtonMove(Point pt);
     void DoMiddleButtonUp(Point pt);
@@ -167,7 +172,6 @@ public:
                       bool ctrlDown, bool isPageScroll);
     void DoAddChar(int key);
     int  DoKeyDown(const wxKeyEvent& event, bool* consumed);
-    void DoTick() { Tick(); }
     void DoOnIdle(wxIdleEvent& evt);
 
 #if wxUSE_DRAG_AND_DROP
@@ -178,8 +182,9 @@ public:
 #endif
 
     void DoCommand(int ID);
-    void DoContextMenu(Point pt);
+    bool DoContextMenu(Point pt);
     void DoOnListBox();
+    void DoMouseCaptureLost();
 
 
     // helpers
@@ -192,11 +197,16 @@ public:
     void ClipChildren(wxDC& dc, PRectangle rect);
     void SetUseAntiAliasing(bool useAA);
     bool GetUseAntiAliasing();
+    SurfaceData* GetSurfaceData() const {return m_surfaceData;}
+    void SetPaintAbandoned(){paintState = paintAbandoned;}
 
 private:
     bool                capturedMouse;
     bool                focusEvent;
     wxStyledTextCtrl*   stc;
+
+    WX_DECLARE_HASH_MAP(TickReason, wxSTCTimer*, wxIntegerHash, wxIntegerEqual, TimersHash);
+    TimersHash          timers;
 
 #if wxUSE_DRAG_AND_DROP
     wxSTCDropTarget*    dropTarget;
@@ -205,6 +215,7 @@ private:
 
     int                 wheelVRotation;
     int                 wheelHRotation;
+    SurfaceData*        m_surfaceData;
 
     // For use in creating a system caret
     bool HasCaretSizeChanged();
@@ -226,6 +237,7 @@ private:
 #endif
 
     friend class wxSTCCallTip;
+    friend class wxSTCTimer; // To get access to TickReason declaration
 };
 
 //----------------------------------------------------------------------

@@ -42,15 +42,17 @@ static wxPlatformInfo gs_platInfo(wxPORT_UNKNOWN);
 // constants
 // ----------------------------------------------------------------------------
 
+// Keep "Unknown" entries to avoid breaking the indexes
+
 static const wxChar* const wxOperatingSystemIdNames[] =
 {
     wxT("Apple Mac OS"),
     wxT("Apple Mac OS X"),
 
-    wxT("Microsoft Windows 9X"),
+    wxT("Unknown"), // STL build: cannot use _() to translate strings here
     wxT("Microsoft Windows NT"),
-    wxT("Microsoft Windows Micro"),
-    wxT("Microsoft Windows CE"),
+    wxT("Unknown"),
+    wxT("Unknown"),
 
     wxT("Linux"),
     wxT("FreeBSD"),
@@ -64,8 +66,8 @@ static const wxChar* const wxOperatingSystemIdNames[] =
     wxT("Other Unix"),
     wxT("Other Unix"),
 
-    wxT("DOS"),
-    wxT("OS/2"),
+    wxT("Unknown"),
+    wxT("Unknown"),
 
 };
 
@@ -77,10 +79,10 @@ static const wxChar* const wxPortIdNames[] =
     wxT("wxGTK"),
     wxT("wxDFB"),
     wxT("wxX11"),
-    wxT("wxOS2"),
+    wxT("Unknown"),
     wxT("wxMac"),
     wxT("wxCocoa"),
-    wxT("wxWinCE"),
+    wxT("Unknown"),
     wxT("wxQT")
 };
 
@@ -239,10 +241,6 @@ wxString wxPlatformInfo::GetOperatingSystemFamilyName(wxOperatingSystemId os)
         string = wxT("Windows");
     else if ( os & wxOS_UNIX )
         string = wxT("Unix");
-    else if ( os == wxOS_DOS )
-        string = wxT("DOS");
-    else if ( os == wxOS_OS2 )
-        string = wxT("OS/2");
 
     return string;
 }
@@ -259,12 +257,14 @@ wxString wxPlatformInfo::GetOperatingSystemIdName(wxOperatingSystemId os)
 
 wxString wxPlatformInfo::GetPortIdName(wxPortId port, bool usingUniversal)
 {
+    wxString ret;
+
     const unsigned idx = wxGetIndexFromEnumValue(port);
 
-    wxCHECK_MSG( idx < WXSIZEOF(wxPortIdNames), wxEmptyString,
+    wxCHECK_MSG( idx < WXSIZEOF(wxPortIdNames), ret,
                  wxT("invalid port id") );
 
-    wxString ret = wxPortIdNames[idx];
+    ret = wxPortIdNames[idx];
 
     if ( usingUniversal )
         ret += wxT("/wxUniversal");
@@ -274,12 +274,14 @@ wxString wxPlatformInfo::GetPortIdName(wxPortId port, bool usingUniversal)
 
 wxString wxPlatformInfo::GetPortIdShortName(wxPortId port, bool usingUniversal)
 {
+    wxString ret;
+
     const unsigned idx = wxGetIndexFromEnumValue(port);
 
-    wxCHECK_MSG( idx < WXSIZEOF(wxPortIdNames), wxEmptyString,
+    wxCHECK_MSG( idx < WXSIZEOF(wxPortIdNames), ret,
                  wxT("invalid port id") );
 
-    wxString ret = wxPortIdNames[idx];
+    ret = wxPortIdNames[idx];
     ret = ret.Mid(2).Lower();       // remove 'wx' prefix
 
     if ( usingUniversal )
@@ -373,4 +375,3 @@ wxEndianness wxPlatformInfo::GetEndianness(const wxString& end)
 
     return wxENDIAN_INVALID;
 }
-

@@ -172,11 +172,6 @@ protected:
     WXHWND m_dummyHwnd;
     wxWindowIDRef m_dummyId;
 
-    // array of widths and heights of the buttons, may be wxDefaultCoord if the
-    // corresponding quantity should be computed
-    int *m_radioWidth;
-    int *m_radioHeight;
-
     // currently selected button or wxNOT_FOUND if none
     int m_selectedButton;
 

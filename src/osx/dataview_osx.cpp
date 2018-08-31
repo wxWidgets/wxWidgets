@@ -13,7 +13,7 @@
 
 #include "wx/dataview.h"
 
-#ifndef wxUSE_GENERICDATAVIEWCTRL
+#ifndef wxHAS_GENERIC_DATAVIEWCTRL
 
 #include <limits>
 
@@ -563,6 +563,16 @@ int wxDataViewCtrl::GetSelections(wxDataViewItemArray& sel) const
   return GetDataViewPeer()->GetSelections(sel);
 }
 
+wxDataViewItem wxDataViewCtrl::GetTopItem() const
+{
+    return GetDataViewPeer()->GetTopItem();
+}
+
+int wxDataViewCtrl::GetCountPerPage() const
+{
+    return GetDataViewPeer()->GetCountPerPage();
+}
+
 void wxDataViewCtrl::HitTest(wxPoint const& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const
 {
   return GetDataViewPeer()->HitTest(point,item,columnPtr);
@@ -740,6 +750,6 @@ wxBEGIN_EVENT_TABLE(wxDataViewCtrl,wxDataViewCtrlBase)
   EVT_MOTION(wxDataViewCtrl::OnMouse)
 wxEND_EVENT_TABLE()
 
-#endif // !wxUSE_GENERICDATAVIEWCTRL
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
 
 #endif // wxUSE_DATAVIEWCTRL

@@ -1530,8 +1530,12 @@ public:
     virtual bool OnSaveModified();
 
     /**
-        Removes the view from the document's list of views, and calls
-        OnChangedViewList().
+        Removes the view from the document's list of views.
+
+        If the view was really removed, also calls OnChangedViewList().
+
+        @return @true if the view was removed or @false if the document didn't
+            have this view in the first place.
     */
     virtual bool RemoveView(wxView* view);
 

@@ -38,7 +38,23 @@
 #    ifndef MAC_OS_X_VERSION_10_10
 #       define MAC_OS_X_VERSION_10_10 101000
 #    endif
-#    include "wx/osx/config_xcode.h"
+#    ifndef MAC_OS_X_VERSION_10_11
+#       define MAC_OS_X_VERSION_10_11 101100
+#    endif
+#    ifndef MAC_OS_X_VERSION_10_12
+#       define MAC_OS_X_VERSION_10_12 101200
+#    endif
+#    ifndef MAC_OS_X_VERSION_10_13
+#       define MAC_OS_X_VERSION_10_13 101300
+#    endif
+#    if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
+#        ifndef NSAppKitVersionNumber10_10
+#            define NSAppKitVersionNumber10_10 1343
+#        endif
+#        ifndef NSAppKitVersionNumber10_11
+#            define NSAppKitVersionNumber10_11 1404
+#        endif
+#    endif
 #    ifndef __WXOSX__
 #        define __WXOSX__ 1
 #    endif
@@ -67,10 +83,6 @@
     /* Select wxMSW under Windows if no other port is specified. */
 #   if !defined(__WXMSW__) && !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__)
 #       define __WXMSW__
-#   endif
-
-#   if !defined(__WINDOWS__)
-#       define __WINDOWS__
 #   endif
 
 #   ifndef _WIN32
@@ -358,6 +370,7 @@
 #    define wxCHECK_W32API_VERSION(maj, min) (0)
 #    undef wxCHECK_MINGW32_VERSION
 #    define wxCHECK_MINGW32_VERSION( major, minor ) (0)
+#    define wxDECL_FOR_MINGW32_ALWAYS(rettype, func, params)
 #    define wxDECL_FOR_STRICT_MINGW32(rettype, func, params)
 #endif
 
@@ -464,6 +477,26 @@
 #        endif
 #        ifndef MAC_OS_X_VERSION_10_10
 #           define MAC_OS_X_VERSION_10_10 101000
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_11
+#           define MAC_OS_X_VERSION_10_11 101100
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_12
+#           define MAC_OS_X_VERSION_10_12 101200
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_13
+#           define MAC_OS_X_VERSION_10_13 101300
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_14
+#           define MAC_OS_X_VERSION_10_14 101400
+#        endif
+#        if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
+#            ifndef NSAppKitVersionNumber10_10
+#                define NSAppKitVersionNumber10_10 1343
+#            endif
+#            ifndef NSAppKitVersionNumber10_11
+#                define NSAppKitVersionNumber10_11 1404
+#            endif
 #        endif
 #    else
 #        error "only mach-o configurations are supported"

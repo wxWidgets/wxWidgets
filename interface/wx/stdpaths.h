@@ -136,6 +136,66 @@ public:
     };
 
     /**
+        Possible values for SetFileLayout() argument.
+
+        The elements of this enum correspond to the different file layout
+        standards under Unix systems.
+
+        @since 3.1.1
+     */
+    enum FileLayout
+    {
+        /**
+            Use the classic file layout.
+
+            User configuration and data files are located directly in the home
+            directory.
+
+            This is the default behaviour for compatibility reasons.
+        */
+        FileLayout_Classic,
+
+        /**
+            Use a XDG styled file layout.
+
+            File layout follows the XDG Base Directory Specification (see
+            https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html).
+
+            This is the recommended layout for new applications.
+        */
+        FileLayout_XDG
+    };
+
+    /**
+        Possible values for MakeConfigFileName() naming convention argument.
+
+        The values in this enum are only used under Unix and only when using
+        the classic Unix convention for file layout, in XDG mode, XDG naming
+        convention is used unconditionally.
+
+        @since 3.1.1
+     */
+    enum ConfigFileConv
+    {
+        /**
+            Use the class Unix dot-file convention.
+
+            Prepend the dot to the file base name.
+
+            This value is ignored when in XDG mode, where MakeConfigFileName()
+            always behaves as if ConfigFileConv_Ext was specified.
+        */
+        ConfigFileConv_Dot,
+
+        /**
+            Use @c .conf extension for the file names.
+
+            This convention is always used in XDG mode.
+         */
+        ConfigFileConv_Ext
+    };
+
+    /**
         MSW-specific function undoing the effect of IgnoreAppSubDir() calls.
 
         After a call to this function the program directory will be exactly the
@@ -300,8 +360,11 @@ public:
     virtual wxString GetTempDir() const;
 
     /**
-        Return the directory for the user config files:
-        - Unix: @c ~ (the home directory)
+        Return the directory for the user config files.
+
+        This directory is:
+        - Unix: @c ~ (the home directory) or @c XDG_CONFIG_HOME depending on
+            GetFileLayout() return value
         - Windows: @c "C:\Users\username\AppData\Roaming" or
                    @c "C:\Documents and Settings\username\Application Data"
         - Mac: @c ~/Library/Preferences
@@ -326,7 +389,8 @@ public:
 
         If the value could not be determined the users home directory is returned.
 
-        @note On Unix this supports the xdg user dirs specification.
+        @note On Unix this method respects the XDG base directory specification
+        only if SetFileLayout() with @c FileLayout_XDG had been called.
 
         @since 3.1.0
     */
@@ -443,6 +507,44 @@ public:
         @since 2.9.0
     */
     void UseAppInfo(int info);
+
+    /**
+        Sets the current file layout.
+
+        The default layout is @c FileLayout_Classic for compatibility, however
+        newer applications are encouraged to set it to @c FileLayout_XDG on
+        program startup.
+
+        @since 3.1.1
+    */
+    void SetFileLayout(FileLayout layout);
+
+    /**
+        Returns the current file layout.
+
+        @see SetFileLayout()
+
+        @since 3.1.1
+    */
+    FileLayout GetFileLayout() const;
+
+    /**
+        Return the file name which would be used by wxFileConfig if it were
+        constructed with @a basename.
+
+        @a conv is used to construct the name of the file under Unix and only
+        matters when using the class file layout, i.e. if SetFileLayout() had
+        @e not been called with @c FileLayout_XDG argument. In this case, this
+        argument is used to determine whether to use an extension or a leading
+        dot. When following XDG specification, the function always appends the
+        extension, regardless of @a conv value. Finally, this argument is not
+        used at all under non-Unix platforms.
+
+        @since 3.1.1
+    */
+    virtual wxString
+    MakeConfigFileName(const wxString& basename,
+                       ConfigFileConv conv = ConfigFileConv_Ext) const;
 
 protected:
     /**

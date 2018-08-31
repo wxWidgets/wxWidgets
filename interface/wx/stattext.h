@@ -100,6 +100,18 @@ public:
     bool IsEllipsized() const;
 
     /**
+        Change the label shown in the control.
+
+        Notice that since wxWidgets 3.1.1 this function is guaranteed not to do
+        anything if the label didn't really change, so there is no benefit to
+        checking if the new label is different from the current one in the
+        application code.
+
+        @see wxControl::SetLabel()
+     */
+    virtual void SetLabel(const wxString& label);
+
+    /**
         This functions wraps the controls label so that each of its lines becomes at
         most @a width pixels wide if possible (the lines are broken at words
         boundaries so it might not be the case if words are too long).

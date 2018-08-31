@@ -117,11 +117,18 @@ wxSize wxDateTimePickerCtrl::DoGetBestSize() const
     if ( wxGetWinVersion() >= wxWinVersion_Vista )
     {
         SIZE idealSize;
-        ::SendMessage(m_hWnd, DTM_GETIDEALSIZE, 0, (LPARAM)&idealSize);
 
-        size = wxSize(idealSize.cx, idealSize.cy);
+        // Work around https://bugs.winehq.org/show_bug.cgi?id=44680 by
+        // checking for the return value: even if all "real" MSW systems do
+        // support this message, Wine does not, even when it's configured to
+        // return Vista or later version to the application.
+        if ( ::SendMessage(m_hWnd, DTM_GETIDEALSIZE, 0, (LPARAM)&idealSize) )
+        {
+            size = wxSize(idealSize.cx, idealSize.cy);
+        }
     }
-    else // Windows XP
+
+    if ( !size.x || !size.y )
     {
         wxClientDC dc(const_cast<wxDateTimePickerCtrl *>(this));
 

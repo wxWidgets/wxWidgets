@@ -157,9 +157,7 @@ wxHtmlCell::GetMouseCursorAt(wxHtmlWindowInterface *window,
 
 
 bool
-wxHtmlCell::AdjustPagebreak(int *pagebreak,
-                            const wxArrayInt& WXUNUSED(known_pagebreaks),
-                            int pageHeight) const
+wxHtmlCell::AdjustPagebreak(int *pagebreak, int pageHeight) const
 {
     // Notice that we always break the cells bigger than the page height here
     // as otherwise we wouldn't be able to break them at all.
@@ -179,7 +177,7 @@ wxHtmlCell::AdjustPagebreak(int *pagebreak,
 void wxHtmlCell::SetLink(const wxHtmlLinkInfo& link)
 {
     wxDELETE(m_Link);
-    if (link.GetHref() != wxEmptyString)
+    if (!link.GetHref().empty())
         m_Link = new wxHtmlLinkInfo(link);
 }
 
@@ -640,7 +638,6 @@ wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCe
     m_AlignVer = wxHTML_ALIGN_BOTTOM;
     m_IndentLeft = m_IndentRight = m_IndentTop = m_IndentBottom = 0;
     m_WidthFloat = 100; m_WidthFloatUnits = wxHTML_UNITS_PERCENT;
-    m_BkColour = wxNullColour;
     m_Border = 0;
     m_MinHeight = 0;
     m_MinHeightAlign = wxHTML_ALIGN_TOP;
@@ -697,22 +694,18 @@ int wxHtmlContainerCell::GetIndentUnits(int ind) const
 
 
 bool
-wxHtmlContainerCell::AdjustPagebreak(int *pagebreak,
-                                     const wxArrayInt& known_pagebreaks,
-                                     int pageHeight) const
+wxHtmlContainerCell::AdjustPagebreak(int *pagebreak, int pageHeight) const
 {
     if (!m_CanLiveOnPagebreak)
-        return wxHtmlCell::AdjustPagebreak(pagebreak, known_pagebreaks, pageHeight);
+        return wxHtmlCell::AdjustPagebreak(pagebreak, pageHeight);
 
-    wxHtmlCell *c = GetFirstChild();
     bool rt = false;
     int pbrk = *pagebreak - m_PosY;
 
-    while (c)
+    for ( wxHtmlCell *c = GetFirstChild(); c; c = c->GetNext() )
     {
-        if (c->AdjustPagebreak(&pbrk, known_pagebreaks, pageHeight))
+        if (c->AdjustPagebreak(&pbrk, pageHeight))
             rt = true;
-        c = c->GetNext();
     }
     if (rt)
         *pagebreak = pbrk + m_PosY;
@@ -1162,6 +1155,43 @@ void wxHtmlContainerCell::InsertCell(wxHtmlCell *f)
     }
     f->SetParent(this);
     m_LastLayout = -1;
+}
+
+
+
+void wxHtmlContainerCell::Detach(wxHtmlCell *cell)
+{
+    wxHtmlCell* const firstChild = GetFirstChild();
+    if ( cell == firstChild )
+    {
+        m_Cells = cell->GetNext();
+        if ( m_LastCell == cell )
+            m_LastCell = NULL;
+    }
+    else // Not the first child.
+    {
+        for ( wxHtmlCell* prev = firstChild;; )
+        {
+            wxHtmlCell* const next = prev->GetNext();
+
+            // We can't reach the end of the children list without finding this
+            // cell, normally.
+            wxCHECK_RET( next,  "Detaching cell which is not our child" );
+
+            if ( cell == next )
+            {
+                prev->SetNext(cell->GetNext());
+                if ( m_LastCell == cell )
+                    m_LastCell = prev;
+                break;
+            }
+
+            prev = next;
+        }
+    }
+
+    cell->SetParent(NULL);
+    cell->SetNext(NULL);
 }
 
 

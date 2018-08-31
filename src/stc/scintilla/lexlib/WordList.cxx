@@ -236,6 +236,66 @@ bool WordList::InListAbbreviated(const char *s, const char marker) const {
 	return false;
 }
 
+/** similar to InListAbbreviated, but word s can be a abridged version of a keyword.
+* eg. the keyword is defined as "after.~:". This means the word must have a prefix (begins with) of
+* "after." and suffix (ends with) of ":" to be a keyword, Hence "after.field:" , "after.form.item:" are valid.
+* Similarly "~.is.valid" keyword is suffix only... hence "field.is.valid" , "form.is.valid" are valid.
+* The marker is ~ in this case.
+* No multiple markers check is done and wont work.
+*/
+bool WordList::InListAbridged(const char *s, const char marker) const {
+	if (0 == words)
+		return false;
+	unsigned char firstChar = s[0];
+	int j = starts[firstChar];
+	if (j >= 0) {
+		while (static_cast<unsigned char>(words[j][0]) == firstChar) {
+			const char *a = words[j];
+			const char *b = s;
+			while (*a && *a == *b) {
+				a++;
+				if (*a == marker) {
+					a++;
+					const size_t suffixLengthA = strlen(a);
+					const size_t suffixLengthB = strlen(b);
+					if (suffixLengthA >= suffixLengthB)
+						break;
+					b = b + suffixLengthB - suffixLengthA - 1;
+				}
+				b++;
+			}
+			if (!*a  && !*b)
+				return true;
+			j++;
+		}
+	}
+
+	j = starts[static_cast<unsigned int>(marker)];
+	if (j >= 0) {
+		while (words[j][0] == marker) {
+			const char *a = words[j] + 1;
+			const char *b = s;
+			const size_t suffixLengthA = strlen(a);
+			const size_t suffixLengthB = strlen(b);
+			if (suffixLengthA > suffixLengthB) {
+				j++;
+				continue;
+			}
+			b = b + suffixLengthB - suffixLengthA;
+
+			while (*a && *a == *b) {
+				a++;
+				b++;
+			}
+			if (!*a && !*b)
+				return true;
+			j++;
+		}
+	}
+
+	return false;
+}
+
 const char *WordList::WordAt(int n) const {
 	return words[n];
 }

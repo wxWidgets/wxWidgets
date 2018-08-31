@@ -79,14 +79,6 @@
 
 using namespace wxMSWImpl;
 
-#ifndef AC_SRC_ALPHA
-    #define AC_SRC_ALPHA 1
-#endif
-
-#ifndef LAYOUT_RTL
-    #define LAYOUT_RTL 1
-#endif
-
 /* Quaternary raster codes */
 #ifndef MAKEROP4
 #define MAKEROP4(fore,back) (DWORD)((((back) << 8) & 0xFF000000) | (fore))
@@ -582,8 +574,7 @@ void wxMSWDCImpl::UpdateClipBox()
     m_isClipBoxValid = true;
 }
 
-void
-wxMSWDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
+bool wxMSWDCImpl::DoGetClippingRect(wxRect& rect) const
 {
     // check if we should try to retrieve the clipping region possibly not set
     // by our SetClippingRegion() but preset or modified by Windows: this
@@ -597,14 +588,22 @@ wxMSWDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) co
         self->UpdateClipBox();
     }
 
-    if ( x )
-        *x = m_clipX1;
-    if ( y )
-        *y = m_clipY1;
-    if ( w )
-        *w = m_clipX2 - m_clipX1;
-    if ( h )
-        *h = m_clipY2 - m_clipY1;
+    // Unfortunately we can't just call wxDCImpl::DoGetClippingRect() here
+    // because it wouldn't return the correct result if there is no clipping
+    // region and this DC has a world transform applied to it, as the base
+    // class version doesn't know anything about world transforms and wouldn't
+    // apply it to GetLogicalArea() that it returns in this case.
+    //
+    // We could solve this by overriding GetLogicalArea() in wxMSW and using
+    // DPtoLP() to perform the conversion correctly ourselves, but it's even
+    // simpler to just use the value returned by our UpdateClipBox() which is
+    // already correct in any case, so just do this instead.
+    rect = wxRect(m_clipX1,
+                  m_clipY1,
+                  m_clipX2 - m_clipX1,
+                  m_clipY2 - m_clipY1);
+
+    return m_clipping;
 }
 
 // common part of DoSetClippingRegion() and DoSetDeviceClippingRegion()
@@ -1103,7 +1102,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     wxASSERT_MSG( n_points > 2 , wxT("incomplete list of spline points?") );
 
     const size_t n_bezier_points = n_points * 3 + 1;
-    POINT *lppt = (POINT *)malloc(n_bezier_points*sizeof(POINT));
+    POINT *lppt = new POINT[n_bezier_points];
     size_t bezier_pos = 0;
     wxCoord x1, y1, x2, y2, cx1, cy1, cx4, cy4;
 
@@ -1114,6 +1113,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     bezier_pos++;
     lppt[ bezier_pos ] = lppt[ bezier_pos-1 ];
     bezier_pos++;
+    CalcBoundingBox(x1, y1);
 
     node = node->GetNext();
     p = node->GetData();
@@ -1127,6 +1127,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     bezier_pos++;
     lppt[ bezier_pos ] = lppt[ bezier_pos-1 ];
     bezier_pos++;
+    CalcBoundingBox(x2, y2);
 
 #if !wxUSE_STD_CONTAINERS
     while ((node = node->GetNext()) != NULL)
@@ -1156,6 +1157,8 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
         bezier_pos++;
         cx1 = cx4;
         cy1 = cy4;
+
+        CalcBoundingBox(x2, y2);
     }
 
     lppt[ bezier_pos ] = lppt[ bezier_pos-1 ];
@@ -1168,7 +1171,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
 
     ::PolyBezier( GetHdc(), lppt, bezier_pos );
 
-    free(lppt);
+    delete []lppt;
 }
 #endif // wxUSE_SPLINES
 
@@ -1430,7 +1433,7 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
 
     // NB: don't take DEFAULT_GUI_FONT (a.k.a. wxSYS_DEFAULT_GUI_FONT)
     //     because it's not TrueType and so can't have non zero
-    //     orientation/escapement under Win9x
+    //     orientation/escapement
     wxFont font = m_font.IsOk() ? m_font : *wxSWISS_FONT;
     LOGFONT lf;
     if ( ::GetObject(GetHfontOf(font), sizeof(lf), &lf) == 0 )
@@ -2339,11 +2342,7 @@ bool wxMSWDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                                      dwRop
                                      ) == (int)GDI_ERROR )
                 {
-                    // On Win9x this API fails most (all?) of the time, so
-                    // logging it becomes quite distracting.  Since it falls
-                    // back to the code below this is not really serious, so
-                    // don't log it.
-                    //wxLogLastError(wxT("StretchDIBits"));
+                    wxLogLastError(wxT("StretchDIBits"));
                 }
                 else
                 {

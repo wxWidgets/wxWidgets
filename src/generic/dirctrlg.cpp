@@ -95,7 +95,7 @@ wxDEFINE_EVENT( wxEVT_DIRCTRL_SELECTIONCHANGED, wxTreeEvent );
 wxDEFINE_EVENT( wxEVT_DIRCTRL_FILEACTIVATED, wxTreeEvent );
 
 // ----------------------------------------------------------------------------
-// wxGetAvailableDrives, for WINDOWS, DOS, MAC, UNIX (returns "/")
+// wxGetAvailableDrives, for WINDOWS, OSX, UNIX (returns "/")
 // ----------------------------------------------------------------------------
 
 size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayInt &icon_ids)
@@ -426,7 +426,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     // instead of scaling.
     // if (!wxTheFileIconsTable->IsOk())
     //     wxTheFileIconsTable->SetSize(scaledSize);
-        
+
     // Meanwhile, in your application initialisation, where you have better knowledge of what
     // icons are available and whether to scale, you can do this:
     //
@@ -465,7 +465,7 @@ void wxGenericDirCtrl::Init()
 {
     m_showHidden = false;
     m_currentFilter = 0;
-    m_currentFilterStr = wxEmptyString; // Default: any file
+    m_currentFilterStr.clear(); // Default: any file
     m_treeCtrl = NULL;
     m_filterListCtrl = NULL;
 }
@@ -936,7 +936,7 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
         {
             data = GetItemData(childId);
 
-            if (data && data->m_path != wxEmptyString && !data->m_isDir)
+            if (data && !data->m_path.empty() && !data->m_isDir)
             {
                 m_treeCtrl->SelectItem(childId);
                 m_treeCtrl->EnsureVisible(childId);
@@ -1278,14 +1278,6 @@ bool wxDirFilterListCtrl::Create(wxGenericDirCtrl* parent,
                                  long style)
 {
     m_dirCtrl = parent;
-
-    // by default our border style is determined by the style of our parent
-    if ( !(style & wxBORDER_MASK) )
-    {
-        style |= parent->HasFlag(wxDIRCTRL_3D_INTERNAL) ? wxBORDER_SUNKEN
-                                                        : wxBORDER_NONE;
-    }
-
     return wxChoice::Create(parent, treeid, pos, size, 0, NULL, style);
 }
 
@@ -1536,113 +1528,6 @@ wxImageList *wxFileIconsTable::GetSmallImageList()
     return m_smallImageList;
 }
 
-#if wxUSE_MIMETYPE && wxUSE_IMAGE && (!defined(__WINDOWS__) || wxUSE_WXDIB)
-// VS: we don't need this function w/o wxMimeTypesManager because we'll only have
-//     one icon and we won't resize it
-
-static wxBitmap CreateAntialiasedBitmap(const wxImage& img, const wxSize& sz)
-{
-    const unsigned int size = sz.x;
-
-    wxImage smallimg (size, size);
-    unsigned char *p1, *p2, *ps;
-    unsigned char mr = img.GetMaskRed(),
-                  mg = img.GetMaskGreen(),
-                  mb = img.GetMaskBlue();
-
-    unsigned x, y;
-    unsigned sr, sg, sb, smask;
-
-    p1 = img.GetData(), p2 = img.GetData() + 3 * size*2, ps = smallimg.GetData();
-    smallimg.SetMaskColour(mr, mr, mr);
-
-    for (y = 0; y < size; y++)
-    {
-        for (x = 0; x < size; x++)
-        {
-            sr = sg = sb = smask = 0;
-            if (p1[0] != mr || p1[1] != mg || p1[2] != mb)
-                sr += p1[0], sg += p1[1], sb += p1[2];
-            else smask++;
-            p1 += 3;
-            if (p1[0] != mr || p1[1] != mg || p1[2] != mb)
-                sr += p1[0], sg += p1[1], sb += p1[2];
-            else smask++;
-            p1 += 3;
-            if (p2[0] != mr || p2[1] != mg || p2[2] != mb)
-                sr += p2[0], sg += p2[1], sb += p2[2];
-            else smask++;
-            p2 += 3;
-            if (p2[0] != mr || p2[1] != mg || p2[2] != mb)
-                sr += p2[0], sg += p2[1], sb += p2[2];
-            else smask++;
-            p2 += 3;
-
-            if (smask > 2)
-                ps[0] = ps[1] = ps[2] = mr;
-            else
-            {
-                ps[0] = (unsigned char)(sr >> 2);
-                ps[1] = (unsigned char)(sg >> 2);
-                ps[2] = (unsigned char)(sb >> 2);
-            }
-            ps += 3;
-        }
-        p1 += size*2 * 3, p2 += size*2 * 3;
-    }
-
-    return wxBitmap(smallimg);
-}
-
-// This function is currently not unused anymore
-#if 0
-// finds empty borders and return non-empty area of image:
-static wxImage CutEmptyBorders(const wxImage& img)
-{
-    unsigned char mr = img.GetMaskRed(),
-                  mg = img.GetMaskGreen(),
-                  mb = img.GetMaskBlue();
-    unsigned char *dt = img.GetData(), *dttmp;
-    unsigned w = img.GetWidth(), h = img.GetHeight();
-
-    unsigned top, bottom, left, right, i;
-    bool empt;
-
-#define MK_DTTMP(x,y)      dttmp = dt + ((x + y * w) * 3)
-#define NOEMPTY_PIX(empt)  if (dttmp[0] != mr || dttmp[1] != mg || dttmp[2] != mb) {empt = false; break;}
-
-    for (empt = true, top = 0; empt && top < h; top++)
-    {
-        MK_DTTMP(0, top);
-        for (i = 0; i < w; i++, dttmp+=3)
-            NOEMPTY_PIX(empt)
-    }
-    for (empt = true, bottom = h-1; empt && bottom > top; bottom--)
-    {
-        MK_DTTMP(0, bottom);
-        for (i = 0; i < w; i++, dttmp+=3)
-            NOEMPTY_PIX(empt)
-    }
-    for (empt = true, left = 0; empt && left < w; left++)
-    {
-        MK_DTTMP(left, 0);
-        for (i = 0; i < h; i++, dttmp+=3*w)
-            NOEMPTY_PIX(empt)
-    }
-    for (empt = true, right = w-1; empt && right > left; right--)
-    {
-        MK_DTTMP(right, 0);
-        for (i = 0; i < h; i++, dttmp+=3*w)
-            NOEMPTY_PIX(empt)
-    }
-    top--, left--, bottom++, right++;
-
-    return img.GetSubImage(wxRect(left, top, right - left + 1, bottom - top + 1));
-}
-#endif // #if 0
-
-#endif // wxUSE_MIMETYPE
-
 int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
 {
     if (!m_smallImageList)
@@ -1701,11 +1586,41 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     {
         wxImage img = bmp.ConvertToImage();
 
-        if ((img.GetWidth() != size*2) || (img.GetHeight() != size*2))
-//            m_smallImageList->Add(CreateAntialiasedBitmap(CutEmptyBorders(img).Rescale(size*2, size*2)));
-            m_smallImageList->Add(CreateAntialiasedBitmap(img.Rescale(size*2, size*2), m_size));
+        if (img.HasMask())
+            img.InitAlpha();
+
+        wxBitmap bmp2;
+        if ((img.GetWidth() != size) || (img.GetHeight() != size))
+        {
+            // TODO: replace with public API that gets the bitmap scale.
+            // But this function may be called from code that doesn't pass a window,
+            // so we will need to be able to get the scaling factor of the current
+            // display, somehow. We could use wxTheApp->GetTopWindow() but sometimes
+            // this won't be available.
+#if defined(__WXOSX_COCOA__)
+            if (wxOSXGetMainScreenContentScaleFactor() > 1.0)
+            {
+                img.Rescale(2*size, 2*size, wxIMAGE_QUALITY_HIGH);
+                bmp2 = wxBitmap(img, -1, 2.0);
+            }
+            else
+#endif
+            {
+                // Double, using normal quality scaling.
+                img.Rescale(2*img.GetWidth(), 2*img.GetHeight());
+
+                // Then scale to the desired size. This gives the best quality,
+                // and better than CreateAntialiasedBitmap.
+                if ((img.GetWidth() != size) || (img.GetHeight() != size))
+                    img.Rescale(size, size, wxIMAGE_QUALITY_HIGH);
+
+                bmp2 = wxBitmap(img);
+            }
+        }
         else
-            m_smallImageList->Add(CreateAntialiasedBitmap(img, m_size));
+            bmp2 = wxBitmap(img);
+
+        m_smallImageList->Add(bmp2);
     }
 #endif // wxUSE_IMAGE
 

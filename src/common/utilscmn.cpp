@@ -103,13 +103,17 @@
     #include "wx/msw/private.h"
 #endif
 
-#if wxUSE_GUI && defined(__WXGTK__)
-    #include <gtk/gtk.h>    // for GTK_XXX_VERSION constants
+#if wxUSE_GUI
+    // Include the definitions of GTK_XXX_VERSION constants.
+    #ifdef __WXGTK20__
+        #include "wx/gtk/private/wrapgtk.h"
+    #elif defined(__WXGTK__)
+        #include <gtk/gtk.h>
+    #elif defined(__WXQT__)
+        #include <QtCore/QtGlobal>       // for QT_VERSION_STR constants
+    #endif
 #endif
 
-#if wxUSE_GUI && defined(__WXQT__)
-    #include <QtGlobal>       // for QT_VERSION_STR constants
-#endif
 #if wxUSE_BASE
 
 // ============================================================================
@@ -117,38 +121,38 @@
 // ============================================================================
 
 // Array used in DecToHex conversion routine.
-static const wxChar hexArray[] = wxT("0123456789ABCDEF");
+static const char hexArray[] = "0123456789ABCDEF";
 
 // Convert 2-digit hex number to decimal
 int wxHexToDec(const wxString& str)
 {
+    wxCHECK_MSG( str.Length() >= 2, -1, wxS("Invalid argument") );
+
     char buf[2];
     buf[0] = str.GetChar(0);
     buf[1] = str.GetChar(1);
-    return wxHexToDec((const char*) buf);
+    return wxHexToDec(buf);
 }
 
-// Convert decimal integer to 2-character hex string
-void wxDecToHex(int dec, wxChar *buf)
+// Convert decimal integer to 2-character hex string (not prefixed by 0x).
+void wxDecToHex(unsigned char dec, wxChar *buf)
 {
-    int firstDigit = (int)(dec/16.0);
-    int secondDigit = (int)(dec - (firstDigit*16.0));
-    buf[0] = hexArray[firstDigit];
-    buf[1] = hexArray[secondDigit];
+    wxASSERT_MSG( buf, wxS("Invalid argument") );
+    buf[0] = hexArray[dec >> 4];
+    buf[1] = hexArray[dec & 0x0F];
     buf[2] = 0;
 }
 
 // Convert decimal integer to 2 characters
-void wxDecToHex(int dec, char* ch1, char* ch2)
+void wxDecToHex(unsigned char dec, char* ch1, char* ch2)
 {
-    int firstDigit = (int)(dec/16.0);
-    int secondDigit = (int)(dec - (firstDigit*16.0));
-    (*ch1) = (char) hexArray[firstDigit];
-    (*ch2) = (char) hexArray[secondDigit];
+    wxASSERT_MSG( ch1 && ch2, wxS("Invalid argument(s)") );
+    *ch1 = hexArray[dec >> 4];
+    *ch2 = hexArray[dec & 0x0F];
 }
 
-// Convert decimal integer to 2-character hex string
-wxString wxDecToHex(int dec)
+// Convert decimal integer to 2-character hex string (not prefixed by 0x).
+wxString wxDecToHex(unsigned char dec)
 {
     wxChar buf[3];
     wxDecToHex(dec, buf);
@@ -1374,7 +1378,9 @@ wxVersionInfo wxGetLibraryVersionInfo()
     wxString msg;
     msg.Printf(wxS("wxWidgets Library (%s port)\n")
                wxS("Version %d.%d.%d (Unicode: %s, debug level: %d),\n")
+#if !wxUSE_REPRODUCIBLE_BUILD
                wxS("compiled at %s %s\n\n")
+#endif
                wxS("Runtime version of toolkit used is %d.%d.\n"),
                wxPlatformInfo::Get().GetPortIdName(),
                wxMAJOR_VERSION,
@@ -1388,8 +1394,10 @@ wxVersionInfo wxGetLibraryVersionInfo()
                "none",
 #endif
                wxDEBUG_LEVEL,
+#if !wxUSE_REPRODUCIBLE_BUILD
                __TDATE__,
                __TTIME__,
+#endif
                wxPlatformInfo::Get().GetToolkitMajorVersion(),
                wxPlatformInfo::Get().GetToolkitMinorVersion()
               );
@@ -1411,7 +1419,7 @@ wxVersionInfo wxGetLibraryVersionInfo()
                          wxMINOR_VERSION,
                          wxRELEASE_NUMBER,
                          msg,
-                         wxS("Copyright (c) 1995-2016 wxWidgets team"));
+                         wxS("Copyright (c) 1995-2018 wxWidgets team"));
 }
 
 void wxInfoMessageBox(wxWindow* parent)

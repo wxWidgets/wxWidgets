@@ -54,7 +54,7 @@ public:
                 long style = 0,
                 const wxString& name = wxPanelNameStr)
     {
-        return CreateUsingMSWClass(GetMSWClassName(),
+        return CreateUsingMSWClass(GetMSWClassName(style),
                                    parent, id, pos, size, style, name);
     }
 
@@ -100,6 +100,7 @@ public:
     virtual bool Reparent(wxWindowBase *newParent) wxOVERRIDE;
 
     virtual void WarpPointer(int x, int y) wxOVERRIDE;
+    virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
 
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = (const wxRect *) NULL ) wxOVERRIDE;
@@ -205,8 +206,8 @@ public:
     void SubclassWin(WXHWND hWnd);
     void UnsubclassWin();
 
-    WXFARPROC MSWGetOldWndProc() const { return m_oldWndProc; }
-    void MSWSetOldWndProc(WXFARPROC proc) { m_oldWndProc = proc; }
+    WXWNDPROC MSWGetOldWndProc() const { return m_oldWndProc; }
+    void MSWSetOldWndProc(WXWNDPROC proc) { m_oldWndProc = proc; }
 
     // return true if the window is of a standard (i.e. not wxWidgets') class
     //
@@ -250,7 +251,7 @@ public:
     // object, taking into account wxFULL_REPAINT_ON_RESIZE style (if it's not
     // specified, the wxApp::GetNoRedrawClassSuffix()-suffixed version of the
     // class is used).
-    const wxChar *GetMSWClassName() const;
+    static const wxChar *GetMSWClassName(long style);
 
     // creates the window of specified Windows class with given style, extended
     // style, title and geometry (default values
@@ -359,6 +360,16 @@ public:
     bool HandleMouseMove(int x, int y, WXUINT flags);
     bool HandleMouseWheel(wxMouseWheelAxis axis,
                           WXWPARAM wParam, WXLPARAM lParam);
+
+    // Common gesture event initialization, returns true if it is the initial
+    // event (GF_BEGIN set in flags), false otherwise.
+    bool InitGestureEvent(wxGestureEvent& event, const wxPoint& pt, WXDWORD flags);
+
+    bool HandlePanGesture(const wxPoint& pt, WXDWORD flags);
+    bool HandleZoomGesture(const wxPoint& pt, WXDWORD fingerDistance, WXDWORD flags);
+    bool HandleRotateGesture(const wxPoint& pt, WXDWORD angleArgument, WXDWORD flags);
+    bool HandleTwoFingerTap(const wxPoint& pt, WXDWORD flags);
+    bool HandlePressAndTap(const wxPoint& pt, WXDWORD flags);
 
     bool HandleChar(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam);
@@ -532,10 +543,8 @@ public:
     // check if mouse is in the window
     bool IsMouseInWindow() const;
 
-    // check if a native double-buffering applies for this window
+    virtual void SetDoubleBuffered(bool on) wxOVERRIDE;
     virtual bool IsDoubleBuffered() const wxOVERRIDE;
-
-    void SetDoubleBuffered(bool on);
 
     // synthesize a wxEVT_LEAVE_WINDOW event and set m_mouseInWindow to false
     void GenerateMouseLeave();
@@ -588,7 +597,7 @@ protected:
     WXHWND                m_hWnd;
 
     // the old window proc (we subclass all windows)
-    WXFARPROC             m_oldWndProc;
+    WXWNDPROC             m_oldWndProc;
 
     // additional (MSW specific) flags
     bool                  m_mouseInWindow:1;
@@ -720,8 +729,27 @@ private:
     bool MSWSafeIsDialogMessage(WXMSG* msg);
 #endif // __WXUNIVERSAL__
 
-#if wxUSE_DEFERRED_SIZING
+    static inline bool MSWIsPositionDirectlySupported(int x, int y)
+    {
+        // The supported coordinate intervals for various functions are:
+        // - MoveWindow, DeferWindowPos: [-32768, 32767] a.k.a. [SHRT_MIN, SHRT_MAX];
+        // - CreateWindow, CreateWindowEx: [-32768, 32554].
+        // CreateXXX will _sometimes_ manage to create the window at higher coordinates
+        // like 32580, 32684, 32710, but that was not consistent and the lowest common
+        // limit was 32554 (so far at least).
+        return (x >= SHRT_MIN && x <= 32554 && y >= SHRT_MIN && y <= 32554);
+    }
+
 protected:
+    WXHWND MSWCreateWindowAtAnyPosition(WXDWORD exStyle, const wxChar* clName,
+                                        const wxChar* title, WXDWORD style,
+                                        int x, int y, int width, int height,
+                                        WXHWND parent, wxWindowID id);
+
+    void MSWMoveWindowToAnyPosition(WXHWND hwnd, int x, int y,
+                                    int width, int height, bool bRepaint);
+
+#if wxUSE_DEFERRED_SIZING
     // this function is called after the window was resized to its new size
     virtual void MSWEndDeferWindowPos()
     {

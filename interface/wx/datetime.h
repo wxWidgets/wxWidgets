@@ -254,6 +254,17 @@ public:
         /// Create a time zone with the given offset in seconds.
         static TimeZone Make(long offset);
 
+        /**
+            Return true if this is the local time zone.
+
+            This method can be useful for distinguishing between UTC time zone
+            and local time zone in Great Britain, which use the same offset as
+            UTC (i.e. 0), but do use DST.
+
+            @since 3.1.1
+         */
+        bool IsLocal() const;
+
         /// Return the offset of this time zone from UTC, in seconds.
         long GetOffset() const;
     };
@@ -561,8 +572,17 @@ public:
     /**
         Returns the number of seconds since Jan 1, 1970 UTC.
 
-        An assert failure will occur if the date is not in the range covered by
-        @c time_t type, use GetValue() if you work with dates outside of it.
+        This function is provided solely for interoperability with the standard
+        C library and other libraries using @c time_t values. If you just need
+        to get the value represented by this object as a number, use GetValue()
+        instead, which doesn't lose precision and covers the entire supported
+        range of dates, unlike this one which is limited to the range of
+        positive 32 bit values, i.e. from Jan 1, 1970 to around Jan 19, 2038
+        and returns @c -1 for the dates outside of it.
+
+        Additionally, this method must be called on an initialized date object
+        and an assertion failure occurs if it is called on an object for which
+        IsValid() is false.
     */
     time_t GetTicks() const;
 
@@ -1232,15 +1252,23 @@ public:
         for more information about time zones. Normally, these functions should
         be rarely used.
 
+        Note that all functions in this section always use the current offset
+        for the specified time zone and don't take into account its possibly
+        different historical value at the given date.
+
         Related functions in other groups: GetBeginDST(), GetEndDST()
     */
     //@{
 
     /**
-        Transform the date from the given time zone to the local one. If
-        @a noDST is @true, no DST adjustments will be made.
+        Transform the date from the given time zone to the local one.
 
-        @return The date in the local time zone.
+        If @a noDST is @true, no DST adjustments will be made.
+
+        If @a tz parameter is wxDateTime::Local, no adjustment is performed.
+
+        @return The date adjusted by the different between the given and the
+        local time zones.
     */
     wxDateTime FromTimezone(const TimeZone& tz, bool noDST = false) const;
 
@@ -1258,7 +1286,9 @@ public:
 
     /**
         Modifies the object in place to represent the date in another time
-        zone. If @a noDST is @true, no DST adjustments will be made.
+        zone.
+
+        If @a noDST is @true, no DST adjustments will be made.
     */
     wxDateTime& MakeTimezone(const TimeZone& tz, bool noDST = false);
 
@@ -1268,10 +1298,14 @@ public:
     wxDateTime& MakeUTC(bool noDST = false);
 
     /**
-        Transform the date to the given time zone. If @a noDST is @true, no DST
-        adjustments will be made.
+        Transform the date to the given time zone.
 
-        @return The date in the new time zone.
+        If @a noDST is @true, no DST adjustments will be made.
+
+        If @a tz parameter is wxDateTime::Local, no adjustment is performed.
+
+        @return The date adjusted by the different between the local and the
+        given time zones.
     */
     wxDateTime ToTimezone(const TimeZone& tz, bool noDST = false) const;
 
@@ -1462,6 +1496,18 @@ public:
     */
     static bool IsDSTApplicable(int year = Inv_Year,
                                   Country country = Country_Default);
+
+    /**
+         Acquires the first weekday of a week based on locale and/or OS settings.
+         If the information was not available, returns @c Sun.
+         @param firstDay
+             The address of a WeekDay variable to which the first weekday will be
+             assigned to.
+         @return If the first day could not be determined, returns false,
+             and @a firstDay is set to a fallback value.
+         @since 3.1.1
+    */
+    static bool GetFirstWeekDay(WeekDay *firstDay);
 
     /**
         Returns @true if the @a year is a leap one in the specified calendar.

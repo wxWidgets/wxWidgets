@@ -26,6 +26,8 @@
 #include "wx/wfstream.h"
 #include "wx/math.h"
 
+#include "testfile.h"
+
 // ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
@@ -107,8 +109,10 @@ DataStreamTestCase::DataStreamTestCase()
 
 wxFloat64 DataStreamTestCase::TestFloatRW(wxFloat64 fValue)
 {
+    TempFile f("mytext.dat");
+
     {
-        wxFileOutputStream pFileOutput( wxT("mytext.dat") );
+        wxFileOutputStream pFileOutput( f.GetName() );
         wxDataOutputStream pDataOutput( pFileOutput );
         if ( ms_useBigEndianFormat )
             pDataOutput.BigEndianOrdered(true);
@@ -121,7 +125,7 @@ wxFloat64 DataStreamTestCase::TestFloatRW(wxFloat64 fValue)
         pDataOutput << fValue;
     }
 
-    wxFileInputStream pFileInput( wxT("mytext.dat") );
+    wxFileInputStream pFileInput( f.GetName() );
     wxDataInputStream pDataInput( pFileInput );
     if ( ms_useBigEndianFormat )
         pDataInput.BigEndianOrdered(true);
@@ -156,15 +160,17 @@ private:
     {
         ValueArray InValues(Size);
 
+        TempFile f("mytext.dat");
+
         {
-            wxFileOutputStream FileOutput( wxT("mytext.dat") );
+            wxFileOutputStream FileOutput( f.GetName() );
             wxDataOutputStream DataOutput( FileOutput );
 
             (DataOutput.*pfnWriter)(Values, Size);
         }
 
         {
-            wxFileInputStream FileInput( wxT("mytext.dat") );
+            wxFileInputStream FileInput( f.GetName() );
             wxDataInputStream DataInput( FileInput );
 
             (DataInput.*pfnReader)(&*InValues.begin(), InValues.size());
@@ -207,15 +213,17 @@ T TestRW(const T &Value)
 {
     T InValue;
 
+    TempFile f("mytext.dat");
+
     {
-        wxFileOutputStream FileOutput( wxT("mytext.dat") );
+        wxFileOutputStream FileOutput( f.GetName() );
         wxDataOutputStream DataOutput( FileOutput );
 
         DataOutput << Value;
     }
 
     {
-        wxFileInputStream FileInput( wxT("mytext.dat") );
+        wxFileInputStream FileInput( f.GetName() );
         wxDataInputStream DataInput( FileInput );
 
         DataInput >> InValue;

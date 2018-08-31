@@ -87,7 +87,6 @@ class ToggleWidgetsPage : public WidgetsPage
 {
 public:
     ToggleWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~ToggleWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_toggle; }
     virtual void RecreateWidget() wxOVERRIDE { CreateToggle(); }

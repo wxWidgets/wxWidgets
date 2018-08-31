@@ -38,8 +38,6 @@
     typedef HWND wxNativeContainerWindowHandle;
     typedef HWND wxNativeWindowHandle;
 #elif defined(__WXGTK__)
-    #include <gtk/gtk.h>
-
     // GdkNativeWindow is guint32 under GDK/X11 and gpointer under GDK/WIN32
     #ifdef __UNIX__
         typedef unsigned long wxNativeContainerWindowId;

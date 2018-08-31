@@ -1653,35 +1653,35 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
             if (bdiag == (Pixmap) 0)
                 bdiag = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
-                bdiag_bits, bdiag_width, bdiag_height);
+                reinterpret_cast<const char*>(bdiag_bits), bdiag_width, bdiag_height);
             myStipple = bdiag;
             break;
         case wxFDIAGONAL_HATCH:
             if (fdiag == (Pixmap) 0)
                 fdiag = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
-                fdiag_bits, fdiag_width, fdiag_height);
+                reinterpret_cast<const char*>(fdiag_bits), fdiag_width, fdiag_height);
             myStipple = fdiag;
             break;
         case wxCROSS_HATCH:
             if (cross == (Pixmap) 0)
                 cross = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
-                cross_bits, cross_width, cross_height);
+                reinterpret_cast<const char*>(cross_bits), cross_width, cross_height);
             myStipple = cross;
             break;
         case wxHORIZONTAL_HATCH:
             if (horiz == (Pixmap) 0)
                 horiz = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
-                horiz_bits, horiz_width, horiz_height);
+                reinterpret_cast<const char*>(horiz_bits), horiz_width, horiz_height);
             myStipple = horiz;
             break;
         case wxVERTICAL_HATCH:
             if (verti == (Pixmap) 0)
                 verti = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
-                verti_bits, verti_width, verti_height);
+                reinterpret_cast<const char*>(verti_bits), verti_width, verti_height);
             myStipple = verti;
             break;
         case wxCROSSDIAG_HATCH:
@@ -1689,7 +1689,7 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
             if (cdiag == (Pixmap) 0)
                 cdiag = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
-                cdiag_bits, cdiag_width, cdiag_height);
+                reinterpret_cast<const char*>(cdiag_bits), cdiag_width, cdiag_height);
             myStipple = cdiag;
             break;
         }
@@ -1824,35 +1824,35 @@ void wxWindowDCImpl::SetBrush( const wxBrush &brush )
             if (bdiag == (Pixmap) 0)
                 bdiag = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
-                bdiag_bits, bdiag_width, bdiag_height);
+                reinterpret_cast<const char*>(bdiag_bits), bdiag_width, bdiag_height);
             myStipple = bdiag;
             break;
         case wxFDIAGONAL_HATCH:
             if (fdiag == (Pixmap) 0)
                 fdiag = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
-                fdiag_bits, fdiag_width, fdiag_height);
+                reinterpret_cast<const char*>(fdiag_bits), fdiag_width, fdiag_height);
             myStipple = fdiag;
             break;
         case wxCROSS_HATCH:
             if (cross == (Pixmap) 0)
                 cross = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
-                cross_bits, cross_width, cross_height);
+                reinterpret_cast<const char*>(cross_bits), cross_width, cross_height);
             myStipple = cross;
             break;
         case wxHORIZONTAL_HATCH:
             if (horiz == (Pixmap) 0)
                 horiz = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
-                horiz_bits, horiz_width, horiz_height);
+                reinterpret_cast<const char*>(horiz_bits), horiz_width, horiz_height);
             myStipple = horiz;
             break;
         case wxVERTICAL_HATCH:
             if (verti == (Pixmap) 0)
                 verti = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
-                verti_bits, verti_width, verti_height);
+                reinterpret_cast<const char*>(verti_bits), verti_width, verti_height);
             myStipple = verti;
             break;
         case wxCROSSDIAG_HATCH:
@@ -1860,7 +1860,7 @@ void wxWindowDCImpl::SetBrush( const wxBrush &brush )
             if (cdiag == (Pixmap) 0)
                 cdiag = XCreateBitmapFromData ((Display*) m_display,
                 RootWindow ((Display*) m_display, DefaultScreen ((Display*) m_display)),
-                cdiag_bits, cdiag_width, cdiag_height);
+                reinterpret_cast<const char*>(cdiag_bits), cdiag_width, cdiag_height);
             myStipple = cdiag;
             break;
         }
@@ -2058,7 +2058,7 @@ void wxWindowDCImpl::SetDCClipping( WXRegion userRegion )
                           m_clipRegion );
     }
     // intersect the user region, if any, with the
-    // exisiting clip region
+    // existing clip region
     else // if( userRegion )
     {
         if( !m_clipRegion )

@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 9 June 2016                                                         *
+# Date : 22 February 2017                                                    *
 #                                                                            *
 #*****************************************************************************
 
@@ -79,7 +79,7 @@ OBJECTS1=LexMMIXAL.obj,LexModula.obj,LexMPT.obj,LexMSSQL.obj,LexMySQL.obj,\
 	LexVerilog.obj,LexVHDL.obj,LexVisualProlog.obj,LexYAML.obj,\
 	LexDMAP.obj,LexHex.obj,LexBibTeX.obj,LexDMIS.obj,LexRegistry.obj,\
 	LexBatch.obj,LexDiff.obj,LexErrorList.obj,LexMake.obj,LexNull.obj,\
-	LexProps.obj,LexJSON.obj
+	LexProps.obj,LexJSON.obj,LexEDIFACT.obj
 
 SOURCES=LexA68k.cxx,LexAbaqus.cxx,LexAda.cxx,LexAPDL.cxx,LexAsm.cxx,\
 	LexAsn1.cxx,LexASY.cxx,LexAU3.cxx,LexAVE.cxx,LexAVS.cxx,LexBaan.cxx,\
@@ -102,7 +102,7 @@ SOURCES=LexA68k.cxx,LexAbaqus.cxx,LexAda.cxx,LexAPDL.cxx,LexAsm.cxx,\
 	LexVerilog.cxx,LexVHDL.cxx,LexVisualProlog.cxx,LexYAML.cxx,\
 	LexDMAP.cxx LexHex.cxx LexBibTeX.cxx LexDMIS.cxx LexRegistry.cxx \
 	LexBatch.cxx LexDiff.cxx LexErrorList.cxx LexMake.cxx LexNull.cxx \
-	LexProps.cxx LexJSON.cxx
+	LexProps.cxx LexJSON.cxx LexEDIFACT.cxx
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -238,3 +238,4 @@ LexMake.obj : LexMake.cxx
 LexNull.obj : LexNull.cxx
 LexProps.obj : LexProps.cxx
 LexJSON.obj : LexJSON.cxx
+LexEDIFACT.obj : LexEDIFACT.cxx

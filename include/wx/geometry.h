@@ -579,7 +579,7 @@ public:
     inline void SetCentre( const wxPoint2DDouble &pt )
         { MoveCentreTo( pt ); }    // since this is impossible without moving...
     inline void MoveCentreTo( const wxPoint2DDouble &pt )
-        { m_x += pt.m_x - (m_x+m_width/2) , m_y += pt.m_y -(m_y+m_height/2); }
+        { m_x += pt.m_x - (m_x+m_width/2); m_y += pt.m_y -(m_y+m_height/2); }
     inline wxOutCode GetOutCode( const wxPoint2DDouble &pt ) const
         { return (wxOutCode) (( ( pt.m_x < m_x ) ? wxOutLeft : 0 ) +
                      ( ( pt.m_x > m_x + m_width ) ? wxOutRight : 0 ) +
@@ -691,7 +691,7 @@ public:
         inline void MoveRightBottomTo( const wxPoint2DInt &pt ) { m_x = pt.m_x - m_width; m_y = pt.m_y - m_height; }
         inline wxPoint2DInt GetCentre() const { return wxPoint2DInt( m_x+m_width/2 , m_y+m_height/2 ); }
         inline void SetCentre( const wxPoint2DInt &pt ) { MoveCentreTo( pt ); }    // since this is impossible without moving...
-        inline void MoveCentreTo( const wxPoint2DInt &pt ) { m_x += pt.m_x - (m_x+m_width/2) , m_y += pt.m_y -(m_y+m_height/2); }
+        inline void MoveCentreTo( const wxPoint2DInt &pt ) { m_x += pt.m_x - (m_x+m_width/2); m_y += pt.m_y -(m_y+m_height/2); }
         inline wxOutCode GetOutCode( const wxPoint2DInt &pt ) const
             { return (wxOutCode) (( ( pt.m_x < m_x ) ? wxOutLeft : 0 ) +
                      ( ( pt.m_x >= m_x + m_width ) ? wxOutRight : 0 ) +

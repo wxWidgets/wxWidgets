@@ -550,7 +550,6 @@ wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckConnectAndPing()
 wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckConnect()
 {
    // second method: try to connect to a well known host:
-   // This can be used under Win 9x, too!
    struct hostent     *hp;
    struct sockaddr_in  serv_addr;
 
@@ -560,6 +559,7 @@ wxDialUpManagerImpl::NetConnection wxDialUpManagerImpl::CheckConnect()
    serv_addr.sin_family = hp->h_addrtype;
    memcpy(&serv_addr.sin_addr,hp->h_addr, hp->h_length);
    serv_addr.sin_port = htons(m_BeaconPort);
+   memset(&serv_addr.sin_zero, 0, sizeof(serv_addr.sin_zero));
 
    int sockfd;
    if( ( sockfd = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0)
@@ -722,11 +722,12 @@ wxDialUpManagerImpl::CheckIfconfig()
                     hasModem = strstr(output.fn_str(),"ipdptp") != NULL;
                     hasLAN = strstr(output.fn_str(), "hme") != NULL;
 #elif defined(__LINUX__) || defined (__FREEBSD__) || defined (__QNX__) || \
-      defined(__OPENBSD__)
+      defined(__OPENBSD__) || defined(__DARWIN__)
                     hasModem = strstr(output.fn_str(),"ppp")    // ppp
                         || strstr(output.fn_str(),"sl")  // slip
                         || strstr(output.fn_str(),"pl"); // plip
-                    hasLAN = strstr(output.fn_str(), "eth") != NULL;
+                    hasLAN = strstr(output.fn_str(), "eth") != NULL
+                        || strstr(output.fn_str(),"en") != NULL; // en0, en1 osx
 #elif defined(__SGI__)  // IRIX
                     hasModem = strstr(output.fn_str(), "ppp") != NULL; // PPP
 #elif defined(__HPUX__)

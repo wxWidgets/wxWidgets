@@ -61,7 +61,7 @@ wxObject *wxCollapsiblePaneXmlHandler::DoCreateResource()
     {
         XRC_MAKE_INSTANCE(ctrl, wxCollapsiblePane)
 
-        wxString label = GetParamValue(wxT("label"));
+        wxString label = GetText(wxT("label"));
         if (label.empty())
         {
             ReportParamError("label", "label cannot be empty");

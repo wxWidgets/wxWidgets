@@ -43,6 +43,7 @@ public:
 
     virtual void SetSortable( bool sortable ) wxOVERRIDE;
     virtual void SetSortOrder( bool ascending ) wxOVERRIDE;
+    virtual void UnsetAsSortKey() wxOVERRIDE;
 
     virtual void SetResizeable( bool resizable ) wxOVERRIDE;
     virtual void SetHidden( bool hidden ) wxOVERRIDE;
@@ -169,6 +170,9 @@ public:
 
     virtual wxDataViewColumn *GetCurrentColumn() const wxOVERRIDE;
 
+    virtual wxDataViewItem GetTopItem() const wxOVERRIDE;
+    virtual int GetCountPerPage() const wxOVERRIDE;
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
@@ -184,6 +188,25 @@ public:
     virtual void OnInternalIdle() wxOVERRIDE;
 
     int GTKGetUniformRowHeight() const { return m_uniformRowHeight; }
+
+    // Simple RAII helper for disabling selection events during its lifetime.
+    class SelectionEventsSuppressor
+    {
+    public:
+        explicit SelectionEventsSuppressor(wxDataViewCtrl* ctrl)
+            : m_ctrl(ctrl)
+        {
+            m_ctrl->GtkDisableSelectionEvents();
+        }
+
+        ~SelectionEventsSuppressor()
+        {
+            m_ctrl->GtkEnableSelectionEvents();
+        }
+
+    private:
+        wxDataViewCtrl* const m_ctrl;
+    };
 
 protected:
     virtual void DoSetExpanderColumn() wxOVERRIDE;

@@ -16,8 +16,16 @@
 #include <vector>
 #include <algorithm>
 
+#define NOEXCEPT
+
 #ifndef NO_CXX11_REGEX
 #include <regex>
+#if defined(__GLIBCXX__)
+// If using the GNU implementation of <regex> then have 'noexcept' so can use
+// when defining regex iterators to keep Clang analyze happy.
+#undef NOEXCEPT
+#define NOEXCEPT noexcept
+#endif
 #endif
 
 #include "Platform.h"
@@ -26,6 +34,7 @@
 #include "Scintilla.h"
 
 #include "CharacterSet.h"
+#include "CharacterCategory.h"
 #include "Position.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
@@ -43,10 +52,6 @@
 #ifdef SCI_NAMESPACE
 using namespace Scintilla;
 #endif
-
-static inline bool IsPunctuation(char ch) {
-	return IsASCII(ch) && ispunct(ch);
-}
 
 void LexInterface::Colourise(int start, int end) {
 	if (pdoc && instance && !performingStyle) {
@@ -771,6 +776,77 @@ bool Document::NextCharacter(int &pos, int moveDir) const {
 	}
 }
 
+Document::CharacterExtracted Document::CharacterAfter(int position) const {
+	if (position >= Length()) {
+		return CharacterExtracted(unicodeReplacementChar, 0);
+	}
+	const unsigned char leadByte = static_cast<unsigned char>(cb.CharAt(position));
+	if (!dbcsCodePage || UTF8IsAscii(leadByte)) {
+		// Common case: ASCII character
+		return CharacterExtracted(leadByte, 1);
+	}
+	if (SC_CP_UTF8 == dbcsCodePage) {
+		const int widthCharBytes = UTF8BytesOfLead[leadByte];
+		unsigned char charBytes[UTF8MaxBytes] = { leadByte, 0, 0, 0 };
+		for (int b = 1; b<widthCharBytes; b++)
+			charBytes[b] = static_cast<unsigned char>(cb.CharAt(position + b));
+		int utf8status = UTF8Classify(charBytes, widthCharBytes);
+		if (utf8status & UTF8MaskInvalid) {
+			// Treat as invalid and use up just one byte
+			return CharacterExtracted(unicodeReplacementChar, 1);
+		} else {
+			return CharacterExtracted(UnicodeFromUTF8(charBytes), utf8status & UTF8MaskWidth);
+		}
+	} else {
+		if (IsDBCSLeadByte(leadByte) && ((position + 1) < Length())) {
+			return CharacterExtracted::DBCS(leadByte, static_cast<unsigned char>(cb.CharAt(position + 1)));
+		} else {
+			return CharacterExtracted(leadByte, 1);
+		}
+	}
+}
+
+Document::CharacterExtracted Document::CharacterBefore(int position) const {
+	if (position <= 0) {
+		return CharacterExtracted(unicodeReplacementChar, 0);
+	}
+	const unsigned char previousByte = static_cast<unsigned char>(cb.CharAt(position - 1));
+	if (0 == dbcsCodePage) {
+		return CharacterExtracted(previousByte, 1);
+	}
+	if (SC_CP_UTF8 == dbcsCodePage) {
+		if (UTF8IsAscii(previousByte)) {
+			return CharacterExtracted(previousByte, 1);
+		}
+		position--;
+		// If previousByte is not a trail byte then its invalid
+		if (UTF8IsTrailByte(previousByte)) {
+			// If previousByte is a trail byte in a valid UTF-8 character then find start of character
+			int startUTF = position;
+			int endUTF = position;
+			if (InGoodUTF8(position, startUTF, endUTF)) {
+				const int widthCharBytes = endUTF - startUTF;
+				unsigned char charBytes[UTF8MaxBytes] = { 0, 0, 0, 0 };
+				for (int b = 0; b<widthCharBytes; b++)
+					charBytes[b] = static_cast<unsigned char>(cb.CharAt(startUTF + b));
+				int utf8status = UTF8Classify(charBytes, widthCharBytes);
+				if (utf8status & UTF8MaskInvalid) {
+					// Treat as invalid and use up just one byte
+					return CharacterExtracted(unicodeReplacementChar, 1);
+				} else {
+					return CharacterExtracted(UnicodeFromUTF8(charBytes), utf8status & UTF8MaskWidth);
+				}
+			}
+			// Else invalid UTF-8 so return position of isolated trail byte
+		}
+		return CharacterExtracted(unicodeReplacementChar, 1);
+	} else {
+		// Moving backwards in DBCS is complex so use NextPosition
+		const int posStartCharacter = NextPosition(position, -1);
+		return CharacterAfter(posStartCharacter);
+	}
+}
+
 // Return -1  on out-of-bounds
 Sci_Position SCI_METHOD Document::GetRelativePosition(Sci_Position positionStart, Sci_Position characterOffset) const {
 	int pos = positionStart;
@@ -1485,28 +1561,104 @@ int Document::ParaDown(int pos) const {
 		return LineEnd(line-1);
 }
 
-CharClassify::cc Document::WordCharClass(unsigned char ch) const {
-	if ((SC_CP_UTF8 == dbcsCodePage) && (!UTF8IsAscii(ch)))
-		return CharClassify::ccWord;
-	return charClass.GetClass(ch);
+bool Document::IsASCIIWordByte(unsigned char ch) const {
+	if (IsASCII(ch)) {
+		return charClass.GetClass(ch) == CharClassify::ccWord;
+	} else {
+		return false;
+	}
+}
+
+CharClassify::cc Document::WordCharacterClass(unsigned int ch) const {
+	if (dbcsCodePage && (!UTF8IsAscii(ch))) {
+		if (SC_CP_UTF8 == dbcsCodePage) {
+			// Use hard coded Unicode class
+			const CharacterCategory cc = CategoriseCharacter(ch);
+			switch (cc) {
+
+				// Separator, Line/Paragraph
+			case ccZl:
+			case ccZp:
+				return CharClassify::ccNewLine;
+
+				// Separator, Space
+			case ccZs:
+				// Other
+			case ccCc:
+			case ccCf:
+			case ccCs:
+			case ccCo:
+			case ccCn:
+				return CharClassify::ccSpace;
+
+				// Letter
+			case ccLu:
+			case ccLl:
+			case ccLt:
+			case ccLm:
+			case ccLo:
+				// Number
+			case ccNd:
+			case ccNl:
+			case ccNo:
+				// Mark - includes combining diacritics
+			case ccMn:
+			case ccMc:
+			case ccMe:
+				return CharClassify::ccWord;
+
+				// Punctuation
+			case ccPc:
+			case ccPd:
+			case ccPs:
+			case ccPe:
+			case ccPi:
+			case ccPf:
+			case ccPo:
+				// Symbol
+			case ccSm:
+			case ccSc:
+			case ccSk:
+			case ccSo:
+				return CharClassify::ccPunctuation;
+
+			}
+		} else {
+			// Asian DBCS
+			return CharClassify::ccWord;
+		}
+	}
+	return charClass.GetClass(static_cast<unsigned char>(ch));
 }
 
 /**
  * Used by commmands that want to select whole words.
  * Finds the start of word at pos when delta < 0 or the end of the word when delta >= 0.
  */
-int Document::ExtendWordSelect(int pos, int delta, bool onlyWordCharacters) {
+int Document::ExtendWordSelect(int pos, int delta, bool onlyWordCharacters) const {
 	CharClassify::cc ccStart = CharClassify::ccWord;
 	if (delta < 0) {
-		if (!onlyWordCharacters)
-			ccStart = WordCharClass(cb.CharAt(pos-1));
-		while (pos > 0 && (WordCharClass(cb.CharAt(pos - 1)) == ccStart))
-			pos--;
+		if (!onlyWordCharacters) {
+			const CharacterExtracted ce = CharacterBefore(pos);
+			ccStart = WordCharacterClass(ce.character);
+		}
+		while (pos > 0) {
+			const CharacterExtracted ce = CharacterBefore(pos);
+			if (WordCharacterClass(ce.character) != ccStart)
+				break;
+			pos -= ce.widthBytes;
+		}
 	} else {
-		if (!onlyWordCharacters && pos < Length())
-			ccStart = WordCharClass(cb.CharAt(pos));
-		while (pos < (Length()) && (WordCharClass(cb.CharAt(pos)) == ccStart))
-			pos++;
+		if (!onlyWordCharacters && pos < Length()) {
+			const CharacterExtracted ce = CharacterAfter(pos);
+			ccStart = WordCharacterClass(ce.character);
+		}
+		while (pos < Length()) {
+			const CharacterExtracted ce = CharacterAfter(pos);
+			if (WordCharacterClass(ce.character) != ccStart)
+				break;
+			pos += ce.widthBytes;
+		}
 	}
 	return MovePositionOutsideChar(pos, delta, true);
 }
@@ -1518,22 +1670,39 @@ int Document::ExtendWordSelect(int pos, int delta, bool onlyWordCharacters) {
  * additional movement to transit white space.
  * Used by cursor movement by word commands.
  */
-int Document::NextWordStart(int pos, int delta) {
+int Document::NextWordStart(int pos, int delta) const {
 	if (delta < 0) {
-		while (pos > 0 && (WordCharClass(cb.CharAt(pos - 1)) == CharClassify::ccSpace))
-			pos--;
+		while (pos > 0) {
+			const CharacterExtracted ce = CharacterBefore(pos);
+			if (WordCharacterClass(ce.character) != CharClassify::ccSpace)
+				break;
+			pos -= ce.widthBytes;
+		}
 		if (pos > 0) {
-			CharClassify::cc ccStart = WordCharClass(cb.CharAt(pos-1));
-			while (pos > 0 && (WordCharClass(cb.CharAt(pos - 1)) == ccStart)) {
-				pos--;
+			CharacterExtracted ce = CharacterBefore(pos);
+			const CharClassify::cc ccStart = WordCharacterClass(ce.character);
+			while (pos > 0) {
+				ce = CharacterBefore(pos);
+				if (WordCharacterClass(ce.character) != ccStart)
+					break;
+				pos -= ce.widthBytes;
 			}
 		}
 	} else {
-		CharClassify::cc ccStart = WordCharClass(cb.CharAt(pos));
-		while (pos < (Length()) && (WordCharClass(cb.CharAt(pos)) == ccStart))
-			pos++;
-		while (pos < (Length()) && (WordCharClass(cb.CharAt(pos)) == CharClassify::ccSpace))
-			pos++;
+		CharacterExtracted ce = CharacterAfter(pos);
+		const CharClassify::cc ccStart = WordCharacterClass(ce.character);
+		while (pos < Length()) {
+			ce = CharacterAfter(pos);
+			if (WordCharacterClass(ce.character) != ccStart)
+				break;
+			pos += ce.widthBytes;
+		}
+		while (pos < Length()) {
+			ce = CharacterAfter(pos);
+			if (WordCharacterClass(ce.character) != CharClassify::ccSpace)
+				break;
+			pos += ce.widthBytes;
+		}
 	}
 	return pos;
 }
@@ -1545,27 +1714,41 @@ int Document::NextWordStart(int pos, int delta) {
  * additional movement to transit white space.
  * Used by cursor movement by word commands.
  */
-int Document::NextWordEnd(int pos, int delta) {
+int Document::NextWordEnd(int pos, int delta) const {
 	if (delta < 0) {
 		if (pos > 0) {
-			CharClassify::cc ccStart = WordCharClass(cb.CharAt(pos-1));
+			CharacterExtracted ce = CharacterBefore(pos);
+			CharClassify::cc ccStart = WordCharacterClass(ce.character);
 			if (ccStart != CharClassify::ccSpace) {
-				while (pos > 0 && WordCharClass(cb.CharAt(pos - 1)) == ccStart) {
-					pos--;
+				while (pos > 0) {
+					ce = CharacterBefore(pos);
+					if (WordCharacterClass(ce.character) != ccStart)
+						break;
+					pos -= ce.widthBytes;
 				}
 			}
-			while (pos > 0 && WordCharClass(cb.CharAt(pos - 1)) == CharClassify::ccSpace) {
-				pos--;
+			while (pos > 0) {
+				ce = CharacterBefore(pos);
+				if (WordCharacterClass(ce.character) != CharClassify::ccSpace)
+					break;
+				pos -= ce.widthBytes;
 			}
 		}
 	} else {
-		while (pos < Length() && WordCharClass(cb.CharAt(pos)) == CharClassify::ccSpace) {
-			pos++;
+		while (pos < Length()) {
+			CharacterExtracted ce = CharacterAfter(pos);
+			if (WordCharacterClass(ce.character) != CharClassify::ccSpace)
+				break;
+			pos += ce.widthBytes;
 		}
 		if (pos < Length()) {
-			CharClassify::cc ccStart = WordCharClass(cb.CharAt(pos));
-			while (pos < Length() && WordCharClass(cb.CharAt(pos)) == ccStart) {
-				pos++;
+			CharacterExtracted ce = CharacterAfter(pos);
+			CharClassify::cc ccStart = WordCharacterClass(ce.character);
+			while (pos < Length()) {
+				ce = CharacterAfter(pos);
+				if (WordCharacterClass(ce.character) != ccStart)
+					break;
+				pos += ce.widthBytes;
 			}
 		}
 	}
@@ -1577,10 +1760,15 @@ int Document::NextWordEnd(int pos, int delta) {
  * the previous character is of a different character class.
  */
 bool Document::IsWordStartAt(int pos) const {
+	if (pos >= Length())
+		return false;
 	if (pos > 0) {
-		CharClassify::cc ccPos = WordCharClass(CharAt(pos));
+		const CharacterExtracted cePos = CharacterAfter(pos);
+		const CharClassify::cc ccPos = WordCharacterClass(cePos.character);
+		const CharacterExtracted cePrev = CharacterBefore(pos);
+		const CharClassify::cc ccPrev = WordCharacterClass(cePrev.character);
 		return (ccPos == CharClassify::ccWord || ccPos == CharClassify::ccPunctuation) &&
-			(ccPos != WordCharClass(CharAt(pos - 1)));
+			(ccPos != ccPrev);
 	}
 	return true;
 }
@@ -1590,10 +1778,15 @@ bool Document::IsWordStartAt(int pos) const {
  * the next character is of a different character class.
  */
 bool Document::IsWordEndAt(int pos) const {
+	if (pos <= 0)
+		return false;
 	if (pos < Length()) {
-		CharClassify::cc ccPrev = WordCharClass(CharAt(pos-1));
+		const CharacterExtracted cePos = CharacterAfter(pos);
+		const CharClassify::cc ccPos = WordCharacterClass(cePos.character);
+		const CharacterExtracted cePrev = CharacterBefore(pos);
+		const CharClassify::cc ccPrev = WordCharacterClass(cePrev.character);
 		return (ccPrev == CharClassify::ccWord || ccPrev == CharClassify::ccPunctuation) &&
-			(ccPrev != WordCharClass(CharAt(pos)));
+			(ccPrev != ccPos);
 	}
 	return true;
 }
@@ -1823,7 +2016,7 @@ void Document::SetCharClasses(const unsigned char *chars, CharClassify::cc newCh
     charClass.SetCharClasses(chars, newCharClass);
 }
 
-int Document::GetCharsOfClass(CharClassify::cc characterClass, unsigned char *buffer) {
+int Document::GetCharsOfClass(CharClassify::cc characterClass, unsigned char *buffer) const {
     return charClass.GetCharsOfClass(characterClass, buffer);
 }
 
@@ -2075,96 +2268,137 @@ void Document::NotifyModified(DocModification mh) {
 	}
 }
 
-bool Document::IsWordPartSeparator(char ch) const {
-	return (WordCharClass(ch) == CharClassify::ccWord) && IsPunctuation(ch);
+// Used for word part navigation.
+static bool IsASCIIPunctuationCharacter(unsigned int ch) {
+	switch (ch) {
+	case '!':
+	case '"':
+	case '#':
+	case '$':
+	case '%':
+	case '&':
+	case '\'':
+	case '(':
+	case ')':
+	case '*':
+	case '+':
+	case ',':
+	case '-':
+	case '.':
+	case '/':
+	case ':':
+	case ';':
+	case '<':
+	case '=':
+	case '>':
+	case '?':
+	case '@':
+	case '[':
+	case '\\':
+	case ']':
+	case '^':
+	case '_':
+	case '`':
+	case '{':
+	case '|':
+	case '}':
+	case '~':
+		return true;
+	default:
+		return false;
+	}
 }
 
-int Document::WordPartLeft(int pos) {
+bool Document::IsWordPartSeparator(unsigned int ch) const {
+	return (WordCharacterClass(ch) == CharClassify::ccWord) && IsASCIIPunctuationCharacter(ch);
+}
+
+int Document::WordPartLeft(int pos) const {
 	if (pos > 0) {
-		--pos;
-		char startChar = cb.CharAt(pos);
-		if (IsWordPartSeparator(startChar)) {
-			while (pos > 0 && IsWordPartSeparator(cb.CharAt(pos))) {
-				--pos;
+		pos -= CharacterBefore(pos).widthBytes;
+		CharacterExtracted ceStart = CharacterAfter(pos);
+		if (IsWordPartSeparator(ceStart.character)) {
+			while (pos > 0 && IsWordPartSeparator(CharacterAfter(pos).character)) {
+				pos -= CharacterBefore(pos).widthBytes;
 			}
 		}
 		if (pos > 0) {
-			startChar = cb.CharAt(pos);
-			--pos;
-			if (IsLowerCase(startChar)) {
-				while (pos > 0 && IsLowerCase(cb.CharAt(pos)))
-					--pos;
-				if (!IsUpperCase(cb.CharAt(pos)) && !IsLowerCase(cb.CharAt(pos)))
-					++pos;
-			} else if (IsUpperCase(startChar)) {
-				while (pos > 0 && IsUpperCase(cb.CharAt(pos)))
-					--pos;
-				if (!IsUpperCase(cb.CharAt(pos)))
-					++pos;
-			} else if (IsADigit(startChar)) {
-				while (pos > 0 && IsADigit(cb.CharAt(pos)))
-					--pos;
-				if (!IsADigit(cb.CharAt(pos)))
-					++pos;
-			} else if (IsPunctuation(startChar)) {
-				while (pos > 0 && IsPunctuation(cb.CharAt(pos)))
-					--pos;
-				if (!IsPunctuation(cb.CharAt(pos)))
-					++pos;
-			} else if (isspacechar(startChar)) {
-				while (pos > 0 && isspacechar(cb.CharAt(pos)))
-					--pos;
-				if (!isspacechar(cb.CharAt(pos)))
-					++pos;
-			} else if (!IsASCII(startChar)) {
-				while (pos > 0 && !IsASCII(cb.CharAt(pos)))
-					--pos;
-				if (IsASCII(cb.CharAt(pos)))
-					++pos;
+			ceStart = CharacterAfter(pos);
+			pos -= CharacterBefore(pos).widthBytes;
+			if (IsLowerCase(ceStart.character)) {
+				while (pos > 0 && IsLowerCase(CharacterAfter(pos).character))
+					pos -= CharacterBefore(pos).widthBytes;
+				if (!IsUpperCase(CharacterAfter(pos).character) && !IsLowerCase(CharacterAfter(pos).character))
+					pos += CharacterAfter(pos).widthBytes;
+			} else if (IsUpperCase(ceStart.character)) {
+				while (pos > 0 && IsUpperCase(CharacterAfter(pos).character))
+					pos -= CharacterBefore(pos).widthBytes;
+				if (!IsUpperCase(CharacterAfter(pos).character))
+					pos += CharacterAfter(pos).widthBytes;
+			} else if (IsADigit(ceStart.character)) {
+				while (pos > 0 && IsADigit(CharacterAfter(pos).character))
+					pos -= CharacterBefore(pos).widthBytes;
+				if (!IsADigit(CharacterAfter(pos).character))
+					pos += CharacterAfter(pos).widthBytes;
+			} else if (IsASCIIPunctuationCharacter(ceStart.character)) {
+				while (pos > 0 && IsASCIIPunctuationCharacter(CharacterAfter(pos).character))
+					pos -= CharacterBefore(pos).widthBytes;
+				if (!IsASCIIPunctuationCharacter(CharacterAfter(pos).character))
+					pos += CharacterAfter(pos).widthBytes;
+			} else if (isspacechar(ceStart.character)) {
+				while (pos > 0 && isspacechar(CharacterAfter(pos).character))
+					pos -= CharacterBefore(pos).widthBytes;
+				if (!isspacechar(CharacterAfter(pos).character))
+					pos += CharacterAfter(pos).widthBytes;
+			} else if (!IsASCII(ceStart.character)) {
+				while (pos > 0 && !IsASCII(CharacterAfter(pos).character))
+					pos -= CharacterBefore(pos).widthBytes;
+				if (IsASCII(CharacterAfter(pos).character))
+					pos += CharacterAfter(pos).widthBytes;
 			} else {
-				++pos;
+				pos += CharacterAfter(pos).widthBytes;
 			}
 		}
 	}
 	return pos;
 }
 
-int Document::WordPartRight(int pos) {
-	char startChar = cb.CharAt(pos);
-	int length = Length();
-	if (IsWordPartSeparator(startChar)) {
-		while (pos < length && IsWordPartSeparator(cb.CharAt(pos)))
-			++pos;
-		startChar = cb.CharAt(pos);
+int Document::WordPartRight(int pos) const {
+	CharacterExtracted ceStart = CharacterAfter(pos);
+	const int length = Length();
+	if (IsWordPartSeparator(ceStart.character)) {
+		while (pos < length && IsWordPartSeparator(CharacterAfter(pos).character))
+			pos += CharacterAfter(pos).widthBytes;
+		ceStart = CharacterAfter(pos);
 	}
-	if (!IsASCII(startChar)) {
-		while (pos < length && !IsASCII(cb.CharAt(pos)))
-			++pos;
-	} else if (IsLowerCase(startChar)) {
-		while (pos < length && IsLowerCase(cb.CharAt(pos)))
-			++pos;
-	} else if (IsUpperCase(startChar)) {
-		if (IsLowerCase(cb.CharAt(pos + 1))) {
-			++pos;
-			while (pos < length && IsLowerCase(cb.CharAt(pos)))
-				++pos;
+	if (!IsASCII(ceStart.character)) {
+		while (pos < length && !IsASCII(CharacterAfter(pos).character))
+			pos += CharacterAfter(pos).widthBytes;
+	} else if (IsLowerCase(ceStart.character)) {
+		while (pos < length && IsLowerCase(CharacterAfter(pos).character))
+			pos += CharacterAfter(pos).widthBytes;
+	} else if (IsUpperCase(ceStart.character)) {
+		if (IsLowerCase(CharacterAfter(pos + ceStart.widthBytes).character)) {
+			pos += CharacterAfter(pos).widthBytes;
+			while (pos < length && IsLowerCase(CharacterAfter(pos).character))
+				pos += CharacterAfter(pos).widthBytes;
 		} else {
-			while (pos < length && IsUpperCase(cb.CharAt(pos)))
-				++pos;
+			while (pos < length && IsUpperCase(CharacterAfter(pos).character))
+				pos += CharacterAfter(pos).widthBytes;
 		}
-		if (IsLowerCase(cb.CharAt(pos)) && IsUpperCase(cb.CharAt(pos - 1)))
-			--pos;
-	} else if (IsADigit(startChar)) {
-		while (pos < length && IsADigit(cb.CharAt(pos)))
-			++pos;
-	} else if (IsPunctuation(startChar)) {
-		while (pos < length && IsPunctuation(cb.CharAt(pos)))
-			++pos;
-	} else if (isspacechar(startChar)) {
-		while (pos < length && isspacechar(cb.CharAt(pos)))
-			++pos;
+		if (IsLowerCase(CharacterAfter(pos).character) && IsUpperCase(CharacterBefore(pos).character))
+			pos -= CharacterBefore(pos).widthBytes;
+	} else if (IsADigit(ceStart.character)) {
+		while (pos < length && IsADigit(CharacterAfter(pos).character))
+			pos += CharacterAfter(pos).widthBytes;
+	} else if (IsASCIIPunctuationCharacter(ceStart.character)) {
+		while (pos < length && IsASCIIPunctuationCharacter(CharacterAfter(pos).character))
+			pos += CharacterAfter(pos).widthBytes;
+	} else if (isspacechar(ceStart.character)) {
+		while (pos < length && isspacechar(CharacterAfter(pos).character))
+			pos += CharacterAfter(pos).widthBytes;
 	} else {
-		++pos;
+		pos += CharacterAfter(pos).widthBytes;
 	}
 	return pos;
 }
@@ -2344,7 +2578,7 @@ public:
 	Position position;
 	ByteIterator(const Document *doc_ = 0, Position position_ = 0) : doc(doc_), position(position_) {
 	}
-	ByteIterator(const ByteIterator &other) {
+	ByteIterator(const ByteIterator &other) NOEXCEPT {
 		doc = other.doc;
 		position = other.position;
 	}
@@ -2519,7 +2753,7 @@ class UTF8Iterator : public std::iterator<std::bidirectional_iterator_tag, wchar
 public:
 	UTF8Iterator(const Document *doc_=0, Position position_=0) : doc(doc_), position(position_) {
 	}
-	UTF8Iterator(const UTF8Iterator &other) {
+	UTF8Iterator(const UTF8Iterator &other) NOEXCEPT {
 		doc = other.doc;
 		position = other.position;
 	}

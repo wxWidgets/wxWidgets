@@ -251,24 +251,24 @@ public:
         switch (dispIdMember)
         {
             case DISPID_AMBIENT_MESSAGEREFLECT:
-                V_BOOL(pVarResult)= FALSE;
+                V_BOOL(pVarResult)= VARIANT_FALSE;
                 return S_OK;
 
             case DISPID_AMBIENT_DISPLAYASDEFAULT:
-                V_BOOL(pVarResult)= TRUE;
+                V_BOOL(pVarResult)= VARIANT_TRUE;
                 return S_OK;
 
             case DISPID_AMBIENT_OFFLINEIFNOTCONNECTED:
-                V_BOOL(pVarResult) = TRUE;
+                V_BOOL(pVarResult) = VARIANT_TRUE;
                 return S_OK;
 
             case DISPID_AMBIENT_SILENT:
-                V_BOOL(pVarResult)= TRUE;
+                V_BOOL(pVarResult)= VARIANT_TRUE;
                 return S_OK;
 
             case DISPID_AMBIENT_APPEARANCE:
                 pVarResult->vt = VT_BOOL;
-                pVarResult->boolVal = m_bAmbientAppearance;
+                pVarResult->boolVal = m_bAmbientAppearance ? VARIANT_TRUE : VARIANT_FALSE;
                 break;
 
             case DISPID_AMBIENT_FORECOLOR:
@@ -288,17 +288,17 @@ public:
 
             case DISPID_AMBIENT_USERMODE:
                 pVarResult->vt = VT_BOOL;
-                pVarResult->boolVal = m_window->m_bAmbientUserMode;
+                pVarResult->boolVal = m_window->m_bAmbientUserMode ? VARIANT_TRUE : VARIANT_FALSE;
                 break;
 
             case DISPID_AMBIENT_SHOWGRABHANDLES:
                 pVarResult->vt = VT_BOOL;
-                pVarResult->boolVal = m_bAmbientShowGrabHandles;
+                pVarResult->boolVal = m_bAmbientShowGrabHandles ? VARIANT_TRUE : VARIANT_FALSE;
                 break;
 
             case DISPID_AMBIENT_SHOWHATCHING:
                 pVarResult->vt = VT_BOOL;
-                pVarResult->boolVal = m_bAmbientShowHatching;
+                pVarResult->boolVal = m_bAmbientShowHatching ? VARIANT_TRUE : VARIANT_FALSE;
                 break;
 
             default:
@@ -429,7 +429,7 @@ public:
            //
            // Result of several hours and days of bug hunting -
            // this is called by an object when it wants to resize
-           // itself to something different then our parent window -
+           // itself to something different from our parent window -
            // don't let it :)
            //
 //            m_window->m_oleInPlaceObject->SetObjectRects(
@@ -1131,14 +1131,9 @@ void wxActiveXContainer::CreateActiveX(REFIID iid, IUnknown* pUnk)
         wxWindow* pWnd = m_realparent;
         int id = m_realparent->GetId();
 
-        pWnd->Connect(id, wxEVT_SIZE,
-            wxSizeEventHandler(wxActiveXContainer::OnSize), 0, this);
-//        this->Connect(GetId(), wxEVT_PAINT,
-//            wxPaintEventHandler(wxActiveXContainer::OnPaint), 0, this);
-        pWnd->Connect(id, wxEVT_SET_FOCUS,
-            wxFocusEventHandler(wxActiveXContainer::OnSetFocus), 0, this);
-        pWnd->Connect(id, wxEVT_KILL_FOCUS,
-            wxFocusEventHandler(wxActiveXContainer::OnKillFocus), 0, this);
+        pWnd->Bind(wxEVT_SIZE, &wxActiveXContainer::OnSize, this, id);
+        pWnd->Bind(wxEVT_SET_FOCUS, &wxActiveXContainer::OnSetFocus, this, id);
+        pWnd->Bind(wxEVT_KILL_FOCUS, &wxActiveXContainer::OnKillFocus, this, id);
     }
 }
 

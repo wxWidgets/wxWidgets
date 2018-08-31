@@ -839,8 +839,6 @@ bool wxRichTextImage::ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* handler
                 strData = wxString((const char*) data, wxConvUTF8, size);
                 delete[] data;
             }
-            else
-                strData = wxEmptyString;
         }
 
     }
@@ -1083,7 +1081,7 @@ void wxRichTextXMLHelper::Clear()
     m_convMem = NULL;
     m_deleteConvFile = false;
 #endif
-    m_fileEncoding = wxEmptyString;
+    m_fileEncoding.clear();
 }
 
 void wxRichTextXMLHelper::SetupForSaving(const wxString& enc)

@@ -42,6 +42,9 @@
 #if wxUSE_SVG
 #include "wx/dcsvg.h"
 #endif
+#if wxUSE_POSTSCRIPT
+#include "wx/dcps.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // resources
@@ -127,6 +130,8 @@ public:
     wxGraphicsRenderer* GetRenderer() const { return m_renderer; }
 #endif // wxUSE_GRAPHICS_CONTEXT
     void UseBuffer(bool use) { m_useBuffer = use; Refresh(); }
+    void ShowBoundingBox(bool show) { m_showBBox = show; Refresh(); }
+    void GetDrawingSize(int* width, int* height) const;
 
     void Draw(wxDC& dc);
 
@@ -173,6 +178,9 @@ private:
     wxGraphicsRenderer* m_renderer;
 #endif
     bool         m_useBuffer;
+    bool         m_showBBox;
+    wxCoord      m_sizeX;
+    wxCoord      m_sizeY;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -253,6 +261,8 @@ public:
     void OnSave(wxCommandEvent& event);
     void OnShow(wxCommandEvent &event);
     void OnOption(wxCommandEvent &event);
+    void OnBoundingBox(wxCommandEvent& evt);
+    void OnBoundingBoxUpdateUI(wxUpdateUIEvent& evt);
 
 #if wxUSE_COLOURDLG
     wxColour SelectColour();
@@ -326,6 +336,7 @@ enum
 #endif
 #endif // __WXMSW__
 #endif // wxUSE_GRAPHICS_CONTEXT
+    File_BBox,
     File_Clip,
     File_Buffer,
     File_Copy,
@@ -402,7 +413,8 @@ bool MyApp::LoadImages()
     pathList.Add(wxFileName(argv[0]).GetPath());
     pathList.Add(wxT("."));
     pathList.Add(wxT(".."));
-    pathList.Add(wxT("../.."));
+    pathList.Add(wxT("../drawing"));
+    pathList.Add(wxT("../../../samples/drawing"));
 
     wxString path = pathList.FindValidPath(wxT("pat4.bmp"));
     if ( !path )
@@ -512,6 +524,9 @@ MyCanvas::MyCanvas(MyFrame *parent)
     m_renderer = NULL;
 #endif
     m_useBuffer = false;
+    m_showBBox = false;
+    m_sizeX = 0;
+    m_sizeY = 0;
 }
 
 void MyCanvas::DrawTestBrushes(wxDC& dc)
@@ -1438,6 +1453,7 @@ void MyCanvas::DrawGradients(wxDC& dc)
         wxGraphicsContext           *gc = gdc.GetGraphicsContext();
         wxGraphicsPath              pth;
         wxGraphicsGradientStops     stops;
+        double boxX, boxY, boxWidth, boxHeight;
 
         gfr.Offset(0, gfr.height + 10);
         dc.DrawText(wxT("Linear Gradient with Stops"), gfr.x, gfr.y);
@@ -1457,6 +1473,9 @@ void MyCanvas::DrawGradients(wxDC& dc)
         pth.AddLineToPoint(gfr.x,gfr.y+gfr.height);
         pth.CloseSubpath();
         gc->FillPath(pth);
+        pth.GetBox(&boxX, &boxY, &boxWidth, &boxHeight);
+        dc.CalcBoundingBox(wxRound(boxX), wxRound(boxY));
+        dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
 
         wxGraphicsGradientStops simpleStops(*wxRED, *wxBLUE);
 
@@ -1479,6 +1498,9 @@ void MyCanvas::DrawGradients(wxDC& dc)
         pth.AddLineToPoint(gfr.x,gfr.y+gfr.height);
         pth.CloseSubpath();
         gc->FillPath(pth);
+        pth.GetBox(&boxX, &boxY, &boxWidth, &boxHeight);
+        dc.CalcBoundingBox(wxRound(boxX), wxRound(boxY));
+        dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
 
         gfr.Offset(0, gfr.height + 10);
         dc.DrawText(wxT("Radial Gradient from Red to Blue with Yellow and Green Stops"),
@@ -1498,6 +1520,9 @@ void MyCanvas::DrawGradients(wxDC& dc)
         pth.AddLineToPoint(gfr.x,gfr.y+gfr.height);
         pth.CloseSubpath();
         gc->FillPath(pth);
+        pth.GetBox(&boxX, &boxY, &boxWidth, &boxHeight);
+        dc.CalcBoundingBox(wxRound(boxX), wxRound(boxY));
+        dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
 
         gfr.Offset(0, gfr.height + 10);
         dc.DrawText(wxT("Linear Gradient with Stops and Gaps"), gfr.x, gfr.y);
@@ -1519,6 +1544,9 @@ void MyCanvas::DrawGradients(wxDC& dc)
         pth.AddLineToPoint(gfr.x,gfr.y+gfr.height);
         pth.CloseSubpath();
         gc->FillPath(pth);
+        pth.GetBox(&boxX, &boxY, &boxWidth, &boxHeight);
+        dc.CalcBoundingBox(wxRound(boxX), wxRound(boxY));
+        dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
 
         gfr.Offset(0, gfr.height + 10);
         dc.DrawText(wxT("Radial Gradient with Stops and Gaps"), gfr.x, gfr.y);
@@ -1537,6 +1565,9 @@ void MyCanvas::DrawGradients(wxDC& dc)
         pth.AddLineToPoint(gfr.x,gfr.y+gfr.height);
         pth.CloseSubpath();
         gc->FillPath(pth);
+        pth.GetBox(&boxX, &boxY, &boxWidth, &boxHeight);
+        dc.CalcBoundingBox(wxRound(boxX), wxRound(boxY));
+        dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
 
         gfr.Offset(0, gfr.height + 10);
         dc.DrawText(wxT("Gradients with Stops and Transparency"), gfr.x, gfr.y);
@@ -1572,6 +1603,9 @@ void MyCanvas::DrawGradients(wxDC& dc)
                                                    gfr.x + gfr.width, gfr.y,
                                                    stops));
         gc->FillPath(pth);
+        pth.GetBox(&boxX, &boxY, &boxWidth, &boxHeight);
+        dc.CalcBoundingBox(wxRound(boxX), wxRound(boxY));
+        dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
     }
 #endif // wxUSE_GRAPHICS_CONTEXT
 }
@@ -1704,6 +1738,15 @@ void MyCanvas::DrawRegionsHelper(wxDC& dc, wxCoord x, bool firstTime)
     }
 }
 
+void MyCanvas::GetDrawingSize(int* width, int* height) const
+{
+    if ( width )
+        *width = m_sizeX;
+
+    if ( height )
+        *height = m_sizeY;
+}
+
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 {
     if ( m_useBuffer )
@@ -1746,6 +1789,7 @@ void MyCanvas::Draw(wxDC& pdc)
             return;
         }
 
+        gdc.SetBackground(GetBackgroundColour());
         gdc.SetGraphicsContext(context);
     }
 
@@ -1754,7 +1798,12 @@ void MyCanvas::Draw(wxDC& pdc)
     wxDC &dc = pdc ;
 #endif
 
-    PrepareDC(dc);
+    // Adjust scrolled contents for screen drawing operations only.
+    if ( wxDynamicCast(&pdc, wxBufferedPaintDC) ||
+         wxDynamicCast(&pdc, wxPaintDC) )
+    {
+        PrepareDC(dc);
+    }
 
     m_owner->PrepareDC(dc);
 
@@ -1854,6 +1903,29 @@ void MyCanvas::Draw(wxDC& pdc)
 
         default:
             break;
+    }
+
+    // For drawing with raw wxGraphicsContext
+    // there is no bounding box to obtain.
+    if ( m_showBBox
+#if wxUSE_GRAPHICS_CONTEXT
+         && m_show != File_ShowGraphics
+#endif // wxUSE_GRAPHICS_CONTEXT
+       )
+    {
+        dc.SetPen(wxPen(wxColor(0, 128, 0), 1, wxPENSTYLE_DOT));
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        dc.DrawRectangle(dc.MinX(), dc.MinY(), dc.MaxX()-dc.MinX()+1, dc.MaxY()-dc.MinY()+1);
+    }
+
+    // Adjust drawing area dimensions only if screen drawing is invoked.
+    if ( wxDynamicCast(&pdc, wxBufferedPaintDC) ||
+         wxDynamicCast(&pdc, wxPaintDC) )
+    {
+        wxCoord x0, y0;
+        dc.GetDeviceOrigin(&x0, &y0);
+        m_sizeX = dc.LogicalToDeviceX(dc.MaxX()) - x0 + 1;
+        m_sizeY = dc.LogicalToDeviceY(dc.MaxY()) - y0 + 1;
     }
 }
 
@@ -1994,6 +2066,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU      (File_Buffer,   MyFrame::OnBuffer)
     EVT_MENU      (File_Copy,     MyFrame::OnCopy)
     EVT_MENU      (File_Save,     MyFrame::OnSave)
+    EVT_MENU      (File_BBox,     MyFrame::OnBoundingBox)
+    EVT_UPDATE_UI (File_BBox,     MyFrame::OnBoundingBoxUpdateUI)
 
     EVT_MENU_RANGE(MenuShow_First,   MenuShow_Last,   MyFrame::OnShow)
 
@@ -2046,6 +2120,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif // __WXMSW__
 #endif // wxUSE_GRAPHICS_CONTEXT
     menuFile->AppendSeparator();
+    menuFile->AppendCheckItem(File_BBox, wxS("Show bounding box\tCtrl-E"),
+                              wxS("Show extents used in drawing operations"));
     menuFile->AppendCheckItem(File_Clip, wxT("&Clip\tCtrl-C"), wxT("Clip/unclip drawing"));
     menuFile->AppendCheckItem(File_Buffer, wxT("&Use wx&BufferedPaintDC\tCtrl-Z"), wxT("Buffer painting"));
     menuFile->AppendSeparator();
@@ -2176,29 +2252,35 @@ void MyFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 {
-    wxFileDialog dlg(this, wxT("Save as bitmap"), wxT(""), wxT(""),
+    wxString wildCard = wxS("Bitmap image (*.bmp)|*.bmp;*.BMP");
 #if wxUSE_LIBPNG
-                     wxT("PNG image (*.png)|*.png;*.PNG|")
+    wildCard.Append(wxS("|PNG image (*.png)|*.png;*.PNG"));
 #endif
 #if wxUSE_SVG
-                     wxT("SVG image (*.svg)|*.svg;*.SVG|")
+    wildCard.Append(wxS("|SVG image (*.svg)|*.svg;*.SVG"));
 #endif
-                     wxT("Bitmap image (*.bmp)|*.bmp;*.BMP"),
+#if wxUSE_POSTSCRIPT
+    wildCard.Append(wxS("|PostScript file (*.ps)|*.ps;*.PS"));
+#endif
+
+    wxFileDialog dlg(this, wxT("Save as bitmap"), wxEmptyString, wxEmptyString,
+                     wildCard,
                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
     if (dlg.ShowModal() == wxID_OK)
     {
         int width, height;
-        m_canvas->GetVirtualSize(&width, &height);
+        m_canvas->GetDrawingSize(&width, &height);
+        wxFileName fn(dlg.GetPath());
+        wxString ext = fn.GetExt().Lower();
 #if wxUSE_SVG
-        wxString ext = dlg.GetPath().AfterLast('.').Lower();
-        if (ext.Lower() == wxT("svg"))
+        if (ext == wxT("svg"))
         {
+#if wxUSE_GRAPHICS_CONTEXT
             // Graphics screen can only be drawn using GraphicsContext
             if (m_canvas->GetPage() == File_ShowGraphics) {
                 wxLogMessage("Graphics screen can not be saved as SVG.");
                 return;
             }
-#if wxUSE_GRAPHICS_CONTEXT
             wxGraphicsRenderer* tempRenderer = m_canvas->GetRenderer();
             m_canvas->UseGraphicRenderer(NULL);
 #endif
@@ -2211,9 +2293,55 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
         }
         else
 #endif
+#if wxUSE_POSTSCRIPT
+        if ( ext == wxS("ps") )
+        {
+#if wxUSE_GRAPHICS_CONTEXT
+            // Graphics screen can only be drawn using wxGraphicsContext
+            if (m_canvas->GetPage() == File_ShowGraphics)
+            {
+                wxLogMessage("Graphics screen can not be saved as PostScript file.");
+                return;
+            }
+            wxGraphicsRenderer* curRenderer = m_canvas->GetRenderer();
+            m_canvas->UseGraphicRenderer(NULL);
+#endif // wxUSE_GRAPHICS_CONTEXT
+            wxPrintData printData;
+            printData.SetPrintMode(wxPRINT_MODE_FILE);
+            printData.SetFilename(dlg.GetPath());
+            printData.SetOrientation(wxPORTRAIT);
+            printData.SetPaperId(wxPAPER_A4);
+            wxPostScriptDC psdc(printData);
+            // Save current scale factor
+            const double curUserScaleX = m_xUserScale;
+            const double curUserScaleY = m_yUserScale;
+            // Change the scale temporarily to fit the drawing into the page.
+            int w, h;
+            psdc.GetSize(&w, &h);
+            double sc = wxMin((double)w / width, (double)h / height);
+            m_xUserScale *= sc;
+            m_yUserScale *= sc;
+            psdc.StartDoc(wxS("Drawing sample"));
+            // Define default font.
+            psdc.SetFont( wxFontInfo(10).Family(wxFONTFAMILY_MODERN) );
+            psdc.StartPage();
+            m_canvas->Draw(psdc);
+            psdc.EndPage();
+            psdc.EndDoc();
+            // Restore original scale facor
+            m_xUserScale = curUserScaleX;
+            m_yUserScale = curUserScaleY;
+#if wxUSE_GRAPHICS_CONTEXT
+            m_canvas->UseGraphicRenderer(curRenderer);
+#endif // wxUSE_GRAPHICS_CONTEXT
+        }
+        else
+#endif // wxUSE_POSTSCRIPT
         {
             wxBitmap bmp(width, height);
             wxMemoryDC mdc(bmp);
+            mdc.SetBackground(*wxWHITE_BRUSH);
+            mdc.Clear();
             m_canvas->Draw(mdc);
             bmp.ConvertToImage().SaveFile(dlg.GetPath());
         }
@@ -2348,6 +2476,20 @@ void MyFrame::OnOption(wxCommandEvent& event)
     }
 
     m_canvas->Refresh();
+}
+
+void MyFrame::OnBoundingBox(wxCommandEvent& evt)
+{
+    m_canvas->ShowBoundingBox(evt.IsChecked());
+}
+
+void MyFrame::OnBoundingBoxUpdateUI(wxUpdateUIEvent& evt)
+{
+#if wxUSE_GRAPHICS_CONTEXT
+    evt.Enable(m_canvas->GetPage() != File_ShowGraphics);
+#else
+    wxUnusedVar(evt);
+#endif // wxUSE_GRAPHICS_CONTEXT / !wxUSE_GRAPHICS_CONTEXT
 }
 
 void MyFrame::PrepareDC(wxDC& dc)

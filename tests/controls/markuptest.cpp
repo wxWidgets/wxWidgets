@@ -105,8 +105,8 @@ void MarkupTestCase::RoundTrip()
 
                 case wxMarkupSpanAttributes::Size_Symbolic:
                     {
-                        CPPUNIT_ASSERT( attrs.m_fontSize >= -3 &&
-                                            attrs.m_fontSize <= 3 );
+                        CPPUNIT_ASSERT( attrs.m_fontSize >= -3 );
+                        CPPUNIT_ASSERT( attrs.m_fontSize <= 3 );
                         static const char *cssSizes[] =
                         {
                             "xx-small", "x-small", "small",
@@ -175,7 +175,7 @@ void MarkupTestCase::RoundTrip()
     );
 
     CHECK_PARSES_OK( "foo&bar" );
-    CHECK_PARSES_AS( "foo&amp;bar", "foo&&bar" );
+    CHECK_PARSES_AS( "foo&amp;bar", "foo&bar" );
     CHECK_PARSES_AS( "&lt;O&apos;Reilly&gt;", "<O'Reilly>" );
 
     CHECK_DOESNT_PARSE( "<" );

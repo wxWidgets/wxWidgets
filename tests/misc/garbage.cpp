@@ -18,6 +18,7 @@
 
 #include "wx/filename.h"
 #include "wx/image.h"
+#include "wx/icon.h"
 #include "wx/animate.h"
 #include "wx/mstream.h"
 #include "wx/dynlib.h"
@@ -161,7 +162,9 @@ void GarbageTestCase::DoLoadFile(const wxString& fullname)
     delete htmlwin;
 */
     // test wxXmlResource
+#if wxUSE_XRC
     CPPUNIT_ASSERT( wxXmlResource::Get()->Load(fullname) == false );
+#endif
 }
 
 void GarbageTestCase::DoLoadStream(wxInputStream& stream)

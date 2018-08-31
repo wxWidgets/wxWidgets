@@ -40,6 +40,7 @@ CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromNSImage( WX_NSImage ns
 
 wxBitmap WXDLLIMPEXP_CORE wxOSXCreateSystemBitmap(const wxString& id, const wxString &client, const wxSize& size);
 WXWindow WXDLLIMPEXP_CORE wxOSXGetMainWindow();
+WXWindow WXDLLIMPEXP_CORE wxOSXGetKeyWindow();
 
 class WXDLLIMPEXP_FWD_CORE wxDialog;
 
@@ -127,7 +128,10 @@ public :
     void                SetToolTip( wxToolTip* tooltip );
 
     void                InstallEventHandler( WXWidget control = NULL );
+    bool                EnableTouchEvents(int eventsMask);
 
+    virtual bool        ShouldHandleKeyNavigation(const wxKeyEvent &event) const;
+    bool                DoHandleKeyNavigation(const wxKeyEvent &event);
     virtual bool        DoHandleMouseEvent(NSEvent *event);
     virtual bool        DoHandleKeyEvent(NSEvent *event);
     virtual bool        DoHandleCharEvent(NSEvent *event, NSString *text);
@@ -140,6 +144,15 @@ public :
     void                SetupCoordinates(wxCoord &x, wxCoord &y, NSEvent *nsEvent);
     virtual bool        SetupCursor(NSEvent* event);
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+    virtual void        PanGestureEvent(NSPanGestureRecognizer *panGestureRecognizer);
+    virtual void        ZoomGestureEvent(NSMagnificationGestureRecognizer *magnificationGestureRecognizer);
+    virtual void        RotateGestureEvent(NSRotationGestureRecognizer *rotationGestureRecognizer);
+    virtual void        LongPressEvent(NSPressGestureRecognizer *pressGestureRecognizer);
+    virtual void        TouchesBegan(NSEvent *event);
+    virtual void        TouchesMoved(NSEvent *event);
+    virtual void        TouchesEnded(NSEvent *event);
+#endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
 #if !wxOSX_USE_NATIVE_FLIPPED
     void                SetFlipped(bool flipped);
@@ -275,6 +288,10 @@ protected :
     CGWindowLevel   m_macWindowLevel;
     WXWindow        m_macWindow;
     void *          m_macFullScreenData ;
+    
+private:
+    void SetUpForModalParent();
+    
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowCocoaImpl);
 };
 
@@ -362,6 +379,7 @@ public:
     }
 
     - (void)textDidChange:(NSNotification *)aNotification;
+    - (void)changeColor:(id)sender;
 
     @end
 
@@ -400,7 +418,13 @@ public:
 
     @end
 
-    void WXDLLIMPEXP_CORE wxOSXCocoaClassAddWXMethods(Class c);
+    // this enum declares which methods should not be overridden in the native view classes
+    enum wxOSXSkipOverrides {
+        wxOSXSKIP_NONE = 0x0,
+        wxOSXSKIP_DRAW = 0x1
+    };
+
+    void WXDLLIMPEXP_CORE wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags = wxOSXSKIP_NONE);
 
     /*
     We need this for ShowModal, as the sheet just disables the parent window and
@@ -482,6 +506,23 @@ const short kwxCursorLast = kwxCursorWatch;
 extern ClassicCursor gMacCursors[];
 
 extern NSLayoutManager* gNSLayoutManager;
+
+// NSString<->wxString
+
+wxString wxStringWithNSString(NSString *nsstring);
+NSString* wxNSStringWithWxString(const wxString &wxstring);
+
+// helper class for setting the current appearance to the
+// effective appearance and restore when exiting scope
+
+class WXDLLIMPEXP_CORE wxOSXEffectiveAppearanceSetter
+{
+public:
+    wxOSXEffectiveAppearanceSetter();
+    ~wxOSXEffectiveAppearanceSetter();
+private:
+    void * formerAppearance;
+};
 
 #endif // wxUSE_GUI
 

@@ -12,6 +12,7 @@
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QDialog>
 
 class wxQtDialog : public wxQtEventSignalHandler< QDialog, wxDialog >
 {
@@ -58,32 +59,38 @@ bool wxDialog::Create( wxWindow *parent, wxWindowID id,
     style |= wxTAB_TRAVERSAL;
 
     m_qtWindow = new wxQtDialog( parent, this );
+    
     PostCreation();
+
     return wxTopLevelWindow::Create( parent, id, title, pos, size, style, name );
 }
 
 int wxDialog::ShowModal()
 {
     wxCHECK_MSG( GetHandle() != NULL, -1, "Invalid dialog" );
-    
-    return GetHandle()->exec() ? wxID_OK : wxID_CANCEL;
+
+    bool ret = GetDialogHandle()->exec();
+    if ( GetReturnCode() == 0 )
+        return ret ? wxID_OK : wxID_CANCEL;
+    return GetReturnCode();
 }
 
 void wxDialog::EndModal(int retCode)
 {
-    wxCHECK_RET( GetHandle() != NULL, "Invalid dialog" );
-    
-    GetHandle()->done( retCode );
+    wxCHECK_RET( GetDialogHandle() != NULL, "Invalid dialog" );
+
+    SetReturnCode(retCode);
+    GetDialogHandle()->done( QDialog::Accepted );
 }
 
 bool wxDialog::IsModal() const
 {
-    wxCHECK_MSG( GetHandle() != NULL, false, "Invalid dialog" );
+    wxCHECK_MSG( GetDialogHandle() != NULL, false, "Invalid dialog" );
 
-    return GetHandle()->isModal();
+    return GetDialogHandle()->isModal();
 }
 
-QDialog *wxDialog::GetHandle() const
+QDialog *wxDialog::GetDialogHandle() const
 {
     return static_cast<QDialog*>(m_qtWindow);
 }

@@ -60,6 +60,21 @@ public:
         Dir_Videos
     };
 
+    // Layout to use for user config/data files under Unix.
+    enum FileLayout
+    {
+        FileLayout_Classic,     // Default: use home directory.
+        FileLayout_XDG          // Recommended: use XDG specification.
+    };
+
+    // Naming convention for the config files under Unix.
+    enum ConfigFileConv
+    {
+        ConfigFileConv_Dot,     // Classic Unix dot-file convention.
+        ConfigFileConv_Ext      // Use .conf extension.
+    };
+
+
     // return the global standard paths object
     static wxStandardPaths& Get();
 
@@ -155,6 +170,10 @@ public:
 
     virtual wxString GetUserDir(Dir userDir) const;
 
+    virtual wxString
+    MakeConfigFileName(const wxString& basename,
+                       ConfigFileConv conv = ConfigFileConv_Ext) const = 0;
+
     // virtual dtor for the base class
     virtual ~wxStandardPathsBase();
 
@@ -166,6 +185,15 @@ public:
 
     bool UsesAppInfo(int info) const { return (m_usedAppInfo & info) != 0; }
 
+    void SetFileLayout(FileLayout layout)
+    {
+        m_fileLayout = layout;
+    }
+
+    FileLayout GetFileLayout() const
+    {
+        return m_fileLayout;
+    }
 
 protected:
     // Ctor is protected as this is a base class which should never be created
@@ -182,6 +210,9 @@ protected:
 
     // combination of AppInfo_XXX flags used by AppendAppInfo()
     int m_usedAppInfo;
+
+    // The file layout to use, currently only used under Unix.
+    FileLayout m_fileLayout;
 };
 
 #if wxUSE_STDPATHS
@@ -221,6 +252,12 @@ public:
     virtual wxString GetUserDataDir() const { return m_prefix; }
     virtual wxString GetPluginsDir() const { return m_prefix; }
     virtual wxString GetUserDir(Dir WXUNUSED(userDir)) const { return m_prefix; }
+    virtual wxString
+    MakeConfigFileName(const wxString& basename,
+                       ConfigFileConv WXUNUSED(conv) = ConfigFileConv_Ext) const
+    {
+        return m_prefix + wxS("/") + basename;
+    }
 
 protected:
     // Ctor is protected because wxStandardPaths::Get() should always be used

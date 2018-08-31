@@ -202,14 +202,15 @@ public:
     // returns true if the platform should explicitly apply a theme border
     virtual bool CanApplyThemeBorder() const wxOVERRIDE { return false; }
 
+    virtual bool IsDoubleBuffered() const wxOVERRIDE;
+    virtual void SetDoubleBuffered(bool on) wxOVERRIDE;
+
 protected:
     // Implement "update locking" in a custom way for this control.
     virtual void DoFreeze() wxOVERRIDE;
     virtual void DoThaw() wxOVERRIDE;
 
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+    virtual bool MSWShouldSetDefaultFont() const wxOVERRIDE { return false; }
 
     // SetImageList helper
     void SetAnyImageList(wxImageList *imageList, int which);
@@ -333,9 +334,6 @@ private:
 
     // whether we need to deselect other items on mouse up
     bool m_mouseUpDeselect;
-
-    // The size to restore the control to when it is thawed, see DoThaw().
-    wxSize m_thawnSize;
 
     friend class wxTreeItemIndirectData;
     friend class wxTreeSortHelper;

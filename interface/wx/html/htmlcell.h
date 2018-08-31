@@ -187,34 +187,31 @@ public:
     wxHtmlCell();
 
     /**
-        This method is used to adjust pagebreak position.
-        The first parameter is a variable that contains the y-coordinate of the page break
-        (= horizontal line that should not be crossed by words, images etc.).
-        If this cell cannot be divided into two pieces (each one on another page)
-        then it either moves the pagebreak a few pixels up, if possible, or, if
-        the cell cannot fit on the page at all, then the cell is forced to
-        split unconditionally.
+        This method is called when paginating HTML, e.g.\ when printing.
 
-        Returns @true if pagebreak was modified, @false otherwise.
+        User code should never call this function, but may need to override it
+        in custom HTML cell classes with any specific page breaking
+        requirements.
+
+        On input, @a pagebreak contains y-coordinate of page break (i.e. the
+        horizontal line that should not be crossed by words, images etc.)
+        relative to the parent cell on entry and may be modified to request a
+        page break at a position before it if this cell cannot be divided into
+        two pieces (each one on its own page).
+
+        Note that page break must still happen on the current page, i.e. the
+        returned value must be strictly greater than @code *pagebreak -
+        pageHeight @endcode and less or equal to @c *pagebreak for the value of
+        @a pagebreak on input.
 
         @param pagebreak
-            position in pixel of the pagebreak.
-
-        @param known_pagebreaks
-            the list of the previous pagebreaks
-
+            position in pixels of the pagebreak.
         @param pageHeight
-            the height in pixel of the page drawable area
+            the height in pixels of the page drawable area
 
-        Usage:
-        @code
-        while (container->AdjustPagebreak(&p, kp, ph)) {}
-        @endcode
-
+        @return @true if pagebreak was modified, @false otherwise.
     */
-    virtual bool AdjustPagebreak(int* pagebreak,
-                                 const wxArrayInt& known_pagebreaks,
-                                 int pageHeight) const;
+    virtual bool AdjustPagebreak(int* pagebreak, int pageHeight) const;
 
     /**
         Renders the cell.
@@ -274,6 +271,17 @@ public:
             Optional parameters
     */
     virtual const wxHtmlCell* Find(int condition, const void* param) const;
+
+    /**
+       Find a cell inside this cell positioned at the given coordinates
+       (relative to this's positions). Returns NULL if no such cell exists.
+       The flag can be used to specify whether to look for terminal or
+       nonterminal cells or both. In either case, returned cell is deepest
+       cell in cells tree that contains [x,y].
+    */
+    virtual wxHtmlCell *FindCellByPos(wxCoord x, wxCoord y,
+                                  unsigned flags = wxHTML_FIND_EXACT) const;
+
 
     /**
         Returns descent value of the cell (m_Descent member).
@@ -435,6 +443,13 @@ public:
         Sets the cell's position within parent container.
     */
     virtual void SetPos(int x, int y);
+
+    /**
+       Converts the cell into text representation. If sel != NULL then
+       only part of the cell inside the selection is converted.
+    */
+    virtual wxString ConvertToText(wxHtmlSelection* sel) const;
+
 };
 
 
@@ -456,7 +471,21 @@ public:
     /**
         Constructor. @a parent is pointer to parent container or @NULL.
     */
-    wxHtmlContainerCell(wxHtmlContainerCell* parent);
+    explicit wxHtmlContainerCell(wxHtmlContainerCell* parent);
+
+    /**
+        Detach a child cell.
+
+        Detaching a cell removes it from this container and allows to reattach
+        it to another one by using InsertCell(). Alternatively, this method can
+        be used to selectively remove some elements of the HTML document tree
+        by deleting the cell after calling it.
+
+        @param cell Must be non-null and an immediate child of this cell.
+
+        @since 3.1.2
+     */
+    void Detach(wxHtmlCell* cell);
 
     /**
         Returns container's horizontal alignment.
@@ -491,6 +520,9 @@ public:
 
     /**
         Inserts a new cell into the container.
+
+        Note that the container takes ownership of the cell and will delete it
+        when it itself is destroyed.
     */
     void InsertCell(wxHtmlCell* cell);
 

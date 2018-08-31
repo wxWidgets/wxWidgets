@@ -66,21 +66,22 @@ bool wxColourDisplay()
 // Returns depth of screen
 int wxDisplayDepth()
 {
-    int theDepth = 0;
-    
     CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
     CFStringRef encoding = CGDisplayModeCopyPixelEncoding(currentMode);
-    
-    if(CFStringCompare(encoding, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
-        theDepth = 32;
-    else if(CFStringCompare(encoding, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
-        theDepth = 16;
-    else if(CFStringCompare(encoding, CFSTR(IO8BitIndexedPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
-        theDepth = 8;
-    else
-        theDepth = 32; // some reasonable default
 
-    CFRelease(encoding);
+    int theDepth = 32; // some reasonable default
+    if(encoding)
+    {
+        if(CFStringCompare(encoding, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+            theDepth = 32;
+        else if(CFStringCompare(encoding, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+            theDepth = 16;
+        else if(CFStringCompare(encoding, CFSTR(IO8BitIndexedPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+            theDepth = 8;
+
+        CFRelease(encoding);
+    }
+
     CGDisplayModeRelease(currentMode);
 
     return theDepth;
@@ -150,11 +151,23 @@ bool wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 
 void wxDisplaySizeMM(int *width, int *height)
 {
+#if wxOSX_USE_IPHONE
+    wxDisplaySize(width, height);
+    // on mac 72 is fixed (at least now;-)
+    double cvPt2Mm = 25.4 / 72;
+    
+    if (width != NULL)
+        *width = int( *width * cvPt2Mm );
+    
+    if (height != NULL)
+        *height = int( *height * cvPt2Mm );
+#else
     CGSize size = CGDisplayScreenSize(CGMainDisplayID());
     if ( width )
         *width = (int)size.width ;
     if ( height )
         *height = (int)size.height;
+#endif
 }
 
 
@@ -199,7 +212,7 @@ CGColorSpaceRef wxMacGetGenericRGBColorSpace()
 #if wxOSX_USE_IPHONE
         genericRGBColorSpace.reset( CGColorSpaceCreateDeviceRGB() );
 #else
-        genericRGBColorSpace.reset( CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB ) );
+        genericRGBColorSpace.reset( CGColorSpaceCreateWithName( kCGColorSpaceSRGB ) );
 #endif
     }
 

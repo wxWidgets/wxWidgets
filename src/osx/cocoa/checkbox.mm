@@ -32,6 +32,8 @@ wxWidgetImplType* wxWidgetImpl::CreateCheckBox( wxWindowMac* wxpeer,
         [v setImagePosition:NSImageRight];
     if (style & wxCHK_3STATE)
         [v setAllowsMixedState:YES];
+    [v setAlignment: (style & wxALIGN_RIGHT) ?
+                     NSRightTextAlignment : NSLeftTextAlignment];
 
     wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v );
     return c;

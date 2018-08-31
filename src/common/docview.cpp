@@ -570,7 +570,9 @@ bool wxDocument::AddView(wxView *view)
 
 bool wxDocument::RemoveView(wxView *view)
 {
-    (void)m_documentViews.DeleteObject(view);
+    if ( !m_documentViews.DeleteObject(view) )
+        return false;
+
     OnChangedViewList();
     return true;
 }
@@ -1122,7 +1124,7 @@ void wxDocManager::OnFileNew(wxCommandEvent& WXUNUSED(event))
 
 void wxDocManager::OnFileOpen(wxCommandEvent& WXUNUSED(event))
 {
-    if ( !CreateDocument("") )
+    if ( !CreateDocument(wxString()) )
     {
         OnOpenFileFailure();
     }
@@ -1792,7 +1794,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
                          msgTitle,
                          wxOK | wxICON_EXCLAMATION | wxCENTRE);
 
-            path = wxEmptyString;
+            path.clear();
             return NULL;
         }
 

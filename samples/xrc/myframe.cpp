@@ -261,8 +261,8 @@ void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_ANIMATIONCTRL
     // dynamically connect our event handler for the "clicked" event of the "play" button
     // in the animation ctrl page of our dialog
-    dlg.Connect(XRCID("controls_animation_button_play"), wxEVT_BUTTON,
-                wxCommandEventHandler(MyFrame::OnAnimationCtrlPlay));
+    dlg.Bind(wxEVT_BUTTON, &MyFrame::OnAnimationCtrlPlay, this,
+             XRCID("controls_animation_button_play"));
 #endif
 
     // All done. Show the dialog.

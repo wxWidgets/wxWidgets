@@ -36,6 +36,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/winstyle.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -54,15 +55,6 @@ wxBEGIN_EVENT_TABLE(wxSpinCtrl, wxSpinButton)
 wxEND_EVENT_TABLE()
 
 #define GetBuddyHwnd()      (HWND)(m_hwndBuddy)
-
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// the margin between the up-down control and its buddy (can be arbitrary,
-// choose what you like - or may be decide during run-time depending on the
-// font size?)
-static const int MARGIN_BETWEEN = 1;
 
 
 // ---------------------------------------------------------------------------
@@ -104,18 +96,17 @@ wxBuddyTextWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
             if ( (WXHWND)wParam == spin->GetHWND() )
                 break;
             //else: fall through
+            wxFALLTHROUGH;
 
         case WM_KILLFOCUS:
         case WM_CHAR:
         case WM_DEADCHAR:
         case WM_KEYUP:
         case WM_KEYDOWN:
-#ifdef WM_HELP
         // we need to forward WM_HELP too to ensure that the context help
         // associated with wxSpinCtrl is shown when the text control part of it
         // is clicked with the "?" cursor
         case WM_HELP:
-#endif
             {
                 WXLRESULT result;
                 if ( spin->MSWHandleMessage(&result, message, wParam, lParam) )
@@ -278,9 +269,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
                         int min, int max, int initial,
                         const wxString& name)
 {
-    // before using DoGetBestSize(), have to set style to let the base class
-    // know whether this is a horizontal or vertical control (we're always
-    // vertical)
+    // set style for the base class
     style |= wxSP_VERTICAL;
 
     if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
@@ -301,27 +290,6 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     else if ( style & wxALIGN_CENTER )
         msStyle |= ES_CENTER;
 
-    // calculate the sizes: the size given is the total size for both controls
-    // and we need to fit them both in the given width (height is the same)
-    wxSize sizeText(size), sizeBtn(size);
-    sizeBtn.x = wxSpinButton::DoGetBestSize().x;
-    if ( sizeText.x <= 0 )
-    {
-        // DEFAULT_ITEM_WIDTH is the default width for the text control
-        sizeText.x = FromDIP(DEFAULT_ITEM_WIDTH) + MARGIN_BETWEEN + sizeBtn.x;
-    }
-
-    sizeText.x -= sizeBtn.x + MARGIN_BETWEEN;
-    if ( sizeText.x <= 0 )
-    {
-        wxLogDebug(wxS("wxSpinCtrl \"%s\": initial width %d is too small, ")
-                   wxS("at least %d pixels needed."),
-                   name, size.x, sizeBtn.x + MARGIN_BETWEEN + 1);
-    }
-
-    wxPoint posBtn(pos);
-    posBtn.x += sizeText.x + MARGIN_BETWEEN;
-
     // we must create the text control before the spin button for the purpose
     // of the dialog navigation: if there is a static text just before the spin
     // control, activating it by Alt-letter should give focus to the text
@@ -330,19 +298,17 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     // create the text window
 
-    m_hwndBuddy = (WXHWND)::CreateWindowEx
-                    (
-                     exStyle,                // sunken border
-                     wxT("EDIT"),             // window class
-                     NULL,                   // no window title
-                     msStyle,                // style (will be shown later)
-                     pos.x, pos.y,           // position
-                     0, 0,                   // size (will be set later)
-                     GetHwndOf(parent),      // parent
-                     (HMENU)-1,              // control id
-                     wxGetInstance(),        // app instance
-                     NULL                    // unused client data
-                    );
+    m_hwndBuddy = MSWCreateWindowAtAnyPosition
+                  (
+                   exStyle,                // sunken border
+                   wxT("EDIT"),            // window class
+                   NULL,                   // no window title
+                   msStyle,                // style (will be shown later)
+                   pos.x, pos.y,           // position
+                   0, 0,                   // size (will be set later)
+                   GetHwndOf(parent),      // parent
+                   -1                      // control id
+                  );
 
     if ( !m_hwndBuddy )
     {
@@ -353,7 +319,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
 
     // create the spin button
-    if ( !wxSpinButton::Create(parent, id, posBtn, sizeBtn, style, name) )
+    if ( !wxSpinButton::Create(parent, id, pos, wxSize(0, 0), style, name) )
     {
         return false;
     }
@@ -363,30 +329,48 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // subclass the text ctrl to be able to intercept some events
     gs_spinForTextCtrl[GetBuddyHwnd()] = this;
 
-    m_wndProcBuddy = (WXFARPROC)wxSetWindowProc(GetBuddyHwnd(),
-                                                wxBuddyTextWndProc);
+    m_wndProcBuddy = wxSetWindowProc(GetBuddyHwnd(), wxBuddyTextWndProc);
+
+    // associate the text window with the spin button
+    (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)m_hwndBuddy, 0);
 
     // set up fonts and colours  (This is nomally done in MSWCreateControl)
     InheritAttributes();
     if (!m_hasFont)
         SetFont(GetDefaultAttributes().font);
 
-    // set the size of the text window - can do it only now, because we
-    // couldn't call DoGetBestSize() before as font wasn't set
-    if ( sizeText.y <= 0 )
+    // Finally deal with the size: notice that this can only be done now both
+    // windows are created and the text one is set up as buddy because
+    // UDM_SETBUDDY changes its size using some unknown algorithm, so setting
+    // the sizes earlier is useless.
+    const int bestSpinWidth = wxSpinButton::DoGetBestSize().x;
+    const int effectiveSpinWidth = bestSpinWidth - GetOverlap();
+    wxSize sizeCtrl(size);
+    if ( sizeCtrl.x <= 0 )
+    {
+        // DEFAULT_ITEM_WIDTH is the default width for the text control
+        sizeCtrl.x = FromDIP(DEFAULT_ITEM_WIDTH) + effectiveSpinWidth;
+    }
+    else if ( sizeCtrl.x <= effectiveSpinWidth )
+    {
+        wxLogDebug(wxS("wxSpinCtrl \"%s\": initial width %d is too small, ")
+                   wxS("at least %d pixels needed."),
+                   name, size.x, effectiveSpinWidth);
+    }
+
+    // adjust an invalid height for text control
+    if ( sizeCtrl.y <= 0 )
     {
         int cx, cy;
         wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
 
-        sizeText.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
+        sizeCtrl.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
     }
 
-    SetInitialSize(size);
+    // This will call our DoMoveWindow() and lay out the windows correctly.
+    SetInitialSize(sizeCtrl);
 
     (void)::ShowWindow(GetBuddyHwnd(), SW_SHOW);
-
-    // associate the text window with the spin button
-    (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)m_hwndBuddy, 0);
 
     // If the initial text value is actually a number, it overrides the
     // "initial" argument specified later.
@@ -563,15 +547,8 @@ void wxSpinCtrl::UpdateBuddyStyle()
     // otherwise this would become impossible and also if we don't use
     // hexadecimal as entering "x" of the "0x" prefix wouldn't be allowed
     // neither then
-    const DWORD styleOld = ::GetWindowLong(GetBuddyHwnd(), GWL_STYLE);
-    DWORD styleNew;
-    if ( m_min < 0 || GetBase() != 10 )
-        styleNew = styleOld & ~ES_NUMBER;
-    else
-        styleNew = styleOld | ES_NUMBER;
-
-    if ( styleNew != styleOld )
-        ::SetWindowLong(GetBuddyHwnd(), GWL_STYLE, styleNew);
+    wxMSWWinStyleUpdater(GetBuddyHwnd())
+        .TurnOnOrOff(m_min >= 0 && GetBase() == 10, ES_NUMBER);
 }
 
 // ----------------------------------------------------------------------------
@@ -632,7 +609,7 @@ bool wxSpinCtrl::Reparent(wxWindowBase *newParent)
 
     // create and initialize the new one
     if ( !wxSpinButton::Create(GetParent(), GetId(),
-                               rect.GetPosition(), rect.GetSize(),
+                               wxPoint(0, 0), wxSize(0, 0), // it will have a buddy
                                GetWindowStyle(), GetName()) )
         return false;
 
@@ -640,13 +617,13 @@ bool wxSpinCtrl::Reparent(wxWindowBase *newParent)
     wxSpinButton::SetValue(GetValue());
     SetRange(m_min, m_max);
 
-    // also set the size again with wxSIZE_ALLOW_MINUS_ONE flag: this is
-    // necessary if our original position used -1 for either x or y
-    SetSize(rect, wxSIZE_ALLOW_MINUS_ONE);
-
     // associate it with the buddy control again
     ::SetParent(GetBuddyHwnd(), GetHwndOf(GetParent()));
     (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)GetBuddyHwnd(), 0);
+
+    // also set the size again with wxSIZE_ALLOW_MINUS_ONE flag: this is
+    // necessary if our original position used -1 for either x or y
+    SetSize(rect, wxSIZE_ALLOW_MINUS_ONE);
 
     return true;
 }
@@ -732,9 +709,24 @@ bool wxSpinCtrl::MSWOnNotify(int WXUNUSED(idCtrl), WXLPARAM lParam, WXLPARAM *re
 // size calculations
 // ----------------------------------------------------------------------------
 
+int wxSpinCtrl::GetOverlap() const
+{
+    if ( !GetHwnd() )
+    {
+        // We can be called from GetSizeFromTextSize() before the window is
+        // created and still need to return something reasonable in this case,
+        // so return the overlap equal to the default border size.
+        return FromDIP(2);
+    }
+
+    // The sign here is correct because the button is positioned inside its
+    // buddy window.
+    return wxGetWindowRect(m_hwndBuddy).right - wxGetWindowRect(GetHwnd()).left;
+}
+
 wxSize wxSpinCtrl::DoGetBestSize() const
 {
-    return DoGetSizeFromTextSize(DEFAULT_ITEM_WIDTH);
+    return DoGetSizeFromTextSize(FromDIP(DEFAULT_ITEM_WIDTH));
 }
 
 wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
@@ -748,7 +740,7 @@ wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     // that's too big. So never use the height calculated
     // from wxSpinButton::DoGetBestSize().
 
-    wxSize tsize(xlen + sizeBtn.x + MARGIN_BETWEEN + 3*y/10 + 10,
+    wxSize tsize(xlen + sizeBtn.x - GetOverlap(),
                  EDIT_HEIGHT_FROM_CHAR_HEIGHT(y));
 
     // Check if the user requested a non-standard height.
@@ -760,8 +752,11 @@ wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
 
 void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
 {
+    // make sure the given width will be the total of both controls
+    const int overlap = GetOverlap();
     int widthBtn = wxSpinButton::DoGetBestSize().x;
-    int widthText = width - widthBtn - MARGIN_BETWEEN;
+    int widthText = width - widthBtn + overlap;
+
     if ( widthText < 0 )
     {
         // This can happen during the initial window layout when it's total
@@ -775,6 +770,9 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
         widthText = 0;
     }
 
+    if ( widthBtn > width )
+        widthBtn = width;
+
     // Because both subcontrols are positioned relatively
     // to the parent which can have different layout direction
     // then our control, we need to mirror their positions manually.
@@ -785,9 +783,7 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
         DoMoveSibling(m_hwndBuddy, x, y, widthText, height);
 
         // 2) The button window
-        if ( widthText > 0 )
-            x += widthText + MARGIN_BETWEEN;
-        wxSpinButton::DoMoveWindow(x, y, widthBtn, height);
+        wxSpinButton::DoMoveWindow(x + widthText - overlap, y, widthBtn, height);
     }
     else
     {
@@ -796,8 +792,7 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
         wxSpinButton::DoMoveWindow(x, y, widthBtn, height);
 
         // 2) The buddy window
-        x += widthBtn + MARGIN_BETWEEN;
-        DoMoveSibling(m_hwndBuddy, x, y, widthText, height);
+        DoMoveSibling(m_hwndBuddy, x + widthBtn - overlap, y, widthText, height);
     }
 }
 

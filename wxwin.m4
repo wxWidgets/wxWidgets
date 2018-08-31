@@ -210,8 +210,8 @@ AC_DEFUN([WX_CONFIG_CHECK],
       AC_MSG_CHECKING([for wxWidgets version >= $min_wx_version ($5)])
     fi
 
-    dnl don't add the libraries ($4) to this variable as this would result in
-    dnl an error when it's used with --version below
+    dnl don't add the libraries (4th argument) to this variable as this would
+    dnl result in an error when it's used with --version below
     WX_CONFIG_WITH_ARGS="$WX_CONFIG_PATH $wx_config_args $5"
 
     WX_VERSION=`$WX_CONFIG_WITH_ARGS --version 2>/dev/null`

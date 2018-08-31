@@ -48,22 +48,6 @@
     #define wxUSE_MENUS_NATIVE wxUSE_MENUS
 #endif // __WXUNIVERSAL__/!__WXUNIVERSAL__
 
-
-// Define this macro if the corresponding operating system handles the state
-// of children windows automatically when the parent is enabled/disabled.
-// Otherwise wx itself must ensure that when the parent is disabled its
-// children are disabled too, and their initial state is restored when the
-// parent is enabled back.
-#if defined(__WXMSW__)
-    // must do everything ourselves
-    #undef wxHAS_NATIVE_ENABLED_MANAGEMENT
-#elif defined(__WXOSX__)
-    // must do everything ourselves
-    #undef wxHAS_NATIVE_ENABLED_MANAGEMENT
-#else
-    #define wxHAS_NATIVE_ENABLED_MANAGEMENT
-#endif
-
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
@@ -131,6 +115,20 @@ enum wxShowEffect
     wxSHOW_EFFECT_BLEND,
     wxSHOW_EFFECT_EXPAND,
     wxSHOW_EFFECT_MAX
+};
+
+// Values for EnableTouchEvents() mask.
+enum
+{
+    wxTOUCH_NONE                    = 0x0000,
+    wxTOUCH_VERTICAL_PAN_GESTURE    = 0x0001,
+    wxTOUCH_HORIZONTAL_PAN_GESTURE  = 0x0002,
+    wxTOUCH_PAN_GESTURES            = wxTOUCH_VERTICAL_PAN_GESTURE |
+                                      wxTOUCH_HORIZONTAL_PAN_GESTURE,
+    wxTOUCH_ZOOM_GESTURE            = 0x0004,
+    wxTOUCH_ROTATE_GESTURE          = 0x0008,
+    wxTOUCH_PRESS_GESTURES          = 0x0010,
+    wxTOUCH_ALL_GESTURES            = 0x001f
 };
 
 // flags for SendSizeEvent()
@@ -402,15 +400,19 @@ public:
         // returns the results.
     virtual wxSize GetEffectiveMinSize() const;
 
+#if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED_MSG("use GetEffectiveMinSize() instead")
     wxSize GetBestFittingSize() const;
+#endif // WXWIN_COMPATIBILITY_2_8
 
         // A 'Smart' SetSize that will fill in default size values with 'best'
         // size.  Sets the minsize to what was passed in.
     void SetInitialSize(const wxSize& size=wxDefaultSize);
 
+#if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED_MSG("use SetInitialSize() instead")
     void SetBestFittingSize(const wxSize& size=wxDefaultSize);
+#endif // WXWIN_COMPATIBILITY_2_8
 
 
         // the generic centre function - centers the window on parent by`
@@ -1029,6 +1031,13 @@ public:
     virtual bool HasCapture() const
         { return (wxWindow *)this == GetCapture(); }
 
+        // enable the specified touch events for this window, return false if
+        // the requested events are not supported
+    virtual bool EnableTouchEvents(int WXUNUSED(eventsMask))
+    {
+        return false;
+    }
+
     // painting the window
     // -------------------
 
@@ -1060,6 +1069,9 @@ public:
 
         // adjust DC for drawing on this window
     virtual void PrepareDC( wxDC & WXUNUSED(dc) ) { }
+
+        // enable or disable double buffering
+    virtual void SetDoubleBuffered(bool WXUNUSED(on)) { }
 
         // return true if the window contents is double buffered by the system
     virtual bool IsDoubleBuffered() const { return false; }
@@ -1123,6 +1135,10 @@ public:
     {
         return m_hasBgCol;
     }
+    bool UseBackgroundColour() const
+    {
+        return UseBgCol();
+    }
 
     virtual bool SetForegroundColour(const wxColour& colour);
     void SetOwnForegroundColour(const wxColour& colour)
@@ -1131,6 +1147,14 @@ public:
             m_inheritFgCol = false;
     }
     wxColour GetForegroundColour() const;
+    bool UseForegroundColour() const
+    {
+        return m_hasFgCol;
+    }
+    bool InheritsForegroundColour() const
+    {
+        return m_inheritFgCol;
+    }
 
         // Set/get the background style.
     virtual bool SetBackgroundStyle(wxBackgroundStyle style);
@@ -1738,10 +1762,12 @@ protected:
     // recalculated each time the value is needed.
     wxSize m_bestSizeCache;
 
+#if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED_MSG("use SetInitialSize() instead.")
     void SetBestSize(const wxSize& size);
     wxDEPRECATED_MSG("use SetInitialSize() instead.")
     virtual void SetInitialBestSize(const wxSize& size);
+#endif // WXWIN_COMPATIBILITY_2_8
 
 
 
@@ -1898,7 +1924,7 @@ private:
 };
 
 
-
+#if WXWIN_COMPATIBILITY_2_8
 // Inlines for some deprecated methods
 inline wxSize wxWindowBase::GetBestFittingSize() const
 {
@@ -1919,6 +1945,7 @@ inline void wxWindowBase::SetInitialBestSize(const wxSize& size)
 {
     SetInitialSize(size);
 }
+#endif // WXWIN_COMPATIBILITY_2_8
 
 
 // ----------------------------------------------------------------------------
@@ -2052,35 +2079,35 @@ public:
 
         // Can return either a child object, or an integer
         // representing the child element, starting from 1.
-    virtual wxAccStatus HitTest(const wxPoint& pt, int* childId, wxAccessible** childObject);
+    virtual wxAccStatus HitTest(const wxPoint& pt, int* childId, wxAccessible** childObject) wxOVERRIDE;
 
         // Returns the rectangle for this object (id = 0) or a child element (id > 0).
-    virtual wxAccStatus GetLocation(wxRect& rect, int elementId);
+    virtual wxAccStatus GetLocation(wxRect& rect, int elementId) wxOVERRIDE;
 
         // Navigates from fromId to toId/toObject.
     virtual wxAccStatus Navigate(wxNavDir navDir, int fromId,
-                int* toId, wxAccessible** toObject);
+                int* toId, wxAccessible** toObject) wxOVERRIDE;
 
         // Gets the name of the specified object.
-    virtual wxAccStatus GetName(int childId, wxString* name);
+    virtual wxAccStatus GetName(int childId, wxString* name) wxOVERRIDE;
 
         // Gets the number of children.
-    virtual wxAccStatus GetChildCount(int* childCount);
+    virtual wxAccStatus GetChildCount(int* childCount) wxOVERRIDE;
 
         // Gets the specified child (starting from 1).
         // If *child is NULL and return value is wxACC_OK,
         // this means that the child is a simple element and
         // not an accessible object.
-    virtual wxAccStatus GetChild(int childId, wxAccessible** child);
+    virtual wxAccStatus GetChild(int childId, wxAccessible** child) wxOVERRIDE;
 
         // Gets the parent, or NULL.
-    virtual wxAccStatus GetParent(wxAccessible** parent);
+    virtual wxAccStatus GetParent(wxAccessible** parent) wxOVERRIDE;
 
         // Performs the default action. childId is 0 (the action for this object)
         // or > 0 (the action for a child).
         // Return wxACC_NOT_SUPPORTED if there is no default action for this
         // window (e.g. an edit control).
-    virtual wxAccStatus DoDefaultAction(int childId);
+    virtual wxAccStatus DoDefaultAction(int childId) wxOVERRIDE;
 
         // Gets the default action for this object (0) or > 0 (the action for a child).
         // Return wxACC_OK even if there is no action. actionName is the action, or the empty
@@ -2088,36 +2115,36 @@ public:
         // The retrieved string describes the action that is performed on an object,
         // not what the object does as a result. For example, a toolbar button that prints
         // a document has a default action of "Press" rather than "Prints the current document."
-    virtual wxAccStatus GetDefaultAction(int childId, wxString* actionName);
+    virtual wxAccStatus GetDefaultAction(int childId, wxString* actionName) wxOVERRIDE;
 
         // Returns the description for this object or a child.
-    virtual wxAccStatus GetDescription(int childId, wxString* description);
+    virtual wxAccStatus GetDescription(int childId, wxString* description) wxOVERRIDE;
 
         // Returns help text for this object or a child, similar to tooltip text.
-    virtual wxAccStatus GetHelpText(int childId, wxString* helpText);
+    virtual wxAccStatus GetHelpText(int childId, wxString* helpText) wxOVERRIDE;
 
         // Returns the keyboard shortcut for this object or child.
         // Return e.g. ALT+K
-    virtual wxAccStatus GetKeyboardShortcut(int childId, wxString* shortcut);
+    virtual wxAccStatus GetKeyboardShortcut(int childId, wxString* shortcut) wxOVERRIDE;
 
         // Returns a role constant.
-    virtual wxAccStatus GetRole(int childId, wxAccRole* role);
+    virtual wxAccStatus GetRole(int childId, wxAccRole* role) wxOVERRIDE;
 
         // Returns a state constant.
-    virtual wxAccStatus GetState(int childId, long* state);
+    virtual wxAccStatus GetState(int childId, long* state) wxOVERRIDE;
 
         // Returns a localized string representing the value for the object
         // or child.
-    virtual wxAccStatus GetValue(int childId, wxString* strValue);
+    virtual wxAccStatus GetValue(int childId, wxString* strValue) wxOVERRIDE;
 
         // Selects the object or child.
-    virtual wxAccStatus Select(int childId, wxAccSelectionFlags selectFlags);
+    virtual wxAccStatus Select(int childId, wxAccSelectionFlags selectFlags) wxOVERRIDE;
 
         // Gets the window with the keyboard focus.
         // If childId is 0 and child is NULL, no object in
         // this subhierarchy has the focus.
         // If this object has the focus, child should be 'this'.
-    virtual wxAccStatus GetFocus(int* childId, wxAccessible** child);
+    virtual wxAccStatus GetFocus(int* childId, wxAccessible** child) wxOVERRIDE;
 
 #if wxUSE_VARIANT
         // Gets a variant representing the selected children
@@ -2128,7 +2155,7 @@ public:
         // - an integer representing the selected child element,
         //   or 0 if this object is selected (GetType() == wxT("long")
         // - a "void*" pointer to a wxAccessible child object
-    virtual wxAccStatus GetSelections(wxVariant* selections);
+    virtual wxAccStatus GetSelections(wxVariant* selections) wxOVERRIDE;
 #endif // wxUSE_VARIANT
 };
 

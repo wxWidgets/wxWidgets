@@ -323,7 +323,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
             SHARED_LD_CXX="\${CXX} -dynamiclib -single_module -headerpad_max_install_names -o"
         fi
 
-        if test "x$GCC" == "xyes"; then
+        if test "x$GCC" = "xyes"; then
             PIC_FLAG="-dynamic -fPIC"
         fi
         if test "x$XLCC" = "xyes"; then
@@ -377,7 +377,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
         fi
       ;;
 
-      *-*-cygwin* | *-*-mingw32* )
+      *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
         PIC_FLAG=""
         SHARED_LD_CC="\$(CC) -shared -o"
         SHARED_LD_CXX="\$(CXX) -shared -o"
@@ -385,7 +385,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_LD],
       ;;
 
       powerpc-apple-macos* | \
-      *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | *-*-gnu* | *-*-k*bsd*-gnu | \
+      *-*-freebsd* | *-*-openbsd* | *-*-haiku* | *-*-netbsd* | *-*-gnu* | *-*-k*bsd*-gnu | \
       *-*-mirbsd* | \
       *-*-sunos4* | \
       *-*-osf* | \
@@ -435,7 +435,7 @@ AC_DEFUN([AC_BAKEFILE_SHARED_VERSIONS],
     SONAME_FLAG=
 
     case "${BAKEFILE_HOST}" in
-      *-*-linux* | *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | \
+      *-*-linux* | *-*-freebsd* | *-*-openbsd* | *-*-haiku* | *-*-netbsd* | \
       *-*-k*bsd*-gnu | *-*-mirbsd* | *-*-gnu* )
         if test "x$SUNCXX" = "xyes"; then
             SONAME_FLAG="-h "
@@ -572,13 +572,13 @@ AC_DEFUN([AC_BAKEFILE_CHECK_BASIC_STUFF],
     AC_CHECK_TOOL(STRIP, strip, :)
     AC_CHECK_TOOL(NM, nm, :)
 
-    dnl Don't use `install -d`, see http://trac.wxwidgets.org/ticket/13452
+    dnl Don't use `install -d`, see https://trac.wxwidgets.org/ticket/13452
     INSTALL_DIR="mkdir -p"
     AC_SUBST(INSTALL_DIR)
 
     LDFLAGS_GUI=
     case ${BAKEFILE_HOST} in
-        *-*-cygwin* | *-*-mingw32* )
+        *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
         LDFLAGS_GUI="-mwindows"
     esac
     AC_SUBST(LDFLAGS_GUI)
@@ -594,20 +594,13 @@ dnl ---------------------------------------------------------------------------
 AC_DEFUN([AC_BAKEFILE_RES_COMPILERS],
 [
     case ${BAKEFILE_HOST} in
-        *-*-cygwin* | *-*-mingw32* )
+        *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
             dnl Check for win32 resources compiler:
             AC_CHECK_TOOL(WINDRES, windres)
          ;;
-
-      *-*-darwin* | powerpc-apple-macos* )
-            AC_CHECK_PROG(REZ, Rez, Rez, /Developer/Tools/Rez)
-            AC_CHECK_PROG(SETFILE, SetFile, SetFile, /Developer/Tools/SetFile)
-        ;;
     esac
 
     AC_SUBST(WINDRES)
-    AC_SUBST(REZ)
-    AC_SUBST(SETFILE)
 ])
 
 dnl ---------------------------------------------------------------------------
@@ -752,7 +745,7 @@ AC_DEFUN([AC_BAKEFILE],
     AC_SUBST(OBJCXXFLAGS)
 
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.2.9"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.11"
 
     dnl includes autoconf_inc.m4:
     $1

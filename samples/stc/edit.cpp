@@ -111,10 +111,10 @@ wxBEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
     EVT_MENU(myID_MULTIPLE_SELECTIONS,          Edit::OnMultipleSelections)
     EVT_MENU(myID_MULTI_PASTE,                  Edit::OnMultiPaste)
     EVT_MENU(myID_MULTIPLE_SELECTIONS_TYPING,   Edit::OnMultipleSelectionsTyping)
+    EVT_MENU(myID_CUSTOM_POPUP,                 Edit::OnCustomPopup)
     // stc
     EVT_STC_MARGINCLICK (wxID_ANY,     Edit::OnMarginClick)
     EVT_STC_CHARADDED (wxID_ANY,       Edit::OnCharAdded)
-    EVT_STC_KEY( wxID_ANY , Edit::OnKey )
 
     EVT_KEY_DOWN( Edit::OnKeyDown )
 wxEND_EVENT_TABLE()
@@ -134,9 +134,6 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     // initialize language
     m_language = NULL;
 
-    // Use all the bits in the style byte as styles, not indicators.
-    SetStyleBits(8);
-    
     // default font for all styles
     SetViewEOL (g_CommonPrefs.displayEOLEnable);
     SetIndentationGuides (g_CommonPrefs.indentGuideEnable);
@@ -179,7 +176,7 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     m_FoldingMargin = 16;
     CmdKeyClear (wxSTC_KEY_TAB, 0); // this is done by the menu accelerator key
     SetLayoutCache (wxSTC_CACHE_PAGE);
-
+    UsePopUp(wxSTC_POPUP_ALL);
 }
 
 Edit::~Edit () {}
@@ -208,11 +205,6 @@ void Edit::OnEditUndo (wxCommandEvent &WXUNUSED(event)) {
 void Edit::OnEditClear (wxCommandEvent &WXUNUSED(event)) {
     if (GetReadOnly()) return;
     Clear ();
-}
-
-void Edit::OnKey (wxStyledTextEvent &WXUNUSED(event))
-{
-    wxMessageBox("OnKey");
 }
 
 void Edit::OnKeyDown (wxKeyEvent &event)
@@ -460,6 +452,11 @@ void Edit::OnMultiPaste(wxCommandEvent& WXUNUSED(event)) {
 void Edit::OnMultipleSelectionsTyping(wxCommandEvent& WXUNUSED(event)) {
     bool isSet = GetAdditionalSelectionTyping();
     SetAdditionalSelectionTyping(!isSet);
+}
+
+void Edit::OnCustomPopup(wxCommandEvent& evt)
+{
+    UsePopUp(evt.IsChecked() ? wxSTC_POPUP_NEVER : wxSTC_POPUP_ALL);
 }
 
 //! misc
@@ -840,10 +837,9 @@ EditProperties::EditProperties (Edit *edit,
 //----------------------------------------------------------------------------
 
 EditPrint::EditPrint (Edit *edit, const wxChar *title)
-              : wxPrintout(title) {
-    m_edit = edit;
-    m_printed = 0;
-
+              : wxPrintout(title)
+              , m_edit(edit)
+{
 }
 
 bool EditPrint::OnPrintPage (int page) {
@@ -855,10 +851,8 @@ bool EditPrint::OnPrintPage (int page) {
     PrintScaling (dc);
 
     // print page
-    if (page == 1) m_printed = 0;
-    m_printed = m_edit->FormatRange (1, m_printed, m_edit->GetLength(),
+    m_edit->FormatRange(true, page == 1 ? 0 : m_pageEnds[page-2], m_pageEnds[page-1],
                                      dc, dc, m_printRect, m_pageRect);
-
     return true;
 }
 
@@ -890,6 +884,12 @@ void EditPrint::GetPageInfo (int *minPage, int *maxPage, int *selPageFrom, int *
     wxSize page = g_pageSetupData->GetPaperSize();
     page.x = static_cast<int> (page.x * ppiScr.x / 25.4);
     page.y = static_cast<int> (page.y * ppiScr.y / 25.4);
+    // In landscape mode we need to swap the width and height
+    if ( g_pageSetupData->GetPrintData().GetOrientation() == wxLANDSCAPE )
+    {
+        wxSwap(page.x, page.y);
+    }
+
     m_pageRect = wxRect (0,
                          0,
                          page.x,
@@ -914,9 +914,12 @@ void EditPrint::GetPageInfo (int *minPage, int *maxPage, int *selPageFrom, int *
                           page.y - (top + bottom));
 
     // count pages
-    while (HasPage (*maxPage)) {
-        m_printed = m_edit->FormatRange (0, m_printed, m_edit->GetLength(),
-                                       dc, dc, m_printRect, m_pageRect);
+    m_pageEnds.Clear();
+    int printed = 0;
+    while ( printed < m_edit->GetLength() ) {
+        printed = m_edit->FormatRange(false, printed, m_edit->GetLength(),
+                                      dc, dc, m_printRect, m_pageRect);
+        m_pageEnds.Add(printed);
         *maxPage += 1;
     }
     if (*maxPage > 0) *minPage = 1;
@@ -924,9 +927,9 @@ void EditPrint::GetPageInfo (int *minPage, int *maxPage, int *selPageFrom, int *
     *selPageTo = *maxPage;
 }
 
-bool EditPrint::HasPage (int WXUNUSED(page)) {
-
-    return (m_printed < m_edit->GetLength());
+bool EditPrint::HasPage (int page)
+{
+    return page <= (int)m_pageEnds.Count();
 }
 
 bool EditPrint::PrintScaling (wxDC *dc){

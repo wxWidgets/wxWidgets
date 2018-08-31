@@ -171,6 +171,11 @@ void ExecTestCase::TestShell()
 
 void ExecTestCase::TestExecute()
 {
+    // Launching interactive programs doesn't work without an interactive
+    // session.
+    if ( IsAutomaticTest() )
+        return;
+
     AsyncInEventLoop asyncInEventLoop;
 
     // test asynch exec
@@ -185,13 +190,15 @@ void ExecTestCase::TestExecute()
                                           ASYNC_COMMAND, wxEXEC_ASYNC);
     CPPUNIT_ASSERT( pid != 0 );
 
-    // NOTE: under Windows the first wxKill() invocation with wxSIGTERM
-    //       may fail if the system is fast and the ASYNC_COMMAND app
-    //       doesn't manage to create its HWND before our wxKill() is
-    //       executed; in that case we "fall back" to the second invocation
-    //       with wxSIGKILL (which should always succeed)
-    CPPUNIT_ASSERT( wxKill(pid, wxSIGTERM) == 0 ||
-                    wxKill(pid, wxSIGKILL) == 0 );
+    // Give the system some time to launch the child.
+    wxMilliSleep(200);
+
+    // Try to terminate it gently first, but fall back to killing it
+    // unconditionally if this fails.
+    const int rc = wxKill(pid, wxSIGTERM);
+    CHECK( rc == 0 );
+    if ( rc != 0 )
+        CHECK( wxKill(pid, wxSIGKILL) == 0 );
 
     int useNoeventsFlag;
 
@@ -236,6 +243,9 @@ void ExecTestCase::TestExecute()
 
 void ExecTestCase::TestProcess()
 {
+    if ( IsAutomaticTest() )
+        return;
+
     AsyncInEventLoop asyncInEventLoop;
 
     // test wxExecute with wxProcess
@@ -249,13 +259,19 @@ void ExecTestCase::TestProcess()
     long pid = asyncInEventLoop.DoExecute(AsyncExec_ExitLoop, // Force exit of event loop right
                                                 // after the call to wxExecute()
                                           ASYNC_COMMAND, wxEXEC_ASYNC, proc);
-    CPPUNIT_ASSERT( proc->GetPid() == pid && pid != 0 );
+    CPPUNIT_ASSERT( proc->GetPid() == pid );
+    CPPUNIT_ASSERT( pid != 0 );
+
+    // As above, give the system time to launch the process.
+    wxMilliSleep(200);
 
     // we're not going to process the wxEVT_END_PROCESS event,
     // so the proc instance will auto-delete itself after we kill
     // the asynch process:
-    CPPUNIT_ASSERT( wxKill(pid, wxSIGTERM) == 0 ||
-                    wxKill(pid, wxSIGKILL) == 0 );
+    const int rc = wxKill(pid, wxSIGTERM);
+    CHECK( rc == 0 );
+    if ( rc != 0 )
+        CHECK( wxKill(pid, wxSIGKILL) == 0 );
 
 
     // test wxExecute with wxProcess and REDIRECTION

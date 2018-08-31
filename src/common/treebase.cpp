@@ -179,7 +179,7 @@ wxTreeCtrlBase::wxTreeCtrlBase()
     // quick DoGetBestSize calculation
     m_quickBestSize = true;
 
-    Connect(wxEVT_CHAR_HOOK, wxKeyEventHandler(wxTreeCtrlBase::OnCharHook));
+    Bind(wxEVT_CHAR_HOOK, &wxTreeCtrlBase::OnCharHook, this);
 }
 
 wxTreeCtrlBase::~wxTreeCtrlBase()

@@ -8,7 +8,9 @@
 #ifndef _WX_QT_LISTBOX_H_
 #define _WX_QT_LISTBOX_H_
 
-#include <QtWidgets/QListWidget>
+class QListWidget;
+class QModelIndex;
+class QScrollArea;
 
 class WXDLLIMPEXP_CORE wxListBox : public wxListBoxBase
 {
@@ -54,10 +56,9 @@ public:
     virtual wxString GetString(unsigned int n) const;
     virtual void SetString(unsigned int n, const wxString& s);
     
-    virtual void SetSelection(int n);
     virtual int GetSelection() const;
 
-    virtual QListWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
     void QtSendEvent(wxEventType evtType, const QModelIndex &index, bool selected);
 

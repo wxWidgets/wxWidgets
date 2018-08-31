@@ -27,9 +27,6 @@ enum
     wxTB_VERTICAL    = wxVERTICAL,      // == 0x0008
     wxTB_LEFT        = wxTB_VERTICAL,
 
-    // show 3D buttons (wxToolBarSimple only)
-    wxTB_3DBUTTONS   = 0x0010,
-
     // "flat" buttons (Win32/GTK only)
     wxTB_FLAT        = 0x0020,
 

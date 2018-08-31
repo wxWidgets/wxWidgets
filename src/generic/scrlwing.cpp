@@ -1067,7 +1067,7 @@ void wxScrollHelperBase::HandleOnChildFocus(wxChildFocusEvent& event)
         return;
 #endif
 
-    // Fixing ticket: http://trac.wxwidgets.org/ticket/9563
+    // Fixing ticket: https://trac.wxwidgets.org/ticket/9563
     // When a child inside a wxControlContainer receives a focus, the
     // wxControlContainer generates an artificial wxChildFocusEvent for
     // itself, telling its parent that 'it' received the focus. The effect is
@@ -1079,22 +1079,28 @@ void wxScrollHelperBase::HandleOnChildFocus(wxChildFocusEvent& event)
     // window again to make the child widget visible. This leads to ugly
     // flickering when using nested wxPanels/wxScrolledWindows.
     //
-    // Ignore this event if 'win' is derived from wxControlContainer AND its
-    // parent is the m_targetWindow AND 'win' is not actually reciving the
-    // focus (win != FindFocus).  TODO: This affects all wxControlContainer
-    // objects, but wxControlContainer is not part of the wxWidgets RTTI and
-    // so wxDynamicCast(win, wxControlContainer) does not compile.  Find a way
-    // to determine if 'win' derives from wxControlContainer. Until then,
-    // testing if 'win' derives from wxPanel will probably get >90% of all
-    // cases.
+    // Ignore this event if 'win', or any of its ancestors, is derived from
+    // wxControlContainer AND its parent is the m_targetWindow AND 'win' is not
+    // actually receiving the focus (win != FindFocus).
+    //
+    // TODO: This affects all wxControlContainer objects, but
+    // wxControlContainer is not part of the wxWidgets RTTI and so
+    // wxDynamicCast(win, wxControlContainer) does not compile.  Find a way to
+    // determine if 'win' derives from wxControlContainer. Until then, testing
+    // if 'win' derives from wxPanel will probably get >90% of all cases.
 
-    wxWindow *actual_focus=wxWindow::FindFocus();
-    if (win != actual_focus &&
-        wxDynamicCast(win, wxPanel) != 0 &&
-        win->GetParent() == m_targetWindow)
-        // if win is a wxPanel and receives the focus, it should not be
-        // scrolled into view
-        return;
+    wxWindow * const actual_focus = wxWindow::FindFocus();
+    for ( wxWindow* w = win; w; w = w->GetParent() )
+    {
+        if ( w != actual_focus &&
+             wxDynamicCast(w, wxPanel) != NULL &&
+             w->GetParent() == m_targetWindow )
+        {
+            // if it is a wxPanel and receives the focus, it should not be
+            // scrolled into view
+            return;
+        }
+    }
 
     const wxRect viewRect(m_targetWindow->GetClientRect());
 

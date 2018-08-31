@@ -648,11 +648,12 @@ bool wxMenuBase::DoProcessEvent(wxMenuBase* menu, wxEvent& event, wxWindow* win)
 {
     event.SetEventObject(menu);
 
-    if ( menu )
-    {
-        wxMenuBar* const mb = menu->GetMenuBar();
+    wxMenuBar* const mb = menu ? menu->GetMenuBar() : NULL;
 
-        // Try the menu's event handler first
+    // Process event in the menu itself and all its parent menus, if it's a
+    // submenu, first.
+    for ( ; menu; menu = menu->GetParent() )
+    {
         wxEvtHandler *handler = menu->GetEventHandler();
         if ( handler )
         {
@@ -666,19 +667,19 @@ bool wxMenuBase::DoProcessEvent(wxMenuBase* menu, wxEvent& event, wxWindow* win)
             if ( handler->SafelyProcessEvent(event) )
                 return true;
         }
+    }
 
-        // If this menu is part of the menu bar, try the event there. this
-        if ( mb )
-        {
-            if ( mb->HandleWindowEvent(event) )
-                return true;
+    // If this menu is part of the menu bar, try the event there.
+    if ( mb )
+    {
+        if ( mb->HandleWindowEvent(event) )
+            return true;
 
-            // If this already propagated it upwards to the window containing
-            // the menu bar, we don't have to handle it in this window again
-            // below.
-            if ( event.ShouldPropagate() )
-                return false;
-        }
+        // If this already propagated it upwards to the window containing
+        // the menu bar, we don't have to handle it in this window again
+        // below.
+        if ( event.ShouldPropagate() )
+            return false;
     }
 
     // Try the window the menu was popped up from.
@@ -982,7 +983,7 @@ wxMenuItem *wxMenuBarBase::FindItem(int itemid, wxMenu **menu) const
     wxMenuItem *item = NULL;
     size_t count = GetMenuCount(), i;
     wxMenuList::const_iterator it;
-    for ( i = 0, it = m_menus.begin(); !item && (i < count); i++, it++ )
+    for ( i = 0, it = m_menus.begin(); !item && (i < count); i++, ++it )
     {
         item = (*it)->FindItem(itemid, menu);
     }

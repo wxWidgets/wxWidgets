@@ -665,7 +665,7 @@ void FileNameTestCase::TestCreateTempFileName()
         if (testData[n].shouldSucceed)
         {
             errDesc += "; path is " + path.ToStdString();
-        
+
             // test the place where the temp file has been created
             wxString expected = testData[n].expectedFolder;
             expected.Replace("$SYSTEM_TEMP", wxStandardPaths::Get().GetTempDir());
@@ -688,7 +688,7 @@ void FileNameTestCase::TestGetTimes()
     wxDateTime dtAccess, dtMod, dtCreate;
     CPPUNIT_ASSERT( fn.GetTimes(&dtAccess, &dtMod, &dtCreate) );
 
-    // make sure all retrieved dates are equal to the current date&time 
+    // make sure all retrieved dates are equal to the current date&time
     // with an accuracy up to 1 minute
     CPPUNIT_ASSERT(dtCreate.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
     CPPUNIT_ASSERT(dtMod.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
@@ -1020,10 +1020,10 @@ void CreateShortcut(const wxString& pathFile, const wxString& pathLink)
    hr = sl->QueryInterface(IID_IPersistFile, (void **)&pf);
    CPPUNIT_ASSERT( SUCCEEDED(hr) );
 
-   hr = sl->SetPath(pathFile.wx_str());
+   hr = sl->SetPath(pathFile.t_str());
    CPPUNIT_ASSERT( SUCCEEDED(hr) );
 
-   hr = pf->Save(pathLink.wx_str(), TRUE);
+   hr = pf->Save(pathLink.wc_str(), TRUE);
    CPPUNIT_ASSERT( SUCCEEDED(hr) );
 }
 
@@ -1049,3 +1049,18 @@ void FileNameTestCase::TestShortcuts()
 }
 
 #endif // __WINDOWS__
+
+#ifdef __LINUX__
+
+// Check that GetSize() works correctly for special files.
+TEST_CASE("wxFileName::GetSizeSpecial", "[filename][linux][special-file]")
+{
+    wxULongLong size = wxFileName::GetSize("/proc/kcore");
+    INFO( "size of /proc/kcore=" << size );
+    CHECK( size > 0 );
+
+    // All files in /sys seem to have size of 4KiB currently.
+    CHECK( wxFileName::GetSize("/sys/power/state") == 4096 );
+}
+
+#endif // __LINUX__

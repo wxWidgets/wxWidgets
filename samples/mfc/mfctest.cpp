@@ -17,8 +17,8 @@
 // created subsequently.
 //
 // (1) Make MyApp::OnInit not create a main window.
-// (2) Make MFC's InitInstance create a main window, and remove
-//     creation of CDummyWindow.
+// (2) Define a class deriving from wxMFCWinApp and override its InitMainWnd()
+//     to create the main window in MFC code.
 //
 // This can be accomplished by setting START_WITH_MFC_WINDOW to 1 below.
 
@@ -73,6 +73,8 @@
 #include "wx/nativewin.h"
 #include "wx/spinctrl.h"
 
+#include "wx/msw/mfc.h"
+
 #include "resource.h"
 
 #include "mfctest.h"
@@ -82,19 +84,15 @@
 // theApp:
 // Just creating this application object runs the whole application.
 //
-CTheApp theApp;
+SampleMFCWinApp theApp;
 
 // wxWidgets elements
 
-// Define a new application type
-class MyApp: public wxApp
+// Define a new application type inheriting from wxAppWithMFC
+class MyApp: public wxAppWithMFC
 {
 public:
-    virtual bool OnInit();
-
-    // we need to override this as the default behaviour only works when we're
-    // running wxWidgets main loop, not MFC one
-    virtual void ExitMainLoop();
+    virtual bool OnInit() wxOVERRIDE;
 
     wxFrame *CreateFrame();
 };
@@ -238,73 +236,6 @@ ON_COMMAND( IDM_TEST, OnTest )
 //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-BOOL CTheApp::InitInstance()
-{
-    if ( !CWinApp::InitInstance() )
-        return FALSE;
-
-    // TODO: cmd line parsing
-    WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
-    wxSetInstance(m_hInstance);
-    wxApp::m_nCmdShow = m_nCmdShow;
-    int argc = 0;
-    wxChar **argv = NULL;
-    wxEntryStart(argc, argv);
-    if ( !wxTheApp || !wxTheApp->CallOnInit() )
-        return FALSE;
-
-#if START_WITH_MFC_WINDOW
-    // Demonstrate creation of an initial MFC main window.
-    m_pMainWnd = new CMainWindow();
-    m_pMainWnd->ShowWindow( m_nCmdShow );
-    m_pMainWnd->UpdateWindow();
-#else
-    // Demonstrate creation of an initial wxWidgets main window.
-    // Wrap wxWidgets window in a dummy MFC window and
-    // make the main window.
-    if (wxTheApp && wxTheApp->GetTopWindow())
-    {
-        m_pMainWnd = new CDummyWindow((HWND) wxTheApp->GetTopWindow()->GetHWND());
-    }
-#endif
-
-    return TRUE;
-}
-
-int CTheApp::ExitInstance()
-{
-#if !START_WITH_MFC_WINDOW
-    delete m_pMainWnd;
-#endif
-
-    if ( wxTheApp )
-        wxTheApp->OnExit();
-    wxEntryCleanup();
-
-    return CWinApp::ExitInstance();
-}
-
-// Override this to provide wxWidgets message loop compatibility
-BOOL CTheApp::PreTranslateMessage(MSG *msg)
-{
-    wxEventLoop * const
-        evtLoop = static_cast<wxEventLoop *>(wxEventLoop::GetActive());
-    if ( evtLoop && evtLoop->PreProcessMessage(msg) )
-        return TRUE;
-
-    return CWinApp::PreTranslateMessage(msg);
-}
-
-BOOL CTheApp::OnIdle(LONG lCount)
-{
-    BOOL moreIdle = CWinApp::OnIdle(lCount);
-
-    if ( wxTheApp && wxTheApp->ProcessIdle() )
-        moreIdle = TRUE;
-
-    return moreIdle;
-}
-
 /*********************************************************************
 * wxWidgets elements
 ********************************************************************/
@@ -315,20 +246,10 @@ bool MyApp::OnInit()
         return false;
 
 #if !START_WITH_MFC_WINDOW
-    // as we're not inside wxWidgets main loop, the default logic doesn't work
-    // in our case and we need to do this explicitly
-    SetExitOnFrameDelete(true);
-
     (void) CreateFrame();
 #endif
 
     return true;
-}
-
-void MyApp::ExitMainLoop()
-{
-    // instead of existing wxWidgets main loop, terminate the MFC one
-    ::PostQuitMessage(0);
 }
 
 wxFrame *MyApp::CreateFrame()
@@ -451,17 +372,3 @@ void MyChild::OnActivate(wxActivateEvent& event)
     if (event.GetActive() && canvas)
         canvas->SetFocus();
 }
-
-// Dummy MFC window for specifying a valid main window to MFC, using
-// a wxWidgets HWND.
-CDummyWindow::CDummyWindow(HWND hWnd)
-{
-    Attach(hWnd);
-}
-
-// Don't let the CWnd destructor delete the HWND
-CDummyWindow::~CDummyWindow()
-{
-    Detach();
-}
-

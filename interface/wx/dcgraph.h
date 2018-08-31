@@ -10,6 +10,10 @@
 
     wxGCDC is a device context that draws on a wxGraphicsContext.
 
+    @remarks
+    If Direct2D is a renderer of underlying graphics context, only wxFont objects
+    representing TrueType fonts can be used in the font-related functions.
+
     @library{wxcore}
     @category{dc}
 

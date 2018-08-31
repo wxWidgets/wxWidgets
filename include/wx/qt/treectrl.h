@@ -8,7 +8,7 @@
 #ifndef _WX_QT_TREECTRL_H_
 #define _WX_QT_TREECTRL_H_
 
-#include <QtWidgets/QTreeWidget>
+class QTreeWidget;
 
 class WXDLLIMPEXP_CORE wxTreeCtrl : public wxTreeCtrlBase
 {
@@ -112,7 +112,7 @@ public:
 
     virtual bool GetBoundingRect(const wxTreeItemId& item, wxRect& rect, bool textOnly = false) const;
 
-    virtual QTreeWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 protected:
     virtual int DoGetItemState(const wxTreeItemId& item) const;

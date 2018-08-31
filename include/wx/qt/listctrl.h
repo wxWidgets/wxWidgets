@@ -9,7 +9,9 @@
 #define _WX_QT_LISTCTRL_H_
 
 #include "wx/textctrl.h"
-#include <QtWidgets/QTreeWidget>
+
+class QTreeWidget;
+class QTreeWidgetItem;
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
@@ -284,7 +286,7 @@ public:
         return OnGetItemAttr(item);
     }
 
-    virtual QTreeWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
 protected:
     void Init();

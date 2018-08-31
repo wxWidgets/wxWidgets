@@ -20,50 +20,41 @@
 
 #include "wx/srchctrl.h"
 
-class SearchCtrlTestCase : public CppUnit::TestCase
+class SearchCtrlTestCase
 {
 public:
-    SearchCtrlTestCase() { }
+    SearchCtrlTestCase()
+        : m_search(new wxSearchCtrl(wxTheApp->GetTopWindow(), wxID_ANY))
+    {
+    }
 
-    virtual void setUp();
-    virtual void tearDown();
+    ~SearchCtrlTestCase()
+    {
+        delete m_search;
+    }
 
-private:
-    CPPUNIT_TEST_SUITE( SearchCtrlTestCase );
-        CPPUNIT_TEST( Focus );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Focus();
-
-    wxSearchCtrl* m_search;
-
-    wxDECLARE_NO_COPY_CLASS(SearchCtrlTestCase);
+protected:
+    wxSearchCtrl* const m_search;
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( SearchCtrlTestCase );
+#define SEARCH_CTRL_TEST_CASE(name, tags) \
+    TEST_CASE_METHOD(SearchCtrlTestCase, name, tags)
 
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( SearchCtrlTestCase, "SearchCtrlTestCase" );
-
-void SearchCtrlTestCase::setUp()
-{
-    m_search = new wxSearchCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
-}
-
-void SearchCtrlTestCase::tearDown()
-{
-    delete m_search;
-    m_search = NULL;
-}
-
-void SearchCtrlTestCase::Focus()
-{
-    // TODO OS X test only passes when run solo ...
+// TODO OS X test only passes when run solo ...
 #ifndef __WXOSX__
+SEARCH_CTRL_TEST_CASE("wxSearchCtrl::Focus", "[wxSearchCtrl][focus]")
+{
     m_search->SetFocus();
-    CPPUNIT_ASSERT( m_search->HasFocus() );
-#endif
+    CHECK( m_search->HasFocus() );
+}
+#endif // !__WXOSX__
+
+SEARCH_CTRL_TEST_CASE("wxSearchCtrl::ChangeValue", "[wxSearchCtrl][text]")
+{
+    CHECK( m_search->GetValue() == wxString() );
+
+    m_search->ChangeValue("foo");
+    CHECK( m_search->GetValue() == "foo" );
 }
 
 #endif // wxUSE_SEARCHCTRL

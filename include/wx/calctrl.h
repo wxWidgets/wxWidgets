@@ -27,7 +27,7 @@
 enum
 {
     // show Sunday as the first day of the week (default)
-    wxCAL_SUNDAY_FIRST               = 0x0000,
+    wxCAL_SUNDAY_FIRST               = 0x0080,
 
     // show Monday as the first day of the week
     wxCAL_MONDAY_FIRST               = 0x0001,
@@ -332,6 +332,9 @@ protected:
 
     // called by EnableHolidayDisplay()
     virtual void RefreshHolidays() { }
+
+    // does the week start on monday based on flags and OS settings?
+    bool WeekStartsOnMonday() const;
 };
 
 // ----------------------------------------------------------------------------

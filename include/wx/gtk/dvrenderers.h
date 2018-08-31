@@ -107,6 +107,8 @@ public:
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                               int align = wxDVR_DEFAULT_ALIGNMENT );
 
+    void ShowAsRadio();
+
     bool SetValue( const wxVariant &value ) wxOVERRIDE;
     bool GetValue( wxVariant &value ) const wxOVERRIDE;
 
@@ -228,9 +230,7 @@ public:
     virtual void GtkPackIntoColumn(GtkTreeViewColumn *column) wxOVERRIDE;
 
 protected:
-    virtual void GtkOnCellChanged(const wxVariant& value,
-                                  const wxDataViewItem& item,
-                                  unsigned col) wxOVERRIDE;
+    virtual wxVariant GtkGetValueFromString(const wxString& str) const wxOVERRIDE;
 
 private:
     wxDataViewIconText   m_value;
@@ -281,7 +281,7 @@ public:
     virtual bool GetValue( wxVariant &value ) const wxOVERRIDE;
 
 private:
-    virtual void GtkOnTextEdited(const char *itempath, const wxString& str) wxOVERRIDE;
+    virtual wxVariant GtkGetValueFromString(const wxString& str) const wxOVERRIDE;
 };
 
 

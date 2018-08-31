@@ -183,11 +183,6 @@
     #define wxUSE_SECRETSTORE 0
 #endif
 
-#if !wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
-#   undef wxUSE_CHECKLISTBOX
-#   define wxUSE_CHECKLISTBOX 0
-#endif
-
 #if wxUSE_SPINCTRL
 #   if !wxUSE_SPINBTN
 #       ifdef wxABORT_ON_CONFIG_ERROR
@@ -196,6 +191,20 @@
 #           undef wxUSE_SPINBTN
 #           define wxUSE_SPINBTN 1
 #       endif
+#   endif
+#endif
+
+/* wxMSW-specific checks: notice that this file is also used with wxUniv
+   and can even be used with wxGTK, when building it under Windows.
+ */
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#   if !wxUSE_OWNER_DRAWN
+#       undef wxUSE_CHECKLISTBOX
+#       define wxUSE_CHECKLISTBOX 0
+#   endif
+#   if !wxUSE_CHECKLISTBOX
+#       undef wxUSE_REARRANGECTRL
+#       define wxUSE_REARRANGECTRL 0
 #   endif
 #endif
 
@@ -355,21 +364,21 @@
 #       endif
 #   endif
 
-#   if wxUSE_DATAOBJ
-#       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "wxUSE_DATAOBJ requires wxUSE_OLE"
-#       else
-#           undef wxUSE_DATAOBJ
-#           define wxUSE_DATAOBJ 0
-#       endif
-#   endif
-
 #   if wxUSE_OLE_AUTOMATION
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxAutomationObject requires wxUSE_OLE"
 #       else
 #           undef wxUSE_OLE_AUTOMATION
 #           define wxUSE_OLE_AUTOMATION 0
+#       endif
+#   endif
+
+#   if wxUSE_DRAG_AND_DROP
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_DRAG_AND_DROP requires wxUSE_OLE"
+#       else
+#           undef wxUSE_DRAG_AND_DROP
+#           define wxUSE_DRAG_AND_DROP 0
 #       endif
 #   endif
 #endif /* !wxUSE_OLE */
@@ -383,12 +392,12 @@
 #           define wxUSE_MEDIACTRL 0
 #       endif
 #   endif
-#    if wxUSE_WEB
+#    if wxUSE_WEBVIEW
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxWebView requires wxActiveXContainer under MSW"
 #       else
-#           undef wxUSE_WEB
-#           define wxUSE_WEB 0
+#           undef wxUSE_WEBVIEW
+#           define wxUSE_WEBVIEW 0
 #       endif
 #   endif
 #endif /* !wxUSE_ACTIVEX */
@@ -431,12 +440,12 @@
 
 
 #if !wxUSE_OLE_AUTOMATION
-#    if wxUSE_WEB
+#    if wxUSE_WEBVIEW
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxWebView requires wxUSE_OLE_AUTOMATION under MSW"
 #       else
-#           undef wxUSE_WEB
-#           define wxUSE_WEB 0
+#           undef wxUSE_WEBVIEW
+#           define wxUSE_WEBVIEW 0
 #       endif
 #   endif
 #endif /* !wxUSE_OLE_AUTOMATION */

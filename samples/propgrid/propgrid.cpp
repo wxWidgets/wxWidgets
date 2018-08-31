@@ -44,34 +44,35 @@
     #error "Please set wxUSE_PROPGRID to 1 and rebuild the library."
 #endif
 
-#include <wx/numdlg.h>
+#include "wx/numdlg.h"
 
 // -----------------------------------------------------------------------
 
 
 // Main propertygrid header.
-#include <wx/propgrid/propgrid.h>
+#include "wx/propgrid/propgrid.h"
 
 // Extra property classes.
-#include <wx/propgrid/advprops.h>
+#include "wx/propgrid/advprops.h"
 
 // This defines wxPropertyGridManager.
-#include <wx/propgrid/manager.h>
+#include "wx/propgrid/manager.h"
 
 #include "propgrid.h"
 #include "sampleprops.h"
 
 #if wxUSE_DATEPICKCTRL
-    #include <wx/datectrl.h>
+    #include "wx/datectrl.h"
 #endif
 
-#include <wx/artprov.h>
+#include "wx/artprov.h"
+#include "wx/dcbuffer.h" // for wxALWAYS_NATIVE_DOUBLE_BUFFER
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
 #endif
 
-#include <wx/popupwin.h>
+#include "wx/popupwin.h"
 
 // -----------------------------------------------------------------------
 // wxSampleMultiButtonEditor
@@ -911,6 +912,7 @@ void FormMain::OnPropertyGridColDragging( wxPropertyGridEvent& event )
 
 void FormMain::OnPropertyGridColEndDrag( wxPropertyGridEvent& event )
 {
+    wxUnusedVar(event);
     wxLogDebug(wxT("Splitter %i resize ended"), event.GetColumn());
 }
 
@@ -1787,6 +1789,7 @@ wxEND_EVENT_TABLE()
 void wxMyPropertyGridPage::OnPropertySelect( wxPropertyGridEvent& event )
 {
     wxPGProperty* p = event.GetProperty();
+    wxUnusedVar(p);
     wxLogDebug(wxT("wxMyPropertyGridPage::OnPropertySelect('%s' is %s"),
                p->GetName().c_str(),
                IsPropertySelected(p)? wxT("selected"): wxT("unselected"));
@@ -1915,10 +1918,12 @@ void FormMain::CreateGrid( int style, int extraStyle )
     if ( extraStyle == -1 )
         // default extra style
         extraStyle = wxPG_EX_MODE_BUTTONS |
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER
+                     wxPG_EX_NATIVE_DOUBLE_BUFFERING |
+#endif // wxALWAYS_NATIVE_DOUBLE_BUFFER
                      wxPG_EX_MULTIPLE_SELECTION;
                 //| wxPG_EX_AUTO_UNSPECIFIED_VALUES
                 //| wxPG_EX_GREY_LABEL_WHEN_DISABLED
-                //| wxPG_EX_NATIVE_DOUBLE_BUFFERING
                 //| wxPG_EX_HELP_AS_TOOLTIPS
 
     bool wasCreated = m_panel ? false : true;
@@ -1963,14 +1968,6 @@ void FormMain::CreateGrid( int style, int extraStyle )
 
     //m_pPropGridManager->SetSplitterLeft(true);
     //m_pPropGridManager->SetSplitterPosition(137);
-
-    /*
-    // This would setup event handling without event table entries
-    Connect(m_pPropGridManager->GetId(), wxEVT_PG_SELECTED,
-            wxPropertyGridEventHandler(FormMain::OnPropertyGridSelect) );
-    Connect(m_pPropGridManager->GetId(), wxEVT_PG_CHANGED,
-            wxPropertyGridEventHandler(FormMain::OnPropertyGridChange) );
-    */
 
     m_topSizer->Add( m_pPropGridManager, wxSizerFlags(1).Expand());
 
@@ -2018,11 +2015,13 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
                 wxPG_TOOLBAR |
                 wxPG_DESCRIPTION,
                 // extra style
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER
+                wxPG_EX_NATIVE_DOUBLE_BUFFERING |
+#endif // wxALWAYS_NATIVE_DOUBLE_BUFFER
                 wxPG_EX_MODE_BUTTONS |
                 wxPG_EX_MULTIPLE_SELECTION
                 //| wxPG_EX_AUTO_UNSPECIFIED_VALUES
                 //| wxPG_EX_GREY_LABEL_WHEN_DISABLED
-                //| wxPG_EX_NATIVE_DOUBLE_BUFFERING
                 //| wxPG_EX_HELP_AS_TOOLTIPS
               );
 
@@ -2704,8 +2703,12 @@ void FormMain::OnEnableLabelEditing(wxCommandEvent& event)
 #if wxUSE_HEADERCTRL
 void FormMain::OnShowHeader( wxCommandEvent& event )
 {
-    m_pPropGridManager->ShowHeader(event.IsChecked());
-    m_pPropGridManager->SetColumnTitle(2, wxT("Units"));
+    bool show = event.IsChecked();
+    m_pPropGridManager->ShowHeader(show);
+    if ( show )
+    {
+        m_pPropGridManager->SetColumnTitle(2, wxT("Units"));
+    }
 }
 #endif // wxUSE_HEADERCTRL
 
@@ -2909,6 +2912,7 @@ void FormMain::OnSelectStyle( wxCommandEvent& WXUNUSED(event) )
         ADD_FLAG(wxPG_EX_ENABLE_TLP_TRACKING)
         ADD_FLAG(wxPG_EX_NO_TOOLBAR_DIVIDER)
         ADD_FLAG(wxPG_EX_TOOLBAR_SEPARATOR)
+        ADD_FLAG(wxPG_EX_ALWAYS_ALLOW_FOCUS)
         wxMultiChoiceDialog dlg( this, wxT("Select extra window styles to use"),
                                  wxT("wxPropertyGrid Extra Style"), chs );
         dlg.SetSelections(sel);
@@ -3002,7 +3006,7 @@ void FormMain::OnDeleteChoice( wxCommandEvent& WXUNUSED(event) )
 
 // -----------------------------------------------------------------------
 
-#include <wx/colordlg.h>
+#include "wx/colordlg.h"
 
 void FormMain::OnMisc ( wxCommandEvent& event )
 {

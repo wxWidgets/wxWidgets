@@ -8,31 +8,22 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// TODO: Actually test the CE IWMP....
 // TODO: Actually test HTTP proxies...
 
 //-----------------Introduction----------------------------------------------
-// This is the media backend for Windows Media Player 6 and ActiveMovie,
-// as well as PocketPC 2000, Windows Media Player Mobile 7 and 8.
+// This is the media backend for Windows Media Player 6 and ActiveMovie.
 //
 // We use a combination of the WMP 6 IMediaPlayer interface as well as the
-// ActiveMovie interface IActiveMovie that even exists on Windows 3. For
-// mobile systems we switch to IWMP for WMP mobile 7 and 8 and possibly
-// earlier. We just use ifdefs for differentiating between IWMP and
-// IActiveMovie/IMediaPlayer as the IWMP and IMediaPlayer are virtually
-// identical with a few minor exceptions.
+// ActiveMovie interface IActiveMovie.
 //
 // For supporting HTTP proxies and such we query the media player
-// interface (IActiveMovie/IWMP) for the INSPlay (NetShow) interface.
+// interface (IActiveMovie) for the INSPlay (NetShow) interface.
 //
-// The IMediaPlayer/IActiveMovie/IWMP are rather clean and straightforward
+// The IMediaPlayer/IActiveMovie are rather clean and straightforward
 // interfaces that are fairly simplistic.
 //
 // Docs for IMediaPlayer are at
 // http://msdn.microsoft.com/library/en-us/wmp6sdk/htm/microsoftwindowsmediaplayercontrolversion64sdk.asp
-//
-// Docs for IWMP are at
-// http://msdn.microsoft.com/library/en-us/wcewmp/html/_wcesdk_asx_wmp_control_reference.asp
 
 //===========================================================================
 //  DECLARATIONS
@@ -86,14 +77,6 @@
 //  argument to make it generate stubs (a .h & .c file), then clean up the
 //  generated interfaces I want with the STDMETHOD wrappers and then put them
 //  into mediactrl.cpp.
-//
-//  According to the MSDN docs, IMediaPlayer requires Windows 98 SE
-//  or greater.  NetShow is available on Windows 3.1 and I'm guessing
-//  IActiveMovie is too.  IMediaPlayer is essentially the Windows Media
-//  Player 6.4 SDK.
-//
-//  IWMP is from PlayerOCX.idl on PocketPC 2000, which uses CLSID_MediaPlayer
-//  as well as the main windows line.
 //
 //  Some of these are not used but are kept here for future reference anyway
 //---------------------------------------------------------------------------
@@ -909,10 +892,10 @@ public:
     wxAMMediaEvtHandler(wxAMMediaBackend *amb) :
        m_amb(amb), m_bLoadEventSent(false)
     {
-        m_amb->m_pAX->Connect(m_amb->m_pAX->GetId(),
+        m_amb->m_pAX->Bind(
             wxEVT_ACTIVEX,
-            wxActiveXEventHandler(wxAMMediaEvtHandler::OnActiveX),
-            NULL, this
+            &wxAMMediaEvtHandler::OnActiveX, this,
+            m_amb->m_pAX->GetId()
                               );
     }
 
@@ -1144,7 +1127,7 @@ bool wxAMMediaBackend::Load(const wxURI& location, const wxURI& proxy)
     if(pPlay)
     {
         pPlay->put_UseHTTPProxy(VARIANT_TRUE);
-        pPlay->put_HTTPProxyHost(wxBasicString(proxy.GetServer()).Get());
+        pPlay->put_HTTPProxyHost(wxBasicString(proxy.GetServer()));
         pPlay->put_HTTPProxyPort(wxAtoi(proxy.GetPort()));
         pPlay->Release();
     }
@@ -1167,9 +1150,9 @@ bool wxAMMediaBackend::DoLoad(const wxString& location)
     // the docs say its async and put_FileName is not -
     // but in practice they both seem to be async anyway
     if(GetMP())
-        hr = GetMP()->Open( wxBasicString(location).Get() );
+        hr = GetMP()->Open( wxBasicString(location) );
     else
-        hr = GetAM()->put_FileName( wxBasicString(location).Get() );
+        hr = GetAM()->put_FileName( wxBasicString(location) );
 
     if(FAILED(hr))
     {
@@ -1547,7 +1530,9 @@ void wxAMMediaBackend::Move(int WXUNUSED(x), int WXUNUSED(y),
 //---------------------------------------------------------------------------
 void wxAMMediaEvtHandler::OnActiveX(wxActiveXEvent& event)
 {
-    switch(event.GetDispatchId())
+    // cast to unsigned long to fix narrowing error with case 0xfffffd9f
+    // when using clang
+    switch (static_cast<unsigned long>(event.GetDispatchId()))
     {
     case 0x00000001: // statechange in IActiveMovie
     case 0x00000bc4: // playstatechange in IMediaPlayer

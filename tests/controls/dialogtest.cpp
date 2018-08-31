@@ -36,11 +36,13 @@ private:
 #endif
         CPPUNIT_TEST( FileDialog );
         CPPUNIT_TEST( CustomDialog );
+        CPPUNIT_TEST( InitDialog );
     CPPUNIT_TEST_SUITE_END();
 
     void MessageDialog();
     void FileDialog();
     void CustomDialog();
+    void InitDialog();
 
     wxDECLARE_NO_COPY_CLASS(ModalDialogsTestCase);
 };
@@ -130,6 +132,38 @@ void ModalDialogsTestCase::CustomDialog()
     );
 
     CPPUNIT_ASSERT_EQUAL( 42, dlg.m_value );
+}
+
+
+class MyModalDialog : public wxDialog
+{
+public:
+    MyModalDialog() : wxDialog (NULL, wxID_ANY, "Modal Dialog")
+    {
+        m_wasModal = false;
+        Bind( wxEVT_INIT_DIALOG, &MyModalDialog::OnInit, this );
+    }
+
+    void OnInit(wxInitDialogEvent& WXUNUSED(event))
+    {
+        m_wasModal = IsModal();
+        CallAfter( &MyModalDialog::EndModal, wxID_OK );
+    }
+
+    bool WasModal() const
+    {
+        return m_wasModal;
+    }
+
+private:
+    bool m_wasModal;
+};
+
+void ModalDialogsTestCase::InitDialog()
+{
+    MyModalDialog dlg;
+    dlg.ShowModal();
+    CPPUNIT_ASSERT( dlg.WasModal() );
 }
 
 #endif // HAVE_VARIADIC_MACROS

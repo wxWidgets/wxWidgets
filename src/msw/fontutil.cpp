@@ -37,11 +37,6 @@
 #include "wx/fontmap.h"
 #include "wx/tokenzr.h"
 
-// for MSVC5 and old w32api
-#ifndef HANGUL_CHARSET
-#    define HANGUL_CHARSET  129
-#endif
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -187,6 +182,7 @@ wxFontEncoding wxGetFontEncFromCharSet(int cs)
         default:
             wxFAIL_MSG( wxT("unexpected Win32 charset") );
             // fall through and assume the system charset
+            wxFALLTHROUGH;
 
         case DEFAULT_CHARSET:
             fontEncoding = wxFONTENCODING_SYSTEM;

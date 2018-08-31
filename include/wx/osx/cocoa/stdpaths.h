@@ -32,6 +32,9 @@ public:
     GetLocalizedResourcesDir(const wxString& lang,
                              ResourceCat category = ResourceCat_None) const wxOVERRIDE;
     virtual wxString GetUserDir(Dir userDir) const wxOVERRIDE;
+    virtual wxString MakeConfigFileName(const wxString& basename,
+                                        ConfigFileConv conv = ConfigFileConv_Ext
+                                        ) const wxOVERRIDE;
 
 protected:
     // Ctor is protected, use wxStandardPaths::Get() instead of instantiating

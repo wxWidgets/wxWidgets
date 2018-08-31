@@ -12,6 +12,7 @@
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QScrollBar>
 
 class wxQtScrollBar : public wxQtEventSignalHandler< QScrollBar, wxScrollBar >
 {
@@ -109,7 +110,7 @@ void wxScrollBar::SetScrollbar(int position, int WXUNUSED(thumbSize),
     }
 }
 
-QScrollBar *wxScrollBar::GetHandle() const
+QWidget *wxScrollBar::GetHandle() const
 {
     return m_qtScrollBar;
 }

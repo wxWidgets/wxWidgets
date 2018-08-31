@@ -719,8 +719,7 @@ void GridFrame::SetTabBehaviour(wxCommandEvent& event)
 {
     // To make any built-in behaviour work, we need to disable the custom TAB
     // handler, otherwise it would be overriding them.
-    grid->Disconnect(wxEVT_GRID_TABBING,
-                     wxGridEventHandler(GridFrame::OnGridCustomTab));
+    grid->Unbind(wxEVT_GRID_TABBING, &GridFrame::OnGridCustomTab, this);
 
     grid->SetTabBehaviour(
             static_cast<wxGrid::TabBehaviour>(event.GetId() - ID_TAB_STOP)
@@ -729,9 +728,7 @@ void GridFrame::SetTabBehaviour(wxCommandEvent& event)
 
 void GridFrame::SetTabCustomHandler(wxCommandEvent&)
 {
-    grid->Connect(wxEVT_GRID_TABBING,
-                  wxGridEventHandler(GridFrame::OnGridCustomTab),
-                  NULL, this);
+    grid->Bind(wxEVT_GRID_TABBING, &GridFrame::OnGridCustomTab, this);
 }
 
 
@@ -1375,7 +1372,7 @@ void GridFrame::About(  wxCommandEvent& WXUNUSED(ev) )
     // work with it for some reason) is moved over it.
     aboutInfo.SetWebSite(wxT("http://www.wxwidgets.org"));
 
-    wxAboutBox(aboutInfo);
+    wxAboutBox(aboutInfo, this);
 }
 
 
@@ -2232,7 +2229,7 @@ void GridFrame::OnGridRender( wxCommandEvent& event )
     int styleRender = 0, i;
     bool useLometric = false, defSize = false;
     double zoom = 1;
-    wxSize sizeMargin( 0, 0 );
+    wxSize sizeOffset( 0, 0 );
     wxPoint pointOrigin( 0, 0 );
 
     wxMenu* menu = GetMenuBar()->GetMenu( 0 );
@@ -2255,7 +2252,7 @@ void GridFrame::OnGridRender( wxCommandEvent& event )
     {
         pointOrigin.x += 50;
         pointOrigin.y += 50;
-        sizeMargin.IncBy( 50 );
+        sizeOffset.IncBy( 50 );
     }
     if ( menu->FindItem( ID_RENDER_ZOOM )->IsChecked() )
         zoom = 1.25;
@@ -2310,26 +2307,19 @@ void GridFrame::OnGridRender( wxCommandEvent& event )
     sizeRender.y *= zoom;
 
     // delete any existing render frame and create new one
-    wxWindow* win = FindWindow( "frameRender" );
+    wxWindow* win = FindWindowByName( "frameRender" );
     if ( win )
         win->Destroy();
 
+    // create a frame large enough for the rendered bitmap
     wxFrame* frame = new wxFrame( this, wxID_ANY, "Grid Render" );
-    frame->SetClientSize( 780, 400 );
+    frame->SetClientSize( sizeRender + sizeOffset * 2 );
     frame->SetName( "frameRender" );
 
     wxPanel* canvas = new wxPanel( frame, wxID_ANY );
 
-    // make bitmap large enough for margins if any
-    if ( !defSize )
-        sizeRender.IncBy( sizeMargin * 2 );
-    else
-        sizeRender.IncBy( sizeMargin );
-
-    wxBitmap bmp( sizeRender );
-    // don't leave it larger or drawing will be scaled
-    sizeRender.DecBy( sizeMargin * 2 );
-
+    // make a bitmap large enough for any top/left offset
+    wxBitmap bmp( sizeRender + sizeOffset );
     wxMemoryDC memDc(bmp);
 
     // default row labels have no background colour so set background
@@ -2356,10 +2346,7 @@ void GridFrame::OnGridRender( wxCommandEvent& event )
 
     m_gridBitmap = bmp;
 
-    canvas->Connect( wxEVT_PAINT,
-                     wxPaintEventHandler(GridFrame::OnRenderPaint),
-                     NULL,
-                     this );
+    canvas->Bind( wxEVT_PAINT, &GridFrame::OnRenderPaint, this );
 
     frame->Show();
 }

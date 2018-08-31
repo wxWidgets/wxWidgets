@@ -73,12 +73,15 @@ struct IShellItem : public IUnknown
 
 #endif // #ifndef __IShellItem_INTERFACE_DEFINED__
 
+#if defined(__VISUALC__) || !defined(__IShellItem_INTERFACE_DEFINED__)
 // Define this GUID in any case, even when __IShellItem_INTERFACE_DEFINED__ is
 // defined in the headers we might still not have it in the actual uuid.lib,
-// this happens with at least VC7 used with its original (i.e. not updated) SDK
-// and there is no harm in defining the GUID unconditionally.
+// this happens with at least VC7 used with its original (i.e. not updated) SDK.
+// clang complains about multiple definitions, so only define it unconditionally
+// when using a Visual C compiler.
 DEFINE_GUID(IID_IShellItem,
     0x43826D1E, 0xE718, 0x42EE, 0xBC, 0x55, 0xA1, 0xE2, 0x61, 0xC3, 0x7B, 0xFE);
+#endif
 
 struct IShellItemFilter;
 struct IFileDialogEvents;
@@ -147,16 +150,8 @@ DEFINE_GUID(IID_IFileDialog,
 // constants
 // ----------------------------------------------------------------------------
 
-#ifndef BIF_NEWDIALOGSTYLE
-    #define BIF_NEWDIALOGSTYLE 0x0040
-#endif
-
 #ifndef BIF_NONEWFOLDERBUTTON
     #define BIF_NONEWFOLDERBUTTON  0x0200
-#endif
-
-#ifndef BIF_EDITBOX
-    #define BIF_EDITBOX 16
 #endif
 
 // ----------------------------------------------------------------------------
@@ -459,7 +454,6 @@ BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 {
     switch(uMsg)
     {
-#ifdef BFFM_SETSELECTION
         case BFFM_INITIALIZED:
             // sent immediately after initialisation and so we may set the
             // initial selection here
@@ -467,8 +461,6 @@ BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
             // wParam = TRUE => lParam is a string and not a PIDL
             ::SendMessage(hwnd, BFFM_SETSELECTION, TRUE, pData);
             break;
-#endif // BFFM_SETSELECTION
-
 
         case BFFM_SELCHANGED:
             // note that this doesn't work with the new style UI (MSDN doesn't

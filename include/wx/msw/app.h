@@ -103,6 +103,10 @@ public:
     // use it.
     static wxLayoutDirection MSWGetDefaultLayout(wxWindow* parent = NULL);
 
+    // Call ProcessPendingEvents() but only if we need to do it, i.e. there was
+    // a recent call to WakeUpIdle().
+    void MSWProcessPendingEventsIfNeeded();
+
 protected:
     int    m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
 
@@ -112,7 +116,7 @@ public:
 
 #if wxUSE_RICHEDIT
     // initialize the richedit DLL of (at least) given version, return true if
-    // ok (Win95 has version 1, Win98/NT4 has 1 and 2, W2K has 3)
+    // ok
     static bool InitRichEdit(int version = 2);
 #endif // wxUSE_RICHEDIT
 

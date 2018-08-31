@@ -33,6 +33,8 @@
 #include <libsecret/secret.h>
 
 #include "wx/gtk/private/error.h"
+#include "wx/gtk/private/list.h"
+#include "wx/gtk/private/object.h"
 
 namespace
 {
@@ -131,10 +133,9 @@ public:
                       wxString& errmsg) wxOVERRIDE
     {
         // We don't have any argument for the user-visible secret description
-        // supported by libsecret, so we just concatenate the service and user
-        // strings. It might be a good idea to add a possibility to specify a
-        // more informative description later.
-        const wxString label = service + wxS("/") + user;
+        // supported by libsecret, so we just reuse the service string. It
+        // might be a good idea to add a possibility to specify a more
+        // informative description later.
 
         // Notice that we can't use secret_password_store_sync() here because
         // our secret can contain NULs, so we must pass by the lower level API.
@@ -145,7 +146,7 @@ public:
                 GetSchema(),
                 BuildAttributes(service, user),
                 SECRET_COLLECTION_DEFAULT,
-                label.utf8_str(),
+                service.utf8_str(),
                 static_cast<const wxSecretValueLibSecretImpl&>(secret).GetValue(),
                 NULL,                           // Can't be cancelled
                 error.Out()
@@ -158,21 +159,27 @@ public:
         return true;
     }
 
-    virtual wxSecretValueImpl* Load(const wxString& service,
-                                    const wxString& user,
-                                    wxString& errmsg) const wxOVERRIDE
+    virtual bool Load(const wxString& service,
+                      wxString* user,
+                      wxSecretValueImpl** secret,
+                      wxString& errmsg) const wxOVERRIDE
     {
         wxGtkError error;
-        SecretValue* const value = secret_service_lookup_sync
-              (
+        GList* const found = secret_service_search_sync
+            (
                 NULL,                           // Default service
                 GetSchema(),
-                BuildAttributes(service, user),
+                BuildAttributes(service),
+                static_cast<SecretSearchFlags>
+                (
+                    SECRET_SEARCH_UNLOCK |
+                    SECRET_SEARCH_LOAD_SECRETS
+                ),
                 NULL,                           // Can't be cancelled
                 error.Out()
-              );
+            );
 
-        if ( !value )
+        if ( !found )
         {
             // There can be no error message if the secret was just not found
             // and no other error occurred -- just leave the error message
@@ -180,21 +187,32 @@ public:
             // behave.
             if ( error )
                 errmsg = error.GetMessage();
-            return NULL;
+            return false;
         }
 
-        return new wxSecretValueLibSecretImpl(value);
+        wxGtkList ensureListFreed(found);
+
+        SecretItem* const item = static_cast<SecretItem*>(found->data);
+        wxGtkObject<SecretItem> ensureItemFreed(item);
+
+        const wxGHashTable attrs(secret_item_get_attributes(item));
+        const gpointer field = g_hash_table_lookup(attrs, FIELD_USER);
+        if ( field )
+            *user = wxString::FromUTF8(static_cast<char*>(field));
+
+        *secret = new wxSecretValueLibSecretImpl(secret_item_get_secret(item));
+
+        return true;
     }
 
     virtual bool Delete(const wxString& service,
-                        const wxString& user,
                         wxString& errmsg) wxOVERRIDE
     {
         wxGtkError error;
         if ( !secret_password_clearv_sync
               (
                 GetSchema(),
-                BuildAttributes(service, user),
+                BuildAttributes(service),
                 NULL,                           // Can't be cancelled
                 error.Out()
               ) )
@@ -217,6 +235,11 @@ private:
     // helper function to make changing the code later simpler.
     static SecretSchema* GetSchema()
     {
+        // SecretSchema struct has some "reserved" fields in it which we don't
+        // want to initialize, but this results in this warning if it's
+        // enabled, so just suppress it here.
+        wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
         static SecretSchema s_schema =
             {
                 "org.freedesktop.Secret.Generic",
@@ -228,12 +251,24 @@ private:
                 }
             };
 
+        wxGCC_WARNING_RESTORE(missing-field-initializers)
+
         return &s_schema;
     }
 
     // Return attributes for the schema defined above.
+    static wxGHashTable BuildAttributes(const wxString& service)
+    {
+        return wxGHashTable(secret_attributes_build
+                            (
+                                GetSchema(),
+                                FIELD_SERVICE,  service.utf8_str().data(),
+                                NULL
+                            ));
+    }
+
     static wxGHashTable BuildAttributes(const wxString& service,
-                                       const wxString& user)
+                                        const wxString& user)
     {
         return wxGHashTable(secret_attributes_build
                             (

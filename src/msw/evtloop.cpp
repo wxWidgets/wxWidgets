@@ -248,11 +248,6 @@ void wxGUIEventLoop::OnNextIteration()
 #endif // wxUSE_THREADS
 }
 
-void wxGUIEventLoop::WakeUp()
-{
-    ::PostMessage(NULL, WM_NULL, 0, 0);
-}
-
 
 // ----------------------------------------------------------------------------
 // Yield to incoming messages
@@ -328,9 +323,7 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
             case WM_SYSKEYUP:
             case WM_SYSCHAR:
             case WM_SYSDEADCHAR:
-#ifdef WM_UNICHAR
             case WM_UNICHAR:
-#endif
             case WM_HOTKEY:
             case WM_IME_STARTCOMPOSITION:
             case WM_IME_ENDCOMPOSITION:
@@ -349,9 +342,7 @@ void wxGUIEventLoop::DoYieldFor(long eventsToProcess)
 
             case WM_MOUSEHOVER:
             case WM_MOUSELEAVE:
-#ifdef WM_NCMOUSELEAVE
             case WM_NCMOUSELEAVE:
-#endif
 
             case WM_CUT:
             case WM_COPY:

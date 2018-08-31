@@ -1184,10 +1184,10 @@ long wxExecute(const wxString& command, int flags = wxEXEC_ASYNC,
     In wxPerl this function is called @c Wx::ExecuteArgs.
     @endWxPerlOnly
 */
-long wxExecute(char** argv, int flags = wxEXEC_ASYNC,
+long wxExecute(const char* const* argv, int flags = wxEXEC_ASYNC,
                 wxProcess* callback = NULL,
                 const wxExecuteEnv *env = NULL);
-long wxExecute(wchar_t** argv, int flags = wxEXEC_ASYNC,
+long wxExecute(const wchar_t* const* argv, int flags = wxEXEC_ASYNC,
                 wxProcess* callback = NULL,
                 const wxExecuteEnv *env = NULL);
 //@}
@@ -1423,3 +1423,76 @@ void wxUsleep(unsigned long milliseconds);
 
 //@}
 
+
+/** @addtogroup group_funcmacro_misc */
+//@{
+/**
+    Convert decimal integer to 2-character hexadecimal string.
+
+    @param dec
+        A number to be converted.
+    @param buf
+        A pointer to the buffer that receives hexadecimal string (not prefixed
+        by @c 0x). This buffer should be large enough to hold at least
+        3 characters: 2 hexadecimal digits and the terminating null character.
+
+    @remarks
+        Returned string is composed of uppercase hexdecimal characters.
+
+    @header{wx/utils.h}
+*/
+void wxDecToHex(unsigned char dec, wxChar *buf);
+
+/**
+    Convert decimal integer to 2-character hexadecimal string.
+
+    @param dec
+        A number to be converted.
+    @return
+        String containing hexadecimal string, not prefixed by @c 0x,
+        composed of uppercase characters.
+
+    @header{wx/utils.h}
+*/
+wxString wxDecToHex(unsigned char dec);
+
+/**
+    Returns 2 characters of hexadecimal representation of a given number.
+
+    @param dec
+        A number to be converted.
+    @param ch1
+        Pointer to the variable that receives 1st hexadecimal character.
+        It must not be @NULL.
+    @param ch2
+        Pointer to the variable that receives 2nd hexadecimal character.
+        It must not be @NULL.
+
+    @remarks
+        Returned characters are uppercase.
+
+    @header{wx/utils.h}
+*/
+void wxDecToHex(unsigned char dec, char* ch1, char* ch2);
+
+/**
+    Convert 2-character hexadecimal string to decimal integer.
+
+    @param buf
+        String containing uppercase hexadecimal characters, not prefixed
+        by @c 0x. Its length must be at least 2 characters. If it is longer
+        than 2 characters, only first two will be converted to the number.
+
+    @return
+        An integer number between 0 and 255 that is equivalent to the number
+        in @a buf, or @c -1 if @a buf is not a hexadecimal string.
+
+    @header{wx/utils.h}
+*/
+int wxHexToDec(const wxString& buf);
+
+/**
+    @overload
+*/
+int wxHexToDec(const char* buf);
+//@}

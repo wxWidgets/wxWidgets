@@ -16,6 +16,8 @@
 #if wxUSE_NOTIFICATION_MESSAGE && wxUSE_WINRT
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/module.h"
     #include "wx/string.h"
 #endif // WX_PRECOMP
 
@@ -25,7 +27,7 @@
 #include "wx/msw/rt/utils.h"
 #include "wx/msw/private/comptr.h"
 #include "wx/msw/wrapshl.h"
-#include "wx/msw/ole/oleutils.h"
+#include "wx/msw/ole/comimpl.h"
 
 #include "wx/filename.h"
 #include "wx/stdpaths.h"
@@ -72,49 +74,20 @@ public:
     IFACEMETHODIMP Invoke(IToastNotification *sender, IToastFailedEventArgs *e);
 
     // IUnknown
-    IFACEMETHODIMP_(ULONG) AddRef()
-    {
-        return ++m_cRef;
-    }
-
-    IFACEMETHODIMP_(ULONG) Release()
-    {
-        if ( --m_cRef == wxAutoULong(0) )
-        {
-            delete this;
-            return 0;
-        }
-        else
-            return m_cRef;
-    }
-
-    IFACEMETHODIMP QueryInterface(REFIID riid, void **ppv)
-    {
-        if ( IsEqualIID(riid, IID_IUnknown) )
-            *ppv = static_cast<IUnknown*>(static_cast<DesktopToastActivatedEventHandler*>(this));
-        else if ( IsEqualIID(riid, __uuidof(DesktopToastActivatedEventHandler)) )
-            *ppv = static_cast<DesktopToastActivatedEventHandler*>(this);
-        else if ( IsEqualIID(riid, __uuidof(DesktopToastDismissedEventHandler)) )
-            *ppv = static_cast<DesktopToastDismissedEventHandler*>(this);
-        else if ( IsEqualIID(riid, __uuidof(DesktopToastFailedEventHandler)) )
-            *ppv = static_cast<DesktopToastFailedEventHandler*>(this);
-        else
-            *ppv = NULL;
-
-        if ( *ppv )
-        {
-            reinterpret_cast<IUnknown*>(*ppv)->AddRef();
-            return S_OK;
-        }
-
-        return E_NOINTERFACE;
-    }
+    DECLARE_IUNKNOWN_METHODS;
 
 private:
-    wxAutoULong m_cRef;
-
     wxToastNotifMsgImpl* m_impl;
 };
+
+BEGIN_IID_TABLE(wxToastEventHandler)
+ADD_IID(Unknown)
+ADD_RAW_IID(__uuidof(DesktopToastActivatedEventHandler))
+ADD_RAW_IID(__uuidof(DesktopToastDismissedEventHandler))
+ADD_RAW_IID(__uuidof(DesktopToastFailedEventHandler))
+END_IID_TABLE;
+
+IMPLEMENT_IUNKNOWN_METHODS(wxToastEventHandler)
 
 class wxToastNotifMsgImpl : public wxNotificationMessageImpl
 {

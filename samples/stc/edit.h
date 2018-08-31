@@ -101,10 +101,10 @@ public:
     void OnMultipleSelections(wxCommandEvent& event);
     void OnMultiPaste(wxCommandEvent& event);
     void OnMultipleSelectionsTyping(wxCommandEvent& event);
+    void OnCustomPopup(wxCommandEvent& evt);
     // stc
     void OnMarginClick (wxStyledTextEvent &event);
     void OnCharAdded  (wxStyledTextEvent &event);
-    void OnKey  (wxStyledTextEvent &event);
 
     void OnKeyDown(wxKeyEvent &event);
 
@@ -165,16 +165,16 @@ public:
     EditPrint (Edit *edit, const wxChar *title = wxT(""));
 
     //! event handlers
-    bool OnPrintPage (int page);
-    bool OnBeginDocument (int startPage, int endPage);
+    bool OnPrintPage (int page) wxOVERRIDE;
+    bool OnBeginDocument (int startPage, int endPage) wxOVERRIDE;
 
     //! print functions
-    bool HasPage (int page);
-    void GetPageInfo (int *minPage, int *maxPage, int *selPageFrom, int *selPageTo);
+    bool HasPage (int page) wxOVERRIDE;
+    void GetPageInfo (int *minPage, int *maxPage, int *selPageFrom, int *selPageTo) wxOVERRIDE;
 
 private:
     Edit *m_edit;
-    int m_printed;
+    wxArrayInt m_pageEnds;
     wxRect m_pageRect;
     wxRect m_printRect;
 

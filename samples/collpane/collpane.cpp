@@ -268,7 +268,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
     info.SetDescription(_("This sample program demonstrates usage of wxCollapsiblePane"));
     info.SetCopyright(wxT("(C) 2006 Francesco Montorsi <frm@users.sourceforge.net>"));
 
-    wxAboutBox(info);
+    wxAboutBox(info, this);
 }
 
 void MyFrame::OnCollapseUpdateUI(wxUpdateUIEvent& event)

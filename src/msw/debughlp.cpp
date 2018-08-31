@@ -21,6 +21,10 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/wxcrt.h"
+#endif // WX_PRECOMP
+
 #include "wx/msw/debughlp.h"
 
 #if wxUSE_DBGHELP && wxUSE_DYNLIB_CLASS
@@ -62,7 +66,7 @@ class VarSizedStruct
 public:
     VarSizedStruct()
     {
-        ::ZeroMemory(m_buffer, sizeof(T) + MAX_NAME_LEN);
+        ::ZeroMemory(m_buffer, sizeof(T) + MAX_NAME_LEN*sizeof(TCHAR));
 
         (*this)->SizeOfStruct = sizeof(T);
         (*this)->MaxNameLen = MAX_NAME_LEN;
@@ -83,7 +87,7 @@ private:
     // if we wanted.
     enum { MAX_NAME_LEN = 1024 };
 
-    BYTE m_buffer[sizeof(T) + MAX_NAME_LEN];
+    BYTE m_buffer[sizeof(T) + MAX_NAME_LEN*sizeof(TCHAR)];
 };
 
 } // anonymous namespace

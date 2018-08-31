@@ -5,6 +5,7 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+
 /**
     @class wxRibbonToolBar
     
@@ -143,7 +144,7 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxString& help_string = wxEmptyString,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                wxObject* client_data = NULL);
+                wxObject* clientData = NULL);
 
     /**
         Add a separator to the tool bar.
@@ -248,7 +249,7 @@ public:
                 const wxBitmap& bitmap_disabled = wxNullBitmap,
                 const wxString& help_string = wxEmptyString,
                 wxRibbonButtonKind kind = wxRIBBON_BUTTON_NORMAL,
-                wxObject* client_data = NULL);
+                wxObject* clientData = NULL);
 
     /**
         Insert a separator to the tool bar at the specified position.
@@ -492,3 +493,20 @@ public:
     */
     virtual void ToggleTool(int tool_id, bool checked);
 };
+
+
+class wxRibbonToolBarEvent : public wxCommandEvent
+{
+public:
+    wxRibbonToolBarEvent(wxEventType command_type = wxEVT_NULL,
+                       int win_id = 0,
+                         wxRibbonToolBar* bar = NULL);
+
+    wxRibbonToolBar* GetBar();
+    void SetBar(wxRibbonToolBar* bar);
+    bool PopupMenu(wxMenu* menu);
+};
+
+
+wxEventType wxEVT_RIBBONTOOLBAR_CLICKED;
+wxEventType wxEVT_RIBBONTOOLBAR_DROPDOWN_CLICKED;

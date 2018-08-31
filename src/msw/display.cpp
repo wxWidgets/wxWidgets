@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#include "wx/msw/wrapwin.h"
+
 #if wxUSE_DISPLAY
 
 #include "wx/display.h"
@@ -38,35 +40,9 @@
 #include "wx/sysopt.h"
 
 #include "wx/display_impl.h"
-#include "wx/msw/wrapwin.h"
 #include "wx/msw/missing.h"
 #include "wx/msw/private.h"
 #include "wx/msw/private/hiddenwin.h"
-
-    // Older versions of windef.h don't define HMONITOR.  Unfortunately, we
-    // can't directly test whether HMONITOR is defined or not in windef.h as
-    // it's not a macro but a typedef, so we test for an unrelated symbol which
-    // is only defined in winuser.h if WINVER >= 0x0500
-    #if !defined(HMONITOR_DECLARED) && !defined(MNS_NOCHECK)
-        DECLARE_HANDLE(HMONITOR);
-        typedef BOOL(CALLBACK * MONITORENUMPROC )(HMONITOR, HDC, LPRECT, LPARAM);
-        typedef struct tagMONITORINFO
-        {
-            DWORD   cbSize;
-            RECT    rcMonitor;
-            RECT    rcWork;
-            DWORD   dwFlags;
-        } MONITORINFO, *LPMONITORINFO;
-        typedef struct tagMONITORINFOEX : public tagMONITORINFO
-        {
-            TCHAR       szDevice[CCHDEVICENAME];
-        } MONITORINFOEX, *LPMONITORINFOEX;
-        #define MONITOR_DEFAULTTONULL       0x00000000
-        #define MONITOR_DEFAULTTOPRIMARY    0x00000001
-        #define MONITOR_DEFAULTTONEAREST    0x00000002
-        #define MONITORINFOF_PRIMARY        0x00000001
-        #define HMONITOR_DECLARED
-    #endif
 
 static const wxChar displayDllName[] = wxT("user32.dll");
 
@@ -260,9 +236,9 @@ wxVideoMode wxDisplayMSW::GetCurrentMode() const
 {
     wxVideoMode mode;
 
-    // The first parameter of EnumDisplaySettings() must be NULL under Win95
-    // according to MSDN.  The version of GetName() we implement for Win95
-    // returns an empty string.
+    // The first parameter of EnumDisplaySettings() must be NULL according
+    // to MSDN, in order to specify the current display on the computer
+    // on which the calling thread is running.
     const wxString name = GetName();
     const wxChar * const deviceName = name.empty()
                                           ? (const wxChar*)NULL
@@ -288,9 +264,9 @@ wxArrayVideoModes wxDisplayMSW::GetModes(const wxVideoMode& modeMatch) const
 {
     wxArrayVideoModes modes;
 
-    // The first parameter of EnumDisplaySettings() must be NULL under Win95
-    // according to MSDN.  The version of GetName() we implement for Win95
-    // returns an empty string.
+    // The first parameter of EnumDisplaySettings() must be NULL according
+    // to MSDN, in order to specify the current display on the computer
+    // on which the calling thread is running.
     const wxString name = GetName();
     const wxChar * const deviceName = name.empty()
                                             ? (const wxChar*)NULL

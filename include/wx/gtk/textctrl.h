@@ -158,7 +158,6 @@ protected:
     // override this and return true.
     virtual bool UseGTKStyleBase() const wxOVERRIDE { return true; }
 
-    virtual void DoSetValue(const wxString &value, int flags = 0) wxOVERRIDE;
     virtual wxString DoGetValue() const wxOVERRIDE;
 
     // Override this to use either GtkEntry or GtkTextView IME depending on the
@@ -206,8 +205,8 @@ private:
     // the widget used for single line controls
     GtkWidget  *m_text;
 
-    bool        m_modified:1;
-    bool        m_dontMarkDirty:1;
+    bool m_modified;
+    bool m_dontMarkDirty;
 
     int         m_countUpdatesToIgnore;
 

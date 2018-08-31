@@ -372,13 +372,13 @@ public:
     /**
         Same as Load(const wxURI& uri). Kept for wxPython compatibility.
     */
-    bool LoadURI(const wxString& fileName);
+    bool LoadURI(const wxString& uri);
 
     /**
         Same as Load(const wxURI& uri, const wxURI& proxy).
         Kept for wxPython compatibility.
     */
-    bool LoadURIWithProxy(const wxString& fileName, const wxString& proxy);
+    bool LoadURIWithProxy(const wxString& uri, const wxString& proxy);
 
     /**
         Pauses playback of the movie.

@@ -38,22 +38,6 @@
     #define NIN_BALLOONUSERCLICK    0x0405
 #endif
 
-#ifndef NIM_SETVERSION
-    #define NIM_SETVERSION  0x00000004
-#endif
-
-#ifndef NIF_INFO
-    #define NIF_INFO        0x00000010
-#endif
-
-#ifndef NOTIFYICONDATA_V2_SIZE
-    #ifdef UNICODE
-        #define NOTIFYICONDATA_V2_SIZE 0x03A8
-    #else
-        #define NOTIFYICONDATA_V2_SIZE 0x01E8
-    #endif
-#endif
-
 // initialized on demand
 static UINT gs_msgTaskbar = 0;
 static UINT gs_msgRestartTaskbar = 0;
@@ -108,7 +92,7 @@ struct NotifyIconData : public NOTIFYICONDATA
 {
     NotifyIconData(WXHWND hwnd)
     {
-        memset(this, 0, sizeof(NOTIFYICONDATA));
+        wxZeroMemory(*this);
 
         // Since Vista there is a new member hBalloonIcon which will be used
         // if a user specified icon is specified in ShowBalloon(). For XP 

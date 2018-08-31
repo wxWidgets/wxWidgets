@@ -11,6 +11,7 @@
 #include "wx/toplevel.h"
 #include "wx/qt/private/converter.h"
 #include <QtGui/QIcon>
+#include <QtWidgets/QWidget>
 
 wxTopLevelWindowQt::wxTopLevelWindowQt()
 {
@@ -119,7 +120,15 @@ void wxTopLevelWindowQt::SetIcons( const wxIconBundle& icons )
 void wxTopLevelWindowQt::SetWindowStyleFlag( long style )
 {
     wxWindow::SetWindowStyleFlag( style );
-    
+
+    if ( HasFlag( wxCENTRE ) )
+    {
+        Centre();
+    }
+
+    if ( !GetHandle() )
+        return;
+
     Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
     
     if ( HasFlag( wxSTAY_ON_TOP ) != qtFlags.testFlag( Qt::WindowStaysOnTopHint ) )
@@ -166,12 +175,7 @@ void wxTopLevelWindowQt::SetWindowStyleFlag( long style )
         GetHandle()->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
     else
         GetHandle()->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-    
-    if ( HasFlag( wxCENTRE ) )
-    {
-        Centre();
     }
-}
 
 long wxTopLevelWindowQt::GetWindowStyleFlag() const
 {

@@ -37,8 +37,8 @@ The source code for the demos is in wxWidgets/demos
 
 More information about building on OS X is available in the wxWiki.
 Here are two useful links
-  http://wiki.wxwidgets.org/Guides_%26_Tutorials
-  http://wiki.wxwidgets.org/Development:_wxMac 
+  https://wiki.wxwidgets.org/Guides_%26_Tutorials
+  https://wiki.wxwidgets.org/Development:_wxMac
 
 ---------
 

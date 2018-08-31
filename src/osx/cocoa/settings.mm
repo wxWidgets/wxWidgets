@@ -52,6 +52,8 @@ static int wxOSXGetUserDefault(NSString* key, int defaultValue)
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
+    wxOSXEffectiveAppearanceSetter helper;
+    
     NSColor* sysColor = nil;
     switch( index )
     {
@@ -74,9 +76,14 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         sysColor = [NSColor windowFrameColor];
         break;
     case wxSYS_COLOUR_WINDOW:
-        return wxColour(wxMacCreateCGColorFromHITheme( 15 /* kThemeBrushDocumentWindowBackground */ )) ;
+        sysColor = [NSColor controlBackgroundColor];
+        break;
     case wxSYS_COLOUR_BTNFACE:
-        return wxColour(wxMacCreateCGColorFromHITheme( 3 /* kThemeBrushDialogBackgroundActive */));
+        if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+            sysColor = [NSColor windowBackgroundColor];
+        else
+            sysColor = [NSColor controlColor];
+        break;
     case wxSYS_COLOUR_LISTBOX:
         sysColor = [NSColor controlBackgroundColor];
         break;
@@ -88,7 +95,6 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     case wxSYS_COLOUR_WINDOWTEXT:
     case wxSYS_COLOUR_CAPTIONTEXT:
     case wxSYS_COLOUR_INFOTEXT:
-    case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
     case wxSYS_COLOUR_LISTBOXTEXT:
         sysColor = [NSColor controlTextColor];
         break;
@@ -98,6 +104,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
     case wxSYS_COLOUR_BTNHIGHLIGHT:
         sysColor = [NSColor controlHighlightColor];
         break;
+    case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
     case wxSYS_COLOUR_GRAYTEXT:
         sysColor = [NSColor disabledControlTextColor];
         break;

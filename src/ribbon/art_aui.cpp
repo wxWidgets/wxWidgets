@@ -38,7 +38,7 @@ wxRibbonAUIArtProvider::wxRibbonAUIArtProvider()
     : wxRibbonMSWArtProvider(false)
 {
 #if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
-    wxColor base_colour = wxColour( wxMacCreateCGColorFromHITheme(kThemeBrushToolbarBackground));
+    wxColor base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 #else
     wxColor base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 #endif
@@ -243,13 +243,32 @@ void wxRibbonAUIArtProvider::SetColourScheme(
     wxRibbonShiftLuminance(secondary_hsl, luminance ## f).ToRGB()
 
     m_tab_ctrl_background_colour = LikePrimary(0.9);
+#ifdef __WXMAC__
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 10 ) )
+        m_tab_ctrl_background_gradient_colour = m_tab_ctrl_background_colour;
+    else
+#endif
     m_tab_ctrl_background_gradient_colour = LikePrimary(1.7);
     m_tab_border_pen = LikePrimary(0.75);
+#ifdef __WXMAC__
+    m_tab_label_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT);
+#else
     m_tab_label_colour = LikePrimary(0.1);
+#endif
     m_tab_hover_background_top_colour =  primary_hsl.ToRGB();
+#ifdef __WXMAC__
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 10 ) )
+        m_tab_hover_background_top_gradient_colour = m_tab_hover_background_top_colour;
+    else
+#endif
     m_tab_hover_background_top_gradient_colour = LikePrimary(1.6);
     m_tab_hover_background_brush = m_tab_hover_background_top_colour;
     m_tab_active_background_colour = m_tab_ctrl_background_gradient_colour;
+#ifdef __WXMAC__
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 10 ) )
+        m_tab_active_background_gradient_colour = m_tab_active_background_colour;
+    else
+#endif
     m_tab_active_background_gradient_colour = primary_hsl.ToRGB();
     m_tab_active_top_background_brush = m_tab_active_background_colour;
     m_panel_label_colour = m_tab_label_colour;
@@ -268,7 +287,11 @@ void wxRibbonAUIArtProvider::SetColourScheme(
     m_button_bar_hover_background_brush = LikeSecondary(1.7);
     m_button_bar_active_background_brush = LikeSecondary(1.4);
     m_button_bar_label_colour = m_tab_label_colour;
+#ifdef __WXMAC__
+    m_button_bar_label_disabled_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT);
+#else
     m_button_bar_label_disabled_colour = m_tab_label_colour;
+#endif
     m_gallery_border_pen = m_tab_border_pen;
     m_gallery_item_border_pen = m_button_bar_hover_border_pen;
     m_gallery_hover_background_brush = LikePrimary(1.2);
@@ -349,7 +372,7 @@ int wxRibbonAUIArtProvider::GetTabCtrlHeight(
             const wxRibbonPageTabInfo& info = pages.Item(i);
             if(info.page->GetIcon().IsOk())
             {
-                icon_height = wxMax(icon_height, info.page->GetIcon().GetHeight());
+                icon_height = wxMax(icon_height, info.page->GetIcon().GetScaledHeight());
             }
         }
     }
@@ -436,9 +459,9 @@ void wxRibbonAUIArtProvider::DrawTab(wxDC& dc,
         {
             if(icon.IsOk())
             {
-            int x = tab.rect.x + (tab.rect.width - icon.GetWidth()) / 2;
+            int x = tab.rect.x + (tab.rect.width - icon.GetScaledWidth()) / 2;
             dc.DrawBitmap(icon, x, tab.rect.y + 1 + (tab.rect.height - 1 -
-                icon.GetHeight()) / 2, true);
+                icon.GetScaledHeight()) / 2, true);
             }
         }
     }
@@ -452,7 +475,7 @@ void wxRibbonAUIArtProvider::DrawTab(wxDC& dc,
 
             int offset = 0;
             if(icon.IsOk())
-                offset += icon.GetWidth() + 2;
+                offset += icon.GetScaledWidth() + 2;
             int text_height;
             int text_width;
             dc.GetTextExtent(label, &text_width, &text_height);
@@ -467,7 +490,7 @@ void wxRibbonAUIArtProvider::DrawTab(wxDC& dc,
             if(icon.IsOk())
             {
                 dc.DrawBitmap(icon, x - offset, tab.rect.y + (tab.rect.height -
-                    icon.GetHeight()) / 2, true);
+                    icon.GetScaledHeight()) / 2, true);
             }
             dc.SetClippingRegion(x, tab.rect.y, width, tab.rect.height);
             dc.DrawText(label, x, y);
@@ -514,8 +537,8 @@ void wxRibbonAUIArtProvider::GetBarTabWidth(
     }
     if((m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS) && bitmap.IsOk())
     {
-        width += bitmap.GetWidth();
-        min += bitmap.GetWidth();
+        width += bitmap.GetScaledWidth();
+        min += bitmap.GetScaledWidth();
     }
 
     if(ideal != NULL)
@@ -852,8 +875,8 @@ void wxRibbonAUIArtProvider::DrawMinimisedPanel(
 
     if(bitmap.IsOk())
     {
-        dc.DrawBitmap(bitmap, preview.x + (preview.width - bitmap.GetWidth()) / 2,
-            preview.y + (preview.height - bitmap.GetHeight()) / 2, true);
+        dc.DrawBitmap(bitmap, preview.x + (preview.width - bitmap.GetScaledWidth()) / 2,
+            preview.y + (preview.height - bitmap.GetScaledHeight()) / 2, true);
     }
 }
 
@@ -1061,7 +1084,7 @@ void wxRibbonAUIArtProvider::DrawButtonBarButton(
             {
             case wxRIBBON_BUTTONBAR_BUTTON_LARGE:
                 {
-                    int iYBorder = rect.y + bitmap_large.GetHeight() + 4;
+                    int iYBorder = rect.y + bitmap_large.GetScaledHeight() + 4;
                     wxRect partial_bg(rect);
                     if(state & wxRIBBON_BUTTONBAR_BUTTON_NORMAL_HOVERED)
                     {
@@ -1224,8 +1247,8 @@ void wxRibbonAUIArtProvider::DrawTool(
         dc.DrawBitmap(m_toolbar_drop_bitmap, bg_rect.x + avail_width + 2,
             bg_rect.y + (bg_rect.height / 2) - 2, true);
     }
-    dc.DrawBitmap(bitmap, bg_rect.x + (avail_width - bitmap.GetWidth()) / 2,
-        bg_rect.y + (bg_rect.height - bitmap.GetHeight()) / 2, true);
+    dc.DrawBitmap(bitmap, bg_rect.x + (avail_width - bitmap.GetScaledWidth()) / 2,
+        bg_rect.y + (bg_rect.height - bitmap.GetScaledHeight()) / 2, true);
 }
 
 #endif // wxUSE_RIBBON

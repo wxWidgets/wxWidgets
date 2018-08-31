@@ -24,9 +24,7 @@
 #include "wx/imaglist.h"
 #include "wx/fontutil.h"
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
 
 //-----------------------------------------------------------------------------
 // wxGtkNotebookPage
@@ -153,6 +151,13 @@ wxNotebook::wxNotebook( wxWindow *parent, wxWindowID id,
 
 wxNotebook::~wxNotebook()
 {
+    // Ensure that we don't generate page changing events during the
+    // destruction, this is unexpected and may reference the already (half)
+    // destroyed parent window, for example. So make sure our switch_page
+    // callback is not called from inside DeleteAllPages() by disconnecting all
+    // the callbacks associated with this widget.
+    GTKDisconnect(m_widget);
+
     DeleteAllPages();
 }
 
@@ -418,7 +423,7 @@ bool wxNotebook::InsertPage( size_t position,
 
     wxGtkNotebookPage* pageData = new wxGtkNotebookPage;
 
-    m_pages.Insert(win, position);
+    m_pages.insert(m_pages.begin() + position, win);
     m_pagesData.Insert(position, pageData);
 
     // set the label image and text

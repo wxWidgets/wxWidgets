@@ -170,10 +170,17 @@ protected:
   void AdjustPageSize(wxNotebookPage *page);
 
 #if wxUSE_UXTHEME
+  virtual void MSWAdjustBrushOrg(int *xOrg, int* yOrg) const wxOVERRIDE
+  {
+      *xOrg -= m_bgBrushAdj.x;
+      *yOrg -= m_bgBrushAdj.y;
+  }
+
   // return the themed brush for painting our children
   virtual WXHBRUSH MSWGetCustomBgBrush() wxOVERRIDE { return m_hbrBackground; }
 
-  // gets the bitmap of notebook background and returns a brush from it
+  // gets the bitmap of notebook background and returns a brush from it and
+  // sets m_bgBrushAdj
   WXHBRUSH QueryBgBitmap();
 
   // creates the brush to be used for drawing the tab control background
@@ -190,6 +197,9 @@ protected:
 #if wxUSE_UXTHEME
   // background brush used to paint the tab control
   WXHBRUSH m_hbrBackground;
+
+  // offset for MSWAdjustBrushOrg()
+  wxPoint m_bgBrushAdj;
 #endif // wxUSE_UXTHEME
 
 

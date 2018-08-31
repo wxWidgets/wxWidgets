@@ -634,7 +634,7 @@ void RemoveTrailingSeparatorsFromPath(wxString& strPath)
     }
 }
 
-#endif // __WINDOWS_ 
+#endif // __WINDOWS_
 
 bool
 wxFileSystemObjectExists(const wxString& path, int flags)
@@ -668,7 +668,7 @@ wxFileSystemObjectExists(const wxString& path, int flags)
     // Anything else must be a file (perhaps we should check for
     // FILE_ATTRIBUTE_REPARSE_POINT?)
     return acceptFile;
-#else // Non-MSW, non-OS/2
+#else // Non-MSW
     wxStructStat st;
     if ( !StatAny(st, strPath, flags) )
         return false;
@@ -1650,12 +1650,7 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath,
             if (SUCCEEDED(hres))
             {
                 wxChar buf[2048];
-                // Wrong prototype in early versions
-#if defined(__MINGW32__) && !wxCHECK_W32API_VERSION(2, 2)
-                psl->GetPath((CHAR*) buf, 2048, NULL, SLGP_UNCPRIORITY);
-#else
                 psl->GetPath(buf, 2048, NULL, SLGP_UNCPRIORITY);
-#endif
                 targetFilename = wxString(buf);
                 success = (shortcutPath != targetFilename);
 
@@ -2469,7 +2464,7 @@ void wxFileName::SplitPath(const wxString& fullpath,
 wxString wxFileName::StripExtension(const wxString& fullpath)
 {
     wxFileName fn(fullpath);
-    fn.SetExt("");
+    fn.SetExt(wxString());
     return fn.GetFullPath();
 }
 

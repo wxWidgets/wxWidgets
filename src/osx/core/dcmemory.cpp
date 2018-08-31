@@ -72,8 +72,6 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     m_selected = bitmap;
     if (m_selected.IsOk())
     {
-        if ( m_selected.GetDepth() != 1 )
-            m_selected.UseAlpha() ;
         m_selected.BeginRawAccess() ;
         m_width = bitmap.GetScaledWidth();
         m_height = bitmap.GetScaledHeight();

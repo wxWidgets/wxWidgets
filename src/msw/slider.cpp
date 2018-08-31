@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/msw/slider.cpp
-// Purpose:     wxSlider, using the Win95 (and later) trackbar control
+// Purpose:     wxSlider, using trackbar control
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
@@ -54,8 +54,6 @@ enum
 // the gaps between the slider and the labels, in pixels
 const int HGAP = 5;
 const int VGAP = 4;
-// the width of the borders including white space
-const int BORDERPAD = 8;
 // these 2 values are arbitrary:
 const int THUMB = 24;
 const int TICK = 8;
@@ -413,39 +411,59 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
     // would return a wrong result and wrong size would be cached internally
     if ( HasFlag(wxSL_VERTICAL) )
     {
-        int labelOffset =  0;
-        int holdTopX;
-        int holdBottomX;
-        int xLabel = (wxMax((THUMB + (BORDERPAD * 2)), longestLabelWidth) / 2) -
-            (longestLabelWidth / 2) + x;
-        if ( HasFlag(wxSL_LEFT) )
+        // Position of the slider.
+        int sliderOffset = 0;
+        if ( HasFlag(wxSL_VALUE_LABEL) )
         {
-            holdTopX = xLabel;
-            holdBottomX = xLabel - (abs(maxLabelWidth - minLabelWidth) / 2);
-        }
-        else // wxSL_RIGHT
-        {
-            holdTopX = xLabel + longestLabelWidth + (abs(maxLabelWidth - minLabelWidth) / 2);
-            holdBottomX = xLabel + longestLabelWidth;
-
-            labelOffset = longestLabelWidth + HGAP;
+            if ( !HasFlag(wxSL_LEFT) )
+                sliderOffset += longestLabelWidth + HGAP;
         }
 
         int labelHeightUsed = 0 ;
 
         if ( HasFlag(wxSL_MIN_MAX_LABELS) )
         {
+            int xPos;
+            int holdTopX;
+            int holdBottomX;
+            if ( HasFlag(wxSL_LEFT) )
+            {
+                // Label aligned to the left edge of the slider.
+                xPos = sliderOffset + tickOffset;
+                holdTopX = xPos;
+                holdBottomX = xPos;
+                if ( holdTopX + minLabelWidth > width )
+                    holdTopX = width - minLabelWidth;
+                if ( holdBottomX + maxLabelWidth > width )
+                    holdBottomX = width - maxLabelWidth;
+            }
+            else // wxSL_RIGHT
+            {
+                // Label aligned to the right edge of the slider.
+                if ( HasFlag(wxSL_BOTH) )
+                    xPos = sliderOffset + THUMB + tickOffset/2;
+                else
+                    xPos = sliderOffset + THUMB;
+
+                holdTopX = xPos - minLabelWidth;
+                holdBottomX = xPos - maxLabelWidth;
+                if ( holdTopX < 0 )
+                    holdTopX = 0;
+                if ( holdBottomX < 0 )
+                    holdBottomX = 0;
+            }
+
             if ( HasFlag(wxSL_INVERSE) )
             {
                 wxSwap(holdTopX, holdBottomX);
             }
 
             DoMoveSibling((HWND)(*m_labels)[SliderLabel_Min],
-                holdTopX,
+                x + holdTopX,
                 y,
                 minLabelWidth, labelHeight);
             DoMoveSibling((HWND)(*m_labels)[SliderLabel_Max],
-                holdBottomX,
+                x + holdBottomX,
                 y + height - labelHeight,
                 maxLabelWidth, labelHeight);
 
@@ -462,9 +480,9 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
 
         // position the slider itself along the left/right edge
         wxSliderBase::DoMoveWindow(
-            x + labelOffset,
+            x + sliderOffset,
             y + labelHeightUsed,
-            THUMB + tickOffset + HGAP,
+            THUMB + tickOffset,
             height - (labelHeightUsed * 2));
     }
     else // horizontal
@@ -527,8 +545,7 @@ wxSize wxSlider::DoGetBestSize() const
     wxSize size;
     if ( HasFlag(wxSL_VERTICAL) )
     {
-        size.x = THUMB;
-        size.y = length;
+        size.Set(THUMB, length);
         width = &size.x;
 
         if ( m_labels )
@@ -536,19 +553,22 @@ wxSize wxSlider::DoGetBestSize() const
             int widthMin,
                 widthMax;
             int hLabel = GetLabelsSize(&widthMin, &widthMax);
+            const int longestLabelWidth = wxMax(widthMin, widthMax);
 
             // account for the labels
-            if ( HasFlag(wxSL_MIN_MAX_LABELS) )
-                size.x += HGAP + wxMax(widthMin, widthMax);
+            if ( HasFlag(wxSL_VALUE_LABEL) )
+                size.x += longestLabelWidth + HGAP;
 
-            // labels are indented relative to the slider itself
-            size.y += hLabel;
+            if (HasFlag(wxSL_MIN_MAX_LABELS))
+            {
+                size.x = wxMax(size.x, longestLabelWidth);
+                size.y += hLabel * 2;
+            }
         }
     }
     else // horizontal
     {
-        size.x = length;
-        size.y = THUMB;
+        size.Set(length, THUMB);
         width = &size.y;
 
         if ( m_labels )

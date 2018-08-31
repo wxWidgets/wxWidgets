@@ -11,6 +11,8 @@
 #include "wx/radiobut.h"
 #include "wx/qt/private/converter.h"
 
+#include <QtWidgets/QRadioButton>
+
 wxRadioButton::wxRadioButton()
 {
 }
@@ -52,7 +54,7 @@ bool wxRadioButton::GetValue() const
     return m_qtRadioButton->isChecked();
 }
 
-QRadioButton *wxRadioButton::GetHandle() const
+QWidget *wxRadioButton::GetHandle() const
 {
     return m_qtRadioButton;
 }

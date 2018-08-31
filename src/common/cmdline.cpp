@@ -429,9 +429,9 @@ void wxCmdLineParserData::SetArguments(int argc, char **argv)
     // temporarily change the locale here. The only drawback is that changing
     // the locale is thread-unsafe but precisely because we're called so early
     // it's hopefully safe to assume that no other threads had been created yet.
-    char * const locOld = SetAllLocaleFacets(NULL);
+    const wxCharBuffer locOld(SetAllLocaleFacets(NULL));
     SetAllLocaleFacets("");
-    wxON_BLOCK_EXIT1( SetAllLocaleFacets, locOld );
+    wxON_BLOCK_EXIT1( SetAllLocaleFacets, locOld.data() );
 
     for ( int n = 0; n < argc; n++ )
     {
@@ -850,11 +850,11 @@ int wxCmdLineParser::Parse(bool showUsage)
         {
             maybeOption = false;
             n++;
-            
+
             continue;
         }
 #endif
-        
+
         // empty argument or just '-' is not an option but a parameter
         if ( maybeOption && arg.length() > 1 &&
                 // FIXME-UTF8: use wc_str() after removing ANSI build
@@ -1337,6 +1337,9 @@ wxString wxCmdLineParser::GetUsageString() const
         wxCmdLineOption& opt = m_data->m_options[n];
         wxString option, negator;
 
+        if ( opt.flags & wxCMD_LINE_HIDDEN )
+            continue;
+
         if ( opt.kind != wxCMD_LINE_USAGE_TEXT )
         {
             usage << wxT(' ');
@@ -1402,6 +1405,9 @@ wxString wxCmdLineParser::GetUsageString() const
     for ( n = 0; n < count; n++ )
     {
         wxCmdLineParam& param = m_data->m_paramDesc[n];
+
+        if ( param.flags & wxCMD_LINE_HIDDEN )
+            continue;
 
         usage << wxT(' ');
         if ( param.flags & wxCMD_LINE_PARAM_OPTIONAL )

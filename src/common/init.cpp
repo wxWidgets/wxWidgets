@@ -240,7 +240,7 @@ static bool DoCommonPreInit()
     // Note that this must be done for any app, Cocoa or console, whether or
     // not it uses wxLocale.
     //
-    // See http://stackoverflow.com/questions/11713745/why-does-the-printf-family-of-functions-care-about-locale
+    // See https://stackoverflow.com/questions/11713745/why-does-the-printf-family-of-functions-care-about-locale
     setlocale(LC_CTYPE, "UTF-8");
 #endif // wxUSE_UNICODE && defined(__WXOSX__)
 
@@ -336,7 +336,11 @@ bool wxEntryStart(int& argc, wxChar **argv)
     // remember, possibly modified (e.g. due to removal of toolkit-specific
     // parameters), command line arguments in member variables
     app->argc = argc;
+#if wxUSE_UNICODE
+    app->argv.Init(argc, argv);
+#else
     app->argv = argv;
+#endif
 
     wxCallAppCleanup callAppCleanup(app.get());
 

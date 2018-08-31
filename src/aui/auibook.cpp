@@ -930,7 +930,7 @@ static void ShowWnd(wxWindow* wnd, bool show)
     if (wxDynamicCast(wnd, wxAuiMDIChildFrame))
     {
         wxAuiMDIChildFrame* cf = (wxAuiMDIChildFrame*)wnd;
-        cf->DoShow(show);
+        cf->wxWindow::Show(show);
     }
     else
 #endif
@@ -1595,14 +1595,6 @@ public:
             }
             // TODO: else if (GetFlags() & wxAUI_NB_LEFT){}
             // TODO: else if (GetFlags() & wxAUI_NB_RIGHT){}
-
-#if wxUSE_MDI
-            if (wxDynamicCast(page.window, wxAuiMDIChildFrame))
-            {
-                wxAuiMDIChildFrame* wnd = (wxAuiMDIChildFrame*)page.window;
-                wnd->ApplyMDIChildFrameRect();
-            }
-#endif
         }
     }
 
@@ -1981,8 +1973,11 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     else
         active_tabctrl->InsertPage(page, info, page_idx);
 
-    UpdateTabCtrlHeight();
-    DoSizing();
+    // Note that we don't need to call DoSizing() if the height has changed, as
+    // it's already called from UpdateTabCtrlHeight() itself in this case.
+    if ( !UpdateTabCtrlHeight() )
+        DoSizing();
+
     active_tabctrl->DoShowHide();
 
     // adjust selected index
@@ -2769,11 +2764,12 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
                 nb->m_tabs.InsertPage(page_info.window, page_info, insert_idx);
 
                 nb->DoSizing();
+                dest_tabs->SetActivePage(insert_idx);
                 dest_tabs->DoShowHide();
                 dest_tabs->Refresh();
 
                 // set the selection in the destination tab control
-                nb->SetSelectionToPage(page_info);
+                nb->DoModifySelection(insert_idx, false);
 
                 // notify owner that the tab has been dragged
                 wxAuiNotebookEvent e2(wxEVT_AUINOTEBOOK_DRAG_DONE, m_windowId);
@@ -2804,8 +2800,10 @@ void wxAuiNotebook::OnTabEndDrag(wxAuiNotebookEvent& evt)
             dest_tabs = tab_frame->m_tabs;
 
             if (dest_tabs == src_tabs)
+            {
+                m_curPage = evt.GetSelection();
                 return;
-
+            }
 
             wxPoint pt = dest_tabs->ScreenToClient(mouse_screen_pt);
             wxWindow* target = NULL;

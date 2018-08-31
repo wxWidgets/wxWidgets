@@ -19,8 +19,8 @@
 class wxFDIOManagerUnix : public wxFDIOManager
 {
 public:
-    virtual int AddInput(wxFDIOHandler *handler, int fd, Direction d);
-    virtual void RemoveInput(wxFDIOHandler *handler, int fd, Direction d);
+    virtual int AddInput(wxFDIOHandler *handler, int fd, Direction d) wxOVERRIDE;
+    virtual void RemoveInput(wxFDIOHandler *handler, int fd, Direction d) wxOVERRIDE;
 };
 
 #endif // _UNIX_PRIVATE_FDIOUNIX_H_

@@ -151,7 +151,6 @@ class HP_TagHandler : public wxHtmlTagHandler
         {
             m_data = NULL;
             m_book = b;
-            m_name = m_page = wxEmptyString;
             m_level = 0;
             m_id = wxID_ANY;
             m_count = 0;
@@ -186,7 +185,8 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
     }
     else if (tag.GetName() == wxT("OBJECT"))
     {
-        m_name = m_page = wxEmptyString;
+        m_name.clear();
+        m_page.clear();
         ParseInner(tag);
 
 #if 0
@@ -656,10 +656,10 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
 
     wxString title = _("noname"),
              safetitle,
-             start = wxEmptyString,
-             contents = wxEmptyString,
-             index = wxEmptyString,
-             charset = wxEmptyString;
+             start,
+             contents,
+             index,
+             charset;
 
     fi = fsys.OpenFile(book);
     if (fi == NULL)
@@ -700,7 +700,7 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
 
     wxFontEncoding enc = wxFONTENCODING_SYSTEM;
 #if wxUSE_FONTMAP
-    if (charset != wxEmptyString)
+    if (!charset.empty())
         enc = wxFontMapper::Get()->CharsetToEncoding(charset);
 #endif
 
@@ -807,7 +807,7 @@ wxHtmlSearchStatus::wxHtmlSearchStatus(wxHtmlHelpData* data, const wxString& key
     m_Data = data;
     m_Keyword = keyword;
     wxHtmlBookRecord* bookr = NULL;
-    if (book != wxEmptyString)
+    if (!book.empty())
     {
         // we have to search in a specific book. Find it first
         int i, cnt = data->m_bookRecords.GetCount();
@@ -846,7 +846,7 @@ bool wxHtmlSearchStatus::Search()
         return false;
     }
 
-    m_Name = wxEmptyString;
+    m_Name.clear();
     m_CurItem = NULL;
     thepage = m_Data->m_contents[i].page;
 

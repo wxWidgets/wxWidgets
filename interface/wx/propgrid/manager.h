@@ -36,8 +36,9 @@
     @library{wxpropgrid}
     @category{propgrid}
 */
-class WXDLLIMPEXP_PROPGRID wxPropertyGridPage : public wxEvtHandler,
-                                                public wxPropertyGridInterface
+class wxPropertyGridPage : public wxEvtHandler,
+                           public wxPropertyGridInterface,
+                           public wxPropertyGridPageState
 {
     friend class wxPropertyGridManager;
 
@@ -171,6 +172,8 @@ public:
             wxPG_TOOLBAR |
             // Include description box.
             wxPG_DESCRIPTION |
+            // Include compactor.
+            wxPG_COMPACTOR |
             // Plus defaults.
             wxPGMAN_DEFAULT_STYLE
            );
@@ -211,8 +214,16 @@ class wxPropertyGridManager : public wxPanel, public wxPropertyGridInterface
 {
 public:
     /**
-        The default constructor. The styles to be used are styles valid for
-        the wxWindow.
+        Two step constructor.
+        Call Create when this constructor is called to build up the
+        wxPropertyGridManager.
+      */
+    wxPropertyGridManager();
+
+    /**
+       The default constructor. The styles to be used are styles valid for
+       the wxWindow.
+       @see @link wndflags Additional Window Styles @endlink
     */
     wxPropertyGridManager( wxWindow *parent, wxWindowID id = wxID_ANY,
                            const wxPoint& pos = wxDefaultPosition,
@@ -410,7 +421,7 @@ public:
     bool IsAnyModified() const;
 
     /**
-        Returns @true if updating is frozen (ie. Freeze() called but not yet Thaw() ).
+        Returns @true if updating is frozen (i.e. Freeze() called but not yet Thaw() ).
     */
     bool IsFrozen() const;
 
@@ -487,7 +498,7 @@ public:
         labels to be shown in full.
 
         @param subProps
-            If @false, will still allow sub-properties (ie. properties which
+            If @false, will still allow sub-properties (i.e. properties which
             parent is not root or category) to be cropped.
 
         @param allPages
@@ -541,7 +552,7 @@ protected:
     /**
         Creates property grid for the manager. Reimplement in derived class to
         use subclassed wxPropertyGrid. However, if you do this then you
-        must also use the two-step construction (ie. default constructor and
+        must also use the two-step construction (i.e. default constructor and
         Create() instead of constructor with arguments) when creating the
         manager.
     */

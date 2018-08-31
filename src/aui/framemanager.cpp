@@ -222,8 +222,7 @@ wxEND_EVENT_TABLE()
 #else
   // __WXGTK20__
 
-#include <gtk/gtk.h>
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/wrapgtk.h"
 
 static void
 gtk_pseudo_window_realized_callback( GtkWidget *m_widget, void *WXUNUSED(win) )
@@ -266,20 +265,8 @@ public:
         g_signal_connect( m_widget, "realize",
                       G_CALLBACK (gtk_pseudo_window_realized_callback), this );
 
-        // gtk_widget_modify_bg() is deprecated in 3.0 but doesn't seem to have
-        // any obvious replacement as gtk_widget_override_background_color()
-        // mentioned in the deprecation message it is itself deprecated in
-        // 3.16, so just continue using it for now. In longer term the best
-        // would probably be to catch "draw" signal and paint the background
-        // ourselves.
-        GdkColor col;
-        col.red = 128 * 256;
-        col.green = 192 * 256;
-        col.blue = 255 * 256;
-
-        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-        gtk_widget_modify_bg( m_widget, GTK_STATE_NORMAL, &col );
-        wxGCC_WARNING_RESTORE(deprecated-declarations)
+        m_backgroundColour.Set(128, 192, 255);
+        GTKApplyWidgetStyle();
     }
 
     bool SetTransparent(wxByte WXUNUSED(alpha)) wxOVERRIDE
@@ -780,6 +767,7 @@ unsigned int wxAuiManager::GetFlags() const
 }
 
 // Convenience function
+static
 bool wxAuiManager_HasLiveResize(wxAuiManager& manager)
 {
     // With Core Graphics on Mac, it's not possible to show sash feedback,
@@ -870,8 +858,7 @@ void wxAuiManager::UpdateHintWindowConfig()
                                          wxDefaultPosition, wxSize(1,1),
                                          wxFRAME_FLOAT_ON_PARENT
                                          | wxFRAME_TOOL_WINDOW );
-            m_hintWnd->Connect(wxEVT_ACTIVATE,
-                wxActivateEventHandler(wxAuiManager::OnHintActivate), NULL, this);
+            m_hintWnd->Bind(wxEVT_ACTIVATE, &wxAuiManager::OnHintActivate, this);
 
             // Can't set the bg colour of a Frame in wxMac
             wxPanel* p = new wxPanel(m_hintWnd);
@@ -1433,7 +1420,7 @@ static wxString EscapeDelimiters(const wxString& s)
     return result;
 }
 
-wxString wxAuiManager::SavePaneInfo(wxAuiPaneInfo& pane)
+wxString wxAuiManager::SavePaneInfo(const wxAuiPaneInfo& pane)
 {
     wxString result = wxT("name=");
     result += EscapeDelimiters(pane.name);
@@ -3296,8 +3283,8 @@ void wxAuiManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
     if (!m_hintWnd || m_hintFadeAmt >= m_hintFadeMax)
     {
         m_hintFadeTimer.Stop();
-        Disconnect(m_hintFadeTimer.GetId(), wxEVT_TIMER,
-                   wxTimerEventHandler(wxAuiManager::OnHintFadeTimer));
+        Unbind(wxEVT_TIMER, &wxAuiManager::OnHintFadeTimer, this,
+               m_hintFadeTimer.GetId());
         return;
     }
 
@@ -3341,8 +3328,8 @@ void wxAuiManager::ShowHint(const wxRect& rect)
             // start fade in timer
             m_hintFadeTimer.SetOwner(this);
             m_hintFadeTimer.Start(5);
-            Connect(m_hintFadeTimer.GetId(), wxEVT_TIMER,
-                    wxTimerEventHandler(wxAuiManager::OnHintFadeTimer));
+            Bind(wxEVT_TIMER, &wxAuiManager::OnHintFadeTimer, this,
+                 m_hintFadeTimer.GetId());
         }
     }
     else  // Not using a transparent hint window...
@@ -3413,8 +3400,8 @@ void wxAuiManager::HideHint()
         m_hintFadeTimer.Stop();
         // In case this is called while a hint fade is going, we need to
         // disconnect the event handler.
-        Disconnect(m_hintFadeTimer.GetId(), wxEVT_TIMER,
-                   wxTimerEventHandler(wxAuiManager::OnHintFadeTimer));
+        Unbind(wxEVT_TIMER, &wxAuiManager::OnHintFadeTimer, this,
+               m_hintFadeTimer.GetId());
         m_lastHint = wxRect();
         return;
     }
@@ -3948,6 +3935,10 @@ void wxAuiManager::Repaint(wxDC* dc)
 void wxAuiManager::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(m_frame);
+
+    dc.SetBackground(GetArtProvider()->GetColor(wxAUI_DOCKART_BACKGROUND_COLOUR));
+    dc.Clear();
+
     Repaint(&dc);
 }
 
@@ -4007,7 +3998,7 @@ void wxAuiManager::OnSetCursor(wxSetCursorEvent& event)
 {
     // determine cursor
     wxAuiDockUIPart* part = HitTest(event.GetX(), event.GetY());
-    wxCursor cursor = wxNullCursor;
+    wxCursor cursor;
 
     if (part)
     {

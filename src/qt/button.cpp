@@ -21,6 +21,7 @@
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QPushButton>
 
 wxButton::wxButton()
 {

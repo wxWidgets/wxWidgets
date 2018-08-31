@@ -227,6 +227,12 @@
     <ClCompile Include="net\socket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="persistence\tlw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="persistence\dataview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="controls\spinctrldbltest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -285,6 +291,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="graphics\graphmatrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="graphics\graphpath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="html\htmprint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

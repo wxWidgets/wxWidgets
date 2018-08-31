@@ -422,7 +422,7 @@ bool wxExtHelpController::KeywordSearch(const wxString& k,
                 // choices[idx] = (**i).doc.Contains((**i).doc.Before(WXEXTHELP_COMMENTCHAR));
                 //if (choices[idx].empty()) // didn't contain the ';'
                 //   choices[idx] = (**i).doc;
-                choices[idx] = wxEmptyString;
+                choices[idx].clear();
                 for (int j=0; ; j++)
                 {
                     wxChar targetChar = entry->doc.c_str()[j];

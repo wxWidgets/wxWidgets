@@ -1,2 +1,0 @@
-ICON     1   PRELOAD   "..\\sample_os2.ico"
-RCINCLUDE "..\\..\\include\\wx\\os2\\wx.rc"

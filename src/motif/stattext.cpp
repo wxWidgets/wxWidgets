@@ -71,6 +71,9 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
 void wxStaticText::SetLabel(const wxString& label)
 {
+    if ( label == m_labelOrig )
+        return;
+
     m_labelOrig = label;       // save original label
 
     // Motif does not support ellipsized labels natively

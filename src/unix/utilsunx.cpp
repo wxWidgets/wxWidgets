@@ -247,6 +247,10 @@ int wxKill(long pid, wxSignal sig, wxKillError *rc, int flags)
 // Shutdown or reboot the PC
 bool wxShutdown(int flags)
 {
+#if defined(__WXOSX__) && wxOSX_USE_IPHONE
+    wxUnusedVar(flags);
+    return false;
+#else
     flags &= ~wxSHUTDOWN_FORCE;
 
     wxChar level;
@@ -270,6 +274,7 @@ bool wxShutdown(int flags)
     }
 
     return system(wxString::Format("init %c", level).mb_str()) == 0;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -409,7 +414,7 @@ public:
     }
 
 #if wxUSE_UNICODE
-    ArgsArray(wchar_t **wargv)
+    ArgsArray(const wchar_t* const* wargv)
     {
         int argc = 0;
         while ( wargv[argc] )
@@ -434,7 +439,7 @@ public:
         delete [] m_argv;
     }
 
-    operator char**() const { return m_argv; }
+    operator const char* const*() const { return m_argv; }
 
 private:
     void Init(int argc)
@@ -457,7 +462,7 @@ private:
 // ----------------------------------------------------------------------------
 
 #if defined(__DARWIN__) && !defined(__WXOSX_IPHONE__)
-bool wxMacLaunch(char **argv);
+bool wxMacLaunch(const char* const* argv);
 #endif
 
 long wxExecute(const wxString& command, int flags, wxProcess *process,
@@ -471,7 +476,7 @@ long wxExecute(const wxString& command, int flags, wxProcess *process,
 
 #if wxUSE_UNICODE
 
-long wxExecute(wchar_t **wargv, int flags, wxProcess *process,
+long wxExecute(const wchar_t* const* wargv, int flags, wxProcess* process,
         const wxExecuteEnv *env)
 {
     ArgsArray argv(wargv);
@@ -559,7 +564,7 @@ int BlockUntilChildExit(wxExecuteData& execData)
 } // anonymous namespace
 
 // wxExecute: the real worker function
-long wxExecute(char **argv, int flags, wxProcess *process,
+long wxExecute(const char* const* argv, int flags, wxProcess* process,
         const wxExecuteEnv *env)
 {
     // for the sync execution, we return -1 to indicate failure, but for async
@@ -696,7 +701,7 @@ long wxExecute(char **argv, int flags, wxProcess *process,
         //       have more opened descriptions than this number). Unfortunately
         //       there is no good portable solution for closing all descriptors
         //       above a certain threshold but non-portable solutions exist for
-        //       most platforms, see [http://stackoverflow.com/questions/899038/
+        //       most platforms, see [https://stackoverflow.com/questions/899038/
         //          getting-the-highest-allocated-file-descriptor]
         for ( int fd = 0; fd < (int)FD_SETSIZE; ++fd )
         {
@@ -743,10 +748,10 @@ long wxExecute(char **argv, int flags, wxProcess *process,
             }
         }
 
-        execvp(*argv, argv);
+        execvp(*argv, const_cast<char**>(argv));
 
         fprintf(stderr, "execvp(");
-        for ( char **a = argv; *a; a++ )
+        for (const char* const* a = argv; *a; a++)
             fprintf(stderr, "%s%s", a == argv ? "" : ", ", *a);
         fprintf(stderr, ") failed with error %d!\n", errno);
 
@@ -1209,7 +1214,12 @@ wxMemorySize wxGetFreeMemory()
                     {
                         unsigned long cached;
                         if ( sscanf(buf, "Cached: %lu", &cached) == 1 )
-                            memFree += cached;
+                        {
+                            if ( cached > ULONG_MAX-memFree )
+                                memFree = ULONG_MAX;
+                            else
+                                memFree += cached;
+                        }
                     }
 
                     // values here are always expressed in kB and we want bytes
@@ -1392,7 +1402,8 @@ bool wxUnsetEnv(const wxString& variable)
 
 #include <signal.h>
 
-extern "C" void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
+extern "C" {
+static void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
 {
     if ( wxTheApp )
     {
@@ -1401,6 +1412,7 @@ extern "C" void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
     }
 
     abort();
+}
 }
 
 bool wxHandleFatalExceptions(bool doit)

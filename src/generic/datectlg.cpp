@@ -86,9 +86,7 @@ public:
         if ( !tx )
             tx = m_combo;
 
-        tx->Connect(wxEVT_KILL_FOCUS,
-                    wxFocusEventHandler(wxCalendarComboPopup::OnKillTextFocus),
-                    NULL, this);
+        tx->Bind(wxEVT_KILL_FOCUS, &wxCalendarComboPopup::OnKillTextFocus, this);
 
         return true;
     }
@@ -123,16 +121,41 @@ public:
         return m_combo->GetTextCtrl()->IsEmpty();
     }
 
+    // This is public because it is used by wxDatePickerCtrlGeneric itself to
+    // change the date when the text control field changes. The reason it's
+    // done there and not in this class itself is mostly historic.
+    void ChangeDateAndNotifyIfValid()
+    {
+        wxDateTime dt;
+        if ( !ParseDateTime(m_combo->GetValue(), &dt) )
+        {
+            // The user must be in the process of updating the date, don't do
+            // anything -- we'll take care of ensuring it's valid on focus loss
+            // later.
+            return;
+        }
+
+        if ( dt == GetDate() )
+        {
+            // No need to send event if the date hasn't changed.
+            return;
+        }
+
+        // We change the date immediately, as it's more consistent with the
+        // native MSW version and avoids another event on focus loss.
+        SetDate(dt);
+
+        SendDateEvent(dt);
+    }
+
+private:
     bool ParseDateTime(const wxString& s, wxDateTime* pDt)
     {
         wxASSERT(pDt);
 
-        if ( !s.empty() )
-        {
-            pDt->ParseFormat(s, m_format);
-            if ( !pDt->IsValid() )
-                return false;
-        }
+        pDt->ParseFormat(s, m_format);
+        if ( !pDt->IsValid() )
+            return false;
 
         return true;
     }
@@ -148,8 +171,6 @@ public:
         wxDateEvent event(datePicker, dt, wxEVT_DATE_CHANGED);
         datePicker->GetEventHandler()->ProcessEvent(event);
     }
-
-private:
 
     void OnCalKey(wxKeyEvent & ev)
     {
@@ -185,17 +206,33 @@ private:
                 dt = dtOld;
         }
 
-        m_combo->SetText(GetStringValueFor(dt));
-
-        if ( !dt.IsValid() && HasDPFlag(wxDP_ALLOWNONE) )
-            return;
-
-        // notify that we had to change the date after validation
-        if ( (dt.IsValid() && (!dtOld.IsValid() || dt != dtOld)) ||
-                (!dt.IsValid() && dtOld.IsValid()) )
+        if ( dt.IsValid() )
         {
+            // Set it at wxCalendarCtrl level.
             SetDate(dt);
-            SendDateEvent(dt);
+
+            // And show it in the text field.
+            m_combo->SetText(GetStringValue());
+
+            // And if the date has really changed, send an event about it.
+            if ( dt != dtOld )
+                SendDateEvent(dt);
+        }
+        else // Invalid date currently entered.
+        {
+            if ( HasDPFlag(wxDP_ALLOWNONE) )
+            {
+                // Clear the text part to indicate that the date is invalid.
+                // Would it be better to indicate this in some more clear way,
+                // e.g. maybe by using "[none]" or something like this?
+                m_combo->SetText(wxString());
+            }
+            else
+            {
+                // Restore the original value, as we can't have invalid value
+                // in this control.
+                m_combo->SetText(GetStringValue());
+            }
         }
     }
 
@@ -254,7 +291,7 @@ private:
     virtual void SetStringValue(const wxString& s) wxOVERRIDE
     {
         wxDateTime dt;
-        if ( !s.empty() && ParseDateTime(s, &dt) )
+        if ( ParseDateTime(s, &dt) )
             SetDate(dt);
         //else: keep the old value
     }
@@ -298,7 +335,6 @@ wxEND_EVENT_TABLE()
 wxBEGIN_EVENT_TABLE(wxDatePickerCtrlGeneric, wxDatePickerCtrlBase)
     EVT_TEXT(wxID_ANY, wxDatePickerCtrlGeneric::OnText)
     EVT_SIZE(wxDatePickerCtrlGeneric::OnSize)
-    EVT_SET_FOCUS(wxDatePickerCtrlGeneric::OnFocus)
 wxEND_EVENT_TABLE()
 
 #ifndef wxHAS_NATIVE_DATEPICKCTRL
@@ -478,21 +514,8 @@ void wxDatePickerCtrlGeneric::OnText(wxCommandEvent &ev)
     ev.SetId(GetId());
     GetParent()->GetEventHandler()->ProcessEvent(ev);
 
-    // We'll create an additional event if the date is valid.
-    // If the date isn't valid, the user's probably in the middle of typing
-    wxDateTime dt;
-    if ( !m_popup || !m_popup->ParseDateTime(m_combo->GetValue(), &dt) )
-        return;
-
-    m_popup->SendDateEvent(dt);
+    if ( m_popup )
+        m_popup->ChangeDateAndNotifyIfValid();
 }
-
-
-void wxDatePickerCtrlGeneric::OnFocus(wxFocusEvent& WXUNUSED(event))
-{
-    m_combo->SetFocus();
-}
-
 
 #endif // wxUSE_DATEPICKCTRL
-

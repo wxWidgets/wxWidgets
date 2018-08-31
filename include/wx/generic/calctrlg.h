@@ -202,13 +202,13 @@ private:
     // get the first/last days of the week corresponding to the current style
     wxDateTime::WeekDay GetWeekStart() const
     {
-        return HasFlag(wxCAL_MONDAY_FIRST) ? wxDateTime::Mon
+        return WeekStartsOnMonday() ? wxDateTime::Mon
                                            : wxDateTime::Sun;
     }
 
     wxDateTime::WeekDay GetWeekEnd() const
     {
-        return HasFlag(wxCAL_MONDAY_FIRST) ? wxDateTime::Sun
+        return WeekStartsOnMonday() ? wxDateTime::Sun
                                            : wxDateTime::Sat;
     }
 

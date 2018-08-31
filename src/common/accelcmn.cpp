@@ -232,12 +232,18 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
             // it's just a letter
             keyCode = current[0U];
 
-            // if the key is used with any modifiers, make it an uppercase one
-            // because Ctrl-A and Ctrl-a are the same; but keep it as is if it's
-            // used alone as 'a' and 'A' are different
-            if ( accelFlags != wxACCEL_NORMAL )
-                keyCode = wxToupper(keyCode);
-            break;
+            // ...or maybe not. A translation may be single character too (e.g.
+            // Chinese), but if it's a Latin character, that's unlikely
+            if ( keyCode < 128 )
+            {
+                // if the key is used with any modifiers, make it an uppercase one
+                // because Ctrl-A and Ctrl-a are the same; but keep it as is if it's
+                // used alone as 'a' and 'A' are different
+                if ( accelFlags != wxACCEL_NORMAL )
+                    keyCode = wxToupper(keyCode);
+                break;
+            }
+            wxFALLTHROUGH;
 
         default:
             keyCode = IsNumberedAccelKey(current, wxTRANSLATE("F"),
@@ -331,7 +337,7 @@ wxString wxAcceleratorEntry::AsPossiblyLocalizedString(bool localized) const
     if ( flags & wxACCEL_RAW_CTRL )
         text += PossiblyLocalize(wxTRANSLATE("RawCtrl+"), localized);
 #endif
-    
+
     const int code = GetKeyCode();
 
     if ( code >= WXK_F1 && code <= WXK_F12 )

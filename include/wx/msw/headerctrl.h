@@ -139,6 +139,9 @@ private:
     // actual column we are dragging or -1 if not dragging anything
     int m_colBeingDragged;
 
+    // a column is currently being resized
+    bool m_isColBeingResized;
+
     // the custom draw helper: initially NULL, created on demand, use
     // GetCustomDraw() to do it
     wxMSWHeaderCtrlCustomDraw *m_customDraw;

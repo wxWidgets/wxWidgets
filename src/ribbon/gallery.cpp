@@ -541,12 +541,12 @@ wxRibbonGalleryItem* wxRibbonGallery::Append(const wxBitmap& bitmap, int id)
     wxASSERT(bitmap.IsOk());
     if(m_items.IsEmpty())
     {
-        m_bitmap_size = bitmap.GetSize();
+        m_bitmap_size = bitmap.GetScaledSize();
         CalculateMinSize();
     }
     else
     {
-        wxASSERT(bitmap.GetSize() == m_bitmap_size);
+        wxASSERT(bitmap.GetScaledSize() == m_bitmap_size);
     }
 
     wxRibbonGalleryItem *item = new wxRibbonGalleryItem;

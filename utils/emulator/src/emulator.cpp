@@ -46,7 +46,7 @@
 // resources
 // ----------------------------------------------------------------------------
 
-// the application icon (under Windows and OS/2 it is in resources)
+// the application icon (under Windows it is in resources)
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "emulator.xpm"
 #endif
@@ -396,7 +396,7 @@ void wxEmulatorContainer::OnEraseBackground(wxEraseEvent& event)
         dc = new wxClientDC(this);
     }
 
-    dc->SetBackground(wxBrush(wxGetApp().m_emulatorInfo.m_emulatorBackgroundColour, wxSOLID));
+    dc->SetBackground(wxBrush(wxGetApp().m_emulatorInfo.m_emulatorBackgroundColour));
     dc->Clear();
 
     if (!event.GetDC())

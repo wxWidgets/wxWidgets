@@ -116,6 +116,8 @@ public:
 
     void OSXHandleMiniaturize(double WXUNUSED(timestampsec), bool miniaturized);
 
+    void OSXSetIgnoreResizing(bool value) { m_ignoreResizing = value; }
+
     void WindowWasPainted();
 
     virtual bool Destroy();
@@ -154,6 +156,7 @@ private :
 #if wxUSE_GRAPHICS_CONTEXT
     wxGraphicsPath m_shapePath;
 #endif // wxUSE_GRAPHICS_CONTEXT
+    bool m_ignoreResizing;
 };
 
 // list of all frames and modeless dialogs

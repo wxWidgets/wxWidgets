@@ -72,7 +72,7 @@ static wxColor GetBaseColor()
 {
 
 #if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
-    wxColor baseColour = wxColour( wxMacCreateCGColorFromHITheme(kThemeBrushToolbarBackground));
+    wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
 #else
     wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 #endif
@@ -208,8 +208,21 @@ void wxAuiGenericToolBarArt::DrawBackground(
 {
     wxRect rect = _rect;
     rect.height++;
-    wxColour startColour = m_baseColour.ChangeLightness(150);
-    wxColour endColour = m_baseColour.ChangeLightness(90);
+
+    int startLightness = 150;
+    int endLightness = 90;
+
+    if ((m_baseColour.Red() < 75)
+        && (m_baseColour.Green() < 75)
+        && (m_baseColour.Blue() < 75))
+    {
+        //dark mode, we cannot go very light
+        startLightness = 110;
+        endLightness = 90;
+    }
+    wxColour startColour = m_baseColour.ChangeLightness(startLightness);
+    wxColour endColour = m_baseColour.ChangeLightness(endLightness);
+
     dc.GradientFillLinear(rect, startColour, endColour, wxSOUTH);
 }
 
@@ -233,7 +246,11 @@ void wxAuiGenericToolBarArt::DrawLabel(
                                     const wxRect& rect)
 {
     dc.SetFont(m_font);
+#ifdef __WXMAC__
+    dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+#else
     dc.SetTextForeground(*wxBLACK);
+#endif
 
     // we only care about the text height here since the text
     // will get cropped based on the width of the item
@@ -279,11 +296,11 @@ void wxAuiGenericToolBarArt::DrawButton(
     {
         bmpX = rect.x +
                 (rect.width/2) -
-                (item.GetBitmap().GetWidth()/2);
+                (item.GetBitmap().GetScaledWidth()/2);
 
         bmpY = rect.y +
                 ((rect.height-textHeight)/2) -
-                (item.GetBitmap().GetHeight()/2);
+                (item.GetBitmap().GetScaledHeight()/2);
 
         textX = rect.x + (rect.width/2) - (textWidth/2) + 1;
         textY = rect.y + rect.height - textHeight - 1;
@@ -294,9 +311,9 @@ void wxAuiGenericToolBarArt::DrawButton(
 
         bmpY = rect.y +
                 (rect.height/2) -
-                (item.GetBitmap().GetHeight()/2);
+                (item.GetBitmap().GetScaledHeight()/2);
 
-        textX = bmpX + 3 + item.GetBitmap().GetWidth();
+        textX = bmpX + 3 + item.GetBitmap().GetScaledWidth();
         textY = rect.y +
                  (rect.height/2) -
                  (textHeight/2);
@@ -343,9 +360,19 @@ void wxAuiGenericToolBarArt::DrawButton(
         dc.DrawBitmap(bmp, bmpX, bmpY, true);
 
     // set the item's text color based on if it is disabled
+#ifdef __WXMAC__
+    dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+#else
     dc.SetTextForeground(*wxBLACK);
+#endif
     if (item.GetState() & wxAUI_BUTTON_STATE_DISABLED)
+    {
+#ifdef __WXMAC__
+        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT));
+#else
         dc.SetTextForeground(DISABLED_TEXT_COLOR);
+#endif
+    }
 
     if ( (m_flags & wxAUI_TB_TEXT) && !item.GetLabel().empty() )
     {
@@ -390,20 +417,20 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
 
     dropBmpX = dropDownRect.x +
                 (dropDownRect.width/2) -
-                (m_buttonDropDownBmp.GetWidth()/2);
+                (m_buttonDropDownBmp.GetScaledWidth()/2);
     dropBmpY = dropDownRect.y +
                 (dropDownRect.height/2) -
-                (m_buttonDropDownBmp.GetHeight()/2);
+                (m_buttonDropDownBmp.GetScaledHeight()/2);
 
 
     if (m_textOrientation == wxAUI_TBTOOL_TEXT_BOTTOM)
     {
         bmpX = buttonRect.x +
                 (buttonRect.width/2) -
-                (item.GetBitmap().GetWidth()/2);
+                (item.GetBitmap().GetScaledWidth()/2);
         bmpY = buttonRect.y +
                 ((buttonRect.height-textHeight)/2) -
-                (item.GetBitmap().GetHeight()/2);
+                (item.GetBitmap().GetScaledHeight()/2);
 
         textX = rect.x + (rect.width/2) - (textWidth/2) + 1;
         textY = rect.y + rect.height - textHeight - 1;
@@ -414,9 +441,9 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
 
         bmpY = rect.y +
                 (rect.height/2) -
-                (item.GetBitmap().GetHeight()/2);
+                (item.GetBitmap().GetScaledHeight()/2);
 
-        textX = bmpX + 3 + item.GetBitmap().GetWidth();
+        textX = bmpX + 3 + item.GetBitmap().GetScaledWidth();
         textY = rect.y +
                  (rect.height/2) -
                  (textHeight/2);
@@ -470,9 +497,19 @@ void wxAuiGenericToolBarArt::DrawDropDownButton(
     dc.DrawBitmap(dropbmp, dropBmpX, dropBmpY, true);
 
     // set the item's text color based on if it is disabled
+#ifdef __WXMAC__
+    dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+#else
     dc.SetTextForeground(*wxBLACK);
+#endif
     if (item.GetState() & wxAUI_BUTTON_STATE_DISABLED)
+    {
+#ifdef __WXMAC__
+        dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT));
+#else
         dc.SetTextForeground(DISABLED_TEXT_COLOR);
+#endif
+    }
 
     if ( (m_flags & wxAUI_TB_TEXT) && !item.GetLabel().empty() )
     {
@@ -511,7 +548,11 @@ void wxAuiGenericToolBarArt::DrawControlLabel(
         return;
 
     // set the label's text color
+#ifdef __WXMAC__
+    dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_CAPTIONTEXT));
+#else
     dc.SetTextForeground(*wxBLACK);
+#endif
 
     textX = rect.x + (rect.width/2) - (textWidth/2) + 1;
     textY = rect.y + rect.height - textHeight - 1;
@@ -553,8 +594,8 @@ wxSize wxAuiGenericToolBarArt::GetToolSize(
     if (!item.GetBitmap().IsOk() && !(m_flags & wxAUI_TB_TEXT))
         return wxSize(16,16);
 
-    int width = item.GetBitmap().GetWidth();
-    int height = item.GetBitmap().GetHeight();
+    int width = item.GetBitmap().GetScaledWidth();
+    int height = item.GetBitmap().GetScaledHeight();
 
     if (m_flags & wxAUI_TB_TEXT)
     {
@@ -694,8 +735,8 @@ void wxAuiGenericToolBarArt::DrawOverflowButton(wxDC& dc,
         }
     }
 
-    int x = rect.x+1+(rect.width-m_overflowBmp.GetWidth())/2;
-    int y = rect.y+1+(rect.height-m_overflowBmp.GetHeight())/2;
+    int x = rect.x+1+(rect.width-m_overflowBmp.GetScaledWidth())/2;
+    int y = rect.y+1+(rect.height-m_overflowBmp.GetScaledHeight())/2;
     dc.DrawBitmap(m_overflowBmp, x, y, true);
 }
 
@@ -1773,7 +1814,7 @@ bool wxAuiToolBar::GetToolFitsByIndex(int tool_idx) const
     {
         // take the dropdown size into account
         if (m_overflowVisible && m_overflowSizerItem)
-            cli_h -= m_overflowSizerItem->GetSize().y;
+            cli_h -= m_overflowSizerItem->GetMinSize().y;
 
         if (rect.y+rect.height < cli_h)
             return true;
@@ -1782,7 +1823,7 @@ bool wxAuiToolBar::GetToolFitsByIndex(int tool_idx) const
     {
         // take the dropdown size into account
         if (m_overflowVisible && m_overflowSizerItem)
-            cli_w -= m_overflowSizerItem->GetSize().x;
+            cli_w -= m_overflowSizerItem->GetMinSize().x;
 
         if (rect.x+rect.width < cli_w)
             return true;
@@ -2024,6 +2065,7 @@ bool wxAuiToolBar::RealizeHelper(wxClientDC& dc, bool horizontal)
                 m_overflowSizerItem = sizer->Add(overflow_size, 1, 0, wxEXPAND);
             else
                 m_overflowSizerItem = sizer->Add(1, overflow_size, 0, wxEXPAND);
+            m_overflowSizerItem->SetMinSize(m_overflowSizerItem->GetSize());
         }
         else
         {

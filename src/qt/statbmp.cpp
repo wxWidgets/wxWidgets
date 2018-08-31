@@ -11,6 +11,8 @@
 #include "wx/statbmp.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QLabel>
+
 class wxQtStaticBmp : public wxQtEventSignalHandler< QLabel, wxStaticBitmap >
 {
 public:
@@ -80,7 +82,7 @@ wxIcon wxStaticBitmap::GetIcon() const
     return icon;
 }
 
-QLabel *wxStaticBitmap::GetHandle() const
+QWidget *wxStaticBitmap::GetHandle() const
 {
     return m_qtLabel;
 }

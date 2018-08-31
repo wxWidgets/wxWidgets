@@ -151,7 +151,7 @@ wxDEFINE_EVENT( wxEVT_GRID_TABBING, wxGridEvent );
 
 namespace
 {
-    
+
     // ensure that first is less or equal to second, swapping the values if
     // necessary
     void EnsureFirstLessThanSecond(int& first, int& second)
@@ -159,7 +159,7 @@ namespace
         if ( first > second )
             wxSwap(first, second);
     }
-    
+
 } // anonymous namespace
 
 // ============================================================================
@@ -1311,7 +1311,7 @@ void wxGridStringTable::Clear()
         {
             for ( col = 0; col < numCols; col++ )
             {
-                m_data[row][col] = wxEmptyString;
+                m_data[row][col].clear();
             }
         }
     }
@@ -1871,7 +1871,10 @@ void wxGrid::Render( wxDC& dc,
     dc.DrawRectangle( pointOffSet, sizeCells );
 
     // draw cells
-    DrawGridCellArea( dc, renderCells );
+    {
+        wxDCClipper clipper( dc, wxRect(pointOffSet, sizeCells) );
+        DrawGridCellArea( dc, renderCells );
+    }
 
     // draw grid lines
     if ( style & wxGRID_DRAW_CELL_LINES )
@@ -2415,7 +2418,6 @@ void wxGrid::Init()
     m_selection = NULL;
     m_defaultCellAttr = NULL;
     m_typeRegistry = NULL;
-    m_winCapture = NULL;
 
     m_rowLabelWidth  = WXGRID_DEFAULT_ROW_LABEL_WIDTH;
     m_colLabelHeight = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
@@ -3844,15 +3846,30 @@ void wxGrid::CancelMouseCapture()
     // cancel operation currently in progress, whatever it is
     if ( m_winCapture )
     {
-        m_isDragging = false;
-        m_startDragPos = wxDefaultPosition;
-
-        m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
-        m_winCapture->SetCursor( *wxSTANDARD_CURSOR );
-        m_winCapture = NULL;
+        DoAfterDraggingEnd();
 
         // remove traces of whatever we drew on screen
         Refresh();
+    }
+}
+
+void wxGrid::DoAfterDraggingEnd()
+{
+    m_isDragging = false;
+    m_startDragPos = wxDefaultPosition;
+
+    m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
+    m_winCapture->SetCursor( *wxSTANDARD_CURSOR );
+    m_winCapture = NULL;
+}
+
+void wxGrid::EndDraggingIfNecessary()
+{
+    if ( m_winCapture )
+    {
+        m_winCapture->ReleaseMouse();
+
+        DoAfterDraggingEnd();
     }
 }
 
@@ -3890,11 +3907,7 @@ void wxGrid::ChangeCursorMode(CursorMode mode,
         win = m_gridWin;
     }
 
-    if ( m_winCapture )
-    {
-        m_winCapture->ReleaseMouse();
-        m_winCapture = NULL;
-    }
+    EndDraggingIfNecessary();
 
     m_cursorMode = mode;
 
@@ -3938,7 +3951,7 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
                        bool isFirstDrag)
 {
     bool performDefault = true ;
-    
+
     if ( coords == wxGridNoCellCoords )
         return performDefault; // we're outside any valid cell
 
@@ -3970,7 +3983,7 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
                     // if event is handled by user code, no further processing
                     if ( SendEvent(wxEVT_GRID_CELL_BEGIN_DRAG, coords, event) != 0 )
                         performDefault = false;
-                    
+
                     return performDefault;
                 }
             }
@@ -3982,7 +3995,7 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
             // we don't handle the other key modifiers
             event.Skip();
     }
-    
+
     return performDefault;
 }
 
@@ -4012,34 +4025,14 @@ void wxGrid::DoGridLineDrag(wxMouseEvent& event, const wxGridOperations& oper)
     oper.DrawParallelLineInRect(dc, rectWin, m_dragLastPos);
 }
 
-void wxGrid::DoGridDragEvent(wxMouseEvent& event, const wxGridCellCoords& coords)
+bool wxGrid::DoGridDragEvent(wxMouseEvent& event,
+                             const wxGridCellCoords& coords,
+                             bool isFirstDrag)
 {
-    if ( !m_isDragging )
-    {
-        // Don't start doing anything until the mouse has been dragged far
-        // enough
-        const wxPoint& pt = event.GetPosition();
-        if ( m_startDragPos == wxDefaultPosition )
-        {
-            m_startDragPos = pt;
-            return;
-        }
-
-        if ( abs(m_startDragPos.x - pt.x) <= DRAG_SENSITIVITY &&
-                abs(m_startDragPos.y - pt.y) <= DRAG_SENSITIVITY )
-            return;
-    }
-
-    const bool isFirstDrag = !m_isDragging;
-    m_isDragging = true;
-
     switch ( m_cursorMode )
     {
         case WXGRID_CURSOR_SELECT_CELL:
-            // no further handling if handled by user
-            if ( DoGridCellDrag(event, coords, isFirstDrag) == false )
-                return;
-            break;
+            return DoGridCellDrag(event, coords, isFirstDrag);
 
         case WXGRID_CURSOR_RESIZE_ROW:
             DoGridLineDrag(event, wxGridRowOperations());
@@ -4053,13 +4046,7 @@ void wxGrid::DoGridDragEvent(wxMouseEvent& event, const wxGridCellCoords& coords
             event.Skip();
     }
 
-    if ( isFirstDrag )
-    {
-        wxASSERT_MSG( !m_winCapture, "shouldn't capture the mouse twice" );
-
-        m_winCapture = m_gridWin;
-        m_winCapture->CaptureMouse();
-    }
+    return true;
 }
 
 void
@@ -4153,12 +4140,6 @@ wxGrid::DoGridCellLeftUp(wxMouseEvent& event, const wxGridCellCoords& coords)
 {
     if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
     {
-        if (m_winCapture)
-        {
-            m_winCapture->ReleaseMouse();
-            m_winCapture = NULL;
-        }
-
         if ( coords == m_currentCellCoords && m_waitForSlowClick && CanEnableCellControl() )
         {
             ClearSelection();
@@ -4259,14 +4240,6 @@ wxGrid::DoGridMouseMoveEvent(wxMouseEvent& WXUNUSED(event),
 
 void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event)
 {
-    if ( event.Entering() || event.Leaving() )
-    {
-        // we don't care about these events but we must not reset m_isDragging
-        // if they happen so return before anything else is done
-        event.Skip();
-        return;
-    }
-
     const wxPoint pos = CalcUnscrolledPosition(event.GetPosition());
 
     // coordinates of the cell under mouse
@@ -4280,17 +4253,64 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event)
         coords.SetCol(coords.GetCol() + cell_cols);
     }
 
-    if ( event.Dragging() )
+    // Releasing the left mouse button must be processed in any case, so deal
+    // with it first.
+    if ( event.LeftUp() )
     {
-        if ( event.LeftIsDown() )
-            DoGridDragEvent(event, coords);
-        else
-            event.Skip();
+        // Note that we must call this one first, before resetting the
+        // drag-related data, as it relies on m_cursorMode being still set and
+        // EndDraggingIfNecessary() resets it.
+        DoGridCellLeftUp(event, coords);
+
+        EndDraggingIfNecessary();
         return;
     }
 
-    m_isDragging = false;
-    m_startDragPos = wxDefaultPosition;
+    const bool isDraggingWithLeft = event.Dragging() && event.LeftIsDown();
+
+    // While dragging the mouse, only releasing the left mouse button, which
+    // cancels the drag operation, is processed (above) and any other events
+    // are just ignored while it's in progress.
+    if ( m_isDragging )
+    {
+        if ( isDraggingWithLeft )
+            DoGridDragEvent(event, coords, false /* not first drag */);
+        return;
+    }
+
+    // Now check if we're starting a drag operation (if it had been already
+    // started, m_isDragging would be true above).
+    if ( isDraggingWithLeft )
+    {
+        // To avoid accidental drags, don't start doing anything until the
+        // mouse has been dragged far enough.
+        const wxPoint& pt = event.GetPosition();
+        if ( m_startDragPos == wxDefaultPosition )
+        {
+            m_startDragPos = pt;
+            return;
+        }
+
+        if ( abs(m_startDragPos.x - pt.x) <= DRAG_SENSITIVITY &&
+                abs(m_startDragPos.y - pt.y) <= DRAG_SENSITIVITY )
+            return;
+
+        if ( DoGridDragEvent(event, coords, true /* first drag */) )
+        {
+            wxASSERT_MSG( !m_winCapture, "shouldn't capture the mouse twice" );
+
+            m_winCapture = m_gridWin;
+            m_winCapture->CaptureMouse();
+
+            m_isDragging = true;
+        }
+
+        return;
+    }
+
+    // If we're not dragging, cancel any dragging operation which could have
+    // been in progress.
+    EndDraggingIfNecessary();
 
     // deal with various button presses
     if ( event.IsButton() )
@@ -4307,12 +4327,6 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event)
                 SendEvent(wxEVT_GRID_CELL_RIGHT_CLICK, coords, event);
             else if ( event.RightDClick() )
                 SendEvent(wxEVT_GRID_CELL_RIGHT_DCLICK, coords, event);
-        }
-
-        // this one should be called even if we're not over any cell
-        if ( event.LeftUp() )
-        {
-            DoGridCellLeftUp(event, coords);
         }
     }
     else if ( event.Moving() )
@@ -4697,7 +4711,7 @@ wxGrid::SendEvent(wxEventType type,
            // explicitly allow the event for it to take place
            gridEvt.Veto();
        }
-              
+
        claimed = GetEventHandler()->ProcessEvent(gridEvt);
        vetoed = !gridEvt.IsAllowed();
    }
@@ -6139,9 +6153,18 @@ void wxGrid::GetTextBoxSize( const wxDC& dc,
     size_t i;
     for ( i = 0; i < lines.GetCount(); i++ )
     {
-        dc.GetTextExtent( lines[i], &lineW, &lineH );
-        w = wxMax( w, lineW );
-        h += lineH;
+        if ( lines[i].empty() )
+        {
+            // GetTextExtent() would return 0 for empty lines, but we still
+            // need to account for their height.
+            h += dc.GetCharHeight();
+        }
+        else
+        {
+            dc.GetTextExtent( lines[i], &lineW, &lineH );
+            w = wxMax( w, lineW );
+            h += lineH;
+        }
     }
 
     *width = w;
@@ -6359,7 +6382,7 @@ void wxGrid::ShowCellEditControl()
             // resize editor to overflow into righthand cells if allowed
             int maxWidth = rect.width;
             wxString value = GetCellValue(row, col);
-            if ( (value != wxEmptyString) && (attr->GetOverflow()) )
+            if ( !value.empty() && attr->GetOverflow() )
             {
                 int y;
                 GetTextExtent(value, &maxWidth, &y, NULL, NULL, &attr->GetFont());

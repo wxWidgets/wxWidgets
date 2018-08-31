@@ -108,6 +108,11 @@ class wxPropertySheetDialog : public wxDialog
 {
 public:
     /**
+       Default constructor. Call Create if using this form of constructor.
+    */
+    wxPropertySheetDialog();
+
+    /**
         Constructor.
     */
     wxPropertySheetDialog(wxWindow* parent, wxWindowID id,
@@ -160,6 +165,11 @@ public:
     wxSizer* GetInnerSizer() const;
 
     /**
+       Set the inner sizer that contains the book control and button sizer.
+     */
+    void SetInnerSizer(wxSizer* sizer);
+
+    /**
         Returns the sheet style.
 
         See SetSheetStyle() for allowed values.
@@ -186,5 +196,31 @@ public:
         It is a bit list of the ::wxPropertySheetDialogFlags values.
     */
     void SetSheetStyle(long style);
+
+    
+    /**
+       Set the border around the whole dialog
+    */
+    void SetSheetOuterBorder(int border);
+
+    /**
+       Returns the border around the whole dialog
+    */
+    int GetSheetOuterBorder() const;
+
+    
+    /**
+       Set the border around the book control only.
+    */
+    void SetSheetInnerBorder(int border);
+    
+    /**
+       Returns the border around the book control only.
+    */
+    int GetSheetInnerBorder() const;
+
+    
+    virtual wxWindow* GetContentWindow() const;
+
 };
 

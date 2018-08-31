@@ -36,8 +36,7 @@ wxArrayString::wxArrayString(size_t sz, const char** a)
 #if !wxUSE_STD_CONTAINERS
     Init(false);
 #endif
-    for (size_t i=0; i < sz; i++)
-        Add(a[i]);
+    assign(a, a + sz);
 }
 
 wxArrayString::wxArrayString(size_t sz, const wchar_t** a)
@@ -45,8 +44,7 @@ wxArrayString::wxArrayString(size_t sz, const wchar_t** a)
 #if !wxUSE_STD_CONTAINERS
     Init(false);
 #endif
-    for (size_t i=0; i < sz; i++)
-        Add(a[i]);
+    assign(a, a + sz);
 }
 
 wxArrayString::wxArrayString(size_t sz, const wxString* a)
@@ -54,14 +52,118 @@ wxArrayString::wxArrayString(size_t sz, const wxString* a)
 #if !wxUSE_STD_CONTAINERS
     Init(false);
 #endif
-    for (size_t i=0; i < sz; i++)
-        Add(a[i]);
+    assign(a, a + sz);
 }
 
-#if !wxUSE_STD_CONTAINERS
+#if wxUSE_STD_CONTAINERS
 
-// size increment = min(50% of current size, ARRAY_MAXSIZE_INCREMENT)
-#define   ARRAY_MAXSIZE_INCREMENT       4096
+#include "wx/arrstr.h"
+
+#include "wx/beforestd.h"
+#include <functional>
+#include "wx/afterstd.h"
+
+// some compilers (Sun CC being the only known example) distinguish between
+// extern "C" functions and the functions with C++ linkage and ptr_fun and
+// wxStringCompareLess can't take wxStrcmp/wxStricmp directly as arguments in
+// this case, we need the wrappers below to make this work
+struct wxStringCmp
+{
+    typedef wxString first_argument_type;
+    typedef wxString second_argument_type;
+    typedef int result_type;
+
+    int operator()(const wxString& s1, const wxString& s2) const
+    {
+        return s1.compare(s2);
+    }
+};
+
+struct wxStringCmpNoCase
+{
+    typedef wxString first_argument_type;
+    typedef wxString second_argument_type;
+    typedef int result_type;
+
+    int operator()(const wxString& s1, const wxString& s2) const
+    {
+        return s1.CmpNoCase(s2);
+    }
+};
+
+int wxArrayString::Index(const wxString& str, bool bCase, bool WXUNUSED(bFromEnd)) const
+{
+    wxArrayString::const_iterator it;
+
+    if (bCase)
+    {
+        it = std::find_if(begin(), end(),
+                          std::not1(
+                              std::bind2nd(
+                                  wxStringCmp(), str)));
+    }
+    else // !bCase
+    {
+        it = std::find_if(begin(), end(),
+                          std::not1(
+                              std::bind2nd(
+                                  wxStringCmpNoCase(), str)));
+    }
+
+    return it == end() ? wxNOT_FOUND : it - begin();
+}
+
+template<class F>
+class wxStringCompareLess
+{
+public:
+    wxStringCompareLess(F f) : m_f(f) { }
+    bool operator()(const wxString& s1, const wxString& s2)
+        { return m_f(s1, s2) < 0; }
+private:
+    F m_f;
+};
+
+template<class F>
+wxStringCompareLess<F> wxStringCompare(F f)
+{
+    return wxStringCompareLess<F>(f);
+}
+
+void wxArrayString::Sort(CompareFunction function)
+{
+    std::sort(begin(), end(), wxStringCompare(function));
+}
+
+void wxArrayString::Sort(bool reverseOrder)
+{
+    if (reverseOrder)
+    {
+        std::sort(begin(), end(), std::greater<wxString>());
+    }
+    else
+    {
+        std::sort(begin(), end());
+    }
+}
+
+int wxSortedArrayString::Index(const wxString& str,
+                               bool WXUNUSED_UNLESS_DEBUG(bCase),
+                               bool WXUNUSED_UNLESS_DEBUG(bFromEnd)) const
+{
+    wxASSERT_MSG( bCase && !bFromEnd,
+                  "search parameters ignored for sorted array" );
+
+    wxSortedArrayString::const_iterator
+        it = std::lower_bound(begin(), end(), str, wxStringCompare(wxStringCmp()));
+
+    if ( it == end() || str.Cmp(*it) != 0 )
+        return wxNOT_FOUND;
+
+    return it - begin();
+}
+
+#else // !wxUSE_STD_CONTAINERS
 
 #ifndef   ARRAY_DEFAULT_INITIAL_SIZE    // also defined in dynarray.h
 #define   ARRAY_DEFAULT_INITIAL_SIZE    (16)
@@ -142,11 +244,8 @@ wxString *wxArrayString::Grow(size_t nIncrement)
     else {
       // otherwise when it's called for the first time, nIncrement would be 0
       // and the array would never be expanded
-      // add 50% but not too much
       size_t ndefIncrement = m_nSize < ARRAY_DEFAULT_INITIAL_SIZE
-                          ? ARRAY_DEFAULT_INITIAL_SIZE : m_nSize >> 1;
-      if ( ndefIncrement > ARRAY_MAXSIZE_INCREMENT )
-        ndefIncrement = ARRAY_MAXSIZE_INCREMENT;
+                          ? ARRAY_DEFAULT_INITIAL_SIZE : m_nSize;
       if ( nIncrement < ndefIncrement )
         nIncrement = ndefIncrement;
       m_nSize += nIncrement;
@@ -490,11 +589,11 @@ bool wxArrayString::operator==(const wxArrayString& a) const
 
 wxString wxJoin(const wxArrayString& arr, const wxChar sep, const wxChar escape)
 {
+    wxString str;
+
     size_t count = arr.size();
     if ( count == 0 )
-        return wxEmptyString;
-
-    wxString str;
+        return str;
 
     // pre-allocate memory using the estimation of the average length of the
     // strings in the given array: this is very imprecise, of course, but

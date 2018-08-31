@@ -85,10 +85,22 @@ public:
                       const wxSecretValueImpl& secret,
                       wxString& errmsg) wxOVERRIDE
     {
-        wxString errmsgExtra;
-
         const wxScopedCharBuffer serviceUTF8 = service.utf8_str();
         const wxScopedCharBuffer userUTF8 = user.utf8_str();
+
+        // It doesn't seem possible to use SecKeychainItemModifyContent() to
+        // update the existing record, if any, in place: what happens instead
+        // is that it implicitly creates a new copy of the key chain item with
+        // the updated attributes, but still keeps the existing one. Perhaps
+        // it's possible to update the existing item in some other way, but for
+        // now just use brute force solution and delete any existing items
+        // first and then create the new one.
+
+        // Ignore the result of Delete(), it's not an error if it didn't delete
+        // anything and it's not even an error if it failed to delete an
+        // existing item, we're going to get an error when adding new one in
+        // this case anyhow.
+        Delete(service, errmsg);
 
         OSStatus err = SecKeychainAddGenericPassword
                        (
@@ -102,89 +114,88 @@ public:
                             NULL                    // no output item
                        );
 
-        // Our API allows to use Save() to overwrite an existing password, so
-        // check for failure due to the item already existing and overwrite it
-        // if necessary.
-        if ( err == errSecDuplicateItem )
-        {
-            SecKeychainItemRef itemRef = NULL;
-            err = SecKeychainFindGenericPassword
-                       (
-                            NULL,                   // default keychain
-                            serviceUTF8.length(),
-                            serviceUTF8.data(),
-                            userUTF8.length(),
-                            userUTF8.data(),
-                            NULL,                   // no output password
-                            NULL,                   // (length/data)
-                            &itemRef
-                       );
-            wxCFRef<SecKeychainItemRef> ensureItemRefReleased(itemRef);
-
-            if ( err == errSecSuccess )
-            {
-                err = SecKeychainItemModifyContent
-                      (
-                        itemRef,
-                        NULL,                           // no attributes to modify
-                        secret.GetSize(),
-                        secret.GetData()
-                      );
-            }
-
-            // Try to provide a better error message, the last error on its own
-            // is not informative enough.
-            if ( err != errSecSuccess )
-                errmsgExtra = _(" (while overwriting an existing item)");
-        }
-
         if ( err != errSecSuccess )
         {
-            errmsg = GetSecurityErrorMessage(err) + errmsgExtra;
+            errmsg = GetSecurityErrorMessage(err);
             return false;
         }
 
         return true;
     }
 
-    virtual wxSecretValueImpl* Load(const wxString& service,
-                                    const wxString& user,
-                                    wxString& errmsg) const wxOVERRIDE
+    virtual bool Load(const wxString& service,
+                      wxString* user,
+                      wxSecretValueImpl** secret,
+                      wxString& errmsg) const wxOVERRIDE
     {
         const wxScopedCharBuffer serviceUTF8 = service.utf8_str();
-        const wxScopedCharBuffer userUTF8 = user.utf8_str();
 
         PasswordData password;
+        SecKeychainItemRef itemRef = NULL;
         OSStatus err = SecKeychainFindGenericPassword
                        (
                             NULL,                   // default keychain
                             serviceUTF8.length(),
                             serviceUTF8.data(),
-                            userUTF8.length(),
-                            userUTF8.data(),
+                            0,                      // no account name
+                            NULL,
                             password.SizePtr(),
                             password.DataPtr(),
-                            NULL                    // no output item
+                            &itemRef
                        );
+        wxCFRef<SecKeychainItemRef> ensureItemRefReleased(itemRef);
 
         if ( err != errSecSuccess )
         {
             if ( err != errSecItemNotFound )
                 errmsg = GetSecurityErrorMessage(err);
 
-            return NULL;
+            return false;
         }
 
-        return new wxSecretValueGenericImpl(password.GetSize(),
-                                            password.GetData());
+        UInt32 attrTag = kSecAccountItemAttr;
+        UInt32 attrFormat = CSSM_DB_ATTRIBUTE_FORMAT_STRING;
+        SecKeychainAttributeInfo attrInfo;
+        attrInfo.count = 1;
+        attrInfo.tag = &attrTag;
+        attrInfo.format = &attrFormat;
+
+        SecKeychainAttributeList* attrList = NULL;
+        err = SecKeychainItemCopyAttributesAndData
+              (
+                    itemRef,
+                    &attrInfo,                      // attrs to get
+                    NULL,                           // no output item class
+                    &attrList,                      // output attr
+                    0,                              // no output data
+                    NULL                            //  (length/data)
+              );
+
+        if ( err != errSecSuccess )
+        {
+            errmsg = GetSecurityErrorMessage(err);
+
+            return false;
+        }
+
+        if ( SecKeychainAttribute* attr = attrList ? attrList->attr : NULL )
+        {
+            *user = wxString::FromUTF8(static_cast<char*>(attr->data),
+                                       attr->length);
+        }
+
+        SecKeychainItemFreeAttributesAndData(attrList, NULL);
+
+        *secret = new wxSecretValueGenericImpl(password.GetSize(),
+                                               password.GetData());
+
+        return true;
     }
 
     virtual bool Delete(const wxString& service,
-                        const wxString& user,
                         wxString& errmsg) wxOVERRIDE
     {
         const wxScopedCharBuffer serviceUTF8 = service.utf8_str();
-        const wxScopedCharBuffer userUTF8 = user.utf8_str();
 
         SecKeychainItemRef itemRef = NULL;
         OSStatus err = SecKeychainFindGenericPassword
@@ -192,9 +203,9 @@ public:
                             NULL,                   // default keychain
                             serviceUTF8.length(),
                             serviceUTF8.data(),
-                            userUTF8.length(),
-                            userUTF8.data(),
-                            NULL,                   // no output password
+                            0,                      // no account name
+                            NULL,
+                            0,                      // no output password
                             NULL,                   // (length/data)
                             &itemRef
                        );

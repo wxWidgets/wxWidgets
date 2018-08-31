@@ -52,9 +52,7 @@
     #include "wx/file.h"
 #endif
 
-#ifdef __WXGTK__
-    #include "wx/dcbuffer.h"
-#endif
+#include "wx/dcbuffer.h"
 
 #include "ScintillaWX.h"
 
@@ -137,7 +135,7 @@ wxDEFINE_EVENT( wxEVT_STC_HOTSPOT_RELEASE_CLICK, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_CLIPBOARD_COPY, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_CLIPBOARD_PASTE, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_COMPLETED, wxStyledTextEvent );
-
+wxDEFINE_EVENT( wxEVT_STC_MARGIN_RIGHT_CLICK, wxStyledTextEvent );
 
 
 wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
@@ -146,15 +144,12 @@ wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_SCROLL                  (wxStyledTextCtrl::OnScroll)
     EVT_SIZE                    (wxStyledTextCtrl::OnSize)
     EVT_LEFT_DOWN               (wxStyledTextCtrl::OnMouseLeftDown)
+    EVT_RIGHT_DOWN              (wxStyledTextCtrl::OnMouseRightDown)
     // Let Scintilla see the double click as a second click
     EVT_LEFT_DCLICK             (wxStyledTextCtrl::OnMouseLeftDown)
     EVT_MOTION                  (wxStyledTextCtrl::OnMouseMove)
     EVT_LEFT_UP                 (wxStyledTextCtrl::OnMouseLeftUp)
-#if defined(__WXGTK__) || defined(__WXMAC__)
-    EVT_RIGHT_UP                (wxStyledTextCtrl::OnMouseRightUp)
-#else
     EVT_CONTEXT_MENU            (wxStyledTextCtrl::OnContextMenu)
-#endif
     EVT_MOUSEWHEEL              (wxStyledTextCtrl::OnMouseWheel)
     EVT_MIDDLE_UP               (wxStyledTextCtrl::OnMouseMiddleUp)
     EVT_CHAR                    (wxStyledTextCtrl::OnChar)
@@ -165,6 +160,7 @@ wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_ERASE_BACKGROUND        (wxStyledTextCtrl::OnEraseBackground)
     EVT_MENU_RANGE              (10, 16, wxStyledTextCtrl::OnMenu)
     EVT_LISTBOX_DCLICK          (wxID_ANY, wxStyledTextCtrl::OnListBox)
+    EVT_MOUSE_CAPTURE_LOST      (wxStyledTextCtrl::OnMouseCaptureLost)
 wxEND_EVENT_TABLE()
 
 
@@ -228,6 +224,18 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
     // STC doesn't support RTL languages at all
     SetLayoutDirection(wxLayout_LeftToRight);
 
+    // Rely on native double buffering by default, except under Mac where it
+    // doesn't work for some reason, see #18085.
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER && !defined(__WXMAC__)
+    SetBufferedDraw(false);
+#else
+    SetBufferedDraw(true);
+#endif
+
+#if wxUSE_GRAPHICS_DIRECT2D
+    SetFontQuality(wxSTC_EFF_QUALITY_DEFAULT);
+#endif
+
     return true;
 }
 
@@ -246,7 +254,7 @@ wxIntPtr wxStyledTextCtrl::SendMsg(int msg, wxUIntPtr wp, wxIntPtr lp) const
 
 //----------------------------------------------------------------------
 
-// Set the vertical scrollbar to use instead of the ont that's built-in.
+// Set the vertical scrollbar to use instead of the one that's built-in.
 void wxStyledTextCtrl::SetVScrollBar(wxScrollBar* bar)  {
     m_vScrollBar = bar;
     if (bar != NULL) {
@@ -256,7 +264,7 @@ void wxStyledTextCtrl::SetVScrollBar(wxScrollBar* bar)  {
 }
 
 
-// Set the horizontal scrollbar to use instead of the ont that's built-in.
+// Set the horizontal scrollbar to use instead of the one that's built-in.
 void wxStyledTextCtrl::SetHScrollBar(wxScrollBar* bar)  {
     m_hScrollBar = bar;
     if (bar != NULL) {
@@ -384,106 +392,6 @@ void wxStyledTextCtrl::StyleSetFontAttr(int styleNum, int size,
 }
 
 
-// Set the character set of the font in a style.  Converts the Scintilla
-// character set values to a wxFontEncoding.
-void wxStyledTextCtrl::StyleSetCharacterSet(int style, int characterSet)
-{
-    wxFontEncoding encoding;
-
-    // Translate the Scintilla characterSet to a wxFontEncoding
-    switch (characterSet) {
-        default:
-        case wxSTC_CHARSET_ANSI:
-        case wxSTC_CHARSET_DEFAULT:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_BALTIC:
-            encoding = wxFONTENCODING_ISO8859_13;
-            break;
-
-        case wxSTC_CHARSET_CHINESEBIG5:
-            encoding = wxFONTENCODING_CP950;
-            break;
-
-        case wxSTC_CHARSET_EASTEUROPE:
-            encoding = wxFONTENCODING_ISO8859_2;
-            break;
-
-        case wxSTC_CHARSET_GB2312:
-            encoding = wxFONTENCODING_CP936;
-            break;
-
-        case wxSTC_CHARSET_GREEK:
-            encoding = wxFONTENCODING_ISO8859_7;
-            break;
-
-        case wxSTC_CHARSET_HANGUL:
-            encoding = wxFONTENCODING_CP949;
-            break;
-
-        case wxSTC_CHARSET_MAC:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_OEM:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_RUSSIAN:
-            encoding = wxFONTENCODING_KOI8;
-            break;
-
-        case wxSTC_CHARSET_SHIFTJIS:
-            encoding = wxFONTENCODING_CP932;
-            break;
-
-        case wxSTC_CHARSET_SYMBOL:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_TURKISH:
-            encoding = wxFONTENCODING_ISO8859_9;
-            break;
-
-        case wxSTC_CHARSET_JOHAB:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_HEBREW:
-            encoding = wxFONTENCODING_ISO8859_8;
-            break;
-
-        case wxSTC_CHARSET_ARABIC:
-            encoding = wxFONTENCODING_ISO8859_6;
-            break;
-
-        case wxSTC_CHARSET_VIETNAMESE:
-            encoding = wxFONTENCODING_DEFAULT;
-            break;
-
-        case wxSTC_CHARSET_THAI:
-            encoding = wxFONTENCODING_ISO8859_11;
-            break;
-
-        case wxSTC_CHARSET_CYRILLIC:
-            encoding = wxFONTENCODING_ISO8859_5;
-            break;
-
-        case wxSTC_CHARSET_8859_15:
-            encoding = wxFONTENCODING_ISO8859_15;;
-            break;
-    }
-
-    // We just have Scintilla track the wxFontEncoding for us.  It gets used
-    // in Font::Create in PlatWX.cpp.  We add one to the value so that the
-    // effective wxFONENCODING_DEFAULT == SC_SHARSET_DEFAULT and so when
-    // Scintilla internally uses SC_CHARSET_DEFAULT we will translate it back
-    // to wxFONENCODING_DEFAULT in Font::Create.
-    SendMsg(SCI_STYLESETCHARACTERSET, style, encoding+1);
-}
-
-
 // Set the font encoding to be used by a style.
 void wxStyledTextCtrl::StyleSetFontEncoding(int style, wxFontEncoding encoding)
 {
@@ -503,13 +411,6 @@ void wxStyledTextCtrl::SetMargins(int left, int right) {
     SetMarginRight(right);
 }
 
-
-// Retrieve the point in the window where a position is displayed.
-wxPoint wxStyledTextCtrl::PointFromPosition(int pos) {
-    int x = SendMsg(SCI_POINTXFROMPOSITION, 0, pos);
-    int y = SendMsg(SCI_POINTYFROMPOSITION, 0, pos);
-    return wxPoint(x, y);
-}
 
 // Scroll enough to make the given line visible
 void wxStyledTextCtrl::ScrollToLine(int line) {
@@ -730,9 +631,7 @@ wxCharBuffer wxStyledTextCtrl::GetTargetTextRaw()
 wxCharBuffer wxStyledTextCtrl::GetTextRangeRaw(int startPos, int endPos)
 {
     if (endPos < startPos) {
-        int temp = startPos;
-        startPos = endPos;
-        endPos = temp;
+        wxSwap(startPos, endPos);
     }
     int len  = endPos - startPos;
     if (!len) {
@@ -741,7 +640,7 @@ wxCharBuffer wxStyledTextCtrl::GetTextRangeRaw(int startPos, int endPos)
     }
 
     wxCharBuffer buf(len);
-    TextRange tr;
+    Sci_TextRange tr;
     tr.lpstrText = buf.data();
     tr.chrg.cpMin = startPos;
     tr.chrg.cpMax = endPos;
@@ -770,19 +669,27 @@ void wxStyledTextCtrl::AppendTextRaw(const char* text, int length)
     SendMsg(SCI_APPENDTEXT, length, (sptr_t)text);
 }
 
+#if WXWIN_COMPATIBILITY_3_0
+// Deprecated since Scintilla 3.7.2
+void wxStyledTextCtrl::UsePopUp(bool allowPopUp)
+{
+    SendMsg(SCI_USEPOPUP, allowPopUp ? SC_POPUP_ALL : SC_POPUP_NEVER, 0);
+}
 
+void wxStyledTextCtrl::StartStyling(int start, int unused)
+{
+        wxASSERT_MSG(unused==0,
+                     "The second argument passed to StartStyling should be 0");
 
-
+        SendMsg(SCI_STARTSTYLING, start, unused);
+}
+#endif // WXWIN_COMPATIBILITY_3_0
 
 //----------------------------------------------------------------------
 // Event handlers
 
 void wxStyledTextCtrl::OnPaint(wxPaintEvent& WXUNUSED(evt)) {
-#ifdef __WXGTK__
-    wxBufferedPaintDC dc(this);
-#else
     wxPaintDC dc(this);
-#endif
     m_swx->DoPaint(&dc, GetUpdateRegion().GetBox());
 }
 
@@ -817,6 +724,15 @@ void wxStyledTextCtrl::OnMouseLeftDown(wxMouseEvent& evt) {
                       evt.ShiftDown(), evt.ControlDown(), evt.AltDown());
 }
 
+void wxStyledTextCtrl::OnMouseRightDown(wxMouseEvent& evt) {
+    SetFocus();
+    wxPoint pt = evt.GetPosition();
+    m_swx->DoRightButtonDown(Point(pt.x, pt.y), m_stopWatch.Time(),
+                      evt.ShiftDown(), evt.ControlDown(), evt.AltDown());
+    // We need to call evt.Skip() to allow generating EVT_CONTEXT_MENU
+    evt.Skip();
+}
+
 void wxStyledTextCtrl::OnMouseMove(wxMouseEvent& evt) {
     wxPoint pt = evt.GetPosition();
     m_swx->DoLeftButtonMove(Point(pt.x, pt.y));
@@ -827,13 +743,6 @@ void wxStyledTextCtrl::OnMouseLeftUp(wxMouseEvent& evt) {
     m_swx->DoLeftButtonUp(Point(pt.x, pt.y), m_stopWatch.Time(),
                       evt.ControlDown());
 }
-
-
-void wxStyledTextCtrl::OnMouseRightUp(wxMouseEvent& evt) {
-    wxPoint pt = evt.GetPosition();
-    m_swx->DoContextMenu(Point(pt.x, pt.y));
-}
-
 
 void wxStyledTextCtrl::OnMouseMiddleUp(wxMouseEvent& evt) {
     wxPoint pt = evt.GetPosition();
@@ -851,12 +760,29 @@ void wxStyledTextCtrl::OnContextMenu(wxContextMenuEvent& evt) {
     if (ht != wxHT_WINDOW_INSIDE) {
         pt = this->PointFromPosition(this->GetCurrentPos());
     }
-    m_swx->DoContextMenu(Point(pt.x, pt.y));
+    if ( !m_swx->DoContextMenu(Point(pt.x, pt.y)) )
+        evt.Skip();
 }
 
 
 void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt)
 {
+    // if the mouse wheel is not captured, test if the mouse
+    // pointer is over the editor window and if not, don't
+    // handle the message but pass it on.
+    if ( !GetMouseWheelCaptures() ) {
+        if ( !GetRect().Contains(evt.GetPosition()) ) {
+            wxWindow* parent = GetParent();
+            if (parent != NULL) {
+                wxMouseEvent newevt(evt);
+                newevt.SetPosition(
+                    parent->ScreenToClient(ClientToScreen(evt.GetPosition())));
+                parent->ProcessWindowEvent(newevt);
+            }
+            return;
+        }
+    }
+
     m_swx->DoMouseWheel(evt.GetWheelAxis(),
                         evt.GetWheelRotation(),
                         evt.GetWheelDelta(),
@@ -965,6 +891,11 @@ void wxStyledTextCtrl::OnIdle(wxIdleEvent& evt) {
 }
 
 
+void wxStyledTextCtrl::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(evt)) {
+    m_swx->DoMouseCaptureLost();
+}
+
+
 wxSize wxStyledTextCtrl::DoGetBestSize() const
 {
     // What would be the best size for a wxSTC?
@@ -1022,10 +953,6 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetEventType(wxEVT_STC_ROMODIFYATTEMPT);
         break;
 
-    case SCN_KEY:
-        evt.SetEventType(wxEVT_STC_KEY);
-        break;
-
     case SCN_DOUBLECLICK:
         evt.SetEventType(wxEVT_STC_DOUBLECLICK);
         evt.SetLine(scn.line);
@@ -1076,11 +1003,6 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         SetEventText(evt, scn.text, strlen(scn.text));
         evt.SetPosition(scn.lParam);
         evt.SetListCompletionMethod(scn.listCompletionMethod);
-        break;
-
-    case SCN_URIDROPPED:
-        evt.SetEventType(wxEVT_STC_URIDROPPED);
-        SetEventText(evt, scn.text, strlen(scn.text));
         break;
 
     case SCN_DWELLSTART:
@@ -1145,6 +1067,11 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         SetEventText(evt, scn.text, strlen(scn.text));
         evt.SetPosition(scn.lParam);
         evt.SetListCompletionMethod(scn.listCompletionMethod);
+        break;
+
+    case SCN_MARGINRIGHTCLICK:
+        evt.SetEventType(wxEVT_STC_MARGIN_RIGHT_CLICK);
+        evt.SetMargin(scn.margin);
         break;
 
     default:
@@ -1233,7 +1160,7 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 
 /*static*/ wxVersionInfo wxStyledTextCtrl::GetLibraryVersionInfo()
 {
-    return wxVersionInfo("Scintilla", 3, 6, 6, "Scintilla 3.6.6");
+    return wxVersionInfo("Scintilla", 3, 7, 2, "Scintilla 3.7.2");
 }
 
 #endif // wxUSE_STC

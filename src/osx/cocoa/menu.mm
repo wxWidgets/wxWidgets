@@ -23,6 +23,7 @@
 #include "wx/utils.h"
 #include "wx/frame.h"
 #include "wx/menuitem.h"
+#include "wx/dialog.h"
 #endif
 
 #include "wx/menu.h"
@@ -37,8 +38,10 @@
 
 - (id) initWithTitle:(NSString*) title
 {
-    self = [super initWithTitle:title];
-    impl = NULL;
+    if ( self = [super initWithTitle:title] )
+    {
+        impl = NULL;
+    }
     return self;
 }
 
@@ -189,14 +192,13 @@ public :
     {
         [m_osxMenu removeItem:(NSMenuItem*) pItem->GetPeer()->GetHMenuItem()];
     }
-
-    virtual void MakeRoot() wxOVERRIDE
+    
+    virtual void MacSetupAppleMenu()
     {
         wxMenu* peer = GetWXPeer();
         
-        [NSApp setMainMenu:m_osxMenu];
         [NSApp setAppleMenu:[[m_osxMenu itemAtIndex:0] submenu]];
-
+        
         wxMenuItem *services = peer->FindItem(wxID_OSX_SERVICES);
         if ( services )
             [NSApp setServicesMenu:services->GetSubMenu()->GetHMenu()];
@@ -205,6 +207,11 @@ public :
         else
             [NSApp setServicesMenu:nil];
 #endif
+    }
+    
+    virtual void MacSetupHelpMenu()
+    {
+        wxMenu* peer = GetWXPeer();
         
         NSMenu* helpMenu = nil;
         int helpid = peer->FindItem(wxApp::s_macHelpMenuTitleName);
@@ -222,6 +229,80 @@ public :
             [NSApp setHelpMenu:helpMenu];
         
     }
+    
+    virtual NSMenu* MacCreateOrFindWindowMenu()
+    {
+        wxMenu* peer = GetWXPeer();
+        wxString windowMenuTitle = wxStripMenuCodes(_("&Window"));
+        
+        NSMenu* windowMenu = nil;
+        int windowmenuid = peer->FindItem(wxApp::s_macWindowMenuTitleName);
+        if ( windowmenuid == wxNOT_FOUND )
+            windowmenuid = peer->FindItem(_("&Window"));
+        
+        if ( windowmenuid != wxNOT_FOUND )
+        {
+            wxMenuItem* windowMenuItem = peer->FindItem(windowmenuid);
+            
+            if ( windowMenuItem->IsSubMenu() )
+                windowMenu = windowMenuItem->GetSubMenu()->GetHMenu();
+        }
+
+        if ( windowMenu == nil )
+        {
+            windowMenu = [[NSMenu alloc] initWithTitle:wxNSStringWithWxString(windowMenuTitle)];
+            NSMenuItem* windowMenuItem = [[NSMenuItem alloc] initWithTitle:wxNSStringWithWxString(windowMenuTitle) action:nil keyEquivalent:@""];
+            [windowMenuItem setSubmenu:windowMenu];
+            [windowMenu release];
+            [m_osxMenu addItem:windowMenuItem];
+        }
+        return windowMenu;
+    }
+    
+    virtual void MacSetupWindowMenu()
+    {
+        if ( GetWXPeer()->GetMenuBar()->GetAutoWindowMenu() )
+        {
+            NSMenu* windowMenu = MacCreateOrFindWindowMenu();
+            NSMenuItem* item = nil;
+            bool menuWasEmpty = [windowMenu numberOfItems] == 0;
+            if ( !menuWasEmpty )
+                item = [windowMenu itemAtIndex:0];
+            
+            if ( item == nil || [item action] != @selector(performMiniaturize:) )
+            {
+                item = [[NSMenuItem alloc] initWithTitle:wxNSStringWithWxString(_("Minimize")) action:@selector(performMiniaturize:) keyEquivalent:@"m"];
+                [windowMenu insertItem:item atIndex:0];
+                [item setEnabled:YES];
+                [item release];
+                
+                item = [[NSMenuItem alloc] initWithTitle:wxNSStringWithWxString(_("Zoom")) action:@selector(performZoom:) keyEquivalent:@""];
+                [windowMenu insertItem:item atIndex:1];
+                [item release];
+                
+                [windowMenu insertItem:[NSMenuItem separatorItem] atIndex:2];
+                
+                item = [[NSMenuItem alloc] initWithTitle:wxNSStringWithWxString(_("Bring All to Front")) action:@selector(arrangeInFront:) keyEquivalent:@""];
+                [windowMenu insertItem:item atIndex:3];
+                [item release];
+                
+                if ( !menuWasEmpty )
+                    [windowMenu insertItem:[NSMenuItem separatorItem] atIndex:4];
+            }
+            
+            [NSApp setWindowsMenu:windowMenu];
+        }
+    }
+
+    virtual void MakeRoot() wxOVERRIDE
+    {
+        [NSApp setMainMenu:m_osxMenu];
+
+        MacSetupAppleMenu();
+        MacSetupHelpMenu();
+        MacSetupWindowMenu();
+        
+    }
 
     virtual void Enable( bool WXUNUSED(enable) )
     {
@@ -235,9 +316,40 @@ public :
 
     virtual void PopUp( wxWindow *win, int x, int y ) wxOVERRIDE
     {
-        win->ScreenToClient( &x , &y ) ;
         NSView *view = win->GetPeer()->GetWXWidget();
-        [m_osxMenu popUpMenuPositioningItem:nil atLocation:NSMakePoint(x, y) inView:view];
+
+        wxPoint screenPoint(x,y);
+        NSPoint pointInView = wxToNSPoint(view, win->ScreenToClient( screenPoint ));
+
+        // action and validation methods are not called from macos for modal dialogs
+        // when using popUpMenuPositioningItem therefore we fall back to the older method
+        if ( wxDialog::OSXHasModalDialogsOpen() )
+        {
+            // we don't want plug-ins interfering
+            m_osxMenu.allowsContextMenuPlugIns = NO;
+            
+            wxTopLevelWindow* tlw = static_cast<wxTopLevelWindow*>(wxGetTopLevelParent(win));
+            NSWindow* nsWindow = tlw->GetWXWindow();
+            NSRect nsrect = NSZeroRect;
+            nsrect.origin = wxToNSPoint( NULL, screenPoint );
+            nsrect = [nsWindow convertRectFromScreen:nsrect];
+
+            NSEvent* rightClick = [NSEvent mouseEventWithType:NSRightMouseDown
+                                                     location:nsrect.origin
+                                                modifierFlags:0
+                                                    timestamp:0
+                                                 windowNumber:[nsWindow windowNumber]
+                                                      context:nil
+                                                  eventNumber:0
+                                                   clickCount:1
+                                                     pressure:0];
+            
+            [NSMenu popUpContextMenu:m_osxMenu withEvent:rightClick forView:view];
+        }
+        else
+        {
+            [m_osxMenu popUpMenuPositioningItem:nil atLocation:pointInView inView:view];
+        }
     }
     
     virtual void GetMenuBarDimensions(int &x, int &y, int &width, int &height) const wxOVERRIDE
@@ -247,6 +359,23 @@ public :
         x = r.origin.x;
         y = r.origin.y;
         width = r.size.width;
+    }
+    
+    void DisableAutoEnable()
+    {
+        [m_osxMenu setAutoenablesItems:NO];
+        
+        wxMenu* menu = GetWXPeer();
+        for ( auto item : menu->GetMenuItems() )
+        {
+            if ( item->IsSubMenu() )
+            {
+                wxMenuCocoaImpl* subimpl = dynamic_cast<wxMenuCocoaImpl*>(item->GetSubMenu()->GetPeer());
+                if ( subimpl )
+                    subimpl->DisableAutoEnable();
+            }
+        }
+
     }
     
     WXHMENU GetHMenu() wxOVERRIDE { return m_osxMenu; }

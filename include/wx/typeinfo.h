@@ -68,14 +68,14 @@ public:
         m_className = className;
     }
 
-    bool operator==(const wxTypeIdentifier& other)
+    bool operator==(const wxTypeIdentifier& other) const
     {
         return strcmp(m_className, other.m_className) == 0;
     }
 
-    bool operator!=(const wxTypeIdentifier& other)
+    bool operator!=(const wxTypeIdentifier& other) const
     {
-        return strcmp(m_className, other.m_className) != 0;
+        return !(*this == other);
     }
 private:
     const char* m_className;

@@ -44,7 +44,7 @@ void CharClassify::SetCharClasses(const unsigned char *chars, cc newCharClass) {
 	}
 }
 
-int CharClassify::GetCharsOfClass(cc characterClass, unsigned char *buffer) {
+int CharClassify::GetCharsOfClass(cc characterClass, unsigned char *buffer) const {
 	// Get characters belonging to the given char class; return the number
 	// of characters (if the buffer is NULL, don't write to it).
 	int count = 0;

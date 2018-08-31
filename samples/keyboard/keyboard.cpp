@@ -224,35 +224,19 @@ MyFrame::MyFrame(const wxString& title)
 
     // connect menu event handlers
 
-    Connect(QuitID, wxEVT_MENU,
-            wxCommandEventHandler(MyFrame::OnQuit));
-
-    Connect(wxID_ABOUT, wxEVT_MENU,
-            wxCommandEventHandler(MyFrame::OnAbout));
-
-    Connect(ClearID, wxEVT_MENU,
-            wxCommandEventHandler(MyFrame::OnClear));
-
-    Connect(SkipHook, wxEVT_MENU,
-            wxCommandEventHandler(MyFrame::OnSkipHook));
-    Connect(SkipDown, wxEVT_MENU,
-            wxCommandEventHandler(MyFrame::OnSkipDown));
-
-    Connect(IDInputCustom, IDInputText, wxEVT_MENU,
-            wxCommandEventHandler(MyFrame::OnInputWindowKind));
-
-    Connect(TestAccelA, wxEVT_MENU,
-            wxCommandEventHandler(MyFrame::OnTestAccelA));
-
-    Connect(TestAccelCtrlA, wxEVT_MENU,
-            wxCommandEventHandler(MyFrame::OnTestAccelCtrlA));
-
-    Connect(TestAccelEsc, wxEVT_MENU,
-            wxCommandEventHandler(MyFrame::OnTestAccelEsc));
+    Bind(wxEVT_MENU, &MyFrame::OnQuit, this, QuitID);
+    Bind(wxEVT_MENU, &MyFrame::OnAbout, this, wxID_ABOUT);
+    Bind(wxEVT_MENU, &MyFrame::OnClear, this, ClearID);
+    Bind(wxEVT_MENU, &MyFrame::OnSkipHook, this, SkipHook);
+    Bind(wxEVT_MENU, &MyFrame::OnSkipDown, this, SkipDown);
+    Bind(wxEVT_MENU, &MyFrame::OnInputWindowKind, this, IDInputCustom, IDInputText);
+    Bind(wxEVT_MENU, &MyFrame::OnTestAccelA, this, TestAccelA);
+    Bind(wxEVT_MENU, &MyFrame::OnTestAccelCtrlA, this, TestAccelCtrlA);
+    Bind(wxEVT_MENU, &MyFrame::OnTestAccelEsc, this, TestAccelEsc);
 
     // notice that we don't connect OnCharHook() to the input window, unlike
     // the usual key events this one is propagated upwards
-    Connect(wxEVT_CHAR_HOOK, wxKeyEventHandler(MyFrame::OnCharHook));
+    Bind(wxEVT_CHAR_HOOK, &MyFrame::OnCharHook, this);
 
     // status bar is useful for showing the menu items help strings
     CreateStatusBar();
@@ -300,18 +284,13 @@ void MyFrame::DoCreateInputWindow(InputKind inputKind)
     m_inputWin->SetForegroundColour(*wxWHITE);
 
     // connect event handlers for the blue input window
-    m_inputWin->Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(MyFrame::OnKeyDown),
-                        NULL, this);
-    m_inputWin->Connect(wxEVT_KEY_UP, wxKeyEventHandler(MyFrame::OnKeyUp),
-                        NULL, this);
-    m_inputWin->Connect(wxEVT_CHAR, wxKeyEventHandler(MyFrame::OnChar),
-                        NULL, this);
+    m_inputWin->Bind(wxEVT_KEY_DOWN, &MyFrame::OnKeyDown, this);
+    m_inputWin->Bind(wxEVT_KEY_UP, &MyFrame::OnKeyUp, this);
+    m_inputWin->Bind(wxEVT_CHAR, &MyFrame::OnChar, this);
 
     if ( inputKind == Input_Custom )
     {
-        m_inputWin->Connect(wxEVT_PAINT,
-                            wxPaintEventHandler(MyFrame::OnPaintInputWin),
-                            NULL, this);
+        m_inputWin->Bind(wxEVT_PAINT, &MyFrame::OnPaintInputWin, this);
     }
 
     if ( oldWin )

@@ -40,10 +40,13 @@ union wxHashKeyValue
 // enough, so provide a real forward declaration
 class WXDLLIMPEXP_FWD_BASE wxHashTableBase;
 
+// and clang doesn't like using WXDLLIMPEXP_FWD_BASE inside a typedef.
+class WXDLLIMPEXP_FWD_BASE wxHashTableBase_Node;
+
 class WXDLLIMPEXP_BASE wxHashTableBase_Node
 {
-    friend class WXDLLIMPEXP_FWD_BASE wxHashTableBase;
-    typedef class WXDLLIMPEXP_FWD_BASE wxHashTableBase_Node _Node;
+    friend class wxHashTableBase;
+    typedef class wxHashTableBase_Node _Node;
 public:
     wxHashTableBase_Node( long key, void* value,
                           wxHashTableBase* table );

@@ -66,10 +66,8 @@ public:
     const wxSize& GetSize() const { return m_size; }
 
 
-    virtual void OnText(const wxString& text_) wxOVERRIDE
+    virtual void OnText(const wxString& text) wxOVERRIDE
     {
-        const wxString text(wxControl::RemoveMnemonics(text_));
-
         // TODO-MULTILINE-MARKUP: Must use GetMultiLineTextExtent().
         const wxSize size = m_dc.GetTextExtent(text);
 
@@ -261,14 +259,14 @@ public:
 
         const wxSize extent = m_dc.GetTextExtent(text);
 
-        // DrawItemText() ignores background color, so render it outselves 
+        // DrawItemText() ignores background color, so render it ourselves
         if ( m_dc.GetBackgroundMode() == wxSOLID )
         {
 #if wxUSE_GRAPHICS_CONTEXT
             // Prefer to use wxGraphicsContext because it supports alpha channel; fall back to wxDC
             if ( !m_gc )
                 m_gc.reset(wxGraphicsContext::CreateFromUnknownDC(m_dc));
- 
+
             if ( m_gc )
             {
                 m_gc->SetBrush(wxBrush(m_dc.GetTextBackground()));
@@ -286,7 +284,7 @@ public:
 
         m_renderer->DrawItemText(m_win,
                                  m_dc,
-                                 wxControl::RemoveMnemonics(text),
+                                 text,
                                  rect,
                                  wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL,
                                  m_rendererFlags,
@@ -313,22 +311,22 @@ private:
 // wxMarkupText implementation
 // ============================================================================
 
-void wxMarkupText::SetMarkupText(const wxString& markup)
-{
-    m_markup = wxControl::EscapeMnemonics(markup);
-}
-
-wxSize wxMarkupText::Measure(wxDC& dc, int *visibleHeight) const
+wxSize wxMarkupTextBase::Measure(wxDC& dc, int *visibleHeight) const
 {
     wxMarkupParserMeasureOutput out(dc, visibleHeight);
     wxMarkupParser parser(out);
-    if ( !parser.Parse(m_markup) )
+    if ( !parser.Parse(GetMarkupForMeasuring()) )
     {
         wxFAIL_MSG( "Invalid markup" );
         return wxDefaultSize;
     }
 
     return out.GetSize();
+}
+
+wxString wxMarkupText::GetMarkupForMeasuring() const
+{
+    return wxControl::RemoveMnemonics(m_markup);
 }
 
 void wxMarkupText::Render(wxDC& dc, const wxRect& rect, int flags)
@@ -345,11 +343,16 @@ void wxMarkupText::Render(wxDC& dc, const wxRect& rect, int flags)
     parser.Parse(m_markup);
 }
 
-void wxMarkupText::RenderItemText(wxWindow *win,
-                                  wxDC& dc,
-                                  const wxRect& rect,
-                                  int rendererFlags,
-                                  wxEllipsizeMode ellipsizeMode)
+
+// ============================================================================
+// wxItemMarkupText implementation
+// ============================================================================
+
+void wxItemMarkupText::Render(wxWindow *win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int rendererFlags,
+                              wxEllipsizeMode ellipsizeMode)
 {
     wxMarkupParserRenderItemOutput out(win, dc, rect, rendererFlags, ellipsizeMode);
     wxMarkupParser parser(out);

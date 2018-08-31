@@ -281,6 +281,10 @@ public:
 
     virtual wxString GetTitle() const { return m_printoutTitle; }
 
+    // Port-specific code should call this function to initialize this object
+    // with everything it needs, instead of using individual accessors below.
+    bool SetUp(wxDC& dc);
+
     wxDC *GetDC() const { return m_printoutDC; }
     void SetDC(wxDC *dc) { m_printoutDC = dc; }
 

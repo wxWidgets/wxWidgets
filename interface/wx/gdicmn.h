@@ -609,12 +609,12 @@ public:
     int width;
 
     /**
-        x coordinate of the top-level corner of the rectangle.
+        x coordinate of the top-left corner of the rectangle.
     */
     int x;
 
     /**
-        y coordinate of the top-level corner of the rectangle.
+        y coordinate of the top-left corner of the rectangle.
     */
     int y;
 };
@@ -1014,7 +1014,7 @@ public:
         @return A reference to this object (so that you can concatenate other
                  operations in the same line).
     */
-    wxSize& Scale(float xscale, float yscale);
+    wxSize& Scale(double xscale, double yscale);
 
     /**
         Sets the width and height members.

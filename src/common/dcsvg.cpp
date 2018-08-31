@@ -31,7 +31,9 @@
 #include "wx/mstream.h"
 #include "wx/scopedarray.h"
 
-#include "wx/private/markupparser.h"
+#if wxUSE_MARKUP
+    #include "wx/private/markupparser.h"
+#endif
 
 // ----------------------------------------------------------
 // Global utilities
@@ -119,6 +121,7 @@ wxString wxBrushString(wxColour c, int style = wxBRUSHSTYLE_SOLID)
     return s;
 }
 
+static
 wxString wxGetPenPattern(wxPen& pen)
 {
     wxString s;
@@ -636,7 +639,11 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
         s += wxBrushString(m_textForegroundColour) + wxPenString(m_textForegroundColour);
         s += wxString::Format(wxS("stroke-width:0;\" transform=\"rotate(%s %d %d)\""), NumStr(-angle), xx, yy);
         s += wxS(" xml:space=\"preserve\">");
-        s += wxMarkupParser::Quote(lines[lineNum]) + wxS("</text>\n");
+        #if wxUSE_MARKUP
+            s += wxMarkupParser::Quote(lines[lineNum]) + wxS("</text>\n");
+        #else
+            s += lines[lineNum] + wxS("</text>\n");
+        #endif
 
         write(s);
     }
@@ -927,6 +934,9 @@ void wxSVGFileDCImpl::DoSetClippingRegion(int x, int y, int width, int height)
 
     m_clipUniqueId++;
     m_clipNestingLevel++;
+
+    // Update the base class m_clip[XY][12] fields too.
+    wxDCImpl::DoSetClippingRegion(x, y, width, height);
 }
 
 void wxSVGFileDCImpl::DestroyClippingRegion()
@@ -951,6 +961,9 @@ void wxSVGFileDCImpl::DestroyClippingRegion()
     DoStartNewGraphics();
 
     m_clipUniqueId = 0;
+
+    // Also update the base class clipping region information.
+    wxDCImpl::DestroyClippingRegion();
 }
 
 void wxSVGFileDCImpl::DoGetTextExtent(const wxString& string, wxCoord *w, wxCoord *h, wxCoord *descent, wxCoord *externalLeading, const wxFont *font) const

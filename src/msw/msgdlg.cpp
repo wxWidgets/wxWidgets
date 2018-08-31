@@ -352,9 +352,9 @@ void wxMessageDialog::AdjustButtonLabels()
     // resize the message box to be wider if needed
     const int wBoxOld = wxGetClientRect(GetHwnd()).right;
 
-    const int CHAR_WIDTH = GetCharWidth();
-    const int MARGIN_OUTER = 2*CHAR_WIDTH;  // margin between box and buttons
-    const int MARGIN_INNER = CHAR_WIDTH;    // margin between buttons
+    const int CHAR_WIDTH_IN_PIXELS = GetCharWidth();
+    const int MARGIN_OUTER = 2*CHAR_WIDTH_IN_PIXELS;  // margin between box and buttons
+    const int MARGIN_INNER = CHAR_WIDTH_IN_PIXELS;    // margin between buttons
 
     RECT rcBox = wxGetWindowRect(GetHwnd());
 

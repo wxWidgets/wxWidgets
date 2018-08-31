@@ -147,8 +147,24 @@ wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 #define WGL_CONTEXT_ES_PROFILE_BIT_EXT            0x00000004
 #endif
 
-typedef HGLRC(WINAPI * PFNWGLCREATECONTEXTATTRIBSARBPROC)
-    (HDC hDC, HGLRC hShareContext, const int *attribList);
+// This helper function only exists to suppress unavoidable gcc 8 warnings
+// about incompatible function casts.
+template <typename T>
+inline T wxWGLProcCast(PROC proc)
+{
+    wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
+
+    return reinterpret_cast<T>(proc);
+
+    wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
+}
+
+// this macro defines a variable of type "name_t" called "name" and initializes
+// it with the pointer to WGL function "name" (which may be NULL)
+//
+// NB: type name_t must be defined by the code using the macro
+#define wxDEFINE_WGL_FUNC(name) \
+    name##_t name = wxWGLProcCast<name##_t>(wglGetProcAddress(#name))
 
 // ----------------------------------------------------------------------------
 // libraries
@@ -340,10 +356,6 @@ wxGLAttributes& wxGLAttributes::RGBA()
 {
     AddAttribute(WGL_PIXEL_TYPE_ARB);
     AddAttribute(WGL_TYPE_RGBA_ARB);
-    AddAttribute(WGL_COLOR_BITS_ARB);
-    AddAttribute(24);
-    AddAttribute(WGL_ALPHA_BITS_ARB);
-    AddAttribute(8);
     return *this;
 }
 
@@ -543,6 +555,12 @@ wxGLAttributes& wxGLAttributes::Defaults()
     return *this;
 }
 
+void wxGLAttributes::AddDefaultsForWXBefore31()
+{
+    // ParseAttribList() will add EndList(), don't do it now
+    RGBA().DoubleBuffer().Depth(16);
+}
+
 // ----------------------------------------------------------------------------
 // wxGLContext
 // ----------------------------------------------------------------------------
@@ -578,9 +596,11 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
     wxCHECK_RET( tempContext, "wglCreateContext failed!" );
 
     wglMakeCurrent(win->GetHDC(), tempContext);
-    PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB
-            = (PFNWGLCREATECONTEXTATTRIBSARBPROC)
-            wglGetProcAddress("wglCreateContextAttribsARB");
+
+    typedef HGLRC(WINAPI * wglCreateContextAttribsARB_t)
+        (HDC hDC, HGLRC hShareContext, const int *attribList);
+
+    wxDEFINE_WGL_FUNC(wglCreateContextAttribsARB);
     wglMakeCurrent(win->GetHDC(), NULL);
     wglDeleteContext(tempContext);
 
@@ -597,7 +617,11 @@ wxGLContext::wxGLContext(wxGLCanvas *win,
                                                 other ? other->m_glContext : 0,
                                                 contextAttribs);
     }
-    else
+
+
+    // Some old hardware may accept the use of this ARB, but may fail.
+    // In case of NULL attributes we'll try creating the context old-way.
+    if ( !m_glContext && (!contextAttribs || !needsARB) )
     {
         // Create legacy context
         m_glContext = wglCreateContext(win->GetHDC());
@@ -735,7 +759,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
                         const int *attribList,
                         const wxPalette& palette)
 {
-    // Separate 'pixel format' attributes.
+    // Separate 'pixel format' attributes and add platform-defaults.
     // Also store context attributes for wxGLContext ctor
     wxGLAttributes dispAttrs;
     if ( ! ParseAttribList(attribList, dispAttrs, &m_GLCTXAttrs) )
@@ -753,8 +777,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
                         const wxString& name,
                         const wxPalette& palette)
 {
-    // Create the window first: we will either use it as is or use it to query
-    // for multisampling support and recreate it later with another pixel format
     if ( !CreateWindow(parent, id, pos, size, style, name) )
         return false;
 
@@ -805,11 +827,6 @@ bool wxGLCanvas::SwapBuffers()
     return true;
 }
 
-
-// this macro defines a variable of type "name_t" called "name" and initializes
-// it with the pointer to WGL function "name" (which may be NULL)
-#define wxDEFINE_WGL_FUNC(name) \
-    name##_t name = (name##_t)wglGetProcAddress(#name)
 
 /* static */
 bool wxGLCanvasBase::IsExtensionSupported(const char *extension)
@@ -876,18 +893,29 @@ static void SetPFDForAttributes(PIXELFORMATDESCRIPTOR& pfd, const int* attrsList
     // Some defaults
     pfd.nSize =  sizeof(PIXELFORMATDESCRIPTOR);
     pfd.nVersion = 1;
-    pfd.iPixelType = PFD_TYPE_RGBA;
+    pfd.iPixelType = PFD_TYPE_COLORINDEX; // If no RGBA is specified
     pfd.iLayerType = PFD_MAIN_PLANE; // For very early MSW OpenGL
+    // Initialize rest of fields
+    pfd.dwFlags = 0;
+    pfd.cColorBits = 0;
+    pfd.cRedBits = pfd.cRedShift = pfd.cGreenBits = pfd.cGreenShift = pfd.cBlueBits = pfd.cBlueShift = 0;
+    pfd.cAlphaBits = pfd.cAlphaShift = 0;
+    pfd.cAccumBits = 0;
+    pfd.cAccumRedBits = pfd.cAccumGreenBits = pfd.cAccumBlueBits = pfd.cAccumAlphaBits = 0;
+    pfd.cDepthBits = pfd.cStencilBits = pfd.cAuxBuffers = 0;
+    pfd.bReserved = 0;
+    pfd.dwLayerMask = pfd.dwVisibleMask = pfd.dwDamageMask = 0;
 
     // We can meet some WGL_XX values not managed by wx. But the user
     // may require them. Allow here those that are also used for pfd.
+    // Notice that the user can't require PFD values, only WGL ones.
     // Color shift and transparency are not handled.
     for ( int arg = 0; attrsListWGL[arg]; )
     {
         switch ( attrsListWGL[arg++] )
         {
             case WGL_DRAW_TO_WINDOW_ARB:
-                if ( attrsListWGL[arg++] )
+                if ( attrsListWGL[arg++] ) //arg++ is for skipping 'true' attribute
                     pfd.dwFlags |= PFD_DRAW_TO_WINDOW;
                 break;
 
@@ -924,12 +952,12 @@ static void SetPFDForAttributes(PIXELFORMATDESCRIPTOR& pfd, const int* attrsList
                 break;
 
             case WGL_NUMBER_OVERLAYS_ARB:
-                pfd.bReserved &= 240;
+                // Bits 0-3
                 pfd.bReserved |= attrsListWGL[arg++] & 15;
                 break;
 
             case WGL_NUMBER_UNDERLAYS_ARB:
-                pfd.bReserved &= 15;
+                // Bits 4-7
                 pfd.bReserved |= attrsListWGL[arg++] & 240;
                 break;
 
@@ -1168,7 +1196,7 @@ bool wxGLCanvasBase::IsDisplaySupported(const int *attribList)
 {
     // We need a device context to test the pixel format, so get one
     // for the root window.
-    // Not true anymore. Keep it just in case some body uses this undocumented function
+    // Not true anymore. Keep it just in case somebody uses this undocumented function
     return wxGLCanvas::ChooseMatchingPixelFormat(ScreenHDC(), attribList) > 0;
 }
 

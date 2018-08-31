@@ -52,6 +52,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+namespace
+{
+
 #define RGB_RED       0
 #define RGB_GREEN     1
 #define RGB_BLUE      2
@@ -675,7 +678,7 @@ select_colors (j_decompress_ptr cinfo, int desired_colors)
  * it needs a work array to hold the best-distance-so-far for each histogram
  * cell (because the inner loop has to be over cells, not colormap entries).
  * The work array elements have to be INT32s, so the work array would need
- * 256Kb at our recommended precision.  This is not feasible in DOS machines.
+ * 256Kb at our recommended precision.
  *
  * To get around these problems, we apply Thomas' method to compute the
  * nearest colors for only the cells within a small subbox of the histogram.
@@ -694,9 +697,8 @@ select_colors (j_decompress_ptr cinfo, int desired_colors)
  *
  * Thomas' article also describes a refined method which is asymptotically
  * faster than the brute-force method, but it is also far more complex and
- * cannot efficiently be applied to small subboxes.  It is therefore not
- * useful for programs intended to be portable to DOS machines.  On machines
- * with plenty of memory, filling the whole histogram in one shot with Thomas'
+ * cannot efficiently be applied to small subboxes. On machines with
+ * plenty of memory, filling the whole histogram in one shot with Thomas'
  * refined method might be faster than the present code --- but then again,
  * it might not be any faster, and it's certainly more complicated.
  */
@@ -993,6 +995,7 @@ fill_inverse_cmap (j_decompress_ptr cinfo, int c0, int c1, int c2)
  * Map some rows of pixels to the output colormapped representation.
  */
 
+#if 0
 void
 pass2_no_dither (j_decompress_ptr cinfo,
          JSAMPARRAY input_buf, JSAMPARRAY output_buf, int num_rows)
@@ -1025,16 +1028,6 @@ pass2_no_dither (j_decompress_ptr cinfo,
     }
   }
 }
-
-#ifdef __VISUALC__
-/*
-  for (yet) unknown reasons, the following code produces
-  bad results or even crashes if the code optimization is
-  enabled in VC++
-
-  disable optimization for now until the reason is discovered
-*/
-  #pragma optimize ("", off)
 #endif
 
 void
@@ -1137,7 +1130,18 @@ pass2_fs_dither (j_decompress_ptr cinfo,
 
     bnexterr = cur0;    /* Process component 0 */
     delta = cur0 * 2;
+/*
+    Calculating cur0, cur1, cur2 gives bad results if code
+    optimization is enabled in VC++. This is apparently caused
+    by some bug in the compiler.
+    Use refactored code until it is fixed.
+*/
+#ifdef __VISUALC__
+    /* Use refactored code to prevent invalid optimization. */
+    cur0 *= 3;          /* form error * 3 */
+#else
     cur0 += delta;      /* form error * 3 */
+#endif
     errorptr[0] = (FSERROR) (bpreverr0 + cur0);
     cur0 += delta;      /* form error * 5 */
     bpreverr0 = belowerr0 + cur0;
@@ -1145,7 +1149,12 @@ pass2_fs_dither (j_decompress_ptr cinfo,
     cur0 += delta;      /* form error * 7 */
     bnexterr = cur1;    /* Process component 1 */
     delta = cur1 * 2;
+#ifdef __VISUALC__
+    /* Use refactored code to prevent invalid optimization. */
+    cur1 *= 3;          /* form error * 3 */
+#else
     cur1 += delta;      /* form error * 3 */
+#endif
     errorptr[1] = (FSERROR) (bpreverr1 + cur1);
     cur1 += delta;      /* form error * 5 */
     bpreverr1 = belowerr1 + cur1;
@@ -1153,7 +1162,12 @@ pass2_fs_dither (j_decompress_ptr cinfo,
     cur1 += delta;      /* form error * 7 */
     bnexterr = cur2;    /* Process component 2 */
     delta = cur2 * 2;
+#ifdef __VISUALC__
+    /* Use refactored code to prevent invalid optimization. */
+    cur2 *= 3;          /* form error * 3 */
+#else
     cur2 += delta;      /* form error * 3 */
+#endif
     errorptr[2] = (FSERROR) (bpreverr2 + cur2);
     cur2 += delta;      /* form error * 5 */
     bpreverr2 = belowerr2 + cur2;
@@ -1177,9 +1191,6 @@ pass2_fs_dither (j_decompress_ptr cinfo,
     errorptr[2] = (FSERROR) bpreverr2;
   }
 }
-#ifdef __VISUALC__
-  #pragma optimize ("", on)
-#endif
 
 /*
  * Initialize the error-limiting transfer function (lookup table).
@@ -1402,7 +1413,7 @@ prepare_range_limit_table (j_decompress_ptr cinfo)
       cinfo->sample_range_limit, CENTERJSAMPLE * sizeof(JSAMPLE));
 }
 
-
+} // anonymous namespace
 
 
 /*
@@ -1417,6 +1428,7 @@ void wxQuantize::DoQuantize(unsigned w, unsigned h, unsigned char **in_rows, uns
     j_decompress dec;
     my_cquantize_ptr cquantize;
 
+    dec.colormap = NULL;
     dec.output_width = w;
     dec.desired_number_of_colors = desiredNoColours;
     prepare_range_limit_table(&dec);

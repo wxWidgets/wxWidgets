@@ -13,8 +13,13 @@
 #ifndef _WX_WXCHARTYPE_H_
 #define _WX_WXCHARTYPE_H_
 
-/* defs.h indirectly includes this file, so don't include it here */
-#include "wx/platform.h"
+/*
+    wx/defs.h indirectly includes this file, so we can't include it here,
+    include just its subset which defines SIZEOF_WCHAR_T that is used here
+    (under Unix it's in configure-generated setup.h, so including wx/platform.h
+    would have been enough, but this is not the case under other platforms).
+ */
+#include "wx/types.h"
 
 /* check whether we have wchar_t and which size it is if we do */
 #if !defined(wxUSE_WCHAR_T)
@@ -108,7 +113,7 @@
 #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x520)
     #define wxHAVE_TCHAR_SUPPORT
     #include <ctype.h>
-#elif defined(__MINGW32__) && wxCHECK_W32API_VERSION( 1, 0 )
+#elif defined(__MINGW32__)
     #define wxHAVE_TCHAR_SUPPORT
     #include <stddef.h>
     #include <string.h>
@@ -173,6 +178,16 @@
     #define wxUSE_UNICODE_WCHAR 0
     #define wxUSE_UNICODE_UTF8  0
     #define wxUSE_UTF8_LOCALE_ONLY 0
+#endif
+
+#ifndef SIZEOF_WCHAR_T
+    #error "SIZEOF_WCHAR_T must be defined before including this file in wx/defs.h"
+#endif
+
+#if wxUSE_UNICODE_WCHAR && SIZEOF_WCHAR_T == 2
+    #define wxUSE_UNICODE_UTF16 1
+#else
+    #define wxUSE_UNICODE_UTF16 0
 #endif
 
 /* define char type used by wxString internal representation: */

@@ -14,7 +14,7 @@
 #include "wx/bmpbuttn.h"
 #include "wx/toolbar.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 // ----------------------------------------------------------------------------
 // wxAddRemoveImpl
@@ -32,7 +32,7 @@ public:
         m_tbar->AddTool(wxID_ADD, wxString(), GetNamedBitmap("list-add"));
         m_tbar->AddTool(wxID_REMOVE, wxString(), GetNamedBitmap("list-remove"));
 
-#ifdef __WXGTK3__
+#if defined(__WXGTK3__) && !defined(__WXUNIVERSAL__)
         // Tweak the toolbar appearance to correspond to how the toolbars used
         // in other GNOME applications for similar purposes look.
         GtkToolbar* const toolbar = m_tbar->GTKGetToolbar();

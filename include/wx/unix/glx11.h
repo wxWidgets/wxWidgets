@@ -143,8 +143,10 @@ public:
         return wxGLCanvasX11::InitDefaultVisualInfo(attribList);
     }
 
-    // and implement this wxGTK::wxApp method too
-    virtual void *GetXVisualInfo() wxOVERRIDE
+    // This method is not currently used by the library itself, but remains for
+    // backwards compatibility and also because wxGTK has it we could start
+    // using it for the same purpose in wxX11 too some day.
+    virtual void* GetXVisualInfo() wxOVERRIDE
     {
         return wxGLCanvasX11::GetDefaultXVisualInfo();
     }

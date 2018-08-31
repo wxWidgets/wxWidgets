@@ -15,6 +15,9 @@
  **
  ** Changes by John Donoghue 2014/08/01
  **   - fix allowed transpose ' after {} operator
+ **
+ ** Changes by John Donoghue 2016/11/15
+ **   - update matlab code folding
  **/
 // Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
@@ -49,13 +52,27 @@ static bool IsOctaveCommentChar(int c) {
 	return (c == '%' || c == '#') ;
 }
 
-static bool IsMatlabComment(Accessor &styler, Sci_Position pos, Sci_Position len) {
-	return len > 0 && IsMatlabCommentChar(styler[pos]) ;
+static inline int LowerCase(int c) {
+	if (c >= 'A' && c <= 'Z')
+		return 'a' + c - 'A';
+	return c;
 }
 
-static bool IsOctaveComment(Accessor &styler, Sci_Position pos, Sci_Position len) {
-	return len > 0 && IsOctaveCommentChar(styler[pos]) ;
+static int CheckKeywordFoldPoint(char *str) {
+	if (strcmp ("if", str) == 0 ||
+		strcmp ("for", str) == 0 ||
+		strcmp ("switch", str) == 0 ||
+		strcmp ("try", str) == 0 ||
+		strcmp ("do", str) == 0 ||
+		strcmp ("parfor", str) == 0 ||
+		strcmp ("function", str) == 0)
+		return 1;
+	if (strncmp("end", str, 3) == 0 ||
+		strcmp("until", str) == 0)
+		return -1;
+	return 0;
 }
+
 
 static void ColouriseMatlabOctaveDoc(
             Sci_PositionU startPos, Sci_Position length, int initStyle,
@@ -245,58 +262,82 @@ static void ColouriseOctaveDoc(Sci_PositionU startPos, Sci_Position length, int 
 	ColouriseMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsOctaveCommentChar, false);
 }
 
-static void FoldMatlabOctaveDoc(Sci_PositionU startPos, Sci_Position length, int,
+static void FoldMatlabOctaveDoc(Sci_PositionU startPos, Sci_Position length, int initStyle,
                                 WordList *[], Accessor &styler,
-                                bool (*IsComment)(Accessor&, Sci_Position, Sci_Position)) {
+                                bool (*IsComment)(int ch)) {
 
-	Sci_Position endPos = startPos + length;
-
-	// Backtrack to previous line in case need to fix its fold status
+	Sci_PositionU endPos = startPos + length;
+	int visibleChars = 0;
 	Sci_Position lineCurrent = styler.GetLine(startPos);
-	if (startPos > 0) {
-		if (lineCurrent > 0) {
-			lineCurrent--;
-			startPos = styler.LineStart(lineCurrent);
-		}
-	}
-	int spaceFlags = 0;
-	int indentCurrent = styler.IndentAmount(lineCurrent, &spaceFlags, IsComment);
+	int levelCurrent = SC_FOLDLEVELBASE;
+	if (lineCurrent > 0)
+		levelCurrent = styler.LevelAt(lineCurrent-1) >> 16;
+	int levelNext = levelCurrent;
 	char chNext = styler[startPos];
-	for (Sci_Position i = startPos; i < endPos; i++) {
+	int styleNext = styler.StyleAt(startPos);
+	int style = initStyle;
+	char word[100];
+	int wordlen = 0;
+	for (Sci_PositionU i = startPos; i < endPos; i++) {
 		char ch = chNext;
 		chNext = styler.SafeGetCharAt(i + 1);
+		style = styleNext;
+		styleNext = styler.StyleAt(i + 1);
+		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
 
-		if ((ch == '\r' && chNext != '\n') || (ch == '\n') || (i == endPos)) {
-			int lev = indentCurrent;
-			int indentNext = styler.IndentAmount(lineCurrent + 1, &spaceFlags, IsComment);
-			if (!(indentCurrent & SC_FOLDLEVELWHITEFLAG)) {
-				// Only non whitespace lines can be headers
-				if ((indentCurrent & SC_FOLDLEVELNUMBERMASK) < (indentNext & SC_FOLDLEVELNUMBERMASK)) {
-					lev |= SC_FOLDLEVELHEADERFLAG;
-				} else if (indentNext & SC_FOLDLEVELWHITEFLAG) {
-					// Line after is blank so check the next - maybe should continue further?
-					int spaceFlags2 = 0;
-					int indentNext2 = styler.IndentAmount(lineCurrent + 2, &spaceFlags2, IsComment);
-					if ((indentCurrent & SC_FOLDLEVELNUMBERMASK) < (indentNext2 & SC_FOLDLEVELNUMBERMASK)) {
-						lev |= SC_FOLDLEVELHEADERFLAG;
-					}
-				}
+		// a line that starts with a comment
+		if (style == SCE_MATLAB_COMMENT && IsComment(ch) && visibleChars == 0) {
+			// start/end of block comment
+			if (chNext == '{')
+				levelNext ++;
+			if (chNext == '}')
+				levelNext --;
+		}
+		// keyword
+		if(style == SCE_MATLAB_KEYWORD) {
+			word[wordlen++] = static_cast<char>(LowerCase(ch));
+			if (wordlen == 100) {  // prevent overflow
+				word[0] = '\0';
+				wordlen = 1;
 			}
-			indentCurrent = indentNext;
-			styler.SetLevel(lineCurrent, lev);
+			if (styleNext !=  SCE_MATLAB_KEYWORD) {
+				word[wordlen] = '\0';
+				wordlen = 0;
+
+				levelNext += CheckKeywordFoldPoint(word);
+			}
+		}
+		if (!IsASpace(ch))
+			visibleChars++;
+		if (atEOL || (i == endPos-1)) {
+			int levelUse = levelCurrent;
+			int lev = levelUse | levelNext << 16;
+			if (visibleChars == 0)
+				lev |= SC_FOLDLEVELWHITEFLAG;
+			if (levelUse < levelNext)
+				lev |= SC_FOLDLEVELHEADERFLAG;
+			if (lev != styler.LevelAt(lineCurrent)) {
+				styler.SetLevel(lineCurrent, lev);
+			}
 			lineCurrent++;
+			levelCurrent = levelNext;
+			if (atEOL && (i == static_cast<Sci_PositionU>(styler.Length() - 1))) {
+				// There is an empty line at end of file so give it same level and empty
+				styler.SetLevel(lineCurrent, (levelCurrent | levelCurrent << 16) | SC_FOLDLEVELWHITEFLAG);
+			}
+			visibleChars = 0;
 		}
 	}
 }
 
 static void FoldMatlabDoc(Sci_PositionU startPos, Sci_Position length, int initStyle,
                           WordList *keywordlists[], Accessor &styler) {
-	FoldMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsMatlabComment);
+	FoldMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsMatlabCommentChar);
 }
 
 static void FoldOctaveDoc(Sci_PositionU startPos, Sci_Position length, int initStyle,
                           WordList *keywordlists[], Accessor &styler) {
-	FoldMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsOctaveComment);
+	FoldMatlabOctaveDoc(startPos, length, initStyle, keywordlists, styler, IsOctaveCommentChar);
 }
 
 static const char * const matlabWordListDesc[] = {

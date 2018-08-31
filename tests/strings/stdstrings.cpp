@@ -593,7 +593,7 @@ void StdStringTestCase::StdConversion()
     // notice that implicit wxString -> std::string conversion is only
     // available in wxUSE_STL case, because it conflicts with conversion to
     // const char*/wchar_t*
-#if wxUSE_STL
+#if wxUSE_STL && wxUSE_UNSAFE_WXSTRING_CONV
     std::string s5 = s4;
 #else
     std::string s5 = s4.ToStdString();
@@ -607,8 +607,10 @@ void StdStringTestCase::StdConversion()
 #endif
     CPPUNIT_ASSERT_EQUAL( "hello", s6 );
 
+#if wxUSE_UNSAFE_WXSTRING_CONV
     std::string s7(s4);
     CPPUNIT_ASSERT( s7 == "hello" );
+#endif
 
     wxStdWideString s8(s4);
     CPPUNIT_ASSERT( s8 == "hello" );

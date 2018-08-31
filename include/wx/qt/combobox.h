@@ -9,7 +9,7 @@
 #define _WX_QT_COMBOBOX_H_
 
 #include "wx/choice.h"
-#include <QtWidgets/QComboBox>
+class QComboBox;
 
 class WXDLLIMPEXP_CORE wxComboBox : public wxChoice, public wxTextEntry
 {
@@ -52,18 +52,18 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);
 
-    virtual void SetSelection(int n) { wxChoice::SetSelection(n); }
-    virtual void SetSelection(long from, long to);
+    virtual void SetSelection(int n) wxOVERRIDE { wxChoice::SetSelection(n); }
+    virtual void SetSelection(long from, long to) wxOVERRIDE;
 
-    virtual int GetSelection() const { return wxChoice::GetSelection(); }
-    virtual void GetSelection(long *from, long *to) const;
+    virtual int GetSelection() const wxOVERRIDE { return wxChoice::GetSelection(); }
+    virtual void GetSelection(long *from, long *to) const wxOVERRIDE;
 
-    virtual wxString GetStringSelection() const
+    virtual wxString GetStringSelection() const wxOVERRIDE
     {
         return wxItemContainer::GetStringSelection();
     }
 
-    virtual void Clear()
+    virtual void Clear() wxOVERRIDE
     {
         wxTextEntry::Clear();
         wxItemContainer::Clear();
@@ -79,7 +79,7 @@ public:
 protected:
 
     // From wxTextEntry:
-    virtual wxString DoGetValue() const;
+    virtual wxString DoGetValue() const wxOVERRIDE;
 
 private:
 

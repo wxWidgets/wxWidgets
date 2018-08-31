@@ -99,10 +99,10 @@ public:
     For example:
     @code
         wxRichTextRange range;
-        if (m_richTextCtrl-HasSelection())
-            range = m_richTextCtrl-GetSelectionRange();
+        if (m_richTextCtrl->HasSelection())
+            range = m_richTextCtrl->GetSelectionRange();
         else
-            range = wxRichTextRange(0, m_richTextCtrl-GetLastPosition()+1);
+            range = wxRichTextRange(0, m_richTextCtrl->GetLastPosition()+1);
 
         int pages = wxRICHTEXT_FORMAT_FONT|wxRICHTEXT_FORMAT_INDENTS_SPACING| \
                     wxRICHTEXT_FORMAT_TABS|wxRICHTEXT_FORMAT_BULLETS;

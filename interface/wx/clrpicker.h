@@ -8,6 +8,7 @@
 #define wxCLRP_USE_TEXTCTRL       (wxPB_USE_TEXTCTRL)
 #define wxCLRP_DEFAULT_STYLE      0
 #define wxCLRP_SHOW_LABEL         0x0008
+#define wxCLRP_SHOW_ALPHA         0x0010
 
 wxEventType wxEVT_COLOURPICKER_CHANGED;
 
@@ -33,6 +34,9 @@ wxEventType wxEVT_COLOURPICKER_CHANGED;
     @style{wxCLRP_SHOW_LABEL}
            Shows the colour in HTML form (AABBCC) as colour button label
            (instead of no label at all).
+    @style{wxCLRP_SHOW_ALPHA}
+           Allows to select opacity in the colour-chooser (effective under
+           wxGTK and wxOSX).
     @endStyleTable
 
     @beginEventEmissionTable{wxColourPickerEvent}

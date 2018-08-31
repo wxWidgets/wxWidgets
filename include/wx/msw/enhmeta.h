@@ -14,7 +14,7 @@
 #include "wx/dc.h"
 #include "wx/gdiobj.h"
 
-#if wxUSE_DRAG_AND_DROP
+#if wxUSE_DATAOBJ
     #include "wx/dataobj.h"
 #endif
 
@@ -109,7 +109,7 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxEnhMetaFileDC);
 };
 
-#if wxUSE_DRAG_AND_DROP
+#if wxUSE_DATAOBJ
 
 // ----------------------------------------------------------------------------
 // wxEnhMetaFileDataObject is a specialization of wxDataObject for enh metafile
@@ -190,6 +190,6 @@ protected:
     wxDECLARE_NO_COPY_CLASS(wxEnhMetaFileSimpleDataObject);
 };
 
-#endif // wxUSE_DRAG_AND_DROP
+#endif // wxUSE_DATAOBJ
 
 #endif // _WX_MSW_ENHMETA_H_

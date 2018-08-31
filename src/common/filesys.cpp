@@ -124,7 +124,7 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
         wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
         if ( !ft || !ft -> GetMimeType(&mime) )
         {
-            mime = wxEmptyString;
+            mime.clear();
         }
 
         delete ft;
@@ -153,7 +153,7 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 /* static */
 wxString wxFileSystemHandler::GetProtocol(const wxString& location)
 {
-    wxString s = wxEmptyString;
+    wxString s;
     int i, l = location.length();
     bool fnd = false;
 
@@ -242,7 +242,7 @@ wxString wxFileSystemHandler::GetAnchor(const wxString& location)
         if (c == wxT('#'))
             return location.Right(l-i-1);
         else if ((c == wxT('/')) || (c == wxT('\\')) || (c == wxT(':')))
-            return wxEmptyString;
+            break;
     }
     return wxEmptyString;
 }
@@ -427,7 +427,7 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
                 }
             }
             if (i == (int) m_Path.length())
-                m_Path = wxEmptyString;
+                m_Path.clear();
         }
         else
         {
@@ -480,7 +480,7 @@ wxFSFile* wxFileSystem::OpenFile(const wxString& location, int flags)
         }
         if (meta != 0) break;
     }
-    m_LastName = wxEmptyString;
+    m_LastName.clear();
 
     // try relative paths first :
     if (meta != wxT(':'))

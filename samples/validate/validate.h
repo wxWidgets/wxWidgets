@@ -76,7 +76,9 @@ public:
 
     // variables handled by wxNumericTextValidator
     int m_intValue;
+    unsigned short m_smallIntValue;
     double m_doubleValue;
+    float m_percentValue;
 
     bool m_checkbox_state;
     int m_radiobox_choice;

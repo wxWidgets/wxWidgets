@@ -217,7 +217,7 @@ LRESULT CALLBACK wxSocket_Internal_WinProc(HWND hWnd,
                 // only then). Ignore such dummy notifications.
                 {
                     fd_set fds;
-                    timeval tv = { 0, 0 };
+                    wxTimeVal_t tv = { 0, 0 };
 
                     wxFD_ZERO(&fds);
                     wxFD_SET(socket->m_fd, &fds);
@@ -267,15 +267,12 @@ void wxSocketMSWManager::Install_Callback(wxSocketImpl *socket_,
 {
     wxSocketImplMSW * const socket = static_cast<wxSocketImplMSW *>(socket_);
 
-  if (socket->m_fd != INVALID_SOCKET)
-  {
     /* We could probably just subscribe to all events regardless
      * of the socket type, but MS recommends to do it this way.
      */
     long lEvent = socket->m_server?
                   FD_ACCEPT : (FD_READ | FD_WRITE | FD_CONNECT | FD_CLOSE);
     gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, lEvent);
-  }
 }
 
 /*
@@ -286,10 +283,7 @@ void wxSocketMSWManager::Uninstall_Callback(wxSocketImpl *socket_,
 {
     wxSocketImplMSW * const socket = static_cast<wxSocketImplMSW *>(socket_);
 
-  if (socket->m_fd != INVALID_SOCKET)
-  {
     gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, 0);
-  }
 }
 
 // set the wxBase variable to point to our wxSocketManager implementation

@@ -59,8 +59,7 @@ class wxMSWListHeaderCustomDraw;
     which item. Each image in an image list can contain a mask, and can be made out
     of either a bitmap, two bitmaps or an icon. See ImagList.h for more details.
 
-    Notifications are passed via the wxWidgets 2.0 event system, or using virtual
-    functions in wxWidgets 1.66.
+    Notifications are passed via the event system.
 
     See the sample wxListCtrl app for API usage.
 
@@ -68,9 +67,6 @@ class wxMSWListHeaderCustomDraw;
      - addition of further convenience functions
        to avoid use of wxListItem in some functions
      - state/overlay images: probably not needed.
-     - in Win95, you can be called back to supply other information
-       besides text, such as state information. This saves no memory
-       and is probably superfluous to requirements.
      - testing of whole API, extending current sample.
 
 
@@ -162,7 +158,7 @@ public:
     bool SetItem(wxListItem& info);
 
     // Sets a string field at a particular column
-    long SetItem(long index, int col, const wxString& label, int imageId = -1);
+    bool SetItem(long index, int col, const wxString& label, int imageId = -1);
 
     // Gets the item state
     int  GetItemState(long item, long stateMask) const;
@@ -255,12 +251,6 @@ public:
     wxImageList *GetImageList(int which) const wxOVERRIDE;
 
     // Sets the image list
-    // N.B. There's a quirk in the Win95 list view implementation.
-    // If in wxLC_LIST mode, it'll *still* display images by the labels if
-    // there's a small-icon image list set for the control - even though you
-    // haven't specified wxLIST_MASK_IMAGE when inserting.
-    // So you have to set a NULL small-icon image list to be sure that
-    // the wxLC_LIST mode works without icons. Of course, you may want icons...
     void SetImageList(wxImageList *imageList, int which) wxOVERRIDE;
     void AssignImageList(wxImageList *imageList, int which) wxOVERRIDE;
 
@@ -356,8 +346,11 @@ public:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
     virtual bool MSWShouldPreProcessMessage(WXMSG* msg) wxOVERRIDE;
 
+#if WXWIN_COMPATIBILITY_3_0
     // bring the control in sync with current m_windowStyle value
+    wxDEPRECATED_MSG("useless and will be removed in the future, use SetWindowStyleFlag() instead")
     void UpdateStyle();
+#endif // WXWIN_COMPATIBILITY_3_0
 
     // Event handlers
     ////////////////////////////////////////////////////////////////////////////
@@ -386,6 +379,8 @@ public:
 protected:
     // common part of all ctors
     void Init();
+
+    virtual bool MSWShouldSetDefaultFont() const wxOVERRIDE { return false; }
 
     // Implement constrained best size calculation.
     virtual int DoGetBestClientHeight(int width) const wxOVERRIDE

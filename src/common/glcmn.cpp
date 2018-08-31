@@ -187,8 +187,8 @@ bool wxGLCanvasBase::ParseAttribList(const int *attribList,
 
     if ( !attribList )
     {
-        // Set default attributes
-        dispAttrs.Defaults();
+        // Default visual attributes used in wx versions before wx3.1
+        dispAttrs.AddDefaultsForWXBefore31();
         dispAttrs.EndList();
         if ( ctxAttrs )
             ctxAttrs->EndList();
@@ -196,8 +196,8 @@ bool wxGLCanvasBase::ParseAttribList(const int *attribList,
     }
 
     int src = 0;
-    int minColo[4] = {0, 0, 0, 0};
-    int minAcum[4] = {0, 0, 0, 0};
+    int minColo[4] = {-1, -1, -1, -1};
+    int minAcum[4] = {-1, -1, -1, -1};
     int num = 0;
     while ( attribList[src] )
     {
@@ -363,9 +363,9 @@ bool wxGLCanvasBase::ParseAttribList(const int *attribList,
     }
 
     // Set color and accumulation
-    if ( minColo[0] || minColo[1] || minColo[2] || minColo[3] )
+    if ( minColo[0] >= 0 || minColo[1] >= 0 || minColo[2] >= 0 || minColo[3] >= 0 )
         dispAttrs.MinRGBA(minColo[0], minColo[1], minColo[2], minColo[3]);
-    if ( minAcum[0] || minAcum[1] || minAcum[2] || minAcum[3] )
+    if ( minAcum[0] >= 0 || minAcum[1] >= 0 || minAcum[2] >= 0 || minAcum[3] >= 0 )
         dispAttrs.MinAcumRGBA(minAcum[0], minAcum[1], minAcum[2], minAcum[3]);
 
     // The attributes lists must be zero-terminated

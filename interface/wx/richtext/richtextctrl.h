@@ -1453,7 +1453,7 @@ public:
     virtual bool WordLeft(int noPages = 1, int flags = 0);
 
     /**
-        Move a nuber of words to the right.
+        Move a number of words to the right.
     */
     virtual bool WordRight(int noPages = 1, int flags = 0);
 

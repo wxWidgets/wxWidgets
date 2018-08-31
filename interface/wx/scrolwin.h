@@ -332,6 +332,8 @@ public:
             - wxSHOW_SB_DEFAULT: To restore the default behaviour described
                 above.
 
+        Note that the window must be created before calling this method.
+
         @param horz
             The desired visibility for the horizontal scrollbar.
         @param vert

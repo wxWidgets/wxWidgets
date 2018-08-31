@@ -6,6 +6,22 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
+enum wxRibbonBarOption
+{
+    wxRIBBON_BAR_SHOW_PAGE_LABELS,
+    wxRIBBON_BAR_SHOW_PAGE_ICONS,
+    wxRIBBON_BAR_FLOW_HORIZONTAL,
+    wxRIBBON_BAR_FLOW_VERTICAL,
+    wxRIBBON_BAR_SHOW_PANEL_EXT_BUTTONS,
+    wxRIBBON_BAR_SHOW_PANEL_MINIMISE_BUTTONS,
+    wxRIBBON_BAR_ALWAYS_SHOW_TABS,
+    wxRIBBON_BAR_SHOW_TOGGLE_BUTTON,
+    wxRIBBON_BAR_SHOW_HELP_BUTTON,
+    wxRIBBON_BAR_DEFAULT_STYLE,
+    wxRIBBON_BAR_FOLDBAR_STYLE
+};
+
+
 /**
     The possible display modes of the panel area of a wxRibbonBar widget.
 
@@ -67,6 +83,35 @@ public:
     */
     void SetPage(wxRibbonPage* page);
 };
+
+
+wxEventType wxEVT_RIBBONBAR_PAGE_CHANGED;
+wxEventType wxEVT_RIBBONBAR_PAGE_CHANGING;
+wxEventType wxEVT_RIBBONBAR_TAB_MIDDLE_DOWN;
+wxEventType wxEVT_RIBBONBAR_TAB_MIDDLE_UP;
+wxEventType wxEVT_RIBBONBAR_TAB_RIGHT_DOWN;
+wxEventType wxEVT_RIBBONBAR_TAB_RIGHT_UP;
+wxEventType wxEVT_RIBBONBAR_TAB_LEFT_DCLICK;
+wxEventType wxEVT_RIBBONBAR_TOGGLED;
+wxEventType wxEVT_RIBBONBAR_HELP_CLICK;
+
+
+class wxRibbonPageTabInfo
+{
+public:
+    wxRect rect;
+    wxRibbonPage *page;
+    int ideal_width;
+    int small_begin_need_separator_width;
+    int small_must_have_separator_width;
+    int minimum_width;
+    bool active;
+    bool hovered;
+    bool highlight;
+    bool shown;
+};
+
+
 
 /**
     @class wxRibbonBar

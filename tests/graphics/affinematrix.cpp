@@ -121,7 +121,7 @@ public:
     {
     }
 
-    virtual void setUp()
+    virtual void setUp() wxOVERRIDE
     {
         m_bmpOrig = wxBitmap(m_imgOrig);
         m_bmpUsingMatrix.Create(m_bmpOrig.GetSize(), m_bmpOrig.GetDepth());
@@ -396,17 +396,19 @@ void TransformMatrixTestCaseDCBase::VMirrorAndTranslate()
     // is affected by the transformation. In this case mirrored bitmap
     // needs to be shifthed by dim pixels.
     int ty;
+#if wxUSE_GRAPHICS_CONTEXT
     if ( m_dc->GetGraphicsContext() )
         ty = m_bmpOrig.GetHeight();
     else
+#endif // wxUSE_GRAPHICS_CONTEXT
         ty = m_bmpOrig.GetHeight() - 1;
     matrix.Translate(0, -ty);
     m_dc->SetTransformMatrix(matrix);
     m_dc->DrawBitmap(m_bmpOrig, 0, 0);
     FlushDC();
 
-    CPPUNIT_ASSERT_EQUAL( m_bmpUsingMatrix.ConvertToImage(),
-                          m_imgOrig.Mirror(false) );
+    CHECK_THAT( m_bmpUsingMatrix.ConvertToImage(),
+                RGBSameAs(m_imgOrig.Mirror(false)) );
 }
 
 void TransformMatrixTestCaseDCBase::Rotate90Clockwise()
@@ -422,8 +424,8 @@ void TransformMatrixTestCaseDCBase::Rotate90Clockwise()
     m_dc->DrawBitmap(m_bmpOrig, 0, 0);
     FlushDC();
 
-    CPPUNIT_ASSERT_EQUAL( m_bmpUsingMatrix.ConvertToImage(),
-                          m_imgOrig.Rotate90(true) );
+    CHECK_THAT( m_bmpUsingMatrix.ConvertToImage(),
+                RGBSameAs(m_imgOrig.Rotate90(true)) );
 }
 
 #if wxUSE_GRAPHICS_CONTEXT
@@ -526,8 +528,8 @@ void TransformMatrixTestCaseDCBase::CompareToGraphicsContext()
     }
 
 
-    CPPUNIT_ASSERT_EQUAL( bmpUsingMatrixA1.ConvertToImage(),
-                          bmpUsingMatrixAG.ConvertToImage() );
+    CHECK_THAT( bmpUsingMatrixA1.ConvertToImage(),
+                RGBSameAs(bmpUsingMatrixAG.ConvertToImage()) );
 
     // Save the images to check that something _is_ inside the visible area.
     //bmpUsingMatrixA1.SaveFile("matrixA1.jpg", wxBITMAP_TYPE_JPEG);

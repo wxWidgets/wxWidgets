@@ -195,9 +195,32 @@ public:
     iterator insert(iterator it, const value_type& v = value_type());
 
     /**
+        Insert the given number of copies of @a v at the given position.
+
+        @return Iterator for the first inserted item.
+
+        @since 3.1.1
+     */
+    iterator insert(iterator it, size_type count, const value_type& v);
+
+    /**
         Assignment operator.
     */
     wxVector& operator=(const wxVector& vb);
+
+    /**
+        Equality operator.
+
+        @since 3.1.1
+    */
+    wxVector& operator==(const wxVector& vb) const;
+
+    /**
+        Inequality operator.
+
+        @since 3.1.1
+    */
+    wxVector& operator!=(const wxVector& vb) const;
 
     /**
         Returns item at position @a idx.
@@ -238,6 +261,18 @@ public:
     void resize(size_type n);
     void resize(size_type n, const value_type& v);
     //@}
+
+    /**
+        Free unused memory allocated by the vector.
+
+        Reduces the memory used by the vector to the bare minimum required to
+        hold its current number of elements, possibly 0.
+
+        After calling this method, capacity() returns the same as size().
+
+        @since 3.1.1
+     */
+    void shrink_to_fit();
 
     /**
         Returns the size of the vector.

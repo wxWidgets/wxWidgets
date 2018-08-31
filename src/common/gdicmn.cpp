@@ -782,6 +782,18 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
         family = wxFONTFAMILY_SWISS;
 #endif // !__WXOSX__
 
+    // In wxMSW, creating a font with wxFONTSTYLE_SLANT creates the same font
+    // as wxFONTSTYLE_ITALIC and its GetStyle() returns the latter, so we must
+    // account for it here. Notice that wxOSX also uses the same native font
+    // for these styles, but wxFont::GetStyle() in it still returns different
+    // values depending on how the font was created, so there is inconsistency
+    // between ports here which it would be nice to fix in one way or another
+    // (wxGTK supports both as separate styles, so it doesn't suffer from it).
+ #ifdef __WXMSW__
+    if ( style == wxFONTSTYLE_SLANT )
+        style = wxFONTSTYLE_ITALIC;
+ #endif // __WXMSW__
+
     wxFont *font;
     wxList::compatibility_iterator node;
     for (node = list.GetFirst(); node; node = node->GetNext())

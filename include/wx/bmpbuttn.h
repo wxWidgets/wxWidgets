@@ -59,7 +59,7 @@ public:
         // And we also use wxBU_EXACTFIT to avoid being resized up to the
         // standard button size as this doesn't make sense for bitmap buttons
         // which are not standard anyhow and should fit their bitmap size.
-        return wxButton::Create(parent, winid, "",
+        return wxButton::Create(parent, winid, wxString(),
                                 pos, size,
                                 style | wxBU_NOTEXT | wxBU_EXACTFIT,
                                 validator, name);

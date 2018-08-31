@@ -61,7 +61,7 @@ public:
         delete m_handler;
     }
 
-    bool Init()
+    bool Init() wxOVERRIDE
     {
         wxCHECK_MSG( !IsOk(), false, "Inotify already initialized" );
 
@@ -98,7 +98,7 @@ public:
         }
     }
 
-    virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryUnix> watch)
+    virtual bool DoAdd(wxSharedPtr<wxFSWatchEntryUnix> watch) wxOVERRIDE
     {
         wxCHECK_MSG( IsOk(), false,
                     "Inotify not initialized or invalid inotify descriptor" );
@@ -121,7 +121,7 @@ public:
         return true;
     }
 
-    virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryUnix> watch)
+    virtual bool DoRemove(wxSharedPtr<wxFSWatchEntryUnix> watch) wxOVERRIDE
     {
         wxCHECK_MSG( IsOk(), false,
                     "Inotify not initialized or invalid inotify descriptor" );
@@ -157,7 +157,7 @@ public:
         return true;
     }
 
-    virtual bool RemoveAll()
+    virtual bool RemoveAll() wxOVERRIDE
     {
         wxFSWatchEntries::iterator it = m_watches.begin();
         for ( ; it != m_watches.end(); ++it )
@@ -432,7 +432,7 @@ protected:
             if ( it2 == m_cookies.end() )
             {
                 int size = sizeof(inevt) + inevt.len;
-                inotify_event* e = (inotify_event*) operator new (size);
+                inotify_event* e = (inotify_event*)new char[size];
                 memcpy(e, &inevt, size);
 
                 wxInotifyCookies::value_type val(e->cookie, e);
@@ -481,7 +481,7 @@ protected:
                 }
 
                 m_cookies.erase(it2);
-                delete &oldinevt;
+                delete[] (char*)&oldinevt;
             }
         }
         // every other kind of event

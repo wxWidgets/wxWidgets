@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 13 June 2016                                                        *
+# Date : 22 May 2018                                                         *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -126,6 +126,10 @@ sound_sdl.obj : sound_sdl.cpp
 stdpaths.obj : stdpaths.cpp
 taskbarx11.obj : taskbarx11.cpp
 displayx11.obj : displayx11.cpp
+	pipe gsed -e "s/X11\/extensions/X11/" < $(MMS$TARGET_NAME).cpp\
+	> $(MMS$TARGET_NAME).cpp_
+	cxx $(CXXFLAGS)$(CXX_DEFINE) $(MMS$TARGET_NAME).cpp_
+	delete $(MMS$TARGET_NAME).cpp_;*
 timerunx.obj : timerunx.cpp
 evtloopunix.obj : evtloopunix.cpp
 	cxx $(CXXFLAGS)$(CXX_DEFINE)/nowarn evtloopunix.cpp

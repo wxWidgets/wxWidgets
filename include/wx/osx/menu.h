@@ -15,6 +15,8 @@ class WXDLLIMPEXP_FWD_CORE wxFrame;
 
 #include "wx/arrstr.h"
 
+class wxMenuRadioItemsData;
+
 // ----------------------------------------------------------------------------
 // Menu
 // ----------------------------------------------------------------------------
@@ -60,6 +62,12 @@ public:
     // we don't want native menu events being triggered
     void SetNoEventsMode( bool noEvents );
     bool GetNoEventsMode() const { return m_noEventsMode; }
+
+    // Returns the start and end position of the radio group to which the item
+    // at given position belongs. Return false if there is no radio group
+    // containing this position.
+    bool OSXGetRadioGroupRange(int pos, int *start, int *end) const;
+
 protected:
     // hide special menu items like exit, preferences etc
     // that are expected in the app menu
@@ -88,6 +96,8 @@ private:
 
     // don't trigger native events
     bool m_noEventsMode;
+
+    wxMenuRadioItemsData* m_radioData;
 
     wxMenuImpl* m_peer;
 

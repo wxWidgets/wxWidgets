@@ -58,7 +58,7 @@ CGRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 }
 
 
-@interface wxUIView(PossibleMethods)
+@interface UIView(PossibleMethods)
 - (void)setTitle:(NSString *)title forState:(UIControlState)state;
 
 - (void)drawRect: (CGRect) rect;
@@ -70,6 +70,9 @@ CGRect wxOSXGetFrameForControl( wxWindowMac* window , const wxPoint& pos , const
 
 - (BOOL) becomeFirstResponder;
 - (BOOL) resignFirstResponder;
+
+- (BOOL)isEnabled;
+- (void)setEnabled:(BOOL)flag;
 @end
 
 //
@@ -147,7 +150,8 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSSet* touches, UIEvent * nsEvent 
             switch ( button )
             {
                 case 0 :
-                    wxevent.SetEventType( clickCount > 1 ? wxEVT_LEFT_DCLICK : wxEVT_LEFT_DOWN )  ;
+                    wxevent.SetEventType( clickCount > 1 ? wxEVT_LEFT_DCLICK : wxEVT_LEFT_DOWN );
+                    wxevent.SetLeftDown(true);
                     break ;
 
                 default:
@@ -159,7 +163,8 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSSet* touches, UIEvent * nsEvent 
             switch ( button )
             {
                 case 0 :
-                    wxevent.SetEventType( wxEVT_LEFT_UP )  ;
+                    wxevent.SetEventType( wxEVT_LEFT_UP );
+                    wxevent.SetLeftDown(false);
                     break ;
 
                 default:
@@ -168,7 +173,8 @@ void SetupMouseEvent( wxMouseEvent &wxevent , NSSet* touches, UIEvent * nsEvent 
             break ;
 
         case UITouchPhaseMoved :
-            wxevent.SetEventType( wxEVT_MOTION ) ;
+            wxevent.SetEventType( wxEVT_MOTION );
+            wxevent.SetLeftDown(true);
             break;
         default :
             break ;
@@ -473,7 +479,7 @@ void  wxWidgetImpl::Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to
 
 void wxWidgetIPhoneImpl::SetBackgroundColour( const wxColour &col )
 {
-    m_osxView.backgroundColor = [[UIColor alloc] initWithCGColor:col.GetCGColor()];
+    m_osxView.backgroundColor = [UIColor colorWithCGColor:col.GetCGColor()];
 }
 
 bool wxWidgetIPhoneImpl::SetBackgroundStyle(wxBackgroundStyle style) 

@@ -333,7 +333,9 @@ public:
                                     int flags = 0) = 0;
 #endif // wxHAS_DRAW_TITLE_BAR_BITMAP
 
-    // Draw a gauge with native style like a wxGauge would display
+    // Draw a gauge with native style like a wxGauge would display.
+    //
+    // wxCONTROL_SPECIAL flag must be used for drawing vertical gauges.
     virtual void DrawGauge(wxWindow* win,
                            wxDC& dc,
                            const wxRect& rect,

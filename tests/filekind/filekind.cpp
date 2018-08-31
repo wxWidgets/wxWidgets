@@ -37,6 +37,8 @@
     #define fileno _fileno
 #endif
 
+#include "testfile.h"
+
 ///////////////////////////////////////////////////////////////////////////////
 // The test case
 
@@ -71,7 +73,7 @@ class FileKindTestCase : public CppUnit::TestCase
 };
 
 // test a wxFFile and wxFFileInput/OutputStreams of a known type
-// 
+//
 void FileKindTestCase::TestFILE(wxFFile& file, bool expected)
 {
     CPPUNIT_ASSERT(file.IsOpened());
@@ -100,23 +102,17 @@ void FileKindTestCase::TestFd(wxFile& file, bool expected)
     CPPUNIT_ASSERT(outStream.IsSeekable() == expected);
 }
 
-struct TempFile
-{
-    ~TempFile() { if (!m_name.IsEmpty()) wxRemoveFile(m_name); }
-    wxString m_name;
-};
-
 // test with an ordinary file
 //
 void FileKindTestCase::File()
 {
     TempFile tmp; // put first
     wxFile file;
-    tmp.m_name = wxFileName::CreateTempFileName(wxT("wxft"), &file);
+    tmp.Assign(wxFileName::CreateTempFileName(wxT("wxft"), &file));
     TestFd(file, true);
     file.Close();
 
-    wxFFile ffile(tmp.m_name);
+    wxFFile ffile(tmp.GetName());
     TestFILE(ffile, true);
 }
 
@@ -195,7 +191,7 @@ void FileKindTestCase::MemoryStream()
 }
 
 // Stdin will usually be a terminal, if so then test it
-// 
+//
 void FileKindTestCase::Stdin()
 {
     if (isatty(0))

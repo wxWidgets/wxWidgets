@@ -163,6 +163,32 @@ public:
     environment doesn't provide one, so don't forget to call IsOk() to check
     for this too.
 
+    Example of storing credentials using this class:
+    @code
+    wxSecretStore store = wxSecretStore::GetDefault();
+    if ( store.IsOk() )
+    {
+        if ( !store.Save("MyApp/MyService", username, password) )
+            wxLogWarning("Failed to save credentials to the system secret store.");
+    }
+    else
+    {
+        wxLogWarning("This system doesn't support storing passwords securely.");
+    }
+    @endcode
+
+    And to load it back:
+    @code
+    wxSecretStore store = wxSecretStore::GetDefault();
+    if ( store.IsOk() )
+    {
+        wxString username;
+        wxSecretValue password;
+        if ( store.Load("MyApp/MyService", username, password) )
+            ... use the password ...
+    }
+    @endcode
+
     @library{wxbase}
     @category{misc}
 
@@ -184,40 +210,42 @@ public:
     bool IsOk() const;
 
     /**
-        Store a secret.
+        Store a username/password combination.
 
         The service name should be user readable and unique.
 
-        If a secret with the same service name and user already exists, it will
-        be overwritten with the new value.
+        If a secret with the same service name already exists, it will be
+        overwritten with the new value. In particular, notice that it is not
+        currently allowed to store passwords for different usernames for the
+        same service, even if the underlying platform API supports this (as is
+        the case for macOS but not MSW).
 
         Returns false after logging an error message if an error occurs,
         otherwise returns true indicating that the secret has been stored and
         can be retrieved by calling Load() later.
      */
     bool Save(const wxString& service,
-              const wxString& user,
-              const wxSecretValue& secret);
+              const wxString& username,
+              const wxSecretValue& password);
 
     /**
-        Look up a secret.
+        Look up the username/password for the given service.
 
-        If no such secret is found, an empty value is returned, but no error is
-        logged (however an error may still be logged if some other error
-        occurs). If more than one secret matching the parameters exist, only
-        one arbitrarily chosen of them is returned (notice that it's impossible
-        to get into such situation using this API only).
+        If no username/password is found for the given service, false is
+        returned.
+
+        Otherwise the function returns true and updates the provided @a username
+        and @a password arguments.
      */
-    wxSecretValue Load(const wxString& service, const wxString& user) const;
+    bool Load(const wxString& service,
+              wxString& username,
+              wxSecretValue& password) const;
 
     /**
-        Delete a previously stored secret.
+        Delete a previously stored username/password combination.
 
-        If there is more than one matching secret, all of them are deleted.
-
-        If any secrets were deleted, returns true. Otherwise returns false and
-        logs an error if any error other than not finding any matching secrets
-        occurred.
+        If anything was deleted, returns true. Otherwise returns false and
+        logs an error if any error other than not finding any matches occurred.
      */
-    bool Delete(const wxString& service, const wxString& user);
+    bool Delete(const wxString& service);
 };

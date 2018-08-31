@@ -80,8 +80,7 @@ public:
     wxPrintDialogData& GetPrintDialogData() wxOVERRIDE
         { return m_printDialogData; }
 
-    wxDC *GetPrintDC() wxOVERRIDE { return m_dc; }
-    void SetPrintDC(wxDC * printDC) { m_dc = printDC; }
+    wxDC *GetPrintDC() wxOVERRIDE;
 
     virtual int ShowModal() wxOVERRIDE;
 
@@ -105,7 +104,6 @@ private:
     wxPrintDialogData    m_printDialogData;
     wxWindow            *m_parent;
     bool                 m_showDialog;
-    wxDC                *m_dc;
 
     wxDECLARE_DYNAMIC_CLASS(wxGtkPrintDialog);
 };
@@ -291,6 +289,7 @@ protected:
                      wxCoord *descent = NULL,
                      wxCoord *externalLeading = NULL,
                      const wxFont *theFont = NULL ) const wxOVERRIDE;
+    bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const wxOVERRIDE;
     void DoGetSize(int* width, int* height) const wxOVERRIDE;
     void DoGetSizeMM(int *width, int *height) const wxOVERRIDE;
 

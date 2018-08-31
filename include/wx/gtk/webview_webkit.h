@@ -11,10 +11,15 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
+// NOTE: this header is used for both the WebKit1 and WebKit2 implementations
+#if wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2) && defined(__WXGTK__)
 
 #include "wx/sharedptr.h"
 #include "wx/webview.h"
+#if wxUSE_WEBVIEW_WEBKIT2
+#include <glib.h>
+#include <gio/gio.h>
+#endif
 
 typedef struct _WebKitWebView WebKitWebView;
 
@@ -109,7 +114,7 @@ public:
     virtual wxString GetSelectedSource() const wxOVERRIDE;
     virtual void ClearSelection() wxOVERRIDE;
 
-    virtual void RunScript(const wxString& javascript) wxOVERRIDE;
+    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) wxOVERRIDE;
 
     //Virtual Filesystem Support
     virtual void RegisterHandler(wxSharedPtr<wxWebViewHandler> handler) wxOVERRIDE;
@@ -152,6 +157,12 @@ private:
     // focus event handler: calls GTKUpdateBitmap()
     void GTKOnFocus(wxFocusEvent& event);
 
+#if wxUSE_WEBVIEW_WEBKIT2
+    bool CanExecuteEditingCommand(const gchar* command) const;
+    void SetupWebExtensionServer();
+    bool RunScriptSync(const wxString& javascript, wxString* output = NULL);
+#endif
+
     WebKitWebView *m_web_view;
     int m_historyLimit;
 
@@ -162,6 +173,12 @@ private:
     wxString m_findText;
     int m_findPosition;
     int m_findCount;
+
+#if wxUSE_WEBVIEW_WEBKIT2
+    //Used for webkit2 extension
+    GDBusServer *m_dbusServer;
+    GDBusProxy *m_extension;
+#endif
 
     wxDECLARE_DYNAMIC_CLASS(wxWebViewWebKit);
 };

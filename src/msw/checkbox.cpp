@@ -39,40 +39,6 @@
 #include "wx/msw/private/button.h"
 #include "wx/msw/missing.h"
 
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-#ifndef BP_CHECKBOX
-    #define BP_CHECKBOX 3
-#endif
-
-// these values are defined in tmschema.h (except the first one)
-enum
-{
-    CBS_INVALID,
-    CBS_UNCHECKEDNORMAL,
-    CBS_UNCHECKEDHOT,
-    CBS_UNCHECKEDPRESSED,
-    CBS_UNCHECKEDDISABLED,
-    CBS_CHECKEDNORMAL,
-    CBS_CHECKEDHOT,
-    CBS_CHECKEDPRESSED,
-    CBS_CHECKEDDISABLED,
-    CBS_MIXEDNORMAL,
-    CBS_MIXEDHOT,
-    CBS_MIXEDPRESSED,
-    CBS_MIXEDDISABLED
-};
-
-// these are our own
-enum
-{
-    CBS_HOT_OFFSET = 1,
-    CBS_PRESSED_OFFSET = 2,
-    CBS_DISABLED_OFFSET = 3
-};
-
 // ============================================================================
 // implementation
 // ============================================================================

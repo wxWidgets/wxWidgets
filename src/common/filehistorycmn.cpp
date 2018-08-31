@@ -237,7 +237,7 @@ void wxFileHistoryBase::Load(const wxConfigBase& config)
         m_fileHistory.Add(historyFile);
 
         buf.Printf(wxT("file%d"), (int)m_fileHistory.GetCount()+1);
-        historyFile = wxEmptyString;
+        historyFile.clear();
     }
 
     AddFilesToMenu();

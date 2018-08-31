@@ -92,42 +92,12 @@ public:
         m_useAMPM = false;
 #endif
 
-        m_text->Connect
-                (
-                    wxEVT_SET_FOCUS,
-                    wxFocusEventHandler(wxTimePickerGenericImpl::OnTextSetFocus),
-                    NULL,
-                    this
-                );
-        m_text->Connect
-                (
-                    wxEVT_KEY_DOWN,
-                    wxKeyEventHandler(wxTimePickerGenericImpl::OnTextKeyDown),
-                    NULL,
-                    this
-                );
-        m_text->Connect
-                (
-                    wxEVT_LEFT_DOWN,
-                    wxMouseEventHandler(wxTimePickerGenericImpl::OnTextClick),
-                    NULL,
-                    this
-                );
+        m_text->Bind(wxEVT_SET_FOCUS, &wxTimePickerGenericImpl::OnTextSetFocus, this);
+        m_text->Bind(wxEVT_KEY_DOWN, &wxTimePickerGenericImpl::OnTextKeyDown, this);
+        m_text->Bind(wxEVT_LEFT_DOWN, &wxTimePickerGenericImpl::OnTextClick, this);
 
-        m_btn->Connect
-               (
-                    wxEVT_SPIN_UP,
-                    wxSpinEventHandler(wxTimePickerGenericImpl::OnArrowUp),
-                    NULL,
-                    this
-               );
-        m_btn->Connect
-               (
-                    wxEVT_SPIN_DOWN,
-                    wxSpinEventHandler(wxTimePickerGenericImpl::OnArrowDown),
-                    NULL,
-                    this
-               );
+        m_btn->Bind(wxEVT_SPIN_UP, &wxTimePickerGenericImpl::OnArrowUp, this);
+        m_btn->Bind(wxEVT_SPIN_DOWN, &wxTimePickerGenericImpl::OnArrowDown, this);
     }
 
     // Set the new value.
@@ -446,6 +416,7 @@ private:
 
             case Field_Max:
                 wxFAIL_MSG( "Invalid field" );
+                return;
         }
 
         UpdateText();
@@ -491,7 +462,7 @@ private:
             // Check if the new value is acceptable. If not, we just handle
             // this digit as if it were the first one.
             int newValue = currentValue*10 + n;
-            if ( newValue < maxValue )
+            if ( newValue <= maxValue )
             {
                 n = newValue;
 
@@ -531,6 +502,7 @@ private:
             case Field_AMPM:
             case Field_Max:
                 wxFAIL_MSG( "Invalid field" );
+                return;
         }
 
         if ( moveToNextField && m_currentField < Field_Sec )

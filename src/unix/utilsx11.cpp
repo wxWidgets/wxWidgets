@@ -37,18 +37,22 @@
 #endif
 
 #ifdef __WXGTK__
+#ifdef __WXGTK20__
+#include "wx/gtk/private/wrapgtk.h"
+#else // GTK+ 1.x
 #include <gtk/gtk.h>
+#define GDK_WINDOWING_X11
+#endif
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
-#ifdef __WXGTK20__
-#include "wx/gtk/private/gtk2-compat.h"     // gdk_window_get_screen()
-#endif
 #endif
 GdkWindow* wxGetTopLevelGDK();
+GtkWidget* wxGetTopLevelGTK();
 #endif
 
-// Only X11 backend is supported for wxGTK here
-#if !defined(__WXGTK__) || defined(GDK_WINDOWING_X11)
+// Only X11 backend is supported for wxGTK here (GTK < 2 has no others)
+#if !defined(__WXGTK__) || \
+    (!defined(__WXGTK20__) || defined(GDK_WINDOWING_X11))
 
 // Various X11 Atoms used in this file:
 static Atom _NET_WM_STATE = 0;
@@ -2660,7 +2664,11 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
     if ( wxGetEnv("PATH", &path) &&
          wxFindFileInPath(&xdg_open, path, "xdg-open") )
     {
-        if ( wxExecute(xdg_open + " " + document) )
+        const char* argv[3];
+        argv[0] = xdg_open.fn_str();
+        argv[1] = document.fn_str();
+        argv[2] = NULL;
+        if (wxExecute(argv))
             return true;
     }
 
@@ -2675,17 +2683,27 @@ bool
 wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 {
 #ifdef __WXGTK__
-#if GTK_CHECK_VERSION(2,14,0)
-#ifndef __WXGTK3__
-    if (gtk_check_version(2,14,0) == NULL)
-#endif
+#ifdef __WXGTK4__
+    if (gtk_show_uri_on_window((GtkWindow*)wxGetTopLevelGTK(),
+            params.url.utf8_str(), GDK_CURRENT_TIME, NULL))
+    {
+        return true;
+    }
+#elif GTK_CHECK_VERSION(2,14,0)
+    if (wx_is_at_least_gtk2(14))
     {
         GdkScreen* screen = gdk_window_get_screen(wxGetTopLevelGDK());
+        wxGCC_WARNING_SUPPRESS(deprecated-declarations)
         if (gtk_show_uri(screen, params.url.utf8_str(), GDK_CURRENT_TIME, NULL))
             return true;
+        wxGCC_WARNING_RESTORE()
     }
 #endif // GTK_CHECK_VERSION(2,14,0)
 #endif // __WXGTK__
+
+    const char* argv[4];
+    argv[1] = params.GetPathOrURL().fn_str();
+    argv[2] = NULL;
 
     // Our best best is to use xdg-open from freedesktop.org cross-desktop
     // compatibility suite xdg-utils
@@ -2697,7 +2715,8 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
     if ( wxGetEnv("PATH", &path) &&
          wxFindFileInPath(&xdg_open, path, "xdg-open") )
     {
-        if ( wxExecute(xdg_open + " " + params.GetPathOrURL()) )
+        argv[0] = xdg_open.fn_str();
+        if (wxExecute(argv))
             return true;
     }
 
@@ -2715,16 +2734,19 @@ wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
                               output, errors, wxEXEC_NODISABLE );
         if (res >= 0 && errors.GetCount() == 0)
         {
-            wxString cmd = output[0];
-            cmd << wxT(' ') << params.GetPathOrURL();
-            if (wxExecute(cmd))
+            argv[0] = output[0].fn_str();
+            if (wxExecute(argv))
                 return true;
         }
     }
     else if (desktop == wxT("KDE"))
     {
         // kfmclient directly opens the given URL
-        if (wxExecute(wxT("kfmclient openURL ") + params.GetPathOrURL()))
+        argv[2] = argv[1];
+        argv[0] = "kfmclient";
+        argv[1] = "openURL";
+        argv[3] = NULL;
+        if (wxExecute(argv))
             return true;
     }
 

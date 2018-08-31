@@ -86,9 +86,9 @@ int wxFontDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
 
-    wxDialog::OSXBeginModalDialog();
+    OSXBeginModalDialog();
     int retval = RunMixedFontDialog(this);
-    wxDialog::OSXEndModalDialog();
+    OSXEndModalDialog();
 
     return retval ;
 }
@@ -587,7 +587,7 @@ void wxFontDialog::ChangeFont()
 
     wxFontFamily family = FontFamilyStringToInt(facename);
     if (family != wxFONTFAMILY_DEFAULT)
-        facename = wxEmptyString;
+        facename.clear();
 
     m_dialogFont = wxFontInfo(size)
                     .Family(family).FaceName(facename)

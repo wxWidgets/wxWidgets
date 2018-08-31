@@ -52,6 +52,23 @@ int wxNumValidatorBase::GetFormatFlags() const
     return flags;
 }
 
+void wxNumValidatorBase::SetWindow(wxWindow *win)
+{
+    wxValidator::SetWindow(win);
+
+#if wxUSE_TEXTCTRL
+    if ( wxDynamicCast(m_validatorWindow, wxTextCtrl) )
+        return;
+#endif // wxUSE_TEXTCTRL
+
+#if wxUSE_COMBOBOX
+    if ( wxDynamicCast(m_validatorWindow, wxComboBox) )
+        return;
+#endif // wxUSE_COMBOBOX
+
+    wxFAIL_MSG("Can only be used with wxTextCtrl or wxComboBox");
+}
+
 wxTextEntry *wxNumValidatorBase::GetTextEntry() const
 {
 #if wxUSE_TEXTCTRL
@@ -63,8 +80,6 @@ wxTextEntry *wxNumValidatorBase::GetTextEntry() const
     if ( wxComboBox *combo = wxDynamicCast(m_validatorWindow, wxComboBox) )
         return combo;
 #endif // wxUSE_COMBOBOX
-
-    wxFAIL_MSG("Can only be used with wxTextCtrl or wxComboBox");
 
     return NULL;
 }
@@ -236,14 +251,21 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
 
 wxString wxFloatingPointValidatorBase::ToString(LongestValueType value) const
 {
-    return wxNumberFormatter::ToString(value, m_precision, GetFormatFlags());
+    return wxNumberFormatter::ToString(value*m_factor,
+                                       m_precision,
+                                       GetFormatFlags());
 }
 
 bool
 wxFloatingPointValidatorBase::FromString(const wxString& s,
-                                         LongestValueType *value)
+                                         LongestValueType *value) const
 {
-    return wxNumberFormatter::FromString(s, value);
+    if ( !wxNumberFormatter::FromString(s, value) )
+        return false;
+
+    *value /= m_factor;
+
+    return true;
 }
 
 bool

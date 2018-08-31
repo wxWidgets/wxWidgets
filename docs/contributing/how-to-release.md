@@ -2,7 +2,7 @@
 
 Creating a new release requires a few things before getting started:
 
-* Linux or OSX.
+* Linux (or another Unix but GNU tar is required).
 * Windows 7+ with HTML Help Workshop, and Inno Setup installed.
 * 7-Zip, Doxygen 1.8.8, and GraphViz installed on both machines.
 
@@ -15,25 +15,53 @@ Setup have all been added to your Path in Windows. You can confirm this by
 running `7z`, `hhc`, `iscc`, `doxygen -v`, and `dot -V` in a command prompt.
 Add the missing installed folder locations of any executables to your Path.
 
+## Checking ABI Compatibility
+
+For the stable (even) releases only, check that binary compatibility hasn't
+been broken since the last stable release.
+
+### Checking under Unix systems using `abi-compliance-checker` tool.
+
+Instructions:
+
+1. Get [the tool](https://lvc.github.io/abi-compliance-checker/).
+1. Build the old (vX.Y.Z-1) library with `-g -Og` options, i.e. configure it
+   with `--enable-debug` and `CXXFLAGS=-Og CFLAFS=-Og`. For convenience, let's
+   assume it's built in "$old" subdirectory.
+1. Build the new (vX.Y.Z) library with the same options in "$new".
+1. Create directories for temporary files containing the ABI dumps for the old
+   and new libraries: `mkdir -p ../compat/{$old,$new}`.
+1. Run abi-dumper on all libraries: `for l in $old/lib/*.so; do abi-dumper $l
+   -lver $old -o ../compat/$old/$(basename $l).dump; done` and the same thing with
+   the new libraries.
+1. Run abi-compliance-checker on each pair of produced dumps to generate HTML
+   reports: `for l in 3.0.2/*dump; do abi-compliance-checker -l $(basename $l
+   .dump) -old $l -new 3.0.3/$(basename $l); done`.
+1. Examine these reports, paying attention to the problem summary.
+
+### Checking under MSW systems.
+
+Manually check compatibility by building the widgets samples from the old tree
+and then run it using the new DLLs.
+
 ## Pre-Release Steps
 
-* Update `docs/readme.txt`. Please review its contents in addition to just
-  changing the version number.
-* Update `docs/release.md` (the release sha1sums should be set to zeroes).
-* Put a date on the release line in `docs/changes.txt`.
-* Update the date in the manual (`docs/doxygen/mainpages/manual.h`).
-* Update the release announcement post in `docs/publicity/announce.txt`.
+1. Perform the following steps. You can run `build/tools/pre-release.sh` to do
+   the straightforward changes like updating the date and version number
+   automatically, but please also review and update the contents of the README
+   and announcement text.
+    * Update `docs/readme.txt`: version needs to be changed, content updated.
+    * Update `docs/release.md`: the release sha1sums should be set to zeroes.
+    * Put a date on the release line in `docs/changes.txt`.
+    * Update the date in the manual (`docs/doxygen/mainpages/manual.h`).
+    * Update the release announcement post in `docs/publicity/announce.txt`.
 
-Commit the changes and finally tag the release, preferably GPG-signed:
+2. Commit the changes and tag the release using your GPG key:
 
     git tag -s -m 'Tag X.Y.Z release' vX.Y.Z
 
-and otherwise unsigned:
-
-    git tag -m 'Tag X.Y.Z release' vX.Y.Z
-
-Don't overwrite existing tags. For non-final releases use e.g. `X.Y.Z-rc1`
-instead of `X.Y.Z`.
+   Don't overwrite existing tags. For non-final releases use e.g. `X.Y.Z-rc1`
+   instead of `X.Y.Z`.
 
 ## Creating Release Files
 
@@ -55,14 +83,18 @@ ensure you have the appropriate tag or commit checked out.
    contained in the copied release ZIP and not from the current working wx
    directory.
 
-4. Copy these Windows packages back to your Linux or OSX `distrib/release/x.y.z`
+4. Copy `wxMSW-x.y.z-Setup.exe` back to your Linux or OSX `distrib/release/x.y.z`
    directory so you can continue with the upload step with all packages
-   available:
+   available. Also create a ZIP file from the CHM one:
 
-    wxMSW-x.y.z-Setup.exe
-    wxWidgets-x.y.z.chm
+    zip wxWidgets-x.y.z-docs-chm.zip wxWidgets-x.y.z.chm
 
-5. Update the sha1sums in `docs/release.md` and commit the changes.
+   and copy/move it to the same directory.
+
+5. Update the version in `docs/release.md` (typically just a global search and
+   replace) and run `./build/tools/post-release.sh` to update the sha1sums in
+   it, then commit the changes. Notice that when making an RC, the version must
+   be explicitly specified on this script command line.
 
 ## Uploading
 
@@ -76,7 +108,7 @@ Attach the following files to it:
     wxWidgets-x.y.z.7z
     wxWidgets-x.y.z.tar.bz2
     wxWidgets-x.y.z.zip
-    wxWidgets-x.y.z.chm
+    wxWidgets-x.y.z-docs-chm.zip
     wxWidgets-x.y.z-docs-html.tar.bz2
     wxWidgets-x.y.z-docs-html.zip
     wxWidgets-x.y.z-headers.7z
@@ -113,7 +145,7 @@ Trac: mark the milestone corresponding to the release as completed and add a
 new version for it to allow reporting bugs against it and create the next
 milestone (ask Vadim or Robin to do it or to get admin password).
 
-Update the roadmap at http://trac.wxwidgets.org/wiki/Roadmap to at least
+Update the roadmap at https://trac.wxwidgets.org/wiki/Roadmap to at least
 mention the new release there.
 
 Run `misc/scripts/inc_release` to increment micro version, i.e. replace x.y.z
@@ -121,8 +153,8 @@ with x.y.z+1 (minor or major versions updates require manual intervention)
 and rerun both `bakefile_gen` and `autoconf` afterwards to update the version
 in the generated files too.
 
-Update the definition of the stable and release branches in
-`build/buildbot/config/include/defs.xml` after a minor version change.
+Update `master.cfg` in [wx/buildbot](https://github.com/wxWidgets/buildbot)
+repository after a minor or major version change.
 
 ## MSW Visual Studio Official Builds
 

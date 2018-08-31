@@ -55,7 +55,6 @@
 using CppUnit::Test;
 using CppUnit::TestCase;
 using CppUnit::TestSuite;
-using CppUnit::Exception;
 
 using std::string;
 using std::vector;
@@ -375,15 +374,8 @@ void RegExTestSuite::add(
 
     va_end(ap);
 
-    try {
-        addTest(new RegExTestCase(
-            name, mode, id, flags, pattern, data, expected_results));
-    }
-    catch (Exception& e) {
-        wxLogInfo(wxString::Format(wxT("skipping: %s\n %s\n"),
-            wxString(name.c_str(), wxConvUTF8).c_str(),
-            wxString(e.what(), wxConvUTF8).c_str()));
-    }
+    addTest(new RegExTestCase(
+        name, mode, id, flags, pattern, data, expected_results));
 }
 
 

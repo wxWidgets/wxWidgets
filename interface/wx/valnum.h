@@ -346,6 +346,19 @@ public:
         constructor.
      */
     void SetPrecision(unsigned precision);
+
+    /**
+        Set factor used for displaying the value.
+
+        The value associated with the validator is multiplied by the factor
+        before displaying it and divided by it when retrieving its value from
+        the control. By default, the @a factor is 1, so the actual value is not
+        affected by it, but it can be set to, for example, 100, to display the
+        value in percents while still storing it as absolute value.
+
+        @since 3.1.1
+     */
+    void SetFactor(double factor);
 };
 
 /**

@@ -30,10 +30,10 @@ enum wxOperatingSystemId
     wxOS_MAC_OSX_DARWIN = 1 << 1,     // Apple Mac OS X with Unix paths
     wxOS_MAC = wxOS_MAC_OS|wxOS_MAC_OSX_DARWIN,
 
-    wxOS_WINDOWS_9X     = 1 << 2,     // Windows 9x family (95/98/ME)
-    wxOS_WINDOWS_NT     = 1 << 3,     // Windows NT family (NT/2000/XP)
-    wxOS_WINDOWS_MICRO  = 1 << 4,     // MicroWindows
-    wxOS_WINDOWS_CE     = 1 << 5,     // Windows CE (Window Mobile)
+    wxOS_WINDOWS_9X     = 1 << 2,     // obsolete
+    wxOS_WINDOWS_NT     = 1 << 3,     // obsolete
+    wxOS_WINDOWS_MICRO  = 1 << 4,     // obsolete
+    wxOS_WINDOWS_CE     = 1 << 5,     // obsolete
     wxOS_WINDOWS = wxOS_WINDOWS_9X      |
                    wxOS_WINDOWS_NT      |
                    wxOS_WINDOWS_MICRO   |
@@ -56,8 +56,8 @@ enum wxOperatingSystemId
 
     // 1<<13 and 1<<14 available for other Unix flavours
 
-    wxOS_DOS            = 1 << 15,      // Microsoft DOS
-    wxOS_OS2            = 1 << 16       // OS/2
+    wxOS_DOS            = 1 << 15,      // obsolete
+    wxOS_OS2            = 1 << 16       // obsolete
 };
 
 // list of wxWidgets ports - some of them can be used with more than
@@ -70,15 +70,15 @@ enum wxPortId
 
     wxPORT_MSW      = 1 << 1,       // wxMSW, native toolkit is Windows API
     wxPORT_MOTIF    = 1 << 2,       // wxMotif, using [Open]Motif or Lesstif
-    wxPORT_GTK      = 1 << 3,       // wxGTK, using GTK+ 1.x, 2.x, GPE or Maemo
+    wxPORT_GTK      = 1 << 3,       // wxGTK, using GTK+ 1.x, 2.x, 3.x
     wxPORT_DFB      = 1 << 4,       // wxDFB, using wxUniversal
     wxPORT_X11      = 1 << 5,       // wxX11, using wxUniversal
-    wxPORT_PM       = 1 << 6,       // wxOS2, using OS/2 Presentation Manager
-    wxPORT_OS2      = wxPORT_PM,    // wxOS2, using OS/2 Presentation Manager
+    wxPORT_PM       = 1 << 6,       // obsolete
+    wxPORT_OS2      = wxPORT_PM,    // obsolete
     wxPORT_MAC      = 1 << 7,       // wxOSX (former wxMac), using Cocoa or iPhone API
     wxPORT_OSX      = wxPORT_MAC,   // wxOSX, using Cocoa or iPhone API
     wxPORT_COCOA    = 1 << 8,       // wxCocoa, using Cocoa NextStep/Mac API
-    wxPORT_WINCE    = 1 << 9,       // wxWinCE, toolkit is WinCE SDK API
+    wxPORT_WINCE    = 1 << 9,       // obsolete
     wxPORT_QT       = 1 << 10       // wxQT, using QT4
 };
 

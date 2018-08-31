@@ -240,6 +240,8 @@
         return vsscanf(const_cast<char *>(str), format, ap);
     }
 #else
+    wxDECL_FOR_STRICT_MINGW32(int, vsscanf, (const char*, const char*, va_list))
+
     #define wxCRT_VsscanfA   vsscanf
 #endif
 
@@ -255,6 +257,8 @@
 #ifdef wxNEED_VSWSCANF
     int wxCRT_VsscanfW(const wchar_t *str, const wchar_t *format, va_list ap);
 #else
+    wxDECL_FOR_STRICT_MINGW32(int, vswscanf, (const wchar_t*, const wchar_t*, va_list))
+
     #define wxCRT_VsscanfW   wxVMS_USE_STD vswscanf
 #endif
 

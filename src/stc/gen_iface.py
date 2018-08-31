@@ -14,6 +14,8 @@
 import sys, string, re, os
 from fileinput import FileInput
 
+sys.dont_write_bytecode = True
+from gen_docs import categoriesList,buildDocs
 
 IFACE         = os.path.abspath('./scintilla/include/Scintilla.iface')
 HDR_SCN       = os.path.abspath('./scintilla/include/Scintilla.h')
@@ -40,6 +42,9 @@ valPrefixes = [('SCI_', ''),
                ('SCK_', 'KEY_'),
                ('SCFIND_', 'FIND_'),
                ('SCWS_', 'WS_'),
+               ('SCTD_', 'TD_'),
+               ('SCVS_', 'VS_'),
+               ('SCMOD_', 'KEYMOD_'),
 ]
 
 # Message function values that should have a CMD_ constant generated
@@ -63,6 +68,18 @@ cmdValues = [ 2011,
 # Should a function be also generated for the CMDs?
 FUNC_FOR_CMD = 1
 
+# Should methods and values be generated for the provisional Scintilla items?
+GENERATE_PROVISIONAL_ITEMS = 0
+
+# No wxSTC value will be generated for the following Scintilla values.
+notMappedSciValues = set([
+    'SC_TECHNOLOGY_DIRECTWRITERETAIN',
+    'SC_TECHNOLOGY_DIRECTWRITEDC',
+    'INDIC0_MASK',
+    'INDIC1_MASK',
+    'INDIC2_MASK',
+    'INDICS_MASK'
+])
 
 # Map some generic typenames to wx types, using return value syntax
 retTypeMap = {
@@ -86,7 +103,6 @@ paramTypeMap = {
 #            default name.
 #         2. Method definition for the .h file, 0 to leave alone
 #         3. Method implementation for the .cpp file, 0 to leave alone.
-#         4. tuple of Doc string lines, or 0 to leave alone.
 #
 methodOverrideMap = {
     'AddText' : (0,
@@ -94,38 +110,38 @@ methodOverrideMap = {
 
                  '''void %s(const wxString& text) {
                     const wxWX2MBbuf buf = wx2stc(text);
-                    SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);''',
-                 0),
+                    SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);'''
+                 ),
 
     'AddStyledText' : (0,
                        'void %s(const wxMemoryBuffer& data);',
 
                        '''void %s(const wxMemoryBuffer& data) {
-                          SendMsg(%s, data.GetDataLen(), (sptr_t)data.GetData());''',
-                       0),
+                          SendMsg(%s, data.GetDataLen(), (sptr_t)data.GetData());'''
+                       ),
 
     'AppendText' : (0,
                  'void %s(const wxString& text) wxOVERRIDE;',
 
                  '''void %s(const wxString& text) {
                     const wxWX2MBbuf buf = wx2stc(text);
-                    SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);''',
-                 0),
+                    SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);'''
+                 ),
 
-    'GetViewWS' : ( 'GetViewWhiteSpace', 0, 0, 0),
-    'SetViewWS' : ( 'SetViewWhiteSpace', 0, 0, 0),
+    'GetViewWS' : ( 'GetViewWhiteSpace', 0, 0),
+    'SetViewWS' : ( 'SetViewWhiteSpace', 0, 0),
 
     'GetCharAt' :
     ( 0, 0,
       '''int %s(int pos) const {
-         return (unsigned char)SendMsg(%s, pos, 0);''',
-      0),
+         return (unsigned char)SendMsg(%s, pos, 0);'''
+    ),
 
     'GetStyleAt' :
     ( 0, 0,
       '''int %s(int pos) const {
-         return (unsigned char)SendMsg(%s, pos, 0);''',
-      0),
+         return (unsigned char)SendMsg(%s, pos, 0);'''
+    ),
 
     'GetStyledText' :
     (0,
@@ -134,21 +150,18 @@ methodOverrideMap = {
      '''wxMemoryBuffer %s(int startPos, int endPos) {
         wxMemoryBuffer buf;
         if (endPos < startPos) {
-            int temp = startPos;
-            startPos = endPos;
-            endPos = temp;
+            wxSwap(startPos, endPos);
         }
         int len = endPos - startPos;
         if (!len) return buf;
-        TextRange tr;
+        Sci_TextRange tr;
         tr.lpstrText = (char*)buf.GetWriteBuf(len*2+1);
         tr.chrg.cpMin = startPos;
         tr.chrg.cpMax = endPos;
         len = SendMsg(%s, 0, (sptr_t)&tr);
         buf.UngetWriteBuf(len);
-        return buf;''',
-
-     ('Retrieve a buffer of cells.',)),
+        return buf;'''
+    ),
 
 
     'PositionFromPoint' :
@@ -156,8 +169,8 @@ methodOverrideMap = {
      'int %s(wxPoint pt) const;',
 
      '''int %s(wxPoint pt) const {
-        return SendMsg(%s, pt.x, pt.y);''',
-     0),
+        return SendMsg(%s, pt.x, pt.y);'''
+    ),
 
     'GetCurLine' :
     (0,
@@ -170,24 +183,17 @@ methodOverrideMap = {
             return wxEmptyString;
         }
 
-        wxMemoryBuffer mbuf(len+1);
-        char* buf = (char*)mbuf.GetWriteBuf(len+1);
-
-        int pos = SendMsg(%s, len+1, (sptr_t)buf);
-        mbuf.UngetWriteBuf(len);
-        mbuf.AppendByte(0);
+        wxCharBuffer buf(len);
+        int pos = SendMsg(%s, len+1, (sptr_t)buf.data());
         if (linePos)  *linePos = pos;
-        return stc2wx(buf);''',
+        return stc2wx(buf);'''
+    ),
 
-     0),
+    'MarkerSetFore' : ('MarkerSetForeground', 0, 0),
+    'MarkerSetBack' : ('MarkerSetBackground', 0, 0),
+    'MarkerSetBackSelected' : ('MarkerSetBackgroundSelected', 0,0),
 
-    'SetUsePalette' : (None, 0,0,0),
-
-    'MarkerSetFore' : ('MarkerSetForeground', 0, 0, 0),
-    'MarkerSetBack' : ('MarkerSetBackground', 0, 0, 0),
-    'MarkerSetBackSelected' : ('MarkerSetBackgroundSelected', 0,0,0),
-
-    'MarkerSymbolDefined' : ('GetMarkerSymbolDefined', 0, 0, 0),
+    'MarkerSymbolDefined' : ('GetMarkerSymbolDefined', 0, 0),
 
     'MarkerDefine' :
     (0,
@@ -203,10 +209,8 @@ methodOverrideMap = {
                 if (foreground.IsOk())
                     MarkerSetForeground(markerNumber, foreground);
                 if (background.IsOk())
-                    MarkerSetBackground(markerNumber, background);''',
-
-     ('Set the symbol used for a particular marker number,',
-      'and optionally the fore and background colours.')),
+                    MarkerSetBackground(markerNumber, background);'''
+    ),
 
 
     'MarkerDefinePixmap' :
@@ -224,22 +228,24 @@ methodOverrideMap = {
         strm.CopyTo(buff, len);
         buff[len] = 0;
         SendMsg(%s, markerNumber, (sptr_t)buff);
-        delete [] buff;
-        ''',
-     ('Define a marker from a bitmap',)),
+        delete [] buff;'''
+    ),
 
+    'GetMargins' : ('GetMarginCount', 0, 0),
+    'SetMargins' : ('SetMarginCount', 0, 0),
+    'GetMarginBackN' : ('GetMarginBackground', 0, 0),
+    'SetMarginBackN' : ('SetMarginBackground', 0, 0),
+    'SetMarginTypeN' : ('SetMarginType', 0, 0),
+    'GetMarginTypeN' : ('GetMarginType', 0, 0),
+    'SetMarginWidthN' : ('SetMarginWidth', 0, 0),
+    'GetMarginWidthN' : ('GetMarginWidth', 0, 0),
+    'SetMarginMaskN' : ('SetMarginMask', 0, 0),
+    'GetMarginMaskN' : ('GetMarginMask', 0, 0),
+    'SetMarginSensitiveN' : ('SetMarginSensitive', 0, 0),
+    'GetMarginSensitiveN' : ('GetMarginSensitive', 0, 0),
+    'SetMarginCursorN' : ('SetMarginCursor', 0, 0),
+    'GetMarginCursorN' : ('GetMarginCursor', 0, 0),
 
-    'SetMarginTypeN' : ('SetMarginType', 0, 0, 0),
-    'GetMarginTypeN' : ('GetMarginType', 0, 0, 0),
-    'SetMarginWidthN' : ('SetMarginWidth', 0, 0, 0),
-    'GetMarginWidthN' : ('GetMarginWidth', 0, 0, 0),
-    'SetMarginMaskN' : ('SetMarginMask', 0, 0, 0),
-    'GetMarginMaskN' : ('GetMarginMask', 0, 0, 0),
-    'SetMarginSensitiveN' : ('SetMarginSensitive', 0, 0, 0),
-    'GetMarginSensitiveN' : ('GetMarginSensitive', 0, 0, 0),
-    'SetMarginCursorN' : ('SetMarginCursor', 0, 0, 0),
-    'GetMarginCursorN' : ('GetMarginCursor', 0, 0, 0),
-    
     'MarginGetText' :
     (0,
     'wxString %s(int line) const;',
@@ -248,15 +254,12 @@ methodOverrideMap = {
          const int msg = %s;
          long len = SendMsg(msg, line, 0);
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, line, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-     0),
-     
-     'MarginGetStyles' :
+         wxCharBuffer buf(len);
+         SendMsg(msg, line, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
+
+    'MarginGetStyles' :
      (0,
     'wxString %s(int line) const;',
 
@@ -269,13 +272,13 @@ methodOverrideMap = {
          SendMsg(msg, line, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-     0),
+         return stc2wx(buf);'''
+    ),
 
-    'SetAdditionalSelFore' : ('SetAdditionalSelForeground', 0, 0, 0),
-    'SetAdditionalSelBack' : ('SetAdditionalSelBackground', 0, 0, 0),
-    'SetAdditionalCaretFore' : ('SetAdditionalCaretForeground', 0, 0, 0),
-    'GetAdditionalCaretFore' : ('GetAdditionalCaretForeground', 0, 0, 0),
+    'SetAdditionalSelFore' : ('SetAdditionalSelForeground', 0, 0),
+    'SetAdditionalSelBack' : ('SetAdditionalSelBackground', 0, 0),
+    'SetAdditionalCaretFore' : ('SetAdditionalCaretForeground', 0, 0),
+    'GetAdditionalCaretFore' : ('GetAdditionalCaretForeground', 0, 0),
 
     'AnnotationGetText' :
     (0,
@@ -284,14 +287,12 @@ methodOverrideMap = {
      '''wxString %s(int line) const {
          const int msg = %s;
          long len = SendMsg(msg, line, 0);
+         if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, line, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-     0),
+         wxCharBuffer buf(len);
+         SendMsg(msg, line, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
 
     'AnnotationGetStyles' :
     (0,
@@ -306,39 +307,136 @@ methodOverrideMap = {
          SendMsg(msg, line, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-     0),
+         return stc2wx(buf);'''
+    ),
 
-    'StyleGetFore' : ('StyleGetForeground', 0, 0, 0),
-    'StyleGetBack' : ('StyleGetBackground', 0, 0, 0),
-    'StyleSetFore' : ('StyleSetForeground', 0, 0, 0),
-    'StyleSetBack' : ('StyleSetBackground', 0, 0, 0),
-    'SetSelFore' : ('SetSelForeground', 0, 0, 0),
-    'SetSelBack' : ('SetSelBackground', 0, 0, 0),
-    'SetCaretFore' : ('SetCaretForeground', 0, 0, 0),
+    'StyleGetFore' : ('StyleGetForeground', 0, 0),
+    'StyleGetBack' : ('StyleGetBackground', 0, 0),
+    'StyleSetFore' : ('StyleSetForeground', 0, 0),
+    'StyleSetBack' : ('StyleSetBackground', 0, 0),
+    'SetSelFore' : ('SetSelForeground', 0, 0),
+    'SetSelBack' : ('SetSelBackground', 0, 0),
+    'SetCaretFore' : ('SetCaretForeground', 0, 0),
+
     'StyleGetFont' :
     ('StyleGetFaceName',
      'wxString %s(int style);',
       '''wxString %s(int style) {
          const int msg = %s;
          long len = SendMsg(msg, style, 0);
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, style, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-         ('Get the font facename of a style',)),
-    'StyleSetFont' : ('StyleSetFaceName', 0, 0, 0),
-    'StyleSetCharacterSet' : (None, 0, 0, 0),
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         SendMsg(msg, style, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
+
+    'StyleSetFont' : ('StyleSetFaceName', 0, 0),
+
+    'StyleSetCharacterSet' : (0, 0,
+    '''void %s(int style, int characterSet) {
+        wxFontEncoding encoding;
+
+        // Translate the Scintilla characterSet to a wxFontEncoding
+        switch (characterSet) {
+            default:
+            case wxSTC_CHARSET_ANSI:
+            case wxSTC_CHARSET_DEFAULT:
+                encoding = wxFONTENCODING_DEFAULT;
+                break;
+
+            case wxSTC_CHARSET_BALTIC:
+                encoding = wxFONTENCODING_ISO8859_13;
+                break;
+
+            case wxSTC_CHARSET_CHINESEBIG5:
+                encoding = wxFONTENCODING_CP950;
+                break;
+
+            case wxSTC_CHARSET_EASTEUROPE:
+                encoding = wxFONTENCODING_ISO8859_2;
+                break;
+
+            case wxSTC_CHARSET_GB2312:
+                encoding = wxFONTENCODING_CP936;
+                break;
+
+            case wxSTC_CHARSET_GREEK:
+                encoding = wxFONTENCODING_ISO8859_7;
+                break;
+
+            case wxSTC_CHARSET_HANGUL:
+                encoding = wxFONTENCODING_CP949;
+                break;
+
+            case wxSTC_CHARSET_MAC:
+                encoding = wxFONTENCODING_DEFAULT;
+                break;
+
+            case wxSTC_CHARSET_OEM:
+                encoding = wxFONTENCODING_DEFAULT;
+                break;
+
+            case wxSTC_CHARSET_RUSSIAN:
+                encoding = wxFONTENCODING_KOI8;
+                break;
+
+            case wxSTC_CHARSET_SHIFTJIS:
+                encoding = wxFONTENCODING_CP932;
+                break;
+
+            case wxSTC_CHARSET_SYMBOL:
+                encoding = wxFONTENCODING_DEFAULT;
+                break;
+
+            case wxSTC_CHARSET_TURKISH:
+                encoding = wxFONTENCODING_ISO8859_9;
+                break;
+
+            case wxSTC_CHARSET_JOHAB:
+                encoding = wxFONTENCODING_DEFAULT;
+                break;
+
+            case wxSTC_CHARSET_HEBREW:
+                encoding = wxFONTENCODING_ISO8859_8;
+                break;
+
+            case wxSTC_CHARSET_ARABIC:
+                encoding = wxFONTENCODING_ISO8859_6;
+                break;
+
+            case wxSTC_CHARSET_VIETNAMESE:
+                encoding = wxFONTENCODING_DEFAULT;
+                break;
+
+            case wxSTC_CHARSET_THAI:
+                encoding = wxFONTENCODING_ISO8859_11;
+                break;
+
+            case wxSTC_CHARSET_CYRILLIC:
+                encoding = wxFONTENCODING_ISO8859_5;
+                break;
+
+            case wxSTC_CHARSET_8859_15:
+                encoding = wxFONTENCODING_ISO8859_15;
+                break;
+        }
+
+        // We just have Scintilla track the wxFontEncoding for us.  It gets used
+        // in Font::Create in PlatWX.cpp.  We add one to the value so that the
+        // effective wxFONENCODING_DEFAULT == SC_SHARSET_DEFAULT and so when
+        // Scintilla internally uses SC_CHARSET_DEFAULT we will translate it back
+        // to wxFONENCODING_DEFAULT in Font::Create.
+        SendMsg(%s, style, encoding+1);'''
+    ),
 
     'AssignCmdKey' :
     ('CmdKeyAssign',
      'void %s(int key, int modifiers, int cmd);',
 
      '''void %s(int key, int modifiers, int cmd) {
-         SendMsg(%s, MAKELONG(key, modifiers), cmd);''',
-     0),
+         SendMsg(%s, MAKELONG(key, modifiers), cmd);'''
+    ),
 
 
     'ClearCmdKey' :
@@ -346,76 +444,97 @@ methodOverrideMap = {
      'void %s(int key, int modifiers);',
 
      '''void %s(int key, int modifiers) {
-         SendMsg(%s, MAKELONG(key, modifiers));''',
-     0),
+         SendMsg(%s, MAKELONG(key, modifiers));'''
+    ),
 
-    'ClearAllCmdKeys' : ('CmdKeyClearAll', 0, 0, 0),
+    'ClearAllCmdKeys' : ('CmdKeyClearAll', 0, 0),
 
+    'StartStyling' :
+    (0,
+     'void %s(int start);',
+
+     '''void %s(int start) {
+        SendMsg(%s, start, 0);'''
+    ),
 
     'SetStylingEx' :
     ('SetStyleBytes',
      'void %s(int length, char* styleBytes);',
 
      '''void %s(int length, char* styleBytes) {
-        SendMsg(%s, length, (sptr_t)styleBytes);''',
-     0),
+        SendMsg(%s, length, (sptr_t)styleBytes);'''
+    ),
 
 
-    'IndicSetAlpha' : ('IndicatorSetAlpha', 0, 0, 0),
-    'IndicGetAlpha' : ('IndicatorGetAlpha', 0, 0, 0),
-    'IndicSetOutlineAlpha' : ('IndicatorSetOutlineAlpha', 0, 0, 0),
-    'IndicGetOutlineAlpha' : ('IndicatorGetOutlineAlpha', 0, 0, 0),
-    'IndicSetStyle' : ('IndicatorSetStyle', 0, 0, 0),
-    'IndicGetStyle' : ('IndicatorGetStyle', 0, 0, 0),
-    'IndicSetFore' : ('IndicatorSetForeground', 0, 0, 0),
-    'IndicGetFore' : ('IndicatorGetForeground', 0, 0, 0),
-    'IndicSetUnder': ('IndicatorSetUnder', 0, 0, 0),
-    'IndicGetUnder': ('IndicatorGetUnder', 0, 0, 0),
-    'IndicSetHoverStyle': ('IndicatorSetHoverStyle', 0, 0, 0),
-    'IndicGetHoverStyle': ('IndicatorGetHoverStyle', 0, 0, 0),
-    'IndicSetHoverFore': ('IndicatorSetHoverForeground', 0, 0, 0),
-    'IndicGetHoverFore': ('IndicatorGetHoverForeground', 0, 0, 0),
-    'IndicSetFlags': ('IndicatorSetFlags', 0, 0, 0),
-    'IndicGetFlags': ('IndicatorGetFlags', 0, 0, 0),
+    'IndicSetAlpha' : ('IndicatorSetAlpha', 0, 0),
+    'IndicGetAlpha' : ('IndicatorGetAlpha', 0, 0),
+    'IndicSetOutlineAlpha' : ('IndicatorSetOutlineAlpha', 0, 0),
+    'IndicGetOutlineAlpha' : ('IndicatorGetOutlineAlpha', 0, 0),
+    'IndicSetStyle' : ('IndicatorSetStyle', 0, 0),
+    'IndicGetStyle' : ('IndicatorGetStyle', 0, 0),
+    'IndicSetFore' : ('IndicatorSetForeground', 0, 0),
+    'IndicGetFore' : ('IndicatorGetForeground', 0, 0),
+    'IndicSetUnder': ('IndicatorSetUnder', 0, 0),
+    'IndicGetUnder': ('IndicatorGetUnder', 0, 0),
+    'IndicSetHoverStyle': ('IndicatorSetHoverStyle', 0, 0),
+    'IndicGetHoverStyle': ('IndicatorGetHoverStyle', 0, 0),
+    'IndicSetHoverFore': ('IndicatorSetHoverForeground', 0, 0),
+    'IndicGetHoverFore': ('IndicatorGetHoverForeground', 0, 0),
+    'IndicSetFlags': ('IndicatorSetFlags', 0, 0),
+    'IndicGetFlags': ('IndicatorGetFlags', 0, 0),
 
-    'SetWhitespaceFore' : ('SetWhitespaceForeground', 0, 0, 0),
-    'SetWhitespaceBack' : ('SetWhitespaceBackground', 0, 0, 0),
+    'SetWhitespaceFore' : ('SetWhitespaceForeground', 0, 0),
+    'SetWhitespaceBack' : ('SetWhitespaceBackground', 0, 0),
 
-    'AutoCShow' : ('AutoCompShow', 0, 0, 0),
-    'AutoCCancel' : ('AutoCompCancel', 0, 0, 0),
-    'AutoCActive' : ('AutoCompActive', 0, 0, 0),
-    'AutoCPosStart' : ('AutoCompPosStart', 0, 0, 0),
-    'AutoCComplete' : ('AutoCompComplete', 0, 0, 0),
-    'AutoCStops' : ('AutoCompStops', 0, 0, 0),
-    'AutoCSetSeparator' : ('AutoCompSetSeparator', 0, 0, 0),
-    'AutoCGetSeparator' : ('AutoCompGetSeparator', 0, 0, 0),
-    'AutoCSelect' : ('AutoCompSelect', 0, 0, 0),
-    'AutoCSetCancelAtStart' : ('AutoCompSetCancelAtStart', 0, 0, 0),
-    'AutoCGetCancelAtStart' : ('AutoCompGetCancelAtStart', 0, 0, 0),
-    'AutoCSetFillUps' : ('AutoCompSetFillUps', 0, 0, 0),
-    'AutoCSetChooseSingle' : ('AutoCompSetChooseSingle', 0, 0, 0),
-    'AutoCGetChooseSingle' : ('AutoCompGetChooseSingle', 0, 0, 0),
-    'AutoCSetIgnoreCase' : ('AutoCompSetIgnoreCase', 0, 0, 0),
-    'AutoCGetIgnoreCase' : ('AutoCompGetIgnoreCase', 0, 0, 0),
-    'AutoCSetAutoHide' : ('AutoCompSetAutoHide', 0, 0, 0),
-    'AutoCGetAutoHide' : ('AutoCompGetAutoHide', 0, 0, 0),
-    'AutoCSetDropRestOfWord' : ('AutoCompSetDropRestOfWord', 0,0,0),
-    'AutoCGetDropRestOfWord' : ('AutoCompGetDropRestOfWord', 0,0,0),
-    'AutoCGetTypeSeparator' : ('AutoCompGetTypeSeparator', 0, 0, 0),
-    'AutoCSetTypeSeparator' : ('AutoCompSetTypeSeparator', 0, 0, 0),
-    'AutoCGetCurrent'       : ('AutoCompGetCurrent', 0, 0, 0),
-    'AutoCGetCurrentText'   : (None, 0, 0, 0),
-    'AutoCSetMaxWidth'      : ('AutoCompSetMaxWidth', 0, 0, 0),
-    'AutoCGetMaxWidth'      : ('AutoCompGetMaxWidth', 0, 0, 0),
-    'AutoCSetMaxHeight'     : ('AutoCompSetMaxHeight', 0, 0, 0),
-    'AutoCGetMaxHeight'     : ('AutoCompGetMaxHeight', 0, 0, 0),
-    'AutoCGetMaxHeight'     : ('AutoCompGetMaxHeight', 0, 0, 0),
-    'AutoCSetCaseInsensitiveBehaviour'     : ('AutoCompSetCaseInsensitiveBehaviour', 0, 0, 0),
-    'AutoCGetCaseInsensitiveBehaviour'     : ('AutoCompGetCaseInsensitiveBehaviour', 0, 0, 0),
-    'AutoCSetMulti'         : ('AutoCompSetMulti', 0, 0, 0),
-    'AutoCGetMulti'         : ('AutoCompGetMulti', 0, 0, 0),
-    'AutoCSetOrder'         : ('AutoCompSetOrder', 0, 0, 0),
-    'AutoCGetOrder'         : ('AutoCompGetOrder', 0, 0, 0),
+    'AutoCShow' : ('AutoCompShow', 0, 0),
+    'AutoCCancel' : ('AutoCompCancel', 0, 0),
+    'AutoCActive' : ('AutoCompActive', 0, 0),
+    'AutoCPosStart' : ('AutoCompPosStart', 0, 0),
+    'AutoCComplete' : ('AutoCompComplete', 0, 0),
+    'AutoCStops' : ('AutoCompStops', 0, 0),
+    'AutoCSetSeparator' : ('AutoCompSetSeparator', 0, 0),
+    'AutoCGetSeparator' : ('AutoCompGetSeparator', 0, 0),
+    'AutoCSelect' : ('AutoCompSelect', 0, 0),
+    'AutoCSetCancelAtStart' : ('AutoCompSetCancelAtStart', 0, 0),
+    'AutoCGetCancelAtStart' : ('AutoCompGetCancelAtStart', 0, 0),
+    'AutoCSetFillUps' : ('AutoCompSetFillUps', 0, 0),
+    'AutoCSetChooseSingle' : ('AutoCompSetChooseSingle', 0, 0),
+    'AutoCGetChooseSingle' : ('AutoCompGetChooseSingle', 0, 0),
+    'AutoCSetIgnoreCase' : ('AutoCompSetIgnoreCase', 0, 0),
+    'AutoCGetIgnoreCase' : ('AutoCompGetIgnoreCase', 0, 0),
+    'AutoCSetAutoHide' : ('AutoCompSetAutoHide', 0, 0),
+    'AutoCGetAutoHide' : ('AutoCompGetAutoHide', 0, 0),
+    'AutoCSetDropRestOfWord' : ('AutoCompSetDropRestOfWord', 0,0),
+    'AutoCGetDropRestOfWord' : ('AutoCompGetDropRestOfWord', 0,0),
+    'AutoCGetTypeSeparator' : ('AutoCompGetTypeSeparator', 0, 0),
+    'AutoCSetTypeSeparator' : ('AutoCompSetTypeSeparator', 0, 0),
+    'AutoCGetCurrent'       : ('AutoCompGetCurrent', 0, 0),
+
+    'AutoCGetCurrentText' :
+    ('AutoCompGetCurrentText',
+    'wxString %s() const;',
+
+     '''wxString %s() const {
+         const int msg = %s;
+         long len = SendMsg(msg, 0, 0);
+         if (!len) return wxEmptyString;
+
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
+
+    'AutoCSetMaxWidth'      : ('AutoCompSetMaxWidth', 0, 0),
+    'AutoCGetMaxWidth'      : ('AutoCompGetMaxWidth', 0, 0),
+    'AutoCSetMaxHeight'     : ('AutoCompSetMaxHeight', 0, 0),
+    'AutoCGetMaxHeight'     : ('AutoCompGetMaxHeight', 0, 0),
+    'AutoCGetMaxHeight'     : ('AutoCompGetMaxHeight', 0, 0),
+    'AutoCSetCaseInsensitiveBehaviour'     : ('AutoCompSetCaseInsensitiveBehaviour', 0, 0),
+    'AutoCGetCaseInsensitiveBehaviour'     : ('AutoCompGetCaseInsensitiveBehaviour', 0, 0),
+    'AutoCSetMulti'         : ('AutoCompSetMulti', 0, 0),
+    'AutoCGetMulti'         : ('AutoCompGetMulti', 0, 0),
+    'AutoCSetOrder'         : ('AutoCompSetOrder', 0, 0),
+    'AutoCGetOrder'         : ('AutoCompGetOrder', 0, 0),
 
     'RegisterImage' :
     (0,
@@ -432,40 +551,34 @@ methodOverrideMap = {
         strm.CopyTo(buff, len);
         buff[len] = 0;
         SendMsg(%s, type, (sptr_t)buff);
-        delete [] buff;
-     ''',
-     ('Register an image for use in autocompletion lists.',)),
+        delete [] buff;'''
+    ),
 
+    'SetHScrollBar' : ('SetUseHorizontalScrollBar', 0, 0),
+    'GetHScrollBar' : ('GetUseHorizontalScrollBar', 0, 0),
 
-    'ClearRegisteredImages' : (0, 0, 0,
-                               ('Clear all the registered images.',)),
+    'SetVScrollBar' : ('SetUseVerticalScrollBar', 0, 0),
+    'GetVScrollBar' : ('GetUseVerticalScrollBar', 0, 0),
 
-
-    'SetHScrollBar' : ('SetUseHorizontalScrollBar', 0, 0, 0),
-    'GetHScrollBar' : ('GetUseHorizontalScrollBar', 0, 0, 0),
-
-    'SetVScrollBar' : ('SetUseVerticalScrollBar', 0, 0, 0),
-    'GetVScrollBar' : ('GetUseVerticalScrollBar', 0, 0, 0),
-
-    'GetCaretFore' : ('GetCaretForeground', 0, 0, 0),
-
-    'GetUsePalette' : (None, 0, 0, 0),
+    'GetCaretFore' : ('GetCaretForeground', 0, 0),
 
     'FindText' :
     (0,
-     '''int %s(int minPos, int maxPos, const wxString& text, int flags=0);''',
+     '''int %s(int minPos, int maxPos, const wxString& text, int flags=0,
+                 int* findEnd=NULL);''',
 
-     '''int %s(int minPos, int maxPos,
-               const wxString& text,
-               int flags) {
-            TextToFind  ft;
+     '''int %s(int minPos, int maxPos, const wxString& text,
+                               int flags, int* findEnd) {
+            Sci_TextToFind  ft;
             ft.chrg.cpMin = minPos;
             ft.chrg.cpMax = maxPos;
             const wxWX2MBbuf buf = wx2stc(text);
             ft.lpstrText = (char*)(const char*)buf;
 
-            return SendMsg(%s, flags, (sptr_t)&ft);''',
-     0),
+            int pos = SendMsg(%s, flags, (sptr_t)&ft);
+            if (findEnd) *findEnd=(pos==-1?wxSTC_INVALID_POSITION:ft.chrgText.cpMax);
+            return pos;'''
+    ),
 
     'FormatRange' :
     (0,
@@ -483,12 +596,10 @@ methodOverrideMap = {
                 wxDC*  target,
                 wxRect renderRect,
                 wxRect pageRect) {
-             RangeToFormat fr;
+             Sci_RangeToFormat fr;
 
              if (endPos < startPos) {
-                 int temp = startPos;
-                 startPos = endPos;
-                 endPos = temp;
+                 wxSwap(startPos, endPos);
              }
              fr.hdc = draw;
              fr.hdcTarget = target;
@@ -503,8 +614,8 @@ methodOverrideMap = {
              fr.chrg.cpMin = startPos;
              fr.chrg.cpMax = endPos;
 
-             return SendMsg(%s, doDraw, (sptr_t)&fr);''',
-     0),
+             return SendMsg(%s, doDraw, (sptr_t)&fr);'''
+    ),
 
 
     'GetLine' :
@@ -515,34 +626,26 @@ methodOverrideMap = {
          int len = LineLength(line);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(%s, line, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
+         wxCharBuffer buf(len);
+         SendMsg(%s, line, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
 
-     ('Retrieve the contents of a line.',)),
-
-    'SetSel' : (None, 0,0,0), #'SetSelection', 0, 0, 0),
+    'SetSel' : (None, 0,0), #'SetSelection', 0, 0, 0),
 
     'GetSelText' :
     ('GetSelectedText',
      'wxString %s();',
 
      '''wxString %s() {
-         const int len = SendMsg(SCI_GETSELTEXT, 0, (sptr_t)0);
+         const int msg = %s;
+         long len = SendMsg(msg, 0, (sptr_t)0);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+2);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(%s, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-
-     ('Retrieve the selected text.',)),
-
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
 
     'GetTextRange' :
     (0,
@@ -550,91 +653,88 @@ methodOverrideMap = {
 
      '''wxString %s(int startPos, int endPos) {
          if (endPos < startPos) {
-             int temp = startPos;
-             startPos = endPos;
-             endPos = temp;
+             wxSwap(startPos, endPos);
          }
-         int   len  = endPos - startPos;
+         int len = endPos - startPos;
          if (!len) return wxEmptyString;
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len);
-         TextRange tr;
-         tr.lpstrText = buf;
+
+         wxCharBuffer buf(len);
+         Sci_TextRange tr;
+         tr.lpstrText = buf.data();
          tr.chrg.cpMin = startPos;
          tr.chrg.cpMax = endPos;
+         tr.lpstrText[0] = '\\0'; // initialize with 0 in case the range is invalid
          SendMsg(%s, 0, (sptr_t)&tr);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
+         return stc2wx(buf);'''
+    ),
 
-     ('Retrieve a range of text.',)),
+    'PointXFromPosition' :
+    ('PointFromPosition',
+     'wxPoint %s(int pos);',
+     '''wxPoint %s(int pos) {
+         int x = SendMsg(%s, 0, pos);
+         int y = SendMsg(SCI_POINTYFROMPOSITION, 0, pos);
+         return wxPoint(x, y);'''
+    ),
 
-    'PointXFromPosition' : (None, 0, 0, 0),
-    'PointYFromPosition' : (None, 0, 0, 0),
+    'PointYFromPosition' : (None, 0, 0),
 
-    'ScrollCaret' : ('EnsureCaretVisible', 0, 0, 0),
-    'ReplaceSel' : ('ReplaceSelection', 0, 0, 0),
-    'Null' : (None, 0, 0, 0),
+    'ScrollCaret' : ('EnsureCaretVisible', 0, 0),
+    'ReplaceSel' : ('ReplaceSelection', 0, 0),
+    'Null' : (None, 0, 0),
 
     'GetText' :
     (0,
      'wxString %s() const;',
 
      '''wxString %s() const {
-         int len  = GetTextLength();
-         wxMemoryBuffer mbuf(len+1);   // leave room for the null...
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(%s, len+1, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
+         int len = GetTextLength();
+         if (!len) return wxEmptyString;
 
-     ('Retrieve all the text in the document.', )),
+         wxCharBuffer buf(len);
+         SendMsg(%s, len+1, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
 
     'GetDirectFunction' :
     (0,
      'void* %s() const;',
      '''void* %s() const {
-         return (void*)SendMsg(%s);''',
-     0),
+         return (void*)SendMsg(%s);'''
+    ),
 
     'GetDirectPointer' :
     (0,
      'void* %s() const;',
      '''void* %s() const {
-         return (void*)SendMsg(%s);''',
-     0),
+         return (void*)SendMsg(%s);'''
+    ),
 
     'GetTargetText' :
     (0,
      'wxString %s() const;',
 
      '''wxString %s() const {
-         int startPos = GetTargetStart();
-         int endPos = GetTargetEnd();
-         wxMemoryBuffer mbuf(endPos-startPos+1);   // leave room for the null...
-         char* buf = (char*)mbuf.GetWriteBuf(endPos-startPos+1);
-         SendMsg(%s, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(endPos-startPos);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
+         int len = GetTargetEnd() - GetTargetStart();
+         wxCharBuffer buf(len);
+         SendMsg(%s, 0, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
 
-     0),
+    'CallTipPosStart'   : ('CallTipPosAtStart', 0, 0),
+    'CallTipSetPosStart': ('CallTipSetPosAtStart', 0, 0),
+    'CallTipSetHlt'     : ('CallTipSetHighlight', 0, 0),
+    'CallTipSetBack'    : ('CallTipSetBackground', 0, 0),
+    'CallTipSetFore'    : ('CallTipSetForeground', 0, 0),
+    'CallTipSetForeHlt' : ('CallTipSetForegroundHighlight', 0, 0),
 
-    'CallTipPosStart'   : ('CallTipPosAtStart', 0, 0, 0),
-    'CallTipSetPosStart': ('CallTipSetPosAtStart', 0, 0, 0),
-    'CallTipSetHlt'     : ('CallTipSetHighlight', 0, 0, 0),
-    'CallTipSetBack'    : ('CallTipSetBackground', 0, 0, 0),
-    'CallTipSetFore'    : ('CallTipSetForeground', 0, 0, 0),
-    'CallTipSetForeHlt' : ('CallTipSetForegroundHighlight', 0, 0, 0),
+    'SetHotspotActiveFore' : ('SetHotspotActiveForeground', 0, 0),
+    'SetHotspotActiveBack' : ('SetHotspotActiveBackground', 0, 0),
+    'GetHotspotActiveFore' : ('GetHotspotActiveForeground', 0, 0),
+    'GetHotspotActiveBack' : ('GetHotspotActiveBackground', 0, 0),
 
-    'SetHotspotActiveFore' : ('SetHotspotActiveForeground', 0, 0, 0),
-    'SetHotspotActiveBack' : ('SetHotspotActiveBackground', 0, 0, 0),
-    'GetHotspotActiveFore' : ('GetHotspotActiveForeground', 0, 0, 0),
-    'GetHotspotActiveBack' : ('GetHotspotActiveBackground', 0, 0, 0),
-
-    'GetCaretLineBack' : ('GetCaretLineBackground', 0, 0, 0),
-    'SetCaretLineBack' : ('SetCaretLineBackground', 0, 0, 0),
+    'GetCaretLineBack' : ('GetCaretLineBackground', 0, 0),
+    'SetCaretLineBack' : ('SetCaretLineBackground', 0, 0),
 
     'ReplaceTarget' :
     (0,
@@ -643,8 +743,8 @@ methodOverrideMap = {
      '''
      int %s(const wxString& text) {
          const wxWX2MBbuf buf = wx2stc(text);
-         return SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);''',
-     0),
+         return SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);'''
+    ),
 
     'ReplaceTargetRE' :
     (0,
@@ -653,13 +753,8 @@ methodOverrideMap = {
      '''
      int %s(const wxString& text) {
          const wxWX2MBbuf buf = wx2stc(text);
-         return SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);''',
-     ('Replace the target text with the argument text after \\\d processing.',
-      'Text is counted so it can contain NULs.',
-      'Looks for \\\d where d is between 1 and 9 and replaces these with the strings',
-      'matched in the last search operation which were surrounded by \( and \).',
-      'Returns the length of the replacement text including any change',
-      'caused by processing the \\\d patterns.',)),
+         return SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);'''
+    ),
 
     'SearchInTarget' :
     (0,
@@ -668,13 +763,13 @@ methodOverrideMap = {
      '''
      int %s(const wxString& text) {
          const wxWX2MBbuf buf = wx2stc(text);
-         return SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);''',
-     0),
+         return SendMsg(%s, wx2stclen(text, buf), (sptr_t)(const char*)buf);'''
+    ),
 
     # not sure what to do about these yet
-    'TargetAsUTF8' :       ( None, 0, 0, 0),
-    'SetLengthForEncode' : ( None, 0, 0, 0),
-    'EncodedFromUTF8' :    ( None, 0, 0, 0),
+    'TargetAsUTF8' :       ( None, 0, 0),
+    'SetLengthForEncode' : ( None, 0, 0),
+    'EncodedFromUTF8' :    ( None, 0, 0),
 
 
     'GetProperty' :
@@ -682,73 +777,82 @@ methodOverrideMap = {
      'wxString %s(const wxString& key);',
 
      '''wxString %s(const wxString& key) {
-         int len = SendMsg(SCI_GETPROPERTY, (sptr_t)(const char*)wx2stc(key), 0);
+         const int msg = %s;
+         const wxWX2MBbuf keyBuf = wx2stc(key);
+         long len = SendMsg(msg, (uptr_t)(const char*)keyBuf, 0);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(%s, (uptr_t)(const char*)wx2stc(key), (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-     ("Retrieve a 'property' value previously set with SetProperty.",)),
+         wxCharBuffer buf(len);
+         SendMsg(msg, (uptr_t)(const char*)keyBuf, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
 
     'GetPropertyExpanded' :
     (0,
      'wxString %s(const wxString& key);',
 
      '''wxString %s(const wxString& key) {
-         int len = SendMsg(SCI_GETPROPERTYEXPANDED, (uptr_t)(const char*)wx2stc(key), 0);
+         const int msg = %s;
+         const wxWX2MBbuf keyBuf = wx2stc(key);
+         long len = SendMsg(msg, (uptr_t)(const char*)keyBuf, 0);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(%s, (uptr_t)(const char*)wx2stc(key), (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-     ("Retrieve a 'property' value previously set with SetProperty,",
-      "with '$()' variable replacement on returned buffer.")),
+         wxCharBuffer buf(len);
+         SendMsg(msg, (uptr_t)(const char*)keyBuf, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
 
-    'GetPropertyInt'   : (0, 0, 0,
-       ("Retrieve a 'property' value previously set with SetProperty,",
-        "interpreted as an int AFTER any '$()' variable replacement.")),
+    'GetPropertyInt' :
+    (0,
+    'int %s(const wxString &key, int defaultValue=0) const;',
+    '''int %s(const wxString &key, int defaultValue) const {
+        return SendMsg(%s, (uptr_t)(const char*)wx2stc(key), defaultValue);'''
+    ),
 
+    'BraceMatch' :
+    (0,
+    'int %s(int pos, int maxReStyle=0);',
+    '''int %s(int pos, int maxReStyle){
+        wxASSERT_MSG(maxReStyle==0,
+                     "The second argument passed to BraceMatch should be 0");
+
+        return SendMsg(%s, pos, maxReStyle);'''
+    ),
 
     'GetDocPointer' :
     (0,
      'void* %s();',
      '''void* %s() {
-         return (void*)SendMsg(%s);''',
-     0),
+         return (void*)SendMsg(%s);'''
+    ),
 
     'SetDocPointer' :
     (0,
      'void %s(void* docPointer);',
      '''void %s(void* docPointer) {
-         SendMsg(%s, 0, (sptr_t)docPointer);''',
-     0),
+         SendMsg(%s, 0, (sptr_t)docPointer);'''
+    ),
 
     'CreateDocument' :
     (0,
      'void* %s();',
      '''void* %s() {
-         return (void*)SendMsg(%s);''',
-     0),
+         return (void*)SendMsg(%s);'''
+    ),
 
     'AddRefDocument' :
     (0,
      'void %s(void* docPointer);',
      '''void %s(void* docPointer) {
-         SendMsg(%s, 0, (sptr_t)docPointer);''',
-     0),
+         SendMsg(%s, 0, (sptr_t)docPointer);'''
+    ),
 
     'ReleaseDocument' :
     (0,
      'void %s(void* docPointer);',
      '''void %s(void* docPointer) {
-         SendMsg(%s, 0, (sptr_t)docPointer);''',
-     0),
+         SendMsg(%s, 0, (sptr_t)docPointer);'''
+    ),
 
     'SetCodePage' :
     (0,
@@ -761,20 +865,20 @@ methodOverrideMap = {
     wxASSERT_MSG(codePage != wxSTC_CP_UTF8,
                  wxT("wxSTC_CP_UTF8 may not be used when wxUSE_UNICODE is off."));
 #endif
-    SendMsg(%s, codePage);''',
-     ("Set the code page used to interpret the bytes of the document as characters.",) ),
+    SendMsg(%s, codePage);'''
+    ),
 
 
-    'GrabFocus' : (None, 0, 0, 0),
+    'GrabFocus' : (None, 0, 0),
 
     # Rename some that would otherwise hide the wxWindow methods
-    'SetFocus'  : ('SetSTCFocus', 0, 0, 0),
-    'GetFocus'  : ('GetSTCFocus', 0, 0, 0),
-    'SetCursor' : ('SetSTCCursor', 0, 0, 0),
-    'GetCursor' : ('GetSTCCursor', 0, 0, 0),
+    'SetFocus'  : ('SetSTCFocus', 0, 0),
+    'GetFocus'  : ('GetSTCFocus', 0, 0),
+    'SetCursor' : ('SetSTCCursor', 0, 0),
+    'GetCursor' : ('GetSTCCursor', 0, 0),
 
-    'SetPositionCache' : ('SetPositionCacheSize', 0, 0, 0),
-    'GetPositionCache' : ('GetPositionCacheSize', 0, 0, 0),
+    'SetPositionCache' : ('SetPositionCacheSize', 0, 0),
+    'GetPositionCache' : ('GetPositionCacheSize', 0, 0),
 
     'GetLexerLanguage' :(0,
      'wxString %s() const;',
@@ -784,31 +888,24 @@ methodOverrideMap = {
          int len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
 
-         ('Retrieve the lexing language of the document.',)),
-
-    'SetFontQuality' : (None, 0, 0, 0),
-    'GetFontQuality' : (None, 0, 0, 0),
-    'SetSelection' : (None, 0, 0, 0),
+    'SetSelection' : (None, 0, 0),
 
     'GetCharacterPointer' : (0,
                              'const char* %s() const;',
                              'const char* %s() const {\n'
-                             '    return (const char*)SendMsg(%s, 0, 0);',
-                             0),
-    
+                             '    return (const char*)SendMsg(%s, 0, 0);'
+                            ),
+
     'GetRangePointer' : (0,
                              'const char* %s(int position, int rangeLength) const;',
                              'const char* %s(int position, int rangeLength) const {\n'
-                             '    return (const char*)SendMsg(%s, position, rangeLength);',
-                             0),
-    
+                             '    return (const char*)SendMsg(%s, position, rangeLength);'
+                        ),
 
     'GetWordChars' :
     (0,
@@ -824,9 +921,8 @@ methodOverrideMap = {
          SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-
-     ('Get the set of characters making up words for when moving or selecting by word.',)),
+         return stc2wx(buf);'''
+    ),
 
     'GetTag' :
     (0,
@@ -834,16 +930,13 @@ methodOverrideMap = {
 
      '''wxString %s(int tagNumber) const {
          const int msg = %s;
-         int len = SendMsg(msg, tagNumber, (sptr_t)NULL);
+         long len = SendMsg(msg, tagNumber, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, tagNumber, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-     0),
+         wxCharBuffer buf(len);
+         SendMsg(msg, tagNumber, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
 
     'GetWhitespaceChars' :
     (0,
@@ -859,8 +952,8 @@ methodOverrideMap = {
          SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-     0),
+         return stc2wx(buf);'''
+    ),
 
 
     'GetPunctuationChars' :
@@ -877,8 +970,8 @@ methodOverrideMap = {
          SendMsg(msg, 0, (sptr_t)buf);
          mbuf.UngetWriteBuf(len);
          mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-     0),
+         return stc2wx(buf);'''
+    ),
 
 
     'PropertyNames' :
@@ -887,16 +980,13 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          const int msg = %s;
-         int len = SendMsg(msg, 0, (sptr_t)NULL);
+         long len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-     0),
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
 
 
 
@@ -906,16 +996,14 @@ methodOverrideMap = {
 
      '''wxString %s(const wxString& name) const {
          const int msg = %s;
-         int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(name), (sptr_t)NULL);
+         const wxWX2MBbuf nameBuf = wx2stc(name);
+         long len = SendMsg(msg, (uptr_t)(const char*)nameBuf, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, (sptr_t)(const char*)wx2stc(name), (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-     0),
+         wxCharBuffer buf(len);
+         SendMsg(msg, (uptr_t)(const char*)nameBuf, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
 
 
 
@@ -925,91 +1013,81 @@ methodOverrideMap = {
 
      '''wxString %s() const {
          const int msg = %s;
-         int len = SendMsg(msg, 0, (sptr_t)NULL);
+         long len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-     0),
-     
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
 
     'MarkerDefineRGBAImage' :
     (0,
     'void %s(int markerNumber, const unsigned char* pixels);',
     '''void %s(int markerNumber, const unsigned char* pixels) {
-           SendMsg(%s, markerNumber, (sptr_t)pixels);''',
-    0),
+           SendMsg(%s, markerNumber, (sptr_t)pixels);'''
+    ),
 
 
     'RegisterRGBAImage' :
     (0,
     'void %s(int type, const unsigned char* pixels);',
     '''void %s(int type, const unsigned char* pixels) {
-           SendMsg(%s, type, (sptr_t)pixels);''',
-    0),
+           SendMsg(%s, type, (sptr_t)pixels);'''
+    ),
 
 
     # I think these are only available on the native OSX backend, so
     # don't add them to the wx API...
-    'FindIndicatorShow' : (None, 0,0,0),
-    'FindIndicatorFlash' : (None, 0,0,0),
-    'FindIndicatorHide' : (None, 0,0,0),
+    'FindIndicatorShow' : (None, 0,0),
+    'FindIndicatorFlash' : (None, 0,0),
+    'FindIndicatorHide' : (None, 0,0),
 
     'CreateLoader' :
     (0,
      'void* %s(int bytes) const;',
      """void* %s(int bytes) const {
-         return (void*)(sptr_t)SendMsg(%s, bytes); """,
-     0),
+         return (void*)(sptr_t)SendMsg(%s, bytes);"""
+    ),
 
     'GetRepresentation' :
     (0,
      'wxString %s(const wxString& encodedCharacter) const;',
      '''wxString %s(const wxString& encodedCharacter) const {
-         int msg = %s;
-         int len = SendMsg(msg, (sptr_t)(const char*)wx2stc(encodedCharacter), (sptr_t)NULL);
+         const int msg = %s;
+         const wxWX2MBbuf encCharBuf = wx2stc(encodedCharacter);
+         long len = SendMsg(msg, (sptr_t)(const char*)encCharBuf, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, (sptr_t)(const char*)wx2stc(encodedCharacter), (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-     0),
+         wxCharBuffer buf(len);
+         SendMsg(msg, (sptr_t)(const char*)encCharBuf, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
 
      'PrivateLexerCall' :
      (0,
       'void* %s(int operation, void* pointer);',
       """void* %s(int operation, void* pointer) {
-           return (void*)(sptr_t)SendMsg(%s, operation, (sptr_t)pointer); """,
-      0),
-      
-    'GetMultiPaste' : 
-    (0, 0, 0, 
-    ('Retrieve the effect of pasting when there are multiple selections.',)),
+           return (void*)(sptr_t)SendMsg(%s, operation, (sptr_t)pointer);"""
+     ),
 
     'GetSubStyleBases' :
     (0,
      'wxString %s() const;',
      '''wxString %s() const {
-         int msg = %s;
-         int len = SendMsg(msg, 0, (sptr_t)NULL);
+         const int msg = %s;
+         long len = SendMsg(msg, 0, (sptr_t)NULL);
          if (!len) return wxEmptyString;
 
-         wxMemoryBuffer mbuf(len+1);
-         char* buf = (char*)mbuf.GetWriteBuf(len+1);
-         SendMsg(msg, 0, (sptr_t)buf);
-         mbuf.UngetWriteBuf(len);
-         mbuf.AppendByte(0);
-         return stc2wx(buf);''',
-     0),
-    
-    '' : ('', 0, 0, 0),
+         wxCharBuffer buf(len);
+         SendMsg(msg, 0, (sptr_t)buf.data());
+         return stc2wx(buf);'''
+    ),
+
+    'SetKeysUnicode' : (None,0,0),
+    'GetKeysUnicode' : (None,0,0),
+
+    '' : ('', 0, 0),
 
     }
 
@@ -1048,6 +1126,7 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
     values = []
     methods = []
     cmds = []
+    icat = 'Basics'
 
     # parse iface file
     fi = FileInput(iface)
@@ -1062,16 +1141,16 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
             curDocStrings.append(line[2:])
 
         elif op == 'val ':
-            parseVal(line[4:], values, curDocStrings)
+            parseVal(line[4:], values, curDocStrings, icat)
             curDocStrings = []
 
         elif op == 'fun ' or op == 'set ' or op == 'get ':
-            parseFun(line[4:], methods, curDocStrings, cmds, op == 'get ', msgcodes)
+            parseFun(line[4:], methods, curDocStrings, cmds, op == 'get ', msgcodes, icat)
             curDocStrings = []
 
         elif op == 'cat ':
-            if line[4:].strip() == 'Deprecated':
-                break    # skip the rest of the file
+            icat = line[4:].strip()
+            curDocStrings = []
 
         elif op == 'evt ':
             pass
@@ -1085,6 +1164,16 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
         else:
             print('***** Unknown line type: %s' % line)
 
+    # build the items for the table of contents in the interface header
+    tableitems=''
+    firstitem=True
+    for category, title, description  in categoriesList:
+        if firstitem:
+            firstitem=False
+        else:
+            tableitems+='\n'
+        tableitems+='    - @ref_member_group{'+category+', '+title+'}'
+
     # process templates
     data = {}
     data['VALUES'] = processVals(values)
@@ -1093,6 +1182,7 @@ def processIface(iface, h_tmplt, cpp_tmplt, ih_tmplt, h_dest, cpp_dest, docstr_d
     data['METHOD_DEFS'] = defs
     data['METHOD_IDEFS'] = idefs
     data['METHOD_IMPS'] = imps
+    data['TABLE_OF_CONTENTS'] = tableitems
 
     # get template text
     h_text = open(h_tmplt).read()
@@ -1158,15 +1248,25 @@ def processMethods(methods):
     idefs = []
     imps = []
     dstr = []
+    piecesForInterface = {}
 
-    for retType, name, number, param1, param2, docs, is_const, is_override in methods:
+    # Initialize each of the piecesForInterface with an empty list
+    for c in categoriesList:
+        piecesForInterface[c[0]]=[]
+
+    for retType, interfName, number, param1, param2, docs, is_const, is_override, icat  in methods:
         retType = retTypeMap.get(retType, retType)
         params = makeParamString(param1, param2)
 
-        name, theDef, theImp, docs = checkMethodOverride(name, number, docs)
+        if icat=='Provisional' and not GENERATE_PROVISIONAL_ITEMS:
+            continue
+
+        name, theDef, theImp = checkMethodOverride(interfName, number)
 
         if name is None:
             continue
+
+        category, docs, docsLong = buildDocs(interfName, docs, icat)
 
         # Build docstrings
         st = 'DocStr(wxStyledTextCtrl::%s,\n' \
@@ -1185,6 +1285,9 @@ def processMethods(methods):
             if is_override:
                 theDef = theDef + ' wxOVERRIDE'
             theDef = theDef + ';'
+        if category=='DeprecatedMessages' or icat=='Deprecated':
+            defs.append('    wxDEPRECATED_MSG( "This method uses a function '
+                        'deprecated in the Scintilla library." )')
         defs.append(theDef)
 
         # Skip override from the interface file
@@ -1192,17 +1295,29 @@ def processMethods(methods):
           theDef = theDef.replace(' wxOVERRIDE', '')
 
         # Build the method definition for the interface .h file
+        intrflines = []
         if docs:
-            idefs.append('')
-            idefs.append('    /**')
+            intrflines.append('')
+            intrflines.append('    /**')
             for x in docs:
-                idefs.append('        ' + x)
-            idefs.append('    */')
-        if name == 'GetCurLine':
-            idefs.append('    wxString GetCurLine(int* linePos=NULL);')
+                intrflines.append('        ' + x)
+
+            if docsLong != 0:
+                intrflines.append('')
+                for y in docsLong:
+                    intrflines.append('        ' + y)
+            intrflines.append('    */')
         else:
-            idefs.append(theDef)
-                     
+            print('warning: ' + name + ' is undocumented.')
+
+        if name == 'GetCurLine':
+            intrflines.append('    wxString GetCurLine(int* linePos=NULL);')
+        else:
+            intrflines.append(theDef)
+
+        piecesForInterface[category]+=intrflines
+
+
         # Build the method implementation string
         if docs:
             imps.append('')
@@ -1228,13 +1343,29 @@ def processMethods(methods):
             theImp = theImp + ';\n}'
         imps.append(theImp)
 
+    # For the interface file, merge all the pieces into one list
+    for c in categoriesList:
+        idefs.append('')
+        idefs.append('    /**')
+        idefs.append('        @member_group_name{' + c[0] + ', ' + c[1] + '}')
+
+        if c[2] != 0:
+            idefs.append('')
+            for z in c[2]:
+                idefs.append('        ' + z)
+
+        idefs.append('    */')
+        idefs.append('    //@{')
+
+        idefs+=piecesForInterface[c[0]]
+        idefs.append('')
+        idefs.append('    //@}')
 
     return joinWithNewLines(defs), joinWithNewLines(imps), joinWithNewLines(dstr), joinWithNewLines(idefs)
 
-
 #----------------------------------------------------------------------------
 
-def checkMethodOverride(name, number, docs):
+def checkMethodOverride(name, number):
     theDef = theImp = None
     if name in methodOverrideMap:
         item = methodOverrideMap[name]
@@ -1246,13 +1377,11 @@ def checkMethodOverride(name, number, docs):
                 theDef = '    ' + (item[1] % name)
             if item[2] != 0:
                 theImp = item[2] % ('wxStyledTextCtrl::'+name, number) + '\n}'
-            if item[3] != 0:
-                docs = item[3]
         except:
             print("************* " + name)
             raise
 
-    return name, theDef, theImp, docs
+    return name, theDef, theImp
 
 #----------------------------------------------------------------------------
 
@@ -1288,8 +1417,22 @@ def makeParamString(param1, param2):
 
 #----------------------------------------------------------------------------
 
-def parseVal(line, values, docs):
+def parseVal(line, values, docs, icat):
     name, val = line.split('=')
+
+    if name in notMappedSciValues:
+            return
+
+    if icat=='Deprecated':
+        docs.append('@deprecated')
+
+    if icat=='Provisional':
+        if GENERATE_PROVISIONAL_ITEMS:
+            docs.append('This item is a provisional value and is subject '
+                        'to change')
+            docs.append('in future versions of wxStyledTextCtrl.')
+        else:
+            return
 
     # remove prefixes such as SCI, etc.
     for old, new in valPrefixes:
@@ -1310,7 +1453,7 @@ funregex = re.compile(r'\s*([a-zA-Z0-9_]+)'  # <ws>return type
                       '\(([ a-zA-Z0-9_]*),'  # (param,
                       '([ a-zA-Z0-9_]*),*\)')  # param)
 
-def parseFun(line, methods, docs, values, is_const, msgcodes):
+def parseFun(line, methods, docs, values, is_const, msgcodes, icat):
     def parseParam(param):
         param = param.strip()
         if param == '':
@@ -1332,7 +1475,7 @@ def parseFun(line, methods, docs, values, is_const, msgcodes):
     num = int(number)
     for v in cmdValues:
         if (type(v) == type(()) and v[0] <= num <= v[1]) or v == num:
-            parseVal('CMD_%s=%s' % (name.upper(), number), values, docs)
+            parseVal('CMD_%s=%s' % (name.upper(), number), values, docs, 'Basics')
 
             # if we are not also doing a function for CMD values, then
             # just return, otherwise fall through to the append blow.
@@ -1345,7 +1488,8 @@ def parseFun(line, methods, docs, values, is_const, msgcodes):
     else:
         code = number
     methods.append( (retType, name, code, param1, param2, tuple(docs),
-                     is_const or name in constNonGetterMethods, name in overrideNeeded) )
+                     is_const or name in constNonGetterMethods,
+                     name in overrideNeeded, icat) )
 
 
 #----------------------------------------------------------------------------

@@ -36,6 +36,7 @@
 #include "wx/scopedarray.h"
 #include "wx/scopedptr.h"
 #include "wx/anidecod.h"
+#include "wx/private/icondir.h"
 
 // For memcpy
 #include <string.h>
@@ -128,7 +129,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
               (format == wxBMP_8BPP_RED) || (format == wxBMP_8BPP_PALETTE) )
     {
         // need to set a wxPalette to use this, HOW TO CHECK IF VALID, SIZE?
-        if ((format == wxBMP_8BPP_PALETTE)
+        if (format == wxBMP_8BPP_PALETTE
 #if wxUSE_PALETTE
                 && !image->HasPalette()
 #endif // wxUSE_PALETTE
@@ -431,7 +432,7 @@ bool wxBMPHandler::SaveDib(wxImage *image,
                     ((wxUint8)palette->GetPixel(data[pixel],
                                                 data[pixel+1],
                                                 data[pixel+2]) << 4) |
-                    (((x+1) > width)
+                    (((x+1) >= width)
                      ? 0
                      : ((wxUint8)palette->GetPixel(data[pixel+3],
                                                    data[pixel+4],
@@ -451,13 +452,13 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 #if wxUSE_PALETTE
                 buffer[x/8] = (wxUint8)(
                                            ((wxUint8)palette->GetPixel(data[pixel], data[pixel+1], data[pixel+2]) << 7) |
-                    (((x+1) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+3], data[pixel+4], data[pixel+5]) << 6)) |
-                    (((x+2) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+6], data[pixel+7], data[pixel+8]) << 5)) |
-                    (((x+3) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+9], data[pixel+10], data[pixel+11]) << 4)) |
-                    (((x+4) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+12], data[pixel+13], data[pixel+14]) << 3)) |
-                    (((x+5) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+15], data[pixel+16], data[pixel+17]) << 2)) |
-                    (((x+6) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+18], data[pixel+19], data[pixel+20]) << 1)) |
-                    (((x+7) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+21], data[pixel+22], data[pixel+23])     ))    );
+                    (((x+1) >= width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+3], data[pixel+4], data[pixel+5]) << 6)) |
+                    (((x+2) >= width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+6], data[pixel+7], data[pixel+8]) << 5)) |
+                    (((x+3) >= width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+9], data[pixel+10], data[pixel+11]) << 4)) |
+                    (((x+4) >= width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+12], data[pixel+13], data[pixel+14]) << 3)) |
+                    (((x+5) >= width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+15], data[pixel+16], data[pixel+17]) << 2)) |
+                    (((x+6) >= width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+18], data[pixel+19], data[pixel+20]) << 1)) |
+                    (((x+7) >= width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+21], data[pixel+22], data[pixel+23])     ))    );
 #else
                 // FIXME: what should this be? use some std palette maybe?
                 buffer[x/8] = 0;
@@ -472,13 +473,13 @@ bool wxBMPHandler::SaveDib(wxImage *image,
 
                 buffer[x/8] = (wxUint8)(
                                           (((wxUint8)(data[pixel]   /128.)) << 7) |
-                   (((x+1) > width) ? 0 : (((wxUint8)(data[pixel+3] /128.)) << 6)) |
-                   (((x+2) > width) ? 0 : (((wxUint8)(data[pixel+6] /128.)) << 5)) |
-                   (((x+3) > width) ? 0 : (((wxUint8)(data[pixel+9] /128.)) << 4)) |
-                   (((x+4) > width) ? 0 : (((wxUint8)(data[pixel+12]/128.)) << 3)) |
-                   (((x+5) > width) ? 0 : (((wxUint8)(data[pixel+15]/128.)) << 2)) |
-                   (((x+6) > width) ? 0 : (((wxUint8)(data[pixel+18]/128.)) << 1)) |
-                   (((x+7) > width) ? 0 : (((wxUint8)(data[pixel+21]/128.))     ))    );
+                   (((x+1) >= width) ? 0 : (((wxUint8)(data[pixel+3] /128.)) << 6)) |
+                   (((x+2) >= width) ? 0 : (((wxUint8)(data[pixel+6] /128.)) << 5)) |
+                   (((x+3) >= width) ? 0 : (((wxUint8)(data[pixel+9] /128.)) << 4)) |
+                   (((x+4) >= width) ? 0 : (((wxUint8)(data[pixel+12]/128.)) << 3)) |
+                   (((x+5) >= width) ? 0 : (((wxUint8)(data[pixel+15]/128.)) << 2)) |
+                   (((x+6) >= width) ? 0 : (((wxUint8)(data[pixel+18]/128.)) << 1)) |
+                   (((x+7) >= width) ? 0 : (((wxUint8)(data[pixel+21]/128.))     ))    );
             }
         }
 
@@ -1032,7 +1033,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     }
 
     // Bitmap files come in old v1 format using BITMAPCOREHEADER or a newer
-    // format (typically BITMAPV5HEADER, in use since Windows 98, but we don't
+    // format (typically BITMAPV5HEADER, but we don't
     // really support any features specific to later formats such as gamma
     // correction or ICC profiles, so it doesn't matter much to us).
     const bool usesV1 = hdrSize == 12;
@@ -1240,30 +1241,6 @@ bool wxBMPHandler::DoCanRead(wxInputStream& stream)
 wxIMPLEMENT_DYNAMIC_CLASS(wxICOHandler, wxBMPHandler);
 
 #if wxUSE_STREAMS
-
-struct ICONDIRENTRY
-{
-    wxUint8         bWidth;               // Width of the image
-    wxUint8         bHeight;              // Height of the image (times 2)
-    wxUint8         bColorCount;          // Number of colors in image (0 if >=8bpp)
-    wxUint8         bReserved;            // Reserved
-
-    // these two are different in icons and cursors:
-                                          // icon           or  cursor
-    wxUint16        wPlanes;              // Color Planes   or  XHotSpot
-    wxUint16        wBitCount;            // Bits per pixel or  YHotSpot
-
-    wxUint32        dwBytesInRes;         // how many bytes in this resource?
-    wxUint32        dwImageOffset;        // where in the file is this image
-};
-
-struct ICONDIR
-{
-    wxUint16     idReserved;   // Reserved
-    wxUint16     idType;       // resource type (1 for icons, 2 for cursors)
-    wxUint16     idCount;      // how many images?
-};
-
 
 bool wxICOHandler::SaveFile(wxImage *image,
                             wxOutputStream& stream,

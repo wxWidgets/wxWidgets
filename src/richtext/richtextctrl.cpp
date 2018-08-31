@@ -312,6 +312,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
 
     GetBuffer().AddEventHandler(this);
 
+#if wxUSE_ACCEL
     // Accelerators
     wxAcceleratorEntry entries[6];
 
@@ -324,6 +325,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
 
     wxAcceleratorTable accel(6, entries);
     SetAcceleratorTable(accel);
+#endif // wxUSE_ACCEL
 
     m_contextMenu = new wxMenu;
     m_contextMenu->Append(wxID_UNDO, _("&Undo"));
@@ -870,6 +872,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
 
                 case wxDragError:
                     wxLogError(wxT("An error occurred during drag and drop operation"));
+                    wxFALLTHROUGH;
                 case wxDragNone:
                 case wxDragCancel:
                     Refresh(); // This is needed in wxMSW, otherwise resetting the position doesn't 'take'
@@ -1010,7 +1013,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
         && (distance > 4)
 #endif
         // Don't select to the end of the container when going outside the window
-        // For analysis, see http://trac.wxwidgets.org/ticket/15714
+        // For analysis, see https://trac.wxwidgets.org/ticket/15714
         && (! (hitObj == (& m_buffer) && ((hit & wxRICHTEXT_HITTEST_OUTSIDE) != 0)))
         )
     {
@@ -3042,7 +3045,7 @@ bool wxRichTextCtrl::RecreateBuffer(const wxSize& size)
         return false;
 
     if (!m_bufferBitmap.IsOk() || m_bufferBitmap.GetWidth() < sz.x || m_bufferBitmap.GetHeight() < sz.y)
-        // As per http://trac.wxwidgets.org/ticket/14403, prevent very inefficient fix to alpha bits of
+        // As per https://trac.wxwidgets.org/ticket/14403, prevent very inefficient fix to alpha bits of
         // destination by making the backing bitmap 24-bit. Note that using 24-bit depth breaks painting of
         // scrolled areas on wxWidgets 2.8.
 #if defined(__WXMSW__) && wxCHECK_VERSION(3,0,0)

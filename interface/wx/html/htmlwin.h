@@ -143,7 +143,7 @@ public:
     @event{EVT_HTML_CELL_HOVER(id, func)}
         The mouse passed over a wxHtmlCell.
     @event{EVT_HTML_LINK_CLICKED(id, func)}
-        A wxHtmlCell which contains an hyperlink was clicked.
+        A wxHtmlCell which contains a hyperlink was clicked.
     @endEventTable
 
     @library{wxhtml}
@@ -220,6 +220,11 @@ public:
         contain \<TITLE\> tag.
     */
     wxString GetOpenedPageTitle() const;
+
+    /**
+       Returns a pointer to the current parser.
+    */
+    wxHtmlWinParser *GetParser() const;
 
     /**
         Returns the related frame.
@@ -550,7 +555,7 @@ wxEventType wxEVT_HTML_LINK_CLICKED;
 
     @beginEventTable{wxHtmlLinkEvent}
     @event{EVT_HTML_LINK_CLICKED(id, func)}
-        User clicked on an hyperlink.
+        User clicked on a hyperlink.
     @endEventTable
 
     @library{wxhtml}

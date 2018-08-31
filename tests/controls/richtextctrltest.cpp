@@ -29,8 +29,8 @@ class RichTextCtrlTestCase : public CppUnit::TestCase
 public:
     RichTextCtrlTestCase() { }
 
-    void setUp();
-    void tearDown();
+    void setUp() wxOVERRIDE;
+    void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( RichTextCtrlTestCase );

@@ -27,12 +27,12 @@ class CheckListBoxTestCase : public ItemContainerTestCase, public CppUnit::TestC
 public:
     CheckListBoxTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
-    virtual wxItemContainer *GetContainer() const { return m_check; }
-    virtual wxWindow *GetContainerWindow() const { return m_check; }
+    virtual wxItemContainer *GetContainer() const wxOVERRIDE { return m_check; }
+    virtual wxWindow *GetContainerWindow() const wxOVERRIDE { return m_check; }
 
     CPPUNIT_TEST_SUITE( CheckListBoxTestCase );
         wxITEM_CONTAINER_TESTS();

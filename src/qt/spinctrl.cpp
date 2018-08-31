@@ -15,6 +15,8 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtWidgets/QSpinBox>
+
 template< typename T, typename Widget >
 wxSpinCtrlQt< T, Widget >::wxSpinCtrlQt()
 {
@@ -32,10 +34,10 @@ bool wxSpinCtrlQt< T, Widget >::Create( wxWindow *parent, wxWindowID id,
     const wxString& value, const wxPoint& pos, const wxSize& size, long style,
     T min, T max, T initial, T inc, const wxString& name )
 {
-    if(!(style & wxSP_ARROW_KEYS))
+    if ( !(style & wxSP_ARROW_KEYS) )
         m_qtSpinBox->setButtonSymbols(QAbstractSpinBox::NoButtons);
 
-    if(style & wxSP_WRAP)
+    if ( style & wxSP_WRAP )
         m_qtSpinBox->setWrapping(true);
 
     m_qtSpinBox->setAccelerated(true); // to match gtk behavior
@@ -117,7 +119,7 @@ void wxSpinCtrlQt< T, Widget >::SetSelection(long WXUNUSED(WXUNUSED(from)), long
 }
 
 template< typename T, typename Widget >
-Widget *wxSpinCtrlQt< T, Widget >::GetHandle() const
+QWidget *wxSpinCtrlQt< T, Widget >::GetHandle() const
 {
     return m_qtSpinBox;
 }

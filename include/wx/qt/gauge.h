@@ -8,7 +8,7 @@
 #ifndef _WX_QT_GAUGE_H_
 #define _WX_QT_GAUGE_H_
 
-#include <QtWidgets/QProgressBar>
+class QProgressBar;
 
 class WXDLLIMPEXP_CORE wxGauge : public wxGaugeBase
 {
@@ -33,7 +33,7 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxGaugeNameStr);
 
-    virtual QProgressBar *GetHandle() const;
+    virtual QWidget *GetHandle() const;
 
     // set/get the control range
     virtual void SetRange(int range);

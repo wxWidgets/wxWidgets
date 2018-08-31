@@ -91,11 +91,15 @@ protected:
   // implement read/write methods
   virtual bool DoReadString(const wxString& key, wxString *pStr) const wxOVERRIDE;
   virtual bool DoReadLong(const wxString& key, long *plResult) const wxOVERRIDE;
+#if wxUSE_BASE64
   virtual bool DoReadBinary(const wxString& key, wxMemoryBuffer* buf) const wxOVERRIDE;
+#endif // wxUSE_BASE64
 
   virtual bool DoWriteString(const wxString& key, const wxString& szValue) wxOVERRIDE;
   virtual bool DoWriteLong(const wxString& key, long lValue) wxOVERRIDE;
+#if wxUSE_BASE64
   virtual bool DoWriteBinary(const wxString& key, const wxMemoryBuffer& buf) wxOVERRIDE;
+#endif // wxUSE_BASE64
 
 private:
   // these keys are opened during all lifetime of wxRegConfig object

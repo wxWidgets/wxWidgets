@@ -163,7 +163,7 @@ wxMutexInternal::wxMutexInternal( wxMutexType WXUNUSED(mutexType) )
     m_isOk = false;
     m_critRegion = kInvalidID;
 
-    verify_noerr( MPCreateCriticalRegion( &m_critRegion ) );
+    __Verify_noErr(MPCreateCriticalRegion( &m_critRegion ));
     m_isOk = ( m_critRegion != kInvalidID );
     if ( !IsOk() )
     {
@@ -278,7 +278,7 @@ wxSemaphoreInternal::wxSemaphoreInternal( int initialcount, int maxcount)
         // make it practically infinite
         maxcount = INT_MAX;
 
-    verify_noerr( MPCreateSemaphore( maxcount, initialcount, &m_semaphore ) );
+    __Verify_noErr(MPCreateSemaphore( maxcount, initialcount, &m_semaphore ));
     m_isOk = ( m_semaphore != kInvalidID );
 
     if ( !IsOk() )
@@ -603,7 +603,7 @@ OSStatus wxThreadInternal::MacThreadStart(void *parameter)
     wxThreadInternal *pthread = thread->m_internal;
 
     // add to TLS so that This() will work
-    verify_noerr( MPSetTaskStorageValue( gs_tlsForWXThread , (TaskStorageValue) thread ) ) ;
+    __Verify_noErr(MPSetTaskStorageValue( gs_tlsForWXThread , (TaskStorageValue) thread )) ;
 
     // have to declare this before pthread_cleanup_push() which defines a
     // block!
@@ -1219,8 +1219,8 @@ bool wxThreadModule::OnInit()
     }
 
     // main thread's This() is NULL
-    verify_noerr( MPAllocateTaskStorageIndex( &gs_tlsForWXThread ) ) ;
-    verify_noerr( MPSetTaskStorageValue( gs_tlsForWXThread, 0 ) ) ;
+    __Verify_noErr(MPAllocateTaskStorageIndex( &gs_tlsForWXThread )) ;
+    __Verify_noErr(MPSetTaskStorageValue( gs_tlsForWXThread, 0 )) ;
 
     wxThread::ms_idMainThread = wxThread::GetCurrentId();
     gs_critsectWaitingForGui = new wxCriticalSection();

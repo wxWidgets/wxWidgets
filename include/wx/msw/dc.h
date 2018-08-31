@@ -243,8 +243,7 @@ public:
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
                                      wxCoord width, wxCoord height) wxOVERRIDE;
     virtual void DoSetDeviceClippingRegion(const wxRegion& region) wxOVERRIDE;
-    virtual void DoGetClippingBox(wxCoord *x, wxCoord *y,
-                                  wxCoord *w, wxCoord *h) const wxOVERRIDE;
+    virtual bool DoGetClippingRect(wxRect& rect) const wxOVERRIDE;
 
     virtual void DoGetSizeMM(int* width, int* height) const wxOVERRIDE;
 

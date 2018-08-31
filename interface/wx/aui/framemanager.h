@@ -332,14 +332,36 @@ public:
 
     /**
         LoadPaneInfo() is similar to LoadPerspective, with the exception that it
-        only loads information about a single pane.  It is used in combination with
-        SavePaneInfo().
+        only loads information about a single pane.
+     
+        This method writes the serialized data into the passed pane. Pointers to
+        UI elements are not modified.
+
+        @notice This operation also changes the name in the pane information!
+     
+        @sa LoadPerspective
+        @sa SavePaneInfo().
+        @sa SavePerspective
     */
     void LoadPaneInfo(wxString pane_part, wxAuiPaneInfo& pane);
 
     /**
-        Loads a saved perspective. If update is @true, wxAuiManager::Update()
-        is automatically invoked, thus realizing the saved perspective on screen.
+        Loads a saved perspective.
+     
+        A perspective is the layout state of an AUI managed window.
+     
+        All currently existing panes that have an object in "perspective"
+        with the same name ("equivalent") will receive the layout parameters of the object in
+        "perspective". Existing panes that do not have an equivalent in "perspective" remain
+        unchanged, objects in "perspective" having no equivalent in the manager are ignored.
+
+        @param perspective Serialized layout information of a perspective (excl. pointers to UI elements).
+        @param update      If update is @true, wxAuiManager::Update() is automatically invoked,
+                           thus realizing the specified perspective on screen.
+     
+        @sa LoadPaneInfo
+        @sa LoadPerspective
+        @sa SavePerspective
     */
     bool LoadPerspective(const wxString& perspective,
                          bool update = true);
@@ -361,17 +383,26 @@ public:
 
     /**
         SavePaneInfo() is similar to SavePerspective, with the exception that it only
-        saves information about a single pane.  It is used in combination with
-        LoadPaneInfo().
+        saves information about a single pane.
+     
+        @param pane Pane whose layout parameters should be serialized.
+        @return     The serialized layout parameters of the pane are returned within
+                    the string. Information about the pointers to UI elements stored
+                    in the pane are not serialized.
+     
+        @sa LoadPaneInfo
+        @sa LoadPerspective
+        @sa SavePerspective
     */
-    wxString SavePaneInfo(wxAuiPaneInfo& pane);
+    wxString SavePaneInfo(const wxAuiPaneInfo& pane);
 
     /**
         Saves the entire user interface layout into an encoded wxString, which
         can then be stored by the application (probably using wxConfig).
-
-        When a perspective is restored using LoadPerspective(), the entire user
-        interface will return to the state it was when the perspective was saved.
+     
+        @sa LoadPerspective
+        @sa LoadPaneInfo
+        @sa SavePaneInfo
     */
     wxString SavePerspective();
 
@@ -873,8 +904,12 @@ public:
     wxAuiPaneInfo& Row(int row);
 
     /**
-        Write the safe parts of a newly loaded PaneInfo structure "source" into "this"
-        used on loading perspectives etc.
+        Write the safe parts of a PaneInfo object "source" into "this".
+        "Safe parts" are all non-UI elements (e.g. all layout determining parameters like the
+        size, position etc.). "Unsafe parts" (pointers to button, frame and window) are not
+        modified by this write operation.
+	 
+        @remark This method is used when loading perspectives.
     */
     void SafeSet(wxAuiPaneInfo source);
 
@@ -917,6 +952,63 @@ public:
         Makes a copy of the wxAuiPaneInfo object.
     */
     wxAuiPaneInfo& operator=(const wxAuiPaneInfo& c);
+
+    
+    /// name of the pane
+    wxString name;
+
+    /// caption displayed on the window
+    wxString caption;
+
+    /// icon of the pane, may be invalid
+    wxBitmap icon;        
+
+    /// window that is in this pane
+    wxWindow* window;
+
+    /// floating frame window that holds the pane
+    wxFrame* frame;
+
+    /// a combination of wxPaneState values
+    unsigned int state;
+
+    /// dock direction (top, bottom, left, right, center)
+    int dock_direction;
+
+    /// layer number (0 = innermost layer)
+    int dock_layer;
+
+    /// row number on the docking bar (0 = first row)
+    int dock_row;
+
+    /// position inside the row (0 = first position)
+    int dock_pos;
+
+    /// size that the layout engine will prefer
+    wxSize best_size;
+
+    /// minimum size the pane window can tolerate
+    wxSize min_size;
+
+    /// maximum size the pane window can tolerate
+    wxSize max_size;
+
+    /// position while floating
+    wxPoint floating_pos;
+
+    /// size while floating
+    wxSize floating_size;
+
+    /// proportion while docked
+    int dock_proportion;
+
+    /// buttons on the pane
+    wxAuiPaneButtonArray buttons; 
+
+    /// current rectangle (populated by wxAUI)
+    wxRect rect;
+
+    bool IsValid() const;    
 };
 
 
@@ -1023,3 +1115,74 @@ public:
     void Veto(bool veto = true);
 };
 
+
+
+wxEventType wxEVT_AUI_PANE_BUTTON;
+wxEventType wxEVT_AUI_PANE_CLOSE;
+wxEventType wxEVT_AUI_PANE_MAXIMIZE;
+wxEventType wxEVT_AUI_PANE_RESTORE;
+wxEventType wxEVT_AUI_PANE_ACTIVATED;
+wxEventType wxEVT_AUI_RENDER;
+wxEventType wxEVT_AUI_FIND_MANAGER;
+
+
+
+class wxAuiDockInfo
+{
+public:
+    wxAuiDockInfo();
+    wxAuiDockInfo(const wxAuiDockInfo& c);
+    wxAuiDockInfo& operator=(const wxAuiDockInfo& c);
+
+    bool IsOk() const;
+    bool IsHorizontal() const;
+    bool IsVertical() const;
+    
+    wxAuiPaneInfoPtrArray panes; // array of panes
+    wxRect rect;              // current rectangle
+    int dock_direction;       // dock direction (top, bottom, left, right, center)
+    int dock_layer;           // layer number (0 = innermost layer)
+    int dock_row;             // row number on the docking bar (0 = first row)
+    int size;                 // size of the dock
+    int min_size;             // minimum size of a dock (0 if there is no min)
+    bool resizable;           // flag indicating whether the dock is resizable
+    bool toolbar;             // flag indicating dock contains only toolbars
+    bool fixed;               // flag indicating that the dock operates on
+                              // absolute coordinates as opposed to proportional
+    bool reserved1;
+};
+
+
+class wxAuiDockUIPart
+{
+public:
+    enum
+    {
+        typeCaption,
+        typeGripper,
+        typeDock,
+        typeDockSizer,
+        typePane,
+        typePaneSizer,
+        typeBackground,
+        typePaneBorder,
+        typePaneButton
+    };
+
+    int type;                // ui part type (see enum above)
+    int orientation;         // orientation (either wxHORIZONTAL or wxVERTICAL)
+    wxAuiDockInfo* dock;        // which dock the item is associated with
+    wxAuiPaneInfo* pane;        // which pane the item is associated with
+    wxAuiPaneButton* button;    // which pane button the item is associated with
+    wxSizer* cont_sizer;     // the part's containing sizer
+    wxSizerItem* sizer_item; // the sizer item of the part
+    wxRect rect;             // client coord rectangle of the part itself
+};
+
+
+
+class wxAuiPaneButton
+{
+public:
+    int button_id;        // id of the button (e.g. buttonClose)
+};

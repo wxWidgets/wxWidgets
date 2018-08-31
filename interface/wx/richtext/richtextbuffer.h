@@ -385,7 +385,7 @@ public:
 
     /**
         Partial equality test. If @a weakTest is @true, attributes of this object do not
-        have to be present if those attributes of @a dim sare present. If @a weakTest is
+        have to be present if those attributes of @a dims are present. If @a weakTest is
         @false, the function will fail if an attribute is present in @a dims but not
         in this object.
 
@@ -4886,7 +4886,7 @@ public:
     /**
         Do the loading and scaling
     */
-    virtual bool LoadAndScaleImageCache(wxImage& image, const wxSize& sz, bool delayLoading, bool& changed);
+    virtual bool LoadAndScaleImageCache(wxImage& image, const wxSize& sz, wxRichTextDrawingContext& context, bool& changed);
 
     /**
         Gets the image state.

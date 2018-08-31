@@ -171,10 +171,12 @@ public:
     // EDIT control has one already)
     void OnContextMenu(wxContextMenuEvent& event);
 
+#if wxUSE_RICHEDIT
     // Create context menu for RICHEDIT controls. This may be called once during
     // the control's lifetime or every time the menu is shown, depending on
     // implementation.
     virtual wxMenu *MSWCreateContextMenu();
+#endif // wxUSE_RICHEDIT
 
     // be sure the caret remains invisible if the user
     // called HideNativeCaret() before
@@ -274,6 +276,10 @@ private:
     // implement wxTextEntry pure virtual: it implements all the operations for
     // the simple EDIT controls
     virtual WXHWND GetEditHWND() const wxOVERRIDE { return m_hWnd; }
+
+#if wxUSE_OLE
+    virtual void MSWProcessSpecialKey(wxKeyEvent& event) wxOVERRIDE;
+#endif // wxUSE_OLE
 
     void OnKeyDown(wxKeyEvent& event);
 

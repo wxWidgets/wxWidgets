@@ -148,6 +148,10 @@ enum wxAuiToolBarToolTextOrientation
 class wxAuiToolBarEvent : public wxNotifyEvent
 {
 public:
+    wxAuiToolBarEvent(wxEventType commandType = wxEVT_NULL,
+                      int winId = 0);
+    wxAuiToolBarEvent(const wxAuiToolBarEvent& c);
+
     /**
       Returns whether the drop down menu has been clicked.
     */
@@ -167,7 +171,19 @@ public:
       Returns the wxAuiToolBarItem identifier.
     */
     int GetToolId() const;
+
+    
+    void SetDropDownClicked(bool c);
+    void SetClickPoint(const wxPoint& p);
+    void SetItemRect(const wxRect& r);
+    void SetToolId(int toolId);    
 };
+
+wxEventType wxEVT_AUITOOLBAR_TOOL_DROPDOWN;
+wxEventType wxEVT_AUITOOLBAR_OVERFLOW_CLICK;
+wxEventType wxEVT_AUITOOLBAR_RIGHT_CLICK;
+wxEventType wxEVT_AUITOOLBAR_MIDDLE_CLICK;
+wxEventType wxEVT_AUITOOLBAR_BEGIN_DRAG;
 
 
 /**

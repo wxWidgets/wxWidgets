@@ -11,7 +11,7 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXGTK__)
+#if wxUSE_WEBVIEW && (wxUSE_WEBVIEW_WEBKIT || wxUSE_WEBVIEW_WEBKIT2) && defined(__WXGTK__)
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewHistoryItem
 {

@@ -77,6 +77,7 @@ public:
     virtual void SetFocus() wxOVERRIDE;
 
     virtual void WarpPointer( int x, int y ) wxOVERRIDE;
+    virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
 
     virtual void Refresh( bool eraseBackground = true,
                           const wxRect *rect = NULL ) wxOVERRIDE;
@@ -122,10 +123,10 @@ public:
     
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget ) wxOVERRIDE;
-#endif
 
     // Accept files for dragging
     virtual void DragAcceptFiles( bool accept ) wxOVERRIDE;
+#endif
 
     // implementation from now on
     // --------------------------

@@ -178,7 +178,7 @@ void EditableListboxWidgetsPage::Reset()
 
 void EditableListboxWidgetsPage::CreateLbox()
 {
-    int flags = 0;
+    long flags = GetAttrs().m_defaultFlags;
 
     if ( m_chkAllowNew->GetValue() )
         flags |= wxEL_ALLOW_NEW;

@@ -124,6 +124,7 @@ BASE_WIN32_HDR =
     wx/msw/stackwalk.h
     wx/msw/stdpaths.h
     wx/msw/winundef.h
+    wx/msw/winver.h
     wx/msw/wrapcctl.h
     wx/msw/wrapcdlg.h
     wx/msw/wrapwin.h
@@ -144,6 +145,9 @@ BASE_COREFOUNDATION_SRC =
 BASE_COREFOUNDATION_HDR =
     wx/osx/carbon/region.h
     wx/osx/core/cfdataref.h
+    wx/osx/core/cfarray.h
+    wx/osx/core/cfdictionary.h
+    wx/osx/core/cftype.h
     wx/osx/core/cfref.h
     wx/osx/core/cfstring.h
     wx/osx/core/colour.h
@@ -185,7 +189,7 @@ BASE_OSX_NOTWXMAC_HDR =
 
 ## Qt
 
-QT_LOWLEVEL_HDR =
+QT_HDR =
     wx/qt/accel.h
     wx/qt/app.h
     wx/qt/apptbase.h
@@ -195,12 +199,13 @@ QT_LOWLEVEL_HDR =
     wx/qt/brush.h
     wx/qt/anybutton.h
     wx/qt/button.h
+    wx/generic/caret.h
     wx/qt/checkbox.h
     wx/qt/checklst.h
     wx/qt/choice.h
     wx/qt/clipbrd.h
     wx/qt/clrpicker.h
-    wx/qt/generic/clrpickerg.h
+    wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
     wx/qt/colordlg.h
     wx/qt/colour.h
@@ -222,9 +227,12 @@ QT_LOWLEVEL_HDR =
     wx/qt/dirdlg.h
     wx/qt/dnd.h
     wx/qt/evtloop.h
+    wx/generic/fdrepdlg.h
     wx/qt/filedlg.h
+    wx/generic/filepickerg.h
     wx/qt/font.h
     wx/qt/fontdlg.h
+    wx/generic/fontpickerg.h
     wx/qt/frame.h
     wx/qt/gauge.h
     wx/generic/icon.h
@@ -236,6 +244,7 @@ QT_LOWLEVEL_HDR =
     wx/qt/menuitem.h
     wx/qt/minifram.h
     wx/qt/msgdlg.h
+    wx/qt/nonownedwnd.h
     wx/qt/notebook.h
     wx/qt/palette.h
     wx/qt/pen.h
@@ -267,7 +276,7 @@ QT_LOWLEVEL_HDR =
     wx/qt/window.h
     wx/qt/private/winevent.h
 
-QT_LOWLEVEL_SRC=
+QT_SRC=
     src/qt/accel.cpp
     src/qt/app.cpp
     src/qt/apptraits.cpp
@@ -322,6 +331,7 @@ QT_LOWLEVEL_SRC=
     src/qt/menuitem.cpp
     src/qt/minifram.cpp
     src/qt/msgdlg.cpp
+    src/qt/nonownedwnd.cpp
     src/qt/notebook.cpp
     src/qt/palette.cpp
     src/qt/pen.cpp
@@ -399,7 +409,6 @@ BASE_CMN_SRC =
     src/common/datetimefmt.cpp
     src/common/datstrm.cpp
     src/common/dircmn.cpp
-    src/common/dynarray.cpp
     src/common/dynlib.cpp
     src/common/dynload.cpp
     src/common/encconv.cpp
@@ -426,6 +435,7 @@ BASE_CMN_SRC =
     src/common/list.cpp
     src/common/log.cpp
     src/common/longlong.cpp
+    src/common/lzmastream.cpp
     src/common/memory.cpp
     src/common/mimecmn.cpp
     src/common/module.cpp
@@ -519,6 +529,7 @@ BASE_CMN_HDR =
     wx/event.h
     wx/eventfilter.h
     wx/evtloop.h
+    wx/evtloopsrc.h
     wx/except.h
     wx/features.h
     wx/flags.h
@@ -551,6 +562,7 @@ BASE_CMN_HDR =
     wx/listimpl.cpp
     wx/log.h
     wx/longlong.h
+    wx/lzmastream.h
     wx/math.h
     wx/memconf.h
     wx/memory.h
@@ -945,6 +957,7 @@ GUI_CMN_HDR =
     wx/palette.h
     wx/panel.h
     wx/pen.h
+    wx/peninfobase.h
     wx/position.h
     wx/preferences.h
     wx/radiobox.h
@@ -1013,7 +1026,6 @@ GUI_CMN_HDR =
     wx/docmdi.h
     wx/docview.h
     wx/effects.h
-    wx/evtloopsrc.h
     wx/fdrepdlg.h
     wx/filectrl.h
     wx/filehistory.h
@@ -1058,6 +1070,7 @@ GUI_CMN_HDR =
     wx/paper.h
     wx/persist.h
     wx/persist/bookctrl.h
+    wx/persist/dataview.h
     wx/persist/splitter.h
     wx/persist/toplevel.h
     wx/persist/treebook.h
@@ -1126,6 +1139,7 @@ GTK_WIN32_SRC =
     src/generic/caret.cpp
     src/generic/imaglist.cpp
     src/msw/ole/automtn.cpp
+    src/msw/ole/comimpl.cpp
     src/msw/ole/oleutils.cpp
     src/msw/ole/safearray.cpp
     src/msw/ole/uuid.cpp
@@ -1139,6 +1153,7 @@ GTK_WIN32_HDR =
     wx/generic/caret.h
     wx/generic/imaglist.h
     wx/msw/ole/automtn.h
+    wx/msw/ole/comimpl.h
     wx/msw/ole/oleutils.h
     wx/msw/ole/safearray.h
     wx/msw/ole/uuid.h
@@ -1746,6 +1761,7 @@ MSW_LOWLEVEL_SRC =
     src/msw/imaglist.cpp
     src/msw/minifram.cpp
     src/msw/nonownedwnd.cpp
+    src/msw/ole/comimpl.cpp
     src/msw/ole/dataobj.cpp
     src/msw/ole/dropsrc.cpp
     src/msw/ole/droptgt.cpp
@@ -1773,7 +1789,6 @@ MSW_LOWLEVEL_HDR =
     wx/msw/ole/activex.h
     wx/msw/popupwin.h
     wx/msw/uxtheme.h
-    wx/msw/uxthemep.h
     wx/msw/htmlhelp.h
 
 MSW_DESKTOP_LOWLEVEL_SRC =
@@ -1905,6 +1920,7 @@ MSW_HDR =
     wx/msw/msvcrt.h
     wx/msw/notebook.h
     wx/msw/ole/access.h
+    wx/msw/ole/comimpl.h
     wx/msw/ole/dataform.h
     wx/msw/ole/dataobj.h
     wx/msw/ole/dataobj2.h
@@ -2054,7 +2070,6 @@ DFB_LOWLEVEL_HDR =
 
 OSX_LOWLEVEL_SRC =
     # Shared wxMac and wxCocoa files
-    <if cond="PLATFORM_MACOSX=='1'">
     src/osx/artmac.cpp
     src/osx/brush.cpp
     src/osx/dialog_osx.cpp
@@ -2078,12 +2093,10 @@ OSX_LOWLEVEL_SRC =
     src/osx/core/printmac.cpp
     src/osx/core/timer.cpp
     src/osx/core/utilsexc_cf.cpp
-    </if>
 
 OSX_LOWLEVEL_HDR =
 
 OSX_COMMON_SRC =
-<if cond="PLATFORM_MACOSX=='1'">
     # Common controls implementation
     src/osx/anybutton_osx.cpp
     src/osx/bmpbuttn_osx.cpp
@@ -2135,7 +2148,6 @@ OSX_COMMON_SRC =
     src/osx/carbon/frame.cpp
     src/osx/carbon/mdi.cpp
     src/osx/carbon/metafile.cpp
-    src/osx/carbon/overlay.cpp
     src/osx/carbon/popupwin.cpp
     src/osx/carbon/renderer.cpp
     src/osx/carbon/statbrma.cpp
@@ -2157,7 +2169,6 @@ OSX_COMMON_SRC =
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
     src/generic/textmeasure.cpp
-</if>
 
 # Header files like wx/osx/foo.h which include wx/osx/carbon/foo.h
 OSX_SHARED_HDR =
@@ -2167,6 +2178,7 @@ OSX_SHARED_HDR =
     wx/osx/accel.h
     wx/osx/anybutton.h
     wx/osx/app.h
+    wx/osx/appprogress.h
     wx/osx/bitmap.h
     wx/osx/bmpbuttn.h
     wx/osx/brush.h
@@ -2279,6 +2291,7 @@ OSX_COCOA_SRC =
     src/osx/cocoa/nonownedwnd.mm
     src/osx/cocoa/notebook.mm
     src/osx/cocoa/radiobut.mm
+    src/osx/cocoa/overlay.mm
     src/osx/cocoa/preferences.mm
     src/osx/cocoa/printdlg.mm
     src/osx/cocoa/scrolbar.mm
@@ -2821,6 +2834,20 @@ WEBVIEW_CMN_HDR =
     wx/webviewarchivehandler.h
     wx/webviewfshandler.h
 
+WEBVIEW_OSX_SHARED_HDR =
+    wx/osx/webviewhistoryitem_webkit.h
+    wx/osx/webview_webkit.h
+
+WEBVIEW_OSX_SHARED_SRC =
+    src/osx/webview_webkit.mm
+
+WEBVIEW_GTK_HDR =
+    wx/gtk/webviewhistoryitem_webkit.h
+    wx/gtk/webview_webkit.h
+
+WEBVIEW_GTK_SRC =
+    src/gtk/webview_webkit.cpp
+
 # wxXRC
 
 XRC_SRC =
@@ -2983,9 +3010,20 @@ OPENGL_CMN_HDR =
 OPENGL_MSW_SRC =
     src/msw/glcanvas.cpp
 
+OPENGL_GTK_HDR =
+    wx/gtk/glcanvas.h
+    wx/unix/glx11.h
+
+OPENGL_GTK_SRC =
+    src/gtk/glcanvas.cpp
+    src/unix/glx11.cpp
+
 OPENGL_MSW_HDR =
     wx/msw/glcanvas.h
 
+OPENGL_OSX_SHARED_SRC =
+    src/osx/cocoa/glcanvas.mm
+    src/osx/glcanvas_osx.cpp
 
 # Misc plugin sources:
 
@@ -3022,6 +3060,12 @@ AUI_MSW_HDR =
 AUI_MSW_SRC =
     src/aui/tabartmsw.cpp
     src/aui/barartmsw.cpp
+
+AUI_GTK_SRC =
+    src/aui/tabartgtk.cpp
+
+AUI_GTK_HDR =
+    wx/aui/tabartgtk.h
 
 # wxRibbon
 

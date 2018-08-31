@@ -79,7 +79,7 @@ wxWidgets first-tier "ports", ie implementations of wxWidgets API, are:
 
 @li wxMSW: This is the native port for Microsoft Windows systems (from Windows
 XP up to Windows 10), either 32 or 64 bits. The primarily supported compilers
-are Microsoft Visual C++ (versions 2003 up to 2015 are supported, at least 2005
+are Microsoft Visual C++ (versions 2003 up to 2017 are supported, at least 2005
 is recommended) and GNU g++ (either from the traditional MinGW, TDM-GCC or
 MinGW-w64 distributions).
 
@@ -93,8 +93,8 @@ primary supported compiler is GNU g++.
 supports 32 or 64 bit Intel Macs running OS X 10.7 or later. The port can be
 built either with g++ or clang.
 
-Other platforms (e.g. iOS), compilers (Borland C++ under Windows,
-Sun CC, HP-UX aCC, IBM xlC or SGI mipsPro under Unix) and ports (
+Other platforms (e.g. iOS - with a minimum requirement of iOS 9), compilers (Borland C++
+under Windows, Sun CC, HP-UX aCC, IBM xlC or SGI mipsPro under Unix) and ports (
 wxQT, wxGTK1, wxX11, wxDFB...) are also supported but to a lesser extent.
 Please see the @subpage page_port "platform details page" for more information.
 

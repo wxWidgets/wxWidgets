@@ -33,6 +33,14 @@
         #endif
     #endif
 
+    /*
+        MinGW 5.3.0 (and presumably later) predefines _WIN32_WINNT and WINVER
+        in sdkddkver.h included from _mingw.h to very low (Windows 2000!)
+        values. We really want to predefine them ourselves instead, so do it
+        before including _mingw.h.
+     */
+    #include "wx/msw/winver.h"
+
     #include <_mingw.h>
 
     /*
@@ -92,46 +100,6 @@
     #define __CYGWIN10__
 #endif
 
-/* Mingw runtime 1.0-20010604 has some missing _tXXXX functions,
-   so let's define them ourselves: */
-#if defined(__GNUWIN32__) && wxCHECK_W32API_VERSION( 1, 0 ) \
-    && !wxCHECK_W32API_VERSION( 1, 1 )
-    #ifndef _tsetlocale
-      #if wxUSE_UNICODE
-      #define _tsetlocale _wsetlocale
-      #else
-      #define _tsetlocale setlocale
-      #endif
-    #endif
-    #ifndef _tgetenv
-      #if wxUSE_UNICODE
-      #define _tgetenv _wgetenv
-      #else
-      #define _tgetenv getenv
-      #endif
-    #endif
-    #ifndef _tfopen
-      #if wxUSE_UNICODE
-      #define _tfopen _wfopen
-      #else
-      #define _tfopen fopen
-      #endif
-    #endif
-#endif
-
-/* current (= before mingw-runtime 3.3) mingw32 headers forget to
-   define _puttchar, this will probably be fixed in the next versions but
-   for now do it ourselves
- */
-#if defined( __MINGW32__ ) && \
-        !wxCHECK_MINGW32_VERSION(3,3) && !defined( _puttchar )
-    #ifdef wxUSE_UNICODE
-        #define  _puttchar   putwchar
-    #else
-        #define  _puttchar   puttchar
-    #endif
-#endif
-
 /*
     Traditional MinGW (but not MinGW-w64 nor TDM-GCC) omits many POSIX
     functions from their headers when compiled with __STRICT_ANSI__ defined.
@@ -141,26 +109,44 @@
     the new C++11 features and not disable the use of POSIX functions, we just
     manually declare the functions we need in this case if necessary.
  */
-#if defined(__MINGW32_TOOLCHAIN__) && defined(__STRICT_ANSI__)
-    #define wxNEEDS_STRICT_ANSI_WORKAROUNDS
+#ifdef __MINGW32_TOOLCHAIN__
+    /*
+        The macro below is used in wx/wxcrtbase.h included from C regex library
+        code, so make sure it compiles in non-C++ code too.
+     */
+    #ifdef __cplusplus
+        #define wxEXTERNC extern "C"
+    #else
+        #define wxEXTERNC
+    #endif
 
     /*
         This macro is somewhat unusual as it takes the list of parameters
         inside parentheses and includes semicolon inside it as putting the
         semicolon outside wouldn't do the right thing when this macro is empty.
      */
-    #define wxDECL_FOR_STRICT_MINGW32(rettype, func, params) \
-        extern "C" _CRTIMP rettype __cdecl __MINGW_NOTHROW func params ;
+    #define wxDECL_FOR_MINGW32_ALWAYS(rettype, func, params) \
+        wxEXTERNC _CRTIMP rettype __cdecl __MINGW_NOTHROW func params ;
 
-    /*
-        There is a bug resulting in a compilation error in MinGW standard
-        math.h header, see https://sourceforge.net/p/mingw/bugs/2250/, work
-        around it here because math.h is also included from several other
-        standard headers (e.g. <algorithm>) and we don't want to duplicate this
-        hack everywhere this happens.
-     */
-    wxDECL_FOR_STRICT_MINGW32(double, _hypot, (double, double))
+    #ifdef __STRICT_ANSI__
+        #define wxNEEDS_STRICT_ANSI_WORKAROUNDS
+
+        #define wxDECL_FOR_STRICT_MINGW32(rettype, func, params) \
+            wxDECL_FOR_MINGW32_ALWAYS(rettype, func, params)
+
+        /*
+            There is a bug resulting in a compilation error in MinGW standard
+            math.h header, see https://sourceforge.net/p/mingw/bugs/2250/, work
+            around it here because math.h is also included from several other
+            standard headers (e.g. <algorithm>) and we don't want to duplicate this
+            hack everywhere this happens.
+         */
+        wxDECL_FOR_STRICT_MINGW32(double, _hypot, (double, double))
+    #else
+        #define wxDECL_FOR_STRICT_MINGW32(rettype, func, params)
+    #endif
 #else
+    #define wxDECL_FOR_MINGW32_ALWAYS(rettype, func, params)
     #define wxDECL_FOR_STRICT_MINGW32(rettype, func, params)
 #endif
 

@@ -23,6 +23,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_DATAOBJ
+
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -32,22 +34,23 @@
 
 #include "wx/dataobj.h"
 
-#if wxUSE_OLE
-
 #include "wx/scopedarray.h"
 #include "wx/vector.h"
 #include "wx/msw/private.h"         // includes <windows.h>
-
-#include <oleauto.h>
+#include "wx/msw/dib.h"
 #include "wx/msw/wrapshl.h"
 
-#include "wx/msw/ole/oleutils.h"
+#if wxUSE_OLE
+#include <oleauto.h>
 
-#include "wx/msw/dib.h"
+#include "wx/msw/ole/oleutils.h"
+#endif // wxUSE_OLE
 
 #ifndef CFSTR_SHELLURL
 #define CFSTR_SHELLURL wxT("UniformResourceLocator")
 #endif
+
+#if wxUSE_OLE
 
 // ----------------------------------------------------------------------------
 // functions
@@ -58,6 +61,8 @@
 #else // !wxDEBUG_LEVEL
     #define GetTymedName(tymed) wxEmptyString
 #endif // wxDEBUG_LEVEL/!wxDEBUG_LEVEL
+
+#endif // wxUSE_OLE
 
 namespace
 {
@@ -84,6 +89,7 @@ wxDataFormat HtmlFormatFixup(wxDataFormat format)
     return format;
 }
 
+#if wxUSE_OLE
 // helper function for wxCopyStgMedium()
 HGLOBAL wxGlobalClone(HGLOBAL hglobIn)
 {
@@ -153,9 +159,11 @@ HRESULT wxCopyStgMedium(const STGMEDIUM *pmediumIn, STGMEDIUM *pmediumOut)
 
     return hres;
 }
+#endif // wxUSE_OLE
 
 } // anonymous namespace
 
+#if wxUSE_OLE
 // ----------------------------------------------------------------------------
 // wxIEnumFORMATETC interface implementation
 // ----------------------------------------------------------------------------
@@ -331,6 +339,7 @@ wxIDataObject::SaveSystemData(FORMATETC *pformatetc,
 
     return S_OK;
 }
+#endif // wxUSE_OLE
 
 // ============================================================================
 // implementation
@@ -389,6 +398,7 @@ wxString wxDataFormat::GetId() const
     return s;
 }
 
+#if wxUSE_OLE
 // ----------------------------------------------------------------------------
 // wxIEnumFORMATETC
 // ----------------------------------------------------------------------------
@@ -1029,6 +1039,8 @@ const wxChar *wxDataObject::GetFormatName(wxDataFormat format)
 
 #endif // wxDEBUG_LEVEL
 
+#endif // wxUSE_OLE
+
 // ----------------------------------------------------------------------------
 // wxBitmapDataObject supports CF_DIB format
 // ----------------------------------------------------------------------------
@@ -1110,7 +1122,7 @@ bool wxBitmapDataObject2::SetData(size_t WXUNUSED(len), const void *pBuf)
         wxLogLastError(wxT("GetObject(HBITMAP)"));
     }
 
-    wxBitmap bitmap(bmp.bmWidth, bmp.bmHeight, bmp.bmPlanes);
+    wxBitmap bitmap(bmp.bmWidth, bmp.bmHeight, bmp.bmBitsPixel);
     bitmap.SetHBITMAP((WXHBITMAP)hbmp);
 
     if ( !bitmap.IsOk() ) {
@@ -1219,6 +1231,7 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format,
 
         m_bitmap.SetWidth(pbmih->biWidth);
         m_bitmap.SetHeight(pbmih->biHeight);
+        m_bitmap.SetDepth(pbmih->biBitCount);
     }
     else // CF_BITMAP
     {
@@ -1233,7 +1246,7 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format,
 
         m_bitmap.SetWidth(bmp.bmWidth);
         m_bitmap.SetHeight(bmp.bmHeight);
-        m_bitmap.SetDepth(bmp.bmPlanes);
+        m_bitmap.SetDepth(bmp.bmBitsPixel);
     }
 
     m_bitmap.SetHBITMAP((WXHBITMAP)hbmp);
@@ -1483,6 +1496,7 @@ void wxURLDataObject::SetURL(const wxString& url)
 #endif
 }
 
+#if wxUSE_OLE
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -1514,8 +1528,6 @@ static const wxChar *GetTymedName(DWORD tymed)
 // wxDataObject
 // ----------------------------------------------------------------------------
 
-#if wxUSE_DATAOBJ
-
 wxDataObject::wxDataObject()
 {
 }
@@ -1533,8 +1545,23 @@ const wxChar *wxDataObject::GetFormatName(wxDataFormat WXUNUSED(format))
     return NULL;
 }
 
-#endif // wxUSE_DATAOBJ
+const void* wxDataObject::GetSizeFromBuffer(const void* WXUNUSED(buffer),
+    size_t* size, const wxDataFormat& WXUNUSED(format))
+{
+    *size = 0;
+    return NULL;
+}
 
+void* wxDataObject::SetSizeInBuffer(void* buffer, size_t WXUNUSED(size),
+    const wxDataFormat& WXUNUSED(format))
+{
+    return buffer;
+}
+
+size_t wxDataObject::GetBufferOffset(const wxDataFormat& WXUNUSED(format))
+{
+    return 0;
+}
 #endif // wxUSE_OLE/!wxUSE_OLE
 
-
+#endif // wxUSE_DATAOBJ

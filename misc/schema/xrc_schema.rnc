@@ -214,6 +214,7 @@ builtinWindowClasses =
     | wxSlider
     | wxSpinButton
     | wxSpinCtrl
+    | wxSpinCtrlDouble
     | wxSplitterWindow
     | wxSearchCtrl
     | wxStatusBar
@@ -310,6 +311,7 @@ builtinClassesNames =
     | "wxSlider"
     | "wxSpinButton"
     | "wxSpinCtrl"
+    | "wxSpinCtrlDouble"
     | "wxSplitterWindow"
     | "wxSearchCtrl"
     | "wxStatusBar"
@@ -477,6 +479,8 @@ t_imagelist  = (
                )
 
 t_list_of_numbers = xsd:string { pattern = "\d+(,\d+)*" }
+
+t_list_of_numbers_with_weights = xsd:string { pattern = "\d+(:\d+)?(,\d+(:\d+)?)*" }
 
 
 #
@@ -825,6 +829,7 @@ wxComboBox =
         stdWindowProperties &
         [xrc:p="o"] element selection {_, t_integer }* &
         [xrc:p="o"] element value     {_, t_string }* &
+        [xrc:p="o"] element hint      {_, t_text }* &
         element content {
             platform,
             element item {_, t_text }*
@@ -1221,6 +1226,7 @@ wxRadioBox =
                 attribute helptext { t_string }?,
                 attribute enabled  { t_bool }?,
                 attribute hidden   { t_bool }?,
+                attribute label    { t_bool }?,
                 t_text
             }*
         }?
@@ -1411,6 +1417,18 @@ wxSpinCtrl =
     }
 
 
+wxSpinCtrlDouble =
+    element object {
+        attribute class { "wxSpinCtrlDouble" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element value {_, t_float }* &
+        [xrc:p="o"] element min   {_, t_float }* &
+        [xrc:p="o"] element max   {_, t_float }* &
+        [xrc:p="o"] element inc   {_, t_float}*
+    }
+
+
 wxSplitterWindow =
     element object {
         attribute class { "wxSplitterWindow" } &
@@ -1429,7 +1447,8 @@ wxSearchCtrl =
         attribute class { "wxSearchCtrl" } &
         stdObjectNodeAttributes &
         stdWindowProperties &
-        [xrc:p="o"] element value {_, t_text }*
+        [xrc:p="o"] element value {_, t_text }* &
+        [xrc:p="o"] element hint      {_, t_text }*
     }
 
 
@@ -1506,7 +1525,9 @@ wxToggleButton =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="important"] element label {_, t_text }* &
-        [xrc:p="o"] element checked {_, t_bool }*
+        [xrc:p="o"] element checked {_, t_bool }* &
+        [xrc:p="o"] element bitmap         {_, t_bitmap }* &
+        [xrc:p="o"] element bitmapposition {_, t_direction }*
     }
 
 
@@ -1860,6 +1881,7 @@ wxStaticBoxSizer_horz =
         stdObjectNodeAttributes &
         stdSizerProperties &
         [xrc:p="important"] element label {_, t_text }* &
+        element windowlabel {windowNode}* &
         [xrc:p="o"] element orient  {_, "wxHORIZONTAL" }* &
         (wxBoxSizer_horz_item | objectRef)*
     }
@@ -1870,6 +1892,7 @@ wxStaticBoxSizer_vert =
         stdObjectNodeAttributes &
         stdSizerProperties &
         [xrc:p="important"] element label {_, t_text }* &
+        element windowlabel {windowNode}* &
         element orient {_, "wxVERTICAL" } &
         (wxBoxSizer_vert_item | objectRef)*
     }
@@ -1899,8 +1922,8 @@ wxFlexGridSizer =
         [xrc:p="o"] element nonflexiblegrowmode {_, ("wxFLEX_GROWMODE_NONE" |
                                                      "wxFLEX_GROWMODE_SPECIFIED" |
                                                      "wxFLEX_GROWMODE_ALL") }* &
-        [xrc:p="o"] element growablerows        {_, t_list_of_numbers }* &
-        [xrc:p="o"] element growablecols        {_, t_list_of_numbers }* &
+        [xrc:p="o"] element growablerows        {_, t_list_of_numbers_with_weights }* &
+        [xrc:p="o"] element growablecols        {_, t_list_of_numbers_with_weights }* &
         (wxGridSizer_item | objectRef)*
     }
 
@@ -1915,8 +1938,8 @@ wxGridBagSizer =
         [xrc:p="o"] element nonflexiblegrowmode {_, ("wxFLEX_GROWMODE_NONE" |
                                                      "wxFLEX_GROWMODE_SPECIFIED" |
                                                      "wxFLEX_GROWMODE_ALL") }* &
-        [xrc:p="o"] element growablerows        {_, t_list_of_numbers }* &
-        [xrc:p="o"] element growablecols        {_, t_list_of_numbers }* &
+        [xrc:p="o"] element growablerows        {_, t_list_of_numbers_with_weights }* &
+        [xrc:p="o"] element growablecols        {_, t_list_of_numbers_with_weights }* &
         (wxSizerGB_item | objectRef)*
     }
 

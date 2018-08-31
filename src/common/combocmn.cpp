@@ -169,7 +169,7 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #define TRANSIENT_POPUPWIN_IS_PERFECT 1 // wxPopupTransientWindow works, its child can have focus, and common
                                         // native controls work on it like normal.
 #define POPUPWIN_IS_PERFECT           1 // Same, but for non-transient popup window.
-#define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
+#define TEXTCTRL_TEXT_CENTERED        0 // 1 if text in textctrl is vertically centered
 #define FOCUS_RING                    0 // No focus ring on wxGTK
 
 #elif defined(__WXMAC__)
@@ -182,7 +182,7 @@ wxCONSTRUCTOR_5( wxComboBox, wxWindow*, Parent, wxWindowID, Id, \
 #define TRANSIENT_POPUPWIN_IS_PERFECT 1 // wxPopupTransientWindow works, its child can have focus, and common
                                         // native controls work on it like normal.
 #define POPUPWIN_IS_PERFECT           1 // Same, but for non-transient popup window.
-#define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
+#define TEXTCTRL_TEXT_CENTERED        0 // 1 if text in textctrl is vertically centered
 #define FOCUS_RING                    3 // Reserve room for the textctrl's focus ring to display
 
 #undef DEFAULT_DROPBUTTON_WIDTH
@@ -751,9 +751,7 @@ void wxComboBoxExtraInputHandler::OnKey(wxKeyEvent& event)
 
     if ( !combo->GetEventHandler()->ProcessEvent(redirectedEvent) )
     {
-        // Don't let TAB through to the text ctrl - looks ugly
-        if ( event.GetKeyCode() != WXK_TAB )
-            event.Skip();
+        event.Skip();
     }
 }
 
@@ -1096,15 +1094,10 @@ wxComboCtrlBase::CreateTextCtrl(int style)
                        style);
 
         // Connecting the events is currently the most reliable way
-        wxWindowID id = m_text->GetId();
-        m_text->Connect(id, wxEVT_TEXT,
-                        wxCommandEventHandler(wxComboCtrlBase::OnTextCtrlEvent),
-                        NULL, this);
+        m_text->Bind(wxEVT_TEXT, &wxComboCtrlBase::OnTextCtrlEvent, this);
         if ( style & wxTE_PROCESS_ENTER )
         {
-            m_text->Connect(id, wxEVT_TEXT_ENTER,
-                            wxCommandEventHandler(wxComboCtrlBase::OnTextCtrlEvent),
-                            NULL, this);
+            m_text->Bind(wxEVT_TEXT_ENTER, &wxComboCtrlBase::OnTextCtrlEvent, this);
         }
 
         m_text->SetHint(m_hintText);
@@ -1996,7 +1989,9 @@ void wxComboCtrlBase::HandleNormalMouseEvent( wxMouseEvent& event )
             kevent.m_keyCode = event.GetWheelRotation() > 0
                                ? WXK_UP
                                : WXK_DOWN;
-            GetEventHandler()->ProcessEvent(kevent);
+
+            if (!GetEventHandler()->ProcessEvent(kevent))
+                event.Skip();
         }
         else
         {
@@ -2078,7 +2073,7 @@ void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
 {
     // On Mac, setting focus here led to infinite recursion so
     // m_resetFocus is used as a guard
-    
+
     if ( event.GetEventType() == wxEVT_SET_FOCUS )
     {
         if ( !m_resetFocus && GetTextCtrl() && !GetTextCtrl()->HasFocus() )
@@ -2088,7 +2083,7 @@ void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
             m_resetFocus = false;
         }
     }
-    
+
     Refresh();
 }
 
@@ -2306,7 +2301,7 @@ void wxComboCtrlBase::ShowPopup()
     //     by, for instance, adding check to window.cpp:wxWindowMSW::MSWProcessMessage
     //     that if transient popup is open, then tab traversal is to be ignored.
     //     However, I think this code would still be needed for cases where
-    //     transient popup doesn't work yet (wxWinCE?).
+    //     transient popup doesn't work yet.
     wxWindow* mainCtrl = GetMainWindowOfCompositeControl();
     wxWindow* parent = mainCtrl->GetParent();
     int parentFlags = parent->GetWindowStyle();

@@ -61,9 +61,8 @@ public:
     virtual void ShowCancelButton( bool show ) wxOVERRIDE;
     virtual bool IsCancelButtonVisible() const wxOVERRIDE;
 
-    // TODO: In 2.9 these should probably be virtual, and declared in the base class...
-    void SetDescriptiveText(const wxString& text);
-    wxString GetDescriptiveText() const;
+    virtual void SetDescriptiveText(const wxString& text) wxOVERRIDE;
+    virtual wxString GetDescriptiveText() const wxOVERRIDE;
 
     // accessors
     // ---------
@@ -88,6 +87,8 @@ public:
 
     // operations
     // ----------
+
+    virtual void ChangeValue(const wxString& value) wxOVERRIDE;
 
     // editing
     virtual void Clear() wxOVERRIDE;
@@ -171,26 +172,6 @@ public:
     virtual bool DoAutoCompleteFileNames(int flags) wxOVERRIDE;
     virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) wxOVERRIDE;
 
-#if 0
-
-    // override streambuf method
-#if wxHAS_TEXT_WINDOW_STREAM
-    int overflow(int i);
-#endif // wxHAS_TEXT_WINDOW_STREAM
-
-    // stream-like insertion operators: these are always available, whether we
-    // were, or not, compiled with streambuf support
-    wxTextCtrl& operator<<(const wxString& s);
-    wxTextCtrl& operator<<(int i);
-    wxTextCtrl& operator<<(long i);
-    wxTextCtrl& operator<<(float f);
-    wxTextCtrl& operator<<(double d);
-    wxTextCtrl& operator<<(wxChar c);
-#endif
-
-    // do the window-specific processing after processing the update event
-    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) wxOVERRIDE;
-
     virtual bool ShouldInheritColours() const wxOVERRIDE;
 
     // wxWindow overrides
@@ -213,7 +194,6 @@ protected:
 
     // override the base class virtuals involved into geometry calculations
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
-    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
 
     virtual void RecalcBitmaps();
 
@@ -224,7 +204,6 @@ protected:
 
     void OnCancelButton( wxCommandEvent& event );
 
-    void OnSetFocus( wxFocusEvent& event );
     void OnSize( wxSizeEvent& event );
 
     bool HasMenu() const
@@ -256,9 +235,6 @@ private:
 #if wxUSE_MENUS
     wxMenu *m_menu;
 #endif // wxUSE_MENUS
-
-    bool m_searchButtonVisible;
-    bool m_cancelButtonVisible;
 
     bool m_searchBitmapUser;
     bool m_cancelBitmapUser;

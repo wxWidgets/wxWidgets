@@ -58,6 +58,9 @@ bool wxStaticText::Create( wxWindow *parent,
 
 void wxStaticText::SetLabel(const wxString& label)
 {
+    if ( label == m_labelOrig )
+        return;
+
     m_labelOrig = label;
 
     // middle/end ellipsization is handled by the OS:
@@ -75,13 +78,7 @@ void wxStaticText::SetLabel(const wxString& label)
         DoSetLabel(GetEllipsizedLabel());
     }
 
-    InvalidateBestSize();
-
-    if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) &&
-         !IsEllipsized() )  // don't resize if we adjust to current size
-    {
-        SetSize( GetBestSize() );
-    }
+    AutoResizeIfNecessary();
 
     Refresh();
 
@@ -95,11 +92,7 @@ bool wxStaticText::SetFont(const wxFont& font)
 
     if ( ret )
     {
-        if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
-        {
-            InvalidateBestSize();
-            SetSize( GetBestSize() );
-        }
+        AutoResizeIfNecessary();
     }
 
     return ret;

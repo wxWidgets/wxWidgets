@@ -92,6 +92,21 @@ enum wxWebViewFindFlags
     wxWEBVIEW_FIND_DEFAULT =          0
 };
 
+/**
+    Navigation action types.
+
+    @since 3.1.2
+*/
+enum wxWebViewNavigationActionFlags
+{
+    /** No navigation action */
+    wxWEBVIEW_NAV_ACTION_NONE,
+    /** The navigation was started by the user */
+    wxWEBVIEW_NAV_ACTION_USER,
+    /**The navigation was started but not by the user*/
+    wxWEBVIEW_NAV_ACTION_OTHER
+};
+
 
 /**
     @class wxWebViewHistoryItem
@@ -232,6 +247,13 @@ public:
     virtual files systems are supported under this backend, however embedded
     resources such as images and stylesheets are currently loaded using the
     data:// scheme.
+
+    @par wxWEBVIEW_WEBKIT2 (GTK3)
+
+    Under GTK3 the WebKit2 version of <a href="http://webkitgtk.org/">WebKitGTK+</a>
+    is used. In Ubuntu the required package name is libwebkit2gtk-4.0-dev
+    and under Fedora it is webkitgtk4-devel. All wxWEBVIEW_WEBKIT features are
+    supported except for clearing and enabling / disabling the history.
 
     @par wxWEBVIEW_WEBKIT (OSX)
 
@@ -453,11 +475,98 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
 
     /**
-        Runs the given javascript code.
-        @note When using wxWEBVIEW_BACKEND_IE you must wait for the current
-              page to finish loading before calling RunScript().
+        Sets emulation level to more modern level.
+
+        This function is useful to enable some minimally modern emulation level
+        of the system browser control used for wxWebView implementation under
+        MSW, rather than using the currently default, IE7-compatible,
+        emulation level. Currently the modern emulation level is only IE8, but
+        this could change in the future and shouldn't be relied on.
+
+        Please notice that this function works by modifying the per-user part
+        of MSW registry, which has several implications: first, it is
+        sufficient to call it only once (per user) as the changes done by it
+        are persistent and, second, if you do not want them to be persistent,
+        you need to call it with @false argument explicitly.
+
+        In particular, this function should be called to allow RunScript() to
+        work for JavaScript code returning arbitrary objects, which is not
+        supported at the default emulation level.
+
+        This function is MSW-specific and doesn't exist under other platforms.
+
+        See https://msdn.microsoft.com/en-us/library/ee330730#browser_emulation
+        for more information about browser control emulation levels.
+
+        @param modernLevel @true to set level to a level modern enough to allow
+            all wxWebView features to work (currently IE8), @false to reset the
+            emulation level to its default, compatible value.
+        @return @true on success, @false on failure (a warning message is also
+            logged in the latter case).
+
+        @since 3.1.1
     */
-    virtual void RunScript(const wxString& javascript) = 0;
+    bool MSWSetModernEmulationLevel(bool modernLevel = true);
+
+    /**
+        Runs the given JavaScript code.
+
+        JavaScript code is executed inside the browser control and has full
+        access to DOM and other browser-provided functionality. For example,
+        this code
+        @code
+            webview->RunScript("document.write('Hello from wxWidgets!')");
+        @endcode
+        will replace the current page contents with the provided string.
+
+        If @a output is non-null, it is filled with the result of executing
+        this code on success, e.g. a JavaScript value such as a string, a
+        number (integer or floating point), a boolean or JSON representation
+        for non-primitive types such as arrays and objects. For example:
+        @code
+            wxString result;
+            if ( webview->RunScript
+                          (
+                            "document.getElementById('some_id').innderHTML",
+                            &result
+                          ) )
+            {
+                ... result contains the contents of the given element ...
+            }
+            //else: the element with this ID probably doesn't exist.
+        @endcode
+
+        This function has a few platform-specific limitations:
+
+        - When using WebKit v1 in wxGTK2, retrieving the result of JavaScript
+          execution is unsupported and this function will always return false
+          if @a output is non-null to indicate this. This functionality is
+          fully supported when using WebKit v2 or later in wxGTK3.
+
+        - When using WebKit under macOS, code execution is limited to at most
+          10MiB of memory and 10 seconds of execution time.
+
+        - When using IE backend under MSW, scripts can only be executed when
+          the current page is fully loaded (i.e. @c wxEVT_WEBVIEW_LOADED event
+          was received). A script tag inside the page HTML is required in order
+          to run JavaScript.
+
+        Also notice that under MSW converting JavaScript objects to JSON is not
+        supported in the default emulation mode. wxWebView implements its own
+        object-to-JSON conversion as a fallback for this case, however it is
+        not as full-featured, well-tested or performing as the implementation
+        of this functionality in the browser control itself, so it is
+        recommended to use MSWSetModernEmulationLevel() to change emulation
+        level to a more modern one in which JSON conversion is done by the
+        control itself.
+
+        @param javascript JavaScript code to execute.
+        @param output Pointer to a string to be filled with the result value or
+            @NULL if it is not needed. This parameter is new since wxWidgets
+            version 3.1.1.
+        @return @true if there is a result, @false if there is an error.
+    */
+    virtual bool RunScript(const wxString& javascript, wxString* output = NULL) = 0;
 
     /**
         Set the editable property of the web control. Enabling allows the user
@@ -571,11 +680,15 @@ public:
 
     /**
         Clear the history, this will also remove the visible page.
+
+        @note This is not implemented on the WebKit2GTK+ backend.
     */
     virtual void ClearHistory() = 0;
 
     /**
         Enable or disable the history. This will also clear the history.
+
+        @note This is not implemented on the WebKit2GTK+ backend.
     */
     virtual void EnableHistory(bool enable = true) = 0;
 
@@ -783,7 +896,8 @@ class wxWebViewEvent : public wxNotifyEvent
 public:
     wxWebViewEvent();
     wxWebViewEvent(wxEventType type, int id, const wxString href,
-                   const wxString target);
+                   const wxString target,
+                   wxWebViewNavigationActionFlags flags = wxWEBVIEW_NAV_ACTION_NONE);
 
     /**
         Get the name of the target frame which the url of this event
@@ -796,6 +910,14 @@ public:
         Get the URL being visited
     */
     const wxString& GetURL() const;
+
+    /**
+        Get the type of navigation action. Only valid for events of type
+        @c wxEVT_WEBVIEW_NEWWINDOW
+
+        @since 3.1.2
+    */
+    wxWebViewNavigationActionFlags GetNavigationAction() const;
 };
 
 

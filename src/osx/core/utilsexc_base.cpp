@@ -68,12 +68,12 @@ wxSocketManager *wxOSXSocketManagerCF = NULL;
 // process is the process passed from wxExecute for pipe streams etc.
 // returns -1 on error for wxEXEC_SYNC and 0 on error for wxEXEC_ASYNC
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-bool wxMacLaunch(char **argv)
+bool wxMacLaunch(const char* const* argv)
 {
     // Obtains the number of arguments for determining the size of
     // the CFArray used to hold them
     CFIndex cfiCount = 0;
-    for(char** argvcopy = argv; *argvcopy != NULL ; ++argvcopy)
+    for (const char* const* argvcopy = argv; *argvcopy != NULL; ++argvcopy)
     {
         ++cfiCount;
     }

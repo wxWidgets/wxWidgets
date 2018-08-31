@@ -227,14 +227,14 @@ void wxRibbonPanel::AddChild(wxWindowBase *child)
     // for children of the window. The panel wants to be in the hovered state
     // whenever the mouse cursor is within its boundary, so the events need to
     // be attached to children too.
-    child->Connect(wxEVT_ENTER_WINDOW, wxMouseEventHandler(wxRibbonPanel::OnMouseEnterChild), NULL, this);
-    child->Connect(wxEVT_LEAVE_WINDOW, wxMouseEventHandler(wxRibbonPanel::OnMouseLeaveChild), NULL, this);
+    child->Bind(wxEVT_ENTER_WINDOW, &wxRibbonPanel::OnMouseEnterChild, this);
+    child->Bind(wxEVT_LEAVE_WINDOW, &wxRibbonPanel::OnMouseLeaveChild, this);
 }
 
 void wxRibbonPanel::RemoveChild(wxWindowBase *child)
 {
-    child->Disconnect(wxEVT_ENTER_WINDOW, wxMouseEventHandler(wxRibbonPanel::OnMouseEnterChild), NULL, this);
-    child->Disconnect(wxEVT_LEAVE_WINDOW, wxMouseEventHandler(wxRibbonPanel::OnMouseLeaveChild), NULL, this);
+    child->Unbind(wxEVT_ENTER_WINDOW, &wxRibbonPanel::OnMouseEnterChild, this);
+    child->Unbind(wxEVT_LEAVE_WINDOW, &wxRibbonPanel::OnMouseLeaveChild, this);
 
     wxRibbonControl::RemoveChild(child);
 }
@@ -303,8 +303,8 @@ bool wxRibbonPanel::IsMinimised(wxSize at_size) const
     if(!m_minimised_size.IsFullySpecified())
         return false;
 
-    return (at_size.GetX() <= m_minimised_size.GetX() &&
-        at_size.GetY() <= m_minimised_size.GetY()) ||
+    return (at_size.GetX() < m_minimised_size.GetX() &&
+        at_size.GetY() < m_minimised_size.GetY()) ||
         at_size.GetX() < m_smallest_unminimised_size.GetX() ||
         at_size.GetY() < m_smallest_unminimised_size.GetY();
 }
@@ -692,11 +692,15 @@ bool wxRibbonPanel::Realize()
         wxSize panel_min_size = GetMinNotMinimisedSize();
         m_minimised_size = m_art->GetMinimisedPanelMinimumSize(temp_dc, this,
             &bitmap_size, &m_preferred_expand_direction);
-        if(m_minimised_icon.IsOk() && m_minimised_icon.GetSize() != bitmap_size)
+        if(m_minimised_icon.IsOk() && m_minimised_icon.GetScaledSize() != bitmap_size)
         {
+            double scale = m_minimised_icon.GetScaleFactor();
+            if (scale > 1.0)
+                scale = 2.0;
+
             wxImage img(m_minimised_icon.ConvertToImage());
-            img.Rescale(bitmap_size.GetWidth(), bitmap_size.GetHeight(), wxIMAGE_QUALITY_HIGH);
-            m_minimised_icon_resized = wxBitmap(img);
+            img.Rescale(scale * bitmap_size.GetWidth(), scale * bitmap_size.GetHeight(), wxIMAGE_QUALITY_HIGH);
+            m_minimised_icon_resized = wxBitmap(img, -1, scale);
         }
         else
         {
@@ -902,9 +906,8 @@ void wxRibbonPanel::OnKillFocus(wxFocusEvent& evt)
         if(IsAncestorOf(this, receiver))
         {
             m_child_with_focus = receiver;
-            receiver->Connect(wxEVT_KILL_FOCUS,
-                wxFocusEventHandler(wxRibbonPanel::OnChildKillFocus),
-                NULL, this);
+            receiver->Bind(wxEVT_KILL_FOCUS,
+                &wxRibbonPanel::OnChildKillFocus, this);
         }
         else if(receiver == NULL || receiver != m_expanded_dummy)
         {
@@ -918,16 +921,16 @@ void wxRibbonPanel::OnChildKillFocus(wxFocusEvent& evt)
     if(m_child_with_focus == NULL)
         return; // Should never happen, but a check can't hurt
 
-    m_child_with_focus->Disconnect(wxEVT_KILL_FOCUS,
-      wxFocusEventHandler(wxRibbonPanel::OnChildKillFocus), NULL, this);
+    m_child_with_focus->Unbind(wxEVT_KILL_FOCUS,
+      &wxRibbonPanel::OnChildKillFocus, this);
     m_child_with_focus = NULL;
 
     wxWindow *receiver = evt.GetWindow();
     if(receiver == this || IsAncestorOf(this, receiver))
     {
         m_child_with_focus = receiver;
-        receiver->Connect(wxEVT_KILL_FOCUS,
-            wxFocusEventHandler(wxRibbonPanel::OnChildKillFocus), NULL, this);
+        receiver->Bind(wxEVT_KILL_FOCUS,
+            &wxRibbonPanel::OnChildKillFocus, this);
         evt.Skip();
     }
     else if(receiver == NULL || receiver != m_expanded_dummy)

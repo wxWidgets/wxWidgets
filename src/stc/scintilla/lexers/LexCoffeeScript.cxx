@@ -40,6 +40,36 @@ static bool IsSpaceEquiv(int state) {
 	    || state == SCE_COFFEESCRIPT_REGEX);
 }
 
+// Store the current lexer state and brace count prior to starting a new
+// `#{}` interpolation level.
+// Based on LexRuby.cxx.
+static void enterInnerExpression(int  *p_inner_string_types,
+                                 int  *p_inner_expn_brace_counts,
+                                 int&  inner_string_count,
+                                 int   state,
+                                 int&  brace_counts
+                                 ) {
+	p_inner_string_types[inner_string_count] = state;
+	p_inner_expn_brace_counts[inner_string_count] = brace_counts;
+	brace_counts = 0;
+	++inner_string_count;
+}
+
+// Restore the lexer state and brace count for the previous `#{}` interpolation
+// level upon returning to it.
+// Note the previous lexer state is the return value and needs to be restored
+// manually by the StyleContext.
+// Based on LexRuby.cxx.
+static int exitInnerExpression(int  *p_inner_string_types,
+                               int  *p_inner_expn_brace_counts,
+                               int&  inner_string_count,
+                               int&  brace_counts
+                              ) {
+	--inner_string_count;
+	brace_counts = p_inner_expn_brace_counts[inner_string_count];
+	return p_inner_string_types[inner_string_count];
+}
+
 // Preconditions: sc.currentPos points to a character after '+' or '-'.
 // The test for pos reaching 0 should be redundant,
 // and is in only for safety measures.
@@ -88,6 +118,27 @@ static void ColouriseCoffeeScriptDoc(Sci_PositionU startPos, Sci_Position length
 	int chPrevNonWhite = ' ';
 	int visibleChars = 0;
 
+	// String/Regex interpolation variables, based on LexRuby.cxx.
+	// In most cases a value of 2 should be ample for the code the user is
+	// likely to enter. For example,
+	//   "Filling the #{container} with #{liquid}..."
+	// from the CoffeeScript homepage nests to a level of 2
+	// If the user actually hits a 6th occurrence of '#{' in a double-quoted
+	// string (including regexes), it will stay as a string.  The problem with
+	// this is that quotes might flip, a 7th '#{' will look like a comment,
+	// and code-folding might be wrong.
+#define INNER_STRINGS_MAX_COUNT 5
+	// These vars track our instances of "...#{,,,'..#{,,,}...',,,}..."
+	int inner_string_types[INNER_STRINGS_MAX_COUNT];
+	// Track # braces when we push a new #{ thing
+	int inner_expn_brace_counts[INNER_STRINGS_MAX_COUNT];
+	int inner_string_count = 0;
+	int brace_counts = 0;   // Number of #{ ... } things within an expression
+	for (int i = 0; i < INNER_STRINGS_MAX_COUNT; i++) {
+		inner_string_types[i] = 0;
+		inner_expn_brace_counts[i] = 0;
+	}
+
 	// look back to set chPrevNonWhite properly for better regex colouring
 	Sci_Position endPos = startPos + length;
         if (startPos > 0 && IsSpaceEquiv(initStyle)) {
@@ -109,7 +160,7 @@ static void ColouriseCoffeeScriptDoc(Sci_PositionU startPos, Sci_Position length
 
 	StyleContext sc(startPos, endPos - startPos, initStyle, styler);
 
-	for (; sc.More(); sc.Forward()) {
+	for (; sc.More();) {
 
 		if (sc.atLineStart) {
 			// Reset states to beginning of colourise so no surprises
@@ -163,6 +214,15 @@ static void ColouriseCoffeeScriptDoc(Sci_PositionU startPos, Sci_Position length
 						sc.Forward();
 					}
 				} else if (sc.ch == '\"') {
+					sc.ForwardSetState(SCE_COFFEESCRIPT_DEFAULT);
+				} else if (sc.ch == '#' && sc.chNext == '{' && inner_string_count < INNER_STRINGS_MAX_COUNT) {
+					// process interpolated code #{ ... }
+					enterInnerExpression(inner_string_types,
+					                     inner_expn_brace_counts,
+					                     inner_string_count,
+					                     sc.state,
+					                     brace_counts);
+					sc.SetState(SCE_COFFEESCRIPT_OPERATOR);
 					sc.ForwardSetState(SCE_COFFEESCRIPT_DEFAULT);
 				}
 				break;
@@ -255,6 +315,15 @@ static void ColouriseCoffeeScriptDoc(Sci_PositionU startPos, Sci_Position length
 				// Handle '..' and '...' operators correctly.
 				if (sc.ch == '.') {
 					for (int i = 0; i < 2 && sc.chNext == '.'; i++, sc.Forward()) ;
+				} else if (sc.ch == '{') {
+					++brace_counts;
+				} else if (sc.ch == '}' && --brace_counts <= 0 && inner_string_count > 0) {
+					// Return to previous state before #{ ... }
+					sc.ForwardSetState(exitInnerExpression(inner_string_types,
+					                                       inner_expn_brace_counts,
+					                                       inner_string_count,
+					                                       brace_counts));
+					continue; // skip sc.Forward() at loop end
 				}
 			}
 		}
@@ -263,6 +332,7 @@ static void ColouriseCoffeeScriptDoc(Sci_PositionU startPos, Sci_Position length
 			chPrevNonWhite = sc.ch;
 			visibleChars++;
 		}
+		sc.Forward();
 	}
 	sc.Complete();
 }

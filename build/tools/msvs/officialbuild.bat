@@ -1,10 +1,17 @@
-ECHO ON
+@echo off
+
+rem SetLocal EnableDelayedExpansion
 
 if "%1" == "" goto ERR_NOPARM
 
 set curr_dir=%cd%
 
 cd ..\..\msw
+
+rem VS2017 changes the build directory when environment batch files
+rem are called, so remember where we are building from.
+
+set "VSCMD_START_DIR=%CD%"
 
 rem ================ wxWidgets Official Build ===============
 rem
@@ -15,6 +22,23 @@ rem ========================================================
 
 set compvers="Unknown"
 
+if "%1" == "vc141" (
+  @echo Building for vc141 / vs2017
+  set comp=141
+  set compvers=vc141
+
+  if NOT "%VS150COMNTOOLS%" == "" (
+    call "%VS150COMNTOOLS%VsDevCmd.bat"
+  )
+  if "%VS150COMNTOOLS%" == "" (
+    call %curr_dir%\findvs 15.0 16.0
+
+    if errorlevel 1 (
+      @echo vswhere.exe must be in your path or a VS2017 developer command prompt must be used.
+      goto end
+    )
+  )
+)
 if "%1" == "vc140" (
   @echo Building for vc140 / vs2015
   set comp=140
@@ -72,9 +96,10 @@ del %compvers%x86_Release.txt
 del %compvers%x64_Debug.txt
 del %compvers%x64_Release.txt
 
+if "%compvers%" == "vc141" call "%VS150COMNTOOLS%..\..\VC\Auxiliary\Build\vcvarsall.bat" x64
 if "%compvers%" == "vc140" call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" x64
-if "%compvers%" == "vc120" call "%VS120COMNTOOLS%..\..\VC\vcvarsall.bat" x64
-if "%compvers%" == "vc110" call "%VS110COMNTOOLS%..\..\VC\vcvarsall.bat" x64
+if "%compvers%" == "vc120" call "%VS120COMNTOOLS%..\..\VC\vcvarsall.bat" x86_amd64
+if "%compvers%" == "vc110" call "%VS110COMNTOOLS%..\..\VC\vcvarsall.bat" x86_amd64
 if "%compvers%" == "vc100" call "%WINDOWS71SDK%SetEnv.Cmd" /X64 /Release
 if "%compvers%" == "vc90"  call "%WINDOWS61SDK%SetEnv.Cmd" /X64 /Release
 
@@ -83,6 +108,18 @@ if "%compvers%" == "vc90"  call "%WINDOWS61SDK%SetEnv.Cmd" /X64 /Release
 nmake -f makefile.vc BUILD=release SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD=1 TARGET_CPU=AMD64 >> %compvers%x64_Release.txt
 
 if ERRORLEVEL 1 goto ERR_BUILD
+
+set build_dir=%cd%
+
+cd ..\..\utils\wxrc
+
+rmdir %compvers%_mswudll_x64 /s /q
+del %compvers%x64_Release.txt
+nmake -f makefile.vc BUILD=release SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD=1 TARGET_CPU=AMD64 >> %compvers%x64_Release.txt
+
+if ERRORLEVEL 1 goto ERR_BUILD
+
+cd %build_dir%
 
 @echo 64 bit debug build
 
@@ -93,6 +130,7 @@ nmake -f makefile.vc BUILD=debug SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD
 
 if ERRORLEVEL 1 goto ERR_BUILD
 
+if "%compvers%" == "vc141" call "%VS150COMNTOOLS%..\..\VC\Auxiliary\Build\vcvarsall.bat" x86
 if "%compvers%" == "vc140" call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" x86
 if "%compvers%" == "vc120" call "%VS120COMNTOOLS%..\..\VC\vcvarsall.bat" x86
 if "%compvers%" == "vc110" call "%VS110COMNTOOLS%..\..\VC\vcvarsall.bat" x86
@@ -102,6 +140,16 @@ if "%compvers%" == "vc90"  call "%WINDOWS61SDK%SetEnv.Cmd" /X86 /Release
 @echo 32 bit release build
 
 nmake -f makefile.vc BUILD=release SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD=1 CPPFLAGS=/arch:SSE CFLAGS=/arch:SSE >> %compvers%x86_Release.txt
+
+if ERRORLEVEL 1 goto ERR_BUILD
+
+cd ..\..\utils\wxrc
+
+rmdir %compvers%_mswuddll /s /q
+del %compvers%x86_Release.txt
+nmake -f makefile.vc BUILD=release SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD=1 CPPFLAGS=/arch:SSE CFLAGS=/arch:SSE >> %compvers%x86_Release.txt
+
+cd %build_dir%
 
 if ERRORLEVEL 1 goto ERR_BUILD
 
@@ -143,6 +191,7 @@ goto End
 :VERSIONS
    @echo.
    @echo Compiler Version: One of -
+   @echo vc141
    @echo vc140
    @echo vc120
    @echo vc110

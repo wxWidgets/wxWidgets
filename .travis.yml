@@ -7,21 +7,29 @@ sudo: required
 
 matrix:
     include:
-        - compiler: gcc
-        - compiler: gcc
-          env: wxCONFIGURE_FLAGS="--disable-precomp-headers --enable-monolithic"
-        - dist: trusty
+        - dist: precise
           compiler: gcc
         - dist: trusty
           compiler: gcc
-          env: wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11"
+        - dist: trusty
+          compiler: gcc
+          env: wxCONFIGURE_FLAGS="--enable-utf8 --enable-utf8only --enable-monolithic"
+        - dist: trusty
+          compiler: gcc
+          env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11"
         - dist: trusty
           compiler: clang
-          env: wxCONFIGURE_FLAGS="--disable-shared"
+          env: wxCONFIGURE_FLAGS="--disable-shared --disable-sys-libs"
+        - dist: trusty
+          compiler: gcc
+          env: wxTOOLSET=cmake wxCMAKE_GENERATOR="Unix Makefiles"
         - os: osx
           osx_image: xcode6.4
           compiler: clang
-          env: wxCONFIGURE_FLAGS="--enable-cxx11" wxMAKEFILE_FLAGS="CXXFLAGS='-std=c++11 -stdlib=libc++'"
+          env: wxCONFIGURE_FLAGS="--enable-cxx11" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11" wxSKIP_SAMPLES=1
+        - os: osx
+          compiler: clang
+          env: wxTOOLSET=cmake wxCMAKE_GENERATOR=Xcode wxCMAKE_DEFINES="-DCMAKE_CXX_STANDARD=11"
 
 branches:
     only:
@@ -37,25 +45,4 @@ notifications:
 
 before_install: ./build/tools/before_install.sh
 
-script: |
-    echo 'Configuring...' && echo -en 'travis_fold:start:script.1\\r' &&
-    ./configure --disable-optimise $wxCONFIGURE_FLAGS &&
-    echo -en 'travis_fold:end:script.1\\r' &&
-    echo 'Building...' && echo -en 'travis_fold:start:script.2\\r' &&
-    make &&
-    echo -en 'travis_fold:end:script.2\\r' &&
-    echo 'Testing...' && echo -en 'travis_fold:start:script.3\\r' &&
-    make -C tests &&
-    pushd tests &&
-    ./test -t &&
-    popd &&
-    echo -en 'travis_fold:end:script.3\\r' &&
-    echo 'Building the samples...' && echo -en 'travis_fold:start:script.4\\r' &&
-    make samples &&
-    echo -en 'travis_fold:end:script.4\\r' &&
-    echo 'Installing...' && echo -en 'travis_fold:start:script.5\\r' &&
-    sudo make install &&
-    echo -en 'travis_fold:end:script.5\\r' &&
-    echo 'Testing building with the installed version...' && echo -en 'travis_fold:start:script.6\\r' &&
-    make -C samples/minimal -f makefile.unx $wxMAKEFILE_FLAGS &&
-    echo -en 'travis_fold:end:script.6\\r'
+script: bash build/tools/travis-ci.sh

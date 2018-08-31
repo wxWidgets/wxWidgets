@@ -81,7 +81,8 @@ public:
         WOW64ViewMode viewMode = WOW64ViewMode_Default);
     /**
         The constructor to set the full name of the key using one of the
-        standard keys, that is, HKCR, HKCU, HKLM, HKUSR, HKPD, HKCC or HKDD.
+        standard keys, that is, HKCR, HKCU, HKLM, HKUSR, HKPD (obsolete),
+        HKCC or HKDD (obsolete).
         The @a viewMode parameter is new since wxWidgets 2.9.2.
     */
     wxRegKey(StdKey keyParent, const wxString& strKey,
@@ -110,9 +111,9 @@ public:
     HKCU,  ///< HKEY_CURRENT_USER
     HKLM,  ///< HKEY_LOCAL_MACHINE
     HKUSR, ///< HKEY_USERS
-    HKPD,  ///< HKEY_PERFORMANCE_DATA
+    HKPD,  ///< HKEY_PERFORMANCE_DATA (Obsolete under XP and later)
     HKCC,  ///< HKEY_CURRENT_CONFIG
-    HKDD,  ///< HKEY_DYN_DATA (Obsolete)
+    HKDD,  ///< HKEY_DYN_DATA (Obsolete under XP and later)
     HKMAX
     };
 

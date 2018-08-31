@@ -73,9 +73,11 @@ private:
         CPPUNIT_TEST( CompareSavedImage );
         CPPUNIT_TEST( SavePNG );
         CPPUNIT_TEST( SaveTIFF );
-        CPPUNIT_TEST( SaveAnimatedGIF );
         CPPUNIT_TEST( ReadCorruptedTGA );
+#if wxUSE_GIF
+        CPPUNIT_TEST( SaveAnimatedGIF );
         CPPUNIT_TEST( GIFComment );
+#endif // wxUSE_GIF
         CPPUNIT_TEST( DibPadding );
         CPPUNIT_TEST( BMPFlippingAndRLECompression );
         CPPUNIT_TEST( ScaleCompare );
@@ -89,9 +91,11 @@ private:
     void CompareSavedImage();
     void SavePNG();
     void SaveTIFF();
-    void SaveAnimatedGIF();
     void ReadCorruptedTGA();
+#if wxUSE_GIF
+    void SaveAnimatedGIF();
     void GIFComment();
+#endif // wxUSE_GIF
     void DibPadding();
     void BMPFlippingAndRLECompression();
     void ScaleCompare();
@@ -113,7 +117,9 @@ ImageTestCase::ImageTestCase()
     wxImage::AddHandler(new wxANIHandler);
     wxImage::AddHandler(new wxBMPHandler);
     wxImage::AddHandler(new wxCURHandler);
+#if wxUSE_GIF
     wxImage::AddHandler(new wxGIFHandler);
+#endif // wxUSE_GIF
     wxImage::AddHandler(new wxJPEGHandler);
     wxImage::AddHandler(new wxPCXHandler);
     wxImage::AddHandler(new wxPNMHandler);
@@ -835,14 +841,9 @@ void ImageTestCase::SizeImage()
        //actual.SaveFile(wxString::Format("imagetest-%02d-actual.png", i), wxBITMAP_TYPE_PNG);
        //expected.SaveFile(wxString::Format("imagetest-%02d-exp.png", i), wxBITMAP_TYPE_PNG);
 
-       CPPUNIT_ASSERT_EQUAL( actual.GetSize().x, expected.GetSize().x );
-       CPPUNIT_ASSERT_EQUAL( actual.GetSize().y, expected.GetSize().y );
-
-       WX_ASSERT_EQUAL_MESSAGE
-       (
-         ("Resize test #%u: (%d, %d), (%d, %d)", i, st.w, st.h, st.dx, st.dy),
-         expected, actual
-       );
+       wxINFO_FMT("Resize test #%u: (%d, %d), (%d, %d)",
+                   i, st.w, st.h, st.dx, st.dy);
+       CHECK_THAT( actual, RGBSameAs(expected) );
    }
 }
 
@@ -870,12 +871,10 @@ void ImageTestCase::CompareLoadedImage()
         }
 
 
-        WX_ASSERT_EQUAL_MESSAGE
-        (
-            ("Compare test '%s' for loading failed", g_testfiles[i].file),
-            g_testfiles[i].bitDepth == 8 ? expected8 : expected24,
-            actual
-        );
+        wxINFO_FMT("Compare test '%s' for loading", g_testfiles[i].file);
+        CHECK_THAT( actual,
+                    RGBSameAs(g_testfiles[i].bitDepth == 8 ? expected8
+                                                           : expected24) );
     }
 
 }
@@ -936,16 +935,11 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
     CPPUNIT_ASSERT(actual.IsOk());
 
     const wxImage *expected = compareTo ? compareTo : &image;
-    CPPUNIT_ASSERT( actual.GetSize() == expected->GetSize() );
 
     unsigned bitsPerPixel = testPalette ? 8 : (testAlpha ? 32 : 24);
-    WX_ASSERT_EQUAL_MESSAGE
-    (
-        ("Compare test '%s (%d-bit)' for saving failed",
-            handler.GetExtension(), bitsPerPixel),
-        *expected,
-        actual
-    );
+    wxINFO_FMT("Compare test '%s (%d-bit)' for saving",
+               handler.GetExtension(), bitsPerPixel);
+    CHECK_THAT(actual, RGBSameAs(*expected));
 
 #if wxUSE_PALETTE
     CPPUNIT_ASSERT(actual.HasPalette()
@@ -959,12 +953,8 @@ void CompareImage(const wxImageHandler& handler, const wxImage& image,
         return;
     }
 
-    WX_ASSERT_EQUAL_MESSAGE
-    (
-        ("Compare alpha test '%s' for saving failed", handler.GetExtension()),
-        *expected,
-        actual
-    );
+    wxINFO_FMT("Compare alpha test '%s' for saving", handler.GetExtension());
+    CHECK_THAT(actual, RGBSameAs(*expected));
 }
 
 static void SetAlpha(wxImage *image)
@@ -1150,46 +1140,6 @@ void ImageTestCase::SaveTIFF()
     TestTIFFImage(wxIMAGE_OPTION_TIFF_SAMPLESPERPIXEL, 2, &alphaImage);
 }
 
-void ImageTestCase::SaveAnimatedGIF()
-{
-#if wxUSE_PALETTE
-    wxImage image("horse.gif");
-    CPPUNIT_ASSERT( image.IsOk() );
-
-    wxImageArray images;
-    images.Add(image);
-    for (int i = 0; i < 4-1; ++i)
-    {
-        images.Add( images[i].Rotate90() );
-
-        images[i+1].SetPalette(images[0].GetPalette());
-    }
-
-    wxMemoryOutputStream memOut;
-    CPPUNIT_ASSERT( wxGIFHandler().SaveAnimation(images, &memOut) );
-
-    wxGIFHandler handler;
-    wxMemoryInputStream memIn(memOut);
-    CPPUNIT_ASSERT(memIn.IsOk());
-    const int imageCount = handler.GetImageCount(memIn);
-    CPPUNIT_ASSERT_EQUAL(4, imageCount);
-
-    for (int i = 0; i < imageCount; ++i)
-    {
-        wxFileOffset pos = memIn.TellI();
-        CPPUNIT_ASSERT( handler.LoadFile(&image, memIn, true, i) );
-        memIn.SeekI(pos);
-
-        WX_ASSERT_EQUAL_MESSAGE
-        (
-            ("Compare test for GIF frame number %d failed", i),
-            images[i],
-            image
-        );
-    }
-#endif // #if wxUSE_PALETTE
-}
-
 void ImageTestCase::ReadCorruptedTGA()
 {
     static unsigned char corruptTGA[18+1+3] =
@@ -1224,6 +1174,44 @@ void ImageTestCase::ReadCorruptedTGA()
     */
     corruptTGA[18] = 0x7f;
     CPPUNIT_ASSERT( !tgaImage.LoadFile(memIn) );
+}
+
+#if wxUSE_GIF
+
+void ImageTestCase::SaveAnimatedGIF()
+{
+#if wxUSE_PALETTE
+    wxImage image("horse.gif");
+    CPPUNIT_ASSERT( image.IsOk() );
+
+    wxImageArray images;
+    images.Add(image);
+    for (int i = 0; i < 4-1; ++i)
+    {
+        images.Add( images[i].Rotate90() );
+
+        images[i+1].SetPalette(images[0].GetPalette());
+    }
+
+    wxMemoryOutputStream memOut;
+    CPPUNIT_ASSERT( wxGIFHandler().SaveAnimation(images, &memOut) );
+
+    wxGIFHandler handler;
+    wxMemoryInputStream memIn(memOut);
+    CPPUNIT_ASSERT(memIn.IsOk());
+    const int imageCount = handler.GetImageCount(memIn);
+    CPPUNIT_ASSERT_EQUAL(4, imageCount);
+
+    for (int i = 0; i < imageCount; ++i)
+    {
+        wxFileOffset pos = memIn.TellI();
+        CPPUNIT_ASSERT( handler.LoadFile(&image, memIn, true, i) );
+        memIn.SeekI(pos);
+
+        wxINFO_FMT("Compare test for GIF frame number %d failed", i);
+        CHECK_THAT(image, RGBSameAs(images[i]));
+    }
+#endif // #if wxUSE_PALETTE
 }
 
 static void TestGIFComment(const wxString& comment)
@@ -1301,6 +1289,8 @@ void ImageTestCase::GIFComment()
     }
 }
 
+#endif // wxUSE_GIF
+
 void ImageTestCase::DibPadding()
 {
     /*
@@ -1340,8 +1330,8 @@ void ImageTestCase::BMPFlippingAndRLECompression()
 }
 
 
-static bool
-CompareApprox(const wxImage& i1, const wxImage& i2)
+static int
+FindMaxChannelDiff(const wxImage& i1, const wxImage& i2)
 {
     if ( i1.GetWidth() != i2.GetWidth() )
         return false;
@@ -1352,26 +1342,21 @@ CompareApprox(const wxImage& i1, const wxImage& i2)
     const unsigned char* p1 = i1.GetData();
     const unsigned char* p2 = i2.GetData();
     const int numBytes = i1.GetWidth()*i1.GetHeight()*3;
+    int maxDiff = 0;
     for ( int n = 0; n < numBytes; n++, p1++, p2++ )
     {
-        switch ( *p1 - *p2 )
-        {
-            case -1:
-            case  0:
-            case +1:
-                // Accept up to one pixel difference, this happens because of
-                // different rounding behaviours in different compiler versions
-                // even under the same architecture, see the example in
-                // http://thread.gmane.org/gmane.comp.lib.wxwidgets.devel/151149/focus=151154
-                break;
-
-            default:
-                return false;
-        }
+        const int diff = std::abs(*p1 - *p2);
+        if ( diff > maxDiff )
+            maxDiff = diff;
     }
 
-    return true;
+    return maxDiff;
 }
+
+// Note that we accept up to one pixel difference, this happens because of
+// different rounding behaviours in different compiler versions
+// even under the same architecture, see the example in
+// http://thread.gmane.org/gmane.comp.lib.wxwidgets.devel/151149/focus=151154
 
 // The 0 below can be replaced with 1 to generate, instead of comparing with,
 // the test files.
@@ -1382,13 +1367,16 @@ CompareApprox(const wxImage& i1, const wxImage& i2)
     } \
     else \
     { \
-        wxImage imageFromFile(file); \
-        CPPUNIT_ASSERT_MESSAGE( "Failed to load " file, imageFromFile.IsOk() ); \
-        CPPUNIT_ASSERT_MESSAGE \
-        ( \
-            "Wrong scaled " + CppUnit::assertion_traits<wxImage>::toString(image), \
-            CompareApprox(imageFromFile, image) \
-        ); \
+        const wxImage imageFromFile(file); \
+        if ( imageFromFile.IsOk() ) \
+        { \
+            INFO("Wrong scaled \"" << file << "\" " << Catch::toString(image)); \
+            CHECK(FindMaxChannelDiff(imageFromFile, image) <= 1); \
+        } \
+        else \
+        { \
+            FAIL("Failed to load \"" << file << "\""); \
+        } \
     }
 
 void ImageTestCase::ScaleCompare()
