@@ -77,6 +77,7 @@ const int wxID_MDI_MORE_WINDOWS = wxLAST_MDI_CHILD + 1;
 
 // The MDI "Window" menu label
 const char *WINDOW_MENU_LABEL = gettext_noop("&Window");
+wxString    WINDOW_MENU_LABEL_TRANSLATED;
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -1562,6 +1563,7 @@ void MDIInsertWindowMenu(wxWindow *win, WXHMENU hMenu, HMENU menuWin)
         bool inserted = false;
         wxString buf;
         MenuIterator it(hmenu);
+        WINDOW_MENU_LABEL_TRANSLATED = wxGetTranslation(WINDOW_MENU_LABEL);
         while ( it.GetNext(buf) )
         {
             const wxString label = wxStripMenuCodes(buf);
@@ -1571,7 +1573,7 @@ void MDIInsertWindowMenu(wxWindow *win, WXHMENU hMenu, HMENU menuWin)
                 ::InsertMenu(hmenu, it.GetPos(),
                              MF_BYPOSITION | MF_POPUP | MF_STRING,
                              (UINT_PTR)menuWin,
-                             wxString(wxGetTranslation(WINDOW_MENU_LABEL)).t_str());
+                             WINDOW_MENU_LABEL_TRANSLATED.t_str());
                 break;
             }
         }
@@ -1580,7 +1582,7 @@ void MDIInsertWindowMenu(wxWindow *win, WXHMENU hMenu, HMENU menuWin)
         {
             ::AppendMenu(hmenu, MF_POPUP,
                          (UINT_PTR)menuWin,
-                         wxString(wxGetTranslation(WINDOW_MENU_LABEL)).t_str());
+                         WINDOW_MENU_LABEL_TRANSLATED.t_str());
         }
     }
 
@@ -1597,7 +1599,7 @@ void MDIRemoveWindowMenu(wxWindow *win, WXHMENU hMenu)
         MenuIterator it(hmenu);
         while ( it.GetNext(buf) )
         {
-            if ( wxStrcmp(buf, wxGetTranslation(WINDOW_MENU_LABEL)) == 0 )
+            if ( wxStrcmp(buf, WINDOW_MENU_LABEL_TRANSLATED) == 0 )
             {
                 if ( !::RemoveMenu(hmenu, it.GetPos(), MF_BYPOSITION) )
                 {
