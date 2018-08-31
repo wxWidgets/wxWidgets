@@ -85,6 +85,12 @@ public:
     virtual void RemoveMDIChild(wxMDIChildFrame *child);
 #endif // wxUSE_MENUS
 
+    // called by AddWindowMenu to remember the translation of the window menu label
+    void SetWindowMenuLabelTranslated();
+
+    // called by AddWindowMenu and RemoveWindowMenu to get the last used translation of the window menu label
+    const wxString GetWindowMenuLabelTranslated() const;
+
     // handlers
     // --------
 
@@ -149,6 +155,9 @@ private:
     // if true, indicates whether the event wasn't really processed even though
     // it was "handled", see OnActivate() and HandleActivate()
     bool m_activationNotHandled;
+
+    // holds the current translation for the window menu label
+    wxString m_windowMenuLabelTranslated;
 
 
     friend class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;
