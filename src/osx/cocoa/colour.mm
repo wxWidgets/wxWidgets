@@ -60,6 +60,7 @@ WX_NSColor wxNSColorRefData::GetNSColor() const
 
 CGFloat wxNSColorRefData::Red() const
 {
+    wxOSXEffectiveAppearanceSetter helper;
     if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
         return [colRGBA redComponent];
     
@@ -68,6 +69,7 @@ CGFloat wxNSColorRefData::Red() const
 
 CGFloat wxNSColorRefData::Green() const
 {
+    wxOSXEffectiveAppearanceSetter helper;
     if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
         return [colRGBA greenComponent];
     
@@ -76,6 +78,7 @@ CGFloat wxNSColorRefData::Green() const
 
 CGFloat wxNSColorRefData::Blue() const
 {
+    wxOSXEffectiveAppearanceSetter helper;
     if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
         return [colRGBA blueComponent];
     
@@ -84,6 +87,7 @@ CGFloat wxNSColorRefData::Blue() const
 
 CGFloat wxNSColorRefData::Alpha() const
 {
+    wxOSXEffectiveAppearanceSetter helper;
     if ( NSColor* colRGBA = [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] )
         return [colRGBA alphaComponent];
     
@@ -93,8 +97,10 @@ CGFloat wxNSColorRefData::Alpha() const
 CGColorRef wxNSColorRefData::GetCGColor() const
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
-    if (wxPlatformInfo::Get().CheckOSVersion(10, 8))
+    if (wxPlatformInfo::Get().CheckOSVersion(10, 8)) {
+        wxOSXEffectiveAppearanceSetter helper;
         return [m_nsColour CGColor];
+    }
 #endif
     CGColorRef cgcolor = NULL;
 
@@ -174,6 +180,7 @@ CGColorRef wxNSColorRefData::GetCGColor() const
 
 WX_NSColor wxColourRefData::GetNSColor() const
 {
+    wxOSXEffectiveAppearanceSetter helper;
     return [NSColor colorWithCalibratedRed:Red() green:Green() blue:Blue() alpha:Alpha() ];
 }
 
