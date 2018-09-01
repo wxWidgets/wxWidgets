@@ -476,19 +476,6 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
     return lf.lfItalic ? wxFONTSTYLE_ITALIC : wxFONTSTYLE_NORMAL;
 }
 
-wxFontWeight wxNativeFontInfo::GetWeight() const
-{
-    // round to nearest hundredth = wxFONTWEIGHT_ constant
-    int weight = ((GetNumericWeight() + 50) / 100) * 100;
-
-    if (weight < wxFONTWEIGHT_THIN)
-        weight = wxFONTWEIGHT_THIN;
-    if (weight > wxFONTWEIGHT_MAX)
-        weight = wxFONTWEIGHT_MAX;
-
-    return (wxFontWeight)weight;
-}
-
 int wxNativeFontInfo::GetNumericWeight() const
 {
     return lf.lfWeight;
@@ -595,25 +582,6 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
             lf.lfItalic = TRUE;
             break;
     }
-}
-
-void wxNativeFontInfo::SetWeight(wxFontWeight weight)
-{
-    // deal with compatibility constants
-    if (weight >= 90 && weight <= 92)
-    {
-        if (weight == 90 /* wxNORMAL */)
-            weight = wxFONTWEIGHT_NORMAL;
-        else if (weight == 91 /* wxLIGHT */)
-            weight = wxFONTWEIGHT_LIGHT;
-        else if (weight == 92 /* wxBOLD */)
-            weight = wxFONTWEIGHT_BOLD;
-    }
-
-    wxASSERT(weight > wxFONTWEIGHT_INVALID || weight <= wxFONTWEIGHT_MAX);
-    wxASSERT(weight % 100 == 0);
-
-    SetNumericWeight(weight);
 }
 
 void wxNativeFontInfo::SetNumericWeight(int weight)

@@ -53,7 +53,7 @@ static QFont::StyleHint ConvertFontFamily(wxFontFamily family)
     return QFont::AnyStyle;
 }
 
-static QFont::Weight ConvertFontWeight(wxFontWeight weight)
+static QFont::Weight ConvertFontWeight(int weight)
 {
     switch (weight)
     {
@@ -65,6 +65,12 @@ static QFont::Weight ConvertFontWeight(wxFontWeight weight)
 
         case wxFONTWEIGHT_BOLD:
             return QFont::Bold;
+
+        case wxFONTWEIGHT_SEMIBOLD:
+            return QFont::DemiBold;
+
+        case wxFONTWEIGHT_HEAVY:
+            return QFont::Black;
 
         case wxFONTWEIGHT_MAX:
             wxFAIL_MSG( "Invalid font weight value" );
@@ -328,7 +334,7 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
     return wxFontStyle();
 }
 
-wxFontWeight wxNativeFontInfo::GetWeight() const
+int wxNativeFontInfo::GetNumericWeight() const
 {
     switch ( m_qtFont.weight() )
     {
@@ -339,12 +345,16 @@ wxFontWeight wxNativeFontInfo::GetWeight() const
             return wxFONTWEIGHT_LIGHT;
 
         case QFont::DemiBold:
+            return wxFONTWEIGHT_SEMIBOLD;
+
         case QFont::Black:
+            return wxFONTWEIGHT_HEAVY;
+
         case QFont::Bold:
             return wxFONTWEIGHT_BOLD;
     }
     wxFAIL_MSG( "Invalid font weight value" );
-    return wxFontWeight();
+    return wxFONTWEIGHT_NORMAL;
 }
 
 bool wxNativeFontInfo::GetUnderlined() const
@@ -411,7 +421,7 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
 //case wxFONTSTYLE_NORMAL:
 }
 
-void wxNativeFontInfo::SetWeight(wxFontWeight weight)
+void wxNativeFontInfo::SetNumericWeight(int weight)
 {
     m_qtFont.setWeight(ConvertFontWeight(weight));
 }

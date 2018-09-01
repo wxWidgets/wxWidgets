@@ -1230,6 +1230,41 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
 
 #endif // generic or wxMSW
 
+// compatibility functions using old API implemented using numeric weight values
+
+wxFontWeight wxNativeFontInfo::GetWeight() const
+{
+    // round to nearest hundredth = wxFONTWEIGHT_ constant
+    int weight = ((GetNumericWeight() + 50) / 100) * 100;
+
+    if (weight < wxFONTWEIGHT_THIN)
+        weight = wxFONTWEIGHT_THIN;
+    if (weight > wxFONTWEIGHT_MAX)
+        weight = wxFONTWEIGHT_MAX;
+
+    return (wxFontWeight)weight;
+}
+
+void wxNativeFontInfo::SetWeight(wxFontWeight weight)
+{
+    // deal with compatibility constants
+    if (weight >= 90 && weight <= 92)
+    {
+        if (weight == 90 /* wxNORMAL */)
+            weight = wxFONTWEIGHT_NORMAL;
+        else if (weight == 91 /* wxLIGHT */)
+            weight = wxFONTWEIGHT_LIGHT;
+        else if (weight == 92 /* wxBOLD */)
+            weight = wxFONTWEIGHT_BOLD;
+    }
+
+    wxASSERT(weight > wxFONTWEIGHT_INVALID || weight <= wxFONTWEIGHT_MAX);
+    wxASSERT(weight % 100 == 0);
+
+    wxFontWeight formerWeight = GetWeight();
+    if (formerWeight != weight)
+        SetNumericWeight(weight);
+}
 
 // wxFont <-> wxString utilities, used by wxConfig
 wxString wxToString(const wxFontBase& font)
