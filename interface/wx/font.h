@@ -715,14 +715,14 @@ public:
         Gets the point size as an integer number.
 
         This function is kept for compatibility reasons. New code should use
-        @ref GetFractionalPointSize and support fractional point sizes.
+        GetFractionalPointSize() and support fractional point sizes.
 
         @see SetPointSize(), @see GetFractionalPointSize()
     */
     virtual int GetPointSize() const;
 
     /**
-        Gets the point size as a floating number
+        Gets the point size as a floating number.
 
         @see SetPointSize(float)
 
@@ -772,11 +772,14 @@ public:
     virtual wxFontWeight GetWeight() const;
 
     /**
-        Gets the font weight as an integer value. See ::wxFontWeight for a list of
-        valid weight identifiers and their corresponding integer value.
+        Gets the font weight as an integer value.
+
+        See ::wxFontWeight for a list of valid weight identifiers and their corresponding integer value.
 
         @see SetWeight()
         @see SetNumericWeight()
+
+        @since 3.1.2
     */
     virtual int GetNumericWeight() const;
 
@@ -1062,7 +1065,9 @@ public:
         (25.4 mm): it is approximately 0.0139 inch or 352.8 um.
 
         @param pointSize
-            Size in points. This can also be a fractional point size like 11.5
+            Size in points. This can also be a fractional point size like 11.5.
+            Note that until wxWidgets 3.1.2, the size had to be an integer number
+            (and the type of this parameter was @c int).
 
         @see GetPointSize()
     */
@@ -1150,8 +1155,10 @@ public:
     virtual void SetWeight(wxFontWeight weight);
 
     /**
-        Sets the font weight using an integer value. See ::wxFontWeight for a list of
-        valid weight identifiers and their corresponding integer value.
+        Sets the font weight using an integer value.
+
+        See ::wxFontWeight for a list of valid weight identifiers and their
+        corresponding integer value.
 
         @param weight
             An integer value int the range 1-1000.
@@ -1232,7 +1239,7 @@ public:
                        const wxString& faceName = wxEmptyString,
                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
-    
+
     static wxFont *New(const wxNativeFontInfo& nativeInfo);
     static wxFont *New(const wxString& nativeInfoString);
 
@@ -1311,7 +1318,7 @@ public:
     /**
         Finds a font of the given specification, or creates one and adds it to the
         list. See the @ref wxFont "wxFont constructor" for details of the arguments.
-        
+
         @since 3.1.1
     */
     wxFont* FindOrCreateFont(const wxFontInfo& fontInfo);
