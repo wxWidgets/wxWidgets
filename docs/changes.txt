@@ -483,8 +483,8 @@ All (GUI):
 - Allow suppressing warnings from wxImage::LoadFile().
 - Allow customizing wxRibbon highlight colours (wxBen).
 - Enable selecting opacity in generic wxColourPicker.
-- Extend the support for font weights to a bigger range
-- Add support for fractional font sizes
+- Extend the support for font weights to a bigger range.
+- Add support for fractional font sizes.
 
 wxGTK:
 
