@@ -147,13 +147,13 @@ wxIcon wxImageList::GetIcon(int index) const
     wxObject* obj = (wxObject*) node->GetData();
     if ( obj == NULL )
         return wxNullIcon ;
-    else if ( obj->IsKindOf(CLASSINFO(wxBitmap)) )
+    if ( obj->IsKindOf(CLASSINFO(wxBitmap)) )
     {
-        wxFAIL_MSG( wxT("cannot convert from bitmap to icon") ) ;
-        return wxNullIcon ;
+        wxIcon icon;
+        icon.CopyFromBitmap(*static_cast<const wxBitmap*>(obj));
+        return icon;
     }
-    else
-        return *(static_cast<wxIcon*>(obj)) ;
+    return *(static_cast<wxIcon*>(obj)) ;
 }
 
 bool wxImageList::Replace( int index, const wxBitmap &bitmap )
