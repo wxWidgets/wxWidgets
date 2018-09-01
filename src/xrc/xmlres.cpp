@@ -2306,10 +2306,24 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     if (hasWeight)
     {
         wxString weight = GetParamValue(wxT("weight"));
-        if (weight == wxT("bold"))
-            iweight = wxFONTWEIGHT_BOLD;
+        if (weight == wxT("thin"))
+            iweight = wxFONTWEIGHT_THIN;
+        else if (weight == wxT("extralight"))
+            iweight = wxFONTWEIGHT_EXTRALIGHT;
         else if (weight == wxT("light"))
             iweight = wxFONTWEIGHT_LIGHT;
+        else if (weight == wxT("medium"))
+            iweight = wxFONTWEIGHT_MEDIUM;
+        else if (weight == wxT("semibold"))
+            iweight = wxFONTWEIGHT_SEMIBOLD;
+        else if (weight == wxT("bold"))
+            iweight = wxFONTWEIGHT_BOLD;
+        else if (weight == wxT("extrabold"))
+            iweight = wxFONTWEIGHT_EXTRABOLD;
+        else if (weight == wxT("heavy"))
+            iweight = wxFONTWEIGHT_HEAVY;
+        else if (weight == wxT("extraheavy"))
+            iweight = wxFONTWEIGHT_EXTRAHEAVY;
         else if (weight != wxT("normal"))
         {
             ReportParamError

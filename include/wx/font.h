@@ -59,10 +59,18 @@ enum wxFontStyle
 // font weights
 enum wxFontWeight
 {
-    wxFONTWEIGHT_NORMAL = wxNORMAL,
-    wxFONTWEIGHT_LIGHT = wxLIGHT,
-    wxFONTWEIGHT_BOLD = wxBOLD,
-    wxFONTWEIGHT_MAX
+    wxFONTWEIGHT_INVALID = 0,
+    wxFONTWEIGHT_THIN = 100,
+    wxFONTWEIGHT_EXTRALIGHT = 200,
+    wxFONTWEIGHT_LIGHT = 300,
+    wxFONTWEIGHT_NORMAL = 400,
+    wxFONTWEIGHT_MEDIUM = 500,
+    wxFONTWEIGHT_SEMIBOLD = 600,
+    wxFONTWEIGHT_BOLD = 700,
+    wxFONTWEIGHT_EXTRABOLD = 800,
+    wxFONTWEIGHT_HEAVY = 900,
+    wxFONTWEIGHT_EXTRAHEAVY = 1000,
+    wxFONTWEIGHT_MAX = wxFONTWEIGHT_EXTRAHEAVY
 };
 
 // Symbolic font sizes as defined in CSS specification.
@@ -338,12 +346,14 @@ public:
     bool operator!=(const wxFont& font) const { return !(*this == font); }
 
     // accessors: get the font characteristics
-    virtual int GetPointSize() const = 0;
+    virtual int GetPointSize() const;
+    virtual float GetFractionalPointSize() const = 0;
     virtual wxSize GetPixelSize() const;
     virtual bool IsUsingSizeInPixels() const;
     wxFontFamily GetFamily() const;
     virtual wxFontStyle GetStyle() const = 0;
     virtual wxFontWeight GetWeight() const = 0;
+    virtual int GetNumericWeight() const = 0;
     virtual bool GetUnderlined() const = 0;
     virtual bool GetStrikethrough() const { return false; }
     virtual wxString GetFaceName() const = 0;
@@ -356,11 +366,12 @@ public:
     wxString GetNativeFontInfoUserDesc() const;
 
     // change the font characteristics
-    virtual void SetPointSize( int pointSize ) = 0;
+    virtual void SetPointSize( float pointSize ) = 0;
     virtual void SetPixelSize( const wxSize& pixelSize );
     virtual void SetFamily( wxFontFamily family ) = 0;
     virtual void SetStyle( wxFontStyle style ) = 0;
     virtual void SetWeight( wxFontWeight weight ) = 0;
+    virtual void SetNumericWeight( int weight ) = 0;
 
     virtual void SetUnderlined( bool underlined ) = 0;
     virtual void SetStrikethrough( bool WXUNUSED(strikethrough) ) {}

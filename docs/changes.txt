@@ -155,7 +155,7 @@ INCOMPATIBLE CHANGES SINCE 3.1.0:
 
 - The enum value wxTASKBAR_JUMP_LIST_DESTIONATION, which was added in 3.1.0,
   contains a typo and has been renamed to wxTASKBAR_JUMP_LIST_DESTINATION.
-  
+
 - wxZipOutputStream will now automatically convert filenames to UTF-8, if the
   wxMBConv used when calling the constructor supports UTF-8 encoding.
 
@@ -489,6 +489,8 @@ All (GUI):
 - Allow suppressing warnings from wxImage::LoadFile().
 - Allow customizing wxRibbon highlight colours (wxBen).
 - Enable selecting opacity in generic wxColourPicker.
+- Extend the support for font weights to a bigger range.
+- Add support for fractional font sizes.
 
 wxGTK:
 

@@ -97,48 +97,6 @@ void* wxMacCocoaRetain( void* obj )
 // ----------------------------------------------------------------------------
 
 #if wxOSX_USE_COCOA
-wxFont::wxFont(WX_NSFont nsfont)
-{
-    wxNativeFontInfo info;
-    SetNativeInfoFromNSFont(nsfont, &info);
-    Create(info);
-}
-
-void wxFont::SetNativeInfoFromNSFont(WX_NSFont theFont, wxNativeFontInfo* info)
-{   
-    if ( info->m_faceName.empty())
-    {
-        //Get more information about the user's chosen font
-        NSFontTraitMask theTraits = [[NSFontManager sharedFontManager] traitsOfFont:theFont];
-        int theFontWeight = [[NSFontManager sharedFontManager] weightOfFont:theFont];
-
-        wxFontFamily fontFamily = wxFONTFAMILY_DEFAULT;
-        //Set the wx font to the appropriate data
-        if(theTraits & NSFixedPitchFontMask)
-            fontFamily = wxFONTFAMILY_TELETYPE;
-
-        wxFontStyle fontstyle = wxFONTSTYLE_NORMAL;
-        wxFontWeight fontweight = wxFONTWEIGHT_NORMAL;
-        bool underlined = false;
-        bool strikethrough = false;
-
-        int size = (int) ([theFont pointSize]+0.5);
- 
-        if ( theFontWeight >= 9 )
-            fontweight = wxFONTWEIGHT_BOLD ;
-        else if ( theFontWeight < 5 )
-            fontweight = wxFONTWEIGHT_LIGHT;
-        else
-            fontweight = wxFONTWEIGHT_NORMAL ;
-            
-        if ( theTraits & NSItalicFontMask )
-            fontstyle = wxFONTSTYLE_ITALIC ;
-
-        info->Init(size,fontFamily,fontstyle,fontweight,underlined, strikethrough,
-                   wxCFStringRef::AsString([theFont familyName]), wxFONTENCODING_DEFAULT);
-
-    }
-}
 
 NSFont* wxFont::OSXGetNSFont() const
 {
@@ -597,8 +555,6 @@ wxOSXEffectiveAppearanceSetter::wxOSXEffectiveAppearanceSetter()
         formerAppearance = NSAppearance.currentAppearance;
         NSAppearance.currentAppearance = NSApp.effectiveAppearance;
     }
-#else
-    wxUnusedVar(formerAppearance);
 #endif
 }
 

@@ -92,9 +92,16 @@ wxENUM_MEMBER( wxFONTSTYLE_SLANT )
 wxEND_ENUM( wxFontStyle )
 
 wxBEGIN_ENUM( wxFontWeight )
-wxENUM_MEMBER( wxFONTWEIGHT_NORMAL )
+wxENUM_MEMBER( wxFONTWEIGHT_THIN )
+wxENUM_MEMBER( wxFONTWEIGHT_EXTRALIGHT )
 wxENUM_MEMBER( wxFONTWEIGHT_LIGHT )
+wxENUM_MEMBER( wxFONTWEIGHT_NORMAL )
+wxENUM_MEMBER( wxFONTWEIGHT_MEDIUM )
+wxENUM_MEMBER( wxFONTWEIGHT_SEMIBOLD )
 wxENUM_MEMBER( wxFONTWEIGHT_BOLD )
+wxENUM_MEMBER( wxFONTWEIGHT_EXTRABOLD )
+wxENUM_MEMBER( wxFONTWEIGHT_HEAVY )
+wxENUM_MEMBER( wxFONTWEIGHT_EXTRAHEAVY )
 wxEND_ENUM( wxFontWeight )
 
 wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI(wxFont, wxGDIObject, "wx/font.h");
@@ -224,6 +231,12 @@ bool wxFontBase::IsFixedWidth() const
 {
     return GetFamily() == wxFONTFAMILY_TELETYPE;
 }
+
+int wxFontBase::GetPointSize() const
+{
+    return wxRound(GetFractionalPointSize());
+}
+
 
 wxSize wxFontBase::GetPixelSize() const
 {
@@ -455,9 +468,16 @@ wxString wxFontBase::GetWeightString() const
 
     switch ( GetWeight() )
     {
-        case wxFONTWEIGHT_NORMAL:   return "wxFONTWEIGHT_NORMAL";
-        case wxFONTWEIGHT_BOLD:     return "wxFONTWEIGHT_BOLD";
+        case wxFONTWEIGHT_THIN:     return "wxFONTWEIGHT_THIN";
+        case wxFONTWEIGHT_EXTRALIGHT: return "wxFONTWEIGHT_EXTRALIGHT";
         case wxFONTWEIGHT_LIGHT:    return "wxFONTWEIGHT_LIGHT";
+        case wxFONTWEIGHT_NORMAL:   return "wxFONTWEIGHT_NORMAL";
+        case wxFONTWEIGHT_MEDIUM:   return "wxFONTWEIGHT_MEDIUM";
+        case wxFONTWEIGHT_SEMIBOLD: return "wxFONTWEIGHT_SEMIBOLD";
+        case wxFONTWEIGHT_BOLD:     return "wxFONTWEIGHT_BOLD";
+        case wxFONTWEIGHT_EXTRABOLD: return "wxFONTWEIGHT_EXTRABOLD";
+        case wxFONTWEIGHT_HEAVY:    return "wxFONTWEIGHT_HEAVY";
+        case wxFONTWEIGHT_EXTRAHEAVY:    return "wxFONTWEIGHT_EXTRAHEAVY";
         default:                    return "wxFONTWEIGHT_DEFAULT";
     }
 }
@@ -816,12 +836,40 @@ wxString wxNativeFontInfo::ToUserString() const
         case wxFONTWEIGHT_NORMAL:
             break;
 
+        case wxFONTWEIGHT_THIN:
+            desc << _(" thin");
+            break;
+
+        case wxFONTWEIGHT_EXTRALIGHT:
+            desc << _(" extra light");
+            break;
+
         case wxFONTWEIGHT_LIGHT:
             desc << _(" light");
             break;
 
+        case wxFONTWEIGHT_MEDIUM:
+            desc << _(" medium");
+            break;
+
+        case wxFONTWEIGHT_SEMIBOLD:
+            desc << _(" semi bold");
+            break;
+
         case wxFONTWEIGHT_BOLD:
             desc << _(" bold");
+            break;
+
+        case wxFONTWEIGHT_EXTRABOLD:
+            desc << _(" extra bold");
+            break;
+
+        case wxFONTWEIGHT_HEAVY:
+            desc << _(" heavy");
+            break;
+
+        case wxFONTWEIGHT_EXTRAHEAVY:
+            desc << _(" extra heavy");
             break;
     }
 
@@ -938,6 +986,8 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
     bool encodingfound = false;
 #endif
     bool insideQuotes = false;
+    bool extraQualifierFound = false;
+    bool semiQualifierFound = false;
 
     while ( tokenizer.HasMoreTokens() )
     {
@@ -988,21 +1038,85 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
             SetUnderlined(true);
             SetStrikethrough(true);
         }
-        else if ( token == wxT("light") || token == _("light") )
+        else if ( token == wxS("thin") || token == _("thin") )
         {
-            SetWeight(wxFONTWEIGHT_LIGHT);
+            SetWeight(wxFONTWEIGHT_THIN);
             weightfound = true;
         }
-        else if ( token == wxT("bold") || token == _("bold") )
+        else if ( token == wxS("extra") || token == wxS("ultra"))
         {
-            SetWeight(wxFONTWEIGHT_BOLD);
+            extraQualifierFound = true;
+        }
+        else if ( token == wxS("semi") || token == wxS("demi") )
+        {
+            semiQualifierFound = true;
+        }
+       else if ( token == wxS("extralight") || token == _("extralight") )
+        {
+            SetWeight(wxFONTWEIGHT_EXTRALIGHT);
+            weightfound = true;
+        }
+        else if ( token == wxS("light") || token == _("light") )
+        {
+            if ( extraQualifierFound )
+                SetWeight(wxFONTWEIGHT_EXTRALIGHT);
+            else
+                SetWeight(wxFONTWEIGHT_LIGHT);
+            weightfound = true;
+        }
+        else if ( token == wxS("normal") || token == _("normal") )
+        {
+            SetWeight(wxFONTWEIGHT_NORMAL);
+            weightfound = true;
+        }
+        else if ( token == wxS("medium") || token == _("medium") )
+        {
+            SetWeight(wxFONTWEIGHT_MEDIUM);
+            weightfound = true;
+        }
+        else if ( token == wxS("semibold") || token == _("semibold") )
+        {
+            SetWeight(wxFONTWEIGHT_SEMIBOLD);
+            weightfound = true;
+        }
+        else if ( token == wxS("bold") || token == _("bold") )
+        {
+            if ( extraQualifierFound )
+                SetWeight(wxFONTWEIGHT_EXTRABOLD);
+            else if ( semiQualifierFound )
+                SetWeight(wxFONTWEIGHT_SEMIBOLD);
+            else
+                SetWeight(wxFONTWEIGHT_BOLD);
+            weightfound = true;
+        }
+        else if ( token == wxS("extrabold") || token == _("extrabold") )
+        {
+            SetWeight(wxFONTWEIGHT_EXTRABOLD);
+            weightfound = true;
+        }
+        else if ( token == wxS("semibold") || token == _("semibold") )
+        {
+            SetWeight(wxFONTWEIGHT_SEMIBOLD);
+            weightfound = true;
+        }
+        else if ( token == wxS("heavy") || token == _("heavy") )
+        {
+            if ( extraQualifierFound )
+                SetWeight(wxFONTWEIGHT_EXTRAHEAVY);
+            else
+                SetWeight(wxFONTWEIGHT_HEAVY);
+            weightfound = true;
+        }
+        else if ( token == wxS("extraheavy") || token == _("extraheavy") )
+        {
+            SetWeight(wxFONTWEIGHT_EXTRAHEAVY);
             weightfound = true;
         }
         else if ( token == wxT("italic") || token == _("italic") )
         {
             SetStyle(wxFONTSTYLE_ITALIC);
         }
-        else if ( token.ToULong(&size) )
+        else if ( token.ToULong(&size ) )
         {
             SetPointSize(size);
             pointsizefound = true;
@@ -1116,6 +1230,41 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
 
 #endif // generic or wxMSW
 
+// compatibility functions using old API implemented using numeric weight values
+
+wxFontWeight wxNativeFontInfo::GetWeight() const
+{
+    // round to nearest hundredth = wxFONTWEIGHT_ constant
+    int weight = ((GetNumericWeight() + 50) / 100) * 100;
+
+    if (weight < wxFONTWEIGHT_THIN)
+        weight = wxFONTWEIGHT_THIN;
+    if (weight > wxFONTWEIGHT_MAX)
+        weight = wxFONTWEIGHT_MAX;
+
+    return (wxFontWeight)weight;
+}
+
+void wxNativeFontInfo::SetWeight(wxFontWeight weight)
+{
+    // deal with compatibility constants
+    if (weight >= 90 && weight <= 92)
+    {
+        if (weight == 90 /* wxNORMAL */)
+            weight = wxFONTWEIGHT_NORMAL;
+        else if (weight == 91 /* wxLIGHT */)
+            weight = wxFONTWEIGHT_LIGHT;
+        else if (weight == 92 /* wxBOLD */)
+            weight = wxFONTWEIGHT_BOLD;
+    }
+
+    wxASSERT(weight > wxFONTWEIGHT_INVALID || weight <= wxFONTWEIGHT_MAX);
+    wxASSERT(weight % 100 == 0);
+
+    wxFontWeight formerWeight = GetWeight();
+    if (formerWeight != weight)
+        SetNumericWeight(weight);
+}
 
 // wxFont <-> wxString utilities, used by wxConfig
 wxString wxToString(const wxFontBase& font)

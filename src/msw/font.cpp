@@ -98,7 +98,7 @@ public:
     void Free();
 
     // all wxFont accessors
-    int GetPointSize() const
+    float GetFractionalPointSize() const
     {
         return m_nativeFontInfo.GetPointSize();
     }
@@ -126,6 +126,11 @@ public:
     wxFontWeight GetWeight() const
     {
         return m_nativeFontInfo.GetWeight();
+    }
+
+    int GetNumericWeight() const
+    {
+        return m_nativeFontInfo.GetNumericWeight();
     }
 
     bool GetUnderlined() const
@@ -176,7 +181,7 @@ public:
     // ... and setters: notice that all of them invalidate the currently
     // allocated HFONT, if any, so that the next call to GetHFONT() recreates a
     // new one
-    void SetPointSize(int pointSize)
+    void SetPointSize(float pointSize)
     {
         Free();
 
@@ -214,6 +219,13 @@ public:
         Free();
 
         m_nativeFontInfo.SetWeight(weight);
+    }
+
+    void SetNumericWeight(int weight)
+    {
+        Free();
+
+        m_nativeFontInfo.SetNumericWeight(weight);
     }
 
     bool SetFaceName(const wxString& faceName)
@@ -438,6 +450,11 @@ void wxNativeFontInfo::Init()
 
 int wxNativeFontInfo::GetPointSize() const
 {
+    return wxRound(GetFractionalPointSize());
+}
+
+float wxNativeFontInfo::GetFractionalPointSize() const
+{
     // FIXME: using the screen here results in incorrect font size calculation
     //        for printing!
     const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
@@ -459,15 +476,9 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
     return lf.lfItalic ? wxFONTSTYLE_ITALIC : wxFONTSTYLE_NORMAL;
 }
 
-wxFontWeight wxNativeFontInfo::GetWeight() const
+int wxNativeFontInfo::GetNumericWeight() const
 {
-    if ( lf.lfWeight <= 300 )
-        return wxFONTWEIGHT_LIGHT;
-
-    if ( lf.lfWeight >= 600 )
-        return wxFONTWEIGHT_BOLD;
-
-    return wxFONTWEIGHT_NORMAL;
+    return lf.lfWeight;
 }
 
 bool wxNativeFontInfo::GetUnderlined() const
@@ -530,7 +541,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxGetFontEncFromCharSet(lf.lfCharSet);
 }
 
-void wxNativeFontInfo::SetPointSize(int pointsize)
+void wxNativeFontInfo::SetPointSize(float pointsize)
 {
     // FIXME: using the screen here results in incorrect font size calculation
     //        for printing!
@@ -573,26 +584,9 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
     }
 }
 
-void wxNativeFontInfo::SetWeight(wxFontWeight weight)
+void wxNativeFontInfo::SetNumericWeight(int weight)
 {
-    switch ( weight )
-    {
-        default:
-            wxFAIL_MSG( "unknown font weight" );
-            // fall through
-
-        case wxFONTWEIGHT_NORMAL:
-            lf.lfWeight = FW_NORMAL;
-            break;
-
-        case wxFONTWEIGHT_LIGHT:
-            lf.lfWeight = FW_LIGHT;
-            break;
-
-        case wxFONTWEIGHT_BOLD:
-            lf.lfWeight = FW_BOLD;
-            break;
-    }
+    lf.lfWeight = weight;
 }
 
 void wxNativeFontInfo::SetUnderlined(bool underlined)
@@ -906,7 +900,7 @@ bool wxFont::IsFree() const
 // change font attribute: we recreate font when doing it
 // ----------------------------------------------------------------------------
 
-void wxFont::SetPointSize(int pointSize)
+void wxFont::SetPointSize(float pointSize)
 {
     AllocExclusive();
 
@@ -940,6 +934,13 @@ void wxFont::SetWeight(wxFontWeight weight)
     AllocExclusive();
 
     M_FONTDATA->SetWeight(weight);
+}
+
+void wxFont::SetNumericWeight(int weight)
+{
+    AllocExclusive();
+
+    M_FONTDATA->SetNumericWeight(weight);
 }
 
 bool wxFont::SetFaceName(const wxString& faceName)
@@ -991,11 +992,11 @@ void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 // accessors
 // ----------------------------------------------------------------------------
 
-int wxFont::GetPointSize() const
+float wxFont::GetFractionalPointSize() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
 
-    return M_FONTDATA->GetPointSize();
+    return M_FONTDATA->GetFractionalPointSize();
 }
 
 wxSize wxFont::GetPixelSize() const
@@ -1026,9 +1027,16 @@ wxFontStyle wxFont::GetStyle() const
 
 wxFontWeight wxFont::GetWeight() const
 {
-    wxCHECK_MSG( IsOk(), wxFONTWEIGHT_MAX, wxT("invalid font") );
+    wxCHECK_MSG( IsOk(), wxFONTWEIGHT_MAX, "invalid font" );
 
     return M_FONTDATA->GetWeight();
+}
+
+int wxFont::GetNumericWeight() const
+{
+    wxCHECK_MSG(IsOk(), wxFONTWEIGHT_MAX, wxT("invalid font"));
+
+    return M_FONTDATA->GetNumericWeight();
 }
 
 bool wxFont::GetUnderlined() const

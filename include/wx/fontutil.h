@@ -29,6 +29,10 @@
     #include <QtGui/QFont>
 #endif
 
+#if defined(__WXOSX__)
+#include "wx/osx/core/cfref.h"
+#endif
+
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
 struct WXDLLIMPEXP_FWD_CORE wxNativeEncodingInfo;
 
@@ -120,20 +124,7 @@ public:
 #elif defined(__WXOSX__)
 public:
     wxNativeFontInfo(const wxNativeFontInfo& info) { Init(info); }
-    wxNativeFontInfo( int size,
-                  wxFontFamily family,
-                  wxFontStyle style,
-                  wxFontWeight weight,
-                  bool underlined,
-                  bool strikethrough,
-                  const wxString& faceName,
-                  wxFontEncoding encoding)
-    {
-        Init(size, family, style, weight,
-             underlined, strikethrough,
-             faceName, encoding);
-    }
-
+ 
     ~wxNativeFontInfo() { Free(); }
 
     wxNativeFontInfo& operator=(const wxNativeFontInfo& info)
@@ -146,30 +137,44 @@ public:
         return *this;
     }
 
-    void Init(CTFontDescriptorRef descr);
+    void InitFromFont(CTFontRef font);
+    void InitFromFontDescriptor(CTFontDescriptorRef font);
     void Init(const wxNativeFontInfo& info);
-    void Init(int size,
-                  wxFontFamily family,
-                  wxFontStyle style,
-                  wxFontWeight weight,
-                  bool underlined,
-                  bool strikethrough,
-                  const wxString& faceName ,
-                  wxFontEncoding encoding);
 
     void Free();
     
+    wxString GetFamilyName() const;
+    wxString GetStyleName() const;
+
     static void UpdateNamesMap(const wxString& familyname, CTFontDescriptorRef descr);
     static void UpdateNamesMap(const wxString& familyname, CTFontRef font);
 
-    int           m_pointSize;
-    wxFontFamily  m_family;
+    static CGFloat GetCTWeight( CTFontRef font );
+    static CGFloat GetCTWeight( CTFontDescriptorRef font );
+    static CGFloat GetCTSlant( CTFontDescriptorRef font );
+    
+    
+    CTFontDescriptorRef GetCTFontDescriptor() const;
+private:
+    // attributes for regenerating a CTFontDescriptor, stay close to native values
+    // for better roundtrip fidelity
+    CGFloat       m_ctWeight;
     wxFontStyle   m_style;
-    wxFontWeight  m_weight;
+    CGFloat       m_ctSize;
+    wxFontFamily  m_family;
+    
+    wxString      m_styleName;
+    wxString      m_familyName;
+
+    // native font description
+    wxCFRef<CTFontDescriptorRef> m_descriptor;
+    void          CreateCTFontDescriptor();
+
+    // these attributes are not part of a CTFont
     bool          m_underlined;
     bool          m_strikethrough;
-    wxString      m_faceName;
     wxFontEncoding m_encoding;
+
 public :
 #elif defined(__WXQT__)
     QFont m_qtFont;
@@ -219,7 +224,7 @@ public:
     // init with the parameters of the given font
     void InitFromFont(const wxFont& font)
     {
-#if wxUSE_PANGO
+#if wxUSE_PANGO || defined(__WXOSX__)
         Init(*font.GetNativeFontInfo());
 #else
         // translate all font parameters
@@ -252,18 +257,21 @@ public:
 
     // accessors and modifiers for the font elements
     int GetPointSize() const;
+    float GetFractionalPointSize() const;
     wxSize GetPixelSize() const;
     wxFontStyle GetStyle() const;
     wxFontWeight GetWeight() const;
+    int GetNumericWeight() const;
     bool GetUnderlined() const;
     bool GetStrikethrough() const;
     wxString GetFaceName() const;
     wxFontFamily GetFamily() const;
     wxFontEncoding GetEncoding() const;
 
-    void SetPointSize(int pointsize);
+    void SetPointSize(float pointsize);
     void SetPixelSize(const wxSize& pixelSize);
     void SetStyle(wxFontStyle style);
+    void SetNumericWeight(int weight);
     void SetWeight(wxFontWeight weight);
     void SetUnderlined(bool underlined);
     void SetStrikethrough(bool strikethrough);

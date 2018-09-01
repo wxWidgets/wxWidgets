@@ -92,7 +92,12 @@ void wxNativeFontInfo::Free()
 
 int wxNativeFontInfo::GetPointSize() const
 {
-    return pango_font_description_get_size( description ) / PANGO_SCALE;
+    return wxRound(GetFractionalPointSize());
+}
+
+float wxNativeFontInfo::GetFractionalPointSize() const
+{
+    return ((float) pango_font_description_get_size( description )) / PANGO_SCALE;
 }
 
 wxFontStyle wxNativeFontInfo::GetStyle() const
@@ -115,7 +120,7 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
     return m_style;
 }
 
-wxFontWeight wxNativeFontInfo::GetWeight() const
+int wxNativeFontInfo::GetNumericWeight() const
 {
     // We seem to currently initialize only by string.
     // In that case PANGO_FONT_MASK_WEIGHT is always set.
@@ -123,19 +128,7 @@ wxFontWeight wxNativeFontInfo::GetWeight() const
     //    return wxFONTWEIGHT_NORMAL;
 
     PangoWeight pango_weight = pango_font_description_get_weight( description );
-
-    // Until the API can be changed the following ranges of weight values are used:
-    // wxFONTWEIGHT_LIGHT:  100 .. 349 - range of 250
-    // wxFONTWEIGHT_NORMAL: 350 .. 599 - range of 250
-    // wxFONTWEIGHT_BOLD:   600 .. 900 - range of 301 (600 is "semibold" already)
-
-    if (pango_weight >= 600)
-        return wxFONTWEIGHT_BOLD;
-
-    if (pango_weight < 350)
-        return wxFONTWEIGHT_LIGHT;
-
-    return wxFONTWEIGHT_NORMAL;
+    return pango_weight;
 }
 
 bool wxNativeFontInfo::GetUnderlined() const
@@ -226,7 +219,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxFONTENCODING_SYSTEM;
 }
 
-void wxNativeFontInfo::SetPointSize(int pointsize)
+void wxNativeFontInfo::SetPointSize(float pointsize)
 {
     pango_font_description_set_size( description, pointsize * PANGO_SCALE );
 }
@@ -250,22 +243,9 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
     }
 }
 
-void wxNativeFontInfo::SetWeight(wxFontWeight weight)
+void wxNativeFontInfo::SetNumericWeight(int weight)
 {
-    switch (weight)
-    {
-        case wxFONTWEIGHT_BOLD:
-            pango_font_description_set_weight(description, PANGO_WEIGHT_BOLD);
-            break;
-        case wxFONTWEIGHT_LIGHT:
-            pango_font_description_set_weight(description, PANGO_WEIGHT_LIGHT);
-            break;
-        default:
-            wxFAIL_MSG( "unknown font weight" );
-            // fall through
-        case wxFONTWEIGHT_NORMAL:
-            pango_font_description_set_weight(description, PANGO_WEIGHT_NORMAL);
-    }
+    pango_font_description_set_weight(description, (PangoWeight) weight);
 }
 
 void wxNativeFontInfo::SetUnderlined(bool underlined)
@@ -727,6 +707,11 @@ void wxNativeFontInfo::SetXFontName(const wxString& xFontName_)
 
 int wxNativeFontInfo::GetPointSize() const
 {
+    return wxRound(GetFractionalPointSize());
+}
+
+float wxNativeFontInfo::GetFractionalPointSize() const
+{
     const wxString s = GetXFontComponent(wxXLFD_POINTSIZE);
 
     // return -1 to indicate that the size is unknown
@@ -761,13 +746,29 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
     }
 }
 
-wxFontWeight wxNativeFontInfo::GetWeight() const
+int wxNativeFontInfo::GetNumericWeight() const
 {
-    const wxString s = GetXFontComponent(wxXLFD_WEIGHT).MakeLower();
-    if ( s.find(wxT("bold")) != wxString::npos || s == wxT("black") )
-        return wxFONTWEIGHT_BOLD;
-    else if ( s == wxT("light") )
+    const wxString weight = GetXFontComponent(wxXLFD_WEIGHT).MakeLower();
+    if (weight == wxT("thin") || weight == wxT("ultralight"))
+        return wxFONTWEIGHT_THIN;
+    else if (weight == wxT("extralight"))
+        return wxFONTWEIGHT_EXTRALIGHT;
+    else if (weight == wxT("light"))
         return wxFONTWEIGHT_LIGHT;
+    else if (weight == wxT("book") || weight == wxT("semilight") || weight == wxT("demilight"))
+        return 350;
+    else if (weight == wxT("medium"))
+        return wxFONTWEIGHT_MEDIUM;
+    else if (weight == wxT("semibold") || weight == wxT("demibold"))
+        return wxFONTWEIGHT_SEMIBOLD;
+    else if (weight == wxT("bold"))
+        return wxFONTWEIGHT_BOLD;
+    else if (weight == wxT("extrabold"))
+        return wxFONTWEIGHT_EXTRABOLD;
+    else if (weight == wxT("heavy"))
+        return wxFONTWEIGHT_HEAVY;
+    else if (weight == wxT("extraheavy") || weight == wxT("black") || weight == wxT("ultrabold"))
+        return wxFONTWEIGHT_EXTRAHEAVY;
 
     return wxFONTWEIGHT_NORMAL;
 }
@@ -801,7 +802,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxFONTENCODING_MAX;
 }
 
-void wxNativeFontInfo::SetPointSize(int pointsize)
+void wxNativeFontInfo::SetPointSize(float pointsize)
 {
     SetXFontComponent(wxXLFD_POINTSIZE, wxString::Format(wxT("%d"), pointsize));
 }
