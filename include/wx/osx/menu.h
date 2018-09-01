@@ -169,8 +169,6 @@ public:
     static wxMenuBar* MacGetCommonMenuBar() { return s_macCommonMenuBar; }
 
 
-    static WXHMENU MacGetWindowMenuHMenu() { return s_macWindowMenuHandle ; }
-    
     virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetClientSize(int *width, int *height) const;
@@ -180,7 +178,6 @@ protected:
     void Init();
 
     static bool     s_macAutoWindowMenu ;
-    static WXHMENU  s_macWindowMenuHandle ;
 
 private:
     static wxMenuBar*            s_macInstalledMenuBar ;
