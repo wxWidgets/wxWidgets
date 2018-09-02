@@ -864,7 +864,7 @@ void wxNativeFontInfo::InitFromFontDescriptor(CTFontDescriptorRef desc)
 
     m_ctWeight = GetCTWeight(desc);
     m_style = GetCTSlant(desc) > 0.01 ? wxFONTSTYLE_ITALIC : wxFONTSTYLE_NORMAL;
-    wxCFTypeRef(CTFontDescriptorCopyAttribute(desc, kCTFontSizeAttribute)).GetValue(m_ctSize, 0.0);
+    wxCFTypeRef(CTFontDescriptorCopyAttribute(desc, kCTFontSizeAttribute)).GetValue(m_ctSize, CGFloat(0.0));
 
     // determine approximate family
 
@@ -946,7 +946,7 @@ CGFloat wxNativeFontInfo::GetCTWeight(CTFontRef font)
     CGFloat weight;
     CFTypeRef fonttraitstype = CTFontCopyAttribute(font, kCTFontTraitsAttribute);
     wxCFDictionaryRef traits((CFDictionaryRef)fonttraitstype);
-    traits.GetValue(kCTFontWeightTrait).GetValue(&weight, 0.0);
+    traits.GetValue(kCTFontWeightTrait).GetValue(&weight, CGFloat(0.0));
     return weight;
 }
 
@@ -955,7 +955,7 @@ CGFloat wxNativeFontInfo::GetCTWeight(CTFontDescriptorRef descr)
     CGFloat weight;
     CFTypeRef fonttraitstype = CTFontDescriptorCopyAttribute(descr, kCTFontTraitsAttribute);
     wxCFDictionaryRef traits((CFDictionaryRef)fonttraitstype);
-    traits.GetValue(kCTFontWeightTrait).GetValue(&weight, 0.0);
+    traits.GetValue(kCTFontWeightTrait).GetValue(&weight, CGFloat(0.0));
     return weight;
 }
 
@@ -964,7 +964,7 @@ CGFloat wxNativeFontInfo::GetCTSlant(CTFontDescriptorRef descr)
     CGFloat slant;
     CFTypeRef fonttraitstype = CTFontDescriptorCopyAttribute(descr, kCTFontTraitsAttribute);
     wxCFDictionaryRef traits((CFDictionaryRef)fonttraitstype);
-    traits.GetValue(kCTFontSlantTrait).GetValue(&slant, 0.0);
+    traits.GetValue(kCTFontSlantTrait).GetValue(&slant, CGFloat(0.0));
     return slant;
 }
 
