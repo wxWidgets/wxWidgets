@@ -20,7 +20,7 @@
     This is an abstract class, and you will normally use one of the predefined
     derived classes or derive your own class from it.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see wxGridCellAutoWrapStringRenderer, wxGridCellBoolRenderer,
@@ -101,7 +101,7 @@ protected:
     This class may be used to format string data in a cell. The too
     long lines are wrapped to be shown entirely at word boundaries.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see wxGridCellRenderer, wxGridCellBoolRenderer,
@@ -125,7 +125,7 @@ public:
 
     This class may be used to format boolean data in a cell.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see wxGridCellRenderer, wxGridCellAutoWrapStringRenderer,
@@ -149,7 +149,7 @@ public:
     The class wxDateTime is used internally to display the local date/time
     or to parse the string date entered in the cell thanks to the defined format.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see wxGridCellRenderer, wxGridCellAutoWrapStringRenderer,
@@ -193,7 +193,7 @@ public:
     example, if this string is @c "John,Fred,Bob" the cell will be rendered as
     "John", "Fred" or "Bob" if its contents is 0, 1 or 2 respectively.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see wxGridCellRenderer, wxGridCellAutoWrapStringRenderer,
@@ -251,7 +251,7 @@ enum wxGridCellFloatFormat
 
     This class may be used to format floating point data in a cell.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see wxGridCellRenderer, wxGridCellAutoWrapStringRenderer,
@@ -328,7 +328,7 @@ public:
 
     This class may be used to format integer data in a cell.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see wxGridCellRenderer, wxGridCellAutoWrapStringRenderer,
@@ -351,7 +351,7 @@ public:
     This class may be used to format string data in a cell; it is the default
     for string cells.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see wxGridCellRenderer, wxGridCellAutoWrapStringRenderer,
@@ -378,7 +378,7 @@ public:
     the cell attributes for individual cells, rows, columns, or even for the
     entire grid.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see wxGridCellAutoWrapStringEditor, wxGridCellBoolEditor,
@@ -527,7 +527,7 @@ protected:
 
     Grid cell editor for wrappable string/text data.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see wxGridCellEditor, wxGridCellBoolEditor, wxGridCellChoiceEditor,
@@ -545,7 +545,7 @@ public:
 
     Grid cell editor for boolean data.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see wxGridCellEditor, wxGridCellAutoWrapStringEditor,
@@ -584,7 +584,7 @@ public:
     Grid cell editor for string data providing the user a choice from a list of
     strings.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see wxGridCellEditor, wxGridCellAutoWrapStringEditor,
@@ -635,7 +635,7 @@ public:
     (e.g. data in cell is 0,1,2 ... n the cell could be displayed as
     "John","Fred"..."Bob" in the combo choice box).
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see wxGridCellEditor, wxGridCellAutoWrapStringEditor,
@@ -660,7 +660,7 @@ public:
 
     Grid cell editor for string/text data.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see wxGridCellEditor, wxGridCellAutoWrapStringEditor,
@@ -699,7 +699,7 @@ public:
 
     The editor for floating point numbers data.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see wxGridCellEditor, wxGridCellAutoWrapStringEditor,
@@ -737,7 +737,7 @@ public:
 
     Grid cell editor for numeric integer data.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see wxGridCellEditor, wxGridCellAutoWrapStringEditor,
@@ -784,7 +784,7 @@ protected:
     changing their attributes from the defaults. An object of this class may be
     returned by wxGridTableBase::GetAttr().
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 */
 class wxGridCellAttr : public wxClientDataContainer, public wxRefCounter
@@ -1488,7 +1488,7 @@ public:
 
     @see wxGridStringTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 */
 class wxGridTableBase : public wxObject
@@ -1921,7 +1921,7 @@ enum wxGridTableRequest
     This structure is particularly useful for serializing the sizes of all
     wxGrid elements at once.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
  */
 struct wxGridSizesInfo
@@ -2061,7 +2061,7 @@ enum wxGridRenderStyle
     wxGridEditorCreatedEvent for the documentation of all event types you can
     use with wxGrid.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 
     @see @ref overview_grid, wxGridUpdateLocker
@@ -4700,7 +4700,7 @@ protected:
     wxGrid::EndBatch() because you don't risk missing the call the latter (due
     to an exception for example).
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid}
 */
 class wxGridUpdateLocker
@@ -4824,7 +4824,7 @@ public:
         wxWidgets 2.9.5.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid,events}
 */
 class wxGridEvent : public wxNotifyEvent
@@ -4918,7 +4918,7 @@ public:
         Same as EVT_GRID_CMD_ROW_SIZE() but uses `wxID_ANY` id.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid,events}
 */
 class wxGridSizeEvent : public wxNotifyEvent
@@ -4980,7 +4980,7 @@ public:
         identifier. Processes a @c wxEVT_GRID_RANGE_SELECT event type.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid,events}
 */
 class wxGridRangeSelectEvent : public wxNotifyEvent
@@ -5069,7 +5069,7 @@ public:
         Processes a @c wxEVT_GRID_EDITOR_CREATED event type.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{grid,events}
 */
 class wxGridEditorCreatedEvent : public wxCommandEvent

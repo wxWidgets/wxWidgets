@@ -101,6 +101,8 @@ All:
 
 All (GUI):
 
+- wxAdvanced library was merged into wxCore, simply remove all references
+  to "adv" from your build system, it is not needed any longer.
 - Add wxDataViewToggleRenderer::ShowAsRadio().
 - Improve stock items consistency and aesthetics (dhowland).
 - Fix bug with missing items in overflowing AUI toolbar (Maarten Bent).

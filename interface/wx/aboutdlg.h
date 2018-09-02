@@ -45,7 +45,7 @@
     }
     @endcode
 
-    @library{wxadv}
+    @library{wxcore}
     @category{cmndlg,data}
 
     @see wxAboutDialogInfo::SetArtists

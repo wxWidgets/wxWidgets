@@ -26,7 +26,7 @@
 
     Lines starting with ';' will be ignored.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{help}
 
     @see wxHelpController

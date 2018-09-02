@@ -88,7 +88,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 auidemo: $(AUIDEMO_OBJECTS)
-	$(CXX) -o $@ $(AUIDEMO_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs aui,html,adv,core,xml,base`
+	$(CXX) -o $@ $(AUIDEMO_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs aui,html,core,xml,base`
 
 auidemo_auidemo.o: ./auidemo.cpp
 	$(CXX) -c -o $@ $(AUIDEMO_CXXFLAGS) $(CPPDEPS) $<

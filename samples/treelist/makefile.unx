@@ -88,7 +88,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 treelist: $(TREELIST_OBJECTS)
-	$(CXX) -o $@ $(TREELIST_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs adv,core,base`
+	$(CXX) -o $@ $(TREELIST_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
 
 treelist_treelist.o: ./treelist.cpp
 	$(CXX) -c -o $@ $(TREELIST_CXXFLAGS) $(CPPDEPS) $<

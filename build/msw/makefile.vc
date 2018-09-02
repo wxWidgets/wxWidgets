@@ -1077,8 +1077,7 @@ ADVDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_240)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__EXCEPTIONSFLAG) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_advdll.pch" \
 	$(CPPFLAGS) $(CXXFLAGS)
 ADVDLL_OBJECTS =  \
-	$(OBJS)\advdll_dummy.obj \
-	$(____ADVANCED_SRC_FILENAMES_2_OBJECTS)
+	$(OBJS)\advdll_dummy.obj
 ADVDLL_RESOURCES =  \
 	$(OBJS)\advdll_version.res
 ADVLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_255)$(__DEBUGRUNTIME) /DWIN32 \
@@ -1094,8 +1093,7 @@ ADVLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_255)$(__DEBUGRUNTIME) /DWIN32 \
 	/I..\..\src\expat\expat\lib $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
 	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_advlib.pch" $(CPPFLAGS) $(CXXFLAGS)
 ADVLIB_OBJECTS =  \
-	$(OBJS)\advlib_dummy.obj \
-	$(____ADVANCED_SRC_FILENAMES_3_OBJECTS)
+	$(OBJS)\advlib_dummy.obj
 MEDIADLL_CXXFLAGS = /M$(__RUNTIME_LIBS_271)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media$(WXCOMPILER)$(VENDORTAG).pdb \
@@ -1945,7 +1943,6 @@ __RUNTIME_LIBS_116 = $(__THREADSFLAG)
 !if "$(USE_GUI)" == "1"
 ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(____CORE_SRC_FILENAMES_OBJECTS) \
-	$(____ADVANCED_SRC_FILENAMES_OBJECTS) \
 	$(OBJS)\monodll_mediactrlcmn.obj \
 	$(OBJS)\monodll_mediactrl_am.obj \
 	$(OBJS)\monodll_mediactrl_wmp10.obj \
@@ -2148,9 +2145,18 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_window.obj \
 	$(OBJS)\monodll_graphicsd2d.obj \
 	$(OBJS)\monodll_utilsrt.obj \
+	$(OBJS)\monodll_taskbarcmn.obj \
 	$(OBJS)\monodll_helpchm.obj \
+	$(OBJS)\monodll_taskbar.obj \
 	$(OBJS)\monodll_helpwin.obj \
+	$(OBJS)\monodll_joystick.obj \
+	$(OBJS)\monodll_aboutdlg.obj \
+	$(OBJS)\monodll_notifmsg.obj \
+	$(OBJS)\monodll_richtooltip.obj \
+	$(OBJS)\monodll_sound.obj \
 	$(OBJS)\monodll_automtn.obj \
+	$(OBJS)\monodll_notifmsgrt.obj \
+	$(OBJS)\monodll_activityindicator.obj \
 	$(OBJS)\monodll_uuid.obj \
 	$(OBJS)\monodll_clrpickerg.obj \
 	$(OBJS)\monodll_collpaneg.obj \
@@ -2212,6 +2218,15 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_treectrl.obj \
 	$(OBJS)\monodll_systhemectrl.obj \
 	$(OBJS)\monodll_customdraw.obj \
+	$(OBJS)\monodll_animateg.obj \
+	$(OBJS)\monodll_commandlinkbutton.obj \
+	$(OBJS)\monodll_bmpcbox.obj \
+	$(OBJS)\monodll_hyperlink.obj \
+	$(OBJS)\monodll_calctrl.obj \
+	$(OBJS)\monodll_datectrl.obj \
+	$(OBJS)\monodll_datetimectrl.obj \
+	$(OBJS)\monodll_timectrl.obj \
+	$(OBJS)\monodll_datecontrols.obj \
 	$(OBJS)\monodll_msw_checklst.obj \
 	$(OBJS)\monodll_msw_fdrepdlg.obj \
 	$(OBJS)\monodll_fontdlg.obj \
@@ -2379,7 +2394,42 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_treebkg.obj \
 	$(OBJS)\monodll_vlbox.obj \
 	$(OBJS)\monodll_vscroll.obj \
-	$(OBJS)\monodll_xmlreshandler.obj
+	$(OBJS)\monodll_xmlreshandler.obj \
+	$(OBJS)\monodll_splash.obj \
+	$(OBJS)\monodll_notifmsgg.obj \
+	$(OBJS)\monodll_odcombo.obj \
+	$(OBJS)\monodll_calctrlcmn.obj \
+	$(OBJS)\monodll_grideditors.obj \
+	$(OBJS)\monodll_bmpcboxcmn.obj \
+	$(OBJS)\monodll_grid.obj \
+	$(OBJS)\monodll_gridctrl.obj \
+	$(OBJS)\monodll_hyperlinkg.obj \
+	$(OBJS)\monodll_helpext.obj \
+	$(OBJS)\monodll_sashwin.obj \
+	$(OBJS)\monodll_gridsel.obj \
+	$(OBJS)\monodll_addremovectrl.obj \
+	$(OBJS)\monodll_tipdlg.obj \
+	$(OBJS)\monodll_aboutdlgg.obj \
+	$(OBJS)\monodll_gridcmn.obj \
+	$(OBJS)\monodll_richtooltipcmn.obj \
+	$(OBJS)\monodll_datectlg.obj \
+	$(OBJS)\monodll_bannerwindow.obj \
+	$(OBJS)\monodll_treelist.obj \
+	$(OBJS)\monodll_datavcmn.obj \
+	$(OBJS)\monodll_animatecmn.obj \
+	$(OBJS)\monodll_odcombocmn.obj \
+	$(OBJS)\monodll_hyperlnkcmn.obj \
+	$(OBJS)\monodll_propdlg.obj \
+	$(OBJS)\monodll_bmpcboxg.obj \
+	$(OBJS)\monodll_richtooltipg.obj \
+	$(OBJS)\monodll_timectrlg.obj \
+	$(OBJS)\monodll_commandlinkbuttong.obj \
+	$(OBJS)\monodll_notifmsgcmn.obj \
+	$(OBJS)\monodll_wizard.obj \
+	$(OBJS)\monodll_datavgen.obj \
+	$(OBJS)\monodll_editlbox.obj \
+	$(OBJS)\monodll_laywin.obj \
+	$(OBJS)\monodll_calctrlg.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_OBJECTS =  \
@@ -2436,9 +2486,18 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_window.obj \
 	$(OBJS)\monodll_graphicsd2d.obj \
 	$(OBJS)\monodll_utilsrt.obj \
+	$(OBJS)\monodll_taskbarcmn.obj \
 	$(OBJS)\monodll_helpchm.obj \
+	$(OBJS)\monodll_taskbar.obj \
 	$(OBJS)\monodll_helpwin.obj \
+	$(OBJS)\monodll_joystick.obj \
+	$(OBJS)\monodll_aboutdlg.obj \
+	$(OBJS)\monodll_notifmsg.obj \
+	$(OBJS)\monodll_richtooltip.obj \
+	$(OBJS)\monodll_sound.obj \
 	$(OBJS)\monodll_automtn.obj \
+	$(OBJS)\monodll_notifmsgrt.obj \
+	$(OBJS)\monodll_activityindicator.obj \
 	$(OBJS)\monodll_uuid.obj \
 	$(OBJS)\monodll_evtloop.obj \
 	$(OBJS)\monodll_generic_accel.obj \
@@ -2660,111 +2719,42 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_treebkg.obj \
 	$(OBJS)\monodll_vlbox.obj \
 	$(OBJS)\monodll_vscroll.obj \
-	$(OBJS)\monodll_xmlreshandler.obj
-!endif
-!if "$(WXUNIV)" == "0"
-____ADVANCED_SRC_FILENAMES_OBJECTS =  \
-	$(OBJS)\monodll_animatecmn.obj \
-	$(OBJS)\monodll_bmpcboxcmn.obj \
-	$(OBJS)\monodll_calctrlcmn.obj \
-	$(OBJS)\monodll_datavcmn.obj \
-	$(OBJS)\monodll_gridcmn.obj \
-	$(OBJS)\monodll_hyperlnkcmn.obj \
-	$(OBJS)\monodll_odcombocmn.obj \
-	$(OBJS)\monodll_richtooltipcmn.obj \
-	$(OBJS)\monodll_aboutdlgg.obj \
-	$(OBJS)\monodll_bannerwindow.obj \
-	$(OBJS)\monodll_bmpcboxg.obj \
-	$(OBJS)\monodll_calctrlg.obj \
-	$(OBJS)\monodll_commandlinkbuttong.obj \
-	$(OBJS)\monodll_datavgen.obj \
-	$(OBJS)\monodll_datectlg.obj \
-	$(OBJS)\monodll_editlbox.obj \
-	$(OBJS)\monodll_grid.obj \
-	$(OBJS)\monodll_gridctrl.obj \
-	$(OBJS)\monodll_grideditors.obj \
-	$(OBJS)\monodll_gridsel.obj \
-	$(OBJS)\monodll_helpext.obj \
-	$(OBJS)\monodll_hyperlinkg.obj \
-	$(OBJS)\monodll_laywin.obj \
+	$(OBJS)\monodll_xmlreshandler.obj \
+	$(OBJS)\monodll_splash.obj \
 	$(OBJS)\monodll_notifmsgg.obj \
 	$(OBJS)\monodll_odcombo.obj \
-	$(OBJS)\monodll_propdlg.obj \
-	$(OBJS)\monodll_richtooltipg.obj \
-	$(OBJS)\monodll_sashwin.obj \
-	$(OBJS)\monodll_splash.obj \
-	$(OBJS)\monodll_timectrlg.obj \
-	$(OBJS)\monodll_tipdlg.obj \
-	$(OBJS)\monodll_treelist.obj \
-	$(OBJS)\monodll_wizard.obj \
-	$(OBJS)\monodll_addremovectrl.obj \
-	$(OBJS)\monodll_notifmsgcmn.obj \
-	$(OBJS)\monodll_taskbarcmn.obj \
-	$(OBJS)\monodll_aboutdlg.obj \
-	$(OBJS)\monodll_notifmsg.obj \
-	$(OBJS)\monodll_richtooltip.obj \
-	$(OBJS)\monodll_sound.obj \
-	$(OBJS)\monodll_taskbar.obj \
-	$(OBJS)\monodll_notifmsgrt.obj \
-	$(OBJS)\monodll_activityindicator.obj \
-	$(OBJS)\monodll_joystick.obj \
-	$(OBJS)\monodll_animateg.obj \
-	$(OBJS)\monodll_bmpcbox.obj \
-	$(OBJS)\monodll_calctrl.obj \
-	$(OBJS)\monodll_commandlinkbutton.obj \
-	$(OBJS)\monodll_datecontrols.obj \
-	$(OBJS)\monodll_datectrl.obj \
-	$(OBJS)\monodll_datetimectrl.obj \
-	$(OBJS)\monodll_hyperlink.obj \
-	$(OBJS)\monodll_timectrl.obj
-!endif
-!if "$(WXUNIV)" == "1"
-____ADVANCED_SRC_FILENAMES_OBJECTS =  \
-	$(OBJS)\monodll_animatecmn.obj \
-	$(OBJS)\monodll_bmpcboxcmn.obj \
 	$(OBJS)\monodll_calctrlcmn.obj \
-	$(OBJS)\monodll_datavcmn.obj \
-	$(OBJS)\monodll_gridcmn.obj \
-	$(OBJS)\monodll_hyperlnkcmn.obj \
-	$(OBJS)\monodll_odcombocmn.obj \
-	$(OBJS)\monodll_richtooltipcmn.obj \
-	$(OBJS)\monodll_aboutdlgg.obj \
-	$(OBJS)\monodll_bannerwindow.obj \
-	$(OBJS)\monodll_bmpcboxg.obj \
-	$(OBJS)\monodll_calctrlg.obj \
-	$(OBJS)\monodll_commandlinkbuttong.obj \
-	$(OBJS)\monodll_datavgen.obj \
-	$(OBJS)\monodll_datectlg.obj \
-	$(OBJS)\monodll_editlbox.obj \
+	$(OBJS)\monodll_grideditors.obj \
+	$(OBJS)\monodll_bmpcboxcmn.obj \
 	$(OBJS)\monodll_grid.obj \
 	$(OBJS)\monodll_gridctrl.obj \
-	$(OBJS)\monodll_grideditors.obj \
-	$(OBJS)\monodll_gridsel.obj \
-	$(OBJS)\monodll_helpext.obj \
 	$(OBJS)\monodll_hyperlinkg.obj \
-	$(OBJS)\monodll_laywin.obj \
-	$(OBJS)\monodll_notifmsgg.obj \
-	$(OBJS)\monodll_odcombo.obj \
-	$(OBJS)\monodll_propdlg.obj \
-	$(OBJS)\monodll_richtooltipg.obj \
+	$(OBJS)\monodll_helpext.obj \
 	$(OBJS)\monodll_sashwin.obj \
-	$(OBJS)\monodll_splash.obj \
-	$(OBJS)\monodll_timectrlg.obj \
-	$(OBJS)\monodll_tipdlg.obj \
-	$(OBJS)\monodll_treelist.obj \
-	$(OBJS)\monodll_wizard.obj \
+	$(OBJS)\monodll_gridsel.obj \
 	$(OBJS)\monodll_addremovectrl.obj \
+	$(OBJS)\monodll_tipdlg.obj \
+	$(OBJS)\monodll_aboutdlgg.obj \
+	$(OBJS)\monodll_gridcmn.obj \
+	$(OBJS)\monodll_richtooltipcmn.obj \
+	$(OBJS)\monodll_datectlg.obj \
+	$(OBJS)\monodll_bannerwindow.obj \
+	$(OBJS)\monodll_treelist.obj \
+	$(OBJS)\monodll_datavcmn.obj \
+	$(OBJS)\monodll_animatecmn.obj \
+	$(OBJS)\monodll_odcombocmn.obj \
+	$(OBJS)\monodll_hyperlnkcmn.obj \
+	$(OBJS)\monodll_propdlg.obj \
+	$(OBJS)\monodll_bmpcboxg.obj \
+	$(OBJS)\monodll_richtooltipg.obj \
+	$(OBJS)\monodll_timectrlg.obj \
+	$(OBJS)\monodll_commandlinkbuttong.obj \
 	$(OBJS)\monodll_notifmsgcmn.obj \
-	$(OBJS)\monodll_taskbarcmn.obj \
-	$(OBJS)\monodll_aboutdlg.obj \
-	$(OBJS)\monodll_notifmsg.obj \
-	$(OBJS)\monodll_richtooltip.obj \
-	$(OBJS)\monodll_sound.obj \
-	$(OBJS)\monodll_taskbar.obj \
-	$(OBJS)\monodll_notifmsgrt.obj \
-	$(OBJS)\monodll_activityindicator.obj \
-	$(OBJS)\monodll_joystick.obj \
-	$(OBJS)\monodll_animateg.obj
+	$(OBJS)\monodll_wizard.obj \
+	$(OBJS)\monodll_datavgen.obj \
+	$(OBJS)\monodll_editlbox.obj \
+	$(OBJS)\monodll_laywin.obj \
+	$(OBJS)\monodll_calctrlg.obj
 !endif
 !if "$(USE_STC)" == "1"
 ____MONOLIB_STC_SRC_FILENAMES_OBJECTS =  \
@@ -2788,7 +2778,6 @@ __RUNTIME_LIBS_131 = $(__THREADSFLAG)
 !if "$(USE_GUI)" == "1"
 ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(____CORE_SRC_FILENAMES_1_OBJECTS) \
-	$(____ADVANCED_SRC_FILENAMES_1_OBJECTS) \
 	$(OBJS)\monolib_mediactrlcmn.obj \
 	$(OBJS)\monolib_mediactrl_am.obj \
 	$(OBJS)\monolib_mediactrl_wmp10.obj \
@@ -2991,9 +2980,18 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_window.obj \
 	$(OBJS)\monolib_graphicsd2d.obj \
 	$(OBJS)\monolib_utilsrt.obj \
+	$(OBJS)\monolib_taskbarcmn.obj \
 	$(OBJS)\monolib_helpchm.obj \
+	$(OBJS)\monolib_taskbar.obj \
 	$(OBJS)\monolib_helpwin.obj \
+	$(OBJS)\monolib_joystick.obj \
+	$(OBJS)\monolib_aboutdlg.obj \
+	$(OBJS)\monolib_notifmsg.obj \
+	$(OBJS)\monolib_richtooltip.obj \
+	$(OBJS)\monolib_sound.obj \
 	$(OBJS)\monolib_automtn.obj \
+	$(OBJS)\monolib_notifmsgrt.obj \
+	$(OBJS)\monolib_activityindicator.obj \
 	$(OBJS)\monolib_uuid.obj \
 	$(OBJS)\monolib_clrpickerg.obj \
 	$(OBJS)\monolib_collpaneg.obj \
@@ -3055,6 +3053,15 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_treectrl.obj \
 	$(OBJS)\monolib_systhemectrl.obj \
 	$(OBJS)\monolib_customdraw.obj \
+	$(OBJS)\monolib_animateg.obj \
+	$(OBJS)\monolib_commandlinkbutton.obj \
+	$(OBJS)\monolib_bmpcbox.obj \
+	$(OBJS)\monolib_hyperlink.obj \
+	$(OBJS)\monolib_calctrl.obj \
+	$(OBJS)\monolib_datectrl.obj \
+	$(OBJS)\monolib_datetimectrl.obj \
+	$(OBJS)\monolib_timectrl.obj \
+	$(OBJS)\monolib_datecontrols.obj \
 	$(OBJS)\monolib_msw_checklst.obj \
 	$(OBJS)\monolib_msw_fdrepdlg.obj \
 	$(OBJS)\monolib_fontdlg.obj \
@@ -3222,7 +3229,42 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_treebkg.obj \
 	$(OBJS)\monolib_vlbox.obj \
 	$(OBJS)\monolib_vscroll.obj \
-	$(OBJS)\monolib_xmlreshandler.obj
+	$(OBJS)\monolib_xmlreshandler.obj \
+	$(OBJS)\monolib_splash.obj \
+	$(OBJS)\monolib_notifmsgg.obj \
+	$(OBJS)\monolib_odcombo.obj \
+	$(OBJS)\monolib_calctrlcmn.obj \
+	$(OBJS)\monolib_grideditors.obj \
+	$(OBJS)\monolib_bmpcboxcmn.obj \
+	$(OBJS)\monolib_grid.obj \
+	$(OBJS)\monolib_gridctrl.obj \
+	$(OBJS)\monolib_hyperlinkg.obj \
+	$(OBJS)\monolib_helpext.obj \
+	$(OBJS)\monolib_sashwin.obj \
+	$(OBJS)\monolib_gridsel.obj \
+	$(OBJS)\monolib_addremovectrl.obj \
+	$(OBJS)\monolib_tipdlg.obj \
+	$(OBJS)\monolib_aboutdlgg.obj \
+	$(OBJS)\monolib_gridcmn.obj \
+	$(OBJS)\monolib_richtooltipcmn.obj \
+	$(OBJS)\monolib_datectlg.obj \
+	$(OBJS)\monolib_bannerwindow.obj \
+	$(OBJS)\monolib_treelist.obj \
+	$(OBJS)\monolib_datavcmn.obj \
+	$(OBJS)\monolib_animatecmn.obj \
+	$(OBJS)\monolib_odcombocmn.obj \
+	$(OBJS)\monolib_hyperlnkcmn.obj \
+	$(OBJS)\monolib_propdlg.obj \
+	$(OBJS)\monolib_bmpcboxg.obj \
+	$(OBJS)\monolib_richtooltipg.obj \
+	$(OBJS)\monolib_timectrlg.obj \
+	$(OBJS)\monolib_commandlinkbuttong.obj \
+	$(OBJS)\monolib_notifmsgcmn.obj \
+	$(OBJS)\monolib_wizard.obj \
+	$(OBJS)\monolib_datavgen.obj \
+	$(OBJS)\monolib_editlbox.obj \
+	$(OBJS)\monolib_laywin.obj \
+	$(OBJS)\monolib_calctrlg.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_1_OBJECTS =  \
@@ -3279,9 +3321,18 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_window.obj \
 	$(OBJS)\monolib_graphicsd2d.obj \
 	$(OBJS)\monolib_utilsrt.obj \
+	$(OBJS)\monolib_taskbarcmn.obj \
 	$(OBJS)\monolib_helpchm.obj \
+	$(OBJS)\monolib_taskbar.obj \
 	$(OBJS)\monolib_helpwin.obj \
+	$(OBJS)\monolib_joystick.obj \
+	$(OBJS)\monolib_aboutdlg.obj \
+	$(OBJS)\monolib_notifmsg.obj \
+	$(OBJS)\monolib_richtooltip.obj \
+	$(OBJS)\monolib_sound.obj \
 	$(OBJS)\monolib_automtn.obj \
+	$(OBJS)\monolib_notifmsgrt.obj \
+	$(OBJS)\monolib_activityindicator.obj \
 	$(OBJS)\monolib_uuid.obj \
 	$(OBJS)\monolib_evtloop.obj \
 	$(OBJS)\monolib_generic_accel.obj \
@@ -3503,111 +3554,42 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_treebkg.obj \
 	$(OBJS)\monolib_vlbox.obj \
 	$(OBJS)\monolib_vscroll.obj \
-	$(OBJS)\monolib_xmlreshandler.obj
-!endif
-!if "$(WXUNIV)" == "0"
-____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
-	$(OBJS)\monolib_animatecmn.obj \
-	$(OBJS)\monolib_bmpcboxcmn.obj \
-	$(OBJS)\monolib_calctrlcmn.obj \
-	$(OBJS)\monolib_datavcmn.obj \
-	$(OBJS)\monolib_gridcmn.obj \
-	$(OBJS)\monolib_hyperlnkcmn.obj \
-	$(OBJS)\monolib_odcombocmn.obj \
-	$(OBJS)\monolib_richtooltipcmn.obj \
-	$(OBJS)\monolib_aboutdlgg.obj \
-	$(OBJS)\monolib_bannerwindow.obj \
-	$(OBJS)\monolib_bmpcboxg.obj \
-	$(OBJS)\monolib_calctrlg.obj \
-	$(OBJS)\monolib_commandlinkbuttong.obj \
-	$(OBJS)\monolib_datavgen.obj \
-	$(OBJS)\monolib_datectlg.obj \
-	$(OBJS)\monolib_editlbox.obj \
-	$(OBJS)\monolib_grid.obj \
-	$(OBJS)\monolib_gridctrl.obj \
-	$(OBJS)\monolib_grideditors.obj \
-	$(OBJS)\monolib_gridsel.obj \
-	$(OBJS)\monolib_helpext.obj \
-	$(OBJS)\monolib_hyperlinkg.obj \
-	$(OBJS)\monolib_laywin.obj \
+	$(OBJS)\monolib_xmlreshandler.obj \
+	$(OBJS)\monolib_splash.obj \
 	$(OBJS)\monolib_notifmsgg.obj \
 	$(OBJS)\monolib_odcombo.obj \
-	$(OBJS)\monolib_propdlg.obj \
-	$(OBJS)\monolib_richtooltipg.obj \
-	$(OBJS)\monolib_sashwin.obj \
-	$(OBJS)\monolib_splash.obj \
-	$(OBJS)\monolib_timectrlg.obj \
-	$(OBJS)\monolib_tipdlg.obj \
-	$(OBJS)\monolib_treelist.obj \
-	$(OBJS)\monolib_wizard.obj \
-	$(OBJS)\monolib_addremovectrl.obj \
-	$(OBJS)\monolib_notifmsgcmn.obj \
-	$(OBJS)\monolib_taskbarcmn.obj \
-	$(OBJS)\monolib_aboutdlg.obj \
-	$(OBJS)\monolib_notifmsg.obj \
-	$(OBJS)\monolib_richtooltip.obj \
-	$(OBJS)\monolib_sound.obj \
-	$(OBJS)\monolib_taskbar.obj \
-	$(OBJS)\monolib_notifmsgrt.obj \
-	$(OBJS)\monolib_activityindicator.obj \
-	$(OBJS)\monolib_joystick.obj \
-	$(OBJS)\monolib_animateg.obj \
-	$(OBJS)\monolib_bmpcbox.obj \
-	$(OBJS)\monolib_calctrl.obj \
-	$(OBJS)\monolib_commandlinkbutton.obj \
-	$(OBJS)\monolib_datecontrols.obj \
-	$(OBJS)\monolib_datectrl.obj \
-	$(OBJS)\monolib_datetimectrl.obj \
-	$(OBJS)\monolib_hyperlink.obj \
-	$(OBJS)\monolib_timectrl.obj
-!endif
-!if "$(WXUNIV)" == "1"
-____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
-	$(OBJS)\monolib_animatecmn.obj \
-	$(OBJS)\monolib_bmpcboxcmn.obj \
 	$(OBJS)\monolib_calctrlcmn.obj \
-	$(OBJS)\monolib_datavcmn.obj \
-	$(OBJS)\monolib_gridcmn.obj \
-	$(OBJS)\monolib_hyperlnkcmn.obj \
-	$(OBJS)\monolib_odcombocmn.obj \
-	$(OBJS)\monolib_richtooltipcmn.obj \
-	$(OBJS)\monolib_aboutdlgg.obj \
-	$(OBJS)\monolib_bannerwindow.obj \
-	$(OBJS)\monolib_bmpcboxg.obj \
-	$(OBJS)\monolib_calctrlg.obj \
-	$(OBJS)\monolib_commandlinkbuttong.obj \
-	$(OBJS)\monolib_datavgen.obj \
-	$(OBJS)\monolib_datectlg.obj \
-	$(OBJS)\monolib_editlbox.obj \
+	$(OBJS)\monolib_grideditors.obj \
+	$(OBJS)\monolib_bmpcboxcmn.obj \
 	$(OBJS)\monolib_grid.obj \
 	$(OBJS)\monolib_gridctrl.obj \
-	$(OBJS)\monolib_grideditors.obj \
-	$(OBJS)\monolib_gridsel.obj \
-	$(OBJS)\monolib_helpext.obj \
 	$(OBJS)\monolib_hyperlinkg.obj \
-	$(OBJS)\monolib_laywin.obj \
-	$(OBJS)\monolib_notifmsgg.obj \
-	$(OBJS)\monolib_odcombo.obj \
-	$(OBJS)\monolib_propdlg.obj \
-	$(OBJS)\monolib_richtooltipg.obj \
+	$(OBJS)\monolib_helpext.obj \
 	$(OBJS)\monolib_sashwin.obj \
-	$(OBJS)\monolib_splash.obj \
-	$(OBJS)\monolib_timectrlg.obj \
-	$(OBJS)\monolib_tipdlg.obj \
-	$(OBJS)\monolib_treelist.obj \
-	$(OBJS)\monolib_wizard.obj \
+	$(OBJS)\monolib_gridsel.obj \
 	$(OBJS)\monolib_addremovectrl.obj \
+	$(OBJS)\monolib_tipdlg.obj \
+	$(OBJS)\monolib_aboutdlgg.obj \
+	$(OBJS)\monolib_gridcmn.obj \
+	$(OBJS)\monolib_richtooltipcmn.obj \
+	$(OBJS)\monolib_datectlg.obj \
+	$(OBJS)\monolib_bannerwindow.obj \
+	$(OBJS)\monolib_treelist.obj \
+	$(OBJS)\monolib_datavcmn.obj \
+	$(OBJS)\monolib_animatecmn.obj \
+	$(OBJS)\monolib_odcombocmn.obj \
+	$(OBJS)\monolib_hyperlnkcmn.obj \
+	$(OBJS)\monolib_propdlg.obj \
+	$(OBJS)\monolib_bmpcboxg.obj \
+	$(OBJS)\monolib_richtooltipg.obj \
+	$(OBJS)\monolib_timectrlg.obj \
+	$(OBJS)\monolib_commandlinkbuttong.obj \
 	$(OBJS)\monolib_notifmsgcmn.obj \
-	$(OBJS)\monolib_taskbarcmn.obj \
-	$(OBJS)\monolib_aboutdlg.obj \
-	$(OBJS)\monolib_notifmsg.obj \
-	$(OBJS)\monolib_richtooltip.obj \
-	$(OBJS)\monolib_sound.obj \
-	$(OBJS)\monolib_taskbar.obj \
-	$(OBJS)\monolib_notifmsgrt.obj \
-	$(OBJS)\monolib_activityindicator.obj \
-	$(OBJS)\monolib_joystick.obj \
-	$(OBJS)\monolib_animateg.obj
+	$(OBJS)\monolib_wizard.obj \
+	$(OBJS)\monolib_datavgen.obj \
+	$(OBJS)\monolib_editlbox.obj \
+	$(OBJS)\monolib_laywin.obj \
+	$(OBJS)\monolib_calctrlg.obj
 !endif
 !if "$(USE_STC)" == "1"
 ____MONOLIB_STC_SRC_FILENAMES_1_OBJECTS =  \
@@ -3768,9 +3750,18 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_window.obj \
 	$(OBJS)\coredll_graphicsd2d.obj \
 	$(OBJS)\coredll_utilsrt.obj \
+	$(OBJS)\coredll_taskbarcmn.obj \
 	$(OBJS)\coredll_helpchm.obj \
+	$(OBJS)\coredll_taskbar.obj \
 	$(OBJS)\coredll_helpwin.obj \
+	$(OBJS)\coredll_joystick.obj \
+	$(OBJS)\coredll_aboutdlg.obj \
+	$(OBJS)\coredll_notifmsg.obj \
+	$(OBJS)\coredll_richtooltip.obj \
+	$(OBJS)\coredll_sound.obj \
 	$(OBJS)\coredll_automtn.obj \
+	$(OBJS)\coredll_notifmsgrt.obj \
+	$(OBJS)\coredll_activityindicator.obj \
 	$(OBJS)\coredll_uuid.obj \
 	$(OBJS)\coredll_clrpickerg.obj \
 	$(OBJS)\coredll_collpaneg.obj \
@@ -3832,6 +3823,15 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_treectrl.obj \
 	$(OBJS)\coredll_systhemectrl.obj \
 	$(OBJS)\coredll_customdraw.obj \
+	$(OBJS)\coredll_animateg.obj \
+	$(OBJS)\coredll_commandlinkbutton.obj \
+	$(OBJS)\coredll_bmpcbox.obj \
+	$(OBJS)\coredll_hyperlink.obj \
+	$(OBJS)\coredll_calctrl.obj \
+	$(OBJS)\coredll_datectrl.obj \
+	$(OBJS)\coredll_datetimectrl.obj \
+	$(OBJS)\coredll_timectrl.obj \
+	$(OBJS)\coredll_datecontrols.obj \
 	$(OBJS)\coredll_msw_checklst.obj \
 	$(OBJS)\coredll_msw_fdrepdlg.obj \
 	$(OBJS)\coredll_fontdlg.obj \
@@ -3999,7 +3999,42 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_treebkg.obj \
 	$(OBJS)\coredll_vlbox.obj \
 	$(OBJS)\coredll_vscroll.obj \
-	$(OBJS)\coredll_xmlreshandler.obj
+	$(OBJS)\coredll_xmlreshandler.obj \
+	$(OBJS)\coredll_splash.obj \
+	$(OBJS)\coredll_notifmsgg.obj \
+	$(OBJS)\coredll_odcombo.obj \
+	$(OBJS)\coredll_calctrlcmn.obj \
+	$(OBJS)\coredll_grideditors.obj \
+	$(OBJS)\coredll_bmpcboxcmn.obj \
+	$(OBJS)\coredll_grid.obj \
+	$(OBJS)\coredll_gridctrl.obj \
+	$(OBJS)\coredll_hyperlinkg.obj \
+	$(OBJS)\coredll_helpext.obj \
+	$(OBJS)\coredll_sashwin.obj \
+	$(OBJS)\coredll_gridsel.obj \
+	$(OBJS)\coredll_addremovectrl.obj \
+	$(OBJS)\coredll_tipdlg.obj \
+	$(OBJS)\coredll_aboutdlgg.obj \
+	$(OBJS)\coredll_gridcmn.obj \
+	$(OBJS)\coredll_richtooltipcmn.obj \
+	$(OBJS)\coredll_datectlg.obj \
+	$(OBJS)\coredll_bannerwindow.obj \
+	$(OBJS)\coredll_treelist.obj \
+	$(OBJS)\coredll_datavcmn.obj \
+	$(OBJS)\coredll_animatecmn.obj \
+	$(OBJS)\coredll_odcombocmn.obj \
+	$(OBJS)\coredll_hyperlnkcmn.obj \
+	$(OBJS)\coredll_propdlg.obj \
+	$(OBJS)\coredll_bmpcboxg.obj \
+	$(OBJS)\coredll_richtooltipg.obj \
+	$(OBJS)\coredll_timectrlg.obj \
+	$(OBJS)\coredll_commandlinkbuttong.obj \
+	$(OBJS)\coredll_notifmsgcmn.obj \
+	$(OBJS)\coredll_wizard.obj \
+	$(OBJS)\coredll_datavgen.obj \
+	$(OBJS)\coredll_editlbox.obj \
+	$(OBJS)\coredll_laywin.obj \
+	$(OBJS)\coredll_calctrlg.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_2_OBJECTS =  \
@@ -4056,9 +4091,18 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_window.obj \
 	$(OBJS)\coredll_graphicsd2d.obj \
 	$(OBJS)\coredll_utilsrt.obj \
+	$(OBJS)\coredll_taskbarcmn.obj \
 	$(OBJS)\coredll_helpchm.obj \
+	$(OBJS)\coredll_taskbar.obj \
 	$(OBJS)\coredll_helpwin.obj \
+	$(OBJS)\coredll_joystick.obj \
+	$(OBJS)\coredll_aboutdlg.obj \
+	$(OBJS)\coredll_notifmsg.obj \
+	$(OBJS)\coredll_richtooltip.obj \
+	$(OBJS)\coredll_sound.obj \
 	$(OBJS)\coredll_automtn.obj \
+	$(OBJS)\coredll_notifmsgrt.obj \
+	$(OBJS)\coredll_activityindicator.obj \
 	$(OBJS)\coredll_uuid.obj \
 	$(OBJS)\coredll_evtloop.obj \
 	$(OBJS)\coredll_generic_accel.obj \
@@ -4280,7 +4324,42 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_treebkg.obj \
 	$(OBJS)\coredll_vlbox.obj \
 	$(OBJS)\coredll_vscroll.obj \
-	$(OBJS)\coredll_xmlreshandler.obj
+	$(OBJS)\coredll_xmlreshandler.obj \
+	$(OBJS)\coredll_splash.obj \
+	$(OBJS)\coredll_notifmsgg.obj \
+	$(OBJS)\coredll_odcombo.obj \
+	$(OBJS)\coredll_calctrlcmn.obj \
+	$(OBJS)\coredll_grideditors.obj \
+	$(OBJS)\coredll_bmpcboxcmn.obj \
+	$(OBJS)\coredll_grid.obj \
+	$(OBJS)\coredll_gridctrl.obj \
+	$(OBJS)\coredll_hyperlinkg.obj \
+	$(OBJS)\coredll_helpext.obj \
+	$(OBJS)\coredll_sashwin.obj \
+	$(OBJS)\coredll_gridsel.obj \
+	$(OBJS)\coredll_addremovectrl.obj \
+	$(OBJS)\coredll_tipdlg.obj \
+	$(OBJS)\coredll_aboutdlgg.obj \
+	$(OBJS)\coredll_gridcmn.obj \
+	$(OBJS)\coredll_richtooltipcmn.obj \
+	$(OBJS)\coredll_datectlg.obj \
+	$(OBJS)\coredll_bannerwindow.obj \
+	$(OBJS)\coredll_treelist.obj \
+	$(OBJS)\coredll_datavcmn.obj \
+	$(OBJS)\coredll_animatecmn.obj \
+	$(OBJS)\coredll_odcombocmn.obj \
+	$(OBJS)\coredll_hyperlnkcmn.obj \
+	$(OBJS)\coredll_propdlg.obj \
+	$(OBJS)\coredll_bmpcboxg.obj \
+	$(OBJS)\coredll_richtooltipg.obj \
+	$(OBJS)\coredll_timectrlg.obj \
+	$(OBJS)\coredll_commandlinkbuttong.obj \
+	$(OBJS)\coredll_notifmsgcmn.obj \
+	$(OBJS)\coredll_wizard.obj \
+	$(OBJS)\coredll_datavgen.obj \
+	$(OBJS)\coredll_editlbox.obj \
+	$(OBJS)\coredll_laywin.obj \
+	$(OBJS)\coredll_calctrlg.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1"
 __corelib___depname = \
@@ -4347,9 +4426,18 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_window.obj \
 	$(OBJS)\corelib_graphicsd2d.obj \
 	$(OBJS)\corelib_utilsrt.obj \
+	$(OBJS)\corelib_taskbarcmn.obj \
 	$(OBJS)\corelib_helpchm.obj \
+	$(OBJS)\corelib_taskbar.obj \
 	$(OBJS)\corelib_helpwin.obj \
+	$(OBJS)\corelib_joystick.obj \
+	$(OBJS)\corelib_aboutdlg.obj \
+	$(OBJS)\corelib_notifmsg.obj \
+	$(OBJS)\corelib_richtooltip.obj \
+	$(OBJS)\corelib_sound.obj \
 	$(OBJS)\corelib_automtn.obj \
+	$(OBJS)\corelib_notifmsgrt.obj \
+	$(OBJS)\corelib_activityindicator.obj \
 	$(OBJS)\corelib_uuid.obj \
 	$(OBJS)\corelib_clrpickerg.obj \
 	$(OBJS)\corelib_collpaneg.obj \
@@ -4411,6 +4499,15 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_treectrl.obj \
 	$(OBJS)\corelib_systhemectrl.obj \
 	$(OBJS)\corelib_customdraw.obj \
+	$(OBJS)\corelib_animateg.obj \
+	$(OBJS)\corelib_commandlinkbutton.obj \
+	$(OBJS)\corelib_bmpcbox.obj \
+	$(OBJS)\corelib_hyperlink.obj \
+	$(OBJS)\corelib_calctrl.obj \
+	$(OBJS)\corelib_datectrl.obj \
+	$(OBJS)\corelib_datetimectrl.obj \
+	$(OBJS)\corelib_timectrl.obj \
+	$(OBJS)\corelib_datecontrols.obj \
 	$(OBJS)\corelib_msw_checklst.obj \
 	$(OBJS)\corelib_msw_fdrepdlg.obj \
 	$(OBJS)\corelib_fontdlg.obj \
@@ -4578,7 +4675,42 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_treebkg.obj \
 	$(OBJS)\corelib_vlbox.obj \
 	$(OBJS)\corelib_vscroll.obj \
-	$(OBJS)\corelib_xmlreshandler.obj
+	$(OBJS)\corelib_xmlreshandler.obj \
+	$(OBJS)\corelib_splash.obj \
+	$(OBJS)\corelib_notifmsgg.obj \
+	$(OBJS)\corelib_odcombo.obj \
+	$(OBJS)\corelib_calctrlcmn.obj \
+	$(OBJS)\corelib_grideditors.obj \
+	$(OBJS)\corelib_bmpcboxcmn.obj \
+	$(OBJS)\corelib_grid.obj \
+	$(OBJS)\corelib_gridctrl.obj \
+	$(OBJS)\corelib_hyperlinkg.obj \
+	$(OBJS)\corelib_helpext.obj \
+	$(OBJS)\corelib_sashwin.obj \
+	$(OBJS)\corelib_gridsel.obj \
+	$(OBJS)\corelib_addremovectrl.obj \
+	$(OBJS)\corelib_tipdlg.obj \
+	$(OBJS)\corelib_aboutdlgg.obj \
+	$(OBJS)\corelib_gridcmn.obj \
+	$(OBJS)\corelib_richtooltipcmn.obj \
+	$(OBJS)\corelib_datectlg.obj \
+	$(OBJS)\corelib_bannerwindow.obj \
+	$(OBJS)\corelib_treelist.obj \
+	$(OBJS)\corelib_datavcmn.obj \
+	$(OBJS)\corelib_animatecmn.obj \
+	$(OBJS)\corelib_odcombocmn.obj \
+	$(OBJS)\corelib_hyperlnkcmn.obj \
+	$(OBJS)\corelib_propdlg.obj \
+	$(OBJS)\corelib_bmpcboxg.obj \
+	$(OBJS)\corelib_richtooltipg.obj \
+	$(OBJS)\corelib_timectrlg.obj \
+	$(OBJS)\corelib_commandlinkbuttong.obj \
+	$(OBJS)\corelib_notifmsgcmn.obj \
+	$(OBJS)\corelib_wizard.obj \
+	$(OBJS)\corelib_datavgen.obj \
+	$(OBJS)\corelib_editlbox.obj \
+	$(OBJS)\corelib_laywin.obj \
+	$(OBJS)\corelib_calctrlg.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_3_OBJECTS =  \
@@ -4635,9 +4767,18 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_window.obj \
 	$(OBJS)\corelib_graphicsd2d.obj \
 	$(OBJS)\corelib_utilsrt.obj \
+	$(OBJS)\corelib_taskbarcmn.obj \
 	$(OBJS)\corelib_helpchm.obj \
+	$(OBJS)\corelib_taskbar.obj \
 	$(OBJS)\corelib_helpwin.obj \
+	$(OBJS)\corelib_joystick.obj \
+	$(OBJS)\corelib_aboutdlg.obj \
+	$(OBJS)\corelib_notifmsg.obj \
+	$(OBJS)\corelib_richtooltip.obj \
+	$(OBJS)\corelib_sound.obj \
 	$(OBJS)\corelib_automtn.obj \
+	$(OBJS)\corelib_notifmsgrt.obj \
+	$(OBJS)\corelib_activityindicator.obj \
 	$(OBJS)\corelib_uuid.obj \
 	$(OBJS)\corelib_evtloop.obj \
 	$(OBJS)\corelib_generic_accel.obj \
@@ -4859,7 +5000,42 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_treebkg.obj \
 	$(OBJS)\corelib_vlbox.obj \
 	$(OBJS)\corelib_vscroll.obj \
-	$(OBJS)\corelib_xmlreshandler.obj
+	$(OBJS)\corelib_xmlreshandler.obj \
+	$(OBJS)\corelib_splash.obj \
+	$(OBJS)\corelib_notifmsgg.obj \
+	$(OBJS)\corelib_odcombo.obj \
+	$(OBJS)\corelib_calctrlcmn.obj \
+	$(OBJS)\corelib_grideditors.obj \
+	$(OBJS)\corelib_bmpcboxcmn.obj \
+	$(OBJS)\corelib_grid.obj \
+	$(OBJS)\corelib_gridctrl.obj \
+	$(OBJS)\corelib_hyperlinkg.obj \
+	$(OBJS)\corelib_helpext.obj \
+	$(OBJS)\corelib_sashwin.obj \
+	$(OBJS)\corelib_gridsel.obj \
+	$(OBJS)\corelib_addremovectrl.obj \
+	$(OBJS)\corelib_tipdlg.obj \
+	$(OBJS)\corelib_aboutdlgg.obj \
+	$(OBJS)\corelib_gridcmn.obj \
+	$(OBJS)\corelib_richtooltipcmn.obj \
+	$(OBJS)\corelib_datectlg.obj \
+	$(OBJS)\corelib_bannerwindow.obj \
+	$(OBJS)\corelib_treelist.obj \
+	$(OBJS)\corelib_datavcmn.obj \
+	$(OBJS)\corelib_animatecmn.obj \
+	$(OBJS)\corelib_odcombocmn.obj \
+	$(OBJS)\corelib_hyperlnkcmn.obj \
+	$(OBJS)\corelib_propdlg.obj \
+	$(OBJS)\corelib_bmpcboxg.obj \
+	$(OBJS)\corelib_richtooltipg.obj \
+	$(OBJS)\corelib_timectrlg.obj \
+	$(OBJS)\corelib_commandlinkbuttong.obj \
+	$(OBJS)\corelib_notifmsgcmn.obj \
+	$(OBJS)\corelib_wizard.obj \
+	$(OBJS)\corelib_datavgen.obj \
+	$(OBJS)\corelib_editlbox.obj \
+	$(OBJS)\corelib_laywin.obj \
+	$(OBJS)\corelib_calctrlg.obj
 !endif
 !if "$(SHARED)" == "1"
 ____wxcore_namedll_DEP = $(__coredll___depname)
@@ -4889,110 +5065,6 @@ __RUNTIME_LIBS_240 = D
 !if "$(RUNTIME_LIBS)" == "static"
 __RUNTIME_LIBS_240 = $(__THREADSFLAG)
 !endif
-!if "$(WXUNIV)" == "0"
-____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
-	$(OBJS)\advdll_animatecmn.obj \
-	$(OBJS)\advdll_bmpcboxcmn.obj \
-	$(OBJS)\advdll_calctrlcmn.obj \
-	$(OBJS)\advdll_datavcmn.obj \
-	$(OBJS)\advdll_gridcmn.obj \
-	$(OBJS)\advdll_hyperlnkcmn.obj \
-	$(OBJS)\advdll_odcombocmn.obj \
-	$(OBJS)\advdll_richtooltipcmn.obj \
-	$(OBJS)\advdll_aboutdlgg.obj \
-	$(OBJS)\advdll_bannerwindow.obj \
-	$(OBJS)\advdll_bmpcboxg.obj \
-	$(OBJS)\advdll_calctrlg.obj \
-	$(OBJS)\advdll_commandlinkbuttong.obj \
-	$(OBJS)\advdll_datavgen.obj \
-	$(OBJS)\advdll_datectlg.obj \
-	$(OBJS)\advdll_editlbox.obj \
-	$(OBJS)\advdll_grid.obj \
-	$(OBJS)\advdll_gridctrl.obj \
-	$(OBJS)\advdll_grideditors.obj \
-	$(OBJS)\advdll_gridsel.obj \
-	$(OBJS)\advdll_helpext.obj \
-	$(OBJS)\advdll_hyperlinkg.obj \
-	$(OBJS)\advdll_laywin.obj \
-	$(OBJS)\advdll_notifmsgg.obj \
-	$(OBJS)\advdll_odcombo.obj \
-	$(OBJS)\advdll_propdlg.obj \
-	$(OBJS)\advdll_richtooltipg.obj \
-	$(OBJS)\advdll_sashwin.obj \
-	$(OBJS)\advdll_splash.obj \
-	$(OBJS)\advdll_timectrlg.obj \
-	$(OBJS)\advdll_tipdlg.obj \
-	$(OBJS)\advdll_treelist.obj \
-	$(OBJS)\advdll_wizard.obj \
-	$(OBJS)\advdll_addremovectrl.obj \
-	$(OBJS)\advdll_notifmsgcmn.obj \
-	$(OBJS)\advdll_taskbarcmn.obj \
-	$(OBJS)\advdll_aboutdlg.obj \
-	$(OBJS)\advdll_notifmsg.obj \
-	$(OBJS)\advdll_richtooltip.obj \
-	$(OBJS)\advdll_sound.obj \
-	$(OBJS)\advdll_taskbar.obj \
-	$(OBJS)\advdll_notifmsgrt.obj \
-	$(OBJS)\advdll_activityindicator.obj \
-	$(OBJS)\advdll_joystick.obj \
-	$(OBJS)\advdll_animateg.obj \
-	$(OBJS)\advdll_bmpcbox.obj \
-	$(OBJS)\advdll_calctrl.obj \
-	$(OBJS)\advdll_commandlinkbutton.obj \
-	$(OBJS)\advdll_datecontrols.obj \
-	$(OBJS)\advdll_datectrl.obj \
-	$(OBJS)\advdll_datetimectrl.obj \
-	$(OBJS)\advdll_hyperlink.obj \
-	$(OBJS)\advdll_timectrl.obj
-!endif
-!if "$(WXUNIV)" == "1"
-____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
-	$(OBJS)\advdll_animatecmn.obj \
-	$(OBJS)\advdll_bmpcboxcmn.obj \
-	$(OBJS)\advdll_calctrlcmn.obj \
-	$(OBJS)\advdll_datavcmn.obj \
-	$(OBJS)\advdll_gridcmn.obj \
-	$(OBJS)\advdll_hyperlnkcmn.obj \
-	$(OBJS)\advdll_odcombocmn.obj \
-	$(OBJS)\advdll_richtooltipcmn.obj \
-	$(OBJS)\advdll_aboutdlgg.obj \
-	$(OBJS)\advdll_bannerwindow.obj \
-	$(OBJS)\advdll_bmpcboxg.obj \
-	$(OBJS)\advdll_calctrlg.obj \
-	$(OBJS)\advdll_commandlinkbuttong.obj \
-	$(OBJS)\advdll_datavgen.obj \
-	$(OBJS)\advdll_datectlg.obj \
-	$(OBJS)\advdll_editlbox.obj \
-	$(OBJS)\advdll_grid.obj \
-	$(OBJS)\advdll_gridctrl.obj \
-	$(OBJS)\advdll_grideditors.obj \
-	$(OBJS)\advdll_gridsel.obj \
-	$(OBJS)\advdll_helpext.obj \
-	$(OBJS)\advdll_hyperlinkg.obj \
-	$(OBJS)\advdll_laywin.obj \
-	$(OBJS)\advdll_notifmsgg.obj \
-	$(OBJS)\advdll_odcombo.obj \
-	$(OBJS)\advdll_propdlg.obj \
-	$(OBJS)\advdll_richtooltipg.obj \
-	$(OBJS)\advdll_sashwin.obj \
-	$(OBJS)\advdll_splash.obj \
-	$(OBJS)\advdll_timectrlg.obj \
-	$(OBJS)\advdll_tipdlg.obj \
-	$(OBJS)\advdll_treelist.obj \
-	$(OBJS)\advdll_wizard.obj \
-	$(OBJS)\advdll_addremovectrl.obj \
-	$(OBJS)\advdll_notifmsgcmn.obj \
-	$(OBJS)\advdll_taskbarcmn.obj \
-	$(OBJS)\advdll_aboutdlg.obj \
-	$(OBJS)\advdll_notifmsg.obj \
-	$(OBJS)\advdll_richtooltip.obj \
-	$(OBJS)\advdll_sound.obj \
-	$(OBJS)\advdll_taskbar.obj \
-	$(OBJS)\advdll_notifmsgrt.obj \
-	$(OBJS)\advdll_activityindicator.obj \
-	$(OBJS)\advdll_joystick.obj \
-	$(OBJS)\advdll_animateg.obj
-!endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1"
 __advlib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib
@@ -5002,110 +5074,6 @@ __RUNTIME_LIBS_255 = D
 !endif
 !if "$(RUNTIME_LIBS)" == "static"
 __RUNTIME_LIBS_255 = $(__THREADSFLAG)
-!endif
-!if "$(WXUNIV)" == "0"
-____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
-	$(OBJS)\advlib_animatecmn.obj \
-	$(OBJS)\advlib_bmpcboxcmn.obj \
-	$(OBJS)\advlib_calctrlcmn.obj \
-	$(OBJS)\advlib_datavcmn.obj \
-	$(OBJS)\advlib_gridcmn.obj \
-	$(OBJS)\advlib_hyperlnkcmn.obj \
-	$(OBJS)\advlib_odcombocmn.obj \
-	$(OBJS)\advlib_richtooltipcmn.obj \
-	$(OBJS)\advlib_aboutdlgg.obj \
-	$(OBJS)\advlib_bannerwindow.obj \
-	$(OBJS)\advlib_bmpcboxg.obj \
-	$(OBJS)\advlib_calctrlg.obj \
-	$(OBJS)\advlib_commandlinkbuttong.obj \
-	$(OBJS)\advlib_datavgen.obj \
-	$(OBJS)\advlib_datectlg.obj \
-	$(OBJS)\advlib_editlbox.obj \
-	$(OBJS)\advlib_grid.obj \
-	$(OBJS)\advlib_gridctrl.obj \
-	$(OBJS)\advlib_grideditors.obj \
-	$(OBJS)\advlib_gridsel.obj \
-	$(OBJS)\advlib_helpext.obj \
-	$(OBJS)\advlib_hyperlinkg.obj \
-	$(OBJS)\advlib_laywin.obj \
-	$(OBJS)\advlib_notifmsgg.obj \
-	$(OBJS)\advlib_odcombo.obj \
-	$(OBJS)\advlib_propdlg.obj \
-	$(OBJS)\advlib_richtooltipg.obj \
-	$(OBJS)\advlib_sashwin.obj \
-	$(OBJS)\advlib_splash.obj \
-	$(OBJS)\advlib_timectrlg.obj \
-	$(OBJS)\advlib_tipdlg.obj \
-	$(OBJS)\advlib_treelist.obj \
-	$(OBJS)\advlib_wizard.obj \
-	$(OBJS)\advlib_addremovectrl.obj \
-	$(OBJS)\advlib_notifmsgcmn.obj \
-	$(OBJS)\advlib_taskbarcmn.obj \
-	$(OBJS)\advlib_aboutdlg.obj \
-	$(OBJS)\advlib_notifmsg.obj \
-	$(OBJS)\advlib_richtooltip.obj \
-	$(OBJS)\advlib_sound.obj \
-	$(OBJS)\advlib_taskbar.obj \
-	$(OBJS)\advlib_notifmsgrt.obj \
-	$(OBJS)\advlib_activityindicator.obj \
-	$(OBJS)\advlib_joystick.obj \
-	$(OBJS)\advlib_animateg.obj \
-	$(OBJS)\advlib_bmpcbox.obj \
-	$(OBJS)\advlib_calctrl.obj \
-	$(OBJS)\advlib_commandlinkbutton.obj \
-	$(OBJS)\advlib_datecontrols.obj \
-	$(OBJS)\advlib_datectrl.obj \
-	$(OBJS)\advlib_datetimectrl.obj \
-	$(OBJS)\advlib_hyperlink.obj \
-	$(OBJS)\advlib_timectrl.obj
-!endif
-!if "$(WXUNIV)" == "1"
-____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
-	$(OBJS)\advlib_animatecmn.obj \
-	$(OBJS)\advlib_bmpcboxcmn.obj \
-	$(OBJS)\advlib_calctrlcmn.obj \
-	$(OBJS)\advlib_datavcmn.obj \
-	$(OBJS)\advlib_gridcmn.obj \
-	$(OBJS)\advlib_hyperlnkcmn.obj \
-	$(OBJS)\advlib_odcombocmn.obj \
-	$(OBJS)\advlib_richtooltipcmn.obj \
-	$(OBJS)\advlib_aboutdlgg.obj \
-	$(OBJS)\advlib_bannerwindow.obj \
-	$(OBJS)\advlib_bmpcboxg.obj \
-	$(OBJS)\advlib_calctrlg.obj \
-	$(OBJS)\advlib_commandlinkbuttong.obj \
-	$(OBJS)\advlib_datavgen.obj \
-	$(OBJS)\advlib_datectlg.obj \
-	$(OBJS)\advlib_editlbox.obj \
-	$(OBJS)\advlib_grid.obj \
-	$(OBJS)\advlib_gridctrl.obj \
-	$(OBJS)\advlib_grideditors.obj \
-	$(OBJS)\advlib_gridsel.obj \
-	$(OBJS)\advlib_helpext.obj \
-	$(OBJS)\advlib_hyperlinkg.obj \
-	$(OBJS)\advlib_laywin.obj \
-	$(OBJS)\advlib_notifmsgg.obj \
-	$(OBJS)\advlib_odcombo.obj \
-	$(OBJS)\advlib_propdlg.obj \
-	$(OBJS)\advlib_richtooltipg.obj \
-	$(OBJS)\advlib_sashwin.obj \
-	$(OBJS)\advlib_splash.obj \
-	$(OBJS)\advlib_timectrlg.obj \
-	$(OBJS)\advlib_tipdlg.obj \
-	$(OBJS)\advlib_treelist.obj \
-	$(OBJS)\advlib_wizard.obj \
-	$(OBJS)\advlib_addremovectrl.obj \
-	$(OBJS)\advlib_notifmsgcmn.obj \
-	$(OBJS)\advlib_taskbarcmn.obj \
-	$(OBJS)\advlib_aboutdlg.obj \
-	$(OBJS)\advlib_notifmsg.obj \
-	$(OBJS)\advlib_richtooltip.obj \
-	$(OBJS)\advlib_sound.obj \
-	$(OBJS)\advlib_taskbar.obj \
-	$(OBJS)\advlib_notifmsgrt.obj \
-	$(OBJS)\advlib_activityindicator.obj \
-	$(OBJS)\advlib_joystick.obj \
-	$(OBJS)\advlib_animateg.obj
 !endif
 !if "$(SHARED)" == "1"
 ____wxadv_namedll_DEP = $(__advdll___depname)
@@ -6129,9 +6097,9 @@ wxxml: $(____wxxml_namedll_DEP) $(____wxxml_namelib_DEP)
 !endif
 
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_XRC)" == "1"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\xrcdll_dummy.obj  $(XRCDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(OBJS)\xrcdll_version.res $(__htmldll_library_link_DEP) $(__advdll___depname) $(__coredll___depname) $(__xmldll___depname) $(__basedll___depname)
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\xrcdll_dummy.obj  $(XRCDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(OBJS)\xrcdll_version.res $(__htmldll_library_link_DEP) $(__coredll___depname) $(__xmldll___depname) $(__basedll___depname)
 	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_418)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(XRCDLL_OBJECTS) $(XRCDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib $(__htmldll_library_link_LIBR) $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc.lib
+	$(XRCDLL_OBJECTS) $(XRCDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib $(__htmldll_library_link_LIBR) $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc.lib
 <<
 !endif
 
@@ -6148,9 +6116,9 @@ wxxrc: $(____wxxrc_namedll_DEP) $(____wxxrc_namelib_DEP)
 !endif
 
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_AUI)" == "1"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\auidll_dummy.obj  $(AUIDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(OBJS)\auidll_version.res $(__advdll___depname) $(__coredll___depname) $(__basedll___depname)
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\auidll_dummy.obj  $(AUIDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(OBJS)\auidll_version.res $(__coredll___depname) $(__basedll___depname)
 	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_449)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(AUIDLL_OBJECTS) $(AUIDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui.lib
+	$(AUIDLL_OBJECTS) $(AUIDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui.lib
 <<
 !endif
 
@@ -6167,9 +6135,9 @@ wxaui: $(____wxaui_namedll_DEP) $(____wxaui_namelib_DEP)
 !endif
 
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_RIBBON)" == "1"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\ribbondll_dummy.obj  $(RIBBONDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(OBJS)\ribbondll_version.res $(__advdll___depname) $(__coredll___depname) $(__basedll___depname)
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\ribbondll_dummy.obj  $(RIBBONDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(OBJS)\ribbondll_version.res $(__coredll___depname) $(__basedll___depname)
 	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_480)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(RIBBONDLL_OBJECTS) $(RIBBONDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon.lib
+	$(RIBBONDLL_OBJECTS) $(RIBBONDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_ribbon.lib
 <<
 !endif
 
@@ -6186,9 +6154,9 @@ wxribbon: $(____wxribbon_namedll_DEP) $(____wxribbon_namelib_DEP)
 !endif
 
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_PROPGRID)" == "1"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\propgriddll_dummy.obj  $(PROPGRIDDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(OBJS)\propgriddll_version.res $(__advdll___depname) $(__coredll___depname) $(__basedll___depname)
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\propgriddll_dummy.obj  $(PROPGRIDDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(OBJS)\propgriddll_version.res $(__coredll___depname) $(__basedll___depname)
 	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_511)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(PROPGRIDDLL_OBJECTS) $(PROPGRIDDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid.lib
+	$(PROPGRIDDLL_OBJECTS) $(PROPGRIDDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_propgrid.lib
 <<
 !endif
 
@@ -6205,9 +6173,9 @@ wxpropgrid: $(____wxpropgrid_namedll_DEP) $(____wxpropgrid_namelib_DEP)
 !endif
 
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_RICHTEXT)" == "1"
-$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\richtextdll_dummy.obj  $(RICHTEXTDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(OBJS)\richtextdll_version.res $(__advdll___depname) $(__htmldll_library_link_DEP) $(__xmldll___depname) $(__coredll___depname) $(__basedll___depname)
+$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG).dll: $(OBJS)\richtextdll_dummy.obj  $(RICHTEXTDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxscintilla) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib $(OBJS)\richtextdll_version.res $(__htmldll_library_link_DEP) $(__xmldll___depname) $(__coredll___depname) $(__basedll___depname)
 	link /DLL /NOLOGO /OUT:$@  $(__DEBUGINFO_6) /pdb:"$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext$(WXCOMPILER)$(VENDORTAG).pdb" $(__DEBUGINFO_542)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(RICHTEXTDLL_OBJECTS) $(RICHTEXTDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib $(__htmldll_library_link_LIBR) $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext.lib
+	$(RICHTEXTDLL_OBJECTS) $(RICHTEXTDLL_RESOURCES)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib $(__htmldll_library_link_LIBR) $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core.lib $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib /IMPLIB:$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext.lib
 <<
 !endif
 
@@ -7663,6 +7631,33 @@ $(OBJS)\monodll_systhemectrl.obj: ..\..\src\msw\systhemectrl.cpp
 $(OBJS)\monodll_customdraw.obj: ..\..\src\msw\customdraw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\customdraw.cpp
 
+$(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\animateg.cpp
+
+$(OBJS)\monodll_commandlinkbutton.obj: ..\..\src\msw\commandlinkbutton.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\commandlinkbutton.cpp
+
+$(OBJS)\monodll_bmpcbox.obj: ..\..\src\msw\bmpcbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\bmpcbox.cpp
+
+$(OBJS)\monodll_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\hyperlink.cpp
+
+$(OBJS)\monodll_calctrl.obj: ..\..\src\msw\calctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\calctrl.cpp
+
+$(OBJS)\monodll_datectrl.obj: ..\..\src\msw\datectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\datectrl.cpp
+
+$(OBJS)\monodll_datetimectrl.obj: ..\..\src\msw\datetimectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\datetimectrl.cpp
+
+$(OBJS)\monodll_timectrl.obj: ..\..\src\msw\timectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\timectrl.cpp
+
+$(OBJS)\monodll_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\datecontrols.cpp
+
 $(OBJS)\monodll_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -7818,30 +7813,6 @@ $(OBJS)\monodll_mono.obj: ..\..\src\univ\themes\mono.cpp
 
 $(OBJS)\monodll_win32.obj: ..\..\src\univ\themes\win32.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\univ\themes\win32.cpp
-
-$(OBJS)\monodll_bmpcbox.obj: ..\..\src\msw\bmpcbox.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\bmpcbox.cpp
-
-$(OBJS)\monodll_calctrl.obj: ..\..\src\msw\calctrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\calctrl.cpp
-
-$(OBJS)\monodll_commandlinkbutton.obj: ..\..\src\msw\commandlinkbutton.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\commandlinkbutton.cpp
-
-$(OBJS)\monodll_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\datecontrols.cpp
-
-$(OBJS)\monodll_datectrl.obj: ..\..\src\msw\datectrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\datectrl.cpp
-
-$(OBJS)\monodll_datetimectrl.obj: ..\..\src\msw\datetimectrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\datetimectrl.cpp
-
-$(OBJS)\monodll_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\hyperlink.cpp
-
-$(OBJS)\monodll_timectrl.obj: ..\..\src\msw\timectrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\timectrl.cpp
 
 $(OBJS)\monodll_mediactrlcmn.obj: ..\..\src\common\mediactrlcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\mediactrlcmn.cpp
@@ -8559,8 +8530,18 @@ $(OBJS)\monodll_utilsrt.obj: ..\..\src\msw\rt\utilsrt.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\taskbarcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_helpchm.obj: ..\..\src\msw\helpchm.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\helpchm.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_taskbar.obj: ..\..\src\msw\taskbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\taskbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -8569,8 +8550,48 @@ $(OBJS)\monodll_helpwin.obj: ..\..\src\msw\helpwin.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_joystick.obj: ..\..\src\msw\joystick.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\joystick.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_aboutdlg.obj: ..\..\src\msw\aboutdlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\aboutdlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_notifmsg.obj: ..\..\src\msw\notifmsg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\notifmsg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_richtooltip.obj: ..\..\src\msw\richtooltip.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\richtooltip.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_sound.obj: ..\..\src\msw\sound.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\sound.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_automtn.obj: ..\..\src\msw\ole\automtn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\ole\automtn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_notifmsgrt.obj: ..\..\src\msw\rt\notifmsgrt.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\rt\notifmsgrt.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\monodll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -9434,128 +9455,8 @@ $(OBJS)\monodll_xmlreshandler.obj: ..\..\src\xrc\xmlreshandler.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_animatecmn.obj: ..\..\src\common\animatecmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\animatecmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_bmpcboxcmn.obj: ..\..\src\common\bmpcboxcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\bmpcboxcmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_calctrlcmn.obj: ..\..\src\common\calctrlcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\calctrlcmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_datavcmn.obj: ..\..\src\common\datavcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\datavcmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_gridcmn.obj: ..\..\src\common\gridcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\gridcmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_hyperlnkcmn.obj: ..\..\src\common\hyperlnkcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\hyperlnkcmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_odcombocmn.obj: ..\..\src\common\odcombocmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\odcombocmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_richtooltipcmn.obj: ..\..\src\common\richtooltipcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\richtooltipcmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_aboutdlgg.obj: ..\..\src\generic\aboutdlgg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\aboutdlgg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_bannerwindow.obj: ..\..\src\generic\bannerwindow.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\bannerwindow.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\bmpcboxg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\calctrlg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_commandlinkbuttong.obj: ..\..\src\generic\commandlinkbuttong.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\commandlinkbuttong.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_datavgen.obj: ..\..\src\generic\datavgen.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\datavgen.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_datectlg.obj: ..\..\src\generic\datectlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\datectlg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_editlbox.obj: ..\..\src\generic\editlbox.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\editlbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_grid.obj: ..\..\src\generic\grid.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\grid.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_gridctrl.obj: ..\..\src\generic\gridctrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\gridctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_grideditors.obj: ..\..\src\generic\grideditors.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\grideditors.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_gridsel.obj: ..\..\src\generic\gridsel.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\gridsel.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_helpext.obj: ..\..\src\generic\helpext.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\helpext.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_hyperlinkg.obj: ..\..\src\generic\hyperlinkg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\hyperlinkg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_laywin.obj: ..\..\src\generic\laywin.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\laywin.cpp
+$(OBJS)\monodll_splash.obj: ..\..\src\generic\splash.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\splash.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -9569,13 +9470,38 @@ $(OBJS)\monodll_odcombo.obj: ..\..\src\generic\odcombo.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_propdlg.obj: ..\..\src\generic\propdlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\propdlg.cpp
+$(OBJS)\monodll_calctrlcmn.obj: ..\..\src\common\calctrlcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\calctrlcmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_richtooltipg.obj: ..\..\src\generic\richtooltipg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\richtooltipg.cpp
+$(OBJS)\monodll_grideditors.obj: ..\..\src\generic\grideditors.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\grideditors.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_bmpcboxcmn.obj: ..\..\src\common\bmpcboxcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\bmpcboxcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_grid.obj: ..\..\src\generic\grid.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\grid.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_gridctrl.obj: ..\..\src\generic\gridctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\gridctrl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_hyperlinkg.obj: ..\..\src\generic\hyperlinkg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\hyperlinkg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_helpext.obj: ..\..\src\generic\helpext.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\helpext.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -9584,28 +9510,8 @@ $(OBJS)\monodll_sashwin.obj: ..\..\src\generic\sashwin.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_splash.obj: ..\..\src\generic\splash.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\splash.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_timectrlg.obj: ..\..\src\generic\timectrlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\timectrlg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\tipdlg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_treelist.obj: ..\..\src\generic\treelist.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\treelist.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_wizard.obj: ..\..\src\generic\wizard.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\wizard.cpp
+$(OBJS)\monodll_gridsel.obj: ..\..\src\generic\gridsel.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\gridsel.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -9614,53 +9520,113 @@ $(OBJS)\monodll_addremovectrl.obj: ..\..\src\common\addremovectrl.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\tipdlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_aboutdlgg.obj: ..\..\src\generic\aboutdlgg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\aboutdlgg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_gridcmn.obj: ..\..\src\common\gridcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\gridcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_richtooltipcmn.obj: ..\..\src\common\richtooltipcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\richtooltipcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_datectlg.obj: ..\..\src\generic\datectlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\datectlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_bannerwindow.obj: ..\..\src\generic\bannerwindow.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\bannerwindow.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_treelist.obj: ..\..\src\generic\treelist.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\treelist.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_datavcmn.obj: ..\..\src\common\datavcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\datavcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_animatecmn.obj: ..\..\src\common\animatecmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\animatecmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_odcombocmn.obj: ..\..\src\common\odcombocmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\odcombocmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_hyperlnkcmn.obj: ..\..\src\common\hyperlnkcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\hyperlnkcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_propdlg.obj: ..\..\src\generic\propdlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\propdlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\bmpcboxg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_richtooltipg.obj: ..\..\src\generic\richtooltipg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\richtooltipg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_timectrlg.obj: ..\..\src\generic\timectrlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\timectrlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_commandlinkbuttong.obj: ..\..\src\generic\commandlinkbuttong.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\commandlinkbuttong.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_notifmsgcmn.obj: ..\..\src\common\notifmsgcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\notifmsgcmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\taskbarcmn.cpp
+$(OBJS)\monodll_wizard.obj: ..\..\src\generic\wizard.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\wizard.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_aboutdlg.obj: ..\..\src\msw\aboutdlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\aboutdlg.cpp
+$(OBJS)\monodll_datavgen.obj: ..\..\src\generic\datavgen.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\datavgen.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_notifmsg.obj: ..\..\src\msw\notifmsg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\notifmsg.cpp
+$(OBJS)\monodll_editlbox.obj: ..\..\src\generic\editlbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\editlbox.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_richtooltip.obj: ..\..\src\msw\richtooltip.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\richtooltip.cpp
+$(OBJS)\monodll_laywin.obj: ..\..\src\generic\laywin.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\laywin.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_sound.obj: ..\..\src\msw\sound.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\sound.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_taskbar.obj: ..\..\src\msw\taskbar.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\taskbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_notifmsgrt.obj: ..\..\src\msw\rt\notifmsgrt.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\rt\notifmsgrt.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_joystick.obj: ..\..\src\msw\joystick.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\joystick.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\animateg.cpp
+$(OBJS)\monodll_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\calctrlg.cpp
 !endif
 
 $(OBJS)\monodll_version.res: ..\..\src\msw\version.rc
@@ -10209,6 +10175,33 @@ $(OBJS)\monolib_systhemectrl.obj: ..\..\src\msw\systhemectrl.cpp
 $(OBJS)\monolib_customdraw.obj: ..\..\src\msw\customdraw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\customdraw.cpp
 
+$(OBJS)\monolib_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\animateg.cpp
+
+$(OBJS)\monolib_commandlinkbutton.obj: ..\..\src\msw\commandlinkbutton.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\commandlinkbutton.cpp
+
+$(OBJS)\monolib_bmpcbox.obj: ..\..\src\msw\bmpcbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\bmpcbox.cpp
+
+$(OBJS)\monolib_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\hyperlink.cpp
+
+$(OBJS)\monolib_calctrl.obj: ..\..\src\msw\calctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\calctrl.cpp
+
+$(OBJS)\monolib_datectrl.obj: ..\..\src\msw\datectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\datectrl.cpp
+
+$(OBJS)\monolib_datetimectrl.obj: ..\..\src\msw\datetimectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\datetimectrl.cpp
+
+$(OBJS)\monolib_timectrl.obj: ..\..\src\msw\timectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\timectrl.cpp
+
+$(OBJS)\monolib_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\datecontrols.cpp
+
 $(OBJS)\monolib_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -10364,30 +10357,6 @@ $(OBJS)\monolib_mono.obj: ..\..\src\univ\themes\mono.cpp
 
 $(OBJS)\monolib_win32.obj: ..\..\src\univ\themes\win32.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\univ\themes\win32.cpp
-
-$(OBJS)\monolib_bmpcbox.obj: ..\..\src\msw\bmpcbox.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\bmpcbox.cpp
-
-$(OBJS)\monolib_calctrl.obj: ..\..\src\msw\calctrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\calctrl.cpp
-
-$(OBJS)\monolib_commandlinkbutton.obj: ..\..\src\msw\commandlinkbutton.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\commandlinkbutton.cpp
-
-$(OBJS)\monolib_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\datecontrols.cpp
-
-$(OBJS)\monolib_datectrl.obj: ..\..\src\msw\datectrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\datectrl.cpp
-
-$(OBJS)\monolib_datetimectrl.obj: ..\..\src\msw\datetimectrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\datetimectrl.cpp
-
-$(OBJS)\monolib_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\hyperlink.cpp
-
-$(OBJS)\monolib_timectrl.obj: ..\..\src\msw\timectrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\timectrl.cpp
 
 $(OBJS)\monolib_mediactrlcmn.obj: ..\..\src\common\mediactrlcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\mediactrlcmn.cpp
@@ -11105,8 +11074,18 @@ $(OBJS)\monolib_utilsrt.obj: ..\..\src\msw\rt\utilsrt.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\taskbarcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_helpchm.obj: ..\..\src\msw\helpchm.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\helpchm.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_taskbar.obj: ..\..\src\msw\taskbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\taskbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -11115,8 +11094,48 @@ $(OBJS)\monolib_helpwin.obj: ..\..\src\msw\helpwin.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_joystick.obj: ..\..\src\msw\joystick.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\joystick.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_aboutdlg.obj: ..\..\src\msw\aboutdlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\aboutdlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_notifmsg.obj: ..\..\src\msw\notifmsg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\notifmsg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_richtooltip.obj: ..\..\src\msw\richtooltip.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\richtooltip.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_sound.obj: ..\..\src\msw\sound.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\sound.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_automtn.obj: ..\..\src\msw\ole\automtn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\ole\automtn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_notifmsgrt.obj: ..\..\src\msw\rt\notifmsgrt.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\rt\notifmsgrt.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\monolib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -11980,128 +11999,8 @@ $(OBJS)\monolib_xmlreshandler.obj: ..\..\src\xrc\xmlreshandler.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_animatecmn.obj: ..\..\src\common\animatecmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\animatecmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_bmpcboxcmn.obj: ..\..\src\common\bmpcboxcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\bmpcboxcmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_calctrlcmn.obj: ..\..\src\common\calctrlcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\calctrlcmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_datavcmn.obj: ..\..\src\common\datavcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\datavcmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_gridcmn.obj: ..\..\src\common\gridcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\gridcmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_hyperlnkcmn.obj: ..\..\src\common\hyperlnkcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\hyperlnkcmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_odcombocmn.obj: ..\..\src\common\odcombocmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\odcombocmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_richtooltipcmn.obj: ..\..\src\common\richtooltipcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\richtooltipcmn.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_aboutdlgg.obj: ..\..\src\generic\aboutdlgg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\aboutdlgg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_bannerwindow.obj: ..\..\src\generic\bannerwindow.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\bannerwindow.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\bmpcboxg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\calctrlg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_commandlinkbuttong.obj: ..\..\src\generic\commandlinkbuttong.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\commandlinkbuttong.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_datavgen.obj: ..\..\src\generic\datavgen.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\datavgen.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_datectlg.obj: ..\..\src\generic\datectlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\datectlg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_editlbox.obj: ..\..\src\generic\editlbox.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\editlbox.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_grid.obj: ..\..\src\generic\grid.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\grid.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_gridctrl.obj: ..\..\src\generic\gridctrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\gridctrl.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_grideditors.obj: ..\..\src\generic\grideditors.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\grideditors.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_gridsel.obj: ..\..\src\generic\gridsel.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\gridsel.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_helpext.obj: ..\..\src\generic\helpext.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\helpext.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_hyperlinkg.obj: ..\..\src\generic\hyperlinkg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\hyperlinkg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_laywin.obj: ..\..\src\generic\laywin.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\laywin.cpp
+$(OBJS)\monolib_splash.obj: ..\..\src\generic\splash.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\splash.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -12115,13 +12014,38 @@ $(OBJS)\monolib_odcombo.obj: ..\..\src\generic\odcombo.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_propdlg.obj: ..\..\src\generic\propdlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\propdlg.cpp
+$(OBJS)\monolib_calctrlcmn.obj: ..\..\src\common\calctrlcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\calctrlcmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_richtooltipg.obj: ..\..\src\generic\richtooltipg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\richtooltipg.cpp
+$(OBJS)\monolib_grideditors.obj: ..\..\src\generic\grideditors.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\grideditors.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_bmpcboxcmn.obj: ..\..\src\common\bmpcboxcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\bmpcboxcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_grid.obj: ..\..\src\generic\grid.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\grid.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_gridctrl.obj: ..\..\src\generic\gridctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\gridctrl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_hyperlinkg.obj: ..\..\src\generic\hyperlinkg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\hyperlinkg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_helpext.obj: ..\..\src\generic\helpext.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\helpext.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -12130,28 +12054,8 @@ $(OBJS)\monolib_sashwin.obj: ..\..\src\generic\sashwin.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_splash.obj: ..\..\src\generic\splash.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\splash.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_timectrlg.obj: ..\..\src\generic\timectrlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\timectrlg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\tipdlg.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_treelist.obj: ..\..\src\generic\treelist.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\treelist.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_wizard.obj: ..\..\src\generic\wizard.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\wizard.cpp
+$(OBJS)\monolib_gridsel.obj: ..\..\src\generic\gridsel.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\gridsel.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -12160,53 +12064,113 @@ $(OBJS)\monolib_addremovectrl.obj: ..\..\src\common\addremovectrl.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\tipdlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_aboutdlgg.obj: ..\..\src\generic\aboutdlgg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\aboutdlgg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_gridcmn.obj: ..\..\src\common\gridcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\gridcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_richtooltipcmn.obj: ..\..\src\common\richtooltipcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\richtooltipcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_datectlg.obj: ..\..\src\generic\datectlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\datectlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_bannerwindow.obj: ..\..\src\generic\bannerwindow.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\bannerwindow.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_treelist.obj: ..\..\src\generic\treelist.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\treelist.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_datavcmn.obj: ..\..\src\common\datavcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\datavcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_animatecmn.obj: ..\..\src\common\animatecmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\animatecmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_odcombocmn.obj: ..\..\src\common\odcombocmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\odcombocmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_hyperlnkcmn.obj: ..\..\src\common\hyperlnkcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\hyperlnkcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_propdlg.obj: ..\..\src\generic\propdlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\propdlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\bmpcboxg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_richtooltipg.obj: ..\..\src\generic\richtooltipg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\richtooltipg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_timectrlg.obj: ..\..\src\generic\timectrlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\timectrlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_commandlinkbuttong.obj: ..\..\src\generic\commandlinkbuttong.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\commandlinkbuttong.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_notifmsgcmn.obj: ..\..\src\common\notifmsgcmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\notifmsgcmn.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\taskbarcmn.cpp
+$(OBJS)\monolib_wizard.obj: ..\..\src\generic\wizard.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\wizard.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_aboutdlg.obj: ..\..\src\msw\aboutdlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\aboutdlg.cpp
+$(OBJS)\monolib_datavgen.obj: ..\..\src\generic\datavgen.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\datavgen.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_notifmsg.obj: ..\..\src\msw\notifmsg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\notifmsg.cpp
+$(OBJS)\monolib_editlbox.obj: ..\..\src\generic\editlbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\editlbox.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_richtooltip.obj: ..\..\src\msw\richtooltip.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\richtooltip.cpp
+$(OBJS)\monolib_laywin.obj: ..\..\src\generic\laywin.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\laywin.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_sound.obj: ..\..\src\msw\sound.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\sound.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_taskbar.obj: ..\..\src\msw\taskbar.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\taskbar.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_notifmsgrt.obj: ..\..\src\msw\rt\notifmsgrt.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\rt\notifmsgrt.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_joystick.obj: ..\..\src\msw\joystick.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\joystick.cpp
-!endif
-
-!if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\animateg.cpp
+$(OBJS)\monolib_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\calctrlg.cpp
 !endif
 
 $(OBJS)\basedll_dummy.obj: ..\..\src\common\dummy.cpp
@@ -13169,6 +13133,33 @@ $(OBJS)\coredll_systhemectrl.obj: ..\..\src\msw\systhemectrl.cpp
 $(OBJS)\coredll_customdraw.obj: ..\..\src\msw\customdraw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\customdraw.cpp
 
+$(OBJS)\coredll_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\animateg.cpp
+
+$(OBJS)\coredll_commandlinkbutton.obj: ..\..\src\msw\commandlinkbutton.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\commandlinkbutton.cpp
+
+$(OBJS)\coredll_bmpcbox.obj: ..\..\src\msw\bmpcbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\bmpcbox.cpp
+
+$(OBJS)\coredll_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\hyperlink.cpp
+
+$(OBJS)\coredll_calctrl.obj: ..\..\src\msw\calctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\calctrl.cpp
+
+$(OBJS)\coredll_datectrl.obj: ..\..\src\msw\datectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\datectrl.cpp
+
+$(OBJS)\coredll_datetimectrl.obj: ..\..\src\msw\datetimectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\datetimectrl.cpp
+
+$(OBJS)\coredll_timectrl.obj: ..\..\src\msw\timectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\timectrl.cpp
+
+$(OBJS)\coredll_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\datecontrols.cpp
+
 $(OBJS)\coredll_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -13312,9 +13303,6 @@ $(OBJS)\coredll_topluniv.obj: ..\..\src\univ\topluniv.cpp
 
 $(OBJS)\coredll_winuniv.obj: ..\..\src\univ\winuniv.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\winuniv.cpp
-
-$(OBJS)\coredll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
 
 $(OBJS)\coredll_gtk.obj: ..\..\src\univ\themes\gtk.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\univ\themes\gtk.cpp
@@ -13594,8 +13582,18 @@ $(OBJS)\coredll_utilsrt.obj: ..\..\src\msw\rt\utilsrt.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\taskbarcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_helpchm.obj: ..\..\src\msw\helpchm.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\helpchm.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_taskbar.obj: ..\..\src\msw\taskbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\taskbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -13604,8 +13602,48 @@ $(OBJS)\coredll_helpwin.obj: ..\..\src\msw\helpwin.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_joystick.obj: ..\..\src\msw\joystick.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\joystick.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_aboutdlg.obj: ..\..\src\msw\aboutdlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\aboutdlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_notifmsg.obj: ..\..\src\msw\notifmsg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\notifmsg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_richtooltip.obj: ..\..\src\msw\richtooltip.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\richtooltip.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_sound.obj: ..\..\src\msw\sound.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\sound.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_automtn.obj: ..\..\src\msw\ole\automtn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\ole\automtn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_notifmsgrt.obj: ..\..\src\msw\rt\notifmsgrt.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\rt\notifmsgrt.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\coredll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -14468,6 +14506,181 @@ $(OBJS)\coredll_xmlreshandler.obj: ..\..\src\xrc\xmlreshandler.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\xrc\xmlreshandler.cpp
 !endif
 
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_splash.obj: ..\..\src\generic\splash.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\splash.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_notifmsgg.obj: ..\..\src\generic\notifmsgg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\notifmsgg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_odcombo.obj: ..\..\src\generic\odcombo.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\odcombo.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_calctrlcmn.obj: ..\..\src\common\calctrlcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\calctrlcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_grideditors.obj: ..\..\src\generic\grideditors.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\grideditors.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_bmpcboxcmn.obj: ..\..\src\common\bmpcboxcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\bmpcboxcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_grid.obj: ..\..\src\generic\grid.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\grid.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_gridctrl.obj: ..\..\src\generic\gridctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\gridctrl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_hyperlinkg.obj: ..\..\src\generic\hyperlinkg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\hyperlinkg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_helpext.obj: ..\..\src\generic\helpext.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\helpext.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_sashwin.obj: ..\..\src\generic\sashwin.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\sashwin.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_gridsel.obj: ..\..\src\generic\gridsel.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\gridsel.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_addremovectrl.obj: ..\..\src\common\addremovectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\addremovectrl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\tipdlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_aboutdlgg.obj: ..\..\src\generic\aboutdlgg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\aboutdlgg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_gridcmn.obj: ..\..\src\common\gridcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\gridcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_richtooltipcmn.obj: ..\..\src\common\richtooltipcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\richtooltipcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_datectlg.obj: ..\..\src\generic\datectlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\datectlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_bannerwindow.obj: ..\..\src\generic\bannerwindow.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\bannerwindow.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_treelist.obj: ..\..\src\generic\treelist.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\treelist.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_datavcmn.obj: ..\..\src\common\datavcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\datavcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_animatecmn.obj: ..\..\src\common\animatecmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\animatecmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_odcombocmn.obj: ..\..\src\common\odcombocmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\odcombocmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_hyperlnkcmn.obj: ..\..\src\common\hyperlnkcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\hyperlnkcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_propdlg.obj: ..\..\src\generic\propdlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\propdlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\bmpcboxg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_richtooltipg.obj: ..\..\src\generic\richtooltipg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\richtooltipg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_timectrlg.obj: ..\..\src\generic\timectrlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\timectrlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_commandlinkbuttong.obj: ..\..\src\generic\commandlinkbuttong.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\commandlinkbuttong.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_notifmsgcmn.obj: ..\..\src\common\notifmsgcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\notifmsgcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_wizard.obj: ..\..\src\generic\wizard.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\wizard.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_datavgen.obj: ..\..\src\generic\datavgen.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\datavgen.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_editlbox.obj: ..\..\src\generic\editlbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\editlbox.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_laywin.obj: ..\..\src\generic\laywin.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\laywin.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\calctrlg.cpp
+!endif
+
 $(OBJS)\corelib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
@@ -14651,6 +14864,33 @@ $(OBJS)\corelib_systhemectrl.obj: ..\..\src\msw\systhemectrl.cpp
 $(OBJS)\corelib_customdraw.obj: ..\..\src\msw\customdraw.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\customdraw.cpp
 
+$(OBJS)\corelib_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\animateg.cpp
+
+$(OBJS)\corelib_commandlinkbutton.obj: ..\..\src\msw\commandlinkbutton.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\commandlinkbutton.cpp
+
+$(OBJS)\corelib_bmpcbox.obj: ..\..\src\msw\bmpcbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\bmpcbox.cpp
+
+$(OBJS)\corelib_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\hyperlink.cpp
+
+$(OBJS)\corelib_calctrl.obj: ..\..\src\msw\calctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\calctrl.cpp
+
+$(OBJS)\corelib_datectrl.obj: ..\..\src\msw\datectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\datectrl.cpp
+
+$(OBJS)\corelib_datetimectrl.obj: ..\..\src\msw\datetimectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\datetimectrl.cpp
+
+$(OBJS)\corelib_timectrl.obj: ..\..\src\msw\timectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\timectrl.cpp
+
+$(OBJS)\corelib_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\datecontrols.cpp
+
 $(OBJS)\corelib_msw_checklst.obj: ..\..\src\msw\checklst.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\checklst.cpp
 
@@ -14794,9 +15034,6 @@ $(OBJS)\corelib_topluniv.obj: ..\..\src\univ\topluniv.cpp
 
 $(OBJS)\corelib_winuniv.obj: ..\..\src\univ\winuniv.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\winuniv.cpp
-
-$(OBJS)\corelib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
 
 $(OBJS)\corelib_gtk.obj: ..\..\src\univ\themes\gtk.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\univ\themes\gtk.cpp
@@ -15076,8 +15313,18 @@ $(OBJS)\corelib_utilsrt.obj: ..\..\src\msw\rt\utilsrt.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\taskbarcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_helpchm.obj: ..\..\src\msw\helpchm.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\helpchm.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_taskbar.obj: ..\..\src\msw\taskbar.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\taskbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -15086,8 +15333,48 @@ $(OBJS)\corelib_helpwin.obj: ..\..\src\msw\helpwin.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_joystick.obj: ..\..\src\msw\joystick.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\joystick.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_aboutdlg.obj: ..\..\src\msw\aboutdlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\aboutdlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_notifmsg.obj: ..\..\src\msw\notifmsg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\notifmsg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_richtooltip.obj: ..\..\src\msw\richtooltip.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\richtooltip.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_sound.obj: ..\..\src\msw\sound.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\sound.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_automtn.obj: ..\..\src\msw\ole\automtn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\ole\automtn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_notifmsgrt.obj: ..\..\src\msw\rt\notifmsgrt.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\rt\notifmsgrt.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
+$(OBJS)\corelib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -15950,332 +16237,189 @@ $(OBJS)\corelib_xmlreshandler.obj: ..\..\src\xrc\xmlreshandler.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\xrc\xmlreshandler.cpp
 !endif
 
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_splash.obj: ..\..\src\generic\splash.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\splash.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_notifmsgg.obj: ..\..\src\generic\notifmsgg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\notifmsgg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_odcombo.obj: ..\..\src\generic\odcombo.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\odcombo.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_calctrlcmn.obj: ..\..\src\common\calctrlcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\calctrlcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_grideditors.obj: ..\..\src\generic\grideditors.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\grideditors.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_bmpcboxcmn.obj: ..\..\src\common\bmpcboxcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\bmpcboxcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_grid.obj: ..\..\src\generic\grid.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\grid.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_gridctrl.obj: ..\..\src\generic\gridctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\gridctrl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_hyperlinkg.obj: ..\..\src\generic\hyperlinkg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\hyperlinkg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_helpext.obj: ..\..\src\generic\helpext.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\helpext.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_sashwin.obj: ..\..\src\generic\sashwin.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\sashwin.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_gridsel.obj: ..\..\src\generic\gridsel.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\gridsel.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_addremovectrl.obj: ..\..\src\common\addremovectrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\addremovectrl.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\tipdlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_aboutdlgg.obj: ..\..\src\generic\aboutdlgg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\aboutdlgg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_gridcmn.obj: ..\..\src\common\gridcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\gridcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_richtooltipcmn.obj: ..\..\src\common\richtooltipcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\richtooltipcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_datectlg.obj: ..\..\src\generic\datectlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\datectlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_bannerwindow.obj: ..\..\src\generic\bannerwindow.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\bannerwindow.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_treelist.obj: ..\..\src\generic\treelist.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\treelist.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_datavcmn.obj: ..\..\src\common\datavcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\datavcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_animatecmn.obj: ..\..\src\common\animatecmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\animatecmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_odcombocmn.obj: ..\..\src\common\odcombocmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\odcombocmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_hyperlnkcmn.obj: ..\..\src\common\hyperlnkcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\hyperlnkcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_propdlg.obj: ..\..\src\generic\propdlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\propdlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\bmpcboxg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_richtooltipg.obj: ..\..\src\generic\richtooltipg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\richtooltipg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_timectrlg.obj: ..\..\src\generic\timectrlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\timectrlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_commandlinkbuttong.obj: ..\..\src\generic\commandlinkbuttong.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\commandlinkbuttong.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_notifmsgcmn.obj: ..\..\src\common\notifmsgcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\notifmsgcmn.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_wizard.obj: ..\..\src\generic\wizard.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\wizard.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_datavgen.obj: ..\..\src\generic\datavgen.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\datavgen.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_editlbox.obj: ..\..\src\generic\editlbox.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\editlbox.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_laywin.obj: ..\..\src\generic\laywin.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\laywin.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\calctrlg.cpp
+!endif
+
 $(OBJS)\advdll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
 $(OBJS)\advdll_version.res: ..\..\src\msw\version.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_6) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_72)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) /i $(SETUPHDIR) /i ..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) /d WXBUILDING /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)  /i ..\..\src\tiff\libtiff /i ..\..\src\jpeg /i ..\..\src\png /i ..\..\src\zlib /i ..\..\src\regex /i ..\..\src\expat\expat\lib /d WXUSINGDLL /d WXMAKINGDLL_ADV ..\..\src\msw\version.rc
 
-$(OBJS)\advdll_bmpcbox.obj: ..\..\src\msw\bmpcbox.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\bmpcbox.cpp
-
-$(OBJS)\advdll_calctrl.obj: ..\..\src\msw\calctrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\calctrl.cpp
-
-$(OBJS)\advdll_commandlinkbutton.obj: ..\..\src\msw\commandlinkbutton.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\commandlinkbutton.cpp
-
-$(OBJS)\advdll_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\datecontrols.cpp
-
-$(OBJS)\advdll_datectrl.obj: ..\..\src\msw\datectrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\datectrl.cpp
-
-$(OBJS)\advdll_datetimectrl.obj: ..\..\src\msw\datetimectrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\datetimectrl.cpp
-
-$(OBJS)\advdll_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\hyperlink.cpp
-
-$(OBJS)\advdll_timectrl.obj: ..\..\src\msw\timectrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\timectrl.cpp
-
-$(OBJS)\advdll_animatecmn.obj: ..\..\src\common\animatecmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\common\animatecmn.cpp
-
-$(OBJS)\advdll_bmpcboxcmn.obj: ..\..\src\common\bmpcboxcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\common\bmpcboxcmn.cpp
-
-$(OBJS)\advdll_calctrlcmn.obj: ..\..\src\common\calctrlcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\common\calctrlcmn.cpp
-
-$(OBJS)\advdll_datavcmn.obj: ..\..\src\common\datavcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\common\datavcmn.cpp
-
-$(OBJS)\advdll_gridcmn.obj: ..\..\src\common\gridcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\common\gridcmn.cpp
-
-$(OBJS)\advdll_hyperlnkcmn.obj: ..\..\src\common\hyperlnkcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\common\hyperlnkcmn.cpp
-
-$(OBJS)\advdll_odcombocmn.obj: ..\..\src\common\odcombocmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\common\odcombocmn.cpp
-
-$(OBJS)\advdll_richtooltipcmn.obj: ..\..\src\common\richtooltipcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\common\richtooltipcmn.cpp
-
-$(OBJS)\advdll_aboutdlgg.obj: ..\..\src\generic\aboutdlgg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\aboutdlgg.cpp
-
-$(OBJS)\advdll_bannerwindow.obj: ..\..\src\generic\bannerwindow.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\bannerwindow.cpp
-
-$(OBJS)\advdll_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\bmpcboxg.cpp
-
-$(OBJS)\advdll_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\calctrlg.cpp
-
-$(OBJS)\advdll_commandlinkbuttong.obj: ..\..\src\generic\commandlinkbuttong.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\commandlinkbuttong.cpp
-
-$(OBJS)\advdll_datavgen.obj: ..\..\src\generic\datavgen.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\datavgen.cpp
-
-$(OBJS)\advdll_datectlg.obj: ..\..\src\generic\datectlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\datectlg.cpp
-
-$(OBJS)\advdll_editlbox.obj: ..\..\src\generic\editlbox.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\editlbox.cpp
-
-$(OBJS)\advdll_grid.obj: ..\..\src\generic\grid.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\grid.cpp
-
-$(OBJS)\advdll_gridctrl.obj: ..\..\src\generic\gridctrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\gridctrl.cpp
-
-$(OBJS)\advdll_grideditors.obj: ..\..\src\generic\grideditors.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\grideditors.cpp
-
-$(OBJS)\advdll_gridsel.obj: ..\..\src\generic\gridsel.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\gridsel.cpp
-
-$(OBJS)\advdll_helpext.obj: ..\..\src\generic\helpext.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\helpext.cpp
-
-$(OBJS)\advdll_hyperlinkg.obj: ..\..\src\generic\hyperlinkg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\hyperlinkg.cpp
-
-$(OBJS)\advdll_laywin.obj: ..\..\src\generic\laywin.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\laywin.cpp
-
-$(OBJS)\advdll_notifmsgg.obj: ..\..\src\generic\notifmsgg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\notifmsgg.cpp
-
-$(OBJS)\advdll_odcombo.obj: ..\..\src\generic\odcombo.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\odcombo.cpp
-
-$(OBJS)\advdll_propdlg.obj: ..\..\src\generic\propdlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\propdlg.cpp
-
-$(OBJS)\advdll_richtooltipg.obj: ..\..\src\generic\richtooltipg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\richtooltipg.cpp
-
-$(OBJS)\advdll_sashwin.obj: ..\..\src\generic\sashwin.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\sashwin.cpp
-
-$(OBJS)\advdll_splash.obj: ..\..\src\generic\splash.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\splash.cpp
-
-$(OBJS)\advdll_timectrlg.obj: ..\..\src\generic\timectrlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\timectrlg.cpp
-
-$(OBJS)\advdll_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\tipdlg.cpp
-
-$(OBJS)\advdll_treelist.obj: ..\..\src\generic\treelist.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\treelist.cpp
-
-$(OBJS)\advdll_wizard.obj: ..\..\src\generic\wizard.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\wizard.cpp
-
-$(OBJS)\advdll_addremovectrl.obj: ..\..\src\common\addremovectrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\common\addremovectrl.cpp
-
-$(OBJS)\advdll_notifmsgcmn.obj: ..\..\src\common\notifmsgcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\common\notifmsgcmn.cpp
-
-$(OBJS)\advdll_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\common\taskbarcmn.cpp
-
-$(OBJS)\advdll_aboutdlg.obj: ..\..\src\msw\aboutdlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\aboutdlg.cpp
-
-$(OBJS)\advdll_notifmsg.obj: ..\..\src\msw\notifmsg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\notifmsg.cpp
-
-$(OBJS)\advdll_richtooltip.obj: ..\..\src\msw\richtooltip.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\richtooltip.cpp
-
-$(OBJS)\advdll_sound.obj: ..\..\src\msw\sound.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\sound.cpp
-
-$(OBJS)\advdll_taskbar.obj: ..\..\src\msw\taskbar.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\taskbar.cpp
-
-$(OBJS)\advdll_notifmsgrt.obj: ..\..\src\msw\rt\notifmsgrt.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\rt\notifmsgrt.cpp
-
-$(OBJS)\advdll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
-
-$(OBJS)\advdll_joystick.obj: ..\..\src\msw\joystick.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\msw\joystick.cpp
-
-$(OBJS)\advdll_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVDLL_CXXFLAGS) ..\..\src\generic\animateg.cpp
-
 $(OBJS)\advlib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
-
-$(OBJS)\advlib_bmpcbox.obj: ..\..\src\msw\bmpcbox.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\bmpcbox.cpp
-
-$(OBJS)\advlib_calctrl.obj: ..\..\src\msw\calctrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\calctrl.cpp
-
-$(OBJS)\advlib_commandlinkbutton.obj: ..\..\src\msw\commandlinkbutton.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\commandlinkbutton.cpp
-
-$(OBJS)\advlib_datecontrols.obj: ..\..\src\msw\datecontrols.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\datecontrols.cpp
-
-$(OBJS)\advlib_datectrl.obj: ..\..\src\msw\datectrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\datectrl.cpp
-
-$(OBJS)\advlib_datetimectrl.obj: ..\..\src\msw\datetimectrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\datetimectrl.cpp
-
-$(OBJS)\advlib_hyperlink.obj: ..\..\src\msw\hyperlink.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\hyperlink.cpp
-
-$(OBJS)\advlib_timectrl.obj: ..\..\src\msw\timectrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\timectrl.cpp
-
-$(OBJS)\advlib_animatecmn.obj: ..\..\src\common\animatecmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\common\animatecmn.cpp
-
-$(OBJS)\advlib_bmpcboxcmn.obj: ..\..\src\common\bmpcboxcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\common\bmpcboxcmn.cpp
-
-$(OBJS)\advlib_calctrlcmn.obj: ..\..\src\common\calctrlcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\common\calctrlcmn.cpp
-
-$(OBJS)\advlib_datavcmn.obj: ..\..\src\common\datavcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\common\datavcmn.cpp
-
-$(OBJS)\advlib_gridcmn.obj: ..\..\src\common\gridcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\common\gridcmn.cpp
-
-$(OBJS)\advlib_hyperlnkcmn.obj: ..\..\src\common\hyperlnkcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\common\hyperlnkcmn.cpp
-
-$(OBJS)\advlib_odcombocmn.obj: ..\..\src\common\odcombocmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\common\odcombocmn.cpp
-
-$(OBJS)\advlib_richtooltipcmn.obj: ..\..\src\common\richtooltipcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\common\richtooltipcmn.cpp
-
-$(OBJS)\advlib_aboutdlgg.obj: ..\..\src\generic\aboutdlgg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\aboutdlgg.cpp
-
-$(OBJS)\advlib_bannerwindow.obj: ..\..\src\generic\bannerwindow.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\bannerwindow.cpp
-
-$(OBJS)\advlib_bmpcboxg.obj: ..\..\src\generic\bmpcboxg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\bmpcboxg.cpp
-
-$(OBJS)\advlib_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\calctrlg.cpp
-
-$(OBJS)\advlib_commandlinkbuttong.obj: ..\..\src\generic\commandlinkbuttong.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\commandlinkbuttong.cpp
-
-$(OBJS)\advlib_datavgen.obj: ..\..\src\generic\datavgen.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\datavgen.cpp
-
-$(OBJS)\advlib_datectlg.obj: ..\..\src\generic\datectlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\datectlg.cpp
-
-$(OBJS)\advlib_editlbox.obj: ..\..\src\generic\editlbox.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\editlbox.cpp
-
-$(OBJS)\advlib_grid.obj: ..\..\src\generic\grid.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\grid.cpp
-
-$(OBJS)\advlib_gridctrl.obj: ..\..\src\generic\gridctrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\gridctrl.cpp
-
-$(OBJS)\advlib_grideditors.obj: ..\..\src\generic\grideditors.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\grideditors.cpp
-
-$(OBJS)\advlib_gridsel.obj: ..\..\src\generic\gridsel.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\gridsel.cpp
-
-$(OBJS)\advlib_helpext.obj: ..\..\src\generic\helpext.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\helpext.cpp
-
-$(OBJS)\advlib_hyperlinkg.obj: ..\..\src\generic\hyperlinkg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\hyperlinkg.cpp
-
-$(OBJS)\advlib_laywin.obj: ..\..\src\generic\laywin.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\laywin.cpp
-
-$(OBJS)\advlib_notifmsgg.obj: ..\..\src\generic\notifmsgg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\notifmsgg.cpp
-
-$(OBJS)\advlib_odcombo.obj: ..\..\src\generic\odcombo.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\odcombo.cpp
-
-$(OBJS)\advlib_propdlg.obj: ..\..\src\generic\propdlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\propdlg.cpp
-
-$(OBJS)\advlib_richtooltipg.obj: ..\..\src\generic\richtooltipg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\richtooltipg.cpp
-
-$(OBJS)\advlib_sashwin.obj: ..\..\src\generic\sashwin.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\sashwin.cpp
-
-$(OBJS)\advlib_splash.obj: ..\..\src\generic\splash.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\splash.cpp
-
-$(OBJS)\advlib_timectrlg.obj: ..\..\src\generic\timectrlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\timectrlg.cpp
-
-$(OBJS)\advlib_tipdlg.obj: ..\..\src\generic\tipdlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\tipdlg.cpp
-
-$(OBJS)\advlib_treelist.obj: ..\..\src\generic\treelist.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\treelist.cpp
-
-$(OBJS)\advlib_wizard.obj: ..\..\src\generic\wizard.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\wizard.cpp
-
-$(OBJS)\advlib_addremovectrl.obj: ..\..\src\common\addremovectrl.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\common\addremovectrl.cpp
-
-$(OBJS)\advlib_notifmsgcmn.obj: ..\..\src\common\notifmsgcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\common\notifmsgcmn.cpp
-
-$(OBJS)\advlib_taskbarcmn.obj: ..\..\src\common\taskbarcmn.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\common\taskbarcmn.cpp
-
-$(OBJS)\advlib_aboutdlg.obj: ..\..\src\msw\aboutdlg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\aboutdlg.cpp
-
-$(OBJS)\advlib_notifmsg.obj: ..\..\src\msw\notifmsg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\notifmsg.cpp
-
-$(OBJS)\advlib_richtooltip.obj: ..\..\src\msw\richtooltip.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\richtooltip.cpp
-
-$(OBJS)\advlib_sound.obj: ..\..\src\msw\sound.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\sound.cpp
-
-$(OBJS)\advlib_taskbar.obj: ..\..\src\msw\taskbar.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\taskbar.cpp
-
-$(OBJS)\advlib_notifmsgrt.obj: ..\..\src\msw\rt\notifmsgrt.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\rt\notifmsgrt.cpp
-
-$(OBJS)\advlib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
-
-$(OBJS)\advlib_joystick.obj: ..\..\src\msw\joystick.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\msw\joystick.cpp
-
-$(OBJS)\advlib_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(ADVLIB_CXXFLAGS) ..\..\src\generic\animateg.cpp
 
 $(OBJS)\mediadll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MEDIADLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp

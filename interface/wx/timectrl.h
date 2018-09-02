@@ -12,7 +12,7 @@
 
     Currently no special styles are defined for this object.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{pickers}
 
     @since 2.9.3
@@ -42,7 +42,7 @@ enum
            control.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{pickers}
     @appearance{timepickerctrl}
 

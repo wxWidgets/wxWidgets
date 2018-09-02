@@ -17,11 +17,11 @@
 
 class WXDLLIMPEXP_FWD_CORE wxButton;
 class WXDLLIMPEXP_FWD_CORE wxStaticBitmap;
-class WXDLLIMPEXP_FWD_ADV wxWizardEvent;
+class WXDLLIMPEXP_FWD_CORE wxWizardEvent;
 class WXDLLIMPEXP_FWD_CORE wxBoxSizer;
-class WXDLLIMPEXP_FWD_ADV wxWizardSizer;
+class WXDLLIMPEXP_FWD_CORE wxWizardSizer;
 
-class WXDLLIMPEXP_ADV wxWizard : public wxWizardBase
+class WXDLLIMPEXP_CORE wxWizard : public wxWizardBase
 {
 public:
     // ctor
