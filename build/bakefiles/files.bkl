@@ -3676,12 +3676,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- ================================================================ -->
 
     <!-- wxAdv sources -->
-    <set var="PLUGIN_ADV_SRC">
+    <set var="PLUGIN_SRC">
         <if cond="FORMAT=='autoconf' and PLATFORM_UNIX=='1' and USE_PLUGINS=='0'">
             $(UNIX_SOUND_SRC_SDL)
         </if>
     </set>
 
-    <set var="PLUGIN_MONOLIB_SRC">$(PLUGIN_ADV_SRC)</set>
+    <set var="PLUGIN_MONOLIB_SRC">$(PLUGIN_SRC)</set>
 
 </makefile>
