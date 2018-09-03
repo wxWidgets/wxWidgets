@@ -325,28 +325,17 @@ protected:
 // wxGridHeaderRenderer and company: like wxGridCellRenderer but for headers
 // ----------------------------------------------------------------------------
 
-// Base class for corner window renderer: it is the simplest of all renderers
-// and only has a single function
-class WXDLLIMPEXP_CORE wxGridCornerHeaderRenderer
+// Base class for header cells renderers.
+class WXDLLIMPEXP_CORE wxGridHeaderCellRenderer
 {
 public:
-    // Draw the border around the corner window.
+    virtual ~wxGridHeaderCellRenderer() {}
+
+    // Draw the border around cell window.
     virtual void DrawBorder(const wxGrid& grid,
                             wxDC& dc,
                             wxRect& rect) const = 0;
 
-    // make the dtor of a class with virtual functions virtual to avoid g++
-    // warnings, even though this class is not supposed to be used
-    // polymorphically
-    virtual ~wxGridCornerHeaderRenderer() { }
-};
-
-
-// Base class for the row/column header cells renderers
-class WXDLLIMPEXP_CORE wxGridHeaderLabelsRenderer
-    : public wxGridCornerHeaderRenderer
-{
-public:
     // Draw header cell label
     virtual void DrawLabel(const wxGrid& grid,
                            wxDC& dc,
@@ -358,16 +347,21 @@ public:
 };
 
 // Currently the row/column/corner renders don't need any methods other than
-// those already in wxGridHeaderLabelsRenderer but still define separate classes
+// those already in wxGridHeaderCellRenderer but still define separate classes
 // for them for future extensions and also for better type safety (i.e. to
 // avoid inadvertently using a column header renderer for the row headers)
 class WXDLLIMPEXP_CORE wxGridRowHeaderRenderer
-    : public wxGridHeaderLabelsRenderer
+    : public wxGridHeaderCellRenderer
 {
 };
 
 class WXDLLIMPEXP_CORE wxGridColumnHeaderRenderer
-    : public wxGridHeaderLabelsRenderer
+    : public wxGridHeaderCellRenderer
+{
+};
+
+class WXDLLIMPEXP_CORE wxGridCornerHeaderRenderer
+    : public wxGridHeaderCellRenderer
 {
 };
 
@@ -745,8 +739,10 @@ public:
 
     virtual wxString GetRowLabelValue( int row );
     virtual wxString GetColLabelValue( int col );
+    virtual wxString GetCornerLabelValue() const;
     virtual void SetRowLabelValue( int WXUNUSED(row), const wxString& ) {}
     virtual void SetColLabelValue( int WXUNUSED(col), const wxString& ) {}
+    virtual void SetCornerLabelValue( const wxString& ) {}
 
     // Attribute handling
     //
@@ -870,8 +866,10 @@ public:
 
     void SetRowLabelValue( int row, const wxString& ) wxOVERRIDE;
     void SetColLabelValue( int col, const wxString& ) wxOVERRIDE;
+    void SetCornerLabelValue( const wxString& ) wxOVERRIDE;
     wxString GetRowLabelValue( int row ) wxOVERRIDE;
     wxString GetColLabelValue( int col ) wxOVERRIDE;
+    wxString GetCornerLabelValue() const wxOVERRIDE;
 
 private:
     wxGridStringArray m_data;
@@ -887,6 +885,8 @@ private:
     //
     wxArrayString     m_rowLabels;
     wxArrayString     m_colLabels;
+
+    wxString m_cornerLabel;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxGridStringTable);
 };
@@ -1226,6 +1226,7 @@ public:
     int      GetColLabelTextOrientation() const;
     wxString GetRowLabelValue( int row ) const;
     wxString GetColLabelValue( int col ) const;
+    wxString GetCornerLabelValue() const;
 
     wxColour GetCellHighlightColour() const { return m_cellHighlightColour; }
     int      GetCellHighlightPenWidth() const { return m_cellHighlightPenWidth; }
@@ -1250,6 +1251,7 @@ public:
     void     SetColLabelTextOrientation( int textOrientation );
     void     SetRowLabelValue( int row, const wxString& );
     void     SetColLabelValue( int col, const wxString& );
+    void     SetCornerLabelValue( const wxString& );
     void     SetCellHighlightColour( const wxColour& );
     void     SetCellHighlightPenWidth(int width);
     void     SetCellHighlightROPenWidth(int width);
