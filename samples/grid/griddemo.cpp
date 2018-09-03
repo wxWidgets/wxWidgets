@@ -178,6 +178,7 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_DELETEROW, GridFrame::DeleteSelectedRows )
     EVT_MENU( ID_DELETECOL, GridFrame::DeleteSelectedCols )
     EVT_MENU( ID_CLEARGRID, GridFrame::ClearGrid )
+    EVT_MENU( ID_SETCORNERLABEL, GridFrame::SetCornerLabelValue )
     EVT_MENU( ID_SHOWSEL,   GridFrame::ShowSelection )
     EVT_MENU( ID_SELCELLS,  GridFrame::SelectCells )
     EVT_MENU( ID_SELROWS,  GridFrame::SelectRows )
@@ -352,6 +353,7 @@ GridFrame::GridFrame()
     editMenu->Append( ID_DELETEROW, wxT("Delete selected ro&ws") );
     editMenu->Append( ID_DELETECOL, wxT("Delete selected co&ls") );
     editMenu->Append( ID_CLEARGRID, wxT("Cl&ear grid cell contents") );
+    editMenu->Append( ID_SETCORNERLABEL, wxT("&Set corner label...") );
 
     wxMenu *selectMenu = new wxMenu;
     selectMenu->Append( ID_SELECT_UNSELECT, wxT("Add new cells to the selection"),
@@ -1038,6 +1040,20 @@ void GridFrame::DeleteSelectedCols( wxCommandEvent& WXUNUSED(ev) )
 void GridFrame::ClearGrid( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->ClearGrid();
+}
+
+void GridFrame::SetCornerLabelValue( wxCommandEvent& WXUNUSED(ev) )
+{
+    wxTextEntryDialog dialog(this,
+                             "Please enter corner label:",
+                             "Please enter a string",
+                             grid->GetCornerLabelValue(),
+                             wxOK | wxCANCEL);
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        grid->SetCornerLabelValue(dialog.GetValue());
+    }
 }
 
 void GridFrame::ShowSelection( wxCommandEvent& WXUNUSED(ev) )
