@@ -340,6 +340,12 @@ bool wxBitmapRefData::Create(CGContextRef context)
         // our own contexts conform to this, always.
         wxASSERT( m_depth == 32 );
         
+        size_t size = m_bytesPerRow * m_height ;
+        void* data = m_memBuf.GetWriteBuf( size ) ;
+
+        memcpy( data , CGBitmapContextGetData(context) , size ) ;
+        m_memBuf.UngetWriteBuf( size ) ;
+
         // determine content scale
         CGRect userrect = CGRectMake(0, 0, 10, 10);
         CGRect devicerect;
