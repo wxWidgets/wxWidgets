@@ -392,6 +392,53 @@ public:
     virtual ~wxWindow();
 
 
+    /**
+        Construct the actual window object after creating the C++ object.
+
+        The non-default constructor of wxWindow class does two things: it
+        initializes the C++ object and it also creates the window object in the
+        underlying graphical toolkit. The Create() method can be used to
+        perform the second part later, while the default constructor can be
+        used to perform the first part only.
+
+        Please note that the underlying window must be created exactly once,
+        i.e. if you use the default constructor, which doesn't do this, you @em
+        must call Create() before using the window and if you use the
+        non-default constructor, you can @em not call Create(), as the
+        underlying window is already created.w
+
+        Note that it is possible and, in fact, useful, to call some methods on
+        the object between creating the C++ object itself and calling Create()
+        on it, e.g. a common pattern to avoid showing the contents of a window
+        before it is fully initialized is:
+        @code
+            wxPanel* panel = new wxPanel(); // Note: default constructor used.
+            panel->Hide(); // Can be called before actually creating it.
+            panel->Create(parent, wxID_ANY, ...); // Won't be shown yet.
+            ... create all the panel children ...
+            panel->Show(); // Now everything will be shown at once.
+        @endcode
+
+        Also note that it is possible to create an object of a derived type and
+        then call Create() on it:
+        @code
+            // This code doesn't need to know about the exact window type.
+            wxWindow* window = MyCreateWindowObjectFunction();
+            window->Create(parent, wxID_ANY, ...);
+
+            // And, usually in some other translation unit (file):
+            wxWindow* MyCreateWindowObjectFunction() {
+                return new MyCustomClassDerivingFromWindow();
+            }
+        @endcode
+        This is notably used by @ref overview_xrc.
+
+        The parameters of this method have exactly the same meaning as the
+        non-default constructor parameters, please refer to them for their
+        description.
+
+        @return @true if window creation succeeded or @false if it failed
+     */
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
