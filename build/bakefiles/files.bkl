@@ -3591,7 +3591,17 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </set>
 
     <!-- wxAdvanced: empty, kept only for backwards compatibility -->
-    <set var="ADVANCED_SRC" hints="files"/>
+    <set var="ADVANCED_SRC" hints="files">
+        <!-- When not using autoconf, it's part of wx_lib_b template. -->
+        <if cond="FORMAT=='autoconf'">
+            <!--
+                But otherwise we need to compile at least a single file as
+                part of the library, at least some versions of ar refuse to
+                create an empty static library without any files, for example.
+             -->
+            src/common/dummy.cpp
+        </if>
+    </set>
     <set var="ADVANCED_HDR" hints="files"/>
 
     <!-- wxMedia files: -->
@@ -3676,12 +3686,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- ================================================================ -->
 
     <!-- wxAdv sources -->
-    <set var="PLUGIN_ADV_SRC">
+    <set var="PLUGIN_SRC">
         <if cond="FORMAT=='autoconf' and PLATFORM_UNIX=='1' and USE_PLUGINS=='0'">
             $(UNIX_SOUND_SRC_SDL)
         </if>
     </set>
 
-    <set var="PLUGIN_MONOLIB_SRC">$(PLUGIN_ADV_SRC)</set>
+    <set var="PLUGIN_MONOLIB_SRC">$(PLUGIN_SRC)</set>
 
 </makefile>
