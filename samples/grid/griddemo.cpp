@@ -174,6 +174,7 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_COLLABELVERTALIGN, GridFrame::SetColLabelVertAlignment )
     EVT_MENU( ID_CORNERLABELHORIZALIGN, GridFrame::SetCornerLabelHorizAlignment )
     EVT_MENU( ID_CORNERLABELVERTALIGN, GridFrame::SetCornerLabelVertAlignment )
+    EVT_MENU( ID_CORNERLABELORIENTATION, GridFrame::ToggleCornerLabelOrientation )
     EVT_MENU( ID_GRIDLINECOLOUR, GridFrame::SetGridLineColour )
     EVT_MENU( ID_INSERTROW, GridFrame::InsertRow )
     EVT_MENU( ID_INSERTCOL, GridFrame::InsertCol )
@@ -331,6 +332,8 @@ GridFrame::GridFrame()
 
     cornerLabelMenu->AppendRadioItem( ID_CORNERLABELHORIZALIGN, wxT("&Horizontal") );
     cornerLabelMenu->AppendRadioItem( ID_CORNERLABELVERTALIGN, wxT("&Vertical") );
+
+    viewMenu->Append( ID_CORNERLABELORIENTATION, wxT("Toggle corner label orientation") );
 
     wxMenu *colHeaderMenu = new wxMenu;
 
@@ -977,6 +980,25 @@ void GridFrame::SetCornerLabelVertAlignment( wxCommandEvent& WXUNUSED(ev) )
     }
 
     grid->SetCornerLabelAlignment( horiz, vert );
+}
+
+
+void GridFrame::ToggleCornerLabelOrientation( wxCommandEvent& WXUNUSED(ev) )
+{
+    int orientation = grid->GetCornerLabelTextOrientation();
+
+    switch(orientation)
+    {
+        case wxHORIZONTAL:
+            orientation = wxVERTICAL;
+            break;
+
+        case wxVERTICAL:
+            orientation = wxHORIZONTAL;
+            break;
+    }
+
+    grid->SetCornerLabelTextOrientation(orientation);
 }
 
 
