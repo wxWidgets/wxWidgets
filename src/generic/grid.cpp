@@ -7343,7 +7343,7 @@ void wxGrid::SetCornerLabelValue( const wxString& s )
         m_table->SetCornerLabelValue( s );
         if ( !GetBatchCount() )
         {
-            wxRect rect(wxSize(m_rowLabelWidth, m_colLabelHeight));
+            wxRect rect = m_cornerLabelWin->GetRect();
             m_cornerLabelWin->Refresh(true, &rect);
         }
     }
