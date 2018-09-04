@@ -1169,7 +1169,7 @@ wxString wxGridTableBase::GetColLabelValue( int col )
 
 wxString wxGridTableBase::GetCornerLabelValue() const
 {
-    return wxString{};
+    return wxString();
 }
 
 wxString wxGridTableBase::GetTypeName( int WXUNUSED(row), int WXUNUSED(col) )
@@ -7104,7 +7104,7 @@ wxString wxGrid::GetCornerLabelValue() const
     }
     else
     {
-        return wxString{};
+        return wxString();
     }
 }
 
