@@ -54,6 +54,8 @@ class GridFrame : public wxFrame
     void SetRowLabelVertAlignment( wxCommandEvent& );
     void SetColLabelHorizAlignment( wxCommandEvent& );
     void SetColLabelVertAlignment( wxCommandEvent& );
+    void SetCornerLabelHorizAlignment( wxCommandEvent& );
+    void SetCornerLabelVertAlignment( wxCommandEvent& );
     void SetGridLineColour( wxCommandEvent& );
 
     void SetCellFgColour(wxCommandEvent &);
@@ -153,6 +155,9 @@ public:
         ID_COLLABELALIGN,
         ID_COLLABELHORIZALIGN,
         ID_COLLABELVERTALIGN,
+        ID_CORNERLABELALIGN,
+        ID_CORNERLABELHORIZALIGN,
+        ID_CORNERLABELVERTALIGN,
         ID_COLDEFAULTHEADER,
         ID_COLNATIVEHEADER,
         ID_COLCUSTOMHEADER,

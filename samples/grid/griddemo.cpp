@@ -172,6 +172,8 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_ROWLABELVERTALIGN, GridFrame::SetRowLabelVertAlignment )
     EVT_MENU( ID_COLLABELHORIZALIGN, GridFrame::SetColLabelHorizAlignment )
     EVT_MENU( ID_COLLABELVERTALIGN, GridFrame::SetColLabelVertAlignment )
+    EVT_MENU( ID_CORNERLABELHORIZALIGN, GridFrame::SetCornerLabelHorizAlignment )
+    EVT_MENU( ID_CORNERLABELVERTALIGN, GridFrame::SetCornerLabelVertAlignment )
     EVT_MENU( ID_GRIDLINECOLOUR, GridFrame::SetGridLineColour )
     EVT_MENU( ID_INSERTROW, GridFrame::InsertRow )
     EVT_MENU( ID_INSERTCOL, GridFrame::InsertCol )
@@ -321,6 +323,14 @@ GridFrame::GridFrame()
 
     colLabelMenu->AppendRadioItem( ID_COLLABELHORIZALIGN, wxT("&Horizontal") );
     colLabelMenu->AppendRadioItem( ID_COLLABELVERTALIGN, wxT("&Vertical") );
+
+    wxMenu *cornerLabelMenu = new wxMenu;
+    viewMenu->Append( ID_CORNERLABELALIGN, wxT("Corner label alignment"),
+                      cornerLabelMenu,
+                      wxT("Change alignment of corner label") );
+
+    cornerLabelMenu->AppendRadioItem( ID_CORNERLABELHORIZALIGN, wxT("&Horizontal") );
+    cornerLabelMenu->AppendRadioItem( ID_CORNERLABELVERTALIGN, wxT("&Vertical") );
 
     wxMenu *colHeaderMenu = new wxMenu;
 
@@ -919,6 +929,54 @@ void GridFrame::SetColLabelVertAlignment( wxCommandEvent& WXUNUSED(ev) )
     }
 
     grid->SetColLabelAlignment( horiz, vert );
+}
+
+
+void GridFrame::SetCornerLabelHorizAlignment( wxCommandEvent& WXUNUSED(ev) )
+{
+    int horiz, vert;
+    grid->GetCornerLabelAlignment( &horiz, &vert );
+
+    switch ( horiz )
+    {
+        case wxALIGN_LEFT:
+            horiz = wxALIGN_CENTRE;
+            break;
+
+        case wxALIGN_CENTRE:
+            horiz = wxALIGN_RIGHT;
+            break;
+
+        case wxALIGN_RIGHT:
+            horiz = wxALIGN_LEFT;
+            break;
+    }
+
+    grid->SetCornerLabelAlignment( horiz, vert );
+}
+
+
+void GridFrame::SetCornerLabelVertAlignment( wxCommandEvent& WXUNUSED(ev) )
+{
+    int horiz, vert;
+    grid->GetCornerLabelAlignment( &horiz, &vert );
+
+    switch ( vert )
+    {
+        case wxALIGN_TOP:
+            vert = wxALIGN_CENTRE;
+            break;
+
+        case wxALIGN_CENTRE:
+            vert = wxALIGN_BOTTOM;
+            break;
+
+        case wxALIGN_BOTTOM:
+            vert = wxALIGN_TOP;
+            break;
+    }
+
+    grid->SetCornerLabelAlignment( horiz, vert );
 }
 
 
