@@ -2454,6 +2454,10 @@ void wxGrid::Init()
     m_colLabelVertAlign  = wxALIGN_CENTRE;
     m_colLabelTextOrientation = wxHORIZONTAL;
 
+    m_cornerLabelHorizAlign = wxALIGN_CENTRE;
+    m_cornerLabelVertAlign = wxALIGN_CENTRE;
+    m_cornerLabelTextOrientation = wxHORIZONTAL;
+
     m_defaultColWidth  = WXGRID_DEFAULT_COL_WIDTH;
     m_defaultRowHeight = 0; // this will be initialized after creation
 
@@ -5957,10 +5961,9 @@ void wxGrid::DrawCornerLabel(wxDC& dc)
     wxString label = GetCornerLabelValue();
     if( !label.IsEmpty() )
     {
-        // TODO: add alignment and orientation support for corner window.
         int hAlign, vAlign;
-        GetColLabelAlignment(&hAlign, &vAlign);
-        const int orient = GetColLabelTextOrientation();
+        GetCornerLabelAlignment(&hAlign, &vAlign);
+        const int orient = GetCornerLabelTextOrientation();
 
         rend.DrawLabel(*this, dc, label, rect, hAlign, vAlign, orient);
     }
@@ -7068,6 +7071,19 @@ int wxGrid::GetColLabelTextOrientation() const
     return m_colLabelTextOrientation;
 }
 
+void wxGrid::GetCornerLabelAlignment( int *horiz, int *vert ) const
+{
+    if ( horiz )
+        *horiz = m_cornerLabelHorizAlign;
+    if ( vert )
+        *vert  = m_cornerLabelVertAlign;
+}
+
+int wxGrid::GetCornerLabelTextOrientation() const
+{
+    return m_cornerLabelTextOrientation;
+}
+
 wxString wxGrid::GetRowLabelValue( int row ) const
 {
     if ( m_table )
@@ -7275,6 +7291,39 @@ void wxGrid::SetColLabelAlignment( int horiz, int vert )
     }
 }
 
+void wxGrid::SetCornerLabelAlignment( int horiz, int vert )
+{
+    // allow old (incorrect) defs to be used
+    switch ( horiz )
+    {
+        case wxLEFT:   horiz = wxALIGN_LEFT; break;
+        case wxRIGHT:  horiz = wxALIGN_RIGHT; break;
+        case wxCENTRE: horiz = wxALIGN_CENTRE; break;
+    }
+
+    switch ( vert )
+    {
+        case wxTOP:    vert = wxALIGN_TOP;    break;
+        case wxBOTTOM: vert = wxALIGN_BOTTOM; break;
+        case wxCENTRE: vert = wxALIGN_CENTRE; break;
+    }
+
+    if ( horiz == wxALIGN_LEFT || horiz == wxALIGN_CENTRE || horiz == wxALIGN_RIGHT )
+    {
+        m_cornerLabelHorizAlign = horiz;
+    }
+
+    if ( vert == wxALIGN_TOP || vert == wxALIGN_CENTRE || vert == wxALIGN_BOTTOM )
+    {
+        m_cornerLabelVertAlign = vert;
+    }
+
+    if ( !GetBatchCount() )
+    {
+        m_cornerLabelWin->Refresh();
+    }
+}
+
 // Note: under MSW, the default column label font must be changed because it
 //       does not support vertical printing
 //
@@ -7289,6 +7338,15 @@ void wxGrid::SetColLabelTextOrientation( int textOrientation )
 
     if ( !GetBatchCount() )
         m_colWindow->Refresh();
+}
+
+void wxGrid::SetCornerLabelTextOrientation( int textOrientation )
+{
+    if ( textOrientation == wxHORIZONTAL || textOrientation == wxVERTICAL )
+        m_cornerLabelTextOrientation = textOrientation;
+
+    if ( !GetBatchCount() )
+        m_cornerLabelWin->Refresh();
 }
 
 void wxGrid::SetRowLabelValue( int row, const wxString& s )

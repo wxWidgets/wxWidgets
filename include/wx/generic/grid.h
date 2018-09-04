@@ -1223,7 +1223,9 @@ public:
     wxFont   GetLabelFont() const { return m_labelFont; }
     void     GetRowLabelAlignment( int *horiz, int *vert ) const;
     void     GetColLabelAlignment( int *horiz, int *vert ) const;
+    void     GetCornerLabelAlignment( int *horiz, int *vert ) const;
     int      GetColLabelTextOrientation() const;
+    int      GetCornerLabelTextOrientation() const;
     wxString GetRowLabelValue( int row ) const;
     wxString GetColLabelValue( int col ) const;
     wxString GetCornerLabelValue() const;
@@ -1248,7 +1250,9 @@ public:
     void     SetLabelFont( const wxFont& );
     void     SetRowLabelAlignment( int horiz, int vert );
     void     SetColLabelAlignment( int horiz, int vert );
+    void     SetCornerLabelAlignment( int horiz, int vert );
     void     SetColLabelTextOrientation( int textOrientation );
+    void     SetCornerLabelTextOrientation( int textOrientation );
     void     SetRowLabelValue( int row, const wxString& );
     void     SetColLabelValue( int col, const wxString& );
     void     SetCornerLabelValue( const wxString& );
@@ -1972,6 +1976,9 @@ protected:
     int        m_colLabelHorizAlign;
     int        m_colLabelVertAlign;
     int        m_colLabelTextOrientation;
+    int        m_cornerLabelHorizAlign;
+    int        m_cornerLabelVertAlign;
+    int        m_cornerLabelTextOrientation;
 
     bool       m_defaultRowLabelValues;
     bool       m_defaultColLabelValues;
