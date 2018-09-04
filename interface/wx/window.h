@@ -405,7 +405,7 @@ public:
         i.e. if you use the default constructor, which doesn't do this, you @em
         must call Create() before using the window and if you use the
         non-default constructor, you can @em not call Create(), as the
-        underlying window is already created.w
+        underlying window is already created.
 
         Note that it is possible and, in fact, useful, to call some methods on
         the object between creating the C++ object itself and calling Create()
@@ -422,14 +422,24 @@ public:
         Also note that it is possible to create an object of a derived type and
         then call Create() on it:
         @code
-            // This code doesn't need to know about the exact window type.
-            wxWindow* window = MyCreateWindowObjectFunction();
-            window->Create(parent, wxID_ANY, ...);
-
-            // And, usually in some other translation unit (file):
+            // Suppose we have this function (which would typically be in a
+            // different translation unit (file) from the rest of the code).
             wxWindow* MyCreateWindowObjectFunction() {
                 return new MyCustomClassDerivingFromWindow();
             }
+
+            // Then we can create a window of MyCustomClassDerivingFromWindow
+            // class without really knowing about this type, as we would have
+            // to do if we wanted to use the non-default constructor, like this:
+
+            // First create the C++ object using the factory function.
+            wxWindow* window = MyCreateWindowObjectFunction();
+
+            // And now create the underlying window.
+            //
+            // This calls the base wxWindow::Create() as it is not virtual, so
+            // the derived class can't customize this part.
+            window->Create(parent, wxID_ANY, ...);
         @endcode
         This is notably used by @ref overview_xrc.
 
