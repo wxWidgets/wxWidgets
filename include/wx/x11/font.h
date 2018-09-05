@@ -83,7 +83,7 @@ public:
     // implement base class pure virtuals
     virtual int GetPointSize() const;
     virtual wxFontStyle GetStyle() const;
-    virtual wxFontWeight GetWeight() const;
+    virtual int GetNumericWeight() const;
     virtual bool GetUnderlined() const;
     virtual bool GetStrikethrough() const wxOVERRIDE;
     virtual wxString GetFaceName() const;
@@ -95,7 +95,7 @@ public:
     virtual void SetPointSize(int pointSize);
     virtual void SetFamily(wxFontFamily family);
     virtual void SetStyle(wxFontStyle style);
-    virtual void SetWeight(wxFontWeight weight);
+    virtual void SetNumericWeight(int weight);
     virtual bool SetFaceName(const wxString& faceName);
     virtual void SetUnderlined(bool underlined);
     virtual void SetStrikethrough(bool strikethrough) wxOVERRIDE;
