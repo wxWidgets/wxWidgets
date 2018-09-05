@@ -831,7 +831,7 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
     SetXFontComponent(wxXLFD_SLANT, s);
 }
 
-void wxNativeFontInfo::SetWeight(wxFontWeight weight)
+void wxNativeFontInfo::SetNumericWeight(int weight)
 {
     wxString s;
     switch ( weight )
