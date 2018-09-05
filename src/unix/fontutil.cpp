@@ -35,6 +35,7 @@
 
 #include "wx/encinfo.h"
 #include "wx/fontmap.h"
+#include "wx/math.h"
 #include "wx/tokenzr.h"
 #include "wx/fontenum.h"
 
@@ -88,11 +89,6 @@ void wxNativeFontInfo::Free()
 {
     if (description)
         pango_font_description_free(description);
-}
-
-int wxNativeFontInfo::GetPointSize() const
-{
-    return wxRound(GetFractionalPointSize());
 }
 
 float wxNativeFontInfo::GetFractionalPointSize() const
@@ -219,9 +215,9 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxFONTENCODING_SYSTEM;
 }
 
-void wxNativeFontInfo::SetPointSize(float pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
 {
-    pango_font_description_set_size( description, pointsize * PANGO_SCALE );
+    pango_font_description_set_size( description, wxRound(pointsize * PANGO_SCALE) );
 }
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
@@ -705,11 +701,6 @@ void wxNativeFontInfo::SetXFontName(const wxString& xFontName_)
     m_isDefault = false;
 }
 
-int wxNativeFontInfo::GetPointSize() const
-{
-    return wxRound(GetFractionalPointSize());
-}
-
 float wxNativeFontInfo::GetFractionalPointSize() const
 {
     const wxString s = GetXFontComponent(wxXLFD_POINTSIZE);
@@ -802,9 +793,10 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxFONTENCODING_MAX;
 }
 
-void wxNativeFontInfo::SetPointSize(float pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
 {
-    SetXFontComponent(wxXLFD_POINTSIZE, wxString::Format(wxT("%d"), pointsize));
+    SetXFontComponent(wxXLFD_POINTSIZE,
+                      wxString::Format("%d", wxRound(pointsize)));
 }
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)

@@ -96,7 +96,7 @@ public:
     {
         if (GetFractionalPointSize() != size)
         {
-            m_info.SetPointSize(size);
+            m_info.SetFractionalPointSize(size);
             Free();
         }
     }
@@ -1028,11 +1028,6 @@ wxString wxNativeFontInfo::ToString() const
     return s;
 }
 
-int wxNativeFontInfo::GetPointSize() const
-{
-    return wxRound(GetFractionalPointSize());
-}
-
 float wxNativeFontInfo::GetFractionalPointSize() const
 {
     return m_ctSize;
@@ -1113,9 +1108,9 @@ bool wxNativeFontInfo::GetStrikethrough() const
 
 // changing the font descriptor
 
-void wxNativeFontInfo::SetPointSize(float pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
 {
-    if (GetPointSize() != pointsize)
+    if (GetFractionalPointSize() != pointsize)
     {
         m_ctSize = pointsize;
 

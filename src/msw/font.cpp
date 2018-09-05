@@ -100,7 +100,7 @@ public:
     // all wxFont accessors
     float GetFractionalPointSize() const
     {
-        return m_nativeFontInfo.GetPointSize();
+        return m_nativeFontInfo.GetFractionalPointSize();
     }
 
     wxSize GetPixelSize() const
@@ -180,7 +180,7 @@ public:
     {
         Free();
 
-        m_nativeFontInfo.SetPointSize(pointSize);
+        m_nativeFontInfo.SetFractionalPointSize(pointSize);
         m_sizeUsingPixels = false;
     }
 
@@ -436,19 +436,13 @@ void wxNativeFontInfo::Init()
                     : PROOF_QUALITY;
 }
 
-int wxNativeFontInfo::GetPointSize() const
-{
-    return wxRound(GetFractionalPointSize());
-}
-
 float wxNativeFontInfo::GetFractionalPointSize() const
 {
     // FIXME: using the screen here results in incorrect font size calculation
     //        for printing!
     const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
 
-    // BC++ 2007 doesn't provide abs(long) overload, hence the cast
-    return (int) (((72.0*abs((int)lf.lfHeight)) / (double) ppInch) + 0.5);
+    return (72.0*abs(lf.lfHeight)) / (double) ppInch;
 }
 
 wxSize wxNativeFontInfo::GetPixelSize() const
@@ -529,13 +523,13 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxGetFontEncFromCharSet(lf.lfCharSet);
 }
 
-void wxNativeFontInfo::SetPointSize(float pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
 {
     // FIXME: using the screen here results in incorrect font size calculation
     //        for printing!
     const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
 
-    lf.lfHeight = -(int)((pointsize*((double)ppInch)/72.0) + 0.5);
+    lf.lfHeight = -wxRound(pointsize*((double)ppInch)/72.0);
 }
 
 void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)

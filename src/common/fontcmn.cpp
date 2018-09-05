@@ -377,7 +377,7 @@ void wxFontBase::SetWeight(wxFontWeight weight)
 void wxFontBase::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 {
 #ifdef wxNO_NATIVE_FONTINFO
-    SetPointSize(info.pointSize);
+    SetFractionalPointSize(info.pointSize);
     SetFamily(info.family);
     SetStyle(info.style);
     SetWeight(info.weight);
@@ -700,6 +700,15 @@ void wxNativeFontInfo::SetFaceName(const wxArrayString& facenames)
 #endif // wxUSE_FONTENUM/!wxUSE_FONTENUM
 }
 
+int wxNativeFontInfo::GetPointSize() const
+{
+    return wxRound(GetFractionalPointSize());
+}
+
+void wxNativeFontInfo::SetPointSize(int pointsize)
+{
+    SetFractionalPointSize(static_cast<float>(pointsize));
+}
 
 #ifdef wxNO_NATIVE_FONTINFO
 
@@ -776,7 +785,7 @@ wxString wxNativeFontInfo::ToString() const
 
     s.Printf(wxT("%d;%d;%d;%d;%d;%d;%d;%s;%d"),
              1,                                 // version
-             pointSize,
+             GetPointSize(),
              family,
              (int)style,
              (int)weight,
@@ -790,7 +799,7 @@ wxString wxNativeFontInfo::ToString() const
 
 void wxNativeFontInfo::Init()
 {
-    pointSize = 0;
+    pointSize = 0.0f;
     family = wxFONTFAMILY_DEFAULT;
     style = wxFONTSTYLE_NORMAL;
     weight = wxFONTWEIGHT_NORMAL;
@@ -800,7 +809,7 @@ void wxNativeFontInfo::Init()
     encoding = wxFONTENCODING_DEFAULT;
 }
 
-int wxNativeFontInfo::GetPointSize() const
+float wxNativeFontInfo::GetFractionalPointSize()
 {
     return pointSize;
 }
@@ -840,7 +849,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return encoding;
 }
 
-void wxNativeFontInfo::SetPointSize(int pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
 {
     pointSize = pointsize;
 }

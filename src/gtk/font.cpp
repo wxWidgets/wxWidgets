@@ -181,7 +181,7 @@ wxFontRefData::~wxFontRefData()
 
 void wxFontRefData::SetPointSize(float pointSize)
 {
-    m_nativeFontInfo.SetPointSize(pointSize);
+    m_nativeFontInfo.SetFractionalPointSize(pointSize);
 }
 
 /*

@@ -315,9 +315,9 @@ void wxNativeFontInfo::Init()
 {
 }
 
-int wxNativeFontInfo::GetPointSize() const
+float wxNativeFontInfo::GetFractionalPointSize() const
 {
-    return m_qtFont.pointSize();
+    return m_qtFont.pointSizeF();
 }
 
 wxFontStyle wxNativeFontInfo::GetStyle() const
@@ -412,9 +412,9 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxFONTENCODING_MAX;
 }
 
-void wxNativeFontInfo::SetPointSize(int pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
 {
-    m_qtFont.setPointSize(pointsize);
+    m_qtFont.setPointSizeF(pointsize);
 }
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
