@@ -496,8 +496,11 @@ int wxBookCtrlBase::DoSetSelection(size_t n, int flags)
                 DoShowPage(DoGetNonNullPage(oldSel), false);
 
             wxWindow* const page = DoGetNonNullPage(n);
-            page->SetSize(GetPageRect());
-            DoShowPage(page, true);
+            if ( page )
+            {
+                page->SetSize(GetPageRect());
+                DoShowPage(page, true);
+			}
 
             // change selection now to ignore the selection change event
             m_selection = n;
