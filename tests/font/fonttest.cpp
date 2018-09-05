@@ -145,6 +145,35 @@ TEST_CASE("wxFont::Size", "[font][size]")
     }
 }
 
+TEST_CASE("wxFont::Weight", "[font][weight]")
+{
+#if WXWIN_COMPATIBILITY_3_0
+    // Disable the warning about deprecated wxNORMAL as we use it here
+    // intentionally.
+    #ifdef __VISUALC__
+        #pragma warning(push)
+        #pragma warning(disable:4996)
+    #endif
+
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
+    wxFont fontNormal(10, wxDEFAULT, wxNORMAL, wxNORMAL);
+    CHECK( fontNormal.GetWeight() == wxFONTWEIGHT_NORMAL );
+
+    wxFont fontBold(10, wxDEFAULT, wxNORMAL, wxBOLD);
+    CHECK( fontBold.GetWeight() == wxFONTWEIGHT_BOLD );
+
+    wxFont fontLight(10, wxDEFAULT, wxNORMAL, wxLIGHT);
+    CHECK( fontLight.GetWeight() == wxFONTWEIGHT_LIGHT );
+
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
+
+    #ifdef __VISUALC__
+        #pragma warning(pop)
+    #endif
+#endif // WXWIN_COMPATIBILITY_3_0
+}
+
 TEST_CASE("wxFont::GetSet", "[font][getters]")
 {
     unsigned numFonts;
