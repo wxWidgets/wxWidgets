@@ -21,8 +21,6 @@
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
-#if wxUSE_FONTMAP
-
 #include "wx/font.h"
 
 #include "asserthelper.h"
@@ -336,5 +334,3 @@ void FontTestCase::NativeFontInfoUserDesc()
 #endif
     }
 }
-
-#endif // wxUSE_FONTMAP
