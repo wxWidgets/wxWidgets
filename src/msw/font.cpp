@@ -176,7 +176,7 @@ public:
     // ... and setters: notice that all of them invalidate the currently
     // allocated HFONT, if any, so that the next call to GetHFONT() recreates a
     // new one
-    void SetPointSize(float pointSize)
+    void SetFractionalPointSize(float pointSize)
     {
         Free();
 
@@ -357,9 +357,15 @@ void wxFontRefData::Init(int pointSize,
 
     m_sizeUsingPixels = sizeUsingPixels;
     if ( m_sizeUsingPixels )
-        SetPixelSize(pixelSize);
+    {
+        m_nativeFontInfo.SetPixelSize(pixelSize);
+    }
     else
-        SetPointSize(pointSize == -1 ? wxNORMAL_FONT->GetPointSize() : pointSize);
+    {
+        m_nativeFontInfo.SetPointSize(pointSize == -1
+                                        ? wxNORMAL_FONT->GetPointSize()
+                                        : pointSize);
+    }
 
     SetStyle(style);
     m_nativeFontInfo.SetWeight(weight);
@@ -877,12 +883,12 @@ bool wxFont::IsFree() const
 // change font attribute: we recreate font when doing it
 // ----------------------------------------------------------------------------
 
-void wxFont::SetPointSize(float pointSize)
+void wxFont::SetFractionalPointSize(float pointSize)
 {
     AllocExclusive();
 
     M_FONTDATA->Free();
-    M_FONTDATA->SetPointSize(pointSize);
+    M_FONTDATA->SetFractionalPointSize(pointSize);
 }
 
 void wxFont::SetPixelSize(const wxSize& pixelSize)

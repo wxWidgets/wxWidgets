@@ -45,6 +45,8 @@
 
 #include "wx/tokenzr.h"
 
+#include <float.h>      // for FLT_MAX
+
 // debugger helper: this function can be called from a debugger to show what
 // the date really is
 extern const char *wxDumpFont(const wxFont *font)
@@ -304,6 +306,14 @@ wxFontWeight wxFontBase::GetWeight() const
 bool wxFontBase::IsUsingSizeInPixels() const
 {
     return false;
+}
+
+void wxFontBase::SetPointSize(int pointSize)
+{
+    wxCHECK_RET( pointSize >= 0 && static_cast<float>(pointSize) < FLT_MAX,
+                 "Invalid font point size" );
+
+    SetFractionalPointSize(static_cast<float>(pointSize));
 }
 
 void wxFontBase::SetPixelSize( const wxSize& pixelSize )

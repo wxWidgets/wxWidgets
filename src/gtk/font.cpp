@@ -65,7 +65,7 @@ public:
 
     // setters: all of them also take care to modify m_nativeFontInfo if we
     // have it so as to not lose the information not carried by our fields
-    void SetPointSize(float pointSize);
+    void SetFractionalPointSize(float pointSize);
     void SetFamily(wxFontFamily family);
     void SetStyle(wxFontStyle style);
     void SetWeight(wxFontWeight weight);
@@ -133,7 +133,8 @@ void wxFontRefData::Init(int pointSize,
     }
 
     SetStyle( style );
-    SetPointSize( pointSize == -1 ? wxDEFAULT_FONT_SIZE : pointSize );
+    m_nativeFontInfo.SetPointSize( pointSize == -1 ? wxDEFAULT_FONT_SIZE
+                                                   : pointSize );
     SetWeight( weight );
     SetUnderlined( underlined );
     SetStrikethrough( strikethrough );
@@ -179,7 +180,7 @@ wxFontRefData::~wxFontRefData()
 // wxFontRefData SetXXX()
 // ----------------------------------------------------------------------------
 
-void wxFontRefData::SetPointSize(float pointSize)
+void wxFontRefData::SetFractionalPointSize(float pointSize)
 {
     m_nativeFontInfo.SetFractionalPointSize(pointSize);
 }
@@ -409,11 +410,11 @@ bool wxFont::IsFixedWidth() const
 // change font attributes
 // ----------------------------------------------------------------------------
 
-void wxFont::SetPointSize(float pointSize)
+void wxFont::SetFractionalPointSize(float pointSize)
 {
     AllocExclusive();
 
-    M_FONTDATA->SetPointSize(pointSize);
+    M_FONTDATA->SetFractionalPointSize(pointSize);
 }
 
 void wxFont::SetFamily(wxFontFamily family)

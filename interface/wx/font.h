@@ -1062,19 +1062,29 @@ public:
     void SetNativeFontInfo(const wxNativeFontInfo& info);
 
     /**
-        Sets the point size.
+        Sets the font size in points to an integer value.
+
+        This is a legacy version of the function only supporting integer point
+        sizes. It can still be used, but to avoid unnecessarily restricting the
+        font size in points to integer values, consider using the new (added in
+        wxWidgets 3.1.2) SetFractionalPointSize() function instead.
+     */
+    virtual void SetPointSize(int pointSize);
+
+    /**
+        Sets the font size in points.
 
         The <em>point size</em> is defined as 1/72 of the Anglo-Saxon inch
         (25.4 mm): it is approximately 0.0139 inch or 352.8 um.
 
         @param pointSize
             Size in points. This can also be a fractional point size like 11.5.
-            Note that until wxWidgets 3.1.2, the size had to be an integer number
-            (and the type of this parameter was @c int).
 
-        @see GetPointSize()
+        @see GetFractionalPointSize(), SetPointSize()
+
+        @since 3.1.2
     */
-    virtual void SetPointSize(float pointSize);
+    virtual void SetFractionalPointSize(float pointSize);
 
     /**
         Sets the pixel size.

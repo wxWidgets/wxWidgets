@@ -368,7 +368,8 @@ public:
     wxString GetNativeFontInfoUserDesc() const;
 
     // change the font characteristics
-    virtual void SetPointSize( float pointSize ) = 0;
+    virtual void SetPointSize( int pointSize );
+    virtual void SetFractionalPointSize( float pointSize ) = 0;
     virtual void SetPixelSize( const wxSize& pixelSize );
     virtual void SetFamily( wxFontFamily family ) = 0;
     virtual void SetStyle( wxFontStyle style ) = 0;

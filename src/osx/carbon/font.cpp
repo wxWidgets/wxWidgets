@@ -92,7 +92,7 @@ public:
 
     const wxNativeFontInfo& GetNativeFontInfo() const;
 
-    void SetPointSize(float size)
+    void SetFractionalPointSize(float size)
     {
         if (GetFractionalPointSize() != size)
         {
@@ -300,7 +300,8 @@ void wxFontRefData::Init(float size,
         SetFaceName(faceName);
     else
         SetFamily(family);
-    SetPointSize(size < 0 ? wxNORMAL_FONT->GetFractionalPointSize() : size);
+
+    SetFractionalPointSize(size < 0 ? wxNORMAL_FONT->GetFractionalPointSize() : size);
     SetNumericWeight(weight);
     SetStyle(style);
     SetUnderlined(underlined);
@@ -613,14 +614,11 @@ wxGDIRefData* wxFont::CloneGDIRefData(const wxGDIRefData* data) const
     return new wxFontRefData(*static_cast<const wxFontRefData*>(data));
 }
 
-void wxFont::SetPointSize(float pointSize)
+void wxFont::SetFractionalPointSize(float pointSize)
 {
-    if (IsOk() && M_FONTDATA->GetFractionalPointSize() == pointSize)
-        return;
-
     AllocExclusive();
 
-    M_FONTDATA->SetPointSize(pointSize);
+    M_FONTDATA->SetFractionalPointSize(pointSize);
 }
 
 void wxFont::SetFamily(wxFontFamily family)

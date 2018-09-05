@@ -74,7 +74,7 @@ public:
     virtual const wxNativeFontInfo *GetNativeFontInfo() const wxOVERRIDE;
     virtual bool IsFixedWidth() const wxOVERRIDE;
 
-    virtual void SetPointSize(float pointSize) wxOVERRIDE;
+    virtual void SetFractionalPointSize(float pointSize) wxOVERRIDE;
     virtual void SetFamily(wxFontFamily family) wxOVERRIDE;
     virtual void SetStyle(wxFontStyle style) wxOVERRIDE;
     virtual void SetNumericWeight(int weight) wxOVERRIDE;

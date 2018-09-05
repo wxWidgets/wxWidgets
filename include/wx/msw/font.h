@@ -96,7 +96,7 @@ public:
     virtual wxFontEncoding GetEncoding() const wxOVERRIDE;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const wxOVERRIDE;
 
-    virtual void SetPointSize(float pointSize) wxOVERRIDE;
+    virtual void SetFractionalPointSize(float pointSize) wxOVERRIDE;
     virtual void SetPixelSize(const wxSize& pixelSize) wxOVERRIDE;
     virtual void SetFamily(wxFontFamily family) wxOVERRIDE;
     virtual void SetStyle(wxFontStyle style) wxOVERRIDE;
