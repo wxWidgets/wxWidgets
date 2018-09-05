@@ -105,6 +105,46 @@ TEST_CASE("wxFont::Construct", "[font][ctor]")
 #endif // WXWIN_COMPATIBILITY_3_0
 }
 
+TEST_CASE("wxFont::Size", "[font][size]")
+{
+    const struct Sizes
+    {
+        int specified;      // Size in points specified in the ctor.
+        int expected;       // Expected GetPointSize() return value,
+                            // -1 here means "same as wxNORMAL_FONT".
+    } sizes[] =
+    {
+        {  9,  9 },
+        { 10, 10 },
+        { 11, 11 },
+        { -1, -1 },
+        { 70, -1 }, // 70 == wxDEFAULT, should be handled specially
+        { 90, 90 }, // 90 == wxNORMAL, should not be handled specially
+    };
+
+    const int sizeDefault = wxFont(wxFontInfo()).GetPointSize();
+
+    for ( size_t n = 0; n < WXSIZEOF(sizes); n++ )
+    {
+        const Sizes& size = sizes[n];
+
+        // Note: use the old-style wxFont ctor as wxFontInfo doesn't implement
+        // any compatibility hacks.
+        const wxFont font(size.specified,
+                          wxFONTFAMILY_DEFAULT,
+                          wxFONTSTYLE_NORMAL,
+                          wxFONTWEIGHT_NORMAL);
+
+        int expected = size.expected;
+        if ( expected == -1 )
+            expected = sizeDefault;
+
+        INFO("specified = " << size.specified <<
+             ", expected = " << size.expected);
+        CHECK( font.GetPointSize() == expected );
+    }
+}
+
 TEST_CASE("wxFont::GetSet", "[font][getters]")
 {
     unsigned numFonts;
