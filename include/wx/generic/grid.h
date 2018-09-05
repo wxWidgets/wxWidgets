@@ -326,10 +326,10 @@ protected:
 // ----------------------------------------------------------------------------
 
 // Base class for header cells renderers.
-class WXDLLIMPEXP_CORE wxGridHeaderCellRenderer
+class WXDLLIMPEXP_CORE wxGridHeaderLabelsRenderer
 {
 public:
-    virtual ~wxGridHeaderCellRenderer() {}
+    virtual ~wxGridHeaderLabelsRenderer() {}
 
     // Draw the border around cell window.
     virtual void DrawBorder(const wxGrid& grid,
@@ -347,21 +347,21 @@ public:
 };
 
 // Currently the row/column/corner renders don't need any methods other than
-// those already in wxGridHeaderCellRenderer but still define separate classes
+// those already in wxGridHeaderLabelsRenderer but still define separate classes
 // for them for future extensions and also for better type safety (i.e. to
 // avoid inadvertently using a column header renderer for the row headers)
 class WXDLLIMPEXP_CORE wxGridRowHeaderRenderer
-    : public wxGridHeaderCellRenderer
+    : public wxGridHeaderLabelsRenderer
 {
 };
 
 class WXDLLIMPEXP_CORE wxGridColumnHeaderRenderer
-    : public wxGridHeaderCellRenderer
+    : public wxGridHeaderLabelsRenderer
 {
 };
 
 class WXDLLIMPEXP_CORE wxGridCornerHeaderRenderer
-    : public wxGridHeaderCellRenderer
+    : public wxGridHeaderLabelsRenderer
 {
 };
 

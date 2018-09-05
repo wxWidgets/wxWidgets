@@ -1019,7 +1019,7 @@ protected:
 
     @since 2.9.1
  */
-class wxGridHeaderCellRenderer
+class wxGridHeaderLabelsRenderer
 {
 public:
     /**
@@ -1063,7 +1063,7 @@ public:
 /**
     Base class for row headers renderer.
 
-    This is the same as wxGridHeaderCellRenderer currently but we still use a
+    This is the same as wxGridHeaderLabelsRenderer currently but we still use a
     separate class for it to distinguish it from wxGridColumnHeaderRenderer
     and wxGridCornerHeaderRenderer.
 
@@ -1073,14 +1073,14 @@ public:
 
     @since 2.9.1
  */
-class wxGridRowHeaderRenderer : public wxGridHeaderCellRenderer
+class wxGridRowHeaderRenderer : public wxGridHeaderLabelsRenderer
 {
 };
 
 /**
     Base class for column headers renderer.
 
-    This is the same as wxGridHeaderCellRenderer currently but we still use a
+    This is the same as wxGridHeaderLabelsRenderer currently but we still use a
     separate class for it to distinguish it from wxGridRowHeaderRenderer and
     wxGridCornerHeaderRenderer.
 
@@ -1090,14 +1090,14 @@ class wxGridRowHeaderRenderer : public wxGridHeaderCellRenderer
 
     @since 2.9.1
  */
-class wxGridColumnHeaderRenderer : public wxGridHeaderCellRenderer
+class wxGridColumnHeaderRenderer : public wxGridHeaderLabelsRenderer
 {
 };
 
 /**
     Base class for corner header renderer.
 
-    This is the same as wxGridHeaderCellRenderer currently but we still use a
+    This is the same as wxGridHeaderLabelsRenderer currently but we still use a
     separate class for it to distinguish it from wxGridRowHeaderRenderer and
     wxGridColumnHeaderRenderer.
 
@@ -1107,7 +1107,7 @@ class wxGridColumnHeaderRenderer : public wxGridHeaderCellRenderer
 
     @since 2.9.1
  */
-class wxGridCornerHeaderRenderer : public wxGridHeaderCellRenderer
+class wxGridCornerHeaderRenderer : public wxGridHeaderLabelsRenderer
 {
 };
 

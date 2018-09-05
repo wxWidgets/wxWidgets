@@ -216,10 +216,10 @@ wxGridCellWorker::~wxGridCellWorker()
 }
 
 // ----------------------------------------------------------------------------
-// wxGridHeaderCellRenderer and related classes
+// wxGridHeaderLabelsRenderer and related classes
 // ----------------------------------------------------------------------------
 
-void wxGridHeaderCellRenderer::DrawLabel(const wxGrid& grid,
+void wxGridHeaderLabelsRenderer::DrawLabel(const wxGrid& grid,
                                          wxDC& dc,
                                          const wxString& value,
                                          const wxRect& rect,
