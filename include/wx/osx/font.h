@@ -122,7 +122,6 @@ public:
     virtual float GetFractionalPointSize() const wxOVERRIDE;
     virtual wxSize GetPixelSize() const wxOVERRIDE;
     virtual wxFontStyle GetStyle() const wxOVERRIDE;
-    virtual wxFontWeight GetWeight() const wxOVERRIDE;
     virtual int GetNumericWeight() const wxOVERRIDE;
     virtual bool GetUnderlined() const wxOVERRIDE;
     virtual bool GetStrikethrough() const wxOVERRIDE;
@@ -135,7 +134,6 @@ public:
     virtual void SetPointSize(float pointSize) wxOVERRIDE;
     virtual void SetFamily(wxFontFamily family) wxOVERRIDE;
     virtual void SetStyle(wxFontStyle style) wxOVERRIDE;
-    virtual void SetWeight(wxFontWeight weight) wxOVERRIDE;
     virtual void SetNumericWeight(int weight) wxOVERRIDE;
     virtual bool SetFaceName(const wxString& faceName) wxOVERRIDE;
     virtual void SetUnderlined(bool underlined) wxOVERRIDE;

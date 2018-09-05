@@ -352,7 +352,6 @@ public:
     virtual bool IsUsingSizeInPixels() const;
     wxFontFamily GetFamily() const;
     virtual wxFontStyle GetStyle() const = 0;
-    virtual wxFontWeight GetWeight() const = 0;
     virtual int GetNumericWeight() const = 0;
     virtual bool GetUnderlined() const = 0;
     virtual bool GetStrikethrough() const { return false; }
@@ -360,6 +359,9 @@ public:
     virtual wxFontEncoding GetEncoding() const = 0;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const = 0;
 
+    // Accessors that can be overridden in the platform-specific code but for
+    // which we provide a reasonable default implementation in the base class.
+    virtual wxFontWeight GetWeight() const;
     virtual bool IsFixedWidth() const;
 
     wxString GetNativeFontInfoDesc() const;
@@ -370,7 +372,6 @@ public:
     virtual void SetPixelSize( const wxSize& pixelSize );
     virtual void SetFamily( wxFontFamily family ) = 0;
     virtual void SetStyle( wxFontStyle style ) = 0;
-    virtual void SetWeight( wxFontWeight weight ) = 0;
     virtual void SetNumericWeight( int weight ) = 0;
 
     virtual void SetUnderlined( bool underlined ) = 0;
@@ -379,6 +380,10 @@ public:
     virtual bool SetFaceName( const wxString& faceName );
     void SetNativeFontInfo(const wxNativeFontInfo& info)
         { DoSetNativeFontInfo(info); }
+
+    // Similarly to the accessors above, the functions in this group have a
+    // reasonable default implementation in the base class.
+    virtual void SetWeight( wxFontWeight weight );
 
     bool SetNativeFontInfo(const wxString& info);
     bool SetNativeFontInfoUserDesc(const wxString& info);
@@ -412,6 +417,14 @@ public:
     wxDEPRECATED_INLINE(void SetNoAntiAliasing(bool no = true), wxUnusedVar(no);)
     wxDEPRECATED_INLINE(bool GetNoAntiAliasing() const, return false;)
 #endif // WXWIN_COMPATIBILITY_2_8
+
+    wxDEPRECATED_MSG("use wxFONTWEIGHT_XXX constants instead of raw values")
+    void SetWeight(int weight)
+        { SetWeight(static_cast<wxFontWeight>(weight)); }
+
+    wxDEPRECATED_MSG("use wxFONTWEIGHT_XXX constants instead of wxLIGHT/wxNORMAL/wxBOLD")
+    void SetWeight(wxDeprecatedGUIConstants weight)
+        { SetWeight(static_cast<wxFontWeight>(weight)); }
 
     // from the font components
     wxDEPRECATED_MSG("use wxFONT{FAMILY,STYLE,WEIGHT}_XXX constants")
@@ -500,18 +513,12 @@ WXDLLIMPEXP_CORE bool wxFromString(const wxString& str, wxFontBase* font);
     wxDEPRECATED_MSG("use wxFONTSTYLE_XXX constants") \
     void SetStyle(int style) \
         { SetStyle((wxFontStyle)style); } \
-    wxDEPRECATED_MSG("use wxFONTWEIGHT_XXX constants") \
-    void SetWeight(int weight) \
-        { SetWeight((wxFontWeight)weight); } \
     wxDEPRECATED_MSG("use wxFONTFAMILY_XXX constants") \
     void SetFamily(wxDeprecatedGUIConstants family) \
         { SetFamily((wxFontFamily)family); } \
     wxDEPRECATED_MSG("use wxFONTSTYLE_XXX constants") \
     void SetStyle(wxDeprecatedGUIConstants style) \
         { SetStyle((wxFontStyle)style); } \
-    wxDEPRECATED_MSG("use wxFONTWEIGHT_XXX constants") \
-    void SetWeight(wxDeprecatedGUIConstants weight) \
-        { SetWeight((wxFontWeight)weight); } \
  \
     /* functions for modifying font in place */ \
     wxFont& MakeBold(); \

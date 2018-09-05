@@ -123,11 +123,6 @@ public:
         return m_nativeFontInfo.GetStyle();
     }
 
-    wxFontWeight GetWeight() const
-    {
-        return m_nativeFontInfo.GetWeight();
-    }
-
     int GetNumericWeight() const
     {
         return m_nativeFontInfo.GetNumericWeight();
@@ -212,13 +207,6 @@ public:
         Free();
 
         m_nativeFontInfo.SetStyle(style);
-    }
-
-    void SetWeight(wxFontWeight weight)
-    {
-        Free();
-
-        m_nativeFontInfo.SetWeight(weight);
     }
 
     void SetNumericWeight(int weight)
@@ -374,7 +362,7 @@ void wxFontRefData::Init(int pointSize,
         SetPointSize(pointSize == -1 ? wxNORMAL_FONT->GetPointSize() : pointSize);
 
     SetStyle(style);
-    SetWeight(weight);
+    m_nativeFontInfo.SetWeight(weight);
     SetUnderlined(underlined);
     SetStrikethrough(strikethrough);
 
@@ -929,13 +917,6 @@ void wxFont::SetStyle(wxFontStyle style)
     M_FONTDATA->SetStyle(style);
 }
 
-void wxFont::SetWeight(wxFontWeight weight)
-{
-    AllocExclusive();
-
-    M_FONTDATA->SetWeight(weight);
-}
-
 void wxFont::SetNumericWeight(int weight)
 {
     AllocExclusive();
@@ -1023,13 +1004,6 @@ wxFontStyle wxFont::GetStyle() const
     wxCHECK_MSG( IsOk(), wxFONTSTYLE_MAX, wxT("invalid font") );
 
     return M_FONTDATA->GetStyle();
-}
-
-wxFontWeight wxFont::GetWeight() const
-{
-    wxCHECK_MSG( IsOk(), wxFONTWEIGHT_MAX, "invalid font" );
-
-    return M_FONTDATA->GetWeight();
 }
 
 int wxFont::GetNumericWeight() const

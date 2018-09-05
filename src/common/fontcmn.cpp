@@ -294,6 +294,13 @@ wxSize wxFontBase::GetPixelSize() const
     return wxSize(dc.GetCharWidth(), dc.GetCharHeight());
 }
 
+wxFontWeight wxFontBase::GetWeight() const
+{
+    wxCHECK_MSG( IsOk(), wxFONTWEIGHT_MAX, "invalid font" );
+
+    return GetWeightClosestToNumericValue(GetNumericWeight());
+}
+
 bool wxFontBase::IsUsingSizeInPixels() const
 {
     return false;
@@ -360,6 +367,11 @@ void wxFontBase::SetPixelSize( const wxSize& pixelSize )
 
     if (currentSize != largestGood)
         SetPointSize(largestGood);
+}
+
+void wxFontBase::SetWeight(wxFontWeight weight)
+{
+    SetNumericWeight(GetNumericWeightOf(weight));
 }
 
 void wxFontBase::DoSetNativeFontInfo(const wxNativeFontInfo& info)
