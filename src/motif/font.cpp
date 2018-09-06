@@ -178,17 +178,10 @@ void wxFontRefData::Init(int pointSize,
 
     m_faceName = faceName;
 
-    if (style == wxDEFAULT)
-        m_style = wxFONTSTYLE_NORMAL;
-    else
-        m_style = style;
+    m_style = style;
+    m_weight = weight;
 
-    if (weight == wxDEFAULT)
-        m_weight = wxFONTWEIGHT_NORMAL;
-    else
-        m_weight = weight;
-
-    if (pointSize == wxDEFAULT)
+    if (pointSize == -1)
         m_pointSize = 12;
     else
         m_pointSize = pointSize;
@@ -229,6 +222,9 @@ bool wxFont::Create(int pointSize,
                     wxFontEncoding encoding)
 {
     UnRef();
+
+    AccountForCompatValues(pointSize, style, weight);
+
     m_refData = new wxFontRefData(pointSize, family, style, weight,
                                   underlined, faceName, encoding);
 

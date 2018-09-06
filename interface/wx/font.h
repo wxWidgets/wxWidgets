@@ -503,7 +503,10 @@ public:
             historical reasons, the value 70 here is interpreted at @c
             wxDEFAULT and results in creation of the font with the default size
             and not of a font with the size of 70pt. If you really need the
-            latter, please use SetPointSize(70).
+            latter, please use SetPointSize(70). Note that this constructor and
+            the matching Create() method overload are the only places in wxFont
+            API handling @c wxDEFAULT specially: neither SetPointSize() nor the
+            constructor taking wxFontInfo handle this value in this way.
         @param family
             The font family: a generic portable way of referring to fonts without specifying a
             facename. This parameter must be one of the ::wxFontFamily enumeration values.

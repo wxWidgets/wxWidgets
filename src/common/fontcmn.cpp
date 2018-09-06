@@ -558,6 +558,24 @@ bool wxFontBase::SetFaceName(const wxString& facename)
     return true;
 }
 
+/* static */
+void wxFontBase::AccountForCompatValues(int& pointSize,
+                                        wxFontStyle& style,
+                                        wxFontWeight& weight)
+{
+    // Old code specifies wxDEFAULT instead of -1 or wxNORMAL instead of the
+    // new type-safe wxFONTSTYLE_NORMAL or wxFONTWEIGHT_NORMAL, continue
+    // handling this for compatibility.
+    if ( pointSize == wxDEFAULT )
+        pointSize = -1;
+
+    if ( static_cast<int>(style) == wxDEFAULT )
+        style = wxFONTSTYLE_NORMAL;
+
+    if ( static_cast<int>(weight) == wxDEFAULT )
+        weight = wxFONTWEIGHT_NORMAL;
+}
+
 void wxFontBase::SetSymbolicSize(wxFontSymbolicSize size)
 {
     SetSymbolicSizeRelativeTo(size, wxNORMAL_FONT->GetPointSize());

@@ -187,6 +187,9 @@ bool wxFont::Create(wxSize size, wxFontFamily family, wxFontStyle style,
         wxFontWeight weight, bool underlined, const wxString& face,
         wxFontEncoding WXUNUSED(encoding) )
 {
+    int pointSize = size.GetHeight();
+    AccountForCompatValues(pointSize, style, weight);
+
     if (!face.empty())
         M_FONTDATA.SetFaceName(face);
     else
@@ -195,7 +198,7 @@ bool wxFont::Create(wxSize size, wxFontFamily family, wxFontStyle style,
     M_FONTDATA.SetStyle(style);
     M_FONTDATA.SetWeight(weight);
     M_FONTDATA.SetUnderlined(underlined);
-    M_FONTDATA.SetPointSize(size.GetHeight());
+    M_FONTDATA.SetPointSize(pointSize);
 
     return true;
 }

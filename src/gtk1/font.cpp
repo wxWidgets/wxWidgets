@@ -147,15 +147,10 @@ void wxFontRefData::Init(int pointSize,
 
     m_faceName = faceName;
 
-    // we accept both wxDEFAULT and wxNORMAL here - should we?
-    m_style = style == wxDEFAULT ? wxFONTSTYLE_NORMAL : style;
-    m_weight = weight == wxDEFAULT ? wxFONTWEIGHT_NORMAL : weight;
+    m_style = style;
+    m_weight = weight;
 
-    // and here, do we really want to forbid creation of the font of the size
-    // 90 (the value of wxDEFAULT)??
-    m_pointSize = pointSize == wxDEFAULT || pointSize == -1
-                    ? wxDEFAULT_FONT_SIZE
-                    : pointSize;
+    m_pointSize = pointSize == -1 ? wxDEFAULT_FONT_SIZE : pointSize;
 
     m_underlined = underlined;
     m_encoding = encoding;
@@ -464,6 +459,8 @@ bool wxFont::Create( int pointSize,
                      wxFontEncoding encoding)
 {
     UnRef();
+
+    AccountForCompatValues(pointSize, style, weight);
 
     m_refData = new wxFontRefData(pointSize, family, style, weight,
                                   underlined, face, encoding);

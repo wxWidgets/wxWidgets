@@ -115,18 +115,6 @@ void wxFontRefData::Init(int pointSize,
                          const wxString& faceName,
                          wxFontEncoding WXUNUSED(encoding))
 {
-    // Old code could wrongly specify wxDEFAULT instead of -1 or wxNORMAL or,
-    // preferably, wxFONTSTYLE_NORMAL or wxFONTWEIGHT_NORMAL, continue handling
-    // this for compatibility.
-    if ( pointSize == wxDEFAULT )
-        pointSize = -1;
-
-    if ( static_cast<int>(style) == wxDEFAULT )
-        style = wxFONTSTYLE_NORMAL;
-
-    if ( static_cast<int>(weight) == wxDEFAULT )
-        weight = wxFONTWEIGHT_NORMAL;
-
     if (family == wxFONTFAMILY_DEFAULT)
         family = wxFONTFAMILY_SWISS;
 
@@ -316,6 +304,8 @@ bool wxFont::Create( int pointSize,
                      wxFontEncoding encoding )
 {
     UnRef();
+
+    AccountForCompatValues(pointSize, style, weight);
 
     m_refData = new wxFontRefData(pointSize, family, style, weight,
                                   underlined, false, face, encoding);

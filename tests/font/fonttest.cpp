@@ -143,6 +143,11 @@ TEST_CASE("wxFont::Size", "[font][size]")
              ", expected = " << size.expected);
         CHECK( font.GetPointSize() == expected );
     }
+
+    // Note that the compatibility hacks only apply to the old ctors, the newer
+    // one, taking wxFontInfo, doesn't support them.
+    CHECK( wxFont(wxFontInfo(70)).GetPointSize() == 70 );
+    CHECK( wxFont(wxFontInfo(90)).GetPointSize() == 90 );
 }
 
 TEST_CASE("wxFont::Style", "[font][style]")

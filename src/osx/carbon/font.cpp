@@ -575,10 +575,7 @@ bool wxFont::Create(int pointSize,
     const wxString& faceName,
     wxFontEncoding encoding)
 {
-    // wxDEFAULT is a valid value for the font size too so we must treat it
-    // specially here (otherwise the size would be 70 == wxDEFAULT value)
-    if (pointSize == wxDEFAULT)
-        pointSize = -1;
+    AccountForCompatValues(pointSize, style, weight);
 
     return Create((float)pointSize, family, style, weight, underlined, faceName, encoding);
 }

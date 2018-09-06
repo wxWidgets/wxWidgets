@@ -817,12 +817,7 @@ bool wxFont::DoCreate(int pointSize,
 {
     UnRef();
 
-    // wxDEFAULT is a valid value for the font size too so we must treat it
-    // specially here (otherwise the size would be 70 == wxDEFAULT value)
-    if ( pointSize == wxDEFAULT )
-    {
-        pointSize = wxNORMAL_FONT->GetPointSize();
-    }
+    AccountForCompatValues(pointSize, style, weight);
 
     m_refData = new wxFontRefData(pointSize, pixelSize, sizeUsingPixels,
                                   family, style, weight,

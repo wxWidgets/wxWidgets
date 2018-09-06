@@ -492,6 +492,14 @@ protected:
         return (flags & wxFONTFLAG_STRIKETHROUGH) != 0;
     }
 
+    // For compatibility reasons, we continue to accept wxDEFAULT as meaning
+    // "default font size" and wxNORMAL and similar deprecated constants
+    // instead of wxFONT{WEIGHT,STYLE}_NORMAL. This function modifies its
+    // parameters to account for this if necessary.
+    static void AccountForCompatValues(int& pointSize,
+                                       wxFontStyle& style,
+                                       wxFontWeight& weight);
+
 private:
     // the currently default encoding: by default, it's the default system
     // encoding, but may be changed by the application using
