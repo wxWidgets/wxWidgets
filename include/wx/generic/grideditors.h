@@ -373,6 +373,41 @@ public:
     wxDECLARE_NO_COPY_CLASS(wxGridCellAutoWrapStringEditor);
 };
 
+#if wxUSE_DATEPICKCTRL
+
+class WXDLLIMPEXP_ADV wxGridCellDateEditor : public wxGridCellEditor
+{
+public:
+    wxGridCellDateEditor() { }
+
+    virtual void Create(wxWindow* parent,
+                        wxWindowID id,
+                        wxEvtHandler* evtHandler) wxOVERRIDE;
+
+    virtual void SetSize(const wxRect& rect) wxOVERRIDE;
+
+    virtual void BeginEdit(int row, int col, wxGrid* grid) wxOVERRIDE;
+    virtual bool EndEdit(int row, int col, const wxGrid* grid,
+                         const wxString& oldval, wxString *newval) wxOVERRIDE;
+    virtual void ApplyEdit(int row, int col, wxGrid* grid) wxOVERRIDE;
+
+    virtual void Reset() wxOVERRIDE;
+
+    virtual wxGridCellEditor *Clone() const wxOVERRIDE;
+
+    virtual wxString GetValue() const wxOVERRIDE;
+
+protected:
+    wxDatePickerCtrl* DatePicker() const;
+
+private:
+    wxDateTime m_value;
+
+    wxDECLARE_NO_COPY_CLASS(wxGridCellDateEditor);
+};
+
+#endif // wxUSE_DATEPICKCTRL
+
 #endif // wxUSE_GRID
 
 #endif // _WX_GENERIC_GRID_EDITORS_H_
