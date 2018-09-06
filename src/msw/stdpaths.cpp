@@ -265,6 +265,7 @@ void wxStandardPaths::IgnoreAppBuildSubDirs()
     // as well
 #ifdef __WIN64__
     IgnoreAppSubDir("x64");
+    IgnoreAppSubDir("ARM64");
 #else // __WIN32__
     IgnoreAppSubDir("Win32");
 #endif // __WIN64__/__WIN32__
