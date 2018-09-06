@@ -121,6 +121,7 @@ All (GUI):
 - Fix wxInfoBar close button size in high DPI (Stefan Ziegler).
 - Make disabling the window before creating it actually work.
 - Implement wxAuiNotebook::GetBestSize() (Sebastian Walderich).
+- Add support for editing dates (without time) to wxGrid (Pavel Kalugin).
 - Allow changing tooltip text for button allowing to enter a new string
   in wxPGArrayEditorDialog.
 
