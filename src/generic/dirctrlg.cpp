@@ -45,6 +45,8 @@
 #include "wx/dir.h"
 #include "wx/artprov.h"
 #include "wx/mimetype.h"
+#include "wx/scopeguard.h"
+#include "wx/menu.h"
 
 #if wxUSE_STATLINE
     #include "wx/statline.h"
@@ -91,8 +93,10 @@ bool wxIsDriveAvailable(const wxString& dirName);
 // events
 // ----------------------------------------------------------------------------
 
-wxDEFINE_EVENT( wxEVT_DIRCTRL_SELECTIONCHANGED, wxTreeEvent );
-wxDEFINE_EVENT( wxEVT_DIRCTRL_FILEACTIVATED, wxTreeEvent );
+wxDEFINE_EVENT( wxEVT_DIRCTRL_SELECTIONCHANGED,   wxTreeEvent );
+wxDEFINE_EVENT( wxEVT_DIRCTRL_FILEACTIVATED,      wxTreeEvent );
+wxDEFINE_EVENT( wxEVT_DIRCTRL_NODE_EXPANDED,      wxCommandEvent);
+wxDEFINE_EVENT( wxEVT_DIRCTRL_SHOWING_POPUP_MENU, wxCommandEvent);
 
 // ----------------------------------------------------------------------------
 // wxGetAvailableDrives, for WINDOWS, OSX, UNIX (returns "/")
@@ -267,14 +271,61 @@ bool wxIsDriveAvailable(const wxString& dirName)
 #endif // wxUSE_DIRDLG || wxUSE_FILEDLG
 
 
+// ----------------------------------------------------------------------------
+// wxDirSortingItem
+// Used by PopulateNode() to allow sorting directories and files by either
+// name or date
+// ----------------------------------------------------------------------------
+
+class wxDirSortingItem
+{
+public:
+    wxDirSortingItem(const wxString& lab, const wxDateTime& dt, wxDirSortingItemSortFunction compareFunc)
+        : label(lab),
+        dateTime(dt),
+        m_compareFunc(compareFunc)
+    {}
+
+    bool operator <(const wxDirSortingItem &rhs) const
+    {
+        if (m_compareFunc)
+        {
+            return m_compareFunc(*this, rhs);
+        }
+        else
+        {
+            return label.CmpNoCase(rhs.label) < 0;
+        }
+    }
+
+    wxString   label;
+    wxDateTime dateTime;
+
+    wxDirSortingItemSortFunction m_compareFunc;
+};
+
+
 
 #if wxUSE_DIRDLG
 
-// Function which is called by quick sort. We want to override the default wxArrayString behaviour,
-// and sort regardless of case.
-static int wxCMPFUNC_CONV wxDirCtrlStringCompareFunction(const wxString& strFirst, const wxString& strSecond)
+bool wxDirSortedItemsNameCompare(const wxDirSortingItem& first, const wxDirSortingItem& second)
 {
-    return strFirst.CmpNoCase(strSecond);
+    return first.label.CmpNoCase(second.label) < 0;
+}
+
+bool wxDirSortedItemsNameCompareReverse(const wxDirSortingItem& first, const wxDirSortingItem& second)
+{
+    return first.label.CmpNoCase(second.label) > 0;
+}
+
+bool wxDirSortedItemsDateCompare(const wxDirSortingItem& first, const wxDirSortingItem& second)
+{
+    return first.dateTime < second.dateTime;
+}
+
+bool wxDirSortedItemsDateCompareReverse(const wxDirSortingItem& first, const wxDirSortingItem& second)
+{
+    return first.dateTime > second.dateTime;
 }
 
 //-----------------------------------------------------------------------------
@@ -283,16 +334,17 @@ static int wxCMPFUNC_CONV wxDirCtrlStringCompareFunction(const wxString& strFirs
 
 wxDirItemData::wxDirItemData(const wxString& path, const wxString& name,
                              bool isDir)
+: m_path(path),
+  m_name(name),
+  m_isHidden(false),
+  m_isExpanded(false),
+  m_isDir(isDir),
+  m_compareFunc(wxDirSortedItemsNameCompare)
 {
-    m_path = path;
-    m_name = name;
     /* Insert logic to detect hidden files here
-     * In UnixLand we just check whether the first char is a dot
-     * For FileNameFromPath read LastDirNameInThisPath ;-) */
+    * In UnixLand we just check whether the first char is a dot
+    * For FileNameFromPath read LastDirNameInThisPath ;-) */
     // m_isHidden = (bool)(wxFileNameFromPath(*m_path)[0] == '.');
-    m_isHidden = false;
-    m_isExpanded = false;
-    m_isDir = isDir;
 }
 
 void wxDirItemData::SetNewDirName(const wxString& path)
@@ -342,6 +394,7 @@ wxBEGIN_EVENT_TABLE(wxGenericDirCtrl, wxControl)
   EVT_TREE_END_LABEL_EDIT     (wxID_TREECTRL, wxGenericDirCtrl::OnEndEditItem)
   EVT_TREE_SEL_CHANGED        (wxID_TREECTRL, wxGenericDirCtrl::OnTreeSelChange)
   EVT_TREE_ITEM_ACTIVATED     (wxID_TREECTRL, wxGenericDirCtrl::OnItemActivated)
+  EVT_TREE_ITEM_RIGHT_CLICK   (wxID_TREECTRL, wxGenericDirCtrl::OnRightClick)
   EVT_SIZE                    (wxGenericDirCtrl::OnSize)
 wxEND_EVENT_TABLE()
 
@@ -389,6 +442,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     long treeStyle = wxTR_HAS_BUTTONS;
 
     treeStyle |= wxTR_HIDE_ROOT;
+    m_availableID = 1;
 
 #ifdef __WXGTK20__
     treeStyle |= wxTR_NO_LINES;
@@ -419,6 +473,17 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     if (m_filterListCtrl)
         m_filterListCtrl->FillFilterList(filter, defaultFilter);
+
+    // Did they ask for sorting by 
+    if ( style & (wxDIRCTRL_POPUP_MENU           |
+                  wxDIRCTRL_EDIT_LABELS           |
+                  wxDIRCTRL_POPUP_MENU_SORT_NAME |
+                  wxDIRCTRL_POPUP_MENU_SORT_DATE ))
+    {
+        Bind(wxID_TREECTRL, wxTreeEventHandler(wxGenericDirCtrl::OnRightClick), this, wxEVT_TREE_ITEM_MENU);
+    }
+
+
 
     // TODO: set the icon size according to current scaling for this window.
     // Currently, there's insufficient API in wxWidgets to determine what icons
@@ -655,7 +720,146 @@ void wxGenericDirCtrl::OnExpandItem(wxTreeEvent &event)
     ExpandDir(parentId);
 }
 
-void wxGenericDirCtrl::OnCollapseItem(wxTreeEvent &event )
+
+// Private: Used to add items to the right-click menu each time it's popped up.
+void wxGenericDirCtrl::AddPopupMenuItem(const wxString& label, void(wxGenericDirCtrl::*function)(wxCommandEvent &))
+{
+    if (!m_popUpMenu)
+        return;
+
+    int id = GetAvailableID();
+    m_popUpMenu->Append(id, label);
+    Bind(wxEVT_MENU, function, this, id);
+}
+
+
+// When a directory is right-clicked, we come here and build the wxMenu.
+// Using a copy of the style passed to the constructor, we can add the
+// right items to the menu.
+void wxGenericDirCtrl::HandleDirMenu()
+{
+    wxMenu menu;
+    m_popUpMenu = &menu;
+    wxON_BLOCK_EXIT_NULL(m_popUpMenu);
+
+    if (HasFlag(wxDIRCTRL_EDIT_LABELS))
+    {
+        AddPopupMenuItem("&Rename",                &wxGenericDirCtrl::MenuRename);
+    }
+
+    if (HasFlag(wxDIRCTRL_POPUP_MENU_SORT_NAME))
+    {
+        AddPopupMenuItem("Sort by &Name",          &wxGenericDirCtrl::MenuSortAlpha);
+        AddPopupMenuItem("Sort by Na&me reversed", &wxGenericDirCtrl::MenuSortNameReversed);
+    }
+
+    if (HasFlag(wxDIRCTRL_POPUP_MENU_SORT_DATE))
+    {
+        AddPopupMenuItem("Sort by &Date",          &wxGenericDirCtrl::MenuSortDate);
+        AddPopupMenuItem("Sort by Da&te reverse",  &wxGenericDirCtrl::MenuSortDateReversed);
+    }
+
+    wxCommandEvent event2(wxEVT_DIRCTRL_SHOWING_POPUP_MENU);
+    event2.SetString("Directory Menu");
+    GetEventHandler()->SafelyProcessEvent(event2);              // Create an event so that the parent is informed that the menu has
+                                                                // opened. Then the parent can add menu items if they want.
+    PopupMenu(m_popUpMenu);
+}
+
+
+void wxGenericDirCtrl::HandleFileMenu()
+{
+    wxMenu menu;
+    m_popUpMenu = &menu;
+    wxON_BLOCK_EXIT_NULL(m_popUpMenu);
+
+    if (HasFlag(wxDIRCTRL_EDIT_LABELS))
+    {
+        AddPopupMenuItem("&Rename", &wxGenericDirCtrl::MenuRename);
+    }
+
+    wxCommandEvent event2(wxEVT_DIRCTRL_SHOWING_POPUP_MENU);
+    event2.SetString("File Menu");
+
+    GetEventHandler()->SafelyProcessEvent(event2);
+
+    PopupMenu(m_popUpMenu);
+}
+
+// Decide whether a directory or a file has been clicked, and call
+// the right function to build the wxMenu.
+void wxGenericDirCtrl::OnRightClick(wxTreeEvent& event)
+{
+    m_popUpItemId = event.GetItem();
+    wxDirItemData *itemData = GetItemData(m_popUpItemId);
+    wxON_BLOCK_EXIT_SET(m_popUpItemId, wxTreeItemId());
+
+    if (wxEndsWithPathSeparator(itemData->m_path))     // If this is a directory
+    {
+        HandleDirMenu();
+    }
+    else
+    {
+        HandleFileMenu();
+    }
+}
+
+// The following Menu___() functions are bound to right-click popup menu items.
+void wxGenericDirCtrl::MenuRename(wxCommandEvent & evt)
+{
+    m_treeCtrl->EditLabel(m_popUpItemId);
+}
+
+void wxGenericDirCtrl::MenuSortAlpha(wxCommandEvent & evt)
+{
+    wxDirItemData *itemData = GetItemData(m_popUpItemId);
+
+    itemData->m_compareFunc = wxDirSortedItemsNameCompare;
+
+    CollapseDir(itemData->GetId());
+    ExpandDir(itemData->GetId());
+    m_treeCtrl->Expand(itemData->GetId());
+    m_treeCtrl->SelectItem(itemData->GetId());
+}
+
+void wxGenericDirCtrl::MenuSortNameReversed(wxCommandEvent & evt)
+{
+    wxDirItemData *itemData = GetItemData(m_popUpItemId);
+
+    itemData->m_compareFunc = wxDirSortedItemsNameCompareReverse;
+
+    CollapseDir(itemData->GetId());
+    ExpandDir(itemData->GetId());
+    m_treeCtrl->Expand(itemData->GetId());
+    m_treeCtrl->SelectItem(itemData->GetId());
+}
+
+
+void wxGenericDirCtrl::MenuSortDate(wxCommandEvent & evt)
+{
+    wxDirItemData *itemData = GetItemData(m_popUpItemId);
+
+    itemData->m_compareFunc = wxDirSortedItemsDateCompare;
+
+    CollapseDir(itemData->GetId());
+    ExpandDir(itemData->GetId());
+    m_treeCtrl->Expand(itemData->GetId());
+    m_treeCtrl->SelectItem(itemData->GetId());
+}
+
+void wxGenericDirCtrl::MenuSortDateReversed(wxCommandEvent & evt)
+{
+    wxDirItemData *itemData = GetItemData(m_popUpItemId);
+
+    itemData->m_compareFunc = wxDirSortedItemsDateCompareReverse;
+
+    CollapseDir(itemData->GetId());
+    ExpandDir(itemData->GetId());
+    m_treeCtrl->Expand(itemData->GetId());
+    m_treeCtrl->SelectItem(itemData->GetId());
+}
+
+void wxGenericDirCtrl::OnCollapseItem(wxTreeEvent &event)
 {
     CollapseDir(event.GetItem());
 }
@@ -717,14 +921,18 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
         dirName += wxString(wxFILE_SEP_PATH);
 #endif
 
-    wxArrayString dirs;
-    wxArrayString filenames;
+    // Get the directory names, and sort them according to the chosen sort function
+    wxVector<wxDirSortingItem>  directoryItems;
 
     wxDir d;
+    wxFileName rootPath(dirName);
+    wxFileName newPath;
     wxString eachFilename;
 
     wxLogNull log;
     d.Open(dirName);
+
+    wxDirSortingItemSortFunction compareFunc = data->m_compareFunc;
 
     if (d.IsOpened())
     {
@@ -736,15 +944,22 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
             {
                 if ((eachFilename != wxT(".")) && (eachFilename != wxT("..")))
                 {
-                    dirs.Add(eachFilename);
+                    newPath = rootPath;
+                    newPath.AppendDir(eachFilename);
+                    directoryItems.push_back( wxDirSortingItem(eachFilename, newPath.GetModificationTime(), compareFunc) );
                 }
             }
             while (d.GetNext(&eachFilename));
         }
     }
-    dirs.Sort(wxDirCtrlStringCompareFunction);
+
+    wxVectorSort(directoryItems);
+
+
 
     // Now do the filenames -- but only if we're allowed to
+    wxVector<wxDirSortingItem>  fileItems;
+    newPath = rootPath;
     if (!HasFlag(wxDIRCTRL_DIR_ONLY))
     {
         d.Open(dirName);
@@ -766,35 +981,39 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
                     {
                         if ((eachFilename != wxT(".")) && (eachFilename != wxT("..")))
                         {
-                            filenames.Add(eachFilename);
+                            newPath.SetFullName(eachFilename);
+                            fileItems.push_back( wxDirSortingItem(eachFilename, newPath.GetModificationTime(), compareFunc) );
                         }
                     }
                     while (d.GetNext(& eachFilename));
                 }
             }
         }
-        filenames.Sort(wxDirCtrlStringCompareFunction);
+        wxVectorSort(fileItems);
     }
 
     // Now we really know whether we have any children so tell the tree control
     // about it.
-    m_treeCtrl->SetItemHasChildren(parentId, !dirs.empty() || !filenames.empty());
+    m_treeCtrl->SetItemHasChildren(parentId, !directoryItems.empty() || !fileItems.empty());
 
     // Add the sorted dirs
     size_t i;
-    for (i = 0; i < dirs.GetCount(); i++)
+    for (i = 0; i < directoryItems.size(); i++)
     {
-        eachFilename = dirs[i];
+        eachFilename = directoryItems[i].label;
         path = dirName;
         if (!wxEndsWithPathSeparator(path))
             path += wxString(wxFILE_SEP_PATH);
         path += eachFilename;
+        path += wxString(wxFILE_SEP_PATH);      // Directories must end with pah separator so that OnRightClick() can
+                                                // tell them apart from files.
 
-        wxDirItemData *dir_item = new wxDirItemData(path,eachFilename,true);
-        wxTreeItemId treeid = AppendItem( parentId, eachFilename,
-                                      wxFileIconsTable::folder, -1, dir_item);
+
+        wxDirItemData *dir_item = new wxDirItemData(path, eachFilename, true);
+        wxTreeItemId treeid = AppendItem(parentId, eachFilename,
+            wxFileIconsTable::folder, -1, dir_item);
         m_treeCtrl->SetItemImage( treeid, wxFileIconsTable::folder_open,
-                                  wxTreeItemIcon_Expanded );
+            wxTreeItemIcon_Expanded );
 
         // assume that it does have children by default as it can take a long
         // time to really check for this (think remote drives...)
@@ -807,14 +1026,14 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
     // Add the sorted filenames
     if (!HasFlag(wxDIRCTRL_DIR_ONLY))
     {
-        for (i = 0; i < filenames.GetCount(); i++)
+        for (i = 0; i < fileItems.size(); i++)
         {
-            eachFilename = filenames[i];
+            eachFilename = fileItems[i].label;
             path = dirName;
             if (!wxEndsWithPathSeparator(path))
                 path += wxString(wxFILE_SEP_PATH);
             path += eachFilename;
-            //path = dirName + wxString(wxT("/")) + eachFilename;
+
             wxDirItemData *dir_item = new wxDirItemData(path,eachFilename,false);
             int image_id = wxFileIconsTable::file;
             if (eachFilename.Find(wxT('.')) != wxNOT_FOUND)
@@ -1258,7 +1477,7 @@ wxTreeItemId wxGenericDirCtrl::AppendItem (const wxTreeItemId & parent,
   {
     return wxTreeItemId();
   }
-}
+} 
 
 
 //-----------------------------------------------------------------------------
@@ -1528,6 +1747,7 @@ wxImageList *wxFileIconsTable::GetSmallImageList()
     return m_smallImageList;
 }
 
+
 int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
 {
     if (!m_smallImageList)
@@ -1600,7 +1820,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
 #if defined(__WXOSX_COCOA__)
             if (wxOSXGetMainScreenContentScaleFactor() > 1.0)
             {
-                img.Rescale(2*size, 2*size, wxIMAGE_QUALITY_HIGH);
+                img.Rescale(2 * size, 2 * size, wxIMAGE_QUALITY_HIGH);
                 bmp2 = wxBitmap(img, -1, 2.0);
             }
             else

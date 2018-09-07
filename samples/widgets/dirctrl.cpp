@@ -18,6 +18,7 @@
 
 // for compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
+#include "wx/msgdlg.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -35,6 +36,8 @@
     #include "wx/checkbox.h"
     #include "wx/button.h"
     #include "wx/filedlg.h"
+    #include "wx/dir.h"
+    #include "wx/menu.h"
 #endif
 
 #include "wx/generic/dirctrlg.h"
@@ -114,6 +117,11 @@ protected:
     void OnSelChanged(wxTreeEvent& event);
     void OnFileActivated(wxTreeEvent& event);
 
+    void DirMenuPopped(wxCommandEvent &evt);
+    void FileMenuPopped(wxCommandEvent &evt);
+    void DirProperties(wxCommandEvent &evt);
+    void FileProperties(wxCommandEvent &evt);
+
     // reset the control parameters
     void Reset();
 
@@ -137,7 +145,9 @@ protected:
                *m_chkFirst,
                *m_chkFilters,
                *m_chkLabels,
-               *m_chkMulti;
+               *m_chkMulti,
+               *m_chkNames,
+               *m_chkDates;
 
     // filters
     wxCheckBox *m_fltr[3];
@@ -158,6 +168,7 @@ wxBEGIN_EVENT_TABLE(DirCtrlWidgetsPage, WidgetsPage)
     EVT_RADIOBOX(wxID_ANY, DirCtrlWidgetsPage::OnRadioBox)
     EVT_DIRCTRL_SELECTIONCHANGED(DirCtrlPage_Ctrl, DirCtrlWidgetsPage::OnSelChanged)
     EVT_DIRCTRL_FILEACTIVATED(DirCtrlPage_Ctrl, DirCtrlWidgetsPage::OnFileActivated)
+    EVT_DIRCTRL_SHOWING_POPUP_MENU(0,  DirCtrlWidgetsPage::DirMenuPopped)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -174,6 +185,55 @@ DirCtrlWidgetsPage::DirCtrlWidgetsPage(WidgetsBookCtrl *book,
 {
     m_dirCtrl = NULL;
 }
+
+
+void DirCtrlWidgetsPage::DirMenuPopped(wxCommandEvent &evt)
+{
+    wxMenu *menu = m_dirCtrl->GetPopupMenu();
+
+    wxTreeItemId    itemId = m_dirCtrl->GetPopupMenuItem();
+    wxDirItemData  *itemData = (wxDirItemData*)(m_dirCtrl->GetTreeCtrl()->GetItemData(itemId));
+    wxString        dirName(itemData->m_path);
+
+    if (wxEndsWithPathSeparator(dirName))
+    {
+        wxWindowID id = wxNewId();
+        menu->AppendSeparator();
+        menu->Append(id, wxT("Directory Properties"));
+        m_dirCtrl->Bind(wxEVT_MENU, &DirCtrlWidgetsPage::DirProperties, this, id);
+    }
+    else
+    {
+        wxWindowID id = wxNewId();
+        menu->Append(id, wxT("File Properties"));
+        m_dirCtrl->Bind(wxEVT_MENU, &DirCtrlWidgetsPage::FileProperties, this, id);
+    }
+}
+
+void DirCtrlWidgetsPage::DirProperties(wxCommandEvent &evt)
+{
+    wxTreeItemId    id = m_dirCtrl->GetPopupMenuItem();
+    wxDirItemData  *itemData = (wxDirItemData*)(m_dirCtrl->GetTreeCtrl()->GetItemData(id));
+    wxFileName      dirName(itemData->m_path);
+    wxDateTime      modTime = dirName.GetModificationTime();
+
+    wxString        dirInfo = wxString::Format("Modified: %s", modTime.FormatISOCombined());
+    wxMessageDialog dlg(this, dirInfo, wxT("Directory Properties"));
+    dlg.ShowModal();
+}
+
+void DirCtrlWidgetsPage::FileProperties(wxCommandEvent &evt)
+{
+    wxTreeItemId    id = m_dirCtrl->GetPopupMenuItem();
+    wxDirItemData  *itemData = (wxDirItemData*)(m_dirCtrl->GetTreeCtrl()->GetItemData(id));
+    wxFileName      dirName(itemData->m_path);
+    wxDateTime      modTime = dirName.GetModificationTime();
+
+    wxString        dirInfo = wxString::Format("Modified: %s\nSize: %s", modTime.FormatISOCombined(), dirName.GetHumanReadableSize());
+    wxMessageDialog dlg(this, dirInfo, wxT("File Properties"));
+    dlg.ShowModal();
+}
+
 
 void DirCtrlWidgetsPage::CreateContent()
 {
@@ -195,6 +255,11 @@ void DirCtrlWidgetsPage::CreateContent()
     m_chkFilters = CreateCheckBoxAndAddToSizer(sizerUseFlags, wxT("wxDIRCTRL_SHOW_FILTERS"));
     m_chkLabels  = CreateCheckBoxAndAddToSizer(sizerUseFlags, wxT("wxDIRCTRL_EDIT_LABELS"));
     m_chkMulti   = CreateCheckBoxAndAddToSizer(sizerUseFlags, wxT("wxDIRCTRL_MULTIPLE"));
+    m_chkNames   = CreateCheckBoxAndAddToSizer(sizerUseFlags, wxT("wxDIRCTRL_RCLICK_MENU_SORT_NAME"));
+    m_chkDates   = CreateCheckBoxAndAddToSizer(sizerUseFlags, wxT("wxDIRCTRL_RCLICK_MENU_SORT_DATE"));
+    m_chkNames->SetValue(true);
+    m_chkDates->SetValue(true);
+
     sizerLeft->Add(sizerUseFlags, wxSizerFlags().Expand().Border());
 
     wxSizer *sizerFilters =
@@ -204,6 +269,8 @@ void DirCtrlWidgetsPage::CreateContent()
     m_fltr[1] = CreateCheckBoxAndAddToSizer(sizerFilters, wxT("C++ files (*.cpp; *.h)|*.cpp;*.h"));
     m_fltr[2] = CreateCheckBoxAndAddToSizer(sizerFilters, wxT("PNG images (*.png)|*.png"));
     sizerLeft->Add(sizerFilters, wxSizerFlags().Expand().Border());
+
+    m_fltr[0]->SetValue(true);      // Filter: *.*
 
     wxButton *btn = new wxButton(this, DirCtrlPage_Reset, wxT("&Reset"));
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
@@ -223,7 +290,7 @@ void DirCtrlWidgetsPage::CreateContent()
         wxDirDialogDefaultFolderStr,
         wxDefaultPosition,
         wxDefaultSize,
-        0
+        wxDIRCTRL_POPUP_MENU_SORT_NAME | wxDIRCTRL_POPUP_MENU_SORT_DATE
     );
 
     // the 3 panes panes compose the window
@@ -268,6 +335,14 @@ void DirCtrlWidgetsPage::CreateDirCtrl()
         wxDefaultSize,
         style
     );
+
+    /*
+    // These lines have been placed here until the conflict can be resolved.
+    if (m_chkNames->IsChecked())
+        style |= wxDIRCTRL_RCLICK_MENU_SORT_NAME;
+    if (m_chkDates->IsChecked())
+        style |= wxDIRCTRL_RCLICK_MENU_SORT_DATE;
+    */
 
     wxString filter;
     for (int i = 0; i < 3; ++i)

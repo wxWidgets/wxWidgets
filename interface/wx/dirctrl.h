@@ -19,6 +19,10 @@ enum
     wxDIRCTRL_EDIT_LABELS    = 0x0100,
     // Allow multiple selection
     wxDIRCTRL_MULTIPLE       = 0x0200,
+    // Enable right-click menu
+    wxDIRCTRL_RCLICK_MENU               = 0x0400,           // Create an r-click menu, even if the next two options aren't used.
+    wxDIRCTRL_RCLICK_MENU_SORT_NAME     = 0x0800,
+    wxDIRCTRL_RCLICK_MENU_SORT_DATE     = 0x1000,
 
     wxDIRCTRL_DEFAULT_STYLE  = wxDIRCTRL_3D_INTERNAL
 };
@@ -47,6 +51,12 @@ enum
            Allow the folder and file labels to be editable.
     @style{wxDIRCTRL_MULTIPLE}
            Allows multiple files and folders to be selected.
+    @style{wxDIRCTRL_RCLICK_MENU}
+           Allows a menu to appear when an item is right-clicked.
+    @style{wxDIRCTRL_RCLICK_MENU_SORT_NAME}
+           Adds "Sort by Name" to the right-click menu.
+    @style{wxDIRCTRL_RCLICK_MENU_SORT_DATE}
+           Adds "Sort by Date" to the right-click menu.
     @endStyleTable
 
     @library{wxcore}
@@ -62,7 +72,11 @@ enum
           Available since wxWidgets 2.9.5.
     @event{EVT_DIRCTRL_FILEACTIVATED(id, func)}
           The user activated a file by double-clicking or pressing Enter.
-          Available since wxWidgets 2.9.5.
+          Available since wxWidgets 2.9.5.      
+    @event{wxEVT_DIRCTRL_MENU_POPPED_UP}
+          User has right-clicked on an item. Use this event to dynamically add items to the popup menu.
+          For example, context specific menu items.
+          Available since wxWidgets 3.1.2.
     @endEventTable
 */
 class wxGenericDirCtrl : public wxControl
@@ -175,6 +189,21 @@ public:
     virtual wxDirFilterListCtrl* GetFilterListCtrl() const;
 
     /**
+        Returns a pointer to the wxMenu which popped up when the user right-clicked on an item.
+        This function should only be called with the wxEVT_DIRCTRL_MENU_POPPED_UP event handler.
+        Within the event handler, new menu items can be added.
+
+        \code{.cpp}
+            wxMenu *menu = dirTreeCtrl->GetPopupMenu();
+            menu->AppendSeparator();
+            wxWindowID id = wxNewId();
+            menu->Append(id, "Renumber Images");
+            dirTreeCtrl->Bind(wxEVT_MENU, &ImageBrowser::ReNumberImages, this, id);
+        \endcode
+    */
+    wxMenu* GetPopupMenu()
+    
+    /**
         Gets the currently-selected directory or filename.
     */
     virtual wxString GetPath() const;
@@ -191,6 +220,19 @@ public:
     */
     virtual void GetPaths(wxArrayString& paths) const;
 
+    /**
+        Get the item data for the item that was right-clicked.
+        This function should only be called with the wxEVT_DIRCTRL_MENU_POPPED_UP event handler.
+
+        To get the name of the file or directory:
+        \code{.cpp}
+            wxTreeItemId id = dirTreeCtrl->GetPopupMenuItem();
+            wxDirItemData *data = (wxDirItemData*)(dirTreeCtrl->GetTreeCtrl()->GetItemData(id));
+            wxFileName fileName = data->m_path;
+        \endcode
+    */
+    wxDirItemData* GetPopupMenuItem()
+    
     /**
         Returns the root id for the tree control.
     */
@@ -211,7 +253,7 @@ public:
         used to update the displayed directory content.
     */
     virtual void ReCreateTree();
-
+    
     /**
         Sets the default path.
     */
