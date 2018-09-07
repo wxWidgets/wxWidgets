@@ -138,7 +138,7 @@ public:
 
     // setters: all of them also take care to modify m_nativeFontInfo if we
     // have it so as to not lose the information not carried by our fields
-    void SetPointSize(int pointSize);
+    void SetFractionalPointSize(float pointSize);
     void SetFamily(wxFontFamily family);
     void SetStyle(wxFontStyle style);
     void SetNumericWeight(int weight);
@@ -165,7 +165,7 @@ protected:
     void InitFromNative();
 
     // font attributes
-    int           m_pointSize;
+    float         m_pointSize;
     wxFontFamily  m_family;
     wxFontStyle   m_style;
     int           m_weight;
@@ -250,7 +250,7 @@ void wxFontRefData::Init(int pointSize,
     m_nativeFontInfo.SetUnderlined(underlined);
 #endif // wxUSE_UNICODE
 
-    SetPointSize(pointSize);
+    SetFractionalPointSize(static_cast<float>(pointSize));
 }
 
 void wxFontRefData::InitFromNative()
@@ -262,7 +262,7 @@ void wxFontRefData::InitFromNative()
     // init fields
     m_faceName = wxGTK_CONV_BACK( pango_font_description_get_family( desc ) );
 
-    m_pointSize = pango_font_description_get_size( desc ) / PANGO_SCALE;
+    m_pointSize = static_cast<float>(pango_font_description_get_size( desc )) / PANGO_SCALE;
 
     switch (pango_font_description_get_style( desc ))
     {
@@ -426,14 +426,14 @@ wxFontRefData::~wxFontRefData()
 // wxFontRefData SetXXX()
 // ----------------------------------------------------------------------------
 
-void wxFontRefData::SetPointSize(int pointSize)
+void wxFontRefData::SetFractionalPointSize(float pointSize)
 {
     // NB: Pango doesn't support point sizes less than 1
     m_pointSize = pointSize == wxDEFAULT || pointSize < 1 ? wxDEFAULT_FONT_SIZE
                                                           : pointSize;
 
 #if wxUSE_UNICODE
-    m_nativeFontInfo.SetPointSize(m_pointSize);
+    m_nativeFontInfo.SetFractionalPointSize(m_pointSize);
 #endif
 }
 
@@ -692,11 +692,11 @@ void wxFont::Unshare()
 // accessors
 // ----------------------------------------------------------------------------
 
-int wxFont::GetPointSize() const
+float wxFont::GetFractionalPointSize() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
 
-    return M_FONTDATA->m_nativeFontInfo.GetPointSize();
+    return M_FONTDATA->m_nativeFontInfo.GetFractionalPointSize();
 }
 
 wxString wxFont::GetFaceName() const
@@ -799,11 +799,11 @@ bool wxFont::IsFixedWidth() const
 // change font attributes
 // ----------------------------------------------------------------------------
 
-void wxFont::SetPointSize(int pointSize)
+void wxFont::SetFractionalPointSize(float pointSize)
 {
     Unshare();
 
-    M_FONTDATA->SetPointSize(pointSize);
+    M_FONTDATA->SetFractionalPointSize(pointSize);
 }
 
 void wxFont::SetFamily(wxFontFamily family)

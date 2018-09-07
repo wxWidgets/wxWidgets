@@ -81,7 +81,7 @@ public:
     virtual ~wxFont();
 
     // implement base class pure virtuals
-    virtual int GetPointSize() const;
+    virtual float GetFractionalPointSize() const;
     virtual wxFontStyle GetStyle() const;
     virtual int GetNumericWeight() const;
     virtual bool GetUnderlined() const;
@@ -92,7 +92,7 @@ public:
 
     virtual bool IsFixedWidth() const;
 
-    virtual void SetPointSize(int pointSize);
+    virtual void SetFractionalPointSize(float pointSize);
     virtual void SetFamily(wxFontFamily family);
     virtual void SetStyle(wxFontStyle style);
     virtual void SetNumericWeight(int weight);
