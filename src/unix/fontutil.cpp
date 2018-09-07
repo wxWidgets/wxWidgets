@@ -823,27 +823,57 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
     SetXFontComponent(wxXLFD_SLANT, s);
 }
 
-void wxNativeFontInfo::SetWeight(wxFontWeight weight)
+void wxNativeFontInfo::SetNumericWeight(int weight)
 {
     wxString s;
-    switch ( weight )
+    switch ( wxFont::GetWeightClosestToNumericValue(weight) )
     {
-        case wxFONTWEIGHT_BOLD:
-            s = wxT("bold");
+        case wxFONTWEIGHT_THIN:
+            s = "thin";
+            break;
+
+        case wxFONTWEIGHT_EXTRALIGHT:
+            s = "extralight";
             break;
 
         case wxFONTWEIGHT_LIGHT:
-            s = wxT("light");
+            s = "light";
             break;
 
         case wxFONTWEIGHT_NORMAL:
-            s = wxT("medium");
+            s = "normal";
             break;
 
-        default:
-            wxFAIL_MSG( wxT("unknown wxFontWeight in wxNativeFontInfo::SetWeight") );
-            return;
+        case wxFONTWEIGHT_MEDIUM:
+            s = "medium";
+            break;
+
+        case wxFONTWEIGHT_SEMIBOLD:
+            s = "semibold";
+            break;
+
+        case wxFONTWEIGHT_BOLD:
+            s = "bold";
+            break;
+
+        case wxFONTWEIGHT_EXTRABOLD:
+            s = "extrabold";
+            break;
+
+        case wxFONTWEIGHT_HEAVY:
+            s = "heavy";
+            break;
+
+        case wxFONTWEIGHT_EXTRAHEAVY:
+            s = "extraheavy";
+            break;
+
+        case wxFONTWEIGHT_INVALID:
+            wxFAIL_MSG( "Invalid font weight" );
+            break;
     }
+
+    wxCHECK_RET( !s.empty(), "unknown weight value" );
 
     SetXFontComponent(wxXLFD_WEIGHT, s);
 }
