@@ -30,7 +30,7 @@ class WXDLLIMPEXP_FWD_CORE wxPixelDataBase;
 // 8 bit is chosen only for performance reasons, note also that this is the inverse value range
 // from alpha, where 0 = invisible , 255 = fully drawn
 
-class WXDLLIMPEXP_CORE wxMask: public wxObject
+class WXDLLIMPEXP_CORE wxMask: public wxMaskBase
 {
     wxDECLARE_DYNAMIC_CLASS(wxMask);
 
@@ -52,8 +52,6 @@ public:
 
     virtual ~wxMask();
 
-    bool Create(const wxBitmap& bitmap, const wxColour& colour);
-    bool Create(const wxBitmap& bitmap);
     bool Create(const wxMemoryBuffer& buf, int width , int height , int bytesPerRow ) ;
 
     wxBitmap GetBitmap() const;
@@ -64,20 +62,36 @@ public:
 
     // a 8 bit depth mask
     void* GetRawAccess() const;
-    int GetBytesPerRow() const { return m_bytesPerRow ; }
+    int GetBytesPerRow() const;
+    int GetWidth() const;
+    int GetHeight() const;
+
     // renders/updates native representation when necessary
     void RealizeNative() ;
 
     WXHBITMAP GetHBITMAP() const ;
 
+protected:
+    // this function is called from Create() to free the existing mask data
+    virtual void FreeData() wxOVERRIDE;
+
+    // these functions must be overridden to implement the corresponding public
+    // Create() methods, they shouldn't call FreeData() as it's already called
+    // by the public wrappers
+    virtual bool InitFromColour(const wxBitmap& bitmap,
+                                const wxColour& colour) wxOVERRIDE;
+    virtual bool InitFromMonoBitmap(const wxBitmap& bitmap) wxOVERRIDE;
 
 private:
+#if !wxOSX_BITMAP_NATIVE_ACCESS
     wxMemoryBuffer m_memBuf ;
     int m_bytesPerRow ;
     int m_width ;
     int m_height ;
+#endif
+    void DoCreateMaskBitmap(int width, int height, int bytesPerRow = -1);
 
-    WXHBITMAP m_maskBitmap ;
+    wxCFRef<CGContextRef> m_maskBitmap ;
 
 };
 
@@ -146,7 +160,10 @@ public:
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
 
-    wxBitmapRefData *GetBitmapData() const
+    const wxBitmapRefData *GetBitmapData() const
+        { return (const wxBitmapRefData *)m_refData; }
+
+    wxBitmapRefData *GetBitmapData()
         { return (wxBitmapRefData *)m_refData; }
 
     // copies the contents and mask of the given (colour) icon to the bitmap
@@ -155,10 +172,17 @@ public:
     int GetWidth() const;
     int GetHeight() const;
     int GetDepth() const;
+
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("this value is determined during creation, this method could lead to inconsistencies")
     void SetWidth(int w);
+    wxDEPRECATED_MSG("this value is determined during creation, this method could lead to inconsistencies")
     void SetHeight(int h);
+    wxDEPRECATED_MSG("this value is determined during creation, this method could lead to inconsistencies")
     void SetDepth(int d);
+    wxDEPRECATED_MSG("this value is determined during creation, this method could lead to inconsistencies")
     void SetOk(bool isOk);
+#endif
 
 #if wxUSE_PALETTE
     wxPalette* GetPalette() const;
@@ -193,18 +217,34 @@ public:
     // returns an autoreleased version of the image
     WX_UIImage GetUIImage() const;
 #endif
+
+#if WXWIN_COMPATIBILITY_3_0
+
+#if wxOSX_USE_ICONREF
     // returns a IconRef which must be retained before and released after usage
+    wxDEPRECATED_MSG("IconRefs are deprecated, this will be removed in the future")
     IconRef GetIconRef() const;
     // returns a IconRef which must be released after usage
+    wxDEPRECATED_MSG("IconRefs are deprecated, this will be removed in the future")
     IconRef CreateIconRef() const;
+#endif
+
     // get read only access to the underlying buffer
-    void *GetRawAccess() const ;
+    wxDEPRECATED_MSG("use GetRawData for accessing the buffer")
+    const void *GetRawAccess() const;
     // brackets to the underlying OS structure for read/write access
     // makes sure that no cached images will be constructed until terminated
-    void *BeginRawAccess() ;
-    void EndRawAccess() ;
+    wxDEPRECATED_MSG("use GetRawData for accessing the buffer")
+    void *BeginRawAccess();
+    wxDEPRECATED_MSG("use GetRawData for accessing the buffer")
+    void EndRawAccess();
+#endif
 
     double GetScaleFactor() const;
+
+    void SetSelectedInto(wxDC *dc);
+    wxDC *GetSelectedInto() const;
+
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;

@@ -2584,7 +2584,6 @@ typedef int (* LINKAGEMODE wxListIterateFunction)(void *current);
 
 #define WX_OPAQUE_TYPE( name ) struct wxOpaque##name
 
-typedef void*       WXHBITMAP;
 typedef void*       WXHCURSOR;
 typedef void*       WXRECTPTR;
 typedef void*       WXPOINTPTR;
@@ -2628,6 +2627,7 @@ DECLARE_WXOSX_OPAQUE_CGREF( CGFont )
 typedef CGColorRef    WXCOLORREF;
 typedef CGImageRef    WXCGIMAGEREF;
 typedef CGContextRef  WXHDC;
+typedef CGContextRef  WXHBITMAP;
 
 /*
  * carbon
