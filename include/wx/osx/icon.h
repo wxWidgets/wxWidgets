@@ -51,7 +51,9 @@ public:
 
     wxSize GetSize() const { return wxSize(GetWidth(), GetHeight()); }
 
+#if wxOSX_USE_ICONREF
     WXHICON GetHICON() const;
+#endif
     
 #if wxOSX_USE_COCOA
     WX_NSImage GetNSImage() const ;

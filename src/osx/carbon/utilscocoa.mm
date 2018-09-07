@@ -203,10 +203,23 @@ double wxOSXGetMainScreenContentScaleFactor()
 
 #if wxOSX_USE_COCOA
 
-wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &WXUNUSED(client), const wxSize& WXUNUSED(size))
+WX_NSImage wxOSXGetSystemImage(const wxString& name)
 {
     wxCFStringRef cfname(name);
-    return wxBitmap( [NSImage imageNamed:cfname.AsNSString()] );
+    NSImage* nsimage = [NSImage imageNamed:cfname.AsNSString()];
+    return nsimage;
+}
+
+wxBitmap wxOSXCreateSystemBitmap(const wxString& name, const wxString &client, const wxSize& sizeHint)
+{
+    NSImage* nsimage = wxOSXGetSystemImage(name);
+    if ( nsimage )
+    {
+        // if ( sizeHint != wxDefaultSize )
+        //    [nsimage setSize:NSMakeSize(sizeHint.GetHeight(), sizeHint.GetWidth())];
+        return wxBitmap( nsimage );
+    }
+    return wxNullBitmap;
 }
 
 WX_NSImage  wxOSXGetNSImageFromCGImage( CGImageRef image, double scaleFactor, bool isTemplate )
@@ -272,6 +285,16 @@ CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromNSImage( WX_NSImage ns
 double wxOSXGetMainScreenContentScaleFactor()
 {
     return [[NSScreen mainScreen] backingScaleFactor];
+}
+
+WX_NSImage wxOSXGetIconForType(OSType type )
+{
+    return [[NSWorkspace sharedWorkspace] iconForFileType: NSFileTypeForHFSTypeCode(type)];
+}
+
+void wxOSXSetImageSize(WX_NSImage image, CGFloat width, CGFloat height)
+{
+    [image setSize:NSMakeSize(width, height)];
 }
 
 CGImageRef wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage, double *scaleptr )
