@@ -188,7 +188,7 @@ public :
     float         pointSize;
     wxFontFamily  family;
     wxFontStyle   style;
-    wxFontWeight  weight;
+    int           weight;
     bool          underlined;
     bool          strikethrough;
     wxString      faceName;
@@ -229,7 +229,7 @@ public:
 #else
         // translate all font parameters
         SetStyle((wxFontStyle)font.GetStyle());
-        SetWeight((wxFontWeight)font.GetWeight());
+        SetNumericWeight(font.GetNumericWeight());
         SetUnderlined(font.GetUnderlined());
         SetStrikethrough(font.GetStrikethrough());
 #if defined(__WXMSW__)

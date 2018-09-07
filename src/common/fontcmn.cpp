@@ -390,7 +390,7 @@ void wxFontBase::DoSetNativeFontInfo(const wxNativeFontInfo& info)
     SetFractionalPointSize(info.pointSize);
     SetFamily(info.family);
     SetStyle(info.style);
-    SetWeight(info.weight);
+    SetNumericWeight(info.weight);
     SetUnderlined(info.underlined);
     SetStrikethrough(info.strikethrough);
     SetFaceName(info.faceName);
@@ -819,7 +819,7 @@ void wxNativeFontInfo::Init()
     encoding = wxFONTENCODING_DEFAULT;
 }
 
-float wxNativeFontInfo::GetFractionalPointSize()
+float wxNativeFontInfo::GetFractionalPointSize() const
 {
     return pointSize;
 }
@@ -829,7 +829,7 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
     return style;
 }
 
-wxFontWeight wxNativeFontInfo::GetWeight() const
+int wxNativeFontInfo::GetNumericWeight() const
 {
     return weight;
 }
@@ -869,7 +869,7 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style_)
     style = style_;
 }
 
-void wxNativeFontInfo::SetWeight(wxFontWeight weight_)
+void wxNativeFontInfo::SetNumericWeight(int weight_)
 {
     weight = weight_;
 }
@@ -1311,7 +1311,7 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
 
     // set point size to default value if size was not given
     if ( !pointsizefound )
-        SetPointSize(wxNORMAL_FONT->GetPointSize());
+        SetFractionalPointSize(wxNORMAL_FONT->GetFractionalPointSize());
 
     // set font weight to default value if weight was not given
     if ( !weightfound )
