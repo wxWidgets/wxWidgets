@@ -2,6 +2,7 @@
 // Name:        wx/valgen.h
 // Purpose:     wxGenericValidator class
 // Author:      Kevin Smith
+// Modified by: Ali Kettab 2018-09-07
 // Created:     Jan 22 1999
 // Copyright:   (c) 1999 Julian Smart (assigned from Kevin)
 // Licence:     wxWindows licence
@@ -13,6 +14,300 @@
 #include "wx/validate.h"
 
 #if wxUSE_VALIDATORS
+
+#if wxUSE_DATATRANSFER
+    #include "wx/private/datatransfer.h"
+    #include "wx/debug.h"
+//  #include "wx/scopedptr.h"
+    #include "wx/typeinfo.h"
+
+    #if defined(HAVE_TYPE_TRAITS)
+        #include <type_traits>
+    #elif defined(HAVE_TR1_TYPE_TRAITS)
+        #ifdef __VISUALC__
+            #include <type_traits>
+        #else
+            #include <tr1/type_traits>
+        #endif
+    #endif
+
+    #ifdef HAVE_STD_VARIANT
+        #include <variant>
+    #endif // HAVE_STD_VARIANT
+#endif // wxUSE_DATATRANSFER
+
+
+#if wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
+
+template<class W>
+struct wxDataTransfer
+{
+      // decltype will give us the window type (a pointer type) which
+      // implements (specializes) wxDataTransferImpl<> interface. or
+      // void* if no such specialization exists for W type.
+    typedef decltype(wxDATA_TRANSFER_IMPLEMENTOR(W)) Type;
+    typedef typename std::remove_pointer<Type>::type Window;
+
+      // always cast @win to the parameter @W and not to @Window type
+      // as the latter may be resolved to a base not necessarily derived
+      // from wxWindow, and the cast would fail as a consequence!
+    template<typename T>
+    static bool To(wxWindow* win, void* data)
+    {
+        return wxDataTransferImpl<Window>::To(static_cast<W*>(win), static_cast<T*>(data));
+    }
+
+    template<typename T>
+    static bool From(wxWindow* win, void* data)
+    {
+        return wxDataTransferImpl<Window>::From(static_cast<W*>(win), static_cast<T*>(data));
+    }
+
+      // No validation by default.
+      // specialize this function in your own code if you want to do any validation or filtering.
+    static bool DoValidate(W* WXUNUSED(win), wxWindow* WXUNUSED(parent)){ return true; }
+};
+
+// ----------------------------------------------------------------------------
+// wxGenericValidatorBase 
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxGenericValidatorBase : public wxValidator
+{
+public:
+
+    wxGenericValidatorBase(const wxGenericValidatorBase& val);
+
+    virtual ~wxGenericValidatorBase(){}
+
+    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorBase(*this); }
+    bool Copy(const wxGenericValidatorBase& val);
+
+protected:
+    explicit wxGenericValidatorBase(void* data) : m_data(data){}
+
+    void* m_data;
+
+private:
+    wxDECLARE_CLASS(wxGenericValidatorBase);
+    wxDECLARE_NO_ASSIGN_CLASS(wxGenericValidatorBase);
+};
+
+// ----------------------------------------------------------------------------
+// 
+//
+// ----------------------------------------------------------------------------
+
+template<class W, typename T>
+class wxGenericValidatorSimpleType : public wxGenericValidatorBase
+{
+public:
+
+    explicit wxGenericValidatorSimpleType(T* data)
+        : wxGenericValidatorBase(data)
+    {
+    }
+
+    wxGenericValidatorSimpleType(const wxGenericValidatorSimpleType& val)
+        : wxGenericValidatorBase(val)
+    {
+    }
+
+    virtual ~wxGenericValidatorSimpleType(){}
+
+    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorSimpleType(*this); }
+
+    virtual void SetWindow(wxWindow *win) wxOVERRIDE
+    {
+        this->m_validatorWindow = win; 
+
+        wxASSERT_MSG((wxTypeId(*win) == wxTypeId(W)), "Invalid window type!");
+    }
+
+    virtual bool Validate(wxWindow* parent) wxOVERRIDE
+    {
+        return wxDataTransfer<W>::DoValidate(static_cast<W*>(this->GetWindow()), parent);
+    }
+
+    virtual bool TransferToWindow() wxOVERRIDE
+    {
+        return wxDataTransfer<W>::template To<T>(this->GetWindow(), this->m_data);
+    }
+
+    virtual bool TransferFromWindow() wxOVERRIDE
+    {
+        return wxDataTransfer<W>::template From<T>(this->GetWindow(), this->m_data);
+    }
+
+protected:
+
+    explicit wxGenericValidatorSimpleType(void* data) : wxGenericValidatorBase(data){}
+};
+
+
+#if defined(HAVE_VARIADIC_TEMPLATES)
+
+template<class W, template<typename...> class TComposite, typename T, typename... Ts>
+class wxGenericValidatorCompositType : public wxGenericValidatorSimpleType<W, T>
+{
+    typedef TComposite<T, Ts...> CompositeType;
+
+    // Assigning (or re-assigning) new value to pointer-like types is different than
+    // assigning (or re-assigning) new value to value-like types. so we need to resort
+    // to the SFINAE mechanism to know what CompositeType represents at compile-time.
+    // 
+    // Hint: a standard conforming smart pointer should have a nested element_type defined.
+
+    template <typename U>
+    static auto IsSmartPtr(U const&) -> decltype(typename U::element_type(), std::true_type())
+    {
+        return std::true_type{};
+    }
+
+    static std::false_type IsSmartPtr(...) { return std::false_type{}; }
+
+    static auto NewValue(const T& value, const std::true_type&){ return new T{value}; }
+    static auto NewValue(const T& value, const std::false_type&){ return value; }
+
+public:
+
+    explicit wxGenericValidatorCompositType(CompositeType& data)
+        : wxGenericValidatorSimpleType<W, T>(std::addressof(data))
+    {
+    }
+
+    wxGenericValidatorCompositType(const wxGenericValidatorCompositType& val)
+        : wxGenericValidatorSimpleType<W, T>(val)
+    {
+    }
+
+    virtual ~wxGenericValidatorCompositType(){}
+
+    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorCompositType(*this); }
+
+    virtual bool TransferToWindow() wxOVERRIDE
+    {
+        CompositeType& data = *static_cast<CompositeType*>(this->m_data);
+        
+        if ( !data )
+            return true;
+
+        return wxDataTransfer<W>::template To<T>(this->GetWindow(), &*data);
+    }
+
+    virtual bool TransferFromWindow() wxOVERRIDE
+    {
+        T value;
+
+        if ( !wxDataTransfer<W>::template From<T>(this->GetWindow(), &value) )
+            return false;
+
+        CompositeType& data = *static_cast<CompositeType*>(this->m_data);
+
+        if ( data )
+        {
+            *data = value;
+        }
+        else
+        {
+            // FIXME: wxSharedPtr<> can't be used with this class as it doesn't
+            //        define the standard member function swap().
+            data.swap(CompositeType(NewValue(value, IsSmartPtr(data))));
+        }
+
+        return true;
+    }
+};
+
+#if defined(HAVE_STD_VARIANT)
+
+template<class W, typename T, typename... Ts>
+class wxGenericValidatorCompositType<W, std::variant, T, Ts...> 
+    : public wxGenericValidatorSimpleType<W, T>
+{
+    typedef std::variant<T, Ts...> CompositeType;
+
+public:
+
+    explicit wxGenericValidatorCompositType(CompositeType& data)
+        : wxGenericValidatorSimpleType<W, T>(std::addressof(data))
+    {
+    }
+
+    wxGenericValidatorCompositType(const wxGenericValidatorCompositType& val)
+        : wxGenericValidatorSimpleType<W, T>(val)
+    {
+    }
+
+    virtual ~wxGenericValidatorCompositType(){}
+
+    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorCompositType(*this); }
+
+    virtual bool TransferToWindow() wxOVERRIDE
+    {
+        CompositeType* data = static_cast<CompositeType*>(this->m_data);
+
+        auto value = std::get_if<T>(data);
+
+        if ( value )
+            return wxDataTransfer<W>::template To<T>(this->GetWindow(), value);
+
+        return false;
+    }
+
+    virtual bool TransferFromWindow() wxOVERRIDE
+    {
+        CompositeType* data = static_cast<CompositeType*>(this->m_data);
+
+        auto value = std::get_if<T>(data);
+
+        if ( value && wxDataTransfer<W>::template From<T>(this->GetWindow(), value) )
+            return true;
+
+        return false;
+    }
+};
+
+#endif // HAVE_STD_VARIANT
+#endif // HAVE_VARIADIC_TEMPLATES
+
+//-----------------------------------------------------------------------------
+// convenience functions.
+//-----------------------------------------------------------------------------
+
+// Notice that using wxSetGenericValidator() is more convenient than calling
+// wxGenericValidator<>() to set generic validators, as the latter can only deduce
+// the passed value type.
+    
+template<class W, typename T>
+inline wxGenericValidatorSimpleType<W, T> wxGenericValidator(T* value)
+{
+    return wxGenericValidatorSimpleType<W, T>(value);
+}
+
+template<class W, typename T>
+inline void wxSetGenericValidator(W* win, T* value)
+{
+    win->SetValidator( wxGenericValidatorSimpleType<W, T>(value) );
+}
+
+#if defined(HAVE_VARIADIC_TEMPLATES)
+
+template<class W, template<typename...> class TComposite, typename T, typename... Ts>
+inline auto wxGenericValidator(TComposite<T, Ts...>& value)
+{
+    return wxGenericValidatorCompositType<W, TComposite, T, Ts...>(value);
+}
+
+template<class W, template<typename...> class TComposite, typename T, typename... Ts>
+inline void wxSetGenericValidator(W* win, TComposite<T, Ts...>& value)
+{
+    win->SetValidator( wxGenericValidatorCompositType<W, TComposite, T, Ts...>(value) );
+}
+
+#endif // HAVE_VARIADIC_TEMPLATES
+
+#else // !wxUSE_DATATRANSFER || !wxCAN_USE_DATATRANSFER
 
 class WXDLLIMPEXP_FWD_BASE wxDateTime;
 class WXDLLIMPEXP_FWD_BASE wxFileName;
@@ -88,6 +383,18 @@ private:
     wxDECLARE_CLASS(wxGenericValidator);
     wxDECLARE_NO_ASSIGN_CLASS(wxGenericValidator);
 };
+
+//-----------------------------------------------------------------------------
+// convenience function.
+//-----------------------------------------------------------------------------
+
+template<class W, typename T>
+inline void wxSetGenericValidator(W* win, T* value)
+{
+    win->SetValidator( wxGenericValidator(static_cast<T*>(value)) );
+}
+
+#endif // wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
 
 #endif // wxUSE_VALIDATORS
 

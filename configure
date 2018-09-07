@@ -1024,6 +1024,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -1314,6 +1315,7 @@ enable_tooltips
 enable_splines
 enable_mousewheel
 enable_validators
+enable_datatransfer
 enable_busyinfo
 enable_hotkey
 enable_joystick
@@ -1444,6 +1446,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1696,6 +1699,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1833,7 +1845,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1986,6 +1998,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -2255,6 +2268,7 @@ Optional Features:
   --enable-splines        use spline drawing code
   --enable-mousewheel     use mousewheel
   --enable-validators     use wxValidator and derived classes
+  --enable-datatransfer   use wxDataTransfer to impl. wxGenericValidator
   --enable-busyinfo       use wxBusyInfo
   --enable-hotkey         use wxWindow::RegisterHotKey()
   --enable-joystick       use wxJoystick
@@ -11743,6 +11757,35 @@ fi
 
 
           eval "$wx_cv_use_validators"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-datatransfer was given.
+if test "${enable_datatransfer+set}" = set; then :
+  enableval=$enable_datatransfer;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_datatransfer='wxUSE_DATATRANSFER=yes'
+                          else
+                            wx_cv_use_datatransfer='wxUSE_DATATRANSFER=no'
+                          fi
+
+else
+
+                          wx_cv_use_datatransfer='wxUSE_DATATRANSFER=${'DEFAULT_wxUSE_DATATRANSFER":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_datatransfer"
 
 
           enablestring=
@@ -37762,6 +37805,12 @@ fi
 
 if test "$wxUSE_VALIDATORS" = "yes"; then
     $as_echo "#define wxUSE_VALIDATORS 1" >>confdefs.h
+
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS validate"
+fi
+
+if test "$wxUSE_DATATRANSFER" = "yes"; then
+    $as_echo "#define wxUSE_DATATRANSFER 1" >>confdefs.h
 
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS validate"
 fi

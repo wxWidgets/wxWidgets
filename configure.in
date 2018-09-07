@@ -995,6 +995,7 @@ WX_ARG_FEATURE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxU
 WX_ARG_FEATURE(splines,     [  --enable-splines        use spline drawing code], wxUSE_SPLINES)
 WX_ARG_FEATURE(mousewheel,  [  --enable-mousewheel     use mousewheel], wxUSE_MOUSEWHEEL)
 WX_ARG_FEATURE(validators,  [  --enable-validators     use wxValidator and derived classes], wxUSE_VALIDATORS)
+WX_ARG_FEATURE(datatransfer,[  --enable-datatransfer   use wxDataTransfer to impl. wxGenericValidator], wxUSE_DATATRANSFER)
 WX_ARG_FEATURE(busyinfo,    [  --enable-busyinfo       use wxBusyInfo], wxUSE_BUSYINFO)
 WX_ARG_FEATURE(hotkey,      [  --enable-hotkey         use wxWindow::RegisterHotKey()], wxUSE_HOTKEY)
 WX_ARG_FEATURE(joystick,    [  --enable-joystick       use wxJoystick], wxUSE_JOYSTICK)
@@ -7195,6 +7196,11 @@ fi
 
 if test "$wxUSE_VALIDATORS" = "yes"; then
     AC_DEFINE(wxUSE_VALIDATORS)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS validate"
+fi
+
+if test "$wxUSE_DATATRANSFER" = "yes"; then
+    AC_DEFINE(wxUSE_DATATRANSFER)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS validate"
 fi
 

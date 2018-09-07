@@ -486,6 +486,12 @@
 
 #define wxUSE_VALIDATORS 0
 
+#if wxUSE_VALIDATORS
+	#define wxUSE_DATATRANSFER 0
+#else
+	#define wxUSE_DATATRANSFER 0
+#endif
+
 #ifdef __WXMSW__
 #define wxUSE_AUTOID_MANAGEMENT 0
 #else

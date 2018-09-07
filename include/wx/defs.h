@@ -257,6 +257,20 @@ typedef short int WXTYPE;
 /* This macro is obsolete, use the 'explicit' keyword in the new code. */
 #define wxEXPLICIT explicit
 
+/* check for decltype keyword support */
+#ifndef HAVE_DECLTYPE
+    #if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
+        #define HAVE_DECLTYPE
+    #endif
+#endif /* HAVE_DECLTYPE */
+
+/* check for variadic templates support */
+#ifndef HAVE_VARIADIC_TEMPLATES
+    #if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(12)
+        #define HAVE_VARIADIC_TEMPLATES
+    #endif
+#endif /* HAVE_VARIADIC_TEMPLATES */
+
 /* check for override keyword support */
 #ifndef HAVE_OVERRIDE
     #if __cplusplus >= 201103L
@@ -419,6 +433,12 @@ typedef short int WXTYPE;
 
     #endif /* __cplusplus */
 #endif /* __WX_SETUP_H__ */
+
+#ifndef HAVE_STD_VARIANT
+    #if __cplusplus >= 201703L
+        #define HAVE_STD_VARIANT
+    #endif /* __cplusplus >= 201703L */
+#endif /* HAVE_STD_VARIANT */
 
 /* provide replacement for C99 va_copy() if the compiler doesn't have it */
 

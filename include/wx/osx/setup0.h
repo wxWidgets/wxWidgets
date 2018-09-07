@@ -1206,6 +1206,13 @@
 // wxValidator class and related methods
 #define wxUSE_VALIDATORS 1
 
+// use wxDataTransfer to implement wxGenericValidator
+#if wxUSE_VALIDATORS
+	#define wxUSE_DATATRANSFER 1
+#else
+	#define wxUSE_DATATRANSFER 0
+#endif
+
 // Use reference counted ID management: this means that wxWidgets will track
 // the automatically allocated ids (those used when you use wxID_ANY when
 // creating a window, menu or toolbar item &c) instead of just supposing that

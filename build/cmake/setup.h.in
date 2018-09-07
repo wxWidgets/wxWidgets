@@ -474,6 +474,12 @@
 
 #cmakedefine01 wxUSE_VALIDATORS
 
+#if wxUSE_VALIDATORS
+	#cmakedefine01 wxUSE_DATATRANSFER
+#else
+	#cmakedefine01 wxUSE_DATATRANSFER
+#endif
+
 #ifdef __WXMSW__
 #cmakedefine01 wxUSE_AUTOID_MANAGEMENT
 #else
