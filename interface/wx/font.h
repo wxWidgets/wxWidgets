@@ -1221,6 +1221,34 @@ public:
     */
     static void SetDefaultEncoding(wxFontEncoding encoding);
 
+    /**
+        Get the raw weight value corresponding to the given symbolic constant.
+
+        For compatibility, this function handles the values @c wxNORMAL, @c
+        wxLIGHT and @c wxBOLD, that have values 90, 91 and 92, specially and
+        converts them to the corresponding @c wxFONTWEIGHT_XXX weight value.
+
+        @param weight
+            A valid element of wxFontWeight enum, i.e. this argument can't have
+            value ::wxFONTWEIGHT_INVALID.
+        @return Numeric weight, between 1 and 1000.
+
+        @since 3.1.2
+     */
+    static int GetNumericWeightOf(wxFontWeight weight);
+
+    /**
+        Get the symbolic weight closest to the given raw weight value.
+
+        @param numWeight
+            A valid raw weight value, i.e. a value in the range 1 to 1000,
+            inclusive.
+        @return A valid element of wxFontWeight enum.
+
+        @since 3.1.2
+     */
+    static wxFontWeight GetWeightClosestToNumericValue(int numWeight);
+
     //@{
     /**
         This function takes the same parameters as the relative

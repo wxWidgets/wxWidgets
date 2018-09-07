@@ -413,6 +413,10 @@ public:
     static wxFontEncoding GetDefaultEncoding() { return ms_encodingDefault; }
     static void SetDefaultEncoding(wxFontEncoding encoding);
 
+    // Convert between symbolic and numeric font weights.
+    static int GetNumericWeightOf(wxFontWeight weight);
+    static wxFontWeight GetWeightClosestToNumericValue(int numWeight);
+
     // this doesn't do anything and is kept for compatibility only
 #if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED_INLINE(void SetNoAntiAliasing(bool no = true), wxUnusedVar(no);)

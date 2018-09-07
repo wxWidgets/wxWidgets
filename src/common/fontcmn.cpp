@@ -139,55 +139,6 @@ wxEMPTY_HANDLERS_TABLE(wxFont)
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// Local helpers
-// ----------------------------------------------------------------------------
-
-namespace
-{
-
-// Convert to/from wxFontWeight enum elements and numeric weight values.
-
-// This function interprets wxNORMAL, wxLIGHT and wxBOLD values in addition to
-// the actual wxFontWeight enum element values for compatibility. It does check
-// that it gets either the one or the other.
-int GetNumericWeightOf(wxFontWeight weight)
-{
-    // deal with compatibility constants
-    if (weight >= 90 && weight <= 92)
-    {
-        if (weight == 90 /* wxNORMAL */)
-            weight = wxFONTWEIGHT_NORMAL;
-        else if (weight == 91 /* wxLIGHT */)
-            weight = wxFONTWEIGHT_LIGHT;
-        else if (weight == 92 /* wxBOLD */)
-            weight = wxFONTWEIGHT_BOLD;
-    }
-
-    wxASSERT(weight > wxFONTWEIGHT_INVALID);
-    wxASSERT(weight <= wxFONTWEIGHT_MAX);
-    wxASSERT(weight % 100 == 0);
-
-    return weight;
-}
-
-// As its name indicates, this function returns the closest wxFontWeight enum
-// element, even if its value doesn't correspond to the given weight exactly.
-wxFontWeight GetWeightClosestToNumericValue(int numWeight)
-{
-    // round to nearest hundredth = wxFONTWEIGHT_ constant
-    int weight = ((numWeight + 50) / 100) * 100;
-
-    if (weight < wxFONTWEIGHT_THIN)
-        weight = wxFONTWEIGHT_THIN;
-    if (weight > wxFONTWEIGHT_MAX)
-        weight = wxFONTWEIGHT_MAX;
-
-    return static_cast<wxFontWeight>(weight);
-}
-
-} // anonymous namespace
-
-// ----------------------------------------------------------------------------
 // wxFontBase
 // ----------------------------------------------------------------------------
 
@@ -282,6 +233,53 @@ bool wxFontBase::IsFixedWidth() const
 {
     return GetFamily() == wxFONTFAMILY_TELETYPE;
 }
+
+
+// Convert to/from wxFontWeight enum elements and numeric weight values.
+
+// This function interprets wxNORMAL, wxLIGHT and wxBOLD values in addition to
+// the actual wxFontWeight enum element values for compatibility. It does check
+// that it gets either the one or the other.
+/* static */
+int wxFontBase::GetNumericWeightOf(wxFontWeight weight)
+{
+    // deal with compatibility constants
+    if (weight >= 90 && weight <= 92)
+    {
+        if (weight == 90 /* wxNORMAL */)
+            weight = wxFONTWEIGHT_NORMAL;
+        else if (weight == 91 /* wxLIGHT */)
+            weight = wxFONTWEIGHT_LIGHT;
+        else if (weight == 92 /* wxBOLD */)
+            weight = wxFONTWEIGHT_BOLD;
+    }
+
+    wxASSERT(weight > wxFONTWEIGHT_INVALID);
+    wxASSERT(weight <= wxFONTWEIGHT_MAX);
+    wxASSERT(weight % 100 == 0);
+
+    return weight;
+}
+
+// As its name indicates, this function returns the closest wxFontWeight enum
+// element, even if its value doesn't correspond to the given weight exactly.
+/* static */
+wxFontWeight wxFontBase::GetWeightClosestToNumericValue(int numWeight)
+{
+    wxASSERT(numWeight > 0);
+    wxASSERT(numWeight <= 1000);
+
+    // round to nearest hundredth = wxFONTWEIGHT_ constant
+    int weight = ((numWeight + 50) / 100) * 100;
+
+    if (weight < wxFONTWEIGHT_THIN)
+        weight = wxFONTWEIGHT_THIN;
+    if (weight > wxFONTWEIGHT_MAX)
+        weight = wxFONTWEIGHT_MAX;
+
+    return static_cast<wxFontWeight>(weight);
+}
+
 
 int wxFontBase::GetPointSize() const
 {
@@ -1332,12 +1330,12 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
 
 wxFontWeight wxNativeFontInfo::GetWeight() const
 {
-    return GetWeightClosestToNumericValue(GetNumericWeight());
+    return wxFontBase::GetWeightClosestToNumericValue(GetNumericWeight());
 }
 
 void wxNativeFontInfo::SetWeight(wxFontWeight weight)
 {
-    const int numWeight = GetNumericWeightOf(weight);
+    const int numWeight = wxFontBase::GetNumericWeightOf(weight);
     if ( numWeight != GetNumericWeight() )
         SetNumericWeight(numWeight);
 }
