@@ -707,6 +707,9 @@ public:
                           const wxPalette* palette = NULL) const;
 
     /**
+         @deprecated This function is deprecated since version 3.1.2, dimensions
+            and depth can only be set at construction time.
+
         Sets the depth member (does not affect the bitmap data).
 
         @todo since these functions do not affect the bitmap data,
@@ -714,10 +717,14 @@ public:
 
         @param depth
             Bitmap depth.
+
     */
     virtual void SetDepth(int depth);
 
     /**
+        @deprecated This function is deprecated since version 3.1.2, dimensions
+            and depth can only be set at construction time.
+
         Sets the height member (does not affect the bitmap data).
 
         @param height
@@ -745,6 +752,9 @@ public:
     virtual void SetPalette(const wxPalette& palette);
 
     /**
+        @deprecated This function is deprecated since version 3.1.2, dimensions
+            and depth can only be set at construction time.
+
         Sets the width member (does not affect the bitmap data).
 
         @param width
