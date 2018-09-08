@@ -149,8 +149,6 @@ protected:
     // wxFONTFAMILY_DEFAULT if the dialog was cancelled
     wxFontFamily GetFamilyFromUser();
 
-    size_t      m_fontSize; // in points
-
     wxTextCtrl *m_textctrl;
     MyCanvas   *m_canvas;
 
@@ -315,8 +313,6 @@ bool MyApp::OnInit()
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size), m_textctrl(NULL)
 {
-    m_fontSize = wxNORMAL_FONT->GetPointSize();
-
     SetIcon(wxICON(sample));
 
     // create a menu bar
