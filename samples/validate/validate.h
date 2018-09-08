@@ -48,7 +48,6 @@ public:
             const wxSize& size = wxDefaultSize,
             const long style = wxDEFAULT_DIALOG_STYLE);
 
-    bool TransferDataToWindow() wxOVERRIDE;
     wxTextCtrl *m_text;
     wxComboBox *m_combobox;
 
@@ -84,23 +83,6 @@ public:
     int m_radiobox_choice;
 };
 
-class MyComboBoxValidator : public wxValidator
-{
-public:
-    MyComboBoxValidator(wxString* var) { m_var=var; }
-
-    virtual bool Validate(wxWindow* parent) wxOVERRIDE;
-    virtual wxObject* Clone() const wxOVERRIDE { return new MyComboBoxValidator(*this); }
-
-    // Called to transfer data to the window
-    virtual bool TransferToWindow() wxOVERRIDE;
-
-    // Called to transfer data from the window
-    virtual bool TransferFromWindow() wxOVERRIDE;
-
-protected:
-    wxString* m_var;
-};
 
 enum
 {
