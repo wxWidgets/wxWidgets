@@ -94,8 +94,8 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// 
-//
+// Simple type (T) is any type supported directly by the window W. e.g. int,
+// bool, wxString, wxArrayInt, ...
 // ----------------------------------------------------------------------------
 
 template<class W, typename T>
@@ -144,6 +144,18 @@ protected:
     explicit wxGenericValidatorSimpleType(void* data) : wxGenericValidatorBase(data){}
 };
 
+// ----------------------------------------------------------------------------
+// Composit type (TComposite<>) is a pointer-like type or a value-like type
+// having the form TComposite<T[, Ts...]> where T is a simple type (see above)
+//
+// Pointer-like types (e.g. std::unique_ptr, std::shared_ptr, wxScopedPtr...)
+// Value-like types (e.g. std::optional)
+//
+// Requirements: TComposite<> should be dereferencable & swappable
+//
+// Notice that in order to support this type of validators, the window W should
+// already know how to deal with the simple type T.
+// ----------------------------------------------------------------------------
 
 #if defined(HAVE_VARIADIC_TEMPLATES)
     template<class W, template<typename...> class TComposite, typename T, typename... Ts>
@@ -214,8 +226,11 @@ public:
         }
         else
         {
-            // FIXME: wxSharedPtr<> can't be used with this class as it doesn't
-            //        define the standard member function swap().
+            // FIXME 1: 'data' should not be assigned any value if 'value' is not valid.
+            //          
+            // FIXME 2: wxSharedPtr<> can't be used with this class as it doesn't
+            //          define the standard member function swap().
+
             data.swap(CompositeType(NewValue(value, IsSmartPtr(data))));
         }
 
