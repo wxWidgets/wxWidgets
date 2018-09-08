@@ -146,11 +146,15 @@ protected:
 
 
 #if defined(HAVE_VARIADIC_TEMPLATES)
-
-template<class W, template<typename...> class TComposite, typename T, typename... Ts>
+    template<class W, template<typename...> class TComposite, typename T, typename... Ts>
+    #define COMPOSIT_TYPE TComposite<T, Ts...>
+#else
+    template<class W, template<typename> class TComposite, typename T>
+    #define COMPOSIT_TYPE TComposite<T>
+#endif // defined(HAVE_VARIADIC_TEMPLATES)
 class wxGenericValidatorCompositType : public wxGenericValidatorSimpleType<W, T>
 {
-    typedef TComposite<T, Ts...> CompositeType;
+    typedef COMPOSIT_TYPE CompositeType;
 
     // Assigning (or re-assigning) new value to pointer-like types is different than
     // assigning (or re-assigning) new value to value-like types. so we need to resort
@@ -269,7 +273,6 @@ public:
 };
 
 #endif // HAVE_STD_VARIANT
-#endif // HAVE_VARIADIC_TEMPLATES
 
 //-----------------------------------------------------------------------------
 // convenience functions.
@@ -292,7 +295,6 @@ inline void wxSetGenericValidator(W* win, T* value)
 }
 
 #if defined(HAVE_VARIADIC_TEMPLATES)
-
 template<class W, template<typename...> class TComposite, typename T, typename... Ts>
 inline auto wxGenericValidator(TComposite<T, Ts...>& value)
 {
@@ -305,7 +307,19 @@ inline void wxSetGenericValidator(W* win, TComposite<T, Ts...>& value)
     win->SetValidator( wxGenericValidatorCompositType<W, TComposite, T, Ts...>(value) );
 }
 
-#endif // HAVE_VARIADIC_TEMPLATES
+#else // !defined(HAVE_VARIADIC_TEMPLATES)
+template<class W, template<typename> class TComposite, typename T>
+inline auto wxGenericValidator(TComposite<T>& value)
+{
+    return wxGenericValidatorCompositType<W, TComposite, T>(value);
+}
+
+template<class W, template<typename> class TComposite, typename T>
+inline void wxSetGenericValidator(W* win, TComposite<T>& value)
+{
+    win->SetValidator( wxGenericValidatorCompositType<W, TComposite, T>(value) );
+}
+#endif // defined(HAVE_VARIADIC_TEMPLATES)
 
 #else // !wxUSE_DATATRANSFER || !wxCAN_USE_DATATRANSFER
 
