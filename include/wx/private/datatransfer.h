@@ -21,7 +21,7 @@
 #endif
 
 #ifndef HAVE_VARIADIC_MACROS
-	#error "Variadic macros support required."
+  #error "Variadic macros support required."
 #endif // HAVE_VARIADIC_MACROS
 
 
@@ -64,12 +64,12 @@ struct WXDLLIMPEXP_CORE wxDataTransferImpl;
 
 extern void* wxDataTransferImplementor(...);
 
-#define wx_DECLARE_DATA_TRANSFER_IMPLEMENTOR(window) 	\
-	class WXDLLIMPEXP_FWD_CORE window;					        \
-	extern window* wxDataTransferImplementor(window*)
+#define wx_DECLARE_DATA_TRANSFER_IMPLEMENTOR(window)  \
+  class WXDLLIMPEXP_FWD_CORE window;                  \
+  extern window* wxDataTransferImplementor(window*)
 
 #define wxDATA_TRANSFER_IMPLEMENTOR(window) \
-	wxDataTransferImplementor(static_cast<window*>(NULL))
+  wxDataTransferImplementor(static_cast<window*>(NULL))
 
 // actually the same technique used to implement wxCALL_FOR_EACH (see wx/cpp.h)
 // is used here to implement wxDECLARE_DATA_TRANSFER_IMPL, which makes it easy 
@@ -80,7 +80,7 @@ extern void* wxDataTransferImplementor(...);
 
 
 #define wx_DATA_TRANSFER_IMPL_NARG(...) \
-	wx_DATA_TRANSFER_IMPL_NARG_((__VA_ARGS__, wx_DATA_TRANSFER_IMPL_RSEQ_N()))
+  wx_DATA_TRANSFER_IMPL_NARG_((__VA_ARGS__, wx_DATA_TRANSFER_IMPL_RSEQ_N()))
 #define wx_DATA_TRANSFER_IMPL_NARG_(args) wx_DATA_TRANSFER_IMPL_ARG_N args
 #define wx_DATA_TRANSFER_IMPL_ARG_N(_1, _2, _3, _4, _5, _6, _7, _8, N, ...) N
 #define wx_DATA_TRANSFER_IMPL_RSEQ_N() 8, 7, 6, 5, 4, 3, 2, 1, 0
@@ -94,52 +94,52 @@ extern void* wxDataTransferImplementor(...);
 #define wx_DATA_TRANSFER_IMPL_7_(args)   wx_DATA_TRANSFER_IMPL_7 args
 #define wx_DATA_TRANSFER_IMPL_8_(args)   wx_DATA_TRANSFER_IMPL_8 args
 
-#define wx_DATA_TRANSFER_IMPL_1(window, type) 	 \
-   	static bool To(window*, type*); 			       \
-   	static bool From(window*, type*)
+#define wx_DATA_TRANSFER_IMPL_1(window, type)    \
+    static bool To(window*, type*);              \
+    static bool From(window*, type*)
 
-#define wx_DATA_TRANSFER_IMPL_2(window, type, ...) 	\
-   	wx_DATA_TRANSFER_IMPL_1(window, type);			    \
-   	wx_DATA_TRANSFER_IMPL_1_((window, __VA_ARGS__))
+#define wx_DATA_TRANSFER_IMPL_2(window, type, ...)  \
+    wx_DATA_TRANSFER_IMPL_1(window, type);          \
+    wx_DATA_TRANSFER_IMPL_1_((window, __VA_ARGS__))
 
-#define wx_DATA_TRANSFER_IMPL_3(window, type, ...) 	\
-   	wx_DATA_TRANSFER_IMPL_1(window, type);			    \
-   	wx_DATA_TRANSFER_IMPL_2_((window, __VA_ARGS__))
+#define wx_DATA_TRANSFER_IMPL_3(window, type, ...)  \
+    wx_DATA_TRANSFER_IMPL_1(window, type);          \
+    wx_DATA_TRANSFER_IMPL_2_((window, __VA_ARGS__))
 
-#define wx_DATA_TRANSFER_IMPL_4(window, type, ...) 	\
-   	wx_DATA_TRANSFER_IMPL_1(window, type);			    \
-   	wx_DATA_TRANSFER_IMPL_3_((window, __VA_ARGS__))
+#define wx_DATA_TRANSFER_IMPL_4(window, type, ...)  \
+    wx_DATA_TRANSFER_IMPL_1(window, type);          \
+    wx_DATA_TRANSFER_IMPL_3_((window, __VA_ARGS__))
 
-#define wx_DATA_TRANSFER_IMPL_5(window, type, ...) 	\
-   	wx_DATA_TRANSFER_IMPL_1(window, type);			    \
-   	wx_DATA_TRANSFER_IMPL_4_((window, __VA_ARGS__))
+#define wx_DATA_TRANSFER_IMPL_5(window, type, ...)  \
+    wx_DATA_TRANSFER_IMPL_1(window, type);          \
+    wx_DATA_TRANSFER_IMPL_4_((window, __VA_ARGS__))
 
-#define wx_DATA_TRANSFER_IMPL_6(window, type, ...) 	\
-   	wx_DATA_TRANSFER_IMPL_1(window, type);			    \
-   	wx_DATA_TRANSFER_IMPL_5_((window, __VA_ARGS__))
+#define wx_DATA_TRANSFER_IMPL_6(window, type, ...)  \
+    wx_DATA_TRANSFER_IMPL_1(window, type);          \
+    wx_DATA_TRANSFER_IMPL_5_((window, __VA_ARGS__))
 
-#define wx_DATA_TRANSFER_IMPL_7(window, type, ...) 	\
-   	wx_DATA_TRANSFER_IMPL_1(window, type);			    \
-   	wx_DATA_TRANSFER_IMPL_6_((window, __VA_ARGS__))
+#define wx_DATA_TRANSFER_IMPL_7(window, type, ...)  \
+    wx_DATA_TRANSFER_IMPL_1(window, type);          \
+    wx_DATA_TRANSFER_IMPL_6_((window, __VA_ARGS__))
 
-#define wx_DATA_TRANSFER_IMPL_8(window, type, ...) 	\
-   	wx_DATA_TRANSFER_IMPL_1(window, type);			    \
-   	wx_DATA_TRANSFER_IMPL_7_((window, __VA_ARGS__))
+#define wx_DATA_TRANSFER_IMPL_8(window, type, ...)  \
+    wx_DATA_TRANSFER_IMPL_1(window, type);          \
+    wx_DATA_TRANSFER_IMPL_7_((window, __VA_ARGS__))
 
 #define wx_DATA_TRANSFER_IMPL_(N, args) \
-   	wxCONCAT(wx_DATA_TRANSFER_IMPL_, N) args
+    wxCONCAT(wx_DATA_TRANSFER_IMPL_, N) args
 
 #define wx_DATA_TRANSFER_IMPL(window, ...) \
-   	wx_DATA_TRANSFER_IMPL_(wx_DATA_TRANSFER_IMPL_NARG(__VA_ARGS__), (window, __VA_ARGS__))
+    wx_DATA_TRANSFER_IMPL_(wx_DATA_TRANSFER_IMPL_NARG(__VA_ARGS__), (window, __VA_ARGS__))
 
 
-#define wxDECLARE_DATA_TRANSFER_IMPL(window, ...) 		                         \
-   	wx_DECLARE_DATA_TRANSFER_IMPLEMENTOR(window); 		                         \
-	  template<> 											                                           \
-	  struct WXDLLIMPEXP_CORE wxDataTransferImpl<window> 	                       \
-	  { 													                                               \
-		    wx_DATA_TRANSFER_IMPL(window, __VA_ARGS__);		                         \
-	  }
+#define wxDECLARE_DATA_TRANSFER_IMPL(window, ...)                              \
+    wx_DECLARE_DATA_TRANSFER_IMPLEMENTOR(window);                              \
+    template<>                                                                 \
+    struct WXDLLIMPEXP_CORE wxDataTransferImpl<window>                         \
+    {                                                                          \
+        wx_DATA_TRANSFER_IMPL(window, __VA_ARGS__);                            \
+    }
 
 
 //=============================================================================
