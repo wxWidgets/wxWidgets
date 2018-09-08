@@ -1205,14 +1205,14 @@ bool wxDataTransferImpl<wxSpinButtonBase>::From(wxSpinButtonBase* ctrl, int* dat
 #if defined(wxHAS_NATIVE_SPINCTRL)
     #define WX_TRANSFER_DATA_FROM_SPINCTRL(ctrl, data) (*data = ctrl->GetValue())
 #else
-    #define WX_TRANSFER_DATA_FROM_SPINCTRL(ctrl, data)
+    #define WX_TRANSFER_DATA_FROM_SPINCTRL(ctrl, data) \
             (*data = ctrl->GetValue(wxSPINCTRL_GETVALUE_FIX))
 #endif // defined(wxHAS_NATIVE_SPINCTRL)
 
 #if defined(wxHAS_NATIVE_SPINCTRLDOUBLE)
     #define WX_TRANSFER_DATA_FROM_SPINCTRLDOUBLE(ctrl, data) (*data = ctrl->GetValue())
 #else
-    #define WX_TRANSFER_DATA_FROM_SPINCTRLDOUBLE(ctrl, data)
+    #define WX_TRANSFER_DATA_FROM_SPINCTRLDOUBLE(ctrl, data) \
             (*data = ctrl->GetValue(wxSPINCTRL_GETVALUE_FIX))
 #endif // defined(wxHAS_NATIVE_SPINCTRLDOUBLE)
 

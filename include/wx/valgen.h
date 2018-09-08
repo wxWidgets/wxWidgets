@@ -182,8 +182,11 @@ class wxGenericValidatorCompositType : public wxGenericValidatorSimpleType<W, T>
 
     static std::false_type IsSmartPtr(...) { return std::false_type{}; }
 
-    static auto NewValue(const T& value, const std::true_type&){ return new T{value}; }
-    static auto NewValue(const T& value, const std::false_type&){ return value; }
+    static auto NewValue(const T& value, const std::true_type&) -> decltype(new T(value))
+      { return new T{value}; }
+    static auto NewValue(const T& value, const std::false_type&) -> decltype(value)
+      { return value; }
+
 
 public:
 
@@ -312,6 +315,7 @@ inline void wxSetGenericValidator(W* win, T* value)
 #if defined(HAVE_VARIADIC_TEMPLATES)
 template<class W, template<typename...> class TComposite, typename T, typename... Ts>
 inline auto wxGenericValidator(TComposite<T, Ts...>& value)
+-> decltype(wxGenericValidatorCompositType<W, TComposite, T, Ts...>(value))
 {
     return wxGenericValidatorCompositType<W, TComposite, T, Ts...>(value);
 }
@@ -325,6 +329,7 @@ inline void wxSetGenericValidator(W* win, TComposite<T, Ts...>& value)
 #else // !defined(HAVE_VARIADIC_TEMPLATES)
 template<class W, template<typename> class TComposite, typename T>
 inline auto wxGenericValidator(TComposite<T>& value)
+-> decltype(wxGenericValidatorCompositType<W, TComposite, T>(value))
 {
     return wxGenericValidatorCompositType<W, TComposite, T>(value);
 }
