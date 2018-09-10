@@ -60,16 +60,22 @@ public:
     virtual bool IsOk() const wxOVERRIDE { return m_ok; }
 
     void Free();
-    void SetOk( bool isOk) { m_ok = isOk; }
 
 #if wxOSX_BITMAP_NATIVE_ACCESS
-    int GetWidth() const { return CGBitmapContextGetWidth(m_hBitmap); }
-    int GetHeight() const { return CGBitmapContextGetHeight(m_hBitmap); }
-    int GetDepth() const { return CGBitmapContextGetBitsPerPixel(m_hBitmap); }
-    int GetBytesPerRow() const { return CGBitmapContextGetBytesPerRow(m_hBitmap); }
-    bool HasAlpha() const {
+    int GetWidth() const
+        { return CGBitmapContextGetWidth(m_hBitmap); }
+    int GetHeight() const
+        { return CGBitmapContextGetHeight(m_hBitmap); }
+    int GetDepth() const
+        { return CGBitmapContextGetBitsPerPixel(m_hBitmap); }
+    int GetBytesPerRow() const
+        { return CGBitmapContextGetBytesPerRow(m_hBitmap); }
+    bool HasAlpha() const
+    {
         CGImageAlphaInfo alpha = CGBitmapContextGetAlphaInfo(m_hBitmap);
-        return !( alpha == kCGImageAlphaNone || alpha == kCGImageAlphaNoneSkipFirst || alpha == kCGImageAlphaNoneSkipLast) ;
+        return !(alpha == kCGImageAlphaNone ||
+                 alpha == kCGImageAlphaNoneSkipFirst ||
+                 alpha == kCGImageAlphaNoneSkipLast);
     }
 #else
     void SetWidth( int width ) { m_width = width; }
@@ -109,12 +115,10 @@ public:
     // rescaled to 16 x 16
     bool          HasNativeSize();
 
-#ifndef __WXOSX_IPHONE__
 #if wxOSX_USE_ICONREF
     // caller should increase ref count if needed longer
     // than the bitmap exists
     IconRef       GetIconRef();
-#endif
 #endif
 
     CGContextRef  GetBitmapContext() const;
@@ -127,6 +131,7 @@ private :
     bool Create( CGImageRef image, double scale );
     bool Create( CGContextRef bitmapcontext);
     void Init();
+    void FreeDerivedRepresentations();
 
 #if !wxOSX_BITMAP_NATIVE_ACCESS
     int           m_width;
@@ -141,10 +146,8 @@ private :
     mutable CGImageRef    m_cgImageRef;
     bool          m_isTemplate;
 
-#ifndef __WXOSX_IPHONE__
 #if wxOSX_USE_ICONREF
     IconRef       m_iconRef;
-#endif
 #endif
 
     wxCFRef<CGContextRef>  m_hBitmap;
@@ -190,10 +193,8 @@ void wxBitmapRefData::Init()
     m_cgImageRef = NULL ;
     m_isTemplate = false;
 
-#ifndef __WXOSX_IPHONE__
 #if wxOSX_USE_ICONREF
     m_iconRef = NULL ;
-#endif
 #endif
     m_hBitmap = NULL ;
 
@@ -391,7 +392,7 @@ void wxBitmapRefData::UseAlpha( bool use )
 #endif
     wxASSERT_MSG( hBitmap , wxT("Unable to create CGBitmapContext context") ) ;
     CGContextTranslateCTM( hBitmap, 0,  GetHeight() );
-    CGContextScaleCTM( hBitmap, 1*GetScaleFactor(), -1*GetScaleFactor() );
+    CGContextScaleCTM( hBitmap, GetScaleFactor(), -GetScaleFactor() );
 
     m_hBitmap.reset(hBitmap);
 }
@@ -408,13 +409,7 @@ const void *wxBitmapRefData::GetRawAccess() const
 
 void *wxBitmapRefData::GetRawAccess()
 {
-    wxCHECK_MSG( IsOk(), NULL , wxT("invalid bitmap") ) ;
-    wxASSERT_MSG( m_rawAccessCount == 1, "Direct write access must be within Begin/EndRawAccess" ) ;
-#if !wxOSX_BITMAP_NATIVE_ACCESS
-    return m_memBuf.GetData() ;
-#else
-    return CGBitmapContextGetData(m_hBitmap);
-#endif
+    return const_cast<void*>(const_cast<const wxBitmapRefData*>(this)->GetRawAccess());
 }
 
 
@@ -422,21 +417,17 @@ void *wxBitmapRefData::BeginRawAccess()
 {
     wxCHECK_MSG( IsOk(), NULL, wxT("invalid bitmap") ) ;
     wxASSERT( m_rawAccessCount == 0 ) ;
-#ifndef __WXOSX_IPHONE__
+
 #if wxOSX_USE_ICONREF
     wxASSERT_MSG( m_iconRef == NULL ,
                  wxT("Currently, modifing bitmaps that are used in controls already is not supported") ) ;
 #endif
-#endif
+
     ++m_rawAccessCount ;
 
     // we must destroy an existing cached image, as
     // the bitmap data may change now
-    if ( m_cgImageRef )
-    {
-        CGImageRelease( m_cgImageRef ) ;
-        m_cgImageRef = NULL ;
-    }
+    FreeDerivedRepresentations();
 
     return GetRawAccess() ;
 }
@@ -458,7 +449,6 @@ bool wxBitmapRefData::HasNativeSize()
     return ( sz == 128 || sz == 48 || sz == 32 || sz == 16 );
 }
 
-#ifndef __WXOSX_IPHONE__
 #if wxOSX_USE_ICONREF
 IconRef wxBitmapRefData::GetIconRef()
 {
@@ -671,8 +661,7 @@ IconRef wxBitmapRefData::GetIconRef()
 
     return m_iconRef ;
 }
-#endif
-#endif
+#endif // wxOSX_USE_ICONREF
 
 CGImageRef wxBitmapRefData::CreateCGImage() const
 {
@@ -821,25 +810,28 @@ wxDC *wxBitmapRefData::GetSelectedInto() const
     return m_selectedInto;
 }
 
-
-void wxBitmapRefData::Free()
+void wxBitmapRefData::FreeDerivedRepresentations()
 {
-    wxASSERT_MSG( m_rawAccessCount == 0 , wxT("Bitmap still selected when destroyed") ) ;
-
     if ( m_cgImageRef )
     {
         CGImageRelease( m_cgImageRef ) ;
         m_cgImageRef = NULL ;
     }
-#ifndef __WXOSX_IPHONE__
 #if wxOSX_USE_ICONREF
     if ( m_iconRef )
     {
         ReleaseIconRef( m_iconRef ) ;
         m_iconRef = NULL ;
     }
-#endif
-#endif
+#endif // wxOSX_USE_ICONREF
+}
+
+void wxBitmapRefData::Free()
+{
+    wxASSERT_MSG( m_rawAccessCount == 0 , wxT("Bitmap still selected when destroyed") ) ;
+
+    FreeDerivedRepresentations();
+
     m_hBitmap.reset();
     wxDELETE(m_bitmapMask);
 }
@@ -1479,6 +1471,7 @@ bool wxBitmap::HasAlpha() const
    return GetBitmapData()->HasAlpha() ;
 }
 
+#if WXWIN_COMPATIBILITY_3_0
 void wxBitmap::SetWidth(int w)
 {
     AllocExclusive();
@@ -1496,12 +1489,7 @@ void wxBitmap::SetDepth(int d)
     AllocExclusive();
     wxASSERT_MSG( d == -1 || GetDepth() == d, "Changing the bitmap depth is not supported");
 }
-
-void wxBitmap::SetOk(bool isOk)
-{
-    AllocExclusive();
-    GetBitmapData()->SetOk(isOk);
-}
+#endif
 
 #if wxUSE_PALETTE
 wxPalette *wxBitmap::GetPalette() const

@@ -74,7 +74,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     {
         wxASSERT_MSG( !bitmap.GetSelectedInto() ||
                      (bitmap.GetSelectedInto() == GetOwner()),
-                     wxT("Bitmap is selected in another wxMemoryDC, delete the first wxMemoryDC or use SelectObject(NULL)") );
+                     "Bitmap is selected in another wxMemoryDC, delete the first wxMemoryDC or use SelectObject(NULL)" );
 
         m_selected.SetSelectedInto(GetOwner());
         m_width = bitmap.GetScaledWidth();
