@@ -42,11 +42,8 @@ public:
     virtual bool IsOk() const wxOVERRIDE { return m_nsImage != NULL; }
     virtual void Free();
 
-    void SetWidth( int width ) { m_width = width; }
-    void SetHeight( int height ) { m_height = height; }
-
-    int GetWidth() const { return m_width; }
-    int GetHeight() const { return m_height; }
+    int GetWidth() const { return (int) wxOSXGetImageSize(m_nsImage).width; }
+    int GetHeight() const { return (int) wxOSXGetImageSize(m_nsImage).height; }
 
     WX_NSImage GetNSImage() const;
 
@@ -54,9 +51,6 @@ private:
     void Init();
     void Create( NSImage* icon, int desiredWidth, int desiredHeight );
     NSImage* m_nsImage;
-
-    int m_width;
-    int m_height;
 
     // We can (easily) copy m_iconRef so we don't implement the copy ctor.
     wxDECLARE_NO_COPY_CLASS(wxIconRefData);
@@ -78,24 +72,18 @@ wxIconRefData::wxIconRefData( WXHICON iconref, int desiredWidth, int desiredHeig
     ReleaseIconRef(iconref);
 }
 
-void wxIconRefData::Create( NSImage* icon, int desiredWidth, int desiredHeight )
+void wxIconRefData::Create( NSImage* icon, int WXUNUSED(desiredWidth), int WXUNUSED(desiredHeight) )
 {
     if ( icon )
     {
         m_nsImage = icon;
         wxMacCocoaRetain(icon);
     }
-
-    // Standard sizes
-    SetWidth( desiredWidth == -1 ? 32 : desiredWidth ) ;
-    SetHeight( desiredHeight == -1 ? 32 : desiredHeight ) ;
 }
 
 void wxIconRefData::Init()
 {
     m_nsImage = NULL;
-    m_width =
-    m_height = 0;
 }
 
 void wxIconRefData::Free()

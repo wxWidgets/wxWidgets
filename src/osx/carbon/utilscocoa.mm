@@ -297,6 +297,11 @@ void wxOSXSetImageSize(WX_NSImage image, CGFloat width, CGFloat height)
     [image setSize:NSMakeSize(width, height)];
 }
 
+CGSize wxOSXGetImageSize(WX_NSImage image)
+{
+    return NSSizeToCGSize([image size]);
+}
+
 CGImageRef wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage, double *scaleptr )
 {
     // based on http://www.mail-archive.com/cocoa-dev@lists.apple.com/msg18065.html
