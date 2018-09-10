@@ -1633,6 +1633,11 @@ public:
 
         This should only be called if CanGetValueAs() returns @true when called
         with @a typeName. Default implementation always return @NULL.
+
+        Note that if the pointer is not null, it will be deleted by the caller,
+        so it must be allocated on the heap by any class overriding this
+        method. In practice, it means that the value stored internally must be
+        cloned on every call.
      */
     virtual void *GetValueAsCustom(int row, int col, const wxString& typeName);
 
