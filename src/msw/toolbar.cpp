@@ -953,7 +953,7 @@ bool wxToolBar::Realize()
         {
             hBitmap = GetHbitmapOf(bitmap);
             // don't delete this HBITMAP!
-            bitmap.SetHBITMAP(0);
+            bitmap.ResetHBITMAP();
         }
 
         if ( remapValue == Remap_Buttons )
