@@ -71,6 +71,7 @@ public:
 
     void SetHICON(WXHICON icon) { SetHandle((WXHANDLE)icon); }
     WXHICON GetHICON() const { return (WXHICON)GetHandle(); }
+    bool InitFromHICON(WXHICON icon, int width, int height);
 
     // create from bitmap (which should have a mask unless it's monochrome):
     // there shouldn't be any implicit bitmap -> icon conversion (i.e. no
