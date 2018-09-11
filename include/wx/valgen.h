@@ -243,6 +243,72 @@ public:
 
 #if defined(HAVE_STD_VARIANT)
 
+template <class W, typename... Ts>
+struct wxVisitorTo;
+
+template <class W, typename T, typename... Ts>
+struct wxVisitorTo<W, T, Ts...> : wxVisitorTo<W, T>, wxVisitorTo<W, Ts...>
+{
+    wxVisitorTo(wxWindow* win) : wxVisitorTo<W, T>(win), wxVisitorTo<W, Ts...>(win) {}
+
+    using wxVisitorTo<W, T>::operator();
+    using wxVisitorTo<W, Ts...>::operator();
+};
+
+template <class W, typename T>
+struct wxVisitorTo<W, T>
+{
+    wxVisitorTo(wxWindow* win) : m_win(win){}
+
+    bool operator()(T value)
+    {
+        return wxDataTransfer<W>::template To<T>(m_win, &value);
+    }
+
+private:
+    wxWindow* m_win;
+};
+
+template<class W, typename... Ts>
+auto wxMakeVisitorTo(wxWindow* win)
+{
+    return wxVisitorTo<W, Ts...>(win);
+}
+
+//
+template <class W, typename... Ts>
+struct wxVisitorFrom;
+
+template <class W, typename T, typename... Ts>
+struct wxVisitorFrom<W, T, Ts...> : wxVisitorFrom<W, T>, wxVisitorFrom<W, Ts...>
+{
+    wxVisitorFrom(wxWindow* win) : wxVisitorFrom<W, T>(win), wxVisitorFrom<W, Ts...>(win) {}
+
+    using wxVisitorFrom<W, T>::operator();
+    using wxVisitorFrom<W, Ts...>::operator();
+};
+
+template <class W, typename T>
+struct wxVisitorFrom<W, T>
+{
+    wxVisitorFrom(wxWindow* win) : m_win(win){}
+
+    bool operator()(T& value)
+    {
+        return wxDataTransfer<W>::template From<T>(m_win, &value);
+    }
+
+private:
+    wxWindow* m_win;
+};
+
+template<class W, typename... Ts>
+auto wxMakeVisitorFrom(wxWindow* win)
+{
+    return wxVisitorFrom<W, Ts...>(win);
+}
+
+//
 template<class W, typename T, typename... Ts>
 class wxGenericValidatorCompositType<W, std::variant, T, Ts...> 
     : public wxGenericValidatorSimpleType<W, T>
@@ -267,30 +333,20 @@ public:
 
     virtual bool TransferToWindow() wxOVERRIDE
     {
-        CompositeType* data = static_cast<CompositeType*>(this->m_data);
+        CompositeType& data = *static_cast<CompositeType*>(this->m_data);
 
-        auto value = std::get_if<T>(data);
-
-        if ( value )
-            return wxDataTransfer<W>::template To<T>(this->GetWindow(), value);
-
-        return false;
+        return std::visit(wxMakeVisitorTo<W, T, Ts...>(this->GetWindow()), data);
     }
 
     virtual bool TransferFromWindow() wxOVERRIDE
     {
-        CompositeType* data = static_cast<CompositeType*>(this->m_data);
+        CompositeType& data = *static_cast<CompositeType*>(this->m_data);
 
-        auto value = std::get_if<T>(data);
-
-        if ( value && wxDataTransfer<W>::template From<T>(this->GetWindow(), value) )
-            return true;
-
-        return false;
+        return std::visit(wxMakeVisitorFrom<W, T, Ts...>(this->GetWindow()), data);
     }
 };
 
-#endif // HAVE_STD_VARIANT
+#endif // defined(HAVE_STD_VARIANT)
 
 //-----------------------------------------------------------------------------
 // convenience functions.
