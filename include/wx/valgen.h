@@ -243,64 +243,45 @@ public:
 
 #if defined(HAVE_STD_VARIANT)
 
-template <class W, typename... Ts>
-struct wxVisitorTo;
+#define wxDEFINE_GENERIC_VALIDATOR_VISITOR(which)                              \
+                                                                               \
+template <class W, typename... Ts>                                             \
+struct wxVisitor##which;                                                       \
+                                                                               \
+template <class W, typename T, typename... Ts>                                 \
+struct wxVisitor##which<W, T, Ts...> :                                         \
+        wxVisitor##which<W, T>, wxVisitor##which<W, Ts...>                     \
+{                                                                              \
+    wxVisitor##which(wxWindow* win) : wxVisitor##which<W, T>(win),             \
+                                      wxVisitor##which<W, Ts...>(win)          \
+    {}                                                                         \
+                                                                               \
+    using wxVisitor##which<W, T>::operator();                                  \
+    using wxVisitor##which<W, Ts...>::operator();                              \
+};                                                                             \
+                                                                               \
+template <class W, typename T>                                                 \
+struct wxVisitor##which<W, T>                                                  \
+{                                                                              \
+    wxVisitor##which(wxWindow* win) : m_win(win){}                             \
+                                                                               \
+    bool operator()(T value)                                                   \
+    {                                                                          \
+        return wxDataTransfer<W>::template which<T>(m_win, &value);            \
+    }                                                                          \
+                                                                               \
+private:                                                                       \
+    wxWindow* m_win;                                                           \
+}
 
-template <class W, typename T, typename... Ts>
-struct wxVisitorTo<W, T, Ts...> : wxVisitorTo<W, T>, wxVisitorTo<W, Ts...>
-{
-    wxVisitorTo(wxWindow* win) : wxVisitorTo<W, T>(win), wxVisitorTo<W, Ts...>(win) {}
-
-    using wxVisitorTo<W, T>::operator();
-    using wxVisitorTo<W, Ts...>::operator();
-};
-
-template <class W, typename T>
-struct wxVisitorTo<W, T>
-{
-    wxVisitorTo(wxWindow* win) : m_win(win){}
-
-    bool operator()(T value)
-    {
-        return wxDataTransfer<W>::template To<T>(m_win, &value);
-    }
-
-private:
-    wxWindow* m_win;
-};
+wxDEFINE_GENERIC_VALIDATOR_VISITOR(To);
+wxDEFINE_GENERIC_VALIDATOR_VISITOR(From);
 
 template<class W, typename... Ts>
 auto wxMakeVisitorTo(wxWindow* win)
 {
     return wxVisitorTo<W, Ts...>(win);
 }
-
-//
-template <class W, typename... Ts>
-struct wxVisitorFrom;
-
-template <class W, typename T, typename... Ts>
-struct wxVisitorFrom<W, T, Ts...> : wxVisitorFrom<W, T>, wxVisitorFrom<W, Ts...>
-{
-    wxVisitorFrom(wxWindow* win) : wxVisitorFrom<W, T>(win), wxVisitorFrom<W, Ts...>(win) {}
-
-    using wxVisitorFrom<W, T>::operator();
-    using wxVisitorFrom<W, Ts...>::operator();
-};
-
-template <class W, typename T>
-struct wxVisitorFrom<W, T>
-{
-    wxVisitorFrom(wxWindow* win) : m_win(win){}
-
-    bool operator()(T& value)
-    {
-        return wxDataTransfer<W>::template From<T>(m_win, &value);
-    }
-
-private:
-    wxWindow* m_win;
-};
 
 template<class W, typename... Ts>
 auto wxMakeVisitorFrom(wxWindow* win)
