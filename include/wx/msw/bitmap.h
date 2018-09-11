@@ -199,7 +199,9 @@ public:
     void MSWUpdateAlpha();
 
 public:
-    void SetHBITMAP(WXHBITMAP bmp) { SetHandle((WXHANDLE)bmp); }
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_INLINE(void SetHBITMAP(WXHBITMAP bmp), SetHandle((WXHANDLE)bmp); )
+#endif // WXWIN_COMPATIBILITY_3_0
     WXHBITMAP GetHBITMAP() const { return (WXHBITMAP)GetHandle(); }
     bool InitFromHBITMAP(WXHBITMAP bmp, int width, int height, int depth);
     void ResetHBITMAP() { InitFromHBITMAP(NULL, 0, 0, 0); }
