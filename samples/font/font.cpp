@@ -76,6 +76,12 @@ public:
     // event handlers
     void OnPaint( wxPaintEvent &event );
 
+protected:
+    virtual wxSize DoGetBestClientSize() const wxOVERRIDE
+    {
+        return wxSize(60*GetCharWidth(), 15*GetCharHeight());
+    }
+
 private:
     wxColour m_colour;
     wxFont   m_font;
@@ -443,14 +449,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     wxSplitterWindow *splitter = new wxSplitterWindow(this);
 
-    m_textctrl = new wxTextCtrl(splitter, wxID_ANY,
-                                wxT("Paste text here to see how it looks\nlike in the given font"),
-                                wxDefaultPosition, wxDefaultSize,
-                                wxTE_MULTILINE);
-
     m_canvas = new MyCanvas(splitter);
 
-    splitter->SplitHorizontally(m_textctrl, m_canvas, 100);
+    m_textctrl = new wxTextCtrl(splitter, wxID_ANY,
+                                wxT("Paste text here to see how it looks\nlike in the given font"),
+                                wxDefaultPosition,
+                                wxSize(-1, 6*GetCharHeight()),
+                                wxTE_MULTILINE);
+
+    splitter->SplitHorizontally(m_canvas, m_textctrl, m_canvas->GetBestSize().y);
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
