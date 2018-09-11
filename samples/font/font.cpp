@@ -141,7 +141,7 @@ public:
 protected:
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE
     {
-        return wxSize(60*GetCharWidth(), 15*GetCharHeight());
+        return wxSize(80*GetCharWidth(), 15*GetCharHeight());
     }
 
 private:
@@ -172,7 +172,7 @@ class MyFrame : public wxFrame
 {
 public:
     // ctor(s)
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+    MyFrame();
 
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
@@ -374,8 +374,7 @@ bool MyApp::OnInit()
     wxString privfont = argv[0].BeforeLast('/');
 
     // Create the main application window
-    MyFrame *frame = new MyFrame(wxT("Font wxWidgets demo"),
-                                 wxPoint(50, 50), wxSize(600, 400));
+    MyFrame *frame = new MyFrame();
 
     // Show it
     frame->Show(true);
@@ -391,8 +390,8 @@ bool MyApp::OnInit()
 // ----------------------------------------------------------------------------
 
 // frame constructor
-MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size), m_textctrl(NULL)
+MyFrame::MyFrame()
+       : wxFrame(NULL, wxID_ANY, "wxWidgets font sample")
 {
     SetIcon(wxICON(sample));
 
@@ -532,13 +531,16 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                                 wxSize(-1, 6*GetCharHeight()),
                                 wxTE_MULTILINE);
 
-    splitter->SplitHorizontally(m_fontWindow, m_textctrl, m_fontWindow->GetBestSize().y);
+    splitter->SplitHorizontally(m_fontWindow, m_textctrl, 0);
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar();
     SetStatusText(wxT("Welcome to wxWidgets font demo!"));
 #endif // wxUSE_STATUSBAR
+
+    SetClientSize(splitter->GetBestSize());
+    splitter->SetSashPosition(m_fontWindow->GetBestSize().y);
 }
 
 // --------------------------------------------------------
