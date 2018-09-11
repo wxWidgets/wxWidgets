@@ -23,12 +23,16 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/checkbox.h"
 #include "wx/choicdlg.h"
 #include "wx/fontdlg.h"
 #include "wx/fontenum.h"
 #include "wx/fontmap.h"
 #include "wx/encconv.h"
+#include "wx/sizer.h"
+#include "wx/spinctrl.h"
 #include "wx/splitter.h"
+#include "wx/statline.h"
 #include "wx/stdpaths.h"
 #include "wx/textfile.h"
 #include "wx/settings.h"
@@ -60,14 +64,72 @@ public:
     virtual bool OnInit() wxOVERRIDE;
 };
 
-// MyCanvas is a canvas on which we show the font sample
-class MyCanvas: public wxWindow
+// FontPanel contains controls allowing to specify the font properties
+class FontPanel : public wxPanel
 {
 public:
-    MyCanvas( wxWindow *parent );
-    virtual ~MyCanvas(){};
+    explicit FontPanel(wxWindow* parent);
 
-    // accessors for the frame
+    void ShowFont(const wxFont& font) { m_font = font; DoUpdate(); }
+
+private:
+    // Unlike wxFontXXX, the elements of these enum are consecutive, which is
+    // more convenient here.
+    enum Family
+    {
+        Family_Default,
+        Family_Decorative,
+        Family_Roman,
+        Family_Script,
+        Family_Swiss,
+        Family_Modern,
+        Family_Teletype
+    };
+
+    enum Style
+    {
+        Style_Normal,
+        Style_Italic,
+        Style_Slant
+    };
+
+    enum Weight
+    {
+        Weight_Thin,
+        Weight_Extralight,
+        Weight_Light,
+        Weight_Normal,
+        Weight_Medium,
+        Weight_Semibold,
+        Weight_Bold,
+        Weight_Extrabold,
+        Weight_Heavy,
+        Weight_Extraheavy
+    };
+
+    void DoUpdate();
+
+    wxFont m_font;
+
+    wxTextCtrl* m_textFaceName;
+    wxChoice* m_choiceFamily;
+    wxSpinCtrlDouble* m_spinPointSize;
+    wxChoice* m_choiceStyle;
+    wxChoice* m_choiceWeight;
+    wxSpinCtrl* m_spinWeight;
+    wxCheckBox* m_checkUnderlined;
+    wxCheckBox* m_checkStrikethrough;
+    wxCheckBox* m_checkFixedWidth;
+    wxStaticText* m_labelInfo;
+};
+
+// FontCanvas shows the font characters.
+class FontCanvas : public wxWindow
+{
+public:
+    explicit FontCanvas( wxWindow *parent );
+
+    // accessors for FontWindow
     const wxFont& GetTextFont() const { return m_font; }
     const wxColour& GetColour() const { return m_colour; }
     void SetTextFont(const wxFont& font) { m_font = font; }
@@ -89,6 +151,22 @@ private:
     wxDECLARE_EVENT_TABLE();
 };
 
+// FontWindow contains both FontPanel and FontCanvas
+class FontWindow : public wxWindow
+{
+public:
+    explicit FontWindow(wxWindow *parent);
+
+    const wxFont& GetTextFont() const { return m_canvas->GetTextFont(); }
+    const wxColour& GetColour() const { return m_canvas->GetColour(); }
+
+    void UpdateFont(const wxFont& font, const wxColour& colour);
+
+private:
+    FontPanel* const m_panel;
+    FontCanvas* const m_canvas;
+};
+
 // Define a new frame type: this is going to be our main frame
 class MyFrame : public wxFrame
 {
@@ -96,15 +174,12 @@ public:
     // ctor(s)
     MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
 
-    // accessors
-    MyCanvas *GetCanvas() const { return m_canvas; }
-
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
     void OnGetBaseFont(wxCommandEvent& WXUNUSED(event))
-        { DoChangeFont(m_canvas->GetTextFont().GetBaseFont()); }
+        { DoChangeFont(m_fontWindow->GetTextFont().GetBaseFont()); }
     void OnIncFont(wxCommandEvent& WXUNUSED(event)) { DoResizeFont(+2); }
     void OnDecFont(wxCommandEvent& WXUNUSED(event)) { DoResizeFont(-2); }
 
@@ -156,7 +231,7 @@ protected:
     wxFontFamily GetFamilyFromUser();
 
     wxTextCtrl *m_textctrl;
-    MyCanvas   *m_canvas;
+    FontWindow *m_fontWindow;
 
 private:
     // any class wishing to process wxWidgets events must use this macro
@@ -449,7 +524,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     wxSplitterWindow *splitter = new wxSplitterWindow(this);
 
-    m_canvas = new MyCanvas(splitter);
+    m_fontWindow = new FontWindow(splitter);
 
     m_textctrl = new wxTextCtrl(splitter, wxID_ANY,
                                 wxT("Paste text here to see how it looks\nlike in the given font"),
@@ -457,7 +532,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                                 wxSize(-1, 6*GetCharHeight()),
                                 wxTE_MULTILINE);
 
-    splitter->SplitHorizontally(m_canvas, m_textctrl, m_canvas->GetBestSize().y);
+    splitter->SplitHorizontally(m_fontWindow, m_textctrl, m_fontWindow->GetBestSize().y);
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
@@ -604,7 +679,7 @@ void MyFrame::OnSetNativeDesc(wxCommandEvent& WXUNUSED(event))
                         (
                             wxT("Enter native font string"),
                             wxT("Input font description"),
-                            m_canvas->GetTextFont().GetNativeFontInfoDesc(),
+                            m_fontWindow->GetTextFont().GetNativeFontInfoDesc(),
                             this
                         );
     if ( fontInfo.empty() )
@@ -624,7 +699,7 @@ void MyFrame::OnSetNativeDesc(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSetNativeUserDesc(wxCommandEvent& WXUNUSED(event))
 {
-    wxString fontdesc = GetCanvas()->GetTextFont().GetNativeFontInfoUserDesc();
+    wxString fontdesc = m_fontWindow->GetTextFont().GetNativeFontInfoUserDesc();
     wxString fontUserInfo = wxGetTextFromUser(
             wxT("Here you can edit current font description"),
             wxT("Input font description"), fontdesc,
@@ -649,14 +724,14 @@ void MyFrame::OnSetFamily(wxCommandEvent& WXUNUSED(event))
 {
     wxFontFamily f = GetFamilyFromUser();
 
-    wxFont font = m_canvas->GetTextFont();
+    wxFont font = m_fontWindow->GetTextFont();
     font.SetFamily(f);
     DoChangeFont(font);
 }
 
 void MyFrame::OnSetFaceName(wxCommandEvent& WXUNUSED(event))
 {
-    wxString facename = GetCanvas()->GetTextFont().GetFaceName();
+    wxString facename = m_fontWindow->GetTextFont().GetFaceName();
     wxString newFaceName = wxGetTextFromUser(
             wxT("Here you can edit current font face name."),
             wxT("Input font facename"), facename,
@@ -664,7 +739,7 @@ void MyFrame::OnSetFaceName(wxCommandEvent& WXUNUSED(event))
     if (newFaceName.IsEmpty())
         return;     // user clicked "Cancel" - do nothing
 
-    wxFont font(GetCanvas()->GetTextFont());
+    wxFont font(m_fontWindow->GetTextFont());
     if (font.SetFaceName(newFaceName))      // change facename only
     {
         wxASSERT_MSG(font.IsOk(), wxT("The font should now be valid"));
@@ -684,7 +759,7 @@ void MyFrame::OnSetEncoding(wxCommandEvent& WXUNUSED(event))
     if ( enc == wxFONTENCODING_SYSTEM )
         return;
 
-    wxFont font = m_canvas->GetTextFont();
+    wxFont font = m_fontWindow->GetTextFont();
     font.SetEncoding(enc);
     DoChangeFont(font);
 }
@@ -748,7 +823,7 @@ wxFontFamily MyFrame::GetFamilyFromUser()
 
 void MyFrame::DoResizeFont(int diff)
 {
-    wxFont font = m_canvas->GetTextFont();
+    wxFont font = m_fontWindow->GetTextFont();
 
     font.SetPointSize(font.GetPointSize() + diff);
     DoChangeFont(font);
@@ -756,7 +831,7 @@ void MyFrame::DoResizeFont(int diff)
 
 void MyFrame::OnBold(wxCommandEvent& event)
 {
-    wxFont font = m_canvas->GetTextFont();
+    wxFont font = m_fontWindow->GetTextFont();
 
     font.SetWeight(event.IsChecked() ? wxFONTWEIGHT_BOLD : wxFONTWEIGHT_NORMAL);
     DoChangeFont(font);
@@ -764,7 +839,7 @@ void MyFrame::OnBold(wxCommandEvent& event)
 
 void MyFrame::OnLight(wxCommandEvent& event)
 {
-    wxFont font = m_canvas->GetTextFont();
+    wxFont font = m_fontWindow->GetTextFont();
 
     font.SetWeight(event.IsChecked() ? wxFONTWEIGHT_LIGHT : wxFONTWEIGHT_NORMAL);
     DoChangeFont(font);
@@ -772,7 +847,7 @@ void MyFrame::OnLight(wxCommandEvent& event)
 
 void MyFrame::OnItalic(wxCommandEvent& event)
 {
-    wxFont font = m_canvas->GetTextFont();
+    wxFont font = m_fontWindow->GetTextFont();
 
     font.SetStyle(event.IsChecked() ? wxFONTSTYLE_ITALIC : wxFONTSTYLE_NORMAL);
     DoChangeFont(font);
@@ -780,7 +855,7 @@ void MyFrame::OnItalic(wxCommandEvent& event)
 
 void MyFrame::OnSlant(wxCommandEvent& event)
 {
-    wxFont font = m_canvas->GetTextFont();
+    wxFont font = m_fontWindow->GetTextFont();
 
     font.SetStyle(event.IsChecked() ? wxFONTSTYLE_SLANT : wxFONTSTYLE_NORMAL);
     DoChangeFont(font);
@@ -788,7 +863,7 @@ void MyFrame::OnSlant(wxCommandEvent& event)
 
 void MyFrame::OnUnderline(wxCommandEvent& event)
 {
-    wxFont font = m_canvas->GetTextFont();
+    wxFont font = m_fontWindow->GetTextFont();
 
     font.SetUnderlined(event.IsChecked());
     DoChangeFont(font);
@@ -796,7 +871,7 @@ void MyFrame::OnUnderline(wxCommandEvent& event)
 
 void MyFrame::OnStrikethrough(wxCommandEvent& event)
 {
-    wxFont font = m_canvas->GetTextFont();
+    wxFont font = m_fontWindow->GetTextFont();
     font.SetStrikethrough(event.IsChecked());
     DoChangeFont(font);
 }
@@ -876,10 +951,7 @@ void MyFrame::OnwxSystemSettingsFont(wxCommandEvent& event)
 
 void MyFrame::DoChangeFont(const wxFont& font, const wxColour& col)
 {
-    m_canvas->SetTextFont(font);
-    if ( col.IsOk() )
-        m_canvas->SetColour(col);
-    m_canvas->Refresh();
+    m_fontWindow->UpdateFont(font, col);
 
     m_textctrl->SetFont(font);
     if ( col.IsOk() )
@@ -906,8 +978,8 @@ void MyFrame::DoChangeFont(const wxFont& font, const wxColour& col)
 void MyFrame::OnSelectFont(wxCommandEvent& WXUNUSED(event))
 {
     wxFontData data;
-    data.SetInitialFont(m_canvas->GetTextFont());
-    data.SetColour(m_canvas->GetColour());
+    data.SetInitialFont(m_fontWindow->GetTextFont());
+    data.SetColour(m_fontWindow->GetColour());
 
     wxFontDialog dialog(this, data);
     if ( dialog.ShowModal() == wxID_OK )
@@ -922,7 +994,7 @@ void MyFrame::OnSelectFont(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPrivateFont(wxCommandEvent& WXUNUSED(event))
 {
-    wxFont font(GetCanvas()->GetTextFont());
+    wxFont font(m_fontWindow->GetTextFont());
     if (font.SetFaceName("wxprivate"))
     {
         wxASSERT_MSG( font.IsOk(), wxT("The font should now be valid")) ;
@@ -1074,20 +1146,260 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 }
 
 // ----------------------------------------------------------------------------
-// MyCanvas
+// FontWindow
 // ----------------------------------------------------------------------------
 
-wxBEGIN_EVENT_TABLE(MyCanvas, wxWindow)
-    EVT_PAINT(MyCanvas::OnPaint)
+FontWindow::FontWindow(wxWindow *parent)
+          : wxWindow(parent, wxID_ANY),
+            m_panel(new FontPanel(this)),
+            m_canvas(new FontCanvas(this))
+{
+    wxSizer* const sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(m_panel, wxSizerFlags().Expand().Border());
+    sizer->Add(new wxStaticLine(this), wxSizerFlags().Expand());
+    sizer->Add(m_canvas, wxSizerFlags(1).Expand());
+    SetSizer(sizer);
+}
+
+void FontWindow::UpdateFont(const wxFont& font, const wxColour& colour)
+{
+    m_panel->ShowFont(font);
+
+    m_canvas->SetTextFont(font);
+    if ( colour.IsOk() )
+        m_canvas->SetColour(colour);
+    m_canvas->Refresh();
+}
+
+// ----------------------------------------------------------------------------
+// FontPanel
+// ----------------------------------------------------------------------------
+
+FontPanel::FontPanel(wxWindow* parent)
+         : wxPanel(parent)
+{
+    m_textFaceName = new wxTextCtrl(this, wxID_ANY, "");
+
+    // Must be in sync with the Family enum.
+    const wxString familiesNames[] =
+    {
+        "Default",
+        "Decorative",
+        "Roman",
+        "Script",
+        "Swiss",
+        "Modern",
+        "Teletype",
+    };
+    m_choiceFamily = new wxChoice(this, wxID_ANY,
+                                  wxDefaultPosition, wxDefaultSize,
+                                  WXSIZEOF(familiesNames), familiesNames);
+
+    m_spinPointSize = new wxSpinCtrlDouble(this, wxID_ANY, wxString(),
+                                           wxDefaultPosition, wxDefaultSize,
+                                           wxSP_ARROW_KEYS,
+                                           1.0, 100.0, 10.0, 0.1);
+
+    m_spinPointSize->SetInitialSize
+        (
+         m_spinPointSize->GetSizeFromTextSize(GetTextExtent("999.9").x)
+        );
+
+    // Must be in sync with the Style enum.
+    const wxString stylesNames[] =
+    {
+        "Normal",
+        "Italic",
+        "Slant",
+    };
+
+    m_choiceStyle = new wxChoice(this, wxID_ANY,
+                                 wxDefaultPosition, wxDefaultSize,
+                                 WXSIZEOF(stylesNames), stylesNames);
+
+    // Must be in sync with the Weight enum.
+    const wxString weightsNames[] =
+    {
+        "Thin",
+        "Extra light",
+        "Light",
+        "Normal",
+        "Medium",
+        "Semi-bold",
+        "Bold",
+        "Extra bold",
+        "Heavy",
+        "Extra heavy",
+    };
+
+    m_choiceWeight = new wxChoice(this, wxID_ANY,
+                                 wxDefaultPosition, wxDefaultSize,
+                                 WXSIZEOF(weightsNames), weightsNames);
+
+    m_spinWeight = new wxSpinCtrl(this, wxID_ANY, wxString(),
+                                  wxDefaultPosition, wxDefaultSize,
+                                  wxSP_ARROW_KEYS,
+                                  1, wxFONTWEIGHT_MAX);
+
+    m_spinWeight->SetInitialSize
+        (
+         m_spinWeight->GetSizeFromTextSize(GetTextExtent("9999").x)
+        );
+
+    m_checkUnderlined = new wxCheckBox(this, wxID_ANY, wxString());
+    m_checkStrikethrough = new wxCheckBox(this, wxID_ANY, wxString());
+    m_checkFixedWidth = new wxCheckBox(this, wxID_ANY, wxString());
+    m_checkFixedWidth->Disable(); // Can't be changed by the user.
+
+    m_labelInfo = new wxStaticText(this, wxID_ANY, "\n\n\n");
+
+
+    const int border = wxSizerFlags::GetDefaultBorder();
+
+    // Columns are: label, control, gap, label, control, label, control (there
+    // is no second gap column because we don't want any gap in the weight row).
+    wxFlexGridSizer* const sizer = new wxFlexGridSizer(7, wxSize(border, border));
+
+    const wxSizerFlags flagsLabel = wxSizerFlags().CentreVertical();
+    const wxSizerFlags flagsValue = wxSizerFlags().Expand().CentreVertical();
+
+    sizer->Add(new wxStaticText(this, wxID_ANY, "Face &name:"), flagsLabel);
+    sizer->Add(m_textFaceName, flagsValue);
+
+    sizer->AddSpacer(2*border);
+
+    sizer->Add(new wxStaticText(this, wxID_ANY, "&Family:"), flagsLabel);
+    sizer->Add(m_choiceFamily, flagsValue);
+
+    sizer->Add(new wxStaticText(this, wxID_ANY, "&Point size:"),
+               wxSizerFlags().DoubleBorder(wxLEFT).CentreVertical());
+    sizer->Add(m_spinPointSize, flagsValue);
+
+
+    sizer->Add(new wxStaticText(this, wxID_ANY, "&Style:"), flagsLabel);
+    sizer->Add(m_choiceStyle, flagsValue);
+
+    sizer->AddSpacer(0);
+
+    sizer->Add(new wxStaticText(this, wxID_ANY, "&Weight:"), flagsLabel);
+    sizer->Add(m_choiceWeight, flagsValue);
+
+    sizer->Add(new wxStaticText(this, wxID_ANY, "or &raw value:"), flagsLabel);
+    sizer->Add(m_spinWeight, flagsValue);
+
+
+    sizer->Add(new wxStaticText(this, wxID_ANY, "&Underlined:"), flagsLabel);
+    sizer->Add(m_checkUnderlined, flagsValue);
+
+    sizer->AddSpacer(0);
+
+    sizer->Add(new wxStaticText(this, wxID_ANY, "&Strike through:"), flagsLabel);
+    sizer->Add(m_checkStrikethrough, flagsValue);
+
+    sizer->Add(new wxStaticText(this, wxID_ANY, "Fixed width:"), flagsLabel);
+    sizer->Add(m_checkFixedWidth, flagsValue);
+
+
+    wxSizer* const sizerTop = new wxBoxSizer(wxVERTICAL);
+    sizerTop->Add(sizer, wxSizerFlags().Expand().Border(wxBOTTOM));
+    sizerTop->Add(m_labelInfo, wxSizerFlags().Expand().Border(wxTOP));
+    SetSizer(sizerTop);
+
+    ShowFont(*wxNORMAL_FONT);
+}
+
+void FontPanel::DoUpdate()
+{
+    m_textFaceName->ChangeValue(m_font.GetFaceName());
+
+    Family family = Family_Default;
+    switch ( m_font.GetFamily() )
+    {
+        case wxFONTFAMILY_DECORATIVE: family = Family_Decorative; break;
+        case wxFONTFAMILY_ROMAN:      family = Family_Roman;      break;
+        case wxFONTFAMILY_SCRIPT:     family = Family_Script;     break;
+        case wxFONTFAMILY_SWISS:      family = Family_Swiss;      break;
+        case wxFONTFAMILY_MODERN:     family = Family_Modern;     break;
+        case wxFONTFAMILY_TELETYPE:   family = Family_Teletype;   break;
+
+        case wxFONTFAMILY_DEFAULT:
+        case wxFONTFAMILY_UNKNOWN:
+            // Leave family as Family_Default, what else can we do.
+            break;
+    }
+    m_choiceFamily->SetSelection(family);
+
+    m_spinPointSize->SetValue(m_font.GetFractionalPointSize());
+
+    Style style = Style_Normal;
+    switch ( m_font.GetStyle() )
+    {
+        case wxFONTSTYLE_ITALIC: style = Style_Italic; break;
+        case wxFONTSTYLE_SLANT:  style = Style_Slant;  break;
+
+        case wxFONTSTYLE_NORMAL:
+        case wxFONTSTYLE_MAX:
+            break;
+    }
+    m_choiceStyle->SetSelection(style);
+
+    Weight weight = Weight_Normal;
+    switch ( m_font.GetWeight() )
+    {
+        case wxFONTWEIGHT_THIN:         weight = Weight_Thin;       break;
+        case wxFONTWEIGHT_EXTRALIGHT:   weight = Weight_Extralight; break;
+        case wxFONTWEIGHT_LIGHT:        weight = Weight_Light;      break;
+        case wxFONTWEIGHT_MEDIUM:       weight = Weight_Medium;     break;
+        case wxFONTWEIGHT_SEMIBOLD:     weight = Weight_Semibold;   break;
+        case wxFONTWEIGHT_BOLD:         weight = Weight_Bold;       break;
+        case wxFONTWEIGHT_EXTRABOLD:    weight = Weight_Extrabold;  break;
+        case wxFONTWEIGHT_HEAVY:        weight = Weight_Heavy;      break;
+        case wxFONTWEIGHT_EXTRAHEAVY:   weight = Weight_Extraheavy; break;
+
+        case wxFONTWEIGHT_NORMAL:
+        case wxFONTWEIGHT_INVALID:
+            break;
+    }
+    m_choiceWeight->SetSelection(weight);
+    m_spinWeight->SetValue(m_font.GetNumericWeight());
+
+    m_checkUnderlined->SetValue(m_font.GetUnderlined());
+    m_checkStrikethrough->SetValue(m_font.GetStrikethrough());
+    m_checkFixedWidth->SetValue(m_font.IsFixedWidth());
+
+    const wxSize pixelSize = m_font.GetPixelSize();
+    wxClientDC dc(this);
+    dc.SetFont(m_font);
+
+    m_labelInfo->SetLabelText
+        (
+            wxString::Format
+            (
+                "Font info string: %s\n"
+                "Size in pixels: %d*%d, "
+                "average char size: %d*%d",
+                m_font.GetNativeFontInfoDesc(),
+                pixelSize.x, pixelSize.y,
+                dc.GetCharWidth(), dc.GetCharHeight()
+            )
+        );
+}
+
+// ----------------------------------------------------------------------------
+// FontCanvas
+// ----------------------------------------------------------------------------
+
+wxBEGIN_EVENT_TABLE(FontCanvas, wxWindow)
+    EVT_PAINT(FontCanvas::OnPaint)
 wxEND_EVENT_TABLE()
 
-MyCanvas::MyCanvas( wxWindow *parent )
-        : wxWindow( parent, wxID_ANY ),
-          m_colour(*wxRED), m_font(*wxNORMAL_FONT)
+FontCanvas::FontCanvas( wxWindow *parent )
+          : wxWindow( parent, wxID_ANY ),
+            m_colour(*wxRED), m_font(*wxNORMAL_FONT)
 {
 }
 
-void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
+void FontCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxPaintDC dc(this);
     PrepareDC(dc);
@@ -1097,54 +1409,9 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.Clear();
     dc.SetFont(m_font);
 
-    // one text line height
-    wxCoord hLine = dc.GetCharHeight();
-
     // the current text origin
     wxCoord x = 5,
             y = 5;
-
-    // output the font name/info
-    wxString fontInfo;
-
-    fontInfo.Printf(wxT("Face name: %s, family: %s"),
-                    m_font.GetFaceName().c_str(),
-                    m_font.GetFamilyString().c_str());
-
-    dc.DrawText(fontInfo, x, y);
-    y += hLine;
-
-    fontInfo.Printf(wxT("Size: %d points or %d pixels; %d*%d average char size"),
-                    m_font.GetPointSize(),
-                    m_font.GetPixelSize().y,
-                    dc.GetCharWidth(), dc.GetCharHeight());
-
-    dc.DrawText(fontInfo, x, y);
-    y += hLine;
-
-    fontInfo.Printf(wxT("Style: %s, weight: %s, fixed width: %s, encoding: %s"),
-                    m_font.GetStyleString().c_str(),
-                    m_font.GetWeightString().c_str(),
-                    m_font.IsFixedWidth() ? wxT("yes") : wxT("no"),
-                    wxFontMapper::GetEncodingDescription(m_font.GetEncoding()));
-
-    dc.DrawText(fontInfo, x, y);
-    y += hLine;
-
-    if ( m_font.IsOk() )
-    {
-        const wxNativeFontInfo *info = m_font.GetNativeFontInfo();
-        if ( info )
-        {
-            wxString fontDesc = m_font.GetNativeFontInfoUserDesc();
-            fontInfo.Printf(wxT("Native font info: %s"), fontDesc.c_str());
-
-            dc.DrawText(fontInfo, x, y);
-            y += hLine;
-        }
-    }
-
-    y += hLine;
 
     // prepare to draw the font
     dc.SetTextForeground(m_colour);
