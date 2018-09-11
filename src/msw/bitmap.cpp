@@ -710,7 +710,7 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
         free(data);
     }
 
-    SetHBITMAP((WXHBITMAP)hbmp);
+    refData->m_handle = (WXHANDLE)hbmp;
 }
 
 wxBitmap::wxBitmap(int w, int h, const wxDC& dc)
@@ -805,7 +805,7 @@ bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
 #endif // !ALWAYS_USE_DIB
     }
 
-    SetHBITMAP((WXHBITMAP)hbmp);
+    GetBitmapData()->m_handle = (WXHANDLE)hbmp;
 
     return IsOk();
 }
@@ -898,7 +898,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
 #endif // !ALWAYS_USE_DIB
 
     // validate this object
-    SetHBITMAP((WXHBITMAP)hbitmap);
+    refData->m_handle = (WXHANDLE)hbitmap;
 
     // finally also set the mask if we have one
     if ( image.HasMask() )
