@@ -578,7 +578,8 @@ bool wxFont::Create(int pointSize,
 {
     AccountForCompatValues(pointSize, style, weight);
 
-    return Create((float)pointSize, family, style, weight, underlined, faceName, encoding);
+    return Create(wxFontInfo::ToFloatPointSize(pointSize),
+                  family, style, weight, underlined, faceName, encoding);
 }
 
 wxFont::~wxFont()

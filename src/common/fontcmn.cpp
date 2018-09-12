@@ -28,7 +28,6 @@
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
     #include "wx/intl.h"
-    #include "wx/math.h"
     #include "wx/dcscreen.h"
     #include "wx/log.h"
     #include "wx/gdicmn.h"
@@ -44,8 +43,6 @@
 #include "wx/fontenum.h"
 
 #include "wx/tokenzr.h"
-
-#include <float.h>      // for FLT_MAX
 
 // debugger helper: this function can be called from a debugger to show what
 // the date really is
@@ -283,7 +280,7 @@ wxFontWeight wxFontBase::GetWeightClosestToNumericValue(int numWeight)
 
 int wxFontBase::GetPointSize() const
 {
-    return wxRound(GetFractionalPointSize());
+    return wxFontInfo::ToIntPointSize(GetFractionalPointSize());
 }
 
 
@@ -308,10 +305,7 @@ bool wxFontBase::IsUsingSizeInPixels() const
 
 void wxFontBase::SetPointSize(int pointSize)
 {
-    wxCHECK_RET( pointSize >= 0 && static_cast<float>(pointSize) < FLT_MAX,
-                 "Invalid font point size" );
-
-    SetFractionalPointSize(static_cast<float>(pointSize));
+    SetFractionalPointSize(wxFontInfo::ToFloatPointSize(pointSize));
 }
 
 void wxFontBase::SetPixelSize( const wxSize& pixelSize )
@@ -710,12 +704,12 @@ void wxNativeFontInfo::SetFaceName(const wxArrayString& facenames)
 
 int wxNativeFontInfo::GetPointSize() const
 {
-    return wxRound(GetFractionalPointSize());
+    return wxFontInfo::ToIntPointSize(GetFractionalPointSize());
 }
 
 void wxNativeFontInfo::SetPointSize(int pointsize)
 {
-    SetFractionalPointSize(static_cast<float>(pointsize));
+    SetFractionalPointSize(wxFontInfo::ToFloatPointSize(pointsize));
 }
 
 #ifdef wxNO_NATIVE_FONTINFO

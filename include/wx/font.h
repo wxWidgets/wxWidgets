@@ -19,6 +19,7 @@
 #include "wx/fontenc.h"     // the font encoding constants
 #include "wx/gdiobj.h"      // the base class
 #include "wx/gdicmn.h"      // for wxGDIObjListBase
+#include "wx/math.h"        // for wxRound()
 
 // ----------------------------------------------------------------------------
 // forward declarations
@@ -215,6 +216,25 @@ public:
 
 
     // Default copy ctor, assignment operator and dtor are OK.
+
+
+    // Helper functions for converting between integer and fractional sizes.
+    static int ToIntPointSize(float pointSize) { return wxRound(pointSize); }
+    static float ToFloatPointSize(int pointSize)
+    {
+        wxCHECK_MSG( pointSize == -1 || pointSize >= 0,
+                     -1, "Invalid font point size" );
+
+        // Huge values are not exactly representable as floats, so don't accept
+        // those neither as they can only be due to a mistake anyhow: nobody
+        // could possibly need a font of size 16777217pt (which is the first
+        // value for which this fails).
+        const float f = static_cast<float>(pointSize);
+        wxCHECK_MSG( static_cast<int>(f) == pointSize,
+                     -1, "Font point size out of range" );
+
+        return f;
+    }
 
 private:
     void Init()
