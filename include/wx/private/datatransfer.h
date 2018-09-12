@@ -55,7 +55,7 @@ class WXDLLIMPEXP_FWD_BASE wxDateTime;
 //-----------------------------------------------------------------------------
 
 template<class W>
-struct WXDLLIMPEXP_CORE wxDataTransferImpl;
+struct wxDataTransferImpl;
 
 //-----------------------------------------------------------------------------
 // wxDataTransferImplementor() is/are just declaration(s) to help wxDataTransfer<W>
