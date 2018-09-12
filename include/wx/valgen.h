@@ -234,7 +234,7 @@ public:
             // FIXME 2: wxSharedPtr<> can't be used with this class as it doesn't
             //          define the standard member function swap().
 
-            CompositeType tmp(CompositeType(NewValue(value, IsSmartPtr(data))));
+            CompositeType tmp(NewValue(value, IsSmartPtr(data)));
 
             data.swap(tmp);
         }
