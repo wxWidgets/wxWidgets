@@ -245,6 +245,14 @@ public:
 
 #if defined(HAVE_STD_VARIANT)
 
+struct wxVisitorBase
+{
+    wxVisitorBase() : m_win(nullptr){}
+    wxVisitorBase(wxWindow* win) : m_win(win){}
+
+    wxWindow* m_win;
+};
+
 #define wxDEFINE_GENERIC_VALIDATOR_VISITOR(which)                              \
                                                                                \
 template <class W, typename... Ts>                                             \
@@ -254,7 +262,8 @@ template <class W, typename T, typename... Ts>                                 \
 struct wxVisitor##which<W, T, Ts...> :                                         \
         wxVisitor##which<W, T>, wxVisitor##which<W, Ts...>                     \
 {                                                                              \
-    wxVisitor##which(wxWindow* win) : wxVisitor##which<W, T>(win),             \
+    wxVisitor##which(wxWindow* win) : wxVisitorBase(win),                      \
+                                      wxVisitor##which<W, T>(win),             \
                                       wxVisitor##which<W, Ts...>(win)          \
     {}                                                                         \
                                                                                \
@@ -263,17 +272,14 @@ struct wxVisitor##which<W, T, Ts...> :                                         \
 };                                                                             \
                                                                                \
 template <class W, typename T>                                                 \
-struct wxVisitor##which<W, T>                                                  \
+struct wxVisitor##which<W, T> : virtual wxVisitorBase                          \
 {                                                                              \
-    wxVisitor##which(wxWindow* win) : m_win(win){}                             \
+    wxVisitor##which(wxWindow* win) : wxVisitorBase(win){}                     \
                                                                                \
     bool operator()(T& value)                                                  \
     {                                                                          \
         return wxDataTransfer<W>::template which<T>(m_win, &value);            \
     }                                                                          \
-                                                                               \
-private:                                                                       \
-    wxWindow* m_win;                                                           \
 }
 
 wxDEFINE_GENERIC_VALIDATOR_VISITOR(To);
