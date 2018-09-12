@@ -54,8 +54,6 @@ public:
     // copy ctor
     wxFontRefData( const wxFontRefData& data );
 
-    virtual ~wxFontRefData();
-
     // setters: all of them also take care to modify m_nativeFontInfo if we
     // have it so as to not lose the information not carried by our fields
     void SetFractionalPointSize(float pointSize);
@@ -162,10 +160,6 @@ wxFontRefData::wxFontRefData(const wxString& nativeFontInfoString)
     m_nativeFontInfo.FromString( nativeFontInfoString );
 
     InitFromNative();
-}
-
-wxFontRefData::~wxFontRefData()
-{
 }
 
 // ----------------------------------------------------------------------------
