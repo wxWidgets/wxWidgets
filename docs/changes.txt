@@ -136,6 +136,7 @@ wxMSW:
 - Fix build in ANSI (non-Unicode) mode.
 - Improve wxNotebook themed background drawing (Arrigo Marchiori).
 - Send wxEVT_WEBVIEW_NAVIGATING when redirecting (Josue Andrade Gomes).
+- Fix build with MSVS 2005 broken in 3.1.1.
 
 wxOSX:
 
