@@ -234,7 +234,9 @@ public:
             // FIXME 2: wxSharedPtr<> can't be used with this class as it doesn't
             //          define the standard member function swap().
 
-            data.swap(CompositeType(NewValue(value, IsSmartPtr(data))));
+            CompositeType tmp(CompositeType(NewValue(value, IsSmartPtr(data))));
+
+            data.swap(tmp);
         }
 
         return true;
@@ -265,7 +267,7 @@ struct wxVisitor##which<W, T>                                                  \
 {                                                                              \
     wxVisitor##which(wxWindow* win) : m_win(win){}                             \
                                                                                \
-    bool operator()(T value)                                                   \
+    bool operator()(T& value)                                                  \
     {                                                                          \
         return wxDataTransfer<W>::template which<T>(m_win, &value);            \
     }                                                                          \

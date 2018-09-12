@@ -44,7 +44,7 @@ wxString g_listbox_choices[] =
     {wxT("one"),  wxT("two"),  wxT("three")};
 
 wxString g_combobox_choices[] =
-    {wxT("yes"), wxT("no (doesn't validate)"), wxT("maybe (doesn't validate)")};
+    {wxT("yes"), wxT("no (doesn't validate)"), wxT("maybe"), wxT("accepted")};
 
 wxString g_radiobox_choices[] =
     {wxT("green"), wxT("yellow"), wxT("red")};
@@ -82,7 +82,7 @@ bool wxDataTransfer<wxComboBox>::DoValidate(wxComboBox* cb, wxWindow* parent)
     wxUnusedVar(parent);
 
     if (cb->GetValue() == g_combobox_choices[1] ||
-        cb->GetValue() == g_combobox_choices[2])
+          (cb->GetValue() == g_combobox_choices[2] && cb->GetId() != VALIDATE_COMBO2))
     {
         // we accept any string != g_combobox_choices[1|2] !
 
@@ -93,7 +93,30 @@ bool wxDataTransfer<wxComboBox>::DoValidate(wxComboBox* cb, wxWindow* parent)
     return true;
 }
 
+static inline wxString GetString(const wxScopedPtr<wxString>& ptr)
+{
+    if (ptr)
+        return *ptr;
+
+    return wxString();
+}
+
+#if defined(HAVE_STD_VARIANT)
+template<class... Ts> struct overload : Ts... { using Ts::operator()...; };
+template<class... Ts> overload(Ts...) -> overload<Ts...>;
+
+static auto GetString(const MyData::VariantType& var)
+{
+    return std::visit(overload{
+                [](int i){ return wxString::Format("item(%d)", i); },
+                [](const wxString& str){ return str; },
+           }, var);
+}
 #else
+static auto GetString(const MyData::VariantType& var){ return var; }
+#endif // defined(HAVE_STD_VARIANT)
+
+#else // wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
 // ----------------------------------------------------------------------------
 // MyComboBoxValidator
 // ----------------------------------------------------------------------------
@@ -263,6 +286,8 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
         wxString checkbox_state(g_data.m_checkbox_state ? wxT("checked") : wxT("unchecked"));
         m_listbox->Append(wxString(wxT("checkbox: ")) + checkbox_state);
         m_listbox->Append(wxString(wxT("combobox: ")) + g_data.m_combobox_choice);
+        m_listbox->Append(wxString(wxT("combobox2: ")) + GetString(g_data.m_combobox2_choice));
+        m_listbox->Append(wxString(wxT("combobox3: ")) + GetString(g_data.m_combobox3_choice));
         m_listbox->Append(wxString(wxT("radiobox: ")) + g_radiobox_choices[g_data.m_radiobox_choice]);
 
         m_listbox->Append(wxString::Format("integer value: %d", g_data.m_intValue));
@@ -321,18 +346,48 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     flexgridsizer->Add(lstbox, 1, wxGROW);
 
+    wxBoxSizer *combosizer = new wxBoxSizer( wxVERTICAL );
+
     m_combobox = new wxComboBox(this, VALIDATE_COMBO, wxEmptyString,
                                 wxDefaultPosition, wxDefaultSize,
                                 WXSIZEOF(g_combobox_choices), g_combobox_choices, 0L);
+
+    m_combobox2 = new wxComboBox(this, VALIDATE_COMBO2, wxEmptyString,
+                                 wxDefaultPosition, wxDefaultSize,
+                                 WXSIZEOF(g_combobox_choices), g_combobox_choices, 0L);
+
+    m_combobox3 = new wxComboBox(this, VALIDATE_COMBO3, wxEmptyString,
+                                 wxDefaultPosition, wxDefaultSize,
+                                 WXSIZEOF(g_combobox_choices), g_combobox_choices, 0L);
+
 #if wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
     wxSetGenericValidator(m_combobox, &g_data.m_combobox_choice);
     m_combobox->SetToolTip("uses generic validator (with validation)");
+
+    wxSetGenericValidator(m_combobox2, g_data.m_combobox2_choice);
+    m_combobox2->SetToolTip("uses generic validator (with validation, wxScopedPtr)");
+
+    #if defined(HAVE_STD_VARIANT)
+    wxSetGenericValidator(m_combobox3, g_data.m_combobox3_choice);
+    m_combobox3->SetToolTip("uses generic validator (with validation, std::variant)");
+    #else
+    m_combobox3->Disable();
+    #endif // defined(HAVE_STD_VARIANT)
+
 #else
     m_combobox->SetValidator(MyComboBoxValidator(&g_data.m_combobox_choice));
     m_combobox->SetToolTip("uses a custom validator (MyComboBoxValidator)");
+
+    m_combobox2->Disable();
 #endif // wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
 
-    flexgridsizer->Add(m_combobox, 1, wxALIGN_CENTER);
+    combosizer->Add(m_combobox, wxSizerFlags().CenterHorizontal());
+    combosizer->AddSpacer(10);
+    combosizer->Add(m_combobox2, wxSizerFlags().CenterHorizontal());
+    combosizer->AddSpacer(10);
+    combosizer->Add(m_combobox3, wxSizerFlags().CenterHorizontal());
+
+    flexgridsizer->Add(combosizer, wxSizerFlags(1).Expand().Border(wxALL, 5));
 
     wxCheckBox* const checkbox = new wxCheckBox(this, VALIDATE_CHECK, wxT("Sample checkbox"));
     wxSetGenericValidator(checkbox, &g_data.m_checkbox_state);

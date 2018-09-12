@@ -15,6 +15,10 @@
 #include "wx/frame.h"
 #include "wx/listbox.h"
 #include "wx/string.h"
+#include "wx/scopedptr.h"
+#if defined(HAVE_STD_VARIANT)
+    #include <variant>
+#endif // defined(HAVE_STD_VARIANT)
 
 // Define a new application type
 class MyApp : public wxApp
@@ -50,6 +54,8 @@ public:
 
     wxTextCtrl *m_text;
     wxComboBox *m_combobox;
+    wxComboBox *m_combobox2;
+    wxComboBox *m_combobox3;
 
     wxTextCtrl *m_numericTextInt;
     wxTextCtrl *m_numericTextDouble;
@@ -72,6 +78,18 @@ public:
     // Comboboxes differ from listboxes--validators transfer
     // the string entered in the combobox's text-edit field.
     wxString m_combobox_choice;
+
+    // use wxScopedPtr<> for combobox2
+    wxScopedPtr<wxString> m_combobox2_choice;
+
+#if defined(HAVE_STD_VARIANT)
+    typedef std::variant<int, wxString> VariantType;
+#else
+    typedef wxString VariantType;
+#endif
+
+    // use std::variant<> for combobox3
+    VariantType m_combobox3_choice;
 
     // variables handled by wxNumericTextValidator
     int m_intValue;
@@ -96,5 +114,7 @@ enum
     VALIDATE_LIST,
     VALIDATE_CHECK,
     VALIDATE_COMBO,
+    VALIDATE_COMBO2,
+    VALIDATE_COMBO3,
     VALIDATE_RADIO
 };
