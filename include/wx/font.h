@@ -164,6 +164,16 @@ public:
         { SetFlag(wxFONTFLAG_ITALIC, italic); return *this; }
     wxFontInfo& Slant(bool slant = true)
         { SetFlag(wxFONTFLAG_SLANT, slant); return *this; }
+    wxFontInfo& Style(wxFontStyle style)
+    {
+        if ( style == wxFONTSTYLE_ITALIC )
+            return Italic();
+
+        if ( style == wxFONTSTYLE_SLANT )
+            return Slant();
+
+        return *this;
+    }
 
     wxFontInfo& AntiAliased(bool antiAliased = true)
         { SetFlag(wxFONTFLAG_ANTIALIASED, antiAliased); return *this; }

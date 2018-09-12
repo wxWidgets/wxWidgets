@@ -398,6 +398,9 @@ public:
     /**
         Use an italic version of the font.
 
+        This is a wrapper for Style() calling it with ::wxFONTSTYLE_ITALIC
+        argument.
+
         @see ::wxFontStyle, wxFont::SetStyle()
      */
     wxFontInfo& Italic(bool italic = true);
@@ -405,9 +408,19 @@ public:
     /**
         Use a slanted version of the font.
 
+        This is a wrapper for Style() calling it with ::wxFONTSTYLE_SLANT
+        argument.
+
         @see ::wxFontStyle, wxFont::SetStyle()
      */
     wxFontInfo& Slant(bool slant = true);
+
+    /**
+        Specify the style of the font using one of wxFontStyle constants.
+
+        @since 3.1.2
+     */
+    wxFontInfo& Style(wxFontStyle style);
 
     /**
         Set anti-aliasing flag.
