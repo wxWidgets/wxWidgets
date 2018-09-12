@@ -542,13 +542,17 @@ wxFont::wxFont(const wxString& fontdesc)
 
 wxFont::wxFont(const wxFontInfo& info)
 {
-    Create(info.GetFractionalPointSize(),
-           info.GetFamily(),
-           info.GetStyle(),
-           info.GetNumericWeight(),
-           info.IsUnderlined(),
-           info.GetFaceName(),
-           info.GetEncoding());
+    m_refData = new wxFontRefData
+                    (
+                        info.GetFractionalPointSize(),
+                        info.GetFamily(),
+                        info.GetStyle(),
+                        info.GetNumericWeight(),
+                        info.IsUnderlined(),
+                        info.IsStrikethrough(),
+                        info.GetFaceName(),
+                        info.GetEncoding()
+                    );
 
     if ( info.IsUsingSizeInPixels() )
         SetPixelSize(info.GetPixelSize());
@@ -566,22 +570,6 @@ wxFont::wxFont(int size,
         (wxFontWeight)weight, underlined, face, encoding);
 }
 
-bool wxFont::Create(float pointSize,
-    wxFontFamily family,
-    wxFontStyle style,
-    int weight,
-    bool underlined,
-    const wxString& faceName,
-    wxFontEncoding encoding)
-{
-    UnRef();
-    
-    m_refData = new wxFontRefData(pointSize, family, style, weight,
-                                  underlined, false, faceName, encoding);
-    
-    return true;
-}
-
 bool wxFont::Create(int pointSize,
     wxFontFamily family,
     wxFontStyle style,
@@ -592,10 +580,14 @@ bool wxFont::Create(int pointSize,
 {
     AccountForCompatValues(pointSize, style, weight);
 
-    return Create(wxFontInfo::ToFloatPointSize(pointSize),
-                  family, style,
-                  GetNumericWeightOf(weight),
-                  underlined, faceName, encoding);
+    m_refData = new wxFontRefData
+                    (
+                        wxFontInfo::ToFloatPointSize(pointSize),
+                        family, style,
+                        GetNumericWeightOf(weight),
+                        underlined, false, faceName, encoding
+                    );
+    return true;
 }
 
 wxFont::~wxFont()
