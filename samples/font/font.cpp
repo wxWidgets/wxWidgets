@@ -72,7 +72,17 @@ public:
 
     void ShowFont(const wxFont& font) { m_font = font; DoUpdate(); }
 
+    wxFontInfo GetFontInfo() const;
+
 private:
+    // Update m_useXXX flags depending on which control was changed last.
+    void OnFacename(wxCommandEvent& e) { m_useFamily = false; e.Skip(); }
+    void OnFamily(wxCommandEvent& e) { m_useFamily = true; e.Skip(); }
+
+    void OnWeightChoice(wxCommandEvent& e) { m_useNumericWeight = false; e.Skip(); }
+    void OnWeightSpin(wxCommandEvent& e) { m_useNumericWeight = true; e.Skip(); }
+
+
     // Unlike wxFontXXX, the elements of these enum are consecutive, which is
     // more convenient here.
     enum Family
@@ -121,6 +131,9 @@ private:
     wxCheckBox* m_checkStrikethrough;
     wxCheckBox* m_checkFixedWidth;
     wxStaticText* m_labelInfo;
+
+    bool m_useFamily;
+    bool m_useNumericWeight;
 };
 
 // FontCanvas shows the font characters.
@@ -159,6 +172,8 @@ public:
 
     const wxFont& GetTextFont() const { return m_canvas->GetTextFont(); }
     const wxColour& GetColour() const { return m_canvas->GetColour(); }
+
+    wxFont MakeNewFont() const { return m_panel->GetFontInfo(); }
 
     void UpdateFont(const wxFont& font, const wxColour& colour);
 
@@ -213,6 +228,9 @@ public:
     void OnSetFaceName(wxCommandEvent& event);
     void OnSetEncoding(wxCommandEvent& event);
     void OnPrivateFont(wxCommandEvent& event);
+
+    void OnFontPanelChange(wxCommandEvent& WXUNUSED(event))
+        { DoChangeFont(m_fontWindow->MakeNewFont()); }
 
 protected:
     bool DoEnumerateFamilies(bool fixedWidthOnly,
@@ -524,6 +542,12 @@ MyFrame::MyFrame()
     wxSplitterWindow *splitter = new wxSplitterWindow(this);
 
     m_fontWindow = new FontWindow(splitter);
+
+    m_fontWindow->Bind(wxEVT_CHECKBOX, &MyFrame::OnFontPanelChange, this);
+    m_fontWindow->Bind(wxEVT_CHOICE, &MyFrame::OnFontPanelChange, this);
+    m_fontWindow->Bind(wxEVT_TEXT_ENTER, &MyFrame::OnFontPanelChange, this);
+    m_fontWindow->Bind(wxEVT_SPINCTRL, &MyFrame::OnFontPanelChange, this);
+    m_fontWindow->Bind(wxEVT_SPINCTRLDOUBLE, &MyFrame::OnFontPanelChange, this);
 
     m_textctrl = new wxTextCtrl(splitter, wxID_ANY,
                                 wxT("Paste text here to see how it looks\nlike in the given font"),
@@ -1180,7 +1204,13 @@ void FontWindow::UpdateFont(const wxFont& font, const wxColour& colour)
 FontPanel::FontPanel(wxWindow* parent)
          : wxPanel(parent)
 {
-    m_textFaceName = new wxTextCtrl(this, wxID_ANY, "");
+    m_useFamily =
+    m_useNumericWeight = false;
+
+    m_textFaceName = new wxTextCtrl(this, wxID_ANY, wxString(),
+                                    wxDefaultPosition, wxDefaultSize,
+                                    wxTE_PROCESS_ENTER);
+    m_textFaceName->Bind(wxEVT_TEXT, &FontPanel::OnFacename, this);
 
     // Must be in sync with the Family enum.
     const wxString familiesNames[] =
@@ -1196,6 +1226,7 @@ FontPanel::FontPanel(wxWindow* parent)
     m_choiceFamily = new wxChoice(this, wxID_ANY,
                                   wxDefaultPosition, wxDefaultSize,
                                   WXSIZEOF(familiesNames), familiesNames);
+    m_choiceFamily->Bind(wxEVT_CHOICE, &FontPanel::OnFamily, this);
 
     m_spinPointSize = new wxSpinCtrlDouble(this, wxID_ANY, wxString(),
                                            wxDefaultPosition, wxDefaultSize,
@@ -1237,16 +1268,17 @@ FontPanel::FontPanel(wxWindow* parent)
     m_choiceWeight = new wxChoice(this, wxID_ANY,
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(weightsNames), weightsNames);
+    m_choiceWeight->Bind(wxEVT_CHOICE, &FontPanel::OnWeightChoice, this);
 
     m_spinWeight = new wxSpinCtrl(this, wxID_ANY, wxString(),
                                   wxDefaultPosition, wxDefaultSize,
                                   wxSP_ARROW_KEYS,
                                   1, wxFONTWEIGHT_MAX);
-
     m_spinWeight->SetInitialSize
         (
          m_spinWeight->GetSizeFromTextSize(GetTextExtent("9999").x)
         );
+    m_spinWeight->Bind(wxEVT_SPINCTRL, &FontPanel::OnWeightSpin, this);
 
     m_checkUnderlined = new wxCheckBox(this, wxID_ANY, wxString());
     m_checkStrikethrough = new wxCheckBox(this, wxID_ANY, wxString());
@@ -1385,6 +1417,54 @@ void FontPanel::DoUpdate()
                 dc.GetCharWidth(), dc.GetCharHeight()
             )
         );
+}
+
+wxFontInfo FontPanel::GetFontInfo() const
+{
+    wxFontInfo info(m_spinPointSize->GetValue());
+
+    if ( m_useFamily )
+    {
+        const wxFontFamily families[] =
+        {
+            wxFONTFAMILY_DEFAULT,
+            wxFONTFAMILY_DECORATIVE,
+            wxFONTFAMILY_ROMAN,
+            wxFONTFAMILY_SCRIPT,
+            wxFONTFAMILY_SWISS,
+            wxFONTFAMILY_MODERN,
+            wxFONTFAMILY_TELETYPE,
+        };
+        info.Family(families[m_choiceFamily->GetSelection()]);
+    }
+    else
+    {
+        info.FaceName(m_textFaceName->GetValue());
+    }
+
+    switch ( m_choiceStyle->GetSelection() )
+    {
+        case Style_Normal:
+            break;
+
+        case Style_Italic:
+            info.Italic();
+            break;
+
+        case Style_Slant:
+            info.Slant();
+            break;
+    }
+
+    info.Weight(m_useNumericWeight ? m_spinWeight->GetValue()
+                                   : (m_choiceWeight->GetSelection() + 1)*100);
+
+    if ( m_checkUnderlined->GetValue() )
+        info.Underlined();
+    if ( m_checkStrikethrough->GetValue() )
+        info.Strikethrough();
+
+    return info;
 }
 
 // ----------------------------------------------------------------------------
