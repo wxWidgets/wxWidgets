@@ -129,13 +129,22 @@ public:
     // Default ctor uses the default font size appropriate for the current
     // platform.
     wxFontInfo()
-        { InitPointSize(-1); }
+        { InitPointSize(-1.0f); }
 
     // These ctors specify the font size, either in points or in pixels.
-    explicit wxFontInfo(int pointSize)
+    // Point size is a floating point number, however we also accept all
+    // integer sizes using the simple template ctor below.
+    explicit wxFontInfo(float pointSize)
         { InitPointSize(pointSize); }
     explicit wxFontInfo(const wxSize& pixelSize) : m_pixelSize(pixelSize)
         { Init(); }
+
+    // Need to define this one to avoid casting double to int too.
+    explicit wxFontInfo(double pointSize)
+        { InitPointSize(pointSize); }
+    template <typename T>
+    explicit wxFontInfo(T pointSize)
+        { InitPointSize(ToFloatPointSize(pointSize)); }
 
     // Setters for the various attributes. All of them return the object itself
     // so that the calls to them could be chained.
@@ -174,7 +183,8 @@ public:
     // various pieces of the font description.
 
     bool IsUsingSizeInPixels() const { return m_pixelSize != wxDefaultSize; }
-    int GetPointSize() const { return m_pointSize; }
+    float GetFractionalPointSize() const { return m_pointSize; }
+    int GetPointSize() const { return ToIntPointSize(m_pointSize); }
     wxSize GetPixelSize() const { return m_pixelSize; }
     wxFontFamily GetFamily() const { return m_family; }
     const wxString& GetFaceName() const { return m_faceName; }
@@ -245,7 +255,7 @@ private:
         m_encoding = wxFONTENCODING_DEFAULT;
     }
 
-    void InitPointSize(int pointSize)
+    void InitPointSize(float pointSize)
     {
         Init();
 
@@ -264,10 +274,9 @@ private:
     }
 
     // The size information: if m_pixelSize is valid (!= wxDefaultSize), then
-    // it is used. Otherwise m_pointSize is used, taking into account that if
-    // it is == -1, it means that the platform dependent font size should be
-    // used.
-    int m_pointSize;
+    // it is used. Otherwise m_pointSize is used, except if it is < 0, which
+    // means that the platform dependent font size should be used instead.
+    float m_pointSize;
     wxSize m_pixelSize;
 
     wxFontFamily m_family;

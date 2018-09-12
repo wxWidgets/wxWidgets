@@ -322,9 +322,16 @@ public:
     /**
         Constructor setting the font size in points to use.
 
+        The canonical type of @a pointSize argument is @c float, however any
+        other integer type, as well as @c double, is also accepted for
+        compatibility.
+
+        Notice that until wxWidgets 3.1.2, the type could only be @c int.
+
         @see wxFont::SetPointSize()
      */
-    explicit wxFontInfo(int pointSize);
+    template <typename T>
+    explicit wxFontInfo(T pointSize);
 
     /**
         Constructor setting the font size in pixels to use.

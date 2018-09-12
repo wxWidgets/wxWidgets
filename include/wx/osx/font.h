@@ -38,7 +38,7 @@ public:
 
     wxFont(const wxFontInfo& info)
     {
-        Create(info.GetPointSize(),
+        Create(info.GetFractionalPointSize(),
                info.GetFamily(),
                info.GetStyle(),
                info.GetWeight(),

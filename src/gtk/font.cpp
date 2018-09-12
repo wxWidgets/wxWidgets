@@ -47,7 +47,7 @@ class wxFontRefData : public wxGDIRefData
 {
 public:
     // from broken down font parameters, also default ctor
-    wxFontRefData(int size = -1,
+    wxFontRefData(float size = -1.0f,
                   wxFontFamily family = wxFONTFAMILY_DEFAULT,
                   wxFontStyle style = wxFONTSTYLE_NORMAL,
                   wxFontWeight weight = wxFONTWEIGHT_NORMAL,
@@ -80,7 +80,7 @@ public:
 
 protected:
     // common part of all ctors
-    void Init(int pointSize,
+    void Init(float pointSize,
               wxFontFamily family,
               wxFontStyle style,
               wxFontWeight weight,
@@ -106,7 +106,7 @@ private:
 // wxFontRefData
 // ----------------------------------------------------------------------------
 
-void wxFontRefData::Init(int pointSize,
+void wxFontRefData::Init(float pointSize,
                          wxFontFamily family,
                          wxFontStyle style,
                          wxFontWeight weight,
@@ -133,8 +133,11 @@ void wxFontRefData::Init(int pointSize,
     }
 
     SetStyle( style );
-    m_nativeFontInfo.SetPointSize( pointSize == -1 ? wxDEFAULT_FONT_SIZE
-                                                   : pointSize );
+    m_nativeFontInfo.SetFractionalPointSize
+                     (
+                        pointSize < 0 ? static_cast<float>(wxDEFAULT_FONT_SIZE)
+                                      : pointSize
+                     );
     SetWeight( weight );
     SetUnderlined( underlined );
     SetStrikethrough( strikethrough );
@@ -157,7 +160,7 @@ wxFontRefData::wxFontRefData( const wxFontRefData& data )
 {
 }
 
-wxFontRefData::wxFontRefData(int size, wxFontFamily family, wxFontStyle style,
+wxFontRefData::wxFontRefData(float size, wxFontFamily family, wxFontStyle style,
                              wxFontWeight weight, bool underlined, bool strikethrough,
                              const wxString& faceName,
                              wxFontEncoding encoding)
@@ -282,7 +285,7 @@ wxFont::wxFont(const wxNativeFontInfo& info)
 
 wxFont::wxFont(const wxFontInfo& info)
 {
-    m_refData = new wxFontRefData(info.GetPointSize(),
+    m_refData = new wxFontRefData(info.GetFractionalPointSize(),
                                   info.GetFamily(),
                                   info.GetStyle(),
                                   info.GetWeight(),
@@ -308,7 +311,8 @@ bool wxFont::Create( int pointSize,
 
     AccountForCompatValues(pointSize, style, weight);
 
-    m_refData = new wxFontRefData(pointSize, family, style, weight,
+    m_refData = new wxFontRefData(wxFontInfo::ToFloatPointSize(pointSize),
+                                  family, style, weight,
                                   underlined, false, face, encoding);
 
     return true;
