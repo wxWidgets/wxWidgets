@@ -71,6 +71,7 @@ MyData::MyData()
     m_percentValue = 0.25;
 }
 
+// define these overloads unconditionally to prevent compilation errors.
 static inline wxString GetString(const wxScopedPtr<wxString>& ptr)
 {
     if (ptr)
@@ -78,6 +79,8 @@ static inline wxString GetString(const wxScopedPtr<wxString>& ptr)
 
     return wxString();
 }
+
+static inline wxString GetString(const wxString& var){ return var; }
 
 #if wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
 
@@ -112,8 +115,6 @@ static auto GetString(const MyData::VariantType& var)
                 [](const wxString& str){ return str; },
            }, var);
 }
-#else
-static auto GetString(const MyData::VariantType& var){ return var; }
 #endif // defined(HAVE_STD_VARIANT)
 
 #else // wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
