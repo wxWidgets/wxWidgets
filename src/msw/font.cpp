@@ -440,10 +440,15 @@ void wxNativeFontInfo::Init()
     lf.lfQuality = wxSystemOptions::GetOptionInt("msw.font.no-proof-quality")
                     ? DEFAULT_QUALITY
                     : PROOF_QUALITY;
+
+    pointSize = 0.0f;
 }
 
 float wxNativeFontInfo::GetFractionalPointSize() const
 {
+    if ( pointSize != 0.0f )
+        return pointSize;
+
     // FIXME: using the screen here results in incorrect font size calculation
     //        for printing!
     const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
@@ -531,6 +536,10 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
 
 void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
 {
+    // Store it to be able to return it from GetFractionalPointSize() later
+    // exactly.
+    pointSize = pointsize;
+
     // FIXME: using the screen here results in incorrect font size calculation
     //        for printing!
     const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);

@@ -118,9 +118,14 @@ public:
     // set the XFLD
     void SetXFontName(const wxString& xFontName);
 #elif defined(__WXMSW__)
-    wxNativeFontInfo(const LOGFONT& lf_) : lf(lf_) { }
+    wxNativeFontInfo(const LOGFONT& lf_) : lf(lf_), pointSize(0.0f) { }
 
     LOGFONT      lf;
+
+    // MSW only has limited support for fractional point sizes and we need to
+    // store the fractional point size separately if it was initially specified
+    // as we can't losslessly recover it from LOGFONT later.
+    float        pointSize;
 #elif defined(__WXOSX__)
 public:
     wxNativeFontInfo(const wxNativeFontInfo& info) { Init(info); }
