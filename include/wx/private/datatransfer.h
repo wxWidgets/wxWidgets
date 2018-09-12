@@ -65,7 +65,6 @@ struct WXDLLIMPEXP_CORE wxDataTransferImpl;
 extern void* wxDataTransferImplementor(...);
 
 #define wx_DECLARE_DATA_TRANSFER_IMPLEMENTOR(window)  \
-  class WXDLLIMPEXP_FWD_CORE window;                  \
   extern window* wxDataTransferImplementor(window*)
 
 #define wxDATA_TRANSFER_IMPLEMENTOR(window) \
@@ -132,8 +131,9 @@ extern void* wxDataTransferImplementor(...);
 #define wx_DATA_TRANSFER_IMPL(window, ...) \
     wx_DATA_TRANSFER_IMPL_(wx_DATA_TRANSFER_IMPL_NARG(__VA_ARGS__), (window, __VA_ARGS__))
 
-
-#define wxDECLARE_DATA_TRANSFER_IMPL(window, ...)                              \
+// This macro is for wxWidgets internal use only.
+#define wxDECLARE_DATA_TRANSFER_IMPL_(window, ...)                             \
+    class WXDLLIMPEXP_FWD_CORE window;                                         \
     wx_DECLARE_DATA_TRANSFER_IMPLEMENTOR(window);                              \
     template<>                                                                 \
     struct WXDLLIMPEXP_CORE wxDataTransferImpl<window>                         \
@@ -141,112 +141,120 @@ extern void* wxDataTransferImplementor(...);
         wx_DATA_TRANSFER_IMPL(window, __VA_ARGS__);                            \
     }
 
+// This macro is intended for client code usage.
+#define wxDECLARE_DATA_TRANSFER_IMPL(window, ...)                              \
+    wx_DECLARE_DATA_TRANSFER_IMPLEMENTOR(window);                              \
+    template<>                                                                 \
+    struct wxDataTransferImpl<window>                                          \
+    {                                                                          \
+        wx_DATA_TRANSFER_IMPL(window, __VA_ARGS__);                            \
+    }
 
 //=============================================================================
 // declarations only from now on
 //=============================================================================
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxButtonBase, wxString);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxButtonBase, wxString);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxCheckBoxBase, bool);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxCheckBoxBase, bool);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxCheckListBoxBase, wxArrayInt);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxCheckListBoxBase, wxArrayInt);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxChoiceBase, int, wxString);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxChoiceBase, int, wxString);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxCollapsibleHeaderCtrlBase, bool);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxCollapsibleHeaderCtrlBase, bool);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxCollapsiblePaneBase, bool);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxCollapsiblePaneBase, bool);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxColourPickerCtrl, wxColour);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxColourPickerCtrl, wxColour);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxComboBox, int, wxString);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxComboBox, int, wxString);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxFileDirPickerCtrlBase, wxString);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxFileDirPickerCtrlBase, wxString);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxFilePickerCtrl, wxFileName, wxString);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxFilePickerCtrl, wxFileName, wxString);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxDirPickerCtrl, wxFileName, wxString);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxDirPickerCtrl, wxFileName, wxString);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxFontPickerCtrl, wxFont);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxFontPickerCtrl, wxFont);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxGaugeBase, int);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxGaugeBase, int);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxListBoxBase, int, wxArrayInt);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxListBoxBase, int, wxArrayInt);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxRadioBoxBase, int);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxRadioBoxBase, int);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxScrollBarBase, int);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxScrollBarBase, int);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxSliderBase, int);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxSliderBase, int);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxSpinButtonBase, int);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxSpinButtonBase, int);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxSpinCtrl, int);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxSpinCtrl, int);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxSpinCtrlDouble, double);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxSpinCtrlDouble, double);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxSplitterWindow, int);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxSplitterWindow, int);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxStaticTextBase, wxString);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxStaticTextBase, wxString);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxTextCtrlBase, int, float, double, wxString, wxFileName);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxTextCtrlBase, int, float, double, wxString, wxFileName);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxToggleButtonBase, bool);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxToggleButtonBase, bool);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxCalendarCtrlBase, wxDateTime);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxCalendarCtrlBase, wxDateTime);
 
 //-----------------------------------------------------------------------------
 
-wxDECLARE_DATA_TRANSFER_IMPL(wxDateTimePickerCtrlBase, wxDateTime);
+wxDECLARE_DATA_TRANSFER_IMPL_(wxDateTimePickerCtrlBase, wxDateTime);
 
 //-----------------------------------------------------------------------------
 
