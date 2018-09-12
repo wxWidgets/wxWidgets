@@ -47,8 +47,6 @@ public:
 
     wxFontRefData(CTFontRef font);
 
-    virtual ~wxFontRefData();
-
     float GetFractionalPointSize() const { return m_info.GetFractionalPointSize(); }
 
     wxFontFamily GetFamily() const { return m_info.GetFamily(); }
@@ -269,11 +267,6 @@ wxFontRefData::wxFontRefData(const wxFontInfo& info)
     SetUnderlined(info.IsUnderlined());
     SetStrikethrough(info.IsStrikethrough());
     SetEncoding(info.GetEncoding());
-}
-
-wxFontRefData::~wxFontRefData()
-{
-    Free();
 }
 
 void wxFontRefData::Free()
