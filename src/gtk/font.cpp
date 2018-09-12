@@ -133,11 +133,7 @@ void wxFontRefData::Init(float pointSize,
     }
 
     SetStyle( style );
-    m_nativeFontInfo.SetFractionalPointSize
-                     (
-                        pointSize < 0 ? static_cast<float>(wxDEFAULT_FONT_SIZE)
-                                      : pointSize
-                     );
+    m_nativeFontInfo.SetSizeOrDefault(pointSize);
     SetNumericWeight( weight );
     SetUnderlined( underlined );
     SetStrikethrough( strikethrough );

@@ -285,6 +285,17 @@ public:
     void SetFamily(wxFontFamily family);
     void SetEncoding(wxFontEncoding encoding);
 
+    // Helper used in many ports: use the normal font size if the input is
+    // negative, as we handle -1 as meaning this for compatibility.
+    void SetSizeOrDefault(float size)
+    {
+        SetFractionalPointSize
+        (
+            size < 0 ? wxNORMAL_FONT->GetFractionalPointSize()
+                     : size
+        );
+    }
+
     // sets the first facename in the given array which is found
     // to be valid. If no valid facename is given, sets the
     // first valid facename returned by wxFontEnumerator::GetFacenames().

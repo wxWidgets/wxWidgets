@@ -301,7 +301,7 @@ void wxFontRefData::Init(float size,
     else
         SetFamily(family);
 
-    SetFractionalPointSize(size < 0 ? wxNORMAL_FONT->GetFractionalPointSize() : size);
+    m_info.SetSizeOrDefault(size);
     SetNumericWeight(weight);
     SetStyle(style);
     SetUnderlined(underlined);

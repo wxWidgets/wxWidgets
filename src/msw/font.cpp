@@ -362,12 +362,7 @@ void wxFontRefData::Init(float pointSize,
     }
     else
     {
-        m_nativeFontInfo.SetFractionalPointSize
-                         (
-                            pointSize < 0
-                                ? wxNORMAL_FONT->GetPointSize()
-                                : pointSize
-                        );
+        m_nativeFontInfo.SetSizeOrDefault(pointSize);
     }
 
     SetStyle(style);
