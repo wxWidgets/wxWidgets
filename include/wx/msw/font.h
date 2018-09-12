@@ -44,8 +44,10 @@ public:
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
     {
-        return DoCreate(size, wxDefaultSize, false, family, style,
-                        weight, underlined, face, encoding);
+        AccountForCompatValues(size, style, weight);
+
+        wxFontInfo info(size);
+        return DoCreate(info, family, style, weight, underlined, face, encoding);
     }
 
     wxFont(const wxSize& pixelSize,
@@ -76,8 +78,8 @@ public:
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
     {
-        return DoCreate(-1, pixelSize, true, family, style,
-                        weight, underlined, face, encoding);
+        wxFontInfo info(pixelSize);
+        return DoCreate(info, family, style, weight, underlined, face, encoding);
     }
 
     bool Create(const wxNativeFontInfo& info, WXHFONT hFont = 0);
@@ -147,10 +149,8 @@ public:
     WXHFONT GetHFONT() const;
 
 protected:
-    // real font creation function, used in all cases
-    bool DoCreate(int size,
-                  const wxSize& pixelSize,
-                  bool sizeUsingPixels,
+    // Common helper of overloaded Create() methods.
+    bool DoCreate(wxFontInfo& info,
                   wxFontFamily family,
                   wxFontStyle style,
                   wxFontWeight weight,
