@@ -33,13 +33,6 @@
 #include "wx/gtk/private.h"
 
 // ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// the default size (in points) for the fonts
-static const int wxDEFAULT_FONT_SIZE = 12;
-
-// ----------------------------------------------------------------------------
 // wxFontRefData
 // ----------------------------------------------------------------------------
 
@@ -147,7 +140,7 @@ void wxFontRefData::InitFromNative()
     // Pango sometimes needs to have a size
     int pango_size = pango_font_description_get_size( desc );
     if (pango_size == 0)
-        m_nativeFontInfo.SetPointSize(wxDEFAULT_FONT_SIZE);
+        m_nativeFontInfo.SetSizeOrDefault(-1); // i.e. default
 }
 
 wxFontRefData::wxFontRefData( const wxFontRefData& data )
