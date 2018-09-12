@@ -70,7 +70,7 @@ public:
                   bool sizeUsingPixels,
                   wxFontFamily family,
                   wxFontStyle style,
-                  wxFontWeight weight,
+                  int weight,
                   bool underlined,
                   bool strikethrough,
                   const wxString& faceName,
@@ -272,7 +272,7 @@ protected:
               bool sizeUsingPixels,
               wxFontFamily family,
               wxFontStyle style,
-              wxFontWeight weight,
+              int weight,
               bool underlined,
               bool strikethrough,
               const wxString& faceName,
@@ -347,7 +347,7 @@ void wxFontRefData::Init(float pointSize,
                          bool sizeUsingPixels,
                          wxFontFamily family,
                          wxFontStyle style,
-                         wxFontWeight weight,
+                         int weight,
                          bool underlined,
                          bool strikethrough,
                          const wxString& faceName,
@@ -371,7 +371,7 @@ void wxFontRefData::Init(float pointSize,
     }
 
     SetStyle(style);
-    m_nativeFontInfo.SetWeight(weight);
+    SetNumericWeight(weight);
     SetUnderlined(underlined);
     SetStrikethrough(strikethrough);
 
@@ -801,7 +801,7 @@ wxFont::wxFont(const wxFontInfo& info)
                                   info.IsUsingSizeInPixels(),
                                   info.GetFamily(),
                                   info.GetStyle(),
-                                  info.GetWeight(),
+                                  info.GetNumericWeight(),
                                   info.IsUnderlined(),
                                   info.IsStrikethrough(),
                                   info.GetFaceName(),
@@ -833,7 +833,8 @@ bool wxFont::DoCreate(int pointSize,
 
     m_refData = new wxFontRefData(wxFontInfo::ToFloatPointSize(pointSize),
                                   pixelSize, sizeUsingPixels,
-                                  family, style, weight,
+                                  family, style,
+                                  GetNumericWeightOf(weight),
                                   underlined, false, faceName, encoding);
 
     return RealizeResource();

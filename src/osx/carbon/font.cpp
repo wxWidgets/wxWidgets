@@ -45,7 +45,7 @@ public:
     wxFontRefData(float size,
                   wxFontFamily family,
                   wxFontStyle style,
-                  wxFontWeight weight,
+                  int weight,
                   bool underlined,
                   bool strikethrough,
                   const wxString& faceName,
@@ -173,7 +173,7 @@ protected:
     void Init(float size,
               wxFontFamily family,
               wxFontStyle style,
-              wxFontWeight weight,
+              int weight,
               bool underlined,
               bool strikethrough,
               const wxString& faceName,
@@ -289,7 +289,7 @@ void wxFontRefData::Init()
 void wxFontRefData::Init(float size,
                          wxFontFamily family,
                          wxFontStyle style,
-                         wxFontWeight weight,
+                         int weight,
                          bool underlined,
                          bool strikethrough,
                          const wxString& faceName,
@@ -540,6 +540,20 @@ wxFont::wxFont(const wxString& fontdesc)
         (void)Create(info);
 }
 
+wxFont::wxFont(const wxFontInfo& info)
+{
+    Create(info.GetFractionalPointSize(),
+           info.GetFamily(),
+           info.GetStyle(),
+           info.GetNumericWeight(),
+           info.IsUnderlined(),
+           info.GetFaceName(),
+           info.GetEncoding());
+
+    if ( info.IsUsingSizeInPixels() )
+        SetPixelSize(info.GetPixelSize());
+}
+
 wxFont::wxFont(int size,
     int family,
     int style,
@@ -555,7 +569,7 @@ wxFont::wxFont(int size,
 bool wxFont::Create(float pointSize,
     wxFontFamily family,
     wxFontStyle style,
-    wxFontWeight weight,
+    int weight,
     bool underlined,
     const wxString& faceName,
     wxFontEncoding encoding)
@@ -579,7 +593,9 @@ bool wxFont::Create(int pointSize,
     AccountForCompatValues(pointSize, style, weight);
 
     return Create(wxFontInfo::ToFloatPointSize(pointSize),
-                  family, style, weight, underlined, faceName, encoding);
+                  family, style,
+                  GetNumericWeightOf(weight),
+                  underlined, faceName, encoding);
 }
 
 wxFont::~wxFont()

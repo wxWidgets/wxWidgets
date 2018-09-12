@@ -36,19 +36,7 @@ public:
     // ctors and such
     wxFont() { }
 
-    wxFont(const wxFontInfo& info)
-    {
-        Create(info.GetFractionalPointSize(),
-               info.GetFamily(),
-               info.GetStyle(),
-               info.GetWeight(),
-               info.IsUnderlined(),
-               info.GetFaceName(),
-               info.GetEncoding());
-
-        if ( info.IsUsingSizeInPixels() )
-            SetPixelSize(info.GetPixelSize());
-    }
+    wxFont(const wxFontInfo& info);
 
     wxFont( wxOSXSystemFont systemFont );
     wxFont(CTFontRef font);
@@ -71,7 +59,7 @@ public:
     wxFont(float size,
            wxFontFamily family,
            wxFontStyle style,
-           wxFontWeight weight,
+           int weight,
            bool underlined = false,
            const wxString& face = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
@@ -102,7 +90,7 @@ public:
     bool Create(float size,
                 wxFontFamily family,
                 wxFontStyle style,
-                wxFontWeight weight,
+                int weight,
                 bool underlined = false,
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
