@@ -71,6 +71,14 @@ MyData::MyData()
     m_percentValue = 0.25;
 }
 
+static inline wxString GetString(const wxScopedPtr<wxString>& ptr)
+{
+    if (ptr)
+        return *ptr;
+
+    return wxString();
+}
+
 #if wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
 
 // we don't have to derive a whole new class from wxValidator
@@ -109,14 +117,6 @@ static auto GetString(const MyData::VariantType& var){ return var; }
 #endif // defined(HAVE_STD_VARIANT)
 
 #else // wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
-
-static inline wxString GetString(const wxScopedPtr<wxString>& ptr)
-{
-    if (ptr)
-        return *ptr;
-
-    return wxString();
-}
 
 // ----------------------------------------------------------------------------
 // MyComboBoxValidator
