@@ -93,14 +93,6 @@ bool wxDataTransfer<wxComboBox>::DoValidate(wxComboBox* cb, wxWindow* parent)
     return true;
 }
 
-static inline wxString GetString(const wxScopedPtr<wxString>& ptr)
-{
-    if (ptr)
-        return *ptr;
-
-    return wxString();
-}
-
 #if defined(HAVE_STD_VARIANT)
 template<class... Ts> struct overload : Ts... { using Ts::operator()...; };
 template<class... Ts> overload(Ts...) -> overload<Ts...>;
@@ -117,6 +109,15 @@ static auto GetString(const MyData::VariantType& var){ return var; }
 #endif // defined(HAVE_STD_VARIANT)
 
 #else // wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
+
+static inline wxString GetString(const wxScopedPtr<wxString>& ptr)
+{
+    if (ptr)
+        return *ptr;
+
+    return wxString();
+}
+
 // ----------------------------------------------------------------------------
 // MyComboBoxValidator
 // ----------------------------------------------------------------------------
