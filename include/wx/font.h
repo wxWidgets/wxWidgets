@@ -96,7 +96,7 @@ enum wxFontFlag
     wxFONTFLAG_ITALIC           = 1 << 0,
     wxFONTFLAG_SLANT            = 1 << 1,
 
-    // weight flags (default: medium)
+    // weight flags (default: medium):
     wxFONTFLAG_LIGHT            = 1 << 2,
     wxFONTFLAG_BOLD             = 1 << 3,
 
@@ -153,10 +153,12 @@ public:
     wxFontInfo& FaceName(const wxString& faceName)
         { m_faceName = faceName; return *this; }
 
+    wxFontInfo& Weight(int weight)
+        { m_weight = weight; return *this; }
     wxFontInfo& Bold(bool bold = true)
-        { SetFlag(wxFONTFLAG_BOLD, bold); return *this; }
+        { return Weight(bold ? wxFONTWEIGHT_BOLD : wxFONTWEIGHT_NORMAL); }
     wxFontInfo& Light(bool light = true)
-        { SetFlag(wxFONTFLAG_LIGHT, light); return *this; }
+        { return Weight(light ? wxFONTWEIGHT_LIGHT : wxFONTWEIGHT_NORMAL); }
 
     wxFontInfo& Italic(bool italic = true)
         { SetFlag(wxFONTFLAG_ITALIC, italic); return *this; }
@@ -176,7 +178,17 @@ public:
 
     // Set all flags at once.
     wxFontInfo& AllFlags(int flags)
-        { m_flags = flags; return *this; }
+    {
+        m_flags = flags;
+
+        m_weight = m_flags & wxFONTFLAG_BOLD
+                        ? wxFONTWEIGHT_BOLD
+                        : m_flags & wxFONTFLAG_LIGHT
+                            ? wxFONTWEIGHT_LIGHT
+                            : wxFONTWEIGHT_NORMAL;
+
+        return *this;
+    }
 
 
     // Accessors are mostly meant to be used by wxFont itself to extract the
@@ -198,13 +210,14 @@ public:
                             : wxFONTSTYLE_NORMAL;
     }
 
+    int GetNumericWeight() const
+    {
+        return m_weight;
+    }
+
     wxFontWeight GetWeight() const
     {
-        return m_flags & wxFONTFLAG_LIGHT
-                        ? wxFONTWEIGHT_LIGHT
-                        : m_flags & wxFONTFLAG_BOLD
-                            ? wxFONTWEIGHT_BOLD
-                            : wxFONTWEIGHT_NORMAL;
+        return GetWeightClosestToNumericValue(m_weight);
     }
 
     bool IsAntiAliased() const
@@ -273,6 +286,7 @@ private:
         m_pointSize = -1;
         m_family = wxFONTFAMILY_DEFAULT;
         m_flags = wxFONTFLAG_DEFAULT;
+        m_weight = wxFONTWEIGHT_NORMAL;
         m_encoding = wxFONTENCODING_DEFAULT;
     }
 
@@ -303,6 +317,7 @@ private:
     wxFontFamily m_family;
     wxString m_faceName;
     int m_flags;
+    int m_weight;
     wxFontEncoding m_encoding;
 };
 

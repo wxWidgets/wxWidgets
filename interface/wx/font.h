@@ -364,7 +364,22 @@ public:
     wxFontInfo& FaceName(const wxString& faceName);
 
     /**
+        Specify the weight of the font.
+
+        @param weight
+            A font weight in the range from 1 to 1000, inclusive, with 1 being
+            the thinnest and 1000 the heaviest possible font variant.
+            @c wxFONTWEIGHT_XXX values from wxFontWeight enum can be used here.
+
+        @since 3.1.2
+     */
+    wxFontInfo& Weight(int weight);
+
+    /**
         Use a bold version of the font.
+
+        This is a wrapper for Weight() calling it with ::wxFONTWEIGHT_BOLD
+        argument.
 
         @see ::wxFontWeight, wxFont::SetWeight()
      */
@@ -372,6 +387,9 @@ public:
 
     /**
         Use a lighter version of the font.
+
+        This is a wrapper for Weight() calling it with ::wxFONTWEIGHT_LIGHT
+        argument.
 
         @see ::wxFontWeight, wxFont::SetWeight()
      */
@@ -426,6 +444,11 @@ public:
         Set all the font attributes at once.
 
         See ::wxFontFlag for the various flags that can be used.
+
+        Note that calling this method affects the font weight stored in this
+        object: it is set to ::wxFONTWEIGHT_LIGHT or ::wxFONTWEIGHT_BOLD if the
+        corresponding flag is present in @a flags, or ::wxFONTWEIGHT_NORMAL
+        otherwise.
      */
     wxFontInfo& AllFlags(int flags);
 
