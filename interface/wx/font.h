@@ -428,6 +428,18 @@ public:
         See ::wxFontFlag for the various flags that can be used.
      */
     wxFontInfo& AllFlags(int flags);
+
+    /**
+        Get the symbolic weight closest to the given raw weight value.
+
+        @param numWeight
+            A valid raw weight value, i.e. a value in the range 1 to 1000,
+            inclusive.
+        @return A valid element of wxFontWeight enum.
+
+        @since 3.1.2
+     */
+    static wxFontWeight GetWeightClosestToNumericValue(int numWeight);
 };
 
 /**
@@ -1243,18 +1255,6 @@ public:
         @since 3.1.2
      */
     static int GetNumericWeightOf(wxFontWeight weight);
-
-    /**
-        Get the symbolic weight closest to the given raw weight value.
-
-        @param numWeight
-            A valid raw weight value, i.e. a value in the range 1 to 1000,
-            inclusive.
-        @return A valid element of wxFontWeight enum.
-
-        @since 3.1.2
-     */
-    static wxFontWeight GetWeightClosestToNumericValue(int numWeight);
 
     //@{
     /**

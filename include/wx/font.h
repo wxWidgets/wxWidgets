@@ -246,6 +246,27 @@ public:
         return f;
     }
 
+    // Another helper for converting arbitrary numeric weight to the closest
+    // value of wxFontWeight enum. It should be avoided in the new code (also
+    // note that the function for the conversion in the other direction is
+    // trivial and so is not provided, we only have GetNumericWeightOf() which
+    // contains backwards compatibility hacks, but we don't need it here).
+    static wxFontWeight GetWeightClosestToNumericValue(int numWeight)
+    {
+        wxASSERT(numWeight > 0);
+        wxASSERT(numWeight <= 1000);
+
+        // round to nearest hundredth = wxFONTWEIGHT_ constant
+        int weight = ((numWeight + 50) / 100) * 100;
+
+        if (weight < wxFONTWEIGHT_THIN)
+            weight = wxFONTWEIGHT_THIN;
+        if (weight > wxFONTWEIGHT_MAX)
+            weight = wxFONTWEIGHT_MAX;
+
+        return static_cast<wxFontWeight>(weight);
+    }
+
 private:
     void Init()
     {
@@ -444,7 +465,6 @@ public:
 
     // Convert between symbolic and numeric font weights.
     static int GetNumericWeightOf(wxFontWeight weight);
-    static wxFontWeight GetWeightClosestToNumericValue(int numWeight);
 
     // this doesn't do anything and is kept for compatibility only
 #if WXWIN_COMPATIBILITY_2_8

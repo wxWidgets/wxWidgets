@@ -826,7 +826,7 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
 void wxNativeFontInfo::SetNumericWeight(int weight)
 {
     wxString s;
-    switch ( wxFont::GetWeightClosestToNumericValue(weight) )
+    switch ( wxFontInfo::GetWeightClosestToNumericValue(weight) )
     {
         case wxFONTWEIGHT_THIN:
             s = "thin";

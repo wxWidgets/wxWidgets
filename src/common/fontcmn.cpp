@@ -258,26 +258,6 @@ int wxFontBase::GetNumericWeightOf(wxFontWeight weight)
     return weight;
 }
 
-// As its name indicates, this function returns the closest wxFontWeight enum
-// element, even if its value doesn't correspond to the given weight exactly.
-/* static */
-wxFontWeight wxFontBase::GetWeightClosestToNumericValue(int numWeight)
-{
-    wxASSERT(numWeight > 0);
-    wxASSERT(numWeight <= 1000);
-
-    // round to nearest hundredth = wxFONTWEIGHT_ constant
-    int weight = ((numWeight + 50) / 100) * 100;
-
-    if (weight < wxFONTWEIGHT_THIN)
-        weight = wxFONTWEIGHT_THIN;
-    if (weight > wxFONTWEIGHT_MAX)
-        weight = wxFONTWEIGHT_MAX;
-
-    return static_cast<wxFontWeight>(weight);
-}
-
-
 int wxFontBase::GetPointSize() const
 {
     return wxFontInfo::ToIntPointSize(GetFractionalPointSize());
@@ -295,7 +275,7 @@ wxFontWeight wxFontBase::GetWeight() const
 {
     wxCHECK_MSG( IsOk(), wxFONTWEIGHT_MAX, "invalid font" );
 
-    return GetWeightClosestToNumericValue(GetNumericWeight());
+    return wxFontInfo::GetWeightClosestToNumericValue(GetNumericWeight());
 }
 
 bool wxFontBase::IsUsingSizeInPixels() const
@@ -1324,7 +1304,7 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
 
 wxFontWeight wxNativeFontInfo::GetWeight() const
 {
-    return wxFontBase::GetWeightClosestToNumericValue(GetNumericWeight());
+    return wxFontInfo::GetWeightClosestToNumericValue(GetNumericWeight());
 }
 
 void wxNativeFontInfo::SetWeight(wxFontWeight weight)
