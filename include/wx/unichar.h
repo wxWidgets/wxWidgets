@@ -14,7 +14,12 @@
 #include "wx/chartype.h"
 #include "wx/stringimpl.h"
 
-#include <algorithm>        // only for std::swap specialization below
+// We need to get std::swap() declaration in order to specialize it below and
+// it is declared in different headers for C++98 and C++11. Instead of testing
+// which one is being used, just include both of them as it's simpler and less
+// error-prone.
+#include <algorithm>        // std::swap() for C++98
+#include <utility>          // std::swap() for C++11
 
 class WXDLLIMPEXP_FWD_BASE wxUniCharRef;
 class WXDLLIMPEXP_FWD_BASE wxString;
