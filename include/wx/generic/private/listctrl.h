@@ -319,7 +319,7 @@ public:
     void Clear()
     {
         for ( size_t n = 0; n < size(); ++n )
-            delete(operator[](n));
+            delete (*this)[n];
         clear();
     }
 
