@@ -175,9 +175,12 @@ bool wxTextValidator::Validate(wxWindow *parent)
 
     if ( !errormsg.empty() )
     {
-        m_validatorWindow->SetFocus();
-        wxMessageBox(errormsg, _("Validation conflict"),
-                     wxOK | wxICON_EXCLAMATION, parent);
+        if ( !wxValidator::SetErrorMsg(errormsg) )
+        {
+            m_validatorWindow->SetFocus();
+            wxMessageBox(errormsg, _("Validation conflict"),
+                         wxOK | wxICON_EXCLAMATION, parent);
+        }
 
         return false;
     }

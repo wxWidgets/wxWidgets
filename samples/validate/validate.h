@@ -32,6 +32,7 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnTestDialog(wxCommandEvent& event);
     void OnToggleBell(wxCommandEvent& event);
+    void OnCustomErrorReport(wxCommandEvent& event);
 
 private:
     wxListBox *m_listbox;
@@ -108,6 +109,7 @@ enum
 
     VALIDATE_TEST_DIALOG,
     VALIDATE_TOGGLE_BELL,
+    VALIDATE_CUSTOM_ERROR_REPORT,
 
     VALIDATE_TEXT,
     VALIDATE_TEXT2,

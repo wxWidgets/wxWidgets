@@ -31,6 +31,7 @@
 #include "wx/valgen.h"
 #include "wx/valtext.h"
 #include "wx/valnum.h"
+#include "wx/richtooltip.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -83,7 +84,11 @@ bool MyComboBoxValidator::Validate(wxWindow *WXUNUSED(parent))
     {
         // we accept any string != g_combobox_choices[1|2] !
 
-        wxLogError("Invalid combo box text!");
+        const wxString errmsg = "Invalid combo box text!";
+
+        if ( !wxValidator::SetErrorMsg(errmsg) )
+            wxLogError(errmsg);
+
         return false;
     }
 
@@ -152,6 +157,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(VALIDATE_TEST_DIALOG, MyFrame::OnTestDialog)
     EVT_MENU(VALIDATE_TOGGLE_BELL, MyFrame::OnToggleBell)
+    EVT_MENU(VALIDATE_CUSTOM_ERROR_REPORT, MyFrame::OnCustomErrorReport)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int h)
@@ -168,6 +174,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
 
     file_menu->Append(VALIDATE_TEST_DIALOG, wxT("&Test dialog...\tCtrl-T"), wxT("Demonstrate validators"));
     file_menu->AppendCheckItem(VALIDATE_TOGGLE_BELL, wxT("&Bell on error"), wxT("Toggle bell on error"));
+    file_menu->AppendCheckItem(VALIDATE_CUSTOM_ERROR_REPORT, 
+        wxT("&Use wxValidatorPopup"), wxT("Use custom error report"));
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, wxT("E&xit"));
 
@@ -232,6 +240,34 @@ void MyFrame::OnToggleBell(wxCommandEvent& event)
     m_silent = !m_silent;
     wxValidator::SuppressBellOnError(m_silent);
     event.Skip();
+}
+
+void MyFrame::OnCustomErrorReport(wxCommandEvent& event)
+{
+    class CustomValidatorPopup : public wxValidatorPopup
+    {
+    public:
+        CustomValidatorPopup(){}
+    
+    protected:
+        virtual void DoShowFor(wxWindow *win) wxOVERRIDE
+        {
+        #if wxUSE_RICHTOOLTIP
+            wxRichToolTip tip("Validation", GetErrorMsg());
+            tip.SetIcon(wxICON_ERROR);
+            tip.ShowFor(win);
+        #else
+            wxLogError(GetErrorMsg());
+        #endif // wxUSE_RICHTOOLTIP
+        }
+    };
+
+    wxValidatorPopup* popup = NULL;
+
+    if ( event.IsChecked() )
+        popup = new CustomValidatorPopup;
+
+    wxValidator::SetCustomErrorReporting(popup);
 }
 
 // ----------------------------------------------------------------------------

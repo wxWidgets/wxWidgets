@@ -20,6 +20,26 @@
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 
+// concrete instances of this interface take care about the way
+// error messages (on validation failure) are shown to the user.
+class WXDLLIMPEXP_CORE wxValidatorPopup
+{
+public:
+    wxValidatorPopup(){}
+    virtual ~wxValidatorPopup(){}
+
+    void ShowFor(wxWindow *win);
+
+    void SetErrorMsg(const wxString& errmsg){ m_errmsg = errmsg; }
+    wxString GetErrorMsg() const { return m_errmsg; }
+    
+protected:
+    // To be implemented by derived classes.
+    virtual void DoShowFor(wxWindow *) = 0;
+
+    wxString m_errmsg;
+};
+
 /*
  A validator has up to three purposes:
 
@@ -76,6 +96,20 @@ public:
 
     // test if beep is currently disabled
     static bool IsSilent() { return ms_isSilent; }
+
+    // will be called upon validation failure to show the previously set
+    // error message in a custom popup if any.
+    void Popup();
+
+    // call this function at validation point to set the error message
+    // that will be shown in case of validation failure.
+    static bool SetErrorMsg(const wxString& errmsg);
+
+    // globally affect how validation errors are reported to the user. 
+    static bool SetCustomErrorReporting(wxValidatorPopup* popup);
+
+    // return true if we have a custom error report previously set.
+    static bool HasCustomErrorReporting();
 
     // this function is deprecated because it handled its parameter
     // unnaturally: it disabled the bell when it was true, not false as could

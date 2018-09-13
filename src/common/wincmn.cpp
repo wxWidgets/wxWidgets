@@ -2045,6 +2045,7 @@ public:
             wxValidator* const validator = child->GetValidator();
             if ( validator && !OnDo(validator) )
             {
+                validator->Popup();
                 return false;
             }
 
