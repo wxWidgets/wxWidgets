@@ -32,6 +32,7 @@ public:
            const wxString& face = wxEmptyString,
            wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
+    wxDEPRECATED_MSG("use wxFONT{FAMILY,STYLE,WEIGHT}_XXX constants")
     wxFont(int size,
            int family,
            int style,
