@@ -53,29 +53,50 @@ static QFont::StyleHint ConvertFontFamily(wxFontFamily family)
     return QFont::AnyStyle;
 }
 
-static QFont::Weight ConvertFontWeight(int weight)
+// Helper of ConvertFontWeight() and GetNumericWeight(): if a value lies in
+// ]fromMin, fromMax] interval, then map it to [toMin, toMax] interval linearly
+// and return true, otherwise return false and don't modify it.
+static bool TryToMap(int& x, int fromMin, int fromMax, int toMin, int toMax)
 {
-    switch (weight)
+    if ( x > fromMin && x <= fromMax )
     {
-        case wxFONTWEIGHT_NORMAL:
-            return QFont::Normal;
+        x = (toMin*(fromMax - x) + toMax*(x - fromMin))/(fromMax - fromMin);
 
-        case wxFONTWEIGHT_LIGHT:
-            return QFont::Light;
-
-        case wxFONTWEIGHT_BOLD:
-            return QFont::Bold;
-
-        case wxFONTWEIGHT_SEMIBOLD:
-            return QFont::DemiBold;
-
-        case wxFONTWEIGHT_HEAVY:
-            return QFont::Black;
-
-        case wxFONTWEIGHT_MAX:
-            wxFAIL_MSG( "Invalid font weight value" );
-            break;
+        return true;
     }
+
+    return false;
+}
+
+static int ConvertFontWeight(int w)
+{
+    // Note that QFont::Thin is 0, so we can't have anything lighter than it.
+    if ( TryToMap(w, wxFONTWEIGHT_INVALID, wxFONTWEIGHT_THIN,
+                     QFont::Thin, QFont::Thin) ||
+         TryToMap(w, wxFONTWEIGHT_THIN, wxFONTWEIGHT_EXTRALIGHT,
+                     QFont::Thin, QFont::ExtraLight) ||
+         TryToMap(w, wxFONTWEIGHT_EXTRALIGHT, wxFONTWEIGHT_LIGHT,
+                     QFont::ExtraLight, QFont::Light) ||
+         TryToMap(w, wxFONTWEIGHT_LIGHT, wxFONTWEIGHT_NORMAL,
+                     QFont::Light, QFont::Normal) ||
+         TryToMap(w, wxFONTWEIGHT_NORMAL, wxFONTWEIGHT_MEDIUM,
+                     QFont::Normal, QFont::Medium) ||
+         TryToMap(w, wxFONTWEIGHT_MEDIUM, wxFONTWEIGHT_SEMIBOLD,
+                     QFont::Medium, QFont::DemiBold) ||
+         TryToMap(w, wxFONTWEIGHT_SEMIBOLD, wxFONTWEIGHT_BOLD,
+                     QFont::DemiBold, QFont::Bold) ||
+         TryToMap(w, wxFONTWEIGHT_BOLD, wxFONTWEIGHT_EXTRABOLD,
+                     QFont::Bold, QFont::ExtraBold) ||
+         TryToMap(w, wxFONTWEIGHT_EXTRABOLD, wxFONTWEIGHT_HEAVY,
+                     QFont::ExtraBold, QFont::Black) ||
+         TryToMap(w, wxFONTWEIGHT_HEAVY, wxFONTWEIGHT_EXTRAHEAVY,
+                     QFont::Black, 99) )
+    {
+        return w;
+    }
+
+    wxFAIL_MSG("invalid wxFont weight");
+
     return QFont::Normal;
 }
 
@@ -339,24 +360,36 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
 
 int wxNativeFontInfo::GetNumericWeight() const
 {
-    switch ( m_qtFont.weight() )
+    int w = m_qtFont.weight();
+
+    // Special case of QFont::Thin == 0.
+    if ( w == QFont::Thin )
+        return wxFONTWEIGHT_THIN;
+
+    if ( TryToMap(w, QFont::Thin, QFont::ExtraLight,
+                     wxFONTWEIGHT_THIN, wxFONTWEIGHT_EXTRALIGHT) ||
+         TryToMap(w, QFont::ExtraLight, QFont::Light,
+                     wxFONTWEIGHT_EXTRALIGHT, wxFONTWEIGHT_LIGHT) ||
+         TryToMap(w, QFont::Light, QFont::Normal,
+                     wxFONTWEIGHT_LIGHT, wxFONTWEIGHT_NORMAL) ||
+         TryToMap(w, QFont::Normal, QFont::Medium,
+                     wxFONTWEIGHT_NORMAL, wxFONTWEIGHT_MEDIUM) ||
+         TryToMap(w, QFont::Medium, QFont::DemiBold,
+                     wxFONTWEIGHT_MEDIUM, wxFONTWEIGHT_SEMIBOLD) ||
+         TryToMap(w, QFont::DemiBold, QFont::Bold,
+                     wxFONTWEIGHT_SEMIBOLD, wxFONTWEIGHT_BOLD) ||
+         TryToMap(w, QFont::Bold, QFont::ExtraBold,
+                     wxFONTWEIGHT_BOLD, wxFONTWEIGHT_EXTRABOLD) ||
+         TryToMap(w, QFont::ExtraBold, QFont::Black,
+                     wxFONTWEIGHT_EXTRABOLD, wxFONTWEIGHT_HEAVY) ||
+         TryToMap(w, QFont::Black, 99,
+                     wxFONTWEIGHT_HEAVY, wxFONTWEIGHT_EXTRAHEAVY) )
     {
-        case QFont::Normal:
-            return wxFONTWEIGHT_NORMAL;
-
-        case QFont::Light:
-            return wxFONTWEIGHT_LIGHT;
-
-        case QFont::DemiBold:
-            return wxFONTWEIGHT_SEMIBOLD;
-
-        case QFont::Black:
-            return wxFONTWEIGHT_HEAVY;
-
-        case QFont::Bold:
-            return wxFONTWEIGHT_BOLD;
+        return w;
     }
-    wxFAIL_MSG( "Invalid font weight value" );
+
+    wxFAIL_MSG( "Invalid QFont weight" );
+
     return wxFONTWEIGHT_NORMAL;
 }
 
