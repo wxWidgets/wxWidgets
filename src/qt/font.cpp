@@ -81,20 +81,20 @@ static QFont::Weight ConvertFontWeight(int weight)
 
 class wxFontRefData: public wxGDIRefData
 {
-    public:
-        wxFontRefData() {}
+public:
+    wxFontRefData() {}
 
-        wxFontRefData( const wxFontRefData& data )
-        : wxGDIRefData()
-        {
-            m_nativeFontInfo.m_qtFont = data.m_nativeFontInfo.m_qtFont;
-        }
+    wxFontRefData( const wxFontRefData& data )
+    : wxGDIRefData()
+    {
+        m_nativeFontInfo.m_qtFont = data.m_nativeFontInfo.m_qtFont;
+    }
 
-        bool operator == (const wxFontRefData& data) const
-        {
-            return m_nativeFontInfo.m_qtFont == data.m_nativeFontInfo.m_qtFont;
-        }
-        
+    bool operator == (const wxFontRefData& data) const
+    {
+        return m_nativeFontInfo.m_qtFont == data.m_nativeFontInfo.m_qtFont;
+    }
+
     wxNativeFontInfo m_nativeFontInfo;
 };
 
