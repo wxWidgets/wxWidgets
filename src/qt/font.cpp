@@ -203,9 +203,9 @@ bool wxFont::Create(wxSize size, wxFontFamily family, wxFontStyle style,
     return true;
 }
 
-int wxFont::GetPointSize() const
+float wxFont::GetFractionalPointSize() const
 {
-    return M_FONTDATA.GetPointSize();
+    return M_FONTDATA.GetFractionalPointSize();
 }
 
 wxFontStyle wxFont::GetStyle() const
@@ -213,9 +213,9 @@ wxFontStyle wxFont::GetStyle() const
     return M_FONTDATA.GetStyle();
 }
 
-wxFontWeight wxFont::GetWeight() const
+int wxFont::GetNumericWeight() const
 {
-    return M_FONTDATA.GetWeight();
+    return M_FONTDATA.GetNumericWeight();
 }
 
 bool wxFont::GetUnderlined() const
@@ -238,11 +238,11 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
     return &M_FONTDATA;
 }
 
-void wxFont::SetPointSize( int pointSize )
+void wxFont::SetFractionalPointSize(float pointSize)
 {
     AllocExclusive();
 
-    M_FONTDATA.SetPointSize(pointSize);
+    M_FONTDATA.SetFractionalPointSize(pointSize);
 }
 
 bool wxFont::SetFaceName(const wxString& facename)
@@ -266,11 +266,11 @@ void wxFont::SetStyle( wxFontStyle style )
     M_FONTDATA.SetStyle(style);
 }
 
-void wxFont::SetWeight( wxFontWeight weight )
+void wxFont::SetNumericWeight(int weight)
 {
     AllocExclusive();
 
-    M_FONTDATA.SetWeight(weight);
+    M_FONTDATA.SetNumericWeight(weight);
 }
 
 void wxFont::SetUnderlined( bool underlined )

@@ -50,20 +50,20 @@ public:
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
     // accessors: get the font characteristics
-    virtual int GetPointSize() const;
+    virtual float GetFractionalPointSize() const wxOVERRIDE;
     virtual wxFontStyle GetStyle() const;
-    virtual wxFontWeight GetWeight() const;
+    virtual int GetNumericWeight() const wxOVERRIDE;
     virtual bool GetUnderlined() const;
     virtual wxString GetFaceName() const;
     virtual wxFontEncoding GetEncoding() const;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const;
 
     // change the font characteristics
-    virtual void SetPointSize( int pointSize );
+    virtual void SetFractionalPointSize(float pointSize) wxOVERRIDE;
     virtual void SetFamily( wxFontFamily family );
     virtual void SetStyle( wxFontStyle style );
+    virtual void SetNumericWeight(int weight) wxOVERRIDE;
     virtual bool SetFaceName(const wxString& facename);
-    virtual void SetWeight( wxFontWeight weight );
     virtual void SetUnderlined( bool underlined );
     virtual void SetEncoding(wxFontEncoding encoding);
     
