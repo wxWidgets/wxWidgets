@@ -338,6 +338,7 @@ public:
                   wxAuiPaneInfo& pane);
 
     void DrawIcon(wxDC& dc,
+                  wxWindow *window,
                   const wxRect& rect,
                   wxAuiPaneInfo& pane);
 
