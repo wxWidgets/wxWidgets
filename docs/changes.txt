@@ -98,6 +98,7 @@ All:
 - Fix build issues under HaikuOS (mill-j).
 - Fix problem with wx-config installation and use under NetBSD (wiz).
 - Avoid spurious errors on thread creation under NetBSD.
+- Improve high DPI support in wxAui (Simon Rozman).
 
 All (GUI):
 
