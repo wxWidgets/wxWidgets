@@ -229,7 +229,7 @@ public:
     void OnSetEncoding(wxCommandEvent& event);
     void OnPrivateFont(wxCommandEvent& event);
 
-    void OnFontPanelChange(wxCommandEvent& WXUNUSED(event))
+    void OnFontPanelApply(wxCommandEvent& WXUNUSED(event))
         { DoChangeFont(m_fontWindow->MakeNewFont()); }
 
 protected:
@@ -543,11 +543,7 @@ MyFrame::MyFrame()
 
     m_fontWindow = new FontWindow(splitter);
 
-    m_fontWindow->Bind(wxEVT_CHECKBOX, &MyFrame::OnFontPanelChange, this);
-    m_fontWindow->Bind(wxEVT_CHOICE, &MyFrame::OnFontPanelChange, this);
-    m_fontWindow->Bind(wxEVT_TEXT_ENTER, &MyFrame::OnFontPanelChange, this);
-    m_fontWindow->Bind(wxEVT_SPINCTRL, &MyFrame::OnFontPanelChange, this);
-    m_fontWindow->Bind(wxEVT_SPINCTRLDOUBLE, &MyFrame::OnFontPanelChange, this);
+    m_fontWindow->Bind(wxEVT_BUTTON, &MyFrame::OnFontPanelApply, this);
 
     m_textctrl = new wxTextCtrl(splitter, wxID_ANY,
                                 wxT("Paste text here to see how it looks\nlike in the given font"),
@@ -1333,9 +1329,10 @@ FontPanel::FontPanel(wxWindow* parent)
     sizer->Add(new wxStaticText(this, wxID_ANY, "Fixed width:"), flagsLabel);
     sizer->Add(m_checkFixedWidth, flagsValue);
 
-
     wxSizer* const sizerTop = new wxBoxSizer(wxVERTICAL);
     sizerTop->Add(sizer, wxSizerFlags().Expand().Border(wxBOTTOM));
+    sizerTop->Add(new wxButton(this, wxID_APPLY, "&Apply changes"),
+                  wxSizerFlags().Border(wxBOTTOM).Centre());
     sizerTop->Add(m_labelInfo, wxSizerFlags().Expand().Border(wxTOP));
     SetSizer(sizerTop);
 
