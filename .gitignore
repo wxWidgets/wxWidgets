@@ -274,6 +274,8 @@
 /misc/libtool
 
 # /samples/
+/samples/**/.vs
+/samples/**/*.user
 /samples/**/*c*_msw
 /samples/**/*c*_msw_x64
 /samples/**/*c*_msw[du]
