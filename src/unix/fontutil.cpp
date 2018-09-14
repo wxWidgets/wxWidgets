@@ -796,7 +796,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
 void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
 {
     SetXFontComponent(wxXLFD_POINTSIZE,
-                      wxString::Format("%d", wxRound(pointsize)));
+                      wxString::Format("%d", wxRound(10*pointsize)));
 }
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
