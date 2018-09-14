@@ -208,6 +208,9 @@ public:
     float GetFractionalPointSize() const { return m_pointSize; }
     int GetPointSize() const { return ToIntPointSize(m_pointSize); }
     wxSize GetPixelSize() const { return m_pixelSize; }
+
+    // If face name is not empty, it has priority, otherwise use family.
+    bool HasFaceName() const { return !m_faceName.empty(); }
     wxFontFamily GetFamily() const { return m_family; }
     const wxString& GetFaceName() const { return m_faceName; }
 

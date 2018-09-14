@@ -255,9 +255,8 @@ wxFontRefData::wxFontRefData(const wxFontInfo& info)
 {
     m_info.Init();
 
-    const wxString& faceName = info.GetFaceName();
-    if ( !faceName.empty() )
-        SetFaceName(faceName);
+    if ( info.HasFaceName() )
+        SetFaceName(info.GetFaceName());
     else
         SetFamily(info.GetFamily());
 

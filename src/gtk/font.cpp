@@ -86,11 +86,10 @@ wxFontRefData::wxFontRefData(const wxFontInfo& info)
     m_nativeFontInfo.description = pango_font_description_new();
 
     // And set its values
-    const wxString& faceName = info.GetFaceName();
-    if (!faceName.empty())
+    if ( info.HasFaceName() )
     {
         pango_font_description_set_family( m_nativeFontInfo.description,
-                                           wxGTK_CONV_SYS(faceName) );
+                                           wxGTK_CONV_SYS(info.GetFaceName()) );
     }
     else
     {

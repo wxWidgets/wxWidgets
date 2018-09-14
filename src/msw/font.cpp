@@ -330,7 +330,7 @@ wxFontRefData::wxFontRefData(const wxFontInfo& info)
 
     // set the family/facename
     SetFamily(info.GetFamily());
-    if ( !info.GetFaceName().empty() )
+    if ( info.HasFaceName() )
         SetFaceName(info.GetFaceName());
 
     // deal with encoding now (it may override the font family and facename
