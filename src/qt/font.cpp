@@ -111,11 +111,6 @@ public:
         m_nativeFontInfo.m_qtFont = data.m_nativeFontInfo.m_qtFont;
     }
 
-    bool operator == (const wxFontRefData& data) const
-    {
-        return m_nativeFontInfo.m_qtFont == data.m_nativeFontInfo.m_qtFont;
-    }
-
     wxNativeFontInfo m_nativeFontInfo;
 };
 
