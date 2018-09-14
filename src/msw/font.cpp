@@ -761,23 +761,11 @@ bool wxFont::Create(const wxNativeFontInfo& info, WXHFONT hFont)
     return RealizeResource();
 }
 
-bool wxFont::DoCreate(wxFontInfo& info,
-                      wxFontFamily family,
-                      wxFontStyle style,
-                      wxFontWeight weight,
-                      bool underlined,
-                      const wxString& faceName,
-                      wxFontEncoding encoding)
+bool wxFont::DoCreate(const wxFontInfo& info)
 {
     UnRef();
 
-    m_refData = new wxFontRefData(info.
-                                  Family(family).
-                                  Style(style).
-                                  Weight(GetNumericWeightOf(weight)).
-                                  Underlined(underlined).
-                                  FaceName(faceName).
-                                  Encoding(encoding));
+    m_refData = new wxFontRefData(info);
 
     return RealizeResource();
 }

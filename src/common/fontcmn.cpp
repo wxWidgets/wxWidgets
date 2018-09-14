@@ -540,10 +540,42 @@ bool wxFontBase::SetFaceName(const wxString& facename)
     return true;
 }
 
+namespace
+{
+
+void InitInfoWithLegacyParams(wxFontInfo& info,
+                              wxFontFamily family,
+                              wxFontStyle style,
+                              wxFontWeight weight,
+                              bool underlined,
+                              const wxString& face,
+                              wxFontEncoding encoding)
+{
+    if ( static_cast<int>(style) == wxDEFAULT )
+        style = wxFONTSTYLE_NORMAL;
+
+    if ( static_cast<int>(weight) == wxDEFAULT )
+        weight = wxFONTWEIGHT_NORMAL;
+
+    info
+        .Family(family)
+        .Style(style)
+        .Weight(wxFontBase::GetNumericWeightOf(weight))
+        .Underlined(underlined)
+        .FaceName(face)
+        .Encoding(encoding);
+}
+
+} // anonymous namespace
+
 /* static */
-void wxFontBase::AccountForCompatValues(int& pointSize,
-                                        wxFontStyle& style,
-                                        wxFontWeight& weight)
+wxFontInfo wxFontBase::InfoFromLegacyParams(int pointSize,
+                                            wxFontFamily family,
+                                            wxFontStyle style,
+                                            wxFontWeight weight,
+                                            bool underlined,
+                                            const wxString& face,
+                                            wxFontEncoding encoding)
 {
     // Old code specifies wxDEFAULT instead of -1 or wxNORMAL instead of the
     // new type-safe wxFONTSTYLE_NORMAL or wxFONTWEIGHT_NORMAL, continue
@@ -551,11 +583,29 @@ void wxFontBase::AccountForCompatValues(int& pointSize,
     if ( pointSize == wxDEFAULT )
         pointSize = -1;
 
-    if ( static_cast<int>(style) == wxDEFAULT )
-        style = wxFONTSTYLE_NORMAL;
+    wxFontInfo info(pointSize);
 
-    if ( static_cast<int>(weight) == wxDEFAULT )
-        weight = wxFONTWEIGHT_NORMAL;
+    InitInfoWithLegacyParams(info,
+                             family, style, weight, underlined, face, encoding);
+
+    return info;
+}
+
+/* static */
+wxFontInfo wxFontBase::InfoFromLegacyParams(const wxSize& pixelSize,
+                                            wxFontFamily family,
+                                            wxFontStyle style,
+                                            wxFontWeight weight,
+                                            bool underlined,
+                                            const wxString& face,
+                                            wxFontEncoding encoding)
+{
+    wxFontInfo info(pixelSize);
+
+    InitInfoWithLegacyParams(info,
+                             family, style, weight, underlined, face, encoding);
+
+    return info;
 }
 
 void wxFontBase::SetSymbolicSize(wxFontSymbolicSize size)

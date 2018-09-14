@@ -188,7 +188,6 @@ wxFont::wxFont(const wxSize& pixelSize,
        const wxString& face,
        wxFontEncoding encoding)
 {
-    m_refData = new wxFontRefData();
     Create(pixelSize, family, style, weight, underlined, face, encoding);
 }
 
@@ -200,27 +199,19 @@ wxFont::wxFont(int size,
        const wxString& face,
        wxFontEncoding encoding)
 {
-    m_refData = new wxFontRefData();
     Create(wxSize(0, size), (wxFontFamily)family, (wxFontStyle)style, (wxFontWeight)weight, underlined, face, encoding);
 }
 
 
 bool wxFont::Create(wxSize size, wxFontFamily family, wxFontStyle style,
         wxFontWeight weight, bool underlined, const wxString& face,
-        wxFontEncoding WXUNUSED(encoding) )
+        wxFontEncoding encoding )
 {
-    int pointSize = size.GetHeight();
-    AccountForCompatValues(pointSize, style, weight);
+    UnRef();
 
-    if (!face.empty())
-        M_FONTDATA.SetFaceName(face);
-    else
-        M_FONTDATA.SetFamily(family);
-
-    M_FONTDATA.SetStyle(style);
-    M_FONTDATA.SetWeight(weight);
-    M_FONTDATA.SetUnderlined(underlined);
-    M_FONTDATA.SetPointSize(pointSize);
+    m_refData = new wxFontRefData(InfoFromLegacyParams(size.GetHeight(), family,
+                                                       style, weight, underlined,
+                                                       face, encoding));
 
     return true;
 }

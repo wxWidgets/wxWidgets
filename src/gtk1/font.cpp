@@ -58,13 +58,7 @@ class wxFontRefData : public wxGDIRefData
 {
 public:
     // from broken down font parameters, also default ctor
-    wxFontRefData(int size = -1,
-                  wxFontFamily family = wxFONTFAMILY_DEFAULT,
-                  wxFontStyle style = wxFONTSTYLE_NORMAL,
-                  wxFontWeight weight = wxFONTWEIGHT_NORMAL,
-                  bool underlined = false,
-                  const wxString& faceName = wxEmptyString,
-                  wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    wxFontRefData(const wxFontInfo& info = wxFontInfo());
 
     // from XFLD
     wxFontRefData(const wxString& fontname);
@@ -276,12 +270,15 @@ wxFontRefData::wxFontRefData( const wxFontRefData& data )
     m_nativeFontInfo.FromString(data.m_nativeFontInfo.ToString());
 }
 
-wxFontRefData::wxFontRefData(int size, wxFontFamily family, wxFontStyle style,
-                             wxFontWeight weight, bool underlined,
-                             const wxString& faceName,
-                             wxFontEncoding encoding)
+wxFontRefData::wxFontRefData(const wxFontInfo& info)
 {
-    Init(size, family, style, weight, underlined, faceName, encoding);
+    Init(info.GetPointSize(),
+         info.GetFamily(),
+         info.GetStyle(),
+         info.GetWeight(),
+         info.IsUnderlined(),
+         info.GetFaceName(),
+         info.GetEncoding());
 }
 
 wxFontRefData::wxFontRefData(const wxString& fontname)
@@ -460,10 +457,9 @@ bool wxFont::Create( int pointSize,
 {
     UnRef();
 
-    AccountForCompatValues(pointSize, style, weight);
-
-    m_refData = new wxFontRefData(pointSize, family, style, weight,
-                                  underlined, face, encoding);
+    m_refData = new wxFontRefData(InfoFromLegacyParams(pointSize, family,
+                                                       style, weight, underlined,
+                                                       face, encoding));
 
     return true;
 }

@@ -521,15 +521,10 @@ bool wxFont::Create(int pointSize,
     const wxString& faceName,
     wxFontEncoding encoding)
 {
-    AccountForCompatValues(pointSize, style, weight);
+    m_refData = new wxFontRefData(InfoFromLegacyParams(pointSize, family,
+                                                       style, weight, underlined,
+                                                       faceName, encoding));
 
-    m_refData = new wxFontRefData(wxFontInfo(pointSize).
-                                  Family(family).
-                                  Style(style).
-                                  Weight(GetNumericWeightOf(weight)).
-                                  Underlined(underlined).
-                                  FaceName(faceName).
-                                  Encoding(encoding));
     return true;
 }
 

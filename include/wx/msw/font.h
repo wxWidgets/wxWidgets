@@ -44,10 +44,13 @@ public:
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
     {
-        AccountForCompatValues(size, style, weight);
-
-        wxFontInfo info(size);
-        return DoCreate(info, family, style, weight, underlined, face, encoding);
+        return DoCreate(InfoFromLegacyParams(size,
+                                             family,
+                                             style,
+                                             weight,
+                                             underlined,
+                                             face,
+                                             encoding));
     }
 
     wxFont(const wxSize& pixelSize,
@@ -78,8 +81,13 @@ public:
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
     {
-        wxFontInfo info(pixelSize);
-        return DoCreate(info, family, style, weight, underlined, face, encoding);
+        return DoCreate(InfoFromLegacyParams(pixelSize,
+                                             family,
+                                             style,
+                                             weight,
+                                             underlined,
+                                             face,
+                                             encoding));
     }
 
     bool Create(const wxNativeFontInfo& info, WXHFONT hFont = 0);
@@ -150,13 +158,7 @@ public:
 
 protected:
     // Common helper of overloaded Create() methods.
-    bool DoCreate(wxFontInfo& info,
-                  wxFontFamily family,
-                  wxFontStyle style,
-                  wxFontWeight weight,
-                  bool underlined = false,
-                  const wxString& face = wxEmptyString,
-                  wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    bool DoCreate(const wxFontInfo& info);
 
     virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info) wxOVERRIDE;
     virtual wxFontFamily DoGetFamily() const wxOVERRIDE;

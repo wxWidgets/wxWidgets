@@ -574,13 +574,25 @@ protected:
         return (flags & wxFONTFLAG_STRIKETHROUGH) != 0;
     }
 
-    // For compatibility reasons, we continue to accept wxDEFAULT as meaning
-    // "default font size" and wxNORMAL and similar deprecated constants
-    // instead of wxFONT{WEIGHT,STYLE}_NORMAL. This function modifies its
-    // parameters to account for this if necessary.
-    static void AccountForCompatValues(int& pointSize,
-                                       wxFontStyle& style,
-                                       wxFontWeight& weight);
+    // Create wxFontInfo object from the parameters passed to the legacy wxFont
+    // ctor/Create() overload. This function implements the compatibility hack
+    // which interprets wxDEFAULT value of size as meaning -1 and also supports
+    // specifying wxNORMAL, wxLIGHT and wxBOLD as weight values.
+    static wxFontInfo InfoFromLegacyParams(int pointSize,
+                                           wxFontFamily family,
+                                           wxFontStyle style,
+                                           wxFontWeight weight,
+                                           bool underlined,
+                                           const wxString& face,
+                                           wxFontEncoding encoding);
+
+    static wxFontInfo InfoFromLegacyParams(const wxSize& pixelSize,
+                                           wxFontFamily family,
+                                           wxFontStyle style,
+                                           wxFontWeight weight,
+                                           bool underlined,
+                                           const wxString& face,
+                                           wxFontEncoding encoding);
 
 private:
     // the currently default encoding: by default, it's the default system

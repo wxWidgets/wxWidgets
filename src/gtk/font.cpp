@@ -253,15 +253,9 @@ bool wxFont::Create( int pointSize,
 {
     UnRef();
 
-    AccountForCompatValues(pointSize, style, weight);
-
-    m_refData = new wxFontRefData(wxFontInfo(pointSize).
-                                  Family(family).
-                                  Style(style).
-                                  Weight(GetNumericWeightOf(weight)).
-                                  Underlined(underlined).
-                                  FaceName(face).
-                                  Encoding(encoding));
+    m_refData = new wxFontRefData(InfoFromLegacyParams(pointSize, family,
+                                                       style, weight, underlined,
+                                                       face, encoding));
 
     return true;
 }
