@@ -445,6 +445,11 @@ void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
     m_qtFont.setPointSizeF(pointsize);
 }
 
+void wxNativeFontInfo::SetPixelSize(const wxSize& size)
+{
+    m_qtFont.setPixelSize(size.GetHeight());
+}
+
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
 {
     m_qtFont.setItalic(style == wxFONTSTYLE_ITALIC);
