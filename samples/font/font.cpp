@@ -389,7 +389,6 @@ bool MyApp::OnInit()
 {
     if ( !wxApp::OnInit() )
         return false;
-    wxString privfont = argv[0].BeforeLast('/');
 
     // Create the main application window
     MyFrame *frame = new MyFrame();
