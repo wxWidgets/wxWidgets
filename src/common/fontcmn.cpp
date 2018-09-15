@@ -226,22 +226,22 @@ bool wxFontBase::IsFixedWidth() const
 
 // Convert to/from wxFontWeight enum elements and numeric weight values.
 
-// This function interprets wxNORMAL, wxLIGHT and wxBOLD values in addition to
-// the actual wxFontWeight enum element values for compatibility. It does check
-// that it gets either the one or the other.
 /* static */
-int wxFontBase::GetNumericWeightOf(wxFontWeight weight)
+int wxFontBase::ConvertFromLegacyWeightIfNecessary(int weight)
 {
-    // deal with compatibility constants
-    if (weight >= 90 && weight <= 92)
+    switch ( weight )
     {
-        if (weight == 90 /* wxNORMAL */)
-            weight = wxFONTWEIGHT_NORMAL;
-        else if (weight == 91 /* wxLIGHT */)
-            weight = wxFONTWEIGHT_LIGHT;
-        else if (weight == 92 /* wxBOLD */)
-            weight = wxFONTWEIGHT_BOLD;
+        case 90: return wxFONTWEIGHT_NORMAL;
+        case 91: return wxFONTWEIGHT_LIGHT;
+        case 92: return wxFONTWEIGHT_BOLD;
+        default: return weight;
     }
+}
+
+/* static */
+int wxFontBase::GetNumericWeightOf(wxFontWeight weight_)
+{
+    const int weight = ConvertFromLegacyWeightIfNecessary(weight_);
 
     wxASSERT(weight > wxFONTWEIGHT_INVALID);
     wxASSERT(weight <= wxFONTWEIGHT_MAX);

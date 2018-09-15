@@ -491,7 +491,14 @@ public:
     static wxFontEncoding GetDefaultEncoding() { return ms_encodingDefault; }
     static void SetDefaultEncoding(wxFontEncoding encoding);
 
-    // Convert between symbolic and numeric font weights.
+    // Account for legacy font weight values: if the argument is one of
+    // wxNORMAL, wxLIGHT or wxBOLD, return the corresponding wxFONTWEIGHT_XXX
+    // enum value. Otherwise just return it unchanged.
+    static int ConvertFromLegacyWeightIfNecessary(int weight);
+
+    // Convert between symbolic and numeric font weights. This function uses
+    // ConvertFromLegacyWeightIfNecessary(), so takes legacy values into
+    // account as well.
     static int GetNumericWeightOf(wxFontWeight weight);
 
     // this doesn't do anything and is kept for compatibility only
