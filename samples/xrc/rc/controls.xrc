@@ -1099,7 +1099,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <flag>wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="wxID_STATIC">
-                                    <label>Slightly larger font:</label>
+                                    <label>Slightly larger strikethrough font:</label>
                                 </object>
                             </object>
                             <object class="sizeritem">
@@ -1109,6 +1109,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                     <label>It was a dark and stormy night.</label>
                                     <font>
                                         <size>12.5</size>
+                                        <strikethrough>1</strikethrough>
                                     </font>
                                 </object>
                             </object>

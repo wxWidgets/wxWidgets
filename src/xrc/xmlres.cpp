@@ -2349,6 +2349,10 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     bool hasUnderlined = HasParam(wxT("underlined"));
     bool underlined = hasUnderlined ? GetBool(wxT("underlined"), false) : false;
 
+    // strikethrough
+    bool hasStrikethrough = HasParam(wxT("strikethrough"));
+    bool strikethrough = hasStrikethrough ? GetBool(wxT("strikethrough"), false) : false;
+
     // family and facename
     wxFontFamily ifamily = wxFONTFAMILY_DEFAULT;
     bool hasFamily = HasParam(wxT("family"));
@@ -2466,6 +2470,8 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
             font.SetNumericWeight(iweight);
         if (hasUnderlined)
             font.SetUnderlined(underlined);
+        if (hasStrikethrough)
+            font.SetStrikethrough(strikethrough);
         if (hasFamily)
             font.SetFamily(ifamily);
         if (hasFacename)
@@ -2481,6 +2487,7 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
                 .Style(istyle)
                 .Weight(iweight)
                 .Underlined(underlined)
+                .Strikethrough(strikethrough)
                 .Encoding(enc)
                 ;
     }

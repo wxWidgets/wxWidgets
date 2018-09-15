@@ -462,6 +462,7 @@ t_font       = (
                    [xrc:p="o"] element family       {_, ("roman" | "script" | "decorative" | "swiss" |
                                                          "modern" | "teletype") }* &
                    [xrc:p="o"] element underlined   {_, t_bool }* &
+                   [xrc:p="o"] element strikethrough{_, t_bool }* &
                    [xrc:p="o"] element face         {_, t_text }* &
                    [xrc:p="o"] element encoding     {_, t_text }* &
                    [xrc:p="o"] element sysfont      {_, ("wxSYS_OEM_FIXED_FONT" | "wxSYS_ANSI_FIXED_FONT" |

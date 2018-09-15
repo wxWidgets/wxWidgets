@@ -422,6 +422,9 @@ and can be one of the following "sub-properties":
     (default: default).}
 @row3col{underlined, @ref overview_xrcformat_type_bool,
     Whether the font should be underlined (default: 0).}
+@row3col{strikethrough, @ref overview_xrcformat_type_bool,
+    Whether the strikethrough font should be used (default: 0). This property
+    is only supported since wxWidgets 3.1.2.}
 @row3col{face, ,
     Comma-separated list of face names; the first one available is used
     (default: unspecified).}
