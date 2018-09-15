@@ -50,20 +50,12 @@ extern const char *wxDumpFont(const wxFont *font)
 {
     static char buf[256];
 
-    const wxFontWeight weight = font->GetWeight();
-
     wxString s;
-    s.Printf(wxS("%s-%s-%s-%d-%d"),
+    s.Printf(wxS("%s-%d-%s-%.2f-%d"),
              font->GetFaceName(),
-             weight == wxFONTWEIGHT_NORMAL
-                ? wxT("normal")
-                : weight == wxFONTWEIGHT_BOLD
-                    ? wxT("bold")
-                    : wxT("light"),
-             font->GetStyle() == wxFONTSTYLE_NORMAL
-                ? wxT("regular")
-                : wxT("italic"),
-             font->GetPointSize(),
+             font->GetNumericWeight(),
+             font->GetStyle() == wxFONTSTYLE_NORMAL ? "regular" : "italic",
+             font->GetFractionalPointSize(),
              font->GetEncoding());
 
     wxStrlcpy(buf, s.mb_str(), WXSIZEOF(buf));
