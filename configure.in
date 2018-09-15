@@ -7869,6 +7869,13 @@ elif test "$GXX" = yes ; then
     CXXWARNINGS="-Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy"
     AX_CXXFLAGS_GCC_OPTION(-Woverloaded-virtual, CXXWARNINGS)
 
+    dnl there are tons of warnings when building with GTK+ 1 which are never
+    dnl going to get fixed, so disable them to at least see new warnings/errors
+    dnl more clearly
+    if test "$WXGTK1" = "1"; then
+        CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations -Wno-narrowing -Wno-write-strings"
+    fi
+
     dnl when building using GTK+ 3 or Cocoa we currently get tons of deprecation
     dnl warnings from the standard headers -- disable them as we already know
     dnl that they're deprecated but we still have to use them to support older
