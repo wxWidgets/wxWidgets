@@ -819,6 +819,7 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
 
         case wxFONTSTYLE_NORMAL:
             s = wxT('r');
+            break;
 
         default:
             wxFAIL_MSG( wxT("unknown wxFontStyle in wxNativeFontInfo::SetStyle") );
