@@ -454,11 +454,11 @@ t_bitmap     = t_url?,
                )?
 
 t_font       = (
-                   [xrc:p="o"] element size         {_, t_integer }* &
+                   [xrc:p="o"] element size         {_, t_float }* &
                    [xrc:p="o"] element style        {_, ("normal" | "italic" | "slant") }* &
                    [xrc:p="o"] element weight       {_, ("normal" | "thin" | "extralight" | "light" | 
                                                          "medium" | "semibold" | "bold" | "extrabold" | 
-                                                         "heavy" | "extraheavy") }* &
+                                                         "heavy" | "extraheavy" | t_integer) }* &
                    [xrc:p="o"] element family       {_, ("roman" | "script" | "decorative" | "swiss" |
                                                          "modern" | "teletype") }* &
                    [xrc:p="o"] element underlined   {_, t_bool }* &

@@ -2275,10 +2275,10 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     // font attributes:
 
     // size
-    int isize = -1;
+    float pointSize = -1.0f;
     bool hasSize = HasParam(wxT("size"));
     if (hasSize)
-        isize = GetLong(wxT("size"), -1);
+        pointSize = GetFloat(wxT("size"), -1.0f);
 
     // style
     wxFontStyle istyle = wxFONTSTYLE_NORMAL;
@@ -2301,12 +2301,23 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     }
 
     // weight
-    wxFontWeight iweight = wxFONTWEIGHT_NORMAL;
+    long iweight = wxFONTWEIGHT_NORMAL;
     bool hasWeight = HasParam(wxT("weight"));
     if (hasWeight)
     {
         wxString weight = GetParamValue(wxT("weight"));
-        if (weight == wxT("thin"))
+        if (weight.ToLong(&iweight))
+        {
+            if (iweight <= wxFONTWEIGHT_INVALID || iweight > wxFONTWEIGHT_MAX)
+            {
+                ReportParamError
+                (
+                    param,
+                    wxString::Format("invalid font weight value \"%d\"", iweight)
+                );
+            }
+        }
+        else if (weight == wxT("thin"))
             iweight = wxFONTWEIGHT_THIN;
         else if (weight == wxT("extralight"))
             iweight = wxFONTWEIGHT_EXTRALIGHT;
@@ -2433,9 +2444,9 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
 
     if (font.IsOk())
     {
-        if (hasSize && isize != -1)
+        if (pointSize > 0)
         {
-            font.SetPointSize(isize);
+            font.SetFractionalPointSize(pointSize);
             if (HasParam(wxT("relativesize")))
             {
                 ReportParamError
@@ -2452,7 +2463,7 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
         if (hasStyle)
             font.SetStyle(istyle);
         if (hasWeight)
-            font.SetWeight(iweight);
+            font.SetNumericWeight(iweight);
         if (hasUnderlined)
             font.SetUnderlined(underlined);
         if (hasFamily)
@@ -2464,9 +2475,14 @@ wxFont wxXmlResourceHandlerImpl::GetFont(const wxString& param, wxWindow* parent
     }
     else // not based on system font
     {
-        font = wxFont(isize == -1 ? wxNORMAL_FONT->GetPointSize() : isize,
-                      ifamily, istyle, iweight,
-                      underlined, facename, enc);
+        font = wxFontInfo(pointSize)
+                .FaceName(facename)
+                .Family(ifamily)
+                .Style(istyle)
+                .Weight(iweight)
+                .Underlined(underlined)
+                .Encoding(enc)
+                ;
     }
 
     m_handler->m_node = oldnode;
