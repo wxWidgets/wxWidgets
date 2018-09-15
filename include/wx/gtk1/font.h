@@ -90,21 +90,19 @@ public:
     virtual ~wxFont();
 
     // implement base class pure virtuals
-    virtual float GetFractionalPointSize() const;
+    virtual int GetPointSize() const;
     virtual wxFontStyle GetStyle() const;
     virtual wxFontWeight GetWeight() const;
-    virtual int GetNumericWeight() const;
     virtual wxString GetFaceName() const;
     virtual bool GetUnderlined() const;
     virtual wxFontEncoding GetEncoding() const;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const;
     virtual bool IsFixedWidth() const;
 
-    virtual void SetPointSize( float pointSize );
+    virtual void SetPointSize( int pointSize );
     virtual void SetFamily(wxFontFamily family);
     virtual void SetStyle(wxFontStyle style);
     virtual void SetWeight(wxFontWeight weight);
-    virtual void SetNumericWeight(int weight);
     virtual bool SetFaceName( const wxString& faceName );
     virtual void SetUnderlined( bool underlined );
     virtual void SetEncoding(wxFontEncoding encoding);

@@ -87,7 +87,6 @@ public:
     void SetFamily(wxFontFamily family);
     void SetStyle(wxFontStyle style);
     void SetWeight(wxFontWeight weight);
-    void SetNumericWeight(int weight);
     void SetUnderlined(bool underlined);
     bool SetFaceName(const wxString& facename);
     void SetEncoding(wxFontEncoding encoding);
@@ -402,11 +401,6 @@ void wxFontRefData::SetWeight(wxFontWeight weight)
     }
 }
 
-void wxFontRefData::SetNumericWeight(int weight)
-{
-    m_nativeFontInfo.SetNumericWeight(weight);
-}
-
 void wxFontRefData::SetUnderlined(bool underlined)
 {
     m_underlined = underlined;
@@ -524,11 +518,11 @@ wxGDIRefData *wxFont::CloneGDIRefData(const wxGDIRefData *data) const
 // accessors
 // ----------------------------------------------------------------------------
 
-float wxFont::GetFractionalPointSize() const
+int wxFont::GetPointSize() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
 
-    return M_FONTDATA->m_nativeFontInfo.GetFractionalPointSize();
+    return M_FONTDATA->m_pointSize;
 }
 
 wxString wxFont::GetFaceName() const
@@ -555,13 +549,6 @@ wxFontWeight wxFont::GetWeight() const
     wxCHECK_MSG( IsOk(), wxFONTWEIGHT_MAX, wxT("invalid font") );
 
     return M_FONTDATA->m_weight;
-}
-
-int wxFont::GetNumericWeight() const
-{
-    wxCHECK_MSG( IsOk(), wxFONTWEIGHT_MAX, "invalid font" );
-    
-    return M_FONTDATA->m_nativeFontInfo.GetNumericWeight();
 }
 
 bool wxFont::GetUnderlined() const
@@ -614,11 +601,11 @@ bool wxFont::IsFixedWidth() const
 // change font attributes
 // ----------------------------------------------------------------------------
 
-void wxFont::SetPointSize(float pointSize)
+void wxFont::SetPointSize(int pointSize)
 {
     Unshare();
 
-    M_FONTDATA->SetPointSize( nintf(pointSize));
+    M_FONTDATA->SetPointSize(pointSize);
 }
 
 void wxFont::SetFamily(wxFontFamily family)
@@ -640,13 +627,6 @@ void wxFont::SetWeight(wxFontWeight weight)
     Unshare();
 
     M_FONTDATA->SetWeight(weight);
-}
-
-void wxFont::SetNumericWeight(int weight)
-{
-    AllocExclusive();
-    
-    M_FONTDATA->SetNumericWeight(weight);
 }
 
 bool wxFont::SetFaceName(const wxString& faceName)
