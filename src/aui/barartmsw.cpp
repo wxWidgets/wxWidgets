@@ -174,13 +174,13 @@ void wxAuiMSWToolBarArt::DrawButton(
         }
         else if ( m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT )
         {
-            bmpX = rect.x + 3;
+            bmpX = rect.x + wnd->FromDIP(3);
 
             bmpY = rect.y +
                 (rect.height / 2) -
                 (item.GetBitmap().GetHeight() / 2);
 
-            textX = bmpX + 3 + item.GetBitmap().GetWidth();
+            textX = bmpX + wnd->FromDIP(3) + item.GetBitmap().GetWidth();
             textY = rect.y +
                 (rect.height / 2) -
                 (textHeight / 2);
@@ -219,7 +219,7 @@ void wxAuiMSWToolBarArt::DrawDropDownButton(
     {
         wxUxThemeHandle hTheme(wnd, L"Toolbar");
 
-        int dropDownWidth = 14;
+        int dropDownWidth = wnd->FromDIP(14);
 
         int textWidth = 0, textHeight = 0, textX = 0, textY = 0;
         int bmpX = 0, bmpY = 0;
@@ -292,13 +292,13 @@ void wxAuiMSWToolBarArt::DrawDropDownButton(
         }
         else if ( m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT )
         {
-            bmpX = rect.x + 3;
+            bmpX = rect.x + wnd->FromDIP(3);
 
             bmpY = rect.y +
                 (rect.height / 2) -
                 (item.GetBitmap().GetHeight() / 2);
 
-            textX = bmpX + 3 + item.GetBitmap().GetWidth();
+            textX = bmpX + wnd->FromDIP(3) + item.GetBitmap().GetWidth();
             textY = rect.y +
                 (rect.height / 2) -
                 (textHeight / 2);
@@ -444,7 +444,7 @@ wxSize wxAuiMSWToolBarArt::GetToolSize(
 
         wxSize size = wxAuiGenericToolBarArt::GetToolSize(dc, wnd, item);
 
-        size.IncBy(3); // Add some padding for native theme
+        size.IncBy(wnd->FromDIP(wxSize(3, 3))); // Add some padding for native theme
 
         return size;
     }
