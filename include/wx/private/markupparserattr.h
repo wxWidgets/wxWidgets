@@ -159,7 +159,7 @@ public:
                 break;
 
             case wxMarkupSpanAttributes::Size_PointParts:
-                font.SetPointSize((spanAttr.m_fontSize + 1023)/1024);
+                font.SetFractionalPointSize(spanAttr.m_fontSize/1024.);
                 break;
         }
 
