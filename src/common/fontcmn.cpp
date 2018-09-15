@@ -747,6 +747,7 @@ void wxNativeFontInfo::SetPointSize(int pointsize)
 bool wxNativeFontInfo::FromString(const wxString& s)
 {
     long l;
+    double d;
     unsigned long version;
 
     wxStringTokenizer tokenizer(s, wxT(";"));
@@ -756,9 +757,11 @@ bool wxNativeFontInfo::FromString(const wxString& s)
         return false;
 
     token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
+    if ( !token.ToCDouble(&d) )
         return false;
-    pointSize = (int)l;
+    pointSize = static_cast<float>(d);
+    if ( static_cast<double>(pointSize) != d )
+        return false;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
@@ -773,7 +776,9 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
         return false;
-    weight = (wxFontWeight)l;
+    weight = ConvertFromLegacyWeightIfNecessary(l);
+    if ( weight <= wxFONTWEIGHT_INVALID || weight > wxFONTWEIGHT_MAX )
+        return false;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
@@ -807,12 +812,12 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
 
-    s.Printf(wxT("%d;%d;%d;%d;%d;%d;%d;%s;%d"),
+    s.Printf(wxT("%d;%f;%d;%d;%d;%d;%d;%s;%d"),
              1,                                 // version
-             GetPointSize(),
+             GetFractionalPointSize(),
              family,
              (int)style,
-             (int)weight,
+             weight,
              underlined,
              strikethrough,
              faceName.GetData(),

@@ -889,6 +889,7 @@ CGFloat wxNativeFontInfo::GetCTSlant(CTFontDescriptorRef descr)
 //
 bool wxNativeFontInfo::FromString(const wxString& s)
 {
+    double d;
     long l, version;
 
     Init();
@@ -904,9 +905,16 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     //
 
     token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
+    if ( !token.ToCDouble(&d) )
         return false;
-    m_ctSize = (int)l;
+#ifdef __LP64__
+    // CGFloat is just double in this case.
+    m_ctSize = d;
+#else // !__LP64__
+    m_ctSize = static_cast<CGFloat>(d);
+    if ( static_cast<double>(m_ctSize) != d )
+        return false;
+#endif // __LP64__/!__LP64__
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
@@ -959,12 +967,12 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
 
-    s.Printf(wxT("%d;%d;%d;%d;%d;%d;%d;%s;%d"),
+    s.Printf(wxT("%d;%f;%d;%d;%d;%d;%d;%s;%d"),
         1, // version
-        GetPointSize(),
+        GetFractionalPointSize(),
         GetFamily(),
         (int)GetStyle(),
-        (int)GetWeight(),
+        GetNumericWeight(),
         GetUnderlined(),
         GetStrikethrough(),
         GetFaceName().GetData(),

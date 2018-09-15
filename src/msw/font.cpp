@@ -635,8 +635,31 @@ bool wxNativeFontInfo::FromString(const wxString& s)
 
     // first the version
     wxString token = tokenizer.GetNextToken();
-    if ( token != wxS('0') )
+    if ( !token.ToLong(&l) )
         return false;
+
+    switch ( l )
+    {
+        case 0:
+            // Fractional point size is not present in this version.
+            pointSize = 0.0f;
+            break;
+
+        case 1:
+            {
+                double d;
+                if ( !tokenizer.GetNextToken().ToCDouble(&d) )
+                    return false;
+                pointSize = static_cast<float>(d);
+                if ( static_cast<double>(pointSize) != d )
+                    return false;
+            }
+            break;
+
+        default:
+            // Unknown version.
+            return false;
+    }
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
@@ -716,8 +739,9 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
 
-    s.Printf(wxS("%d;%ld;%ld;%ld;%ld;%ld;%d;%d;%d;%d;%d;%d;%d;%d;%s"),
-             0, // version, in case we want to change the format later
+    s.Printf(wxS("%d;%f;%ld;%ld;%ld;%ld;%ld;%d;%d;%d;%d;%d;%d;%d;%d;%s"),
+             1, // version
+             pointSize,
              lf.lfHeight,
              lf.lfWidth,
              lf.lfEscapement,
