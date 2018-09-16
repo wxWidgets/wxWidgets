@@ -242,7 +242,12 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
     if ( !FromString(GetValueAfterInsertingChar(val, pos, ch), &value) )
         return false;
 
-    return IsInRange(value);
+    // N.B. don't call IsInRange() here to check whether value is in the
+    // expected range or not, as doing so would prevent us from entering
+    // any value at all in some cases (e.g. if m_min >= 10) but we still
+    // have (here) the opportunity to disallow values greater than m_max
+
+    return value <= m_max;
 }
 
 // ============================================================================
@@ -314,8 +319,8 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
     if ( posSep != wxString::npos && newval.length() - posSep - 1 > m_precision )
         return false;
 
-    // Finally check whether it is in the range.
-    return IsInRange(value);
+    // N.B. (see wxIntegerValidatorBase::IsCharOk())
+    return (value*m_factor) <= m_max;
 }
 
 #endif // wxUSE_VALIDATORS && wxUSE_TEXTCTRL

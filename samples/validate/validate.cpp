@@ -360,6 +360,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     wxFloatingPointValidator<float> percentVal(&g_data.m_percentValue);
     percentVal.SetPrecision(2);
     percentVal.SetFactor(100.0);
+    percentVal.SetRange(10.0, 100.0);
 
     numSizer->Add(new wxStaticText(this, wxID_ANY, "Value displayed in %:"),
                   center);

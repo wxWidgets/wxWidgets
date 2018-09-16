@@ -218,8 +218,17 @@ protected:
     virtual wxString NormalizeString(const wxString& s) const wxOVERRIDE
     {
         LongestValueType value;
-        return BaseValidator::FromString(s, &value) ? NormalizeValue(value)
-                                                    : wxString();
+
+        if ( !BaseValidator::FromString(s, &value) )
+        {
+            return wxString();
+        }
+        else if ( !this->IsInRange(value) )
+        {
+            this->MakeInRange(&value);
+        }
+
+        return NormalizeValue(value);
     }
 
 private:
@@ -287,6 +296,16 @@ protected:
     bool IsInRange(LongestValueType value) const
     {
         return m_min <= value && value <= m_max;
+    }
+
+    void MakeInRange(LongestValueType* value) const
+    {
+        LongestValueType& v = *value;
+
+        if ( v < m_min )
+            v = m_min;
+        else if ( v > m_max )
+            v = m_max;
     }
 
     // Implement wxNumValidatorBase pure virtual method.
@@ -388,7 +407,18 @@ protected:
 
     bool IsInRange(LongestValueType value) const
     {
-        return m_min <= value && value <= m_max;
+        LongestValueType origValue = value * m_factor;
+        return m_min <= origValue && origValue <= m_max;
+    }
+
+    void MakeInRange(LongestValueType* value) const
+    {
+        LongestValueType& v = *value;
+
+        if ( (v * m_factor) < m_min )
+            v = m_min / m_factor;
+        else if ( (v * m_factor) > m_max )
+            v = m_max / m_factor;
     }
 
     // Implement wxNumValidatorBase pure virtual method.
