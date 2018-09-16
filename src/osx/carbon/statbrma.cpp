@@ -103,6 +103,10 @@ void wxStatusBarMac::InitColours()
         }
         else
         {
+            // FIXME: None of this is correct and is only very loose
+            //        approximation. 10.14's dark mode uses dynamic colors that
+            //        use desktop tinting. The only correct way to render the
+            //        statusbar is to use windowBackgroundColor in a NSBox.
             wxColour bg = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
             m_textActive = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT);
             m_textInactive = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
@@ -110,6 +114,7 @@ void wxStatusBarMac::InitColours()
             if ( bg.Red() < 128 )
             {
                 // dark mode appearance
+                m_textActive = wxColour(0xB0, 0xB0, 0xB0);
                 m_bgActiveFrom = wxColour(0x32, 0x32, 0x34);
                 m_bgActiveTo = wxColour(0x29, 0x29, 0x2A);
                 m_borderActive = wxColour(0x00, 0x00, 0x00);
