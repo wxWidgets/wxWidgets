@@ -3024,12 +3024,30 @@ void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &hei
     }
 }
 
+static void SetSubviewsNeedDisplay( NSView *view )
+{
+    for ( NSView *sub in view.subviews )
+    {
+        if ( !sub.layer )
+            continue;
+
+        [sub setNeedsDisplay:YES];
+        SetSubviewsNeedDisplay(sub);
+    }
+}
+
 void wxWidgetCocoaImpl::SetNeedsDisplay( const wxRect* where )
 {
     if ( where )
         [m_osxView setNeedsDisplayInRect:wxToNSRect(m_osxView, *where )];
     else
         [m_osxView setNeedsDisplay:YES];
+
+    // Layer-backed views (which are all in Mojave's Dark Mode) may not have
+    // their children implicitly redrawn with the parent. For compatibility,
+    // do it manually here:
+    if ( m_osxView.layer )
+        SetSubviewsNeedDisplay(m_osxView);
 }
 
 bool wxWidgetCocoaImpl::GetNeedsDisplay() const
