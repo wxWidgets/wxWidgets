@@ -337,8 +337,7 @@ void MyCanvas::CreateCaret()
 
 void MyCanvas::SetFontSize(int fontSize)
 {
-    m_font = wxFont(fontSize, wxFONTFAMILY_TELETYPE,
-                    wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    m_font = wxFont(wxFontInfo(fontSize).Family(wxFONTFAMILY_TELETYPE));
 
     wxClientDC dc(this);
     dc.SetFont(m_font);

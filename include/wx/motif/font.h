@@ -27,19 +27,7 @@ public:
     // ctors and such
     wxFont() { }
 
-    wxFont(const wxFontInfo& info)
-    {
-        Create(info.GetPointSize(),
-               info.GetFamily(),
-               info.GetStyle(),
-               info.GetWeight(),
-               info.IsUnderlined(),
-               info.GetFaceName(),
-               info.GetEncoding());
-
-        if ( info.IsUsingSizeInPixels() )
-            SetPixelSize(info.GetPixelSize());
-    }
+    wxFont(const wxFontInfo& info);
 
     wxFont(const wxNativeFontInfo& info);
 
@@ -82,18 +70,18 @@ public:
     virtual ~wxFont();
 
     // implement base class pure virtuals
-    virtual int GetPointSize() const;
+    virtual float GetFractionalPointSize() const;
     virtual wxFontStyle GetStyle() const;
-    virtual wxFontWeight GetWeight() const;
+    virtual int GetNumericWeight() const;
     virtual bool GetUnderlined() const;
     virtual wxString GetFaceName() const;
     virtual wxFontEncoding GetEncoding() const;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const;
 
-    virtual void SetPointSize(int pointSize);
+    virtual void SetFractionalPointSize(float pointSize);
     virtual void SetFamily(wxFontFamily family);
     virtual void SetStyle(wxFontStyle style);
-    virtual void SetWeight(wxFontWeight weight);
+    virtual void SetNumericWeight(int weight);
     virtual bool SetFaceName(const wxString& faceName);
     virtual void SetUnderlined(bool underlined);
     virtual void SetEncoding(wxFontEncoding encoding);

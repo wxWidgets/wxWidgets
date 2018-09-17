@@ -522,8 +522,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // create the listbox in which we will show misc messages as they come
     m_lbox = new wxListBox(this, wxID_ANY);
-    wxFont font(12, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL,
-                wxFONTWEIGHT_NORMAL);
+    wxFont font(wxFontInfo(12).Family(wxFONTFAMILY_TELETYPE));
     if ( font.IsOk() )
         m_lbox->SetFont(font);
 

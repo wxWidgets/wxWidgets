@@ -52,6 +52,28 @@
 static const int wxDEFAULT_FONT_SIZE = 12;
 
 
+// ----------------------------------------------------------------------------
+// helper functions
+// ----------------------------------------------------------------------------
+
+static wxFontWeight ParseWeightString(wxString s)
+{
+    s.MakeUpper();
+
+    if (s == "THIN") return wxFONTWEIGHT_THIN;
+    if (s == "EXTRALIGHT" || s == "ULTRALIGHT") return wxFONTWEIGHT_EXTRALIGHT;
+    if (s == "LIGHT") return wxFONTWEIGHT_LIGHT;
+    if (s == "NORMAL") return wxFONTWEIGHT_NORMAL;
+    if (s == "MEDIUM") return wxFONTWEIGHT_MEDIUM;
+    if (s == "DEMIBOLD" || s == "SEMIBOLD") return wxFONTWEIGHT_SEMIBOLD;
+    if (s == "BOLD") return wxFONTWEIGHT_BOLD;
+    if (s == "EXTRABOLD" || s == "ULTRABOLD") return wxFONTWEIGHT_EXTRABOLD;
+    if (s == "BLACK" || s == "HEAVY") return wxFONTWEIGHT_HEAVY;
+    if (s == "EXTRAHEAVY") return wxFONTWEIGHT_EXTRAHEAVY;
+
+    return wxFONTWEIGHT_NORMAL;
+}
+
 #if wxUSE_UNICODE
 #else
 // ----------------------------------------------------------------------------
@@ -116,10 +138,10 @@ public:
 
     // setters: all of them also take care to modify m_nativeFontInfo if we
     // have it so as to not lose the information not carried by our fields
-    void SetPointSize(int pointSize);
+    void SetFractionalPointSize(float pointSize);
     void SetFamily(wxFontFamily family);
     void SetStyle(wxFontStyle style);
-    void SetWeight(wxFontWeight weight);
+    void SetNumericWeight(int weight);
     void SetUnderlined(bool underlined);
     void SetStrikethrough(bool strikethrough);
     bool SetFaceName(const wxString& facename);
@@ -143,10 +165,10 @@ protected:
     void InitFromNative();
 
     // font attributes
-    int           m_pointSize;
+    float         m_pointSize;
     wxFontFamily  m_family;
     wxFontStyle   m_style;
-    wxFontWeight  m_weight;
+    int           m_weight;
     bool          m_underlined;
     bool          m_strikethrough;
     wxString      m_faceName;
@@ -223,12 +245,12 @@ void wxFontRefData::Init(int pointSize,
     }
 
     m_nativeFontInfo.SetFaceName(m_faceName);
-    m_nativeFontInfo.SetWeight((wxFontWeight)m_weight);
+    m_nativeFontInfo.SetNumericWeight(m_weight);
     m_nativeFontInfo.SetStyle((wxFontStyle)m_style);
     m_nativeFontInfo.SetUnderlined(underlined);
 #endif // wxUSE_UNICODE
 
-    SetPointSize(pointSize);
+    SetFractionalPointSize(static_cast<float>(pointSize));
 }
 
 void wxFontRefData::InitFromNative()
@@ -240,7 +262,7 @@ void wxFontRefData::InitFromNative()
     // init fields
     m_faceName = wxGTK_CONV_BACK( pango_font_description_get_family( desc ) );
 
-    m_pointSize = pango_font_description_get_size( desc ) / PANGO_SCALE;
+    m_pointSize = static_cast<float>(pango_font_description_get_size( desc )) / PANGO_SCALE;
 
     switch (pango_font_description_get_style( desc ))
     {
@@ -255,56 +277,18 @@ void wxFontRefData::InitFromNative()
             break;
     }
 
-// Not defined in some Pango versions
-#define wxPANGO_WEIGHT_SEMIBOLD 600
-
-    switch (pango_font_description_get_weight( desc ))
-    {
-        case PANGO_WEIGHT_ULTRALIGHT:
-        case PANGO_WEIGHT_LIGHT:
-            m_weight = wxFONTWEIGHT_LIGHT;
-            break;
-
-        default:
-            wxFAIL_MSG(wxT("unknown Pango font weight"));
-            // fall through
-
-        case PANGO_WEIGHT_NORMAL:
-            m_weight = wxFONTWEIGHT_NORMAL;
-            break;
-
-        case wxPANGO_WEIGHT_SEMIBOLD:
-        case PANGO_WEIGHT_BOLD:
-        case PANGO_WEIGHT_ULTRABOLD:
-        case PANGO_WEIGHT_HEAVY:
-            m_weight = wxFONTWEIGHT_BOLD;
-            break;
-    }
-
+    m_weight = pango_font_description_get_weight( desc );
 #else // X11
     // get the font parameters from the XLFD
     // -------------------------------------
 
     m_faceName = m_nativeFontInfo.GetXFontComponent(wxXLFD_FAMILY);
 
-    m_weight = wxFONTWEIGHT_NORMAL;
-
     wxString w = m_nativeFontInfo.GetXFontComponent(wxXLFD_WEIGHT).Upper();
     if ( !w.empty() && w != wxT('*') )
-    {
-        // the test below catches all of BOLD, EXTRABOLD, DEMIBOLD, ULTRABOLD
-        // and BLACK
-        if ( ((w[0u] == wxT('B') && (!wxStrcmp(w.c_str() + 1, wxT("OLD")) ||
-                                   !wxStrcmp(w.c_str() + 1, wxT("LACK"))))) ||
-             wxStrstr(w.c_str() + 1, wxT("BOLD")) )
-        {
-            m_weight = wxFONTWEIGHT_BOLD;
-        }
-        else if ( w == wxT("LIGHT") || w == wxT("THIN") )
-        {
-            m_weight = wxFONTWEIGHT_LIGHT;
-        }
-    }
+        m_weight = ParseWeightString(w);
+    else
+        m_weight = wxFONTWEIGHT_NORMAL;
 
     switch ( wxToupper( m_nativeFontInfo.
                 GetXFontComponent(wxXLFD_SLANT)[0u]).GetValue() )
@@ -442,14 +426,14 @@ wxFontRefData::~wxFontRefData()
 // wxFontRefData SetXXX()
 // ----------------------------------------------------------------------------
 
-void wxFontRefData::SetPointSize(int pointSize)
+void wxFontRefData::SetFractionalPointSize(float pointSize)
 {
     // NB: Pango doesn't support point sizes less than 1
     m_pointSize = pointSize == wxDEFAULT || pointSize < 1 ? wxDEFAULT_FONT_SIZE
                                                           : pointSize;
 
 #if wxUSE_UNICODE
-    m_nativeFontInfo.SetPointSize(m_pointSize);
+    m_nativeFontInfo.SetFractionalPointSize(m_pointSize);
 #endif
 }
 
@@ -486,7 +470,7 @@ void wxFontRefData::SetStyle(wxFontStyle style)
 #endif
 }
 
-void wxFontRefData::SetWeight(wxFontWeight weight)
+void wxFontRefData::SetNumericWeight(int weight)
 {
     m_weight = weight;
 }
@@ -594,15 +578,7 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
 
     M_FONTDATA->m_faceName = tn.GetNextToken();  // family
 
-    tmp = tn.GetNextToken().MakeUpper();         // weight
-    if (tmp == wxT("BOLD")) M_FONTDATA->m_weight = wxFONTWEIGHT_BOLD;
-    if (tmp == wxT("BLACK")) M_FONTDATA->m_weight = wxFONTWEIGHT_BOLD;
-    if (tmp == wxT("EXTRABOLD")) M_FONTDATA->m_weight = wxFONTWEIGHT_BOLD;
-    if (tmp == wxT("DEMIBOLD")) M_FONTDATA->m_weight = wxFONTWEIGHT_BOLD;
-    if (tmp == wxT("ULTRABOLD")) M_FONTDATA->m_weight = wxFONTWEIGHT_BOLD;
-
-    if (tmp == wxT("LIGHT")) M_FONTDATA->m_weight = wxFONTWEIGHT_LIGHT;
-    if (tmp == wxT("THIN")) M_FONTDATA->m_weight = wxFONTWEIGHT_LIGHT;
+    M_FONTDATA->m_weight = ParseWeightString(tn.GetNextToken()); // weight
 
     tmp = tn.GetNextToken().MakeUpper();        // slant
     if (tmp == wxT("I")) M_FONTDATA->m_style = wxFONTSTYLE_ITALIC;
@@ -716,11 +692,11 @@ void wxFont::Unshare()
 // accessors
 // ----------------------------------------------------------------------------
 
-int wxFont::GetPointSize() const
+float wxFont::GetFractionalPointSize() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
 
-    return M_FONTDATA->m_nativeFontInfo.GetPointSize();
+    return M_FONTDATA->m_nativeFontInfo.GetFractionalPointSize();
 }
 
 wxString wxFont::GetFaceName() const
@@ -742,7 +718,7 @@ wxFontStyle wxFont::GetStyle() const
     return M_FONTDATA->m_style;
 }
 
-wxFontWeight wxFont::GetWeight() const
+int wxFont::GetNumericWeight() const
 {
     wxCHECK_MSG( IsOk(), wxFONTWEIGHT_MAX, wxT("invalid font") );
 
@@ -823,11 +799,11 @@ bool wxFont::IsFixedWidth() const
 // change font attributes
 // ----------------------------------------------------------------------------
 
-void wxFont::SetPointSize(int pointSize)
+void wxFont::SetFractionalPointSize(float pointSize)
 {
     Unshare();
 
-    M_FONTDATA->SetPointSize(pointSize);
+    M_FONTDATA->SetFractionalPointSize(pointSize);
 }
 
 void wxFont::SetFamily(wxFontFamily family)
@@ -844,11 +820,11 @@ void wxFont::SetStyle(wxFontStyle style)
     M_FONTDATA->SetStyle(style);
 }
 
-void wxFont::SetWeight(wxFontWeight weight)
+void wxFont::SetNumericWeight(int weight)
 {
     Unshare();
 
-    M_FONTDATA->SetWeight(weight);
+    M_FONTDATA->SetNumericWeight(weight);
 }
 
 bool wxFont::SetFaceName(const wxString& faceName)
