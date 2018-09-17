@@ -148,6 +148,16 @@ TEST_CASE("wxFont::Size", "[font][size]")
     // one, taking wxFontInfo, doesn't support them.
     CHECK( wxFont(wxFontInfo(70)).GetPointSize() == 70 );
     CHECK( wxFont(wxFontInfo(90)).GetPointSize() == 90 );
+
+    // Check fractional point sizes as well.
+    wxFont font(wxFontInfo(12.25));
+    CHECK( font.GetFractionalPointSize() == 12.25 );
+    CHECK( font.GetPointSize() == 12 );
+
+    font = *wxNORMAL_FONT;
+    font.SetFractionalPointSize(9.5);
+    CHECK( font.GetFractionalPointSize() == 9.5 );
+    CHECK( font.GetPointSize() == 10 );
 }
 
 TEST_CASE("wxFont::Style", "[font][style]")
@@ -185,6 +195,15 @@ TEST_CASE("wxFont::Style", "[font][style]")
 
 TEST_CASE("wxFont::Weight", "[font][weight]")
 {
+    wxFont font;
+    font.SetNumericWeight(123);
+    CHECK( font.GetNumericWeight() == 123 );
+    CHECK( font.GetWeight() == wxFONTWEIGHT_THIN );
+
+    font.SetNumericWeight(wxFONTWEIGHT_SEMIBOLD);
+    CHECK( font.GetNumericWeight() == wxFONTWEIGHT_SEMIBOLD );
+    CHECK( font.GetWeight() == wxFONTWEIGHT_SEMIBOLD );
+
 #if WXWIN_COMPATIBILITY_3_0
     // Disable the warning about deprecated wxNORMAL as we use it here
     // intentionally.
