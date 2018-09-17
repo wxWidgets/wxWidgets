@@ -1707,7 +1707,7 @@ wxListLineData *wxListMainWindow::GetDummyLine() const
 
         // don't waste extra memory -- there never going to be anything
         // else/more in this array
-        self->m_lines.shrink_to_fit();
+        wxShrinkToFit(self->m_lines);
     }
 
     return m_lines[0];
