@@ -378,11 +378,7 @@ QT_SRC=
     src/qt/toplevel.cpp
     src/qt/uiaction.cpp
     src/qt/utils.cpp
-    src/qt/utils.cpp
     src/qt/window.cpp
-    src/unix/dialup.cpp
-    src/unix/joystick.cpp
-    src/unix/sound.cpp
 
 MEDIA_QT_SRC=
     src/qt/mediactrl.cpp

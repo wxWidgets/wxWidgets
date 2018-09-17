@@ -698,7 +698,6 @@ COND_UNICODE_1
 COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1
 COND_TOOLKIT_X11_USE_GUI_1
 COND_TOOLKIT_X11
-COND_TOOLKIT_Qt
 COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_QT
 COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0
@@ -3770,7 +3769,7 @@ WX_SUBVERSION=$WX_VERSION.$wx_subrelease_number
 WX_MSW_VERSION=$wx_major_version_number$wx_minor_version_number$wx_release_number
 
 
-wx_top_builddir="`pwd`"
+wx_top_builddir="`pwd -W 2> /dev/null || pwd`"
 
 
 
@@ -23728,7 +23727,7 @@ fi
 
     LIBS="$LIBS -luxtheme -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lcomdlg32 -ladvapi32 -lversion -lwsock32 -lgdi32"
     case "${host}" in
-        x86_64-*-mingw32* )
+        x86_64-*-mingw* )
                                                 WINDRES_CPU_DEFINE="--define WX_CPU_AMD64"
         ;;
     esac
@@ -23761,7 +23760,7 @@ if test "$wxUSE_GUI" = "yes"; then
         GUIDIST=MSW_DIST
 
                 case "${host}" in
-            *-*-mingw32* )
+            *-*-mingw* )
                 WXCONFIG_LDFLAGS_GUI="$LDFLAGS -Wl,--subsystem,windows -mwindows"
         esac
     fi
@@ -33215,7 +33214,7 @@ $as_echo "$wx_cv_type_abi_forced_unwind" >&6; }
 else
     if test "$wxUSE_THREADS" = "yes" ; then
       case "${host}" in
-        x86_64-*-mingw32* )
+        x86_64-*-mingw* )
         ;;
         *-*-mingw32* )
                         { $as_echo "$as_me:${as_lineno-$LINENO}: checking if compiler supports -mthreads" >&5
@@ -39792,7 +39791,7 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
 
     if test "x$BAKEFILE_FORCE_PLATFORM" = "x"; then
         case "${BAKEFILE_HOST}" in
-            *-*-mingw32* )
+            *-*-mingw* )
                 PLATFORM_WIN32=1
             ;;
             *-*-darwin* )
@@ -39886,7 +39885,7 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
             DLLPREFIX="cyg"
             dlldir="$bindir"
         ;;
-        *-*-mingw32* )
+        *-*-mingw* )
             SO_SUFFIX="dll"
             SO_SUFFIX_MODULE="dll"
             DLLIMP_SUFFIX="dll.a"
@@ -41366,11 +41365,6 @@ EOF
     COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
         COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0=""
-    fi
-
-    COND_TOOLKIT_Qt="#"
-    if test "x$TOOLKIT" = "xQt" ; then
-        COND_TOOLKIT_Qt=""
     fi
 
     COND_TOOLKIT_X11="#"

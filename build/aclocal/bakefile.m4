@@ -76,7 +76,7 @@ AC_DEFUN([AC_BAKEFILE_PLATFORM],
 
     if test "x$BAKEFILE_FORCE_PLATFORM" = "x"; then
         case "${BAKEFILE_HOST}" in
-            *-*-mingw32* )
+            *-*-mingw* )
                 PLATFORM_WIN32=1
             ;;
             *-*-darwin* )
@@ -197,7 +197,7 @@ AC_DEFUN([AC_BAKEFILE_SUFFIXES],
             DLLPREFIX="cyg"
             dlldir="$bindir"
         ;;
-        *-*-mingw32* )
+        *-*-mingw* )
             SO_SUFFIX="dll"
             SO_SUFFIX_MODULE="dll"
             DLLIMP_SUFFIX="dll.a"

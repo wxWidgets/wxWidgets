@@ -104,7 +104,8 @@ to configure the Qt dir of the build intended to use as QT5_CUSTOM_DIR, i.e.
 ../configure --with-qt --enable-debug QT5_CUSTOM_DIR=~/Qt/5.11.0/gcc_64
 
 # for Windows (ran from Git Bash, or any other Unix-like shell):
-../configure --with-qt --enable-debug QT5_CUSTOM_DIR=/c/Qt/5.11.0/mingw53_32
+# (the syntax for the drive in the path is required by ar and ld)
+../configure --with-qt --enable-debug QT5_CUSTOM_DIR=c:/Qt/5.11.0/mingw53_32
 
 * Building wxGT on Android
 --------------------------

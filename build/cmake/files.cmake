@@ -292,7 +292,6 @@ set(QT_SRC
     src/qt/dcscreen.cpp
     src/qt/defs.cpp
     src/qt/dialog.cpp
-    src/unix/dialup.cpp
     src/qt/display.cpp
     src/qt/dnd.cpp
     src/qt/evtloop.cpp
@@ -353,9 +352,7 @@ set(QT_SRC
     src/generic/activityindicator.cpp
     src/common/taskbarcmn.cpp
     src/generic/animateg.cpp
-    src/unix/sound.cpp
     src/qt/calctrl.cpp
-    src/unix/joystick.cpp
     src/qt/dataview.cpp
     src/qt/taskbar.cpp
 )

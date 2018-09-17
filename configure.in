@@ -52,7 +52,7 @@ WX_MSW_VERSION=$wx_major_version_number$wx_minor_version_number$wx_release_numbe
 
 dnl Autoconf-2.60 changed the meaning of top_builddir variable, so we have
 dnl to use our own replacement that will work with both 2.5x and 2.60+:
-wx_top_builddir="`pwd`"
+wx_top_builddir="`pwd -W 2> /dev/null || pwd`"
 AC_SUBST(wx_top_builddir)
 
 
@@ -2746,7 +2746,7 @@ if test "$USE_WIN32" = 1 ; then
 
     LIBS="$LIBS -luxtheme -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lcomdlg32 -ladvapi32 -lversion -lwsock32 -lgdi32"
     case "${host}" in
-        x86_64-*-mingw32* )
+        x86_64-*-mingw* )
             dnl we need to define this to embed the manifest for correct
             dnl platform from wx/msw/wx.rc (this is not needed for x86 which is
             dnl the default in wx/msw/rcdefs.h)
@@ -2785,7 +2785,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
         dnl -mwindows causes a heap of other default gui libs to be linked in.
         case "${host}" in
-            *-*-mingw32* )
+            *-*-mingw* )
                 WXCONFIG_LDFLAGS_GUI="$LDFLAGS -Wl,--subsystem,windows -mwindows"
         esac
     fi
@@ -5003,7 +5003,7 @@ dnl from if !MSW
 else
     if test "$wxUSE_THREADS" = "yes" ; then
       case "${host}" in
-        x86_64-*-mingw32* )
+        x86_64-*-mingw* )
         ;;
         *-*-mingw32* )
             dnl check if the compiler accepts -mthreads
