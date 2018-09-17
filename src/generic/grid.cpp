@@ -220,12 +220,12 @@ wxGridCellWorker::~wxGridCellWorker()
 // ----------------------------------------------------------------------------
 
 void wxGridHeaderLabelsRenderer::DrawLabel(const wxGrid& grid,
-                                           wxDC& dc,
-                                           const wxString& value,
-                                           const wxRect& rect,
-                                           int horizAlign,
-                                           int vertAlign,
-                                           int textOrientation) const
+                                         wxDC& dc,
+                                         const wxString& value,
+                                         const wxRect& rect,
+                                         int horizAlign,
+                                         int vertAlign,
+                                         int textOrientation) const
 {
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     dc.SetTextForeground(grid.GetLabelTextColour());
@@ -1167,6 +1167,11 @@ wxString wxGridTableBase::GetColLabelValue( int col )
     return s2;
 }
 
+wxString wxGridTableBase::GetCornerLabelValue() const
+{
+    return wxString();
+}
+
 wxString wxGridTableBase::GetTypeName( int WXUNUSED(row), int WXUNUSED(col) )
 {
     return wxGRID_VALUE_STRING;
@@ -1600,6 +1605,15 @@ void wxGridStringTable::SetColLabelValue( int col, const wxString& value )
     m_colLabels[col] = value;
 }
 
+void wxGridStringTable::SetCornerLabelValue( const wxString& value )
+{
+    m_cornerLabel = value;
+}
+
+wxString wxGridStringTable::GetCornerLabelValue() const
+{
+    return m_cornerLabel;
+}
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
@@ -2439,6 +2453,10 @@ void wxGrid::Init()
     m_colLabelHorizAlign = wxALIGN_CENTRE;
     m_colLabelVertAlign  = wxALIGN_CENTRE;
     m_colLabelTextOrientation = wxHORIZONTAL;
+
+    m_cornerLabelHorizAlign = wxALIGN_CENTRE;
+    m_cornerLabelVertAlign = wxALIGN_CENTRE;
+    m_cornerLabelTextOrientation = wxHORIZONTAL;
 
     m_defaultColWidth  = WXGRID_DEFAULT_COL_WIDTH;
     m_defaultRowHeight = 0; // this will be initialized after creation
@@ -5919,6 +5937,13 @@ void wxGrid::DrawCornerLabel(wxDC& dc)
 {
     wxRect rect(wxSize(m_rowLabelWidth, m_colLabelHeight));
 
+    wxGridCellAttrProvider * const
+        attrProvider = m_table ? m_table->GetAttrProvider() : NULL;
+    const wxGridCornerHeaderRenderer&
+        rend = attrProvider ? attrProvider->GetCornerRenderer()
+                            : static_cast<wxGridCornerHeaderRenderer&>
+                                (gs_defaultHeaderRenderers.cornerRenderer);
+
     if ( m_nativeColumnLabels )
     {
         rect.Deflate(1);
@@ -5930,14 +5955,17 @@ void wxGrid::DrawCornerLabel(wxDC& dc)
         rect.width++;
         rect.height++;
 
-        wxGridCellAttrProvider * const
-            attrProvider = m_table ? m_table->GetAttrProvider() : NULL;
-        const wxGridCornerHeaderRenderer&
-            rend = attrProvider ? attrProvider->GetCornerRenderer()
-                                : static_cast<wxGridCornerHeaderRenderer&>
-                                    (gs_defaultHeaderRenderers.cornerRenderer);
-
         rend.DrawBorder(*this, dc, rect);
+    }
+
+    wxString label = GetCornerLabelValue();
+    if( !label.IsEmpty() )
+    {
+        int hAlign, vAlign;
+        GetCornerLabelAlignment(&hAlign, &vAlign);
+        const int orient = GetCornerLabelTextOrientation();
+
+        rend.DrawLabel(*this, dc, label, rect, hAlign, vAlign, orient);
     }
 }
 
@@ -7043,6 +7071,19 @@ int wxGrid::GetColLabelTextOrientation() const
     return m_colLabelTextOrientation;
 }
 
+void wxGrid::GetCornerLabelAlignment( int *horiz, int *vert ) const
+{
+    if ( horiz )
+        *horiz = m_cornerLabelHorizAlign;
+    if ( vert )
+        *vert  = m_cornerLabelVertAlign;
+}
+
+int wxGrid::GetCornerLabelTextOrientation() const
+{
+    return m_cornerLabelTextOrientation;
+}
+
 wxString wxGrid::GetRowLabelValue( int row ) const
 {
     if ( m_table )
@@ -7068,6 +7109,18 @@ wxString wxGrid::GetColLabelValue( int col ) const
         wxString s;
         s << col;
         return s;
+    }
+}
+
+wxString wxGrid::GetCornerLabelValue() const
+{
+    if ( m_table )
+    {
+        return m_table->GetCornerLabelValue();
+    }
+    else
+    {
+        return wxString();
     }
 }
 
@@ -7238,6 +7291,39 @@ void wxGrid::SetColLabelAlignment( int horiz, int vert )
     }
 }
 
+void wxGrid::SetCornerLabelAlignment( int horiz, int vert )
+{
+    // allow old (incorrect) defs to be used
+    switch ( horiz )
+    {
+        case wxLEFT:   horiz = wxALIGN_LEFT; break;
+        case wxRIGHT:  horiz = wxALIGN_RIGHT; break;
+        case wxCENTRE: horiz = wxALIGN_CENTRE; break;
+    }
+
+    switch ( vert )
+    {
+        case wxTOP:    vert = wxALIGN_TOP;    break;
+        case wxBOTTOM: vert = wxALIGN_BOTTOM; break;
+        case wxCENTRE: vert = wxALIGN_CENTRE; break;
+    }
+
+    if ( horiz == wxALIGN_LEFT || horiz == wxALIGN_CENTRE || horiz == wxALIGN_RIGHT )
+    {
+        m_cornerLabelHorizAlign = horiz;
+    }
+
+    if ( vert == wxALIGN_TOP || vert == wxALIGN_CENTRE || vert == wxALIGN_BOTTOM )
+    {
+        m_cornerLabelVertAlign = vert;
+    }
+
+    if ( !GetBatchCount() )
+    {
+        m_cornerLabelWin->Refresh();
+    }
+}
+
 // Note: under MSW, the default column label font must be changed because it
 //       does not support vertical printing
 //
@@ -7252,6 +7338,15 @@ void wxGrid::SetColLabelTextOrientation( int textOrientation )
 
     if ( !GetBatchCount() )
         m_colWindow->Refresh();
+}
+
+void wxGrid::SetCornerLabelTextOrientation( int textOrientation )
+{
+    if ( textOrientation == wxHORIZONTAL || textOrientation == wxVERTICAL )
+        m_cornerLabelTextOrientation = textOrientation;
+
+    if ( !GetBatchCount() )
+        m_cornerLabelWin->Refresh();
 }
 
 void wxGrid::SetRowLabelValue( int row, const wxString& s )
@@ -7295,6 +7390,19 @@ void wxGrid::SetColLabelValue( int col, const wxString& s )
                     GetColLabelWindow()->Refresh( true, &rect );
                 }
             }
+        }
+    }
+}
+
+void wxGrid::SetCornerLabelValue( const wxString& s )
+{
+    if ( m_table )
+    {
+        m_table->SetCornerLabelValue( s );
+        if ( !GetBatchCount() )
+        {
+            wxRect rect = m_cornerLabelWin->GetRect();
+            m_cornerLabelWin->Refresh(true, &rect);
         }
     }
 }
