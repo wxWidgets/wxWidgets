@@ -213,6 +213,13 @@ wxFont::wxFont(const wxNativeFontInfo& info)
     (void)Create(info.GetXFontName());
 }
 
+wxFont::wxFont(const wxString& nativeFontInfoString)
+{
+    wxNativeFontInfo info;
+    if ( info.FromString(nativeFontInfoString) )
+        (void)Create(info.GetXFontName());
+}
+
 wxFont::wxFont(const wxFontInfo& info)
 {
     m_refData = new wxFontRefData(info);
