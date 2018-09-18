@@ -20,6 +20,20 @@
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 
+// Older versions of QT don't define all the QFont::Weight enum values, so just
+// do it ourselves here for all case instead.
+enum
+{
+    wxQFont_Thin        = 0,
+    wxQFont_ExtraLight  = 12,
+    wxQFont_Light       = QFont::Light,
+    wxQFont_Normal      = QFont::Normal,
+    wxQFont_Medium      = 57,
+    wxQFont_DemiBold    = QFont::DemiBold,
+    wxQFont_Bold        = QFont::Bold,
+    wxQFont_ExtraBold   = 81,
+    wxQFont_Black       = QFont::Black
+};
 
 static QFont::StyleHint ConvertFontFamily(wxFontFamily family)
 {
@@ -70,34 +84,34 @@ static bool TryToMap(int& x, int fromMin, int fromMax, int toMin, int toMax)
 
 static int ConvertFontWeight(int w)
 {
-    // Note that QFont::Thin is 0, so we can't have anything lighter than it.
+    // Note that wxQFont_Thin is 0, so we can't have anything lighter than it.
     if ( TryToMap(w, wxFONTWEIGHT_INVALID, wxFONTWEIGHT_THIN,
-                     QFont::Thin, QFont::Thin) ||
+                     wxQFont_Thin, wxQFont_Thin) ||
          TryToMap(w, wxFONTWEIGHT_THIN, wxFONTWEIGHT_EXTRALIGHT,
-                     QFont::Thin, QFont::ExtraLight) ||
+                     wxQFont_Thin, wxQFont_ExtraLight) ||
          TryToMap(w, wxFONTWEIGHT_EXTRALIGHT, wxFONTWEIGHT_LIGHT,
-                     QFont::ExtraLight, QFont::Light) ||
+                     wxQFont_ExtraLight, wxQFont_Light) ||
          TryToMap(w, wxFONTWEIGHT_LIGHT, wxFONTWEIGHT_NORMAL,
-                     QFont::Light, QFont::Normal) ||
+                     wxQFont_Light, wxQFont_Normal) ||
          TryToMap(w, wxFONTWEIGHT_NORMAL, wxFONTWEIGHT_MEDIUM,
-                     QFont::Normal, QFont::Medium) ||
+                     wxQFont_Normal, wxQFont_Medium) ||
          TryToMap(w, wxFONTWEIGHT_MEDIUM, wxFONTWEIGHT_SEMIBOLD,
-                     QFont::Medium, QFont::DemiBold) ||
+                     wxQFont_Medium, wxQFont_DemiBold) ||
          TryToMap(w, wxFONTWEIGHT_SEMIBOLD, wxFONTWEIGHT_BOLD,
-                     QFont::DemiBold, QFont::Bold) ||
+                     wxQFont_DemiBold, wxQFont_Bold) ||
          TryToMap(w, wxFONTWEIGHT_BOLD, wxFONTWEIGHT_EXTRABOLD,
-                     QFont::Bold, QFont::ExtraBold) ||
+                     wxQFont_Bold, wxQFont_ExtraBold) ||
          TryToMap(w, wxFONTWEIGHT_EXTRABOLD, wxFONTWEIGHT_HEAVY,
-                     QFont::ExtraBold, QFont::Black) ||
+                     wxQFont_ExtraBold, wxQFont_Black) ||
          TryToMap(w, wxFONTWEIGHT_HEAVY, wxFONTWEIGHT_EXTRAHEAVY,
-                     QFont::Black, 99) )
+                     wxQFont_Black, 99) )
     {
         return w;
     }
 
     wxFAIL_MSG("invalid wxFont weight");
 
-    return QFont::Normal;
+    return wxQFont_Normal;
 }
 
 class wxFontRefData: public wxGDIRefData
@@ -354,27 +368,27 @@ int wxNativeFontInfo::GetNumericWeight() const
 {
     int w = m_qtFont.weight();
 
-    // Special case of QFont::Thin == 0.
-    if ( w == QFont::Thin )
+    // Special case of wxQFont_Thin == 0.
+    if ( w == wxQFont_Thin )
         return wxFONTWEIGHT_THIN;
 
-    if ( TryToMap(w, QFont::Thin, QFont::ExtraLight,
+    if ( TryToMap(w, wxQFont_Thin, wxQFont_ExtraLight,
                      wxFONTWEIGHT_THIN, wxFONTWEIGHT_EXTRALIGHT) ||
-         TryToMap(w, QFont::ExtraLight, QFont::Light,
+         TryToMap(w, wxQFont_ExtraLight, wxQFont_Light,
                      wxFONTWEIGHT_EXTRALIGHT, wxFONTWEIGHT_LIGHT) ||
-         TryToMap(w, QFont::Light, QFont::Normal,
+         TryToMap(w, wxQFont_Light, wxQFont_Normal,
                      wxFONTWEIGHT_LIGHT, wxFONTWEIGHT_NORMAL) ||
-         TryToMap(w, QFont::Normal, QFont::Medium,
+         TryToMap(w, wxQFont_Normal, wxQFont_Medium,
                      wxFONTWEIGHT_NORMAL, wxFONTWEIGHT_MEDIUM) ||
-         TryToMap(w, QFont::Medium, QFont::DemiBold,
+         TryToMap(w, wxQFont_Medium, wxQFont_DemiBold,
                      wxFONTWEIGHT_MEDIUM, wxFONTWEIGHT_SEMIBOLD) ||
-         TryToMap(w, QFont::DemiBold, QFont::Bold,
+         TryToMap(w, wxQFont_DemiBold, wxQFont_Bold,
                      wxFONTWEIGHT_SEMIBOLD, wxFONTWEIGHT_BOLD) ||
-         TryToMap(w, QFont::Bold, QFont::ExtraBold,
+         TryToMap(w, wxQFont_Bold, wxQFont_ExtraBold,
                      wxFONTWEIGHT_BOLD, wxFONTWEIGHT_EXTRABOLD) ||
-         TryToMap(w, QFont::ExtraBold, QFont::Black,
+         TryToMap(w, wxQFont_ExtraBold, wxQFont_Black,
                      wxFONTWEIGHT_EXTRABOLD, wxFONTWEIGHT_HEAVY) ||
-         TryToMap(w, QFont::Black, 99,
+         TryToMap(w, wxQFont_Black, 99,
                      wxFONTWEIGHT_HEAVY, wxFONTWEIGHT_EXTRAHEAVY) )
     {
         return w;
