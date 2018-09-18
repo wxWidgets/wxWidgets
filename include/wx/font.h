@@ -141,7 +141,7 @@ public:
 
     // Need to define this one to avoid casting double to int too.
     explicit wxFontInfo(double pointSize)
-        { InitPointSize(pointSize); }
+        { InitPointSize(static_cast<float>(pointSize)); }
     template <typename T>
     explicit wxFontInfo(T pointSize)
         { InitPointSize(ToFloatPointSize(pointSize)); }
