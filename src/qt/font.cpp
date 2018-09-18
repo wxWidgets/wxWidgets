@@ -22,16 +22,22 @@
 
 // Older versions of QT don't define all the QFont::Weight enum values, so just
 // do it ourselves here for all case instead.
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
+#define wxQFontEnumOrInt(a, b) a
+#else
+#define wxQFontEnumOrInt(a, b) b
+#endif
+
 enum
 {
-    wxQFont_Thin        = 0,
-    wxQFont_ExtraLight  = 12,
+    wxQFont_Thin        = wxQFontEnumOrInt( QFont::Thin, 0 ),
+    wxQFont_ExtraLight  = wxQFontEnumOrInt( QFont::ExtraLight, 12 ),
     wxQFont_Light       = QFont::Light,
     wxQFont_Normal      = QFont::Normal,
-    wxQFont_Medium      = 57,
+    wxQFont_Medium      = wxQFontEnumOrInt( QFont::Medium, 57 ),
     wxQFont_DemiBold    = QFont::DemiBold,
     wxQFont_Bold        = QFont::Bold,
-    wxQFont_ExtraBold   = 81,
+    wxQFont_ExtraBold   = wxQFontEnumOrInt( QFont::ExtraBold, 81 ),
     wxQFont_Black       = QFont::Black
 };
 
