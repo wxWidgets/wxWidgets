@@ -1250,6 +1250,7 @@ void ImageTestCase::GIFComment()
     // Test writing comments in an animated GIF and reading them back.
     CPPUNIT_ASSERT( image.LoadFile("horse.gif") );
 
+#if wxUSE_PALETTE
     wxImageArray images;
     int i;
     for (i = 0; i < 4; ++i)
@@ -1287,6 +1288,7 @@ void ImageTestCase::GIFComment()
             image.GetOption(wxIMAGE_OPTION_GIF_COMMENT));
         memIn.SeekI(pos);
     }
+#endif //wxUSE_PALETTE
 }
 
 #endif // wxUSE_GIF

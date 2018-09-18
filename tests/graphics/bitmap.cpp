@@ -12,6 +12,8 @@
 
 #include "testprec.h"
 
+#ifdef wxHAS_RAW_BITMAP
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -153,3 +155,5 @@ void BitmapTestCase::OverlappingBlit()
         }
     }
 }
+
+#endif //wxHAS_RAW_BITMAP
