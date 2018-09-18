@@ -89,7 +89,8 @@ void BitmapTestCase::Mask()
     m_bmp.SetMask(mask);
 
     // copying masks should work
-    wxMask *mask2 = new wxMask(*mask);
+    wxMask *mask2 = NULL;
+    REQUIRE_NOTHROW(mask2 = new wxMask(*mask));
     m_bmp.SetMask(mask2);
 }
 
