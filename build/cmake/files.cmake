@@ -2208,6 +2208,7 @@ set(DFB_LOWLEVEL_SRC
     src/dfb/utils.cpp
     src/dfb/window.cpp
     src/dfb/wrapdfb.cpp
+    src/generic/animateg.cpp
 )
 
 set(DFB_LOWLEVEL_HDR
@@ -2236,6 +2237,7 @@ set(DFB_LOWLEVEL_HDR
     wx/dfb/toplevel.h
     wx/dfb/window.h
     wx/dfb/wrapdfb.h
+    wx/generic/animate.h
 )
 
 set(OSX_LOWLEVEL_SRC
