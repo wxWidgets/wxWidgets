@@ -36963,6 +36963,10 @@ fi
         elif test "$WXGTK3" = 1; then
                                                 wxUSE_UIACTIONSIMULATOR=no
         fi
+    elif test "$wxUSE_DFB" = 1; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxUIActionSimulator not yet supported under $TOOLKIT... disabled" >&5
+$as_echo "$as_me: WARNING: wxUIActionSimulator not yet supported under $TOOLKIT... disabled" >&2;}
+        wxUSE_UIACTIONSIMULATOR=no
     fi
 
     if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
@@ -37391,8 +37395,8 @@ if test "$wxUSE_TOOLTIPS" = "yes"; then
 $as_echo "$as_me: WARNING: wxTooltip not supported yet under Motif... disabled" >&2;}
     else
         if test "$wxUSE_UNIVERSAL" = "yes"; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxTooltip not supported yet in wxUniversal... disabled" >&5
-$as_echo "$as_me: WARNING: wxTooltip not supported yet in wxUniversal... disabled" >&2;}
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxTooltip not supported yet in $TOOLKIT... disabled" >&5
+$as_echo "$as_me: WARNING: wxTooltip not supported yet in $TOOLKIT... disabled" >&2;}
         else
             $as_echo "#define wxUSE_TOOLTIPS 1" >>confdefs.h
 
