@@ -86,6 +86,13 @@ Changes in behaviour which may result in build errors
   not long. Its return value hasn't changed, however, and is still always
   either true or false, so normally the existing code should continue to work.
 
+- configure only accepts the options it knows about now and doesn't silently
+  ignore all the rest. If you get errors about unknown options, you may either
+  specify --disable-option-checking argument to continue accepting them (which
+  only ever makes sense if you pass these options to sub-configure scripts) or,
+  e.g. if the error is due to spelling an option name wrongly, fixing or
+  removing its name.
+
 
 3.1.2: (released 2018-??-??)
 ----------------------------
