@@ -8,6 +8,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_HTML
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -56,3 +58,5 @@ void HtmlListBoxTestCase::tearDown()
 {
     wxDELETE(m_htmllbox);
 }
+
+#endif //wxUSE_HTML

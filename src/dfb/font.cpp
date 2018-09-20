@@ -38,6 +38,13 @@ typedef wxFontMgrFontRefData wxFontRefData;
 // wxFont
 // ----------------------------------------------------------------------------
 
+wxFont::wxFont(const wxString& nativeFontInfoString)
+{
+    wxNativeFontInfo info;
+    if ( info.FromString(nativeFontInfoString) )
+        (void)Create(info);
+}
+
 bool wxFont::Create(const wxNativeFontInfo& info)
 {
     m_refData = new wxFontRefData(info.pointSize,

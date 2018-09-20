@@ -6597,6 +6597,9 @@ if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
             dnl he's doing if --without-xtest was explicitly specified.
             wxUSE_UIACTIONSIMULATOR=no
         fi
+    elif test "$wxUSE_DFB" = 1; then
+        AC_MSG_WARN([wxUIActionSimulator not yet supported under $TOOLKIT... disabled])
+        wxUSE_UIACTIONSIMULATOR=no
     fi
 
     if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
@@ -6960,7 +6963,7 @@ if test "$wxUSE_TOOLTIPS" = "yes"; then
         AC_MSG_WARN([wxTooltip not supported yet under Motif... disabled])
     else
         if test "$wxUSE_UNIVERSAL" = "yes"; then
-            AC_MSG_WARN([wxTooltip not supported yet in wxUniversal... disabled])
+            AC_MSG_WARN([wxTooltip not supported yet in $TOOLKIT... disabled])
         else
             AC_DEFINE(wxUSE_TOOLTIPS)
         fi

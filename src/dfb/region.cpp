@@ -74,6 +74,12 @@ wxRegion::wxRegion(const wxRect& r)
     m_refData = new wxRegionRefData(r);
 }
 
+wxRegion::wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle)
+{
+#warning "implement this"
+    m_refData = NULL;
+}
+
 wxRegion::~wxRegion()
 {
     // m_refData unrefed in ~wxObject

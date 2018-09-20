@@ -39,6 +39,8 @@ public:
 
     wxFont(const wxNativeFontInfo& info) { Create(info); }
 
+    wxFont(const wxString& nativeFontInfoString);
+
     wxFont(int size,
            wxFontFamily family,
            wxFontStyle style,
