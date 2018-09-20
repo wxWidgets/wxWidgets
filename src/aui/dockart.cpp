@@ -197,7 +197,7 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
     int pen_width = wxWindow::FromDIP(1, NULL);
     m_gripperPen1 = wxPen(darker5Colour, pen_width);
     m_gripperPen2 = wxPen(darker3Colour, pen_width);
-    m_gripperPen3 = wxPen(*wxStockGDI::GetColour(wxStockGDI::COLOUR_WHITE), pen_width);
+    m_gripperPen3 = wxPen(*wxWHITE, pen_width);
 
 #ifdef __WXMAC__
     m_captionFont = *wxSMALL_FONT;
