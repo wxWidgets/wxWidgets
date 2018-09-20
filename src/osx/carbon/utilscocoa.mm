@@ -280,6 +280,30 @@ CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromNSImage( WX_NSImage ns
     return hbitmap;
 }
 
+void WXDLLIMPEXP_CORE wxOSXDrawNSImage(
+                                          CGContextRef    inContext,
+                                          const CGRect *  inBounds,
+                                          WX_NSImage      inImage)
+{
+    if (inImage != nil)
+    {
+        CGContextSaveGState(inContext);
+        CGContextTranslateCTM(inContext, inBounds->origin.x, inBounds->origin.y + inBounds->size.height);
+        CGRect r = *inBounds;
+        r.origin.x = r.origin.y = 0;
+        CGContextScaleCTM(inContext, 1, -1);
+
+        NSGraphicsContext *previousContext = [NSGraphicsContext currentContext];
+        NSGraphicsContext *nsGraphicsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:inContext flipped:NO];
+        [NSGraphicsContext setCurrentContext:nsGraphicsContext];
+        [inImage drawInRect:NSRectFromCGRect(r) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0];
+        [NSGraphicsContext setCurrentContext:previousContext];
+
+        CGContextRestoreGState(inContext);
+
+    }
+}
+
 double wxOSXGetMainScreenContentScaleFactor()
 {
     return [[NSScreen mainScreen] backingScaleFactor];
