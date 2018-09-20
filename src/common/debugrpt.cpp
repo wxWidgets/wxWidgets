@@ -131,10 +131,14 @@ void XmlStackWalker::OnStackFrame(const wxStackFrame& frame)
     NumProperty(nodeFrame, wxT("level"), frame.GetLevel());
     wxString func = frame.GetName();
     if ( !func.empty() )
-    {
         nodeFrame->AddAttribute(wxT("function"), func);
-        HexProperty(nodeFrame, wxT("offset"), frame.GetOffset());
-    }
+
+    HexProperty(nodeFrame, wxT("offset"), frame.GetOffset());
+    HexProperty(nodeFrame, wxT("address"), reinterpret_cast<long unsigned int>(frame.GetAddress()));
+
+    wxString module = frame.GetModule();
+    if ( !module.empty() )
+        nodeFrame->AddAttribute(wxT("module"), module);
 
     if ( frame.HasSourceLocation() )
     {
