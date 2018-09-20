@@ -54,6 +54,10 @@ wxAuiMSWToolBarArt::wxAuiMSWToolBarArt()
             NULL, TS_TRUE, &seperatorSize);
         m_separatorSize = seperatorSize.cx;
 
+        // TP_DROPDOWNBUTTON is only 7px, too small to fit the dropdown arrow,
+        // use 14px instead.
+        m_dropdownSize = window->FromDIP(14);
+
         SIZE buttonSize;
         ::GetThemePartSize(hThemeToolbar, NULL, TP_BUTTON, 0,
             NULL, TS_TRUE, &buttonSize);
@@ -219,18 +223,16 @@ void wxAuiMSWToolBarArt::DrawDropDownButton(
     {
         wxUxThemeHandle hTheme(wnd, L"Toolbar");
 
-        int dropDownWidth = wnd->FromDIP(14);
-
         int textWidth = 0, textHeight = 0, textX = 0, textY = 0;
         int bmpX = 0, bmpY = 0;
 
         wxRect buttonRect = wxRect(rect.x,
             rect.y,
-            rect.width - dropDownWidth,
+            rect.width - m_dropdownSize,
             rect.height);
-        wxRect dropDownRect = wxRect(rect.x + rect.width - dropDownWidth - 1,
+        wxRect dropDownRect = wxRect(rect.x + rect.width - m_dropdownSize - 1,
             rect.y,
-            dropDownWidth + 1,
+            m_dropdownSize + 1,
             rect.height);
 
         if ( m_flags & wxAUI_TB_TEXT )
@@ -444,7 +446,7 @@ wxSize wxAuiMSWToolBarArt::GetToolSize(
 
         wxSize size = wxAuiGenericToolBarArt::GetToolSize(dc, wnd, item);
 
-        size.IncBy(wnd->FromDIP(wxSize(3, 3))); // Add some padding for native theme
+        size.IncBy(wnd->FromDIP(3)); // Add some padding for native theme
 
         return size;
     }
