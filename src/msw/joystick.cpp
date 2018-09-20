@@ -17,8 +17,6 @@
 
 #if wxUSE_JOYSTICK
 
-#include <iostream>
-
 #include "wx/joystick.h"
 
 #ifndef WX_PRECOMP
@@ -66,7 +64,7 @@ public:
     void* Entry() wxOVERRIDE;
 
 private:
-    void      SendEvent(wxEventType type, long ts, int change = 0);
+    void      SendEvent(wxEventType type, long ts);
     int       m_device;
     int       m_joystick;
     wxPoint   m_lastposition;
@@ -99,11 +97,9 @@ wxJoystickThread::wxJoystickThread(int joystick)
     m_lastJoyInfoEx.dwFlags = JOY_RETURNALL;
 }
 
-void wxJoystickThread::SendEvent(wxEventType type, long ts, int change)
+void wxJoystickThread::SendEvent(wxEventType type, long ts)
 {
-    wxJoystickEvent jwx_event(type, m_buttons, m_joystick, change);
-    if (change)
-        std::cout << "Button changed: " << change << std::endl;
+    wxJoystickEvent jwx_event(type, m_buttons, m_joystick);
 
     jwx_event.SetTimestamp(ts);
     jwx_event.SetPosition(wxPoint(m_joyInfoEx.dwXpos, m_joyInfoEx.dwYpos));
@@ -116,9 +112,7 @@ void wxJoystickThread::SendEvent(wxEventType type, long ts, int change)
 
 void* wxJoystickThread::Entry()
 {
-    std::cout << "Entered polling thread" << std::endl;
     joyGetPosEx(m_joystick, &m_lastJoyInfoEx);
-    std::cout << m_lastJoyInfoEx.dwSize << std::endl;
 
     while (true)
     {
@@ -129,17 +123,15 @@ void* wxJoystickThread::Entry()
         DWORD ts = GetTickCount();
 
         joyGetPosEx(m_joystick, &m_joyInfoEx);
-        DWORD delta = m_joyInfoEx.dwButtons ^ m_lastJoyInfoEx.dwButtons;
-        DWORD deltaUp = delta ^ !m_joyInfoEx.dwButtons;
-        DWORD deltaDown = delta & m_joyInfoEx.dwButtons;
+        m_buttons = m_joyInfoEx.dwButtons;
+        DWORD delta = m_buttons ^ m_lastJoyInfoEx.dwButtons;
+        DWORD deltaUp = delta ^ !m_buttons;
+        DWORD deltaDown = delta & m_buttons;
 
-        for (int i = 0; i < wxJS_MAX_BUTTONS; i++)
-        {
-            if (deltaUp & (1<<i))
-                SendEvent(wxEVT_JOY_BUTTON_UP, ts, i);
-            else if (deltaDown & (1<<i))
-                SendEvent(wxEVT_JOY_BUTTON_DOWN, ts, i);
-        }
+        if (deltaUp)
+            SendEvent(wxEVT_JOY_BUTTON_UP, ts);
+        else if(deltaDown)
+            SendEvent(wxEVT_JOY_BUTTON_DOWN, ts);
 
         if (not( deltaUp || deltaDown)) // button events also report position.
         {
@@ -153,8 +145,6 @@ void* wxJoystickThread::Entry()
         memcpy (&m_lastJoyInfoEx, &m_joyInfoEx, m_lastJoyInfoEx.dwSize);
     }
 
-
-    std::cout << "Leaving polling thread cleanly." << std::endl;
     return NULL;
 }
 
