@@ -49,8 +49,8 @@ enum {
 
     wxJS_AXIS_MAX = 32767,
     wxJS_AXIS_MIN = -32767,
-    wxJS_MAX_AXES = 15,
-    wxJS_MAX_BUTTONS = sizeof(int) * 8
+    wxJS_MAX_AXES = 6,      // WinMM supports up to 6 axes.
+    wxJS_MAX_BUTTONS = 32,  // WinMM supports up to 32 buttons.
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject);
@@ -70,12 +70,13 @@ private:
     int       m_device;
     int       m_joystick;
     wxPoint   m_lastposition;
-    int       m_axe[6];
+    int       m_axe[wxJS_MAX_AXES];
     int       m_buttons;
-    int       m_lastbuttons;
     wxWindow* m_catchwin;
     int       m_polling;
     int       m_threshold;
+    JOYINFOEX m_joyInfoEx;
+    JOYINFOEX m_lastJoyInfoEx;
 
     friend class wxJoystick;
 };
@@ -85,22 +86,28 @@ wxJoystickThread::wxJoystickThread(int joystick)
     : m_joystick(joystick),
       m_lastposition(wxDefaultPosition),
       m_buttons(0),
-      m_lastbuttons(0),
       m_catchwin(NULL),
       m_polling(0),
-      m_threshold(0)
+      m_threshold(0),
+      m_joyInfoEx(),
+      m_lastJoyInfoEx()
 {
     memset(m_axe, 0, sizeof(m_axe));
+    m_joyInfoEx.dwSize = sizeof(JOYINFOEX);
+    m_joyInfoEx.dwFlags = JOY_RETURNALL;
+    m_lastJoyInfoEx.dwSize = sizeof(JOYINFOEX);
+    m_lastJoyInfoEx.dwFlags = JOY_RETURNALL;
 }
 
 void wxJoystickThread::SendEvent(wxEventType type, long ts, int change)
 {
-    std::cout << "SendEvent" << std::endl;
     wxJoystickEvent jwx_event(type, m_buttons, m_joystick, change);
+    if (change)
+        std::cout << "Button changed: " << change << std::endl;
 
     jwx_event.SetTimestamp(ts);
-    jwx_event.SetPosition(m_lastposition);
-    jwx_event.SetZPosition(m_axe[wxJS_AXIS_Z]);
+    jwx_event.SetPosition(wxPoint(m_joyInfoEx.dwXpos, m_joyInfoEx.dwYpos));
+    jwx_event.SetZPosition(m_joyInfoEx.dwZpos);
     jwx_event.SetEventObject(m_catchwin);
 
     if (m_catchwin)
@@ -109,25 +116,45 @@ void wxJoystickThread::SendEvent(wxEventType type, long ts, int change)
 
 void* wxJoystickThread::Entry()
 {
+    std::cout << "Entered polling thread" << std::endl;
+    joyGetPosEx(m_joystick, &m_lastJoyInfoEx);
+    std::cout << m_lastJoyInfoEx.dwSize << std::endl;
 
-        std::cout << "Entered polling thread" << std::endl;
-    //struct js_event j_evt;
-    //fd_set read_fds;
-    struct timeval time_out = {0, 0};
-
-    //wxFD_ZERO(&read_fds);
     while (true)
     {
         if (TestDestroy())
             break;
 
-        // We use select when either polling or 'blocking' as even in the
-        // blocking case we need to check TestDestroy periodically
-        if (m_polling)
-            time_out.tv_usec = m_polling * 1000;
-        else
-            time_out.tv_usec = 10 * 1000; // check at least every 10 msec in blocking case
+        this->Sleep(m_polling);
+        DWORD ts = GetTickCount();
+
+        joyGetPosEx(m_joystick, &m_joyInfoEx);
+        DWORD delta = m_joyInfoEx.dwButtons ^ m_lastJoyInfoEx.dwButtons;
+        DWORD deltaUp = delta ^ !m_joyInfoEx.dwButtons;
+        DWORD deltaDown = delta & m_joyInfoEx.dwButtons;
+
+        for (int i = 0; i < wxJS_MAX_BUTTONS; i++)
+        {
+            if (deltaUp & (1<<i))
+                SendEvent(wxEVT_JOY_BUTTON_UP, ts, i);
+            else if (deltaDown & (1<<i))
+                SendEvent(wxEVT_JOY_BUTTON_DOWN, ts, i);
+        }
+
+        if (not( deltaUp || deltaDown)) // button events also report position.
+        {
+            if ((m_joyInfoEx.dwXpos != m_lastJoyInfoEx.dwXpos) ||
+                (m_joyInfoEx.dwYpos != m_lastJoyInfoEx.dwYpos) ||
+                (m_joyInfoEx.dwZpos != m_lastJoyInfoEx.dwZpos)   )
+            {
+                SendEvent(wxEVT_JOY_MOVE, ts);
+            }
+        }
+        memcpy (&m_lastJoyInfoEx, &m_joyInfoEx, m_lastJoyInfoEx.dwSize);
     }
+
+
+    std::cout << "Leaving polling thread cleanly." << std::endl;
     return NULL;
 }
 
