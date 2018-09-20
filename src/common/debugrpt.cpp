@@ -88,9 +88,9 @@ protected:
 // ----------------------------------------------------------------------------
 
 static inline void
-HexProperty(wxXmlNode *node, const wxChar *name, unsigned long value)
+HexProperty(wxXmlNode *node, const wxChar *name, wxUIntPtr value)
 {
-    node->AddAttribute(name, wxString::Format(wxT("%08lx"), value));
+    node->AddAttribute(name, wxString::Format(wxT("%#zx"), value));
 }
 
 static inline void
@@ -134,7 +134,7 @@ void XmlStackWalker::OnStackFrame(const wxStackFrame& frame)
         nodeFrame->AddAttribute(wxT("function"), func);
 
     HexProperty(nodeFrame, wxT("offset"), frame.GetOffset());
-    HexProperty(nodeFrame, wxT("address"), reinterpret_cast<long unsigned int>(frame.GetAddress()));
+    HexProperty(nodeFrame, wxT("address"), wxPtrToUInt(frame.GetAddress()));
 
     wxString module = frame.GetModule();
     if ( !module.empty() )
