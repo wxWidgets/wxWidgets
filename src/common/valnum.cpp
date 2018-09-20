@@ -214,6 +214,40 @@ wxIntegerValidatorBase::FromString(const wxString& s, LongestValueType *value)
     return wxNumberFormatter::FromString(s, value);
 }
 
+namespace
+{
+
+static inline long wxGetNumDigits(long number)
+{
+    long digits = 0;
+
+    while ( number != 0 ) { number /= 10; digits++; }
+
+    return digits;
+}
+
+template<typename T>
+static inline bool wxTryMakeValueInRange(T* value, const T min, const T max)
+{
+    T& val = *value;
+
+    long exp = (val >= (T)1) ?
+        std::max(wxGetNumDigits(min)-wxGetNumDigits(val), 1L) : 0L;
+    T mul = std::pow((T)10, exp);
+
+    val *= mul;
+
+    if ( val > max )
+        return false;
+
+    if ( val < min )
+        val += (long)min % (long)mul;
+
+    return val >= min;
+}
+
+}
+
 bool
 wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
 {
@@ -244,8 +278,41 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
 
     // N.B. don't call IsInRange() here to check whether value is in the
     // expected range or not, as doing so would prevent us from entering
-    // any value at all in some cases (e.g. if m_min >= 10) but we still
-    // have (here) the opportunity to disallow values greater than m_max
+    // any value at all in some cases (e.g. if m_min >= 10).
+    // So we need to treat each bound apart...
+
+    if ( value < m_min )
+    {
+        if ( wxTryMakeValueInRange(&value, m_min, m_max) )
+        {
+            // TODO: refactoring needed!
+            wxTextEntry * const control = GetTextEntry();
+            if ( !control )
+                return false;
+
+            wxTextCtrl * const text = wxDynamicCast(m_validatorWindow, wxTextCtrl);
+            const bool wasModified = text ? text->IsModified() : false;
+
+            control->ChangeValue(wxNumberFormatter::ToString(value));
+
+            // FIXME: under wxMSW this line of code works correctly:
+            //        control->SetSelection(pos+1, -1);
+            //        which does not under wxGTK. but calling it at
+            //        a later time does work without problems.
+            // notice that i am using a lambda here for my easiness
+            // only and will be change in the future.
+
+            (const_cast<wxIntegerValidatorBase*>(this))->CallAfter(
+                [=](){ control->SetSelection(pos+1, -1); }
+            );
+
+            if ( wasModified )
+                text->MarkDirty();
+        }
+
+        // return false to indicate error status
+        return false;
+    }
 
     return value <= m_max;
 }
@@ -320,7 +387,33 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
         return false;
 
     // N.B. (see wxIntegerValidatorBase::IsCharOk())
-    return (value*m_factor) <= m_max;
+    value *= m_factor;
+
+    if ( value < m_min )
+    {
+        if ( wxTryMakeValueInRange(&value, m_min, m_max) )
+        {
+            wxTextEntry * const control = GetTextEntry();
+            if ( !control )
+                return false;
+
+            wxTextCtrl * const text = wxDynamicCast(m_validatorWindow, wxTextCtrl);
+            const bool wasModified = text ? text->IsModified() : false;
+
+            control->ChangeValue(wxNumberFormatter::ToString(value, m_precision, GetFormatFlags()));
+
+            (const_cast<wxFloatingPointValidatorBase*>(this))->CallAfter(
+                [=](){ control->SetSelection(pos+1, -1); }
+            );
+
+            if ( wasModified )
+                text->MarkDirty();
+        }
+
+        return false;
+    }
+
+    return value <= m_max;
 }
 
 #endif // wxUSE_VALIDATORS && wxUSE_TEXTCTRL

@@ -347,8 +347,8 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     numSizer->Add(m_numericTextDouble, wxSizerFlags(center).Expand());
 
     wxIntegerValidator<unsigned short> smallIntVal(&g_data.m_smallIntValue);
-    smallIntVal.SetRange(1, 5);
-    numSizer->Add(new wxStaticText(this, wxID_ANY, "Int between 1 and 5:"),
+    smallIntVal.SetRange(333, 698);
+    numSizer->Add(new wxStaticText(this, wxID_ANY, "Int between 333 and 698:"),
                   center);
     numSizer->Add(new wxTextCtrl(this, wxID_ANY, "",
                                  wxDefaultPosition, wxDefaultSize, wxTE_RIGHT,
@@ -360,7 +360,8 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     wxFloatingPointValidator<float> percentVal(&g_data.m_percentValue);
     percentVal.SetPrecision(2);
     percentVal.SetFactor(100.0);
-    percentVal.SetRange(10.0, 100.0);
+    // FIXME: i couldn't enter -3.5 in the control but -3.49!
+    percentVal.SetRange(-3.5, 99.5);
 
     numSizer->Add(new wxStaticText(this, wxID_ANY, "Value displayed in %:"),
                   center);
