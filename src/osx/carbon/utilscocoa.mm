@@ -302,22 +302,13 @@ CGSize wxOSXGetImageSize(WX_NSImage image)
 
 CGImageRef wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage, double *scaleptr )
 {
-    // based on http://www.mail-archive.com/cocoa-dev@lists.apple.com/msg18065.html
-
     CGImageRef image = NULL;
     if (nsimage != nil)
-    {        
-        CGContextRef context = wxOSXCreateBitmapContextFromNSImage(nsimage);
+    {
+        image = [nsimage CGImageForProposedRect:nil context:nil hints:nil];
+        CFRetain(image);
         if ( scaleptr )
-        {
-            // determine content scale
-            CGRect userrect = CGRectMake(0, 0, 10, 10);
-            CGRect devicerect;
-            devicerect = CGContextConvertRectToDeviceSpace(context, userrect);
-            *scaleptr = devicerect.size.height / userrect.size.height;
-        }
-        image = CGBitmapContextCreateImage(context);
-        CFRelease(context);
+            *scaleptr = CGImageGetWidth(image)/[nsimage size].width;
     }
     return image;
  }
