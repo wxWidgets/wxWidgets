@@ -4193,9 +4193,17 @@ fi
 
 dnl at least under IRIX with mipsPro the C99 round() function is available when
 dnl building using the C compiler but not when using C++ one
+AC_CACHE_CHECK([for round], wx_cv_func_round, [
 AC_LANG_PUSH(C++)
-WX_CHECK_FUNCS(round,,,[#include <math.h>])
+AC_TRY_LINK(
+    [#include <math.h>],
+    [return int(round(0.0))],
+    wx_cv_func_round=yes, wx_cv_func_round=no)
 AC_LANG_POP()
+])
+if test "$wx_cv_func_round" = yes; then
+    AC_DEFINE(HAVE_ROUND)
+fi
 
 dnl the following tests are for Unix(like) systems only
 if test "$TOOLKIT" != "MSW"; then
