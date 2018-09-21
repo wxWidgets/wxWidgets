@@ -231,7 +231,7 @@ static inline bool wxTryMakeValueInRange(T* value, const T min, const T max)
 {
     T& val = *value;
 
-    int e = std::abs(val) >= (T)1 ?
+    int e = val >= (T)1 ?
         (wxGetNumDigits(min)-wxGetNumDigits(val)) : 0;
     T m = static_cast<T>(std::pow(10.0, e));
 
