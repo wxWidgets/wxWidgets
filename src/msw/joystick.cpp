@@ -37,6 +37,23 @@
 
 #include <regstr.h>
 
+// Use optimised count trailing zeros where available.
+#ifdef __GNUC__
+    #define ctz(x) __builtin_ctz(x)
+#else
+int ctz(unsigned x) {
+   int n;
+
+   if (x == 0) return(32);
+   n = 1;
+   if ((x & 0x0000FFFF) == 0) {n = n +16; x = x >>16;}
+   if ((x & 0x000000FF) == 0) {n = n + 8; x = x >> 8;}
+   if ((x & 0x0000000F) == 0) {n = n + 4; x = x >> 4;}
+   if ((x & 0x00000003) == 0) {n = n + 2; x = x >> 2;}
+   return n - (x & 1);
+}
+#endif
+
 enum {
     wxJS_AXIS_X = 0,
     wxJS_AXIS_Y,
@@ -64,8 +81,7 @@ public:
     void* Entry() wxOVERRIDE;
 
 private:
-    void      SendEvent(wxEventType type, long ts);
-    int       m_device;
+    void      SendEvent(wxEventType type, long ts, int change = 0);
     int       m_joystick;
     int       m_buttons;
     wxWindow* m_catchwin;
@@ -87,9 +103,9 @@ wxJoystickThread::wxJoystickThread(int joystick)
 {
 }
 
-void wxJoystickThread::SendEvent(wxEventType type, long ts)
+void wxJoystickThread::SendEvent(wxEventType type, long ts, int change)
 {
-    wxJoystickEvent jwx_event(type, m_buttons, m_joystick);
+    wxJoystickEvent jwx_event(type, m_buttons, m_joystick, change);
 
     jwx_event.SetTimestamp(ts);
     jwx_event.SetPosition(wxPoint(m_joyInfo.wXpos, m_joyInfo.wYpos));
@@ -118,10 +134,14 @@ void* wxJoystickThread::Entry()
         DWORD deltaUp = delta & !m_buttons;
         DWORD deltaDown = delta & m_buttons;
 
+        // Use count trailing zeros to determine which button changed.
+        // Was using JOYINFOEX.dwButtons, because the docs state this is
+        // "Current button number that is pressed.", but it turns out
+        // it is the *total* number of buttons pressed.
         if (deltaUp)
-            SendEvent(wxEVT_JOY_BUTTON_UP, ts);
-        else if(deltaDown)
-            SendEvent(wxEVT_JOY_BUTTON_DOWN, ts);
+            SendEvent(wxEVT_JOY_BUTTON_UP, ts, ctz(deltaUp)+1);
+        if(deltaDown)
+            SendEvent(wxEVT_JOY_BUTTON_DOWN, ts, ctz(deltaDown)+1);
 
         if ((m_joyInfo.wXpos != m_lastJoyInfo.wXpos) ||
             (m_joyInfo.wYpos != m_lastJoyInfo.wYpos) ||
