@@ -31,6 +31,7 @@
 
 #include "wx/valnum.h"
 #include "wx/numformatter.h"
+#include "wx/math.h"
 
 // ============================================================================
 // wxNumValidatorBase implementation
