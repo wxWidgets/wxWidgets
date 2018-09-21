@@ -114,6 +114,15 @@ WXDLLIMPEXP_CORE CGColorSpaceRef wxMacGetGenericRGBColorSpace(void);
 
 WXDLLIMPEXP_CORE double wxOSXGetMainScreenContentScaleFactor();
 
+// UI
+
+CGSize WXDLLIMPEXP_CORE wxOSXGetImageSize(WXImage image);
+CGImageRef WXDLLIMPEXP_CORE wxOSXCreateCGImageFromImage( WXImage nsimage, double *scale = NULL );
+CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromImage( WXImage nsimage, CGRect* r, CGContextRef cg);
+CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromImage( WXImage nsimage, bool *isTemplate = NULL);
+WXImage WXDLLIMPEXP_CORE wxOSXGetImageFromCGImage( CGImageRef image, double scale = 1.0, bool isTemplate = false);
+
+
 class wxWindowMac;
 // to
 extern wxWindow* g_MacLastWindow;
