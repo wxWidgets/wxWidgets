@@ -214,12 +214,12 @@ wxIntegerValidatorBase::FromString(const wxString& s, LongestValueType *value)
     return wxNumberFormatter::FromString(s, value);
 }
 
-namespace
+namespace // anonymous
 {
 
-static inline long wxGetNumDigits(long number)
+static inline int wxGetNumDigits(int number)
 {
-    long digits = 0;
+    int digits = 0;
 
     while ( number != 0 ) { number /= 10; digits++; }
 
@@ -231,22 +231,45 @@ static inline bool wxTryMakeValueInRange(T* value, const T min, const T max)
 {
     T& val = *value;
 
-    long exp = (val >= (T)1) ?
-        std::max(wxGetNumDigits(min)-wxGetNumDigits(val), 1L) : 0L;
-    T mul = std::pow((T)10, exp);
+    int e = std::abs(val) >= (T)1 ?
+        (wxGetNumDigits(min)-wxGetNumDigits(val)) : 0;
+    T m = static_cast<T>(std::pow(10.0, e));
 
-    val *= mul;
+    val *= m;
 
     if ( val > max )
         return false;
+    else if ( val >= min )
+        return true;
 
-    if ( val < min )
-        val += (long)min % (long)mul;
-
-    return val >= min;
+    if ( val + ((int)min % (int)m) < min )
+    {
+        val *= 10;
+        return val >= min && val <= max;
+    }
+    else
+    {
+        val = min;
+        return true;
+    }
 }
 
-}
+class wxTextSelector
+{
+public:
+    wxTextSelector(wxTextEntry * const control, int pos)
+        : m_control(control), m_pos(pos)
+    {}
+
+    void operator()()
+        { m_control->SetSelection(m_pos+1, -1); }
+
+private:
+    wxTextEntry * const m_control;
+    int m_pos;
+};
+
+} // anonymous namespace
 
 bool
 wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
@@ -290,23 +313,21 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
             if ( !control )
                 return false;
 
-            wxTextCtrl * const text = wxDynamicCast(m_validatorWindow, wxTextCtrl);
-            const bool wasModified = text ? text->IsModified() : false;
-
             control->ChangeValue(wxNumberFormatter::ToString(value));
 
             // FIXME: under wxMSW this line of code works correctly:
             //        control->SetSelection(pos+1, -1);
             //        which does not under wxGTK. but calling it at
             //        a later time does work without problems.
-            // notice that i am using a lambda here for my easiness
-            // only and will be change in the future.
 
             (const_cast<wxIntegerValidatorBase*>(this))->CallAfter(
-                [=](){ control->SetSelection(pos+1, -1); }
+                wxTextSelector(control, pos)
             );
 
-            if ( wasModified )
+            // the "modified" status was reset by the call to ChangeValue() above,
+            // so we need to explicitly set it (back) here.
+            wxTextCtrl * const text = wxDynamicCast(m_validatorWindow, wxTextCtrl);
+            if ( text )
                 text->MarkDirty();
         }
 
@@ -397,16 +418,16 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
             if ( !control )
                 return false;
 
-            wxTextCtrl * const text = wxDynamicCast(m_validatorWindow, wxTextCtrl);
-            const bool wasModified = text ? text->IsModified() : false;
-
             control->ChangeValue(wxNumberFormatter::ToString(value, m_precision, GetFormatFlags()));
 
             (const_cast<wxFloatingPointValidatorBase*>(this))->CallAfter(
-                [=](){ control->SetSelection(pos+1, -1); }
+                wxTextSelector(control, pos)
             );
 
-            if ( wasModified )
+            // the "modified" status was reset by the call to ChangeValue() above,
+            // so we need to explicitly set it (back) here.
+            wxTextCtrl * const text = wxDynamicCast(m_validatorWindow, wxTextCtrl);
+            if ( text )
                 text->MarkDirty();
         }
 
