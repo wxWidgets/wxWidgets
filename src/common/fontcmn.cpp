@@ -776,9 +776,9 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
         return false;
-    if ( l <= wxFONTWEIGHT_INVALID || l > wxFONTWEIGHT_MAX )
+    weight = wxFont::ConvertFromLegacyWeightIfNecessary(l);
+    if ( weight <= wxFONTWEIGHT_INVALID || weight > wxFONTWEIGHT_MAX )
         return false;
-    weight = static_cast<int>(l);
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
