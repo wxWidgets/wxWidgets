@@ -560,7 +560,7 @@ WX_NSCursor  wxMacCocoaCreateCursorFromCGImage( CGImageRef cgImageRef, float hot
         firstTime = NO;
     }
 
-    NSImage    *nsImage  = wxOSXGetNSImageFromCGImage( cgImageRef );
+    NSImage    *nsImage  = wxOSXGetImageFromCGImage( cgImageRef );
     NSCursor  *cursor    = [[NSCursor alloc] initWithImage:nsImage hotSpot:NSMakePoint( hotSpotX, hotSpotY )];
 
     return cursor;
