@@ -282,7 +282,7 @@ void ItemContainerTestCase::SetSelection()
     class CommandEventHandler : public wxEvtHandler
     {
     public:
-        virtual bool ProcessEvent(wxEvent& event)
+        virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE
         {
             CPPUNIT_ASSERT_MESSAGE
             (

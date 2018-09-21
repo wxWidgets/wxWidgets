@@ -63,7 +63,7 @@ public:
     {
     }
 
-    virtual void Notify()
+    virtual void Notify() wxOVERRIDE
     {
         m_loop.ScheduleExit(m_rc);
     }
@@ -87,7 +87,7 @@ public:
     {
     }
 
-    virtual void Notify()
+    virtual void Notify() wxOVERRIDE
     {
         wxEventLoop loopInner;
         ScheduleLoopExitTimer timerInner(loopInner, EXIT_CODE_INNER_LOOP);

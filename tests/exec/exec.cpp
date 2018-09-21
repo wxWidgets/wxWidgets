@@ -135,7 +135,7 @@ private:
             return wxExecuteReturnCode;
         }
 
-        void Notify()
+        void Notify() wxOVERRIDE
         {
             // Run wxExecute inside the event loop.
             wxExecuteReturnCode = wxExecute(command, flags, callback);
@@ -323,7 +323,7 @@ public:
     }
 
     // may be overridden to be notified about process termination
-    virtual void OnTerminate(int WXUNUSED(pid), int WXUNUSED(status))
+    virtual void OnTerminate(int WXUNUSED(pid), int WXUNUSED(status)) wxOVERRIDE
     {
         wxEventLoop::GetActive()->ScheduleExit();
     }
@@ -469,7 +469,7 @@ void ExecTestCase::TestOverlappedSyncExecute()
             StartOnce(10);
         }
 
-        virtual void Notify()
+        virtual void Notify() wxOVERRIDE
         {
             wxExecute(m_command, m_outputArray);
         }
