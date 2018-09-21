@@ -188,6 +188,9 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_SELCOLS,  GridFrame::SelectCols )
     EVT_MENU( ID_SELROWSORCOLS,  GridFrame::SelectRowsOrCols )
 
+    EVT_MENU( ID_FREEZE,  GridFrame::Freeze )
+    EVT_MENU( ID_UNFREEZE,  GridFrame::Unfreeze )
+
     EVT_MENU( ID_SET_CELL_FG_COLOUR, GridFrame::SetCellFgColour )
     EVT_MENU( ID_SET_CELL_BG_COLOUR, GridFrame::SetCellBgColour )
 
@@ -368,6 +371,9 @@ GridFrame::GridFrame()
     editMenu->Append( ID_CLEARGRID, "Cl&ear grid cell contents" );
     editMenu->Append( ID_SETCORNERLABEL, "&Set corner label..." );
 
+    editMenu->Append( ID_FREEZE, wxT("Freeze up to selection") );
+    editMenu->Append( ID_UNFREEZE, wxT("Unfreeze") );
+    
     wxMenu *selectMenu = new wxMenu;
     selectMenu->Append( ID_SELECT_UNSELECT, "Add new cells to the selection",
                         "When off, old selection is deselected before "
@@ -571,10 +577,10 @@ GridFrame::GridFrame()
         "This takes two cells",
         "Another choice",
     };
-    grid->SetCellEditor(4, 0, new wxGridCellChoiceEditor(WXSIZEOF(choices), choices));
-    grid->SetCellSize(4, 0, 1, 2);
-    grid->SetCellValue(4, 0, choices[0]);
-    grid->SetCellOverflow(4, 0, false);
+    grid->SetCellEditor(4, 2, new wxGridCellChoiceEditor(WXSIZEOF(choices), choices));
+    grid->SetCellSize(4, 2, 1, 2);
+    grid->SetCellValue(4, 2, choices[0]);
+    grid->SetCellOverflow(4, 2, false);
 
     grid->SetCellSize(7, 1, 3, 4);
     grid->SetCellAlignment(7, 1, wxALIGN_CENTRE, wxALIGN_CENTRE);
@@ -1194,6 +1200,25 @@ void GridFrame::SelectCols( wxCommandEvent& WXUNUSED(ev) )
 void GridFrame::SelectRowsOrCols( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->SetSelectionMode( wxGrid::wxGridSelectRowsOrColumns );
+}
+
+#include <wx/log.h>
+
+void GridFrame::Freeze( wxCommandEvent& WXUNUSED(ev))
+{
+    bool froze = grid->FreezeTo(grid->GetGridCursorRow(), grid->GetGridCursorCol());
+    
+    wxLogDebug("Freeze: rows: %d \t cols: %d \t succeded = %d",
+               grid->GetGridCursorRow(),
+               grid->GetGridCursorCol(),
+               froze);
+}
+
+void GridFrame::Unfreeze( wxCommandEvent& WXUNUSED(ev))
+{
+    grid->FreezeTo(0, 0);
+    
+    wxLogDebug("Unfreeze");
 }
 
 void GridFrame::SetCellFgColour( wxCommandEvent& WXUNUSED(ev) )
