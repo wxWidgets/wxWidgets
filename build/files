@@ -2296,7 +2296,6 @@ OSX_COMMON_SRC =
     src/osx/carbon/cursor.cpp
     src/osx/carbon/fontdlg.cpp
     src/osx/carbon/gdiobj.cpp
-    src/osx/carbon/icon.cpp
     src/osx/carbon/app.cpp
     src/osx/carbon/control.cpp
     src/osx/carbon/dataobj.cpp
@@ -2325,6 +2324,7 @@ OSX_COMMON_SRC =
     src/generic/filepickerg.cpp
     src/generic/fontdlgg.cpp
     src/generic/fontpickerg.cpp
+    src/generic/icon.cpp
     src/generic/listctrl.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
@@ -2371,7 +2371,6 @@ OSX_SHARED_HDR =
     wx/osx/fontdlg.h
     wx/osx/frame.h
     wx/osx/gauge.h
-    wx/osx/icon.h
     wx/osx/imaglist.h
     wx/osx/listbox.h
     wx/osx/listctrl.h
@@ -2422,6 +2421,7 @@ OSX_SHARED_HDR =
     wx/generic/filepickerg.h
     wx/generic/fontdlgg.h
     wx/generic/fontpickerg.h
+    wx/generic/icon.h
     wx/generic/listctrl.h
     wx/generic/prntdlgg.h
     wx/generic/statusbr.h
@@ -2511,7 +2511,6 @@ OSX_COCOA_HDR =
 OSX_IPHONE_SRC =
     $(OSX_COMMON_SRC)
     src/generic/animateg.cpp
-    src/generic/icon.cpp
     src/generic/regiong.cpp
     src/osx/cocoa/stdpaths.mm
     src/osx/core/sound.cpp

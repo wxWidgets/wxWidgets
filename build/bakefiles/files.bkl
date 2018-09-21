@@ -2435,7 +2435,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/cursor.cpp
     src/osx/carbon/fontdlg.cpp
     src/osx/carbon/gdiobj.cpp
-    src/osx/carbon/icon.cpp
     src/osx/carbon/app.cpp
     src/osx/carbon/control.cpp
     src/osx/carbon/dataobj.cpp
@@ -2468,6 +2467,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
     src/generic/textmeasure.cpp
+    src/generic/icon.cpp
 </if>
 </set>
 
@@ -2511,7 +2511,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/fontdlg.h
     wx/osx/frame.h
     wx/osx/gauge.h
-    wx/osx/icon.h
     wx/osx/imaglist.h
     wx/osx/listbox.h
     wx/osx/listctrl.h
@@ -2566,6 +2565,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/prntdlgg.h
     wx/generic/statusbr.h
     wx/osx/appprogress.h
+    wx/generic/icon.h
 </set>
 
 <!-- ====================================================================== -->
@@ -2656,7 +2656,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="OSX_IPHONE_SRC" hints="files">
     $(OSX_COMMON_SRC)
     src/generic/regiong.cpp
-    src/generic/icon.cpp
     <!-- iphone files -->
     src/osx/iphone/anybutton.mm
     src/osx/iphone/button.mm
