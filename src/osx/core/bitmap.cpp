@@ -1967,6 +1967,21 @@ public:
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxJPEGResourceHandler, wxBundleResourceHandler);
 
+class WXDLLEXPORT wxICNSResourceHandler: public wxBundleResourceHandler
+{
+    wxDECLARE_DYNAMIC_CLASS(wxICNSResourceHandler);
+
+public:
+    inline wxICNSResourceHandler()
+    {
+        SetName(wxT("icns resource"));
+        SetExtension("icns");
+        SetType(wxBITMAP_TYPE_ICON_RESOURCE);
+    }
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxICNSResourceHandler, wxBundleResourceHandler);
+
 bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
                                      const wxString& name,
                                      wxBitmapType WXUNUSED(type),
@@ -2030,7 +2045,8 @@ wxBitmap wxBitmapHelpers::NewFromPNGData(const void* data, size_t size)
 void wxBitmap::InitStandardHandlers()
 {
 #if wxOSX_USE_COCOA_OR_CARBON
-    AddHandler( new wxICONResourceHandler ) ;
+    // no icns on iOS
+    AddHandler( new wxICNSResourceHandler ) ;
 #endif
     AddHandler( new wxPNGResourceHandler );
     AddHandler( new wxJPEGResourceHandler );
