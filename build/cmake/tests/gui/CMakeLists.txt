@@ -109,8 +109,64 @@ set(TEST_GUI_SRC
     window/clientsize.cpp
     window/setsize.cpp
     xml/xrctest.cpp
+
+    testprec.h
+    testableframe.h
+    asserthelper.h
+    testdate.h
+    testfile.h
+    testimage.h
+    controls/bookctrlbasetest.h
+    controls/itemcontainertest.h
+    controls/listbasetest.h
+    controls/pickerbasetest.h
+    controls/textentrytest.h
+    persistence/testpersistence.h
     )
-wx_add_test(test_gui ${TEST_GUI_SRC})
+
+set(TEST_GUI_DATA
+    horse.ani
+    horse.bmp
+    horse.cur
+    horse.gif
+    horse.ico
+    horse.jpg
+    horse.pcx
+    horse.png
+    horse.pnm
+    horse.tga
+    horse.tif
+    horse.xpm
+    image/horse_grey.bmp
+    image/horse_grey_flipped.bmp
+    image/horse_rle4.bmp
+    image/horse_rle4_flipped.bmp
+    image/horse_rle8.bmp
+    image/horse_rle8_flipped.bmp
+    image/cross_bicubic_256x256.png
+    image/cross_bilinear_256x256.png
+    image/cross_box_average_256x256.png
+    image/cross_nearest_neighb_256x256.png
+    image/horse_bicubic_50x50.png
+    image/horse_bicubic_100x100.png
+    image/horse_bicubic_150x150.png
+    image/horse_bicubic_300x300.png
+    image/horse_bilinear_50x50.png
+    image/horse_bilinear_100x100.png
+    image/horse_bilinear_150x150.png
+    image/horse_bilinear_300x300.png
+    image/horse_box_average_50x50.png
+    image/horse_box_average_100x100.png
+    image/horse_box_average_150x150.png
+    image/horse_box_average_300x300.png
+    intl/ja/internat.mo
+    intl/ja/internat.po
+    )
+
+wx_add_test(test_gui ${TEST_GUI_SRC}
+    DATA ${TEST_GUI_DATA}
+    RES ../samples/sample.rc
+    )
 wx_exe_link_libraries(test_gui core)
 if(wxUSE_RICHTEXT)
     wx_exe_link_libraries(test_gui richtext)
@@ -124,7 +180,6 @@ endif()
 if(wxUSE_XML)
     wx_exe_link_libraries(test_gui xml)
 endif()
-wx_exe_link_libraries(test_gui adv)
 if(wxUSE_HTML)
     wx_exe_link_libraries(test_gui html)
 endif()

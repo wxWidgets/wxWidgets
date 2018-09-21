@@ -28,6 +28,7 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/nonownedwnd.h"
+    #include "wx/dialog.h"
 #endif // WX_PRECOMP
 
 #include "wx/log.h"

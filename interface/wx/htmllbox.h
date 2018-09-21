@@ -10,7 +10,7 @@
 
     wxHtmlListBox is an implementation of wxVListBox which shows HTML content in
     the listbox rows. This is still an abstract base class and you will need to
-    derive your own class from it (see htlbox sample for the example) but you will
+    derive your own class from it (see htlbox sample for the example), but you will
     only need to override a single wxHtmlListBox::OnGetItem function.
 
     @beginEventEmissionTable{wxHtmlCellEvent,wxHtmlLinkEvent}
@@ -19,7 +19,7 @@
     @event{EVT_HTML_CELL_HOVER(id, func)}
         The mouse passed over a wxHtmlCell.
     @event{EVT_HTML_LINK_CLICKED(id, func)}
-        A wxHtmlCell which contains an hyperlink was clicked.
+        A wxHtmlCell which contains a hyperlink was clicked.
     @endEventTable
 
     @library{wxhtml}
@@ -191,7 +191,7 @@ protected:
     @event{EVT_HTML_CELL_HOVER(id, func)}
         The mouse passed over a wxHtmlCell. See wxHtmlCellEvent.
     @event{EVT_HTML_LINK_CLICKED(id, func)}
-        A wxHtmlCell which contains an hyperlink was clicked. See wxHtmlLinkEvent
+        A wxHtmlCell which contains a hyperlink was clicked. See wxHtmlLinkEvent
     @endEventTable
 
     @library{wxhtml}

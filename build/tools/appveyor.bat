@@ -1,11 +1,12 @@
+set MSBUILD_LOGGER=/logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 goto %TOOLSET%
 
 :msbuild
 cd build\msw
-msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" wx_vc12.sln
+msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" wx_vc12.sln %MSBUILD_LOGGER%
 cd ..\..\tests
-msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_vc12.sln
-msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_gui_vc12.sln
+msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_vc12.sln %MSBUILD_LOGGER%
+msbuild /m:2 /v:n /p:Platform=%ARCH% /p:Configuration="%CONFIGURATION%" test_gui_vc12.sln %MSBUILD_LOGGER%
 goto :eof
 
 :nmake
@@ -57,7 +58,7 @@ path C:\msys64\%MSYSTEM%\bin;C:\msys64\usr\bin;%path%
 set GENERATOR=MSYS Makefiles
 set SKIPTESTS=1
 set SKIPINSTALL=1
-set CMAKE_BUILD_FLAGS=-- -j3
+set CMAKE_NATIVE_FLAGS=-j3
 goto cmake
 
 :cmake_cygwin
@@ -66,7 +67,7 @@ path c:\cygwin\bin;%path%
 set GENERATOR=Unix Makefiles
 set SKIPTESTS=1
 set SKIPINSTALL=1
-set CMAKE_BUILD_FLAGS=-- -j3
+set CMAKE_NATIVE_FLAGS=-j3
 goto cmake
 
 :cmake_mingw
@@ -74,7 +75,7 @@ goto cmake
 path C:\Program Files (x86)\CMake\bin;C:\MinGW\bin
 set GENERATOR=MinGW Makefiles
 set SKIPTESTS=1
-set CMAKE_BUILD_FLAGS=-- -j3
+set CMAKE_NATIVE_FLAGS=-j3
 goto cmake
 
 :cmake
@@ -83,6 +84,9 @@ cmake --version
 
 if "%SHARED%"=="" set SHARED=ON
 if "%CONFIGURATION%"=="" set CONFIGURATION=Release
+echo.%GENERATOR% | findstr /C:"Visual Studio">nul && (
+    set CMAKE_LOGGER=%MSBUILD_LOGGER%
+)
 
 if "%SKIPTESTS%"=="1" (
     set BUILD_TESTS=OFF
@@ -101,7 +105,7 @@ if ERRORLEVEL 1 goto error
 echo.
 echo --- Starting the build
 echo.
-cmake --build . --config %CONFIGURATION% %CMAKE_BUILD_FLAGS%
+cmake --build . --config %CONFIGURATION% -- %CMAKE_NATIVE_FLAGS% %CMAKE_LOGGER%
 if ERRORLEVEL 1 goto error
 
 :: Package binaries as artifact
@@ -115,7 +119,7 @@ if NOT "%SKIPINSTALL%"=="1" (
     echo.
     echo --- Installing
     echo.
-    cmake --build . --config %CONFIGURATION% --target install
+    cmake --build . --config %CONFIGURATION% --target install -- %CMAKE_LOGGER%
     if ERRORLEVEL 1 goto error
     popd
 
@@ -129,7 +133,7 @@ if NOT "%SKIPINSTALL%"=="1" (
     cmake -G "%GENERATOR%" ..\samples\minimal
     if ERRORLEVEL 1 goto error
     echo --- Building minimal sample with installed library
-    cmake --build . --config %CONFIGURATION%
+    cmake --build . --config %CONFIGURATION% -- %CMAKE_LOGGER%
     if ERRORLEVEL 1 goto error
     popd
 )

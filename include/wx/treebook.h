@@ -142,7 +142,7 @@ protected:
 
     // This subclass of wxBookCtrlBase accepts NULL page pointers (empty pages)
     virtual bool AllowNullPage() const wxOVERRIDE { return true; }
-    virtual wxWindow *DoGetNonNullPage(size_t page) wxOVERRIDE;
+    virtual wxWindow *TryGetNonNullPage(size_t page) wxOVERRIDE;
 
     // event handlers
     void OnTreeSelectionChange(wxTreeEvent& event);

@@ -617,16 +617,30 @@ static const long gs_fp_es_style_values[] = {
 };
 
 static const wxChar* const gs_fp_es_weight_labels[] = {
-    wxT("Normal"),
+    wxT("Thin"),
+    wxT("ExtraLight"),
     wxT("Light"),
+    wxT("Normal"),
+    wxT("Medium"),
+    wxT("SemiBold"),
     wxT("Bold"),
+    wxT("ExtraBold"),
+    wxT("Heavy"),
+    wxT("ExtraHeavy"),
     (const wxChar*) NULL
 };
 
 static const long gs_fp_es_weight_values[] = {
-    wxFONTWEIGHT_NORMAL,
+    wxFONTWEIGHT_THIN,
+    wxFONTWEIGHT_EXTRALIGHT,
     wxFONTWEIGHT_LIGHT,
-    wxFONTWEIGHT_BOLD
+    wxFONTWEIGHT_NORMAL,
+    wxFONTWEIGHT_MEDIUM,
+    wxFONTWEIGHT_SEMIBOLD,
+    wxFONTWEIGHT_BOLD,
+    wxFONTWEIGHT_EXTRABOLD,
+    wxFONTWEIGHT_HEAVY,
+    wxFONTWEIGHT_EXTRAHEAVY
 };
 
 // Class body is in advprops.h
@@ -788,9 +802,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
     else if ( ind == 3 )
     {
         int wt = childValue.GetLong();
-        if ( wt != wxFONTWEIGHT_NORMAL &&
-             wt != wxFONTWEIGHT_LIGHT &&
-             wt != wxFONTWEIGHT_BOLD )
+        if ( wt < wxFONTWEIGHT_THIN || wt > wxFONTWEIGHT_MAX )
              wt = wxFONTWEIGHT_NORMAL;
         font.SetWeight( static_cast<wxFontWeight>(wt) );
     }

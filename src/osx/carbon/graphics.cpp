@@ -834,10 +834,10 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
     m_underlined = font.GetUnderlined();
     m_strikethrough = font.GetStrikethrough();
 
-    m_ctFont.reset( wxCFRetain( font.OSXGetCTFont() ) );
-    m_ctFontAttributes.reset( wxCFRetain( font.OSXGetCTFontAttributes() ) );
+    m_ctFont = wxCFRetain(font.OSXGetCTFont());
+    m_ctFontAttributes = wxCFRetain(font.OSXGetCTFontAttributes());
 #if wxOSX_USE_IPHONE
-    m_uiFont.reset( wxCFRetain( font.OSXGetUIFont() ) );
+    m_uiFont = font.OSXGetUIFont();
 #endif
 }
 
@@ -2892,23 +2892,10 @@ wxMacCoreGraphicsRenderer::CreateFont(double sizeInPixels,
                                       int flags,
                                       const wxColour& col)
 {
-    // This implementation is not ideal as we don't support fractional font
-    // sizes right now, but it's the simplest one.
-    //
     // Notice that under Mac we always use 72 DPI so the font size in pixels is
     // the same as the font size in points and we can pass it directly to wxFont
     // ctor.
-    wxFont font(wxRound(sizeInPixels),
-                wxFONTFAMILY_DEFAULT,
-                flags & wxFONTFLAG_ITALIC ? wxFONTSTYLE_ITALIC
-                                          : wxFONTSTYLE_NORMAL,
-                flags & wxFONTFLAG_BOLD ? wxFONTWEIGHT_BOLD
-                                        : wxFONTWEIGHT_NORMAL,
-                (flags & wxFONTFLAG_UNDERLINED) != 0,
-                facename);
-
-    if ( flags & wxFONTFLAG_STRIKETHROUGH )
-        font.MakeStrikethrough();
+    wxFont font(wxFontInfo(sizeInPixels).FaceName(facename).AllFlags(flags));
 
     wxGraphicsFont f;
     f.SetRefData(new wxMacCoreGraphicsFontData(this, font, col));

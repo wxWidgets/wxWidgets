@@ -101,7 +101,7 @@ enum wxPropertySheetDialogFlags
 
     For more about layout adaptation, see @ref overview_dialog_autoscrolling.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{managedwnd}
 */
 class wxPropertySheetDialog : public wxDialog

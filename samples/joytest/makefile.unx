@@ -88,7 +88,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 joytest: $(JOYTEST_OBJECTS)
-	$(CXX) -o $@ $(JOYTEST_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs adv,core,base`
+	$(CXX) -o $@ $(JOYTEST_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
 
 joytest_joytest.o: ./joytest.cpp
 	$(CXX) -c -o $@ $(JOYTEST_CXXFLAGS) $(CPPDEPS) $<

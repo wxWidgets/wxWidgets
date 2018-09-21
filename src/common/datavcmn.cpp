@@ -87,6 +87,8 @@ wxFont wxDataViewItemAttr::GetEffectiveFont(const wxFont& font) const
         f.MakeBold();
     if ( GetItalic() )
         f.MakeItalic();
+    if ( GetStrikethrough() )
+        f.MakeStrikethrough();
     return f;
 }
 
@@ -3027,7 +3029,7 @@ void  wxDataViewTreeCtrl::DeleteAllItems()
 
 void wxDataViewTreeCtrl::OnExpanded( wxDataViewEvent &event )
 {
-    if (HasImageList()) return;
+    if (!HasImageList()) return;
 
     wxDataViewTreeStoreContainerNode* container = GetStore()->FindContainerNode( event.GetItem() );
     if (!container) return;
@@ -3039,7 +3041,7 @@ void wxDataViewTreeCtrl::OnExpanded( wxDataViewEvent &event )
 
 void wxDataViewTreeCtrl::OnCollapsed( wxDataViewEvent &event )
 {
-    if (HasImageList()) return;
+    if (!HasImageList()) return;
 
     wxDataViewTreeStoreContainerNode* container = GetStore()->FindContainerNode( event.GetItem() );
     if (!container) return;

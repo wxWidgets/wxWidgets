@@ -60,7 +60,7 @@ wx_add_demo(forty
     DATA
         about.htm
     LIBRARIES
-        html adv xml
+        html xml
     )
 wx_add_demo(fractal fractal.cpp)
 wx_add_demo(life

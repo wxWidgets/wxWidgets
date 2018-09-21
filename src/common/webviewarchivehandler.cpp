@@ -76,7 +76,7 @@ wxFSFile* wxWebViewArchiveHandler::GetFile(const wxString &uri)
         }
     }
 
-    //We do not have a protocol string so we just pass the path withouth the 
+    //We do not have a protocol string so we just pass the path withouth the
     if(start == wxString::npos)
     {
         size_t doubleslash = path.find("//");
@@ -84,7 +84,7 @@ wxFSFile* wxWebViewArchiveHandler::GetFile(const wxString &uri)
         if(doubleslash == wxString::npos)
             return NULL;
 
-        wxString fspath = "file:" + 
+        wxString fspath = "file:" +
                           EscapeFileNameCharsInURL(path.substr(doubleslash + 2).c_str());
         return m_fileSystem->OpenFile(fspath);
     }
@@ -107,7 +107,7 @@ wxFSFile* wxWebViewArchiveHandler::GetFile(const wxString &uri)
         if(doubleslash == wxString::npos)
             return NULL;
 
-        wxString fspath = "file:" + 
+        wxString fspath = "file:" +
                           EscapeFileNameCharsInURL(mainpath.substr(doubleslash + 2).c_str())
                           + "#" + protocol +":" + archivepath;
         return m_fileSystem->OpenFile(fspath);

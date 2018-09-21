@@ -725,6 +725,11 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             m_list_model = new MyListModel;
             m_ctrl[1]->AssociateModel( m_list_model.get() );
 
+            m_ctrl[1]->AppendToggleColumn(L"\u2714",
+                                          MyListModel::Col_Toggle,
+                                          wxDATAVIEW_CELL_ACTIVATABLE,
+                                          wxCOL_WIDTH_AUTOSIZE);
+
             // the various columns
             m_ctrl[1]->AppendTextColumn("editable string",
                                         MyListModel::Col_EditableText,

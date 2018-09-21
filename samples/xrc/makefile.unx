@@ -92,7 +92,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 xrcdemo: $(XRCDEMO_OBJECTS)
-	$(CXX) -o $@ $(XRCDEMO_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs aui,ribbon,xrc,html,adv,core,xml,base`
+	$(CXX) -o $@ $(XRCDEMO_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs aui,ribbon,xrc,html,core,xml,base`
 
 xrcdemo_xrcdemo.o: ./xrcdemo.cpp
 	$(CXX) -c -o $@ $(XRCDEMO_CXXFLAGS) $(CPPDEPS) $<

@@ -782,8 +782,6 @@ private:
 wxChmFSHandler::wxChmFSHandler() : wxFileSystemHandler()
 {
     m_lasterror=0;
-    m_pattern=wxEmptyString;
-    m_found=wxEmptyString;
     m_chm=NULL;
 }
 

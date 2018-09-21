@@ -99,7 +99,6 @@
         <wx-lib>xrc</wx-lib>
         <wx-lib>html</wx-lib>
         <wx-lib>media</wx-lib>
-        <wx-lib>adv</wx-lib>
         <wx-lib>net</wx-lib>
         <wx-lib>xml</wx-lib>
         <wx-lib>core</wx-lib>

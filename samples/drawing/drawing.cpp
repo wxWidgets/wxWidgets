@@ -1072,7 +1072,7 @@ void MyCanvas::DrawAlpha(wxDC& dc)
 
     dc.SetTextBackground( wxColour(160, 192, 160, 160) );
     dc.SetTextForeground( wxColour(255, 128, 128, 128) );
-    dc.SetFont( wxFont( 40, wxFONTFAMILY_SWISS, wxFONTSTYLE_ITALIC, wxFONTWEIGHT_NORMAL ) );
+    dc.SetFont( wxFontInfo(40).Family(wxFONTFAMILY_SWISS).Italic() );
     dc.DrawText( wxT("Hello!"), 120, 80 );
 }
 #endif // wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT

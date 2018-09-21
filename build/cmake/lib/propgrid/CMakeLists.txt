@@ -12,6 +12,5 @@ include(../../source_groups.cmake)
 wx_append_sources(PROPGRID_FILES PROPGRID)
 
 wx_add_library(propgrid ${PROPGRID_FILES})
-wx_lib_link_libraries(propgrid PRIVATE adv)
 
 wx_finalize_lib(propgrid)

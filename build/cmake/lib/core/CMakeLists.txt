@@ -56,4 +56,15 @@ foreach(lib JPEG PNG TIFF)
     endif()
 endforeach()
 
+if(WIN32)
+    wx_lib_link_libraries(core PRIVATE
+        winmm
+    )
+endif()
+if(WXOSX_COCOA)
+    wx_lib_link_libraries(core PUBLIC
+        "-framework AudioToolbox"
+        )
+endif()
+
 wx_finalize_lib(core)

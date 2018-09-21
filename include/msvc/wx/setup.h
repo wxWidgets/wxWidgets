@@ -77,6 +77,8 @@
 // architecture-specific part: not used (again, for compatibility), for x86
 #if defined(_M_X64)
     #define wxARCH_SUFFIX _x64
+#elif defined(_M_ARM64)
+    #define wxARCH_SUFFIX _arm64
 #elif defined(_M_IA64)
     #define wxARCH_SUFFIX _ia64
 #else // assume _M_IX86
@@ -199,10 +201,6 @@
     #if !defined(wxMONOLITHIC) || wxMONOLITHIC == 0
 
         #pragma comment(lib, wxTOOLKIT_LIB_NAME("core"))
-
-        #ifndef wxNO_ADV_LIB
-            #pragma comment(lib, wxTOOLKIT_LIB_NAME("adv"))
-        #endif
 
         #if wxUSE_HTML && !defined(wxNO_HTML_LIB)
             #pragma comment(lib, wxTOOLKIT_LIB_NAME("html"))

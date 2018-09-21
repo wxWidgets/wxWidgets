@@ -79,12 +79,17 @@ public:
     {
     }
 
-    explicit wxCFDictionaryRef(CFDictionaryRef r)
+    wxCFDictionaryRef(CFDictionaryRef r)
         : wxCFDictionaryRefCommon(r)
     {
     }
 
     wxCFDictionaryRef& operator=(const wxCFMutableDictionaryRef& other);
+
+    CFDictionaryRef CreateCopy() const
+    {
+        return CFDictionaryCreateCopy(kCFAllocatorDefault, this->m_ptr);
+    }
 };
 
 class wxCFMutableDictionaryRef : public wxCFDictionaryRefCommon<CFMutableDictionaryRef>
@@ -95,7 +100,7 @@ public:
     {
     }
 
-    explicit wxCFMutableDictionaryRef(CFMutableDictionaryRef r)
+    wxCFMutableDictionaryRef(CFMutableDictionaryRef r)
         : wxCFDictionaryRefCommon(r)
     {
     }
@@ -108,6 +113,11 @@ public:
     void SetValue(const void* key, CGFloat v)
     {
         SetValue(key, wxCFNumberRef(v));
+    }
+    
+    CFMutableDictionaryRef CreateCopy() const
+    {
+        return CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, this->m_ptr);
     }
 
     friend class wxCFDictionaryRef;

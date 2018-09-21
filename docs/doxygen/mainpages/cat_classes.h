@@ -354,6 +354,7 @@ Related Overviews: @ref overview_bitmap
 @li wxCursor: A small, transparent bitmap representing the cursor
 @li wxIcon: A small, transparent bitmap for assigning to frames and drawing on
     device contexts
+@li wxIconBundle: Contains multiple copies of an icon in different sizes
 @li wxImage: A platform-independent image class
 @li wxImageHandler: Class for loading a saving a wxImage in a specific format
 @li wxImageList: A list of images, used with some controls

@@ -47,7 +47,7 @@
     ::wxNullIcon
 
     @see @ref overview_bitmap, @ref overview_bitmap_supportedformats,
-         wxDC::DrawIcon, wxCursor
+         wxIconBundle, wxDC::DrawIcon, wxCursor
 */
 class wxIcon : public wxGDIObject
 {

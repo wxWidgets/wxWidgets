@@ -17,7 +17,7 @@
 
 #include "wx/event.h"
 
-class WXDLLIMPEXP_FWD_ADV wxTaskBarIconEvent;
+class WXDLLIMPEXP_FWD_CORE wxTaskBarIconEvent;
 
 // ----------------------------------------------------------------------------
 
@@ -38,7 +38,7 @@ enum wxTaskBarIconType
 // wxTaskBarIconBase: define wxTaskBarIcon interface
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxTaskBarIconBase : public wxEvtHandler
+class WXDLLIMPEXP_CORE wxTaskBarIconBase : public wxEvtHandler
 {
 public:
     wxTaskBarIconBase() { }
@@ -91,7 +91,7 @@ private:
 // wxTaskBarIcon events
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxTaskBarIconEvent : public wxEvent
+class WXDLLIMPEXP_CORE wxTaskBarIconEvent : public wxEvent
 {
 public:
     wxTaskBarIconEvent(wxEventType evtType, wxTaskBarIcon *tbIcon)
@@ -108,15 +108,15 @@ private:
 
 typedef void (wxEvtHandler::*wxTaskBarIconEventFunction)(wxTaskBarIconEvent&);
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_TASKBAR_MOVE, wxTaskBarIconEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_TASKBAR_LEFT_DOWN, wxTaskBarIconEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_TASKBAR_LEFT_UP, wxTaskBarIconEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_TASKBAR_RIGHT_DOWN, wxTaskBarIconEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_TASKBAR_RIGHT_UP, wxTaskBarIconEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_TASKBAR_LEFT_DCLICK, wxTaskBarIconEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_TASKBAR_RIGHT_DCLICK, wxTaskBarIconEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_TASKBAR_BALLOON_TIMEOUT, wxTaskBarIconEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_TASKBAR_BALLOON_CLICK, wxTaskBarIconEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TASKBAR_MOVE, wxTaskBarIconEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TASKBAR_LEFT_DOWN, wxTaskBarIconEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TASKBAR_LEFT_UP, wxTaskBarIconEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TASKBAR_RIGHT_DOWN, wxTaskBarIconEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TASKBAR_RIGHT_UP, wxTaskBarIconEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TASKBAR_LEFT_DCLICK, wxTaskBarIconEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TASKBAR_RIGHT_DCLICK, wxTaskBarIconEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TASKBAR_BALLOON_TIMEOUT, wxTaskBarIconEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_TASKBAR_BALLOON_CLICK, wxTaskBarIconEvent );
 
 #define wxTaskBarIconEventHandler(func) \
     wxEVENT_HANDLER_CAST(wxTaskBarIconEventFunction, func)

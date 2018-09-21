@@ -310,7 +310,7 @@ if(NOT WIN32)
             statfs(\"/\", &fs);"
             HAVE_STATFS_DECL)
     else()
-        # TODO: implment statvfs checks
+        # TODO: implement statvfs checks
         if(HAVE_STATVFS)
             set(WX_STATFS_T statvfs_t)
         endif()

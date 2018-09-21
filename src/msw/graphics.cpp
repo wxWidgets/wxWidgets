@@ -335,7 +335,7 @@ public:
                        const wxColour& col );
     wxGDIPlusFontData(wxGraphicsRenderer* renderer,
                       const wxString& name,
-                      REAL sizeInPixels,
+                      REAL size,
                       int style,
                       const wxColour& col);
     ~wxGDIPlusFontData();
@@ -349,8 +349,7 @@ private :
     void Init(const wxString& name,
               REAL size,
               int style,
-              const wxColour& col,
-              Unit fontUnit);
+              const wxColour& col);
 
     Brush* m_textBrush;
     Font* m_font;
@@ -986,8 +985,7 @@ void
 wxGDIPlusFontData::Init(const wxString& name,
                         REAL size,
                         int style,
-                        const wxColour& col,
-                        Unit fontUnit)
+                        const wxColour& col)
 {
 #if wxUSE_PRIVATE_FONTS
     // If the user has registered any private fonts, they should be used in
@@ -1007,7 +1005,7 @@ wxGDIPlusFontData::Init(const wxString& name,
             int rc = gs_pFontFamily[j].GetFamilyName(familyName);
             if ( rc == 0 && name == familyName )
             {
-                m_font = new Font(&gs_pFontFamily[j], size, style, fontUnit);
+                m_font = new Font(&gs_pFontFamily[j], size, style, UnitPoint);
                 break;
             }
         }
@@ -1016,7 +1014,7 @@ wxGDIPlusFontData::Init(const wxString& name,
     if ( !m_font )
 #endif // wxUSE_PRIVATE_FONTS
     {
-        m_font = new Font(name.wc_str(), size, style, fontUnit);
+        m_font = new Font(name.wc_str(), size, style, UnitPoint);
     }
 
     m_textBrush = new SolidBrush(wxColourToColor(col));
@@ -1037,19 +1035,17 @@ wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
     if ( font.GetWeight() == wxFONTWEIGHT_BOLD )
         style |= FontStyleBold;
 
-    // Create font which size is measured in logical units
-    // and let the system rescale it according to the target resolution.
-    Init(font.GetFaceName(), font.GetPixelSize().GetHeight(), style, col, UnitPixel);
+    Init(font.GetFaceName(), font.GetFractionalPointSize(), style, col);
 }
 
 wxGDIPlusFontData::wxGDIPlusFontData(wxGraphicsRenderer* renderer,
                                      const wxString& name,
-                                     REAL sizeInPixels,
+                                     REAL size,
                                      int style,
                                      const wxColour& col) :
     wxGraphicsObjectRefData(renderer)
 {
-    Init(name, sizeInPixels, style, col, UnitPixel);
+    Init(name, size, style, col);
 }
 
 wxGDIPlusFontData::~wxGDIPlusFontData()

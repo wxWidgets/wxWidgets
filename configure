@@ -665,7 +665,6 @@ COND_wxUSE_LIBPNG_builtin
 COND_wxUSE_LIBJPEG_builtin
 COND_wxUSE_EXPAT_builtin
 COND_WXUNIV_1
-COND_WXUNIV_0
 COND_WITH_PLUGIN_SDL_1
 COND_WINDOWS_IMPLIB_1
 COND_USE_XRC_1
@@ -696,18 +695,16 @@ COND_USE_EXCEPTIONS_1
 COND_USE_EXCEPTIONS_0
 COND_USE_CAIRO_1
 COND_UNICODE_1
-COND_TOOLKIT_X11_WXUNIV_1
 COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1
 COND_TOOLKIT_X11_USE_GUI_1
 COND_TOOLKIT_X11
-COND_TOOLKIT_Qt
 COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0
-COND_TOOLKIT_QT_USE_GUI_1
 COND_TOOLKIT_QT
 COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_OSX_IPHONE_USE_GUI_1
 COND_TOOLKIT_OSX_IPHONE
 COND_TOOLKIT_OSX_COCOA_WXUNIV_0
+COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_OSX_COCOA_USE_GUI_1
 COND_TOOLKIT_OSX_COCOA
 COND_TOOLKIT_OSX_CARBON
@@ -721,16 +718,12 @@ COND_TOOLKIT_MAC
 COND_TOOLKIT_GTK_USE_GUI_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1
-COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4
-COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3
-COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_1
-COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
@@ -739,7 +732,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_
 COND_TOOLKIT_GTK
 COND_TOOLKIT_DFB_USE_GUI_1
 COND_TOOLKIT_DFB
-COND_TOOLKIT_COCOA_USE_GUI_1
 COND_TOOLKIT_COCOA
 COND_TOOLKIT_
 COND_SHARED_1_USE_GUI_1_USE_OPENGL_1
@@ -758,11 +750,8 @@ COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0
 COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0
 COND_SHARED_0
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1
-COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
-COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
-COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2
 COND_PLATFORM_WIN32_1_SHARED_0
 COND_PLATFORM_WIN32_1
 COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4
@@ -771,11 +760,8 @@ COND_PLATFORM_WIN32_0
 COND_PLATFORM_UNIX_1_USE_PLUGINS_0
 COND_PLATFORM_UNIX_1_USE_GUI_1
 COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1
-COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4
 COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
-COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3
 COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
-COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2
 COND_PLATFORM_UNIX_1
 COND_PLATFORM_UNIX_0
 COND_PLATFORM_OS2_1
@@ -787,11 +773,8 @@ COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1
 COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0
 COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1
-COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
-COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
-COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2
 COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0
 COND_PLATFORM_MACOSX_1
 COND_PLATFORM_MACOSX_0_USE_SOVERSION_1
@@ -3786,7 +3769,7 @@ WX_SUBVERSION=$WX_VERSION.$wx_subrelease_number
 WX_MSW_VERSION=$wx_major_version_number$wx_minor_version_number$wx_release_number
 
 
-wx_top_builddir="`pwd`"
+wx_top_builddir="`pwd -W 2> /dev/null || pwd`"
 
 
 
@@ -20187,7 +20170,7 @@ $as_echo_n "checking SDK deployment version... " >&6; }
         MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" buildSettings | grep '^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}[^"]*"\{0,1\}; *$' | sed 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/'`
 
         # If that failed, try again with the new key
-        if test "x$MACOSX_SDK_PLIST_VERSION_MIN" == "x"; then
+        if test "x$MACOSX_SDK_PLIST_VERSION_MIN" = "x"; then
 
             MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" DefaultProperties | grep '^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}[^"]*"\{0,1\}; *$' | sed 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/'`
 
@@ -23744,7 +23727,7 @@ fi
 
     LIBS="$LIBS -luxtheme -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lcomdlg32 -ladvapi32 -lversion -lwsock32 -lgdi32"
     case "${host}" in
-        x86_64-*-mingw32* )
+        x86_64-*-mingw* )
                                                 WINDRES_CPU_DEFINE="--define WX_CPU_AMD64"
         ;;
     esac
@@ -23777,7 +23760,7 @@ if test "$wxUSE_GUI" = "yes"; then
         GUIDIST=MSW_DIST
 
                 case "${host}" in
-            *-*-mingw32* )
+            *-*-mingw* )
                 WXCONFIG_LDFLAGS_GUI="$LDFLAGS -Wl,--subsystem,windows -mwindows"
         esac
     fi
@@ -33023,16 +33006,6 @@ $as_echo "$as_me: WARNING: wxMutex won't be recursive on this platform" >&2;}
         fi
       fi
 
-      if test "$wxUSE_COMPILER_TLS" = "auto"; then
-          if test "$USE_NETBSD" = 1; then
-              { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling TLS under NetBSD, please contact wx-dev if it works now" >&5
-$as_echo "$as_me: WARNING: Disabling TLS under NetBSD, please contact wx-dev if it works now" >&2;}
-              wxUSE_COMPILER_TLS=no
-          else
-              wxUSE_COMPILER_TLS=yes
-          fi
-      fi
-
       if test "$wxUSE_COMPILER_TLS" = "yes"; then
                     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for __thread keyword" >&5
 $as_echo_n "checking for __thread keyword... " >&6; }
@@ -33241,7 +33214,7 @@ $as_echo "$wx_cv_type_abi_forced_unwind" >&6; }
 else
     if test "$wxUSE_THREADS" = "yes" ; then
       case "${host}" in
-        x86_64-*-mingw32* )
+        x86_64-*-mingw* )
         ;;
         *-*-mingw32* )
                         { $as_echo "$as_me:${as_lineno-$LINENO}: checking if compiler supports -mthreads" >&5
@@ -36990,6 +36963,10 @@ fi
         elif test "$WXGTK3" = 1; then
                                                 wxUSE_UIACTIONSIMULATOR=no
         fi
+    elif test "$wxUSE_DFB" = 1; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxUIActionSimulator not yet supported under $TOOLKIT... disabled" >&5
+$as_echo "$as_me: WARNING: wxUIActionSimulator not yet supported under $TOOLKIT... disabled" >&2;}
+        wxUSE_UIACTIONSIMULATOR=no
     fi
 
     if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
@@ -37418,8 +37395,8 @@ if test "$wxUSE_TOOLTIPS" = "yes"; then
 $as_echo "$as_me: WARNING: wxTooltip not supported yet under Motif... disabled" >&2;}
     else
         if test "$wxUSE_UNIVERSAL" = "yes"; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxTooltip not supported yet in wxUniversal... disabled" >&5
-$as_echo "$as_me: WARNING: wxTooltip not supported yet in wxUniversal... disabled" >&2;}
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxTooltip not supported yet in $TOOLKIT... disabled" >&5
+$as_echo "$as_me: WARNING: wxTooltip not supported yet in $TOOLKIT... disabled" >&2;}
         else
             $as_echo "#define wxUSE_TOOLTIPS 1" >>confdefs.h
 
@@ -38325,6 +38302,9 @@ $as_echo "$wx_cv_lib_gdiplus" >&6; }
         if test "$wx_cv_lib_gdiplus" = "yes"; then
             wx_has_graphics=1
         fi
+    elif test "$WXGTK1" = "1"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxGraphicsContext not supported with GTK +1" >&5
+$as_echo "$as_me: WARNING: wxGraphicsContext not supported with GTK +1" >&2;}
     elif test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
 
 pkg_failed=no
@@ -38997,6 +38977,10 @@ case ".$ac_cv_cxxflags_gcc_option__Woverloaded_virtual" in
  ;;
 esac
 
+
+                if test "$WXGTK1" = "1"; then
+        CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations -Wno-narrowing -Wno-write-strings"
+    fi
 
                         if test "$WXGTK4" != 1 -a \( "$WXGTK3" = 1 -o "$wxUSE_MAC" = 1 \) ; then
         CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations"
@@ -39811,7 +39795,7 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
 
     if test "x$BAKEFILE_FORCE_PLATFORM" = "x"; then
         case "${BAKEFILE_HOST}" in
-            *-*-mingw32* )
+            *-*-mingw* )
                 PLATFORM_WIN32=1
             ;;
             *-*-darwin* )
@@ -39905,7 +39889,7 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
             DLLPREFIX="cyg"
             dlldir="$bindir"
         ;;
-        *-*-mingw32* )
+        *-*-mingw* )
             SO_SUFFIX="dll"
             SO_SUFFIX_MODULE="dll"
             DLLIMP_SUFFIX="dll.a"
@@ -40129,7 +40113,7 @@ $as_echo "$bakefile_cv_gcc31" >&6; }
             SHARED_LD_CXX="\${CXX} -dynamiclib -single_module -headerpad_max_install_names -o"
         fi
 
-        if test "x$GCC" == "xyes"; then
+        if test "x$GCC" = "xyes"; then
             PIC_FLAG="-dynamic -fPIC"
         fi
         if test "x$XLCC" = "xyes"; then
@@ -41002,29 +40986,14 @@ EOF
         COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0=""
     fi
 
-    COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" ; then
-        COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2=""
-    fi
-
     COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1=""
     fi
 
-    COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
-        COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3=""
-    fi
-
     COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1=""
-    fi
-
-    COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
-        COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
     fi
 
     COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1="#"
@@ -41082,29 +41051,14 @@ EOF
         COND_PLATFORM_UNIX_1=""
     fi
 
-    COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2="#"
-    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" ; then
-        COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2=""
-    fi
-
     COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1="#"
     if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1=""
     fi
 
-    COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
-    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
-        COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3=""
-    fi
-
     COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1="#"
     if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1=""
-    fi
-
-    COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
-    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
-        COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
     fi
 
     COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1="#"
@@ -41147,29 +41101,14 @@ EOF
         COND_PLATFORM_WIN32_1_SHARED_0=""
     fi
 
-    COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2="#"
-    if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" ; then
-        COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2=""
-    fi
-
     COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1="#"
     if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1=""
     fi
 
-    COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
-    if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
-        COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3=""
-    fi
-
     COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1="#"
     if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1=""
-    fi
-
-    COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
-    if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
-        COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
     fi
 
     COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1="#"
@@ -41262,11 +41201,6 @@ EOF
         COND_TOOLKIT_COCOA=""
     fi
 
-    COND_TOOLKIT_COCOA_USE_GUI_1="#"
-    if test "x$TOOLKIT" = "xCOCOA" -a "x$USE_GUI" = "x1" ; then
-        COND_TOOLKIT_COCOA_USE_GUI_1=""
-    fi
-
     COND_TOOLKIT_DFB="#"
     if test "x$TOOLKIT" = "xDFB" ; then
         COND_TOOLKIT_DFB=""
@@ -41307,16 +41241,6 @@ EOF
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1=""
     fi
 
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0=""
-    fi
-
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_1="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$WXUNIV" = "x1" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_1=""
-    fi
-
     COND_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
     if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_3=""
@@ -41332,11 +41256,6 @@ EOF
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0=""
     fi
 
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0=""
-    fi
-
     COND_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
     if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
@@ -41350,11 +41269,6 @@ EOF
     COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0=""
-    fi
-
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_WXUNIV_0=""
     fi
 
     COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1="#"
@@ -41422,6 +41336,11 @@ EOF
         COND_TOOLKIT_OSX_COCOA_USE_GUI_1=""
     fi
 
+    COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0="#"
+    if test "x$TOOLKIT" = "xOSX_COCOA" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0=""
+    fi
+
     COND_TOOLKIT_OSX_COCOA_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xOSX_COCOA" -a "x$WXUNIV" = "x0" ; then
         COND_TOOLKIT_OSX_COCOA_WXUNIV_0=""
@@ -41447,19 +41366,9 @@ EOF
         COND_TOOLKIT_QT=""
     fi
 
-    COND_TOOLKIT_QT_USE_GUI_1="#"
-    if test "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" ; then
-        COND_TOOLKIT_QT_USE_GUI_1=""
-    fi
-
     COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
         COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0=""
-    fi
-
-    COND_TOOLKIT_Qt="#"
-    if test "x$TOOLKIT" = "xQt" ; then
-        COND_TOOLKIT_Qt=""
     fi
 
     COND_TOOLKIT_X11="#"
@@ -41475,11 +41384,6 @@ EOF
     COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1="#"
     if test "x$TOOLKIT" = "xX11" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x1" ; then
         COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1=""
-    fi
-
-    COND_TOOLKIT_X11_WXUNIV_1="#"
-    if test "x$TOOLKIT" = "xX11" -a "x$WXUNIV" = "x1" ; then
-        COND_TOOLKIT_X11_WXUNIV_1=""
     fi
 
     COND_UNICODE_1="#"
@@ -41630,11 +41534,6 @@ EOF
     COND_WITH_PLUGIN_SDL_1="#"
     if test "x$WITH_PLUGIN_SDL" = "x1" ; then
         COND_WITH_PLUGIN_SDL_1=""
-    fi
-
-    COND_WXUNIV_0="#"
-    if test "x$WXUNIV" = "x0" ; then
-        COND_WXUNIV_0=""
     fi
 
     COND_WXUNIV_1="#"

@@ -10,7 +10,7 @@
 
     wxJoystick allows an application to control one or more joysticks.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{misc}
 
     @see wxJoystickEvent

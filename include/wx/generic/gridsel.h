@@ -17,7 +17,7 @@
 
 #include "wx/grid.h"
 
-class WXDLLIMPEXP_ADV wxGridSelection
+class WXDLLIMPEXP_CORE wxGridSelection
 {
 public:
     wxGridSelection(wxGrid *grid,
@@ -106,7 +106,7 @@ private:
     wxGrid                              *m_grid;
     wxGrid::wxGridSelectionModes        m_selectionMode;
 
-    friend class WXDLLIMPEXP_FWD_ADV wxGrid;
+    friend class WXDLLIMPEXP_FWD_CORE wxGrid;
 
     wxDECLARE_NO_COPY_CLASS(wxGridSelection);
 };

@@ -88,7 +88,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 webview: $(WEBVIEW_OBJECTS)
-	$(CXX) -o $@ $(WEBVIEW_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs webview,stc,adv,core,base`
+	$(CXX) -o $@ $(WEBVIEW_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs webview,stc,core,base`
 
 webview_webview.o: ./webview.cpp
 	$(CXX) -c -o $@ $(WEBVIEW_CXXFLAGS) $(CPPDEPS) $<

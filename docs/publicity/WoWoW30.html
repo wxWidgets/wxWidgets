@@ -78,7 +78,7 @@ signature of the many class methods to the documentation. The result
 is more correct documentation with better formating and built-in
 searching and screenshots of many controls. Since Doxygen is a
 wide-spread format and easy to learn, the new documentation is much
-easier to edit, correct and read. See the <A HREF="http://docs.wxwidgets.org/trunk/index.html">wxWidgets
+easier to edit, correct and read. See the <A HREF="https://docs.wxwidgets.org/trunk/index.html">wxWidgets
 on-line documentation</A> to which this document refers to in many
 places.</P>
 <H3 CLASS="western">C++ features and template support</H3>
@@ -91,9 +91,9 @@ was often buggy even in them, wxWidgets initially stayed away from
 using templates entirely including the use of the Standard Template
 Library (STL). In the meantime nearly all compilers have gained solid
 template support and therefore wxWidgets is now using templates for
-container classes (such as <A HREF="http://docs.wxwidgets.org/trunk/classwx_vector_3_01_t_01_4.html">wxVector&lt;T&gt;</A>),
-smart pointers (such as <A HREF="http://docs.wxwidgets.org/trunk/classwx_shared_ptr_3_01_t_01_4.html">wxSharedPtr&lt;T&gt;</A>),
-weak references (see <A HREF="http://docs.wxwidgets.org/trunk/classwx_weak_ref_3_01_t_01_4.html">wxWeakRef&lt;T&gt;</A>)
+container classes (such as <A HREF="https://docs.wxwidgets.org/trunk/classwx_vector_3_01_t_01_4.html">wxVector&lt;T&gt;</A>),
+smart pointers (such as <A HREF="https://docs.wxwidgets.org/trunk/classwx_shared_ptr_3_01_t_01_4.html">wxSharedPtr&lt;T&gt;</A>),
+weak references (see <A HREF="https://docs.wxwidgets.org/trunk/classwx_weak_ref_3_01_t_01_4.html">wxWeakRef&lt;T&gt;</A>)
 and many other places where templates are useful. This means that
 very old compilers won't be able to compile wxWidgets anymore or only
 in a degraded way (such as Visual C++ 6.0).</P>
@@ -129,8 +129,8 @@ UTF-16 under Windows (mostly as before) but UTF-8 elsewhere (instead
 of wide character strings using wchar_t) so that strings received
 from and sent to Unix and GTK+ library calls would no longer have to
 be converted back and forth between different Unicode representations
-(see <A HREF="http://docs.wxwidgets.org/trunk/classwx_string.html">wxString</A>
-and <A HREF="http://docs.wxwidgets.org/trunk/overview_unicode.html">Unicode
+(see <A HREF="https://docs.wxwidgets.org/trunk/classwx_string.html">wxString</A>
+and <A HREF="https://docs.wxwidgets.org/trunk/overview_unicode.html">Unicode
 overview</A>). Additionally, the „ANSI“ mode was removed and the
 wxString class as well as some other classes were modified to accept
 and return both Unicode and 8-bit string literals if required. The
@@ -142,9 +142,9 @@ primary reason to give wxWidgets the new major version number 3.</P>
 <P ALIGN=JUSTIFY STYLE="margin-bottom: 0cm">Although a 2D drawing API
 has always been part of wxWidgets (using so-called device contexts
 such as a window or a bitmap and pens and brushes to draw into them,
-see <A HREF="http://docs.wxwidgets.org/trunk/classwx_d_c.html">wxDC</A>,
-<A HREF="http://docs.wxwidgets.org/trunk/classwx_pen.html">wxPen</A>,
-<A HREF="http://docs.wxwidgets.org/trunk/classwx_brush.html">wxBrush</A>),
+see <A HREF="https://docs.wxwidgets.org/trunk/classwx_d_c.html">wxDC</A>,
+<A HREF="https://docs.wxwidgets.org/trunk/classwx_pen.html">wxPen</A>,
+<A HREF="https://docs.wxwidgets.org/trunk/classwx_brush.html">wxBrush</A>),
 it has not changed much since its initial inception and so the code
 was completely reorganized using a single set of frontend classes and
 different backends which will make maintainance much easier without
@@ -155,7 +155,7 @@ the 1990's but it didn't make use of advanced features such as
 transparency, anti-aliasing and free matrix transforms of modern 2D
 graphics systems such as GDI+ on Windows, Cairo on Linux (and
 elsewhere) and CoreGraphics on OS X. Therefore a completely new
-drawing API (the so called graphics contexts, see <A HREF="http://docs.wxwidgets.org/trunk/classwx_graphics_context.html">wxGraphicsContext</A>)
+drawing API (the so called graphics contexts, see <A HREF="https://docs.wxwidgets.org/trunk/classwx_graphics_context.html">wxGraphicsContext</A>)
 was added to wxWidgets making use of modern drawing engines. This is
 complemented by a bitmap class with alpha channel support and fast
 raw access to the bitmap's internal data representation. Additionally
@@ -198,13 +198,13 @@ and may thus be the most important changes from a user's perspective
 	Reimplementing wxTreeCtrl and possibly wxListCtrl in terms of
 	wxDataViewCtrl was considered, but this was dropped as certain
 	special features are not available on all platforms (or
-	differently). See also <A HREF="http://docs.wxwidgets.org/trunk/classwx_data_view_ctrl.html">wxDataViewCtrl</A>,
-	<A HREF="http://docs.wxwidgets.org/trunk/classwx_data_view_list_ctrl.html">wxDataViewListCtrl</A>
-	and <A HREF="http://docs.wxwidgets.org/trunk/classwx_data_view_tree_ctrl.html">wxDataViewTreeCtrl</A>.</P>
+	differently). See also <A HREF="https://docs.wxwidgets.org/trunk/classwx_data_view_ctrl.html">wxDataViewCtrl</A>,
+	<A HREF="https://docs.wxwidgets.org/trunk/classwx_data_view_list_ctrl.html">wxDataViewListCtrl</A>
+	and <A HREF="https://docs.wxwidgets.org/trunk/classwx_data_view_tree_ctrl.html">wxDataViewTreeCtrl</A>.</P>
 	<LI><P ALIGN=JUSTIFY>The tabular view of wxGrid has been improved
 	including a native header control, which has been separated into a
-	new control. See also <A HREF="http://docs.wxwidgets.org/trunk/classwx_grid.html">wxGrid</A>
-	and <A HREF="http://docs.wxwidgets.org/trunk/classwx_header_ctrl.html">wxHeaderCtrl.</A></P>
+	new control. See also <A HREF="https://docs.wxwidgets.org/trunk/classwx_grid.html">wxGrid</A>
+	and <A HREF="https://docs.wxwidgets.org/trunk/classwx_header_ctrl.html">wxHeaderCtrl.</A></P>
 	<LI><P ALIGN=JUSTIFY>Added wxPropertyGrid which is a big generic
 	control used to display lists and hierarchies of name-value pairs.
 	Like wxDataViewCtrl, it offers a number of ready-to-use editors for
@@ -212,53 +212,53 @@ and may thus be the most important changes from a user's perspective
 	editing or using pop-up dialog and combo boxes. Development of
 	wxPropertyGrid has so far taken place outside of wxWidgets as a
 	separate project, but it has not been included in wxWidgets per se.
-	See also <A HREF="http://docs.wxwidgets.org/trunk/classwx_property_grid.html">wxPropertyGrid</A>.</P>
+	See also <A HREF="https://docs.wxwidgets.org/trunk/classwx_property_grid.html">wxPropertyGrid</A>.</P>
 	<LI><P ALIGN=JUSTIFY>wxHyperlinkCtrl added, implemented natively
 	under GTK+ and in a generic way on other platforms. It can be used
 	to represent a hypertext link, for example to the homepage of the
-	developer or company. See also <A HREF="http://docs.wxwidgets.org/trunk/classwx_hyperlink_ctrl.html">wxHyperlinkCtrl</A>.</P>
+	developer or company. See also <A HREF="https://docs.wxwidgets.org/trunk/classwx_hyperlink_ctrl.html">wxHyperlinkCtrl</A>.</P>
 	<LI><P ALIGN=JUSTIFY>wxFileCtrl for constructing fully customized
 	file dialogs. Complementary to this, the possibility to add custom
-	control to wxFileDialog has been added. See <A HREF="http://docs.wxwidgets.org/trunk/classwx_file_ctrl.html">wxFileCtrl</A>
-	and <A HREF="http://docs.wxwidgets.org/trunk/classwx_file_dialog.html">wxFileDialog</A>.</P>
+	control to wxFileDialog has been added. See <A HREF="https://docs.wxwidgets.org/trunk/classwx_file_ctrl.html">wxFileCtrl</A>
+	and <A HREF="https://docs.wxwidgets.org/trunk/classwx_file_dialog.html">wxFileDialog</A>.</P>
 	<LI><P ALIGN=JUSTIFY>Several enhancements to wxRichTextCtrl
 	including support for super- and subscript and many speed-ups. See
-	<A HREF="http://docs.wxwidgets.org/trunk/classwx_rich_text_ctrl.html">wxRichTextCtrl</A>.</P>
+	<A HREF="https://docs.wxwidgets.org/trunk/classwx_rich_text_ctrl.html">wxRichTextCtrl</A>.</P>
 	<LI><P ALIGN=JUSTIFY>The possibility to display state icons has been
 	added to wxTreeCtrl. This can also be used to implement check-box
-	like behaviour. See <A HREF="http://docs.wxwidgets.org/trunk/classwx_tree_ctrl.html">wxTreeCtrl</A>.</P>
+	like behaviour. See <A HREF="https://docs.wxwidgets.org/trunk/classwx_tree_ctrl.html">wxTreeCtrl</A>.</P>
 	<LI><P ALIGN=JUSTIFY>wxCalendarCtrl has been rewritten using native
 	code under MSW and GTK+ and enhanced in many ways (for example
-	displaying week numbers). See <A HREF="http://docs.wxwidgets.org/trunk/classwx_calendar_ctrl.html">wxCalendarCtrl</A>.</P>
+	displaying week numbers). See <A HREF="https://docs.wxwidgets.org/trunk/classwx_calendar_ctrl.html">wxCalendarCtrl</A>.</P>
 	<LI><P ALIGN=JUSTIFY>Implemented support for auto-completion for
 	wxTextCtrl and wxComboBox.</P>
 	<LI><P ALIGN=JUSTIFY>Added wxAUIToolBar to the set of wxAUI classes,
 	which is better integrated and more flexible than the standard
 	wxToolBar.</P>
 	<LI><P ALIGN=JUSTIFY>Reimplemented wxBitmapComboBox using native
-	code under MSW and GTK+. See also <A HREF="http://docs.wxwidgets.org/trunk/classwx_bitmap_combo_box.html">wxBitmapComboBox</A>.</P>
+	code under MSW and GTK+. See also <A HREF="https://docs.wxwidgets.org/trunk/classwx_bitmap_combo_box.html">wxBitmapComboBox</A>.</P>
 	<LI><P ALIGN=JUSTIFY>Added wxBitmapToggleButton on all platforms.
-	See also <A HREF="http://docs.wxwidgets.org/trunk/classwx_bitmap_toggle_button.html">wxBitmapToggleButton</A>.</P>
+	See also <A HREF="https://docs.wxwidgets.org/trunk/classwx_bitmap_toggle_button.html">wxBitmapToggleButton</A>.</P>
 	<LI><P ALIGN=JUSTIFY>Added support for ellipsization on all
 	platforms and for mark-up formatting under GTK+ to wxStaticText. See
-	<A HREF="http://docs.wxwidgets.org/trunk/classwx_static_text.html">wxStaticText</A>.</P>
+	<A HREF="https://docs.wxwidgets.org/trunk/classwx_static_text.html">wxStaticText</A>.</P>
 	<LI><P ALIGN=JUSTIFY>Rewritten the selection event emission logic of
 	wxListBox on all platforms to more exactly match each other when
 	selecting and deselecting certain items.</P>
 	<LI><P ALIGN=JUSTIFY>Implemented wxCollapsiblePane natively for GTK
-	and OS X. See <A HREF="http://docs.wxwidgets.org/trunk/classwx_collapsible_pane.html">wxCollapsiblePane</A>.</P>
+	and OS X. See <A HREF="https://docs.wxwidgets.org/trunk/classwx_collapsible_pane.html">wxCollapsiblePane</A>.</P>
 	<LI><P ALIGN=JUSTIFY>Added a new sizer which can wrap across
-	multiple lines. See <A HREF="http://docs.wxwidgets.org/trunk/classwx_wrap_sizer.html">wxWrapSizer</A>.</P>
+	multiple lines. See <A HREF="https://docs.wxwidgets.org/trunk/classwx_wrap_sizer.html">wxWrapSizer</A>.</P>
 	<LI><P ALIGN=JUSTIFY>Added multi-sample and anti-aliasing support
 	to the OpenGL canvas and separated wxGLCanvas and wxGLContext. See
-	<A HREF="http://docs.wxwidgets.org/trunk/classwx_g_l_canvas.html">wxGLCanvas</A>.</P>
+	<A HREF="https://docs.wxwidgets.org/trunk/classwx_g_l_canvas.html">wxGLCanvas</A>.</P>
 	<LI><P ALIGN=JUSTIFY>Added wxNativeContainerWindow in order to
 	construct a wxTopLevelWindow from a native window handle (MSW and
 	GTK+).</P>
-	<LI><P ALIGN=JUSTIFY>The <A HREF="http://docs.wxwidgets.org/trunk/classwx_v_scrolled_window.html">wxVScrolledWindow</A>
+	<LI><P ALIGN=JUSTIFY>The <A HREF="https://docs.wxwidgets.org/trunk/classwx_v_scrolled_window.html">wxVScrolledWindow</A>
 	class has been completely rewritten to accommodate the addition of
-	the new horizontal scrolling variants (<A HREF="http://docs.wxwidgets.org/trunk/classwx_h_scrolled_window.html">wxHScrolledWindow</A>
-	and <A HREF="http://docs.wxwidgets.org/trunk/classwx_h_v_scrolled_window.html">wxHVScrolledWindow</A>)
+	the new horizontal scrolling variants (<A HREF="https://docs.wxwidgets.org/trunk/classwx_h_scrolled_window.html">wxHScrolledWindow</A>
+	and <A HREF="https://docs.wxwidgets.org/trunk/classwx_h_v_scrolled_window.html">wxHVScrolledWindow</A>)
 	while still providing complete backwards compatibility for
 	wxVScrolledWindow.</P>
 </UL>
