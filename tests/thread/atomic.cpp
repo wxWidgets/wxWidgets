@@ -62,7 +62,7 @@ private:
             m_operateOn(operateOn), m_testType(testType) {}
 
         // thread execution starts here
-        virtual void *Entry();
+        virtual void *Entry() wxOVERRIDE;
 
     public:
         wxAtomicInt &m_operateOn;

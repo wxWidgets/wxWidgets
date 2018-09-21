@@ -150,7 +150,7 @@ void CmdLineTestCase::ParseSwitches()
     class NoMessageOutput : public wxMessageOutput
     {
     public:
-        virtual void Output(const wxString& WXUNUSED(str)) { }
+        virtual void Output(const wxString& WXUNUSED(str)) wxOVERRIDE { }
     } noMessages;
 
     wxMessageOutput * const old = wxMessageOutput::Set(&noMessages);

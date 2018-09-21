@@ -42,7 +42,7 @@
 class RegApp : public wxApp
 {
 public:
-    bool OnInit();
+    bool OnInit() wxOVERRIDE;
 };
 
 // ----------------------------------------------------------------------------
