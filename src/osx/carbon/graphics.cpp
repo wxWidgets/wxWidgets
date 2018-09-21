@@ -2162,7 +2162,7 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDo
 #if wxOSX_USE_COCOA
     {
         CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
-        wxOSXDrawNSImage( m_cgContext, &r, bmp.GetNSImage());
+        wxOSXDrawNSImage( m_cgContext, &r, bmp.GetImage());
     }
 #else
     wxGraphicsBitmap bitmap = GetRenderer()->CreateBitmap(bmp);
@@ -2225,7 +2225,7 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
 #if wxOSX_USE_COCOA
     {
         CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
-        wxOSXDrawNSImage( m_cgContext, &r, icon.GetNSImage());
+        wxOSXDrawNSImage( m_cgContext, &r, icon.GetImage());
     }
 #endif
     

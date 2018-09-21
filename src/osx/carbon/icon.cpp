@@ -45,7 +45,7 @@ public:
     int GetWidth() const { return (int) wxOSXGetImageSize(m_nsImage).width; }
     int GetHeight() const { return (int) wxOSXGetImageSize(m_nsImage).height; }
 
-    WX_NSImage GetNSImage() const;
+    WX_NSImage GetImage() const;
 
 private:
     void Init();
@@ -94,7 +94,7 @@ void wxIconRefData::Free()
     }
 }
 
-WX_NSImage wxIconRefData::GetNSImage() const
+WX_NSImage wxIconRefData::GetImage() const
 {
     wxASSERT( IsOk() );
 
@@ -123,7 +123,7 @@ public:
 
     WXHICON GetHICON() const { return (WXHICON) m_iconRef; }
 
-    WX_NSImage GetNSImage() const;
+    WX_NSImage GetImage() const;
 
 private:
     void Init();
@@ -172,7 +172,7 @@ void wxIconRefData::Free()
     }
 }
 
-WX_NSImage wxIconRefData::GetNSImage() const
+WX_NSImage wxIconRefData::GetImage() const
 {
     wxASSERT( IsOk() );
 
@@ -269,11 +269,11 @@ int wxIcon::GetDepth() const
     return 32;
 }
 
-WX_NSImage wxIcon::GetNSImage() const
+WX_NSImage wxIcon::GetImage() const
 {
     wxCHECK_MSG( IsOk(), NULL, wxT("invalid icon") );
     
-    return M_ICONDATA->GetNSImage() ;
+    return M_ICONDATA->GetImage() ;
 }
 
 #if WXWIN_COMPATIBILITY_3_0
@@ -565,7 +565,7 @@ void wxIcon::CopyFromBitmap( const wxBitmap& bmp )
     UnRef() ;
 
 #if wxOSX_ICON_USE_NSIMAGE
-    m_refData = new wxIconRefData( bmp.GetNSImage() , bmp.GetWidth(), bmp.GetHeight()  ) ;
+    m_refData = new wxIconRefData( bmp.GetImage() , bmp.GetWidth(), bmp.GetHeight()  ) ;
 #else
     // as the bitmap owns that ref, we have to acquire it as well
     
