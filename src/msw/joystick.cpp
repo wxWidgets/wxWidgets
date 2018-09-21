@@ -67,14 +67,11 @@ private:
     void      SendEvent(wxEventType type, long ts);
     int       m_device;
     int       m_joystick;
-    wxPoint   m_lastposition;
-    int       m_axe[wxJS_MAX_AXES];
     int       m_buttons;
     wxWindow* m_catchwin;
     int       m_polling;
-    int       m_threshold;
-    JOYINFOEX m_joyInfoEx;
-    JOYINFOEX m_lastJoyInfoEx;
+    JOYINFO   m_joyInfo;
+    JOYINFO   m_lastJoyInfo;
 
     friend class wxJoystick;
 };
@@ -82,19 +79,12 @@ private:
 
 wxJoystickThread::wxJoystickThread(int joystick)
     : m_joystick(joystick),
-      m_lastposition(wxDefaultPosition),
       m_buttons(0),
       m_catchwin(NULL),
       m_polling(0),
-      m_threshold(0),
-      m_joyInfoEx(),
-      m_lastJoyInfoEx()
+      m_joyInfo(),
+      m_lastJoyInfo()
 {
-    memset(m_axe, 0, sizeof(m_axe));
-    m_joyInfoEx.dwSize = sizeof(JOYINFOEX);
-    m_joyInfoEx.dwFlags = JOY_RETURNALL;
-    m_lastJoyInfoEx.dwSize = sizeof(JOYINFOEX);
-    m_lastJoyInfoEx.dwFlags = JOY_RETURNALL;
 }
 
 void wxJoystickThread::SendEvent(wxEventType type, long ts)
@@ -102,8 +92,8 @@ void wxJoystickThread::SendEvent(wxEventType type, long ts)
     wxJoystickEvent jwx_event(type, m_buttons, m_joystick);
 
     jwx_event.SetTimestamp(ts);
-    jwx_event.SetPosition(wxPoint(m_joyInfoEx.dwXpos, m_joyInfoEx.dwYpos));
-    jwx_event.SetZPosition(m_joyInfoEx.dwZpos);
+    jwx_event.SetPosition(wxPoint(m_joyInfo.wXpos, m_joyInfo.wYpos));
+    jwx_event.SetZPosition(m_joyInfo.wZpos);
     jwx_event.SetEventObject(m_catchwin);
 
     if (m_catchwin)
@@ -112,7 +102,7 @@ void wxJoystickThread::SendEvent(wxEventType type, long ts)
 
 void* wxJoystickThread::Entry()
 {
-    joyGetPosEx(m_joystick, &m_lastJoyInfoEx);
+    joyGetPos(m_joystick, &m_lastJoyInfo);
 
     while (true)
     {
@@ -122,10 +112,10 @@ void* wxJoystickThread::Entry()
         this->Sleep(m_polling);
         DWORD ts = GetTickCount();
 
-        joyGetPosEx(m_joystick, &m_joyInfoEx);
-        m_buttons = m_joyInfoEx.dwButtons;
-        DWORD delta = m_buttons ^ m_lastJoyInfoEx.dwButtons;
-        DWORD deltaUp = delta ^ !m_buttons;
+        joyGetPos(m_joystick, &m_joyInfo);
+        m_buttons = m_joyInfo.wButtons;
+        DWORD delta = m_buttons ^ m_lastJoyInfo.wButtons;
+        DWORD deltaUp = delta & !m_buttons;
         DWORD deltaDown = delta & m_buttons;
 
         if (deltaUp)
@@ -133,16 +123,14 @@ void* wxJoystickThread::Entry()
         else if(deltaDown)
             SendEvent(wxEVT_JOY_BUTTON_DOWN, ts);
 
-        if (not( deltaUp || deltaDown)) // button events also report position.
+        if ((m_joyInfo.wXpos != m_lastJoyInfo.wXpos) ||
+            (m_joyInfo.wYpos != m_lastJoyInfo.wYpos) ||
+            (m_joyInfo.wZpos != m_lastJoyInfo.wZpos)   )
         {
-            if ((m_joyInfoEx.dwXpos != m_lastJoyInfoEx.dwXpos) ||
-                (m_joyInfoEx.dwYpos != m_lastJoyInfoEx.dwYpos) ||
-                (m_joyInfoEx.dwZpos != m_lastJoyInfoEx.dwZpos)   )
-            {
-                SendEvent(wxEVT_JOY_MOVE, ts);
-            }
+            SendEvent(wxEVT_JOY_MOVE, ts);
         }
-        memcpy (&m_lastJoyInfoEx, &m_joyInfoEx, m_lastJoyInfoEx.dwSize);
+
+        memcpy (&m_lastJoyInfo, &m_joyInfo, sizeof(JOYINFO));
     }
 
     return NULL;
