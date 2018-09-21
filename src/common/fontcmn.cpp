@@ -445,7 +445,7 @@ bool wxFontBase::operator==(const wxFont& font) const
 #endif
             GetFamily() == font.GetFamily() &&
             GetStyle() == font.GetStyle() &&
-            GetWeight() == font.GetWeight() &&
+            GetNumericWeight() == font.GetNumericWeight() &&
             GetUnderlined() == font.GetUnderlined() &&
             GetStrikethrough() == font.GetStrikethrough() &&
             GetFaceName().IsSameAs(font.GetFaceName(), false) &&
