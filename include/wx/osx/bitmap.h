@@ -118,7 +118,7 @@ public:
     
     // creates an bitmap from the native image format
     wxBitmap(CGImageRef image, double scale = 1.0);
-    wxBitmap(WX_NSImage image);
+    wxBitmap(WXImage image);
     wxBitmap(CGContextRef bitmapcontext);
 
     // Create a bitmap compatible with the given DC
@@ -147,7 +147,7 @@ public:
 
     virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
     bool Create( CGImageRef image, double scale = 1.0 );
-    bool Create( WX_NSImage image );
+    bool Create( WXImage image );
     bool Create( CGContextRef bitmapcontext);
     
     // Create a bitmap compatible with the given DC, inheriting its magnification factor
@@ -207,13 +207,16 @@ public:
     // returns a CGImageRef which must released after usage with CGImageRelease
     CGImageRef CreateCGImage() const ;
 
+    WXImage GetImage() const;
 #if wxOSX_USE_COCOA
     // returns an autoreleased version of the image
-    WX_NSImage GetNSImage() const;
+    WX_NSImage GetNSImage() const
+        { return GetImage(); }
 #endif
 #if wxOSX_USE_IPHONE
     // returns an autoreleased version of the image
-    WX_UIImage GetUIImage() const;
+    WX_UIImage GetUIImage() const
+        { return GetImage(); }
 #endif
 
 #if WXWIN_COMPATIBILITY_3_0
