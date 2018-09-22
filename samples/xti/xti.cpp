@@ -140,7 +140,7 @@ bool MyApp::OnInit()
     RegisterFrameRTTI();
 
     // create the main application window
-    MyFrame *frame = new MyFrame(wxT("Extended RTTI sample"));
+    MyFrame *frame = new MyFrame("Extended RTTI sample");
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -168,24 +168,24 @@ MyFrame::MyFrame(const wxString& title)
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Minimal_About, wxT("&About\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(Minimal_About, "&About\tF1", "Show about dialog");
 
-    fileMenu->Append(Minimal_Persist, wxT("Persist a wxFrame to XML..."), 
-                    wxT("Creates a wxFrame using wxXTI and saves its description as XML"));
-    fileMenu->Append(Minimal_Depersist, wxT("Depersist XML file..."), 
-                    wxT("Loads the description of wxFrame from XML"));
-    fileMenu->Append(Minimal_GenerateCode, wxT("Generate code for a wxFrame saved to XML..."), 
-                    wxT("Generates the C++ code which belong to a persisted wxFrame"));
+    fileMenu->Append(Minimal_Persist, "Persist a wxFrame to XML...", 
+                    "Creates a wxFrame using wxXTI and saves its description as XML");
+    fileMenu->Append(Minimal_Depersist, "Depersist XML file...", 
+                    "Loads the description of wxFrame from XML");
+    fileMenu->Append(Minimal_GenerateCode, "Generate code for a wxFrame saved to XML...", 
+                    "Generates the C++ code which belong to a persisted wxFrame");
     fileMenu->AppendSeparator();
-    fileMenu->Append(Minimal_DumpClasses, wxT("Dump registered classes..."), 
-                    wxT("Dumps the description of all wxWidgets classes registered in XTI"));
+    fileMenu->Append(Minimal_DumpClasses, "Dump registered classes...", 
+                    "Dumps the description of all wxWidgets classes registered in XTI");
     fileMenu->AppendSeparator();
-    fileMenu->Append(Minimal_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
+    fileMenu->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(fileMenu, wxT("&File"));
-    menuBar->Append(helpMenu, wxT("&Help"));
+    menuBar->Append(fileMenu, "&File");
+    menuBar->Append(helpMenu, "&Help");
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -194,7 +194,7 @@ MyFrame::MyFrame(const wxString& title)
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText(wxT("Welcome to wxWidgets!"));
+    SetStatusText("Welcome to wxWidgets!");
 #endif // wxUSE_STATUSBAR
 }
 
@@ -280,13 +280,13 @@ public:
         // this approach would be used if the handler would not 
         // be connected really in the designer, so we have to supply 
         // the information
-        const wxObject* but = wxAnyGetAsObjectPtr( m_frame->GetProperty(wxT("Button")) );
+        const wxObject* but = wxAnyGetAsObjectPtr( m_frame->GetProperty("Button") );
         if ( object == but && 
-             propInfo == wxCLASSINFO( wxButton )->FindPropertyInfo(wxT("OnClick")) )
+             propInfo == wxCLASSINFO( wxButton )->FindPropertyInfo("OnClick") )
         {
             eventSink = m_frame;
             handlerInfo = m_frame->GetClassInfo()->
-                FindHandlerInfo(wxT("ButtonClickHandler"));
+                FindHandlerInfo("ButtonClickHandler");
             return true;
         }
         return false;
@@ -315,16 +315,16 @@ void RegisterFrameRTTI()
     // set up the RTTI info for a class (MyXTIFrame) which
     // is not defined anywhere in this program
     wxDynamicClassInfo *dyninfo = 
-        wx_dynamic_cast( wxDynamicClassInfo *, wxClassInfo::FindClass(wxT("MyXTIFrame")));
+        wx_dynamic_cast( wxDynamicClassInfo *, wxClassInfo::FindClass("MyXTIFrame"));
     if ( dyninfo == NULL )
     {
-        dyninfo = new wxDynamicClassInfo(wxT("myxtiframe.h"),
-                            wxT("MyXTIFrame"), 
+        dyninfo = new wxDynamicClassInfo("myxtiframe.h",
+                            "MyXTIFrame", 
                             CLASSINFO(wxFrame) );
 
         // this class has a property named "Button" and the relative handler:
-        dyninfo->AddProperty(wxT("Button"), wxGetTypeInfo((wxButton**) NULL));
-        dyninfo->AddHandler(wxT("ButtonClickHandler"), 
+        dyninfo->AddProperty("Button", wxGetTypeInfo((wxButton**) NULL));
+        dyninfo->AddHandler("ButtonClickHandler", 
             NULL /* no instance of the handler method */, CLASSINFO( wxEvent ) );
     }
 }
@@ -337,13 +337,13 @@ wxDynamicObject* CreateFrameRTTI()
     // the class is now part of XTI internal table so that we can
     // get a pointer to it just searching it like any other class:
     wxFrame* frame;
-    wxClassInfo *info = wxClassInfo::FindClass(wxT("MyXTIFrame"));
+    wxClassInfo *info = wxClassInfo::FindClass("MyXTIFrame");
     wxASSERT( info );
     wxDynamicObject* frameWrapper = 
         wx_dynamic_cast(wxDynamicObject*, info->CreateObject() );
     Params[0] = wxAny((wxWindow*)(NULL));
     Params[1] = wxAny(wxWindowID(baseID++));
-    Params[2] = wxAny(wxString(wxT("This is a frame created from XTI")));
+    Params[2] = wxAny(wxString("This is a frame created from XTI"));
     Params[3] = wxAny(wxPoint(-1,-1));
     Params[4] = wxAny(wxSize(400,300));
     Params[5] = wxAny((long)wxDEFAULT_FRAME_STYLE);
@@ -374,7 +374,7 @@ wxDynamicObject* CreateFrameRTTI()
     Params[2] = wxAny(wxPoint(-1,-1));
     Params[3] = wxAny(wxSize(-1,-1));
     Params[4] = wxAny((long)0);
-    Params[5] = wxAny(wxString(wxT("Hello")));
+    Params[5] = wxAny(wxString("Hello"));
     wxASSERT( info->Create(panel, 6, Params ));
     notebook->AddPage( panel, "Buttons" );
 
@@ -384,12 +384,12 @@ wxDynamicObject* CreateFrameRTTI()
     button = wxDynamicCast( info->CreateObject(), wxButton );
     Params[0] = wxAny((wxWindow*)(panel));
     Params[1] = wxAny(wxWindowID(baseID++));
-    Params[2] = wxAny(wxString(wxT("Click Me!")));
+    Params[2] = wxAny(wxString("Click Me!"));
     Params[3] = wxAny(wxPoint( 10, 10 ));
     Params[4] = wxAny(wxSize(-1,-1));
     Params[5] = wxAny((long)0);
     wxASSERT( info->Create(button, 6, Params ));
-    frameWrapper->SetProperty( wxT("Button"), wxAny( button ) );
+    frameWrapper->SetProperty( "Button", wxAny( button ) );
 
     // other controls page
 
@@ -401,7 +401,7 @@ wxDynamicObject* CreateFrameRTTI()
     Params[2] = wxAny(wxPoint(-1,-1));
     Params[3] = wxAny(wxSize(-1,-1));
     Params[4] = wxAny((long)0);
-    Params[5] = wxAny(wxString(wxT("Hello")));
+    Params[5] = wxAny(wxString("Hello"));
     wxASSERT( info->Create(panel, 6, Params ));
     notebook->AddPage( panel, "Other Standard controls" );
 
@@ -411,7 +411,7 @@ wxDynamicObject* CreateFrameRTTI()
     control = wxDynamicCast( info->CreateObject(), wxControl );
     Params[0] = wxAny((wxWindow*)(panel));
     Params[1] = wxAny(wxWindowID(baseID++));
-    Params[2] = wxAny(wxString(wxT("A Checkbox")));
+    Params[2] = wxAny(wxString("A Checkbox"));
     Params[3] = wxAny(wxPoint( 10, 10 ));
     Params[4] = wxAny(wxSize(-1,-1));
     Params[5] = wxAny((long)0);
@@ -422,7 +422,7 @@ wxDynamicObject* CreateFrameRTTI()
     control = wxDynamicCast( info->CreateObject(), wxControl );
     Params[0] = wxAny((wxWindow*)(panel));
     Params[1] = wxAny(wxWindowID(baseID++));
-    Params[2] = wxAny(wxString(wxT("A Radiobutton")));
+    Params[2] = wxAny(wxString("A Radiobutton"));
     Params[3] = wxAny(wxPoint( 10, 30 ));
     Params[4] = wxAny(wxSize(-1,-1));
     Params[5] = wxAny((long)0);
@@ -430,7 +430,7 @@ wxDynamicObject* CreateFrameRTTI()
 
     control = wxDynamicCast( info->CreateObject(), wxControl );
     Params[1] = wxAny(wxWindowID(baseID++));
-    Params[2] = wxAny(wxString(wxT("Another One")));
+    Params[2] = wxAny(wxString("Another One"));
     Params[3] = wxAny(wxPoint( 10, 50 ));
     wxASSERT( info->Create(control, 6, Params ));
 
@@ -439,7 +439,7 @@ wxDynamicObject* CreateFrameRTTI()
     control = wxDynamicCast( info->CreateObject(), wxControl );
     Params[0] = wxAny((wxWindow*)(panel));
     Params[1] = wxAny(wxWindowID(baseID++));
-    Params[2] = wxAny(wxString(wxT("A Static Text!")));
+    Params[2] = wxAny(wxString("A Static Text!"));
     Params[3] = wxAny(wxPoint( 10, 70 ));
     Params[4] = wxAny(wxSize(-1,-1));
     Params[5] = wxAny((long)0);
@@ -450,7 +450,7 @@ wxDynamicObject* CreateFrameRTTI()
     control = wxDynamicCast( info->CreateObject(), wxControl );
     Params[0] = wxAny((wxWindow*)(panel));
     Params[1] = wxAny(wxWindowID(baseID++));
-    Params[2] = wxAny(wxString(wxT("A Static Box")));
+    Params[2] = wxAny(wxString("A Static Box"));
     Params[3] = wxAny(wxPoint( 10, 90 ));
     Params[4] = wxAny(wxSize(100,80));
     Params[5] = wxAny((long)0);
@@ -461,7 +461,7 @@ wxDynamicObject* CreateFrameRTTI()
     control = wxDynamicCast( info->CreateObject(), wxControl );
     Params[0] = wxAny((wxWindow*)(panel));
     Params[1] = wxAny(wxWindowID(baseID++));
-    Params[2] = wxAny(wxString(wxT("A Text Control")));
+    Params[2] = wxAny(wxString("A Text Control"));
     Params[3] = wxAny(wxPoint( 10, 200 ));
     Params[4] = wxAny(wxSize(-1,-1));
     Params[5] = wxAny((long)0);
@@ -477,7 +477,7 @@ wxDynamicObject* CreateFrameRTTI()
     Params[2] = wxAny(wxPoint(-1,-1));
     Params[3] = wxAny(wxSize(-1,-1));
     Params[4] = wxAny((long)0);
-    Params[5] = wxAny(wxString(wxT("Hello")));
+    Params[5] = wxAny(wxString("Hello"));
     wxASSERT( info->Create(panel, 6, Params ));
     notebook->AddPage( panel, "Spins and Sliders" );
 
@@ -619,7 +619,7 @@ void MyFrame::OnPersist(wxCommandEvent& WXUNUSED(event))
     wxDynamicObject *frame = CreateFrameRTTI();
     if (!frame)
     {
-        wxLogError(wxT("Cannot create the XTI frame!"));
+        wxLogError("Cannot create the XTI frame!");
         return;
     }
 
@@ -628,8 +628,8 @@ void MyFrame::OnPersist(wxCommandEvent& WXUNUSED(event))
     trueFrame->Show();
 
     // ask the user where to save it
-    wxFileDialog dlg(this, wxT("Where should the frame be saved?"),
-                     wxEmptyString, wxT("test.xml"), wxT("XML files (*.xml)|*.xml"), 
+    wxFileDialog dlg(this, "Where should the frame be saved?",
+                     wxEmptyString, "test.xml", "XML files (*.xml)|*.xml", 
                      wxFD_SAVE);
     if (dlg.ShowModal() == wxID_CANCEL)
         return;
@@ -637,7 +637,7 @@ void MyFrame::OnPersist(wxCommandEvent& WXUNUSED(event))
     // then save it to a test XML file
     if (!SaveFrameRTTI(dlg.GetPath(), frame))
     {
-        wxLogError(wxT("Cannot save the XTI frame into '%s'"), dlg.GetPath());
+        wxLogError("Cannot save the XTI frame into '%s'", dlg.GetPath());
         return;
     }
 
@@ -648,8 +648,8 @@ void MyFrame::OnPersist(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnDepersist(wxCommandEvent& WXUNUSED(event))
 {
     // ask the user which file to load
-    wxFileDialog dlg(this, wxT("Which file contains the frame to depersist?"),
-                     wxEmptyString, wxT("test.xml"), wxT("XML files (*.xml)|*.xml"), 
+    wxFileDialog dlg(this, "Which file contains the frame to depersist?",
+                     wxEmptyString, "test.xml", "XML files (*.xml)|*.xml", 
                      wxFD_OPEN);
     if (dlg.ShowModal() == wxID_CANCEL)
         return;
@@ -657,7 +657,7 @@ void MyFrame::OnDepersist(wxCommandEvent& WXUNUSED(event))
     wxObject *frame = LoadFrameRTTI(dlg.GetPath());
     if (!frame)
     {
-        wxLogError(wxT("Could not depersist the wxFrame from '%s'"), dlg.GetPath());
+        wxLogError("Could not depersist the wxFrame from '%s'", dlg.GetPath());
         return;
     }
 
@@ -672,21 +672,21 @@ void MyFrame::OnDepersist(wxCommandEvent& WXUNUSED(event))
     if ( trueFrame )
         trueFrame->Show();
     else
-        wxLogError(wxT("Could not show the frame"));
+        wxLogError("Could not show the frame");
 }
 
 void MyFrame::OnGenerateCode(wxCommandEvent& WXUNUSED(event))
 {
     // ask the user which file to load
-    wxFileDialog dlg(this, wxT("Which file contains the frame to work on?"),
-                     wxEmptyString, wxT("test.xml"), wxT("XML files (*.xml)|*.xml"), 
+    wxFileDialog dlg(this, "Which file contains the frame to work on?",
+                     wxEmptyString, "test.xml", "XML files (*.xml)|*.xml", 
                      wxFD_OPEN);
     if (dlg.ShowModal() == wxID_CANCEL)
         return;
 
     // ask the user which file to load
-    wxFileDialog dlg2(this, wxT("Where should the C++ code be saved?"),
-                      wxEmptyString, wxT("test.cpp"), wxT("Source files (*.cpp)|*.cpp"), 
+    wxFileDialog dlg2(this, "Where should the C++ code be saved?",
+                      wxEmptyString, "test.cpp", "Source files (*.cpp)|*.cpp", 
                       wxFD_SAVE);
     if (dlg2.ShowModal() == wxID_CANCEL)
         return;
@@ -694,7 +694,7 @@ void MyFrame::OnGenerateCode(wxCommandEvent& WXUNUSED(event))
     // do generate code
     if (!GenerateFrameRTTICode(dlg.GetPath(), dlg2.GetPath()))
     {
-        wxLogError(wxT("Could not generate the code for the frame!"));
+        wxLogError("Could not generate the code for the frame!");
         return;
     }
 
@@ -704,7 +704,7 @@ void MyFrame::OnGenerateCode(wxCommandEvent& WXUNUSED(event))
         wxStringOutputStream str;
         f.Read(str);
 
-        wxDialog dlg(this, wxID_ANY, wxT("Generated code"), 
+        wxDialog dlg(this, wxID_ANY, "Generated code", 
                      wxDefaultPosition, wxDefaultSize,
                      wxRESIZE_BORDER|wxDEFAULT_DIALOG_STYLE);
         wxPanel *panel = new wxPanel(&dlg);
@@ -734,12 +734,12 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox(wxString::Format(
-                    wxT("Welcome to %s!\n")
-                    wxT("\n")
-                    wxT("This sample demonstrates wxWidgets eXtended RTTI (XTI) system."),
+                    "Welcome to %s!\n"
+                    "\n"
+                    "This sample demonstrates wxWidgets eXtended RTTI (XTI) system.",
                     wxVERSION_STRING
                 ),
-                wxT("About wxWidgets XTI sample"),
+                "About wxWidgets XTI sample",
                 wxOK | wxICON_INFORMATION,
                 this);
 }

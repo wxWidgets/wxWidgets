@@ -399,7 +399,7 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
     {
         // this message is not translated (not in catalog) because we used wxT()
         // and not _() around it
-        str = wxT("You've found a bug in this program!");
+        str = "You've found a bug in this program!";
     }
     else if ( num == 17 )
     {
