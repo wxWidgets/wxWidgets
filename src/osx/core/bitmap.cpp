@@ -712,10 +712,8 @@ CGImageRef wxBitmapRefData::CreateCGImage() const
                         alphaInfo = kCGImageAlphaFirst;
 #endif
                     }
-#if wxOSX_BITMAP_NATIVE_ACCESS
                     memcpy(membuf.GetWriteBuf(imageSize), GetRawAccess(), imageSize);
                     membuf.UngetWriteBuf(imageSize);
-#endif
                 }
 
                 CGDataProviderRef dataProvider = NULL;
@@ -1531,46 +1529,27 @@ wxMask::~wxMask()
 
 void wxMask::Init()
 {
-#if !wxOSX_BITMAP_NATIVE_ACCESS
-    m_width = m_height = m_bytesPerRow = 0 ;
-#endif
 }
 
 void *wxMask::GetRawAccess() const
 {
     wxCHECK_MSG( m_maskBitmap, NULL , wxT("invalid mask") ) ;
-#if !wxOSX_BITMAP_NATIVE_ACCESS
-    return m_memBuf.GetData() ;
-#else
     return CGBitmapContextGetData(m_maskBitmap);
-#endif
 }
 
 int wxMask::GetBytesPerRow() const
 {
-#if !wxOSX_BITMAP_NATIVE_ACCESS
-    return m_bytesPerRow ;
-#else
     return CGBitmapContextGetBytesPerRow(m_maskBitmap);
-#endif
 }
 
 int wxMask::GetWidth() const
 {
-#if !wxOSX_BITMAP_NATIVE_ACCESS
-    return m_width ;
-#else
     return CGBitmapContextGetWidth(m_maskBitmap);
-#endif
 }
 
 int wxMask::GetHeight() const
 {
-#if !wxOSX_BITMAP_NATIVE_ACCESS
-    return m_height ;
-#else
     return CGBitmapContextGetHeight(m_maskBitmap);
-#endif
 }
 
 
@@ -1583,20 +1562,9 @@ void wxMask::DoCreateMaskBitmap(int width, int height, int bytesPerRow)
 
    if ( bytesPerRow < 0 )
         bytesPerRow = GetBestBytesPerRow(width * kMaskBytesPerPixel);
-#if !wxOSX_BITMAP_NATIVE_ACCESS
-    m_width = width;
-    m_height = height;
-    m_bytesPerRow = bytesPerRow;
-    size_t size = m_bytesPerRow * m_height;
-    unsigned char* data = (unsigned char*)m_memBuf.GetWriteBuf(size);
-#else
-    unsigned char* data = NULL;
-#endif
-    m_maskBitmap = CGBitmapContextCreate(data, width, height, kMaskBytesPerPixel * 8, bytesPerRow, colorspace,
+
+    m_maskBitmap = CGBitmapContextCreate(NULL, width, height, kMaskBytesPerPixel * 8, bytesPerRow, colorspace,
         kCGImageAlphaNone);
-#if !wxOSX_BITMAP_NATIVE_ACCESS
-    m_memBuf.UngetWriteBuf(size);
-#endif
     wxASSERT_MSG(m_maskBitmap, wxT("Unable to create CGBitmapContext context"));
 }
 
@@ -1636,16 +1604,12 @@ bool wxMask::Create(const wxMemoryBuffer& data,int width , int height , int byte
 
 bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
 {
-#if wxOSX_BITMAP_NATIVE_ACCESS
     int m_width, m_height, m_bytesPerRow;
-#endif
     m_width = bitmap.GetWidth() ;
     m_height = bitmap.GetHeight() ;
 
     DoCreateMaskBitmap(m_width, m_height);
-#if wxOSX_BITMAP_NATIVE_ACCESS
     m_bytesPerRow = GetBytesPerRow();
-#endif
 
     // pixel access needs a non-const bitmap currently
     wxBitmap bmp(bitmap);
@@ -1678,16 +1642,13 @@ bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
 
 bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
 {
-#if wxOSX_BITMAP_NATIVE_ACCESS
     int m_width, m_height, m_bytesPerRow;
-#endif
+
     m_width = bitmap.GetWidth() ;
     m_height = bitmap.GetHeight() ;
 
     DoCreateMaskBitmap(m_width, m_height);
-#if wxOSX_BITMAP_NATIVE_ACCESS
     m_bytesPerRow = GetBytesPerRow();
-#endif
 
     // pixel access needs a non-const bitmap currently
     wxBitmap bmp(bitmap);
@@ -1722,13 +1683,12 @@ bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
 
 wxBitmap wxMask::GetBitmap() const
 {
-#if wxOSX_BITMAP_NATIVE_ACCESS
     int m_width, m_height, m_bytesPerRow;
     m_width = GetWidth();
     m_height = GetHeight();
     m_bytesPerRow = GetBytesPerRow();
-#endif
 
+    
     wxBitmap bitmap(m_width, m_height, 32);
     wxNativePixelData data(bitmap);
 
