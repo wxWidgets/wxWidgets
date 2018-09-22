@@ -88,7 +88,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 anitest: $(ANITEST_OBJECTS)
-	$(CXX) -o $@ $(ANITEST_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs adv,core,base`
+	$(CXX) -o $@ $(ANITEST_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
 
 anitest_anitest.o: ./anitest.cpp
 	$(CXX) -c -o $@ $(ANITEST_CXXFLAGS) $(CPPDEPS) $<

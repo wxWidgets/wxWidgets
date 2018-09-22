@@ -16,7 +16,7 @@ more about wxWidgets at:
 
 Documentation is available online at:
 
-* http://docs.wxwidgets.org/3.1.2/
+* https://docs.wxwidgets.org/3.1.2/
 
 wxWidgets sources and binaries for the selected platforms are available for
 download from:

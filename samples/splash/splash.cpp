@@ -248,7 +248,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
         text->SetBackgroundColour(*wxWHITE);
         text->SetForegroundColour(*wxBLACK);
         wxFont font = text->GetFont();
-        font.SetPointSize(2*font.GetPointSize()/3);
+        font.SetFractionalPointSize(2.0*font.GetFractionalPointSize()/3.0);
         text->SetFont(font);
 #endif
     }

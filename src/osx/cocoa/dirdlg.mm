@@ -116,9 +116,14 @@ int wxDirDialog::ShowModal()
     m_path.clear();
 
     int returnCode = -1;
+    
+    OSXBeginModalDialog();
 
     returnCode = (NSInteger)[oPanel runModalForDirectory:dir.AsNSString() file:nil types:nil];
     ModalFinishedCallback(oPanel, returnCode);
+    
+    OSXEndModalDialog();
+
 
     return GetReturnCode();
 }

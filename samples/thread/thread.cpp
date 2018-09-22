@@ -402,8 +402,7 @@ MyFrame::MyFrame(const wxString& title)
     wxLog::SetActiveTarget(this);
 
     // use fixed width font to align output in nice columns
-    wxFont font(wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_TELETYPE,
-                wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    wxFont font(wxFontInfo().Family(wxFONTFAMILY_TELETYPE));
     header->SetFont(font);
     m_txtctrl->SetFont(font);
 

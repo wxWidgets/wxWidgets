@@ -557,20 +557,27 @@ enum wxBackgroundStyle
 
     Notice that some, but @em not all, of these IDs are also stock IDs, i.e.
     you can use them for the button or menu items without specifying the label
-    which will be provided by the underlying platform itself. See @ref page_stockitems "the
-    list of stock items" for the subset of standard IDs which are stock IDs as well.
+    which will be provided by the underlying platform itself. See
+    @ref page_stockitems "the list of stock items" for the subset of standard
+    IDs which are stock IDs as well.
 */
 enum wxStandardID
 {
     /**
        This id delimits the lower bound of the range used by automatically-generated ids
-       (i.e. those used when wxID_ANY is specified during construction).
+       (i.e.\ those used when wxID_ANY is specified during construction).
+
+       It is defined as a relatively large negative number and its exact value
+       is platform-dependent.
      */
     wxID_AUTO_LOWEST,
 
     /**
        This id delimits the upper bound of the range used by automatically-generated ids
-       (i.e. those used when wxID_ANY is specified during construction).
+       (i.e.\ those used when wxID_ANY is specified during construction).
+
+       It is defined as a relatively small negative number and its exact value
+       is platform-dependent.
      */
     wxID_AUTO_HIGHEST,
 
@@ -590,6 +597,11 @@ enum wxStandardID
     */
     wxID_ANY = -1,
 
+    /**
+        Start of the range reserved for wxWidgets-defined IDs.
+
+        Don't define custom IDs in the range from wxID_LOWEST to wxID_HIGHEST.
+     */
     wxID_LOWEST = 4999,
 
     wxID_OPEN,
@@ -737,6 +749,15 @@ enum wxStandardID
     /** IDs used by generic file ctrl (4 consecutive starting from this value) */
     wxID_FILECTRL = 5950,
 
+    /**
+        End of the range reserved for wxWidgets-defined IDs.
+
+        Don't define custom IDs in the range from wxID_LOWEST to wxID_HIGHEST.
+
+        When using an enum to define a number of custom IDs, assigning the
+        value of @c wxID_HIGHEST+1 to the first element ensures that none of
+        the enum elements will conflict with any standard IDs.
+     */
     wxID_HIGHEST = 5999
 };
 

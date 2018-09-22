@@ -429,9 +429,9 @@ void wxCmdLineParserData::SetArguments(int argc, char **argv)
     // temporarily change the locale here. The only drawback is that changing
     // the locale is thread-unsafe but precisely because we're called so early
     // it's hopefully safe to assume that no other threads had been created yet.
-    char * const locOld = SetAllLocaleFacets(NULL);
+    const wxCharBuffer locOld(SetAllLocaleFacets(NULL));
     SetAllLocaleFacets("");
-    wxON_BLOCK_EXIT1( SetAllLocaleFacets, locOld );
+    wxON_BLOCK_EXIT1( SetAllLocaleFacets, locOld.data() );
 
     for ( int n = 0; n < argc; n++ )
     {

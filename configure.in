@@ -52,7 +52,7 @@ WX_MSW_VERSION=$wx_major_version_number$wx_minor_version_number$wx_release_numbe
 
 dnl Autoconf-2.60 changed the meaning of top_builddir variable, so we have
 dnl to use our own replacement that will work with both 2.5x and 2.60+:
-wx_top_builddir="`pwd`"
+wx_top_builddir="`pwd -W 2> /dev/null || pwd`"
 AC_SUBST(wx_top_builddir)
 
 
@@ -2746,7 +2746,7 @@ if test "$USE_WIN32" = 1 ; then
 
     LIBS="$LIBS -luxtheme -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lcomdlg32 -ladvapi32 -lversion -lwsock32 -lgdi32"
     case "${host}" in
-        x86_64-*-mingw32* )
+        x86_64-*-mingw* )
             dnl we need to define this to embed the manifest for correct
             dnl platform from wx/msw/wx.rc (this is not needed for x86 which is
             dnl the default in wx/msw/rcdefs.h)
@@ -2785,7 +2785,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
         dnl -mwindows causes a heap of other default gui libs to be linked in.
         case "${host}" in
-            *-*-mingw32* )
+            *-*-mingw* )
                 WXCONFIG_LDFLAGS_GUI="$LDFLAGS -Wl,--subsystem,windows -mwindows"
         esac
     fi
@@ -4193,9 +4193,17 @@ fi
 
 dnl at least under IRIX with mipsPro the C99 round() function is available when
 dnl building using the C compiler but not when using C++ one
+AC_CACHE_CHECK([for round], wx_cv_func_round, [
 AC_LANG_PUSH(C++)
-WX_CHECK_FUNCS(round,,,[#include <math.h>])
+AC_TRY_LINK(
+    [#include <math.h>],
+    [return int(round(0.0))],
+    wx_cv_func_round=yes, wx_cv_func_round=no)
 AC_LANG_POP()
+])
+if test "$wx_cv_func_round" = yes; then
+    AC_DEFINE(HAVE_ROUND)
+fi
 
 dnl the following tests are for Unix(like) systems only
 if test "$TOOLKIT" != "MSW"; then
@@ -5003,7 +5011,7 @@ dnl from if !MSW
 else
     if test "$wxUSE_THREADS" = "yes" ; then
       case "${host}" in
-        x86_64-*-mingw32* )
+        x86_64-*-mingw* )
         ;;
         *-*-mingw32* )
             dnl check if the compiler accepts -mthreads
@@ -6597,6 +6605,9 @@ if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
             dnl he's doing if --without-xtest was explicitly specified.
             wxUSE_UIACTIONSIMULATOR=no
         fi
+    elif test "$wxUSE_DFB" = 1; then
+        AC_MSG_WARN([wxUIActionSimulator not yet supported under $TOOLKIT... disabled])
+        wxUSE_UIACTIONSIMULATOR=no
     fi
 
     if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
@@ -6960,7 +6971,7 @@ if test "$wxUSE_TOOLTIPS" = "yes"; then
         AC_MSG_WARN([wxTooltip not supported yet under Motif... disabled])
     else
         if test "$wxUSE_UNIVERSAL" = "yes"; then
-            AC_MSG_WARN([wxTooltip not supported yet in wxUniversal... disabled])
+            AC_MSG_WARN([wxTooltip not supported yet in $TOOLKIT... disabled])
         else
             AC_DEFINE(wxUSE_TOOLTIPS)
         fi
@@ -7518,6 +7529,8 @@ if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
         if test "$wx_cv_lib_gdiplus" = "yes"; then
             wx_has_graphics=1
         fi
+    elif test "$WXGTK1" = "1"; then
+        AC_MSG_WARN([wxGraphicsContext not supported with GTK +1])
     elif test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
         PKG_CHECK_MODULES(CAIRO, cairo,
             [wx_has_graphics=1],
@@ -7866,6 +7879,13 @@ if test "x$INTELCXX" = "xyes" ; then
 elif test "$GXX" = yes ; then
     CXXWARNINGS="-Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy"
     AX_CXXFLAGS_GCC_OPTION(-Woverloaded-virtual, CXXWARNINGS)
+
+    dnl there are tons of warnings when building with GTK+ 1 which are never
+    dnl going to get fixed, so disable them to at least see new warnings/errors
+    dnl more clearly
+    if test "$WXGTK1" = "1"; then
+        CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations -Wno-narrowing -Wno-write-strings"
+    fi
 
     dnl when building using GTK+ 3 or Cocoa we currently get tons of deprecation
     dnl warnings from the standard headers -- disable them as we already know

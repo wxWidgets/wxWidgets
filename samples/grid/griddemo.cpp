@@ -172,12 +172,16 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_ROWLABELVERTALIGN, GridFrame::SetRowLabelVertAlignment )
     EVT_MENU( ID_COLLABELHORIZALIGN, GridFrame::SetColLabelHorizAlignment )
     EVT_MENU( ID_COLLABELVERTALIGN, GridFrame::SetColLabelVertAlignment )
+    EVT_MENU( ID_CORNERLABELHORIZALIGN, GridFrame::SetCornerLabelHorizAlignment )
+    EVT_MENU( ID_CORNERLABELVERTALIGN, GridFrame::SetCornerLabelVertAlignment )
+    EVT_MENU( ID_CORNERLABELORIENTATION, GridFrame::ToggleCornerLabelOrientation )
     EVT_MENU( ID_GRIDLINECOLOUR, GridFrame::SetGridLineColour )
     EVT_MENU( ID_INSERTROW, GridFrame::InsertRow )
     EVT_MENU( ID_INSERTCOL, GridFrame::InsertCol )
     EVT_MENU( ID_DELETEROW, GridFrame::DeleteSelectedRows )
     EVT_MENU( ID_DELETECOL, GridFrame::DeleteSelectedCols )
     EVT_MENU( ID_CLEARGRID, GridFrame::ClearGrid )
+    EVT_MENU( ID_SETCORNERLABEL, GridFrame::SetCornerLabelValue )
     EVT_MENU( ID_SHOWSEL,   GridFrame::ShowSelection )
     EVT_MENU( ID_SELCELLS,  GridFrame::SelectCells )
     EVT_MENU( ID_SELROWS,  GridFrame::SelectRows )
@@ -321,6 +325,16 @@ GridFrame::GridFrame()
     colLabelMenu->AppendRadioItem( ID_COLLABELHORIZALIGN, wxT("&Horizontal") );
     colLabelMenu->AppendRadioItem( ID_COLLABELVERTALIGN, wxT("&Vertical") );
 
+    wxMenu *cornerLabelMenu = new wxMenu;
+    viewMenu->Append( ID_CORNERLABELALIGN, wxT("Corner label alignment"),
+                      cornerLabelMenu,
+                      wxT("Change alignment of corner label") );
+
+    cornerLabelMenu->AppendRadioItem( ID_CORNERLABELHORIZALIGN, wxT("&Horizontal") );
+    cornerLabelMenu->AppendRadioItem( ID_CORNERLABELVERTALIGN, wxT("&Vertical") );
+
+    viewMenu->Append( ID_CORNERLABELORIENTATION, wxT("Toggle corner label orientation") );
+
     wxMenu *colHeaderMenu = new wxMenu;
 
     viewMenu->Append( ID_ROWLABELALIGN, wxT("Col header style"),
@@ -352,6 +366,7 @@ GridFrame::GridFrame()
     editMenu->Append( ID_DELETEROW, wxT("Delete selected ro&ws") );
     editMenu->Append( ID_DELETECOL, wxT("Delete selected co&ls") );
     editMenu->Append( ID_CLEARGRID, wxT("Cl&ear grid cell contents") );
+    editMenu->Append( ID_SETCORNERLABEL, wxT("&Set corner label...") );
 
     wxMenu *selectMenu = new wxMenu;
     selectMenu->Append( ID_SELECT_UNSELECT, wxT("Add new cells to the selection"),
@@ -920,6 +935,73 @@ void GridFrame::SetColLabelVertAlignment( wxCommandEvent& WXUNUSED(ev) )
 }
 
 
+void GridFrame::SetCornerLabelHorizAlignment( wxCommandEvent& WXUNUSED(ev) )
+{
+    int horiz, vert;
+    grid->GetCornerLabelAlignment( &horiz, &vert );
+
+    switch ( horiz )
+    {
+        case wxALIGN_LEFT:
+            horiz = wxALIGN_CENTRE;
+            break;
+
+        case wxALIGN_CENTRE:
+            horiz = wxALIGN_RIGHT;
+            break;
+
+        case wxALIGN_RIGHT:
+            horiz = wxALIGN_LEFT;
+            break;
+    }
+
+    grid->SetCornerLabelAlignment( horiz, vert );
+}
+
+
+void GridFrame::SetCornerLabelVertAlignment( wxCommandEvent& WXUNUSED(ev) )
+{
+    int horiz, vert;
+    grid->GetCornerLabelAlignment( &horiz, &vert );
+
+    switch ( vert )
+    {
+        case wxALIGN_TOP:
+            vert = wxALIGN_CENTRE;
+            break;
+
+        case wxALIGN_CENTRE:
+            vert = wxALIGN_BOTTOM;
+            break;
+
+        case wxALIGN_BOTTOM:
+            vert = wxALIGN_TOP;
+            break;
+    }
+
+    grid->SetCornerLabelAlignment( horiz, vert );
+}
+
+
+void GridFrame::ToggleCornerLabelOrientation( wxCommandEvent& WXUNUSED(ev) )
+{
+    int orientation = grid->GetCornerLabelTextOrientation();
+
+    switch(orientation)
+    {
+        case wxHORIZONTAL:
+            orientation = wxVERTICAL;
+            break;
+
+        case wxVERTICAL:
+            orientation = wxHORIZONTAL;
+            break;
+    }
+
+    grid->SetCornerLabelTextOrientation(orientation);
+}
+
+
 void GridFrame::SetGridLineColour( wxCommandEvent& WXUNUSED(ev) )
 {
     wxColourDialog dlg( NULL );
@@ -1038,6 +1120,20 @@ void GridFrame::DeleteSelectedCols( wxCommandEvent& WXUNUSED(ev) )
 void GridFrame::ClearGrid( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->ClearGrid();
+}
+
+void GridFrame::SetCornerLabelValue( wxCommandEvent& WXUNUSED(ev) )
+{
+    wxTextEntryDialog dialog(this,
+                             "Please enter corner label:",
+                             "Please enter a string",
+                             grid->GetCornerLabelValue(),
+                             wxOK | wxCANCEL);
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        grid->SetCornerLabelValue(dialog.GetValue());
+    }
 }
 
 void GridFrame::ShowSelection( wxCommandEvent& WXUNUSED(ev) )

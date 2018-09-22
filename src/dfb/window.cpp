@@ -312,6 +312,13 @@ void wxWindowDFB::DoReleaseMouse()
     return (wxWindow*)gs_mouseCapture;
 }
 
+wxMouseState wxGetMouseState()
+{
+#warning "implement this"
+    wxMouseState ms;
+    return ms;
+}
+
 bool wxWindowDFB::SetCursor(const wxCursor& cursor)
 {
     if ( !wxWindowBase::SetCursor(cursor) )

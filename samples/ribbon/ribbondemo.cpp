@@ -387,7 +387,7 @@ MyFrame::MyFrame()
         sizer_panelsizer_h->Add(sizer_panelsizer_v, 0);
         sizer_panel->SetSizer(sizer_panelsizer_h);
 
-        wxFont label_font(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT);
+        wxFont label_font(wxFontInfo(8).Light());
         m_bitmap_creation_dc.SetFont(label_font);
 
         wxRibbonPage* scheme = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Appearance"), eye_xpm);

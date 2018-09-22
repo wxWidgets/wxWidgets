@@ -219,7 +219,6 @@ desirable, for example because some of them were not built and this is where
 the symbols in this section can be helpful: defining them allows to not link
 with the corresponding library. The following symbols are honoured:
 
-    - wxNO_ADV_LIB
     - wxNO_AUI_LIB
     - wxNO_HTML_LIB
     - wxNO_MEDIA_LIB

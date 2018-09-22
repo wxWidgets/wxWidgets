@@ -839,8 +839,6 @@ bool wxRichTextImage::ExportXML(wxXmlNode* parent, wxRichTextXMLHandler* handler
                 strData = wxString((const char*) data, wxConvUTF8, size);
                 delete[] data;
             }
-            else
-                strData = wxEmptyString;
         }
 
     }

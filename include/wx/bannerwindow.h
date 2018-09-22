@@ -22,13 +22,13 @@ class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxColour;
 class WXDLLIMPEXP_FWD_CORE wxDC;
 
-extern WXDLLIMPEXP_DATA_ADV(const char) wxBannerWindowNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxBannerWindowNameStr[];
 
 // ----------------------------------------------------------------------------
 // A simple banner window showing either a bitmap or text.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxBannerWindow : public wxWindow
+class WXDLLIMPEXP_CORE wxBannerWindow : public wxWindow
 {
 public:
     // Default constructor, use Create() later.

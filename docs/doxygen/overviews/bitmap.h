@@ -106,58 +106,58 @@ platform.
 
 Under Windows, wxBitmap may load the following formats:
 
-    @li Windows bitmap resource (wxBITMAP_TYPE_BMP_RESOURCE)
-    @li Windows bitmap file (wxBITMAP_TYPE_BMP)
-    @li XPM data and file (wxBITMAP_TYPE_XPM)
-    @li All formats that are supported by the wxImage class.
+@li Windows bitmap resource (wxBITMAP_TYPE_BMP_RESOURCE)
+@li Windows bitmap file (wxBITMAP_TYPE_BMP)
+@li XPM data and file (wxBITMAP_TYPE_XPM)
+@li All formats that are supported by the wxImage class.
 
 Under wxGTK, wxBitmap may load the following formats:
 
-    @li XPM data and file (wxBITMAP_TYPE_XPM)
-    @li All formats that are supported by the wxImage class.
+@li XPM data and file (wxBITMAP_TYPE_XPM)
+@li All formats that are supported by the wxImage class.
 
 Under wxMotif and wxX11, wxBitmap may load the following formats:
 
-    @li XBM data and file (wxBITMAP_TYPE_XBM)
-    @li XPM data and file (wxBITMAP_TYPE_XPM)
-    @li All formats that are supported by the wxImage class.
+@li XBM data and file (wxBITMAP_TYPE_XBM)
+@li XPM data and file (wxBITMAP_TYPE_XPM)
+@li All formats that are supported by the wxImage class.
 
 @subsection overview_bitmap_supportedformats_icon wxIcon
 
 Under Windows, wxIcon may load the following formats:
 
-    @li Windows icon resource (wxBITMAP_TYPE_ICO_RESOURCE)
-    @li Windows icon file (wxBITMAP_TYPE_ICO)
-    @li XPM data and file (wxBITMAP_TYPE_XPM)
+@li Windows icon resource (wxBITMAP_TYPE_ICO_RESOURCE)
+@li Windows icon file (wxBITMAP_TYPE_ICO)
+@li XPM data and file (wxBITMAP_TYPE_XPM).
 
 Under wxGTK, wxIcon may load the following formats:
 
-    @li XPM data and file (wxBITMAP_TYPE_XPM)
-    @li All formats that are supported by the wxImage class.
+@li XPM data and file (wxBITMAP_TYPE_XPM)
+@li All formats that are supported by the wxImage class.
 
 Under wxMotif and wxX11, wxIcon may load the following formats:
 
-    @li XBM data and file (wxBITMAP_TYPE_XBM)
-    @li XPM data and file (wxBITMAP_TYPE_XPM)
-    @li All formats that are supported by the wxImage class.
+@li XBM data and file (wxBITMAP_TYPE_XBM)
+@li XPM data and file (wxBITMAP_TYPE_XPM)
+@li All formats that are supported by the wxImage class.
 
 @subsection overview_bitmap_supportedformats_cursor wxCursor
 
 Under Windows, wxCursor may load the following formats:
 
-    @li Windows cursor resource (wxBITMAP_TYPE_CUR_RESOURCE)
-    @li Windows cursor file (wxBITMAP_TYPE_CUR)
-    @li Windows icon file (wxBITMAP_TYPE_ICO)
-    @li Windows bitmap file (wxBITMAP_TYPE_BMP)
+@li Windows cursor resource (wxBITMAP_TYPE_CUR_RESOURCE)
+@li Windows cursor file (wxBITMAP_TYPE_CUR)
+@li Windows icon file (wxBITMAP_TYPE_ICO)
+@li Windows bitmap file (wxBITMAP_TYPE_BMP).
 
 Under wxGTK, wxCursor may load the following formats (in addition to stock
 cursors):
 
-    @li None (stock cursors only).
+@li None (stock cursors only).
 
 Under wxMotif and wxX11, wxCursor may load the following formats:
 
-    @li XBM data and file (wxBITMAP_TYPE_XBM)
+@li XBM data and file (wxBITMAP_TYPE_XBM).
 
 
 @section overview_bitmap_handlers Bitmap Format Handlers

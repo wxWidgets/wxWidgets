@@ -13,7 +13,7 @@ for the use in both open source and commercial applications, comes
 with the full, easy to read and modify, source and extensive
 documentation and a collection of more than a hundred examples.
 You can learn more about wxWidgets at https://www.wxwidgets.org/
-and read its documentation online at http://docs.wxwidgets.org/
+and read its documentation online at https://docs.wxwidgets.org/
 
 
 Platforms

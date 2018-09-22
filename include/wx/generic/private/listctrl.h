@@ -258,7 +258,7 @@ public:
     bool HasText() const { return !GetText(0).empty(); }
 
     void SetItem( int index, const wxListItem &info );
-    void GetItem( int index, wxListItem &info );
+    void GetItem( int index, wxListItem &info ) const;
 
     wxString GetText(int index) const;
     void SetText( int index, const wxString& s );
@@ -313,7 +313,18 @@ private:
                            int width);
 };
 
-WX_DECLARE_OBJARRAY(wxListLineData, wxListLineDataArray);
+class wxListLineDataArray : public wxVector<wxListLineData*>
+{
+public:
+    void Clear()
+    {
+        for ( size_t n = 0; n < size(); ++n )
+            delete (*this)[n];
+        clear();
+    }
+
+    ~wxListLineDataArray() { Clear(); }
+};
 
 //-----------------------------------------------------------------------------
 //  wxListHeaderWindow (internal)
@@ -817,7 +828,7 @@ protected:
             n = 0;
         }
 
-        return &m_lines[n];
+        return m_lines[n];
     }
 
     // get a dummy line which can be used for geometry calculations and such:

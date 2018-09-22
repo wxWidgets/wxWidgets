@@ -480,7 +480,7 @@ bool DXFRenderer::ParseEntities(wxInputStream& stream)
                 else
                     p->colour = GetLayerColour(layer);
                 m_entities.Append(p);
-                colour = -1; layer = wxEmptyString;
+                colour = -1; layer.clear();
                 v[0] = v[1] = v[2] = v[3] = DXFVector();
                 state = 0;
             }
@@ -494,7 +494,7 @@ bool DXFRenderer::ParseEntities(wxInputStream& stream)
                 else
                     p->colour = GetLayerColour(layer);
                 m_entities.Append(p);
-                colour = -1; layer = wxEmptyString;
+                colour = -1; layer.clear();
                 v[0] = v[1] = v[2] = v[3] = DXFVector();
                 state = 0;
             }

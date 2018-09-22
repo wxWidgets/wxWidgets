@@ -74,7 +74,8 @@ public:
     ~wxGtkTreePathList()
     {
         // Delete the list contents, wxGtkList will delete the list itself.
-        g_list_foreach(m_list, (GFunc)gtk_tree_path_free, NULL);
+        for (GList* p = m_list; p; p = p->next)
+            gtk_tree_path_free(static_cast<GtkTreePath*>(p->data));
     }
 };
 

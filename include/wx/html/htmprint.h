@@ -54,6 +54,11 @@ public:
     // (see wxFileSystem for detailed explanation)
     void SetHtmlText(const wxString& html, const wxString& basepath = wxEmptyString, bool isdir = true);
 
+    // Sets the HTML cell that will be rendered: this is more efficient than
+    // using text as it allows to parse it only once. Note that the cell will
+    // be modified by this call.
+    void SetHtmlCell(wxHtmlContainerCell& cell);
+
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
     void SetFonts(const wxString& normal_face, const wxString& fixed_face, const int *sizes = NULL);
 
@@ -79,11 +84,14 @@ public:
     int GetTotalHeight() const;
 
 private:
+    void DoSetHtmlCell(wxHtmlContainerCell* cell);
+
     wxDC *m_DC;
-    wxHtmlWinParser *m_Parser;
-    wxFileSystem *m_FS;
+    wxFileSystem m_FS;
+    wxHtmlWinParser m_Parser;
     wxHtmlContainerCell *m_Cells;
     int m_Width, m_Height;
+    bool m_ownsCells;
 
     wxDECLARE_NO_COPY_CLASS(wxHtmlDCRenderer);
 };

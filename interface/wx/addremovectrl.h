@@ -21,7 +21,7 @@
 
     @since 3.1.0
 
-    @library{wxadv}
+    @library{wxcore}
  */
 class wxAddRemoveAdaptor
 {
@@ -134,7 +134,7 @@ public:
 
     @since 3.1.0
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
  */
 class wxAddRemoveCtrl : public wxPanel

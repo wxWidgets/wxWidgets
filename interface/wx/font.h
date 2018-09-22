@@ -61,13 +61,27 @@ enum wxFontStyle
 
 /**
     Font weights.
+
+    The values of this enum correspond to the CSS font weight specifications,
+    see https://www.w3.org/TR/css-fonts-4/#font-weight-prop, with the addition of
+    one font weight bolder than heavy
+
+
 */
 enum wxFontWeight
 {
-    wxFONTWEIGHT_NORMAL = wxNORMAL,  //!< Normal font.
-    wxFONTWEIGHT_LIGHT = wxLIGHT,    //!< Light font.
-    wxFONTWEIGHT_BOLD = wxBOLD,      //!< Bold font.
-    wxFONTWEIGHT_MAX
+    wxFONTWEIGHT_INVALID = 0,        //!< Invalid font weight. @since 3.1.2
+    wxFONTWEIGHT_THIN = 100,         //!< Thin font (weight = 100). @since 3.1.2
+    wxFONTWEIGHT_EXTRALIGHT = 200,   //!< Extra Light (Ultra Light) font (weight = 200). @since 3.1.2
+    wxFONTWEIGHT_LIGHT = 300,        //!< Light font (weight = 300).
+    wxFONTWEIGHT_NORMAL = 400,       //!< Normal font (weight = 400).
+    wxFONTWEIGHT_MEDIUM = 500,       //!< Medium font (weight = 500). @since 3.1.2
+    wxFONTWEIGHT_SEMIBOLD = 600,     //!< Semi Bold (Demi Bold) font (weight = 600). @since 3.1.2
+    wxFONTWEIGHT_BOLD = 700,         //!< Bold font (weight = 700).
+    wxFONTWEIGHT_EXTRABOLD = 800,    //!< Extra Bold (Ultra Bold) font (weight = 800). @since 3.1.2
+    wxFONTWEIGHT_HEAVY = 900,        //!< Heavy (Black) font (weight = 900). @since 3.1.2
+    wxFONTWEIGHT_EXTRAHEAVY = 1000,  //!< Extra Heavy font (weight = 1000).  @since 3.1.2
+    wxFONTWEIGHT_MAX = wxFONTWEIGHT_EXTRAHEAVY
 };
 
 /**
@@ -308,9 +322,16 @@ public:
     /**
         Constructor setting the font size in points to use.
 
+        The canonical type of @a pointSize argument is @c float, however any
+        other integer type, as well as @c double, is also accepted for
+        compatibility.
+
+        Notice that until wxWidgets 3.1.2, the type could only be @c int.
+
         @see wxFont::SetPointSize()
      */
-    explicit wxFontInfo(int pointSize);
+    template <typename T>
+    explicit wxFontInfo(T pointSize);
 
     /**
         Constructor setting the font size in pixels to use.
@@ -343,7 +364,22 @@ public:
     wxFontInfo& FaceName(const wxString& faceName);
 
     /**
+        Specify the weight of the font.
+
+        @param weight
+            A font weight in the range from 1 to 1000, inclusive, with 1 being
+            the thinnest and 1000 the heaviest possible font variant.
+            @c wxFONTWEIGHT_XXX values from wxFontWeight enum can be used here.
+
+        @since 3.1.2
+     */
+    wxFontInfo& Weight(int weight);
+
+    /**
         Use a bold version of the font.
+
+        This is a wrapper for Weight() calling it with ::wxFONTWEIGHT_BOLD
+        argument.
 
         @see ::wxFontWeight, wxFont::SetWeight()
      */
@@ -352,12 +388,18 @@ public:
     /**
         Use a lighter version of the font.
 
+        This is a wrapper for Weight() calling it with ::wxFONTWEIGHT_LIGHT
+        argument.
+
         @see ::wxFontWeight, wxFont::SetWeight()
      */
     wxFontInfo& Light(bool light = true);
 
     /**
         Use an italic version of the font.
+
+        This is a wrapper for Style() calling it with ::wxFONTSTYLE_ITALIC
+        argument.
 
         @see ::wxFontStyle, wxFont::SetStyle()
      */
@@ -366,9 +408,19 @@ public:
     /**
         Use a slanted version of the font.
 
+        This is a wrapper for Style() calling it with ::wxFONTSTYLE_SLANT
+        argument.
+
         @see ::wxFontStyle, wxFont::SetStyle()
      */
     wxFontInfo& Slant(bool slant = true);
+
+    /**
+        Specify the style of the font using one of wxFontStyle constants.
+
+        @since 3.1.2
+     */
+    wxFontInfo& Style(wxFontStyle style);
 
     /**
         Set anti-aliasing flag.
@@ -405,8 +457,25 @@ public:
         Set all the font attributes at once.
 
         See ::wxFontFlag for the various flags that can be used.
+
+        Note that calling this method affects the font weight stored in this
+        object: it is set to ::wxFONTWEIGHT_LIGHT or ::wxFONTWEIGHT_BOLD if the
+        corresponding flag is present in @a flags, or ::wxFONTWEIGHT_NORMAL
+        otherwise.
      */
     wxFontInfo& AllFlags(int flags);
+
+    /**
+        Get the symbolic weight closest to the given raw weight value.
+
+        @param numWeight
+            A valid raw weight value, i.e. a value in the range 1 to 1000,
+            inclusive.
+        @return A valid element of wxFontWeight enum.
+
+        @since 3.1.2
+     */
+    static wxFontWeight GetWeightClosestToNumericValue(int numWeight);
 };
 
 /**
@@ -489,7 +558,10 @@ public:
             historical reasons, the value 70 here is interpreted at @c
             wxDEFAULT and results in creation of the font with the default size
             and not of a font with the size of 70pt. If you really need the
-            latter, please use SetPointSize(70).
+            latter, please use SetPointSize(70). Note that this constructor and
+            the matching Create() method overload are the only places in wxFont
+            API handling @c wxDEFAULT specially: neither SetPointSize() nor the
+            constructor taking wxFontInfo handle this value in this way.
         @param family
             The font family: a generic portable way of referring to fonts without specifying a
             facename. This parameter must be one of the ::wxFontFamily enumeration values.
@@ -698,11 +770,23 @@ public:
     static bool AddPrivateFont(const wxString& filename);
 
     /**
-        Gets the point size.
+        Gets the point size as an integer number.
 
-        @see SetPointSize()
+        This function is kept for compatibility reasons. New code should use
+        GetFractionalPointSize() and support fractional point sizes.
+
+        @see SetPointSize(), @see GetFractionalPointSize()
     */
     virtual int GetPointSize() const;
+
+    /**
+        Gets the point size as a floating number.
+
+        @see SetPointSize(float)
+
+        @since 3.1.2
+    */
+    virtual float  GetFractionalPointSize() const;
 
     /**
         Gets the pixel size.
@@ -744,6 +828,18 @@ public:
         @see SetWeight()
     */
     virtual wxFontWeight GetWeight() const;
+
+    /**
+        Gets the font weight as an integer value.
+
+        See ::wxFontWeight for a list of valid weight identifiers and their corresponding integer value.
+
+        @see SetWeight()
+        @see SetNumericWeight()
+
+        @since 3.1.2
+    */
+    virtual int GetNumericWeight() const;
 
     /**
         Returns @true if the font is a fixed width (or monospaced) font,
@@ -1019,19 +1115,31 @@ public:
     bool SetNativeFontInfoUserDesc(const wxString& info);
 
     void SetNativeFontInfo(const wxNativeFontInfo& info);
-        
+
     /**
-        Sets the point size.
+        Sets the font size in points to an integer value.
+
+        This is a legacy version of the function only supporting integer point
+        sizes. It can still be used, but to avoid unnecessarily restricting the
+        font size in points to integer values, consider using the new (added in
+        wxWidgets 3.1.2) SetFractionalPointSize() function instead.
+     */
+    virtual void SetPointSize(int pointSize);
+
+    /**
+        Sets the font size in points.
 
         The <em>point size</em> is defined as 1/72 of the Anglo-Saxon inch
         (25.4 mm): it is approximately 0.0139 inch or 352.8 um.
 
         @param pointSize
-            Size in points.
+            Size in points. This can also be a fractional point size like 11.5.
 
-        @see GetPointSize()
+        @see GetFractionalPointSize(), SetPointSize()
+
+        @since 3.1.2
     */
-    virtual void SetPointSize(int pointSize);
+    virtual void SetFractionalPointSize(float pointSize);
 
     /**
         Sets the pixel size.
@@ -1114,6 +1222,19 @@ public:
     */
     virtual void SetWeight(wxFontWeight weight);
 
+    /**
+        Sets the font weight using an integer value.
+
+        See ::wxFontWeight for a list of valid weight identifiers and their
+        corresponding integer value.
+
+        @param weight
+            An integer value int the range 1-1000.
+
+        @see GetNumericWeight()
+    */
+    virtual void SetNumericWeight(int weight);
+
     //@}
 
 
@@ -1155,6 +1276,22 @@ public:
     */
     static void SetDefaultEncoding(wxFontEncoding encoding);
 
+    /**
+        Get the raw weight value corresponding to the given symbolic constant.
+
+        For compatibility, this function handles the values @c wxNORMAL, @c
+        wxLIGHT and @c wxBOLD, that have values 90, 91 and 92, specially and
+        converts them to the corresponding @c wxFONTWEIGHT_XXX weight value.
+
+        @param weight
+            A valid element of wxFontWeight enum, i.e. this argument can't have
+            value ::wxFONTWEIGHT_INVALID.
+        @return Numeric weight, between 1 and 1000.
+
+        @since 3.1.2
+     */
+    static int GetNumericWeightOf(wxFontWeight weight);
+
     //@{
     /**
         This function takes the same parameters as the relative
@@ -1186,7 +1323,7 @@ public:
                        const wxString& faceName = wxEmptyString,
                        wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
-    
+
     static wxFont *New(const wxNativeFontInfo& nativeInfo);
     static wxFont *New(const wxString& nativeInfoString);
 
@@ -1265,7 +1402,7 @@ public:
     /**
         Finds a font of the given specification, or creates one and adds it to the
         list. See the @ref wxFont "wxFont constructor" for details of the arguments.
-        
+
         @since 3.1.1
     */
     wxFont* FindOrCreateFont(const wxFontInfo& fontInfo);

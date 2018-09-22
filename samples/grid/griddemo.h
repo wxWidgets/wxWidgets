@@ -54,6 +54,9 @@ class GridFrame : public wxFrame
     void SetRowLabelVertAlignment( wxCommandEvent& );
     void SetColLabelHorizAlignment( wxCommandEvent& );
     void SetColLabelVertAlignment( wxCommandEvent& );
+    void SetCornerLabelHorizAlignment( wxCommandEvent& );
+    void SetCornerLabelVertAlignment( wxCommandEvent& );
+    void ToggleCornerLabelOrientation( wxCommandEvent& );
     void SetGridLineColour( wxCommandEvent& );
 
     void SetCellFgColour(wxCommandEvent &);
@@ -64,6 +67,7 @@ class GridFrame : public wxFrame
     void DeleteSelectedRows( wxCommandEvent& );
     void DeleteSelectedCols( wxCommandEvent& );
     void ClearGrid( wxCommandEvent& );
+    void SetCornerLabelValue( wxCommandEvent& );
     void ShowSelection( wxCommandEvent& );
     void SelectCells( wxCommandEvent& );
     void SelectRows( wxCommandEvent& );
@@ -152,6 +156,10 @@ public:
         ID_COLLABELALIGN,
         ID_COLLABELHORIZALIGN,
         ID_COLLABELVERTALIGN,
+        ID_CORNERLABELALIGN,
+        ID_CORNERLABELHORIZALIGN,
+        ID_CORNERLABELVERTALIGN,
+        ID_CORNERLABELORIENTATION,
         ID_COLDEFAULTHEADER,
         ID_COLNATIVEHEADER,
         ID_COLCUSTOMHEADER,
@@ -165,6 +173,7 @@ public:
         ID_DELETEROW,
         ID_DELETECOL,
         ID_CLEARGRID,
+        ID_SETCORNERLABEL,
         ID_SHOWSEL,
         ID_CHANGESEL,
         ID_SELCELLS,

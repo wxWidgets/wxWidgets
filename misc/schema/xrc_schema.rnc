@@ -1,7 +1,7 @@
 #
 # RELAX NG schema for XRC files.
 #
-# See http://docs.wxwidgets.org/trunk/overview_xrcformat.html for freeform
+# See https://docs.wxwidgets.org/trunk/overview_xrcformat.html for freeform
 # description of the format.
 #
 #
@@ -454,12 +454,15 @@ t_bitmap     = t_url?,
                )?
 
 t_font       = (
-                   [xrc:p="o"] element size         {_, t_integer }* &
+                   [xrc:p="o"] element size         {_, t_float }* &
                    [xrc:p="o"] element style        {_, ("normal" | "italic" | "slant") }* &
-                   [xrc:p="o"] element weight       {_, ("normal" | "bold" | "light") }* &
+                   [xrc:p="o"] element weight       {_, ("normal" | "thin" | "extralight" | "light" | 
+                                                         "medium" | "semibold" | "bold" | "extrabold" | 
+                                                         "heavy" | "extraheavy" | t_integer) }* &
                    [xrc:p="o"] element family       {_, ("roman" | "script" | "decorative" | "swiss" |
                                                          "modern" | "teletype") }* &
                    [xrc:p="o"] element underlined   {_, t_bool }* &
+                   [xrc:p="o"] element strikethrough{_, t_bool }* &
                    [xrc:p="o"] element face         {_, t_text }* &
                    [xrc:p="o"] element encoding     {_, t_text }* &
                    [xrc:p="o"] element sysfont      {_, ("wxSYS_OEM_FIXED_FONT" | "wxSYS_ANSI_FIXED_FONT" |

@@ -42,8 +42,11 @@
         flag is ignored under Windows unless you specify @c wxTR_NO_LINES as
         well.)
     @style{wxTR_LINES_AT_ROOT}
-        Use this style to show lines between root nodes. Only applicable if @c
-        wxTR_HIDE_ROOT is set and @c wxTR_NO_LINES is not set.
+        Use this style to show lines leading to the root nodes (unless no
+        @c wxTR_NO_LINES is also used, in which case no lines are shown). Note
+        that in the MSW version, if this style is omitted, not only the lines,
+        but also the button used for expanding the root item is not shown,
+        which can be unexpected, so it is recommended to always use it.
     @style{wxTR_HIDE_ROOT}
         Use this style to suppress the display of the root node, effectively
         causing the first-level nodes to appear as a series of root nodes.

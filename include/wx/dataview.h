@@ -50,16 +50,16 @@ class WXDLLIMPEXP_FWD_CORE wxHeaderCtrl;
 // wxDataViewCtrl globals
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_FWD_ADV wxDataViewModel;
-class WXDLLIMPEXP_FWD_ADV wxDataViewCtrl;
-class WXDLLIMPEXP_FWD_ADV wxDataViewColumn;
-class WXDLLIMPEXP_FWD_ADV wxDataViewRenderer;
-class WXDLLIMPEXP_FWD_ADV wxDataViewModelNotifier;
+class WXDLLIMPEXP_FWD_CORE wxDataViewModel;
+class WXDLLIMPEXP_FWD_CORE wxDataViewCtrl;
+class WXDLLIMPEXP_FWD_CORE wxDataViewColumn;
+class WXDLLIMPEXP_FWD_CORE wxDataViewRenderer;
+class WXDLLIMPEXP_FWD_CORE wxDataViewModelNotifier;
 #if wxUSE_ACCESSIBILITY
-class WXDLLIMPEXP_FWD_ADV wxDataViewCtrlAccessible;
+class WXDLLIMPEXP_FWD_CORE wxDataViewCtrlAccessible;
 #endif // wxUSE_ACCESSIBILITY
 
-extern WXDLLIMPEXP_DATA_ADV(const char) wxDataViewCtrlNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxDataViewCtrlNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxDataViewCtrl flags
@@ -100,7 +100,7 @@ WX_DEFINE_ARRAY(wxDataViewItem, wxDataViewItemArray);
 // wxDataViewModelNotifier
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewModelNotifier
+class WXDLLIMPEXP_CORE wxDataViewModelNotifier
 {
 public:
     wxDataViewModelNotifier() { m_owner = NULL; }
@@ -136,7 +136,7 @@ private:
 
 // TODO: Merge with wxItemAttr somehow.
 
-class WXDLLIMPEXP_ADV wxDataViewItemAttr
+class WXDLLIMPEXP_CORE wxDataViewItemAttr
 {
 public:
     // ctors
@@ -186,7 +186,7 @@ private:
 
 typedef wxVector<wxDataViewModelNotifier*> wxDataViewModelNotifiers;
 
-class WXDLLIMPEXP_ADV wxDataViewModel: public wxRefCounter
+class WXDLLIMPEXP_CORE wxDataViewModel: public wxRefCounter
 {
 public:
     wxDataViewModel();
@@ -300,7 +300,7 @@ private:
 //      wxDataViewVirtualListModel
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewListModel : public wxDataViewModel
+class WXDLLIMPEXP_CORE wxDataViewListModel : public wxDataViewModel
 {
 public:
     // derived classes should override these methods instead of
@@ -378,7 +378,7 @@ public:
 // wxDataViewIndexListModel
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewIndexListModel: public wxDataViewListModel
+class WXDLLIMPEXP_CORE wxDataViewIndexListModel: public wxDataViewListModel
 {
 public:
     wxDataViewIndexListModel( unsigned int initial_size = 0 );
@@ -417,7 +417,7 @@ private:
 typedef wxDataViewIndexListModel wxDataViewVirtualListModel;
 #else
 
-class WXDLLIMPEXP_ADV wxDataViewVirtualListModel: public wxDataViewListModel
+class WXDLLIMPEXP_CORE wxDataViewVirtualListModel: public wxDataViewListModel
 {
 public:
     wxDataViewVirtualListModel( unsigned int initial_size = 0 );
@@ -474,7 +474,7 @@ enum wxDataViewColumnFlags
     wxDATAVIEW_COL_HIDDEN        = wxCOL_HIDDEN
 };
 
-class WXDLLIMPEXP_ADV wxDataViewColumnBase : public wxSettableHeaderColumn
+class WXDLLIMPEXP_CORE wxDataViewColumnBase : public wxSettableHeaderColumn
 {
 public:
     // ctor for the text columns: takes ownership of renderer
@@ -534,7 +534,7 @@ private:
 #define wxDV_ROW_LINES               0x0010     // alternating colour in rows
 #define wxDV_VARIABLE_LINE_HEIGHT    0x0020     // variable line height
 
-class WXDLLIMPEXP_ADV wxDataViewCtrlBase: public wxSystemThemedControl<wxControl>
+class WXDLLIMPEXP_CORE wxDataViewCtrlBase: public wxSystemThemedControl<wxControl>
 {
 public:
     wxDataViewCtrlBase();
@@ -803,7 +803,7 @@ protected:
 // wxDataViewEvent - the event class for the wxDataViewCtrl notifications
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewEvent : public wxNotifyEvent
+class WXDLLIMPEXP_CORE wxDataViewEvent : public wxNotifyEvent
 {
 public:
     // Default ctor, normally shouldn't be used and mostly exists only for
@@ -949,30 +949,30 @@ private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxDataViewEvent);
 };
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_SELECTION_CHANGED, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_SELECTION_CHANGED, wxDataViewEvent );
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_ITEM_ACTIVATED, wxDataViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_ITEM_COLLAPSED, wxDataViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_ITEM_EXPANDED, wxDataViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_ITEM_COLLAPSING, wxDataViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_ITEM_EXPANDING, wxDataViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_ITEM_START_EDITING, wxDataViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_ITEM_EDITING_STARTED, wxDataViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_ITEM_EDITING_DONE, wxDataViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_ITEM_ACTIVATED, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_ITEM_COLLAPSED, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_ITEM_EXPANDED, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_ITEM_COLLAPSING, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_ITEM_EXPANDING, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_ITEM_START_EDITING, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_ITEM_EDITING_STARTED, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_ITEM_EDITING_DONE, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEvent );
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_ITEM_CONTEXT_MENU, wxDataViewEvent );
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_COLUMN_HEADER_CLICK, wxDataViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, wxDataViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_COLUMN_SORTED, wxDataViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_COLUMN_REORDERED, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_COLUMN_HEADER_CLICK, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_COLUMN_SORTED, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_COLUMN_REORDERED, wxDataViewEvent );
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_CACHE_HINT, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_CACHE_HINT, wxDataViewEvent );
 
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, wxDataViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_ADV, wxEVT_DATAVIEW_ITEM_DROP, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_ITEM_BEGIN_DRAG, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_ITEM_DROP_POSSIBLE, wxDataViewEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_DATAVIEW_ITEM_DROP, wxDataViewEvent );
 
 typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 
@@ -1025,7 +1025,7 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 // wxDataViewListStore
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewListStoreLine
+class WXDLLIMPEXP_CORE wxDataViewListStoreLine
 {
 public:
     wxDataViewListStoreLine( wxUIntPtr data = 0 )
@@ -1045,7 +1045,7 @@ private:
 };
 
 
-class WXDLLIMPEXP_ADV wxDataViewListStore: public wxDataViewIndexListModel
+class WXDLLIMPEXP_CORE wxDataViewListStore: public wxDataViewIndexListModel
 {
 public:
     wxDataViewListStore();
@@ -1087,7 +1087,7 @@ public:
 
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewListCtrl: public wxDataViewCtrl
+class WXDLLIMPEXP_CORE wxDataViewListCtrl: public wxDataViewCtrl
 {
 public:
     wxDataViewListCtrl();
@@ -1192,7 +1192,7 @@ private:
 // wxDataViewTreeStore
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewTreeStoreNode
+class WXDLLIMPEXP_CORE wxDataViewTreeStoreNode
 {
 public:
     wxDataViewTreeStoreNode( wxDataViewTreeStoreNode *parent,
@@ -1230,7 +1230,7 @@ private:
 
 typedef wxVector<wxDataViewTreeStoreNode*> wxDataViewTreeStoreNodes;
 
-class WXDLLIMPEXP_ADV wxDataViewTreeStoreContainerNode: public wxDataViewTreeStoreNode
+class WXDLLIMPEXP_CORE wxDataViewTreeStoreContainerNode: public wxDataViewTreeStoreNode
 {
 public:
     wxDataViewTreeStoreContainerNode( wxDataViewTreeStoreNode *parent,
@@ -1268,7 +1268,7 @@ private:
 
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewTreeStore: public wxDataViewModel
+class WXDLLIMPEXP_CORE wxDataViewTreeStore: public wxDataViewModel
 {
 public:
     wxDataViewTreeStore();
@@ -1337,7 +1337,7 @@ public:
 
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewTreeCtrl: public wxDataViewCtrl,
+class WXDLLIMPEXP_CORE wxDataViewTreeCtrl: public wxDataViewCtrl,
                                           public wxWithImages
 {
 public:

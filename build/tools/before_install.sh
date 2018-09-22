@@ -14,7 +14,14 @@ case $(uname -s) in
                 3) libgtk_dev=libgtk-3-dev ;;
                 *) libgtk_dev=libgtk2.0-dev;;
             esac
-            $SUDO apt-get install -y $libgtk_dev libnotify-dev
+
+            case "$wxCONFIGURE_FLAGS" in
+                *--with-directfb*) libtoolkit_dev='libdirectfb-dev'         ;;
+                *--with-motif*)    libtoolkit_dev='libmotif-dev libxmu-dev' ;;
+                *--with-qt*)       libtoolkit_dev='qtdeclarative5-dev'      ;;
+            esac
+
+            $SUDO apt-get install -y $libgtk_dev $libtoolkit_dev libnotify-dev
         fi
         ;;
 

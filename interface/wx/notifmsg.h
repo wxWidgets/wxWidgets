@@ -51,7 +51,7 @@
     @endEventTable
     
     @since 2.9.0
-    @library{wxadv}
+    @library{wxcore}
     @category{misc}
 */
 class wxNotificationMessage : public wxEvtHandler

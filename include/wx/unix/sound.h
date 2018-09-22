@@ -21,12 +21,12 @@
 // wxSound: simple audio playback class
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_FWD_ADV wxSoundBackend;
-class WXDLLIMPEXP_FWD_ADV wxSound;
+class WXDLLIMPEXP_FWD_CORE wxSoundBackend;
+class WXDLLIMPEXP_FWD_CORE wxSound;
 class WXDLLIMPEXP_FWD_BASE wxDynamicLibrary;
 
 /// Sound data, as loaded from .wav file:
-class WXDLLIMPEXP_ADV wxSoundData
+class WXDLLIMPEXP_CORE wxSoundData
 {
 public:
     wxSoundData() : m_refCnt(1) {}
@@ -54,7 +54,7 @@ private:
 
 
 /// Simple sound class:
-class WXDLLIMPEXP_ADV wxSound : public wxSoundBase
+class WXDLLIMPEXP_CORE wxSound : public wxSoundBase
 {
 public:
     wxSound();
@@ -116,7 +116,7 @@ struct wxSoundPlaybackStatus
 };
 
 // Audio backend interface
-class WXDLLIMPEXP_ADV wxSoundBackend
+class WXDLLIMPEXP_CORE wxSoundBackend
 {
 public:
     virtual ~wxSoundBackend() {}
