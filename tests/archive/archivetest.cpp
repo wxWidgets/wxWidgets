@@ -1159,7 +1159,7 @@ template <class NotifierT, class EntryT>
 class ArchiveNotifier : public NotifierT
 {
 public:
-    void OnEntryUpdated(EntryT& WXUNUSED(entry)) { }
+    void OnEntryUpdated(EntryT& WXUNUSED(entry)) wxOVERRIDE { }
 };
 
 template <class ClassFactoryT>

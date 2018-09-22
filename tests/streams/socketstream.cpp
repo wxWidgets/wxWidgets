@@ -66,7 +66,7 @@ public:
     }
 
 protected:
-    virtual void *Entry()
+    virtual void *Entry() wxOVERRIDE
     {
         wxSocketServer srv(LocalAddress(m_port), wxSOCKET_REUSEADDR);
         CPPUNIT_ASSERT( srv.IsOk() );

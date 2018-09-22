@@ -31,7 +31,7 @@
 class OwnerDrawnApp: public wxApp
 {
 public:
-    bool OnInit();
+    bool OnInit() wxOVERRIDE;
 };
 
 // Define a new frame type
