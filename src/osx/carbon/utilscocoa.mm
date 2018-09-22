@@ -248,11 +248,7 @@ CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromImage( WXImage nsimage
     {
         double scale = wxOSXGetMainScreenContentScaleFactor();
 
-#if wxOSX_USE_COCOA
-        NSSize imageSize = [nsimage size];
-#else
-        CGSize imageSize = [nsimage size];
-#endif
+        CGSize imageSize = wxOSXGetImageSize(nsimage);
         
         hbitmap = CGBitmapContextCreate(NULL, imageSize.width*scale, imageSize.height*scale, 8, 0, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst);
         CGContextScaleCTM( hbitmap, scale, scale );
@@ -326,6 +322,20 @@ void wxOSXSetImageSize(WXImage image, CGFloat width, CGFloat height)
     [image setSize:NSMakeSize(width, height)];
 #else
     // TODO
+#endif
+}
+
+double wxOSXGetImageScaleFactor(WXImage image)
+{
+#if wxOSX_USE_COCOA
+    NSSize imagesize = [image size];
+    int width = [[image bestRepresentationForRect:NSMakeRect(0, 0, imagesize.width, imagesize.height) context:nil hints:nil] pixelsWide];
+    if ( width == 0 ) // there are multi-res representations which return 0 for the pixel dimensions
+        return wxOSXGetMainScreenContentScaleFactor();
+
+    return width / [image size].width;
+#else
+    return [image scale];
 #endif
 }
 

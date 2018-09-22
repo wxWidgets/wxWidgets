@@ -138,20 +138,6 @@ static size_t GetBestBytesPerRow( size_t rawBytes )
     return (((rawBytes)+kBestByteAlignement-1) & ~(kBestByteAlignement-1) );
 }
 
-#if wxUSE_GUI && !defined(__WXOSX_IPHONE__)
-
-// this is used for more controls than just the wxBitmap button, also for notebooks etc
-
-CGImageRef wxMacCreateCGImageFromBitmap( const wxBitmap& bitmap )
-{
-    const wxBitmapRefData * bmap = bitmap.GetBitmapData() ;
-    if ( bmap == NULL )
-        return NULL ;
-    return (CGImageRef) bmap->CreateCGImage();
-}
-
-#endif //wxUSE_BMPBUTTON
-
 void wxBitmapRefData::Init()
 {
     m_nsImage = NULL;
@@ -230,6 +216,8 @@ bool wxBitmapRefData::Create( WXImage image )
 
     wxMacCocoaRetain(image);
 
+    m_scaleFactor = wxOSXGetImageScaleFactor(image);
+
     return true;
 }
 
@@ -289,7 +277,7 @@ bool wxBitmapRefData::Create(int w, int h, int d, double logicalscale)
     size_t m_width = wxMax(1, w);
     size_t m_height = wxMax(1, h);
 
-    int m_scaleFactor = logicalscale;
+    m_scaleFactor = logicalscale;
     m_hBitmap = NULL;
 
     size_t m_bytesPerRow = GetBestBytesPerRow(m_width * 4);
@@ -314,7 +302,7 @@ int wxBitmapRefData::GetWidth() const
     if ( m_hBitmap )
         return (int) CGBitmapContextGetWidth(m_hBitmap);
     else
-        return (int) wxOSXGetImageSize(m_nsImage).width;
+        return (int) wxOSXGetImageSize(m_nsImage).width * m_scaleFactor;
 }
 
 int wxBitmapRefData::GetHeight() const
@@ -324,7 +312,7 @@ int wxBitmapRefData::GetHeight() const
     if ( m_hBitmap )
         return (int) CGBitmapContextGetHeight(m_hBitmap);
     else
-        return (int) wxOSXGetImageSize(m_nsImage).height;
+        return (int) wxOSXGetImageSize(m_nsImage).height * m_scaleFactor;
 }
 
 int wxBitmapRefData::GetDepth() const
@@ -1274,6 +1262,11 @@ wxImage wxBitmap::ConvertToImage() const
 
     wxCHECK_MSG( IsOk(), wxNullImage, wxT("invalid bitmap") );
 
+    // this call may trigger a conversion from platform image to bitmap, issue it
+    // before any measurements are taken, multi-resolution platform images may be
+    // rendered incorrectly otherwise
+    unsigned char* sourcestart = (unsigned char*) GetBitmapData()->GetRawAccess() ;
+
     // create an wxImage object
     int width = GetWidth();
     int height = GetHeight();
@@ -1281,8 +1274,6 @@ wxImage wxBitmap::ConvertToImage() const
 
     unsigned char *data = image.GetData();
     wxCHECK_MSG( data, wxNullImage, wxT("Could not allocate data for image") );
-
-    unsigned char* sourcestart = (unsigned char*) GetBitmapData()->GetRawAccess() ;
 
     bool hasAlpha = false ;
     bool hasMask = false ;
