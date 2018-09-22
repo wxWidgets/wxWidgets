@@ -83,12 +83,6 @@ protected:
     virtual bool InitFromMonoBitmap(const wxBitmap& bitmap) wxOVERRIDE;
 
 private:
-#if !wxOSX_BITMAP_NATIVE_ACCESS
-    wxMemoryBuffer m_memBuf ;
-    int m_bytesPerRow ;
-    int m_width ;
-    int m_height ;
-#endif
     void DoCreateMaskBitmap(int width, int height, int bytesPerRow = -1);
 
     wxCFRef<CGContextRef> m_maskBitmap ;
