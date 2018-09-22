@@ -837,7 +837,7 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
     m_ctFont = wxCFRetain(font.OSXGetCTFont());
     m_ctFontAttributes = wxCFRetain(font.OSXGetCTFontAttributes());
 #if wxOSX_USE_IPHONE
-    m_uiFont = font.OSXGetUIFont();
+    m_uiFont = wxCFRetain(font.OSXGetUIFont());
 #endif
 }
 
