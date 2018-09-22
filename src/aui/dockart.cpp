@@ -632,12 +632,20 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc,
     dc.DestroyClippingRegion();
 }
 
+#if WXWIN_COMPATIBILITY_3_0
+void wxAuiDefaultDockArt::DrawIcon(wxDC& dc, const wxRect& rect, wxAuiPaneInfo& pane)
+{
+    DrawIcon(dc, NULL, rect, pane);
+}
+#endif
+
 void
 wxAuiDefaultDockArt::DrawIcon(wxDC& dc, wxWindow *window, const wxRect& rect, wxAuiPaneInfo& pane)
 {
     // Draw the icon centered vertically
+    int xOffset = window ? window->FromDIP(2) : 2;
     dc.DrawBitmap(pane.icon,
-                  rect.x+window->FromDIP(2), rect.y+(rect.height-pane.icon.GetScaledHeight())/2,
+                  rect.x+xOffset, rect.y+(rect.height-pane.icon.GetScaledHeight())/2,
                   true);
 }
 
