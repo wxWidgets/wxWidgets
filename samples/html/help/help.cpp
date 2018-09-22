@@ -119,8 +119,8 @@ bool MyApp::OnInit()
 #if wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB
     wxFileSystem::AddHandler(new wxZipFSHandler);
 #endif
-    SetVendorName(wxT("wxWidgets"));
-    SetAppName(wxT("wxHTMLHelp"));
+    SetVendorName("wxWidgets");
+    SetAppName("wxHTMLHelp");
 
     // Create the main application window
     MyFrame *frame = new MyFrame(_("HTML Help Sample"),
@@ -162,17 +162,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     help.UseConfig(wxConfig::Get());
     bool ret;
-    help.SetTempDir(wxT("."));
+    help.SetTempDir(".");
 
     wxPathList pathlist;
-    pathlist.Add(wxT("./helpfiles"));
-    pathlist.Add(wxT("../helpfiles"));
-    pathlist.Add(wxT("../../html/help/helpfiles"));
+    pathlist.Add("./helpfiles");
+    pathlist.Add("../helpfiles");
+    pathlist.Add("../../html/help/helpfiles");
 
-    ret = help.AddBook(wxFileName(pathlist.FindValidPath(wxT("testing.hhp")), wxPATH_UNIX));
+    ret = help.AddBook(wxFileName(pathlist.FindValidPath("testing.hhp"), wxPATH_UNIX));
     if (! ret)
-        wxMessageBox(wxT("Failed adding book helpfiles/testing.hhp"));
-    ret = help.AddBook(wxFileName(pathlist.FindValidPath(wxT("another.hhp")), wxPATH_UNIX));
+        wxMessageBox("Failed adding book helpfiles/testing.hhp");
+    ret = help.AddBook(wxFileName(pathlist.FindValidPath("another.hhp"), wxPATH_UNIX));
     if (! ret)
         wxMessageBox(_("Failed adding book helpfiles/another.hhp"));
 }
@@ -188,7 +188,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnHelp(wxCommandEvent& WXUNUSED(event))
 {
-    help.Display(wxT("Test HELPFILE"));
+    help.Display("Test HELPFILE");
 }
 
 void MyFrame::OnClose(wxCloseEvent& event)
