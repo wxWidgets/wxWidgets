@@ -411,12 +411,12 @@ bool MyApp::LoadImages()
     // special hack for Unix in-tree sample build, don't do this in real
     // programs, use wxStandardPaths instead
     pathList.Add(wxFileName(argv[0]).GetPath());
-    pathList.Add(wxT("."));
-    pathList.Add(wxT(".."));
-    pathList.Add(wxT("../drawing"));
-    pathList.Add(wxT("../../../samples/drawing"));
+    pathList.Add(".");
+    pathList.Add("..");
+    pathList.Add("../drawing");
+    pathList.Add("../../../samples/drawing");
 
-    wxString path = pathList.FindValidPath(wxT("pat4.bmp"));
+    wxString path = pathList.FindValidPath("pat4.bmp");
     if ( !path )
         return false;
 
@@ -427,21 +427,21 @@ bool MyApp::LoadImages()
     wxMask* mask4 = new wxMask(*gs_bmp4_mono, *wxBLACK);
     gs_bmp4_mono->SetMask(mask4);
 
-    path = pathList.FindValidPath(wxT("pat36.bmp"));
+    path = pathList.FindValidPath("pat36.bmp");
     if ( !path )
         return false;
     gs_bmp36->LoadFile(path, wxBITMAP_TYPE_BMP);
     wxMask* mask36 = new wxMask(*gs_bmp36, *wxBLACK);
     gs_bmp36->SetMask(mask36);
 
-    path = pathList.FindValidPath(wxT("image.bmp"));
+    path = pathList.FindValidPath("image.bmp");
     if ( !path )
         return false;
     gs_bmpNoMask->LoadFile(path, wxBITMAP_TYPE_BMP);
     gs_bmpWithMask->LoadFile(path, wxBITMAP_TYPE_BMP);
     gs_bmpWithColMask->LoadFile(path, wxBITMAP_TYPE_BMP);
 
-    path = pathList.FindValidPath(wxT("mask.bmp"));
+    path = pathList.FindValidPath("mask.bmp");
     if ( !path )
         return false;
     gs_bmpMask->LoadFile(path, wxBITMAP_TYPE_BMP);
@@ -462,7 +462,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main application window
-    MyFrame *frame = new MyFrame(wxT("Drawing sample"),
+    MyFrame *frame = new MyFrame("Drawing sample",
                                  wxDefaultPosition, wxSize(550, 840));
 
     // Show it
@@ -470,9 +470,9 @@ bool MyApp::OnInit()
 
     if ( !LoadImages() )
     {
-        wxLogError(wxT("Can't load one of the bitmap files needed ")
-                   wxT("for this sample from the current or parent ")
-                   wxT("directory, please copy them there."));
+        wxLogError("Can't load one of the bitmap files needed "
+                   "for this sample from the current or parent "
+                   "directory, please copy them there.");
 
         // still continue, the sample can be used without images too if they're
         // missing for whatever reason
@@ -539,37 +539,37 @@ void MyCanvas::DrawTestBrushes(wxDC& dc)
 
     dc.SetBrush(*wxGREEN_BRUSH);
     dc.DrawRectangle(x, y, WIDTH, HEIGHT);
-    dc.DrawText(wxT("Solid green"), x + 10, y + 10);
+    dc.DrawText("Solid green", x + 10, y + 10);
 
     y += HEIGHT;
     dc.SetBrush(wxBrush(*wxRED, wxBRUSHSTYLE_CROSSDIAG_HATCH));
     dc.DrawRectangle(x, y, WIDTH, HEIGHT);
-    dc.DrawText(wxT("Diagonally hatched red"), x + 10, y + 10);
+    dc.DrawText("Diagonally hatched red", x + 10, y + 10);
 
     y += HEIGHT;
     dc.SetBrush(wxBrush(*wxBLUE, wxBRUSHSTYLE_CROSS_HATCH));
     dc.DrawRectangle(x, y, WIDTH, HEIGHT);
-    dc.DrawText(wxT("Cross hatched blue"), x + 10, y + 10);
+    dc.DrawText("Cross hatched blue", x + 10, y + 10);
 
     y += HEIGHT;
     dc.SetBrush(wxBrush(*wxCYAN, wxBRUSHSTYLE_VERTICAL_HATCH));
     dc.DrawRectangle(x, y, WIDTH, HEIGHT);
-    dc.DrawText(wxT("Vertically hatched cyan"), x + 10, y + 10);
+    dc.DrawText("Vertically hatched cyan", x + 10, y + 10);
 
     y += HEIGHT;
     dc.SetBrush(wxBrush(*wxBLACK, wxBRUSHSTYLE_HORIZONTAL_HATCH));
     dc.DrawRectangle(x, y, WIDTH, HEIGHT);
-    dc.DrawText(wxT("Horizontally hatched black"), x + 10, y + 10);
+    dc.DrawText("Horizontally hatched black", x + 10, y + 10);
 
     y += HEIGHT;
     dc.SetBrush(wxBrush(*gs_bmpMask));
     dc.DrawRectangle(x, y, WIDTH, HEIGHT);
-    dc.DrawText(wxT("Stipple mono"), x + 10, y + 10);
+    dc.DrawText("Stipple mono", x + 10, y + 10);
 
     y += HEIGHT;
     dc.SetBrush(wxBrush(*gs_bmpNoMask));
     dc.DrawRectangle(x, y, WIDTH, HEIGHT);
-    dc.DrawText(wxT("Stipple colour"), x + 10, y + 10);
+    dc.DrawText("Stipple colour", x + 10, y + 10);
 }
 
 void MyCanvas::DrawTestPoly(wxDC& dc)
@@ -584,11 +584,11 @@ void MyCanvas::DrawTestPoly(wxDC& dc)
     star[3] = wxPoint(40, 100);
     star[4] = wxPoint(140, 150);
 
-    dc.DrawText(wxT("You should see two (irregular) stars below, the left one ")
-                wxT("hatched"), 10, 10);
-    dc.DrawText(wxT("except for the central region and the right ")
-                wxT("one entirely hatched"), 10, 30);
-    dc.DrawText(wxT("The third star only has a hatched outline"), 10, 50);
+    dc.DrawText("You should see two (irregular) stars below, the left one "
+                "hatched", 10, 10);
+    dc.DrawText("except for the central region and the right "
+                "one entirely hatched", 10, 30);
+    dc.DrawText("The third star only has a hatched outline", 10, 50);
 
     dc.DrawPolygon(WXSIZEOF(star), star, 0, 30);
     dc.DrawPolygon(WXSIZEOF(star), star, 160, 30, wxWINDING_RULE);
@@ -615,10 +615,10 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
 {
     dc.SetPen( wxPen( *wxBLACK, width ) );
     dc.SetBrush( *wxRED_BRUSH );
-    dc.DrawText(wxString::Format(wxT("Testing lines of width %d"), width), x + 10, y - 10);
+    dc.DrawText(wxString::Format("Testing lines of width %d", width), x + 10, y - 10);
     dc.DrawRectangle( x+10, y+10, 100, 190 );
 
-    dc.DrawText(wxT("Solid/dot/short dash/long dash/dot dash"), x + 150, y + 10);
+    dc.DrawText("Solid/dot/short dash/long dash/dot dash", x + 150, y + 10);
     dc.SetPen( wxPen( *wxBLACK, width ) );
     dc.DrawLine( x+20, y+20, 100, y+20 );
     dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_DOT) );
@@ -630,7 +630,7 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_DOT_DASH) );
     dc.DrawLine( x+20, y+60, 100, y+60 );
 
-    dc.DrawText(wxT("Misc hatches"), x + 150, y + 70);
+    dc.DrawText("Misc hatches", x + 150, y + 70);
     dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_BDIAGONAL_HATCH) );
     dc.DrawLine( x+20, y+70, 100, y+70 );
     dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_CROSSDIAG_HATCH) );
@@ -644,7 +644,7 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_VERTICAL_HATCH) );
     dc.DrawLine( x+20, y+120, 100, y+120 );
 
-    dc.DrawText(wxT("User dash"), x + 150, y + 140);
+    dc.DrawText("User dash", x + 150, y + 140);
     wxPen ud( *wxBLACK, width, wxPENSTYLE_USER_DASH );
     wxDash dash1[6];
     dash1[0] = 8;  // Long dash  <---------+
@@ -887,8 +887,8 @@ void MyCanvas::DrawText(wxDC& dc)
 {
     // set underlined font for testing
     dc.SetFont( wxFontInfo(12).Family(wxFONTFAMILY_MODERN).Underlined() );
-    dc.DrawText( wxT("This is text"), 110, 10 );
-    dc.DrawRotatedText( wxT("That is text"), 20, 10, -45 );
+    dc.DrawText( "This is text", 110, 10 );
+    dc.DrawRotatedText( "That is text", 20, 10, -45 );
 
     // use wxSWISS_FONT and not wxNORMAL_FONT as the latter can't be rotated
     // under MSW (it is not TrueType)
@@ -899,22 +899,22 @@ void MyCanvas::DrawText(wxDC& dc)
 
     for ( int n = -180; n < 180; n += 30 )
     {
-        text.Printf(wxT("     %d rotated text"), n);
+        text.Printf("     %d rotated text", n);
         dc.DrawRotatedText(text , 400, 400, n);
     }
 
     dc.SetFont( wxFontInfo(18).Family(wxFONTFAMILY_SWISS) );
 
-    dc.DrawText( wxT("This is Swiss 18pt text."), 110, 40 );
+    dc.DrawText( "This is Swiss 18pt text.", 110, 40 );
 
     wxCoord length;
     wxCoord height;
     wxCoord descent;
-    dc.GetTextExtent( wxT("This is Swiss 18pt text."), &length, &height, &descent );
-    text.Printf( wxT("Dimensions are length %d, height %d, descent %d"), length, height, descent );
+    dc.GetTextExtent( "This is Swiss 18pt text.", &length, &height, &descent );
+    text.Printf( "Dimensions are length %d, height %d, descent %d", length, height, descent );
     dc.DrawText( text, 110, 80 );
 
-    text.Printf( wxT("CharHeight() returns: %d"), dc.GetCharHeight() );
+    text.Printf( "CharHeight() returns: %d", dc.GetCharHeight() );
     dc.DrawText( text, 110, 120 );
 
     dc.DrawRectangle( 100, 40, 4, height );
@@ -923,19 +923,19 @@ void MyCanvas::DrawText(wxDC& dc)
     wxCoord y = 150;
     dc.SetLogicalFunction(wxINVERT);
     // text drawing should ignore logical function
-    dc.DrawText( wxT("There should be a text below"), 110, y );
+    dc.DrawText( "There should be a text below", 110, y );
     dc.DrawRectangle( 110, y, 100, height );
 
     y += height;
-    dc.DrawText( wxT("Visible text"), 110, y );
+    dc.DrawText( "Visible text", 110, y );
     dc.DrawRectangle( 110, y, 100, height );
-    dc.DrawText( wxT("Visible text"), 110, y );
+    dc.DrawText( "Visible text", 110, y );
     dc.DrawRectangle( 110, y, 100, height );
     dc.SetLogicalFunction(wxCOPY);
 
     y += height;
     dc.DrawRectangle( 110, y, 100, height );
-    dc.DrawText( wxT("Another visible text"), 110, y );
+    dc.DrawText( "Another visible text", 110, y );
 
     y += height;
     dc.DrawText("And\nmore\ntext on\nmultiple\nlines", 110, y);
@@ -947,36 +947,36 @@ void MyCanvas::DrawText(wxDC& dc)
 
 static const struct
 {
-    const wxChar *name;
+    wxString name;
     wxRasterOperationMode rop;
 } rasterOperations[] =
 {
-    { wxT("wxAND"),          wxAND           },
-    { wxT("wxAND_INVERT"),   wxAND_INVERT    },
-    { wxT("wxAND_REVERSE"),  wxAND_REVERSE   },
-    { wxT("wxCLEAR"),        wxCLEAR         },
-    { wxT("wxCOPY"),         wxCOPY          },
-    { wxT("wxEQUIV"),        wxEQUIV         },
-    { wxT("wxINVERT"),       wxINVERT        },
-    { wxT("wxNAND"),         wxNAND          },
-    { wxT("wxNO_OP"),        wxNO_OP         },
-    { wxT("wxOR"),           wxOR            },
-    { wxT("wxOR_INVERT"),    wxOR_INVERT     },
-    { wxT("wxOR_REVERSE"),   wxOR_REVERSE    },
-    { wxT("wxSET"),          wxSET           },
-    { wxT("wxSRC_INVERT"),   wxSRC_INVERT    },
-    { wxT("wxXOR"),          wxXOR           },
+    { "wxAND",          wxAND           },
+    { "wxAND_INVERT",   wxAND_INVERT    },
+    { "wxAND_REVERSE",  wxAND_REVERSE   },
+    { "wxCLEAR",        wxCLEAR         },
+    { "wxCOPY",         wxCOPY          },
+    { "wxEQUIV",        wxEQUIV         },
+    { "wxINVERT",       wxINVERT        },
+    { "wxNAND",         wxNAND          },
+    { "wxNO_OP",        wxNO_OP         },
+    { "wxOR",           wxOR            },
+    { "wxOR_INVERT",    wxOR_INVERT     },
+    { "wxOR_REVERSE",   wxOR_REVERSE    },
+    { "wxSET",          wxSET           },
+    { "wxSRC_INVERT",   wxSRC_INVERT    },
+    { "wxXOR",          wxXOR           },
 };
 
 void MyCanvas::DrawImages(wxDC& dc, DrawMode mode)
 {
-    dc.DrawText(wxT("original image"), 0, 0);
+    dc.DrawText("original image", 0, 0);
     dc.DrawBitmap(*gs_bmpNoMask, 0, 20, 0);
-    dc.DrawText(wxT("with colour mask"), 0, 100);
+    dc.DrawText("with colour mask", 0, 100);
     dc.DrawBitmap(*gs_bmpWithColMask, 0, 120, true);
-    dc.DrawText(wxT("the mask image"), 0, 200);
+    dc.DrawText("the mask image", 0, 200);
     dc.DrawBitmap(*gs_bmpMask, 0, 220, 0);
-    dc.DrawText(wxT("masked image"), 0, 300);
+    dc.DrawText("masked image", 0, 300);
     dc.DrawBitmap(*gs_bmpWithMask, 0, 320, true);
 
     int cx = gs_bmpWithColMask->GetWidth(),
@@ -1073,7 +1073,7 @@ void MyCanvas::DrawAlpha(wxDC& dc)
     dc.SetTextBackground( wxColour(160, 192, 160, 160) );
     dc.SetTextForeground( wxColour(255, 128, 128, 128) );
     dc.SetFont( wxFontInfo(40).Family(wxFONTFAMILY_SWISS).Italic() );
-    dc.DrawText( wxT("Hello!"), 120, 80 );
+    dc.DrawText( "Hello!", 120, 80 );
 }
 #endif // wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
 
@@ -1225,19 +1225,19 @@ void MyCanvas::DrawCircles(wxDC& dc)
     dc.SetPen( *wxRED_PEN );
     dc.SetBrush( *wxGREEN_BRUSH );
 
-    dc.DrawText(wxT("Some circles"), 0, y);
+    dc.DrawText("Some circles", 0, y);
     dc.DrawCircle(x, y, r);
     dc.DrawCircle(x + 2*r, y, r);
     dc.DrawCircle(x + 4*r, y, r);
 
     y += 2*r;
-    dc.DrawText(wxT("And ellipses"), 0, y);
+    dc.DrawText("And ellipses", 0, y);
     dc.DrawEllipse(x - r, y, 2*r, r);
     dc.DrawEllipse(x + r, y, 2*r, r);
     dc.DrawEllipse(x + 3*r, y, 2*r, r);
 
     y += 2*r;
-    dc.DrawText(wxT("And arcs"), 0, y);
+    dc.DrawText("And arcs", 0, y);
     dc.DrawArc(x - r, y, x + r, y, x, y);
     dc.DrawArc(x + 4*r, y, x + 2*r, y, x + 3*r, y);
     dc.DrawArc(x + 5*r, y, x + 5*r, y, x + 6*r, y);
@@ -1254,19 +1254,19 @@ void MyCanvas::DrawCircles(wxDC& dc)
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
     y += 2*r;
-    dc.DrawText(wxT("Some circles"), 0, y);
+    dc.DrawText("Some circles", 0, y);
     dc.DrawCircle(x, y, r);
     dc.DrawCircle(x + 2*r, y, r);
     dc.DrawCircle(x + 4*r, y, r);
 
     y += 2*r;
-    dc.DrawText(wxT("And ellipses"), 0, y);
+    dc.DrawText("And ellipses", 0, y);
     dc.DrawEllipse(x - r, y, 2*r, r);
     dc.DrawEllipse(x + r, y, 2*r, r);
     dc.DrawEllipse(x + 3*r, y, 2*r, r);
 
     y += 2*r;
-    dc.DrawText(wxT("And arcs"), 0, y);
+    dc.DrawText("And arcs", 0, y);
     dc.DrawArc(x - r, y, x + r, y, x, y);
     dc.DrawArc(x + 4*r, y, x + 2*r, y, x + 3*r, y);
     dc.DrawArc(x + 5*r, y, x + 5*r, y, x + 6*r, y);
@@ -1282,7 +1282,7 @@ void MyCanvas::DrawCircles(wxDC& dc)
 void MyCanvas::DrawSplines(wxDC& dc)
 {
 #if wxUSE_SPLINES
-    dc.DrawText(wxT("Some splines"), 10, 5);
+    dc.DrawText("Some splines", 10, 5);
 
     // values are hardcoded rather than randomly generated
     // so the output can be compared between native
@@ -1363,7 +1363,7 @@ void MyCanvas::DrawSplines(wxDC& dc)
     }
 
 #else
-    dc.DrawText(wxT("Splines not supported."), 10, 5);
+    dc.DrawText("Splines not supported.", 10, 5);
 #endif
 }
 
@@ -1373,22 +1373,22 @@ void MyCanvas::DrawGradients(wxDC& dc)
 
     // LHS: linear
     wxRect r(10, 10, 50, 50);
-    dc.DrawText(wxT("wxRIGHT"), r.x, r.y);
+    dc.DrawText("wxRIGHT", r.x, r.y);
     r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillLinear(r, *wxWHITE, *wxBLUE, wxRIGHT);
 
     r.Offset(0, r.height + 10);
-    dc.DrawText(wxT("wxLEFT"), r.x, r.y);
+    dc.DrawText("wxLEFT", r.x, r.y);
     r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillLinear(r, *wxWHITE, *wxBLUE, wxLEFT);
 
     r.Offset(0, r.height + 10);
-    dc.DrawText(wxT("wxDOWN"), r.x, r.y);
+    dc.DrawText("wxDOWN", r.x, r.y);
     r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillLinear(r, *wxWHITE, *wxBLUE, wxDOWN);
 
     r.Offset(0, r.height + 10);
-    dc.DrawText(wxT("wxUP"), r.x, r.y);
+    dc.DrawText("wxUP", r.x, r.y);
     r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillLinear(r, *wxWHITE, *wxBLUE, wxUP);
 
@@ -1396,22 +1396,22 @@ void MyCanvas::DrawGradients(wxDC& dc)
 
     // RHS: concentric
     r = wxRect(200, 10, 50, 50);
-    dc.DrawText(wxT("Blue inside"), r.x, r.y);
+    dc.DrawText("Blue inside", r.x, r.y);
     r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillConcentric(r, *wxBLUE, *wxWHITE);
 
     r.Offset(0, r.height + 10);
-    dc.DrawText(wxT("White inside"), r.x, r.y);
+    dc.DrawText("White inside", r.x, r.y);
     r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillConcentric(r, *wxWHITE, *wxBLUE);
 
     r.Offset(0, r.height + 10);
-    dc.DrawText(wxT("Blue in top left corner"), r.x, r.y);
+    dc.DrawText("Blue in top left corner", r.x, r.y);
     r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillConcentric(r, *wxBLUE, *wxWHITE, wxPoint(0, 0));
 
     r.Offset(0, r.height + 10);
-    dc.DrawText(wxT("Blue in bottom right corner"), r.x, r.y);
+    dc.DrawText("Blue in bottom right corner", r.x, r.y);
     r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillConcentric(r, *wxBLUE, *wxWHITE, wxPoint(r.width, r.height));
 
@@ -1456,7 +1456,7 @@ void MyCanvas::DrawGradients(wxDC& dc)
         double boxX, boxY, boxWidth, boxHeight;
 
         gfr.Offset(0, gfr.height + 10);
-        dc.DrawText(wxT("Linear Gradient with Stops"), gfr.x, gfr.y);
+        dc.DrawText("Linear Gradient with Stops", gfr.x, gfr.y);
         gfr.Offset(0, TEXT_HEIGHT);
 
         stops = wxGraphicsGradientStops(*wxRED, *wxBLUE);
@@ -1480,7 +1480,7 @@ void MyCanvas::DrawGradients(wxDC& dc)
         wxGraphicsGradientStops simpleStops(*wxRED, *wxBLUE);
 
         gfr.Offset(0, gfr.height + 10);
-        dc.DrawText(wxT("Radial Gradient from Red to Blue without intermediary Stops"),
+        dc.DrawText("Radial Gradient from Red to Blue without intermediary Stops",
             gfr.x, gfr.y);
         gfr.Offset(0, TEXT_HEIGHT);
 
@@ -1503,7 +1503,7 @@ void MyCanvas::DrawGradients(wxDC& dc)
         dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
 
         gfr.Offset(0, gfr.height + 10);
-        dc.DrawText(wxT("Radial Gradient from Red to Blue with Yellow and Green Stops"),
+        dc.DrawText("Radial Gradient from Red to Blue with Yellow and Green Stops",
             gfr.x, gfr.y);
         gfr.Offset(0, TEXT_HEIGHT);
 
@@ -1525,7 +1525,7 @@ void MyCanvas::DrawGradients(wxDC& dc)
         dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
 
         gfr.Offset(0, gfr.height + 10);
-        dc.DrawText(wxT("Linear Gradient with Stops and Gaps"), gfr.x, gfr.y);
+        dc.DrawText("Linear Gradient with Stops and Gaps", gfr.x, gfr.y);
         gfr.Offset(0, TEXT_HEIGHT);
 
         stops = wxGraphicsGradientStops(*wxRED, *wxBLUE);
@@ -1549,7 +1549,7 @@ void MyCanvas::DrawGradients(wxDC& dc)
         dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
 
         gfr.Offset(0, gfr.height + 10);
-        dc.DrawText(wxT("Radial Gradient with Stops and Gaps"), gfr.x, gfr.y);
+        dc.DrawText("Radial Gradient with Stops and Gaps", gfr.x, gfr.y);
         gfr.Offset(0, TEXT_HEIGHT);
 
         gc->SetBrush(gc->CreateRadialGradientBrush(gfr.x + gfr.width / 2,
@@ -1570,7 +1570,7 @@ void MyCanvas::DrawGradients(wxDC& dc)
         dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
 
         gfr.Offset(0, gfr.height + 10);
-        dc.DrawText(wxT("Gradients with Stops and Transparency"), gfr.x, gfr.y);
+        dc.DrawText("Gradients with Stops and Transparency", gfr.x, gfr.y);
         gfr.Offset(0, TEXT_HEIGHT);
 
         stops = wxGraphicsGradientStops(*wxRED, wxTransparentColour);
@@ -1685,12 +1685,12 @@ void MyCanvas::DrawSystemColours(wxDC& dc)
 
 void MyCanvas::DrawRegions(wxDC& dc)
 {
-    dc.DrawText(wxT("You should see a red rect partly covered by a cyan one ")
-                wxT("on the left"), 10, 5);
-    dc.DrawText(wxT("and 5 smileys from which 4 are partially clipped on the right"),
+    dc.DrawText("You should see a red rect partly covered by a cyan one "
+                "on the left", 10, 5);
+    dc.DrawText("and 5 smileys from which 4 are partially clipped on the right",
                 10, 5 + dc.GetCharHeight());
-    dc.DrawText(wxT("The second copy should be identical but right part of it ")
-                wxT("should be offset by 10 pixels."),
+    dc.DrawText("The second copy should be identical but right part of it "
+                "should be offset by 10 pixels.",
                 10, 5 + 2*dc.GetCharHeight());
 
     DrawRegionsHelper(dc, 10, true);
@@ -1941,7 +1941,7 @@ void MyCanvas::OnMouseMove(wxMouseEvent &event)
         long x = dc.DeviceToLogicalX( pos.x );
         long y = dc.DeviceToLogicalY( pos.y );
         wxString str;
-        str.Printf( wxT("Current mouse position: %d,%d"), (int)x, (int)y );
+        str.Printf( "Current mouse position: %d,%d", (int)x, (int)y );
         m_owner->SetStatusText( str );
     }
 
@@ -2083,25 +2083,25 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetIcon(wxICON(sample));
 
     wxMenu *menuScreen = new wxMenu;
-    menuScreen->Append(File_ShowDefault, wxT("&Default screen\tF1"));
-    menuScreen->Append(File_ShowText, wxT("&Text screen\tF2"));
-    menuScreen->Append(File_ShowLines, wxT("&Lines screen\tF3"));
-    menuScreen->Append(File_ShowBrushes, wxT("&Brushes screen\tF4"));
-    menuScreen->Append(File_ShowPolygons, wxT("&Polygons screen\tF5"));
-    menuScreen->Append(File_ShowMask, wxT("&Mask screen\tF6"));
-    menuScreen->Append(File_ShowMaskStretch, wxT("1/&2 scaled mask\tShift-F6"));
-    menuScreen->Append(File_ShowOps, wxT("&Raster operations screen\tF7"));
-    menuScreen->Append(File_ShowRegions, wxT("Re&gions screen\tF8"));
-    menuScreen->Append(File_ShowCircles, wxT("&Circles screen\tF9"));
+    menuScreen->Append(File_ShowDefault, "&Default screen\tF1");
+    menuScreen->Append(File_ShowText, "&Text screen\tF2");
+    menuScreen->Append(File_ShowLines, "&Lines screen\tF3");
+    menuScreen->Append(File_ShowBrushes, "&Brushes screen\tF4");
+    menuScreen->Append(File_ShowPolygons, "&Polygons screen\tF5");
+    menuScreen->Append(File_ShowMask, "&Mask screen\tF6");
+    menuScreen->Append(File_ShowMaskStretch, "1/&2 scaled mask\tShift-F6");
+    menuScreen->Append(File_ShowOps, "&Raster operations screen\tF7");
+    menuScreen->Append(File_ShowRegions, "Re&gions screen\tF8");
+    menuScreen->Append(File_ShowCircles, "&Circles screen\tF9");
 #if wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
-    menuScreen->Append(File_ShowAlpha, wxT("&Alpha screen\tF10"));
+    menuScreen->Append(File_ShowAlpha, "&Alpha screen\tF10");
 #endif // wxDRAWING_DC_SUPPORTS_ALPHA || wxUSE_GRAPHICS_CONTEXT
-    menuScreen->Append(File_ShowSplines, wxT("Spl&ines screen\tF11"));
-    menuScreen->Append(File_ShowGradients, wxT("&Gradients screen\tF12"));
+    menuScreen->Append(File_ShowSplines, "Spl&ines screen\tF11");
+    menuScreen->Append(File_ShowGradients, "&Gradients screen\tF12");
 #if wxUSE_GRAPHICS_CONTEXT
-    menuScreen->Append(File_ShowGraphics, wxT("&Graphics screen"));
+    menuScreen->Append(File_ShowGraphics, "&Graphics screen");
 #endif
-    menuScreen->Append(File_ShowSystemColours, wxT("System &colours"));
+    menuScreen->Append(File_ShowSystemColours, "System &colours");
 
     wxMenu *menuFile = new wxMenu;
 #if wxUSE_GRAPHICS_CONTEXT
@@ -2122,71 +2122,71 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->AppendSeparator();
     menuFile->AppendCheckItem(File_BBox, wxS("Show bounding box\tCtrl-E"),
                               wxS("Show extents used in drawing operations"));
-    menuFile->AppendCheckItem(File_Clip, wxT("&Clip\tCtrl-C"), wxT("Clip/unclip drawing"));
-    menuFile->AppendCheckItem(File_Buffer, wxT("&Use wx&BufferedPaintDC\tCtrl-Z"), wxT("Buffer painting"));
+    menuFile->AppendCheckItem(File_Clip, "&Clip\tCtrl-C", "Clip/unclip drawing");
+    menuFile->AppendCheckItem(File_Buffer, "&Use wx&BufferedPaintDC\tCtrl-Z", "Buffer painting");
     menuFile->AppendSeparator();
 #if wxUSE_METAFILE && defined(wxMETAFILE_IS_ENH)
-    menuFile->Append(File_Copy, wxT("Copy to clipboard"));
+    menuFile->Append(File_Copy, "Copy to clipboard");
 #endif
-    menuFile->Append(File_Save, wxT("&Save...\tCtrl-S"), wxT("Save drawing to file"));
+    menuFile->Append(File_Save, "&Save...\tCtrl-S", "Save drawing to file");
     menuFile->AppendSeparator();
-    menuFile->Append(File_About, wxT("&About\tCtrl-A"), wxT("Show about dialog"));
+    menuFile->Append(File_About, "&About\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
-    menuFile->Append(File_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
+    menuFile->Append(File_Quit, "E&xit\tAlt-X", "Quit this program");
 
     wxMenu *menuMapMode = new wxMenu;
-    menuMapMode->Append( MapMode_Text, wxT("&TEXT map mode") );
-    menuMapMode->Append( MapMode_Lometric, wxT("&LOMETRIC map mode") );
-    menuMapMode->Append( MapMode_Twips, wxT("T&WIPS map mode") );
-    menuMapMode->Append( MapMode_Points, wxT("&POINTS map mode") );
-    menuMapMode->Append( MapMode_Metric, wxT("&METRIC map mode") );
+    menuMapMode->Append( MapMode_Text, "&TEXT map mode" );
+    menuMapMode->Append( MapMode_Lometric, "&LOMETRIC map mode" );
+    menuMapMode->Append( MapMode_Twips, "T&WIPS map mode" );
+    menuMapMode->Append( MapMode_Points, "&POINTS map mode" );
+    menuMapMode->Append( MapMode_Metric, "&METRIC map mode" );
 
     wxMenu *menuUserScale = new wxMenu;
-    menuUserScale->Append( UserScale_StretchHoriz, wxT("Stretch &horizontally\tCtrl-H") );
-    menuUserScale->Append( UserScale_ShrinkHoriz, wxT("Shrin&k horizontally\tCtrl-G") );
-    menuUserScale->Append( UserScale_StretchVertic, wxT("Stretch &vertically\tCtrl-V") );
-    menuUserScale->Append( UserScale_ShrinkVertic, wxT("&Shrink vertically\tCtrl-W") );
+    menuUserScale->Append( UserScale_StretchHoriz, "Stretch &horizontally\tCtrl-H" );
+    menuUserScale->Append( UserScale_ShrinkHoriz, "Shrin&k horizontally\tCtrl-G" );
+    menuUserScale->Append( UserScale_StretchVertic, "Stretch &vertically\tCtrl-V" );
+    menuUserScale->Append( UserScale_ShrinkVertic, "&Shrink vertically\tCtrl-W" );
     menuUserScale->AppendSeparator();
-    menuUserScale->Append( UserScale_Restore, wxT("&Restore to normal\tCtrl-0") );
+    menuUserScale->Append( UserScale_Restore, "&Restore to normal\tCtrl-0" );
 
     wxMenu *menuAxis = new wxMenu;
-    menuAxis->AppendCheckItem( AxisMirror_Horiz, wxT("Mirror horizontally\tCtrl-M") );
-    menuAxis->AppendCheckItem( AxisMirror_Vertic, wxT("Mirror vertically\tCtrl-N") );
+    menuAxis->AppendCheckItem( AxisMirror_Horiz, "Mirror horizontally\tCtrl-M" );
+    menuAxis->AppendCheckItem( AxisMirror_Vertic, "Mirror vertically\tCtrl-N" );
 
     wxMenu *menuLogical = new wxMenu;
-    menuLogical->Append( LogicalOrigin_MoveDown, wxT("Move &down\tCtrl-D") );
-    menuLogical->Append( LogicalOrigin_MoveUp, wxT("Move &up\tCtrl-U") );
-    menuLogical->Append( LogicalOrigin_MoveLeft, wxT("Move &right\tCtrl-L") );
-    menuLogical->Append( LogicalOrigin_MoveRight, wxT("Move &left\tCtrl-R") );
+    menuLogical->Append( LogicalOrigin_MoveDown, "Move &down\tCtrl-D" );
+    menuLogical->Append( LogicalOrigin_MoveUp, "Move &up\tCtrl-U" );
+    menuLogical->Append( LogicalOrigin_MoveLeft, "Move &right\tCtrl-L" );
+    menuLogical->Append( LogicalOrigin_MoveRight, "Move &left\tCtrl-R" );
     menuLogical->AppendSeparator();
-    menuLogical->Append( LogicalOrigin_Set, wxT("Set to (&100, 100)\tShift-Ctrl-1") );
-    menuLogical->Append( LogicalOrigin_Restore, wxT("&Restore to normal\tShift-Ctrl-0") );
+    menuLogical->Append( LogicalOrigin_Set, "Set to (&100, 100)\tShift-Ctrl-1" );
+    menuLogical->Append( LogicalOrigin_Restore, "&Restore to normal\tShift-Ctrl-0" );
 
     wxMenu *menuColour = new wxMenu;
 #if wxUSE_COLOURDLG
-    menuColour->Append( Colour_TextForeground, wxT("Text &foreground...") );
-    menuColour->Append( Colour_TextBackground, wxT("Text &background...") );
-    menuColour->Append( Colour_Background, wxT("Background &colour...") );
+    menuColour->Append( Colour_TextForeground, "Text &foreground..." );
+    menuColour->Append( Colour_TextBackground, "Text &background..." );
+    menuColour->Append( Colour_Background, "Background &colour..." );
 #endif // wxUSE_COLOURDLG
-    menuColour->AppendCheckItem( Colour_BackgroundMode, wxT("&Opaque/transparent\tCtrl-B") );
-    menuColour->AppendCheckItem( Colour_TextureBackgound, wxT("Draw textured back&ground\tCtrl-T") );
+    menuColour->AppendCheckItem( Colour_BackgroundMode, "&Opaque/transparent\tCtrl-B" );
+    menuColour->AppendCheckItem( Colour_TextureBackgound, "Draw textured back&ground\tCtrl-T" );
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, wxT("&Drawing"));
-    menuBar->Append(menuScreen, wxT("Scree&n"));
-    menuBar->Append(menuMapMode, wxT("&Mode"));
-    menuBar->Append(menuUserScale, wxT("&Scale"));
-    menuBar->Append(menuAxis, wxT("&Axis"));
-    menuBar->Append(menuLogical, wxT("&Origin"));
-    menuBar->Append(menuColour, wxT("&Colours"));
+    menuBar->Append(menuFile, "&Drawing");
+    menuBar->Append(menuScreen, "Scree&n");
+    menuBar->Append(menuMapMode, "&Mode");
+    menuBar->Append(menuUserScale, "&Scale");
+    menuBar->Append(menuAxis, "&Axis");
+    menuBar->Append(menuLogical, "&Origin");
+    menuBar->Append(menuColour, "&Colours");
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
 #if wxUSE_STATUSBAR
     CreateStatusBar(2);
-    SetStatusText(wxT("Welcome to wxWidgets!"));
+    SetStatusText("Welcome to wxWidgets!");
 #endif // wxUSE_STATUSBAR
 
     m_mapMode = wxMM_TEXT;
@@ -2216,13 +2216,13 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( wxT("This is the about dialog of the drawing sample.\n")
-                wxT("This sample tests various primitive drawing functions\n")
-                wxT("(without any attempts to prevent flicker).\n")
-                wxT("Copyright (c) Robert Roebling 1999")
+    msg.Printf( "This is the about dialog of the drawing sample.\n"
+                "This sample tests various primitive drawing functions\n"
+                "(without any attempts to prevent flicker).\n"
+                "Copyright (c) Robert Roebling 1999"
               );
 
-    wxMessageBox(msg, wxT("About Drawing"), wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(msg, "About Drawing", wxOK | wxICON_INFORMATION, this);
 }
 
 void MyFrame::OnClip(wxCommandEvent& event)
@@ -2263,7 +2263,7 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
     wildCard.Append(wxS("|PostScript file (*.ps)|*.ps;*.PS"));
 #endif
 
-    wxFileDialog dlg(this, wxT("Save as bitmap"), wxEmptyString, wxEmptyString,
+    wxFileDialog dlg(this, "Save as bitmap", wxEmptyString, wxEmptyString,
                      wildCard,
                      wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
     if (dlg.ShowModal() == wxID_OK)
@@ -2273,7 +2273,7 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
         wxFileName fn(dlg.GetPath());
         wxString ext = fn.GetExt().Lower();
 #if wxUSE_SVG
-        if (ext == wxT("svg"))
+        if (ext == "svg")
         {
 #if wxUSE_GRAPHICS_CONTEXT
             // Graphics screen can only be drawn using GraphicsContext
@@ -2284,7 +2284,7 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
             wxGraphicsRenderer* tempRenderer = m_canvas->GetRenderer();
             m_canvas->UseGraphicRenderer(NULL);
 #endif
-            wxSVGFileDC svgdc(dlg.GetPath(), width, height, 72, wxT("Drawing sample"));
+            wxSVGFileDC svgdc(dlg.GetPath(), width, height, 72, "Drawing sample");
             svgdc.SetBitmapHandler(new wxSVGBitmapEmbedHandler());
             m_canvas->Draw(svgdc);
 #if wxUSE_GRAPHICS_CONTEXT

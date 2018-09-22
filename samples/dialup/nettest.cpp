@@ -157,7 +157,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main application window
-    MyFrame *frame = new MyFrame(wxT("Dial-up wxWidgets demo"),
+    MyFrame *frame = new MyFrame("Dial-up wxWidgets demo",
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // Show it
@@ -168,7 +168,7 @@ bool MyApp::OnInit()
 
     if ( !m_dial->IsOk() )
     {
-        wxLogError(wxT("The sample can't run on this system."));
+        wxLogError("The sample can't run on this system.");
 
 #if wxUSE_LOG
         wxLog::GetActiveTarget()->Flush();
@@ -181,7 +181,7 @@ bool MyApp::OnInit()
     }
 
 #if wxUSE_STATUSBAR
-    frame->SetStatusText(GetDialer()->IsAlwaysOnline() ? wxT("LAN") : wxT("No LAN"), 2);
+    frame->SetStatusText(GetDialer()->IsAlwaysOnline() ? "LAN" : "No LAN", 2);
 #endif // wxUSE_STATUSBAR
 
     return true;
@@ -197,18 +197,18 @@ int MyApp::OnExit()
 
 void MyApp::OnConnected(wxDialUpEvent& event)
 {
-    const wxChar *msg;
+    wxString msg;
     if ( event.IsOwnEvent() )
     {
-        msg = event.IsConnectedEvent() ? wxT("Successfully connected")
-                                       : wxT("Dialing failed");
+        msg = event.IsConnectedEvent() ? "Successfully connected"
+                                       : "Dialing failed";
 
         wxLogStatus(wxEmptyString);
     }
     else
     {
-        msg = event.IsConnectedEvent() ? wxT("Just connected!")
-                                       : wxT("Disconnected");
+        msg = event.IsConnectedEvent() ? "Just connected!"
+                                       : "Disconnected";
     }
 
     wxLogMessage(msg);
@@ -227,19 +227,19 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
-    menuFile->Append(NetTest_Dial, wxT("&Dial\tCtrl-D"), wxT("Dial default ISP"));
-    menuFile->Append(NetTest_HangUp, wxT("&HangUp\tCtrl-H"), wxT("Hang up modem"));
+    menuFile->Append(NetTest_Dial, "&Dial\tCtrl-D", "Dial default ISP");
+    menuFile->Append(NetTest_HangUp, "&HangUp\tCtrl-H", "Hang up modem");
     menuFile->AppendSeparator();
-    menuFile->Append(NetTest_EnumISP, wxT("&Enumerate ISPs...\tCtrl-E"));
-    menuFile->Append(NetTest_Check, wxT("&Check connection status...\tCtrl-C"));
+    menuFile->Append(NetTest_EnumISP, "&Enumerate ISPs...\tCtrl-E");
+    menuFile->Append(NetTest_Check, "&Check connection status...\tCtrl-C");
     menuFile->AppendSeparator();
-    menuFile->Append(NetTest_About, wxT("&About\tCtrl-A"), wxT("Show about dialog"));
+    menuFile->Append(NetTest_About, "&About\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
-    menuFile->Append(NetTest_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
+    menuFile->Append(NetTest_Quit, "E&xit\tAlt-X", "Quit this program");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, wxT("&File"));
+    menuBar->Append(menuFile, "&File");
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -264,37 +264,37 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( wxT("This is the network functions test sample.\n")
-                wxT("(c) 1999 Vadim Zeitlin") );
+    msg.Printf( "This is the network functions test sample.\n"
+                "(c) 1999 Vadim Zeitlin" );
 
-    wxMessageBox(msg, wxT("About NetTest"), wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(msg, "About NetTest", wxOK | wxICON_INFORMATION, this);
 }
 
 void MyFrame::OnHangUp(wxCommandEvent& WXUNUSED(event))
 {
     if ( wxGetApp().GetDialer()->HangUp() )
     {
-        wxLogStatus(this, wxT("Connection was successfully terminated."));
+        wxLogStatus(this, "Connection was successfully terminated.");
     }
     else
     {
-        wxLogStatus(this, wxT("Failed to hang up."));
+        wxLogStatus(this, "Failed to hang up.");
     }
 }
 
 void MyFrame::OnDial(wxCommandEvent& WXUNUSED(event))
 {
-    wxLogStatus(this, wxT("Preparing to dial..."));
+    wxLogStatus(this, "Preparing to dial...");
     wxYield();
     wxBeginBusyCursor();
 
     if ( wxGetApp().GetDialer()->Dial() )
     {
-        wxLogStatus(this, wxT("Dialing..."));
+        wxLogStatus(this, "Dialing...");
     }
     else
     {
-        wxLogStatus(this, wxT("Dialing attempt failed."));
+        wxLogStatus(this, "Dialing attempt failed.");
     }
 
     wxEndBusyCursor();
@@ -304,11 +304,11 @@ void MyFrame::OnCheck(wxCommandEvent& WXUNUSED(event))
 {
    if(wxGetApp().GetDialer()->IsOnline())
    {
-      wxLogMessage(wxT("Network is online."));
+      wxLogMessage("Network is online.");
    }
    else
    {
-      wxLogMessage(wxT("Network is offline."));
+      wxLogMessage("Network is offline.");
    }
 }
 
@@ -318,11 +318,11 @@ void MyFrame::OnEnumISPs(wxCommandEvent& WXUNUSED(event))
     size_t nCount = wxGetApp().GetDialer()->GetISPNames(names);
     if ( nCount == 0 )
     {
-        wxLogWarning(wxT("No ISPs found."));
+        wxLogWarning("No ISPs found.");
     }
     else
     {
-        wxString msg = wxT("Known ISPs:\n");
+        wxString msg = "Known ISPs:\n";
         for ( size_t n = 0; n < nCount; n++ )
         {
             msg << names[n] << '\n';
@@ -348,7 +348,7 @@ void MyFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
         s_isOnline = isOnline;
 
 #if wxUSE_STATUSBAR
-        SetStatusText(isOnline ? wxT("Online") : wxT("Offline"), 1);
+        SetStatusText(isOnline ? "Online" : "Offline", 1);
 #endif // wxUSE_STATUSBAR
     }
 }
