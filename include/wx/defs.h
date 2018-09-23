@@ -2584,7 +2584,6 @@ typedef int (* LINKAGEMODE wxListIterateFunction)(void *current);
 
 #define WX_OPAQUE_TYPE( name ) struct wxOpaque##name
 
-typedef void*       WXHBITMAP;
 typedef void*       WXHCURSOR;
 typedef void*       WXRECTPTR;
 typedef void*       WXPOINTPTR;
@@ -2628,6 +2627,7 @@ DECLARE_WXOSX_OPAQUE_CGREF( CGFont )
 typedef CGColorRef    WXCOLORREF;
 typedef CGImageRef    WXCGIMAGEREF;
 typedef CGContextRef  WXHDC;
+typedef CGContextRef  WXHBITMAP;
 
 /*
  * carbon
@@ -2764,6 +2764,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSString);
 
 typedef WX_NSWindow WXWindow;
 typedef WX_NSView WXWidget;
+typedef WX_NSImage WXImage;
 typedef WX_NSMenu WXHMENU;
 typedef WX_NSOpenGLPixelFormat WXGLPixelFormat;
 typedef WX_NSOpenGLContext WXGLContext;
@@ -2771,6 +2772,7 @@ typedef WX_NSOpenGLContext WXGLContext;
 #elif wxOSX_USE_IPHONE
 
 DECLARE_WXCOCOA_OBJC_CLASS(UIWindow);
+DECLARE_WXCOCOA_OBJC_CLASS(UImage);
 DECLARE_WXCOCOA_OBJC_CLASS(UIView);
 DECLARE_WXCOCOA_OBJC_CLASS(UIFont);
 DECLARE_WXCOCOA_OBJC_CLASS(UIImage);
@@ -2781,6 +2783,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(UIWebView);
 
 typedef WX_UIWindow WXWindow;
 typedef WX_UIView WXWidget;
+typedef WX_UIImage WXImage;
 typedef WX_EAGLContext WXGLContext;
 typedef WX_NSString WXGLPixelFormat;
 typedef WX_UIWebView OSXWebViewPtr;

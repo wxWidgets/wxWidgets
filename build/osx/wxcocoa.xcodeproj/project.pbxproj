@@ -4754,7 +4754,7 @@
 		F4B85051B7C835A8BF4E3EE1 /* xh_panel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_panel.cpp; path = ../../src/xrc/xh_panel.cpp; sourceTree = "<group>"; };
 		F4C72C5C61A6335C8B418BA1 /* LexMetapost.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexMetapost.cxx; path = ../../src/stc/scintilla/lexers/LexMetapost.cxx; sourceTree = "<group>"; };
 		F52DCBC0442233738B39138E /* CaseFolder.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CaseFolder.cxx; path = ../../src/stc/scintilla/src/CaseFolder.cxx; sourceTree = "<group>"; };
-		F5DAF1F49F0F3F41A427A21D /* icon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = icon.cpp; path = ../../src/osx/carbon/icon.cpp; sourceTree = "<group>"; };
+		F5DAF1F49F0F3F41A427A21D /* icon.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = icon.cpp; path = ../../src/generic/icon.cpp; sourceTree = "<group>"; };
 		F6EA240B3DB93D398A990FAD /* tif_dirread.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_dirread.c; path = ../../src/tiff/libtiff/tif_dirread.c; sourceTree = "<group>"; };
 		F6F01A84F4DE3C9FB9849004 /* tif_jbig.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_jbig.c; path = ../../src/tiff/libtiff/tif_jbig.c; sourceTree = "<group>"; };
 		F7332A03D93D3DABB050615D /* dir.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dir.cpp; path = ../../src/unix/dir.cpp; sourceTree = "<group>"; };
