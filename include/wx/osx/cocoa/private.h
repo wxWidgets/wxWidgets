@@ -32,12 +32,16 @@ OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
                                CGContextRef    inContext,
                                const CGRect *  inBounds,
                                CGImageRef      inImage) ;
+void WXDLLIMPEXP_CORE wxOSXDrawNSImage(
+                                           CGContextRef    inContext,
+                                           const CGRect *  inBounds,
+                                           WX_NSImage      inImage) ;
+WX_NSImage WXDLLIMPEXP_CORE wxOSXGetSystemImage(const wxString& name);
 WX_NSImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromCGImage( CGImageRef image, double scale = 1.0, bool isTemplate = false);
 WX_NSImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromIconRef( WXHICON iconref );
-CGImageRef WXDLLIMPEXP_CORE wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage, double *scale = NULL );
-CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromNSImage( WX_NSImage nsimage, CGRect* r, CGContextRef cg);
-CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromNSImage( WX_NSImage nsimage, bool *isTemplate = NULL);
-
+WX_NSImage WXDLLIMPEXP_CORE wxOSXGetIconForType(OSType type );
+void WXDLLIMPEXP_CORE wxOSXSetImageSize(WX_NSImage image, CGFloat width, CGFloat height);
+double WXDLLIMPEXP_CORE wxOSXGetImageScaleFactor(WXImage image);
 wxBitmap WXDLLIMPEXP_CORE wxOSXCreateSystemBitmap(const wxString& id, const wxString &client, const wxSize& size);
 WXWindow WXDLLIMPEXP_CORE wxOSXGetMainWindow();
 WXWindow WXDLLIMPEXP_CORE wxOSXGetKeyWindow();
