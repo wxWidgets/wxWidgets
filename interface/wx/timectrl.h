@@ -67,7 +67,7 @@ public:
                      const wxSize& size = wxDefaultSize,
                      long style = wxTP_DEFAULT,
                      const wxValidator& validator = wxDefaultValidator,
-                     const wxString& name = "timectrl");
+                     const wxString& name = wxTimePickerCtrlNameStr);
 
     /**
         Create the control window.
@@ -103,9 +103,9 @@ public:
                 const wxDateTime& dt = wxDefaultDateTime,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxDP_DEFAULT | wxDP_SHOWCENTURY,
+                long style = wxTP_DEFAULT,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = "timectrl");
+                const wxString& name = wxTimePickerCtrlNameStr);
 
     /**
         Returns the currently entered time as hours, minutes and seconds.

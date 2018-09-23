@@ -339,6 +339,19 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="QT_SRC" hints="files">
+    src/common/taskbarcmn.cpp
+    src/generic/caret.cpp
+    src/generic/clrpickerg.cpp
+    src/generic/collpaneg.cpp
+    src/generic/fdrepdlg.cpp
+    src/generic/filepickerg.cpp
+    src/generic/fontpickerg.cpp
+    src/generic/icon.cpp
+    src/generic/imaglist.cpp
+    src/generic/prntdlgg.cpp
+    src/generic/textmeasure.cpp
+    src/generic/animateg.cpp
+    src/generic/activityindicator.cpp
     src/qt/accel.cpp
     src/qt/app.cpp
     src/qt/apptraits.cpp
@@ -347,14 +360,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/brush.cpp
     src/qt/anybutton.cpp
     src/qt/button.cpp
-    src/generic/caret.cpp
+    src/qt/calctrl.cpp
     src/qt/checkbox.cpp
     src/qt/checklst.cpp
     src/qt/choice.cpp
     src/qt/clipbrd.cpp
     src/qt/clrpicker.cpp
-    src/generic/clrpickerg.cpp
-    src/generic/collpaneg.cpp
     src/qt/colordlg.cpp
     src/qt/colour.cpp
     src/qt/combobox.cpp
@@ -363,6 +374,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/ctrlsub.cpp
     src/qt/cursor.cpp
     src/qt/dataobj.cpp
+    src/qt/dataview.cpp
     src/qt/dcclient.cpp
     src/qt/dc.cpp
     src/qt/dcmemory.cpp
@@ -370,22 +382,18 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/dcscreen.cpp
     src/qt/defs.cpp
     src/qt/dialog.cpp
-    src/unix/dialup.cpp
     src/qt/display.cpp
     src/qt/dnd.cpp
+    src/qt/dvrenderer.cpp
+    src/qt/dvrenderers.cpp
     src/qt/evtloop.cpp
-    src/generic/fdrepdlg.cpp
     src/qt/filedlg.cpp
-    src/generic/filepickerg.cpp
     src/qt/font.cpp
     src/qt/fontdlg.cpp
     src/qt/fontutil.cpp
     src/qt/fontenum.cpp
-    src/generic/fontpickerg.cpp
     src/qt/frame.cpp
     src/qt/gauge.cpp
-    src/generic/icon.cpp
-    src/generic/imaglist.cpp
     src/qt/listbox.cpp
     src/qt/listctrl.cpp
     src/qt/mdi.cpp
@@ -399,7 +407,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/pen.cpp
     src/qt/popupwin.cpp
     src/qt/printdlg.cpp
-    src/generic/prntdlgg.cpp
     src/qt/printqt.cpp
     src/qt/radiobox.cpp
     src/qt/radiobut.cpp
@@ -415,28 +422,17 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/statline.cpp
     src/qt/stattext.cpp
     src/qt/statusbar.cpp
+    src/qt/taskbar.cpp
     src/qt/textctrl.cpp
     src/qt/textentry.cpp
-    src/generic/textmeasure.cpp
     src/qt/tglbtn.cpp
     src/qt/timer.cpp
     src/qt/toolbar.cpp
     src/qt/tooltip.cpp
     src/qt/toplevel.cpp
-    <!-- src/qt/treectrl.cpp -->
     src/qt/uiaction.cpp
     src/qt/utils.cpp
     src/qt/window.cpp
-    src/common/taskbarcmn.cpp
-    src/unix/joystick.cpp
-    src/qt/taskbar.cpp
-    src/qt/dvrenderer.cpp
-    src/generic/animateg.cpp
-    src/qt/dataview.cpp
-    src/unix/sound.cpp
-    src/generic/activityindicator.cpp
-    src/qt/calctrl.cpp
-    src/qt/dvrenderers.cpp
 </set>
 
 <set var="MEDIA_QT_SRC" hints="files">
@@ -2301,6 +2297,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="DFB_LOWLEVEL_SRC" hints="files">
     src/common/fontmgrcmn.cpp
+    src/generic/animateg.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp
@@ -2331,6 +2328,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/dfb/wrapdfb.cpp
 </set>
 <set var="DFB_LOWLEVEL_HDR" hints="files">
+    wx/generic/animate.h
     wx/generic/caret.h
     wx/generic/colour.h
     wx/generic/icon.h
@@ -3250,7 +3248,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         wx/gtk1/glcanvas.h
         wx/unix/glx11.h
     </if>
-    <if cond="TOOLKIT=='Qt'">wx/qt/glcanvas.h</if>
+    <if cond="TOOLKIT=='QT'">wx/qt/glcanvas.h</if>
     <if cond="TOOLKIT=='MSW'">wx/msw/glcanvas.h</if>
     <if cond="TOOLKIT=='MOTIF'">wx/x11/glcanvas.h wx/unix/glx11.h</if>
     <if cond="TOOLKIT=='X11'">wx/x11/glcanvas.h wx/unix/glx11.h</if>
@@ -3590,7 +3588,17 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </set>
 
     <!-- wxAdvanced: empty, kept only for backwards compatibility -->
-    <set var="ADVANCED_SRC" hints="files"/>
+    <set var="ADVANCED_SRC" hints="files">
+        <!-- When not using autoconf, it's part of wx_lib_b template. -->
+        <if cond="FORMAT=='autoconf'">
+            <!--
+                But otherwise we need to compile at least a single file as
+                part of the library, at least some versions of ar refuse to
+                create an empty static library without any files, for example.
+             -->
+            src/common/dummy.cpp
+        </if>
+    </set>
     <set var="ADVANCED_HDR" hints="files"/>
 
     <!-- wxMedia files: -->
@@ -3675,12 +3683,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- ================================================================ -->
 
     <!-- wxAdv sources -->
-    <set var="PLUGIN_ADV_SRC">
+    <set var="PLUGIN_SRC">
         <if cond="FORMAT=='autoconf' and PLATFORM_UNIX=='1' and USE_PLUGINS=='0'">
             $(UNIX_SOUND_SRC_SDL)
         </if>
     </set>
 
-    <set var="PLUGIN_MONOLIB_SRC">$(PLUGIN_ADV_SRC)</set>
+    <set var="PLUGIN_MONOLIB_SRC">$(PLUGIN_SRC)</set>
 
 </makefile>

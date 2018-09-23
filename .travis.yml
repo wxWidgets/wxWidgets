@@ -30,6 +30,18 @@ matrix:
         - os: osx
           compiler: clang
           env: wxTOOLSET=cmake wxCMAKE_GENERATOR=Xcode wxCMAKE_DEFINES="-DCMAKE_CXX_STANDARD=11"
+        - dist: trusty
+          compiler: gcc
+          env: wxCONFIGURE_FLAGS="--with-x11 --enable-pch --disable-stc" wxSKIP_SAMPLES=1
+        - dist: trusty
+          compiler: gcc
+          env: wxCONFIGURE_FLAGS="--with-directfb --enable-pch --disable-stc" wxSKIP_SAMPLES=1
+        - dist: trusty
+          compiler: gcc
+          env: wxCONFIGURE_FLAGS="--with-motif --enable-pch --disable-stc" wxSKIP_SAMPLES=1
+        - dist: trusty
+          compiler: gcc
+          env: wxCONFIGURE_FLAGS="--with-qt --enable-pch" wxSKIP_SAMPLES=1
 
 branches:
     only:

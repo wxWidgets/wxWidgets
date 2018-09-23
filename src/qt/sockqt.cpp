@@ -94,10 +94,12 @@ public:
     wxVector<wxQtFDIONotifier*> m_qtNotifiers;
 };
 
+#if defined(__UNIX__)
 wxFDIOManager *wxGUIAppTraits::GetFDIOManager()
 {
     static QtFDIOManager s_manager;
     return &s_manager;
 }
+#endif // __UNIX__
 
-#endif // wxUSE_SOCKETS && __UNIX__
+#endif // wxUSE_SOCKETS

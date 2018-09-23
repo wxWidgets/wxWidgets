@@ -680,8 +680,11 @@ void WidgetsFrame::ConnectToWidgetEvents()
             it != widgets.end();
             ++it )
     {
-        (*it)->Bind(wxEVT_SET_FOCUS, &WidgetsFrame::OnWidgetFocus, this);
-        (*it)->Bind(wxEVT_KILL_FOCUS, &WidgetsFrame::OnWidgetFocus, this);
+        wxWindow* const w = *it;
+        wxCHECK_RET(w, "NULL widget");
+
+        w->Bind(wxEVT_SET_FOCUS, &WidgetsFrame::OnWidgetFocus, this);
+        w->Bind(wxEVT_KILL_FOCUS, &WidgetsFrame::OnWidgetFocus, this);
     }
 }
 

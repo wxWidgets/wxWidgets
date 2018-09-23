@@ -147,7 +147,7 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
         nameAndVersion << wxT(' ') << info.GetVersion();
     wxStaticText *label = new wxStaticText(this, wxID_ANY, nameAndVersion);
     wxFont fontBig(*wxNORMAL_FONT);
-    fontBig.SetPointSize(fontBig.GetPointSize() + 2);
+    fontBig.SetFractionalPointSize(fontBig.GetFractionalPointSize() + 2.0);
     fontBig.SetWeight(wxFONTWEIGHT_BOLD);
     label->SetFont(fontBig);
 

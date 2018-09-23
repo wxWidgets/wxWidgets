@@ -27,7 +27,7 @@ private:
     ScoreFile* m_scoreFile;
     wxButton* m_OK;
 
-	wxDECLARE_EVENT_TABLE();
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif

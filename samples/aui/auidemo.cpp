@@ -125,7 +125,7 @@ private:
     wxTextCtrl* CreateTextCtrl(const wxString& text = wxEmptyString);
     wxGrid* CreateGrid();
     wxTreeCtrl* CreateTreeCtrl();
-    wxSizeReportCtrl* CreateSizeReportCtrl(int width = 80, int height = 80);
+    wxSizeReportCtrl* CreateSizeReportCtrl(const wxSize &size = wxWindow::FromDIP(wxSize(80, 80), NULL));
     wxPoint GetStartPosition();
     wxHtmlWindow* CreateHTMLCtrl(wxWindow* parent = NULL);
     wxAuiNotebook* CreateNotebook();
@@ -202,11 +202,11 @@ private:
         wxString s;
         int h, w, height;
 
-        s.Printf(wxT("Size: %d x %d"), size.x, size.y);
+        s.Printf("Size: %d x %d", size.x, size.y);
 
         dc.SetFont(*wxNORMAL_FONT);
         dc.GetTextExtent(s, &w, &height);
-        height += 3;
+        height += FromDIP(3);
         dc.SetBrush(*wxWHITE_BRUSH);
         dc.SetPen(*wxWHITE_PEN);
         dc.DrawRectangle(0, 0, size.x, size.y);
@@ -219,19 +219,19 @@ private:
         {
             wxAuiPaneInfo pi = m_mgr->GetPane(this);
 
-            s.Printf(wxT("Layer: %d"), pi.dock_layer);
+            s.Printf("Layer: %d", pi.dock_layer);
             dc.GetTextExtent(s, &w, &h);
             dc.DrawText(s, (size.x-w)/2, ((size.y-(height*5))/2)+(height*1));
 
-            s.Printf(wxT("Dock: %d Row: %d"), pi.dock_direction, pi.dock_row);
+            s.Printf("Dock: %d Row: %d", pi.dock_direction, pi.dock_row);
             dc.GetTextExtent(s, &w, &h);
             dc.DrawText(s, (size.x-w)/2, ((size.y-(height*5))/2)+(height*2));
 
-            s.Printf(wxT("Position: %d"), pi.dock_pos);
+            s.Printf("Position: %d", pi.dock_pos);
             dc.GetTextExtent(s, &w, &h);
             dc.DrawText(s, (size.x-w)/2, ((size.y-(height*5))/2)+(height*3));
 
-            s.Printf(wxT("Proportion: %d"), pi.dock_proportion);
+            s.Printf("Proportion: %d", pi.dock_proportion);
             dc.GetTextExtent(s, &w, &h);
             dc.DrawText(s, (size.x-w)/2, ((size.y-(height*5))/2)+(height*4));
         }
@@ -287,132 +287,132 @@ public:
     {
         //wxBoxSizer* vert = new wxBoxSizer(wxVERTICAL);
 
-        //vert->Add(1, 1, 1, wxEXPAND);
+        //vert->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
 
         wxBoxSizer* s1 = new wxBoxSizer(wxHORIZONTAL);
-        m_border_size = new wxSpinCtrl(this, ID_PaneBorderSize, wxString::Format(wxT("%d"), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
-        s1->Add(1, 1, 1, wxEXPAND);
-        s1->Add(new wxStaticText(this, wxID_ANY, wxT("Pane Border Size:")));
+        m_border_size = new wxSpinCtrl(this, ID_PaneBorderSize, wxString::Format("%d", frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, FromDIP(100), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
+        s1->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s1->Add(new wxStaticText(this, wxID_ANY, "Pane Border Size:"));
         s1->Add(m_border_size);
-        s1->Add(1, 1, 1, wxEXPAND);
-        s1->SetItemMinSize((size_t)1, 180, 20);
-        //vert->Add(s1, 0, wxEXPAND | wxLEFT | wxBOTTOM, 5);
+        s1->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s1->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
+        //vert->Add(s1, 0, wxEXPAND | wxLEFT | wxBOTTOM, FromDIP(5));
 
         wxBoxSizer* s2 = new wxBoxSizer(wxHORIZONTAL);
-        m_sash_size = new wxSpinCtrl(this, ID_SashSize, wxString::Format(wxT("%d"), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE));
-        s2->Add(1, 1, 1, wxEXPAND);
-        s2->Add(new wxStaticText(this, wxID_ANY, wxT("Sash Size:")));
+        m_sash_size = new wxSpinCtrl(this, ID_SashSize, wxString::Format("%d", frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, FromDIP(100), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE));
+        s2->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s2->Add(new wxStaticText(this, wxID_ANY, "Sash Size:"));
         s2->Add(m_sash_size);
-        s2->Add(1, 1, 1, wxEXPAND);
-        s2->SetItemMinSize((size_t)1, 180, 20);
-        //vert->Add(s2, 0, wxEXPAND | wxLEFT | wxBOTTOM, 5);
+        s2->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s2->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
+        //vert->Add(s2, 0, wxEXPAND | wxLEFT | wxBOTTOM, FromDIP(5));
 
         wxBoxSizer* s3 = new wxBoxSizer(wxHORIZONTAL);
-        m_caption_size = new wxSpinCtrl(this, ID_CaptionSize, wxString::Format(wxT("%d"), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 100, frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE));
-        s3->Add(1, 1, 1, wxEXPAND);
-        s3->Add(new wxStaticText(this, wxID_ANY, wxT("Caption Size:")));
+        m_caption_size = new wxSpinCtrl(this, ID_CaptionSize, wxString::Format("%d", frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE)), wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, FromDIP(100), frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE));
+        s3->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s3->Add(new wxStaticText(this, wxID_ANY, "Caption Size:"));
         s3->Add(m_caption_size);
-        s3->Add(1, 1, 1, wxEXPAND);
-        s3->SetItemMinSize((size_t)1, 180, 20);
-        //vert->Add(s3, 0, wxEXPAND | wxLEFT | wxBOTTOM, 5);
+        s3->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s3->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
+        //vert->Add(s3, 0, wxEXPAND | wxLEFT | wxBOTTOM, FromDIP(5));
 
-        //vert->Add(1, 1, 1, wxEXPAND);
+        //vert->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
 
 
         wxBitmap b = CreateColorBitmap(*wxBLACK);
 
         wxBoxSizer* s4 = new wxBoxSizer(wxHORIZONTAL);
-        m_background_color = new wxBitmapButton(this, ID_BackgroundColor, b, wxDefaultPosition, wxSize(50,25));
-        s4->Add(1, 1, 1, wxEXPAND);
-        s4->Add(new wxStaticText(this, wxID_ANY, wxT("Background Color:")));
+        m_background_color = new wxBitmapButton(this, ID_BackgroundColor, b, wxDefaultPosition, FromDIP(wxSize(50,25)));
+        s4->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s4->Add(new wxStaticText(this, wxID_ANY, "Background Color:"));
         s4->Add(m_background_color);
-        s4->Add(1, 1, 1, wxEXPAND);
-        s4->SetItemMinSize((size_t)1, 180, 20);
+        s4->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s4->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s5 = new wxBoxSizer(wxHORIZONTAL);
         m_sash_color = new wxBitmapButton(this, ID_SashColor, b, wxDefaultPosition, wxSize(50,25));
-        s5->Add(1, 1, 1, wxEXPAND);
-        s5->Add(new wxStaticText(this, wxID_ANY, wxT("Sash Color:")));
+        s5->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s5->Add(new wxStaticText(this, wxID_ANY, "Sash Color:"));
         s5->Add(m_sash_color);
-        s5->Add(1, 1, 1, wxEXPAND);
-        s5->SetItemMinSize((size_t)1, 180, 20);
+        s5->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s5->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s6 = new wxBoxSizer(wxHORIZONTAL);
         m_inactive_caption_color = new wxBitmapButton(this, ID_InactiveCaptionColor, b, wxDefaultPosition, wxSize(50,25));
-        s6->Add(1, 1, 1, wxEXPAND);
-        s6->Add(new wxStaticText(this, wxID_ANY, wxT("Normal Caption:")));
+        s6->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s6->Add(new wxStaticText(this, wxID_ANY, "Normal Caption:"));
         s6->Add(m_inactive_caption_color);
-        s6->Add(1, 1, 1, wxEXPAND);
-        s6->SetItemMinSize((size_t)1, 180, 20);
+        s6->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s6->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s7 = new wxBoxSizer(wxHORIZONTAL);
         m_inactive_caption_gradient_color = new wxBitmapButton(this, ID_InactiveCaptionGradientColor, b, wxDefaultPosition, wxSize(50,25));
-        s7->Add(1, 1, 1, wxEXPAND);
-        s7->Add(new wxStaticText(this, wxID_ANY, wxT("Normal Caption Gradient:")));
+        s7->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s7->Add(new wxStaticText(this, wxID_ANY, "Normal Caption Gradient:"));
         s7->Add(m_inactive_caption_gradient_color);
-        s7->Add(1, 1, 1, wxEXPAND);
-        s7->SetItemMinSize((size_t)1, 180, 20);
+        s7->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s7->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s8 = new wxBoxSizer(wxHORIZONTAL);
         m_inactive_caption_text_color = new wxBitmapButton(this, ID_InactiveCaptionTextColor, b, wxDefaultPosition, wxSize(50,25));
-        s8->Add(1, 1, 1, wxEXPAND);
-        s8->Add(new wxStaticText(this, wxID_ANY, wxT("Normal Caption Text:")));
+        s8->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s8->Add(new wxStaticText(this, wxID_ANY, "Normal Caption Text:"));
         s8->Add(m_inactive_caption_text_color);
-        s8->Add(1, 1, 1, wxEXPAND);
-        s8->SetItemMinSize((size_t)1, 180, 20);
+        s8->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s8->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s9 = new wxBoxSizer(wxHORIZONTAL);
         m_active_caption_color = new wxBitmapButton(this, ID_ActiveCaptionColor, b, wxDefaultPosition, wxSize(50,25));
-        s9->Add(1, 1, 1, wxEXPAND);
-        s9->Add(new wxStaticText(this, wxID_ANY, wxT("Active Caption:")));
+        s9->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s9->Add(new wxStaticText(this, wxID_ANY, "Active Caption:"));
         s9->Add(m_active_caption_color);
-        s9->Add(1, 1, 1, wxEXPAND);
-        s9->SetItemMinSize((size_t)1, 180, 20);
+        s9->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s9->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s10 = new wxBoxSizer(wxHORIZONTAL);
         m_active_caption_gradient_color = new wxBitmapButton(this, ID_ActiveCaptionGradientColor, b, wxDefaultPosition, wxSize(50,25));
-        s10->Add(1, 1, 1, wxEXPAND);
-        s10->Add(new wxStaticText(this, wxID_ANY, wxT("Active Caption Gradient:")));
+        s10->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s10->Add(new wxStaticText(this, wxID_ANY, "Active Caption Gradient:"));
         s10->Add(m_active_caption_gradient_color);
-        s10->Add(1, 1, 1, wxEXPAND);
-        s10->SetItemMinSize((size_t)1, 180, 20);
+        s10->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s10->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s11 = new wxBoxSizer(wxHORIZONTAL);
         m_active_caption_text_color = new wxBitmapButton(this, ID_ActiveCaptionTextColor, b, wxDefaultPosition, wxSize(50,25));
-        s11->Add(1, 1, 1, wxEXPAND);
-        s11->Add(new wxStaticText(this, wxID_ANY, wxT("Active Caption Text:")));
+        s11->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s11->Add(new wxStaticText(this, wxID_ANY, "Active Caption Text:"));
         s11->Add(m_active_caption_text_color);
-        s11->Add(1, 1, 1, wxEXPAND);
-        s11->SetItemMinSize((size_t)1, 180, 20);
+        s11->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s11->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s12 = new wxBoxSizer(wxHORIZONTAL);
         m_border_color = new wxBitmapButton(this, ID_BorderColor, b, wxDefaultPosition, wxSize(50,25));
-        s12->Add(1, 1, 1, wxEXPAND);
-        s12->Add(new wxStaticText(this, wxID_ANY, wxT("Border Color:")));
+        s12->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s12->Add(new wxStaticText(this, wxID_ANY, "Border Color:"));
         s12->Add(m_border_color);
-        s12->Add(1, 1, 1, wxEXPAND);
-        s12->SetItemMinSize((size_t)1, 180, 20);
+        s12->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s12->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxBoxSizer* s13 = new wxBoxSizer(wxHORIZONTAL);
         m_gripper_color = new wxBitmapButton(this, ID_GripperColor, b, wxDefaultPosition, wxSize(50,25));
-        s13->Add(1, 1, 1, wxEXPAND);
-        s13->Add(new wxStaticText(this, wxID_ANY, wxT("Gripper Color:")));
+        s13->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s13->Add(new wxStaticText(this, wxID_ANY, "Gripper Color:"));
         s13->Add(m_gripper_color);
-        s13->Add(1, 1, 1, wxEXPAND);
-        s13->SetItemMinSize((size_t)1, 180, 20);
+        s13->Add(FromDIP(1), FromDIP(1), 1, wxEXPAND);
+        s13->SetItemMinSize((size_t)1, FromDIP(wxSize(180, 20)));
 
         wxGridSizer* grid_sizer = new wxGridSizer(2);
-        grid_sizer->SetHGap(5);
+        grid_sizer->SetHGap(FromDIP(5));
         grid_sizer->Add(s1);  grid_sizer->Add(s4);
         grid_sizer->Add(s2);  grid_sizer->Add(s5);
         grid_sizer->Add(s3);  grid_sizer->Add(s13);
-        grid_sizer->Add(1,1); grid_sizer->Add(s12);
+        grid_sizer->Add(FromDIP(1),FromDIP(1)); grid_sizer->Add(s12);
         grid_sizer->Add(s6);  grid_sizer->Add(s9);
         grid_sizer->Add(s7);  grid_sizer->Add(s10);
         grid_sizer->Add(s8);  grid_sizer->Add(s11);
 
         wxBoxSizer* cont_sizer = new wxBoxSizer(wxVERTICAL);
-        cont_sizer->Add(grid_sizer, 1, wxEXPAND | wxALL, 5);
+        cont_sizer->Add(grid_sizer, 1, wxEXPAND | wxALL, FromDIP(5));
         SetSizer(cont_sizer);
         GetSizer()->SetSizeHints(this);
 
@@ -428,12 +428,13 @@ private:
     wxBitmap CreateColorBitmap(const wxColour& c)
     {
         wxImage image;
-        image.Create(25,14);
-        for (int x = 0; x < 25; ++x)
-            for (int y = 0; y < 14; ++y)
+        wxSize size = FromDIP(wxSize(25, 14));
+        image.Create(size);
+        for (int x = 0; x < size.x; ++x)
+            for (int y = 0; y < size.y; ++y)
             {
                 wxColour pixcol = c;
-                if (x == 0 || x == 24 || y == 0 || y == 13)
+                if (x == 0 || x == size.x || y == 0 || y == size.y)
                     pixcol = *wxBLACK;
                 image.SetRGB(x, y, pixcol.Red(), pixcol.Green(), pixcol.Blue());
             }
@@ -566,9 +567,9 @@ bool MyApp::OnInit()
 
     wxFrame* frame = new MyFrame(NULL,
                                  wxID_ANY,
-                                 wxT("wxAUI Sample Application"),
+                                 "wxAUI Sample Application",
                                  wxDefaultPosition,
-                                 wxSize(800, 600));
+                                 wxWindow::FromDIP(wxSize(800, 600), NULL));
     frame->Show();
 
     return true;
@@ -761,7 +762,7 @@ MyFrame::MyFrame(wxWindow* parent,
     // min size for the frame itself isn't completely done.
     // see the end up wxAuiManager::Update() for the test
     // code. For now, just hard code a frame minimum size
-    SetMinSize(wxSize(400,300));
+    SetMinSize(FromDIP(wxSize(400,300)));
 
 
 
@@ -781,34 +782,34 @@ MyFrame::MyFrame(wxWindow* parent,
     // create some toolbars
     wxAuiToolBar* tb1 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
-    tb1->SetToolBitmapSize(wxSize(48,48));
-    tb1->AddTool(ID_SampleItem+1, wxT("Test"), wxArtProvider::GetBitmap(wxART_ERROR));
+    tb1->SetToolBitmapSize(FromDIP(wxSize(48,48)));
+    tb1->AddTool(ID_SampleItem+1, "Test", wxArtProvider::GetBitmap(wxART_ERROR));
     tb1->AddSeparator();
-    tb1->AddTool(ID_SampleItem+2, wxT("Test"), wxArtProvider::GetBitmap(wxART_QUESTION));
-    tb1->AddTool(ID_SampleItem+3, wxT("Test"), wxArtProvider::GetBitmap(wxART_INFORMATION));
-    tb1->AddTool(ID_SampleItem+4, wxT("Test"), wxArtProvider::GetBitmap(wxART_WARNING));
-    tb1->AddTool(ID_SampleItem+5, wxT("Test"), wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
+    tb1->AddTool(ID_SampleItem+2, "Test", wxArtProvider::GetBitmap(wxART_QUESTION));
+    tb1->AddTool(ID_SampleItem+3, "Test", wxArtProvider::GetBitmap(wxART_INFORMATION));
+    tb1->AddTool(ID_SampleItem+4, "Test", wxArtProvider::GetBitmap(wxART_WARNING));
+    tb1->AddTool(ID_SampleItem+5, "Test", wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
     tb1->SetCustomOverflowItems(prepend_items, append_items);
     tb1->Realize();
 
 
     wxAuiToolBar* tb2 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_HORIZONTAL);
-    tb2->SetToolBitmapSize(wxSize(16,16));
+    tb2->SetToolBitmapSize(FromDIP(wxSize(16,16)));
 
-    wxBitmap tb2_bmp1 = wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(16,16));
-    tb2->AddTool(ID_SampleItem+6, wxT("Disabled"), tb2_bmp1);
-    tb2->AddTool(ID_SampleItem+7, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(ID_SampleItem+8, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(ID_SampleItem+9, wxT("Test"), tb2_bmp1);
+    wxBitmap tb2_bmp1 = wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, FromDIP(wxSize(16,16)));
+    tb2->AddTool(ID_SampleItem+6, "Disabled", tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+7, "Test", tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+8, "Test", tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+9, "Test", tb2_bmp1);
     tb2->AddSeparator();
-    tb2->AddTool(ID_SampleItem+10, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(ID_SampleItem+11, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+10, "Test", tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+11, "Test", tb2_bmp1);
     tb2->AddSeparator();
-    tb2->AddTool(ID_SampleItem+12, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(ID_SampleItem+13, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(ID_SampleItem+14, wxT("Test"), tb2_bmp1);
-    tb2->AddTool(ID_SampleItem+15, wxT("Test"), tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+12, "Test", tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+13, "Test", tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+14, "Test", tb2_bmp1);
+    tb2->AddTool(ID_SampleItem+15, "Test", tb2_bmp1);
     tb2->SetCustomOverflowItems(prepend_items, append_items);
     tb2->EnableTool(ID_SampleItem+6, false);
     tb2->Realize();
@@ -816,20 +817,20 @@ MyFrame::MyFrame(wxWindow* parent,
 
     wxAuiToolBar* tb3 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW);
-    tb3->SetToolBitmapSize(wxSize(16,16));
-    wxBitmap tb3_bmp1 = wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, wxSize(16,16));
-    tb3->AddTool(ID_SampleItem+16, wxT("Check 1"), tb3_bmp1, wxT("Check 1"), wxITEM_CHECK);
-    tb3->AddTool(ID_SampleItem+17, wxT("Check 2"), tb3_bmp1, wxT("Check 2"), wxITEM_CHECK);
-    tb3->AddTool(ID_SampleItem+18, wxT("Check 3"), tb3_bmp1, wxT("Check 3"), wxITEM_CHECK);
-    tb3->AddTool(ID_SampleItem+19, wxT("Check 4"), tb3_bmp1, wxT("Check 4"), wxITEM_CHECK);
+    tb3->SetToolBitmapSize(FromDIP(wxSize(16,16)));
+    wxBitmap tb3_bmp1 = wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, FromDIP(wxSize(16,16)));
+    tb3->AddTool(ID_SampleItem+16, "Check 1", tb3_bmp1, "Check 1", wxITEM_CHECK);
+    tb3->AddTool(ID_SampleItem+17, "Check 2", tb3_bmp1, "Check 2", wxITEM_CHECK);
+    tb3->AddTool(ID_SampleItem+18, "Check 3", tb3_bmp1, "Check 3", wxITEM_CHECK);
+    tb3->AddTool(ID_SampleItem+19, "Check 4", tb3_bmp1, "Check 4", wxITEM_CHECK);
     tb3->AddSeparator();
-    tb3->AddTool(ID_SampleItem+20, wxT("Radio 1"), tb3_bmp1, wxT("Radio 1"), wxITEM_RADIO);
-    tb3->AddTool(ID_SampleItem+21, wxT("Radio 2"), tb3_bmp1, wxT("Radio 2"), wxITEM_RADIO);
-    tb3->AddTool(ID_SampleItem+22, wxT("Radio 3"), tb3_bmp1, wxT("Radio 3"), wxITEM_RADIO);
+    tb3->AddTool(ID_SampleItem+20, "Radio 1", tb3_bmp1, "Radio 1", wxITEM_RADIO);
+    tb3->AddTool(ID_SampleItem+21, "Radio 2", tb3_bmp1, "Radio 2", wxITEM_RADIO);
+    tb3->AddTool(ID_SampleItem+22, "Radio 3", tb3_bmp1, "Radio 3", wxITEM_RADIO);
     tb3->AddSeparator();
-    tb3->AddTool(ID_SampleItem+23, wxT("Radio 1 (Group 2)"), tb3_bmp1, wxT("Radio 1 (Group 2)"), wxITEM_RADIO);
-    tb3->AddTool(ID_SampleItem+24, wxT("Radio 2 (Group 2)"), tb3_bmp1, wxT("Radio 2 (Group 2)"), wxITEM_RADIO);
-    tb3->AddTool(ID_SampleItem+25, wxT("Radio 3 (Group 2)"), tb3_bmp1, wxT("Radio 3 (Group 2)"), wxITEM_RADIO);
+    tb3->AddTool(ID_SampleItem+23, "Radio 1 (Group 2)", tb3_bmp1, "Radio 1 (Group 2)", wxITEM_RADIO);
+    tb3->AddTool(ID_SampleItem+24, "Radio 2 (Group 2)", tb3_bmp1, "Radio 2 (Group 2)", wxITEM_RADIO);
+    tb3->AddTool(ID_SampleItem+25, "Radio 3 (Group 2)", tb3_bmp1, "Radio 3 (Group 2)", wxITEM_RADIO);
     tb3->SetCustomOverflowItems(prepend_items, append_items);
     tb3->Realize();
 
@@ -839,83 +840,83 @@ MyFrame::MyFrame(wxWindow* parent,
                                          wxAUI_TB_OVERFLOW |
                                          wxAUI_TB_TEXT |
                                          wxAUI_TB_HORZ_TEXT);
-    tb4->SetToolBitmapSize(wxSize(16,16));
-    wxBitmap tb4_bmp1 = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
-    tb4->AddTool(ID_DropDownToolbarItem, wxT("Item 1"), tb4_bmp1);
-    tb4->AddTool(ID_SampleItem+23, wxT("Item 2"), tb4_bmp1);
-    tb4->AddTool(ID_SampleItem+24, wxT("Item 3"), tb4_bmp1);
-    tb4->AddTool(ID_SampleItem+25, wxT("Item 4"), tb4_bmp1);
+    tb4->SetToolBitmapSize(FromDIP(wxSize(16,16)));
+    wxBitmap tb4_bmp1 = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, FromDIP(wxSize(16,16)));
+    tb4->AddTool(ID_DropDownToolbarItem, "Item 1", tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+23, "Item 2", tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+24, "Item 3", tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+25, "Item 4", tb4_bmp1);
     tb4->AddSeparator();
-    tb4->AddTool(ID_SampleItem+26, wxT("Item 5"), tb4_bmp1);
-    tb4->AddTool(ID_SampleItem+27, wxT("Item 6"), tb4_bmp1);
-    tb4->AddTool(ID_SampleItem+28, wxT("Item 7"), tb4_bmp1);
-    tb4->AddTool(ID_SampleItem+29, wxT("Item 8"), tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+26, "Item 5", tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+27, "Item 6", tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+28, "Item 7", tb4_bmp1);
+    tb4->AddTool(ID_SampleItem+29, "Item 8", tb4_bmp1);
     tb4->SetToolDropDown(ID_DropDownToolbarItem, true);
     tb4->SetCustomOverflowItems(prepend_items, append_items);
     wxChoice* choice = new wxChoice(tb4, ID_SampleItem+35);
-    choice->AppendString(wxT("One choice"));
-    choice->AppendString(wxT("Another choice"));
+    choice->AppendString("One choice");
+    choice->AppendString("Another choice");
     tb4->AddControl(choice);
     tb4->Realize();
 
 
     wxAuiToolBar* tb5 = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                          wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-    tb5->SetToolBitmapSize(wxSize(48,48));
-    tb5->AddTool(ID_SampleItem+30, wxT("Test"), wxArtProvider::GetBitmap(wxART_ERROR));
+    tb5->SetToolBitmapSize(FromDIP(wxSize(48,48)));
+    tb5->AddTool(ID_SampleItem+30, "Test", wxArtProvider::GetBitmap(wxART_ERROR));
     tb5->AddSeparator();
-    tb5->AddTool(ID_SampleItem+31, wxT("Test"), wxArtProvider::GetBitmap(wxART_QUESTION));
-    tb5->AddTool(ID_SampleItem+32, wxT("Test"), wxArtProvider::GetBitmap(wxART_INFORMATION));
-    tb5->AddTool(ID_SampleItem+33, wxT("Test"), wxArtProvider::GetBitmap(wxART_WARNING));
-    tb5->AddTool(ID_SampleItem+34, wxT("Test"), wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
+    tb5->AddTool(ID_SampleItem+31, "Test", wxArtProvider::GetBitmap(wxART_QUESTION));
+    tb5->AddTool(ID_SampleItem+32, "Test", wxArtProvider::GetBitmap(wxART_INFORMATION));
+    tb5->AddTool(ID_SampleItem+33, "Test", wxArtProvider::GetBitmap(wxART_WARNING));
+    tb5->AddTool(ID_SampleItem+34, "Test", wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
     tb5->SetCustomOverflowItems(prepend_items, append_items);
     tb5->Realize();
 
     // add a bunch of panes
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name(wxT("test1")).Caption(wxT("Pane Caption")).
+                  Name("test1").Caption("Pane Caption").
                   Top());
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name(wxT("test2")).Caption(wxT("Client Size Reporter")).
+                  Name("test2").Caption("Client Size Reporter").
                   Bottom().Position(1).
                   CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name(wxT("test3")).Caption(wxT("Client Size Reporter")).
+                  Name("test3").Caption("Client Size Reporter").
                   Bottom().
                   CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name(wxT("test4")).Caption(wxT("Pane Caption")).
+                  Name("test4").Caption("Pane Caption").
                   Left());
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name(wxT("test5")).Caption(wxT("No Close Button")).
+                  Name("test5").Caption("No Close Button").
                   Right().CloseButton(false));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name(wxT("test6")).Caption(wxT("Client Size Reporter")).
+                  Name("test6").Caption("Client Size Reporter").
                   Right().Row(1).
                   CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name(wxT("test7")).Caption(wxT("Client Size Reporter")).
+                  Name("test7").Caption("Client Size Reporter").
                   Left().Layer(1).
                   CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
-                  Name(wxT("test8")).Caption(wxT("Tree Pane")).
+                  Name("test8").Caption("Tree Pane").
                   Left().Layer(1).Position(1).
                   CloseButton(true).MaximizeButton(true));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name(wxT("test9")).Caption(wxT("Min Size 200x100")).
-                  BestSize(wxSize(200,100)).MinSize(wxSize(200,100)).
+                  Name("test9").Caption("Min Size 200x100").
+                  BestSize(FromDIP(wxSize(200,100))).MinSize(FromDIP(wxSize(200,100))).
                   Bottom().Layer(1).
                   CloseButton(true).MaximizeButton(true));
 
-    wxWindow* wnd10 = CreateTextCtrl(wxT("This pane will prompt the user before hiding."));
+    wxWindow* wnd10 = CreateTextCtrl("This pane will prompt the user before hiding.");
 
     // Give this pane an icon, too, just for testing.
     int iconSize = m_mgr.GetArtProvider()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE);
@@ -924,65 +925,65 @@ MyFrame::MyFrame(wxWindow* parent,
     iconSize &= ~1;
 
     m_mgr.AddPane(wnd10, wxAuiPaneInfo().
-                  Name(wxT("test10")).Caption(wxT("Text Pane with Hide Prompt")).
+                  Name("test10").Caption("Text Pane with Hide Prompt").
                   Bottom().Layer(1).Position(1).
                   Icon(wxArtProvider::GetBitmap(wxART_WARNING,
                                                 wxART_OTHER,
                                                 wxSize(iconSize, iconSize))));
 
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name(wxT("test11")).Caption(wxT("Fixed Pane")).
+                  Name("test11").Caption("Fixed Pane").
                   Bottom().Layer(1).Position(2).Fixed());
 
 
     m_mgr.AddPane(new SettingsPanel(this,this), wxAuiPaneInfo().
-                  Name(wxT("settings")).Caption(wxT("Dock Manager Settings")).
+                  Name("settings").Caption("Dock Manager Settings").
                   Dockable(false).Float().Hide());
 
     // create some center panes
 
-    m_mgr.AddPane(CreateGrid(), wxAuiPaneInfo().Name(wxT("grid_content")).
+    m_mgr.AddPane(CreateGrid(), wxAuiPaneInfo().Name("grid_content").
                   CenterPane().Hide());
 
-    m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().Name(wxT("tree_content")).
+    m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().Name("tree_content").
                   CenterPane().Hide());
 
-    m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().Name(wxT("sizereport_content")).
+    m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().Name("sizereport_content").
                   CenterPane().Hide());
 
-    m_mgr.AddPane(CreateTextCtrl(), wxAuiPaneInfo().Name(wxT("text_content")).
+    m_mgr.AddPane(CreateTextCtrl(), wxAuiPaneInfo().Name("text_content").
                   CenterPane().Hide());
 
-    m_mgr.AddPane(CreateHTMLCtrl(), wxAuiPaneInfo().Name(wxT("html_content")).
+    m_mgr.AddPane(CreateHTMLCtrl(), wxAuiPaneInfo().Name("html_content").
                   CenterPane().Hide());
 
-    m_mgr.AddPane(CreateNotebook(), wxAuiPaneInfo().Name(wxT("notebook_content")).
+    m_mgr.AddPane(CreateNotebook(), wxAuiPaneInfo().Name("notebook_content").
                   CenterPane().PaneBorder(false));
 
     // add the toolbars to the manager
     m_mgr.AddPane(tb1, wxAuiPaneInfo().
-                  Name(wxT("tb1")).Caption(wxT("Big Toolbar")).
+                  Name("tb1").Caption("Big Toolbar").
                   ToolbarPane().Top());
 
     m_mgr.AddPane(tb2, wxAuiPaneInfo().
-                  Name(wxT("tb2")).Caption(wxT("Toolbar 2 (Horizontal)")).
+                  Name("tb2").Caption("Toolbar 2 (Horizontal)").
                   ToolbarPane().Top().Row(1));
 
     m_mgr.AddPane(tb3, wxAuiPaneInfo().
-                  Name(wxT("tb3")).Caption(wxT("Toolbar 3")).
+                  Name("tb3").Caption("Toolbar 3").
                   ToolbarPane().Top().Row(1).Position(1));
 
     m_mgr.AddPane(tb4, wxAuiPaneInfo().
-                  Name(wxT("tb4")).Caption(wxT("Sample Bookmark Toolbar")).
+                  Name("tb4").Caption("Sample Bookmark Toolbar").
                   ToolbarPane().Top().Row(2));
 
     m_mgr.AddPane(tb5, wxAuiPaneInfo().
-                  Name(wxT("tb5")).Caption(wxT("Sample Vertical Toolbar")).
+                  Name("tb5").Caption("Sample Vertical Toolbar").
                   ToolbarPane().Left().
                   GripperTop());
 
     m_mgr.AddPane(new wxButton(this, wxID_ANY, _("Test Button")),
-                  wxAuiPaneInfo().Name(wxT("tb6")).
+                  wxAuiPaneInfo().Name("tb6").
                   ToolbarPane().Top().Row(2).Position(1).
                   LeftDockable(false).RightDockable(false));
 
@@ -995,11 +996,11 @@ MyFrame::MyFrame(wxWindow* parent,
     for (i = 0, count = all_panes.GetCount(); i < count; ++i)
         if (!all_panes.Item(i).IsToolbar())
             all_panes.Item(i).Hide();
-    m_mgr.GetPane(wxT("tb1")).Hide();
-    m_mgr.GetPane(wxT("tb6")).Hide();
-    m_mgr.GetPane(wxT("test8")).Show().Left().Layer(0).Row(0).Position(0);
-    m_mgr.GetPane(wxT("test10")).Show().Bottom().Layer(0).Row(0).Position(0);
-    m_mgr.GetPane(wxT("notebook_content")).Show();
+    m_mgr.GetPane("tb1").Hide();
+    m_mgr.GetPane("tb6").Hide();
+    m_mgr.GetPane("test8").Show().Left().Layer(0).Row(0).Position(0);
+    m_mgr.GetPane("test10").Show().Bottom().Layer(0).Row(0).Position(0);
+    m_mgr.GetPane("notebook_content").Show();
     wxString perspective_default = m_mgr.SavePerspective();
 
     m_perspectives.Add(perspective_default);
@@ -1037,7 +1038,7 @@ void MyFrame::OnSize(wxSizeEvent& event)
 void MyFrame::OnSettings(wxCommandEvent& WXUNUSED(evt))
 {
     // show the settings pane, and float it
-    wxAuiPaneInfo& floating_pane = m_mgr.GetPane(wxT("settings")).Float().Show();
+    wxAuiPaneInfo& floating_pane = m_mgr.GetPane("settings").Float().Show();
 
     if (floating_pane.floating_pos == wxDefaultPosition)
         floating_pane.FloatingPosition(GetStartPosition());
@@ -1090,7 +1091,7 @@ void MyFrame::OnManagerFlag(wxCommandEvent& event)
         event.GetId() == ID_TransparentHint ||
         event.GetId() == ID_HintFade)
     {
-        wxMessageBox(wxT("This option is presently only available on wxGTK, wxMSW and wxMac"));
+        wxMessageBox("This option is presently only available on wxGTK, wxMSW and wxMac");
         return;
     }
 #endif
@@ -1311,10 +1312,10 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
 
 void MyFrame::OnPaneClose(wxAuiManagerEvent& evt)
 {
-    if (evt.pane->name == wxT("test10"))
+    if (evt.pane->name == "test10")
     {
-        int res = wxMessageBox(wxT("Are you sure you want to close/hide this pane?"),
-                               wxT("wxAUI"),
+        int res = wxMessageBox("Are you sure you want to close/hide this pane?",
+                               "wxAUI",
                                wxYES_NO,
                                this);
         if (res != wxYES)
@@ -1324,10 +1325,10 @@ void MyFrame::OnPaneClose(wxAuiManagerEvent& evt)
 
 void MyFrame::OnCreatePerspective(wxCommandEvent& WXUNUSED(event))
 {
-    wxTextEntryDialog dlg(this, wxT("Enter a name for the new perspective:"),
-                          wxT("wxAUI Test"));
+    wxTextEntryDialog dlg(this, "Enter a name for the new perspective:",
+                          "wxAUI Test");
 
-    dlg.SetValue(wxString::Format(wxT("Perspective %u"), unsigned(m_perspectives.GetCount() + 1)));
+    dlg.SetValue(wxString::Format("Perspective %u", unsigned(m_perspectives.GetCount() + 1)));
     if (dlg.ShowModal() != wxID_OK)
         return;
 
@@ -1363,8 +1364,8 @@ void MyFrame::OnNotebookPageClose(wxAuiNotebookEvent& evt)
     wxAuiNotebook* ctrl = (wxAuiNotebook*)evt.GetEventObject();
     if (ctrl->GetPage(evt.GetSelection())->IsKindOf(CLASSINFO(wxHtmlWindow)))
     {
-        int res = wxMessageBox(wxT("Are you sure you want to close/hide this notebook page?"),
-                       wxT("wxAUI"),
+        int res = wxMessageBox("Are you sure you want to close/hide this notebook page?",
+                       "wxAUI",
                        wxYES_NO,
                        this);
         if (res != wxYES)
@@ -1396,7 +1397,7 @@ void MyFrame::OnAllowNotebookDnD(wxAuiNotebookEvent& evt)
 wxPoint MyFrame::GetStartPosition()
 {
     static int x = 0;
-    x += 20;
+    x += FromDIP(20);
     wxPoint pt = ClientToScreen(wxPoint(0,0));
     return wxPoint(pt.x + x, pt.y + x);
 }
@@ -1404,36 +1405,36 @@ wxPoint MyFrame::GetStartPosition()
 void MyFrame::OnCreateTree(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
-                  Caption(wxT("Tree Control")).
+                  Caption("Tree Control").
                   Float().FloatingPosition(GetStartPosition()).
-                  FloatingSize(wxSize(150,300)));
+                  FloatingSize(FromDIP(wxSize(150,300))));
     m_mgr.Update();
 }
 
 void MyFrame::OnCreateGrid(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateGrid(), wxAuiPaneInfo().
-                  Caption(wxT("Grid")).
+                  Caption("Grid").
                   Float().FloatingPosition(GetStartPosition()).
-                  FloatingSize(wxSize(300,200)));
+                  FloatingSize(FromDIP(wxSize(300,200))));
     m_mgr.Update();
 }
 
 void MyFrame::OnCreateHTML(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateHTMLCtrl(), wxAuiPaneInfo().
-                  Caption(wxT("HTML Control")).
+                  Caption("HTML Control").
                   Float().FloatingPosition(GetStartPosition()).
-                  FloatingSize(wxSize(300,200)));
+                  FloatingSize(FromDIP(wxSize(300,200))));
     m_mgr.Update();
 }
 
 void MyFrame::OnCreateNotebook(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateNotebook(), wxAuiPaneInfo().
-                  Caption(wxT("Notebook")).
+                  Caption("Notebook").
                   Float().FloatingPosition(GetStartPosition()).
-                  //FloatingSize(300,200).
+                  //FloatingSize(FromDIP(wxSize(300,200))).
                   CloseButton(true).MaximizeButton(true));
     m_mgr.Update();
 }
@@ -1441,7 +1442,7 @@ void MyFrame::OnCreateNotebook(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnCreateText(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateTextCtrl(), wxAuiPaneInfo().
-                  Caption(wxT("Text Control")).
+                  Caption("Text Control").
                   Float().FloatingPosition(GetStartPosition()));
     m_mgr.Update();
 }
@@ -1449,7 +1450,7 @@ void MyFrame::OnCreateText(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnCreateSizeReport(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Caption(wxT("Client Size Reporter")).
+                  Caption("Client Size Reporter").
                   Float().FloatingPosition(GetStartPosition()).
                   CloseButton(true).MaximizeButton(true));
     m_mgr.Update();
@@ -1457,12 +1458,12 @@ void MyFrame::OnCreateSizeReport(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnChangeContentPane(wxCommandEvent& evt)
 {
-    m_mgr.GetPane(wxT("grid_content")).Show(evt.GetId() == ID_GridContent);
-    m_mgr.GetPane(wxT("text_content")).Show(evt.GetId() == ID_TextContent);
-    m_mgr.GetPane(wxT("tree_content")).Show(evt.GetId() == ID_TreeContent);
-    m_mgr.GetPane(wxT("sizereport_content")).Show(evt.GetId() == ID_SizeReportContent);
-    m_mgr.GetPane(wxT("html_content")).Show(evt.GetId() == ID_HTMLContent);
-    m_mgr.GetPane(wxT("notebook_content")).Show(evt.GetId() == ID_NotebookContent);
+    m_mgr.GetPane("grid_content").Show(evt.GetId() == ID_GridContent);
+    m_mgr.GetPane("text_content").Show(evt.GetId() == ID_TextContent);
+    m_mgr.GetPane("tree_content").Show(evt.GetId() == ID_TreeContent);
+    m_mgr.GetPane("sizereport_content").Show(evt.GetId() == ID_SizeReportContent);
+    m_mgr.GetPane("html_content").Show(evt.GetId() == ID_HTMLContent);
+    m_mgr.GetPane("notebook_content").Show(evt.GetId() == ID_NotebookContent);
     m_mgr.Update();
 }
 
@@ -1477,7 +1478,7 @@ void MyFrame::OnDropDownToolbarItem(wxAuiToolBarEvent& evt)
         // create the popup menu
         wxMenu menuPopup;
 
-        wxBitmap bmp = wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(16,16));
+        wxBitmap bmp = wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, FromDIP(wxSize(16,16)));
 
         wxMenuItem* m1 =  new wxMenuItem(&menuPopup, 10001, _("Drop Down Item 1"));
         m1->SetBitmap(bmp);
@@ -1552,10 +1553,10 @@ wxTextCtrl* MyFrame::CreateTextCtrl(const wxString& ctrl_text)
     if ( !ctrl_text.empty() )
         text = ctrl_text;
     else
-        text.Printf(wxT("This is text box %d"), ++n);
+        text.Printf("This is text box %d", ++n);
 
     return new wxTextCtrl(this,wxID_ANY, text,
-                          wxPoint(0,0), wxSize(150,90),
+                          wxPoint(0,0), FromDIP(wxSize(150,90)),
                           wxNO_BORDER | wxTE_MULTILINE);
 }
 
@@ -1564,7 +1565,7 @@ wxGrid* MyFrame::CreateGrid()
 {
     wxGrid* grid = new wxGrid(this, wxID_ANY,
                               wxPoint(0,0),
-                              wxSize(150,250),
+                              FromDIP(wxSize(150,250)),
                               wxNO_BORDER | wxWANTS_CHARS);
     grid->CreateGrid(50, 20);
     return grid;
@@ -1573,35 +1574,37 @@ wxGrid* MyFrame::CreateGrid()
 wxTreeCtrl* MyFrame::CreateTreeCtrl()
 {
     wxTreeCtrl* tree = new wxTreeCtrl(this, wxID_ANY,
-                                      wxPoint(0,0), wxSize(160,250),
+                                      wxPoint(0,0),
+                                      FromDIP(wxSize(160,250)),
                                       wxTR_DEFAULT_STYLE | wxNO_BORDER);
 
-    wxImageList* imglist = new wxImageList(16, 16, true, 2);
-    imglist->Add(wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, wxSize(16,16)));
-    imglist->Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16)));
+    wxSize size = FromDIP(wxSize(16, 16));
+    wxImageList* imglist = new wxImageList(size.x, size.y, true, 2);
+    imglist->Add(wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, size));
+    imglist->Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, size));
     tree->AssignImageList(imglist);
 
-    wxTreeItemId root = tree->AddRoot(wxT("wxAUI Project"), 0);
+    wxTreeItemId root = tree->AddRoot("wxAUI Project", 0);
     wxArrayTreeItemIds items;
 
 
 
-    items.Add(tree->AppendItem(root, wxT("Item 1"), 0));
-    items.Add(tree->AppendItem(root, wxT("Item 2"), 0));
-    items.Add(tree->AppendItem(root, wxT("Item 3"), 0));
-    items.Add(tree->AppendItem(root, wxT("Item 4"), 0));
-    items.Add(tree->AppendItem(root, wxT("Item 5"), 0));
+    items.Add(tree->AppendItem(root, "Item 1", 0));
+    items.Add(tree->AppendItem(root, "Item 2", 0));
+    items.Add(tree->AppendItem(root, "Item 3", 0));
+    items.Add(tree->AppendItem(root, "Item 4", 0));
+    items.Add(tree->AppendItem(root, "Item 5", 0));
 
 
     int i, count;
     for (i = 0, count = items.Count(); i < count; ++i)
     {
         wxTreeItemId id = items.Item(i);
-        tree->AppendItem(id, wxT("Subitem 1"), 1);
-        tree->AppendItem(id, wxT("Subitem 2"), 1);
-        tree->AppendItem(id, wxT("Subitem 3"), 1);
-        tree->AppendItem(id, wxT("Subitem 4"), 1);
-        tree->AppendItem(id, wxT("Subitem 5"), 1);
+        tree->AppendItem(id, "Subitem 1", 1);
+        tree->AppendItem(id, "Subitem 2", 1);
+        tree->AppendItem(id, "Subitem 3", 1);
+        tree->AppendItem(id, "Subitem 4", 1);
+        tree->AppendItem(id, "Subitem 5", 1);
     }
 
 
@@ -1610,11 +1613,11 @@ wxTreeCtrl* MyFrame::CreateTreeCtrl()
     return tree;
 }
 
-wxSizeReportCtrl* MyFrame::CreateSizeReportCtrl(int width, int height)
+wxSizeReportCtrl* MyFrame::CreateSizeReportCtrl(const wxSize& size)
 {
     wxSizeReportCtrl* ctrl = new wxSizeReportCtrl(this, wxID_ANY,
                                    wxDefaultPosition,
-                                   wxSize(width, height), &m_mgr);
+                                   size, &m_mgr);
     return ctrl;
 }
 
@@ -1625,7 +1628,7 @@ wxHtmlWindow* MyFrame::CreateHTMLCtrl(wxWindow* parent)
 
     wxHtmlWindow* ctrl = new wxHtmlWindow(parent, wxID_ANY,
                                    wxDefaultPosition,
-                                   wxSize(400,300));
+                                   FromDIP(wxSize(400,300)));
     ctrl->SetPage(GetIntroText());
     return ctrl;
 }
@@ -1637,13 +1640,13 @@ wxAuiNotebook* MyFrame::CreateNotebook()
 
    wxAuiNotebook* ctrl = new wxAuiNotebook(this, wxID_ANY,
                                     wxPoint(client_size.x, client_size.y),
-                                    wxSize(430,200),
+                                    FromDIP(wxSize(430,200)),
                                     m_notebook_style);
    ctrl->Freeze();
 
-   wxBitmap page_bmp = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16));
+   wxBitmap page_bmp = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, FromDIP(wxSize(16,16)));
 
-   ctrl->AddPage(CreateHTMLCtrl(ctrl), wxT("Welcome to wxAUI") , false, page_bmp);
+   ctrl->AddPage(CreateHTMLCtrl(ctrl), "Welcome to wxAUI" , false, page_bmp);
    ctrl->SetPageToolTip(0, "Welcome to wxAUI (this is a page tooltip)");
 
    wxPanel *panel = new wxPanel( ctrl, wxID_ANY );
@@ -1651,43 +1654,43 @@ wxAuiNotebook* MyFrame::CreateNotebook()
    flex->AddGrowableRow( 0 );
    flex->AddGrowableRow( 3 );
    flex->AddGrowableCol( 1 );
-   flex->Add( 5,5 );   flex->Add( 5,5 );
-   flex->Add( new wxStaticText( panel, -1, wxT("wxTextCtrl:") ), 0, wxALL|wxALIGN_CENTRE, 5 );
-   flex->Add( new wxTextCtrl( panel, -1, wxT(""), wxDefaultPosition, wxSize(100,-1)),
-                1, wxALL|wxALIGN_CENTRE, 5 );
-   flex->Add( new wxStaticText( panel, -1, wxT("wxSpinCtrl:") ), 0, wxALL|wxALIGN_CENTRE, 5 );
-   flex->Add( new wxSpinCtrl( panel, -1, wxT("5"), wxDefaultPosition, wxDefaultSize,
-                wxSP_ARROW_KEYS, 5, 50, 5 ), 0, wxALL|wxALIGN_CENTRE, 5 );
-   flex->Add( 5,5 );   flex->Add( 5,5 );
+   flex->Add( FromDIP(5), FromDIP(5) );   flex->Add( FromDIP(5), FromDIP(5) );
+   flex->Add( new wxStaticText( panel, -1, "wxTextCtrl:" ), 0, wxALL|wxALIGN_CENTRE, FromDIP(5) );
+   flex->Add( new wxTextCtrl( panel, -1, "", wxDefaultPosition, FromDIP(wxSize(100,-1))),
+                1, wxALL|wxALIGN_CENTRE, FromDIP(5) );
+   flex->Add( new wxStaticText( panel, -1, "wxSpinCtrl:" ), 0, wxALL|wxALIGN_CENTRE, FromDIP(5) );
+   flex->Add( new wxSpinCtrl( panel, -1, "5", wxDefaultPosition, wxDefaultSize,
+                wxSP_ARROW_KEYS, 5, 50, 5 ), 0, wxALL|wxALIGN_CENTRE, FromDIP(5) );
+   flex->Add( FromDIP(5), FromDIP(5) );   flex->Add( FromDIP(5), FromDIP(5) );
    panel->SetSizer( flex );
-   ctrl->AddPage( panel, wxT("wxPanel"), false, page_bmp );
+   ctrl->AddPage( panel, "wxPanel", false, page_bmp );
 
 
-   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some text"),
-                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 1"), false, page_bmp );
+   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, "Some text",
+                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , "wxTextCtrl 1", false, page_bmp );
 
-   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
-                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 2") );
+   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, "Some more text",
+                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , "wxTextCtrl 2" );
 
-   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
-                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 3") );
+   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, "Some more text",
+                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , "wxTextCtrl 3" );
 
-   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
-                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 4") );
+   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, "Some more text",
+                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , "wxTextCtrl 4" );
 
-   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
-                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 5") );
+   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, "Some more text",
+                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , "wxTextCtrl 5" );
 
-   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
-                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 6") );
+   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, "Some more text",
+                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , "wxTextCtrl 6" );
 
-   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
-                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 7 (longer title)") );
+   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, "Some more text",
+                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , "wxTextCtrl 7 (longer title)" );
    ctrl->SetPageToolTip(ctrl->GetPageCount()-1,
                         "wxTextCtrl 7: and the tooltip message can be even longer!");
 
-   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some more text"),
-                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 8") );
+   ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, "Some more text",
+                wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , "wxTextCtrl 8" );
 
    ctrl->Thaw();
    return ctrl;

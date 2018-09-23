@@ -163,25 +163,25 @@ if [[ "$1" = "docset" ]]; then
     BASENAME="wxWidgets-3.1"    # was org.wxwidgets.doxygen.docset.wx30
     DOCSETNAME="$BASENAME.docset"
     ATOM="$BASENAME.atom"
-    ATOMDIR="http://docs.wxwidgets.org/docsets"
+    ATOMDIR="https://docs.wxwidgets.org/docsets"
     XAR="$BASENAME.xar"
-    XARDIR="http://docs.wxwidgets.org/docsets"
+    XARDIR="https://docs.wxwidgets.org/docsets"
     XCODE_INSTALL=`xcode-select -print-path`
-    
+
     cd out/html
     DESTINATIONDIR=`pwd`/../docset
-    
+
     mkdir -p $DESTINATIONDIR
     rm -rf $DESTINATIONDIR/$DOCSETNAME
     rm -f $DESTINATIONDIR/$XAR
-    
+
     make DOCSET_NAME=$DESTINATIONDIR/$DOCSETNAME
-    
+
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleVersion 1.3
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleShortVersionString 1.3
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info CFBundleName "wxWidgets 3.1"
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFeedURL $ATOMDIR/$ATOM
-    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFallbackURL http://docs.wxwidgets.org
+    defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetFallbackURL https://docs.wxwidgets.org
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info DocSetDescription "API reference and conceptual documentation for wxWidgets 3.0"
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info NSHumanReadableCopyright "Copyright 1992-2018 wxWidgets team, Portions 1996 Artificial Intelligence Applications Institute"
     defaults write $DESTINATIONDIR/$DOCSETNAME/Contents/Info isJavaScriptEnabled true

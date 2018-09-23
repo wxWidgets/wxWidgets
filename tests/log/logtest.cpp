@@ -86,7 +86,7 @@ public:
 protected:
     virtual void DoLogRecord(wxLogLevel level,
                              const wxString& msg,
-                             const wxLogRecordInfo& info)
+                             const wxLogRecordInfo& info) wxOVERRIDE
     {
         m_logs[level] = msg;
         m_logsInfo[level] = info;

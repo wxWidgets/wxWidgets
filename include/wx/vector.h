@@ -669,6 +669,19 @@ void wxVectorSort(wxVector<T>& v)
 
 #endif // wxUSE_STD_CONTAINERS/!wxUSE_STD_CONTAINERS
 
+// Define vector::shrink_to_fit() equivalent which can be always used, even
+// when using pre-C++11 std::vector.
+template<typename T>
+inline void wxShrinkToFit(wxVector<T>& v)
+{
+#if !wxUSE_STD_CONTAINERS || __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
+    v.shrink_to_fit();
+#else
+    wxVector<T> tmp(v);
+    v.swap(tmp);
+#endif
+}
+
 #if WXWIN_COMPATIBILITY_2_8
     #define WX_DECLARE_VECTORBASE(obj, cls) typedef wxVector<obj> cls
     #define _WX_DECLARE_VECTOR(obj, cls, exp) WX_DECLARE_VECTORBASE(obj, cls)

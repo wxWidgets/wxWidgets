@@ -82,7 +82,7 @@ public:
         if ( m_frameStatusBar )
         {
             wxSize sz = GetClientSize();
-            SetStatusText(wxString::Format(wxT("%dx%d"), sz.x, sz.y), 1);
+            SetStatusText(wxString::Format("%dx%d", sz.x, sz.y), 1);
         }
 #endif // wxUSE_STATUSBAR
 
@@ -118,7 +118,7 @@ public:
 #if wxUSE_STATUSBAR
         m_frame->SetStatusText(wxString::Format
                                (
-                                    wxT("Page size = %d, pos = %d, max = %d"),
+                                    "Page size = %d, pos = %d, max = %d",
                                     GetScrollThumb(wxVERTICAL),
                                     GetScrollPos(wxVERTICAL),
                                     GetScrollRange(wxVERTICAL)
@@ -146,7 +146,7 @@ public:
             dc.DrawLine(0, y, clientSize.GetWidth(), y);
 
             wxCoord hLine = OnGetRowHeight(line);
-            dc.DrawText(wxString::Format(wxT("Line %lu"), (unsigned long)line),
+            dc.DrawText(wxString::Format("Line %lu", (unsigned long)line),
                         2, y + (hLine - hText) / 2);
 
             y += hLine;
@@ -215,7 +215,7 @@ public:
 #if wxUSE_STATUSBAR
         m_frame->SetStatusText(wxString::Format
                                (
-                                    wxT("Page size = %d, pos = %d, max = %d"),
+                                    "Page size = %d, pos = %d, max = %d",
                                     GetScrollThumb(wxVERTICAL),
                                     GetScrollPos(wxVERTICAL),
                                     GetScrollRange(wxVERTICAL)
@@ -243,7 +243,7 @@ public:
             dc.DrawLine(x, 0, x, clientSize.GetHeight());
 
             wxCoord wLine = OnGetColumnWidth(line);
-            dc.DrawRotatedText(wxString::Format(wxT("Line %lu"), (unsigned long)line),
+            dc.DrawRotatedText(wxString::Format("Line %lu", (unsigned long)line),
                                x + (wLine - hText) / 2, clientSize.GetHeight() - 5, 90);
 
             x += wLine;
@@ -315,7 +315,7 @@ public:
 #if wxUSE_STATUSBAR
         m_frame->SetStatusText(wxString::Format
                                (
-                                    wxT("Page size = %d rows %d columns; pos = row: %d, column: %d; max = %d rows, %d columns"),
+                                    "Page size = %d rows %d columns; pos = row: %d, column: %d; max = %d rows, %d columns",
                                     GetScrollThumb(wxVERTICAL),
                                     GetScrollThumb(wxHORIZONTAL),
                                     GetScrollPos(wxVERTICAL),
@@ -357,9 +357,9 @@ public:
                 if ( row == rowFirst )
                     dc.DrawLine(x, 0, x, clientSize.GetHeight());
 
-                dc.DrawText(wxString::Format(wxT("Row %lu"), (unsigned long)row),
+                dc.DrawText(wxString::Format("Row %lu", (unsigned long)row),
                             x + 2, y + rowHeight / 2 - hText);
-                dc.DrawText(wxString::Format(wxT("Col %lu"), (unsigned long)col),
+                dc.DrawText(wxString::Format("Col %lu", (unsigned long)col),
                             x + 2, y + rowHeight / 2);
 
                 x += colWidth;
@@ -496,7 +496,7 @@ bool VarScrollApp::OnInit()
 VarScrollFrame::VarScrollFrame()
                : wxFrame(NULL,
                          wxID_ANY,
-                         wxT("VScroll wxWidgets Sample"),
+                         "VScroll wxWidgets Sample",
                          wxDefaultPosition,
                          wxSize(400, 350)),
                  m_scrollWindow(NULL)
@@ -512,33 +512,33 @@ VarScrollFrame::VarScrollFrame()
 
     // the "About" item should be in the help menu
     wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append(VScroll_About, wxT("&About\tF1"), wxT("Show about dialog"));
+    menuHelp->Append(VScroll_About, "&About\tF1", "Show about dialog");
 
 #ifdef wxHAS_RADIO_MENU_ITEMS
-    menuMode->AppendRadioItem(VScroll_VScrollMode, wxT("&Vertical\tAlt-V"),
-                              wxT("Vertical scrolling only"));
-    menuMode->AppendRadioItem(VScroll_HScrollMode, wxT("&Horizontal\tAlt-H"),
-                              wxT("Horizontal scrolling only"));
+    menuMode->AppendRadioItem(VScroll_VScrollMode, "&Vertical\tAlt-V",
+                              "Vertical scrolling only");
+    menuMode->AppendRadioItem(VScroll_HScrollMode, "&Horizontal\tAlt-H",
+                              "Horizontal scrolling only");
     menuMode->AppendRadioItem(VScroll_HVScrollMode,
-                              wxT("Hori&zontal/Vertical\tAlt-Z"),
-                              wxT("Horizontal and vertical scrolling"));
+                              "Hori&zontal/Vertical\tAlt-Z",
+                              "Horizontal and vertical scrolling");
     menuMode->Check(VScroll_VScrollMode, true);
 #else
-    menuMode->Append(VScroll_VScrollMode, wxT("&Vertical\tAlt-V"),
-                     wxT("Vertical scrolling only"));
-    menuMode->Append(VScroll_HScrollMode, wxT("&Horizontal\tAlt-H"),
-                     wxT("Horizontal scrolling only"));
-    menuMode->Append(VScroll_HVScrollMode, wxT("Hori&zontal/Vertical\tAlt-Z"),
-                     wxT("Horizontal and vertical scrolling"));
+    menuMode->Append(VScroll_VScrollMode, "&Vertical\tAlt-V",
+                     "Vertical scrolling only");
+    menuMode->Append(VScroll_HScrollMode, "&Horizontal\tAlt-H",
+                     "Horizontal scrolling only");
+    menuMode->Append(VScroll_HVScrollMode, "Hori&zontal/Vertical\tAlt-Z",
+                     "Horizontal and vertical scrolling");
 #endif
 
-    menuFile->Append(VScroll_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
+    menuFile->Append(VScroll_Quit, "E&xit\tAlt-X", "Quit this program");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, wxT("&File"));
-    menuBar->Append(menuMode, wxT("&Mode"));
-    menuBar->Append(menuHelp, wxT("&Help"));
+    menuBar->Append(menuFile, "&File");
+    menuBar->Append(menuMode, "&Mode");
+    menuBar->Append(menuHelp, "&Help");
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -547,7 +547,7 @@ VarScrollFrame::VarScrollFrame()
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText(wxT("Welcome to wxWidgets!"));
+    SetStatusText("Welcome to wxWidgets!");
     int widths[2];
     widths[0] = -1;
     widths[1] = 100;
@@ -602,10 +602,10 @@ void VarScrollFrame::OnModeHVScroll(wxCommandEvent& WXUNUSED(event))
 
 void VarScrollFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(wxT("VScroll shows how to implement scrolling with\n")
-                 wxT("variable line widths and heights.\n")
-                 wxT("(c) 2003 Vadim Zeitlin"),
-                 wxT("About VScroll"),
+    wxMessageBox("VScroll shows how to implement scrolling with\n"
+                 "variable line widths and heights.\n"
+                 "(c) 2003 Vadim Zeitlin",
+                 "About VScroll",
                  wxOK | wxICON_INFORMATION,
                  this);
 }

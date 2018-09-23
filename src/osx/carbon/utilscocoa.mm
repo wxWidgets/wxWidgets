@@ -629,6 +629,8 @@ wxOSXEffectiveAppearanceSetter::wxOSXEffectiveAppearanceSetter()
         formerAppearance = NSAppearance.currentAppearance;
         NSAppearance.currentAppearance = NSApp.effectiveAppearance;
     }
+#else
+    wxUnusedVar(formerAppearance);
 #endif
 }
 

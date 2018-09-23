@@ -489,7 +489,7 @@ bool MyGLCanvas::oglInit()
     int swi = 0, shi = 0; //Image sizes
     wxString stg("wxWidgets");
     // Set the font. Use a big pointsize so as to smoothing edges.
-    wxFont font(48, wxFONTFAMILY_MODERN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    wxFont font(wxFontInfo(48).Family(wxFONTFAMILY_MODERN));
     if ( !font.IsOk() )
         font = *wxSWISS_FONT;
     wxColour bgrdColo(*wxBLACK);

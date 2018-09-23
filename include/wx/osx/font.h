@@ -36,19 +36,7 @@ public:
     // ctors and such
     wxFont() { }
 
-    wxFont(const wxFontInfo& info)
-    {
-        Create(info.GetPointSize(),
-               info.GetFamily(),
-               info.GetStyle(),
-               info.GetWeight(),
-               info.IsUnderlined(),
-               info.GetFaceName(),
-               info.GetEncoding());
-
-        if ( info.IsUsingSizeInPixels() )
-            SetPixelSize(info.GetPixelSize());
-    }
+    wxFont(const wxFontInfo& info);
 
     wxFont( wxOSXSystemFont systemFont );
     wxFont(CTFontRef font);
@@ -68,17 +56,6 @@ public:
         Create(size, family, style, weight, underlined, face, encoding);
     }
 
-    wxFont(float size,
-           wxFontFamily family,
-           wxFontStyle style,
-           wxFontWeight weight,
-           bool underlined = false,
-           const wxString& face = wxEmptyString,
-           wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
-    {
-        Create(size, family, style, weight, underlined, face, encoding);
-    }
-    
     wxFont(const wxSize& pixelSize,
            wxFontFamily family,
            wxFontStyle style,
@@ -99,14 +76,6 @@ public:
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
-    bool Create(float size,
-                wxFontFamily family,
-                wxFontStyle style,
-                wxFontWeight weight,
-                bool underlined = false,
-                const wxString& face = wxEmptyString,
-                wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-    
     wxFont(const wxNativeFontInfo& info)
     {
         (void)Create(info);
@@ -122,7 +91,6 @@ public:
     virtual float GetFractionalPointSize() const wxOVERRIDE;
     virtual wxSize GetPixelSize() const wxOVERRIDE;
     virtual wxFontStyle GetStyle() const wxOVERRIDE;
-    virtual wxFontWeight GetWeight() const wxOVERRIDE;
     virtual int GetNumericWeight() const wxOVERRIDE;
     virtual bool GetUnderlined() const wxOVERRIDE;
     virtual bool GetStrikethrough() const wxOVERRIDE;
@@ -132,10 +100,9 @@ public:
 
     virtual bool IsFixedWidth() const wxOVERRIDE;
 
-    virtual void SetPointSize(float pointSize) wxOVERRIDE;
+    virtual void SetFractionalPointSize(float pointSize) wxOVERRIDE;
     virtual void SetFamily(wxFontFamily family) wxOVERRIDE;
     virtual void SetStyle(wxFontStyle style) wxOVERRIDE;
-    virtual void SetWeight(wxFontWeight weight) wxOVERRIDE;
     virtual void SetNumericWeight(int weight) wxOVERRIDE;
     virtual bool SetFaceName(const wxString& faceName) wxOVERRIDE;
     virtual void SetUnderlined(bool underlined) wxOVERRIDE;

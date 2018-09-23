@@ -698,7 +698,6 @@ COND_UNICODE_1
 COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1
 COND_TOOLKIT_X11_USE_GUI_1
 COND_TOOLKIT_X11
-COND_TOOLKIT_Qt
 COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_QT
 COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0
@@ -3770,7 +3769,7 @@ WX_SUBVERSION=$WX_VERSION.$wx_subrelease_number
 WX_MSW_VERSION=$wx_major_version_number$wx_minor_version_number$wx_release_number
 
 
-wx_top_builddir="`pwd`"
+wx_top_builddir="`pwd -W 2> /dev/null || pwd`"
 
 
 
@@ -23728,7 +23727,7 @@ fi
 
     LIBS="$LIBS -luxtheme -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lcomdlg32 -ladvapi32 -lversion -lwsock32 -lgdi32"
     case "${host}" in
-        x86_64-*-mingw32* )
+        x86_64-*-mingw* )
                                                 WINDRES_CPU_DEFINE="--define WX_CPU_AMD64"
         ;;
     esac
@@ -23761,7 +23760,7 @@ if test "$wxUSE_GUI" = "yes"; then
         GUIDIST=MSW_DIST
 
                 case "${host}" in
-            *-*-mingw32* )
+            *-*-mingw* )
                 WXCONFIG_LDFLAGS_GUI="$LDFLAGS -Wl,--subsystem,windows -mwindows"
         esac
     fi
@@ -30802,74 +30801,50 @@ _ACEOF
 
 fi
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for round" >&5
+$as_echo_n "checking for round... " >&6; }
+if ${wx_cv_func_round+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-  for wx_func in round
-  do
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $wx_func" >&5
-$as_echo_n "checking for $wx_func... " >&6; }
-if eval \${wx_cv_func_$wx_func+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-
-
-                #include <math.h>
-                $ac_includes_default
-
+#include <math.h>
 int
 main ()
 {
-
-                #ifndef $wx_func
-                  &$wx_func;
-                #endif
-
-
+return int(round(0.0))
   ;
   return 0;
 }
-
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
-  eval wx_cv_func_$wx_func=yes
+  wx_cv_func_round=yes
 else
-  eval wx_cv_func_$wx_func=no
+  wx_cv_func_round=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-
-fi
-eval ac_res=\$wx_cv_func_$wx_func
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-
-    if eval test \$wx_cv_func_$wx_func = yes
-    then
-      cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$wx_func" | $as_tr_cpp` 1
-_ACEOF
-
-
-    else
-      :
-
-    fi
-  done
-
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_func_round" >&5
+$as_echo "$wx_cv_func_round" >&6; }
+if test "$wx_cv_func_round" = yes; then
+    $as_echo "#define HAVE_ROUND 1" >>confdefs.h
+
+fi
 
 if test "$TOOLKIT" != "MSW"; then
 
@@ -33215,7 +33190,7 @@ $as_echo "$wx_cv_type_abi_forced_unwind" >&6; }
 else
     if test "$wxUSE_THREADS" = "yes" ; then
       case "${host}" in
-        x86_64-*-mingw32* )
+        x86_64-*-mingw* )
         ;;
         *-*-mingw32* )
                         { $as_echo "$as_me:${as_lineno-$LINENO}: checking if compiler supports -mthreads" >&5
@@ -36964,6 +36939,10 @@ fi
         elif test "$WXGTK3" = 1; then
                                                 wxUSE_UIACTIONSIMULATOR=no
         fi
+    elif test "$wxUSE_DFB" = 1; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxUIActionSimulator not yet supported under $TOOLKIT... disabled" >&5
+$as_echo "$as_me: WARNING: wxUIActionSimulator not yet supported under $TOOLKIT... disabled" >&2;}
+        wxUSE_UIACTIONSIMULATOR=no
     fi
 
     if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
@@ -37392,8 +37371,8 @@ if test "$wxUSE_TOOLTIPS" = "yes"; then
 $as_echo "$as_me: WARNING: wxTooltip not supported yet under Motif... disabled" >&2;}
     else
         if test "$wxUSE_UNIVERSAL" = "yes"; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxTooltip not supported yet in wxUniversal... disabled" >&5
-$as_echo "$as_me: WARNING: wxTooltip not supported yet in wxUniversal... disabled" >&2;}
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxTooltip not supported yet in $TOOLKIT... disabled" >&5
+$as_echo "$as_me: WARNING: wxTooltip not supported yet in $TOOLKIT... disabled" >&2;}
         else
             $as_echo "#define wxUSE_TOOLTIPS 1" >>confdefs.h
 
@@ -38299,6 +38278,9 @@ $as_echo "$wx_cv_lib_gdiplus" >&6; }
         if test "$wx_cv_lib_gdiplus" = "yes"; then
             wx_has_graphics=1
         fi
+    elif test "$WXGTK1" = "1"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxGraphicsContext not supported with GTK +1" >&5
+$as_echo "$as_me: WARNING: wxGraphicsContext not supported with GTK +1" >&2;}
     elif test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
 
 pkg_failed=no
@@ -38971,6 +38953,10 @@ case ".$ac_cv_cxxflags_gcc_option__Woverloaded_virtual" in
  ;;
 esac
 
+
+                if test "$WXGTK1" = "1"; then
+        CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations -Wno-narrowing -Wno-write-strings"
+    fi
 
                         if test "$WXGTK4" != 1 -a \( "$WXGTK3" = 1 -o "$wxUSE_MAC" = 1 \) ; then
         CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations"
@@ -39785,7 +39771,7 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
 
     if test "x$BAKEFILE_FORCE_PLATFORM" = "x"; then
         case "${BAKEFILE_HOST}" in
-            *-*-mingw32* )
+            *-*-mingw* )
                 PLATFORM_WIN32=1
             ;;
             *-*-darwin* )
@@ -39879,7 +39865,7 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
             DLLPREFIX="cyg"
             dlldir="$bindir"
         ;;
-        *-*-mingw32* )
+        *-*-mingw* )
             SO_SUFFIX="dll"
             SO_SUFFIX_MODULE="dll"
             DLLIMP_SUFFIX="dll.a"
@@ -41359,11 +41345,6 @@ EOF
     COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
         COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0=""
-    fi
-
-    COND_TOOLKIT_Qt="#"
-    if test "x$TOOLKIT" = "xQt" ; then
-        COND_TOOLKIT_Qt=""
     fi
 
     COND_TOOLKIT_X11="#"

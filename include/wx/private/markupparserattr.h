@@ -135,7 +135,9 @@ public:
                              font, &wxFont::SetUnderlined,
                              false, true);
 
-        // TODO: No support for strike-through yet.
+        FontModifier<bool>()(spanAttr.m_isStrikethrough,
+                             font, &wxFont::SetStrikethrough,
+                             false, true);
 
         switch ( spanAttr.m_sizeKind )
         {
@@ -159,7 +161,7 @@ public:
                 break;
 
             case wxMarkupSpanAttributes::Size_PointParts:
-                font.SetPointSize((spanAttr.m_fontSize + 1023)/1024);
+                font.SetFractionalPointSize(spanAttr.m_fontSize/1024.);
                 break;
         }
 

@@ -314,7 +314,7 @@ WebFrame::WebFrame(const wxString& url) :
     m_toolbar_forward = m_toolbar->AddTool(wxID_ANY, _("Forward"), forward);
     m_toolbar_stop = m_toolbar->AddTool(wxID_ANY, _("Stop"), stop);
     m_toolbar_reload = m_toolbar->AddTool(wxID_ANY, _("Reload"),  refresh);
-    m_url = new wxTextCtrl(m_toolbar, wxID_ANY, wxT(""),  wxDefaultPosition, wxSize(400, -1), wxTE_PROCESS_ENTER );
+    m_url = new wxTextCtrl(m_toolbar, wxID_ANY, "",  wxDefaultPosition, wxSize(400, -1), wxTE_PROCESS_ENTER );
     m_toolbar->AddControl(m_url, _("URL"));
     m_toolbar_tools = m_toolbar->AddTool(wxID_ANY, _("Menu"), wxBitmap(wxlogo_xpm));
 
@@ -682,12 +682,12 @@ void WebFrame::OnMode(wxCommandEvent& WXUNUSED(evt))
 void WebFrame::OnLoadScheme(wxCommandEvent& WXUNUSED(evt))
 {
     wxPathList pathlist;
-    pathlist.Add(wxT("."));
-    pathlist.Add(wxT(".."));
-    pathlist.Add(wxT("../help"));
-    pathlist.Add(wxT("../../../samples/help"));
+    pathlist.Add(".");
+    pathlist.Add("..");
+    pathlist.Add("../help");
+    pathlist.Add("../../../samples/help");
 
-    wxFileName helpfile(pathlist.FindValidPath(wxT("doc.zip")));
+    wxFileName helpfile(pathlist.FindValidPath("doc.zip"));
     helpfile.MakeAbsolute();
     wxString path = helpfile.GetFullPath();
     //Under MSW we need to flip the slashes

@@ -132,7 +132,7 @@ bool MyApp::OnInit()
         return false;
 
     // create the main application window
-    MyFrame *frame = new MyFrame(wxT("wxWebKit Sample"));
+    MyFrame *frame = new MyFrame("wxWebKit Sample");
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -183,7 +183,7 @@ MyFrame::MyFrame(const wxString& title)
     wxButton* btnReload = new wxButton(myToolbar, ID_RELOAD, _("Reload"));
     myToolbar->AddControl(btnReload);
     myToolbar->AddSeparator();
-    urlText = new wxTextCtrl(myToolbar, ID_URLLIST, wxT("http://www.wxwidgets.org"), wxDefaultPosition, wxSize(220, -1), wxTE_PROCESS_ENTER);
+    urlText = new wxTextCtrl(myToolbar, ID_URLLIST, "http://www.wxwidgets.org", wxDefaultPosition, wxSize(220, -1), wxTE_PROCESS_ENTER);
     myToolbar->AddControl(urlText);
     myToolbar->AddSeparator();
     myToolbar->Realize();
@@ -195,7 +195,7 @@ MyFrame::MyFrame(const wxString& title)
     wxBoxSizer* boxSizer = new wxBoxSizer(wxVERTICAL);
     panel->SetSizer(boxSizer);
 
-    mySafari = new wxWebKitCtrl(panel, ID_WEBKIT, wxT("http://www.wxwidgets.org"), wxDefaultPosition, wxSize(200, 200));
+    mySafari = new wxWebKitCtrl(panel, ID_WEBKIT, "http://www.wxwidgets.org", wxDefaultPosition, wxSize(200, 200));
 
     boxSizer->Add(mySafari, 1, wxEXPAND);
 
@@ -203,7 +203,7 @@ MyFrame::MyFrame(const wxString& title)
     SetSizer(frameSizer);
     frameSizer->Add(panel, 1, wxEXPAND);
 #else
-    mySafari = new wxWebKitCtrl(this, ID_WEBKIT, wxT("http://www.wxwidgets.org"), wxDefaultPosition, wxSize(200, 200));
+    mySafari = new wxWebKitCtrl(this, ID_WEBKIT, "http://www.wxwidgets.org", wxDefaultPosition, wxSize(200, 200));
 #endif
 
 #if wxUSE_STATUSBAR
@@ -274,7 +274,7 @@ void MyFrame::OnSetSource(wxCommandEvent& WXUNUSED(myEvent))
 {
     if (mySafari)
     {
-        wxString myText = wxT("<HTML><HEAD></HEAD><BODY><P>Hello world!</P></BODY></HTML>");
+        wxString myText = "<HTML><HEAD></HEAD><BODY><P>Hello world!</P></BODY></HTML>";
         mySafari->SetPageSource(myText);
     }
 }

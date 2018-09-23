@@ -116,7 +116,7 @@ Additionally, the latest version can always be retrieved from our version
 control system using Git (https://github.com/wxWidgets/wxWidgets).
 
 wxWidgets documentation that you are reading is also available online at
-http://docs.wxwidgets.org/trunk/ and please also visit our wiki at
+https://docs.wxwidgets.org/trunk/ and please also visit our wiki at
 https://wiki.wxwidgets.org/ for user-contributed contents.
 
 And if you have any questions, you can join wxWidgets community using

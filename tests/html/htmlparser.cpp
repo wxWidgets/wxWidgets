@@ -30,10 +30,10 @@ TEST_CASE("wxHtmlParser::ParseInvalid", "[html][parser][error]")
     class NullParser : public wxHtmlWinParser
     {
     public:
-        virtual wxObject *GetProduct() { return NULL; }
+        virtual wxObject *GetProduct() wxOVERRIDE { return NULL; }
 
     protected:
-        virtual void AddText(const wxString& WXUNUSED(txt)) { }
+        virtual void AddText(const wxString& WXUNUSED(txt)) wxOVERRIDE { }
     };
 
     NullParser p;
