@@ -482,7 +482,6 @@ wxFont::wxFont(WX_NSFont nsfont)
 {
     m_refData = new wxFontRefData((CTFontRef)nsfont);
 }
-#endif
 
 #endif
 
