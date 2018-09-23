@@ -135,7 +135,7 @@ void StatBmpWidgetsPage::RecreateWidget()
         wxImage image(filepath);
         if ( image.IsOk() )
         {
-            bmp = image;
+            bmp = wxBitmap(image);
         }
         else
         {
