@@ -131,10 +131,10 @@ name##PluginSentinel  m_pluginsentinel
 
 #define wxCLASSINFO(name) (&name::ms_classInfo)
 
-#define wxIS_KIND_OF(obj, className) obj->IsKindOf(&className::ms_classInfo)
+#define wxIS_KIND_OF(obj, className) (obj && obj->IsKindOf(&className::ms_classInfo))
 
 // Just seems a bit nicer-looking (pretend it's not a macro)
-#define wxIsKindOf(obj, className) obj->IsKindOf(&className::ms_classInfo)
+#define wxIsKindOf(obj, className) (obj && obj->IsKindOf(&className::ms_classInfo))
 
 // this cast does some more checks at compile time as it uses static_cast
 // internally
