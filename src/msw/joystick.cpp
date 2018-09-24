@@ -80,6 +80,12 @@ class wxJoystickThread : public wxThread
 public:
     explicit wxJoystickThread(int joystick);
     void* Entry() wxOVERRIDE;
+    void SetPolling(wxWindow* win, int pollingFreq)
+    {
+        m_catchwin = win;
+        m_polling = pollingFreq;
+    };
+
 
 private:
     void      SendEvent(wxEventType type, long ts, int change = 0);
@@ -89,8 +95,6 @@ private:
     int       m_polling;
     JOYINFO   m_joyInfo;
     JOYINFO   m_lastJoyInfo;
-
-    friend class wxJoystick;
 };
 
 
@@ -714,8 +718,7 @@ bool wxJoystick::SetCapture(wxWindow* win, int pollingFreq)
 {
     if (m_thread)
     {
-        m_thread->m_catchwin = win;
-        m_thread->m_polling = pollingFreq;
+        m_thread->SetPolling(win, pollingFreq);
         return true;
     }
     return false;
@@ -725,8 +728,7 @@ bool wxJoystick::ReleaseCapture()
 {
     if (m_thread)
     {
-        m_thread->m_catchwin = NULL;
-        m_thread->m_polling = 0;
+        m_thread->SetPolling(NULL, 0);
         return true;
     }
     return false;
