@@ -38,22 +38,22 @@
 #include <regstr.h>
 
 // Use optimised count trailing zeros where available.
-#ifdef __GNUC__
-    #define ctz(x) __builtin_ctz(x)
-#else
 int ctz(unsigned x)
 {
+    wxCHECK_MSG(x > 0, 0, "Undefined for x == 0.");
+#ifdef __GNUC__
+   return __builtin_ctz(x);
+#else
    int n;
-
-   if (x == 0) return(32);
    n = 1;
    if ((x & 0x0000FFFF) == 0) {n = n +16; x = x >>16;}
    if ((x & 0x000000FF) == 0) {n = n + 8; x = x >> 8;}
    if ((x & 0x0000000F) == 0) {n = n + 4; x = x >> 4;}
    if ((x & 0x00000003) == 0) {n = n + 2; x = x >> 2;}
    return n - (x & 1);
-}
 #endif
+}
+
 
 enum {
     wxJS_AXIS_X = 0,
