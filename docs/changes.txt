@@ -141,6 +141,7 @@ wxMSW:
 - Add experimental support for Windows 10/ARM64 platform (Simon Rozman).
 - Fix hang after clearing wxTAB_TRAVERSAL style on a window with children.
 - Fix handling of AUX2 mouse button events (Timon Rozmanrylz).
+- Implement support for more than 4 joystick buttons (Mick Phillips).
 - Fix saving/restoring window position for maximized windows.
 - Fix stack corruption when using wxStackWalker (srfisk).
 - Fix positioning windows at positions >= SHORT_MAX (Cătălin Răceanu).
