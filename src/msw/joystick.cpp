@@ -90,7 +90,7 @@ public:
 private:
     void      SendEvent(wxEventType type, long ts, int change = 0);
     int       m_joystick;
-    int       m_buttons;
+    UINT      m_buttons;
     wxWindow* m_catchwin;
     int       m_polling;
     JOYINFO   m_joyInfo;
@@ -110,11 +110,11 @@ wxJoystickThread::wxJoystickThread(int joystick)
 
 void wxJoystickThread::SendEvent(wxEventType type, long ts, int change)
 {
-    wxJoystickEvent joystickEvent(type, m_buttons, m_joystick, change);
+    wxJoystickEvent joystickEvent(type, (int)m_buttons, m_joystick, change);
 
     joystickEvent.SetTimestamp(ts);
-    joystickEvent.SetPosition(wxPoint(m_joyInfo.wXpos, m_joyInfo.wYpos));
-    joystickEvent.SetZPosition(m_joyInfo.wZpos);
+    joystickEvent.SetPosition(wxPoint( (int)m_joyInfo.wXpos, (int)m_joyInfo.wYpos) );
+    joystickEvent.SetZPosition( (int)m_joyInfo.wZpos );
     joystickEvent.SetEventObject(m_catchwin);
 
     if (m_catchwin)
@@ -128,13 +128,13 @@ void* wxJoystickThread::Entry()
     while (!TestDestroy())
     {
         Sleep(m_polling);
-        DWORD ts = GetTickCount();
+        long ts = GetTickCount();
 
         joyGetPos(m_joystick, &m_joyInfo);
         m_buttons = m_joyInfo.wButtons;
-        DWORD delta = m_buttons ^ m_lastJoyInfo.wButtons;
-        DWORD deltaUp = delta & !m_buttons;
-        DWORD deltaDown = delta & m_buttons;
+        UINT delta = m_buttons ^ m_lastJoyInfo.wButtons;
+        UINT deltaUp = delta & !m_buttons;
+        UINT deltaDown = delta & m_buttons;
 
         // Use count trailing zeros to determine which button changed.
         // Was using JOYINFOEX.dwButtons, because the docs state this is
@@ -388,7 +388,7 @@ int wxJoystick::GetMovementThreshold() const
     MMRESULT res = joyGetThreshold(m_joystick, & thresh);
     if (res == JOYERR_NOERROR )
     {
-        return thresh;
+        return (int)thresh;
     }
     else
         return 0;
@@ -396,8 +396,7 @@ int wxJoystick::GetMovementThreshold() const
 
 void wxJoystick::SetMovementThreshold(int threshold)
 {
-    UINT thresh = threshold;
-    joySetThreshold(m_joystick, thresh);
+    joySetThreshold(m_joystick, (UINT)threshold);
 }
 
 // Capabilities
