@@ -110,15 +110,15 @@ wxJoystickThread::wxJoystickThread(int joystick)
 
 void wxJoystickThread::SendEvent(wxEventType type, long ts, int change)
 {
-    wxJoystickEvent jwx_event(type, m_buttons, m_joystick, change);
+    wxJoystickEvent joystickEvent(type, m_buttons, m_joystick, change);
 
-    jwx_event.SetTimestamp(ts);
-    jwx_event.SetPosition(wxPoint(m_joyInfo.wXpos, m_joyInfo.wYpos));
-    jwx_event.SetZPosition(m_joyInfo.wZpos);
-    jwx_event.SetEventObject(m_catchwin);
+    joystickEvent.SetTimestamp(ts);
+    joystickEvent.SetPosition(wxPoint(m_joyInfo.wXpos, m_joyInfo.wYpos));
+    joystickEvent.SetZPosition(m_joyInfo.wZpos);
+    joystickEvent.SetEventObject(m_catchwin);
 
     if (m_catchwin)
-        m_catchwin->GetEventHandler()->AddPendingEvent(jwx_event);
+        m_catchwin->GetEventHandler()->AddPendingEvent(joystickEvent);
 }
 
 void* wxJoystickThread::Entry()
