@@ -386,8 +386,7 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
     return IsOk();
 }
 
-
-// implementation:
+#if WXWIN_COMPATIBILITY_3_0
 void wxBitmap::SetHeight(int height)
 {
     M_PIXDATA = QPixmap(GetWidth(), height);
@@ -405,7 +404,7 @@ void wxBitmap::SetDepth(int depth)
     else
         M_PIXDATA = QPixmap(GetWidth(), GetHeight());
 }
-
+#endif
 
 void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 {
