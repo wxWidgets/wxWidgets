@@ -13,7 +13,7 @@
 
 #include "wx/event.h"
 
-class WXDLLIMPEXP_FWD_CORE wxJoystickThread;
+class wxJoystickThread;
 
 class WXDLLIMPEXP_ADV wxJoystick: public wxObject
 {
