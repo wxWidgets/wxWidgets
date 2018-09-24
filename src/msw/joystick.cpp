@@ -41,7 +41,8 @@
 #ifdef __GNUC__
     #define ctz(x) __builtin_ctz(x)
 #else
-int ctz(unsigned x) {
+int ctz(unsigned x)
+{
    int n;
 
    if (x == 0) return(32);
@@ -77,7 +78,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject);
 class wxJoystickThread : public wxThread
 {
 public:
-    wxJoystickThread(int joystick);
+    explicit wxJoystickThread(int joystick);
     void* Entry() wxOVERRIDE;
 
 private:
@@ -120,12 +121,9 @@ void* wxJoystickThread::Entry()
 {
     joyGetPos(m_joystick, &m_lastJoyInfo);
 
-    while (true)
+    while (!TestDestroy())
     {
-        if (TestDestroy())
-            break;
-
-        this->Sleep(m_polling);
+        Sleep(m_polling);
         DWORD ts = GetTickCount();
 
         joyGetPos(m_joystick, &m_joyInfo);
@@ -140,7 +138,7 @@ void* wxJoystickThread::Entry()
         // it is the *total* number of buttons pressed.
         if (deltaUp)
             SendEvent(wxEVT_JOY_BUTTON_UP, ts, ctz(deltaUp)+1);
-        if(deltaDown)
+        if (deltaDown)
             SendEvent(wxEVT_JOY_BUTTON_DOWN, ts, ctz(deltaDown)+1);
 
         if ((m_joyInfo.wXpos != m_lastJoyInfo.wXpos) ||
@@ -150,7 +148,7 @@ void* wxJoystickThread::Entry()
             SendEvent(wxEVT_JOY_MOVE, ts);
         }
 
-        memcpy (&m_lastJoyInfo, &m_joyInfo, sizeof(JOYINFO));
+        m_lastJoyInfo = m_joyInfo;
     }
 
     return NULL;
@@ -182,7 +180,6 @@ wxJoystick::wxJoystick(int joystick)
                 /* Found the one we want, store actual OS id and return */
                 m_joystick = i;
                 m_thread = new wxJoystickThread(m_joystick);
-                m_thread->Create();
                 m_thread->Run();
                 return;
             }
