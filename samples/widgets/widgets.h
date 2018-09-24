@@ -197,7 +197,7 @@ public:
                                         wxImageList *imaglist);
 
     // our ctor
-    WidgetsPageInfo(Constructor ctor, const wxChar *label, int categories);
+    WidgetsPageInfo(Constructor ctor, const wxString& label, int categories);
 
     // accessors
     const wxString& GetLabel() const { return m_label; }

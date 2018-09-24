@@ -1210,7 +1210,7 @@ void WidgetsFrame::OnWidgetFocus(wxFocusEvent& event)
 // WidgetsPageInfo
 // ----------------------------------------------------------------------------
 
-WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label, int categories)
+WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxString& label, int categories)
                : m_label(label)
                , m_categories(categories)
 {
