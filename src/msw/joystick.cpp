@@ -118,7 +118,7 @@ void wxJoystickThread::SendEvent(wxEventType type, long ts, int change)
     joystickEvent.SetEventObject(m_catchwin);
 
     if (m_catchwin)
-        m_catchwin->GetEventHandler()->AddPendingEvent(joystickEvent);
+        m_catchwin->GetEventHandler()->ProcessThreadEvent(joystickEvent);
 }
 
 void* wxJoystickThread::Entry()
