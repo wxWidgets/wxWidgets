@@ -235,6 +235,6 @@ private:
                                       wxImageList *imaglist)                \
         { return new classname(book, imaglist); }                           \
     WidgetsPageInfo classname::                                             \
-        ms_info##classname(wxCtorFor##classname, label, ALL_CTRLS | categories)
+        ms_info##classname(wxCtorFor##classname, wxString(label), ALL_CTRLS | categories)
 
 #endif // _WX_SAMPLE_WIDGETS_H_
