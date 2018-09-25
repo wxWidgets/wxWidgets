@@ -158,6 +158,7 @@ wxOSX:
 - Fix dispatching pending events (and CallAfter()) in console applications.
 - Implement wxDataViewColumn::UnsetAsSortKey() (Daniel Kulp).
 - supporting native image formst like NSImage and UIImage in wxBitmap
+- native implementation for wxStaticBitmap for correct rendering of template images
 
 wxQt:
 
