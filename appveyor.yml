@@ -36,6 +36,10 @@ environment:
     GENERATOR: 'Visual Studio 12'
     SHARED: ON
     CONFIGURATION: Release
+  - TOOLSET: cmake_qt
+    GENERATOR: 'Visual Studio 14 2015 Win64'
+    SHARED: ON
+    CONFIGURATION: Release
 
 clone_depth: 50
 
