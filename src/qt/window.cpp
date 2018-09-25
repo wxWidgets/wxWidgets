@@ -650,10 +650,12 @@ void wxWindowQt::ScrollWindow( int dx, int dy, const wxRect *rect )
 }
 
 
+#if wxUSE_DRAG_AND_DROP
 void wxWindowQt::SetDropTarget( wxDropTarget * WXUNUSED( dropTarget ) )
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
 }
+#endif
 
 void wxWindowQt::SetWindowStyleFlag( long style )
 {

@@ -8,6 +8,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_DRAG_AND_DROP
+
 #include "wx/dnd.h"
 
 wxDropTarget::wxDropTarget(wxDataObject *WXUNUSED(dataObject))
@@ -58,3 +60,4 @@ wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
     return wxDragResult();
 }
 
+#endif // wxUSE_DRAG_AND_DROP
