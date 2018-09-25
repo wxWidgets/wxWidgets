@@ -558,6 +558,15 @@ public :
                                     long extraStyle);
 #endif
 
+    static wxWidgetImplType*    CreateStaticBitmap( wxWindowMac* wxpeer,
+                                                   wxWindowMac* parent,
+                                                   wxWindowID id,
+                                                   const wxBitmap& bitmap,
+                                                   const wxPoint& pos,
+                                                   const wxSize& size,
+                                                   long style,
+                                                   long extraStyle);
+
     // converts from Toplevel-Content relative to local
     static void Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to );
 protected :
