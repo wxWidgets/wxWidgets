@@ -168,8 +168,6 @@ set(BASE_OSX_NOTWXMAC_HDR
 set(QT_HDR
     wx/qt/accel.h
     wx/qt/app.h
-    wx/qt/apptbase.h
-    wx/qt/apptrait.h
     wx/qt/bitmap.h
     wx/qt/bmpbuttn.h
     wx/qt/brush.h
@@ -187,7 +185,6 @@ set(QT_HDR
     wx/qt/colour.h
     wx/qt/combobox.h
     wx/qt/control.h
-    wx/qt/converter.h
     wx/qt/ctrlsub.h
     wx/qt/cursor.h
     wx/qt/dataform.h
@@ -241,16 +238,12 @@ set(QT_HDR
     wx/qt/statusbar.h
     wx/qt/stattext.h
     wx/qt/textctrl.h
-    wx/qt/textdlg.h
     wx/qt/textentry.h
     wx/qt/tglbtn.h
-    wx/qt/timer.h
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
-    wx/qt/utils.h
     wx/qt/window.h
-    wx/qt/private/winevent.h
     wx/qt/dvrenderer.h
     wx/qt/dvrenderers.h
     wx/generic/animate.h

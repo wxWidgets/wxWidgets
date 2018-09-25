@@ -245,8 +245,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="QT_HDR" hints="files">
     wx/qt/accel.h
     wx/qt/app.h
-    wx/qt/apptbase.h
-    wx/qt/apptrait.h
     wx/qt/bitmap.h
     wx/qt/bmpbuttn.h
     wx/qt/brush.h
@@ -262,7 +260,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/colour.h
     wx/qt/combobox.h
     wx/qt/control.h
-    wx/qt/converter.h
     wx/qt/ctrlsub.h
     wx/qt/cursor.h
     wx/qt/dataform.h
@@ -313,17 +310,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/statusbar.h
     wx/qt/stattext.h
     wx/qt/textctrl.h
-    wx/qt/textdlg.h
     wx/qt/textentry.h
     wx/qt/tglbtn.h
-    wx/qt/timer.h
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
     <!-- wx/qt/treectrl.h -->
-    wx/qt/utils.h
     wx/qt/window.h
-    wx/qt/private/winevent.h
     wx/generic/fdrepdlg.h
     wx/generic/filepickerg.h
     wx/generic/clrpickerg.h
