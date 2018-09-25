@@ -12,7 +12,7 @@
 
 #if wxUSE_STATBMP
 
-#include "wx/stattext.h"
+#include "wx/statbmp.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
