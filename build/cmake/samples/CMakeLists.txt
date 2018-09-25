@@ -264,13 +264,15 @@ if(WIN32)
 
         wx_add_sample(dll sdk_exe.cpp my_dll.h NAME sdk_exe FOLDER dll LIBRARIES my_dll)
     endif()
-    if(MSVC)
-        wx_add_sample(flash)
-    endif()
-    #TODO: reenable when sample is fixed
-    #wx_add_sample(mfc mfctest.cpp mfctest.h resource.h stdafx.h RES mfctest.rc)
-    wx_add_sample(nativdlg nativdlg.cpp nativdlg.h resource.h RES nativdlg.rc)
-    wx_add_sample(oleauto DEPENDS wxUSE_OLE)
+
     wx_add_sample(regtest RES regtest.rc DEPENDS wxUSE_REGKEY)
-    wx_add_sample(taskbarbutton DEPENDS wxUSE_TASKBARBUTTON)
+    wx_add_sample(oleauto DEPENDS wxUSE_OLE)
+
+    if(WXMSW)
+        wx_add_sample(nativdlg nativdlg.cpp nativdlg.h resource.h RES nativdlg.rc)
+        #TODO: reenable when sample is fixed
+        #wx_add_sample(mfc mfctest.cpp mfctest.h resource.h stdafx.h RES mfctest.rc)
+        wx_add_sample(taskbarbutton DEPENDS wxUSE_TASKBARBUTTON)
+        wx_add_sample(flash DEPENDS wxUSE_ACTIVEX)
+    endif()
 endif()

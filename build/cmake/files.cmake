@@ -379,6 +379,14 @@ set(MEDIA_QT_SRC
     src/qt/mediactrl.cpp
 )
 
+set(OPENGL_QT_HDR
+    wx/qt/glcanvas.h
+)
+
+set(OPENGL_QT_SRC
+    src/qt/glcanvas.cpp
+)
+
 set(BASE_CMN_SRC
     src/common/any.cpp
     src/common/appbase.cpp

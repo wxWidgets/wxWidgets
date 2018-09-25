@@ -398,6 +398,12 @@ QT_SRC=
 MEDIA_QT_SRC=
     src/qt/mediactrl.cpp
 
+OPENGL_QT_HDR=
+    wx/qt/glcanvas.h
+
+OPENGL_QT_SRC=
+    src/qt/glcanvas.cpp
+
 ## Common
 
 BASE_CMN_SRC =
