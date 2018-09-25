@@ -2278,6 +2278,7 @@ OSX_COMMON_SRC =
     src/osx/slider_osx.cpp
     src/osx/spinbutt_osx.cpp
     src/osx/srchctrl_osx.cpp
+    src/osx/statbmp_osx.cpp
     src/osx/statbox_osx.cpp
     src/osx/statline_osx.cpp
     src/osx/stattext_osx.cpp
@@ -2467,6 +2468,7 @@ OSX_COCOA_SRC =
     src/osx/cocoa/slider.mm
     src/osx/cocoa/spinbutt.mm
     src/osx/cocoa/srchctrl.mm
+    src/osx/cocoa/statbmp.mm
     src/osx/cocoa/statbox.mm
     src/osx/cocoa/statline.mm
     src/osx/cocoa/stattext.mm
@@ -2525,6 +2527,7 @@ OSX_IPHONE_SRC =
     src/osx/iphone/scrolbar.mm
     src/osx/iphone/settings.mm
     src/osx/iphone/slider.mm
+    src/osx/iphone/statbmp.mm
     src/osx/iphone/stattext.mm
     src/osx/iphone/textctrl.mm
     src/osx/iphone/toolbar.mm

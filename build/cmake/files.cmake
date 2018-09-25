@@ -2346,6 +2346,7 @@ set(OSX_COMMON_SRC
     src/generic/textmeasure.cpp
     src/generic/icon.cpp
     #TODO: </if>
+    src/osx/statbmp_osx.cpp
 )
 
 set(OSX_SHARED_HDR
@@ -2499,6 +2500,7 @@ set(OSX_COCOA_SRC
     src/osx/cocoa/notifmsg.mm
     src/osx/datectrl_osx.cpp
     src/osx/core/sound.cpp
+    src/osx/cocoa/statbmp.mm
 )
 
 set(OSX_COCOA_HDR
@@ -2546,6 +2548,7 @@ set(OSX_IPHONE_SRC
     src/osx/sound_osx.cpp
     src/generic/animateg.cpp
     src/osx/core/sound.cpp
+    src/osx/iphone/statbmp.mm
 )
 
 set(OSX_IPHONE_HDR

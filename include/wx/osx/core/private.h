@@ -119,6 +119,7 @@ CGImageRef WXDLLIMPEXP_CORE wxOSXCreateCGImageFromImage( WXImage nsimage, double
 CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromImage( WXImage nsimage, CGRect* r, CGContextRef cg);
 CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromImage( WXImage nsimage, bool *isTemplate = NULL);
 WXImage WXDLLIMPEXP_CORE wxOSXGetImageFromCGImage( CGImageRef image, double scale = 1.0, bool isTemplate = false);
+double WXDLLIMPEXP_CORE wxOSXGetImageScaleFactor(WXImage image);
 
 
 class wxWindowMac;
