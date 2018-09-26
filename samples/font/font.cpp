@@ -713,7 +713,7 @@ void MyFrame::OnSetNativeDesc(wxCommandEvent& WXUNUSED(event))
     font.SetNativeFontInfo(fontInfo);
     if ( !font.IsOk() )
     {
-        wxLogError(wxT("Font info string \"%s\" is invalid."),
+        wxLogError("Font info string \"%s\" is invalid.",
                    fontInfo.c_str());
         return;
     }

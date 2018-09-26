@@ -1606,7 +1606,7 @@ void MyTreeCtrl::OnItemStateClick(wxTreeEvent& event)
     wxTreeItemId itemId = event.GetItem();
     DoToggleState(itemId);
 
-    wxLogMessage(wxT("Item \"%s\" state changed to %d"),
+    wxLogMessage("Item \"%s\" state changed to %d",
                  GetItemText(itemId), GetItemState(itemId));
 }
 
@@ -1619,8 +1619,8 @@ void MyTreeCtrl::OnItemMenu(wxTreeEvent& event)
     wxPoint clientpt = event.GetPoint();
     wxPoint screenpt = ClientToScreen(clientpt);
 
-    wxLogMessage(wxT("OnItemMenu for item \"%s\" at screen coords (%i, %i)"),
-                 item ? item->GetDesc() : wxString(wxS("unknown")), screenpt.x, screenpt.y);
+    wxLogMessage("OnItemMenu for item \"%s\" at screen coords (%i, %i)",
+                 item ? item->GetDesc() : wxString("unknown"), screenpt.x, screenpt.y);
 
     ShowMenu(itemId, clientpt);
     event.Skip();
@@ -1665,7 +1665,7 @@ void MyTreeCtrl::OnItemRClick(wxTreeEvent& event)
 
     MyTreeItemData *item = (MyTreeItemData *)GetItemData(itemId);
 
-    wxLogMessage(wxT("Item \"%s\" right clicked"), item ? item->GetDesc() : wxString(wxS("unknown")));
+    wxLogMessage("Item \"%s\" right clicked", item ? item->GetDesc() : wxString("unknown"));
 
     event.Skip();
 }

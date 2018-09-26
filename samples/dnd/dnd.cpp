@@ -1150,7 +1150,7 @@ void DnDFrame::OnDragMoveAllow(wxCommandEvent& event)
 void DnDFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox("Drag-&-Drop Demo\n"
-                 wxT("Please see \"Help|Help...\" for details\n")
+                 "Please see \"Help|Help...\" for details\n"
                  "Copyright (c) 1998 Vadim Zeitlin",
                  "About wxDnD",
                  wxICON_INFORMATION | wxOK,

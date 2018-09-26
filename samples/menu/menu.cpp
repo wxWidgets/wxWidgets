@@ -674,9 +674,9 @@ MyFrame::MyFrame()
     wxLog::DisableTimestamp();
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_textctrl));
 
-    wxLogMessage(wxT("Brief explanations: the commands in the \"Menu\" menu ")
-                 wxT("append/insert/delete items to/from the \"Test\" menu.\n")
-                 wxT("The commands in the \"Menubar\" menu work with the ")
+    wxLogMessage("Brief explanations: the commands in the \"Menu\" menu "
+                 "append/insert/delete items to/from the \"Test\" menu.\n"
+                 "The commands in the \"Menubar\" menu work with the "
                  "menubar itself.\n\n"
                  "Right click the band below to test popup menus.\n");
 #endif

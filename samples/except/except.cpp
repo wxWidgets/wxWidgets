@@ -464,7 +464,7 @@ bool MyFrame::ProcessEvent(wxEvent& event)
     }
     catch ( const wxChar *msg )
     {
-        wxLogMessage(wxT("Caught a string \"%s\" in MyFrame"), msg);
+        wxLogMessage("Caught a string \"%s\" in MyFrame", msg);
 
         return true;
     }

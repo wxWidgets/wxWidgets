@@ -1173,7 +1173,7 @@ void MyFrame::OnOpenURL(wxCommandEvent& WXUNUSED(event))
 
     if ( !wxLaunchDefaultBrowser(s_url) )
     {
-        wxLogError(wxT("Failed to open URL \"%s\""), s_url.c_str());
+        wxLogError("Failed to open URL \"%s\"", s_url.c_str());
     }
 }
 

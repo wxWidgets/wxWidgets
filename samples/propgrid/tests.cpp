@@ -146,14 +146,14 @@ void FormMain::OnDumpList( wxCommandEvent& WXUNUSED(event) )
             {
                 wxVariant& a = v[n];
 
-                t.Printf(wxT("  attribute %i: name=\"%s\"  (type=\"%s\"  value=\"%s\")\n"),(int)n,
+                t.Printf("  attribute %i: name=\"%s\"  (type=\"%s\"  value=\"%s\")\n",(int)n,
                     a.GetName().c_str(),a.GetType().c_str(),a.GetString().c_str());
                 text += t;
             }
         }
         else
         {
-            t.Printf(wxT("%i: name=\"%s\"  type=\"%s\"  value=\"%s\"\n"),(int)i,
+            t.Printf("%i: name=\"%s\"  type=\"%s\"  value=\"%s\"\n",(int)i,
                 v.GetName().c_str(),v.GetType().c_str(),strValue.c_str());
             text += t;
         }
@@ -761,17 +761,17 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
         if ( pgman->GetPropertyValueAsInt("Car.Speeds.Max. Speed (mph)") != 100 )
         {
-            RT_FAILURE_MSG(wxString::Format(wxS("Did not match: Car.Speeds.Max. Speed (mph)=%s"), pgman->GetPropertyValueAsString(wxS("Car.Speeds.Max. Speed (mph)")).c_str()));
+            RT_FAILURE_MSG(wxString::Format("Did not match: Car.Speeds.Max. Speed (mph)=%s", pgman->GetPropertyValueAsString(wxS("Car.Speeds.Max. Speed (mph)")).c_str()));
         }
 
-        if ( pgman->GetPropertyValueAsInt(wxT("Car.Price ($)")) != 3000002 )
+        if ( pgman->GetPropertyValueAsInt("Car.Price ($)") != 3000002 )
         {
             RT_FAILURE_MSG(wxString::Format(wxS("Did not match: Car.Price ($)=%s"), pgman->GetPropertyValueAsString(wxS("Car.Price ($)")).c_str()));
         }
 
         if ( !pgman->GetPropertyValueAsBool("Car.Convertible") )
         {
-            RT_FAILURE_MSG(wxString::Format(wxS("Did not match: Car.Convertible=%s"), pgman->GetPropertyValueAsString(wxS("Car.Convertible")).c_str()));
+            RT_FAILURE_MSG(wxString::Format("Did not match: Car.Convertible=%s", pgman->GetPropertyValueAsString(wxS("Car.Convertible")).c_str()));
         }
 
         // SetPropertyValueString for special cases such as wxColour

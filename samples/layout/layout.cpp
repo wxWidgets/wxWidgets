@@ -368,7 +368,7 @@ MyFlexSizerFrame::MyFlexSizerFrame(wxFrame* parent)
     sizerFlex->SetFlexibleDirection(wxHORIZONTAL);
     sizerCol2->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
 
-    sizerCol2->Add(new wxStaticText(p, wxID_ANY, wxT("Same with grow mode == \"none\"")), 0, wxCENTER | wxTOP, 20);
+    sizerCol2->Add(new wxStaticText(p, wxID_ANY, "Same with grow mode == \"none\""), 0, wxCENTER | wxTOP, 20);
     sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableCol(1);
@@ -377,7 +377,7 @@ MyFlexSizerFrame::MyFlexSizerFrame(wxFrame* parent)
     sizerFlex->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_NONE);
     sizerCol2->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
 
-    sizerCol2->Add(new wxStaticText(p, wxID_ANY, wxT("Same with grow mode == \"all\"")), 0, wxCENTER | wxTOP, 20);
+    sizerCol2->Add(new wxStaticText(p, wxID_ANY, "Same with grow mode == \"all\""), 0, wxCENTER | wxTOP, 20);
     sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableCol(1);
@@ -557,9 +557,9 @@ void MyGridBagSizerFrame::OnMoveBtn(wxCommandEvent& event)
     {
         if ( m_gbs->CheckForIntersection(wxGBPosition(3,6), wxGBSpan(1,1)) )
             wxMessageBox(
-wxT("wxGridBagSizer will not allow items to be in the same cell as\n\
+"wxGridBagSizer will not allow items to be in the same cell as\n\
 another item, so this operation will fail.  You will also get an assert\n\
-when compiled in debug mode."), "Warning", wxOK | wxICON_INFORMATION);
+when compiled in debug mode.", "Warning", wxOK | wxICON_INFORMATION);
 
         if ( m_gbs->SetItemPosition(btn, wxGBPosition(3,6)) )
         {

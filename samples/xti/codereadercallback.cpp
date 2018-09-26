@@ -90,7 +90,7 @@ void wxObjectCodeReaderCallback::AllocateObject(int objectID, wxClassInfo *class
     {
         // add corresponding header if not already included
         wxString include;
-        include.Printf(wxT("#include \"%s\"\n"),classInfo->GetIncludeName());
+        include.Printf("#include \"%s\"\n",classInfo->GetIncludeName());
         if ( m_headerincludes.Find(include) == wxNOT_FOUND)
             m_headerincludes += include;
     }
@@ -155,12 +155,12 @@ wxString wxObjectCodeReaderCallback::ValueAsCode( const wxAny &param )
         }
         else
         {
-            wxLogError ( _("Internal error, illegal wxCustomTypeInfo") );
+            wxLogError ( "Internal error, illegal wxCustomTypeInfo" );
         }
     }
     else if ( type->GetKind() == wxT_STRING )
     {
-        value.Printf( wxT("\"%s\""), wxAnyGetAsString(param).c_str() );
+        value.Printf( "\"%s\"", wxAnyGetAsString(param).c_str() );
     }
     else if ( type->GetKind() == wxT_OBJECT )
     {

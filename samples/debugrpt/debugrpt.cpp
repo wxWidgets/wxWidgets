@@ -466,7 +466,7 @@ void MyApp::GenerateReport(wxDebugReport::Context ctx)
             }
             else
             {
-                wxLogMessage(wxT("Report generated in \"%s\"."),
+                wxLogMessage("Report generated in \"%s\".",
                              report->GetCompressedFileName().c_str());
                 report->Reset();
             }
