@@ -2468,6 +2468,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/statusbr.cpp
     src/generic/textmeasure.cpp
     src/generic/icon.cpp
+    src/osx/statbmp_osx.cpp
 </if>
 </set>
 
@@ -2627,6 +2628,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/timectrl_osx.cpp
     src/common/taskbarcmn.cpp
     src/osx/cocoa/activityindicator.mm
+    src/osx/cocoa/statbmp.mm
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
     wx/osx/cocoa/chkconf.h
@@ -2677,6 +2679,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/sound_osx.cpp
     src/osx/core/sound.cpp
     src/generic/animateg.cpp
+    src/osx/iphone/statbmp.mm
 </set>
 
 <set var="OSX_IPHONE_HDR" hints="files">
