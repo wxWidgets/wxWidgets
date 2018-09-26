@@ -32,7 +32,9 @@
 #endif
 
 #ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
     #include "wx/msw/enhmeta.h"
+#endif
 #endif
 
 #include "wx/private/graphics.h"
