@@ -245,64 +245,32 @@ public:
 
 #if defined(HAVE_STD_VARIANT)
 
-struct wxVisitorBase
-{
-    wxVisitorBase() : m_win(nullptr){}
-    wxVisitorBase(wxWindow* win) : m_win(win){}
+template<class... Ls> struct wxVisitor : Ls... { using Ls::operator()...; };
+template<class... Ls> wxVisitor(Ls...) -> wxVisitor<Ls...>;
 
-    wxWindow* m_win;
-};
-
-#define wxDEFINE_GENERIC_VALIDATOR_VISITOR(which)                              \
-                                                                               \
-template <class W, typename... Ts>                                             \
-struct wxVisitor##which;                                                       \
-                                                                               \
-template <class W, typename T, typename... Ts>                                 \
-struct wxVisitor##which<W, T, Ts...> :                                         \
-        wxVisitor##which<W, T>, wxVisitor##which<W, Ts...>                     \
-{                                                                              \
-    wxVisitor##which(wxWindow* win) : wxVisitorBase(win),                      \
-                                      wxVisitor##which<W, T>(win),             \
-                                      wxVisitor##which<W, Ts...>(win)          \
-    {}                                                                         \
-                                                                               \
-    using wxVisitor##which<W, T>::operator();                                  \
-    using wxVisitor##which<W, Ts...>::operator();                              \
-};                                                                             \
-                                                                               \
-template <class W, typename T>                                                 \
-struct wxVisitor##which<W, T> : virtual wxVisitorBase                          \
-{                                                                              \
-    wxVisitor##which(wxWindow* win) : wxVisitorBase(win){}                     \
-                                                                               \
-    bool operator()(T& value)                                                  \
-    {                                                                          \
-        return wxDataTransfer<W>::template which<T>(m_win, &value);            \
-    }                                                                          \
-}
-
-wxDEFINE_GENERIC_VALIDATOR_VISITOR(To);
-wxDEFINE_GENERIC_VALIDATOR_VISITOR(From);
-
-template<class W, typename... Ts>
-auto wxMakeVisitorTo(wxWindow* win)
-{
-    return wxVisitorTo<W, Ts...>(win);
-}
-
-template<class W, typename... Ts>
-auto wxMakeVisitorFrom(wxWindow* win)
-{
-    return wxVisitorFrom<W, Ts...>(win);
-}
-
-//
 template<class W, typename T, typename... Ts>
 class wxGenericValidatorCompositType<W, std::variant, T, Ts...> 
     : public wxGenericValidatorSimpleType<W, T>
 {
     typedef std::variant<T, Ts...> CompositeType;
+
+    template<typename T_>
+    inline auto CreateLambdaTo()
+    {
+        return [&](T_& value)
+                {
+                    return wxDataTransfer<W>::template To<T_>(this->GetWindow(), &value);
+                };
+    }
+
+    template<typename T_>
+    inline auto CreateLambdaFrom()
+    {
+        return [&](T_& value)
+                {
+                    return wxDataTransfer<W>::template From<T_>(this->GetWindow(), &value);
+                };
+    }
 
 public:
 
@@ -324,14 +292,14 @@ public:
     {
         CompositeType& data = *static_cast<CompositeType*>(this->m_data);
 
-        return std::visit(wxMakeVisitorTo<W, T, Ts...>(this->GetWindow()), data);
+        return std::visit(wxVisitor{CreateLambdaTo<T>(), CreateLambdaFrom<Ts>()...}, data);
     }
 
     virtual bool TransferFromWindow() wxOVERRIDE
     {
         CompositeType& data = *static_cast<CompositeType*>(this->m_data);
 
-        return std::visit(wxMakeVisitorFrom<W, T, Ts...>(this->GetWindow()), data);
+        return std::visit(wxVisitor{CreateLambdaFrom<T>(), CreateLambdaFrom<Ts>()...}, data);
     }
 };
 

@@ -105,14 +105,12 @@ bool wxDataTransfer<wxComboBox>::DoValidate(wxComboBox* cb, wxWindow* parent)
 }
 
 #if defined(HAVE_STD_VARIANT)
-template<class... Ts> struct overload : Ts... { using Ts::operator()...; };
-template<class... Ts> overload(Ts...) -> overload<Ts...>;
 
 static auto GetString(const MyData::VariantType& var)
 {
-    return std::visit(overload{
+    return std::visit(wxVisitor{
                 [](int i){ return wxString::Format("item(%d)", i); },
-                [](const wxString& str){ return str; },
+                [](const wxString& str){ return str; }
            }, var);
 }
 #endif // defined(HAVE_STD_VARIANT)
