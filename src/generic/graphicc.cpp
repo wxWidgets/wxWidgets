@@ -41,7 +41,7 @@ bool wxCairoInit();
 #include "wx/private/graphics.h"
 #include "wx/rawbmp.h"
 #include "wx/vector.h"
-#if defined(__WXMSW__) && wxUSE_ENH_METAFILE
+#ifdef __WXMSW__
     #include "wx/msw/enhmeta.h"
 #endif
 
