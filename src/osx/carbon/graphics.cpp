@@ -1430,6 +1430,9 @@ public:
 private:
     bool EnsureIsValid();
     void CheckInvariants() const;
+    bool DoSetAntialiasMode(wxAntialiasMode antialias);
+    bool DoSetInterpolationQuality(wxInterpolationQuality interpolation);
+    bool DoSetCompositionMode(wxCompositionMode op);
 
     virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y ) wxOVERRIDE;
     virtual void DoDrawRotatedText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle ) wxOVERRIDE;
@@ -1678,6 +1681,16 @@ bool wxMacCoreGraphicsContext::SetAntialiasMode(wxAntialiasMode antialias)
 
     m_antialias = antialias;
 
+    if ( !DoSetAntialiasMode(antialias) )
+    {
+        return false;
+    }
+    CheckInvariants();
+    return true;
+}
+
+bool wxMacCoreGraphicsContext::DoSetAntialiasMode(wxAntialiasMode antialias)
+{
     bool antialiasMode;
     switch (antialias)
     {
@@ -1691,7 +1704,6 @@ bool wxMacCoreGraphicsContext::SetAntialiasMode(wxAntialiasMode antialias)
             return false;
     }
     CGContextSetShouldAntialias(m_cgContext, antialiasMode);
-    CheckInvariants();
     return true;
 }
 
@@ -1704,9 +1716,20 @@ bool wxMacCoreGraphicsContext::SetInterpolationQuality(wxInterpolationQuality in
         return true;
 
     m_interpolation = interpolation;
+
+    if ( !DoSetInterpolationQuality(interpolation) )
+    {
+        return false;
+    }
+    CheckInvariants();
+    return true;
+}
+
+bool wxMacCoreGraphicsContext::DoSetInterpolationQuality(wxInterpolationQuality interpolation)
+{
     CGInterpolationQuality quality;
-    
-    switch (interpolation) 
+
+    switch (interpolation)
     {
         case wxINTERPOLATION_DEFAULT:
             quality = kCGInterpolationDefault;
@@ -1727,7 +1750,6 @@ bool wxMacCoreGraphicsContext::SetInterpolationQuality(wxInterpolationQuality in
             return false;
     }
     CGContextSetInterpolationQuality(m_cgContext, quality);
-    CheckInvariants();
     return true;
 }
 
@@ -1741,7 +1763,17 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
 
     m_composition = op;
 
-    if (m_composition == wxCOMPOSITION_DEST)
+    if ( !DoSetCompositionMode(op) )
+    {
+        return false;
+    }
+    CheckInvariants();
+    return true;
+}
+
+bool wxMacCoreGraphicsContext::DoSetCompositionMode(wxCompositionMode op)
+{
+    if (op == wxCOMPOSITION_DEST)
         return true;
 
     // TODO REMOVE if we don't need it because of bugs in 10.5
@@ -1751,44 +1783,44 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
         CGBlendMode mode = kCGBlendModeNormal;
         switch( op )
         {
-        case wxCOMPOSITION_CLEAR:
-            cop = kCGCompositeOperationClear;
-            break;
-        case wxCOMPOSITION_SOURCE:
-            cop = kCGCompositeOperationCopy;
-            break;
-        case wxCOMPOSITION_OVER:
-            mode = kCGBlendModeNormal;
-            break;
-        case wxCOMPOSITION_IN:
-            cop = kCGCompositeOperationSourceIn;
-            break;
-        case wxCOMPOSITION_OUT:
-            cop = kCGCompositeOperationSourceOut;
-            break;
-        case wxCOMPOSITION_ATOP:
-            cop = kCGCompositeOperationSourceAtop;
-            break;
-        case wxCOMPOSITION_DEST_OVER:
-            cop = kCGCompositeOperationDestinationOver;
-            break;
-        case wxCOMPOSITION_DEST_IN:
-            cop = kCGCompositeOperationDestinationIn;
-            break;
-        case wxCOMPOSITION_DEST_OUT:
-            cop = kCGCompositeOperationDestinationOut;
-            break;
-        case wxCOMPOSITION_DEST_ATOP:
-           cop = kCGCompositeOperationDestinationAtop;
-            break;
-        case wxCOMPOSITION_XOR:
-            cop = kCGCompositeOperationXOR;
-            break;
-        case wxCOMPOSITION_ADD:
-            mode = kCGBlendModePlusLighter ;
-            break;
-        default:
-            return false;
+            case wxCOMPOSITION_CLEAR:
+                cop = kCGCompositeOperationClear;
+                break;
+            case wxCOMPOSITION_SOURCE:
+                cop = kCGCompositeOperationCopy;
+                break;
+            case wxCOMPOSITION_OVER:
+                mode = kCGBlendModeNormal;
+                break;
+            case wxCOMPOSITION_IN:
+                cop = kCGCompositeOperationSourceIn;
+                break;
+            case wxCOMPOSITION_OUT:
+                cop = kCGCompositeOperationSourceOut;
+                break;
+            case wxCOMPOSITION_ATOP:
+                cop = kCGCompositeOperationSourceAtop;
+                break;
+            case wxCOMPOSITION_DEST_OVER:
+                cop = kCGCompositeOperationDestinationOver;
+                break;
+            case wxCOMPOSITION_DEST_IN:
+                cop = kCGCompositeOperationDestinationIn;
+                break;
+            case wxCOMPOSITION_DEST_OUT:
+                cop = kCGCompositeOperationDestinationOut;
+                break;
+            case wxCOMPOSITION_DEST_ATOP:
+                cop = kCGCompositeOperationDestinationAtop;
+                break;
+            case wxCOMPOSITION_XOR:
+                cop = kCGCompositeOperationXOR;
+                break;
+            case wxCOMPOSITION_ADD:
+                mode = kCGBlendModePlusLighter ;
+                break;
+            default:
+                return false;
         }
         if ( cop != kCGCompositeOperationSourceOver )
             CGContextSetCompositeOperation(m_cgContext, cop);
@@ -1800,50 +1832,47 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
         CGBlendMode mode = kCGBlendModeNormal;
         switch( op )
         {
-        case wxCOMPOSITION_CLEAR:
-            mode = kCGBlendModeClear;
-            break;
-        case wxCOMPOSITION_SOURCE:
-            mode = kCGBlendModeCopy;
-            break;
-        case wxCOMPOSITION_OVER:
-            mode = kCGBlendModeNormal;
-            break;
-        case wxCOMPOSITION_IN:
-            mode = kCGBlendModeSourceIn;
-            break;
-        case wxCOMPOSITION_OUT:
-            mode = kCGBlendModeSourceOut;
-            break;
-        case wxCOMPOSITION_ATOP:
-            mode = kCGBlendModeSourceAtop;
-            break;
-        case wxCOMPOSITION_DEST_OVER:
-            mode = kCGBlendModeDestinationOver;
-            break;
-        case wxCOMPOSITION_DEST_IN:
-            mode = kCGBlendModeDestinationIn;
-            break;
-        case wxCOMPOSITION_DEST_OUT:
-            mode = kCGBlendModeDestinationOut;
-            break;
-        case wxCOMPOSITION_DEST_ATOP:
-           mode = kCGBlendModeDestinationAtop;
-            break;
-        case wxCOMPOSITION_XOR:
-            mode = kCGBlendModeExclusion; // Not kCGBlendModeXOR!
-            break;
-
-        case wxCOMPOSITION_ADD:
-            mode = kCGBlendModePlusLighter ;
-            break;
-        default:
-            return false;
+            case wxCOMPOSITION_CLEAR:
+                mode = kCGBlendModeClear;
+                break;
+            case wxCOMPOSITION_SOURCE:
+                mode = kCGBlendModeCopy;
+                break;
+            case wxCOMPOSITION_OVER:
+                mode = kCGBlendModeNormal;
+                break;
+            case wxCOMPOSITION_IN:
+                mode = kCGBlendModeSourceIn;
+                break;
+            case wxCOMPOSITION_OUT:
+                mode = kCGBlendModeSourceOut;
+                break;
+            case wxCOMPOSITION_ATOP:
+                mode = kCGBlendModeSourceAtop;
+                break;
+            case wxCOMPOSITION_DEST_OVER:
+                mode = kCGBlendModeDestinationOver;
+                break;
+            case wxCOMPOSITION_DEST_IN:
+                mode = kCGBlendModeDestinationIn;
+                break;
+            case wxCOMPOSITION_DEST_OUT:
+                mode = kCGBlendModeDestinationOut;
+                break;
+            case wxCOMPOSITION_DEST_ATOP:
+                mode = kCGBlendModeDestinationAtop;
+                break;
+            case wxCOMPOSITION_XOR:
+                mode = kCGBlendModeExclusion; // Not kCGBlendModeXOR!
+                break;
+            case wxCOMPOSITION_ADD:
+                mode = kCGBlendModePlusLighter ;
+                break;
+            default:
+                return false;
         }
         CGContextSetBlendMode(m_cgContext, mode);
     }
-
-    CheckInvariants();
     return true;
 }
 
@@ -1939,6 +1968,12 @@ void wxMacCoreGraphicsContext::ResetClip()
         transformNew = CGAffineTransformInvert( transformNew ) ;
         CGContextConcatCTM( m_cgContext, transformNew);
         CGContextConcatCTM( m_cgContext, transform);
+        // Retain antialiasing mode
+        DoSetAntialiasMode(m_antialias);
+        // Retain interpolation quality
+        DoSetInterpolationQuality(m_interpolation);
+        // Retain composition mode
+        DoSetCompositionMode(m_composition);
     }
     else
     {
