@@ -651,7 +651,7 @@ void MyFrame::OnPrimaryColourSelect(wxRibbonGalleryEvent& evt)
 {
     wxString name;
     wxColour colour = GetGalleryColour(evt.GetGallery(), evt.GetGalleryItem(), &name);
-    AddText(wxString("Colour \"") + name + wxString("\" selected as primary."));
+    AddText("Colour \"" + name + "\" selected as primary.");
     wxColour secondary, tertiary;
     m_ribbon->GetArtProvider()->GetColourScheme(NULL, &secondary, &tertiary);
     m_ribbon->GetArtProvider()->SetColourScheme(colour, secondary, tertiary);

@@ -1211,33 +1211,24 @@ void FormMain::PopulateWithExamples ()
     //
     // wxEnumProperty does not store strings or even list of strings
     // ( so that's why they are static in function ).
-    static wxArrayString enum_prop_labels;
-    enum_prop_labels.push_back("One Item");
-    enum_prop_labels.push_back("Another Item");
-    enum_prop_labels.push_back("One More");
-    enum_prop_labels.push_back("This Is Last");
+    static const wxString enum_prop_labels[] = { wxT("One Item"),
+        wxT("Another Item"), wxT("One More"), wxT("This Is Last") };
 
     // this value array would be optional if values matched string indexes
-    static wxArrayInt enum_prop_values;
-    enum_prop_values.push_back(40);
-    enum_prop_values.push_back(80);
-    enum_prop_values.push_back(120);
-    enum_prop_values.push_back(160);
+    static long enum_prop_values[] = { 40, 80, 120, 160 };
 
     // note that the initial value (the last argument) is the actual value,
     // not index or anything like that. Thus, our value selects "Another Item".
-    //
-    // 0 before value is number of items. If it is 0, like in our example,
-    // number of items is calculated, and this requires that the string pointer
-    // array is terminated with NULL.
     pg->Append( new wxEnumProperty("EnumProperty",wxPG_LABEL,
-        enum_prop_labels, enum_prop_values, 80 ) );
+        wxArrayString(WXSIZEOF(enum_prop_labels), enum_prop_labels),
+        wxArrayInt(enum_prop_values, enum_prop_values+ WXSIZEOF(enum_prop_values)), 80 ) );
 
     wxPGChoices soc;
 
     // use basic table from our previous example
     // can also set/add wxArrayStrings and wxArrayInts directly.
-    soc.Set( enum_prop_labels, enum_prop_values );
+    soc.Set(wxArrayString(WXSIZEOF(enum_prop_labels), enum_prop_labels),
+            wxArrayInt(enum_prop_values, enum_prop_values + WXSIZEOF(enum_prop_values)));
 
     // add extra items
     soc.Add( "Look, it continues", 200 );
@@ -1865,74 +1856,80 @@ void FormMain::CreateGrid( int style, int extraStyle )
 
     InitPanel();
 
-    wxArrayString _fs_windowstyle_labels;
-    _fs_windowstyle_labels.push_back("wxSIMPLE_BORDER");
-    _fs_windowstyle_labels.push_back("wxDOUBLE_BORDER");
-    _fs_windowstyle_labels.push_back("wxSUNKEN_BORDER");
-    _fs_windowstyle_labels.push_back("wxRAISED_BORDER");
-    _fs_windowstyle_labels.push_back("wxNO_BORDER");
-    _fs_windowstyle_labels.push_back("wxTRANSPARENT_WINDOW");
-    _fs_windowstyle_labels.push_back("wxTAB_TRAVERSAL");
-    _fs_windowstyle_labels.push_back("wxWANTS_CHARS");
+    static const wxChar* _fs_windowstyle_labels[] = {
+        wxT("wxSIMPLE_BORDER"),
+        wxT("wxDOUBLE_BORDER"),
+        wxT("wxSUNKEN_BORDER"),
+        wxT("wxRAISED_BORDER"),
+        wxT("wxNO_BORDER"),
+        wxT("wxTRANSPARENT_WINDOW"),
+        wxT("wxTAB_TRAVERSAL"),
+        wxT("wxWANTS_CHARS"),
     #if wxNO_FULL_REPAINT_ON_RESIZE
-    _fs_windowstyle_labels.push_back("wxNO_FULL_REPAINT_ON_RESIZE");
+        wxT("wxNO_FULL_REPAINT_ON_RESIZE"),
     #endif
-    _fs_windowstyle_labels.push_back("wxVSCROLL");
-    _fs_windowstyle_labels.push_back("wxALWAYS_SHOW_SB");
-    _fs_windowstyle_labels.push_back("wxCLIP_CHILDREN");
+        wxT("wxVSCROLL"),
+        wxT("wxALWAYS_SHOW_SB"),
+        wxT("wxCLIP_CHILDREN"),
     #if wxFULL_REPAINT_ON_RESIZE
-    _fs_windowstyle_labels.push_back("wxFULL_REPAINT_ON_RESIZE");
+        wxT("wxFULL_REPAINT_ON_RESIZE"),
     #endif
+        };
 
-    static wxArrayInt _fs_windowstyle_values;
-    _fs_windowstyle_values.push_back(wxSIMPLE_BORDER);
-    _fs_windowstyle_values.push_back(wxDOUBLE_BORDER);
-    _fs_windowstyle_values.push_back(wxSUNKEN_BORDER);
-    _fs_windowstyle_values.push_back(wxRAISED_BORDER);
-    _fs_windowstyle_values.push_back(wxNO_BORDER);
-    _fs_windowstyle_values.push_back(wxTRANSPARENT_WINDOW);
-    _fs_windowstyle_values.push_back(wxTAB_TRAVERSAL);
-    _fs_windowstyle_values.push_back(wxWANTS_CHARS);
-#if wxNO_FULL_REPAINT_ON_RESIZE
-    _fs_windowstyle_values.push_back(wxNO_FULL_REPAINT_ON_RESIZE);
-#endif
-    _fs_windowstyle_values.push_back(wxVSCROLL);
-    _fs_windowstyle_values.push_back(wxALWAYS_SHOW_SB);
-    _fs_windowstyle_values.push_back(wxCLIP_CHILDREN);
-#if wxFULL_REPAINT_ON_RESIZE
-    _fs_windowstyle_values.push_back(wxFULL_REPAINT_ON_RESIZE);
-#endif
+    static const long _fs_windowstyle_values[] = {
+        wxSIMPLE_BORDER,
+        wxDOUBLE_BORDER,
+        wxSUNKEN_BORDER,
+        wxRAISED_BORDER,
+        wxNO_BORDER,
+        wxTRANSPARENT_WINDOW,
+        wxTAB_TRAVERSAL,
+        wxWANTS_CHARS,
+    #if wxNO_FULL_REPAINT_ON_RESIZE
+        wxNO_FULL_REPAINT_ON_RESIZE,
+    #endif
+        wxVSCROLL,
+        wxALWAYS_SHOW_SB,
+        wxCLIP_CHILDREN,
+    #if wxFULL_REPAINT_ON_RESIZE
+        wxFULL_REPAINT_ON_RESIZE
+    #endif
+    };
 
-    static wxArrayString _fs_framestyle_labels;
-    _fs_framestyle_labels.push_back("wxCAPTION"),
-    _fs_framestyle_labels.push_back("wxMINIMIZE"),
-    _fs_framestyle_labels.push_back("wxMAXIMIZE"),
-    _fs_framestyle_labels.push_back("wxCLOSE_BOX"),
-    _fs_framestyle_labels.push_back("wxSTAY_ON_TOP"),
-    _fs_framestyle_labels.push_back("wxSYSTEM_MENU"),
-    _fs_framestyle_labels.push_back("wxRESIZE_BORDER"),
-    _fs_framestyle_labels.push_back("wxFRAME_TOOL_WINDOW"),
-    _fs_framestyle_labels.push_back("wxFRAME_NO_TASKBAR"),
-    _fs_framestyle_labels.push_back("wxFRAME_FLOAT_ON_PARENT"),
-    _fs_framestyle_labels.push_back("wxFRAME_SHAPED");
+    static const wxString _fs_framestyle_labels[] = {
+        wxT("wxCAPTION"),
+        wxT("wxMINIMIZE"),
+        wxT("wxMAXIMIZE"),
+        wxT("wxCLOSE_BOX"),
+        wxT("wxSTAY_ON_TOP"),
+        wxT("wxSYSTEM_MENU"),
+        wxT("wxRESIZE_BORDER"),
+        wxT("wxFRAME_TOOL_WINDOW"),
+        wxT("wxFRAME_NO_TASKBAR"),
+        wxT("wxFRAME_FLOAT_ON_PARENT"),
+        wxT("wxFRAME_SHAPED")
+    };
 
-    static wxArrayInt _fs_framestyle_values;
-    _fs_framestyle_values.push_back(wxCAPTION);
-    _fs_framestyle_values.push_back(wxMINIMIZE);
-    _fs_framestyle_values.push_back(wxMAXIMIZE);
-    _fs_framestyle_values.push_back(wxCLOSE_BOX);
-    _fs_framestyle_values.push_back(wxSTAY_ON_TOP);
-    _fs_framestyle_values.push_back(wxSYSTEM_MENU);
-    _fs_framestyle_values.push_back(wxRESIZE_BORDER);
-    _fs_framestyle_values.push_back(wxFRAME_TOOL_WINDOW);
-    _fs_framestyle_values.push_back(wxFRAME_NO_TASKBAR);
-    _fs_framestyle_values.push_back(wxFRAME_FLOAT_ON_PARENT);
-    _fs_framestyle_values.push_back(wxFRAME_SHAPED);
+    static const long _fs_framestyle_values[] = {
+        wxCAPTION,
+        wxMINIMIZE,
+        wxMAXIMIZE,
+        wxCLOSE_BOX,
+        wxSTAY_ON_TOP,
+        wxSYSTEM_MENU,
+        wxRESIZE_BORDER,
+        wxFRAME_TOOL_WINDOW,
+        wxFRAME_NO_TASKBAR,
+        wxFRAME_FLOAT_ON_PARENT,
+        wxFRAME_SHAPED
+    };
 
     //
     // This shows how to combine two static choice descriptors
-    m_combinedFlags.Add( _fs_windowstyle_labels, _fs_windowstyle_values );
-    m_combinedFlags.Add( _fs_framestyle_labels, _fs_framestyle_values );
+    m_combinedFlags.Add(wxArrayString(WXSIZEOF(_fs_windowstyle_labels), _fs_windowstyle_labels),
+        wxArrayInt(_fs_windowstyle_values, _fs_windowstyle_values+WXSIZEOF(_fs_windowstyle_values)) );
+    m_combinedFlags.Add(wxArrayString(WXSIZEOF(_fs_framestyle_labels), _fs_framestyle_labels),
+        wxArrayInt(_fs_framestyle_values, _fs_framestyle_values+ WXSIZEOF(_fs_framestyle_values)) );
 
     wxPropertyGridManager* pgman = m_pPropGridManager =
         new wxPropertyGridManager(m_panel,
