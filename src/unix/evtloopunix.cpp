@@ -20,8 +20,6 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#if wxUSE_CONSOLE_EVENTLOOP
-
 #include "wx/evtloop.h"
 
 #ifndef WX_PRECOMP
@@ -52,6 +50,8 @@
 //-----------------------------------------------------------------------------
 // initialization
 //-----------------------------------------------------------------------------
+
+#if wxUSE_CONSOLE_EVENTLOOP
 
 wxConsoleEventLoop::wxConsoleEventLoop()
 {
@@ -97,6 +97,8 @@ wxConsoleEventLoop::~wxConsoleEventLoop()
         delete m_wakeupPipe;
     }
 }
+
+#endif // wxUSE_CONSOLE_EVENTLOOP
 
 //-----------------------------------------------------------------------------
 // adding & removing sources
@@ -152,6 +154,8 @@ wxUnixEventLoopSource::~wxUnixEventLoopSource()
 //-----------------------------------------------------------------------------
 // events dispatch and loop handling
 //-----------------------------------------------------------------------------
+
+#if wxUSE_CONSOLE_EVENTLOOP
 
 bool wxConsoleEventLoop::Pending() const
 {
