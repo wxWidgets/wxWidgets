@@ -286,16 +286,16 @@ void ButtonWidgetsPage::CreateContent()
     // should be in sync with enums Button[HV]Align!
     static const wxString halign[] =
     {
-        wxT("left"),
-        wxT("centre"),
-        wxT("right"),
+        "left",
+        "centre",
+        "right",
     };
 
     static const wxString valign[] =
     {
-        wxT("top"),
-        wxT("centre"),
-        wxT("bottom"),
+        "top",
+        "centre",
+        "bottom",
     };
 
     m_radioHAlign = new wxRadioBox(this, wxID_ANY, "&Horz alignment",

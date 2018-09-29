@@ -304,9 +304,9 @@ void BitmapComboBoxWidgetsPage::CreateContent()
     // should be in sync with ComboKind_XXX values
     static const wxString kinds[] =
     {
-        wxT("default"),
-        wxT("simple"),
-        wxT("drop down"),
+        "default",
+        "simple",
+        "drop down",
     };
 
     m_radioKind = new wxRadioBox(this, wxID_ANY, "Combobox &kind:",

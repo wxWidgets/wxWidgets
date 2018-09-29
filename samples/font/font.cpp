@@ -1088,10 +1088,10 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
         {
             // found!
             const wxChar *pc = line.c_str() + len;
-            if ( *pc == wxT('"') )
+            if ( *pc == '"')
                 pc++;
 
-            while ( *pc && *pc != wxT('"') )
+            while ( *pc && *pc != '"')
             {
                 charset += *pc++;
             }

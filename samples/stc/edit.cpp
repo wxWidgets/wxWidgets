@@ -567,10 +567,10 @@ bool Edit::InitializePrefs (const wxString &name) {
                             .Family(wxFONTFAMILY_MODERN)
                             .FaceName(curType.fontname));
             StyleSetFont (Nr, font);
-            if (curType.foreground) {
+            if (curType.foreground.length()) {
                 StyleSetForeground (Nr, wxColour (curType.foreground));
             }
-            if (curType.background) {
+            if (curType.background.length()) {
                 StyleSetBackground (Nr, wxColour (curType.background));
             }
             StyleSetBold (Nr, (curType.fontstyle & mySTC_STYLE_BOLD) > 0);
@@ -836,7 +836,7 @@ EditProperties::EditProperties (Edit *edit,
 // EditPrint
 //----------------------------------------------------------------------------
 
-EditPrint::EditPrint (Edit *edit, const wxChar *title)
+EditPrint::EditPrint (Edit *edit, const wxString& title)
               : wxPrintout(title)
               , m_edit(edit)
 {

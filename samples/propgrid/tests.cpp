@@ -236,7 +236,7 @@ protected:
 
 
 #define RT_START_TEST(TESTNAME) \
-    TestRunner tr(wxT(#TESTNAME), pgman, ed, &errorMessages);
+    TestRunner tr(#TESTNAME, pgman, ed, &errorMessages);
 
 #define RT_MSG(S) \
     tr.Msg(S);
@@ -580,7 +580,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             {
                 wxVariant& v = values[j];
 
-                t.Printf(wxT("%i: name=\"%s\"  type=\"%s\"\n"),(int)j,
+                t.Printf("%i: name=\"%s\"  type=\"%s\"\n",(int)j,
                     v.GetName().c_str(),v.GetType().c_str());
 
                 text += t;

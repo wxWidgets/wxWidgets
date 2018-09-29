@@ -631,7 +631,7 @@ public:
                          size_t WXUNUSED(len), const void *buf) wxOVERRIDE
     {
         wxCHECK_MSG( format == m_formatShape, false,
-                     wxT( "unsupported format") );
+                     "unsupported format");
 
         delete m_shape;
         m_shape = DnDShape::New(buf);

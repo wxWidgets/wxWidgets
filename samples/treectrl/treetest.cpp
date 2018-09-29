@@ -1298,12 +1298,12 @@ void MyTreeCtrl::DoResetBrokenStateImages(const wxTreeItemId& idParent,
     DoResetBrokenStateImages(idParent, cookie, state);
 }
 
-void MyTreeCtrl::LogEvent(const wxChar *name, const wxTreeEvent& event)
+void MyTreeCtrl::LogEvent(const wxString& name, const wxTreeEvent& event)
 {
     wxTreeItemId item = event.GetItem();
     wxString text;
     if ( item.IsOk() )
-        text << wxT('"') << GetItemText(item).c_str() << wxT('"');
+        text << '"' << GetItemText(item).c_str() << '"';
     else
         text = "invalid item";
     wxLogMessage("%s(%s)", name, text.c_str());
@@ -1313,7 +1313,7 @@ void MyTreeCtrl::LogEvent(const wxChar *name, const wxTreeEvent& event)
 #define TREE_EVENT_HANDLER(name)                                 \
 void MyTreeCtrl::name(wxTreeEvent& event)                        \
 {                                                                \
-    LogEvent(wxT(#name), event);                                  \
+    LogEvent(#name, event);                                  \
     event.Skip();                                                \
 }
 

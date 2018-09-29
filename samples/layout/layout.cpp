@@ -441,15 +441,18 @@ MySizerDialog::MySizerDialog(wxWindow *parent, const wxString &title)
 // ----------------------------------------------------------------------------
 
 // some simple macros to help make the sample code below more clear
-#define TEXTCTRL(text)   new wxTextCtrl(p, wxID_ANY, wxT(text))
-#define MLTEXTCTRL(text) new wxTextCtrl(p, wxID_ANY, wxT(text), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE)
+#define TEXTCTRL(text)   new wxTextCtrl(p, wxID_ANY, text)
+#define MLTEXTCTRL(text) new wxTextCtrl(p, wxID_ANY, text, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE)
 #define POS(r, c)        wxGBPosition(r,c)
 #define SPAN(r, c)       wxGBSpan(r,c)
 
-const wxChar gbsDescription[] =wxT("\
-The wxGridBagSizer is similar to the wxFlexGridSizer except the items are explicitly positioned\n\
-in a virtual cell of the layout grid, and column or row spanning is allowed.  For example, this\n\
-static text is positioned at (0,0) and it spans 7 columns.");
+wxString GetGbsDescription()
+{
+    return "\
+    The wxGridBagSizer is similar to the wxFlexGridSizer except the items are explicitly positioned\n\
+    in a virtual cell of the layout grid, and column or row spanning is allowed.  For example, this\n\
+    static text is positioned at (0,0) and it spans 7 columns.";
+}
 
 
 // Some IDs
@@ -479,7 +482,7 @@ MyGridBagSizerFrame::MyGridBagSizerFrame(wxFrame* parent)
     m_gbs = new wxGridBagSizer();
 
 
-    m_gbs->Add( new wxStaticText(p, wxID_ANY, gbsDescription),
+    m_gbs->Add( new wxStaticText(p, wxID_ANY, GetGbsDescription()),
                 POS(0,0), SPAN(1, 7),
                 wxALIGN_CENTER | wxALL, 5);
 

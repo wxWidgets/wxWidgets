@@ -70,7 +70,7 @@ wxPanel *CreateUserCreatedPage(wxBookCtrlBase *parent)
     wxPanel *panel = new wxPanel(parent);
 
 #if wxUSE_HELP
-    panel->SetHelpText( wxT( "Panel with a Button" ) );
+    panel->SetHelpText("Panel with a Button");
 #endif
 
     (void) new wxButton( panel, wxID_ANY, "Button",
@@ -84,7 +84,7 @@ wxPanel *CreateRadioButtonsPage(wxBookCtrlBase *parent)
     wxPanel *panel = new wxPanel(parent);
 
 #if wxUSE_HELP
-    panel->SetHelpText( wxT( "Panel with some Radio Buttons" ) );
+    panel->SetHelpText("Panel with some Radio Buttons");
 #endif
 
     wxString animals[] =
@@ -115,7 +115,7 @@ wxPanel *CreateVetoPage(wxBookCtrlBase *parent)
     wxPanel *panel = new wxPanel(parent);
 
 #if wxUSE_HELP
-    panel->SetHelpText( wxT( "An empty panel" ) );
+    panel->SetHelpText("An empty panel");
 #endif
 
     (void) new wxStaticText( panel, wxID_ANY,
@@ -130,7 +130,7 @@ wxPanel *CreateBigButtonPage(wxBookCtrlBase *parent)
     wxPanel *panel = new wxPanel(parent);
 
 #if wxUSE_HELP
-    panel->SetHelpText( wxT( "Panel with a maximized button" ) );
+    panel->SetHelpText("Panel with a maximized button");
 #endif
 
     wxButton *buttonBig = new wxButton(panel, wxID_ANY, "Maximized button");
@@ -147,7 +147,7 @@ wxPanel *CreateInsertPage(wxBookCtrlBase *parent)
     wxPanel *panel = new wxPanel(parent);
 
 #if wxUSE_HELP
-    panel->SetHelpText( wxT( "Maroon panel" ) );
+    panel->SetHelpText("Maroon panel");
 #endif
 
     panel->SetBackgroundColour( wxColour( "MAROON" ) );
@@ -642,7 +642,7 @@ wxPanel *MyFrame::CreateNewPage() const
     wxPanel *panel = new wxPanel(m_bookCtrl, wxID_ANY );
 
 #if wxUSE_HELP
-    panel->SetHelpText( wxT( "Panel with \"First\" and \"Second\" buttons" ) );
+    panel->SetHelpText("Panel with \"First\" and \"Second\" buttons");
 #endif
 
     (void) new wxButton(panel, wxID_ANY, "First button", wxPoint(10, 30));

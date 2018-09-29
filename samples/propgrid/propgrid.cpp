@@ -1211,8 +1211,8 @@ void FormMain::PopulateWithExamples ()
     //
     // wxEnumProperty does not store strings or even list of strings
     // ( so that's why they are static in function ).
-    static const wxString enum_prop_labels[] = { wxT("One Item"),
-        wxT("Another Item"), wxT("One More"), wxT("This Is Last") };
+    static const wxString enum_prop_labels[] = { "One Item",
+        "Another Item", "One More", "This Is Last" };
 
     // this value array would be optional if values matched string indexes
     static long enum_prop_values[] = { 40, 80, 120, 160 };
@@ -1856,23 +1856,23 @@ void FormMain::CreateGrid( int style, int extraStyle )
 
     InitPanel();
 
-    static const wxChar* _fs_windowstyle_labels[] = {
-        wxT("wxSIMPLE_BORDER"),
-        wxT("wxDOUBLE_BORDER"),
-        wxT("wxSUNKEN_BORDER"),
-        wxT("wxRAISED_BORDER"),
-        wxT("wxNO_BORDER"),
-        wxT("wxTRANSPARENT_WINDOW"),
-        wxT("wxTAB_TRAVERSAL"),
-        wxT("wxWANTS_CHARS"),
+    static const wxString _fs_windowstyle_labels[] = {
+        "wxSIMPLE_BORDER",
+        "wxDOUBLE_BORDER",
+        "wxSUNKEN_BORDER",
+        "wxRAISED_BORDER",
+        "wxNO_BORDER",
+        "wxTRANSPARENT_WINDOW",
+        "wxTAB_TRAVERSAL",
+        "wxWANTS_CHARS",
     #if wxNO_FULL_REPAINT_ON_RESIZE
-        wxT("wxNO_FULL_REPAINT_ON_RESIZE"),
+        "wxNO_FULL_REPAINT_ON_RESIZE",
     #endif
-        wxT("wxVSCROLL"),
-        wxT("wxALWAYS_SHOW_SB"),
-        wxT("wxCLIP_CHILDREN"),
+        "wxVSCROLL",
+        "wxALWAYS_SHOW_SB",
+        "wxCLIP_CHILDREN",
     #if wxFULL_REPAINT_ON_RESIZE
-        wxT("wxFULL_REPAINT_ON_RESIZE"),
+        "wxFULL_REPAINT_ON_RESIZE",
     #endif
         };
 
@@ -1897,17 +1897,17 @@ void FormMain::CreateGrid( int style, int extraStyle )
     };
 
     static const wxString _fs_framestyle_labels[] = {
-        wxT("wxCAPTION"),
-        wxT("wxMINIMIZE"),
-        wxT("wxMAXIMIZE"),
-        wxT("wxCLOSE_BOX"),
-        wxT("wxSTAY_ON_TOP"),
-        wxT("wxSYSTEM_MENU"),
-        wxT("wxRESIZE_BORDER"),
-        wxT("wxFRAME_TOOL_WINDOW"),
-        wxT("wxFRAME_NO_TASKBAR"),
-        wxT("wxFRAME_FLOAT_ON_PARENT"),
-        wxT("wxFRAME_SHAPED")
+        "wxCAPTION",
+        "wxMINIMIZE",
+        "wxMAXIMIZE",
+        "wxCLOSE_BOX",
+        "wxSTAY_ON_TOP",
+        "wxSYSTEM_MENU",
+        "wxRESIZE_BORDER",
+        "wxFRAME_TOOL_WINDOW",
+        "wxFRAME_NO_TASKBAR",
+        "wxFRAME_FLOAT_ON_PARENT",
+        "wxFRAME_SHAPED"
     };
 
     static const long _fs_framestyle_values[] = {

@@ -357,22 +357,22 @@ bool WidgetsApp::OnInit()
     // this sample side by side and it is useful to see which one is which
     wxString title;
 #if defined(__WXUNIVERSAL__)
-    title = wxT("wxUniv/");
+    title = "wxUniv/";
 #endif
 
 #if defined(__WXMSW__)
-    title += wxT("wxMSW");
+    title += "wxMSW";
 #elif defined(__WXGTK__)
-    title += wxT("wxGTK");
+    title += "wxGTK";
 #elif defined(__WXMAC__)
-    title += wxT("wxMAC");
+    title += "wxMAC";
 #elif defined(__WXMOTIF__)
-    title += wxT("wxMOTIF");
+    title += "wxMOTIF";
 #else
-    title += wxT("wxWidgets");
+    title += "wxWidgets";
 #endif
 
-    wxFrame *frame = new WidgetsFrame(title + wxT(" widgets demo"));
+    wxFrame *frame = new WidgetsFrame(title + " widgets demo");
     frame->Show();
 
     return true;
@@ -400,25 +400,25 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     wxMenuBar *mbar = new wxMenuBar;
     wxMenu *menuWidget = new wxMenu;
 #if wxUSE_TOOLTIPS
-    menuWidget->Append(Widgets_SetTooltip, wxT("Set &tooltip...\tCtrl-T"));
+    menuWidget->Append(Widgets_SetTooltip, "Set &tooltip...\tCtrl-T");
     menuWidget->AppendSeparator();
 #endif // wxUSE_TOOLTIPS
-    menuWidget->Append(Widgets_SetFgColour, wxT("Set &foreground...\tCtrl-F"));
-    menuWidget->Append(Widgets_SetBgColour, wxT("Set &background...\tCtrl-B"));
-    menuWidget->Append(Widgets_SetPageBg,   wxT("Set &page background...\tShift-Ctrl-B"));
-    menuWidget->Append(Widgets_SetFont,     wxT("Set f&ont...\tCtrl-O"));
-    menuWidget->AppendCheckItem(Widgets_Enable,  wxT("&Enable/disable\tCtrl-E"));
-    menuWidget->AppendCheckItem(Widgets_Show, wxT("Show/Hide"));
+    menuWidget->Append(Widgets_SetFgColour, "Set &foreground...\tCtrl-F");
+    menuWidget->Append(Widgets_SetBgColour, "Set &background...\tCtrl-B");
+    menuWidget->Append(Widgets_SetPageBg,   "Set &page background...\tShift-Ctrl-B");
+    menuWidget->Append(Widgets_SetFont,     "Set f&ont...\tCtrl-O");
+    menuWidget->AppendCheckItem(Widgets_Enable,  "&Enable/disable\tCtrl-E");
+    menuWidget->AppendCheckItem(Widgets_Show, "Show/Hide");
 
     wxMenu *menuBorders = new wxMenu;
-    menuBorders->AppendRadioItem(Widgets_BorderDefault, wxT("De&fault\tCtrl-Shift-9"));
-    menuBorders->AppendRadioItem(Widgets_BorderNone,   wxT("&None\tCtrl-Shift-0"));
-    menuBorders->AppendRadioItem(Widgets_BorderSimple, wxT("&Simple\tCtrl-Shift-1"));
-    menuBorders->AppendRadioItem(Widgets_BorderDouble, wxT("&Double\tCtrl-Shift-2"));
-    menuBorders->AppendRadioItem(Widgets_BorderStatic, wxT("Stati&c\tCtrl-Shift-3"));
-    menuBorders->AppendRadioItem(Widgets_BorderRaised, wxT("&Raised\tCtrl-Shift-4"));
-    menuBorders->AppendRadioItem(Widgets_BorderSunken, wxT("S&unken\tCtrl-Shift-5"));
-    menuWidget->AppendSubMenu(menuBorders, wxT("Set &border"));
+    menuBorders->AppendRadioItem(Widgets_BorderDefault, "De&fault\tCtrl-Shift-9");
+    menuBorders->AppendRadioItem(Widgets_BorderNone,   "&None\tCtrl-Shift-0");
+    menuBorders->AppendRadioItem(Widgets_BorderSimple, "&Simple\tCtrl-Shift-1");
+    menuBorders->AppendRadioItem(Widgets_BorderDouble, "&Double\tCtrl-Shift-2");
+    menuBorders->AppendRadioItem(Widgets_BorderStatic, "Stati&c\tCtrl-Shift-3");
+    menuBorders->AppendRadioItem(Widgets_BorderRaised, "&Raised\tCtrl-Shift-4");
+    menuBorders->AppendRadioItem(Widgets_BorderSunken, "S&unken\tCtrl-Shift-5");
+    menuWidget->AppendSubMenu(menuBorders, "Set &border");
 
     wxMenu* const menuVariants = new wxMenu;
     menuVariants->AppendRadioItem(Widgets_VariantMini, "&Mini\tCtrl-Shift-6");
@@ -433,31 +433,31 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
     menuWidget->AppendSeparator();
     menuWidget->AppendCheckItem(Widgets_GlobalBusyCursor,
-                                wxT("Toggle &global busy cursor\tCtrl-Shift-U"));
+                                "Toggle &global busy cursor\tCtrl-Shift-U");
     menuWidget->AppendCheckItem(Widgets_BusyCursor,
-                                wxT("Toggle b&usy cursor\tCtrl-U"));
+                                "Toggle b&usy cursor\tCtrl-U");
 
     menuWidget->AppendSeparator();
-    menuWidget->Append(wxID_EXIT, wxT("&Quit\tCtrl-Q"));
-    mbar->Append(menuWidget, wxT("&Widget"));
+    menuWidget->Append(wxID_EXIT, "&Quit\tCtrl-Q");
+    mbar->Append(menuWidget, "&Widget");
 
     wxMenu *menuTextEntry = new wxMenu;
     menuTextEntry->AppendRadioItem(TextEntry_DisableAutoComplete,
-                                   wxT("&Disable auto-completion"));
+                                   "&Disable auto-completion");
     menuTextEntry->AppendRadioItem(TextEntry_AutoCompleteFixed,
-                                   wxT("Fixed-&list auto-completion"));
+                                   "Fixed-&list auto-completion");
     menuTextEntry->AppendRadioItem(TextEntry_AutoCompleteFilenames,
-                                   wxT("&Files names auto-completion"));
+                                   "&Files names auto-completion");
     menuTextEntry->AppendRadioItem(TextEntry_AutoCompleteDirectories,
-                                   wxT("&Directories names auto-completion"));
+                                   "&Directories names auto-completion");
     menuTextEntry->AppendRadioItem(TextEntry_AutoCompleteCustom,
-                                   wxT("&Custom auto-completion"));
+                                   "&Custom auto-completion");
     menuTextEntry->AppendRadioItem(TextEntry_AutoCompleteKeyLength,
-                                   wxT("Custom with &min length"));
+                                   "Custom with &min length");
     menuTextEntry->AppendSeparator();
     menuTextEntry->Append(TextEntry_SetHint, "Set help &hint");
 
-    mbar->Append(menuTextEntry, wxT("&Text"));
+    mbar->Append(menuTextEntry, "&Text");
 
     SetMenuBar(mbar);
 
@@ -488,7 +488,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     // the lower one only has the log listbox and a button to clear it
 #if USE_LOG
     wxSizer *sizerDown = new wxStaticBoxSizer(
-        new wxStaticBox( m_panel, wxID_ANY, wxT("&Log window") ),
+        new wxStaticBox( m_panel, wxID_ANY, "&Log window" ),
         wxVERTICAL);
 
     m_lboxLog = new wxListBox(m_panel, wxID_ANY);
@@ -501,11 +501,11 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
     wxBoxSizer *sizerBtns = new wxBoxSizer(wxHORIZONTAL);
     wxButton *btn;
 #if USE_LOG
-    btn = new wxButton(m_panel, Widgets_ClearLog, wxT("Clear &log"));
+    btn = new wxButton(m_panel, Widgets_ClearLog, "Clear &log");
     sizerBtns->Add(btn);
     sizerBtns->Add(10, 0); // spacer
 #endif // USE_LOG
-    btn = new wxButton(m_panel, Widgets_Quit, wxT("E&xit"));
+    btn = new wxButton(m_panel, Widgets_Quit, "E&xit");
     sizerBtns->Add(btn);
     sizerDown->Add(sizerBtns, 0, wxALL | wxALIGN_RIGHT, 5);
 
@@ -601,7 +601,7 @@ void WidgetsFrame::InitBook()
         }
     }
 
-    GetMenuBar()->Append(menuPages, wxT("&Page"));
+    GetMenuBar()->Append(menuPages, "&Page");
 
     m_book->AssignImageList(imageList);
 
@@ -664,7 +664,7 @@ WidgetsPage *WidgetsFrame::CurrentPage()
 
 #if !USE_TREEBOOK
     WidgetsBookCtrl *subBook = wxStaticCast(page, WidgetsBookCtrl);
-    wxCHECK_MSG( subBook, NULL, wxT("no WidgetsBookCtrl?") );
+    wxCHECK_MSG( subBook, NULL, "no WidgetsBookCtrl?" );
 
     page = subBook->GetCurrentPage();
 #endif // !USE_TREEBOOK
@@ -771,8 +771,8 @@ void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
     wxTextEntryDialog dialog
                       (
                         this,
-                        wxT("Tooltip text (may use \\n, leave empty to remove): "),
-                        wxT("Widgets sample"),
+                        "Tooltip text (may use \\n, leave empty to remove): ",
+                        "Widgets sample",
                         WidgetsPage::GetAttrs().m_tooltip
                       );
 
@@ -780,7 +780,7 @@ void WidgetsFrame::OnSetTooltip(wxCommandEvent& WXUNUSED(event))
         return;
 
     WidgetsPage::GetAttrs().m_tooltip = dialog.GetValue();
-    WidgetsPage::GetAttrs().m_tooltip.Replace(wxT("\\n"), wxT("\n"));
+    WidgetsPage::GetAttrs().m_tooltip.Replace("\\n", "\n");
 
     CurrentPage()->SetUpWidget();
 }
@@ -870,7 +870,7 @@ void WidgetsFrame::OnSetFont(wxCommandEvent& WXUNUSED(event))
     // so re-layout to show it correctly.
     page->Layout();
 #else
-    wxLogMessage(wxT("Font selection dialog not available in current build."));
+    wxLogMessage("Font selection dialog not available in current build.");
 #endif
 }
 
@@ -901,7 +901,7 @@ void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
         case Widgets_BorderDouble: border = wxBORDER_DOUBLE; break;
 
         default:
-            wxFAIL_MSG( wxT("unknown border style") );
+            wxFAIL_MSG( "unknown border style" );
             // fall through
 
         case Widgets_BorderDefault: border = wxBORDER_DEFAULT; break;
