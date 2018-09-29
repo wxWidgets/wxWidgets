@@ -45,7 +45,7 @@
 #endif
 
 // used as title for several dialog boxes
-static wxString SAMPLE_TITLE()
+static wxString GetSampleTitle()
 {
     return "wxWidgets Font Sample";
 }
@@ -659,7 +659,7 @@ bool MyFrame::DoEnumerateFamilies(bool fixedWidthOnly,
             n = wxGetSingleChoiceIndex
                 (
                     "Choose a facename",
-                    SAMPLE_TITLE(),
+                    GetSampleTitle(),
                     nFacenames,
                     facenames,
                     this
@@ -713,7 +713,7 @@ void MyFrame::OnSetNativeDesc(wxCommandEvent& WXUNUSED(event))
     font.SetNativeFontInfo(fontInfo);
     if ( !font.IsOk() )
     {
-        wxLogError(wxT("Font info string \"%s\" is invalid."),
+        wxLogError("Font info string \"%s\" is invalid.",
                    fontInfo.c_str());
         return;
     }
@@ -807,7 +807,7 @@ wxFontEncoding MyFrame::GetEncodingFromUser()
     int i = wxGetSingleChoiceIndex
             (
                 "Choose the encoding",
-                SAMPLE_TITLE(),
+                GetSampleTitle(),
                 names,
                 this
             );
@@ -837,7 +837,7 @@ wxFontFamily MyFrame::GetFamilyFromUser()
     int i = wxGetSingleChoiceIndex
             (
                 "Choose the family",
-                SAMPLE_TITLE(),
+                GetSampleTitle(),
                 names,
                 this
             );
@@ -1088,10 +1088,10 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
         {
             // found!
             const wxChar *pc = line.c_str() + len;
-            if ( *pc == wxT('"') )
+            if ( *pc == '"')
                 pc++;
 
-            while ( *pc && *pc != wxT('"') )
+            while ( *pc && *pc != '"')
             {
                 charset += *pc++;
             }
@@ -1165,7 +1165,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox("wxWidgets font sample\n"
                  "(c) 1999-2006 Vadim Zeitlin",
-                 wxString("About ") + SAMPLE_TITLE(),
+                 wxString("About ") + GetSampleTitle(),
                  wxOK | wxICON_INFORMATION, this);
 }
 

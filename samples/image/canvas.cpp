@@ -153,7 +153,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 #if wxUSE_GIF
     image.Destroy();
 
-    if ( !image.LoadFile( dir + wxT("horse.gif" )) )
+    if ( !image.LoadFile( dir + "horse.gif" ) )
     {
         wxLogError("Can't load GIF image");
     }

@@ -1850,13 +1850,12 @@ void BugsGridTable::SetValueAsBool( int row, int col, bool value )
 
 wxString BugsGridTable::GetColLabelValue( int col )
 {
-    static wxArrayString headers;
-    headers.push_back("Id");
-    headers.push_back("Summary");
-    headers.push_back("Severity");
-    headers.push_back("Priority");
-    headers.push_back("Platform");
-    headers.push_back("Opened?");
+    static const wxString headers[] = { "Id",
+        "Summary",
+        "Severity",
+        "Priority",
+        "Platform",
+        "Opened?" };
     return headers[col];
 }
 

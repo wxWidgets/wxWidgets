@@ -631,7 +631,7 @@ public:
                          size_t WXUNUSED(len), const void *buf) wxOVERRIDE
     {
         wxCHECK_MSG( format == m_formatShape, false,
-                     wxT( "unsupported format") );
+                     "unsupported format");
 
         delete m_shape;
         m_shape = DnDShape::New(buf);
@@ -1150,7 +1150,7 @@ void DnDFrame::OnDragMoveAllow(wxCommandEvent& event)
 void DnDFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox("Drag-&-Drop Demo\n"
-                 wxT("Please see \"Help|Help...\" for details\n")
+                 "Please see \"Help|Help...\" for details\n"
                  "Copyright (c) 1998 Vadim Zeitlin",
                  "About wxDnD",
                  wxICON_INFORMATION | wxOK,
@@ -1175,11 +1175,11 @@ void DnDFrame::OnHelp(wxCommandEvent& /* event */)
                            "it to wordpad or any other droptarget accepting text (and of course you can just drag it\n"
                            "to the right pane). Due to a lot of trace messages, the cursor might take some time to \n"
                            "change, don't release the mouse button until it does. You can change the string being\n"
-                           wxT("dragged in \"File|Test drag...\" dialog.\n")
+                           "dragged in \"File|Test drag...\" dialog.\n"
                            "\n"
                            "\n"
                            "Please send all questions/bug reports/suggestions &c to \n"
-                           wxT("Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>"),
+                           "Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>",
                            "wxDnD Help");
 
     dialog.ShowModal();
@@ -1199,18 +1199,18 @@ void DnDFrame::OnLogClear(wxCommandEvent& /* event */ )
 void DnDFrame::LogDragResult(wxDragResult result)
 {
 #if wxUSE_STATUSBAR
-    wxString pc;
+    wxString msg;
     switch ( result )
     {
-        case wxDragError:   pc = "Error!";    break;
-        case wxDragNone:    pc = "Nothing";   break;
-        case wxDragCopy:    pc = "Copied";    break;
-        case wxDragMove:    pc = "Moved";     break;
-        case wxDragCancel:  pc = "Cancelled"; break;
-        default:            pc = "Huh?";      break;
+        case wxDragError:   msg = "Error!";    break;
+        case wxDragNone:    msg = "Nothing";   break;
+        case wxDragCopy:    msg = "Copied";    break;
+        case wxDragMove:    msg = "Moved";     break;
+        case wxDragCancel:  msg = "Cancelled"; break;
+        default:            msg = "Huh?";      break;
     }
 
-    SetStatusText(wxString("Drag result: ") + pc);
+    SetStatusText(wxString("Drag result: ") + msg);
 #else
     wxUnusedVar(result);
 #endif // wxUSE_STATUSBAR
@@ -1294,9 +1294,9 @@ void DnDFrame::OnCopyBitmap(wxCommandEvent& WXUNUSED(event))
 {
     // PNG support is not always compiled in under Windows, so use BMP there
 #if wxUSE_LIBPNG
-    wxFileDialog dialog(this, "Open a PNG file", wxEmptyString, wxEmptyString, wxT("PNG files (*.png)|*.png"), 0);
+    wxFileDialog dialog(this, "Open a PNG file", wxEmptyString, wxEmptyString, "PNG files (*.png)|*.png", 0);
 #else
-    wxFileDialog dialog(this, "Open a BMP file", wxEmptyString, wxEmptyString, wxT("BMP files (*.bmp)|*.bmp"), 0);
+    wxFileDialog dialog(this, "Open a BMP file", wxEmptyString, wxEmptyString, "BMP files (*.bmp)|*.bmp", 0);
 #endif
 
     if (dialog.ShowModal() != wxID_OK)
@@ -1439,7 +1439,7 @@ void DnDFrame::OnCopyFiles(wxCommandEvent& WXUNUSED(event))
 {
 #ifdef __WXMSW__
     wxFileDialog dialog(this, "Select a file to copy", wxEmptyString, wxEmptyString,
-                         wxT("All files (*.*)|*.*"), 0);
+                         "All files (*.*)|*.*", 0);
 
     wxArrayString filenames;
     while ( dialog.ShowModal() == wxID_OK )
@@ -1802,7 +1802,7 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
     DnDShapeDataObject shapeData(m_shape);
     wxDropSource source(shapeData, this);
 
-    wxString pc;
+    wxString msg;
     switch ( source.DoDragDrop(true) )
     {
         default:
@@ -1817,11 +1817,11 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
             break;
 
         case wxDragCopy:
-            pc = "copied";
+            msg = "copied";
             break;
 
         case wxDragMove:
-            pc = "moved";
+            msg = "moved";
             if ( ms_lastDropTarget != this )
             {
                 // don't delete the shape if we dropped it on ourselves!
@@ -1836,10 +1836,10 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
             break;
     }
 
-    if ( pc.length() )
+    if (msg.length() )
     {
 #if wxUSE_STATUSBAR
-        SetStatusText(wxString("Shape successfully ") + pc);
+        SetStatusText(wxString("Shape successfully ") + msg);
 #endif // wxUSE_STATUSBAR
     }
     //else: status text already set

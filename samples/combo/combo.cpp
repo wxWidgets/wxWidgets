@@ -944,7 +944,7 @@ void MyFrame::OnComboBoxUpdate( wxCommandEvent& event )
     }
     else if ( event.GetEventType() == wxEVT_TEXT )
     {
-        wxLogDebug(wxT("EVT_TEXT(id=%i,string=\"%s\")"),event.GetId(),event.GetString().c_str());
+        wxLogDebug("EVT_TEXT(id=%i,string=\"%s\")",event.GetId(),event.GetString().c_str());
     }
     else if ( event.GetEventType() == wxEVT_TEXT_ENTER )
     {

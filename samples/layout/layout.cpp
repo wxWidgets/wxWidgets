@@ -368,7 +368,7 @@ MyFlexSizerFrame::MyFlexSizerFrame(wxFrame* parent)
     sizerFlex->SetFlexibleDirection(wxHORIZONTAL);
     sizerCol2->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
 
-    sizerCol2->Add(new wxStaticText(p, wxID_ANY, wxT("Same with grow mode == \"none\"")), 0, wxCENTER | wxTOP, 20);
+    sizerCol2->Add(new wxStaticText(p, wxID_ANY, "Same with grow mode == \"none\""), 0, wxCENTER | wxTOP, 20);
     sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableCol(1);
@@ -377,7 +377,7 @@ MyFlexSizerFrame::MyFlexSizerFrame(wxFrame* parent)
     sizerFlex->SetNonFlexibleGrowMode(wxFLEX_GROWMODE_NONE);
     sizerCol2->Add(sizerFlex, 1, wxALL | wxEXPAND, 10);
 
-    sizerCol2->Add(new wxStaticText(p, wxID_ANY, wxT("Same with grow mode == \"all\"")), 0, wxCENTER | wxTOP, 20);
+    sizerCol2->Add(new wxStaticText(p, wxID_ANY, "Same with grow mode == \"all\""), 0, wxCENTER | wxTOP, 20);
     sizerFlex = new wxFlexGridSizer(3, 3, wxSize(5, 5));
     InitFlexSizer(sizerFlex, p);
     sizerFlex->AddGrowableCol(1);
@@ -441,15 +441,18 @@ MySizerDialog::MySizerDialog(wxWindow *parent, const wxString &title)
 // ----------------------------------------------------------------------------
 
 // some simple macros to help make the sample code below more clear
-#define TEXTCTRL(text)   new wxTextCtrl(p, wxID_ANY, wxT(text))
-#define MLTEXTCTRL(text) new wxTextCtrl(p, wxID_ANY, wxT(text), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE)
+#define TEXTCTRL(text)   new wxTextCtrl(p, wxID_ANY, text)
+#define MLTEXTCTRL(text) new wxTextCtrl(p, wxID_ANY, text, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE)
 #define POS(r, c)        wxGBPosition(r,c)
 #define SPAN(r, c)       wxGBSpan(r,c)
 
-const wxChar gbsDescription[] =wxT("\
-The wxGridBagSizer is similar to the wxFlexGridSizer except the items are explicitly positioned\n\
-in a virtual cell of the layout grid, and column or row spanning is allowed.  For example, this\n\
-static text is positioned at (0,0) and it spans 7 columns.");
+wxString GetGbsDescription()
+{
+    return "\
+    The wxGridBagSizer is similar to the wxFlexGridSizer except the items are explicitly positioned\n\
+    in a virtual cell of the layout grid, and column or row spanning is allowed.  For example, this\n\
+    static text is positioned at (0,0) and it spans 7 columns.";
+}
 
 
 // Some IDs
@@ -479,7 +482,7 @@ MyGridBagSizerFrame::MyGridBagSizerFrame(wxFrame* parent)
     m_gbs = new wxGridBagSizer();
 
 
-    m_gbs->Add( new wxStaticText(p, wxID_ANY, gbsDescription),
+    m_gbs->Add( new wxStaticText(p, wxID_ANY, GetGbsDescription()),
                 POS(0,0), SPAN(1, 7),
                 wxALIGN_CENTER | wxALL, 5);
 
@@ -557,9 +560,9 @@ void MyGridBagSizerFrame::OnMoveBtn(wxCommandEvent& event)
     {
         if ( m_gbs->CheckForIntersection(wxGBPosition(3,6), wxGBSpan(1,1)) )
             wxMessageBox(
-wxT("wxGridBagSizer will not allow items to be in the same cell as\n\
+"wxGridBagSizer will not allow items to be in the same cell as\n\
 another item, so this operation will fail.  You will also get an assert\n\
-when compiled in debug mode."), "Warning", wxOK | wxICON_INFORMATION);
+when compiled in debug mode.", "Warning", wxOK | wxICON_INFORMATION);
 
         if ( m_gbs->SetItemPosition(btn, wxGBPosition(3,6)) )
         {
