@@ -99,11 +99,11 @@ struct GraphicsBenchmarkOptions
          useGL;
 
 #ifdef __WXMSW__
-    enum GraphRenderer { Default, GDIPlus, Direct2D, Cairo };
+    enum GraphicsRenderer { Default, GDIPlus, Direct2D, Cairo };
 #else
     enum GraphicsRenderer { Default };
 #endif // __WXMSW__ / !__WXMSW__
-    GraphRenderer renderer;
+    GraphicsRenderer renderer;
 } opts;
 
 class GraphicsBenchmarkFrame : public wxFrame
