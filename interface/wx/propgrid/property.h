@@ -2662,12 +2662,14 @@ public:
 
     /**
         Sets contents from lists of strings and values.
+
+        This is similar to calling Clear() and the corresponding overload of Add().
     */
     void Set( const wxChar** labels, const long* values = NULL );
 
     /**
-        Sets contents from lists of strings and values.
-    */
+        @overload
+     */
     void Set( const wxArrayString& labels, const wxArrayInt& values = wxArrayInt() );
 
     /**
