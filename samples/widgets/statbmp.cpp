@@ -62,7 +62,7 @@ private:
 
     void OnMouseEvent(wxMouseEvent& WXUNUSED(event))
     {
-        wxLogMessage(wxT("wxStaticBitmap clicked."));
+        wxLogMessage("wxStaticBitmap clicked.");
     }
 
     wxStaticBitmapBase *m_statbmp;
@@ -74,7 +74,7 @@ private:
     DECLARE_WIDGETS_PAGE(StatBmpWidgetsPage)
 };
 
-IMPLEMENT_WIDGETS_PAGE(StatBmpWidgetsPage, wxT("StaticBitmap"),
+IMPLEMENT_WIDGETS_PAGE(StatBmpWidgetsPage, "StaticBitmap",
                        ALL_CTRLS);
 
 void StatBmpWidgetsPage::CreateContent()
@@ -92,12 +92,12 @@ void StatBmpWidgetsPage::CreateContent()
     wxString testImage;
 #if wxUSE_LIBPNG
     wxPathList pathlist;
-    pathlist.Add(wxT("."));
-    pathlist.Add(wxT(".."));
-    pathlist.Add(wxT("../image"));
-    pathlist.Add(wxT("../../../samples/image"));
+    pathlist.Add(".");
+    pathlist.Add("..");
+    pathlist.Add("../image");
+    pathlist.Add("../../../samples/image");
 
-    wxFileName fn(pathlist.FindValidPath(wxT("toucan.png")));
+    wxFileName fn(pathlist.FindValidPath("toucan.png"));
     if ( fn.FileExists() )
         testImage = fn.GetFullPath();
 #endif // wxUSE_LIBPNG

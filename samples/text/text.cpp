@@ -898,7 +898,7 @@ void MyTextCtrl::OnText(wxCommandEvent& event)
     const wxChar *data = (const wxChar *)(win->GetClientData());
     if ( data )
     {
-        wxLogMessage(wxT("Text %s in control \"%s\""), changeVerb, data);
+        wxLogMessage("Text %s in control \"%s\"", changeVerb, data);
     }
     else
     {
@@ -1022,7 +1022,7 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
                              (unsigned int) sel.length());
 
                 const wxString text = GetLineText(line);
-                wxLogMessage(wxT("Current line: \"%s\"; length = %lu"),
+                wxLogMessage("Current line: \"%s\"; length = %lu",
                              text.c_str(), text.length());
             }
             break;
@@ -1212,7 +1212,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 "very very very long line to test "
                                 "wxHSCROLL style\n"
                                 "\nAnd here is a link in quotation marks to "
-                                wxT("test wxTE_AUTO_URL: \"http://www.wxwidgets.org\""),
+                                "test wxTE_AUTO_URL: \"http://www.wxwidgets.org\"",
                                 wxPoint(450, 10), wxSize(200, 230),
                                 wxTE_RICH | wxTE_MULTILINE | wxTE_AUTO_URL);
     m_textrich->SetStyle(0, 10, *wxRED);

@@ -197,7 +197,7 @@ public:
                                         wxImageList *imaglist);
 
     // our ctor
-    WidgetsPageInfo(Constructor ctor, const wxChar *label, int categories);
+    WidgetsPageInfo(Constructor ctor, const wxString& label, int categories);
 
     // accessors
     const wxString& GetLabel() const { return m_label; }
@@ -235,6 +235,6 @@ private:
                                       wxImageList *imaglist)                \
         { return new classname(book, imaglist); }                           \
     WidgetsPageInfo classname::                                             \
-        ms_info##classname(wxCtorFor##classname, label, ALL_CTRLS | categories)
+        ms_info##classname(wxCtorFor##classname, wxString(label), ALL_CTRLS | categories)
 
 #endif // _WX_SAMPLE_WIDGETS_H_

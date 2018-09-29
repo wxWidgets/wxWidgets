@@ -28,7 +28,7 @@
 #include "artbrows.h"
 
 #define ART_CLIENT(id) \
-    choice->Append(wxT(#id), (void*)id);
+    choice->Append(#id, (void*)id);
 #define ART_ICON(id) \
     { \
         int ind; \
@@ -37,7 +37,7 @@
             ind = images->Add(icon); \
         else \
             ind = 0; \
-        list->InsertItem(index, wxT(#id), ind); \
+        list->InsertItem(index, #id, ind); \
         list->SetItemPtrData(index, wxPtrToUInt(id)); \
         index++; \
     }

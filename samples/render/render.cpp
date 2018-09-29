@@ -571,7 +571,7 @@ void MyFrame::OnLoad(wxCommandEvent& WXUNUSED(event))
     wxRendererNative *renderer = wxRendererNative::Load(name);
     if ( !renderer )
     {
-        wxLogError(wxT("Failed to load renderer \"%s\"."), name.c_str());
+        wxLogError("Failed to load renderer \"%s\".", name.c_str());
     }
     else // loaded ok
     {
@@ -579,7 +579,7 @@ void MyFrame::OnLoad(wxCommandEvent& WXUNUSED(event))
 
         m_panel->Refresh();
 
-        wxLogStatus(this, wxT("Successfully loaded the renderer \"%s\"."),
+        wxLogStatus(this, "Successfully loaded the renderer \"%s\".",
                     name.c_str());
     }
 }

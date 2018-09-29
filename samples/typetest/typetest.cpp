@@ -1051,15 +1051,15 @@ void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
 
     wxFont* sysFont = new wxFont(wxSystemSettings::GetFont(wxSYS_OEM_FIXED_FONT));
     var1 = wxVariant(sysFont);
-    textCtrl << wxT("var1 = (wxfont)\"");
+    textCtrl << "var1 = (wxfont)\"";
     wxFont* font = wxGetVariantCast(var1,wxFont);
     if (font)
     {
-        textCtrl << font->GetNativeFontInfoDesc() << wxT("\"\n");
+        textCtrl << font->GetNativeFontInfoDesc() << "\"\n";
     }
     else
     {
-        textCtrl << wxT("(null)\"\n");
+        textCtrl << "(null)\"\n";
     }
 
     delete sysFont;

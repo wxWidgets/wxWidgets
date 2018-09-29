@@ -78,7 +78,7 @@ private:
 #endif
 
 IMPLEMENT_WIDGETS_PAGE(HeaderCtrlWidgetsPage,
-                       wxT("Header"), HEADER_CTRL_FAMILY);
+                       "Header", HEADER_CTRL_FAMILY);
 
 void HeaderCtrlWidgetsPage::CreateContent()
 {

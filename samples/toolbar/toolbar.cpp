@@ -605,7 +605,7 @@ MyFrame::MyFrame(wxFrame* parent,
     toolMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN2, "Toggle &2nd radio button\tCtrl-2");
     toolMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN3, "Toggle &3rd radio button\tCtrl-3");
     toolMenu->AppendSeparator();
-    toolMenu->Append(IDM_TOOLBAR_CHANGE_TOOLTIP, wxT("Change tooltip of \"New\""));
+    toolMenu->Append(IDM_TOOLBAR_CHANGE_TOOLTIP, "Change tooltip of \"New\"");
     toolMenu->AppendSeparator();
     toolMenu->Append(IDM_TOOLBAR_INC_TOOL_SPACING, "Increase spacing\tCtrl-+");
     toolMenu->Append(IDM_TOOLBAR_DEC_TOOL_SPACING, "Decrease spacing\tCtrl--");

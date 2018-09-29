@@ -343,7 +343,7 @@ enum
     Exec_Btn_Close
 };
 
-static wxString DIALOG_TITLE()
+static wxString GetDialogTitle()
 {
     return "Exec sample";
 }
@@ -675,12 +675,11 @@ void MyFrame::OnKill(wxCommandEvent& WXUNUSED(event))
         }
         else
         {
-            wxArrayString errorText;
-            errorText.push_back(""); // no error
-            errorText.push_back("signal not supported");
-            errorText.push_back("permission denied");
-            errorText.push_back("no such process");
-            errorText.push_back("unspecified error");
+            const wxString errorText[] = { "", // no error
+                                     "signal not supported",
+                                     "permission denied",
+                                     "no such process",
+                                     "unspecified error" };
 
             wxLogStatus("Failed to kill process %ld with signal %d: %s",
                         pid, sig, errorText[rc]);
@@ -742,7 +741,7 @@ wxBEGIN_EVENT_TABLE(ExecQueryDialog, wxDialog)
 wxEND_EVENT_TABLE()
 
 ExecQueryDialog::ExecQueryDialog(const wxString& cmd)
-    : wxDialog(NULL, wxID_ANY, DIALOG_TITLE(),
+    : wxDialog(NULL, wxID_ANY, GetDialogTitle(),
                wxDefaultPosition, wxDefaultSize,
                wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER)
 {
@@ -891,7 +890,7 @@ void MyFrame::OnSyncExec(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAsyncExec(wxCommandEvent& WXUNUSED(event))
 {
     wxString cmd = wxGetTextFromUser("Enter the command: ",
-                                     DIALOG_TITLE(),
+                                     GetDialogTitle(),
                                      m_cmdLast);
 
     if ( !cmd )
@@ -903,7 +902,7 @@ void MyFrame::OnAsyncExec(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnShell(wxCommandEvent& WXUNUSED(event))
 {
     wxString cmd = wxGetTextFromUser("Enter the command: ",
-                                     DIALOG_TITLE(),
+                                     GetDialogTitle(),
                                      m_cmdLast);
 
     if ( !cmd )
@@ -927,7 +926,7 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
     }
 
     wxString cmd = wxGetTextFromUser("Enter the command: ",
-                                     DIALOG_TITLE(),
+                                     GetDialogTitle(),
                                      m_cmdLast);
 
     if ( !cmd )
@@ -989,14 +988,14 @@ void MyFrame::OnExecWithPipe(wxCommandEvent& WXUNUSED(event))
         m_cmdLast = "tr [a-z] [A-Z]";
 
     wxString cmd = wxGetTextFromUser("Enter the command: ",
-                                     DIALOG_TITLE(),
+                                     GetDialogTitle(),
                                      m_cmdLast);
 
     if ( !cmd )
         return;
 
     wxString input = wxGetTextFromUser("Enter the string to send to it: ",
-                                       DIALOG_TITLE());
+                                       GetDialogTitle());
     if ( !input )
         return;
 
@@ -1022,7 +1021,7 @@ void MyFrame::OnExecWithPipe(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnPOpen(wxCommandEvent& WXUNUSED(event))
 {
     wxString cmd = wxGetTextFromUser("Enter the command to launch: ",
-                                     DIALOG_TITLE(),
+                                     GetDialogTitle(),
                                      m_cmdLast);
     if ( cmd.empty() )
         return;
@@ -1174,7 +1173,7 @@ void MyFrame::OnOpenURL(wxCommandEvent& WXUNUSED(event))
 
     if ( !wxLaunchDefaultBrowser(s_url) )
     {
-        wxLogError(wxT("Failed to open URL \"%s\""), s_url.c_str());
+        wxLogError("Failed to open URL \"%s\"", s_url.c_str());
     }
 }
 
@@ -1187,19 +1186,19 @@ void MyFrame::OnOpenURL(wxCommandEvent& WXUNUSED(event))
 bool MyFrame::GetDDEServer()
 {
     wxString server = wxGetTextFromUser("Server to connect to:",
-                                        DIALOG_TITLE(), m_server);
+                                        GetDialogTitle(), m_server);
     if ( !server )
         return false;
 
     m_server = server;
 
-    wxString topic = wxGetTextFromUser("DDE topic:", DIALOG_TITLE(), m_topic);
+    wxString topic = wxGetTextFromUser("DDE topic:", GetDialogTitle(), m_topic);
     if ( !topic )
         return false;
 
     m_topic = topic;
 
-    wxString cmd = wxGetTextFromUser("DDE command:", DIALOG_TITLE(), m_cmdDde);
+    wxString cmd = wxGetTextFromUser("DDE command:", GetDialogTitle(), m_cmdDde);
     if ( !cmd )
         return false;
 

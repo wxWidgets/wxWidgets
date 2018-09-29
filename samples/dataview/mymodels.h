@@ -226,7 +226,7 @@ public:
     virtual wxString GetColumnType( unsigned int col ) const wxOVERRIDE
     {
         if (col == Col_Toggle)
-            return wxT( "bool" );
+            return "bool";
 
         if (col == Col_IconText)
             return "wxDataViewIconText";

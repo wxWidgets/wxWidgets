@@ -109,7 +109,7 @@ wxEND_EVENT_TABLE()
 // ============================================================================
 
 IMPLEMENT_WIDGETS_PAGE(ActivityIndicatorWidgetsPage,
-                       wxT("ActivityIndicator"), NATIVE_CTRLS);
+                       "ActivityIndicator", NATIVE_CTRLS);
 
 void ActivityIndicatorWidgetsPage::CreateContent()
 {
