@@ -724,7 +724,7 @@ public:
     wxPGChoices( const wxChar* const* labels, const long* values = NULL )
     {
         Init();
-        Set(labels,values);
+        Add(labels,values);
     }
 
     // Constructor.
@@ -734,7 +734,7 @@ public:
                  const wxArrayInt& values = wxArrayInt() )
     {
         Init();
-        Set(labels,values);
+        Add(labels,values);
     }
 
     // Simple interface constructor.
