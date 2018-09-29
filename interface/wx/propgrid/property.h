@@ -2488,10 +2488,11 @@ public:
         Constructor.
 
         @param labels
-            Labels for choices.
+            Labels for choices, @NULL-terminated.
 
         @param values
-            Values for choices. If @NULL, indexes are used.
+            Values for choices. If @NULL, indexes are used. Otherwise must have
+            at least the same size as @a labels.
     */
     wxPGChoices( const wxChar** labels, const long* values = NULL );
 
@@ -2502,7 +2503,8 @@ public:
             Labels for choices.
 
         @param values
-            Values for choices. If empty, indexes are used.
+            Values for choices. If empty, indexes are used. Otherwise must have
+            at least the same size as @a labels.
     */
     wxPGChoices( const wxArrayString& labels, const wxArrayInt& values = wxArrayInt() );
 
@@ -2521,10 +2523,11 @@ public:
         identical to set except that creates copies.
 
         @param labels
-            Labels for added choices.
+            Labels for added choices, @NULL-terminated.
 
         @param values
-            Values for added choices. If empty, relevant entry indexes are used.
+            Values for added choices. If empty, relevant entry indexes are
+            used. Otherwise must have at least the same size as @a labels.
     */
     void Add( const wxChar** labels, const ValArrItem* values = NULL );
 

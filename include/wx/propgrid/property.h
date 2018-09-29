@@ -719,7 +719,7 @@ public:
     }
 
     // Constructor.
-    // labels - Labels for choices.
+    // labels - Labels for choices, NULL-terminated.
     // values - Values for choices. If NULL, indexes are used.
     wxPGChoices( const wxChar* const* labels, const long* values = NULL )
     {
@@ -754,7 +754,7 @@ public:
     // Adds to current.
     // If did not have own copies, creates them now. If was empty, identical
     // to set except that creates copies.
-    // labels - Labels for added choices.
+    // labels - Labels for added choices, NULL-terminated.
     // values - Values for added choices. If empty, relevant entry indexes are used.
     void Add( const wxChar* const* labels, const ValArrItem* values = NULL );
 
