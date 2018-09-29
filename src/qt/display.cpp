@@ -19,12 +19,12 @@ class wxDisplayImplQt : public wxDisplayImpl
 public:
     wxDisplayImplQt( unsigned n );
 
-    virtual wxRect GetGeometry() const;
-    virtual wxString GetName() const;
+    virtual wxRect GetGeometry() const wxOVERRIDE;
+    virtual wxString GetName() const wxOVERRIDE;
 
-    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const;
-    virtual wxVideoMode GetCurrentMode() const;
-    virtual bool ChangeMode(const wxVideoMode& mode);
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
+    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
+    virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;
 };
 
 wxDisplayImplQt::wxDisplayImplQt( unsigned n )
@@ -69,9 +69,9 @@ class wxDisplayFactoryQt : public wxDisplayFactory
 public:
     wxDisplayFactoryQt();
 
-    virtual wxDisplayImpl *CreateDisplay(unsigned n);
-    virtual unsigned GetCount();
-    virtual int GetFromPoint(const wxPoint& pt);
+    virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
+    virtual unsigned GetCount() wxOVERRIDE;
+    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
 };
 
     
