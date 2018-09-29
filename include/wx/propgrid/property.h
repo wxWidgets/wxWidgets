@@ -719,6 +719,17 @@ public:
     }
 
     // Constructor.
+    // count - Number of labels.
+    // labels - Labels themselves.
+    // values - Values for choices. If NULL, indexes are used.
+    wxPGChoices(size_t count, const wxString* labels, const long* values = NULL)
+    {
+        Init();
+        Add(count, labels, values);
+    }
+
+    // Constructor overload taking wxChar strings, provided mostly for
+    // compatibility.
     // labels - Labels for choices, NULL-terminated.
     // values - Values for choices. If NULL, indexes are used.
     wxPGChoices( const wxChar* const* labels, const long* values = NULL )
@@ -754,6 +765,9 @@ public:
     // Adds to current.
     // If did not have own copies, creates them now. If was empty, identical
     // to set except that creates copies.
+    void Add(size_t count, const wxString* labels, const long* values = NULL);
+
+    // Overload taking wxChar strings, provided mostly for compatibility.
     // labels - Labels for added choices, NULL-terminated.
     // values - Values for added choices. If empty, relevant entry indexes are used.
     void Add( const wxChar* const* labels, const ValArrItem* values = NULL );
@@ -879,6 +893,12 @@ public:
     // Sets contents from lists of strings and values.
     // Does not create copies for itself.
     // TODO: Deprecate.
+    void Set(size_t count, const wxString* labels, const long* values = NULL)
+    {
+        Free();
+        Add(count, labels, values);
+    }
+
     void Set( const wxChar* const* labels, const long* values = NULL )
     {
         Free();
