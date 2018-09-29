@@ -8,11 +8,7 @@
 
 #include "wx/wxprec.h"
 
-#if wxUSE_DISPLAY
-    #include "wx/display.h"
-    #include "wx/private/display.h"
-#endif
-#include "wx/utils.h" // wxClientDisplayRect
+#include "wx/private/display.h"
 
 #include "wx/gtk/private/wrapgtk.h"
 #ifdef GDK_WINDOWING_X11
@@ -75,61 +71,6 @@ wx_gdk_screen_get_monitor_workarea(GdkScreen* screen, int monitor, GdkRectangle*
 
 #endif // !__WXGTK4__
 
-void wxClientDisplayRect(int* x, int* y, int* width, int* height)
-{
-    GdkRectangle rect;
-    GdkWindow* window = wxGetTopLevelGDK();
-#ifdef __WXGTK4__
-    GdkMonitor* monitor =
-        gdk_display_get_monitor_at_window(gdk_window_get_display(window), window);
-    gdk_monitor_get_workarea(monitor, &rect);
-#else
-    GdkScreen* screen = gdk_window_get_screen(window);
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-    int monitor = gdk_screen_get_monitor_at_window(screen, window);
-    gdk_screen_get_monitor_workarea(screen, monitor, &rect);
-    wxGCC_WARNING_RESTORE()
-#endif
-    if (x)
-        *x = rect.x;
-    if (y)
-        *y = rect.y;
-    if (width)
-        *width = rect.width;
-    if (height)
-        *height = rect.height;
-}
-//-----------------------------------------------------------------------------
-
-#if wxUSE_DISPLAY
-class wxDisplayFactoryGTK: public wxDisplayFactory
-{
-public:
-    virtual wxDisplayImpl* CreateDisplay(unsigned n) wxOVERRIDE;
-    virtual unsigned GetCount() wxOVERRIDE;
-    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
-};
-
-class wxDisplayImplGTK: public wxDisplayImpl
-{
-    typedef wxDisplayImpl base_type;
-public:
-    wxDisplayImplGTK(unsigned i);
-    virtual wxRect GetGeometry() const wxOVERRIDE;
-    virtual wxRect GetClientArea() const wxOVERRIDE;
-    virtual wxString GetName() const wxOVERRIDE;
-    virtual bool IsPrimary() const wxOVERRIDE;
-    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
-    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
-    virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;
-#ifdef __WXGTK4__
-    GdkMonitor* const m_monitor;
-#else
-    GdkScreen* const m_screen;
-#endif
-};
-//-----------------------------------------------------------------------------
-
 #ifdef __WXGTK4__
 static inline GdkDisplay* GetDisplay()
 {
@@ -141,6 +82,45 @@ static inline GdkScreen* GetScreen()
     return gdk_window_get_screen(wxGetTopLevelGDK());
 }
 #endif
+
+//-----------------------------------------------------------------------------
+
+// This class is always defined as it's used for the main display even when
+// wxUSE_DISPLAY == 0.
+class wxDisplayImplGTK : public wxDisplayImpl
+{
+    typedef wxDisplayImpl base_type;
+public:
+    wxDisplayImplGTK(unsigned i);
+    virtual wxRect GetGeometry() const wxOVERRIDE;
+    virtual wxRect GetClientArea() const wxOVERRIDE;
+
+#if wxUSE_DISPLAY
+    virtual wxString GetName() const wxOVERRIDE;
+    virtual bool IsPrimary() const wxOVERRIDE;
+    virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
+    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
+    virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;
+#endif // wxUSE_DISPLAY
+
+#ifdef __WXGTK4__
+    GdkMonitor* const m_monitor;
+#else
+    GdkScreen* const m_screen;
+#endif
+};
+
+//-----------------------------------------------------------------------------
+
+// This class is only defined when we're built with full display support.
+#if wxUSE_DISPLAY
+class wxDisplayFactoryGTK: public wxDisplayFactory
+{
+public:
+    virtual wxDisplayImpl* CreateDisplay(unsigned n) wxOVERRIDE;
+    virtual unsigned GetCount() wxOVERRIDE;
+    virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
+};
 
 wxDisplayImpl* wxDisplayFactoryGTK::CreateDisplay(unsigned n)
 {
@@ -185,6 +165,8 @@ int wxDisplayFactoryGTK::GetFromPoint(const wxPoint& pt)
     return monitor;
 #endif
 }
+#endif // wxUSE_DISPLAY
+
 //-----------------------------------------------------------------------------
 
 wxDisplayImplGTK::wxDisplayImplGTK(unsigned i)
@@ -223,6 +205,7 @@ wxRect wxDisplayImplGTK::GetClientArea() const
     return wxRect(rect.x, rect.y, rect.width, rect.height);
 }
 
+#if wxUSE_DISPLAY
 wxString wxDisplayImplGTK::GetName() const
 {
     return wxString();
@@ -307,6 +290,23 @@ wxDisplayFactory* wxDisplay::CreateFactory()
 {
     return new wxDisplayFactoryGTK;
 }
-#endif // wxUSE_DISPLAY
+
+#else // !wxUSE_DISPLAY
+
+class wxDisplayFactorySingleGTK : public wxDisplayFactorySingle
+{
+protected:
+    virtual wxDisplayImpl *CreateSingleDisplay()
+    {
+        return new wxDisplayImplGTK(0);
+    }
+};
+
+wxDisplayFactory* wxDisplay::CreateFactory()
+{
+    return wxDisplayFactorySingleGTK;
+}
+
+#endif // wxUSE_DISPLAY/!wxUSE_DISPLAY
 
 #endif // !defined(GDK_WINDOWING_WIN32)

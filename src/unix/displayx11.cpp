@@ -37,10 +37,42 @@
     #include <X11/Xatom.h>
 #endif
 
-#if wxUSE_DISPLAY
-
-#include "wx/display.h"
 #include "wx/private/display.h"
+
+#ifndef __WXGTK20__
+
+static wxRect wxGetMainScreenWorkArea();
+
+class wxDisplayImplSingleX11 : public wxDisplayImplSingle
+{
+public:
+    virtual wxRect GetGeometry() const wxOVERRIDE
+    {
+        Display* const dpy = wxGetX11Display();
+
+        return wxRect(0, 0,
+                      DisplayWidth(dpy, DefaultScreen (dpy)),
+                      DisplayHeight(dpy, DefaultScreen (dpy)));
+    }
+
+    virtual wxRect GetClientArea() const wxOVERRIDE
+    {
+        return wxGetMainScreenWorkArea();
+    }
+};
+
+class wxDisplayFactorySingleX11 : public wxDisplayFactorySingle
+{
+protected:
+    virtual wxDisplayImpl *CreateSingleDisplay()
+    {
+        return new wxDisplayImplSingleX11;
+    }
+};
+
+#endif // !__WXGTK20__
+
+#if wxUSE_DISPLAY
 
 #ifndef __WXGTK20__
 
@@ -97,7 +129,7 @@ public:
         // we intentionally don't cache the result here because the client
         // display area may change (e.g. the user resized or hid a panel) and
         // we don't currently react to its changes
-        return IsPrimary() ? wxGetClientDisplayRect() : m_rect;
+        return IsPrimary() ? wxGetMainScreenWorkArea() : m_rect;
     }
 
     virtual wxString GetName() const wxOVERRIDE { return wxString(); }
@@ -347,13 +379,20 @@ bool wxDisplayImplX11::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 /* static */ wxDisplayFactory *wxDisplay::CreateFactory()
 {
     if ( !XineramaIsActive((Display*)wxGetDisplay()) )
-        return new wxDisplayFactorySingle;
+        return new wxDisplayFactorySingleX11;
 
     return new wxDisplayFactoryX11;
 }
 #endif
 
-#endif /* wxUSE_DISPLAY */
+#else // !wxUSE_DISPLAY
+
+/* static */ wxDisplayFactory *wxDisplay::CreateFactory()
+{
+    return new wxDisplayFactorySingleX11;
+}
+
+#endif // wxUSE_DISPLAY/!wxUSE_DISPLAY
 
 #if !defined(__WXGTK20__) || defined(GDK_WINDOWING_X11)
 void wxGetWorkAreaX11(Screen* screen, int& x, int& y, int& width, int& height)
@@ -388,45 +427,33 @@ void wxGetWorkAreaX11(Screen* screen, int& x, int& y, int& width, int& height)
 
 #ifndef __WXGTK20__
 
-void wxClientDisplayRect(int *x, int *y, int *width, int *height)
+wxRect wxGetMainScreenWorkArea()
 {
+    wxRect rect;
+
     Display * const dpy = wxGetX11Display();
-    wxCHECK_RET( dpy, wxT("can't be called before initializing the GUI") );
+    wxCHECK_MSG( dpy, rect, "can't be called before initializing the GUI" );
 
-    wxRect rectClient;
     wxGetWorkAreaX11(DefaultScreenOfDisplay(dpy),
-        rectClient.x, rectClient.y, rectClient.width, rectClient.height);
+                     rect.x, rect.y, rect.width, rect.height);
 
-    // Although _NET_WORKAREA is supposed to return the client size of the
-    // screen, not all implementations are conforming, apparently, see #14419,
-    // so make sure we return a subset of the primary display.
-    wxRect rectFull;
-#if wxUSE_DISPLAY
-    ScreensInfo screens;
-    const ScreenInfo& info = screens[0];
-    rectFull = wxRect(info.x_org, info.y_org, info.width, info.height);
-#else
-    wxDisplaySize(&rectFull.width, &rectFull.height);
-#endif
+    const wxRect rectFull = wxDisplay().GetGeometry();
 
-    if ( !rectClient.width || !rectClient.height )
+    if ( !rect.width || !rect.height )
     {
         // _NET_WORKAREA not available or didn't work, fall back to the total
         // display size.
-        rectClient = rectFull;
+        rect = rectFull;
     }
     else
     {
-        rectClient = rectClient.Intersect(rectFull);
+        // Although _NET_WORKAREA is supposed to return the client size of the
+        // screen, not all implementations are conforming, apparently, see
+        // #14419, so make sure we return a subset of the primary display.
+        rect = rect.Intersect(rectFull);
     }
 
-    if ( x )
-        *x = rectClient.x;
-    if ( y )
-        *y = rectClient.y;
-    if ( width )
-        *width = rectClient.width;
-    if ( height )
-        *height = rectClient.height;
+    return rect;
 }
+
 #endif // !__WXGTK20__

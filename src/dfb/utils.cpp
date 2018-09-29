@@ -17,6 +17,7 @@
 #include "wx/utils.h"
 #include "wx/evtloop.h"
 #include "wx/apptrait.h"
+#include "wx/private/display.h"
 #include "wx/unix/private/timer.h"
 
 #ifndef WX_PRECOMP
@@ -56,6 +57,33 @@ wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 // display characteristics
 // ----------------------------------------------------------------------------
 
+// TODO: move into a separate src/dfb/display.cpp
+
+class wxDisplayImplSingleDFB : public wxDisplayImplSingle
+{
+public:
+    virtual wxRect GetGeometry() const wxOVERRIDE
+    {
+        const wxVideoMode mode(wxTheApp->GetDisplayMode());
+
+        return wxRect(0, 0, mode.w, mode.h);
+    }
+};
+
+class wxDisplayFactorySingleDFB : public wxDisplayFactorySingle
+{
+protected:
+    virtual wxDisplayImpl *CreateSingleDisplay()
+    {
+        return new wxDisplayImplSingleDFB;
+    }
+};
+
+wxDisplayFactory* wxDisplay::CreateFactory()
+{
+    return new wxDisplayFactorySingleDFB;
+}
+
 bool wxColourDisplay()
 {
     #warning "FIXME: wxColourDisplay"
@@ -65,13 +93,6 @@ bool wxColourDisplay()
 int wxDisplayDepth()
 {
     return wxTheApp->GetDisplayMode().bpp;
-}
-
-void wxDisplaySize(int *width, int *height)
-{
-    wxVideoMode mode(wxTheApp->GetDisplayMode());
-    if ( width ) *width = mode.w;
-    if ( height ) *height = mode.h;
 }
 
 void wxDisplaySizeMM(int *width, int *height)
@@ -88,15 +109,6 @@ void wxDisplaySizeMM(int *width, int *height)
     #undef DPI
     #undef PX_TO_MM
 }
-
-void wxClientDisplayRect(int *x, int *y, int *width, int *height)
-{
-    // return desktop dimensions minus any panels, menus, trays:
-    if (x) *x = 0;
-    if (y) *y = 0;
-    wxDisplaySize(width, height);
-}
-
 
 //-----------------------------------------------------------------------------
 // mouse

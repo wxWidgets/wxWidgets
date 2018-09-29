@@ -24,11 +24,46 @@
     #pragma hdrstop
 #endif
 
+#include "wx/private/display.h"
+
+#include "wx/msw/private.h"
 #include "wx/msw/wrapwin.h"
 
-#if wxUSE_DISPLAY
+// This implementation is always available, whether wxUSE_DISPLAY is 1 or not,
+// as we fall back to it in case of error.
+class wxDisplayImplSingleMSW : public wxDisplayImplSingle
+{
+public:
+    virtual wxRect GetGeometry() const wxOVERRIDE
+    {
+        ScreenHDC dc;
 
-#include "wx/display.h"
+        return wxRect(0, 0,
+                      ::GetDeviceCaps(dc, HORZRES),
+                      ::GetDeviceCaps(dc, VERTRES));
+    }
+
+    virtual wxRect GetClientArea() const wxOVERRIDE
+    {
+        RECT rc;
+        SystemParametersInfo(SPI_GETWORKAREA, 0, &rc, 0);
+
+        wxRect rectClient;
+        wxCopyRECTToRect(rc, rectClient);
+        return rectClient;
+    }
+};
+
+class wxDisplayFactorySingleMSW : public wxDisplayFactorySingle
+{
+protected:
+    virtual wxDisplayImpl *CreateSingleDisplay() wxOVERRIDE
+    {
+        return new wxDisplayImplSingleMSW;
+    }
+};
+
+#if wxUSE_DISPLAY
 
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
@@ -39,9 +74,7 @@
 #include "wx/dynlib.h"
 #include "wx/sysopt.h"
 
-#include "wx/private/display.h"
 #include "wx/msw/missing.h"
-#include "wx/msw/private.h"
 #include "wx/msw/private/hiddenwin.h"
 
 static const wxChar displayDllName[] = wxT("user32.dll");
@@ -170,7 +203,7 @@ wxDisplayFactoryMSW* wxDisplayFactoryMSW::ms_factory = NULL;
     delete factoryMM;
 
     // fall back to a stub implementation if no multimon support (Win95?)
-    return new wxDisplayFactorySingle;
+    return new wxDisplayFactorySingleMSW;
 }
 
 
@@ -507,17 +540,12 @@ int wxDisplayFactoryMSW::GetFromWindow(const wxWindow *window)
 #endif
 }
 
-#endif // wxUSE_DISPLAY
+#else // !wxUSE_DISPLAY
 
-void wxClientDisplayRect(int *x, int *y, int *width, int *height)
+// In this case, wxDisplayFactorySingleMSW is the only implementation.
+wxDisplayFactory* wxDisplay::CreateFactory()
 {
-    // Determine the desktop dimensions minus the taskbar and any other
-    // special decorations...
-    RECT r;
-
-    SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
-    if (x)      *x = r.left;
-    if (y)      *y = r.top;
-    if (width)  *width = r.right - r.left;
-    if (height) *height = r.bottom - r.top;
+    return new wxDisplayFactorySingleMSW;
 }
+
+#endif // wxUSE_DISPLAY/!wxUSE_DISPLAY

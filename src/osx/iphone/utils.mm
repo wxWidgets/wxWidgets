@@ -25,6 +25,8 @@
 
 #include "wx/apptrait.h"
 
+#include "wx/private/display.h"
+
 #include "wx/osx/private.h"
 
 #if wxUSE_GUI
@@ -116,46 +118,6 @@ CFArrayRef CopyAvailableFontFamilyNames()
     return (CFArrayRef) [[UIFont familyNames] retain];
 }
 
-void wxClientDisplayRect(int *x, int *y, int *width, int *height)
-{
-#if 0
-    CGRect r = [[UIScreen mainScreen] applicationFrame];
-    CGRect bounds = [[UIScreen mainScreen] bounds];
-    if ( bounds.size.height > r.size.height )
-    {
-        // portrait
-        if ( x )
-            *x = r.origin.x;
-        if ( y )
-            *y = r.origin.y;
-        if ( width )
-            *width = r.size.width;
-        if ( height )
-            *height = r.size.height;
-    }
-    else
-    {
-        // landscape
-        if ( x )
-            *x = r.origin.y;
-        if ( y )
-            *y = r.origin.x;
-        if ( width )
-            *width = r.size.height;
-        if ( height )
-            *height = r.size.width;
-    }
-#else
-    // it's easier to treat the status bar as an element of the toplevel window 
-    // instead of the desktop in order to support easy rotation
-    if ( x )
-        *x = 0;
-    if ( y )
-        *y = 0;
-    wxDisplaySize(width, height);
-#endif
-}
-
 void wxGetMousePosition( int* x, int* y )
 {
     if ( x )
@@ -177,26 +139,44 @@ int wxDisplayDepth()
 }
 
 // Get size of display
-void wxDisplaySize(int *width, int *height)
-{
-    CGRect bounds = [[UIScreen mainScreen] bounds];
 
-    if ( UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]) )
+class wxDisplayImplSingleiOS : public wxDisplayImplSingle
+{
+public:
+    virtual wxRect GetGeometry() const wxOVERRIDE
     {
-        // portrait
-        if ( width )
-            *width = (int)bounds.size.width ;
-        if ( height )
-            *height = (int)bounds.size.height;
+        CGRect bounds = [[UIScreen mainScreen] bounds];
+
+        int width, height;
+        if ( UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]) )
+        {
+            // portrait
+            width = (int)bounds.size.width ;
+            height = (int)bounds.size.height;
+        }
+        else
+        {
+            // landscape
+            width = (int)bounds.size.height ;
+            height = (int)bounds.size.width;
+        }
+
+        return wxRect(0, 0, width, height);
     }
-    else
+};
+
+class wxDisplayFactorySingleiOS : public wxDisplayFactorySingle
+{
+protected:
+    virtual wxDisplayImpl *CreateSingleDisplay() wxOVERRIDE
     {
-        // landscape
-        if ( width )
-            *width = (int)bounds.size.height ;
-        if ( height )
-            *height = (int)bounds.size.width;
+        return new wxDisplayImplSingleiOS;
     }
+};
+
+/* static */ wxDisplayFactory *wxDisplay::CreateFactory()
+{
+    return new wxDisplayFactorySingleiOS;
 }
 
 wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)

@@ -24,9 +24,11 @@ public:
 
     virtual wxString GetName() const wxOVERRIDE;
 
+#if wxUSE_DISPLAY
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
     virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
     virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;
+#endif // wxUSE_DISPLAY
 };
 
 wxDisplayImplQt::wxDisplayImplQt( unsigned n )
@@ -49,6 +51,7 @@ wxString wxDisplayImplQt::GetName() const
     return wxString();
 }
 
+#if wxUSE_DISPLAY
 wxArrayVideoModes wxDisplayImplQt::GetModes(const wxVideoMode& WXUNUSED(mode)) const
 {
     return wxArrayVideoModes();
@@ -67,9 +70,12 @@ bool wxDisplayImplQt::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 {
     return false;
 }
+#endif // wxUSE_DISPLAY
 
 
 //##############################################################################
+
+#if wxUSE_DISPLAY
 
 class wxDisplayFactoryQt : public wxDisplayFactory
 {
@@ -100,3 +106,21 @@ int wxDisplayFactoryQt::GetFromPoint(const wxPoint& pt)
 {
     return new wxDisplayFactoryQt;
 }
+
+#else // wxUSE_DISPLAY
+
+class wxDisplayFactorySingleQt : public wxDisplayFactorySingleQt
+{
+protected:
+    virtual wxDisplayImpl *CreateSingleDisplay() wxOVERRIDE
+    {
+        return new wxDisplayImplQt(0);
+    }
+};
+
+/* static */ wxDisplayFactory *wxDisplay::CreateFactory()
+{
+    return new wxDisplayFactorySingleQt;
+}
+
+#endif // wxUSE_DISPLAY/!wxUSE_DISPLAY

@@ -22,9 +22,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_DISPLAY
-
-#include "wx/display.h"
+#include "wx/private/display.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
@@ -33,11 +31,32 @@
     #include "wx/gdicmn.h"
 #endif
 
-#include "wx/private/display.h"
-#include "wx/scopedarray.h"
 #include "wx/osx/private.h"
 
-#if wxOSX_USE_COCOA_OR_CARBON
+// ----------------------------------------------------------------------------
+// common helpers compiled even in wxUSE_DISPLAY==0 case
+// ----------------------------------------------------------------------------
+
+// This one is defined in Objective C++ code.
+extern wxRect wxOSXGetMainDisplayClientArea();
+
+namespace
+{
+
+wxRect wxGetDisplayGeometry(CGDirectDisplayID id)
+{
+    CGRect theRect = CGDisplayBounds(id);
+    return wxRect( (int)theRect.origin.x,
+                   (int)theRect.origin.y,
+                   (int)theRect.size.width,
+                   (int)theRect.size.height ); //floats
+}
+
+} // anonymous namespace
+
+#if wxUSE_DISPLAY
+
+#include "wx/scopedarray.h"
 
 // ----------------------------------------------------------------------------
 // display classes implementation
@@ -197,11 +216,7 @@ bool wxDisplayImplMacOSX::IsPrimary() const
 
 wxRect wxDisplayImplMacOSX::GetGeometry() const
 {
-    CGRect theRect = CGDisplayBounds(m_id);
-    return wxRect( (int)theRect.origin.x,
-                   (int)theRect.origin.y,
-                   (int)theRect.size.width,
-                   (int)theRect.size.height ); //floats
+    return wxGetDisplayGeometry(m_id);
 }
 
 wxRect wxDisplayImplMacOSX::GetClientArea() const
@@ -210,7 +225,7 @@ wxRect wxDisplayImplMacOSX::GetClientArea() const
     //     wxGetClientDisplayRect() does work correctly for at least the main
     //     one (TODO: do it correctly for the other displays too)
     if ( IsPrimary() )
-        return wxGetClientDisplayRect();
+        return wxOSXGetMainDisplayClientArea();
 
     return wxDisplayImpl::GetClientArea();
 }
@@ -311,13 +326,34 @@ bool wxDisplayImplMacOSX::ChangeMode( const wxVideoMode& mode )
     return new wxDisplayFactoryMacOSX;
 }
 
-#else
+#else // !wxUSE_DISPLAY
+
+class wxDisplayImplSingleMacOSX : public wxDisplayImplSingle
+{
+public:
+    virtual wxRect GetGeometry() const wxOVERRIDE
+    {
+        return wxGetDisplayGeometry(CGMainDisplayID());
+    }
+
+    virtual wxRect GetClientArea() const wxOVERRIDE
+    {
+        return wxOSXGetMainDisplayClientArea();
+    }
+};
+
+class wxDisplayFactorySingleMacOSX : public wxDisplayFactorySingle
+{
+protected:
+    virtual wxDisplayImpl *CreateSingleDisplay() wxOVERRIDE
+    {
+        return new wxDisplayImplSingleMacOSX;
+    }
+};
 
 /* static */ wxDisplayFactory *wxDisplay::CreateFactory()
 {
-    return new wxDisplayFactorySingle;
+    return new wxDisplayFactorySingleMacOSX;
 }
-
-#endif
 
 #endif // wxUSE_DISPLAY

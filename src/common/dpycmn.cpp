@@ -29,7 +29,6 @@
     #include "wx/module.h"
 #endif //WX_PRECOMP
 
-#include "wx/display.h"
 #include "wx/private/display.h"
 
 #if wxUSE_DISPLAY
@@ -49,43 +48,6 @@ const wxVideoMode wxDefaultVideoMode;
 //
 // created on demand and destroyed by wxDisplayModule
 static wxDisplayFactory *gs_factory = NULL;
-
-// ----------------------------------------------------------------------------
-// wxDisplayImplSingle: trivial implementation working for main display only
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxDisplayImplSingle : public wxDisplayImpl
-{
-public:
-    wxDisplayImplSingle() : wxDisplayImpl(0) { }
-
-    virtual wxRect GetGeometry() const wxOVERRIDE
-    {
-        wxRect r;
-        wxDisplaySize(&r.width, &r.height);
-        return r;
-    }
-
-    virtual wxRect GetClientArea() const wxOVERRIDE { return wxGetClientDisplayRect(); }
-
-    virtual wxString GetName() const wxOVERRIDE { return wxString(); }
-
-#if wxUSE_DISPLAY
-    // no video modes support for us, provide just the stubs
-
-    virtual wxArrayVideoModes GetModes(const wxVideoMode& WXUNUSED(mode)) const wxOVERRIDE
-    {
-        return wxArrayVideoModes();
-    }
-
-    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE { return wxVideoMode(); }
-
-    virtual bool ChangeMode(const wxVideoMode& WXUNUSED(mode)) wxOVERRIDE { return false; }
-#endif // wxUSE_DISPLAY
-
-
-    wxDECLARE_NO_COPY_CLASS(wxDisplayImplSingle);
-};
 
 // ----------------------------------------------------------------------------
 // wxDisplayModule is used to cleanup gs_factory
@@ -201,16 +163,6 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 // static functions implementation
 // ----------------------------------------------------------------------------
 
-// if wxUSE_DISPLAY == 1 this is implemented in port-specific code
-#if !wxUSE_DISPLAY
-
-/* static */ wxDisplayFactory *wxDisplay::CreateFactory()
-{
-    return new wxDisplayFactorySingle;
-}
-
-#endif // !wxUSE_DISPLAY
-
 /* static */ wxDisplayFactory& wxDisplay::Factory()
 {
     if ( !gs_factory )
@@ -248,20 +200,10 @@ int wxDisplayFactory::GetFromWindow(const wxWindow *window)
 wxDisplayImpl *wxDisplayFactorySingle::CreateDisplay(unsigned n)
 {
     // we recognize the main display only
-    return n != 0 ? NULL : new wxDisplayImplSingle;
+    return n != 0 ? NULL : CreateSingleDisplay();
 }
 
 int wxDisplayFactorySingle::GetFromPoint(const wxPoint& pt)
 {
-    if ( pt.x >= 0 && pt.y >= 0 )
-    {
-        int w, h;
-        wxDisplaySize(&w, &h);
-
-        if ( pt.x < w && pt.y < h )
-            return 0;
-    }
-
-    // the point is outside of the screen
-    return wxNOT_FOUND;
+    return wxDisplay().GetGeometry().Contains(pt) ? 0 : wxNOT_FOUND;
 }

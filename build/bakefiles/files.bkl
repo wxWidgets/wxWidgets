@@ -2381,7 +2381,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/core/bitmap.cpp
     src/osx/core/colour.cpp
     src/osx/core/dcmemory.cpp
-    src/osx/core/display.cpp
     src/osx/core/fontenum.cpp
     src/osx/core/hid.cpp
     src/osx/core/printmac.cpp
@@ -2628,6 +2627,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/taskbarcmn.cpp
     src/osx/cocoa/activityindicator.mm
     src/osx/cocoa/statbmp.mm
+    src/osx/core/display.cpp
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
     wx/osx/cocoa/chkconf.h
