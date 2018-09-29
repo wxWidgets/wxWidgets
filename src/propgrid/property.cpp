@@ -3013,6 +3013,20 @@ wxPGChoiceEntry& wxPGChoices::AddAsSorted( const wxString& label, int value )
 
 // -----------------------------------------------------------------------
 
+void wxPGChoices::Add(size_t count, const wxString* labels, const long* values)
+{
+    AllocExclusive();
+
+    for ( size_t i = 0; i < count; ++i )
+    {
+        const int value = values ? values[i] : i;
+        wxPGChoiceEntry entry(labels[i], value);
+        m_data->Insert( i, entry );
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void wxPGChoices::Add( const wxChar* const* labels, const ValArrItem* values )
 {
     AllocExclusive();
