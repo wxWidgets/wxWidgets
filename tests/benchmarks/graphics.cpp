@@ -152,7 +152,9 @@ public:
         Connect(wxEVT_SIZE, wxSizeEventHandler(GraphicsBenchmarkFrame::OnSize));
 
         m_bitmapARGB.Create(64, 64, 32);
+#ifdef __WXMSW__
         m_bitmapARGB.UseAlpha(true);
+#endif // __WXMSW__
         m_bitmapRGB.Create(64, 64, 24);
 
         m_renderer = NULL;
@@ -320,8 +322,12 @@ private:
                 BenchmarkDCAndGC("RGB memory", dc, gcdc);
             }
             {
+#ifdef __WXMSW__
                 wxBitmap bmp(opts.width, opts.height, 32);
                 bmp.UseAlpha(false);
+#else // !__WXMSW__
+                wxBitmap bmp(opts.width, opts.height, 24);
+#endif // __WXMSW__/!__WXMSW__
                 wxMemoryDC dc(bmp);
                 wxGCDC gcdc;
                 if ( m_renderer )
@@ -333,7 +339,9 @@ private:
             }
             {
                 wxBitmap bmp(opts.width, opts.height, 32);
+#ifdef __WXMSW__
                 bmp.UseAlpha(true);
+#endif // __WXMSW__
                 wxMemoryDC dc(bmp);
                 wxGCDC gcdc;
                 if ( m_renderer )
