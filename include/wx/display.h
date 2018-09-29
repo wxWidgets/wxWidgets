@@ -50,7 +50,6 @@ public:
 
     // dtor is not virtual as this is a concrete class not meant to be derived
     // from
-    ~wxDisplay();
 
 
     // return the number of available displays, valid parameters to

@@ -118,12 +118,7 @@ wxDisplay::wxDisplay(unsigned n)
     wxASSERT_MSG( n == 0 || n < GetCount(),
                     wxT("An invalid index was passed to wxDisplay") );
 
-    m_impl = Factory().CreateDisplay(n);
-}
-
-wxDisplay::~wxDisplay()
-{
-    delete m_impl;
+    m_impl = Factory().GetDisplay(n);
 }
 
 // ----------------------------------------------------------------------------
@@ -229,6 +224,15 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 // ============================================================================
 // wxDisplayFactory implementation
 // ============================================================================
+
+wxDisplayFactory::~wxDisplayFactory()
+{
+    for ( size_t n = 0; n < m_impls.size(); ++n )
+    {
+        // It can be null, that's ok.
+        delete m_impls[n];
+    }
+}
 
 int wxDisplayFactory::GetFromWindow(const wxWindow *window)
 {
