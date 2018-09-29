@@ -241,7 +241,6 @@ int wxDisplayFactory::GetFromWindow(const wxWindow *window)
 // wxDisplayFactorySingle implementation
 // ============================================================================
 
-/* static */
 wxDisplayImpl *wxDisplayFactorySingle::CreateDisplay(unsigned n)
 {
     // we recognize the main display only
