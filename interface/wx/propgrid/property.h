@@ -2529,7 +2529,7 @@ public:
             Values for added choices. If empty, relevant entry indexes are
             used. Otherwise must have at least the same size as @a labels.
     */
-    void Add( const wxChar** labels, const ValArrItem* values = NULL );
+    void Add( const wxChar** labels, const long* values = NULL );
 
     /**
         Adds to current. Version that works with wxArrayString and wxArrayInt.
