@@ -106,7 +106,7 @@ bool MyApp::OnInit(void)
     m_bitmap = image;
 #endif
     m_angle = 30;
-    m_testFont.Create(10, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    m_testFont = wxFontInfo(10).Family(wxFONTFAMILY_SWISS);
 
 
     // Create the main frame window

@@ -189,7 +189,29 @@ BASE_OSX_NOTWXMAC_HDR =
 
 ## Qt
 
+QT_WIN32_SRC=
+    src/msw/ole/automtn.cpp
+    src/msw/ole/comimpl.cpp
+    src/msw/ole/oleutils.cpp
+    src/msw/ole/safearray.cpp
+    src/msw/ole/uuid.cpp
+    src/msw/dialup.cpp
+    src/msw/dib.cpp
+    src/msw/joystick.cpp
+    src/msw/sound.cpp
+
+QT_WIN32_HDR=
+    wx/msw/ole/automtn.h
+    wx/msw/ole/comimpl.h
+    wx/msw/ole/oleutils.h
+    wx/msw/ole/safearray.h
+    wx/msw/ole/uuid.h
+    wx/msw/dib.h
+    wx/msw/joystick.h
+    wx/msw/sound.h
+
 QT_HDR =
+    $(QT_PLATFORM_HDR)
     wx/generic/activityindicator.h
     wx/generic/animate.h
     wx/generic/caret.h
@@ -204,8 +226,6 @@ QT_HDR =
     wx/qt/accel.h
     wx/qt/anybutton.h
     wx/qt/app.h
-    wx/qt/apptbase.h
-    wx/qt/apptrait.h
     wx/qt/bitmap.h
     wx/qt/bmpbuttn.h
     wx/qt/brush.h
@@ -220,7 +240,6 @@ QT_HDR =
     wx/qt/colour.h
     wx/qt/combobox.h
     wx/qt/control.h
-    wx/qt/converter.h
     wx/qt/ctrlsub.h
     wx/qt/cursor.h
     wx/qt/dataform.h
@@ -258,7 +277,6 @@ QT_HDR =
     wx/qt/popupwin.h
     wx/qt/printdlg.h
     wx/qt/printqt.h
-    wx/qt/private/winevent.h
     wx/qt/radiobox.h
     wx/qt/radiobut.h
     wx/qt/region.h
@@ -273,17 +291,15 @@ QT_HDR =
     wx/qt/statusbar.h
     wx/qt/taskbar.h
     wx/qt/textctrl.h
-    wx/qt/textdlg.h
     wx/qt/textentry.h
     wx/qt/tglbtn.h
-    wx/qt/timer.h
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
-    wx/qt/utils.h
     wx/qt/window.h
 
 QT_SRC=
+    $(QT_PLATFORM_SRC)
     src/common/taskbarcmn.cpp
     src/generic/activityindicator.cpp
     src/generic/animateg.cpp
@@ -315,7 +331,6 @@ QT_SRC=
     src/qt/colour.cpp
     src/qt/combobox.cpp
     src/qt/control.cpp
-    src/qt/converter.cpp
     src/qt/converter.cpp
     src/qt/ctrlsub.cpp
     src/qt/cursor.cpp
@@ -382,6 +397,12 @@ QT_SRC=
 
 MEDIA_QT_SRC=
     src/qt/mediactrl.cpp
+
+OPENGL_QT_HDR=
+    wx/qt/glcanvas.h
+
+OPENGL_QT_SRC=
+    src/qt/glcanvas.cpp
 
 ## Common
 

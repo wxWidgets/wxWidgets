@@ -36,10 +36,21 @@ environment:
     GENERATOR: 'Visual Studio 12'
     SHARED: ON
     CONFIGURATION: Release
+  - TOOLSET: cmake_qt
+    GENERATOR: 'Visual Studio 14 2015 Win64'
+    SHARED: ON
+    CONFIGURATION: Release
 
 clone_depth: 50
 
 install: git submodule update --init
+
+init:
+- ps: |
+    if ($env:APPVEYOR_PULL_REQUEST_NUMBER -and $env:APPVEYOR_BUILD_NUMBER -ne ((Invoke-RestMethod `
+        https://ci.appveyor.com/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=50).builds | `
+        Where-Object pullRequestId -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
+        throw "There are newer queued builds for this pull request, failing early." }
 
 before_build:
 - ps: |
@@ -49,10 +60,6 @@ before_build:
       %{$_ -replace "define wxUSE_STL 0", "define wxUSE_STL $env:wxUSE_STL"} |
       sc include\wx\msw\setup.h
     }
-    if ($env:APPVEYOR_PULL_REQUEST_NUMBER -and $env:APPVEYOR_BUILD_NUMBER -ne ((Invoke-RestMethod `
-        https://ci.appveyor.com/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=50).builds | `
-        Where-Object pullRequestId -eq $env:APPVEYOR_PULL_REQUEST_NUMBER)[0].buildNumber) { `
-        throw "There are newer queued builds for this pull request, failing early." }
 
 build_script: c:\projects\wxwidgets\build\tools\appveyor.bat
 
