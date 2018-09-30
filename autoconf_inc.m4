@@ -530,12 +530,6 @@ dnl ### begin block 20_COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0[../../samples/dialogs/
         COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0=""
     fi
     AC_SUBST(COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0)
-dnl ### begin block 20_COND_SHARED_0_TOOLKIT_PM_WXUNIV_0[../../samples/dialogs/dialogs.bkl] ###
-    COND_SHARED_0_TOOLKIT_PM_WXUNIV_0="#"
-    if test "x$SHARED" = "x0" -a "x$TOOLKIT" = "xPM" -a "x$WXUNIV" = "x0" ; then
-        COND_SHARED_0_TOOLKIT_PM_WXUNIV_0=""
-    fi
-    AC_SUBST(COND_SHARED_0_TOOLKIT_PM_WXUNIV_0)
 dnl ### begin block 20_COND_SHARED_0_USE_GUI_1_USE_OPENGL_1[wx.bkl] ###
     COND_SHARED_0_USE_GUI_1_USE_OPENGL_1="#"
     if test "x$SHARED" = "x0" -a "x$USE_GUI" = "x1" -a "x$USE_OPENGL" = "x1" ; then

@@ -106,8 +106,6 @@ COND_PLATFORM_OS2_1___dialogs___os2_emxbindcmd = $(NM) dialogs$(EXEEXT) | if \
 @COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0@	dialogs_filedlgg.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__GENERIC_DIALOGS_IN_NATIVE_BUILDS_OBJECTS \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= dialogs_filedlgg.o
-@COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@__GENERIC_DIALOGS_IN_NATIVE_BUILDS_OBJECTS \
-@COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@	= dialogs_fontdlgg.o dialogs_filedlgg.o
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
@@ -221,15 +219,9 @@ dialogs_dialogs.o: $(srcdir)/dialogs.cpp
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@dialogs_filedlgg.o: $(srcdir)/../../src/generic/filedlgg.cpp
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/filedlgg.cpp
 
-@COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@dialogs_filedlgg.o: $(srcdir)/../../src/generic/filedlgg.cpp
-@COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/filedlgg.cpp
 
 @COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@dialogs_fontdlgg.o: $(srcdir)/../../src/generic/fontdlgg.cpp
 @COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/fontdlgg.cpp
-
-@COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@dialogs_fontdlgg.o: $(srcdir)/../../src/generic/fontdlgg.cpp
-@COND_SHARED_0_TOOLKIT_PM_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/fontdlgg.cpp
-
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d
