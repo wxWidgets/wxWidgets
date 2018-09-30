@@ -10,8 +10,6 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/wxprec.h"
-
 #include "wx/utils.h"
 
 #ifndef WX_PRECOMP
