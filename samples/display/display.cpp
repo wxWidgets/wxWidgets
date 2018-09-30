@@ -278,6 +278,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
         sizer->Add(new wxStaticText(page, wxID_ANY, "Name: "));
         sizer->Add(new wxStaticText(page, wxID_ANY, display.GetName()));
 
+        sizer->Add(new wxStaticText(page, wxID_ANY, "Primary: "));
+        sizer->Add(new wxStaticText(page, wxID_ANY,
+                                    display.IsPrimary() ? "yes" : "no"));
+
         wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
         sizerTop->Add(sizer, 1, wxALL | wxEXPAND, 10);
 
