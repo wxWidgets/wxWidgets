@@ -235,8 +235,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     wxPanel *panel = new wxPanel(this, wxID_ANY);
 
     m_book = new wxBookCtrl(panel, wxID_ANY);
-    const size_t count = wxDisplay::GetCount();
-    for ( size_t nDpy = 0; nDpy < count; nDpy++ )
+    const size_t countDpy = wxDisplay::GetCount();
+    for ( size_t nDpy = 0; nDpy < countDpy; nDpy++ )
     {
         wxDisplay display(nDpy);
 
@@ -288,8 +288,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 #if wxUSE_DISPLAY
         wxChoice *choiceModes = new wxChoice(page, Display_ChangeMode);
         const wxArrayVideoModes modes = display.GetModes();
-        const size_t count = modes.GetCount();
-        for ( size_t nMode = 0; nMode < count; nMode++ )
+        const size_t countModes = modes.GetCount();
+        for ( size_t nMode = 0; nMode < countModes; nMode++ )
         {
             const wxVideoMode& mode = modes[nMode];
 
