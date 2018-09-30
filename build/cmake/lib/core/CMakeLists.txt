@@ -71,5 +71,13 @@ if(WXOSX_COCOA)
         "-framework AudioToolbox"
         )
 endif()
+if(WXGTK AND wxUSE_PRIVATE_FONTS)
+    wx_lib_include_directories(core PUBLIC
+        ${FONTCONFIG_INCLUDE_DIR}
+    )
+    wx_lib_link_libraries(core PUBLIC
+        ${FONTCONFIG_LIBRARIES}
+    )
+endif()
 
 wx_finalize_lib(core)
