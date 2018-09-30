@@ -20,6 +20,8 @@ public:
     wxDisplayImplQt( unsigned n );
 
     virtual wxRect GetGeometry() const wxOVERRIDE;
+    virtual wxRect GetClientArea() const wxOVERRIDE;
+
     virtual wxString GetName() const wxOVERRIDE;
 
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
@@ -35,6 +37,11 @@ wxDisplayImplQt::wxDisplayImplQt( unsigned n )
 wxRect wxDisplayImplQt::GetGeometry() const
 {
     return wxQtConvertRect( QApplication::desktop()->screenGeometry( GetIndex() ));
+}
+
+wxRect wxDisplayImplQt::GetClientArea() const
+{
+    return wxQtConvertRect( QApplication::desktop()->availableGeometry( GetIndex() ));
 }
 
 wxString wxDisplayImplQt::GetName() const
