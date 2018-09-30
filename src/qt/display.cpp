@@ -67,17 +67,10 @@ bool wxDisplayImplQt::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 class wxDisplayFactoryQt : public wxDisplayFactory
 {
 public:
-    wxDisplayFactoryQt();
-
     virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
     virtual unsigned GetCount() wxOVERRIDE;
     virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
 };
-
-    
-wxDisplayFactoryQt::wxDisplayFactoryQt()
-{
-}
 
 wxDisplayImpl *wxDisplayFactoryQt::CreateDisplay(unsigned n)
 {
