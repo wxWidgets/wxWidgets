@@ -165,6 +165,29 @@ set(BASE_OSX_NOTWXMAC_HDR
     ${BASE_COREFOUNDATION_HDR}
 )
 
+set(QT_WIN32_SRC
+    src/msw/ole/automtn.cpp
+    src/msw/ole/safearray.cpp
+    src/msw/sound.cpp
+    src/msw/ole/oleutils.cpp
+    src/msw/ole/uuid.cpp
+    src/msw/ole/comimpl.cpp
+    src/msw/dialup.cpp
+    src/msw/dib.cpp
+    src/msw/joystick.cpp
+)
+
+set(QT_WIN32_HDR
+    wx/msw/ole/automtn.h
+    wx/msw/joystick.h
+    wx/msw/dib.h
+    wx/msw/ole/uuid.h
+    wx/msw/ole/safearray.h
+    wx/msw/sound.h
+    wx/msw/ole/oleutils.h
+    wx/msw/ole/comimpl.h
+)
+
 set(QT_HDR
     wx/qt/accel.h
     wx/qt/app.h
@@ -251,6 +274,7 @@ set(QT_HDR
     wx/qt/taskbar.h
     wx/qt/dataview.h
     wx/generic/activityindicator.h
+    ${QT_PLATFORM_HDR}
 )
 
 set(QT_SRC
@@ -348,6 +372,7 @@ set(QT_SRC
     src/qt/calctrl.cpp
     src/qt/dataview.cpp
     src/qt/taskbar.cpp
+    ${QT_PLATFORM_SRC}
 )
 
 set(MEDIA_QT_SRC

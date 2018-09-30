@@ -242,6 +242,37 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                               wxQT                                       -->
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 
+<set var="QT_WIN32_SRC" hints="files">
+    src/msw/ole/comimpl.cpp
+    src/msw/dialup.cpp
+    src/msw/dib.cpp
+    src/msw/joystick.cpp
+    src/msw/ole/oleutils.cpp
+    src/msw/ole/uuid.cpp
+    src/msw/ole/safearray.cpp
+    src/msw/sound.cpp
+    src/msw/ole/automtn.cpp
+</set>
+
+<set var="QT_WIN32_HDR" hints="files">
+    wx/msw/dib.h
+    wx/msw/ole/automtn.h
+    wx/msw/joystick.h
+    wx/msw/sound.h
+    wx/msw/ole/safearray.h
+    wx/msw/ole/oleutils.h
+    wx/msw/ole/comimpl.h
+    wx/msw/ole/uuid.h
+</set>
+
+<set var="QT_PLATFORM_SRC" hints="files">
+    <if cond="PLATFORM_WIN32=='1'">$(QT_WIN32_SRC)</if>
+</set>
+
+<set var="QT_PLATFORM_HDR" hints="files">
+    <if cond="PLATFORM_WIN32=='1'">$(QT_WIN32_HDR)</if>
+</set>
+
 <set var="QT_HDR" hints="files">
     wx/qt/accel.h
     wx/qt/app.h
@@ -329,6 +360,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/activityindicator.h
     wx/qt/dataview.h
     wx/qt/dvrenderers.h
+    $(QT_PLATFORM_HDR)
 </set>
 
 <set var="QT_SRC" hints="files">
@@ -426,6 +458,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/uiaction.cpp
     src/qt/utils.cpp
     src/qt/window.cpp
+    $(QT_PLATFORM_SRC)
 </set>
 
 <set var="MEDIA_QT_SRC" hints="files">

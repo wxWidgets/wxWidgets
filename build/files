@@ -189,7 +189,29 @@ BASE_OSX_NOTWXMAC_HDR =
 
 ## Qt
 
+QT_WIN32_SRC=
+    src/msw/ole/automtn.cpp
+    src/msw/ole/comimpl.cpp
+    src/msw/ole/oleutils.cpp
+    src/msw/ole/safearray.cpp
+    src/msw/ole/uuid.cpp
+    src/msw/dialup.cpp
+    src/msw/dib.cpp
+    src/msw/joystick.cpp
+    src/msw/sound.cpp
+
+QT_WIN32_HDR=
+    wx/msw/ole/automtn.h
+    wx/msw/ole/comimpl.h
+    wx/msw/ole/oleutils.h
+    wx/msw/ole/safearray.h
+    wx/msw/ole/uuid.h
+    wx/msw/dib.h
+    wx/msw/joystick.h
+    wx/msw/sound.h
+
 QT_HDR =
+    $(QT_PLATFORM_HDR)
     wx/generic/activityindicator.h
     wx/generic/animate.h
     wx/generic/caret.h
@@ -277,6 +299,7 @@ QT_HDR =
     wx/qt/window.h
 
 QT_SRC=
+    $(QT_PLATFORM_SRC)
     src/common/taskbarcmn.cpp
     src/generic/activityindicator.cpp
     src/generic/animateg.cpp
