@@ -3472,9 +3472,6 @@ if test "$wxUSE_DISPLAY" = "yes"; then
             AC_MSG_WARN([Xinerama not found; disabling wxDisplay])
             wxUSE_DISPLAY="no"
         fi
-    elif test "$wxUSE_MSW" = 1; then
-        dnl DirectDraw for MSW - optionally used by WxDisplay.
-        AC_CHECK_HEADER([ddraw.h], [], [], [#include <windows.h>])
     fi
 fi
 

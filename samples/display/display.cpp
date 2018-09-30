@@ -170,13 +170,6 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
-#ifdef __WXMSW__
-    if ( argc == 2 && !wxStricmp(argv[1],  "/dx") )
-    {
-        wxSystemOptions::SetOption("msw.display.directdraw", 1);
-    }
-#endif // __WXMSW__
-
     // create the main application window
     MyFrame *frame = new MyFrame(_("Display wxWidgets Sample"),
                                  wxDefaultPosition, wxDefaultSize);

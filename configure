@@ -27521,14 +27521,6 @@ fi
 $as_echo "$as_me: WARNING: Xinerama not found; disabling wxDisplay" >&2;}
             wxUSE_DISPLAY="no"
         fi
-    elif test "$wxUSE_MSW" = 1; then
-                ac_fn_c_check_header_compile "$LINENO" "ddraw.h" "ac_cv_header_ddraw_h" "#include <windows.h>
-"
-if test "x$ac_cv_header_ddraw_h" = xyes; then :
-
-fi
-
-
     fi
 fi
 
