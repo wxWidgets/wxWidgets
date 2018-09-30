@@ -18,7 +18,7 @@
 // wxDisplayFactory: allows to create wxDisplay objects
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDisplayFactory
+class wxDisplayFactory
 {
 public:
     wxDisplayFactory() { }
@@ -65,7 +65,7 @@ private:
 // wxDisplayImpl: base class for all wxDisplay implementations
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDisplayImpl
+class wxDisplayImpl
 {
 public:
     // virtual dtor for this base class
@@ -160,7 +160,7 @@ public:
 // Note that this is still an ABC and derived classes must implement
 // CreateSingleDisplay().
 
-class WXDLLIMPEXP_CORE wxDisplayFactorySingle : public wxDisplayFactory
+class wxDisplayFactorySingle : public wxDisplayFactory
 {
 public:
     virtual unsigned GetCount() wxOVERRIDE { return 1; }
