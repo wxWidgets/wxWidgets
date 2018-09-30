@@ -285,7 +285,7 @@ void MainFrame::OnShowTransparent(wxCommandEvent& WXUNUSED(event))
         seeThroughFrame->Show(true);
     }
     else
-        wxMessageBox(wxS("transparent window requires a composited screen"));
+        wxMessageBox("transparent window requires a composited screen");
 }
 
 void MainFrame::OnShowEffect(wxCommandEvent& event)

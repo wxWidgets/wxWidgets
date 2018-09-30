@@ -455,7 +455,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame(wxS("Text wxWidgets sample"), 50, 50);
+    MyFrame *frame = new MyFrame("Text wxWidgets sample", 50, 50);
 
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(TEXT_SAVE, "&Save file\tCtrl-S",

@@ -663,7 +663,7 @@ MyFrame::MyFrame()
 
     wxMenu *menuImage = new wxMenu;
     menuImage->Append( ID_NEW, "&Show any image...\tCtrl-O");
-    menuImage->Append(ID_NEW_HIDPI, wxS("Show any image as &HiDPI...\tCtrl-H"));
+    menuImage->Append(ID_NEW_HIDPI, "Show any image as &HiDPI...\tCtrl-H");
     menuImage->Append( ID_INFO, "Show image &information...\tCtrl-I");
 #ifdef wxHAVE_RAW_BITMAP
     menuImage->AppendSeparator();
