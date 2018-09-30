@@ -138,10 +138,6 @@ public:
     {
         return wxDataTransfer<W>::template From<T>(this->GetWindow(), this->m_data);
     }
-
-protected:
-
-    explicit wxGenericValidatorSimpleType(void* data) : wxGenericValidatorBase(data){}
 };
 
 // ----------------------------------------------------------------------------
@@ -164,7 +160,7 @@ protected:
     template<class W, template<typename> class TComposite, typename T>
     #define COMPOSIT_TYPE TComposite<T>
 #endif // defined(HAVE_VARIADIC_TEMPLATES)
-class wxGenericValidatorCompositType : public wxGenericValidatorSimpleType<W, T>
+class wxGenericValidatorCompositType : public wxGenericValidatorBase
 {
     typedef COMPOSIT_TYPE CompositeType;
 
@@ -191,18 +187,30 @@ class wxGenericValidatorCompositType : public wxGenericValidatorSimpleType<W, T>
 public:
 
     explicit wxGenericValidatorCompositType(CompositeType& data)
-        : wxGenericValidatorSimpleType<W, T>(std::addressof(data))
+        : wxGenericValidatorBase(std::addressof(data))
     {
     }
 
     wxGenericValidatorCompositType(const wxGenericValidatorCompositType& val)
-        : wxGenericValidatorSimpleType<W, T>(val)
+        : wxGenericValidatorBase(val)
     {
     }
 
     virtual ~wxGenericValidatorCompositType(){}
 
     virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorCompositType(*this); }
+
+    virtual void SetWindow(wxWindow *win) wxOVERRIDE
+    {
+        this->m_validatorWindow = win; 
+
+        wxASSERT_MSG((wxTypeId(*win) == wxTypeId(W)), "Invalid window type!");
+    }
+
+    virtual bool Validate(wxWindow* parent) wxOVERRIDE
+    {
+        return wxDataTransfer<W>::DoValidate(static_cast<W*>(this->GetWindow()), parent);
+    }
 
     virtual bool TransferToWindow() wxOVERRIDE
     {
@@ -250,7 +258,7 @@ template<class... Ls> wxVisitor(Ls...) -> wxVisitor<Ls...>;
 
 template<class W, typename T, typename... Ts>
 class wxGenericValidatorCompositType<W, std::variant, T, Ts...> 
-    : public wxGenericValidatorSimpleType<W, T>
+    : public wxGenericValidatorBase
 {
     typedef std::variant<T, Ts...> CompositeType;
 
@@ -275,18 +283,30 @@ class wxGenericValidatorCompositType<W, std::variant, T, Ts...>
 public:
 
     explicit wxGenericValidatorCompositType(CompositeType& data)
-        : wxGenericValidatorSimpleType<W, T>(std::addressof(data))
+        : wxGenericValidatorBase(std::addressof(data))
     {
     }
 
     wxGenericValidatorCompositType(const wxGenericValidatorCompositType& val)
-        : wxGenericValidatorSimpleType<W, T>(val)
+        : wxGenericValidatorBase(val)
     {
     }
 
     virtual ~wxGenericValidatorCompositType(){}
 
     virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorCompositType(*this); }
+
+    virtual void SetWindow(wxWindow *win) wxOVERRIDE
+    {
+        this->m_validatorWindow = win; 
+
+        wxASSERT_MSG((wxTypeId(*win) == wxTypeId(W)), "Invalid window type!");
+    }
+
+    virtual bool Validate(wxWindow* parent) wxOVERRIDE
+    {
+        return wxDataTransfer<W>::DoValidate(static_cast<W*>(this->GetWindow()), parent);
+    }
 
     virtual bool TransferToWindow() wxOVERRIDE
     {
