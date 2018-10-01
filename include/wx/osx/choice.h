@@ -91,7 +91,6 @@ protected:
 
     wxArrayString m_strings;
     wxChoiceDataArray m_datas ;
-    wxMenu*    m_popUpMenu ;
 
 private:
     // This should be called when the number of items in the control changes.

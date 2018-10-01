@@ -128,7 +128,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main application window
-    MyFrame *frame = new MyFrame(wxT("OleAuto wxWidgets App"),
+    MyFrame *frame = new MyFrame("OleAuto wxWidgets App",
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // Show it
@@ -154,14 +154,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
-    menuFile->Append(OleAuto_Test, wxT("&Test Excel Automation..."));
-    menuFile->Append(OleAuto_About, wxT("&About"));
+    menuFile->Append(OleAuto_Test, "&Test Excel Automation...");
+    menuFile->Append(OleAuto_About, "&About");
     menuFile->AppendSeparator();
-    menuFile->Append(OleAuto_Quit, wxT("E&xit"));
+    menuFile->Append(OleAuto_Quit, "E&xit");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(menuFile, wxT("&File"));
+    menuBar->Append(menuFile, "&File");
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -169,7 +169,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText(wxT("Welcome to wxWidgets!"));
+    SetStatusText("Welcome to wxWidgets!");
 #endif // wxUSE_STATUSBAR
 }
 
@@ -184,8 +184,8 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(wxT("This is an OLE Automation sample"),
-                 wxT("About OleAuto"), wxOK | wxICON_INFORMATION, this);
+    wxMessageBox("This is an OLE Automation sample",
+                 "About OleAuto", wxOK | wxICON_INFORMATION, this);
 }
 
 /* Tests OLE automation by making the active Excel cell bold,
@@ -193,47 +193,47 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
  */
 void MyFrame::OnTest(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(wxT("Excel will be started if it is not running after you have pressed OK button.")
-        wxT("\nThe active cell should then say 'wxWidgets automation test!' in bold."),
-        wxT("Excel start"));
+    wxMessageBox("Excel will be started if it is not running after you have pressed OK button."
+        "\nThe active cell should then say 'wxWidgets automation test!' in bold.",
+        "Excel start");
 
     wxAutomationObject excelObject;
-    if ( !excelObject.GetInstance(wxT("Excel.Application")) )
+    if ( !excelObject.GetInstance("Excel.Application") )
     {
-        wxLogError(wxT("Could not create Excel object."));
+        wxLogError("Could not create Excel object.");
         return;
     }
 
     // Ensure that Excel is visible
-    if (!excelObject.PutProperty(wxT("Visible"), true))
+    if (!excelObject.PutProperty("Visible", true))
     {
-        wxLogError(wxT("Could not make Excel object visible"));
+        wxLogError("Could not make Excel object visible");
     }
-    const wxVariant workbooksCountVariant = excelObject.GetProperty(wxT("Workbooks.Count"));
+    const wxVariant workbooksCountVariant = excelObject.GetProperty("Workbooks.Count");
     if (workbooksCountVariant.IsNull())
     {
-        wxLogError(wxT("Could not get workbooks count"));
+        wxLogError("Could not get workbooks count");
         return;
     }
     const long workbooksCount = workbooksCountVariant;
     if (workbooksCount == 0)
     {
-        const wxVariant workbook = excelObject.CallMethod(wxT("Workbooks.Add"));
+        const wxVariant workbook = excelObject.CallMethod("Workbooks.Add");
         if (workbook.IsNull())
         {
-            wxLogError(wxT("Could not create new Workbook"));
+            wxLogError("Could not create new Workbook");
             return;
         }
     }
 
-    if (!excelObject.PutProperty(wxT("ActiveCell.Value"), wxT("wxWidgets automation test!")))
+    if (!excelObject.PutProperty("ActiveCell.Value", "wxWidgets automation test!"))
     {
-        wxLogError(wxT("Could not set active cell value."));
+        wxLogError("Could not set active cell value.");
         return;
     }
-    if (!excelObject.PutProperty(wxT("ActiveCell.Font.Bold"), wxVariant(true)) )
+    if (!excelObject.PutProperty("ActiveCell.Font.Bold", wxVariant(true)) )
     {
-        wxLogError(wxT("Could not put Bold property to active cell."));
+        wxLogError("Could not put Bold property to active cell.");
         return;
     }
 }

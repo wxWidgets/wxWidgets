@@ -10,6 +10,7 @@
 
 #include "wx/menuitem.h"
 #include "wx/bitmap.h"
+
 class QAction;
 
 class WXDLLIMPEXP_FWD_CORE wxBitmap;
@@ -38,6 +39,7 @@ public:
     virtual const wxBitmap& GetBitmap() const { return m_bitmap; };
 
     virtual QAction *GetHandle() const;
+
 
 private:
     // Qt is using an action instead of a menu item.

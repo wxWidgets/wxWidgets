@@ -242,11 +242,40 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                               wxQT                                       -->
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 
+<set var="QT_WIN32_SRC" hints="files">
+    src/msw/ole/comimpl.cpp
+    src/msw/dialup.cpp
+    src/msw/dib.cpp
+    src/msw/joystick.cpp
+    src/msw/ole/oleutils.cpp
+    src/msw/ole/uuid.cpp
+    src/msw/ole/safearray.cpp
+    src/msw/sound.cpp
+    src/msw/ole/automtn.cpp
+</set>
+
+<set var="QT_WIN32_HDR" hints="files">
+    wx/msw/dib.h
+    wx/msw/ole/automtn.h
+    wx/msw/joystick.h
+    wx/msw/sound.h
+    wx/msw/ole/safearray.h
+    wx/msw/ole/oleutils.h
+    wx/msw/ole/comimpl.h
+    wx/msw/ole/uuid.h
+</set>
+
+<set var="QT_PLATFORM_SRC" hints="files">
+    <if cond="PLATFORM_WIN32=='1'">$(QT_WIN32_SRC)</if>
+</set>
+
+<set var="QT_PLATFORM_HDR" hints="files">
+    <if cond="PLATFORM_WIN32=='1'">$(QT_WIN32_HDR)</if>
+</set>
+
 <set var="QT_HDR" hints="files">
     wx/qt/accel.h
     wx/qt/app.h
-    wx/qt/apptbase.h
-    wx/qt/apptrait.h
     wx/qt/bitmap.h
     wx/qt/bmpbuttn.h
     wx/qt/brush.h
@@ -262,7 +291,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/colour.h
     wx/qt/combobox.h
     wx/qt/control.h
-    wx/qt/converter.h
     wx/qt/ctrlsub.h
     wx/qt/cursor.h
     wx/qt/dataform.h
@@ -313,17 +341,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/statusbar.h
     wx/qt/stattext.h
     wx/qt/textctrl.h
-    wx/qt/textdlg.h
     wx/qt/textentry.h
     wx/qt/tglbtn.h
-    wx/qt/timer.h
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
     <!-- wx/qt/treectrl.h -->
-    wx/qt/utils.h
     wx/qt/window.h
-    wx/qt/private/winevent.h
     wx/generic/fdrepdlg.h
     wx/generic/filepickerg.h
     wx/generic/clrpickerg.h
@@ -336,6 +360,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/activityindicator.h
     wx/qt/dataview.h
     wx/qt/dvrenderers.h
+    $(QT_PLATFORM_HDR)
 </set>
 
 <set var="QT_SRC" hints="files">
@@ -433,6 +458,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/uiaction.cpp
     src/qt/utils.cpp
     src/qt/window.cpp
+    $(QT_PLATFORM_SRC)
 </set>
 
 <set var="MEDIA_QT_SRC" hints="files">
@@ -1124,7 +1150,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dialup.h
     wx/dirctrl.h
     wx/display.h
-    wx/display_impl.h
     wx/dnd.h
     wx/docmdi.h
     wx/docview.h
@@ -2382,7 +2407,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/core/bitmap.cpp
     src/osx/core/colour.cpp
     src/osx/core/dcmemory.cpp
-    src/osx/core/display.cpp
     src/osx/core/fontenum.cpp
     src/osx/core/hid.cpp
     src/osx/core/printmac.cpp
@@ -2435,7 +2459,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/carbon/cursor.cpp
     src/osx/carbon/fontdlg.cpp
     src/osx/carbon/gdiobj.cpp
-    src/osx/carbon/icon.cpp
     src/osx/carbon/app.cpp
     src/osx/carbon/control.cpp
     src/osx/carbon/dataobj.cpp
@@ -2468,6 +2491,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
     src/generic/textmeasure.cpp
+    src/generic/icon.cpp
+    src/osx/statbmp_osx.cpp
 </if>
 </set>
 
@@ -2511,7 +2536,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/fontdlg.h
     wx/osx/frame.h
     wx/osx/gauge.h
-    wx/osx/icon.h
     wx/osx/imaglist.h
     wx/osx/listbox.h
     wx/osx/listctrl.h
@@ -2566,6 +2590,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/prntdlgg.h
     wx/generic/statusbr.h
     wx/osx/appprogress.h
+    wx/generic/icon.h
 </set>
 
 <!-- ====================================================================== -->
@@ -2627,6 +2652,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/timectrl_osx.cpp
     src/common/taskbarcmn.cpp
     src/osx/cocoa/activityindicator.mm
+    src/osx/cocoa/statbmp.mm
+    src/osx/core/display.cpp
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
     wx/osx/cocoa/chkconf.h
@@ -2656,7 +2683,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="OSX_IPHONE_SRC" hints="files">
     $(OSX_COMMON_SRC)
     src/generic/regiong.cpp
-    src/generic/icon.cpp
     <!-- iphone files -->
     src/osx/iphone/anybutton.mm
     src/osx/iphone/button.mm
@@ -2673,11 +2699,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/iphone/toolbar.mm
     src/osx/iphone/utils.mm
     src/osx/iphone/window.mm
-    src/osx/cocoa/stdpaths.mm
     src/osx/iphone/settings.mm
     src/osx/sound_osx.cpp
     src/osx/core/sound.cpp
     src/generic/animateg.cpp
+    src/osx/iphone/statbmp.mm
 </set>
 
 <set var="OSX_IPHONE_HDR" hints="files">

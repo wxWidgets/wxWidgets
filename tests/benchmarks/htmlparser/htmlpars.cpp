@@ -21,6 +21,7 @@
     #include "wx/app.h"
 #endif
 
+#include "wx/crt.h"
 #include "wx/tokenzr.h"
 #include "wx/wfstream.h"
 #include "wx/url.h"

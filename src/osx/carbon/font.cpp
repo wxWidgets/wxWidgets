@@ -476,10 +476,14 @@ wxFont::wxFont(wxOSXSystemFont font)
     m_refData = new wxFontRefData(ctfont);
 }
 
+#if wxOSX_USE_COCOA
+
 wxFont::wxFont(WX_NSFont nsfont)
 {
     m_refData = new wxFontRefData((CTFontRef)nsfont);
 }
+
+#endif
 
 wxFont::wxFont(CTFontRef font)
 {

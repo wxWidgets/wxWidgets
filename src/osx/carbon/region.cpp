@@ -77,6 +77,21 @@ wxRegion::wxRegion(WXHRGN hRegion )
 
 wxRegion::wxRegion(long x, long y, long w, long h)
 {
+    // Rectangle needs to be given in the canonical form,
+    // with (x,y) pointing to the top-left corner
+    // and with non-negative width and height
+    // (for compatibility with wxMSW anf wxGTK).
+    if ( w < 0 )
+    {
+        w = -w;
+        x -= (w - 1);
+    }
+    if ( h < 0 )
+    {
+        h = -h;
+        y -= (h - 1);
+    }
+
     m_refData = new wxRegionRefData(x , y , w , h );
 }
 

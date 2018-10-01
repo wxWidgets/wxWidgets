@@ -76,22 +76,6 @@ void *wxGetDisplay()
 }
 #endif
 
-void wxDisplaySize( int *width, int *height )
-{
-#ifdef __WXGTK4__
-    GdkMonitor* monitor = gdk_display_get_primary_monitor(gdk_display_get_default());
-    GdkRectangle rect;
-    gdk_monitor_get_geometry(monitor, &rect);
-    if (width) *width = rect.width;
-    if (height) *height = rect.height;
-#else
-    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
-    if (width) *width = gdk_screen_width();
-    if (height) *height = gdk_screen_height();
-    wxGCC_WARNING_RESTORE()
-#endif
-}
-
 void wxDisplaySizeMM( int *width, int *height )
 {
 #ifdef __WXGTK4__

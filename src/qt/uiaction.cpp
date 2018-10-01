@@ -12,6 +12,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_UIACTIONSIMULATOR
+
 #include "wx/uiaction.h"
 #include "wx/private/uiaction.h"
 
@@ -23,8 +25,6 @@
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 
-
-#if wxUSE_UIACTIONSIMULATOR
 
 using namespace Qt;
 using namespace QTest;

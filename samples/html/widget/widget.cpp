@@ -40,16 +40,16 @@ TAG_HANDLER_PROC(tag)
     int ax, ay;
     int fl = 0;
 
-    tag.ScanParam(wxT("X"), wxT("%i"), &ax);
-    tag.ScanParam(wxT("Y"), wxT("%i"), &ay);
+    tag.ScanParam("X", "%i", &ax);
+    tag.ScanParam("Y", "%i", &ay);
 
-    if (tag.HasParam(wxT("FLOAT"))) fl = ax;
+    if (tag.HasParam("FLOAT")) fl = ax;
 
     wnd = new wxTextCtrl
               (
                 m_WParser->GetWindowInterface()->GetHTMLWindow(),
                 wxID_ANY,
-                tag.GetParam(wxT("NAME")),
+                tag.GetParam("NAME"),
                 wxPoint(0,0),
                 wxSize(ax, ay),
                 wxTE_MULTILINE
@@ -209,7 +209,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #if wxUSE_STATUSBAR
     html -> SetRelatedStatusBar(1);
 #endif // wxUSE_STATUSBAR
-    html -> LoadPage(wxT("start.htm"));
+    html -> LoadPage("start.htm");
 
 }
 

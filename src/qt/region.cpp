@@ -10,6 +10,7 @@
 
 #include "wx/region.h"
 #include "wx/bitmap.h"
+#include "wx/scopedarray.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/utils.h"
 
@@ -106,8 +107,8 @@ wxRegion::wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance)
         return;
     }
 
-    unsigned char raw[bmp.GetWidth()*bmp.GetHeight()];
-    memset(raw, 0, bmp.GetWidth()*bmp.GetHeight());
+    wxScopedArray<unsigned char> raw(bmp.GetWidth()*bmp.GetHeight());
+    memset(raw.get(), 0, bmp.GetWidth()*bmp.GetHeight());
 
     QImage img(bmp.GetHandle()->toImage());
     int r = transp.Red(), g = transp.Green(), b = transp.Blue();
@@ -125,7 +126,7 @@ wxRegion::wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance)
         }
     }
             
-    m_refData = new wxRegionRefData(QBitmap::fromData(bmp.GetHandle()->size(), raw));
+    m_refData = new wxRegionRefData(QBitmap::fromData(bmp.GetHandle()->size(), raw.get()));
 }
 
 bool wxRegion::IsEmpty() const

@@ -154,7 +154,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
     html = new wxHtmlWindow(&dlg, wxID_ANY, wxDefaultPosition, wxSize(380, 160), wxHW_SCROLLBAR_NEVER);
     html -> SetBorders(0);
-    html -> LoadPage(wxT("data/about.htm"));
+    html -> LoadPage("data/about.htm");
     html -> SetInitialSize(wxSize(html -> GetInternalRepresentation() -> GetWidth(),
                                   html -> GetInternalRepresentation() -> GetHeight()));
 

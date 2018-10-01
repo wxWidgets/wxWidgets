@@ -256,7 +256,7 @@ public:
     int GetNumberCols() wxOVERRIDE { return m_sizeGrid; }
     wxString GetValue( int row, int col ) wxOVERRIDE
     {
-        return wxString::Format(wxT("(%d, %d)"), row, col);
+        return wxString::Format("(%d, %d)", row, col);
     }
 
     void SetValue( int , int , const wxString&  ) wxOVERRIDE { /* ignore */ }

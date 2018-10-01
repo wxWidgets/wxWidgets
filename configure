@@ -745,10 +745,10 @@ COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBPNG_builtin
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBJPEG_builtin
 COND_SHARED_0_USE_GUI_1_USE_OPENGL_1
-COND_SHARED_0_TOOLKIT_PM_WXUNIV_0
 COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0
 COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0
 COND_SHARED_0
+COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
@@ -27521,14 +27521,6 @@ fi
 $as_echo "$as_me: WARNING: Xinerama not found; disabling wxDisplay" >&2;}
             wxUSE_DISPLAY="no"
         fi
-    elif test "$wxUSE_MSW" = 1; then
-                ac_fn_c_check_header_compile "$LINENO" "ddraw.h" "ac_cv_header_ddraw_h" "#include <windows.h>
-"
-if test "x$ac_cv_header_ddraw_h" = xyes; then :
-
-fi
-
-
     fi
 fi
 
@@ -41092,6 +41084,11 @@ EOF
         COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1=""
     fi
 
+    COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0="#"
+    if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0=""
+    fi
+
     COND_SHARED_0="#"
     if test "x$SHARED" = "x0" ; then
         COND_SHARED_0=""
@@ -41105,11 +41102,6 @@ EOF
     COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0="#"
     if test "x$SHARED" = "x0" -a "x$TOOLKIT" = "xMSW" -a "x$WXUNIV" = "x0" ; then
         COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0=""
-    fi
-
-    COND_SHARED_0_TOOLKIT_PM_WXUNIV_0="#"
-    if test "x$SHARED" = "x0" -a "x$TOOLKIT" = "xPM" -a "x$WXUNIV" = "x0" ; then
-        COND_SHARED_0_TOOLKIT_PM_WXUNIV_0=""
     fi
 
     COND_SHARED_0_USE_GUI_1_USE_OPENGL_1="#"

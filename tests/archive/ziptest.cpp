@@ -42,19 +42,19 @@ public:
     { }
 
 protected:
-    void OnCreateArchive(wxZipOutputStream& zip);
+    void OnCreateArchive(wxZipOutputStream& zip) wxOVERRIDE;
 
-    void OnArchiveExtracted(wxZipInputStream& zip, int expectedTotal);
+    void OnArchiveExtracted(wxZipInputStream& zip, int expectedTotal) wxOVERRIDE;
 
     void OnCreateEntry(wxZipOutputStream& zip,
                        TestEntry& testEntry,
-                       wxZipEntry *entry);
+                       wxZipEntry *entry) wxOVERRIDE;
 
     void OnEntryExtracted(wxZipEntry& entry,
                           const TestEntry& testEntry,
-                          wxZipInputStream *arc);
+                          wxZipInputStream *arc) wxOVERRIDE;
 
-    void OnSetNotifier(EntryT& entry);
+    void OnSetNotifier(EntryT& entry) wxOVERRIDE;
 
     int m_count;
     wxString m_comment;
@@ -136,7 +136,7 @@ void ZipTestCase::OnEntryExtracted(wxZipEntry& entry,
 class ZipNotifier : public wxZipNotifier
 {
 public:
-    void OnEntryUpdated(wxZipEntry& entry);
+    void OnEntryUpdated(wxZipEntry& entry) wxOVERRIDE;
 };
 
 void ZipNotifier::OnEntryUpdated(wxZipEntry& entry)
@@ -166,7 +166,7 @@ public:
     { }
 
 protected:
-    void runTest();
+    void runTest() wxOVERRIDE;
     int m_options;
     int m_id;
 };

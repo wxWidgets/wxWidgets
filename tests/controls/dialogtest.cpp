@@ -111,7 +111,7 @@ public:
     wxExpectModal(int valueToSet) : m_valueToSet(valueToSet) {}
 
 protected:
-    virtual int OnInvoked(MyDialog *dlg) const
+    virtual int OnInvoked(MyDialog *dlg) const wxOVERRIDE
     {
         // Simulate the user entering the expected number:
         dlg->m_value = m_valueToSet;

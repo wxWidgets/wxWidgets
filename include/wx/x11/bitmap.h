@@ -124,9 +124,11 @@ public:
     // implementation
     // --------------
 
-    void SetHeight( int height );
-    void SetWidth( int width );
-    void SetDepth( int depth );
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED(void SetHeight( int height ));
+    wxDEPRECATED(void SetWidth( int width ));
+    wxDEPRECATED(void SetDepth( int depth ));
+#endif
     void SetPixmap( WXPixmap pixmap );
     void SetBitmap( WXPixmap bitmap );
 

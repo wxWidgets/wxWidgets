@@ -133,7 +133,9 @@ public:
 
     QWidget *GetHandle() const wxOVERRIDE;
 
+#if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget ) wxOVERRIDE;
+#endif
 
 #if wxUSE_ACCEL
     // accelerators

@@ -13,6 +13,8 @@
 
 #include "wx/event.h"
 
+class wxJoystickThread;
+
 class WXDLLIMPEXP_ADV wxJoystick: public wxObject
 {
   wxDECLARE_DYNAMIC_CLASS(wxJoystick);
@@ -22,6 +24,7 @@ public:
    */
 
   wxJoystick(int joystick = wxJOYSTICK1);
+  virtual ~wxJoystick();
 
   // Attributes
   ////////////////////////////////////////////////////////////////////////////
@@ -84,7 +87,8 @@ public:
   bool ReleaseCapture(void);
 
 protected:
-  int       m_joystick;
+  int                   m_joystick;
+  wxJoystickThread*     m_thread;
 };
 
 #endif

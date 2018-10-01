@@ -126,9 +126,11 @@ public:
     // implementation
     // --------------
 
-    void SetHeight( int height ) wxOVERRIDE;
-    void SetWidth( int width ) wxOVERRIDE;
-    void SetDepth( int depth ) wxOVERRIDE;
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED(void SetHeight( int height ) wxOVERRIDE);
+    wxDEPRECATED(void SetWidth( int width ) wxOVERRIDE);
+    wxDEPRECATED(void SetDepth( int depth ) wxOVERRIDE);
+#endif
 
 #ifdef __WXGTK3__
     GdkPixbuf* GetPixbufNoMask() const;

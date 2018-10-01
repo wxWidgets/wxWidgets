@@ -256,7 +256,7 @@ void wxCursor::CreateFromImage(const wxImage & image)
     int hotSpotY = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
 #if wxOSX_USE_COCOA
     wxBitmap bmp( image );
-    CGImageRef cgimage = wxMacCreateCGImageFromBitmap(bmp);
+    CGImageRef cgimage = bmp.CreateCGImage();
     if ( cgimage )
     {
         M_CURSORDATA->m_hCursor = wxMacCocoaCreateCursorFromCGImage( cgimage, hotSpotX, hotSpotY );
