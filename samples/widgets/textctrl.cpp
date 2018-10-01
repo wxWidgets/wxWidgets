@@ -468,12 +468,12 @@ void TextWidgetsPage::CreateContent()
 
     static const wxString halign[] =
     {
-        wxS("left"),
-        wxS("centre"),
-        wxS("right"),
+        "left",
+        "centre",
+        "right",
     };
 
-    m_radioAlign = new wxRadioBox(this, wxID_ANY, wxS("&Text alignment"),
+    m_radioAlign = new wxRadioBox(this, wxID_ANY, "&Text alignment",
                                     wxDefaultPosition, wxDefaultSize,
                                     WXSIZEOF(halign), halign, 1);
     sizerLeft->Add(m_radioAlign, 0, wxGROW | wxALL, 5);
@@ -747,7 +747,7 @@ void TextWidgetsPage::CreateText()
             flags |= wxTE_RIGHT;
             break;
         default:
-            wxFAIL_MSG( wxS("unexpected alignment style radio box selection") );
+            wxFAIL_MSG( "unexpected alignment style radio box selection" );
     }
 
 #ifdef __WXMSW__
@@ -1033,7 +1033,7 @@ void TextWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
                 flags |= wxTE_RIGHT;
                 break;
             default:
-                wxFAIL_MSG( wxS("unexpected alignment style radio box selection") );
+                wxFAIL_MSG( "unexpected alignment style radio box selection" );
                 return;
         }
 

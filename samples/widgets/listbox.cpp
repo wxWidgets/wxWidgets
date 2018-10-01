@@ -295,15 +295,15 @@ void ListboxWidgetsPage::CreateContent()
 
     static const wxString listTypes[] =
     {
-        wxS("list box")
+        "list box"
 #if wxUSE_CHECKLISTBOX
-      , wxS("check list box")
+      , "check list box"
 #endif // wxUSE_CHECKLISTBOX
 #if wxUSE_REARRANGECTRL
-      , wxS("rearrange list")
+      , "rearrange list"
 #endif // wxUSE_REARRANGECTRL
     };
-    m_radioListType = new wxRadioBox(this, wxID_ANY, wxS("&List type:"),
+    m_radioListType = new wxRadioBox(this, wxID_ANY, "&List type:",
                                     wxDefaultPosition, wxDefaultSize,
                                     WXSIZEOF(listTypes), listTypes,
                                     1, wxRA_SPECIFY_COLS);
