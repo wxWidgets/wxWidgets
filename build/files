@@ -2534,7 +2534,6 @@ OSX_IPHONE_SRC =
     $(OSX_COMMON_SRC)
     src/generic/animateg.cpp
     src/generic/regiong.cpp
-    src/osx/cocoa/stdpaths.mm
     src/osx/core/sound.cpp
     src/osx/iphone/anybutton.mm
     src/osx/iphone/button.mm

@@ -2552,7 +2552,6 @@ set(OSX_COCOA_HDR
 set(OSX_IPHONE_SRC
     ${OSX_COMMON_SRC}
     src/generic/regiong.cpp
-    src/osx/cocoa/stdpaths.mm
     # iphone files
     src/osx/iphone/anybutton.mm
     src/osx/iphone/button.mm
