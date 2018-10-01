@@ -104,8 +104,6 @@ protected :
 
 // Quartz
 
-WXDLLIMPEXP_CORE CGImageRef wxMacCreateCGImageFromBitmap( const wxBitmap& bitmap );
-
 WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithCFData( CFDataRef data );
 WXDLLIMPEXP_CORE CGDataConsumerRef wxMacCGDataConsumerCreateWithCFData( CFMutableDataRef data );
 WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffer& buf );
@@ -113,6 +111,16 @@ WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( co
 WXDLLIMPEXP_CORE CGColorSpaceRef wxMacGetGenericRGBColorSpace(void);
 
 WXDLLIMPEXP_CORE double wxOSXGetMainScreenContentScaleFactor();
+
+// UI
+
+CGSize WXDLLIMPEXP_CORE wxOSXGetImageSize(WXImage image);
+CGImageRef WXDLLIMPEXP_CORE wxOSXCreateCGImageFromImage( WXImage nsimage, double *scale = NULL );
+CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromImage( WXImage nsimage, CGRect* r, CGContextRef cg);
+CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromImage( WXImage nsimage, bool *isTemplate = NULL);
+WXImage WXDLLIMPEXP_CORE wxOSXGetImageFromCGImage( CGImageRef image, double scale = 1.0, bool isTemplate = false);
+double WXDLLIMPEXP_CORE wxOSXGetImageScaleFactor(WXImage image);
+
 
 class wxWindowMac;
 // to
@@ -549,6 +557,15 @@ public :
                                     long style,
                                     long extraStyle);
 #endif
+
+    static wxWidgetImplType*    CreateStaticBitmap( wxWindowMac* wxpeer,
+                                                   wxWindowMac* parent,
+                                                   wxWindowID id,
+                                                   const wxBitmap& bitmap,
+                                                   const wxPoint& pos,
+                                                   const wxSize& size,
+                                                   long style,
+                                                   long extraStyle);
 
     // converts from Toplevel-Content relative to local
     static void Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to );

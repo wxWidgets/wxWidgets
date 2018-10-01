@@ -2176,6 +2176,16 @@ COND_USE_STC_1___wxscintilla___depname = \
 @COND_PLATFORM_UNIX_1@PLUGIN_VERSION0 = $(WX_VERSION)
 @COND_PLATFORM_UNIX_0@PLUGVERDELIM = 
 @COND_PLATFORM_UNIX_1@PLUGVERDELIM = -
+COND_PLATFORM_WIN32_1_QT_PLATFORM_HDR =  \
+	wx/msw/dib.h \
+	wx/msw/ole/automtn.h \
+	wx/msw/joystick.h \
+	wx/msw/sound.h \
+	wx/msw/ole/safearray.h \
+	wx/msw/ole/oleutils.h \
+	wx/msw/ole/comimpl.h \
+	wx/msw/ole/uuid.h
+@COND_PLATFORM_WIN32_1@QT_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_QT_PLATFORM_HDR)
 COND_PLATFORM_MACOSX_1_GTK_PLATFORM_HDR =  \
 	wx/generic/caret.h \
 	wx/generic/imaglist.h \
@@ -3305,7 +3315,6 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/fontdlg.h \
 	wx/osx/frame.h \
 	wx/osx/gauge.h \
-	wx/osx/icon.h \
 	wx/osx/imaglist.h \
 	wx/osx/listbox.h \
 	wx/osx/listctrl.h \
@@ -3359,6 +3368,7 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/generic/prntdlgg.h \
 	wx/generic/statusbr.h \
 	wx/osx/appprogress.h \
+	wx/generic/icon.h \
 	wx/osx/cocoa/chkconf.h \
 	wx/osx/cocoa/evtloop.h \
 	wx/osx/cocoa/private.h \
@@ -3415,7 +3425,6 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/osx/fontdlg.h \
 	wx/osx/frame.h \
 	wx/osx/gauge.h \
-	wx/osx/icon.h \
 	wx/osx/imaglist.h \
 	wx/osx/listbox.h \
 	wx/osx/listctrl.h \
@@ -3469,6 +3478,7 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/generic/prntdlgg.h \
 	wx/generic/statusbr.h \
 	wx/osx/appprogress.h \
+	wx/generic/icon.h \
 	wx/osx/iphone/chkconf.h \
 	wx/osx/iphone/evtloop.h \
 	wx/osx/iphone/private.h \
@@ -3479,8 +3489,6 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 COND_TOOLKIT_QT_GUI_HDR =  \
 	wx/qt/accel.h \
 	wx/qt/app.h \
-	wx/qt/apptbase.h \
-	wx/qt/apptrait.h \
 	wx/qt/bitmap.h \
 	wx/qt/bmpbuttn.h \
 	wx/qt/brush.h \
@@ -3496,7 +3504,6 @@ COND_TOOLKIT_QT_GUI_HDR =  \
 	wx/qt/colour.h \
 	wx/qt/combobox.h \
 	wx/qt/control.h \
-	wx/qt/converter.h \
 	wx/qt/ctrlsub.h \
 	wx/qt/cursor.h \
 	wx/qt/dataform.h \
@@ -3547,16 +3554,12 @@ COND_TOOLKIT_QT_GUI_HDR =  \
 	wx/qt/statusbar.h \
 	wx/qt/stattext.h \
 	wx/qt/textctrl.h \
-	wx/qt/textdlg.h \
 	wx/qt/textentry.h \
 	wx/qt/tglbtn.h \
-	wx/qt/timer.h \
 	wx/qt/toolbar.h \
 	wx/qt/tooltip.h \
 	wx/qt/toplevel.h \
-	wx/qt/utils.h \
 	wx/qt/window.h \
-	wx/qt/private/winevent.h \
 	wx/generic/fdrepdlg.h \
 	wx/generic/filepickerg.h \
 	wx/generic/clrpickerg.h \
@@ -3568,7 +3571,8 @@ COND_TOOLKIT_QT_GUI_HDR =  \
 	wx/qt/taskbar.h \
 	wx/generic/activityindicator.h \
 	wx/qt/dataview.h \
-	wx/qt/dvrenderers.h
+	wx/qt/dvrenderers.h \
+	$(QT_PLATFORM_HDR)
 @COND_TOOLKIT_QT@GUI_HDR = $(COND_TOOLKIT_QT_GUI_HDR)
 @COND_TOOLKIT_COCOA@MEDIA_PLATFORM_HDR = 
 @COND_TOOLKIT_GTK@MEDIA_PLATFORM_HDR = 
@@ -5605,12 +5609,12 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_cocoa_dataview.o \
 	monodll_timectrl_osx.o \
 	monodll_taskbarcmn.o \
-	monodll_cocoa_activityindicator.o
+	monodll_cocoa_activityindicator.o \
+	monodll_cocoa_statbmp.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	$(__OSX_COMMON_SRC_OBJECTS) \
 	monodll_regiong.o \
-	monodll_generic_icon.o \
 	monodll_iphone_anybutton.o \
 	monodll_iphone_button.o \
 	monodll_iphone_checkbox.o \
@@ -5630,7 +5634,8 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	monodll_iphone_settings.o \
 	monodll_sound_osx.o \
 	monodll_core_sound.o \
-	monodll_animateg.o
+	monodll_animateg.o \
+	monodll_iphone_statbmp.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS)
 COND_TOOLKIT_QT___GUI_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
@@ -5726,8 +5731,20 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS =  \
 	monodll_qt_toplevel.o \
 	monodll_qt_uiaction.o \
 	monodll_qt_utils.o \
-	monodll_qt_window.o
+	monodll_qt_window.o \
+	$(__QT_PLATFORM_SRC_OBJECTS)
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS)
+COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS =  \
+	monodll_comimpl.o \
+	monodll_msw_dialup.o \
+	monodll_dib.o \
+	monodll_msw_joystick.o \
+	monodll_oleutils.o \
+	monodll_uuid.o \
+	monodll_safearray.o \
+	monodll_msw_sound.o \
+	monodll_automtn.o
+@COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_fontmgrcmn.o \
 	monodll_animateg.o \
@@ -7569,12 +7586,12 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_cocoa_dataview.o \
 	monolib_timectrl_osx.o \
 	monolib_taskbarcmn.o \
-	monolib_cocoa_activityindicator.o
+	monolib_cocoa_activityindicator.o \
+	monolib_cocoa_statbmp.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_0) \
 	monolib_regiong.o \
-	monolib_generic_icon.o \
 	monolib_iphone_anybutton.o \
 	monolib_iphone_button.o \
 	monolib_iphone_checkbox.o \
@@ -7594,7 +7611,8 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	monolib_iphone_settings.o \
 	monolib_sound_osx.o \
 	monolib_core_sound.o \
-	monolib_animateg.o
+	monolib_animateg.o \
+	monolib_iphone_statbmp.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1 =  \
 	monolib_taskbarcmn.o \
@@ -7690,8 +7708,20 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1 =  \
 	monolib_qt_toplevel.o \
 	monolib_qt_uiaction.o \
 	monolib_qt_utils.o \
-	monolib_qt_window.o
+	monolib_qt_window.o \
+	$(__QT_PLATFORM_SRC_OBJECTS_1)
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1)
+COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_1 =  \
+	monolib_comimpl.o \
+	monolib_msw_dialup.o \
+	monolib_dib.o \
+	monolib_msw_joystick.o \
+	monolib_oleutils.o \
+	monolib_uuid.o \
+	monolib_safearray.o \
+	monolib_msw_sound.o \
+	monolib_automtn.o
+@COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_1)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_fontmgrcmn.o \
 	monolib_animateg.o \
@@ -9680,12 +9710,12 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_cocoa_dataview.o \
 	coredll_timectrl_osx.o \
 	coredll_taskbarcmn.o \
-	coredll_cocoa_activityindicator.o
+	coredll_cocoa_activityindicator.o \
+	coredll_cocoa_statbmp.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_8) \
 	coredll_regiong.o \
-	coredll_generic_icon.o \
 	coredll_iphone_anybutton.o \
 	coredll_iphone_button.o \
 	coredll_iphone_checkbox.o \
@@ -9705,7 +9735,8 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	coredll_iphone_settings.o \
 	coredll_sound_osx.o \
 	coredll_core_sound.o \
-	coredll_animateg.o
+	coredll_animateg.o \
+	coredll_iphone_statbmp.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2 =  \
 	coredll_taskbarcmn.o \
@@ -9801,8 +9832,20 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2 =  \
 	coredll_qt_toplevel.o \
 	coredll_qt_uiaction.o \
 	coredll_qt_utils.o \
-	coredll_qt_window.o
+	coredll_qt_window.o \
+	$(__QT_PLATFORM_SRC_OBJECTS_2)
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2)
+COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_2 =  \
+	coredll_comimpl.o \
+	coredll_msw_dialup.o \
+	coredll_dib.o \
+	coredll_msw_joystick.o \
+	coredll_oleutils.o \
+	coredll_uuid.o \
+	coredll_safearray.o \
+	coredll_msw_sound.o \
+	coredll_automtn.o
+@COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_2)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_fontmgrcmn.o \
 	coredll_animateg.o \
@@ -11386,12 +11429,12 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_cocoa_dataview.o \
 	corelib_timectrl_osx.o \
 	corelib_taskbarcmn.o \
-	corelib_cocoa_activityindicator.o
+	corelib_cocoa_activityindicator.o \
+	corelib_cocoa_statbmp.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_9) \
 	corelib_regiong.o \
-	corelib_generic_icon.o \
 	corelib_iphone_anybutton.o \
 	corelib_iphone_button.o \
 	corelib_iphone_checkbox.o \
@@ -11411,7 +11454,8 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	corelib_iphone_settings.o \
 	corelib_sound_osx.o \
 	corelib_core_sound.o \
-	corelib_animateg.o
+	corelib_animateg.o \
+	corelib_iphone_statbmp.o
 @COND_TOOLKIT_OSX_IPHONE@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3 =  \
 	corelib_taskbarcmn.o \
@@ -11507,8 +11551,20 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3 =  \
 	corelib_qt_toplevel.o \
 	corelib_qt_uiaction.o \
 	corelib_qt_utils.o \
-	corelib_qt_window.o
+	corelib_qt_window.o \
+	$(__QT_PLATFORM_SRC_OBJECTS_3)
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3)
+COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_3 =  \
+	corelib_comimpl.o \
+	corelib_msw_dialup.o \
+	corelib_dib.o \
+	corelib_msw_joystick.o \
+	corelib_oleutils.o \
+	corelib_uuid.o \
+	corelib_safearray.o \
+	corelib_msw_sound.o \
+	corelib_automtn.o
+@COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_3)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_fontmgrcmn.o \
 	corelib_animateg.o \
@@ -13093,7 +13149,6 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS =  \
 	monodll_carbon_cursor.o \
 	monodll_carbon_fontdlg.o \
 	monodll_carbon_gdiobj.o \
-	monodll_carbon_icon.o \
 	monodll_carbon_app.o \
 	monodll_carbon_control.o \
 	monodll_carbon_dataobj.o \
@@ -13123,7 +13178,9 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS =  \
 	monodll_generic_listctrl.o \
 	monodll_prntdlgg.o \
 	monodll_generic_statusbr.o \
-	monodll_generic_textmeasure.o
+	monodll_generic_textmeasure.o \
+	monodll_generic_icon.o \
+	monodll_statbmp_osx.o
 @COND_PLATFORM_MACOSX_1@__OSX_COMMON_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS)
 COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS =  \
 	monodll_generic_caret.o \
@@ -13236,7 +13293,6 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_0 =  \
 	monolib_carbon_cursor.o \
 	monolib_carbon_fontdlg.o \
 	monolib_carbon_gdiobj.o \
-	monolib_carbon_icon.o \
 	monolib_carbon_app.o \
 	monolib_carbon_control.o \
 	monolib_carbon_dataobj.o \
@@ -13266,7 +13322,9 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_0 =  \
 	monolib_generic_listctrl.o \
 	monolib_prntdlgg.o \
 	monolib_generic_statusbr.o \
-	monolib_generic_textmeasure.o
+	monolib_generic_textmeasure.o \
+	monolib_generic_icon.o \
+	monolib_statbmp_osx.o
 @COND_PLATFORM_MACOSX_1@__OSX_COMMON_SRC_OBJECTS_0 = $(COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_0)
 COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_27 =  \
 	monolib_generic_caret.o \
@@ -13379,7 +13437,6 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_8 =  \
 	coredll_carbon_cursor.o \
 	coredll_carbon_fontdlg.o \
 	coredll_carbon_gdiobj.o \
-	coredll_carbon_icon.o \
 	coredll_carbon_app.o \
 	coredll_carbon_control.o \
 	coredll_carbon_dataobj.o \
@@ -13409,7 +13466,9 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_8 =  \
 	coredll_generic_listctrl.o \
 	coredll_prntdlgg.o \
 	coredll_generic_statusbr.o \
-	coredll_generic_textmeasure.o
+	coredll_generic_textmeasure.o \
+	coredll_generic_icon.o \
+	coredll_statbmp_osx.o
 @COND_PLATFORM_MACOSX_1@__OSX_COMMON_SRC_OBJECTS_8 = $(COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_8)
 COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_1_4 =  \
 	coredll_generic_caret.o \
@@ -13519,7 +13578,6 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_9 =  \
 	corelib_carbon_cursor.o \
 	corelib_carbon_fontdlg.o \
 	corelib_carbon_gdiobj.o \
-	corelib_carbon_icon.o \
 	corelib_carbon_app.o \
 	corelib_carbon_control.o \
 	corelib_carbon_dataobj.o \
@@ -13549,7 +13607,9 @@ COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_9 =  \
 	corelib_generic_listctrl.o \
 	corelib_prntdlgg.o \
 	corelib_generic_statusbr.o \
-	corelib_generic_textmeasure.o
+	corelib_generic_textmeasure.o \
+	corelib_generic_icon.o \
+	corelib_statbmp_osx.o
 @COND_PLATFORM_MACOSX_1@__OSX_COMMON_SRC_OBJECTS_9 = $(COND_PLATFORM_MACOSX_1___OSX_COMMON_SRC_OBJECTS_9)
 COND_PLATFORM_MACOSX_1___GTK_PLATFORM_SRC_OBJECTS_2_2 =  \
 	corelib_generic_caret.o \
@@ -16460,6 +16520,9 @@ monodll_timectrl_osx.o: $(srcdir)/src/osx/timectrl_osx.cpp $(MONODLL_ODEP)
 monodll_cocoa_activityindicator.o: $(srcdir)/src/osx/cocoa/activityindicator.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/activityindicator.mm
 
+monodll_cocoa_statbmp.o: $(srcdir)/src/osx/cocoa/statbmp.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/statbmp.mm
+
 monodll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
 
@@ -16510,6 +16573,9 @@ monodll_iphone_window.o: $(srcdir)/src/osx/iphone/window.mm $(MONODLL_ODEP)
 
 monodll_iphone_settings.o: $(srcdir)/src/osx/iphone/settings.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/settings.mm
+
+monodll_iphone_statbmp.o: $(srcdir)/src/osx/iphone/statbmp.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/statbmp.mm
 
 monodll_qt_accel.o: $(srcdir)/src/qt/accel.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/accel.cpp
@@ -17849,6 +17915,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_automtn.o: $(srcdir)/src/msw/ole/automtn.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/automtn.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_automtn.o: $(srcdir)/src/msw/ole/automtn.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/automtn.cpp
 
@@ -17860,6 +17929,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_automtn.o: $(srcdir)/src/msw/ole/automtn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/automtn.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
@@ -17873,6 +17945,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
 
@@ -17884,6 +17959,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
@@ -17897,6 +17975,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_uuid.o: $(srcdir)/src/msw/ole/uuid.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/uuid.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_uuid.o: $(srcdir)/src/msw/ole/uuid.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/uuid.cpp
 
@@ -17909,6 +17990,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_uuid.o: $(srcdir)/src/msw/ole/uuid.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/ole/uuid.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_msw_dialup.o: $(srcdir)/src/msw/dialup.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/dialup.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_msw_dialup.o: $(srcdir)/src/msw/dialup.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/dialup.cpp
 
@@ -17920,6 +18004,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_dialup.o: $(srcdir)/src/msw/dialup.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/dialup.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_dib.o: $(srcdir)/src/msw/dib.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/dib.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_dib.o: $(srcdir)/src/msw/dib.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/dib.cpp
@@ -17957,6 +18044,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_utilswin.o: $(srcdir)/src/msw/utilswin.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/utilswin.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_msw_sound.o: $(srcdir)/src/msw/sound.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/sound.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_msw_sound.o: $(srcdir)/src/msw/sound.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/sound.cpp
 
@@ -17968,6 +18058,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_sound.o: $(srcdir)/src/msw/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/sound.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monodll_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
@@ -17981,8 +18074,11 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
@@ -19922,12 +20018,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_carbon_gdiobj.o: $(srcdir)/src/osx/carbon/gdiobj.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/gdiobj.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_carbon_icon.o: $(srcdir)/src/osx/carbon/icon.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/icon.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_carbon_icon.o: $(srcdir)/src/osx/carbon/icon.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/icon.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_carbon_app.o: $(srcdir)/src/osx/carbon/app.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/carbon/app.cpp
 
@@ -20023,6 +20113,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_utilscocoa.o: $(srcdir)/src/osx/carbon/utilscocoa.mm $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/carbon/utilscocoa.mm
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_statbmp_osx.o: $(srcdir)/src/osx/statbmp_osx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/statbmp_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_statbmp_osx.o: $(srcdir)/src/osx/statbmp_osx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/statbmp_osx.cpp
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monodll_core_sound.o: $(srcdir)/src/osx/core/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/sound.cpp
@@ -21701,6 +21797,9 @@ monolib_timectrl_osx.o: $(srcdir)/src/osx/timectrl_osx.cpp $(MONOLIB_ODEP)
 monolib_cocoa_activityindicator.o: $(srcdir)/src/osx/cocoa/activityindicator.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/activityindicator.mm
 
+monolib_cocoa_statbmp.o: $(srcdir)/src/osx/cocoa/statbmp.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/statbmp.mm
+
 monolib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
 
@@ -21751,6 +21850,9 @@ monolib_iphone_window.o: $(srcdir)/src/osx/iphone/window.mm $(MONOLIB_ODEP)
 
 monolib_iphone_settings.o: $(srcdir)/src/osx/iphone/settings.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/settings.mm
+
+monolib_iphone_statbmp.o: $(srcdir)/src/osx/iphone/statbmp.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/statbmp.mm
 
 monolib_qt_accel.o: $(srcdir)/src/qt/accel.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/accel.cpp
@@ -23090,6 +23192,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_automtn.o: $(srcdir)/src/msw/ole/automtn.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/automtn.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_automtn.o: $(srcdir)/src/msw/ole/automtn.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/automtn.cpp
 
@@ -23101,6 +23206,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_automtn.o: $(srcdir)/src/msw/ole/automtn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/automtn.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
@@ -23114,6 +23222,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
 
@@ -23125,6 +23236,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
@@ -23138,6 +23252,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_uuid.o: $(srcdir)/src/msw/ole/uuid.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/uuid.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_uuid.o: $(srcdir)/src/msw/ole/uuid.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/uuid.cpp
 
@@ -23150,6 +23267,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_uuid.o: $(srcdir)/src/msw/ole/uuid.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/ole/uuid.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_msw_dialup.o: $(srcdir)/src/msw/dialup.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/dialup.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_msw_dialup.o: $(srcdir)/src/msw/dialup.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/dialup.cpp
 
@@ -23161,6 +23281,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_dialup.o: $(srcdir)/src/msw/dialup.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/dialup.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_dib.o: $(srcdir)/src/msw/dib.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/dib.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_dib.o: $(srcdir)/src/msw/dib.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/dib.cpp
@@ -23198,6 +23321,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_utilswin.o: $(srcdir)/src/msw/utilswin.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/utilswin.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_msw_sound.o: $(srcdir)/src/msw/sound.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/sound.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_msw_sound.o: $(srcdir)/src/msw/sound.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/sound.cpp
 
@@ -23209,6 +23335,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_sound.o: $(srcdir)/src/msw/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/sound.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@monolib_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
@@ -23222,8 +23351,11 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
@@ -25163,12 +25295,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_carbon_gdiobj.o: $(srcdir)/src/osx/carbon/gdiobj.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/gdiobj.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_carbon_icon.o: $(srcdir)/src/osx/carbon/icon.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/icon.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_carbon_icon.o: $(srcdir)/src/osx/carbon/icon.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/icon.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_carbon_app.o: $(srcdir)/src/osx/carbon/app.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/carbon/app.cpp
 
@@ -25264,6 +25390,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_utilscocoa.o: $(srcdir)/src/osx/carbon/utilscocoa.mm $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/carbon/utilscocoa.mm
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_statbmp_osx.o: $(srcdir)/src/osx/statbmp_osx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/statbmp_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_statbmp_osx.o: $(srcdir)/src/osx/statbmp_osx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/statbmp_osx.cpp
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@monolib_core_sound.o: $(srcdir)/src/osx/core/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/sound.cpp
@@ -27605,6 +27737,9 @@ coredll_timectrl_osx.o: $(srcdir)/src/osx/timectrl_osx.cpp $(COREDLL_ODEP)
 coredll_cocoa_activityindicator.o: $(srcdir)/src/osx/cocoa/activityindicator.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/activityindicator.mm
 
+coredll_cocoa_statbmp.o: $(srcdir)/src/osx/cocoa/statbmp.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/statbmp.mm
+
 coredll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
 
@@ -27658,6 +27793,9 @@ coredll_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(COREDLL_ODEP)
 
 coredll_iphone_settings.o: $(srcdir)/src/osx/iphone/settings.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/settings.mm
+
+coredll_iphone_statbmp.o: $(srcdir)/src/osx/iphone/statbmp.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/statbmp.mm
 
 coredll_qt_accel.o: $(srcdir)/src/qt/accel.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/accel.cpp
@@ -28424,6 +28562,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_automtn.o: $(srcdir)/src/msw/ole/automtn.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/automtn.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_automtn.o: $(srcdir)/src/msw/ole/automtn.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/automtn.cpp
 
@@ -28435,6 +28576,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_automtn.o: $(srcdir)/src/msw/ole/automtn.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/automtn.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
@@ -28448,6 +28592,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
 
@@ -28459,6 +28606,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
@@ -28472,6 +28622,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_uuid.o: $(srcdir)/src/msw/ole/uuid.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/uuid.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_uuid.o: $(srcdir)/src/msw/ole/uuid.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/uuid.cpp
 
@@ -28484,6 +28637,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_uuid.o: $(srcdir)/src/msw/ole/uuid.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/ole/uuid.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_msw_dialup.o: $(srcdir)/src/msw/dialup.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/dialup.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_msw_dialup.o: $(srcdir)/src/msw/dialup.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/dialup.cpp
 
@@ -28495,6 +28651,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_dialup.o: $(srcdir)/src/msw/dialup.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/dialup.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_dib.o: $(srcdir)/src/msw/dib.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/dib.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_dib.o: $(srcdir)/src/msw/dib.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/dib.cpp
@@ -28532,6 +28691,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_utilswin.o: $(srcdir)/src/msw/utilswin.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/utilswin.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_msw_sound.o: $(srcdir)/src/msw/sound.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/sound.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_msw_sound.o: $(srcdir)/src/msw/sound.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/sound.cpp
 
@@ -28543,6 +28705,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_sound.o: $(srcdir)/src/msw/sound.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/sound.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@coredll_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
@@ -28556,8 +28721,11 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
@@ -30497,12 +30665,6 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_carbon_gdiobj.o: $(srcdir)/src/osx/carbon/gdiobj.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/gdiobj.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_carbon_icon.o: $(srcdir)/src/osx/carbon/icon.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/icon.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_carbon_icon.o: $(srcdir)/src/osx/carbon/icon.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/icon.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_carbon_app.o: $(srcdir)/src/osx/carbon/app.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/carbon/app.cpp
 
@@ -30598,6 +30760,12 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_utilscocoa.o: $(srcdir)/src/osx/carbon/utilscocoa.mm $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/carbon/utilscocoa.mm
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_statbmp_osx.o: $(srcdir)/src/osx/statbmp_osx.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/statbmp_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@coredll_statbmp_osx.o: $(srcdir)/src/osx/statbmp_osx.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/statbmp_osx.cpp
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@coredll_core_sound.o: $(srcdir)/src/osx/core/sound.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/sound.cpp
@@ -31841,6 +32009,9 @@ corelib_timectrl_osx.o: $(srcdir)/src/osx/timectrl_osx.cpp $(CORELIB_ODEP)
 corelib_cocoa_activityindicator.o: $(srcdir)/src/osx/cocoa/activityindicator.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/activityindicator.mm
 
+corelib_cocoa_statbmp.o: $(srcdir)/src/osx/cocoa/statbmp.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/statbmp.mm
+
 corelib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
 
@@ -31894,6 +32065,9 @@ corelib_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(CORELIB_ODEP)
 
 corelib_iphone_settings.o: $(srcdir)/src/osx/iphone/settings.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/settings.mm
+
+corelib_iphone_statbmp.o: $(srcdir)/src/osx/iphone/statbmp.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/statbmp.mm
 
 corelib_qt_accel.o: $(srcdir)/src/qt/accel.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/accel.cpp
@@ -32660,6 +32834,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_automtn.o: $(srcdir)/src/msw/ole/automtn.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/automtn.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_automtn.o: $(srcdir)/src/msw/ole/automtn.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/automtn.cpp
 
@@ -32671,6 +32848,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_automtn.o: $(srcdir)/src/msw/ole/automtn.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/automtn.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
@@ -32684,6 +32864,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_comimpl.o: $(srcdir)/src/msw/ole/comimpl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/comimpl.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
 
@@ -32695,6 +32878,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_oleutils.o: $(srcdir)/src/msw/ole/oleutils.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/oleutils.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
@@ -32708,6 +32894,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_safearray.o: $(srcdir)/src/msw/ole/safearray.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/safearray.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_uuid.o: $(srcdir)/src/msw/ole/uuid.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/uuid.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_uuid.o: $(srcdir)/src/msw/ole/uuid.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/uuid.cpp
 
@@ -32720,6 +32909,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_uuid.o: $(srcdir)/src/msw/ole/uuid.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/ole/uuid.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_msw_dialup.o: $(srcdir)/src/msw/dialup.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/dialup.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_msw_dialup.o: $(srcdir)/src/msw/dialup.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/dialup.cpp
 
@@ -32731,6 +32923,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_dialup.o: $(srcdir)/src/msw/dialup.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/dialup.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_dib.o: $(srcdir)/src/msw/dib.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/dib.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_dib.o: $(srcdir)/src/msw/dib.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/dib.cpp
@@ -32768,6 +32963,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_utilswin.o: $(srcdir)/src/msw/utilswin.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/utilswin.cpp
 
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_msw_sound.o: $(srcdir)/src/msw/sound.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/sound.cpp
+
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_msw_sound.o: $(srcdir)/src/msw/sound.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/sound.cpp
 
@@ -32779,6 +32977,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_sound.o: $(srcdir)/src/msw/sound.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/sound.cpp
+
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@corelib_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
@@ -32792,8 +32993,11 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_msw_joystick.o: $(srcdir)/src/msw/joystick.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/joystick.cpp
 
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
 
 @COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_generic_icon.o: $(srcdir)/src/generic/icon.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/icon.cpp
@@ -34733,12 +34937,6 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_carbon_gdiobj.o: $(srcdir)/src/osx/carbon/gdiobj.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/gdiobj.cpp
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_carbon_icon.o: $(srcdir)/src/osx/carbon/icon.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/icon.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_carbon_icon.o: $(srcdir)/src/osx/carbon/icon.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/icon.cpp
-
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_carbon_app.o: $(srcdir)/src/osx/carbon/app.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/carbon/app.cpp
 
@@ -34834,6 +35032,12 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_utilscocoa.o: $(srcdir)/src/osx/carbon/utilscocoa.mm $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/carbon/utilscocoa.mm
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_statbmp_osx.o: $(srcdir)/src/osx/statbmp_osx.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/statbmp_osx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@corelib_statbmp_osx.o: $(srcdir)/src/osx/statbmp_osx.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/statbmp_osx.cpp
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@corelib_core_sound.o: $(srcdir)/src/osx/core/sound.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/sound.cpp

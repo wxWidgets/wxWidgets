@@ -42,7 +42,7 @@ bool MyApp::OnInit(void)
     return false;
 
   // Create the main frame window
-  MyFrame   *frame = new MyFrame(NULL, wxID_ANY, wxT("wxWidgets Native Dialog Sample"), wxPoint(0, 0), wxSize(300, 250));
+  MyFrame   *frame = new MyFrame(NULL, wxID_ANY, "wxWidgets Native Dialog Sample", wxPoint(0, 0), wxSize(300, 250));
 
 #if wxUSE_STATUSBAR
   // Give it a status line
@@ -52,18 +52,18 @@ bool MyApp::OnInit(void)
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
 
-  file_menu->Append(RESOURCE_TEST1, wxT("&Dialog box test"),                wxT("Test dialog box resource"));
-  file_menu->Append(RESOURCE_QUIT, wxT("E&xit"),                wxT("Quit program"));
+  file_menu->Append(RESOURCE_TEST1, "&Dialog box test",                "Test dialog box resource");
+  file_menu->Append(RESOURCE_QUIT, "E&xit",                "Quit program");
 
   wxMenuBar *menu_bar = new wxMenuBar;
 
-  menu_bar->Append(file_menu, wxT("&File"));
+  menu_bar->Append(file_menu, "&File");
 
   // Associate the menu bar with the frame
   frame->SetMenuBar(menu_bar);
 
   // Make a panel
-  frame->panel = new wxWindow(frame, wxID_ANY, wxPoint(0, 0), wxSize(400, 400), 0, wxT("MyMainFrame"));
+  frame->panel = new wxWindow(frame, wxID_ANY, wxPoint(0, 0), wxSize(400, 400), 0, "MyMainFrame");
   frame->Show(true);
 
   return true;
@@ -92,12 +92,12 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 {
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     MyDialog dialog;
-    if (dialog.LoadNativeDialog(this, wxT("dialog1")))
+    if (dialog.LoadNativeDialog(this, "dialog1"))
     {
         dialog.ShowModal();
     }
 #else
-    wxMessageBox(wxT("No native dialog support"),wxT("Platform limitation"));
+    wxMessageBox("No native dialog support","Platform limitation");
 #endif
 }
 

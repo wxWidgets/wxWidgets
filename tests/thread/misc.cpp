@@ -37,7 +37,7 @@ public:
         { m_n = n; Create(); }
 
     // thread execution starts here
-    virtual ExitCode Entry();
+    virtual ExitCode Entry() wxOVERRIDE;
 
 private:
     size_t m_n;
@@ -70,10 +70,10 @@ public:
     }
 
     // thread execution starts here
-    virtual ExitCode Entry();
+    virtual ExitCode Entry() wxOVERRIDE;
 
     // and stops here
-    virtual void OnExit();
+    virtual void OnExit() wxOVERRIDE;
 
 private:
     size_t m_n; // number of characters to write
@@ -130,7 +130,7 @@ public:
         Create();
     }
 
-    virtual ExitCode Entry()
+    virtual ExitCode Entry() wxOVERRIDE
     {
         //wxPrintf(wxT("Thread %lu has started running.\n"), GetId());
         gs_cond.Post();
@@ -165,7 +165,7 @@ public:
         Create();
     }
 
-    virtual ExitCode Entry()
+    virtual ExitCode Entry() wxOVERRIDE
     {
         wxUnusedVar(m_i);
 

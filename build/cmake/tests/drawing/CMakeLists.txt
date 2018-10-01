@@ -24,6 +24,7 @@ set(TEST_DRAWING_SRC
     testprec.h
     testableframe.h
     testimage.h
+    drawing/drawing.h
     drawing/gcfactory.h
     drawing/plugin.h
     drawing/pluginsample.cpp

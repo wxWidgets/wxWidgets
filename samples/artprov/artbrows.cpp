@@ -28,7 +28,7 @@
 #include "artbrows.h"
 
 #define ART_CLIENT(id) \
-    choice->Append(wxT(#id), (void*)id);
+    choice->Append(#id, (void*)id);
 #define ART_ICON(id) \
     { \
         int ind; \
@@ -37,7 +37,7 @@
             ind = images->Add(icon); \
         else \
             ind = 0; \
-        list->InsertItem(index, wxT(#id), ind); \
+        list->InsertItem(index, #id, ind); \
         list->SetItemPtrData(index, wxPtrToUInt(id)); \
         index++; \
     }
@@ -132,7 +132,7 @@ wxBEGIN_EVENT_TABLE(wxArtBrowserDialog, wxDialog)
 wxEND_EVENT_TABLE()
 
 wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
-    : wxDialog(parent, wxID_ANY, wxT("Art resources browser"),
+    : wxDialog(parent, wxID_ANY, "Art resources browser",
                wxDefaultPosition, wxDefaultSize,
                wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
 {
@@ -143,7 +143,7 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
     FillClients(choice);
 
     subsizer = new wxBoxSizer(wxHORIZONTAL);
-    subsizer->Add(new wxStaticText(this, wxID_ANY, wxT("Client:")), 0, wxALIGN_CENTER_VERTICAL);
+    subsizer->Add(new wxStaticText(this, wxID_ANY, "Client:"), 0, wxALIGN_CENTER_VERTICAL);
     subsizer->Add(choice, 1, wxLEFT, 5);
     sizer->Add(subsizer, 0, wxALL | wxEXPAND, 10);
 
@@ -151,11 +151,11 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
 
     m_list = new wxListCtrl(this, wxID_ANY, wxDefaultPosition, wxSize(250, 300),
                             wxLC_REPORT | wxSUNKEN_BORDER);
-    m_list->AppendColumn(wxT("wxArtID"));
+    m_list->AppendColumn("wxArtID");
     subsizer->Add(m_list, 1, wxEXPAND | wxRIGHT, 10);
 
     wxSizer *subsub = new wxBoxSizer(wxVERTICAL);
-    m_text = new wxStaticText(this, wxID_ANY, wxT("Size: 333x333"));
+    m_text = new wxStaticText(this, wxID_ANY, "Size: 333x333");
     subsub->Add(m_text);
 
     m_canvas = new wxStaticBitmap(this, wxID_ANY, wxBitmap(null_xpm));
@@ -165,7 +165,7 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
 
     sizer->Add(subsizer, 1, wxEXPAND | wxLEFT|wxRIGHT, 10);
 
-    wxButton *ok = new wxButton(this, wxID_OK, wxT("Close"));
+    wxButton *ok = new wxButton(this, wxID_OK, "Close");
     ok->SetDefault();
     sizer->Add(ok, 0, wxALIGN_RIGHT | wxALL, 10);
 
@@ -215,6 +215,6 @@ void wxArtBrowserDialog::SetArtBitmap(const wxArtID& id, const wxArtClient& clie
     wxBitmap bmp = wxArtProvider::GetBitmap(id, client, size);
     m_canvas->SetSize(bmp.GetWidth(), bmp.GetHeight());
     m_canvas->SetBitmap(bmp);
-    m_text->SetLabel(wxString::Format(wxT("Size: %d x %d"), bmp.GetWidth(), bmp.GetHeight()));
+    m_text->SetLabel(wxString::Format("Size: %d x %d", bmp.GetWidth(), bmp.GetHeight()));
     Refresh();
 }

@@ -134,12 +134,14 @@ wxGTK:
 - Implement wxDataViewColumn::UnsetAsSortKey().
 - Fix not showing wxInfoBar with GTK+ 3 < 3.22.29.
 - Fix the build with glib < 2.32 (e.g. CentOS 6).
+- Fix field widths in wxStatusBar showing a size grip.
 
 wxMSW:
 
 - Add experimental support for Windows 10/ARM64 platform (Simon Rozman).
 - Fix hang after clearing wxTAB_TRAVERSAL style on a window with children.
 - Fix handling of AUX2 mouse button events (Timon Rozmanrylz).
+- Implement support for more than 4 joystick buttons (Mick Phillips).
 - Fix saving/restoring window position for maximized windows.
 - Fix stack corruption when using wxStackWalker (srfisk).
 - Fix positioning windows at positions >= SHORT_MAX (Cătălin Răceanu).
@@ -155,6 +157,8 @@ wxOSX:
 
 - Fix dispatching pending events (and CallAfter()) in console applications.
 - Implement wxDataViewColumn::UnsetAsSortKey() (Daniel Kulp).
+- supporting native image formst like NSImage and UIImage in wxBitmap
+- native implementation for wxStaticBitmap for correct rendering of template images
 
 wxQt:
 

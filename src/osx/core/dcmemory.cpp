@@ -56,7 +56,7 @@ wxMemoryDCImpl::~wxMemoryDCImpl()
 {
     if ( m_selected.IsOk() )
     {
-        m_selected.EndRawAccess() ;
+        m_selected.SetSelectedInto(NULL);
         wxDELETE(m_graphicContext);
     }
 }
@@ -65,14 +65,18 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 {
     if ( m_selected.IsOk() )
     {
-        m_selected.EndRawAccess() ;
+        m_selected.SetSelectedInto(NULL);
         wxDELETE(m_graphicContext);
     }
 
     m_selected = bitmap;
     if (m_selected.IsOk())
     {
-        m_selected.BeginRawAccess() ;
+        wxASSERT_MSG( !bitmap.GetSelectedInto() ||
+                     (bitmap.GetSelectedInto() == GetOwner()),
+                     "Bitmap is selected in another wxMemoryDC, delete the first wxMemoryDC or use SelectObject(NULL)" );
+
+        m_selected.SetSelectedInto(GetOwner());
         m_width = bitmap.GetScaledWidth();
         m_height = bitmap.GetScaledHeight();
         m_contentScaleFactor = bitmap.GetScaleFactor();

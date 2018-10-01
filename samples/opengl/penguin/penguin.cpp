@@ -43,15 +43,15 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame(NULL, wxT("wxWidgets Penguin Sample"),
+    MyFrame *frame = new MyFrame(NULL, "wxWidgets Penguin Sample",
         wxDefaultPosition, wxDefaultSize);
 
 #if wxUSE_ZLIB
-    if (wxFileExists(wxT("penguin.dxf.gz")))
-        frame->GetCanvas()->LoadDXF(wxT("penguin.dxf.gz"));
+    if (wxFileExists("penguin.dxf.gz"))
+        frame->GetCanvas()->LoadDXF("penguin.dxf.gz");
 #else
-    if (wxFileExists(wxT("penguin.dxf")))
-        frame->GetCanvas()->LoadDXF(wxT("penguin.dxf"));
+    if (wxFileExists("penguin.dxf"))
+        frame->GetCanvas()->LoadDXF("penguin.dxf");
 #endif
 
     /* Show the frame */
@@ -81,16 +81,16 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
 
     // Make the "File" menu
     wxMenu *fileMenu = new wxMenu;
-    fileMenu->Append(wxID_OPEN, wxT("&Open..."));
+    fileMenu->Append(wxID_OPEN, "&Open...");
     fileMenu->AppendSeparator();
-    fileMenu->Append(wxID_EXIT, wxT("E&xit\tALT-X"));
+    fileMenu->Append(wxID_EXIT, "E&xit\tALT-X");
     // Make the "Help" menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(wxID_HELP, wxT("&About"));
+    helpMenu->Append(wxID_HELP, "&About");
 
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(fileMenu, wxT("&File"));
-    menuBar->Append(helpMenu, wxT("&Help"));
+    menuBar->Append(fileMenu, "&File");
+    menuBar->Append(helpMenu, "&Help");
     SetMenuBar(menuBar);
 
     Show(true);
@@ -102,11 +102,11 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
 // File|Open... command
 void MyFrame::OnMenuFileOpen( wxCommandEvent& WXUNUSED(event) )
 {
-    wxString filename = wxFileSelector(wxT("Choose DXF Model"), wxT(""), wxT(""), wxT(""),
+    wxString filename = wxFileSelector("Choose DXF Model", "", "", "",
 #if wxUSE_ZLIB
-        wxT("DXF Drawing (*.dxf;*.dxf.gz)|*.dxf;*.dxf.gz|All files (*.*)|*.*"),
+        "DXF Drawing (*.dxf;*.dxf.gz)|*.dxf;*.dxf.gz|All files (*.*)|*.*",
 #else
-        wxT("DXF Drawing (*.dxf)|*.dxf)|All files (*.*)|*.*"),
+        "DXF Drawing (*.dxf)|*.dxf)|All files (*.*)|*.*",
 #endif
         wxFD_OPEN);
     if (!filename.IsEmpty())
@@ -126,7 +126,7 @@ void MyFrame::OnMenuFileExit( wxCommandEvent& WXUNUSED(event) )
 // Help|About command
 void MyFrame::OnMenuHelpAbout( wxCommandEvent& WXUNUSED(event) )
 {
-    wxMessageBox(wxT("OpenGL Penguin Sample (c) Robert Roebling, Sandro Sigala et al"));
+    wxMessageBox("OpenGL Penguin Sample (c) Robert Roebling, Sandro Sigala et al");
 }
 
 // ---------------------------------------------------------------------------
@@ -222,7 +222,7 @@ void TestGLCanvas::LoadDXF(const wxString& filename)
     if (stream.IsOk())
 #if wxUSE_ZLIB
     {
-        if (filename.Right(3).Lower() == wxT(".gz"))
+        if (filename.Right(3).Lower() == ".gz")
         {
             wxZlibInputStream zstream(stream);
             m_renderer.Load(zstream);
