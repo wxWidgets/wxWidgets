@@ -87,17 +87,6 @@ int wxDisplayDepth()
     return theDepth;
 }
 
-// Get size of display
-void wxDisplaySize(int *width, int *height)
-{
-    // TODO adapt for multi-displays
-    CGRect bounds = CGDisplayBounds(CGMainDisplayID());
-    if ( width )
-        *width = (int)bounds.size.width ;
-    if ( height )
-        *height = (int)bounds.size.height;
-}
-
 #if wxUSE_GUI
 
 // ----------------------------------------------------------------------------

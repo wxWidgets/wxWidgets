@@ -1058,7 +1058,6 @@ set(GUI_CMN_HDR
     wx/dialup.h
     wx/dirctrl.h
     wx/display.h
-    wx/display_impl.h
     wx/dnd.h
     wx/docmdi.h
     wx/docview.h
@@ -2285,7 +2284,6 @@ set(OSX_LOWLEVEL_SRC
     src/osx/core/bitmap.cpp
     src/osx/core/colour.cpp
     src/osx/core/dcmemory.cpp
-    src/osx/core/display.cpp
     src/osx/core/fontenum.cpp
     src/osx/core/hid.cpp
     src/osx/core/printmac.cpp
@@ -2527,6 +2525,7 @@ set(OSX_COCOA_SRC
     src/osx/datectrl_osx.cpp
     src/osx/core/sound.cpp
     src/osx/cocoa/statbmp.mm
+    src/osx/core/display.cpp
 )
 
 set(OSX_COCOA_HDR

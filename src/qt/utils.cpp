@@ -115,14 +115,6 @@ int wxDisplayDepth()
     return QApplication::desktop()->depth();
 }
 
-void wxDisplaySize(int *width, int *height)
-{
-    if ( width != NULL )
-        *width = QApplication::desktop()->width();
-    if ( height != NULL )
-        *height = QApplication::desktop()->height();
-}
-
 void wxDisplaySizeMM(int *width, int *height)
 {
     if ( width != NULL )
@@ -134,16 +126,6 @@ void wxDisplaySizeMM(int *width, int *height)
 void wxBell()
 {
     QApplication::beep();
-}
-
-void wxClientDisplayRect(int *x, int *y, int *width, int *height)
-{
-    QRect r = QApplication::desktop()->availableGeometry();
-
-    *x = r.x();
-    *y = r.y();
-    *width = r.width();
-    *height = r.height();
 }
 
 wxWindow *wxGetActiveWindow()

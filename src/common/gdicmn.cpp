@@ -16,6 +16,8 @@
 #endif
 
 #include "wx/gdicmn.h"
+
+#include "wx/display.h"
 #include "wx/gdiobj.h"
 
 #ifndef WX_PRECOMP
@@ -843,18 +845,36 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
     return font;
 }
 
+void wxDisplaySize(int *width, int *height)
+{
+    const wxSize size = wxGetDisplaySize();
+    if ( width )
+        *width = size.x;
+    if ( height )
+        *height = size.y;
+}
+
 wxSize wxGetDisplaySize()
 {
-    int x, y;
-    wxDisplaySize(& x, & y);
-    return wxSize(x, y);
+    return wxDisplay().GetGeometry().GetSize();
+}
+
+void wxClientDisplayRect(int *x, int *y, int *width, int *height)
+{
+    const wxRect rect = wxGetClientDisplayRect();
+    if ( x )
+        *x = rect.x;
+    if ( y )
+        *y = rect.y;
+    if ( width )
+        *width = rect.width;
+    if ( height )
+        *height = rect.height;
 }
 
 wxRect wxGetClientDisplayRect()
 {
-    int x, y, width, height;
-    wxClientDisplayRect(&x, &y, &width, &height);  // call plat-specific version
-    return wxRect(x, y, width, height);
+    return wxDisplay().GetClientArea();
 }
 
 wxSize wxGetDisplaySizeMM()

@@ -905,20 +905,13 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
         // change our window style to be compatible with full-screen mode
         updateStyle.Apply();
 
-        wxRect rect;
-#if wxUSE_DISPLAY
-        // resize to the size of the display containing us
+        // resize to the size of the display containing us, falling back to the
+        // primary one
         int dpy = wxDisplay::GetFromWindow(this);
-        if ( dpy != wxNOT_FOUND )
-        {
-            rect = wxDisplay(dpy).GetGeometry();
-        }
-        else // fall back to the main desktop
-#endif // wxUSE_DISPLAY
-        {
-            // resize to the size of the desktop
-            wxCopyRECTToRect(wxGetWindowRect(::GetDesktopWindow()), rect);
-        }
+        if ( dpy == wxNOT_FOUND )
+            dpy = 0;
+
+        const wxRect rect = wxDisplay(dpy).GetGeometry();
 
         SetSize(rect);
 

@@ -239,17 +239,6 @@ int wxDisplayDepth()
     return DefaultDepth (dpy, DefaultScreen (dpy));
 }
 
-// Get size of display
-void wxDisplaySize(int *width, int *height)
-{
-    Display *dpy = wxGlobalDisplay();
-
-    if ( width )
-        *width = DisplayWidth (dpy, DefaultScreen (dpy));
-    if ( height )
-        *height = DisplayHeight (dpy, DefaultScreen (dpy));
-}
-
 void wxDisplaySizeMM(int *width, int *height)
 {
     Display *dpy = wxGlobalDisplay();
