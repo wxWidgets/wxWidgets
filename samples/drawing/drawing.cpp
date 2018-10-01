@@ -227,7 +227,7 @@ public:
 
     void OnGraphicContextCairoUpdateUI(wxUpdateUIEvent& event)
     {
-        event.Check(m_canvas->IsRendererName(wxS("cairo")));
+        event.Check(m_canvas->IsRendererName("cairo"));
     }
 #endif // wxUSE_CAIRO
 #ifdef __WXMSW__
@@ -239,7 +239,7 @@ public:
 
     void OnGraphicContextGDIPlusUpdateUI(wxUpdateUIEvent& event)
     {
-        event.Check(m_canvas->IsRendererName(wxS("gdiplus")));
+        event.Check(m_canvas->IsRendererName("gdiplus"));
     }
 #endif
 #if wxUSE_GRAPHICS_DIRECT2D
@@ -250,7 +250,7 @@ public:
 
     void OnGraphicContextDirect2DUpdateUI(wxUpdateUIEvent& event)
     {
-        event.Check(m_canvas->IsRendererName(wxS("direct2d")));
+        event.Check(m_canvas->IsRendererName("direct2d"));
     }
 #endif
 #endif // __WXMSW__
@@ -1190,7 +1190,7 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
 
     gc->PushState();
     gc->Translate(60, 400);
-    const wxString labelText(wxS("Scaled smiley inside a square"));
+    const wxString labelText("Scaled smiley inside a square");
     gc->DrawText(labelText, 0, 0);
     // Center a bitmap horizontally
     wxDouble textWidth;
@@ -1204,7 +1204,7 @@ void MyCanvas::DrawGraphics(wxGraphicsContext* gc)
     // Draw graphics bitmap and its subbitmap
     gc->PushState();
     gc->Translate(300, 400);
-    gc->DrawText(wxS("Smiley as a graphics bitmap"), 0, 0);
+    gc->DrawText("Smiley as a graphics bitmap", 0, 0);
 
     wxGraphicsBitmap gbmp1 = gc->CreateBitmap(m_smile_bmp);
     gc->DrawBitmap(gbmp1, 0, BASE2, 50, 50);
@@ -1616,7 +1616,7 @@ void MyCanvas::DrawSystemColours(wxDC& dc)
     wxSize textSize;
     {
         wxDCFontChanger setMono(dc, mono);
-        textSize = dc.GetTextExtent(wxS("#01234567"));
+        textSize = dc.GetTextExtent("#01234567");
     }
 
     int lineHeight = textSize.GetHeight();
@@ -2120,8 +2120,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #endif // __WXMSW__
 #endif // wxUSE_GRAPHICS_CONTEXT
     menuFile->AppendSeparator();
-    menuFile->AppendCheckItem(File_BBox, wxS("Show bounding box\tCtrl-E"),
-                              wxS("Show extents used in drawing operations"));
+    menuFile->AppendCheckItem(File_BBox, "Show bounding box\tCtrl-E",
+                              "Show extents used in drawing operations");
     menuFile->AppendCheckItem(File_Clip, "&Clip\tCtrl-C", "Clip/unclip drawing");
     menuFile->AppendCheckItem(File_Buffer, "&Use wx&BufferedPaintDC\tCtrl-Z", "Buffer painting");
     menuFile->AppendSeparator();
@@ -2252,15 +2252,15 @@ void MyFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 {
-    wxString wildCard = wxS("Bitmap image (*.bmp)|*.bmp;*.BMP");
+    wxString wildCard = "Bitmap image (*.bmp)|*.bmp;*.BMP";
 #if wxUSE_LIBPNG
-    wildCard.Append(wxS("|PNG image (*.png)|*.png;*.PNG"));
+    wildCard.Append("|PNG image (*.png)|*.png;*.PNG");
 #endif
 #if wxUSE_SVG
-    wildCard.Append(wxS("|SVG image (*.svg)|*.svg;*.SVG"));
+    wildCard.Append("|SVG image (*.svg)|*.svg;*.SVG");
 #endif
 #if wxUSE_POSTSCRIPT
-    wildCard.Append(wxS("|PostScript file (*.ps)|*.ps;*.PS"));
+    wildCard.Append("|PostScript file (*.ps)|*.ps;*.PS");
 #endif
 
     wxFileDialog dlg(this, "Save as bitmap", wxEmptyString, wxEmptyString,
@@ -2294,7 +2294,7 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
         else
 #endif
 #if wxUSE_POSTSCRIPT
-        if ( ext == wxS("ps") )
+        if ( ext == "ps" )
         {
 #if wxUSE_GRAPHICS_CONTEXT
             // Graphics screen can only be drawn using wxGraphicsContext
@@ -2321,7 +2321,7 @@ void MyFrame::OnSave(wxCommandEvent& WXUNUSED(event))
             double sc = wxMin((double)w / width, (double)h / height);
             m_xUserScale *= sc;
             m_yUserScale *= sc;
-            psdc.StartDoc(wxS("Drawing sample"));
+            psdc.StartDoc("Drawing sample");
             // Define default font.
             psdc.SetFont( wxFontInfo(10).Family(wxFONTFAMILY_MODERN) );
             psdc.StartPage();

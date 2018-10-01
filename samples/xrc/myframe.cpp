@@ -281,7 +281,7 @@ void MyFrame::OnAuiDemoToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_AUI
     wxDialog dlg;
-    wxXmlResource::Get()->LoadDialog(&dlg, this, wxS("aui_dialog"));
+    wxXmlResource::Get()->LoadDialog(&dlg, this, "aui_dialog");
     dlg.ShowModal();
 #else
     wxLogWarning("wxUSE_AUI must be set to 1 in 'setup.h' to view the AUI demo.");
