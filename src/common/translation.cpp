@@ -1555,9 +1555,9 @@ bool wxTranslations::AddCatalog(const wxString& domain,
                                 wxLanguage msgIdLanguage)
 {
     const wxString msgIdLang = wxLocale::GetLanguageCanonicalName(msgIdLanguage);
-    const wxString domain_lang = GetBestTranslation(domain, msgIdLang);
+    const wxArrayString domain_langs = GetAllGoodTranslations(domain, msgIdLanguage);
 
-    if ( domain_lang.empty() )
+    if ( domain_langs.empty() )
     {
         wxLogTrace(TRACE_I18N,
                     wxS("no suitable translation for domain '%s' found"),
@@ -1565,11 +1565,30 @@ bool wxTranslations::AddCatalog(const wxString& domain,
         return false;
     }
 
-    wxLogTrace(TRACE_I18N,
-                wxS("adding '%s' translation for domain '%s' (msgid language '%s')"),
-                domain_lang, domain, msgIdLang);
+    bool success = false;
+    for ( wxArrayString::const_iterator lang = domain_langs.begin();
+          lang != domain_langs.end();
+          ++lang )
+    {
+        wxLogTrace(TRACE_I18N,
+                   wxS("adding '%s' translation for domain '%s' (msgid language '%s')"),
+                   *lang, domain, msgIdLang);
 
-    return LoadCatalog(domain, domain_lang, msgIdLang);
+        // No use loading languages that are less preferred than the
+        // msgid language, as by definition it contains all the strings
+        // in the msgid language.
+        if ( msgIdLang == *lang )
+            break;
+
+        // We determine success by the success of loading/failing to load
+        // the most preferred (i.e. the first one) language's catalog:
+        if ( lang == domain_langs.begin() )
+            success = LoadCatalog(domain, *lang, msgIdLang);
+        else
+            LoadCatalog(domain, *lang, msgIdLang);
+    }
+
+    return success;
 }
 
 
