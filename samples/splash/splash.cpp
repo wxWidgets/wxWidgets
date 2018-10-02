@@ -62,6 +62,8 @@ public:
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit() wxOVERRIDE;
+
+    void DecorateSplashScreen(wxBitmap& bmp);
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -141,6 +143,10 @@ bool MyApp::OnInit()
 
     if (ok)
     {
+        //we can even draw dynamic artwork onto our splashscreen
+        DecorateSplashScreen(bitmap);
+
+        //Show the splashscreen
         new wxSplashScreen(bitmap,
             wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
             6000, frame, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -161,6 +167,41 @@ bool MyApp::OnInit()
     // application would exit immediately.
     return true;
 }
+
+//Draws artwork onto our splashscreen at runtime
+void MyApp::DecorateSplashScreen(wxBitmap& bmp)
+{
+    //use a memory DC to draw directly onto the bitmap
+    wxMemoryDC memDc(bmp);
+
+    //draw an orange box (with black outline) at the bottom of the splashscreen
+    wxDCPenChanger pc(memDc, wxPen(*wxBLACK_PEN));
+    wxDCBrushChanger bc(memDc, wxBrush(wxColour(255, 102, 0)));
+    memDc.DrawRectangle(wxRect(0, bmp.GetHeight() - 50, bmp.GetWidth(), bmp.GetHeight()));
+    memDc.DrawLine(0, bmp.GetHeight() - 50, bmp.GetWidth(), bmp.GetHeight() - 50);
+
+    //dynamically get the wxWidgets version to display
+    wxString description = wxString::Format("wxWidgets %s", wxVERSION_NUM_DOT_STRING);
+    //Create a copyright notice that uses the year that this file was compiled
+    wxString year(__DATE__, *wxConvCurrent);
+    wxString copyrightLabel = wxString::Format("%c%s wxWidgets. %s",
+        0xA9, year.Mid(year.Length() - 4),
+        "All rights reserved.");
+
+    //draw the (white) labels inside of our orange box (at the bottom of the splashscreen)
+    wxCoord width, height;
+    memDc.SetTextForeground(*wxWHITE);
+    //calculate the height of the text so that we can nicely center it vertically
+    memDc.GetTextExtent(description, &width, &height);
+    memDc.DrawText(description, 10, bmp.GetHeight() - (height + 10));
+
+    memDc.SetFont(wxFontInfo(8));
+    memDc.GetTextExtent(copyrightLabel, &width, &height);
+    memDc.DrawText(copyrightLabel, bmp.GetWidth() - (width + 10), bmp.GetHeight() - (height + 10));
+
+    memDc.SelectObject(wxNullBitmap);
+}
+
 
 // ----------------------------------------------------------------------------
 // main frame
