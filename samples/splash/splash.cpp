@@ -182,7 +182,7 @@ void MyApp::DecorateSplashScreen(wxBitmap& bmp)
 
     //dynamically get the wxWidgets version to display
     wxString description = wxString::Format("wxWidgets %s", wxVERSION_NUM_DOT_STRING);
-    //Create a copyright notice that uses the year that this file was compiled
+    //Create a copyright notice that uses the year that this file was compiled in
     wxString year(__DATE__, *wxConvCurrent);
     wxString copyrightLabel = wxString::Format("%c%s wxWidgets. %s",
         0xA9, year.Mid(year.Length() - 4),
