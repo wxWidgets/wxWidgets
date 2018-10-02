@@ -145,6 +145,11 @@ public:
     wxString GetBestTranslation(const wxString& domain,
                                 const wxString& msgIdLanguage = "en");
 
+    // find best and all other suitable translation languages for given domain
+    wxArrayString GetAllGoodTranslations(const wxString& domain, wxLanguage msgIdLanguage);
+    wxArrayString GetAllGoodTranslations(const wxString& domain,
+                                const wxString& msgIdLanguage = "en");
+
     // add standard wxWidgets catalog ("wxstd")
     bool AddStdCatalog();
 
