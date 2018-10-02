@@ -190,9 +190,10 @@ public:
     bool AddStdCatalog();
 
     /**
-        Add a catalog for use with the current locale.
+        Add a catalog for the preferred UI language. In case of multiple
+        preferences, add catalog for each language, if available.
 
-        By default, it is searched for in standard places (see
+        By default, the catalog is searched for in standard places (see
         wxFileTranslationsLoader), but you may also prepend additional
         directories to the search path with
         wxFileTranslationsLoader::AddCatalogLookupPathPrefix().
@@ -216,8 +217,9 @@ public:
             code are used instead.
 
         @return
-            @true if catalog was successfully loaded, @false otherwise (which might
-            mean that the catalog is not found or that it isn't in the correct format).
+            @true if catalog in the most preferred language was successfully loaded,
+            @false otherwise (which might mean that the catalog is not found or that
+            it isn't in the correct format).
      */
     bool AddCatalog(const wxString& domain,
                     wxLanguage msgIdLanguage = wxLANGUAGE_ENGLISH_US);
@@ -243,8 +245,9 @@ public:
             in case they use 8-bit characters (e.g. German or French strings).
 
         @return
-            @true if catalog was successfully loaded, @false otherwise (which might
-            mean that the catalog is not found or that it isn't in the correct format).
+            @true if catalog in the most preferred language was successfully loaded,
+            @false otherwise (which might mean that the catalog is not found or that
+            it isn't in the correct format).
      */
     bool AddCatalog(const wxString& domain,
                     wxLanguage msgIdLanguage,
