@@ -895,10 +895,7 @@ void wxGridSelection::ClearSelection()
                 m_grid->RefreshBlock(coords1, coords1);
 
 #ifdef __WXMAC__
-                ((wxWindow *)m_grid->m_frozenCornerGridWin)->Update();
-                ((wxWindow *)m_grid->m_frozenRowGridWin)->Update();
-                ((wxWindow *)m_grid->m_frozenColGridWin)->Update();
-                ((wxWindow *)m_grid->m_gridWin)->Update();
+                m_grid->UpdateGridWindows();
 #endif
             }
         }
@@ -917,10 +914,7 @@ void wxGridSelection::ClearSelection()
             m_grid->RefreshBlock(coords1, coords2);
 
 #ifdef __WXMAC__
-            ((wxWindow *)m_grid->m_frozenCornerGridWin)->Update();
-            ((wxWindow *)m_grid->m_frozenRowGridWin)->Update();
-            ((wxWindow *)m_grid->m_frozenColGridWin)->Update();
-            ((wxWindow *)m_grid->m_gridWin)->Update();
+            m_grid->UpdateGridWindows();
 #endif
         }
     }
@@ -938,10 +932,7 @@ void wxGridSelection::ClearSelection()
                 m_grid->RefreshBlock(row, 0, row, m_grid->GetNumberCols() - 1);
 
 #ifdef __WXMAC__
-                ((wxWindow *)m_grid->m_frozenCornerGridWin)->Update();
-                ((wxWindow *)m_grid->m_frozenRowGridWin)->Update();
-                ((wxWindow *)m_grid->m_frozenColGridWin)->Update();
-                ((wxWindow *)m_grid->m_gridWin)->Update();
+                m_grid->UpdateGridWindows();
 #endif
             }
         }
@@ -960,10 +951,7 @@ void wxGridSelection::ClearSelection()
                 m_grid->RefreshBlock(0, col, m_grid->GetNumberRows() - 1, col);
 
 #ifdef __WXMAC__
-                ((wxWindow *)m_grid->m_frozenCornerGridWin)->Update();
-                ((wxWindow *)m_grid->m_frozenRowGridWin)->Update();
-                ((wxWindow *)m_grid->m_frozenColGridWin)->Update();
-                ((wxWindow *)m_grid->m_gridWin)->Update();
+                m_grid->UpdateGridWindows();
 #endif
             }
         }

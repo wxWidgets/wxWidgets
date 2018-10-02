@@ -226,9 +226,6 @@ public:
     wxGridCellAttr* GetCellAttr() const { return m_attr; }
     void SetCellAttr(wxGridCellAttr* attr) { m_attr = attr; }
 
-    virtual wxWindow* GetParent() const
-    { return m_control ? reinterpret_cast<wxWindow*>(m_control)->GetParent() : NULL; }
-    
     // Creates the actual edit control
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
@@ -1027,7 +1024,8 @@ public:
     wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg,
                                             wxGridWindow *gridWindow) const;
 
-    void PrepareDC(wxDC &dc, wxGridWindow *gridWindow = 0);
+    void PrepareDC(wxDC &dc) wxOVERRIDE { PrepareDC(dc, NULL); }
+    void PrepareDC(wxDC &dc, wxGridWindow *gridWindow);
     
     void ClearGrid();
     bool InsertRows(int pos = 0, int numRows = 1, bool updateLabels = true)
@@ -1071,7 +1069,9 @@ public:
     void DrawCell( wxDC& dc, const wxGridCellCoords& );
     void DrawHighlight(wxDC& dc, const wxGridCellCoordsArray& cells);
 
-    void ScrollWindow( int dx, int dy, const wxRect *rect );
+    void ScrollWindow( int dx, int dy, const wxRect *rect ) wxOVERRIDE;
+    
+    void UpdateGridWindows() const;
     
     // this function is called when the current cell highlight must be redrawn
     // and may be overridden by the user
@@ -1201,11 +1201,15 @@ public:
     wxGridWindow* DevicePosToGridWindow(wxPoint pos) const;
     wxGridWindow* DevicePosToGridWindow(int x, int y) const;
     
-    void    CalcGridWindowUnscrolledPosition(int x, int y, int *xx, int *yy, const wxGridWindow *gridWindow) const;
-    wxPoint CalcGridWindowUnscrolledPosition(const wxPoint& pt, const wxGridWindow *gridWindow) const;
+    void    CalcGridWindowUnscrolledPosition(int x, int y, int *xx, int *yy,
+                                             const wxGridWindow *gridWindow) const;
+    wxPoint CalcGridWindowUnscrolledPosition(const wxPoint& pt,
+                                             const wxGridWindow *gridWindow) const;
     
-    void    CalcGridWindowScrolledPosition(int x, int y, int *xx, int *yy, const wxGridWindow *gridWindow) const;
-    wxPoint CalcGridWindowScrolledPosition(const wxPoint& pt, const wxGridWindow *gridWindow) const;
+    void    CalcGridWindowScrolledPosition(int x, int y, int *xx, int *yy,
+                                           const wxGridWindow *gridWindow) const;
+    wxPoint CalcGridWindowScrolledPosition(const wxPoint& pt,
+                                           const wxGridWindow *gridWindow) const;
     
     // check to see if a cell is either wholly visible (the default arg) or
     // at least partially visible in the grid window
@@ -1686,6 +1690,9 @@ public:
 
     // Accessors for component windows
     wxWindow* GetGridWindow() const            { return (wxWindow*)m_gridWin; }
+    wxWindow* GetFrozenCornerGridWindow()const { return (wxWindow*)m_frozenCornerGridWin; }
+    wxWindow* GetFrozenRowGridWindow() const   { return (wxWindow*)m_frozenRowGridWin; }
+    wxWindow* GetFrozenColGridWindow() const   { return (wxWindow*)m_frozenColGridWin; }
     wxWindow* GetGridRowLabelWindow() const    { return (wxWindow*)m_rowLabelWin; }
     wxWindow* GetGridColLabelWindow() const    { return m_colLabelWin; }
     wxWindow* GetGridCornerLabelWindow() const { return (wxWindow*)m_cornerLabelWin; }
@@ -2223,6 +2230,9 @@ protected:
         { UpdateBlockBeingSelected(topLeft.GetRow(), topLeft.GetCol(),
                          bottomRight.GetRow(), bottomRight.GetCol()); }
 
+    virtual bool ScrollToChildWindowOnFocus(wxWindow* WXUNUSED(win)) wxOVERRIDE
+        { return false; }
+    
     friend class WXDLLIMPEXP_FWD_CORE wxGridSelection;
     friend class wxGridRowOperations;
     friend class wxGridColumnOperations;
@@ -2241,6 +2251,10 @@ private:
     // implement wxScrolledWindow method to return m_gridWin size
     virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size) wxOVERRIDE;
 
+    // depending on the values of m_numFrozenRows and m_numFrozenCols, it will
+    // create and initialize or delete the frozen windows
+    void InitializeFrozenWindows();
+    
     // redraw the grid lines, should be called after changing their attributes
     void RedrawGridLines();
 
@@ -2289,14 +2303,6 @@ private:
     // this always returns a valid position, even if the coordinate is out of
     // bounds (in which case first/last column is returned)
     int XToPos(int x, wxGridWindow *gridWindow) const;
-
-    // return the position (not index) of the row at the given logical pixel
-    // position
-    //
-    // this always returns a valid position, even if the coordinate is out of
-    // bounds (in which case first/last row is returned)
-    int YToPos(int y, wxGridWindow *gridWindow) const; // BRICSYS DragRowMove
-
 
     // event handlers and their helpers
     // --------------------------------

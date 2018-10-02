@@ -1202,23 +1202,14 @@ void GridFrame::SelectRowsOrCols( wxCommandEvent& WXUNUSED(ev) )
     grid->SetSelectionMode( wxGrid::wxGridSelectRowsOrColumns );
 }
 
-#include <wx/log.h>
-
 void GridFrame::Freeze( wxCommandEvent& WXUNUSED(ev))
 {
-    bool froze = grid->FreezeTo(grid->GetGridCursorRow(), grid->GetGridCursorCol());
-    
-    wxLogDebug("Freeze: rows: %d \t cols: %d \t succeded = %d",
-               grid->GetGridCursorRow(),
-               grid->GetGridCursorCol(),
-               froze);
+    grid->FreezeTo(grid->GetGridCursorRow(), grid->GetGridCursorCol());
 }
 
 void GridFrame::Unfreeze( wxCommandEvent& WXUNUSED(ev))
 {
     grid->FreezeTo(0, 0);
-    
-    wxLogDebug("Unfreeze");
 }
 
 void GridFrame::SetCellFgColour( wxCommandEvent& WXUNUSED(ev) )

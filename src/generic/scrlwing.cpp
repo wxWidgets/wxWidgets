@@ -1071,7 +1071,7 @@ void wxScrollHelperBase::HandleOnChildFocus(wxChildFocusEvent& event)
         return; // nothing to do
 
     // the window does not require to be scrolled into view
-    if( win->GetExtraStyle() & wxWS_EX_BLOCK_EVENTS )
+    if ( !ScrollToChildWindowOnFocus(win) )
         return;
     
 #if defined( __WXOSX__ ) && wxUSE_SCROLLBAR

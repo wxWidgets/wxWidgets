@@ -305,6 +305,9 @@ protected:
         return size;
     }
 
+    // returns if window should be fully scrolled into view when receiving focus
+    virtual bool ScrollToChildWindowOnFocus(wxWindow* WXUNUSED(win)) { return true; }
+
 
     double                m_scaleX;
     double                m_scaleY;

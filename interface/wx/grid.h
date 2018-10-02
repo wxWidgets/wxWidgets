@@ -4227,10 +4227,13 @@ public:
         limited by @a topLeft and @a bottomRight cell in device coords and
         clipped to the client size of the grid window.
 
+        @since 3.1.2 Parameter @ gridWindow is required.
+     
         @see CellToRect()
     */
     wxRect BlockToDeviceRect(const wxGridCellCoords& topLeft,
-                             const wxGridCellCoords& bottomRight) const;
+                             const wxGridCellCoords& bottomRight,
+                             const wxGridWindow *gridWindow) const;
 
     /**
         Return the rectangle corresponding to the grid cell's size and position
@@ -4248,10 +4251,101 @@ public:
     wxRect CellToRect(const wxGridCellCoords& coords) const;
 
     /**
-        Returns the column at the given pixel position.
-
+        Returns the grid window that contains the cell.
+        @since 3.1.2
+     */
+    wxGridWindow* CellToGridWindow( int row, int col ) const;
+    
+    /**
+        Returns the grid window that contains the cell.
+        @since 3.1.2
+     */
+    wxGridWindow* CellToGridWindow( const wxGridCellCoords& coords ) const
+    
+    /**
+        Returns the grid window that includes the input coordinates.
+        @since 3.1.2
+     */
+    wxGridWindow* DevicePosToGridWindow(wxPoint pos) const;
+    
+    /**
+        Returns the grid window that includes the input coordinates.
+        @since 3.1.2
+     */
+    wxGridWindow* DevicePosToGridWindow(int x, int y) const;
+    
+    /**
+        Returns the grid window's offset from the grid starting position taking
+        into account the frozen cells.
+        If there are no frozen cells, it will return (0, 0).
+     
+        @since 3.1.2
+     */
+    void GetGridWindowOffset(const wxGridWindow *gridWindow, int &x, int &y) const;
+    
+    /**
+        Returns the grid window's offset from the grid starting position taking
+        into account the frozen cells.
+        If there are no frozen cells, it will return (0, 0).
+     
+        @since 3.1.2
+     */
+    wxPoint GetGridWindowOffset(const wxGridWindow *gridWindow) const;
+    
+    /**
+        Translates the device coordinates to the logical ones, taking into
+        account the grid window type.
+     
+        @since 3.1.2
+     
+        @see wxScrolled::CalcUnscrolledPosition()
+     */
+    void CalcGridWindowUnscrolledPosition(int x, int y,
+                                          int *xx, int *yy,
+                                          const wxGridWindow *gridWindow) const;
+    /**
+        Translates the device coordinates to the logical ones, taking into
+        account the grid window type.
+     
+        @since 3.1.2
+     
+        @see wxScrolled::CalcUnscrolledPosition()
+     */
+    wxPoint CalcGridWindowUnscrolledPosition(const wxPoint& pt,
+                                             const wxGridWindow *gridWindow) const;
+    
+    /**
+        Translates the logical coordinates to the device ones, taking into
+        account the grid window type.
+     
+        @since 3.1.2
+     
+        @see wxScrolled::CalcScrolledPosition()
+     */
+    void CalcGridWindowScrolledPosition(int x, int y,
+                                        int *xx, int *yy,
+                                        const wxGridWindow *gridWindow) const;
+    
+    /**
+        Translates the logical coordinates to the device ones, taking into
+        account the grid window type.
+     
+        @since 3.1.2
+     
+        @see wxScrolled::CalcScrolledPosition()
+     */
+    wxPoint CalcGridWindowScrolledPosition(const wxPoint& pt,
+                                           const wxGridWindow *gridWindow) const;
+    
+    /**
+        Returns the column at the given pixel position depending on the window.
+     
         @param x
             The x position to evaluate.
+        @param gridWindow
+            The associated grid window (new in 3.1.2).
+            If @a gridWindow is @NULL, it will consider all the cells, no matter
+            which grid they belong to.
         @param clipToMinMax
             If @true, rather than returning @c wxNOT_FOUND, it returns either
             the first or last column depending on whether @a x is too far to
@@ -4259,7 +4353,7 @@ public:
         @return
             The column index or @c wxNOT_FOUND.
     */
-    int XToCol(int x, bool clipToMinMax = false) const;
+    int XToCol(int x, wxGridWindow *gridWindow, bool clipToMinMax = false) const;
 
     /**
         Returns the column whose right hand edge is close to the given logical
@@ -4276,10 +4370,14 @@ public:
         you use this function in a mouse event handler you need to translate
         the mouse position, which is expressed in device coordinates, to
         logical ones.
+        @since 3.1.2 The coordinates have to be relative to @a gridWindow.
+     
+        If @a gridWindow is @NULL, it will consider all the cells, no matter
+        which grid they belong to.
 
         @see XToCol(), YToRow()
      */
-    wxGridCellCoords XYToCell(int x, int y) const;
+    wxGridCellCoords XYToCell(int x, int y, wxGridWindow *gridWindow) const;
     /**
         Translates logical pixel coordinates to the grid cell coordinates.
 
@@ -4287,10 +4385,14 @@ public:
         you use this function in a mouse event handler you need to translate
         the mouse position, which is expressed in device coordinates, to
         logical ones.
+        @since 3.1.2 The coordinates have to be relative to @a gridWindow.
+     
+        If @a gridWindow is @NULL, it will consider all the cells, no matter
+        which grid they belong to.
 
         @see XToCol(), YToRow()
      */
-    wxGridCellCoords XYToCell(const wxPoint& pos) const;
+    wxGridCellCoords XYToCell(const wxPoint& pos, wxGridWindow *gridWindow) const;
     // XYToCell(int, int, wxGridCellCoords&) overload is intentionally
     // undocumented, using it is ugly and non-const reference parameters are
     // not used in wxWidgets API
@@ -4304,11 +4406,14 @@ public:
     int YToEdgeOfRow(int y) const;
 
     /**
+        If @a gridWindow is @NULL, it will consider all the cells, no matter
+        which grid they belong to (new in 3.1.2).
+     
         Returns the grid row that corresponds to the logical @a y coordinate.
 
         Returns @c wxNOT_FOUND if there is no row at the @a y position.
     */
-    int YToRow(int y, bool clipToMinMax = false) const;
+    int YToRow(int y, wxGridWindow *gridWindow, bool clipToMinMax = false) const;
 
     //@}
 
@@ -4437,6 +4542,25 @@ public:
     bool DeleteRows(int pos = 0, int numRows = 1, bool updateLabels = true);
 
     /**
+        Sets or resets the frozen columns and rows.
+     
+        @param row
+            The number of rows to freeze.
+            If it is 0, it will unfreeze all rows.
+        @param col
+            The numver of columns to freeze.
+            If it is 0, it will unfreeze all columns.
+        @return @true on success or @false if it failed.
+     
+        It could fail from a number of reasons: number bigger than total available
+        lines/columns, size of frozen part will be bigger than viewing area, freezing
+        across merged cells.
+     
+        @since 3.1.2
+     */
+    bool FreezeTo(unsigned row, unsigned col);
+    
+    /**
         Decrements the grid's batch count.
 
         When the count is greater than zero repainting of the grid is
@@ -4482,6 +4606,18 @@ public:
     */
     int GetNumberRows() const;
 
+    /**
+        Returns the number of frozen grid columns.
+        @since 3.1.2
+     */
+    int GetNumberFrozenCols() const;
+    
+    /**
+        Returns the number of frozen grid rows.
+        @since 3.1.2
+     */
+    int GetNumberFrozenRows() const;
+    
     /**
         Returns the attribute for the given cell creating one if necessary.
 
@@ -4642,8 +4778,11 @@ public:
 
     wxArrayInt CalcRowLabelsExposed( const wxRegion& reg );
     wxArrayInt CalcColLabelsExposed( const wxRegion& reg );
-    wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg );
+    wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg,
+                                            wxGridWindow *gridWindow ) const;
 
+    void PrepareDC(wxDC &dc, wxGridWindow *gridWindow = 0);
+    
     //@}
 
 
@@ -4742,6 +4881,33 @@ public:
      */
     wxWindow *GetGridWindow() const;
 
+    /**
+        Return the corner grid window containing frozen cells.
+     
+        This window is shown only when there are frozen rows and columns.
+     
+        @since 3.1.2
+     */
+    wxWindow* GetFrozenCornerGridWindow() const;
+    
+    /**
+        Return the rows grid window containing row frozen cells.
+     
+        This window is shown only when there are frozen rows.
+     
+        @since 3.1.2
+     */
+    wxWindow* GetFrozenRowGridWindow() const;
+    
+    /**
+        Return the columns grid window containing column frozen cells.
+     
+        This window is shown only when there are frozen columns.
+     
+        @since 3.1.2
+     */
+    wxWindow* GetFrozenColGridWindow() const;
+    
     /**
         Return the row labels window.
 
