@@ -780,7 +780,7 @@
 // Default is 1 on MSW
 //
 // Recommended setting: 1
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && defined(NTDDI_VERSION) && defined(NTDDI_WIN10_RS4) && NTDDI_VERSION >= NTDDI_WIN10_RS4
 #define wxUSE_WEBVIEW_EDGE 1
 #else
 #define wxUSE_WEBVIEW_EDGE 0

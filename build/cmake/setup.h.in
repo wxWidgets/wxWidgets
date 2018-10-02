@@ -329,7 +329,7 @@
 #cmakedefine01 wxUSE_WEBVIEW_IE
 #endif
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && defined(NTDDI_VERSION) && defined(NTDDI_WIN10_RS4) && NTDDI_VERSION >= NTDDI_WIN10_RS4
 #cmakedefine01 wxUSE_WEBVIEW_EDGE
 #else
 #cmakedefine01 wxUSE_WEBVIEW_EDGE

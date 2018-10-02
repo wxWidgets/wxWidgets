@@ -786,7 +786,7 @@
 // Default is 1 on MSW
 //
 // Recommended setting: 1
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && defined(NTDDI_VERSION) && defined(NTDDI_WIN10_RS4) && NTDDI_VERSION >= NTDDI_WIN10_RS4
 #define wxUSE_WEBVIEW_EDGE 1
 #else
 #define wxUSE_WEBVIEW_EDGE 0
@@ -1633,13 +1633,6 @@
 // make sure we have the proper dispatcher for the console event loop
 #define wxUSE_SELECT_DISPATCHER 1
 #define wxUSE_EPOLL_DISPATCHER 0
-
-// set to 1 if you have older code that still needs icon refs
-#define wxOSX_USE_ICONREF 0
-
-// set to 0 if you have code that has problems with the new bitmap implementation
-#define wxOSX_BITMAP_NATIVE_ACCESS 1
-
 /* --- end OSX options --- */
 
 #endif
