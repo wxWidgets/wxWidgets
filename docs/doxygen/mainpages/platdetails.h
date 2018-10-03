@@ -62,8 +62,7 @@ distribution.
 wxOSX/Cocoa is the port of wxWidgets for the OS X platform. It requires
 OS X 10.7 or later and fully supports 64 bit builds.
 
-For further information, please see the files in @c docs/osx in the
-distribution.
+@subpage plat_osx_install "Build and Install Instructions"
 
 
 
@@ -105,7 +104,7 @@ This port can be compiled with several compilers including Microsoft Studio
 VC++ 2003 or later, Borland 5.5, MinGW32, Cygwin as well as cross-compilation
 with a Linux-hosted MinGW32 tool chain.
 
-For further information, please see the files in docs/msw in the distribution.
+@subpage plat_msw_install "Build and Install Instructions"
 
 @subsection page_port_wxmsw_resources Resources and Application Icon
 
@@ -175,7 +174,7 @@ wxiOS is a port of wxWidgets using Cocoa touch libraries for iOS. It is very
 basic in it current form, but is included for further improvements and very
 simple applications. It requires iOS 9 or later and fully supports 64 bit builds.
 
-For further information, please see the files in docs/ios in the distribution.
+@subpage plat_ios_install "Build Instructions"
 
 @section page_port_nativedocs Native Toolkit Documentation
 
