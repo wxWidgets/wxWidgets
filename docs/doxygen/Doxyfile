@@ -294,9 +294,11 @@ INPUT                  = mainpages \
                          overviews \
                          ../gtk \
                          ../ios \
+                         ../motif \
                          ../msw \
                          ../osx \
                          ../qt \
+                         ../x11 \
                          ../../interface
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h *.md

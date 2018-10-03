@@ -80,8 +80,9 @@ In order to configure wxWidgets to compile wxX11 you will need to type:
 
 @verbatim configure --with-x11 --with-universal @endverbatim
 
-For further information, please see the files in @c docs/x11 in the
-distribution. There is also a page on the use of wxWidgets for embedded
+@subpage plat_x11_install "Build Instructions"
+
+There is also a page on the use of wxWidgets for embedded
 applications on the wxWidgets web site.
 
 
@@ -92,8 +93,8 @@ wxMotif is a port of wxWidgets for X11 systems using Motif libraries. Motif
 libraries provide a clean and fast user interface at the expense of the beauty
 and candy of newer interfaces like GTK.
 
-For further information, please see the files in @c docs/motif in the
-distribution.
+@subpage plat_motif_install "Build Instructions"
+
 
 
 

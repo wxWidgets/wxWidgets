@@ -1,5 +1,7 @@
-wxWidgets for Motif installation
+wxWidgets for Motif installation       {#plat_motif_install}
 --------------------------------
+
+[TOC]
 
 IMPORTANT NOTE:
 
@@ -40,38 +42,38 @@ First steps
   config.log file).
 
 
-COMPILING USING CONFIGURE
+Compiling using configure              {#motif_configure}
 =========================
 
-* The simplest case
+The simplest case                      {#motif_simple}
 -------------------
 
 If you compile wxWidgets on Linux for the first time and don't like to read
 install instructions just do (in the base dir):
 
-> ./configure --with-motif
-> make
-> su <type root password>
-> make install
-> ldconfig
-> exit
+    > ./configure --with-motif
+    > make
+    > su <type root password>
+    > make install
+    > ldconfig
+    > exit
 
 Afterwards you can continue with
 
-> make
-> su <type root password>
-> make install
-> ldconfig
-> exit
+    > make
+    > su <type root password>
+    > make install
+    > ldconfig
+    > exit
 
 If you want to remove wxWidgets on Unix you can do this:
 
-> su <type root password>
-> make uninstall
-> ldconfig
-> exit
+    > su <type root password>
+    > make uninstall
+    > ldconfig
+    > exit
 
-* The expert case
+The expert case                        {#motif_expert}
 -----------------
 
 If you want to do some more serious cross-platform programming with wxWidgets,
@@ -84,28 +86,28 @@ with --enable-debug and one without.
 For building three versions (one GTK, one Motif and a debug version of the GTK
 source) you'd do this:
 
-mkdir buildmotif
-cd buildmotif
-../configure --with-motif
-make
-cd ..
+    mkdir buildmotif
+    cd buildmotif
+    ../configure --with-motif
+    make
+    cd ..
 
-mkdir buildgtk
-cd buildgtk
-../configure --with-gtk
-make
-cd ..
+    mkdir buildgtk
+    cd buildgtk
+    ../configure --with-gtk
+    make
+    cd ..
 
-mkdir buildgtkd
-cd buildgtkd
-../configure --with-gtk --enable-debug
-make
-cd ..
+    mkdir buildgtkd
+    cd buildgtkd
+    ../configure --with-gtk --enable-debug
+    make
+    cd ..
 
 Note that since wxWidgets-2.6.0 you can install all those libraries
 concurrently, you just need to pass the appropriate flags when using them.
 
-* The simplest errors
+The simplest errors                    {#motif_error_simple}
 ---------------------
 
 You get errors during compilation: The reason is that you probably have a
@@ -115,18 +117,18 @@ GCC 2.95 or later.
 
 You get immediate segfault when starting any sample or application: This is
 either due to having compiled the library with different flags or options than
-your program - typically you might have the __WXDEBUG__ option set for the
+your program - typically you might have the `__WXDEBUG__` option set for the
 library but not for your program - or due to using a compiler with optimisation
 bugs.
 
-* The simplest program
+The simplest program                   {#motif_simple_app}
 ----------------------
 
 Now create your super-application myfoo.app and compile anywhere with
 
-g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
+    g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
 
-* General
+General                                {#motif_general}
 ---------
 
 The Unix variants of wxWidgets use GNU configure. If you have problems with
@@ -134,7 +136,7 @@ your make use GNU make instead.
 
 If you have general problems with installation, see the wxWidgets website at
 
-  https://www.wxwidgets.org/
+https://www.wxwidgets.org/
 
 for newest information. If you still don't have any success, please send a bug
 report to one of our mailing lists (see my homepage) INCLUDING A DESCRIPTION OF
@@ -142,7 +144,7 @@ YOUR SYSTEM AND YOUR PROBLEM, SUCH AS YOUR VERSION OF MOTIF, WXMOTIF, WHAT
 DISTRIBUTION YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect,
 but I tried...
 
-* GUI libraries
+GUI libraries                          {#motif_libs_gui}
 ---------------
 
 wxWidgets/Motif requires the Motif library to be installed on your system. As
@@ -151,9 +153,9 @@ most of the Motif API without the licence restrictions of Motif.
 
 You can get the newest version of the Lesstif from the lesstif homepage at:
 
-  http://lesstif.sourceforge.net/
+http://lesstif.sourceforge.net/
 
-* Additional libraries
+Additional libraries                   {#motif_libs_misc}
 ----------------------
 
 wxWidgets/Motif requires a thread library and X libraries known to work with
@@ -164,14 +166,14 @@ correct glibc 2 support.
 
 You can disable thread support by running
 
-./configure --disable-threads
-make
-su <type root password>
-make install
-ldconfig
-exit
+    ./configure --disable-threads
+    make
+    su <type root password>
+    make install
+    ldconfig
+    exit
 
-* Building wxMotif on Cygwin
+Building wxMotif on Cygwin             {#motif_cygwin}
 ----------------------------
 
 The normal build instructions should work fine on Cygwin. The one difference
@@ -185,10 +187,11 @@ will see linking errors. If this happens then you can work around the
 problem by setting LDFLAGS=-Wl,--export-all-symbols. Please also let us know
 about it on the wx-dev mailing list.
 
-* Create your configuration
+Create your configuration              {#motif_config}
 ---------------------------
 
 Usage:
+
 	./configure [options]
 
 If you want to use system's C and C++ compiler,
@@ -216,7 +219,7 @@ Configure will complain if the system variable OSTYPE has
 not been defined. And Make in some circumstances as well...
 
 
-* General options
+General options                        {#motif_options}
 -------------------
 
 Given below are the commands to change the default behaviour,
@@ -289,7 +292,7 @@ The following options handle the kind of library you want to build.
 				must be compiled with the same debug
 				options.
 
-* Feature Options
+Feature Options                        {#motif_feature_options}
 -----------------
 
 Many of the configure options have been thoroughly tested
@@ -338,7 +341,7 @@ Please see the output of "./configure --help" for comprehensive list
 of all configurable options.
 
 
-* Compiling
+Compiling                              {#motif_compile}
 -----------
 
 The following must be done in the base directory (e.g. ~/wxMotif
@@ -374,41 +377,41 @@ object-files:
 
 in the various directories will do the work for you.
 
-* Creating a new Project
+Creating a new Project                 {#motif_new_project}
 ------------------------
 
-1) The first way uses the installed libraries and header files
+1. The first way uses the installed libraries and header files
 automatically using wx-config
 
-g++ myfoo.cpp `wx-config --libs` `wx-config --cxxflags` -o myfoo
+        g++ myfoo.cpp `wx-config --libs` `wx-config --cxxflags` -o myfoo
 
-Using this way, a make file for the minimal sample would look
-like this
+    Using this way, a make file for the minimal sample would look
+    like this
 
-CXX = g++
+        CXX = g++
 
-minimal: minimal.o
-    $(CXX) -o minimal minimal.o `wx-config --libs`
+        minimal: minimal.o
+            $(CXX) -o minimal minimal.o `wx-config --libs`
 
-minimal.o: minimal.cpp
-    $(CXX) `wx-config --cxxflags` -c minimal.cpp -o minimal.o
+        minimal.o: minimal.cpp
+            $(CXX) `wx-config --cxxflags` -c minimal.cpp -o minimal.o
 
-clean:
-	rm -f *.o minimal
+        clean:
+            rm -f *.o minimal
 
-If your application uses only some of wxWidgets libraries, you can
-specify required libraries when running wx-config. For example,
-`wx-config --libs=html,core` will only output link command to link
-with libraries required by core GUI classes and wxHTML classes. See
-the manual for more information on the libraries.
+    If your application uses only some of wxWidgets libraries, you can
+    specify required libraries when running wx-config. For example,
+    `wx-config --libs=html,core` will only output link command to link
+    with libraries required by core GUI classes and wxHTML classes. See
+    the manual for more information on the libraries.
 
-2) The other way creates a project within the source code
+2. The other way creates a project within the source code
 directories of wxWidgets. For this endeavour, you'll need
 GNU autoconf version 2.14 and add an entry to your Makefile.in
 to the bottom of the configure.in script and run autoconf
 and configure before you can type make.
 
-* Further notes by Julian Smart
+Further notes by Julian Smart          {#motif_notes}
 ---------------------------------
 
 - You may find the following script useful for compiling wxMotif,
@@ -416,25 +419,23 @@ and configure before you can type make.
   permissions). Make this script executable with the command
   chmod a+x makewxmotif.
 
-  -------:x-----Cut here-----:x-----
-  # makewxmotif
-  # Sets permissions (in case we extracted wxMotif from zip files)
-  # and makes wxMotif.
-  # Call from top-level wxWidgets directory.
-  # Note that this uses standard (but commonly-used) configure options;
-  # if you're feeling brave, you may wish to compile with threads:
-  # if they're not supported by the target platform, they will be disabled
-  # anyhow
-  # -- Julian Smart
-  chmod a+x configure config.sub config.guess
-  ./configure --with-shared --with-motif --with-debug_flag --with-debug_info --enable-debug --without-threads --without-sockets --without-odbc
-  make
-  -------:x-----Cut here-----:x-----
+        # makewxmotif
+        # Sets permissions (in case we extracted wxMotif from zip files)
+        # and makes wxMotif.
+        # Call from top-level wxWidgets directory.
+        # Note that this uses standard (but commonly-used) configure options;
+        # if you're feeling brave, you may wish to compile with threads:
+        # if they're not supported by the target platform, they will be disabled
+        # anyhow
+        # -- Julian Smart
+        chmod a+x configure config.sub config.guess
+        ./configure --with-shared --with-motif --with-debug_flag --with-debug_info --enable-debug --without-threads --without-sockets --without-odbc
+        make
 
   This script will build wxMotif using shared libraries. If you want to build
   a static wxWidgets library, use --disable-shared.
 
-Troubleshooting
+Troubleshooting                        {#motif_troubleshoot}
 ---------------
 
 - Solaris compilation with gcc: if the compiler has problems with the variable
@@ -458,20 +459,10 @@ Troubleshooting
   If you find any incorrect instances, though, such as a
   missing 'const' in an overridden function, please let us know.
 
-Other Notes
+Other Notes                            {#motif_misc}
 -----------
 
 - Using configure will create a release build of the library by
   default: it's recommended to use --enable-debug configure switch
   while developing your application. To compile in non-debug mode, use
   --disable-debug configure switch.
-
-Bug reports
------------
-
-Please send bug reports with a description of your environment,
-compiler and the error message(s) to the developers mailing list at:
-
-    https://www.wxwidgets.org/support/mailing-lists/
-
-Julian Smart, Robert Roebling and Vadim Zeitlin, November 1999.
