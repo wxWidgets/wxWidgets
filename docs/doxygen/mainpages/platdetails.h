@@ -167,7 +167,9 @@ wxWindowBase::GetDefaultBorder(), returning wxBORDER_NONE.
 
 wxQt is a port of wxWidgets using Qt libraries. It requires Qt 5 or later.
 
-For further information, please see the files in docs/qt in the distribution.
+@subpage plat_qt_install "Build Instructions"
+
+@subpage plat_qt_architecture "Architecture Overview"
 
 @section page_port_wxiOS wxiOS
 

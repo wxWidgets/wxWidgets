@@ -296,6 +296,7 @@ INPUT                  = mainpages \
                          ../ios \
                          ../msw \
                          ../osx \
+                         ../qt \
                          ../../interface
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h *.md
