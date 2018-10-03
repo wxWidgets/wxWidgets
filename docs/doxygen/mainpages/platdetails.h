@@ -52,8 +52,9 @@ GTK+ 1.2 can still be used, albeit discouraged. For that you can pass
 Support for GTK+ 3 is available starting with wxWidgets 2.9.4, use @c configure
 option @c \--with-gtk=3 to enable it.
 
-For further information, please see the files in @c docs/gtk in the
-distribution.
+@subpage plat_gtk_install "Build and Install Instructions"
+
+@subpage plat_gtk_overview "wxWidgets on the GNOME Desktop"
 
 
 

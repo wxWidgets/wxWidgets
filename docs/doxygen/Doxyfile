@@ -292,6 +292,7 @@ WARN_LOGFILE           = doxygen.log
 INPUT                  = mainpages \
                          groups \
                          overviews \
+                         ../gtk \
                          ../ios \
                          ../msw \
                          ../osx \
