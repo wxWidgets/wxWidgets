@@ -1339,9 +1339,9 @@ void FormMain::PopulateWithExamples ()
         "Should have one extra item when compared to EnumProperty 3");
 
     // Plus property value bitmap
-    pg->Append( new wxEnumProperty(wxS("EnumProperty With Bitmap"), wxS("EnumProperty 5"),
+    pg->Append( new wxEnumProperty("EnumProperty With Bitmap", "EnumProperty 5",
         soc, 280) );
-    pg->SetPropertyHelpString(wxS("EnumProperty 5"),
+    pg->SetPropertyHelpString("EnumProperty 5",
         "Should have bitmap in front of the displayed value");
     wxBitmap bmpVal = wxArtProvider::GetBitmap(wxART_REMOVABLE);
     pg->SetPropertyImage("EnumProperty 5", bmpVal);

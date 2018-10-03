@@ -1280,7 +1280,6 @@
     <ClInclude Include="..\..\include\wx\dirctrl.h" />
     <ClInclude Include="..\..\include\wx\dirdlg.h" />
     <ClInclude Include="..\..\include\wx\display.h" />
-    <ClInclude Include="..\..\include\wx\display_impl.h" />
     <ClInclude Include="..\..\include\wx\dnd.h" />
     <ClInclude Include="..\..\include\wx\docmdi.h" />
     <ClInclude Include="..\..\include\wx\docview.h" />

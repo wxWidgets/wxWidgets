@@ -988,7 +988,6 @@ GUI_CMN_HDR =
     wx/dirctrl.h
     wx/dirdlg.h
     wx/display.h
-    wx/display_impl.h
     wx/dnd.h
     wx/docmdi.h
     wx/docview.h
@@ -2268,7 +2267,6 @@ OSX_LOWLEVEL_SRC =
     src/osx/core/bitmap.cpp
     src/osx/core/colour.cpp
     src/osx/core/dcmemory.cpp
-    src/osx/core/display.cpp
     src/osx/core/fontenum.cpp
     src/osx/core/hid.cpp
     src/osx/core/printmac.cpp
@@ -2499,6 +2497,7 @@ OSX_COCOA_SRC =
     src/osx/cocoa/toolbar.mm
     src/osx/cocoa/tooltip.mm
     src/osx/cocoa/window.mm
+    src/osx/core/display.cpp
     src/osx/core/hidjoystick.cpp
     src/osx/core/sound.cpp
     src/osx/dataview_osx.cpp
@@ -2535,7 +2534,6 @@ OSX_IPHONE_SRC =
     $(OSX_COMMON_SRC)
     src/generic/animateg.cpp
     src/generic/regiong.cpp
-    src/osx/cocoa/stdpaths.mm
     src/osx/core/sound.cpp
     src/osx/iphone/anybutton.mm
     src/osx/iphone/button.mm

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/display_impl.h
+// Name:        wx/private/display.h
 // Purpose:     wxDisplayImpl class declaration
 // Author:      Vadim Zeitlin
 // Created:     2006-03-15
@@ -7,25 +7,35 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DISPLAY_IMPL_H_BASE_
-#define _WX_DISPLAY_IMPL_H_BASE_
+#ifndef _WX_PRIVATE_DISPLAY_H_
+#define _WX_PRIVATE_DISPLAY_H_
 
+#include "wx/display.h"
 #include "wx/gdicmn.h"      // for wxRect
+#include "wx/vector.h"
 
 // ----------------------------------------------------------------------------
 // wxDisplayFactory: allows to create wxDisplay objects
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDisplayFactory
+class wxDisplayFactory
 {
 public:
     wxDisplayFactory() { }
-    virtual ~wxDisplayFactory() { }
+    virtual ~wxDisplayFactory();
 
-    // create a new display object
-    //
-    // it can return a NULL pointer if the display creation failed
-    virtual wxDisplayImpl *CreateDisplay(unsigned n) = 0;
+    // Create the display if necessary using CreateDisplay(), otherwise just
+    // get it from cache.
+    wxDisplayImpl* GetDisplay(unsigned n)
+    {
+        if ( m_impls.empty() )
+            m_impls.resize(GetCount());
+        else if ( m_impls[n] )
+            return m_impls[n];
+
+        m_impls[n] = CreateDisplay(n);
+        return m_impls[n];
+    }
 
     // get the total number of displays
     virtual unsigned GetCount() = 0;
@@ -37,13 +47,25 @@ public:
     //
     // the window pointer must not be NULL (i.e. caller should check it)
     virtual int GetFromWindow(const wxWindow *window);
+
+protected:
+    // create a new display object
+    //
+    // it can return a NULL pointer if the display creation failed
+    virtual wxDisplayImpl *CreateDisplay(unsigned n) = 0;
+
+private:
+    // On-demand populated vector of wxDisplayImpl objects.
+    wxVector<wxDisplayImpl*> m_impls;
+
+    wxDECLARE_NO_COPY_CLASS(wxDisplayFactory);
 };
 
 // ----------------------------------------------------------------------------
 // wxDisplayImpl: base class for all wxDisplay implementations
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxDisplayImpl
+class wxDisplayImpl
 {
 public:
     // virtual dtor for this base class
@@ -92,18 +114,62 @@ protected:
 };
 
 // ----------------------------------------------------------------------------
+// wxDisplayImplSingle: the simplest possible impl for the main display only
+// ----------------------------------------------------------------------------
+
+// Note that this is still an ABC and GetGeometry() and GetClientArea() methods
+// must be implemented in the derived classes.
+
+class WXDLLEXPORT wxDisplayImplSingle : public wxDisplayImpl
+{
+public:
+    wxDisplayImplSingle() : wxDisplayImpl(0) { }
+
+    virtual wxString GetName() const wxOVERRIDE { return wxString(); }
+
+#if wxUSE_DISPLAY
+    // no video modes support for us, provide just the stubs
+    virtual wxArrayVideoModes
+    GetModes(const wxVideoMode& WXUNUSED(mode)) const wxOVERRIDE
+    {
+        return wxArrayVideoModes();
+    }
+
+    virtual wxVideoMode GetCurrentMode() const wxOVERRIDE
+    {
+        return wxVideoMode();
+    }
+
+    virtual bool ChangeMode(const wxVideoMode& WXUNUSED(mode)) wxOVERRIDE
+    {
+        return false;
+    }
+#endif // wxUSE_DISPLAY
+
+    wxDECLARE_NO_COPY_CLASS(wxDisplayImplSingle);
+};
+
+// ----------------------------------------------------------------------------
 // wxDisplayFactorySingle
 // ----------------------------------------------------------------------------
 
-// this is a stub implementation using single/main display only, it is
-// available even if wxUSE_DISPLAY == 0
-class WXDLLIMPEXP_CORE wxDisplayFactorySingle : public wxDisplayFactory
+// This is the simplest implementation of wxDisplayFactory using single/main
+// display only. It is used when wxUSE_DISPLAY == 0 because getting the size of
+// the main display is always needed.
+//
+// Note that this is still an ABC and derived classes must implement
+// CreateSingleDisplay().
+
+class wxDisplayFactorySingle : public wxDisplayFactory
 {
 public:
-    virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
     virtual unsigned GetCount() wxOVERRIDE { return 1; }
     virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
+
+protected:
+    virtual wxDisplayImpl *CreateDisplay(unsigned n) wxOVERRIDE;
+
+    virtual wxDisplayImpl *CreateSingleDisplay() = 0;
 };
 
-#endif // _WX_DISPLAY_IMPL_H_BASE_
-
+#endif // _WX_PRIVATE_DISPLAY_H_
