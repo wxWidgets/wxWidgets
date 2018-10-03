@@ -143,10 +143,10 @@ bool MyApp::OnInit()
 
     if (ok)
     {
-        //we can even draw dynamic artwork onto our splashscreen
+        // we can even draw dynamic artwork onto our splashscreen
         DecorateSplashScreen(bitmap);
 
-        //Show the splashscreen
+        // show the splashscreen
         new wxSplashScreen(bitmap,
             wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
             6000, frame, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -168,38 +168,38 @@ bool MyApp::OnInit()
     return true;
 }
 
-//Draws artwork onto our splashscreen at runtime
+// Draws artwork onto our splashscreen at runtime
 void MyApp::DecorateSplashScreen(wxBitmap& bmp)
 {
-    //use a memory DC to draw directly onto the bitmap
+    // use a memory DC to draw directly onto the bitmap
     wxMemoryDC memDc(bmp);
 
-    //draw an orange box (with black outline) at the bottom of the splashscreen
-    wxDCPenChanger pc(memDc, wxPen(*wxBLACK_PEN));
+    // draw an orange box (with black outline) at the bottom of the splashscreen.
+    // this box will be 10% of the height of the bitmap, and be at the bottom.
+    const wxRect bannerRect(wxPoint(0, (bmp.GetHeight() / 10)*9),
+                            wxPoint(bmp.GetWidth(), bmp.GetHeight()));
     wxDCBrushChanger bc(memDc, wxBrush(wxColour(255, 102, 0)));
-    memDc.DrawRectangle(wxRect(0, bmp.GetHeight() - 50, bmp.GetWidth(), bmp.GetHeight()));
-    memDc.DrawLine(0, bmp.GetHeight() - 50, bmp.GetWidth(), bmp.GetHeight() - 50);
+    memDc.DrawRectangle(bannerRect);
+    memDc.DrawLine(bannerRect.GetTopLeft(), bannerRect.GetTopRight());
 
-    //dynamically get the wxWidgets version to display
+    // dynamically get the wxWidgets version to display
     wxString description = wxString::Format("wxWidgets %s", wxVERSION_NUM_DOT_STRING);
-    //Create a copyright notice that uses the year that this file was compiled in
-    wxString year(__DATE__, *wxConvCurrent);
-    wxString copyrightLabel = wxString::Format("%c%s wxWidgets. %s",
-        0xA9, year.Mid(year.Length() - 4),
+    // create a copyright notice that uses the year that this file was compiled
+    wxString year(__DATE__);
+    wxString copyrightLabel = wxString::Format("%s%s wxWidgets. %s",
+        wxString::FromUTF8("\xc2\xa9"), year.Mid(year.Length() - 4),
         "All rights reserved.");
 
-    //draw the (white) labels inside of our orange box (at the bottom of the splashscreen)
-    wxCoord width, height;
+    // draw the (white) labels inside of our orange box (at the bottom of the splashscreen)
     memDc.SetTextForeground(*wxWHITE);
-    //calculate the height of the text so that we can nicely center it vertically
-    memDc.GetTextExtent(description, &width, &height);
-    memDc.DrawText(description, 10, bmp.GetHeight() - (height + 10));
+    // draw the "wxWidget" label on the left side, vertically centered.
+    // note that we deflate the banner rect a little bit horizontally
+    // so that the text has some padding to its left.
+    memDc.DrawLabel(description, bannerRect.Deflate(5, 0), wxALIGN_CENTRE_VERTICAL|wxALIGN_LEFT);
 
+    // draw the copyright label on the right side
     memDc.SetFont(wxFontInfo(8));
-    memDc.GetTextExtent(copyrightLabel, &width, &height);
-    memDc.DrawText(copyrightLabel, bmp.GetWidth() - (width + 10), bmp.GetHeight() - (height + 10));
-
-    memDc.SelectObject(wxNullBitmap);
+    memDc.DrawLabel(copyrightLabel, bannerRect.Deflate(5, 0), wxALIGN_CENTRE_VERTICAL | wxALIGN_RIGHT);
 }
 
 
