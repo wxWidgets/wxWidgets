@@ -9,10 +9,8 @@ including both 32 bit and 64 bit versions.
 Installation                           {#msw_install}
 ============
 
-If you are using one of the supported compilers, you can download the
-pre-built in binaries from
-
-https://github.com/wxWidgets/wxWidgets/releases/v3.1.1
+If you are using one of the supported compilers, you can use
+[pre-built binaries](@ref plat_msw_binaries).
 
 In this case, just uncompress the binaries archive under any directory
 and skip to [Building Applications Using wxWidgets](#msw_build_apps) part.

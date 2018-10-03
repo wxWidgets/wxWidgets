@@ -108,6 +108,8 @@ with a Linux-hosted MinGW32 tool chain.
 
 @subpage plat_msw_install "Build and Install Instructions"
 
+@subpage plat_msw_binaries "Using pre-built binaries"
+
 @subsection page_port_wxmsw_resources Resources and Application Icon
 
 All applications using wxMSW should have a Windows resource file (@c .rc
