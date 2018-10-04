@@ -79,7 +79,7 @@ public:
     virtual wxRect GetClientArea() const { return GetGeometry(); }
 
     // return the name (may be empty)
-    virtual wxString GetName() const = 0;
+    virtual wxString GetName() const { return wxString(); }
 
     // return the index of this display
     unsigned GetIndex() const { return m_index; }
@@ -124,8 +124,6 @@ class WXDLLEXPORT wxDisplayImplSingle : public wxDisplayImpl
 {
 public:
     wxDisplayImplSingle() : wxDisplayImpl(0) { }
-
-    virtual wxString GetName() const wxOVERRIDE { return wxString(); }
 
 #if wxUSE_DISPLAY
     // no video modes support for us, provide just the stubs

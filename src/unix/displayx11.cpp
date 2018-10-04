@@ -132,8 +132,6 @@ public:
         return IsPrimary() ? wxGetMainScreenWorkArea() : m_rect;
     }
 
-    virtual wxString GetName() const wxOVERRIDE { return wxString(); }
-
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
     virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
     virtual bool ChangeMode(const wxVideoMode& mode) wxOVERRIDE;

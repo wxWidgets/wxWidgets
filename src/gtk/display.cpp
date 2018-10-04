@@ -96,7 +96,6 @@ public:
     virtual wxRect GetClientArea() const wxOVERRIDE;
 
 #if wxUSE_DISPLAY
-    virtual wxString GetName() const wxOVERRIDE;
     virtual bool IsPrimary() const wxOVERRIDE;
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
     virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
@@ -206,11 +205,6 @@ wxRect wxDisplayImplGTK::GetClientArea() const
 }
 
 #if wxUSE_DISPLAY
-wxString wxDisplayImplGTK::GetName() const
-{
-    return wxString();
-}
-
 bool wxDisplayImplGTK::IsPrimary() const
 {
 #ifdef __WXGTK4__
