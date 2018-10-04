@@ -370,6 +370,7 @@ bool wxDisplayImplX11::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 #endif // !__WXGTK20__
 #endif // !HAVE_X11_EXTENSIONS_XF86VMODE_H
 #endif // !defined(__WXGTK20__) || defined(GDK_WINDOWING_X11)
+#endif // wxUSE_DISPLAY
 
 // ============================================================================
 // wxDisplay::CreateFactory()
@@ -378,21 +379,14 @@ bool wxDisplayImplX11::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 #ifndef __WXGTK20__
 /* static */ wxDisplayFactory *wxDisplay::CreateFactory()
 {
-    if ( !XineramaIsActive((Display*)wxGetDisplay()) )
-        return new wxDisplayFactorySingleX11;
+#if wxUSE_DISPLAY
+    if ( XineramaIsActive((Display*)wxGetDisplay()) )
+        return new wxDisplayFactoryX11;
+#endif // wxUSE_DISPLAY
 
-    return new wxDisplayFactoryX11;
-}
-#endif
-
-#else // !wxUSE_DISPLAY
-
-/* static */ wxDisplayFactory *wxDisplay::CreateFactory()
-{
     return new wxDisplayFactorySingleX11;
 }
-
-#endif // wxUSE_DISPLAY/!wxUSE_DISPLAY
+#endif
 
 #if !defined(__WXGTK20__) || defined(GDK_WINDOWING_X11)
 void wxGetWorkAreaX11(Screen* screen, int& x, int& y, int& width, int& height)
