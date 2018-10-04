@@ -1262,6 +1262,10 @@ wxSize wxGetDisplayPPI();
 /**
     Returns the display size in pixels.
 
+    @note Use of this function is not recommended in the new code as it only
+        works for the primary display. Use wxDisplay::GetGeometry() to retrieve
+        the size of the appropriate display instead.
+
     Either of output pointers can be @NULL if the caller is not interested in
     the corresponding value.
 
@@ -1276,6 +1280,10 @@ void wxDisplaySize(int* width, int* height);
 //@{
 /**
     Returns the display size in pixels.
+
+    @note Use of this function is not recommended in the new code as it only
+        works for the primary display. Use wxDisplay::GetGeometry() to retrieve
+        the size of the appropriate display instead.
 
     @see wxDisplay
 
