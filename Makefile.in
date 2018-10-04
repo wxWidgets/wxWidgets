@@ -3787,7 +3787,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/dialup.h \
 	wx/dirctrl.h \
 	wx/display.h \
-	wx/display_impl.h \
 	wx/dnd.h \
 	wx/docmdi.h \
 	wx/docview.h \
@@ -5610,7 +5609,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_timectrl_osx.o \
 	monodll_taskbarcmn.o \
 	monodll_cocoa_activityindicator.o \
-	monodll_cocoa_statbmp.o
+	monodll_cocoa_statbmp.o \
+	monodll_core_display.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	$(__OSX_COMMON_SRC_OBJECTS) \
@@ -5630,7 +5630,6 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	monodll_iphone_toolbar.o \
 	monodll_iphone_utils.o \
 	monodll_iphone_window.o \
-	monodll_cocoa_stdpaths.o \
 	monodll_iphone_settings.o \
 	monodll_sound_osx.o \
 	monodll_core_sound.o \
@@ -7587,7 +7586,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_timectrl_osx.o \
 	monolib_taskbarcmn.o \
 	monolib_cocoa_activityindicator.o \
-	monolib_cocoa_statbmp.o
+	monolib_cocoa_statbmp.o \
+	monolib_core_display.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_0) \
@@ -7607,7 +7607,6 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	monolib_iphone_toolbar.o \
 	monolib_iphone_utils.o \
 	monolib_iphone_window.o \
-	monolib_cocoa_stdpaths.o \
 	monolib_iphone_settings.o \
 	monolib_sound_osx.o \
 	monolib_core_sound.o \
@@ -9711,7 +9710,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_timectrl_osx.o \
 	coredll_taskbarcmn.o \
 	coredll_cocoa_activityindicator.o \
-	coredll_cocoa_statbmp.o
+	coredll_cocoa_statbmp.o \
+	coredll_core_display.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_8) \
@@ -9731,7 +9731,6 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	coredll_iphone_toolbar.o \
 	coredll_iphone_utils.o \
 	coredll_iphone_window.o \
-	coredll_stdpaths.o \
 	coredll_iphone_settings.o \
 	coredll_sound_osx.o \
 	coredll_core_sound.o \
@@ -11430,7 +11429,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_timectrl_osx.o \
 	corelib_taskbarcmn.o \
 	corelib_cocoa_activityindicator.o \
-	corelib_cocoa_statbmp.o
+	corelib_cocoa_statbmp.o \
+	corelib_core_display.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_9) \
@@ -11450,7 +11450,6 @@ COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	corelib_iphone_toolbar.o \
 	corelib_iphone_utils.o \
 	corelib_iphone_window.o \
-	corelib_stdpaths.o \
 	corelib_iphone_settings.o \
 	corelib_sound_osx.o \
 	corelib_core_sound.o \
@@ -13245,7 +13244,6 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS =  \
 	monodll_core_bitmap.o \
 	monodll_core_colour.o \
 	monodll_core_dcmemory.o \
-	monodll_core_display.o \
 	monodll_core_fontenum.o \
 	monodll_hid.o \
 	monodll_printmac.o \
@@ -13389,7 +13387,6 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_17 =  \
 	monolib_core_bitmap.o \
 	monolib_core_colour.o \
 	monolib_core_dcmemory.o \
-	monolib_core_display.o \
 	monolib_core_fontenum.o \
 	monolib_hid.o \
 	monolib_printmac.o \
@@ -13533,7 +13530,6 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_1 =  \
 	coredll_core_bitmap.o \
 	coredll_core_colour.o \
 	coredll_core_dcmemory.o \
-	coredll_core_display.o \
 	coredll_core_fontenum.o \
 	coredll_hid.o \
 	coredll_printmac.o \
@@ -13674,7 +13670,6 @@ COND_PLATFORM_MACOSX_1___OSX_LOWLEVEL_SRC_OBJECTS_1_4 =  \
 	corelib_core_bitmap.o \
 	corelib_core_colour.o \
 	corelib_core_dcmemory.o \
-	corelib_core_display.o \
 	corelib_core_fontenum.o \
 	corelib_hid.o \
 	corelib_printmac.o \
@@ -15851,6 +15846,9 @@ monodll_core_secretstore.o: $(srcdir)/src/osx/core/secretstore.cpp $(MONODLL_ODE
 monodll_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
 
+monodll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+
 monodll_event.o: $(srcdir)/src/common/event.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/event.cpp
 
@@ -16522,6 +16520,9 @@ monodll_cocoa_activityindicator.o: $(srcdir)/src/osx/cocoa/activityindicator.mm 
 
 monodll_cocoa_statbmp.o: $(srcdir)/src/osx/cocoa/statbmp.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/statbmp.mm
+
+monodll_core_display.o: $(srcdir)/src/osx/core/display.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
 
 monodll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
@@ -17500,12 +17501,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1@monodll_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
-
-@COND_PLATFORM_MACOSX_1@monodll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
-
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monodll_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONODLL_ODEP)
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 @COND_PLATFORM_UNIX_1@monodll_socketiohandler.o: $(srcdir)/src/common/socketiohandler.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/socketiohandler.cpp
@@ -18826,12 +18821,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@monodll_core_dcmemory.o: $(srcdir)/src/osx/core/dcmemory.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/dcmemory.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_core_display.o: $(srcdir)/src/osx/core/display.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@monodll_core_display.o: $(srcdir)/src/osx/core/display.cpp $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_core_fontenum.o: $(srcdir)/src/osx/core/fontenum.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/fontenum.cpp
@@ -21128,6 +21117,9 @@ monolib_core_secretstore.o: $(srcdir)/src/osx/core/secretstore.cpp $(MONOLIB_ODE
 monolib_fswatcher_fsevents.o: $(srcdir)/src/osx/fswatcher_fsevents.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/fswatcher_fsevents.cpp
 
+monolib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
+
 monolib_event.o: $(srcdir)/src/common/event.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/event.cpp
 
@@ -21799,6 +21791,9 @@ monolib_cocoa_activityindicator.o: $(srcdir)/src/osx/cocoa/activityindicator.mm 
 
 monolib_cocoa_statbmp.o: $(srcdir)/src/osx/cocoa/statbmp.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/statbmp.mm
+
+monolib_core_display.o: $(srcdir)/src/osx/core/display.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
 
 monolib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
@@ -22777,12 +22772,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1@monolib_fswatcher_kqueue.o: $(srcdir)/src/unix/fswatcher_kqueue.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/fswatcher_kqueue.cpp
-
-@COND_PLATFORM_MACOSX_1@monolib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
-
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@monolib_cocoa_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(MONOLIB_ODEP)
-@COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 @COND_PLATFORM_UNIX_1@monolib_socketiohandler.o: $(srcdir)/src/common/socketiohandler.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/socketiohandler.cpp
@@ -24103,12 +24092,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@monolib_core_dcmemory.o: $(srcdir)/src/osx/core/dcmemory.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/dcmemory.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_core_display.o: $(srcdir)/src/osx/core/display.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@monolib_core_display.o: $(srcdir)/src/osx/core/display.cpp $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_core_fontenum.o: $(srcdir)/src/osx/core/fontenum.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/fontenum.cpp
@@ -27740,6 +27723,9 @@ coredll_cocoa_activityindicator.o: $(srcdir)/src/osx/cocoa/activityindicator.mm 
 coredll_cocoa_statbmp.o: $(srcdir)/src/osx/cocoa/statbmp.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/statbmp.mm
 
+coredll_core_display.o: $(srcdir)/src/osx/core/display.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
+
 coredll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
 
@@ -27787,9 +27773,6 @@ coredll_iphone_utils.o: $(srcdir)/src/osx/iphone/utils.mm $(COREDLL_ODEP)
 
 coredll_iphone_window.o: $(srcdir)/src/osx/iphone/window.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/window.mm
-
-coredll_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 coredll_iphone_settings.o: $(srcdir)/src/osx/iphone/settings.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/settings.mm
@@ -29473,12 +29456,6 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@coredll_core_dcmemory.o: $(srcdir)/src/osx/core/dcmemory.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/dcmemory.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@coredll_core_display.o: $(srcdir)/src/osx/core/display.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@coredll_core_display.o: $(srcdir)/src/osx/core/display.cpp $(COREDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@coredll_core_fontenum.o: $(srcdir)/src/osx/core/fontenum.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/fontenum.cpp
@@ -32012,6 +31989,9 @@ corelib_cocoa_activityindicator.o: $(srcdir)/src/osx/cocoa/activityindicator.mm 
 corelib_cocoa_statbmp.o: $(srcdir)/src/osx/cocoa/statbmp.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/statbmp.mm
 
+corelib_core_display.o: $(srcdir)/src/osx/core/display.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
+
 corelib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
 
@@ -32059,9 +32039,6 @@ corelib_iphone_utils.o: $(srcdir)/src/osx/iphone/utils.mm $(CORELIB_ODEP)
 
 corelib_iphone_window.o: $(srcdir)/src/osx/iphone/window.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/window.mm
-
-corelib_stdpaths.o: $(srcdir)/src/osx/cocoa/stdpaths.mm $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/stdpaths.mm
 
 corelib_iphone_settings.o: $(srcdir)/src/osx/iphone/settings.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/iphone/settings.mm
@@ -33745,12 +33722,6 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@corelib_core_dcmemory.o: $(srcdir)/src/osx/core/dcmemory.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/dcmemory.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@corelib_core_display.o: $(srcdir)/src/osx/core/display.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@corelib_core_display.o: $(srcdir)/src/osx/core/display.cpp $(CORELIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@corelib_core_fontenum.o: $(srcdir)/src/osx/core/fontenum.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/fontenum.cpp

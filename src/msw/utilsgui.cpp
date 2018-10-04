@@ -145,17 +145,6 @@ int wxDisplayDepth()
     return GetDeviceCaps(dc, PLANES) * GetDeviceCaps(dc, BITSPIXEL);
 }
 
-// Get size of display
-void wxDisplaySize(int *width, int *height)
-{
-    ScreenHDC dc;
-
-    if ( width )
-        *width = ::GetDeviceCaps(dc, HORZRES);
-    if ( height )
-        *height = ::GetDeviceCaps(dc, VERTRES);
-}
-
 void wxDisplaySizeMM(int *width, int *height)
 {
     ScreenHDC dc;

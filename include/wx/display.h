@@ -10,6 +10,8 @@
 #ifndef _WX_DISPLAY_H_BASE_
 #define _WX_DISPLAY_H_BASE_
 
+#include "wx/defs.h"
+
 // NB: no #if wxUSE_DISPLAY here, the display geometry part of this class (but
 //     not the video mode stuff) is always available but if wxUSE_DISPLAY == 0
 //     it becomes just a trivial wrapper around the old wxDisplayXXX() functions
@@ -48,7 +50,6 @@ public:
 
     // dtor is not virtual as this is a concrete class not meant to be derived
     // from
-    ~wxDisplay();
 
 
     // return the number of available displays, valid parameters to

@@ -811,6 +811,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\display.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\image.cpp"
 				>
 			</File>

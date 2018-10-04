@@ -726,7 +726,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxTextWidgetImpl);
 };
 
-// common interface for all implementations
+// common interface for all combobox implementations
 class WXDLLIMPEXP_CORE wxComboWidgetImpl
 
 {
@@ -752,6 +752,41 @@ public :
 
     virtual int FindString(const wxString& WXUNUSED(text)) const { return -1; }
 };
+
+//
+// common interface for choice
+//
+
+class WXDLLIMPEXP_CORE wxChoiceWidgetImpl
+
+{
+public :
+    wxChoiceWidgetImpl() {}
+
+    virtual ~wxChoiceWidgetImpl() {}
+
+    virtual int GetSelectedItem() const { return -1; }
+
+    virtual void SetSelectedItem(int WXUNUSED(item)) {}
+
+    virtual size_t GetNumberOfItems() const = 0;
+
+    virtual void InsertItem(size_t pos, int itemid, const wxString& text) = 0;
+
+    virtual void RemoveItem(size_t pos) = 0;
+
+    virtual void Clear()
+    {
+        size_t count = GetNumberOfItems();
+        for ( size_t i = 0 ; i < count ; i++ )
+        {
+            RemoveItem( 0 );
+        }
+    }
+
+    virtual void SetItem(int pos, const wxString& item) = 0;
+};
+
 
 //
 // common interface for buttons

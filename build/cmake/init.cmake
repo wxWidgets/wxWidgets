@@ -162,6 +162,7 @@ if(wxUSE_GUI)
         wx_option_force_value(wxUSE_METAFILE OFF)
         if(WIN32)
             wx_option_force_value(wxUSE_ACCESSIBILITY OFF)
+            wx_option_force_value(wxUSE_OWNER_DRAWN OFF)
         endif()
     endif()
 

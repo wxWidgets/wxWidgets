@@ -106,12 +106,6 @@ bool wxMenuItem::IsChecked() const
 }
 
 
-void wxMenuItem::SetBitmaps(const wxBitmap& WXUNUSED(bmpChecked),
-                            const wxBitmap& WXUNUSED(bmpUnchecked))
-{
-    wxMISSING_FUNCTION();
-}
-
 void wxMenuItem::SetBitmap(const wxBitmap& WXUNUSED(bitmap))
 {
     wxMISSING_FUNCTION();
@@ -130,34 +124,6 @@ QAction *wxMenuItem::GetHandle() const
 {
     return m_qtAction;
 }
-
-#if wxUSE_OWNER_DRAWN
-
-void wxMenuItem::SetDisabledBitmap(const wxBitmap& bmpDisabled)
-{
-    m_bmpDisabled = bmpDisabled;
-    wxMISSING_FUNCTION();
-}
-
-const wxBitmap& wxMenuItem::GetDisabledBitmap() const
-{
-    wxMISSING_FUNCTION();
-    return m_bmpDisabled;
-}
-
-wxString wxMenuItem::GetName() const
-{
-    return GetItemLabelText();
-}
-
-bool wxMenuItem::OnDrawItem(wxDC& WXUNUSED(dc), const wxRect& WXUNUSED(rc),
-                            wxODAction WXUNUSED(act), wxODStatus WXUNUSED(stat))
-{
-    wxMISSING_FUNCTION();
-    return false;
-}
-
-#endif // wxUSE_OWNER_DRAWN
 
 //=============================================================================
 
