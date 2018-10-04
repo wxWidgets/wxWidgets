@@ -12,6 +12,12 @@
 
 #include "wx/gtk/private/wrapgtk.h"
 #ifdef GDK_WINDOWING_X11
+    #ifndef __WXGTK4__
+        #include "wx/unix/private/displayx11.h"
+
+        #define wxGTK_HAVE_X11_DISPLAY
+    #endif
+
     #include <gdk/gdkx.h>
 #endif
 
@@ -22,10 +28,6 @@ GdkWindow* wxGetTopLevelGDK();
 //-----------------------------------------------------------------------------
 
 #ifndef __WXGTK4__
-
-#ifdef GDK_WINDOWING_X11
-void wxGetWorkAreaX11(Screen* screen, int& x, int& y, int& width, int& height);
-#endif
 
 #ifndef __WXGTK3__
 static inline int wx_gdk_screen_get_primary_monitor(GdkScreen* screen)
@@ -51,7 +53,7 @@ wx_gdk_screen_get_monitor_workarea(GdkScreen* screen, int monitor, GdkRectangle*
 #endif
     {
         gdk_screen_get_monitor_geometry(screen, monitor, dest);
-#ifdef GDK_WINDOWING_X11
+#ifdef wxGTK_HAVE_X11_DISPLAY
 #ifdef __WXGTK3__
         if (GDK_IS_X11_SCREEN(screen))
 #endif
@@ -63,7 +65,7 @@ wx_gdk_screen_get_monitor_workarea(GdkScreen* screen, int monitor, GdkRectangle*
             if (rect.width && rect.height)
                 gdk_rectangle_intersect(dest, &rect, dest);
         }
-#endif // GDK_WINDOWING_X11
+#endif // wxGTK_HAVE_X11_DISPLAY
     }
     wxGCC_WARNING_RESTORE()
 }
@@ -216,17 +218,10 @@ bool wxDisplayImplGTK::IsPrimary() const
 #endif
 }
 
-#if defined(GDK_WINDOWING_X11) && !defined(__WXGTK4__)
-wxArrayVideoModes wxXF86VidMode_GetModes(const wxVideoMode& mode, Display* pDisplay, int nScreen);
-wxVideoMode wxXF86VidMode_GetCurrentMode(Display* display, int nScreen);
-bool wxXF86VidMode_ChangeMode(const wxVideoMode& mode, Display* display, int nScreen);
-wxArrayVideoModes wxX11_GetModes(const wxDisplayImpl* impl, const wxVideoMode& modeMatch, Display* display);
-#endif
-
 wxArrayVideoModes wxDisplayImplGTK::GetModes(const wxVideoMode& mode) const
 {
     wxArrayVideoModes modes;
-#if defined(GDK_WINDOWING_X11) && !defined(__WXGTK4__)
+#ifdef wxGTK_HAVE_X11_DISPLAY
 #ifdef __WXGTK3__
     if (GDK_IS_X11_SCREEN(m_screen))
 #endif
@@ -248,7 +243,7 @@ wxArrayVideoModes wxDisplayImplGTK::GetModes(const wxVideoMode& mode) const
 wxVideoMode wxDisplayImplGTK::GetCurrentMode() const
 {
     wxVideoMode mode;
-#if defined(GDK_WINDOWING_X11) && defined(HAVE_X11_EXTENSIONS_XF86VMODE_H) && !defined(__WXGTK4__)
+#if defined(wxGTK_HAVE_X11_DISPLAY) && defined(HAVE_X11_EXTENSIONS_XF86VMODE_H)
 #ifdef __WXGTK3__
     if (GDK_IS_X11_SCREEN(m_screen))
 #endif
@@ -264,7 +259,7 @@ wxVideoMode wxDisplayImplGTK::GetCurrentMode() const
 bool wxDisplayImplGTK::ChangeMode(const wxVideoMode& mode)
 {
     bool success = false;
-#if defined(GDK_WINDOWING_X11) && defined(HAVE_X11_EXTENSIONS_XF86VMODE_H) && !defined(__WXGTK4__)
+#if defined(wxGTK_HAVE_X11_DISPLAY) && defined(HAVE_X11_EXTENSIONS_XF86VMODE_H)
 #ifdef __WXGTK3__
     if (GDK_IS_X11_SCREEN(m_screen))
 #endif

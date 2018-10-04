@@ -1206,7 +1206,6 @@ set(XWIN_LOWLEVEL_SRC
     src/generic/caret.cpp
     src/generic/imaglist.cpp
     src/unix/dialup.cpp
-    src/unix/displayx11.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
     src/unix/uiactionx11.cpp
@@ -1513,6 +1512,7 @@ set(GTK1_LOWLEVEL_SRC
     src/gtk1/utilsgtk.cpp
     src/gtk1/win_gtk.c
     src/gtk1/window.cpp
+    src/unix/displayx11.cpp
 )
 
 set(GTK1_LOWLEVEL_HDR
@@ -1656,6 +1656,7 @@ set(MOTIF_LOWLEVEL_SRC
     src/x11/pen.cpp
     src/x11/region.cpp
     src/x11/utilsx.cpp
+    src/unix/displayx11.cpp
 )
 
 set(MOTIF_LOWLEVEL_HDR
@@ -1844,6 +1845,7 @@ set(X11_LOWLEVEL_SRC
     src/x11/utils.cpp
     src/x11/utilsx.cpp
     src/x11/window.cpp
+    src/unix/displayx11.cpp
 )
 
 set(X11_LOWLEVEL_HDR
