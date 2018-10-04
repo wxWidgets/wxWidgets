@@ -298,7 +298,7 @@ protected:
 
 wxDisplayFactory* wxDisplay::CreateFactory()
 {
-    return wxDisplayFactorySingleGTK;
+    return new wxDisplayFactorySingleGTK;
 }
 
 #endif // wxUSE_DISPLAY/!wxUSE_DISPLAY
