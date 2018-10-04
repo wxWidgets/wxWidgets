@@ -9,7 +9,6 @@
 #define _WX_QT_MENUITEM_H_
 
 #include "wx/menuitem.h"
-<<<<<<< HEAD
 #include "wx/bitmap.h"
 
 class QAction;
