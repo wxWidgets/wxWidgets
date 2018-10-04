@@ -124,34 +124,6 @@ QAction *wxMenuItem::GetHandle() const
     return m_qtAction;
 }
 
-#if wxUSE_OWNER_DRAWN
-
-void wxMenuItem::SetDisabledBitmap(const wxBitmap& bmpDisabled)
-{
-    m_bmpDisabled = bmpDisabled;
-    wxMISSING_FUNCTION();
-}
-
-const wxBitmap& wxMenuItem::GetDisabledBitmap() const
-{
-    wxMISSING_FUNCTION();
-    return m_bmpDisabled;
-}
-
-wxString wxMenuItem::GetName() const
-{
-    return GetItemLabelText();
-}
-
-bool wxMenuItem::OnDrawItem(wxDC& WXUNUSED(dc), const wxRect& WXUNUSED(rc),
-                            wxODAction WXUNUSED(act), wxODStatus WXUNUSED(stat))
-{
-    wxMISSING_FUNCTION();
-    return false;
-}
-
-#endif // wxUSE_OWNER_DRAWN
-
 //=============================================================================
 
 wxQtAction::wxQtAction( wxMenu *parent, int id, const wxString &text, const wxString &help,
