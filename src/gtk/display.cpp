@@ -141,7 +141,7 @@ bool wxDisplayImplGTK::ChangeMode(const wxVideoMode& WXUNUSED(mode))
 
 #ifdef __WXGTK3__
 
-static inline bool gdk_is_x11_screen(GdkScreen* screen)
+static inline bool wxIsX11GDKScreen(GdkScreen* screen)
 {
     return GDK_IS_X11_SCREEN(screen);
 }
@@ -159,7 +159,7 @@ static inline int wx_gdk_screen_get_primary_monitor(GdkScreen* screen)
 }
 #define gdk_screen_get_primary_monitor wx_gdk_screen_get_primary_monitor
 
-static inline bool gdk_is_x11_screen(GdkScreen* WXUNUSED(screen))
+static inline bool wxIsX11GDKScreen(GdkScreen* WXUNUSED(screen))
 {
     return true;
 }
@@ -178,7 +178,7 @@ wx_gdk_screen_get_monitor_workarea(GdkScreen* screen, int monitor, GdkRectangle*
     {
         gdk_screen_get_monitor_geometry(screen, monitor, dest);
 #ifdef wxGTK_HAVE_X11_DISPLAY
-        if ( gdk_is_x11_screen(screen) )
+        if ( wxIsX11GDKScreen(screen) )
         {
             GdkRectangle rect = { 0, 0, 0, 0 };
             wxGetWorkAreaX11(GDK_SCREEN_XSCREEN(screen),
@@ -279,7 +279,7 @@ wxArrayVideoModes wxDisplayImplGTK::GetModes(const wxVideoMode& mode) const
 {
     wxArrayVideoModes modes;
 #ifdef wxGTK_HAVE_X11_DISPLAY
-    if ( gdk_is_x11_screen(m_screen) )
+    if ( wxIsX11GDKScreen(m_screen) )
     {
         Display* display = GDK_DISPLAY_XDISPLAY(gdk_screen_get_display(m_screen));
 #ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
@@ -299,7 +299,7 @@ wxVideoMode wxDisplayImplGTK::GetCurrentMode() const
 {
     wxVideoMode mode;
 #if defined(wxGTK_HAVE_X11_DISPLAY) && defined(HAVE_X11_EXTENSIONS_XF86VMODE_H)
-    if ( gdk_is_x11_screen(m_screen) )
+    if ( wxIsX11GDKScreen(m_screen) )
     {
         Display* display = GDK_DISPLAY_XDISPLAY(gdk_screen_get_display(m_screen));
         int nScreen = gdk_x11_screen_get_screen_number(m_screen);
@@ -313,7 +313,7 @@ bool wxDisplayImplGTK::ChangeMode(const wxVideoMode& mode)
 {
     bool success = false;
 #if defined(wxGTK_HAVE_X11_DISPLAY) && defined(HAVE_X11_EXTENSIONS_XF86VMODE_H)
-    if ( gdk_is_x11_screen(m_screen) )
+    if ( wxIsX11GDKScreen(m_screen) )
     {
         Display* display = GDK_DISPLAY_XDISPLAY(gdk_screen_get_display(m_screen));
         int nScreen = gdk_x11_screen_get_screen_number(m_screen);
