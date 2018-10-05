@@ -1221,7 +1221,6 @@ XWIN_LOWLEVEL_SRC =
     src/generic/caret.cpp
     src/generic/imaglist.cpp
     src/unix/dialup.cpp
-    src/unix/displayx11.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
     src/unix/joystick.cpp
@@ -1486,6 +1485,7 @@ GTK2_HDR =
 
 GTK1_LOWLEVEL_SRC =
     $(XWIN_LOWLEVEL_SRC)
+    src/unix/displayx11.cpp
     src/generic/icon.cpp
     src/generic/paletteg.cpp
     src/generic/textmeasure.cpp
@@ -1651,6 +1651,7 @@ GTK1_HDR =
 
 MOTIF_LOWLEVEL_SRC =
     $(XWIN_LOWLEVEL_SRC)
+    src/unix/displayx11.cpp
     src/generic/textmeasure.cpp
     src/x11/bitmap.cpp
     src/x11/brush.cpp
@@ -1814,6 +1815,7 @@ MOTIF_HDR =
 
 X11_LOWLEVEL_SRC =
     $(XWIN_LOWLEVEL_SRC)
+    src/unix/displayx11.cpp
     src/generic/icon.cpp
     src/generic/textmeasure.cpp
     src/generic/timer.cpp
