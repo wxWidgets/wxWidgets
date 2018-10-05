@@ -218,7 +218,7 @@ WXImage  wxOSXGetImageFromCGImage( CGImageRef image, double scaleFactor, bool is
 #endif
 }
 
-#if wxOSX_USE_ICONREF
+#if wxOSX_USE_COCOA
 WXImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromIconRef( WXHICON iconref )
 {
     NSImage  *newImage = [[NSImage alloc] initWithIconRef:iconref];
