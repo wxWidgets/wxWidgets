@@ -46,6 +46,7 @@ public:
     virtual wxRect GetGeometry() const wxOVERRIDE;
     virtual wxRect GetClientArea() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE;
+    virtual wxSize GetSizeMM() const wxOVERRIDE;
 
 #if wxUSE_DISPLAY
     virtual bool IsPrimary() const wxOVERRIDE;
@@ -118,6 +119,15 @@ wxRect wxDisplayImplGTK::GetClientArea() const
 int wxDisplayImplGTK::GetDepth() const
 {
     return 24;
+}
+
+wxSize wxDisplayImplGTK::GetSizeMM() const
+{
+    return wxSize
+           (
+                gdk_monitor_get_width_mm(m_monitor),
+                gdk_monitor_get_height_mm(m_monitor)
+           );
 }
 
 #if wxUSE_DISPLAY
@@ -212,6 +222,7 @@ public:
     virtual wxRect GetGeometry() const wxOVERRIDE;
     virtual wxRect GetClientArea() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE;
+    virtual wxSize GetSizeMM() const wxOVERRIDE;
 
 #if wxUSE_DISPLAY
     virtual bool IsPrimary() const wxOVERRIDE;
@@ -280,6 +291,34 @@ int wxDisplayImplGTK::GetDepth() const
 {
     // TODO: How to get the depth of the specific display?
     return gdk_visual_get_depth(gdk_window_get_visual(wxGetTopLevelGDK()));
+}
+
+wxSize wxDisplayImplGTK::GetSizeMM() const
+{
+    // At least in some configurations, gdk_screen_xxx_mm() functions return
+    // valid values when gdk_screen_get_monitor_xxx_mm() only return -1, so
+    // handle this case specially.
+    if ( IsPrimary() )
+    {
+        return wxSize(gdk_screen_width_mm(), gdk_screen_height_mm());
+    }
+
+    wxSize sizeMM;
+#if GTK_CHECK_VERSION(2,14,0)
+    if ( wx_is_at_least_gtk2(14) )
+    {
+        // Take care not to return (-1, -1) from here, the caller expects us to
+        // return (0, 0) if we can't retrieve this information.
+        int rc = gdk_screen_get_monitor_width_mm(m_screen, m_index);
+        if ( rc != -1 )
+            sizeMM.x = rc;
+
+        rc = gdk_screen_get_monitor_height_mm(m_screen, m_index);
+        if ( rc != -1 )
+            sizeMM.y = rc;
+    }
+#endif // GTK+ 2.14
+    return sizeMM;
 }
 
 #if wxUSE_DISPLAY

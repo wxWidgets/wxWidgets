@@ -86,12 +86,6 @@ void *wxGetDisplay()
     return GDK_DISPLAY();
 }
 
-void wxDisplaySizeMM( int *width, int *height )
-{
-    if (width) *width = gdk_screen_width_mm();
-    if (height) *height = gdk_screen_height_mm();
-}
-
 void wxGetMousePosition( int* x, int* y )
 {
     gdk_window_get_pointer( NULL, x, y, NULL );

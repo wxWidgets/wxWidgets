@@ -26,8 +26,13 @@
 
 #include "wx/private/display.h"
 
+#include "wx/dynlib.h"
+
 #include "wx/msw/private.h"
 #include "wx/msw/wrapwin.h"
+
+namespace
+{
 
 int wxGetHDCDepth(HDC hdc)
 {
@@ -62,6 +67,13 @@ public:
     {
         return wxGetHDCDepth(ScreenHDC());
     }
+
+    virtual wxSize GetSizeMM() const wxOVERRIDE
+    {
+        ScreenHDC dc;
+
+        return wxSize(::GetDeviceCaps(dc, HORZSIZE), ::GetDeviceCaps(dc, VERTSIZE));
+    }
 };
 
 class wxDisplayFactorySingleMSW : public wxDisplayFactorySingle
@@ -72,6 +84,8 @@ protected:
         return new wxDisplayImplSingleMSW;
     }
 };
+
+} // anonymous namespace
 
 #if wxUSE_DISPLAY
 
@@ -86,6 +100,10 @@ protected:
 
 #include "wx/msw/missing.h"
 #include "wx/msw/private/hiddenwin.h"
+
+#ifndef DPI_ENUMS_DECLARED
+    #define MDT_EFFECTIVE_DPI 0
+#endif
 
 static const wxChar displayDllName[] = wxT("user32.dll");
 
@@ -119,6 +137,8 @@ public:
     virtual wxRect GetGeometry() const wxOVERRIDE;
     virtual wxRect GetClientArea() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE;
+    virtual wxSize GetPPI() const wxOVERRIDE;
+
     virtual wxString GetName() const wxOVERRIDE;
     virtual bool IsPrimary() const wxOVERRIDE;
 
@@ -176,6 +196,13 @@ public:
     // handles.
     static void RefreshMonitors() { ms_factory->DoRefreshMonitors(); }
 
+    // Declare the second argument as int to avoid problems with older SDKs not
+    // declaring MONITOR_DPI_TYPE enum.
+    typedef HRESULT (WINAPI *GetDpiForMonitor_t)(HMONITOR, int, UINT*, UINT*);
+
+    // Return the pointer to GetDpiForMonitor() function which may be null if
+    // not running under new enough Windows version.
+    static GetDpiForMonitor_t GetDpiForMonitorPtr();
 
 private:
     // EnumDisplayMonitors() callback
@@ -197,6 +224,48 @@ private:
     // variable (also making it of correct type for us) here).
     static wxDisplayFactoryMSW* ms_factory;
 
+    // The pointer to GetDpiForMonitorPtr(), retrieved on demand, and the
+    // related data, including the DLL containing the function that we must
+    // keep loaded.
+    struct GetDpiForMonitorData
+    {
+        GetDpiForMonitorData()
+        {
+            m_pfnGetDpiForMonitor = NULL;
+            m_initialized = false;
+        }
+
+        bool TryLoad()
+        {
+            if ( !m_dllShcore.Load("shcore.dll", wxDL_VERBATIM | wxDL_QUIET) )
+                return false;
+
+            wxDL_INIT_FUNC(m_pfn, GetDpiForMonitor, m_dllShcore);
+
+            if ( !m_pfnGetDpiForMonitor )
+            {
+                m_dllShcore.Unload();
+                return false;
+            }
+
+            return true;
+        }
+
+        void UnloadIfNecessary()
+        {
+            if ( m_dllShcore.IsLoaded() )
+            {
+                m_dllShcore.Unload();
+                m_pfnGetDpiForMonitor = NULL;
+            }
+        }
+
+        wxDynamicLibrary m_dllShcore;
+        GetDpiForMonitor_t m_pfnGetDpiForMonitor;
+        bool m_initialized;
+    };
+    static GetDpiForMonitorData ms_getDpiForMonitorData;
+
 
     // the array containing information about all available displays, filled by
     // MultimonEnumProc()
@@ -211,6 +280,8 @@ private:
 };
 
 wxDisplayFactoryMSW* wxDisplayFactoryMSW::ms_factory = NULL;
+wxDisplayFactoryMSW::GetDpiForMonitorData
+    wxDisplayFactoryMSW::ms_getDpiForMonitorData;
 
 // ----------------------------------------------------------------------------
 // wxDisplay implementation
@@ -270,6 +341,24 @@ wxRect wxDisplayMSW::GetClientArea() const
 int wxDisplayMSW::GetDepth() const
 {
     return m_info.depth;
+}
+
+wxSize wxDisplayMSW::GetPPI() const
+{
+    if ( const wxDisplayFactoryMSW::GetDpiForMonitor_t
+            getFunc = wxDisplayFactoryMSW::GetDpiForMonitorPtr() )
+    {
+        UINT dpiX = 0,
+             dpiY = 0;
+        const HRESULT
+            hr = (*getFunc)(m_info.hmon, MDT_EFFECTIVE_DPI, &dpiX, &dpiY);
+        if ( SUCCEEDED(hr) )
+            return wxSize(dpiX, dpiY);
+
+        wxLogApiError("GetDpiForMonitor", hr);
+    }
+
+    return IsPrimary() ? wxDisplayImplSingleMSW().GetPPI() : wxSize(0, 0);
 }
 
 wxString wxDisplayMSW::GetName() const
@@ -492,7 +581,26 @@ wxDisplayFactoryMSW::~wxDisplayFactoryMSW()
         }
     }
 
+    if ( ms_getDpiForMonitorData.m_initialized )
+    {
+        ms_getDpiForMonitorData.UnloadIfNecessary();
+        ms_getDpiForMonitorData.m_initialized = false;
+    }
+
     ms_factory = NULL;
+}
+
+/* static */
+wxDisplayFactoryMSW::GetDpiForMonitor_t
+wxDisplayFactoryMSW::GetDpiForMonitorPtr()
+{
+    if ( !ms_getDpiForMonitorData.m_initialized )
+    {
+        ms_getDpiForMonitorData.m_initialized = true;
+        ms_getDpiForMonitorData.TryLoad();
+    }
+
+    return ms_getDpiForMonitorData.m_pfnGetDpiForMonitor;
 }
 
 void wxDisplayFactoryMSW::DoRefreshMonitors()

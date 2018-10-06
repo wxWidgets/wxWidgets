@@ -889,20 +889,29 @@ wxRect wxGetClientDisplayRect()
     return wxDisplay().GetClientArea();
 }
 
+void wxDisplaySizeMM(int *width, int *height)
+{
+    const wxSize size = wxGetDisplaySizeMM();
+    if ( width )
+        *width = size.x;
+    if ( height )
+        *height = size.y;
+}
+
 wxSize wxGetDisplaySizeMM()
 {
-    int x, y;
-    wxDisplaySizeMM(& x, & y);
-    return wxSize(x, y);
+    const wxSize ppi = wxGetDisplayPPI();
+    if ( !ppi.x || !ppi.y )
+        return wxSize(0, 0);
+
+    const wxSize pixels = wxGetDisplaySize();
+    return wxSize(wxRound(pixels.x * inches2mm / ppi.x),
+                  wxRound(pixels.y * inches2mm / ppi.y));
 }
 
 wxSize wxGetDisplayPPI()
 {
-    const wxSize pixels = wxGetDisplaySize();
-    const wxSize mm = wxGetDisplaySizeMM();
-
-    return wxSize((int)((pixels.x * inches2mm) / mm.x),
-                  (int)((pixels.y * inches2mm) / mm.y));
+    return wxDisplay().GetPPI();
 }
 
 wxResourceCache::~wxResourceCache ()

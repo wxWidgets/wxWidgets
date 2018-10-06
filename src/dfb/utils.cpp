@@ -73,6 +73,13 @@ public:
     {
         return wxTheApp->GetDisplayMode().bpp;
     }
+
+    virtual wxSize GetPPI() const wxOVERRIDE
+    {
+        // FIXME: there's no way to get physical resolution using the DirectDB
+        //        API, we hardcode a commonly used value of 72dpi
+        return wxSize(72, 72);
+    }
 };
 
 class wxDisplayFactorySingleDFB : public wxDisplayFactorySingle
@@ -87,21 +94,6 @@ protected:
 wxDisplayFactory* wxDisplay::CreateFactory()
 {
     return new wxDisplayFactorySingleDFB;
-}
-
-void wxDisplaySizeMM(int *width, int *height)
-{
-    // FIXME: there's no way to get physical resolution using the DirectDB
-    //        API, we hardcode a commonly used value of 72dpi
-    #define DPI          72.0
-    #define PX_TO_MM(x)  (int(((x) / DPI) * inches2mm))
-
-    wxDisplaySize(width, height);
-    if ( width ) *width = PX_TO_MM(*width);
-    if ( height ) *height = PX_TO_MM(*height);
-
-    #undef DPI
-    #undef PX_TO_MM
 }
 
 //-----------------------------------------------------------------------------

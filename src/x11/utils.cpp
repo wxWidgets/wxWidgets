@@ -148,16 +148,6 @@ void wxGetMousePosition( int* x, int* y )
 #endif
 };
 
-void wxDisplaySizeMM(int *width, int *height)
-{
-    Display *dpy = (Display*) wxGetDisplay();
-
-    if ( width )
-        *width = DisplayWidthMM(dpy, DefaultScreen (dpy));
-    if ( height )
-        *height = DisplayHeightMM(dpy, DefaultScreen (dpy));
-}
-
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
     return wxGenericFindWindowAtPoint(pt);

@@ -110,14 +110,6 @@ bool wxGetKeyState(wxKeyCode key)
     }
 }
 
-void wxDisplaySizeMM(int *width, int *height)
-{
-    if ( width != NULL )
-        *width = QApplication::desktop()->widthMM();
-    if ( height != NULL )
-        *height = QApplication::desktop()->heightMM();
-}
-
 void wxBell()
 {
     QApplication::beep();

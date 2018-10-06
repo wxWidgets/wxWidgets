@@ -160,6 +160,11 @@ public:
     {
         return 32; // TODO can we determine this ?
     }
+
+    virtual wxSize GetPPI() const wxOVERRIDE
+    {
+        return wxSize(72, 72);
+    }
 };
 
 class wxDisplayFactorySingleiOS : public wxDisplayFactorySingle

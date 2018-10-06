@@ -29,6 +29,8 @@
     #include "wx/module.h"
 #endif //WX_PRECOMP
 
+#include "wx/math.h"
+
 #include "wx/private/display.h"
 
 #if wxUSE_DISPLAY
@@ -122,6 +124,13 @@ wxRect wxDisplay::GetClientArea() const
     return m_impl->GetClientArea();
 }
 
+wxSize wxDisplay::GetPPI() const
+{
+    wxCHECK_MSG( IsOk(), wxSize(), wxT("invalid wxDisplay object") );
+
+    return m_impl->GetPPI();
+}
+
 int wxDisplay::GetDepth() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid wxDisplay object") );
@@ -178,6 +187,26 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
     }
 
     return *gs_factory;
+}
+
+// ============================================================================
+// wxDisplayImpl implementation
+// ============================================================================
+
+wxSize wxDisplayImpl::GetPPI() const
+{
+    const wxSize pixels = GetGeometry().GetSize();
+    const wxSize mm = GetSizeMM();
+
+    if ( !mm.x || !mm.y )
+    {
+        // Physical size is unknown, return a special value indicating that we
+        // can't compute the resolution -- what else can we do?
+        return wxSize(0, 0);
+    }
+
+    return wxSize(wxRound((pixels.x * inches2mm) / mm.x),
+                  wxRound((pixels.y * inches2mm) / mm.y));
 }
 
 // ============================================================================

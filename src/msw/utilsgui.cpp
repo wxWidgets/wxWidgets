@@ -117,16 +117,6 @@ void wxGetMousePosition( int* x, int* y )
     if ( y ) *y = pt.y;
 }
 
-void wxDisplaySizeMM(int *width, int *height)
-{
-    ScreenHDC dc;
-
-    if ( width )
-        *width = ::GetDeviceCaps(dc, HORZSIZE);
-    if ( height )
-        *height = ::GetDeviceCaps(dc, VERTSIZE);
-}
-
 // ---------------------------------------------------------------------------
 // window information functions
 // ---------------------------------------------------------------------------

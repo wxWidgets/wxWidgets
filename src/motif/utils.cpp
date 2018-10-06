@@ -225,16 +225,6 @@ void wxGetMousePosition( int* x, int* y )
 #endif
 }
 
-void wxDisplaySizeMM(int *width, int *height)
-{
-    Display *dpy = wxGlobalDisplay();
-
-    if ( width )
-        *width = DisplayWidthMM(dpy, DefaultScreen (dpy));
-    if ( height )
-        *height = DisplayHeightMM(dpy, DefaultScreen (dpy));
-}
-
 // Configurable display in wxX11 and wxMotif
 static WXDisplay *gs_currentDisplay = NULL;
 static wxString gs_displayName;

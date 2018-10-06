@@ -275,6 +275,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
                                          rc.x, rc.y, rc.width, rc.height)
                        ));
 
+        sizer->Add(new wxStaticText(page, wxID_ANY, "Resolution: "));
+        const wxSize ppi = display.GetPPI();
+        sizer->Add(new wxStaticText(page, wxID_ANY,
+                                    wxString::Format("%d*%d", ppi.x, ppi.y)));
+
         sizer->Add(new wxStaticText(page, wxID_ANY, "Depth: "));
         sizer->Add(new wxStaticText(page, wxID_ANY,
                                     wxString::Format("%d", display.GetDepth())));

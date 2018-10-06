@@ -1256,6 +1256,10 @@ wxRect wxGetClientDisplayRect();
     The @c x component of the returned wxSize object contains the horizontal
     resolution and the @c y one -- the vertical resolution.
 
+    @note Use of this function is not recommended in the new code as it only
+        works for the primary display. Use wxDisplay::GetPPI() to retrieve
+        the resolution of the appropriate display instead.
+
     @header{wx/gdicmn.h}
 
     @see wxDisplay
