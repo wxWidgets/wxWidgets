@@ -86,12 +86,6 @@ void *wxGetDisplay()
     return GDK_DISPLAY();
 }
 
-void wxDisplaySize( int *width, int *height )
-{
-    if (width) *width = gdk_screen_width();
-    if (height) *height = gdk_screen_height();
-}
-
 void wxDisplaySizeMM( int *width, int *height )
 {
     if (width) *width = gdk_screen_width_mm();
