@@ -140,11 +140,6 @@ wxWindow *wxGetActiveWindow()
     return NULL;
 }
 
-bool wxColourDisplay()
-{
-    return QApplication::desktop()->depth() > 1;
-}
-
 bool wxLaunchDefaultApplication(const wxString& path, int WXUNUSED( flags ) )
 {
     return QDesktopServices::openUrl( QUrl::fromLocalFile( wxQtConvertString( path ) ) );

@@ -97,11 +97,6 @@ void wxGetMousePosition( int* x, int* y )
     gdk_window_get_pointer( NULL, x, y, NULL );
 }
 
-bool wxColourDisplay()
-{
-    return true;
-}
-
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
     return wxGenericFindWindowAtPoint(pt);

@@ -89,12 +89,6 @@ wxDisplayFactory* wxDisplay::CreateFactory()
     return new wxDisplayFactorySingleDFB;
 }
 
-bool wxColourDisplay()
-{
-    #warning "FIXME: wxColourDisplay"
-    return true;
-}
-
 void wxDisplaySizeMM(int *width, int *height)
 {
     // FIXME: there's no way to get physical resolution using the DirectDB

@@ -850,6 +850,13 @@ int wxDisplayDepth()
     return wxDisplay().GetDepth();
 }
 
+bool wxColourDisplay()
+{
+    // If GetDepth() returns 0, meaning unknown, we assume it's a colour
+    // display, hence the use of "!=" rather than ">" here.
+    return wxDisplay().GetDepth() != 1;
+}
+
 void wxDisplaySize(int *width, int *height)
 {
     const wxSize size = wxGetDisplaySize();

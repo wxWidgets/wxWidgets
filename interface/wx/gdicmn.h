@@ -1183,6 +1183,10 @@ const wxSize wxDefaultSize;
 /**
     Returns @true if the display is colour, @false otherwise.
 
+    @note Use of this function is not recommended in the new code as it only
+        works for the primary display. Use wxDisplay::GetDepth() to retrieve
+        the depth of the appropriate display and compare it with 1 instead.
+
     @header{wx/gdicmn.h}
 */
 bool wxColourDisplay();

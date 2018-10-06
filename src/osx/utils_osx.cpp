@@ -53,14 +53,6 @@ bool wxCheckForInterrupt(wxWindow *WXUNUSED(wnd))
     return false;
 }
 
-// Return true if we have a colour display
-bool wxColourDisplay()
-{
-    // always the case on OS X
-    return true;
-}
-
-
 #if wxOSX_USE_COCOA_OR_CARBON
 
 #if wxUSE_GUI

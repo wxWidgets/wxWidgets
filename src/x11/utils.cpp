@@ -148,12 +148,6 @@ void wxGetMousePosition( int* x, int* y )
 #endif
 };
 
-// Return true if we have a colour display
-bool wxColourDisplay()
-{
-    return wxDisplayDepth() > 1;
-}
-
 void wxDisplaySizeMM(int *width, int *height)
 {
     Display *dpy = (Display*) wxGetDisplay();

@@ -90,11 +90,6 @@ void wxDisplaySizeMM( int *width, int *height )
 #endif
 }
 
-bool wxColourDisplay()
-{
-    return true;
-}
-
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
     return wxGenericFindWindowAtPoint(pt);
