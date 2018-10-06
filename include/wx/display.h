@@ -74,6 +74,9 @@ public:
     // get the client area of the display, i.e. without taskbars and such
     wxRect GetClientArea() const;
 
+    // get the depth, i.e. number of bits per pixel (0 if unknown)
+    int GetDepth() const;
+
     // name may be empty
     wxString GetName() const;
 

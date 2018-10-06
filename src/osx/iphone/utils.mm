@@ -130,12 +130,6 @@ wxMouseState wxGetMouseState()
     return ms;
 }    
 
-// Returns depth of screen
-int wxDisplayDepth()
-{
-    return 32; // TODO can we determine this ?
-}
-
 // Get size of display
 
 class wxDisplayImplSingleiOS : public wxDisplayImplSingle
@@ -160,6 +154,11 @@ public:
         }
 
         return wxRect(0, 0, width, height);
+    }
+
+    virtual int GetDepth() const wxOVERRIDE
+    {
+        return 32; // TODO can we determine this ?
     }
 };
 

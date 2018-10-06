@@ -845,6 +845,11 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
     return font;
 }
 
+int wxDisplayDepth()
+{
+    return wxDisplay().GetDepth();
+}
+
 void wxDisplaySize(int *width, int *height)
 {
     const wxSize size = wxGetDisplaySize();

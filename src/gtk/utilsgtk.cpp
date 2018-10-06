@@ -95,15 +95,6 @@ bool wxColourDisplay()
     return true;
 }
 
-int wxDisplayDepth()
-{
-#ifdef __WXGTK4__
-    return 24;
-#else
-    return gdk_visual_get_depth(gdk_window_get_visual(wxGetTopLevelGDK()));
-#endif
-}
-
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 {
     return wxGenericFindWindowAtPoint(pt);

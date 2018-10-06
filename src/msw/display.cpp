@@ -29,6 +29,11 @@
 #include "wx/msw/private.h"
 #include "wx/msw/wrapwin.h"
 
+int wxGetHDCDepth(HDC hdc)
+{
+    return ::GetDeviceCaps(hdc, PLANES) * GetDeviceCaps(hdc, BITSPIXEL);
+}
+
 // This implementation is always available, whether wxUSE_DISPLAY is 1 or not,
 // as we fall back to it in case of error.
 class wxDisplayImplSingleMSW : public wxDisplayImplSingle
@@ -51,6 +56,11 @@ public:
         wxRect rectClient;
         wxCopyRECTToRect(rc, rectClient);
         return rectClient;
+    }
+
+    virtual int GetDepth() const wxOVERRIDE
+    {
+        return wxGetHDCDepth(ScreenHDC());
     }
 };
 
@@ -79,6 +89,20 @@ protected:
 
 static const wxChar displayDllName[] = wxT("user32.dll");
 
+namespace
+{
+
+// Simple struct storing the information needed by wxDisplayMSW.
+struct wxDisplayInfo
+{
+    wxDisplayInfo(HMONITOR hmon_, int depth_) : hmon(hmon_), depth(depth_) {}
+
+    HMONITOR hmon;
+    int depth;
+};
+
+} // anonymous namespace
+
 // ----------------------------------------------------------------------------
 // wxDisplayMSW declaration
 // ----------------------------------------------------------------------------
@@ -86,14 +110,15 @@ static const wxChar displayDllName[] = wxT("user32.dll");
 class wxDisplayMSW : public wxDisplayImpl
 {
 public:
-    wxDisplayMSW(unsigned n, HMONITOR hmon)
+    wxDisplayMSW(unsigned n, const wxDisplayInfo& info)
         : wxDisplayImpl(n),
-          m_hmon(hmon)
+          m_info(info)
     {
     }
 
     virtual wxRect GetGeometry() const wxOVERRIDE;
     virtual wxRect GetClientArea() const wxOVERRIDE;
+    virtual int GetDepth() const wxOVERRIDE;
     virtual wxString GetName() const wxOVERRIDE;
     virtual bool IsPrimary() const wxOVERRIDE;
 
@@ -118,7 +143,7 @@ protected:
     // it succeeded, otherwise return false.
     bool GetMonInfo(MONITORINFOEX& monInfo) const;
 
-    HMONITOR m_hmon;
+    wxDisplayInfo m_info;
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxDisplayMSW);
@@ -128,8 +153,6 @@ private:
 // ----------------------------------------------------------------------------
 // wxDisplayFactoryMSW declaration
 // ----------------------------------------------------------------------------
-
-WX_DEFINE_ARRAY(HMONITOR, wxMonitorHandleArray);
 
 class wxDisplayFactoryMSW : public wxDisplayFactory
 {
@@ -177,7 +200,7 @@ private:
 
     // the array containing information about all available displays, filled by
     // MultimonEnumProc()
-    wxMonitorHandleArray m_displays;
+    wxVector<wxDisplayInfo> m_displays;
 
     // The hidden window we use for receiving WM_SETTINGCHANGE and its class
     // name.
@@ -213,7 +236,7 @@ wxDisplayFactoryMSW* wxDisplayFactoryMSW::ms_factory = NULL;
 
 bool wxDisplayMSW::GetMonInfo(MONITORINFOEX& monInfo) const
 {
-    if ( !::GetMonitorInfo(m_hmon, &monInfo) )
+    if ( !::GetMonitorInfo(m_info.hmon, &monInfo) )
     {
         wxLogLastError(wxT("GetMonitorInfo"));
         return false;
@@ -242,6 +265,11 @@ wxRect wxDisplayMSW::GetClientArea() const
         wxCopyRECTToRect(monInfo.rcWork, rectClient);
 
     return rectClient;
+}
+
+int wxDisplayMSW::GetDepth() const
+{
+    return m_info.depth;
 }
 
 wxString wxDisplayMSW::GetName() const
@@ -469,9 +497,12 @@ wxDisplayFactoryMSW::~wxDisplayFactoryMSW()
 
 void wxDisplayFactoryMSW::DoRefreshMonitors()
 {
-    m_displays.Clear();
+    m_displays.clear();
 
-    if ( !::EnumDisplayMonitors(NULL, NULL, MultimonEnumProc, (LPARAM)this) )
+    // We need to pass a valid HDC here in order to get valid hdcMonitor in our
+    // callback.
+    ScreenHDC dc;
+    if ( !::EnumDisplayMonitors(dc, NULL, MultimonEnumProc, (LPARAM)this) )
     {
         wxLogLastError(wxT("EnumDisplayMonitors"));
     }
@@ -481,13 +512,13 @@ void wxDisplayFactoryMSW::DoRefreshMonitors()
 BOOL CALLBACK
 wxDisplayFactoryMSW::MultimonEnumProc(
     HMONITOR hMonitor,              // handle to display monitor
-    HDC WXUNUSED(hdcMonitor),       // handle to monitor-appropriate device context
+    HDC hdcMonitor,                 // handle to monitor-appropriate device context
     LPRECT WXUNUSED(lprcMonitor),   // pointer to monitor intersection rectangle
     LPARAM dwData)                  // data passed from EnumDisplayMonitors (this)
 {
     wxDisplayFactoryMSW *const self = (wxDisplayFactoryMSW *)dwData;
 
-    self->m_displays.Add(hMonitor);
+    self->m_displays.push_back(wxDisplayInfo(hMonitor, wxGetHDCDepth(hdcMonitor)));
 
     // continue the enumeration
     return TRUE;
@@ -508,7 +539,7 @@ int wxDisplayFactoryMSW::FindDisplayFromHMONITOR(HMONITOR hmon) const
         const size_t count = m_displays.size();
         for ( size_t n = 0; n < count; n++ )
         {
-            if ( hmon == m_displays[n] )
+            if ( hmon == m_displays[n].hmon )
                 return n;
         }
     }

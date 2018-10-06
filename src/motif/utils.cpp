@@ -231,14 +231,6 @@ bool wxColourDisplay()
     return wxDisplayDepth() > 1;
 }
 
-// Returns depth of screen
-int wxDisplayDepth()
-{
-    Display *dpy = wxGlobalDisplay();
-
-    return DefaultDepth (dpy, DefaultScreen (dpy));
-}
-
 void wxDisplaySizeMM(int *width, int *height)
 {
     Display *dpy = wxGlobalDisplay();

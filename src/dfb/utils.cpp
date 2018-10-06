@@ -68,6 +68,11 @@ public:
 
         return wxRect(0, 0, mode.w, mode.h);
     }
+
+    virtual int GetDepth() const wxOVERRIDE
+    {
+        return wxTheApp->GetDisplayMode().bpp;
+    }
 };
 
 class wxDisplayFactorySingleDFB : public wxDisplayFactorySingle
@@ -88,11 +93,6 @@ bool wxColourDisplay()
 {
     #warning "FIXME: wxColourDisplay"
     return true;
-}
-
-int wxDisplayDepth()
-{
-    return wxTheApp->GetDisplayMode().bpp;
 }
 
 void wxDisplaySizeMM(int *width, int *height)

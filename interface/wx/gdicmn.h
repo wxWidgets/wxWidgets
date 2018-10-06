@@ -1191,6 +1191,10 @@ bool wxColourDisplay();
     Returns the depth of the display (a value of 1 denotes a monochrome
     display).
 
+    @note Use of this function is not recommended in the new code as it only
+        works for the primary display. Use wxDisplay::GetDepth() to retrieve
+        the depth of the appropriate display instead.
+
     @header{wx/gdicmn.h}
 */
 int wxDisplayDepth();

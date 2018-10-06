@@ -122,6 +122,13 @@ wxRect wxDisplay::GetClientArea() const
     return m_impl->GetClientArea();
 }
 
+int wxDisplay::GetDepth() const
+{
+    wxCHECK_MSG( IsOk(), 0, wxT("invalid wxDisplay object") );
+
+    return m_impl->GetDepth();
+}
+
 wxString wxDisplay::GetName() const
 {
     wxCHECK_MSG( IsOk(), wxString(), wxT("invalid wxDisplay object") );

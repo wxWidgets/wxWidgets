@@ -78,6 +78,9 @@ public:
     // return the area of the display available for normal windows
     virtual wxRect GetClientArea() const { return GetGeometry(); }
 
+    // return the depth or 0 if unknown
+    virtual int GetDepth() const = 0;
+
     // return the name (may be empty)
     virtual wxString GetName() const { return wxString(); }
 

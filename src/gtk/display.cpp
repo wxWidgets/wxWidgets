@@ -45,6 +45,7 @@ public:
     wxDisplayImplGTK(unsigned i);
     virtual wxRect GetGeometry() const wxOVERRIDE;
     virtual wxRect GetClientArea() const wxOVERRIDE;
+    virtual int GetDepth() const wxOVERRIDE;
 
 #if wxUSE_DISPLAY
     virtual bool IsPrimary() const wxOVERRIDE;
@@ -112,6 +113,11 @@ wxRect wxDisplayImplGTK::GetClientArea() const
     GdkRectangle rect;
     gdk_monitor_get_workarea(m_monitor, &rect);
     return wxRect(rect.x, rect.y, rect.width, rect.height);
+}
+
+int wxDisplayImplGTK::GetDepth() const
+{
+    return 24;
 }
 
 #if wxUSE_DISPLAY
@@ -205,6 +211,7 @@ public:
     wxDisplayImplGTK(unsigned i);
     virtual wxRect GetGeometry() const wxOVERRIDE;
     virtual wxRect GetClientArea() const wxOVERRIDE;
+    virtual int GetDepth() const wxOVERRIDE;
 
 #if wxUSE_DISPLAY
     virtual bool IsPrimary() const wxOVERRIDE;
@@ -267,6 +274,12 @@ wxRect wxDisplayImplGTK::GetClientArea() const
     GdkRectangle rect;
     gdk_screen_get_monitor_workarea(m_screen, m_index, &rect);
     return wxRect(rect.x, rect.y, rect.width, rect.height);
+}
+
+int wxDisplayImplGTK::GetDepth() const
+{
+    // TODO: How to get the depth of the specific display?
+    return gdk_visual_get_depth(gdk_window_get_visual(wxGetTopLevelGDK()));
 }
 
 #if wxUSE_DISPLAY

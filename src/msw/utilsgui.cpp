@@ -138,13 +138,6 @@ bool wxColourDisplay()
     return s_isColour != 0;
 }
 
-// Returns depth of screen
-int wxDisplayDepth()
-{
-    ScreenHDC dc;
-    return GetDeviceCaps(dc, PLANES) * GetDeviceCaps(dc, BITSPIXEL);
-}
-
 void wxDisplaySizeMM(int *width, int *height)
 {
     ScreenHDC dc;
