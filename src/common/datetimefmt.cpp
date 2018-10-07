@@ -1652,7 +1652,13 @@ wxDateTime::ParseFormat(const wxString& date,
     //
     // Note that avoiding the call to MakeFromTimeZone is necessary to avoid
     // DST problems.
-    if ( haveTimeZone && timeZone != -wxGetTimeZone() )
+
+    int effective_tz = wxGetTimeZone();
+    if(IsDST())
+    {
+        effective_tz += DST_OFFSET;
+    }
+    if ( haveTimeZone && timeZone != -effective_tz )
         MakeFromTimezone(timeZone);
 
     // finally check that the week day is consistent -- if we had it
