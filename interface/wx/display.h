@@ -102,7 +102,10 @@ public:
     wxArrayVideoModes GetModes(const wxVideoMode& mode = wxDefaultVideoMode) const;
 
     /**
-        Returns the display's name. A name is not available on all platforms.
+        Returns the display's name.
+
+        The returned value is currently an empty string under all platforms
+        except MSW.
     */
     wxString GetName() const;
 

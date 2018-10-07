@@ -1778,6 +1778,8 @@ public:
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxJPEGResourceHandler, wxBundleResourceHandler);
 
+#if wxOSX_USE_COCOA
+
 class WXDLLEXPORT wxICNSResourceHandler: public wxBundleResourceHandler
 {
     wxDECLARE_DYNAMIC_CLASS(wxICNSResourceHandler);
@@ -1789,9 +1791,122 @@ public:
         SetExtension("icns");
         SetType(wxBITMAP_TYPE_ICON_RESOURCE);
     }
+
+    virtual bool LoadFile(wxBitmap *bitmap,
+                          const wxString& name,
+                          wxBitmapType type,
+                          int desiredWidth,
+                          int desiredHeight) wxOVERRIDE;
+
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxICNSResourceHandler, wxBundleResourceHandler);
+
+bool wxICNSResourceHandler::LoadFile(wxBitmap *bitmap,
+                                       const wxString& resourceName,
+                                       wxBitmapType type,
+                                       int desiredWidth,
+                                       int desiredHeight)
+{
+    OSType theId = 0 ;
+
+    if ( resourceName == wxT("wxICON_INFORMATION") )
+    {
+        theId = kAlertNoteIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_QUESTION") )
+    {
+        theId = kAlertCautionIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_WARNING") )
+    {
+        theId = kAlertCautionIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_ERROR") )
+    {
+        theId = kAlertStopIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_FOLDER") )
+    {
+        theId = kGenericFolderIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_FOLDER_OPEN") )
+    {
+        theId = kOpenFolderIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_NORMAL_FILE") )
+    {
+        theId = kGenericDocumentIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_EXECUTABLE_FILE") )
+    {
+        theId = kGenericApplicationIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_CDROM") )
+    {
+        theId = kGenericCDROMIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_FLOPPY") )
+    {
+        theId = kGenericFloppyIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_HARDDISK") )
+    {
+        theId = kGenericHardDiskIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_REMOVABLE") )
+    {
+        theId = kGenericRemovableMediaIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_DELETE") )
+    {
+        theId = kToolbarDeleteIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_GO_BACK") )
+    {
+        theId = kBackwardArrowIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_GO_FORWARD") )
+    {
+        theId = kForwardArrowIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_GO_HOME") )
+    {
+        theId = kToolbarHomeIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_HELP_SETTINGS") )
+    {
+        theId = kGenericFontIcon ;
+    }
+    else if ( resourceName == wxT("wxICON_HELP_PAGE") )
+    {
+        theId = kGenericDocumentIcon ;
+    }
+    else if ( resourceName == wxT( "wxICON_PRINT" ) )
+    {
+        theId = kPrintMonitorFolderIcon;
+    }
+    else if ( resourceName == wxT( "wxICON_HELP_FOLDER" ) )
+    {
+        theId = kHelpFolderIcon;
+    }
+
+    if ( theId != 0 )
+    {
+        IconRef iconRef = NULL ;
+        __Verify_noErr(GetIconRef( kOnSystemDisk, kSystemIconsCreator, theId, &iconRef )) ;
+        if ( iconRef )
+        {
+            WXImage img = wxOSXGetNSImageFromIconRef(iconRef);
+            bitmap->Create(img);
+            return true;
+        }
+    }
+
+    return wxBundleResourceHandler::LoadFile( bitmap, resourceName, type, desiredWidth, desiredHeight);
+}
+
+#endif // wxOSX_USE_COCOA
 
 bool wxBundleResourceHandler::LoadFile(wxBitmap *bitmap,
                                      const wxString& name,

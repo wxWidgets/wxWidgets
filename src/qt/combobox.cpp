@@ -118,6 +118,14 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
+void wxComboBox::SetValue(const wxString& value)
+{
+    if ( HasFlag(wxCB_READONLY) )
+        SetStringSelection(value);
+    else
+        wxTextEntry::SetValue(value);
+}
+
 wxString wxComboBox::DoGetValue() const
 {
     return wxQtConvertString( m_qtComboBox->currentText() );
@@ -131,6 +139,12 @@ void wxComboBox::Popup()
 void wxComboBox::Dismiss()
 {
     static_cast<QComboBox *>(GetHandle())->hidePopup();
+}
+
+void wxComboBox::Clear()
+{
+    wxTextEntry::Clear();
+    wxItemContainer::Clear();
 }
 
 void wxComboBox::SetSelection( long from, long to )
