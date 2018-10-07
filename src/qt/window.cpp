@@ -194,8 +194,7 @@ wxWindowQt::~wxWindowQt()
     // Delete only if the qt widget was created or assigned to this base class
     if (m_qtWindow)
     {
-        wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow=%p"),
-                   (const char*)GetName(), m_qtWindow);
+        wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow=%p"), GetName(), m_qtWindow);
         // Avoid sending further signals (i.e. if deleting the current page)
         m_qtWindow->blockSignals(true);
         // Reset the pointer to avoid handling pending event and signals
@@ -206,8 +205,7 @@ wxWindowQt::~wxWindowQt()
     }
     else
     {
-        wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow is NULL"),
-                   (const char*)GetName());
+        wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow is NULL"), GetName());
     }
 }
 
@@ -260,8 +258,7 @@ void wxWindowQt::PostCreation(bool generic)
         // store pointer to the QWidget subclass (to be used in the destructor)
         m_qtWindow = GetHandle();
     }
-    wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::Create %s m_qtWindow=%p"),
-               (const char*)GetName(), m_qtWindow);
+    wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::Create %s m_qtWindow=%p"), GetName(), m_qtWindow);
 
     // set the background style after creation (not before like in wxGTK)
     // (only for generic controls, to use qt defaults elsewere)
@@ -395,7 +392,7 @@ void wxWindowQt::WarpPointer(int x, int y)
 
 void wxWindowQt::Update()
 {
-    wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::Update %s"), (const char*)GetName());
+    wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::Update %s"), GetName());
     // send the paint event to the inner widget in scroll areas:
     if ( QtGetScrollBarsContainer() )
     {
@@ -422,14 +419,13 @@ void wxWindowQt::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
         if ( rect != NULL )
         {
             wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::Refresh %s rect %d %d %d %d"),
-                       (const char*)GetName(),
+                       GetName(),
                        rect->x, rect->y, rect->width, rect->height);
             widget->update( wxQtConvertRect( *rect ));
         }
         else
         {
-            wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::Refresh %s"),
-                       (const char*)GetName());
+            wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::Refresh %s"), GetName());
             widget->update();
         }
     }
@@ -1083,7 +1079,7 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                             if ( UseBgCol() && !GetHandle()->autoFillBackground() )
                             {
                                 wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::QtHandlePaintEvent %s clearing DC to %s"),
-                                           (const char*)GetName(), GetBackgroundColour().GetAsString()
+                                           GetName(), GetBackgroundColour().GetAsString()
                                            );
                                 dc.SetBackground(GetBackgroundColour());
                                 dc.Clear();
@@ -1132,8 +1128,7 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
         else
         {
             // Painter didn't begun, not handled by wxWidgets:
-            wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::QtHandlePaintEvent %s Qt widget painter begin failed"),
-                       (const char*)GetName() );
+            wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::QtHandlePaintEvent %s Qt widget painter begin failed"), GetName() );
             return false;
         }
     }
