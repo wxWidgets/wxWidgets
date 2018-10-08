@@ -66,11 +66,23 @@ public:
 private:
     CPPUNIT_TEST_SUITE( RegionTestCase );
         CPPUNIT_TEST( Validity );
+        CPPUNIT_TEST( Union );
         CPPUNIT_TEST( Intersect );
+        CPPUNIT_TEST( Clear );
+        CPPUNIT_TEST( Subtract );
+        CPPUNIT_TEST( Xor );
+        CPPUNIT_TEST( Contains );
+        CPPUNIT_TEST( IsEqual );
     CPPUNIT_TEST_SUITE_END();
 
     void Validity();
+    void Union();
     void Intersect();
+    void Clear();
+    void Subtract();
+    void Xor();
+    void Contains();
+    void IsEqual();
 
     wxDECLARE_NO_COPY_CLASS(RegionTestCase);
 };
@@ -97,8 +109,28 @@ void RegionTestCase::Validity()
         r.IsEmpty()
     );
 
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    (
+        "GetBox of invalid region should return zero-sized",
+        r.GetBox(),
+        wxRect(0, 0, 0, 0)
+    );
+
+    int x, y, w, h;
+    r.GetBox(x, y, w, h);
+    CPPUNIT_ASSERT_MESSAGE
+    (
+        "GetBox for invalid region should return zero-sized box values",
+        (x == 0 && y == 0 && w == -1 && h == -1)
+    );
+
     // Offsetting an invalid region doesn't make sense.
     WX_ASSERT_FAILS_WITH_ASSERT( r.Offset(1, 1) );
+}
+
+void RegionTestCase::Union()
+{
+    wxRegion r;
 
     CPPUNIT_ASSERT_MESSAGE
     (
@@ -111,6 +143,37 @@ void RegionTestCase::Validity()
         "Union() with invalid region should give the same region",
         wxRegion(0, 0, 10, 10),
         r
+    );
+
+    r.Clear();
+
+    wxRect rect(0, 0, 2, 2);
+    CPPUNIT_ASSERT_MESSAGE
+    (
+        "Combining invalid region with a rectangle should create a valid region",
+        r.Union(rect)
+    );
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    (
+        "Union() with rectangle should make region equal to the rectangle",
+        wxRegion(0, 0, 2, 2),
+        r
+    );
+
+    wxRegion invalid;
+
+    CPPUNIT_ASSERT_MESSAGE
+    (
+        "Combining invalid region with valid region should create valid region",
+        invalid.Union(r)
+    );
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    (
+        "Union() of invalid region with valid region should match valid region",
+        wxRegion(0, 0, 2, 2),
+        invalid
     );
 }
 
@@ -136,4 +199,141 @@ void RegionTestCase::Intersect()
 
     CPPUNIT_ASSERT( region1.Intersect(region2) );
     CPPUNIT_ASSERT( region1.IsEmpty() );
+
+    wxRegion invalid;
+
+    CPPUNIT_ASSERT_MESSAGE(
+        "Intersecting an invalid region fails safely",
+        !invalid.Intersect(region2)
+    );
+}
+
+void RegionTestCase::Clear()
+{
+    const wxPoint points[] = {
+        wxPoint(1, 2),
+        wxPoint(5, 2),
+        wxPoint(3, 3)
+    };
+
+    wxRegion region(WXSIZEOF(points), points);
+    CPPUNIT_ASSERT(region.IsOk());
+
+    region.Clear();
+
+    CPPUNIT_ASSERT(!region.IsOk());
+}
+
+void RegionTestCase::Subtract()
+{
+    wxRegion region;
+    wxRect rect(0, 0, 3, 3);
+
+    CPPUNIT_ASSERT_MESSAGE(
+        "Subtract rect from invalid region should fail safely.",
+        !region.Subtract(rect)
+    );
+
+    wxRegion rectRegion(rect);
+    CPPUNIT_ASSERT_MESSAGE(
+        "Subtract region from invalid region should fail safely.",
+        !region.Subtract(rectRegion)
+    );
+}
+
+void RegionTestCase::Xor()
+{
+    wxRegion region;
+    CPPUNIT_ASSERT_MESSAGE(
+        "Xor on invalid region should succeed.",
+        region.Xor(1, 3, 2, 2)
+    );
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Xor on invalid region should set invalid region to rectangle.",
+        wxRegion(1, 3, 2, 2),
+        region
+    );
+
+    region.Clear();
+
+    CPPUNIT_ASSERT_MESSAGE(
+        "Xor rectangle on invalid region should succeed.",
+        region.Xor(wxRect(1, 3, 2, 2))
+    );
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Xor on invalid region should set invalid region to rectangle.",
+        wxRegion(1, 3, 2, 2),
+        region
+    );
+
+    region.Clear();
+    wxRegion valid_region(wxRect(1, 3, 2, 2));
+
+    CPPUNIT_ASSERT_MESSAGE(
+        "Xor region on invalid region should succeed.",
+        region.Xor(valid_region)
+    );
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Xor on invalid region should set invalid region to region.",
+        wxRegion(1, 3, 2, 2),
+        region
+    );
+}
+
+void RegionTestCase::Contains()
+{
+    wxRegion region;
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Contains on an invalid region should return wxOutRegion.",
+        wxOutRegion,
+        region.Contains(1, 3)
+    );
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Contains on an invalid region should return wxOutRegion.",
+        wxOutRegion,
+        region.Contains(wxPoint(1, 3))
+    );
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Contains on an invalid region should return wxOutRegion.",
+        wxOutRegion,
+        region.Contains(1, 3, 2, 2)
+    );
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Contains on an invalid region should return wxOutRegion.",
+        wxOutRegion,
+        region.Contains(wxRect(1, 3, 2, 2))
+    );
+}
+
+void RegionTestCase::IsEqual()
+{
+    wxRegion r1, r2;
+    CPPUNIT_ASSERT_MESSAGE(
+        "Two invalid regions are equal.",
+        r1.IsEqual(r2)
+    );
+
+    r2.Union(0, 0, 1, 1);
+    CPPUNIT_ASSERT_MESSAGE(
+        "Invalid region is not equal to valid.",
+        !r1.IsEqual(r2)
+    );
+
+    CPPUNIT_ASSERT_MESSAGE(
+        "Valid region is not equal to invalid.",
+        !r2.IsEqual(r1)
+    );
+
+    r1.Union(r2);
+    CPPUNIT_ASSERT_MESSAGE(
+        "Valid regions can be equal.",
+        r2.IsEqual(r1)
+    );
 }

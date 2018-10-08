@@ -55,7 +55,6 @@ class wxRegionRefData: public wxGDIRefData
 
 wxRegion::wxRegion()
 {
-    m_refData = new wxRegionRefData();
 }
 
 wxRegion::wxRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
@@ -131,21 +130,21 @@ wxRegion::wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance)
 
 bool wxRegion::IsEmpty() const
 {
-    wxCHECK_MSG( IsOk(), true, "Invalid region" );
+    if(!IsOk())
+        return true;
     
     return M_REGIONDATA.isEmpty();
 }
 
 void wxRegion::Clear()
 {
-    wxCHECK_RET( IsOk(), "Invalid region" );
-
-    AllocExclusive();
-    M_REGIONDATA = QRegion();
+    UnRef();
 }
 
 void wxRegion::QtSetRegion(QRegion region)
 {
+    if(!IsOk())
+        m_refData = new wxRegionRefData;
     M_REGIONDATA = region;
 }
 
@@ -169,27 +168,36 @@ bool wxRegion::DoIsEqual(const wxRegion& region) const
 
 bool wxRegion::DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const
 {
-    wxCHECK_MSG( IsOk(), false, "Invalid region" );
+    if(IsOk())
+    {
+        QRect bounding = M_REGIONDATA.boundingRect();
+        x = bounding.x();
+        y = bounding.y();
+        w = bounding.width();
+        h = bounding.height();
 
-    QRect bounding = M_REGIONDATA.boundingRect();
-    x = bounding.x();
-    y = bounding.y();
-    w = bounding.width();
-    h = bounding.height();
-    
-    return true;
+        return true;
+    }
+
+    x = 0;
+    y = 0;
+    w = -1;
+    h = -1;
+    return false;
 }
 
 wxRegionContain wxRegion::DoContainsPoint(wxCoord x, wxCoord y) const
 {
-    wxCHECK_MSG( IsOk(), wxOutRegion, "Invalid region" );
+    if(!IsOk())
+        return wxOutRegion;
     
     return M_REGIONDATA.contains( QPoint( x, y ) ) ? wxInRegion : wxOutRegion;
 }
 
 wxRegionContain wxRegion::DoContainsRect(const wxRect& rect) const
 {
-    wxCHECK_MSG( IsOk(), wxOutRegion, "Invalid region" );
+    if(!IsOk())
+        return wxOutRegion;
     
     return M_REGIONDATA.contains( wxQtConvertRect( rect ) ) ? wxInRegion : wxOutRegion;
 }
@@ -204,7 +212,10 @@ bool wxRegion::DoOffset(wxCoord x, wxCoord y)
 
 bool wxRegion::DoUnionWithRect(const wxRect& rect)
 {
-    wxCHECK_MSG( IsOk(), false, "Invalid region" );
+    if(!IsOk())
+    {
+        m_refData = new wxRegionRefData;
+    }
 
     M_REGIONDATA = M_REGIONDATA.united( wxQtConvertRect( rect ) );
     return true;
@@ -212,8 +223,11 @@ bool wxRegion::DoUnionWithRect(const wxRect& rect)
 
 bool wxRegion::DoUnionWithRegion(const wxRegion& region)
 {
-    wxCHECK_MSG( IsOk(), false, "Invalid region" );
     wxCHECK_MSG( region.IsOk(), false, "Invalid parameter region" );
+    if(!IsOk())
+    {
+        m_refData = new wxRegionRefData;
+    }
     
     M_REGIONDATA = M_REGIONDATA.united( region.GetHandle() );
     return true;
@@ -221,17 +235,21 @@ bool wxRegion::DoUnionWithRegion(const wxRegion& region)
 
 bool wxRegion::DoIntersect(const wxRegion& region)
 {
-    wxCHECK_MSG( IsOk(), false, "Invalid region" );
     wxCHECK_MSG( region.IsOk(), false, "Invalid parameter region" );
-    
+
+    if(!IsOk())
+        return false;
+
     M_REGIONDATA = M_REGIONDATA.intersected( region.GetHandle() );
     return true;
 }
 
 bool wxRegion::DoSubtract(const wxRegion& region)
 {
-    wxCHECK_MSG( IsOk(), false, "Invalid region" );
     wxCHECK_MSG( region.IsOk(), false, "Invalid parameter region" );
+
+    if(!IsOk())
+        return false;
     
     M_REGIONDATA = M_REGIONDATA.subtracted( region.GetHandle() );
     return true;
@@ -239,8 +257,11 @@ bool wxRegion::DoSubtract(const wxRegion& region)
 
 bool wxRegion::DoXor(const wxRegion& region)
 {
-    wxCHECK_MSG( IsOk(), false, "Invalid region" );
     wxCHECK_MSG( region.IsOk(), false, "Invalid parameter region" );
+    if(!IsOk())
+    {
+        m_refData = new wxRegionRefData;
+    }
     
     M_REGIONDATA = M_REGIONDATA.xored( region.GetHandle() );
     return true;
