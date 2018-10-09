@@ -181,12 +181,12 @@ void* wxJoystickThread::Entry()
                 if (j_evt.value)
                 {
                     m_buttons |= (1 << j_evt.number);
-                    SendEvent(wxEVT_JOY_BUTTON_DOWN, j_evt.time, j_evt.number);
+                    SendEvent(wxEVT_JOY_BUTTON_DOWN, j_evt.time, 1 << j_evt.number);
                 }
                 else
                 {
                     m_buttons &= ~(1 << j_evt.number);
-                    SendEvent(wxEVT_JOY_BUTTON_UP, j_evt.time, j_evt.number);
+                    SendEvent(wxEVT_JOY_BUTTON_UP, j_evt.time, 1 << j_evt.number);
                 }
             }
         }
