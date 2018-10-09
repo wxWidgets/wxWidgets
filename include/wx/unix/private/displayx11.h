@@ -10,6 +10,10 @@
 #ifndef _WX_UNIX_PRIVATE_DISPLAYX11_H_
 #define _WX_UNIX_PRIVATE_DISPLAYX11_H_
 
+#include "wx/defs.h"
+
+#if wxUSE_DISPLAY
+
 #include "wx/log.h"
 #include "wx/translation.h"
 
@@ -144,6 +148,8 @@ wxArrayVideoModes wxX11_GetModes(const wxDisplayImpl* impl, const wxVideoMode& m
 }
 
 #endif // !HAVE_X11_EXTENSIONS_XF86VMODE_H
+
+#endif // wxUSE_DISPLAY
 
 void wxGetWorkAreaX11(Screen* screen, int& x, int& y, int& width, int& height)
 {
