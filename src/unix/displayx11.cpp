@@ -34,6 +34,27 @@
 
 static wxRect wxGetMainScreenWorkArea();
 
+namespace
+{
+
+inline int wxGetMainScreenDepth()
+{
+    Display* const dpy = wxGetX11Display();
+
+    return DefaultDepth(dpy, DefaultScreen (dpy));
+}
+
+inline wxSize wxGetMainScreenSizeMM()
+{
+    Display* const dpy = wxGetX11Display();
+
+    return wxSize
+           (
+                DisplayWidthMM(dpy, DefaultScreen(dpy)),
+                DisplayHeightMM(dpy, DefaultScreen(dpy))
+           );
+}
+
 class wxDisplayImplSingleX11 : public wxDisplayImplSingle
 {
 public:
@@ -50,6 +71,16 @@ public:
     {
         return wxGetMainScreenWorkArea();
     }
+
+    virtual int GetDepth() const wxOVERRIDE
+    {
+        return wxGetMainScreenDepth();
+    }
+
+    virtual wxSize GetSizeMM() const wxOVERRIDE
+    {
+        return wxGetMainScreenSizeMM();
+    }
 };
 
 class wxDisplayFactorySingleX11 : public wxDisplayFactorySingle
@@ -60,6 +91,8 @@ protected:
         return new wxDisplayImplSingleX11;
     }
 };
+
+} // anonymous namespace
 
 #if wxUSE_DISPLAY
 
@@ -118,6 +151,19 @@ public:
         // we don't currently react to its changes
         return IsPrimary() ? wxGetMainScreenWorkArea() : m_rect;
     }
+    virtual int GetDepth() const wxOVERRIDE
+    {
+        const wxVideoMode& mode = GetCurrentMode();
+        if ( mode.bpp )
+            return mode.bpp;
+
+        return wxGetMainScreenDepth();
+    }
+    virtual wxSize GetSizeMM() const wxOVERRIDE
+    {
+        // TODO: how to get physical size or resolution of the other monitors?
+        return IsPrimary() ? wxGetMainScreenSizeMM() : wxSize(0, 0);
+    }
 
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
     virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
@@ -125,7 +171,6 @@ public:
 
 private:
     wxRect m_rect;
-    int m_depth;
 
     wxDECLARE_NO_COPY_CLASS(wxDisplayImplX11);
 };

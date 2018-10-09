@@ -78,6 +78,18 @@ public:
     // return the area of the display available for normal windows
     virtual wxRect GetClientArea() const { return GetGeometry(); }
 
+    // return the depth or 0 if unknown
+    virtual int GetDepth() const = 0;
+
+    // return the resolution of the display, uses GetSizeMM() by default but
+    // can be also overridden directly
+    virtual wxSize GetPPI() const;
+
+    // return the physical size of the display or (0, 0) if unknown: this is
+    // only used by GetPPI() implementation in the base class, so if GetPPI()
+    // is overridden, this one doesn't have to be implemented
+    virtual wxSize GetSizeMM() const { return wxSize(0, 0); }
+
     // return the name (may be empty)
     virtual wxString GetName() const { return wxString(); }
 

@@ -11,6 +11,7 @@
 #define _WX_DISPLAY_H_BASE_
 
 #include "wx/defs.h"
+#include "wx/gdicmn.h"      // wxSize
 
 // NB: no #if wxUSE_DISPLAY here, the display geometry part of this class (but
 //     not the video mode stuff) is always available but if wxUSE_DISPLAY == 0
@@ -73,6 +74,12 @@ public:
 
     // get the client area of the display, i.e. without taskbars and such
     wxRect GetClientArea() const;
+
+    // get the depth, i.e. number of bits per pixel (0 if unknown)
+    int GetDepth() const;
+
+    // get the resolution of this monitor in pixels per inch
+    wxSize GetPPI() const;
 
     // name may be empty
     wxString GetName() const;

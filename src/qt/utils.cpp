@@ -110,19 +110,6 @@ bool wxGetKeyState(wxKeyCode key)
     }
 }
 
-int wxDisplayDepth()
-{
-    return QApplication::desktop()->depth();
-}
-
-void wxDisplaySizeMM(int *width, int *height)
-{
-    if ( width != NULL )
-        *width = QApplication::desktop()->widthMM();
-    if ( height != NULL )
-        *height = QApplication::desktop()->heightMM();
-}
-
 void wxBell()
 {
     QApplication::beep();
@@ -143,11 +130,6 @@ wxWindow *wxGetActiveWindow()
     }
 
     return NULL;
-}
-
-bool wxColourDisplay()
-{
-    return QApplication::desktop()->depth() > 1;
 }
 
 bool wxLaunchDefaultApplication(const wxString& path, int WXUNUSED( flags ) )

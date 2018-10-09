@@ -52,6 +52,35 @@ wxRect wxGetDisplayGeometry(CGDirectDisplayID id)
                    (int)theRect.size.height ); //floats
 }
 
+int wxGetDisplayDepth(CGDirectDisplayID id)
+{
+    CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(id);
+    CFStringRef encoding = CGDisplayModeCopyPixelEncoding(currentMode);
+
+    int theDepth = 32; // some reasonable default
+    if(encoding)
+    {
+        if(CFStringCompare(encoding, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+            theDepth = 32;
+        else if(CFStringCompare(encoding, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+            theDepth = 16;
+        else if(CFStringCompare(encoding, CFSTR(IO8BitIndexedPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+            theDepth = 8;
+
+        CFRelease(encoding);
+    }
+
+    CGDisplayModeRelease(currentMode);
+
+    return theDepth;
+}
+
+wxSize wxGetDisplaySizeMM(CGDirectDisplayID id)
+{
+    const CGSize size = CGDisplayScreenSize(id);
+    return wxSize(wxRound(size.width), wxRound(size.height));
+}
+
 } // anonymous namespace
 
 #if wxUSE_DISPLAY
@@ -73,6 +102,8 @@ public:
 
     virtual wxRect GetGeometry() const wxOVERRIDE;
     virtual wxRect GetClientArea() const wxOVERRIDE;
+    virtual int GetDepth() const wxOVERRIDE;
+    virtual wxSize GetSizeMM() const wxOVERRIDE;
 
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
     virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
@@ -229,6 +260,16 @@ wxRect wxDisplayImplMacOSX::GetClientArea() const
     return wxDisplayImpl::GetClientArea();
 }
 
+int wxDisplayImplMacOSX::GetDepth() const
+{
+    return wxGetDisplayDepth(m_id);
+}
+
+wxSize wxDisplayImplMacOSX::GetSizeMM() const
+{
+    return wxGetDisplaySizeMM(m_id);
+}
+
 static int wxOSXCGDisplayModeGetBitsPerPixel( CGDisplayModeRef theValue )
 {
     wxCFRef<CFStringRef> pixelEncoding( CGDisplayModeCopyPixelEncoding(theValue) );
@@ -338,6 +379,16 @@ public:
     virtual wxRect GetClientArea() const wxOVERRIDE
     {
         return wxOSXGetMainDisplayClientArea();
+    }
+
+    virtual int GetDepth() const wxOVERRIDE
+    {
+        return wxGetDisplayDepth(CGMainDisplayID());
+    }
+
+    virtual wxSize GetSizeMM() const wxOVERRIDE
+    {
+        return wxGetDisplaySizeMM(CGMainDisplayID());
     }
 };
 

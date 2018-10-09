@@ -12,8 +12,6 @@
 
     @library{wxcore}
     @category{cfg}
-
-    @see wxClientDisplayRect(), wxDisplaySize(), wxDisplaySizeMM()
 */
 class wxDisplay
 {
@@ -108,6 +106,19 @@ public:
         except MSW.
     */
     wxString GetName() const;
+
+    /**
+        Returns display resolution in pixels per inch.
+
+        Horizontal and vertical resolution are returned in @c x and @c y
+        components of the wxSize object respectively.
+
+        If the resolution information is not available, returns @code wxSize(0,
+        0) @endcode.
+
+        @since 3.1.2
+     */
+    wxSize GetPPI() const;
 
     /**
         Returns @true if the display is the primary display. The primary
