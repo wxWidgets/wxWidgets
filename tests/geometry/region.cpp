@@ -109,11 +109,10 @@ void RegionTestCase::Validity()
         r.IsEmpty()
     );
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE
+    CPPUNIT_ASSERT_MESSAGE
     (
         "GetBox of invalid region should return zero-sized",
-        r.GetBox(),
-        wxRect(0, 0, 0, 0)
+        r.GetBox().IsEmpty()
     );
 
     int x, y, w, h;
@@ -121,7 +120,7 @@ void RegionTestCase::Validity()
     CPPUNIT_ASSERT_MESSAGE
     (
         "GetBox for invalid region should return zero-sized box values",
-        (x == 0 && y == 0 && w == -1 && h == -1)
+        wxRect(x, y, w, h).IsEmpty()
     );
 
     // Offsetting an invalid region doesn't make sense.
