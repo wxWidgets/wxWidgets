@@ -181,4 +181,9 @@ inline double wxRadToDeg(double rad) { return (rad * 180.0) / M_PI; }
 /* Compute the greatest common divisor of two positive integers */
 WXDLLIMPEXP_BASE unsigned int wxGCD(unsigned int u, unsigned int v);
 
+#ifdef __cplusplus
+/* Count trailing zeros */
+WXDLLIMPEXP_BASE unsigned int wxCTZ(unsigned x);
+#endif
+
 #endif /* _WX_MATH_H_ */

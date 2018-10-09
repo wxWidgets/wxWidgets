@@ -19,6 +19,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/debug.h"
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -1014,6 +1016,27 @@ unsigned int wxGCD(unsigned int u, unsigned int v)
     // restore common factors of 2
     return u << shift;
 }
+
+// ----------------------------------------------------------------------------
+// wxCTZ
+// Count trailing zeros. Use optimised builtin where available.
+// ----------------------------------------------------------------------------
+unsigned int wxCTZ(unsigned x)
+{
+    wxCHECK_MSG(x > 0, 0, "Undefined for x == 0.");
+#ifdef __GNUC__
+   return __builtin_ctz(x);
+#else
+   int n;
+   n = 1;
+   if ((x & 0x0000FFFF) == 0) {n = n +16; x = x >>16;}
+   if ((x & 0x000000FF) == 0) {n = n + 8; x = x >> 8;}
+   if ((x & 0x0000000F) == 0) {n = n + 4; x = x >> 4;}
+   if ((x & 0x00000003) == 0) {n = n + 2; x = x >> 2;}
+   return n - (x & 1);
+#endif
+}
+
 
 #endif // wxUSE_BASE
 

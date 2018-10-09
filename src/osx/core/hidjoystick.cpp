@@ -861,6 +861,10 @@ void* wxJoystickThread::Entry()
         //is the cookie a button?
         if (nIndex < 40)
         {
+            // Bounds check for bit shift in this block.
+            wxCHECK_MSG(nIndex >= 0, (void *) -1, "Shift count negative.");
+            wxCHECK_MSG(nIndex < CHAR_BIT * (int) sizeof(int), (void *) -1,
+                            "Shift count overflow.");
             if (hidevent.value)
             {
                 pThis->m_buttons |= (1 << nIndex);
@@ -872,7 +876,7 @@ void* wxJoystickThread::Entry()
                 wxevent.SetEventType(wxEVT_JOY_BUTTON_UP);
             }
 
-            wxevent.SetButtonChange(nIndex+1);
+            wxevent.SetButtonChange(1 << nIndex);
         }
         else if (nIndex == wxJS_AXIS_X)
         {
