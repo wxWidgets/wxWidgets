@@ -4461,10 +4461,11 @@ wxdataview_selection_changed_callback( GtkTreeSelection* WXUNUSED(selection), wx
 
 static void
 wxdataview_row_activated_callback( GtkTreeView* WXUNUSED(treeview), GtkTreePath *path,
-                                   GtkTreeViewColumn *WXUNUSED(column), wxDataViewCtrl *dv )
+                                   GtkTreeViewColumn *column, wxDataViewCtrl *dv )
 {
     wxDataViewItem item(dv->GTKPathToItem(path));
-    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_ACTIVATED, dv, item);
+    wxDataViewEvent
+        event(wxEVT_DATAVIEW_ITEM_ACTIVATED, dv, dv->GTKColumnToWX(column), item);
     dv->HandleWindowEvent( event );
 }
 
