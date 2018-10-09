@@ -160,6 +160,7 @@ wxOSX:
 - Implement wxDataViewColumn::UnsetAsSortKey() (Daniel Kulp).
 - supporting native image formst like NSImage and UIImage in wxBitmap
 - native implementation for wxStaticBitmap for correct rendering of template images
+- Fill column value in wxEVT_DATAVIEW_ITEM_ACTIVATED events (Igor Korot).
 
 wxQt:
 
