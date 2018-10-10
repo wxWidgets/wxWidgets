@@ -419,8 +419,17 @@ bool wxHeaderCtrl::EndReordering(int xPhysical)
 
     m_colBeingReordered = COL_NONE;
 
+    // mouse drag must be longer than min distance m_dragOffset
     if ( xPhysical - GetColStart(colOld) == m_dragOffset )
+    {
         return false;
+    }
+
+    // the new drag location may not be valid, such as past the last column
+    if ( colNew == COL_NONE)
+    {
+        return false;
+    }
 
     if ( colNew != colOld )
     {
