@@ -25,6 +25,11 @@ enum wxAccStatus
 };
 
 
+/** Child ids are integer identifiers from 1 up.
+    So zero represents 'this' object.
+*/
+#define wxACC_SELF 0
+
 /**
     This enum represents directions of navigation used in
     wxAccessible::Navigate().
@@ -495,7 +500,7 @@ public:
     */
     static void NotifyEvent(int eventType, wxWindow* window,
                             wxAccObject objectType,
-                            int objectType);
+                            int objectId);
 
     /**
         Selects the object or child. See wxAccSelectionFlags for a list
