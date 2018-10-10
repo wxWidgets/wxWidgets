@@ -1301,6 +1301,7 @@ enable_statusbar
 enable_taskbaricon
 enable_tbarnative
 enable_textctrl
+enable_timepick
 enable_tipwindow
 enable_togglebtn
 enable_toolbar
@@ -14053,25 +14054,25 @@ $as_echo "$result" >&6; }
               fi
           fi
 
-          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-datepick" >&5
-$as_echo_n "checking for --${enablestring:-enable}-datepick... " >&6; }
-          # Check whether --enable-datepick was given.
-if test "${enable_datepick+set}" = set; then :
-  enableval=$enable_datepick;
+          { $as_echo "$as_me:${as_lineno-$LINENO}: checking for --${enablestring:-enable}-timepick" >&5
+$as_echo_n "checking for --${enablestring:-enable}-timepick... " >&6; }
+          # Check whether --enable-timepick was given.
+if test "${enable_timepick+set}" = set; then :
+  enableval=$enable_timepick;
                           if test "$enableval" = yes; then
-                            wx_cv_use_datepick='wxUSE_TIMEPICKCTRL=yes'
+                            wx_cv_use_timepick='wxUSE_TIMEPICKCTRL=yes'
                           else
-                            wx_cv_use_datepick='wxUSE_TIMEPICKCTRL=no'
+                            wx_cv_use_timepick='wxUSE_TIMEPICKCTRL=no'
                           fi
 
 else
 
-                          wx_cv_use_datepick='wxUSE_TIMEPICKCTRL=${'DEFAULT_wxUSE_TIMEPICKCTRL":-$defaultval}"
+                          wx_cv_use_timepick='wxUSE_TIMEPICKCTRL=${'DEFAULT_wxUSE_TIMEPICKCTRL":-$defaultval}"
 
 fi
 
 
-          eval "$wx_cv_use_datepick"
+          eval "$wx_cv_use_timepick"
 
           if test x"$enablestring" = xdisable; then
             if test $wxUSE_TIMEPICKCTRL = no; then
