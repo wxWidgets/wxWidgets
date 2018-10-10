@@ -1601,6 +1601,11 @@
 #undef wxUSE_GRAPHICS_CONTEXT
 #define wxUSE_GRAPHICS_CONTEXT 1
 
+//wxUSE_DATAVIEWCTRL relies on wxUSE_DRAG_AND_DROP
+#if wxUSE_DATAVIEWCTRL
+#undef wxUSE_DRAG_AND_DROP
+#define wxUSE_DRAG_AND_DROP 1
+#endif
 
 // things not implemented under Mac
 
