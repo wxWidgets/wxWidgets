@@ -125,7 +125,7 @@ Update https://www.wxwidgets.org:
   more can be called for for major releases
 
 Post `docs/publicity/announce.txt` at least to wx-announce@googlegroups.com and
-to wx-users for the important releases.
+to wx-users.
 
 Submit a link to https://www.reddit.com/r/programming
 
