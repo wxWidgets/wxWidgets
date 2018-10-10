@@ -83,13 +83,16 @@ public:
     wxScopedPtr<wxString> m_combobox2_choice;
 
 #if defined(HAVE_STD_VARIANT)
-    typedef std::variant<int, wxString> VariantType;
+    typedef std::variant<wxString, int> VariantType;
+    typedef std::variant<wxString, int, wxString, wxString> VariantType2;
 #else
     typedef wxString VariantType;
+    typedef wxString VariantType2;
 #endif
 
     // use std::variant<> for combobox3
     VariantType m_combobox3_choice;
+    VariantType2 m_int_or_str;
 
     // variables handled by wxNumericTextValidator
     int m_intValue;

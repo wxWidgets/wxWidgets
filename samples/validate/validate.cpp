@@ -31,6 +31,8 @@
 #include "wx/valgen.h"
 #include "wx/valtext.h"
 #include "wx/valnum.h"
+#include "wx/valpnl.h"
+#include "wx/spinctrl.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -106,6 +108,56 @@ bool wxDataTransfer<wxComboBox>::DoValidate(wxComboBox* cb, wxWindow* parent)
 
 #if defined(HAVE_STD_VARIANT)
 
+class MyPanel 
+    : public wxMonoValidatorPanel<MyData::VariantType2, 
+                                  wxTextCtrl, wxSpinCtrl, wxComboBox, wxTextCtrl>
+{
+    using Base = wxMonoValidatorPanel<MyData::VariantType2, 
+                                      wxTextCtrl, wxSpinCtrl, wxComboBox, wxTextCtrl>;
+
+public:
+    MyPanel(wxWindow *parent)
+        : Base(parent, g_data.m_int_or_str)
+    {
+        wxSizer* const sizer = new wxFlexGridSizer(2, wxSize(5, 5));
+        sizer->Add(new wxStaticText(this, wxID_ANY, "Enter your &name:"),
+                   wxSizerFlags().Center().Right());
+        auto textName = new wxTextCtrl(this, wxID_ANY);
+        textName->SetHint("First Last");
+        sizer->Add(textName, wxSizerFlags().Expand().CenterVertical());
+
+        sizer->Add(new wxStaticText(this, wxID_ANY, "And your &age:"),
+                   wxSizerFlags().Center().Right());
+        auto spinAge = new wxSpinCtrl(this, wxID_ANY);
+        sizer->Add(spinAge, wxSizerFlags().Expand().CenterVertical());
+
+        sizer->Add(new wxStaticText(this, wxID_ANY, "Select any:"),
+                   wxSizerFlags().Center().Right());
+        auto combobox = new wxComboBox(this, wxID_ANY, wxEmptyString,
+                                wxDefaultPosition, wxDefaultSize,
+                                WXSIZEOF(g_combobox_choices), g_combobox_choices, 0L);
+        sizer->Add(combobox, wxSizerFlags().Expand().CenterVertical());
+
+        sizer->Add(new wxStaticText(this, wxID_ANY, "Enter your &job:"),
+                   wxSizerFlags().Center().Right());
+        auto textJob = new wxTextCtrl(this, wxID_ANY);
+        textJob->SetHint("Your job");
+        sizer->Add(textJob, wxSizerFlags().Expand().CenterVertical());
+
+        wxStaticBoxSizer* const
+            box = new wxStaticBoxSizer(wxVERTICAL, this, "wxWidgets box");
+        box->Add(sizer, wxSizerFlags(1).Expand());
+        SetSizer(box);
+
+        // We won't be resized automatically, so set our size ourselves.
+        SetSize(GetBestSize());
+
+        //
+        SetAlternatives(textName, spinAge, combobox, textJob);
+    }
+};
+
+
 static auto GetString(const MyData::VariantType& var)
 {
     return std::visit(wxVisitor{
@@ -113,6 +165,16 @@ static auto GetString(const MyData::VariantType& var)
                 [](const wxString& str){ return str; }
            }, var);
 }
+
+static auto GetString(const MyData::VariantType2& var)
+{
+    return std::visit(wxVisitor{
+                [](int i){ return wxString::Format("item(%d)", i); },
+                [](bool b){ return wxString::Format("%s", (b ? "Selected" : "Unselected")); },
+                [](const wxString& str){ return str; }
+           }, var);
+}
+
 #endif // defined(HAVE_STD_VARIANT)
 
 #else // wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
@@ -288,6 +350,7 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
         m_listbox->Append(wxString(wxT("combobox: ")) + g_data.m_combobox_choice);
         m_listbox->Append(wxString(wxT("combobox2: ")) + GetString(g_data.m_combobox2_choice));
         m_listbox->Append(wxString(wxT("combobox3: ")) + GetString(g_data.m_combobox3_choice));
+        m_listbox->Append(wxString(wxT("Int or Str: ")) + GetString(g_data.m_int_or_str));
         m_listbox->Append(wxString(wxT("radiobox: ")) + g_radiobox_choices[g_data.m_radiobox_choice]);
 
         m_listbox->Append(wxString::Format("integer value: %d", g_data.m_intValue));
@@ -370,6 +433,11 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     #if defined(HAVE_STD_VARIANT)
     wxSetGenericValidator(m_combobox3, g_data.m_combobox3_choice);
     m_combobox3->SetToolTip("uses generic validator (with validation, std::variant)");
+
+    MyPanel* const panel = new MyPanel(this);
+    combosizer->Add(panel, wxSizerFlags().Expand());
+    combosizer->AddSpacer(10);
+
     #else
     m_combobox3->Disable();
     #endif // defined(HAVE_STD_VARIANT)

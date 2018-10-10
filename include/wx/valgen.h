@@ -18,7 +18,6 @@
 #if wxUSE_DATATRANSFER
     #include "wx/private/datatransfer.h"
     #include "wx/debug.h"
-//  #include "wx/scopedptr.h"
     #include "wx/typeinfo.h"
 
     #if defined(HAVE_TYPE_TRAITS)
@@ -33,6 +32,7 @@
 
     #ifdef HAVE_STD_VARIANT
         #include <variant>
+        #include "wx/meta/typelist.h"
     #endif // HAVE_STD_VARIANT
 #endif // wxUSE_DATATRANSFER
 
@@ -323,6 +323,124 @@ public:
     }
 };
 
+
+template<class W, typename T, class... Ws, typename... Ts>
+class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts...>
+    : public wxGenericValidatorBase
+{
+    typedef std::variant<W*, Ws*...> WindowsType;
+    typedef std::variant<T, Ts...> CompositeType;
+
+    using WinDataTypes_ = typename wxTypeList::TList<std::pair<W, T>, std::pair<Ws, Ts>...>::Type;
+    using WinDataTypes  = typename wxTypeList::EraseDuplType<WinDataTypes_>::Type;
+
+
+    template<class W_, typename T_>
+    inline auto CreateLambdaTo()
+    {
+        return [](W_* win, T_& value)
+                {
+                    return wxDataTransfer<W_>::template To<T_>(win, &value);
+                };
+    }
+
+    template<typename... Pairs>
+    inline auto CreateLambdaToVistitor(wxTypeList::TList<Pairs...>)
+    {
+        return wxVisitor{
+                    [](auto*, auto&){ return false; },
+                    CreateLambdaTo<typename Pairs::first_type, 
+                                   typename Pairs::second_type>()...
+                };
+    }
+
+    template<class W_, typename T_>
+    inline auto CreateLambdaFrom()
+    {
+        return [](W_* win, T_& value)
+                {
+                    return wxDataTransfer<W_>::template From<T_>(win, &value);
+                };
+    }
+
+    template<typename... Pairs>
+    inline auto CreateLambdaFromVistitor(wxTypeList::TList<Pairs...>)
+    {
+        return wxVisitor{
+                    [](auto*, auto&){ return false; },
+                    CreateLambdaFrom<typename Pairs::first_type, 
+                                     typename Pairs::second_type>()...
+                };
+    }
+
+    template<class W_>
+    inline auto CreateLambdaValidate(wxWindow* parent)
+    {
+        return [=](W_* win)
+                {
+                    return wxDataTransfer<W_>::DoValidate(win, parent);
+                };
+    }
+
+
+    template<class... Ws_>
+    inline auto CreateValidateVisitor(wxWindow* parent, wxTypeList::TList<Ws_...>)
+    {
+        return wxVisitor{ CreateLambdaValidate<Ws_>(parent)... };
+    }
+
+public:
+
+    wxGenericValidatorCompositType(WindowsType& wins, CompositeType& data)
+        : wxGenericValidatorBase(std::addressof(data))
+        , m_wins(wins)
+    {
+        static_assert((sizeof...(Ws)==sizeof...(Ts)), "Parameter packs don't match!");
+    }
+
+    wxGenericValidatorCompositType(const wxGenericValidatorCompositType& val)
+        : wxGenericValidatorBase(val)
+        , m_wins(val.m_wins)
+    {
+    }
+
+    virtual ~wxGenericValidatorCompositType(){}
+
+    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorCompositType(*this); }
+
+    virtual void SetWindow(wxWindow *win) wxOVERRIDE
+    {
+        this->m_validatorWindow = win; 
+
+//        wxASSERT_MSG((wxTypeId(*win) == wxTypeId(W)), "Invalid window type!");
+    }
+
+    virtual bool Validate(wxWindow* parent) wxOVERRIDE
+    {
+        using WinTypes_ = typename wxTypeList::TList<W, Ws...>::Type;
+        using WinTypes  = typename wxTypeList::EraseDuplType<WinTypes_>::Type;
+
+        return std::visit(CreateValidateVisitor(parent, WinTypes{}), m_wins);
+    }
+
+    virtual bool TransferToWindow() wxOVERRIDE
+    {
+        CompositeType& data = *static_cast<CompositeType*>(this->m_data);
+
+        return std::visit(CreateLambdaToVistitor(WinDataTypes{}), m_wins, data);
+    }
+
+    virtual bool TransferFromWindow() wxOVERRIDE
+    {
+        CompositeType& data = *static_cast<CompositeType*>(this->m_data);
+
+        return std::visit(CreateLambdaFromVistitor(WinDataTypes{}), m_wins, data);
+    }
+
+private:
+    WindowsType& m_wins;
+};
+
 #endif // defined(HAVE_STD_VARIANT)
 
 //-----------------------------------------------------------------------------
@@ -357,6 +475,15 @@ template<class W, template<typename...> class TComposite, typename T, typename..
 inline void wxSetGenericValidator(W* win, TComposite<T, Ts...>& value)
 {
     win->SetValidator( wxGenericValidatorCompositType<W, TComposite, T, Ts...>(value) );
+}
+
+template<class Panel, 
+         template<typename...> class TWindows, 
+         template<typename...> class TComposite,
+         class W, typename T, class... Ws, typename... Ts>
+inline void wxSetGenericValidator(Panel* panel, TWindows<W*, Ws*...>& wins, TComposite<T, Ts...>& value)
+{
+    panel->SetValidator( wxGenericValidatorCompositType<TWindows<W, Ws...>, TComposite, T, Ts...>{wins, value} );
 }
 
 #else // !defined(HAVE_VARIADIC_TEMPLATES)
