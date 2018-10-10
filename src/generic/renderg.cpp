@@ -714,6 +714,8 @@ wxRendererGeneric::DrawCheckBox(wxWindow *WXUNUSED(win),
 
 wxSize wxRendererGeneric::GetCheckBoxSize(wxWindow *win)
 {
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
     return win->FromDIP(wxSize(16, 16));
 }
 

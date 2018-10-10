@@ -551,8 +551,13 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
 }
 
 wxSize
-wxRendererGTK::GetCheckBoxSize(wxWindow *WXUNUSED(win))
+wxRendererGTK::GetCheckBoxSize(wxWindow* win)
 {
+    // Even though we don't use the window in this implementation, still check
+    // that it's valid to avoid surprises when running the same code under the
+    // other platforms.
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
 #ifdef __WXGTK3__
     int min_width, min_height;
     wxGtkStyleContext sc;
