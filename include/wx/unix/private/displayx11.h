@@ -12,13 +12,13 @@
 
 #include "wx/defs.h"
 
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+
 #if wxUSE_DISPLAY
 
 #include "wx/log.h"
 #include "wx/translation.h"
-
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
 
 #ifdef HAVE_X11_EXTENSIONS_XF86VMODE_H
 
