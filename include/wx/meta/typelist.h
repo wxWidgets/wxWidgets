@@ -26,7 +26,28 @@ template <typename... Ts>
 struct TList 
 {
     using Type = TList;
-    static constexpr size_t Size() noexcept { return sizeof...(Ts); }
+    static wxCONSTEXPR size_t Size() /*noexcept*/ { return sizeof...(Ts) }
+};
+
+// ----------------------------------------------------------------------------
+// Computes the length of a typelist at compile-time
+// ----------------------------------------------------------------------------
+
+// for compilers supporting constexpr keyword, the static member function Size()
+// is the preferred way to get the length of the typelist at compile-time.
+// if not, you have to use Sizeof<TList<...>>::value to get the same effect.
+template <class TL> struct Sizeof;
+
+template <>
+struct Sizeof<TList<>>
+{
+    enum { value = 0 };
+};
+
+template <typename T, typename... Ts>
+struct Sizeof<Tlist<T, Ts...>>
+{
+    enum { value = 1 + Sizeof<Ts...>::value };
 };
 
 // ----------------------------------------------------------------------------

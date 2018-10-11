@@ -271,6 +271,26 @@ typedef short int WXTYPE;
     #endif
 #endif /* HAVE_VARIADIC_TEMPLATES */
 
+/* check for constexpr keyword support */
+#ifndef HAVE_CONSTEXPR
+    #if __cplusplus >= 201103L
+        /* All C++11 compilers should have it. */
+        #define HAVE_CONSTEXPR
+    #elif wxCHECK_VISUALC_VERSION(14)
+        #define HAVE_CONSTEXPR
+    #elif wxCHECK_GCC_VERSION(4, 6)
+        #define HAVE_CONSTEXPR
+    #elif WX_HAS_CLANG_FEATURE(cxx_constexpr)
+        #define HAVE_CONSTEXPR
+    #endif
+#endif /* !HAVE_CONSTEXPR */
+
+#ifdef HAVE_CONSTEXPR
+    #define wxCONSTEXPR constexpr
+#else /*  !HAVE_CONSTEXPR */
+    #define wxCONSTEXPR
+#endif /*  HAVE_CONSTEXPR */
+
 /* check for override keyword support */
 #ifndef HAVE_OVERRIDE
     #if __cplusplus >= 201103L
