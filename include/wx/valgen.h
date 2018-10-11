@@ -54,18 +54,22 @@ struct wxDataTransfer
     template<typename T>
     static bool To(wxWindow* win, void* data)
     {
-        return wxDataTransferImpl<Window>::To(static_cast<W*>(win), static_cast<T*>(data));
+        return wxDataTransferImpl<Window>::To(
+            static_cast<W*>(win), static_cast<T*>(data));
     }
 
     template<typename T>
     static bool From(wxWindow* win, void* data)
     {
-        return wxDataTransferImpl<Window>::From(static_cast<W*>(win), static_cast<T*>(data));
+        return wxDataTransferImpl<Window>::From(
+            static_cast<W*>(win), static_cast<T*>(data));
     }
 
       // No validation by default.
-      // specialize this function in your own code if you want to do any validation or filtering.
-    static bool DoValidate(W* WXUNUSED(win), wxWindow* WXUNUSED(parent)){ return true; }
+      // specialize this function in your own code if you want 
+      // to do any validation or filtering.
+    static bool DoValidate(W* WXUNUSED(win), wxWindow* WXUNUSED(parent))
+    { return true; }
 };
 
 // ----------------------------------------------------------------------------
@@ -80,7 +84,11 @@ public:
 
     virtual ~wxGenericValidatorBase(){}
 
-    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorBase(*this); }
+    virtual wxObject *Clone() const wxOVERRIDE 
+    {
+        return new wxGenericValidatorBase(*this); 
+    }
+
     bool Copy(const wxGenericValidatorBase& val);
 
 protected:
@@ -115,7 +123,10 @@ public:
 
     virtual ~wxGenericValidatorSimpleType(){}
 
-    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorSimpleType(*this); }
+    virtual wxObject *Clone() const wxOVERRIDE 
+    {
+        return new wxGenericValidatorSimpleType(*this); 
+    }
 
     virtual void SetWindow(wxWindow *win) wxOVERRIDE
     {
@@ -126,7 +137,8 @@ public:
 
     virtual bool Validate(wxWindow* parent) wxOVERRIDE
     {
-        return wxDataTransfer<W>::DoValidate(static_cast<W*>(this->GetWindow()), parent);
+        return wxDataTransfer<W>::DoValidate(
+            static_cast<W*>(this->GetWindow()), parent);
     }
 
     virtual bool TransferToWindow() wxOVERRIDE
@@ -171,18 +183,19 @@ class wxGenericValidatorCompositType : public wxGenericValidatorBase
     // Hint: a standard conforming smart pointer should have a nested element_type defined.
 
     template <typename U>
-    static auto IsSmartPtr(U const&) -> decltype(typename U::element_type(), std::true_type())
+    static auto IsSmartPtr(U const&) 
+    -> decltype(typename U::element_type(), std::true_type())
     {
         return std::true_type{};
     }
 
     static std::false_type IsSmartPtr(...) { return std::false_type{}; }
 
-    static auto NewValue(const T& value, const std::true_type&) -> decltype(new T(value))
-      { return new T{value}; }
-    static auto NewValue(const T& value, const std::false_type&) -> decltype(value)
-      { return value; }
+    static auto NewValue(const T& value, const std::true_type&) 
+    -> decltype(new T(value)){ return new T{value}; }
 
+    static auto NewValue(const T& value, const std::false_type&) 
+    -> decltype(value){ return value; }
 
 public:
 
@@ -198,7 +211,10 @@ public:
 
     virtual ~wxGenericValidatorCompositType(){}
 
-    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorCompositType(*this); }
+    virtual wxObject *Clone() const wxOVERRIDE 
+    {
+        return new wxGenericValidatorCompositType(*this);
+    }
 
     virtual void SetWindow(wxWindow *win) wxOVERRIDE
     {
@@ -209,7 +225,8 @@ public:
 
     virtual bool Validate(wxWindow* parent) wxOVERRIDE
     {
-        return wxDataTransfer<W>::DoValidate(static_cast<W*>(this->GetWindow()), parent);
+        return wxDataTransfer<W>::DoValidate(
+            static_cast<W*>(this->GetWindow()), parent);
     }
 
     virtual bool TransferToWindow() wxOVERRIDE
@@ -267,7 +284,8 @@ class wxGenericValidatorCompositType<W, std::variant, T, Ts...>
     {
         return [&](T_& value)
                 {
-                    return wxDataTransfer<W>::template To<T_>(this->GetWindow(), &value);
+                    return wxDataTransfer<W>::template To<T_>
+                            (this->GetWindow(), &value);
                 };
     }
 
@@ -276,7 +294,8 @@ class wxGenericValidatorCompositType<W, std::variant, T, Ts...>
     {
         return [&](T_& value)
                 {
-                    return wxDataTransfer<W>::template From<T_>(this->GetWindow(), &value);
+                    return wxDataTransfer<W>::template From<T_>
+                            (this->GetWindow(), &value);
                 };
     }
 
@@ -294,7 +313,10 @@ public:
 
     virtual ~wxGenericValidatorCompositType(){}
 
-    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorCompositType(*this); }
+    virtual wxObject *Clone() const wxOVERRIDE 
+    {
+        return new wxGenericValidatorCompositType(*this); 
+    }
 
     virtual void SetWindow(wxWindow *win) wxOVERRIDE
     {
@@ -305,21 +327,24 @@ public:
 
     virtual bool Validate(wxWindow* parent) wxOVERRIDE
     {
-        return wxDataTransfer<W>::DoValidate(static_cast<W*>(this->GetWindow()), parent);
+        return wxDataTransfer<W>::DoValidate(
+            static_cast<W*>(this->GetWindow()), parent);
     }
 
     virtual bool TransferToWindow() wxOVERRIDE
     {
         CompositeType& data = *static_cast<CompositeType*>(this->m_data);
 
-        return std::visit(wxVisitor{CreateLambdaTo<T>(), CreateLambdaFrom<Ts>()...}, data);
+        return std::visit(
+            wxVisitor{CreateLambdaTo<T>(), CreateLambdaFrom<Ts>()...}, data);
     }
 
     virtual bool TransferFromWindow() wxOVERRIDE
     {
         CompositeType& data = *static_cast<CompositeType*>(this->m_data);
 
-        return std::visit(wxVisitor{CreateLambdaFrom<T>(), CreateLambdaFrom<Ts>()...}, data);
+        return std::visit(
+            wxVisitor{CreateLambdaFrom<T>(), CreateLambdaFrom<Ts>()...}, data);
     }
 };
 
@@ -331,7 +356,8 @@ class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts
     typedef std::variant<W*, Ws*...> WindowsType;
     typedef std::variant<T, Ts...> CompositeType;
 
-    using WinDataTypes_ = typename wxTypeList::TList<std::pair<W, T>, std::pair<Ws, Ts>...>::Type;
+    using WinDataTypes_ = typename wxTypeList::TList<std::pair<W, T>, 
+                                                     std::pair<Ws, Ts>...>::Type;
     using WinDataTypes  = typename wxTypeList::EraseDuplType<WinDataTypes_>::Type;
 
 
@@ -406,7 +432,10 @@ public:
 
     virtual ~wxGenericValidatorCompositType(){}
 
-    virtual wxObject *Clone() const wxOVERRIDE { return new wxGenericValidatorCompositType(*this); }
+    virtual wxObject *Clone() const wxOVERRIDE 
+    {
+        return new wxGenericValidatorCompositType(*this); 
+    }
 
     virtual void SetWindow(wxWindow *win) wxOVERRIDE
     {
@@ -481,9 +510,13 @@ template<class Panel,
          template<typename...> class TWindows, 
          template<typename...> class TComposite,
          class W, typename T, class... Ws, typename... Ts>
-inline void wxSetGenericValidator(Panel* panel, TWindows<W*, Ws*...>& wins, TComposite<T, Ts...>& value)
+inline void wxSetGenericValidator(Panel* panel, 
+                                  TWindows<W*, Ws*...>& wins, 
+                                  TComposite<T, Ts...>& value)
 {
-    panel->SetValidator( wxGenericValidatorCompositType<TWindows<W, Ws...>, TComposite, T, Ts...>{wins, value} );
+    panel->SetValidator( 
+        wxGenericValidatorCompositType<TWindows<W, Ws...>, 
+                                       TComposite, T, Ts...>{wins, value} );
 }
 
 #else // !defined(HAVE_VARIADIC_TEMPLATES)
