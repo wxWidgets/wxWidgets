@@ -135,6 +135,11 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
     return YES;
 }
 
+- (BOOL) acceptsFirstResponder
+{
+    return YES;
+}
+
 @end
 
 bool wxGLCanvas::DoCreate(wxWindow *parent,
@@ -154,7 +159,7 @@ bool wxGLCanvas::DoCreate(wxWindow *parent,
     NSRect r = wxOSXGetFrameForControl( this, pos , size ) ;
     wxNSCustomOpenGLView* v = [[wxNSCustomOpenGLView alloc] initWithFrame:r];
     
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( this, v, false, true );
+    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( this, v );
     SetPeer(c);
     MacPostControlCreate(pos, size) ;
     return true;
