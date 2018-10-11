@@ -181,24 +181,7 @@ inline double wxRadToDeg(double rad) { return (rad * 180.0) / M_PI; }
 /* Compute the greatest common divisor of two positive integers */
 WXDLLIMPEXP_BASE unsigned int wxGCD(unsigned int u, unsigned int v);
 
-
-
-/* Count trailing zeros. Use optimised builtin where available. */
-/* Count trailing zeros. Use optimised builtin where available. */
-inline unsigned int wxCtz(unsigned x)
-{
-    wxCHECK_MSG(x > 0, 0, "Undefined for x == 0.");
-#ifdef __GNUC__
-   return __builtin_ctz(x);
-#else
-   int n;
-   n = 1;
-   if ((x & 0x0000FFFF) == 0) {n = n +16; x = x >>16;}
-   if ((x & 0x000000FF) == 0) {n = n + 8; x = x >> 8;}
-   if ((x & 0x0000000F) == 0) {n = n + 4; x = x >> 4;}
-   if ((x & 0x00000003) == 0) {n = n + 2; x = x >> 2;}
-   return n - (x & 1);
-#endif
-}
+/* Count trailing zeros */
+WXDLLIMPEXP_BASE unsigned int wxCTZ(unsigned x);
 
 #endif /* _WX_MATH_H_ */

@@ -2761,7 +2761,7 @@ public:
     int GetZPosition() const { return m_zPosition; }
     int GetButtonState() const { return m_buttonState; }
     int GetButtonChange() const { return m_buttonChange; }
-    int GetButtonOrdinal() const {return wxCtz(m_buttonChange); }
+    int GetButtonOrdinal() const { return wxCTZ(m_buttonChange); }
     int GetJoystick() const { return m_joyStick; }
 
     void SetJoystick(int stick) { m_joyStick = stick; }
