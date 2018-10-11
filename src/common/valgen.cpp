@@ -737,14 +737,12 @@ bool wxGenericValidatorBase::Copy(const wxGenericValidatorBase& val)
 
 #if wxUSE_BUTTON
 
-//template<>
 bool wxDataTransferImpl<wxButtonBase>::To(wxButtonBase* btn, wxString* data)
 {
     btn->SetLabel(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxButtonBase>::From(wxButtonBase* btn, wxString* data)
 {
     *data = btn->GetLabel();
@@ -757,14 +755,12 @@ bool wxDataTransferImpl<wxButtonBase>::From(wxButtonBase* btn, wxString* data)
 
 #if wxUSE_CHECKBOX
 
-//template<>
 bool wxDataTransferImpl<wxCheckBoxBase>::To(wxCheckBoxBase* ctrl, bool* data)
 {
     ctrl->SetValue(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxCheckBoxBase>::From(wxCheckBoxBase* ctrl, bool* data)
 {
     *data = ctrl->GetValue();
@@ -777,7 +773,6 @@ bool wxDataTransferImpl<wxCheckBoxBase>::From(wxCheckBoxBase* ctrl, bool* data)
 
 #if wxUSE_CHECKLISTBOX
 
-//template<>
 bool wxDataTransferImpl<wxCheckListBoxBase>::To(wxCheckListBoxBase* ctrl, wxArrayInt* arr)
 {
     size_t i, count = ctrl->GetCount();
@@ -792,7 +787,6 @@ bool wxDataTransferImpl<wxCheckListBoxBase>::To(wxCheckListBoxBase* ctrl, wxArra
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxCheckListBoxBase>::From(wxCheckListBoxBase* ctrl, wxArrayInt* arr)
 {
     arr->Clear();
@@ -812,27 +806,23 @@ bool wxDataTransferImpl<wxCheckListBoxBase>::From(wxCheckListBoxBase* ctrl, wxAr
 
 #if wxUSE_CHOICE
 
-//template<>
 bool wxDataTransferImpl<wxChoiceBase>::To(wxChoiceBase* ctrl, int* data)
 {
     ctrl->SetSelection(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxChoiceBase>::To(wxChoiceBase* ctrl, wxString* data)
 {
     return ctrl->SetStringSelection(*data);
 }
 
-//template<>
 bool wxDataTransferImpl<wxChoiceBase>::From(wxChoiceBase* ctrl, int* data)
 {
     *data = ctrl->GetSelection();
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxChoiceBase>::From(wxChoiceBase* ctrl, wxString* data)
 {
     *data = ctrl->GetStringSelection();
@@ -845,14 +835,12 @@ bool wxDataTransferImpl<wxChoiceBase>::From(wxChoiceBase* ctrl, wxString* data)
 
 #if wxUSE_COLLPANE
 
-//template<>
 bool wxDataTransferImpl<wxCollapsibleHeaderCtrlBase>::To(wxCollapsibleHeaderCtrlBase* ctrl, bool* value)
 {
     ctrl->SetCollapsed(*value);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxCollapsibleHeaderCtrlBase>::From(wxCollapsibleHeaderCtrlBase* ctrl, bool* value)
 {
     *value = ctrl->IsCollapsed();
@@ -861,14 +849,12 @@ bool wxDataTransferImpl<wxCollapsibleHeaderCtrlBase>::From(wxCollapsibleHeaderCt
 
 //-----------------------------------------------------------------------------
 
-//template<>
 bool wxDataTransferImpl<wxCollapsiblePaneBase>::To(wxCollapsiblePaneBase* ctrl, bool* data)
 {
     ctrl->Collapse(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxCollapsiblePaneBase>::From(wxCollapsiblePaneBase* ctrl, bool* data)
 {
     *data = ctrl->IsCollapsed();
@@ -881,14 +867,12 @@ bool wxDataTransferImpl<wxCollapsiblePaneBase>::From(wxCollapsiblePaneBase* ctrl
 
 #if wxUSE_COLOURPICKERCTRL
 
-//template<>
 bool wxDataTransferImpl<wxColourPickerCtrl>::To(wxColourPickerCtrl* ctrl, wxColour* data)
 {
     ctrl->SetColour(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxColourPickerCtrl>::From(wxColourPickerCtrl* ctrl, wxColour* data)
 {
     *data = ctrl->GetColour();
@@ -901,21 +885,18 @@ bool wxDataTransferImpl<wxColourPickerCtrl>::From(wxColourPickerCtrl* ctrl, wxCo
 
 #if wxUSE_COMBOBOX
 
-//template<>
 bool wxDataTransferImpl<wxComboBox>::To(wxComboBox* ctrl, int* data)
 {
     ctrl->SetSelection(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxComboBox>::From(wxComboBox* ctrl, int* data)
 {
     *data = ctrl->GetSelection();
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxComboBox>::To(wxComboBox* ctrl, wxString* data)
 {
     if ( !ctrl->SetStringSelection(*data) )
@@ -929,7 +910,6 @@ bool wxDataTransferImpl<wxComboBox>::To(wxComboBox* ctrl, wxString* data)
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxComboBox>::From(wxComboBox* ctrl, wxString* data)
 {
     if ( ctrl->GetWindowStyle() & wxCB_READONLY )
@@ -946,14 +926,12 @@ bool wxDataTransferImpl<wxComboBox>::From(wxComboBox* ctrl, wxString* data)
 
 #if wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
 
-//template<>
 bool wxDataTransferImpl<wxFileDirPickerCtrlBase>::To(wxFileDirPickerCtrlBase* ctrl, wxString* data)
 {
     ctrl->SetPath(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxFileDirPickerCtrlBase>::From(wxFileDirPickerCtrlBase* ctrl, wxString* data)
 {
     *data = ctrl->GetPath();
@@ -966,27 +944,23 @@ bool wxDataTransferImpl<wxFileDirPickerCtrlBase>::From(wxFileDirPickerCtrlBase* 
 
 #if wxUSE_FILEPICKERCTRL
 
-//template<>
 bool wxDataTransferImpl<wxFilePickerCtrl>::To(wxFilePickerCtrl* ctrl, wxFileName* data)
 {
     ctrl->SetFileName(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxFilePickerCtrl>::From(wxFilePickerCtrl* ctrl, wxFileName* data)
 {
     *data = ctrl->GetFileName();
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxFilePickerCtrl>::To(wxFilePickerCtrl* ctrl, wxString* data)
 {
     return wxDataTransferImpl<wxFileDirPickerCtrlBase>::To(ctrl, data);
 }
 
-//template<>
 bool wxDataTransferImpl<wxFilePickerCtrl>::From(wxFilePickerCtrl* ctrl, wxString* data)
 {
     return wxDataTransferImpl<wxFileDirPickerCtrlBase>::From(ctrl, data);
@@ -998,27 +972,24 @@ bool wxDataTransferImpl<wxFilePickerCtrl>::From(wxFilePickerCtrl* ctrl, wxString
 
 #if wxUSE_DIRPICKERCTRL
 
-//template<>
 bool wxDataTransferImpl<wxDirPickerCtrl>::To(wxDirPickerCtrl* ctrl, wxFileName* data)
 {
     ctrl->SetDirName(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxDirPickerCtrl>::From(wxDirPickerCtrl* ctrl, wxFileName* data)
 {
     *data = ctrl->GetDirName();
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxDirPickerCtrl>::To(wxDirPickerCtrl* ctrl, wxString* data)
 {
     return wxDataTransferImpl<wxFileDirPickerCtrlBase>::To(ctrl, data);
 }
 
-//template<>
+
 bool wxDataTransferImpl<wxDirPickerCtrl>::From(wxDirPickerCtrl* ctrl, wxString* data)
 {
     return wxDataTransferImpl<wxFileDirPickerCtrlBase>::From(ctrl, data);
@@ -1030,14 +1001,12 @@ bool wxDataTransferImpl<wxDirPickerCtrl>::From(wxDirPickerCtrl* ctrl, wxString* 
 
 #if wxUSE_FONTPICKERCTRL
 
-//template<>
 bool wxDataTransferImpl<wxFontPickerCtrl>::To(wxFontPickerCtrl* ctrl, wxFont* data)
 {
     ctrl->SetSelectedFont(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxFontPickerCtrl>::From(wxFontPickerCtrl* ctrl, wxFont* data)
 {
     *data = ctrl->GetSelectedFont();
@@ -1050,14 +1019,12 @@ bool wxDataTransferImpl<wxFontPickerCtrl>::From(wxFontPickerCtrl* ctrl, wxFont* 
 
 #if wxUSE_GAUGE
 
-//template<>
 bool wxDataTransferImpl<wxGaugeBase>::To(wxGaugeBase* ctrl, int* data)
 {
     ctrl->SetValue(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxGaugeBase>::From(wxGaugeBase* ctrl, int* data)
 {
     *data = ctrl->GetValue();
@@ -1070,7 +1037,6 @@ bool wxDataTransferImpl<wxGaugeBase>::From(wxGaugeBase* ctrl, int* data)
 
 #if wxUSE_LISTBOX
 
-//template<>
 bool wxDataTransferImpl<wxListBoxBase>::To(wxListBoxBase* ctrl, int* data)
 {
     wxASSERT( (ctrl->GetWindowStyle() & wxLB_SINGLE) );
@@ -1079,14 +1045,12 @@ bool wxDataTransferImpl<wxListBoxBase>::To(wxListBoxBase* ctrl, int* data)
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxListBoxBase>::From(wxListBoxBase* ctrl, int* data)
 {
     *data = ctrl->GetSelection();
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxListBoxBase>::To(wxListBoxBase* ctrl, wxArrayInt* arr)
 {
     wxASSERT( (ctrl->GetWindowStyle() & wxLB_MULTIPLE) );
@@ -1102,7 +1066,6 @@ bool wxDataTransferImpl<wxListBoxBase>::To(wxListBoxBase* ctrl, wxArrayInt* arr)
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxListBoxBase>::From(wxListBoxBase* ctrl, wxArrayInt* arr)
 {
     arr->Clear();
@@ -1122,14 +1085,12 @@ bool wxDataTransferImpl<wxListBoxBase>::From(wxListBoxBase* ctrl, wxArrayInt* ar
 
 #if wxUSE_RADIOBOX
 
-//template<>
 bool wxDataTransferImpl<wxRadioBoxBase>::To(wxRadioBoxBase* ctrl, int* data)
 {
     ctrl->SetSelection(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxRadioBoxBase>::From(wxRadioBoxBase* ctrl, int* data)
 {
     *data = ctrl->GetSelection();
@@ -1142,14 +1103,12 @@ bool wxDataTransferImpl<wxRadioBoxBase>::From(wxRadioBoxBase* ctrl, int* data)
 
 #if wxUSE_SCROLLBAR
 
-//template<>
 bool wxDataTransferImpl<wxScrollBarBase>::To(wxScrollBarBase* ctrl, int* data)
 {
     ctrl->SetThumbPosition(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxScrollBarBase>::From(wxScrollBarBase* ctrl, int* data)
 {
     *data = ctrl->GetThumbPosition();
@@ -1162,14 +1121,12 @@ bool wxDataTransferImpl<wxScrollBarBase>::From(wxScrollBarBase* ctrl, int* data)
 
 #if wxUSE_SLIDER
 
-//template<>
 bool wxDataTransferImpl<wxSliderBase>::To(wxSliderBase* ctrl, int* data)
 {
     ctrl->SetValue(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxSliderBase>::From(wxSliderBase* ctrl, int* data)
 {
     *data = ctrl->GetValue();
@@ -1182,14 +1139,12 @@ bool wxDataTransferImpl<wxSliderBase>::From(wxSliderBase* ctrl, int* data)
 
 #if wxUSE_SPINBTN
 
-//template<>
 bool wxDataTransferImpl<wxSpinButtonBase>::To(wxSpinButtonBase* ctrl, int* data)
 {
     ctrl->SetValue(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxSpinButtonBase>::From(wxSpinButtonBase* ctrl, int* data)
 {
     *data = ctrl->GetValue();
@@ -1218,14 +1173,12 @@ bool wxDataTransferImpl<wxSpinButtonBase>::From(wxSpinButtonBase* ctrl, int* dat
 
 // wxSpinCtrl
 
-//template<>
 bool wxDataTransferImpl<wxSpinCtrl>::To(wxSpinCtrl* ctrl, int* data)
 {
     ctrl->SetValue(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxSpinCtrl>::From(wxSpinCtrl* ctrl, int* data)
 {
     WX_TRANSFER_DATA_FROM_SPINCTRL(ctrl, data);
@@ -1234,14 +1187,12 @@ bool wxDataTransferImpl<wxSpinCtrl>::From(wxSpinCtrl* ctrl, int* data)
 
 // wxSpinCtrlDouble
 
-//template<>
 bool wxDataTransferImpl<wxSpinCtrlDouble>::To(wxSpinCtrlDouble* ctrl, double* data)
 {
     ctrl->SetValue(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxSpinCtrlDouble>::From(wxSpinCtrlDouble* ctrl, double* data)
 {
     WX_TRANSFER_DATA_FROM_SPINCTRLDOUBLE(ctrl, data);
@@ -1254,14 +1205,12 @@ bool wxDataTransferImpl<wxSpinCtrlDouble>::From(wxSpinCtrlDouble* ctrl, double* 
 
 #if wxUSE_SPLITTER
 
-//template<>
 bool wxDataTransferImpl<wxSplitterWindow>::To(wxSplitterWindow* win, int* data)
 {
     win->SetSashPosition(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxSplitterWindow>::From(wxSplitterWindow* win, int* data)
 {
     *data = win->GetSashPosition();
@@ -1274,14 +1223,12 @@ bool wxDataTransferImpl<wxSplitterWindow>::From(wxSplitterWindow* win, int* data
 
 #if wxUSE_STATTEXT
 
-//template<>
 bool wxDataTransferImpl<wxStaticTextBase>::To(wxStaticTextBase* ctrl, wxString* data)
 {
     ctrl->SetLabel(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxStaticTextBase>::From(wxStaticTextBase* ctrl, wxString* data)
 {
     *data = ctrl->GetLabel();
@@ -1294,21 +1241,18 @@ bool wxDataTransferImpl<wxStaticTextBase>::From(wxStaticTextBase* ctrl, wxString
 
 #if wxUSE_TEXTCTRL
 
-//template<>
 bool wxDataTransferImpl<wxTextCtrlBase>::To(wxTextCtrlBase* ctrl, wxString* data)
 {
     ctrl->SetValue(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxTextCtrlBase>::From(wxTextCtrlBase* ctrl, wxString* data)
 {
     *data = ctrl->GetValue();
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxTextCtrlBase>::To(wxTextCtrlBase* ctrl, int* data)
 {
     const wxString str = wxString::Format("%d", *data);
@@ -1316,14 +1260,12 @@ bool wxDataTransferImpl<wxTextCtrlBase>::To(wxTextCtrlBase* ctrl, int* data)
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxTextCtrlBase>::From(wxTextCtrlBase* ctrl, int* data)
 {
     *data = wxAtoi(ctrl->GetValue());
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxTextCtrlBase>::To(wxTextCtrlBase* ctrl, float* data)
 {
     const wxString str = wxString::Format("%g", *data);
@@ -1331,14 +1273,12 @@ bool wxDataTransferImpl<wxTextCtrlBase>::To(wxTextCtrlBase* ctrl, float* data)
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxTextCtrlBase>::From(wxTextCtrlBase* ctrl, float* data)
 {
     *data = static_cast<float>(wxAtof(ctrl->GetValue()));
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxTextCtrlBase>::To(wxTextCtrlBase* ctrl, double* data)
 {
     const wxString str = wxString::Format("%g", *data);
@@ -1346,21 +1286,18 @@ bool wxDataTransferImpl<wxTextCtrlBase>::To(wxTextCtrlBase* ctrl, double* data)
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxTextCtrlBase>::From(wxTextCtrlBase* ctrl, double* data)
 {
     *data = wxAtof(ctrl->GetValue());
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxTextCtrlBase>::To(wxTextCtrlBase* ctrl, wxFileName* data)
 {
     ctrl->SetValue(data->GetFullPath());
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxTextCtrlBase>::From(wxTextCtrlBase* ctrl, wxFileName* data)
 {
     *data = ctrl->GetValue();
@@ -1373,14 +1310,12 @@ bool wxDataTransferImpl<wxTextCtrlBase>::From(wxTextCtrlBase* ctrl, wxFileName* 
 
 #if wxUSE_TOGGLEBTN
 
-//template<>
 bool wxDataTransferImpl<wxToggleButtonBase>::To(wxToggleButtonBase* btn, bool* data)
 {
     btn->SetValue(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxToggleButtonBase>::From(wxToggleButtonBase* btn, bool* data)
 {
     *data = btn->GetValue();
@@ -1393,13 +1328,11 @@ bool wxDataTransferImpl<wxToggleButtonBase>::From(wxToggleButtonBase* btn, bool*
 
 #if wxUSE_CALENDARCTRL
 
-//template<>
 bool wxDataTransferImpl<wxCalendarCtrlBase>::To(wxCalendarCtrlBase* ctrl, wxDateTime* data)
 {
     return ctrl->SetDate(*data);
 }
 
-//template<>
 bool wxDataTransferImpl<wxCalendarCtrlBase>::From(wxCalendarCtrlBase* ctrl, wxDateTime* data)
 {
     *data = ctrl->GetDate();
@@ -1412,14 +1345,12 @@ bool wxDataTransferImpl<wxCalendarCtrlBase>::From(wxCalendarCtrlBase* ctrl, wxDa
 
 #if wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL
 
-//template<>
 bool wxDataTransferImpl<wxDateTimePickerCtrlBase>::To(wxDateTimePickerCtrlBase* ctrl, wxDateTime* data)
 {
     ctrl->SetValue(*data);
     return true;
 }
 
-//template<>
 bool wxDataTransferImpl<wxDateTimePickerCtrlBase>::From(wxDateTimePickerCtrlBase* ctrl, wxDateTime* data)
 {
     *data = ctrl->GetValue();
@@ -1428,6 +1359,6 @@ bool wxDataTransferImpl<wxDateTimePickerCtrlBase>::From(wxDateTimePickerCtrlBase
 
 #endif // wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL
 
-#endif // #if !wxUSE_DATATRANSFER || !wxCAN_USE_DATATRANSFER
+#endif // !wxUSE_DATATRANSFER || !wxCAN_USE_DATATRANSFER
 
 #endif // wxUSE_VALIDATORS
