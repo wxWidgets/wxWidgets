@@ -43,13 +43,13 @@
 // ----------------------------------------------------------------------------
 
 wxString g_listbox_choices[] =
-    {wxT("one"),  wxT("two"),  wxT("three")};
+    {"one",  "two",  "three"};
 
 wxString g_combobox_choices[] =
-    {wxT("yes"), wxT("no (doesn't validate)"), wxT("maybe"), wxT("accepted")};
+    {"yes", "no (doesn't validate)", "maybe", "accepted"};
 
 wxString g_radiobox_choices[] =
-    {wxT("green"), wxT("yellow"), wxT("red")};
+    {"green", "yellow", "red"};
 
 // initialization order matters (g_combobox_choices used in MyData ctor)
 MyData g_data;
@@ -63,7 +63,7 @@ MyData::MyData()
     // This string will be passed to an alpha-only validator, which
     // will complain because spaces aren't alpha. Note that validation
     // is performed only when 'OK' is pressed.
-    m_string = wxT("Spaces are invalid here");
+    m_string = "Spaces are invalid here";
     m_string2 = "Valid text";
     m_listbox_choices.Add(0);
     m_combobox_choice = g_combobox_choices[0];
@@ -267,7 +267,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create and display the main frame window.
-    MyFrame *frame = new MyFrame((wxFrame *) NULL, wxT("Validator Test"),
+    MyFrame *frame = new MyFrame((wxFrame *) NULL, "Validator Test",
                                  50, 50, 300, 250);
     frame->Show(true);
 
@@ -292,17 +292,17 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
 
     // Create a listbox to display the validated data.
     m_listbox = new wxListBox(this, wxID_ANY);
-    m_listbox->Append(wxString(wxT("Try 'File|Test' to see how validators work.")));
+    m_listbox->Append(wxString("Try 'File|Test' to see how validators work."));
 
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(VALIDATE_TEST_DIALOG, wxT("&Test dialog...\tCtrl-T"), wxT("Demonstrate validators"));
-    file_menu->AppendCheckItem(VALIDATE_TOGGLE_BELL, wxT("&Bell on error"), wxT("Toggle bell on error"));
+    file_menu->Append(VALIDATE_TEST_DIALOG, "&Test dialog...\tCtrl-T", "Demonstrate validators");
+    file_menu->AppendCheckItem(VALIDATE_TOGGLE_BELL, "&Bell on error", "Toggle bell on error");
     file_menu->AppendSeparator();
-    file_menu->Append(wxID_EXIT, wxT("E&xit"));
+    file_menu->Append(wxID_EXIT, "E&xit");
 
     wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(file_menu, wxT("&File"));
+    menu_bar->Append(file_menu, "&File");
     SetMenuBar(menu_bar);
 
     // All validators share a common (static) flag that controls
@@ -326,7 +326,7 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
     // and variables together. Values are transferred between them behind
     // the scenes, so here we don't have to query the controls for their
     // values.
-    MyDialog dialog(this, wxT("Validator demonstration"));
+    MyDialog dialog(this, "Validator demonstration");
 
     // When the dialog is displayed, validators automatically transfer
     // data from variables to their corresponding controls.
@@ -336,22 +336,22 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
         // automatically transferred to the variables we specified
         // when we created the validators.
         m_listbox->Clear();
-        m_listbox->Append(wxString(wxT("string: ")) + g_data.m_string);
-        m_listbox->Append(wxString(wxT("string #2: ")) + g_data.m_string2);
+        m_listbox->Append(wxString("string: ") + g_data.m_string);
+        m_listbox->Append(wxString("string #2: ") + g_data.m_string2);
 
         for(unsigned int i = 0; i < g_data.m_listbox_choices.GetCount(); ++i)
         {
             int j = g_data.m_listbox_choices[i];
-            m_listbox->Append(wxString(wxT("listbox choice(s): ")) + g_listbox_choices[j]);
+            m_listbox->Append(wxString("listbox choice(s): ") + g_listbox_choices[j]);
         }
 
-        wxString checkbox_state(g_data.m_checkbox_state ? wxT("checked") : wxT("unchecked"));
-        m_listbox->Append(wxString(wxT("checkbox: ")) + checkbox_state);
-        m_listbox->Append(wxString(wxT("combobox: ")) + g_data.m_combobox_choice);
-        m_listbox->Append(wxString(wxT("combobox2: ")) + GetString(g_data.m_combobox2_choice));
-        m_listbox->Append(wxString(wxT("combobox3: ")) + GetString(g_data.m_combobox3_choice));
-        m_listbox->Append(wxString(wxT("Int or Str: ")) + GetString(g_data.m_int_or_str));
-        m_listbox->Append(wxString(wxT("radiobox: ")) + g_radiobox_choices[g_data.m_radiobox_choice]);
+        wxString checkbox_state(g_data.m_checkbox_state ? "checked" : "unchecked");
+        m_listbox->Append(wxString("checkbox: ") + checkbox_state);
+        m_listbox->Append(wxString("combobox: ") + g_data.m_combobox_choice);
+        m_listbox->Append(wxString("combobox2: ") + GetString(g_data.m_combobox2_choice));
+        m_listbox->Append(wxString("combobox3: ") + GetString(g_data.m_combobox3_choice));
+        m_listbox->Append(wxString("Int or Str: ") + GetString(g_data.m_int_or_str));
+        m_listbox->Append(wxString("radiobox: ") + g_radiobox_choices[g_data.m_radiobox_choice]);
 
         m_listbox->Append(wxString::Format("integer value: %d", g_data.m_intValue));
         m_listbox->Append(wxString::Format("small int value: %u", g_data.m_smallIntValue));
@@ -457,7 +457,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     flexgridsizer->Add(combosizer, wxSizerFlags(1).Expand().Border(wxALL, 5));
 
-    wxCheckBox* const checkbox = new wxCheckBox(this, VALIDATE_CHECK, wxT("Sample checkbox"));
+    wxCheckBox* const checkbox = new wxCheckBox(this, VALIDATE_CHECK, "Sample checkbox");
     wxSetGenericValidator(checkbox, &g_data.m_checkbox_state);
 
     flexgridsizer->Add(checkbox, 1, wxALIGN_CENTER|wxALL, 15);
@@ -545,7 +545,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     mainsizer->Add(flexgridsizer, 1, wxGROW | wxALL, 10);
 
-    wxRadioBox* const radiobox = new wxRadioBox((wxWindow*)this, VALIDATE_RADIO, wxT("Pick a color"),
+    wxRadioBox* const radiobox = new wxRadioBox((wxWindow*)this, VALIDATE_RADIO, "Pick a color",
                                                 wxDefaultPosition, wxDefaultSize,
                                                 WXSIZEOF(g_radiobox_choices), g_radiobox_choices,
                                                 1, wxRA_SPECIFY_ROWS);
