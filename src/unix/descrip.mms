@@ -97,7 +97,7 @@ all : $(SOURCES)
 .ifdef __WXGTK__
 	library [--.lib]libwx_gtk.olb $(OBJECTS)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS2)
-	library [--.lib]libwx_motif.olb $(OBJECTS2)
+	library [--.lib]libwx_gtk.olb $(OBJECTS2)
 .else
 .ifdef __WXGTK2__
 	library [--.lib]libwx_gtk2.olb $(OBJECTS)
@@ -105,7 +105,7 @@ all : $(SOURCES)
 .ifdef __WXX11__
 	library [--.lib]libwx_x11_univ.olb $(OBJECTS)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS2)
-	library [--.lib]libwx_motif.olb $(OBJECTS2)
+	library [--.lib]libwx_x11.olb $(OBJECTS2)
 .endif
 .endif
 .endif
