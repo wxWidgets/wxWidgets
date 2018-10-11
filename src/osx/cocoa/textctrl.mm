@@ -40,7 +40,7 @@
         #include <fstream>
     #endif
 #endif
-
+#include "wx/math.h"
 #include "wx/filefn.h"
 #include "wx/sysopt.h"
 #include "wx/thread.h"
@@ -1075,27 +1075,37 @@ void wxNSTextViewControl::SetStyle(long start,
                                 long end,
                                 const wxTextAttr& style)
 {
+    NSMutableParagraphStyle *paragraphStyle;
+    NSRange range;
+    NSTextStorage *storage;
+    double indent = style.GetLeftIndent() * mm2pt / 10.0;
+    NSMutableDictionary* attrs;
     if ( !m_textView )
         return;
 
     if ( start == -1 && end == -1 )
     {
-        NSMutableDictionary* const
-            attrs = [NSMutableDictionary dictionaryWithCapacity:3];
+        attrs = [NSMutableDictionary dictionaryWithCapacity:4];
         if ( style.HasFont() )
             [attrs setValue:style.GetFont().OSXGetNSFont() forKey:NSFontAttributeName];
         if ( style.HasBackgroundColour() )
             [attrs setValue:style.GetBackgroundColour().OSXGetNSColor() forKey:NSBackgroundColorAttributeName];
         if ( style.HasTextColour() )
             [attrs setValue:style.GetTextColour().OSXGetNSColor() forKey:NSForegroundColorAttributeName];
-
-        [m_textView setTypingAttributes:attrs];
+        if( style.HasLeftIndent() )
+        {
+            storage = [m_textView textStorage];
+            NSInteger insPoint = [[[m_textView selectedRanges] objectAtIndex:0] rangeValue].location;
+            range = NSMakeRange(insPoint, storage.string.length - insPoint);
+        }
+        else
+            [m_textView setTypingAttributes:attrs];
     }
     else // Set the attributes just for this range.
     {
-        NSRange range = NSMakeRange(start, end-start);
+        range = NSMakeRange(start, end-start);
 
-        NSTextStorage* storage = [m_textView textStorage];
+        storage = [m_textView textStorage];
         if ( style.HasFont() )
             [storage addAttribute:NSFontAttributeName value:style.GetFont().OSXGetNSFont() range:range];
 
@@ -1104,6 +1114,20 @@ void wxNSTextViewControl::SetStyle(long start,
 
         if ( style.HasTextColour() )
             [storage addAttribute:NSForegroundColorAttributeName value:style.GetTextColour().OSXGetNSColor() range:range];
+        
+    }
+    if( style.HasLeftIndent() )
+    {
+        paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle setFirstLineHeadIndent: indent];
+        [paragraphStyle setHeadIndent: indent];
+        [storage addAttribute: NSParagraphStyleAttributeName value: paragraphStyle range: range];
+        if( start == -1 && end == -1 )
+        {
+            [attrs setValue: paragraphStyle forKey: NSParagraphStyleAttributeName];
+            [m_textView setTypingAttributes:attrs];
+        }
+        [paragraphStyle release];
     }
         
     if ( style.HasAlignment() )

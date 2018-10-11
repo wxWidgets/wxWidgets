@@ -1220,10 +1220,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_textrich->SetStyle(30, 40,
                          wxTextAttr(*wxGREEN, wxNullColour, *wxITALIC_FONT));
     m_textrich->SetDefaultStyle(wxTextAttr());
-    m_textrich->AppendText("\n\nFirst 10 characters should be in red\n");
-    m_textrich->AppendText("Next 10 characters should be in blue\n");
-    m_textrich->AppendText("Next 10 characters should be normal\n");
-    m_textrich->AppendText("And the next 10 characters should be green and italic\n");
+    m_textrich->AppendText(wxT("\n\nFirst 10 characters should be in red\n"));
+    m_textrich->AppendText(wxT("Next 10 characters should be in blue\n"));
+    m_textrich->AppendText(wxT("Next 10 characters should be normal\n"));
+    m_textrich->AppendText(wxT("And the next 10 characters should be green and italic\n"));
     m_textrich->SetDefaultStyle(wxTextAttr(*wxCYAN, *wxBLUE));
     m_textrich->AppendText("This text should be cyan on blue\n");
     m_textrich->SetDefaultStyle(wxTextAttr(*wxBLUE, *wxWHITE));
