@@ -169,6 +169,11 @@ int wxHeaderCtrl::GetColEnd(unsigned int idx) const
     return x + GetColumn(idx).GetWidth();
 }
 
+int wxHeaderCtrl::GetLastCol() const
+{
+    return m_colIndices[GetColumnCount() - 1];
+}
+
 unsigned int wxHeaderCtrl::FindColumnAtPoint(int xPhysical, bool *onSeparator) const
 {
     int pos = 0;
@@ -183,11 +188,12 @@ unsigned int wxHeaderCtrl::FindColumnAtPoint(int xPhysical, bool *onSeparator) c
 
         pos += col.GetWidth();
 
+        // TODO: don't hardcode sensitivity
+        const unsigned int position_sensitivity = 8;
+
         // if the column is resizable, check if we're approximatively over the
         // line separating it from the next column
-        //
-        // TODO: don't hardcode sensitivity
-        if ( col.IsResizeable() && abs(xLogical - pos) < 8 )
+        if ( col.IsResizeable() && abs(xLogical - pos) < position_sensitivity )
         {
             if ( onSeparator )
                 *onSeparator = true;
@@ -206,6 +212,20 @@ unsigned int wxHeaderCtrl::FindColumnAtPoint(int xPhysical, bool *onSeparator) c
     if ( onSeparator )
         *onSeparator = false;
     return COL_NONE;
+}
+
+unsigned int wxHeaderCtrl::FindColumnAtPointElseLast(int xPhysical, bool *onSeparator) const
+{
+    // FindColumnAtPoint(...) always handles onSeparator value
+    const unsigned int colIndexAtPoint = FindColumnAtPoint(xPhysical, onSeparator);
+
+    // valid column found?
+    if (colIndexAtPoint != COL_NONE)
+    {
+        return colIndexAtPoint;
+    }
+
+    return GetLastCol();
 }
 
 // ----------------------------------------------------------------------------
@@ -372,7 +392,7 @@ void wxHeaderCtrl::UpdateReorderingMarker(int xPhysical)
 
     // and also a hint indicating where it is going to be inserted if it's
     // dropped now
-    unsigned int col = FindColumnAtPoint(xPhysical);
+    unsigned int col = FindColumnAtPointElseLast(xPhysical);
     if ( col != COL_NONE )
     {
         static const int DROP_MARKER_WIDTH = 4;
@@ -415,7 +435,7 @@ bool wxHeaderCtrl::EndReordering(int xPhysical)
     ReleaseMouse();
 
     const int colOld = m_colBeingReordered,
-              colNew = FindColumnAtPoint(xPhysical);
+              colNew = FindColumnAtPointElseLast(xPhysical);
 
     m_colBeingReordered = COL_NONE;
 
@@ -425,7 +445,7 @@ bool wxHeaderCtrl::EndReordering(int xPhysical)
         return false;
     }
 
-    // the new drag location may not be valid, such as past the last column
+    // cannot proceed without a valid column index
     if ( colNew == COL_NONE)
     {
         return false;

@@ -82,6 +82,9 @@ private:
     // and the end position
     int GetColEnd(unsigned int idx) const;
 
+    // return the index of the last displayed column
+    int GetLastCol() const;
+
     // refresh the given column [only]; idx must be valid
     void RefreshCol(unsigned int idx);
 
@@ -97,6 +100,10 @@ private:
     // that this means that we return column 0 even if the position is over
     // column 1 but close enough to the divider separating it from column 0)
     unsigned int FindColumnAtPoint(int x, bool *onSeparator = NULL) const;
+
+    // returns FindColumnAtPoint(...) if the result is a valid column otherwise
+    // the index of the last displayed column (rightmost) is returned
+    unsigned int FindColumnAtPointElseLast(int xPhysical, bool *onSeparator = NULL) const;
 
     // return true if a drag resizing operation is currently in progress
     bool IsResizing() const;
