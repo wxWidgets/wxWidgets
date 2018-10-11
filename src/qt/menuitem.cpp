@@ -106,18 +106,17 @@ bool wxMenuItem::IsChecked() const
 }
 
 
-void wxMenuItem::SetBitmap(const wxBitmap& WXUNUSED(bitmap))
+void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
 {
-    wxMISSING_FUNCTION();
-}
-
-const wxBitmap &wxMenuItem::GetBitmap() const
-{
-    wxMISSING_FUNCTION();
-
-    static wxBitmap s_bitmap;
-
-    return s_bitmap;
+    if( m_kind == wxITEM_NORMAL )
+    {
+        m_bitmap = bitmap;
+        m_qtAction->setIcon( QIcon( *m_bitmap.GetHandle() ) );
+    }
+    else
+    {
+        wxFAIL_MSG("only normal menu items can have bitmaps");
+    }
 }
 
 QAction *wxMenuItem::GetHandle() const
