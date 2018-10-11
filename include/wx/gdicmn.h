@@ -1080,6 +1080,9 @@ extern WXDLLIMPEXP_DATA_CORE(const wxPoint) wxDefaultPosition;
 extern void WXDLLIMPEXP_CORE wxInitializeStockLists();
 extern void WXDLLIMPEXP_CORE wxDeleteStockLists();
 
+// Note: all the display-related functions here exist for compatibility only,
+// please use wxDisplay class in the new code
+
 // is the display colour (or monochrome)?
 extern bool WXDLLIMPEXP_CORE wxColourDisplay();
 

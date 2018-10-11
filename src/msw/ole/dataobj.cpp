@@ -1076,8 +1076,8 @@ bool wxBitmapDataObject::SetData(size_t WXUNUSED(len), const void *buf)
     wxCHECK_MSG( hbmp, FALSE, wxT("pasting/dropping invalid bitmap") );
 
     const BITMAPINFOHEADER * const pbmih = &pbmi->bmiHeader;
-    wxBitmap bitmap(pbmih->biWidth, pbmih->biHeight, pbmih->biBitCount);
-    bitmap.SetHBITMAP((WXHBITMAP)hbmp);
+    wxBitmap bitmap;
+    bitmap.InitFromHBITMAP((WXHBITMAP)hbmp, pbmih->biWidth, pbmih->biHeight, pbmih->biBitCount);
 
     // TODO: create wxPalette if the bitmap has any
 
@@ -1122,10 +1122,9 @@ bool wxBitmapDataObject2::SetData(size_t WXUNUSED(len), const void *pBuf)
         wxLogLastError(wxT("GetObject(HBITMAP)"));
     }
 
-    wxBitmap bitmap(bmp.bmWidth, bmp.bmHeight, bmp.bmBitsPixel);
-    bitmap.SetHBITMAP((WXHBITMAP)hbmp);
-
-    if ( !bitmap.IsOk() ) {
+    wxBitmap bitmap;
+    if ( !bitmap.InitFromHBITMAP((WXHBITMAP)hbmp, bmp.bmWidth, bmp.bmHeight, bmp.bmBitsPixel) )
+    {
         wxFAIL_MSG(wxT("pasting/dropping invalid bitmap"));
 
         return false;
@@ -1214,6 +1213,7 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format,
                                  size_t size, const void *pBuf)
 {
     HBITMAP hbmp;
+    int w, h, d;
     if ( format.GetFormatId() == CF_DIB )
     {
         // here we get BITMAPINFO struct followed by the actual bitmap bits and
@@ -1229,9 +1229,9 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format,
             wxLogLastError(wxT("CreateDIBitmap"));
         }
 
-        m_bitmap.SetWidth(pbmih->biWidth);
-        m_bitmap.SetHeight(pbmih->biHeight);
-        m_bitmap.SetDepth(pbmih->biBitCount);
+        w = pbmih->biWidth;
+        h = pbmih->biHeight;
+        d = pbmih->biBitCount;
     }
     else // CF_BITMAP
     {
@@ -1244,12 +1244,12 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format,
             wxLogLastError(wxT("GetObject(HBITMAP)"));
         }
 
-        m_bitmap.SetWidth(bmp.bmWidth);
-        m_bitmap.SetHeight(bmp.bmHeight);
-        m_bitmap.SetDepth(bmp.bmBitsPixel);
+        w = bmp.bmWidth;
+        h = bmp.bmHeight;
+        d = bmp.bmBitsPixel;
     }
 
-    m_bitmap.SetHBITMAP((WXHBITMAP)hbmp);
+    m_bitmap.InitFromHBITMAP((WXHBITMAP)hbmp, w, h, d);
 
     wxASSERT_MSG( m_bitmap.IsOk(), wxT("pasting invalid bitmap") );
 

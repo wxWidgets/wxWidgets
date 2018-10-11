@@ -46,6 +46,8 @@ if(wxBUILD_TOOLKIT MATCHES "^gtk*")
     set(WXGTK ON)
 elseif(wxBUILD_TOOLKIT MATCHES "^osx*")
     set(WXOSX ON)
+elseif(wxBUILD_TOOLKIT MATCHES "qt")
+    set(WXQT ON)
 endif()
 
 set(wxTOOLKIT_DEFINITIONS __WX${toolkit_upper}__)
@@ -113,7 +115,19 @@ if(WXGTK)
     endif()
 endif()
 
+if(WXQT)
+    set(QT_COMPONENTS Core Widgets Gui OpenGL Test)
+    foreach(QT_COMPONENT ${QT_COMPONENTS})
+        find_package(Qt5 COMPONENTS ${QT_COMPONENT} REQUIRED)
+        list(APPEND wxTOOLKIT_INCLUDE_DIRS ${Qt5${QT_COMPONENT}_INCLUDE_DIRS})
+        list(APPEND wxTOOLKIT_LIBRARIES ${Qt5${QT_COMPONENT}_LIBRARIES})
+        list(APPEND wxTOOLKIT_DEFINITIONS ${Qt5${QT_COMPONENT}_COMPILE_DEFINITIONS})
+    endforeach()
+    set(wxTOOLKIT_VERSION ${Qt5Core_VERSION})
+endif()
+
 if(APPLE)
     list(APPEND wxTOOLKIT_DEFINITIONS __WXMAC__ __WXOSX__)
 endif()
+
 endif() # wxUSE_GUI

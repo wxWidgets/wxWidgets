@@ -79,8 +79,8 @@ private:
     wxLog *m_logOld;
     void SetColumnImage(int col, int image);
 
-    void LogEvent(const wxListEvent& event, const wxChar *eventName);
-    void LogColEvent(const wxListEvent& event, const wxChar *eventName);
+    void LogEvent(const wxListEvent& event, const wxString& eventName);
+    void LogColEvent(const wxListEvent& event, const wxString& eventName);
 
     virtual wxString OnGetItemText(long item, long column) const wxOVERRIDE;
     virtual int OnGetItemColumnImage(long item, long column) const wxOVERRIDE;
@@ -97,7 +97,7 @@ private:
 class MyFrame: public wxFrame
 {
 public:
-    MyFrame(const wxChar *title);
+    MyFrame(const wxString& title);
     virtual ~MyFrame();
 
 protected:

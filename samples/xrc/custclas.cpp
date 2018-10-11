@@ -142,7 +142,7 @@ void MyResizableListCtrl::SetColumnWidths()
 
     // This is just a debug message in case you want to watch the
     // events scroll by as you resize.
-    wxLogDebug( wxT("Successfully set column widths") );
+    wxLogDebug( "Successfully set column widths" );
 }
 
 

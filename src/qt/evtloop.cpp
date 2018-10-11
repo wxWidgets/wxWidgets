@@ -259,16 +259,4 @@ wxGUIEventLoop::wxGUIEventLoop()
 {
 }
 
-#else // !wxUSE_GUI
-
-//#############################################################################
-
-#if wxUSE_CONSOLE_EVENTLOOP
-
-wxConsoleEventLoop::wxConsoleEventLoop()
-{
-}
-
-#endif // wxUSE_CONSOLE_EVENTLOOP
-
 #endif // wxUSE_GUI

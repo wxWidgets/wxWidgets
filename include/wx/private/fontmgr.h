@@ -204,7 +204,7 @@ public:
     wxFontMgrFontRefData(int size = wxDEFAULT,
                   wxFontFamily family = wxFONTFAMILY_DEFAULT,
                   wxFontStyle style = wxFONTSTYLE_NORMAL,
-                  wxFontWeight weight = wxFONTWEIGHT_NORMAL,
+                  int weight = wxFONTWEIGHT_NORMAL,
                   bool underlined = false,
                   const wxString& faceName = wxEmptyString,
                   wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
@@ -218,18 +218,18 @@ public:
 
     const wxNativeFontInfo *GetNativeFontInfo() const { return &m_info; }
 
-    int GetPointSize() const { return m_info.pointSize; }
+    float GetFractionalPointSize() const { return m_info.pointSize; }
     wxString GetFaceName() const { return m_info.faceName; }
     wxFontFamily GetFamily() const { return m_info.family; }
     wxFontStyle GetStyle() const { return m_info.style; }
-    wxFontWeight GetWeight() const { return m_info.weight; }
+    int GetNumericWeight() const { return m_info.weight; }
     bool GetUnderlined() const { return m_info.underlined; }
     wxFontEncoding GetEncoding() const { return m_info.encoding; }
 
-    void SetPointSize(int pointSize);
+    void SetFractionalPointSize(float pointSize);
     void SetFamily(wxFontFamily family);
     void SetStyle(wxFontStyle style);
-    void SetWeight(wxFontWeight weight);
+    void SetNumericWeight(int weight);
     void SetFaceName(const wxString& faceName);
     void SetUnderlined(bool underlined);
     void SetEncoding(wxFontEncoding encoding);

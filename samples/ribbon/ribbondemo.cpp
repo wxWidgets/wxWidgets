@@ -288,7 +288,7 @@ wxEND_EVENT_TABLE()
 #include "triangle.xpm"
 
 MyFrame::MyFrame()
-    : wxFrame(NULL, wxID_ANY, wxT("wxRibbon Sample Application"), wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE)
+    : wxFrame(NULL, wxID_ANY, "wxRibbon Sample Application", wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE)
 {
     m_ribbon = new wxRibbonBar(this,-1,wxDefaultPosition, wxDefaultSize, wxRIBBON_BAR_FLOW_HORIZONTAL
                                 | wxRIBBON_BAR_SHOW_PAGE_LABELS
@@ -298,8 +298,8 @@ MyFrame::MyFrame()
                                 );
 
     {
-        wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Examples"), ribbon_xpm);
-        wxRibbonPanel *toolbar_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Toolbar"), 
+        wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, "Examples", ribbon_xpm);
+        wxRibbonPanel *toolbar_panel = new wxRibbonPanel(home, wxID_ANY, "Toolbar", 
                                             wxNullBitmap, wxDefaultPosition, wxDefaultSize, 
                                             wxRIBBON_PANEL_NO_AUTO_MINIMISE |
                                             wxRIBBON_PANEL_EXT_BUTTON);
@@ -331,24 +331,24 @@ MyFrame::MyFrame()
                                 "This is the Print button tooltip\ndemonstrating a tooltip");
         toolbar->SetRows(2, 3);
 
-        wxRibbonPanel *selection_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Selection"), wxBitmap(selection_panel_xpm));
+        wxRibbonPanel *selection_panel = new wxRibbonPanel(home, wxID_ANY, "Selection", wxBitmap(selection_panel_xpm));
         wxRibbonButtonBar *selection = new wxRibbonButtonBar(selection_panel);
-        selection->AddButton(ID_SELECTION_EXPAND_V, wxT("Expand Vertically"), wxBitmap(expand_selection_v_xpm),
+        selection->AddButton(ID_SELECTION_EXPAND_V, "Expand Vertically", wxBitmap(expand_selection_v_xpm),
                                 "This is a tooltip for Expand Vertically\ndemonstrating a tooltip");
-        selection->AddButton(ID_SELECTION_EXPAND_H, wxT("Expand Horizontally"), wxBitmap(expand_selection_h_xpm), wxEmptyString);
-        selection->AddButton(ID_SELECTION_CONTRACT, wxT("Contract"), wxBitmap(auto_crop_selection_xpm), wxBitmap(auto_crop_selection_small_xpm));
+        selection->AddButton(ID_SELECTION_EXPAND_H, "Expand Horizontally", wxBitmap(expand_selection_h_xpm), wxEmptyString);
+        selection->AddButton(ID_SELECTION_CONTRACT, "Contract", wxBitmap(auto_crop_selection_xpm), wxBitmap(auto_crop_selection_small_xpm));
 
-        wxRibbonPanel *shapes_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Shapes"), wxBitmap(circle_small_xpm));
+        wxRibbonPanel *shapes_panel = new wxRibbonPanel(home, wxID_ANY, "Shapes", wxBitmap(circle_small_xpm));
         wxRibbonButtonBar *shapes = new wxRibbonButtonBar(shapes_panel);
-        shapes->AddButton(ID_CIRCLE, wxT("Circle"), wxBitmap(circle_xpm), wxBitmap(circle_small_xpm), 
+        shapes->AddButton(ID_CIRCLE, "Circle", wxBitmap(circle_xpm), wxBitmap(circle_small_xpm), 
                             wxNullBitmap, wxNullBitmap, wxRIBBON_BUTTON_NORMAL,
                             "This is a tooltip for the circle button\ndemonstrating another tooltip");
-        shapes->AddButton(ID_CROSS, wxT("Cross"), wxBitmap(cross_xpm), wxEmptyString);
-        shapes->AddHybridButton(ID_TRIANGLE, wxT("Triangle"), wxBitmap(triangle_xpm));
-        shapes->AddButton(ID_SQUARE, wxT("Square"), wxBitmap(square_xpm), wxEmptyString);
-        shapes->AddDropdownButton(ID_POLYGON, wxT("Other Polygon"), wxBitmap(hexagon_xpm), wxEmptyString);
+        shapes->AddButton(ID_CROSS, "Cross", wxBitmap(cross_xpm), wxEmptyString);
+        shapes->AddHybridButton(ID_TRIANGLE, "Triangle", wxBitmap(triangle_xpm));
+        shapes->AddButton(ID_SQUARE, "Square", wxBitmap(square_xpm), wxEmptyString);
+        shapes->AddDropdownButton(ID_POLYGON, "Other Polygon", wxBitmap(hexagon_xpm), wxEmptyString);
 
-        wxRibbonPanel *sizer_panel = new wxRibbonPanel(home, wxID_ANY, wxT("Panel with Sizer"), 
+        wxRibbonPanel *sizer_panel = new wxRibbonPanel(home, wxID_ANY, "Panel with Sizer", 
                                                     wxNullBitmap, wxDefaultPosition, wxDefaultSize, 
                                                     wxRIBBON_PANEL_DEFAULT_STYLE);
 
@@ -371,8 +371,8 @@ MyFrame::MyFrame()
         sizer_panelcombo2->SetMinSize(wxSize(150, -1));
 
         wxRibbonButtonBar* bar = new wxRibbonButtonBar(sizer_panel, wxID_ANY);
-        bar->AddButton(ID_BUTTON_XX, wxT("xx"), ribbon_xpm);
-        bar->AddButton(ID_BUTTON_XY, wxT("xy"), ribbon_xpm);
+        bar->AddButton(ID_BUTTON_XX, "xx", ribbon_xpm);
+        bar->AddButton(ID_BUTTON_XY, "xy", ribbon_xpm);
         // This prevents ribbon buttons in panels with sizer from collapsing.
         bar->SetButtonMinSizeClass(ID_BUTTON_XX, wxRIBBON_BUTTONBAR_BUTTON_LARGE);
         bar->SetButtonMinSizeClass(ID_BUTTON_XY, wxRIBBON_BUTTONBAR_BUTTON_LARGE);
@@ -387,112 +387,112 @@ MyFrame::MyFrame()
         sizer_panelsizer_h->Add(sizer_panelsizer_v, 0);
         sizer_panel->SetSizer(sizer_panelsizer_h);
 
-        wxFont label_font(8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_LIGHT);
+        wxFont label_font(wxFontInfo(8).Light());
         m_bitmap_creation_dc.SetFont(label_font);
 
-        wxRibbonPage* scheme = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Appearance"), eye_xpm);
+        wxRibbonPage* scheme = new wxRibbonPage(m_ribbon, wxID_ANY, "Appearance", eye_xpm);
         m_ribbon->GetArtProvider()->GetColourScheme(&m_default_primary,
             &m_default_secondary, &m_default_tertiary);
         wxRibbonPanel *provider_panel = new wxRibbonPanel(scheme, wxID_ANY,
-            wxT("Art"), wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
+            "Art", wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxRIBBON_PANEL_NO_AUTO_MINIMISE);
         wxRibbonButtonBar *provider_bar = new wxRibbonButtonBar(provider_panel, wxID_ANY);
-        provider_bar->AddButton(ID_DEFAULT_PROVIDER, wxT("Default Provider"),
+        provider_bar->AddButton(ID_DEFAULT_PROVIDER, "Default Provider",
             wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(32, 32)));
-        provider_bar->AddButton(ID_AUI_PROVIDER, wxT("AUI Provider"), aui_style_xpm);
-        provider_bar->AddButton(ID_MSW_PROVIDER, wxT("MSW Provider"), msw_style_xpm);
+        provider_bar->AddButton(ID_AUI_PROVIDER, "AUI Provider", aui_style_xpm);
+        provider_bar->AddButton(ID_MSW_PROVIDER, "MSW Provider", msw_style_xpm);
         wxRibbonPanel *primary_panel = new wxRibbonPanel(scheme, wxID_ANY,
-            wxT("Primary Colour"), colours_xpm);
+            "Primary Colour", colours_xpm);
         m_primary_gallery = PopulateColoursPanel(primary_panel,
             m_default_primary, ID_PRIMARY_COLOUR);
         wxRibbonPanel *secondary_panel = new wxRibbonPanel(scheme, wxID_ANY,
-            wxT("Secondary Colour"), colours_xpm);
+            "Secondary Colour", colours_xpm);
         m_secondary_gallery = PopulateColoursPanel(secondary_panel,
             m_default_secondary, ID_SECONDARY_COLOUR);
     }
     {
-        wxRibbonPage* page = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("UI Updated"), ribbon_xpm);
-        wxRibbonPanel *panel = new wxRibbonPanel(page, wxID_ANY, wxT("Enable/Disable"), ribbon_xpm);
+        wxRibbonPage* page = new wxRibbonPage(m_ribbon, wxID_ANY, "UI Updated", ribbon_xpm);
+        wxRibbonPanel *panel = new wxRibbonPanel(page, wxID_ANY, "Enable/Disable", ribbon_xpm);
         wxRibbonButtonBar *bar = new wxRibbonButtonBar(panel, wxID_ANY);
-        bar->AddButton(ID_DISABLED, wxT("Disabled"), ribbon_xpm);
-        bar->AddButton(ID_ENABLE,   wxT("Enable"), ribbon_xpm);
-        bar->AddButton(ID_DISABLE,  wxT("Disable"), ribbon_xpm);
-        bar->AddButton(ID_UI_ENABLE_UPDATED, wxT("Enable UI updated"), ribbon_xpm);
+        bar->AddButton(ID_DISABLED, "Disabled", ribbon_xpm);
+        bar->AddButton(ID_ENABLE,   "Enable", ribbon_xpm);
+        bar->AddButton(ID_DISABLE,  "Disable", ribbon_xpm);
+        bar->AddButton(ID_UI_ENABLE_UPDATED, "Enable UI updated", ribbon_xpm);
         bar->EnableButton(ID_DISABLED, false);
         m_bEnabled = true;
 
-        panel = new wxRibbonPanel(page, wxID_ANY, wxT("Toggle"), ribbon_xpm);
+        panel = new wxRibbonPanel(page, wxID_ANY, "Toggle", ribbon_xpm);
         bar = new wxRibbonButtonBar(panel, wxID_ANY);
-        bar->AddButton(ID_CHECK, wxT("Toggle"), ribbon_xpm);
-        bar->AddToggleButton(ID_UI_CHECK_UPDATED, wxT("Toggled UI updated"), ribbon_xpm);
+        bar->AddButton(ID_CHECK, "Toggle", ribbon_xpm);
+        bar->AddToggleButton(ID_UI_CHECK_UPDATED, "Toggled UI updated", ribbon_xpm);
         m_bChecked = true;
 
-        panel = new wxRibbonPanel(page, wxID_ANY, wxT("Change text"), ribbon_xpm);
+        panel = new wxRibbonPanel(page, wxID_ANY, "Change text", ribbon_xpm);
         bar = new wxRibbonButtonBar(panel, wxID_ANY);
-        bar->AddButton(ID_CHANGE_TEXT1, wxT("One"), ribbon_xpm);
-        bar->AddButton(ID_CHANGE_TEXT2, wxT("Two"), ribbon_xpm);
-        bar->AddButton(ID_UI_CHANGE_TEXT_UPDATED, wxT("Zero"), ribbon_xpm);
+        bar->AddButton(ID_CHANGE_TEXT1, "One", ribbon_xpm);
+        bar->AddButton(ID_CHANGE_TEXT2, "Two", ribbon_xpm);
+        bar->AddButton(ID_UI_CHANGE_TEXT_UPDATED, "Zero", ribbon_xpm);
 
         //Also set the general disabled text colour:
         wxRibbonArtProvider* artProvider = m_ribbon->GetArtProvider();
         wxColour tColour = artProvider->GetColor(wxRIBBON_ART_BUTTON_BAR_LABEL_COLOUR);
         artProvider->SetColor(wxRIBBON_ART_BUTTON_BAR_LABEL_DISABLED_COLOUR, tColour.MakeDisabled());
     }
-    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Empty Page"), empty_xpm);
+    new wxRibbonPage(m_ribbon, wxID_ANY, "Empty Page", empty_xpm);
     {
-        wxRibbonPage* page = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Another Page"), empty_xpm);
-        wxRibbonPanel *panel = new wxRibbonPanel(page, wxID_ANY, wxT("Page manipulation"), ribbon_xpm);
+        wxRibbonPage* page = new wxRibbonPage(m_ribbon, wxID_ANY, "Another Page", empty_xpm);
+        wxRibbonPanel *panel = new wxRibbonPanel(page, wxID_ANY, "Page manipulation", ribbon_xpm);
         wxRibbonButtonBar *bar = new wxRibbonButtonBar(panel, wxID_ANY);
-        bar->AddButton(ID_REMOVE_PAGE, wxT("Remove"), wxArtProvider::GetBitmap(wxART_DELETE, wxART_OTHER, wxSize(24, 24)));
-        bar->AddButton(ID_HIDE_PAGES, wxT("Hide Pages"), ribbon_xpm);
-        bar->AddButton(ID_SHOW_PAGES, wxT("Show Pages"), ribbon_xpm);
+        bar->AddButton(ID_REMOVE_PAGE, "Remove", wxArtProvider::GetBitmap(wxART_DELETE, wxART_OTHER, wxSize(24, 24)));
+        bar->AddButton(ID_HIDE_PAGES, "Hide Pages", ribbon_xpm);
+        bar->AddButton(ID_SHOW_PAGES, "Show Pages", ribbon_xpm);
 
-        panel = new wxRibbonPanel(page, wxID_ANY, wxT("Button bar manipulation"), ribbon_xpm);
+        panel = new wxRibbonPanel(page, wxID_ANY, "Button bar manipulation", ribbon_xpm);
         m_mutable_button_bar = new wxRibbonButtonBar(panel, wxID_ANY);
-        m_mutable_button_bar->AddButton(ID_PLUS_MINUS, wxT("+/-"),
+        m_mutable_button_bar->AddButton(ID_PLUS_MINUS, "+/-",
             wxArtProvider::GetBitmap(wxART_PLUS, wxART_OTHER, wxSize(24, 24)));
         m_plus_minus_state = false;
-        m_mutable_button_bar->AddButton(ID_CHANGE_LABEL, wxT("short"), ribbon_xpm);
-        m_mutable_button_bar->SetButtonTextMinWidth(ID_CHANGE_LABEL, wxT("some long text"));
+        m_mutable_button_bar->AddButton(ID_CHANGE_LABEL, "short", ribbon_xpm);
+        m_mutable_button_bar->SetButtonTextMinWidth(ID_CHANGE_LABEL, "some long text");
         m_change_label_state = false;
 
-        panel = new wxRibbonPanel(page, wxID_ANY, wxT("Always medium buttons"), ribbon_xpm);
+        panel = new wxRibbonPanel(page, wxID_ANY, "Always medium buttons", ribbon_xpm);
         bar = new wxRibbonButtonBar(panel, wxID_ANY);
-        bar->AddButton(ID_SMALL_BUTTON_1, wxT("Button 1"), ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_1, "Button 1", ribbon_xpm);
         bar->SetButtonMaxSizeClass(ID_SMALL_BUTTON_1, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
-        bar->AddButton(ID_SMALL_BUTTON_2, wxT("Button 2"), ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_2, "Button 2", ribbon_xpm);
         bar->SetButtonMaxSizeClass(ID_SMALL_BUTTON_2, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
-        bar->AddButton(ID_SMALL_BUTTON_3, wxT("Button 3"), ribbon_xpm);
-        bar->AddButton(ID_SMALL_BUTTON_4, wxT("Button 4"), ribbon_xpm);
-        bar->AddButton(ID_SMALL_BUTTON_5, wxT("Button 5"), ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_3, "Button 3", ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_4, "Button 4", ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_5, "Button 5", ribbon_xpm);
         bar->SetButtonMaxSizeClass(ID_SMALL_BUTTON_5, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
-        bar->AddButton(ID_SMALL_BUTTON_6, wxT("Button 6"), ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_6, "Button 6", ribbon_xpm);
         bar->SetButtonMaxSizeClass(ID_SMALL_BUTTON_6, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
     }
-    new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Highlight Page"), empty_xpm);
+    new wxRibbonPage(m_ribbon, wxID_ANY, "Highlight Page", empty_xpm);
     m_ribbon->AddPageHighlight(m_ribbon->GetPageCount()-1);
 
     {
-        wxRibbonPage* page = new wxRibbonPage(m_ribbon, wxID_ANY, wxT("Advanced"), empty_xpm);
-        wxRibbonPanel* panel = new wxRibbonPanel(page, wxID_ANY, wxT("Button bar manipulation"), ribbon_xpm);
+        wxRibbonPage* page = new wxRibbonPage(m_ribbon, wxID_ANY, "Advanced", empty_xpm);
+        wxRibbonPanel* panel = new wxRibbonPanel(page, wxID_ANY, "Button bar manipulation", ribbon_xpm);
         m_mutable_button_bar = new wxRibbonButtonBar(panel, wxID_ANY);
-        m_mutable_button_bar->AddButton(ID_PLUS_MINUS, wxT("+/-"),
+        m_mutable_button_bar->AddButton(ID_PLUS_MINUS, "+/-",
             wxArtProvider::GetBitmap(wxART_PLUS, wxART_OTHER, wxSize(24, 24)));
         m_plus_minus_state = false;
-        m_mutable_button_bar->AddButton(ID_CHANGE_LABEL, wxT("short"), ribbon_xpm);
-        m_mutable_button_bar->SetButtonTextMinWidth(ID_CHANGE_LABEL, wxT("some long text"));
+        m_mutable_button_bar->AddButton(ID_CHANGE_LABEL, "short", ribbon_xpm);
+        m_mutable_button_bar->SetButtonTextMinWidth(ID_CHANGE_LABEL, "some long text");
         m_change_label_state = false;
 
-        panel = new wxRibbonPanel(page, wxID_ANY, wxT("Always medium buttons"), ribbon_xpm);
+        panel = new wxRibbonPanel(page, wxID_ANY, "Always medium buttons", ribbon_xpm);
         wxRibbonButtonBar* bar = new wxRibbonButtonBar(panel, wxID_ANY);
-        bar->AddButton(ID_SMALL_BUTTON_1, wxT("Button 1"), ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_1, "Button 1", ribbon_xpm);
         bar->SetButtonMaxSizeClass(ID_SMALL_BUTTON_1, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
-        bar->AddButton(ID_SMALL_BUTTON_2, wxT("Button 2"), ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_2, "Button 2", ribbon_xpm);
         bar->SetButtonMaxSizeClass(ID_SMALL_BUTTON_2, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
-        bar->AddButton(ID_SMALL_BUTTON_3, wxT("Button 3"), ribbon_xpm);
-        bar->AddButton(ID_SMALL_BUTTON_4, wxT("Button 4"), ribbon_xpm);
-        bar->AddButton(ID_SMALL_BUTTON_5, wxT("Button 5"), ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_3, "Button 3", ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_4, "Button 4", ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_5, "Button 5", ribbon_xpm);
         bar->SetButtonMaxSizeClass(ID_SMALL_BUTTON_5, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
-        bar->AddButton(ID_SMALL_BUTTON_6, wxT("Button 6"), ribbon_xpm);
+        bar->AddButton(ID_SMALL_BUTTON_6, "Button 6", ribbon_xpm);
         bar->SetButtonMaxSizeClass(ID_SMALL_BUTTON_6, wxRIBBON_BUTTONBAR_BUTTON_MEDIUM);
     }
 
@@ -567,45 +567,45 @@ wxRibbonGallery* MyFrame::PopulateColoursPanel(wxWindow* panel,
         gallery = new wxRibbonGallery(panel, gallery_id);
     wxMemoryDC& dc = m_bitmap_creation_dc;
     wxRibbonGalleryItem *def_item =
-        AddColourToGallery(gallery, wxT("Default"), dc, &def);
+        AddColourToGallery(gallery, "Default", dc, &def);
     gallery->SetSelection(def_item);
-    AddColourToGallery(gallery, wxT("BLUE"), dc);
-    AddColourToGallery(gallery, wxT("BLUE VIOLET"), dc);
-    AddColourToGallery(gallery, wxT("BROWN"), dc);
-    AddColourToGallery(gallery, wxT("CADET BLUE"), dc);
-    AddColourToGallery(gallery, wxT("CORAL"), dc);
-    AddColourToGallery(gallery, wxT("CYAN"), dc);
-    AddColourToGallery(gallery, wxT("DARK GREEN"), dc);
-    AddColourToGallery(gallery, wxT("DARK ORCHID"), dc);
-    AddColourToGallery(gallery, wxT("FIREBRICK"), dc);
-    AddColourToGallery(gallery, wxT("GOLD"), dc);
-    AddColourToGallery(gallery, wxT("GOLDENROD"), dc);
-    AddColourToGallery(gallery, wxT("GREEN"), dc);
-    AddColourToGallery(gallery, wxT("INDIAN RED"), dc);
-    AddColourToGallery(gallery, wxT("KHAKI"), dc);
-    AddColourToGallery(gallery, wxT("LIGHT BLUE"), dc);
-    AddColourToGallery(gallery, wxT("LIME GREEN"), dc);
-    AddColourToGallery(gallery, wxT("MAGENTA"), dc);
-    AddColourToGallery(gallery, wxT("MAROON"), dc);
-    AddColourToGallery(gallery, wxT("NAVY"), dc);
-    AddColourToGallery(gallery, wxT("ORANGE"), dc);
-    AddColourToGallery(gallery, wxT("ORCHID"), dc);
-    AddColourToGallery(gallery, wxT("PINK"), dc);
-    AddColourToGallery(gallery, wxT("PLUM"), dc);
-    AddColourToGallery(gallery, wxT("PURPLE"), dc);
-    AddColourToGallery(gallery, wxT("RED"), dc);
-    AddColourToGallery(gallery, wxT("SALMON"), dc);
-    AddColourToGallery(gallery, wxT("SEA GREEN"), dc);
-    AddColourToGallery(gallery, wxT("SIENNA"), dc);
-    AddColourToGallery(gallery, wxT("SKY BLUE"), dc);
-    AddColourToGallery(gallery, wxT("TAN"), dc);
-    AddColourToGallery(gallery, wxT("THISTLE"), dc);
-    AddColourToGallery(gallery, wxT("TURQUOISE"), dc);
-    AddColourToGallery(gallery, wxT("VIOLET"), dc);
-    AddColourToGallery(gallery, wxT("VIOLET RED"), dc);
-    AddColourToGallery(gallery, wxT("WHEAT"), dc);
-    AddColourToGallery(gallery, wxT("WHITE"), dc);
-    AddColourToGallery(gallery, wxT("YELLOW"), dc);
+    AddColourToGallery(gallery, "BLUE", dc);
+    AddColourToGallery(gallery, "BLUE VIOLET", dc);
+    AddColourToGallery(gallery, "BROWN", dc);
+    AddColourToGallery(gallery, "CADET BLUE", dc);
+    AddColourToGallery(gallery, "CORAL", dc);
+    AddColourToGallery(gallery, "CYAN", dc);
+    AddColourToGallery(gallery, "DARK GREEN", dc);
+    AddColourToGallery(gallery, "DARK ORCHID", dc);
+    AddColourToGallery(gallery, "FIREBRICK", dc);
+    AddColourToGallery(gallery, "GOLD", dc);
+    AddColourToGallery(gallery, "GOLDENROD", dc);
+    AddColourToGallery(gallery, "GREEN", dc);
+    AddColourToGallery(gallery, "INDIAN RED", dc);
+    AddColourToGallery(gallery, "KHAKI", dc);
+    AddColourToGallery(gallery, "LIGHT BLUE", dc);
+    AddColourToGallery(gallery, "LIME GREEN", dc);
+    AddColourToGallery(gallery, "MAGENTA", dc);
+    AddColourToGallery(gallery, "MAROON", dc);
+    AddColourToGallery(gallery, "NAVY", dc);
+    AddColourToGallery(gallery, "ORANGE", dc);
+    AddColourToGallery(gallery, "ORCHID", dc);
+    AddColourToGallery(gallery, "PINK", dc);
+    AddColourToGallery(gallery, "PLUM", dc);
+    AddColourToGallery(gallery, "PURPLE", dc);
+    AddColourToGallery(gallery, "RED", dc);
+    AddColourToGallery(gallery, "SALMON", dc);
+    AddColourToGallery(gallery, "SEA GREEN", dc);
+    AddColourToGallery(gallery, "SIENNA", dc);
+    AddColourToGallery(gallery, "SKY BLUE", dc);
+    AddColourToGallery(gallery, "TAN", dc);
+    AddColourToGallery(gallery, "THISTLE", dc);
+    AddColourToGallery(gallery, "TURQUOISE", dc);
+    AddColourToGallery(gallery, "VIOLET", dc);
+    AddColourToGallery(gallery, "VIOLET RED", dc);
+    AddColourToGallery(gallery, "WHEAT", dc);
+    AddColourToGallery(gallery, "WHITE", dc);
+    AddColourToGallery(gallery, "YELLOW", dc);
 
     return gallery;
 }
@@ -651,7 +651,7 @@ void MyFrame::OnPrimaryColourSelect(wxRibbonGalleryEvent& evt)
 {
     wxString name;
     wxColour colour = GetGalleryColour(evt.GetGallery(), evt.GetGalleryItem(), &name);
-    AddText(wxT("Colour \"") + name + wxT("\" selected as primary."));
+    AddText("Colour \"" + name + "\" selected as primary.");
     wxColour secondary, tertiary;
     m_ribbon->GetArtProvider()->GetColourScheme(NULL, &secondary, &tertiary);
     m_ribbon->GetArtProvider()->SetColourScheme(colour, secondary, tertiary);
@@ -663,7 +663,7 @@ void MyFrame::OnSecondaryColourSelect(wxRibbonGalleryEvent& evt)
 {
     wxString name;
     wxColour colour = GetGalleryColour(evt.GetGallery(), evt.GetGalleryItem(), &name);
-    AddText(wxT("Colour \"") + name + wxT("\" selected as secondary."));
+    AddText("Colour \"" + name + "\" selected as secondary.");
     wxColour primary, tertiary;
     m_ribbon->GetArtProvider()->GetColourScheme(&primary, NULL, &tertiary);
     m_ribbon->GetArtProvider()->SetColourScheme(primary, colour, tertiary);
@@ -687,12 +687,12 @@ void MyFrame::ResetGalleryArtProviders()
 
 void MyFrame::OnChangeText1(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
-    m_new_text = wxT("One");
+    m_new_text = "One";
 }
 
 void MyFrame::OnChangeText2(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
-    m_new_text = wxT("Two");
+    m_new_text = "Two";
 }
 
 void MyFrame::OnEnable(wxRibbonButtonBarEvent& WXUNUSED(evt))
@@ -735,64 +735,64 @@ void MyFrame::OnChangeTextUpdateUI(wxUpdateUIEvent& evt)
     if ( !m_new_text.IsEmpty() )
     {
         evt.SetText(m_new_text);
-        m_new_text = wxT("");
+        m_new_text = "";
     }
 }
 
 void MyFrame::OnSelectionExpandHButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
-    AddText(wxT("Expand selection horizontally button clicked."));
+    AddText("Expand selection horizontally button clicked.");
 }
 
 void MyFrame::OnSelectionExpandVButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
-    AddText(wxT("Expand selection vertically button clicked."));
+    AddText("Expand selection vertically button clicked.");
 }
 
 void MyFrame::OnSelectionContractButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
-    AddText(wxT("Contract selection button clicked."));
+    AddText("Contract selection button clicked.");
 }
 
 void MyFrame::OnCircleButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
-    AddText(wxT("Circle button clicked."));
+    AddText("Circle button clicked.");
 }
 
 void MyFrame::OnCrossButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
-    AddText(wxT("Cross button clicked."));
+    AddText("Cross button clicked.");
 }
 
 void MyFrame::OnTriangleButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
-    AddText(wxT("Triangle button clicked."));
+    AddText("Triangle button clicked.");
 }
 
 void MyFrame::OnTriangleDropdown(wxRibbonButtonBarEvent& evt)
 {
     wxMenu menu;
-    menu.Append(wxID_ANY, wxT("Equilateral"));
-    menu.Append(wxID_ANY, wxT("Isosceles"));
-    menu.Append(wxID_ANY, wxT("Scalene"));
+    menu.Append(wxID_ANY, "Equilateral");
+    menu.Append(wxID_ANY, "Isosceles");
+    menu.Append(wxID_ANY, "Scalene");
 
     evt.PopupMenu(&menu);
 }
 
 void MyFrame::OnSquareButton(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
-    AddText(wxT("Square button clicked."));
+    AddText("Square button clicked.");
 }
 
 void MyFrame::OnPolygonDropdown(wxRibbonButtonBarEvent& evt)
 {
     wxMenu menu;
-    menu.Append(wxID_ANY, wxT("Pentagon (5 sided)"));
-    menu.Append(wxID_ANY, wxT("Hexagon (6 sided)"));
-    menu.Append(wxID_ANY, wxT("Heptagon (7 sided)"));
-    menu.Append(wxID_ANY, wxT("Octogon (8 sided)"));
-    menu.Append(wxID_ANY, wxT("Nonagon (9 sided)"));
-    menu.Append(wxID_ANY, wxT("Decagon (10 sided)"));
+    menu.Append(wxID_ANY, "Pentagon (5 sided)");
+    menu.Append(wxID_ANY, "Hexagon (6 sided)");
+    menu.Append(wxID_ANY, "Heptagon (7 sided)");
+    menu.Append(wxID_ANY, "Octogon (8 sided)");
+    menu.Append(wxID_ANY, "Nonagon (9 sided)");
+    menu.Append(wxID_ANY, "Decagon (10 sided)");
 
     evt.PopupMenu(&menu);
 }
@@ -833,30 +833,30 @@ void MyFrame::OnJustifyUpdateUI(wxUpdateUIEvent& evt)
 
 void MyFrame::OnNew(wxRibbonToolBarEvent& WXUNUSED(evt))
 {
-    AddText(wxT("New button clicked."));
+    AddText("New button clicked.");
 }
 
 void MyFrame::OnNewDropdown(wxRibbonToolBarEvent& evt)
 {
     wxMenu menu;
-    menu.Append(wxID_ANY, wxT("New Document"));
-    menu.Append(wxID_ANY, wxT("New Template"));
-    menu.Append(wxID_ANY, wxT("New Mail"));
+    menu.Append(wxID_ANY, "New Document");
+    menu.Append(wxID_ANY, "New Template");
+    menu.Append(wxID_ANY, "New Mail");
 
     evt.PopupMenu(&menu);
 }
 
 void MyFrame::OnPrint(wxRibbonToolBarEvent& WXUNUSED(evt))
 {
-    AddText(wxT("Print button clicked."));
+    AddText("Print button clicked.");
 }
 
 void MyFrame::OnPrintDropdown(wxRibbonToolBarEvent& evt)
 {
     wxMenu menu;
-    menu.Append(wxID_ANY, wxT("Print"));
-    menu.Append(wxID_ANY, wxT("Preview"));
-    menu.Append(wxID_ANY, wxT("Options"));
+    menu.Append(wxID_ANY, "Print");
+    menu.Append(wxID_ANY, "Preview");
+    menu.Append(wxID_ANY, "Options");
 
     evt.PopupMenu(&menu);
 }
@@ -864,9 +864,9 @@ void MyFrame::OnPrintDropdown(wxRibbonToolBarEvent& evt)
 void MyFrame::OnRedoDropdown(wxRibbonToolBarEvent& evt)
 {
     wxMenu menu;
-    menu.Append(wxID_ANY, wxT("Redo E"));
-    menu.Append(wxID_ANY, wxT("Redo F"));
-    menu.Append(wxID_ANY, wxT("Redo G"));
+    menu.Append(wxID_ANY, "Redo E");
+    menu.Append(wxID_ANY, "Redo F");
+    menu.Append(wxID_ANY, "Redo G");
 
     evt.PopupMenu(&menu);
 }
@@ -874,9 +874,9 @@ void MyFrame::OnRedoDropdown(wxRibbonToolBarEvent& evt)
 void MyFrame::OnUndoDropdown(wxRibbonToolBarEvent& evt)
 {
     wxMenu menu;
-    menu.Append(wxID_ANY, wxT("Undo C"));
-    menu.Append(wxID_ANY, wxT("Undo B"));
-    menu.Append(wxID_ANY, wxT("Undo A"));
+    menu.Append(wxID_ANY, "Undo C");
+    menu.Append(wxID_ANY, "Undo B");
+    menu.Append(wxID_ANY, "Undo A");
 
     evt.PopupMenu(&menu);
 }
@@ -922,9 +922,9 @@ void MyFrame::OnPositionTop(wxRibbonToolBarEvent& evt)
 void MyFrame::OnPositionTopDropdown(wxRibbonToolBarEvent& evt)
 {
     wxMenu menu;
-    menu.Append(ID_POSITION_TOP, wxT("Top with Labels"));
-    menu.Append(ID_POSITION_TOP_ICONS, wxT("Top with Icons"));
-    menu.Append(ID_POSITION_TOP_BOTH, wxT("Top with Both"));
+    menu.Append(ID_POSITION_TOP, "Top with Labels");
+    menu.Append(ID_POSITION_TOP_ICONS, "Top with Icons");
+    menu.Append(ID_POSITION_TOP_BOTH, "Top with Both");
     evt.PopupMenu(&menu);
 }
 
@@ -936,9 +936,9 @@ void MyFrame::OnPositionLeft(wxRibbonToolBarEvent& evt)
 void MyFrame::OnPositionLeftDropdown(wxRibbonToolBarEvent& evt)
 {
     wxMenu menu;
-    menu.Append(ID_POSITION_LEFT, wxT("Left with Icons"));
-    menu.Append(ID_POSITION_LEFT_LABELS, wxT("Left with Labels"));
-    menu.Append(ID_POSITION_LEFT_BOTH, wxT("Left with Both"));
+    menu.Append(ID_POSITION_LEFT, "Left with Icons");
+    menu.Append(ID_POSITION_LEFT_LABELS, "Left with Labels");
+    menu.Append(ID_POSITION_LEFT_BOTH, "Left with Both");
     evt.PopupMenu(&menu);
 }
 
@@ -955,7 +955,7 @@ void MyFrame::OnExtButton(wxRibbonPanelEvent& WXUNUSED(evt))
 void MyFrame::AddText(wxString msg)
 {
     m_logwindow->AppendText(msg);
-    m_logwindow->AppendText(wxT("\n"));
+    m_logwindow->AppendText("\n");
     m_ribbon->DismissExpandedPanel();
 }
 
@@ -965,7 +965,7 @@ wxRibbonGalleryItem* MyFrame::AddColourToGallery(wxRibbonGallery *gallery,
 {
     wxRibbonGalleryItem* item = NULL;
     wxColour c;
-    if (colour != wxT("Default"))
+    if (colour != "Default")
         c = wxColour(colour);
     if (!c.IsOk())
         c = *value;
@@ -1132,12 +1132,12 @@ void MyFrame::OnChangeLabel(wxRibbonButtonBarEvent& WXUNUSED(evt))
 {
     if(m_change_label_state)
     {
-        m_mutable_button_bar->SetButtonText(ID_CHANGE_LABEL, wxT("short"));
+        m_mutable_button_bar->SetButtonText(ID_CHANGE_LABEL, "short");
         m_change_label_state = false;
     }
     else
     {
-        m_mutable_button_bar->SetButtonText(ID_CHANGE_LABEL, wxT("some long text"));
+        m_mutable_button_bar->SetButtonText(ID_CHANGE_LABEL, "some long text");
         m_change_label_state = true;
     }
 }

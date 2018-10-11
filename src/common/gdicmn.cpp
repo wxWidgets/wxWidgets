@@ -16,6 +16,8 @@
 #endif
 
 #include "wx/gdicmn.h"
+
+#include "wx/display.h"
 #include "wx/gdiobj.h"
 
 #ifndef WX_PRECOMP
@@ -843,34 +845,73 @@ wxFont *wxFontList::FindOrCreateFont(int pointSize,
     return font;
 }
 
+int wxDisplayDepth()
+{
+    return wxDisplay().GetDepth();
+}
+
+bool wxColourDisplay()
+{
+    // If GetDepth() returns 0, meaning unknown, we assume it's a colour
+    // display, hence the use of "!=" rather than ">" here.
+    return wxDisplay().GetDepth() != 1;
+}
+
+void wxDisplaySize(int *width, int *height)
+{
+    const wxSize size = wxGetDisplaySize();
+    if ( width )
+        *width = size.x;
+    if ( height )
+        *height = size.y;
+}
+
 wxSize wxGetDisplaySize()
 {
-    int x, y;
-    wxDisplaySize(& x, & y);
-    return wxSize(x, y);
+    return wxDisplay().GetGeometry().GetSize();
+}
+
+void wxClientDisplayRect(int *x, int *y, int *width, int *height)
+{
+    const wxRect rect = wxGetClientDisplayRect();
+    if ( x )
+        *x = rect.x;
+    if ( y )
+        *y = rect.y;
+    if ( width )
+        *width = rect.width;
+    if ( height )
+        *height = rect.height;
 }
 
 wxRect wxGetClientDisplayRect()
 {
-    int x, y, width, height;
-    wxClientDisplayRect(&x, &y, &width, &height);  // call plat-specific version
-    return wxRect(x, y, width, height);
+    return wxDisplay().GetClientArea();
+}
+
+void wxDisplaySizeMM(int *width, int *height)
+{
+    const wxSize size = wxGetDisplaySizeMM();
+    if ( width )
+        *width = size.x;
+    if ( height )
+        *height = size.y;
 }
 
 wxSize wxGetDisplaySizeMM()
 {
-    int x, y;
-    wxDisplaySizeMM(& x, & y);
-    return wxSize(x, y);
+    const wxSize ppi = wxGetDisplayPPI();
+    if ( !ppi.x || !ppi.y )
+        return wxSize(0, 0);
+
+    const wxSize pixels = wxGetDisplaySize();
+    return wxSize(wxRound(pixels.x * inches2mm / ppi.x),
+                  wxRound(pixels.y * inches2mm / ppi.y));
 }
 
 wxSize wxGetDisplayPPI()
 {
-    const wxSize pixels = wxGetDisplaySize();
-    const wxSize mm = wxGetDisplaySizeMM();
-
-    return wxSize((int)((pixels.x * inches2mm) / mm.x),
-                  (int)((pixels.y * inches2mm) / mm.y));
+    return wxDisplay().GetPPI();
 }
 
 wxResourceCache::~wxResourceCache ()

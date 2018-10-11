@@ -512,6 +512,12 @@ dnl ### begin block 20_COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_G
         COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1=""
     fi
     AC_SUBST(COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1)
+dnl ### begin block 20_COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0[wx.bkl] ###
+    COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0="#"
+    if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0=""
+    fi
+    AC_SUBST(COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0)
 dnl ### begin block 20_COND_SHARED_0[wx.bkl] ###
     COND_SHARED_0="#"
     if test "x$SHARED" = "x0" ; then
@@ -530,12 +536,6 @@ dnl ### begin block 20_COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0[../../samples/dialogs/
         COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0=""
     fi
     AC_SUBST(COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0)
-dnl ### begin block 20_COND_SHARED_0_TOOLKIT_PM_WXUNIV_0[../../samples/dialogs/dialogs.bkl] ###
-    COND_SHARED_0_TOOLKIT_PM_WXUNIV_0="#"
-    if test "x$SHARED" = "x0" -a "x$TOOLKIT" = "xPM" -a "x$WXUNIV" = "x0" ; then
-        COND_SHARED_0_TOOLKIT_PM_WXUNIV_0=""
-    fi
-    AC_SUBST(COND_SHARED_0_TOOLKIT_PM_WXUNIV_0)
 dnl ### begin block 20_COND_SHARED_0_USE_GUI_1_USE_OPENGL_1[wx.bkl] ###
     COND_SHARED_0_USE_GUI_1_USE_OPENGL_1="#"
     if test "x$SHARED" = "x0" -a "x$USE_GUI" = "x1" -a "x$USE_OPENGL" = "x1" ; then
@@ -818,12 +818,6 @@ dnl ### begin block 20_COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0[wx.bkl] ###
         COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0=""
     fi
     AC_SUBST(COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0)
-dnl ### begin block 20_COND_TOOLKIT_Qt[wx.bkl] ###
-    COND_TOOLKIT_Qt="#"
-    if test "x$TOOLKIT" = "xQt" ; then
-        COND_TOOLKIT_Qt=""
-    fi
-    AC_SUBST(COND_TOOLKIT_Qt)
 dnl ### begin block 20_COND_TOOLKIT_X11[wx.bkl] ###
     COND_TOOLKIT_X11="#"
     if test "x$TOOLKIT" = "xX11" ; then

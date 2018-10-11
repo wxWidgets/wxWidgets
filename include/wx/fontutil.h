@@ -118,9 +118,14 @@ public:
     // set the XFLD
     void SetXFontName(const wxString& xFontName);
 #elif defined(__WXMSW__)
-    wxNativeFontInfo(const LOGFONT& lf_) : lf(lf_) { }
+    wxNativeFontInfo(const LOGFONT& lf_) : lf(lf_), pointSize(0.0f) { }
 
     LOGFONT      lf;
+
+    // MSW only has limited support for fractional point sizes and we need to
+    // store the fractional point size separately if it was initially specified
+    // as we can't losslessly recover it from LOGFONT later.
+    float        pointSize;
 #elif defined(__WXOSX__)
 public:
     wxNativeFontInfo(const wxNativeFontInfo& info) { Init(info); }
@@ -185,10 +190,10 @@ public :
     //
     #define wxNO_NATIVE_FONTINFO
 
-    int           pointSize;
+    float         pointSize;
     wxFontFamily  family;
     wxFontStyle   style;
-    wxFontWeight  weight;
+    int           weight;
     bool          underlined;
     bool          strikethrough;
     wxString      faceName;
@@ -229,16 +234,16 @@ public:
 #else
         // translate all font parameters
         SetStyle((wxFontStyle)font.GetStyle());
-        SetWeight((wxFontWeight)font.GetWeight());
+        SetNumericWeight(font.GetNumericWeight());
         SetUnderlined(font.GetUnderlined());
         SetStrikethrough(font.GetStrikethrough());
 #if defined(__WXMSW__)
         if ( font.IsUsingSizeInPixels() )
             SetPixelSize(font.GetPixelSize());
         else
-            SetPointSize(font.GetPointSize());
+            SetFractionalPointSize(font.GetFractionalPointSize());
 #else
-        SetPointSize(font.GetPointSize());
+        SetFractionalPointSize(font.GetFractionalPointSize());
 #endif
 
         // set the family/facename
@@ -268,7 +273,8 @@ public:
     wxFontFamily GetFamily() const;
     wxFontEncoding GetEncoding() const;
 
-    void SetPointSize(float pointsize);
+    void SetPointSize(int pointsize);
+    void SetFractionalPointSize(float pointsize);
     void SetPixelSize(const wxSize& pixelSize);
     void SetStyle(wxFontStyle style);
     void SetNumericWeight(int weight);
@@ -278,6 +284,17 @@ public:
     bool SetFaceName(const wxString& facename);
     void SetFamily(wxFontFamily family);
     void SetEncoding(wxFontEncoding encoding);
+
+    // Helper used in many ports: use the normal font size if the input is
+    // negative, as we handle -1 as meaning this for compatibility.
+    void SetSizeOrDefault(float size)
+    {
+        SetFractionalPointSize
+        (
+            size < 0 ? wxNORMAL_FONT->GetFractionalPointSize()
+                     : size
+        );
+    }
 
     // sets the first facename in the given array which is found
     // to be valid. If no valid facename is given, sets the

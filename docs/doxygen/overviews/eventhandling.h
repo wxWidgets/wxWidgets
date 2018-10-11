@@ -575,7 +575,7 @@ all events (or any selection of them) to the parent window.
 
 @subsection overview_events_nexthandler Event Handlers Chain
 
-The step 4 of the event propagation algorithm checks for the next handler in
+The step 5 of the event propagation algorithm checks for the next handler in
 the event handler chain. This chain can be formed using
 wxEvtHandler::SetNextHandler():
         @image html overview_events_chain.png

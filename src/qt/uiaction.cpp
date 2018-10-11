@@ -12,6 +12,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_UIACTIONSIMULATOR
+
 #include "wx/uiaction.h"
 #include "wx/private/uiaction.h"
 
@@ -24,16 +26,14 @@
 #include "wx/qt/private/converter.h"
 
 
-#if wxUSE_UIACTIONSIMULATOR
-
 using namespace Qt;
 using namespace QTest;
 
 // Apparently {mouse,key}Event() functions signature has changed from QWidget
 // to QWindow at some time during Qt5, but we don't know when exactly. We do
-// know that they take QWindow for 5.3 and, presumably, later versions (but not
+// know that they take QWindow for 5.2 and, presumably, later versions (but not
 // for whichever version this code was originally written for).
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 3, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 2, 0))
 inline QWindow* argForEvents(QWidget* w) { return w->windowHandle(); }
 #else
 inline QWidget* argForEvents(QWidget* w) { return w; }

@@ -189,7 +189,29 @@ BASE_OSX_NOTWXMAC_HDR =
 
 ## Qt
 
+QT_WIN32_SRC=
+    src/msw/ole/automtn.cpp
+    src/msw/ole/comimpl.cpp
+    src/msw/ole/oleutils.cpp
+    src/msw/ole/safearray.cpp
+    src/msw/ole/uuid.cpp
+    src/msw/dialup.cpp
+    src/msw/dib.cpp
+    src/msw/joystick.cpp
+    src/msw/sound.cpp
+
+QT_WIN32_HDR=
+    wx/msw/ole/automtn.h
+    wx/msw/ole/comimpl.h
+    wx/msw/ole/oleutils.h
+    wx/msw/ole/safearray.h
+    wx/msw/ole/uuid.h
+    wx/msw/dib.h
+    wx/msw/joystick.h
+    wx/msw/sound.h
+
 QT_HDR =
+    $(QT_PLATFORM_HDR)
     wx/generic/activityindicator.h
     wx/generic/animate.h
     wx/generic/caret.h
@@ -204,8 +226,6 @@ QT_HDR =
     wx/qt/accel.h
     wx/qt/anybutton.h
     wx/qt/app.h
-    wx/qt/apptbase.h
-    wx/qt/apptrait.h
     wx/qt/bitmap.h
     wx/qt/bmpbuttn.h
     wx/qt/brush.h
@@ -220,7 +240,6 @@ QT_HDR =
     wx/qt/colour.h
     wx/qt/combobox.h
     wx/qt/control.h
-    wx/qt/converter.h
     wx/qt/ctrlsub.h
     wx/qt/cursor.h
     wx/qt/dataform.h
@@ -258,7 +277,6 @@ QT_HDR =
     wx/qt/popupwin.h
     wx/qt/printdlg.h
     wx/qt/printqt.h
-    wx/qt/private/winevent.h
     wx/qt/radiobox.h
     wx/qt/radiobut.h
     wx/qt/region.h
@@ -273,17 +291,15 @@ QT_HDR =
     wx/qt/statusbar.h
     wx/qt/taskbar.h
     wx/qt/textctrl.h
-    wx/qt/textdlg.h
     wx/qt/textentry.h
     wx/qt/tglbtn.h
-    wx/qt/timer.h
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
-    wx/qt/utils.h
     wx/qt/window.h
 
 QT_SRC=
+    $(QT_PLATFORM_SRC)
     src/common/taskbarcmn.cpp
     src/generic/activityindicator.cpp
     src/generic/animateg.cpp
@@ -315,7 +331,6 @@ QT_SRC=
     src/qt/colour.cpp
     src/qt/combobox.cpp
     src/qt/control.cpp
-    src/qt/converter.cpp
     src/qt/converter.cpp
     src/qt/ctrlsub.cpp
     src/qt/cursor.cpp
@@ -378,14 +393,16 @@ QT_SRC=
     src/qt/toplevel.cpp
     src/qt/uiaction.cpp
     src/qt/utils.cpp
-    src/qt/utils.cpp
     src/qt/window.cpp
-    src/unix/dialup.cpp
-    src/unix/joystick.cpp
-    src/unix/sound.cpp
 
 MEDIA_QT_SRC=
     src/qt/mediactrl.cpp
+
+OPENGL_QT_HDR=
+    wx/qt/glcanvas.h
+
+OPENGL_QT_SRC=
+    src/qt/glcanvas.cpp
 
 ## Common
 
@@ -971,7 +988,6 @@ GUI_CMN_HDR =
     wx/dirctrl.h
     wx/dirdlg.h
     wx/display.h
-    wx/display_impl.h
     wx/dnd.h
     wx/docmdi.h
     wx/docview.h
@@ -1205,7 +1221,6 @@ XWIN_LOWLEVEL_SRC =
     src/generic/caret.cpp
     src/generic/imaglist.cpp
     src/unix/dialup.cpp
-    src/unix/displayx11.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
     src/unix/joystick.cpp
@@ -1470,6 +1485,7 @@ GTK2_HDR =
 
 GTK1_LOWLEVEL_SRC =
     $(XWIN_LOWLEVEL_SRC)
+    src/unix/displayx11.cpp
     src/generic/icon.cpp
     src/generic/paletteg.cpp
     src/generic/textmeasure.cpp
@@ -1635,6 +1651,7 @@ GTK1_HDR =
 
 MOTIF_LOWLEVEL_SRC =
     $(XWIN_LOWLEVEL_SRC)
+    src/unix/displayx11.cpp
     src/generic/textmeasure.cpp
     src/x11/bitmap.cpp
     src/x11/brush.cpp
@@ -1798,6 +1815,7 @@ MOTIF_HDR =
 
 X11_LOWLEVEL_SRC =
     $(XWIN_LOWLEVEL_SRC)
+    src/unix/displayx11.cpp
     src/generic/icon.cpp
     src/generic/textmeasure.cpp
     src/generic/timer.cpp
@@ -2173,6 +2191,7 @@ MSW_DESKTOP_HDR =
 
 DFB_LOWLEVEL_SRC =
     src/common/fontmgrcmn.cpp
+    src/generic/animateg.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp
@@ -2201,6 +2220,7 @@ DFB_LOWLEVEL_SRC =
     src/dfb/window.cpp
     src/dfb/wrapdfb.cpp
 DFB_LOWLEVEL_HDR =
+    wx/generic/animate.h
     wx/generic/caret.h
     wx/generic/colour.h
     wx/generic/icon.h
@@ -2249,7 +2269,6 @@ OSX_LOWLEVEL_SRC =
     src/osx/core/bitmap.cpp
     src/osx/core/colour.cpp
     src/osx/core/dcmemory.cpp
-    src/osx/core/display.cpp
     src/osx/core/fontenum.cpp
     src/osx/core/hid.cpp
     src/osx/core/printmac.cpp
@@ -2280,6 +2299,7 @@ OSX_COMMON_SRC =
     src/osx/slider_osx.cpp
     src/osx/spinbutt_osx.cpp
     src/osx/srchctrl_osx.cpp
+    src/osx/statbmp_osx.cpp
     src/osx/statbox_osx.cpp
     src/osx/statline_osx.cpp
     src/osx/stattext_osx.cpp
@@ -2298,7 +2318,6 @@ OSX_COMMON_SRC =
     src/osx/carbon/cursor.cpp
     src/osx/carbon/fontdlg.cpp
     src/osx/carbon/gdiobj.cpp
-    src/osx/carbon/icon.cpp
     src/osx/carbon/app.cpp
     src/osx/carbon/control.cpp
     src/osx/carbon/dataobj.cpp
@@ -2327,6 +2346,7 @@ OSX_COMMON_SRC =
     src/generic/filepickerg.cpp
     src/generic/fontdlgg.cpp
     src/generic/fontpickerg.cpp
+    src/generic/icon.cpp
     src/generic/listctrl.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
@@ -2373,7 +2393,6 @@ OSX_SHARED_HDR =
     wx/osx/fontdlg.h
     wx/osx/frame.h
     wx/osx/gauge.h
-    wx/osx/icon.h
     wx/osx/imaglist.h
     wx/osx/listbox.h
     wx/osx/listctrl.h
@@ -2424,6 +2443,7 @@ OSX_SHARED_HDR =
     wx/generic/filepickerg.h
     wx/generic/fontdlgg.h
     wx/generic/fontpickerg.h
+    wx/generic/icon.h
     wx/generic/listctrl.h
     wx/generic/prntdlgg.h
     wx/generic/statusbr.h
@@ -2469,6 +2489,7 @@ OSX_COCOA_SRC =
     src/osx/cocoa/slider.mm
     src/osx/cocoa/spinbutt.mm
     src/osx/cocoa/srchctrl.mm
+    src/osx/cocoa/statbmp.mm
     src/osx/cocoa/statbox.mm
     src/osx/cocoa/statline.mm
     src/osx/cocoa/stattext.mm
@@ -2478,6 +2499,7 @@ OSX_COCOA_SRC =
     src/osx/cocoa/toolbar.mm
     src/osx/cocoa/tooltip.mm
     src/osx/cocoa/window.mm
+    src/osx/core/display.cpp
     src/osx/core/hidjoystick.cpp
     src/osx/core/sound.cpp
     src/osx/dataview_osx.cpp
@@ -2513,9 +2535,7 @@ OSX_COCOA_HDR =
 OSX_IPHONE_SRC =
     $(OSX_COMMON_SRC)
     src/generic/animateg.cpp
-    src/generic/icon.cpp
     src/generic/regiong.cpp
-    src/osx/cocoa/stdpaths.mm
     src/osx/core/sound.cpp
     src/osx/iphone/anybutton.mm
     src/osx/iphone/button.mm
@@ -2528,6 +2548,7 @@ OSX_IPHONE_SRC =
     src/osx/iphone/scrolbar.mm
     src/osx/iphone/settings.mm
     src/osx/iphone/slider.mm
+    src/osx/iphone/statbmp.mm
     src/osx/iphone/stattext.mm
     src/osx/iphone/textctrl.mm
     src/osx/iphone/toolbar.mm

@@ -1657,6 +1657,7 @@ outlineView:(NSOutlineView*)outlineView
 
     const wxDataViewItem item = wxDataViewItemFromItem([self itemAtRow:[self clickedRow]]);
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_ACTIVATED, dvc, item);
+    event.SetColumn( [self clickedColumn] );
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 

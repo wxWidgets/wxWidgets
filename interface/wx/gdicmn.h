@@ -1183,6 +1183,10 @@ const wxSize wxDefaultSize;
 /**
     Returns @true if the display is colour, @false otherwise.
 
+    @note Use of this function is not recommended in the new code as it only
+        works for the primary display. Use wxDisplay::GetDepth() to retrieve
+        the depth of the appropriate display and compare it with 1 instead.
+
     @header{wx/gdicmn.h}
 */
 bool wxColourDisplay();
@@ -1190,6 +1194,10 @@ bool wxColourDisplay();
 /**
     Returns the depth of the display (a value of 1 denotes a monochrome
     display).
+
+    @note Use of this function is not recommended in the new code as it only
+        works for the primary display. Use wxDisplay::GetDepth() to retrieve
+        the depth of the appropriate display instead.
 
     @header{wx/gdicmn.h}
 */
@@ -1248,6 +1256,10 @@ wxRect wxGetClientDisplayRect();
     The @c x component of the returned wxSize object contains the horizontal
     resolution and the @c y one -- the vertical resolution.
 
+    @note Use of this function is not recommended in the new code as it only
+        works for the primary display. Use wxDisplay::GetPPI() to retrieve
+        the resolution of the appropriate display instead.
+
     @header{wx/gdicmn.h}
 
     @see wxDisplay
@@ -1261,6 +1273,10 @@ wxSize wxGetDisplayPPI();
 //@{
 /**
     Returns the display size in pixels.
+
+    @note Use of this function is not recommended in the new code as it only
+        works for the primary display. Use wxDisplay::GetGeometry() to retrieve
+        the size of the appropriate display instead.
 
     Either of output pointers can be @NULL if the caller is not interested in
     the corresponding value.
@@ -1276,6 +1292,10 @@ void wxDisplaySize(int* width, int* height);
 //@{
 /**
     Returns the display size in pixels.
+
+    @note Use of this function is not recommended in the new code as it only
+        works for the primary display. Use wxDisplay::GetGeometry() to retrieve
+        the size of the appropriate display instead.
 
     @see wxDisplay
 

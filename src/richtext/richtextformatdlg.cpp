@@ -516,8 +516,7 @@ void wxRichTextFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     if ((GetTextEffects() & wxTEXT_ATTR_EFFECT_SUPERSCRIPT) || (GetTextEffects() & wxTEXT_ATTR_EFFECT_SUBSCRIPT))
     {
-        double fontSize = static_cast<double>(font.GetPointSize()) / wxSCRIPT_MUL_FACTOR;
-        font.SetPointSize( static_cast<int>(fontSize) );
+        font.SetFractionalPointSize(font.GetFractionalPointSize() / wxSCRIPT_MUL_FACTOR);
     }
 
     if ( font.IsOk() )

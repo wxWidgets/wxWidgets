@@ -99,11 +99,11 @@ struct GraphicsBenchmarkOptions
          useGL;
 
 #ifdef __WXMSW__
-    enum GraphRenderer { Default, GDIPlus, Direct2D, Cairo };
+    enum GraphicsRenderer { Default, GDIPlus, Direct2D, Cairo };
 #else
     enum GraphicsRenderer { Default };
 #endif // __WXMSW__ / !__WXMSW__
-    GraphRenderer renderer;
+    GraphicsRenderer renderer;
 } opts;
 
 class GraphicsBenchmarkFrame : public wxFrame
@@ -152,7 +152,9 @@ public:
         Connect(wxEVT_SIZE, wxSizeEventHandler(GraphicsBenchmarkFrame::OnSize));
 
         m_bitmapARGB.Create(64, 64, 32);
+#ifdef __WXMSW__
         m_bitmapARGB.UseAlpha(true);
+#endif // __WXMSW__
         m_bitmapRGB.Create(64, 64, 24);
 
         m_renderer = NULL;
@@ -320,8 +322,12 @@ private:
                 BenchmarkDCAndGC("RGB memory", dc, gcdc);
             }
             {
+#ifdef __WXMSW__
                 wxBitmap bmp(opts.width, opts.height, 32);
                 bmp.UseAlpha(false);
+#else // !__WXMSW__
+                wxBitmap bmp(opts.width, opts.height, 24);
+#endif // __WXMSW__/!__WXMSW__
                 wxMemoryDC dc(bmp);
                 wxGCDC gcdc;
                 if ( m_renderer )
@@ -333,7 +339,9 @@ private:
             }
             {
                 wxBitmap bmp(opts.width, opts.height, 32);
+#ifdef __WXMSW__
                 bmp.UseAlpha(true);
+#endif // __WXMSW__
                 wxMemoryDC dc(bmp);
                 wxGCDC gcdc;
                 if ( m_renderer )

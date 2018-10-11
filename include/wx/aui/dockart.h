@@ -129,13 +129,18 @@ public:
                   const wxRect& rect,
                   wxAuiPaneInfo& pane) wxOVERRIDE;
 
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("This is not intended for the public API")
     void DrawIcon(wxDC& dc,
                   const wxRect& rect,
                   wxAuiPaneInfo& pane);
+#endif
 
 protected:
 
     void DrawCaptionBackground(wxDC& dc, const wxRect& rect, bool active);
+
+    void DrawIcon(wxDC& dc, wxWindow *window, const wxRect& rect, wxAuiPaneInfo& pane);
 
     void InitBitmaps();
 

@@ -44,9 +44,7 @@
 #include "wx/textwrapper.h"
 #include "wx/modalhook.h"
 
-#if wxUSE_DISPLAY
 #include "wx/display.h"
-#endif
 
 extern WXDLLEXPORT_DATA(const char) wxDialogNameStr[] = "dialog";
 
@@ -873,11 +871,7 @@ int wxStandardDialogLayoutAdapter::DoMustScroll(wxDialog* dialog, wxSize& window
     wxSize minWindowSize = dialog->GetSizer()->GetMinSize();
     windowSize = dialog->GetSize();
     windowSize = wxSize(wxMax(windowSize.x, minWindowSize.x), wxMax(windowSize.y, minWindowSize.y));
-#if wxUSE_DISPLAY
     displaySize = wxDisplay(wxDisplay::GetFromWindow(dialog)).GetClientArea().GetSize();
-#else
-    displaySize = wxGetClientDisplayRect().GetSize();
-#endif
 
     int flags = 0;
 

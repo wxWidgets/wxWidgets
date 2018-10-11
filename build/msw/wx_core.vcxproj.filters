@@ -1267,9 +1267,6 @@
     <ClInclude Include="..\..\include\wx\display.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\display_impl.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\wx\dnd.h">
       <Filter>Common Headers</Filter>
     </ClInclude>

@@ -96,7 +96,7 @@ bool MyApp::OnInit()
 
     // Create the main frame window
 
-    MyFrame* frame = new MyFrame((wxFrame *)NULL, wxID_ANY, wxT("Animation Demo"),
+    MyFrame* frame = new MyFrame((wxFrame *)NULL, wxID_ANY, "Animation Demo",
                                  wxDefaultPosition, wxSize(500, 400),
                                  wxDEFAULT_FRAME_STYLE);
     frame->Show(true);
@@ -124,31 +124,31 @@ MyFrame::MyFrame(wxWindow *parent,
     wxMenu *file_menu = new wxMenu;
 
 #if wxUSE_FILEDLG
-    file_menu->Append(wxID_OPEN, wxT("&Open Animation...\tCtrl+O"), wxT("Loads an animation"));
+    file_menu->Append(wxID_OPEN, "&Open Animation...\tCtrl+O", "Loads an animation");
 #endif // wxUSE_FILEDLG
     file_menu->Append(wxID_EXIT);
 
     wxMenu *play_menu = new wxMenu;
-    play_menu->Append(ID_PLAY, wxT("Play\tCtrl+P"), wxT("Play the animation"));
-    play_menu->Append(wxID_STOP, wxT("Stop\tCtrl+S"), wxT("Stop the animation"));
+    play_menu->Append(ID_PLAY, "Play\tCtrl+P", "Play the animation");
+    play_menu->Append(wxID_STOP, "Stop\tCtrl+S", "Stop the animation");
     play_menu->AppendSeparator();
-    play_menu->Append(ID_SET_NULL_ANIMATION, wxT("Set null animation"),
-                      wxT("Sets the empty animation in the control"));
-    play_menu->AppendCheckItem(ID_SET_INACTIVE_BITMAP, wxT("Set inactive bitmap"),
-                               wxT("Sets an inactive bitmap for the control"));
-    play_menu->AppendCheckItem(ID_SET_NO_AUTO_RESIZE, wxT("Set no autoresize"),
-                               wxT("Tells the control not to resize automatically"));
-    play_menu->Append(ID_SET_BGCOLOR, wxT("Set background colour..."),
-                      wxT("Sets the background colour of the control"));
+    play_menu->Append(ID_SET_NULL_ANIMATION, "Set null animation",
+                      "Sets the empty animation in the control");
+    play_menu->AppendCheckItem(ID_SET_INACTIVE_BITMAP, "Set inactive bitmap",
+                               "Sets an inactive bitmap for the control");
+    play_menu->AppendCheckItem(ID_SET_NO_AUTO_RESIZE, "Set no autoresize",
+                               "Tells the control not to resize automatically");
+    play_menu->Append(ID_SET_BGCOLOR, "Set background colour...",
+                      "Sets the background colour of the control");
 
     wxMenu *help_menu = new wxMenu;
     help_menu->Append(wxID_ABOUT);
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
-    menu_bar->Append(file_menu, wxT("&File"));
-    menu_bar->Append(play_menu, wxT("&Animation"));
-    menu_bar->Append(help_menu, wxT("&Help"));
+    menu_bar->Append(file_menu, "&File");
+    menu_bar->Append(play_menu, "&Animation");
+    menu_bar->Append(help_menu, "&Help");
 
     // Associate the menu bar with this frame
     SetMenuBar(menu_bar);
@@ -161,11 +161,11 @@ MyFrame::MyFrame(wxWindow *parent,
     // resize the m_animationCtrl to fill its client area on
     // user resizes
     wxSizer *sz = new wxBoxSizer(wxVERTICAL);
-    sz->Add(new wxStaticText(this, wxID_ANY, wxT("wxAnimationCtrl:")),
+    sz->Add(new wxStaticText(this, wxID_ANY, "wxAnimationCtrl:"),
             wxSizerFlags().Centre().Border());
 
     m_animationCtrl = new wxAnimationCtrl(this, wxID_ANY);
-    if (m_animationCtrl->LoadFile(wxT("throbber.gif")))
+    if (m_animationCtrl->LoadFile("throbber.gif"))
         m_animationCtrl->Play();
 
     sz->Add(m_animationCtrl, wxSizerFlags().Centre().Border());
@@ -180,7 +180,7 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
 {
     if (!m_animationCtrl->Play())
     {
-        wxLogError(wxT("Invalid animation"));
+        wxLogError("Invalid animation");
     }
 }
 
@@ -239,7 +239,7 @@ void MyFrame::OnSetNoAutoResize(wxCommandEvent& event)
 void MyFrame::OnSetBgColor(wxCommandEvent& WXUNUSED(event))
 {
     wxColour clr = wxGetColourFromUser(this, m_animationCtrl->GetBackgroundColour(),
-                                       wxT("Choose the background colour"));
+                                       "Choose the background colour");
 
     if (clr.IsOk())
         m_animationCtrl->SetBackgroundColour(clr);
@@ -255,11 +255,11 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
     wxAboutDialogInfo info;
     info.SetName(_("wxAnimationCtrl and wxAnimation sample"));
     info.SetDescription(_("This sample program demonstrates the usage of wxAnimationCtrl"));
-    info.SetCopyright(wxT("(C) 2006 Julian Smart"));
+    info.SetCopyright("(C) 2006 Julian Smart");
 
-    info.AddDeveloper(wxT("Julian Smart"));
-    info.AddDeveloper(wxT("Guillermo Rodriguez Garcia"));
-    info.AddDeveloper(wxT("Francesco Montorsi"));
+    info.AddDeveloper("Julian Smart");
+    info.AddDeveloper("Guillermo Rodriguez Garcia");
+    info.AddDeveloper("Francesco Montorsi");
 
     wxAboutBox(info, this);
 }
@@ -267,8 +267,8 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 #if wxUSE_FILEDLG
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
-    wxFileDialog dialog(this, wxT("Please choose an animation"),
-                        wxEmptyString, wxEmptyString, wxT("*.gif;*.ani"), wxFD_OPEN);
+    wxFileDialog dialog(this, "Please choose an animation",
+                        wxEmptyString, wxEmptyString, "*.gif;*.ani", wxFD_OPEN);
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString filename(dialog.GetPath());
@@ -278,13 +278,13 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
         if (m_animationCtrl->LoadFile(filename))
             m_animationCtrl->Play();
         else
-            wxMessageBox(wxT("Sorry, this animation is not a valid format for wxAnimation."));
+            wxMessageBox("Sorry, this animation is not a valid format for wxAnimation.");
 #else
     #if 0
         wxAnimation temp;
         if (!temp.LoadFile(filename))
         {
-            wxLogError(wxT("Sorry, this animation is not a valid format for wxAnimation."));
+            wxLogError("Sorry, this animation is not a valid format for wxAnimation.");
             return;
         }
 
@@ -294,14 +294,14 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
         wxFileInputStream stream(filename);
         if (!stream.IsOk())
         {
-            wxLogError(wxT("Sorry, this animation is not a valid format for wxAnimation."));
+            wxLogError("Sorry, this animation is not a valid format for wxAnimation.");
             return;
         }
 
         wxAnimation temp;
         if (!temp.Load(stream))
         {
-            wxLogError(wxT("Sorry, this animation is not a valid format for wxAnimation."));
+            wxLogError("Sorry, this animation is not a valid format for wxAnimation.");
             return;
         }
 

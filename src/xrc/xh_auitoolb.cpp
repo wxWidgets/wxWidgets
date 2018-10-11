@@ -276,7 +276,7 @@ void wxAuiToolBarXmlHandler::MenuHandler::OnDropDown(wxAuiToolBarEvent& event)
                 if (menu != NULL)
                 {
                     wxRect rect = item->GetSizerItem()->GetRect();
-                    toobar->PopupMenu(menu, rect.GetRight() - 10, rect.GetBottom());
+                    toobar->PopupMenu(menu, rect.GetRight() - toobar->FromDIP(10), rect.GetBottom());
                 }
             }
         }

@@ -2604,7 +2604,6 @@ typedef int (* LINKAGEMODE wxListIterateFunction)(void *current);
 
 #define WX_OPAQUE_TYPE( name ) struct wxOpaque##name
 
-typedef void*       WXHBITMAP;
 typedef void*       WXHCURSOR;
 typedef void*       WXRECTPTR;
 typedef void*       WXPOINTPTR;
@@ -2628,11 +2627,13 @@ typedef void*       WXDisplay;
 
 typedef const void * CFTypeRef;
 
-/* typedef const struct __CFString * CFStringRef; */
-
+DECLARE_WXOSX_OPAQUE_CONST_CFREF( CFData )
 DECLARE_WXOSX_OPAQUE_CONST_CFREF( CFString )
 typedef struct __CFString * CFMutableStringRef;
 DECLARE_WXOSX_OPAQUE_CONST_CFREF( CFDictionary )
+
+DECLARE_WXOSX_OPAQUE_CONST_CFREF( CFArray )
+typedef struct __CFArray * CFMutableArrayRef;
 
 DECLARE_WXOSX_OPAQUE_CFREF( CFRunLoopSource )
 DECLARE_WXOSX_OPAQUE_CONST_CFREF( CTFont )
@@ -2648,6 +2649,7 @@ DECLARE_WXOSX_OPAQUE_CGREF( CGFont )
 typedef CGColorRef    WXCOLORREF;
 typedef CGImageRef    WXCGIMAGEREF;
 typedef CGContextRef  WXHDC;
+typedef CGContextRef  WXHBITMAP;
 
 /*
  * carbon
@@ -2665,7 +2667,7 @@ DECLARE_WXMAC_OPAQUE_REF( MenuRef )
 typedef IconRef WXHICON ;
 typedef HIShapeRef WXHRGN;
 
-#endif
+#endif // __WXMAC__
 
 #if defined(__WXMAC__)
 
@@ -2732,6 +2734,13 @@ typedef struct objc_object *WX_##klass
 
 #endif /*  (defined(__GNUC__) && defined(__APPLE__)) */
 
+DECLARE_WXCOCOA_OBJC_CLASS(NSArray);
+DECLARE_WXCOCOA_OBJC_CLASS(NSData);
+DECLARE_WXCOCOA_OBJC_CLASS(NSMutableArray);
+DECLARE_WXCOCOA_OBJC_CLASS(NSString);
+
+#if wxOSX_USE_COCOA
+
 DECLARE_WXCOCOA_OBJC_CLASS(NSApplication);
 DECLARE_WXCOCOA_OBJC_CLASS(NSBitmapImageRep);
 DECLARE_WXCOCOA_OBJC_CLASS(NSBox);
@@ -2749,7 +2758,6 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSLayoutManager);
 DECLARE_WXCOCOA_OBJC_CLASS(NSMenu);
 DECLARE_WXCOCOA_OBJC_CLASS(NSMenuExtra);
 DECLARE_WXCOCOA_OBJC_CLASS(NSMenuItem);
-DECLARE_WXCOCOA_OBJC_CLASS(NSMutableArray);
 DECLARE_WXCOCOA_OBJC_CLASS(NSNotification);
 DECLARE_WXCOCOA_OBJC_CLASS(NSObject);
 DECLARE_WXCOCOA_OBJC_CLASS(NSPanel);
@@ -2767,30 +2775,27 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSWindow);
 DECLARE_WXCOCOA_OBJC_CLASS(NSView);
 DECLARE_WXCOCOA_OBJC_CLASS(NSOpenGLContext);
 DECLARE_WXCOCOA_OBJC_CLASS(NSOpenGLPixelFormat);
-DECLARE_WXCOCOA_OBJC_CLASS( NSPrintInfo );
+DECLARE_WXCOCOA_OBJC_CLASS(NSPrintInfo);
 DECLARE_WXCOCOA_OBJC_CLASS(NSGestureRecognizer);
 DECLARE_WXCOCOA_OBJC_CLASS(NSPanGestureRecognizer);
 DECLARE_WXCOCOA_OBJC_CLASS(NSMagnificationGestureRecognizer);
 DECLARE_WXCOCOA_OBJC_CLASS(NSRotationGestureRecognizer);
 DECLARE_WXCOCOA_OBJC_CLASS(NSPressGestureRecognizer);
 DECLARE_WXCOCOA_OBJC_CLASS(NSTouch);
-#endif /* __WXMAC__ &__DARWIN__ */
-
-#ifdef __WXMAC__
-
-DECLARE_WXCOCOA_OBJC_CLASS(NSString);
-
-#if wxOSX_USE_COCOA
+DECLARE_WXCOCOA_OBJC_CLASS(NSPasteboard);
 
 typedef WX_NSWindow WXWindow;
 typedef WX_NSView WXWidget;
+typedef WX_NSImage WXImage;
 typedef WX_NSMenu WXHMENU;
 typedef WX_NSOpenGLPixelFormat WXGLPixelFormat;
 typedef WX_NSOpenGLContext WXGLContext;
+typedef WX_NSPasteboard OSXPasteboard;
 
 #elif wxOSX_USE_IPHONE
 
 DECLARE_WXCOCOA_OBJC_CLASS(UIWindow);
+DECLARE_WXCOCOA_OBJC_CLASS(UImage);
 DECLARE_WXCOCOA_OBJC_CLASS(UIView);
 DECLARE_WXCOCOA_OBJC_CLASS(UIFont);
 DECLARE_WXCOCOA_OBJC_CLASS(UIImage);
@@ -2798,12 +2803,15 @@ DECLARE_WXCOCOA_OBJC_CLASS(UIEvent);
 DECLARE_WXCOCOA_OBJC_CLASS(NSSet);
 DECLARE_WXCOCOA_OBJC_CLASS(EAGLContext);
 DECLARE_WXCOCOA_OBJC_CLASS(UIWebView);
+DECLARE_WXCOCOA_OBJC_CLASS(UIPasteboard);
 
 typedef WX_UIWindow WXWindow;
 typedef WX_UIView WXWidget;
+typedef WX_UIImage WXImage;
 typedef WX_EAGLContext WXGLContext;
 typedef WX_NSString WXGLPixelFormat;
 typedef WX_UIWebView OSXWebViewPtr;
+typedef WX_UIPasteboard OSXPasteboard;
 
 #endif
 
@@ -3053,6 +3061,8 @@ typedef const void* WXWidget;
     #pragma comment(linker, WX_CC_MANIFEST("x86"))
 #elif defined _M_X64
     #pragma comment(linker, WX_CC_MANIFEST("amd64"))
+#elif defined _M_ARM64
+    #pragma comment(linker, WX_CC_MANIFEST("arm64"))
 #elif defined _M_IA64
     #pragma comment(linker, WX_CC_MANIFEST("ia64"))
 #else

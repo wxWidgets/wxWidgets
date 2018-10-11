@@ -24,6 +24,87 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxIcon, wxGDIObject);
 
 #define M_ICONDATA ((wxIconRefData *)m_refData)
 
+#define wxOSX_ICON_USE_NSIMAGE wxOSX_BITMAP_NATIVE_ACCESS
+
+#if wxOSX_ICON_USE_NSIMAGE
+
+// implementation based on NSImage
+
+class WXDLLEXPORT wxIconRefData : public wxGDIRefData
+{
+public:
+    wxIconRefData() { Init(); }
+    wxIconRefData( WX_NSImage image, int desiredWidth, int desiredHeight );
+    wxIconRefData( WXHICON iconref, int desiredWidth, int desiredHeight );
+
+    virtual ~wxIconRefData() { Free(); }
+
+    virtual bool IsOk() const wxOVERRIDE { return m_nsImage != NULL; }
+    virtual void Free();
+
+    int GetWidth() const { return (int) wxOSXGetImageSize(m_nsImage).width; }
+    int GetHeight() const { return (int) wxOSXGetImageSize(m_nsImage).height; }
+
+    WX_NSImage GetImage() const;
+
+private:
+    void Init();
+    void Create( NSImage* icon, int desiredWidth, int desiredHeight );
+    NSImage* m_nsImage;
+
+    // We can (easily) copy m_iconRef so we don't implement the copy ctor.
+    wxDECLARE_NO_COPY_CLASS(wxIconRefData);
+};
+
+
+wxIconRefData::wxIconRefData( NSImage* icon, int desiredWidth, int desiredHeight )
+{
+    Init();
+
+    Create(icon, desiredWidth, desiredHeight);
+}
+
+wxIconRefData::wxIconRefData( WXHICON iconref, int desiredWidth, int desiredHeight )
+{
+    Init();
+
+    Create(wxOSXGetNSImageFromIconRef(iconref), desiredWidth, desiredHeight);
+    ReleaseIconRef(iconref);
+}
+
+void wxIconRefData::Create( NSImage* icon, int WXUNUSED(desiredWidth), int WXUNUSED(desiredHeight) )
+{
+    if ( icon )
+    {
+        m_nsImage = icon;
+        wxMacCocoaRetain(icon);
+    }
+}
+
+void wxIconRefData::Init()
+{
+    m_nsImage = NULL;
+}
+
+void wxIconRefData::Free()
+{
+    if ( m_nsImage )
+    {
+        wxMacCocoaRelease(m_nsImage);
+    }
+}
+
+WX_NSImage wxIconRefData::GetImage() const
+{
+    wxASSERT( IsOk() );
+
+    return m_nsImage;
+}
+
+#else // !wxOSX_ICON_USE_NSIMAGE
+
+// implementation based on IconRef
+
 class WXDLLEXPORT wxIconRefData : public wxGDIRefData
 {
 public:
@@ -32,7 +113,6 @@ public:
     virtual ~wxIconRefData() { Free(); }
 
     virtual bool IsOk() const wxOVERRIDE { return m_iconRef != NULL; }
-
     virtual void Free();
 
     void SetWidth( int width ) { m_width = width; }
@@ -42,24 +122,22 @@ public:
     int GetHeight() const { return m_height; }
 
     WXHICON GetHICON() const { return (WXHICON) m_iconRef; }
-#if wxOSX_USE_COCOA
-    WX_NSImage GetNSImage() const;
-#endif
+
+    WX_NSImage GetImage() const;
 
 private:
     void Init();
 
     IconRef m_iconRef;
-#if wxOSX_USE_COCOA
+
     mutable NSImage* m_nsImage;
-#endif
+
     int m_width;
     int m_height;
 
     // We can (easily) copy m_iconRef so we don't implement the copy ctor.
     wxDECLARE_NO_COPY_CLASS(wxIconRefData);
 };
-
 
 wxIconRefData::wxIconRefData( WXHICON icon, int desiredWidth, int desiredHeight )
 {
@@ -74,9 +152,8 @@ wxIconRefData::wxIconRefData( WXHICON icon, int desiredWidth, int desiredHeight 
 void wxIconRefData::Init()
 {
     m_iconRef = NULL ;
-#if wxOSX_USE_COCOA
     m_nsImage = NULL;
-#endif
+
     m_width =
     m_height = 0;
 }
@@ -88,28 +165,26 @@ void wxIconRefData::Free()
         ReleaseIconRef( m_iconRef ) ;
         m_iconRef = NULL ;
     }
-    
-#if wxOSX_USE_COCOA
+
     if ( m_nsImage )
     {
-        CFRelease(m_nsImage);
+        wxMacCocoaRelease(m_nsImage);
     }
-#endif
 }
 
-#if wxOSX_USE_COCOA
-WX_NSImage wxIconRefData::GetNSImage() const
+WX_NSImage wxIconRefData::GetImage() const
 {
     wxASSERT( IsOk() );
-    
+
     if ( m_nsImage == 0 )
     {
         m_nsImage = wxOSXGetNSImageFromIconRef(m_iconRef);
         CFRetain(m_nsImage);
     }
-    
+
     return m_nsImage;
 }
+
 #endif
 
 //
@@ -139,6 +214,7 @@ wxIcon::wxIcon(
     LoadFile( icon_file, flags, desiredWidth, desiredHeight );
 }
 
+#if wxOSX_USE_ICONREF
 wxIcon::wxIcon(WXHICON icon, const wxSize& size)
       : wxGDIObject()
 {
@@ -148,6 +224,14 @@ wxIcon::wxIcon(WXHICON icon, const wxSize& size)
 
     m_refData = new wxIconRefData( icon, size.x, size.y ) ;
 }
+
+WXHICON wxIcon::GetHICON() const
+{
+    wxASSERT( IsOk() ) ;
+
+    return (WXHICON) ((wxIconRefData*)m_refData)->GetHICON() ;
+}
+#endif
 
 wxIcon::~wxIcon()
 {
@@ -164,13 +248,6 @@ wxIcon::CloneGDIRefData(const wxGDIRefData * WXUNUSED(data)) const
     wxFAIL_MSG( wxS("Cloning icons is not implemented in wxCarbon.") );
 
     return new wxIconRefData;
-}
-
-WXHICON wxIcon::GetHICON() const
-{
-    wxASSERT( IsOk() ) ;
-
-    return (WXHICON) ((wxIconRefData*)m_refData)->GetHICON() ;
 }
 
 int wxIcon::GetWidth() const
@@ -192,15 +269,14 @@ int wxIcon::GetDepth() const
     return 32;
 }
 
-#if wxOSX_USE_COCOA
-WX_NSImage wxIcon::GetNSImage() const
+WX_NSImage wxIcon::GetImage() const
 {
     wxCHECK_MSG( IsOk(), NULL, wxT("invalid icon") );
     
-    return M_ICONDATA->GetNSImage() ;
+    return M_ICONDATA->GetImage() ;
 }
-#endif
 
+#if WXWIN_COMPATIBILITY_3_0
 void wxIcon::SetDepth( int WXUNUSED(depth) )
 {
 }
@@ -212,6 +288,7 @@ void wxIcon::SetWidth( int WXUNUSED(width) )
 void wxIcon::SetHeight( int WXUNUSED(height) )
 {
 }
+#endif
 
 // Load an icon based on resource name or filel name
 // Return true on success, false otherwise
@@ -330,13 +407,10 @@ bool wxIcon::LoadIconFromSystemResource(const wxString& resourceName, int desire
         IconRef iconRef = NULL ;
         __Verify_noErr(GetIconRef( kOnSystemDisk, kSystemIconsCreator, theId, &iconRef )) ;
         if ( iconRef )
-        {
             m_refData = new wxIconRefData( (WXHICON) iconRef, desiredWidth, desiredHeight ) ;
-            return true ;
-        }
     }
 
-    return false;
+    return IsOk();
 }
 
 // Load an icon of type 'icns' by resource by name
@@ -347,6 +421,7 @@ bool wxIcon::LoadIconFromBundleResource(const wxString& resourceName, int desire
 {
     UnRef();
 
+#if wxOSX_USE_ICONREF
     IconRef iconRef = NULL ;
 
     // first look in the resource fork
@@ -395,7 +470,7 @@ bool wxIcon::LoadIconFromBundleResource(const wxString& resourceName, int desire
         m_refData = new wxIconRefData( (WXHICON) iconRef, desiredWidth, desiredHeight );
         return true;
     }
-
+#endif
    return false;
 }
 
@@ -406,9 +481,10 @@ bool wxIcon::LoadIconFromFile(const wxString& filename, int desiredWidth, int de
 {
     UnRef();
 
-    OSStatus err;
     bool result = false;
 
+#if wxOSX_USE_ICONREF
+    OSStatus err;
     // Get a file system reference
     FSRef fsRef;
     err = FSPathMakeRef( (const wxUint8*)filename.utf8_str().data(), &fsRef, NULL );
@@ -436,6 +512,7 @@ bool wxIcon::LoadIconFromFile(const wxString& filename, int desiredWidth, int de
 
     // Release the iconFamily before returning
     ReleaseResource( (Handle) iconFamily );
+#endif
     return result;
 }
 
@@ -487,6 +564,9 @@ void wxIcon::CopyFromBitmap( const wxBitmap& bmp )
 {
     UnRef() ;
 
+#if wxOSX_ICON_USE_NSIMAGE
+    m_refData = new wxIconRefData( bmp.GetImage() , bmp.GetWidth(), bmp.GetHeight()  ) ;
+#else
     // as the bitmap owns that ref, we have to acquire it as well
     
     int w = bmp.GetWidth() ;
@@ -502,7 +582,7 @@ void wxIcon::CopyFromBitmap( const wxBitmap& bmp )
     {
         m_refData = new wxIconRefData( (WXHICON) bmp.CreateIconRef() , bmp.GetWidth(), bmp.GetHeight()  ) ;
     }
-
+#endif
 }
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxICONResourceHandler, wxBitmapHandler);

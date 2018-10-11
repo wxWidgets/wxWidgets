@@ -162,7 +162,7 @@ class EditPrint: public wxPrintout {
 public:
 
     //! constructor
-    EditPrint (Edit *edit, const wxChar *title = wxT(""));
+    EditPrint (Edit *edit, const wxString& title = "");
 
     //! event handlers
     bool OnPrintPage (int page) wxOVERRIDE;
