@@ -2608,8 +2608,7 @@ void wxPropertyGrid::DrawItemAndValueRelated( wxPGProperty* p )
     wxPGProperty* parent = p->GetParent();
 
     while ( parent &&
-            !parent->IsCategory() &&
-            parent->GetParent() )
+            !parent->IsCategory() && !parent->IsRoot() )
     {
          DrawItem(parent);
          parent = parent->GetParent();
