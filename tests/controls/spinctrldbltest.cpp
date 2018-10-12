@@ -89,7 +89,7 @@ void SpinCtrlDoubleTestCase::NoEventsInCtor()
 
 void SpinCtrlDoubleTestCase::Arrows()
 {
-#ifndef __WXGTK__
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
     EventCounter updated(m_spin, wxEVT_SPINCTRLDOUBLE);
 
     wxUIActionSimulator sim;

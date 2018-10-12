@@ -44,8 +44,13 @@ public:
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
     {
-        return DoCreate(size, wxDefaultSize, false, family, style,
-                        weight, underlined, face, encoding);
+        return DoCreate(InfoFromLegacyParams(size,
+                                             family,
+                                             style,
+                                             weight,
+                                             underlined,
+                                             face,
+                                             encoding));
     }
 
     wxFont(const wxSize& pixelSize,
@@ -76,8 +81,13 @@ public:
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
     {
-        return DoCreate(-1, pixelSize, true, family, style,
-                        weight, underlined, face, encoding);
+        return DoCreate(InfoFromLegacyParams(pixelSize,
+                                             family,
+                                             style,
+                                             weight,
+                                             underlined,
+                                             face,
+                                             encoding));
     }
 
     bool Create(const wxNativeFontInfo& info, WXHFONT hFont = 0);
@@ -89,7 +99,6 @@ public:
     virtual wxSize GetPixelSize() const wxOVERRIDE;
     virtual bool IsUsingSizeInPixels() const wxOVERRIDE;
     virtual wxFontStyle GetStyle() const wxOVERRIDE;
-    virtual wxFontWeight GetWeight() const wxOVERRIDE;
     virtual int GetNumericWeight() const wxOVERRIDE;
     virtual bool GetUnderlined() const wxOVERRIDE;
     virtual bool GetStrikethrough() const wxOVERRIDE;
@@ -97,11 +106,10 @@ public:
     virtual wxFontEncoding GetEncoding() const wxOVERRIDE;
     virtual const wxNativeFontInfo *GetNativeFontInfo() const wxOVERRIDE;
 
-    virtual void SetPointSize(float pointSize) wxOVERRIDE;
+    virtual void SetFractionalPointSize(float pointSize) wxOVERRIDE;
     virtual void SetPixelSize(const wxSize& pixelSize) wxOVERRIDE;
     virtual void SetFamily(wxFontFamily family) wxOVERRIDE;
     virtual void SetStyle(wxFontStyle style) wxOVERRIDE;
-    virtual void SetWeight(wxFontWeight weight) wxOVERRIDE;
     virtual void SetNumericWeight(int weight) wxOVERRIDE;
     virtual bool SetFaceName(const wxString& faceName) wxOVERRIDE;
     virtual void SetUnderlined(bool underlined) wxOVERRIDE;
@@ -149,16 +157,8 @@ public:
     WXHFONT GetHFONT() const;
 
 protected:
-    // real font creation function, used in all cases
-    bool DoCreate(int size,
-                  const wxSize& pixelSize,
-                  bool sizeUsingPixels,
-                  wxFontFamily family,
-                  wxFontStyle style,
-                  wxFontWeight weight,
-                  bool underlined = false,
-                  const wxString& face = wxEmptyString,
-                  wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+    // Common helper of overloaded Create() methods.
+    bool DoCreate(const wxFontInfo& info);
 
     virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info) wxOVERRIDE;
     virtual wxFontFamily DoGetFamily() const wxOVERRIDE;

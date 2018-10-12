@@ -149,8 +149,7 @@ wxFont wxCreateFontFromStockObject(int index)
         LOGFONT lf;
         if ( ::GetObject(hFont, sizeof(LOGFONT), &lf) != 0 )
         {
-            wxNativeFontInfo info;
-            info.lf = lf;
+            wxNativeFontInfo info(lf);
             font.Create(info);
         }
         else
@@ -182,8 +181,8 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
             // for most (simple) controls, e.g. buttons and such but other
             // controls may prefer to use lfStatusFont or lfCaptionFont if it
             // is more appropriate for them
-            wxNativeFontInfo info;
-            info.lf = wxMSWImpl::GetNonClientMetrics().lfMessageFont;
+            const wxNativeFontInfo
+                info(wxMSWImpl::GetNonClientMetrics().lfMessageFont);
             gs_fontDefault = new wxFont(info);
         }
 

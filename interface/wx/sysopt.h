@@ -66,9 +66,6 @@
         Setting this to 0 causes more flicker, but allows applications to paint
         graphics on the parent of a static box (the optimized refresh causes any
         such drawing to disappear).
-    @flag{msw.display.directdraw}
-        If set to 1, use DirectDraw-based implementation of wxDisplay.
-        By default the standard Win32 functions are used.
     @flag{msw.font.no-proof-quality}
         If set to 1, use default fonts quality instead of proof quality when
         creating fonts. With proof quality the fonts have slightly better

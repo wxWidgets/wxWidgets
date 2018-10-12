@@ -402,7 +402,6 @@ void wxSVGFileDCImpl::Init(const wxString &filename, int Width, int Height,
     m_backgroundBrush = *wxTRANSPARENT_BRUSH;
     m_textForegroundColour = *wxBLACK;
     m_textBackgroundColour = *wxWHITE;
-    m_colour = wxColourDisplay();
 
     m_pen   = *wxBLACK_PEN;
     m_font  = *wxNORMAL_FONT;

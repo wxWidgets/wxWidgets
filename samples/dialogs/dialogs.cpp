@@ -614,15 +614,15 @@ bool MyApp::OnInit()
     editMenu->Append(wxID_COPY, "&Copy\tCtrl+C");
     editMenu->Append(wxID_PASTE, "&Paste\tCtrl+V");
     editMenu->Append(wxID_CLEAR, "&Delete");
-    
+
     editMenu->AppendSeparator();
     editMenu->Append(wxID_SELECTALL, "Select All\tCtrl+A");
 
     wxMenuBar *menubar = new wxMenuBar;
     menubar->Append(menuDlg, "&Dialogs");
-    
+
     menubar->Append(editMenu, "&Edit");
-    
+
 #if wxUSE_ABOUTDLG
     menubar->Append(menuHelp, "&Help");
 #endif // wxUSE_ABOUTDLG
@@ -2146,7 +2146,7 @@ private:
                 if ( !m_taskbarIcon )
                 {
                     m_taskbarIcon = new wxTaskBarIcon();
-                    m_taskbarIcon->SetIcon(reinterpret_cast<wxTopLevelWindow*>(GetParent())->GetIcon(), 
+                    m_taskbarIcon->SetIcon(reinterpret_cast<wxTopLevelWindow*>(GetParent())->GetIcon(),
                         "Dialogs Sample (Persistent)");
                 }
                 wxNotificationMessage::UseTaskBarIcon(m_taskbarIcon);

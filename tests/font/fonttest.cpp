@@ -21,58 +21,31 @@
     #include "wx/wx.h"
 #endif // WX_PRECOMP
 
-#if wxUSE_FONTMAP
-
 #include "wx/font.h"
 
 #include "asserthelper.h"
 
 // ----------------------------------------------------------------------------
-// test class
+// local helpers
 // ----------------------------------------------------------------------------
 
-class FontTestCase : public CppUnit::TestCase
+// Returns a point to an array of fonts and fills the output parameter with the
+// number of elements in this array.
+static const wxFont *GetTestFonts(unsigned& numFonts)
 {
-public:
-    FontTestCase() { }
-
-private:
-    CPPUNIT_TEST_SUITE( FontTestCase );
-        CPPUNIT_TEST( Construct );
-        CPPUNIT_TEST( GetSet );
-        CPPUNIT_TEST( NativeFontInfo );
-        CPPUNIT_TEST( NativeFontInfoUserDesc );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Construct();
-    void GetSet();
-    void NativeFontInfo();
-    void NativeFontInfoUserDesc();
-
-    static const wxFont *GetTestFonts(unsigned& numFonts)
+    static const wxFont testfonts[] =
     {
-        static const wxFont testfonts[] =
-        {
-            *wxNORMAL_FONT,
-            *wxSMALL_FONT,
-            *wxITALIC_FONT,
-            *wxSWISS_FONT,
-            wxFont(5, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL)
-        };
+        *wxNORMAL_FONT,
+        *wxSMALL_FONT,
+        *wxITALIC_FONT,
+        *wxSWISS_FONT,
+        wxFont(5, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL)
+    };
 
-        numFonts = WXSIZEOF(testfonts);
+    numFonts = WXSIZEOF(testfonts);
 
-        return testfonts;
-    }
-
-    wxDECLARE_NO_COPY_CLASS(FontTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( FontTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FontTestCase, "FontTestCase" );
+    return testfonts;
+}
 
 wxString DumpFont(const wxFont *font)
 {
@@ -96,15 +69,19 @@ wxString DumpFont(const wxFont *font)
     return s;
 }
 
-void FontTestCase::Construct()
+// ----------------------------------------------------------------------------
+// the tests
+// ----------------------------------------------------------------------------
+
+TEST_CASE("wxFont::Construct", "[font][ctor]")
 {
     // The main purpose of this test is to verify that the font ctors below
     // compile because it's easy to introduce ambiguities due to the number of
     // overloaded wxFont ctors.
 
-    CPPUNIT_ASSERT( wxFont(10, wxFONTFAMILY_DEFAULT,
-                               wxFONTSTYLE_NORMAL,
-                               wxFONTWEIGHT_NORMAL).IsOk() );
+    CHECK( wxFont(10, wxFONTFAMILY_DEFAULT,
+                      wxFONTSTYLE_NORMAL,
+                      wxFONTWEIGHT_NORMAL).IsOk() );
 
 #if WXWIN_COMPATIBILITY_3_0
     // Disable the warning about deprecated wxNORMAL as we use it here
@@ -118,7 +95,7 @@ void FontTestCase::Construct()
 
     // Tests relying on the soon-to-be-deprecated ctor taking ints and not
     // wxFontXXX enum elements.
-    CPPUNIT_ASSERT( wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL).IsOk() );
+    CHECK( wxFont(10, wxDEFAULT, wxNORMAL, wxNORMAL).IsOk() );
 
     wxGCC_WARNING_RESTORE(deprecated-declarations)
 
@@ -128,7 +105,133 @@ void FontTestCase::Construct()
 #endif // WXWIN_COMPATIBILITY_3_0
 }
 
-void FontTestCase::GetSet()
+TEST_CASE("wxFont::Size", "[font][size]")
+{
+    const struct Sizes
+    {
+        int specified;      // Size in points specified in the ctor.
+        int expected;       // Expected GetPointSize() return value,
+                            // -1 here means "same as wxNORMAL_FONT".
+    } sizes[] =
+    {
+        {  9,  9 },
+        { 10, 10 },
+        { 11, 11 },
+        { -1, -1 },
+        { 70, -1 }, // 70 == wxDEFAULT, should be handled specially
+        { 90, 90 }, // 90 == wxNORMAL, should not be handled specially
+    };
+
+    const int sizeDefault = wxFont(wxFontInfo()).GetPointSize();
+
+    for ( size_t n = 0; n < WXSIZEOF(sizes); n++ )
+    {
+        const Sizes& size = sizes[n];
+
+        // Note: use the old-style wxFont ctor as wxFontInfo doesn't implement
+        // any compatibility hacks.
+        const wxFont font(size.specified,
+                          wxFONTFAMILY_DEFAULT,
+                          wxFONTSTYLE_NORMAL,
+                          wxFONTWEIGHT_NORMAL);
+
+        int expected = size.expected;
+        if ( expected == -1 )
+            expected = sizeDefault;
+
+        INFO("specified = " << size.specified <<
+             ", expected = " << size.expected);
+        CHECK( font.GetPointSize() == expected );
+    }
+
+    // Note that the compatibility hacks only apply to the old ctors, the newer
+    // one, taking wxFontInfo, doesn't support them.
+    CHECK( wxFont(wxFontInfo(70)).GetPointSize() == 70 );
+    CHECK( wxFont(wxFontInfo(90)).GetPointSize() == 90 );
+
+    // Check fractional point sizes as well.
+    wxFont font(wxFontInfo(12.25));
+    CHECK( font.GetFractionalPointSize() == 12.25 );
+    CHECK( font.GetPointSize() == 12 );
+
+    font = *wxNORMAL_FONT;
+    font.SetFractionalPointSize(9.5);
+    CHECK( font.GetFractionalPointSize() == 9.5 );
+    CHECK( font.GetPointSize() == 10 );
+}
+
+TEST_CASE("wxFont::Style", "[font][style]")
+{
+#if WXWIN_COMPATIBILITY_3_0
+    // Disable the warning about deprecated wxNORMAL as we use it here
+    // intentionally.
+    #ifdef __VISUALC__
+        #pragma warning(push)
+        #pragma warning(disable:4996)
+    #endif
+
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
+    wxFont fontNormal(10, wxDEFAULT, wxNORMAL, wxNORMAL);
+    CHECK( fontNormal.GetStyle() == wxFONTSTYLE_NORMAL );
+
+    wxFont fontItalic(10, wxDEFAULT, wxITALIC, wxNORMAL);
+    CHECK( fontItalic.GetStyle() == wxFONTSTYLE_ITALIC );
+
+    wxFont fontSlant(10, wxDEFAULT, wxSLANT, wxNORMAL);
+#ifdef __WXMSW__
+    CHECK( fontSlant.GetStyle() == wxFONTSTYLE_ITALIC );
+#else
+    CHECK( fontSlant.GetStyle() == wxFONTSTYLE_SLANT );
+#endif
+
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
+
+    #ifdef __VISUALC__
+        #pragma warning(pop)
+    #endif
+#endif // WXWIN_COMPATIBILITY_3_0
+}
+
+TEST_CASE("wxFont::Weight", "[font][weight]")
+{
+    wxFont font;
+    font.SetNumericWeight(123);
+    CHECK( font.GetNumericWeight() == 123 );
+    CHECK( font.GetWeight() == wxFONTWEIGHT_THIN );
+
+    font.SetNumericWeight(wxFONTWEIGHT_SEMIBOLD);
+    CHECK( font.GetNumericWeight() == wxFONTWEIGHT_SEMIBOLD );
+    CHECK( font.GetWeight() == wxFONTWEIGHT_SEMIBOLD );
+
+#if WXWIN_COMPATIBILITY_3_0
+    // Disable the warning about deprecated wxNORMAL as we use it here
+    // intentionally.
+    #ifdef __VISUALC__
+        #pragma warning(push)
+        #pragma warning(disable:4996)
+    #endif
+
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
+    wxFont fontNormal(10, wxDEFAULT, wxNORMAL, wxNORMAL);
+    CHECK( fontNormal.GetWeight() == wxFONTWEIGHT_NORMAL );
+
+    wxFont fontBold(10, wxDEFAULT, wxNORMAL, wxBOLD);
+    CHECK( fontBold.GetWeight() == wxFONTWEIGHT_BOLD );
+
+    wxFont fontLight(10, wxDEFAULT, wxNORMAL, wxLIGHT);
+    CHECK( fontLight.GetWeight() == wxFONTWEIGHT_LIGHT );
+
+    wxGCC_WARNING_RESTORE(deprecated-declarations)
+
+    #ifdef __VISUALC__
+        #pragma warning(pop)
+    #endif
+#endif // WXWIN_COMPATIBILITY_3_0
+}
+
+TEST_CASE("wxFont::GetSet", "[font][getters]")
 {
     unsigned numFonts;
     const wxFont *pf = GetTestFonts(numFonts);
@@ -137,12 +240,12 @@ void FontTestCase::GetSet()
         wxFont test(*pf++);
 
         // remember: getters can only be called when wxFont::IsOk() == true
-        CPPUNIT_ASSERT( test.IsOk() );
+        CHECK( test.IsOk() );
 
 
         // test Get/SetFaceName()
-        CPPUNIT_ASSERT( !test.SetFaceName("a dummy face name") );
-        CPPUNIT_ASSERT( !test.IsOk() );
+        CHECK( !test.SetFaceName("a dummy face name") );
+        CHECK( !test.IsOk() );
 
         // if the call to SetFaceName() below fails on your system/port,
         // consider adding another branch to this #if
@@ -159,41 +262,41 @@ void FontTestCase::GetSet()
              "available on this system)", knownGoodFaceName, n),
             test.SetFaceName(knownGoodFaceName)
         );
-        CPPUNIT_ASSERT( test.IsOk() );
+        CHECK( test.IsOk() );
 
 
         // test Get/SetFamily()
 
         test.SetFamily( wxFONTFAMILY_ROMAN );
-        CPPUNIT_ASSERT( test.IsOk() );
+        CHECK( test.IsOk() );
 
         // note that there is always the possibility that GetFamily() returns
         // wxFONTFAMILY_DEFAULT (meaning "unknown" in this case) so that we
         // consider it as a valid return value
         const wxFontFamily family = test.GetFamily();
         if ( family != wxFONTFAMILY_DEFAULT )
-            CPPUNIT_ASSERT_EQUAL( wxFONTFAMILY_ROMAN, family );
+            CHECK( wxFONTFAMILY_ROMAN == family );
 
 
         // test Get/SetEncoding()
 
         //test.SetEncoding( wxFONTENCODING_KOI8 );
-        //CPPUNIT_ASSERT( test.IsOk() );
-        //CPPUNIT_ASSERT_EQUAL( wxFONTENCODING_KOI8 , test.GetEncoding() );
+        //CHECK( test.IsOk() );
+        //CHECK( wxFONTENCODING_KOI8 == test.GetEncoding() );
 
 
         // test Get/SetPointSize()
 
         test.SetPointSize(30);
-        CPPUNIT_ASSERT( test.IsOk() );
-        CPPUNIT_ASSERT_EQUAL( 30, test.GetPointSize() );
+        CHECK( test.IsOk() );
+        CHECK( 30 == test.GetPointSize() );
 
 
         // test Get/SetPixelSize()
 
         test.SetPixelSize(wxSize(0,30));
-        CPPUNIT_ASSERT( test.IsOk() );
-        CPPUNIT_ASSERT( test.GetPixelSize().GetHeight() <= 30 );
+        CHECK( test.IsOk() );
+        CHECK( test.GetPixelSize().GetHeight() <= 30 );
             // NOTE: the match found by SetPixelSize() may be not 100% precise; it
             //       only grants that a font smaller than the required height will
             //       be selected
@@ -202,43 +305,43 @@ void FontTestCase::GetSet()
         // test Get/SetStyle()
 
         test.SetStyle(wxFONTSTYLE_SLANT);
-        CPPUNIT_ASSERT( test.IsOk() );
+        CHECK( test.IsOk() );
 #ifdef __WXMSW__
         // on wxMSW wxFONTSTYLE_SLANT==wxFONTSTYLE_ITALIC, so accept the latter
         // as a valid value too.
         if ( test.GetStyle() != wxFONTSTYLE_ITALIC )
 #endif
-        CPPUNIT_ASSERT_EQUAL( wxFONTSTYLE_SLANT, test.GetStyle() );
+        CHECK( wxFONTSTYLE_SLANT == test.GetStyle() );
 
         // test Get/SetUnderlined()
 
         test.SetUnderlined(true);
-        CPPUNIT_ASSERT( test.IsOk() );
-        CPPUNIT_ASSERT_EQUAL( true, test.GetUnderlined() );
+        CHECK( test.IsOk() );
+        CHECK( test.GetUnderlined() );
 
         const wxFont fontBase = test.GetBaseFont();
-        CPPUNIT_ASSERT( fontBase.IsOk() );
-        CPPUNIT_ASSERT( !fontBase.GetUnderlined() );
-        CPPUNIT_ASSERT( !fontBase.GetStrikethrough() );
-        CPPUNIT_ASSERT_EQUAL( wxFONTWEIGHT_NORMAL, fontBase.GetWeight() );
-        CPPUNIT_ASSERT_EQUAL( wxFONTSTYLE_NORMAL, fontBase.GetStyle() );
+        CHECK( fontBase.IsOk() );
+        CHECK( !fontBase.GetUnderlined() );
+        CHECK( !fontBase.GetStrikethrough() );
+        CHECK( wxFONTWEIGHT_NORMAL == fontBase.GetWeight() );
+        CHECK( wxFONTSTYLE_NORMAL == fontBase.GetStyle() );
 
         // test Get/SetStrikethrough()
 
         test.SetStrikethrough(true);
-        CPPUNIT_ASSERT( test.IsOk() );
-        CPPUNIT_ASSERT_EQUAL( true, test.GetStrikethrough() );
+        CHECK( test.IsOk() );
+        CHECK( test.GetStrikethrough() );
 
 
         // test Get/SetWeight()
 
         test.SetWeight(wxFONTWEIGHT_BOLD);
-        CPPUNIT_ASSERT( test.IsOk() );
-        CPPUNIT_ASSERT_EQUAL( wxFONTWEIGHT_BOLD, test.GetWeight() );
+        CHECK( test.IsOk() );
+        CHECK( wxFONTWEIGHT_BOLD == test.GetWeight() );
     }
 }
 
-void FontTestCase::NativeFontInfo()
+TEST_CASE("wxFont::NativeFontInfo", "[font][fontinfo]")
 {
     unsigned numFonts;
     const wxFont *pf = GetTestFonts(numFonts);
@@ -247,12 +350,12 @@ void FontTestCase::NativeFontInfo()
         wxFont test(*pf++);
 
         const wxString& nid = test.GetNativeFontInfoDesc();
-        CPPUNIT_ASSERT( !nid.empty() );
+        CHECK( !nid.empty() );
             // documented to be never empty
 
         wxFont temp;
-        CPPUNIT_ASSERT( temp.SetNativeFontInfo(nid) );
-        CPPUNIT_ASSERT( temp.IsOk() );
+        CHECK( temp.SetNativeFontInfo(nid) );
+        CHECK( temp.IsOk() );
         WX_ASSERT_MESSAGE(
             ("Test #%u failed\ndump of test font: \"%s\"\ndump of temp font: \"%s\"", \
              n, DumpFont(&test), DumpFont(&temp)),
@@ -261,14 +364,14 @@ void FontTestCase::NativeFontInfo()
 
     // test that clearly invalid font info strings do not work
     wxFont font;
-    CPPUNIT_ASSERT( !font.SetNativeFontInfo("") );
+    CHECK( !font.SetNativeFontInfo("") );
 
     // pango_font_description_from_string() used by wxFont in wxGTK and wxX11
     // never returns an error at all so this assertion fails there -- and as it
     // doesn't seem to be possible to do anything about it maybe we should
     // change wxMSW and other ports to also accept any strings?
 #if !defined(__WXGTK__) && !defined(__WXX11__)
-    CPPUNIT_ASSERT( !font.SetNativeFontInfo("bloordyblop") );
+    CHECK( !font.SetNativeFontInfo("bloordyblop") );
 #endif
 
     // Pango font description doesn't have 'underlined' and 'strikethrough'
@@ -276,23 +379,23 @@ void FontTestCase::NativeFontInfo()
     // are properly preserved by wxNativeFontInfo or its string description.
     font.SetUnderlined(true);
     font.SetStrikethrough(true);
-    CPPUNIT_ASSERT_EQUAL(font, wxFont(font));
-    CPPUNIT_ASSERT_EQUAL(font, wxFont(*font.GetNativeFontInfo()));
-    CPPUNIT_ASSERT_EQUAL(font, wxFont(font.GetNativeFontInfoDesc()));
+    CHECK(font == wxFont(font));
+    CHECK(font == wxFont(*font.GetNativeFontInfo()));
+    CHECK(font == wxFont(font.GetNativeFontInfoDesc()));
     font.SetUnderlined(false);
-    CPPUNIT_ASSERT_EQUAL(font, wxFont(font));
-    CPPUNIT_ASSERT_EQUAL(font, wxFont(*font.GetNativeFontInfo()));
-    CPPUNIT_ASSERT_EQUAL(font, wxFont(font.GetNativeFontInfoDesc()));
+    CHECK(font == wxFont(font));
+    CHECK(font == wxFont(*font.GetNativeFontInfo()));
+    CHECK(font == wxFont(font.GetNativeFontInfoDesc()));
     font.SetUnderlined(true);
     font.SetStrikethrough(false);
-    CPPUNIT_ASSERT_EQUAL(font, wxFont(font));
-    CPPUNIT_ASSERT_EQUAL(font, wxFont(*font.GetNativeFontInfo()));
-    CPPUNIT_ASSERT_EQUAL(font, wxFont(font.GetNativeFontInfoDesc()));
+    CHECK(font == wxFont(font));
+    CHECK(font == wxFont(*font.GetNativeFontInfo()));
+    CHECK(font == wxFont(font.GetNativeFontInfoDesc()));
     // note: the GetNativeFontInfoUserDesc() doesn't preserve all attributes
     // according to docs, so it is not tested.
 }
 
-void FontTestCase::NativeFontInfoUserDesc()
+TEST_CASE("wxFont::NativeFontInfoUserDesc", "[font][fontinfo]")
 {
     unsigned numFonts;
     const wxFont *pf = GetTestFonts(numFonts);
@@ -301,12 +404,12 @@ void FontTestCase::NativeFontInfoUserDesc()
         wxFont test(*pf++);
 
         const wxString& niud = test.GetNativeFontInfoUserDesc();
-        CPPUNIT_ASSERT( !niud.empty() );
+        CHECK( !niud.empty() );
             // documented to be never empty
 
         wxFont temp2;
-        CPPUNIT_ASSERT( temp2.SetNativeFontInfoUserDesc(niud) );
-        CPPUNIT_ASSERT( temp2.IsOk() );
+        CHECK( temp2.SetNativeFontInfoUserDesc(niud) );
+        CHECK( temp2.IsOk() );
 
 #ifdef __WXGTK__
         // Pango saves/restores all font info in the user-friendly string:
@@ -319,8 +422,8 @@ void FontTestCase::NativeFontInfoUserDesc()
         //       are not granted to save/restore all font info.
         //       In fact e.g. the font family is not saved at all; test only those
         //       info which GetNativeFontInfoUserDesc() does indeed save:
-        CPPUNIT_ASSERT_EQUAL( test.GetWeight(), temp2.GetWeight() );
-        CPPUNIT_ASSERT_EQUAL( test.GetStyle(), temp2.GetStyle() );
+        CHECK( test.GetWeight() == temp2.GetWeight() );
+        CHECK( test.GetStyle() == temp2.GetStyle() );
 
         // if the original face name was empty, it means that any face name (in
         // this family) can be used for the new font so we shouldn't be
@@ -328,13 +431,11 @@ void FontTestCase::NativeFontInfoUserDesc()
         const wxString facename = test.GetFaceName();
         if ( !facename.empty() )
         {
-            CPPUNIT_ASSERT_EQUAL( facename.Upper(), temp2.GetFaceName().Upper() );
+            CHECK( facename.Upper() == temp2.GetFaceName().Upper() );
         }
 
-        CPPUNIT_ASSERT_EQUAL( test.GetPointSize(), temp2.GetPointSize() );
-        CPPUNIT_ASSERT_EQUAL( test.GetEncoding(), temp2.GetEncoding() );
+        CHECK( test.GetPointSize() == temp2.GetPointSize() );
+        CHECK( test.GetEncoding() == temp2.GetEncoding() );
 #endif
     }
 }
-
-#endif // wxUSE_FONTMAP

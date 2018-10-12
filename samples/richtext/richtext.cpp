@@ -98,7 +98,7 @@ public:
     virtual bool EditProperties(wxRichTextField* WXUNUSED(obj), wxWindow* WXUNUSED(parent), wxRichTextBuffer* WXUNUSED(buffer)) wxOVERRIDE
     {
         wxString label = GetLabel();
-        wxMessageBox(wxString::Format(wxT("Editing %s"), label.c_str()));
+        wxMessageBox(wxString::Format("Editing %s", label.c_str()));
         return true;
     }
 
@@ -523,10 +523,10 @@ bool MyApp::OnInit()
 
     m_styleSheet = new wxRichTextStyleSheet;
 #if wxUSE_PRINTING_ARCHITECTURE
-    m_printing = new wxRichTextPrinting(wxT("Test Document"));
+    m_printing = new wxRichTextPrinting("Test Document");
 
-    m_printing->SetFooterText(wxT("@TITLE@"), wxRICHTEXT_PAGE_ALL, wxRICHTEXT_PAGE_CENTRE);
-    m_printing->SetFooterText(wxT("Page @PAGENUM@"), wxRICHTEXT_PAGE_ALL, wxRICHTEXT_PAGE_RIGHT);
+    m_printing->SetFooterText("@TITLE@", wxRICHTEXT_PAGE_ALL, wxRICHTEXT_PAGE_CENTRE);
+    m_printing->SetFooterText("Page @PAGENUM@", wxRICHTEXT_PAGE_ALL, wxRICHTEXT_PAGE_RIGHT);
 #endif
 
     CreateStyles();
@@ -539,21 +539,21 @@ bool MyApp::OnInit()
 
     // Add field types
 
-    wxRichTextBuffer::AddFieldType(new wxRichTextFieldTypePropertiesTest(wxT("rectangle"), wxT("RECTANGLE"), wxRichTextFieldTypeStandard::wxRICHTEXT_FIELD_STYLE_RECTANGLE));
+    wxRichTextBuffer::AddFieldType(new wxRichTextFieldTypePropertiesTest("rectangle", "RECTANGLE", wxRichTextFieldTypeStandard::wxRICHTEXT_FIELD_STYLE_RECTANGLE));
 
-    wxRichTextFieldTypeStandard* s1 = new wxRichTextFieldTypeStandard(wxT("begin-section"), wxT("SECTION"), wxRichTextFieldTypeStandard::wxRICHTEXT_FIELD_STYLE_START_TAG);
+    wxRichTextFieldTypeStandard* s1 = new wxRichTextFieldTypeStandard("begin-section", "SECTION", wxRichTextFieldTypeStandard::wxRICHTEXT_FIELD_STYLE_START_TAG);
     s1->SetBackgroundColour(*wxBLUE);
 
-    wxRichTextFieldTypeStandard* s2 = new wxRichTextFieldTypeStandard(wxT("end-section"), wxT("SECTION"), wxRichTextFieldTypeStandard::wxRICHTEXT_FIELD_STYLE_END_TAG);
+    wxRichTextFieldTypeStandard* s2 = new wxRichTextFieldTypeStandard("end-section", "SECTION", wxRichTextFieldTypeStandard::wxRICHTEXT_FIELD_STYLE_END_TAG);
     s2->SetBackgroundColour(*wxBLUE);
 
-    wxRichTextFieldTypeStandard* s3 = new wxRichTextFieldTypeStandard(wxT("bitmap"), wxBitmap(paste_xpm), wxRichTextFieldTypeStandard::wxRICHTEXT_FIELD_STYLE_NO_BORDER);
+    wxRichTextFieldTypeStandard* s3 = new wxRichTextFieldTypeStandard("bitmap", wxBitmap(paste_xpm), wxRichTextFieldTypeStandard::wxRICHTEXT_FIELD_STYLE_NO_BORDER);
 
     wxRichTextBuffer::AddFieldType(s1);
     wxRichTextBuffer::AddFieldType(s2);
     wxRichTextBuffer::AddFieldType(s3);
 
-    wxRichTextFieldTypeCompositeTest* s4 = new wxRichTextFieldTypeCompositeTest(wxT("composite"), wxT("This is a field value"));
+    wxRichTextFieldTypeCompositeTest* s4 = new wxRichTextFieldTypeCompositeTest("composite", "This is a field value");
     wxRichTextBuffer::AddFieldType(s4);
 
     // Add image handlers
@@ -576,7 +576,7 @@ bool MyApp::OnInit()
     // create the main application window
     wxSize size = wxGetDisplaySize();
     size.Scale(0.75, 0.75);
-    MyFrame *frame = new MyFrame(wxT("wxRichTextCtrl Sample"), wxID_ANY, wxDefaultPosition, size);
+    MyFrame *frame = new MyFrame("wxRichTextCtrl Sample", wxID_ANY, wxDefaultPosition, size);
 
 #if wxUSE_PRINTING_ARCHITECTURE
     m_printing->SetParentWindow(frame);
@@ -609,7 +609,7 @@ void MyApp::CreateStyles()
     wxFont romanFont(wxFontInfo(12).Family(wxFONTFAMILY_ROMAN));
     wxFont swissFont(wxFontInfo(12).Family(wxFONTFAMILY_SWISS));
 
-    wxRichTextParagraphStyleDefinition* normalPara = new wxRichTextParagraphStyleDefinition(wxT("Normal"));
+    wxRichTextParagraphStyleDefinition* normalPara = new wxRichTextParagraphStyleDefinition("Normal");
     wxRichTextAttr normalAttr;
     normalAttr.SetFontFaceName(romanFont.GetFaceName());
     normalAttr.SetFontSize(12);
@@ -621,7 +621,7 @@ void MyApp::CreateStyles()
 
     m_styleSheet->AddParagraphStyle(normalPara);
 
-    wxRichTextParagraphStyleDefinition* indentedPara = new wxRichTextParagraphStyleDefinition(wxT("Indented"));
+    wxRichTextParagraphStyleDefinition* indentedPara = new wxRichTextParagraphStyleDefinition("Indented");
     wxRichTextAttr indentedAttr;
     indentedAttr.SetFontFaceName(romanFont.GetFaceName());
     indentedAttr.SetFontSize(12);
@@ -632,7 +632,7 @@ void MyApp::CreateStyles()
 
     m_styleSheet->AddParagraphStyle(indentedPara);
 
-    wxRichTextParagraphStyleDefinition* indentedPara2 = new wxRichTextParagraphStyleDefinition(wxT("Red Bold Indented"));
+    wxRichTextParagraphStyleDefinition* indentedPara2 = new wxRichTextParagraphStyleDefinition("Red Bold Indented");
     wxRichTextAttr indentedAttr2;
     indentedAttr2.SetFontFaceName(romanFont.GetFaceName());
     indentedAttr2.SetFontSize(12);
@@ -646,7 +646,7 @@ void MyApp::CreateStyles()
 
     m_styleSheet->AddParagraphStyle(indentedPara2);
 
-    wxRichTextParagraphStyleDefinition* flIndentedPara = new wxRichTextParagraphStyleDefinition(wxT("First Line Indented"));
+    wxRichTextParagraphStyleDefinition* flIndentedPara = new wxRichTextParagraphStyleDefinition("First Line Indented");
     wxRichTextAttr flIndentedAttr;
     flIndentedAttr.SetFontFaceName(swissFont.GetFaceName());
     flIndentedAttr.SetFontSize(12);
@@ -659,7 +659,7 @@ void MyApp::CreateStyles()
 
     // Character styles
 
-    wxRichTextCharacterStyleDefinition* boldDef = new wxRichTextCharacterStyleDefinition(wxT("Bold"));
+    wxRichTextCharacterStyleDefinition* boldDef = new wxRichTextCharacterStyleDefinition("Bold");
     wxRichTextAttr boldAttr;
     boldAttr.SetFontFaceName(romanFont.GetFaceName());
     boldAttr.SetFontSize(12);
@@ -670,7 +670,7 @@ void MyApp::CreateStyles()
 
     m_styleSheet->AddCharacterStyle(boldDef);
 
-    wxRichTextCharacterStyleDefinition* italicDef = new wxRichTextCharacterStyleDefinition(wxT("Italic"));
+    wxRichTextCharacterStyleDefinition* italicDef = new wxRichTextCharacterStyleDefinition("Italic");
     wxRichTextAttr italicAttr;
     italicAttr.SetFontFaceName(romanFont.GetFaceName());
     italicAttr.SetFontSize(12);
@@ -681,7 +681,7 @@ void MyApp::CreateStyles()
 
     m_styleSheet->AddCharacterStyle(italicDef);
 
-    wxRichTextCharacterStyleDefinition* redDef = new wxRichTextCharacterStyleDefinition(wxT("Red Bold"));
+    wxRichTextCharacterStyleDefinition* redDef = new wxRichTextCharacterStyleDefinition("Red Bold");
     wxRichTextAttr redAttr;
     redAttr.SetFontFaceName(romanFont.GetFaceName());
     redAttr.SetFontSize(12);
@@ -693,28 +693,28 @@ void MyApp::CreateStyles()
 
     m_styleSheet->AddCharacterStyle(redDef);
 
-    wxRichTextListStyleDefinition* bulletList = new wxRichTextListStyleDefinition(wxT("Bullet List 1"));
+    wxRichTextListStyleDefinition* bulletList = new wxRichTextListStyleDefinition("Bullet List 1");
     int i;
     for (i = 0; i < 10; i++)
     {
         wxString bulletText;
         if (i == 0)
-            bulletText = wxT("standard/circle");
+            bulletText = "standard/circle";
         else if (i == 1)
-            bulletText = wxT("standard/square");
+            bulletText = "standard/square";
         else if (i == 2)
-            bulletText = wxT("standard/circle");
+            bulletText = "standard/circle";
         else if (i == 3)
-            bulletText = wxT("standard/square");
+            bulletText = "standard/square";
         else
-            bulletText = wxT("standard/circle");
+            bulletText = "standard/circle";
 
         bulletList->SetAttributes(i, (i+1)*60, 60, wxTEXT_ATTR_BULLET_STYLE_STANDARD, bulletText);
     }
 
     m_styleSheet->AddListStyle(bulletList);
 
-    wxRichTextListStyleDefinition* numberedList = new wxRichTextListStyleDefinition(wxT("Numbered List 1"));
+    wxRichTextListStyleDefinition* numberedList = new wxRichTextListStyleDefinition("Numbered List 1");
     for (i = 0; i < 10; i++)
     {
         long numberStyle;
@@ -736,7 +736,7 @@ void MyApp::CreateStyles()
 
     m_styleSheet->AddListStyle(numberedList);
 
-    wxRichTextListStyleDefinition* outlineList = new wxRichTextListStyleDefinition(wxT("Outline List 1"));
+    wxRichTextListStyleDefinition* outlineList = new wxRichTextListStyleDefinition("Outline List 1");
     for (i = 0; i < 10; i++)
     {
         long numberStyle;
@@ -772,23 +772,23 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(ID_About, wxT("&About\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(ID_About, "&About\tF1", "Show about dialog");
 
-    fileMenu->Append(wxID_OPEN, wxT("&Open\tCtrl+O"), wxT("Open a file"));
-    fileMenu->Append(wxID_SAVE, wxT("&Save\tCtrl+S"), wxT("Save a file"));
-    fileMenu->Append(wxID_SAVEAS, wxT("&Save As...\tF12"), wxT("Save to a new file"));
+    fileMenu->Append(wxID_OPEN, "&Open\tCtrl+O", "Open a file");
+    fileMenu->Append(wxID_SAVE, "&Save\tCtrl+S", "Save a file");
+    fileMenu->Append(wxID_SAVEAS, "&Save As...\tF12", "Save to a new file");
     fileMenu->AppendSeparator();
-    fileMenu->Append(ID_RELOAD, wxT("&Reload Text\tF2"), wxT("Reload the initial text"));
+    fileMenu->Append(ID_RELOAD, "&Reload Text\tF2", "Reload the initial text");
     fileMenu->AppendSeparator();
-    fileMenu->Append(ID_PAGE_SETUP, wxT("Page Set&up..."), wxT("Page setup"));
+    fileMenu->Append(ID_PAGE_SETUP, "Page Set&up...", "Page setup");
 #if wxUSE_PRINTING_ARCHITECTURE
-    fileMenu->Append(ID_PRINT, wxT("&Print...\tCtrl+P"), wxT("Print"));
-    fileMenu->Append(ID_PREVIEW, wxT("Print Pre&view"), wxT("Print preview"));
+    fileMenu->Append(ID_PRINT, "&Print...\tCtrl+P", "Print");
+    fileMenu->Append(ID_PREVIEW, "Print Pre&view", "Print preview");
 #endif
     fileMenu->AppendSeparator();
-    fileMenu->Append(ID_VIEW_HTML, wxT("&View as HTML"), wxT("View HTML"));
+    fileMenu->Append(ID_VIEW_HTML, "&View as HTML", "View HTML");
     fileMenu->AppendSeparator();
-    fileMenu->Append(ID_Quit, wxT("E&xit\tAlt+X"), wxT("Quit this program"));
+    fileMenu->Append(ID_Quit, "E&xit\tAlt+X", "Quit this program");
 
     wxMenu* editMenu = new wxMenu;
     editMenu->Append(wxID_UNDO, _("&Undo\tCtrl+Z"));
@@ -858,13 +858,13 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(fileMenu, wxT("&File"));
-    menuBar->Append(editMenu, wxT("&Edit"));
-    menuBar->Append(formatMenu, wxT("F&ormat"));
-    menuBar->Append(listsMenu, wxT("&Lists"));
-    menuBar->Append(tableMenu, wxT("&Tables"));
-    menuBar->Append(insertMenu, wxT("&Insert"));
-    menuBar->Append(helpMenu, wxT("&Help"));
+    menuBar->Append(fileMenu, "&File");
+    menuBar->Append(editMenu, "&Edit");
+    menuBar->Append(formatMenu, "F&ormat");
+    menuBar->Append(listsMenu, "&Lists");
+    menuBar->Append(tableMenu, "&Tables");
+    menuBar->Append(insertMenu, "&Insert");
+    menuBar->Append(helpMenu, "&Help");
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -877,7 +877,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     if ( !is_pda )
     {
         CreateStatusBar(2);
-        SetStatusText(wxT("Welcome to wxRichTextCtrl!"));
+        SetStatusText("Welcome to wxRichTextCtrl!");
     }
 #endif
 
@@ -890,7 +890,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     // toolbar to avoid the need for this workaround. Or, use the toolbar in a container window
     // as part of a more complex hierarchy, and the toolbar will automatically be non-native.
 
-    wxSystemOptions::SetOption(wxT("mac.toolbar.no-native"), 1);
+    wxSystemOptions::SetOption("mac.toolbar.no-native", 1);
 
     wxToolBar* toolBar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                        wxNO_BORDER|wxTB_FLAT|wxTB_NODIVIDER|wxTB_NOALIGN);
@@ -995,11 +995,11 @@ void MyFrame::WriteInitialText()
 
     wxString lineBreak = (wxChar) 29;
 
-    r.WriteText(wxString(wxT("Welcome to wxRichTextCtrl, a wxWidgets control")) + lineBreak + wxT("for editing and presenting styled text and images\n"));
+    r.WriteText(wxString("Welcome to wxRichTextCtrl, a wxWidgets control") + lineBreak + "for editing and presenting styled text and images\n");
     r.EndFontSize();
 
     r.BeginItalic();
-    r.WriteText(wxT("by Julian Smart"));
+    r.WriteText("by Julian Smart");
     r.EndItalic();
 
     r.EndBold();
@@ -1014,7 +1014,7 @@ void MyFrame::WriteInitialText()
 
 #if 0
     r.BeginAlignment(wxTEXT_ALIGNMENT_CENTRE);
-    r.WriteText(wxString(wxT("This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side.")));
+    r.WriteText(wxString("This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side."));
     r.Newline();
     r.EndAlignment();
 #endif
@@ -1022,98 +1022,98 @@ void MyFrame::WriteInitialText()
     r.BeginAlignment(wxTEXT_ALIGNMENT_LEFT);
     wxRichTextAttr imageAttr;
     imageAttr.GetTextBoxAttr().SetFloatMode(wxTEXT_BOX_ATTR_FLOAT_LEFT);
-    r.WriteText(wxString(wxT("This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side.")));
+    r.WriteText(wxString("This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side. This is a simple test for a floating left image test. The zebra image should be placed at the left side of the current buffer and all the text should flow around it at the right side."));
     r.WriteImage(wxBitmap(zebra_xpm), wxBITMAP_TYPE_PNG, imageAttr);
 
     imageAttr.GetTextBoxAttr().GetTop().SetValue(200);
     imageAttr.GetTextBoxAttr().GetTop().SetUnits(wxTEXT_ATTR_UNITS_PIXELS);
     imageAttr.GetTextBoxAttr().SetFloatMode(wxTEXT_BOX_ATTR_FLOAT_RIGHT);
     r.WriteImage(wxBitmap(zebra_xpm), wxBITMAP_TYPE_PNG, imageAttr);
-    r.WriteText(wxString(wxT("This is a simple test for a floating right image test. The zebra image should be placed at the right side of the current buffer and all the text should flow around it at the left side. This is a simple test for a floating left image test. The zebra image should be placed at the right side of the current buffer and all the text should flow around it at the left side. This is a simple test for a floating left image test. The zebra image should be placed at the right side of the current buffer and all the text should flow around it at the left side.")));
+    r.WriteText(wxString("This is a simple test for a floating right image test. The zebra image should be placed at the right side of the current buffer and all the text should flow around it at the left side. This is a simple test for a floating left image test. The zebra image should be placed at the right side of the current buffer and all the text should flow around it at the left side. This is a simple test for a floating left image test. The zebra image should be placed at the right side of the current buffer and all the text should flow around it at the left side."));
     r.EndAlignment();
     r.Newline();
 
-    r.WriteText(wxT("What can you do with this thing? "));
+    r.WriteText("What can you do with this thing? ");
 
     r.WriteImage(wxBitmap(smiley_xpm));
-    r.WriteText(wxT(" Well, you can change text "));
+    r.WriteText(" Well, you can change text ");
 
     r.BeginTextColour(*wxRED);
-    r.WriteText(wxT("colour, like this red bit."));
+    r.WriteText("colour, like this red bit.");
     r.EndTextColour();
 
     wxRichTextAttr backgroundColourAttr;
     backgroundColourAttr.SetBackgroundColour(*wxGREEN);
     backgroundColourAttr.SetTextColour(*wxBLUE);
     r.BeginStyle(backgroundColourAttr);
-    r.WriteText(wxT(" And this blue on green bit."));
+    r.WriteText(" And this blue on green bit.");
     r.EndStyle();
 
-    r.WriteText(wxT(" Naturally you can make things "));
+    r.WriteText(" Naturally you can make things ");
     r.BeginBold();
-    r.WriteText(wxT("bold "));
+    r.WriteText("bold ");
     r.EndBold();
     r.BeginItalic();
-    r.WriteText(wxT("or italic "));
+    r.WriteText("or italic ");
     r.EndItalic();
     r.BeginUnderline();
-    r.WriteText(wxT("or underlined."));
+    r.WriteText("or underlined.");
     r.EndUnderline();
 
     r.BeginFontSize(14);
-    r.WriteText(wxT(" Different font sizes on the same line is allowed, too."));
+    r.WriteText(" Different font sizes on the same line is allowed, too.");
     r.EndFontSize();
 
-    r.WriteText(wxT(" Next we'll show an indented paragraph."));
+    r.WriteText(" Next we'll show an indented paragraph.");
 
     r.Newline();
 
     r.BeginLeftIndent(60);
-    r.WriteText(wxT("It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable."));
+    r.WriteText("It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable.");
     r.Newline();
 
     r.EndLeftIndent();
 
-    r.WriteText(wxT("Next, we'll show a first-line indent, achieved using BeginLeftIndent(100, -40)."));
+    r.WriteText("Next, we'll show a first-line indent, achieved using BeginLeftIndent(100, -40).");
 
     r.Newline();
 
     r.BeginLeftIndent(100, -40);
 
-    r.WriteText(wxT("It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable."));
+    r.WriteText("It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable.");
     r.Newline();
 
     r.EndLeftIndent();
 
-    r.WriteText(wxT("Numbered bullets are possible, again using subindents:"));
+    r.WriteText("Numbered bullets are possible, again using subindents:");
     r.Newline();
 
     r.BeginNumberedBullet(1, 100, 60);
-    r.WriteText(wxT("This is my first item. Note that wxRichTextCtrl can apply numbering and bullets automatically based on list styles, but this list is formatted explicitly by setting indents."));
+    r.WriteText("This is my first item. Note that wxRichTextCtrl can apply numbering and bullets automatically based on list styles, but this list is formatted explicitly by setting indents.");
     r.Newline();
     r.EndNumberedBullet();
 
     r.BeginNumberedBullet(2, 100, 60);
-    r.WriteText(wxT("This is my second item."));
+    r.WriteText("This is my second item.");
     r.Newline();
     r.EndNumberedBullet();
 
-    r.WriteText(wxT("The following paragraph is right-indented:"));
+    r.WriteText("The following paragraph is right-indented:");
     r.Newline();
 
     r.BeginRightIndent(200);
 
-    r.WriteText(wxT("It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable."));
+    r.WriteText("It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable.");
     r.Newline();
 
     r.EndRightIndent();
 
-    r.WriteText(wxT("The following paragraph is right-aligned with 1.5 line spacing:"));
+    r.WriteText("The following paragraph is right-aligned with 1.5 line spacing:");
     r.Newline();
 
     r.BeginAlignment(wxTEXT_ALIGNMENT_RIGHT);
     r.BeginLineSpacing(wxTEXT_ATTR_LINE_SPACING_HALF);
-    r.WriteText(wxT("It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable."));
+    r.WriteText("It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable.");
     r.Newline();
     r.EndLineSpacing();
     r.EndAlignment();
@@ -1128,44 +1128,44 @@ void MyFrame::WriteInitialText()
     attr.SetTabs(tabs);
     r.SetDefaultStyle(attr);
 
-    r.WriteText(wxT("This line contains tabs:\tFirst tab\tSecond tab\tThird tab"));
+    r.WriteText("This line contains tabs:\tFirst tab\tSecond tab\tThird tab");
     r.Newline();
 
-    r.WriteText(wxT("Other notable features of wxRichTextCtrl include:"));
+    r.WriteText("Other notable features of wxRichTextCtrl include:");
     r.Newline();
 
-    r.BeginSymbolBullet(wxT('*'), 100, 60);
-    r.WriteText(wxT("Compatibility with wxTextCtrl API"));
-    r.Newline();
-    r.EndSymbolBullet();
-
-    r.BeginSymbolBullet(wxT('*'), 100, 60);
-    r.WriteText(wxT("Easy stack-based BeginXXX()...EndXXX() style setting in addition to SetStyle()"));
+    r.BeginSymbolBullet('*', 100, 60);
+    r.WriteText("Compatibility with wxTextCtrl API");
     r.Newline();
     r.EndSymbolBullet();
 
-    r.BeginSymbolBullet(wxT('*'), 100, 60);
-    r.WriteText(wxT("XML loading and saving"));
+    r.BeginSymbolBullet('*', 100, 60);
+    r.WriteText("Easy stack-based BeginXXX()...EndXXX() style setting in addition to SetStyle()");
     r.Newline();
     r.EndSymbolBullet();
 
-    r.BeginSymbolBullet(wxT('*'), 100, 60);
-    r.WriteText(wxT("Undo/Redo, with batching option and Undo suppressing"));
+    r.BeginSymbolBullet('*', 100, 60);
+    r.WriteText("XML loading and saving");
     r.Newline();
     r.EndSymbolBullet();
 
-    r.BeginSymbolBullet(wxT('*'), 100, 60);
-    r.WriteText(wxT("Clipboard copy and paste"));
+    r.BeginSymbolBullet('*', 100, 60);
+    r.WriteText("Undo/Redo, with batching option and Undo suppressing");
     r.Newline();
     r.EndSymbolBullet();
 
-    r.BeginSymbolBullet(wxT('*'), 100, 60);
-    r.WriteText(wxT("wxRichTextStyleSheet with named character and paragraph styles, and control for applying named styles"));
+    r.BeginSymbolBullet('*', 100, 60);
+    r.WriteText("Clipboard copy and paste");
     r.Newline();
     r.EndSymbolBullet();
 
-    r.BeginSymbolBullet(wxT('*'), 100, 60);
-    r.WriteText(wxT("A design that can easily be extended to other content types, ultimately with text boxes, tables, controls, and so on"));
+    r.BeginSymbolBullet('*', 100, 60);
+    r.WriteText("wxRichTextStyleSheet with named character and paragraph styles, and control for applying named styles");
+    r.Newline();
+    r.EndSymbolBullet();
+
+    r.BeginSymbolBullet('*', 100, 60);
+    r.WriteText("A design that can easily be extended to other content types, ultimately with text boxes, tables, controls, and so on");
     r.Newline();
     r.EndSymbolBullet();
 
@@ -1174,17 +1174,17 @@ void MyFrame::WriteInitialText()
     urlStyle.SetTextColour(*wxBLUE);
     urlStyle.SetFontUnderlined(true);
 
-    r.WriteText(wxT("wxRichTextCtrl can also display URLs, such as this one: "));
+    r.WriteText("wxRichTextCtrl can also display URLs, such as this one: ");
     r.BeginStyle(urlStyle);
-    r.BeginURL(wxT("http://www.wxwidgets.org"));
-    r.WriteText(wxT("The wxWidgets Web Site"));
+    r.BeginURL("http://www.wxwidgets.org");
+    r.WriteText("The wxWidgets Web Site");
     r.EndURL();
     r.EndStyle();
-    r.WriteText(wxT(". Click on the URL to generate an event."));
+    r.WriteText(". Click on the URL to generate an event.");
 
     r.Newline();
 
-    r.WriteText(wxT("Note: this sample content was generated programmatically from within the MyFrame constructor in the demo. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!\n"));
+    r.WriteText("Note: this sample content was generated programmatically from within the MyFrame constructor in the demo. The images were loaded from inline XPMs. Enjoy wxRichTextCtrl!\n");
 
     r.EndParagraphSpacing();
 
@@ -1207,7 +1207,7 @@ void MyFrame::WriteInitialText()
         wxRichTextBox* textBox = r.WriteTextBox(attr);
         r.SetFocusObject(textBox);
 
-        r.WriteText(wxT("This is a text box. Just testing! Once more unto the breach, dear friends, once more..."));
+        r.WriteText("This is a text box. Just testing! Once more unto the breach, dear friends, once more...");
 
         r.SetFocusObject(NULL); // Set the focus back to the main buffer
         r.SetInsertionPointEnd();
@@ -1242,7 +1242,7 @@ void MyFrame::WriteInitialText()
         {
             for (i = 0; i < table->GetColumnCount(); i++)
             {
-                wxString msg = wxString::Format(wxT("This is cell %d, %d"), (j+1), (i+1));
+                wxString msg = wxString::Format("This is cell %d, %d", (j+1), (i+1));
                 r.SetFocusObject(table->GetCell(j, i));
                 r.WriteText(msg);
             }
@@ -1276,18 +1276,18 @@ void MyFrame::WriteInitialText()
     r.Newline(); r.Newline();
 
     wxRichTextProperties properties;
-    r.WriteText(wxT("This is a rectangle field: "));
-    r.WriteField(wxT("rectangle"), properties);
-    r.WriteText(wxT(" and a begin section field: "));
-    r.WriteField(wxT("begin-section"), properties);
-    r.WriteText(wxT("This is text between the two tags."));
-    r.WriteField(wxT("end-section"), properties);
-    r.WriteText(wxT(" Now a bitmap. "));
-    r.WriteField(wxT("bitmap"), properties);
-    r.WriteText(wxT(" Before we go, here's a composite field: ***"));
-    wxRichTextField* field = r.WriteField(wxT("composite"), properties);
+    r.WriteText("This is a rectangle field: ");
+    r.WriteField("rectangle", properties);
+    r.WriteText(" and a begin section field: ");
+    r.WriteField("begin-section", properties);
+    r.WriteText("This is text between the two tags.");
+    r.WriteField("end-section", properties);
+    r.WriteText(" Now a bitmap. ");
+    r.WriteField("bitmap", properties);
+    r.WriteText(" Before we go, here's a composite field: ***");
+    wxRichTextField* field = r.WriteField("composite", properties);
     field->UpdateField(& r.GetBuffer()); // Creates the composite value (sort of a text box)
-    r.WriteText(wxT("*** End of composite field."));
+    r.WriteText("*** End of composite field.");
 
     r.Newline();
     r.EndSuppressUndo();
@@ -1295,13 +1295,13 @@ void MyFrame::WriteInitialText()
     // Add some locked content first - needs Undo to be enabled
     {
         r.BeginLock();
-        r.WriteText(wxString(wxT("This is a locked object.")));
+        r.WriteText(wxString("This is a locked object."));
         r.EndLock();
 
-        r.WriteText(wxString(wxT(" This is unlocked text. ")));
+        r.WriteText(wxString(" This is unlocked text. "));
 
         r.BeginLock();
-        r.WriteText(wxString(wxT("More locked content.")));
+        r.WriteText(wxString("More locked content."));
         r.EndLock();
         r.Newline();
 
@@ -1323,8 +1323,8 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( wxT("This is a demo for wxRichTextCtrl, a control for editing styled text.\n(c) Julian Smart, 2005"));
-    wxMessageBox(msg, wxT("About wxRichTextCtrl Sample"), wxOK | wxICON_INFORMATION, this);
+    msg.Printf( "This is a demo for wxRichTextCtrl, a control for editing styled text.\n(c) Julian Smart, 2005");
+    wxMessageBox(msg, "About wxRichTextCtrl Sample", wxOK | wxICON_INFORMATION, this);
 }
 
 // Forward command events to the current rich text control, if any
@@ -1374,8 +1374,8 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 
     wxString filter = wxRichTextBuffer::GetExtWildcard(false, false, & fileTypes);
     if (!filter.empty())
-        filter += wxT("|");
-    filter += wxT("All files (*.*)|*.*");
+        filter += "|";
+    filter += "All files (*.*)|*.*";
 
     wxFileDialog dialog(this,
         _("Choose a filename"),
@@ -1434,8 +1434,8 @@ void MyFrame::OnSaveAs(wxCommandEvent& WXUNUSED(event))
             m_richTextCtrl->SaveFile(path);
 
             long t = stopwatch.Time();
-            wxLogDebug(wxT("Saving took %ldms"), t);
-            wxMessageBox(wxString::Format(wxT("Saving took %ldms"), t));
+            wxLogDebug("Saving took %ldms", t);
+            wxMessageBox(wxString::Format("Saving took %ldms", t));
         }
     }
 }
@@ -1780,7 +1780,7 @@ void MyFrame::OnViewHTML(wxCommandEvent& WXUNUSED(event))
     wxHtmlWindow* win = new wxHtmlWindow(& dialog, wxID_ANY, wxDefaultPosition, wxSize(500, 400), wxSUNKEN_BORDER);
     boxSizer->Add(win, 1, wxALL, 5);
 
-    wxButton* cancelButton = new wxButton(& dialog, wxID_CANCEL, wxT("&Close"));
+    wxButton* cancelButton = new wxButton(& dialog, wxID_CANCEL, "&Close");
     boxSizer->Add(cancelButton, 0, wxALL|wxCENTRE, 5);
 
     wxString text;
@@ -1891,7 +1891,7 @@ void MyFrame::OnInsertSymbol(wxCommandEvent& WXUNUSED(event))
     // 'normal text', i.e. the current font) but do tell the dialog
     // what 'normal text' is.
 
-    wxSymbolPickerDialog dlg(wxT("*"), wxEmptyString, currentFontName, this);
+    wxSymbolPickerDialog dlg("*", wxEmptyString, currentFontName, this);
 
     if (dlg.ShowModal() == wxID_OK)
     {
@@ -1917,7 +1917,7 @@ void MyFrame::OnNumberList(wxCommandEvent& WXUNUSED(event))
     if (m_richTextCtrl->HasSelection())
     {
         wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
-        m_richTextCtrl->SetListStyle(range, wxT("Numbered List 1"), wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_RENUMBER);
+        m_richTextCtrl->SetListStyle(range, "Numbered List 1", wxRICHTEXT_SETSTYLE_WITH_UNDO|wxRICHTEXT_SETSTYLE_RENUMBER);
     }
 }
 
@@ -1940,7 +1940,7 @@ void MyFrame::OnItemizeList(wxCommandEvent& WXUNUSED(event))
     if (m_richTextCtrl->HasSelection())
     {
         wxRichTextRange range = m_richTextCtrl->GetSelectionRange();
-        m_richTextCtrl->SetListStyle(range, wxT("Bullet List 1"));
+        m_richTextCtrl->SetListStyle(range, "Bullet List 1");
     }
 }
 
@@ -2110,19 +2110,19 @@ void MyFrame::OnPreview(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
 {
-    wxDialog dialog(this, wxID_ANY, wxT("Testing"), wxPoint(10, 10), wxSize(400, 300), wxDEFAULT_DIALOG_STYLE);
+    wxDialog dialog(this, wxID_ANY, "Testing", wxPoint(10, 10), wxSize(400, 300), wxDEFAULT_DIALOG_STYLE);
 
     wxNotebook* nb = new wxNotebook(& dialog, wxID_ANY, wxPoint(5, 5), wxSize(300, 250));
     wxPanel* panel = new wxPanel(nb, wxID_ANY, wxDefaultPosition, wxDefaultSize);
     wxPanel* panel2 = new wxPanel(nb, wxID_ANY, wxDefaultPosition, wxDefaultSize);
 
     new wxRichTextCtrl(panel, wxID_ANY, wxEmptyString, wxPoint(5, 5), wxSize(200, 150), wxVSCROLL|wxTE_READONLY);
-    nb->AddPage(panel, wxT("Page 1"));
+    nb->AddPage(panel, "Page 1");
 
     new wxRichTextCtrl(panel2, wxID_ANY, wxEmptyString, wxPoint(5, 5), wxSize(200, 150), wxVSCROLL|wxTE_READONLY);
-    nb->AddPage(panel2, wxT("Page 2"));
+    nb->AddPage(panel2, "Page 2");
 
-    new wxButton(& dialog, wxID_OK, wxT("OK"), wxPoint(5, 180));
+    new wxButton(& dialog, wxID_OK, "OK", wxPoint(5, 180));
 
     dialog.ShowModal();
 
@@ -2131,24 +2131,24 @@ void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSetFontScale(wxCommandEvent& WXUNUSED(event))
 {
-    wxString value = wxString::Format(wxT("%g"), m_richTextCtrl->GetFontScale());
-    wxString text = wxGetTextFromUser(wxT("Enter a text scale factor:"), wxT("Text Scale Factor"), value, wxGetTopLevelParent(this));
+    wxString value = wxString::Format("%g", m_richTextCtrl->GetFontScale());
+    wxString text = wxGetTextFromUser("Enter a text scale factor:", "Text Scale Factor", value, wxGetTopLevelParent(this));
     if (!text.IsEmpty() && value != text)
     {
         double scale = 1.0;
-        wxSscanf(text, wxT("%lf"), & scale);
+        wxSscanf(text, "%lf", & scale);
         m_richTextCtrl->SetFontScale(scale, true);
     }
 }
 
 void MyFrame::OnSetDimensionScale(wxCommandEvent& WXUNUSED(event))
 {
-    wxString value = wxString::Format(wxT("%g"), m_richTextCtrl->GetDimensionScale());
-    wxString text = wxGetTextFromUser(wxT("Enter a dimension scale factor:"), wxT("Dimension Scale Factor"), value, wxGetTopLevelParent(this));
+    wxString value = wxString::Format("%g", m_richTextCtrl->GetDimensionScale());
+    wxString text = wxGetTextFromUser("Enter a dimension scale factor:", "Dimension Scale Factor", value, wxGetTopLevelParent(this));
     if (!text.IsEmpty() && value != text)
     {
         double scale = 1.0;
-        wxSscanf(text, wxT("%lf"), & scale);
+        wxSscanf(text, "%lf", & scale);
         m_richTextCtrl->SetDimensionScale(scale, true);
     }
 }
@@ -2168,7 +2168,7 @@ void MyRichTextCtrl::PrepareContent(wxRichTextParagraphLayoutBox& container)
                 while (childNode)
                 {
                     wxRichTextObject* obj = childNode->GetData();
-                    obj->GetProperties().SetProperty(wxT("Lock"), m_lockId);
+                    obj->GetProperties().SetProperty("Lock", m_lockId);
 
                     childNode = childNode->GetNext();
                 }
@@ -2184,7 +2184,7 @@ bool MyRichTextCtrl::CanDeleteRange(wxRichTextParagraphLayoutBox& container, con
     for (i = range.GetStart(); i < range.GetEnd(); i++)
     {
         wxRichTextObject* obj = container.GetLeafObjectAtPosition(i);
-        if (obj && obj->GetProperties().HasProperty(wxT("Lock")))
+        if (obj && obj->GetProperties().HasProperty("Lock"))
         {
             return false;
         }
@@ -2199,10 +2199,10 @@ bool MyRichTextCtrl::CanInsertContent(wxRichTextParagraphLayoutBox& container, l
 
     long lock1 = -1, lock2 = -1;
 
-    if (child1 && child1->GetProperties().HasProperty(wxT("Lock")))
-        lock1 = child1->GetProperties().GetPropertyLong(wxT("Lock"));
-    if (child2 && child2->GetProperties().HasProperty(wxT("Lock")))
-        lock2 = child2->GetProperties().GetPropertyLong(wxT("Lock"));
+    if (child1 && child1->GetProperties().HasProperty("Lock"))
+        lock1 = child1->GetProperties().GetPropertyLong("Lock");
+    if (child2 && child2->GetProperties().HasProperty("Lock"))
+        lock2 = child2->GetProperties().GetPropertyLong("Lock");
 
     if (lock1 != -1 && lock1 == lock2)
         return false;
@@ -2220,7 +2220,7 @@ class wxRichTextEnhancedDrawingHandler: public wxRichTextDrawingHandler
 public:
     wxRichTextEnhancedDrawingHandler()
     {
-        SetName(wxT("enhanceddrawing"));
+        SetName("enhanceddrawing");
         m_lockBackgroundColour = wxColour(220, 220, 220);
     }
 
@@ -2264,12 +2264,12 @@ public:
 
 bool wxRichTextEnhancedDrawingHandler::HasVirtualAttributes(wxRichTextObject* obj) const
 {
-    return obj->GetProperties().HasProperty(wxT("Lock"));
+    return obj->GetProperties().HasProperty("Lock");
 }
 
 bool wxRichTextEnhancedDrawingHandler::GetVirtualAttributes(wxRichTextAttr& attr, wxRichTextObject* obj) const
 {
-    if (obj->GetProperties().HasProperty(wxT("Lock")))
+    if (obj->GetProperties().HasProperty("Lock"))
     {
         attr.SetBackgroundColour(m_lockBackgroundColour);
         return true;

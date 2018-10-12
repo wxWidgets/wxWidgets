@@ -11,12 +11,14 @@ include(../../source_groups.cmake)
 
 wx_append_sources(GL_FILES OPENGL_CMN)
 
-if(WIN32)
+if(WXMSW)
     wx_append_sources(GL_FILES OPENGL_MSW)
 elseif(WXGTK)
     wx_append_sources(GL_FILES OPENGL_GTK)
 elseif(APPLE)
     wx_append_sources(GL_FILES OPENGL_OSX_SHARED)
+elseif(WXQT)
+    wx_append_sources(GL_FILES OPENGL_QT)
 endif()
 
 wx_add_library(gl ${GL_FILES})

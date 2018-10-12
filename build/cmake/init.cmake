@@ -151,11 +151,41 @@ if(wxUSE_THREADS)
 endif()
 
 if(wxUSE_GUI)
-    if(WIN32 AND wxUSE_METAFILE)
+    if(WXMSW AND wxUSE_METAFILE)
         # this one should probably be made separately configurable
         set(wxUSE_ENH_METAFILE ON)
     endif()
 
+    # WXQT checks
+    if(WXQT)
+        wx_option_force_value(wxUSE_WEBVIEW OFF)
+        wx_option_force_value(wxUSE_METAFILE OFF)
+        if(WIN32)
+            wx_option_force_value(wxUSE_ACCESSIBILITY OFF)
+            wx_option_force_value(wxUSE_OWNER_DRAWN OFF)
+        endif()
+    endif()
+
+    # WXGTK checks, match include/wx/gtk/chkconf.h
+    if(WXGTK)
+        wx_option_force_value(wxUSE_METAFILE OFF)
+
+        if(WIN32)
+            wx_option_force_value(wxUSE_CAIRO ON)
+            wx_option_force_value(wxUSE_ACCESSIBILITY OFF)
+            wx_option_force_value(wxUSE_OWNER_DRAWN OFF)
+        endif()
+
+        if(NOT UNIX)
+            wx_option_force_value(wxUSE_WEBVIEW OFF)
+            wx_option_force_value(wxUSE_MEDIACTRL OFF)
+            wx_option_force_value(wxUSE_UIACTIONSIMULATOR OFF)
+            wx_option_force_value(wxUSE_OPENGL OFF)
+            set(wxUSE_GLCANVAS OFF)
+        endif()
+    endif()
+
+    # extra dependencies
     if(wxUSE_OPENGL)
         find_package(OpenGL)
         if(NOT OPENGL_FOUND)
@@ -170,6 +200,14 @@ if(wxUSE_GUI)
         if(NOT WEBKIT_FOUND OR NOT LIBSOUP_FOUND)
             message(WARNING "webkit not found, wxWebview won't be available")
             wx_option_force_value(wxUSE_WEBVIEW OFF)
+        endif()
+    endif()
+
+    if(wxUSE_PRIVATE_FONTS AND WXGTK)
+        find_package(Fontconfig)
+        if(NOT FONTCONFIG_FOUND)
+            message(WARNING "Fontconfig not found, Private fonts won't be available")
+            wx_option_force_value(wxUSE_PRIVATE_FONTS OFF)
         endif()
     endif()
 

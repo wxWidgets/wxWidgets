@@ -41,6 +41,11 @@ elseif(WXOSX_COCOA)
     wx_append_sources(CORE_SRC OSX_LOWLEVEL)
     wx_append_sources(CORE_SRC OSX_SHARED)
     wx_append_sources(CORE_SRC OSX_COCOA)
+elseif(WXQT)
+    wx_append_sources(CORE_SRC QT)
+    if(WIN32)
+        wx_append_sources(CORE_SRC QT_WIN32)
+    endif()
 endif()
 
 wx_add_library(core ${CORE_SRC})
@@ -65,6 +70,14 @@ if(WXOSX_COCOA)
     wx_lib_link_libraries(core PUBLIC
         "-framework AudioToolbox"
         )
+endif()
+if(WXGTK AND wxUSE_PRIVATE_FONTS)
+    wx_lib_include_directories(core PUBLIC
+        ${FONTCONFIG_INCLUDE_DIR}
+    )
+    wx_lib_link_libraries(core PUBLIC
+        ${FONTCONFIG_LIBRARIES}
+    )
 endif()
 
 wx_finalize_lib(core)

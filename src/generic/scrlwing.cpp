@@ -767,10 +767,18 @@ bool wxScrollHelperBase::ScrollLayout()
         // If we're the scroll target, take into account the
         // virtual size and scrolled position of the window.
 
-        int x = 0, y = 0, w = 0, h = 0;
-        CalcScrolledPosition(0,0, &x,&y);
-        m_win->GetVirtualSize(&w, &h);
-        m_win->GetSizer()->SetDimension(x, y, w, h);
+        wxSize size = m_win->GetVirtualSize();
+
+        // However we should use the real window size in the direction in which
+        // scrolling is disabled, if any.
+        const wxSize clientSize = m_win->GetClientSize();
+        if ( !IsScrollbarShown(wxHORIZONTAL) )
+            size.x = clientSize.x;
+        if ( !IsScrollbarShown(wxVERTICAL) )
+            size.y = clientSize.y;
+
+        m_win->GetSizer()->SetDimension(CalcScrolledPosition(wxPoint(0, 0)),
+                                        size);
         return true;
     }
 

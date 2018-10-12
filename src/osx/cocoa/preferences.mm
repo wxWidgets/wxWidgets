@@ -151,6 +151,10 @@ private:
         info->win->Show();
         SetTitle(info->page->GetName());
 
+        // Refresh the page to ensure everything is drawn in 10.14's dark mode;
+        // without it, generic controls aren't shown at all
+        info->win->Refresh();
+
         // TODO: Preferences window may have some pages resizeable and some
         //       non-resizable on OS X; the whole window is or is not resizable
         //       depending on which page is selected.

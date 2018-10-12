@@ -34,7 +34,11 @@
 
 #include "wx/dcgraph.h"
 #ifndef __WXGTK3__
-#include "wx/gtk/dc.h"
+    #include "wx/gtk/dc.h"
+    #if wxUSE_GRAPHICS_CONTEXT
+        #include <gdk/gdkx.h>
+        #include <cairo-xlib.h>
+    #endif
 #endif
 
 #include "wx/gtk/private.h"
@@ -149,7 +153,7 @@ wxRendererNative& wxRendererNative::GetDefault()
 #define NULL_RECT
 typedef cairo_t wxGTKDrawable;
 
-static cairo_t* wxGetGTKDrawable(wxWindow*, const wxDC& dc)
+static cairo_t* wxGetGTKDrawable(const wxDC& dc)
 {
     wxGraphicsContext* gc = dc.GetGraphicsContext();
     wxCHECK_MSG(gc, NULL, "cannot use wxRendererNative on wxDC of this type");
@@ -166,14 +170,25 @@ static const GtkStateFlags stateTypeToFlags[] = {
 #define NULL_RECT NULL,
 typedef GdkWindow wxGTKDrawable;
 
-static GdkWindow* wxGetGTKDrawable(wxWindow* win, wxDC& dc)
+static GdkWindow* wxGetGTKDrawable(wxDC& dc)
 {
     GdkWindow* gdk_window = NULL;
 
 #if wxUSE_GRAPHICS_CONTEXT
-    if ( wxDynamicCast(&dc, wxGCDC) )
-        gdk_window = win->GTKGetDrawingWindow();
-    else
+    cairo_t* cr = NULL;
+    wxGraphicsContext* gc = dc.GetGraphicsContext();
+    if (gc)
+        cr = static_cast<cairo_t*>(gc->GetNativeContext());
+    if (cr)
+    {
+        cairo_surface_t* surf = cairo_get_target(cr);
+        if (cairo_surface_get_type(surf) == CAIRO_SURFACE_TYPE_XLIB)
+        {
+            gdk_window = static_cast<GdkWindow*>(
+                gdk_xid_table_lookup(cairo_xlib_surface_get_drawable(surf)));
+        }
+    }
+    if (gdk_window == NULL)
 #endif
     {
         wxDCImpl *impl = dc.GetImpl();
@@ -183,10 +198,6 @@ static GdkWindow* wxGetGTKDrawable(wxWindow* win, wxDC& dc)
         else
             wxFAIL_MSG("cannot use wxRendererNative on wxDC of this type");
     }
-
-#if !wxUSE_GRAPHICS_CONTEXT
-    wxUnusedVar(win);
-#endif
 
     return gdk_window;
 }
@@ -224,7 +235,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
     }
 
 #ifdef __WXGTK3__
-    cairo_t* cr = wxGetGTKDrawable(win, dc);
+    cairo_t* cr = wxGetGTKDrawable(dc);
     if (cr == NULL)
         return 0;
 
@@ -255,7 +266,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         gtk_style_context_restore(sc);
     }
 #else
-    GdkWindow* gdk_window = wxGetGTKDrawable(win, dc);
+    GdkWindow* gdk_window = wxGetGTKDrawable(dc);
     gtk_paint_box
     (
         gtk_widget_get_style(button),
@@ -297,7 +308,7 @@ void
 wxRendererGTK::DrawTreeItemButton(wxWindow* win,
                                   wxDC& dc, const wxRect& rect, int flags)
 {
-    wxGTKDrawable* drawable = wxGetGTKDrawable(win, dc);
+    wxGTKDrawable* drawable = wxGetGTKDrawable(dc);
     if (drawable == NULL)
         return;
 
@@ -406,7 +417,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow* win,
         return;
     }
 
-    wxGTKDrawable* drawable = wxGetGTKDrawable(win, dc);
+    wxGTKDrawable* drawable = wxGetGTKDrawable(dc);
     if (drawable == NULL)
         return;
 
@@ -447,7 +458,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow* win,
         flags & wxCONTROL_CURRENT ? GTK_STATE_FLAG_PRELIGHT : GTK_STATE_FLAG_NORMAL);
     gtk_render_handle(sc, drawable, rect.x - x_diff, rect.y, rect.width, rect.height);
 #else
-    GdkWindow* gdk_window = wxGetGTKDrawable(win, dc);
+    GdkWindow* gdk_window = wxGetGTKDrawable(dc);
     if (gdk_window == NULL)
         return;
     gtk_paint_handle
@@ -469,7 +480,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow* win,
 }
 
 void
-wxRendererGTK::DrawDropArrow(wxWindow* win,
+wxRendererGTK::DrawDropArrow(wxWindow*,
                              wxDC& dc,
                              const wxRect& rect,
                              int flags)
@@ -500,7 +511,7 @@ wxRendererGTK::DrawDropArrow(wxWindow* win,
         state = GTK_STATE_NORMAL;
 
 #ifdef __WXGTK3__
-    cairo_t* cr = wxGetGTKDrawable(win, dc);
+    cairo_t* cr = wxGetGTKDrawable(dc);
     if (cr)
     {
         gtk_widget_set_state_flags(button, stateTypeToFlags[state], true);
@@ -508,7 +519,7 @@ wxRendererGTK::DrawDropArrow(wxWindow* win,
         gtk_render_arrow(sc, cr, G_PI, x, y, size);
     }
 #else
-    GdkWindow* gdk_window = wxGetGTKDrawable(win, dc);
+    GdkWindow* gdk_window = wxGetGTKDrawable(dc);
     if (gdk_window == NULL)
         return;
     // draw arrow on button
@@ -540,8 +551,13 @@ wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
 }
 
 wxSize
-wxRendererGTK::GetCheckBoxSize(wxWindow *WXUNUSED(win))
+wxRendererGTK::GetCheckBoxSize(wxWindow* win)
 {
+    // Even though we don't use the window in this implementation, still check
+    // that it's valid to avoid surprises when running the same code under the
+    // other platforms.
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
 #ifdef __WXGTK3__
     int min_width, min_height;
     wxGtkStyleContext sc;
@@ -582,7 +598,7 @@ wxRendererGTK::GetCheckBoxSize(wxWindow *WXUNUSED(win))
 }
 
 void
-wxRendererGTK::DrawCheckBox(wxWindow* win,
+wxRendererGTK::DrawCheckBox(wxWindow*,
                             wxDC& dc,
                             const wxRect& rect,
                             int flags )
@@ -618,7 +634,7 @@ wxRendererGTK::DrawCheckBox(wxWindow* win,
 #endif
 
 #ifdef __WXGTK3__
-    cairo_t* cr = wxGetGTKDrawable(win, dc);
+    cairo_t* cr = wxGetGTKDrawable(dc);
     if (cr == NULL)
         return;
 
@@ -666,7 +682,7 @@ wxRendererGTK::DrawCheckBox(wxWindow* win,
     gtk_render_check(sc, cr, x, y, min_width, min_height);
     gtk_style_context_restore(sc);
 #else
-    GdkWindow* gdk_window = wxGetGTKDrawable(win, dc);
+    GdkWindow* gdk_window = wxGetGTKDrawable(dc);
     if (gdk_window == NULL)
         return;
 
@@ -687,7 +703,7 @@ wxRendererGTK::DrawCheckBox(wxWindow* win,
 }
 
 void
-wxRendererGTK::DrawPushButton(wxWindow* win,
+wxRendererGTK::DrawPushButton(wxWindow*,
                               wxDC& dc,
                               const wxRect& rect,
                               int flags)
@@ -707,7 +723,7 @@ wxRendererGTK::DrawPushButton(wxWindow* win,
         state = GTK_STATE_NORMAL;
 
 #ifdef __WXGTK3__
-    cairo_t* cr = wxGetGTKDrawable(win, dc);
+    cairo_t* cr = wxGetGTKDrawable(dc);
     if (cr)
     {
         GtkStyleContext* sc = gtk_widget_get_style_context(button);
@@ -718,7 +734,7 @@ wxRendererGTK::DrawPushButton(wxWindow* win,
         gtk_style_context_restore(sc);
     }
 #else
-    GdkWindow* gdk_window = wxGetGTKDrawable(win, dc);
+    GdkWindow* gdk_window = wxGetGTKDrawable(dc);
     if (gdk_window == NULL)
         return;
 
@@ -745,7 +761,7 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow* win,
                                      const wxRect& rect,
                                      int flags )
 {
-    wxGTKDrawable* drawable = wxGetGTKDrawable(win, dc);
+    wxGTKDrawable* drawable = wxGetGTKDrawable(dc);
     if (drawable == NULL)
         return;
 
@@ -790,7 +806,7 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow* win,
 
 void wxRendererGTK::DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
 {
-    wxGTKDrawable* drawable = wxGetGTKDrawable(win, dc);
+    wxGTKDrawable* drawable = wxGetGTKDrawable(dc);
     if (drawable == NULL)
         return;
 
@@ -821,9 +837,9 @@ void wxRendererGTK::DrawFocusRect(wxWindow* win, wxDC& dc, const wxRect& rect, i
 }
 
 // Uses the theme to draw the border and fill for something like a wxTextCtrl
-void wxRendererGTK::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+void wxRendererGTK::DrawTextCtrl(wxWindow*, wxDC& dc, const wxRect& rect, int flags)
 {
-    wxGTKDrawable* drawable = wxGetGTKDrawable(win, dc);
+    wxGTKDrawable* drawable = wxGetGTKDrawable(dc);
     if (drawable == NULL)
         return;
 
@@ -869,7 +885,7 @@ void wxRendererGTK::DrawTextCtrl(wxWindow* win, wxDC& dc, const wxRect& rect, in
 // Draw the equivalent of a wxComboBox
 void wxRendererGTK::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
 {
-    wxGTKDrawable* drawable = wxGetGTKDrawable(win, dc);
+    wxGTKDrawable* drawable = wxGetGTKDrawable(dc);
     if (drawable == NULL)
         return;
 
@@ -893,6 +909,7 @@ void wxRendererGTK::DrawComboBox(wxWindow* win, wxDC& dc, const wxRect& rect, in
     r.width = r.height;
     DrawComboBoxDropButton(win, dc, r, flags);
 #else
+    wxUnusedVar(win);
     gtk_paint_shadow
     (
         gtk_widget_get_style(combo),
@@ -961,9 +978,9 @@ void wxRendererGTK::DrawChoice(wxWindow* win, wxDC& dc,
 
 
 // Draw a themed radio button
-void wxRendererGTK::DrawRadioBitmap(wxWindow* win, wxDC& dc, const wxRect& rect, int flags)
+void wxRendererGTK::DrawRadioBitmap(wxWindow*, wxDC& dc, const wxRect& rect, int flags)
 {
-    wxGTKDrawable* drawable = wxGetGTKDrawable(win, dc);
+    wxGTKDrawable* drawable = wxGetGTKDrawable(dc);
     if (drawable == NULL)
         return;
 

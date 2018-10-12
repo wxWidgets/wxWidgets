@@ -90,6 +90,7 @@ void MiscGUIFuncsTestCase::DisplaySize()
 
 void MiscGUIFuncsTestCase::URLDataObject()
 {
+#if wxUSE_DATAOBJ
     // this tests for buffer overflow, see #11102
     const char * const
         url = "http://something.long.to.overwrite.plenty.memory.example.com";
@@ -99,6 +100,7 @@ void MiscGUIFuncsTestCase::URLDataObject()
     wxClipboardLocker lockClip;
     CPPUNIT_ASSERT( wxTheClipboard->SetData(dobj) );
     wxTheClipboard->Flush();
+#endif // wxUSE_DATAOBJ
 }
 
 void MiscGUIFuncsTestCase::ParseFileDialogFilter()

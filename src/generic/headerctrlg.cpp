@@ -484,12 +484,8 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     int w, h;
     GetClientSize(&w, &h);
 
-#ifdef __WXGTK__
-//    int vw;
-//    GetVirtualSize(&vw, NULL);
-#endif
-
     wxAutoBufferedPaintDC dc(this);
+    dc.Clear();
 
     // account for the horizontal scrollbar offset in the parent window
     dc.SetDeviceOrigin(m_scrollOffset, 0);
@@ -538,7 +534,6 @@ void wxHeaderCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 #ifdef __WXGTK__
         if (i == count-1 && xpos + colWidth >= w)
         {
-//            colWidth = wxMax( colWidth, vw - xpos );
             state |= wxCONTROL_DIRTY;
         }
 #endif

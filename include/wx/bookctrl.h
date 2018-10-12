@@ -293,8 +293,9 @@ protected:
     // For classes that allow null pages, we also need a way to find the
     // closest non-NULL page corresponding to the given index, e.g. the first
     // leaf item in wxTreebook tree and this method must be overridden to
-    // return it if AllowNullPage() is overridden.
-    virtual wxWindow *DoGetNonNullPage(size_t page) { return m_pages[page]; }
+    // return it if AllowNullPage() is overridden. Note that it can still
+    // return null if there are no valid pages after this one.
+    virtual wxWindow *TryGetNonNullPage(size_t page) { return m_pages[page]; }
 
     // Remove the page and return a pointer to it.
     //

@@ -116,7 +116,7 @@ class VsnprintfTestCase : public CppUnit::TestCase
 public:
     VsnprintfTestCase() {}
 
-    virtual void setUp();
+    virtual void setUp() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( VsnprintfTestCase );

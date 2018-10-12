@@ -22,9 +22,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_DISPLAY
-
-#include "wx/display.h"
+#include "wx/private/display.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dynarray.h"
@@ -33,11 +31,61 @@
     #include "wx/gdicmn.h"
 #endif
 
-#include "wx/display_impl.h"
-#include "wx/scopedarray.h"
 #include "wx/osx/private.h"
 
-#if wxOSX_USE_COCOA_OR_CARBON
+// ----------------------------------------------------------------------------
+// common helpers compiled even in wxUSE_DISPLAY==0 case
+// ----------------------------------------------------------------------------
+
+// This one is defined in Objective C++ code.
+extern wxRect wxOSXGetMainDisplayClientArea();
+
+namespace
+{
+
+wxRect wxGetDisplayGeometry(CGDirectDisplayID id)
+{
+    CGRect theRect = CGDisplayBounds(id);
+    return wxRect( (int)theRect.origin.x,
+                   (int)theRect.origin.y,
+                   (int)theRect.size.width,
+                   (int)theRect.size.height ); //floats
+}
+
+int wxGetDisplayDepth(CGDirectDisplayID id)
+{
+    CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(id);
+    CFStringRef encoding = CGDisplayModeCopyPixelEncoding(currentMode);
+
+    int theDepth = 32; // some reasonable default
+    if(encoding)
+    {
+        if(CFStringCompare(encoding, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+            theDepth = 32;
+        else if(CFStringCompare(encoding, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+            theDepth = 16;
+        else if(CFStringCompare(encoding, CFSTR(IO8BitIndexedPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+            theDepth = 8;
+
+        CFRelease(encoding);
+    }
+
+    CGDisplayModeRelease(currentMode);
+
+    return theDepth;
+}
+
+wxSize wxGetDisplaySizeMM(CGDirectDisplayID id)
+{
+    const CGSize size = CGDisplayScreenSize(id);
+    return wxSize(wxRound(size.width), wxRound(size.height));
+}
+
+} // anonymous namespace
+
+#if wxUSE_DISPLAY
+
+#include "wx/scopedarray.h"
 
 // ----------------------------------------------------------------------------
 // display classes implementation
@@ -54,7 +102,8 @@ public:
 
     virtual wxRect GetGeometry() const wxOVERRIDE;
     virtual wxRect GetClientArea() const wxOVERRIDE;
-    virtual wxString GetName() const wxOVERRIDE { return wxString(); }
+    virtual int GetDepth() const wxOVERRIDE;
+    virtual wxSize GetSizeMM() const wxOVERRIDE;
 
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const wxOVERRIDE;
     virtual wxVideoMode GetCurrentMode() const wxOVERRIDE;
@@ -197,11 +246,7 @@ bool wxDisplayImplMacOSX::IsPrimary() const
 
 wxRect wxDisplayImplMacOSX::GetGeometry() const
 {
-    CGRect theRect = CGDisplayBounds(m_id);
-    return wxRect( (int)theRect.origin.x,
-                   (int)theRect.origin.y,
-                   (int)theRect.size.width,
-                   (int)theRect.size.height ); //floats
+    return wxGetDisplayGeometry(m_id);
 }
 
 wxRect wxDisplayImplMacOSX::GetClientArea() const
@@ -210,9 +255,19 @@ wxRect wxDisplayImplMacOSX::GetClientArea() const
     //     wxGetClientDisplayRect() does work correctly for at least the main
     //     one (TODO: do it correctly for the other displays too)
     if ( IsPrimary() )
-        return wxGetClientDisplayRect();
+        return wxOSXGetMainDisplayClientArea();
 
     return wxDisplayImpl::GetClientArea();
+}
+
+int wxDisplayImplMacOSX::GetDepth() const
+{
+    return wxGetDisplayDepth(m_id);
+}
+
+wxSize wxDisplayImplMacOSX::GetSizeMM() const
+{
+    return wxGetDisplaySizeMM(m_id);
 }
 
 static int wxOSXCGDisplayModeGetBitsPerPixel( CGDisplayModeRef theValue )
@@ -311,13 +366,44 @@ bool wxDisplayImplMacOSX::ChangeMode( const wxVideoMode& mode )
     return new wxDisplayFactoryMacOSX;
 }
 
-#else
+#else // !wxUSE_DISPLAY
+
+class wxDisplayImplSingleMacOSX : public wxDisplayImplSingle
+{
+public:
+    virtual wxRect GetGeometry() const wxOVERRIDE
+    {
+        return wxGetDisplayGeometry(CGMainDisplayID());
+    }
+
+    virtual wxRect GetClientArea() const wxOVERRIDE
+    {
+        return wxOSXGetMainDisplayClientArea();
+    }
+
+    virtual int GetDepth() const wxOVERRIDE
+    {
+        return wxGetDisplayDepth(CGMainDisplayID());
+    }
+
+    virtual wxSize GetSizeMM() const wxOVERRIDE
+    {
+        return wxGetDisplaySizeMM(CGMainDisplayID());
+    }
+};
+
+class wxDisplayFactorySingleMacOSX : public wxDisplayFactorySingle
+{
+protected:
+    virtual wxDisplayImpl *CreateSingleDisplay() wxOVERRIDE
+    {
+        return new wxDisplayImplSingleMacOSX;
+    }
+};
 
 /* static */ wxDisplayFactory *wxDisplay::CreateFactory()
 {
-    return new wxDisplayFactorySingle;
+    return new wxDisplayFactorySingleMacOSX;
 }
-
-#endif
 
 #endif // wxUSE_DISPLAY

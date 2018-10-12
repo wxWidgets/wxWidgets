@@ -106,7 +106,7 @@ void NotebookTestCase::NoEventsOnDestruction()
 
     // Normally deleting a page before the selected one results in page
     // selection changing and the corresponding event.
-    m_notebook->DeletePage(0);
+    m_notebook->DeletePage(static_cast<size_t>(0));
     CHECK( m_numPageChanges == 1 );
 
     // But deleting the entire control shouldn't generate any events, yet it

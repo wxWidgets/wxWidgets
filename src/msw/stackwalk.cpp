@@ -233,6 +233,16 @@ void wxStackWalker::WalkFrom(const CONTEXT *pCtx, size_t skip, size_t maxDepth)
     sf.AddrFrame.Mode      = AddrModeFlat;
 
     dwMachineType = IMAGE_FILE_MACHINE_AMD64;
+#elif defined(_M_ARM64)
+    // TODO: Verify this code once Windows 10 for ARM64 is commercially available
+    sf.AddrPC.Offset       = ctx.Pc;
+    sf.AddrPC.Mode         = AddrModeFlat;
+    sf.AddrStack.Offset    = ctx.Sp;
+    sf.AddrStack.Mode      = AddrModeFlat;
+    sf.AddrFrame.Offset    = ctx.Fp;
+    sf.AddrFrame.Mode      = AddrModeFlat;
+
+    dwMachineType = IMAGE_FILE_MACHINE_ARM64;
 #elif  defined(_M_IX86)
     sf.AddrPC.Offset       = ctx.Eip;
     sf.AddrPC.Mode         = AddrModeFlat;

@@ -53,50 +53,7 @@ bool wxCheckForInterrupt(wxWindow *WXUNUSED(wnd))
     return false;
 }
 
-// Return true if we have a colour display
-bool wxColourDisplay()
-{
-    // always the case on OS X
-    return true;
-}
-
-
 #if wxOSX_USE_COCOA_OR_CARBON
-
-// Returns depth of screen
-int wxDisplayDepth()
-{
-    CGDisplayModeRef currentMode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
-    CFStringRef encoding = CGDisplayModeCopyPixelEncoding(currentMode);
-
-    int theDepth = 32; // some reasonable default
-    if(encoding)
-    {
-        if(CFStringCompare(encoding, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
-            theDepth = 32;
-        else if(CFStringCompare(encoding, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
-            theDepth = 16;
-        else if(CFStringCompare(encoding, CFSTR(IO8BitIndexedPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
-            theDepth = 8;
-
-        CFRelease(encoding);
-    }
-
-    CGDisplayModeRelease(currentMode);
-
-    return theDepth;
-}
-
-// Get size of display
-void wxDisplaySize(int *width, int *height)
-{
-    // TODO adapt for multi-displays
-    CGRect bounds = CGDisplayBounds(CGMainDisplayID());
-    if ( width )
-        *width = (int)bounds.size.width ;
-    if ( height )
-        *height = (int)bounds.size.height;
-}
 
 #if wxUSE_GUI
 
@@ -148,28 +105,6 @@ bool wxDoLaunchDefaultBrowser(const wxLaunchBrowserParams& params)
 #endif // wxUSE_GUI
 
 #endif
-
-void wxDisplaySizeMM(int *width, int *height)
-{
-#if wxOSX_USE_IPHONE
-    wxDisplaySize(width, height);
-    // on mac 72 is fixed (at least now;-)
-    double cvPt2Mm = 25.4 / 72;
-    
-    if (width != NULL)
-        *width = int( *width * cvPt2Mm );
-    
-    if (height != NULL)
-        *height = int( *height * cvPt2Mm );
-#else
-    CGSize size = CGDisplayScreenSize(CGMainDisplayID());
-    if ( width )
-        *width = (int)size.width ;
-    if ( height )
-        *height = (int)size.height;
-#endif
-}
-
 
 wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj,
                                            int *verMin,

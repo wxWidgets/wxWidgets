@@ -86,10 +86,12 @@ public:
     virtual wxCoord GetCharHeight() const wxOVERRIDE;
     virtual wxCoord GetCharWidth() const wxOVERRIDE;
 
+#if wxUSE_PALETTE
     virtual void SetPalette(const wxPalette&  WXUNUSED(palette)) wxOVERRIDE
     {
         wxFAIL_MSG(wxT("wxSVGFILEDC::SetPalette not implemented"));
     }
+#endif
 
     virtual void SetLogicalFunction(wxRasterOperationMode WXUNUSED(function)) wxOVERRIDE
     {

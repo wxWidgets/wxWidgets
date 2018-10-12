@@ -44,14 +44,20 @@ public:
     int GetWidth() const;
     int GetHeight() const;
     int GetDepth() const;
-    void SetWidth(int w);
-    void SetHeight(int h);
-    void SetDepth(int d);
-    void SetOk(bool isOk);
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("this value is determined during creation, this method could lead to inconsistencies")
+    void SetWidth(int width);
+    wxDEPRECATED_MSG("this value is determined during creation, this method could lead to inconsistencies")
+    void SetHeight(int height);
+    wxDEPRECATED_MSG("this value is determined during creation, this method could lead to inconsistencies")
+    void SetDepth(int depth);
+#endif
 
     wxSize GetSize() const { return wxSize(GetWidth(), GetHeight()); }
 
+#if wxOSX_USE_ICONREF
     WXHICON GetHICON() const;
+#endif
     
 #if wxOSX_USE_COCOA
     WX_NSImage GetNSImage() const ;

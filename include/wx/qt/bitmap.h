@@ -66,9 +66,11 @@ public:
     virtual bool CopyFromIcon(const wxIcon& icon);
 
     // implementation:
-    virtual void SetHeight(int height);
-    virtual void SetWidth(int width);
-    virtual void SetDepth(int depth);
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED(virtual void SetHeight(int height));
+    wxDEPRECATED(virtual void SetWidth(int width));
+    wxDEPRECATED(virtual void SetDepth(int depth));
+#endif
 
     void *GetRawData(wxPixelDataBase& data, int bpp);
     void UngetRawData(wxPixelDataBase& data);

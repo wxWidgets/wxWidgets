@@ -111,12 +111,7 @@ public:
 
     void Shrink()
     {
-#if !wxUSE_STD_CONTAINERS || __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
-        this->shrink_to_fit();
-#else
-        base_vec tmp(*this);
-        this->swap(tmp);
-#endif
+        wxShrinkToFit(*this);
     }
 
     size_t GetCount() const { return this->size(); }

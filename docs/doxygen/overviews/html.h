@@ -505,6 +505,7 @@ DL
 DT
 EM
 FONT            COLOR=[color]
+                BGCOLOR=[color]
                 SIZE=[fontsize]
                 FACE=[comma-separated list of facenames]
 HR              ALIGN=[alignment]

@@ -337,6 +337,9 @@ public:
                   const wxRect& rect,
                   wxAuiPaneInfo& pane);
 
+    /**
+        @deprecated Not intended for the public API.
+    */
     void DrawIcon(wxDC& dc,
                   const wxRect& rect,
                   wxAuiPaneInfo& pane);
@@ -344,6 +347,8 @@ public:
 protected:
 
     void DrawCaptionBackground(wxDC& dc, const wxRect& rect, bool active);
+
+    void DrawIcon(wxDC& dc, wxWindow *window, const wxRect& rect, wxAuiPaneInfo& pane);
 
     void InitBitmaps();
 

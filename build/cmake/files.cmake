@@ -165,11 +165,32 @@ set(BASE_OSX_NOTWXMAC_HDR
     ${BASE_COREFOUNDATION_HDR}
 )
 
+set(QT_WIN32_SRC
+    src/msw/ole/automtn.cpp
+    src/msw/ole/safearray.cpp
+    src/msw/sound.cpp
+    src/msw/ole/oleutils.cpp
+    src/msw/ole/uuid.cpp
+    src/msw/ole/comimpl.cpp
+    src/msw/dialup.cpp
+    src/msw/dib.cpp
+    src/msw/joystick.cpp
+)
+
+set(QT_WIN32_HDR
+    wx/msw/ole/automtn.h
+    wx/msw/joystick.h
+    wx/msw/dib.h
+    wx/msw/ole/uuid.h
+    wx/msw/ole/safearray.h
+    wx/msw/sound.h
+    wx/msw/ole/oleutils.h
+    wx/msw/ole/comimpl.h
+)
+
 set(QT_HDR
     wx/qt/accel.h
     wx/qt/app.h
-    wx/qt/apptbase.h
-    wx/qt/apptrait.h
     wx/qt/bitmap.h
     wx/qt/bmpbuttn.h
     wx/qt/brush.h
@@ -187,7 +208,6 @@ set(QT_HDR
     wx/qt/colour.h
     wx/qt/combobox.h
     wx/qt/control.h
-    wx/qt/converter.h
     wx/qt/ctrlsub.h
     wx/qt/cursor.h
     wx/qt/dataform.h
@@ -241,16 +261,12 @@ set(QT_HDR
     wx/qt/statusbar.h
     wx/qt/stattext.h
     wx/qt/textctrl.h
-    wx/qt/textdlg.h
     wx/qt/textentry.h
     wx/qt/tglbtn.h
-    wx/qt/timer.h
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
-    wx/qt/utils.h
     wx/qt/window.h
-    wx/qt/private/winevent.h
     wx/qt/dvrenderer.h
     wx/qt/dvrenderers.h
     wx/generic/animate.h
@@ -258,6 +274,7 @@ set(QT_HDR
     wx/qt/taskbar.h
     wx/qt/dataview.h
     wx/generic/activityindicator.h
+    ${QT_PLATFORM_HDR}
 )
 
 set(QT_SRC
@@ -292,7 +309,6 @@ set(QT_SRC
     src/qt/dcscreen.cpp
     src/qt/defs.cpp
     src/qt/dialog.cpp
-    src/unix/dialup.cpp
     src/qt/display.cpp
     src/qt/dnd.cpp
     src/qt/evtloop.cpp
@@ -353,15 +369,22 @@ set(QT_SRC
     src/generic/activityindicator.cpp
     src/common/taskbarcmn.cpp
     src/generic/animateg.cpp
-    src/unix/sound.cpp
     src/qt/calctrl.cpp
-    src/unix/joystick.cpp
     src/qt/dataview.cpp
     src/qt/taskbar.cpp
+    ${QT_PLATFORM_SRC}
 )
 
 set(MEDIA_QT_SRC
     src/qt/mediactrl.cpp
+)
+
+set(OPENGL_QT_HDR
+    wx/qt/glcanvas.h
+)
+
+set(OPENGL_QT_SRC
+    src/qt/glcanvas.cpp
 )
 
 set(BASE_CMN_SRC
@@ -1035,7 +1058,6 @@ set(GUI_CMN_HDR
     wx/dialup.h
     wx/dirctrl.h
     wx/display.h
-    wx/display_impl.h
     wx/dnd.h
     wx/docmdi.h
     wx/docview.h
@@ -1184,7 +1206,6 @@ set(XWIN_LOWLEVEL_SRC
     src/generic/caret.cpp
     src/generic/imaglist.cpp
     src/unix/dialup.cpp
-    src/unix/displayx11.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
     src/unix/uiactionx11.cpp
@@ -1491,6 +1512,7 @@ set(GTK1_LOWLEVEL_SRC
     src/gtk1/utilsgtk.cpp
     src/gtk1/win_gtk.c
     src/gtk1/window.cpp
+    src/unix/displayx11.cpp
 )
 
 set(GTK1_LOWLEVEL_HDR
@@ -1634,6 +1656,7 @@ set(MOTIF_LOWLEVEL_SRC
     src/x11/pen.cpp
     src/x11/region.cpp
     src/x11/utilsx.cpp
+    src/unix/displayx11.cpp
 )
 
 set(MOTIF_LOWLEVEL_HDR
@@ -1822,6 +1845,7 @@ set(X11_LOWLEVEL_SRC
     src/x11/utils.cpp
     src/x11/utilsx.cpp
     src/x11/window.cpp
+    src/unix/displayx11.cpp
 )
 
 set(X11_LOWLEVEL_HDR
@@ -2211,6 +2235,7 @@ set(DFB_LOWLEVEL_SRC
     src/dfb/utils.cpp
     src/dfb/window.cpp
     src/dfb/wrapdfb.cpp
+    src/generic/animateg.cpp
 )
 
 set(DFB_LOWLEVEL_HDR
@@ -2239,6 +2264,7 @@ set(DFB_LOWLEVEL_HDR
     wx/dfb/toplevel.h
     wx/dfb/window.h
     wx/dfb/wrapdfb.h
+    wx/generic/animate.h
 )
 
 set(OSX_LOWLEVEL_SRC
@@ -2260,7 +2286,6 @@ set(OSX_LOWLEVEL_SRC
     src/osx/core/bitmap.cpp
     src/osx/core/colour.cpp
     src/osx/core/dcmemory.cpp
-    src/osx/core/display.cpp
     src/osx/core/fontenum.cpp
     src/osx/core/hid.cpp
     src/osx/core/printmac.cpp
@@ -2313,7 +2338,6 @@ set(OSX_COMMON_SRC
     src/osx/carbon/cursor.cpp
     src/osx/carbon/fontdlg.cpp
     src/osx/carbon/gdiobj.cpp
-    src/osx/carbon/icon.cpp
     src/osx/carbon/app.cpp
     src/osx/carbon/control.cpp
     src/osx/carbon/dataobj.cpp
@@ -2346,7 +2370,9 @@ set(OSX_COMMON_SRC
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
     src/generic/textmeasure.cpp
+    src/generic/icon.cpp
     #TODO: </if>
+    src/osx/statbmp_osx.cpp
 )
 
 set(OSX_SHARED_HDR
@@ -2388,7 +2414,6 @@ set(OSX_SHARED_HDR
     wx/osx/fontdlg.h
     wx/osx/frame.h
     wx/osx/gauge.h
-    wx/osx/icon.h
     wx/osx/imaglist.h
     wx/osx/listbox.h
     wx/osx/listctrl.h
@@ -2443,6 +2468,7 @@ set(OSX_SHARED_HDR
     wx/generic/prntdlgg.h
     wx/generic/statusbr.h
     wx/osx/appprogress.h
+    wx/generic/icon.h
 )
 
 set(OSX_COCOA_SRC
@@ -2500,6 +2526,8 @@ set(OSX_COCOA_SRC
     src/osx/cocoa/notifmsg.mm
     src/osx/datectrl_osx.cpp
     src/osx/core/sound.cpp
+    src/osx/cocoa/statbmp.mm
+    src/osx/core/display.cpp
 )
 
 set(OSX_COCOA_HDR
@@ -2526,8 +2554,6 @@ set(OSX_COCOA_HDR
 set(OSX_IPHONE_SRC
     ${OSX_COMMON_SRC}
     src/generic/regiong.cpp
-    src/generic/icon.cpp
-    src/osx/cocoa/stdpaths.mm
     # iphone files
     src/osx/iphone/anybutton.mm
     src/osx/iphone/button.mm
@@ -2548,6 +2574,7 @@ set(OSX_IPHONE_SRC
     src/osx/sound_osx.cpp
     src/generic/animateg.cpp
     src/osx/core/sound.cpp
+    src/osx/iphone/statbmp.mm
 )
 
 set(OSX_IPHONE_HDR

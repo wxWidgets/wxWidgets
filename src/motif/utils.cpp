@@ -225,41 +225,6 @@ void wxGetMousePosition( int* x, int* y )
 #endif
 }
 
-// Return true if we have a colour display
-bool wxColourDisplay()
-{
-    return wxDisplayDepth() > 1;
-}
-
-// Returns depth of screen
-int wxDisplayDepth()
-{
-    Display *dpy = wxGlobalDisplay();
-
-    return DefaultDepth (dpy, DefaultScreen (dpy));
-}
-
-// Get size of display
-void wxDisplaySize(int *width, int *height)
-{
-    Display *dpy = wxGlobalDisplay();
-
-    if ( width )
-        *width = DisplayWidth (dpy, DefaultScreen (dpy));
-    if ( height )
-        *height = DisplayHeight (dpy, DefaultScreen (dpy));
-}
-
-void wxDisplaySizeMM(int *width, int *height)
-{
-    Display *dpy = wxGlobalDisplay();
-
-    if ( width )
-        *width = DisplayWidthMM(dpy, DefaultScreen (dpy));
-    if ( height )
-        *height = DisplayHeightMM(dpy, DefaultScreen (dpy));
-}
-
 // Configurable display in wxX11 and wxMotif
 static WXDisplay *gs_currentDisplay = NULL;
 static wxString gs_displayName;

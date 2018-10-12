@@ -347,7 +347,6 @@
                             <object class="sizeritem">
                                 <flag>wxGROW|wxALL</flag>
                                 <border>5</border>
-                                <option>1</option>
                                 <object class="wxCollapsiblePane" name="controls_collpane">
                                     <label>Details:</label>
                                     <collapsed>0</collapsed>
@@ -1100,6 +1099,24 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                 <flag>wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="wxID_STATIC">
+                                    <label>Slightly larger strikethrough font:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTRE_VERTICAL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="controls_statictext">
+                                    <label>It was a dark and stormy night.</label>
+                                    <font>
+                                        <size>12.5</size>
+                                        <strikethrough>1</strikethrough>
+                                    </font>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="wxID_STATIC">
                                     <label>Default constructed bold font:</label>
                                 </object>
                             </object>
@@ -1127,7 +1144,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
                                     <label>It was a dark and stormy night.</label>
                                     <font>
                                       <inherit>1</inherit>
-                                      <weight>bold</weight>
+                                      <weight>700</weight> <!-- same as "bold" -->
                                     </font>
                                 </object>
                             </object>
@@ -1494,7 +1511,6 @@ lay them out using wxSizers, absolute positioning, everything you like!
                             </object>
                             <object class="sizeritem">
                                 <flag>wxGROW|wxALL</flag>
-                                <option>1</option>
                                 <border>5</border>
                                 <object class="wxColourPickerCtrl" name="controls_colourpicker">
                                     <value>#00ff00</value>
@@ -1510,7 +1526,6 @@ lay them out using wxSizers, absolute positioning, everything you like!
                             </object>
                             <object class="sizeritem">
                                 <flag>wxGROW|wxALL</flag>
-                                <option>1</option>
                                 <border>5</border>
                                 <object class="wxFilePickerCtrl" name="controls_filepicker">
                                     <message>Here goes a message</message>
@@ -1528,7 +1543,6 @@ lay them out using wxSizers, absolute positioning, everything you like!
                             </object>
                             <object class="sizeritem">
                                 <flag>wxGROW|wxALL</flag>
-                                <option>1</option>
                                 <border>5</border>
                                 <object class="wxDirPickerCtrl" name="controls_dirpicker">
                                     <value/>
@@ -1545,7 +1559,6 @@ lay them out using wxSizers, absolute positioning, everything you like!
                             </object>
                             <object class="sizeritem">
                                 <flag>wxGROW|wxALL</flag>
-                                <option>1</option>
                                 <border>5</border>
                                 <object class="wxFontPickerCtrl" name="controls_fontpicker">
                                     <style>wxFNTP_USEFONT_FOR_LABEL</style>

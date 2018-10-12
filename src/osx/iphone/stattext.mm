@@ -80,22 +80,22 @@ wxWidgetImplType* wxWidgetImpl::CreateStaticText( wxWindowMac* wxpeer,
     wxUILabel* v = [[wxUILabel alloc] initWithFrame:r];
     v.backgroundColor = [UIColor clearColor];
 
-    UILineBreakMode linebreak = UILineBreakModeWordWrap;
+    NSLineBreakMode linebreak = NSLineBreakByWordWrapping;
     if ( style & wxST_ELLIPSIZE_MASK )
     {
         if ( style & wxST_ELLIPSIZE_MIDDLE )
-            linebreak = UILineBreakModeMiddleTruncation;
+            linebreak = NSLineBreakByTruncatingMiddle;
         else if (style & wxST_ELLIPSIZE_END )
-            linebreak = UILineBreakModeTailTruncation;
+            linebreak = NSLineBreakByTruncatingTail;
         else if (style & wxST_ELLIPSIZE_START )
-            linebreak = UILineBreakModeHeadTruncation;
+            linebreak = NSLineBreakByTruncatingHead;
     }
     [v setLineBreakMode:linebreak];
 
     if (style & wxALIGN_CENTER)
-        [v setTextAlignment: UITextAlignmentCenter];
+        [v setTextAlignment: NSTextAlignmentCenter];
     else if (style & wxALIGN_RIGHT)
-        [v setTextAlignment: UITextAlignmentRight];
+        [v setTextAlignment: NSTextAlignmentRight];
     
     wxWidgetIPhoneImpl* c = new wxStaticTextIPhoneImpl( wxpeer, v );
     return c;

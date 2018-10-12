@@ -11,6 +11,10 @@
 #ifndef _WX_MSW_ENHMETA_H_
 #define _WX_MSW_ENHMETA_H_
 
+#include "wx/defs.h"
+
+#if wxUSE_ENH_METAFILE
+
 #include "wx/dc.h"
 #include "wx/gdiobj.h"
 
@@ -191,5 +195,7 @@ protected:
 };
 
 #endif // wxUSE_DATAOBJ
+
+#endif // wxUSE_ENH_METAFILE
 
 #endif // _WX_MSW_ENHMETA_H_
