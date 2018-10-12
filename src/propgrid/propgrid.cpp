@@ -3677,7 +3677,7 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
     // SetValueInEvent(), as called in one of the functions referred above
     // overrides editor's value.
-    if ( m_iFlags & wxPG_FL_VALUE_CHANGE_IN_EVENT )
+    if ( WasValueChangedInEvent() )
     {
         valueIsPending = true;
         pendingValue = m_changeInEventValue;
