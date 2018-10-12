@@ -147,7 +147,7 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
         nameAndVersion << wxT(' ') << info.GetVersion();
     wxStaticText *label = new wxStaticText(this, wxID_ANY, nameAndVersion);
     wxFont fontBig(*wxNORMAL_FONT);
-    fontBig.SetPointSize(fontBig.GetPointSize() + 2);
+    fontBig.SetFractionalPointSize(fontBig.GetFractionalPointSize() + 2.0);
     fontBig.SetWeight(wxFONTWEIGHT_BOLD);
     label->SetFont(fontBig);
 
@@ -220,10 +220,8 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info, wxWindow* paren
     CentreOnParent();
 
 #if !wxUSE_MODAL_ABOUT_DIALOG
-    Connect(wxEVT_CLOSE_WINDOW,
-            wxCloseEventHandler(wxGenericAboutDialog::OnCloseWindow));
-    Connect(wxID_OK, wxEVT_BUTTON,
-            wxCommandEventHandler(wxGenericAboutDialog::OnOK));
+    Bind(wxEVT_CLOSE_WINDOW, &wxGenericAboutDialog::OnCloseWindow, this);
+    Bind(wxEVT_BUTTON, &wxGenericAboutDialog::OnOK, this, wxID_OK);
 #endif // !wxUSE_MODAL_ABOUT_DIALOG
 
     return true;

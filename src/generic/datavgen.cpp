@@ -18,7 +18,7 @@
 
 #include "wx/dataview.h"
 
-#ifdef wxUSE_GENERICDATAVIEWCTRL
+#ifdef wxHAS_GENERIC_DATAVIEWCTRL
 
 #ifndef WX_PRECOMP
     #ifdef __WXMSW__
@@ -1260,6 +1260,7 @@ wxDataViewToggleRenderer::wxDataViewToggleRenderer( const wxString &varianttype,
     wxDataViewRenderer( varianttype, mode, align )
 {
     m_toggle = false;
+    m_radio = false;
 }
 
 bool wxDataViewToggleRenderer::SetValue( const wxVariant &value )
@@ -1301,11 +1302,12 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     size.IncTo(GetSize());
     cell.SetSize(size);
 
-    wxRendererNative::Get().DrawCheckBox(
-            GetOwner()->GetOwner(),
-            *dc,
-            cell,
-            flags );
+    wxRendererNative& renderer = wxRendererNative::Get();
+    wxWindow* const win = GetOwner()->GetOwner();
+    if ( m_radio )
+        renderer.DrawRadioBitmap(win, *dc, cell, flags);
+    else
+        renderer.DrawCheckBox(win, *dc, cell, flags);
 
     return true;
 }
@@ -1514,7 +1516,7 @@ public:
     wxWindow( parent, wxID_ANY, wxPoint(0,0), size )
     {
         m_bitmap = bitmap;
-        Connect( wxEVT_PAINT, wxPaintEventHandler(wxBitmapCanvas::OnPaint) );
+        Bind(wxEVT_PAINT, &wxBitmapCanvas::OnPaint, this);
     }
 
     void OnPaint( wxPaintEvent &WXUNUSED(event) )
@@ -6412,7 +6414,7 @@ wxAccStatus wxDataViewCtrlAccessible::GetHelpText(int childId, wxString* helpTex
         }
         else
         {
-            *helpText = wxEmptyString;
+            helpText->clear();
         }
     }
     return wxACC_OK;
@@ -6782,6 +6784,6 @@ wxAccStatus wxDataViewCtrlAccessible::GetSelections(wxVariant* selections)
 }
 #endif // wxUSE_ACCESSIBILITY
 
-#endif // !wxUSE_GENERICDATAVIEWCTRL
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
 
 #endif // wxUSE_DATAVIEWCTRL

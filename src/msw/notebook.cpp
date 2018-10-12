@@ -81,10 +81,10 @@
 #if USE_NOTEBOOK_ANTIFLICKER
 
 // the pointer to standard spin button wnd proc
-static WXFARPROC gs_wndprocNotebookSpinBtn = (WXFARPROC)NULL;
+static WXWNDPROC gs_wndprocNotebookSpinBtn = NULL;
 
 // the pointer to standard tab control wnd proc
-static WXFARPROC gs_wndprocNotebook = (WXFARPROC)NULL;
+static WXWNDPROC gs_wndprocNotebook = NULL;
 
 LRESULT APIENTRY
 wxNotebookWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -202,8 +202,7 @@ bool wxNotebook::Create(wxWindow *parent,
 
             if ( ::GetClassInfo(NULL, WC_TABCONTROL, &wc) )
             {
-                gs_wndprocNotebook =
-                    reinterpret_cast<WXFARPROC>(wc.lpfnWndProc);
+                gs_wndprocNotebook = wc.lpfnWndProc;
                 wc.lpszClassName = wxT("_wx_SysTabCtl32");
                 wc.style &= ~(CS_HREDRAW | CS_VREDRAW);
                 wc.hInstance = wxGetInstance();
@@ -309,9 +308,9 @@ wxNotebook::~wxNotebook()
 size_t wxNotebook::GetPageCount() const
 {
     // consistency check
-    wxASSERT( (int)m_pages.Count() == TabCtrl_GetItemCount(GetHwnd()) );
+    wxASSERT( (int)m_pages.size() == TabCtrl_GetItemCount(GetHwnd()) );
 
-    return m_pages.Count();
+    return m_pages.size();
 }
 
 int wxNotebook::GetRowCount() const
@@ -404,7 +403,7 @@ bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
     if ( ret && rows != GetRowCount() )
     {
         const wxRect r = GetPageSize();
-        const size_t count = m_pages.Count();
+        const size_t count = m_pages.size();
         for ( size_t page = 0; page < count; page++ )
             m_pages[page]->SetSize(r);
     }
@@ -578,7 +577,7 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
     if ( !TabCtrl_DeleteItem(GetHwnd(), nPage) )
         wxLogLastError(wxS("TabCtrl_DeleteItem()"));
 
-    if ( m_pages.IsEmpty() )
+    if ( m_pages.empty() )
     {
         // no selection any more, the notebook becamse empty
         m_selection = wxNOT_FOUND;
@@ -622,19 +621,11 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
 // remove all pages
 bool wxNotebook::DeleteAllPages()
 {
-    size_t nPageCount = GetPageCount();
-    size_t nPage;
-    for ( nPage = 0; nPage < nPageCount; nPage++ )
-        delete m_pages[nPage];
-
-    m_pages.Clear();
+    wxBookCtrlBase::DeleteAllPages();
 
     if ( !TabCtrl_DeleteAllItems(GetHwnd()) )
         wxLogLastError(wxS("TabCtrl_DeleteAllItems()"));
 
-    m_selection = wxNOT_FOUND;
-
-    InvalidateBestSize();
     return true;
 }
 
@@ -701,13 +692,13 @@ bool wxNotebook::InsertPage(size_t nPage,
     }
 
     // succeeded: save the pointer to the page
-    m_pages.Insert(pPage, nPage);
+    m_pages.insert(m_pages.begin() + nPage, pPage);
 
     // we may need to adjust the size again if the notebook size changed:
     // normally this only happens for the first page we add (the tabs which
     // hadn't been there before are now shown) but for a multiline notebook it
     // can happen for any page at all as a new row could have been started
-    if ( m_pages.GetCount() == 1 || HasFlag(wxNB_MULTILINE) )
+    if ( m_pages.size() == 1 || HasFlag(wxNB_MULTILINE) )
     {
         AdjustPageSize(pPage);
 
@@ -967,7 +958,7 @@ void wxNotebook::OnSize(wxSizeEvent& event)
 
     int width = rc.right - rc.left,
         height = rc.bottom - rc.top;
-    size_t nCount = m_pages.Count();
+    size_t nCount = m_pages.size();
     for ( size_t nPage = 0; nPage < nCount; nPage++ ) {
         wxNotebookPage *pPage = m_pages[nPage];
         pPage->SetSize(rc.left, rc.top, width, height);
@@ -1004,7 +995,7 @@ void wxNotebook::OnSize(wxSizeEvent& event)
             {
                 // subclass the spin button to override WM_ERASEBKGND
                 if ( !gs_wndprocNotebookSpinBtn )
-                    gs_wndprocNotebookSpinBtn = (WXFARPROC)wxGetWindowProc(child);
+                    gs_wndprocNotebookSpinBtn = wxGetWindowProc(child);
 
                 wxSetWindowProc(child, wxNotebookSpinBtnWndProc);
                 m_hasSubclassedUpdown = true;
@@ -1104,30 +1095,40 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 
 WXHBRUSH wxNotebook::QueryBgBitmap()
 {
-    wxRect r = GetPageSize();
-    if ( r.IsEmpty() )
+    RECT rc;
+    ::GetClientRect(GetHwnd(), &rc);
+    if ( ::IsRectEmpty(&rc) )
         return 0;
 
     wxUxThemeHandle theme(this, L"TAB");
     if ( !theme )
         return 0;
 
-    RECT rc;
-    wxCopyRectToRECT(r, rc);
-
     WindowHDC hDC(GetHwnd());
+
+    RECT rcBg;
+    ::GetThemeBackgroundContentRect(theme,
+                                    (HDC) hDC,
+                                    9, /* TABP_PANE */
+                                    0,
+                                    &rc,
+                                    &rcBg);
+
+    m_bgBrushAdj = wxPoint(rcBg.left, rcBg.top);
+    ::OffsetRect(&rcBg, -rcBg.left, -rcBg.top);
+
     ::GetThemeBackgroundExtent
                             (
                                 theme,
                                 (HDC) hDC,
                                 9 /* TABP_PANE */,
                                 0,
-                                &rc,
+                                &rcBg,
                                 &rc
                             );
 
     MemoryHDC hDCMem(hDC);
-    CompatibleBitmap hBmp(hDC, rc.right, rc.bottom);
+    CompatibleBitmap hBmp(hDC, rcBg.right, rcBg.bottom);
 
     {
         SelectInHDC selectBmp(hDCMem, hBmp);

@@ -33,8 +33,8 @@ class VirtListCtrlTestCase : public CppUnit::TestCase
 public:
     VirtListCtrlTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( VirtListCtrlTestCase );
@@ -73,7 +73,7 @@ void VirtListCtrlTestCase::setUp()
         }
 
     protected:
-        virtual wxString OnGetItemText(long item, long column) const
+        virtual wxString OnGetItemText(long item, long column) const wxOVERRIDE
         {
             return wxString::Format("Row %ld, col %ld", item, column);
         }

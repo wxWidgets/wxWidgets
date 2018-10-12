@@ -48,7 +48,7 @@ enum wxAnimationType
            flag is given, the control will not change its size
     @endStyleTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @nativeimpl{wxgtk,wxmsw}
@@ -191,7 +191,7 @@ public:
     On other platforms wxAnimation is always capable of loading both GIF and ANI
     formats (i.e. both @c wxANIMATION_TYPE_GIF and @c wxANIMATION_TYPE_ANI).
 
-    @library{wxadv}
+    @library{wxcore}
     @category{gdi}
 
     @stdobjects

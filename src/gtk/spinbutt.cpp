@@ -14,7 +14,7 @@
 
 #include "wx/spinbutt.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 //-----------------------------------------------------------------------------
 // data

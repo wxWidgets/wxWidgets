@@ -44,3 +44,29 @@ void wxDialog::EndWindowModal()
     [NSApp endSheet: GetWXWindow()];
     [GetWXWindow() orderOut:GetWXWindow()];
 }
+
+bool wxDialog::OSXGetWorksWhenModal()
+{
+    bool worksWhenModal = false;
+
+    NSWindow* nswindow = IsModal() ? GetWXWindow() : nil;
+    if ( nswindow != nil )
+    {
+        if ( [nswindow isKindOfClass:[NSPanel class]] &&  [(NSPanel*)nswindow worksWhenModal] == YES )
+        {
+            [(NSPanel*)nswindow setWorksWhenModal:NO];
+            worksWhenModal = true;
+        }
+    }
+    return worksWhenModal;
+}
+
+void wxDialog::OSXSetWorksWhenModal(bool worksWhenModal)
+{
+    NSWindow* nswindow = IsModal() ? GetWXWindow() : nil;
+    if ( nswindow != nil )
+    {
+        if ( [nswindow isKindOfClass:[NSPanel class]] &&  [(NSPanel*)nswindow worksWhenModal] == YES )
+            [(NSPanel*)nswindow setWorksWhenModal:worksWhenModal];
+    }
+}

@@ -979,12 +979,17 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
                         newFrameName:(NSString *)frameName
                     decisionListener:(id < WebPolicyDecisionListener >)listener
 {
-    wxUnusedVar(actionInformation);
-
     NSString *url = [[request URL] absoluteString];
+
+    wxWebViewNavigationActionFlags flags = wxWEBVIEW_NAV_ACTION_USER;
+
+    int action = [[actionInformation objectForKey:WebActionNavigationTypeKey] intValue];
+    if (action == WebNavigationTypeOther)
+        flags = wxWEBVIEW_NAV_ACTION_OTHER;
+
     wxWebViewEvent event(wxEVT_WEBVIEW_NEWWINDOW,
                          webKitWindow->GetId(),
-                         wxCFStringRef::AsString( url ), "");
+                         wxCFStringRef::AsString( url ), "", flags);
 
     if (webKitWindow && webKitWindow->GetEventHandler())
         webKitWindow->GetEventHandler()->ProcessEvent(event);

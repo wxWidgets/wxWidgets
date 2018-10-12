@@ -37,10 +37,10 @@ class ListCtrlTestCase : public ListBaseTestCase, public CppUnit::TestCase
 public:
     ListCtrlTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
-    virtual wxListCtrl *GetList() const { return m_list; }
+    virtual wxListCtrl *GetList() const wxOVERRIDE { return m_list; }
 
 private:
     CPPUNIT_TEST_SUITE( ListCtrlTestCase );

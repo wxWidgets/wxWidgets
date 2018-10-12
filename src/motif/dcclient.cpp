@@ -139,7 +139,6 @@ void wxWindowDCImpl::Init()
     m_currentPenDash = NULL;
     m_currentStyle = -1;
     m_currentFill = -1;
-    m_colour = wxColourDisplay();
     m_display = NULL;
     m_pixmap = (WXPixmap) 0;
     m_autoSetting = 0;
@@ -2058,7 +2057,7 @@ void wxWindowDCImpl::SetDCClipping( WXRegion userRegion )
                           m_clipRegion );
     }
     // intersect the user region, if any, with the
-    // exisiting clip region
+    // existing clip region
     else // if( userRegion )
     {
         if( !m_clipRegion )

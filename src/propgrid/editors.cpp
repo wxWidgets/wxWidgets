@@ -1776,12 +1776,7 @@ wxPGCheckBoxEditor::~wxPGCheckBoxEditor()
 
 wxWindow* wxPropertyGrid::GetEditorControl() const
 {
-    wxWindow* ctrl = m_wndEditor;
-
-    if ( !ctrl )
-        return ctrl;
-
-    return ctrl;
+    return  m_wndEditor;
 }
 
 // -----------------------------------------------------------------------
@@ -2061,7 +2056,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
 
   #ifdef __WXGTK__
     wxFont font = GetFont();
-    font.SetPointSize(font.GetPointSize()-2);
+    font.SetFractionalPointSize(font.GetFractionalPointSize()-2);
     but->SetFont(font);
   #else
     but->SetFont(GetFont());

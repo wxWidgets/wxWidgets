@@ -27,8 +27,7 @@
 
 #include "wx/nativewin.h"
 
-#include <gtk/gtk.h>
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/wrapgtk.h"
 
 #ifdef GDK_WINDOWING_X11
     #include <gdk/gdkx.h>
@@ -110,7 +109,7 @@ bool wxNativeContainerWindow::Create(wxNativeContainerWindowHandle win)
 {
     wxCHECK( win, false );
 
-    if ( !wxTopLevelWindow::Create(NULL, wxID_ANY, "") )
+    if ( !wxTopLevelWindow::Create(NULL, wxID_ANY, wxString()) )
         return false;
 
     // we need to realize the window first before reparenting it

@@ -318,7 +318,7 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxDCImpl, wxObject);
 
 wxDCImpl::wxDCImpl( wxDC *owner )
         : m_window(NULL)
-        , m_colour(wxColourDisplay())
+        , m_colour(true)
         , m_ok(true)
         , m_clipping(false)
         , m_isInteractive(0)
@@ -353,9 +353,6 @@ wxDCImpl::wxDCImpl( wxDC *owner )
                     (double)wxGetDisplaySizeMM().GetWidth();
     m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
                     (double)wxGetDisplaySizeMM().GetHeight();
-
-    ResetBoundingBox();
-    ResetClipping();
 }
 
 wxDCImpl::~wxDCImpl()
@@ -405,6 +402,65 @@ void wxDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
         m_clipY2 = clipRegion.GetBottom() + 1;
     }
 }
+
+wxRect wxDCImpl::GetLogicalArea() const
+{
+    const wxSize size = GetSize();
+    return wxRect(DeviceToLogicalX(0),
+                  DeviceToLogicalY(0),
+                  DeviceToLogicalXRel(size.x),
+                  DeviceToLogicalYRel(size.y));
+}
+
+bool wxDCImpl::DoGetClippingRect(wxRect& rect) const
+{
+#if WXWIN_COMPATIBILITY_3_0
+    // Call the old function for compatibility.
+    DoGetClippingBox(&rect.x, &rect.y, &rect.width, &rect.height);
+    if ( rect != wxRect(-1, -1, 0, 0) )
+    {
+        // Custom overridden version of DoGetClippingBox() was called, we need
+        // to check if there is an actual clipping region or not. Normally the
+        // function is supposed to return the whole DC area (in logical
+        // coordinates) in this case, but also check that the clipping region
+        // is not empty because some implementations seem to do this instead.
+        return !rect.IsEmpty() && rect != GetLogicalArea();
+    }
+#endif // WXWIN_COMPATIBILITY_3_0
+
+    if ( m_clipping )
+    {
+        rect = wxRect(m_clipX1,
+                      m_clipY1,
+                      m_clipX2 - m_clipX1,
+                      m_clipY2 - m_clipY1);
+
+        return true;
+    }
+    else // No active clipping region.
+    {
+        rect = GetLogicalArea();
+
+        return false;
+    }
+}
+
+#if WXWIN_COMPATIBILITY_3_0
+void wxDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y,
+                                wxCoord *w, wxCoord *h) const
+{
+    // Dummy implementation just to allow DoGetClippingRect() above to
+    // determine if this version was called or not.
+    if ( x )
+        *x = -1;
+    if ( y )
+        *y = -1;
+    if ( w )
+        *w = 0;
+    if ( h )
+        *h = 0;
+}
+#endif // WXWIN_COMPATIBILITY_3_0
 
 // ----------------------------------------------------------------------------
 // coordinate conversions and transforms
@@ -581,15 +637,34 @@ wxDCImpl::DoStretchBlit(wxCoord xdest, wxCoord ydest,
     double xscale = (double)srcWidth/dstWidth,
            yscale = (double)srcHeight/dstHeight;
 
+    // Shift origin to avoid imprecision of integer destination coordinates
+    const int deviceOriginX = m_deviceOriginX;
+    const int deviceOriginY = m_deviceOriginY;
+    const int deviceLocalOriginX = m_deviceLocalOriginX;
+    const int deviceLocalOriginY = m_deviceLocalOriginY;
+    const int logicalOriginX = m_logicalOriginX;
+    const int logicalOriginY = m_logicalOriginY;
+    m_deviceOriginX = LogicalToDeviceX(xdest);
+    m_deviceOriginY = LogicalToDeviceY(ydest);
+    m_deviceLocalOriginX = 0;
+    m_deviceLocalOriginY = 0;
+    m_logicalOriginX = 0;
+    m_logicalOriginY = 0;
+
     double xscaleOld, yscaleOld;
     GetUserScale(&xscaleOld, &yscaleOld);
     SetUserScale(xscaleOld/xscale, yscaleOld/yscale);
 
-    bool rc = DoBlit(wxCoord(xdest*xscale), wxCoord(ydest*yscale),
-                     wxCoord(dstWidth*xscale), wxCoord(dstHeight*yscale),
+    bool rc = DoBlit(0, 0, srcWidth, srcHeight,
                      source,
                      xsrc, ysrc, rop, useMask, xsrcMask, ysrcMask);
 
+    m_deviceOriginX = deviceOriginX;
+    m_deviceOriginY = deviceOriginY;
+    m_deviceLocalOriginX = deviceLocalOriginX;
+    m_deviceLocalOriginY = deviceLocalOriginY;
+    m_logicalOriginX = logicalOriginX;
+    m_logicalOriginY = logicalOriginY;
     SetUserScale(xscaleOld, yscaleOld);
 
     return rc;
@@ -1299,12 +1374,12 @@ void wxDC::GetDeviceOrigin(long *x, long *y) const
 
 void wxDC::GetClippingBox(long *x, long *y, long *w, long *h) const
     {
-        wxCoord xx,yy,ww,hh;
-        m_pimpl->DoGetClippingBox(&xx, &yy, &ww, &hh);
-        if (x) *x = xx;
-        if (y) *y = yy;
-        if (w) *w = ww;
-        if (h) *h = hh;
+        wxRect r;
+        m_pimpl->DoGetClippingRect(r);
+        if (x) *x = r.x;
+        if (y) *y = r.y;
+        if (w) *w = r.width;
+        if (h) *h = r.height;
     }
 
 void wxDC::DrawObject(wxDrawObject* drawobject)

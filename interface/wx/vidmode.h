@@ -15,8 +15,6 @@
 
     @stdobjects
     ::wxDefaultVideoMode
-
-    @see wxClientDisplayRect(), wxDisplaySize(), wxDisplaySizeMM()
 */
 struct wxVideoMode
 {

@@ -298,19 +298,17 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     // create the text window
 
-    m_hwndBuddy = (WXHWND)::CreateWindowEx
-                    (
-                     exStyle,                // sunken border
-                     wxT("EDIT"),             // window class
-                     NULL,                   // no window title
-                     msStyle,                // style (will be shown later)
-                     pos.x, pos.y,           // position
-                     0, 0,                   // size (will be set later)
-                     GetHwndOf(parent),      // parent
-                     (HMENU)-1,              // control id
-                     wxGetInstance(),        // app instance
-                     NULL                    // unused client data
-                    );
+    m_hwndBuddy = MSWCreateWindowAtAnyPosition
+                  (
+                   exStyle,                // sunken border
+                   wxT("EDIT"),            // window class
+                   NULL,                   // no window title
+                   msStyle,                // style (will be shown later)
+                   pos.x, pos.y,           // position
+                   0, 0,                   // size (will be set later)
+                   GetHwndOf(parent),      // parent
+                   -1                      // control id
+                  );
 
     if ( !m_hwndBuddy )
     {
@@ -331,8 +329,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // subclass the text ctrl to be able to intercept some events
     gs_spinForTextCtrl[GetBuddyHwnd()] = this;
 
-    m_wndProcBuddy = (WXFARPROC)wxSetWindowProc(GetBuddyHwnd(),
-                                                wxBuddyTextWndProc);
+    m_wndProcBuddy = wxSetWindowProc(GetBuddyHwnd(), wxBuddyTextWndProc);
 
     // associate the text window with the spin button
     (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)m_hwndBuddy, 0);
@@ -729,7 +726,7 @@ int wxSpinCtrl::GetOverlap() const
 
 wxSize wxSpinCtrl::DoGetBestSize() const
 {
-    return DoGetSizeFromTextSize(DEFAULT_ITEM_WIDTH);
+    return DoGetSizeFromTextSize(FromDIP(DEFAULT_ITEM_WIDTH));
 }
 
 wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const

@@ -675,7 +675,6 @@ void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp)
         buff[len] = 0;
         SendMsg(SCI_MARKERDEFINEPIXMAP, markerNumber, (sptr_t)buff);
         delete [] buff;
-        
 }
 
 // Add a set of markers to a line.
@@ -1478,7 +1477,6 @@ void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp) {
         buff[len] = 0;
         SendMsg(SCI_REGISTERIMAGE, type, (sptr_t)buff);
         delete [] buff;
-     
 }
 
 // Clear all the registered images.
@@ -4491,7 +4489,7 @@ int wxStyledTextCtrl::GetTechnology() const
 
 // Create an ILoader*.
 void* wxStyledTextCtrl::CreateLoader(int bytes) const {
-         return (void*)(sptr_t)SendMsg(SCI_CREATELOADER, bytes); 
+         return (void*)(sptr_t)SendMsg(SCI_CREATELOADER, bytes);
 }
 
 // Move caret to before first visible character on display line.
@@ -4665,7 +4663,7 @@ wxString wxStyledTextCtrl::GetLexerLanguage() const {
 
 // For private communication between an application and a known lexer.
 void* wxStyledTextCtrl::PrivateLexerCall(int operation, void* pointer) {
-           return (void*)(sptr_t)SendMsg(SCI_PRIVATELEXERCALL, operation, (sptr_t)pointer); 
+           return (void*)(sptr_t)SendMsg(SCI_PRIVATELEXERCALL, operation, (sptr_t)pointer);
 }
 
 // Retrieve a '\\n' separated list of properties understood by the current lexer.

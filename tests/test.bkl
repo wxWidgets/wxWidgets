@@ -90,6 +90,7 @@
             streams/filestream.cpp
             streams/iostreams.cpp
             streams/largefile.cpp
+            streams/lzmastream.cpp
             streams/memstream.cpp
             streams/socketstream.cpp
             streams/sstream.cpp
@@ -181,6 +182,7 @@
             graphics/boundingbox.cpp
             graphics/clippingbox.cpp
             graphics/graphmatrix.cpp
+            graphics/graphpath.cpp
             config/config.cpp
             controls/bitmapcomboboxtest.cpp
             controls/bitmaptogglebuttontest.cpp
@@ -248,6 +250,7 @@
             image/rawbmp.cpp
             html/htmlparser.cpp
             html/htmlwindow.cpp
+            html/htmprint.cpp
             menu/accelentry.cpp
             menu/menu.cpp
             misc/guifuncs.cpp
@@ -283,7 +286,6 @@
         <wx-lib>media</wx-lib>
         <wx-lib>xrc</wx-lib>
         <wx-lib>xml</wx-lib>
-        <wx-lib>adv</wx-lib>
         <wx-lib>html</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>net</wx-lib>

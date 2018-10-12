@@ -67,18 +67,18 @@ protected:
 
         if ( m_bitmapBg.IsOk() )
         {
-            BaseWindowClass::Connect
+            BaseWindowClass::Bind
             (
                 wxEVT_ERASE_BACKGROUND,
-                wxEraseEventHandler(wxCustomBackgroundWindow::OnEraseBackground)
+                &wxCustomBackgroundWindow::OnEraseBackground, this
             );
         }
         else
         {
-            BaseWindowClass::Disconnect
+            BaseWindowClass::Unbind
             (
                 wxEVT_ERASE_BACKGROUND,
-                wxEraseEventHandler(wxCustomBackgroundWindow::OnEraseBackground)
+                &wxCustomBackgroundWindow::OnEraseBackground, this
             );
         }
     }

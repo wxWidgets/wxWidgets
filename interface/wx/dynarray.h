@@ -6,6 +6,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    The legacy dynamic array class, existing for compatibility only and @e NOT
+    to be used in the new code.
 
     This section describes the so called @e "dynamic arrays". This is a C
     array-like type safe data structure i.e. the member access time is constant
@@ -668,9 +670,9 @@ public:
     This macro declares a new object array class named @a name and containing
     the elements of type @e T.
 
-    An exported array is used when compiling wxWidgets as a DLL under Windows
-    and the array needs to be visible outside the DLL. An user exported array
-    needed for exporting an array from a user DLL.
+    An exported array is used when compiling wxWidgets as a DLL under Windows,
+    and the array needs to be visible outside the DLL. A user-exported array
+    is needed for exporting an array from a user DLL.
 
     Example:
 
@@ -679,8 +681,8 @@ public:
     WX_DECLARE_OBJARRAY(MyClass, wxArrayOfMyClass); // note: not "MyClass *"!
     @endcode
 
-    You must use WX_DEFINE_OBJARRAY() macro to define the array class,
-    otherwise you would get link errors.
+    You must use the WX_DEFINE_OBJARRAY() macro to define the array class;
+    otherwise, you will get link errors.
 */
 #define WX_DECLARE_OBJARRAY(T, name)
 #define WX_DECLARE_EXPORTED_OBJARRAY(T, name)
@@ -693,8 +695,8 @@ public:
     elements of type @a T.
 
     An exported array is used when compiling wxWidgets as a DLL under Windows
-    and the array needs to be visible outside the DLL. An user exported array
-    needed for exporting an array from a user DLL.
+    and the array needs to be visible outside the DLL. A user-exported array
+    is needed for exporting an array from a user DLL.
 
     Example:
 
@@ -726,8 +728,8 @@ public:
     destructor will not be called.
 
     An exported array is used when compiling wxWidgets as a DLL under Windows
-    and the array needs to be visible outside the DLL. An user exported array
-    needed for exporting an array from a user DLL.
+    and the array needs to be visible outside the DLL. A user-exported array
+    is needed for exporting an array from a user DLL.
 
     Example of usage:
 
@@ -758,8 +760,8 @@ public:
     the elements of type @e T.
 
     An exported array is used when compiling wxWidgets as a DLL under Windows
-    and the array needs to be visible outside the DLL. An user exported array
-    needed for exporting an array from a user DLL.
+    and the array needs to be visible outside the DLL. A user-exported array
+    is needed for exporting an array from a user DLL.
 
     Example:
 

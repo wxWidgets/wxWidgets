@@ -356,36 +356,18 @@ dnl ### begin block 20_COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0[../../sa
         COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0=""
     fi
     AC_SUBST(COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0)
-dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2[wx.bkl] ###
-    COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" ; then
-        COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2=""
-    fi
-    AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2)
 dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1[wx.bkl] ###
     COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1=""
     fi
     AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1)
-dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3[wx.bkl] ###
-    COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
-        COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3=""
-    fi
-    AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3)
 dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1[wx.bkl] ###
     COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1=""
     fi
     AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1)
-dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4[wx.bkl] ###
-    COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
-        COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
-    fi
-    AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4)
 dnl ### begin block 20_COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1[wx.bkl] ###
     COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" -a "x$USE_GUI" = "x1" ; then
@@ -452,36 +434,18 @@ dnl ### begin block 20_COND_PLATFORM_UNIX_1[../../demos/bombs/bombs.bkl,../../de
         COND_PLATFORM_UNIX_1=""
     fi
     AC_SUBST(COND_PLATFORM_UNIX_1)
-dnl ### begin block 20_COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2[wx.bkl] ###
-    COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2="#"
-    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" ; then
-        COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2=""
-    fi
-    AC_SUBST(COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2)
 dnl ### begin block 20_COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1[wx.bkl] ###
     COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1="#"
     if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1=""
     fi
     AC_SUBST(COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1)
-dnl ### begin block 20_COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3[wx.bkl] ###
-    COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
-    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
-        COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3=""
-    fi
-    AC_SUBST(COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3)
 dnl ### begin block 20_COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1[wx.bkl] ###
     COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1="#"
     if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1=""
     fi
     AC_SUBST(COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1)
-dnl ### begin block 20_COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4[wx.bkl] ###
-    COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
-    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
-        COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
-    fi
-    AC_SUBST(COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4)
 dnl ### begin block 20_COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1[wx.bkl] ###
     COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1="#"
     if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" -a "x$USE_GUI" = "x1" ; then
@@ -530,42 +494,30 @@ dnl ### begin block 20_COND_PLATFORM_WIN32_1_SHARED_0[../../samples/dll/dll.bkl]
         COND_PLATFORM_WIN32_1_SHARED_0=""
     fi
     AC_SUBST(COND_PLATFORM_WIN32_1_SHARED_0)
-dnl ### begin block 20_COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2[wx.bkl] ###
-    COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2="#"
-    if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" ; then
-        COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2=""
-    fi
-    AC_SUBST(COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2)
 dnl ### begin block 20_COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1[wx.bkl] ###
     COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1="#"
     if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1=""
     fi
     AC_SUBST(COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1)
-dnl ### begin block 20_COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3[wx.bkl] ###
-    COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
-    if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
-        COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3=""
-    fi
-    AC_SUBST(COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3)
 dnl ### begin block 20_COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1[wx.bkl] ###
     COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1="#"
     if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1=""
     fi
     AC_SUBST(COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1)
-dnl ### begin block 20_COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4[wx.bkl] ###
-    COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
-    if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
-        COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
-    fi
-    AC_SUBST(COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4)
 dnl ### begin block 20_COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1[wx.bkl] ###
     COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1="#"
     if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1=""
     fi
     AC_SUBST(COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1)
+dnl ### begin block 20_COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0[wx.bkl] ###
+    COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0="#"
+    if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0=""
+    fi
+    AC_SUBST(COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0)
 dnl ### begin block 20_COND_SHARED_0[wx.bkl] ###
     COND_SHARED_0="#"
     if test "x$SHARED" = "x0" ; then
@@ -584,12 +536,6 @@ dnl ### begin block 20_COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0[../../samples/dialogs/
         COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0=""
     fi
     AC_SUBST(COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0)
-dnl ### begin block 20_COND_SHARED_0_TOOLKIT_PM_WXUNIV_0[../../samples/dialogs/dialogs.bkl] ###
-    COND_SHARED_0_TOOLKIT_PM_WXUNIV_0="#"
-    if test "x$SHARED" = "x0" -a "x$TOOLKIT" = "xPM" -a "x$WXUNIV" = "x0" ; then
-        COND_SHARED_0_TOOLKIT_PM_WXUNIV_0=""
-    fi
-    AC_SUBST(COND_SHARED_0_TOOLKIT_PM_WXUNIV_0)
 dnl ### begin block 20_COND_SHARED_0_USE_GUI_1_USE_OPENGL_1[wx.bkl] ###
     COND_SHARED_0_USE_GUI_1_USE_OPENGL_1="#"
     if test "x$SHARED" = "x0" -a "x$USE_GUI" = "x1" -a "x$USE_OPENGL" = "x1" ; then
@@ -668,12 +614,6 @@ dnl ### begin block 20_COND_TOOLKIT_COCOA[../../demos/bombs/bombs.bkl,../../demo
         COND_TOOLKIT_COCOA=""
     fi
     AC_SUBST(COND_TOOLKIT_COCOA)
-dnl ### begin block 20_COND_TOOLKIT_COCOA_USE_GUI_1[wx.bkl] ###
-    COND_TOOLKIT_COCOA_USE_GUI_1="#"
-    if test "x$TOOLKIT" = "xCOCOA" -a "x$USE_GUI" = "x1" ; then
-        COND_TOOLKIT_COCOA_USE_GUI_1=""
-    fi
-    AC_SUBST(COND_TOOLKIT_COCOA_USE_GUI_1)
 dnl ### begin block 20_COND_TOOLKIT_DFB[wx.bkl] ###
     COND_TOOLKIT_DFB="#"
     if test "x$TOOLKIT" = "xDFB" ; then
@@ -722,18 +662,6 @@ dnl ### begin block 20_COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1[wx.
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1=""
     fi
     AC_SUBST(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1)
-dnl ### begin block 20_COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0[wx.bkl] ###
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0=""
-    fi
-    AC_SUBST(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0)
-dnl ### begin block 20_COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_1[wx.bkl] ###
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_1="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$WXUNIV" = "x1" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_1=""
-    fi
-    AC_SUBST(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_1)
 dnl ### begin block 20_COND_TOOLKIT_GTK_TOOLKIT_VERSION_3[wx.bkl] ###
     COND_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
     if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
@@ -752,12 +680,6 @@ dnl ### begin block 20_COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0[wx.
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0=""
     fi
     AC_SUBST(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0)
-dnl ### begin block 20_COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0[wx.bkl] ###
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0=""
-    fi
-    AC_SUBST(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0)
 dnl ### begin block 20_COND_TOOLKIT_GTK_TOOLKIT_VERSION_4[wx.bkl] ###
     COND_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
     if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
@@ -776,12 +698,6 @@ dnl ### begin block 20_COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0[wx.
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0=""
     fi
     AC_SUBST(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0)
-dnl ### begin block 20_COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_WXUNIV_0[wx.bkl] ###
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_WXUNIV_0=""
-    fi
-    AC_SUBST(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_WXUNIV_0)
 dnl ### begin block 20_COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1[wx.bkl] ###
     COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1="#"
     if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x" -a "x$USE_GUI" = "x1" ; then
@@ -860,6 +776,12 @@ dnl ### begin block 20_COND_TOOLKIT_OSX_COCOA_USE_GUI_1[wx.bkl] ###
         COND_TOOLKIT_OSX_COCOA_USE_GUI_1=""
     fi
     AC_SUBST(COND_TOOLKIT_OSX_COCOA_USE_GUI_1)
+dnl ### begin block 20_COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0[wx.bkl] ###
+    COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0="#"
+    if test "x$TOOLKIT" = "xOSX_COCOA" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0=""
+    fi
+    AC_SUBST(COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0)
 dnl ### begin block 20_COND_TOOLKIT_OSX_COCOA_WXUNIV_0[../../samples/widgets/widgets.bkl] ###
     COND_TOOLKIT_OSX_COCOA_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xOSX_COCOA" -a "x$WXUNIV" = "x0" ; then
@@ -890,24 +812,12 @@ dnl ### begin block 20_COND_TOOLKIT_QT[wx.bkl] ###
         COND_TOOLKIT_QT=""
     fi
     AC_SUBST(COND_TOOLKIT_QT)
-dnl ### begin block 20_COND_TOOLKIT_QT_USE_GUI_1[wx.bkl] ###
-    COND_TOOLKIT_QT_USE_GUI_1="#"
-    if test "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" ; then
-        COND_TOOLKIT_QT_USE_GUI_1=""
-    fi
-    AC_SUBST(COND_TOOLKIT_QT_USE_GUI_1)
 dnl ### begin block 20_COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0[wx.bkl] ###
     COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
         COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0=""
     fi
     AC_SUBST(COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0)
-dnl ### begin block 20_COND_TOOLKIT_Qt[wx.bkl] ###
-    COND_TOOLKIT_Qt="#"
-    if test "x$TOOLKIT" = "xQt" ; then
-        COND_TOOLKIT_Qt=""
-    fi
-    AC_SUBST(COND_TOOLKIT_Qt)
 dnl ### begin block 20_COND_TOOLKIT_X11[wx.bkl] ###
     COND_TOOLKIT_X11="#"
     if test "x$TOOLKIT" = "xX11" ; then
@@ -926,12 +836,6 @@ dnl ### begin block 20_COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1[wx.bkl] ###
         COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1=""
     fi
     AC_SUBST(COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1)
-dnl ### begin block 20_COND_TOOLKIT_X11_WXUNIV_1[wx.bkl] ###
-    COND_TOOLKIT_X11_WXUNIV_1="#"
-    if test "x$TOOLKIT" = "xX11" -a "x$WXUNIV" = "x1" ; then
-        COND_TOOLKIT_X11_WXUNIV_1=""
-    fi
-    AC_SUBST(COND_TOOLKIT_X11_WXUNIV_1)
 dnl ### begin block 20_COND_UNICODE_1[../../demos/bombs/bombs.bkl,../../demos/forty/forty.bkl,../../demos/fractal/fractal.bkl,../../demos/life/life.bkl,../../demos/poem/poem.bkl,../../samples/access/access.bkl,../../samples/animate/anitest.bkl,../../samples/archive/archive.bkl,../../samples/artprov/artprov.bkl,../../samples/aui/auidemo.bkl,../../samples/calendar/calendar.bkl,../../samples/caret/caret.bkl,../../samples/clipboard/clipboard.bkl,../../samples/collpane/collpane.bkl,../../samples/combo/combo.bkl,../../samples/config/config.bkl,../../samples/console/console.bkl,../../samples/dataview/dataview.bkl,../../samples/debugrpt/debugrpt.bkl,../../samples/dialogs/dialogs.bkl,../../samples/dialup/dialup.bkl,../../samples/display/display.bkl,../../samples/dll/dll.bkl,../../samples/dnd/dnd.bkl,../../samples/docview/docview.bkl,../../samples/dragimag/dragimag.bkl,../../samples/drawing/drawing.bkl,../../samples/erase/erase.bkl,../../samples/event/event.bkl,../../samples/except/except.bkl,../../samples/exec/exec.bkl,../../samples/font/font.bkl,../../samples/fswatcher/fswatcher.bkl,../../samples/grid/grid.bkl,../../samples/help/help.bkl,../../samples/htlbox/htlbox.bkl,../../samples/html/about/about.bkl,../../samples/html/help/help.bkl,../../samples/html/helpview/helpview.bkl,../../samples/html/htmlctrl/htmlctrl.bkl,../../samples/html/printing/printing.bkl,../../samples/html/test/test.bkl,../../samples/html/virtual/virtual.bkl,../../samples/html/widget/widget.bkl,../../samples/html/zip/zip.bkl,../../samples/image/image.bkl,../../samples/internat/internat.bkl,../../samples/ipc/ipc.bkl,../../samples/joytest/joytest.bkl,../../samples/keyboard/keyboard.bkl,../../samples/layout/layout.bkl,../../samples/listctrl/listctrl.bkl,../../samples/mdi/mdi.bkl,../../samples/mediaplayer/mediaplayer.bkl,../../samples/memcheck/memcheck.bkl,../../samples/menu/menu.bkl,../../samples/minimal/minimal.bkl,../../samples/nativdlg/nativdlg.bkl,../../samples/notebook/notebook.bkl,../../samples/oleauto/oleauto.bkl,../../samples/opengl/cube/cube.bkl,../../samples/opengl/isosurf/isosurf.bkl,../../samples/opengl/penguin/penguin.bkl,../../samples/opengl/pyramid/pyramid.bkl,../../samples/ownerdrw/ownerdrw.bkl,../../samples/popup/popup.bkl,../../samples/power/power.bkl,../../samples/preferences/preferences.bkl,../../samples/printing/printing.bkl,../../samples/propgrid/propgrid.bkl,../../samples/regtest/regtest.bkl,../../samples/render/render.bkl,../../samples/ribbon/ribbon.bkl,../../samples/richtext/richtext.bkl,../../samples/sashtest/sashtest.bkl,../../samples/scroll/scroll.bkl,../../samples/secretstore/secretstore.bkl,../../samples/shaped/shaped.bkl,../../samples/sockets/sockets.bkl,../../samples/sound/sound.bkl,../../samples/splash/splash.bkl,../../samples/splitter/splitter.bkl,../../samples/statbar/statbar.bkl,../../samples/stc/stctest.bkl,../../samples/svg/svgtest.bkl,../../samples/taborder/taborder.bkl,../../samples/taskbar/taskbar.bkl,../../samples/taskbarbutton/taskbarbutton.bkl,../../samples/text/text.bkl,../../samples/thread/thread.bkl,../../samples/toolbar/toolbar.bkl,../../samples/treectrl/treectrl.bkl,../../samples/treelist/treelist.bkl,../../samples/typetest/typetest.bkl,../../samples/uiaction/uiaction.bkl,../../samples/validate/validate.bkl,../../samples/vscroll/vscroll.bkl,../../samples/webview/webview.bkl,../../samples/widgets/widgets.bkl,../../samples/wizard/wizard.bkl,../../samples/wrapsizer/wrapsizer.bkl,../../samples/xrc/xrcdemo.bkl,../../samples/xti/xti.bkl,../../tests/benchmarks/bench.bkl,../../tests/test.bkl,../../utils/emulator/src/emulator.bkl,../../utils/execmon/execmon.bkl,../../utils/helpview/src/helpview.bkl,../../utils/hhp2cached/hhp2cached.bkl,../../utils/ifacecheck/src/ifacecheck.bkl,../../utils/screenshotgen/src/screenshotgen.bkl,../../utils/wxrc/wxrc.bkl,wx.bkl] ###
     COND_UNICODE_1="#"
     if test "x$UNICODE" = "x1" ; then
@@ -1112,12 +1016,6 @@ dnl ### begin block 20_COND_WITH_PLUGIN_SDL_1[wx.bkl] ###
         COND_WITH_PLUGIN_SDL_1=""
     fi
     AC_SUBST(COND_WITH_PLUGIN_SDL_1)
-dnl ### begin block 20_COND_WXUNIV_0[wx.bkl] ###
-    COND_WXUNIV_0="#"
-    if test "x$WXUNIV" = "x0" ; then
-        COND_WXUNIV_0=""
-    fi
-    AC_SUBST(COND_WXUNIV_0)
 dnl ### begin block 20_COND_WXUNIV_1[../../demos/bombs/bombs.bkl,../../demos/forty/forty.bkl,../../demos/fractal/fractal.bkl,../../demos/life/life.bkl,../../demos/poem/poem.bkl,../../samples/access/access.bkl,../../samples/animate/anitest.bkl,../../samples/archive/archive.bkl,../../samples/artprov/artprov.bkl,../../samples/aui/auidemo.bkl,../../samples/calendar/calendar.bkl,../../samples/caret/caret.bkl,../../samples/clipboard/clipboard.bkl,../../samples/collpane/collpane.bkl,../../samples/combo/combo.bkl,../../samples/config/config.bkl,../../samples/console/console.bkl,../../samples/dataview/dataview.bkl,../../samples/debugrpt/debugrpt.bkl,../../samples/dialogs/dialogs.bkl,../../samples/dialup/dialup.bkl,../../samples/display/display.bkl,../../samples/dll/dll.bkl,../../samples/dnd/dnd.bkl,../../samples/docview/docview.bkl,../../samples/dragimag/dragimag.bkl,../../samples/drawing/drawing.bkl,../../samples/erase/erase.bkl,../../samples/event/event.bkl,../../samples/except/except.bkl,../../samples/exec/exec.bkl,../../samples/font/font.bkl,../../samples/fswatcher/fswatcher.bkl,../../samples/grid/grid.bkl,../../samples/help/help.bkl,../../samples/htlbox/htlbox.bkl,../../samples/html/about/about.bkl,../../samples/html/help/help.bkl,../../samples/html/helpview/helpview.bkl,../../samples/html/htmlctrl/htmlctrl.bkl,../../samples/html/printing/printing.bkl,../../samples/html/test/test.bkl,../../samples/html/virtual/virtual.bkl,../../samples/html/widget/widget.bkl,../../samples/html/zip/zip.bkl,../../samples/image/image.bkl,../../samples/internat/internat.bkl,../../samples/ipc/ipc.bkl,../../samples/joytest/joytest.bkl,../../samples/keyboard/keyboard.bkl,../../samples/layout/layout.bkl,../../samples/listctrl/listctrl.bkl,../../samples/mdi/mdi.bkl,../../samples/mediaplayer/mediaplayer.bkl,../../samples/memcheck/memcheck.bkl,../../samples/menu/menu.bkl,../../samples/minimal/minimal.bkl,../../samples/nativdlg/nativdlg.bkl,../../samples/notebook/notebook.bkl,../../samples/oleauto/oleauto.bkl,../../samples/opengl/cube/cube.bkl,../../samples/opengl/isosurf/isosurf.bkl,../../samples/opengl/penguin/penguin.bkl,../../samples/opengl/pyramid/pyramid.bkl,../../samples/ownerdrw/ownerdrw.bkl,../../samples/popup/popup.bkl,../../samples/power/power.bkl,../../samples/preferences/preferences.bkl,../../samples/printing/printing.bkl,../../samples/propgrid/propgrid.bkl,../../samples/regtest/regtest.bkl,../../samples/render/render.bkl,../../samples/ribbon/ribbon.bkl,../../samples/richtext/richtext.bkl,../../samples/sashtest/sashtest.bkl,../../samples/scroll/scroll.bkl,../../samples/secretstore/secretstore.bkl,../../samples/shaped/shaped.bkl,../../samples/sockets/sockets.bkl,../../samples/sound/sound.bkl,../../samples/splash/splash.bkl,../../samples/splitter/splitter.bkl,../../samples/statbar/statbar.bkl,../../samples/stc/stctest.bkl,../../samples/svg/svgtest.bkl,../../samples/taborder/taborder.bkl,../../samples/taskbar/taskbar.bkl,../../samples/taskbarbutton/taskbarbutton.bkl,../../samples/text/text.bkl,../../samples/thread/thread.bkl,../../samples/toolbar/toolbar.bkl,../../samples/treectrl/treectrl.bkl,../../samples/treelist/treelist.bkl,../../samples/typetest/typetest.bkl,../../samples/uiaction/uiaction.bkl,../../samples/validate/validate.bkl,../../samples/vscroll/vscroll.bkl,../../samples/webview/webview.bkl,../../samples/widgets/widgets.bkl,../../samples/wizard/wizard.bkl,../../samples/wrapsizer/wrapsizer.bkl,../../samples/xrc/xrcdemo.bkl,../../samples/xti/xti.bkl,../../tests/benchmarks/bench.bkl,../../tests/test.bkl,../../utils/emulator/src/emulator.bkl,../../utils/execmon/execmon.bkl,../../utils/helpview/src/helpview.bkl,../../utils/hhp2cached/hhp2cached.bkl,../../utils/ifacecheck/src/ifacecheck.bkl,../../utils/screenshotgen/src/screenshotgen.bkl,../../utils/wxrc/wxrc.bkl,wx.bkl] ###
     COND_WXUNIV_1="#"
     if test "x$WXUNIV" = "x1" ; then

@@ -27,9 +27,7 @@
 #endif
 
 #ifdef __WXGTK20__
-    #include <gtk/gtk.h>
     #include "wx/gtk/private.h"
-    #include "wx/gtk/private/gtk2-compat.h"
 #endif
 
 // we only have to do it here when we use wxStatusBarGeneric in addition to the
@@ -186,8 +184,12 @@ void wxStatusBarGeneric::DoUpdateFieldWidths()
 {
     m_lastClientSize = GetClientSize();
 
+    int width = m_lastClientSize.x;
+    if ( ShowsSizeGrip() )
+        width -= GetSizeGripRect().width;
+
     // recompute the cache of the field widths if the status bar width has changed
-    m_widthsAbs = CalculateAbsWidths(m_lastClientSize.x);
+    m_widthsAbs = CalculateAbsWidths(width);
 }
 
 bool wxStatusBarGeneric::ShowsSizeGrip() const
@@ -233,12 +235,12 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int 
 
     // eventually ellipsize the text so that it fits the field width
 
-    wxEllipsizeMode ellmode = (wxEllipsizeMode)-1;
+    wxEllipsizeMode ellmode = wxELLIPSIZE_NONE;
     if (HasFlag(wxSTB_ELLIPSIZE_START)) ellmode = wxELLIPSIZE_START;
     else if (HasFlag(wxSTB_ELLIPSIZE_MIDDLE)) ellmode = wxELLIPSIZE_MIDDLE;
     else if (HasFlag(wxSTB_ELLIPSIZE_END)) ellmode = wxELLIPSIZE_END;
 
-    if (ellmode == (wxEllipsizeMode)-1)
+    if (ellmode == wxELLIPSIZE_NONE)
     {
         // if we have the wxSTB_SHOW_TIPS we must set the ellipsized flag even if
         // we don't ellipsize the text but just truncate it
@@ -269,7 +271,7 @@ void wxStatusBarGeneric::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int 
     // draw the text
     dc.DrawText(text, xpos, ypos);
 
-    if (ellmode == (wxEllipsizeMode)-1)
+    if (ellmode == wxELLIPSIZE_NONE)
         dc.DestroyClippingRegion();
 }
 

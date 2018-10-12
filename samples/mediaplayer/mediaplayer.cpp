@@ -307,7 +307,7 @@ public:
         kNewItem.SetData(new wxString(szString));
 
         this->InsertItem(kNewItem);
-        this->SetItem(nID, 0, wxT("*"));
+        this->SetItem(nID, 0, "*");
         this->SetItem(nID, 1, wxFileName(szString).GetName());
 
         if (nID % 2)
@@ -381,17 +381,17 @@ public:
 // Converts a wxMediaCtrl state into something useful that we can display
 // to the user
 // ----------------------------------------------------------------------------
-const wxChar* wxGetMediaStateText(int nState)
+const wxString wxGetMediaStateText(int nState)
 {
     switch(nState)
     {
         case wxMEDIASTATE_PLAYING:
-            return wxT("Playing");
+            return "Playing";
         case wxMEDIASTATE_STOPPED:
-            return wxT("Stopped");
+            return "Stopped";
         ///case wxMEDIASTATE_PAUSED:
         default:
-            return wxT("Paused");
+            return "Paused";
     }
 }
 
@@ -456,10 +456,10 @@ bool wxMediaPlayerApp::OnInit()
         return false;
 
     // SetAppName() lets wxConfig and others know where to write
-    SetAppName(wxT("wxMediaPlayer"));
+    SetAppName("wxMediaPlayer");
 
     wxMediaPlayerFrame *frame =
-        new wxMediaPlayerFrame(wxT("MediaPlayer wxWidgets Sample"));
+        new wxMediaPlayerFrame("MediaPlayer wxWidgets Sample");
     frame->Show(true);
 
 #if wxUSE_CMDLINE_PARSER
@@ -516,50 +516,50 @@ wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
     wxMenu *helpMenu = new wxMenu;
     wxMenu *debugMenu = new wxMenu;
 
-    fileMenu->Append(wxID_OPENFILESAMEPAGE, wxT("&Open File\tCtrl-Shift-O"),
-                        wxT("Open a File in the current notebook page"));
-    fileMenu->Append(wxID_OPENFILENEWPAGE, wxT("&Open File in a new page"),
-                        wxT("Open a File in a new notebook page"));
-    fileMenu->Append(wxID_OPENURLSAMEPAGE, wxT("&Open URL"),
-                        wxT("Open a URL in the current notebook page"));
-    fileMenu->Append(wxID_OPENURLNEWPAGE, wxT("&Open URL in a new page"),
-                        wxT("Open a URL in a new notebook page"));
+    fileMenu->Append(wxID_OPENFILESAMEPAGE, "&Open File\tCtrl-Shift-O",
+                        "Open a File in the current notebook page");
+    fileMenu->Append(wxID_OPENFILENEWPAGE, "&Open File in a new page",
+                        "Open a File in a new notebook page");
+    fileMenu->Append(wxID_OPENURLSAMEPAGE, "&Open URL",
+                        "Open a URL in the current notebook page");
+    fileMenu->Append(wxID_OPENURLNEWPAGE, "&Open URL in a new page",
+                        "Open a URL in a new notebook page");
     fileMenu->AppendSeparator();
-    fileMenu->Append(wxID_CLOSECURRENTPAGE, wxT("&Close Current Page\tCtrl-C"),
-                        wxT("Close current notebook page"));
+    fileMenu->Append(wxID_CLOSECURRENTPAGE, "&Close Current Page\tCtrl-C",
+                        "Close current notebook page");
     fileMenu->AppendSeparator();
     fileMenu->Append(wxID_EXIT,
-                     wxT("E&xit\tAlt-X"),
-                     wxT("Quit this program"));
+                     "E&xit\tAlt-X",
+                     "Quit this program");
 
-    controlsMenu->Append(wxID_PLAY, wxT("&Play/Pause\tCtrl-P"), wxT("Resume/Pause playback"));
-    controlsMenu->Append(wxID_STOP, wxT("&Stop\tCtrl-S"), wxT("Stop playback"));
+    controlsMenu->Append(wxID_PLAY, "&Play/Pause\tCtrl-P", "Resume/Pause playback");
+    controlsMenu->Append(wxID_STOP, "&Stop\tCtrl-S", "Stop playback");
     controlsMenu->AppendSeparator();
-    controlsMenu->Append(wxID_PREV, wxT("&Previous\tCtrl-B"), wxT("Go to previous track"));
-    controlsMenu->Append(wxID_NEXT, wxT("&Next\tCtrl-N"), wxT("Skip to next track"));
+    controlsMenu->Append(wxID_PREV, "&Previous\tCtrl-B", "Go to previous track");
+    controlsMenu->Append(wxID_NEXT, "&Next\tCtrl-N", "Skip to next track");
 
     optionsMenu->AppendCheckItem(wxID_LOOP,
-                              wxT("&Loop\tCtrl-L"),
-                              wxT("Loop Selected Media"));
+                              "&Loop\tCtrl-L",
+                              "Loop Selected Media");
     optionsMenu->AppendCheckItem(wxID_SHOWINTERFACE,
-                              wxT("&Show Interface\tCtrl-I"),
-                              wxT("Show wxMediaCtrl native controls"));
+                              "&Show Interface\tCtrl-I",
+                              "Show wxMediaCtrl native controls");
 
     debugMenu->Append(wxID_SELECTBACKEND,
-                     wxT("&Select Backend...\tCtrl-D"),
-                     wxT("Select a backend manually"));
+                     "&Select Backend...\tCtrl-D",
+                     "Select a backend manually");
 
     helpMenu->Append(wxID_ABOUT,
-                     wxT("&About\tF1"),
-                     wxT("Show about dialog"));
+                     "&About\tF1",
+                     "Show about dialog");
 
 
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(fileMenu, wxT("&File"));
-    menuBar->Append(controlsMenu, wxT("&Controls"));
-    menuBar->Append(optionsMenu, wxT("&Options"));
-    menuBar->Append(debugMenu, wxT("&Debug"));
-    menuBar->Append(helpMenu, wxT("&Help"));
+    menuBar->Append(fileMenu, "&File");
+    menuBar->Append(controlsMenu, "&Controls");
+    menuBar->Append(optionsMenu, "&Options");
+    menuBar->Append(debugMenu, "&Debug");
+    menuBar->Append(helpMenu, "&Help");
     SetMenuBar(menuBar);
 
     //
@@ -579,129 +579,48 @@ wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
     //
     //  Connect events.
     //
-    //  There are two ways in wxWidgets to use events -
-    //  Message Maps and Connections.
-    //
-    //  Message Maps are implemented by putting
-    //  DECLARE_MESSAGE_MAP in your wxEvtHandler-derived
-    //  class you want to use for events, such as wxMediaPlayerFrame.
-    //
-    //  Then after your class declaration you put
-    //  wxBEGIN_EVENT_TABLE(wxMediaPlayerFrame, wxFrame)
-    //  EVT_XXX(XXX)...
-    //  wxEND_EVENT_TABLE()
-    //
-    //  Where wxMediaPlayerFrame is the class with the DECLARE_MESSAGE_MAP
-    //  in it.  EVT_XXX(XXX) are each of your handlers, such
-    //  as EVT_MENU for menu events and the XXX inside
-    //  is the parameters to the event macro - in the case
-    //  of EVT_MENU the menu id and then the function to call.
-    //
-    //  However, with wxEvtHandler::Connect you can avoid a
-    //  global message map for your class and those annoying
-    //  macros.  You can also change the context in which
-    //  the call the handler (more later).
-    //
-    //  The downside is that due to the limitation that
-    //  wxWidgets doesn't use templates in certain areas,
-    //  You have to triple-cast the event function.
-    //
-    //  There are five parameters to wxEvtHandler::Connect -
-    //
-    //  The first is the id of the instance whose events
-    //  you want to handle - i.e. a menu id for menus,
-    //  a control id for controls (wxControl::GetId())
-    //  and so on.
-    //
-    //  The second is the event id.  This is the same
-    //  as the message maps (EVT_MENU) except prefixed
-    //  with "wx" (wxEVT_MENU).
-    //
-    //  The third is the function handler for the event -
-    //  You need to cast it to the specific event handler
-    //  type, then to a wxEventFunction, then to a
-    //  wxObjectEventFunction - I.E.
-    //  (wxObjectEventFunction)(wxEventFunction)
-    //  (wxCommandEventFunction) &wxMediaPlayerFrame::MyHandler
-    //
-    //  Or, you can use the new (2.5.5+) event handler
-    //  conversion macros - for instance the above could
-    //  be done as
-    //  wxCommandEventHandler(wxMediaPlayerFrame::MyHandler)
-    //  pretty simple, eh?
-    //
-    //  The fourth is an optional userdata param -
-    //  this is of historical relevance only and is
-    //  there only for backwards compatibility.
-    //
-    //  The fifth is the context in which to call the
-    //  handler - by default (this param is optional)
-    //  this.  For example in your event handler
-    //  if you were to call "this->MyFunc()"
-    //  it would literally do this->MyFunc.  However,
-    //  if you were to pass myHandler as the fifth
-    //  parameter, for instance, you would _really_
-    //  be calling myHandler->MyFunc, even though
-    //  the compiler doesn't really know it.
-    //
 
     //
     // Menu events
     //
-    this->Connect(wxID_EXIT, wxEVT_MENU,
-                  wxCommandEventHandler(wxMediaPlayerFrame::OnQuit));
-
-    this->Connect(wxID_ABOUT, wxEVT_MENU,
-                  wxCommandEventHandler(wxMediaPlayerFrame::OnAbout));
-
-    this->Connect(wxID_LOOP, wxEVT_MENU,
-                  wxCommandEventHandler(wxMediaPlayerFrame::OnLoop));
-
-    this->Connect(wxID_SHOWINTERFACE, wxEVT_MENU,
-                  wxCommandEventHandler(wxMediaPlayerFrame::OnShowInterface));
-
-    this->Connect(wxID_OPENFILENEWPAGE, wxEVT_MENU,
-                  wxCommandEventHandler(wxMediaPlayerFrame::OnOpenFileNewPage));
-
-    this->Connect(wxID_OPENFILESAMEPAGE, wxEVT_MENU,
-                  wxCommandEventHandler(wxMediaPlayerFrame::OnOpenFileSamePage));
-
-    this->Connect(wxID_OPENURLNEWPAGE, wxEVT_MENU,
-                  wxCommandEventHandler(wxMediaPlayerFrame::OnOpenURLNewPage));
-
-    this->Connect(wxID_OPENURLSAMEPAGE, wxEVT_MENU,
-                  wxCommandEventHandler(wxMediaPlayerFrame::OnOpenURLSamePage));
-
-    this->Connect(wxID_CLOSECURRENTPAGE, wxEVT_MENU,
-                  wxCommandEventHandler(wxMediaPlayerFrame::OnCloseCurrentPage));
-
-    this->Connect(wxID_PLAY, wxEVT_MENU,
-                  wxCommandEventHandler(wxMediaPlayerFrame::OnPlay));
-
-    this->Connect(wxID_STOP, wxEVT_MENU,
-                  wxCommandEventHandler(wxMediaPlayerFrame::OnStop));
-
-    this->Connect(wxID_NEXT, wxEVT_MENU,
-                  wxCommandEventHandler(wxMediaPlayerFrame::OnNext));
-
-    this->Connect(wxID_PREV, wxEVT_MENU,
-                  wxCommandEventHandler(wxMediaPlayerFrame::OnPrev));
-
-    this->Connect(wxID_SELECTBACKEND, wxEVT_MENU,
-                  wxCommandEventHandler(wxMediaPlayerFrame::OnSelectBackend));
+    Bind(wxEVT_MENU, &wxMediaPlayerFrame::OnQuit, this,
+         wxID_EXIT);
+    Bind(wxEVT_MENU, &wxMediaPlayerFrame::OnAbout, this,
+         wxID_ABOUT);
+    Bind(wxEVT_MENU, &wxMediaPlayerFrame::OnLoop, this,
+         wxID_LOOP);
+    Bind(wxEVT_MENU, &wxMediaPlayerFrame::OnShowInterface, this,
+         wxID_SHOWINTERFACE);
+    Bind(wxEVT_MENU, &wxMediaPlayerFrame::OnOpenFileNewPage, this,
+         wxID_OPENFILENEWPAGE);
+    Bind(wxEVT_MENU, &wxMediaPlayerFrame::OnOpenFileSamePage, this,
+         wxID_OPENFILESAMEPAGE);
+    Bind(wxEVT_MENU, &wxMediaPlayerFrame::OnOpenURLNewPage, this,
+         wxID_OPENURLNEWPAGE);
+    Bind(wxEVT_MENU, &wxMediaPlayerFrame::OnOpenURLSamePage, this,
+         wxID_OPENURLSAMEPAGE);
+    Bind(wxEVT_MENU, &wxMediaPlayerFrame::OnCloseCurrentPage, this,
+         wxID_CLOSECURRENTPAGE);
+    Bind(wxEVT_MENU, &wxMediaPlayerFrame::OnPlay, this,
+         wxID_PLAY);
+    Bind(wxEVT_MENU, &wxMediaPlayerFrame::OnStop, this,
+         wxID_STOP);
+    Bind(wxEVT_MENU, &wxMediaPlayerFrame::OnNext, this,
+         wxID_NEXT);
+    Bind(wxEVT_MENU, &wxMediaPlayerFrame::OnPrev, this,
+         wxID_PREV);
+    Bind(wxEVT_MENU, &wxMediaPlayerFrame::OnSelectBackend, this,
+         wxID_SELECTBACKEND);
 
     //
     // Key events
     //
-    wxTheApp->Connect(wxID_ANY, wxEVT_KEY_DOWN,
-                  wxKeyEventHandler(wxMediaPlayerFrame::OnKeyDown),
-                  (wxObject*)0, this);
+    wxTheApp->Bind(wxEVT_KEY_DOWN, &wxMediaPlayerFrame::OnKeyDown, this);
 
     //
     // Close events
     //
-    this->Connect(wxID_ANY, wxEVT_CLOSE_WINDOW,
-                wxCloseEventHandler(wxMediaPlayerFrame::OnClose));
+    Bind(wxEVT_CLOSE_WINDOW, &wxMediaPlayerFrame::OnClose, this);
 
     //
     // End of Events
@@ -714,7 +633,7 @@ wxMediaPlayerFrame::wxMediaPlayerFrame(const wxString& title)
     wxMediaPlayerNotebookPage* page =
         new wxMediaPlayerNotebookPage(this, m_notebook);
     m_notebook->AddPage(page,
-                        wxT(""),
+                        "",
                         true);
 
 
@@ -841,24 +760,24 @@ void wxMediaPlayerFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void wxMediaPlayerFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( wxT("This is a test of wxMediaCtrl.\n\n")
+    msg.Printf( "This is a test of wxMediaCtrl.\n\n"
 
-                wxT("Instructions:\n")
+                "Instructions:\n"
 
-                wxT("The top slider shows the current the current position, ")
-                wxT("which you can change by dragging and releasing it.\n")
+                "The top slider shows the current the current position, "
+                "which you can change by dragging and releasing it.\n"
 
-                wxT("The gauge (progress bar) shows the progress in ")
-                wxT("downloading data of the current file - it may always be ")
-                wxT("empty due to lack of support from the current backend.\n")
+                "The gauge (progress bar) shows the progress in "
+                "downloading data of the current file - it may always be "
+                "empty due to lack of support from the current backend.\n"
 
-                wxT("The lower-left slider controls the volume and the lower-")
-                wxT("right slider controls the playback rate/speed of the ")
-                wxT("media\n\n")
+                "The lower-left slider controls the volume and the lower-"
+                "right slider controls the playback rate/speed of the "
+                "media\n\n"
 
-                wxT("Currently using: %s"), wxVERSION_STRING);
+                "Currently using: %s", wxVERSION_STRING);
 
-    wxMessageBox(msg, wxT("About wxMediaCtrl test"),
+    wxMessageBox(msg, "About wxMediaCtrl test",
                  wxOK | wxICON_INFORMATION, this);
 }
 
@@ -897,9 +816,9 @@ void wxMediaPlayerFrame::OnShowInterface(wxCommandEvent& event)
         pSIItem->Check(!event.IsChecked());
 
         if(event.IsChecked())
-            wxMessageBox(wxT("Could not show player controls"));
+            wxMessageBox("Could not show player controls");
         else
-            wxMessageBox(wxT("Could not hide player controls"));
+            wxMessageBox("Could not hide player controls");
     }
 }
 
@@ -975,7 +894,7 @@ void wxMediaPlayerFrame::DoOpenFile(const wxString& path, bool bNewPage)
     newlistitem.SetData(new wxString(path));
 
     currentpage->m_playlist->InsertItem(newlistitem);
-    currentpage->m_playlist->SetItem(nID, 0, wxT("*"));
+    currentpage->m_playlist->SetItem(nID, 0, "*");
     currentpage->m_playlist->SetItem(nID, 1, wxFileName(path).GetName());
 
     if (nID % 2)
@@ -1012,12 +931,12 @@ void wxMediaPlayerFrame::DoPlayFile(const wxString& path)
         if(currentpage->m_mediactrl->GetState() == wxMEDIASTATE_PLAYING)
         {
             if( !currentpage->m_mediactrl->Pause() )
-                wxMessageBox(wxT("Couldn't pause movie!"));
+                wxMessageBox("Couldn't pause movie!");
         }
         else
         {
             if( !currentpage->m_mediactrl->Play() )
-                wxMessageBox(wxT("Couldn't play movie!"));
+                wxMessageBox("Couldn't play movie!");
         }
     }
     else
@@ -1029,31 +948,31 @@ void wxMediaPlayerFrame::DoPlayFile(const wxString& path)
 
         if(currentpage->m_nLastFileId != -1)
            currentpage->m_playlist->SetItem(
-                    currentpage->m_nLastFileId, 0, wxT("*"));
+                    currentpage->m_nLastFileId, 0, "*");
 
         wxURI uripath(path);
         if( uripath.IsReference() )
         {
             if( !currentpage->m_mediactrl->Load(path) )
             {
-                wxMessageBox(wxT("Couldn't load file!"));
-                currentpage->m_playlist->SetItem(nNewId, 0, wxT("E"));
+                wxMessageBox("Couldn't load file!");
+                currentpage->m_playlist->SetItem(nNewId, 0, "E");
             }
             else
             {
-                currentpage->m_playlist->SetItem(nNewId, 0, wxT("O"));
+                currentpage->m_playlist->SetItem(nNewId, 0, "O");
             }
         }
         else
         {
             if( !currentpage->m_mediactrl->Load(uripath) )
             {
-                wxMessageBox(wxT("Couldn't load URL!"));
-                currentpage->m_playlist->SetItem(nNewId, 0, wxT("E"));
+                wxMessageBox("Couldn't load URL!");
+                currentpage->m_playlist->SetItem(nNewId, 0, "E");
             }
             else
             {
-                currentpage->m_playlist->SetItem(nNewId, 0, wxT("O"));
+                currentpage->m_playlist->SetItem(nNewId, 0, "O");
             }
         }
 
@@ -1062,7 +981,7 @@ void wxMediaPlayerFrame::DoPlayFile(const wxString& path)
         currentpage->m_playlist->SetItem(currentpage->m_nLastFileId,
                                          1, wxFileName(path).GetName());
         currentpage->m_playlist->SetItem(currentpage->m_nLastFileId,
-                                         2, wxT(""));
+                                         2, "");
     }
 }
 
@@ -1079,12 +998,12 @@ void wxMediaPlayerFrame::OnMediaLoaded(wxMediaEvent& WXUNUSED(evt))
 
     if( !currentpage->m_mediactrl->Play() )
     {
-            wxMessageBox(wxT("Couldn't play movie!"));
-        currentpage->m_playlist->SetItem(currentpage->m_nLastFileId, 0, wxT("E"));
+            wxMessageBox("Couldn't play movie!");
+        currentpage->m_playlist->SetItem(currentpage->m_nLastFileId, 0, "E");
     }
     else
     {
-        currentpage->m_playlist->SetItem(currentpage->m_nLastFileId, 0, wxT(">"));
+        currentpage->m_playlist->SetItem(currentpage->m_nLastFileId, 0, ">");
     }
 
 }
@@ -1099,7 +1018,7 @@ void wxMediaPlayerFrame::OnMediaLoaded(wxMediaEvent& WXUNUSED(evt))
 // ----------------------------------------------------------------------------
 void wxMediaPlayerFrame::OnSelectBackend(wxCommandEvent& WXUNUSED(evt))
 {
-    wxString sBackend = wxGetTextFromUser(wxT("Enter backend to use"));
+    wxString sBackend = wxGetTextFromUser("Enter backend to use");
 
     if(sBackend.empty() == false)  // could have been cancelled by the user
     {
@@ -1112,7 +1031,7 @@ void wxMediaPlayerFrame::OnSelectBackend(wxCommandEvent& WXUNUSED(evt))
 
         m_notebook->AddPage(new wxMediaPlayerNotebookPage(this, m_notebook,
                                                         sBackend
-                                                        ), wxT(""), true);
+                                                        ), "", true);
 
         DoOpenFile(
             ((wxMediaPlayerNotebookPage*) m_notebook->GetCurrentPage())->m_szFile,
@@ -1151,7 +1070,7 @@ void wxMediaPlayerFrame::OnOpenURLNewPage(wxCommandEvent& WXUNUSED(event))
 void wxMediaPlayerFrame::OpenURL(bool bNewPage)
 {
     wxString sUrl = wxGetTextFromUser(
-        wxT("Enter the URL that has the movie to play")
+        "Enter the URL that has the movie to play"
                                      );
 
     if(sUrl.empty() == false) // could have been cancelled by user
@@ -1182,7 +1101,7 @@ void wxMediaPlayerFrame::OnCloseCurrentPage(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        wxMessageBox(wxT("Cannot close main page"));
+        wxMessageBox("Cannot close main page");
     }
 }
 
@@ -1207,7 +1126,7 @@ void wxMediaPlayerFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
                                          wxLIST_STATE_DONTCARE)) == -1)
         {
             // no items in list
-            wxMessageBox(wxT("No items in playlist!"));
+            wxMessageBox("No items in playlist!");
     }
         else
         {
@@ -1275,10 +1194,10 @@ void wxMediaPlayerFrame::OnStop(wxCommandEvent& WXUNUSED(evt))
         (wxMediaPlayerNotebookPage*) m_notebook->GetCurrentPage();
 
     if( !currentpage->m_mediactrl->Stop() )
-        wxMessageBox(wxT("Couldn't stop movie!"));
+        wxMessageBox("Couldn't stop movie!");
     else
         currentpage->m_playlist->SetItem(
-            currentpage->m_nLastFileId, 0, wxT("[]"));
+            currentpage->m_nLastFileId, 0, "[]");
 }
 
 
@@ -1299,7 +1218,7 @@ void wxMediaPlayerFrame::OnChangeSong(wxListEvent& WXUNUSED(evt))
     if(listitem.GetData())
         DoPlayFile((*((wxString*) listitem.GetData())));
     else
-        wxMessageBox(wxT("No selected item!"));
+        wxMessageBox("No selected item!");
 }
 
 // ----------------------------------------------------------------------------
@@ -1466,7 +1385,7 @@ void wxMediaPlayerTimer::Notify()
 
     // Duration string (i.e. MM:SS)
     wxString sDuration;
-    sDuration.Printf(wxT("%2i:%02i"), nMinutes, nSeconds);
+    sDuration.Printf("%2i:%02i", nMinutes, nSeconds);
 
 
     // Number of minutes/seconds total
@@ -1476,7 +1395,7 @@ void wxMediaPlayerTimer::Notify()
 
     // Position string (i.e. MM:SS)
     wxString sPosition;
-    sPosition.Printf(wxT("%2i:%02i"), nMinutes, nSeconds);
+    sPosition.Printf("%2i:%02i", nMinutes, nSeconds);
 
 
     // Set the third item in the listctrl entry to the duration string
@@ -1514,9 +1433,9 @@ void wxMediaPlayerTimer::Notify()
     // hold various metadata about the media
 #if wxUSE_STATUSBAR
     m_frame->SetStatusText(wxString::Format(
-                    wxT("Size(x,y):%i,%i ")
-                    wxT("Position:%s/%s Speed:%1.1fx ")
-                    wxT("State:%s Loops:%i D/T:[%i]/[%i] V:%i%%"),
+                    "Size(x,y):%i,%i "
+                    "Position:%s/%s Speed:%1.1fx "
+                    "State:%s Loops:%i D/T:[%i]/[%i] V:%i%%",
                     videoSize.x,
                     videoSize.y,
                     sPosition.c_str(),
@@ -1579,13 +1498,13 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
                                     wxDefaultPosition, wxDefaultSize, 0,
 // you could specify a macro backend here like
 //  wxMEDIABACKEND_WMP10);
-//        wxT("wxPDFMediaBackend"));
+//        "wxPDFMediaBackend");
                                    szBackend);
 // you could change the cursor here like
 //    m_mediactrl->SetCursor(wxCURSOR_BLANK);
 // note that this may not effect it if SetPlayerControls
 // is set to something else than wxMEDIACTRLPLAYERCONTROLS_NONE
-    wxASSERT_MSG(bOK, wxT("Could not create media control!"));
+    wxASSERT_MSG(bOK, "Could not create media control!");
     wxUnusedVar(bOK);
 
     sizer->Add(m_mediactrl, wxSizerFlags().Expand().Border());
@@ -1642,17 +1561,17 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     m_vdButton = new wxButton();
     m_vuButton = new wxButton();
 
-    m_prevButton->Create(this, wxID_BUTTONPREV, wxT("|<"));
+    m_prevButton->Create(this, wxID_BUTTONPREV, "|<");
     m_prevButton->SetToolTip("Previous");
-    m_playButton->Create(this, wxID_BUTTONPLAY, wxT(">"));
+    m_playButton->Create(this, wxID_BUTTONPLAY, ">");
     m_playButton->SetToolTip("Play");
-    m_stopButton->Create(this, wxID_BUTTONSTOP, wxT("[]"));
+    m_stopButton->Create(this, wxID_BUTTONSTOP, "[]");
     m_stopButton->SetToolTip("Stop");
-    m_nextButton->Create(this, wxID_BUTTONNEXT, wxT(">|"));
+    m_nextButton->Create(this, wxID_BUTTONNEXT, ">|");
     m_nextButton->SetToolTip("Next");
-    m_vdButton->Create(this, wxID_BUTTONVD, wxT("(("));
+    m_vdButton->Create(this, wxID_BUTTONVD, "((");
     m_vdButton->SetToolTip("Volume down");
-    m_vuButton->Create(this, wxID_BUTTONVU, wxT("))"));
+    m_vuButton->Create(this, wxID_BUTTONVU, "))");
     m_vuButton->SetToolTip("Volume up");
 
     vertsizer->Add(m_prevButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
@@ -1710,58 +1629,50 @@ wxMediaPlayerNotebookPage::wxMediaPlayerNotebookPage(wxMediaPlayerFrame* parentF
     //
     // ListCtrl events
     //
-    this->Connect( wxID_LISTCTRL, wxEVT_LIST_ITEM_ACTIVATED,
-        wxListEventHandler(wxMediaPlayerFrame::OnChangeSong),
-        (wxObject*)0, parentFrame);
+    Bind(wxEVT_LIST_ITEM_ACTIVATED, &wxMediaPlayerFrame::OnChangeSong, parentFrame,
+         wxID_LISTCTRL);
 
     //
     // Slider events
     //
-    this->Connect(wxID_SLIDER, wxEVT_SCROLL_THUMBTRACK,
-                  wxScrollEventHandler(wxMediaPlayerNotebookPage::OnBeginSeek));
-    this->Connect(wxID_SLIDER, wxEVT_SCROLL_THUMBRELEASE,
-                  wxScrollEventHandler(wxMediaPlayerNotebookPage::OnEndSeek));
-    this->Connect(wxID_PBSLIDER, wxEVT_SCROLL_THUMBRELEASE,
-                    wxScrollEventHandler(wxMediaPlayerNotebookPage::OnPBChange));
-    this->Connect(wxID_VOLSLIDER, wxEVT_SCROLL_THUMBRELEASE,
-                    wxScrollEventHandler(wxMediaPlayerNotebookPage::OnVolChange));
+    Bind(wxEVT_SCROLL_THUMBTRACK, &wxMediaPlayerNotebookPage::OnBeginSeek, this,
+         wxID_SLIDER);
+    Bind(wxEVT_SCROLL_THUMBRELEASE, &wxMediaPlayerNotebookPage::OnEndSeek, this,
+         wxID_SLIDER);
+    Bind(wxEVT_SCROLL_THUMBRELEASE, &wxMediaPlayerNotebookPage::OnPBChange, this,
+         wxID_PBSLIDER);
+    Bind(wxEVT_SCROLL_THUMBRELEASE, &wxMediaPlayerNotebookPage::OnVolChange, this,
+         wxID_VOLSLIDER);
 
     //
     // Media Control events
     //
-    this->Connect(wxID_MEDIACTRL, wxEVT_MEDIA_PLAY,
-                  wxMediaEventHandler(wxMediaPlayerNotebookPage::OnMediaPlay));
-    this->Connect(wxID_MEDIACTRL, wxEVT_MEDIA_PAUSE,
-                  wxMediaEventHandler(wxMediaPlayerNotebookPage::OnMediaPause));
-    this->Connect(wxID_MEDIACTRL, wxEVT_MEDIA_STOP,
-                  wxMediaEventHandler(wxMediaPlayerNotebookPage::OnMediaStop));
-    this->Connect(wxID_MEDIACTRL, wxEVT_MEDIA_FINISHED,
-                  wxMediaEventHandler(wxMediaPlayerNotebookPage::OnMediaFinished));
-    this->Connect(wxID_MEDIACTRL, wxEVT_MEDIA_LOADED,
-                  wxMediaEventHandler(wxMediaPlayerFrame::OnMediaLoaded),
-                  (wxObject*)0, parentFrame);
+    Bind(wxEVT_MEDIA_PLAY, &wxMediaPlayerNotebookPage::OnMediaPlay, this,
+         wxID_MEDIACTRL);
+    Bind(wxEVT_MEDIA_PAUSE, &wxMediaPlayerNotebookPage::OnMediaPause, this,
+         wxID_MEDIACTRL);
+    Bind(wxEVT_MEDIA_STOP, &wxMediaPlayerNotebookPage::OnMediaStop, this,
+         wxID_MEDIACTRL);
+    Bind(wxEVT_MEDIA_FINISHED, &wxMediaPlayerNotebookPage::OnMediaFinished, this,
+         wxID_MEDIACTRL);
+    Bind(wxEVT_MEDIA_LOADED, &wxMediaPlayerFrame::OnMediaLoaded, parentFrame,
+         wxID_MEDIACTRL);
 
     //
     // Button events
     //
-    this->Connect( wxID_BUTTONPREV, wxEVT_BUTTON,
-        wxCommandEventHandler(wxMediaPlayerFrame::OnPrev),
-        (wxObject*)0, parentFrame);
-    this->Connect( wxID_BUTTONPLAY, wxEVT_BUTTON,
-        wxCommandEventHandler(wxMediaPlayerFrame::OnPlay),
-        (wxObject*)0, parentFrame);
-    this->Connect( wxID_BUTTONSTOP, wxEVT_BUTTON,
-        wxCommandEventHandler(wxMediaPlayerFrame::OnStop),
-        (wxObject*)0, parentFrame);
-    this->Connect( wxID_BUTTONNEXT, wxEVT_BUTTON,
-        wxCommandEventHandler(wxMediaPlayerFrame::OnNext),
-        (wxObject*)0, parentFrame);
-    this->Connect( wxID_BUTTONVD, wxEVT_BUTTON,
-        wxCommandEventHandler(wxMediaPlayerFrame::OnVolumeDown),
-        (wxObject*)0, parentFrame);
-    this->Connect( wxID_BUTTONVU, wxEVT_BUTTON,
-        wxCommandEventHandler(wxMediaPlayerFrame::OnVolumeUp),
-        (wxObject*)0, parentFrame);
+    Bind(wxEVT_BUTTON, &wxMediaPlayerFrame::OnPrev, parentFrame,
+         wxID_BUTTONPREV);
+    Bind(wxEVT_BUTTON, &wxMediaPlayerFrame::OnPlay, parentFrame,
+         wxID_BUTTONPLAY);
+    Bind(wxEVT_BUTTON, &wxMediaPlayerFrame::OnStop, parentFrame,
+         wxID_BUTTONSTOP);
+    Bind(wxEVT_BUTTON, &wxMediaPlayerFrame::OnNext, parentFrame,
+         wxID_BUTTONNEXT);
+    Bind(wxEVT_BUTTON, &wxMediaPlayerFrame::OnVolumeDown, parentFrame,
+         wxID_BUTTONVD);
+    Bind(wxEVT_BUTTON, &wxMediaPlayerFrame::OnVolumeUp, parentFrame,
+         wxID_BUTTONVU);
 }
 
 // ----------------------------------------------------------------------------
@@ -1788,7 +1699,7 @@ void wxMediaPlayerNotebookPage::OnEndSeek(wxScrollEvent& WXUNUSED(event))
     if( m_mediactrl->Seek(
             m_slider->GetValue() * 1000
                                    ) == wxInvalidOffset )
-        wxMessageBox(wxT("Couldn't seek in movie!"));
+        wxMessageBox("Couldn't seek in movie!");
 
     m_bIsBeingDragged = false;
 }
@@ -1813,7 +1724,7 @@ void wxMediaPlayerNotebookPage::OnVolChange(wxScrollEvent& WXUNUSED(event))
     if( m_mediactrl->SetVolume(
             m_volSlider->GetValue() / 100.0
                                    ) == false )
-        wxMessageBox(wxT("Couldn't set volume!"));
+        wxMessageBox("Couldn't set volume!");
 
 }
 
@@ -1827,7 +1738,7 @@ void wxMediaPlayerNotebookPage::OnPBChange(wxScrollEvent& WXUNUSED(event))
     if( m_mediactrl->SetPlaybackRate(
             m_pbSlider->GetValue() * .25
                                    ) == false )
-        wxMessageBox(wxT("Couldn't set playbackrate!"));
+        wxMessageBox("Couldn't set playbackrate!");
 
 }
 
@@ -1838,7 +1749,7 @@ void wxMediaPlayerNotebookPage::OnPBChange(wxScrollEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void wxMediaPlayerNotebookPage::OnMediaPlay(wxMediaEvent& WXUNUSED(event))
 {
-    m_playlist->SetItem(m_nLastFileId, 0, wxT(">"));
+    m_playlist->SetItem(m_nLastFileId, 0, ">");
 }
 
 // ----------------------------------------------------------------------------
@@ -1848,7 +1759,7 @@ void wxMediaPlayerNotebookPage::OnMediaPlay(wxMediaEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void wxMediaPlayerNotebookPage::OnMediaPause(wxMediaEvent& WXUNUSED(event))
 {
-    m_playlist->SetItem(m_nLastFileId, 0, wxT("||"));
+    m_playlist->SetItem(m_nLastFileId, 0, "||");
 }
 
 // ----------------------------------------------------------------------------
@@ -1858,7 +1769,7 @@ void wxMediaPlayerNotebookPage::OnMediaPause(wxMediaEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void wxMediaPlayerNotebookPage::OnMediaStop(wxMediaEvent& WXUNUSED(event))
 {
-    m_playlist->SetItem(m_nLastFileId, 0, wxT("[]"));
+    m_playlist->SetItem(m_nLastFileId, 0, "[]");
 }
 
 // ----------------------------------------------------------------------------
@@ -1873,15 +1784,15 @@ void wxMediaPlayerNotebookPage::OnMediaFinished(wxMediaEvent& WXUNUSED(event))
     {
         if ( !m_mediactrl->Play() )
         {
-            wxMessageBox(wxT("Couldn't loop movie!"));
-            m_playlist->SetItem(m_nLastFileId, 0, wxT("E"));
+            wxMessageBox("Couldn't loop movie!");
+            m_playlist->SetItem(m_nLastFileId, 0, "E");
         }
         else
             ++m_nLoops;
     }
     else
     {
-        m_playlist->SetItem(m_nLastFileId, 0, wxT("[]"));
+        m_playlist->SetItem(m_nLastFileId, 0, "[]");
     }
 }
 

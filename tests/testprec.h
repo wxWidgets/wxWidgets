@@ -36,21 +36,24 @@
     #endif
 #endif
 
-// Define wxUSING_VC_CRT_IO when using MSVC CRT STDIO library as its standard
-// functions give different results from glibc ones in several cases (of
-// course, any code relying on this is not portable and probably won't work,
-// i.e. will result in tests failures, with other platforms/compilers which
-// should have checks for them added as well).
+// Define wxUSING_MANTISSA_SIZE_3 for certain versions of MinGW and MSVC.
+// These use a CRT which prints the exponent with a minimum of 3
+// digits instead of 2.
 //
-// Notice that MinGW uses VC CRT by default but may use its own printf()
-// implementation if __USE_MINGW_ANSI_STDIO is defined. And finally also notice
-// that testing for __USE_MINGW_ANSI_STDIO directly results in a warning with
-// -Wundef if it involves an operation with undefined __MINGW_FEATURES__ so
-// test for the latter too to avoid it.
-#if defined(__VISUALC__) || \
-    (defined(__MINGW32__) && \
-     (!defined(__MINGW_FEATURES__) || !__USE_MINGW_ANSI_STDIO))
-    #define wxUSING_VC_CRT_IO
+// This happens for all MSVC compilers before version 14 (VS2015).
+// And for MinGW when it does not define or set __USE_MINGW_ANSI_STDIO.
+// Since MinGW 5.0.4 it uses at least 2 digits for the exponent:
+// https://sourceforge.net/p/mingw-w64/mailman/message/36333746/
+
+#if (defined(__MINGW64_VERSION_MAJOR) && (__MINGW64_VERSION_MAJOR > 5 || \
+        (__MINGW64_VERSION_MAJOR == 5 && __MINGW64_VERSION_MINOR >= 0) || \
+        (__MINGW64_VERSION_MAJOR == 5 && __MINGW64_VERSION_MINOR == 0 && __MINGW64_VERSION_BUGFIX >= 4)))
+#define wxMINGW_WITH_FIXED_MANTISSA
+#endif
+#if (defined(__VISUALC__) && !wxCHECK_VISUALC_VERSION(14)) || \
+        (defined(__MINGW32__) && !defined(wxMINGW_WITH_FIXED_MANTISSA) && \
+        (!defined(__USE_MINGW_ANSI_STDIO) || !__USE_MINGW_ANSI_STDIO))
+    #define wxDEFAULT_MANTISSA_SIZE_3
 #endif
 
 // thrown when assert fails in debug build

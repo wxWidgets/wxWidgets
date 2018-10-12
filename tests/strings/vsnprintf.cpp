@@ -71,12 +71,6 @@ int r;
     CPPUNIT_ASSERT_EQUAL( r, wxStrlen(buf) );          \
     ASSERT_STR_EQUAL( wxT(expected), buf );
 
-#define CMP3i(expected, fmt, y)                        \
-    r=wxSnprintf(buf, MAX_TEST_LEN, wxT(fmt), y);     \
-    CPPUNIT_ASSERT_EQUAL( r, wxStrlen(buf) );          \
-    WX_ASSERT_MESSAGE( ("Expected \"%s\", got \"%s\"", expected, buf), \
-                       wxStricmp(expected, buf) == 0 );
-
 #define CMP2(expected, fmt)                           \
     r=wxSnprintf(buf, MAX_TEST_LEN, wxT(fmt));        \
     CPPUNIT_ASSERT_EQUAL( r, wxStrlen(buf) );          \
@@ -122,7 +116,7 @@ class VsnprintfTestCase : public CppUnit::TestCase
 public:
     VsnprintfTestCase() {}
 
-    virtual void setUp();
+    virtual void setUp() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( VsnprintfTestCase );
@@ -166,7 +160,7 @@ private:
 #endif
     void Unicode();
 
-    template<typename T> 
+    template<typename T>
         void DoBigToSmallBuffer(T *buffer, int size);
     void BigToSmallBuffer();
 
@@ -241,22 +235,23 @@ void VsnprintfTestCase::P()
     // the system sprintf() for actual formatting so the results are still
     // different under different systems).
 
-#ifdef wxUSING_VC_CRT_IO
-    // MSVC always prints pointers as %8X on 32 bit systems and as %16X on 64
-    // bit systems.
+#if defined(__VISUALC__) || (defined(__MINGW32__) && \
+        (!defined(__USE_MINGW_ANSI_STDIO) || !__USE_MINGW_ANSI_STDIO))
     #if SIZEOF_VOID_P == 4
-        CMP3i("00ABCDEF", "%p", (void*)0xABCDEF);
+        CMP3("00ABCDEF", "%p", (void*)0xABCDEF);
         CMP3("00000000", "%p", (void*)NULL);
     #elif SIZEOF_VOID_P == 8
-        CMP3i("0000ABCDEFABCDEF", "%p", (void*)0xABCDEFABCDEF);
+        CMP3("0000ABCDEFABCDEF", "%p", (void*)0xABCDEFABCDEF);
         CMP3("0000000000000000", "%p", (void*)NULL);
     #endif
-#elif defined(__MINGW32__) 
-    // mingw32 uses MSVC CRT in old versions but is own implementation now
-    // which is somewhere in the middle as it uses %8x, so to catch both cases
-    // we use case-insensitive comparison here.
-    CMP3("0xabcdef", "%p", (void*)0xABCDEF); 
-    CMP3("0", "%p", (void*)NULL); 
+#elif defined(__MINGW32__)
+    #if SIZEOF_VOID_P == 4
+        CMP3("00abcdef", "%p", (void*)0xABCDEF);
+        CMP3("00000000", "%p", (void*)NULL);
+    #elif SIZEOF_VOID_P == 8
+        CMP3("0000abcdefabcdef", "%p", (void*)0xABCDEFABCDEF);
+        CMP3("0000000000000000", "%p", (void*)NULL);
+    #endif
 #elif defined(__GNUG__)
     // glibc prints pointers as %#x except for NULL pointers which are printed
     // as '(nil)'.
@@ -275,13 +270,10 @@ void VsnprintfTestCase::N()
 
 void VsnprintfTestCase::E()
 {
-    // NB: there are no standards about the minimum exponent width
-    //     (and the width of the %e conversion specifier refers to the
-    //      mantissa, not to the exponent).
-    //     Since newer MSVC versions use 3 digits as minimum exponent
-    //     width while GNU libc uses 2 digits as minimum width, here we
-    //     workaround this problem using for the exponent values with at
-    //     least three digits.
+    // NB: Use at least three digits for the exponent to workaround
+    //     differences between MSVC, MinGW and GNU libc.
+    //     See wxUSING_MANTISSA_SIZE_3 in testprec.h as well.
+    //
     //     Some examples:
     //       printf("%e",2.342E+02);
     //     -> under MSVC7.1 prints:      2.342000e+002
@@ -601,8 +593,7 @@ void VsnprintfTestCase::GlibcMisc1()
 {
     CMP3("     ",    "%5.s", "xyz");
     CMP3("   33",    "%5.f", 33.3);
-#ifdef wxUSING_VC_CRT_IO
-    // see the previous notes about the minimum width of mantissa:
+#if defined(wxDEFAULT_MANTISSA_SIZE_3)
     CMP3("  3e+008", "%8.e", 33.3e7);
     CMP3("  3E+008", "%8.E", 33.3e7);
     CMP3("3e+001",    "%.g",  33.3);

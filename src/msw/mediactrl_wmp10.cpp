@@ -29,7 +29,7 @@
 //
 // The ActiveX control itself is particularly stubborn, calling
 // IOleInPlaceSite::OnPosRectChange every file change trying to set itself
-// to something different then what we told it to before.
+// to something different from what we told it to before.
 //
 // The docs are at
 // http://msdn.microsoft.com/library/en-us/wmplay10/mmp_sdk/windowsmediaplayer10sdk.asp
@@ -681,11 +681,9 @@ public:
     wxWMP10MediaEvtHandler(wxWMP10MediaBackend *amb) :
        m_amb(amb)
     {
-        m_amb->m_pAX->Connect(m_amb->m_pAX->GetId(),
-            wxEVT_ACTIVEX,
-            wxActiveXEventHandler(wxWMP10MediaEvtHandler::OnActiveX),
-            NULL, this
-                              );
+        m_amb->m_pAX->Bind(wxEVT_ACTIVEX,
+            &wxWMP10MediaEvtHandler::OnActiveX, this,
+            m_amb->m_pAX->GetId());
     }
 
     void OnActiveX(wxActiveXEvent& event);

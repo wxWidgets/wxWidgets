@@ -1094,15 +1094,10 @@ wxComboCtrlBase::CreateTextCtrl(int style)
                        style);
 
         // Connecting the events is currently the most reliable way
-        wxWindowID id = m_text->GetId();
-        m_text->Connect(id, wxEVT_TEXT,
-                        wxCommandEventHandler(wxComboCtrlBase::OnTextCtrlEvent),
-                        NULL, this);
+        m_text->Bind(wxEVT_TEXT, &wxComboCtrlBase::OnTextCtrlEvent, this);
         if ( style & wxTE_PROCESS_ENTER )
         {
-            m_text->Connect(id, wxEVT_TEXT_ENTER,
-                            wxCommandEventHandler(wxComboCtrlBase::OnTextCtrlEvent),
-                            NULL, this);
+            m_text->Bind(wxEVT_TEXT_ENTER, &wxComboCtrlBase::OnTextCtrlEvent, this);
         }
 
         m_text->SetHint(m_hintText);
@@ -2078,7 +2073,7 @@ void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
 {
     // On Mac, setting focus here led to infinite recursion so
     // m_resetFocus is used as a guard
-    
+
     if ( event.GetEventType() == wxEVT_SET_FOCUS )
     {
         if ( !m_resetFocus && GetTextCtrl() && !GetTextCtrl()->HasFocus() )
@@ -2088,7 +2083,7 @@ void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
             m_resetFocus = false;
         }
     }
-    
+
     Refresh();
 }
 

@@ -259,7 +259,7 @@ public:
 class ClassFactory : public IClassFactory
 {
 public:
-    ClassFactory(wxSharedPtr<wxWebViewHandler> handler) : m_handler(handler) 
+    ClassFactory(wxSharedPtr<wxWebViewHandler> handler) : m_handler(handler)
         { AddRef(); }
     virtual ~ClassFactory() {}
 

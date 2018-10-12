@@ -17,9 +17,7 @@
 
 #include "wx/stockitem.h"
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/list.h"
 
 // ----------------------------------------------------------------------------

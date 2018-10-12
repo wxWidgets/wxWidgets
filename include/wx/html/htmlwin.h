@@ -146,7 +146,7 @@ protected:
     /**
         Virtual dtor.
 
-        It is not really needed in this case but at leats it prevents gcc from
+        It is not really needed in this case, but at least it prevents gcc from
         complaining about its absence.
      */
     virtual ~wxHtmlWindowMouseHelper() { }

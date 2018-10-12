@@ -674,7 +674,7 @@ void wxFileListCtrl::GoToParentDir()
         if (!m_dirName.empty())
         {
             if (m_dirName.Last() == wxT('.'))
-                m_dirName = wxEmptyString;
+                m_dirName.clear();
         }
 #elif defined(__UNIX__)
         if (m_dirName.empty())
@@ -927,7 +927,7 @@ bool wxGenericFileCtrl::Create( wxWindow *parent,
     if ( ( len > 1 ) && ( wxEndsWithPathSeparator( m_dir ) ) )
         m_dir.Remove( len - 1, 1 );
 
-    m_filterExtension = wxEmptyString;
+    m_filterExtension.clear();
 
     // layout
 

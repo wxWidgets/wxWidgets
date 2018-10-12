@@ -426,7 +426,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     // instead of scaling.
     // if (!wxTheFileIconsTable->IsOk())
     //     wxTheFileIconsTable->SetSize(scaledSize);
-        
+
     // Meanwhile, in your application initialisation, where you have better knowledge of what
     // icons are available and whether to scale, you can do this:
     //
@@ -465,7 +465,7 @@ void wxGenericDirCtrl::Init()
 {
     m_showHidden = false;
     m_currentFilter = 0;
-    m_currentFilterStr = wxEmptyString; // Default: any file
+    m_currentFilterStr.clear(); // Default: any file
     m_treeCtrl = NULL;
     m_filterListCtrl = NULL;
 }
@@ -1608,7 +1608,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
             {
                 // Double, using normal quality scaling.
                 img.Rescale(2*img.GetWidth(), 2*img.GetHeight());
-                
+
                 // Then scale to the desired size. This gives the best quality,
                 // and better than CreateAntialiasedBitmap.
                 if ((img.GetWidth() != size) || (img.GetHeight() != size))

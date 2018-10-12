@@ -81,7 +81,7 @@
 
 #if defined(__WINDOWS__)
     /* Select wxMSW under Windows if no other port is specified. */
-#   if !defined(__WXMSW__) && !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__)
+#   if !defined(__WXMSW__) && !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__) && !defined(__WXQT__)
 #       define __WXMSW__
 #   endif
 
@@ -122,13 +122,13 @@
 #   endif
 #endif
 
-#if defined(__WXGTK__) && defined(__WINDOWS__)
+#if (defined(__WXGTK__) || defined(__WXQT__)) && defined(__WINDOWS__)
 
 #   ifdef __WXMSW__
 #       undef __WXMSW__
 #   endif
 
-#endif /* __WXGTK__ && __WINDOWS__ */
+#endif /* (__WXGTK__ || __WXQT__) && __WINDOWS__ */
 
 #ifdef __ANDROID__
 #   define __WXANDROID__
@@ -486,6 +486,9 @@
 #        endif
 #        ifndef MAC_OS_X_VERSION_10_13
 #           define MAC_OS_X_VERSION_10_13 101300
+#        endif
+#        ifndef MAC_OS_X_VERSION_10_14
+#           define MAC_OS_X_VERSION_10_14 101400
 #        endif
 #        if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
 #            ifndef NSAppKitVersionNumber10_10

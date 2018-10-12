@@ -19,7 +19,7 @@
 
 // keep cairo.h from defining dllimport as we're defining the symbols inside
 // the wx dll in order to load them dynamically.
-#define cairo_public 
+#define cairo_public
 
 #include <cairo.h>
 #include "wx/dynlib.h"
@@ -40,7 +40,7 @@
 
 #define wxCAIRO_METHOD_TYPE(name) \
     wxCairo##name##_t
-    
+
 #define wxCAIRO_STATIC_METHOD_DEFINE(rettype, name, args, argnames, defret) \
    static wxCAIRO_METHOD_TYPE(name) name;
 
@@ -100,6 +100,8 @@
         (cairo_t *cr, double alpha), (cr, alpha) ) \
     m( cairo_path_destroy, \
         (cairo_path_t *path), (path) ) \
+    m( cairo_path_extents, \
+        (cairo_t *cr, double *x1, double *y1, double *x2, double *y2), (cr, x1, y1, x2, y2) ) \
     m( cairo_pattern_add_color_stop_rgba, \
         (cairo_pattern_t *pattern, double offset, double red, double green, double blue, double alpha), (pattern, offset, red, green, blue, alpha) ) \
     m( cairo_pattern_destroy, \
@@ -192,7 +194,7 @@
     m( HDC, cairo_win32_surface_get_dc, \
        (cairo_surface_t *surface), (surface), NULL )
 #else
-#define wxCAIRO_PLATFORM_METHODS(m) 
+#define wxCAIRO_PLATFORM_METHODS(m)
 #endif
 
 #define wxFOR_ALL_CAIRO_METHODS(m) \
@@ -252,7 +254,7 @@
 
 #define wxCAIRO_DECLARE_VOIDTYPE(name, args, argnames) \
    wxCAIRO_DECLARE_TYPE(void, name, args, argnames, NULL)
-   
+
 wxFOR_ALL_CAIRO_VOIDMETHODS(wxCAIRO_DECLARE_VOIDTYPE)
 wxFOR_ALL_CAIRO_METHODS(wxCAIRO_DECLARE_TYPE)
 
@@ -334,7 +336,7 @@ wxCairo::wxCairo()
     }
 #endif
 
-    
+
 #define wxDO_LOAD_FUNC(name, nameStr)                                     \
     name = (wxCAIRO_METHOD_TYPE(name))m_libCairo.RawGetSymbol(nameStr);      \
     if ( !name )                                                          \

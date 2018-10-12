@@ -32,8 +32,8 @@ class SetSizeTestCase : public CppUnit::TestCase
 public:
     SetSizeTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( SetSizeTestCase );
@@ -56,7 +56,7 @@ private:
         }
 
     protected:
-        virtual wxSize DoGetBestSize() const { return wxSize(50, 250); }
+        virtual wxSize DoGetBestSize() const wxOVERRIDE { return wxSize(50, 250); }
     };
 
     wxWindow *m_win;

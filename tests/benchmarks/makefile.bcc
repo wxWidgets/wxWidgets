@@ -54,6 +54,7 @@ BENCH_GUI_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__DLLFLAG_p) -I.\..\..\samples -DNOPCH $(CPPFLAGS) $(CXXFLAGS)
 BENCH_GUI_OBJECTS =  \
 	$(OBJS)\bench_gui_bench.obj \
+	$(OBJS)\bench_gui_display.obj \
 	$(OBJS)\bench_gui_image.obj
 BENCH_GRAPHICS_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_1) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
@@ -339,6 +340,9 @@ $(OBJS)\bench_gui_sample.res: .\..\..\samples\sample.rc
 
 $(OBJS)\bench_gui_bench.obj: .\bench.cpp
 	$(CXX) -q -c -P -o$@ $(BENCH_GUI_CXXFLAGS) .\bench.cpp
+
+$(OBJS)\bench_gui_display.obj: .\display.cpp
+	$(CXX) -q -c -P -o$@ $(BENCH_GUI_CXXFLAGS) .\display.cpp
 
 $(OBJS)\bench_gui_image.obj: .\image.cpp
 	$(CXX) -q -c -P -o$@ $(BENCH_GUI_CXXFLAGS) .\image.cpp

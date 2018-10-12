@@ -172,26 +172,6 @@ public:
     virtual bool DoAutoCompleteFileNames(int flags) wxOVERRIDE;
     virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) wxOVERRIDE;
 
-#if 0
-
-    // override streambuf method
-#if wxHAS_TEXT_WINDOW_STREAM
-    int overflow(int i);
-#endif // wxHAS_TEXT_WINDOW_STREAM
-
-    // stream-like insertion operators: these are always available, whether we
-    // were, or not, compiled with streambuf support
-    wxTextCtrl& operator<<(const wxString& s);
-    wxTextCtrl& operator<<(int i);
-    wxTextCtrl& operator<<(long i);
-    wxTextCtrl& operator<<(float f);
-    wxTextCtrl& operator<<(double d);
-    wxTextCtrl& operator<<(wxChar c);
-#endif
-
-    // do the window-specific processing after processing the update event
-    virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) wxOVERRIDE;
-
     virtual bool ShouldInheritColours() const wxOVERRIDE;
 
     // wxWindow overrides
@@ -214,7 +194,6 @@ protected:
 
     // override the base class virtuals involved into geometry calculations
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
-    virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
 
     virtual void RecalcBitmaps();
 
@@ -256,9 +235,6 @@ private:
 #if wxUSE_MENUS
     wxMenu *m_menu;
 #endif // wxUSE_MENUS
-
-    bool m_searchButtonVisible;
-    bool m_cancelButtonVisible;
 
     bool m_searchBitmapUser;
     bool m_cancelBitmapUser;

@@ -77,7 +77,7 @@ public:
         }
         //else: Simply don't show any icon.
 
-        wxStaticText* const labelTitle = new wxStaticText(this, wxID_ANY, "");
+        wxStaticText* const labelTitle = new wxStaticText(this, wxID_ANY, wxString());
         labelTitle->SetLabelText(title);
 
         wxFont titleFont(titleFont_);
@@ -252,7 +252,7 @@ public:
             return;
         }
 
-        Connect(wxEVT_TIMER, wxTimerEventHandler(wxRichToolTipPopup::OnTimer));
+        Bind(wxEVT_TIMER, &wxRichToolTipPopup::OnTimer, this);
 
         m_timeout = timeout; // set for use in OnTimer if we have a delay
         m_delayShow = delay != 0;

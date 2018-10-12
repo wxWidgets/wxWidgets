@@ -128,7 +128,7 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     // check if we have an image with alpha or not
     if ( wxTheApp->GetComCtl32Version() < 600 )
     {
-        Connect(wxEVT_PAINT, wxPaintEventHandler(wxStaticBitmap::DoPaintManually));
+        Bind(wxEVT_PAINT, &wxStaticBitmap::DoPaintManually, this);
     }
 
     return true;
@@ -333,7 +333,7 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
             w = width;
             h = height;
 
-            ::MoveWindow(GetHwnd(), x, y, width, height, FALSE);
+            MSWMoveWindowToAnyPosition(GetHwnd(), x, y, width, height, false);
         }
     }
 

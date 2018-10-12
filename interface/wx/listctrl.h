@@ -1093,13 +1093,19 @@ public:
 
         Using the wxListItem's mask and state mask, you can change only selected
         attributes of a wxListCtrl item.
+
+        @return @true if the item was successfully updated or @false if the
+            update failed for some reason (e.g. an invalid item index).
     */
     bool SetItem(wxListItem& info);
 
     /**
         Sets an item string field at a particular column.
+
+        @return @true if the item was successfully updated or @false if the
+        update failed for some reason (e.g. an invalid item index).
     */
-    long SetItem(long index, int column, const wxString& label, int imageId = -1);
+    bool SetItem(long index, int column, const wxString& label, int imageId = -1);
 
     /**
         Sets the background colour for this item.

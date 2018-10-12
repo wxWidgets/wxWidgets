@@ -118,19 +118,19 @@ class wxDataViewRendererNativeData
 {
 public:
     wxDataViewRendererNativeData()
-        : m_Object(NULL), m_ColumnCell(NULL)
+        : m_Object(NULL), m_ColumnCell(NULL), m_ItemCell(NULL)
     {
         Init();
     }
 
     wxDataViewRendererNativeData(NSCell* initColumnCell)
-        : m_Object(NULL), m_ColumnCell([initColumnCell retain])
+        : m_Object(NULL), m_ColumnCell([initColumnCell retain]), m_ItemCell(NULL)
     {
         Init();
     }
 
     wxDataViewRendererNativeData(NSCell* initColumnCell, id initObject)
-        : m_Object([initObject retain]), m_ColumnCell([initColumnCell retain])
+        : m_Object([initObject retain]), m_ColumnCell([initColumnCell retain]), m_ItemCell(NULL)
     {
         Init();
     }

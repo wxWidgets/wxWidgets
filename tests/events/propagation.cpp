@@ -71,7 +71,7 @@ public:
 
     // override ProcessEvent() to confirm that it is called for all event
     // handlers in the chain
-    virtual bool ProcessEvent(wxEvent& event)
+    virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE
     {
         if ( event.GetEventType() == m_evtType )
             g_str += 'o'; // "o" == "overridden"
@@ -190,7 +190,7 @@ public:
         Update();
     }
 
-    virtual void OnDraw(wxDC& WXUNUSED(dc))
+    virtual void OnDraw(wxDC& WXUNUSED(dc)) wxOVERRIDE
     {
         g_str += 'D';   // draw
     }
@@ -234,8 +234,8 @@ class EventPropagationTestCase : public CppUnit::TestCase
 public:
     EventPropagationTestCase() {}
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( EventPropagationTestCase );
@@ -360,7 +360,7 @@ void EventPropagationTestCase::ForwardEvent()
     public:
         ForwardEvtHandler(wxEvtHandler& h) : m_h(&h) { }
 
-        virtual bool ProcessEvent(wxEvent& event)
+        virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE
         {
             g_str += 'f';
 
@@ -445,10 +445,13 @@ wxMenu* CreateTestMenu(wxFrame* frame)
 // reliable than using wxUIActionSimulator and currently works in all ports as
 // they all call wxMenuBase::SendEvent() from their respective menu event
 // handlers.
-#define ASSERT_MENU_EVENT_RESULT(menu, result) \
-    g_str.clear();                             \
-    menu->SendEvent(wxID_APPLY);               \
+#define ASSERT_MENU_EVENT_RESULT_FOR(cmd, menu, result) \
+    g_str.clear();                                      \
+    menu->SendEvent(cmd);                               \
     CHECK( g_str == result )
+
+#define ASSERT_MENU_EVENT_RESULT(menu, result) \
+    ASSERT_MENU_EVENT_RESULT_FOR(wxID_APPLY, menu, result)
 
 void EventPropagationTestCase::MenuEvent()
 {
@@ -471,6 +474,17 @@ void EventPropagationTestCase::MenuEvent()
                           wxEvtHandler::SetNextHandler, (wxEvtHandler*)NULL );
     ASSERT_MENU_EVENT_RESULT( menu, "aomA" );
 
+
+    // Check that a handler can also be attached to a submenu.
+    wxMenu* const submenu = new wxMenu;
+    submenu->Append(wxID_ABOUT);
+    menu->Append(wxID_ANY, "Submenu", submenu);
+
+    TestMenuEvtHandler hs('s'); // 's' for "submenu"
+    submenu->SetNextHandler(&hs);
+    wxON_BLOCK_EXIT_OBJ1( *submenu,
+                          wxEvtHandler::SetNextHandler, (wxEvtHandler*)NULL );
+    ASSERT_MENU_EVENT_RESULT_FOR( wxID_ABOUT, submenu, "aosomA" );
 
     // Test that the event handler associated with the menu bar gets the event.
     TestMenuEvtHandler hb('b'); // 'b' for "menu Bar"
@@ -502,7 +516,7 @@ class EventTestView : public wxView
 public:
     EventTestView() { }
 
-    virtual void OnDraw(wxDC*) { }
+    virtual void OnDraw(wxDC*) wxOVERRIDE { }
 
     wxDECLARE_DYNAMIC_CLASS(EventTestView);
 };

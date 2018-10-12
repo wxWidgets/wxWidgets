@@ -348,26 +348,31 @@ bool wxBMPResourceHandler::LoadFile(wxBitmap *bitmap,
                                     int WXUNUSED(desiredHeight))
 {
     // TODO: load colourmap.
-    bitmap->SetHBITMAP((WXHBITMAP)::LoadBitmap(wxGetInstance(), name.t_str()));
-
-    if ( !bitmap->IsOk() )
+    HBITMAP hbmp = ::LoadBitmap(wxGetInstance(), name.t_str());
+    if ( hbmp == NULL )
     {
         // it's probably not found
         wxLogError(wxT("Can't load bitmap '%s' from resources! Check .rc file."),
-                   name.c_str());
+            name.c_str());
 
         return false;
     }
 
+    int w, h, d;
     BITMAP bm;
-    if ( !::GetObject(GetHbitmapOf(*bitmap), sizeof(BITMAP), (LPSTR) &bm) )
+    if (::GetObject(hbmp, sizeof(BITMAP), &bm))
+    {
+        w = bm.bmWidth;
+        h = bm.bmHeight;
+        d = bm.bmBitsPixel;
+    }
+    else
     {
         wxLogLastError(wxT("GetObject(HBITMAP)"));
+        w = h = d = 0;
     }
 
-    bitmap->SetWidth(bm.bmWidth);
-    bitmap->SetHeight(bm.bmHeight);
-    bitmap->SetDepth(bm.bmBitsPixel);
+    bitmap->InitFromHBITMAP((WXHBITMAP)hbmp, w, h, d);
 
     // use 0xc0c0c0 as transparent colour by default
     bitmap->SetMask(new wxMask(*bitmap, *wxLIGHT_GREY));

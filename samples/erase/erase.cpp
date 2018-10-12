@@ -159,8 +159,7 @@ public:
         }
 
         Create (parent, wxID_ANY, pos, size, wxBORDER_NONE);
-        Connect(wxEVT_PAINT,
-                wxPaintEventHandler(ControlWithTransparency::OnPaint));
+        Bind(wxEVT_PAINT, &ControlWithTransparency::OnPaint, this);
 
         if ( !reason.empty() )
         {

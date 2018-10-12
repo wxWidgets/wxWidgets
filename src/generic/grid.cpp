@@ -151,7 +151,7 @@ wxDEFINE_EVENT( wxEVT_GRID_TABBING, wxGridEvent );
 
 namespace
 {
-    
+
     // ensure that first is less or equal to second, swapping the values if
     // necessary
     void EnsureFirstLessThanSecond(int& first, int& second)
@@ -159,7 +159,7 @@ namespace
         if ( first > second )
             wxSwap(first, second);
     }
-    
+
 } // anonymous namespace
 
 // ============================================================================
@@ -220,12 +220,12 @@ wxGridCellWorker::~wxGridCellWorker()
 // ----------------------------------------------------------------------------
 
 void wxGridHeaderLabelsRenderer::DrawLabel(const wxGrid& grid,
-                                           wxDC& dc,
-                                           const wxString& value,
-                                           const wxRect& rect,
-                                           int horizAlign,
-                                           int vertAlign,
-                                           int textOrientation) const
+                                         wxDC& dc,
+                                         const wxString& value,
+                                         const wxRect& rect,
+                                         int horizAlign,
+                                         int vertAlign,
+                                         int textOrientation) const
 {
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     dc.SetTextForeground(grid.GetLabelTextColour());
@@ -1167,6 +1167,11 @@ wxString wxGridTableBase::GetColLabelValue( int col )
     return s2;
 }
 
+wxString wxGridTableBase::GetCornerLabelValue() const
+{
+    return wxString();
+}
+
 wxString wxGridTableBase::GetTypeName( int WXUNUSED(row), int WXUNUSED(col) )
 {
     return wxGRID_VALUE_STRING;
@@ -1311,7 +1316,7 @@ void wxGridStringTable::Clear()
         {
             for ( col = 0; col < numCols; col++ )
             {
-                m_data[row][col] = wxEmptyString;
+                m_data[row][col].clear();
             }
         }
     }
@@ -1600,6 +1605,15 @@ void wxGridStringTable::SetColLabelValue( int col, const wxString& value )
     m_colLabels[col] = value;
 }
 
+void wxGridStringTable::SetCornerLabelValue( const wxString& value )
+{
+    m_cornerLabel = value;
+}
+
+wxString wxGridStringTable::GetCornerLabelValue() const
+{
+    return m_cornerLabel;
+}
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
@@ -2418,7 +2432,6 @@ void wxGrid::Init()
     m_selection = NULL;
     m_defaultCellAttr = NULL;
     m_typeRegistry = NULL;
-    m_winCapture = NULL;
 
     m_rowLabelWidth  = WXGRID_DEFAULT_ROW_LABEL_WIDTH;
     m_colLabelHeight = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
@@ -2440,6 +2453,10 @@ void wxGrid::Init()
     m_colLabelHorizAlign = wxALIGN_CENTRE;
     m_colLabelVertAlign  = wxALIGN_CENTRE;
     m_colLabelTextOrientation = wxHORIZONTAL;
+
+    m_cornerLabelHorizAlign = wxALIGN_CENTRE;
+    m_cornerLabelVertAlign = wxALIGN_CENTRE;
+    m_cornerLabelTextOrientation = wxHORIZONTAL;
 
     m_defaultColWidth  = WXGRID_DEFAULT_COL_WIDTH;
     m_defaultRowHeight = 0; // this will be initialized after creation
@@ -3847,15 +3864,30 @@ void wxGrid::CancelMouseCapture()
     // cancel operation currently in progress, whatever it is
     if ( m_winCapture )
     {
-        m_isDragging = false;
-        m_startDragPos = wxDefaultPosition;
-
-        m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
-        m_winCapture->SetCursor( *wxSTANDARD_CURSOR );
-        m_winCapture = NULL;
+        DoAfterDraggingEnd();
 
         // remove traces of whatever we drew on screen
         Refresh();
+    }
+}
+
+void wxGrid::DoAfterDraggingEnd()
+{
+    m_isDragging = false;
+    m_startDragPos = wxDefaultPosition;
+
+    m_cursorMode = WXGRID_CURSOR_SELECT_CELL;
+    m_winCapture->SetCursor( *wxSTANDARD_CURSOR );
+    m_winCapture = NULL;
+}
+
+void wxGrid::EndDraggingIfNecessary()
+{
+    if ( m_winCapture )
+    {
+        m_winCapture->ReleaseMouse();
+
+        DoAfterDraggingEnd();
     }
 }
 
@@ -3893,11 +3925,7 @@ void wxGrid::ChangeCursorMode(CursorMode mode,
         win = m_gridWin;
     }
 
-    if ( m_winCapture )
-    {
-        m_winCapture->ReleaseMouse();
-        m_winCapture = NULL;
-    }
+    EndDraggingIfNecessary();
 
     m_cursorMode = mode;
 
@@ -3941,7 +3969,7 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
                        bool isFirstDrag)
 {
     bool performDefault = true ;
-    
+
     if ( coords == wxGridNoCellCoords )
         return performDefault; // we're outside any valid cell
 
@@ -3973,7 +4001,7 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
                     // if event is handled by user code, no further processing
                     if ( SendEvent(wxEVT_GRID_CELL_BEGIN_DRAG, coords, event) != 0 )
                         performDefault = false;
-                    
+
                     return performDefault;
                 }
             }
@@ -3985,7 +4013,7 @@ wxGrid::DoGridCellDrag(wxMouseEvent& event,
             // we don't handle the other key modifiers
             event.Skip();
     }
-    
+
     return performDefault;
 }
 
@@ -4015,34 +4043,14 @@ void wxGrid::DoGridLineDrag(wxMouseEvent& event, const wxGridOperations& oper)
     oper.DrawParallelLineInRect(dc, rectWin, m_dragLastPos);
 }
 
-void wxGrid::DoGridDragEvent(wxMouseEvent& event, const wxGridCellCoords& coords)
+bool wxGrid::DoGridDragEvent(wxMouseEvent& event,
+                             const wxGridCellCoords& coords,
+                             bool isFirstDrag)
 {
-    if ( !m_isDragging )
-    {
-        // Don't start doing anything until the mouse has been dragged far
-        // enough
-        const wxPoint& pt = event.GetPosition();
-        if ( m_startDragPos == wxDefaultPosition )
-        {
-            m_startDragPos = pt;
-            return;
-        }
-
-        if ( abs(m_startDragPos.x - pt.x) <= DRAG_SENSITIVITY &&
-                abs(m_startDragPos.y - pt.y) <= DRAG_SENSITIVITY )
-            return;
-    }
-
-    const bool isFirstDrag = !m_isDragging;
-    m_isDragging = true;
-
     switch ( m_cursorMode )
     {
         case WXGRID_CURSOR_SELECT_CELL:
-            // no further handling if handled by user
-            if ( DoGridCellDrag(event, coords, isFirstDrag) == false )
-                return;
-            break;
+            return DoGridCellDrag(event, coords, isFirstDrag);
 
         case WXGRID_CURSOR_RESIZE_ROW:
             DoGridLineDrag(event, wxGridRowOperations());
@@ -4056,13 +4064,7 @@ void wxGrid::DoGridDragEvent(wxMouseEvent& event, const wxGridCellCoords& coords
             event.Skip();
     }
 
-    if ( isFirstDrag )
-    {
-        wxASSERT_MSG( !m_winCapture, "shouldn't capture the mouse twice" );
-
-        m_winCapture = m_gridWin;
-        m_winCapture->CaptureMouse();
-    }
+    return true;
 }
 
 void
@@ -4156,12 +4158,6 @@ wxGrid::DoGridCellLeftUp(wxMouseEvent& event, const wxGridCellCoords& coords)
 {
     if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
     {
-        if (m_winCapture)
-        {
-            m_winCapture->ReleaseMouse();
-            m_winCapture = NULL;
-        }
-
         if ( coords == m_currentCellCoords && m_waitForSlowClick && CanEnableCellControl() )
         {
             ClearSelection();
@@ -4262,14 +4258,6 @@ wxGrid::DoGridMouseMoveEvent(wxMouseEvent& WXUNUSED(event),
 
 void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event)
 {
-    if ( event.Entering() || event.Leaving() )
-    {
-        // we don't care about these events but we must not reset m_isDragging
-        // if they happen so return before anything else is done
-        event.Skip();
-        return;
-    }
-
     const wxPoint pos = CalcUnscrolledPosition(event.GetPosition());
 
     // coordinates of the cell under mouse
@@ -4283,17 +4271,64 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event)
         coords.SetCol(coords.GetCol() + cell_cols);
     }
 
-    if ( event.Dragging() )
+    // Releasing the left mouse button must be processed in any case, so deal
+    // with it first.
+    if ( event.LeftUp() )
     {
-        if ( event.LeftIsDown() )
-            DoGridDragEvent(event, coords);
-        else
-            event.Skip();
+        // Note that we must call this one first, before resetting the
+        // drag-related data, as it relies on m_cursorMode being still set and
+        // EndDraggingIfNecessary() resets it.
+        DoGridCellLeftUp(event, coords);
+
+        EndDraggingIfNecessary();
         return;
     }
 
-    m_isDragging = false;
-    m_startDragPos = wxDefaultPosition;
+    const bool isDraggingWithLeft = event.Dragging() && event.LeftIsDown();
+
+    // While dragging the mouse, only releasing the left mouse button, which
+    // cancels the drag operation, is processed (above) and any other events
+    // are just ignored while it's in progress.
+    if ( m_isDragging )
+    {
+        if ( isDraggingWithLeft )
+            DoGridDragEvent(event, coords, false /* not first drag */);
+        return;
+    }
+
+    // Now check if we're starting a drag operation (if it had been already
+    // started, m_isDragging would be true above).
+    if ( isDraggingWithLeft )
+    {
+        // To avoid accidental drags, don't start doing anything until the
+        // mouse has been dragged far enough.
+        const wxPoint& pt = event.GetPosition();
+        if ( m_startDragPos == wxDefaultPosition )
+        {
+            m_startDragPos = pt;
+            return;
+        }
+
+        if ( abs(m_startDragPos.x - pt.x) <= DRAG_SENSITIVITY &&
+                abs(m_startDragPos.y - pt.y) <= DRAG_SENSITIVITY )
+            return;
+
+        if ( DoGridDragEvent(event, coords, true /* first drag */) )
+        {
+            wxASSERT_MSG( !m_winCapture, "shouldn't capture the mouse twice" );
+
+            m_winCapture = m_gridWin;
+            m_winCapture->CaptureMouse();
+
+            m_isDragging = true;
+        }
+
+        return;
+    }
+
+    // If we're not dragging, cancel any dragging operation which could have
+    // been in progress.
+    EndDraggingIfNecessary();
 
     // deal with various button presses
     if ( event.IsButton() )
@@ -4310,12 +4345,6 @@ void wxGrid::ProcessGridCellMouseEvent(wxMouseEvent& event)
                 SendEvent(wxEVT_GRID_CELL_RIGHT_CLICK, coords, event);
             else if ( event.RightDClick() )
                 SendEvent(wxEVT_GRID_CELL_RIGHT_DCLICK, coords, event);
-        }
-
-        // this one should be called even if we're not over any cell
-        if ( event.LeftUp() )
-        {
-            DoGridCellLeftUp(event, coords);
         }
     }
     else if ( event.Moving() )
@@ -4700,7 +4729,7 @@ wxGrid::SendEvent(wxEventType type,
            // explicitly allow the event for it to take place
            gridEvt.Veto();
        }
-              
+
        claimed = GetEventHandler()->ProcessEvent(gridEvt);
        vetoed = !gridEvt.IsAllowed();
    }
@@ -5908,6 +5937,13 @@ void wxGrid::DrawCornerLabel(wxDC& dc)
 {
     wxRect rect(wxSize(m_rowLabelWidth, m_colLabelHeight));
 
+    wxGridCellAttrProvider * const
+        attrProvider = m_table ? m_table->GetAttrProvider() : NULL;
+    const wxGridCornerHeaderRenderer&
+        rend = attrProvider ? attrProvider->GetCornerRenderer()
+                            : static_cast<wxGridCornerHeaderRenderer&>
+                                (gs_defaultHeaderRenderers.cornerRenderer);
+
     if ( m_nativeColumnLabels )
     {
         rect.Deflate(1);
@@ -5919,14 +5955,17 @@ void wxGrid::DrawCornerLabel(wxDC& dc)
         rect.width++;
         rect.height++;
 
-        wxGridCellAttrProvider * const
-            attrProvider = m_table ? m_table->GetAttrProvider() : NULL;
-        const wxGridCornerHeaderRenderer&
-            rend = attrProvider ? attrProvider->GetCornerRenderer()
-                                : static_cast<wxGridCornerHeaderRenderer&>
-                                    (gs_defaultHeaderRenderers.cornerRenderer);
-
         rend.DrawBorder(*this, dc, rect);
+    }
+
+    wxString label = GetCornerLabelValue();
+    if( !label.IsEmpty() )
+    {
+        int hAlign, vAlign;
+        GetCornerLabelAlignment(&hAlign, &vAlign);
+        const int orient = GetCornerLabelTextOrientation();
+
+        rend.DrawLabel(*this, dc, label, rect, hAlign, vAlign, orient);
     }
 }
 
@@ -7032,6 +7071,19 @@ int wxGrid::GetColLabelTextOrientation() const
     return m_colLabelTextOrientation;
 }
 
+void wxGrid::GetCornerLabelAlignment( int *horiz, int *vert ) const
+{
+    if ( horiz )
+        *horiz = m_cornerLabelHorizAlign;
+    if ( vert )
+        *vert  = m_cornerLabelVertAlign;
+}
+
+int wxGrid::GetCornerLabelTextOrientation() const
+{
+    return m_cornerLabelTextOrientation;
+}
+
 wxString wxGrid::GetRowLabelValue( int row ) const
 {
     if ( m_table )
@@ -7057,6 +7109,18 @@ wxString wxGrid::GetColLabelValue( int col ) const
         wxString s;
         s << col;
         return s;
+    }
+}
+
+wxString wxGrid::GetCornerLabelValue() const
+{
+    if ( m_table )
+    {
+        return m_table->GetCornerLabelValue();
+    }
+    else
+    {
+        return wxString();
     }
 }
 
@@ -7227,6 +7291,39 @@ void wxGrid::SetColLabelAlignment( int horiz, int vert )
     }
 }
 
+void wxGrid::SetCornerLabelAlignment( int horiz, int vert )
+{
+    // allow old (incorrect) defs to be used
+    switch ( horiz )
+    {
+        case wxLEFT:   horiz = wxALIGN_LEFT; break;
+        case wxRIGHT:  horiz = wxALIGN_RIGHT; break;
+        case wxCENTRE: horiz = wxALIGN_CENTRE; break;
+    }
+
+    switch ( vert )
+    {
+        case wxTOP:    vert = wxALIGN_TOP;    break;
+        case wxBOTTOM: vert = wxALIGN_BOTTOM; break;
+        case wxCENTRE: vert = wxALIGN_CENTRE; break;
+    }
+
+    if ( horiz == wxALIGN_LEFT || horiz == wxALIGN_CENTRE || horiz == wxALIGN_RIGHT )
+    {
+        m_cornerLabelHorizAlign = horiz;
+    }
+
+    if ( vert == wxALIGN_TOP || vert == wxALIGN_CENTRE || vert == wxALIGN_BOTTOM )
+    {
+        m_cornerLabelVertAlign = vert;
+    }
+
+    if ( !GetBatchCount() )
+    {
+        m_cornerLabelWin->Refresh();
+    }
+}
+
 // Note: under MSW, the default column label font must be changed because it
 //       does not support vertical printing
 //
@@ -7241,6 +7338,15 @@ void wxGrid::SetColLabelTextOrientation( int textOrientation )
 
     if ( !GetBatchCount() )
         m_colWindow->Refresh();
+}
+
+void wxGrid::SetCornerLabelTextOrientation( int textOrientation )
+{
+    if ( textOrientation == wxHORIZONTAL || textOrientation == wxVERTICAL )
+        m_cornerLabelTextOrientation = textOrientation;
+
+    if ( !GetBatchCount() )
+        m_cornerLabelWin->Refresh();
 }
 
 void wxGrid::SetRowLabelValue( int row, const wxString& s )
@@ -7284,6 +7390,19 @@ void wxGrid::SetColLabelValue( int col, const wxString& s )
                     GetColLabelWindow()->Refresh( true, &rect );
                 }
             }
+        }
+    }
+}
+
+void wxGrid::SetCornerLabelValue( const wxString& s )
+{
+    if ( m_table )
+    {
+        m_table->SetCornerLabelValue( s );
+        if ( !GetBatchCount() )
+        {
+            wxRect rect = m_cornerLabelWin->GetRect();
+            m_cornerLabelWin->Refresh(true, &rect);
         }
     }
 }

@@ -487,7 +487,7 @@ bool wxWindowDCImpl::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
     }
     if (image == NULL)
     {
-        *col = wxColour();
+        col->UnRef();
         return false;
     }
     GdkColormap* colormap = gdk_image_get_colormap(image);
@@ -498,7 +498,7 @@ bool wxWindowDCImpl::DoGetPixel( wxCoord x1, wxCoord y1, wxColour *col ) const
     {
         GdkColor c;
         gdk_colormap_query_color(colormap, pixel, &c);
-        col->Set(c.red >> 8, c.green >> 8, c.blue >> 8);
+        *col = wxColour(c);
     }
     g_object_unref(image);
     return true;
@@ -1863,10 +1863,12 @@ void wxWindowDCImpl::SetBackgroundMode( int mode )
     m_backgroundMode = mode;
 }
 
+#if wxUSE_PALETTE
 void wxWindowDCImpl::SetPalette( const wxPalette& WXUNUSED(palette) )
 {
     wxFAIL_MSG( wxT("wxWindowDCImpl::SetPalette not implemented") );
 }
+#endif
 
 void wxWindowDCImpl::UpdateClipBox()
 {
@@ -1912,9 +1914,9 @@ void wxWindowDCImpl::UpdateClipBox()
     m_isClipBoxValid = true;
 }
 
-void wxWindowDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
+bool wxWindowDCImpl::DoGetClippingRect(wxRect& rect) const
 {
-    wxCHECK_RET( IsOk(), wxS("invalid window dc") );
+    wxCHECK_MSG( IsOk(), false, wxS("invalid window dc") );
 
     // Check if we should try to retrieve the clipping region possibly not set
     // by our SetClippingRegion() but preset or modified by application: this
@@ -1926,14 +1928,7 @@ void wxWindowDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoor
         self->UpdateClipBox();
     }
 
-    if ( x )
-        *x = m_clipX1;
-    if ( y )
-        *y = m_clipY1;
-    if ( w )
-        *w = m_clipX2 - m_clipX1;
-    if ( h )
-        *h = m_clipY2 - m_clipY1;
+    return wxGTKDCImpl::DoGetClippingRect(rect);
 }
 
 void wxWindowDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -2067,7 +2062,7 @@ void wxWindowDCImpl::ComputeScaleAndOrigin()
         // this is a bit artificial, but we need to force wxDC to think the pen
         // has changed
         wxPen pen = m_pen;
-        m_pen = wxNullPen;
+        m_pen.UnRef();
         SetPen( pen );
     }
 

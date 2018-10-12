@@ -1124,7 +1124,7 @@ void wxDocManager::OnFileNew(wxCommandEvent& WXUNUSED(event))
 
 void wxDocManager::OnFileOpen(wxCommandEvent& WXUNUSED(event))
 {
-    if ( !CreateDocument("") )
+    if ( !CreateDocument(wxString()) )
     {
         OnOpenFileFailure();
     }

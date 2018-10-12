@@ -329,7 +329,7 @@ void wxGLAttributes::AddDefaultsForWXBefore31()
 
 wxIMPLEMENT_CLASS(wxGLContext, wxWindow);
 
-wxGLContext::wxGLContext(wxGLCanvas *WXUNUSED(win), const wxGLContext* WXUNUSED(other))
+wxGLContext::wxGLContext(wxGLCanvas *WXUNUSED(win), const wxGLContext* WXUNUSED(other), const wxGLContextAttrs *WXUNUSED(ctxAttrs))
 {
 //    m_glContext = win->GetHandle()->context();
 }
@@ -348,6 +348,18 @@ bool wxGLContext::SetCurrent(const wxGLCanvas&) const
 wxIMPLEMENT_CLASS(wxGLCanvas, wxWindow);
 
 wxGLCanvas::wxGLCanvas(wxWindow *parent,
+                       const wxGLAttributes& dispAttrs,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name,
+                       const wxPalette& palette)
+{
+    Create(parent, dispAttrs, id, pos, size, style, name, palette);
+}
+
+wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        wxWindowID id,
                        const int *attribList,
                        const wxPoint& pos,
@@ -357,6 +369,19 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent,
                        const wxPalette& palette)
 {
     Create(parent, id, pos, size, style, name, attribList, palette);
+}
+
+bool wxGLCanvas::Create(wxWindow *parent,
+                        const wxGLAttributes& dispAttrs,
+                        wxWindowID id,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        long style,
+                        const wxString& name,
+                        const wxPalette& palette)
+{
+    wxLogError("Missing implementation of " + wxString(__FUNCTION__));
+    return false;
 }
 
 bool wxGLCanvas::Create(wxWindow *parent,
@@ -507,6 +532,24 @@ wxGLCanvasBase::IsDisplaySupported(const int *attribList)
         return false;
 
     return QGLWidget(format).isValid();
+}
+
+/* static */
+bool
+wxGLCanvasBase::IsDisplaySupported(const wxGLAttributes& dispAttrs)
+{
+    wxLogError("Missing implementation of " + wxString(__FUNCTION__));
+    return false;
+}
+
+// ----------------------------------------------------------------------------
+// wxGLApp
+// ----------------------------------------------------------------------------
+
+bool wxGLApp::InitGLVisual(const int *attribList)
+{
+    wxLogError("Missing implementation of " + wxString(__FUNCTION__));
+    return false;
 }
 
 #endif // wxUSE_GLCANVAS

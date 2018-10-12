@@ -45,7 +45,7 @@ wxObject *wxSpinButtonXmlHandler::DoCreateResource()
     control->Create(m_parentAsWindow,
                     GetID(),
                     GetPosition(), GetSize(),
-                    GetStyle(wxT("style"), wxSP_VERTICAL | wxSP_ARROW_KEYS),
+                    GetStyle(wxT("style"), wxSP_ARROW_KEYS),
                     GetName());
 
     control->SetValue(GetLong( wxT("value"), DEFAULT_VALUE));
@@ -96,7 +96,7 @@ wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
                     GetID(),
                     GetText(wxT("value")),
                     GetPosition(), GetSize(),
-                    GetStyle(wxT("style"), wxSP_ARROW_KEYS | wxALIGN_RIGHT),
+                    GetStyle(wxT("style"), wxSP_ARROW_KEYS),
                     GetLong(wxT("min"), DEFAULT_MIN),
                     GetLong(wxT("max"), DEFAULT_MAX),
                     GetLong(wxT("value"), DEFAULT_VALUE),
@@ -133,7 +133,7 @@ wxObject *wxSpinCtrlDoubleXmlHandler::DoCreateResource()
                     GetID(),
                     GetText(wxS("value")),
                     GetPosition(), GetSize(),
-                    GetStyle(wxS("style"), wxSP_ARROW_KEYS | wxALIGN_RIGHT),
+                    GetStyle(wxS("style"), wxSP_ARROW_KEYS),
                     GetFloat(wxS("min"), (float)DEFAULT_MIN),
                     GetFloat(wxS("max"), (float)DEFAULT_MAX),
                     GetFloat(wxS("value"), (float)DEFAULT_VALUE),

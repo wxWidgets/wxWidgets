@@ -168,6 +168,9 @@ public:
     Calls to @c wxToolBarToolBase methods (undocumented by purpose) will not change
     the visible state of the item within the tool bar.
 
+    After you have added all the tools you need, you must call Realize() to
+    effectively construct and display the toolbar.
+
     <b>wxMSW note</b>: Note that under wxMSW toolbar paints tools to reflect
     system-wide colours. If you use more than 16 colours in your tool bitmaps,
     you may wish to suppress this behaviour, otherwise system colours in your

@@ -8,7 +8,7 @@
 #############################################################################
 
 include(CMakeDependentOption)
-include(CMakeParseArguments)           # For compatiblity with CMake < 3.4
+include(CMakeParseArguments)           # For compatibility with CMake < 3.4
 include(ExternalProject)
 if(CMAKE_GENERATOR STREQUAL "Xcode")
     # wxWidgets does not use the unity features of cotire so we can
@@ -20,19 +20,24 @@ include(CMakePrintHelpers)
 
 # This function adds a list of headers to a variable while prepending
 # include/ to the path
-function(wx_add_headers src_var)
+macro(wx_add_headers src_var)
     set(headers)
-    list(REMOVE_AT ARGV 0)
-    foreach(header ${ARGV})
+    foreach(header ${ARGN})
         list(APPEND headers ${wxSOURCE_DIR}/include/${header})
         if(header MATCHES "\\.cpp$")
             # .cpp files in include directory should not be compiled
-            set_source_files_properties(${wxSOURCE_DIR}/include/${header}
-                PROPERTIES HEADER_FILE_ONLY TRUE)
+            if (wxBUILD_MONOLITHIC)
+                # set_source_files_properties only works within the same CMakeLists.txt
+                list(APPEND wxMONO_NONCOMPILED_CPP_FILES ${wxSOURCE_DIR}/include/${header})
+                set(wxMONO_NONCOMPILED_CPP_FILES ${wxMONO_NONCOMPILED_CPP_FILES} PARENT_SCOPE)
+            else()
+                set_source_files_properties(${wxSOURCE_DIR}/include/${header}
+                    PROPERTIES HEADER_FILE_ONLY TRUE)
+            endif()
         endif()
     endforeach()
-    set(${src_var} ${${src_var}} ${headers} PARENT_SCOPE)
-endfunction()
+    list(APPEND ${src_var} ${headers})
+endmacro()
 
 # Add sources from a ..._SRC variable and headers from a ..._HDR
 macro(wx_append_sources src_var source_base_name)
@@ -202,8 +207,8 @@ function(wx_set_target_properties target_name is_base)
             PUBLIC ${wxTOOLKIT_INCLUDE_DIRS})
     endif()
 
-    if (WXMSW)
-        set(WXMSW_LIBRARIES
+    if (WIN32)
+        set(WIN32_LIBRARIES
             kernel32
             user32
             gdi32
@@ -225,7 +230,7 @@ function(wx_set_target_properties target_name is_base)
             uxtheme
         )
         target_link_libraries(${target_name}
-            PUBLIC ${WXMSW_LIBRARIES})
+            PUBLIC ${WIN32_LIBRARIES})
     endif()
 
     if(wxTOOLKIT_LIBRARIES)
@@ -269,65 +274,65 @@ endfunction()
 # first parameter is the name of the library
 # if the second parameter is set to IS_BASE a non UI lib is created
 # all additional parameters are source files for the library
-function(wx_add_library name)
+macro(wx_add_library name)
     cmake_parse_arguments(wxADD_LIBRARY "IS_BASE" "" "" ${ARGN})
     set(src_files ${wxADD_LIBRARY_UNPARSED_ARGUMENTS})
 
-    if(wxBUILD_MONOLITHIC AND NOT name STREQUAL "mono")
+    if(wxBUILD_MONOLITHIC AND NOT ${name} STREQUAL "mono")
         # collect all source files for mono library
         set(wxMONO_SRC_FILES ${wxMONO_SRC_FILES} ${src_files} PARENT_SCOPE)
-        return()
-    endif()
-
-    if(wxBUILD_PRECOMP AND MSVC)
-        # Add dummy source file to be used by cotire for PCH creation
-        list(INSERT src_files 0 "${wxSOURCE_DIR}/src/common/dummy.cpp")
-    endif()
-    list(APPEND src_files ${wxSETUP_HEADER_FILE})
-
-    if(wxBUILD_SHARED)
-        set(wxBUILD_LIB_TYPE SHARED)
-        if(WIN32)
-            # Add WIN32 version information
-            list(APPEND src_files "${wxSOURCE_DIR}/src/msw/version.rc" "${wxSOURCE_DIR}/include/wx/msw/genrcdefs.h")
-        endif()
     else()
-        set(wxBUILD_LIB_TYPE STATIC)
-    endif()
+        list(APPEND src_files ${wxSETUP_HEADER_FILE})
 
-    add_library(${name} ${wxBUILD_LIB_TYPE} ${src_files})
-    wx_set_target_properties(${name} ${wxADD_LIBRARY_IS_BASE})
-
-    # Setup install
-    wx_install(TARGETS ${name}
-        LIBRARY DESTINATION "lib${wxPLATFORM_LIB_DIR}"
-        ARCHIVE DESTINATION "lib${wxPLATFORM_LIB_DIR}"
-        RUNTIME DESTINATION "lib${wxPLATFORM_LIB_DIR}"
-        BUNDLE DESTINATION Applications/wxWidgets
-        )
-
-    set(wxLIB_TARGETS ${wxLIB_TARGETS} ${name} PARENT_SCOPE)
-endfunction()
-
-# Enable cotire for target if precompiled headers are enabled
-macro(wx_target_enable_precomp target_name)
-    if(wxBUILD_PRECOMP)
-        if(APPLE AND ${target_name} STREQUAL "wxscintilla")
-            # TODO: workaround/fix cotire issue with wxscintilla when using Xcode
+        if(wxBUILD_SHARED)
+            set(wxBUILD_LIB_TYPE SHARED)
+            if(WIN32)
+                # Add WIN32 version information
+                list(APPEND src_files "${wxSOURCE_DIR}/src/msw/version.rc" "${wxSOURCE_DIR}/include/wx/msw/genrcdefs.h")
+            endif()
         else()
-            set_target_properties(${target_name} PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
-            cotire(${target_name})
+            set(wxBUILD_LIB_TYPE STATIC)
         endif()
+
+        add_library(${name} ${wxBUILD_LIB_TYPE} ${src_files})
+        wx_set_target_properties(${name} ${wxADD_LIBRARY_IS_BASE})
+
+        # Setup install
+        wx_install(TARGETS ${name}
+            LIBRARY DESTINATION "lib${wxPLATFORM_LIB_DIR}"
+            ARCHIVE DESTINATION "lib${wxPLATFORM_LIB_DIR}"
+            RUNTIME DESTINATION "lib${wxPLATFORM_LIB_DIR}"
+            BUNDLE DESTINATION Applications/wxWidgets
+            )
+
+        list(APPEND wxLIB_TARGETS ${name})
     endif()
+endmacro()
+
+# Enable cotire for target, use optional second argument for prec. header
+macro(wx_target_enable_precomp target_name)
+    target_compile_definitions(${target_name} PRIVATE WX_PRECOMP)
+    if(NOT ${ARGV1} STREQUAL "")
+        set_target_properties(${target_name} PROPERTIES
+            COTIRE_CXX_PREFIX_HEADER_INIT ${ARGV1})
+    endif()
+    set_target_properties(${target_name} PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
+    cotire(${target_name})
 endmacro()
 
 # Enable precompiled headers for tests
 macro(wx_test_enable_precomp target_name)
     if(wxBUILD_PRECOMP)
-        target_compile_definitions(${target_name} PRIVATE WX_PRECOMP)
-        set_target_properties(${target_name} PROPERTIES
-            COTIRE_CXX_PREFIX_HEADER_INIT "${wxSOURCE_DIR}/tests/testprec.h")
-        wx_target_enable_precomp(${target_name})
+        wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/tests/testprec.h")
+    elseif(MSVC)
+        target_compile_definitions(${target_name} PRIVATE NOPCH)
+    endif()
+endmacro()
+
+# Enable precompiled headers for samples
+macro(wx_sample_enable_precomp target_name)
+    if(wxBUILD_PRECOMP)
+        wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
     elseif(MSVC)
         target_compile_definitions(${target_name} PRIVATE NOPCH)
     endif()
@@ -336,13 +341,12 @@ endmacro()
 # Enable precompiled headers for wx libraries
 macro(wx_finalize_lib target_name)
     set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)
-    if(wxBUILD_PRECOMP AND TARGET ${target_name})
-        target_compile_definitions(${target_name} PRIVATE WX_PRECOMP)
-        set_target_properties(${target_name} PROPERTIES
-            COTIRE_CXX_PREFIX_HEADER_INIT "${wxSOURCE_DIR}/include/wx/wxprec.h")
-        wx_target_enable_precomp(${target_name})
+    if(wxBUILD_PRECOMP)
+        if(TARGET ${target_name})
+            wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
+        endif()
     elseif(MSVC)
-        target_compile_definitions(${target_name} PRIVATE NOPCH)
+        wx_lib_compile_definitions(${target_name} PRIVATE NOPCH)
     endif()
 endmacro()
 
@@ -354,6 +358,8 @@ macro(wx_lib_link_libraries name)
         cmake_parse_arguments(_LIB_LINK "" "" "PUBLIC;PRIVATE" ${ARGN})
         list(APPEND wxMONO_LIBS_PUBLIC ${_LIB_LINK_PUBLIC})
         list(APPEND wxMONO_LIBS_PRIVATE ${_LIB_LINK_PRIVATE})
+        set(wxMONO_LIBS_PUBLIC ${wxMONO_LIBS_PUBLIC} PARENT_SCOPE)
+        set(wxMONO_LIBS_PRIVATE ${wxMONO_LIBS_PRIVATE} PARENT_SCOPE)
     else()
         target_link_libraries(${name};${ARGN})
     endif()
@@ -377,8 +383,10 @@ macro(wx_lib_include_directories name)
         cmake_parse_arguments(_LIB_INCLUDE_DIRS "" "" "PUBLIC;PRIVATE" ${ARGN})
         list(APPEND wxMONO_INCLUDE_DIRS_PUBLIC ${_LIB_INCLUDE_DIRS_PUBLIC})
         list(APPEND wxMONO_INCLUDE_DIRS_PRIVATE ${_LIB_INCLUDE_DIRS_PRIVATE})
+        set(wxMONO_INCLUDE_DIRS_PUBLIC ${wxMONO_INCLUDE_DIRS_PUBLIC} PARENT_SCOPE)
+        set(wxMONO_INCLUDE_DIRS_PRIVATE ${wxMONO_INCLUDE_DIRS_PRIVATE} PARENT_SCOPE)
     else()
-        target_include_directories(${name};${ARGN})
+        target_include_directories(${name};BEFORE;${ARGN})
     endif()
 endmacro()
 
@@ -390,6 +398,8 @@ macro(wx_lib_compile_definitions name)
         cmake_parse_arguments(_LIB_DEFINITIONS "" "" "PUBLIC;PRIVATE" ${ARGN})
         list(APPEND wxMONO_DEFINITIONS_PUBLIC ${_LIB_DEFINITIONS_PUBLIC})
         list(APPEND wxMONO_DEFINITIONS_PRIVATE ${_LIB_DEFINITIONS_PRIVATE})
+        set(wxMONO_DEFINITIONS_PUBLIC ${wxMONO_DEFINITIONS_PUBLIC} PARENT_SCOPE)
+        set(wxMONO_DEFINITIONS_PRIVATE ${wxMONO_DEFINITIONS_PRIVATE} PARENT_SCOPE)
     else()
         target_compile_definitions(${name};${ARGN})
     endif()
@@ -531,7 +541,7 @@ endfunction()
 # IMPORTANT does not require wxBUILD_SAMPLES=ALL
 # RES followed by WIN32 .rc files
 #
-# Additinally the following variables may be set before calling wx_add_sample:
+# Additionally the following variables may be set before calling wx_add_sample:
 # wxSAMPLE_SUBDIR subdirectory in the samples/ folder to use as base
 # wxSAMPLE_FOLDER IDE sub folder to be used for the samples
 function(wx_add_sample name)
@@ -616,8 +626,6 @@ function(wx_add_sample name)
     if(SAMPLE_DEFINITIONS)
         target_compile_definitions(${target_name} PRIVATE ${SAMPLE_DEFINITIONS})
     endif()
-    # Disable precompile headers for samples
-    target_compile_definitions(${target_name} PRIVATE NOPCH)
     if(SAMPLE_DATA)
         # TODO: handle data files differently for OS X bundles
         # Copy data files to output directory
@@ -636,6 +644,7 @@ function(wx_add_sample name)
     elseif(APPLE)
         if(NOT IPHONE)
             set_target_properties(${target_name} PROPERTIES
+                MACOSX_BUNDLE_INFO_PLIST "${wxSOURCE_DIR}/samples/Info.plist.in"
                 RESOURCE "${wxSOURCE_DIR}/src/osx/carbon/wxmac.icns")
         endif()
         set_target_properties(${target_name} PROPERTIES
@@ -653,6 +662,7 @@ function(wx_add_sample name)
         wx_string_append(folder "/${SAMPLE_FOLDER}")
     endif()
     wx_set_common_target_properties(${target_name})
+    wx_sample_enable_precomp(${target_name})
     set_target_properties(${target_name} PROPERTIES
         FOLDER ${folder}
         )
@@ -739,17 +749,33 @@ macro(wx_dependent_option option doc default depends force)
 endmacro()
 
 # wx_add_test(<name> [src...])
+# Optionally:
+# DATA followed by required data files
+# RES followed by WIN32 .rc files
 function(wx_add_test name)
-    wx_list_add_prefix(test_src "${wxSOURCE_DIR}/tests/" ${ARGN})
-    if(wxBUILD_PRECOMP AND MSVC)
-        # Add dummy source file to be used by cotire for PCH creation
-        list(INSERT test_src 0 "${wxSOURCE_DIR}/tests/dummy.cpp")
+    cmake_parse_arguments(TEST "" "" "DATA;RES" ${ARGN})
+    wx_list_add_prefix(test_src "${wxSOURCE_DIR}/tests/" ${TEST_UNPARSED_ARGUMENTS})
+    if(WIN32 AND TEST_RES)
+        foreach(res ${TEST_RES})
+            list(APPEND test_src ${wxSOURCE_DIR}/tests/${res})
+        endforeach()
     endif()
     add_executable(${name} ${test_src})
     target_include_directories(${name} PRIVATE "${wxSOURCE_DIR}/tests" "${wxSOURCE_DIR}/3rdparty/catch/include")
     wx_exe_link_libraries(${name} base)
     if(wxBUILD_SHARED)
         target_compile_definitions(${name} PRIVATE WXUSINGDLL)
+    endif()
+    if(TEST_DATA)
+        # Copy data files to output directory
+        foreach(data_file ${TEST_DATA})
+            list(APPEND cmds COMMAND ${CMAKE_COMMAND}
+                -E copy ${wxSOURCE_DIR}/tests/${data_file}
+                ${wxOUTPUT_DIR}/${wxPLATFORM_LIB_DIR}/${data_file})
+        endforeach()
+        add_custom_command(
+            TARGET ${name} ${cmds}
+            COMMENT "Copying test data files...")
     endif()
     wx_set_common_target_properties(${name})
     set_target_properties(${name} PROPERTIES FOLDER "Tests")

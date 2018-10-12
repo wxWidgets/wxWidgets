@@ -441,7 +441,7 @@ wxSize wxMSWButton::IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size
         // so make them as high as it.
         int yText;
         wxGetCharSize(GetHwndOf(btn), NULL, &yText, btn->GetFont());
-        yText = EDIT_HEIGHT_FROM_CHAR_HEIGHT(yText);
+        yText = wxGetEditHeightFromCharHeight(yText, btn);
 
         sizeBtn.IncTo(wxSize(-1, yText));
     }
@@ -930,21 +930,51 @@ void DrawButtonText(HDC hdc,
         {
             // draw multiline label
 
-            // center text horizontally in any case
-            flags |= DT_CENTER;
-
             // first we need to compute its bounding rect
             RECT rc;
             ::CopyRect(&rc, pRect);
             ::DrawText(hdc, text.t_str(), text.length(), &rc,
-                       DT_CENTER | DT_CALCRECT);
+                       flags | DT_CALCRECT);
 
-            // now center this rect inside the entire button area
+            // now position this rect inside the entire button area: notice
+            // that DrawText() doesn't respect alignment flags for multiline
+            // text, which is why we have to do it on our own (but still use
+            // the horizontal alignment flags for the individual lines to be
+            // aligned correctly)
             const LONG w = rc.right - rc.left;
             const LONG h = rc.bottom - rc.top;
-            rc.left = pRect->left + (pRect->right - pRect->left)/2 - w/2;
+
+            if ( btn->HasFlag(wxBU_RIGHT) )
+            {
+                rc.left = pRect->right - w;
+
+                flags |= DT_RIGHT;
+            }
+            else if ( !btn->HasFlag(wxBU_LEFT) )
+            {
+                rc.left = pRect->left + (pRect->right - pRect->left)/2 - w/2;
+
+                flags |= DT_CENTER;
+            }
+            else // wxBU_LEFT
+            {
+                rc.left = pRect->left;
+            }
+
+            if ( btn->HasFlag(wxBU_BOTTOM) )
+            {
+                rc.top = pRect->bottom - h;
+            }
+            else if ( !btn->HasFlag(wxBU_TOP) )
+            {
+                rc.top = pRect->top + (pRect->bottom - pRect->top)/2 - h/2;
+            }
+            else // wxBU_TOP
+            {
+                rc.top = pRect->top;
+            }
+
             rc.right = rc.left+w;
-            rc.top = pRect->top + (pRect->bottom - pRect->top)/2 - h/2;
             rc.bottom = rc.top+h;
 
             ::DrawText(hdc, text.t_str(), text.length(), &rc, flags);

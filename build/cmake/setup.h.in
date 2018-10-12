@@ -275,6 +275,8 @@
 
 #cmakedefine01 wxUSE_ZLIB
 
+#cmakedefine01 wxUSE_LIBLZMA
+
 #cmakedefine01 wxUSE_APPLE_IEEE
 
 #cmakedefine01 wxUSE_JOYSTICK

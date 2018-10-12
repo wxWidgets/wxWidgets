@@ -63,8 +63,8 @@ protected:
 
 private:
     // Implement base class functions.
-    virtual wxStringInputStream  *DoCreateInStream();
-    virtual wxStringOutputStream *DoCreateOutStream();
+    virtual wxStringInputStream  *DoCreateInStream() wxOVERRIDE;
+    virtual wxStringOutputStream *DoCreateOutStream() wxOVERRIDE;
 
     // output the given string to wxStringOutputStream and check that its
     // contents is exactly the same string

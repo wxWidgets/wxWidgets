@@ -33,10 +33,16 @@
     <ClCompile Include="..\..\src\common\accesscmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\addremovectrl.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\common\affinematrix2d.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\anidecod.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\animatecmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\appcmn.cpp">
@@ -57,6 +63,9 @@
     <ClCompile Include="..\..\src\common\bmpbtncmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\bmpcboxcmn.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\common\bookctrl.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
@@ -64,6 +73,9 @@
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\cairo.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\calctrlcmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\checkboxcmn.cpp">
@@ -106,6 +118,9 @@
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\ctrlsub.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\datavcmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\dcbase.cpp">
@@ -210,6 +225,9 @@
     <ClCompile Include="..\..\src\common\graphcmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\gridcmn.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\common\headercolcmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
@@ -217,6 +235,9 @@
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\helpbase.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\hyperlnkcmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\iconbndl.cpp">
@@ -291,6 +312,12 @@
     <ClCompile Include="..\..\src\common\nbkbase.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\notifmsgcmn.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\odcombocmn.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\common\overlaycmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
@@ -336,6 +363,9 @@
     <ClCompile Include="..\..\src\common\rgncmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\richtooltipcmn.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\common\scrolbarcmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
@@ -373,6 +403,9 @@
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\stockitem.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\common\taskbarcmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\common\tbarbase.cpp">
@@ -423,10 +456,28 @@
     <ClCompile Include="..\..\src\common\xpmdecod.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\generic\aboutdlgg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\activityindicator.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\animateg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\bannerwindow.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\bmpcboxg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\generic\busyinfo.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\buttonbar.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\calctrlg.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\choicbkg.cpp">
@@ -447,6 +498,15 @@
     <ClCompile Include="..\..\src\generic\combog.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\generic\commandlinkbuttong.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\datavgen.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\datectlg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\generic\dcpsg.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
@@ -454,6 +514,9 @@
       <Filter>Generic Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\dragimgg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\editlbox.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\filectrlg.cpp">
@@ -468,10 +531,31 @@
     <ClCompile Include="..\..\src\generic\graphicc.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\generic\grid.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\gridctrl.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\grideditors.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\gridsel.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\generic\headerctrlg.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\generic\helpext.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\hyperlinkg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\generic\infobar.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\laywin.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\listbkg.cpp">
@@ -486,7 +570,13 @@
     <ClCompile Include="..\..\src\generic\msgdlgg.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\generic\notifmsgg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\generic\numdlgg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\odcombo.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\preferencesg.cpp">
@@ -501,10 +591,19 @@
     <ClCompile Include="..\..\src\generic\progdlgg.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\generic\propdlg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\generic\renderg.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\richmsgdlgg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\richtooltipg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\sashwin.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\scrlwing.cpp">
@@ -514,6 +613,9 @@
       <Filter>Generic Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\spinctlg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\splash.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\splitter.cpp">
@@ -534,6 +636,12 @@
     <ClCompile Include="..\..\src\generic\textdlgg.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\generic\timectrlg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\tipdlg.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\generic\tipwin.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
@@ -546,11 +654,20 @@
     <ClCompile Include="..\..\src\generic\treectlg.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\generic\treelist.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\generic\vlbox.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\generic\vscroll.cpp">
       <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\generic\wizard.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\aboutdlg.cpp">
+      <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\accel.cpp">
       <Filter>MSW Sources</Filter>
@@ -573,10 +690,16 @@
     <ClCompile Include="..\..\src\msw\bmpbuttn.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\bmpcbox.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\brush.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\button.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\calctrl.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\caret.cpp">
@@ -606,6 +729,9 @@
     <ClCompile Include="..\..\src\msw\combobox.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\commandlinkbutton.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\control.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
@@ -616,6 +742,15 @@
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\data.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\datecontrols.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\datectrl.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\datetimectrl.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\dc.cpp">
@@ -705,6 +840,9 @@
     <ClCompile Include="..\..\src\msw\helpwin.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\hyperlink.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\icon.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
@@ -712,6 +850,9 @@
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\iniconf.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\joystick.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\listbox.cpp">
@@ -751,6 +892,9 @@
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\notebook.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\notifmsg.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\ole\access.cpp">
@@ -819,6 +963,12 @@
     <ClCompile Include="..\..\src\msw\richmsgdlg.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\richtooltip.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\rt\notifmsgrt.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\rt\utilsrt.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
@@ -829,6 +979,9 @@
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\slider.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\sound.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\spinbutt.cpp">
@@ -855,6 +1008,9 @@
     <ClCompile Include="..\..\src\msw\systhemectrl.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\taskbar.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\msw\taskbarbutton.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
@@ -868,6 +1024,9 @@
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\tglbtn.cpp">
+      <Filter>MSW Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\msw\timectrl.cpp">
       <Filter>MSW Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\msw\toolbar.cpp">
@@ -910,10 +1069,19 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\wx\aboutdlg.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\accel.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\access.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\activityindicator.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\addremovectrl.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\affinematrix2d.h">
@@ -923,6 +1091,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\anidecod.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\animate.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\animdecod.h">
@@ -937,10 +1108,16 @@
     <ClInclude Include="..\..\include\wx\artprov.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\bannerwindow.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\bitmap.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\bmpbuttn.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\bmpcbox.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\bookctrl.h">
@@ -953,6 +1130,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\button.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\calctrl.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\caret.h">
@@ -1006,6 +1186,9 @@
     <ClInclude Include="..\..\include\wx\combobox.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\commandlinkbutton.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\compositewin.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -1027,7 +1210,22 @@
     <ClInclude Include="..\..\include\wx\dataobj.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\dataview.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\datectrl.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\dateevt.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\datetimectrl.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\dc.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\dcbuffer.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\dcclient.h">
@@ -1069,9 +1267,6 @@
     <ClInclude Include="..\..\include\wx\display.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\wx\display_impl.h">
-      <Filter>Common Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\wx\dnd.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -1082,6 +1277,12 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\dragimag.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\dvrenderers.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\editlbox.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\effects.h">
@@ -1141,13 +1342,28 @@
     <ClInclude Include="..\..\include\wx\gdiobj.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\aboutdlgg.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\accel.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\activityindicator.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\animate.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\bmpcbox.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\busyinfo.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\buttonbar.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\calctrlg.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\choicdgg.h">
@@ -1168,6 +1384,12 @@
     <ClInclude Include="..\..\include\wx\generic\custombgwin.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\dataview.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\datectrl.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\dcpsg.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
@@ -1175,6 +1397,12 @@
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\dragimgg.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\dvrenderer.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\dvrenderers.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\filectrlg.h">
@@ -1186,10 +1414,31 @@
     <ClInclude Include="..\..\include\wx\generic\fontpickerg.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\grid.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\gridctrl.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\grideditors.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\gridsel.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\headerctrlg.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\helpext.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\hyperlink.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\infobar.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\laywin.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\logg.h">
@@ -1199,6 +1448,9 @@
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\notebook.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\notifmsg.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\numdlgg.h">
@@ -1216,13 +1468,22 @@
     <ClInclude Include="..\..\include\wx\generic\progdlgg.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\propdlg.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\richmsgdlgg.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\sashwin.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\scrolwin.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\spinctlg.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\splash.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\splitter.h">
@@ -1240,7 +1501,13 @@
     <ClInclude Include="..\..\include\wx\generic\textdlgg.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\timectrl.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\generic\treectlg.h">
+      <Filter>Generic Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\generic\wizard.h">
       <Filter>Generic Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\geometry.h">
@@ -1250,6 +1517,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\graphics.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\grid.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\headercol.h">
@@ -1268,6 +1538,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\helpwin.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\hyperlink.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\icon.h">
@@ -1321,7 +1594,13 @@
     <ClInclude Include="..\..\include\wx\itemid.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\joystick.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\layout.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\laywin.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\listbase.h">
@@ -1381,10 +1660,16 @@
     <ClInclude Include="..\..\include\wx\msw\bmpbuttn.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\bmpcbox.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\brush.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\button.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\calctrl.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\caret.h">
@@ -1414,6 +1699,9 @@
     <ClInclude Include="..\..\include\wx\msw\combobox.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\commandlinkbutton.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\control.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
@@ -1424,6 +1712,12 @@
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\custombgwin.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\datectrl.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\datetimectrl.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\dc.h">
@@ -1492,6 +1786,9 @@
     <ClInclude Include="..\..\include\wx\msw\htmlhelp.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\hyperlink.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\icon.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
@@ -1502,6 +1799,9 @@
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\init.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\joystick.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\listbox.h">
@@ -1627,6 +1927,9 @@
     <ClInclude Include="..\..\include\wx\msw\slider.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\sound.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\spinbutt.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
@@ -1648,6 +1951,9 @@
     <ClInclude Include="..\..\include\wx\msw\statusbar.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\taskbar.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\taskbarbutton.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
@@ -1658,6 +1964,9 @@
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\tglbtn.h">
+      <Filter>MSW Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\msw\timectrl.h">
       <Filter>MSW Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\msw\toolbar.h">
@@ -1687,7 +1996,13 @@
     <ClInclude Include="..\..\include\wx\notebook.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\notifmsg.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\numdlg.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\odcombo.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\overlay.h">
@@ -1756,6 +2071,9 @@
     <ClInclude Include="..\..\include\wx\progdlg.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\propdlg.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\quantize.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -1783,6 +2101,12 @@
     <ClInclude Include="..\..\include\wx\richmsgdlg.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\richtooltip.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\sashwin.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\scopeguard.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -1807,10 +2131,16 @@
     <ClInclude Include="..\..\include\wx\slider.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\sound.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\spinbutt.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\spinctrl.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\splash.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\splitter.h">
@@ -1835,6 +2165,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\systhemectrl.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\taskbar.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\taskbarbutton.h">
@@ -1864,6 +2197,12 @@
     <ClInclude Include="..\..\include\wx\tglbtn.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\wx\timectrl.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\tipdlg.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\tipwin.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
@@ -1886,6 +2225,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\treectrl.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\treelist.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\uiaction.h">
@@ -1925,6 +2267,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\withimages.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\wizard.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\wrapsizer.h">

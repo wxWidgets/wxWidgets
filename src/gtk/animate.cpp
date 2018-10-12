@@ -25,8 +25,6 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/object.h"
 
-#include <gtk/gtk.h>
-
 
 // ============================================================================
 // implementation

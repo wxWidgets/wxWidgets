@@ -30,7 +30,6 @@ wxChoice::~wxChoice()
         for ( i = 0; i < max; ++i )
             delete GetClientObject( i );
     }
-    delete m_popUpMenu;
 }
 
 bool wxChoice::Create(wxWindow *parent,
@@ -70,10 +69,7 @@ bool wxChoice::Create(wxWindow *parent,
     if ( !wxChoiceBase::Create( parent, id, pos, size, style, validator, name ) )
         return false;
 
-    m_popUpMenu = new wxMenu();
-    m_popUpMenu->SetNoEventsMode(true);
-
-    SetPeer(wxWidgetImpl::CreateChoice( this, parent, id, m_popUpMenu, pos, size, style, GetExtraStyle() ));
+    SetPeer(wxWidgetImpl::CreateChoice( this, parent, id, NULL, pos, size, style, GetExtraStyle() ));
 
     MacPostControlCreate( pos, size );
 
@@ -133,7 +129,7 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
         wxString text = items[i];
         if (text.empty())
             text = " ";  // menu items can't have empty labels
-        m_popUpMenu->Insert( idx, i+1, text );
+        dynamic_cast<wxChoiceWidgetImpl*>(GetPeer())->InsertItem( idx, i+1, text );
         m_datas.Insert( NULL, idx );
         AssignNewItemClientData(idx, clientData, i, type);
     }
@@ -150,8 +146,7 @@ void wxChoice::DoDeleteOneItem(unsigned int n)
     if ( HasClientObjectData() )
         delete GetClientObject( n );
 
-    m_popUpMenu->Delete( m_popUpMenu->FindItemByPosition( n ) );
-
+    dynamic_cast<wxChoiceWidgetImpl*>(GetPeer())->RemoveItem(n);
     m_strings.RemoveAt( n ) ;
     m_datas.RemoveAt( n ) ;
 
@@ -160,10 +155,7 @@ void wxChoice::DoDeleteOneItem(unsigned int n)
 
 void wxChoice::DoClear()
 {
-    for ( unsigned int i = 0 ; i < GetCount() ; i++ )
-    {
-        m_popUpMenu->Delete( m_popUpMenu->FindItemByPosition( 0 ) );
-    }
+    dynamic_cast<wxChoiceWidgetImpl*>(GetPeer())->Clear();
 
     m_strings.Empty() ;
     m_datas.Empty() ;
@@ -210,7 +202,7 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
 
     m_strings[n] = s ;
 
-    m_popUpMenu->FindItemByPosition( n )->SetItemLabel( s ) ;
+    dynamic_cast<wxChoiceWidgetImpl*>(GetPeer())->SetItem(n,s);
 }
 
 wxString wxChoice::GetString(unsigned int n) const

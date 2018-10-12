@@ -29,9 +29,7 @@
 #include <sys/stat.h>
 #include <ctype.h>
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/gtk3-compat.h"
 
 // ----------------------------------------------------------------------------
@@ -1467,8 +1465,53 @@ wxTextCtrl::HitTest(const wxPoint& pt, long *pos) const
 {
     if ( !IsMultiLine() )
     {
-        // not supported
-        return wxTE_HT_UNKNOWN;
+        // These variables will contain the position inside PangoLayout.
+        int x = pt.x,
+            y = pt.y;
+
+        // Get the offsets of PangoLayout inside the control.
+        //
+        // Note that contrary to what GTK+ documentation implies, the
+        // horizontal offset already accounts for scrolling, i.e. it will be
+        // negative if text is scrolled.
+        gint ofsX = 0,
+             ofsY = 0;
+        gtk_entry_get_layout_offsets(GTK_ENTRY(m_text), &ofsX, &ofsY);
+
+        x -= ofsX;
+        y -= ofsY;
+
+        // And scale the coordinates for Pango.
+        x *= PANGO_SCALE;
+        y *= PANGO_SCALE;
+
+        PangoLayout* const layout = gtk_entry_get_layout(GTK_ENTRY(m_text));
+
+        int idx = -1,
+            ofs = 0;
+        if ( !pango_layout_xy_to_index(layout, x, y, &idx, &ofs) )
+        {
+            // Try to guess why did it fail.
+            if ( x < 0 || y < 0 )
+            {
+                if ( pos )
+                    *pos = 0;
+
+                return wxTE_HT_BEFORE;
+            }
+            else
+            {
+                if ( pos )
+                    *pos = wxTextEntry::GetLastPosition();
+
+                return wxTE_HT_BEYOND;
+            }
+        }
+
+        if ( pos )
+            *pos = idx;
+
+        return wxTE_HT_ON_TEXT;
     }
 
     int x, y;

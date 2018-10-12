@@ -88,7 +88,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 grid: $(GRID_OBJECTS)
-	$(CXX) -o $@ $(GRID_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs adv,core,base`
+	$(CXX) -o $@ $(GRID_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
 
 grid_griddemo.o: ./griddemo.cpp
 	$(CXX) -c -o $@ $(GRID_CXXFLAGS) $(CPPDEPS) $<

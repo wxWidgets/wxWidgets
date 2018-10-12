@@ -28,8 +28,7 @@
 #if !wxUSE_NATIVE_SEARCH_CONTROL
 
 #include "wx/image.h"
-
-#define WXMAX(a,b) ((a)>(b)?(a):(b))
+#include "wx/utils.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -38,7 +37,10 @@
 // the margin between the text control and the search/cancel buttons
 static const wxCoord MARGIN = 2;
 
-#define LIGHT_STEP 160
+// arguments to wxColour::ChangeLightness() for making the search/cancel
+// bitmaps foreground colour, respectively
+static const int SEARCH_BITMAP_LIGHTNESS = 140; // slightly lighter
+static const int CANCEL_BITMAP_LIGHTNESS = 160; // a bit more lighter
 
 // ----------------------------------------------------------------------------
 // wxSearchTextCtrl: text control used by search control
@@ -130,7 +132,7 @@ protected:
         // can't use wxBORDER_NONE to calculate a good height, in which case we just have to
         // assume a border in the code above and then subtract the space that would be taken up
         // by a themed border (the thin blue border and the white internal border).
-        size.y -= 4;
+        size.y -= FromDIP(4);
 
         self->SetWindowStyleFlag(flags);
 
@@ -282,9 +284,6 @@ void wxSearchCtrl::Init()
     m_menu = NULL;
 #endif // wxUSE_MENUS
 
-    m_searchButtonVisible = true;
-    m_cancelButtonVisible = false;
-
     m_searchBitmapUser = false;
     m_cancelBitmapUser = false;
 #if wxUSE_MENUS
@@ -311,9 +310,6 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
     m_searchButton = new wxSearchButton(this,
                                         wxEVT_SEARCH,
                                         m_searchBitmap);
-    m_cancelButton = new wxSearchButton(this,
-                                        wxEVT_SEARCH_CANCEL,
-                                        m_cancelBitmap);
 
     SetBackgroundColour( m_text->GetBackgroundColour() );
     m_text->SetBackgroundColour(wxColour());
@@ -352,13 +348,14 @@ void wxSearchCtrl::SetMenu( wxMenu* menu )
 
     if ( m_menu && !hadMenu )
     {
+        m_searchButton->Show();
         m_searchButton->SetBitmapLabel(m_searchMenuBitmap);
         m_searchButton->Refresh();
     }
     else if ( !m_menu && hadMenu )
     {
         m_searchButton->SetBitmapLabel(m_searchBitmap);
-        if ( m_searchButtonVisible )
+        if ( m_searchButton->IsShown() )
         {
             m_searchButton->Refresh();
         }
@@ -375,15 +372,23 @@ wxMenu* wxSearchCtrl::GetMenu()
 
 void wxSearchCtrl::ShowSearchButton( bool show )
 {
-    if ( m_searchButtonVisible == show )
+    if ( show == IsSearchButtonVisible() )
     {
         // no change
         return;
     }
-    m_searchButtonVisible = show;
-    if ( m_searchButtonVisible )
+    if ( show )
     {
         RecalcBitmaps();
+
+        m_searchButton->Show();
+    }
+    else // Requested to hide it.
+    {
+        // Only hide the button if we don't need it for the menu, otherwise it
+        // needs to remain shown.
+        if ( !HasMenu() )
+            m_searchButton->Hide();
     }
 
     LayoutControls();
@@ -391,25 +396,36 @@ void wxSearchCtrl::ShowSearchButton( bool show )
 
 bool wxSearchCtrl::IsSearchButtonVisible() const
 {
-    return m_searchButtonVisible;
+    return m_searchButton->IsShown() || HasMenu();
 }
 
 
 void wxSearchCtrl::ShowCancelButton( bool show )
 {
-    if ( m_cancelButtonVisible == show )
+    if ( show == IsCancelButtonVisible() )
     {
         // no change
         return;
     }
-    m_cancelButtonVisible = show;
+
+    // This button is not shown initially, so create it on demand if necessary,
+    // i.e. if it's the first time we show it.
+    if ( !m_cancelButton )
+    {
+        m_cancelButton = new wxSearchButton(this,
+                                            wxEVT_SEARCH_CANCEL,
+                                            m_cancelBitmap);
+        RecalcBitmaps();
+    }
+
+    m_cancelButton->Show(show);
 
     LayoutControls();
 }
 
 bool wxSearchCtrl::IsCancelButtonVisible() const
 {
-    return m_cancelButtonVisible;
+    return m_cancelButton && m_cancelButton->IsShown();
 }
 
 void wxSearchCtrl::SetDescriptiveText(const wxString& text)
@@ -433,30 +449,23 @@ wxSize wxSearchCtrl::DoGetBestClientSize() const
     wxSize sizeCancel(0,0);
     int searchMargin = 0;
     int cancelMargin = 0;
-    if ( m_searchButtonVisible || HasMenu() )
+    if ( IsSearchButtonVisible() )
     {
         sizeSearch = m_searchButton->GetBestSize();
-        searchMargin = MARGIN;
+        searchMargin = FromDIP(MARGIN);
     }
-    if ( m_cancelButtonVisible )
+    if ( IsCancelButtonVisible() )
     {
         sizeCancel = m_cancelButton->GetBestSize();
-        cancelMargin = MARGIN;
+        cancelMargin = FromDIP(MARGIN);
     }
 
-    int horizontalBorder = 1 + ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
+    int horizontalBorder = FromDIP(1) + ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
 
     // buttons are square and equal to the height of the text control
     int height = sizeText.y;
     return wxSize(sizeSearch.x + searchMargin + sizeText.x + cancelMargin + sizeCancel.x + 2*horizontalBorder,
                   height);
-}
-
-void wxSearchCtrl::DoMoveWindow(int x, int y, int width, int height)
-{
-    wxSearchCtrlBase::DoMoveWindow(x, y, width, height);
-
-    LayoutControls();
 }
 
 void wxSearchCtrl::LayoutControls()
@@ -470,7 +479,7 @@ void wxSearchCtrl::LayoutControls()
 
     wxSize sizeText = m_text->GetBestSize();
     // make room for the search menu & clear button
-    int horizontalBorder = 1 + ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
+    int horizontalBorder = FromDIP(1) + ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
     int x = horizontalBorder;
     width -= horizontalBorder*2;
     if (width < 0) width = 0;
@@ -479,18 +488,16 @@ void wxSearchCtrl::LayoutControls()
     wxSize sizeCancel(0,0);
     int searchMargin = 0;
     int cancelMargin = 0;
-    if ( m_searchButtonVisible || HasMenu() )
+    if ( IsSearchButtonVisible() )
     {
         sizeSearch = m_searchButton->GetBestSize();
-        searchMargin = MARGIN;
+        searchMargin = FromDIP(MARGIN);
     }
-    if ( m_cancelButtonVisible )
+    if ( IsCancelButtonVisible() )
     {
         sizeCancel = m_cancelButton->GetBestSize();
-        cancelMargin = MARGIN;
+        cancelMargin = FromDIP(MARGIN);
     }
-    m_searchButton->Show( m_searchButtonVisible || HasMenu() );
-    m_cancelButton->Show( m_cancelButtonVisible );
 
     if ( sizeSearch.x + sizeCancel.x > width )
     {
@@ -499,13 +506,13 @@ void wxSearchCtrl::LayoutControls()
         searchMargin = 0;
         cancelMargin = 0;
     }
-    wxCoord textWidth = width - sizeSearch.x - sizeCancel.x - searchMargin - cancelMargin - 1;
+    wxCoord textWidth = width - sizeSearch.x - sizeCancel.x - searchMargin - cancelMargin - FromDIP(1);
     if (textWidth < 0) textWidth = 0;
 
     // position the subcontrols inside the client area
 
     m_searchButton->SetSize(x, (height - sizeSearch.y) / 2,
-                            sizeSearch.x, height);
+                            sizeSearch.x, sizeSearch.y);
     x += sizeSearch.x;
     x += searchMargin;
 
@@ -514,7 +521,7 @@ void wxSearchCtrl::LayoutControls()
     // of the white border that's part of the theme border. We can also remove a pixel from
     // the height to fit the text control in, because the padding in EDIT_HEIGHT_FROM_CHAR_HEIGHT
     // is already generous.
-    int textY = 1;
+    int textY = FromDIP(2);
 #else
     int textY = 0;
 #endif
@@ -523,8 +530,11 @@ void wxSearchCtrl::LayoutControls()
     x += textWidth;
     x += cancelMargin;
 
-    m_cancelButton->SetSize(x, (height - sizeCancel.y) / 2,
-                            sizeCancel.x, height);
+    if ( m_cancelButton )
+    {
+        m_cancelButton->SetSize(x, (height - sizeCancel.y) / 2,
+                                sizeCancel.x, height);
+    }
 }
 
 wxWindowList wxSearchCtrl::GetCompositeWindowParts() const
@@ -883,23 +893,6 @@ void wxSearchCtrl::SetCancelBitmap( const wxBitmap& bitmap )
     }
 }
 
-#if 0
-
-// override streambuf method
-#if wxHAS_TEXT_WINDOW_STREAM
-int overflow(int i);
-#endif // wxHAS_TEXT_WINDOW_STREAM
-
-// stream-like insertion operators: these are always available, whether we
-// were, or not, compiled with streambuf support
-wxTextCtrl& operator<<(const wxString& s);
-wxTextCtrl& operator<<(int i);
-wxTextCtrl& operator<<(long i);
-wxTextCtrl& operator<<(float f);
-wxTextCtrl& operator<<(double d);
-wxTextCtrl& operator<<(const wxChar c);
-#endif
-
 // Note that overriding DoSetValue() is currently insufficient because the base
 // class ChangeValue() only updates m_hintData of this object (which is null
 // anyhow), instead of updating m_text->m_hintData, see #16998.
@@ -921,12 +914,6 @@ bool wxSearchCtrl::DoLoadFile(const wxString& file, int fileType)
 bool wxSearchCtrl::DoSaveFile(const wxString& file, int fileType)
 {
     return m_text->DoSaveFile(file, fileType);
-}
-
-// do the window-specific processing after processing the update event
-void wxSearchCtrl::DoUpdateWindowUI(wxUpdateUIEvent& event)
-{
-    wxSearchCtrlBase::DoUpdateWindowUI(event);
 }
 
 bool wxSearchCtrl::ShouldInheritColours() const
@@ -976,7 +963,7 @@ static void RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded)
 wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
 {
     wxColour bg = GetBackgroundColour();
-    wxColour fg = GetForegroundColour().ChangeLightness(LIGHT_STEP-20);
+    wxColour fg = GetForegroundColour().ChangeLightness(SEARCH_BITMAP_LIGHTNESS);
 
     //===============================================================================
     // begin drawing code
@@ -1030,7 +1017,7 @@ wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
     mem.SetPen( wxPen(fg) );
     mem.SetBrush( wxBrush(fg) );
     int handleCornerShift = penWidth * 707 / 1000 / 2; // 707 / 1000 = 0.707 = 1/sqrt(2);
-    handleCornerShift = WXMAX( handleCornerShift, 1 );
+    handleCornerShift = wxMax( handleCornerShift, 1 );
     int handleBase = 4 * x / 20;
     int handleLength = 2*handleBase+1;
     wxPoint handlePolygon[] =
@@ -1079,7 +1066,7 @@ wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
 wxBitmap wxSearchCtrl::RenderCancelBitmap( int x, int y )
 {
     wxColour bg = GetBackgroundColour();
-    wxColour fg = GetForegroundColour().ChangeLightness(LIGHT_STEP);
+    wxColour fg = GetForegroundColour().ChangeLightness(CANCEL_BITMAP_LIGHTNESS);
 
     //===============================================================================
     // begin drawing code
@@ -1129,7 +1116,7 @@ wxBitmap wxSearchCtrl::RenderCancelBitmap( int x, int y )
     mem.SetPen( wxPen(bg) );
     mem.SetBrush( wxBrush(bg) );
     int handleCornerShift = penWidth/2;
-    handleCornerShift = WXMAX( handleCornerShift, 1 );
+    handleCornerShift = wxMax( handleCornerShift, 1 );
     wxPoint handlePolygon[] =
     {
         wxPoint(-handleCornerShift,+handleCornerShift),
@@ -1167,7 +1154,7 @@ void wxSearchCtrl::RecalcBitmaps()
     }
     wxSize sizeText = m_text->GetBestSize();
 
-    int bitmapHeight = sizeText.y - 4;
+    int bitmapHeight = sizeText.y - FromDIP(4);
     int bitmapWidth  = sizeText.y * 20 / 14;
 
     if ( !m_searchBitmapUser )
@@ -1206,7 +1193,7 @@ void wxSearchCtrl::RecalcBitmaps()
     }
 #endif // wxUSE_MENUS
 
-    if ( !m_cancelBitmapUser )
+    if ( m_cancelButton && !m_cancelBitmapUser )
     {
         if (
             !m_cancelBitmap.IsOk() ||

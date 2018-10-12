@@ -14,7 +14,7 @@
 #include "wx/gtk/private/timer.h"
 #include "wx/app.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 // ----------------------------------------------------------------------------
 // wxTimerImpl

@@ -796,7 +796,7 @@ wxValidator* PROPNAME::DoGetValidator () const \
 
 #if wxUSE_EDITABLELISTBOX
 
-class WXDLLIMPEXP_FWD_ADV wxEditableListBox;
+class WXDLLIMPEXP_FWD_CORE wxEditableListBox;
 class WXDLLIMPEXP_FWD_CORE wxListEvent;
 
 #define wxAEDIALOG_STYLE \

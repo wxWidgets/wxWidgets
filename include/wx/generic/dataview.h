@@ -21,17 +21,17 @@
     #include "wx/access.h"
 #endif // wxUSE_ACCESSIBILITY
 
-class WXDLLIMPEXP_FWD_ADV wxDataViewMainWindow;
-class WXDLLIMPEXP_FWD_ADV wxDataViewHeaderWindow;
+class WXDLLIMPEXP_FWD_CORE wxDataViewMainWindow;
+class WXDLLIMPEXP_FWD_CORE wxDataViewHeaderWindow;
 #if wxUSE_ACCESSIBILITY
-class WXDLLIMPEXP_FWD_ADV wxDataViewCtrlAccessible;
+class WXDLLIMPEXP_FWD_CORE wxDataViewCtrlAccessible;
 #endif // wxUSE_ACCESSIBILITY
 
 // ---------------------------------------------------------
 // wxDataViewColumn
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewColumn : public wxDataViewColumnBase
+class WXDLLIMPEXP_CORE wxDataViewColumn : public wxDataViewColumnBase
 {
 public:
     wxDataViewColumn(const wxString& title,
@@ -168,9 +168,9 @@ private:
 // ---------------------------------------------------------
 
 WX_DECLARE_LIST_WITH_DECL(wxDataViewColumn, wxDataViewColumnList,
-                          class WXDLLIMPEXP_ADV);
+                          class WXDLLIMPEXP_CORE);
 
-class WXDLLIMPEXP_ADV wxDataViewCtrl : public wxDataViewCtrlBase,
+class WXDLLIMPEXP_CORE wxDataViewCtrl : public wxDataViewCtrlBase,
                                        public wxScrollHelper
 {
     friend class wxDataViewMainWindow;
@@ -405,7 +405,7 @@ private:
 // wxDataViewCtrlAccessible
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewCtrlAccessible: public wxWindowAccessible
+class WXDLLIMPEXP_CORE wxDataViewCtrlAccessible: public wxWindowAccessible
 {
 public:
     wxDataViewCtrlAccessible(wxDataViewCtrl* win);

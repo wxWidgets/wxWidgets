@@ -40,7 +40,7 @@ enum
 
     The wxCalendarEvent class is used together with wxCalendarCtrl.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{events}
 
     @see wxCalendarCtrl
@@ -90,7 +90,7 @@ enum wxCalendarDateBorder
     wxCalendarDateAttr is a custom attributes for a calendar date. The objects
     of this class are used with wxCalendarCtrl.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{data}
 
     @see wxCalendarCtrl
@@ -296,7 +296,7 @@ enum wxCalendarHitTestResult
     @note Changing the selected date will trigger an EVT_CALENDAR_DAY, MONTH or
           YEAR event as well as an EVT_CALENDAR_SEL_CHANGED event.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
     @appearance{calendarctrl}
 
@@ -469,7 +469,8 @@ public:
 
         The @a date parameter must be valid and in the currently valid range as
         set by SetDateRange(), otherwise the current date is not changed and
-        the function returns @false.
+        the function returns @false and, additionally, triggers an assertion
+        failure if the date is invalid.
     */
     virtual bool SetDate(const wxDateTime& date);
 

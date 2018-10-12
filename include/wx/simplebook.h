@@ -155,9 +155,10 @@ public:
     }
 
 protected:
-    virtual void UpdateSelectedPage(size_t newsel) wxOVERRIDE
+    virtual void UpdateSelectedPage(size_t WXUNUSED(newsel)) wxOVERRIDE
     {
-        m_selection = (int)newsel;
+        // Nothing to do here, but must be overridden to avoid the assert in
+        // the base class version.
     }
 
     virtual wxBookCtrlEvent* CreatePageChangingEvent() const wxOVERRIDE

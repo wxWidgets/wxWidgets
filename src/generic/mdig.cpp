@@ -534,17 +534,15 @@ wxGenericMDIClientWindow::CreateGenericClient(wxWindow *parent)
         return false;
 
     m_notebook = new wxNotebook(this, wxID_ANY);
-    m_notebook->Connect
+    m_notebook->Bind
                 (
                     wxEVT_NOTEBOOK_PAGE_CHANGED,
-                    wxNotebookEventHandler(
-                        wxGenericMDIClientWindow::OnPageChanged),
-                    NULL,
+                    &wxGenericMDIClientWindow::OnPageChanged,
                     this
                 );
 
     // now that we have a notebook to resize, hook up OnSize() too
-    Connect(wxEVT_SIZE, wxSizeEventHandler(wxGenericMDIClientWindow::OnSize));
+    Bind(wxEVT_SIZE, &wxGenericMDIClientWindow::OnSize, this);
 
     return true;
 }

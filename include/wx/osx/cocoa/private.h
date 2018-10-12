@@ -32,12 +32,15 @@ OSStatus WXDLLIMPEXP_CORE wxMacDrawCGImage(
                                CGContextRef    inContext,
                                const CGRect *  inBounds,
                                CGImageRef      inImage) ;
+void WXDLLIMPEXP_CORE wxOSXDrawNSImage(
+                                           CGContextRef    inContext,
+                                           const CGRect *  inBounds,
+                                           WX_NSImage      inImage) ;
+WX_NSImage WXDLLIMPEXP_CORE wxOSXGetSystemImage(const wxString& name);
 WX_NSImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromCGImage( CGImageRef image, double scale = 1.0, bool isTemplate = false);
 WX_NSImage WXDLLIMPEXP_CORE wxOSXGetNSImageFromIconRef( WXHICON iconref );
-CGImageRef WXDLLIMPEXP_CORE wxOSXCreateCGImageFromNSImage( WX_NSImage nsimage, double *scale = NULL );
-CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromNSImage( WX_NSImage nsimage, CGRect* r, CGContextRef cg);
-CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromNSImage( WX_NSImage nsimage, bool *isTemplate = NULL);
-
+WX_NSImage WXDLLIMPEXP_CORE wxOSXGetIconForType(OSType type );
+void WXDLLIMPEXP_CORE wxOSXSetImageSize(WX_NSImage image, CGFloat width, CGFloat height);
 wxBitmap WXDLLIMPEXP_CORE wxOSXCreateSystemBitmap(const wxString& id, const wxString &client, const wxSize& size);
 WXWindow WXDLLIMPEXP_CORE wxOSXGetMainWindow();
 WXWindow WXDLLIMPEXP_CORE wxOSXGetKeyWindow();
@@ -379,6 +382,7 @@ public:
     }
 
     - (void)textDidChange:(NSNotification *)aNotification;
+    - (void)changeColor:(id)sender;
 
     @end
 
@@ -417,7 +421,13 @@ public:
 
     @end
 
-    void WXDLLIMPEXP_CORE wxOSXCocoaClassAddWXMethods(Class c);
+    // this enum declares which methods should not be overridden in the native view classes
+    enum wxOSXSkipOverrides {
+        wxOSXSKIP_NONE = 0x0,
+        wxOSXSKIP_DRAW = 0x1
+    };
+
+    void WXDLLIMPEXP_CORE wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags = wxOSXSKIP_NONE);
 
     /*
     We need this for ShowModal, as the sheet just disables the parent window and
@@ -504,6 +514,18 @@ extern NSLayoutManager* gNSLayoutManager;
 
 wxString wxStringWithNSString(NSString *nsstring);
 NSString* wxNSStringWithWxString(const wxString &wxstring);
+
+// helper class for setting the current appearance to the
+// effective appearance and restore when exiting scope
+
+class WXDLLIMPEXP_CORE wxOSXEffectiveAppearanceSetter
+{
+public:
+    wxOSXEffectiveAppearanceSetter();
+    ~wxOSXEffectiveAppearanceSetter();
+private:
+    void * formerAppearance;
+};
 
 #endif // wxUSE_GUI
 

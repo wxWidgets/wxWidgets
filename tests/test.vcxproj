@@ -517,6 +517,7 @@
     <ClCompile Include="streams\filestream.cpp" />
     <ClCompile Include="streams\iostreams.cpp" />
     <ClCompile Include="streams\largefile.cpp" />
+    <ClCompile Include="streams\lzmastream.cpp" />
     <ClCompile Include="streams\memstream.cpp" />
     <ClCompile Include="streams\socketstream.cpp" />
     <ClCompile Include="streams\sstream.cpp" />

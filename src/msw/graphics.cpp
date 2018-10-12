@@ -42,9 +42,7 @@
 #include "wx/private/graphics.h"
 #include "wx/msw/wrapgdip.h"
 #include "wx/msw/dc.h"
-#if wxUSE_ENH_METAFILE
-    #include "wx/msw/enhmeta.h"
-#endif
+#include "wx/msw/enhmeta.h"
 #include "wx/dcgraph.h"
 #include "wx/rawbmp.h"
 
@@ -335,7 +333,7 @@ public:
                        const wxColour& col );
     wxGDIPlusFontData(wxGraphicsRenderer* renderer,
                       const wxString& name,
-                      REAL sizeInPixels,
+                      REAL size,
                       int style,
                       const wxColour& col);
     ~wxGDIPlusFontData();
@@ -349,8 +347,7 @@ private :
     void Init(const wxString& name,
               REAL size,
               int style,
-              const wxColour& col,
-              Unit fontUnit);
+              const wxColour& col);
 
     Brush* m_textBrush;
     Font* m_font;
@@ -986,8 +983,7 @@ void
 wxGDIPlusFontData::Init(const wxString& name,
                         REAL size,
                         int style,
-                        const wxColour& col,
-                        Unit fontUnit)
+                        const wxColour& col)
 {
 #if wxUSE_PRIVATE_FONTS
     // If the user has registered any private fonts, they should be used in
@@ -1007,7 +1003,7 @@ wxGDIPlusFontData::Init(const wxString& name,
             int rc = gs_pFontFamily[j].GetFamilyName(familyName);
             if ( rc == 0 && name == familyName )
             {
-                m_font = new Font(&gs_pFontFamily[j], size, style, fontUnit);
+                m_font = new Font(&gs_pFontFamily[j], size, style, UnitPoint);
                 break;
             }
         }
@@ -1016,7 +1012,7 @@ wxGDIPlusFontData::Init(const wxString& name,
     if ( !m_font )
 #endif // wxUSE_PRIVATE_FONTS
     {
-        m_font = new Font(name.wc_str(), size, style, fontUnit);
+        m_font = new Font(name.wc_str(), size, style, UnitPoint);
     }
 
     m_textBrush = new SolidBrush(wxColourToColor(col));
@@ -1037,19 +1033,17 @@ wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
     if ( font.GetWeight() == wxFONTWEIGHT_BOLD )
         style |= FontStyleBold;
 
-    // Create font which size is measured in logical units
-    // and let the system rescale it according to the target resolution.
-    Init(font.GetFaceName(), font.GetPixelSize().GetHeight(), style, col, UnitPixel);
+    Init(font.GetFaceName(), font.GetFractionalPointSize(), style, col);
 }
 
 wxGDIPlusFontData::wxGDIPlusFontData(wxGraphicsRenderer* renderer,
                                      const wxString& name,
-                                     REAL sizeInPixels,
+                                     REAL size,
                                      int style,
                                      const wxColour& col) :
     wxGraphicsObjectRefData(renderer)
 {
-    Init(name, sizeInPixels, style, col, UnitPixel);
+    Init(name, size, style, col);
 }
 
 wxGDIPlusFontData::~wxGDIPlusFontData()
@@ -1280,9 +1274,6 @@ void wxGDIPlusPathData::AddLineToPoint( wxDouble x , wxDouble y )
     if ( m_logCurrentPointSet )
     {
         start = m_logCurrentPoint;
-        // After calling AddLine() the native current point
-        // will be updated and can be used.
-        m_logCurrentPointSet = false;
     }
     else
     {
@@ -1296,6 +1287,8 @@ void wxGDIPlusPathData::AddLineToPoint( wxDouble x , wxDouble y )
         }
     }
     m_path->AddLine(start.X, start.Y, (REAL)x, (REAL)y);
+    // After calling AddLine() the native current point will be updated and can be used.
+    m_logCurrentPointSet = false;
 }
 
 void wxGDIPlusPathData::CloseSubpath()
@@ -1326,9 +1319,6 @@ void wxGDIPlusPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx
     if ( m_logCurrentPointSet )
     {
         start = m_logCurrentPoint;
-        // After calling AddBezier() the native current point
-        // will be updated and can be used.
-        m_logCurrentPointSet = false;
     }
     else
     {
@@ -1339,6 +1329,8 @@ void wxGDIPlusPathData::AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx
         }
     }
     m_path->AddBezier(start,c1,c2,end);
+    // After calling AddBezier() the native current point will be updated and can be used.
+    m_logCurrentPointSet = false;
 }
 
 // gets the last point of the current path, (0,0) if not yet set
@@ -1450,11 +1442,15 @@ void wxGDIPlusPathData::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDoub
 void wxGDIPlusPathData::AddCircle(wxDouble x, wxDouble y, wxDouble r)
 {
     m_path->AddEllipse((REAL)(x-r), (REAL)(y-r), (REAL)(2.0*r), (REAL)(2.0*r));
+    // After calling AddEllipse() the native current point will be updated and can be used.
+    m_logCurrentPointSet = false;
 }
 
 void wxGDIPlusPathData::AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
 {
     m_path->AddEllipse((REAL)x, (REAL)y, (REAL)w, (REAL)h);
+    // After calling AddEllipse() the native current point will be updated and can be used.
+    m_logCurrentPointSet = false;
 }
 
 void wxGDIPlusPathData::AddPath( const wxGraphicsPathData* path )
@@ -2333,7 +2329,7 @@ void wxGDIPlusRenderer::Load()
             for ( size_t i = 0 ; i < n; i++ )
             {
                 const wxString& fname = privateFonts[i];
-                gs_privateFonts->AddFontFile(fname.t_str());
+                gs_privateFonts->AddFontFile(fname.wc_str());
             }
 
             gs_pFontFamily = new Gdiplus::FontFamily[n];

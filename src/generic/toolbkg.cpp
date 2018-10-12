@@ -197,7 +197,6 @@ void wxToolbook::MakeChangedEvent(wxBookCtrlEvent &event)
 
 void wxToolbook::UpdateSelectedPage(size_t newsel)
 {
-    m_selection = newsel;
     GetToolBar()->ToggleTool(newsel + 1, true);
 }
 

@@ -28,7 +28,7 @@ TEST_CASE("wxPathList::FindValidPath", "[file][path]")
 
     wxPathList pathlist;
     pathlist.AddEnvList(wxT("PATH"));
-    
+
     wxString path = pathlist.FindValidPath(CMD_IN_PATH);
     INFO( CMD_IN_PATH " not found in " << wxGetenv("PATH") );
     CHECK( !path.empty() );

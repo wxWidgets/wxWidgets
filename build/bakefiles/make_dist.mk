@@ -100,11 +100,6 @@ ALL_DIST: distrib_clean
 	$(CP_P) $(WXDIR)/lib/vms.opt $(DISTDIR)/lib
 	$(CP_P) $(WXDIR)/lib/vms_gtk.opt $(DISTDIR)/lib
 	mkdir $(DISTDIR)/src
-	# temp hack for common/execcmn.cpp: it's not supported by tmake
-	# yet (it's a header-like file but in src/common directory and it
-	# shouldn't be distributed...)
-	mkdir $(DISTDIR)/src/common
-	$(CP_P) $(SRCDIR)/common/execcmn.cpp $(DISTDIR)/src/common
 	mkdir $(DISTDIR)/src/xml
 	$(CP_P) $(SRCDIR)/xml/*.cpp $(DISTDIR)/src/xml
 	mkdir $(DISTDIR)/src/zlib
@@ -317,7 +312,6 @@ BASE_DIST: ALL_DIST INTL_DIST
 	mkdir $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/Makefile.in $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/makefile.* $(DISTDIR)/samples
-	$(CP_P) $(SAMPDIR)/Info.plist $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/sample.* $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/samples.* $(DISTDIR)/samples
 
@@ -544,7 +538,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/Makefile.in $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/makefile.* $(DISTDIR)/samples
-	$(CP_P) $(SAMPDIR)/Info.plist $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/sample.* $(DISTDIR)/samples
 	$(CP_P) $(SAMPDIR)/samples.* $(DISTDIR)/samples
 

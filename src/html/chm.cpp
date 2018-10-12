@@ -201,7 +201,7 @@ bool wxChmTools::Contains(const wxString& pattern)
 /**
  * Find()
  *
- * Finds the next file descibed by a pattern in the archive, starting
+ * Finds the next file described by a pattern in the archive, starting
  * the file given by second parameter
  *
  * @param pattern   The file-pattern to search for. May contain '*' and/or '?'
@@ -410,7 +410,7 @@ private:
 /**
  * Constructor
  * @param archive  The name of the .chm archive. Remember that archive must
- *                 be local file accesible via fopen, fread functions!
+ *                 be local file accessible via fopen, fread functions!
  * @param filename The Name of the file to be extracted from archive
  * @param simulate if true than class should simulate .HHP-File based on #SYSTEM
  *                 if false than class does nothing if it doesn't find .hhp
@@ -553,8 +553,8 @@ wxFileOffset wxChmInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
 
 /**
  * Help Browser tries to read the contents of the
- * file by interpreting a .hhp file in the Archiv.
- * For .chm doesn't include such a file, we need
+ * file by interpreting a .hhp file in the Archive.
+ * Because .chm doesn't include such a file, we need
  * to rebuild the information based on stored
  * system-files.
  */
@@ -782,8 +782,6 @@ private:
 wxChmFSHandler::wxChmFSHandler() : wxFileSystemHandler()
 {
     m_lasterror=0;
-    m_pattern=wxEmptyString;
-    m_found=wxEmptyString;
     m_chm=NULL;
 }
 

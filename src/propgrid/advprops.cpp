@@ -146,14 +146,10 @@ public:
         m_hasCapture = false;
         m_spins = 1;
 
-        Connect( wxEVT_LEFT_DOWN,
-                 wxMouseEventHandler(wxPGSpinButton::OnMouseEvent) );
-        Connect( wxEVT_LEFT_UP,
-                 wxMouseEventHandler(wxPGSpinButton::OnMouseEvent) );
-        Connect( wxEVT_MOTION,
-                 wxMouseEventHandler(wxPGSpinButton::OnMouseEvent) );
-        Connect( wxEVT_MOUSE_CAPTURE_LOST,
-          wxMouseCaptureLostEventHandler(wxPGSpinButton::OnMouseCaptureLost) );
+        Bind(wxEVT_LEFT_DOWN, &wxPGSpinButton::OnMouseEvent, this);
+        Bind(wxEVT_LEFT_UP, &wxPGSpinButton::OnMouseEvent, this);
+        Bind(wxEVT_MOTION, &wxPGSpinButton::OnMouseEvent, this);
+        Bind(wxEVT_MOUSE_CAPTURE_LOST, &wxPGSpinButton::OnMouseCaptureLost, this);
     }
 
     int GetSpins() const
@@ -621,16 +617,30 @@ static const long gs_fp_es_style_values[] = {
 };
 
 static const wxChar* const gs_fp_es_weight_labels[] = {
-    wxT("Normal"),
+    wxT("Thin"),
+    wxT("ExtraLight"),
     wxT("Light"),
+    wxT("Normal"),
+    wxT("Medium"),
+    wxT("SemiBold"),
     wxT("Bold"),
+    wxT("ExtraBold"),
+    wxT("Heavy"),
+    wxT("ExtraHeavy"),
     (const wxChar*) NULL
 };
 
 static const long gs_fp_es_weight_values[] = {
-    wxFONTWEIGHT_NORMAL,
+    wxFONTWEIGHT_THIN,
+    wxFONTWEIGHT_EXTRALIGHT,
     wxFONTWEIGHT_LIGHT,
-    wxFONTWEIGHT_BOLD
+    wxFONTWEIGHT_NORMAL,
+    wxFONTWEIGHT_MEDIUM,
+    wxFONTWEIGHT_SEMIBOLD,
+    wxFONTWEIGHT_BOLD,
+    wxFONTWEIGHT_EXTRABOLD,
+    wxFONTWEIGHT_HEAVY,
+    wxFONTWEIGHT_EXTRAHEAVY
 };
 
 // Class body is in advprops.h
@@ -792,9 +802,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
     else if ( ind == 3 )
     {
         int wt = childValue.GetLong();
-        if ( wt != wxFONTWEIGHT_NORMAL &&
-             wt != wxFONTWEIGHT_LIGHT &&
-             wt != wxFONTWEIGHT_BOLD )
+        if ( wt < wxFONTWEIGHT_THIN || wt > wxFONTWEIGHT_MAX )
              wt = wxFONTWEIGHT_NORMAL;
         font.SetWeight( static_cast<wxFontWeight>(wt) );
     }

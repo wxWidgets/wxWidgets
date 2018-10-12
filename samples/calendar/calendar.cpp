@@ -375,7 +375,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main application window
-    MyFrame *frame = new MyFrame(wxT("Calendar wxWidgets sample")
+    MyFrame *frame = new MyFrame("Calendar wxWidgets sample"
                                  ,wxPoint(50, 50), wxSize(450, 340)
                                  );
 
@@ -402,12 +402,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxMenuBar *menuBar = new wxMenuBar;
 
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(Calendar_File_About, wxT("&About\tCtrl-A"), wxT("Show about dialog"));
+    menuFile->Append(Calendar_File_About, "&About\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
-    menuFile->Append(Calendar_File_ClearLog, wxT("&Clear log\tCtrl-L"));
+    menuFile->Append(Calendar_File_ClearLog, "&Clear log\tCtrl-L");
     menuFile->AppendSeparator();
-    menuFile->Append(Calendar_File_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
-    menuBar->Append(menuFile, wxT("&File"));
+    menuFile->Append(Calendar_File_Quit, "E&xit\tAlt-X", "Quit this program");
+    menuBar->Append(menuFile, "&File");
 
     wxMenu *menuCal = new wxMenu;
 #ifdef wxHAS_NATIVE_CALENDARCTRL
@@ -416,71 +416,71 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuCal->AppendSeparator();
 #endif // wxHAS_NATIVE_CALENDARCTRL
     menuCal->AppendRadioItem(Calendar_Cal_AutoWeekday,
-                    wxT("Automatic &first weekday\tCtrl-V"));
+                    "Automatic &first weekday\tCtrl-V");
     menuCal->AppendRadioItem(Calendar_Cal_Sunday,
-                    wxT("Sunday &first weekday\tCtrl-Z"));
+                    "Sunday &first weekday\tCtrl-Z");
     menuCal->AppendRadioItem(Calendar_Cal_Monday,
-                    wxT("Monday &first weekday\tCtrl-F"));
-    menuCal->Append(Calendar_Cal_Holidays, wxT("Show &holidays\tCtrl-H"),
-                    wxT("Toggle highlighting the holidays"),
+                    "Monday &first weekday\tCtrl-F");
+    menuCal->Append(Calendar_Cal_Holidays, "Show &holidays\tCtrl-H",
+                    "Toggle highlighting the holidays",
                     true);
-    menuCal->Append(Calendar_Cal_Special, wxT("Highlight &special dates\tCtrl-S"),
-                    wxT("Test custom highlighting"),
+    menuCal->Append(Calendar_Cal_Special, "Highlight &special dates\tCtrl-S",
+                    "Test custom highlighting",
                     true);
     menuCal->Append(Calendar_Cal_SurroundWeeks,
-                    wxT("Show s&urrounding weeks\tCtrl-W"),
-                    wxT("Show the neighbouring weeks in the prev/next month"),
+                    "Show s&urrounding weeks\tCtrl-W",
+                    "Show the neighbouring weeks in the prev/next month",
                     true);
     menuCal->Append(Calendar_Cal_WeekNumbers,
-                    wxT("Show &week numbers"),
-                    wxT("Toggle week numbers"),
+                    "Show &week numbers",
+                    "Toggle week numbers",
                     true);
     menuCal->AppendSeparator();
     menuCal->Append(Calendar_Cal_SeqMonth,
-                    wxT("Toggle month selector st&yle\tCtrl-Y"),
-                    wxT("Use another style for the calendar controls"),
+                    "Toggle month selector st&yle\tCtrl-Y",
+                    "Use another style for the calendar controls",
                     true);
-    menuCal->Append(Calendar_Cal_Month, wxT("&Month can be changed\tCtrl-M"),
-                    wxT("Allow changing the month in the calendar"),
+    menuCal->Append(Calendar_Cal_Month, "&Month can be changed\tCtrl-M",
+                    "Allow changing the month in the calendar",
                     true);
-    menuCal->AppendCheckItem(Calendar_Cal_LimitDates, wxT("Toggle date ra&nge\tCtrl-N"),
-                    wxT("Limit the valid dates"));
+    menuCal->AppendCheckItem(Calendar_Cal_LimitDates, "Toggle date ra&nge\tCtrl-N",
+                    "Limit the valid dates");
     menuCal->AppendSeparator();
-    menuCal->Append(Calendar_Cal_SetDate, wxT("Call &SetDate(2005-12-24)"), wxT("Set date to 2005-12-24."));
-    menuCal->Append(Calendar_Cal_Today, wxT("Call &Today()"), wxT("Set to the current date."));
+    menuCal->Append(Calendar_Cal_SetDate, "Call &SetDate(2005-12-24)", "Set date to 2005-12-24.");
+    menuCal->Append(Calendar_Cal_Today, "Call &Today()", "Set to the current date.");
     menuCal->Append(Calendar_Cal_BeginDST, "Call SetDate(GetBeginDST())");
     menuCal->AppendSeparator();
-    menuCal->AppendCheckItem(Calendar_Cal_Resizable, wxT("Make &resizable\tCtrl-R"));
-    menuBar->Append(menuCal, wxT("&Calendar"));
+    menuCal->AppendCheckItem(Calendar_Cal_Resizable, "Make &resizable\tCtrl-R");
+    menuBar->Append(menuCal, "&Calendar");
 
 #if wxUSE_DATEPICKCTRL
     wxMenu *menuDate = new wxMenu;
     menuDate->AppendCheckItem(Calendar_DatePicker_ShowCentury,
-                              wxT("Al&ways show century"));
+                              "Al&ways show century");
     menuDate->AppendCheckItem(Calendar_DatePicker_DropDown,
-                              wxT("Use &drop down control"));
+                              "Use &drop down control");
     menuDate->AppendCheckItem(Calendar_DatePicker_AllowNone,
-                              wxT("Allow &no date"));
+                              "Allow &no date");
     menuDate->AppendCheckItem(Calendar_DatePicker_StartWithNone,
-                              wxT("Start &with no date"));
+                              "Start &with no date");
 #if wxUSE_DATEPICKCTRL_GENERIC
     menuDate->AppendCheckItem(Calendar_DatePicker_Generic,
-                              wxT("Use &generic version of the control"));
+                              "Use &generic version of the control");
 #endif // wxUSE_DATEPICKCTRL_GENERIC
     menuDate->AppendSeparator();
-    menuDate->Append(Calendar_DatePicker_AskDate, wxT("&Choose date...\tCtrl-D"), wxT("Show dialog with wxDatePickerCtrl"));
-    menuBar->Append(menuDate, wxT("&Date picker"));
+    menuDate->Append(Calendar_DatePicker_AskDate, "&Choose date...\tCtrl-D", "Show dialog with wxDatePickerCtrl");
+    menuBar->Append(menuDate, "&Date picker");
 #endif // wxUSE_DATEPICKCTRL
 
 #if wxUSE_TIMEPICKCTRL
     wxMenu *menuTime = new wxMenu;
 #if wxUSE_TIMEPICKCTRL_GENERIC
     menuTime->AppendCheckItem(Calendar_TimePicker_Generic,
-                              wxT("Use &generic version of the control"));
+                              "Use &generic version of the control");
     menuTime->AppendSeparator();
 #endif // wxUSE_TIMEPICKCTRL_GENERIC
-    menuTime->Append(Calendar_TimePicker_AskTime, wxT("&Choose time...\tCtrl-T"), wxT("Show dialog with wxTimePickerCtrl"));
-    menuBar->Append(menuTime, wxT("&Time picker"));
+    menuTime->Append(Calendar_TimePicker_AskTime, "&Choose time...\tCtrl-T", "Show dialog with wxTimePickerCtrl");
+    menuBar->Append(menuTime, "&Time picker");
 #endif // wxUSE_TIMEPICKCTRL
 
     menuBar->Check(Calendar_Cal_AutoWeekday, true);
@@ -517,8 +517,8 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(wxT("wxCalendarCtrl sample\n(c) 2000--2008 Vadim Zeitlin"),
-                 wxT("About Calendar"), wxOK | wxICON_INFORMATION, this);
+    wxMessageBox("wxCalendarCtrl sample\n(c) 2000--2008 Vadim Zeitlin",
+                 "About Calendar", wxOK | wxICON_INFORMATION, this);
 }
 
 void MyFrame::OnClearLog(wxCommandEvent& WXUNUSED(event))
@@ -691,16 +691,16 @@ void MyFrame::OnAskDate(wxCommandEvent& WXUNUSED(event))
             if ( dt.GetDay() == today.GetDay() &&
                     dt.GetMonth() == today.GetMonth() )
             {
-                wxMessageBox(wxT("Happy birthday!"), wxT("Calendar Sample"));
+                wxMessageBox("Happy birthday!", "Calendar Sample");
             }
 
             m_panel->SetDate(dt);
 
-            wxLogStatus(wxT("Changed the date to your input"));
+            wxLogStatus("Changed the date to your input");
         }
         else
         {
-            wxLogStatus(wxT("No date entered"));
+            wxLogStatus("No date entered");
         }
     }
 }
@@ -734,7 +734,7 @@ MyPanel::MyPanel(wxWindow *parent)
 #endif
 
     wxString date;
-    date.Printf(wxT("Selected date: %s"),
+    date.Printf("Selected date: %s",
                 wxDateTime::Today().FormatISODate().c_str());
     m_date = new wxStaticText(this, wxID_ANY, date);
     m_calendar = DoCreateCalendar(wxDefaultDateTime,
@@ -760,14 +760,14 @@ void MyPanel::OnCalendar(wxCalendarEvent& event)
     s_dateLast = event.GetDate();
 
     m_calendar->Mark(event.GetDate().GetDay(), mark);
-    wxLogMessage(wxT("Selected (and %smarked) %s from calendar."),
+    wxLogMessage("Selected (and %smarked) %s from calendar.",
                  mark ? "" : "un", s_dateLast.FormatISODate().c_str());
 }
 
 void MyPanel::OnCalendarChange(wxCalendarEvent& event)
 {
     wxString s;
-    s.Printf(wxT("Selected date: %s"), event.GetDate().FormatISODate().c_str());
+    s.Printf("Selected date: %s", event.GetDate().FormatISODate().c_str());
 
     m_date->SetLabel(s);
     wxLogStatus(s);
@@ -775,20 +775,20 @@ void MyPanel::OnCalendarChange(wxCalendarEvent& event)
 
 void MyPanel::OnCalMonthChange(wxCalendarEvent& event)
 {
-    wxLogStatus(wxT("Calendar month changed to %s %d"),
+    wxLogStatus("Calendar month changed to %s %d",
                 wxDateTime::GetMonthName(event.GetDate().GetMonth()),
                 event.GetDate().GetYear());
 }
 
 void MyPanel::OnCalendarWeekDayClick(wxCalendarEvent& event)
 {
-    wxLogMessage(wxT("Clicked on %s"),
+    wxLogMessage("Clicked on %s",
                  wxDateTime::GetWeekDayName(event.GetWeekDay()).c_str());
 }
 
 void MyPanel::OnCalendarWeekClick(wxCalendarEvent& event)
 {
-    wxLogMessage(wxT("Clicked on week %d"), event.GetDate().GetWeekOfYear());
+    wxLogMessage("Clicked on week %d", event.GetDate().GetWeekOfYear());
 }
 
 wxCalendarCtrlBase *MyPanel::DoCreateCalendar(const wxDateTime& dt, long style)
@@ -809,10 +809,9 @@ wxCalendarCtrlBase *MyPanel::DoCreateCalendar(const wxDateTime& dt, long style)
                                       wxDefaultSize,
                                       style);
 
-    calendar->Connect(wxEVT_RIGHT_DOWN,
-                      wxMouseEventHandler(MyFrame::OnCalRClick),
-                      NULL,
-                      ( MyFrame * )wxGetTopLevelParent(this));
+    calendar->Bind(wxEVT_RIGHT_DOWN,
+                   &MyFrame::OnCalRClick,
+                   ( MyFrame * )wxGetTopLevelParent(this));
 
     return calendar;
 }
@@ -931,7 +930,7 @@ wxBEGIN_EVENT_TABLE(MyDateDialog, wxDialog)
 wxEND_EVENT_TABLE()
 
 MyDateDialog::MyDateDialog(wxWindow *parent, const wxDateTime& dt, int dtpStyle)
-        : wxDialog(parent, wxID_ANY, wxString(wxT("Calendar: Choose a date")))
+        : wxDialog(parent, wxID_ANY, wxString("Calendar: Choose a date"))
 {
 #if wxUSE_DATEPICKCTRL_GENERIC
     wxFrame *frame = (wxFrame *)wxGetTopLevelParent(parent);
@@ -989,7 +988,7 @@ wxBEGIN_EVENT_TABLE(MyTimeDialog, wxDialog)
 wxEND_EVENT_TABLE()
 
 MyTimeDialog::MyTimeDialog(wxWindow *parent)
-        : wxDialog(parent, wxID_ANY, wxString(wxT("Calendar: Choose time")))
+        : wxDialog(parent, wxID_ANY, wxString("Calendar: Choose time"))
 {
 #if wxUSE_TIMEPICKCTRL_GENERIC
     wxFrame *frame = (wxFrame *)wxGetTopLevelParent(parent);

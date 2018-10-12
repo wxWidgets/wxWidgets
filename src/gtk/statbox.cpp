@@ -13,8 +13,7 @@
 
 #include "wx/statbox.h"
 
-#include <gtk/gtk.h>
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/win_gtk.h"
 
 // constants taken from GTK sources

@@ -283,10 +283,16 @@
 				RelativePath="..\..\src\common\accesscmn.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\addremovectrl.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\affinematrix2d.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\common\anidecod.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\animatecmn.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\common\appcmn.cpp">
@@ -307,6 +313,9 @@
 				RelativePath="..\..\src\common\bmpbtncmn.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\bmpcboxcmn.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\bookctrl.cpp">
 			</File>
 			<File
@@ -314,6 +323,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\common\cairo.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\calctrlcmn.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\common\checkboxcmn.cpp">
@@ -356,6 +368,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\common\ctrlsub.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\datavcmn.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\common\dcbase.cpp">
@@ -484,6 +499,9 @@
 				RelativePath="..\..\src\common\graphcmn.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\gridcmn.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\headercolcmn.cpp">
 			</File>
 			<File
@@ -491,6 +509,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\common\helpbase.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\hyperlnkcmn.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\common\iconbndl.cpp">
@@ -565,6 +586,12 @@
 				RelativePath="..\..\src\common\nbkbase.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\notifmsgcmn.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\odcombocmn.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\overlaycmn.cpp">
 			</File>
 			<File
@@ -610,6 +637,9 @@
 				RelativePath="..\..\src\common\rgncmn.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\richtooltipcmn.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\scrolbarcmn.cpp">
 			</File>
 			<File
@@ -647,6 +677,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\common\stockitem.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\common\taskbarcmn.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\common\tbarbase.cpp">
@@ -701,6 +734,9 @@
 			Name="MSW Sources"
 			UniqueIdentifier="{D030D8C2-53EE-5B96-8F89-D78157B06140}">
 			<File
+				RelativePath="..\..\src\msw\aboutdlg.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\msw\accel.cpp">
 			</File>
 			<File
@@ -731,10 +767,16 @@
 				RelativePath="..\..\src\msw\bmpbuttn.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\msw\bmpcbox.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\msw\brush.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\msw\button.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\msw\calctrl.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\msw\caret.cpp">
@@ -767,6 +809,9 @@
 				RelativePath="..\..\src\msw\ole\comimpl.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\msw\commandlinkbutton.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\msw\control.cpp">
 			</File>
 			<File
@@ -780,6 +825,15 @@
 			</File>
 			<File
 				RelativePath="..\..\src\msw\ole\dataobj.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\msw\datecontrols.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\msw\datectrl.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\msw\datetimectrl.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\msw\dc.cpp">
@@ -875,6 +929,9 @@
 				RelativePath="..\..\src\msw\helpwin.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\msw\hyperlink.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\msw\icon.cpp">
 			</File>
 			<File
@@ -882,6 +939,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\msw\iniconf.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\msw\joystick.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\msw\listbox.cpp">
@@ -923,6 +983,12 @@
 				RelativePath="..\..\src\msw\notebook.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\msw\notifmsg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\msw\rt\notifmsgrt.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\msw\ole\oleutils.cpp">
 			</File>
 			<File
@@ -962,6 +1028,9 @@
 				RelativePath="..\..\src\msw\richmsgdlg.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\msw\richtooltip.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\msw\ole\safearray.cpp">
 			</File>
 			<File
@@ -972,6 +1041,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\msw\slider.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\msw\sound.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\msw\spinbutt.cpp">
@@ -998,6 +1070,9 @@
 				RelativePath="..\..\src\msw\systhemectrl.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\msw\taskbar.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\msw\taskbarbutton.cpp">
 			</File>
 			<File
@@ -1011,6 +1086,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\msw\tglbtn.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\msw\timectrl.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\msw\toolbar.cpp">
@@ -1062,10 +1140,28 @@
 			Name="Generic Sources"
 			UniqueIdentifier="{FEA0C02F-F300-53BA-B784-52A5086B8093}">
 			<File
+				RelativePath="..\..\src\generic\aboutdlgg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\activityindicator.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\animateg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\bannerwindow.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\bmpcboxg.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\generic\busyinfo.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\buttonbar.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\calctrlg.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\choicbkg.cpp">
@@ -1086,6 +1182,15 @@
 				RelativePath="..\..\src\generic\combog.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\generic\commandlinkbuttong.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\datavgen.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\datectlg.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\generic\dcpsg.cpp">
 			</File>
 			<File
@@ -1093,6 +1198,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\dragimgg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\editlbox.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\filectrlg.cpp">
@@ -1107,10 +1215,31 @@
 				RelativePath="..\..\src\generic\graphicc.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\generic\grid.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\gridctrl.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\grideditors.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\gridsel.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\generic\headerctrlg.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\generic\helpext.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\hyperlinkg.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\generic\infobar.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\laywin.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\listbkg.cpp">
@@ -1125,7 +1254,13 @@
 				RelativePath="..\..\src\generic\msgdlgg.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\generic\notifmsgg.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\generic\numdlgg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\odcombo.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\preferencesg.cpp">
@@ -1140,10 +1275,19 @@
 				RelativePath="..\..\src\generic\progdlgg.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\generic\propdlg.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\generic\renderg.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\richmsgdlgg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\richtooltipg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\sashwin.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\scrlwing.cpp">
@@ -1153,6 +1297,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\generic\spinctlg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\splash.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\splitter.cpp">
@@ -1173,6 +1320,12 @@
 				RelativePath="..\..\src\generic\textdlgg.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\generic\timectrlg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\tipdlg.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\generic\tipwin.cpp">
 			</File>
 			<File
@@ -1185,10 +1338,16 @@
 				RelativePath="..\..\src\generic\treectlg.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\generic\treelist.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\generic\vlbox.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\generic\vscroll.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\generic\wizard.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -2110,9 +2269,6 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\display.h">
-			</File>
-			<File
-				RelativePath="..\..\include\wx\display_impl.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\dnd.h">

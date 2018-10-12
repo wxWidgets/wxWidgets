@@ -29,7 +29,7 @@ case $wxTOOLSET in
         if [ "$wxCMAKE_TESTS" != "OFF" ]; then
             echo 'travis_fold:start:testing'
             echo 'Testing...'
-            ctest . -C Debug -V --output-on-failure
+            ctest -V -C Debug -R "test_base" --output-on-failure --interactive-debug-mode 0 .
             echo 'travis_fold:end:testing'
         fi
         ;;

@@ -33,9 +33,7 @@
 
 #include "wx/textcompleter.h"
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/object.h"
 #include "wx/gtk/private/string.h"
 
@@ -43,7 +41,7 @@
 //  helper function to get the length of the text
 //-----------------------------------------------------------------------------
 
-static unsigned int GetEntryTextLength(GtkEntry* entry)
+static int GetEntryTextLength(GtkEntry* entry)
 {
 #if GTK_CHECK_VERSION(2, 14, 0)
     if ( wx_is_at_least_gtk2(14) )
@@ -584,7 +582,7 @@ void wxTextEntry::Remove(long from, long to)
 }
 
 // static
-unsigned int wxTextEntry::GTKGetEntryTextLength(GtkEntry* entry)
+int wxTextEntry::GTKGetEntryTextLength(GtkEntry* entry)
 {
     return GetEntryTextLength(entry);
 }

@@ -195,7 +195,7 @@ wxSize wxHeaderCtrl::DoGetBestSize() const
         return wxControl::DoGetBestSize();
     }
 
-    return wxSize(wpos.cx, wpos.cy);
+    return wxSize(wxDefaultCoord, wpos.cy);
 }
 
 // ----------------------------------------------------------------------------

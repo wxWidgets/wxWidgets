@@ -38,7 +38,7 @@
 // return true if ok, false otherwise
 inline bool wxOleInitialize()
 {
-    HRESULT
+    const HRESULT
     hr = ::OleInitialize(NULL);
 
     // RPC_E_CHANGED_MODE indicates that OLE had been already initialized

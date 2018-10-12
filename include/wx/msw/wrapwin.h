@@ -34,7 +34,16 @@
     #include <winsock2.h>
 #endif
 
+// Disable any warnings inside Windows headers.
+#ifdef __VISUALC__
+    #pragma warning(push, 1)
+#endif
+
 #include <windows.h>
+
+#ifdef __VISUALC__
+    #pragma warning(pop)
+#endif
 
 // #undef the macros defined in winsows.h which conflict with code elsewhere
 #include "wx/msw/winundef.h"

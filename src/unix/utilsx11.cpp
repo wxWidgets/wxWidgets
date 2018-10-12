@@ -37,19 +37,22 @@
 #endif
 
 #ifdef __WXGTK__
+#ifdef __WXGTK20__
+#include "wx/gtk/private/wrapgtk.h"
+#else // GTK+ 1.x
 #include <gtk/gtk.h>
+#define GDK_WINDOWING_X11
+#endif
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
-#ifdef __WXGTK20__
-#include "wx/gtk/private/gtk2-compat.h"     // gdk_window_get_screen()
-#endif
 #endif
 GdkWindow* wxGetTopLevelGDK();
 GtkWidget* wxGetTopLevelGTK();
 #endif
 
-// Only X11 backend is supported for wxGTK here
-#if !defined(__WXGTK__) || defined(GDK_WINDOWING_X11)
+// Only X11 backend is supported for wxGTK here (GTK < 2 has no others)
+#if !defined(__WXGTK__) || \
+    (!defined(__WXGTK20__) || defined(GDK_WINDOWING_X11))
 
 // Various X11 Atoms used in this file:
 static Atom _NET_WM_STATE = 0;

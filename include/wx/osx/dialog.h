@@ -60,8 +60,13 @@ public:
     virtual void EndModal(int retCode);
 
     static bool OSXHasModalDialogsOpen();
-    static void OSXBeginModalDialog();
-    static void OSXEndModalDialog();
+    void OSXBeginModalDialog();
+    void OSXEndModalDialog();
+    
+#if wxOSX_USE_COCOA
+    bool OSXGetWorksWhenModal();
+    void OSXSetWorksWhenModal(bool worksWhenModal);
+#endif
 
     // implementation
     // --------------
@@ -89,6 +94,11 @@ protected:
 
 private:
     void Init();
+    
+    static wxVector<wxDialog*> s_modalStack;
+#if wxOSX_USE_COCOA
+    static wxVector<bool> s_modalWorksStack;
+#endif
 };
 
 #endif

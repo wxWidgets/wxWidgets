@@ -2378,7 +2378,7 @@ void wxBoxSizer::RecalcSizes()
 
             wxCoord maxMajor = GetSizeInMajorDir(item->GetMaxSizeWithBorder());
 
-            // must be nonzero, fixed-size items were dealt with in previous loop
+            // must be nonzero, fixed-size items were dealt with in the previous loop
             const int propItem = item->GetProportion();
 
             // is the desired size of this item small enough?

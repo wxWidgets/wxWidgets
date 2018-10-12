@@ -21,7 +21,7 @@
 #include "wx/imaglist.h"
 #include "wx/window.h"
 
-class WXDLLIMPEXP_FWD_ADV wxAnimation;
+class WXDLLIMPEXP_FWD_CORE wxAnimation;
 
 class WXDLLIMPEXP_FWD_XML wxXmlNode;
 class WXDLLIMPEXP_FWD_XML wxXmlResource;
@@ -407,7 +407,7 @@ protected:
     wxObject* GetInstance() const             { return m_instance; }
     wxWindow* GetParentAsWindow() const       { return m_parentAsWindow; }
 
-    
+
     wxArrayString m_styleNames;
     wxArrayInt m_styleValues;
 

@@ -68,7 +68,7 @@ void wxVListBoxComboPopup::Init()
     m_value = -1;
     m_itemHover = -1;
     m_clientDataItemsType = wxClientData_None;
-    m_partialCompletionString = wxEmptyString;
+    m_partialCompletionString.clear();
 }
 
 bool wxVListBoxComboPopup::Create(wxWindow* parent)
@@ -224,7 +224,7 @@ void wxVListBoxComboPopup::DismissWithEvent()
     if ( selection != wxNOT_FOUND )
         m_stringValue = m_strings[selection];
     else
-        m_stringValue = wxEmptyString;
+        m_stringValue.clear();
 
     if ( m_stringValue != m_combo->GetValue() )
         m_combo->SetValueByUser(m_stringValue);
@@ -388,7 +388,7 @@ bool wxVListBoxComboPopup::HandleKey( int keycode, bool saturate, wxChar keychar
 // stop partial completion
 void wxVListBoxComboPopup::StopPartialCompletion()
 {
-    m_partialCompletionString = wxEmptyString;
+    m_partialCompletionString.clear();
 #if wxUSE_TIMER
     m_partialCompletionTimer.Stop();
 #endif // wxUSE_TIMER
@@ -685,7 +685,7 @@ void wxVListBoxComboPopup::SetSelection( int item )
     if ( item >= 0 )
         m_stringValue = m_strings[item];
     else
-        m_stringValue = wxEmptyString;
+        m_stringValue.clear();
 
     if ( IsCreated() )
         wxVListBox::SetSelection(item);

@@ -812,7 +812,7 @@ bool wxPropertyGridManager::DoSelectPage( int index )
 #endif
 
 #if wxUSE_HEADERCTRL
-    if ( m_showHeader )
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
         m_pHeaderCtrl->OnPageChanged(nextPage);
 #endif
 
@@ -929,7 +929,7 @@ void wxPropertyGridManager::SetColumnCount( int colCount, int page )
     GetGrid()->Refresh();
 
 #if wxUSE_HEADERCTRL
-    if ( m_showHeader )
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
         m_pHeaderCtrl->OnPageUpdated();
 #endif
 }
@@ -1048,10 +1048,8 @@ wxPropertyGridPage* wxPropertyGridManager::InsertPage( int index,
             pageObj->m_toolId = tool->GetId();
 
             // Connect to toolbar button events.
-            Connect(pageObj->GetToolId(),
-                    wxEVT_TOOL,
-                    wxCommandEventHandler(
-                        wxPropertyGridManager::OnToolbarClick));
+            Bind(wxEVT_TOOL, &wxPropertyGridManager::OnToolbarClick, this,
+                 pageObj->GetToolId());
 
             m_pToolbar->Realize();
         }
@@ -1349,7 +1347,7 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
 
     // Header comes after the tool bar
 #if wxUSE_HEADERCTRL
-    if ( m_showHeader )
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
     {
         m_pHeaderCtrl->SetSize(0, propgridY, width, wxDefaultCoord);
         propgridY += m_pHeaderCtrl->GetSize().y;
@@ -1541,10 +1539,8 @@ void wxPropertyGridManager::RecreateControls()
                 m_categorizedModeToolId = tool->GetId();
                 tbModified = true;
 
-                Connect(m_categorizedModeToolId,
-                        wxEVT_TOOL,
-                        wxCommandEventHandler(
-                        wxPropertyGridManager::OnToolbarClick));
+                Bind(wxEVT_TOOL, &wxPropertyGridManager::OnToolbarClick, this,
+                     m_categorizedModeToolId);
             }
 
             if (m_alphabeticModeToolId == -1)
@@ -1560,10 +1556,8 @@ void wxPropertyGridManager::RecreateControls()
                 m_alphabeticModeToolId = tool->GetId();
                 tbModified = true;
 
-                Connect(m_alphabeticModeToolId,
-                        wxEVT_TOOL,
-                        wxCommandEventHandler(
-                        wxPropertyGridManager::OnToolbarClick));
+                Bind(wxEVT_TOOL, &wxPropertyGridManager::OnToolbarClick, this,
+                     m_alphabeticModeToolId);
             }
 
             // Both buttons should exist here.
@@ -1574,10 +1568,8 @@ void wxPropertyGridManager::RecreateControls()
             // Remove buttons if they exist.
             if (m_categorizedModeToolId != -1)
             {
-                Disconnect(m_categorizedModeToolId,
-                           wxEVT_TOOL,
-                           wxCommandEventHandler(
-                           wxPropertyGridManager::OnToolbarClick));
+                Unbind(wxEVT_TOOL, &wxPropertyGridManager::OnToolbarClick, this,
+                       m_categorizedModeToolId);
 
                 m_pToolbar->DeleteTool(m_categorizedModeToolId);
                 m_categorizedModeToolId = -1;
@@ -1586,10 +1578,8 @@ void wxPropertyGridManager::RecreateControls()
 
             if (m_alphabeticModeToolId != -1)
             {
-                Disconnect(m_alphabeticModeToolId,
-                            wxEVT_TOOL,
-                            wxCommandEventHandler(
-                            wxPropertyGridManager::OnToolbarClick));
+                Unbind(wxEVT_TOOL, &wxPropertyGridManager::OnToolbarClick, this,
+                       m_alphabeticModeToolId);
 
                 m_pToolbar->DeleteTool(m_alphabeticModeToolId);
                 m_alphabeticModeToolId = -1;
@@ -1640,11 +1630,10 @@ void wxPropertyGridManager::RecreateControls()
 #if wxUSE_HEADERCTRL
     if ( m_showHeader )
     {
-        wxPGHeaderCtrl* hc;
 
         if ( !m_pHeaderCtrl )
         {
-            hc = new wxPGHeaderCtrl(this);
+            wxPGHeaderCtrl* hc = new wxPGHeaderCtrl(this);
             hc->Create(this, wxID_ANY);
             m_pHeaderCtrl = hc;
         }
@@ -1910,7 +1899,7 @@ void wxPropertyGridManager::SetSplitterLeft( bool subProps, bool allPages )
     }
 
 #if wxUSE_HEADERCTRL
-    if ( m_showHeader )
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
         m_pHeaderCtrl->OnColumWidthsChanged();
 #endif
 }
@@ -1930,7 +1919,7 @@ void wxPropertyGridManager::SetPageSplitterLeft(int page, bool subProps)
         SetPageSplitterPosition( page, maxW );
 
 #if wxUSE_HEADERCTRL
-        if ( m_showHeader )
+        if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
             m_pHeaderCtrl->OnColumWidthsChanged();
 #endif
     }
@@ -1943,18 +1932,18 @@ void wxPropertyGridManager::ReconnectEventHandlers(wxWindowID oldId, wxWindowID 
 
     if (oldId != wxID_NONE)
     {
-        Disconnect(oldId, wxEVT_PG_SELECTED,
-          wxPropertyGridEventHandler(wxPropertyGridManager::OnPropertyGridSelect));
-        Disconnect(oldId, wxEVT_PG_COL_DRAGGING,
-          wxPropertyGridEventHandler(wxPropertyGridManager::OnPGColDrag));
+        Unbind(wxEVT_PG_SELECTED, &wxPropertyGridManager::OnPropertyGridSelect, this,
+               oldId);
+        Unbind(wxEVT_PG_COL_DRAGGING, &wxPropertyGridManager::OnPGColDrag, this,
+               oldId);
     }
 
     if (newId != wxID_NONE)
     {
-        Connect(newId, wxEVT_PG_SELECTED,
-          wxPropertyGridEventHandler(wxPropertyGridManager::OnPropertyGridSelect));
-        Connect(newId, wxEVT_PG_COL_DRAGGING,
-          wxPropertyGridEventHandler(wxPropertyGridManager::OnPGColDrag));
+        Bind(wxEVT_PG_SELECTED, &wxPropertyGridManager::OnPropertyGridSelect, this,
+             newId);
+        Bind(wxEVT_PG_COL_DRAGGING, &wxPropertyGridManager::OnPGColDrag, this,
+             newId);
     }
 }
 
@@ -1976,10 +1965,8 @@ void
 wxPropertyGridManager::OnPGColDrag( wxPropertyGridEvent& WXUNUSED(event) )
 {
 #if wxUSE_HEADERCTRL
-    if ( !m_showHeader )
-        return;
-
-    m_pHeaderCtrl->OnColumWidthsChanged();
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
+        m_pHeaderCtrl->OnColumWidthsChanged();
 #endif
 }
 
@@ -2015,7 +2002,7 @@ void wxPropertyGridManager::OnResize( wxSizeEvent& WXUNUSED(event) )
     }
 
 #if wxUSE_HEADERCTRL
-    if ( m_showHeader )
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
         m_pHeaderCtrl->OnColumWidthsChanged();
 #endif
 }
@@ -2158,7 +2145,7 @@ void wxPropertyGridManager::SetSplitterPosition( int pos, int splitterColumn )
     }
 
 #if wxUSE_HEADERCTRL
-    if ( m_showHeader )
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
         m_pHeaderCtrl->OnColumWidthsChanged();
 #endif
 }
@@ -2172,7 +2159,7 @@ void wxPropertyGridManager::SetPageSplitterPosition( int page,
     GetPage(page)->DoSetSplitterPosition( pos, column );
 
 #if wxUSE_HEADERCTRL
-    if ( m_showHeader )
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
         m_pHeaderCtrl->OnColumWidthsChanged();
 #endif
 }

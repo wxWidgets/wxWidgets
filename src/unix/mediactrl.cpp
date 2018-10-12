@@ -34,9 +34,8 @@
 #include "wx/vector.h"              // wxVector<wxString>
 
 #ifdef __WXGTK__
-    #include <gtk/gtk.h>
+    #include "wx/gtk/private/wrapgtk.h"
     #include <gdk/gdkx.h>
-    #include "wx/gtk/private/gtk2-compat.h"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -205,8 +204,8 @@ class wxGStreamerMediaEventHandler : public wxEvtHandler
     public:
     wxGStreamerMediaEventHandler(wxGStreamerMediaBackend* be) : m_be(be)
     {
-        this->Connect(wxID_ANY, wxEVT_MEDIA_FINISHED,
-           wxMediaEventHandler(wxGStreamerMediaEventHandler::OnMediaFinish));
+        this->Bind(wxEVT_MEDIA_FINISHED,
+           &wxGStreamerMediaEventHandler::OnMediaFinish, this);
     }
 
     void OnMediaFinish(wxMediaEvent& event);
@@ -822,6 +821,13 @@ bool wxGStreamerMediaBackend::TryVideoSink(GstElement* videosink)
         m_xoverlay = (GstVideoOverlay*) videosink;
 
     if ( !GST_IS_VIDEO_OVERLAY(m_xoverlay) )
+    {
+        g_object_unref(videosink);
+        return false;
+    }
+
+    if ( gst_element_set_state (videosink,
+                                GST_STATE_READY) == GST_STATE_CHANGE_FAILURE )
     {
         g_object_unref(videosink);
         return false;

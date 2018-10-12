@@ -20,7 +20,6 @@
     #include "wx/button.h"
 #endif
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/eventsdisabler.h"
 #include "wx/gtk/private/list.h"

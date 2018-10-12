@@ -617,6 +617,22 @@
 // wxUSE_LIBPNG
 #define wxUSE_ZLIB          1
 
+// Set to 1 if liblzma is available to enable wxLZMA{Input,Output}Stream
+// classes.
+//
+// Notice that if you enable this build option when not using configure or
+// CMake, you need to ensure that liblzma headers and libraries are available
+// (i.e. by building the library yourself or downloading its binaries) and can
+// be found, either by copying them to one of the locations searched by the
+// compiler/linker by default (e.g. any of the directories in the INCLUDE or
+// LIB environment variables, respectively, when using MSVC) or modify the
+// make- or project files to add references to these directories.
+//
+// Default is 0 under MSW, auto-detected by configure.
+//
+// Recommended setting: 1 if you need LZMA compression.
+#define wxUSE_LIBLZMA       0
+
 // If enabled, the code written by Apple will be used to write, in a portable
 // way, float on the disk. See extended.c for the license which is different
 // from wxWidgets one.
@@ -1606,6 +1622,13 @@
 // make sure we have the proper dispatcher for the console event loop
 #define wxUSE_SELECT_DISPATCHER 1
 #define wxUSE_EPOLL_DISPATCHER 0
+
+// set to 1 if you have older code that still needs icon refs
+#define wxOSX_USE_ICONREF 0
+
+// set to 0 if you have code that has problems with the new bitmap implementation
+#define wxOSX_BITMAP_NATIVE_ACCESS 1
+
 /* --- end OSX options --- */
 
 #endif

@@ -1105,6 +1105,39 @@ void wxWindowMSW::SetScrollbar(int orient,
                                int range,
                                bool refresh)
 {
+#if wxUSE_DEFERRED_SIZING
+    // Work around not documented, but reliably happening, at least under
+    // Windows 7, but with changing the scrollbars in the middle of a deferred
+    // positioning operation: the child windows of a window whose position is
+    // deferred after changing the scrollbar get offset compared to their
+    // correct position, somehow.
+    //
+    // Note that this scenario happens all the time with wxScrolledWindow as
+    // its HandleOnSize(), which calls AdjustScrollbars() and hence this method
+    // indirectly, gets called from WM_SIZE handler, which begins deferring
+    // window positions, and calls Layout() which continues doing it after the
+    // scrollbar update. So one way of reproducing the bug is to have a window
+    // with children, such as wxStaticBox, inside a wxScrolledWindow whose size
+    // gets changed.
+    //
+    // Fix this simply by "flushing" the pending windows positions and starting
+    // a new deferring operation.
+    if ( m_hDWP )
+    {
+        // Do reposition the children already moved.
+        EndRepositioningChildren();
+
+        // And restart another deferred positioning operation as any currently
+        // existing ChildrenRepositioningGuard objects would be confused if we
+        // just removed the HDWP from under them.
+        //
+        // Unfortunately we have to ignore BeginRepositioningChildren() return
+        // value here, there is not much that we can do if it fails (but this
+        // should never happen anyhow).
+        BeginRepositioningChildren();
+    }
+#endif // wxUSE_DEFERRED_SIZING
+
     // We have to set the variables here to make them valid in events
     // triggered by ::SetScrollInfo()
     *(orient == wxHORIZONTAL ? &m_xThumbSize : &m_yThumbSize) = pageSize;
@@ -1144,6 +1177,9 @@ void wxWindowMSW::SetScrollbar(int orient,
 
 void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
 {
+    if ( !dx && !dy )
+        return;
+
     RECT rect;
     RECT *pr;
     if ( prect )
@@ -1248,11 +1284,11 @@ void wxWindowMSW::SubclassWin(WXHWND hWnd)
 
     wxAssociateWinWithHandle(hwnd, this);
 
-    m_oldWndProc = (WXFARPROC)wxGetWindowProc((HWND)hWnd);
+    m_oldWndProc = wxGetWindowProc((HWND)hWnd);
 
     // we don't need to subclass the window of our own class (in the Windows
     // sense of the word)
-    if ( !wxCheckWindowWndProc(hWnd, (WXFARPROC)wxWndProc) )
+    if ( !wxCheckWindowWndProc(hWnd) )
     {
         wxSetWindowProc(hwnd, wxWndProc);
 
@@ -1289,9 +1325,9 @@ void wxWindowMSW::UnsubclassWin()
 
         if ( m_oldWndProc )
         {
-            if ( !wxCheckWindowWndProc((WXHWND)hwnd, m_oldWndProc) )
+            if ( !wxCheckWindowWndProc((WXHWND)hwnd) )
             {
-                wxSetWindowProc(hwnd, (WNDPROC)m_oldWndProc);
+                wxSetWindowProc(hwnd, m_oldWndProc);
             }
 
             m_oldWndProc = NULL;
@@ -1322,8 +1358,7 @@ void wxWindowMSW::DissociateHandle()
 }
 
 
-bool wxCheckWindowWndProc(WXHWND hWnd,
-                          WXFARPROC WXUNUSED(wndProc))
+bool wxCheckWindowWndProc(WXHWND hWnd, WXWNDPROC WXUNUSED(wndProc))
 {
     const wxString str(wxGetWindowClass(hWnd));
 
@@ -1935,38 +1970,6 @@ void wxWindowMSW::DoClientToScreen(int *x, int *y) const
 bool
 wxWindowMSW::DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height)
 {
-#if wxUSE_DEFERRED_SIZING
-    // if our parent had prepared a defer window handle for us, use it (unless
-    // we are a top level window)
-    wxWindowMSW * const parent = IsTopLevel() ? NULL : GetParent();
-
-    HDWP hdwp = parent ? (HDWP)parent->m_hDWP : NULL;
-    if ( hdwp )
-    {
-        hdwp = ::DeferWindowPos(hdwp, (HWND)hwnd, NULL, x, y, width, height,
-                                SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE);
-        if ( !hdwp )
-        {
-            wxLogLastError(wxT("DeferWindowPos"));
-        }
-    }
-
-    if ( parent )
-    {
-        // hdwp must be updated as it may have been changed
-        parent->m_hDWP = (WXHANDLE)hdwp;
-    }
-
-    if ( hdwp )
-    {
-        // did deferred move, remember new coordinates of the window as they're
-        // different from what Windows would return for it
-        return true;
-    }
-
-    // otherwise (or if deferring failed) move the window in place immediately
-#endif // wxUSE_DEFERRED_SIZING
-
     // toplevel window's coordinates are mirrored if the TLW is a child of another
     // RTL window and changing width without moving the position would enlarge the
     // window in the wrong direction, so we need to adjust for it
@@ -1986,14 +1989,68 @@ wxWindowMSW::DoMoveSibling(WXHWND hwnd, int x, int y, int width, int height)
         }
     }
 
-    if ( !::MoveWindow((HWND)hwnd, x, y, width, height, IsShown()) )
+#if wxUSE_DEFERRED_SIZING
+    else if ( MSWIsPositionDirectlySupported(x, y) )
     {
-        wxLogLastError(wxT("MoveWindow"));
+        // if our parent had prepared a defer window handle for us, use it
+        wxWindowMSW * const parent = GetParent();
+
+        HDWP hdwp = parent ? (HDWP)parent->m_hDWP : NULL;
+        if ( hdwp )
+        {
+            hdwp = ::DeferWindowPos(hdwp, (HWND)hwnd, NULL, x, y, width, height,
+                                    SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOACTIVATE);
+            if ( !hdwp )
+            {
+                wxLogLastError(wxT("DeferWindowPos"));
+            }
+        }
+
+        if ( parent )
+        {
+            // hdwp must be updated as it may have been changed
+            parent->m_hDWP = (WXHANDLE)hdwp;
+        }
+
+        if ( hdwp )
+        {
+            // did deferred move, remember new coordinates of the window as they're
+            // different from what Windows would return for it
+            return true;
+        }
+
+        // otherwise (or if deferring failed) move the window in place immediately
     }
+#endif // wxUSE_DEFERRED_SIZING
+
+    MSWMoveWindowToAnyPosition(hwnd, x, y, width, height, IsShown());
 
     // if wxUSE_DEFERRED_SIZING, indicates that we didn't use deferred move,
     // ignored otherwise
     return false;
+}
+
+void wxWindowMSW::MSWMoveWindowToAnyPosition(WXHWND hwnd, int x, int y, int width, int height, bool bRepaint)
+{
+    bool scroll = GetParent() && !MSWIsPositionDirectlySupported(x, y);
+
+    if ( scroll )
+    {
+        // scroll to the actual position (looks like there is no need to Freeze() the parent)
+        ::ScrollWindow(GetHwndOf(GetParent()), -x, -y, NULL, NULL);
+    }
+
+    // move to relative coordinates
+    if ( !::MoveWindow(hwnd, (scroll ? 0 : x), (scroll ? 0 : y), width, height, bRepaint) )
+    {
+        wxLogLastError(wxT("MoveWindow"));
+    }
+
+    if ( scroll )
+    {
+        // scroll back
+        ::ScrollWindow(GetHwndOf(GetParent()), x, y, NULL, NULL);
+    }
 }
 
 void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
@@ -2168,15 +2225,9 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
         // and not defer it here as otherwise the value returned by
         // GetClient/WindowRect() wouldn't change as the window wouldn't be
         // really resized
-        if ( !::MoveWindow(GetHwnd(),
-                           rectWin.left,
-                           rectWin.top,
-                           width + widthWin - rectClient.right,
-                           height + heightWin - rectClient.bottom,
-                           TRUE) )
-        {
-            wxLogLastError(wxT("MoveWindow"));
-        }
+        MSWMoveWindowToAnyPosition(GetHwnd(), rectWin.left, rectWin.top,
+                                   width + widthWin - rectClient.right,
+                                   height + heightWin - rectClient.bottom, true);
     }
 }
 
@@ -2392,7 +2443,7 @@ WXLRESULT wxWindowMSW::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM l
 {
     WXLRESULT rc;
     if ( m_oldWndProc )
-        rc = ::CallWindowProc(CASTWNDPROC m_oldWndProc, GetHwnd(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
+        rc = ::CallWindowProc(m_oldWndProc, GetHwnd(), nMsg, wParam, lParam);
     else
         rc = ::DefWindowProc(GetHwnd(), nMsg, wParam, lParam);
 
@@ -3082,19 +3133,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             break;
 
-        case MM_JOY1MOVE:
-        case MM_JOY2MOVE:
-        case MM_JOY1ZMOVE:
-        case MM_JOY2ZMOVE:
-        case MM_JOY1BUTTONDOWN:
-        case MM_JOY2BUTTONDOWN:
-        case MM_JOY1BUTTONUP:
-        case MM_JOY2BUTTONUP:
-            processed = HandleJoystickEvent(message,
-                                            LOWORD(lParam),
-                                            HIWORD(lParam),
-                                            wParam);
-            break;
 
         case WM_COMMAND:
             {
@@ -3243,8 +3281,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                             processed = HandleWindowEvent(event);
                 }
             }
-            if (message == WM_SYSKEYDOWN)  // Let Windows still handle the SYSKEYs
-                processed = false;
             break;
 
         case WM_SYSKEYUP:
@@ -3897,29 +3933,51 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     // do create the window
     wxWindowCreationHook hook(this);
 
-    m_hWnd = (WXHWND)::CreateWindowEx
-                       (
-                        extendedStyle,
-                        wclass,
-                        title ? title : m_windowName.t_str(),
-                        style,
-                        x, y, w, h,
-                        (HWND)MSWGetParent(),
-                        (HMENU)wxUIntToPtr(controlId),
-                        wxGetInstance(),
-                        NULL                        // no extra data
-                       );
+    m_hWnd = MSWCreateWindowAtAnyPosition
+             (
+              extendedStyle,
+              wclass,
+              title ? title : m_windowName.t_str(),
+              style,
+              x, y, w, h,
+              MSWGetParent(),
+              controlId
+             );
 
     if ( !m_hWnd )
     {
-        wxLogSysError(_("Can't create window of class %s"), wclass);
-
         return false;
     }
 
     SubclassWin(m_hWnd);
 
     return true;
+}
+
+WXHWND wxWindowMSW::MSWCreateWindowAtAnyPosition(WXDWORD exStyle, const wxChar* clName,
+                                                 const wxChar* title, WXDWORD style,
+                                                 int x, int y, int width, int height,
+                                                 WXHWND parent, wxWindowID id)
+{
+    WXHWND hWnd = ::CreateWindowEx(exStyle, clName, title, style, x, y, width, height,
+                                   parent, (HMENU)wxUIntToPtr(id), wxGetInstance(),
+                                   NULL); // no extra data
+
+    if ( !hWnd )
+    {
+        wxLogLastError(wxString::Format
+        (
+            wxT("CreateWindowEx(\"%s\", flags=%08lx, ex=%08lx)"),
+            clName, style, exStyle
+        ));
+    }
+    else if ( !IsTopLevel() && !MSWIsPositionDirectlySupported(x, y) )
+    {
+        // fix position if limited by Short range
+        MSWMoveWindowToAnyPosition(hWnd, x, y, width, height, IsShown());
+    }
+
+    return hWnd;
 }
 
 // ===========================================================================
@@ -6091,92 +6149,6 @@ bool wxWindowMSW::HandleClipboardEvent(WXUINT nMsg)
     return HandleWindowEvent(evt);
 }
 
-// ---------------------------------------------------------------------------
-// joystick
-// ---------------------------------------------------------------------------
-
-bool wxWindowMSW::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
-{
-    int change = 0;
-    if ( flags & JOY_BUTTON1CHG )
-        change = wxJOY_BUTTON1;
-    if ( flags & JOY_BUTTON2CHG )
-        change = wxJOY_BUTTON2;
-    if ( flags & JOY_BUTTON3CHG )
-        change = wxJOY_BUTTON3;
-    if ( flags & JOY_BUTTON4CHG )
-        change = wxJOY_BUTTON4;
-
-    int buttons = 0;
-    if ( flags & JOY_BUTTON1 )
-        buttons |= wxJOY_BUTTON1;
-    if ( flags & JOY_BUTTON2 )
-        buttons |= wxJOY_BUTTON2;
-    if ( flags & JOY_BUTTON3 )
-        buttons |= wxJOY_BUTTON3;
-    if ( flags & JOY_BUTTON4 )
-        buttons |= wxJOY_BUTTON4;
-
-    // the event ids aren't consecutive so we can't use table based lookup
-    int joystick;
-    wxEventType eventType;
-    switch ( msg )
-    {
-        case MM_JOY1MOVE:
-            joystick = 1;
-            eventType = wxEVT_JOY_MOVE;
-            break;
-
-        case MM_JOY2MOVE:
-            joystick = 2;
-            eventType = wxEVT_JOY_MOVE;
-            break;
-
-        case MM_JOY1ZMOVE:
-            joystick = 1;
-            eventType = wxEVT_JOY_ZMOVE;
-            break;
-
-        case MM_JOY2ZMOVE:
-            joystick = 2;
-            eventType = wxEVT_JOY_ZMOVE;
-            break;
-
-        case MM_JOY1BUTTONDOWN:
-            joystick = 1;
-            eventType = wxEVT_JOY_BUTTON_DOWN;
-            break;
-
-        case MM_JOY2BUTTONDOWN:
-            joystick = 2;
-            eventType = wxEVT_JOY_BUTTON_DOWN;
-            break;
-
-        case MM_JOY1BUTTONUP:
-            joystick = 1;
-            eventType = wxEVT_JOY_BUTTON_UP;
-            break;
-
-        case MM_JOY2BUTTONUP:
-            joystick = 2;
-            eventType = wxEVT_JOY_BUTTON_UP;
-            break;
-
-        default:
-            wxFAIL_MSG(wxT("no such joystick event"));
-
-            return false;
-    }
-
-    wxJoystickEvent event(eventType, buttons, joystick, change);
-    if ( eventType == wxEVT_JOY_ZMOVE )
-        event.SetZPosition(x);
-    else
-        event.SetPosition(wxPoint(x, y));
-    event.SetEventObject(this);
-
-    return HandleWindowEvent(event);
-}
 
 // ---------------------------------------------------------------------------
 // scrolling
@@ -6829,8 +6801,8 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
 // in active frames and dialogs, regardless of where the focus is.
 static HHOOK wxTheKeyboardHook = 0;
 
-int APIENTRY
-wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
+LRESULT APIENTRY
+wxKeyboardHook(int nCode, WXWPARAM wParam, WXLPARAM lParam)
 {
     DWORD hiWord = HIWORD(lParam);
     if ( nCode != HC_NOREMOVE && ((hiWord & KF_UP) == 0) )
@@ -6897,7 +6869,7 @@ void wxSetKeyboardHook(bool doIt)
         wxTheKeyboardHook = ::SetWindowsHookEx
                               (
                                 WH_KEYBOARD,
-                                (HOOKPROC)wxKeyboardHook,
+                                wxKeyboardHook,
                                 NULL,   // must be NULL for process hook
                                 ::GetCurrentThreadId()
                               );

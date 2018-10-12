@@ -122,9 +122,11 @@ public:
 
     wxListWidgetImpl* GetListPeer() const;
 
-    bool MacGetBlockEvents() const { return m_blockEvents; }
-
     virtual void HandleLineEvent( unsigned int n, bool doubleClick );
+
+    // This is called by wxNSTableView
+    void MacHandleSelectionChange(int row);
+
 protected:
     // callback for derived classes which may have to insert additional data
     // at a certain line - which cannot be predetermined for sorted list data

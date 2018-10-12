@@ -26,6 +26,10 @@
 
 #if wxUSE_WINRT
 
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+#endif //WX_PRECOMP
+
 #include <roapi.h>
 
 #include "wx/dynlib.h"

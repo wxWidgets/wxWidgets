@@ -438,8 +438,8 @@ class FileSystemWatcherTestCase : public CppUnit::TestCase
 public:
     FileSystemWatcherTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 protected:
     wxEventLoopBase* m_loop;
@@ -524,12 +524,12 @@ void FileSystemWatcherTestCase::TestEventCreate()
     class EventTester : public EventHandler
     {
     public:
-        virtual void GenerateEvent()
+        virtual void GenerateEvent() wxOVERRIDE
         {
             CPPUNIT_ASSERT(eg.CreateFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent()
+        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_CREATE);
             event.SetPath(eg.m_file);
@@ -555,12 +555,12 @@ void FileSystemWatcherTestCase::TestEventDelete()
     class EventTester : public EventHandler
     {
     public:
-        virtual void GenerateEvent()
+        virtual void GenerateEvent() wxOVERRIDE
         {
             CPPUNIT_ASSERT(eg.DeleteFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent()
+        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_DELETE);
             event.SetPath(eg.m_old);
@@ -588,12 +588,12 @@ void FileSystemWatcherTestCase::TestEventRename()
     class EventTester : public EventHandler
     {
     public:
-        virtual void GenerateEvent()
+        virtual void GenerateEvent() wxOVERRIDE
         {
             CPPUNIT_ASSERT(eg.RenameFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent()
+        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_RENAME);
             event.SetPath(eg.m_old);
@@ -619,12 +619,12 @@ void FileSystemWatcherTestCase::TestEventModify()
     class EventTester : public EventHandler
     {
     public:
-        virtual void GenerateEvent()
+        virtual void GenerateEvent() wxOVERRIDE
         {
             CPPUNIT_ASSERT(eg.ModifyFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent()
+        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_MODIFY);
             event.SetPath(eg.m_file);
@@ -650,12 +650,12 @@ void FileSystemWatcherTestCase::TestEventAccess()
     class EventTester : public EventHandler
     {
     public:
-        virtual void GenerateEvent()
+        virtual void GenerateEvent() wxOVERRIDE
         {
             CPPUNIT_ASSERT(eg.ReadFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent()
+        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_ACCESS);
             event.SetPath(eg.m_file);
@@ -683,12 +683,12 @@ void FileSystemWatcherTestCase::TestEventAttribute()
     class EventTester : public EventHandler
     {
     public:
-        virtual void GenerateEvent()
+        virtual void GenerateEvent() wxOVERRIDE
         {
             CPPUNIT_ASSERT(eg.TouchFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent()
+        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_ATTRIB);
             event.SetPath(eg.m_file);
@@ -718,7 +718,7 @@ void FileSystemWatcherTestCase::TestSingleWatchtypeEvent()
         // DELETE as the event path fields would be wrong in CheckResult()
         EventTester() : EventHandler(wxFSW_EVENT_ACCESS) {}
 
-        virtual void GenerateEvent()
+        virtual void GenerateEvent() wxOVERRIDE
         {
             // As wxFSW_EVENT_ACCESS is passed to the ctor only ReadFile() will
             // generate an event. Without it they all will, and the test fails
@@ -727,7 +727,7 @@ void FileSystemWatcherTestCase::TestSingleWatchtypeEvent()
             CPPUNIT_ASSERT(eg.ReadFile());
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent()
+        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
         {
             wxFileSystemWatcherEvent event(wxFSW_EVENT_ACCESS);
             event.SetPath(eg.m_file);
@@ -925,7 +925,7 @@ void FileSystemWatcherTestCase::TestTrees()
             CPPUNIT_ASSERT_EQUAL(0, m_watcher->GetWatchedPathsCount());
         }
 
-        virtual void GenerateEvent()
+        virtual void GenerateEvent() wxOVERRIDE
         {
             // We don't use this function for events. Just run the tests
 
@@ -963,14 +963,14 @@ void FileSystemWatcherTestCase::TestTrees()
             Exit();
         }
 
-        virtual wxFileSystemWatcherEvent ExpectedEvent()
+        virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
         {
             CPPUNIT_FAIL("Shouldn't be called");
 
             return wxFileSystemWatcherEvent(wxFSW_EVENT_ERROR);
         }
 
-        virtual void CheckResult()
+        virtual void CheckResult() wxOVERRIDE
         {
             // Do nothing. We override this to prevent receiving events in
             // ExpectedEvent()
@@ -1016,25 +1016,25 @@ public:
         Start(1000, true);
     }
 
-    virtual void GenerateEvent()
+    virtual void GenerateEvent() wxOVERRIDE
     {
         m_watcher->Remove(EventGenerator::GetWatchDir());
         CPPUNIT_ASSERT(eg.CreateFile());
     }
 
-    virtual void CheckResult()
+    virtual void CheckResult() wxOVERRIDE
     {
         CPPUNIT_ASSERT( m_events.empty() );
     }
 
-    virtual wxFileSystemWatcherEvent ExpectedEvent()
+    virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
     {
         CPPUNIT_FAIL( "Shouldn't be called" );
 
         return wxFileSystemWatcherEvent(wxFSW_EVENT_ERROR);
     }
 
-    virtual void Notify()
+    virtual void Notify() wxOVERRIDE
     {
         SendIdle();
     }

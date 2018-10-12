@@ -20,7 +20,7 @@
 
 #include "wx/clrpicker.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 // ============================================================================
 // implementation

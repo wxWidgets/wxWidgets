@@ -113,7 +113,7 @@ namespace
 {
 
 // the pointer to standard radio button wnd proc
-WXFARPROC s_wndprocRadioBtn = (WXFARPROC)NULL;
+WXWNDPROC s_wndprocRadioBtn = NULL;
 
 // Hash allowing to find wxRadioBox containing the given radio button by its
 // HWND. This is used by (subclassed) radio button window proc to find the
@@ -298,7 +298,7 @@ void wxRadioBox::SubclassRadioButton(WXHWND hWndBtn)
     HWND hwndBtn = (HWND)hWndBtn;
 
     if ( !s_wndprocRadioBtn )
-        s_wndprocRadioBtn = (WXFARPROC)wxGetWindowProc(hwndBtn);
+        s_wndprocRadioBtn = wxGetWindowProc(hwndBtn);
 
     wxSetWindowProc(hwndBtn, wxRadioBtnWndProc);
 

@@ -17,10 +17,7 @@
     #include "wx/tooltip.h"
 #endif
 
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
 
 //-----------------------------------------------------------------------------
 // wxGTKRadioButtonInfo
@@ -293,7 +290,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
                          // So far we assumed that label doesn't contain mnemonic
                          // and therefore single underscore characters were not
                          // replaced by two underscores. Now we have to double
-                         // all exisiting underscore characters.
+                         // all existing underscore characters.
                          label.Replace(wxS("_"), wxS("__"));
                          label += wxS('_');
                      }

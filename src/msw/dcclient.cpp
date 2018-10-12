@@ -302,7 +302,7 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
     InitDC();
 
     // the HDC can have a clipping box (which we didn't set), make sure our
-    // DoGetClippingBox() checks for it
+    // DoGetClippingRect() checks for it
     m_clipping = true;
 }
 

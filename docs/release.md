@@ -11,7 +11,7 @@ If you intend to build wxWidgets from sources (which is recommended), please do 
 
 Instead, download one of [wxWidgets-3.1.1.zip](https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.1/wxWidgets-3.1.1.zip) or [wxWidgets-3.1.1.7z](https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.1/wxWidgets-3.1.1.7z), for much smaller size, for Microsoft Windows systems or [wxWidgets-3.1.1.tar.bz2](https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.1/wxWidgets-3.1.1.tar.bz2) for Unix ones, including macOS. These archives have exactly the same contents, but use the line endings appropriate for the corresponding platform.
 
-In addition, we provide archives containing the documentation in either HTML or Microsoft CHM formats. Notice that the documentation is also [available online](http://docs.wxwidgets.org/3.1).
+In addition, we provide archives containing the documentation in either HTML or Microsoft CHM formats. Notice that the documentation is also [available online](https://docs.wxwidgets.org/3.1).
 
 Finally, Microsoft Windows users may download [Setup.exe file](https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.1/wxMSW-3.1.1-Setup.exe) containing both sources and documentation, however please note that this file does _not_ contain any binaries, please see below for those.
 

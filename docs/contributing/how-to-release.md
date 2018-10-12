@@ -113,7 +113,7 @@ Attach the following files to it:
     wxWidgets-x.y.z-docs-html.zip
     wxWidgets-x.y.z-headers.7z
 
-Create http://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it if not done yet).
+Create https://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it if not done yet).
 
 ## Announcement
 

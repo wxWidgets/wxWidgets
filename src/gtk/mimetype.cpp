@@ -13,11 +13,10 @@
 
 #include "wx/gtk/mimetype.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 #include "wx/gtk/private/string.h"
 #include "wx/gtk/private/object.h"
-#include "wx/gtk/private/gtk2-compat.h"
 
 #if defined(__UNIX__)
 wxString wxGTKMimeTypesManagerImpl::GetIconFromMimeType(const wxString& mime)

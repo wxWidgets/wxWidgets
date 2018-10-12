@@ -9,8 +9,6 @@
 
 include(../../source_groups.cmake)
 
-wx_option(wxUSE_IMAGE "use wxImage class" ON)
-
 wx_append_sources(CORE_SRC GUI_CMN)
 wx_append_sources(CORE_SRC BASE_AND_GUI_CMN)
 if(WIN32)
@@ -25,15 +23,29 @@ if(WXMSW)
     wx_append_sources(CORE_SRC MSW)
     wx_append_sources(CORE_SRC MSW_DESKTOP)
 elseif(WXGTK)
-    wx_append_sources(CORE_SRC GTK2_LOWLEVEL)
-    wx_append_sources(CORE_SRC GTK2)
+    if(WXGTK2)
+        wx_append_sources(CORE_SRC GTK2_LOWLEVEL)
+        wx_append_sources(CORE_SRC GTK2)
+    else()
+        wx_append_sources(CORE_SRC GTK_LOWLEVEL)
+        wx_append_sources(CORE_SRC GTK)
+    endif()
 
-    wx_append_sources(CORE_SRC XWIN_LOWLEVEL)
+    if(UNIX)
+        wx_append_sources(CORE_SRC XWIN_LOWLEVEL)
+    elseif(WIN32)
+        wx_append_sources(CORE_SRC GTK_WIN32)
+    endif()
 elseif(WXOSX_COCOA)
     wx_append_sources(CORE_SRC BASE_AND_GUI_OSX_COCOA)
     wx_append_sources(CORE_SRC OSX_LOWLEVEL)
     wx_append_sources(CORE_SRC OSX_SHARED)
     wx_append_sources(CORE_SRC OSX_COCOA)
+elseif(WXQT)
+    wx_append_sources(CORE_SRC QT)
+    if(WIN32)
+        wx_append_sources(CORE_SRC QT_WIN32)
+    endif()
 endif()
 
 wx_add_library(core ${CORE_SRC})
@@ -48,5 +60,24 @@ foreach(lib JPEG PNG TIFF)
         wx_lib_link_libraries(core PRIVATE ${${lib}_LIBRARIES})
     endif()
 endforeach()
+
+if(WIN32)
+    wx_lib_link_libraries(core PRIVATE
+        winmm
+    )
+endif()
+if(WXOSX_COCOA)
+    wx_lib_link_libraries(core PUBLIC
+        "-framework AudioToolbox"
+        )
+endif()
+if(WXGTK AND wxUSE_PRIVATE_FONTS)
+    wx_lib_include_directories(core PUBLIC
+        ${FONTCONFIG_INCLUDE_DIR}
+    )
+    wx_lib_link_libraries(core PUBLIC
+        ${FONTCONFIG_LIBRARIES}
+    )
+endif()
 
 wx_finalize_lib(core)

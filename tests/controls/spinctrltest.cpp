@@ -27,8 +27,8 @@ class SpinCtrlTestCase : public CppUnit::TestCase
 public:
     SpinCtrlTestCase() { }
 
-    void setUp();
-    void tearDown();
+    void setUp() wxOVERRIDE;
+    void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( SpinCtrlTestCase );

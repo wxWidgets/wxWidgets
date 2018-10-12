@@ -32,7 +32,6 @@ public:
 
     virtual ~wxToolBar();
 
-    void Init();
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
@@ -44,23 +43,27 @@ public:
     virtual QToolBar *GetQToolBar() const { return m_qtToolBar; }
 
     virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
+
+    virtual void SetToolShortHelp(int id, const wxString& helpString) wxOVERRIDE;
+    virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap) wxOVERRIDE;
+    virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap) wxOVERRIDE;
+
     virtual bool Realize() wxOVERRIDE;
 
     virtual wxToolBarToolBase *CreateTool(int toolid,
                                           const wxString& label,
                                           const wxBitmap& bmpNormal,
-                                          const wxBitmap& bmpDisabled,
-                                          wxItemKind kind,
-                                          wxObject *clientData,
-                                          const wxString& shortHelp,
-                                          const wxString& longHelp) wxOVERRIDE;
+                                          const wxBitmap& bmpDisabled = wxNullBitmap,
+                                          wxItemKind kind = wxITEM_NORMAL,
+                                          wxObject *clientData = NULL,
+                                          const wxString& shortHelp = wxEmptyString,
+                                          const wxString& longHelp = wxEmptyString) wxOVERRIDE;
 
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label) wxOVERRIDE;
     QWidget *GetHandle() const wxOVERRIDE;
 
 protected:
-
     QActionGroup* GetActionGroup(size_t pos);
     virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool) wxOVERRIDE;
     virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool) wxOVERRIDE;
@@ -69,6 +72,8 @@ protected:
     virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle) wxOVERRIDE;
 
 private:
+    void Init();
+
     long GetButtonStyle();
 
     QToolBar *m_qtToolBar;

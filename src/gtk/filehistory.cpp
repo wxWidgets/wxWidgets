@@ -28,10 +28,8 @@
 
 #include "wx/filename.h"
 
-#include <glib.h>
-#include <gtk/gtk.h>
-#include "wx/gtk/private/string.h"
 #include "wx/gtk/private.h"
+#include "wx/gtk/private/string.h"
 
 // ============================================================================
 // implementation

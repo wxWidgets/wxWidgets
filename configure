@@ -665,7 +665,6 @@ COND_wxUSE_LIBPNG_builtin
 COND_wxUSE_LIBJPEG_builtin
 COND_wxUSE_EXPAT_builtin
 COND_WXUNIV_1
-COND_WXUNIV_0
 COND_WITH_PLUGIN_SDL_1
 COND_WINDOWS_IMPLIB_1
 COND_USE_XRC_1
@@ -696,18 +695,16 @@ COND_USE_EXCEPTIONS_1
 COND_USE_EXCEPTIONS_0
 COND_USE_CAIRO_1
 COND_UNICODE_1
-COND_TOOLKIT_X11_WXUNIV_1
 COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1
 COND_TOOLKIT_X11_USE_GUI_1
 COND_TOOLKIT_X11
-COND_TOOLKIT_Qt
 COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0
-COND_TOOLKIT_QT_USE_GUI_1
 COND_TOOLKIT_QT
 COND_TOOLKIT_OSX_IPHONE_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_OSX_IPHONE_USE_GUI_1
 COND_TOOLKIT_OSX_IPHONE
 COND_TOOLKIT_OSX_COCOA_WXUNIV_0
+COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_OSX_COCOA_USE_GUI_1
 COND_TOOLKIT_OSX_COCOA
 COND_TOOLKIT_OSX_CARBON
@@ -721,16 +718,12 @@ COND_TOOLKIT_MAC
 COND_TOOLKIT_GTK_USE_GUI_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1
-COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4
-COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3
-COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_1
-COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
@@ -739,7 +732,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_
 COND_TOOLKIT_GTK
 COND_TOOLKIT_DFB_USE_GUI_1
 COND_TOOLKIT_DFB
-COND_TOOLKIT_COCOA_USE_GUI_1
 COND_TOOLKIT_COCOA
 COND_TOOLKIT_
 COND_SHARED_1_USE_GUI_1_USE_OPENGL_1
@@ -753,16 +745,13 @@ COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBPNG_builtin
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBJPEG_builtin
 COND_SHARED_0_USE_GUI_1_USE_OPENGL_1
-COND_SHARED_0_TOOLKIT_PM_WXUNIV_0
 COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0
 COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0
 COND_SHARED_0
+COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1
-COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
-COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
-COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2
 COND_PLATFORM_WIN32_1_SHARED_0
 COND_PLATFORM_WIN32_1
 COND_PLATFORM_WIN32_0_TOOLKIT_GTK_TOOLKIT_VERSION_4
@@ -771,11 +760,8 @@ COND_PLATFORM_WIN32_0
 COND_PLATFORM_UNIX_1_USE_PLUGINS_0
 COND_PLATFORM_UNIX_1_USE_GUI_1
 COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1
-COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4
 COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
-COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3
 COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
-COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2
 COND_PLATFORM_UNIX_1
 COND_PLATFORM_UNIX_0
 COND_PLATFORM_OS2_1
@@ -787,11 +773,8 @@ COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_IPHONE_USE_GUI_1
 COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0
 COND_PLATFORM_MACOSX_1_TOOLKIT_OSX_COCOA_USE_GUI_1
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1
-COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
-COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3
 COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
-COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2
 COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0
 COND_PLATFORM_MACOSX_1
 COND_PLATFORM_MACOSX_0_USE_SOVERSION_1
@@ -1092,7 +1075,6 @@ with_libpng
 with_libjpeg
 with_libtiff
 with_libjbig
-with_liblzma
 with_libxpm
 with_libiconv
 with_libmspack
@@ -1104,6 +1086,7 @@ with_xtest
 with_dmalloc
 with_sdl
 with_regex
+with_liblzma
 with_zlib
 with_expat
 with_macosx_sdk
@@ -1302,6 +1285,7 @@ enable_statusbar
 enable_taskbaricon
 enable_tbarnative
 enable_textctrl
+enable_timepick
 enable_tipwindow
 enable_togglebtn
 enable_toolbar
@@ -2329,7 +2313,6 @@ Optional Packages:
   --with-libjpeg          use libjpeg (JPEG file format)
   --with-libtiff          use libtiff (TIFF file format)
   --without-libjbig       don't use libjbig in libtiff even if available)
-  --without-liblzma       don't use liblzma in libtiff even if available)
   --with-libxpm           use libxpm (XPM file format)
   --with-libiconv         use libiconv (character conversion)
   --with-libmspack        use libmspack (CHM help files loading)
@@ -2341,6 +2324,7 @@ Optional Packages:
   --with-dmalloc          use dmalloc library (http://dmalloc.com/)
   --with-sdl              use SDL for audio on Unix
   --with-regex            enable support for wxRegEx class
+  --with-liblzma          use LZMA compression)
   --with-zlib             use zlib for LZW compression
   --with-expat            enable XML support using expat parser
   --with-macosx-sdk=PATH  use an OS X SDK at PATH
@@ -3177,48 +3161,6 @@ $as_echo "$ac_res" >&6; }
 
 } # ac_fn_c_check_type
 
-# ac_fn_cxx_try_run LINENO
-# ------------------------
-# Try to link conftest.$ac_ext, and return whether this succeeded. Assumes
-# that executables *can* be run.
-ac_fn_cxx_try_run ()
-{
-  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
-  if { { ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
-$as_echo "$ac_try_echo"; } >&5
-  (eval "$ac_link") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; } && { ac_try='./conftest$ac_exeext'
-  { { case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
-$as_echo "$ac_try_echo"; } >&5
-  (eval "$ac_try") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; }; then :
-  ac_retval=0
-else
-  $as_echo "$as_me: program exited with status $ac_status" >&5
-       $as_echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-       ac_retval=$ac_status
-fi
-  rm -rf conftest.dSYM conftest_ipa8_conftest.oo
-  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
-  as_fn_set_status $ac_retval
-
-} # ac_fn_cxx_try_run
-
 # ac_fn_c_check_header_mongrel LINENO HEADER VAR INCLUDES
 # -------------------------------------------------------
 # Tests whether HEADER exists, giving a warning if it cannot be compiled using
@@ -3309,6 +3251,48 @@ fi
   eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
 
 } # ac_fn_c_check_header_mongrel
+
+# ac_fn_cxx_try_run LINENO
+# ------------------------
+# Try to link conftest.$ac_ext, and return whether this succeeded. Assumes
+# that executables *can* be run.
+ac_fn_cxx_try_run ()
+{
+  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+  if { { ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+$as_echo "$ac_try_echo"; } >&5
+  (eval "$ac_link") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; } && { ac_try='./conftest$ac_exeext'
+  { { case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+$as_echo "$ac_try_echo"; } >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }; then :
+  ac_retval=0
+else
+  $as_echo "$as_me: program exited with status $ac_status" >&5
+       $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+       ac_retval=$ac_status
+fi
+  rm -rf conftest.dSYM conftest_ipa8_conftest.oo
+  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+  as_fn_set_status $ac_retval
+
+} # ac_fn_cxx_try_run
 cat >config.log <<_ACEOF
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
@@ -3786,7 +3770,7 @@ WX_SUBVERSION=$WX_VERSION.$wx_subrelease_number
 WX_MSW_VERSION=$wx_major_version_number$wx_minor_version_number$wx_release_number
 
 
-wx_top_builddir="`pwd`"
+wx_top_builddir="`pwd -W 2> /dev/null || pwd`"
 
 
 
@@ -3807,6 +3791,7 @@ USE_OSF=                            USE_SGI=
 USE_SOLARIS=                        USE_SUN=                            USE_SUNOS=                          USE_SVR4=                           USE_SYSV=                           USE_VMS=
 USE_ULTRIX=
 USE_UNIXWARE=
+USE_HAIKU=
 
 USE_ALPHA=
 
@@ -3991,7 +3976,7 @@ case "${host}" in
 
   ;;
 
-  *-*-cygwin* | *-*-mingw32* )
+  *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
                 PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_MSW=1
   ;;
@@ -4020,6 +4005,13 @@ case "${host}" in
         USE_BEOS=1
     $as_echo "#define __BEOS__ 1" >>confdefs.h
 
+  ;;
+
+  *-*-haiku* )
+    USE_HAIKU=1
+    $as_echo "#define __HAIKU__ 1" >>confdefs.h
+
+    DEFAULT_DEFAULT_wxUSE_QT=1
   ;;
 
   *)
@@ -4751,7 +4743,6 @@ fi
 
 if test "$wxUSE_LIBTIFF" = "builtin" ; then
     wxUSE_LIBJBIG=no
-    wxUSE_LIBLZMA=no
 else
 
           withstring=without
@@ -4781,35 +4772,6 @@ fi
 
 
           eval "$wx_cv_use_libjbig"
-
-
-          withstring=without
-          defaultval=$wxUSE_ALL_FEATURES
-          if test -z "$defaultval"; then
-              if test x"$withstring" = xwithout; then
-                  defaultval=yes
-              else
-                  defaultval=no
-              fi
-          fi
-
-# Check whether --with-liblzma was given.
-if test "${with_liblzma+set}" = set; then :
-  withval=$with_liblzma;
-                        if test "$withval" = yes; then
-                          wx_cv_use_liblzma='wxUSE_LIBLZMA=yes'
-                        else
-                          wx_cv_use_liblzma='wxUSE_LIBLZMA=no'
-                        fi
-
-else
-
-                        wx_cv_use_liblzma='wxUSE_LIBLZMA=${'DEFAULT_wxUSE_LIBLZMA":-$defaultval}"
-
-fi
-
-
-          eval "$wx_cv_use_liblzma"
 
 fi
 
@@ -5148,6 +5110,35 @@ fi
 
 
           eval "$wx_cv_use_regex"
+
+
+          withstring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$withstring" = xwithout; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+# Check whether --with-liblzma was given.
+if test "${with_liblzma+set}" = set; then :
+  withval=$with_liblzma;
+                        if test "$withval" = yes; then
+                          wx_cv_use_liblzma='wxUSE_LIBLZMA=yes'
+                        else
+                          wx_cv_use_liblzma='wxUSE_LIBLZMA=no'
+                        fi
+
+else
+
+                        wx_cv_use_liblzma='wxUSE_LIBLZMA=${'DEFAULT_wxUSE_LIBLZMA":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_liblzma"
 
 
 
@@ -10915,23 +10906,23 @@ fi
               fi
           fi
 
-          # Check whether --enable-datepick was given.
-if test "${enable_datepick+set}" = set; then :
-  enableval=$enable_datepick;
+          # Check whether --enable-timepick was given.
+if test "${enable_timepick+set}" = set; then :
+  enableval=$enable_timepick;
                           if test "$enableval" = yes; then
-                            wx_cv_use_datepick='wxUSE_TIMEPICKCTRL=yes'
+                            wx_cv_use_timepick='wxUSE_TIMEPICKCTRL=yes'
                           else
-                            wx_cv_use_datepick='wxUSE_TIMEPICKCTRL=no'
+                            wx_cv_use_timepick='wxUSE_TIMEPICKCTRL=no'
                           fi
 
 else
 
-                          wx_cv_use_datepick='wxUSE_TIMEPICKCTRL=${'DEFAULT_wxUSE_TIMEPICKCTRL":-$defaultval}"
+                          wx_cv_use_timepick='wxUSE_TIMEPICKCTRL=${'DEFAULT_wxUSE_TIMEPICKCTRL":-$defaultval}"
 
 fi
 
 
-          eval "$wx_cv_use_datepick"
+          eval "$wx_cv_use_timepick"
 
 
           enablestring=
@@ -20180,7 +20171,7 @@ $as_echo_n "checking SDK deployment version... " >&6; }
         MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" buildSettings | grep '^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}[^"]*"\{0,1\}; *$' | sed 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/'`
 
         # If that failed, try again with the new key
-        if test "x$MACOSX_SDK_PLIST_VERSION_MIN" == "x"; then
+        if test "x$MACOSX_SDK_PLIST_VERSION_MIN" = "x"; then
 
             MACOSX_SDK_PLIST_VERSION_MIN=`defaults read "$wxUSE_MACOSX_SDK/SDKSettings" DefaultProperties | grep '^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}[^"]*"\{0,1\}; *$' | sed 's/^ *"\{0,1\}MACOSX_DEPLOYMENT_TARGET"\{0,1\} *= *"\{0,1\}\([^"]*\)"\{0,1\} *; *$/\1/'`
 
@@ -23317,9 +23308,16 @@ fi
 fi
 
 
-LZMA_LINK=
-if test "$wxUSE_LIBLZMA" = "yes"; then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for lzma_code in -llzma" >&5
+if test "$wxUSE_LIBLZMA" != "no"; then
+    ac_fn_c_check_header_mongrel "$LINENO" "lzma.h" "ac_cv_header_lzma_h" "$ac_includes_default"
+if test "x$ac_cv_header_lzma_h" = xyes; then :
+
+fi
+
+
+
+    if test "$ac_cv_header_lzma_h" = "yes"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for lzma_code in -llzma" >&5
 $as_echo_n "checking for lzma_code in -llzma... " >&6; }
 if ${ac_cv_lib_lzma_lzma_code+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -23356,10 +23354,22 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_lzma_lzma_code" >&5
 $as_echo "$ac_cv_lib_lzma_lzma_code" >&6; }
 if test "x$ac_cv_lib_lzma_lzma_code" = xyes; then :
-  LZMA_LINK=" -llzma"
+
+                LZMA_LINK="-llzma"
+                LIBS="$LZMA_LINK $LIBS"
+                $as_echo "#define wxUSE_LIBLZMA 1" >>confdefs.h
+
+
 fi
 
-else
+    fi
+
+    if test -z "$LZMA_LINK"; then
+        wxUSE_LIBLZMA=no
+    fi
+fi
+
+if test "$HAVE_LZMA" = "no" -o "$wxUSE_LIBTIFF" = "builtin"; then
     ac_configure_args="$ac_configure_args --disable-lzma"
 fi
 
@@ -23424,7 +23434,7 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
         if test "$wxUSE_ZLIB" = "sys"; then
             TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $ZLIB_LINK"
         fi
-        if test "$wxUSE_LIBLZMA" = "yes"; then
+        if test -n "$LZMA_LINK"; then
             TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $LZMA_LINK"
         fi
         if test "$wxUSE_LIBJBIG" = "yes"; then
@@ -23718,7 +23728,7 @@ fi
 
     LIBS="$LIBS -luxtheme -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lcomdlg32 -ladvapi32 -lversion -lwsock32 -lgdi32"
     case "${host}" in
-        x86_64-*-mingw32* )
+        x86_64-*-mingw* )
                                                 WINDRES_CPU_DEFINE="--define WX_CPU_AMD64"
         ;;
     esac
@@ -23751,7 +23761,7 @@ if test "$wxUSE_GUI" = "yes"; then
         GUIDIST=MSW_DIST
 
                 case "${host}" in
-            *-*-mingw32* )
+            *-*-mingw* )
                 WXCONFIG_LDFLAGS_GUI="$LDFLAGS -Wl,--subsystem,windows -mwindows"
         esac
     fi
@@ -26984,6 +26994,20 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
     if test "$wxUSE_QT" = 1; then
+        TOOLKIT=QT
+        GUIDIST=QT_DIST
+        TOOLKIT_DIR="qt"
+
+        if test -n "$QT5_CUSTOM_DIR" ; then
+                        TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} -I${QT5_CUSTOM_DIR}/include"
+            GUI_TK_LIBRARY="${GUI_TK_LIBRARY} -L${QT5_CUSTOM_DIR}/lib \
+                            -lQt5Core -lQt5Widgets -lQt5Gui -lQt5OpenGL -lQt5Test \
+                            -Wl,-rpath,${QT5_CUSTOM_DIR}/lib"
+
+        elif test -z "$PKG_CONFIG" ; then
+            as_fn_error $? "specify QT5_CUSTOM_DIR or make sure pkg-config is available to search for Qt5 libraries" "$LINENO" 5
+
+        else
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for QT5" >&5
@@ -27044,12 +27068,12 @@ fi
 	echo "$QT5_PKG_ERRORS" >&5
 
 
-                as_fn_error $? "Qt5 libraries are not available" "$LINENO" 5
+                    as_fn_error $? "Qt5 libraries are not available" "$LINENO" 5
 
 
 elif test $pkg_failed = untried; then
 
-                as_fn_error $? "Qt5 libraries are not available" "$LINENO" 5
+                    as_fn_error $? "Qt5 libraries are not available" "$LINENO" 5
 
 
 else
@@ -27058,9 +27082,6 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 
-                TOOLKIT=QT
-                GUIDIST=QT_DIST
-                TOOLKIT_DIR="qt"
                 TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} ${QT5_CFLAGS}"
                 GUI_TK_LIBRARY="${GUI_TK_LIBRARY} ${QT5_LIBS}"
                 if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
@@ -27069,6 +27090,7 @@ $as_echo "yes" >&6; }
                 fi
 
 fi
+        fi
     fi
         TOOLKIT_DIR=`echo ${TOOLKIT} | tr '[A-Z]' '[a-z]'`
 
@@ -27500,14 +27522,6 @@ fi
 $as_echo "$as_me: WARNING: Xinerama not found; disabling wxDisplay" >&2;}
             wxUSE_DISPLAY="no"
         fi
-    elif test "$wxUSE_MSW" = 1; then
-                ac_fn_c_check_header_compile "$LINENO" "ddraw.h" "ac_cv_header_ddraw_h" "#include <windows.h>
-"
-if test "x$ac_cv_header_ddraw_h" = xyes; then :
-
-fi
-
-
     fi
 fi
 
@@ -29837,7 +29851,7 @@ EOF
                                         HEADER_PAD_OPTION="-headerpad_max_install_names"
       ;;
 
-      *-*-cygwin* | *-*-mingw32* )
+      *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
         ;;
 
       *-*-hpux* )
@@ -30780,74 +30794,50 @@ _ACEOF
 
 fi
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for round" >&5
+$as_echo_n "checking for round... " >&6; }
+if ${wx_cv_func_round+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-  for wx_func in round
-  do
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $wx_func" >&5
-$as_echo_n "checking for $wx_func... " >&6; }
-if eval \${wx_cv_func_$wx_func+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-
-
-                #include <math.h>
-                $ac_includes_default
-
+#include <math.h>
 int
 main ()
 {
-
-                #ifndef $wx_func
-                  &$wx_func;
-                #endif
-
-
+return int(round(0.0))
   ;
   return 0;
 }
-
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
-  eval wx_cv_func_$wx_func=yes
+  wx_cv_func_round=yes
 else
-  eval wx_cv_func_$wx_func=no
+  wx_cv_func_round=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-
-fi
-eval ac_res=\$wx_cv_func_$wx_func
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-
-    if eval test \$wx_cv_func_$wx_func = yes
-    then
-      cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$wx_func" | $as_tr_cpp` 1
-_ACEOF
-
-
-    else
-      :
-
-    fi
-  done
-
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_func_round" >&5
+$as_echo "$wx_cv_func_round" >&6; }
+if test "$wx_cv_func_round" = yes; then
+    $as_echo "#define HAVE_ROUND 1" >>confdefs.h
+
+fi
 
 if test "$TOOLKIT" != "MSW"; then
 
@@ -31983,6 +31973,50 @@ fi
 $as_echo "$ac_cv_lib_socket_inet_addr" >&6; }
 if test "x$ac_cv_lib_socket_inet_addr" = xyes; then :
   INET_LINK="socket"
+else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for inet_addr in -lnetwork" >&5
+$as_echo_n "checking for inet_addr in -lnetwork... " >&6; }
+if ${ac_cv_lib_network_inet_addr+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lnetwork  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char inet_addr ();
+int
+main ()
+{
+return inet_addr ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_network_inet_addr=yes
+else
+  ac_cv_lib_network_inet_addr=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_network_inet_addr" >&5
+$as_echo "$ac_cv_lib_network_inet_addr" >&6; }
+if test "x$ac_cv_lib_network_inet_addr" = xyes; then :
+  INET_LINK="network"
+
+fi
+
+
 
 fi
 
@@ -32941,16 +32975,6 @@ $as_echo "$as_me: WARNING: wxMutex won't be recursive on this platform" >&2;}
         fi
       fi
 
-      if test "$wxUSE_COMPILER_TLS" = "auto"; then
-          if test "$USE_NETBSD" = 1; then
-              { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Disabling TLS under NetBSD, please contact wx-dev if it works now" >&5
-$as_echo "$as_me: WARNING: Disabling TLS under NetBSD, please contact wx-dev if it works now" >&2;}
-              wxUSE_COMPILER_TLS=no
-          else
-              wxUSE_COMPILER_TLS=yes
-          fi
-      fi
-
       if test "$wxUSE_COMPILER_TLS" = "yes"; then
                     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for __thread keyword" >&5
 $as_echo_n "checking for __thread keyword... " >&6; }
@@ -33159,7 +33183,7 @@ $as_echo "$wx_cv_type_abi_forced_unwind" >&6; }
 else
     if test "$wxUSE_THREADS" = "yes" ; then
       case "${host}" in
-        x86_64-*-mingw32* )
+        x86_64-*-mingw* )
         ;;
         *-*-mingw32* )
                         { $as_echo "$as_me:${as_lineno-$LINENO}: checking if compiler supports -mthreads" >&5
@@ -33424,6 +33448,18 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 if test "x$ac_cv_func_gethostbyname" = xyes; then :
    $as_echo "#define HAVE_GETHOSTBYNAME 1" >>confdefs.h
 
+else
+
+                                    case "${host}" in
+                  *-*-haiku* )
+                    $as_echo "#define HAVE_GETHOSTBYNAME 1" >>confdefs.h
+
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Defining HAVE_GETHOSTBYNAME unconditionally under ${host}." >&5
+$as_echo "$as_me: WARNING: Defining HAVE_GETHOSTBYNAME unconditionally under ${host}." >&2;}
+                    ;;
+                  esac
+
+
 fi
 
       fi
@@ -33551,6 +33587,18 @@ if test "x$ac_cv_func_getservbyname" = xyes; then :
 #define HAVE_GETSERVBYNAME 1
 _ACEOF
   $as_echo "#define HAVE_GETSERVBYNAME 1" >>confdefs.h
+
+else
+
+                                    case "${host}" in
+                  *-*-haiku* )
+                    $as_echo "#define HAVE_GETSERVBYNAME 1" >>confdefs.h
+
+                    { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Defining HAVE_GETSERVBYNAME unconditionally under ${host}." >&5
+$as_echo "$as_me: WARNING: Defining HAVE_GETSERVBYNAME unconditionally under ${host}." >&2;}
+                    ;;
+                  esac
+
 
 fi
 done
@@ -34108,7 +34156,11 @@ fi
 
 
 if test "$wxUSE_SECRETSTORE" = "yes"; then
-            if test "$wxUSE_MSW" != "1" -a "$wxUSE_OSX_COCOA" != 1; then
+            if test "$WXGTK1" = "1"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: libsecret is incompatible with GTK+ 1, disabled" >&5
+$as_echo "$as_me: WARNING: libsecret is incompatible with GTK+ 1, disabled" >&2;}
+        wxUSE_SECRETSTORE=no
+    elif test "$wxUSE_MSW" != "1" -a "$wxUSE_OSX_COCOA" != 1; then
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBSECRET" >&5
@@ -36106,9 +36158,55 @@ if test "x$ac_cv_lib_socket_socket" = xyes; then :
                     fi
 else
 
-                        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: socket library not found - sockets will be disabled" >&5
+                                                { $as_echo "$as_me:${as_lineno-$LINENO}: checking for socket in -lnetwork" >&5
+$as_echo_n "checking for socket in -lnetwork... " >&6; }
+if ${ac_cv_lib_network_socket+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lnetwork  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char socket ();
+int
+main ()
+{
+return socket ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_network_socket=yes
+else
+  ac_cv_lib_network_socket=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_network_socket" >&5
+$as_echo "$ac_cv_lib_network_socket" >&6; }
+if test "x$ac_cv_lib_network_socket" = xyes; then :
+  if test "$INET_LINK" != " -lnetwork"; then
+                                INET_LINK="$INET_LINK -lnetwork"
+                            fi
+else
+
+                                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: socket library not found - sockets will be disabled" >&5
 $as_echo "$as_me: WARNING: socket library not found - sockets will be disabled" >&2;}
-                        wxUSE_SOCKETS=no
+                                wxUSE_SOCKETS=no
+
+
+fi
+
 
 
 fi
@@ -36834,6 +36932,10 @@ fi
         elif test "$WXGTK3" = 1; then
                                                 wxUSE_UIACTIONSIMULATOR=no
         fi
+    elif test "$wxUSE_DFB" = 1; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxUIActionSimulator not yet supported under $TOOLKIT... disabled" >&5
+$as_echo "$as_me: WARNING: wxUIActionSimulator not yet supported under $TOOLKIT... disabled" >&2;}
+        wxUSE_UIACTIONSIMULATOR=no
     fi
 
     if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
@@ -37262,8 +37364,8 @@ if test "$wxUSE_TOOLTIPS" = "yes"; then
 $as_echo "$as_me: WARNING: wxTooltip not supported yet under Motif... disabled" >&2;}
     else
         if test "$wxUSE_UNIVERSAL" = "yes"; then
-            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxTooltip not supported yet in wxUniversal... disabled" >&5
-$as_echo "$as_me: WARNING: wxTooltip not supported yet in wxUniversal... disabled" >&2;}
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxTooltip not supported yet in $TOOLKIT... disabled" >&5
+$as_echo "$as_me: WARNING: wxTooltip not supported yet in $TOOLKIT... disabled" >&2;}
         else
             $as_echo "#define wxUSE_TOOLTIPS 1" >>confdefs.h
 
@@ -38169,6 +38271,9 @@ $as_echo "$wx_cv_lib_gdiplus" >&6; }
         if test "$wx_cv_lib_gdiplus" = "yes"; then
             wx_has_graphics=1
         fi
+    elif test "$WXGTK1" = "1"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: wxGraphicsContext not supported with GTK +1" >&5
+$as_echo "$as_me: WARNING: wxGraphicsContext not supported with GTK +1" >&2;}
     elif test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
 
 pkg_failed=no
@@ -38842,6 +38947,10 @@ case ".$ac_cv_cxxflags_gcc_option__Woverloaded_virtual" in
 esac
 
 
+                if test "$WXGTK1" = "1"; then
+        CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations -Wno-narrowing -Wno-write-strings"
+    fi
+
                         if test "$WXGTK4" != 1 -a \( "$WXGTK3" = 1 -o "$wxUSE_MAC" = 1 \) ; then
         CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations"
 
@@ -38925,6 +39034,11 @@ case "$wxUSE_EXPAT" in
         WXCONFIG_LIBS="$EXPAT_LINK $WXCONFIG_LIBS"
         ;;
 esac
+if test "$wxUSE_LIBLZMA" = "yes"; then
+            if test "$wxUSE_GUI" != "yes" -o "$wxUSE_LIBTIFF" != "sys"; then
+        WXCONFIG_LIBS="$LZMA_LINK $WXCONFIG_LIBS"
+    fi
+fi
 case "$wxUSE_ZLIB" in
     builtin)
         wxconfig_3rdparty="zlib $wxconfig_3rdparty"
@@ -39609,7 +39723,7 @@ fi
 
     LDFLAGS_GUI=
     case ${BAKEFILE_HOST} in
-        *-*-cygwin* | *-*-mingw32* )
+        *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
         LDFLAGS_GUI="-mwindows"
     esac
 
@@ -39650,7 +39764,7 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
 
     if test "x$BAKEFILE_FORCE_PLATFORM" = "x"; then
         case "${BAKEFILE_HOST}" in
-            *-*-mingw32* )
+            *-*-mingw* )
                 PLATFORM_WIN32=1
             ;;
             *-*-darwin* )
@@ -39744,7 +39858,7 @@ $as_echo "$bakefile_cv_prog_makeisgnu" >&6; }
             DLLPREFIX="cyg"
             dlldir="$bindir"
         ;;
-        *-*-mingw32* )
+        *-*-mingw* )
             SO_SUFFIX="dll"
             SO_SUFFIX_MODULE="dll"
             DLLIMP_SUFFIX="dll.a"
@@ -39968,7 +40082,7 @@ $as_echo "$bakefile_cv_gcc31" >&6; }
             SHARED_LD_CXX="\${CXX} -dynamiclib -single_module -headerpad_max_install_names -o"
         fi
 
-        if test "x$GCC" == "xyes"; then
+        if test "x$GCC" = "xyes"; then
             PIC_FLAG="-dynamic -fPIC"
         fi
         if test "x$XLCC" = "xyes"; then
@@ -40043,7 +40157,7 @@ fi
         fi
       ;;
 
-      *-*-cygwin* | *-*-mingw32* )
+      *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
         PIC_FLAG=""
         SHARED_LD_CC="\$(CC) -shared -o"
         SHARED_LD_CXX="\$(CXX) -shared -o"
@@ -40051,7 +40165,7 @@ fi
       ;;
 
       powerpc-apple-macos* | \
-      *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | *-*-gnu* | *-*-k*bsd*-gnu | \
+      *-*-freebsd* | *-*-openbsd* | *-*-haiku* | *-*-netbsd* | *-*-gnu* | *-*-k*bsd*-gnu | \
       *-*-mirbsd* | \
       *-*-sunos4* | \
       *-*-osf* | \
@@ -40091,7 +40205,7 @@ fi
     SONAME_FLAG=
 
     case "${BAKEFILE_HOST}" in
-      *-*-linux* | *-*-freebsd* | *-*-openbsd* | *-*-netbsd* | \
+      *-*-linux* | *-*-freebsd* | *-*-openbsd* | *-*-haiku* | *-*-netbsd* | \
       *-*-k*bsd*-gnu | *-*-mirbsd* | *-*-gnu* )
         if test "x$SUNCXX" = "xyes"; then
             SONAME_FLAG="-h "
@@ -40288,7 +40402,7 @@ EOF
 
 
     case ${BAKEFILE_HOST} in
-        *-*-cygwin* | *-*-mingw32* )
+        *-*-cygwin* | *-*-mingw32* | *-*-mingw64* )
                         if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}windres", so it can be a program name with args.
 set dummy ${ac_tool_prefix}windres; ac_word=$2
@@ -40841,29 +40955,14 @@ EOF
         COND_PLATFORM_MACOSX_1_PLATFORM_WIN32_1_SHARED_0=""
     fi
 
-    COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" ; then
-        COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2=""
-    fi
-
     COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1=""
     fi
 
-    COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
-        COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3=""
-    fi
-
     COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1=""
-    fi
-
-    COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
-    if test "x$PLATFORM_MACOSX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
-        COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
     fi
 
     COND_PLATFORM_MACOSX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1="#"
@@ -40921,29 +41020,14 @@ EOF
         COND_PLATFORM_UNIX_1=""
     fi
 
-    COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2="#"
-    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" ; then
-        COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2=""
-    fi
-
     COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1="#"
     if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1=""
     fi
 
-    COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
-    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
-        COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3=""
-    fi
-
     COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1="#"
     if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1=""
-    fi
-
-    COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
-    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
-        COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
     fi
 
     COND_PLATFORM_UNIX_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1="#"
@@ -40986,19 +41070,9 @@ EOF
         COND_PLATFORM_WIN32_1_SHARED_0=""
     fi
 
-    COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2="#"
-    if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" ; then
-        COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2=""
-    fi
-
     COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1="#"
     if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1=""
-    fi
-
-    COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
-    if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
-        COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3=""
     fi
 
     COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1="#"
@@ -41006,14 +41080,14 @@ EOF
         COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1=""
     fi
 
-    COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
-    if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
-        COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
-    fi
-
     COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1="#"
     if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" -a "x$USE_GUI" = "x1" ; then
         COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1=""
+    fi
+
+    COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0="#"
+    if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0=""
     fi
 
     COND_SHARED_0="#"
@@ -41029,11 +41103,6 @@ EOF
     COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0="#"
     if test "x$SHARED" = "x0" -a "x$TOOLKIT" = "xMSW" -a "x$WXUNIV" = "x0" ; then
         COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0=""
-    fi
-
-    COND_SHARED_0_TOOLKIT_PM_WXUNIV_0="#"
-    if test "x$SHARED" = "x0" -a "x$TOOLKIT" = "xPM" -a "x$WXUNIV" = "x0" ; then
-        COND_SHARED_0_TOOLKIT_PM_WXUNIV_0=""
     fi
 
     COND_SHARED_0_USE_GUI_1_USE_OPENGL_1="#"
@@ -41101,11 +41170,6 @@ EOF
         COND_TOOLKIT_COCOA=""
     fi
 
-    COND_TOOLKIT_COCOA_USE_GUI_1="#"
-    if test "x$TOOLKIT" = "xCOCOA" -a "x$USE_GUI" = "x1" ; then
-        COND_TOOLKIT_COCOA_USE_GUI_1=""
-    fi
-
     COND_TOOLKIT_DFB="#"
     if test "x$TOOLKIT" = "xDFB" ; then
         COND_TOOLKIT_DFB=""
@@ -41146,16 +41210,6 @@ EOF
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_1=""
     fi
 
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_0=""
-    fi
-
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_1="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x2" -a "x$WXUNIV" = "x1" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_WXUNIV_1=""
-    fi
-
     COND_TOOLKIT_GTK_TOOLKIT_VERSION_3="#"
     if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" ; then
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_3=""
@@ -41171,11 +41225,6 @@ EOF
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0=""
     fi
 
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x3" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_WXUNIV_0=""
-    fi
-
     COND_TOOLKIT_GTK_TOOLKIT_VERSION_4="#"
     if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" ; then
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_4=""
@@ -41189,11 +41238,6 @@ EOF
     COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
         COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0=""
-    fi
-
-    COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_WXUNIV_0="#"
-    if test "x$TOOLKIT" = "xGTK" -a "x$TOOLKIT_VERSION" = "x4" -a "x$WXUNIV" = "x0" ; then
-        COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_WXUNIV_0=""
     fi
 
     COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1="#"
@@ -41261,6 +41305,11 @@ EOF
         COND_TOOLKIT_OSX_COCOA_USE_GUI_1=""
     fi
 
+    COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0="#"
+    if test "x$TOOLKIT" = "xOSX_COCOA" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_TOOLKIT_OSX_COCOA_USE_GUI_1_WXUNIV_0=""
+    fi
+
     COND_TOOLKIT_OSX_COCOA_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xOSX_COCOA" -a "x$WXUNIV" = "x0" ; then
         COND_TOOLKIT_OSX_COCOA_WXUNIV_0=""
@@ -41286,19 +41335,9 @@ EOF
         COND_TOOLKIT_QT=""
     fi
 
-    COND_TOOLKIT_QT_USE_GUI_1="#"
-    if test "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" ; then
-        COND_TOOLKIT_QT_USE_GUI_1=""
-    fi
-
     COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0="#"
     if test "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
         COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0=""
-    fi
-
-    COND_TOOLKIT_Qt="#"
-    if test "x$TOOLKIT" = "xQt" ; then
-        COND_TOOLKIT_Qt=""
     fi
 
     COND_TOOLKIT_X11="#"
@@ -41314,11 +41353,6 @@ EOF
     COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1="#"
     if test "x$TOOLKIT" = "xX11" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x1" ; then
         COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1=""
-    fi
-
-    COND_TOOLKIT_X11_WXUNIV_1="#"
-    if test "x$TOOLKIT" = "xX11" -a "x$WXUNIV" = "x1" ; then
-        COND_TOOLKIT_X11_WXUNIV_1=""
     fi
 
     COND_UNICODE_1="#"
@@ -41469,11 +41503,6 @@ EOF
     COND_WITH_PLUGIN_SDL_1="#"
     if test "x$WITH_PLUGIN_SDL" = "x1" ; then
         COND_WITH_PLUGIN_SDL_1=""
-    fi
-
-    COND_WXUNIV_0="#"
-    if test "x$WXUNIV" = "x0" ; then
-        COND_WXUNIV_0=""
     fi
 
     COND_WXUNIV_1="#"
@@ -43251,6 +43280,7 @@ echo "                                       tiff               ${wxUSE_LIBTIFF-
 if test "$wxUSE_X11" = 1 -o "$wxUSE_MOTIF" = 1; then
 echo "                                       xpm                ${wxUSE_LIBXPM-none}"
 fi
+echo "                                       lzma               ${wxUSE_LIBLZMA}"
 echo "                                       zlib               ${wxUSE_ZLIB}"
 echo "                                       expat              ${wxUSE_EXPAT}"
 echo "                                       libmspack          ${wxUSE_LIBMSPACK}"

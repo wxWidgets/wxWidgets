@@ -49,6 +49,7 @@ BENCH_GUI_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 BENCH_GUI_OBJECTS =  \
 	$(OBJS)\bench_gui_sample_rc.o \
 	$(OBJS)\bench_gui_bench.o \
+	$(OBJS)\bench_gui_display.o \
 	$(OBJS)\bench_gui_image.o
 BENCH_GRAPHICS_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
@@ -316,6 +317,9 @@ $(OBJS)\bench_gui_sample_rc.o: ./../../samples/sample.rc
 	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__NDEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) --include-dir $(SETUPHDIR) --include-dir ./../../include $(__CAIRO_INCLUDEDIR_p) --include-dir . $(__DLLFLAG_p_0) --include-dir ./../../samples --define NOPCH
 
 $(OBJS)\bench_gui_bench.o: ./bench.cpp
+	$(CXX) -c -o $@ $(BENCH_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\bench_gui_display.o: ./display.cpp
 	$(CXX) -c -o $@ $(BENCH_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\bench_gui_image.o: ./image.cpp

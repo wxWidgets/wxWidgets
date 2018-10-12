@@ -115,7 +115,7 @@ void wxDFBDCImpl::DestroyClippingRegion()
 
     m_surface->SetClip(NULL);
 
-    ResetClipping();
+    wxDCImpl::DestroyClippingRegion();
 }
 
 // ---------------------------------------------------------------------------
