@@ -2160,7 +2160,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     //
     // Pre-generate list of visible properties.
-    wxArrayPGProperty visPropArray;
+    wxVector<wxPGProperty*> visPropArray;
     visPropArray.reserve((m_height/m_lineHeight)+6);
 
     for ( ; !it.AtEnd(); it.Next() )
