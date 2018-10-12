@@ -1792,8 +1792,7 @@ public:
     // (i.e. cancel 'true' returned by StringToValue() or IntToValue()).
     void SetWasModified( bool set = true )
     {
-        if ( set ) m_flags |= wxPG_PROP_WAS_MODIFIED;
-        else m_flags &= ~wxPG_PROP_WAS_MODIFIED;
+        ChangeFlag(wxPG_PROP_WAS_MODIFIED, set);
     }
 
     // Returns property's help or description text.
