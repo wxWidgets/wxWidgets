@@ -1454,8 +1454,7 @@ void wxPropertyGridManager::OnPaint( wxPaintEvent& WXUNUSED(event) )
 
 void wxPropertyGridManager::Refresh(bool eraseBackground, const wxRect* rect )
 {
-    m_pPropGrid->Refresh(eraseBackground);
-    wxWindow::Refresh(eraseBackground,rect);
+    wxPanel::Refresh(eraseBackground, rect);
 }
 
 // -----------------------------------------------------------------------
