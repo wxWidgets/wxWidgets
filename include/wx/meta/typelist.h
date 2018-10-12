@@ -26,7 +26,7 @@ template <typename... Ts>
 struct TList 
 {
     using Type = TList;
-    static wxCONSTEXPR size_t Size() /*noexcept*/ { return sizeof...(Ts) }
+    static wxCONSTEXPR size_t Size() /*noexcept*/ { return sizeof...(Ts); }
 };
 
 // ----------------------------------------------------------------------------
@@ -45,7 +45,7 @@ struct Sizeof<TList<>>
 };
 
 template <typename T, typename... Ts>
-struct Sizeof<Tlist<T, Ts...>>
+struct Sizeof<TList<T, Ts...>>
 {
     enum { value = 1 + Sizeof<Ts...>::value };
 };

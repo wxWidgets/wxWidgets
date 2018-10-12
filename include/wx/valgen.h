@@ -356,8 +356,9 @@ class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts
     typedef std::variant<W*, Ws*...> WindowsType;
     typedef std::variant<T, Ts...> CompositeType;
 
-    using WinDataTypes_ = typename wxTypeList::TList<std::pair<W, T>, 
-                                                     std::pair<Ws, Ts>...>::Type;
+    using WinDataTypes_ = 
+        typename wxTypeList::TList<wxTypeList::TList<W, T>, 
+                                   wxTypeList::TList<Ws, Ts>...>::Type;
     using WinDataTypes  = typename wxTypeList::EraseDuplType<WinDataTypes_>::Type;
 
 
@@ -375,8 +376,8 @@ class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts
     {
         return wxVisitor{
                     [](auto*, auto&){ return false; },
-                    CreateLambdaTo<typename Pairs::first_type, 
-                                   typename Pairs::second_type>()...
+                    CreateLambdaTo<typename wxTypeList::FirstType<Pairs>::Type,
+                                   typename wxTypeList::LastType<Pairs>::Type>()...
                 };
     }
 
@@ -394,8 +395,8 @@ class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts
     {
         return wxVisitor{
                     [](auto*, auto&){ return false; },
-                    CreateLambdaFrom<typename Pairs::first_type, 
-                                     typename Pairs::second_type>()...
+                    CreateLambdaFrom<typename wxTypeList::FirstType<Pairs>::Type, 
+                                     typename wxTypeList::LastType<Pairs>::Type>()...
                 };
     }
 
