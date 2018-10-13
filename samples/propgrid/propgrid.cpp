@@ -2658,6 +2658,7 @@ void FormMain::OnTestReplaceClick( wxCommandEvent& WXUNUSED(event) )
 void FormMain::OnClearModifyStatusClick( wxCommandEvent& WXUNUSED(event) )
 {
     m_pPropGridManager->ClearModifiedStatus();
+    m_pPropGridManager->Refresh();
 }
 
 // -----------------------------------------------------------------------
