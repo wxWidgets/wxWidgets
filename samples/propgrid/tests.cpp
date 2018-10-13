@@ -872,6 +872,65 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
     {
         //
+        // Test retrieving main parent of the property
+        RT_START_TEST(GetMainParent)
+        pgman = m_pPropGridManager;
+
+        // Simple properties
+        wxPGProperty* prop = pgman->GetProperty("DateProperty");
+        wxPGProperty* parent = prop->GetMainParent();
+        RT_ASSERT(parent->GetName() == "DateProperty");
+
+        prop = pgman->GetProperty("Label");
+        parent = prop->GetMainParent();
+        RT_ASSERT(parent->GetName() == "Label");
+
+        // Properties with children
+        prop = pgman->GetProperty("Font");
+        RT_ASSERT(prop);
+        parent = prop->GetMainParent();
+        RT_ASSERT(parent);
+        RT_ASSERT(parent->GetName() == "Font");
+
+        prop = pgman->GetProperty("Font.Style");
+        RT_ASSERT(prop);
+        parent = prop->GetMainParent();
+        RT_ASSERT(parent);
+        RT_ASSERT(parent->GetName() == "Font");
+
+        prop = pgman->GetProperty("Car");
+        RT_ASSERT(prop);
+        parent = prop->GetMainParent();
+        RT_ASSERT(parent);
+        RT_ASSERT(parent->GetName() == "Car");
+
+        prop = pgman->GetProperty("Car.Model");
+        RT_ASSERT(prop);
+        parent = prop->GetMainParent();
+        RT_ASSERT(parent);
+        RT_ASSERT(parent->GetName() == "Car");
+
+        prop = pgman->GetProperty("Car.Speeds");
+        RT_ASSERT(prop);
+        parent = prop->GetMainParent();
+        RT_ASSERT(parent);
+        RT_ASSERT(parent->GetName() == "Car");
+
+        prop = pgman->GetProperty("3D Object.Triangle 3.A");
+        RT_ASSERT(prop);
+        parent = prop->GetMainParent();
+        RT_ASSERT(parent);
+        RT_ASSERT(parent->GetName() == "3D Object");
+
+        prop = pgman->GetProperty("3D Object.Triangle 3.A.Z");
+        RT_ASSERT(prop);
+        parent = prop->GetMainParent();
+        RT_ASSERT(parent);
+        RT_ASSERT(parent->GetName() == "3D Object");
+    }
+
+    {
+        //
         // Test label editing
         RT_START_TEST(LABEL_EDITING)
 
