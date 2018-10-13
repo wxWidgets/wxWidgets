@@ -3368,14 +3368,6 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
     // If property's value is being changed, assume it is valid
     OnValidationFailureReset(selected);
 
-    wxPGProperty* topPaintedProperty = changedProperty;
-
-    while ( !topPaintedProperty->IsCategory() &&
-            !topPaintedProperty->IsRoot() )
-    {
-        topPaintedProperty = topPaintedProperty->GetParent();
-    }
-
     changedProperty->SetValue(value, &m_chgInfo_valueList, wxPG_SETVAL_BY_USER);
 
     // NB: Call GetEditorControl() as late as possible, because OnSetValue()
@@ -3393,10 +3385,9 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
         }
     }
 
-    wxPGProperty* pwc;
-
     // Propagate updates to parent(s)
-    pwc = p;
+    wxPGProperty* topPaintedProperty = changedProperty->GetMainParent();
+    wxPGProperty* pwc = p;
     wxPGProperty* prevPwc = NULL;
 
     while ( prevPwc != topPaintedProperty )
