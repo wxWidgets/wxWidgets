@@ -76,7 +76,7 @@ private:
         }
     }
 
-private:
+protected:
     DataType& m_data;
 
     std::tuple<Ws*...> m_ctrls;
@@ -98,7 +98,13 @@ public:
         Bind(wxEVT_TEXT, &wxMonoValidatorPanel::OnText, this);
     }
 
-protected:    
+protected:
+    template <std::size_t I>
+    auto Get() const
+    {
+        return std::get<I>(this->m_ctrls);
+    }
+
     void SetAlternatives(Ws*... ws)
     {
         this->InitAlternatives(this, ws...);
@@ -108,7 +114,13 @@ protected:
     {
         if ( !this->SelectAlternative(event.GetId()) )
             event.Skip();
+        else
+            OnAlternativeSelected(event.GetId());
     }
+
+    // Override this if you want to do something useful
+    // at the time an alternative (control) is being selected.
+    virtual void OnAlternativeSelected(int WXUNUSED(id)){}
 };
 
 

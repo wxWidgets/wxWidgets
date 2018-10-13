@@ -126,6 +126,9 @@ public:
         textName->SetHint("First Last");
         sizer->Add(textName, wxSizerFlags().Expand().CenterVertical());
 
+        // save id
+        m_textNameId = textName->GetId();
+
         sizer->Add(new wxStaticText(this, wxID_ANY, "And your &age:"),
                    wxSizerFlags().Center().Right());
         auto spinAge = new wxSpinCtrl(this, wxID_ANY);
@@ -154,6 +157,17 @@ public:
 
         //
         SetAlternatives(textName, spinAge, combobox, textJob);
+    }
+
+private:
+    virtual void OnAlternativeSelected(int id) wxOVERRIDE
+    {
+        auto textName = this->template Get<0>();
+
+        if (textName->GetId() == id)
+            textName->SetValidator(wxTextValidator(wxFILTER_ALPHANUMERIC));
+        else
+            textName->SetValidator(wxDefaultValidator);
     }
 };
 
