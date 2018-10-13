@@ -1283,12 +1283,13 @@ void wxPropertyGridManager::RepaintDescBoxDecorations( wxDC& dc,
 
 void wxPropertyGridManager::UpdateDescriptionBox( int new_splittery, int new_width, int new_height )
 {
-    int use_hei = new_height;
-    use_hei--;
+    int use_hei = new_height-1;
+    int use_width = new_width-6;
 
     // Fix help control positions.
-    int cap_hei = m_pPropGrid->GetFontHeight();
     int cap_y = new_splittery+m_splitterHeight+5;
+    m_pTxtHelpCaption->SetSize(3, cap_y, use_width, wxDefaultCoord, wxSIZE_AUTO_HEIGHT);
+    int cap_hei = m_pTxtHelpCaption->GetSize().GetHeight();
     int cnt_y = cap_y+cap_hei+3;
     int sub_cap_hei = cap_y+cap_hei-use_hei;
     int cnt_hei = use_hei-cnt_y;
@@ -1304,7 +1305,6 @@ void wxPropertyGridManager::UpdateDescriptionBox( int new_splittery, int new_wid
     }
     else
     {
-        m_pTxtHelpCaption->SetSize(3,cap_y,new_width-6,cap_hei);
         m_pTxtHelpCaption->Wrap(-1);
         m_pTxtHelpCaption->Show( true );
         if ( cnt_hei <= 2 )
@@ -1313,7 +1313,8 @@ void wxPropertyGridManager::UpdateDescriptionBox( int new_splittery, int new_wid
         }
         else
         {
-            m_pTxtHelpContent->SetSize(3,cnt_y,new_width-6,cnt_hei);
+            m_pTxtHelpContent->SetSize(3,cnt_y,use_width,cnt_hei);
+            m_pTxtHelpContent->Wrap(use_width);
             m_pTxtHelpContent->Show( true );
         }
     }
