@@ -26,7 +26,11 @@ template <typename... Ts>
 struct TList 
 {
     using Type = TList;
-    static wxCONSTEXPR size_t Size() /*noexcept*/ { return sizeof...(Ts); }
+
+#if defined(HAVE_CONSTEXPR)
+    // don't define this function altogether if compiler lack constexpr support.
+    static constexpr size_t Size() /*noexcept*/ { return sizeof...(Ts); }
+#endif
 };
 
 // ----------------------------------------------------------------------------
