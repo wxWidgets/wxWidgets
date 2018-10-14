@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/meta/typelist.h
-// Purpose:     definitions for wxTypeList.
+// Purpose:     definitions for wxTypeList types and classes.
 // Author:      Ali Kettab
 // Created:     2018-10-10
 // Copyright:   (c) 2018 Ali Kettab
@@ -10,8 +10,16 @@
 #ifndef _WX_META_TYPELIST_H_
 #define _WX_META_TYPELIST_H_
 
+/*
+    N.B. For now, its enough to just provide definitions for what is actually
+         needed by the library itself. so other typelist classes and types
+         may be added in a future revision ( should the need arise ).
+*/
+
+
+// typelists are more elegantly implemented using parameter packs nowadays.
 #if !defined(HAVE_VARIADIC_TEMPLATES)
-  #error "Variadic templates support required."
+    #error "Variadic templates support required."
 #endif // HAVE_VARIADIC_TEMPLATES
 
 
@@ -19,7 +27,7 @@ namespace wxTypeList
 {
 
 // ----------------------------------------------------------------------------
-// TList definition; defines size similar to  C++ STL containers size
+// TList definition; defines Size similar to  C++ STL containers size
 // ----------------------------------------------------------------------------
 
 template <typename... Ts>
@@ -32,6 +40,8 @@ struct TList
     static constexpr size_t Size() /*noexcept*/ { return sizeof...(Ts); }
 #endif
 };
+
+// Notice that TList<> is the empty list.
 
 // ----------------------------------------------------------------------------
 // Computes the length of a typelist at compile-time
