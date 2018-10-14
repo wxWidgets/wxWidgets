@@ -1903,6 +1903,7 @@ MSW_LOWLEVEL_SRC =
     src/msw/dib.cpp
     src/msw/display.cpp
     src/msw/enhmeta.cpp
+    src/msw/evtloop.cpp
     src/msw/font.cpp
     src/msw/fontenum.cpp
     src/msw/fontutil.cpp
@@ -1952,6 +1953,7 @@ MSW_LOWLEVEL_SRC =
 
 MSW_LOWLEVEL_HDR =
     wx/generic/activityindicator.h
+    wx/msw/evtloop.h
     wx/msw/helpchm.h
     wx/msw/helpwin.h
     wx/msw/htmlhelp.h
@@ -1993,7 +1995,6 @@ MSW_SRC =
     src/msw/dialog.cpp
     src/msw/dirdlg.cpp
     src/msw/dragimag.cpp
-    src/msw/evtloop.cpp
     src/msw/filedlg.cpp
     src/msw/frame.cpp
     src/msw/gauge.cpp
@@ -2075,7 +2076,6 @@ MSW_HDR =
     wx/msw/dirdlg.h
     wx/msw/dragimag.h
     wx/msw/enhmeta.h
-    wx/msw/evtloop.h
     wx/msw/filedlg.h
     wx/msw/font.h
     wx/msw/frame.h
