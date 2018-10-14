@@ -2730,9 +2730,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="UNIV_PLATFORM_SRC" hints="files">
-    <if cond="TOOLKIT=='MSW'">
-        src/msw/evtloop.cpp
-    </if>
 <!--
     Including src/generic/animateg.cpp hre unconditionally results in bakefile
     errors when not fixing the value of TOOLKIT to MSW in msvc format, see #15327.
@@ -2748,9 +2745,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </if>
 </set>
 <set var="UNIV_PLATFORM_HDR" hints="files">
-    <if cond="TOOLKIT=='MSW'">
-        wx/msw/evtloop.h
-    </if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
         wx/generic/animate.h
     </if>
