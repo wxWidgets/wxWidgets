@@ -39,12 +39,12 @@ class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts
     using WinDataTypes  = typename wxTypeList::EraseDuplType<WinDataTypes_>::Type;
 
 
-    template<class W_, typename T_>
+    template<class Y, typename U>
     inline auto CreateLambdaTo()
     {
-        return [](W_* win, T_& value)
+        return [](Y* win, U& value)
                 {
-                    return wxDataTransfer<W_>::template To<T_>(win, &value);
+                    return wxDataTransfer<Y>::template To<U>(win, &value);
                 };
     }
 
@@ -58,12 +58,12 @@ class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts
                 };
     }
 
-    template<class W_, typename T_>
+    template<class Y, typename U>
     inline auto CreateLambdaFrom()
     {
-        return [](W_* win, T_& value)
+        return [](Y* win, U& value)
                 {
-                    return wxDataTransfer<W_>::template From<T_>(win, &value);
+                    return wxDataTransfer<Y>::template From<U>(win, &value);
                 };
     }
 
@@ -77,20 +77,20 @@ class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts
                 };
     }
 
-    template<class W_>
+    template<class Y>
     inline auto CreateLambdaValidate(wxWindow* parent)
     {
-        return [=](W_* win)
+        return [=](Y* win)
                 {
-                    return wxDataTransfer<W_>::DoValidate(win, parent);
+                    return wxDataTransfer<Y>::DoValidate(win, parent);
                 };
     }
 
 
-    template<class... Ws_>
-    inline auto CreateValidateVisitor(wxWindow* parent, wxTypeList::TList<Ws_...>)
+    template<class... Ys>
+    inline auto CreateValidateVisitor(wxWindow* parent, wxTypeList::TList<Ys...>)
     {
-        return wxVisitor{ CreateLambdaValidate<Ws_>(parent)... };
+        return wxVisitor{ CreateLambdaValidate<Ys>(parent)... };
     }
 
 public:

@@ -118,22 +118,22 @@ class wxGenericValidatorCompositType<W, std::variant, T, Ts...>
 {
     typedef std::variant<T, Ts...> CompositeType;
 
-    template<typename T_>
+    template<typename U>
     inline auto CreateLambdaTo()
     {
-        return [&](T_& value)
+        return [&](U& value)
                 {
-                    return wxDataTransfer<W>::template To<T_>
+                    return wxDataTransfer<W>::template To<U>
                             (this->GetWindow(), &value);
                 };
     }
 
-    template<typename T_>
+    template<typename U>
     inline auto CreateLambdaFrom()
     {
-        return [&](T_& value)
+        return [&](U& value)
                 {
-                    return wxDataTransfer<W>::template From<T_>
+                    return wxDataTransfer<W>::template From<U>
                             (this->GetWindow(), &value);
                 };
     }
