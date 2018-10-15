@@ -108,6 +108,89 @@ bool wxDataTransfer<wxComboBox>::DoValidate(wxComboBox* cb, wxWindow* parent)
 
 #if defined(HAVE_STD_VARIANT)
 
+// ----------------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------------
+
+template<class W, typename T, typename... Ts>
+class wxGenericValidatorCompositType<W, std::variant, T, Ts...> 
+    : public wxGenericValidatorBase
+{
+    typedef std::variant<T, Ts...> CompositeType;
+
+    template<typename T_>
+    inline auto CreateLambdaTo()
+    {
+        return [&](T_& value)
+                {
+                    return wxDataTransfer<W>::template To<T_>
+                            (this->GetWindow(), &value);
+                };
+    }
+
+    template<typename T_>
+    inline auto CreateLambdaFrom()
+    {
+        return [&](T_& value)
+                {
+                    return wxDataTransfer<W>::template From<T_>
+                            (this->GetWindow(), &value);
+                };
+    }
+
+public:
+
+    explicit wxGenericValidatorCompositType(CompositeType& data)
+        : wxGenericValidatorBase(std::addressof(data))
+    {
+    }
+
+    wxGenericValidatorCompositType(const wxGenericValidatorCompositType& val)
+        : wxGenericValidatorBase(val)
+    {
+    }
+
+    virtual ~wxGenericValidatorCompositType(){}
+
+    virtual wxObject *Clone() const wxOVERRIDE 
+    {
+        return new wxGenericValidatorCompositType(*this); 
+    }
+
+    virtual void SetWindow(wxWindow *win) wxOVERRIDE
+    {
+        this->m_validatorWindow = win; 
+
+        wxASSERT_MSG((wxTypeId(*win) == wxTypeId(W)), "Invalid window type!");
+    }
+
+    virtual bool Validate(wxWindow* parent) wxOVERRIDE
+    {
+        return wxDataTransfer<W>::DoValidate(
+            static_cast<W*>(this->GetWindow()), parent);
+    }
+
+    virtual bool TransferToWindow() wxOVERRIDE
+    {
+        CompositeType& data = *static_cast<CompositeType*>(this->m_data);
+
+        return std::visit(
+            wxVisitor{CreateLambdaTo<T>(), CreateLambdaFrom<Ts>()...}, data);
+    }
+
+    virtual bool TransferFromWindow() wxOVERRIDE
+    {
+        CompositeType& data = *static_cast<CompositeType*>(this->m_data);
+
+        return std::visit(
+            wxVisitor{CreateLambdaFrom<T>(), CreateLambdaFrom<Ts>()...}, data);
+    }
+};
+
+// ----------------------------------------------------------------------------
+//
+// ----------------------------------------------------------------------------
+
 class MyPanel 
     : public wxMonoValidatorPanel<MyData::VariantType2, 
                                   wxTextCtrl, wxSpinCtrl, wxComboBox, wxTextCtrl>
@@ -125,9 +208,6 @@ public:
         auto textName = new wxTextCtrl(this, wxID_ANY);
         textName->SetHint("First Last");
         sizer->Add(textName, wxSizerFlags().Expand().CenterVertical());
-
-        // save id
-        m_textNameId = textName->GetId();
 
         sizer->Add(new wxStaticText(this, wxID_ANY, "And your &age:"),
                    wxSizerFlags().Center().Right());
