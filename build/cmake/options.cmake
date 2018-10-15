@@ -146,6 +146,7 @@ wx_option(wxUSE_TEXTBUFFER "use wxTextBuffer class")
 wx_option(wxUSE_TEXTFILE "use wxTextFile class")
 wx_option(wxUSE_TIMER "use wxTimer class")
 wx_option(wxUSE_VARIANT "use wxVariant class")
+wx_option(wxUSE_WEBREQUEST "use wxWebRequest class")
 wx_option(wxUSE_ZIPSTREAM "use wxZip streams")
 
 # URL-related classes

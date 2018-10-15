@@ -80,7 +80,7 @@ endif
 
 ### Targets: ###
 
-all: access animate archive artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing $(__propgrid___depname) regtest render $(__ribbon___depname) $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar $(__stc___depname) svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll $(__webview___depname) widgets wizard wrapsizer $(__xrc___depname)
+all: access animate archive artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing $(__propgrid___depname) regtest render $(__ribbon___depname) $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar $(__stc___depname) svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll $(__webview___depname) webrequest widgets wizard wrapsizer $(__xrc___depname)
 
 clean: 
 	-if exist .\*.o del .\*.o
@@ -162,6 +162,7 @@ clean:
 	$(MAKE) -C validate -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C vscroll -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C webview -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C webrequest -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C widgets -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C wizard -f makefile.gcc $(MAKEARGS) clean
 	$(MAKE) -C wrapsizer -f makefile.gcc $(MAKEARGS) clean
@@ -425,6 +426,9 @@ webview:
 	$(MAKE) -C webview -f makefile.gcc $(MAKEARGS) all
 endif
 
+webrequest: 
+	$(MAKE) -C webrequest -f makefile.gcc $(MAKEARGS) all
+
 widgets: 
 	$(MAKE) -C widgets -f makefile.gcc $(MAKEARGS) all
 
@@ -451,7 +455,8 @@ memcheck:
 	notebook oleauto opengl ownerdrw popup power preferences printing propgrid \
 	regtest render ribbon richtext sashtest scroll secretstore shaped sockets sound \
 	splash splitter statbar stc svg taborder taskbar text thread toolbar treectrl \
-	typetest uiaction validate vscroll webview widgets wizard wrapsizer xrc memcheck
+	typetest uiaction validate vscroll webview webrequest widgets wizard wrapsizer \
+	xrc memcheck
 
 
 SHELL := $(COMSPEC)

@@ -83,7 +83,7 @@ __xrc___depname = xrc
 
 ### Targets: ###
 
-all: access animate archive artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing $(__propgrid___depname) regtest render $(__ribbon___depname) $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar $(__stc___depname) svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll $(__webview___depname) widgets wizard wrapsizer $(__xrc___depname)
+all: access animate archive artprov $(__aui___depname) calendar caret clipboard collpane combo config console dataview dialogs dialup display dll dnd docview dragimag drawing erase event $(__except___depname) exec font grid $(__help___depname) $(__htlbox___depname) $(__html___depname) image internat ipc joytest keyboard layout listctrl mdi $(__mediaplayer___depname) menu minimal nativdlg notebook oleauto opengl ownerdrw popup power preferences printing $(__propgrid___depname) regtest render $(__ribbon___depname) $(__richtext___depname) sashtest scroll secretstore shaped sockets sound $(__splash___depname) splitter statbar $(__stc___depname) svg taborder taskbar text thread toolbar treectrl typetest uiaction validate vscroll $(__webview___depname) webrequest widgets wizard wrapsizer $(__xrc___depname)
 
 clean: 
 	-if exist .\*.obj del .\*.obj
@@ -397,6 +397,10 @@ clean:
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>webview.bat
 	call webview.bat
 	@del webview.bat
+	@echo cd webrequest >webrequest.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>webrequest.bat
+	call webrequest.bat
+	@del webrequest.bat
 	@echo cd widgets >widgets.bat
 	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) clean >>widgets.bat
 	call widgets.bat
@@ -903,6 +907,12 @@ webview:
 	call webview.bat
 	@del webview.bat
 !endif
+
+webrequest: 
+	@echo cd webrequest >webrequest.bat
+	@echo $(MAKE) -f makefile.bcc $(MAKEARGS) all >>webrequest.bat
+	call webrequest.bat
+	@del webrequest.bat
 
 widgets: 
 	@echo cd widgets >widgets.bat

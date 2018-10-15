@@ -156,6 +156,7 @@ wx_add_sample(webview LIBRARIES webview NAME webviewsample DEPENDS wxUSE_WEBVIEW
 if(TARGET webviewsample AND wxUSE_STC)
     wx_exe_link_libraries(webviewsample stc)
 endif()
+wx_add_sample(webrequest LIBRARIES net DEPENDS wxUSE_WEBREQUEST)
 # widgets Sample
 set(SAMPLE_WIDGETS_SRC
     activityindicator.cpp
