@@ -46,14 +46,16 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id,
 {     
     QtCreate(parent);
     SetLabel( wxIsStockID( id ) ? wxGetStockLabel( id ) : label );
+    
     if( style & wxBU_LEFT )
         m_qtPushButton->setStyleSheet( "Text-align:left" );
     else if( style & wxBU_RIGHT )
-         m_qtPushButton->setStyleSheet( "Text-align:right" );
+        m_qtPushButton->setStyleSheet( "Text-align:right" );
     else if( style & wxBU_TOP )
-         m_qtPushButton->setStyleSheet( "Text-align:top" );
+        m_qtPushButton->setStyleSheet( "Text-align:top" );
     else if( style & wxBU_BOTTOM )
-         m_qtPushButton->setStyleSheet( "Text-align:bottom" );
+        m_qtPushButton->setStyleSheet( "Text-align:bottom" );
+    
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
