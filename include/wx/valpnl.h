@@ -49,7 +49,7 @@ class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts
     }
 
     template<typename... Pairs>
-    inline auto CreateLambdaToVistitor(wxTypeList::TList<Pairs...>)
+    inline auto CreateLambdaToVisitor(wxTypeList::TList<Pairs...>)
     {
         return wxVisitor{
                     [](auto*, auto&){ return false; },
@@ -68,7 +68,7 @@ class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts
     }
 
     template<typename... Pairs>
-    inline auto CreateLambdaFromVistitor(wxTypeList::TList<Pairs...>)
+    inline auto CreateLambdaFromVisitor(wxTypeList::TList<Pairs...>)
     {
         return wxVisitor{
                     [](auto*, auto&){ return false; },
@@ -134,14 +134,14 @@ public:
     {
         CompositeType& data = *static_cast<CompositeType*>(this->m_data);
 
-        return std::visit(CreateLambdaToVistitor(WinDataTypes{}), m_wins, data);
+        return std::visit(CreateLambdaToVisitor(WinDataTypes{}), m_wins, data);
     }
 
     virtual bool TransferFromWindow() wxOVERRIDE
     {
         CompositeType& data = *static_cast<CompositeType*>(this->m_data);
 
-        return std::visit(CreateLambdaFromVistitor(WinDataTypes{}), m_wins, data);
+        return std::visit(CreateLambdaFromVisitor(WinDataTypes{}), m_wins, data);
     }
 
 private:
