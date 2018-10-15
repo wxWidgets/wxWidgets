@@ -35,7 +35,7 @@
 #include "wx/dcgraph.h"
 #ifndef __WXGTK3__
     #include "wx/gtk/dc.h"
-    #if wxUSE_GRAPHICS_CONTEXT
+    #if wxUSE_GRAPHICS_CONTEXT && defined(GDK_WINDOWING_X11)
         #include <gdk/gdkx.h>
         #include <cairo-xlib.h>
     #endif
@@ -174,7 +174,7 @@ static GdkWindow* wxGetGTKDrawable(wxDC& dc)
 {
     GdkWindow* gdk_window = NULL;
 
-#if wxUSE_GRAPHICS_CONTEXT
+#if wxUSE_GRAPHICS_CONTEXT && defined(GDK_WINDOWING_X11)
     cairo_t* cr = NULL;
     wxGraphicsContext* gc = dc.GetGraphicsContext();
     if (gc)
