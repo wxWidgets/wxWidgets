@@ -1884,7 +1884,6 @@ X11_LOWLEVEL_HDR =
 
 MSW_LOWLEVEL_SRC =
     src/common/taskbarcmn.cpp
-    src/generic/activityindicator.cpp
     src/msw/aboutdlg.cpp
     src/msw/app.cpp
     src/msw/bitmap.cpp
@@ -1952,7 +1951,6 @@ MSW_LOWLEVEL_SRC =
     src/msw/window.cpp
 
 MSW_LOWLEVEL_HDR =
-    wx/generic/activityindicator.h
     wx/msw/evtloop.h
     wx/msw/helpchm.h
     wx/msw/helpwin.h
@@ -1966,6 +1964,7 @@ MSW_LOWLEVEL_HDR =
     wx/msw/uxtheme.h
 
 MSW_SRC =
+    src/generic/activityindicator.cpp
     src/generic/animateg.cpp
     src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
@@ -2036,6 +2035,7 @@ MSW_SRC =
     src/msw/treectrl.cpp
 
 MSW_HDR =
+    wx/generic/activityindicator.h
     wx/generic/animate.h
     wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
