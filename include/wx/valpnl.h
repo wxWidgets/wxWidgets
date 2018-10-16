@@ -33,11 +33,18 @@ class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts
     typedef std::variant<W*, Ws*...> WindowsType;
     typedef std::variant<T, Ts...> CompositeType;
 
+    // To make sure that each wxVisitor will be instantiated with a list of
+    // unique types only, we extract a list of unique pairs {Y, U} from the
+    // parallel lists {W, Ws...} and {T, Ts...} and create our wxVisitors
+    // based on that list.
+
     using WinDataTypes_ = 
         typename wxTypeList::TList<wxTypeList::TList<W, T>, 
                                    wxTypeList::TList<Ws, Ts>...>::Type;
     using WinDataTypes  = typename wxTypeList::EraseDuplType<WinDataTypes_>::Type;
 
+    // N.B. The CreateVisitorXXX() below have WXUNUSED(tag) as parameter just
+    //      to help the compiler deduce the template parameter types.
 
     template<class Y, typename U>
     inline auto CreateLambdaTo()
@@ -49,7 +56,7 @@ class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts
     }
 
     template<typename... Pairs>
-    inline auto CreateLambdaToVisitor(wxTypeList::TList<Pairs...>)
+    inline auto CreateVisitorTo(wxTypeList::TList<Pairs...> WXUNUSED(tag))
     {
         return wxVisitor{
                     [](auto*, auto&){ return false; },
@@ -68,7 +75,7 @@ class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts
     }
 
     template<typename... Pairs>
-    inline auto CreateLambdaFromVisitor(wxTypeList::TList<Pairs...>)
+    inline auto CreateVisitorFrom(wxTypeList::TList<Pairs...> WXUNUSED(tag))
     {
         return wxVisitor{
                     [](auto*, auto&){ return false; },
@@ -88,7 +95,8 @@ class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts
 
 
     template<class... Ys>
-    inline auto CreateValidateVisitor(wxWindow* parent, wxTypeList::TList<Ys...>)
+    inline auto CreateVisitorValidate(wxWindow* parent,
+                                      wxTypeList::TList<Ys...> WXUNUSED(tag))
     {
         return wxVisitor{ CreateLambdaValidate<Ys>(parent)... };
     }
@@ -127,21 +135,21 @@ public:
         using WinTypes_ = typename wxTypeList::TList<W, Ws...>::Type;
         using WinTypes  = typename wxTypeList::EraseDuplType<WinTypes_>::Type;
 
-        return std::visit(CreateValidateVisitor(parent, WinTypes{}), m_wins);
+        return std::visit(CreateVisitorValidate(parent, WinTypes{}), m_wins);
     }
 
     virtual bool TransferToWindow() wxOVERRIDE
     {
         CompositeType& data = *static_cast<CompositeType*>(this->m_data);
 
-        return std::visit(CreateLambdaToVisitor(WinDataTypes{}), m_wins, data);
+        return std::visit(CreateVisitorTo(WinDataTypes{}), m_wins, data);
     }
 
     virtual bool TransferFromWindow() wxOVERRIDE
     {
         CompositeType& data = *static_cast<CompositeType*>(this->m_data);
 
-        return std::visit(CreateLambdaFromVisitor(WinDataTypes{}), m_wins, data);
+        return std::visit(CreateVisitorFrom(WinDataTypes{}), m_wins, data);
     }
 
 private:
