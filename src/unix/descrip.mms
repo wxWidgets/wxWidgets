@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 11 October 2018                                                     *
+# Date : 16 October 2018                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -105,7 +105,7 @@ all : $(SOURCES)
 .ifdef __WXX11__
 	library [--.lib]libwx_x11_univ.olb $(OBJECTS)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS2)
-	library [--.lib]libwx_x11.olb $(OBJECTS2)
+	library [--.lib]libwx_x11_univ.olb $(OBJECTS2)
 .endif
 .endif
 .endif
