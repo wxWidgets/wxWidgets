@@ -23,7 +23,7 @@
 #include "wx/msw/private.h"
 #include "wx/renderer.h"
 
-#if wxUSE_AUI
+#if wxUSE_AUI && !defined(__WXUNIVERSAL__)
 
 wxAuiMSWTabArt::wxAuiMSWTabArt()
 {

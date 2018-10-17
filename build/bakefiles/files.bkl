@@ -2073,8 +2073,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/sound.cpp
     src/msw/ole/automtn.cpp
     src/msw/rt/notifmsgrt.cpp
-    src/generic/activityindicator.cpp
     src/msw/ole/uuid.cpp
+    src/msw/evtloop.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
     wx/msw/nonownedwnd.h
@@ -2082,12 +2082,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/popupwin.h
     wx/msw/uxtheme.h
     wx/msw/htmlhelp.h
-    wx/generic/activityindicator.h
     wx/msw/helpwin.h
     wx/msw/taskbar.h
     wx/msw/helpchm.h
     wx/msw/sound.h
     wx/msw/joystick.h
+    wx/msw/evtloop.h
 </set>
 
 <set var="MSW_SRC" hints="files">
@@ -2112,7 +2112,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/dialog.cpp
     src/msw/dirdlg.cpp
     src/msw/dragimag.cpp
-    src/msw/evtloop.cpp
     src/msw/filedlg.cpp
     src/msw/frame.cpp
     src/msw/gauge.cpp
@@ -2160,6 +2159,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/datetimectrl.cpp
     src/msw/timectrl.cpp
     src/msw/datecontrols.cpp
+    src/generic/activityindicator.cpp
 </set>
 <set var="MSW_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -2196,7 +2196,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/dirdlg.h
     wx/msw/dragimag.h
     wx/msw/enhmeta.h
-    wx/msw/evtloop.h
     wx/msw/filedlg.h
     wx/msw/font.h
     wx/msw/frame.h
@@ -2267,6 +2266,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/timectrl.h
     wx/msw/datectrl.h
     wx/msw/calctrl.h
+    wx/generic/activityindicator.h
 </set>
 <set var="MSW_RSC" hints="files">
     <!-- Resources must be installed together with headers: -->
@@ -2730,9 +2730,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="UNIV_PLATFORM_SRC" hints="files">
-    <if cond="TOOLKIT=='MSW'">
-        src/msw/evtloop.cpp
-    </if>
 <!--
     Including src/generic/animateg.cpp hre unconditionally results in bakefile
     errors when not fixing the value of TOOLKIT to MSW in msvc format, see #15327.
@@ -2748,9 +2745,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </if>
 </set>
 <set var="UNIV_PLATFORM_HDR" hints="files">
-    <if cond="TOOLKIT=='MSW'">
-        wx/msw/evtloop.h
-    </if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
         wx/generic/animate.h
     </if>
