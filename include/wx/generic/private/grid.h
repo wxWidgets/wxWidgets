@@ -142,20 +142,27 @@ private:
 class wxGridHeaderCtrl : public wxHeaderCtrl
 {
 public:
-    wxGridHeaderCtrl(wxGrid *owner)
+    wxGridHeaderCtrl(wxGrid *owner, bool isFrozen = false)
         : wxHeaderCtrl(owner,
                        wxID_ANY,
                        wxDefaultPosition,
                        wxDefaultSize,
                        wxHD_ALLOW_HIDE |
-                       (owner->CanDragColMove() ? wxHD_ALLOW_REORDER : 0))
+                       (owner->CanDragColMove() ? wxHD_ALLOW_REORDER : 0)),
+          m_isFrozen(isFrozen)
     {
+    }
+    
+    virtual ~wxGridHeaderCtrl()
+    {
+        if ( !m_isFrozen )
+            ms_columns.clear();
     }
 
 protected:
     virtual const wxHeaderColumn& GetColumn(unsigned int idx) const wxOVERRIDE
     {
-        return m_columns[idx];
+        return ms_columns[idx];
     }
 
 private:
@@ -173,23 +180,54 @@ private:
     // override the base class method to update our m_columns array
     virtual void OnColumnCountChanging(unsigned int count) wxOVERRIDE
     {
-        const unsigned countOld = m_columns.size();
+        if ( m_isFrozen )
+            return;
+        
+        const unsigned countOld = ms_columns.size();
+        const unsigned offset = GetOwner()->GetNumberFrozenCols();
+        count += offset;
         if ( count < countOld )
         {
             // just discard the columns which don't exist any more (notice that
             // we can't use resize() here as it would require the vector
             // value_type, i.e. wxGridHeaderColumn to be default constructible,
             // which it is not)
-            m_columns.erase(m_columns.begin() + count, m_columns.end());
+            ms_columns.erase(ms_columns.begin() + count, ms_columns.end());
         }
         else // new columns added
         {
             // add columns for the new elements
             for ( unsigned n = countOld; n < count; n++ )
-                m_columns.push_back(wxGridHeaderColumn(GetOwner(), n));
+                ms_columns.push_back(wxGridHeaderColumn(GetOwner(), n));
         }
     }
-
+  
+    virtual void SetColumnsOrder(const wxArrayInt& order) wxOVERRIDE
+    {
+        wxASSERT_MSG( order.size() <= ms_columns.size(), "wrong number of columns" );
+        
+        DoSetColumnsOrder(order);
+    }
+    
+    virtual void ResetColumnsOrder() wxOVERRIDE
+    {
+        const unsigned offset = m_isFrozen ? 0 : GetOwner()->GetNumberFrozenCols();
+        const unsigned count = GetColumnCount();
+        
+        wxArrayInt order(count);
+        for ( unsigned n = 0; n < count; n++ )
+            order[n] = n + offset;
+     
+        DoSetColumnsOrder(order);
+    }
+    
+    virtual void UpdateColumn(unsigned int idx) wxOVERRIDE
+    {
+        wxCHECK_RET( idx < ms_columns.size(), "invalid column index" );
+        
+        DoUpdate(idx);
+    }
+    
     // override to implement column auto sizing
     virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle) wxOVERRIDE
     {
@@ -283,8 +321,9 @@ private:
         GetOwner()->DoEndMoveCol(event.GetNewOrder());
     }
 
-    wxVector<wxGridHeaderColumn> m_columns;
-
+    static wxVector<wxGridHeaderColumn> ms_columns;
+    bool m_isFrozen;
+    
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxGridHeaderCtrl);
 };
@@ -322,13 +361,17 @@ protected:
 class WXDLLIMPEXP_ADV wxGridRowLabelWindow : public wxGridSubwindow
 {
 public:
-    wxGridRowLabelWindow(wxGrid *parent)
-      : wxGridSubwindow(parent)
+    wxGridRowLabelWindow(wxGrid *parent, bool isFrozen = false)
+      : wxGridSubwindow(parent),
+        m_isFrozen(isFrozen)
     {
     }
 
+    bool IsFrozen() const { return m_isFrozen; }
 
 private:
+    bool m_isFrozen;
+    
     void OnPaint( wxPaintEvent& event );
     void OnMouseEvent( wxMouseEvent& event );
     void OnMouseWheel( wxMouseEvent& event );
@@ -341,13 +384,17 @@ private:
 class WXDLLIMPEXP_ADV wxGridColLabelWindow : public wxGridSubwindow
 {
 public:
-    wxGridColLabelWindow(wxGrid *parent)
-        : wxGridSubwindow(parent)
+    wxGridColLabelWindow(wxGrid *parent, bool isFrozen = false)
+        : wxGridSubwindow(parent),
+          m_isFrozen(isFrozen)
     {
     }
 
+    bool IsFrozen() const { return m_isFrozen; }
 
 private:
+    bool m_isFrozen;
+    
     void OnPaint( wxPaintEvent& event );
     void OnMouseEvent( wxMouseEvent& event );
     void OnMouseWheel( wxMouseEvent& event );

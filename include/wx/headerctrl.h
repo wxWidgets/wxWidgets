@@ -87,7 +87,7 @@ public:
     bool IsEmpty() const { return DoGetCount() == 0; }
 
     // update the column with the given index
-    void UpdateColumn(unsigned int idx)
+    virtual void UpdateColumn(unsigned int idx)
     {
         wxCHECK_RET( idx < GetColumnCount(), "invalid column index" );
 
@@ -101,7 +101,7 @@ public:
     // set the columns order: the array defines the column index which appears
     // the given position, it must have GetColumnCount() elements and contain
     // all indices exactly once
-    void SetColumnsOrder(const wxArrayInt& order);
+    virtual void SetColumnsOrder(const wxArrayInt& order);
     wxArrayInt GetColumnsOrder() const;
 
     // get the index of the column at the given display position
@@ -111,7 +111,7 @@ public:
     unsigned int GetColumnPos(unsigned int idx) const;
 
     // reset the columns order to the natural one
-    void ResetColumnsOrder();
+    virtual void ResetColumnsOrder();
 
     // helper function used by the generic version of this control and also
     // wxGrid: reshuffles the array of column indices indexed by positions

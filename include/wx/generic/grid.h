@@ -1018,9 +1018,10 @@ public:
 
     // ------ display update functions
     //
-    wxArrayInt CalcRowLabelsExposed( const wxRegion& reg ) const;
-
-    wxArrayInt CalcColLabelsExposed( const wxRegion& reg ) const;
+    wxArrayInt CalcRowLabelsExposed( const wxRegion& reg,
+                                     wxGridWindow *gridWindow) const;
+    wxArrayInt CalcColLabelsExposed( const wxRegion& reg,
+                                     wxGridWindow *gridWindow ) const;
     wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg,
                                             wxGridWindow *gridWindow) const;
 
@@ -1059,6 +1060,7 @@ public:
                              pos, numCols, updateLabels);
     }
 
+    bool FreezeToSelection();
     bool FreezeTo(unsigned row, unsigned col);
     
     void DrawGridCellArea( wxDC& dc , const wxGridCellCoordsArray& cells );
@@ -1068,6 +1070,8 @@ public:
     void DrawAllGridWindowLines( wxDC& dc, const wxRegion & reg , wxGridWindow *gridWindow);
     void DrawCell( wxDC& dc, const wxGridCellCoords& );
     void DrawHighlight(wxDC& dc, const wxGridCellCoordsArray& cells);
+    void DrawFrozenBorder( wxDC& dc, wxGridWindow *gridWindow );
+    void DrawLabelFrozenBorder( wxDC& dc, wxWindow *window, bool isRow );
 
     void ScrollWindow( int dx, int dy, const wxRect *rect ) wxOVERRIDE;
     
@@ -1274,7 +1278,9 @@ public:
     wxColour GetCellHighlightColour() const { return m_cellHighlightColour; }
     int      GetCellHighlightPenWidth() const { return m_cellHighlightPenWidth; }
     int      GetCellHighlightROPenWidth() const { return m_cellHighlightROPenWidth; }
-
+    wxColor  GetGridFrozenBorderColour() const { return m_gridFrozenBorderColour; }
+    int      GetGridFrozenBorderPenWidth() const { return m_gridFrozenBorderPenWidth; }
+    
     // this one will use wxHeaderCtrl for the column labels
     void UseNativeColHeader(bool native = true);
 
@@ -1298,9 +1304,10 @@ public:
     void     SetColLabelValue( int col, const wxString& );
     void     SetCornerLabelValue( const wxString& );
     void     SetCellHighlightColour( const wxColour& );
-    void     SetCellHighlightPenWidth(int width);
-    void     SetCellHighlightROPenWidth(int width);
-
+    void     SetCellHighlightPenWidth( int width );
+    void     SetCellHighlightROPenWidth( int width );
+    void     SetGridFrozenBorderColour( const wxColour& );
+    void     SetGridFrozenBorderPenWidth( int width );
 
     // interactive grid mouse operations control
     // -----------------------------------------
@@ -1327,7 +1334,7 @@ public:
         { return m_canDragColSize && DoCanResizeLine(col, m_setFixedCols); }
 
     // interactive column reordering (disabled by default)
-    void     EnableDragColMove( bool enable = true );
+    bool     EnableDragColMove( bool enable = true );
     void     DisableDragColMove() { EnableDragColMove( false ); }
     bool     CanDragColMove() const { return m_canDragColMove; }
 
@@ -1707,7 +1714,16 @@ public:
         // even at the cost of using reinterpret_cast<>
         return reinterpret_cast<wxHeaderCtrl *>(m_colLabelWin);
     }
-
+    wxHeaderCtrl *GetGridFrozenColHeader() const
+    {
+        wxASSERT_MSG( m_useNativeHeader, "no frozen column header window" );
+        
+        // static_cast<> doesn't work without the full class declaration in
+        // view and we prefer to avoid adding more compile-time dependencies
+        // even at the cost of using reinterpret_cast<>
+        return reinterpret_cast<wxHeaderCtrl *>(m_colFrozenLabelWin);
+    }
+    
     // Allow adjustment of scroll increment. The default is (15, 15).
     void SetScrollLineX(int x) { m_xScrollPixelsPerLine = x; }
     void SetScrollLineY(int y) { m_yScrollPixelsPerLine = y; }
@@ -2044,7 +2060,8 @@ protected:
     wxColour   m_cellHighlightColour;
     int        m_cellHighlightPenWidth;
     int        m_cellHighlightROPenWidth;
-
+    wxColour   m_gridFrozenBorderColour;
+    int        m_gridFrozenBorderPenWidth;
 
     // common part of AutoSizeColumn/Row() and GetBestSize()
     int SetOrCalcColumnSizes(bool calcOnly, bool setAsMin = true);
@@ -2334,14 +2351,17 @@ private:
     // process movement (but not dragging) event in the grid cell area
     void DoGridMouseMoveEvent(wxMouseEvent& event,
                               const wxGridCellCoords& coords,
-                              const wxPoint& pos);
+                              const wxPoint& pos,
+                              wxGridWindow* gridWindow);
 
     // process mouse events in the grid window
-    void ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow *gridWindow);
+    void ProcessGridCellMouseEvent(wxMouseEvent& event, wxGridWindow* gridWindow);
 
     // process mouse events in the row/column labels/corner windows
-    void ProcessRowLabelMouseEvent(wxMouseEvent& event);
-    void ProcessColLabelMouseEvent(wxMouseEvent& event);
+    void ProcessRowLabelMouseEvent(wxMouseEvent& event,
+                                   wxGridRowLabelWindow* rowLabelWin);
+    void ProcessColLabelMouseEvent(wxMouseEvent& event,
+                                   wxGridColLabelWindow* colLabelWin);
     void ProcessCornerLabelMouseEvent(wxMouseEvent& event);
 
     void DoColHeaderClick(int col);
@@ -2422,6 +2442,8 @@ private:
     void DoSetRowSize( int row, int height );
     void DoSetColSize( int col, int width );
 
+    void SetNativeHeaderColCount();
+    void SetNativeHeaderColOrder();
 
     // these sets contain the indices of fixed, i.e. non-resizable
     // interactively, grid rows or columns and are NULL if there are no fixed

@@ -148,7 +148,7 @@ wxSize wxHeaderCtrl::DoGetBestSize() const
 int wxHeaderCtrl::GetColStart(unsigned int idx) const
 {
     int pos = m_scrollOffset;
-    for ( unsigned n = 0; ; n++ )
+    for ( unsigned n = 0; n < m_numColumns; n++ )
     {
         const unsigned i = m_colIndices[n];
         if ( i == idx )

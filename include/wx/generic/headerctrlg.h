@@ -49,17 +49,17 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual void DoSetColumnsOrder(const wxArrayInt& order) wxOVERRIDE;
+    virtual void DoUpdate(unsigned int idx) wxOVERRIDE;
 
 
 private:
     // implement base class pure virtuals
     virtual void DoSetCount(unsigned int count) wxOVERRIDE;
     virtual unsigned int DoGetCount() const wxOVERRIDE;
-    virtual void DoUpdate(unsigned int idx) wxOVERRIDE;
 
     virtual void DoScrollHorz(int dx) wxOVERRIDE;
 
-    virtual void DoSetColumnsOrder(const wxArrayInt& order) wxOVERRIDE;
     virtual wxArrayInt DoGetColumnsOrder() const wxOVERRIDE;
 
     // common part of all ctors

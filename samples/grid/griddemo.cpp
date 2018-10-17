@@ -691,6 +691,9 @@ void GridFrame::ToggleColMoving( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->EnableDragColMove(
         GetMenuBar()->IsChecked( ID_TOGGLECOLMOVING ) );
+    
+    GetMenuBar()->Enable( ID_FREEZE,
+                         !GetMenuBar()->IsChecked( ID_TOGGLECOLMOVING ) );
 }
 
 void GridFrame::ToggleGridSizing( wxCommandEvent& WXUNUSED(ev) )
@@ -1204,12 +1207,16 @@ void GridFrame::SelectRowsOrCols( wxCommandEvent& WXUNUSED(ev) )
 
 void GridFrame::Freeze( wxCommandEvent& WXUNUSED(ev))
 {
-    grid->FreezeTo(grid->GetGridCursorRow(), grid->GetGridCursorCol());
+    bool ret = grid->FreezeToSelection();
+    
+    GetMenuBar()->Enable( ID_TOGGLECOLMOVING, !ret );
 }
 
 void GridFrame::Unfreeze( wxCommandEvent& WXUNUSED(ev))
 {
     grid->FreezeTo(0, 0);
+    
+    GetMenuBar()->Enable( ID_TOGGLECOLMOVING, true );
 }
 
 void GridFrame::SetCellFgColour( wxCommandEvent& WXUNUSED(ev) )
