@@ -17,7 +17,7 @@
     when possible.
 
     Instances of wxWebRequest are created by using
-    wxWebRequestSession::CreateRequest().
+    wxWebSession::CreateRequest().
 
     The requests are handled asynchronously and event handlers are used to
     communicate the request status.
@@ -27,7 +27,7 @@
     @code
         // Create the request object
         wxObjectDataPtr<wxWebRequest> request(
-            wxWebRequestSession::GetDefault()->CreateRequest("https://www.wxwidgets.org/downloads/logos/blocks.png"));
+            wxWebSession::GetDefault().CreateRequest("https://www.wxwidgets.org/downloads/logos/blocks.png"));
 
         // Bind events
         request->Bind(wxEVT_WEBREQUEST_READY, [](wxWebRequestEvent& evt) {
@@ -100,22 +100,20 @@
     @library{wxnet}
     @category{net}
 
-    @see wxWebRequestResponse, wxWebRequestSession
+    @see wxWebResponse, wxWebSession
 */
 class wxWebRequest: public wxEvtHandler, public wxRefCounter
 {
 public:
     /**
-        Adds a request header send by this request.
+        Sets a request header send by this request.
 
         @param name Name of the header
         @param value String value of the header
     */
-    void AddHeader(const wxString& name, const wxString& value);
+    void SetHeader(const wxString& name, const wxString& value);
 
     /**
-        Set HTTP method.
-
         Set <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html">common</a>
         or expanded HTTP method.
 
@@ -133,37 +131,37 @@ public:
         After a successful call to this method, the request will use HTTP @c
         POST instead of the default @c GET when it's executed.
 
-        @param data
-            The data to post.
+        @param text
+            The text data to post.
         @param contentType
             The value of HTTP "Content-Type" header, e.g. "text/html;
             charset=UTF-8".
     */
-    void SetData(const wxString& data, const wxString& contentType);
+    void SetData(const wxString& text, const wxString& contentType);
 
     /**
         Set the binary data to be posted to the server.
 
-        The next request will
-        be an HTTP @c POST instead of the default HTTP @c GET and the given @a
-        data will be posted as the body of this request.
+        The next request will be a HTTP @c POST instead of the default HTTP
+        @c GET and the given @a dataStream will be posted as the body of
+        this request.
 
         @param dataStream
             The data in this stream will be posted as the request body
         @param contentType
-            The value of HTTP "Content-Type" header, e.g. "text/html;
-            charset=UTF-8".
+            The value of HTTP "Content-Type" header, e.g.
+            "application/octet-stream".
     */
     void SetData(const wxInputStream& dataStream, const wxString& contentType);
 
     /**
         Instructs the request to ignore server error status codes.
 
-        Per default, server side errors (status code 500-599) will send
+        Per default, server side errors (status code 400-599) will send
         a wxEVT_WEBREQUEST_FAILED event just like network errors, but
         if the response is still required in this cases (e.g. to get more
         details from the response body), set this option to ignore all errors.
-        If ignored wxWebRequestResponse::GetStatus() has to be checked
+        If ignored, wxWebResponse::GetStatus() has to be checked
         from the wxEVT_WEBREQUEST_READY event handler.
     */
     void SetIgnoreServerErrorStatus(bool ignore);
@@ -183,13 +181,16 @@ public:
     void Cancel();
 
     /**
-        Return a response object after a successful request.
+        Returns a response object after a successful request.
+
+        Before sending a request or after a failed request this will return
+        @c NULL.
     */
-    const wxWebRequestResponse* GetResponse() const;
+    const wxWebResponse* GetResponse() const;
 };
 
 /**
-    A wxWebRequestResponse allows access to the response sent by the server.
+    A wxWebResponse allows access to the response sent by the server.
 
     @since 3.1.2
 
@@ -198,7 +199,7 @@ public:
 
     @see wxWebRequest
 */
-class wxWebRequestResponse
+class wxWebResponse
 {
 public:
     /**
@@ -242,12 +243,12 @@ public:
 };
 
 /**
-    @class wxWebRequestSession
+    @class wxWebSession
 
     This class handles session-wide parameters and data used by wxWebRequest
     instances.
 
-    Usually the default session available via wxWebRequestSession::GetDefault()
+    Usually the default session available via wxWebSession::GetDefault()
     should be used. Additional instances might be useful if session separation
     is required. Instances <b>must not</b> be deleted before every active web
     request has finished.
@@ -263,7 +264,7 @@ public:
 
     @see wxWebRequest
 */
-class wxWebRequestSession
+class wxWebSession
 {
 public:
     /**
@@ -272,7 +273,7 @@ public:
         All requests created by a call to CreateRequest() will use this session
         for communication and to store cookies.
     */
-    wxWebRequestSession();
+    wxWebSession();
 
     /**
         Create a new request for the specified URL
@@ -288,10 +289,11 @@ public:
     /**
         Returns the default session
     */
-    static wxWebRequestSession* GetDefault();
+    static wxWebSession& GetDefault();
 
     /**
-        Adds a request header to every wxWebRequest using this session.
+        Sets a request header in every wxWebRequest created from this session
+        after is has been set.
 
         A good example for a session-wide request header is the @c User-Agent
         header.
@@ -299,7 +301,7 @@ public:
         @param name Name of the header
         @param value String value of the header
     */
-    void AddRequestHeader(const wxString& name, const wxString& value);
+    void SetHeader(const wxString& name, const wxString& value);
 };
 
 /**
@@ -317,13 +319,14 @@ public:
 class wxWebRequestEvent : public wxEvent
 {
 public:
-    wxWebViewEvent();
-    wxWebViewEvent(wxEventType type, int id);
+    wxWebRequestEvent();
+    wxWebRequestEvent(wxEventType type, int id);
 
     /**
-        The response for a wxEVT_WEBREQUEST_READY event
+        The response for a wxEVT_WEBREQUEST_READY event or @c NULL for other
+        events.
     */
-    const wxWebRequestResponse* GetResponse() const;
+    const wxWebResponse* GetResponse() const;
 
     /**
         A textual error description for a client side error
