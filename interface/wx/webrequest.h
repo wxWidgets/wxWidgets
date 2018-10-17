@@ -13,7 +13,7 @@
 
     The latest features of the operating system will be used if available
     (e.g. HTTP/2, TLS 1.3).
-    System wide configuration like proxy and SSL certificates will be used
+    System-wide configuration like proxy and SSL certificates will be used
     when possible.
 
     Instances of wxWebRequest are created by using
@@ -89,7 +89,7 @@
     @event{wxEVT_WEBREQUEST_READY(id, func)}
         The response data is ready to be used.
     @event{wxEVT_WEBREQUEST_FAILED(id, func)}
-        A network error has occured. This could be client side or server side.
+        A network error has occurred. This could be client side or server side.
         Use wxWebRequestEvent::GetErrorDescription() to get more details.
     @event{wxEVT_WEBREQUEST_AUTH_REQUIRED(id, func)}
         The request needs additional authentication to continue.
@@ -106,10 +106,15 @@ class wxWebRequest: public wxEvtHandler, public wxRefCounter
 {
 public:
     /**
-        Sets a request header send by this request.
+        Sets a request header which will be send to the server by this request.
 
-        @param name Name of the header
-        @param value String value of the header
+        The header will be added if it hasen't been set before or replaced
+        otherwise.
+
+        @param name
+            Name of the header
+        @param value
+            String value of the header. An empty string will remove the header.
     */
     void SetHeader(const wxString& name, const wxString& value);
 
