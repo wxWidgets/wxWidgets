@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/qt/colour.h
+// Name:        src/qt/colour.cpp
 // Purpose:     wxColour class implementation for wxQt
 // Author:      Kolya Kosenko
 // Created:     2010-05-12
