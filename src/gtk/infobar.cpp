@@ -239,7 +239,7 @@ GtkWidget *wxInfoBar::GTKAddButton(wxWindowID btnid, const wxString& label)
 #if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
                                 wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(btnid)))
 #else
-                                wxGetStockGtkID(btnid)
+                                wxString(wxGetStockGtkID(btnid))
 #endif // GTK >= 3.10 / < 3.10
                                 : wxGTK_CONV(label),
                             btnid
