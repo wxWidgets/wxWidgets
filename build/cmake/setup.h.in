@@ -299,6 +299,8 @@
 
 #cmakedefine01 wxUSE_MIMETYPE
 
+#cmakedefine01 wxUSE_WEBREQUEST
+
 #cmakedefine01 wxUSE_PROTOCOL
 
 #cmakedefine01 wxUSE_PROTOCOL_FILE

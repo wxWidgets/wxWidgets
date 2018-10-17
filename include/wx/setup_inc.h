@@ -644,6 +644,12 @@
 // wxMimeTypesManager class
 #define wxUSE_MIMETYPE 1
 
+// wxWebRequest and related classes: This will allow usage of system libraries
+// for HTTP(S) requests
+//
+// Default is 1
+#define wxUSE_WEBREQUEST 1
+
 // wxProtocol and related classes: if you want to use either of wxFTP, wxHTTP
 // or wxURL you need to set this to 1.
 //

@@ -299,6 +299,8 @@
 
 #define wxUSE_MIMETYPE 0
 
+#define wxUSE_WEBREQUEST 0
+
 #define wxUSE_PROTOCOL 0
 
 #define wxUSE_PROTOCOL_FILE 0

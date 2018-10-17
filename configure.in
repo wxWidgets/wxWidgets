@@ -698,6 +698,7 @@ WX_ARG_FEATURE(sockets,       [  --enable-sockets        use socket/network clas
 WX_ARG_FEATURE(ipv6,          [  --enable-ipv6           enable IPv6 support in wxSocket], wxUSE_IPV6)
 WX_ARG_FEATURE(ole,           [  --enable-ole            use OLE classes (Win32 only)], wxUSE_OLE)
 WX_ARG_FEATURE(dataobj,       [  --enable-dataobj        use data object classes], wxUSE_DATAOBJ)
+WX_ARG_FEATURE(webrequest,    [  --enable-webrequest     use wxWebRequest], wxUSE_WEBREQUEST)
 
 WX_ARG_FEATURE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
 
@@ -6338,6 +6339,10 @@ fi
 
 if test "$wxUSE_FS_INET" = "yes"; then
   AC_DEFINE(wxUSE_FS_INET)
+fi
+
+if test "$wxUSE_WEBREQUEST" = "yes"; then
+    AC_DEFINE(wxUSE_WEBREQUEST)
 fi
 
 dnl ---------------------------------------------------------------------------

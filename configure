@@ -1137,6 +1137,7 @@ enable_sockets
 enable_ipv6
 enable_ole
 enable_dataobj
+enable_webrequest
 enable_ipc
 enable_baseevtloop
 enable_epollloop
@@ -2078,6 +2079,7 @@ Optional Features:
   --enable-ipv6           enable IPv6 support in wxSocket
   --enable-ole            use OLE classes (Win32 only)
   --enable-dataobj        use data object classes
+  --enable-webrequest     use wxWebRequest
   --enable-ipc            use interprocess communication (wxSocket etc.)
   --enable-baseevtloop    use event loop in console programs too
   --enable-epollloop      use wxEpollDispatcher class (Linux only)
@@ -6515,6 +6517,35 @@ fi
 
 
           eval "$wx_cv_use_dataobj"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-webrequest was given.
+if test "${enable_webrequest+set}" = set; then :
+  enableval=$enable_webrequest;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_webrequest='wxUSE_WEBREQUEST=yes'
+                          else
+                            wx_cv_use_webrequest='wxUSE_WEBREQUEST=no'
+                          fi
+
+else
+
+                          wx_cv_use_webrequest='wxUSE_WEBREQUEST=${'DEFAULT_wxUSE_WEBREQUEST":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_webrequest"
 
 
 
@@ -36550,6 +36581,11 @@ fi
 
 if test "$wxUSE_FS_INET" = "yes"; then
   $as_echo "#define wxUSE_FS_INET 1" >>confdefs.h
+
+fi
+
+if test "$wxUSE_WEBREQUEST" = "yes"; then
+    $as_echo "#define wxUSE_WEBREQUEST 1" >>confdefs.h
 
 fi
 
