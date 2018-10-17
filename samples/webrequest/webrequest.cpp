@@ -138,7 +138,7 @@ class WebRequestApp : public wxApp
 public:
     virtual bool OnInit() wxOVERRIDE
     {
-        if (!wxApp::OnInit())
+        if ( !wxApp::OnInit() )
             return false;
 
         // create the main application window

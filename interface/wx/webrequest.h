@@ -12,7 +12,7 @@
     components as implementation.
 
     The latest features of the operating system will be used if available
-    (e.g. HTTP/2, TLS 1.2).
+    (e.g. HTTP/2, TLS 1.3).
     System wide configuration like proxy and SSL certificates will be used
     when possible.
 
@@ -108,7 +108,7 @@ public:
     /**
         Adds a request header send by this request.
 
-        @param name Name if the header
+        @param name Name of the header
         @param value String value of the header
     */
     void AddHeader(const wxString& name, const wxString& value);
@@ -159,10 +159,10 @@ public:
     /**
         Instructs the request to ignore server error status codes.
 
-        Per default server side errors (status code 500-599) will be send
+        Per default, server side errors (status code 500-599) will send
         a wxEVT_WEBREQUEST_FAILED event just like network errors, but
         if the response is still required in this cases (e.g. to get more
-        details from the response body) this may be set to ignore these.
+        details from the response body), set this option to ignore all errors.
         If ignored wxWebRequestResponse::GetStatus() has to be checked
         from the wxEVT_WEBREQUEST_READY event handler.
     */
@@ -171,14 +171,14 @@ public:
     /**
         Send the request to the server asynchronously.
 
-        Events will be triggered on success or failure
+        Events will be triggered on success or failure.
 
         @see Cancel()
     */
     void Start();
 
     /**
-        Cancel an active request
+        Cancel an active request.
     */
     void Cancel();
 
@@ -204,12 +204,12 @@ public:
     /**
         Returns the final URL.
         This URL might be different than the request URL when a redirection
-        occured.
+        occurred.
     */
     wxString GetURL() const;
 
     /**
-        Return a header from the response or an empty string if the header
+        Returns a header from the response or an empty string if the header
         could not be found.
 
         @param name Name of the header field
@@ -217,12 +217,12 @@ public:
     wxString GetHeader(const wxString& name) const;
 
     /**
-        Returns the status code returned by the server
+        Returns the status code returned by the server.
     */
     int GetStatus() const;
 
     /**
-        Returns the response status text
+        Returns the status text of the response.
     */
     wxString GetStatusText() const;
 
@@ -235,8 +235,8 @@ public:
         Returns all response data as a string.
 
         @param conv wxMBConv used to convert the response to a string.
-                    If @c NULL the conversion will be determined by
-                    response headers. Defaulting to UTF-8
+                    If @c NULL, the conversion will be determined by
+                    response headers. The default is UTF-8.
     */
     wxString AsString(wxMBConv* conv = NULL) const;
 };
@@ -244,7 +244,7 @@ public:
 /**
     @class wxWebRequestSession
 
-    This class handles session wide parameters and data used by wxWebRequest
+    This class handles session-wide parameters and data used by wxWebRequest
     instances.
 
     Usually the default session available via wxWebRequestSession::GetDefault()
@@ -253,7 +253,7 @@ public:
     request has finished.
 
     Every wxWebRequest sharing the same session object will use the same
-    cookies. Additionally an underlying network connection might be kept
+    cookies. Additionally, an underlying network connection might be kept
     alive to achieve faster additional responses.
 
     @since 3.1.2
@@ -280,7 +280,7 @@ public:
         @param url
             The URL of the HTTP resource for this request
         @param id
-            Optional id send with events
+            Optional id sent with events
     */
     wxWebRequest* CreateRequest(const wxString& url, int id = wxID_ANY);
 
@@ -291,12 +291,12 @@ public:
     static wxWebRequestSession* GetDefault();
 
     /**
-        Adds a request header send by every wxWebRequest using this session.
+        Adds a request header to every wxWebRequest using this session.
 
-        A good example for a session wide request header is the @c User-Agent
+        A good example for a session-wide request header is the @c User-Agent
         header.
 
-        @param name Name if the header
+        @param name Name of the header
         @param value String value of the header
     */
     void AddRequestHeader(const wxString& name, const wxString& value);
@@ -305,7 +305,7 @@ public:
 /**
     @class wxWebRequestEvent
 
-    A web request event send during or after server communication.
+    A web request event sent during or after server communication.
 
     @since 3.1.2
 
@@ -327,7 +327,7 @@ public:
 
     /**
         A textual error description for a client side error
-        wxEVT_WEBREQUEST_FAILED
+        in case of wxEVT_WEBREQUEST_FAILED
     */
     const wxString& GetErrorDescription() const;
 };
