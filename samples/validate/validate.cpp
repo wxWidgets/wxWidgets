@@ -347,8 +347,8 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     numSizer->Add(m_numericTextDouble, wxSizerFlags(center).Expand());
 
     wxIntegerValidator<unsigned short> smallIntVal(&g_data.m_smallIntValue);
-    smallIntVal.SetRange(333, 698);
-    numSizer->Add(new wxStaticText(this, wxID_ANY, "Int between 333 and 698:"),
+    smallIntVal.SetRange(65535, 65535);
+    numSizer->Add(new wxStaticText(this, wxID_ANY, "Int between 65535 and 65535:"),
                   center);
     numSizer->Add(new wxTextCtrl(this, wxID_ANY, "",
                                  wxDefaultPosition, wxDefaultSize, wxTE_RIGHT,

@@ -218,7 +218,8 @@ wxIntegerValidatorBase::FromString(const wxString& s, LongestValueType *value)
 namespace // anonymous
 {
 
-static inline int wxGetNumDigits(int number)
+template<typename T>
+static inline int wxGetNumDigits(T number)
 {
     int digits = 0;
 
@@ -227,38 +228,38 @@ static inline int wxGetNumDigits(int number)
     return digits;
 }
 
-#if __cplusplus >= 201103
-    #define wxPow std::pow
-#else
-    #define wxPow pow
-#endif
-
 template<typename T>
 static inline bool wxTryMakeValueInRange(T* value, const T min, const T max)
 {
+#if __cplusplus >= 201103
+    using std::pow;
+    using std::fmod;
+#endif
+
     T& val = *value;
 
-    int e = val >= (T)1 ?
+    int e = (val >= 1) ?
         (wxGetNumDigits(min)-wxGetNumDigits(val)) : 0;
-    T m = static_cast<T>(wxPow(10.0, e));
+
+    const T m = static_cast<T>(pow(10.0, e));
 
     val *= m;
 
     if ( val > max )
         return false;
-    else if ( val >= min )
+    
+    if ( val >= min )
         return true;
 
-    if ( val + ((int)min % (int)m) < min )
+    if ( val + fmod(min, m) < min )
     {
         val *= 10;
         return val >= min && val <= max;
     }
-    else
-    {
-        val = min;
-        return true;
-    }
+
+    val = min;
+
+    return true;
 }
 
 class wxTextSelector
