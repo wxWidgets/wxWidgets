@@ -290,12 +290,6 @@ public:
     */
     wxWebRequest* CreateRequest(const wxString& url, int id = wxID_ANY);
 
-
-    /**
-        Returns the default session
-    */
-    static wxWebSession& GetDefault();
-
     /**
         Sets a request header in every wxWebRequest created from this session
         after is has been set.
@@ -307,6 +301,55 @@ public:
         @param value String value of the header
     */
     void SetHeader(const wxString& name, const wxString& value);
+
+    /**
+        Returns the default session
+    */
+    static wxWebSession& GetDefault();
+
+    /**
+        Creates a new wxWebSession object.
+
+        @param backend
+            The backend web session implementation to use.
+
+        @return
+            The created wxWebSession
+    */
+    static wxWebSession* New(const wxString& backend = wxWebSessionBackendDefault);
+
+    /**
+        Allows the registering of new backend for wxWebSession.
+
+        backend can be used as an argument to New().
+
+        @param backend The name for the new backend to be registered under
+        @param factory A shared pointer to the factory which creates the appropriate backend.
+    */
+    static void RegisterFactory(const wxString& backend, wxSharedPtr<wxWebSessionFactory> factory);
+};
+
+/**
+    @class wxWebSessionFactory
+
+    An abstract factory class for creation wxWebSession backends.
+
+    Each implementation of wxWebSession should have its own factory.
+
+    @since 3.1.2
+
+    @library{wxnet}
+    @category{net}
+
+    @see wxWebSession
+*/
+class wxWebSessionFactory
+{
+public:
+    /**
+        Creates a new web session object
+    */
+    virtual wxWebSession* Create() = 0;
 };
 
 /**
@@ -325,13 +368,14 @@ class wxWebRequestEvent : public wxEvent
 {
 public:
     wxWebRequestEvent();
-    wxWebRequestEvent(wxEventType type, int id);
+    wxWebRequestEvent(wxEventType type, int id, wxWebResponse* response = NULL,
+        const wxString& errorDesc = "");
 
     /**
         The response for a wxEVT_WEBREQUEST_READY event or @c NULL for other
         events.
     */
-    const wxWebResponse* GetResponse() const;
+    wxWebResponse* GetResponse() const;
 
     /**
         A textual error description for a client side error
