@@ -205,15 +205,15 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 #if wxUSE_STATUSBAR
     m_Html -> SetRelatedStatusBar(0);
 #endif // wxUSE_STATUSBAR
-    m_Name = wxT("test.htm");
+    m_Name = "test.htm";
     m_Html -> LoadPage(m_Name);
 
     m_Prn = new wxHtmlEasyPrinting(_("Easy Printing Demo"), this);
-    m_Prn -> SetHeader(m_Name + wxT("(@PAGENUM@/@PAGESCNT@)<hr>"), wxPAGE_ALL);
+    m_Prn -> SetHeader(m_Name + "(@PAGENUM@/@PAGESCNT@)<hr>", wxPAGE_ALL);
 
     // To specify where the AFM files are kept on Unix,
     // you may wish to do something like this
-    // m_Prn->GetPrintData()->SetFontMetricPath(wxT("/home/julians/afm"));
+    // m_Prn->GetPrintData()->SetFontMetricPath("/home/julians/afm");
 }
 
 // frame destructor
@@ -258,13 +258,13 @@ void MyFrame::OnPreview(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
-    wxFileDialog dialog(this, _("Open HTML page"), wxT(""), wxT(""), wxT("*.htm"), 0);
+    wxFileDialog dialog(this, _("Open HTML page"), "", "", "*.htm", 0);
 
     if (dialog.ShowModal() == wxID_OK)
     {
         m_Name = dialog.GetPath();
         m_Html -> LoadPage(m_Name);
-        m_Prn -> SetHeader(m_Name + wxT("(@PAGENUM@/@PAGESCNT@)<hr>"), wxPAGE_ALL);
+        m_Prn -> SetHeader(m_Name + "(@PAGENUM@/@PAGESCNT@)<hr>", wxPAGE_ALL);
     }
 }
 

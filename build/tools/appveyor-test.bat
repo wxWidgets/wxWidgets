@@ -42,10 +42,15 @@ echo --- Note: ignoring possible test failures under Cygwin
 echo.
 exit /b 0
 
+:cmake_qt
+set CMAKE_TEST_REGEX="test_base"
+goto :cmake
+
 :cmake
 if "%CONFIGURATION%"=="" set CONFIGURATION=Release
+if "%CMAKE_TEST_REGEX%"=="" set CMAKE_TEST_REGEX="test_[base|gui]"
 cd ..\build_cmake
-ctest -V -C %CONFIGURATION% -R "test_[base|gui]" --output-on-failure --interactive-debug-mode 0 .
+ctest -V -C %CONFIGURATION% -R %CMAKE_TEST_REGEX% --output-on-failure --interactive-debug-mode 0 .
 if %errorlevel% NEQ 0 goto :error
 goto :eof
 

@@ -3746,10 +3746,9 @@ public:
     */
     wxDataViewEvent(const wxDataViewEvent& event);
 
-    
     /**
         Returns the position of the column in the control or -1
-        if no column field was set by the event emitter.
+        if column field is unavailable for this event.
 
         For wxEVT_DATAVIEW_COLUMN_REORDERED, this is the new position of the
         column.

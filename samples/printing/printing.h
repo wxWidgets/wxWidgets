@@ -86,7 +86,7 @@ private:
 class MyPrintout: public wxPrintout
 {
 public:
-    MyPrintout(MyFrame* frame, const wxString &title = wxT("My printout"))
+    MyPrintout(MyFrame* frame, const wxString &title = "My printout")
         : wxPrintout(title) { m_frame=frame; }
 
     virtual bool OnPrintPage(int page) wxOVERRIDE;

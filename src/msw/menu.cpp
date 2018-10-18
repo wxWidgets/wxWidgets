@@ -793,9 +793,13 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id_)
                 UINT menuState = ::GetMenuState(GetHmenu(), id_, MF_BYCOMMAND);
                 checked = (menuState & MF_CHECKED) != 0;
             }
-        }
 
-        item->GetMenu()->SendEvent(id, checked);
+            item->GetMenu()->SendEvent(id, checked);
+        }
+        else
+        {
+            SendEvent(id, checked);
+        }
     }
 
     return true;

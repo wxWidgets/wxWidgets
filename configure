@@ -745,10 +745,10 @@ COND_SHARED_0_USE_GUI_1_wxUSE_LIBTIFF_builtin
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBPNG_builtin
 COND_SHARED_0_USE_GUI_1_wxUSE_LIBJPEG_builtin
 COND_SHARED_0_USE_GUI_1_USE_OPENGL_1
-COND_SHARED_0_TOOLKIT_PM_WXUNIV_0
 COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0
 COND_SHARED_0_TOOLKIT_MAC_WXUNIV_0
 COND_SHARED_0
+COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1
 COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1
@@ -1285,6 +1285,7 @@ enable_statusbar
 enable_taskbaricon
 enable_tbarnative
 enable_textctrl
+enable_timepick
 enable_tipwindow
 enable_togglebtn
 enable_toolbar
@@ -10905,23 +10906,23 @@ fi
               fi
           fi
 
-          # Check whether --enable-datepick was given.
-if test "${enable_datepick+set}" = set; then :
-  enableval=$enable_datepick;
+          # Check whether --enable-timepick was given.
+if test "${enable_timepick+set}" = set; then :
+  enableval=$enable_timepick;
                           if test "$enableval" = yes; then
-                            wx_cv_use_datepick='wxUSE_TIMEPICKCTRL=yes'
+                            wx_cv_use_timepick='wxUSE_TIMEPICKCTRL=yes'
                           else
-                            wx_cv_use_datepick='wxUSE_TIMEPICKCTRL=no'
+                            wx_cv_use_timepick='wxUSE_TIMEPICKCTRL=no'
                           fi
 
 else
 
-                          wx_cv_use_datepick='wxUSE_TIMEPICKCTRL=${'DEFAULT_wxUSE_TIMEPICKCTRL":-$defaultval}"
+                          wx_cv_use_timepick='wxUSE_TIMEPICKCTRL=${'DEFAULT_wxUSE_TIMEPICKCTRL":-$defaultval}"
 
 fi
 
 
-          eval "$wx_cv_use_datepick"
+          eval "$wx_cv_use_timepick"
 
 
           enablestring=
@@ -27521,14 +27522,6 @@ fi
 $as_echo "$as_me: WARNING: Xinerama not found; disabling wxDisplay" >&2;}
             wxUSE_DISPLAY="no"
         fi
-    elif test "$wxUSE_MSW" = 1; then
-                ac_fn_c_check_header_compile "$LINENO" "ddraw.h" "ac_cv_header_ddraw_h" "#include <windows.h>
-"
-if test "x$ac_cv_header_ddraw_h" = xyes; then :
-
-fi
-
-
     fi
 fi
 
@@ -30801,74 +30794,50 @@ _ACEOF
 
 fi
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for round" >&5
+$as_echo_n "checking for round... " >&6; }
+if ${wx_cv_func_round+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-
-  for wx_func in round
-  do
-    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $wx_func" >&5
-$as_echo_n "checking for $wx_func... " >&6; }
-if eval \${wx_cv_func_$wx_func+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-
-        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
-
-
-                #include <math.h>
-                $ac_includes_default
-
+#include <math.h>
 int
 main ()
 {
-
-                #ifndef $wx_func
-                  &$wx_func;
-                #endif
-
-
+return int(round(0.0))
   ;
   return 0;
 }
-
 _ACEOF
 if ac_fn_cxx_try_link "$LINENO"; then :
-  eval wx_cv_func_$wx_func=yes
+  wx_cv_func_round=yes
 else
-  eval wx_cv_func_$wx_func=no
+  wx_cv_func_round=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-
-fi
-eval ac_res=\$wx_cv_func_$wx_func
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-
-    if eval test \$wx_cv_func_$wx_func = yes
-    then
-      cat >>confdefs.h <<_ACEOF
-#define `$as_echo "HAVE_$wx_func" | $as_tr_cpp` 1
-_ACEOF
-
-
-    else
-      :
-
-    fi
-  done
-
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $wx_cv_func_round" >&5
+$as_echo "$wx_cv_func_round" >&6; }
+if test "$wx_cv_func_round" = yes; then
+    $as_echo "#define HAVE_ROUND 1" >>confdefs.h
+
+fi
 
 if test "$TOOLKIT" != "MSW"; then
 
@@ -39015,7 +38984,7 @@ EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
 EXTRALIBS_STC="-lwxscintilla${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $SDL_LIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"
@@ -41116,6 +41085,11 @@ EOF
         COND_PLATFORM_WIN32_1_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1=""
     fi
 
+    COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0="#"
+    if test "x$PLATFORM_WIN32" = "x1" -a "x$TOOLKIT" = "xQT" -a "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
+        COND_PLATFORM_WIN32_1_TOOLKIT_QT_USE_GUI_1_WXUNIV_0=""
+    fi
+
     COND_SHARED_0="#"
     if test "x$SHARED" = "x0" ; then
         COND_SHARED_0=""
@@ -41129,11 +41103,6 @@ EOF
     COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0="#"
     if test "x$SHARED" = "x0" -a "x$TOOLKIT" = "xMSW" -a "x$WXUNIV" = "x0" ; then
         COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0=""
-    fi
-
-    COND_SHARED_0_TOOLKIT_PM_WXUNIV_0="#"
-    if test "x$SHARED" = "x0" -a "x$TOOLKIT" = "xPM" -a "x$WXUNIV" = "x0" ; then
-        COND_SHARED_0_TOOLKIT_PM_WXUNIV_0=""
     fi
 
     COND_SHARED_0_USE_GUI_1_USE_OPENGL_1="#"

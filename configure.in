@@ -952,7 +952,7 @@ WX_ARG_FEATURE(statusbar,   [  --enable-statusbar      use wxStatusBar class], w
 WX_ARG_FEATURE(taskbaricon, [  --enable-taskbaricon    use wxTaskBarIcon class], wxUSE_TASKBARICON)
 WX_ARG_FEATURE(tbarnative,  [  --enable-tbarnative     use native wxToolBar class], wxUSE_TOOLBAR_NATIVE)
 WX_ARG_FEATURE(textctrl,    [  --enable-textctrl       use wxTextCtrl class], wxUSE_TEXTCTRL)
-WX_ARG_FEATURE(datepick,    [  --enable-timepick       use wxTimePickerCtrl class], wxUSE_TIMEPICKCTRL)
+WX_ARG_FEATURE(timepick,    [  --enable-timepick       use wxTimePickerCtrl class], wxUSE_TIMEPICKCTRL)
 WX_ARG_FEATURE(tipwindow,   [  --enable-tipwindow      use wxTipWindow class], wxUSE_TIPWINDOW)
 WX_ARG_FEATURE(togglebtn,   [  --enable-togglebtn      use wxToggleButton class], wxUSE_TOGGLEBTN)
 WX_ARG_FEATURE(toolbar,     [  --enable-toolbar        use wxToolBar class], wxUSE_TOOLBAR)
@@ -3472,9 +3472,6 @@ if test "$wxUSE_DISPLAY" = "yes"; then
             AC_MSG_WARN([Xinerama not found; disabling wxDisplay])
             wxUSE_DISPLAY="no"
         fi
-    elif test "$wxUSE_MSW" = 1; then
-        dnl DirectDraw for MSW - optionally used by WxDisplay.
-        AC_CHECK_HEADER([ddraw.h], [], [], [#include <windows.h>])
     fi
 fi
 
@@ -4193,9 +4190,17 @@ fi
 
 dnl at least under IRIX with mipsPro the C99 round() function is available when
 dnl building using the C compiler but not when using C++ one
+AC_CACHE_CHECK([for round], wx_cv_func_round, [
 AC_LANG_PUSH(C++)
-WX_CHECK_FUNCS(round,,,[#include <math.h>])
+AC_TRY_LINK(
+    [#include <math.h>],
+    [return int(round(0.0))],
+    wx_cv_func_round=yes, wx_cv_func_round=no)
 AC_LANG_POP()
+])
+if test "$wx_cv_func_round" = yes; then
+    AC_DEFINE(HAVE_ROUND)
+fi
 
 dnl the following tests are for Unix(like) systems only
 if test "$TOOLKIT" != "MSW"; then
@@ -7927,7 +7932,7 @@ EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
 EXTRALIBS_STC="-lwxscintilla${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $SDL_LIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"

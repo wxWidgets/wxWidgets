@@ -142,6 +142,8 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "minimal_iphone" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
@@ -203,6 +205,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 404BEE0510EC7BF20080E2B8 /* wxiphone.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = minimal_iphone;
 			};
@@ -212,6 +215,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 404BEE0510EC7BF20080E2B8 /* wxiphone.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				PRODUCT_NAME = minimal_iphone;
 			};
 			name = Release;

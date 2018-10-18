@@ -15,5 +15,6 @@ sys$share:libglib2.exe/share
 sys$share:freetype2shr/share
 sys$share:libfontconfig/share
 sys$share:pthread$rtl.exe/share
+sys$share:libXrender.exe/share
 sys$library:decw$xextlibshr.exe/share
 sys$library:decw$xlibshr.exe/share

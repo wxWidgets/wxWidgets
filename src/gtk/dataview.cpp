@@ -4461,10 +4461,11 @@ wxdataview_selection_changed_callback( GtkTreeSelection* WXUNUSED(selection), wx
 
 static void
 wxdataview_row_activated_callback( GtkTreeView* WXUNUSED(treeview), GtkTreePath *path,
-                                   GtkTreeViewColumn *WXUNUSED(column), wxDataViewCtrl *dv )
+                                   GtkTreeViewColumn *column, wxDataViewCtrl *dv )
 {
     wxDataViewItem item(dv->GTKPathToItem(path));
-    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_ACTIVATED, dv, item);
+    wxDataViewEvent
+        event(wxEVT_DATAVIEW_ITEM_ACTIVATED, dv, dv->GTKColumnToWX(column), item);
     dv->HandleWindowEvent( event );
 }
 
@@ -4617,7 +4618,7 @@ wxDataViewCtrl::~wxDataViewCtrl()
         GtkTreeViewColumn *col;
         gtk_tree_view_get_cursor(GTK_TREE_VIEW(m_treeview), NULL, &col);
 
-        wxDataViewColumn * const wxcol = FromGTKColumn(col);
+        wxDataViewColumn * const wxcol = GTKColumnToWX(col);
         if ( wxcol )
         {
             // This won't do anything if we're not editing it
@@ -4862,7 +4863,7 @@ unsigned int wxDataViewCtrl::GetColumnCount() const
     return m_cols.GetCount();
 }
 
-wxDataViewColumn* wxDataViewCtrl::FromGTKColumn(GtkTreeViewColumn *gtk_col) const
+wxDataViewColumn* wxDataViewCtrl::GTKColumnToWX(GtkTreeViewColumn *gtk_col) const
 {
     if ( !gtk_col )
         return NULL;
@@ -4886,7 +4887,7 @@ wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int pos ) const
 {
     GtkTreeViewColumn *gtk_col = gtk_tree_view_get_column( GTK_TREE_VIEW(m_treeview), pos );
 
-    return FromGTKColumn(gtk_col);
+    return GTKColumnToWX(gtk_col);
 }
 
 bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
@@ -5058,7 +5059,7 @@ wxDataViewColumn *wxDataViewCtrl::GetCurrentColumn() const
 
     GtkTreeViewColumn *col;
     gtk_tree_view_get_cursor(GTK_TREE_VIEW(m_treeview), NULL, &col);
-    return FromGTKColumn(col);
+    return GTKColumnToWX(col);
 }
 
 void wxDataViewCtrl::EditItem(const wxDataViewItem& item, const wxDataViewColumn *column)

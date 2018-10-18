@@ -285,7 +285,7 @@ void MainFrame::OnShowTransparent(wxCommandEvent& WXUNUSED(event))
         seeThroughFrame->Show(true);
     }
     else
-        wxMessageBox(wxS("transparent window requires a composited screen"));
+        wxMessageBox("transparent window requires a composited screen");
 }
 
 void MainFrame::OnShowEffect(wxCommandEvent& event)
@@ -387,9 +387,9 @@ ShapedFrame::ShapedFrame(wxFrame *parent)
             )
 {
     m_shapeKind = Shape_Star;
-    m_bmp = wxBitmap(wxT("star.png"), wxBITMAP_TYPE_PNG);
+    m_bmp = wxBitmap("star.png", wxBITMAP_TYPE_PNG);
     SetSize(wxSize(m_bmp.GetWidth(), m_bmp.GetHeight()));
-    SetToolTip(wxT("Right-click to close, double click to cycle shape"));
+    SetToolTip("Right-click to close, double click to cycle shape");
     SetWindowShape();
 }
 

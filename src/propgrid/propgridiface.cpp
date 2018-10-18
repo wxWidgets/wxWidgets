@@ -942,7 +942,6 @@ wxString wxPropertyGridInterface::SaveEditableState( int includedStates ) const
         }
         if ( includedStates & ExpandedState )
         {
-            wxArrayPGProperty ptrs;
             wxPropertyGridConstIterator it =
                 wxPropertyGridConstIterator( pageState,
                                              wxPG_ITERATE_ALL_PARENTS_RECURSIVELY|wxPG_ITERATE_HIDDEN,

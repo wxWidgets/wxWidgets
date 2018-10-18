@@ -78,6 +78,12 @@ set SKIPTESTS=1
 set CMAKE_NATIVE_FLAGS=-j3
 goto cmake
 
+:cmake_qt
+set SKIPINSTALL=1
+set QT5DIR="C:\Qt\5.11\msvc2015_64"
+set CMAKE_CONFIGURE_FLAGS=-DCMAKE_PREFIX_PATH=%QT5DIR% -DwxBUILD_TOOLKIT="qt" -DCMAKE_CXX_STANDARD=11
+goto cmake
+
 :cmake
 echo --- Tools versions:
 cmake --version

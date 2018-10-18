@@ -163,7 +163,7 @@ public:
     }
 
 protected:
-    virtual int Invoke(wxDialog *dlg) const
+    virtual int Invoke(wxDialog *dlg) const wxOVERRIDE
     {
         DialogType *t = dynamic_cast<DialogType*>(dlg);
         if ( t )
@@ -173,7 +173,7 @@ protected:
     }
 
     /// Returns description of the expected dialog (by default, its class).
-    virtual wxString GetDefaultDescription() const
+    virtual wxString GetDefaultDescription() const wxOVERRIDE
     {
         return wxGetDialogClassDescription<T>(wxCLASSINFO(T));
     }
@@ -220,7 +220,7 @@ public:
     }
 
 protected:
-    virtual int OnInvoked(T *WXUNUSED(dlg)) const
+    virtual int OnInvoked(T *WXUNUSED(dlg)) const wxOVERRIDE
     {
         return m_id;
     }
@@ -239,7 +239,7 @@ public:
     }
 
 protected:
-    virtual wxString GetDefaultDescription() const
+    virtual wxString GetDefaultDescription() const wxOVERRIDE
     {
         // It can be useful to show which buttons the expected message box was
         // supposed to have, in case there could have been several of them.
@@ -289,7 +289,7 @@ public:
     }
 
 protected:
-    virtual int OnInvoked(wxFileDialog *dlg) const
+    virtual int OnInvoked(wxFileDialog *dlg) const wxOVERRIDE
     {
         dlg->SetPath(m_path);
         return m_id;
@@ -351,7 +351,7 @@ public:
     }
 
 protected:
-    virtual int Enter(wxDialog *dlg)
+    virtual int Enter(wxDialog *dlg) wxOVERRIDE
     {
         while ( !m_expectations.empty() )
         {

@@ -484,8 +484,13 @@ wxRendererMac::DrawCheckBox(wxWindow *win,
                        kind, kThemeAdornmentNone);
 }
 
-wxSize wxRendererMac::GetCheckBoxSize(wxWindow* WXUNUSED(win))
+wxSize wxRendererMac::GetCheckBoxSize(wxWindow* win)
 {
+    // Even though we don't use the window in this implementation, still check
+    // that it's valid to avoid surprises when running the same code under the
+    // other platforms.
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
     wxSize size;
     SInt32 width, height;
     OSStatus errStatus;

@@ -2254,7 +2254,7 @@ wxPGProperty* wxPGProperty::GetMainParent() const
     const wxPGProperty* curChild = this;
     const wxPGProperty* curParent = m_parent;
 
-    while ( curParent && !curParent->IsCategory() )
+    while ( !curParent->IsRoot() && !curParent->IsCategory() )
     {
         curChild = curParent;
         curParent = curParent->m_parent;
@@ -3009,6 +3009,20 @@ wxPGChoiceEntry& wxPGChoices::AddAsSorted( const wxString& label, int value )
 
     wxPGChoiceEntry entry(label, value);
     return m_data->Insert( index, entry );
+}
+
+// -----------------------------------------------------------------------
+
+void wxPGChoices::Add(size_t count, const wxString* labels, const long* values)
+{
+    AllocExclusive();
+
+    for ( size_t i = 0; i < count; ++i )
+    {
+        const int value = values ? values[i] : i;
+        wxPGChoiceEntry entry(labels[i], value);
+        m_data->Insert( i, entry );
+    }
 }
 
 // -----------------------------------------------------------------------

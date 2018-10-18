@@ -318,7 +318,7 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxDCImpl, wxObject);
 
 wxDCImpl::wxDCImpl( wxDC *owner )
         : m_window(NULL)
-        , m_colour(wxColourDisplay())
+        , m_colour(true)
         , m_ok(true)
         , m_clipping(false)
         , m_isInteractive(0)
