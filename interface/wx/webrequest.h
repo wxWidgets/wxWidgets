@@ -106,9 +106,9 @@ class wxWebRequest: public wxEvtHandler, public wxRefCounter
 {
 public:
     /**
-        Sets a request header which will be send to the server by this request.
+        Sets a request header which will be sent to the server by this request.
 
-        The header will be added if it hasen't been set before or replaced
+        The header will be added if it hasn't been set before or replaced
         otherwise.
 
         @param name
