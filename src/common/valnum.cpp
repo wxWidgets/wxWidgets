@@ -227,6 +227,12 @@ static inline int wxGetNumDigits(int number)
     return digits;
 }
 
+#if __cplusplus >= 201103
+    #define wxPow std::pow
+#else
+    #define wxPow pow
+#endif
+
 template<typename T>
 static inline bool wxTryMakeValueInRange(T* value, const T min, const T max)
 {
@@ -234,7 +240,7 @@ static inline bool wxTryMakeValueInRange(T* value, const T min, const T max)
 
     int e = val >= (T)1 ?
         (wxGetNumDigits(min)-wxGetNumDigits(val)) : 0;
-    T m = static_cast<T>(std::pow(10.0, e));
+    T m = static_cast<T>(wxPow(10.0, e));
 
     val *= m;
 
@@ -317,7 +323,7 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
             control->ChangeValue(wxNumberFormatter::ToString(value));
 
             // FIXME: under wxMSW this line of code works correctly:
-            //        control->SetSelection(pos+1, -1);
+            //            control->SetSelection(pos+1, -1);
             //        which does not under wxGTK. but calling it at
             //        a later time does work without problems.
 
@@ -419,7 +425,9 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
             if ( !control )
                 return false;
 
-            control->ChangeValue(wxNumberFormatter::ToString(value, m_precision, GetFormatFlags()));
+            const wxString strVal = 
+                wxNumberFormatter::ToString(value, m_precision, GetFormatFlags());
+            control->ChangeValue(strVal);
 
             (const_cast<wxFloatingPointValidatorBase*>(this))->CallAfter(
                 wxTextSelector(control, pos)
