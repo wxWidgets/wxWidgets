@@ -545,6 +545,7 @@ ALL_BASE_HEADERS =  \
 	wx/sckstrm.h \
 	wx/socket.h \
 	wx/url.h \
+	wx/webrequest.h \
 	wx/xml/xml.h \
 	wx/xtixml.h
 ALL_HEADERS =  \
@@ -764,6 +765,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/sckstrm.h \
 	wx/socket.h \
 	wx/url.h \
+	wx/webrequest.h \
 	wx/xml/xml.h \
 	wx/xtixml.h
 ALL_BASE_SOURCES =  \
@@ -913,11 +915,13 @@ ALL_BASE_SOURCES =  \
 	src/common/sckstrm.cpp \
 	src/common/socket.cpp \
 	src/common/url.cpp \
+	src/common/webrequest.cpp \
 	src/common/socketiohandler.cpp \
 	src/unix/sockunix.cpp \
 	src/osx/core/sockosx.cpp \
 	src/msw/sockmsw.cpp \
 	src/msw/urlmsw.cpp \
+	src/msw/webrequest_winhttp.cpp \
 	src/xml/xml.cpp \
 	src/common/xtixml.cpp
 MONODLL_CFLAGS = $(__monodll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
@@ -1055,6 +1059,7 @@ MONODLL_OBJECTS =  \
 	monodll_sckstrm.o \
 	monodll_socket.o \
 	monodll_url.o \
+	monodll_webrequest.o \
 	$(__NET_PLATFORM_SRC_OBJECTS) \
 	$(__MONOLIB_GUI_SRC_OBJECTS) \
 	monodll_xml.o \
@@ -1197,6 +1202,7 @@ MONOLIB_OBJECTS =  \
 	monolib_sckstrm.o \
 	monolib_socket.o \
 	monolib_url.o \
+	monolib_webrequest.o \
 	$(__NET_PLATFORM_SRC_OBJECTS_1) \
 	$(__MONOLIB_GUI_SRC_OBJECTS_1) \
 	monolib_xml.o \
@@ -1451,6 +1457,7 @@ NETDLL_OBJECTS =  \
 	netdll_sckstrm.o \
 	netdll_socket.o \
 	netdll_url.o \
+	netdll_webrequest.o \
 	$(__NET_PLATFORM_SRC_OBJECTS_2)
 NETDLL_ODEP =  $(_____pch_wxprec_netdll_wx_wxprec_h_gch___depname)
 NETLIB_CXXFLAGS = $(__netlib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
@@ -1469,6 +1476,7 @@ NETLIB_OBJECTS =  \
 	netlib_sckstrm.o \
 	netlib_socket.o \
 	netlib_url.o \
+	netlib_webrequest.o \
 	$(__NET_PLATFORM_SRC_OBJECTS_3)
 NETLIB_ODEP =  $(_____pch_wxprec_netlib_wx_wxprec_h_gch___depname)
 COREDLL_CFLAGS = $(__coredll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
@@ -4229,7 +4237,8 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS = \
 @COND_PLATFORM_UNIX_1@	monodll_socketiohandler.o monodll_sockunix.o
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS = \
-@COND_PLATFORM_WIN32_1@	monodll_sockmsw.o monodll_urlmsw.o
+@COND_PLATFORM_WIN32_1@	monodll_sockmsw.o monodll_urlmsw.o \
+@COND_PLATFORM_WIN32_1@	monodll_webrequest_winhttp.o
 COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	$(__CORE_SRC_OBJECTS) \
 	monodll_mediactrlcmn.o \
@@ -6205,7 +6214,8 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_1 = \
 @COND_PLATFORM_UNIX_1@	monolib_socketiohandler.o monolib_sockunix.o
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_1 \
-@COND_PLATFORM_WIN32_1@	= monolib_sockmsw.o monolib_urlmsw.o
+@COND_PLATFORM_WIN32_1@	= monolib_sockmsw.o monolib_urlmsw.o \
+@COND_PLATFORM_WIN32_1@	monolib_webrequest_winhttp.o
 COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	$(__CORE_SRC_OBJECTS_1) \
 	monolib_mediactrlcmn.o \
@@ -8383,7 +8393,8 @@ COND_USE_SOVERSOLARIS_1___netdll___so_symlinks_uninst_cmd = rm -f \
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_2 = \
 @COND_PLATFORM_UNIX_1@	netdll_socketiohandler.o netdll_sockunix.o
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_2 \
-@COND_PLATFORM_WIN32_1@	= netdll_sockmsw.o netdll_urlmsw.o
+@COND_PLATFORM_WIN32_1@	= netdll_sockmsw.o netdll_urlmsw.o \
+@COND_PLATFORM_WIN32_1@	netdll_webrequest_winhttp.o
 COND_MONOLITHIC_0_SHARED_0___netlib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_MONOLITHIC_0_SHARED_0@__netlib___depname = $(COND_MONOLITHIC_0_SHARED_0___netlib___depname)
@@ -8400,7 +8411,8 @@ COND_MONOLITHIC_0_SHARED_0___netlib___depname = \
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_3 = \
 @COND_PLATFORM_UNIX_1@	netlib_socketiohandler.o netlib_sockunix.o
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_3 \
-@COND_PLATFORM_WIN32_1@	= netlib_sockmsw.o netlib_urlmsw.o
+@COND_PLATFORM_WIN32_1@	= netlib_sockmsw.o netlib_urlmsw.o \
+@COND_PLATFORM_WIN32_1@	netlib_webrequest_winhttp.o
 @COND_SHARED_1@____wxnet_namedll_DEP = $(__netdll___depname)
 @COND_SHARED_0@____wxnet_namelib_DEP = $(__netlib___depname)
 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1___coredll___depname = \
@@ -15898,11 +15910,17 @@ monodll_socket.o: $(srcdir)/src/common/socket.cpp $(MONODLL_ODEP)
 monodll_url.o: $(srcdir)/src/common/url.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/url.cpp
 
+monodll_webrequest.o: $(srcdir)/src/common/webrequest.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/webrequest.cpp
+
 monodll_sockmsw.o: $(srcdir)/src/msw/sockmsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/sockmsw.cpp
 
 monodll_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/urlmsw.cpp
+
+monodll_webrequest_winhttp.o: $(srcdir)/src/msw/webrequest_winhttp.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/webrequest_winhttp.cpp
 
 monodll_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/sockosx.cpp
@@ -21151,11 +21169,17 @@ monolib_socket.o: $(srcdir)/src/common/socket.cpp $(MONOLIB_ODEP)
 monolib_url.o: $(srcdir)/src/common/url.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/url.cpp
 
+monolib_webrequest.o: $(srcdir)/src/common/webrequest.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/webrequest.cpp
+
 monolib_sockmsw.o: $(srcdir)/src/msw/sockmsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/sockmsw.cpp
 
 monolib_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/urlmsw.cpp
+
+monolib_webrequest_winhttp.o: $(srcdir)/src/msw/webrequest_winhttp.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/webrequest_winhttp.cpp
 
 monolib_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/sockosx.cpp
@@ -26974,11 +26998,17 @@ netdll_socket.o: $(srcdir)/src/common/socket.cpp $(NETDLL_ODEP)
 netdll_url.o: $(srcdir)/src/common/url.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/url.cpp
 
+netdll_webrequest.o: $(srcdir)/src/common/webrequest.cpp $(NETDLL_ODEP)
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/common/webrequest.cpp
+
 netdll_sockmsw.o: $(srcdir)/src/msw/sockmsw.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/msw/sockmsw.cpp
 
 netdll_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/msw/urlmsw.cpp
+
+netdll_webrequest_winhttp.o: $(srcdir)/src/msw/webrequest_winhttp.cpp $(NETDLL_ODEP)
+	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/msw/webrequest_winhttp.cpp
 
 netdll_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $(srcdir)/src/osx/core/sockosx.cpp
@@ -27025,11 +27055,17 @@ netlib_socket.o: $(srcdir)/src/common/socket.cpp $(NETLIB_ODEP)
 netlib_url.o: $(srcdir)/src/common/url.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/url.cpp
 
+netlib_webrequest.o: $(srcdir)/src/common/webrequest.cpp $(NETLIB_ODEP)
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/common/webrequest.cpp
+
 netlib_sockmsw.o: $(srcdir)/src/msw/sockmsw.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/msw/sockmsw.cpp
 
 netlib_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/msw/urlmsw.cpp
+
+netlib_webrequest_winhttp.o: $(srcdir)/src/msw/webrequest_winhttp.cpp $(NETLIB_ODEP)
+	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/msw/webrequest_winhttp.cpp
 
 netlib_sockosx.o: $(srcdir)/src/osx/core/sockosx.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $(srcdir)/src/osx/core/sockosx.cpp

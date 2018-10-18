@@ -756,8 +756,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="NET_WIN32_SRC" hints="files">
     src/msw/sockmsw.cpp
     src/msw/urlmsw.cpp
+    src/msw/webrequest_winhttp.cpp
 </set>
 <set var="NET_WIN32_HDR" hints="files">
+    wx/msw/webrequest_winhttp.h
 </set>
 
 
@@ -772,6 +774,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/sckstrm.cpp
     src/common/socket.cpp
     src/common/url.cpp
+    src/common/webrequest.cpp
 </set>
 <set var="NET_CMN_HDR" hints="files">
     wx/fs_inet.h
@@ -785,6 +788,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/sckstrm.h
     wx/socket.h
     wx/url.h
+    wx/webrequest.h
 </set>
 
 <!-- ====================================================================== -->

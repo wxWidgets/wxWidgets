@@ -468,6 +468,8 @@
     <ClCompile Include="..\..\src\common\url.cpp" />
     <ClCompile Include="..\..\src\msw\sockmsw.cpp" />
     <ClCompile Include="..\..\src\msw\urlmsw.cpp" />
+    <ClCompile Include="..\..\src\common\webrequest.cpp" />
+    <ClCompile Include="..\..\src\msw\webrequest_winhttp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">
@@ -509,6 +511,8 @@
     <ClInclude Include="..\..\include\wx\sckstrm.h" />
     <ClInclude Include="..\..\include\wx\socket.h" />
     <ClInclude Include="..\..\include\wx\url.h" />
+    <ClInclude Include="..\..\include\wx\webrequest.h" />
+    <ClInclude Include="..\..\include\wx\msw\webrequest_winhttp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -481,8 +481,10 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_sckstrm.o \
 	$(OBJS)\monodll_socket.o \
 	$(OBJS)\monodll_url.o \
+	$(OBJS)\monodll_webrequest.o \
 	$(OBJS)\monodll_sockmsw.o \
 	$(OBJS)\monodll_urlmsw.o \
+	$(OBJS)\monodll_webrequest_winhttp.o \
 	$(____MONOLIB_GUI_SRC_FILENAMES_OBJECTS) \
 	$(OBJS)\monodll_xml.o \
 	$(OBJS)\monodll_xtixml.o \
@@ -634,8 +636,10 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_sckstrm.o \
 	$(OBJS)\monolib_socket.o \
 	$(OBJS)\monolib_url.o \
+	$(OBJS)\monolib_webrequest.o \
 	$(OBJS)\monolib_sockmsw.o \
 	$(OBJS)\monolib_urlmsw.o \
+	$(OBJS)\monolib_webrequest_winhttp.o \
 	$(____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS) \
 	$(OBJS)\monolib_xml.o \
 	$(OBJS)\monolib_xtixml.o
@@ -928,8 +932,10 @@ NETDLL_OBJECTS =  \
 	$(OBJS)\netdll_sckstrm.o \
 	$(OBJS)\netdll_socket.o \
 	$(OBJS)\netdll_url.o \
+	$(OBJS)\netdll_webrequest.o \
 	$(OBJS)\netdll_sockmsw.o \
-	$(OBJS)\netdll_urlmsw.o
+	$(OBJS)\netdll_urlmsw.o \
+	$(OBJS)\netdll_webrequest_winhttp.o
 NETLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -950,8 +956,10 @@ NETLIB_OBJECTS =  \
 	$(OBJS)\netlib_sckstrm.o \
 	$(OBJS)\netlib_socket.o \
 	$(OBJS)\netlib_url.o \
+	$(OBJS)\netlib_webrequest.o \
 	$(OBJS)\netlib_sockmsw.o \
-	$(OBJS)\netlib_urlmsw.o
+	$(OBJS)\netlib_urlmsw.o \
+	$(OBJS)\netlib_webrequest_winhttp.o
 COREDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__NDEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
@@ -6956,10 +6964,16 @@ $(OBJS)\monodll_socket.o: ../../src/common/socket.cpp
 $(OBJS)\monodll_url.o: ../../src/common/url.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_webrequest.o: ../../src/common/webrequest.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_sockmsw.o: ../../src/msw/sockmsw.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_urlmsw.o: ../../src/msw/urlmsw.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_webrequest_winhttp.o: ../../src/msw/webrequest_winhttp.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_generic_statusbr.o: ../../src/generic/statusbr.cpp
@@ -9497,10 +9511,16 @@ $(OBJS)\monolib_socket.o: ../../src/common/socket.cpp
 $(OBJS)\monolib_url.o: ../../src/common/url.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monolib_webrequest.o: ../../src/common/webrequest.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monolib_sockmsw.o: ../../src/msw/sockmsw.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_urlmsw.o: ../../src/msw/urlmsw.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_webrequest_winhttp.o: ../../src/msw/webrequest_winhttp.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_generic_statusbr.o: ../../src/generic/statusbr.cpp
@@ -12389,10 +12409,16 @@ $(OBJS)\netdll_socket.o: ../../src/common/socket.cpp
 $(OBJS)\netdll_url.o: ../../src/common/url.cpp
 	$(CXX) -c -o $@ $(NETDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\netdll_webrequest.o: ../../src/common/webrequest.cpp
+	$(CXX) -c -o $@ $(NETDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\netdll_sockmsw.o: ../../src/msw/sockmsw.cpp
 	$(CXX) -c -o $@ $(NETDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\netdll_urlmsw.o: ../../src/msw/urlmsw.cpp
+	$(CXX) -c -o $@ $(NETDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\netdll_webrequest_winhttp.o: ../../src/msw/webrequest_winhttp.cpp
 	$(CXX) -c -o $@ $(NETDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\netlib_dummy.o: ../../src/common/dummy.cpp
@@ -12428,10 +12454,16 @@ $(OBJS)\netlib_socket.o: ../../src/common/socket.cpp
 $(OBJS)\netlib_url.o: ../../src/common/url.cpp
 	$(CXX) -c -o $@ $(NETLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\netlib_webrequest.o: ../../src/common/webrequest.cpp
+	$(CXX) -c -o $@ $(NETLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\netlib_sockmsw.o: ../../src/msw/sockmsw.cpp
 	$(CXX) -c -o $@ $(NETLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\netlib_urlmsw.o: ../../src/msw/urlmsw.cpp
+	$(CXX) -c -o $@ $(NETLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\netlib_webrequest_winhttp.o: ../../src/msw/webrequest_winhttp.cpp
 	$(CXX) -c -o $@ $(NETLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_dummy.o: ../../src/common/dummy.cpp

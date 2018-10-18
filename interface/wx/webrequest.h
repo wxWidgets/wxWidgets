@@ -327,6 +327,14 @@ public:
         @param factory A shared pointer to the factory which creates the appropriate backend.
     */
     static void RegisterFactory(const wxString& backend, wxSharedPtr<wxWebSessionFactory> factory);
+
+    /**
+        Allows to check if the specified backend is available at runtime.
+
+        Usually the default backend should always be available, but e.g. macOS
+        before 10.9 does not have the @c NSURLSession implementation available.
+    */
+    static bool IsBackendAvailable(const wxString& backend);
 };
 
 /**

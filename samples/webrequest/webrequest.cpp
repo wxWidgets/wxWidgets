@@ -18,8 +18,9 @@
     #include "wx/wx.h"
 #endif
 
-#include <wx/notebook.h>
-#include <wx/artprov.h>
+#include "wx/notebook.h"
+#include "wx/artprov.h"
+#include "wx/webrequest.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -116,6 +117,29 @@ public:
     void OnGetLoadButton(wxCommandEvent& WXUNUSED(evt))
     {
         GetStatusBar()->SetStatusText("Requesting image...");
+
+        // Create request for the specified URL from the default session
+        wxObjectDataPtr<wxWebRequest> request(wxWebSession::GetDefault().CreateRequest(
+            m_getURLTextCtrl->GetValue()));
+
+        // Bind events for failure and success
+        request->Bind(wxEVT_WEBREQUEST_READY, &WebRequestFrame::OnGetWebRequestReady, this);
+        request->Bind(wxEVT_WEBREQUEST_FAILED, &WebRequestFrame::OnWebRequestFailed, this);
+
+        // Start the request (events will be called on success or failure)
+        request->Start();
+    }
+
+    void OnGetWebRequestReady(wxWebRequestEvent& evt)
+    {
+        wxImage img(evt.GetResponse()->GetStream());
+        m_getStaticBitmap->SetBitmap(img);
+    }
+
+    void OnWebRequestFailed(wxWebRequestEvent& evt)
+    {
+        wxLogError("Web Request failed: %s", evt.GetErrorDescription());
+        GetStatusBar()->SetStatusText("");
     }
 
     void OnPostSendButton(wxCommandEvent& WXUNUSED(evt))
