@@ -1279,6 +1279,7 @@ elif test "x$wxUSE_MACOSX_VERSION_MIN" = "x"; then
 fi
 
 if test "x$MACOSX_SDK_OPTS" != "x"; then
+    eval "CPP=\"$CPP $MACOSX_SDK_OPTS\""
     eval "CC=\"$CC $MACOSX_SDK_OPTS\""
     eval "CXX=\"$CXX $MACOSX_SDK_OPTS\""
     eval "LD=\"$LD $MACOSX_SDK_OPTS\""
@@ -1291,6 +1292,7 @@ if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
     else
         MACOSX_VERSION_MIN_OPTS="-mmacosx-version-min=$wxUSE_MACOSX_VERSION_MIN"
     fi
+    eval "CPP=\"$CPP $MACOSX_VERSION_MIN_OPTS\""
     eval "CC=\"$CC $MACOSX_VERSION_MIN_OPTS\""
     eval "CXX=\"$CXX $MACOSX_VERSION_MIN_OPTS\""
     eval "LD=\"$LD $MACOSX_VERSION_MIN_OPTS\""
