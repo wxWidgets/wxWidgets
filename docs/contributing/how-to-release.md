@@ -117,11 +117,15 @@ Create https://docs.wxwidgets.org/x.y.z/ (ask Bryan to do it if not done yet).
 
 ## Announcement
 
-Update https://www.wxwidgets.org, usually a news item is enough but something
-more can be called for for major releases.
+Update https://www.wxwidgets.org:
+* Update release information (at least `version` and `released`) in `_data/relases.yml`.
+* Download information can then be updated by running `update_release_info.rb`.
+  This will update the asset information from GitHub.
+* Add a news item. Usually a news item is enough but something
+  more can be called for for major releases
 
 Post `docs/publicity/announce.txt` at least to wx-announce@googlegroups.com and
-to wx-users for the important releases.
+to wx-users.
 
 Submit a link to https://www.reddit.com/r/programming
 
