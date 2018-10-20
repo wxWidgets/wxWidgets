@@ -218,8 +218,14 @@ wxIntegerValidatorBase::FromString(const wxString& s, LongestValueType *value)
 namespace // anonymous
 {
 
-template<typename T>
-static inline int wxGetNumDigits(T number)
+#ifdef wxLongLong_t
+    typedef wxLongLong_t LongestIntegerType;
+#else
+    typedef long LongestIntegerType;
+#endif
+
+// Helper function to compute the number of digits in a number.
+static inline int wxGetNumDigits(LongestIntegerType number)
 {
     int digits = 0;
 
