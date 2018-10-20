@@ -2585,7 +2585,7 @@ dnl We need to disable the use of lzma in built-in libtiff explicitly, as
 dnl otherwise we'd depend on the system lzma library, which is typically
 dnl undesirable when using builtin libraries. We also disable the use of lzma
 dnl if it's not available anyhow, just to speed up libtiff configure a little.
-if test "$HAVE_LZMA" = "no" -o "$wxUSE_LIBTIFF" = "builtin"; then
+if test "$wxUSE_LIBLZMA" = "no" -a "$wxUSE_LIBTIFF" = "builtin"; then
     ac_configure_args="$ac_configure_args --disable-lzma"
 fi
 
