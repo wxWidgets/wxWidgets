@@ -52,8 +52,9 @@ GTK+ 1.2 can still be used, albeit discouraged. For that you can pass
 Support for GTK+ 3 is available starting with wxWidgets 2.9.4, use @c configure
 option @c \--with-gtk=3 to enable it.
 
-For further information, please see the files in @c docs/gtk in the
-distribution.
+@subpage plat_gtk_install "Build and Install Instructions"
+
+@subpage plat_gtk_overview "wxWidgets on the GNOME Desktop"
 
 
 
@@ -62,8 +63,7 @@ distribution.
 wxOSX/Cocoa is the port of wxWidgets for the OS X platform. It requires
 OS X 10.7 or later and fully supports 64 bit builds.
 
-For further information, please see the files in @c docs/osx in the
-distribution.
+@subpage plat_osx_install "Build and Install Instructions"
 
 
 
@@ -80,8 +80,9 @@ In order to configure wxWidgets to compile wxX11 you will need to type:
 
 @verbatim configure --with-x11 --with-universal @endverbatim
 
-For further information, please see the files in @c docs/x11 in the
-distribution. There is also a page on the use of wxWidgets for embedded
+@subpage plat_x11_install "Build Instructions"
+
+There is also a page on the use of wxWidgets for embedded
 applications on the wxWidgets web site.
 
 
@@ -92,8 +93,8 @@ wxMotif is a port of wxWidgets for X11 systems using Motif libraries. Motif
 libraries provide a clean and fast user interface at the expense of the beauty
 and candy of newer interfaces like GTK.
 
-For further information, please see the files in @c docs/motif in the
-distribution.
+@subpage plat_motif_install "Build Instructions"
+
 
 
 
@@ -105,7 +106,9 @@ This port can be compiled with several compilers including Microsoft Studio
 VC++ 2003 or later, Borland 5.5, MinGW32, Cygwin as well as cross-compilation
 with a Linux-hosted MinGW32 tool chain.
 
-For further information, please see the files in docs/msw in the distribution.
+@subpage plat_msw_install "Build and Install Instructions"
+
+@subpage plat_msw_binaries "Using pre-built binaries"
 
 @subsection page_port_wxmsw_resources Resources and Application Icon
 
@@ -167,7 +170,9 @@ wxWindowBase::GetDefaultBorder(), returning wxBORDER_NONE.
 
 wxQt is a port of wxWidgets using Qt libraries. It requires Qt 5 or later.
 
-For further information, please see the files in docs/qt in the distribution.
+@subpage plat_qt_install "Build Instructions"
+
+@subpage plat_qt_architecture "Architecture Overview"
 
 @section page_port_wxiOS wxiOS
 
@@ -175,7 +180,7 @@ wxiOS is a port of wxWidgets using Cocoa touch libraries for iOS. It is very
 basic in it current form, but is included for further improvements and very
 simple applications. It requires iOS 9 or later and fully supports 64 bit builds.
 
-For further information, please see the files in docs/ios in the distribution.
+@subpage plat_ios_install "Build Instructions"
 
 @section page_port_nativedocs Native Toolkit Documentation
 
