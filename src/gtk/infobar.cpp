@@ -139,7 +139,6 @@ bool wxInfoBar::Create(wxWindow *parent, wxWindowID winid)
     // finish creation and connect to all the signals we're interested in
     m_parent->DoAddChild(this);
 
-
     PostCreation(wxDefaultSize);
 
     GTKConnectWidget("response", G_CALLBACK(wxgtk_infobar_response));
@@ -232,18 +231,13 @@ GtkWidget *wxInfoBar::GTKAddButton(wxWindowID btnid, const wxString& label)
     // our best size (at least in vertical direction)
     InvalidateBestSize();
 
-    GtkWidget *button = gtk_info_bar_add_button
-                        (
-                            GTK_INFO_BAR(m_widget),
-                            label.empty() ?
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
-                                wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(btnid)))
+    GtkWidget* button = gtk_info_bar_add_button(GTK_INFO_BAR(m_widget),
+#ifdef __WXGTK4__
+        wxGTK_CONV(label.empty() ? wxConvertMnemonicsToGTK(wxGetStockLabel(btnid)) : label),
 #else
-                                wxString(wxGetStockGtkID(btnid))
-#endif // GTK >= 3.10 / < 3.10
-                                : wxGTK_CONV(label),
-                            btnid
-                        );
+        label.empty() ? wxGetStockGtkID(btnid) : static_cast<const char*>(wxGTK_CONV(label)),
+#endif
+        btnid);
 
     wxASSERT_MSG( button, "unexpectedly failed to add button to info bar" );
 
