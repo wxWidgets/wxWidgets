@@ -23773,6 +23773,9 @@ fi
     if test "$wxUSE_ACCESSIBILITY" = "yes" ; then
         LIBS="$LIBS -loleacc"
     fi
+    if test "$wxUSE_WEBREQUEST" = "yes" ; then
+        LIBS="$LIBS -lwinhttp"
+    fi
 
     case "${host}" in
         *-*-cygwin* )

@@ -55,12 +55,12 @@ public:
         getLoadButton->Bind(wxEVT_BUTTON, &WebRequestFrame::OnGetLoadButton, this);
         getSizer->Add(getLoadButton, wxSizerFlags().Border());
 
-        wxStaticBoxSizer* getImageBox =
+        m_getImageBox =
             new wxStaticBoxSizer(wxVERTICAL, getPanel, "Image");
-        m_getStaticBitmap = new wxStaticBitmap(getImageBox->GetStaticBox(),
+        m_getStaticBitmap = new wxStaticBitmap(m_getImageBox->GetStaticBox(),
             wxID_ANY, wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
-        getImageBox->Add(m_getStaticBitmap, wxSizerFlags(1).Expand());
-        getSizer->Add(getImageBox, wxSizerFlags(1).Expand().Border());
+        m_getImageBox->Add(m_getStaticBitmap, wxSizerFlags(1).Expand());
+        getSizer->Add(m_getImageBox, wxSizerFlags(1).Expand().Border());
 
         getPanel->SetSizer(getSizer);
         notebook->AddPage(getPanel, "GET Image", true);
@@ -132,8 +132,10 @@ public:
 
     void OnGetWebRequestReady(wxWebRequestEvent& evt)
     {
-        wxImage img(evt.GetResponse()->GetStream());
+        wxImage img(*evt.GetResponse()->GetStream());
         m_getStaticBitmap->SetBitmap(img);
+        m_getImageBox->Layout();
+        GetStatusBar()->SetStatusText(wxString::Format("Loaded %lld bytes image data", evt.GetResponse()->GetContentLength()));
     }
 
     void OnWebRequestFailed(wxWebRequestEvent& evt)
@@ -149,6 +151,7 @@ public:
 
 private:
     wxTextCtrl* m_getURLTextCtrl;
+    wxStaticBoxSizer* m_getImageBox;
     wxStaticBitmap* m_getStaticBitmap;
 
     wxTextCtrl* m_postURLTextCtrl;

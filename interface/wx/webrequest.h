@@ -31,7 +31,7 @@
 
         // Bind events
         request->Bind(wxEVT_WEBREQUEST_READY, [](wxWebRequestEvent& evt) {
-            wxImage logoImage(evt->GetResponse()->GetStream());
+            wxImage logoImage(*evt->GetResponse()->GetStream());
             if (logoImage.IsOK())
                 wxLogInfo("Image loaded");
         });
@@ -192,6 +192,11 @@ public:
         @c NULL.
     */
     const wxWebResponse* GetResponse() const;
+
+    /**
+        Returns the id specified while creating this request.
+    */
+    int GetId() const;
 };
 
 /**
@@ -235,7 +240,7 @@ public:
     /**
         Returns a stream which represents the response data sent by the server.
     */
-    wxInputStream& GetStream() const;
+    wxInputStream* GetStream() const;
 
     /**
         Returns all response data as a string.
