@@ -29,6 +29,14 @@
 class WebRequestFrame : public wxFrame
 {
 public:
+    enum Pages
+    {
+        Page_Image,
+        Page_Text,
+        Page_Download,
+        Page_Advanced
+    };
+
     WebRequestFrame(const wxString& title):
         wxFrame(NULL, wxID_ANY, title)
     {
@@ -39,72 +47,77 @@ public:
 
         // If menus are not available add a button to access the about box
         wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-        wxNotebook* notebook = new wxNotebook(this, wxID_ANY);
 
-        // Get image page
-        wxPanel* getPanel = new wxPanel(notebook);
-        wxSizer* getSizer = new wxBoxSizer(wxVERTICAL);
-        getSizer->Add(new wxStaticText(getPanel, wxID_ANY, "Image URL to load:"),
+        mainSizer->Add(new wxStaticText(this, wxID_ANY, "Request URL:"),
             wxSizerFlags().Border());
-        m_getURLTextCtrl = new wxTextCtrl(getPanel, wxID_ANY,
+        m_urlTextCtrl = new wxTextCtrl(this, wxID_ANY,
             "https://www.wxwidgets.org/downloads/logos/blocks.png");
-        getSizer->Add(m_getURLTextCtrl,
+        mainSizer->Add(m_urlTextCtrl,
             wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT));
 
-        wxButton* getLoadButton = new wxButton(getPanel, wxID_ANY, "&Load");
-        getLoadButton->Bind(wxEVT_BUTTON, &WebRequestFrame::OnGetLoadButton, this);
-        getSizer->Add(getLoadButton, wxSizerFlags().Border());
+        m_notebook = new wxNotebook(this, wxID_ANY);
+        m_notebook->Bind(wxEVT_NOTEBOOK_PAGE_CHANGED, &WebRequestFrame::OnNotebookPageChanged, this);
 
-        m_getImageBox =
-            new wxStaticBoxSizer(wxVERTICAL, getPanel, "Image");
-        m_getStaticBitmap = new wxStaticBitmap(m_getImageBox->GetStaticBox(),
+        // Image page
+        wxPanel* imagePanel = new wxPanel(m_notebook);
+        wxSizer* imageSizer = new wxBoxSizer(wxVERTICAL);
+
+        m_imageStaticBitmap = new wxStaticBitmap(imagePanel,
             wxID_ANY, wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
-        m_getImageBox->Add(m_getStaticBitmap, wxSizerFlags(1).Expand());
-        getSizer->Add(m_getImageBox, wxSizerFlags(1).Expand().Border());
+        imageSizer->Add(m_imageStaticBitmap, wxSizerFlags(1).Expand());
 
-        getPanel->SetSizer(getSizer);
-        notebook->AddPage(getPanel, "GET Image", true);
+        imagePanel->SetSizer(imageSizer);
+        m_notebook->AddPage(imagePanel, "Image", true);
 
-        // POST Text page
-        wxPanel* postPanel = new wxPanel(notebook);
-        wxSizer* postSizer = new wxBoxSizer(wxVERTICAL);
-        postSizer->Add(new wxStaticText(postPanel, wxID_ANY, "Request URL:"),
-            wxSizerFlags().Border());
-        m_postURLTextCtrl = new wxTextCtrl(postPanel, wxID_ANY,
-            "https://api.github.com/");
-        postSizer->Add(m_postURLTextCtrl,
-            wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT));
+        // Text page
+        wxPanel* textPanel = new wxPanel(m_notebook);
+        wxSizer* textSizer = new wxBoxSizer(wxVERTICAL);
 
-        postSizer->Add(new wxStaticText(postPanel, wxID_ANY, "Content type:"),
-            wxSizerFlags().Border());
-        m_postContentTypeTextCtrl = new wxTextCtrl(postPanel, wxID_ANY,
-            "application/json");
-        postSizer->Add(m_postContentTypeTextCtrl,
-            wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT));
+        m_postCheckBox = new wxCheckBox(textPanel, wxID_ANY, "Post request body");
+        textSizer->Add(m_postCheckBox, wxSizerFlags().Border());
+        m_postCheckBox->Bind(wxEVT_CHECKBOX, &WebRequestFrame::OnPostCheckBox, this);
 
-        postSizer->Add(new wxStaticText(postPanel, wxID_ANY, "Request body:"),
-            wxSizerFlags().Border());
-        m_postRequestTextCtrl = new wxTextCtrl(postPanel, wxID_ANY, "",
+        m_postRequestTextCtrl = new wxTextCtrl(textPanel, wxID_ANY, "",
             wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
-        postSizer->Add(m_postRequestTextCtrl,
+        textSizer->Add(m_postRequestTextCtrl,
             wxSizerFlags(1).Expand().Border(wxLEFT | wxRIGHT));
 
-        wxButton* postSendButton = new wxButton(postPanel, wxID_ANY, "&Send");
-        postSendButton->Bind(wxEVT_BUTTON, &WebRequestFrame::OnPostSendButton, this);
-        postSizer->Add(postSendButton, wxSizerFlags().Border());
-
-        postSizer->Add(new wxStaticText(postPanel, wxID_ANY, "Response body:"),
+        textSizer->Add(new wxStaticText(textPanel, wxID_ANY, "Request body content type:"),
             wxSizerFlags().Border());
-        m_postResponseTextCtrl = new wxTextCtrl(postPanel, wxID_ANY, "",
+        m_postContentTypeTextCtrl = new wxTextCtrl(textPanel, wxID_ANY,
+            "application/json");
+        textSizer->Add(m_postContentTypeTextCtrl,
+            wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT));
+
+        textSizer->Add(new wxStaticText(textPanel, wxID_ANY, "Response body:"),
+            wxSizerFlags().Border());
+        m_textResponseTextCtrl = new wxTextCtrl(textPanel, wxID_ANY, "",
             wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY);
-        m_postResponseTextCtrl->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
-        postSizer->Add(m_postResponseTextCtrl,
+        m_textResponseTextCtrl->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
+        textSizer->Add(m_textResponseTextCtrl,
             wxSizerFlags(1).Expand().Border(wxLEFT | wxRIGHT | wxBOTTOM));
 
-        postPanel->SetSizer(postSizer);
-        notebook->AddPage(postPanel, "POST Text");
+        textPanel->SetSizer(textSizer);
+        m_notebook->AddPage(textPanel, "Text");
 
-        mainSizer->Add(notebook, wxSizerFlags(1).Expand().Border());
+        // Download page
+        wxPanel* downloadPanel = new wxPanel(m_notebook);
+
+        m_notebook->AddPage(downloadPanel, "Download");
+
+        // Advanced page
+        wxPanel* advancedPanel = new wxPanel(m_notebook);
+
+        m_notebook->AddPage(advancedPanel, "Advanced");
+
+        mainSizer->Add(m_notebook, wxSizerFlags(1).Expand().Border());
+
+        m_startButton = new wxButton(this, wxID_ANY, "&Start Request");
+        m_startButton->Bind(wxEVT_BUTTON, &WebRequestFrame::OnStartButton, this);
+        mainSizer->Add(m_startButton, wxSizerFlags().Border());
+
+        wxCommandEvent evt;
+        OnPostCheckBox(evt);
 
         SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
         SetSizer(mainSizer);
@@ -114,50 +127,115 @@ public:
         CreateStatusBar();
     }
 
-    void OnGetLoadButton(wxCommandEvent& WXUNUSED(evt))
+    void OnStartButton(wxCommandEvent& WXUNUSED(evt))
     {
-        GetStatusBar()->SetStatusText("Requesting image...");
+        GetStatusBar()->SetStatusText("Started request...");
 
         // Create request for the specified URL from the default session
         wxObjectDataPtr<wxWebRequest> request(wxWebSession::GetDefault().CreateRequest(
-            m_getURLTextCtrl->GetValue()));
+            m_urlTextCtrl->GetValue()));
 
-        // Bind events for failure and success
-        request->Bind(wxEVT_WEBREQUEST_READY, &WebRequestFrame::OnGetWebRequestReady, this);
+        // Bind event for failure
         request->Bind(wxEVT_WEBREQUEST_FAILED, &WebRequestFrame::OnWebRequestFailed, this);
+
+        // Prepare request based on selected action
+        switch (m_notebook->GetSelection())
+        {
+        case Page_Image:
+            // Bind completion event to response as image
+            request->Bind(wxEVT_WEBREQUEST_READY, &WebRequestFrame::OnImageRequestReady, this);
+            break;
+        case Page_Text:
+            if (m_postCheckBox->IsChecked())
+            {
+                request->SetData(m_postRequestTextCtrl->GetValue(),
+                    m_postContentTypeTextCtrl->GetValue());
+            }
+
+            request->Bind(wxEVT_WEBREQUEST_READY, &WebRequestFrame::OnTextRequestReady, this);
+            break;
+        case Page_Download:
+            // TODO: implement
+            break;
+        case Page_Advanced:
+            // TODO: implement
+            break;
+        }
+
+        m_startButton->Disable();
 
         // Start the request (events will be called on success or failure)
         request->Start();
     }
 
-    void OnGetWebRequestReady(wxWebRequestEvent& evt)
+    void OnImageRequestReady(wxWebRequestEvent& evt)
     {
         wxImage img(*evt.GetResponse()->GetStream());
-        m_getStaticBitmap->SetBitmap(img);
-        m_getImageBox->Layout();
+        m_imageStaticBitmap->SetBitmap(img);
+        m_notebook->GetPage(Page_Image)->Layout();
         GetStatusBar()->SetStatusText(wxString::Format("Loaded %lld bytes image data", evt.GetResponse()->GetContentLength()));
+        m_startButton->Enable();
+    }
+
+    void OnTextRequestReady(wxWebRequestEvent& evt)
+    {
+        m_textResponseTextCtrl->SetValue(evt.GetResponse()->AsString());
+        GetStatusBar()->SetStatusText(wxString::Format("Loaded %lld bytes text data (Status: %d %s)",
+            evt.GetResponse()->GetContentLength(),
+            evt.GetResponse()->GetStatus(),
+            evt.GetResponse()->GetStatusText()));
+        m_startButton->Enable();
     }
 
     void OnWebRequestFailed(wxWebRequestEvent& evt)
     {
         wxLogError("Web Request failed: %s", evt.GetErrorDescription());
         GetStatusBar()->SetStatusText("");
+        m_startButton->Enable();
     }
 
-    void OnPostSendButton(wxCommandEvent& WXUNUSED(evt))
+    void OnPostCheckBox(wxCommandEvent& WXUNUSED(evt))
     {
-        GetStatusBar()->SetStatusText("Requesting text...");
+        m_postContentTypeTextCtrl->Enable(m_postCheckBox->IsChecked());
+        m_postRequestTextCtrl->Enable(m_postCheckBox->IsChecked());
+        wxColour textBg = wxSystemSettings::GetColour(
+            (m_postCheckBox->IsChecked()) ? wxSYS_COLOUR_WINDOW : wxSYS_COLOUR_BTNFACE);
+
+        m_postContentTypeTextCtrl->SetBackgroundColour(textBg);
+        m_postRequestTextCtrl->SetBackgroundColour(textBg);
+    }
+
+    void OnNotebookPageChanged(wxBookCtrlEvent& event)
+    {
+        wxString defaultURL;
+        switch (event.GetSelection())
+        {
+        case Page_Image:
+            defaultURL = "https://www.wxwidgets.org/downloads/logos/blocks.png";
+            break;
+        case Page_Text:
+            defaultURL = "https://api.github.com";
+            break;
+        case Page_Download:
+            defaultURL = "https://www.wxwidgets.com/download.zip";
+            break;
+        case Page_Advanced:
+            defaultURL = "https://www.wxwidgets.com/adv.zip";
+            break;
+        }
+        m_urlTextCtrl->SetValue(defaultURL);
     }
 
 private:
-    wxTextCtrl* m_getURLTextCtrl;
-    wxStaticBoxSizer* m_getImageBox;
-    wxStaticBitmap* m_getStaticBitmap;
+    wxNotebook* m_notebook;
+    wxTextCtrl* m_urlTextCtrl;
+    wxButton* m_startButton;
+    wxStaticBitmap* m_imageStaticBitmap;
 
-    wxTextCtrl* m_postURLTextCtrl;
+    wxCheckBox* m_postCheckBox;
     wxTextCtrl* m_postContentTypeTextCtrl;
     wxTextCtrl* m_postRequestTextCtrl;
-    wxTextCtrl* m_postResponseTextCtrl;
+    wxTextCtrl* m_textResponseTextCtrl;
 };
 
 class WebRequestApp : public wxApp
