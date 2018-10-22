@@ -11,6 +11,9 @@
 
 #include <list>
 
+class QShortcut;
+template < class T > class QList;
+
 class QWidget;
 class QScrollWindow;
 class QAbstractScrollArea;
