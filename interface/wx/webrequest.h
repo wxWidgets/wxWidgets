@@ -20,7 +20,8 @@
     wxWebSession::CreateRequest().
 
     The requests are handled asynchronously and event handlers are used to
-    communicate the request status.
+    communicate the request status. The response data may be stored in
+    memory, to a file or processed directly, see SetStorage() for details.
 
     Example usage:
 
@@ -29,14 +30,24 @@
         wxObjectDataPtr<wxWebRequest> request(
             wxWebSession::GetDefault().CreateRequest("https://www.wxwidgets.org/downloads/logos/blocks.png"));
 
-        // Bind events
-        request->Bind(wxEVT_WEBREQUEST_READY, [](wxWebRequestEvent& evt) {
-            wxImage logoImage(*evt->GetResponse()->GetStream());
-            if (logoImage.IsOK())
-                wxLogInfo("Image loaded");
-        });
-        request->Bind(wxEVT_WEBREQUEST_FAILED, [](wxWebRequestEvent& evt) {
-            wxLogError("Could not load logo: %s", evt.GetErrorDescription());
+        // Bind state event
+        request->Bind(wxEVT_WEBREQUEST_STATE, [](wxWebRequestEvent& evt) {
+            switch (evt.GetState())
+            {
+                // Request completed
+                case wxWebRequest::State_Completed:
+                {
+                    wxImage logoImage(*evt->GetResponse()->GetStream());
+                    if (logoImage.IsOK())
+                        wxLogInfo("Image loaded");
+                    break;
+                }
+                // Request failed
+                case wxWebRequest::State_Failed:
+                    wxLogError("Could not load logo: %s", evt.GetErrorDescription());
+                    break;
+            }
+
         });
 
         // Start the request
@@ -86,13 +97,16 @@
     </table>
 
     @beginEventEmissionTable{wxWebRequestEvent}
-    @event{wxEVT_WEBREQUEST_READY(id, func)}
-        The response data is ready to be used.
-    @event{wxEVT_WEBREQUEST_FAILED(id, func)}
-        A network error has occurred. This could be client side or server side.
-        Use wxWebRequestEvent::GetErrorDescription() to get more details.
-    @event{wxEVT_WEBREQUEST_AUTH_REQUIRED(id, func)}
-        The request needs additional authentication to continue.
+    @event{wxEVT_WEBREQUEST_STATE(id, func)}
+        The request state changed.
+    @event{wxEVT_WEBREQUEST_DATA(id, func)}
+        A new block of data has been downloaded.
+    @event{wxEVT_WEBREQUEST_DOWNLOAD_PROGRESS(id, func)}
+        This event periodically reports the download progress while the request
+        is active.
+    @event{wxEVT_WEBREQUEST_UPLOAD_PROGRESS(id, func)}
+        This event periodically reports the upload progress while the request
+        is active.
     @endEventTable
 
     @since 3.1.2
@@ -105,6 +119,71 @@
 class wxWebRequest: public wxEvtHandler, public wxRefCounter
 {
 public:
+    /**
+        Possible request states returned by GetState().
+    */
+    enum State
+    {
+        /// The request has just been created and Start() has not been called
+        State_Idle,
+
+        /// The request has been started and is transferring data
+        State_Active,
+
+        /**
+            The server denied the request because of insufficient
+            user credentials. When credentials are provided with
+            SetCredentials() the request will be retried with the supplied
+            user credentials.
+        */
+        State_Unauthorized,
+
+        /**
+            A proxy denied the request because of insufficient
+            user credentials. When credentials are provided with
+            SetCredentials() the request will be retried with the supplied
+            user credentials.
+        */
+        State_UnauthorizedProxy,
+
+        /// The request completed successfully and all data has been received.
+        State_Completed,
+
+        /// The request failed
+        State_Failed,
+
+        /// The request has been cancelled before completion by calling Cancel()
+        State_Cancelled
+    };
+
+    /**
+        Possible storage types. Set by SetStorage().
+    */
+    enum Storage
+    {
+        /// All data is collected in memory until the request is complete
+        Storage_Memory,
+
+        /// The data is written to a file on disk
+        Storage_File,
+
+        /**
+            The data is not stored by the request and is only available
+            via events.
+        */
+        Storage_None
+    };
+
+    /// Possible credential targets used by SetCredentials().
+    enum CredentialTarget
+    {
+        /// Set credentials to be sent to the server.
+        CredentialTarget_Server,
+
+        /// Set credentials to be sent to a proxy.
+        CredentialTarget_Proxy
+    }
+
     /**
         Sets a request header which will be sent to the server by this request.
 
@@ -141,8 +220,11 @@ public:
         @param contentType
             The value of HTTP "Content-Type" header, e.g. "text/html;
             charset=UTF-8".
+        @param conv
+            Conversion used when sending the text to the server
     */
-    void SetData(const wxString& text, const wxString& contentType);
+    void SetData(const wxString& text, const wxString& contentType,
+        const wxMBConv& conv = wxConvUTF8);
 
     /**
         Set the binary data to be posted to the server.
@@ -156,20 +238,64 @@ public:
         @param contentType
             The value of HTTP "Content-Type" header, e.g.
             "application/octet-stream".
+        @param dataSize
+            Amount of data which is sent to the server. If set to
+            @c wxInvalidOffset all stream data is sent.
+
     */
-    void SetData(const wxInputStream& dataStream, const wxString& contentType);
+    void SetData(wxSharedPtr<wxInputStream> dataStream,
+        const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
+
+    /**
+        Sets the credentials to be sent to the server or proxy when
+        authentification is requested.
+
+        @param user
+            User name
+        @param password
+            Password
+        @param target
+            Specify the credentials for the server @c CredentialTarget_Server
+            or the proxy @c CredentialTarget_Proxy.
+    */
+    void SetCredentials(const wxString& user, const wxString& password,
+        CredentialTarget target);
 
     /**
         Instructs the request to ignore server error status codes.
 
-        Per default, server side errors (status code 400-599) will send
-        a wxEVT_WEBREQUEST_FAILED event just like network errors, but
-        if the response is still required in this cases (e.g. to get more
+        Per default, server side errors (status code 400-599) will enter
+        the State_Failed state just like network errors, but
+        if the response is still required in such cases (e.g. to get more
         details from the response body), set this option to ignore all errors.
         If ignored, wxWebResponse::GetStatus() has to be checked
-        from the wxEVT_WEBREQUEST_READY event handler.
+        from the State_Completed event handler.
     */
     void SetIgnoreServerErrorStatus(bool ignore);
+
+    /**
+        Sets how response data will be stored.
+
+        The default storage method @c Storage_Memory collects all response data
+        in memory until the request is completed. This is fine for most usage
+        scenarios like API calls, loading images, etc. For larger downloads or
+        if the response data will be used permanently @c Storage_File instructs
+        the request to write the response to a temporary file. This temporary
+        file may then be read or moved after the request is complete. The file
+        will be downloaded to the system temp directory as returned by
+        wxStandardPaths::GetTempDir(). To specify a different directory use
+        wxWebSession::SetTempDir().
+
+        Sometimes response data needs to be processed while its downloaded from
+        the server. For example if the response is in a format that can be
+        parsed piece by piece like XML, JSON or an archive format like ZIP.
+        In these cases storing the data in memory or a file before being able
+        to process it might not be ideal and @c Storage_None should be set.
+        With this storage method the data is only available during the
+        @c wxEVT_WEBREQUEST_DATA event calls as soon as it's received from the
+        server.
+    */
+    void SetStorage(Storage storage);
 
     /**
         Send the request to the server asynchronously.
@@ -191,12 +317,17 @@ public:
         Before sending a request or after a failed request this will return
         @c NULL.
     */
-    const wxWebResponse* GetResponse() const;
+    wxWebResponse* GetResponse();
 
     /**
         Returns the id specified while creating this request.
     */
     int GetId() const;
+
+    /**
+        Returns the current state of the request.
+    */
+    State GetState() const { return m_state; }
 };
 
 /**
@@ -240,7 +371,7 @@ public:
     /**
         Returns a stream which represents the response data sent by the server.
     */
-    wxInputStream* GetStream() const;
+    wxInputStream* GetStream();
 
     /**
         Returns all response data as a string.
@@ -306,6 +437,19 @@ public:
         @param value String value of the header
     */
     void SetHeader(const wxString& name, const wxString& value);
+
+    /**
+        Override the default temporary directory that may be used by the
+        session implemention, when required.
+    */
+    void SetTempDir(const wxString& name);
+
+    /**
+        Returns the current temporary directory.
+
+        @see SetTempDir()
+    */
+    const &wxString GetTempDir() const;
 
     /**
         Returns the default session
@@ -381,11 +525,16 @@ class wxWebRequestEvent : public wxEvent
 {
 public:
     wxWebRequestEvent();
-    wxWebRequestEvent(wxEventType type, int id, wxWebResponse* response = NULL,
-        const wxString& errorDesc = "");
+    wxWebRequestEvent(wxEventType type, int id, wxWebRequest::State state,
+        wxWebResponse* response = NULL, const wxString& errorDesc = "");
 
     /**
-        The response for a wxEVT_WEBREQUEST_READY event or @c NULL for other
+        Return the current state of the request
+    */
+    wxWebRequest::State GetState() const;
+
+    /**
+        The response with the state set to @c State_Complete or @c NULL for other
         events.
     */
     wxWebResponse* GetResponse() const;
@@ -397,6 +546,7 @@ public:
     const wxString& GetErrorDescription() const;
 };
 
-wxEventType wxEVT_WEBREQUEST_READY;
-wxEventType wxEVT_WEBREQUEST_FAILED;
-wxEventType wxEVT_WEBREQUEST_AUTH_REQUIRED;
+wxEventType wxEVT_WEBREQUEST_STATE;
+wxEventType wxEVT_WEBREQUEST_DATA;
+wxEventType wxEVT_WEBREQUEST_DOWNLOAD_PROGRESS;
+wxEventType wxEVT_WEBREQUEST_UPLOAD_PROGRESS;
