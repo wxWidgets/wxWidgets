@@ -2345,6 +2345,15 @@
 #           define wxUSE_STC 0
 #       endif
 #   endif
+
+#   if !wxUSE_SCROLLBAR
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxStyledTextCtrl requires wxUSE_SCROLLBAR"
+#       else
+#           undef wxUSE_STC
+#           define wxUSE_STC 0
+#       endif
+#   endif
 #endif /* wxUSE_STC */
 
 #if wxUSE_RICHTEXT
