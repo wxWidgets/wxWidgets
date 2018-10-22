@@ -42,11 +42,11 @@ public:
     virtual void SetHeader(const wxString& name, const wxString& value)
     { m_headers[name] = value; }
 
-    virtual void SetMethod(const wxString& method) = 0;
+    virtual void SetMethod(const wxString& method) { m_method = method; }
 
-    virtual void SetData(const wxString& text, const wxString& contentType) = 0;
+    void SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv = wxConvUTF8);
 
-    virtual void SetData(const wxInputStream& dataStream, const wxString& contentType) = 0;
+    void SetData(wxSharedPtr<wxInputStream> dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
     void SetIgnoreServerErrorStatus(bool ignore) { m_ignoreServerErrorStatus = ignore; }
 
@@ -61,12 +61,16 @@ public:
     State GetState() const { return m_state; }
 
 protected:
+    wxString m_method;
     wxWebRequestHeaderMap m_headers;
+    wxFileOffset m_dataSize;
+    wxSharedPtr<wxInputStream> m_dataStream;
 
     wxWebRequest(int id):
         m_id(id),
         m_state(State_Idle),
-        m_ignoreServerErrorStatus(false) { }
+        m_ignoreServerErrorStatus(false),
+        m_dataSize(0) { }
 
     void SetState(State state, const wxString& failMsg = "");
 
@@ -77,6 +81,7 @@ private:
     State m_state;
     wxString m_failMessage;
     bool m_ignoreServerErrorStatus;
+    wxCharBuffer m_dataText;
 
     void ProcessReadyEvent();
 

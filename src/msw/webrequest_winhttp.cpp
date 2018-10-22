@@ -163,36 +163,28 @@ wxWebRequestWinHTTP::~wxWebRequestWinHTTP()
 void wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
     LPVOID lpvStatusInformation, DWORD dwStatusInformationLength)
 {
-    bool handleLastError = false;
-    static const int readSize = 8 * 1024;
-
     switch ( dwInternetStatus )
     {
         case WINHTTP_CALLBACK_STATUS_SENDREQUEST_COMPLETE:
-            if ( ::WinHttpReceiveResponse(m_request, NULL) )
-            {
-                m_response.reset(new wxWebResponseWinHTTP(*this));
-                if ( CheckServerStatus() )
-                {
-                    // Start reading the response
-                    if ( !m_response->ReadData() )
-                        handleLastError = true;
-                }
-            }
+            if ( m_dataSize )
+                WriteData();
             else
-                handleLastError = true;
+                CreateResponse();
             break;
         case WINHTTP_CALLBACK_STATUS_READ_COMPLETE:
             if ( dwStatusInformationLength > 0 )
             {
                 if ( !m_response->ReportAvailableData(dwStatusInformationLength) )
-                    handleLastError = true;
+                    SetFailedWithLastError();
             }
             else
             {
                 m_response->ReportDataComplete();
                 SetState(State_Ready);
             }
+            break;
+        case WINHTTP_CALLBACK_STATUS_WRITE_COMPLETE:
+            WriteData();
             break;
         case WINHTTP_CALLBACK_STATUS_REQUEST_ERROR:
         {
@@ -201,8 +193,40 @@ void wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
             break;
         }
     }
+}
 
-    if (handleLastError)
+void wxWebRequestWinHTTP::WriteData()
+{
+    int dataWriteSize = 8 * 1024;
+    if ( m_dataWritten + dataWriteSize > m_dataSize )
+        dataWriteSize = m_dataSize - m_dataWritten;
+    if ( dataWriteSize )
+    {
+        m_dataWriteBuffer.Clear();
+        m_dataWriteBuffer.GetWriteBuf(dataWriteSize);
+        m_dataStream->Read(m_dataWriteBuffer.GetData(), dataWriteSize);
+
+        if ( !::WinHttpWriteData(m_request, m_dataWriteBuffer.GetData(), dataWriteSize, NULL) )
+            SetFailedWithLastError();
+        m_dataWritten += dataWriteSize;
+    }
+    else
+        CreateResponse();
+}
+
+void wxWebRequestWinHTTP::CreateResponse()
+{
+    if (::WinHttpReceiveResponse(m_request, NULL))
+    {
+        m_response.reset(new wxWebResponseWinHTTP(*this));
+        if (CheckServerStatus())
+        {
+            // Start reading the response
+            if (!m_response->ReadData())
+                SetFailedWithLastError();
+        }
+    }
+    else
         SetFailedWithLastError();
 }
 
@@ -210,21 +234,6 @@ void wxWebRequestWinHTTP::SetFailedWithLastError()
 {
     wxString failMessage = wxWinHTTPErrorToString(::GetLastError());
     SetState(State_Failed, failMessage);
-}
-
-void wxWebRequestWinHTTP::SetMethod(const wxString& method)
-{
-    // TODO: implement
-}
-
-void wxWebRequestWinHTTP::SetData(const wxString& text, const wxString& contentType)
-{
-    // TODO: implement
-}
-
-void wxWebRequestWinHTTP::SetData(const wxInputStream& dataStream, const wxString& contentType)
-{
-    // TODO: implement
 }
 
 void wxWebRequestWinHTTP::Start()
@@ -251,9 +260,17 @@ void wxWebRequestWinHTTP::Start()
         return;
     }
 
+    wxString method;
+    if ( !m_method.empty() )
+        method = m_method;
+    else if ( m_dataSize )
+        method = "POST";
+    else
+        method = "GET";
+
     // Open a request
     m_request = ::WinHttpOpenRequest(m_connect,
-        L"GET", uri.GetPath().wc_str(),
+        method.wc_str(), uri.GetPath().wc_str(),
         NULL, WINHTTP_NO_REFERER,
         WINHTTP_DEFAULT_ACCEPT_TYPES,
         (isSecure) ? WINHTTP_FLAG_SECURE : 0);
@@ -267,6 +284,7 @@ void wxWebRequestWinHTTP::Start()
     if ( ::WinHttpSetStatusCallback(m_request,
         (WINHTTP_STATUS_CALLBACK)wxRequestStatusCallback,
         WINHTTP_CALLBACK_FLAG_READ_COMPLETE |
+        WINHTTP_CALLBACK_FLAG_WRITE_COMPLETE |
         WINHTTP_CALLBACK_FLAG_SENDREQUEST_COMPLETE |
         WINHTTP_CALLBACK_FLAG_REQUEST_ERROR,
         0) == WINHTTP_INVALID_STATUS_CALLBACK )
@@ -280,10 +298,13 @@ void wxWebRequestWinHTTP::Start()
     for (wxWebRequestHeaderMap::const_iterator header = m_headers.begin(); header != m_headers.end(); ++header)
         allHeaders.append(wxString::Format("%s: %s\n", header->first, header->second));
 
+    if ( m_dataSize )
+        m_dataWritten = 0;
+
     // Send request
     if ( WinHttpSendRequest(m_request,
         allHeaders.wc_str(), allHeaders.length(),
-        NULL, 0, 0,
+        NULL, 0, m_dataSize,
         (DWORD_PTR)this) )
     {
         SetState(State_Active);

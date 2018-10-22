@@ -17,6 +17,7 @@
 #if wxUSE_WEBREQUEST
 
 #include "wx/webrequest.h"
+#include "wx/mstream.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -53,6 +54,32 @@ bool wxWebRequest::CheckServerStatus()
     }
     else
         return true;
+}
+
+void wxWebRequest::SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv)
+{
+    m_dataText = text.mb_str(conv);
+    SetData(wxSharedPtr<wxInputStream>(new wxMemoryInputStream(m_dataText, m_dataText.length())), contentType);
+}
+
+void wxWebRequest::SetData(wxSharedPtr<wxInputStream> dataStream, const wxString& contentType, wxFileOffset dataSize)
+{
+    m_dataStream = dataStream;
+    if ( m_dataStream.get() )
+    {
+        if ( dataSize == wxInvalidOffset )
+        {
+            // Determine data size
+            m_dataSize = m_dataStream->SeekI(0, wxFromEnd);
+            m_dataStream->SeekI(0);
+        }
+        else
+            m_dataSize = dataSize;
+    }
+    else
+        m_dataSize = 0;
+
+    SetHeader("Content-Type", contentType);
 }
 
 void wxWebRequest::SetState(State state, const wxString & failMsg)

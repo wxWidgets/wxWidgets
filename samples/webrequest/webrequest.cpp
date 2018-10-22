@@ -77,15 +77,16 @@ public:
         textSizer->Add(m_postCheckBox, wxSizerFlags().Border());
         m_postCheckBox->Bind(wxEVT_CHECKBOX, &WebRequestFrame::OnPostCheckBox, this);
 
-        m_postRequestTextCtrl = new wxTextCtrl(textPanel, wxID_ANY, "",
-            wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+        m_postRequestTextCtrl = new wxTextCtrl(textPanel, wxID_ANY,
+            "app=WebRequestSample&version=1",
+            wxDefaultPosition, wxSize(-1, FromDIP(60)), wxTE_MULTILINE);
         textSizer->Add(m_postRequestTextCtrl,
-            wxSizerFlags(1).Expand().Border(wxLEFT | wxRIGHT));
+            wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT));
 
         textSizer->Add(new wxStaticText(textPanel, wxID_ANY, "Request body content type:"),
             wxSizerFlags().Border());
         m_postContentTypeTextCtrl = new wxTextCtrl(textPanel, wxID_ANY,
-            "application/json");
+            "application/x-www-form-urlencoded");
         textSizer->Add(m_postContentTypeTextCtrl,
             wxSizerFlags().Expand().Border(wxLEFT | wxRIGHT));
 
@@ -142,10 +143,16 @@ public:
         switch (m_notebook->GetSelection())
         {
         case Page_Image:
+            // Reset static bitmap image
+            m_imageStaticBitmap->SetBitmap(wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
             // Bind completion event to response as image
             request->Bind(wxEVT_WEBREQUEST_READY, &WebRequestFrame::OnImageRequestReady, this);
             break;
         case Page_Text:
+            // Reset response text control
+            m_textResponseTextCtrl->Clear();
+
+            // Set postdata if checked
             if (m_postCheckBox->IsChecked())
             {
                 request->SetData(m_postRequestTextCtrl->GetValue(),
@@ -214,7 +221,7 @@ public:
             defaultURL = "https://www.wxwidgets.org/downloads/logos/blocks.png";
             break;
         case Page_Text:
-            defaultURL = "https://api.github.com";
+            defaultURL = "https://httpbin.org/post";
             break;
         case Page_Download:
             defaultURL = "https://www.wxwidgets.com/download.zip";

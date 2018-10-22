@@ -59,12 +59,6 @@ public:
 
     ~wxWebRequestWinHTTP();
 
-    void SetMethod(const wxString& method) wxOVERRIDE;
-
-    void SetData(const wxString& text, const wxString& contentType) wxOVERRIDE;
-
-    void SetData(const wxInputStream& dataStream, const wxString& contentType) wxOVERRIDE;
-
     void Start() wxOVERRIDE;
 
     void Cancel() wxOVERRIDE;
@@ -82,6 +76,12 @@ private:
     HINTERNET m_connect;
     HINTERNET m_request;
     wxScopedPtr<wxWebResponseWinHTTP> m_response;
+    wxMemoryBuffer m_dataWriteBuffer;
+    wxFileOffset m_dataWritten;
+
+    void WriteData();
+
+    void CreateResponse();
 
     void SetFailedWithLastError();
 
