@@ -21,7 +21,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_DATEPICKCTRL
+#if wxUSE_TIMEPICKCTRL
 
 #ifndef WX_PRECOMP
     #include "wx/msw/wrapcctl.h"
