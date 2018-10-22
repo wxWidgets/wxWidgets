@@ -62,8 +62,10 @@ wxDateTimePickerCtrl::MSWCreateDateTimePicker(wxWindow *parent,
                                               const wxValidator& validator,
                                               const wxString& name)
 {
+#if wxUSE_DATEPICKCTRL || wxUSE_CALENDARCTRL
     if ( !wxMSWDateControls::CheckInitialization() )
         return false;
+#endif // wxUSE_DATEPICKCTRL || wxUSE_CALENDARCTRL
 
     // initialize the base class
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
