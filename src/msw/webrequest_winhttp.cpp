@@ -268,9 +268,13 @@ void wxWebRequestWinHTTP::Start()
     else
         method = "GET";
 
+    wxString objectName = uri.GetPath();
+    if ( uri.HasQuery() )
+        objectName += "?" + uri.GetQuery();
+
     // Open a request
     m_request = ::WinHttpOpenRequest(m_connect,
-        method.wc_str(), uri.GetPath().wc_str(),
+        method.wc_str(), objectName.wc_str(),
         NULL, WINHTTP_NO_REFERER,
         WINHTTP_DEFAULT_ACCEPT_TYPES,
         (isSecure) ? WINHTTP_FLAG_SECURE : 0);
