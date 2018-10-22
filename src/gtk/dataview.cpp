@@ -5289,10 +5289,36 @@ void wxDataViewCtrl::HitTest(const wxPoint& point,
 }
 
 wxRect
-wxDataViewCtrl::GetItemRect(const wxDataViewItem& WXUNUSED(item),
-                            const wxDataViewColumn *WXUNUSED(column)) const
+wxDataViewCtrl::GetItemRect(const wxDataViewItem& item,
+                            const wxDataViewColumn *column) const
 {
-    return wxRect();
+    if ( !item )
+        return wxRect();
+
+    GtkTreeViewColumn *gcolumn = NULL ;
+    if (column)
+        gcolumn = GTK_TREE_VIEW_COLUMN(column->GetGtkHandle());
+
+    GtkTreeIter iter;
+    iter.user_data = item.GetID();
+    wxGtkTreePath path(m_internal->get_path( &iter ));
+
+    GdkRectangle item_rect;
+    gtk_tree_view_get_background_area(GTK_TREE_VIEW(m_treeview), path, gcolumn, &item_rect);
+    // If column is NULL we compute the combined width of all the columns
+    if ( !column )
+    {
+        unsigned int cols = GetColumnCount();
+        int width = 0;
+        for (unsigned int i = 0; i < cols; ++i)
+        {
+            wxDataViewColumn * col = GetColumn(i);
+            if ( !col->IsHidden() )
+                width += col->GetWidth();
+        }
+        item_rect.width = width;
+    }
+    return wxRectFromGDKRect(&item_rect);
 }
 
 bool wxDataViewCtrl::SetRowHeight(int rowHeight)
