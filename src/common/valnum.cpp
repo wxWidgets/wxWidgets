@@ -271,15 +271,14 @@ static inline bool wxTryMakeValueInRange(T* value, const T min, const T max)
 class wxTextSelector
 {
 public:
-    wxTextSelector(wxTextEntry * const control, int pos)
-        : m_control(control), m_pos(pos)
+    wxTextSelector(wxTextEntry * const entry, int pos)
+        : m_entry(entry), m_pos(pos)
     {}
 
-    void operator()()
-        { m_control->SetSelection(m_pos+1, -1); }
+    void operator()(){ m_entry->SetSelection(m_pos+1, -1); }
 
 private:
-    wxTextEntry * const m_control;
+    wxTextEntry * const m_entry;
     int m_pos;
 };
 
@@ -329,11 +328,9 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
 
             control->ChangeValue(wxNumberFormatter::ToString(value));
 
-            // FIXME: under wxMSW this line of code works correctly:
-            //            control->SetSelection(pos+1, -1);
-            //        which does not under wxGTK. but calling it at
-            //        a later time does work without problems.
-
+            // Notice that it is much safer to call SetSelection() at a later time
+            // (i.e. after the current event has been fully processed) than calling
+            // it directly here which won't work at least on wxGTK.
             (const_cast<wxIntegerValidatorBase*>(this))->CallAfter(
                 wxTextSelector(control, pos)
             );
