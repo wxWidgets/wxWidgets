@@ -278,14 +278,17 @@ void MainFrame::OnShowShaped(wxCommandEvent& WXUNUSED(event))
 
 void MainFrame::OnShowTransparent(wxCommandEvent& WXUNUSED(event))
 {
-    if (IsTransparentBackgroundSupported())
+    wxString reason;
+    if (IsTransparentBackgroundSupported(&reason))
     {
         SeeThroughFrame *seeThroughFrame = new SeeThroughFrame;
         seeThroughFrame->Create();
         seeThroughFrame->Show(true);
     }
     else
-        wxMessageBox("transparent window requires a composited screen");
+    {
+        wxLogError("%s, can't create transparent window.", reason);
+    }
 }
 
 void MainFrame::OnShowEffect(wxCommandEvent& event)
