@@ -180,7 +180,7 @@ void wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
             else
             {
                 m_response->ReportDataComplete();
-                SetState(State_Ready);
+                SetState(State_Completed);
             }
             break;
         case WINHTTP_CALLBACK_STATUS_WRITE_COMPLETE:
@@ -319,7 +319,7 @@ void wxWebRequestWinHTTP::Start()
 
 void wxWebRequestWinHTTP::Cancel()
 {
-    // TODO: implement
+    wxFAIL_MSG("not implemented");
 }
 
 wxWebResponse* wxWebRequestWinHTTP::GetResponse()

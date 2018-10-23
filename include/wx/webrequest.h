@@ -32,9 +32,18 @@ public:
     enum State
     {
         State_Idle,
+        State_Unauthorized,
+        State_UnauthorizedProxy,
         State_Active,
-        State_Ready,
-        State_Failed
+        State_Completed,
+        State_Failed,
+        State_Cancelled
+    };
+
+    enum CredentialTarget
+    {
+        CredentialTarget_Server,
+        CredentialTarget_Proxy
     };
 
     virtual ~wxWebRequest() { }
@@ -47,6 +56,9 @@ public:
     void SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv = wxConvUTF8);
 
     void SetData(wxSharedPtr<wxInputStream> dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
+
+    void SetCredentials(const wxString& user, const wxString& password,
+        CredentialTarget target);
 
     void SetIgnoreServerErrorStatus(bool ignore) { m_ignoreServerErrorStatus = ignore; }
 
@@ -79,13 +91,10 @@ protected:
 private:
     int m_id;
     State m_state;
-    wxString m_failMessage;
     bool m_ignoreServerErrorStatus;
     wxCharBuffer m_dataText;
 
-    void ProcessReadyEvent();
-
-    void ProcessFailedEvent();
+    void ProcessStateEvent(State state, const wxString& failMsg);
 
     wxDECLARE_NO_COPY_CLASS(wxWebRequest);
 };
@@ -167,11 +176,13 @@ class WXDLLIMPEXP_NET wxWebRequestEvent : public wxEvent
 {
 public:
     wxWebRequestEvent() {}
-    wxWebRequestEvent(wxEventType type, int id, wxWebResponse* response = NULL,
-        const wxString& errorDesc = "")
+    wxWebRequestEvent(wxEventType type, int id, wxWebRequest::State state,
+        wxWebResponse* response = NULL, const wxString& errorDesc = "")
         : wxEvent(id, type),
-        m_response(response), m_errorDescription(errorDesc)
+        m_state(state), m_response(response), m_errorDescription(errorDesc)
     { }
+
+    wxWebRequest::State GetState() const { return m_state; }
 
     wxWebResponse* GetResponse() const { return m_response; }
 
@@ -180,14 +191,15 @@ public:
     wxEvent* Clone() const wxOVERRIDE { return new wxWebRequestEvent(*this); }
 
 private:
+    wxWebRequest::State m_state;
     wxWebResponse* m_response;
     wxString m_errorDescription;
 };
 
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_NET, wxEVT_WEBREQUEST_READY, wxWebRequestEvent);
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_NET, wxEVT_WEBREQUEST_FAILED, wxWebRequestEvent);
-wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_NET, wxEVT_WEBREQUEST_AUTH_REQUIRED, wxWebRequestEvent);
-
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_NET, wxEVT_WEBREQUEST_STATE, wxWebRequestEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_NET, wxEVT_WEBREQUEST_DATA, wxWebRequestEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_NET, wxEVT_WEBREQUEST_DOWNLOAD_PROGRESS, wxWebRequestEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_NET, wxEVT_WEBREQUEST_UPLOAD_PROGRESS, wxWebRequestEvent);
 
 #endif // wxUSE_WEBREQUEST
 

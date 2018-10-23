@@ -36,9 +36,10 @@ extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendCURL[] = "wxWebSessio
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendDefault[] = "wxWebSessionBackendWinHTTP";
 #endif
 
-wxDEFINE_EVENT(wxEVT_WEBREQUEST_READY, wxWebRequestEvent);
-wxDEFINE_EVENT(wxEVT_WEBREQUEST_FAILED, wxWebRequestEvent);
-wxDEFINE_EVENT(wxEVT_WEBREQUEST_AUTH_REQUIRED, wxWebRequestEvent);
+wxDEFINE_EVENT(wxEVT_WEBREQUEST_STATE, wxWebRequestEvent);
+wxDEFINE_EVENT(wxEVT_WEBREQUEST_DATA, wxWebRequestEvent);
+wxDEFINE_EVENT(wxEVT_WEBREQUEST_DOWNLOAD_PROGRESS, wxWebRequestEvent);
+wxDEFINE_EVENT(wxEVT_WEBREQUEST_UPLOAD_PROGRESS, wxWebRequestEvent);
 
 //
 // wxWebRequest
@@ -82,49 +83,31 @@ void wxWebRequest::SetData(wxSharedPtr<wxInputStream> dataStream, const wxString
     SetHeader("Content-Type", contentType);
 }
 
+void wxWebRequest::SetCredentials(const wxString & user, const wxString & password, CredentialTarget target)
+{
+    wxFAIL_MSG("not implemented");
+}
+
 void wxWebRequest::SetState(State state, const wxString & failMsg)
 {
-    switch (state)
-    {
-        case State_Active:
-            // Add a reference while the request is active
-            if ( m_state != State_Active )
-            {
-                IncRef();
-                m_state = state;
-            }
-            break;
-        case State_Ready:
-            // Trigger the ready event in main thread
-            CallAfter(&wxWebRequest::ProcessReadyEvent);
-            break;
-        case State_Failed:
-            m_failMessage = failMsg;
-            // Trigger the failed event in main thread
-            CallAfter(&wxWebRequest::ProcessFailedEvent);
-            break;
-    }
+    // Add a reference while the request is active
+    if (state == State_Active && m_state != State_Active)
+        IncRef();
+
+    // Trigger the event in the main thread
+    CallAfter(&wxWebRequest::ProcessStateEvent, state, failMsg);
 }
 
-void wxWebRequest::ProcessReadyEvent()
+void wxWebRequest::ProcessStateEvent(State state, const wxString& failMsg)
 {
-    wxWebRequestEvent evt(wxEVT_WEBREQUEST_READY, GetId(), GetResponse());
+    wxWebRequestEvent evt(wxEVT_WEBREQUEST_STATE, GetId(), state,
+        GetResponse(), failMsg);
     ProcessEvent(evt);
     // Remove reference after the request is no longer active
-    if ( m_state == State_Active )
+    if (state == State_Completed || state == State_Failed ||
+        state == State_Cancelled)
         DecRef();
-    m_state = State_Ready;
-}
-
-void wxWebRequest::ProcessFailedEvent()
-{
-    wxWebRequestEvent evt(wxEVT_WEBREQUEST_FAILED, GetId(), NULL,
-        m_failMessage);
-    ProcessEvent(evt);
-    // Remove reference after the request is no longer active
-    if ( m_state == State_Active )
-        DecRef();
-    m_state = State_Failed;
+    m_state = state;
 }
 
 //

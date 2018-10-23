@@ -136,8 +136,8 @@ public:
         wxObjectDataPtr<wxWebRequest> request(wxWebSession::GetDefault().CreateRequest(
             m_urlTextCtrl->GetValue()));
 
-        // Bind event for failure
-        request->Bind(wxEVT_WEBREQUEST_FAILED, &WebRequestFrame::OnWebRequestFailed, this);
+        // Bind event for state change
+        request->Bind(wxEVT_WEBREQUEST_STATE, &WebRequestFrame::OnWebRequestState, this);
 
         // Prepare request based on selected action
         switch (m_notebook->GetSelection())
@@ -145,8 +145,6 @@ public:
         case Page_Image:
             // Reset static bitmap image
             m_imageStaticBitmap->SetBitmap(wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
-            // Bind completion event to response as image
-            request->Bind(wxEVT_WEBREQUEST_READY, &WebRequestFrame::OnImageRequestReady, this);
             break;
         case Page_Text:
             // Reset response text control
@@ -158,8 +156,6 @@ public:
                 request->SetData(m_postRequestTextCtrl->GetValue(),
                     m_postContentTypeTextCtrl->GetValue());
             }
-
-            request->Bind(wxEVT_WEBREQUEST_READY, &WebRequestFrame::OnTextRequestReady, this);
             break;
         case Page_Download:
             // TODO: implement
@@ -175,30 +171,37 @@ public:
         request->Start();
     }
 
-    void OnImageRequestReady(wxWebRequestEvent& evt)
+    void OnWebRequestState(wxWebRequestEvent& evt)
     {
-        wxImage img(*evt.GetResponse()->GetStream());
-        m_imageStaticBitmap->SetBitmap(img);
-        m_notebook->GetPage(Page_Image)->Layout();
-        GetStatusBar()->SetStatusText(wxString::Format("Loaded %lld bytes image data", evt.GetResponse()->GetContentLength()));
-        m_startButton->Enable();
-    }
+        m_startButton->Enable(evt.GetState() != wxWebRequest::State_Active);
 
-    void OnTextRequestReady(wxWebRequestEvent& evt)
-    {
-        m_textResponseTextCtrl->SetValue(evt.GetResponse()->AsString());
-        GetStatusBar()->SetStatusText(wxString::Format("Loaded %lld bytes text data (Status: %d %s)",
-            evt.GetResponse()->GetContentLength(),
-            evt.GetResponse()->GetStatus(),
-            evt.GetResponse()->GetStatusText()));
-        m_startButton->Enable();
-    }
+        switch (evt.GetState())
+        {
+            case wxWebRequest::State_Completed:
+                switch (m_notebook->GetSelection())
+                {
+                case Page_Image:
+                {
+                    wxImage img(*evt.GetResponse()->GetStream());
+                    m_imageStaticBitmap->SetBitmap(img);
+                    m_notebook->GetPage(Page_Image)->Layout();
+                    GetStatusBar()->SetStatusText(wxString::Format("Loaded %lld bytes image data", evt.GetResponse()->GetContentLength()));
+                    break;
+                }
+                case Page_Text:
+                    m_textResponseTextCtrl->SetValue(evt.GetResponse()->AsString());
+                    GetStatusBar()->SetStatusText(wxString::Format("Loaded %lld bytes text data (Status: %d %s)",
+                        evt.GetResponse()->GetContentLength(),
+                        evt.GetResponse()->GetStatus(),
+                        evt.GetResponse()->GetStatusText()));
+                    break;
+                }
 
-    void OnWebRequestFailed(wxWebRequestEvent& evt)
-    {
-        wxLogError("Web Request failed: %s", evt.GetErrorDescription());
-        GetStatusBar()->SetStatusText("");
-        m_startButton->Enable();
+                break;
+            case wxWebRequest::State_Failed:
+                wxLogError("Web Request failed: %s", evt.GetErrorDescription());
+                GetStatusBar()->SetStatusText("");
+        }
     }
 
     void OnPostCheckBox(wxCommandEvent& WXUNUSED(evt))
