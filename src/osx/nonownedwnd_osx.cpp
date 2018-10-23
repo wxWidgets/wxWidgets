@@ -254,6 +254,13 @@ wxPoint wxNonOwnedWindow::GetClientAreaOrigin() const
 
 bool wxNonOwnedWindow::SetBackgroundColour(const wxColour& c )
 {
+    // only set the native background color if the toplevel window's
+    // background is not supposed to be transparent, otherwise the
+    // transparency is lost
+    if( GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT ||
+       (GetWindowStyle() & wxFRAME_SHAPED) )
+        return false;
+
     if ( !wxWindow::SetBackgroundColour(c) && m_hasBgCol )
         return false ;
 
