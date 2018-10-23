@@ -34,7 +34,12 @@
 
 #include "wx/dcgraph.h"
 #ifndef __WXGTK3__
-#include "wx/gtk/dc.h"
+    #include "wx/gtk/dc.h"
+    #include <gdk/gdk.h>
+    #if wxUSE_GRAPHICS_CONTEXT && defined(GDK_WINDOWING_X11)
+        #include <gdk/gdkx.h>
+        #include <cairo-xlib.h>
+    #endif
 #endif
 
 #include <gtk/gtk.h>
@@ -167,14 +172,25 @@ static const GtkStateFlags stateTypeToFlags[] = {
 #define NULL_RECT NULL,
 typedef GdkWindow wxGTKDrawable;
 
-static GdkWindow* wxGetGTKDrawable(wxWindow* win, wxDC& dc)
+static GdkWindow* wxGetGTKDrawable(wxWindow*, wxDC& dc)
 {
     GdkWindow* gdk_window = NULL;
 
-#if wxUSE_GRAPHICS_CONTEXT
-    if ( wxDynamicCast(&dc, wxGCDC) )
-        gdk_window = win->GTKGetDrawingWindow();
-    else
+#if wxUSE_GRAPHICS_CONTEXT && defined(GDK_WINDOWING_X11)
+    cairo_t* cr = NULL;
+    wxGraphicsContext* gc = dc.GetGraphicsContext();
+    if (gc)
+        cr = static_cast<cairo_t*>(gc->GetNativeContext());
+    if (cr)
+    {
+        cairo_surface_t* surf = cairo_get_target(cr);
+        if (cairo_surface_get_type(surf) == CAIRO_SURFACE_TYPE_XLIB)
+        {
+            gdk_window = static_cast<GdkWindow*>(
+                gdk_xid_table_lookup(cairo_xlib_surface_get_drawable(surf)));
+        }
+    }
+    if (gdk_window == NULL)
 #endif
     {
         wxDCImpl *impl = dc.GetImpl();
@@ -184,10 +200,6 @@ static GdkWindow* wxGetGTKDrawable(wxWindow* win, wxDC& dc)
         else
             wxFAIL_MSG("cannot use wxRendererNative on wxDC of this type");
     }
-
-#if !wxUSE_GRAPHICS_CONTEXT
-    wxUnusedVar(win);
-#endif
 
     return gdk_window;
 }
