@@ -214,6 +214,16 @@ is obtained using wxNumberEntryDialog::GetValue().
 
 
 
+@section overview_cmndlg_cred wxCredentialEntryDialog Overview
+
+Classes: wxCredentialEntryDialog
+
+This is a dialog with a user and password entry field. The values that the
+users entered is obtained using wxCredentialEntryDialog::GetUser() and
+wxCredentialEntryDialog::GetPassword().
+
+
+
 @section overview_cmndlg_msg wxMessageDialog Overview
 
 Classes: wxMessageDialog

@@ -1009,6 +1009,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/editlbox.cpp
     src/generic/laywin.cpp
     src/generic/calctrlg.cpp
+    src/generic/creddlgg.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
     wx/affinematrix2dbase.h
@@ -1297,6 +1298,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/dvrenderer.h
     wx/calctrl.h
     wx/propdlg.h
+    wx/generic/creddlgg.h
+    wx/creddlg.h
 </set>
 
 <!-- ====================================================================== -->

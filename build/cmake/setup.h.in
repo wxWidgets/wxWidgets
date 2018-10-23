@@ -524,6 +524,8 @@
 
 #cmakedefine01 wxUSE_NUMBERDLG
 
+#cmakedefine01 wxUSE_CREDENTIALDLG
+
 #cmakedefine01 wxUSE_SPLASH
 
 #cmakedefine01 wxUSE_WIZARDDLG

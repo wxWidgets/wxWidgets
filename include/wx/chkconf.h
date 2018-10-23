@@ -2128,6 +2128,7 @@
 #   if wxUSE_FONTDLG || \
        wxUSE_FILEDLG || \
        wxUSE_CHOICEDLG || \
+       wxUSE_CREDENTIALDLG || \
        wxUSE_NUMBERDLG || \
        wxUSE_TEXTDLG || \
        wxUSE_DIRDLG || \

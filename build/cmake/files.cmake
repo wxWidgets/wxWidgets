@@ -912,6 +912,7 @@ set(GUI_CMN_SRC
     src/generic/wizard.cpp
     src/generic/editlbox.cpp
     src/generic/datavgen.cpp
+    src/generic/creddlgg.cpp
 )
 
 set(GUI_CMN_HDR
@@ -1200,6 +1201,8 @@ set(GUI_CMN_HDR
     wx/generic/splash.h
     wx/generic/calctrlg.h
     wx/generic/sashwin.h
+    wx/creddlg.h
+    wx/generic/creddlgg.h
 )
 
 set(UNIX_SRC

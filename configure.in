@@ -970,6 +970,7 @@ WX_ARG_FEATURE(commondlg,   [  --enable-commondlg      use all common dialogs], 
 WX_ARG_FEATURE(aboutdlg,    [  --enable-aboutdlg       use wxAboutBox], wxUSE_ABOUTDLG)
 WX_ARG_FEATURE(choicedlg,   [  --enable-choicedlg      use wxChoiceDialog], wxUSE_CHOICEDLG)
 WX_ARG_FEATURE(coldlg,      [  --enable-coldlg         use wxColourDialog], wxUSE_COLOURDLG)
+WX_ARG_FEATURE(creddlg,     [  --enable-creddlg        use wxCredentialEntryDialog], wxUSE_CREDENTIALDLG)
 WX_ARG_FEATURE(filedlg,     [  --enable-filedlg        use wxFileDialog], wxUSE_FILEDLG)
 WX_ARG_FEATURE(finddlg,     [  --enable-finddlg        use wxFindReplaceDialog], wxUSE_FINDREPLDLG)
 WX_ARG_FEATURE(fontdlg,     [  --enable-fontdlg        use wxFontDialog], wxUSE_FONTDLG)
@@ -7372,6 +7373,10 @@ fi
 
 if test "$wxUSE_COLOURDLG" = "yes"; then
     AC_DEFINE(wxUSE_COLOURDLG)
+fi
+
+if test "$wxUSE_CREDENTIALDLG" = "yes"; then
+    AC_DEFINE(wxUSE_CREDENTIALDLG)
 fi
 
 if test "$wxUSE_FILEDLG" = "yes"; then

@@ -1296,6 +1296,9 @@
 // number entry dialog
 #define wxUSE_NUMBERDLG 1
 
+// credential entry dialog
+#define wxUSE_CREDENTIALDLG 1
+
 // splash screen class
 #define wxUSE_SPLASH 1
 

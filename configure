@@ -1298,6 +1298,7 @@ enable_commondlg
 enable_aboutdlg
 enable_choicedlg
 enable_coldlg
+enable_creddlg
 enable_filedlg
 enable_finddlg
 enable_fontdlg
@@ -2240,6 +2241,7 @@ Optional Features:
   --enable-aboutdlg       use wxAboutBox
   --enable-choicedlg      use wxChoiceDialog
   --enable-coldlg         use wxColourDialog
+  --enable-creddlg        use wxCredentialEntryDialog
   --enable-filedlg        use wxFileDialog
   --enable-finddlg        use wxFindReplaceDialog
   --enable-fontdlg        use wxFontDialog
@@ -11275,6 +11277,35 @@ fi
 
 
           eval "$wx_cv_use_coldlg"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-creddlg was given.
+if test "${enable_creddlg+set}" = set; then :
+  enableval=$enable_creddlg;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_creddlg='wxUSE_CREDENTIALDLG=yes'
+                          else
+                            wx_cv_use_creddlg='wxUSE_CREDENTIALDLG=no'
+                          fi
+
+else
+
+                          wx_cv_use_creddlg='wxUSE_CREDENTIALDLG=${'DEFAULT_wxUSE_CREDENTIALDLG":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_creddlg"
 
 
           enablestring=
@@ -38085,6 +38116,11 @@ fi
 
 if test "$wxUSE_COLOURDLG" = "yes"; then
     $as_echo "#define wxUSE_COLOURDLG 1" >>confdefs.h
+
+fi
+
+if test "$wxUSE_CREDENTIALDLG" = "yes"; then
+    $as_echo "#define wxUSE_CREDENTIALDLG 1" >>confdefs.h
 
 fi
 
