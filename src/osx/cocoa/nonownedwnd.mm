@@ -914,7 +914,12 @@ bool wxNonOwnedWindowCocoaImpl::SetTransparent(wxByte alpha)
 
 bool wxNonOwnedWindowCocoaImpl::SetBackgroundColour(const wxColour& col )
 {
-    [m_macWindow setBackgroundColor:col.OSXGetNSColor()];
+    // only set the native background color if the toplevel window's
+    // background is not supposed to be transparent, otherwise the
+    // transparency is lost
+    if( GetWXPeer()->GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT &&
+       !(GetWXPeer()->GetWindowStyle() & wxFRAME_SHAPED) )
+        [m_macWindow setBackgroundColor:col.OSXGetNSColor()];
     return true;
 }
 
