@@ -135,6 +135,12 @@ wxPopupWindowBase::~wxPopupWindowBase()
 
 bool wxPopupWindowBase::Create(wxWindow* WXUNUSED(parent), int WXUNUSED(flags))
 {
+    // By default, block event propagation at this window as it usually
+    // doesn't make sense. This notably prevents wxScrolledWindow from trying
+    // to scroll popup contents into view if a popup is shown from it but
+    // extends beyond its window boundaries.
+    SetExtraStyle(GetExtraStyle() | wxWS_EX_BLOCK_EVENTS);
+
     return true;
 }
 
