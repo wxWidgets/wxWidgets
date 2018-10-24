@@ -1219,6 +1219,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\net\webrequest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\regex\wxregextest.cpp"
 				>
 			</File>

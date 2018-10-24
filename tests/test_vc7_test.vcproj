@@ -563,6 +563,9 @@
 				RelativePath=".\weakref\weakref.cpp">
 			</File>
 			<File
+				RelativePath=".\net\webrequest.cpp">
+			</File>
+			<File
 				RelativePath=".\regex\wxregextest.cpp">
 			</File>
 			<File
