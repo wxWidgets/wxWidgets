@@ -70,6 +70,11 @@ if(WXOSX_COCOA)
     wx_lib_link_libraries(core PUBLIC
         "-framework AudioToolbox"
         )
+    if(wxUSE_WEBKIT)
+        wx_lib_link_libraries(core PUBLIC
+            "-framework WebKit"
+            )
+    endif()
 endif()
 if(WXGTK AND wxUSE_PRIVATE_FONTS)
     wx_lib_include_directories(core PUBLIC
