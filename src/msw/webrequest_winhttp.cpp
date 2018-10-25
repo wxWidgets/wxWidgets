@@ -16,7 +16,7 @@
 
 #include "wx/webrequest.h"
 
-#if wxUSE_WEBREQUEST
+#if wxUSE_WEBREQUEST_WINHTTP
 
 #include "wx/mstream.h"
 #include "wx/uri.h"
@@ -472,4 +472,4 @@ wxWebRequest* wxWebSessionWinHTTP::CreateRequest(const wxString& url, int id)
     return new wxWebRequestWinHTTP(id, *this, url);
 }
 
-#endif // wxUSE_WEBREQUEST
+#endif // wxUSE_WEBREQUEST_WINHTTP

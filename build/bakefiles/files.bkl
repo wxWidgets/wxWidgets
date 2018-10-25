@@ -751,6 +751,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="NET_OSX_SRC" hints="files">
     src/osx/core/sockosx.cpp
+    src/osx/webrequest_urlsession.mm
 </set>
 
 <set var="NET_WIN32_SRC" hints="files">
@@ -775,6 +776,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/socket.cpp
     src/common/url.cpp
     src/common/webrequest.cpp
+    src/common/webrequest_curl.cpp
 </set>
 <set var="NET_CMN_HDR" hints="files">
     wx/fs_inet.h
@@ -789,6 +791,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/socket.h
     wx/url.h
     wx/webrequest.h
+    wx/webrequest_curl.h
 </set>
 
 <!-- ====================================================================== -->

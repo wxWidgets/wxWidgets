@@ -6347,6 +6347,11 @@ fi
 
 if test "$wxUSE_WEBREQUEST" = "yes"; then
     AC_DEFINE(wxUSE_WEBREQUEST)
+
+    if test "$wxUSE_MSW" = 1; then
+        dnl TODO: Check for the required headers/libraries under Windows
+        AC_DEFINE(wxUSE_WEBREQUEST_WINHTTP)
+    fi
 fi
 
 dnl ---------------------------------------------------------------------------

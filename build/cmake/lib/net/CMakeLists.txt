@@ -26,7 +26,7 @@ wx_add_library(net IS_BASE ${NET_FILES})
 if(WIN32)
     wx_lib_link_libraries(net PRIVATE ws2_32)
 
-    if(wxUSE_WEBREQUEST)
+    if(wxUSE_WEBREQUEST_WINHTTP)
         wx_lib_link_libraries(net PRIVATE Winhttp)
     endif()
 endif()

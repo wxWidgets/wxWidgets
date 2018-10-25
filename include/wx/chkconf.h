@@ -2300,6 +2300,15 @@
 #   endif
 #endif /* wxUSE_WEBVIEW && !any web view backend */
 
+#if wxUSE_WEBREQUEST && !(wxUSE_WEBREQUEST_WINHTTP || wxUSE_WEBREQUEST_URLSESSION || wxUSE_WEBREQUEST_CURL)
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_WEBREQUEST requires at least one backend"
+#   else
+#       undef wxUSE_WEBREQUEST
+#       define wxUSE_WEBREQUEST 0
+#   endif
+#endif /* wxUSE_WEBREQUEST && !any web request backend */
+
 #if wxUSE_PREFERENCES_EDITOR
     /*
         We can use either a generic implementation, using wxNotebook, or a

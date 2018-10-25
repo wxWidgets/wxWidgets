@@ -24,16 +24,26 @@
     #include "wx/translation.h"
 #endif
 
-#if defined(__WINDOWS__)
+#if wxUSE_WEBREQUEST_WINHTTP
 #include "wx/msw/webrequest_winhttp.h"
+#endif
+#if wxUSE_WEBREQUEST_URLSESSION
+#include "wx/osx/webrequest_urlsession.h"
+#endif
+#if wxUSE_WEBREQUEST_CURL
+#include "wx/webrequest_curl.h"
 #endif
 
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendWinHTTP[] = "wxWebSessionBackendWinHTTP";
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendURLSession[] = "wxWebSessionBackendURLSession";
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendCURL[] = "wxWebSessionBackendCURL";
 
-#if defined(__WINDOWS__)
+#if wxUSE_WEBREQUEST_WINHTTP
 extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendDefault[] = "wxWebSessionBackendWinHTTP";
+#elif wxUSE_WEBREQUEST_URLSESSION
+extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendDefault[] = "wxWebSessionBackendURLSession";
+#elif wxUSE_WEBREQUEST_CURL
+extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendDefault[] = "wxWebSessionBackendCURL";
 #endif
 
 wxDEFINE_EVENT(wxEVT_WEBREQUEST_STATE, wxWebRequestEvent);
@@ -156,9 +166,17 @@ void wxWebSession::RegisterFactory(const wxString& backend, wxSharedPtr<wxWebSes
 // static
 void wxWebSession::InitFactoryMap()
 {
-#if defined(__WINDOWS__)
+#if wxUSE_WEBREQUEST_WINHTTP
     RegisterFactory(wxWebSessionBackendWinHTTP,
         wxSharedPtr<wxWebSessionFactory>(new wxWebSessionFactoryWinHTTP()));
+#endif
+#if wxUSE_WEBREQUEST_URLSESSION
+	RegisterFactory(wxWebSessionBackendURLSession,
+					wxSharedPtr<wxWebSessionFactory>(new wxWebSessionFactoryURLSession()));
+#endif
+#if wxUSE_WEBREQUEST_CURL
+	RegisterFactory(wxWebSessionBackendCURL,
+					wxSharedPtr<wxWebSessionFactory>(new wxWebSessionFactoryCURL()));
 #endif
 }
 

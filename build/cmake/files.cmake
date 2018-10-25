@@ -661,6 +661,11 @@ set(NET_UNIX_SRC
 
 set(NET_OSX_SRC
     src/osx/core/sockosx.cpp
+    src/osx/webrequest_urlsession.mm
+)
+
+set(NET_OSX_HDR
+    wx/osx/webrequest_urlsession.h
 )
 
 set(NET_WIN32_SRC
@@ -685,6 +690,7 @@ set(NET_CMN_SRC
     src/common/socket.cpp
     src/common/url.cpp
     src/common/webrequest.cpp
+    src/common/webrequest_curl.cpp
 )
 
 set(NET_CMN_HDR
@@ -700,6 +706,7 @@ set(NET_CMN_HDR
     wx/socket.h
     wx/url.h
     wx/webrequest.h
+    wx/webrequest_curl.h
 )
 
 set(QA_SRC

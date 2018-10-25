@@ -146,7 +146,19 @@ wx_option(wxUSE_TEXTBUFFER "use wxTextBuffer class")
 wx_option(wxUSE_TEXTFILE "use wxTextFile class")
 wx_option(wxUSE_TIMER "use wxTimer class")
 wx_option(wxUSE_VARIANT "use wxVariant class")
+
+# WebRequest options
 wx_option(wxUSE_WEBREQUEST "use wxWebRequest class")
+if(WIN32)
+    wx_option(wxUSE_WEBREQUEST_WINHTTP "use wxWebRequest WinHTTP backend")
+endif()
+if(APPLE)
+    wx_option(wxUSE_WEBREQUEST_URLSESSION "use wxWebRequest URLSession backend")
+endif()
+set(wxUSE_WEBREQUEST_CURL_DEFAULT OFF)
+#TODO: determine wxUSE_WEBREQUEST_CURL_DEFAULT (based)
+wx_option(wxUSE_WEBREQUEST_CURL "use wxWebRequest libcurl backend" ${wxUSE_WEBREQUEST_CURL_DEFAULT})
+
 wx_option(wxUSE_ZIPSTREAM "use wxZip streams")
 
 # URL-related classes

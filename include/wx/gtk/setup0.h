@@ -648,11 +648,52 @@
 // wxMimeTypesManager class
 #define wxUSE_MIMETYPE 1
 
+// wxWebRequest backend based on WinHTTP
+//
+// Default is 1
+//
+// Recommended setting: 1 on Windows
+
+// Notice that we can't use wxCHECK_VISUALC_VERSION() nor wxCHECK_GCC_VERSION()
+// here as this file is included from wx/platform.h before they're defined.
+#if defined(_MSC_VER) || \
+    (defined(__MINGW32__) && (__GNUC__ > 4 || __GNUC_MINOR__ >= 8))
+#define wxUSE_WEBREQUEST_WINHTTP 1
+#else
+#define wxUSE_WEBREQUEST_WINHTTP 0
+#endif
+
+// wxWebRequest backend based on NSURLSession
+//
+// Default is 1
+//
+// Recommended setting: 1 on macOS 10.9+
+#if defined(__APPLE__) && defined(MAC_OS_X_VERSION_10_9) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
+#define wxUSE_WEBREQUEST_URLSESSION 1
+#else
+#define wxUSE_WEBREQUEST_URLSESSION 0
+#endif
+
+// wxWebRequest backend based on NSURLSession
+//
+// Default is 1
+//
+// Recommended setting: 0 on Windows and macOS otherwise 1
+#if defined(__WINDOWS__) || defined(__APPLE__)
+#define wxUSE_WEBREQUEST_CURL 0
+#else
+#define wxUSE_WEBREQUEST_CURL 1
+#endif
+
 // wxWebRequest and related classes: This will allow usage of system libraries
 // for HTTP(S) requests
 //
 // Default is 1
+#if wxUSE_WEBREQUEST_WINHTTP || wxUSE_WEBREQUEST_URLSESSION || wxUSE_WEBREQUEST_CURL
 #define wxUSE_WEBREQUEST 1
+#else
+#define wxUSE_WEBREQUEST 0
+#endif
 
 // wxProtocol and related classes: if you want to use either of wxFTP, wxHTTP
 // or wxURL you need to set this to 1.

@@ -36621,6 +36621,11 @@ fi
 if test "$wxUSE_WEBREQUEST" = "yes"; then
     $as_echo "#define wxUSE_WEBREQUEST 1" >>confdefs.h
 
+
+    if test "$wxUSE_MSW" = 1; then
+                $as_echo "#define wxUSE_WEBREQUEST_WINHTTP 1" >>confdefs.h
+
+    fi
 fi
 
 

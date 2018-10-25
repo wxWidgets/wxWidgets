@@ -494,6 +494,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_socket.obj \
 	$(OBJS)\monodll_url.obj \
 	$(OBJS)\monodll_webrequest.obj \
+	$(OBJS)\monodll_webrequest_curl.obj \
 	$(OBJS)\monodll_sockmsw.obj \
 	$(OBJS)\monodll_urlmsw.obj \
 	$(OBJS)\monodll_webrequest_winhttp.obj \
@@ -648,6 +649,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_socket.obj \
 	$(OBJS)\monolib_url.obj \
 	$(OBJS)\monolib_webrequest.obj \
+	$(OBJS)\monolib_webrequest_curl.obj \
 	$(OBJS)\monolib_sockmsw.obj \
 	$(OBJS)\monolib_urlmsw.obj \
 	$(OBJS)\monolib_webrequest_winhttp.obj \
@@ -942,6 +944,7 @@ NETDLL_OBJECTS =  \
 	$(OBJS)\netdll_socket.obj \
 	$(OBJS)\netdll_url.obj \
 	$(OBJS)\netdll_webrequest.obj \
+	$(OBJS)\netdll_webrequest_curl.obj \
 	$(OBJS)\netdll_sockmsw.obj \
 	$(OBJS)\netdll_urlmsw.obj \
 	$(OBJS)\netdll_webrequest_winhttp.obj
@@ -966,6 +969,7 @@ NETLIB_OBJECTS =  \
 	$(OBJS)\netlib_socket.obj \
 	$(OBJS)\netlib_url.obj \
 	$(OBJS)\netlib_webrequest.obj \
+	$(OBJS)\netlib_webrequest_curl.obj \
 	$(OBJS)\netlib_sockmsw.obj \
 	$(OBJS)\netlib_urlmsw.obj \
 	$(OBJS)\netlib_webrequest_winhttp.obj
@@ -6793,6 +6797,9 @@ $(OBJS)\monodll_url.obj: ..\..\src\common\url.cpp
 $(OBJS)\monodll_webrequest.obj: ..\..\src\common\webrequest.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\webrequest.cpp
 
+$(OBJS)\monodll_webrequest_curl.obj: ..\..\src\common\webrequest_curl.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\common\webrequest_curl.cpp
+
 $(OBJS)\monodll_sockmsw.obj: ..\..\src\msw\sockmsw.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\sockmsw.cpp
 
@@ -9344,6 +9351,9 @@ $(OBJS)\monolib_url.obj: ..\..\src\common\url.cpp
 
 $(OBJS)\monolib_webrequest.obj: ..\..\src\common\webrequest.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\webrequest.cpp
+
+$(OBJS)\monolib_webrequest_curl.obj: ..\..\src\common\webrequest_curl.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\webrequest_curl.cpp
 
 $(OBJS)\monolib_sockmsw.obj: ..\..\src\msw\sockmsw.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\sockmsw.cpp
@@ -12248,6 +12258,9 @@ $(OBJS)\netdll_url.obj: ..\..\src\common\url.cpp
 $(OBJS)\netdll_webrequest.obj: ..\..\src\common\webrequest.cpp
 	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) ..\..\src\common\webrequest.cpp
 
+$(OBJS)\netdll_webrequest_curl.obj: ..\..\src\common\webrequest_curl.cpp
+	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) ..\..\src\common\webrequest_curl.cpp
+
 $(OBJS)\netdll_sockmsw.obj: ..\..\src\msw\sockmsw.cpp
 	$(CXX) -q -c -P -o$@ $(NETDLL_CXXFLAGS) ..\..\src\msw\sockmsw.cpp
 
@@ -12292,6 +12305,9 @@ $(OBJS)\netlib_url.obj: ..\..\src\common\url.cpp
 
 $(OBJS)\netlib_webrequest.obj: ..\..\src\common\webrequest.cpp
 	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) ..\..\src\common\webrequest.cpp
+
+$(OBJS)\netlib_webrequest_curl.obj: ..\..\src\common\webrequest_curl.cpp
+	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) ..\..\src\common\webrequest_curl.cpp
 
 $(OBJS)\netlib_sockmsw.obj: ..\..\src\msw\sockmsw.cpp
 	$(CXX) -q -c -P -o$@ $(NETLIB_CXXFLAGS) ..\..\src\msw\sockmsw.cpp

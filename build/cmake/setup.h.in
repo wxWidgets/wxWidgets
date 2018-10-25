@@ -299,7 +299,31 @@
 
 #cmakedefine01 wxUSE_MIMETYPE
 
+
+#if defined(_MSC_VER) || \
+    (defined(__MINGW32__) && (__GNUC__ > 4 || __GNUC_MINOR__ >= 8))
+#cmakedefine01 wxUSE_WEBREQUEST_WINHTTP
+#else
+#cmakedefine01 wxUSE_WEBREQUEST_WINHTTP
+#endif
+
+#if defined(__APPLE__) && defined(MAC_OS_X_VERSION_10_9) && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
+#cmakedefine01 wxUSE_WEBREQUEST_URLSESSION
+#else
+#cmakedefine01 wxUSE_WEBREQUEST_URLSESSION
+#endif
+
+#if defined(__WINDOWS__) || defined(__APPLE__)
+#cmakedefine01 wxUSE_WEBREQUEST_CURL
+#else
+#cmakedefine01 wxUSE_WEBREQUEST_CURL
+#endif
+
+#if wxUSE_WEBREQUEST_WINHTTP || wxUSE_WEBREQUEST_URLSESSION || wxUSE_WEBREQUEST_CURL
 #cmakedefine01 wxUSE_WEBREQUEST
+#else
+#cmakedefine01 wxUSE_WEBREQUEST
+#endif
 
 #cmakedefine01 wxUSE_PROTOCOL
 

@@ -853,6 +853,10 @@
 				RelativePath="..\..\src\common\webrequest.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\src\common\webrequest_curl.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="MSW Sources"
@@ -1159,6 +1163,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\webrequest.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\webrequest_curl.h"
 				>
 			</File>
 		</Filter>
