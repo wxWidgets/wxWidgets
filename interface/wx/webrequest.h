@@ -131,20 +131,10 @@ public:
         State_Active,
 
         /**
-            The server denied the request because of insufficient
-            user credentials. When credentials are provided with
-            SetCredentials() the request will be retried with the supplied
-            user credentials.
+            The request is currently unauthorized. Calling GetAuthChallenge()
+            returns a challenge object with further details.
         */
         State_Unauthorized,
-
-        /**
-            A proxy denied the request because of insufficient
-            user credentials. When credentials are provided with
-            SetCredentials() the request will be retried with the supplied
-            user credentials.
-        */
-        State_UnauthorizedProxy,
 
         /// The request completed successfully and all data has been received.
         State_Completed,
@@ -173,16 +163,6 @@ public:
         */
         Storage_None
     };
-
-    /// Possible credential targets used by SetCredentials().
-    enum CredentialTarget
-    {
-        /// Set credentials to be sent to the server.
-        CredentialTarget_Server,
-
-        /// Set credentials to be sent to a proxy.
-        CredentialTarget_Proxy
-    }
 
     /**
         Sets a request header which will be sent to the server by this request.
@@ -247,19 +227,11 @@ public:
         const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
     /**
-        Sets the credentials to be sent to the server or proxy when
-        authentification is requested.
-
-        @param user
-            User name
-        @param password
-            Password
-        @param target
-            Specify the credentials for the server @c CredentialTarget_Server
-            or the proxy @c CredentialTarget_Proxy.
+        Returns the current authentication challenge object while the request
+        is in @c State_Unauthorized.
     */
-    void SetCredentials(const wxString& user, const wxString& password,
-        CredentialTarget target);
+    wxWebAuthChallenge* GetAuthChallenge();
+
 
     /**
         Instructs the request to ignore server error status codes.
@@ -328,6 +300,26 @@ public:
         Returns the current state of the request.
     */
     State GetState() const { return m_state; }
+};
+
+/**
+    Authentication challenge information available via
+    wxWebRequest::GetAuthChallenge().
+
+    Use SetCredentials() to provide user credentials.
+*/
+class wxWebAuthChallenge
+{
+public:
+    /**
+        Used to provide user credentials to the authentication challenge.
+
+        @param user
+            User name.
+        @param password
+            The users password.
+    */
+    void SetCredentials(const wxString& user, const wxString& password);
 };
 
 /**
