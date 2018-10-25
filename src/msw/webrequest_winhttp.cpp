@@ -219,10 +219,20 @@ void wxWebRequestWinHTTP::CreateResponse()
     if (::WinHttpReceiveResponse(m_request, NULL))
     {
         m_response.reset(new wxWebResponseWinHTTP(*this));
-        if (CheckServerStatus())
+        int status = m_response->GetStatus();
+        if ( status == 401 || status == 407)
+        {
+            m_authChallenge.reset(new wxWebAuthChallengeWinHTTP(
+                (status == 407) ? wxWebAuthChallenge::Source_Proxy : wxWebAuthChallenge::Source_Server, *this));
+            if ( m_authChallenge->Init() )
+                SetState(State_Unauthorized, m_response->GetStatusText());
+            else
+                SetFailedWithLastError();
+        }
+        else if ( CheckServerStatus() )
         {
             // Start reading the response
-            if (!m_response->ReadData())
+            if ( !m_response->ReadData() )
                 SetFailedWithLastError();
         }
     }
@@ -297,16 +307,21 @@ void wxWebRequestWinHTTP::Start()
         return;
     }
 
+    SendRequest();
+}
+
+void wxWebRequestWinHTTP::SendRequest()
+{
     // Combine all headers to a string
     wxString allHeaders;
-    for (wxWebRequestHeaderMap::const_iterator header = m_headers.begin(); header != m_headers.end(); ++header)
+    for ( wxWebRequestHeaderMap::const_iterator header = m_headers.begin(); header != m_headers.end(); ++header )
         allHeaders.append(wxString::Format("%s: %s\n", header->first, header->second));
 
     if ( m_dataSize )
         m_dataWritten = 0;
 
     // Send request
-    if ( WinHttpSendRequest(m_request,
+    if ( ::WinHttpSendRequest(m_request,
         allHeaders.wc_str(), allHeaders.length(),
         NULL, 0, m_dataSize,
         (DWORD_PTR)this) )
@@ -407,6 +422,57 @@ void wxWebResponseWinHTTP::ReportDataComplete()
 {
     m_stream.reset(new wxMemoryInputStream(m_readBuffer.GetData(), m_readBuffer.GetDataLen()));
 }
+
+//
+// wxWebAuthChallengeWinHTTP
+//
+wxWebAuthChallengeWinHTTP::wxWebAuthChallengeWinHTTP(Source source, wxWebRequestWinHTTP & request):
+    wxWebAuthChallenge(source),
+    m_request(request),
+    m_target(0),
+    m_selectedScheme(0)
+{
+
+}
+
+bool wxWebAuthChallengeWinHTTP::Init()
+{
+    DWORD supportedSchemes;
+    DWORD firstScheme;
+
+    if ( ::WinHttpQueryAuthSchemes(m_request.GetHandle(),
+        &supportedSchemes, &firstScheme, &m_target) )
+    {
+        if ( supportedSchemes & WINHTTP_AUTH_SCHEME_NEGOTIATE )
+            m_selectedScheme = WINHTTP_AUTH_SCHEME_NEGOTIATE;
+        else if ( supportedSchemes & WINHTTP_AUTH_SCHEME_NTLM )
+            m_selectedScheme = WINHTTP_AUTH_SCHEME_NTLM;
+        else if ( supportedSchemes & WINHTTP_AUTH_SCHEME_PASSPORT )
+            m_selectedScheme = WINHTTP_AUTH_SCHEME_PASSPORT;
+        else if ( supportedSchemes & WINHTTP_AUTH_SCHEME_DIGEST )
+            m_selectedScheme = WINHTTP_AUTH_SCHEME_DIGEST;
+        else if ( supportedSchemes & WINHTTP_AUTH_SCHEME_BASIC )
+            m_selectedScheme = WINHTTP_AUTH_SCHEME_BASIC;
+        else
+            m_selectedScheme = 0;
+
+        if ( m_selectedScheme )
+            return true;
+    }
+
+    return false;
+}
+
+void wxWebAuthChallengeWinHTTP::SetCredentials(const wxString& user,
+    const wxString& password)
+{
+    if ( ::WinHttpSetCredentials(m_request.GetHandle(), m_target, m_selectedScheme,
+        user.wc_str(), password.wc_str(), NULL) )
+        m_request.SendRequest();
+    else
+        m_request.SetFailedWithLastError();
+}
+
 
 //
 // wxWebSessionWinHTTP

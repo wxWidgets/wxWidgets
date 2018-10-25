@@ -57,6 +57,7 @@ public:
     {
         switch (evt.GetState())
         {
+        case wxWebRequest::State_Unauthorized:
         case wxWebRequest::State_Completed:
         case wxWebRequest::State_Failed:
         case wxWebRequest::State_Cancelled:
@@ -123,6 +124,28 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][.]")
             "image/png");
         request->SetMethod("PUT");
         Run();
+    }
+
+    SECTION("Server auth BASIC")
+    {
+        Create("/digest-auth/auth/wxtest/wxwidgets");
+        Run(wxWebRequest::State_Unauthorized, 401);
+        REQUIRE( request->GetAuthChallenge() != NULL );
+        request->GetAuthChallenge()->SetCredentials("wxtest", "wxwidgets");
+        loop.Run();
+        REQUIRE( request->GetResponse()->GetStatus() == 200 );
+        REQUIRE( request->GetState() == wxWebRequest::State_Completed );
+    }
+
+    SECTION("Server auth DIGEST")
+    {
+        Create("/digest-auth/auth/wxtest/wxwidgets");
+        Run(wxWebRequest::State_Unauthorized, 401);
+        REQUIRE( request->GetAuthChallenge() != NULL );
+        request->GetAuthChallenge()->SetCredentials("wxtest", "wxwidgets");
+        loop.Run();
+        REQUIRE( request->GetResponse()->GetStatus() == 200 );
+        REQUIRE( request->GetState() == wxWebRequest::State_Completed );
     }
 }
 

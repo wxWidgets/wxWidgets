@@ -93,15 +93,10 @@ void wxWebRequest::SetData(wxSharedPtr<wxInputStream> dataStream, const wxString
     SetHeader("Content-Type", contentType);
 }
 
-void wxWebRequest::SetCredentials(const wxString & user, const wxString & password, CredentialTarget target)
-{
-    wxFAIL_MSG("not implemented");
-}
-
 void wxWebRequest::SetState(State state, const wxString & failMsg)
 {
     // Add a reference while the request is active
-    if (state == State_Active && m_state != State_Active)
+    if (state == State_Active && m_state != State_Active && m_state != State_Unauthorized)
         IncRef();
 
     // Trigger the event in the main thread

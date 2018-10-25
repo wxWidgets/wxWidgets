@@ -23,6 +23,7 @@
 
 class wxWebResponse;
 class wxWebSession;
+class wxWebAuthChallenge;
 
 WX_DECLARE_STRING_HASH_MAP(wxString, wxWebRequestHeaderMap);
 
@@ -33,17 +34,10 @@ public:
     {
         State_Idle,
         State_Unauthorized,
-        State_UnauthorizedProxy,
         State_Active,
         State_Completed,
         State_Failed,
         State_Cancelled
-    };
-
-    enum CredentialTarget
-    {
-        CredentialTarget_Server,
-        CredentialTarget_Proxy
     };
 
     virtual ~wxWebRequest() { }
@@ -57,9 +51,6 @@ public:
 
     void SetData(wxSharedPtr<wxInputStream> dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
-    void SetCredentials(const wxString& user, const wxString& password,
-        CredentialTarget target);
-
     void SetIgnoreServerErrorStatus(bool ignore) { m_ignoreServerErrorStatus = ignore; }
 
     virtual void Start() = 0;
@@ -67,6 +58,8 @@ public:
     virtual void Cancel() = 0;
 
     virtual wxWebResponse* GetResponse() = 0;
+
+    virtual wxWebAuthChallenge* GetAuthChallenge() const = 0;
 
     int GetId() const { return m_id; }
 
@@ -123,6 +116,30 @@ protected:
 
 private:
     wxDECLARE_NO_COPY_CLASS(wxWebResponse);
+};
+
+class WXDLLIMPEXP_NET wxWebAuthChallenge
+{
+public:
+    enum Source
+    {
+        Source_Server,
+        Source_Proxy
+    };
+
+    virtual ~wxWebAuthChallenge() { }
+
+    Source GetSource() const { return m_source; }
+
+    virtual void SetCredentials(const wxString& user, const wxString& password) = 0;
+
+protected:
+    wxWebAuthChallenge(Source source): m_source(source) { }
+
+private:
+    Source m_source;
+
+    wxDECLARE_NO_COPY_CLASS(wxWebAuthChallenge);
 };
 
 class WXDLLIMPEXP_NET wxWebSessionFactory

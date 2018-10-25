@@ -52,6 +52,23 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxWebResponseWinHTTP);
 };
 
+class WXDLLIMPEXP_NET wxWebAuthChallengeWinHTTP : public wxWebAuthChallenge
+{
+public:
+    explicit wxWebAuthChallengeWinHTTP(Source source, wxWebRequestWinHTTP& request);
+
+    bool Init();
+
+    void SetCredentials(const wxString& user, const wxString& password) wxOVERRIDE;
+
+private:
+    wxWebRequestWinHTTP& m_request;
+    DWORD m_target;
+    DWORD m_selectedScheme;
+
+    wxDECLARE_NO_COPY_CLASS(wxWebAuthChallengeWinHTTP);
+};
+
 class WXDLLIMPEXP_NET wxWebRequestWinHTTP : public wxWebRequest
 {
 public:
@@ -65,6 +82,8 @@ public:
 
     wxWebResponse* GetResponse() wxOVERRIDE;
 
+    wxWebAuthChallenge* GetAuthChallenge() const wxOVERRIDE { return m_authChallenge.get(); }
+
     void HandleCallback(DWORD dwInternetStatus, LPVOID lpvStatusInformation,
         DWORD dwStatusInformationLength);
 
@@ -76,14 +95,19 @@ private:
     HINTERNET m_connect;
     HINTERNET m_request;
     wxScopedPtr<wxWebResponseWinHTTP> m_response;
+    wxScopedPtr<wxWebAuthChallengeWinHTTP> m_authChallenge;
     wxMemoryBuffer m_dataWriteBuffer;
     wxFileOffset m_dataWritten;
+
+    void SendRequest();
 
     void WriteData();
 
     void CreateResponse();
 
     void SetFailedWithLastError();
+
+    friend class wxWebAuthChallengeWinHTTP;
 
     wxDECLARE_NO_COPY_CLASS(wxWebRequestWinHTTP);
 };
