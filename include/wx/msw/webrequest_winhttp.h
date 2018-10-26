@@ -84,6 +84,14 @@ public:
 
     wxWebAuthChallenge* GetAuthChallenge() const wxOVERRIDE { return m_authChallenge.get(); }
 
+    wxFileOffset GetBytesSent() const wxOVERRIDE { return m_dataWritten; }
+
+    wxFileOffset GetBytesExpectedToSend() const wxOVERRIDE { return m_dataSize; }
+
+    wxFileOffset GetBytesReceived() const wxOVERRIDE { return m_bytesReceived; }
+
+    wxFileOffset GetBytesExpectedToReceive() const wxOVERRIDE { return m_bytesExpectedToReceive; }
+
     void HandleCallback(DWORD dwInternetStatus, LPVOID lpvStatusInformation,
         DWORD dwStatusInformationLength);
 
@@ -98,6 +106,8 @@ private:
     wxScopedPtr<wxWebAuthChallengeWinHTTP> m_authChallenge;
     wxMemoryBuffer m_dataWriteBuffer;
     wxFileOffset m_dataWritten;
+    wxFileOffset m_bytesExpectedToReceive;
+    wxFileOffset m_bytesReceived;
 
     void SendRequest();
 
@@ -108,6 +118,7 @@ private:
     void SetFailedWithLastError();
 
     friend class wxWebAuthChallengeWinHTTP;
+    friend class wxWebResponseWinHTTP;
 
     wxDECLARE_NO_COPY_CLASS(wxWebRequestWinHTTP);
 };

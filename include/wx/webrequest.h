@@ -65,6 +65,14 @@ public:
 
     State GetState() const { return m_state; }
 
+    virtual wxFileOffset GetBytesSent() const = 0;
+
+    virtual wxFileOffset GetBytesExpectedToSend() const = 0;
+
+    virtual wxFileOffset GetBytesReceived() const = 0;
+
+    virtual wxFileOffset GetBytesExpectedToReceive() const = 0;
+
 protected:
     wxString m_method;
     wxWebRequestHeaderMap m_headers;

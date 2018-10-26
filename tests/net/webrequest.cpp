@@ -96,6 +96,8 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][.]")
         Create("/bytes/65536");
         Run();
         REQUIRE( request->GetResponse()->GetContentLength() == 65536 );
+        REQUIRE( request->GetBytesExpectedToReceive() == 65536 );
+        REQUIRE( request->GetBytesReceived() == 65536 );
     }
 
     SECTION("GET 404 error")
