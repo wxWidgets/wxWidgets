@@ -103,11 +103,15 @@ public:
 
     virtual wxString GetHeader(const wxString& name) const = 0;
 
+    virtual wxString GetMimeType() const;
+
     virtual int GetStatus() const = 0;
 
     virtual wxString GetStatusText() const = 0;
 
     virtual wxInputStream* GetStream() const = 0;
+
+    virtual wxString GetSuggestedFileName() const;
 
     virtual wxString AsString(wxMBConv* conv = NULL) const = 0;
 

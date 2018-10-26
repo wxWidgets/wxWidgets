@@ -18,6 +18,8 @@
 
 #include "wx/webrequest.h"
 #include "wx/mstream.h"
+#include "wx/uri.h"
+#include "wx/filename.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -112,6 +114,33 @@ void wxWebRequest::ProcessStateEvent(State state, const wxString& failMsg)
         DecRef();
     m_state = state;
 }
+
+//
+// wxWebResponse
+//
+wxString wxWebResponse::GetMimeType() const
+{
+    return GetHeader("Mime-Type");
+}
+
+wxString wxWebResponse::GetSuggestedFileName() const
+{
+    wxString suggestedFilename;
+
+    // TODO: get from Content-Disposition header
+
+    wxURI uri(GetURL());
+    if ( uri.HasPath() )
+    {
+        wxFileName fn(uri.GetPath());
+        suggestedFilename = fn.GetFullName();
+    }
+    else
+        suggestedFilename = uri.GetServer();
+
+    return suggestedFilename;
+}
+
 
 //
 // wxWebSession
