@@ -48,8 +48,6 @@ extern WXDLLIMPEXP_DATA_NET(const char) wxWebSessionBackendDefault[] = "wxWebSes
 
 wxDEFINE_EVENT(wxEVT_WEBREQUEST_STATE, wxWebRequestEvent);
 wxDEFINE_EVENT(wxEVT_WEBREQUEST_DATA, wxWebRequestEvent);
-wxDEFINE_EVENT(wxEVT_WEBREQUEST_DOWNLOAD_PROGRESS, wxWebRequestEvent);
-wxDEFINE_EVENT(wxEVT_WEBREQUEST_UPLOAD_PROGRESS, wxWebRequestEvent);
 
 //
 // wxWebRequest
