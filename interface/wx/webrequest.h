@@ -101,12 +101,6 @@
         The request state changed.
     @event{wxEVT_WEBREQUEST_DATA(id, func)}
         A new block of data has been downloaded.
-    @event{wxEVT_WEBREQUEST_DOWNLOAD_PROGRESS(id, func)}
-        This event periodically reports the download progress while the request
-        is active.
-    @event{wxEVT_WEBREQUEST_UPLOAD_PROGRESS(id, func)}
-        This event periodically reports the upload progress while the request
-        is active.
     @endEventTable
 
     @since 3.1.2
@@ -164,6 +158,43 @@ public:
         Storage_None
     };
 
+    /**
+        Send the request to the server asynchronously.
+
+        Events will be triggered on success or failure.
+
+        @see Cancel()
+    */
+    void Start();
+
+    /**
+        Cancel an active request.
+    */
+    void Cancel();
+
+    /**
+        Returns a response object after a successful request.
+
+        Before sending a request or after a failed request this will return
+        @c NULL.
+    */
+    wxWebResponse* GetResponse();
+
+    /**
+        Returns the current authentication challenge object while the request
+        is in @c State_Unauthorized.
+    */
+    wxWebAuthChallenge* GetAuthChallenge();
+
+    /**
+        Returns the id specified while creating this request.
+    */
+    int GetId() const;
+
+    /** @name Request options
+        Methods that set options before starting the request
+    */
+    ///@{
     /**
         Sets a request header which will be sent to the server by this request.
 
@@ -227,13 +258,6 @@ public:
         const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
     /**
-        Returns the current authentication challenge object while the request
-        is in @c State_Unauthorized.
-    */
-    wxWebAuthChallenge* GetAuthChallenge();
-
-
-    /**
         Instructs the request to ignore server error status codes.
 
         Per default, server side errors (status code 400-599) will enter
@@ -268,38 +292,34 @@ public:
         server.
     */
     void SetStorage(Storage storage);
+    ///@}
 
-    /**
-        Send the request to the server asynchronously.
-
-        Events will be triggered on success or failure.
-
-        @see Cancel()
+    /** @name Progress methods
+        Methods that describe the requests progress
     */
-    void Start();
-
-    /**
-        Cancel an active request.
-    */
-    void Cancel();
-
-    /**
-        Returns a response object after a successful request.
-
-        Before sending a request or after a failed request this will return
-        @c NULL.
-    */
-    wxWebResponse* GetResponse();
-
-    /**
-        Returns the id specified while creating this request.
-    */
-    int GetId() const;
-
+    ///@{
     /**
         Returns the current state of the request.
     */
     State GetState() const { return m_state; }
+
+    /// Returns the number of bytes sent to the server.
+    wxFileOffset GetBytesSent() const;
+
+    /// Returns the number of bytes expected to be send to the server.
+    wxFileOffset GetBytesExpectedToSend() const;
+
+    /// Returns the number of bytes received from the server.
+    wxFileOffset GetBytesReceived() const;
+
+    /**
+        Returns the number of bytes expected to be received from the server.
+
+        This value is based on the @c Content-Length header, if none is found
+        it will return -1.
+    */
+    wxFileOffset GetBytesExpectedToReceive() const;
+    ///@}
 };
 
 /**
@@ -311,6 +331,20 @@ public:
 class wxWebAuthChallenge
 {
 public:
+    enum Source
+    {
+        /// The server requested authentication
+        Source_Server,
+
+        /// A proxy requested authentication
+        Source_Proxy
+    };
+
+    /**
+        Returns which source requested credentials with this challenge.
+    */
+    Source GetSource() const { return m_source; }
+
     /**
         Used to provide user credentials to the authentication challenge.
 
@@ -351,6 +385,11 @@ public:
     wxString GetHeader(const wxString& name) const;
 
     /**
+        Returns the MIME type of the response (if available).
+    */
+    wxString GetMimeType() const;
+
+    /**
         Returns the status code returned by the server.
     */
     int GetStatus() const;
@@ -364,6 +403,11 @@ public:
         Returns a stream which represents the response data sent by the server.
     */
     wxInputStream* GetStream();
+
+    /**
+        Returns a suggested filename for the response data.
+    */
+    wxString GetSuggestedFileName() const;
 
     /**
         Returns all response data as a string.
@@ -540,5 +584,3 @@ public:
 
 wxEventType wxEVT_WEBREQUEST_STATE;
 wxEventType wxEVT_WEBREQUEST_DATA;
-wxEventType wxEVT_WEBREQUEST_DOWNLOAD_PROGRESS;
-wxEventType wxEVT_WEBREQUEST_UPLOAD_PROGRESS;
