@@ -1485,3 +1485,8 @@ QPainter *wxWindowQt::QtGetPainter()
 {
     return m_qtPainter;
 }
+
+void wxWindowQt::QtBuildStyleSheet(QString sheet)
+{
+    m_qtWindow->setStyleSheet( sheet );
+}

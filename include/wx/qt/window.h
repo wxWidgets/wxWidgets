@@ -30,6 +30,7 @@ class QEvent;
 class QCloseEvent;
 class QContextMenuEvent;
 class QFocusEvent;
+class QString;
 
 class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 class WXDLLIMPEXP_FWD_CORE wxQtShortcutHandler;
@@ -172,6 +173,7 @@ public:
     virtual QScrollArea *QtGetScrollBarsContainer() const;
 
 protected:
+    virtual void QtBuildStyleSheet(QString sheet);
     virtual void DoGetTextExtent(const wxString& string,
                                  int *x, int *y,
                                  int *descent = NULL,

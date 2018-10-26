@@ -31,6 +31,9 @@ public:
 
    virtual wxWindow *SetDefault();
 
+protected:
+   virtual void QtBuildStyleSheet(QString sheet);
+   
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxButton);
 };
