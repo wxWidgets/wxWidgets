@@ -96,7 +96,10 @@ void wxPopupTransientWindow::Popup(wxWindow* focus)
 {
     Show();
 
-    if ( focus )
+    // We can only set focus to one of our children as setting it to another
+    // window would result in an immediate loss of activation and popup
+    // disappearance.
+    if ( focus && IsDescendant(focus) )
         focus->SetFocus();
 }
 
