@@ -84,10 +84,10 @@ public:
     /**
         Popup the window (this will show it too).
 
-        If @a winFocus is non-@NULL, it will be kept focused while this window
-        is shown, otherwise this window itself will receive focus. In any case,
-        the popup will disappear automatically if it loses focus because of a
-        user action.
+        If @a focus is non-@NULL, it will be kept focused while this window
+        is shown if supported by the current platform, otherwise the popup
+        itself will receive focus. In any case, the popup will disappear
+        automatically if it loses focus because of a user action.
 
         @see Dismiss()
     */

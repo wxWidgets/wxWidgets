@@ -46,8 +46,6 @@
 #elif defined(__WXGTK__)
     #include <gtk/gtk.h>
     #define gtk_widget_get_window(x) x->window
-#elif defined(__WXMSW__)
-    #include "wx/msw/private.h"
 #elif defined(__WXX11__)
     #include "wx/x11/private.h"
 #endif
@@ -58,6 +56,8 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxPopupTransientWindow, wxPopupWindow);
 #if wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)
 wxIMPLEMENT_DYNAMIC_CLASS(wxPopupComboWindow, wxPopupTransientWindow);
 #endif
+
+#ifndef __WXMSW__
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -113,10 +113,12 @@ wxBEGIN_EVENT_TABLE(wxPopupFocusHandler, wxEvtHandler)
 wxEND_EVENT_TABLE()
 
 wxBEGIN_EVENT_TABLE(wxPopupTransientWindow, wxPopupWindow)
-#if defined(__WXMSW__) || (defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON)
+#if defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON
     EVT_IDLE(wxPopupTransientWindow::OnIdle)
 #endif
 wxEND_EVENT_TABLE()
+
+#endif // !__WXMSW__
 
 // ============================================================================
 // implementation
@@ -133,6 +135,12 @@ wxPopupWindowBase::~wxPopupWindowBase()
 
 bool wxPopupWindowBase::Create(wxWindow* WXUNUSED(parent), int WXUNUSED(flags))
 {
+    // By default, block event propagation at this window as it usually
+    // doesn't make sense. This notably prevents wxScrolledWindow from trying
+    // to scroll popup contents into view if a popup is shown from it but
+    // extends beyond its window boundaries.
+    SetExtraStyle(GetExtraStyle() | wxWS_EX_BLOCK_EVENTS);
+
     return true;
 }
 
@@ -200,6 +208,27 @@ void wxPopupWindowBase::Position(const wxPoint& ptOrigin,
 
     Move(x, y, wxSIZE_NO_ADJUSTMENTS);
 }
+
+// ----------------------------------------------------------------------------
+// wxPopupTransientWindowBase
+// ----------------------------------------------------------------------------
+
+bool wxPopupTransientWindowBase::Destroy()
+{
+    // The popup window can be deleted at any moment, even while some events
+    // are still being processed for it, so delay its real destruction until
+    // the next idle time when we're sure that it's safe to really destroy it.
+
+    wxCHECK_MSG( !wxPendingDelete.Member(this), false,
+                 wxS("Shouldn't destroy the popup twice.") );
+
+    wxPendingDelete.Append(this);
+
+    return true;
+}
+
+// MSW implementation is in platform-specific src/msw/popupwin.cpp.
+#ifndef __WXMSW__
 
 // ----------------------------------------------------------------------------
 // wxPopupTransientWindow
@@ -292,18 +321,10 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
 
     m_child->PushEventHandler(m_handlerPopup);
 
-#if defined(__WXMSW__)
-    // Focusing on child of popup window does not work on MSW unless WS_POPUP
-    // style is set. We do not even want to try to set the focus, as it may
-    // provoke errors on some Windows versions (Vista and later).
-    if ( ::GetWindowLong(GetHwnd(), GWL_STYLE) & WS_POPUP )
-#endif
-    {
-        m_focus = winFocus ? winFocus : this;
-        m_focus->SetFocus();
-    }
+    m_focus = winFocus ? winFocus : this;
+    m_focus->SetFocus();
 
-#if defined( __WXMSW__ ) || (defined( __WXMAC__) && wxOSX_USE_COCOA_OR_CARBON)
+#if defined( __WXMAC__) && wxOSX_USE_COCOA_OR_CARBON
     // MSW doesn't allow to set focus to the popup window, but we need to
     // subclass the window which has the focus, and not winFocus passed in or
     // otherwise everything else breaks down
@@ -354,7 +375,7 @@ bool wxPopupTransientWindow::Show( bool show )
     }
 #endif
 
-#if defined( __WXMSW__ ) || defined( __WXMAC__)
+#if defined( __WXMAC__)
     if (!show && m_child && m_child->HasCapture())
     {
         m_child->ReleaseMouse();
@@ -414,7 +435,7 @@ bool wxPopupTransientWindow::Show( bool show )
     }
 #endif
 
-#if defined( __WXMSW__ ) || defined( __WXMAC__)
+#if defined( __WXMAC__)
     if (show && m_child)
     {
         // Assume that the mouse is outside the popup to begin with
@@ -425,44 +446,13 @@ bool wxPopupTransientWindow::Show( bool show )
     return ret;
 }
 
-bool wxPopupTransientWindow::Destroy()
-{
-    // The popup window can be deleted at any moment, even while some events
-    // are still being processed for it, so delay its real destruction until
-    // the next idle time when we're sure that it's safe to really destroy it.
-
-    wxCHECK_MSG( !wxPendingDelete.Member(this), false,
-                 wxS("Shouldn't destroy the popup twice.") );
-
-    wxPendingDelete.Append(this);
-
-    return true;
-}
-
 void wxPopupTransientWindow::Dismiss()
 {
     Hide();
     PopHandlers();
 }
 
-void wxPopupTransientWindow::DismissAndNotify()
-{
-    Dismiss();
-    OnDismiss();
-}
-
-void wxPopupTransientWindow::OnDismiss()
-{
-    // nothing to do here - but it may be interesting for derived class
-}
-
-bool wxPopupTransientWindow::ProcessLeftDown(wxMouseEvent& WXUNUSED(event))
-{
-    // no special processing here
-    return false;
-}
-
-#if defined(__WXMSW__) ||(defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON)
+#if defined(__WXMAC__) && wxOSX_USE_COCOA_OR_CARBON
 void wxPopupTransientWindow::OnIdle(wxIdleEvent& event)
 {
     event.Skip();
@@ -500,6 +490,7 @@ void wxPopupTransientWindow::OnIdle(wxIdleEvent& event)
 }
 #endif // wxOSX/Carbon
 
+#endif // !__WXMSW__
 
 #if wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)
 
@@ -554,6 +545,8 @@ void wxPopupComboWindow::OnKeyDown(wxKeyEvent& event)
 }
 
 #endif // wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)
+
+#ifndef __WXMSW__
 
 // ----------------------------------------------------------------------------
 // wxPopupWindowHandler
@@ -695,5 +688,7 @@ void wxPopupFocusHandler::OnChar(wxKeyEvent& event)
         m_popup->DismissAndNotify();
     }
 }
+
+#endif // !__WXMSW__
 
 #endif // wxUSE_POPUPWIN
