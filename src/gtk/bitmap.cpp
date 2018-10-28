@@ -981,6 +981,8 @@ bool wxBitmap::CreateScaled(int w, int h, int depth, double scale)
 
 double wxBitmap::GetScaleFactor() const
 {
+    wxCHECK_MSG(m_refData, -1, "invalid bitmap");
+
     return M_BMPDATA->m_scaleFactor;
 }
 
