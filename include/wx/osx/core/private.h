@@ -104,8 +104,6 @@ protected :
 
 // Quartz
 
-WXDLLIMPEXP_CORE CGImageRef wxMacCreateCGImageFromBitmap( const wxBitmap& bitmap );
-
 WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithCFData( CFDataRef data );
 WXDLLIMPEXP_CORE CGDataConsumerRef wxMacCGDataConsumerCreateWithCFData( CFMutableDataRef data );
 WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffer& buf );
@@ -113,6 +111,16 @@ WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( co
 WXDLLIMPEXP_CORE CGColorSpaceRef wxMacGetGenericRGBColorSpace(void);
 
 WXDLLIMPEXP_CORE double wxOSXGetMainScreenContentScaleFactor();
+
+// UI
+
+CGSize WXDLLIMPEXP_CORE wxOSXGetImageSize(WXImage image);
+CGImageRef WXDLLIMPEXP_CORE wxOSXCreateCGImageFromImage( WXImage nsimage, double *scale = NULL );
+CGImageRef WXDLLIMPEXP_CORE wxOSXGetCGImageFromImage( WXImage nsimage, CGRect* r, CGContextRef cg);
+CGContextRef WXDLLIMPEXP_CORE wxOSXCreateBitmapContextFromImage( WXImage nsimage, bool *isTemplate = NULL);
+WXImage WXDLLIMPEXP_CORE wxOSXGetImageFromCGImage( CGImageRef image, double scale = 1.0, bool isTemplate = false);
+double WXDLLIMPEXP_CORE wxOSXGetImageScaleFactor(WXImage image);
+
 
 class wxWindowMac;
 // to
@@ -550,6 +558,15 @@ public :
                                     long extraStyle);
 #endif
 
+    static wxWidgetImplType*    CreateStaticBitmap( wxWindowMac* wxpeer,
+                                                   wxWindowMac* parent,
+                                                   wxWindowID id,
+                                                   const wxBitmap& bitmap,
+                                                   const wxPoint& pos,
+                                                   const wxSize& size,
+                                                   long style,
+                                                   long extraStyle);
+
     // converts from Toplevel-Content relative to local
     static void Convert( wxPoint *pt , wxWidgetImpl *from , wxWidgetImpl *to );
 protected :
@@ -709,7 +726,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxTextWidgetImpl);
 };
 
-// common interface for all implementations
+// common interface for all combobox implementations
 class WXDLLIMPEXP_CORE wxComboWidgetImpl
 
 {
@@ -735,6 +752,41 @@ public :
 
     virtual int FindString(const wxString& WXUNUSED(text)) const { return -1; }
 };
+
+//
+// common interface for choice
+//
+
+class WXDLLIMPEXP_CORE wxChoiceWidgetImpl
+
+{
+public :
+    wxChoiceWidgetImpl() {}
+
+    virtual ~wxChoiceWidgetImpl() {}
+
+    virtual int GetSelectedItem() const { return -1; }
+
+    virtual void SetSelectedItem(int WXUNUSED(item)) {}
+
+    virtual size_t GetNumberOfItems() const = 0;
+
+    virtual void InsertItem(size_t pos, int itemid, const wxString& text) = 0;
+
+    virtual void RemoveItem(size_t pos) = 0;
+
+    virtual void Clear()
+    {
+        size_t count = GetNumberOfItems();
+        for ( size_t i = 0 ; i < count ; i++ )
+        {
+            RemoveItem( 0 );
+        }
+    }
+
+    virtual void SetItem(int pos, const wxString& item) = 0;
+};
+
 
 //
 // common interface for buttons

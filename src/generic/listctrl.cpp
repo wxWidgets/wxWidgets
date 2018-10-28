@@ -113,9 +113,6 @@ static const int MARGIN_AROUND_CHECKBOX = 5;
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxListItemDataList)
 
-#include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(wxListLineDataArray)
-
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxListHeaderDataList)
 
@@ -602,7 +599,7 @@ void wxListLineData::SetItem( int index, const wxListItem &info )
     item->SetItem( info );
 }
 
-void wxListLineData::GetItem( int index, wxListItem &info )
+void wxListLineData::GetItem( int index, wxListItem &info ) const
 {
     wxListItemDataList::compatibility_iterator node = m_items.Item( index );
     if (node)
@@ -1667,7 +1664,7 @@ void wxListMainWindow::SetReportView(bool inReportView)
     const size_t count = m_lines.size();
     for ( size_t n = 0; n < count; n++ )
     {
-        m_lines[n].SetReportView(inReportView);
+        m_lines[n]->SetReportView(inReportView);
     }
 }
 
@@ -1697,23 +1694,23 @@ wxListLineData *wxListMainWindow::GetDummyLine() const
     // we need to recreate the dummy line if the number of columns in the
     // control changed as it would have the incorrect number of fields
     // otherwise
-    if ( !m_lines.IsEmpty() &&
-            m_lines[0].m_items.GetCount() != (size_t)GetColumnCount() )
+    if ( !m_lines.empty() &&
+            m_lines[0]->m_items.GetCount() != (size_t)GetColumnCount() )
     {
         self->m_lines.Clear();
     }
 
-    if ( m_lines.IsEmpty() )
+    if ( m_lines.empty() )
     {
         wxListLineData *line = new wxListLineData(self);
-        self->m_lines.Add(line);
+        self->m_lines.push_back(line);
 
         // don't waste extra memory -- there never going to be anything
         // else/more in this array
-        self->m_lines.Shrink();
+        wxShrinkToFit(self->m_lines);
     }
 
-    return &m_lines[0];
+    return m_lines[0];
 }
 
 // ----------------------------------------------------------------------------
@@ -3566,7 +3563,7 @@ void wxListMainWindow::GetItem( wxListItem &item ) const
 
 size_t wxListMainWindow::GetItemCount() const
 {
-    return IsVirtual() ? m_countVirt : m_lines.GetCount();
+    return IsVirtual() ? m_countVirt : m_lines.size();
 }
 
 void wxListMainWindow::SetItemCount(long count)
@@ -4084,7 +4081,8 @@ void wxListMainWindow::DeleteItem( long lindex )
     }
     else
     {
-        m_lines.RemoveAt( index );
+        delete m_lines[index];
+        m_lines.erase( m_lines.begin() + index );
     }
 
     // we need to refresh the (vert) scrollbar as the number of items changed
@@ -4113,7 +4111,7 @@ void wxListMainWindow::DeleteColumn( int col )
     if ( !IsVirtual() )
     {
         // update all the items
-        for ( size_t i = 0; i < m_lines.GetCount(); i++ )
+        for ( size_t i = 0; i < m_lines.size(); i++ )
         {
             wxListLineData * const line = GetLine(i);
 
@@ -4365,7 +4363,7 @@ void wxListMainWindow::InsertItem( wxListItem &item )
         }
     }
 
-    m_lines.Insert( line, id );
+    m_lines.insert( m_lines.begin() + id, line );
 
     m_dirty = true;
 
@@ -4412,7 +4410,7 @@ long wxListMainWindow::InsertColumn( long col, const wxListItem &item )
         if ( !IsVirtual() )
         {
             // update all the items
-            for ( size_t i = 0; i < m_lines.GetCount(); i++ )
+            for ( size_t i = 0; i < m_lines.size(); i++ )
             {
                 wxListLineData * const line = GetLine(i);
                 wxListItemData * const data = new wxListItemData(this);
@@ -4457,21 +4455,28 @@ int wxListMainWindow::GetItemWidthWithImage(wxListItem * item)
 // sorting
 // ----------------------------------------------------------------------------
 
-static wxListCtrlCompare list_ctrl_compare_func_2;
-static wxIntPtr          list_ctrl_compare_data;
-
-static
-int LINKAGEMODE list_ctrl_compare_func_1( wxListLineData **arg1, wxListLineData **arg2 )
+struct wxListLineComparator
 {
-    wxListLineData *line1 = *arg1;
-    wxListLineData *line2 = *arg2;
-    wxListItem item;
-    line1->GetItem( 0, item );
-    wxUIntPtr data1 = item.m_data;
-    line2->GetItem( 0, item );
-    wxUIntPtr data2 = item.m_data;
-    return list_ctrl_compare_func_2( data1, data2, list_ctrl_compare_data );
-}
+    wxListLineComparator(wxListCtrlCompare& f, wxIntPtr data)
+        : m_f(f),
+          m_data(data)
+    {
+    }
+
+    bool operator()(wxListLineData* const& line1,
+                    wxListLineData* const& line2) const
+    {
+        wxListItem item;
+        line1->GetItem( 0, item );
+        wxUIntPtr data1 = item.m_data;
+        line2->GetItem( 0, item );
+        wxUIntPtr data2 = item.m_data;
+        return m_f(data1, data2, m_data) < 0;
+    }
+
+    const wxListCtrlCompare m_f;
+    const wxIntPtr          m_data;
+};
 
 void wxListMainWindow::SortItems( wxListCtrlCompare fn, wxIntPtr data )
 {
@@ -4480,9 +4485,8 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, wxIntPtr data )
     HighlightAll(false);
     ResetCurrent();
 
-    list_ctrl_compare_func_2 = fn;
-    list_ctrl_compare_data = data;
-    m_lines.Sort( list_ctrl_compare_func_1 );
+    std::sort(m_lines.begin(), m_lines.end(), wxListLineComparator(fn, data));
+
     m_dirty = true;
 }
 

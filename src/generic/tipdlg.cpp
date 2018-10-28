@@ -213,7 +213,7 @@ wxTipDialog::wxTipDialog(wxWindow *parent,
     if (!isPda)
     {
         wxFont font = text->GetFont();
-        font.SetPointSize(int(1.6 * font.GetPointSize()));
+        font.SetFractionalPointSize(1.6 * font.GetFractionalPointSize());
         font.SetWeight(wxFONTWEIGHT_BOLD);
         text->SetFont(font);
     }

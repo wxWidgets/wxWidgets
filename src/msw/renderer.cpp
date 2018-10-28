@@ -521,8 +521,12 @@ wxRendererMSW::DrawTitleBarBitmap(wxWindow *win,
     DoDrawFrameControl(DFC_CAPTION, kind, win, dc, rect, flags);
 }
 
-wxSize wxRendererMSW::GetCheckBoxSize(wxWindow * WXUNUSED(win))
+wxSize wxRendererMSW::GetCheckBoxSize(wxWindow* win)
 {
+    // Even though we don't use the window in this implementation, still check
+    // that it's valid to avoid surprises when using themes.
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
     return wxSize(::GetSystemMetrics(SM_CXMENUCHECK),
                   ::GetSystemMetrics(SM_CYMENUCHECK));
 }
@@ -830,6 +834,8 @@ wxRendererXP::DrawTitleBarBitmap(wxWindow *win,
 
 wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win)
 {
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
     wxUxThemeHandle hTheme(win, L"BUTTON");
     if (hTheme)
     {

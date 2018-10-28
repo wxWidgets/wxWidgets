@@ -981,6 +981,8 @@ bool wxBitmap::CreateScaled(int w, int h, int depth, double scale)
 
 double wxBitmap::GetScaleFactor() const
 {
+    wxCHECK_MSG(m_refData, -1, "invalid bitmap");
+
     return M_BMPDATA->m_scaleFactor;
 }
 
@@ -1139,6 +1141,7 @@ void wxBitmap::SetPalette(const wxPalette& WXUNUSED(palette))
 }
 #endif // wxUSE_PALETTE
 
+#if WXWIN_COMPATIBILITY_3_0
 void wxBitmap::SetHeight( int height )
 {
     AllocExclusive();
@@ -1156,6 +1159,7 @@ void wxBitmap::SetDepth( int depth )
     AllocExclusive();
     M_BMPDATA->m_bpp = depth;
 }
+#endif
 
 #ifndef __WXGTK3__
 void wxBitmap::SetPixmap( GdkPixmap *pixmap )

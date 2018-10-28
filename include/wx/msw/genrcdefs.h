@@ -27,6 +27,10 @@ EMIT(#define WX_CPU_AMD64)
 EMIT(#define WX_CPU_ARM)
 #endif
 
+#ifdef _M_ARM64
+EMIT(#define WX_CPU_ARM64)
+#endif
+
 #if defined _M_IA64 || defined __ia64__
 EMIT(#define WX_CPU_IA64)
 #endif

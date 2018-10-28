@@ -41,7 +41,8 @@ public:
     wxFontFamily GetFamily() const;
     wxFontEncoding GetEncoding() const;
 
-    void SetPointSize(float pointsize);
+    void SetPointSize(int pointsize);
+    void SetFractionalPointSize(float pointsize);
     void SetPixelSize(const wxSize& pixelSize);
     void SetStyle(wxFontStyle style);
     void SetNumericWeight(int weight);

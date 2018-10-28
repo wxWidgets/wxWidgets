@@ -1,4 +1,4 @@
-Microsoft Windows XP Support from wxWidgets
+Microsoft Windows XP Support from wxWidgets {#plat_msw_winxp}
 -------------------------------------------
 
 Windows XP introduces the themes (called "visual styles" in the Microsoft
@@ -30,27 +30,25 @@ for more details.
 Here is the example manifest which you can put into controls.exe.manifest
 file to test theme support using the controls sample:
 
---- cut here ---
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
-<assemblyIdentity
-    version="0.64.1.0"
-    processorArchitecture="x86"
-    name="Controls"
-    type="win32"
-/>
-<description>Controls: wxWidgets sample application</description>
-<dependency>
-    <dependentAssembly>
-        <assemblyIdentity
-            type="win32"
-            name="Microsoft.Windows.Common-Controls"
-            version="6.0.0.0"
-            processorArchitecture="X86"
-            publicKeyToken="6595b64144ccf1df"
-            language="*"
-        />
-    </dependentAssembly>
-</dependency>
-</assembly>
---- cut here ---
+    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+    <assemblyIdentity
+        version="0.64.1.0"
+        processorArchitecture="x86"
+        name="Controls"
+        type="win32"
+    />
+    <description>Controls: wxWidgets sample application</description>
+    <dependency>
+        <dependentAssembly>
+            <assemblyIdentity
+                type="win32"
+                name="Microsoft.Windows.Common-Controls"
+                version="6.0.0.0"
+                processorArchitecture="X86"
+                publicKeyToken="6595b64144ccf1df"
+                language="*"
+            />
+        </dependentAssembly>
+    </dependency>
+    </assembly>

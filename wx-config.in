@@ -1029,6 +1029,7 @@ ldlibs_base="@WXCONFIG_LIBS@"
 ldlibs_core="@EXTRALIBS_GUI@ @EXTRALIBS_SDL@"
 ldlibs_gl="@OPENGL_LIBS@"
 ldlibs_html="@EXTRALIBS_HTML@"
+ldlibs_media="@EXTRALIBS_MEDIA@"
 ldlibs_xml="@EXTRALIBS_XML@"
 ldlibs_stc="@EXTRALIBS_STC@"
 ldlibs_webview="@EXTRALIBS_WEBVIEW@"
@@ -1240,6 +1241,10 @@ else    # MONOLITHIC = 0
             wx_libs="$wx_libs base"
         fi
     fi
+
+    # Existing scripts may use "wx-config --libs std,adv" or similar, but "adv"
+    # library is not used any longer.
+    wx_libs=`remove_field adv $wx_libs`
 
     if [ -n "$output_option_libs" ]; then
         using_gui=no

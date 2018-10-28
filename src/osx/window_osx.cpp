@@ -518,6 +518,11 @@ bool wxWindowMac::SetBackgroundStyle(wxBackgroundStyle style)
     return true;
 }
 
+bool wxWindowMac::IsTransparentBackgroundSupported(wxString* WXUNUSED(reason)) const
+{
+    return true;
+}
+
 bool wxWindowMac::SetBackgroundColour(const wxColour& col )
 {
     if (m_growBox)

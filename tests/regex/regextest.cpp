@@ -77,7 +77,7 @@ public:
 
 protected:
     // run this testcase
-    void runTest();
+    void runTest() wxOVERRIDE;
 
 private:
     // workers

@@ -90,6 +90,11 @@ public:
     {
         return CFDictionaryCreateCopy(kCFAllocatorDefault, this->m_ptr);
     }
+
+    CFMutableDictionaryRef CreateMutableCopy() const
+    {
+        return CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, this->m_ptr);
+    }
 };
 
 class wxCFMutableDictionaryRef : public wxCFDictionaryRefCommon<CFMutableDictionaryRef>

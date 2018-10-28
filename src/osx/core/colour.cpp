@@ -163,27 +163,37 @@ wxColour::wxColour(CGColorRef col)
 
 wxColour::ChannelType wxColour::Red() const
 {
+    wxCHECK_MSG( IsOk(), 0, "invalid colour" );
+
     return wxRound(M_COLDATA->Red() * 255.0);
 }
 
 wxColour::ChannelType wxColour::Green() const
 {
+    wxCHECK_MSG( IsOk(), 0, "invalid colour" );
+
     return wxRound(M_COLDATA->Green() * 255.0);
 }
 
 wxColour::ChannelType wxColour::Blue() const
 {
+    wxCHECK_MSG( IsOk(), 0, "invalid colour" );
+
     return wxRound(M_COLDATA->Blue() * 255.0);
 }
 
 wxColour::ChannelType wxColour::Alpha() const
 {
+    wxCHECK_MSG( IsOk(), 0, "invalid colour" );
+
     return wxRound(M_COLDATA->Alpha() * 255.0);
 }
 
 #if wxOSX_USE_COCOA_OR_CARBON
 void wxColour::GetRGBColor(RGBColor* col) const
 {
+    wxCHECK_RET( IsOk(), "invalid colour" );
+
     col->red = M_COLDATA->Red() * 65535.0;
     col->blue = M_COLDATA->Blue() * 65535.0;
     col->green = M_COLDATA->Green() * 65535.0;
@@ -192,12 +202,16 @@ void wxColour::GetRGBColor(RGBColor* col) const
 
 CGColorRef wxColour::GetCGColor() const
 {
+    wxCHECK_MSG( IsOk(), NULL, "invalid colour" );
+
     return M_COLDATA->GetCGColor();
 }
 
 #if wxOSX_USE_COCOA
 WX_NSColor wxColour::OSXGetNSColor() const
 {
+    wxCHECK_MSG( IsOk(), NULL, "invalid colour" );
+
     return M_COLDATA->GetNSColor();
 }
 #endif

@@ -103,6 +103,13 @@ public:
         (void)CopyFromCursor(cursor, wxBitmapTransparency_Auto);
     }
 
+#if wxUSE_IMAGE
+    wxBitmap& operator=(const wxImage& image)
+    {
+        return *this = wxBitmap(image);
+    }
+#endif // wxUSE_IMAGE
+
     wxBitmap& operator=(const wxIcon& icon)
     {
         (void)CopyFromIcon(icon);

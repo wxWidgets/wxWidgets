@@ -803,7 +803,6 @@
 		F0B3F484C38C3BA0B9927CD9 /* docmdi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECC9F5C21ACB31A0B24AEE35 /* docmdi.cpp */; };
 		F0D892C2618130FEAD46BB86 /* panel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00969CBE3B8F32C78C195619 /* panel.cpp */; };
 		F1E4D7CA634E33808AE3B522 /* fontenumcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 373242CD08F330208A7CF438 /* fontenumcmn.cpp */; };
-		F1F484DD591337399FCD0463 /* display.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A5617D10CB7136EC9A4194EF /* display.cpp */; };
 		F22C401903993639AE05A295 /* xh_stbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 147800BBCB80346798B35D75 /* xh_stbox.cpp */; };
 		F24F637D59F637CA9A7E23C9 /* xh_filectrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 60EE4448A28D38F5ADE17B5A /* xh_filectrl.cpp */; };
 		F2813BF297C73A3ABD02EC98 /* glcanvas_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA59091E3ED83FB781FB9659 /* glcanvas_osx.cpp */; };
@@ -1402,7 +1401,6 @@
 		A46D50BEBF523B3F88831086 /* LexAsn1.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexAsn1.cxx; path = ../../src/stc/scintilla/lexers/LexAsn1.cxx; sourceTree = "<group>"; };
 		A4A745D1821A32D591D76650 /* imagiff.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imagiff.cpp; path = ../../src/common/imagiff.cpp; sourceTree = "<group>"; };
 		A54B80C17F823CB5900AD2E8 /* framecmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = framecmn.cpp; path = ../../src/common/framecmn.cpp; sourceTree = "<group>"; };
-		A5617D10CB7136EC9A4194EF /* display.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = display.cpp; path = ../../src/osx/core/display.cpp; sourceTree = "<group>"; };
 		A5794CD687013AF8A20A691A /* headerctrlcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = headerctrlcmn.cpp; path = ../../src/common/headerctrlcmn.cpp; sourceTree = "<group>"; };
 		A57CF60203F53459A03951A9 /* arrstr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = arrstr.cpp; path = ../../src/common/arrstr.cpp; sourceTree = "<group>"; };
 		A5BBC1E494D33D028CA547FF /* jddctmgr.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jddctmgr.c; path = ../../src/jpeg/jddctmgr.c; sourceTree = "<group>"; };
@@ -1953,7 +1951,6 @@
 				A1A53EC3A3463EFDB7614E93 /* bitmap.cpp */,
 				9D1F14339D1C331087650931 /* colour.cpp */,
 				343D4FDD5CC030618EF24729 /* dcmemory.cpp */,
-				A5617D10CB7136EC9A4194EF /* display.cpp */,
 				36E1DBA275AD325DB759C180 /* fontenum.cpp */,
 				160EB9744CB63A0B81DC651F /* hid.cpp */,
 				5CC5C13F8AA1387BADB7E60C /* printmac.cpp */,
@@ -2834,7 +2831,9 @@
 /* Begin PBXProject section */
 		19367367C9323490BB936F06 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiphone" */;
+			attributes = {
+			};
+			buildConfigurationList = A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiPhone" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -3006,7 +3005,6 @@
 				03BF1610E2FC3BD5ACB754F0 /* bitmap.cpp in Sources */,
 				FF50EC0EC5F23DF890C6E95F /* colour.cpp in Sources */,
 				BD2B17EB72E73A6EB6E0B26F /* dcmemory.cpp in Sources */,
-				F1F484DD591337399FCD0463 /* display.cpp in Sources */,
 				371809DA4AD1382F8B532878 /* fontenum.cpp in Sources */,
 				86BE5213D3F131D8A6862679 /* hid.cpp in Sources */,
 				AB58406CEBA13BC4A2A83B66 /* printmac.cpp in Sources */,
@@ -3737,6 +3735,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 477B609FA2373FB58F4C8768 /* wxiphone.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(GCC_PREPROCESSOR_DEFINITIONS)",
 					"wxUSE_BASE=1",
@@ -3756,6 +3755,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 477B609FA2373FB58F4C8768 /* wxiphone.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(GCC_PREPROCESSOR_DEFINITIONS)",
 					"wxUSE_BASE=1",
@@ -3783,7 +3783,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiphone" */ = {
+		A66311F47C8832F6A58105B6 /* Build configuration list for PBXProject "wxiPhone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				55C93151F6053EBCBDD70DF9 /* Debug */,

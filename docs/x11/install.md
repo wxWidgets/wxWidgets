@@ -1,5 +1,7 @@
-wxWidgets for X11 installation
+wxWidgets for X11 installation         {#plat_x11_install}
 ------------------------------
+
+[TOC]
 
 IMPORTANT NOTE:
 
@@ -13,7 +15,7 @@ IMPORTANT NOTE:
   using (including the beta) and what compiler on what system. One
   example: wxX11 2.8.0, gcc 2.95.4, Redhat 6.2
 
-First steps
+First steps                            {#x11_first_steps}
 -----------
 
 - Download wxX11-x.y.z.tgz, where x.y.z is the version number.
@@ -34,38 +36,38 @@ First steps
   information about your platform and the (relevant part of) contents of
   config.log file).
 
-COMPILING USING CONFIGURE
+Compiling using configure              {#x11_configure}
 =========================
 
-* The simplest case
+The simplest case                      {#x11_simple}
 -------------------
 
 If you compile wxWidgets on Linux for the first time and don't like to read
 install instructions just do (in the base dir):
 
-> ./configure --with-x11
-> make
-> su <type root password>
-> make install
-> ldconfig
-> exit
+    > ./configure --with-x11
+    > make
+    > su <type root password>
+    > make install
+    > ldconfig
+    > exit
 
 Afterwards you can continue with
 
-> make
-> su <type root password>
-> make install
-> ldconfig
-> exit
+    > make
+    > su <type root password>
+    > make install
+    > ldconfig
+    > exit
 
 If you want to remove wxWidgets on Unix you can do this:
 
-> su <type root password>
-> make uninstall
-> ldconfig
-> exit
+    > su <type root password>
+    > make uninstall
+    > ldconfig
+    > exit
 
-* The expert case
+The expert case                        {#x11_expert}
 -----------------
 
 If you want to do some more serious cross-platform programming with wxWidgets,
@@ -80,25 +82,25 @@ that purpose.
 For building three versions (one GTK, one X11 and a debug version of the GTK
 source) you'd do this:
 
-md buildx11
-cd buildx11
-../configure --with-x11
-make
-cd ..
+    md buildx11
+    cd buildx11
+    ../configure --with-x11
+    make
+    cd ..
 
-md buildgtk
-cd buildgtk
-../configure --with-gtk
-make
-cd ..
+    md buildgtk
+    cd buildgtk
+    ../configure --with-gtk
+    make
+    cd ..
 
-md buildgtkd
-cd buildgtkd
-../configure --with-gtk --enable-debug_flag
-make
-cd ..
+    md buildgtkd
+    cd buildgtkd
+    ../configure --with-gtk --enable-debug_flag
+    make
+    cd ..
 
-* The simplest errors
+The simplest errors                    {#x11_errors}
 ---------------------
 
 You get errors during compilation: The reason is that you probably have a
@@ -108,18 +110,18 @@ GCC 2.95 or later.
 
 You get immediate segfault when starting any sample or application: This is
 either due to having compiled the library with different flags or options than
-your program - typically you might have the __WXDEBUG__ option set for the
+your program - typically you might have the `__WXDEBUG__` option set for the
 library but not for your program - or due to using a compiler with optimisation
 bugs.
 
-* The simplest program
+The simplest program                   {#x11_simple_app}
 ----------------------
 
 Now create your super-application myfoo.cpp and compile anywhere with
 
-g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
+    g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
 
-* General
+General                                {#x11_general}
 ---------
 
 The Unix variants of wxWidgets use GNU configure. If you have problems with
@@ -127,19 +129,19 @@ your make use GNU make instead.
 
 If you have general problems with installation, see the wxWidgets website at
 
-    https://www.wxwidgets.org/
+https://www.wxwidgets.org/
 
 for newest information. If you still don't have any success, please send a bug
 report to one of our mailing lists (see my homepage) INCLUDING A DESCRIPTION OF
 YOUR SYSTEM AND YOUR PROBLEM, SUCH AS YOUR VERSION OF X, WHAT DISTRIBUTION
 YOU USE AND WHAT ERROR WAS REPORTED. I know this has no effect, but I tried...
 
-* GUI libraries
+GUI libraries                          {#x11_libs_gui}
 ---------------
 
 wxWidgets/X11 requires the X11 library to be installed on your system.
 
-* Additional libraries
+Additional libraries                   {#x11_libs_misc}
 ----------------------
 
 wxWidgets/X11 requires a thread library and X libraries known to work with
@@ -150,14 +152,14 @@ many aspects.  As of writing this, virtually all Linux distributions have
 
 You can disable thread support by running
 
-./configure --disable-threads
-make
-su <type root password>
-make install
-ldconfig
-exit
+    ./configure --disable-threads
+    make
+    su <type root password>
+    make install
+    ldconfig
+    exit
 
-* Building wxX11 on Cygwin
+Building wxX11 on Cygwin               {#x11_cygwin}
 --------------------------
 
 The normal build instructions should work fine on Cygwin. The one difference
@@ -171,10 +173,11 @@ will see linking errors. If this happens then you can work around the
 problem by setting LDFLAGS=-Wl,--export-all-symbols. Please also let us know
 about it on the wx-dev mailing list.
 
-* Create your configuration
+Create your configuration              {#x11_config}
 ---------------------------
 
 Usage:
+
 	./configure [options]
 
 If you want to use system's C and C++ compiler,
@@ -202,7 +205,7 @@ Configure will complain if the system variable OSTYPE has
 not been defined. And Make in some circumstances as well...
 
 
-* General options
+General options                        {#x11_options}
 -----------------
 
 Given below are the commands to change the default behaviour,
@@ -268,7 +271,7 @@ The following options handle the kind of library you want to build.
 				must be compiled with the same debug
 				options.
 
-* Feature Options
+Feature Options                        {#x11_feature_options}
 -----------------
 
 Many of the configure options have been thoroughly tested
@@ -320,7 +323,7 @@ Please see the output of "./configure --help" for comprehensive list
 of all configurable options.
 
 
-* Compiling
+Compiling                              {#x11_compiling}
 -----------
 
 The following must be done in the base directory (e.g. ~/wxX11
@@ -356,44 +359,44 @@ object-files:
 
 in the various directories will do the work for you.
 
-* Creating a new Project
+Creating a new Project                 {#x11_new_app}
 ------------------------
 
-1) The first way uses the installed libraries and header files
+1. The first way uses the installed libraries and header files
 automatically using wx-config
 
-g++ myfoo.cpp `wx-config --libs` `wx-config --cxxflags` -o myfoo
+        g++ myfoo.cpp `wx-config --libs` `wx-config --cxxflags` -o myfoo
 
-Using this way, a make file for the minimal sample would look
-like this
+    Using this way, a make file for the minimal sample would look
+    like this
 
-CXX = g++
+        CXX = g++
 
-minimal: minimal.o
-    $(CXX) -o minimal minimal.o `wx-config --libs`
+        minimal: minimal.o
+            $(CXX) -o minimal minimal.o `wx-config --libs`
 
-minimal.o: minimal.cpp
-    $(CXX) `wx-config --cxxflags` -c minimal.cpp -o minimal.o
+        minimal.o: minimal.cpp
+            $(CXX) `wx-config --cxxflags` -c minimal.cpp -o minimal.o
 
-clean:
-	rm -f *.o minimal
+        clean:
+            rm -f *.o minimal
 
-This is certain to become the standard way unless we decide
-to stick to tmake.
+    This is certain to become the standard way unless we decide
+    to stick to tmake.
 
-If your application uses only some of wxWidgets libraries, you can
-specify required libraries when running wx-config. For example,
-`wx-config --libs=html,core` will only output link command to link
-with libraries required by core GUI classes and wxHTML classes. See
-the manual for more information on the libraries.
+    If your application uses only some of wxWidgets libraries, you can
+    specify required libraries when running wx-config. For example,
+    `wx-config --libs=html,core` will only output link command to link
+    with libraries required by core GUI classes and wxHTML classes. See
+    the manual for more information on the libraries.
 
-2) The other way creates a project within the source code
+2. The other way creates a project within the source code
 directories of wxWidgets. For this endeavour, you'll need
 GNU autoconf version 2.14 and add an entry to your Makefile.in
 to the bottom of the configure.in script and run autoconf
 and configure before you can type make.
 
-* Further notes by Julian Smart
+Further notes by Julian Smart          {#x11_notes}
 -------------------------------
 
 - You may find the following script useful for compiling wxX11,
@@ -401,25 +404,23 @@ and configure before you can type make.
   permissions). Make this script executable with the command
   chmod a+x makewxx11.
 
-  -------:x-----Cut here-----:x-----
-  # makewxx11
-  # Sets permissions (in case we extracted wxX11 from zip files)
-  # and makes wxX11.
-  # Call from top-level wxWidgets directory.
-  # Note that this uses standard (but commonly-used) configure options;
-  # if you're feeling brave, you may wish to compile with threads:
-  # if they're not supported by the target platform, they will be disabled
-  # anyhow
-  # -- Julian Smart
-  chmod a+x configure config.sub config.guess
-  ./configure --with-x11 --with-shared --with-debug_flag --with-debug_info --enable-debug --without-threads --without-sockets --without-odbc
-  make
-  -------:x-----Cut here-----:x-----
+        # makewxx11
+        # Sets permissions (in case we extracted wxX11 from zip files)
+        # and makes wxX11.
+        # Call from top-level wxWidgets directory.
+        # Note that this uses standard (but commonly-used) configure options;
+        # if you're feeling brave, you may wish to compile with threads:
+        # if they're not supported by the target platform, they will be disabled
+        # anyhow
+        # -- Julian Smart
+        chmod a+x configure config.sub config.guess
+        ./configure --with-x11 --with-shared --with-debug_flag --with-debug_info --enable-debug --without-threads --without-sockets --without-odbc
+        make
 
   This script will build wxX11 using shared libraries. If you want to build
   a static wxWidgets library, use --disable-shared.
 
-Troubleshooting
+Troubleshooting                        {#x11_troubleshooting}
 ---------------
 
 - Solaris compilation with gcc: if the compiler has problems with the variable
@@ -437,7 +438,7 @@ Troubleshooting
   If you find any incorrect instances, though, such as a
   missing 'const' in an overridden function, please let us know.
 
-Other Notes
+Other Notes                            {#x11_misc_notes}
 -----------
 
 - Debugging mode is switched on by default in the makefiles, but using
@@ -448,11 +449,3 @@ Other Notes
   configure system, change --with-debug_flag to --without-debug_flag
   and --with-debug_info to --without-debug_info in the makewxx11
   script).
-
-Bug reports
------------
-
-Please send bug reports with a description of your environment,
-compiler and the error message(s) to the developers mailing list at:
-
-    https://www.wxwidgets.org/support/mailing-lists/

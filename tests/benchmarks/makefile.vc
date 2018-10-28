@@ -51,6 +51,7 @@ BENCH_GUI_CXXFLAGS = /M$(__RUNTIME_LIBS_26)$(__DEBUGRUNTIME) /DWIN32 \
 	/DNOPCH /D_CONSOLE $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) $(CXXFLAGS)
 BENCH_GUI_OBJECTS =  \
 	$(OBJS)\bench_gui_bench.obj \
+	$(OBJS)\bench_gui_display.obj \
 	$(OBJS)\bench_gui_image.obj
 BENCH_GUI_RESOURCES =  \
 	$(OBJS)\bench_gui_sample.res
@@ -73,6 +74,9 @@ BENCH_GRAPHICS_RESOURCES =  \
 !if "$(TARGET_CPU)" == "AMD64"
 ARCH_SUFFIX = _x64
 !endif
+!if "$(TARGET_CPU)" == "ARM64"
+ARCH_SUFFIX = _arm64
+!endif
 !if "$(TARGET_CPU)" == "IA64"
 ARCH_SUFFIX = _ia64
 !endif
@@ -81,6 +85,9 @@ ARCH_SUFFIX = _x64
 !endif
 !if "$(TARGET_CPU)" == "amd64"
 ARCH_SUFFIX = _x64
+!endif
+!if "$(TARGET_CPU)" == "arm64"
+ARCH_SUFFIX = _arm64
 !endif
 !if "$(TARGET_CPU)" == "ia64"
 ARCH_SUFFIX = _ia64
@@ -121,6 +128,9 @@ LIBTYPE_SUFFIX = dll
 !if "$(TARGET_CPU)" == "AMD64"
 LINK_TARGET_CPU = /MACHINE:X64
 !endif
+!if "$(TARGET_CPU)" == "ARM64"
+LINK_TARGET_CPU = /MACHINE:ARM64
+!endif
 !if "$(TARGET_CPU)" == "IA64"
 LINK_TARGET_CPU = /MACHINE:IA64
 !endif
@@ -129,6 +139,9 @@ LINK_TARGET_CPU = /MACHINE:X64
 !endif
 !if "$(TARGET_CPU)" == "amd64"
 LINK_TARGET_CPU = /MACHINE:X64
+!endif
+!if "$(TARGET_CPU)" == "arm64"
+LINK_TARGET_CPU = /MACHINE:ARM64
 !endif
 !if "$(TARGET_CPU)" == "ia64"
 LINK_TARGET_CPU = /MACHINE:IA64
@@ -499,6 +512,9 @@ $(OBJS)\bench_gui_sample.res: .\..\..\samples\sample.rc
 
 $(OBJS)\bench_gui_bench.obj: .\bench.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BENCH_GUI_CXXFLAGS) .\bench.cpp
+
+$(OBJS)\bench_gui_display.obj: .\display.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(BENCH_GUI_CXXFLAGS) .\display.cpp
 
 $(OBJS)\bench_gui_image.obj: .\image.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BENCH_GUI_CXXFLAGS) .\image.cpp

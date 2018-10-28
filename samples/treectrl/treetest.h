@@ -147,7 +147,7 @@ private:
     void DoResetBrokenStateImages(const wxTreeItemId& idParent,
                                   wxTreeItemIdValue cookie, int state);
 
-    void LogEvent(const wxChar *name, const wxTreeEvent& event);
+    void LogEvent(const wxString& name, const wxTreeEvent& event);
 
     int          m_imageSize;               // current size of images
     bool         m_reverseSort;             // flag for OnCompareItems

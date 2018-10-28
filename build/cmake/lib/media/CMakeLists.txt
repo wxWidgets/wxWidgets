@@ -17,6 +17,8 @@ elseif(WXOSX_COCOA)
     wx_append_sources(MEDIA_FILES MEDIA_OSX_COCOA)
 elseif(UNIX)
     wx_append_sources(MEDIA_FILES MEDIA_UNIX)
+elseif(WXQT)
+    wx_append_sources(MEDIA_FILES MEDIA_QT)
 endif()
 
 wx_add_library(media ${MEDIA_FILES})

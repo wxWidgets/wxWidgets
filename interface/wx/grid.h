@@ -1012,20 +1012,18 @@ protected:
 };
 
 /**
-    Base class for corner window renderer.
+    Base class for header cells renderers.
 
-    This is the simplest of all header renderers and only has a single
-    function.
-
-    @see wxGridCellAttrProvider::GetCornerRenderer()
+    A cell renderer can be used to draw the text of a cell's label, and/or
+    the border around it.
 
     @since 2.9.1
  */
-class wxGridCornerHeaderRenderer
+class wxGridHeaderLabelsRenderer
 {
 public:
     /**
-        Called by the grid to draw the corner window border.
+        Called by the grid to draw the border around the cell header.
 
         This method is responsible for drawing the border inside the given @a
         rect and adjusting the rectangle size to correspond to the area inside
@@ -1033,7 +1031,7 @@ public:
         border width.
 
         @param grid
-            The grid whose corner window is being drawn.
+            The grid whose header cell window is being drawn.
         @param dc
             The device context to use for drawing.
         @param rect
@@ -1044,23 +1042,11 @@ public:
     virtual void DrawBorder(const wxGrid& grid,
                             wxDC& dc,
                             wxRect& rect) const = 0;
-};
 
-/**
-    Common base class for row and column headers renderers.
-
-    @see wxGridColumnHeaderRenderer, wxGridRowHeaderRenderer
-
-    @since 2.9.1
- */
-class wxGridHeaderLabelsRenderer : public wxGridCornerHeaderRenderer
-{
-public:
     /**
         Called by the grid to draw the specified label.
 
-        Notice that the base class DrawBorder() method is called before this
-        one.
+        Notice that the DrawBorder() method is called before this one.
 
         The default implementation uses wxGrid::GetLabelTextColour() and
         wxGrid::GetLabelFont() to draw the label.
@@ -1078,7 +1064,8 @@ public:
     Base class for row headers renderer.
 
     This is the same as wxGridHeaderLabelsRenderer currently but we still use a
-    separate class for it to distinguish it from wxGridColumnHeaderRenderer.
+    separate class for it to distinguish it from wxGridColumnHeaderRenderer
+    and wxGridCornerHeaderRenderer.
 
     @see wxGridRowHeaderRendererDefault
 
@@ -1094,7 +1081,8 @@ class wxGridRowHeaderRenderer : public wxGridHeaderLabelsRenderer
     Base class for column headers renderer.
 
     This is the same as wxGridHeaderLabelsRenderer currently but we still use a
-    separate class for it to distinguish it from wxGridRowHeaderRenderer.
+    separate class for it to distinguish it from wxGridRowHeaderRenderer and
+    wxGridCornerHeaderRenderer.
 
     @see wxGridColumnHeaderRendererDefault
 
@@ -1107,13 +1095,30 @@ class wxGridColumnHeaderRenderer : public wxGridHeaderLabelsRenderer
 };
 
 /**
+    Base class for corner header renderer.
+
+    This is the same as wxGridHeaderLabelsRenderer currently but we still use a
+    separate class for it to distinguish it from wxGridRowHeaderRenderer and
+    wxGridColumnHeaderRenderer.
+
+    @see wxGridCornerHeaderRendererDefault
+
+    @see wxGridCellAttrProvider::GetCornerRenderer()
+
+    @since 2.9.1
+ */
+class wxGridCornerHeaderRenderer : public wxGridHeaderLabelsRenderer
+{
+};
+
+/**
     Default row header renderer.
 
     You may derive from this class if you need to only override one of its
     methods (i.e. either DrawLabel() or DrawBorder()) but continue to use the
     default implementation for the other one.
 
-    @see wxGridColumnHeaderRendererDefault
+    @see wxGridColumnHeaderRendererDefault, wxGridCornerHeaderRendererDefault
 
     @since 2.9.1
  */
@@ -1129,7 +1134,7 @@ public:
 /**
     Default column header renderer.
 
-    @see wxGridRowHeaderRendererDefault
+    @see wxGridRowHeaderRendererDefault, wxGridCornerHeaderRendererDefault
 
     @since 2.9.1
  */
@@ -1393,8 +1398,10 @@ public:
 
     void SetRowLabelValue( int row, const wxString& );
     void SetColLabelValue( int col, const wxString& );
+    void SetCornerLabelValue( const wxString& );
     wxString GetRowLabelValue( int row );
     wxString GetColLabelValue( int col );
+    wxString GetCornerLabelValue() const;
 };
 
 /**
@@ -1769,13 +1776,19 @@ public:
     //@}
 
     /*!
-        @name Table Row and Column Labels
+        @name Table Row, Column and Corner Labels
 
         By default the numbers are used for labelling rows and Latin letters for
         labelling columns. If the table has more than 26 columns, the pairs of
         letters are used starting from the 27-th one and so on, i.e. the
         sequence of labels is A, B, ..., Z, AA, AB, ..., AZ, BA, ..., ..., ZZ,
         AAA, ...
+
+        A cell in the top-left corner of a grid can also have a label. It is
+        empty by default. Use wxGrid::SetCornerLabelValue() to set it and
+        wxGrid::GetCornerLabelValue() to get its' current value.
+
+        @see wxGridTableBase::GetCornerLabelValue, wxGridTableBase::SetCornerLabelValue
      */
     //@{
 
@@ -1790,6 +1803,13 @@ public:
     virtual wxString GetColLabelValue(int col);
 
     /**
+        Return the label of the grid's corner.
+
+        @since 3.1.2
+     */
+    virtual wxString GetCornerLabelValue() const;
+
+    /**
         Set the given label for the specified row.
 
         The default version does nothing, i.e. the label is not stored. You
@@ -1802,6 +1822,17 @@ public:
         Exactly the same as SetRowLabelValue() but for columns.
      */
     virtual void SetColLabelValue(int col, const wxString& label);
+
+    /**
+        Set the given label for the grid's corner.
+
+        The default version does nothing, i.e. the label is not stored. You
+        must override this method in your derived class if you wish
+        wxGrid::GetCornerLabelValue() to work.
+
+        @since 3.1.2
+     */
+    virtual void SetCornerLabelValue( const wxString& );
 
     //@}
 
@@ -2342,6 +2373,34 @@ public:
     wxString GetColLabelValue(int col) const;
 
     /**
+        Sets the arguments to the current corner label alignment values.
+
+        Horizontal alignment will be one of @c wxALIGN_LEFT, @c wxALIGN_CENTRE
+        or @c wxALIGN_RIGHT.
+
+        Vertical alignment will be one of @c wxALIGN_TOP, @c wxALIGN_CENTRE or
+        @c wxALIGN_BOTTOM.
+
+        @since 3.1.2
+    */
+    void GetCornerLabelAlignment( int *horiz, int *vert ) const;
+
+    /**
+        Returns the orientation of the corner label (either @c wxHORIZONTAL or
+        @c wxVERTICAL).
+
+        @since 3.1.2
+    */
+    int GetCornerLabelTextOrientation() const;
+
+    /**
+        Returns the (top-left) corner label.
+
+        @since 3.1.2
+    */
+    wxString GetCornerLabelValue() const;
+
+    /**
         Returns the colour used for the background of row and column labels.
     */
     wxColour GetLabelBackgroundColour() const;
@@ -2412,6 +2471,35 @@ public:
         wxGridTableBase::SetColLabelValue() for this to have any effect.
     */
     void SetColLabelValue(int col, const wxString& value);
+
+    /**
+        Sets the horizontal and vertical alignment of the (top-left) corner label text.
+
+        Horizontal alignment should be one of @c wxALIGN_LEFT,
+        @c wxALIGN_CENTRE or @c wxALIGN_RIGHT. Vertical alignment should be one
+        of @c wxALIGN_TOP, @c wxALIGN_CENTRE or @c wxALIGN_BOTTOM.
+
+        @since 3.1.2
+    */
+    void SetCornerLabelAlignment( int horiz, int vert );
+
+    /**
+        Sets the orientation of the (top-left) corner label (either @c wxHORIZONTAL or
+        @c wxVERTICAL).
+
+        @since 3.1.2
+    */
+    void SetCornerLabelTextOrientation( int textOrientation );
+
+    /**
+        Set the value for the (top-left) corner label.
+
+        If you are using a custom grid table you must override
+        wxGridTableBase::SetCornerLabelValue() for this to have any effect.
+
+        @since 3.1.2
+    */
+    void SetCornerLabelValue( const wxString& );
 
     /**
         Sets the background colour for row and column labels.

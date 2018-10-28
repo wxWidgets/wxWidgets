@@ -703,6 +703,7 @@ void wxBitmap::SetPalette(const wxPalette& palette)
 }
 #endif // wxUSE_PALETTE
 
+#if WXWIN_COMPATIBILITY_3_0
 void wxBitmap::SetHeight(int height)
 {
     AllocExclusive();
@@ -737,6 +738,7 @@ void wxBitmap::SetDepth(int depth)
 
     M_BITMAP->m_surface = s;
 }
+#endif // WXWIN_COMPATIBILITY_3_0
 
 wxIDirectFBSurfacePtr wxBitmap::GetDirectFBSurface() const
 {

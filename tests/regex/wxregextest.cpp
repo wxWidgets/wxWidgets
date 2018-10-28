@@ -43,7 +43,7 @@ public:
     { }
 
 protected:
-    void runTest();
+    void runTest() wxOVERRIDE;
 
 private:
     wxString m_pattern;
@@ -80,7 +80,7 @@ public:
     { }
 
 protected:
-    void runTest();
+    void runTest() wxOVERRIDE;
 
 private:
     wxString m_pattern;
@@ -146,7 +146,7 @@ public:
     { }
 
 protected:
-    void runTest();
+    void runTest() wxOVERRIDE;
 
 private:
     wxString m_pattern;

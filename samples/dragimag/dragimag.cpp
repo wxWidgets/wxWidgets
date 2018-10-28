@@ -178,7 +178,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
                 }
                 case SHAPE_DRAG_TEXT:
                 {
-                    m_dragImage = new MyDragImage(this, wxString(wxT("Dragging some test text")), wxCursor(wxCURSOR_HAND));
+                    m_dragImage = new MyDragImage(this, wxString("Dragging some test text"), wxCursor(wxCURSOR_HAND));
                     break;
                 }
                 case SHAPE_DRAG_ICON:
@@ -313,16 +313,16 @@ wxBEGIN_EVENT_TABLE(MyFrame,wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
-: wxFrame( (wxFrame *)NULL, wxID_ANY, wxT("wxDragImage sample"),
+: wxFrame( (wxFrame *)NULL, wxID_ANY, "wxDragImage sample",
           wxPoint(20,20), wxSize(470,360) )
 {
     wxMenu *file_menu = new wxMenu();
-    file_menu->Append( wxID_ABOUT, wxT("&About"));
-    file_menu->AppendCheckItem( TEST_USE_SCREEN, wxT("&Use whole screen for dragging"), wxT("Use whole screen"));
-    file_menu->Append( wxID_EXIT, wxT("E&xit"));
+    file_menu->Append( wxID_ABOUT, "&About");
+    file_menu->AppendCheckItem( TEST_USE_SCREEN, "&Use whole screen for dragging", "Use whole screen");
+    file_menu->Append( wxID_EXIT, "E&xit");
 
     wxMenuBar *menu_bar = new wxMenuBar();
-    menu_bar->Append(file_menu, wxT("&File"));
+    menu_bar->Append(file_menu, "&File");
 
     SetIcon(wxICON(sample));
     SetMenuBar( menu_bar );
@@ -343,9 +343,9 @@ void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
-    (void)wxMessageBox( wxT("wxDragImage demo\n")
-        wxT("Julian Smart (c) 2000"),
-        wxT("About wxDragImage Demo"),
+    (void)wxMessageBox( "wxDragImage demo\n"
+        "Julian Smart (c) 2000",
+        "About wxDragImage Demo",
         wxICON_INFORMATION | wxOK );
 }
 
@@ -373,14 +373,14 @@ bool MyApp::OnInit()
 #endif
 
     wxImage image;
-    if (image.LoadFile(wxT("backgrnd.png"), wxBITMAP_TYPE_PNG))
+    if (image.LoadFile("backgrnd.png", wxBITMAP_TYPE_PNG))
     {
         m_background = wxBitmap(image);
     }
 
     MyFrame *frame = new MyFrame();
 
-    wxString rootName(wxT("shape0"));
+    wxString rootName("shape0");
 
     for (int i = 1; i < 4; i++)
     {

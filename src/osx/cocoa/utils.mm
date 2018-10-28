@@ -484,19 +484,11 @@ void wxApp::DoCleanUp()
     }
 }
 
-void wxClientDisplayRect(int *x, int *y, int *width, int *height)
+extern // used from src/osx/core/display.cpp
+wxRect wxOSXGetMainDisplayClientArea()
 {
     NSRect displayRect = [wxOSXGetMenuScreen() visibleFrame];
-    wxRect r = wxFromNSRect( NULL, displayRect );
-    if ( x )
-        *x = r.x;
-    if ( y )
-        *y = r.y;
-    if ( width )
-        *width = r.GetWidth();
-    if ( height )
-        *height = r.GetHeight();
-
+    return wxFromNSRect( NULL, displayRect );
 }
 
 void wxGetMousePosition( int* x, int* y )

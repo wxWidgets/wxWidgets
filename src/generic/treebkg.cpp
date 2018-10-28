@@ -542,7 +542,7 @@ void wxTreebook::MakeChangedEvent(wxBookCtrlEvent &event)
     event.SetEventType(wxEVT_TREEBOOK_PAGE_CHANGED);
 }
 
-wxWindow *wxTreebook::DoGetNonNullPage(size_t n)
+wxWindow *wxTreebook::TryGetNonNullPage(size_t n)
 {
     wxWindow* page = wxBookCtrlBase::GetPage(n);
 

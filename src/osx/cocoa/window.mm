@@ -3024,12 +3024,30 @@ void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &hei
     }
 }
 
+static void SetSubviewsNeedDisplay( NSView *view )
+{
+    for ( NSView *sub in view.subviews )
+    {
+        if ( !sub.layer )
+            continue;
+
+        [sub setNeedsDisplay:YES];
+        SetSubviewsNeedDisplay(sub);
+    }
+}
+
 void wxWidgetCocoaImpl::SetNeedsDisplay( const wxRect* where )
 {
     if ( where )
         [m_osxView setNeedsDisplayInRect:wxToNSRect(m_osxView, *where )];
     else
         [m_osxView setNeedsDisplay:YES];
+
+    // Layer-backed views (which are all in Mojave's Dark Mode) may not have
+    // their children implicitly redrawn with the parent. For compatibility,
+    // do it manually here:
+    if ( m_osxView.layer )
+        SetSubviewsNeedDisplay(m_osxView);
 }
 
 bool wxWidgetCocoaImpl::GetNeedsDisplay() const
@@ -3118,7 +3136,14 @@ void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
 
     if ( [targetView respondsToSelector:@selector(setBackgroundColor:) ] )
     {
-        [targetView setBackgroundColor: col.OSXGetNSColor()];
+        wxWindow* peer = GetWXPeer();
+        if ( peer->GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
+        {
+            wxTopLevelWindow* toplevel = wxDynamicCast(peer,wxTopLevelWindow);
+
+            if ( toplevel == NULL || toplevel->GetShape().IsEmpty() )
+                [targetView setBackgroundColor: col.OSXGetNSColor()];
+        }
     }
 }
 
@@ -3129,6 +3154,8 @@ bool wxWidgetCocoaImpl::SetBackgroundStyle( wxBackgroundStyle style )
     if ( [m_osxView respondsToSelector:@selector(setOpaque:) ] )
     {
         [m_osxView setOpaque: opaque];
+        if ( style == wxBG_STYLE_TRANSPARENT )
+            [m_osxView setBackgroundColor:[NSColor clearColor]];
     }
     
     return true ;
