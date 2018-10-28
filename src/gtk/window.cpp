@@ -310,7 +310,7 @@ static wxPoint gs_lastGesturePoint;
 
 // Function used to dump a brief description of a window.
 static
-wxString wxDumpWindow(wxWindow* win)
+wxString wxDumpWindow(wxWindowGTK* win)
 {
     if ( !win )
         return "(no window)";
