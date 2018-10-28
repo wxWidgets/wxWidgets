@@ -223,10 +223,9 @@ protected:
         {
             return wxString();
         }
-        else if ( !this->IsInRange(value) )
-        {
-            this->MakeInRange(&value);
-        }
+
+        // value should be kept in range (i.e. [m_min..m_max])
+        value = this->ClampToRange(value);
 
         return NormalizeValue(value);
     }
@@ -298,14 +297,14 @@ protected:
         return m_min <= value && value <= m_max;
     }
 
-    void MakeInRange(LongestValueType* value) const
+    LongestValueType ClampToRange(const LongestValueType value) const
     {
-        LongestValueType& v = *value;
-
-        if ( v < m_min )
-            v = m_min;
-        else if ( v > m_max )
-            v = m_max;
+        if ( value < m_min )
+            return m_min;
+        else if ( value > m_max )
+            return m_max;
+        else
+            return value;
     }
 
     // Implement wxNumValidatorBase pure virtual method.
@@ -407,18 +406,17 @@ protected:
 
     bool IsInRange(LongestValueType value) const
     {
-        LongestValueType origValue = value * m_factor;
-        return m_min <= origValue && origValue <= m_max;
+        return m_min <= value && value <= m_max;
     }
 
-    void MakeInRange(LongestValueType* value) const
+    LongestValueType ClampToRange(const LongestValueType value) const
     {
-        LongestValueType& v = *value;
-
-        if ( (v * m_factor) < m_min )
-            v = m_min / m_factor;
-        else if ( (v * m_factor) > m_max )
-            v = m_max / m_factor;
+        if ( value < m_min )
+            return m_min;
+        else if ( value > m_max )
+            return m_max;
+        else
+            return value;
     }
 
     // Implement wxNumValidatorBase pure virtual method.

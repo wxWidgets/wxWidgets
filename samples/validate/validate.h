@@ -30,6 +30,7 @@ public:
     MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int h);
 
     void OnQuit(wxCommandEvent& event);
+    void OnRangesDialog(wxCommandEvent& event);
     void OnTestDialog(wxCommandEvent& event);
     void OnToggleBell(wxCommandEvent& event);
 
@@ -56,6 +57,17 @@ public:
     wxTextCtrl *m_numericTextDouble;
 };
 
+class RangesDialog : public wxDialog
+{
+public:
+    RangesDialog(wxWindow *parent);
+
+private:
+    void OnButtonClick(wxCommandEvent& event);
+    
+    wxDECLARE_EVENT_TABLE();
+};
+
 class MyData
 {
 public:
@@ -76,9 +88,15 @@ public:
 
     // variables handled by wxNumericTextValidator
     int m_intValue;
+
     unsigned short m_smallIntValue;
+    unsigned short m_minSmallInt, m_maxSmallInt;
+
     double m_doubleValue;
+    
     float m_percentValue;
+    float m_minPercent, m_maxPercent;
+    static const float ms_factor;
 
     bool m_checkbox_state;
     int m_radiobox_choice;
@@ -106,8 +124,12 @@ enum
 {
     VALIDATE_DIALOG_ID = wxID_HIGHEST,
 
+    VALIDATE_RANGES_DIALOG,
     VALIDATE_TEST_DIALOG,
     VALIDATE_TOGGLE_BELL,
+
+    VALIDATE_BTN_USHORT,
+    VALIDATE_BTN_FLOAT,
 
     VALIDATE_TEXT,
     VALIDATE_TEXT2,

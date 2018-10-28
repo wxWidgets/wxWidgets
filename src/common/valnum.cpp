@@ -312,10 +312,12 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
     if ( !FromString(GetValueAfterInsertingChar(val, pos, ch), &value) )
         return false;
 
-    // N.B. don't call IsInRange() here to check whether value is in the
-    // expected range or not, as doing so would prevent us from entering
-    // any value at all in some cases (e.g. if m_min >= 10).
-    // So we need to treat each bound apart...
+    // N.B. Just calling IsInRange() here to check whether 'value' is in the
+    // expected range [m_min..m_max] or not may prevent us from entering any
+    // value at all if m_min >= some_value. e.g.:
+    //   Range1 [2..20]: values of this range [10..19] can't be typed in!
+    //   Range2 [10..100]: no value can be typed in at all!
+    // So we need to check for each bound individually.
 
     if ( value < m_min )
     {
@@ -330,7 +332,7 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
 
             // Notice that it is much safer to call SetSelection() at a later time
             // (i.e. after the current event has been fully processed) than calling
-            // it directly here which won't work at least on wxGTK.
+            // it directly here which won't work at all on some systems (e.g. wxGTK)
             (const_cast<wxIntegerValidatorBase*>(this))->CallAfter(
                 wxTextSelector(control, pos)
             );
@@ -419,7 +421,6 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
         return false;
 
     // N.B. (see wxIntegerValidatorBase::IsCharOk())
-    value *= m_factor;
 
     if ( value < m_min )
     {

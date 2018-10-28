@@ -40,6 +40,9 @@
 // Global data
 // ----------------------------------------------------------------------------
 
+/*static*/
+const float MyData::ms_factor = 100.0f;
+
 MyData g_data;
 
 wxString g_listbox_choices[] =
@@ -64,9 +67,16 @@ MyData::MyData()
     m_string2 = "Valid text";
     m_listbox_choices.Add(0);
     m_intValue = 0;
-    m_smallIntValue = 3;
+
+    m_minSmallInt = 150;
+    m_maxSmallInt = 777;
+    m_smallIntValue = m_minSmallInt;
+
     m_doubleValue = 12354.31;
-    m_percentValue = 0.25;
+
+    m_minPercent = -0.035; // -3.5%
+    m_maxPercent = 0.995;  // 99.5%
+    m_percentValue = m_minPercent;
 }
 
 // ----------------------------------------------------------------------------
@@ -150,6 +160,7 @@ bool MyApp::OnInit()
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
+    EVT_MENU(VALIDATE_RANGES_DIALOG, MyFrame::OnRangesDialog)
     EVT_MENU(VALIDATE_TEST_DIALOG, MyFrame::OnTestDialog)
     EVT_MENU(VALIDATE_TOGGLE_BELL, MyFrame::OnToggleBell)
 wxEND_EVENT_TABLE()
@@ -166,6 +177,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
 
     wxMenu *file_menu = new wxMenu;
 
+    file_menu->Append(VALIDATE_RANGES_DIALOG, "Set &ranges...\tCtrl-R", "Set ranges");
     file_menu->Append(VALIDATE_TEST_DIALOG, wxT("&Test dialog...\tCtrl-T"), wxT("Demonstrate validators"));
     file_menu->AppendCheckItem(VALIDATE_TOGGLE_BELL, wxT("&Bell on error"), wxT("Toggle bell on error"));
     file_menu->AppendSeparator();
@@ -188,6 +200,13 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(true);
+}
+
+void MyFrame::OnRangesDialog(wxCommandEvent& WXUNUSED(event))
+{
+    RangesDialog dialog(this);
+
+    dialog.ShowModal();
 }
 
 void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
@@ -347,9 +366,12 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     numSizer->Add(m_numericTextDouble, wxSizerFlags(center).Expand());
 
     wxIntegerValidator<unsigned short> smallIntVal(&g_data.m_smallIntValue);
-    smallIntVal.SetRange(150, 777);
-    numSizer->Add(new wxStaticText(this, wxID_ANY, "Int between 150 and 777:"),
-                  center);
+    smallIntVal.SetRange(g_data.m_minSmallInt, g_data.m_maxSmallInt);
+
+    const wxString lable_1 =
+        wxString::Format("Int between %d and %d:",
+            g_data.m_minSmallInt, g_data.m_maxSmallInt);
+    numSizer->Add(new wxStaticText(this, wxID_ANY, lable_1), center);
     numSizer->Add(new wxTextCtrl(this, wxID_ANY, "",
                                  wxDefaultPosition, wxDefaultSize, wxTE_RIGHT,
                                  smallIntVal),
@@ -359,12 +381,15 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     wxFloatingPointValidator<float> percentVal(&g_data.m_percentValue);
     percentVal.SetPrecision(2);
-    percentVal.SetFactor(100.0);
+    percentVal.SetFactor(MyData::ms_factor);
     // FIXME: i couldn't enter -3.5 in the control but -3.49!
-    percentVal.SetRange(-3.5, 99.5);
+    percentVal.SetRange(g_data.m_minPercent, g_data.m_maxPercent);
 
-    numSizer->Add(new wxStaticText(this, wxID_ANY, "Value displayed in %:"),
-                  center);
+    const wxString lable_2 =
+        wxString::Format("Value displayed in %% [%g%%..%g%%]",
+            g_data.m_minPercent * MyData::ms_factor,
+            g_data.m_maxPercent * MyData::ms_factor);
+    numSizer->Add(new wxStaticText(this, wxID_ANY, lable_2), center);
     numSizer->Add(new wxTextCtrl(this, wxID_ANY, "",
                                  wxDefaultPosition, wxDefaultSize, wxTE_RIGHT,
                                  percentVal),
@@ -407,3 +432,94 @@ bool MyDialog::TransferDataToWindow()
     return r;
 }
 
+// ----------------------------------------------------------------------------
+// RangesDialog
+// ----------------------------------------------------------------------------
+wxBEGIN_EVENT_TABLE(RangesDialog, wxDialog)
+    EVT_BUTTON(VALIDATE_BTN_USHORT, RangesDialog::OnButtonClick)
+    EVT_BUTTON(VALIDATE_BTN_FLOAT, RangesDialog::OnButtonClick)
+wxEND_EVENT_TABLE()
+
+RangesDialog::RangesDialog(wxWindow *parent) :
+    wxDialog(parent, wxID_ANY, "Ranges")
+{
+    wxFlexGridSizer* const
+        numSizer = new wxFlexGridSizer(4, 3, FromDIP(wxSize(5, 5)));
+
+    const wxSizerFlags center = wxSizerFlags().CenterVertical();
+
+    wxIntegerValidator<unsigned short> minSmallIntVal(&g_data.m_minSmallInt);
+    numSizer->Add(new wxStaticText(this, wxID_ANY, "Min:"), center);
+    numSizer->Add(new wxTextCtrl(this, wxID_ANY, wxString(),
+                                 wxDefaultPosition, wxDefaultSize, wxTE_RIGHT,
+                                 minSmallIntVal),
+                  wxSizerFlags(center).Expand());
+    numSizer->Add(new wxStaticText(this, wxID_ANY, "(unsigned short)"), center);
+
+    wxIntegerValidator<unsigned short> maxSmallIntVal(&g_data.m_maxSmallInt);
+    numSizer->Add(new wxStaticText(this, wxID_ANY, "Max:"), center);
+    numSizer->Add(new wxTextCtrl(this, wxID_ANY, wxString(),
+                                 wxDefaultPosition, wxDefaultSize, wxTE_RIGHT,
+                                 maxSmallIntVal),
+                  wxSizerFlags(center).Expand());
+    numSizer->Add(new wxStaticText(this, wxID_ANY, "(unsigned short)"), center);
+
+//    numSizer->AddSpacer(FromDIP(10));
+
+    wxFloatingPointValidator<float> minPercentVal(&g_data.m_minPercent);
+    minPercentVal.SetPrecision(2);
+    minPercentVal.SetFactor(MyData::ms_factor);
+    numSizer->Add(new wxStaticText(this, wxID_ANY, "Min:"), center);
+    numSizer->Add(new wxTextCtrl(this, wxID_ANY, wxString(),
+                                 wxDefaultPosition, wxDefaultSize, wxTE_RIGHT,
+                                 minPercentVal),
+                  wxSizerFlags(center).Expand());
+    numSizer->Add(new wxStaticText(this, wxID_ANY, "(float)"), center);
+
+    wxFloatingPointValidator<float> maxPercentVal(&g_data.m_maxPercent);
+    maxPercentVal.SetPrecision(2);
+    maxPercentVal.SetFactor(MyData::ms_factor);
+    numSizer->Add(new wxStaticText(this, wxID_ANY, "Max:"), center);
+    numSizer->Add(new wxTextCtrl(this, wxID_ANY, wxString(),
+                                 wxDefaultPosition, wxDefaultSize, wxTE_RIGHT,
+                                 maxPercentVal),
+                  wxSizerFlags(center).Expand());
+    numSizer->Add(new wxStaticText(this, wxID_ANY, "(float)"), center);
+
+    wxBoxSizer *btnsizer = new wxBoxSizer( wxHORIZONTAL );
+
+    btnsizer->Add(new wxButton(this, VALIDATE_BTN_USHORT, "Full range (unsigned short)"), center);
+    btnsizer->Add(new wxButton(this, VALIDATE_BTN_FLOAT, "Full range (float)"), center);
+
+    // setup the main sizer
+    // --------------------
+
+    wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
+
+    mainsizer->Add(btnsizer, wxSizerFlags().Expand().DoubleBorder());
+    mainsizer->Add(numSizer, wxSizerFlags().Expand().DoubleBorder());
+
+    mainsizer->Add(CreateButtonSizer(wxOK | wxCANCEL),
+                   wxSizerFlags().Expand().DoubleBorder());
+
+    SetSizer(mainsizer);
+    mainsizer->SetSizeHints(this);
+}
+
+void RangesDialog::OnButtonClick(wxCommandEvent& event)
+{
+    const int id = event.GetId();
+
+    if (id == VALIDATE_BTN_USHORT)
+    {
+        g_data.m_minSmallInt = std::numeric_limits<unsigned short>::min();
+        g_data.m_maxSmallInt = std::numeric_limits<unsigned short>::max();
+    }
+    else if (id == VALIDATE_BTN_FLOAT)
+    {
+        g_data.m_minPercent = 0.0f; // 0%
+        g_data.m_maxPercent = 1.0f; // 100%
+    }
+
+    TransferDataToWindow();
+}
