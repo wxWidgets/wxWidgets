@@ -14,7 +14,6 @@
 
 #include "wx/msw/wrapwin.h"
 
-#if wxUSE_DATEPICKCTRL || wxUSE_CALENDARCTRL
 // namespace for the helper functions related to the date controls
 namespace wxMSWDateControls
 {
@@ -25,7 +24,6 @@ namespace wxMSWDateControls
 extern bool CheckInitialization();
 
 } // namespace wxMSWDateControls
-#endif // wxUSE_DATEPICKCTRL || wxUSE_CALENDARCTRL
 
 #endif // _MSW_PRIVATE_DATECONTROLS_H_
 
