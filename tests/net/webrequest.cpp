@@ -119,6 +119,13 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][.]")
         Run();
     }
 
+    SECTION("GET data as string")
+    {
+        Create("/base64/VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==");
+        Run();
+        REQUIRE( request->GetResponse()->AsString() == "The quick brown fox jumps over the lazy dog" );
+    }
+
     SECTION("PUT file data")
     {
         Create("/put");
