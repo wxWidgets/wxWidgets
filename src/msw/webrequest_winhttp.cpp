@@ -181,10 +181,7 @@ void wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
                     SetFailedWithLastError();
             }
             else
-            {
-                m_response->ReportDataComplete();
                 SetState(State_Completed);
-            }
             break;
         case WINHTTP_CALLBACK_STATUS_WRITE_COMPLETE:
             WriteData();
@@ -351,10 +348,10 @@ wxWebResponse* wxWebRequestWinHTTP::GetResponse()
 //
 
 wxWebResponseWinHTTP::wxWebResponseWinHTTP(wxWebRequestWinHTTP& request):
-    m_request(request),
-    m_readSize(8 * 1024)
+    wxWebResponse(request),
+    m_requestHandle(request.GetHandle())
 {
-    wxString contentLengthStr = wxWinHTTPQueryHeaderString(m_request.GetHandle(),
+    wxString contentLengthStr = wxWinHTTPQueryHeaderString(m_requestHandle,
         WINHTTP_QUERY_CONTENT_LENGTH);
     if ( contentLengthStr.empty() ||
         !contentLengthStr.ToLongLong(&m_contentLength) )
@@ -363,12 +360,12 @@ wxWebResponseWinHTTP::wxWebResponseWinHTTP(wxWebRequestWinHTTP& request):
 
 wxString wxWebResponseWinHTTP::GetURL() const
 {
-    return wxWinHTTPQueryOptionString(m_request.GetHandle(), WINHTTP_OPTION_URL);
+    return wxWinHTTPQueryOptionString(m_requestHandle, WINHTTP_OPTION_URL);
 }
 
 wxString wxWebResponseWinHTTP::GetHeader(const wxString& name) const
 {
-    return wxWinHTTPQueryHeaderString(m_request.GetHandle(),
+    return wxWinHTTPQueryHeaderString(m_requestHandle,
         WINHTTP_QUERY_CUSTOM, name.wc_str());
 }
 
@@ -376,7 +373,7 @@ int wxWebResponseWinHTTP::GetStatus() const
 {
     DWORD status = 0;
     DWORD statusSize = sizeof(status);
-    if ( !::WinHttpQueryHeaders(m_request.GetHandle(),
+    if ( !::WinHttpQueryHeaders(m_requestHandle,
         WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER,
         WINHTTP_HEADER_NAME_BY_INDEX, &status, &statusSize, 0) )
     {
@@ -389,28 +386,13 @@ int wxWebResponseWinHTTP::GetStatus() const
 
 wxString wxWebResponseWinHTTP::GetStatusText() const
 {
-    return wxWinHTTPQueryHeaderString(m_request.GetHandle(), WINHTTP_QUERY_STATUS_TEXT);
-}
-
-wxInputStream* wxWebResponseWinHTTP::GetStream() const
-{
-    return m_stream.get();
-}
-
-wxString wxWebResponseWinHTTP::AsString(wxMBConv* conv) const
-{
-    // TODO: try to determine encoding type from content-type header
-    if ( !conv )
-        conv = &wxConvUTF8;
-
-    size_t outLen = 0;
-    return conv->cMB2WC((const char*) m_readBuffer.GetData(), m_readBuffer.GetDataLen(), &outLen);
+    return wxWinHTTPQueryHeaderString(m_requestHandle, WINHTTP_QUERY_STATUS_TEXT);
 }
 
 bool wxWebResponseWinHTTP::ReadData()
 {
-    if ( ::WinHttpReadData(m_request.GetHandle(),
-        m_readBuffer.GetAppendBuf(m_readSize), m_readSize, NULL) )
+    if ( ::WinHttpReadData(m_requestHandle,
+        GetDataBuffer(m_readSize), m_readSize, NULL) )
         return true;
     else
         return false;
@@ -418,14 +400,9 @@ bool wxWebResponseWinHTTP::ReadData()
 
 bool wxWebResponseWinHTTP::ReportAvailableData(DWORD dataLen)
 {
-    m_readBuffer.UngetAppendBuf(dataLen);
-    m_request.m_bytesReceived += dataLen;
+    ReportDataReceived(dataLen);
+    static_cast<wxWebRequestWinHTTP&>(m_request).m_bytesReceived += dataLen;
     return ReadData();
-}
-
-void wxWebResponseWinHTTP::ReportDataComplete()
-{
-    m_stream.reset(new wxMemoryInputStream(m_readBuffer.GetData(), m_readBuffer.GetDataLen()));
 }
 
 //

@@ -32,22 +32,13 @@ public:
 
     wxString GetStatusText() const wxOVERRIDE;
 
-    wxInputStream* GetStream() const wxOVERRIDE;
-
-    wxString AsString(wxMBConv* conv = NULL) const wxOVERRIDE;
-
     bool ReadData();
 
     bool ReportAvailableData(DWORD dataLen);
 
-    void ReportDataComplete();
-
 private:
-    wxWebRequestWinHTTP& m_request;
+    HINTERNET m_requestHandle;
     wxInt64 m_contentLength;
-    long m_readSize;
-    wxMemoryBuffer m_readBuffer;
-    wxScopedPtr<wxInputStream> m_stream;
 
     wxDECLARE_NO_COPY_CLASS(wxWebResponseWinHTTP);
 };

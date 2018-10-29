@@ -123,6 +123,17 @@ wxString wxWebResponse::GetMimeType() const
     return GetHeader("Mime-Type");
 }
 
+wxInputStream * wxWebResponse::GetStream() const
+{
+    if ( !m_stream.get() )
+    {
+        // Create stream
+        m_stream.reset(new wxMemoryInputStream(m_readBuffer.GetData(), m_readBuffer.GetDataLen()));
+    }
+
+    return m_stream.get();
+}
+
 wxString wxWebResponse::GetSuggestedFileName() const
 {
     wxString suggestedFilename;
@@ -139,6 +150,31 @@ wxString wxWebResponse::GetSuggestedFileName() const
         suggestedFilename = uri.GetServer();
 
     return suggestedFilename;
+}
+
+wxString wxWebResponse::AsString(wxMBConv * conv) const
+{
+    // TODO: try to determine encoding type from content-type header
+    if (!conv)
+        conv = &wxConvUTF8;
+
+    if (m_request.GetStorage() == wxWebRequest::Storage_Memory)
+    {
+        size_t outLen = 0;
+        return conv->cMB2WC((const char*)m_readBuffer.GetData(), m_readBuffer.GetDataLen(), &outLen);
+    }
+    else
+        return wxString();
+}
+
+void* wxWebResponse::GetDataBuffer(size_t sizeNeeded)
+{
+    return m_readBuffer.GetAppendBuf(sizeNeeded);
+}
+
+void wxWebResponse::ReportDataReceived(size_t sizeReceived)
+{
+    m_readBuffer.UngetAppendBuf(sizeReceived);
 }
 
 

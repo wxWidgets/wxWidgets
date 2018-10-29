@@ -60,7 +60,9 @@ public:
 
     void SetIgnoreServerErrorStatus(bool ignore) { m_ignoreServerErrorStatus = ignore; }
 
-    virtual void SetStorage(Storage storage);
+    virtual void SetStorage(Storage storage) { m_storage = storage; }
+
+    Storage GetStorage() const { return m_storage; }
 
     virtual void Start() = 0;
 
@@ -128,16 +130,27 @@ public:
 
     virtual wxString GetStatusText() const = 0;
 
-    virtual wxInputStream* GetStream() const = 0;
+    virtual wxInputStream* GetStream() const;
 
     virtual wxString GetSuggestedFileName() const;
 
-    virtual wxString AsString(wxMBConv* conv = NULL) const = 0;
+    wxString AsString(wxMBConv* conv = NULL) const;
 
 protected:
-    wxWebResponse() { }
+    wxWebRequest& m_request;
+    size_t m_readSize;
+
+    wxWebResponse(wxWebRequest& request):
+        m_request(request), m_readSize(8 * 1024) { }
+
+    void* GetDataBuffer(size_t sizeNeeded);
+
+    void ReportDataReceived(size_t sizeReceived);
 
 private:
+    wxMemoryBuffer m_readBuffer;
+    mutable wxScopedPtr<wxInputStream> m_stream;
+
     wxDECLARE_NO_COPY_CLASS(wxWebResponse);
 };
 
