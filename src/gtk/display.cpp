@@ -314,14 +314,6 @@ double wxDisplayImplGTK::GetScaleFactor() const
 
 wxSize wxDisplayImplGTK::GetSizeMM() const
 {
-    // At least in some configurations, gdk_screen_xxx_mm() functions return
-    // valid values when gdk_screen_get_monitor_xxx_mm() only return -1, so
-    // handle this case specially.
-    if ( gdk_screen_get_n_monitors(m_screen) == 1 )
-    {
-        return wxSize(gdk_screen_width_mm(), gdk_screen_height_mm());
-    }
-
     wxSize sizeMM;
 #if GTK_CHECK_VERSION(2,14,0)
     if ( wx_is_at_least_gtk2(14) )
@@ -337,6 +329,19 @@ wxSize wxDisplayImplGTK::GetSizeMM() const
             sizeMM.y = rc;
     }
 #endif // GTK+ 2.14
+
+    // When we have only a single display, we can use global GTK+ functions.
+    // Note that at least in some configurations, these functions return valid
+    // values when gdk_screen_get_monitor_xxx_mm() only return -1, so it's
+    // always worth fallng back on them, but we can't do it when using
+    // multiple displays because they combine the sizes of all displays in this
+    // case, which would result in a completely wrong value for GetPPI().
+    if ( !(sizeMM.x && sizeMM.y) && gdk_screen_get_n_monitors(m_screen) == 1 )
+    {
+        sizeMM.x = gdk_screen_width_mm();
+        sizeMM.y = gdk_screen_height_mm();
+    }
+
     return sizeMM;
 }
 
