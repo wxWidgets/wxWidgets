@@ -30,6 +30,7 @@
 #include "wx/univ/scrtimer.h"
 #include "wx/univ/scrthumb.h"
 
+#if wxUSE_SCROLLBAR
 // ----------------------------------------------------------------------------
 // wxScrollThumbCaptureData: the struct used while dragging the scroll thumb
 // ----------------------------------------------------------------------------
@@ -290,3 +291,4 @@ int wxScrollThumb::GetThumbPos(const wxMouseEvent& event) const
     int x = GetMouseCoord(event) - m_captureData->m_ofsMouse;
     return m_control->PixelToThumbPos(x);
 }
+#endif // wxUSE_SCROLLBAR
