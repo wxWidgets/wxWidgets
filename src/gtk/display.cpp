@@ -317,7 +317,7 @@ wxSize wxDisplayImplGTK::GetSizeMM() const
     // At least in some configurations, gdk_screen_xxx_mm() functions return
     // valid values when gdk_screen_get_monitor_xxx_mm() only return -1, so
     // handle this case specially.
-    if ( IsPrimary() )
+    if ( gdk_screen_get_n_monitors(m_screen) == 1 )
     {
         return wxSize(gdk_screen_width_mm(), gdk_screen_height_mm());
     }
