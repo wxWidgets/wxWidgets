@@ -268,21 +268,29 @@ static inline bool wxTryMakeValueInRange(T* value, const T min, const T max)
     return true;
 }
 
-class wxTextSelector
-{
-public:
-    wxTextSelector(wxTextEntry * const entry, int pos)
-        : m_entry(entry), m_pos(pos)
-    {}
-
-    void operator()(){ m_entry->SetSelection(m_pos+1, -1); }
-
-private:
-    wxTextEntry * const m_entry;
-    int m_pos;
-};
-
 } // anonymous namespace
+
+void
+wxIntegerValidatorBase::TryCompleteValue(LongestValueType value,
+                                                      int pos)
+{
+    if ( wxTryMakeValueInRange(&value, m_min, m_max) )
+    {
+        wxTextEntry * const control = GetTextEntry();
+        if ( !control )
+            return;
+
+        control->ChangeValue(wxNumberFormatter::ToString(value));
+
+        control->SetSelection(pos+1, -1);
+
+        // the "modified" status was reset by the call to ChangeValue() above,
+        // so we need to explicitly set it (back) here.
+        wxTextCtrl * const text = wxDynamicCast(m_validatorWindow, wxTextCtrl);
+        if ( text )
+            text->MarkDirty();
+    }
+}
 
 bool
 wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
@@ -321,28 +329,8 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
 
     if ( value < m_min )
     {
-        if ( wxTryMakeValueInRange(&value, m_min, m_max) )
-        {
-            // TODO: refactoring needed!
-            wxTextEntry * const control = GetTextEntry();
-            if ( !control )
-                return false;
-
-            control->ChangeValue(wxNumberFormatter::ToString(value));
-
-            // Notice that it is much safer to call SetSelection() at a later time
-            // (i.e. after the current event has been fully processed) than calling
-            // it directly here which won't work at all on some systems (e.g. wxGTK)
-            (const_cast<wxIntegerValidatorBase*>(this))->CallAfter(
-                wxTextSelector(control, pos)
-            );
-
-            // the "modified" status was reset by the call to ChangeValue() above,
-            // so we need to explicitly set it (back) here.
-            wxTextCtrl * const text = wxDynamicCast(m_validatorWindow, wxTextCtrl);
-            if ( text )
-                text->MarkDirty();
-        }
+        (const_cast<wxIntegerValidatorBase*>(this))->CallAfter(
+            &wxIntegerValidatorBase::TryCompleteValue, value, pos);
 
         // return false to indicate error status
         return false;
@@ -372,6 +360,30 @@ wxFloatingPointValidatorBase::FromString(const wxString& s,
     *value /= m_factor;
 
     return true;
+}
+
+void
+wxFloatingPointValidatorBase::TryCompleteValue(LongestValueType value,
+                                                            int pos)
+{
+    if ( wxTryMakeValueInRange(&value, m_min, m_max) )
+    {
+        wxTextEntry * const control = GetTextEntry();
+        if ( !control )
+            return;
+
+        const wxString strVal = 
+            wxNumberFormatter::ToString(value, m_precision, GetFormatFlags());
+        control->ChangeValue(strVal);
+
+        control->SetSelection(pos+1, -1);
+
+        // the "modified" status was reset by the call to ChangeValue() above,
+        // so we need to explicitly set it (back) here.
+        wxTextCtrl * const text = wxDynamicCast(m_validatorWindow, wxTextCtrl);
+        if ( text )
+            text->MarkDirty();
+    }
 }
 
 bool
@@ -424,26 +436,8 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
 
     if ( value < m_min )
     {
-        if ( wxTryMakeValueInRange(&value, m_min, m_max) )
-        {
-            wxTextEntry * const control = GetTextEntry();
-            if ( !control )
-                return false;
-
-            const wxString strVal = 
-                wxNumberFormatter::ToString(value, m_precision, GetFormatFlags());
-            control->ChangeValue(strVal);
-
-            (const_cast<wxFloatingPointValidatorBase*>(this))->CallAfter(
-                wxTextSelector(control, pos)
-            );
-
-            // the "modified" status was reset by the call to ChangeValue() above,
-            // so we need to explicitly set it (back) here.
-            wxTextCtrl * const text = wxDynamicCast(m_validatorWindow, wxTextCtrl);
-            if ( text )
-                text->MarkDirty();
-        }
+        (const_cast<wxFloatingPointValidatorBase*>(this))->CallAfter(
+            &wxFloatingPointValidatorBase::TryCompleteValue, value, pos);
 
         return false;
     }

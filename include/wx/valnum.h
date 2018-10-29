@@ -307,6 +307,8 @@ protected:
             return value;
     }
 
+    void TryCompleteValue(LongestValueType value, int pos);
+
     // Implement wxNumValidatorBase pure virtual method.
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const wxOVERRIDE;
 
@@ -418,6 +420,8 @@ protected:
         else
             return value;
     }
+
+    void TryCompleteValue(LongestValueType value, int pos);
 
     // Implement wxNumValidatorBase pure virtual method.
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const wxOVERRIDE;
