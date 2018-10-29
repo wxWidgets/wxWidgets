@@ -118,6 +118,11 @@ protected:
     // create the object providing access to the display with the given index
     wxDisplayImpl(unsigned n) : m_index(n) { }
 
+    // Compute PPI from the sizes in pixels and mm.
+    //
+    // Return (0, 0) if physical size (in mm) is not known, i.e. 0.
+    static wxSize ComputePPI(int pxX, int pxY, int mmX, int mmY);
+
 
     // the index of this display (0 is always the primary one)
     const unsigned m_index;
