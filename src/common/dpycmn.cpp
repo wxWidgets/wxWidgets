@@ -195,15 +195,17 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 
 wxSize wxDisplayImpl::GetPPI() const
 {
-    const wxSize pixels = GetGeometry().GetSize();
     const wxSize mm = GetSizeMM();
-
     if ( !mm.x || !mm.y )
     {
         // Physical size is unknown, return a special value indicating that we
         // can't compute the resolution -- what else can we do?
         return wxSize(0, 0);
     }
+
+    // We need physical pixels here, not logical ones returned by
+    // GetGeometry(), to compute the real DPI.
+    const wxSize pixels = GetGeometry().GetSize()*GetScaleFactor();
 
     return wxSize(wxRound((pixels.x * inches2mm) / mm.x),
                   wxRound((pixels.y * inches2mm) / mm.y));

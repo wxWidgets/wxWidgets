@@ -46,6 +46,7 @@ public:
     virtual wxRect GetGeometry() const wxOVERRIDE;
     virtual wxRect GetClientArea() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE;
+    virtual double GetScaleFactor() const wxOVERRIDE;
     virtual wxSize GetSizeMM() const wxOVERRIDE;
 
 #if wxUSE_DISPLAY
@@ -119,6 +120,11 @@ wxRect wxDisplayImplGTK::GetClientArea() const
 int wxDisplayImplGTK::GetDepth() const
 {
     return 24;
+}
+
+double wxDisplayImplGTK::GetScaleFactor() const
+{
+    return gdk_monitor_get_scale_factor(m_monitor);
 }
 
 wxSize wxDisplayImplGTK::GetSizeMM() const
@@ -222,6 +228,9 @@ public:
     virtual wxRect GetGeometry() const wxOVERRIDE;
     virtual wxRect GetClientArea() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE;
+#if GTK_CHECK_VERSION(3,10,0)
+    virtual double GetScaleFactor() const wxOVERRIDE;
+#endif // GTK+ 3.10
     virtual wxSize GetSizeMM() const wxOVERRIDE;
 
 #if wxUSE_DISPLAY
@@ -292,6 +301,16 @@ int wxDisplayImplGTK::GetDepth() const
     // TODO: How to get the depth of the specific display?
     return gdk_visual_get_depth(gdk_window_get_visual(wxGetTopLevelGDK()));
 }
+
+#if GTK_CHECK_VERSION(3,10,0)
+double wxDisplayImplGTK::GetScaleFactor() const
+{
+    if ( gtk_check_version(3,10,0) == NULL )
+        return gdk_screen_get_monitor_scale_factor(m_screen, m_index);
+
+    return 1.0;
+}
+#endif // GTK+ 3.10
 
 wxSize wxDisplayImplGTK::GetSizeMM() const
 {
