@@ -40,6 +40,13 @@ public:
         State_Cancelled
     };
 
+    enum Storage
+    {
+        Storage_Memory,
+        Storage_File,
+        Storage_None
+    };
+
     virtual ~wxWebRequest() { }
 
     virtual void SetHeader(const wxString& name, const wxString& value)
@@ -52,6 +59,8 @@ public:
     void SetData(wxSharedPtr<wxInputStream> dataStream, const wxString& contentType, wxFileOffset dataSize = wxInvalidOffset);
 
     void SetIgnoreServerErrorStatus(bool ignore) { m_ignoreServerErrorStatus = ignore; }
+
+    virtual void SetStorage(Storage storage);
 
     virtual void Start() = 0;
 
@@ -75,6 +84,7 @@ public:
 
 protected:
     wxString m_method;
+    Storage m_storage;
     wxWebRequestHeaderMap m_headers;
     wxFileOffset m_dataSize;
     wxSharedPtr<wxInputStream> m_dataStream;
@@ -83,7 +93,8 @@ protected:
         m_id(id),
         m_state(State_Idle),
         m_ignoreServerErrorStatus(false),
-        m_dataSize(0) { }
+        m_dataSize(0),
+        m_storage(Storage_Memory) { }
 
     void SetState(State state, const wxString& failMsg = "");
 
