@@ -61,4 +61,4 @@ bool wxTimePickerCtrl::MSWOnDateTimeChange(const NMDATETIMECHANGE& dtch)
     wxDateEvent event(this, m_date, wxEVT_TIME_CHANGED);
     return HandleWindowEvent(event);
 }
-#endif // wxUSE_DATEPICKCTRL
+#endif // wxUSE_TIMEPICKCTRL
