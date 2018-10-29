@@ -231,6 +231,7 @@ public:
 #if GTK_CHECK_VERSION(3,10,0)
     virtual double GetScaleFactor() const wxOVERRIDE;
 #endif // GTK+ 3.10
+    virtual wxSize GetPPI() const wxOVERRIDE;
     virtual wxSize GetSizeMM() const wxOVERRIDE;
 
 #if wxUSE_DISPLAY
@@ -311,6 +312,24 @@ double wxDisplayImplGTK::GetScaleFactor() const
     return 1.0;
 }
 #endif // GTK+ 3.10
+
+wxSize wxDisplayImplGTK::GetPPI() const
+{
+    // Try the base class version which uses our GetSizeMM() and returns
+    // per-display PPI value if it works.
+    wxSize ppi = wxDisplayImpl::GetPPI();
+
+    if ( !ppi.x || !ppi.y )
+    {
+        // But if it didn't work, fall back to the global DPI value common to
+        // all displays -- this is still better than nothing and more
+        // compatible with the previous wxWidgets versions.
+        ppi = ComputePPI(gdk_screen_width(), gdk_screen_height(),
+                         gdk_screen_width_mm(), gdk_screen_height_mm());
+    }
+
+    return ppi;
+}
 
 wxSize wxDisplayImplGTK::GetSizeMM() const
 {
