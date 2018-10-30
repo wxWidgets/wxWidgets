@@ -165,31 +165,6 @@ bool wxImageList::Replace( int index, const wxBitmap &bitmap )
     return true;
 }
 
-bool wxImageList::Replace( int index, const wxIcon &bitmap )
-{
-    wxList::compatibility_iterator node = m_images.Item( index );
-
-    wxCHECK_MSG( node, false, wxT("wrong index in image list") );
-
-    wxIcon* newBitmap = new wxIcon( bitmap );
-
-    if (index == (int) m_images.GetCount() - 1)
-    {
-        delete node->GetData();
-        m_images.Erase( node );
-        m_images.Append( newBitmap );
-    }
-    else
-    {
-        wxList::compatibility_iterator next = node->GetNext();
-        delete node->GetData();
-        m_images.Erase( node );
-        m_images.Insert( next, newBitmap );
-    }
-
-    return true;
-}
-
 bool wxImageList::Replace( int index, const wxBitmap &bitmap, const wxBitmap &mask )
 {
     wxList::compatibility_iterator node = m_images.Item( index );

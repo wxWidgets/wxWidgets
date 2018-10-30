@@ -37,7 +37,6 @@ public:
     int Add( const wxBitmap& bitmap, const wxColour& maskColour );
     wxBitmap GetBitmap(int index) const;
     wxIcon GetIcon(int index) const;
-    bool Replace( int index, const wxIcon &bitmap );
     bool Replace( int index, const wxBitmap &bitmap );
     bool Replace( int index, const wxBitmap &bitmap, const wxBitmap &mask );
     bool Remove( int index );
