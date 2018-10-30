@@ -60,12 +60,10 @@ bool wxGenericImageList::Create()
 
 int wxGenericImageList::Add( const wxBitmap &bitmap )
 {
-    wxASSERT_MSG( (bitmap.GetWidth() >= m_width && bitmap.GetHeight() == m_height)
+    wxASSERT_MSG( (bitmap.GetScaledWidth() >= m_width && bitmap.GetScaledHeight() == m_height)
                   || (m_width == 0 && m_height == 0),
                   wxT("invalid bitmap size in wxImageList: this might work ")
                   wxT("on this platform but definitely won't under Windows.") );
-
-    const int index = int(m_images.GetCount());
 
     if (bitmap.IsKindOf(wxCLASSINFO(wxIcon)))
     {
@@ -75,9 +73,9 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
     {
         // Mimic behaviour of Windows ImageList_Add that automatically breaks up the added
         // bitmap into sub-images of the correct size
-        if (m_width > 0 && bitmap.GetWidth() > m_width && bitmap.GetHeight() >= m_height)
+        if (m_width > 0 && bitmap.GetScaledWidth() > m_width && bitmap.GetScaledHeight() >= m_height)
         {
-            int numImages = bitmap.GetWidth() / m_width;
+            int numImages = bitmap.GetScaledWidth() / m_width;
             for (int subIndex = 0; subIndex < numImages; subIndex++)
             {
                 wxRect rect(m_width * subIndex, 0, m_width, m_height);
@@ -93,11 +91,11 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
 
     if (m_width == 0 && m_height == 0)
     {
-        m_width = bitmap.GetWidth();
-        m_height = bitmap.GetHeight();
+        m_width = bitmap.GetScaledWidth();
+        m_height = bitmap.GetScaledHeight();
     }
 
-    return index;
+    return m_images.GetCount() - 1;
 }
 
 int wxGenericImageList::Add( const wxBitmap& bitmap, const wxBitmap& mask )
@@ -128,24 +126,30 @@ const wxBitmap *wxGenericImageList::GetBitmapPtr( int index ) const
 wxBitmap wxGenericImageList::GetBitmap(int index) const
 {
     const wxBitmap* bmp = GetBitmapPtr(index);
-    if (bmp)
-        return *bmp;
-    else
+    if (!bmp)
         return wxNullBitmap;
+
+    if ( bmp->IsKindOf(wxCLASSINFO(wxIcon)) )
+        return wxBitmap( *(static_cast<const wxIcon*>(bmp)) );
+    else
+        return *bmp;
 }
 
 // Get the icon
 wxIcon wxGenericImageList::GetIcon(int index) const
 {
     const wxBitmap* bmp = GetBitmapPtr(index);
-    if (bmp)
+    if (!bmp)
+        return wxNullIcon;
+
+    if ( bmp->IsKindOf(wxCLASSINFO(wxIcon)) )
+        return *(static_cast<const wxIcon*>(bmp));
+    else
     {
         wxIcon icon;
         icon.CopyFromBitmap(*bmp);
         return icon;
     }
-    else
-        return wxNullIcon;
 }
 
 bool wxGenericImageList::Replace( int index, const wxBitmap &bitmap )
@@ -235,8 +239,8 @@ bool wxGenericImageList::GetSize( int index, int &width, int &height ) const
     wxCHECK_MSG( node, false, wxT("wrong index in image list") );
 
     wxBitmap *bm = (wxBitmap*)node->GetData();
-    width = bm->GetWidth();
-    height = bm->GetHeight();
+    width = bm->GetScaledWidth();
+    height = bm->GetScaledHeight();
 
     return true;
 }
