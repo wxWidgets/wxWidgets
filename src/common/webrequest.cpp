@@ -19,7 +19,10 @@
 #include "wx/webrequest.h"
 #include "wx/mstream.h"
 #include "wx/uri.h"
+#include "wx/filefn.h"
 #include "wx/filename.h"
+#include "wx/stdpaths.h"
+#include "wx/wfstream.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -105,9 +108,23 @@ void wxWebRequest::SetState(State state, const wxString & failMsg)
 
 void wxWebRequest::ProcessStateEvent(State state, const wxString& failMsg)
 {
+    wxString responseFileName;
+
     wxWebRequestEvent evt(wxEVT_WEBREQUEST_STATE, GetId(), state,
         GetResponse(), failMsg);
+    if ( state == State_Completed && m_storage == Storage::Storage_File )
+    {
+        responseFileName = GetResponse()->GetFileName();
+        evt.SetResponseFileName(responseFileName);
+    }
+
     ProcessEvent(evt);
+
+    // Remove temporary file if it still exists
+    if ( state == State_Completed && m_storage == Storage::Storage_File &&
+        wxFileExists(responseFileName) )
+        wxRemove(responseFileName);
+
     // Remove reference after the request is no longer active
     if (state == State_Completed || state == State_Failed ||
         state == State_Cancelled)
@@ -118,6 +135,43 @@ void wxWebRequest::ProcessStateEvent(State state, const wxString& failMsg)
 //
 // wxWebResponse
 //
+wxWebResponse::wxWebResponse(wxWebRequest& request) :
+    m_request(request),
+    m_readSize(8 * 1024)
+{
+}
+
+wxWebResponse::~wxWebResponse()
+{
+    if ( wxFileExists(m_file.GetName()) )
+        wxRemove(m_file.GetName());
+}
+
+bool wxWebResponse::Init()
+{
+    if (m_request.GetStorage() == wxWebRequest::Storage_File)
+    {
+        wxFileName tmpPrefix;
+        tmpPrefix.AssignDir(m_request.GetSession().GetTempDir());
+        if ( GetContentLength() > 0 )
+        {
+            // Check available disk space
+            wxLongLong freeSpace;
+            if ( wxGetDiskSpace(tmpPrefix.GetFullPath(), NULL, &freeSpace) &&
+                GetContentLength() > freeSpace )
+            {
+                m_request.SetState(wxWebRequest::State_Failed, _("Not enough free disk space for download."));
+                return false;
+            }
+        }
+
+        tmpPrefix.SetName("wxd");
+        wxFileName::CreateTempFileName(tmpPrefix.GetFullPath(), &m_file);
+    }
+
+    return true;
+}
+
 wxString wxWebResponse::GetMimeType() const
 {
     return GetHeader("Mime-Type");
@@ -128,7 +182,20 @@ wxInputStream * wxWebResponse::GetStream() const
     if ( !m_stream.get() )
     {
         // Create stream
-        m_stream.reset(new wxMemoryInputStream(m_readBuffer.GetData(), m_readBuffer.GetDataLen()));
+        switch (m_request.GetStorage())
+        {
+            case wxWebRequest::Storage_Memory:
+                m_stream.reset(new wxMemoryInputStream(m_readBuffer.GetData(), m_readBuffer.GetDataLen()));
+                break;
+            case wxWebRequest::Storage_File:
+                m_stream.reset(new wxFFileInputStream(m_file));
+                m_stream->SeekI(0);
+                break;
+            case wxWebRequest::Storage_None:
+                // No stream available
+                break;
+        }
+
     }
 
     return m_stream.get();
@@ -155,10 +222,10 @@ wxString wxWebResponse::GetSuggestedFileName() const
 wxString wxWebResponse::AsString(wxMBConv * conv) const
 {
     // TODO: try to determine encoding type from content-type header
-    if (!conv)
+    if ( !conv )
         conv = &wxConvUTF8;
 
-    if (m_request.GetStorage() == wxWebRequest::Storage_Memory)
+    if ( m_request.GetStorage() == wxWebRequest::Storage_Memory )
     {
         size_t outLen = 0;
         return conv->cMB2WC((const char*)m_readBuffer.GetData(), m_readBuffer.GetDataLen(), &outLen);
@@ -175,8 +242,30 @@ void* wxWebResponse::GetDataBuffer(size_t sizeNeeded)
 void wxWebResponse::ReportDataReceived(size_t sizeReceived)
 {
     m_readBuffer.UngetAppendBuf(sizeReceived);
+
+    if ( m_request.GetStorage() == wxWebRequest::Storage_File )
+        m_file.Write(m_readBuffer.GetData(), m_readBuffer.GetDataLen());
+    else if ( m_request.GetStorage() == wxWebRequest::Storage_None )
+    {
+        wxWebRequestEvent evt(wxEVT_WEBREQUEST_DATA, m_request.GetId(), wxWebRequest::State_Active);
+        evt.SetDataBuffer(m_readBuffer.GetData(), m_readBuffer.GetDataLen());
+        m_request.ProcessEvent(evt);
+    }
+
+    if ( m_request.GetStorage() != wxWebRequest::Storage_Memory )
+        m_readBuffer.Clear();
 }
 
+wxString wxWebResponse::GetFileName() const
+{
+    return m_file.GetName();
+}
+
+void wxWebResponse::ReportDataCompleted()
+{
+    if ( m_request.GetStorage() == wxWebRequest::Storage_File )
+        m_file.Close();
+}
 
 //
 // wxWebSession
@@ -191,6 +280,14 @@ wxWebSession::wxWebSession()
     SetHeader("User-Agent", wxString::Format("%s/1 wxWidgets/%d.%d.%d",
         wxTheApp->GetAppName(),
         wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER));
+}
+
+wxString wxWebSession::GetTempDir() const
+{
+    if ( m_tempDir.empty() )
+        return wxStandardPaths::Get().GetTempDir();
+    else
+        return m_tempDir;
 }
 
 // static

@@ -15,6 +15,7 @@
 #if wxUSE_WEBREQUEST
 
 #include "wx/event.h"
+#include "wx/ffile.h"
 #include "wx/object.h"
 #include "wx/scopedptr.h"
 #include "wx/sharedptr.h"
@@ -74,6 +75,8 @@ public:
 
     int GetId() const { return m_id; }
 
+    wxWebSession& GetSession() const { return m_session; }
+
     State GetState() const { return m_state; }
 
     virtual wxFileOffset GetBytesSent() const = 0;
@@ -84,6 +87,8 @@ public:
 
     virtual wxFileOffset GetBytesExpectedToReceive() const = 0;
 
+    void SetState(State state, const wxString& failMsg = "");
+
 protected:
     wxString m_method;
     Storage m_storage;
@@ -91,18 +96,18 @@ protected:
     wxFileOffset m_dataSize;
     wxSharedPtr<wxInputStream> m_dataStream;
 
-    wxWebRequest(int id):
+    wxWebRequest(wxWebSession& session, int id):
+        m_session(session),
         m_id(id),
         m_state(State_Idle),
         m_ignoreServerErrorStatus(false),
         m_dataSize(0),
         m_storage(Storage_Memory) { }
 
-    void SetState(State state, const wxString& failMsg = "");
-
     bool CheckServerStatus();
 
 private:
+    wxWebSession& m_session;
     int m_id;
     State m_state;
     bool m_ignoreServerErrorStatus;
@@ -116,7 +121,7 @@ private:
 class WXDLLIMPEXP_NET wxWebResponse
 {
 public:
-    virtual ~wxWebResponse() { }
+    virtual ~wxWebResponse();
 
     virtual wxInt64 GetContentLength() const = 0;
 
@@ -136,12 +141,17 @@ public:
 
     wxString AsString(wxMBConv* conv = NULL) const;
 
+    void ReportDataCompleted();
+
+    bool Init();
+
+    virtual wxString GetFileName() const;
+
 protected:
     wxWebRequest& m_request;
     size_t m_readSize;
 
-    wxWebResponse(wxWebRequest& request):
-        m_request(request), m_readSize(8 * 1024) { }
+    wxWebResponse(wxWebRequest& request);
 
     void* GetDataBuffer(size_t sizeNeeded);
 
@@ -149,6 +159,7 @@ protected:
 
 private:
     wxMemoryBuffer m_readBuffer;
+    mutable wxFFile m_file;
     mutable wxScopedPtr<wxInputStream> m_stream;
 
     wxDECLARE_NO_COPY_CLASS(wxWebResponse);
@@ -205,6 +216,10 @@ public:
 
     const wxWebRequestHeaderMap& GetHeaders() const { return m_headers; }
 
+    void SetTempDir(const wxString& dir) { m_tempDir = dir; }
+
+    wxString GetTempDir() const;
+
     static wxWebSession& GetDefault();
 
     static wxWebSession* New(const wxString& backend = wxWebSessionBackendDefault);
@@ -218,6 +233,7 @@ protected:
 
 private:
     wxWebRequestHeaderMap m_headers;
+    wxString m_tempDir;
 
     static wxScopedPtr<wxWebSession> ms_defaultSession;
     static wxStringWebSessionFactoryMap ms_factoryMap;
@@ -232,7 +248,8 @@ public:
     wxWebRequestEvent(wxEventType type, int id, wxWebRequest::State state,
         wxWebResponse* response = NULL, const wxString& errorDesc = "")
         : wxEvent(id, type),
-        m_state(state), m_response(response), m_errorDescription(errorDesc)
+        m_state(state), m_response(response), m_data(NULL), m_dataSize(0),
+        m_errorDescription(errorDesc)
     { }
 
     wxWebRequest::State GetState() const { return m_state; }
@@ -241,11 +258,25 @@ public:
 
     const wxString& GetErrorDescription() const { return m_errorDescription; }
 
+    const wxString& GetResponseFileName() const { return m_responseFileName; }
+
+    void SetResponseFileName(const wxString& filename) { m_responseFileName = filename; }
+
+    const void* GetDataBuffer() const { return m_data; }
+
+    size_t GetDataSize() const { return m_dataSize; }
+
+    void SetDataBuffer(const void* buffer, size_t size)
+    { m_data = buffer; m_dataSize = size; }
+
     wxEvent* Clone() const wxOVERRIDE { return new wxWebRequestEvent(*this); }
 
 private:
     wxWebRequest::State m_state;
     wxWebResponse* m_response;
+    wxString m_responseFileName;
+    const void* m_data;
+    size_t m_dataSize;
     wxString m_errorDescription;
 };
 

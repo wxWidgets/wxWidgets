@@ -22,6 +22,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/webrequest.h"
+#include "wx/filename.h"
 #include "wx/wfstream.h"
 
 // This test requires the URL to an httpbin instance.
@@ -38,7 +39,11 @@
 class RequestFixture
 {
 public:
-    RequestFixture() { }
+    RequestFixture()
+    {
+        expectedFileSize = 0;
+        dataSize = 0;
+    }
 
     void Create(const wxString& subURL)
     {
@@ -51,6 +56,7 @@ public:
     {
         request.reset(wxWebSession::GetDefault().CreateRequest(url));
         request->Bind(wxEVT_WEBREQUEST_STATE, &RequestFixture::OnRequestState, this);
+        request->Bind(wxEVT_WEBREQUEST_DATA, &RequestFixture::OnData, this);
     }
 
     void OnRequestState(wxWebRequestEvent& evt)
@@ -59,11 +65,23 @@ public:
         {
         case wxWebRequest::State_Unauthorized:
         case wxWebRequest::State_Completed:
+            if ( request->GetStorage() == wxWebRequest::Storage_File )
+            {
+                wxFileName fn(evt.GetResponseFileName());
+                REQUIRE( fn.GetSize() == expectedFileSize );
+            }
+            wxFALLTHROUGH;
         case wxWebRequest::State_Failed:
         case wxWebRequest::State_Cancelled:
             loop.Exit();
             break;
         }
+    }
+
+    void OnData(wxWebRequestEvent& evt)
+    {
+        // Count all bytes recieved via data event for Storage_None
+        dataSize += evt.GetDataSize();
     }
 
     void Run(wxWebRequest::State requiredState = wxWebRequest::State_Completed,
@@ -79,6 +97,8 @@ public:
 
     wxEventLoop loop;
     wxObjectDataPtr<wxWebRequest> request;
+    wxInt64 expectedFileSize;
+    wxInt64 dataSize;
 };
 
 TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][.]")
@@ -124,6 +144,25 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][.]")
         Create("/base64/VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIHRoZSBsYXp5IGRvZw==");
         Run();
         REQUIRE( request->GetResponse()->AsString() == "The quick brown fox jumps over the lazy dog" );
+    }
+
+    SECTION("GET 99KB to file")
+    {
+        expectedFileSize = 99 * 1024;
+        Create(wxString::Format("/bytes/%lld", expectedFileSize));
+        request->SetStorage(wxWebRequest::Storage_File);
+        Run();
+        REQUIRE( request->GetBytesReceived() == expectedFileSize );
+    }
+
+    SECTION("Process 99KB data")
+    {
+        int processingSize = 99 * 1024;
+        Create(wxString::Format("/bytes/%d", processingSize));
+        request->SetStorage(wxWebRequest::Storage_None);
+        Run();
+        REQUIRE( request->GetBytesReceived() == processingSize );
+        REQUIRE( dataSize == processingSize );
     }
 
     SECTION("PUT file data")

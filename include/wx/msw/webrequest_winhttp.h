@@ -89,7 +89,6 @@ public:
     HINTERNET GetHandle() const { return m_request; }
 
 private:
-    wxWebSessionWinHTTP& m_session;
     wxString m_url;
     HINTERNET m_connect;
     HINTERNET m_request;

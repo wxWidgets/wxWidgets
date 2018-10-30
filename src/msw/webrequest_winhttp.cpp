@@ -143,8 +143,7 @@ static void CALLBACK wxRequestStatusCallback(
 //
 
 wxWebRequestWinHTTP::wxWebRequestWinHTTP(int id, wxWebSessionWinHTTP& session, const wxString& url):
-    wxWebRequest(id),
-    m_session(session),
+    wxWebRequest(session, id),
     m_url(url),
     m_connect(NULL),
     m_request(NULL),
@@ -181,7 +180,10 @@ void wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
                     SetFailedWithLastError();
             }
             else
+            {
+                m_response->ReportDataCompleted();
                 SetState(State_Completed);
+            }
             break;
         case WINHTTP_CALLBACK_STATUS_WRITE_COMPLETE:
             WriteData();
@@ -216,9 +218,11 @@ void wxWebRequestWinHTTP::WriteData()
 
 void wxWebRequestWinHTTP::CreateResponse()
 {
-    if (::WinHttpReceiveResponse(m_request, NULL))
+    if ( ::WinHttpReceiveResponse(m_request, NULL) )
     {
         m_response.reset(new wxWebResponseWinHTTP(*this));
+        if ( !m_response->Init() )
+            return;
         m_bytesExpectedToReceive = m_response->GetContentLength();
         int status = m_response->GetStatus();
         if ( status == 401 || status == 407)
@@ -263,8 +267,9 @@ void wxWebRequestWinHTTP::Start()
         port = wxAtoi(uri.GetPort());
 
     // Open a connction
-    m_connect = ::WinHttpConnect(m_session.GetHandle(), uri.GetServer().wc_str(),
-        port, 0);
+    m_connect = ::WinHttpConnect(
+        static_cast<wxWebSessionWinHTTP&>(GetSession()).GetHandle(),
+        uri.GetServer().wc_str(), port, 0);
     if ( m_connect == NULL )
     {
         SetFailedWithLastError();
