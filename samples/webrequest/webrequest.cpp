@@ -21,6 +21,7 @@
 #include "wx/notebook.h"
 #include "wx/artprov.h"
 #include "wx/webrequest.h"
+#include "wx/filedlg.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -103,11 +104,41 @@ public:
 
         // Download page
         wxPanel* downloadPanel = new wxPanel(m_notebook);
+        wxSizer* downloadSizer = new wxBoxSizer(wxVERTICAL);
+        wxStaticText* downloadHeader = new wxStaticText(downloadPanel, wxID_ANY,
+            "The URL will be downloaded to a file.\n"\
+            "Progress will be shown and you will be asked, where\n"\
+            "to save the file when the download completed.");
+        downloadSizer->Add(downloadHeader, wxSizerFlags().Expand().Border());
+        downloadSizer->AddStretchSpacer();
+        m_downloadGauge = new wxGauge(downloadPanel, wxID_ANY, 100);
+        downloadSizer->Add(m_downloadGauge, wxSizerFlags().Expand().Border());
+        m_downloadStaticText = new wxStaticText(downloadPanel, wxID_ANY, "");
+        downloadSizer->Add(m_downloadStaticText, wxSizerFlags().Expand().Border());
 
+        downloadSizer->AddStretchSpacer();
+
+        downloadPanel->SetSizer(downloadSizer);
         m_notebook->AddPage(downloadPanel, "Download");
 
         // Advanced page
         wxPanel* advancedPanel = new wxPanel(m_notebook);
+        wxSizer* advSizer = new wxBoxSizer(wxVERTICAL);
+        wxStaticText* advHeader = new wxStaticText(advancedPanel, wxID_ANY,
+            "As an example of processing data while\n"\
+            "it's being received from the server every\n"\
+            "zero byte in the response will be counted below.");
+        advSizer->Add(advHeader, wxSizerFlags().Expand().Border());
+
+        advSizer->AddStretchSpacer();
+        m_advCountStaticText = new wxStaticText(advancedPanel, wxID_ANY, "0",
+            wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL | wxST_NO_AUTORESIZE);
+        m_advCountStaticText->SetFont(m_advCountStaticText->GetFont()
+            .MakeBold().MakeLarger().MakeLarger());
+        advSizer->Add(m_advCountStaticText, wxSizerFlags().Expand().Border());
+        advSizer->AddStretchSpacer();
+
+        advancedPanel->SetSizer(advSizer);
 
         m_notebook->AddPage(advancedPanel, "Advanced");
 
@@ -123,9 +154,14 @@ public:
         SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
         SetSizer(mainSizer);
 
-        SetSize(FromDIP(wxSize(400, 500)));
+        SetSize(FromDIP(wxSize(540, 500)));
 
         CreateStatusBar();
+
+        m_downloadProgressTimer.Bind(wxEVT_TIMER,
+            &WebRequestFrame::OnProgressTimer, this);
+
+        m_downloadRequest = NULL;
     }
 
     void OnStartButton(wxCommandEvent& WXUNUSED(evt))
@@ -158,10 +194,19 @@ public:
             }
             break;
         case Page_Download:
-            // TODO: implement
+            m_downloadRequest = request.get();
+            request->SetStorage(wxWebRequest::Storage_File);
+            m_downloadGauge->SetValue(0);
+            m_downloadGauge->Pulse();
+            m_downloadStaticText->SetLabel("");
+            m_downloadProgressTimer.Start(500);
+            GetStatusBar()->SetStatusText("");
             break;
         case Page_Advanced:
-            // TODO: implement
+            request->SetStorage(wxWebRequest::Storage_None);
+            request->Bind(wxEVT_WEBREQUEST_DATA, &WebRequestFrame::OnRequestData, this);
+
+            m_advCountStaticText->SetLabel("0");
             break;
         }
 
@@ -195,13 +240,59 @@ public:
                         evt.GetResponse()->GetStatus(),
                         evt.GetResponse()->GetStatusText()));
                     break;
-                }
+                case Page_Download:
+                {
+                    // Force last progress update
+                    wxTimerEvent timerEvt;
+                    OnProgressTimer(timerEvt);
 
+                    // Stop updating download progress
+                    m_downloadRequest = NULL;
+                    m_downloadProgressTimer.Stop();
+
+                    GetStatusBar()->SetStatusText("Download completed");
+
+                    // Ask the user where to save the file
+                    wxFileDialog fileDlg(this, "Save download", "",
+                        evt.GetResponse()->GetSuggestedFileName(), "*.*",
+                        wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+                    if ( fileDlg.ShowModal() == wxID_OK )
+                    {
+                        if (!wxRenameFile(evt.GetResponseFileName(), fileDlg.GetPath()))
+                            wxLogError("Could not move file");
+                    }
+
+                    break;
+                }
+                }
                 break;
+
             case wxWebRequest::State_Failed:
+                // Stop updating download progress
+                m_downloadRequest = NULL;
+                m_downloadProgressTimer.Stop();
                 wxLogError("Web Request failed: %s", evt.GetErrorDescription());
                 GetStatusBar()->SetStatusText("");
+                break;
         }
+    }
+
+    void OnRequestData(wxWebRequestEvent& evt)
+    {
+
+    }
+
+    void OnProgressTimer(wxTimerEvent& WXUNUSED(evt))
+    {
+        if (!m_downloadRequest || m_downloadRequest->GetBytesExpectedToReceive() <= 0)
+            return;
+
+        
+        m_downloadGauge->SetValue((m_downloadRequest->GetBytesReceived() * 100) /
+            m_downloadRequest->GetBytesExpectedToReceive());
+
+        m_downloadStaticText->SetLabelText(wxString::Format("%lld/%lld",
+            m_downloadRequest->GetBytesReceived(), m_downloadRequest->GetBytesExpectedToReceive()));
     }
 
     void OnPostCheckBox(wxCommandEvent& WXUNUSED(evt))
@@ -227,10 +318,10 @@ public:
             defaultURL = "https://httpbin.org/post";
             break;
         case Page_Download:
-            defaultURL = "https://www.wxwidgets.com/download.zip";
+            defaultURL = "https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.1/wxWidgets-3.1.1.7z";
             break;
         case Page_Advanced:
-            defaultURL = "https://www.wxwidgets.com/adv.zip";
+            defaultURL = "https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.1/wxWidgets-3.1.1.tar.bz2";
             break;
         }
         m_urlTextCtrl->SetValue(defaultURL);
@@ -246,6 +337,13 @@ private:
     wxTextCtrl* m_postContentTypeTextCtrl;
     wxTextCtrl* m_postRequestTextCtrl;
     wxTextCtrl* m_textResponseTextCtrl;
+
+    wxGauge* m_downloadGauge;
+    wxStaticText* m_downloadStaticText;
+    wxTimer m_downloadProgressTimer;
+    wxWebRequest* m_downloadRequest;
+
+    wxStaticText* m_advCountStaticText;
 };
 
 class WebRequestApp : public wxApp
