@@ -59,10 +59,36 @@ bool wxGenericImageList::Create()
 
 int wxGenericImageList::Add( const wxBitmap &bitmap )
 {
-    wxASSERT_MSG( (bitmap.GetScaledWidth() >= m_size.x && bitmap.GetScaledHeight() == m_size.y)
-                  || m_size == wxSize(0, 0),
-                  wxT("invalid bitmap size in wxImageList: this might work ")
-                  wxT("on this platform but definitely won't under Windows.") );
+    // We use the scaled, i.e. logical, size here as image list images size is
+    // specified in logical pixels, just as window coordinates and sizes are.
+    const wxSize bitmapSize = bitmap.GetScaledSize();
+
+    if ( m_size == wxSize(0, 0) )
+    {
+        // This is the first time Add() is called and we hadn't had any fixed
+        // size: adopt the size of our first bitmap as image size.
+        m_size = bitmapSize;
+    }
+    else // We already have a fixed size, check that the bitmap conforms to it.
+    {
+        // There is a special case: a bitmap may contain more than one image,
+        // in which case we're supposed to chop it in parts, just as Windows
+        // ImageList_Add() does.
+        if ( bitmapSize.x > m_size.x && (bitmapSize.x % m_size.x == 0) )
+        {
+            const int numImages = bitmapSize.x / m_size.x;
+            for (int subIndex = 0; subIndex < numImages; subIndex++)
+            {
+                wxRect rect(m_size.x * subIndex, 0, m_size.x, m_size.y);
+                Add(bitmap.GetSubBitmap(rect));
+            }
+
+            return m_images.GetCount() - 1;
+        }
+
+        wxASSERT_MSG( bitmapSize == m_size,
+                      "All bitmaps in wxImageList must have the same size" );
+    }
 
     if (bitmap.IsKindOf(wxCLASSINFO(wxIcon)))
     {
@@ -70,27 +96,7 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
     }
     else
     {
-        // Mimic behaviour of Windows ImageList_Add that automatically breaks up the added
-        // bitmap into sub-images of the correct size
-        if (m_size.x > 0 && bitmap.GetScaledWidth() > m_size.x && bitmap.GetScaledHeight() >= m_size.y)
-        {
-            int numImages = bitmap.GetScaledWidth() / m_size.x;
-            for (int subIndex = 0; subIndex < numImages; subIndex++)
-            {
-                wxRect rect(m_size.x * subIndex, 0, m_size.x, m_size.y);
-                wxBitmap tmpBmp = bitmap.GetSubBitmap(rect);
-                m_images.Append( new wxBitmap(tmpBmp) );
-            }
-        }
-        else
-        {
-            m_images.Append( new wxBitmap(bitmap) );
-        }
-    }
-
-    if ( m_size == wxSize(0, 0) )
-    {
-        m_size = bitmap.GetScaledSize();
+        m_images.Append( new wxBitmap(bitmap) );
     }
 
     return m_images.GetCount() - 1;
