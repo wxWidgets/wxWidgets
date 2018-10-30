@@ -47,11 +47,14 @@ public:
 #if WXWIN_COMPATIBILITY_3_0
     wxDEPRECATED_MSG("Don't use this overload: it's not portable and does nothing")
     bool Create() { return true; }
+
+    wxDEPRECATED_MSG("Use GetBitmap() instead")
+    const wxBitmap *GetBitmapPtr(int index) const { return DoGetPtr(index); }
 #endif // WXWIN_COMPATIBILITY_3_0
 
-    // Internal use only
-    const wxBitmap *GetBitmapPtr(int index) const;
 private:
+    const wxBitmap *DoGetPtr(int index) const;
+
     wxObjectList  m_images;
 
     // Size of a single bitmap in the list.

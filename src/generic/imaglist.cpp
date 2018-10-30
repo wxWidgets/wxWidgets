@@ -112,7 +112,7 @@ int wxGenericImageList::Add( const wxBitmap& bitmap, const wxColour& maskColour 
     return Add(wxBitmap(img));
 }
 
-const wxBitmap *wxGenericImageList::GetBitmapPtr( int index ) const
+const wxBitmap *wxGenericImageList::DoGetPtr( int index ) const
 {
     wxObjectList::compatibility_iterator node = m_images.Item( index );
 
@@ -124,7 +124,7 @@ const wxBitmap *wxGenericImageList::GetBitmapPtr( int index ) const
 // Get the bitmap
 wxBitmap wxGenericImageList::GetBitmap(int index) const
 {
-    const wxBitmap* bmp = GetBitmapPtr(index);
+    const wxBitmap* bmp = DoGetPtr(index);
     if (!bmp)
         return wxNullBitmap;
 
@@ -137,7 +137,7 @@ wxBitmap wxGenericImageList::GetBitmap(int index) const
 // Get the icon
 wxIcon wxGenericImageList::GetIcon(int index) const
 {
-    const wxBitmap* bmp = GetBitmapPtr(index);
+    const wxBitmap* bmp = DoGetPtr(index);
     if (!bmp)
         return wxNullIcon;
 
