@@ -10,10 +10,11 @@
 #ifndef _WX_IMAGLISTG_H_
 #define _WX_IMAGLISTG_H_
 
+#include "wx/bitmap.h"
 #include "wx/gdicmn.h"
+#include "wx/vector.h"
 
 class WXDLLIMPEXP_FWD_CORE wxDC;
-class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxIcon;
 class WXDLLIMPEXP_FWD_CORE wxColour;
 
@@ -35,8 +36,9 @@ public:
     int Add( const wxBitmap& bitmap, const wxColour& maskColour );
     wxBitmap GetBitmap(int index) const;
     wxIcon GetIcon(int index) const;
-    bool Replace( int index, const wxBitmap &bitmap );
-    bool Replace( int index, const wxBitmap &bitmap, const wxBitmap& mask );
+    bool Replace( int index,
+                  const wxBitmap& bitmap,
+                  const wxBitmap& mask = wxNullBitmap );
     bool Remove( int index );
     bool RemoveAll();
 
@@ -55,7 +57,7 @@ public:
 private:
     const wxBitmap *DoGetPtr(int index) const;
 
-    wxObjectList  m_images;
+    wxVector<wxBitmap> m_images;
 
     // Size of a single bitmap in the list.
     wxSize m_size;
