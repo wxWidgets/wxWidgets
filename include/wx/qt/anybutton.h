@@ -29,6 +29,7 @@ public:
     virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
 
     virtual QWidget *GetHandle() const;
+    wxBitmap *GetStateBitmaps() { return m_bitmaps; };
 
 protected:
 
@@ -39,7 +40,12 @@ protected:
 
 private:
     typedef wxAnyButtonBase base_type;
-
+    
+    // the bitmaps for the different state of the buttons, all of them may be
+    // invalid and the button only shows a bitmap at all if State_Normal bitmap
+    // is valid
+    wxBitmap m_bitmaps[State_Max];
+    
     wxDECLARE_NO_COPY_CLASS(wxAnyButton);
 };
 
