@@ -32,7 +32,6 @@ public:
     virtual bool GetSize( int index, int &width, int &height ) const;
     virtual wxSize GetSize() const { return wxSize(m_width, m_height); }
 
-    int Add( const wxIcon& bitmap );
     int Add( const wxBitmap& bitmap );
     int Add( const wxBitmap& bitmap, const wxBitmap& mask );
     int Add( const wxBitmap& bitmap, const wxColour& maskColour );

@@ -53,24 +53,6 @@ bool wxImageList::Create()
     return true;
 }
 
-int wxImageList::Add( const wxIcon &bitmap )
-{
-    wxASSERT_MSG( (bitmap.GetWidth() == m_width && bitmap.GetHeight() == m_height)
-                  || (m_width == 0 && m_height == 0),
-                  wxT("invalid bitmap size in wxImageList: this might work ")
-                  wxT("on this platform but definitely won't under Windows.") );
-
-    m_images.Append( new wxIcon( bitmap ) );
-
-    if (m_width == 0 && m_height == 0)
-    {
-        m_width = bitmap.GetWidth();
-        m_height = bitmap.GetHeight();
-    }
-
-    return m_images.GetCount() - 1;
-}
-
 int wxImageList::Add( const wxBitmap &bitmap )
 {
     wxASSERT_MSG( (bitmap.GetScaledWidth() >= m_width && bitmap.GetScaledHeight() == m_height)
