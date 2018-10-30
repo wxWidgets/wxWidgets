@@ -49,11 +49,6 @@ bool wxGenericImageList::Create( int width, int height, bool WXUNUSED(mask), int
 {
     m_size = wxSize(width, height);
 
-    return Create();
-}
-
-bool wxGenericImageList::Create()
-{
     return true;
 }
 

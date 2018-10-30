@@ -25,7 +25,6 @@ public:
     wxGenericImageList( int width, int height, bool mask = true, int initialCount = 1 );
     virtual ~wxGenericImageList();
     bool Create( int width, int height, bool mask = true, int initialCount = 1 );
-    bool Create();
 
     virtual int GetImageCount() const;
     virtual bool GetSize( int index, int &width, int &height ) const;
@@ -44,6 +43,11 @@ public:
     virtual bool Draw(int index, wxDC& dc, int x, int y,
               int flags = wxIMAGELIST_DRAW_NORMAL,
               bool solidBackground = false);
+
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("Don't use this overload: it's not portable and does nothing")
+    bool Create() { return true; }
+#endif // WXWIN_COMPATIBILITY_3_0
 
     // Internal use only
     const wxBitmap *GetBitmapPtr(int index) const;
