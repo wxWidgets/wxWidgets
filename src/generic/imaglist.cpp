@@ -47,8 +47,7 @@ int wxGenericImageList::GetImageCount() const
 
 bool wxGenericImageList::Create( int width, int height, bool WXUNUSED(mask), int WXUNUSED(initialCount) )
 {
-    m_width = width;
-    m_height = height;
+    m_size = wxSize(width, height);
 
     return Create();
 }
@@ -60,8 +59,8 @@ bool wxGenericImageList::Create()
 
 int wxGenericImageList::Add( const wxBitmap &bitmap )
 {
-    wxASSERT_MSG( (bitmap.GetScaledWidth() >= m_width && bitmap.GetScaledHeight() == m_height)
-                  || (m_width == 0 && m_height == 0),
+    wxASSERT_MSG( (bitmap.GetScaledWidth() >= m_size.x && bitmap.GetScaledHeight() == m_size.y)
+                  || m_size == wxSize(0, 0),
                   wxT("invalid bitmap size in wxImageList: this might work ")
                   wxT("on this platform but definitely won't under Windows.") );
 
@@ -73,12 +72,12 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
     {
         // Mimic behaviour of Windows ImageList_Add that automatically breaks up the added
         // bitmap into sub-images of the correct size
-        if (m_width > 0 && bitmap.GetScaledWidth() > m_width && bitmap.GetScaledHeight() >= m_height)
+        if (m_size.x > 0 && bitmap.GetScaledWidth() > m_size.x && bitmap.GetScaledHeight() >= m_size.y)
         {
-            int numImages = bitmap.GetScaledWidth() / m_width;
+            int numImages = bitmap.GetScaledWidth() / m_size.x;
             for (int subIndex = 0; subIndex < numImages; subIndex++)
             {
-                wxRect rect(m_width * subIndex, 0, m_width, m_height);
+                wxRect rect(m_size.x * subIndex, 0, m_size.x, m_size.y);
                 wxBitmap tmpBmp = bitmap.GetSubBitmap(rect);
                 m_images.Append( new wxBitmap(tmpBmp) );
             }
@@ -89,10 +88,9 @@ int wxGenericImageList::Add( const wxBitmap &bitmap )
         }
     }
 
-    if (m_width == 0 && m_height == 0)
+    if ( m_size == wxSize(0, 0) )
     {
-        m_width = bitmap.GetScaledWidth();
-        m_height = bitmap.GetScaledHeight();
+        m_size = bitmap.GetScaledSize();
     }
 
     return m_images.GetCount() - 1;

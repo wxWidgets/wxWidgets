@@ -21,7 +21,7 @@ class WXDLLIMPEXP_FWD_CORE wxColour;
 class WXDLLIMPEXP_CORE wxGenericImageList: public wxObject
 {
 public:
-    wxGenericImageList() { m_width = m_height = 0; }
+    wxGenericImageList() { }
     wxGenericImageList( int width, int height, bool mask = true, int initialCount = 1 );
     virtual ~wxGenericImageList();
     bool Create( int width, int height, bool mask = true, int initialCount = 1 );
@@ -29,7 +29,7 @@ public:
 
     virtual int GetImageCount() const;
     virtual bool GetSize( int index, int &width, int &height ) const;
-    virtual wxSize GetSize() const { return wxSize(m_width, m_height); }
+    virtual wxSize GetSize() const { return m_size; }
 
     int Add( const wxBitmap& bitmap );
     int Add( const wxBitmap& bitmap, const wxBitmap& mask );
@@ -50,8 +50,8 @@ public:
 private:
     wxObjectList  m_images;
 
-    int     m_width;
-    int     m_height;
+    // Size of a single bitmap in the list.
+    wxSize m_size;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxGenericImageList);
 };
