@@ -485,7 +485,7 @@ public:
 
         @see SetTempDir()
     */
-    const &wxString GetTempDir() const;
+    const wxString& GetTempDir() const;
 
     /**
         Returns the default session
@@ -577,9 +577,34 @@ public:
 
     /**
         A textual error description for a client side error
-        in case of wxEVT_WEBREQUEST_FAILED
+        in case of @c State_Failed
     */
     const wxString& GetErrorDescription() const;
+
+    /**
+        Returns a file name to a temporary file containing the response data
+        when the state is @c State_Completed and storage is @Storage_File.
+
+        The file will be removed after the event handlers are called. You can
+        move the file to location of your choice if you want to process the
+        contents outside of the event handler.
+    */
+    const wxString& GetResponseFileName() const;
+
+    void SetResponseFileName(const wxString& filename);
+
+    /**
+        Only for @c wxEVT_WEBREQUEST_DATA events. The buffer is only valid
+        in the event handler.
+    */
+    ///@{
+    const void* GetDataBuffer() const;
+
+    size_t GetDataSize() const;
+    ///@}
+
+    void SetDataBuffer(const void* buffer, size_t size);
+
 };
 
 wxEventType wxEVT_WEBREQUEST_STATE;
