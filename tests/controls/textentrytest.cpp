@@ -83,6 +83,10 @@ void TextEntryTestCase::TextChangeEvents()
     entry->Clear();
     CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
     updated.Clear();
+
+    entry->ChangeValue("");
+    CPPUNIT_ASSERT_EQUAL( 0, updated.GetCount() );
+    updated.Clear();
 }
 
 void TextEntryTestCase::CheckStringSelection(const char *sel)
