@@ -4314,9 +4314,7 @@ double wxWindowGTK::GetContentScaleFactor() const
 #if GTK_CHECK_VERSION(3,10,0)
     if (m_widget && gtk_check_version(3,10,0) == NULL)
     {
-        GdkWindow* window = gtk_widget_get_window(m_widget);
-        if (window)
-            scaleFactor = gdk_window_get_scale_factor(window);
+        scaleFactor = gtk_widget_get_scale_factor(m_widget);
     }
 #endif
     return scaleFactor;
