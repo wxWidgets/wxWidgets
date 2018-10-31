@@ -27,6 +27,7 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/translation.h"
+    #include "wx/utils.h"
 #endif
 
 #if wxUSE_WEBREQUEST_WINHTTP
