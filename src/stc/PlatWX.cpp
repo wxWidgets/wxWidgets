@@ -1861,8 +1861,7 @@ void Window::SetPositionRelative(PRectangle rc, Window relativeTo) {
     position.x = wxRound(position.x + rc.left);
     position.y = wxRound(position.y + rc.top);
 
-    const int currentDisplay = wxDisplay::GetFromWindow(relativeWin);
-    const wxRect displayRect = wxDisplay(currentDisplay).GetClientArea();
+    const wxRect displayRect = wxDisplay(relativeWin).GetClientArea();
 
     if (position.x < displayRect.GetLeft())
         position.x = displayRect.GetLeft();

@@ -249,8 +249,7 @@ void wxTopLevelWindowBase::DoCentre(int dir)
     // we need the display rect anyhow so store it first: notice that we should
     // be centered on the same display as our parent window, the display of
     // this window itself is not really defined yet
-    int nDisplay = wxDisplay::GetFromWindow(GetParent() ? GetParent() : this);
-    wxDisplay dpy(nDisplay == wxNOT_FOUND ? 0 : nDisplay);
+    wxDisplay dpy(GetParent() ? GetParent() : this);
     const wxRect rectDisplay(dpy.GetClientArea());
 
     // what should we centre this window on?
