@@ -85,6 +85,13 @@ wxDisplay::wxDisplay(unsigned n)
     m_impl = Factory().GetDisplay(n);
 }
 
+wxDisplay::wxDisplay(const wxWindow* window)
+{
+    const int n = GetFromWindow(window);
+
+    m_impl = Factory().GetDisplay(n != wxNOT_FOUND ? n : 0);
+}
+
 // ----------------------------------------------------------------------------
 // static functions forwarded to wxDisplayFactory
 // ----------------------------------------------------------------------------
@@ -233,6 +240,8 @@ wxDisplayFactory::~wxDisplayFactory()
 
 int wxDisplayFactory::GetFromWindow(const wxWindow *window)
 {
+    wxCHECK_MSG( window, wxNOT_FOUND, "window can't be NULL" );
+
     // consider that the window belongs to the display containing its centre
     const wxRect r(window->GetScreenRect());
     return GetFromPoint(wxPoint(r.x + r.width/2, r.y + r.height/2));
