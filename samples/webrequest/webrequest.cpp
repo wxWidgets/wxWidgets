@@ -144,9 +144,17 @@ public:
 
         mainSizer->Add(m_notebook, wxSizerFlags(1).Expand().Border());
 
-        m_startButton = new wxButton(this, wxID_ANY, "&Start Request");
+        wxStdDialogButtonSizer* btnSizer = new wxStdDialogButtonSizer();
+        m_cancelButton = new wxButton(this, wxID_CANCEL, "Cancel");
+        m_cancelButton->Bind(wxEVT_BUTTON, &WebRequestFrame::OnCancelButton, this);
+        m_cancelButton->Disable();
+        btnSizer->AddButton(m_cancelButton);
+
+        m_startButton = new wxButton(this, wxID_OK, "&Start Request");
         m_startButton->Bind(wxEVT_BUTTON, &WebRequestFrame::OnStartButton, this);
-        mainSizer->Add(m_startButton, wxSizerFlags().Border());
+        btnSizer->AddButton(m_startButton);
+        btnSizer->Realize();
+        mainSizer->Add(btnSizer, wxSizerFlags().Border());
 
         wxCommandEvent evt;
         OnPostCheckBox(evt);
@@ -161,7 +169,7 @@ public:
         m_downloadProgressTimer.Bind(wxEVT_TIMER,
             &WebRequestFrame::OnProgressTimer, this);
 
-        m_downloadRequest = NULL;
+        m_currentRequest = NULL;
     }
 
     void OnStartButton(wxCommandEvent& WXUNUSED(evt))
@@ -171,6 +179,7 @@ public:
         // Create request for the specified URL from the default session
         wxObjectDataPtr<wxWebRequest> request(wxWebSession::GetDefault().CreateRequest(
             m_urlTextCtrl->GetValue()));
+        m_currentRequest = request.get();
 
         // Bind event for state change
         request->Bind(wxEVT_WEBREQUEST_STATE, &WebRequestFrame::OnWebRequestState, this);
@@ -178,38 +187,37 @@ public:
         // Prepare request based on selected action
         switch (m_notebook->GetSelection())
         {
-        case Page_Image:
-            // Reset static bitmap image
-            m_imageStaticBitmap->SetBitmap(wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
-            break;
-        case Page_Text:
-            // Reset response text control
-            m_textResponseTextCtrl->Clear();
+            case Page_Image:
+                // Reset static bitmap image
+                m_imageStaticBitmap->SetBitmap(wxArtProvider::GetBitmap(wxART_MISSING_IMAGE));
+                break;
+            case Page_Text:
+                // Reset response text control
+                m_textResponseTextCtrl->Clear();
 
-            // Set postdata if checked
-            if (m_postCheckBox->IsChecked())
-            {
-                request->SetData(m_postRequestTextCtrl->GetValue(),
-                    m_postContentTypeTextCtrl->GetValue());
-            }
-            break;
-        case Page_Download:
-            m_downloadRequest = request.get();
-            request->SetStorage(wxWebRequest::Storage_File);
-            m_downloadGauge->SetValue(0);
-            m_downloadGauge->Pulse();
-            m_downloadStaticText->SetLabel("");
-            m_downloadProgressTimer.Start(500);
-            GetStatusBar()->SetStatusText("");
-            break;
-        case Page_Advanced:
-            request->SetStorage(wxWebRequest::Storage_None);
-            request->Bind(wxEVT_WEBREQUEST_DATA, &WebRequestFrame::OnRequestData, this);
+                // Set postdata if checked
+                if ( m_postCheckBox->IsChecked() )
+                {
+                    request->SetData(m_postRequestTextCtrl->GetValue(),
+                        m_postContentTypeTextCtrl->GetValue());
+                }
+                break;
+            case Page_Download:
+                request->SetStorage(wxWebRequest::Storage_File);
+                m_downloadGauge->SetValue(0);
+                m_downloadGauge->Pulse();
+                m_downloadStaticText->SetLabel("");
+                m_downloadProgressTimer.Start(500);
+                GetStatusBar()->SetStatusText("");
+                break;
+            case Page_Advanced:
+                request->SetStorage(wxWebRequest::Storage_None);
+                request->Bind(wxEVT_WEBREQUEST_DATA, &WebRequestFrame::OnRequestData, this);
 
-            GetStatusBar()->SetStatusText("Counting...");
-            m_advCount = 0;
-            m_advCountStaticText->SetLabel("0");
-            break;
+                GetStatusBar()->SetStatusText("Counting...");
+                m_advCount = 0;
+                m_advCountStaticText->SetLabel("0");
+                break;
         }
 
         m_startButton->Disable();
@@ -218,67 +226,78 @@ public:
         request->Start();
     }
 
+    void OnCancelButton(wxCommandEvent& WXUNUSED(evt))
+    {
+        if ( m_currentRequest )
+            m_currentRequest->Cancel();
+    }
+
     void OnWebRequestState(wxWebRequestEvent& evt)
     {
         m_startButton->Enable(evt.GetState() != wxWebRequest::State_Active);
+        m_cancelButton->Enable(evt.GetState() == wxWebRequest::State_Active);
+
+        if ( evt.GetState() != wxWebRequest::State_Active )
+        {
+            m_currentRequest = NULL;
+            m_downloadProgressTimer.Stop();
+        }
 
         switch (evt.GetState())
         {
             case wxWebRequest::State_Completed:
                 switch (m_notebook->GetSelection())
                 {
-                case Page_Image:
-                {
-                    wxImage img(*evt.GetResponse()->GetStream());
-                    m_imageStaticBitmap->SetBitmap(img);
-                    m_notebook->GetPage(Page_Image)->Layout();
-                    GetStatusBar()->SetStatusText(wxString::Format("Loaded %lld bytes image data", evt.GetResponse()->GetContentLength()));
-                    break;
-                }
-                case Page_Text:
-                    m_textResponseTextCtrl->SetValue(evt.GetResponse()->AsString());
-                    GetStatusBar()->SetStatusText(wxString::Format("Loaded %lld bytes text data (Status: %d %s)",
-                        evt.GetResponse()->GetContentLength(),
-                        evt.GetResponse()->GetStatus(),
-                        evt.GetResponse()->GetStatusText()));
-                    break;
-                case Page_Download:
-                {
-                    // Force last progress update
-                    wxTimerEvent timerEvt;
-                    OnProgressTimer(timerEvt);
-
-                    // Stop updating download progress
-                    m_downloadRequest = NULL;
-                    m_downloadProgressTimer.Stop();
-
-                    GetStatusBar()->SetStatusText("Download completed");
-
-                    // Ask the user where to save the file
-                    wxFileDialog fileDlg(this, "Save download", "",
-                        evt.GetResponse()->GetSuggestedFileName(), "*.*",
-                        wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
-                    if ( fileDlg.ShowModal() == wxID_OK )
+                    case Page_Image:
                     {
-                        if (!wxRenameFile(evt.GetResponseFileName(), fileDlg.GetPath()))
-                            wxLogError("Could not move file");
+                        wxImage img(*evt.GetResponse()->GetStream());
+                        m_imageStaticBitmap->SetBitmap(img);
+                        m_notebook->GetPage(Page_Image)->Layout();
+                        GetStatusBar()->SetStatusText(wxString::Format("Loaded %lld bytes image data", evt.GetResponse()->GetContentLength()));
+                        break;
                     }
+                    case Page_Text:
+                        m_textResponseTextCtrl->SetValue(evt.GetResponse()->AsString());
+                        GetStatusBar()->SetStatusText(wxString::Format("Loaded %lld bytes text data (Status: %d %s)",
+                            evt.GetResponse()->GetContentLength(),
+                            evt.GetResponse()->GetStatus(),
+                            evt.GetResponse()->GetStatusText()));
+                        break;
+                    case Page_Download:
+                    {
+                        m_downloadGauge->SetValue(100);
+                        m_downloadStaticText->SetLabel("");
 
-                    break;
-                }
-                case Page_Advanced:
-                    UpdateAdvCount();
-                    GetStatusBar()->SetStatusText("");
-                    break;
+                        GetStatusBar()->SetStatusText("Download completed");
+
+                        // Ask the user where to save the file
+                        wxFileDialog fileDlg(this, "Save download", "",
+                            evt.GetResponse()->GetSuggestedFileName(), "*.*",
+                            wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+                        if ( fileDlg.ShowModal() == wxID_OK )
+                        {
+                            if ( !wxRenameFile(evt.GetResponseFileName(), fileDlg.GetPath()) )
+                                wxLogError("Could not move file");
+                        }
+
+                        break;
+                    }
+                    case Page_Advanced:
+                        UpdateAdvCount();
+                        GetStatusBar()->SetStatusText("");
+                        break;
                 }
                 break;
 
             case wxWebRequest::State_Failed:
-                // Stop updating download progress
-                m_downloadRequest = NULL;
-                m_downloadProgressTimer.Stop();
                 wxLogError("Web Request failed: %s", evt.GetErrorDescription());
                 GetStatusBar()->SetStatusText("");
+                break;
+
+            case wxWebRequest::State_Cancelled:
+                m_downloadGauge->SetValue(0);
+                m_downloadStaticText->SetLabel("");
+                GetStatusBar()->SetStatusText("Cancelled");
                 break;
         }
     }
@@ -311,15 +330,15 @@ public:
 
     void OnProgressTimer(wxTimerEvent& WXUNUSED(evt))
     {
-        if (!m_downloadRequest || m_downloadRequest->GetBytesExpectedToReceive() <= 0)
+        if ( !m_currentRequest || m_currentRequest->GetBytesExpectedToReceive() <= 0 )
             return;
 
         
-        m_downloadGauge->SetValue((m_downloadRequest->GetBytesReceived() * 100) /
-            m_downloadRequest->GetBytesExpectedToReceive());
+        m_downloadGauge->SetValue((m_currentRequest->GetBytesReceived() * 100) /
+            m_currentRequest->GetBytesExpectedToReceive());
 
         m_downloadStaticText->SetLabelText(wxString::Format("%lld/%lld",
-            m_downloadRequest->GetBytesReceived(), m_downloadRequest->GetBytesExpectedToReceive()));
+            m_currentRequest->GetBytesReceived(), m_currentRequest->GetBytesExpectedToReceive()));
     }
 
     void OnPostCheckBox(wxCommandEvent& WXUNUSED(evt))
@@ -358,7 +377,9 @@ private:
     wxNotebook* m_notebook;
     wxTextCtrl* m_urlTextCtrl;
     wxButton* m_startButton;
+    wxButton* m_cancelButton;
     wxStaticBitmap* m_imageStaticBitmap;
+    wxWebRequest* m_currentRequest;
 
     wxCheckBox* m_postCheckBox;
     wxTextCtrl* m_postContentTypeTextCtrl;
@@ -368,7 +389,6 @@ private:
     wxGauge* m_downloadGauge;
     wxStaticText* m_downloadStaticText;
     wxTimer m_downloadProgressTimer;
-    wxWebRequest* m_downloadRequest;
 
     wxStaticText* m_advCountStaticText;
     long long m_advCount;
