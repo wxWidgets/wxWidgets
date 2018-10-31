@@ -106,6 +106,7 @@ All:
 - Fix problem with wx-config installation and use under NetBSD (wiz).
 - Avoid spurious errors on thread creation under NetBSD.
 - Improve high DPI support in wxAui (Simon Rozman).
+- Fix a bug with parsing time zones in wxDateTime::ParseFormat() (evileye).
 
 All (GUI):
 
