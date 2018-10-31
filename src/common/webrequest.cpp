@@ -124,7 +124,7 @@ void wxWebRequest::ProcessStateEvent(State state, const wxString& failMsg)
     // Remove temporary file if it still exists
     if ( state == State_Completed && m_storage == Storage::Storage_File &&
         wxFileExists(responseFileName) )
-        wxRemove(responseFileName);
+        wxRemoveFile(responseFileName);
 
     // Remove reference after the request is no longer active
     if (state == State_Completed || state == State_Failed ||
@@ -145,7 +145,7 @@ wxWebResponse::wxWebResponse(wxWebRequest& request) :
 wxWebResponse::~wxWebResponse()
 {
     if ( wxFileExists(m_file.GetName()) )
-        wxRemove(m_file.GetName());
+        wxRemoveFile(m_file.GetName());
 }
 
 bool wxWebResponse::Init()
