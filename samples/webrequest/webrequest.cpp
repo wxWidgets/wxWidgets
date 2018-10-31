@@ -206,6 +206,8 @@ public:
             request->SetStorage(wxWebRequest::Storage_None);
             request->Bind(wxEVT_WEBREQUEST_DATA, &WebRequestFrame::OnRequestData, this);
 
+            GetStatusBar()->SetStatusText("Counting...");
+            m_advCount = 0;
             m_advCountStaticText->SetLabel("0");
             break;
         }
@@ -264,6 +266,10 @@ public:
 
                     break;
                 }
+                case Page_Advanced:
+                    UpdateAdvCount();
+                    GetStatusBar()->SetStatusText("");
+                    break;
                 }
                 break;
 
@@ -279,7 +285,28 @@ public:
 
     void OnRequestData(wxWebRequestEvent& evt)
     {
+        // Count zero bytes in data buffer
+        bool notify = false;
 
+        const char* p = (const char*) evt.GetDataBuffer();
+        for ( size_t i = 0; i < evt.GetDataSize(); i++ )
+        {
+            if ( *p == 0 )
+            {
+                m_advCount++;
+                notify = true;
+            }
+
+            p++;
+        }
+
+        if ( notify )
+            CallAfter(&WebRequestFrame::UpdateAdvCount);
+    }
+
+    void UpdateAdvCount()
+    {
+        m_advCountStaticText->SetLabel(wxString::Format("%lld", m_advCount));
     }
 
     void OnProgressTimer(wxTimerEvent& WXUNUSED(evt))
@@ -321,7 +348,7 @@ public:
             defaultURL = "https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.1/wxWidgets-3.1.1.7z";
             break;
         case Page_Advanced:
-            defaultURL = "https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.1/wxWidgets-3.1.1.tar.bz2";
+            defaultURL = "https://httpbin.org/bytes/64000";
             break;
         }
         m_urlTextCtrl->SetValue(defaultURL);
@@ -344,6 +371,7 @@ private:
     wxWebRequest* m_downloadRequest;
 
     wxStaticText* m_advCountStaticText;
+    long long m_advCount;
 };
 
 class WebRequestApp : public wxApp
