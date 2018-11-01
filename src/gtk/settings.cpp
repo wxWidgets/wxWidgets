@@ -791,7 +791,12 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
                         G_CALLBACK(notify_gtk_font_name), NULL);
                 }
                 ContainerWidget();
-                wxGtkStyleContext sc(gtk_widget_get_scale_factor(gs_tlw_parent));
+                int scale = 1;
+#if GTK_CHECK_VERSION(3,10,0)
+                if (wx_is_at_least_gtk3(10))
+                    scale = gtk_widget_get_scale_factor(gs_tlw_parent);
+#endif
+                wxGtkStyleContext sc(scale);
                 sc.AddButton().AddLabel();
                 gtk_style_context_get(sc, GTK_STATE_FLAG_NORMAL,
                     GTK_STYLE_PROPERTY_FONT, &info.description, NULL);
@@ -875,7 +880,11 @@ static int GetScrollbarWidth()
     if (wx_is_at_least_gtk3(20))
     {
         GtkBorder border;
+#if GTK_CHECK_VERSION(3,10,0)
         wxGtkStyleContext sc(gtk_widget_get_scale_factor(ScrollBarWidget()));
+#else
+        wxGtkStyleContext sc;
+#endif
         sc.Add(GTK_TYPE_SCROLLBAR, "scrollbar", "scrollbar", "vertical", "right", NULL);
 
         gtk_style_context_get_border(sc, GTK_STATE_FLAG_NORMAL, &border);
