@@ -15,7 +15,7 @@
 class wxGtkStyleContext
 {
 public:
-    wxGtkStyleContext(double scale = 1);
+    explicit wxGtkStyleContext(double scale = 1);
     ~wxGtkStyleContext();
     wxGtkStyleContext& Add(GType type, const char* objectName, ...) G_GNUC_NULL_TERMINATED;
     wxGtkStyleContext& Add(const char* objectName);
