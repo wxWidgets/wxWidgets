@@ -742,6 +742,8 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
                                        int flags )
 {
     wxPGProperty* p = GetSelection();
+    if (!p) return;
+    
     wxString text;
 
     const wxPGChoices& choices = p->GetChoices();
