@@ -850,7 +850,7 @@ void MyFrame::OnGetLabelMenu(wxCommandEvent& WXUNUSED(event))
     wxCHECK_RET( count, "no last menu?" );
 
     wxLogMessage("The label of the last menu item is '%s'",
-                 mbar->GetMenuLabel(count - 1).c_str());
+                 mbar->GetMenuLabel(count - 1));
 }
 
 #if wxUSE_TEXTDLG
@@ -896,11 +896,11 @@ void MyFrame::OnFindMenu(wxCommandEvent& WXUNUSED(event))
 
         if (index == wxNOT_FOUND)
         {
-            wxLogWarning("No menu with label '%s'", label.c_str());
+            wxLogWarning("No menu with label '%s'", label);
         }
         else
         {
-            wxLogMessage("Menu %d has label '%s'", index, label.c_str());
+            wxLogMessage("Menu %d has label '%s'", index, label);
         }
     }
 }
@@ -1016,7 +1016,7 @@ void MyFrame::OnGetLabelMenuItem(wxCommandEvent& WXUNUSED(event))
     {
         wxString label = item->GetItemLabel();
         wxLogMessage("The label of the last menu item is '%s'",
-                     label.c_str());
+                     label);
     }
 }
 
@@ -1146,12 +1146,12 @@ void MyFrame::OnFindMenuItem(wxCommandEvent& WXUNUSED(event))
         }
         if (index == wxNOT_FOUND)
         {
-            wxLogWarning("No menu item with label '%s'", label.c_str());
+            wxLogWarning("No menu item with label '%s'", label);
         }
         else
         {
             wxLogMessage("Menu item %d in menu %lu has label '%s'",
-                         index, (unsigned long)menuindex, label.c_str());
+                         index, (unsigned long)menuindex, label);
         }
     }
 }
@@ -1252,7 +1252,7 @@ void MyFrame::LogMenuOpenCloseOrHighlight(const wxMenuEvent& event, const wxStri
 
     msg << ".";
 
-    wxLogStatus(this, msg.c_str());
+    wxLogStatus(this, msg);
 }
 #endif
 

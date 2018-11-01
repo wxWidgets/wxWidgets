@@ -2018,7 +2018,7 @@ void MyCanvas::UseGraphicRenderer(wxGraphicsRenderer* renderer)
         int major, minor, micro;
         renderer->GetVersion(&major, &minor, &micro);
         wxString str = wxString::Format("Graphics renderer: %s %i.%i.%i",
-                         renderer->GetName().c_str(), major, minor, micro);
+                         renderer->GetName(), major, minor, micro);
         m_owner->SetStatusText(str, 1);
     }
     else

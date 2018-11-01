@@ -252,7 +252,7 @@ void MyFrame::OnStart(wxCommandEvent& WXUNUSED(event))
     bool retval = m_client->Connect(hostname, servername, topic);
 
     wxLogMessage("Client host=\"%s\" port=\"%s\" topic=\"%s\" %s",
-        hostname.c_str(), servername.c_str(), topic.c_str(),
+        hostname, servername, topic,
         retval ? "connected" : "failed to connect");
 
     if (!retval)

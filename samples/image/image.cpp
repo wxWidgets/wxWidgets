@@ -752,7 +752,7 @@ wxString MyFrame::LoadUserImage(wxImage& image)
     {
         if ( !image.LoadFile(filename) )
         {
-            wxLogError("Couldn't load image from '%s'.", filename.c_str());
+            wxLogError("Couldn't load image from '%s'.", filename);
 
             return wxEmptyString;
         }
@@ -962,7 +962,7 @@ void MyFrame::OnThumbnail( wxCommandEvent &WXUNUSED(event) )
     wxStopWatch sw;
     if ( !image.LoadFile(filename) )
     {
-        wxLogError("Couldn't load image from '%s'.", filename.c_str());
+        wxLogError("Couldn't load image from '%s'.", filename);
         return;
     }
 

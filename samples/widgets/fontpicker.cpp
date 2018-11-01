@@ -219,7 +219,7 @@ void FontPickerWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 void FontPickerWidgetsPage::OnFontChange(wxFontPickerEvent& event)
 {
     wxLogMessage("The font changed to '%s' with size %d !",
-                 event.GetFont().GetFaceName().c_str(), event.GetFont().GetPointSize());
+                 event.GetFont().GetFaceName(), event.GetFont().GetPointSize());
 }
 
 void FontPickerWidgetsPage::OnCheckBox(wxCommandEvent &event)

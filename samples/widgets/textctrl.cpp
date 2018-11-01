@@ -317,7 +317,7 @@ private:
                 break;
         }
 
-        wxLogMessage("Mouse is %s (%ld, %ld)", where.c_str(), x, y);
+        wxLogMessage("Mouse is %s (%ld, %ld)", where, x, y);
     }
 };
 
@@ -941,7 +941,7 @@ void TextWidgetsPage::OnButtonLoad(wxCommandEvent& WXUNUSED(event))
         {
             long elapsed = sw.Time();
             wxLogMessage("Loaded file '%s' in %lu.%us",
-                         filename.c_str(), elapsed / 1000,
+                         filename, elapsed / 1000,
                          (unsigned int) elapsed % 1000);
         }
     }
@@ -1001,7 +1001,7 @@ void TextWidgetsPage::OnText(wxCommandEvent& WXUNUSED(event))
 
 void TextWidgetsPage::OnTextEnter(wxCommandEvent& event)
 {
-    wxLogMessage("Text entered: '%s'", event.GetString().c_str());
+    wxLogMessage("Text entered: '%s'", event.GetString());
     event.Skip();
 }
 

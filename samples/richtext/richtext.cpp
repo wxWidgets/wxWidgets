@@ -98,7 +98,7 @@ public:
     virtual bool EditProperties(wxRichTextField* WXUNUSED(obj), wxWindow* WXUNUSED(parent), wxRichTextBuffer* WXUNUSED(buffer)) wxOVERRIDE
     {
         wxString label = GetLabel();
-        wxMessageBox(wxString::Format("Editing %s", label.c_str()));
+        wxMessageBox(wxString::Format("Editing %s", label));
         return true;
     }
 
