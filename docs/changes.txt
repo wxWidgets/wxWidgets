@@ -51,6 +51,8 @@ Changes in behaviour not resulting in compilation errors
   consistency with the other ports. You now need to call SetMargins(0, 0)
   explicitly if you really don't want to have any margins in your buttons.
 
+- wxEVT_AUINOTEBOOK_PAGE_CHANGED event is now sent after changing the page,
+  as expected, and not before doing it.
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
