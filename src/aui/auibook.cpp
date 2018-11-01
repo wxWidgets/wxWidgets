@@ -3423,14 +3423,6 @@ int wxAuiNotebook::DoModifySelection(size_t n, bool events)
         int old_curpage = m_curPage;
         m_curPage = n;
 
-        // program allows the page change
-        if(events)
-        {
-            evt.SetEventType(wxEVT_AUINOTEBOOK_PAGE_CHANGED);
-            (void)GetEventHandler()->ProcessEvent(evt);
-        }
-
-
         wxAuiTabCtrl* ctrl;
         int ctrl_idx;
         if (FindTab(wnd, &ctrl, &ctrl_idx))
@@ -3463,6 +3455,13 @@ int wxAuiNotebook::DoModifySelection(size_t n, bool events)
             // This is Firefox-like behaviour.
             if (wnd->IsShownOnScreen() && FindFocus() != ctrl)
                 wnd->SetFocus();
+
+            // program allows the page change
+            if(events)
+            {
+                evt.SetEventType(wxEVT_AUINOTEBOOK_PAGE_CHANGED);
+                (void)GetEventHandler()->ProcessEvent(evt);
+            }
 
             return old_curpage;
         }
