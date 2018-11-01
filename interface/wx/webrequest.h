@@ -121,14 +121,14 @@ public:
         /// The request has just been created and Start() has not been called
         State_Idle,
 
-        /// The request has been started and is transferring data
-        State_Active,
-
         /**
             The request is currently unauthorized. Calling GetAuthChallenge()
             returns a challenge object with further details.
         */
         State_Unauthorized,
+
+        /// The request has been started and is transferring data
+        State_Active,
 
         /// The request completed successfully and all data has been received.
         State_Completed,
@@ -178,13 +178,13 @@ public:
         Before sending a request or after a failed request this will return
         @c NULL.
     */
-    wxWebResponse* GetResponse();
+    wxWebResponse* GetResponse() const;
 
     /**
         Returns the current authentication challenge object while the request
         is in @c State_Unauthorized.
     */
-    wxWebAuthChallenge* GetAuthChallenge();
+    wxWebAuthChallenge* GetAuthChallenge() const;
 
     /**
         Returns the id specified while creating this request.
@@ -301,7 +301,7 @@ public:
     /**
         Returns the current state of the request.
     */
-    State GetState() const { return m_state; }
+    State GetState() const;
 
     /// Returns the number of bytes sent to the server.
     wxFileOffset GetBytesSent() const;
@@ -343,7 +343,7 @@ public:
     /**
         Returns which source requested credentials with this challenge.
     */
-    Source GetSource() const { return m_source; }
+    Source GetSource() const;
 
     /**
         Used to provide user credentials to the authentication challenge.
@@ -445,14 +445,6 @@ class wxWebSession
 {
 public:
     /**
-        Constructor for the session
-
-        All requests created by a call to CreateRequest() will use this session
-        for communication and to store cookies.
-    */
-    wxWebSession();
-
-    /**
         Create a new request for the specified URL
 
         @param url
@@ -476,16 +468,16 @@ public:
 
     /**
         Override the default temporary directory that may be used by the
-        session implemention, when required.
+        session implementation, when required.
     */
-    void SetTempDir(const wxString& name);
+    void SetTempDir(const wxString& dir);
 
     /**
         Returns the current temporary directory.
 
         @see SetTempDir()
     */
-    const wxString& GetTempDir() const;
+    wxString GetTempDir() const;
 
     /**
         Returns the default session
@@ -540,9 +532,9 @@ class wxWebSessionFactory
 {
 public:
     /**
-        Creates a new web session object
+        Creates a new web session object.
     */
-    virtual wxWebSession* Create() = 0;
+    virtual wxWebSession* Create();
 };
 
 /**
