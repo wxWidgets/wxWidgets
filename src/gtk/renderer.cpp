@@ -249,7 +249,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         if (flags & wxCONTROL_DIRTY)
             pos = 2;
 
-        wxGtkStyleContext sc;
+        wxGtkStyleContext sc(dc.GetContentScaleFactor());
         sc.AddTreeviewHeaderButton(pos);
 
         gtk_style_context_set_state(sc, stateTypeToFlags[state]);
@@ -450,7 +450,7 @@ wxRendererGTK::DrawSplitterSash(wxWindow* win,
         x_diff = rect.width;
 
 #ifdef __WXGTK3__
-    wxGtkStyleContext sc;
+    wxGtkStyleContext sc(dc.GetContentScaleFactor());
     sc.Add(GTK_TYPE_PANED, "paned", "pane-separator", NULL);
     if (gtk_check_version(3,20,0) == NULL)
         sc.Add("separator");
@@ -561,7 +561,7 @@ wxRendererGTK::GetCheckBoxSize(wxWindow* win)
 
 #ifdef __WXGTK3__
     int min_width, min_height;
-    wxGtkStyleContext sc;
+    wxGtkStyleContext sc(win->GetContentScaleFactor());
     sc.AddCheckButton();
     if (gtk_check_version(3,20,0) == NULL)
     {
@@ -654,7 +654,7 @@ wxRendererGTK::DrawCheckBox(wxWindow*,
         state |= GTK_STATE_FLAG_PRELIGHT;
 
     int min_width, min_height;
-    wxGtkStyleContext sc;
+    wxGtkStyleContext sc(dc.GetContentScaleFactor());
     sc.AddCheckButton();
     if (gtk_check_version(3,20,0) == NULL)
     {
@@ -851,7 +851,7 @@ void wxRendererGTK::DrawTextCtrl(wxWindow*, wxDC& dc, const wxRect& rect, int fl
     if (flags & wxCONTROL_DISABLED)
         state = GTK_STATE_FLAG_INSENSITIVE;
 
-    wxGtkStyleContext sc;
+    wxGtkStyleContext sc(dc.GetContentScaleFactor());
     sc.Add(GTK_TYPE_ENTRY, "entry", "entry", NULL);
 
     gtk_style_context_set_state(sc, GtkStateFlags(state));
@@ -1001,7 +1001,7 @@ void wxRendererGTK::DrawRadioBitmap(wxWindow*, wxDC& dc, const wxRect& rect, int
         state |= GTK_STATE_FLAG_PRELIGHT;
 
     int min_width, min_height;
-    wxGtkStyleContext sc;
+    wxGtkStyleContext sc(dc.GetContentScaleFactor());
     sc.Add(GTK_TYPE_RADIO_BUTTON, "radiobutton", NULL);
 #if GTK_CHECK_VERSION(3,20,0)
     if (gtk_check_version(3,20,0) == NULL)

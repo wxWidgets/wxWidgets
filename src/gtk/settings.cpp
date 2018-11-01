@@ -209,8 +209,9 @@ private:
 // wxGtkStyleContext
 //-----------------------------------------------------------------------------
 
-wxGtkStyleContext::wxGtkStyleContext()
+wxGtkStyleContext::wxGtkStyleContext(double scale)
     : m_path(gtk_widget_path_new())
+    , m_scale(int(scale))
 {
     m_context = NULL;
 }
@@ -233,6 +234,10 @@ wxGtkStyleContext& wxGtkStyleContext::Add(GType type, const char* objectName, ..
     va_end(args);
 
     GtkStyleContext* sc = gtk_style_context_new();
+#if GTK_CHECK_VERSION(3,10,0)
+    if (gtk_check_version(3,10,0) == NULL)
+        gtk_style_context_set_scale(sc, m_scale);
+#endif
     gtk_style_context_set_path(sc, m_path);
     if (m_context)
     {
