@@ -45,8 +45,6 @@ public:
         SetIcon(wxICON(sample));
 
         // Prepare UI controls
-
-        // If menus are not available add a button to access the about box
         wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
         mainSizer->Add(new wxStaticText(this, wxID_ANY, "Request URL:"),
@@ -299,6 +297,9 @@ public:
                 m_downloadStaticText->SetLabel("");
                 GetStatusBar()->SetStatusText("Cancelled");
                 break;
+
+            default:
+                break;
         }
     }
 
@@ -332,7 +333,6 @@ public:
     {
         if ( !m_currentRequest || m_currentRequest->GetBytesExpectedToReceive() <= 0 )
             return;
-
         
         m_downloadGauge->SetValue((m_currentRequest->GetBytesReceived() * 100) /
             m_currentRequest->GetBytesExpectedToReceive());
@@ -391,7 +391,7 @@ private:
     wxTimer m_downloadProgressTimer;
 
     wxStaticText* m_advCountStaticText;
-    long long m_advCount;
+    wxLongLong m_advCount;
 };
 
 class WebRequestApp : public wxApp
