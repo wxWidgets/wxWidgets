@@ -738,6 +738,11 @@ void FormMain::OnPropertyGridChange( wxPropertyGridEvent& event )
         wxColourPropertyValue cpv = value.As<wxColourPropertyValue>();
         m_pPropGridManager->GetGrid()->SetCellTextColour( cpv.m_colour );
     }
+    else if ( name == "EnumProperty" )
+    {
+        m_pPropGridManager->Clear();
+        PopulateGrid();
+    }
 }
 
 // -----------------------------------------------------------------------
