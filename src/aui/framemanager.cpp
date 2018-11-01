@@ -604,6 +604,7 @@ wxBEGIN_EVENT_TABLE(wxAuiManager, wxEvtHandler)
     EVT_MOUSE_CAPTURE_LOST(wxAuiManager::OnCaptureLost)
     EVT_CHILD_FOCUS(wxAuiManager::OnChildFocus)
     EVT_AUI_FIND_MANAGER(wxAuiManager::OnFindManager)
+    EVT_SYS_COLOUR_CHANGED(wxAuiManager::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 
@@ -646,6 +647,13 @@ wxAuiManager::~wxAuiManager()
 #endif
 
     delete m_art;
+}
+
+void wxAuiManager::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    m_art->UpdateColoursFromSystem();
+    m_frame->Refresh();
+    event.Skip(true);
 }
 
 // creates a floating frame for the windows
@@ -3898,7 +3906,7 @@ void wxAuiManager::Render(wxDC* dc)
 
 void wxAuiManager::Repaint(wxDC* dc)
 {
-#ifdef __WXMAC__ 
+#ifdef __WXMAC__
     if ( dc == NULL )
     {
         m_frame->Refresh() ;

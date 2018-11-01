@@ -109,6 +109,9 @@ public:
                          wxWindow* wnd,
                          const wxAuiNotebookPageArray& pages,
                          const wxSize& requiredBmpSize) = 0;
+
+    //Provide opportunity for subclasses to recalculate colours
+    virtual void UpdateColoursFromSystem() {}
 };
 
 
@@ -184,6 +187,9 @@ public:
     int GetBestTabCtrlSize(wxWindow* wnd,
                  const wxAuiNotebookPageArray& pages,
                  const wxSize& requiredBmpSize) wxOVERRIDE;
+
+    //Provide opportunity for subclasses to recalculate colours
+    virtual void UpdateColoursFromSystem() wxOVERRIDE;
 
 protected:
 

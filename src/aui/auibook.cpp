@@ -998,6 +998,7 @@ wxBEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_KILL_FOCUS(wxAuiTabCtrl::OnKillFocus)
     EVT_CHAR(wxAuiTabCtrl::OnChar)
     EVT_MOUSE_CAPTURE_LOST(wxAuiTabCtrl::OnCaptureLost)
+    EVT_SYS_COLOUR_CHANGED(wxAuiTabCtrl::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 
@@ -1026,6 +1027,15 @@ void wxAuiTabCtrl::OnPaint(wxPaintEvent&)
 
     if (GetPageCount() > 0)
         Render(&dc, this);
+}
+
+void wxAuiTabCtrl::OnSysColourChanged(wxSysColourChangedEvent &event)
+{
+    event.Skip(true);
+    if (m_art)
+    {
+        m_art->UpdateColoursFromSystem();
+    }
 }
 
 void wxAuiTabCtrl::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
@@ -1669,7 +1679,29 @@ wxBEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
                       wxEVT_AUINOTEBOOK_BG_DCLICK,
                       wxAuiNotebook::OnTabBgDClick)
     EVT_NAVIGATION_KEY(wxAuiNotebook::OnNavigationKeyNotebook)
+    EVT_SYS_COLOUR_CHANGED(wxAuiNotebook::OnSysColourChanged)
 wxEND_EVENT_TABLE()
+
+void wxAuiNotebook::OnSysColourChanged(wxSysColourChangedEvent &event)
+{
+    event.Skip(true);
+    wxAuiTabArt* art = m_tabs.GetArtProvider();
+    art->UpdateColoursFromSystem();
+
+    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+    size_t i, pane_count = all_panes.GetCount();
+    for (i = 0; i < pane_count; ++i)
+    {
+        wxAuiPaneInfo& pane = all_panes.Item(i);
+        if (pane.name == wxT("dummy"))
+            continue;
+        wxTabFrame* tab_frame = (wxTabFrame*)pane.window;
+        wxAuiTabCtrl* tabctrl = tab_frame->m_tabs;
+        tabctrl->GetArtProvider()->UpdateColoursFromSystem();
+        tabctrl->Refresh();
+    }
+    Refresh();
+}
 
 void wxAuiNotebook::Init()
 {
