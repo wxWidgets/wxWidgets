@@ -106,6 +106,8 @@ protected:
 
     bool CheckServerStatus();
 
+    static bool IsActiveState(State state);
+
 private:
     wxWebSession& m_session;
     int m_id;
@@ -141,9 +143,9 @@ public:
 
     wxString AsString(wxMBConv* conv = NULL) const;
 
-    void ReportDataCompleted();
-
     bool Init();
+
+    void Finalize();
 
     virtual wxString GetFileName() const;
 

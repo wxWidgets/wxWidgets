@@ -176,14 +176,12 @@ void wxWebRequestWinHTTP::HandleCallback(DWORD dwInternetStatus,
         case WINHTTP_CALLBACK_STATUS_READ_COMPLETE:
             if ( dwStatusInformationLength > 0 )
             {
-                if ( !m_response->ReportAvailableData(dwStatusInformationLength) )
+                if ( !m_response->ReportAvailableData(dwStatusInformationLength) &&
+                    GetState() != State_Cancelled )
                     SetFailedWithLastError();
             }
             else
-            {
-                m_response->ReportDataCompleted();
                 SetState(State_Completed);
-            }
             break;
         case WINHTTP_CALLBACK_STATUS_WRITE_COMPLETE:
             WriteData();
@@ -340,7 +338,12 @@ void wxWebRequestWinHTTP::SendRequest()
 
 void wxWebRequestWinHTTP::Cancel()
 {
-    wxFAIL_MSG("not implemented");
+    SetState(State_Cancelled);
+    if ( m_request != NULL )
+    {
+        ::WinHttpCloseHandle(m_request);
+        m_request = NULL;
+    }
 }
 
 wxWebResponse* wxWebRequestWinHTTP::GetResponse()

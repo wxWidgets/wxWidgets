@@ -71,6 +71,11 @@ bool wxWebRequest::CheckServerStatus()
         return true;
 }
 
+bool wxWebRequest::IsActiveState(State state)
+{
+    return (state == State_Active || state == State_Unauthorized);
+}
+
 void wxWebRequest::SetData(const wxString& text, const wxString& contentType, const wxMBConv& conv)
 {
     m_dataText = text.mb_str(conv);
@@ -100,8 +105,10 @@ void wxWebRequest::SetData(wxSharedPtr<wxInputStream> dataStream, const wxString
 void wxWebRequest::SetState(State state, const wxString & failMsg)
 {
     // Add a reference while the request is active
-    if (state == State_Active && m_state != State_Active && m_state != State_Unauthorized)
+    if ( IsActiveState(state) && !IsActiveState(m_state) )
         IncRef();
+
+    m_state = state;
 
     // Trigger the event in the main thread
     CallAfter(&wxWebRequest::ProcessStateEvent, state, failMsg);
@@ -109,6 +116,9 @@ void wxWebRequest::SetState(State state, const wxString & failMsg)
 
 void wxWebRequest::ProcessStateEvent(State state, const wxString& failMsg)
 {
+    if (!IsActiveState(state) && GetResponse())
+        GetResponse()->Finalize();
+
     wxString responseFileName;
 
     wxWebRequestEvent evt(wxEVT_WEBREQUEST_STATE, GetId(), state,
@@ -127,10 +137,8 @@ void wxWebRequest::ProcessStateEvent(State state, const wxString& failMsg)
         wxRemoveFile(responseFileName);
 
     // Remove reference after the request is no longer active
-    if (state == State_Completed || state == State_Failed ||
-        state == State_Cancelled)
+    if ( !IsActiveState(state) )
         DecRef();
-    m_state = state;
 }
 
 //
@@ -262,7 +270,7 @@ wxString wxWebResponse::GetFileName() const
     return m_file.GetName();
 }
 
-void wxWebResponse::ReportDataCompleted()
+void wxWebResponse::Finalize()
 {
     if ( m_request.GetStorage() == wxWebRequest::Storage_File )
         m_file.Close();
