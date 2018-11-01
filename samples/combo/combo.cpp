@@ -944,12 +944,12 @@ void MyFrame::OnComboBoxUpdate( wxCommandEvent& event )
     }
     else if ( event.GetEventType() == wxEVT_TEXT )
     {
-        wxLogDebug("EVT_TEXT(id=%i,string=\"%s\")",event.GetId(),event.GetString().c_str());
+        wxLogDebug("EVT_TEXT(id=%i,string=\"%s\")",event.GetId(),event.GetString()$1);
     }
     else if ( event.GetEventType() == wxEVT_TEXT_ENTER )
     {
         wxLogDebug("EVT_TEXT_ENTER(id=%i,string=\"%s\")",
-                   event.GetId(), event.GetString().c_str());
+                   event.GetId(), event.GetString()$1);
     }
 }
 
@@ -1123,7 +1123,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                     "This is the wxWidgets wxComboCtrl and wxOwnerDrawnComboBox sample\n"
                     "running under %s.",
                     wxVERSION_STRING,
-                    wxGetOsDescription().c_str()
+                    wxGetOsDescription()$1
                  ),
                  "About wxComboCtrl sample",
                  wxOK | wxICON_INFORMATION,

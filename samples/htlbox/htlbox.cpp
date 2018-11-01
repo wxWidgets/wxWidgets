@@ -348,7 +348,7 @@ void MyFrame::CreateBox()
                     "Item</font> <b>%lu</b>"
                     "</h%d>",
                     level,
-                    clr.GetAsString(wxC2S_HTML_SYNTAX).c_str(),
+                    clr.GetAsString(wxC2S_HTML_SYNTAX),
                     (unsigned long)n, level);
             arr.Add(label);
         }
@@ -489,7 +489,7 @@ void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnHtmlLinkClicked(wxHtmlLinkEvent &event)
 {
-    wxLogMessage("The url '%s' has been clicked!", event.GetLinkInfo().GetHref().c_str());
+    wxLogMessage("The url '%s' has been clicked!", event.GetLinkInfo().GetHref());
 
     if (GetMyBox())
     {
@@ -541,7 +541,7 @@ void MyFrame::OnLboxSelect(wxCommandEvent& event)
 
         if ( !s.empty() )
         {
-            wxLogMessage("Selected items: %s", s.c_str());
+            wxLogMessage("Selected items: %s", s);
         }
     }
 
@@ -621,7 +621,7 @@ wxString MyHtmlListBox::OnGetItem(size_t n) const
                                       "Item</font> <b>%lu</b>"
                                       "</h%d>",
                                       level,
-                                      clr.GetAsString(wxC2S_HTML_SYNTAX).c_str(),
+                                      clr.GetAsString(wxC2S_HTML_SYNTAX),
                                       (unsigned long)n, level);
     if ( n == 1 )
     {

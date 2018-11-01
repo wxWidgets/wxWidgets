@@ -188,7 +188,7 @@ public:
         if ( val.find(m_invalidWord) == wxString::npos )
             return true;
 
-        ::wxMessageBox(wxString::Format("%s is not allowed word",m_invalidWord.c_str()),
+        ::wxMessageBox(wxString::Format("%s is not allowed word",m_invalidWord),
                        "Validation Failure");
 
         return false;
@@ -650,7 +650,7 @@ void FormMain::OnPropertyGridChanging( wxPropertyGridEvent& event )
     {
         int res =
         wxMessageBox(wxString::Format("'%s' is about to change (to variant of type '%s')\n\nAllow or deny?",
-                                      p->GetName().c_str(),event.GetValue().GetType().c_str()),
+                                      p->GetName(),event.GetValue().GetType()),
                      "Testing wxEVT_PG_CHANGING", wxYES_NO, m_pPropGridManager);
 
         if ( res == wxNO )
@@ -787,7 +787,7 @@ void FormMain::OnPropertyGridPageChange( wxPropertyGridEvent& WXUNUSED(event) )
 void FormMain::OnPropertyGridLabelEditBegin( wxPropertyGridEvent& event )
 {
     wxLogMessage("wxPG_EVT_LABEL_EDIT_BEGIN(%s)",
-                 event.GetProperty()->GetLabel().c_str());
+                 event.GetProperty()->GetLabel());
 }
 
 // -----------------------------------------------------------------------
@@ -795,7 +795,7 @@ void FormMain::OnPropertyGridLabelEditBegin( wxPropertyGridEvent& event )
 void FormMain::OnPropertyGridLabelEditEnding( wxPropertyGridEvent& event )
 {
     wxLogMessage("wxPG_EVT_LABEL_EDIT_ENDING(%s)",
-                 event.GetProperty()->GetLabel().c_str());
+                 event.GetProperty()->GetLabel());
 }
 
 // -----------------------------------------------------------------------
@@ -1784,7 +1784,7 @@ void wxMyPropertyGridPage::OnPropertySelect( wxPropertyGridEvent& event )
     wxPGProperty* p = event.GetProperty();
     wxUnusedVar(p);
     wxLogDebug("wxMyPropertyGridPage::OnPropertySelect('%s' is %s",
-               p->GetName().c_str(),
+               p->GetName(),
                IsPropertySelected(p)? "selected": "unselected");
 }
 
@@ -1792,16 +1792,16 @@ void wxMyPropertyGridPage::OnPropertyChange( wxPropertyGridEvent& event )
 {
     wxPGProperty* p = event.GetProperty();
     wxLogVerbose("wxMyPropertyGridPage::OnPropertyChange('%s', to value '%s')",
-               p->GetName().c_str(),
-               p->GetDisplayedString().c_str());
+               p->GetName(),
+               p->GetDisplayedString());
 }
 
 void wxMyPropertyGridPage::OnPropertyChanging( wxPropertyGridEvent& event )
 {
     wxPGProperty* p = event.GetProperty();
     wxLogVerbose("wxMyPropertyGridPage::OnPropertyChanging('%s', to value '%s')",
-               p->GetName().c_str(),
-               event.GetValue().GetString().c_str());
+               p->GetName(),
+               event.GetValue().GetString());
 }
 
 void wxMyPropertyGridPage::OnPageChange( wxPropertyGridEvent& WXUNUSED(event) )
@@ -2186,7 +2186,7 @@ void GenerateUniquePropertyLabel( wxPropertyGridManager* pg, wxString& baselabel
         for (;;)
         {
             count++;
-            newlabel.Printf("%s%i",baselabel.c_str(),count);
+            newlabel.Printf("%s%i",baselabel,count);
             if ( !pg->GetPropertyByLabel( newlabel ) ) break;
         }
     }
@@ -2359,8 +2359,8 @@ int IterateMessage( wxPGProperty* prop )
 {
     wxString s;
 
-    s.Printf( "\"%s\" class = %s, valuetype = %s", prop->GetLabel().c_str(),
-        prop->GetClassInfo()->GetClassName(), prop->GetValueType().c_str() );
+    s.Printf( "\"%s\" class = %s, valuetype = %s", prop->GetLabel(),
+        prop->GetClassInfo()->GetClassName(), prop->GetValueType() );
 
     return wxMessageBox( s, "Iterating... (press CANCEL to end)", wxOK|wxCANCEL );
 }
@@ -2595,7 +2595,7 @@ void FormMain::OnRemovePage( wxCommandEvent& WXUNUSED(event) )
 void FormMain::OnSaveState( wxCommandEvent& WXUNUSED(event) )
 {
     m_savedState = m_pPropGridManager->SaveEditableState();
-    wxLogDebug("Saved editable state string: \"%s\"", m_savedState.c_str());
+    wxLogDebug("Saved editable state string: \"%s\"", m_savedState);
 }
 
 // -----------------------------------------------------------------------

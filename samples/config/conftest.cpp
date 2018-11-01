@@ -210,7 +210,7 @@ MyFrame::MyFrame()
     wxString s;
     if ( pConfig->Read("TestValue", &s) )
     {
-        wxLogStatus(this, "TestValue from config is '%s'", s.c_str());
+        wxLogStatus(this, "TestValue from config is '%s'", s);
     }
     else
     {

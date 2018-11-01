@@ -198,7 +198,7 @@ void TestGLCanvas::LoadSurface(const wxString& filename)
         new wxZlibInputStream(new wxFFileInputStream(filename));
     if (!stream || !stream->IsOk())
     {
-        wxLogError("Cannot load '%s' type of files!", filename.c_str());
+        wxLogError("Cannot load '%s' type of files!", filename);
         delete stream;
         return;
     }
@@ -226,7 +226,7 @@ void TestGLCanvas::LoadSurface(const wxString& filename)
     delete stream;
 
     wxLogMessage("Loaded %d vertices, %d triangles from '%s'",
-                 m_numverts, m_numverts-2, filename.c_str());
+                 m_numverts, m_numverts-2, filename);
 
     // NOTE: for some reason under wxGTK the following is required to avoid that
     //       the surface gets rendered in a small rectangle in the top-left corner of the frame

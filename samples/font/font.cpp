@@ -582,7 +582,7 @@ protected:
     {
         wxString text;
         text.Printf("Encoding %u: %s (available in facename '%s')\n",
-                    (unsigned int) ++m_n, encoding.c_str(), facename.c_str());
+                    (unsigned int) ++m_n, encoding, facename);
         m_text += text;
         return true;
     }
@@ -599,7 +599,7 @@ void MyFrame::OnEnumerateEncodings(wxCommandEvent& WXUNUSED(event))
     fontEnumerator.EnumerateEncodings();
 
     wxLogMessage("Enumerating all available encodings:\n%s",
-                 fontEnumerator.GetText().c_str());
+                 fontEnumerator.GetText());
 }
 
 // -------------------------------------------------------------
@@ -714,7 +714,7 @@ void MyFrame::OnSetNativeDesc(wxCommandEvent& WXUNUSED(event))
     if ( !font.IsOk() )
     {
         wxLogError("Font info string \"%s\" is invalid.",
-                   fontInfo.c_str());
+                   fontInfo);
         return;
     }
 
@@ -1103,7 +1103,7 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
     if ( !charset )
     {
         wxLogError("The file '%s' doesn't contain charset information.",
-                   filename.c_str());
+                   filename);
 
         return;
     }
@@ -1112,7 +1112,7 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
     wxFontEncoding fontenc = wxFontMapper::Get()->CharsetToEncoding(charset);
     if ( fontenc == wxFONTENCODING_SYSTEM )
     {
-        wxLogError("Charset '%s' is unsupported.", charset.c_str());
+        wxLogError("Charset '%s' is unsupported.", charset);
         return;
     }
 
@@ -1135,13 +1135,13 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
             else
             {
                 wxLogWarning("Cannot convert from '%s' to '%s'.",
-                             wxFontMapper::GetEncodingDescription(fontenc).c_str(),
-                             wxFontMapper::GetEncodingDescription(encAlt).c_str());
+                             wxFontMapper::GetEncodingDescription(fontenc),
+                             wxFontMapper::GetEncodingDescription(encAlt));
             }
         }
         else
             wxLogWarning("No fonts for encoding '%s' on this system.",
-                         wxFontMapper::GetEncodingDescription(fontenc).c_str());
+                         wxFontMapper::GetEncodingDescription(fontenc));
     }
 
     // and now create the correct font
@@ -1155,7 +1155,7 @@ void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
         else
         {
             wxLogWarning("No fonts for encoding '%s' on this system.",
-                         wxFontMapper::GetEncodingDescription(fontenc).c_str());
+                         wxFontMapper::GetEncodingDescription(fontenc));
         }
     }
 #endif // wxUSE_FILEDLG

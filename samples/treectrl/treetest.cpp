@@ -588,7 +588,7 @@ void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))
 
     for ( size_t n = 0; n < count; n++ )
     {
-        wxLogMessage("\t%s", m_treeCtrl->GetItemText(array.Item(n)).c_str());
+        wxLogMessage("\t%s", m_treeCtrl->GetItemText(array.Item(n)));
     }
 }
 
@@ -1306,7 +1306,7 @@ void MyTreeCtrl::LogEvent(const wxString& name, const wxTreeEvent& event)
         text << '"' << GetItemText(item).c_str() << '"';
     else
         text = "invalid item";
-    wxLogMessage("%s(%s)", name, text.c_str());
+    wxLogMessage("%s(%s)", name, text);
 }
 
 // avoid repetition
@@ -1466,7 +1466,7 @@ void LogKeyEvent(const wxString& name, const wxKeyEvent& event)
 
     wxLogMessage( "%s event: %s (flags = %c%c%c%c)",
                   name,
-                  key.c_str(),
+                  key,
                   event.ControlDown() ? 'C' : '-',
                   event.AltDown() ? 'A' : '-',
                   event.ShiftDown() ? 'S' : '-',
@@ -1491,7 +1491,7 @@ void MyTreeCtrl::OnBeginDrag(wxTreeEvent& event)
         wxPoint screenpt = ClientToScreen(clientpt);
 
         wxLogMessage("OnBeginDrag: started dragging %s at screen coords (%i,%i)",
-                     GetItemText(m_draggedItem).c_str(),
+                     GetItemText(m_draggedItem),
                      screenpt.x, screenpt.y);
 
         event.Allow();
@@ -1524,7 +1524,7 @@ void MyTreeCtrl::OnEndDrag(wxTreeEvent& event)
 
     wxString text = GetItemText(itemSrc);
     wxLogMessage("OnEndDrag: '%s' copied to '%s'.",
-                 text.c_str(), GetItemText(itemDst).c_str());
+                 text, GetItemText(itemDst));
 
     // just do append here - we could also insert it just before/after the item
     // on which it was dropped, but this requires slightly more work... we also
@@ -1712,7 +1712,7 @@ void MyTreeItemData::ShowInfo(wxTreeCtrl *tree)
 {
     wxLogMessage("Item '%s': %sselected, %sexpanded, %sbold,\n"
                  "%u children (%u immediately under this item).",
-                 m_desc.c_str(),
+                 m_desc,
                  Bool2String(tree->IsSelected(GetId())),
                  Bool2String(tree->IsExpanded(GetId())),
                  Bool2String(tree->IsBold(GetId())),
