@@ -69,7 +69,7 @@ public:
 
     virtual void Cancel() = 0;
 
-    virtual wxWebResponse* GetResponse() = 0;
+    virtual wxWebResponse* GetResponse() const = 0;
 
     virtual wxWebAuthChallenge* GetAuthChallenge() const = 0;
 
@@ -97,12 +97,12 @@ protected:
     wxSharedPtr<wxInputStream> m_dataStream;
 
     wxWebRequest(wxWebSession& session, int id):
+        m_storage(Storage_Memory),
+        m_dataSize(0),
         m_session(session),
         m_id(id),
         m_state(State_Idle),
-        m_ignoreServerErrorStatus(false),
-        m_dataSize(0),
-        m_storage(Storage_Memory) { }
+        m_ignoreServerErrorStatus(false) { }
 
     bool CheckServerStatus();
 

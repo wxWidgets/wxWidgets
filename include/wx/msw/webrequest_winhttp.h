@@ -71,7 +71,7 @@ public:
 
     void Cancel() wxOVERRIDE;
 
-    wxWebResponse* GetResponse() wxOVERRIDE;
+    wxWebResponse* GetResponse() const wxOVERRIDE;
 
     wxWebAuthChallenge* GetAuthChallenge() const wxOVERRIDE { return m_authChallenge.get(); }
 

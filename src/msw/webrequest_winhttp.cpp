@@ -264,7 +264,7 @@ void wxWebRequestWinHTTP::Start()
     else
         port = wxAtoi(uri.GetPort());
 
-    // Open a connction
+    // Open a connection
     m_connect = ::WinHttpConnect(
         static_cast<wxWebSessionWinHTTP&>(GetSession()).GetHandle(),
         uri.GetServer().wc_str(), port, 0);
@@ -346,7 +346,7 @@ void wxWebRequestWinHTTP::Cancel()
     }
 }
 
-wxWebResponse* wxWebRequestWinHTTP::GetResponse()
+wxWebResponse* wxWebRequestWinHTTP::GetResponse() const
 {
     return m_response.get();
 }
