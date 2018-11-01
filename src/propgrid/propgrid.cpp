@@ -5588,17 +5588,20 @@ void wxPropertyGrid::ClearActionTriggers( int action )
 }
 
 #if WXWIN_COMPATIBILITY_3_0
-// Utility to find if specific item is in a vector. Returns index to
-// the item, or wxNOT_FOUND if not present.
-template<typename CONTAINER, typename T>
-int wxPGFindInVector( CONTAINER vector, const T& item )
+// Utility to check if specific item is in a vector.
+template<typename T>
+static bool wxPGItemExistsInVector(const wxVector<T>& vector, const T& item)
 {
-    for ( unsigned int i=0; i<vector.size(); i++ )
+#if wxUSE_STL
+    return std::find(vector.begin(), vector.end(), item) != vector.end();
+#else
+    for (wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
     {
-        if ( vector[i] == item )
-            return (int) i;
+        if ( *it == item )
+            return true;
     }
-    return wxNOT_FOUND;
+    return false;
+#endif // wxUSE_STL/!wxUSE_STL
 }
 #endif // WXWIN_COMPATIBILITY_3_0
 
@@ -5706,7 +5709,7 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
     if ( fromChild &&
 #if WXWIN_COMPATIBILITY_3_0
          // Deprecated: use a hash set instead.
-         wxPGFindInVector(m_dedicatedKeys, keycode) == wxNOT_FOUND )
+         !wxPGItemExistsInVector<int>(m_dedicatedKeys, keycode) )
 #else
          m_dedicatedKeys.find(keycode) == m_dedicatedKeys.end() )
 #endif
@@ -6602,11 +6605,10 @@ bool wxPropertyGridPopulator::AddAttribute( const wxString& name,
                                             const wxString& type,
                                             const wxString& value )
 {
-    int l = m_propHierarchy.size();
-    if ( !l )
+    if ( m_propHierarchy.empty() )
         return false;
 
-    wxPGProperty* p = m_propHierarchy[l-1];
+    wxPGProperty* p = m_propHierarchy.back();
     wxString valuel = value.Lower();
     wxVariant variant;
 
