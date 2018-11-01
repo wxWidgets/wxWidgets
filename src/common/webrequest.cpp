@@ -277,16 +277,29 @@ wxString wxWebResponse::GetSuggestedFileName() const
 {
     wxString suggestedFilename;
 
-    // TODO: get from Content-Disposition header
-
-    wxURI uri(GetURL());
-    if ( uri.HasPath() )
+    // Try to determine from Content-Disposition header
+    wxString contentDisp = GetHeader("Content-Disposition");
+    wxString disp;
+    wxWebRequestHeaderMap params;
+    wxWebRequest::SplitParameters(contentDisp, disp, params);
+    if ( disp == "attachment" )
     {
-        wxFileName fn(uri.GetPath());
+        // Parse as filename to filter potential path names
+        wxFileName fn(params["filename"]);
         suggestedFilename = fn.GetFullName();
     }
-    else
-        suggestedFilename = uri.GetServer();
+
+    if ( suggestedFilename.empty() )
+    {
+        wxURI uri(GetURL());
+        if ( uri.HasPath() )
+        {
+            wxFileName fn(uri.GetPath());
+            suggestedFilename = fn.GetFullName();
+        }
+        else
+            suggestedFilename = uri.GetServer();
+    }
 
     return suggestedFilename;
 }
