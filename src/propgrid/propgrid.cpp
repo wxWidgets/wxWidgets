@@ -5961,6 +5961,11 @@ void wxPropertyGrid::HandleFocusChange( wxWindow* newFocused )
     {
         if ( parent == wndEditor )
         {
+            // If editor is active consider focus set on its components
+            // as a focus set on the editor itself (to prevent doing actions
+            // when focus is switched between subcontrols of a compound
+            // editor like e.g. wxComboCtrl).
+            newFocused = wndEditor;
             wasEditorFocused = true;
         }
         // Use m_eventObject, which is either wxPropertyGrid or
