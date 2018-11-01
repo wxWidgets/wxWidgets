@@ -1219,11 +1219,8 @@ void wxPropertyGridPageState::ResetColumnSizes( int setSplitterFlags )
 void wxPropertyGridPageState::SetColumnCount( int colCount )
 {
     wxASSERT( colCount >= 2 );
-    m_colWidths.SetCount( colCount, wxPG_DRAG_MARGIN );
-    m_columnProportions.SetCount( colCount, 1 );
-    if ( m_colWidths.size() > (unsigned int)colCount )
-        m_colWidths.RemoveAt( m_colWidths.size()-1,
-                              m_colWidths.size() - colCount );
+    m_colWidths.resize(colCount, wxPG_DRAG_MARGIN);
+    m_columnProportions.resize(colCount, 1);
 
     if ( m_pPropGrid->GetState() == this )
         m_pPropGrid->RecalculateVirtualSize();

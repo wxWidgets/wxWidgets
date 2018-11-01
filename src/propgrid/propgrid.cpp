@@ -137,6 +137,22 @@ DeletedObjects gs_deletedEditorObjects;
 } // anonymous namespace
 #endif
 
+  // Utility to check if specific item is in a vector.
+template<typename T>
+static bool wxPGItemExistsInVector(const wxVector<T>& vector, const T& item)
+{
+#if wxUSE_STL
+    return std::find(vector.begin(), vector.end(), item) != vector.end();
+#else
+    for ( wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it )
+    {
+        if ( *it == item )
+            return true;
+    }
+    return false;
+#endif // wxUSE_STL/!wxUSE_STL
+}
+
 // -----------------------------------------------------------------------
 
 #if wxUSE_INTL
@@ -802,7 +818,7 @@ bool wxPropertyGrid::DoSelectAndEdit( wxPGProperty* prop,
         // send event
         DoClearSelection(false, wxPG_SEL_NO_REFRESH);
 
-        if ( m_pState->m_editableColumns.Index(colIndex) == wxNOT_FOUND )
+        if ( !wxPGItemExistsInVector<int>(m_pState->m_editableColumns, colIndex) )
         {
             res = DoAddToSelection(prop, selFlags);
         }
@@ -972,7 +988,7 @@ void wxPropertyGrid::MakeColumnEditable( unsigned int column,
          wxS("Set wxPG_PROP_READONLY property flag instead")
     );
 
-    wxArrayInt& cols = m_pState->m_editableColumns;
+    wxVector<int>& cols = m_pState->m_editableColumns;
 
     if ( editable )
     {
@@ -2145,7 +2161,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     const wxPGProperty* firstSelected = GetSelection();
     const wxPropertyGridPageState* state = m_pState;
-    const wxArrayInt& colWidths = state->m_colWidths;
+    const wxVector<int>& colWidths = state->m_colWidths;
     const unsigned int colCount = state->GetColumnCount();
 
     // TODO: Only render columns that are within clipping region.
@@ -5586,24 +5602,6 @@ void wxPropertyGrid::ClearActionTriggers( int action )
     }
     while ( didSomething );
 }
-
-#if WXWIN_COMPATIBILITY_3_0
-// Utility to check if specific item is in a vector.
-template<typename T>
-static bool wxPGItemExistsInVector(const wxVector<T>& vector, const T& item)
-{
-#if wxUSE_STL
-    return std::find(vector.begin(), vector.end(), item) != vector.end();
-#else
-    for (wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
-    {
-        if ( *it == item )
-            return true;
-    }
-    return false;
-#endif // wxUSE_STL/!wxUSE_STL
-}
-#endif // WXWIN_COMPATIBILITY_3_0
 
 void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
 {
