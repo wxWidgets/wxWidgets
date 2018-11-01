@@ -195,6 +195,8 @@ image_expose_event(GtkWidget* widget, GdkEventExpose*, wxToolBarTool* tool)
     int x = (alloc.width - bitmap.GetScaledWidth()) / 2;
     int y = (alloc.height - bitmap.GetScaledHeight()) / 2;
 #ifdef __WXGTK3__
+    gtk_render_background(gtk_widget_get_style_context(widget),
+        cr, alloc.x, alloc.y, alloc.width, alloc.height);
     bitmap.Draw(cr, x, y);
 #else
     x += alloc.x;
