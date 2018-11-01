@@ -197,4 +197,17 @@ TEST_CASE_METHOD(RequestFixture, "WebRequest", "[net][.]")
     }
 }
 
+TEST_CASE("WebRequestUtils", "[net]")
+{
+    wxString value;
+    wxWebRequestHeaderMap params;
+
+    wxString header = "multipart/mixed; boundary=\"MIME_boundary_01234567\"";
+
+    wxWebRequest::SplitParameters(header, value, params);
+    REQUIRE( value == "multipart/mixed" );
+    REQUIRE( params.size() == 1 );
+    REQUIRE( params["boundary"] == "MIME_boundary_01234567" );
+}
+
 #endif // wxUSE_WEBREQUEST

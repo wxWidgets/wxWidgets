@@ -320,6 +320,36 @@ public:
     */
     wxFileOffset GetBytesExpectedToReceive() const;
     ///@}
+
+    /**
+        Splits the given string into a value and a collection of parameters.
+        Parameters are expected to be separated by semicolons.
+        Enclosing quotes of parameter values are removed.
+
+        For example, the string
+        @code
+           multipart/mixed; boundary="MIME_boundary_01234567"
+        @endcode
+        is split into the value
+        @code
+           multipart/mixed
+        @endcode
+        and the parameter
+        @code
+            boundary -> MIME_boundary_01234567
+        @endcode
+    */
+    static void SplitParameters(const wxString& s, wxString& value,
+        wxWebRequestHeaderMap& parameters);
+
+    /**
+        Splits the given string into a collection of parameters.
+        Parameters are expected to be separated by semicolons.
+
+        Enclosing quotes of parameter values are removed.
+    */
+    static void SplitParameters(const wxString::const_iterator& begin,
+        const wxString::const_iterator& end, wxWebRequestHeaderMap& parameters);
 };
 
 /**

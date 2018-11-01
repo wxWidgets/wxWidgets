@@ -114,6 +114,69 @@ void wxWebRequest::SetState(State state, const wxString & failMsg)
     CallAfter(&wxWebRequest::ProcessStateEvent, state, failMsg);
 }
 
+// The SplitParamaters implementation is adapted to wxWidgets
+// from Poco::Net::MessageHeader::splitParameters
+
+void wxWebRequest::SplitParameters(const wxString& s, wxString& value,
+    wxWebRequestHeaderMap& parameters)
+{
+    value.clear();
+    parameters.clear();
+    wxString::const_iterator it = s.begin();
+    wxString::const_iterator end = s.end();
+    while ( it != end && wxIsspace(*it) ) ++it;
+    while ( it != end && *it != ';' ) value += *it++;
+    value.Trim();
+    if ( it != end ) ++it;
+    SplitParameters(it, end, parameters);
+}
+
+void wxWebRequest::SplitParameters(const wxString::const_iterator& begin,
+    const wxString::const_iterator& end, wxWebRequestHeaderMap& parameters)
+{
+    wxString pname;
+    wxString pvalue;
+    pname.reserve(32);
+    pvalue.reserve(64);
+    wxString::const_iterator it = begin;
+    while ( it != end )
+    {
+        pname.clear();
+        pvalue.clear();
+        while ( it != end && wxIsspace(*it) ) ++it;
+        while ( it != end && *it != '=' && *it != ';' ) pname += *it++;
+        pname.Trim();
+        if ( it != end && *it != ';' ) ++it;
+        while ( it != end && wxIsspace(*it) ) ++it;
+        while ( it != end && *it != ';' )
+        {
+            if ( *it == '"' )
+            {
+                ++it;
+                while ( it != end && *it != '"' )
+                {
+                    if ( *it == '\\' )
+                    {
+                        ++it;
+                        if ( it != end ) pvalue += *it++;
+                    }
+                    else pvalue += *it++;
+                }
+                if ( it != end ) ++it;
+            }
+            else if ( *it == '\\' )
+            {
+                ++it;
+                if ( it != end ) pvalue += *it++;
+            }
+            else pvalue += *it++;
+        }
+        pvalue.Trim();
+        if ( !pname.empty() ) parameters[pname] = pvalue;
+        if ( it != end ) ++it;
+    }
+}
+
 void wxWebRequest::ProcessStateEvent(State state, const wxString& failMsg)
 {
     if (!IsActiveState(state) && GetResponse())

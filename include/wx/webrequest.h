@@ -89,6 +89,12 @@ public:
 
     void SetState(State state, const wxString& failMsg = "");
 
+    static void SplitParameters(const wxString& s, wxString& value,
+        wxWebRequestHeaderMap& parameters);
+
+    static void SplitParameters(const wxString::const_iterator& begin,
+        const wxString::const_iterator& end, wxWebRequestHeaderMap& parameters);
+
 protected:
     wxString m_method;
     Storage m_storage;
