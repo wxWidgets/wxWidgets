@@ -20,7 +20,9 @@ class wxQtComboBox : public wxQtEventSignalHandler< QComboBox, wxComboBox >
 {
 public:
     wxQtComboBox( wxWindow *parent, wxComboBox *handler );
-
+    virtual void showPopup();
+    virtual void hidePopup();
+    
 private:
     void activated(int index);
     void editTextChanged(const QString &text);
@@ -34,6 +36,30 @@ wxQtComboBox::wxQtComboBox( wxWindow *parent, wxComboBox *handler )
             this, &wxQtComboBox::activated);
     connect(this, &QComboBox::editTextChanged,
             this, &wxQtComboBox::editTextChanged);
+}
+
+void wxQtComboBox::showPopup()
+{
+    wxComboBox *handler = GetHandler();
+    if( handler )
+    {
+        wxCommandEvent event( wxEVT_COMBOBOX_DROPDOWN, handler->GetId() );
+        event.SetEventObject( handler );
+        EmitEvent( event );
+    }
+    QComboBox::showPopup();
+}
+
+void wxQtComboBox::hidePopup()
+{
+    wxComboBox *handler = GetHandler();
+    if( handler )
+    {
+        wxCommandEvent event( wxEVT_COMBOBOX_CLOSEUP, handler->GetId() );
+        event.SetEventObject( GetHandler() );
+        EmitEvent( event );
+    }
+    QComboBox::hidePopup();
 }
 
 void wxQtComboBox::activated(int WXUNUSED(index))
