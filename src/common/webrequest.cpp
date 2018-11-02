@@ -254,7 +254,7 @@ wxInputStream * wxWebResponse::GetStream() const
     if ( !m_stream.get() )
     {
         // Create stream
-        switch (m_request.GetStorage())
+        switch ( m_request.GetStorage() )
         {
             case wxWebRequest::Storage_Memory:
                 m_stream.reset(new wxMemoryInputStream(m_readBuffer.GetData(), m_readBuffer.GetDataLen()));
@@ -408,15 +408,15 @@ void wxWebSession::InitFactoryMap()
 {
 #if wxUSE_WEBREQUEST_WINHTTP
     RegisterFactory(wxWebSessionBackendWinHTTP,
-        wxSharedPtr<wxWebSessionFactory>(new wxWebSessionFactoryWinHTTP()));
+                    wxSharedPtr<wxWebSessionFactory>(new wxWebSessionFactoryWinHTTP()));
 #endif
 #if wxUSE_WEBREQUEST_URLSESSION
-	RegisterFactory(wxWebSessionBackendURLSession,
-					wxSharedPtr<wxWebSessionFactory>(new wxWebSessionFactoryURLSession()));
+    RegisterFactory(wxWebSessionBackendURLSession,
+                    wxSharedPtr<wxWebSessionFactory>(new wxWebSessionFactoryURLSession()));
 #endif
 #if wxUSE_WEBREQUEST_CURL
-	RegisterFactory(wxWebSessionBackendCURL,
-					wxSharedPtr<wxWebSessionFactory>(new wxWebSessionFactoryCURL()));
+    RegisterFactory(wxWebSessionBackendCURL,
+                    wxSharedPtr<wxWebSessionFactory>(new wxWebSessionFactoryCURL()));
 #endif
 }
 
