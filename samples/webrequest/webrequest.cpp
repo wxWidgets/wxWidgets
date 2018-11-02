@@ -220,7 +220,7 @@ public:
 
         m_startButton->Disable();
 
-        // Start the request (events will be called on success or failure)
+        // Start the request (events will be sent on success or failure)
         request->Start();
     }
 
