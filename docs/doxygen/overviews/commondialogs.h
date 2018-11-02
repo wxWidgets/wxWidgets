@@ -218,8 +218,8 @@ is obtained using wxNumberEntryDialog::GetValue().
 
 Classes: wxCredentialEntryDialog
 
-This is a dialog with a user and password entry field. The values that the
-users entered is obtained using wxCredentialEntryDialog::GetUser() and
+This is a dialog with user and password entry fields. The values that the
+user entered are obtained using wxCredentialEntryDialog::GetUser() and
 wxCredentialEntryDialog::GetPassword().
 
 
