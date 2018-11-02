@@ -102,6 +102,14 @@ void wxWebRequest::SetData(wxSharedPtr<wxInputStream> dataStream, const wxString
     SetHeader("Content-Type", contentType);
 }
 
+wxFileOffset wxWebRequest::GetBytesExpectedToReceive() const
+{
+    if ( GetResponse() )
+        return GetResponse()->GetContentLength();
+    else
+        return -1;
+}
+
 void wxWebRequest::SetState(State state, const wxString & failMsg)
 {
     // Add a reference while the request is active

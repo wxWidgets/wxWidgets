@@ -148,7 +148,6 @@ wxWebRequestWinHTTP::wxWebRequestWinHTTP(int id, wxWebSessionWinHTTP& session, c
     m_connect(NULL),
     m_request(NULL),
     m_dataWritten(0),
-    m_bytesExpectedToReceive(0),
     m_bytesReceived(0)
 {
     m_headers = session.GetHeaders();
@@ -221,7 +220,6 @@ void wxWebRequestWinHTTP::CreateResponse()
         m_response.reset(new wxWebResponseWinHTTP(*this));
         if ( !m_response->Init() )
             return;
-        m_bytesExpectedToReceive = m_response->GetContentLength();
         int status = m_response->GetStatus();
         if ( status == 401 || status == 407)
         {

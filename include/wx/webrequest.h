@@ -85,7 +85,7 @@ public:
 
     virtual wxFileOffset GetBytesReceived() const = 0;
 
-    virtual wxFileOffset GetBytesExpectedToReceive() const = 0;
+    virtual wxFileOffset GetBytesExpectedToReceive() const;
 
     void SetState(State state, const wxString& failMsg = "");
 

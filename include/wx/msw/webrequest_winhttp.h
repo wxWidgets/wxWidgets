@@ -81,8 +81,6 @@ public:
 
     wxFileOffset GetBytesReceived() const wxOVERRIDE { return m_bytesReceived; }
 
-    wxFileOffset GetBytesExpectedToReceive() const wxOVERRIDE { return m_bytesExpectedToReceive; }
-
     void HandleCallback(DWORD dwInternetStatus, LPVOID lpvStatusInformation,
         DWORD dwStatusInformationLength);
 
@@ -96,7 +94,6 @@ private:
     wxScopedPtr<wxWebAuthChallengeWinHTTP> m_authChallenge;
     wxMemoryBuffer m_dataWriteBuffer;
     wxFileOffset m_dataWritten;
-    wxFileOffset m_bytesExpectedToReceive;
     wxFileOffset m_bytesReceived;
 
     void SendRequest();
