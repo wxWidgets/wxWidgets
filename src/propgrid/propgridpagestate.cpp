@@ -48,13 +48,13 @@ template<typename T>
 static void wxPGRemoveItemFromVector(wxVector<T>& vector, const T& item)
 {
 #if wxUSE_STL
-    wxVector<T>::iterator it = std::find(vector.begin(), vector.end(), item);
+    typename wxVector<T>::iterator it = std::find(vector.begin(), vector.end(), item);
     if ( it != vector.end() )
     {
         vector.erase(it);
     }
 #else
-    for (wxVector<T>::iterator it = vector.begin(); it != vector.end(); ++it)
+    for (typename wxVector<T>::iterator it = vector.begin(); it != vector.end(); ++it)
     {
         if ( *it == item )
         {
@@ -72,7 +72,7 @@ static bool wxPGItemExistsInVector(const wxVector<T>& vector, const T& item)
 #if wxUSE_STL
     return std::find(vector.begin(), vector.end(), item) != vector.end();
 #else
-    for (wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
+    for (typename wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
     {
         if ( *it == item )
             return true;

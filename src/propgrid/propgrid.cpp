@@ -144,7 +144,7 @@ static bool wxPGItemExistsInVector(const wxVector<T>& vector, const T& item)
 #if wxUSE_STL
     return std::find(vector.begin(), vector.end(), item) != vector.end();
 #else
-    for ( wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it )
+    for (typename wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
     {
         if ( *it == item )
             return true;
