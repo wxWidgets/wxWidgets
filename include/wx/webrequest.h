@@ -83,11 +83,13 @@ public:
 
     virtual wxFileOffset GetBytesExpectedToSend() const = 0;
 
-    virtual wxFileOffset GetBytesReceived() const = 0;
+    virtual wxFileOffset GetBytesReceived() const;
 
     virtual wxFileOffset GetBytesExpectedToReceive() const;
 
     void SetState(State state, const wxString& failMsg = "");
+
+    void ReportDataReceived(size_t sizeReceived);
 
     static void SplitParameters(const wxString& s, wxString& value,
         wxWebRequestHeaderMap& parameters);
@@ -108,7 +110,8 @@ protected:
         m_session(session),
         m_id(id),
         m_state(State_Idle),
-        m_ignoreServerErrorStatus(false) { }
+        m_ignoreServerErrorStatus(false),
+        m_bytesReceived(0) { }
 
     bool CheckServerStatus();
 
@@ -119,6 +122,7 @@ private:
     int m_id;
     State m_state;
     bool m_ignoreServerErrorStatus;
+    wxFileOffset m_bytesReceived;
     wxCharBuffer m_dataText;
 
     void ProcessStateEvent(State state, const wxString& failMsg);

@@ -79,8 +79,6 @@ public:
 
     wxFileOffset GetBytesExpectedToSend() const wxOVERRIDE { return m_dataSize; }
 
-    wxFileOffset GetBytesReceived() const wxOVERRIDE { return m_bytesReceived; }
-
     void HandleCallback(DWORD dwInternetStatus, LPVOID lpvStatusInformation,
         DWORD dwStatusInformationLength);
 
@@ -94,7 +92,6 @@ private:
     wxScopedPtr<wxWebAuthChallengeWinHTTP> m_authChallenge;
     wxMemoryBuffer m_dataWriteBuffer;
     wxFileOffset m_dataWritten;
-    wxFileOffset m_bytesReceived;
 
     void SendRequest();
 
@@ -105,7 +102,6 @@ private:
     void SetFailedWithLastError();
 
     friend class wxWebAuthChallengeWinHTTP;
-    friend class wxWebResponseWinHTTP;
 
     wxDECLARE_NO_COPY_CLASS(wxWebRequestWinHTTP);
 };

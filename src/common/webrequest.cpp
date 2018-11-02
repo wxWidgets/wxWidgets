@@ -102,6 +102,11 @@ void wxWebRequest::SetData(wxSharedPtr<wxInputStream> dataStream, const wxString
     SetHeader("Content-Type", contentType);
 }
 
+wxFileOffset wxWebRequest::GetBytesReceived() const
+{
+    return m_bytesReceived;;
+}
+
 wxFileOffset wxWebRequest::GetBytesExpectedToReceive() const
 {
     if ( GetResponse() )
@@ -120,6 +125,11 @@ void wxWebRequest::SetState(State state, const wxString & failMsg)
 
     // Trigger the event in the main thread
     CallAfter(&wxWebRequest::ProcessStateEvent, state, failMsg);
+}
+
+void wxWebRequest::ReportDataReceived(size_t sizeReceived)
+{
+    m_bytesReceived += sizeReceived;
 }
 
 // The SplitParamaters implementation is adapted to wxWidgets
@@ -335,6 +345,7 @@ void* wxWebResponse::GetDataBuffer(size_t sizeNeeded)
 void wxWebResponse::ReportDataReceived(size_t sizeReceived)
 {
     m_readBuffer.UngetAppendBuf(sizeReceived);
+    m_request.ReportDataReceived(sizeReceived);
 
     if ( m_request.GetStorage() == wxWebRequest::Storage_File )
         m_file.Write(m_readBuffer.GetData(), m_readBuffer.GetDataLen());

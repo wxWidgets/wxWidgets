@@ -147,8 +147,7 @@ wxWebRequestWinHTTP::wxWebRequestWinHTTP(int id, wxWebSessionWinHTTP& session, c
     m_url(url),
     m_connect(NULL),
     m_request(NULL),
-    m_dataWritten(0),
-    m_bytesReceived(0)
+    m_dataWritten(0)
 {
     m_headers = session.GetHeaders();
 }
@@ -407,7 +406,6 @@ bool wxWebResponseWinHTTP::ReadData()
 bool wxWebResponseWinHTTP::ReportAvailableData(DWORD dataLen)
 {
     ReportDataReceived(dataLen);
-    static_cast<wxWebRequestWinHTTP&>(m_request).m_bytesReceived += dataLen;
     return ReadData();
 }
 
