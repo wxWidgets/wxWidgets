@@ -43,6 +43,43 @@
 
 #define wxPG_DEFAULT_SPLITTERX      110
 
+// Utility to remove given item from the vector.
+template<typename T>
+static void wxPGRemoveItemFromVector(wxVector<T>& vector, const T& item)
+{
+#if wxUSE_STL
+    typename wxVector<T>::iterator it = std::find(vector.begin(), vector.end(), item);
+    if ( it != vector.end() )
+    {
+        vector.erase(it);
+    }
+#else
+    for (typename wxVector<T>::iterator it = vector.begin(); it != vector.end(); ++it)
+    {
+        if ( *it == item )
+        {
+            vector.erase(it);
+            return;
+        }
+    }
+#endif // wxUSE_STL/!wxUSE_STL
+}
+
+// Utility to check if specific item is in a vector.
+template<typename T>
+static bool wxPGItemExistsInVector(const wxVector<T>& vector, const T& item)
+{
+#if wxUSE_STL
+    return std::find(vector.begin(), vector.end(), item) != vector.end();
+#else
+    for (typename wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
+    {
+        if ( *it == item )
+            return true;
+    }
+    return false;
+#endif // wxUSE_STL/!wxUSE_STL
+}
 
 // -----------------------------------------------------------------------
 // wxPropertyGridIterator
@@ -303,16 +340,8 @@ void wxPropertyGridPageState::DoClear()
         for (unsigned int i = 0; i < m_regularArray.GetChildCount(); i++)
         {
             wxPGProperty* p = m_regularArray.Item(i);
-            int index = m_pPropGrid->m_deletedProperties.Index(p);
-            if (index != wxNOT_FOUND)
-            {
-                m_pPropGrid->m_deletedProperties.RemoveAt(index);
-            }
-            index = m_pPropGrid->m_removedProperties.Index(p);
-            if (index != wxNOT_FOUND)
-            {
-                m_pPropGrid->m_removedProperties.RemoveAt(index);
-            }
+            wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_deletedProperties, p);
+            wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_removedProperties, p);
         }
 
         m_regularArray.Empty();
@@ -1190,11 +1219,8 @@ void wxPropertyGridPageState::ResetColumnSizes( int setSplitterFlags )
 void wxPropertyGridPageState::SetColumnCount( int colCount )
 {
     wxASSERT( colCount >= 2 );
-    m_colWidths.SetCount( colCount, wxPG_DRAG_MARGIN );
-    m_columnProportions.SetCount( colCount, 1 );
-    if ( m_colWidths.size() > (unsigned int)colCount )
-        m_colWidths.RemoveAt( m_colWidths.size()-1,
-                              m_colWidths.size() - colCount );
+    m_colWidths.resize(colCount, wxPG_DRAG_MARGIN);
+    m_columnProportions.resize(colCount, 1);
 
     if ( m_pPropGrid->GetState() == this )
         m_pPropGrid->RecalculateVirtualSize();
@@ -2004,14 +2030,14 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
         // Prevent adding duplicates to the lists.
         if ( doDelete )
         {
-            if ( pg->m_deletedProperties.Index(item) != wxNOT_FOUND )
+            if ( wxPGItemExistsInVector<wxPGProperty*>(pg->m_deletedProperties, item) )
                 return;
 
             pg->m_deletedProperties.push_back(item);
         }
         else
         {
-            if ( pg->m_removedProperties.Index(item) != wxNOT_FOUND )
+            if ( wxPGItemExistsInVector<wxPGProperty*>(pg->m_removedProperties, item) )
                 return;
 
             pg->m_removedProperties.push_back(item);
@@ -2112,20 +2138,12 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     {
         // Remove the item from both lists of pending operations.
         // (Deleted item cannot be also the subject of further removal.)
-        int index = pg->m_deletedProperties.Index(item);
-        if ( index != wxNOT_FOUND )
-        {
-            pg->m_deletedProperties.RemoveAt(index);
-        }
-        wxASSERT_MSG( pg->m_deletedProperties.Index(item) == wxNOT_FOUND,
+        wxPGRemoveItemFromVector<wxPGProperty*>(pg->m_deletedProperties, item);
+        wxASSERT_MSG( !wxPGItemExistsInVector<wxPGProperty*>(pg->m_deletedProperties, item),
                     wxS("Too many occurrences of the item"));
 
-        index = pg->m_removedProperties.Index(item);
-        if ( index != wxNOT_FOUND )
-        {
-            pg->m_removedProperties.RemoveAt(index);
-        }
-        wxASSERT_MSG( pg->m_removedProperties.Index(item) == wxNOT_FOUND,
+        wxPGRemoveItemFromVector<wxPGProperty*>(pg->m_removedProperties, item);
+        wxASSERT_MSG( !wxPGItemExistsInVector<wxPGProperty*>(pg->m_removedProperties, item),
                     wxS("Too many occurrences of the item"));
 
         delete item;
@@ -2133,12 +2151,8 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     else
     {
         // Remove the item from the list of pending removals.
-        int index = pg->m_removedProperties.Index(item);
-        if ( index != wxNOT_FOUND )
-        {
-            pg->m_removedProperties.RemoveAt(index);
-        }
-        wxASSERT_MSG( pg->m_removedProperties.Index(item) == wxNOT_FOUND,
+        wxPGRemoveItemFromVector<wxPGProperty*>(pg->m_removedProperties, item);
+        wxASSERT_MSG( !wxPGItemExistsInVector<wxPGProperty*>(pg->m_removedProperties, item),
                     wxS("Too many occurrences of the item"));
 
         item->OnDetached(this, pg);

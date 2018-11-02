@@ -2544,6 +2544,31 @@ wxSize wxBoxSizer::CalcMin()
     return m_calculatedMinSize;
 }
 
+bool
+wxBoxSizer::InformFirstDirection(int direction, int size, int availableOtherDir)
+{
+    // In principle, we could propagate the information about the size in the
+    // sizer major direction too, but this would require refactoring CalcMin()
+    // to determine the actual sizes all our items would have with the given
+    // size and we don't do this yet, so for now handle only the simpler case
+    // of informing all our items about their size in the orthogonal direction.
+    if ( direction == GetOrientation() )
+        return false;
+
+    bool didUse = false;
+
+    for ( wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        didUse |= node->GetData()->InformFirstDirection(direction,
+                                                        size,
+                                                        availableOtherDir);
+    }
+
+    return didUse;
+}
+
 //---------------------------------------------------------------------------
 // wxStaticBoxSizer
 //---------------------------------------------------------------------------

@@ -806,7 +806,7 @@ public:
     bool IsRowSelected( unsigned int row );
     void SendSelectionChangedEvent( const wxDataViewItem& item);
 
-    void RefreshRow( unsigned int row );
+    void RefreshRow( unsigned int row ) { RefreshRows(row, row); }
     void RefreshRows( unsigned int from, unsigned int to );
     void RefreshRowsAfter( unsigned int firstRow );
 
@@ -816,7 +816,7 @@ public:
         return wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT);
     }
 
-    wxRect GetLineRect( unsigned int row ) const;
+    wxRect GetLinesRect( unsigned int rowFrom, unsigned int rowTo ) const;
 
     int GetLineStart( unsigned int row ) const;  // row * m_lineHeight in fixed mode
     int GetLineHeight( unsigned int row ) const; // m_lineHeight in fixed mode
@@ -3275,34 +3275,16 @@ void wxDataViewMainWindow::SendSelectionChangedEvent( const wxDataViewItem& item
     m_owner->ProcessWindowEvent(le);
 }
 
-void wxDataViewMainWindow::RefreshRow( unsigned int row )
-{
-    wxRect rect( 0, GetLineStart( row ), GetEndOfLastCol(), GetLineHeight( row ) );
-    m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
-
-    wxSize client_size = GetClientSize();
-    wxRect client_rect( 0, 0, client_size.x, client_size.y );
-    wxRect intersect_rect = client_rect.Intersect( rect );
-    if (intersect_rect.width > 0)
-        Refresh( true, &intersect_rect );
-}
-
 void wxDataViewMainWindow::RefreshRows( unsigned int from, unsigned int to )
 {
-    if (from > to)
-    {
-        unsigned int tmp = to;
-        to = from;
-        from = tmp;
-    }
+    wxRect rect = GetLinesRect(from, to);
 
-    wxRect rect( 0, GetLineStart( from ), GetEndOfLastCol(), GetLineStart( (to-from+1) ) );
-    m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+    m_owner->CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
 
     wxSize client_size = GetClientSize();
     wxRect client_rect( 0, 0, client_size.x, client_size.y );
     wxRect intersect_rect = client_rect.Intersect( rect );
-    if (intersect_rect.width > 0)
+    if (!intersect_rect.IsEmpty())
         Refresh( true, &intersect_rect );
 }
 
@@ -3318,14 +3300,22 @@ void wxDataViewMainWindow::RefreshRowsAfter( unsigned int firstRow )
     Refresh( true, &rect );
 }
 
-wxRect wxDataViewMainWindow::GetLineRect( unsigned int row ) const
+wxRect wxDataViewMainWindow::GetLinesRect( unsigned int rowFrom, unsigned int rowTo ) const
 {
+    if (rowFrom > rowTo)
+        wxSwap(rowFrom, rowTo);
+
     wxRect rect;
     rect.x = 0;
-    rect.y = GetLineStart( row );
-    rect.width = GetEndOfLastCol();
-    rect.height = GetLineHeight( row );
-
+    rect.y = GetLineStart(rowFrom);
+    // Don't calculate exact width of the row, because GetEndOfLastCol() is
+    // expensive to call, and controls with rows not spanning entire width rare.
+    // It is more efficient to e.g. repaint empty parts of the window needlessly.
+    rect.width = INT_MAX;
+    if (rowFrom == rowTo)
+        rect.height = GetLineHeight(rowFrom);
+    else
+        rect.height = GetLineStart(rowTo) - rect.y + GetLineHeight(rowTo);
     return rect;
 }
 

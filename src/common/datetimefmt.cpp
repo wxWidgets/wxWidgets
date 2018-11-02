@@ -1647,12 +1647,7 @@ wxDateTime::ParseFormat(const wxString& date,
 
     Set(tm);
 
-    // If a time zone was specified and it is not the local time zone, we need
-    // to shift the time accordingly.
-    //
-    // Note that avoiding the call to MakeFromTimeZone is necessary to avoid
-    // DST problems.
-    if ( haveTimeZone && timeZone != -wxGetTimeZone() )
+    if ( haveTimeZone )
         MakeFromTimezone(timeZone);
 
     // finally check that the week day is consistent -- if we had it

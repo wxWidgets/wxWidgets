@@ -875,6 +875,20 @@ bool wxThreadInternal::Suspend()
         return false;
     }
 
+    // Calling GetThreadContext() forces the thread to actually be suspended:
+    // just calling SuspendThread() is not enough, it just asks the scheduler
+    // to suspend the thread at the next opportunity and by then we may already
+    // exit wxThread::Pause() and leave m_critsect, meaning that the thread
+    // could enter it and end up suspended inside a CS, which will inevitably
+    // result in a deadlock later.
+    CONTEXT ctx;
+    // We don't really need the context, but we still must initialize it.
+    ctx.ContextFlags = CONTEXT_FULL;
+    if ( !::GetThreadContext(m_hThread, &ctx) )
+    {
+        wxLogLastError(wxS("GetThreadContext"));
+    }
+
     m_state = STATE_PAUSED;
 
     return true;

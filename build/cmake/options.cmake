@@ -23,6 +23,9 @@ wx_option(wxBUILD_COMPATIBILITY
 set(wxBUILD_CUSTOM_SETUP_HEADER_PATH "" CACHE PATH "Include path containing custom wx/setup.h")
 mark_as_advanced(wxBUILD_CUSTOM_SETUP_HEADER_PATH)
 
+wx_option(wxBUILD_DEBUG_LEVEL "Debug Level" Default STRINGS Default 0 1 2)
+mark_as_advanced(wxBUILD_DEBUG_LEVEL)
+
 if(MSVC)
     wx_option(wxBUILD_USE_STATIC_RUNTIME "Link using the static runtime library" OFF)
     wx_option(wxBUILD_MSVC_MULTIPROC "Enable multi-processor compilation for MSVC")

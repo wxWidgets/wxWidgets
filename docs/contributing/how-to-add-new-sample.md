@@ -43,12 +43,20 @@ samples/ with demos/ where needed).
    After this, regenerate configure from configure.in
    by running "autoconf" on a Unix system in the corresponding directory.
 
-5. Add a short description of what the sample does and how does it work
+5. Modify `build/cmake/samples/CMakeLists.txt` to include the sample in
+   CMake. Add a new line like this:
+
+       wx_add_sample(foo DEPENDS wxUSE_FOO)
+
+   For a complete list of parameters to the `wx_add_sample()` function see
+   the description in `build/cmake/functions.cmake`.
+
+6. Add a short description of what the sample does and how does it work
    to the "samples overview" section in the wxWidgets manual. That section
    lives in docs/doxygen/mainpages/samples.h; look at the descriptions for
    other samples, if you are not familiar with Doxygen.
 
-6. Add any non-standard sample's files to build/bakefiles/make_dist.mk (the
+7. Add any non-standard sample's files to build/bakefiles/make_dist.mk (the
    makefiles copies all bmp, cpp, h, ico, png, rc, xpm and makefiles by
    default, you only need to update it if the sample uses some other files)
    and run the ./update-manifests.sh script in distrib/scripts (don't forget

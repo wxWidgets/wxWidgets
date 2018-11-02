@@ -137,6 +137,22 @@ DeletedObjects gs_deletedEditorObjects;
 } // anonymous namespace
 #endif
 
+  // Utility to check if specific item is in a vector.
+template<typename T>
+static bool wxPGItemExistsInVector(const wxVector<T>& vector, const T& item)
+{
+#if wxUSE_STL
+    return std::find(vector.begin(), vector.end(), item) != vector.end();
+#else
+    for (typename wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
+    {
+        if ( *it == item )
+            return true;
+    }
+    return false;
+#endif // wxUSE_STL/!wxUSE_STL
+}
+
 // -----------------------------------------------------------------------
 
 #if wxUSE_INTL
@@ -802,7 +818,7 @@ bool wxPropertyGrid::DoSelectAndEdit( wxPGProperty* prop,
         // send event
         DoClearSelection(false, wxPG_SEL_NO_REFRESH);
 
-        if ( m_pState->m_editableColumns.Index(colIndex) == wxNOT_FOUND )
+        if ( !wxPGItemExistsInVector<int>(m_pState->m_editableColumns, colIndex) )
         {
             res = DoAddToSelection(prop, selFlags);
         }
@@ -972,7 +988,7 @@ void wxPropertyGrid::MakeColumnEditable( unsigned int column,
          wxS("Set wxPG_PROP_READONLY property flag instead")
     );
 
-    wxArrayInt& cols = m_pState->m_editableColumns;
+    wxVector<int>& cols = m_pState->m_editableColumns;
 
     if ( editable )
     {
@@ -2145,7 +2161,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     const wxPGProperty* firstSelected = GetSelection();
     const wxPropertyGridPageState* state = m_pState;
-    const wxArrayInt& colWidths = state->m_colWidths;
+    const wxVector<int>& colWidths = state->m_colWidths;
     const unsigned int colCount = state->GetColumnCount();
 
     // TODO: Only render columns that are within clipping region.
@@ -5587,21 +5603,6 @@ void wxPropertyGrid::ClearActionTriggers( int action )
     while ( didSomething );
 }
 
-#if WXWIN_COMPATIBILITY_3_0
-// Utility to find if specific item is in a vector. Returns index to
-// the item, or wxNOT_FOUND if not present.
-template<typename CONTAINER, typename T>
-int wxPGFindInVector( CONTAINER vector, const T& item )
-{
-    for ( unsigned int i=0; i<vector.size(); i++ )
-    {
-        if ( vector[i] == item )
-            return (int) i;
-    }
-    return wxNOT_FOUND;
-}
-#endif // WXWIN_COMPATIBILITY_3_0
-
 void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
 {
     //
@@ -5706,7 +5707,7 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
     if ( fromChild &&
 #if WXWIN_COMPATIBILITY_3_0
          // Deprecated: use a hash set instead.
-         wxPGFindInVector(m_dedicatedKeys, keycode) == wxNOT_FOUND )
+         !wxPGItemExistsInVector<int>(m_dedicatedKeys, keycode) )
 #else
          m_dedicatedKeys.find(keycode) == m_dedicatedKeys.end() )
 #endif
@@ -5961,6 +5962,11 @@ void wxPropertyGrid::HandleFocusChange( wxWindow* newFocused )
     {
         if ( parent == wndEditor )
         {
+            // If editor is active consider focus set on its components
+            // as a focus set on the editor itself (to prevent doing actions
+            // when focus is switched between subcontrols of a compound
+            // editor like e.g. wxComboCtrl).
+            newFocused = wndEditor;
             wasEditorFocused = true;
         }
         // Use m_eventObject, which is either wxPropertyGrid or
@@ -6597,11 +6603,10 @@ bool wxPropertyGridPopulator::AddAttribute( const wxString& name,
                                             const wxString& type,
                                             const wxString& value )
 {
-    int l = m_propHierarchy.size();
-    if ( !l )
+    if ( m_propHierarchy.empty() )
         return false;
 
-    wxPGProperty* p = m_propHierarchy[l-1];
+    wxPGProperty* p = m_propHierarchy.back();
     wxString valuel = value.Lower();
     wxVariant variant;
 

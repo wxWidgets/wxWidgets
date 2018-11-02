@@ -182,6 +182,11 @@ public:
     */
     virtual unsigned char Red() const;
 
+    /**
+        Returns @true if the color can be described using RGB values, ie is solid,
+        @false if it is a pattern (currently only possible on macOS)
+    */
+    virtual bool IsSolid() const;
     //@{
     /**
         Sets the RGB intensity values using the given values (first overload),

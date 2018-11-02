@@ -189,6 +189,13 @@ wxColour::ChannelType wxColour::Alpha() const
     return wxRound(M_COLDATA->Alpha() * 255.0);
 }
 
+bool wxColour::IsSolid() const
+{
+    wxCHECK_MSG( IsOk(), false, "invalid colour" );
+
+    return M_COLDATA->IsSolid();
+}
+
 #if wxOSX_USE_COCOA_OR_CARBON
 void wxColour::GetRGBColor(RGBColor* col) const
 {

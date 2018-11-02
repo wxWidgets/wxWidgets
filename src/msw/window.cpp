@@ -60,6 +60,7 @@
 
 #include "wx/hashmap.h"
 #include "wx/evtloop.h"
+#include "wx/popupwin.h"
 #include "wx/power.h"
 #include "wx/scopeguard.h"
 #include "wx/sysopt.h"
@@ -133,6 +134,10 @@
 #if wxUSE_MENUS_NATIVE
 extern wxMenu *wxCurrentPopupMenu;
 #endif
+
+#if wxUSE_POPUPWIN
+extern wxPopupWindow* wxCurrentPopupWindow;
+#endif // wxUSE_POPUPWIN
 
 #if wxUSE_UXTHEME
 // This is a hack used by the owner-drawn wxButton implementation to ensure
@@ -3729,6 +3734,23 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 bool vetoed;
                 processed = HandlePower(wParam, lParam, &vetoed);
                 rc.result = processed && vetoed ? BROADCAST_QUERY_DENY : TRUE;
+            }
+            break;
+
+        case WM_NCACTIVATE:
+            // When we're losing activation to our own popup window, we want to
+            // retain the "active" appearance of the title bar, as dropping
+            // down a combobox popup shouldn't deactivate the window containing
+            // the combobox, for example. Explicitly calling DefWindowProc() to
+            // draw the window as active seems to be the only way of achieving
+            // this (thanks to Barmak Shemirani for suggesting it at
+            // https://stackoverflow.com/a/52808753/15275).
+            if ( !wParam &&
+                    wxCurrentPopupWindow &&
+                        wxCurrentPopupWindow->MSWGetOwner() == this )
+            {
+                rc.result = MSWDefWindowProc(message, TRUE, lParam);
+                processed = true;
             }
             break;
 

@@ -2,9 +2,9 @@ Welcome to wxWidgets/Mac
 
 More Information is available from the wxWidgets project home page at
 
-https://www.wxwidgets.org 
+https://www.wxwidgets.org
 
-For more information, please see install.txt and the manuals.
+For more information, please see install.md and the manuals.
 
 Please send problems concerning installation, feature requests,
 bug reports or comments to the wxWidgets users list. Information

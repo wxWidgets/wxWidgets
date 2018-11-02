@@ -65,19 +65,9 @@ private:
         // Now switch to the multi-line text controls.
         CPPUNIT_TEST( PseudoTestSwitchToMultiLineStyle );
 
-        // Rerun some of the tests above. Notice that not all of them pass, so
-        // we can't just use wxTEXT_ENTRY_TESTS() here. For some of them it's
-        // normal, e.g. Hint() test isn't supposed to work for multi-line
-        // controls. Others, such as InsertionPoint() and TextChangeEvents()
-        // don't pass neither but this could be a bug.
-        CPPUNIT_TEST( SetValue );
-        CPPUNIT_TEST( Selection );
-        CPPUNIT_TEST( InsertionPoint );
-        CPPUNIT_TEST( Replace );
-        WXUISIM_TEST( Editable );
-        CPPUNIT_TEST( CopyPaste );
-        CPPUNIT_TEST( UndoRedo );
-
+        // Rerun the text entry tests not specific to single line controls for
+        // multiline ones now.
+        wxTEXT_ENTRY_TESTS();
         SINGLE_AND_MULTI_TESTS();
 
 

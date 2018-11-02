@@ -121,6 +121,10 @@ if(wxUSE_ON_FATAL_EXCEPTION AND MSVC AND (MSVC_VERSION GREATER 1800) )
     add_compile_options("/EHa")
 endif()
 
+if(NOT wxBUILD_DEBUG_LEVEL STREQUAL "Default")
+    add_compile_options("-DwxDEBUG_LEVEL=${wxBUILD_DEBUG_LEVEL}")
+endif()
+
 # Constants for setup.h creation
 set(wxUSE_STD_DEFAULT ON)
 if(wxUSE_UNICODE)
