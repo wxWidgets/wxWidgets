@@ -8,7 +8,7 @@
 /**
     @class wxWebRequest
 
-    This class allows for simple HTTP requests using the operating systems
+    This class allows for simple HTTP requests using the operating system's
     components as implementation.
 
     The latest features of the operating system will be used if available
@@ -56,8 +56,8 @@
 
     @section descriptions Implementation Descriptions
 
-    The following APIs are used per platform, additional documentation
-    about supported features may be found in their documentation
+    The following APIs are used per platform, additional details
+    about supported features may be found in their documentation.
 
     Available features by implementation and minimum version:
     <table>
@@ -608,8 +608,8 @@ public:
         when the state is @c State_Completed and storage is @Storage_File.
 
         The file will be removed after the event handlers are called. You can
-        move the file to location of your choice if you want to process the
-        contents outside of the event handler.
+        move the file to a location of your choice if you want to process the
+        contents outside the event handler.
     */
     const wxString& GetResponseFileName() const;
 
@@ -617,7 +617,7 @@ public:
 
     /**
         Only for @c wxEVT_WEBREQUEST_DATA events. The buffer is only valid
-        in the event handler.
+        inside the event handler.
     */
     ///@{
     const void* GetDataBuffer() const;
