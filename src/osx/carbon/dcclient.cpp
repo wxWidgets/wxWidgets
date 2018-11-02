@@ -48,8 +48,6 @@ wxWindowDCImpl::wxWindowDCImpl( wxDC *owner, wxWindow *window )
     m_ok = true ;
 
     m_window->GetSize( &m_width , &m_height);
-    if ( !m_window->IsShownOnScreen() )
-        m_width = m_height = 0;
 
     CGContextRef cg = (CGContextRef) window->MacGetCGContextRef();
 
@@ -122,8 +120,6 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *window ) :
     wxCHECK_RET( window, wxT("invalid window in wxClientDCImpl") );
     wxPoint origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
-    if ( !m_window->IsShownOnScreen() )
-        m_width = m_height = 0;
     
     int x0,y0;
     DoGetDeviceOrigin(&x0,&y0);

@@ -484,9 +484,7 @@ void wxWindowMac::MacUpdateControlFont()
     if ( GetPeer() )
         GetPeer()->SetFont( GetFont() , GetForegroundColour() , GetWindowStyle() ) ;
 
-    // do not trigger refreshes upon invisible and possible partly created objects
-    if ( IsShownOnScreen() )
-        Refresh() ;
+    Refresh() ;
 }
 
 bool wxWindowMac::SetFont(const wxFont& font)
@@ -926,10 +924,6 @@ void wxWindowMac::MacInvalidateBorders()
     if ( GetPeer() == NULL )
         return ;
 
-    bool vis = IsShownOnScreen() ;
-    if ( !vis )
-        return ;
-
     int outerBorder = MacGetLeftBorderSize() ;
 
     if ( GetPeer()->NeedsFocusRect() )
@@ -1210,10 +1204,6 @@ void wxWindowMac::SetLabel(const wxString& title)
 
     if ( GetPeer() && GetPeer()->IsOk() )
         GetPeer()->SetLabel( wxStripMenuCodes(m_label, wxStrip_Mnemonics), GetFont().GetEncoding() ) ;
-
-    // do not trigger refreshes upon invisible and possible partly created objects
-    if ( IsShownOnScreen() )
-        Refresh() ;
 }
 
 wxString wxWindowMac::GetLabel() const
@@ -1352,9 +1342,6 @@ void wxWindowMac::DoGetTextExtent(const wxString& str,
 void wxWindowMac::Refresh(bool WXUNUSED(eraseBack), const wxRect *rect)
 {
     if ( GetPeer() == NULL )
-        return ;
-
-    if ( !IsShownOnScreen() )
         return ;
 
     if ( IsFrozen() )
@@ -1895,7 +1882,7 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion( bool includeOuterStructures )
 {
     static wxRegion emptyrgn ;
 
-    if ( !m_isBeingDeleted && IsShownOnScreen() )
+    if ( !m_isBeingDeleted )
     {
         MacUpdateClippedRects() ;
         if ( includeOuterStructures )
