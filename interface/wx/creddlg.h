@@ -12,7 +12,7 @@
     from the user. It is implemented as a generic wxWidgets dialog on all
     platforms.
 
-    @note For secure saving and loading, user and passwords have a look at
+    @note For secure saving and loading users and passwords, have a look at
         wxSecretStore.
 
     @since 3.1.2
