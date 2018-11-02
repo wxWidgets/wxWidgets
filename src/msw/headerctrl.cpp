@@ -243,12 +243,12 @@ void wxHeaderCtrl::DoSetCount(unsigned int count)
     m_isHidden.resize(m_numColumns);
     for ( n = 0; n < count; n++ )
     {
-        const wxHeaderColumn& col = GetColumn(n);
+        const wxHeaderColumn& col = GetColumn(n + GetColumnIdOffset());
         if ( col.IsShown() )
         {
             m_isHidden[n] = false;
 
-            DoInsertItem(col, n);
+            DoInsertItem(col, n + GetColumnIdOffset());
         }
         else // hidden initially
         {
@@ -377,10 +377,10 @@ void wxHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
     }
 
     hdi.mask |= HDI_ORDER;
-    hdi.iOrder = MSWToNativeOrder(m_colIndices.Index(idx));
+    hdi.iOrder = MSWToNativeOrder(m_colIndices.Index(idx - GetColumnIdOffset()));
 
     if ( ::SendMessage(GetHwnd(), HDM_INSERTITEM,
-                       MSWToNativeIdx(idx), (LPARAM)&hdi) == -1 )
+                       MSWToNativeIdx(idx - GetColumnIdOffset()), (LPARAM)&hdi) == -1 )
     {
         wxLogLastError(wxT("Header_InsertItem()"));
     }
@@ -412,7 +412,7 @@ void wxHeaderCtrl::DoSetColumnsOrder(const wxArrayInt& order)
     {
         const int idx = order[n];
         if ( GetColumn(idx).IsShown() )
-            orderShown.push_back(MSWToNativeIdx(idx));
+            orderShown.push_back(MSWToNativeIdx(idx - GetColumnIdOffset()));
     }
 
     if ( !Header_SetOrderArray(GetHwnd(), orderShown.size(), &orderShown[0]) )
@@ -446,7 +446,7 @@ int wxHeaderCtrl::MSWToNativeIdx(int idx)
     int item = idx;
     for ( int i = 0; i < idx; i++ )
     {
-        if ( GetColumn(i).IsHidden() )
+        if (GetColumn(i + GetColumnIdOffset()).IsHidden())
             item--; // one less column the native control knows about
     }
 

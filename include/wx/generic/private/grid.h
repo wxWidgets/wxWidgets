@@ -177,6 +177,11 @@ private:
         return e;
     }
 
+    virtual int GetColumnIdOffset() const wxOVERRIDE
+    { 
+        return m_isFrozen ? 0 : GetOwner()->GetNumberFrozenCols();
+    }
+
     // override the base class method to update our m_columns array
     virtual void OnColumnCountChanging(unsigned int count) wxOVERRIDE
     {
@@ -184,7 +189,7 @@ private:
             return;
         
         const unsigned countOld = ms_columns.size();
-        const unsigned offset = GetOwner()->GetNumberFrozenCols();
+        const unsigned offset = GetColumnIdOffset();
         count += offset;
         if ( count < countOld )
         {
@@ -211,7 +216,7 @@ private:
     
     virtual void ResetColumnsOrder() wxOVERRIDE
     {
-        const unsigned offset = m_isFrozen ? 0 : GetOwner()->GetNumberFrozenCols();
+        const unsigned offset = GetColumnIdOffset();
         const unsigned count = GetColumnCount();
         
         wxArrayInt order(count);
@@ -289,14 +294,14 @@ private:
 
     void OnBeginResize(wxHeaderCtrlEvent& event)
     {
-        GetOwner()->DoStartResizeCol(event.GetColumn());
+        GetOwner()->DoStartResizeCol(event.GetColumn(), m_isFrozen);
 
         event.Skip();
     }
 
     void OnResizing(wxHeaderCtrlEvent& event)
     {
-        GetOwner()->DoUpdateResizeColWidth(event.GetWidth());
+        GetOwner()->DoUpdateResizeColWidth(event.GetWidth(), m_isFrozen);
     }
 
     void OnEndResize(wxHeaderCtrlEvent& event)
@@ -306,7 +311,9 @@ private:
         // UpdateColumnVisibility()
         wxMouseEvent e;
         e.SetState(wxGetMouseState());
-        GetOwner()->DoEndDragResizeCol(e);
+        wxWindow *gridWindow = m_isFrozen ? 
+            GetOwner()->GetFrozenColGridWindow() : GetOwner()->GetGridWindow();
+        GetOwner()->DoEndDragResizeCol(e, reinterpret_cast<wxGridWindow*>(gridWindow));
 
         event.Skip();
     }
@@ -632,6 +639,8 @@ public:
     // Get the width or height of the row or column label window
     virtual int GetHeaderWindowSize(wxGrid *grid) const = 0;
 
+    // Get the row or column frozen grid window
+    virtual wxGridWindow *GetFrozenGrid(wxGrid* grid) const = 0;
 
     // This class is never used polymorphically but give it a virtual dtor
     // anyhow to suppress g++ complaints about it
@@ -706,6 +715,9 @@ public:
         { return grid->GetGridRowLabelWindow(); }
     virtual int GetHeaderWindowSize(wxGrid *grid) const wxOVERRIDE
         { return grid->GetRowLabelSize(); }
+
+    virtual wxGridWindow *GetFrozenGrid(wxGrid* grid) const wxOVERRIDE
+        { return (wxGridWindow*)grid->GetFrozenRowGridWindow(); }
 };
 
 class wxGridColumnOperations : public wxGridOperations
@@ -779,6 +791,9 @@ public:
         { return grid->GetGridColLabelWindow(); }
     virtual int GetHeaderWindowSize(wxGrid *grid) const wxOVERRIDE
         { return grid->GetColLabelSize(); }
+
+    virtual wxGridWindow *GetFrozenGrid(wxGrid* grid) const wxOVERRIDE
+        { return (wxGridWindow*)grid->GetFrozenColGridWindow(); }
 };
 
 // This class abstracts the difference between operations going forward

@@ -1061,10 +1061,10 @@ public:
     }
 
     bool FreezeToSelection();
-    bool FreezeTo(unsigned row, unsigned col);
+    bool FreezeTo(int row, int col);
     
     void DrawGridCellArea( wxDC& dc , const wxGridCellCoordsArray& cells );
-    void DrawGridSpace( wxDC& dc );
+    void DrawGridSpace( wxDC& dc, wxGridWindow *gridWindow );
     void DrawCellBorder( wxDC& dc, const wxGridCellCoords& );
     void DrawAllGridLines();
     void DrawAllGridWindowLines( wxDC& dc, const wxRegion & reg , wxGridWindow *gridWindow);
@@ -2330,14 +2330,27 @@ private:
                         bool isFirstDrag);
 
     // process row/column resizing drag event
-    void DoGridLineDrag(wxMouseEvent& event, const wxGridOperations& oper);
+    void DoGridLineDrag(int pos, 
+                        const wxGridOperations& oper, 
+                        wxGridWindow* gridWindow);
 
     // process mouse drag event in the grid window, return false if starting
     // dragging was vetoed by the user-defined wxEVT_GRID_CELL_BEGIN_DRAG
     // handler
     bool DoGridDragEvent(wxMouseEvent& event,
                          const wxGridCellCoords& coords,
-                         bool isFirstDrag);
+                         bool isFirstDrag,
+                         wxGridWindow* gridWindow);
+
+    void DrawGridDragLine(wxPoint position,
+                          const wxGridOperations& oper,
+                          wxGridWindow* gridWindow);
+
+    // return the current grid windows involved in the drag process
+    void GetDragGridWindows(int pos,
+                            const wxGridOperations& oper,
+                            wxGridWindow*& firstGridWindow,
+                            wxGridWindow*& secondGridWindow);
 
     // process different clicks on grid cells
     void DoGridCellLeftDown(wxMouseEvent& event,
@@ -2346,7 +2359,9 @@ private:
     void DoGridCellLeftDClick(wxMouseEvent& event,
                              const wxGridCellCoords& coords,
                              const wxPoint& pos);
-    void DoGridCellLeftUp(wxMouseEvent& event, const wxGridCellCoords& coords);
+    void DoGridCellLeftUp(wxMouseEvent& event,
+                          const wxGridCellCoords& coords,
+                          wxGridWindow* gridWindow);
 
     // process movement (but not dragging) event in the grid cell area
     void DoGridMouseMoveEvent(wxMouseEvent& event,
@@ -2366,13 +2381,12 @@ private:
 
     void DoColHeaderClick(int col);
 
-    void DoStartResizeCol(int col);
-    void DoUpdateResizeCol(int x);
-    void DoUpdateResizeColWidth(int w);
+    void DoStartResizeCol(int col, bool isFrozen);
+    void DoUpdateResizeColWidth(int w, bool isFrozen);
     void DoStartMoveCol(int col);
 
-    void DoEndDragResizeRow(const wxMouseEvent& event);
-    void DoEndDragResizeCol(const wxMouseEvent& event);
+    void DoEndDragResizeRow(const wxMouseEvent& event, wxGridWindow *gridWindow);
+    void DoEndDragResizeCol(const wxMouseEvent& event, wxGridWindow *gridWindow);
     void DoEndMoveCol(int pos);
 
     // process a TAB keypress
@@ -2380,7 +2394,7 @@ private:
 
     // common implementations of methods defined for both rows and columns
     void DeselectLine(int line, const wxGridOperations& oper);
-    bool DoEndDragResizeLine(const wxGridOperations& oper);
+    bool DoEndDragResizeLine(const wxGridOperations& oper, wxGridWindow *gridWindow);
     int PosToLinePos(int pos, bool clipToMinMax,
                      const wxGridOperations& oper,
                      wxGridWindow *gridWindow) const;

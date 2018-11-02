@@ -58,21 +58,23 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+    virtual void DoSetColumnsOrder(const wxArrayInt& order) wxOVERRIDE;
+    virtual void DoUpdate(unsigned int idx) wxOVERRIDE;
 
 private:
     // implement base class pure virtuals
     virtual void DoSetCount(unsigned int count) wxOVERRIDE;
     virtual unsigned int DoGetCount() const wxOVERRIDE;
-    virtual void DoUpdate(unsigned int idx) wxOVERRIDE;
 
     virtual void DoScrollHorz(int dx) wxOVERRIDE;
 
-    virtual void DoSetColumnsOrder(const wxArrayInt& order) wxOVERRIDE;
     virtual wxArrayInt DoGetColumnsOrder() const wxOVERRIDE;
 
     // override MSW-specific methods needed for new control
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
+
+    virtual int GetColumnIdOffset() const { return 0; }
 
     // common part of all ctors
     void Init();

@@ -62,6 +62,8 @@ private:
 
     virtual wxArrayInt DoGetColumnsOrder() const wxOVERRIDE;
 
+    virtual int GetColumnIdOffset() const { return 0; }
+
     // common part of all ctors
     void Init();
 
