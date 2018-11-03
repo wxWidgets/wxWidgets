@@ -205,7 +205,7 @@ void wxWebRequest::ProcessStateEvent(State state, const wxString& failMsg)
 
     wxWebRequestEvent evt(wxEVT_WEBREQUEST_STATE, GetId(), state,
         GetResponse(), failMsg);
-    if ( state == State_Completed && m_storage == Storage::Storage_File )
+    if ( state == State_Completed && m_storage == Storage_File )
     {
         responseFileName = GetResponse()->GetFileName();
         evt.SetResponseFileName(responseFileName);
@@ -214,7 +214,7 @@ void wxWebRequest::ProcessStateEvent(State state, const wxString& failMsg)
     ProcessEvent(evt);
 
     // Remove temporary file if it still exists
-    if ( state == State_Completed && m_storage == Storage::Storage_File &&
+    if ( state == State_Completed && m_storage == Storage_File &&
         wxFileExists(responseFileName) )
         wxRemoveFile(responseFileName);
 
