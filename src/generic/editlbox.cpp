@@ -123,45 +123,36 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
     wxSizer *subsizer = new wxBoxSizer(wxHORIZONTAL);
     subsizer->Add(new wxStaticText(subp, wxID_ANY, label), 1, wxALIGN_CENTRE_VERTICAL | wxLEFT, 4);
 
-#ifdef __WXMSW__
-    #define BTN_BORDER 4
-    // FIXME - why is this needed? There's some reason why sunken border is
-    //         ignored by sizers in wxMSW but not in wxGTK that I can't
-    //         figure out...
-#else
-    #define BTN_BORDER 0
-#endif
-
     if ( m_style & wxEL_ALLOW_EDIT )
     {
         m_bEdit = new wxBitmapButton(subp, wxID_ELB_EDIT,
                                      wxArtProvider::GetBitmap(wxART_EDIT, wxART_BUTTON));
-        subsizer->Add(m_bEdit, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+        subsizer->Add(m_bEdit, 0, wxALIGN_CENTRE_VERTICAL);
     }
 
     if ( m_style & wxEL_ALLOW_NEW )
     {
         m_bNew = new wxBitmapButton(subp, wxID_ELB_NEW,
                                     wxArtProvider::GetBitmap(wxART_NEW, wxART_BUTTON));
-        subsizer->Add(m_bNew, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+        subsizer->Add(m_bNew, 0, wxALIGN_CENTRE_VERTICAL);
     }
 
     if ( m_style & wxEL_ALLOW_DELETE )
     {
         m_bDel = new wxBitmapButton(subp, wxID_ELB_DELETE,
                                     wxArtProvider::GetBitmap(wxART_DELETE, wxART_BUTTON));
-        subsizer->Add(m_bDel, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+        subsizer->Add(m_bDel, 0, wxALIGN_CENTRE_VERTICAL);
     }
 
     if (!(m_style & wxEL_NO_REORDER))
     {
         m_bUp = new wxBitmapButton(subp, wxID_ELB_UP,
                                    wxArtProvider::GetBitmap(wxART_GO_UP, wxART_BUTTON));
-        subsizer->Add(m_bUp, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+        subsizer->Add(m_bUp, 0, wxALIGN_CENTRE_VERTICAL);
 
         m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN,
                                      wxArtProvider::GetBitmap(wxART_GO_DOWN, wxART_BUTTON));
-        subsizer->Add(m_bDown, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+        subsizer->Add(m_bDown, 0, wxALIGN_CENTRE_VERTICAL);
     }
 
 #if wxUSE_TOOLTIPS
