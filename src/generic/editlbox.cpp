@@ -131,6 +131,7 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
     {
         m_bEdit = new wxBitmapButton(subp, wxID_ELB_EDIT,
                                      wxArtProvider::GetBitmap(wxART_EDIT, wxART_BUTTON));
+        m_bEdit->SetToolTip(_("Edit item"));
         subsizer->Add(m_bEdit, centered);
     }
 
@@ -138,6 +139,7 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
     {
         m_bNew = new wxBitmapButton(subp, wxID_ELB_NEW,
                                     wxArtProvider::GetBitmap(wxART_NEW, wxART_BUTTON));
+        m_bNew->SetToolTip(_("New item"));
         subsizer->Add(m_bNew, centered);
     }
 
@@ -145,6 +147,7 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
     {
         m_bDel = new wxBitmapButton(subp, wxID_ELB_DELETE,
                                     wxArtProvider::GetBitmap(wxART_DELETE, wxART_BUTTON));
+        m_bDel->SetToolTip(_("Delete item"));
         subsizer->Add(m_bDel, centered);
     }
 
@@ -152,20 +155,14 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
     {
         m_bUp = new wxBitmapButton(subp, wxID_ELB_UP,
                                    wxArtProvider::GetBitmap(wxART_GO_UP, wxART_BUTTON));
+        m_bUp->SetToolTip(_("Move up"));
         subsizer->Add(m_bUp, centered);
 
         m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN,
                                      wxArtProvider::GetBitmap(wxART_GO_DOWN, wxART_BUTTON));
+        m_bDown->SetToolTip(_("Move down"));
         subsizer->Add(m_bDown, centered);
     }
-
-#if wxUSE_TOOLTIPS
-    if ( m_bEdit ) m_bEdit->SetToolTip(_("Edit item"));
-    if ( m_bNew ) m_bNew->SetToolTip(_("New item"));
-    if ( m_bDel ) m_bDel->SetToolTip(_("Delete item"));
-    if ( m_bUp ) m_bUp->SetToolTip(_("Move up"));
-    if ( m_bDown ) m_bDown->SetToolTip(_("Move down"));
-#endif
 
     subp->SetSizer(subsizer);
     subsizer->Fit(subp);
