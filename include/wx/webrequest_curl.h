@@ -12,24 +12,135 @@
 
 #if wxUSE_WEBREQUEST_CURL
 
-class WXDLLIMPEXP_NET wxWebSessionCURL: public wxWebSession
+#include "wx/thread.h"
+
+#include "curl/curl.h"
+
+class wxWebResponseCURL;
+class wxWebRequestCURL;
+
+class WXDLLIMPEXP_NET wxWebAuthChallengeCURL : public wxWebAuthChallenge
 {
 public:
-	wxWebSessionCURL();
+    explicit wxWebAuthChallengeCURL(Source source, wxWebRequestCURL& request);
 
-	~wxWebSessionCURL();
+    bool Init();
 
-	wxWebRequest* CreateRequest(const wxString& url, int id = wxID_ANY) wxOVERRIDE;
+    void SetCredentials(const wxString& user, const wxString& password) wxOVERRIDE;
 
 private:
-	wxDECLARE_NO_COPY_CLASS(wxWebSessionCURL);
+    wxWebRequestCURL& m_request;
+
+    wxDECLARE_NO_COPY_CLASS(wxWebAuthChallengeCURL);
+};
+
+class WXDLLIMPEXP_NET wxWebRequestCURL: public wxWebRequest
+{
+public:
+    wxWebRequestCURL(wxWebSession& session, int id, const wxString& url);
+
+    ~wxWebRequestCURL();
+
+    void Start() wxOVERRIDE;
+
+    void Cancel() wxOVERRIDE;
+
+    wxWebResponse* GetResponse() const wxOVERRIDE;
+
+    wxWebAuthChallenge* GetAuthChallenge() const wxOVERRIDE
+    { return m_authChallenge.get(); }
+
+    wxFileOffset GetBytesSent() const wxOVERRIDE;
+
+    wxFileOffset GetBytesExpectedToSend() const wxOVERRIDE;
+
+    CURL* GetHandle() const { return m_handle; }
+
+    bool StartRequest();
+
+    void HandleCompletion();
+
+    wxString GetError() const;
+
+    size_t ReadData(char* buffer, size_t size);
+
+private:
+    CURL* m_handle;
+    char m_errorBuffer[CURL_ERROR_SIZE];
+    struct curl_slist *m_headerList;
+    wxScopedPtr<wxWebResponseCURL> m_response;
+    wxScopedPtr<wxWebAuthChallengeCURL> m_authChallenge;
+
+    void DestroyHeaderList();
+
+    wxDECLARE_NO_COPY_CLASS(wxWebRequestCURL);
+};
+
+class WXDLLIMPEXP_NET wxWebResponseCURL : public wxWebResponse
+{
+public:
+    wxWebResponseCURL(wxWebRequest& request);
+
+    wxInt64 GetContentLength() const wxOVERRIDE;
+
+    wxString GetURL() const wxOVERRIDE;
+
+    wxString GetHeader(const wxString& name) const wxOVERRIDE;
+
+    int GetStatus() const wxOVERRIDE;
+
+    wxString GetStatusText() const wxOVERRIDE { return m_statusText; }
+
+    size_t WriteData(void *buffer, size_t size);
+
+    size_t AddHeaderData(const char* buffer, size_t size);
+
+private:
+    wxWebRequestHeaderMap m_headers;
+    wxString m_statusText;
+
+    CURL* GetHandle() const
+    { return static_cast<wxWebRequestCURL&>(m_request).GetHandle(); }
+
+    wxDECLARE_NO_COPY_CLASS(wxWebResponseCURL);
+};
+
+class WXDLLIMPEXP_NET wxWebSessionCURL: public wxWebSession, private wxThreadHelper
+{
+public:
+    wxWebSessionCURL();
+
+    ~wxWebSessionCURL();
+
+    wxWebRequest* CreateRequest(const wxString& url, int id = wxID_ANY) wxOVERRIDE;
+
+    bool StartRequest(wxWebRequestCURL& request);
+
+protected:
+    wxThread::ExitCode Entry() wxOVERRIDE;
+
+private:
+    CURLM* m_handle;
+    wxCondition m_condition;
+    wxMutex m_mutex;
+    bool m_shuttingDown;
+
+    void Initialize();
+
+    static int ms_activeSessions;
+
+    static void InitializeCURL();
+
+    static void CleanupCURL();
+
+    wxDECLARE_NO_COPY_CLASS(wxWebSessionCURL);
 };
 
 class WXDLLIMPEXP_NET wxWebSessionFactoryCURL: public wxWebSessionFactory
 {
 public:
-	wxWebSession* Create() wxOVERRIDE
-	{ return new wxWebSessionCURL(); }
+    wxWebSession* Create() wxOVERRIDE
+    { return new wxWebSessionCURL(); }
 };
 
 #endif // wxUSE_WEBREQUEST_CURL

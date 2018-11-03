@@ -699,6 +699,7 @@ WX_ARG_FEATURE(ipv6,          [  --enable-ipv6           enable IPv6 support in 
 WX_ARG_FEATURE(ole,           [  --enable-ole            use OLE classes (Win32 only)], wxUSE_OLE)
 WX_ARG_FEATURE(dataobj,       [  --enable-dataobj        use data object classes], wxUSE_DATAOBJ)
 WX_ARG_FEATURE(webrequest,    [  --enable-webrequest     use wxWebRequest], wxUSE_WEBREQUEST)
+WX_ARG_FEATURE(webrequestcurl, [  --enable-webrequest-curl use libcurl with wxWebRequest], wxUSE_WEBREQUEST_LIBCURL)
 
 WX_ARG_FEATURE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
 
@@ -2736,6 +2737,26 @@ if test "$wxUSE_LIBMSPACK" != "no"; then
     AC_DEFINE(wxUSE_LIBMSPACK)
 fi
 
+dnl ------------------------------------------------------------------------
+dnl Check for libcurl
+dnl ------------------------------------------------------------------------
+
+if test "$wxUSE_WEBREQUEST_CURL" != "no"; then
+    AC_CHECK_HEADER(curl/curl.h,,,[])
+
+    if test "$ac_cv_header_curl_curl_h" = "yes"; then
+        AC_CHECK_LIB(curl, curl_easy_init,
+            [
+                CURL_LINK="-lcurl"
+                LIBS="$CURL_LINK $LIBS"
+                AC_DEFINE(wxUSE_WEBREQUEST_CURL)
+            ])
+    fi
+
+    if test -z "$CURL_LINK"; then
+        wxUSE_WEBREQUEST_CURL=no
+    fi
+fi
 
 dnl ----------------------------------------------------------------
 dnl search for toolkit (widget sets)

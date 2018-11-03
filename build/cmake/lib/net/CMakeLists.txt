@@ -35,7 +35,7 @@ if (wxUSE_WEBREQUEST_CURL)
     find_package(CURL REQUIRED)
 
     target_include_directories(net PRIVATE ${CURL_INCLUDE_DIRS})
-    wx_lib_link_libraries(net PRIVATE CURL::libcurl)
+    wx_lib_link_libraries(net PRIVATE ${CURL_LIBRARIES})
 endif()
 
 wx_finalize_lib(net)

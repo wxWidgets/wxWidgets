@@ -1138,6 +1138,7 @@ enable_ipv6
 enable_ole
 enable_dataobj
 enable_webrequest
+enable_webrequestcurl
 enable_ipc
 enable_baseevtloop
 enable_epollloop
@@ -2081,6 +2082,7 @@ Optional Features:
   --enable-ole            use OLE classes (Win32 only)
   --enable-dataobj        use data object classes
   --enable-webrequest     use wxWebRequest
+  --enable-webrequest-curl use libcurl with wxWebRequest
   --enable-ipc            use interprocess communication (wxSocket etc.)
   --enable-baseevtloop    use event loop in console programs too
   --enable-epollloop      use wxEpollDispatcher class (Linux only)
@@ -6548,6 +6550,35 @@ fi
 
 
           eval "$wx_cv_use_webrequest"
+
+
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-webrequestcurl was given.
+if test "${enable_webrequestcurl+set}" = set; then :
+  enableval=$enable_webrequestcurl;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_webrequestcurl='wxUSE_WEBREQUEST_LIBCURL=yes'
+                          else
+                            wx_cv_use_webrequestcurl='wxUSE_WEBREQUEST_LIBCURL=no'
+                          fi
+
+else
+
+                          wx_cv_use_webrequestcurl='wxUSE_WEBREQUEST_LIBCURL=${'DEFAULT_wxUSE_WEBREQUEST_LIBCURL":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_webrequestcurl"
 
 
 
@@ -23763,6 +23794,67 @@ if test "$wxUSE_LIBMSPACK" != "no"; then
 
 fi
 
+
+if test "$wxUSE_WEBREQUEST_CURL" != "no"; then
+    ac_fn_c_check_header_mongrel "$LINENO" "curl/curl.h" "ac_cv_header_curl_curl_h" "$ac_includes_default"
+if test "x$ac_cv_header_curl_curl_h" = xyes; then :
+
+fi
+
+
+
+    if test "$ac_cv_header_curl_curl_h" = "yes"; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for curl_easy_init in -lcurl" >&5
+$as_echo_n "checking for curl_easy_init in -lcurl... " >&6; }
+if ${ac_cv_lib_curl_curl_easy_init+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lcurl  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char curl_easy_init ();
+int
+main ()
+{
+return curl_easy_init ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_curl_curl_easy_init=yes
+else
+  ac_cv_lib_curl_curl_easy_init=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_curl_curl_easy_init" >&5
+$as_echo "$ac_cv_lib_curl_curl_easy_init" >&6; }
+if test "x$ac_cv_lib_curl_curl_easy_init" = xyes; then :
+
+                CURL_LINK="-lcurl"
+                LIBS="$CURL_LINK $LIBS"
+                $as_echo "#define wxUSE_WEBREQUEST_CURL 1" >>confdefs.h
+
+
+fi
+
+    fi
+
+    if test -z "$CURL_LINK"; then
+        wxUSE_WEBREQUEST_CURL=no
+    fi
+fi
 
 
 TOOLKIT=
