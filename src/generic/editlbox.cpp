@@ -121,38 +121,42 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
     wxPanel *subp = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                 wxSUNKEN_BORDER | wxTAB_TRAVERSAL);
     wxSizer *subsizer = new wxBoxSizer(wxHORIZONTAL);
-    subsizer->Add(new wxStaticText(subp, wxID_ANY, label), 1, wxALIGN_CENTRE_VERTICAL | wxLEFT, 4);
+
+    subsizer->Add(new wxStaticText(subp, wxID_ANY, label),
+                  wxSizerFlags(1).Center().Border(wxLEFT));
+
+    const wxSizerFlags centered = wxSizerFlags().Center();
 
     if ( m_style & wxEL_ALLOW_EDIT )
     {
         m_bEdit = new wxBitmapButton(subp, wxID_ELB_EDIT,
                                      wxArtProvider::GetBitmap(wxART_EDIT, wxART_BUTTON));
-        subsizer->Add(m_bEdit, 0, wxALIGN_CENTRE_VERTICAL);
+        subsizer->Add(m_bEdit, centered);
     }
 
     if ( m_style & wxEL_ALLOW_NEW )
     {
         m_bNew = new wxBitmapButton(subp, wxID_ELB_NEW,
                                     wxArtProvider::GetBitmap(wxART_NEW, wxART_BUTTON));
-        subsizer->Add(m_bNew, 0, wxALIGN_CENTRE_VERTICAL);
+        subsizer->Add(m_bNew, centered);
     }
 
     if ( m_style & wxEL_ALLOW_DELETE )
     {
         m_bDel = new wxBitmapButton(subp, wxID_ELB_DELETE,
                                     wxArtProvider::GetBitmap(wxART_DELETE, wxART_BUTTON));
-        subsizer->Add(m_bDel, 0, wxALIGN_CENTRE_VERTICAL);
+        subsizer->Add(m_bDel, centered);
     }
 
     if (!(m_style & wxEL_NO_REORDER))
     {
         m_bUp = new wxBitmapButton(subp, wxID_ELB_UP,
                                    wxArtProvider::GetBitmap(wxART_GO_UP, wxART_BUTTON));
-        subsizer->Add(m_bUp, 0, wxALIGN_CENTRE_VERTICAL);
+        subsizer->Add(m_bUp, centered);
 
         m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN,
                                      wxArtProvider::GetBitmap(wxART_GO_DOWN, wxART_BUTTON));
-        subsizer->Add(m_bDown, 0, wxALIGN_CENTRE_VERTICAL);
+        subsizer->Add(m_bDown, centered);
     }
 
 #if wxUSE_TOOLTIPS
@@ -166,7 +170,7 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
     subp->SetSizer(subsizer);
     subsizer->Fit(subp);
 
-    sizer->Add(subp, 0, wxEXPAND);
+    sizer->Add(subp, wxSizerFlags().Expand());
 
     long st = wxLC_REPORT | wxLC_NO_HEADER | wxLC_SINGLE_SEL | wxSUNKEN_BORDER;
     if ( style & wxEL_ALLOW_EDIT )
@@ -176,7 +180,7 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
     wxArrayString empty_ar;
     SetStrings(empty_ar);
 
-    sizer->Add(m_listCtrl, 1, wxEXPAND);
+    sizer->Add(m_listCtrl, wxSizerFlags(1).Expand());
 
     SetSizer(sizer);
     Layout();
