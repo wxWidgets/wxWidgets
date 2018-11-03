@@ -234,6 +234,8 @@ public:
 
     static wxWebSession& GetDefault();
 
+    static void DestroyDefault();
+
     static wxWebSession* New(const wxString& backend = wxWebSessionBackendDefault);
 
     static void RegisterFactory(const wxString& backend, wxSharedPtr<wxWebSessionFactory> factory);

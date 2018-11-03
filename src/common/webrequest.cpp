@@ -18,6 +18,7 @@
 
 #include "wx/webrequest.h"
 #include "wx/mstream.h"
+#include "wx/module.h"
 #include "wx/uri.h"
 #include "wx/filefn.h"
 #include "wx/filename.h"
@@ -403,6 +404,11 @@ wxWebSession& wxWebSession::GetDefault()
     return *ms_defaultSession;
 }
 
+void wxWebSession::DestroyDefault()
+{
+    ms_defaultSession.reset();
+}
+
 // static
 wxWebSession* wxWebSession::New(const wxString& backend)
 {
@@ -448,5 +454,32 @@ bool wxWebSession::IsBackendAvailable(const wxString& backend)
     wxStringWebSessionFactoryMap::iterator factory = ms_factoryMap.find(backend);
     return factory != ms_factoryMap.end();
 }
+
+// ----------------------------------------------------------------------------
+// Module ensuring all global/singleton objects are destroyed on shutdown.
+// ----------------------------------------------------------------------------
+
+class WebRequestModule : public wxModule
+{
+public:
+    WebRequestModule()
+    {
+    }
+
+    virtual bool OnInit() wxOVERRIDE
+    {
+        return true;
+    }
+
+    virtual void OnExit() wxOVERRIDE
+    {
+        wxWebSession::DestroyDefault();
+    }
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(WebRequestModule);
+};
+
+wxIMPLEMENT_DYNAMIC_CLASS(WebRequestModule, wxModule);
 
 #endif // wxUSE_WEBREQUEST
