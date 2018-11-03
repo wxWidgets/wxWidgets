@@ -648,7 +648,9 @@ bool wxNativeFontInfo::FromString(const wxString& s)
         case 1:
             {
                 double d;
-                if ( !tokenizer.GetNextToken().ToCDouble(&d) )
+                token = tokenizer.GetNextToken();
+                // try both C and native formatting for backward compatibility
+                if ( !token.ToCDouble(&d) && !token.ToDouble(&d) )
                     return false;
                 pointSize = static_cast<float>(d);
                 if ( static_cast<double>(pointSize) != d )
@@ -739,9 +741,9 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
 
-    s.Printf(wxS("%d;%f;%ld;%ld;%ld;%ld;%ld;%d;%d;%d;%d;%d;%d;%d;%d;%s"),
+    s.Printf(wxS("%d;%s;%ld;%ld;%ld;%ld;%ld;%d;%d;%d;%d;%d;%d;%d;%d;%s"),
              1, // version
-             pointSize,
+             wxString::FromCDouble(pointSize),
              lf.lfHeight,
              lf.lfWidth,
              lf.lfEscapement,

@@ -757,7 +757,8 @@ bool wxNativeFontInfo::FromString(const wxString& s)
         return false;
 
     token = tokenizer.GetNextToken();
-    if ( !token.ToCDouble(&d) )
+    // try both C and native formatting for backward compatibility
+    if ( !token.ToCDouble(&d) && !token.ToDouble(&d) )
         return false;
     pointSize = static_cast<float>(d);
     if ( static_cast<double>(pointSize) != d )
@@ -812,9 +813,9 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
 
-    s.Printf(wxT("%d;%f;%d;%d;%d;%d;%d;%s;%d"),
+    s.Printf(wxT("%d;%s;%d;%d;%d;%d;%d;%s;%d"),
              1,                                 // version
-             GetFractionalPointSize(),
+             wxString::FromCDouble(GetFractionalPointSize()),
              family,
              (int)style,
              weight,
