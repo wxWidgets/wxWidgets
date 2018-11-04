@@ -3860,41 +3860,49 @@ int wxDataViewMainWindow::RecalculateCount() const
 class ItemToRowJob : public DoJob
 {
 public:
+    // As with RowToTreeNodeJob above, we initialize m_current to -1 because
+    // the first node passed to our operator() is the root node which is not
+    // visible on screen and so we should return 0 for its first child node and
+    // not for the root itself.
     ItemToRowJob(const wxDataViewItem& item, wxVector<wxDataViewItem>::reverse_iterator iter)
-        : m_item(item), m_iter(iter), m_ret(-1)
+        : m_item(item), m_iter(iter), m_current(-1)
     {
     }
 
     // Maybe binary search will help to speed up this process
     virtual int operator() ( wxDataViewTreeNode * node) wxOVERRIDE
     {
-        m_ret ++;
         if( node->GetItem() == m_item )
         {
             return DoJob::DONE;
         }
 
+        // Is this node the next (grand)parent of the item we're looking for?
         if( node->GetItem() == *m_iter )
         {
+            // Search for the next (grand)parent now and skip this item itself.
             ++m_iter;
+            ++m_current;
             return DoJob::CONTINUE;
         }
         else
         {
-            m_ret += node->GetSubTreeCount();
+            // Skip this node and all its currently visible children.
+            m_current += node->GetSubTreeCount() + 1;
             return DoJob::SKIP_SUBTREE;
         }
 
     }
 
-    // the row number is begin from zero
     int GetResult() const
-        { return m_ret -1; }
+        { return m_current; }
 
 private:
     const wxDataViewItem m_item;
     wxVector<wxDataViewItem>::reverse_iterator m_iter;
-    int m_ret;
+
+    // The row corresponding to the last node seen in our operator().
+    int m_current;
 
 };
 
