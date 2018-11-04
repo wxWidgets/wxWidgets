@@ -3468,31 +3468,28 @@ int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
 class RowToTreeNodeJob: public DoJob
 {
 public:
-    RowToTreeNodeJob( unsigned int row_ , int current_, wxDataViewTreeNode * node )
+    RowToTreeNodeJob(unsigned int row, int current, wxDataViewTreeNode *parent)
+        : m_row(row), m_current(current), m_parent(parent), m_ret(NULL)
     {
-        this->row = row_;
-        this->current = current_;
-        ret = NULL;
-        parent = node;
     }
 
     virtual int operator() ( wxDataViewTreeNode * node ) wxOVERRIDE
     {
-        current ++;
-        if( current == static_cast<int>(row))
+        m_current ++;
+        if( m_current == static_cast<int>(m_row))
         {
-            ret = node;
+            m_ret = node;
             return DoJob::DONE;
         }
 
-        if( node->GetSubTreeCount() + current < static_cast<int>(row) )
+        if( node->GetSubTreeCount() + m_current < static_cast<int>(m_row) )
         {
-            current += node->GetSubTreeCount();
+            m_current += node->GetSubTreeCount();
             return  DoJob::SKIP_SUBTREE;
         }
         else
         {
-            parent = node;
+            m_parent = node;
 
             // If the current node has only leaf children, we can find the
             // desired node directly. This can speed up finding the node
@@ -3500,8 +3497,8 @@ public:
             if ( node->HasChildren() &&
                  (int)node->GetChildNodes().size() == node->GetSubTreeCount() )
             {
-                const int index = static_cast<int>(row) - current - 1;
-                ret = node->GetChildNodes()[index];
+                const int index = static_cast<int>(m_row) - m_current - 1;
+                m_ret = node->GetChildNodes()[index];
                 return DoJob::DONE;
             }
 
@@ -3510,13 +3507,13 @@ public:
     }
 
     wxDataViewTreeNode * GetResult() const
-        { return ret; }
+        { return m_ret; }
 
 private:
-    unsigned int row;
-    int current;
-    wxDataViewTreeNode * ret;
-    wxDataViewTreeNode * parent;
+    unsigned int m_row;
+    int m_current;
+    wxDataViewTreeNode* m_parent;
+    wxDataViewTreeNode* m_ret;
 };
 
 wxDataViewTreeNode * wxDataViewMainWindow::GetTreeNodeByRow(unsigned int row) const
