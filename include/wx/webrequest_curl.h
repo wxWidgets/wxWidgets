@@ -70,6 +70,7 @@ private:
     struct curl_slist *m_headerList;
     wxScopedPtr<wxWebResponseCURL> m_response;
     wxScopedPtr<wxWebAuthChallengeCURL> m_authChallenge;
+    wxFileOffset m_bytesSent;
 
     void DestroyHeaderList();
 

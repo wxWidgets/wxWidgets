@@ -227,6 +227,8 @@ void wxWebRequestCURL::Start()
 
 bool wxWebRequestCURL::StartRequest()
 {
+    m_bytesSent = 0;
+
     if ( static_cast<wxWebSessionCURL&>(GetSession()).StartRequest(*this) )
     {
         SetState(State_Active);
@@ -271,7 +273,12 @@ wxString wxWebRequestCURL::GetError() const
 size_t wxWebRequestCURL::ReadData(char* buffer, size_t size)
 {
     if ( m_dataStream )
-        return m_dataStream->Read((void*)buffer, size).LastRead();
+    {
+        m_dataStream->Read((void*)buffer, size);
+        size_t readSize = m_dataStream->LastRead();
+        m_bytesSent += readSize;
+        return readSize;
+    }
     else
         return 0;
 }
@@ -292,14 +299,12 @@ wxWebResponse* wxWebRequestCURL::GetResponse() const
 
 wxFileOffset wxWebRequestCURL::GetBytesSent() const
 {
-    wxFAIL_MSG("not implemented");
-    return 0;
+    return m_bytesSent;
 }
 
 wxFileOffset wxWebRequestCURL::GetBytesExpectedToSend() const
 {
-    wxFAIL_MSG("not implemented");
-    return 0;
+    return m_dataSize;
 }
 
 //
