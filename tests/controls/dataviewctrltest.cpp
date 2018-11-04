@@ -198,4 +198,24 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     CHECK( !m_dvc->IsExpanded(m_child2) );
 }
 
+TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
+                 "wxDVC::GetItemRect",
+                 "[wxDataViewCtrl][item]")
+{
+#ifdef __WXGTK__
+    WARN("Disabled under GTK because GetItemRect() is not implemented");
+#else
+    const wxRect rect1 = m_dvc->GetItemRect(m_child1);
+    const wxRect rect2 = m_dvc->GetItemRect(m_child2);
+
+    CHECK( rect1.x == rect2.x );
+    CHECK( rect1.width == rect2.width );
+    CHECK( rect1.height == rect2.height );
+    CHECK( rect1.y < rect2.y );
+
+    const wxRect rectNotShown = m_dvc->GetItemRect(m_grandchild);
+    CHECK( rectNotShown == wxRect() );
+#endif
+}
+
 #endif //wxUSE_DATAVIEWCTRL
