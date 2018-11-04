@@ -3468,8 +3468,8 @@ int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
 class RowToTreeNodeJob: public DoJob
 {
 public:
-    RowToTreeNodeJob(int row, int current, wxDataViewTreeNode *parent)
-        : m_row(row), m_current(current), m_parent(parent), m_ret(NULL)
+    RowToTreeNodeJob(int row, int current)
+        : m_row(row), m_current(current), m_ret(NULL)
     {
     }
 
@@ -3489,8 +3489,6 @@ public:
         }
         else
         {
-            m_parent = node;
-
             // If the current node has only leaf children, we can find the
             // desired node directly. This can speed up finding the node
             // in some cases, and will have a very good effect for list views.
@@ -3512,7 +3510,6 @@ public:
 private:
     const int m_row;
     int m_current;
-    wxDataViewTreeNode* m_parent;
     wxDataViewTreeNode* m_ret;
 };
 
@@ -3523,7 +3520,7 @@ wxDataViewTreeNode * wxDataViewMainWindow::GetTreeNodeByRow(unsigned int row) co
     if ( row == (unsigned)-1 )
         return NULL;
 
-    RowToTreeNodeJob job( static_cast<int>(row) , -2, m_root );
+    RowToTreeNodeJob job( static_cast<int>(row) , -2 );
     Walker( m_root , job );
     return job.GetResult();
 }
