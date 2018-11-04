@@ -3892,7 +3892,7 @@ public:
         { return m_ret -1; }
 
 private:
-    wxDataViewItem m_item;
+    const wxDataViewItem m_item;
     wxVector<wxDataViewItem>::reverse_iterator m_iter;
     int m_ret;
 
