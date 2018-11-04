@@ -84,7 +84,7 @@ DataViewCtrlTestCase::DataViewCtrlTestCase(long style)
       m_child2 = m_dvc->AppendItem(m_root, "child2");
 
     m_dvc->SetSize(400, 200);
-    m_dvc->ExpandAncestors(m_root);
+    m_dvc->Expand(m_root);
     m_dvc->Refresh();
     m_dvc->Update();
 }
@@ -186,6 +186,16 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
                  "[wxDataViewCtrl][selection]")
 {
     TestSelectionFor0and1();
+}
+
+TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
+                 "wxDVC::IsExpanded",
+                 "[wxDataViewCtrl][expand]")
+{
+    CHECK( m_dvc->IsExpanded(m_root) );
+    CHECK( !m_dvc->IsExpanded(m_child1) );
+    CHECK( !m_dvc->IsExpanded(m_grandchild) );
+    CHECK( !m_dvc->IsExpanded(m_child2) );
 }
 
 #endif //wxUSE_DATAVIEWCTRL
