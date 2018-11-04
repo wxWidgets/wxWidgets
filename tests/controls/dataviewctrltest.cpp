@@ -208,6 +208,9 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     const wxRect rect1 = m_dvc->GetItemRect(m_child1);
     const wxRect rect2 = m_dvc->GetItemRect(m_child2);
 
+    CHECK( rect1 != wxRect() );
+    CHECK( rect2 != wxRect() );
+
     CHECK( rect1.x == rect2.x );
     CHECK( rect1.width == rect2.width );
     CHECK( rect1.height == rect2.height );
@@ -215,6 +218,30 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
 
     const wxRect rectNotShown = m_dvc->GetItemRect(m_grandchild);
     CHECK( rectNotShown == wxRect() );
+
+    // Append enough items to make the window scrollable.
+    for ( int i = 3; i < 100; ++i )
+        m_dvc->AppendItem(m_root, wxString::Format("child%d", i));
+
+    const wxDataViewItem last = m_dvc->AppendItem(m_root, "last");
+
+    // This should scroll the window to bring this item into view.
+    m_dvc->EnsureVisible(last);
+
+    // Check that this was indeed the case.
+    const wxDataViewItem top = m_dvc->GetTopItem();
+    CHECK( top != m_root );
+
+    // Verify that the coordinates are returned in physical coordinates of the
+    // window and not the logical coordinates affected by scrolling.
+    const wxRect rectScrolled = m_dvc->GetItemRect(top);
+    CHECK( rectScrolled.GetBottom() > 0 );
+    CHECK( rectScrolled.GetTop() <= m_dvc->GetClientSize().y );
+
+    // Also check that the root item is not currently visible (because it's
+    // scrolled off).
+    const wxRect rectRoot = m_dvc->GetItemRect(m_root);
+    CHECK( rectRoot == wxRect() );
 #endif
 }
 

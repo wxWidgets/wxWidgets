@@ -1448,8 +1448,9 @@ public:
     /**
         Returns item rectangle.
 
-        If item is not currently visible because its parent is collapsed,
-        return an empty rectangle.
+        If item is not currently visible, either because its parent is
+        collapsed or it is outside of the visible part of the control due to
+        the current vertical scrollbar position, return an empty rectangle.
 
         Coordinates of the rectangle are specified in wxDataViewCtrl client
         area coordinates.

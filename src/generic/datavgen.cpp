@@ -3839,6 +3839,14 @@ wxRect wxDataViewMainWindow::GetItemRect( const wxDataViewItem & item,
     GetOwner()->CalcScrolledPosition(  itemRect.x,  itemRect.y,
                                       &itemRect.x, &itemRect.y );
 
+    // Check if the rectangle is completely outside of the currently visible
+    // area and, if so, return an empty rectangle to indicate that the item is
+    // not visible.
+    if ( itemRect.GetBottom() < 0 || itemRect.GetTop() > GetClientSize().y )
+    {
+        return wxRect();
+    }
+
     return itemRect;
 }
 
@@ -5853,8 +5861,11 @@ wxRect wxDataViewCtrl::GetItemRect( const wxDataViewItem & item,
     // Convert position from the main window coordinates to the control coordinates.
     // (They can be different due to the presence of the header.).
     wxRect r = m_clientArea->GetItemRect(item, column);
-    const wxPoint ctrlPos = ScreenToClient(m_clientArea->ClientToScreen(r.GetPosition()));
-    r.SetPosition(ctrlPos);
+    if ( r.width || r.height )
+    {
+        const wxPoint ctrlPos = ScreenToClient(m_clientArea->ClientToScreen(r.GetPosition()));
+        r.SetPosition(ctrlPos);
+    }
     return r;
 }
 
