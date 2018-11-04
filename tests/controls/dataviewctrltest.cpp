@@ -83,7 +83,7 @@ DataViewCtrlTestCase::DataViewCtrlTestCase(long style)
         m_grandchild = m_dvc->AppendItem(m_child1, "grandchild");
       m_child2 = m_dvc->AppendItem(m_root, "child2");
 
-    m_dvc->SetSize(400, 200);
+    m_dvc->Layout();
     m_dvc->Expand(m_root);
     m_dvc->Refresh();
     m_dvc->Update();
