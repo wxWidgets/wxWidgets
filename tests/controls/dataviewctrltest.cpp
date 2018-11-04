@@ -22,6 +22,7 @@
 #include "wx/dataview.h"
 
 #include "testableframe.h"
+#include "asserthelper.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -203,8 +204,10 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
                  "[wxDataViewCtrl][item]")
 {
 #ifdef __WXGTK__
-    WARN("Disabled under GTK because GetItemRect() is not implemented");
-#else
+    // We need to let the native control have some events to lay itself out.
+    wxYield();
+#endif // __WXGTK__
+
     const wxRect rect1 = m_dvc->GetItemRect(m_child1);
     const wxRect rect2 = m_dvc->GetItemRect(m_child2);
 
@@ -214,7 +217,11 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     CHECK( rect1.x == rect2.x );
     CHECK( rect1.width == rect2.width );
     CHECK( rect1.height == rect2.height );
-    CHECK( rect1.y < rect2.y );
+
+    {
+        INFO("First child: " << rect1 << ", second one: " << rect2);
+        CHECK( rect1.y < rect2.y );
+    }
 
     const wxRect rectNotShown = m_dvc->GetItemRect(m_grandchild);
     CHECK( rectNotShown == wxRect() );
@@ -227,6 +234,11 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
 
     // This should scroll the window to bring this item into view.
     m_dvc->EnsureVisible(last);
+
+#ifdef __WXGTK__
+    // And again to let it scroll the correct items into view.
+    wxYield();
+#endif
 
     // Check that this was indeed the case.
     const wxDataViewItem top = m_dvc->GetTopItem();
@@ -242,7 +254,6 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     // scrolled off).
     const wxRect rectRoot = m_dvc->GetItemRect(m_root);
     CHECK( rectRoot == wxRect() );
-#endif
 }
 
 #endif //wxUSE_DATAVIEWCTRL
