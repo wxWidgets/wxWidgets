@@ -142,10 +142,6 @@ if(DEFINED wxUSE_OLE AND wxUSE_OLE)
     set(wxUSE_OLE_AUTOMATION ON)
 endif()
 
-if(DEFINED wxUSE_GRAPHICS_DIRECT2D AND NOT wxUSE_GRAPHICS_CONTEXT)
-    set(wxUSE_GRAPHICS_DIRECT2D OFF)
-endif()
-
 if(wxUSE_OPENGL)
     set(wxUSE_GLCANVAS ON)
 endif()
@@ -173,6 +169,21 @@ if(wxUSE_GUI)
         # this one should probably be made separately configurable
         set(wxUSE_ENH_METAFILE ON)
     endif()
+
+    # Direct2D check
+    if(WIN32 AND wxUSE_GRAPHICS_DIRECT2D)
+        check_include_file(d2d1.h HAVE_D2D1_H)
+        if (NOT HAVE_D2D1_H)
+            wx_option_force_value(wxUSE_GRAPHICS_DIRECT2D OFF)
+        endif()
+    endif()
+     if(MSVC) # match setup.h
+        if(MSVC_VERSION LESS 1600)
+            wx_option_force_value(wxUSE_GRAPHICS_DIRECT2D OFF)
+        else()
+            wx_option_force_value(wxUSE_GRAPHICS_DIRECT2D ${wxUSE_GRAPHICS_CONTEXT})
+        endif()
+     endif()
 
     # WXQT checks
     if(WXQT)
