@@ -216,7 +216,17 @@ if(wxUSE_GUI)
     endif()
 
     if(wxUSE_MEDIACTRL AND UNIX AND NOT APPLE AND NOT WIN32)
-        find_package(GStreamer)
+        find_package(GStreamer 1.0 COMPONENTS video)
+        if(NOT GSTREAMER_FOUND)
+            find_package(GStreamer 0.10 COMPONENTS interfaces)
+        endif()
+
+        set(wxUSE_GSTREAMER ${GSTREAMER_FOUND})
+        set(wxUSE_GSTREAMER_PLAYER OFF)
+        if(GSTREAMER_PLAYER_INCLUDE_DIRS)
+            set(wxUSE_GSTREAMER_PLAYER ON)
+        endif()
+
         if(NOT GSTREAMER_FOUND)
             message(WARNING "GStreamer not found, wxMediaCtrl won't be available")
             wx_option_force_value(wxUSE_MEDIACTRL OFF)
