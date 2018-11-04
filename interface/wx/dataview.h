@@ -1462,9 +1462,7 @@ public:
             intersection of the item with the specified column. If @NULL, the
             rectangle spans all the columns.
 
-        @note This method is currently not implemented at all in wxGTK and only
-              implemented for non-@NULL @a col argument in wxOSX. It is fully
-              implemented in the generic version of the control.
+        @note This method is currently not implemented in wxGTK.
     */
     virtual wxRect GetItemRect(const wxDataViewItem& item,
                                const wxDataViewColumn* col = NULL) const;

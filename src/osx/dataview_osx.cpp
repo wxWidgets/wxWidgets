@@ -547,10 +547,24 @@ wxDataViewColumn *wxDataViewCtrl::GetCurrentColumn() const
 
 wxRect wxDataViewCtrl::GetItemRect(wxDataViewItem const& item, wxDataViewColumn const* columnPtr) const
 {
-  if (item.IsOk() && (columnPtr != NULL))
-    return GetDataViewPeer()->GetRectangle(item,columnPtr);
-  else
-    return wxRect();
+  if ( !item.IsOk() )
+      return wxRect();
+
+  wxRect rect = GetDataViewPeer()->GetRectangle(item, columnPtr ? columnPtr : GetColumn(0));
+
+  if ( !columnPtr )
+  {
+      const unsigned columnCount = GetColumnCount();
+      if ( columnCount != 1 )
+      {
+          // Extend the rectangle to the rightmost part of the last column.
+          const wxRect rectLastCol = GetDataViewPeer()->GetRectangle(item, GetColumn(columnCount - 1));
+          rect.SetRight(rectLastCol.GetRight());
+      }
+      //else: We already have the rectangle we need.
+  }
+
+  return rect;
 }
 
 int wxDataViewCtrl::GetSelectedItemsCount() const
