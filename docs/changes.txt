@@ -141,6 +141,7 @@ wxGTK:
 - Fix the build with glib < 2.32 (e.g. CentOS 6).
 - Fix field widths in wxStatusBar showing a size grip.
 - Fill column value in wxEVT_DATAVIEW_ITEM_ACTIVATED events.
+- Implement wxDataViewCtrl::GetItemRect() (MrMeesek).
 
 wxMSW:
 
