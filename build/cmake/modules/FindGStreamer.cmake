@@ -61,8 +61,7 @@ endif()
 #   _header is the component's header, relative to the gstreamer-${GST_LIB_VERSION} directory (eg. "gst/gst.h").
 #   _library is the component's library name (eg. "gstreamer" or "gstvideo")
 macro(FIND_GSTREAMER_COMPONENT _component_prefix _pkgconfig_name _header _library)
-    # FIXME: The QUIET keyword can be used once we require CMake 2.8.2.
-    pkg_check_modules(PC_${_component_prefix} ${_pkgconfig_name}-${GST_LIB_VERSION})
+    pkg_check_modules(PC_${_component_prefix} QUIET ${_pkgconfig_name}-${GST_LIB_VERSION})
 
     find_path(${_component_prefix}_INCLUDE_DIRS
         NAMES ${_header}
@@ -74,6 +73,8 @@ macro(FIND_GSTREAMER_COMPONENT _component_prefix _pkgconfig_name _header _librar
         NAMES ${_library}-${GST_LIB_VERSION}
         HINTS ${PC_${_component_prefix}_LIBRARY_DIRS} ${PC_${_component_prefix}_LIBDIR}
     )
+
+    mark_as_advanced(${_component_prefix}_INCLUDE_DIRS ${_component_prefix}_LIBRARIES)
 endmacro()
 
 # ------------------------
