@@ -3920,7 +3920,9 @@ int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item) const
         // the parent chain was created by adding the deepest parent first.
         // so if we want to start at the root node, we have to iterate backwards through the vector
         ItemToRowJob job( item, parentChain.rbegin() );
-        Walker( m_root, job );
+        if ( !Walker( m_root, job ) )
+            return -1;
+
         return job.GetResult();
     }
 }
