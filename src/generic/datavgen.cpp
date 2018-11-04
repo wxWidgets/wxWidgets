@@ -3860,18 +3860,16 @@ int wxDataViewMainWindow::RecalculateCount() const
 class ItemToRowJob : public DoJob
 {
 public:
-    ItemToRowJob(const wxDataViewItem& item_, wxVector<wxDataViewItem>::reverse_iterator iter)
-        : m_iter(iter),
-        item(item_)
+    ItemToRowJob(const wxDataViewItem& item, wxVector<wxDataViewItem>::reverse_iterator iter)
+        : m_item(item), m_iter(iter), m_ret(-1)
     {
-        ret = -1;
     }
 
     // Maybe binary search will help to speed up this process
     virtual int operator() ( wxDataViewTreeNode * node) wxOVERRIDE
     {
-        ret ++;
-        if( node->GetItem() == item )
+        m_ret ++;
+        if( node->GetItem() == m_item )
         {
             return DoJob::DONE;
         }
@@ -3883,7 +3881,7 @@ public:
         }
         else
         {
-            ret += node->GetSubTreeCount();
+            m_ret += node->GetSubTreeCount();
             return DoJob::SKIP_SUBTREE;
         }
 
@@ -3891,12 +3889,12 @@ public:
 
     // the row number is begin from zero
     int GetResult() const
-        { return ret -1; }
+        { return m_ret -1; }
 
 private:
+    wxDataViewItem m_item;
     wxVector<wxDataViewItem>::reverse_iterator m_iter;
-    wxDataViewItem item;
-    int ret;
+    int m_ret;
 
 };
 
