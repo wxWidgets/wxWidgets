@@ -2395,7 +2395,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/brush.cpp
     src/osx/dialog_osx.cpp
     src/osx/fontutil.cpp
-    src/osx/imaglist.cpp
     src/osx/minifram.cpp
     src/osx/nonownedwnd_osx.cpp
     src/osx/palette.cpp
@@ -2495,6 +2494,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/textmeasure.cpp
     src/generic/icon.cpp
     src/osx/statbmp_osx.cpp
+    src/generic/imaglist.cpp
 </if>
 </set>
 
@@ -2538,7 +2538,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/fontdlg.h
     wx/osx/frame.h
     wx/osx/gauge.h
-    wx/osx/imaglist.h
     wx/osx/listbox.h
     wx/osx/listctrl.h
     wx/osx/mdi.h
@@ -2593,6 +2592,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/statusbr.h
     wx/osx/appprogress.h
     wx/generic/icon.h
+    wx/generic/imaglist.h
 </set>
 
 <!-- ====================================================================== -->

@@ -284,17 +284,15 @@ bool wxNotebook::SetPageImage( size_t page, int image )
     if (image >= 0)
     {
         wxCHECK_MSG(HasImageList(), false, "invalid notebook imagelist");
-        const wxBitmap* bitmap = GetImageList()->GetBitmapPtr(image);
-        if (bitmap == NULL)
-            return false;
+        const wxBitmap bitmap = GetImageList()->GetBitmap(image);
         if (pageData->m_image)
         {
             gtk_image_set_from_pixbuf(
-                GTK_IMAGE(pageData->m_image), bitmap->GetPixbuf());
+                GTK_IMAGE(pageData->m_image), bitmap.GetPixbuf());
         }
         else
         {
-            pageData->m_image = gtk_image_new_from_pixbuf(bitmap->GetPixbuf());
+            pageData->m_image = gtk_image_new_from_pixbuf(bitmap.GetPixbuf());
             gtk_widget_show(pageData->m_image);
             gtk_box_pack_start(GTK_BOX(pageData->m_box),
                 pageData->m_image, false, false, m_padding);
@@ -443,8 +441,8 @@ bool wxNotebook::InsertPage( size_t position,
     {
         if (HasImageList())
         {
-            const wxBitmap* bitmap = GetImageList()->GetBitmapPtr(imageId);
-            pageData->m_image = gtk_image_new_from_pixbuf(bitmap->GetPixbuf());
+            const wxBitmap bitmap = GetImageList()->GetBitmap(imageId);
+            pageData->m_image = gtk_image_new_from_pixbuf(bitmap.GetPixbuf());
             gtk_box_pack_start(GTK_BOX(pageData->m_box),
                 pageData->m_image, false, false, m_padding);
         }
