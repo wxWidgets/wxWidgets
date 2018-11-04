@@ -67,3 +67,11 @@ std::ostream& operator<<(std::ostream& os, const wxPoint& p)
 
     return os;
 }
+
+std::ostream& operator<<(std::ostream& os, const wxRect& r)
+{
+    os << "{"
+        << r.x << ", " << r.y << "  " << r.width << "*" << r.height
+       << "}";
+    return os;
+}

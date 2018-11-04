@@ -35,5 +35,6 @@ std::ostream& operator<<(std::ostream& os, const wxColour& c);
 std::ostream& operator<<(std::ostream& os, const wxSize& s);
 std::ostream& operator<<(std::ostream& os, const wxFont& f);
 std::ostream& operator<<(std::ostream& os, const wxPoint& p);
+std::ostream& operator<<(std::ostream& os, const wxRect& r);
 
 #endif
