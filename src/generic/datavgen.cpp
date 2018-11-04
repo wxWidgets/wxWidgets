@@ -3468,7 +3468,7 @@ int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
 class RowToTreeNodeJob: public DoJob
 {
 public:
-    RowToTreeNodeJob(unsigned int row, int current, wxDataViewTreeNode *parent)
+    RowToTreeNodeJob(int row, int current, wxDataViewTreeNode *parent)
         : m_row(row), m_current(current), m_parent(parent), m_ret(NULL)
     {
     }
@@ -3476,13 +3476,13 @@ public:
     virtual int operator() ( wxDataViewTreeNode * node ) wxOVERRIDE
     {
         m_current ++;
-        if( m_current == static_cast<int>(m_row))
+        if( m_current == m_row)
         {
             m_ret = node;
             return DoJob::DONE;
         }
 
-        if( node->GetSubTreeCount() + m_current < static_cast<int>(m_row) )
+        if( node->GetSubTreeCount() + m_current < m_row )
         {
             m_current += node->GetSubTreeCount();
             return  DoJob::SKIP_SUBTREE;
@@ -3497,7 +3497,7 @@ public:
             if ( node->HasChildren() &&
                  (int)node->GetChildNodes().size() == node->GetSubTreeCount() )
             {
-                const int index = static_cast<int>(m_row) - m_current - 1;
+                const int index = m_row - m_current - 1;
                 m_ret = node->GetChildNodes()[index];
                 return DoJob::DONE;
             }
@@ -3510,7 +3510,7 @@ public:
         { return m_ret; }
 
 private:
-    unsigned int m_row;
+    const int m_row;
     int m_current;
     wxDataViewTreeNode* m_parent;
     wxDataViewTreeNode* m_ret;
@@ -3523,7 +3523,7 @@ wxDataViewTreeNode * wxDataViewMainWindow::GetTreeNodeByRow(unsigned int row) co
     if ( row == (unsigned)-1 )
         return NULL;
 
-    RowToTreeNodeJob job( row , -2, m_root );
+    RowToTreeNodeJob job( static_cast<int>(row) , -2, m_root );
     Walker( m_root , job );
     return job.GetResult();
 }
