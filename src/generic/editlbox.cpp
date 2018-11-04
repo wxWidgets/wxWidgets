@@ -125,14 +125,14 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
     subsizer->Add(new wxStaticText(subp, wxID_ANY, label),
                   wxSizerFlags(1).Center().Border(wxLEFT));
 
-    const wxSizerFlags centered = wxSizerFlags().Center();
+    const wxSizerFlags flagsCentered = wxSizerFlags().Center();
 
     if ( m_style & wxEL_ALLOW_EDIT )
     {
         m_bEdit = new wxBitmapButton(subp, wxID_ELB_EDIT,
                                      wxArtProvider::GetBitmap(wxART_EDIT, wxART_BUTTON));
         m_bEdit->SetToolTip(_("Edit item"));
-        subsizer->Add(m_bEdit, centered);
+        subsizer->Add(m_bEdit, flagsCentered);
     }
 
     if ( m_style & wxEL_ALLOW_NEW )
@@ -140,7 +140,7 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
         m_bNew = new wxBitmapButton(subp, wxID_ELB_NEW,
                                     wxArtProvider::GetBitmap(wxART_NEW, wxART_BUTTON));
         m_bNew->SetToolTip(_("New item"));
-        subsizer->Add(m_bNew, centered);
+        subsizer->Add(m_bNew, flagsCentered);
     }
 
     if ( m_style & wxEL_ALLOW_DELETE )
@@ -148,7 +148,7 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
         m_bDel = new wxBitmapButton(subp, wxID_ELB_DELETE,
                                     wxArtProvider::GetBitmap(wxART_DELETE, wxART_BUTTON));
         m_bDel->SetToolTip(_("Delete item"));
-        subsizer->Add(m_bDel, centered);
+        subsizer->Add(m_bDel, flagsCentered);
     }
 
     if (!(m_style & wxEL_NO_REORDER))
@@ -156,12 +156,12 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
         m_bUp = new wxBitmapButton(subp, wxID_ELB_UP,
                                    wxArtProvider::GetBitmap(wxART_GO_UP, wxART_BUTTON));
         m_bUp->SetToolTip(_("Move up"));
-        subsizer->Add(m_bUp, centered);
+        subsizer->Add(m_bUp, flagsCentered);
 
         m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN,
                                      wxArtProvider::GetBitmap(wxART_GO_DOWN, wxART_BUTTON));
         m_bDown->SetToolTip(_("Move down"));
-        subsizer->Add(m_bDown, centered);
+        subsizer->Add(m_bDown, flagsCentered);
     }
 
     subp->SetSizer(subsizer);
