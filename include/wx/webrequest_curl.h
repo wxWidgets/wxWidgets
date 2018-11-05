@@ -125,8 +125,8 @@ protected:
 
 private:
     CURLM* m_handle;
-    wxCondition m_condition;
     wxMutex m_mutex;
+    wxCondition m_condition;
     bool m_shuttingDown;
     wxMutex m_cancelledMutex;
     wxVector< wxObjectDataPtr<wxWebRequestCURL> > m_cancelledRequests;
