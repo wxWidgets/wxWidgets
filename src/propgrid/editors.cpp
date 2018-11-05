@@ -645,10 +645,11 @@ public:
 
         // Enabling double-click processor makes sense
         // only for wxBoolProperty.
-        wxPGProperty* selProp = GetGrid()->GetSelection();
-        if (wxDynamicCast(selProp, wxBoolProperty))
+        m_selProp = GetGrid()->GetSelection();
+        wxASSERT(m_selProp);
+        if (wxDynamicCast(m_selProp, wxBoolProperty))
         {
-            m_dclickProcessor = new wxPGDoubleClickProcessor(this, selProp);
+            m_dclickProcessor = new wxPGDoubleClickProcessor(this, m_selProp);
             PushEventHandler(m_dclickProcessor);
         }
 
@@ -729,9 +730,12 @@ public:
         );
     }
 
+    wxPGProperty* GetProperty() const { return m_selProp; }
+
 private:
     wxPGDoubleClickProcessor*   m_dclickProcessor;
     bool                        m_sizeEventCalled;
+    wxPGProperty*               m_selProp;
 };
 
 
@@ -741,7 +745,8 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
                                        wxRect& rect,
                                        int flags )
 {
-    wxPGProperty* p = GetSelection();
+    wxPGProperty* p = pCb->GetProperty();
+
     wxString text;
 
     const wxPGChoices& choices = p->GetChoices();
