@@ -23,6 +23,9 @@
 #define D2D1MakeSkewMatrix wxD2D1MakeSkewMatrix
 #define D2D1IsMatrixInvertible wxD2D1IsMatrixInvertible
 #define D2D1InvertMatrix wxD2D1InvertMatrix
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+#define D3D11CreateDevice wxD3D11CreateDevice
+#endif
 
 // There are clashes between the names of the member fields and parameters
 // in the standard d2d1helper.h header resulting in C4458 with VC14,
@@ -42,9 +45,9 @@
 #endif
 
 #if wxD2D_DEVICE_CONTEXT_SUPPORTED
-#include <D3D11.h>
-#include <D2d1_1.h>
-#include <DXGI1_2.h>
+#include <d3d11.h>
+#include <d2d1_1.h>
+#include <dxgi1_2.h>
 #endif
 
 #ifdef __VISUALC__
@@ -155,6 +158,11 @@ private:
         if ( !m_dllDirectWrite.Load(wxT("dwrite.dll"), wxDL_VERBATIM | wxDL_QUIET) )
             return false;
 
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+        if (!m_dllDirect3d.Load(wxT("d3d11.dll"), wxDL_VERBATIM | wxDL_QUIET))
+            return false;
+#endif
+
         #define wxLOAD_FUNC(dll, name)                    \
         name = (name##_t)dll.RawGetSymbol(#name);         \
             if ( !name )                                  \
@@ -166,6 +174,10 @@ private:
         wxLOAD_FUNC(m_dllDirect2d, D2D1IsMatrixInvertible);
         wxLOAD_FUNC(m_dllDirect2d, D2D1InvertMatrix);
         wxLOAD_FUNC(m_dllDirectWrite, DWriteCreateFactory);
+
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+        wxLOAD_FUNC(m_dllDirect3d, D3D11CreateDevice);
+#endif
 
         m_D2DRuntimeVersion = wxD2D_VERSION_1_0;
 
@@ -191,6 +203,11 @@ public:
     typedef HRESULT (WINAPI *DWriteCreateFactory_t)(DWRITE_FACTORY_TYPE, REFIID, IUnknown**);
     static DWriteCreateFactory_t DWriteCreateFactory;
 
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+    typedef HRESULT (WINAPI *D3D11CreateDevice_t)(IDXGIAdapter*, D3D_DRIVER_TYPE, HMODULE, UINT, CONST D3D_FEATURE_LEVEL*, UINT, UINT, ID3D11Device**, D3D_FEATURE_LEVEL*, ID3D11DeviceContext**);
+    static D3D11CreateDevice_t D3D11CreateDevice;
+#endif
+
 private:
     static bool m_initialized;
     static bool m_hasDirect2DSupport;
@@ -198,6 +215,9 @@ private:
 
     static wxDynamicLibrary m_dllDirect2d;
     static wxDynamicLibrary m_dllDirectWrite;
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+    static wxDynamicLibrary m_dllDirect3d;
+#endif
 };
 
 // define the members
@@ -207,6 +227,9 @@ wxDirect2D::wxD2DVersion wxDirect2D::m_D2DRuntimeVersion = wxD2D_VERSION_NONE;
 
 wxDynamicLibrary wxDirect2D::m_dllDirect2d;
 wxDynamicLibrary wxDirect2D::m_dllDirectWrite;
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+wxDynamicLibrary wxDirect2D::m_dllDirect3d;
+#endif
 
 // define the (not yet imported) functions
 wxDirect2D::D2D1CreateFactory_t wxDirect2D::D2D1CreateFactory = NULL;
@@ -215,6 +238,10 @@ wxDirect2D::D2D1MakeSkewMatrix_t wxDirect2D::D2D1MakeSkewMatrix = NULL;
 wxDirect2D::D2D1IsMatrixInvertible_t wxDirect2D::D2D1IsMatrixInvertible = NULL;
 wxDirect2D::D2D1InvertMatrix_t wxDirect2D::D2D1InvertMatrix = NULL;
 wxDirect2D::DWriteCreateFactory_t wxDirect2D::DWriteCreateFactory = NULL;
+
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+wxDirect2D::D3D11CreateDevice_t wxDirect2D::D3D11CreateDevice = NULL;
+#endif
 
 // define the interface GUIDs
 DEFINE_GUID(wxIID_IWICImagingFactory,
@@ -234,6 +261,11 @@ DEFINE_GUID(GUID_WICPixelFormat32bppPBGRA,
 
 DEFINE_GUID(GUID_WICPixelFormat32bppBGR,
             0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0e);
+
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+DEFINE_GUID(IID_IDXGIDevice,
+            0x54ec77fa, 0x1377, 0x44e6, 0x8c, 0x32, 0x88, 0xfd, 0x5f, 0x44, 0xc8, 0x4c);
+#endif
 
 #ifndef CLSID_WICImagingFactory
 DEFINE_GUID(CLSID_WICImagingFactory,
@@ -297,6 +329,36 @@ BOOL WINAPI wxD2D1InvertMatrix(
 
     return wxDirect2D::D2D1InvertMatrix(matrix);
 }
+
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+HRESULT WINAPI wxD3D11CreateDevice(
+    IDXGIAdapter* pAdapter,
+    D3D_DRIVER_TYPE DriverType,
+    HMODULE Software,
+    UINT Flags,
+    CONST D3D_FEATURE_LEVEL* pFeatureLevels,
+    UINT FeatureLevels,
+    UINT SDKVersion,
+    ID3D11Device** ppDevice,
+    D3D_FEATURE_LEVEL* pFeatureLevel,
+    ID3D11DeviceContext** ppImmediateContext)
+{
+    if (!wxDirect2D::Initialize())
+        return S_FALSE;
+
+    return wxDirect2D::D3D11CreateDevice(
+        pAdapter,
+        DriverType,
+        Software,
+        Flags,
+        pFeatureLevels,
+        FeatureLevels,
+        SDKVersion,
+        ppDevice,
+        pFeatureLevel,
+        ppImmediateContext);
+}
+#endif
 
 static IWICImagingFactory* gs_WICImagingFactory = NULL;
 
@@ -401,7 +463,7 @@ public:
     // was not previously acquired
     virtual void* GetResource() = 0;
 
-    virtual ~wxResourceHolder(){};
+    virtual ~wxResourceHolder() {}
 };
 
 class wxD2DResourceManager;
@@ -414,13 +476,13 @@ public:
     virtual bool IsBound() = 0;
     virtual wxD2DResourceManager* GetManager() = 0;
 
-    virtual ~wxD2DManagedObject() {};
+    virtual ~wxD2DManagedObject() {}
 };
 
 class wxManagedResourceHolder : public wxResourceHolder, public wxD2DManagedObject
 {
 public:
-    virtual ~wxManagedResourceHolder() {};
+    virtual ~wxManagedResourceHolder() {}
 };
 
 // A Direct2D resource manager handles the device-dependent
@@ -594,7 +656,7 @@ public:
 
     virtual wxD2DManagedObject* GetManagedObject() = 0;
 
-    ~wxD2DManagedGraphicsData() {};
+    ~wxD2DManagedGraphicsData() {}
 };
 
 D2D1_CAP_STYLE wxD2DConvertPenCap(wxPenCap cap)
@@ -1115,7 +1177,7 @@ public :
     void* GetNativePath() const wxOVERRIDE;
 
     // give the native path returned by GetNativePath() back (there might be some deallocations necessary)
-    void UnGetNativePath(void* WXUNUSED(p)) const wxOVERRIDE {};
+    void UnGetNativePath(void* WXUNUSED(p)) const wxOVERRIDE {}
 
     // transforms each point of this path by the matrix
     void Transform(const wxGraphicsMatrixData* matrix) wxOVERRIDE;
@@ -2199,7 +2261,7 @@ public:
         wxGraphicsBitmapData(renderer), m_bitmapHolder(bitmap) {}
 
     wxD2DBitmapData(wxGraphicsRenderer* renderer, const void* pseudoNativeBitmap) :
-        wxGraphicsBitmapData(renderer), m_bitmapHolder(*static_cast<const NativeType*>(pseudoNativeBitmap)) {};
+        wxGraphicsBitmapData(renderer), m_bitmapHolder(*static_cast<const NativeType*>(pseudoNativeBitmap)) {}
 
     // returns the native representation
     void* GetNativeBitmap() const wxOVERRIDE;
@@ -2268,8 +2330,8 @@ template <typename B>
 class wxD2DBrushResourceHolder : public wxD2DResourceHolder<B>
 {
 public:
-    wxD2DBrushResourceHolder(const wxBrush& brush) : m_sourceBrush(brush) {};
-    virtual ~wxD2DBrushResourceHolder() {};
+    wxD2DBrushResourceHolder(const wxBrush& brush) : m_sourceBrush(brush) {}
+    virtual ~wxD2DBrushResourceHolder() {}
 protected:
     const wxBrush m_sourceBrush;
 };
@@ -2645,7 +2707,7 @@ public:
 
     wxCOMPtr<IDWriteTextFormat> GetTextFormat() const { return m_textFormat; }
 
-    wxCOMPtr<IDWriteFont> GetFont() { return m_font; };
+    wxCOMPtr<IDWriteFont> GetFont() { return m_font; }
 
 private:
     // The native, device-independent font object

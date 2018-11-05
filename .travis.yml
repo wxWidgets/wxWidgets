@@ -19,7 +19,7 @@ matrix:
           env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11"
         - dist: trusty
           compiler: clang
-          env: wxCONFIGURE_FLAGS="--disable-shared --disable-sys-libs"
+          env: wxCONFIGURE_FLAGS="--disable-shared --disable-sys-libs --disable-webview"
         - dist: trusty
           compiler: gcc
           env: wxTOOLSET=cmake wxCMAKE_GENERATOR="Unix Makefiles"

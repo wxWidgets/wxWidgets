@@ -142,10 +142,6 @@ if(DEFINED wxUSE_OLE AND wxUSE_OLE)
     set(wxUSE_OLE_AUTOMATION ON)
 endif()
 
-if(DEFINED wxUSE_GRAPHICS_DIRECT2D AND NOT wxUSE_GRAPHICS_CONTEXT)
-    set(wxUSE_GRAPHICS_DIRECT2D OFF)
-endif()
-
 if(wxUSE_OPENGL)
     set(wxUSE_GLCANVAS ON)
 endif()
@@ -154,11 +150,40 @@ if(wxUSE_THREADS)
     find_package(Threads REQUIRED)
 endif()
 
+if(wxUSE_LIBLZMA)
+    find_package(LibLZMA REQUIRED)
+endif()
+
+if(UNIX AND wxUSE_SECRETSTORE)
+    # The required APIs are always available under MSW and OS X but we must
+    # have GNOME libsecret under Unix to be able to compile this class.
+    find_package(Libsecret REQUIRED)
+    if(NOT LIBSECRET_FOUND)
+        message(WARNING "libsecret not found, wxSecretStore won't be available")
+        wx_option_force_value(wxUSE_SECRETSTORE OFF)
+    endif()
+endif()
+
 if(wxUSE_GUI)
     if(WXMSW AND wxUSE_METAFILE)
         # this one should probably be made separately configurable
         set(wxUSE_ENH_METAFILE ON)
     endif()
+
+    # Direct2D check
+    if(WIN32 AND wxUSE_GRAPHICS_DIRECT2D)
+        check_include_file(d2d1.h HAVE_D2D1_H)
+        if (NOT HAVE_D2D1_H)
+            wx_option_force_value(wxUSE_GRAPHICS_DIRECT2D OFF)
+        endif()
+    endif()
+     if(MSVC) # match setup.h
+        if(MSVC_VERSION LESS 1600)
+            wx_option_force_value(wxUSE_GRAPHICS_DIRECT2D OFF)
+        else()
+            wx_option_force_value(wxUSE_GRAPHICS_DIRECT2D ${wxUSE_GRAPHICS_CONTEXT})
+        endif()
+     endif()
 
     # WXQT checks
     if(WXQT)
@@ -216,7 +241,17 @@ if(wxUSE_GUI)
     endif()
 
     if(wxUSE_MEDIACTRL AND UNIX AND NOT APPLE AND NOT WIN32)
-        find_package(GStreamer)
+        find_package(GStreamer 1.0 COMPONENTS video)
+        if(NOT GSTREAMER_FOUND)
+            find_package(GStreamer 0.10 COMPONENTS interfaces)
+        endif()
+
+        set(wxUSE_GSTREAMER ${GSTREAMER_FOUND})
+        set(wxUSE_GSTREAMER_PLAYER OFF)
+        if(GSTREAMER_PLAYER_INCLUDE_DIRS)
+            set(wxUSE_GSTREAMER_PLAYER ON)
+        endif()
+
         if(NOT GSTREAMER_FOUND)
             message(WARNING "GStreamer not found, wxMediaCtrl won't be available")
             wx_option_force_value(wxUSE_MEDIACTRL OFF)
