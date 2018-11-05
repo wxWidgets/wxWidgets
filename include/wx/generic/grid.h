@@ -1019,11 +1019,11 @@ public:
     // ------ display update functions
     //
     wxArrayInt CalcRowLabelsExposed( const wxRegion& reg,
-                                     wxGridWindow *gridWindow) const;
+                                     wxGridWindow *gridWindow = NULL) const;
     wxArrayInt CalcColLabelsExposed( const wxRegion& reg,
-                                     wxGridWindow *gridWindow ) const;
+                                     wxGridWindow *gridWindow = NULL) const;
     wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg,
-                                            wxGridWindow *gridWindow) const;
+                                            wxGridWindow *gridWindow = NULL) const;
 
     void PrepareDC(wxDC &dc) wxOVERRIDE { PrepareDC(dc, NULL); }
     void PrepareDC(wxDC &dc, wxGridWindow *gridWindow);
@@ -1170,10 +1170,14 @@ public:
     //  grid cells and labels so you will need to convert from device
     //  coordinates for mouse events etc.
     //
-    wxGridCellCoords XYToCell(int x, int y, wxGridWindow *gridWindow) const;
-    void XYToCell(int x, int y, wxGridCellCoords& coords, wxGridWindow *gridWindow) const
+    wxGridCellCoords XYToCell(int x, int y, wxGridWindow *gridWindow = NULL) const;
+    void XYToCell(int x, int y,
+                  wxGridCellCoords& coords,
+                  wxGridWindow *gridWindow = NULL) const
         { coords = XYToCell(x, y, gridWindow); }
-    wxGridCellCoords XYToCell(const wxPoint& pos, wxGridWindow *gridWindow) const
+    
+    wxGridCellCoords XYToCell(const wxPoint& pos,
+                              wxGridWindow *gridWindow = NULL) const
         { return XYToCell(pos.x, pos.y, gridWindow); }
 
     // these functions return the index of the row/columns corresponding to the
@@ -1182,8 +1186,8 @@ public:
     // if clipToMinMax is false (default, wxNOT_FOUND is returned if the
     // position is outside any row/column, otherwise the first/last element is
     // returned in this case
-    int  YToRow( int y, wxGridWindow *gridWindow, bool clipToMinMax = false ) const;
-    int  XToCol( int x, wxGridWindow *gridWindow, bool clipToMinMax = false ) const;
+    int  YToRow( int y, bool clipToMinMax = false, wxGridWindow *gridWindow = NULL ) const;
+    int  XToCol( int x, bool clipToMinMax = false, wxGridWindow *gridWindow = NULL ) const;
 
     int  YToEdgeOfRow( int y ) const;
     int  XToEdgeOfCol( int x ) const;
@@ -1661,7 +1665,7 @@ public:
     //
     wxRect BlockToDeviceRect( const wxGridCellCoords & topLeft,
                               const wxGridCellCoords & bottomRight,
-                              const wxGridWindow *gridWindow) const;
+                              const wxGridWindow *gridWindow = NULL) const;
 
     // Access or update the selection fore/back colours
     wxColour GetSelectionBackground() const

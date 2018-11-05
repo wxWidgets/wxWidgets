@@ -3729,8 +3729,10 @@ public:
 
     /**
         Enables or disables column moving by dragging with the mouse.
+     
+        @return @true if it was successful.
     */
-    void EnableDragColMove(bool enable = true);
+    bool EnableDragColMove(bool enable = true);
 
     /**
         Enables or disables column sizing by dragging with the mouse.
@@ -4227,13 +4229,13 @@ public:
         limited by @a topLeft and @a bottomRight cell in device coords and
         clipped to the client size of the grid window.
 
-        @since 3.1.2 Parameter @ gridWindow is required.
+        @since 3.1.2 Parameter @ gridWindow has been added.
      
         @see CellToRect()
     */
     wxRect BlockToDeviceRect(const wxGridCellCoords& topLeft,
                              const wxGridCellCoords& bottomRight,
-                             const wxGridWindow *gridWindow) const;
+                             const wxGridWindow *gridWindow = NULL) const;
 
     /**
         Return the rectangle corresponding to the grid cell's size and position
@@ -4342,18 +4344,18 @@ public:
      
         @param x
             The x position to evaluate.
-        @param gridWindow
-            The associated grid window (new in 3.1.2).
-            If @a gridWindow is @NULL, it will consider all the cells, no matter
-            which grid they belong to.
         @param clipToMinMax
             If @true, rather than returning @c wxNOT_FOUND, it returns either
             the first or last column depending on whether @a x is too far to
             the left or right respectively.
+        @param gridWindow
+            The associated grid window that limits the search. (new in 3.1.2).
+            If @a gridWindow is @NULL, it will consider all the cells, no matter
+            which grid they belong to.
         @return
             The column index or @c wxNOT_FOUND.
     */
-    int XToCol(int x, wxGridWindow *gridWindow, bool clipToMinMax = false) const;
+    int XToCol(int x, bool clipToMinMax = false, wxGridWindow *gridWindow = NULL) const;
 
     /**
         Returns the column whose right hand edge is close to the given logical
@@ -4370,14 +4372,16 @@ public:
         you use this function in a mouse event handler you need to translate
         the mouse position, which is expressed in device coordinates, to
         logical ones.
-        @since 3.1.2 The coordinates have to be relative to @a gridWindow.
      
+        @since 3.1.2 The coordinates are relative to @a gridWindow, and
+        the search is limited by its size. If the position is not within the window,
+        it will return @c wxNOT_FOUND.
         If @a gridWindow is @NULL, it will consider all the cells, no matter
         which grid they belong to.
 
         @see XToCol(), YToRow()
      */
-    wxGridCellCoords XYToCell(int x, int y, wxGridWindow *gridWindow) const;
+    wxGridCellCoords XYToCell(int x, int y, wxGridWindow *gridWindow = NULL) const;
     /**
         Translates logical pixel coordinates to the grid cell coordinates.
 
@@ -4385,14 +4389,16 @@ public:
         you use this function in a mouse event handler you need to translate
         the mouse position, which is expressed in device coordinates, to
         logical ones.
-        @since 3.1.2 The coordinates have to be relative to @a gridWindow.
      
+        @since 3.1.2 The coordinates are relative to @a gridWindow, and
+        the search is limited by its size. If the position is not within the window,
+        it will return @c wxNOT_FOUND.
         If @a gridWindow is @NULL, it will consider all the cells, no matter
         which grid they belong to.
 
         @see XToCol(), YToRow()
      */
-    wxGridCellCoords XYToCell(const wxPoint& pos, wxGridWindow *gridWindow) const;
+    wxGridCellCoords XYToCell(const wxPoint& pos, wxGridWindow *gridWindow = NULL) const;
     // XYToCell(int, int, wxGridCellCoords&) overload is intentionally
     // undocumented, using it is ugly and non-const reference parameters are
     // not used in wxWidgets API
@@ -4406,6 +4412,7 @@ public:
     int YToEdgeOfRow(int y) const;
 
     /**
+        The search is limited by the size of the @a gridWindow.
         If @a gridWindow is @NULL, it will consider all the cells, no matter
         which grid they belong to (new in 3.1.2).
      
@@ -4413,7 +4420,7 @@ public:
 
         Returns @c wxNOT_FOUND if there is no row at the @a y position.
     */
-    int YToRow(int y, wxGridWindow *gridWindow, bool clipToMinMax = false) const;
+    int YToRow(int y, bool clipToMinMax = false, wxGridWindow *gridWindow = NULL) const;
 
     //@}
 
@@ -4776,13 +4783,13 @@ public:
     void SetRowAttr(int row, wxGridCellAttr* attr);
 
 
-    wxArrayInt CalcRowLabelsExposed( const wxRegion& reg );
-    wxArrayInt CalcColLabelsExposed( const wxRegion& reg );
+    wxArrayInt CalcRowLabelsExposed( const wxRegion& reg,
+                                     wxGridWindow *gridWindow = NULL) const;
+    wxArrayInt CalcColLabelsExposed( const wxRegion& reg,
+                                     wxGridWindow *gridWindow = NULL) const;
     wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg,
-                                            wxGridWindow *gridWindow ) const;
+                                            wxGridWindow *gridWindow = NULL) const;
 
-    void PrepareDC(wxDC &dc, wxGridWindow *gridWindow = 0);
-    
     //@}
 
 
@@ -4977,6 +4984,8 @@ public:
     void SetCellHighlightColour( const wxColour& );
     void SetCellHighlightPenWidth(int width);
     void SetCellHighlightROPenWidth(int width);
+    void SetGridFrozenBorderColour( const wxColour& );
+    void SetGridFrozenBorderPenWidth( int width );
 
 
 protected:

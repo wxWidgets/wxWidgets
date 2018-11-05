@@ -683,7 +683,7 @@ public:
         { dc.DrawLine(start, pos, end, pos); }
 
     virtual int PosToLine(const wxGrid *grid, int pos, wxGridWindow *gridWindow , bool clip = false) const wxOVERRIDE
-        { return grid->YToRow(pos, gridWindow, clip); }
+        { return grid->YToRow(pos, clip, gridWindow); }
     virtual int GetLineStartPos(const wxGrid *grid, int line) const wxOVERRIDE
         { return grid->GetRowTop(line); }
     virtual int GetLineEndPos(const wxGrid *grid, int line) const wxOVERRIDE
@@ -756,7 +756,7 @@ public:
         { dc.DrawLine(pos, start, pos, end); }
 
     virtual int PosToLine(const wxGrid *grid, int pos, wxGridWindow *gridWindow, bool clip = false) const wxOVERRIDE
-        { return grid->XToCol(pos, gridWindow, clip); }
+        { return grid->XToCol(pos, clip, gridWindow); }
     virtual int GetLineStartPos(const wxGrid *grid, int line) const wxOVERRIDE
         { return grid->GetColLeft(line); }
     virtual int GetLineEndPos(const wxGrid *grid, int line) const wxOVERRIDE
