@@ -14,7 +14,7 @@
 
 #include "wx/dataview.h"
 
-#if !defined(wxUSE_GENERICDATAVIEWCTRL)
+#if !defined(wxHAS_GENERIC_DATAVIEWCTRL)
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -3556,6 +3556,6 @@ void wxDataViewColumn::SetNativeData(wxDataViewColumnNativeData* newNativeDataPt
     m_NativeDataPtr = newNativeDataPtr;
 }
 
-#endif // !wxUSE_GENERICDATAVIEWCTRL
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
 
 #endif // wxUSE_DATAVIEWCTRL
