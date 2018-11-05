@@ -2573,6 +2573,10 @@ bool wxWidgetCocoaImpl::IsVisible() const
 void wxWidgetCocoaImpl::SetVisibility( bool visible )
 {
     [m_osxView setHidden:(visible ? NO:YES)];
+    
+    // trigger redraw upon shown for layer-backed views
+    if( m_osxView.layer && !m_osxView.isHiddenOrHasHiddenAncestor )
+        SetNeedsDisplay(NULL);
 }
 
 double wxWidgetCocoaImpl::GetContentScaleFactor() const
@@ -3028,7 +3032,7 @@ static void SetSubviewsNeedDisplay( NSView *view )
 {
     for ( NSView *sub in view.subviews )
     {
-        if ( !sub.layer )
+        if ( sub.isHidden || !sub.layer )
             continue;
 
         [sub setNeedsDisplay:YES];

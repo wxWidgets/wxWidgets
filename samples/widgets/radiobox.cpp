@@ -363,7 +363,7 @@ void RadioWidgetsPage::CreateRadio()
     for ( size_t n = 0; n < count; n++ )
     {
         items[n] = wxString::Format("%s %lu",
-                                    labelBtn.c_str(), (unsigned long)n + 1);
+                                    labelBtn, (unsigned long)n + 1);
     }
 
     int flags = m_chkSpecifyRows->GetValue() ? wxRA_SPECIFY_ROWS

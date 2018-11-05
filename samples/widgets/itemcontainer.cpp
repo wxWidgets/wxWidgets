@@ -123,7 +123,7 @@ bool ItemContainerWidgetsPage::VerifyAllClientDataDestroyed()
 void ItemContainerWidgetsPage::StartTest(const wxString& label)
 {
     m_container->Clear();
-    wxLogMessage("Test - %s:", label.c_str());
+    wxLogMessage("Test - %s:", label);
 }
 
 void ItemContainerWidgetsPage::EndTest(const wxArrayString& items)
@@ -144,7 +144,7 @@ void ItemContainerWidgetsPage::EndTest(const wxArrayString& items)
             {
                 wxFAIL_MSG(wxString::Format(
                             "Wrong string \"%s\" at position %d (expected \"%s\")",
-                           str.c_str(), i, items[i].c_str()));
+                           str, i, items[i]));
                 ok = false;
                 break;
             }
@@ -227,7 +227,7 @@ bool ItemContainerWidgetsPage::VerifyClientData(wxUIntPtr i, const wxString& str
 {
     if ( i > m_items.GetCount() || m_items[i] != str )
     {
-        wxLogMessage("Client data for '%s' does not match.", str.c_str());
+        wxLogMessage("Client data for '%s' does not match.", str);
         return false;
     }
 

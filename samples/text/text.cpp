@@ -726,7 +726,7 @@ void MyTextCtrl::LogKeyEvent(const wxString& name, wxKeyEvent& event) const
 
     wxLogMessage( "%s event: %s (flags = %c%c%c%c)",
                   name,
-                  key.c_str(),
+                  key,
                   GetChar( event.ControlDown(), 'C' ),
                   GetChar( event.AltDown(), 'A' ),
                   GetChar( event.ShiftDown(), 'S' ),
@@ -781,7 +781,7 @@ static wxString GetMouseEventDesc(const wxMouseEvent& ev)
     wxASSERT(!(dbl && up));
 
     return wxString::Format("%s mouse button %s",
-                            button.c_str(),
+                            button,
                             dbl ? "double clicked"
                                 : up ? "released" : "clicked");
 }
@@ -973,8 +973,8 @@ void MyTextCtrl::OnTextURL(wxTextUrlEvent& event)
          end = event.GetURLEnd();
 
     wxLogMessage("Mouse event over URL '%s': %s",
-                 GetValue().Mid(start, end - start).c_str(),
-                 GetMouseEventDesc(ev).c_str());
+                 GetValue().Mid(start, end - start),
+                 GetMouseEventDesc(ev));
 }
 
 void MyTextCtrl::OnChar(wxKeyEvent& event)
@@ -1018,12 +1018,12 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
 
                 wxLogMessage("Selection: from %ld to %ld.", from, to);
                 wxLogMessage("Selection = '%s' (len = %u)",
-                             sel.c_str(),
+                             sel,
                              (unsigned int) sel.length());
 
                 const wxString text = GetLineText(line);
                 wxLogMessage("Current line: \"%s\"; length = %lu",
-                             text.c_str(), text.length());
+                             text, text.length());
             }
             break;
 

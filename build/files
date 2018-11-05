@@ -2256,7 +2256,6 @@ OSX_LOWLEVEL_SRC =
     src/osx/brush.cpp
     src/osx/dialog_osx.cpp
     src/osx/fontutil.cpp
-    src/osx/imaglist.cpp
     src/osx/minifram.cpp
     src/osx/nonownedwnd_osx.cpp
     src/osx/palette.cpp
@@ -2347,6 +2346,7 @@ OSX_COMMON_SRC =
     src/generic/fontdlgg.cpp
     src/generic/fontpickerg.cpp
     src/generic/icon.cpp
+    src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
@@ -2393,7 +2393,6 @@ OSX_SHARED_HDR =
     wx/osx/fontdlg.h
     wx/osx/frame.h
     wx/osx/gauge.h
-    wx/osx/imaglist.h
     wx/osx/listbox.h
     wx/osx/listctrl.h
     wx/osx/mdi.h
@@ -2444,6 +2443,7 @@ OSX_SHARED_HDR =
     wx/generic/fontdlgg.h
     wx/generic/fontpickerg.h
     wx/generic/icon.h
+    wx/generic/imaglist.h
     wx/generic/listctrl.h
     wx/generic/prntdlgg.h
     wx/generic/statusbr.h

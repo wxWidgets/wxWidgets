@@ -765,11 +765,11 @@ void ODComboboxWidgetsPage::OnComboText(wxCommandEvent& event)
 
     if (event.GetEventType() == wxEVT_TEXT_ENTER)
     {
-        wxLogMessage("OwnerDrawnCombobox enter pressed (now '%s')", s.c_str());
+        wxLogMessage("OwnerDrawnCombobox enter pressed (now '%s')", s);
     }
     else
     {
-        wxLogMessage("OwnerDrawnCombobox text changed (now '%s')", s.c_str());
+        wxLogMessage("OwnerDrawnCombobox text changed (now '%s')", s);
     }
 }
 
@@ -780,7 +780,7 @@ void ODComboboxWidgetsPage::OnComboBox(wxCommandEvent& event)
 
     wxLogMessage("OwnerDrawnCombobox item %ld selected", sel);
 
-    wxLogMessage("OwnerDrawnCombobox GetValue(): %s", m_combobox->GetValue().c_str() );
+    wxLogMessage("OwnerDrawnCombobox GetValue(): %s", m_combobox->GetValue() );
 }
 
 void ODComboboxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)

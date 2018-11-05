@@ -2274,7 +2274,6 @@ set(OSX_LOWLEVEL_SRC
     src/osx/brush.cpp
     src/osx/dialog_osx.cpp
     src/osx/fontutil.cpp
-    src/osx/imaglist.cpp
     src/osx/minifram.cpp
     src/osx/nonownedwnd_osx.cpp
     src/osx/palette.cpp
@@ -2373,6 +2372,7 @@ set(OSX_COMMON_SRC
     src/generic/icon.cpp
     #TODO: </if>
     src/osx/statbmp_osx.cpp
+    src/generic/imaglist.cpp
 )
 
 set(OSX_SHARED_HDR
@@ -2414,7 +2414,6 @@ set(OSX_SHARED_HDR
     wx/osx/fontdlg.h
     wx/osx/frame.h
     wx/osx/gauge.h
-    wx/osx/imaglist.h
     wx/osx/listbox.h
     wx/osx/listctrl.h
     wx/osx/mdi.h
@@ -2469,6 +2468,7 @@ set(OSX_SHARED_HDR
     wx/generic/statusbr.h
     wx/osx/appprogress.h
     wx/generic/icon.h
+    wx/generic/imaglist.h
 )
 
 set(OSX_COCOA_SRC
