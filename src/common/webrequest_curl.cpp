@@ -243,7 +243,7 @@ bool wxWebRequestCURL::StartRequest()
 
 void wxWebRequestCURL::Cancel()
 {
-    wxFAIL_MSG("not implemented");
+    static_cast<wxWebSessionCURL&>(GetSession()).CancelRequest(this);
 }
 
 void wxWebRequestCURL::HandleCompletion()
@@ -393,6 +393,18 @@ wxThread::ExitCode wxWebSessionCURL::Entry()
 
     while ( activeRequests )
     {
+        // Handle cancelled requests
+        {
+            wxMutexLocker lock(m_cancelledMutex);
+            while ( !m_cancelledRequests.empty() )
+            {
+                wxObjectDataPtr<wxWebRequestCURL> request(m_cancelledRequests.back());
+                m_cancelledRequests.pop_back();
+                curl_multi_remove_handle(m_handle, request->GetHandle());
+                request->SetState(wxWebRequest::State_Cancelled);
+            }
+        }
+
         // Instruct CURL to work on requests
         curl_multi_perform(m_handle, &activeRequests);
 
@@ -413,7 +425,7 @@ wxThread::ExitCode wxWebSessionCURL::Entry()
         {
             // Wait for CURL work to finish
             int numfds;
-            curl_multi_wait(m_handle, NULL, 0, 1000, &numfds);
+            curl_multi_wait(m_handle, NULL, 0, 500, &numfds);
 
             if ( !numfds )
             {
@@ -456,6 +468,15 @@ bool wxWebSessionCURL::StartRequest(wxWebRequestCURL & request)
     m_condition.Broadcast();
 
     return true;
+}
+
+void wxWebSessionCURL::CancelRequest(wxWebRequestCURL* request)
+{
+    // Add the request to a list of threads that will be removed from the curl
+    // multi handle in the worker thread
+    wxMutexLocker lock(m_cancelledMutex);
+    request->IncRef();
+    m_cancelledRequests.push_back(wxObjectDataPtr<wxWebRequestCURL>(request));
 }
 
 // static

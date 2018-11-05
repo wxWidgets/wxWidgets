@@ -13,6 +13,7 @@
 #if wxUSE_WEBREQUEST_CURL
 
 #include "wx/thread.h"
+#include "wx/vector.h"
 
 #include "curl/curl.h"
 
@@ -117,6 +118,8 @@ public:
 
     bool StartRequest(wxWebRequestCURL& request);
 
+    void CancelRequest(wxWebRequestCURL* request);
+
 protected:
     wxThread::ExitCode Entry() wxOVERRIDE;
 
@@ -125,6 +128,8 @@ private:
     wxCondition m_condition;
     wxMutex m_mutex;
     bool m_shuttingDown;
+    wxMutex m_cancelledMutex;
+    wxVector< wxObjectDataPtr<wxWebRequestCURL> > m_cancelledRequests;
 
     void Initialize();
 
