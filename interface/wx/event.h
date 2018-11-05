@@ -1741,7 +1741,12 @@ public:
     /**
         Returns the identifier of the button changing state.
 
-        This was once a @c wxJOY_BUTTONn identifier, where @c n is one of 1, 2, 3, 4,
+        The return value is @code 1 << n @endcode where @c n is the index of the
+        button changing state.
+        
+        Note that for @c n equal to 1, 2, 3 or 4 there are predefined @c wxJOY_BUTTONn
+        constants which can be used for more clarity, however these constants are not
+        defined for the buttons beyond the first four.
         and whose values were 1 << n. To support more than four buttons, the return value
         is now defined as 1 << n.
     */
