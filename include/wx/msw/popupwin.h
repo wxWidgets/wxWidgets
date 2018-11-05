@@ -18,25 +18,28 @@
 class WXDLLIMPEXP_CORE wxPopupWindow : public wxPopupWindowBase
 {
 public:
-    wxPopupWindow() { }
+    wxPopupWindow() { m_owner = NULL; }
 
     wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE)
         { (void)Create(parent, flags); }
 
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
-    virtual void SetFocus() wxOVERRIDE;
     virtual bool Show(bool show = true) wxOVERRIDE;
 
     // return the style to be used for the popup windows
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const wxOVERRIDE;
 
-    // get the HWND to be used as parent of this window with CreateWindow()
-    virtual WXHWND MSWGetParent() const wxOVERRIDE;
 
-protected:
+    // Implementation only from now on.
+
+    // Return the top level window parent of this popup or null.
+    wxWindow* MSWGetOwner() const { return m_owner; }
+
+private:
+    wxWindow* m_owner;
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxPopupWindow);
 };
 
 #endif // _WX_MSW_POPUPWIN_H_
-

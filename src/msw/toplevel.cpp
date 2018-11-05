@@ -579,6 +579,15 @@ bool wxTopLevelWindowMSW::Show(bool show)
     }
     else // hide
     {
+        // When hiding the window, remember if it was maximized or iconized in
+        // order to return the correct value from Is{Maximized,Iconized}().
+        if ( ::IsZoomed(GetHwnd()) )
+            m_showCmd = SW_MAXIMIZE;
+        else if ( ::IsIconic(GetHwnd()) )
+            m_showCmd = SW_MINIMIZE;
+        else
+            m_showCmd = SW_SHOW;
+
         nShowCmd = SW_HIDE;
     }
 

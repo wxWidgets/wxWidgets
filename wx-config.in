@@ -1242,6 +1242,10 @@ else    # MONOLITHIC = 0
         fi
     fi
 
+    # Existing scripts may use "wx-config --libs std,adv" or similar, but "adv"
+    # library is not used any longer.
+    wx_libs=`remove_field adv $wx_libs`
+
     if [ -n "$output_option_libs" ]; then
         using_gui=no
         for i in $wx_libs ; do

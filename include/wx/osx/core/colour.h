@@ -34,6 +34,8 @@ public:
     virtual ChannelType Blue() const wxOVERRIDE;
     virtual ChannelType Alpha() const wxOVERRIDE;
 
+    virtual bool IsSolid() const wxOVERRIDE;
+
     wxColour& operator=(const wxColour& col);
 
     // comparison
@@ -90,7 +92,10 @@ public:
     virtual CGFloat Green() const = 0;
     virtual CGFloat Blue() const = 0;
     virtual CGFloat Alpha() const = 0;
-    
+ 
+    virtual bool IsSolid() const
+        { return true; }
+
     virtual CGColorRef GetCGColor() const = 0;
     
     virtual wxColourRefData* Clone() const = 0;

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/qt/nonownedwnd.h
+// Name:        src/qt/nonownedwnd.cpp
 // Author:      Sean D'Epagnier
 // Copyright:   (c) 2016 wxWidgets dev team
 // Licence:     wxWindows licence

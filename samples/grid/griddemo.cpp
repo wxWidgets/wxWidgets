@@ -1275,7 +1275,7 @@ void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
         logBuf << " (shift down)";
     if ( ev.ControlDown() )
         logBuf << " (control down)";
-    wxLogMessage( "%s", logBuf.c_str() );
+    wxLogMessage( "%s", logBuf );
 
     // you must call event skip if you want default grid processing
     //
@@ -1349,7 +1349,7 @@ void GridFrame::OnSelectCell( wxGridEvent& ev )
     if ( ((wxGrid *)ev.GetEventObject())->GetColPos( ev.GetCol() ) != ev.GetCol() )
         logBuf << " *** Column moved, current position: " << ((wxGrid *)ev.GetEventObject())->GetColPos( ev.GetCol() );
 
-    wxLogMessage( "%s", logBuf.c_str() );
+    wxLogMessage( "%s", logBuf );
 
     // you must call Skip() if you want the default processing
     // to occur in wxGrid
@@ -1371,7 +1371,7 @@ void GridFrame::OnRangeSelected( wxGridRangeSelectEvent& ev )
            << ", ShiftDown: "<< (ev.ShiftDown() ? 'T':'F')
            << ", AltDown: "<< (ev.AltDown() ? 'T':'F')
            << ", MetaDown: "<< (ev.MetaDown() ? 'T':'F') << " )";
-    wxLogMessage( "%s", logBuf.c_str() );
+    wxLogMessage( "%s", logBuf );
 
     ev.Skip();
 }
@@ -1742,7 +1742,7 @@ void BugsGridTable::SetValue( int row, int col, const wxString& value )
                 if ( n == WXSIZEOF(severities) )
                 {
                     wxLogWarning("Invalid severity value '%s'.",
-                                 value.c_str());
+                                 value);
                     gd.severity = Sev_Normal;
                 }
             }

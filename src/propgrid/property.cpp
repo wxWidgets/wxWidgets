@@ -2254,7 +2254,7 @@ wxPGProperty* wxPGProperty::GetMainParent() const
     const wxPGProperty* curChild = this;
     const wxPGProperty* curParent = m_parent;
 
-    while ( curParent && !curParent->IsCategory() )
+    while ( !curParent->IsRoot() && !curParent->IsCategory() )
     {
         curChild = curParent;
         curParent = curParent->m_parent;

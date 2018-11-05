@@ -272,7 +272,7 @@ bool wxBitmapRefData::Create(CGContextRef context)
     return IsOk() ;
 }
 
-bool wxBitmapRefData::Create(int w, int h, int d, double logicalscale)
+bool wxBitmapRefData::Create(int w, int h, int WXUNUSED(d), double logicalscale)
 {
     size_t m_width = wxMax(1, w);
     size_t m_height = wxMax(1, h);

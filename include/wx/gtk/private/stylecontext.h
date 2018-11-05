@@ -15,7 +15,7 @@
 class wxGtkStyleContext
 {
 public:
-    wxGtkStyleContext();
+    explicit wxGtkStyleContext(double scale = 1);
     ~wxGtkStyleContext();
     wxGtkStyleContext& Add(GType type, const char* objectName, ...) G_GNUC_NULL_TERMINATED;
     wxGtkStyleContext& Add(const char* objectName);
@@ -38,6 +38,7 @@ public:
 private:
     GtkStyleContext* m_context;
     GtkWidgetPath* const m_path;
+    const int m_scale;
 
     wxDECLARE_NO_COPY_CLASS(wxGtkStyleContext);
 };

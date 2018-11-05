@@ -51,6 +51,8 @@ Changes in behaviour not resulting in compilation errors
   consistency with the other ports. You now need to call SetMargins(0, 0)
   explicitly if you really don't want to have any margins in your buttons.
 
+- wxEVT_AUINOTEBOOK_PAGE_CHANGED event is now sent after changing the page,
+  as expected, and not before doing it.
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
@@ -106,6 +108,7 @@ All:
 - Fix problem with wx-config installation and use under NetBSD (wiz).
 - Avoid spurious errors on thread creation under NetBSD.
 - Improve high DPI support in wxAui (Simon Rozman).
+- Fix a bug with parsing time zones in wxDateTime::ParseFormat() (evileye).
 
 All (GUI):
 
@@ -132,6 +135,7 @@ All (GUI):
 wxGTK:
 
 - Implement wxTextCtrl::HitTest() for single line controls.
+- Fix bug with wxTextCtrl::ChangeValue("") sending an unwanted event.
 - Implement wxDataViewColumn::UnsetAsSortKey().
 - Fix not showing wxInfoBar with GTK+ 3 < 3.22.29.
 - Fix the build with glib < 2.32 (e.g. CentOS 6).

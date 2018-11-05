@@ -3136,7 +3136,14 @@ void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
 
     if ( [targetView respondsToSelector:@selector(setBackgroundColor:) ] )
     {
-        [targetView setBackgroundColor: col.OSXGetNSColor()];
+        wxWindow* peer = GetWXPeer();
+        if ( peer->GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
+        {
+            wxTopLevelWindow* toplevel = wxDynamicCast(peer,wxTopLevelWindow);
+
+            if ( toplevel == NULL || toplevel->GetShape().IsEmpty() )
+                [targetView setBackgroundColor: col.OSXGetNSColor()];
+        }
     }
 }
 
@@ -3147,6 +3154,8 @@ bool wxWidgetCocoaImpl::SetBackgroundStyle( wxBackgroundStyle style )
     if ( [m_osxView respondsToSelector:@selector(setOpaque:) ] )
     {
         [m_osxView setOpaque: opaque];
+        if ( style == wxBG_STYLE_TRANSPARENT )
+            [m_osxView setBackgroundColor:[NSColor clearColor]];
     }
     
     return true ;

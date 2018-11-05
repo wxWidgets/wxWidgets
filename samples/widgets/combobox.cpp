@@ -662,11 +662,11 @@ void ComboboxWidgetsPage::OnComboText(wxCommandEvent& event)
 
     if (event.GetEventType() == wxEVT_TEXT_ENTER)
     {
-        wxLogMessage("Combobox enter pressed (now '%s')", s.c_str());
+        wxLogMessage("Combobox enter pressed (now '%s')", s);
     }
     else
     {
-        wxLogMessage("Combobox text changed (now '%s')", s.c_str());
+        wxLogMessage("Combobox text changed (now '%s')", s);
     }
 }
 
@@ -685,7 +685,7 @@ void ComboboxWidgetsPage::OnComboBox(wxCommandEvent& event)
 
     wxLogMessage("Combobox item %ld selected", sel);
 
-    wxLogMessage("Combobox GetValue(): %s", m_combobox->GetValue().c_str() );
+    wxLogMessage("Combobox GetValue(): %s", m_combobox->GetValue() );
 
     if ( event.GetString() != m_combobox->GetValue() )
     {

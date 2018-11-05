@@ -1279,6 +1279,7 @@ elif test "x$wxUSE_MACOSX_VERSION_MIN" = "x"; then
 fi
 
 if test "x$MACOSX_SDK_OPTS" != "x"; then
+    eval "CPP=\"$CPP $MACOSX_SDK_OPTS\""
     eval "CC=\"$CC $MACOSX_SDK_OPTS\""
     eval "CXX=\"$CXX $MACOSX_SDK_OPTS\""
     eval "LD=\"$LD $MACOSX_SDK_OPTS\""
@@ -1291,6 +1292,7 @@ if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
     else
         MACOSX_VERSION_MIN_OPTS="-mmacosx-version-min=$wxUSE_MACOSX_VERSION_MIN"
     fi
+    eval "CPP=\"$CPP $MACOSX_VERSION_MIN_OPTS\""
     eval "CC=\"$CC $MACOSX_VERSION_MIN_OPTS\""
     eval "CXX=\"$CXX $MACOSX_VERSION_MIN_OPTS\""
     eval "LD=\"$LD $MACOSX_VERSION_MIN_OPTS\""
@@ -1474,6 +1476,10 @@ if test "$USE_UNIX" = 1 ; then
     wxUSE_UNIX=yes
     AC_DEFINE(__UNIX__)
 fi
+
+dnl Values of these variables shouldn't change any longer from now on, we
+dnl export them to ensure they're picked up by sub-configure scripts.
+export CC CFLAGS CPP CPPFLAGS CXX CXXFLAGS LDD LDFLAGS OBJCFLAGS OBJCXXFLAGS
 
 dnl ------------------------------------------------------------------------
 dnl Check for headers
@@ -2583,7 +2589,7 @@ dnl We need to disable the use of lzma in built-in libtiff explicitly, as
 dnl otherwise we'd depend on the system lzma library, which is typically
 dnl undesirable when using builtin libraries. We also disable the use of lzma
 dnl if it's not available anyhow, just to speed up libtiff configure a little.
-if test "$HAVE_LZMA" = "no" -o "$wxUSE_LIBTIFF" = "builtin"; then
+if test "$wxUSE_LIBLZMA" = "no" -a "$wxUSE_LIBTIFF" = "builtin"; then
     ac_configure_args="$ac_configure_args --disable-lzma"
 fi
 
@@ -7932,7 +7938,7 @@ EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
 EXTRALIBS_STC="-lwxscintilla${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $SDL_LIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"

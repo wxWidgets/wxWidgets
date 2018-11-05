@@ -80,7 +80,7 @@ protected:
             s << '\t' << reply[n] << '\n';
         }
 
-        wxLogMessage("%s", s.c_str());
+        wxLogMessage("%s", s);
 
         return true;
     }
@@ -467,7 +467,7 @@ void MyApp::GenerateReport(wxDebugReport::Context ctx)
             else
             {
                 wxLogMessage("Report generated in \"%s\".",
-                             report->GetCompressedFileName().c_str());
+                             report->GetCompressedFileName());
                 report->Reset();
             }
         }

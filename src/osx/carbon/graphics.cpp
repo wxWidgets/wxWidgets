@@ -39,6 +39,7 @@
     #include "wx/osx/dcclient.h"
     #include "wx/osx/dcmemory.h"
     #include "wx/osx/private.h"
+    #include "wx/osx/core/cfdictionary.h"
 #else
     #include "CoreServices/CoreServices.h"
     #include "ApplicationServices/ApplicationServices.h"
@@ -2298,7 +2299,23 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
     CGColorRef col = wxMacCreateCGColor( fref->GetColour() );
     CTFontRef font = fref->OSXGetCTFont();
 
-    wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, fref->OSXGetCTFontAttributes()) );
+    wxCFDictionaryRef fontattr(wxCFRetain(fref->OSXGetCTFontAttributes()));
+    wxCFMutableDictionaryRef inlinefontattr;
+    
+    bool setColorsInLine = false;
+    
+    // if we emulate boldness the stroke color is not taken from the current context
+    // therefore we have to set it explicitly
+    if ( fontattr.GetValue(kCTStrokeWidthAttributeName) != NULL)
+    {
+        setColorsInLine = true;
+        inlinefontattr = fontattr.CreateMutableCopy();
+        inlinefontattr.SetValue(kCTForegroundColorFromContextAttributeName, kCFBooleanFalse);
+        inlinefontattr.SetValue(kCTForegroundColorAttributeName,col);
+        inlinefontattr.SetValue(kCTStrokeColorAttributeName,col);
+    }
+        
+    wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, setColorsInLine ? inlinefontattr : fontattr ) );
     wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
 
     y += CTFontGetAscent(font);

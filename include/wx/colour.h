@@ -118,6 +118,9 @@ public:
     virtual ChannelType Blue() const = 0;
     virtual ChannelType Alpha() const
         { return wxALPHA_OPAQUE ; }
+    
+    virtual bool IsSolid() const
+        { return true; }
 
     // implemented in colourcmn.cpp
     virtual wxString GetAsString(long flags = wxC2S_NAME | wxC2S_CSS_SYNTAX) const;

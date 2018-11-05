@@ -75,6 +75,8 @@ endmacro()
 
 # Set properties common to builtin third party libraries and wx libs
 function(wx_set_common_target_properties target_name)
+    cmake_parse_arguments(wxCOMMON_TARGET_PROPS "DEFAULT_WARNINGS" "" "" ${ARGN})
+
     if(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
         # TODO: implement for older CMake versions ?
         set_target_properties(${target_name} PROPERTIES CXX_STANDARD ${wxBUILD_CXX_STANDARD})
@@ -96,6 +98,13 @@ function(wx_set_common_target_properties target_name)
         ARCHIVE_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
         RUNTIME_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
         )
+    if(NOT wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
+        # Enable higher warnings for most compilers/IDEs
+        if(MSVC)
+            target_compile_options(${target_name} PRIVATE /W4)
+        endif()
+        # TODO: add warning flags for other compilers
+    endif()
 endfunction()
 
 # Set common properties on wx library target
@@ -446,7 +455,7 @@ function(wx_set_builtin_target_properties target_name)
 
     set_target_properties(${target_name} PROPERTIES FOLDER "Third Party Libraries")
 
-    wx_set_common_target_properties(${target_name})
+    wx_set_common_target_properties(${target_name} DEFAULT_WARNINGS)
     if(NOT wxBUILD_SHARED)
         wx_install(TARGETS ${name} ARCHIVE DESTINATION "lib${wxPLATFORM_LIB_DIR}")
     endif()

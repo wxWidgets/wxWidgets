@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/aui/tabartmsw.h
-// Purpose:     wxAuiMSWTabArt declaration
+// Name:        src/aui/tabartmsw.cpp
+// Purpose:     wxAuiMSWTabArt implementation
 // Author:      Tobias Taschner
 // Created:     2015-09-26
 // Copyright:   (c) 2015 wxWidgets development team
@@ -23,7 +23,7 @@
 #include "wx/msw/private.h"
 #include "wx/renderer.h"
 
-#if wxUSE_AUI
+#if wxUSE_AUI && !defined(__WXUNIVERSAL__)
 
 wxAuiMSWTabArt::wxAuiMSWTabArt()
 {

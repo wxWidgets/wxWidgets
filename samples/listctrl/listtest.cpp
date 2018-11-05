@@ -724,7 +724,7 @@ void MyFrame::OnShowSelInfo(wxCommandEvent& WXUNUSED(event))
     while ( item != -1 )
     {
         wxLogMessage("\t%ld (%s)",
-                     item, m_listCtrl->GetItemText(item).c_str());
+                     item, m_listCtrl->GetItemText(item));
 
         if ( ++shownCount > 10 )
         {
@@ -1119,7 +1119,7 @@ void MyListCtrl::OnBeginRDrag(wxListEvent& event)
 
 void MyListCtrl::OnBeginLabelEdit(wxListEvent& event)
 {
-    wxLogMessage( "OnBeginLabelEdit: %s", event.m_item.m_text.c_str());
+    wxLogMessage( "OnBeginLabelEdit: %s", event.m_item.m_text);
 
     wxTextCtrl * const text = GetEditControl();
     if ( !text )
@@ -1139,7 +1139,7 @@ void MyListCtrl::OnEndLabelEdit(wxListEvent& event)
             event.IsEditCancelled() ?
             wxString("[cancelled]") :
             event.m_item.m_text
-        ).c_str()
+        )
     );
 }
 
@@ -1167,7 +1167,7 @@ void MyListCtrl::OnSelected(wxListEvent& event)
         if ( GetItem(info) )
         {
             wxLogMessage("Value of the 2nd field of the selected item: %s",
-                         info.m_text.c_str());
+                         info.m_text);
         }
         else
         {
@@ -1397,7 +1397,7 @@ void MyListCtrl::OnRightClick(wxMouseEvent& event)
     }
 
     wxLogMessage("Right double click %s item %ld, subitem %ld",
-                 where.c_str(), item, subitem);
+                 where, item, subitem);
 }
 
 void MyListCtrl::LogEvent(const wxListEvent& event, const wxString& eventName)

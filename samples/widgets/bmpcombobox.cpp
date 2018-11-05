@@ -806,11 +806,11 @@ void BitmapComboBoxWidgetsPage::OnComboText(wxCommandEvent& event)
 
     if (event.GetEventType() == wxEVT_TEXT_ENTER)
     {
-        wxLogMessage("BitmapCombobox enter pressed (now '%s')", s.c_str());
+        wxLogMessage("BitmapCombobox enter pressed (now '%s')", s);
     }
     else
     {
-        wxLogMessage("BitmapCombobox text changed (now '%s')", s.c_str());
+        wxLogMessage("BitmapCombobox text changed (now '%s')", s);
     }
 }
 
@@ -821,7 +821,7 @@ void BitmapComboBoxWidgetsPage::OnComboBox(wxCommandEvent& event)
 
     wxLogMessage("BitmapCombobox item %ld selected", sel);
 
-    wxLogMessage("BitmapCombobox GetValue(): %s", m_combobox->GetValue().c_str() );
+    wxLogMessage("BitmapCombobox GetValue(): %s", m_combobox->GetValue() );
 }
 
 void BitmapComboBoxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))

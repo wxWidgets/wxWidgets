@@ -116,7 +116,6 @@ update_msw_setup_h setup.h.in
 update_msw_setup_h build/cmake/setup.h.in
 
 update_osx_setup_h include/wx/osx/setup0.h
-update_msw_setup_h setup.h.in
 
 update_single_setup_h wxUniv include/wx/univ/setup_inc.h include/wx/univ/setup0.h
 

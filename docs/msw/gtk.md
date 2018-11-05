@@ -1,4 +1,4 @@
-Building wxGTK port with Win32 GDK backend
+Building wxGTK port with Win32 GDK backend {#plat_msw_gtk}
 ------------------------------------------
 
 GTK+ widget toolkit has multiple GDK backends and one of them is Win32.
@@ -11,14 +11,15 @@ These notes don't consider building wxGTK with X11 backend under Windows.
 Building steps:
 
 1. wxGTK/Win32 build is similar to wxMSW one and you should have configured
-and be able to build wxWidgets as described in docs/msw/install.txt
+and be able to build wxWidgets as described in @ref plat_msw_install
 
 2. wxGTK/Win32 is disabled by default in wxWidgets, you need to enable it
 in bakefiles manually. Apply following patch manually or using Cygwin:
 
-    patch -p0 < docs/msw/gtkfix.patch
+        patch -p0 < docs/msw/gtkfix.patch
 
 Regenerate required make/project files:
+
     cd build\bakefiles
     bakefile_gen
 
@@ -31,6 +32,7 @@ in the C:\gtk directory.
 4. Building
 
 4.1 If you are using Visual C++ project files you need to setup GTK+ 2 include directories
+
     C:\gtk\lib\include\gtk-2.0
     C:\gtk\lib\include\glib-2.0
     C:\gtk\lib\include\cairo
@@ -44,7 +46,7 @@ and library directory
 
     C:\gtk\lib\
 
-    See http://msdn.microsoft.com/en-us/library/t9az1d21(v=vs.90).aspx
+See http://msdn.microsoft.com/en-us/library/t9az1d21(v=vs.90).aspx
 
 Open solution file in build\msw directory, select "GTK+ Debug" solution
 configuration and build the solution. To be sure that everything is as expected

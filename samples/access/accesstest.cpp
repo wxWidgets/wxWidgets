@@ -455,7 +455,7 @@ void MyFrame::OnQuery(wxCommandEvent& WXUNUSED(event))
                         wxString name, role;
                         GetInfo(childAccessible, 0, name, role);
                         wxString str;
-                        str.Printf("Found child %s/%s", name.c_str(), role.c_str());
+                        str.Printf("Found child %s/%s", name, role);
                         Log(str);
                         childAccessible->Release();
                     }
@@ -499,7 +499,7 @@ void MyFrame::LogObject(int indent, IAccessible* obj)
         GetInfo(obj, 0, name, role);
 
         wxString str;
-        str.Printf("Name = %s; Role = %s", name.c_str(), role.c_str());
+        str.Printf("Name = %s; Role = %s", name, role);
         str.Pad(indent, ' ', false);
         Log(str);
     }
@@ -520,7 +520,7 @@ void MyFrame::LogObject(int indent, IAccessible* obj)
         GetInfo(obj, i, name, role);
 
         wxString str;
-        str.Printf("%d) Name = %s; Role = %s", i, name.c_str(), role.c_str());
+        str.Printf("%d) Name = %s; Role = %s", i, name, role);
         str.Pad(indent, ' ', false);
         Log(str);
 

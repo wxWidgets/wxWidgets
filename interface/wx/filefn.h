@@ -130,26 +130,6 @@ typedef off_t wxFileOffset;
 #define wxCHANGE_UMASK(mask)
 
 /**
-    This function returns the total number of bytes and number of free bytes on
-    the disk containing the directory @a path (it should exist). Both @a total
-    and @a free parameters may be @NULL if the corresponding information is not
-    needed.
-
-    @since 2.3.2
-
-    @note The generic Unix implementation depends on the system having the
-          @c statfs() or @c statvfs() function.
-
-    @return @true on success, @false if an error occurred (for example, the
-             directory doesn’t exist).
-
-    @header{wx/filefn.h}
-*/
-bool wxGetDiskSpace(const wxString& path,
-                    wxLongLong total = NULL,
-                    wxLongLong free = NULL);
-
-/**
     Returns the Windows directory under Windows; other platforms return an
     empty string.
 

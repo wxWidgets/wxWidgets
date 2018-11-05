@@ -179,8 +179,8 @@ private:
 
         SetStatusText(wxString::Format(
                         "System is on %s power, battery state is %s",
-                        powerStr.c_str(),
-                        batteryStr.c_str()));
+                        powerStr,
+                        batteryStr));
     }
 
     void OnStartTaskClicked( wxCommandEvent& WXUNUSED(event) )

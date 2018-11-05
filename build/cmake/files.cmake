@@ -1947,8 +1947,8 @@ set(MSW_LOWLEVEL_SRC
     src/msw/notifmsg.cpp
     src/msw/ole/automtn.cpp
     src/msw/taskbar.cpp
-    src/generic/activityindicator.cpp
     src/msw/richtooltip.cpp
+    src/msw/evtloop.cpp
 )
 
 set(MSW_LOWLEVEL_HDR
@@ -1959,10 +1959,10 @@ set(MSW_LOWLEVEL_HDR
     wx/msw/htmlhelp.h
     wx/msw/helpchm.h
     wx/msw/sound.h
-    wx/generic/activityindicator.h
     wx/msw/joystick.h
     wx/msw/helpwin.h
     wx/msw/taskbar.h
+    wx/msw/evtloop.h
 )
 
 set(MSW_DESKTOP_LOWLEVEL_SRC
@@ -2000,7 +2000,6 @@ set(MSW_SRC
     src/msw/dialog.cpp
     src/msw/dirdlg.cpp
     src/msw/dragimag.cpp
-    src/msw/evtloop.cpp
     src/msw/filedlg.cpp
     src/msw/frame.cpp
     src/msw/gauge.cpp
@@ -2047,6 +2046,7 @@ set(MSW_SRC
     src/msw/commandlinkbutton.cpp
     src/msw/datetimectrl.cpp
     src/msw/hyperlink.cpp
+    src/generic/activityindicator.cpp
 )
 
 set(MSW_HDR
@@ -2084,7 +2084,6 @@ set(MSW_HDR
     wx/msw/dirdlg.h
     wx/msw/dragimag.h
     wx/msw/enhmeta.h
-    wx/msw/evtloop.h
     wx/msw/filedlg.h
     wx/msw/font.h
     wx/msw/frame.h
@@ -2155,6 +2154,7 @@ set(MSW_HDR
     wx/msw/datetimectrl.h
     wx/msw/timectrl.h
     wx/generic/animate.h
+    wx/generic/activityindicator.h
 )
 
 set(MSW_RSC
@@ -2274,7 +2274,6 @@ set(OSX_LOWLEVEL_SRC
     src/osx/brush.cpp
     src/osx/dialog_osx.cpp
     src/osx/fontutil.cpp
-    src/osx/imaglist.cpp
     src/osx/minifram.cpp
     src/osx/nonownedwnd_osx.cpp
     src/osx/palette.cpp
@@ -2373,6 +2372,7 @@ set(OSX_COMMON_SRC
     src/generic/icon.cpp
     #TODO: </if>
     src/osx/statbmp_osx.cpp
+    src/generic/imaglist.cpp
 )
 
 set(OSX_SHARED_HDR
@@ -2414,7 +2414,6 @@ set(OSX_SHARED_HDR
     wx/osx/fontdlg.h
     wx/osx/frame.h
     wx/osx/gauge.h
-    wx/osx/imaglist.h
     wx/osx/listbox.h
     wx/osx/listctrl.h
     wx/osx/mdi.h
@@ -2469,6 +2468,7 @@ set(OSX_SHARED_HDR
     wx/generic/statusbr.h
     wx/osx/appprogress.h
     wx/generic/icon.h
+    wx/generic/imaglist.h
 )
 
 set(OSX_COCOA_SRC
@@ -2596,7 +2596,6 @@ set(UNIV_THEMES_SRC
 set(UNIV_SRC
     ${UNIV_PLATFORM_SRC}
     src/generic/accel.cpp
-    src/generic/activityindicator.cpp
     src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
@@ -2646,12 +2645,12 @@ set(UNIV_SRC
     src/univ/toolbar.cpp
     src/univ/topluniv.cpp
     src/univ/winuniv.cpp
+    src/generic/activityindicator.cpp
 )
 
 set(UNIV_HDR
     ${UNIV_PLATFORM_HDR}
     wx/generic/accel.h
-    wx/generic/activityindicator.h
     wx/generic/animate.h
     wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
@@ -2708,6 +2707,7 @@ set(UNIV_HDR
     wx/univ/toolbar.h
     wx/univ/toplevel.h
     wx/univ/window.h
+    wx/generic/activityindicator.h
 )
 
 set(MEDIA_CMN_SRC

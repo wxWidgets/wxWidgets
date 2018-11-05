@@ -769,15 +769,16 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
 
     [m_macWindow setDelegate:controller];
     [controller addObservers:m_macWindow];
-
-    if ( ( style & wxFRAME_SHAPED) )
-    {
-        [m_macWindow setOpaque:NO];
-        [m_macWindow setAlphaValue:1.0];
-    }
     
     if ( !(style & wxFRAME_TOOL_WINDOW) )
         [m_macWindow setHidesOnDeactivate:NO];
+    
+    if ( GetWXPeer()->GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT )
+    {
+        [m_macWindow setOpaque:NO];
+        [m_macWindow setAlphaValue:1.0];
+        [m_macWindow setBackgroundColor:[NSColor clearColor]];
+    }
 }
 
 void wxNonOwnedWindowCocoaImpl::Create( wxWindow* WXUNUSED(parent), WXWindow nativeWindow )

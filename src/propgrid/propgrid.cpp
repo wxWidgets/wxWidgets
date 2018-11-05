@@ -137,6 +137,22 @@ DeletedObjects gs_deletedEditorObjects;
 } // anonymous namespace
 #endif
 
+  // Utility to check if specific item is in a vector.
+template<typename T>
+static bool wxPGItemExistsInVector(const wxVector<T>& vector, const T& item)
+{
+#if wxUSE_STL
+    return std::find(vector.begin(), vector.end(), item) != vector.end();
+#else
+    for (typename wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
+    {
+        if ( *it == item )
+            return true;
+    }
+    return false;
+#endif // wxUSE_STL/!wxUSE_STL
+}
+
 // -----------------------------------------------------------------------
 
 #if wxUSE_INTL
@@ -802,7 +818,7 @@ bool wxPropertyGrid::DoSelectAndEdit( wxPGProperty* prop,
         // send event
         DoClearSelection(false, wxPG_SEL_NO_REFRESH);
 
-        if ( m_pState->m_editableColumns.Index(colIndex) == wxNOT_FOUND )
+        if ( !wxPGItemExistsInVector<int>(m_pState->m_editableColumns, colIndex) )
         {
             res = DoAddToSelection(prop, selFlags);
         }
@@ -972,7 +988,7 @@ void wxPropertyGrid::MakeColumnEditable( unsigned int column,
          wxS("Set wxPG_PROP_READONLY property flag instead")
     );
 
-    wxArrayInt& cols = m_pState->m_editableColumns;
+    wxVector<int>& cols = m_pState->m_editableColumns;
 
     if ( editable )
     {
@@ -1861,8 +1877,8 @@ void wxPropertyGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
     }
 
     // Find out where the window is scrolled to
-    int vx,vy;                     // Top left corner of client
-    GetViewStart(&vx,&vy);
+    int vy;                     // Top of the client
+    GetViewStart(NULL, &vy);
     vy *= wxPG_PIXELS_PER_UNIT;
 
     // Update everything inside the box
@@ -1875,11 +1891,8 @@ void wxPropertyGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
     r.x = 0;
     r.width = GetClientSize().x;
 
-    r.y = vy;
-    r.height = GetClientSize().y;
-
     // Repaint this rectangle
-    DrawItems(*dcPtr, r.y, r.y + r.height, &r);
+    DrawItems(*dcPtr, r.y, r.y + r.height-1, &r);
 
     // This blits the buffer (if used) to the window DC.
     delete dcPtr;
@@ -1985,7 +1998,7 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
     {
         tempItemsRect = wxRect(0, topItemY,
                                m_pState->GetVirtualWidth(),
-                               bottomItemY);
+                               bottomItemY - topItemY + 1);
         itemsRect = &tempItemsRect;
     }
 
@@ -1999,9 +2012,8 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
 
     if ( m_pState->DoGetRoot()->GetChildCount() > 0 )
     {
-        // paintFinishY and drawBottomY are in buffer/physical space
-        int paintFinishY = DoDrawItems(dc, itemsRect);
-        int drawBottomY = itemsRect->y + itemsRect->height - vy;
+        int paintFinishY = DoDrawItems(dc, itemsRect) + 1 - vy;
+        int drawBottomY = itemsRect->y + itemsRect->height - 1 - vy;
 
         // Clear area beyond last painted property
         if ( paintFinishY < drawBottomY )
@@ -2010,7 +2022,7 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
             dc.SetBrush(m_colEmptySpace);
             dc.DrawRectangle(0, paintFinishY,
                                     m_width,
-                                    drawBottomY );
+                                    drawBottomY-paintFinishY+1);
         }
     }
     else
@@ -2047,10 +2059,14 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     if ( !lastItem )
         lastItem = GetLastItem( wxPG_ITERATE_VISIBLE );
 
-    if ( IsFrozen() || m_height < 1 || firstItem == NULL )
-        return itemsRect->y;
+    int vy;
+    GetViewStart(NULL, &vy);
+    vy *= wxPG_PIXELS_PER_UNIT;
 
-    wxCHECK_MSG( !m_pState->m_itemsAdded, itemsRect->y,
+    if ( IsFrozen() || m_height < 1 || firstItem == NULL )
+        return vy - 1;
+
+    wxCHECK_MSG( !m_pState->m_itemsAdded, vy - 1,
                  wxS("no items added") );
     wxASSERT( m_pState->DoGetRoot()->GetChildCount() );
 
@@ -2060,7 +2076,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     int lastItemBottomY;
 
     firstItemTopY = itemsRect->y;
-    lastItemBottomY = itemsRect->y + itemsRect->height;
+    lastItemBottomY = itemsRect->y + itemsRect->height - 1;
 
     // Align y coordinates to item boundaries
     firstItemTopY -= firstItemTopY % lh;
@@ -2093,20 +2109,18 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 #if WXWIN_COMPATIBILITY_3_0
     int xRelMod = 0;
 
-    // Buffer's y = 0, so align itemsRect and coordinates to that
     if ( isBuffered )
     {
         xRelMod = itemsRect->x;
         // itemsRect conversion
-        firstItemTopY -= itemsRect->y;
-        lastItemBottomY -= itemsRect->y;
+        firstItemTopY -= vy;
+        lastItemBottomY -= vy;
     }
 #else
-    // Buffer's y = 0, so align itemsRect and coordinates to that
     int xRelMod = itemsRect->x;
     // itemsRect conversion
-    firstItemTopY -= itemsRect->y;
-    lastItemBottomY -= itemsRect->y;
+    firstItemTopY -= vy;
+    lastItemBottomY -= vy;
 #endif
 
     int x = m_marginWidth - xRelMod;
@@ -2147,7 +2161,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     const wxPGProperty* firstSelected = GetSelection();
     const wxPropertyGridPageState* state = m_pState;
-    const wxArrayInt& colWidths = state->m_colWidths;
+    const wxVector<int>& colWidths = state->m_colWidths;
     const unsigned int colCount = state->GetColumnCount();
 
     // TODO: Only render columns that are within clipping region.
@@ -2160,7 +2174,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     //
     // Pre-generate list of visible properties.
-    wxArrayPGProperty visPropArray;
+    wxVector<wxPGProperty*> visPropArray;
     visPropArray.reserve((m_height/m_lineHeight)+6);
 
     for ( ; !it.AtEnd(); it.Next() )
@@ -2512,7 +2526,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         y += rowHeight;
     }
 
-    return y;
+    return y - 1  + vy;
 }
 
 // -----------------------------------------------------------------------
@@ -2580,6 +2594,7 @@ void wxPropertyGrid::DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 )
         r.x -= vx;
         r.y -= vy;
         RefreshRect(r);
+        Update();
     }
 }
 
@@ -2608,8 +2623,7 @@ void wxPropertyGrid::DrawItemAndValueRelated( wxPGProperty* p )
     wxPGProperty* parent = p->GetParent();
 
     while ( parent &&
-            !parent->IsCategory() &&
-            parent->GetParent() )
+            !parent->IsCategory() && !parent->IsRoot() )
     {
          DrawItem(parent);
          parent = parent->GetParent();
@@ -3370,14 +3384,6 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
     // If property's value is being changed, assume it is valid
     OnValidationFailureReset(selected);
 
-    wxPGProperty* topPaintedProperty = changedProperty;
-
-    while ( !topPaintedProperty->IsCategory() &&
-            !topPaintedProperty->IsRoot() )
-    {
-        topPaintedProperty = topPaintedProperty->GetParent();
-    }
-
     changedProperty->SetValue(value, &m_chgInfo_valueList, wxPG_SETVAL_BY_USER);
 
     // NB: Call GetEditorControl() as late as possible, because OnSetValue()
@@ -3395,10 +3401,9 @@ bool wxPropertyGrid::DoPropertyChanged( wxPGProperty* p, unsigned int selFlags )
         }
     }
 
-    wxPGProperty* pwc;
-
     // Propagate updates to parent(s)
-    pwc = p;
+    wxPGProperty* topPaintedProperty = changedProperty->GetMainParent();
+    wxPGProperty* pwc = p;
     wxPGProperty* prevPwc = NULL;
 
     while ( prevPwc != topPaintedProperty )
@@ -3678,7 +3683,7 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
     // SetValueInEvent(), as called in one of the functions referred above
     // overrides editor's value.
-    if ( m_iFlags & wxPG_FL_VALUE_CHANGE_IN_EVENT )
+    if ( WasValueChangedInEvent() )
     {
         valueIsPending = true;
         pendingValue = m_changeInEventValue;
@@ -5598,21 +5603,6 @@ void wxPropertyGrid::ClearActionTriggers( int action )
     while ( didSomething );
 }
 
-#if WXWIN_COMPATIBILITY_3_0
-// Utility to find if specific item is in a vector. Returns index to
-// the item, or wxNOT_FOUND if not present.
-template<typename CONTAINER, typename T>
-int wxPGFindInVector( CONTAINER vector, const T& item )
-{
-    for ( unsigned int i=0; i<vector.size(); i++ )
-    {
-        if ( vector[i] == item )
-            return (int) i;
-    }
-    return wxNOT_FOUND;
-}
-#endif // WXWIN_COMPATIBILITY_3_0
-
 void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
 {
     //
@@ -5717,7 +5707,7 @@ void wxPropertyGrid::HandleKeyEvent( wxKeyEvent &event, bool fromChild )
     if ( fromChild &&
 #if WXWIN_COMPATIBILITY_3_0
          // Deprecated: use a hash set instead.
-         wxPGFindInVector(m_dedicatedKeys, keycode) == wxNOT_FOUND )
+         !wxPGItemExistsInVector<int>(m_dedicatedKeys, keycode) )
 #else
          m_dedicatedKeys.find(keycode) == m_dedicatedKeys.end() )
 #endif
@@ -5972,6 +5962,11 @@ void wxPropertyGrid::HandleFocusChange( wxWindow* newFocused )
     {
         if ( parent == wndEditor )
         {
+            // If editor is active consider focus set on its components
+            // as a focus set on the editor itself (to prevent doing actions
+            // when focus is switched between subcontrols of a compound
+            // editor like e.g. wxComboCtrl).
+            newFocused = wndEditor;
             wasEditorFocused = true;
         }
         // Use m_eventObject, which is either wxPropertyGrid or
@@ -6608,11 +6603,10 @@ bool wxPropertyGridPopulator::AddAttribute( const wxString& name,
                                             const wxString& type,
                                             const wxString& value )
 {
-    int l = m_propHierarchy.size();
-    if ( !l )
+    if ( m_propHierarchy.empty() )
         return false;
 
-    wxPGProperty* p = m_propHierarchy[l-1];
+    wxPGProperty* p = m_propHierarchy.back();
     wxString valuel = value.Lower();
     wxVariant variant;
 
