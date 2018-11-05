@@ -150,6 +150,9 @@ inline int wxRound(double x)
 inline double wxDegToRad(double deg) { return (deg * M_PI) / 180.0; }
 inline double wxRadToDeg(double rad) { return (rad * 180.0) / M_PI; }
 
+// Count trailing zeros.
+WXDLLIMPEXP_BASE unsigned int wxCTZ(wxUint32 x);
+
 #endif /* __cplusplus */
 
 
@@ -180,15 +183,5 @@ inline double wxRadToDeg(double rad) { return (rad * 180.0) / M_PI; }
 
 /* Compute the greatest common divisor of two positive integers */
 WXDLLIMPEXP_BASE unsigned int wxGCD(unsigned int u, unsigned int v);
-
-#ifdef __cplusplus
-/* Count trailing zeros
-
-Returns the number of trailing zeros in unsigned input x.
-
-@since 3.1.2
-*/
-WXDLLIMPEXP_BASE unsigned int wxCTZ(unsigned x);
-#endif
 
 #endif /* _WX_MATH_H_ */

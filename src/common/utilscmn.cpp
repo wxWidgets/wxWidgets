@@ -1021,7 +1021,7 @@ unsigned int wxGCD(unsigned int u, unsigned int v)
 // wxCTZ
 // Count trailing zeros. Use optimised builtin where available.
 // ----------------------------------------------------------------------------
-unsigned int wxCTZ(unsigned x)
+unsigned int wxCTZ(wxUint32 x)
 {
     wxCHECK_MSG(x > 0, 0, "Undefined for x == 0.");
 #ifdef __GNUC__
