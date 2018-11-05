@@ -178,10 +178,6 @@ void* wxJoystickThread::Entry()
 
             if ( (j_evt.type & JS_EVENT_BUTTON) && (j_evt.number < wxJS_MAX_BUTTONS) )
             {
-                // Bounds check for bit shift in this block.
-                wxCHECK_MSG(j_evt.number >= 0, (void *) -1, "Shift count negative.");
-                wxCHECK_MSG(j_evt.number < CHAR_BIT * (int) sizeof(int), (void *) -1,
-                            "Shift count overflow.");
                 if (j_evt.value)
                 {
                     m_buttons |= (1 << j_evt.number);

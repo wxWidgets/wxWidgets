@@ -861,10 +861,6 @@ void* wxJoystickThread::Entry()
         //is the cookie a button?
         if (nIndex < 40)
         {
-            // Bounds check for bit shift in this block.
-            wxCHECK_MSG(nIndex >= 0, (void *) -1, "Shift count negative.");
-            wxCHECK_MSG(nIndex < CHAR_BIT * (int) sizeof(int), (void *) -1,
-                            "Shift count overflow.");
             if (hidevent.value)
             {
                 pThis->m_buttons |= (1 << nIndex);
