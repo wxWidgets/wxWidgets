@@ -1748,7 +1748,9 @@ public:
     int GetButtonChange() const;
 
     /**
-        Returns the 0-indexed ordinal of the button changing state @since 3.1.2.
+        Returns the 0-indexed ordinal of the button changing state.
+        
+        @since 3.1.2.
     */
     int GetButtonOrdinal() const;
 
