@@ -182,7 +182,12 @@ inline double wxRadToDeg(double rad) { return (rad * 180.0) / M_PI; }
 WXDLLIMPEXP_BASE unsigned int wxGCD(unsigned int u, unsigned int v);
 
 #ifdef __cplusplus
-/* Count trailing zeros */
+/* Count trailing zeros
+
+Returns the number of trailing zeros in unsigned input x.
+
+@since 3.1.2
+*/
 WXDLLIMPEXP_BASE unsigned int wxCTZ(unsigned x);
 #endif
 
