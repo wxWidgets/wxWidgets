@@ -2295,8 +2295,33 @@ wxDataViewItem wxCocoaDataViewControl::GetTopItem() const
 
 wxRect wxCocoaDataViewControl::GetRectangle(const wxDataViewItem& item, const wxDataViewColumn *columnPtr)
 {
-    return wxFromNSRect([m_osxView superview],[m_OutlineView frameOfCellAtColumn:GetColumnPosition(columnPtr)
+    NSView* const parent = [m_osxView superview];
+
+    wxRect r = wxFromNSRect(parent, [m_OutlineView frameOfCellAtColumn:GetColumnPosition(columnPtr)
             row:[m_OutlineView rowForItem:[m_DataSource getDataViewItemFromBuffer:item]]]);
+
+    // For hidden items, i.e. items not shown because their parent is
+    // collapsed, the native method returns rectangles with negative width, but
+    // we're supposed to just return an empty rectangle in this case. To be on
+    // the safe side, also check for the height as well, even if it seems to be
+    // always 0 in this case.
+    if ( r.width < 0 || r.height < 0 )
+        return wxRect();
+
+    // Also adjust the vertical coordinates to use physical window coordinates
+    // instead of the logical ones returned by frameOfCellAtColumn:row:
+    NSScrollView* const scrollView = [m_OutlineView enclosingScrollView];
+    const wxRect
+        visible = wxFromNSRect(parent, scrollView.contentView.visibleRect);
+
+    // We are also supposed to return empty rectangle if the item is not
+    // visible because it is scrolled out of view.
+    if ( r.GetBottom() < visible.GetTop() || r.GetTop() > visible.GetBottom() )
+        return wxRect();
+
+    r.y -= visible.y;
+
+    return r;
 }
 
 bool wxCocoaDataViewControl::IsExpanded(const wxDataViewItem& item) const
