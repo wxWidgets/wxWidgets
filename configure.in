@@ -700,6 +700,9 @@ WX_ARG_FEATURE(ole,           [  --enable-ole            use OLE classes (Win32 
 WX_ARG_FEATURE(dataobj,       [  --enable-dataobj        use data object classes], wxUSE_DATAOBJ)
 WX_ARG_FEATURE(webrequest,    [  --enable-webrequest     use wxWebRequest], wxUSE_WEBREQUEST)
 WX_ARG_FEATURE(webrequestcurl, [  --enable-webrequest-curl use libcurl with wxWebRequest], wxUSE_WEBREQUEST_LIBCURL)
+if test "$USE_DARWIN" = 1; then
+WX_ARG_FEATURE(webrequesturlsession, [  --enable-webrequest-urlsession use NSURLSession with wxWebRequest], wxUSE_WEBREQUEST_URLSESSION)
+fi dnl USE_DARWIN
 
 WX_ARG_FEATURE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
 
@@ -6368,6 +6371,10 @@ fi
 
 if test "$wxUSE_WEBREQUEST" = "yes"; then
     AC_DEFINE(wxUSE_WEBREQUEST)
+
+    if test "$wxUSE_WEBREQUEST_URLSESSION" = "yes"; then
+        AC_DEFINE(wxUSE_WEBREQUEST_URLSESSION)
+    fi
 
     if test "$wxUSE_MSW" = 1; then
         dnl TODO: Check for the required headers/libraries under Windows

@@ -1139,6 +1139,7 @@ enable_ole
 enable_dataobj
 enable_webrequest
 enable_webrequestcurl
+enable_webrequesturlsession
 enable_ipc
 enable_baseevtloop
 enable_epollloop
@@ -2083,6 +2084,7 @@ Optional Features:
   --enable-dataobj        use data object classes
   --enable-webrequest     use wxWebRequest
   --enable-webrequest-curl use libcurl with wxWebRequest
+  --enable-webrequest-urlsession use NSURLSession with wxWebRequest
   --enable-ipc            use interprocess communication (wxSocket etc.)
   --enable-baseevtloop    use event loop in console programs too
   --enable-epollloop      use wxEpollDispatcher class (Linux only)
@@ -6580,7 +6582,37 @@ fi
 
           eval "$wx_cv_use_webrequestcurl"
 
+if test "$USE_DARWIN" = 1; then
 
+          enablestring=
+          defaultval=$wxUSE_ALL_FEATURES
+          if test -z "$defaultval"; then
+              if test x"$enablestring" = xdisable; then
+                  defaultval=yes
+              else
+                  defaultval=no
+              fi
+          fi
+
+          # Check whether --enable-webrequesturlsession was given.
+if test "${enable_webrequesturlsession+set}" = set; then :
+  enableval=$enable_webrequesturlsession;
+                          if test "$enableval" = yes; then
+                            wx_cv_use_webrequesturlsession='wxUSE_WEBREQUEST_URLSESSION=yes'
+                          else
+                            wx_cv_use_webrequesturlsession='wxUSE_WEBREQUEST_URLSESSION=no'
+                          fi
+
+else
+
+                          wx_cv_use_webrequesturlsession='wxUSE_WEBREQUEST_URLSESSION=${'DEFAULT_wxUSE_WEBREQUEST_URLSESSION":-$defaultval}"
+
+fi
+
+
+          eval "$wx_cv_use_webrequesturlsession"
+
+fi
 
           enablestring=
           defaultval=$wxUSE_ALL_FEATURES
@@ -36713,6 +36745,11 @@ fi
 if test "$wxUSE_WEBREQUEST" = "yes"; then
     $as_echo "#define wxUSE_WEBREQUEST 1" >>confdefs.h
 
+
+    if test "$wxUSE_WEBREQUEST_URLSESSION" = "yes"; then
+        $as_echo "#define wxUSE_WEBREQUEST_URLSESSION 1" >>confdefs.h
+
+    fi
 
     if test "$wxUSE_MSW" = 1; then
                 $as_echo "#define wxUSE_WEBREQUEST_WINHTTP 1" >>confdefs.h
