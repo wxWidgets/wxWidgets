@@ -36718,6 +36718,8 @@ if test "$wxUSE_WEBREQUEST" = "yes"; then
                 $as_echo "#define wxUSE_WEBREQUEST_WINHTTP 1" >>confdefs.h
 
     fi
+
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webrequest"
 fi
 
 

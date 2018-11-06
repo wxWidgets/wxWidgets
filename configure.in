@@ -6373,6 +6373,8 @@ if test "$wxUSE_WEBREQUEST" = "yes"; then
         dnl TODO: Check for the required headers/libraries under Windows
         AC_DEFINE(wxUSE_WEBREQUEST_WINHTTP)
     fi
+
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS webrequest"
 fi
 
 dnl ---------------------------------------------------------------------------
