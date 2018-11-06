@@ -524,4 +524,12 @@ wxWebRequest* wxWebSessionWinHTTP::CreateRequest(const wxString& url, int id)
     return new wxWebRequestWinHTTP(id, *this, url);
 }
 
+wxVersionInfo wxWebSessionWinHTTP::GetLibraryVersionInfo()
+{
+    int verMaj, verMin, verMicro;
+    wxGetOsVersion(&verMaj, &verMin, &verMicro);
+    return wxVersionInfo("WinHTTP", verMaj, verMin, verMicro);
+}
+
+
 #endif // wxUSE_WEBREQUEST_WINHTTP

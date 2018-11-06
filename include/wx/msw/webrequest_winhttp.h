@@ -115,6 +115,8 @@ public:
 
     wxWebRequest* CreateRequest(const wxString& url, int id = wxID_ANY) wxOVERRIDE;
 
+    wxVersionInfo GetLibraryVersionInfo() wxOVERRIDE;
+
     HINTERNET GetHandle() const { return m_handle; }
 
 private:

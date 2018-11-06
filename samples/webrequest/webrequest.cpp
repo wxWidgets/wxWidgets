@@ -165,6 +165,8 @@ public:
 
         CreateStatusBar();
 
+        GetStatusBar()->SetStatusText(wxWebSession::GetDefault().GetLibraryVersionInfo().ToString());
+
         m_downloadProgressTimer.Bind(wxEVT_TIMER,
             &WebRequestFrame::OnProgressTimer, this);
 
@@ -402,7 +404,7 @@ public:
     {
         if ( !wxApp::OnInit() )
             return false;
-
+        
         wxInitAllImageHandlers();
 
         // create the main application window

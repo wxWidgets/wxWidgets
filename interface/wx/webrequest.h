@@ -485,6 +485,12 @@ public:
     wxWebRequest* CreateRequest(const wxString& url, int id = wxID_ANY);
 
     /**
+        Retrieve the version information about the implementation library used
+        by this session.
+    */
+    virtual wxVersionInfo GetLibraryVersionInfo();
+
+    /**
         Sets a request header in every wxWebRequest created from this session
         after is has been set.
 

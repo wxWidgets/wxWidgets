@@ -479,6 +479,19 @@ void wxWebSessionCURL::CancelRequest(wxWebRequestCURL* request)
     m_cancelledRequests.push_back(wxObjectDataPtr<wxWebRequestCURL>(request));
 }
 
+wxVersionInfo  wxWebSessionCURL::GetLibraryVersionInfo()
+{
+    const curl_version_info_data* vi = curl_version_info(CURLVERSION_NOW);
+    wxString desc = wxString::Format("libcurl/%s", vi->version);
+    if (vi->ssl_version[0])
+        desc += " " + wxString(vi->ssl_version);
+    return wxVersionInfo("libcurl",
+        vi->version_num >> 16 & 0xff,
+        vi->version_num >> 8 & 0xff,
+        vi->version_num & 0xff,
+        desc);
+}
+
 // static
 void wxWebSessionCURL::InitializeCURL()
 {

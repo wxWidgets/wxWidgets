@@ -116,6 +116,8 @@ public:
 
     wxWebRequest* CreateRequest(const wxString& url, int id = wxID_ANY) wxOVERRIDE;
 
+    wxVersionInfo GetLibraryVersionInfo() wxOVERRIDE;
+
     bool StartRequest(wxWebRequestCURL& request);
 
     void CancelRequest(wxWebRequestCURL* request);

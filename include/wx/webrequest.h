@@ -21,6 +21,7 @@
 #include "wx/sharedptr.h"
 #include "wx/stream.h"
 #include "wx/vector.h"
+#include "wx/versioninfo.h"
 
 class wxWebResponse;
 class wxWebSession;
@@ -222,6 +223,8 @@ public:
     virtual ~wxWebSession() { }
 
     virtual wxWebRequest* CreateRequest(const wxString& url, int id = wxID_ANY) = 0;
+
+    virtual wxVersionInfo GetLibraryVersionInfo() = 0;
 
     virtual void SetHeader(const wxString& name, const wxString& value)
     { m_headers[name] = value; }
