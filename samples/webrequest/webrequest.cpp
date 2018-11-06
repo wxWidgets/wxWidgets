@@ -22,6 +22,7 @@
 #include "wx/artprov.h"
 #include "wx/webrequest.h"
 #include "wx/filedlg.h"
+#include "wx/image.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
     #include "../sample.xpm"
@@ -401,6 +402,8 @@ public:
     {
         if ( !wxApp::OnInit() )
             return false;
+
+        wxInitAllImageHandlers();
 
         // create the main application window
         WebRequestFrame *frame = new WebRequestFrame("wxWebRequest Sample App");
