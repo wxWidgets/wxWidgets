@@ -42,7 +42,6 @@ wxQtPushButton::wxQtPushButton(wxWindow *parent, wxAnyButton *handler)
 
 bool wxQtPushButton::eventFilter(QObject *watched, QEvent *event)
 {
-// TODO: Disabled control shouldn't get any events
     QPushButton *button = qobject_cast<QPushButton *>( watched );
     if( !button )
         return false;
