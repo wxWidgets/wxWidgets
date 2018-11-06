@@ -15,7 +15,6 @@
 #endif
 
 #include <QtWidgets/QPushButton>
-#include <QDebug>
 
 #include "wx/bitmap.h"
 #include "wx/qt/private/utils.h"
@@ -53,7 +52,6 @@ bool wxQtPushButton::eventFilter(QObject *watched, QEvent *event)
         if( m_button->GetStateBitmaps()[1].IsOk() )
         {
             button->setIcon( QIcon( *( m_button->GetStateBitmaps()[1].GetHandle() ) ) );
-//            return true;
         }
     }
     else if( event->type() == QEvent::MouseButtonPress && button->isEnabled() )
