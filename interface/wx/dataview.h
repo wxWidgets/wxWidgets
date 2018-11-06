@@ -1558,6 +1558,9 @@ public:
 
     /**
         Return @true if the item is expanded.
+
+        @note When using the native macOS version this method has a bug which
+              may result in returning @true even for items without children.
     */
     virtual bool IsExpanded(const wxDataViewItem& item) const;
 
