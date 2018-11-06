@@ -128,6 +128,7 @@ All (GUI):
 - Add wxGrid::SetCornerLabelValue() (Pavel Kalugin).
 - Add strikethrough support for fonts defined in XRC.
 - Add wxDisplay::GetPPI().
+- Add wxGraphicsContext::GetWindow().
 
 wxGTK:
 
