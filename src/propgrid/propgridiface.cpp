@@ -896,15 +896,16 @@ wxPGVIterator wxPropertyGridInterface::GetVIterator( int flags ) const
 static wxString EscapeDelimiters(const wxString& s)
 {
     wxString result;
-    result.Alloc(s.length());
-    const wxChar* ch = s.c_str();
-    while (*ch)
+    result.reserve(s.length());
+
+    for (wxString::const_iterator it = s.begin(); it != s.end(); ++it)
     {
-        if (*ch == wxT(';') || *ch == wxT('|') || *ch == wxT(','))
-            result += wxT('\\');
-        result += *ch;
-        ++ch;
+        wxStringCharType ch = *it;
+        if ( ch == wxS(';') || ch == wxS('|') || ch == wxS(',') )
+            result += wxS('\\');
+        result += ch;
     }
+
     return result;
 }
 
