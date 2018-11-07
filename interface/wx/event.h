@@ -1741,9 +1741,23 @@ public:
     /**
         Returns the identifier of the button changing state.
 
-        This is a @c wxJOY_BUTTONn identifier, where @c n is one of 1, 2, 3, 4.
+        The return value is @code 1 << n @endcode where @c n is the index of the
+        button changing state, which can also be retrieved using GetButtonOrdinal().
+
+        Note that for @c n equal to 1, 2, 3 or 4 there are predefined @c wxJOY_BUTTONn
+        constants which can be used for more clarity, however these constants are not
+        defined for the buttons beyond the first four.
     */
     int GetButtonChange() const;
+
+    /**
+        Returns the 0-indexed ordinal of the button changing state.
+
+        @see GetButtonChange()
+
+        @since 3.1.2.
+    */
+    int GetButtonOrdinal() const;
 
     /**
         Returns the down state of the buttons.
