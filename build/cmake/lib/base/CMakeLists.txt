@@ -24,15 +24,6 @@ elseif(APPLE)
     endif()
 elseif(UNIX)
     wx_append_sources(BASE_FILES BASE_UNIX)
-    if(wxUSE_SECRETSTORE)
-        # The required APIs are always available under MSW and OS X but we must
-        # have GNOME libsecret under Unix to be able to compile this class.
-        find_package(Libsecret REQUIRED)
-        if(NOT LIBSECRET_FOUND)
-            message(WARNING "libsecret not found, wxSecretStore won't be available")
-            wx_option_force_value(wxUSE_SECRETSTORE OFF)
-        endif()
-    endif()
 endif()
 
 wx_add_library(base IS_BASE ${BASE_FILES})

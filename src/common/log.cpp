@@ -1108,7 +1108,7 @@ static const wxChar* GetSysErrorMsg(wxChar* szBuf, size_t sizeBuf, unsigned long
         char buffer[1024];
         char *errorMsg = buffer;
 
-#ifdef _GNU_SOURCE // GNU-specific strerror_r
+#if defined(__GLIBC__) && defined(_GNU_SOURCE) // GNU-specific strerror_r
         // GNU's strerror_r has a weird interface -- it doesn't
         // necessarily copy anything to the buffer given; use return
         // value instead.

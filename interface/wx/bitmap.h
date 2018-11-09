@@ -712,9 +712,6 @@ public:
 
         Sets the depth member (does not affect the bitmap data).
 
-        @todo since these functions do not affect the bitmap data,
-              why they exist??
-
         @param depth
             Bitmap depth.
 

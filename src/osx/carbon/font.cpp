@@ -971,9 +971,9 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
 
-    s.Printf(wxT("%d;%f;%d;%d;%d;%d;%d;%s;%d"),
+    s.Printf(wxT("%d;%s;%d;%d;%d;%d;%d;%s;%d"),
         1, // version
-        GetFractionalPointSize(),
+        wxString::FromCDouble(GetFractionalPointSize()),
         GetFamily(),
         (int)GetStyle(),
         GetNumericWeight(),

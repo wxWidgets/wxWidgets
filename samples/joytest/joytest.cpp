@@ -159,7 +159,7 @@ void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
 #if wxUSE_STATUSBAR
     wxString buf;
     if (event.ButtonDown())
-        buf.Printf("Joystick (%ld, %ld) #%i Fire!", xpos, ypos, event.GetButtonChange());
+        buf.Printf("Joystick (%ld, %ld) #%i Fire!", xpos, ypos, event.GetButtonOrdinal());
     else
         buf.Printf("Joystick (%ld, %ld)  ", xpos, ypos);
 

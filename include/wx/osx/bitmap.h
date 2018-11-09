@@ -47,12 +47,7 @@ public:
     // Construct a mask from a mono bitmap (black meaning show pixels, white meaning transparent)
     wxMask(const wxBitmap& bitmap);
 
-    // implementation helper only : construct a mask from a 32 bit memory buffer
-    wxMask(const wxMemoryBuffer& buf, int width , int height , int bytesPerRow ) ;
-
     virtual ~wxMask();
-
-    bool Create(const wxMemoryBuffer& buf, int width , int height , int bytesPerRow ) ;
 
     wxBitmap GetBitmap() const;
 
@@ -70,6 +65,9 @@ public:
     void RealizeNative() ;
 
     WXHBITMAP GetHBITMAP() const ;
+
+    // implementation helper only : construct a mask from a 32 bit memory buffer
+    bool OSXCreate(const wxMemoryBuffer& buf, int width , int height , int bytesPerRow ) ;
 
 protected:
     // this function is called from Create() to free the existing mask data

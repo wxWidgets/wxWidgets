@@ -2575,8 +2575,11 @@ void wxWidgetCocoaImpl::SetVisibility( bool visible )
     [m_osxView setHidden:(visible ? NO:YES)];
     
     // trigger redraw upon shown for layer-backed views
-    if( m_osxView.layer && !m_osxView.isHiddenOrHasHiddenAncestor )
-        SetNeedsDisplay(NULL);
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+        if( !m_osxView.isHiddenOrHasHiddenAncestor )
+            SetNeedsDisplay(NULL);
+#endif
 }
 
 double wxWidgetCocoaImpl::GetContentScaleFactor() const
@@ -3032,7 +3035,7 @@ static void SetSubviewsNeedDisplay( NSView *view )
 {
     for ( NSView *sub in view.subviews )
     {
-        if ( sub.isHidden || !sub.layer )
+        if ( sub.isHidden )
             continue;
 
         [sub setNeedsDisplay:YES];
@@ -3050,8 +3053,10 @@ void wxWidgetCocoaImpl::SetNeedsDisplay( const wxRect* where )
     // Layer-backed views (which are all in Mojave's Dark Mode) may not have
     // their children implicitly redrawn with the parent. For compatibility,
     // do it manually here:
-    if ( m_osxView.layer )
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
         SetSubviewsNeedDisplay(m_osxView);
+#endif
 }
 
 bool wxWidgetCocoaImpl::GetNeedsDisplay() const

@@ -150,6 +150,9 @@ inline int wxRound(double x)
 inline double wxDegToRad(double deg) { return (deg * M_PI) / 180.0; }
 inline double wxRadToDeg(double rad) { return (rad * 180.0) / M_PI; }
 
+// Count trailing zeros.
+WXDLLIMPEXP_BASE unsigned int wxCTZ(wxUint32 x);
+
 #endif /* __cplusplus */
 
 

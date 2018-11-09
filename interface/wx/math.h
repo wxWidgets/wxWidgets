@@ -76,6 +76,19 @@ double wxDegToRad(double deg);
 double wxRadToDeg(double rad);
 
 /**
+    Count the number of trailing zeros.
+
+    This function returns the number of trailing zeros in the binary notation
+    of its argument @a x. E.g. for @a x equal to 4, or 0b100, the return value
+    is 2.
+
+    @param x Strictly positive, i.e. non-zero, 32 bit number.
+
+    @since 3.1.2
+ */
+unsigned int wxCTZ(wxUint32 x);
+
+/**
     Small wrapper around round().
 */
 int wxRound(double x);
