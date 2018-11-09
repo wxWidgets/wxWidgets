@@ -505,6 +505,10 @@ The full list of the build settings follows:
 Building Applications Using wxWidgets  {#msw_build_apps}
 =====================================
 
+If you use MSVS 2010 or later IDE for building your project, simply add
+`wxwidgets.props` property sheet to (all) your project(s) using wxWidgets.
+You don't need to do anything else.
+
 If you want to use CMake for building your project, please see
 @ref overview_cmake.
 
