@@ -271,7 +271,7 @@ debugger is very good. To avoid linker errors you will need to add
 
 The version 5.6 included in Borland C++ Builder 2006 works as well after the
 following small change: please remove the test for `__WINDOWS__` from line 88
-of the file BCCDIR\include\stl\_threads.h.
+of the file `BCCDIR\include\stl\_threads.h`.
 
 Compiling using the makefiles:
 
@@ -535,11 +535,11 @@ Here is what you need to do:
   be used for debug builds only.
 * Define the following symbols for the preprocessor:
   - `__WXMSW__` to ensure you use the correct wxWidgets port.
-  - _UNICODE unless you want to use deprecated ANSI build of wxWidgets.
-  - NDEBUG if you want to build in release mode, i.e. disable asserts.
-  - WXUSINGDLL if you are using DLL build of wxWidgets.
+  - `_UNICODE` unless you want to use deprecated ANSI build of wxWidgets.
+  - `NDEBUG` if you want to build in release mode, i.e. disable asserts.
+  - `WXUSINGDLL` if you are using DLL build of wxWidgets.
 * If using MSVC 7 only (i.e. not for later versions), also define
-  wxUSE_RC_MANIFEST=1 and WX_CPU_X86.
+  `wxUSE_RC_MANIFEST=1` and `WX_CPU_X86`.
 * Add \<wx-lib-dir\> directory described above to the libraries path.
 
 When using MSVC, the libraries are linked automatically using "#pragma
