@@ -403,7 +403,7 @@ public:
     // We don't implement bases support for floating point numbers, this is not
     // very useful in practice.
     virtual int GetBase() const wxOVERRIDE { return 10; }
-    virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return 0; }
+    virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
 
 protected:
     virtual void DoSendEvent() wxOVERRIDE;
