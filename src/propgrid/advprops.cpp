@@ -2294,8 +2294,6 @@ bool wxDateProperty::StringToValue( wxVariant& variant, const wxString& text,
 wxString wxDateProperty::ValueToString( wxVariant& value,
                                         int argFlags ) const
 {
-    const wxChar* format = (const wxChar*) NULL;
-
     wxDateTime dateTime = value.GetDateTime();
 
     if ( !dateTime.IsValid() )
@@ -2311,13 +2309,14 @@ wxString wxDateProperty::ValueToString( wxVariant& value,
         ms_defaultDateFormat = DetermineDefaultDateFormat( showCentury );
     }
 
+    wxString format;
     if ( !m_format.empty() &&
          !(argFlags & wxPG_FULL_VALUE) )
-            format = m_format.c_str();
+            format = m_format;
 
     // Determine default from locale
-    if ( !format )
-        format = ms_defaultDateFormat.c_str();
+    if ( format.empty() )
+        format = ms_defaultDateFormat;
 
     return dateTime.Format(format);
 }
