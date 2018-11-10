@@ -547,7 +547,7 @@ expdecl classname& classname##RefFromVariant( wxVariant& variant ) \
                   wxString::Format(wxS("Variant type should have been '%s'") \
                                    wxS("instead of '%s'"), \
                                    wxS(#classname), \
-                                   variant.GetType().c_str())); \
+                                   variant.GetType())); \
     classname##VariantData *data = \
         (classname##VariantData*) variant.GetData(); \
     return data->GetValue();\
@@ -558,7 +558,7 @@ expdecl const classname& classname##RefFromVariant( const wxVariant& variant ) \
                   wxString::Format(wxS("Variant type should have been '%s'") \
                                    wxS("instead of '%s'"), \
                                    wxS(#classname), \
-                                   variant.GetType().c_str())); \
+                                   variant.GetType())); \
     classname##VariantData *data = \
         (classname##VariantData*) variant.GetData(); \
     return data->GetValue();\

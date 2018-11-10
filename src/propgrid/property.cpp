@@ -337,7 +337,7 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
             {
                 wxString unitsString = property->GetAttribute(wxPG_ATTR_UNITS, wxEmptyString);
                 if ( !unitsString.empty() )
-                    text = wxString::Format(wxS("%s %s"), text.c_str(), unitsString.c_str() );
+                    text = wxString::Format(wxS("%s %s"), text, unitsString );
             }
         }
 
@@ -919,7 +919,7 @@ void wxPGProperty::GetDisplayInfo( unsigned int column,
 
     wxASSERT_MSG( cell.GetData(),
                   wxString::Format(wxS("Invalid cell for property %s"),
-                                   GetName().c_str()) );
+                                   GetName()) );
 
     // We need to return customized cell object.
     if (pCell)
@@ -1470,7 +1470,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
             wxVariant newValue;
             AdaptListToValue(value, &newValue);
             value = newValue;
-            //wxLogDebug(wxS(">> %s.SetValue() adapted list value to type '%s'"),GetName().c_str(),value.GetType().c_str());
+            //wxLogDebug(wxS(">> %s.SetValue() adapted list value to type '%s'"),GetName(),value.GetType());
         }
 
         if ( HasFlag( wxPG_PROP_AGGREGATE) )
@@ -1486,7 +1486,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
             wxVariantList::iterator node;
             unsigned int i = 0;
 
-            //wxLogDebug(wxS(">> %s.SetValue() pList parsing"),GetName().c_str());
+            //wxLogDebug(wxS(">> %s.SetValue() pList parsing"),GetName());
 
             // Children in list can be in any order, but we will give hint to
             // GetPropertyByNameWH(). This optimizes for full list parsing.
@@ -1496,7 +1496,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
                 wxPGProperty* child = GetPropertyByNameWH(childValue.GetName(), i);
                 if ( child )
                 {
-                    //wxLogDebug(wxS("%i: child = %s, childValue.GetType()=%s"),i,child->GetBaseName().c_str(),childValue.GetType().c_str());
+                    //wxLogDebug(wxS("%i: child = %s, childValue.GetType()=%s"),i,child->GetBaseName(),childValue.GetType());
                     if ( childValue.IsType(wxPG_VARIANT_TYPE_LIST) )
                     {
                         if ( child->HasFlag(wxPG_PROP_AGGREGATE) && !(flags & wxPG_SETVAL_AGGREGATED) )
@@ -1966,7 +1966,7 @@ double wxPGProperty::GetAttributeAsDouble( const wxString& name, double defVal )
 wxVariant wxPGProperty::GetAttributesAsList() const
 {
     wxVariantList tempList;
-    wxVariant v( tempList, wxString::Format(wxS("@%s@attr"),m_name.c_str()) );
+    wxVariant v( tempList, wxString::Format(wxS("@%s@attr"),m_name) );
 
     wxPGAttributeStorage::const_iterator it = m_attributes.StartIteration();
     wxVariant variant;
@@ -2496,7 +2496,7 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
     unsigned int n = 0;
     wxVariant childValue = list[n];
 
-    //wxLogDebug(wxS(">> %s.AdaptListToValue()"),GetBaseName().c_str());
+    //wxLogDebug(wxS(">> %s.AdaptListToValue()"),GetBaseName());
 
     for ( unsigned int i = 0; i < GetChildCount(); i++ )
     {
@@ -2504,7 +2504,7 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
 
         if ( childValue.GetName() == child->GetBaseName() )
         {
-            //wxLogDebug(wxS("  %s(n=%i), %s"),childValue.GetName().c_str(),n,childValue.GetType().c_str());
+            //wxLogDebug(wxS("  %s(n=%i), %s"),childValue.GetName(),n,childValue.GetType());
 
             if ( childValue.IsType(wxPG_VARIANT_TYPE_LIST) )
             {
@@ -2678,11 +2678,11 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
     /*
     if ( current )
     {
-        wxLogDebug(wxS("%s::GetItemAtY(%i) -> %s"),this->GetLabel().c_str(),y,current->GetLabel().c_str());
+        wxLogDebug(wxS("%s::GetItemAtY(%i) -> %s"),this->GetLabel(),y,current->GetLabel());
     }
     else
     {
-        wxLogDebug(wxS("%s::GetItemAtY(%i) -> NULL"),this->GetLabel().c_str(),y);
+        wxLogDebug(wxS("%s::GetItemAtY(%i) -> NULL"),this->GetLabel(),y);
     }
     */
 

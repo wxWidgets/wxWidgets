@@ -2095,8 +2095,8 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     /*
     wxLogDebug(wxS(" -> DoDrawItems(\"%s\" -> \"%s\"")
                wxS(" %i -> %i height=%i (ch=%i), itemsRect = 0x%lX %i,%i %ix%i)"),
-        firstItem->GetLabel().c_str(),
-        lastItem->GetLabel().c_str(),
+        firstItem->GetLabel(),
+        lastItem->GetLabel(),
         firstItemTopY, lastItemBottomY,
         (int)(lastItemBottomY - firstItemTopY),
         (int)m_height,
@@ -4021,8 +4021,8 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
     /*
     if (p)
     {
-        wxLogDebug(wxS("SelectProperty( %s (%s[%i]) )"),p->GetLabel().c_str(),
-            p->m_parent->GetLabel().c_str(),p->GetIndexInParent());
+        wxLogDebug(wxS("SelectProperty( %s (%s[%i]) )"),p->GetLabel(),
+            p->m_parent->GetLabel(),p->GetIndexInParent());
     }
     else
     {
@@ -6438,13 +6438,13 @@ wxPGProperty* wxPropertyGridPopulator::Add( const wxString& propClass,
 
     if ( parent->HasFlag(wxPG_PROP_AGGREGATE) )
     {
-        ProcessError(wxString::Format(wxS("new children cannot be added to '%s'"),parent->GetName().c_str()));
+        ProcessError(wxString::Format(wxS("new children cannot be added to '%s'"),parent->GetName()));
         return NULL;
     }
 
     if ( !classInfo || !classInfo->IsKindOf(wxCLASSINFO(wxPGProperty)) )
     {
-        ProcessError(wxString::Format(wxS("'%s' is not valid property class"),propClass.c_str()));
+        ProcessError(wxString::Format(wxS("'%s' is not valid property class"),propClass));
         return NULL;
     }
 
@@ -6487,7 +6487,7 @@ wxPGChoices wxPropertyGridPopulator::ParseChoices( const wxString& choicesString
         wxString ids = choicesString.substr(1);
         wxPGHashMapS2P::iterator it = m_dictIdChoices.find(ids);
         if ( it == m_dictIdChoices.end() )
-            ProcessError(wxString::Format(wxS("No choices defined for id '%s'"),ids.c_str()));
+            ProcessError(wxString::Format(wxS("No choices defined for id '%s'"),ids));
         else
             choices.AssignData((wxPGChoicesData*)it->second);
     }
@@ -6528,7 +6528,7 @@ wxPGChoices wxPropertyGridPopulator::ParseChoices( const wxString& choicesString
                             choices.Add(label, l);
                         }
                         labelValid = false;
-                        //wxLogDebug(wxS("%s, %s"),label.c_str(),value.c_str());
+                        //wxLogDebug(wxS("%s, %s"),label,value);
                         value.clear();
                         label.clear();
                         state = 1;
@@ -6645,7 +6645,7 @@ bool wxPropertyGridPopulator::AddAttribute( const wxString& name,
         }
         else
         {
-            ProcessError(wxString::Format(wxS("Invalid attribute type '%s'"),type.c_str()));
+            ProcessError(wxString::Format(wxS("Invalid attribute type '%s'"),type));
             return false;
         }
     }
@@ -6659,7 +6659,7 @@ bool wxPropertyGridPopulator::AddAttribute( const wxString& name,
 
 void wxPropertyGridPopulator::ProcessError( const wxString& msg )
 {
-    wxLogError(_("Error in resource: %s"),msg.c_str());
+    wxLogError(_("Error in resource: %s"),msg);
 }
 
 // -----------------------------------------------------------------------

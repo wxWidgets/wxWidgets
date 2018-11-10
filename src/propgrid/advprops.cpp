@@ -1085,7 +1085,7 @@ int wxSystemColourProperty::ColToInd( const wxColour& colour ) const
         if ( colour == GetColour(ind) )
         {
             /*wxLogDebug(wxS("%s(%s): Index %i for ( getcolour(%i,%i,%i), colour(%i,%i,%i))"),
-                GetClassName(),GetLabel().c_str(),
+                GetClassName(),GetLabel(),
                 (int)i,(int)GetColour(ind).Red(),(int)GetColour(ind).Green(),(int)GetColour(ind).Blue(),
                 (int)colour.Red(),(int)colour.Green(),(int)colour.Blue());*/
             return ind;

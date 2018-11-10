@@ -399,7 +399,7 @@ void wxPGTypeOperationFailed( const wxPGProperty* p,
 {
     wxASSERT( p != NULL );
     wxLogError( _("Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT \"%s\"."),
-        op.c_str(), p->GetLabel().c_str(), p->GetValue().GetType().c_str(), typestr.c_str() );
+        op, p->GetLabel(), p->GetValue().GetType(), typestr );
 }
 
 // -----------------------------------------------------------------------
@@ -434,7 +434,7 @@ void wxPropertyGridInterface::SetValidationFailureBehavior( int vfbFlags )
 wxPGProperty* wxPropertyGridInterface::GetPropertyByNameA( const wxString& name ) const
 {
     wxPGProperty* p = GetPropertyByName(name);
-    wxASSERT_MSG(p,wxString::Format(wxS("no property with name '%s'"),name.c_str()));
+    wxASSERT_MSG(p,wxString::Format(wxS("no property with name '%s'"),name));
     return p;
 }
 

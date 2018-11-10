@@ -1599,7 +1599,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
                             wxStrcmp(current->GetType(), p->GetValue().GetType()) == 0,
                             wxString::Format(
                                 wxS("setting value of property \"%s\" from variant"),
-                                p->GetName().c_str())
+                                p->GetName())
                         );
 
                         p->SetValue(*current);
