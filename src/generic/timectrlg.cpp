@@ -86,7 +86,7 @@ public:
         // nice to add support to "%k" and "%l" (hours with leading blanks
         // instead of zeros) too as this is the most common unsupported case in
         // practice.
-#if wxUSE_XLOCALE
+#if wxUSE_INTL
         m_useAMPM = wxLocale::GetInfo(wxLOCALE_TIME_FMT).Contains("%p");
 #else
         m_useAMPM = false;
