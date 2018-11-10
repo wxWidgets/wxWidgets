@@ -104,6 +104,48 @@ static void wxPGDrawFocusRect(wxWindow *win, wxDC& dc,
 #endif // wxPG_USE_NATIVE_FOCUS_RECT_RENDERER/!wxPG_USE_NATIVE_FOCUS_RECT_RENDERER
 }
 
+// Utility to determine the index of the item in the vector.
+template<typename T>
+static int wxPGItemIndexInVector(const wxVector<T>& vector, const T& item)
+{
+#if wxUSE_STL
+    typename wxVector<T>::const_iterator it = std::find(vector.begin(), vector.end(), item);
+    if ( it != vector.end() )
+        return (int)(it - vector.begin());
+
+    return wxNOT_FOUND;
+#else
+    for (typename wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
+    {
+        if ( *it == item )
+            return (int)(it - vector.begin());
+    }
+    return wxNOT_FOUND;
+#endif // wxUSE_STL/!wxUSE_STL
+}
+
+// Utility to remove given item from the vector.
+template<typename T>
+static void wxPGRemoveItemFromVector(wxVector<T>& vector, const T& item)
+{
+#if wxUSE_STL
+    typename wxVector<T>::iterator it = std::find(vector.begin(), vector.end(), item);
+    if ( it != vector.end() )
+    {
+        vector.erase(it);
+    }
+#else
+    for (typename wxVector<T>::iterator it = vector.begin(); it != vector.end(); ++it)
+    {
+        if ( *it == item )
+        {
+            vector.erase(it);
+            return;
+        }
+    }
+#endif // wxUSE_STL/!wxUSE_STL
+}
+
 // -----------------------------------------------------------------------
 // wxPGCellRenderer
 // -----------------------------------------------------------------------
@@ -781,7 +823,7 @@ wxPropertyGrid* wxPGProperty::GetGrid() const
 
 int wxPGProperty::Index( const wxPGProperty* p ) const
 {
-    return m_children.Index(const_cast<wxPGProperty*>(p));
+    return wxPGItemIndexInVector<wxPGProperty*>(m_children, const_cast<wxPGProperty*>(p));
 }
 
 bool wxPGProperty::ValidateValue( wxVariant& WXUNUSED(value), wxPGValidationInfo& WXUNUSED(validationInfo) ) const
@@ -2416,17 +2458,7 @@ wxPGProperty* wxPGProperty::InsertChild( int index,
 
 void wxPGProperty::RemoveChild( wxPGProperty* p )
 {
-    wxArrayPGProperty::iterator it;
-    wxArrayPGProperty& children = m_children;
-
-    for ( it=children.begin(); it != children.end(); ++it )
-    {
-        if ( *it == p )
-        {
-            children.erase(it);
-            break;
-        }
-    }
+    wxPGRemoveItemFromVector<wxPGProperty*>(m_children, p);
 }
 
 void wxPGProperty::RemoveChild(unsigned int index)
@@ -2436,12 +2468,8 @@ void wxPGProperty::RemoveChild(unsigned int index)
 
 void wxPGProperty::SortChildren(int (*fCmp)(wxPGProperty**, wxPGProperty**))
 {
-    m_children.Sort(fCmp);
-
-#if 0
-    // For wxVector w/ wxUSE_STL=1, you would use code like this instead:
-    std::sort(m_children.begin(), m_children.end(), fCmp);
-#endif
+    wxArray_SortFunction<wxPGProperty*> sf(fCmp);
+    std::sort(m_children.begin(), m_children.end(), sf);
 }
 
 void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
