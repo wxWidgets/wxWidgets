@@ -1446,8 +1446,14 @@ public:
     int GetIndent() const;
 
     /**
-        Returns item rectangle. Coordinates of the rectangle are specified in
-        wxDataViewCtrl client area coordinates.
+        Returns item rectangle.
+
+        If item is not currently visible, either because its parent is
+        collapsed or it is outside of the visible part of the control due to
+        the current vertical scrollbar position, return an empty rectangle.
+
+        Coordinates of the rectangle are specified in wxDataViewCtrl client
+        area coordinates.
 
         @param item
             A valid item.
@@ -1455,10 +1461,6 @@ public:
             If non-@NULL, the rectangle returned corresponds to the
             intersection of the item with the specified column. If @NULL, the
             rectangle spans all the columns.
-
-        @note This method is currently not implemented at all in wxGTK and only
-              implemented for non-@NULL @a col argument in wxOSX. It is fully
-              implemented in the generic version of the control.
     */
     virtual wxRect GetItemRect(const wxDataViewItem& item,
                                const wxDataViewColumn* col = NULL) const;
@@ -1556,6 +1558,9 @@ public:
 
     /**
         Return @true if the item is expanded.
+
+        @note When using the native macOS version this method has a bug which
+              may result in returning @true even for items without children.
     */
     virtual bool IsExpanded(const wxDataViewItem& item) const;
 
