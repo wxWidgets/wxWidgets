@@ -137,22 +137,6 @@ DeletedObjects gs_deletedEditorObjects;
 } // anonymous namespace
 #endif
 
-  // Utility to check if specific item is in a vector.
-template<typename T>
-static bool wxPGItemExistsInVector(const wxVector<T>& vector, const T& item)
-{
-#if wxUSE_STL
-    return std::find(vector.begin(), vector.end(), item) != vector.end();
-#else
-    for (typename wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
-    {
-        if ( *it == item )
-            return true;
-    }
-    return false;
-#endif // wxUSE_STL/!wxUSE_STL
-}
-
 // -----------------------------------------------------------------------
 
 #if wxUSE_INTL

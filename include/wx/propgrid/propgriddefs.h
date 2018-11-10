@@ -700,6 +700,67 @@ protected:
     }
 
 // -----------------------------------------------------------------------
+// wxVector utilities
+
+// Utility to check if specific item is in a vector.
+template<typename T>
+inline bool wxPGItemExistsInVector(const wxVector<T>& vector, const T& item)
+{
+#if wxUSE_STL
+    return std::find(vector.begin(), vector.end(), item) != vector.end();
+#else
+    for (typename wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
+    {
+        if ( *it == item )
+            return true;
+    }
+    return false;
+#endif // wxUSE_STL/!wxUSE_STL
+}
+
+// Utility to determine the index of the item in the vector.
+template<typename T>
+inline int wxPGItemIndexInVector(const wxVector<T>& vector, const T& item)
+{
+#if wxUSE_STL
+    typename wxVector<T>::const_iterator it = std::find(vector.begin(), vector.end(), item);
+    if ( it != vector.end() )
+        return (int)(it - vector.begin());
+
+    return wxNOT_FOUND;
+#else
+    for (typename wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
+    {
+        if ( *it == item )
+            return (int)(it - vector.begin());
+    }
+    return wxNOT_FOUND;
+#endif // wxUSE_STL/!wxUSE_STL
+}
+
+// Utility to remove given item from the vector.
+template<typename T>
+inline void wxPGRemoveItemFromVector(wxVector<T>& vector, const T& item)
+{
+#if wxUSE_STL
+    typename wxVector<T>::iterator it = std::find(vector.begin(), vector.end(), item);
+    if ( it != vector.end() )
+    {
+        vector.erase(it);
+    }
+#else
+    for (typename wxVector<T>::iterator it = vector.begin(); it != vector.end(); ++it)
+    {
+        if ( *it == item )
+        {
+            vector.erase(it);
+            return;
+        }
+    }
+#endif // wxUSE_STL/!wxUSE_STL
+}
+
+// -----------------------------------------------------------------------
 
 #endif // wxUSE_PROPGRID
 
