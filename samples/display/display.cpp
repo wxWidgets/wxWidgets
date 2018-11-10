@@ -232,9 +232,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 #endif // wxUSE_STATUSBAR
 
     // create child controls
-    wxPanel *panel = new wxPanel(this, wxID_ANY);
-
-    m_book = new wxBookCtrl(panel, wxID_ANY);
+    m_book = new wxBookCtrl(this, wxID_ANY);
     const size_t countDpy = wxDisplay::GetCount();
     for ( size_t nDpy = 0; nDpy < countDpy; nDpy++ )
     {
@@ -291,6 +289,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
         sizer->Add(new wxStaticText(page, wxID_ANY,
                                     display.IsPrimary() ? "yes" : "no"));
 
+        // add it to another sizer to have borders around it and button below
         wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
         sizerTop->Add(sizer, 1, wxALL | wxEXPAND, 10);
 
@@ -313,22 +312,19 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
         sizer->Add(new wxStaticText(page, Display_CurrentMode,
                                     VideoModeToText(display.GetCurrentMode())));
 
-        // add it to another sizer to have borders around it and button below
         sizerTop->Add(new wxButton(page, Display_ResetMode, "&Reset mode"),
                       0, wxALL | wxCENTRE, 5);
 #endif // wxUSE_DISPLAY
 
         page->SetSizer(sizerTop);
+        page->Layout();
 
         m_book->AddPage(page,
                         wxString::Format("Display %lu",
                                          (unsigned long)nDpy));
     }
 
-    wxBoxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
-    sizer->Add(m_book, 1, wxEXPAND);
-    panel->SetSizer(sizer);
-    sizer->SetSizeHints(this);
+    SetClientSize(m_book->GetBestSize());
 }
 
 #if wxUSE_DISPLAY

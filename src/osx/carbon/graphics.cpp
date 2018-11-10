@@ -1303,7 +1303,11 @@ bool wxMacCoreGraphicsPathData::Contains( wxDouble x, wxDouble y, wxPolygonFillM
 class WXDLLEXPORT wxMacCoreGraphicsContext : public wxGraphicsContext
 {
 public:
-    wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, CGContextRef cgcontext, wxDouble width = 0, wxDouble height = 0 );
+    wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer,
+                              CGContextRef cgcontext,
+                              wxDouble width = 0,
+                              wxDouble height = 0,
+                              wxWindow* window = NULL );
 
     wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, wxWindow* window );
 
@@ -1509,7 +1513,12 @@ void wxMacCoreGraphicsContext::Init()
     m_interpolation = wxINTERPOLATION_DEFAULT;
 }
 
-wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, CGContextRef cgcontext, wxDouble width, wxDouble height ) : wxGraphicsContext(renderer)
+wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer,
+                                                    CGContextRef cgcontext,
+                                                    wxDouble width,
+                                                    wxDouble height,
+                                                    wxWindow* window )
+    : wxGraphicsContext(renderer, window)
 {
     Init();
     SetNativeContext(cgcontext);
@@ -1518,7 +1527,9 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
     m_initTransform = m_cgContext ? CGContextGetCTM(m_cgContext) : CGAffineTransformIdentity;
 }
 
-wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, wxWindow* window ): wxGraphicsContext(renderer)
+wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer,
+                                                    wxWindow* window )
+    : wxGraphicsContext(renderer, window)
 {
     Init();
 
@@ -2694,26 +2705,18 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& dc )
 {
-    const wxDCImpl* impl = dc.GetImpl();
-    wxWindowDCImpl *win_impl = wxDynamicCast( impl, wxWindowDCImpl );
-    if (win_impl)
-    {
-        int w, h;
-        win_impl->GetSize( &w, &h );
-        CGContextRef cgctx = 0;
+    wxWindow* const win = dc.GetWindow();
+    wxCHECK_MSG( win, NULL, "Invalid wxWindowDC" );
 
-        wxASSERT_MSG(win_impl->GetWindow(), "Invalid wxWindow in wxMacCoreGraphicsRenderer::CreateContext");
-        if (win_impl->GetWindow())
-            cgctx =  (CGContextRef)(win_impl->GetWindow()->MacGetCGContextRef());
+    const wxSize sz = win->GetSize();
 
-        // having a cgctx being NULL is fine (will be created on demand)
-        // this is the case for all wxWindowDCs except wxPaintDC
-        wxMacCoreGraphicsContext *context = 
-            new wxMacCoreGraphicsContext( this, cgctx, (wxDouble) w, (wxDouble) h );
-        context->EnableOffset(dc.GetContentScaleFactor() < 2);
-        return context;
-    }
-    return NULL;
+    // having a cgctx being NULL is fine (will be created on demand)
+    // this is the case for all wxWindowDCs except wxPaintDC
+    CGContextRef cgctx = (CGContextRef)(win->MacGetCGContextRef());
+    wxMacCoreGraphicsContext *context =
+        new wxMacCoreGraphicsContext( this, cgctx, sz.x, sz.y, win );
+    context->EnableOffset(dc.GetContentScaleFactor() < 2);
+    return context;
 }
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& dc )

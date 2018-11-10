@@ -452,7 +452,7 @@ private:
 class WXDLLIMPEXP_CORE wxGraphicsContext : public wxGraphicsObject
 {
 public:
-    wxGraphicsContext(wxGraphicsRenderer* renderer);
+    wxGraphicsContext(wxGraphicsRenderer* renderer, wxWindow* window = NULL);
 
     virtual ~wxGraphicsContext();
 
@@ -489,6 +489,9 @@ public:
 
     // create a context that can be used for measuring texts only, no drawing allowed
     static wxGraphicsContext * Create();
+
+    // Return the window this context is associated with, if any.
+    wxWindow* GetWindow() const { return m_window; }
 
     // begin a new document (relevant only for printing / pdf etc) if there is a progress dialog, message will be shown
     virtual bool StartDoc( const wxString& message );
@@ -787,6 +790,12 @@ protected:
                                          wxDouble x, wxDouble y,
                                          wxDouble angle,
                                          const wxGraphicsBrush& backgroundBrush);
+
+private:
+    // The associated window, if any, i.e. if one was passed directly to
+    // Create() or the associated window of the wxDC this context was created
+    // from.
+    wxWindow* const m_window;
 
     wxDECLARE_NO_COPY_CLASS(wxGraphicsContext);
     wxDECLARE_ABSTRACT_CLASS(wxGraphicsContext);

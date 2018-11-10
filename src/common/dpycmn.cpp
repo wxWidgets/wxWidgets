@@ -85,6 +85,13 @@ wxDisplay::wxDisplay(unsigned n)
     m_impl = Factory().GetDisplay(n);
 }
 
+wxDisplay::wxDisplay(const wxWindow* window)
+{
+    const int n = GetFromWindow(window);
+
+    m_impl = Factory().GetDisplay(n != wxNOT_FOUND ? n : 0);
+}
+
 // ----------------------------------------------------------------------------
 // static functions forwarded to wxDisplayFactory
 // ----------------------------------------------------------------------------
@@ -193,20 +200,29 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 // wxDisplayImpl implementation
 // ============================================================================
 
-wxSize wxDisplayImpl::GetPPI() const
+/* static */
+wxSize wxDisplayImpl::ComputePPI(int pxX, int pxY, int mmX, int mmY)
 {
-    const wxSize pixels = GetGeometry().GetSize();
-    const wxSize mm = GetSizeMM();
-
-    if ( !mm.x || !mm.y )
+    if ( !mmX || !mmY )
     {
         // Physical size is unknown, return a special value indicating that we
         // can't compute the resolution -- what else can we do?
         return wxSize(0, 0);
     }
 
-    return wxSize(wxRound((pixels.x * inches2mm) / mm.x),
-                  wxRound((pixels.y * inches2mm) / mm.y));
+    return wxSize(wxRound((pxX * inches2mm) / mmX),
+                  wxRound((pxY * inches2mm) / mmY));
+}
+
+wxSize wxDisplayImpl::GetPPI() const
+{
+    const wxSize mm = GetSizeMM();
+
+    // We need physical pixels here, not logical ones returned by
+    // GetGeometry(), to compute the real DPI.
+    const wxSize pixels = GetGeometry().GetSize()*GetScaleFactor();
+
+    return ComputePPI(pixels.x, pixels.y, mm.x, mm.y);
 }
 
 // ============================================================================
@@ -224,6 +240,8 @@ wxDisplayFactory::~wxDisplayFactory()
 
 int wxDisplayFactory::GetFromWindow(const wxWindow *window)
 {
+    wxCHECK_MSG( window, wxNOT_FOUND, "window can't be NULL" );
+
     // consider that the window belongs to the display containing its centre
     const wxRect r(window->GetScreenRect());
     return GetFromPoint(wxPoint(r.x + r.width/2, r.y + r.height/2));

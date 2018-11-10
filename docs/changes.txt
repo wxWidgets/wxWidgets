@@ -138,6 +138,7 @@ All (GUI):
 - Add strikethrough support for fonts defined in XRC.
 - Add wxDisplay::GetPPI().
 - Add wxJoystickEvent::GetButtonOrdinal() (Mick Phillips).
+- Add wxGraphicsContext::GetWindow() and implement wxGraphicsContext::GetDPI().
 
 wxGTK:
 

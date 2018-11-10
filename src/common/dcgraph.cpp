@@ -418,6 +418,15 @@ void wxGCDCImpl::SetTextBackground( const wxColour &col )
 
 wxSize wxGCDCImpl::GetPPI() const
 {
+    if ( m_graphicContext )
+    {
+        wxDouble x, y;
+        m_graphicContext->GetDPI(&x, &y);
+        return wxSize(wxRound(x), wxRound(y));
+    }
+
+    // This is the same value that wxGraphicsContext::GetDPI() returns by
+    // default.
     return wxSize(72, 72);
 }
 

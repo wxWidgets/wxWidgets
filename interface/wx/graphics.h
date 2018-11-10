@@ -1095,6 +1095,19 @@ public:
     */
     virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY);
 
+    /**
+        Returns the associated window if any.
+
+        If this context was created using Create() overload taking wxWindow or
+        wxWindowDC, this method returns the corresponding window. Otherwise
+        returns @NULL.
+
+        @return A possibly @NULL window pointer.
+
+        @since 3.1.2
+     */
+    wxWindow* GetWindow() const;
+
     /** @}
     */
 

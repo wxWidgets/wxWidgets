@@ -3462,9 +3462,19 @@ public:
 class wxD2DContext : public wxGraphicsContext, wxD2DResourceManager
 {
 public:
-    wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, HWND hwnd);
+    // Create the context for the given HWND, which may be associated (if it's
+    // non-null) with the given wxWindow.
+    wxD2DContext(wxGraphicsRenderer* renderer,
+                 ID2D1Factory* direct2dFactory,
+                 HWND hwnd,
+                 wxWindow* window = NULL);
 
-    wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, HDC hdc, const wxSize& dcSize,
+    // Create the context for the given HDC which may be associated (if it's
+    // non-null) with the given wxDC.
+    wxD2DContext(wxGraphicsRenderer* renderer,
+                 ID2D1Factory* direct2dFactory,
+                 HDC hdc,
+                 const wxDC* dc = NULL,
                  D2D1_ALPHA_MODE alphaMode = D2D1_ALPHA_MODE_IGNORE);
 
 #if wxUSE_IMAGE
@@ -3612,8 +3622,11 @@ private:
 // wxD2DContext implementation
 //-----------------------------------------------------------------------------
 
-wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, HWND hwnd) :
-    wxGraphicsContext(renderer), m_direct2dFactory(direct2dFactory),
+wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer,
+                           ID2D1Factory* direct2dFactory,
+                           HWND hwnd,
+                           wxWindow* window) :
+    wxGraphicsContext(renderer, window), m_direct2dFactory(direct2dFactory),
 #if wxD2D_DEVICE_CONTEXT_SUPPORTED
     m_renderTargetHolder(new wxD2DDeviceContextResourceHolder(direct2dFactory, hwnd))
 #else
@@ -3626,13 +3639,21 @@ wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dF
     Init();
 }
 
-wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, HDC hdc,
-                           const wxSize& dcSize, D2D1_ALPHA_MODE alphaMode) :
-    wxGraphicsContext(renderer), m_direct2dFactory(direct2dFactory),
+wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer,
+                           ID2D1Factory* direct2dFactory,
+                           HDC hdc,
+                           const wxDC* dc,
+                           D2D1_ALPHA_MODE alphaMode) :
+    wxGraphicsContext(renderer, dc->GetWindow()), m_direct2dFactory(direct2dFactory),
     m_renderTargetHolder(new wxD2DDCRenderTargetResourceHolder(direct2dFactory, hdc, alphaMode))
 {
-    m_width = dcSize.GetWidth();
-    m_height = dcSize.GetHeight();
+    if ( dc )
+    {
+        const wxSize dcSize = dc->GetSize();
+        m_width = dcSize.GetWidth();
+        m_height = dcSize.GetHeight();
+    }
+
     Init();
 }
 
@@ -4593,7 +4614,7 @@ wxD2DRenderer::~wxD2DRenderer()
 
 wxGraphicsContext* wxD2DRenderer::CreateContext(const wxWindowDC& dc)
 {
-    return new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), dc.GetSize());
+    return new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), &dc);
 }
 
 wxGraphicsContext* wxD2DRenderer::CreateContext(const wxMemoryDC& dc)
@@ -4601,7 +4622,7 @@ wxGraphicsContext* wxD2DRenderer::CreateContext(const wxMemoryDC& dc)
     wxBitmap bmp = dc.GetSelectedBitmap();
     wxASSERT_MSG( bmp.IsOk(), wxS("Should select a bitmap before creating wxGraphicsContext") );
 
-    return new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), dc.GetSize(),
+    return new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), &dc,
                             bmp.HasAlpha() ? D2D1_ALPHA_MODE_PREMULTIPLIED : D2D1_ALPHA_MODE_IGNORE);
 }
 
@@ -4633,12 +4654,12 @@ wxGraphicsContext* wxD2DRenderer::CreateContextFromNativeWindow(void* window)
 
 wxGraphicsContext* wxD2DRenderer::CreateContextFromNativeHDC(WXHDC dc)
 {
-    return new wxD2DContext(this, m_direct2dFactory, (HDC)dc, wxSize(0, 0));
+    return new wxD2DContext(this, m_direct2dFactory, (HDC)dc);
 }
 
 wxGraphicsContext* wxD2DRenderer::CreateContext(wxWindow* window)
 {
-    return new wxD2DContext(this, m_direct2dFactory, (HWND)window->GetHWND());
+    return new wxD2DContext(this, m_direct2dFactory, (HWND)window->GetHWND(), window);
 }
 
 #if wxUSE_IMAGE
