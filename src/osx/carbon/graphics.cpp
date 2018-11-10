@@ -1315,6 +1315,12 @@ public:
 
     ~wxMacCoreGraphicsContext();
 
+    // Enable offset on non-high DPI displays, i.e. those with scale factor <= 1.
+    void SetEnableOffsetFromScaleFactor(double factor)
+    {
+        m_enableOffset = factor <= 1.0;
+    }
+
     void Init();
 
     virtual void StartPage( wxDouble width, wxDouble height ) wxOVERRIDE;
@@ -1533,7 +1539,7 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
 {
     Init();
 
-    m_enableOffset = window->GetContentScaleFactor() <= 1;
+    SetEnableOffsetFromScaleFactor(window->GetContentScaleFactor());
     wxSize sz = window->GetSize();
     m_width = sz.x;
     m_height = sz.y;
@@ -2715,7 +2721,7 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& 
     CGContextRef cgctx = (CGContextRef)(win->MacGetCGContextRef());
     wxMacCoreGraphicsContext *context =
         new wxMacCoreGraphicsContext( this, cgctx, sz.x, sz.y, win );
-    context->EnableOffset(dc.GetContentScaleFactor() < 2);
+    context->SetEnableOffsetFromScaleFactor(dc.GetContentScaleFactor());
     return context;
 }
 
@@ -2730,7 +2736,7 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& 
         mem_impl->GetSize( &w, &h );
         wxMacCoreGraphicsContext* context = new wxMacCoreGraphicsContext( this,
             (CGContextRef)(mem_impl->GetGraphicsContext()->GetNativeContext()), (wxDouble) w, (wxDouble) h );
-        context->EnableOffset(dc.GetContentScaleFactor() < 2);
+        context->SetEnableOffsetFromScaleFactor(dc.GetContentScaleFactor());
         return context;
     }
 #endif
