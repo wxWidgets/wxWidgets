@@ -2316,8 +2316,6 @@ wxString wxDateProperty::ValueToString( wxVariant& value,
             format = m_format.c_str();
 
     // Determine default from locale
-    // NB: This is really simple stuff, but can't figure anything
-    //     better without proper support in wxLocale
     if ( !format )
         format = ms_defaultDateFormat.c_str();
 
@@ -2326,46 +2324,18 @@ wxString wxDateProperty::ValueToString( wxVariant& value,
 
 wxString wxDateProperty::DetermineDefaultDateFormat( bool showCentury )
 {
-    // This code is basically copied from datectlg.cpp's SetFormat
-    //
-    wxString format;
-
-    wxDateTime dt;
-    dt.ParseFormat(wxS("2003-10-13"), wxS("%Y-%m-%d"));
-    wxString str(dt.Format(wxS("%x")));
-
-    const wxChar *p = str.c_str();
-    while ( *p )
-    {
-        int n=wxAtoi(p);
-        if (n == dt.GetDay())
-        {
-            format.Append(wxS("%d"));
-            p += 2;
-        }
-        else if (n == (int)dt.GetMonth()+1)
-        {
-            format.Append(wxS("%m"));
-            p += 2;
-        }
-        else if (n == dt.GetYear())
-        {
-            format.Append(wxS("%Y"));
-            p += 4;
-        }
-        else if (n == (dt.GetYear() % 100))
-        {
-            if (showCentury)
-                format.Append(wxS("%Y"));
-            else
-                format.Append(wxS("%y"));
-            p += 2;
-        }
-        else
-            format.Append(*p++);
-    }
+    // This code is based on datectlg.cpp's GetLocaleDateFormat()
+#if wxUSE_INTL
+    wxString format = wxLocale::GetOSInfo(wxLOCALE_SHORT_DATE_FMT);
+    if ( showCentury )
+        format.Replace(wxS("%y"), wxS("%Y"));
+    else
+        format.Replace(wxS("%Y"), wxS("%y"));
 
     return format;
+#else
+    return wxS("%x");
+#endif // wxUSE_INTL/!wxUSE_INTL
 }
 
 bool wxDateProperty::DoSetAttribute( const wxString& name, wxVariant& value )
