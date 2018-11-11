@@ -2315,11 +2315,10 @@ bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGr
     rowsizer->Add(ed, wxSizerFlags(1).Expand().Border(wxALL, spacing));
     topsizer->Add(rowsizer, wxSizerFlags(1).Expand());
 
-    wxStdDialogButtonSizer* buttonSizer = new wxStdDialogButtonSizer();
+    long btnSizerFlags = wxCANCEL;
     if ( !prop->HasFlag(wxPG_PROP_READONLY) )
-        buttonSizer->AddButton(new wxButton(dlg, wxID_OK));
-    buttonSizer->AddButton(new wxButton(dlg, wxID_CANCEL));
-    buttonSizer->Realize();
+        btnSizerFlags |= wxOK;
+    wxStdDialogButtonSizer* buttonSizer = dlg->CreateStdDialogButtonSizer(btnSizerFlags);
     topsizer->Add(buttonSizer, wxSizerFlags(0).Right().Border(wxBOTTOM|wxRIGHT, spacing));
 
     dlg->SetSizer( topsizer );
@@ -2494,10 +2493,7 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
     topsizer->Add(m_elb, wxSizerFlags(1).Expand().Border(0, spacing));
 
     // Standard dialog buttons
-    wxStdDialogButtonSizer* buttonSizer = new wxStdDialogButtonSizer();
-    buttonSizer->AddButton(new wxButton(this, wxID_OK));
-    buttonSizer->AddButton(new wxButton(this, wxID_CANCEL));
-    buttonSizer->Realize();
+    wxStdDialogButtonSizer* buttonSizer = CreateStdDialogButtonSizer(wxOK | wxCANCEL);
     topsizer->Add(buttonSizer, wxSizerFlags(0).Right().Border(wxALL, spacing));
 
     m_elb->SetFocus();
