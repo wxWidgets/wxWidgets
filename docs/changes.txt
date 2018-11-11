@@ -172,8 +172,8 @@ wxOSX:
 
 - Fix dispatching pending events (and CallAfter()) in console applications.
 - Implement wxDataViewColumn::UnsetAsSortKey() (Daniel Kulp).
-- supporting native image formst like NSImage and UIImage in wxBitmap
-- native implementation for wxStaticBitmap for correct rendering of template images
+- Change wxBitmap to use native image format like NSImage and UIImage.
+- Implement wxStaticBitmap natively for correct rendering of template images.
 - Fill column value in wxEVT_DATAVIEW_ITEM_ACTIVATED events (Igor Korot).
 - Make wxFrame::EnableFullScreenView() work under macOS 10.11+ (Andy Robinson).
 
