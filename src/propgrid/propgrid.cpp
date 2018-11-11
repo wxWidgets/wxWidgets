@@ -2590,7 +2590,11 @@ void wxPropertyGrid::RefreshProperty( wxPGProperty* p )
     {
         // NB: We must copy the selection.
         wxArrayPGProperty selection = m_pState->m_selection;
-        DoSetSelection(selection, wxPG_SEL_FORCE);
+        int selFlags = wxPG_SEL_FORCE;
+        // We want to keep property's editor focused.
+        if ( IsEditorFocused() )
+            selFlags |= wxPG_SEL_FOCUS;
+        DoSetSelection(selection, selFlags);
     }
 
     DrawItemAndChildren(p);
