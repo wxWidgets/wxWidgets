@@ -175,6 +175,7 @@ wxOSX:
 - supporting native image formst like NSImage and UIImage in wxBitmap
 - native implementation for wxStaticBitmap for correct rendering of template images
 - Fill column value in wxEVT_DATAVIEW_ITEM_ACTIVATED events (Igor Korot).
+- Make wxFrame::EnableFullScreenView() work under macOS 10.11+ (Andy Robinson).
 
 wxQt:
 
