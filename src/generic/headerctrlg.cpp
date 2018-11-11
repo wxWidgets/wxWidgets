@@ -183,11 +183,12 @@ unsigned int wxHeaderCtrl::FindColumnAtPoint(int xPhysical, bool *onSeparator) c
 
         pos += col.GetWidth();
 
+        // TODO: don't hardcode sensitivity
+        const int separatorClickMargin = FromDIP(8);
+
         // if the column is resizable, check if we're approximatively over the
         // line separating it from the next column
-        //
-        // TODO: don't hardcode sensitivity
-        if ( col.IsResizeable() && abs(xLogical - pos) < 8 )
+        if ( col.IsResizeable() && abs(xLogical - pos) < separatorClickMargin )
         {
             if ( onSeparator )
                 *onSeparator = true;
