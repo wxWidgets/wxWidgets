@@ -184,7 +184,7 @@ wxString GetPreferredUILanguage(const wxArrayString& available, wxArrayString& a
             }
         }
     }
-    if ( allPreferred.empty() == false )
+    if ( !allPreferred.empty() )
         return allPreferred[0];
 
     return GetPreferredUILanguageFallback(available);
