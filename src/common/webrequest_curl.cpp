@@ -32,6 +32,12 @@
   (LIBCURL_VERSION_NUM >= CURL_VERSION_BITS(x, y, z))
 #endif
 
+#if CURL_AT_LEAST_VERSION(7, 28, 0)
+    #define wxCURL_HAVE_MULTI_WAIT 1
+#else
+    #define wxCURL_HAVE_MULTI_WAIT 0
+#endif
+
 //
 // wxWebResponseCURL
 //
@@ -384,6 +390,46 @@ wxWebRequest* wxWebSessionCURL::CreateRequest(const wxString& url, int id)
     return new wxWebRequestCURL(*this, id, url);
 }
 
+static CURLMcode wx_curl_multi_wait(CURLM *multi_handle, int timeout_ms,
+    int *ret)
+{
+    // since libcurl 7.28.0 the curl_multi_wait method is more convient than
+    // calling multiple curl_multi_... methods.
+    // When support for older libcurl versions is dropped this wrapper can be
+    // removed.
+#if wxCURL_HAVE_MULTI_WAIT
+    return curl_multi_wait(multi_handle, NULL, 0, timeout_ms, ret);
+#else
+    wxASSERT(ret != NULL);
+
+    fd_set fdread;
+    fd_set fdwrite;
+    fd_set fdexcep;
+    timeval timeout;
+
+    long curl_timeo;
+
+    curl_multi_timeout(multi_handle, &curl_timeo);
+    if ( curl_timeo < 0 )
+        curl_timeo = timeout_ms;
+
+    timeout.tv_sec = curl_timeo / 1000;
+    timeout.tv_usec = (curl_timeo % 1000) * 1000;
+
+    FD_ZERO(&fdread);
+    FD_ZERO(&fdwrite);
+    FD_ZERO(&fdexcep);
+
+    curl_multi_fdset(multi_handle, &fdread, &fdwrite, &fdexcep, ret);
+    if ( *ret == -1 )
+        return CURLM_OK;
+    else if ( select(*ret + 1, &fdread, &fdwrite, &fdexcep, &timeout) == -1 )
+        return CURLM_BAD_SOCKET;
+    else
+        return CURLM_OK;
+#endif
+}
+
 wxThread::ExitCode wxWebSessionCURL::Entry()
 {
     m_mutex.Lock();
@@ -425,7 +471,7 @@ wxThread::ExitCode wxWebSessionCURL::Entry()
         {
             // Wait for CURL work to finish
             int numfds;
-            curl_multi_wait(m_handle, NULL, 0, 500, &numfds);
+            wx_curl_multi_wait(m_handle, 500, &numfds);
 
             if ( !numfds )
             {
