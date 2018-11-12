@@ -153,7 +153,7 @@ public:
         m_startButton->Bind(wxEVT_BUTTON, &WebRequestFrame::OnStartButton, this);
         btnSizer->AddButton(m_startButton);
         btnSizer->Realize();
-        mainSizer->Add(btnSizer, wxSizerFlags().Border());
+        mainSizer->Add(btnSizer, wxSizerFlags().Expand().Border());
 
         wxCommandEvent evt;
         OnPostCheckBox(evt);
