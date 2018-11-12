@@ -24,8 +24,8 @@
 #include "wx/osx/private.h"
 
 #ifndef WX_PRECOMP
-	#include "wx/log.h"
-	#include "wx/utils.h"
+    #include "wx/log.h"
+    #include "wx/utils.h"
 #endif
 
 @interface wxWebSessionDelegte : NSObject <NSURLSessionDataDelegate>
@@ -94,7 +94,7 @@ wxWebRequestURLSession::wxWebRequestURLSession(wxWebSessionURLSession& session, 
     wxWebRequest(session, id),
     m_url(url)
 {
-
+    m_headers = session.GetHeaders();
 }
 
 wxWebRequestURLSession::~wxWebRequestURLSession()
@@ -106,8 +106,35 @@ void wxWebRequestURLSession::Start()
 {
     wxWebSessionURLSession& session = static_cast<wxWebSessionURLSession&>(GetSession());
 
-    m_task = [[session.GetSession() dataTaskWithURL:
-               [NSURL URLWithString:wxCFStringRef(m_url).AsNSString()]] retain];
+    NSMutableURLRequest* req = [NSMutableURLRequest requestWithURL:
+                                [NSURL URLWithString:wxCFStringRef(m_url).AsNSString()]];
+    if (m_method.empty())
+        req.HTTPMethod = (m_dataSize) ? @"POST" : @"GET";
+    else
+        req.HTTPMethod = wxCFStringRef(m_method).AsNSString();
+
+    // Set request headers
+    for (wxWebRequestHeaderMap::const_iterator it = m_headers.begin(); it != m_headers.end(); ++it)
+    {
+        [req setValue:wxCFStringRef(it->second).AsNSString() forHTTPHeaderField:
+         wxCFStringRef(it->first).AsNSString()];
+    }
+
+    if (m_dataSize)
+    {
+        // Read all upload data to memory buffer
+        wxMemoryBuffer memBuf;
+        m_dataStream->Read(memBuf.GetWriteBuf(m_dataSize), m_dataSize);
+
+        // Create NSDAta from memory buffer
+        NSData* data = [NSData dataWithBytes:memBuf.GetData() length:m_dataSize];
+        m_task = [[session.GetSession() uploadTaskWithRequest:req fromData:data] retain];
+    }
+    else
+    {
+        // Create data task
+        m_task = [[session.GetSession() dataTaskWithRequest:req] retain];
+    }
 
     // The session delegate needs to know which task is wrapped in which request
     [session.GetDelegate() registerRequest:this task:m_task];
