@@ -515,11 +515,13 @@ void wxVListBoxComboPopup::OnChar(wxKeyEvent& event)
 void wxVListBoxComboPopup::Insert( const wxString& item, int pos )
 {
     // Need to change selection?
-    wxString strValue;
-    if ( !(m_combo->GetWindowStyle() & wxCB_READONLY) &&
-         m_combo->GetValue() == item )
+    if ( m_combo->GetValue() == item )
     {
-        m_value = pos;
+        m_value = wxMin(m_value, pos);
+    }
+    else if ( pos <= m_value )
+    {
+        m_value++;
     }
 
     m_strings.Insert(item,pos);
