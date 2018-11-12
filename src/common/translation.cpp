@@ -1581,7 +1581,7 @@ bool wxTranslations::AddCatalog(const wxString& domain,
             break;
 
         // We determine success by the success of loading/failing to load
-        // the most preferred language's catalog:
+        // the most preferred (i.e. the first one) language's catalog:
         if ( lang == domain_langs.begin() )
             success = LoadCatalog(domain, *lang, msgIdLang);
         else
