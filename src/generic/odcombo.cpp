@@ -544,9 +544,7 @@ int wxVListBoxComboPopup::Append(const wxString& item)
         // Find position
         // TODO: Could be optimized with binary search
         const wxArrayString& strings = m_strings;
-        unsigned int i;
-
-        for ( i=0; i<strings.GetCount(); i++ )
+        for ( size_t i=0; i<strings.GetCount(); i++ )
         {
             if ( item.CmpNoCase(strings.Item(i)) <= 0 )
             {
@@ -583,8 +581,7 @@ void wxVListBoxComboPopup::ClearClientDatas()
 {
     if ( m_clientDataItemsType == wxClientData_Object )
     {
-        size_t i;
-        for ( i=0; i<m_clientDatas.GetCount(); i++ )
+        for ( size_t i=0; i<m_clientDatas.GetCount(); i++ )
             delete (wxClientData*) m_clientDatas[i];
     }
 
@@ -718,7 +715,6 @@ void wxVListBoxComboPopup::CalcWidths()
     // Measure items with dirty width.
     if ( m_widthsDirty )
     {
-        unsigned int i;
         unsigned int n = m_widths.GetCount();
         int dirtyHandled = 0;
         wxArrayInt& widths = m_widths;
@@ -731,7 +727,7 @@ void wxVListBoxComboPopup::CalcWidths()
             m_useFont = m_combo->GetFont();
         dc.SetFont(m_useFont);
 
-        for ( i=0; i<n; i++ )
+        for ( unsigned int i=0; i<n; i++ )
         {
             if ( widths[i] < 0 )
             {
@@ -779,13 +775,12 @@ void wxVListBoxComboPopup::CalcWidths()
 
     if ( doFindWidest )
     {
-        unsigned int i;
         unsigned int n = m_widths.GetCount();
 
         int bestWidth = -1;
         int bestIndex = -1;
 
-        for ( i=0; i<n; i++ )
+        for ( unsigned int i=0; i<n; i++ )
         {
             int w = m_widths[i];
             if ( w > bestWidth )
@@ -849,11 +844,9 @@ wxSize wxVListBoxComboPopup::GetAdjustedSize( int minWidth, int prefHeight, int 
 //void wxVListBoxComboPopup::Populate( int n, const wxString choices[] )
 void wxVListBoxComboPopup::Populate( const wxArrayString& choices )
 {
-    int i;
-
     int n = choices.GetCount();
 
-    for ( i=0; i<n; i++ )
+    for ( int i=0; i<n; i++ )
     {
         const wxString& item = choices.Item(i);
         m_strings.Add(item);
@@ -951,8 +944,7 @@ bool wxOwnerDrawnComboBox::Create(wxWindow *parent,
         return false;
     }
 
-    int i;
-    for ( i=0; i<n; i++ )
+    for ( int i=0; i<n; i++ )
         m_initChs.Add(choices[i]);
 
     return true;
