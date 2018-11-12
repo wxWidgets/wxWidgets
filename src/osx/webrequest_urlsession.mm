@@ -173,11 +173,9 @@ wxWebResponseURLSession::~wxWebResponseURLSession()
 
 void wxWebResponseURLSession::HandleData(WX_NSData data)
 {
-    [data enumerateByteRangesUsingBlock:^(const void * _Nonnull bytes, NSRange byteRange, BOOL * _Nonnull stop) {
-        void* buf = GetDataBuffer(byteRange.length);
-        std::memcpy(buf, bytes, byteRange.length);
-        ReportDataReceived(byteRange.length);
-    }];
+    void* buf = GetDataBuffer(data.length);
+    [data getBytes:buf length:data.length];
+    ReportDataReceived(data.length);
 }
 
 wxInt64 wxWebResponseURLSession::GetContentLength() const
