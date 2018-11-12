@@ -127,7 +127,7 @@ wxString GetPreferredUILanguageFallback(const wxArrayString& WXUNUSED(available)
 
 #ifdef __WINDOWS__
 
-wxString GetPreferredUILanguage(const wxArrayString& available, wxArrayString &allPreferred)
+wxString GetPreferredUILanguage(const wxArrayString& available, wxArrayString& allPreferred)
 {
     typedef BOOL (WINAPI *GetUserPreferredUILanguages_t)(DWORD, PULONG, PWSTR, PULONG);
     static GetUserPreferredUILanguages_t s_pfnGetUserPreferredUILanguages = NULL;
