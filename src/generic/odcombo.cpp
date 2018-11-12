@@ -543,7 +543,7 @@ int wxVListBoxComboPopup::Append(const wxString& item)
     {
         // Find position
         // TODO: Could be optimized with binary search
-        wxArrayString strings = m_strings;
+        const wxArrayString& strings = m_strings;
         unsigned int i;
 
         for ( i=0; i<strings.GetCount(); i++ )
