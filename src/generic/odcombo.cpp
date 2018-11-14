@@ -219,17 +219,14 @@ void wxVListBoxComboPopup::DismissWithEvent()
 
     int selection = wxVListBox::GetSelection();
 
-    Dismiss();
-
     if ( selection != wxNOT_FOUND )
         m_stringValue = m_strings[selection];
     else
         m_stringValue.clear();
 
-    if ( m_stringValue != m_combo->GetValue() )
-        m_combo->SetValueByUser(m_stringValue);
-
     m_value = selection;
+
+    Dismiss();
 
     SendComboBoxEvent(selection);
 }
