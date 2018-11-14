@@ -81,8 +81,11 @@ public:
     // return the depth or 0 if unknown
     virtual int GetDepth() const = 0;
 
-    // return the resolution of the display, uses GetSizeMM() by default but
-    // can be also overridden directly
+    // return the scale factor used to convert logical pixels to physical ones
+    virtual double GetScaleFactor() const { return 1.0; }
+
+    // return the resolution of the display, uses GetSize(), GetScaleFactor()
+    // and GetSizeMM() by default but can be also overridden directly
     virtual wxSize GetPPI() const;
 
     // return the physical size of the display or (0, 0) if unknown: this is
@@ -114,6 +117,11 @@ public:
 protected:
     // create the object providing access to the display with the given index
     wxDisplayImpl(unsigned n) : m_index(n) { }
+
+    // Compute PPI from the sizes in pixels and mm.
+    //
+    // Return (0, 0) if physical size (in mm) is not known, i.e. 0.
+    static wxSize ComputePPI(int pxX, int pxY, int mmX, int mmY);
 
 
     // the index of this display (0 is always the primary one)

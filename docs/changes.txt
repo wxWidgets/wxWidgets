@@ -138,6 +138,7 @@ All (GUI):
 - Add strikethrough support for fonts defined in XRC.
 - Add wxDisplay::GetPPI().
 - Add wxJoystickEvent::GetButtonOrdinal() (Mick Phillips).
+- Add wxGraphicsContext::GetWindow() and implement wxGraphicsContext::GetDPI().
 
 wxGTK:
 
@@ -148,6 +149,7 @@ wxGTK:
 - Fix the build with glib < 2.32 (e.g. CentOS 6).
 - Fix field widths in wxStatusBar showing a size grip.
 - Fill column value in wxEVT_DATAVIEW_ITEM_ACTIVATED events.
+- Implement wxDataViewCtrl::GetItemRect() (MrMeesek).
 
 wxMSW:
 
@@ -170,9 +172,10 @@ wxOSX:
 
 - Fix dispatching pending events (and CallAfter()) in console applications.
 - Implement wxDataViewColumn::UnsetAsSortKey() (Daniel Kulp).
-- supporting native image formst like NSImage and UIImage in wxBitmap
-- native implementation for wxStaticBitmap for correct rendering of template images
+- Change wxBitmap to use native image format like NSImage and UIImage.
+- Implement wxStaticBitmap natively for correct rendering of template images.
 - Fill column value in wxEVT_DATAVIEW_ITEM_ACTIVATED events (Igor Korot).
+- Make wxFrame::EnableFullScreenView() work under macOS 10.11+ (Andy Robinson).
 
 wxQt:
 

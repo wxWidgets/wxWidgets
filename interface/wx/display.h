@@ -27,6 +27,23 @@ public:
     wxDisplay(unsigned int index = 0);
 
     /**
+        Constructor creating the display object associated with the given
+        window.
+
+        This is the most convenient way of finding the display on which the
+        given window is shown while falling back to the default display if it
+        is not shown at all or positioned outside of any display.
+
+        @param window
+            A valid, i.e. non-null, window.
+
+        @see GetFromWindow()
+
+        @since 3.1.2
+     */
+    explicit wxDisplay(const wxWindow* window);
+
+    /**
         Destructor.
     */
     ~wxDisplay();

@@ -930,15 +930,9 @@ wxSize wxSizer::ComputeFittingClientSize(wxWindow *window)
             return tlw->GetClientSize();
         }
 
-        // limit the window to the size of the display it is on
-        int disp = wxDisplay::GetFromWindow(window);
-        if ( disp == wxNOT_FOUND )
-        {
-            // or, if we don't know which one it is, of the main one
-            disp = 0;
-        }
-
-        sizeMax = wxDisplay(disp).GetClientArea().GetSize();
+        // limit the window to the size of the display it is on (or the main
+        // one if the window display can't be determined)
+        sizeMax = wxDisplay(window).GetClientArea().GetSize();
 
         // If determining the display size failed, skip the max size checks as
         // we really don't want to create windows of (0, 0) size.

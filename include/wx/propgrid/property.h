@@ -2019,7 +2019,7 @@ protected:
 
     wxVariant                   m_value;
     wxPGAttributeStorage        m_attributes;
-    wxArrayPGProperty           m_children;
+    wxVector<wxPGProperty*>     m_children;
 
     // Extended cell information
     wxVector<wxPGCell>          m_cells;

@@ -318,11 +318,7 @@ private:
 
         // Use GetFromWindow() and not GetFromPoint() here to try to get the
         // correct display even if the tip point itself is not visible.
-        int dpy = wxDisplay::GetFromWindow(GetParent());
-        if ( dpy == wxNOT_FOUND )
-            dpy = 0; // What else can we do?
-
-        const wxRect rectDpy = wxDisplay(dpy).GetClientArea();
+        const wxRect rectDpy = wxDisplay(GetParent()).GetClientArea();
 
 #ifdef __WXMAC__
         return pos.y > rectDpy.height/2 ? wxTipKind_Bottom : wxTipKind_Top;

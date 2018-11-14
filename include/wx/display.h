@@ -49,6 +49,10 @@ public:
     // primary display and the only one which is always supported
     wxDisplay(unsigned n = 0);
 
+    // create display object corresponding to the display of the given window
+    // or the default one if the window display couldn't be found
+    explicit wxDisplay(const wxWindow* window);
+
     // dtor is not virtual as this is a concrete class not meant to be derived
     // from
 

@@ -461,6 +461,10 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+#if wxUSE_LIBPNG
+      wxImage::AddHandler( new wxPNGHandler );
+#endif
+
     // Create the main application window
     MyFrame *frame = new MyFrame("Drawing sample",
                                  wxDefaultPosition, wxSize(550, 840));
@@ -477,9 +481,6 @@ bool MyApp::OnInit()
         // still continue, the sample can be used without images too if they're
         // missing for whatever reason
     }
-#if wxUSE_LIBPNG
-      wxImage::AddHandler( new wxPNGHandler );
-#endif
 
     return true;
 }
