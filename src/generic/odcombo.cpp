@@ -525,7 +525,7 @@ void wxVListBoxComboPopup::Insert( const wxString& item, int pos )
     if ( (int)m_clientDatas.size() >= pos )
         m_clientDatas.Insert(NULL, pos);
 
-    m_widths.Insert(-1,pos);
+    m_widths.insert(m_widths.begin()+pos, -1);
     m_widthsDirty = true;
 
     if ( IsCreated() )
@@ -561,7 +561,7 @@ void wxVListBoxComboPopup::Clear()
     wxASSERT(m_combo);
 
     m_strings.Empty();
-    m_widths.Empty();
+    m_widths.clear();
 
     m_widestWidth = 0;
     m_widestItem = -1;
@@ -618,7 +618,7 @@ void wxVListBoxComboPopup::Delete( unsigned int item )
     }
 
     m_strings.RemoveAt(item);
-    m_widths.RemoveAt(item);
+    m_widths.erase(m_widths.begin()+item);
 
     if ( (int)item == m_widestItem )
         m_findWidest = true;
@@ -712,9 +712,9 @@ void wxVListBoxComboPopup::CalcWidths()
     // Measure items with dirty width.
     if ( m_widthsDirty )
     {
-        unsigned int n = m_widths.GetCount();
+        unsigned int n = m_widths.size();
         int dirtyHandled = 0;
-        wxArrayInt& widths = m_widths;
+        wxVector<int>& widths = m_widths;
 
         // I think using wxDC::GetTextExtent is faster than
         // wxWindow::GetTextExtent (assuming same dc is used
@@ -772,7 +772,7 @@ void wxVListBoxComboPopup::CalcWidths()
 
     if ( doFindWidest )
     {
-        unsigned int n = m_widths.GetCount();
+        unsigned int n = m_widths.size();
 
         int bestWidth = -1;
         int bestIndex = -1;
@@ -849,7 +849,7 @@ void wxVListBoxComboPopup::Populate( const wxArrayString& choices )
         m_strings.Add(item);
     }
 
-    m_widths.SetCount(n,-1);
+    m_widths.resize(n,-1);
     m_widthsDirty = true;
 
     if ( IsCreated() )

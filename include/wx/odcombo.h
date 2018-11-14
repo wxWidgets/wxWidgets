@@ -192,7 +192,7 @@ protected:
 private:
 
     // Cached item widths (in pixels).
-    wxArrayInt              m_widths;
+    wxVector<int>           m_widths;
 
     // Width of currently widest item.
     int                     m_widestWidth;
