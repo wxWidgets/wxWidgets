@@ -129,7 +129,10 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
         wxString text = items[i];
         if (text.empty())
             text = " ";  // menu items can't have empty labels
-        dynamic_cast<wxChoiceWidgetImpl*>(GetPeer())->InsertItem( idx, i+1, text );
+        if (text == wxT("---"))
+            dynamic_cast<wxChoiceWidgetImpl*>(GetPeer())->InsertSeparator( idx );
+        else
+            dynamic_cast<wxChoiceWidgetImpl*>(GetPeer())->InsertItem( idx, i+1, text );
         m_datas.Insert( NULL, idx );
         AssignNewItemClientData(idx, clientData, i, type);
     }

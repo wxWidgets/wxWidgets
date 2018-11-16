@@ -816,6 +816,8 @@ public :
 
     virtual void InsertItem(size_t pos, int itemid, const wxString& text) = 0;
 
+    virtual void InsertSeparator(size_t WXUNUSED(pos)) {}
+
     virtual void RemoveItem(size_t pos) = 0;
 
     virtual void Clear()

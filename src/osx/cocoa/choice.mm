@@ -78,6 +78,11 @@ public:
         m_popUpMenu->Insert( pos, itemid, text );
     }
 
+    void InsertSeparator(size_t pos) wxOVERRIDE
+    {
+        m_popUpMenu->InsertSeparator(pos);
+    }
+
     size_t GetNumberOfItems() const wxOVERRIDE
     {
         return m_popUpMenu->GetMenuItemCount();
