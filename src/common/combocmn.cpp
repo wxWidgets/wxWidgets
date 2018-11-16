@@ -2277,7 +2277,7 @@ void wxComboCtrlBase::ShowPopup()
     wxSize ctrlSz = GetSize();
 
     screenHeight = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
-    scrPos = GetParent()->ClientToScreen(GetPosition());
+    scrPos = GetScreenPosition();
 
     spaceAbove = scrPos.y;
     spaceBelow = screenHeight - spaceAbove - ctrlSz.y;
