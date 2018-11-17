@@ -206,8 +206,10 @@ WXTIFF_OBJECTS =  \
 	wxtiff_tif_tile.o \
 	wxtiff_tif_version.o \
 	wxtiff_tif_warning.o \
+	wxtiff_tif_webp.o \
 	wxtiff_tif_write.o \
-	wxtiff_tif_zip.o
+	wxtiff_tif_zip.o \
+	wxtiff_tif_zstd.o
 WXEXPAT_CFLAGS = -DNDEBUG -I./src/expat/expat -DHAVE_EXPAT_CONFIG_H \
 	$(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
@@ -15026,11 +15028,17 @@ wxtiff_tif_version.o: $(srcdir)/src/tiff/libtiff/tif_version.c
 wxtiff_tif_warning.o: $(srcdir)/src/tiff/libtiff/tif_warning.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_warning.c
 
+wxtiff_tif_webp.o: $(srcdir)/src/tiff/libtiff/tif_webp.c
+	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_webp.c
+
 wxtiff_tif_write.o: $(srcdir)/src/tiff/libtiff/tif_write.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_write.c
 
 wxtiff_tif_zip.o: $(srcdir)/src/tiff/libtiff/tif_zip.c
 	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_zip.c
+
+wxtiff_tif_zstd.o: $(srcdir)/src/tiff/libtiff/tif_zstd.c
+	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_zstd.c
 
 @COND_PLATFORM_UNIX_1@wxtiff_tif_unix.o: $(srcdir)/src/tiff/libtiff/tif_unix.c
 @COND_PLATFORM_UNIX_1@	$(CCC) -c -o $@ $(WXTIFF_CFLAGS) $(srcdir)/src/tiff/libtiff/tif_unix.c
