@@ -174,8 +174,10 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_tile.o \
 	$(OBJS)\wxtiff_tif_version.o \
 	$(OBJS)\wxtiff_tif_warning.o \
+	$(OBJS)\wxtiff_tif_webp.o \
 	$(OBJS)\wxtiff_tif_write.o \
-	$(OBJS)\wxtiff_tif_zip.o
+	$(OBJS)\wxtiff_tif_zip.o \
+	$(OBJS)\wxtiff_tif_zstd.o
 WXEXPAT_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -DNDEBUG -I$(LIBDIRNAME) $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
@@ -6132,10 +6134,16 @@ $(OBJS)\wxtiff_tif_version.o: ../../src/tiff/libtiff/tif_version.c
 $(OBJS)\wxtiff_tif_warning.o: ../../src/tiff/libtiff/tif_warning.c
 	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxtiff_tif_webp.o: ../../src/tiff/libtiff/tif_webp.c
+	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxtiff_tif_write.o: ../../src/tiff/libtiff/tif_write.c
 	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxtiff_tif_zip.o: ../../src/tiff/libtiff/tif_zip.c
+	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxtiff_tif_zstd.o: ../../src/tiff/libtiff/tif_zstd.c
 	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxexpat_xmlparse.o: ../../src/expat/expat/lib/xmlparse.c

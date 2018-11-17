@@ -185,8 +185,10 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_tile.obj \
 	$(OBJS)\wxtiff_tif_version.obj \
 	$(OBJS)\wxtiff_tif_warning.obj \
+	$(OBJS)\wxtiff_tif_webp.obj \
 	$(OBJS)\wxtiff_tif_write.obj \
-	$(OBJS)\wxtiff_tif_zip.obj
+	$(OBJS)\wxtiff_tif_zip.obj \
+	$(OBJS)\wxtiff_tif_zstd.obj
 WXEXPAT_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG -I$(LIBDIRNAME) -w-8004 -w-8008 \
 	-w-8012 -w-8057 -w-8066 $(CPPFLAGS) $(CFLAGS)
@@ -5950,11 +5952,17 @@ $(OBJS)\wxtiff_tif_version.obj: ..\..\src\tiff\libtiff\tif_version.c
 $(OBJS)\wxtiff_tif_warning.obj: ..\..\src\tiff\libtiff\tif_warning.c
 	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_warning.c
 
+$(OBJS)\wxtiff_tif_webp.obj: ..\..\src\tiff\libtiff\tif_webp.c
+	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_webp.c
+
 $(OBJS)\wxtiff_tif_write.obj: ..\..\src\tiff\libtiff\tif_write.c
 	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_write.c
 
 $(OBJS)\wxtiff_tif_zip.obj: ..\..\src\tiff\libtiff\tif_zip.c
 	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_zip.c
+
+$(OBJS)\wxtiff_tif_zstd.obj: ..\..\src\tiff\libtiff\tif_zstd.c
+	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_zstd.c
 
 $(OBJS)\wxexpat_xmlparse.obj: ..\..\src\expat\expat\lib\xmlparse.c
 	$(CC) -q -c -P- -o$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\xmlparse.c

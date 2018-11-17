@@ -115,6 +115,7 @@ All:
 - Avoid spurious errors on thread creation under NetBSD.
 - Improve high DPI support in wxAui (Simon Rozman).
 - Fix a bug with parsing time zones in wxDateTime::ParseFormat() (evileye).
+- Update all 3rd party libraries to their latest versions (Maarten Bent).
 
 All (GUI):
 
