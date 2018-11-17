@@ -85,23 +85,29 @@ bool wxDirDialog::Create(wxWindow* parent,
     if (parent)
         gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
 
+#ifndef __WXGTK4__
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+#endif
     m_widget = gtk_file_chooser_dialog_new(
                    wxGTK_CONV(m_message),
                    gtk_parent,
                    GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+#ifdef __WXGTK4__
                    static_cast<const char*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL)))),
 #else
                    GTK_STOCK_CANCEL,
-#endif // GTK >= 3.10 / < 3.10
+#endif
                    GTK_RESPONSE_CANCEL,
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+#ifdef __WXGTK4__
                    static_cast<const char*>(wxGTK_CONV(wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_OPEN)))),
 #else
                    GTK_STOCK_OPEN,
-#endif // GTK >= 3.10 / < 3.10
+#endif
                    GTK_RESPONSE_ACCEPT,
                    NULL);
+#ifndef __WXGTK4__
+    wxGCC_WARNING_RESTORE()
+#endif
     g_object_ref(m_widget);
 
     gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_ACCEPT);

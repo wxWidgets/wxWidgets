@@ -49,47 +49,57 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
 
 wxString wxMessageDialog::GetDefaultYesLabel() const
 {
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+#ifdef __WXGTK4__
     return wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_YES));
 #else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     return GTK_STOCK_YES;
-#endif // GTK >= 3.10 / < 3.10
+    wxGCC_WARNING_RESTORE()
+#endif
 }
 
 wxString wxMessageDialog::GetDefaultNoLabel() const
 {
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+#ifdef __WXGTK4__
     return wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_NO));
 #else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     return GTK_STOCK_NO;
-#endif // GTK >= 3.10 / < 3.10
+    wxGCC_WARNING_RESTORE()
+#endif
 }
 
 wxString wxMessageDialog::GetDefaultOKLabel() const
 {
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+#ifdef __WXGTK4__
     return wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_OK));
 #else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     return GTK_STOCK_OK;
-#endif // GTK >= 3.10 / < 3.10
+    wxGCC_WARNING_RESTORE()
+#endif
 }
 
 wxString wxMessageDialog::GetDefaultCancelLabel() const
 {
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+#ifdef __WXGTK4__
     return wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_CANCEL));
 #else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     return GTK_STOCK_CANCEL;
-#endif // GTK >= 3.10 / < 3.10
+    wxGCC_WARNING_RESTORE()
+#endif
 }
 
 wxString wxMessageDialog::GetDefaultHelpLabel() const
 {
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+#ifdef __WXGTK4__
     return wxConvertMnemonicsToGTK(wxGetStockLabel(wxID_HELP));
 #else
+    wxGCC_WARNING_SUPPRESS(deprecated-declarations)
     return GTK_STOCK_HELP;
-#endif // GTK >= 3.10 / < 3.10
+    wxGCC_WARNING_RESTORE()
+#endif
 }
 
 void wxMessageDialog::DoSetCustomLabel(wxString& var, const ButtonLabel& label)
@@ -102,11 +112,11 @@ void wxMessageDialog::DoSetCustomLabel(wxString& var, const ButtonLabel& label)
     }
     else // stock label
     {
-#if defined(__WXGTK3__) && GTK_CHECK_VERSION(3,10,0)
+#ifdef __WXGTK4__
         var = wxConvertMnemonicsToGTK(wxGetStockLabel(stockId));
 #else
         var = wxGetStockGtkID(stockId);
-#endif // GTK >= 3.10 / < 3.10
+#endif
     }
 }
 
