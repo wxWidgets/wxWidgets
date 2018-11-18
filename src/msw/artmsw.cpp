@@ -101,10 +101,7 @@ MSWGetBitmapFromIconLocation(const TCHAR* path, int index, const wxSize& size)
     if ( !icon.InitFromHICON((WXHICON)hIcon, size.x, size.x) )
         return wxNullBitmap;
 
-    wxBitmap bitmap(icon);
-    ::DestroyIcon(hIcon);
-
-    return bitmap;
+    return wxBitmap(icon);
 }
 
 wxBitmap
