@@ -180,38 +180,37 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
     {
         WinStruct<SHSTOCKICONINFO> sii;
 
-        UINT uFlags = SHGSI_ICON;
-        if ( size != wxDefaultSize )
-        {
-            if ( size.x <= 16 )
-                uFlags |= SHGSI_SMALLICON;
-            else if ( size.x >= 64 )
-                uFlags |= SHGSI_LARGEICON;
-        }
+        UINT uFlags = SHGSI_ICONLOCATION | SHGSI_SYSICONINDEX;
 
         HRESULT res = MSW_SHGetStockIconInfo(stockIconId, uFlags, &sii);
         if ( res == S_OK )
         {
-            wxIcon icon;
-            icon.CreateFromHICON( (WXHICON)sii.hIcon );
+            const wxSize
+                sizeNeeded = size.IsFullySpecified()
+                                ? size
+                                : wxArtProvider::GetNativeSizeHint(client);
 
-            bitmap = wxBitmap(icon);
-            ::DestroyIcon(sii.hIcon);
-
-            if ( bitmap.IsOk() )
+            HICON hIcon = NULL;
+            res = SHDefExtractIcon(sii.szPath, sii.iIcon, 0,
+                                   &hIcon, NULL, sizeNeeded.x);
+            if ( res == S_OK )
             {
-                const wxSize
-                    sizeNeeded = size.IsFullySpecified()
-                                    ? size
-                                    : wxArtProvider::GetNativeSizeHint(client);
+                wxIcon icon;
+                icon.CreateFromHICON((WXHICON)hIcon);
 
-                if ( sizeNeeded.IsFullySpecified() &&
-                        bitmap.GetSize() != sizeNeeded )
+                bitmap = wxBitmap(icon);
+                ::DestroyIcon(hIcon);
+
+                if ( bitmap.IsOk() )
                 {
-                    wxArtProvider::RescaleBitmap(bitmap, sizeNeeded);
-                }
+                    if ( sizeNeeded.IsFullySpecified() &&
+                            bitmap.GetSize() != sizeNeeded )
+                    {
+                        wxArtProvider::RescaleBitmap(bitmap, sizeNeeded);
+                    }
 
-                return bitmap;
+                    return bitmap;
+                }
             }
         }
     }
