@@ -200,8 +200,7 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
                                                   sizeNeeded);
             if ( bitmap.IsOk() )
             {
-                if ( sizeNeeded.IsFullySpecified() &&
-                        bitmap.GetSize() != sizeNeeded )
+                if ( bitmap.GetSize() != sizeNeeded )
                 {
                     wxArtProvider::RescaleBitmap(bitmap, sizeNeeded);
                 }
