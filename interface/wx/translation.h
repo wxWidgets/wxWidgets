@@ -137,47 +137,32 @@ public:
                                 const wxString& msgIdLanguage = "en");
 
     /**
-        Returns the best and all other suitable UI languages for the @a domain.
+        Returns the languages of all translations that can be used for the @a
+        domain.
 
-        This is nearly the same as GetBestTranslation(), but returns the
-        whole list of preferred UI languages for which a translation for the
-        @a domain was found.
-
-        @param domain
-            The catalog domain to look for.
-
-        @param msgIdLanguage
-            Specifies the language of "msgid" strings in source code
-            (i.e. arguments to GetString(), wxGetTranslation() and the _() macro).
-
-        @return An array of language codes if any suitable matches were found, empty array
-                otherwise.
-
-        @since 3.1.2
-     */
-    wxArrayString GetAllGoodTranslations(const wxString& domain, wxLanguage msgIdLanguage);
-
-    /**
-        Returns the best and all other suitable UI languages for the @a domain.
-
-        This is nearly the same as GetBestTranslation(), but returns the
-        whole list of preferred UI languages for which a translation for the
-        @a domain was found.
+        This is a more general version of GetBestTranslation(), which returns
+        the whole list of preferred UI languages for which a translation for
+        the @a domain was found instead of just the first, i.e. the most
+        preferred, element of this list.
 
         @param domain
             The catalog domain to look for.
 
         @param msgIdLanguage
-            Specifies the language of "msgid" strings in source code
-            (i.e. arguments to GetString(), wxGetTranslation() and the _() macro).
+            Specifies the language of "msgid" strings in source code (i.e.
+            arguments to GetString(), wxGetTranslation() and the _() macro).
 
-        @return An array of language codes if any suitable matches were found, empty array
-                otherwise.
+        @return An array of language codes if any suitable matches were found,
+            empty array otherwise.
 
         @since 3.1.2
      */
-        wxArrayString GetAllGoodTranslations(const wxString& domain,
-                                const wxString& msgIdLanguage = "en");
+    wxArrayString GetAcceptableTranslations(const wxString& domain,
+                                            wxLanguage msgIdLanguage);
+
+    /// @overload
+    wxArrayString GetAcceptableTranslations(const wxString& domain,
+                                            const wxString& msgIdLanguage = "en");
 
         /**
         Add standard wxWidgets catalogs ("wxstd" and possible port-specific

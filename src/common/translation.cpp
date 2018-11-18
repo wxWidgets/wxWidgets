@@ -1555,7 +1555,7 @@ bool wxTranslations::AddCatalog(const wxString& domain,
                                 wxLanguage msgIdLanguage)
 {
     const wxString msgIdLang = wxLocale::GetLanguageCanonicalName(msgIdLanguage);
-    const wxArrayString domain_langs = GetAllGoodTranslations(domain, msgIdLanguage);
+    const wxArrayString domain_langs = GetAcceptableTranslations(domain, msgIdLanguage);
 
     if ( domain_langs.empty() )
     {
@@ -1675,21 +1675,21 @@ wxString wxTranslations::GetBestTranslation(const wxString& domain,
 wxString wxTranslations::GetBestTranslation(const wxString& domain,
                                             const wxString& msgIdLanguage)
 {
-    const wxArrayString allGoodOnes = GetAllGoodTranslations(domain, msgIdLanguage);
+    const wxArrayString allGoodOnes = GetAcceptableTranslations(domain, msgIdLanguage);
 
     wxLogTrace(TRACE_I18N, " => using language '%s'", allGoodOnes[0]);
     return allGoodOnes[0];
 }
 
-wxArrayString wxTranslations::GetAllGoodTranslations(const wxString& domain,
-                                                       wxLanguage msgIdLanguage)
+wxArrayString wxTranslations::GetAcceptableTranslations(const wxString& domain,
+                                                        wxLanguage msgIdLanguage)
 {
     const wxString lang = wxLocale::GetLanguageCanonicalName(msgIdLanguage);
-    return GetAllGoodTranslations(domain, lang);
+    return GetAcceptableTranslations(domain, lang);
 }
 
-wxArrayString wxTranslations::GetAllGoodTranslations(const wxString& domain,
-                                                       const wxString& msgIdLanguage)
+wxArrayString wxTranslations::GetAcceptableTranslations(const wxString& domain,
+                                                        const wxString& msgIdLanguage)
 {
     wxArrayString available(GetAvailableTranslations(domain));
     // it's OK to have duplicates, so just add msgid language
