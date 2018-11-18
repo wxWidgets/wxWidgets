@@ -51,6 +51,9 @@ SHSTOCKICONID MSWGetStockIconIdForArtProviderId(const wxArtID& art_id)
     else if ( art_id == wxART_FLOPPY )      return SIID_DRIVE35;
     else if ( art_id == wxART_CDROM )       return SIID_DRIVECD;
     else if ( art_id == wxART_REMOVABLE )   return SIID_DRIVEREMOVE;
+    else if ( art_id == wxART_PRINT )       return SIID_PRINTER;
+    else if ( art_id == wxART_EXECUTABLE_FILE ) return SIID_APPLICATION;
+    else if ( art_id == wxART_NORMAL_FILE ) return SIID_DOCNOASSOC;
 
     return SIID_INVALID;
 };
