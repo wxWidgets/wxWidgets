@@ -2152,7 +2152,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavgen.o \
 	$(OBJS)\monodll_editlbox.o \
 	$(OBJS)\monodll_laywin.o \
-	$(OBJS)\monodll_calctrlg.o
+	$(OBJS)\monodll_calctrlg.o \
+	$(OBJS)\monodll_rowheightcache.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -2479,7 +2480,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavgen.o \
 	$(OBJS)\monodll_editlbox.o \
 	$(OBJS)\monodll_laywin.o \
-	$(OBJS)\monodll_calctrlg.o
+	$(OBJS)\monodll_calctrlg.o \
+	$(OBJS)\monodll_rowheightcache.o
 endif
 endif
 ifeq ($(USE_STC),1)
@@ -2987,7 +2989,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavgen.o \
 	$(OBJS)\monolib_editlbox.o \
 	$(OBJS)\monolib_laywin.o \
-	$(OBJS)\monolib_calctrlg.o
+	$(OBJS)\monolib_calctrlg.o \
+	$(OBJS)\monolib_rowheightcache.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -3314,7 +3317,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavgen.o \
 	$(OBJS)\monolib_editlbox.o \
 	$(OBJS)\monolib_laywin.o \
-	$(OBJS)\monolib_calctrlg.o
+	$(OBJS)\monolib_calctrlg.o \
+	$(OBJS)\monolib_rowheightcache.o
 endif
 endif
 ifeq ($(USE_STC),1)
@@ -3707,7 +3711,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_datavgen.o \
 	$(OBJS)\coredll_editlbox.o \
 	$(OBJS)\coredll_laywin.o \
-	$(OBJS)\coredll_calctrlg.o
+	$(OBJS)\coredll_calctrlg.o \
+	$(OBJS)\coredll_rowheightcache.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -4034,7 +4039,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_datavgen.o \
 	$(OBJS)\coredll_editlbox.o \
 	$(OBJS)\coredll_laywin.o \
-	$(OBJS)\coredll_calctrlg.o
+	$(OBJS)\coredll_calctrlg.o \
+	$(OBJS)\coredll_rowheightcache.o
 endif
 endif
 ifeq ($(MONOLITHIC),0)
@@ -4385,7 +4391,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_datavgen.o \
 	$(OBJS)\corelib_editlbox.o \
 	$(OBJS)\corelib_laywin.o \
-	$(OBJS)\corelib_calctrlg.o
+	$(OBJS)\corelib_calctrlg.o \
+	$(OBJS)\corelib_rowheightcache.o
 endif
 endif
 ifeq ($(USE_GUI),1)
@@ -4712,7 +4719,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_datavgen.o \
 	$(OBJS)\corelib_editlbox.o \
 	$(OBJS)\corelib_laywin.o \
-	$(OBJS)\corelib_calctrlg.o
+	$(OBJS)\corelib_calctrlg.o \
+	$(OBJS)\corelib_rowheightcache.o
 endif
 endif
 ifeq ($(SHARED),1)
@@ -9119,6 +9127,11 @@ $(OBJS)\monodll_calctrlg.o: ../../src/generic/calctrlg.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
+ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_rowheightcache.o: ../../src/generic/rowheightcache.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
 $(OBJS)\monodll_version_rc.o: ../../src/msw/version.rc
 	$(WINDRES) -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) --include-dir $(SETUPHDIR) --include-dir ../../include $(__CAIRO_INCLUDEDIR_p) --define WXBUILDING --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)  --include-dir ../../src/tiff/libtiff --include-dir ../../src/jpeg --include-dir ../../src/png --include-dir ../../src/zlib --include-dir ../../src/regex --include-dir ../../src/expat/expat/lib --include-dir ../../src/stc/scintilla/include --include-dir ../../src/stc/scintilla/lexlib --include-dir ../../src/stc/scintilla/src --define __WX__ --define SCI_LEXER --define NO_CXX11_REGEX --define LINK_LEXERS --define wxUSE_BASE=1 --define WXMAKINGDLL
 
@@ -11660,6 +11673,11 @@ $(OBJS)\monolib_calctrlg.o: ../../src/generic/calctrlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_rowheightcache.o: ../../src/generic/rowheightcache.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
 $(OBJS)\basedll_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -14165,6 +14183,11 @@ $(OBJS)\coredll_calctrlg.o: ../../src/generic/calctrlg.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
+ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_rowheightcache.o: ../../src/generic/rowheightcache.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
 $(OBJS)\corelib_dummy.o: ../../src/common/dummy.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -15890,6 +15913,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_calctrlg.o: ../../src/generic/calctrlg.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_rowheightcache.o: ../../src/generic/rowheightcache.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

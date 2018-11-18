@@ -266,6 +266,7 @@
             net/socket.cpp
             persistence/tlw.cpp
             persistence/dataview.cpp
+            rowheightcache/rowheightcachetest.cpp
             sizers/boxsizer.cpp
             sizers/gridsizer.cpp
             sizers/wrapsizer.cpp

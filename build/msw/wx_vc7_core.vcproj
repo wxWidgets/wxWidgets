@@ -1287,6 +1287,9 @@
 				RelativePath="..\..\src\generic\richtooltipg.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\generic\rowheightcache.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\generic\sashwin.cpp">
 			</File>
 			<File

@@ -1167,6 +1167,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\rowheightcache\rowheightcachetest.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\misc\safearrayconverttest.cpp"
 				>
 			</File>
