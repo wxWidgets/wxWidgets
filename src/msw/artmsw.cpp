@@ -85,6 +85,23 @@ MSW_SHGetStockIconInfo(SHSTOCKICONID siid,
 
 #endif // #ifdef wxHAS_SHGetStockIconInfo
 
+// Wrapper for SHDefExtractIcon().
+wxBitmap
+MSWGetBitmapFromIconLocation(const TCHAR* path, int index, const wxSize& size)
+{
+    HICON hIcon = NULL;
+    if ( SHDefExtractIcon(path, index, 0, &hIcon, NULL, size.x) != S_OK )
+        return wxNullBitmap;
+
+    wxIcon icon;
+    icon.CreateFromHICON((WXHICON)hIcon);
+
+    wxBitmap bitmap(icon);
+    ::DestroyIcon(hIcon);
+
+    return bitmap;
+}
+
 wxBitmap
 MSWGetBitmapForPath(const wxString& path, const wxSize& size, DWORD uFlags = 0)
 {
@@ -97,18 +114,7 @@ MSWGetBitmapForPath(const wxString& path, const wxSize& size, DWORD uFlags = 0)
                         &fi, sizeof(SHFILEINFO), uFlags) )
        return wxNullBitmap;
 
-    HICON hIcon = NULL;
-    if ( !SHDefExtractIcon(fi.szDisplayName, fi.iIcon, 0,
-                           &hIcon, NULL, size.x) )
-        return wxNullBitmap;
-
-    wxIcon icon;
-    icon.CreateFromHICON((WXHICON)hIcon);
-
-    wxBitmap bitmap(icon);
-    ::DestroyIcon(hIcon);
-
-    return bitmap;
+    return MSWGetBitmapFromIconLocation(fi.szDisplayName, fi.iIcon, size);
 }
 
 #if wxUSE_FSVOLUME
@@ -190,27 +196,17 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
                                 ? size
                                 : wxArtProvider::GetNativeSizeHint(client);
 
-            HICON hIcon = NULL;
-            res = SHDefExtractIcon(sii.szPath, sii.iIcon, 0,
-                                   &hIcon, NULL, sizeNeeded.x);
-            if ( res == S_OK )
+            bitmap = MSWGetBitmapFromIconLocation(sii.szPath, sii.iIcon,
+                                                  sizeNeeded);
+            if ( bitmap.IsOk() )
             {
-                wxIcon icon;
-                icon.CreateFromHICON((WXHICON)hIcon);
-
-                bitmap = wxBitmap(icon);
-                ::DestroyIcon(hIcon);
-
-                if ( bitmap.IsOk() )
+                if ( sizeNeeded.IsFullySpecified() &&
+                        bitmap.GetSize() != sizeNeeded )
                 {
-                    if ( sizeNeeded.IsFullySpecified() &&
-                            bitmap.GetSize() != sizeNeeded )
-                    {
-                        wxArtProvider::RescaleBitmap(bitmap, sizeNeeded);
-                    }
-
-                    return bitmap;
+                    wxArtProvider::RescaleBitmap(bitmap, sizeNeeded);
                 }
+
+                return bitmap;
             }
         }
     }
