@@ -25,6 +25,7 @@
 #include "wx/volume.h"
 #include "wx/msw/private.h"
 #include "wx/msw/wrapwin.h"
+#include "wx/msw/wrapshl.h"
 
 #ifdef SHGSI_ICON
     #define wxHAS_SHGetStockIconInfo
@@ -90,24 +91,22 @@ MSWGetBitmapForPath(const wxString& path, const wxSize& size, DWORD uFlags = 0)
     SHFILEINFO fi;
     wxZeroMemory(fi);
 
-    uFlags |= SHGFI_USEFILEATTRIBUTES | SHGFI_ICON;
-    if ( size != wxDefaultSize )
-    {
-        if ( size.x <= 16 )
-            uFlags |= SHGFI_SMALLICON;
-        else if ( size.x >= 64 )
-            uFlags |= SHGFI_LARGEICON;
-    }
+    uFlags |= SHGFI_USEFILEATTRIBUTES | SHGFI_ICONLOCATION;
 
     if ( !SHGetFileInfo(path.t_str(), FILE_ATTRIBUTE_DIRECTORY,
                         &fi, sizeof(SHFILEINFO), uFlags) )
+       return wxNullBitmap;
+
+    HICON hIcon = NULL;
+    if ( !SHDefExtractIcon(fi.szDisplayName, fi.iIcon, 0,
+                           &hIcon, NULL, size.x) )
         return wxNullBitmap;
 
     wxIcon icon;
-    icon.CreateFromHICON((WXHICON)fi.hIcon);
+    icon.CreateFromHICON((WXHICON)hIcon);
 
     wxBitmap bitmap(icon);
-    ::DestroyIcon(fi.hIcon);
+    ::DestroyIcon(hIcon);
 
     return bitmap;
 }
