@@ -93,8 +93,13 @@ MSWGetBitmapFromIconLocation(const TCHAR* path, int index, const wxSize& size)
     if ( SHDefExtractIcon(path, index, 0, &hIcon, NULL, size.x) != S_OK )
         return wxNullBitmap;
 
+    // Note that using "size.x" twice here is not a typo: normally size.y is
+    // the same anyhow, of course, but if it isn't, the actual icon size would
+    // be size.x in both directions as we only pass "x" to SHDefExtractIcon()
+    // above.
     wxIcon icon;
-    icon.CreateFromHICON((WXHICON)hIcon);
+    if ( !icon.InitFromHICON((WXHICON)hIcon, size.x, size.x) )
+        return wxNullBitmap;
 
     wxBitmap bitmap(icon);
     ::DestroyIcon(hIcon);
