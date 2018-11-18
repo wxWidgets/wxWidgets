@@ -38,9 +38,7 @@ private:
     wxStaticText *m_text;
     wxString m_client;
     wxChoice *m_sizes;
-    wxString m_current_artid;
-
-    static int m_bitmap_sizes[7];
+    wxString m_currentArtId;
 
     wxDECLARE_EVENT_TABLE();
 };

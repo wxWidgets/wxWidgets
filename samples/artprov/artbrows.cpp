@@ -128,7 +128,8 @@ static void FillBitmaps(wxImageList *images, wxListCtrl *list,
 
 const int SIZE_CHOICE_ID = ::wxNewId();
 
-int wxArtBrowserDialog::m_bitmap_sizes[] = { -1, 16, 32, 64, 128, 256, 0 };
+// Bitmap sizes that can be chosen in the size selection wxChoice.
+static const int bitmapSizes[] = { -1, 16, 32, 64, 128, 256, 0 };
 
 wxBEGIN_EVENT_TABLE(wxArtBrowserDialog, wxDialog)
     EVT_LIST_ITEM_SELECTED(wxID_ANY, wxArtBrowserDialog::OnSelectItem)
@@ -141,7 +142,7 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
                wxDefaultPosition, wxDefaultSize,
                wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
 {
-    m_current_artid = wxART_ERROR;
+    m_currentArtId = wxART_ERROR;
 
     wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
     wxSizer *subsizer;
@@ -164,15 +165,12 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
     wxSizer *subsub = new wxBoxSizer(wxVERTICAL);
 
     m_sizes = new wxChoice( this, SIZE_CHOICE_ID );
-    int size_index = 0;
-    while( m_bitmap_sizes[size_index] != 0 )
+    for ( const int* p = bitmapSizes; *p; ++p )
     {
-      if( m_bitmap_sizes[size_index] == -1 )
+      if ( *p == -1 )
         m_sizes->Append( "Default" );
       else
-        m_sizes->Append( wxString::Format("%d x %d", m_bitmap_sizes[size_index], m_bitmap_sizes[size_index] ) );
-
-      size_index++;
+        m_sizes->Append( wxString::Format("%d x %d", *p, *p ) );
     }
     m_sizes->SetSelection(0);
     subsub->Add(m_sizes, 0, wxALL, 4);
@@ -200,8 +198,8 @@ wxArtBrowserDialog::wxArtBrowserDialog(wxWindow *parent)
 
 wxSize wxArtBrowserDialog::GetSelectedBitmapSize() const
 {
-  int size = m_bitmap_sizes[ m_sizes->GetSelection() ];
-  return wxSize( size, size );
+  const int size = bitmapSizes[m_sizes->GetSelection()];
+  return wxSize(size, size);
 }
 
 
@@ -230,13 +228,13 @@ void wxArtBrowserDialog::SetArtClient(const wxArtClient& client)
 void wxArtBrowserDialog::OnSelectItem(wxListEvent &event)
 {
     const char *data = (const char*)event.GetData();
-    m_current_artid = wxString( data );
+    m_currentArtId = wxString( data );
     SetArtBitmap(data, m_client, GetSelectedBitmapSize());
 }
 
-void wxArtBrowserDialog::OnChangeSize(wxCommandEvent &event)
+void wxArtBrowserDialog::OnChangeSize(wxCommandEvent& WXUNUSED(event))
 {
-    SetArtBitmap(m_current_artid, m_client, GetSelectedBitmapSize() );
+    SetArtBitmap(m_currentArtId, m_client, GetSelectedBitmapSize() );
 }
 
 void wxArtBrowserDialog::OnChooseClient(wxCommandEvent &event)
