@@ -163,15 +163,26 @@ int wxTextCtrl::GetNumberOfLines() const
 
 bool wxTextCtrl::IsModified() const
 {
-    return false;
+    if( !IsMultiLine() )
+        return m_qtLineEdit->isModified();
+    else
+        return m_qtTextEdit->isWindowModified();
 }
 
 void wxTextCtrl::MarkDirty()
 {
+    if( !IsMultiLine() )
+        return m_qtLineEdit->setModified( true );
+    else
+        return m_qtTextEdit->setWindowModified( true );
 }
 
 void wxTextCtrl::DiscardEdits()
 {
+    if( !IsMultiLine() )
+        return m_qtLineEdit->setModified( false );
+    else
+        return m_qtTextEdit->setWindowModified( false );
 }
 
 bool wxTextCtrl::SetStyle(long WXUNUSED(start), long WXUNUSED(end), const wxTextAttr& WXUNUSED(style))
