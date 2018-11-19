@@ -908,6 +908,7 @@ set(GUI_CMN_SRC
     src/generic/wizard.cpp
     src/generic/editlbox.cpp
     src/generic/datavgen.cpp
+    src/generic/rowheightcache.cpp
 )
 
 set(GUI_CMN_HDR

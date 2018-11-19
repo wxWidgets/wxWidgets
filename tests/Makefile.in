@@ -254,6 +254,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_socket.o \
 	test_gui_tlw.o \
 	test_gui_dataview.o \
+	test_gui_rowheightcachetest.o \
 	test_gui_boxsizer.o \
 	test_gui_gridsizer.o \
 	test_gui_wrapsizer.o \
@@ -1029,6 +1030,9 @@ test_gui_tlw.o: $(srcdir)/persistence/tlw.cpp $(TEST_GUI_ODEP)
 
 test_gui_dataview.o: $(srcdir)/persistence/dataview.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/persistence/dataview.cpp
+
+test_gui_rowheightcachetest.o: $(srcdir)/rowheightcache/rowheightcachetest.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/rowheightcache/rowheightcachetest.cpp
 
 test_gui_boxsizer.o: $(srcdir)/sizers/boxsizer.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/sizers/boxsizer.cpp

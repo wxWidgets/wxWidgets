@@ -899,6 +899,7 @@ GUI_CMN_SRC =
     src/generic/renderg.cpp
     src/generic/richmsgdlgg.cpp
     src/generic/richtooltipg.cpp
+    src/generic/rowheightcache.cpp
     src/generic/sashwin.cpp
     src/generic/scrlwing.cpp
     src/generic/selstore.cpp

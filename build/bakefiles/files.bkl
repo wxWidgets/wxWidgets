@@ -1005,6 +1005,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/editlbox.cpp
     src/generic/laywin.cpp
     src/generic/calctrlg.cpp
+    src/generic/rowheightcache.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
     wx/affinematrix2dbase.h
