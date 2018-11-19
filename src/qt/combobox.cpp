@@ -20,8 +20,8 @@ class wxQtComboBox : public wxQtEventSignalHandler< QComboBox, wxComboBox >
 {
 public:
     wxQtComboBox( wxWindow *parent, wxComboBox *handler );
-    virtual void showPopup();
-    virtual void hidePopup();
+    virtual void showPopup() wxOVERRIDE;
+    virtual void hidePopup() wxOVERRIDE;
     
 private:
     void activated(int index);
@@ -44,7 +44,7 @@ void wxQtComboBox::showPopup()
     if( handler )
     {
         wxCommandEvent event( wxEVT_COMBOBOX_DROPDOWN, handler->GetId() );
-        event.SetEventObject( handler );
+//        event.SetEventObject( handler );
         EmitEvent( event );
     }
     QComboBox::showPopup();
@@ -56,7 +56,7 @@ void wxQtComboBox::hidePopup()
     if( handler )
     {
         wxCommandEvent event( wxEVT_COMBOBOX_CLOSEUP, handler->GetId() );
-        event.SetEventObject( GetHandler() );
+//        event.SetEventObject( GetHandler() );
         EmitEvent( event );
     }
     QComboBox::hidePopup();
