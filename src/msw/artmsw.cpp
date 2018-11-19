@@ -31,6 +31,27 @@
     #define wxHAS_SHGetStockIconInfo
 #endif
 
+// MinGW headers don't always define this symbol (up to at least 5.3 version),
+// so do it ourselves.
+//
+// Note that at least there is no need for run-time loading here, as it's
+// available since XP.
+#ifndef SHDefExtractIcon
+
+#ifdef UNICODE
+extern "C" HRESULT wxSTDCALL
+SHDefExtractIconW(LPCWSTR pszIconFile, int iIndex, UINT uFlags,
+                  HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize);
+#define SHDefExtractIcon SHDefExtractIconW
+#else // !UNICODE
+extern "C" HRESULT wxSTDCALL
+SHDefExtractIconA(LPCSTR pszIconFile, int iIndex, UINT uFlags,
+                  HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize);
+#define SHDefExtractIcon SHDefExtractIconA
+#endif // UNICODE/!UNICODE
+
+#endif // !defined(SHDefExtractIcon)
+
 namespace
 {
 
