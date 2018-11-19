@@ -36,6 +36,7 @@ private:
         CPPUNIT_TEST( NoEventsInCtor );
         WXUISIM_TEST( Arrows );
         WXUISIM_TEST( Wrap );
+        WXUISIM_TEST( SetValueInsideEventHandler );
         CPPUNIT_TEST( Range );
         CPPUNIT_TEST( Value );
     CPPUNIT_TEST_SUITE_END();
@@ -44,8 +45,10 @@ private:
     void NoEventsInCtor();
     void Arrows();
     void Wrap();
+    void SetValueInsideEventHandler();
     void Range();
     void Value();
+    void OnSpin(wxSpinEvent &e);
 
     wxSpinCtrl* m_spin;
 
@@ -168,6 +171,47 @@ void SpinCtrlTestCase::Wrap()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(0, m_spin->GetValue());
+#endif
+}
+
+void SpinCtrlTestCase::OnSpin(wxSpinEvent &e)
+{
+    // make sure val is 1..16 or 32
+    int new_val = e.GetValue();
+
+    if (new_val == 31)
+        m_spin->SetValue(16);
+    else if (new_val > 16)
+        m_spin->SetValue(32);
+}
+
+void SpinCtrlTestCase::SetValueInsideEventHandler()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    wxDELETE(m_spin);
+    m_spin = new wxSpinCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
+                            wxDefaultPosition, wxDefaultSize,
+                            wxSP_ARROW_KEYS | wxSP_WRAP, 1, 32, 1);
+    m_spin->Bind(wxEVT_SPINCTRL, &SpinCtrlTestCase::OnSpin, this);
+
+    wxUIActionSimulator sim;
+
+    // run multiple times to make sure there are no issues with keeping old value
+    for (size_t i = 0; i < 2; i++)
+    {
+        m_spin->SetFocus();
+        wxYield();
+
+        sim.Char(WXK_DELETE);
+        sim.Char(WXK_DELETE);
+        sim.Text("20");
+        wxYield();
+
+        wxTheApp->GetTopWindow()->SetFocus();
+        wxYield();
+
+        CPPUNIT_ASSERT_EQUAL(32, m_spin->GetValue());
+    }
 #endif
 }
 
