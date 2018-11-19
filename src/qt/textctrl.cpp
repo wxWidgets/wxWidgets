@@ -121,6 +121,8 @@ bool wxTextCtrl::Create(wxWindow *parent,
     {
         m_qtLineEdit = new wxQtLineEdit( parent, this );
         m_qtTextEdit = NULL;
+        if( style & wxTE_PASSWORD )
+            m_qtLineEdit->setEchoMode( QLineEdit::Password );
     }
     else
     {
