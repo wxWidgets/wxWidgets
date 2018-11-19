@@ -26,8 +26,8 @@ A helper class that manages a set of RowRange objects.
 It stores the indices that are members of a group in a memory
 efficiant way.
 */
-//class WXDLLIMPEXP_ADV RowRanges
-class RowRanges
+class WXDLLIMPEXP_CORE RowRanges
+//class RowRanges
 {
 public:
     /**
