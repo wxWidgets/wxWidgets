@@ -40,25 +40,15 @@ wxQtComboBox::wxQtComboBox( wxWindow *parent, wxComboBox *handler )
 
 void wxQtComboBox::showPopup()
 {
-    wxComboBox *handler = GetHandler();
-    if( handler )
-    {
-        wxCommandEvent event( wxEVT_COMBOBOX_DROPDOWN, handler->GetId() );
-//        event.SetEventObject( handler );
-        EmitEvent( event );
-    }
+    wxCommandEvent event( wxEVT_COMBOBOX_DROPDOWN, GetHandler()->GetId() );
+    EmitEvent( event );
     QComboBox::showPopup();
 }
 
 void wxQtComboBox::hidePopup()
 {
-    wxComboBox *handler = GetHandler();
-    if( handler )
-    {
-        wxCommandEvent event( wxEVT_COMBOBOX_CLOSEUP, handler->GetId() );
-//        event.SetEventObject( GetHandler() );
-        EmitEvent( event );
-    }
+    wxCommandEvent event( wxEVT_COMBOBOX_CLOSEUP, GetHandler()->GetId() );
+    EmitEvent( event );
     QComboBox::hidePopup();
 }
 
