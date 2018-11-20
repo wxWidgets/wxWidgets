@@ -22,7 +22,6 @@
 #include <exdispid.h>
 #include <exdisp.h>
 #include <mshtml.h>
-#include <shobjidl.h>
 #include "wx/msw/registry.h"
 #include "wx/msw/missing.h"
 #include "wx/msw/ole/safearray.h"
@@ -1641,8 +1640,12 @@ HRESULT wxSTDCALL DocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt,
 
 HRESULT wxSTDCALL DocHostUIHandler::GetHostInfo(DOCHOSTUIINFO *pInfo)
 {
-    //don't show 3d border and enable themes.
-    pInfo->dwFlags = pInfo->dwFlags | DOCHOSTUIFLAG_NO3DBORDER | DOCHOSTUIFLAG_THEME;
+    // Don't show 3d border and enable themes and also enable sending redirect
+    // notifications as otherwise we wouldn't get wxEVT_WEBVIEW_NAVIGATING when
+    // redirected.
+    pInfo->dwFlags |= DOCHOSTUIFLAG_NO3DBORDER |
+                      DOCHOSTUIFLAG_THEME |
+                      DOCHOSTUIFLAG_ENABLE_REDIRECT_NOTIFICATION;
     return S_OK;
 }
 

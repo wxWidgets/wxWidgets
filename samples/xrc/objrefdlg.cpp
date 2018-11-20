@@ -42,7 +42,7 @@
 //-----------------------------------------------------------------------------
 ObjrefDialog::ObjrefDialog(wxWindow* parent)
 {
-    wxXmlResource::Get()->LoadDialog(this, parent, wxT("objref_dialog"));
+    wxXmlResource::Get()->LoadDialog(this, parent, "objref_dialog");
 
     nb = XRCCTRL(*this, "objref_notebook", wxNotebook);
     wxCHECK_RET(nb, "failed to find objref_notebook");

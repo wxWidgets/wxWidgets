@@ -248,9 +248,53 @@ wxString GetPreferredUILanguage(const wxArrayString& available)
 
 #else
 
-// On Unix, there's just one language=locale setting, so we should always
-// use that.
-#define GetPreferredUILanguage GetPreferredUILanguageFallback
+// When the preferred UI language is determined, the LANGUAGE environment
+// variable is the primary source of preference.
+// http://www.gnu.org/software/gettext/manual/html_node/Locale-Environment-Variables.html
+//
+// The LANGUAGE variable may contain a colon separated list of language
+// codes in the order of preference.
+// http://www.gnu.org/software/gettext/manual/html_node/The-LANGUAGE-variable.html
+wxString GetPreferredUILanguage(const wxArrayString& available)
+{
+    wxString languageFromEnv;
+    wxArrayString preferred;
+    if ( wxGetEnv("LANGUAGE", &languageFromEnv) )
+    {
+        wxStringTokenizer tknzr(languageFromEnv, ":");
+        while ( tknzr.HasMoreTokens() )
+        {
+            const wxString tok = tknzr.GetNextToken();
+            if ( const wxLanguageInfo *li = wxLocale::FindLanguageInfo(tok) )
+            {
+                preferred.push_back(li->CanonicalName);
+            }
+        }
+        if ( preferred.empty() )
+        {
+            wxLogTrace(TRACE_I18N, " - LANGUAGE was set, but it didn't contain any languages recognized by the system");
+        }
+    }
+
+    LogTraceArray(" - preferred languages from environment", preferred);
+    for ( wxArrayString::const_iterator j = preferred.begin();
+          j != preferred.end();
+          ++j )
+    {
+        wxString lang(*j);
+        if ( available.Index(lang) != wxNOT_FOUND )
+            return lang;
+        size_t pos = lang.find('_');
+        if ( pos != wxString::npos )
+        {
+            lang = lang.substr(0, pos);
+            if ( available.Index(lang) != wxNOT_FOUND )
+                return lang;
+        }
+    }
+
+    return GetPreferredUILanguageFallback(available);
+}
 
 #endif
 

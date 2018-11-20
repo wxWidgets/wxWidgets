@@ -73,7 +73,7 @@ void VirtListCtrlTestCase::setUp()
         }
 
     protected:
-        virtual wxString OnGetItemText(long item, long column) const
+        virtual wxString OnGetItemText(long item, long column) const wxOVERRIDE
         {
             return wxString::Format("Row %ld, col %ld", item, column);
         }

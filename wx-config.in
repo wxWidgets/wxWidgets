@@ -1026,11 +1026,11 @@ fi
 ldflags_gl="@LDFLAGS_GL@"
 
 ldlibs_base="@WXCONFIG_LIBS@"
-ldlibs_core="@EXTRALIBS_GUI@"
+ldlibs_core="@EXTRALIBS_GUI@ @EXTRALIBS_SDL@"
 ldlibs_gl="@OPENGL_LIBS@"
 ldlibs_html="@EXTRALIBS_HTML@"
+ldlibs_media="@EXTRALIBS_MEDIA@"
 ldlibs_xml="@EXTRALIBS_XML@"
-ldlibs_adv="@EXTRALIBS_SDL@"
 ldlibs_stc="@EXTRALIBS_STC@"
 ldlibs_webview="@EXTRALIBS_WEBVIEW@"
 
@@ -1050,15 +1050,14 @@ order_libs()
             # those that can be output immediately because no other libraries
             # depend on them.
             case "$lib" in
-                base|core|html|xml|adv) eval "use_$lib=1" ;;
-                *)                      libs="$libs $lib" ;;
+                base|core|html|xml) eval "use_$lib=1" ;;
+                *)                  libs="$libs $lib" ;;
             esac
         done
 
         # Add the libraries that we postponed adding above.
         # Order of the checks here is important.
         [ -z "$use_html" ] || libs="$libs html"
-        [ -z "$use_adv" ] || libs="$libs adv"
         [ -z "$use_core" ] || libs="$libs core"
         [ -z "$use_xml" ] || libs="$libs xml"
         [ -z "$use_base" ] || libs="$libs base"
@@ -1242,6 +1241,10 @@ else    # MONOLITHIC = 0
             wx_libs="$wx_libs base"
         fi
     fi
+
+    # Existing scripts may use "wx-config --libs std,adv" or similar, but "adv"
+    # library is not used any longer.
+    wx_libs=`remove_field adv $wx_libs`
 
     if [ -n "$output_option_libs" ]; then
         using_gui=no

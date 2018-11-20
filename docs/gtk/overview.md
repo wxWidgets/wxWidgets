@@ -1,4 +1,4 @@
-# wxWidgets on the GNOME Desktop
+# wxWidgets on the GNOME Desktop       {#plat_gtk_overview}
 
 wxWidgets is a C++ cross-platform GUI library, whose distintive feature is the
 use of native calls and native widgets on the respective platform, i.e. an

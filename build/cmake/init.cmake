@@ -121,6 +121,10 @@ if(wxUSE_ON_FATAL_EXCEPTION AND MSVC AND (MSVC_VERSION GREATER 1800) )
     add_compile_options("/EHa")
 endif()
 
+if(NOT wxBUILD_DEBUG_LEVEL STREQUAL "Default")
+    add_compile_options("-DwxDEBUG_LEVEL=${wxBUILD_DEBUG_LEVEL}")
+endif()
+
 # Constants for setup.h creation
 set(wxUSE_STD_DEFAULT ON)
 if(wxUSE_UNICODE)
@@ -138,10 +142,6 @@ if(DEFINED wxUSE_OLE AND wxUSE_OLE)
     set(wxUSE_OLE_AUTOMATION ON)
 endif()
 
-if(DEFINED wxUSE_GRAPHICS_DIRECT2D AND NOT wxUSE_GRAPHICS_CONTEXT)
-    set(wxUSE_GRAPHICS_DIRECT2D OFF)
-endif()
-
 if(wxUSE_OPENGL)
     set(wxUSE_GLCANVAS ON)
 endif()
@@ -150,12 +150,71 @@ if(wxUSE_THREADS)
     find_package(Threads REQUIRED)
 endif()
 
+if(wxUSE_LIBLZMA)
+    find_package(LibLZMA REQUIRED)
+endif()
+
+if(UNIX AND wxUSE_SECRETSTORE)
+    # The required APIs are always available under MSW and OS X but we must
+    # have GNOME libsecret under Unix to be able to compile this class.
+    find_package(Libsecret REQUIRED)
+    if(NOT LIBSECRET_FOUND)
+        message(WARNING "libsecret not found, wxSecretStore won't be available")
+        wx_option_force_value(wxUSE_SECRETSTORE OFF)
+    endif()
+endif()
+
 if(wxUSE_GUI)
-    if(WIN32 AND wxUSE_METAFILE)
+    if(WXMSW AND wxUSE_METAFILE)
         # this one should probably be made separately configurable
         set(wxUSE_ENH_METAFILE ON)
     endif()
 
+    # Direct2D check
+    if(WIN32 AND wxUSE_GRAPHICS_DIRECT2D)
+        check_include_file(d2d1.h HAVE_D2D1_H)
+        if (NOT HAVE_D2D1_H)
+            wx_option_force_value(wxUSE_GRAPHICS_DIRECT2D OFF)
+        endif()
+    endif()
+     if(MSVC) # match setup.h
+        if(MSVC_VERSION LESS 1600)
+            wx_option_force_value(wxUSE_GRAPHICS_DIRECT2D OFF)
+        else()
+            wx_option_force_value(wxUSE_GRAPHICS_DIRECT2D ${wxUSE_GRAPHICS_CONTEXT})
+        endif()
+     endif()
+
+    # WXQT checks
+    if(WXQT)
+        wx_option_force_value(wxUSE_WEBVIEW OFF)
+        wx_option_force_value(wxUSE_METAFILE OFF)
+        if(WIN32)
+            wx_option_force_value(wxUSE_ACCESSIBILITY OFF)
+            wx_option_force_value(wxUSE_OWNER_DRAWN OFF)
+        endif()
+    endif()
+
+    # WXGTK checks, match include/wx/gtk/chkconf.h
+    if(WXGTK)
+        wx_option_force_value(wxUSE_METAFILE OFF)
+
+        if(WIN32)
+            wx_option_force_value(wxUSE_CAIRO ON)
+            wx_option_force_value(wxUSE_ACCESSIBILITY OFF)
+            wx_option_force_value(wxUSE_OWNER_DRAWN OFF)
+        endif()
+
+        if(NOT UNIX)
+            wx_option_force_value(wxUSE_WEBVIEW OFF)
+            wx_option_force_value(wxUSE_MEDIACTRL OFF)
+            wx_option_force_value(wxUSE_UIACTIONSIMULATOR OFF)
+            wx_option_force_value(wxUSE_OPENGL OFF)
+            set(wxUSE_GLCANVAS OFF)
+        endif()
+    endif()
+
+    # extra dependencies
     if(wxUSE_OPENGL)
         find_package(OpenGL)
         if(NOT OPENGL_FOUND)
@@ -173,8 +232,26 @@ if(wxUSE_GUI)
         endif()
     endif()
 
+    if(wxUSE_PRIVATE_FONTS AND WXGTK)
+        find_package(Fontconfig)
+        if(NOT FONTCONFIG_FOUND)
+            message(WARNING "Fontconfig not found, Private fonts won't be available")
+            wx_option_force_value(wxUSE_PRIVATE_FONTS OFF)
+        endif()
+    endif()
+
     if(wxUSE_MEDIACTRL AND UNIX AND NOT APPLE AND NOT WIN32)
-        find_package(GStreamer)
+        find_package(GStreamer 1.0 COMPONENTS video)
+        if(NOT GSTREAMER_FOUND)
+            find_package(GStreamer 0.10 COMPONENTS interfaces)
+        endif()
+
+        set(wxUSE_GSTREAMER ${GSTREAMER_FOUND})
+        set(wxUSE_GSTREAMER_PLAYER OFF)
+        if(GSTREAMER_PLAYER_INCLUDE_DIRS)
+            set(wxUSE_GSTREAMER_PLAYER ON)
+        endif()
+
         if(NOT GSTREAMER_FOUND)
             message(WARNING "GStreamer not found, wxMediaCtrl won't be available")
             wx_option_force_value(wxUSE_MEDIACTRL OFF)

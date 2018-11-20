@@ -12,8 +12,6 @@
 
     @library{wxcore}
     @category{cfg}
-
-    @see wxClientDisplayRect(), wxDisplaySize(), wxDisplaySizeMM()
 */
 class wxDisplay
 {
@@ -27,6 +25,23 @@ public:
             lower than the value returned by GetCount().
     */
     wxDisplay(unsigned int index = 0);
+
+    /**
+        Constructor creating the display object associated with the given
+        window.
+
+        This is the most convenient way of finding the display on which the
+        given window is shown while falling back to the default display if it
+        is not shown at all or positioned outside of any display.
+
+        @param window
+            A valid, i.e. non-null, window.
+
+        @see GetFromWindow()
+
+        @since 3.1.2
+     */
+    explicit wxDisplay(const wxWindow* window);
 
     /**
         Destructor.
@@ -102,9 +117,25 @@ public:
     wxArrayVideoModes GetModes(const wxVideoMode& mode = wxDefaultVideoMode) const;
 
     /**
-        Returns the display's name. A name is not available on all platforms.
+        Returns the display's name.
+
+        The returned value is currently an empty string under all platforms
+        except MSW.
     */
     wxString GetName() const;
+
+    /**
+        Returns display resolution in pixels per inch.
+
+        Horizontal and vertical resolution are returned in @c x and @c y
+        components of the wxSize object respectively.
+
+        If the resolution information is not available, returns @code wxSize(0,
+        0) @endcode.
+
+        @since 3.1.2
+     */
+    wxSize GetPPI() const;
 
     /**
         Returns @true if the display is the primary display. The primary

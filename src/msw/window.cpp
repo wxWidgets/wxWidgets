@@ -60,6 +60,7 @@
 
 #include "wx/hashmap.h"
 #include "wx/evtloop.h"
+#include "wx/popupwin.h"
 #include "wx/power.h"
 #include "wx/scopeguard.h"
 #include "wx/sysopt.h"
@@ -133,6 +134,10 @@
 #if wxUSE_MENUS_NATIVE
 extern wxMenu *wxCurrentPopupMenu;
 #endif
+
+#if wxUSE_POPUPWIN
+extern wxPopupWindow* wxCurrentPopupWindow;
+#endif // wxUSE_POPUPWIN
 
 #if wxUSE_UXTHEME
 // This is a hack used by the owner-drawn wxButton implementation to ensure
@@ -3177,19 +3182,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             break;
 
-        case MM_JOY1MOVE:
-        case MM_JOY2MOVE:
-        case MM_JOY1ZMOVE:
-        case MM_JOY2ZMOVE:
-        case MM_JOY1BUTTONDOWN:
-        case MM_JOY2BUTTONDOWN:
-        case MM_JOY1BUTTONUP:
-        case MM_JOY2BUTTONUP:
-            processed = HandleJoystickEvent(message,
-                                            LOWORD(lParam),
-                                            HIWORD(lParam),
-                                            wParam);
-            break;
 
         case WM_COMMAND:
             {
@@ -3742,6 +3734,23 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                 bool vetoed;
                 processed = HandlePower(wParam, lParam, &vetoed);
                 rc.result = processed && vetoed ? BROADCAST_QUERY_DENY : TRUE;
+            }
+            break;
+
+        case WM_NCACTIVATE:
+            // When we're losing activation to our own popup window, we want to
+            // retain the "active" appearance of the title bar, as dropping
+            // down a combobox popup shouldn't deactivate the window containing
+            // the combobox, for example. Explicitly calling DefWindowProc() to
+            // draw the window as active seems to be the only way of achieving
+            // this (thanks to Barmak Shemirani for suggesting it at
+            // https://stackoverflow.com/a/52808753/15275).
+            if ( !wParam &&
+                    wxCurrentPopupWindow &&
+                        wxCurrentPopupWindow->MSWGetOwner() == this )
+            {
+                rc.result = MSWDefWindowProc(message, TRUE, lParam);
+                processed = true;
             }
             break;
 
@@ -6248,92 +6257,6 @@ bool wxWindowMSW::HandleClipboardEvent(WXUINT nMsg)
     return HandleWindowEvent(evt);
 }
 
-// ---------------------------------------------------------------------------
-// joystick
-// ---------------------------------------------------------------------------
-
-bool wxWindowMSW::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
-{
-    int change = 0;
-    if ( flags & JOY_BUTTON1CHG )
-        change = wxJOY_BUTTON1;
-    if ( flags & JOY_BUTTON2CHG )
-        change = wxJOY_BUTTON2;
-    if ( flags & JOY_BUTTON3CHG )
-        change = wxJOY_BUTTON3;
-    if ( flags & JOY_BUTTON4CHG )
-        change = wxJOY_BUTTON4;
-
-    int buttons = 0;
-    if ( flags & JOY_BUTTON1 )
-        buttons |= wxJOY_BUTTON1;
-    if ( flags & JOY_BUTTON2 )
-        buttons |= wxJOY_BUTTON2;
-    if ( flags & JOY_BUTTON3 )
-        buttons |= wxJOY_BUTTON3;
-    if ( flags & JOY_BUTTON4 )
-        buttons |= wxJOY_BUTTON4;
-
-    // the event ids aren't consecutive so we can't use table based lookup
-    int joystick;
-    wxEventType eventType;
-    switch ( msg )
-    {
-        case MM_JOY1MOVE:
-            joystick = 1;
-            eventType = wxEVT_JOY_MOVE;
-            break;
-
-        case MM_JOY2MOVE:
-            joystick = 2;
-            eventType = wxEVT_JOY_MOVE;
-            break;
-
-        case MM_JOY1ZMOVE:
-            joystick = 1;
-            eventType = wxEVT_JOY_ZMOVE;
-            break;
-
-        case MM_JOY2ZMOVE:
-            joystick = 2;
-            eventType = wxEVT_JOY_ZMOVE;
-            break;
-
-        case MM_JOY1BUTTONDOWN:
-            joystick = 1;
-            eventType = wxEVT_JOY_BUTTON_DOWN;
-            break;
-
-        case MM_JOY2BUTTONDOWN:
-            joystick = 2;
-            eventType = wxEVT_JOY_BUTTON_DOWN;
-            break;
-
-        case MM_JOY1BUTTONUP:
-            joystick = 1;
-            eventType = wxEVT_JOY_BUTTON_UP;
-            break;
-
-        case MM_JOY2BUTTONUP:
-            joystick = 2;
-            eventType = wxEVT_JOY_BUTTON_UP;
-            break;
-
-        default:
-            wxFAIL_MSG(wxT("no such joystick event"));
-
-            return false;
-    }
-
-    wxJoystickEvent event(eventType, buttons, joystick, change);
-    if ( eventType == wxEVT_JOY_ZMOVE )
-        event.SetZPosition(x);
-    else
-        event.SetPosition(wxPoint(x, y));
-    event.SetEventObject(this);
-
-    return HandleWindowEvent(event);
-}
 
 // ---------------------------------------------------------------------------
 // scrolling

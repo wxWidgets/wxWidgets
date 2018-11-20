@@ -617,16 +617,30 @@ static const long gs_fp_es_style_values[] = {
 };
 
 static const wxChar* const gs_fp_es_weight_labels[] = {
-    wxT("Normal"),
+    wxT("Thin"),
+    wxT("ExtraLight"),
     wxT("Light"),
+    wxT("Normal"),
+    wxT("Medium"),
+    wxT("SemiBold"),
     wxT("Bold"),
+    wxT("ExtraBold"),
+    wxT("Heavy"),
+    wxT("ExtraHeavy"),
     (const wxChar*) NULL
 };
 
 static const long gs_fp_es_weight_values[] = {
-    wxFONTWEIGHT_NORMAL,
+    wxFONTWEIGHT_THIN,
+    wxFONTWEIGHT_EXTRALIGHT,
     wxFONTWEIGHT_LIGHT,
-    wxFONTWEIGHT_BOLD
+    wxFONTWEIGHT_NORMAL,
+    wxFONTWEIGHT_MEDIUM,
+    wxFONTWEIGHT_SEMIBOLD,
+    wxFONTWEIGHT_BOLD,
+    wxFONTWEIGHT_EXTRABOLD,
+    wxFONTWEIGHT_HEAVY,
+    wxFONTWEIGHT_EXTRAHEAVY
 };
 
 // Class body is in advprops.h
@@ -788,9 +802,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
     else if ( ind == 3 )
     {
         int wt = childValue.GetLong();
-        if ( wt != wxFONTWEIGHT_NORMAL &&
-             wt != wxFONTWEIGHT_LIGHT &&
-             wt != wxFONTWEIGHT_BOLD )
+        if ( wt < wxFONTWEIGHT_THIN || wt > wxFONTWEIGHT_MAX )
              wt = wxFONTWEIGHT_NORMAL;
         font.SetWeight( static_cast<wxFontWeight>(wt) );
     }
@@ -1073,7 +1085,7 @@ int wxSystemColourProperty::ColToInd( const wxColour& colour ) const
         if ( colour == GetColour(ind) )
         {
             /*wxLogDebug(wxS("%s(%s): Index %i for ( getcolour(%i,%i,%i), colour(%i,%i,%i))"),
-                GetClassName(),GetLabel().c_str(),
+                GetClassName(),GetLabel(),
                 (int)i,(int)GetColour(ind).Red(),(int)GetColour(ind).Green(),(int)GetColour(ind).Blue(),
                 (int)colour.Red(),(int)colour.Green(),(int)colour.Blue());*/
             return ind;
@@ -2282,8 +2294,6 @@ bool wxDateProperty::StringToValue( wxVariant& variant, const wxString& text,
 wxString wxDateProperty::ValueToString( wxVariant& value,
                                         int argFlags ) const
 {
-    const wxChar* format = (const wxChar*) NULL;
-
     wxDateTime dateTime = value.GetDateTime();
 
     if ( !dateTime.IsValid() )
@@ -2299,61 +2309,32 @@ wxString wxDateProperty::ValueToString( wxVariant& value,
         ms_defaultDateFormat = DetermineDefaultDateFormat( showCentury );
     }
 
+    wxString format;
     if ( !m_format.empty() &&
          !(argFlags & wxPG_FULL_VALUE) )
-            format = m_format.c_str();
+            format = m_format;
 
     // Determine default from locale
-    // NB: This is really simple stuff, but can't figure anything
-    //     better without proper support in wxLocale
-    if ( !format )
-        format = ms_defaultDateFormat.c_str();
+    if ( format.empty() )
+        format = ms_defaultDateFormat;
 
     return dateTime.Format(format);
 }
 
 wxString wxDateProperty::DetermineDefaultDateFormat( bool showCentury )
 {
-    // This code is basically copied from datectlg.cpp's SetFormat
-    //
-    wxString format;
-
-    wxDateTime dt;
-    dt.ParseFormat(wxS("2003-10-13"), wxS("%Y-%m-%d"));
-    wxString str(dt.Format(wxS("%x")));
-
-    const wxChar *p = str.c_str();
-    while ( *p )
-    {
-        int n=wxAtoi(p);
-        if (n == dt.GetDay())
-        {
-            format.Append(wxS("%d"));
-            p += 2;
-        }
-        else if (n == (int)dt.GetMonth()+1)
-        {
-            format.Append(wxS("%m"));
-            p += 2;
-        }
-        else if (n == dt.GetYear())
-        {
-            format.Append(wxS("%Y"));
-            p += 4;
-        }
-        else if (n == (dt.GetYear() % 100))
-        {
-            if (showCentury)
-                format.Append(wxS("%Y"));
-            else
-                format.Append(wxS("%y"));
-            p += 2;
-        }
-        else
-            format.Append(*p++);
-    }
+    // This code is based on datectlg.cpp's GetLocaleDateFormat()
+#if wxUSE_INTL
+    wxString format = wxLocale::GetOSInfo(wxLOCALE_SHORT_DATE_FMT);
+    if ( showCentury )
+        format.Replace(wxS("%y"), wxS("%Y"));
+    else
+        format.Replace(wxS("%Y"), wxS("%y"));
 
     return format;
+#else
+    return wxS("%x");
+#endif // wxUSE_INTL/!wxUSE_INTL
 }
 
 bool wxDateProperty::DoSetAttribute( const wxString& name, wxVariant& value )

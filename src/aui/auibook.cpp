@@ -517,7 +517,11 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         }
         if (button.id == wxAUI_BUTTON_RIGHT)
         {
-            if (visible_width < m_rect.GetWidth() - ((int)button_count*16))
+            int button_width = 0;
+            for (i = 0; i < button_count; ++i)
+                button_width += m_buttons.Item(button_count - i - 1).rect.GetWidth();
+
+            if (visible_width < m_rect.GetWidth() - button_width)
                 button.curState |= wxAUI_BUTTON_STATE_DISABLED;
             else
                 button.curState &= ~wxAUI_BUTTON_STATE_DISABLED;
@@ -651,7 +655,7 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         }
 
         rect.x = offset;
-        rect.width = m_rect.width - right_buttons_width - offset - 2;
+        rect.width = m_rect.width - right_buttons_width - offset - wnd->FromDIP(2);
 
         if (rect.width <= 0)
             break;
@@ -796,7 +800,7 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
         wxAuiTabContainerButton& tab_button = m_tabCloseButtons.Item(i);
 
         rect.x = offset;
-        rect.width = m_rect.width - right_buttons_width - offset - 2;
+        rect.width = m_rect.width - right_buttons_width - offset - wnd->FromDIP(2);
 
         if (rect.width <= 0)
             return false; // haven't found the tab, and we've run out of space, so return false
@@ -816,7 +820,7 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
         {
             // If not all of the tab is visible, and supposing there's space to display it all,
             // we could do better so we return false.
-            if (((m_rect.width - right_buttons_width - offset - 2) <= 0) && ((m_rect.width - right_buttons_width - left_buttons_width) > x_extent))
+            if (((m_rect.width - right_buttons_width - offset - wnd->FromDIP(2)) <= 0) && ((m_rect.width - right_buttons_width - left_buttons_width) > x_extent))
                 return false;
             else
                 return true;
@@ -1501,8 +1505,8 @@ public:
     wxTabFrame()
     {
         m_tabs = NULL;
-        m_rect = wxRect(0,0,200,200);
-        m_tabCtrlHeight = 20;
+        m_rect = wxRect(wxPoint(0,0), FromDIP(wxSize(200,200)));
+        m_tabCtrlHeight = FromDIP(20);
     }
 
     ~wxTabFrame()
@@ -1672,7 +1676,7 @@ void wxAuiNotebook::Init()
     m_curPage = -1;
     m_tabIdCounter = wxAuiBaseTabCtrlId;
     m_dummyWnd = NULL;
-    m_tabCtrlHeight = 20;
+    m_tabCtrlHeight = FromDIP(20);
     m_requestedBmpSize = wxDefaultSize;
     m_requestedTabCtrlHeight = -1;
 }
@@ -1700,7 +1704,7 @@ void wxAuiNotebook::InitNotebook(long style)
     m_tabIdCounter = wxAuiBaseTabCtrlId;
     m_dummyWnd = NULL;
     m_flags = (unsigned int)style;
-    m_tabCtrlHeight = 20;
+    m_tabCtrlHeight = FromDIP(20);
 
     m_normalFont = *wxNORMAL_FONT;
     m_selectedFont = *wxNORMAL_FONT;
@@ -1709,7 +1713,7 @@ void wxAuiNotebook::InitNotebook(long style)
     SetArtProvider(new wxAuiDefaultTabArt);
 
     m_dummyWnd = new wxWindow(this, wxID_ANY, wxPoint(0,0), wxSize(0,0));
-    m_dummyWnd->SetSize(200, 200);
+    m_dummyWnd->SetSize(FromDIP(wxSize(200, 200)));
     m_dummyWnd->Show(false);
 
     m_mgr.SetManagedWindow(this);
@@ -1870,7 +1874,7 @@ wxSize wxAuiNotebook::CalculateNewSplitSize()
     {
         // this is in place of a more complicated calculation
         // that needs to be implemented
-        new_split_size = wxSize(180,180);
+        new_split_size = FromDIP(wxSize(180,180));
     }
 
     return new_split_size;
@@ -3419,14 +3423,6 @@ int wxAuiNotebook::DoModifySelection(size_t n, bool events)
         int old_curpage = m_curPage;
         m_curPage = n;
 
-        // program allows the page change
-        if(events)
-        {
-            evt.SetEventType(wxEVT_AUINOTEBOOK_PAGE_CHANGED);
-            (void)GetEventHandler()->ProcessEvent(evt);
-        }
-
-
         wxAuiTabCtrl* ctrl;
         int ctrl_idx;
         if (FindTab(wnd, &ctrl, &ctrl_idx))
@@ -3459,6 +3455,13 @@ int wxAuiNotebook::DoModifySelection(size_t n, bool events)
             // This is Firefox-like behaviour.
             if (wnd->IsShownOnScreen() && FindFocus() != ctrl)
                 wnd->SetFocus();
+
+            // program allows the page change
+            if(events)
+            {
+                evt.SetEventType(wxEVT_AUINOTEBOOK_PAGE_CHANGED);
+                (void)GetEventHandler()->ProcessEvent(evt);
+            }
 
             return old_curpage;
         }

@@ -44,7 +44,11 @@
 #include "wx/stc/stc.h"
 #include "wx/stc/private.h"
 
-#if wxUSE_GRAPHICS_DIRECT2D
+#if defined(__WXMSW__) && wxUSE_GRAPHICS_DIRECT2D
+#define HAVE_DIRECTWRITE_TECHNOLOGY
+#endif
+
+#ifdef HAVE_DIRECTWRITE_TECHNOLOGY
 #include "ScintillaWX.h"
 #include <float.h>
 #include "wx/dcscreen.h"
@@ -165,11 +169,11 @@ void Font::Create(const FontParameters &fp) {
     wxFontWithAscent* newFont = new wxFontWithAscent(font);
     fid = newFont;
 
-#if wxUSE_GRAPHICS_DIRECT2D
+#ifdef HAVE_DIRECTWRITE_TECHNOLOGY
     if ( fp.technology == wxSTC_TECHNOLOGY_DIRECTWRITE ) {
         newFont->SetSurfaceFontData(new SurfaceFontDataD2D(fp));
     }
-#endif // wxUSE_GRAPHICS_DIRECT2D
+#endif // HAVE_DIRECTWRITE_TECHNOLOGY
 }
 
 
@@ -694,7 +698,7 @@ void SurfaceImpl::SetDBCSMode(int WXUNUSED(codePage)) {
     // dbcsMode = codePage == SC_CP_DBCS;
 }
 
-#if wxUSE_GRAPHICS_DIRECT2D
+#ifdef HAVE_DIRECTWRITE_TECHNOLOGY
 
 //----------------------------------------------------------------------
 // SurfaceFontDataD2D
@@ -1805,16 +1809,16 @@ void SurfaceD2D::DrawTextCommon(PRectangle rc, Font &font_, XYPOSITION ybase,
     }
 }
 
-#endif // wxUSE_GRAPHICS_DIRECT2D
+#endif // HAVE_DIRECTWRITE_TECHNOLOGY
 
 Surface *Surface::Allocate(int technology) {
     wxUnusedVar(technology);
 
-#if wxUSE_GRAPHICS_DIRECT2D
+#ifdef HAVE_DIRECTWRITE_TECHNOLOGY
     if ( technology == wxSTC_TECHNOLOGY_DIRECTWRITE ) {
         return new SurfaceD2D;
     }
-#endif // wxUSE_GRAPHICS_DIRECT2D
+#endif // HAVE_DIRECTWRITE_TECHNOLOGY
     return new SurfaceImpl;
 }
 
@@ -1857,8 +1861,7 @@ void Window::SetPositionRelative(PRectangle rc, Window relativeTo) {
     position.x = wxRound(position.x + rc.left);
     position.y = wxRound(position.y + rc.top);
 
-    const int currentDisplay = wxDisplay::GetFromWindow(relativeWin);
-    const wxRect displayRect = wxDisplay(currentDisplay).GetClientArea();
+    const wxRect displayRect = wxDisplay(relativeWin).GetClientArea();
 
     if (position.x < displayRect.GetLeft())
         position.x = displayRect.GetLeft();
@@ -1953,17 +1956,11 @@ void Window::SetTitle(const char *s) {
 
 // Returns rectangle of monitor pt is on
 PRectangle Window::GetMonitorRect(Point pt) {
-    wxRect rect;
     if (! wid) return PRectangle();
-#if wxUSE_DISPLAY
     // Get the display the point is found on
     int n = wxDisplay::GetFromPoint(wxPoint(wxRound(pt.x), wxRound(pt.y)));
     wxDisplay dpy(n == wxNOT_FOUND ? 0 : n);
-    rect = dpy.GetGeometry();
-#else
-    wxUnusedVar(pt);
-#endif
-    return PRectangleFromwxRect(rect);
+    return PRectangleFromwxRect(dpy.GetGeometry());
 }
 
 //----------------------------------------------------------------------

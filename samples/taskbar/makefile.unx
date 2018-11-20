@@ -88,7 +88,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 taskbar: $(TASKBAR_OBJECTS)
-	$(CXX) -o $@ $(TASKBAR_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs adv,core,base`
+	$(CXX) -o $@ $(TASKBAR_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
 
 taskbar_tbtest.o: ./tbtest.cpp
 	$(CXX) -c -o $@ $(TASKBAR_CXXFLAGS) $(CPPDEPS) $<

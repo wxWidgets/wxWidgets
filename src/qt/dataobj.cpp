@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/qt/dataform.h
+// Name:        src/qt/dataobj.cpp
 // Author:      Peter Most
 // Copyright:   (c) Peter Most
 // Licence:     wxWindows licence

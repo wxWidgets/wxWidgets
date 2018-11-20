@@ -152,7 +152,7 @@ bool wxNonOwnedWindow::Create(wxWindow *parent,
     wxWindowCreateEvent event(this);
     HandleWindowEvent(event);
 
-    SetBackgroundColour(wxSystemSettings::GetColour( wxSYS_COLOUR_3DFACE ));
+    SetBackgroundColour(wxSystemSettings::GetColour( wxSYS_COLOUR_APPWORKSPACE ));
 
     if ( parent )
         parent->AddChild(this);
@@ -256,8 +256,11 @@ bool wxNonOwnedWindow::SetBackgroundColour(const wxColour& c )
 {
     if ( !wxWindow::SetBackgroundColour(c) && m_hasBgCol )
         return false ;
-
-    if ( GetBackgroundStyle() != wxBG_STYLE_CUSTOM )
+    
+    // only set the native background color if the toplevel window's
+    // background is not supposed to be transparent, otherwise the
+    // transparency is lost
+    if ( GetBackgroundStyle() != wxBG_STYLE_PAINT && GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT)
     {
         if ( m_nowpeer )
             return m_nowpeer->SetBackgroundColour(c);
@@ -514,6 +517,10 @@ bool wxNonOwnedWindow::DoClearShape()
 bool wxNonOwnedWindow::DoSetRegionShape(const wxRegion& region)
 {
     m_shape = region;
+
+    // set the native content view to transparency, this is an implementation detail
+    // no reflected in the wx BackgroundStyle
+    GetPeer()->SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
 
     return m_nowpeer->SetShape(region);
 }

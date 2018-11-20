@@ -275,7 +275,7 @@ private:
         eltype *Delete(long lhash, long key)                                  \
             { return (eltype*)DoDelete(key, lhash); }                         \
     private:                                                                  \
-        virtual void DoDeleteContents( wxHashTableBase_Node* node )           \
+        virtual void DoDeleteContents( wxHashTableBase_Node* node ) wxOVERRIDE\
             { delete (eltype*)node->GetData(); }                              \
                                                                               \
         wxDECLARE_NO_COPY_CLASS(hashclass);                                   \

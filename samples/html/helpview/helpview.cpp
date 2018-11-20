@@ -66,15 +66,15 @@ bool MyApp::OnInit()
     wxInitAllImageHandlers();
     wxFileSystem::AddHandler(new wxZipFSHandler);
 
-    SetVendorName(wxT("wxWidgets"));
-    SetAppName(wxT("wxHTMLHelp"));
+    SetVendorName("wxWidgets");
+    SetAppName("wxHTMLHelp");
     wxConfig::Get(); // create an instance
 
     help = new wxHtmlHelpController;
 
     if (argc < 2) {
-        wxLogError(wxT("Usage : helpview <helpfile> [<more helpfiles>]"));
-        wxLogError(wxT("  helpfile may be .hhp, .zip or .htb"));
+        wxLogError("Usage : helpview <helpfile> [<more helpfiles>]");
+        wxLogError("  helpfile may be .hhp, .zip or .htb");
         return false;
     }
 

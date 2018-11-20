@@ -252,7 +252,7 @@ private:
 
         return fmt;
 #else // !wxUSE_INTL
-        return wxT("x");
+        return wxS("%x");
 #endif // wxUSE_INTL/!wxUSE_INTL
     }
 

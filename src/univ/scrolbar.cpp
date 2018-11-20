@@ -1153,7 +1153,7 @@ bool wxStdScrollBarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
 
 #endif // wxUSE_SCROLLBAR
 
-#if wxUSE_TIMER
+#if wxUSE_TIMER && wxUSE_SCROLLBAR
 
 // ----------------------------------------------------------------------------
 // wxScrollTimer
@@ -1198,4 +1198,4 @@ void wxScrollTimer::Notify()
     }
 }
 
-#endif // wxUSE_TIMER
+#endif // wxUSE_TIMER && wxUSE_SCROLLBAR

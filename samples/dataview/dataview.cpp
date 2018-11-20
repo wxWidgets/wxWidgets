@@ -1031,7 +1031,7 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
     wxAboutDialogInfo info;
     info.SetName(_("DataView sample"));
     info.SetDescription(_("This sample demonstrates wxDataViewCtrl"));
-    info.SetCopyright(wxT("(C) 2007-2009 Robert Roebling"));
+    info.SetCopyright("(C) 2007-2009 Robert Roebling");
     info.AddDeveloper("Robert Roebling");
     info.AddDeveloper("Francesco Montorsi");
 
@@ -1214,7 +1214,8 @@ void MyFrame::OnValueChanged( wxDataViewEvent &event )
 void MyFrame::OnActivated( wxDataViewEvent &event )
 {
     wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage( "wxEVT_DATAVIEW_ITEM_ACTIVATED, Item: %s", title );
+    wxLogMessage( "wxEVT_DATAVIEW_ITEM_ACTIVATED, Item: %s; Column: %d",
+                  title, event.GetColumn() );
 
     if (m_ctrl[0]->IsExpanded( event.GetItem() ))
     {

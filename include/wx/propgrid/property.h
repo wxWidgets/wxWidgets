@@ -719,12 +719,23 @@ public:
     }
 
     // Constructor.
-    // labels - Labels for choices.
+    // count - Number of labels.
+    // labels - Labels themselves.
+    // values - Values for choices. If NULL, indexes are used.
+    wxPGChoices(size_t count, const wxString* labels, const long* values = NULL)
+    {
+        Init();
+        Add(count, labels, values);
+    }
+
+    // Constructor overload taking wxChar strings, provided mostly for
+    // compatibility.
+    // labels - Labels for choices, NULL-terminated.
     // values - Values for choices. If NULL, indexes are used.
     wxPGChoices( const wxChar* const* labels, const long* values = NULL )
     {
         Init();
-        Set(labels,values);
+        Add(labels,values);
     }
 
     // Constructor.
@@ -734,7 +745,7 @@ public:
                  const wxArrayInt& values = wxArrayInt() )
     {
         Init();
-        Set(labels,values);
+        Add(labels,values);
     }
 
     // Simple interface constructor.
@@ -754,7 +765,10 @@ public:
     // Adds to current.
     // If did not have own copies, creates them now. If was empty, identical
     // to set except that creates copies.
-    // labels - Labels for added choices.
+    void Add(size_t count, const wxString* labels, const long* values = NULL);
+
+    // Overload taking wxChar strings, provided mostly for compatibility.
+    // labels - Labels for added choices, NULL-terminated.
     // values - Values for added choices. If empty, relevant entry indexes are used.
     void Add( const wxChar* const* labels, const ValArrItem* values = NULL );
 
@@ -879,6 +893,12 @@ public:
     // Sets contents from lists of strings and values.
     // Does not create copies for itself.
     // TODO: Deprecate.
+    void Set(size_t count, const wxString* labels, const long* values = NULL)
+    {
+        Free();
+        Add(count, labels, values);
+    }
+
     void Set( const wxChar* const* labels, const long* values = NULL )
     {
         Free();
@@ -1772,8 +1792,7 @@ public:
     // (i.e. cancel 'true' returned by StringToValue() or IntToValue()).
     void SetWasModified( bool set = true )
     {
-        if ( set ) m_flags |= wxPG_PROP_WAS_MODIFIED;
-        else m_flags &= ~wxPG_PROP_WAS_MODIFIED;
+        ChangeFlag(wxPG_PROP_WAS_MODIFIED, set);
     }
 
     // Returns property's help or description text.
@@ -2000,7 +2019,7 @@ protected:
 
     wxVariant                   m_value;
     wxPGAttributeStorage        m_attributes;
-    wxArrayPGProperty           m_children;
+    wxVector<wxPGProperty*>     m_children;
 
     // Extended cell information
     wxVector<wxPGCell>          m_cells;

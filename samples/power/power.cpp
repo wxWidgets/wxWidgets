@@ -46,7 +46,7 @@ class MyFrame : public wxFrame
 {
 public:
     MyFrame()
-        : wxFrame(NULL, wxID_ANY, wxT("wxWidgets Power Management Sample"),
+        : wxFrame(NULL, wxID_ANY, "wxWidgets Power Management Sample",
                   wxDefaultPosition, wxSize(500, 200))
     {
         m_powerResourceBlocker = NULL;
@@ -56,10 +56,10 @@ public:
         fileMenu->Append(wxID_ABORT, "Stop long running task");
 
         wxMenuBar* menuBar = new wxMenuBar();
-        menuBar->Append(fileMenu, wxT("&Task"));
+        menuBar->Append(fileMenu, "&Task");
         SetMenuBar(menuBar);
 
-        wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, wxT(""),
+        wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, "",
                                           wxDefaultPosition, wxDefaultSize,
                                           wxTE_MULTILINE | wxTE_READONLY);
         m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(text));
@@ -101,28 +101,28 @@ private:
 #ifdef wxHAS_POWER_EVENTS
     void OnSuspending(wxPowerEvent& event)
     {
-        wxLogMessage(wxT("System suspend starting..."));
-        if ( wxMessageBox(wxT("Veto suspend?"), wxT("Please answer"),
+        wxLogMessage("System suspend starting...");
+        if ( wxMessageBox("Veto suspend?", "Please answer",
                           wxYES_NO, this) == wxYES )
         {
             event.Veto();
-            wxLogMessage(wxT("Vetoed suspend."));
+            wxLogMessage("Vetoed suspend.");
         }
     }
 
     void OnSuspended(wxPowerEvent& WXUNUSED(event))
     {
-        wxLogMessage(wxT("System is going to suspend."));
+        wxLogMessage("System is going to suspend.");
     }
 
     void OnSuspendCancel(wxPowerEvent& WXUNUSED(event))
     {
-        wxLogMessage(wxT("System suspend was cancelled."));
+        wxLogMessage("System suspend was cancelled.");
     }
 
     void OnResume(wxPowerEvent& WXUNUSED(event))
     {
-        wxLogMessage(wxT("System resumed from suspend."));
+        wxLogMessage("System resumed from suspend.");
     }
 #endif // wxHAS_POWER_EVENTS
 
@@ -133,19 +133,19 @@ private:
         switch ( m_powerType = powerType )
         {
             case wxPOWER_SOCKET:
-                powerStr = wxT("wall");
+                powerStr = "wall";
                 break;
 
             case wxPOWER_BATTERY:
-                powerStr = wxT("battery");
+                powerStr = "battery";
                 break;
 
             default:
-                wxFAIL_MSG(wxT("unknown wxPowerType value"));
+                wxFAIL_MSG("unknown wxPowerType value");
                 // fall through
 
             case wxPOWER_UNKNOWN:
-                powerStr = wxT("psychic");
+                powerStr = "psychic";
                 break;
         }
 
@@ -153,34 +153,34 @@ private:
         switch ( m_batteryState = batteryState )
         {
             case wxBATTERY_NORMAL_STATE:
-                batteryStr = wxT("charged");
+                batteryStr = "charged";
                 break;
 
             case wxBATTERY_LOW_STATE:
-                batteryStr = wxT("low");
+                batteryStr = "low";
                 break;
 
             case wxBATTERY_CRITICAL_STATE:
-                batteryStr = wxT("critical");
+                batteryStr = "critical";
                 break;
 
             case wxBATTERY_SHUTDOWN_STATE:
-                batteryStr = wxT("empty");
+                batteryStr = "empty";
                 break;
 
             default:
-                wxFAIL_MSG(wxT("unknown wxBatteryState value"));
+                wxFAIL_MSG("unknown wxBatteryState value");
                 // fall through
 
             case wxBATTERY_UNKNOWN_STATE:
-                batteryStr = wxT("unknown");
+                batteryStr = "unknown";
                 break;
         }
 
         SetStatusText(wxString::Format(
-                        wxT("System is on %s power, battery state is %s"),
-                        powerStr.c_str(),
-                        batteryStr.c_str()));
+                        "System is on %s power, battery state is %s",
+                        powerStr,
+                        batteryStr));
     }
 
     void OnStartTaskClicked( wxCommandEvent& WXUNUSED(event) )

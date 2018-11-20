@@ -90,7 +90,7 @@
     @endcode
 
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewModel : public wxRefCounter
@@ -428,7 +428,7 @@ protected:
     Base class with abstract API for wxDataViewIndexListModel and
     wxDataViewVirtualListModel.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewListModel : public wxDataViewModel
@@ -528,7 +528,7 @@ public:
 
     @see wxDataViewListModel for the API.
     
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 
@@ -603,7 +603,7 @@ public:
 
     @see wxDataViewListModel for the API.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 
@@ -677,7 +677,7 @@ public:
 
     Attributes are currently only supported by wxDataViewTextRendererText.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewItemAttr
@@ -789,7 +789,7 @@ public:
     the invisible root. Examples for this are wxDataViewModel::GetParent and
     wxDataViewModel::GetChildren.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewItem
@@ -990,7 +990,7 @@ wxEventType wxEVT_DATAVIEW_ITEM_DROP;
     you can call wxSystemThemedControl::EnableSystemTheme with @c false
     argument to disable this.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl,dvc}
     @appearance{dataviewctrl}
 */
@@ -1446,8 +1446,14 @@ public:
     int GetIndent() const;
 
     /**
-        Returns item rectangle. Coordinates of the rectangle are specified in
-        wxDataViewCtrl client area coordinates.
+        Returns item rectangle.
+
+        If item is not currently visible, either because its parent is
+        collapsed or it is outside of the visible part of the control due to
+        the current vertical scrollbar position, return an empty rectangle.
+
+        Coordinates of the rectangle are specified in wxDataViewCtrl client
+        area coordinates.
 
         @param item
             A valid item.
@@ -1455,10 +1461,6 @@ public:
             If non-@NULL, the rectangle returned corresponds to the
             intersection of the item with the specified column. If @NULL, the
             rectangle spans all the columns.
-
-        @note This method is currently not implemented at all in wxGTK and only
-              implemented for non-@NULL @a col argument in wxOSX. It is fully
-              implemented in the generic version of the control.
     */
     virtual wxRect GetItemRect(const wxDataViewItem& item,
                                const wxDataViewColumn* col = NULL) const;
@@ -1556,6 +1558,9 @@ public:
 
     /**
         Return @true if the item is expanded.
+
+        @note When using the native macOS version this method has a bug which
+              may result in returning @true even for items without children.
     */
     virtual bool IsExpanded(const wxDataViewItem& item) const;
 
@@ -1728,7 +1733,7 @@ public:
     its notification interface.
     See the documentation of that class for further information.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewModelNotifier
@@ -1911,7 +1916,7 @@ enum wxDataViewCellRenderState
     by the constructors respectively controls what actions the cell data allows
     and how the renderer should display its contents in a cell.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewRenderer : public wxObject
@@ -2083,7 +2088,7 @@ protected:
     wxDataViewTextRenderer is used for rendering text.
     It supports in-place editing if desired.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewTextRenderer : public wxDataViewRenderer
@@ -2160,7 +2165,7 @@ public:
     shift operator.
 
     @see wxDataViewCheckIconTextRenderer
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewIconTextRenderer : public wxDataViewRenderer
@@ -2196,7 +2201,7 @@ public:
     in the corresponding sample.
 
     @see wxDataViewIconTextRenderer, wxDataViewToggleRenderer
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
     @since 3.1.1
  */
@@ -2240,7 +2245,7 @@ public:
 
     This class is used by wxDataViewCtrl to render progress bars.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewProgressRenderer : public wxDataViewRenderer
@@ -2271,7 +2276,7 @@ public:
     It supports modifying the values in-place by using a wxSpinCtrl.
     The renderer only support variants of type @e long.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewSpinRenderer : public wxDataViewCustomRenderer
@@ -2297,7 +2302,7 @@ public:
     radio buttons.
 
     @see wxDataViewCheckIconTextRenderer
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewToggleRenderer : public wxDataViewRenderer
@@ -2347,7 +2352,7 @@ public:
 
     @see wxDataViewChoiceByIndexRenderer
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 
@@ -2380,7 +2385,7 @@ public:
     index, i.e. an @c int, in the variant used by its SetValue() and
     GetValue().
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewChoiceByIndexRenderer : public wxDataViewChoiceRenderer
@@ -2400,7 +2405,7 @@ public:
 
     This class is used by wxDataViewCtrl to render calendar controls.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewDateRenderer : public wxDataViewRenderer
@@ -2442,7 +2447,7 @@ public:
     Note that a special event handler will be pushed onto that editor control
     which handles @e \<ENTER\> and focus out events in order to end the editing.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewCustomRenderer : public wxDataViewRenderer
@@ -2655,7 +2660,7 @@ protected:
 
     This class is used by wxDataViewCtrl to render bitmap controls.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewBitmapRenderer : public wxDataViewRenderer
@@ -2698,7 +2703,7 @@ enum wxDataViewColumnFlags
 
     An instance of wxDataViewRenderer is used by this class to render its data.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewColumn : public wxSettableHeaderColumn
@@ -2807,7 +2812,7 @@ public:
     See wxDataViewCtrl for the list of events emitted by this class.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl,dvc}
 
     @since 2.9.0
@@ -3131,7 +3136,7 @@ public:
     See wxDataViewCtrl for the list of events emitted by this class.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl,dvc}
 
     @since 2.9.0
@@ -3337,7 +3342,7 @@ public:
     used directly without having to derive any class from it, but it is
     mostly used from within wxDataViewListCtrl.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 
@@ -3491,7 +3496,7 @@ public:
     which they were added, or its Compare() function to compare the items using
     some other criterion, e.g. alphabetically.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewTreeStore : public wxDataViewModel
@@ -3630,7 +3635,7 @@ public:
     wxDataViewIconText is used by wxDataViewIconTextRenderer for data transfer.
     This class can be converted to and from a wxVariant.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewIconText : public wxObject
@@ -3714,7 +3719,7 @@ public:
            Process a @c wxEVT_DATAVIEW_CACHE_HINT event.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{events,dvc}
 */
 class wxDataViewEvent : public wxNotifyEvent
@@ -3746,10 +3751,9 @@ public:
     */
     wxDataViewEvent(const wxDataViewEvent& event);
 
-    
     /**
         Returns the position of the column in the control or -1
-        if no column field was set by the event emitter.
+        if column field is unavailable for this event.
 
         For wxEVT_DATAVIEW_COLUMN_REORDERED, this is the new position of the
         column.
@@ -3950,7 +3954,7 @@ public:
 
     @since 3.1.1
 
-    @library{wxadv}
+    @library{wxcore}
     @category{dvc}
 */
 class wxDataViewValueAdjuster

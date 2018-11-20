@@ -29,6 +29,8 @@
     #include "wx/utils.h"
 #endif // WX_PRECOMP
 
+WX_CHECK_BUILD_OPTIONS("wxQA")
+
 #if wxUSE_DEBUGREPORT && wxUSE_XML
 
 #include "wx/debugrpt.h"
@@ -56,8 +58,6 @@
     #include "wx/wfstream.h"
     #include "wx/zipstrm.h"
 #endif // wxUSE_ZIPSTREAM
-
-WX_CHECK_BUILD_OPTIONS("wxQA")
 
 // ----------------------------------------------------------------------------
 // XmlStackWalker: stack walker specialization which dumps stack in XML
@@ -88,9 +88,9 @@ protected:
 // ----------------------------------------------------------------------------
 
 static inline void
-HexProperty(wxXmlNode *node, const wxChar *name, unsigned long value)
+HexProperty(wxXmlNode *node, const wxChar *name, wxUIntPtr value)
 {
-    node->AddAttribute(name, wxString::Format(wxT("%08lx"), value));
+    node->AddAttribute(name, wxString::Format(wxT("%#zx"), value));
 }
 
 static inline void
@@ -131,10 +131,14 @@ void XmlStackWalker::OnStackFrame(const wxStackFrame& frame)
     NumProperty(nodeFrame, wxT("level"), frame.GetLevel());
     wxString func = frame.GetName();
     if ( !func.empty() )
-    {
         nodeFrame->AddAttribute(wxT("function"), func);
-        HexProperty(nodeFrame, wxT("offset"), frame.GetOffset());
-    }
+
+    HexProperty(nodeFrame, wxT("offset"), frame.GetOffset());
+    HexProperty(nodeFrame, wxT("address"), wxPtrToUInt(frame.GetAddress()));
+
+    wxString module = frame.GetModule();
+    if ( !module.empty() )
+        nodeFrame->AddAttribute(wxT("module"), module);
 
     if ( frame.HasSourceLocation() )
     {

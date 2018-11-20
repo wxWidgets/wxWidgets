@@ -42,9 +42,7 @@
 #include "wx/private/graphics.h"
 #include "wx/msw/wrapgdip.h"
 #include "wx/msw/dc.h"
-#if wxUSE_ENH_METAFILE
-    #include "wx/msw/enhmeta.h"
-#endif
+#include "wx/msw/enhmeta.h"
 #include "wx/dcgraph.h"
 #include "wx/rawbmp.h"
 
@@ -335,7 +333,7 @@ public:
                        const wxColour& col );
     wxGDIPlusFontData(wxGraphicsRenderer* renderer,
                       const wxString& name,
-                      REAL sizeInPixels,
+                      REAL size,
                       int style,
                       const wxColour& col);
     ~wxGDIPlusFontData();
@@ -349,8 +347,7 @@ private :
     void Init(const wxString& name,
               REAL size,
               int style,
-              const wxColour& col,
-              Unit fontUnit);
+              const wxColour& col);
 
     Brush* m_textBrush;
     Font* m_font;
@@ -361,7 +358,7 @@ class wxGDIPlusContext : public wxGraphicsContext
 public:
     wxGDIPlusContext( wxGraphicsRenderer* renderer, const wxDC& dc );
     wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc, wxDouble width, wxDouble height );
-    wxGDIPlusContext( wxGraphicsRenderer* renderer, HWND hwnd );
+    wxGDIPlusContext( wxGraphicsRenderer* renderer, HWND hwnd, wxWindow* window = NULL);
     wxGDIPlusContext( wxGraphicsRenderer* renderer, Graphics* gr);
     wxGDIPlusContext(wxGraphicsRenderer* renderer);
 
@@ -986,8 +983,7 @@ void
 wxGDIPlusFontData::Init(const wxString& name,
                         REAL size,
                         int style,
-                        const wxColour& col,
-                        Unit fontUnit)
+                        const wxColour& col)
 {
 #if wxUSE_PRIVATE_FONTS
     // If the user has registered any private fonts, they should be used in
@@ -1007,7 +1003,7 @@ wxGDIPlusFontData::Init(const wxString& name,
             int rc = gs_pFontFamily[j].GetFamilyName(familyName);
             if ( rc == 0 && name == familyName )
             {
-                m_font = new Font(&gs_pFontFamily[j], size, style, fontUnit);
+                m_font = new Font(&gs_pFontFamily[j], size, style, UnitPoint);
                 break;
             }
         }
@@ -1016,7 +1012,7 @@ wxGDIPlusFontData::Init(const wxString& name,
     if ( !m_font )
 #endif // wxUSE_PRIVATE_FONTS
     {
-        m_font = new Font(name.wc_str(), size, style, fontUnit);
+        m_font = new Font(name.wc_str(), size, style, UnitPoint);
     }
 
     m_textBrush = new SolidBrush(wxColourToColor(col));
@@ -1037,19 +1033,17 @@ wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
     if ( font.GetWeight() == wxFONTWEIGHT_BOLD )
         style |= FontStyleBold;
 
-    // Create font which size is measured in logical units
-    // and let the system rescale it according to the target resolution.
-    Init(font.GetFaceName(), font.GetPixelSize().GetHeight(), style, col, UnitPixel);
+    Init(font.GetFaceName(), font.GetFractionalPointSize(), style, col);
 }
 
 wxGDIPlusFontData::wxGDIPlusFontData(wxGraphicsRenderer* renderer,
                                      const wxString& name,
-                                     REAL sizeInPixels,
+                                     REAL size,
                                      int style,
                                      const wxColour& col) :
     wxGraphicsObjectRefData(renderer)
 {
-    Init(name, sizeInPixels, style, col, UnitPixel);
+    Init(name, size, style, col);
 }
 
 wxGDIPlusFontData::~wxGDIPlusFontData()
@@ -1653,7 +1647,7 @@ wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc, wxDou
 }
 
 wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, const wxDC& dc )
-    : wxGraphicsContext(renderer)
+    : wxGraphicsContext(renderer, dc.GetWindow())
 {
     wxMSWDCImpl *msw = wxDynamicCast( dc.GetImpl() , wxMSWDCImpl );
     HDC hdc = (HDC) msw->GetHDC();
@@ -1662,8 +1656,10 @@ wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, const wxDC& dc
     Init(new Graphics(hdc), sz.x, sz.y);
 }
 
-wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HWND hwnd  )
-    : wxGraphicsContext(renderer)
+wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer,
+                                    HWND hwnd,
+                                    wxWindow* window )
+    : wxGraphicsContext(renderer, window)
 {
     RECT rect = wxGetWindowRect(hwnd);
     Init(new Graphics(hwnd), rect.right - rect.left, rect.bottom - rect.top);
@@ -2498,7 +2494,7 @@ wxGraphicsContext * wxGDIPlusRenderer::CreateContextFromNativeHDC(WXHDC dc)
 wxGraphicsContext * wxGDIPlusRenderer::CreateContext( wxWindow* window )
 {
     ENSURE_LOADED_OR_RETURN(NULL);
-    return new wxGDIPlusContext(this, (HWND) window->GetHWND() );
+    return new wxGDIPlusContext(this, (HWND) window->GetHWND(), window );
 }
 
 // Path

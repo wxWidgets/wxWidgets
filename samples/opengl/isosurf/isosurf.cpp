@@ -56,7 +56,7 @@ bool MyApp::OnInit()
         return false;
 
     // Create the main frame window
-    new MyFrame(NULL, wxT("wxWidgets OpenGL Isosurf Sample"));
+    new MyFrame(NULL, "wxWidgets OpenGL Isosurf Sample");
 
     return true;
 }
@@ -102,9 +102,9 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
     // Make a menubar
     wxMenu *fileMenu = new wxMenu;
 
-    fileMenu->Append(wxID_EXIT, wxT("E&xit"));
+    fileMenu->Append(wxID_EXIT, "E&xit");
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(fileMenu, wxT("&File"));
+    menuBar->Append(fileMenu, "&File");
     SetMenuBar(menuBar);
 
 
@@ -198,7 +198,7 @@ void TestGLCanvas::LoadSurface(const wxString& filename)
         new wxZlibInputStream(new wxFFileInputStream(filename));
     if (!stream || !stream->IsOk())
     {
-        wxLogError("Cannot load '%s' type of files!", filename.c_str());
+        wxLogError("Cannot load '%s' type of files!", filename);
         delete stream;
         return;
     }
@@ -225,8 +225,8 @@ void TestGLCanvas::LoadSurface(const wxString& filename)
 
     delete stream;
 
-    wxLogMessage(wxT("Loaded %d vertices, %d triangles from '%s'"),
-                 m_numverts, m_numverts-2, filename.c_str());
+    wxLogMessage("Loaded %d vertices, %d triangles from '%s'",
+                 m_numverts, m_numverts-2, filename);
 
     // NOTE: for some reason under wxGTK the following is required to avoid that
     //       the surface gets rendered in a small rectangle in the top-left corner of the frame

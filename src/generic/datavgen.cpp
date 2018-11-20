@@ -806,7 +806,7 @@ public:
     bool IsRowSelected( unsigned int row );
     void SendSelectionChangedEvent( const wxDataViewItem& item);
 
-    void RefreshRow( unsigned int row );
+    void RefreshRow( unsigned int row ) { RefreshRows(row, row); }
     void RefreshRows( unsigned int from, unsigned int to );
     void RefreshRowsAfter( unsigned int firstRow );
 
@@ -816,7 +816,7 @@ public:
         return wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT);
     }
 
-    wxRect GetLineRect( unsigned int row ) const;
+    wxRect GetLinesRect( unsigned int rowFrom, unsigned int rowTo ) const;
 
     int GetLineStart( unsigned int row ) const;  // row * m_lineHeight in fixed mode
     int GetLineHeight( unsigned int row ) const; // m_lineHeight in fixed mode
@@ -3275,34 +3275,16 @@ void wxDataViewMainWindow::SendSelectionChangedEvent( const wxDataViewItem& item
     m_owner->ProcessWindowEvent(le);
 }
 
-void wxDataViewMainWindow::RefreshRow( unsigned int row )
-{
-    wxRect rect( 0, GetLineStart( row ), GetEndOfLastCol(), GetLineHeight( row ) );
-    m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
-
-    wxSize client_size = GetClientSize();
-    wxRect client_rect( 0, 0, client_size.x, client_size.y );
-    wxRect intersect_rect = client_rect.Intersect( rect );
-    if (intersect_rect.width > 0)
-        Refresh( true, &intersect_rect );
-}
-
 void wxDataViewMainWindow::RefreshRows( unsigned int from, unsigned int to )
 {
-    if (from > to)
-    {
-        unsigned int tmp = to;
-        to = from;
-        from = tmp;
-    }
+    wxRect rect = GetLinesRect(from, to);
 
-    wxRect rect( 0, GetLineStart( from ), GetEndOfLastCol(), GetLineStart( (to-from+1) ) );
-    m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+    m_owner->CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
 
     wxSize client_size = GetClientSize();
     wxRect client_rect( 0, 0, client_size.x, client_size.y );
     wxRect intersect_rect = client_rect.Intersect( rect );
-    if (intersect_rect.width > 0)
+    if (!intersect_rect.IsEmpty())
         Refresh( true, &intersect_rect );
 }
 
@@ -3318,14 +3300,22 @@ void wxDataViewMainWindow::RefreshRowsAfter( unsigned int firstRow )
     Refresh( true, &rect );
 }
 
-wxRect wxDataViewMainWindow::GetLineRect( unsigned int row ) const
+wxRect wxDataViewMainWindow::GetLinesRect( unsigned int rowFrom, unsigned int rowTo ) const
 {
+    if (rowFrom > rowTo)
+        wxSwap(rowFrom, rowTo);
+
     wxRect rect;
     rect.x = 0;
-    rect.y = GetLineStart( row );
-    rect.width = GetEndOfLastCol();
-    rect.height = GetLineHeight( row );
-
+    rect.y = GetLineStart(rowFrom);
+    // Don't calculate exact width of the row, because GetEndOfLastCol() is
+    // expensive to call, and controls with rows not spanning entire width rare.
+    // It is more efficient to e.g. repaint empty parts of the window needlessly.
+    rect.width = INT_MAX;
+    if (rowFrom == rowTo)
+        rect.height = GetLineHeight(rowFrom);
+    else
+        rect.height = GetLineStart(rowTo) - rect.y + GetLineHeight(rowTo);
     return rect;
 }
 
@@ -3478,55 +3468,53 @@ int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
 class RowToTreeNodeJob: public DoJob
 {
 public:
-    RowToTreeNodeJob( unsigned int row_ , int current_, wxDataViewTreeNode * node )
+    // Note that we initialize m_current to -1 because the first node passed to
+    // our operator() will be the root node, which doesn't appear in the window
+    // and so doesn't count as a real row.
+    explicit RowToTreeNodeJob(int row)
+        : m_row(row), m_current(-1), m_ret(NULL)
     {
-        this->row = row_;
-        this->current = current_;
-        ret = NULL;
-        parent = node;
     }
 
     virtual int operator() ( wxDataViewTreeNode * node ) wxOVERRIDE
     {
-        current ++;
-        if( current == static_cast<int>(row))
+        if( m_current == m_row)
         {
-            ret = node;
+            m_ret = node;
             return DoJob::DONE;
         }
 
-        if( node->GetSubTreeCount() + current < static_cast<int>(row) )
+        if( node->GetSubTreeCount() + m_current < m_row )
         {
-            current += node->GetSubTreeCount();
+            m_current += node->GetSubTreeCount() + 1;
             return  DoJob::SKIP_SUBTREE;
         }
         else
         {
-            parent = node;
-
             // If the current node has only leaf children, we can find the
             // desired node directly. This can speed up finding the node
             // in some cases, and will have a very good effect for list views.
             if ( node->HasChildren() &&
                  (int)node->GetChildNodes().size() == node->GetSubTreeCount() )
             {
-                const int index = static_cast<int>(row) - current - 1;
-                ret = node->GetChildNodes()[index];
+                const int index = m_row - m_current - 1;
+                m_ret = node->GetChildNodes()[index];
                 return DoJob::DONE;
             }
+
+            m_current++;
 
             return DoJob::CONTINUE;
         }
     }
 
     wxDataViewTreeNode * GetResult() const
-        { return ret; }
+        { return m_ret; }
 
 private:
-    unsigned int row;
-    int current;
-    wxDataViewTreeNode * ret;
-    wxDataViewTreeNode * parent;
+    const int m_row;
+    int m_current;
+    wxDataViewTreeNode* m_ret;
 };
 
 wxDataViewTreeNode * wxDataViewMainWindow::GetTreeNodeByRow(unsigned int row) const
@@ -3536,7 +3524,7 @@ wxDataViewTreeNode * wxDataViewMainWindow::GetTreeNodeByRow(unsigned int row) co
     if ( row == (unsigned)-1 )
         return NULL;
 
-    RowToTreeNodeJob job( row , -2, m_root );
+    RowToTreeNodeJob job(static_cast<int>(row));
     Walker( m_root , job );
     return job.GetResult();
 }
@@ -3825,10 +3813,16 @@ wxRect wxDataViewMainWindow::GetItemRect( const wxDataViewItem & item,
         xpos = 0;
     }
 
+    const int row = GetRowByItem(item);
+    if ( row == -1 )
+    {
+        // This means the row is currently not visible at all.
+        return wxRect();
+    }
+
     // we have to take an expander column into account and compute its indentation
     // to get the correct x position where the actual text is
     int indent = 0;
-    int row = GetRowByItem(item);
     if (!IsList() &&
             (column == 0 || GetExpanderColumnOrFirstOne(GetOwner()) == column) )
     {
@@ -3844,6 +3838,14 @@ wxRect wxDataViewMainWindow::GetItemRect( const wxDataViewItem & item,
 
     GetOwner()->CalcScrolledPosition(  itemRect.x,  itemRect.y,
                                       &itemRect.x, &itemRect.y );
+
+    // Check if the rectangle is completely outside of the currently visible
+    // area and, if so, return an empty rectangle to indicate that the item is
+    // not visible.
+    if ( itemRect.GetBottom() < 0 || itemRect.GetTop() > GetClientSize().y )
+    {
+        return wxRect();
+    }
 
     return itemRect;
 }
@@ -3866,43 +3868,49 @@ int wxDataViewMainWindow::RecalculateCount() const
 class ItemToRowJob : public DoJob
 {
 public:
-    ItemToRowJob(const wxDataViewItem& item_, wxVector<wxDataViewItem>::reverse_iterator iter)
-        : m_iter(iter),
-        item(item_)
+    // As with RowToTreeNodeJob above, we initialize m_current to -1 because
+    // the first node passed to our operator() is the root node which is not
+    // visible on screen and so we should return 0 for its first child node and
+    // not for the root itself.
+    ItemToRowJob(const wxDataViewItem& item, wxVector<wxDataViewItem>::reverse_iterator iter)
+        : m_item(item), m_iter(iter), m_current(-1)
     {
-        ret = -1;
     }
 
     // Maybe binary search will help to speed up this process
     virtual int operator() ( wxDataViewTreeNode * node) wxOVERRIDE
     {
-        ret ++;
-        if( node->GetItem() == item )
+        if( node->GetItem() == m_item )
         {
             return DoJob::DONE;
         }
 
+        // Is this node the next (grand)parent of the item we're looking for?
         if( node->GetItem() == *m_iter )
         {
+            // Search for the next (grand)parent now and skip this item itself.
             ++m_iter;
+            ++m_current;
             return DoJob::CONTINUE;
         }
         else
         {
-            ret += node->GetSubTreeCount();
+            // Skip this node and all its currently visible children.
+            m_current += node->GetSubTreeCount() + 1;
             return DoJob::SKIP_SUBTREE;
         }
 
     }
 
-    // the row number is begin from zero
     int GetResult() const
-        { return ret -1; }
+        { return m_current; }
 
 private:
+    const wxDataViewItem m_item;
     wxVector<wxDataViewItem>::reverse_iterator m_iter;
-    wxDataViewItem item;
-    int ret;
+
+    // The row corresponding to the last node seen in our operator().
+    int m_current;
 
 };
 
@@ -3936,7 +3944,9 @@ int wxDataViewMainWindow::GetRowByItem(const wxDataViewItem & item) const
         // the parent chain was created by adding the deepest parent first.
         // so if we want to start at the root node, we have to iterate backwards through the vector
         ItemToRowJob job( item, parentChain.rbegin() );
-        Walker( m_root, job );
+        if ( !Walker( m_root, job ) )
+            return -1;
+
         return job.GetResult();
     }
 }
@@ -5851,8 +5861,11 @@ wxRect wxDataViewCtrl::GetItemRect( const wxDataViewItem & item,
     // Convert position from the main window coordinates to the control coordinates.
     // (They can be different due to the presence of the header.).
     wxRect r = m_clientArea->GetItemRect(item, column);
-    const wxPoint ctrlPos = ScreenToClient(m_clientArea->ClientToScreen(r.GetPosition()));
-    r.SetPosition(ctrlPos);
+    if ( r.width || r.height )
+    {
+        const wxPoint ctrlPos = ScreenToClient(m_clientArea->ClientToScreen(r.GetPosition()));
+        r.SetPosition(ctrlPos);
+    }
     return r;
 }
 

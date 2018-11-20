@@ -206,8 +206,7 @@ MyFrame::MyFrame(const wxString& title)
                                wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH|wxHSCROLL);
 
     // set monospace font to have output in nice columns
-    wxFont font(10, wxFONTFAMILY_TELETYPE,
-                wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    wxFont font(wxFontInfo(10).Family(wxFONTFAMILY_TELETYPE));
     headerText->SetFont(font);
     m_logText->SetFont(font);
 

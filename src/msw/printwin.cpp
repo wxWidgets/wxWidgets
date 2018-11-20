@@ -48,9 +48,8 @@
 #include "wx/msw/printdlg.h"
 #include "wx/msw/private.h"
 #include "wx/msw/dcprint.h"
-#if wxUSE_ENH_METAFILE
-    #include "wx/msw/enhmeta.h"
-#endif
+#include "wx/msw/enhmeta.h"
+
 #include <stdlib.h>
 
 // ---------------------------------------------------------------------------

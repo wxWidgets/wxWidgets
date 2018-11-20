@@ -17,6 +17,7 @@
 #include "wx/utils.h"
 #include "wx/evtloop.h"
 #include "wx/apptrait.h"
+#include "wx/private/display.h"
 #include "wx/unix/private/timer.h"
 
 #ifndef WX_PRECOMP
@@ -56,47 +57,44 @@ wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 // display characteristics
 // ----------------------------------------------------------------------------
 
-bool wxColourDisplay()
+// TODO: move into a separate src/dfb/display.cpp
+
+class wxDisplayImplSingleDFB : public wxDisplayImplSingle
 {
-    #warning "FIXME: wxColourDisplay"
-    return true;
-}
+public:
+    virtual wxRect GetGeometry() const wxOVERRIDE
+    {
+        const wxVideoMode mode(wxTheApp->GetDisplayMode());
 
-int wxDisplayDepth()
+        return wxRect(0, 0, mode.w, mode.h);
+    }
+
+    virtual int GetDepth() const wxOVERRIDE
+    {
+        return wxTheApp->GetDisplayMode().bpp;
+    }
+
+    virtual wxSize GetPPI() const wxOVERRIDE
+    {
+        // FIXME: there's no way to get physical resolution using the DirectDB
+        //        API, we hardcode a commonly used value of 72dpi
+        return wxSize(72, 72);
+    }
+};
+
+class wxDisplayFactorySingleDFB : public wxDisplayFactorySingle
 {
-    return wxTheApp->GetDisplayMode().bpp;
-}
+protected:
+    virtual wxDisplayImpl *CreateSingleDisplay()
+    {
+        return new wxDisplayImplSingleDFB;
+    }
+};
 
-void wxDisplaySize(int *width, int *height)
+wxDisplayFactory* wxDisplay::CreateFactory()
 {
-    wxVideoMode mode(wxTheApp->GetDisplayMode());
-    if ( width ) *width = mode.w;
-    if ( height ) *height = mode.h;
+    return new wxDisplayFactorySingleDFB;
 }
-
-void wxDisplaySizeMM(int *width, int *height)
-{
-    // FIXME: there's no way to get physical resolution using the DirectDB
-    //        API, we hardcode a commonly used value of 72dpi
-    #define DPI          72.0
-    #define PX_TO_MM(x)  (int(((x) / DPI) * inches2mm))
-
-    wxDisplaySize(width, height);
-    if ( width ) *width = PX_TO_MM(*width);
-    if ( height ) *height = PX_TO_MM(*height);
-
-    #undef DPI
-    #undef PX_TO_MM
-}
-
-void wxClientDisplayRect(int *x, int *y, int *width, int *height)
-{
-    // return desktop dimensions minus any panels, menus, trays:
-    if (x) *x = 0;
-    if (y) *y = 0;
-    wxDisplaySize(width, height);
-}
-
 
 //-----------------------------------------------------------------------------
 // mouse

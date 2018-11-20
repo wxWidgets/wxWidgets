@@ -366,6 +366,26 @@ wxPowerType wxGetPowerType();
 wxString wxGetDisplayName();
 
 /**
+    This function returns the total number of bytes and number of free bytes on
+    the disk containing the directory @a path (it should exist). Both @a total
+    and @a free parameters may be @NULL if the corresponding information is not
+    needed.
+
+    @since 2.3.2
+
+    @note The generic Unix implementation depends on the system having the
+          @c statfs() or @c statvfs() function.
+
+    @return @true on success, @false if an error occurred (for example, the
+             directory doesn’t exist).
+
+    @header{wx/utils.h}
+*/
+bool wxGetDiskSpace(const wxString& path,
+                    wxLongLong total = NULL,
+                    wxLongLong free = NULL);
+
+/**
     For normal keys, returns @true if the specified key is currently down.
 
     For togglable keys (Caps Lock, Num Lock and Scroll Lock), returns @true if

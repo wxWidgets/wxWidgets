@@ -45,33 +45,55 @@ endfunction()
 
 wx_add_demo(bombs
     bombs.cpp
+    bombs.h
     bombs1.cpp
     game.cpp
+    game.h
     )
+
 wx_add_demo(forty
-    forty.cpp
     canvas.cpp
+    canvas.h
     card.cpp
+    card.h
+    forty.cpp
+    forty.h
     game.cpp
+    game.h
     pile.cpp
+    pile.h
     playerdg.cpp
+    playerdg.h
     scoredg.cpp
+    scoredg.h
     scorefil.cpp
+    scorefil.h
     DATA
         about.htm
     LIBRARIES
-        html adv xml
+        html xml
     )
-wx_add_demo(fractal fractal.cpp)
+
+wx_add_demo(fractal
+    fractal.cpp
+    )
+
 wx_add_demo(life
-    life.cpp
     dialogs.cpp
+    dialogs.h
     game.cpp
+    game.h
+    life.cpp
+    life.h
     reader.cpp
+    reader.h
     DATA
         breeder.lif
     )
-wx_add_demo(poem wxpoem.cpp
+
+wx_add_demo(poem
+    wxpoem.cpp
+    wxpoem.h
     DATA
         wxpoem.txt wxpoem.dat wxpoem.idx
     LIBRARIES

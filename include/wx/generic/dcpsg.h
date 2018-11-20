@@ -79,7 +79,9 @@ public:
     virtual void ComputeScaleAndOrigin() wxOVERRIDE;
 
     void SetBackgroundMode(int WXUNUSED(mode)) wxOVERRIDE { }
+#if wxUSE_PALETTE
     void SetPalette(const wxPalette& WXUNUSED(palette)) wxOVERRIDE { }
+#endif
 
     void SetPrintData(const wxPrintData& data);
     wxPrintData& GetPrintData() { return m_printData; }

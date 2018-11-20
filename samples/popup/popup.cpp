@@ -119,22 +119,24 @@ SimpleTransientPopup::SimpleTransientPopup( wxWindow *parent, bool scrolled )
     m_panel->Bind(wxEVT_MOTION, &SimpleTransientPopup::OnMouse, this);
 
     wxStaticText *text = new wxStaticText( m_panel, wxID_ANY,
-                          wxT("wxPopupTransientWindow is a\n")
-                          wxT("wxPopupWindow which disappears\n")
-                          wxT("automatically when the user\n")
-                          wxT("clicks the mouse outside it or if it\n")
-                          wxT("(or its first child) loses focus in \n")
-                          wxT("any other way.") );
+                          "wxPopupTransientWindow is a\n"
+                          "wxPopupWindow which disappears\n"
+                          "automatically when the user\n"
+                          "clicks the mouse outside it or if it\n"
+                          "(or its first child) loses focus in \n"
+                          "any other way." );
 
-    m_button = new wxButton(m_panel, Minimal_PopupButton, wxT("Press Me"));
-    m_spinCtrl = new wxSpinCtrl(m_panel, Minimal_PopupSpinctrl, wxT("Hello"));
+    m_button = new wxButton(m_panel, Minimal_PopupButton, "Press Me");
+    m_spinCtrl = new wxSpinCtrl(m_panel, Minimal_PopupSpinctrl, "Hello");
     m_mouseText = new wxStaticText(m_panel, wxID_ANY,
-                                   wxT("<- Test Mouse ->"));
+                                   "<- Test Mouse ->");
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( text, 0, wxALL, 5 );
     topSizer->Add( m_button, 0, wxALL, 5 );
     topSizer->Add( m_spinCtrl, 0, wxALL, 5 );
+    topSizer->Add( new wxTextCtrl(m_panel, wxID_ANY, "Try to type here"),
+                   0, wxEXPAND|wxALL, 5 );
     topSizer->Add( m_mouseText, 0, wxCENTRE|wxALL, 5 );
 
     if ( scrolled )
@@ -235,10 +237,10 @@ void SimpleTransientPopup::OnButton(wxCommandEvent& event)
     wxLogMessage( "%p SimpleTransientPopup::OnButton ID %d", this, event.GetId());
 
     wxButton *button = wxDynamicCast(event.GetEventObject(), wxButton);
-    if (button->GetLabel() == wxT("Press Me"))
-        button->SetLabel(wxT("Pressed"));
+    if (button->GetLabel() == "Press Me")
+        button->SetLabel("Pressed");
     else
-        button->SetLabel(wxT("Press Me"));
+        button->SetLabel("Press Me");
 
     event.Skip();
 }
@@ -311,7 +313,7 @@ bool MyApp::OnInit()
         return false;
 
     // create the main application window
-    m_frame = new MyFrame(wxT("Popup wxWidgets App"));
+    m_frame = new MyFrame("Popup wxWidgets App");
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -348,15 +350,15 @@ MyFrame::MyFrame(const wxString& title)
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Minimal_About, wxT("&About\tF1"), wxT("Show about dialog"));
+    helpMenu->Append(Minimal_About, "&About\tF1", "Show about dialog");
 
-    menuFile->Append(Minimal_TestDialog, wxT("&Test dialog\tAlt-T"), wxT("Test dialog"));
-    menuFile->Append(Minimal_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
+    menuFile->Append(Minimal_TestDialog, "&Test dialog\tAlt-T", "Test dialog");
+    menuFile->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, wxT("&File"));
-    menuBar->Append(helpMenu, wxT("&Help"));
+    menuBar->Append(menuFile, "&File");
+    menuBar->Append(helpMenu, "&Help");
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -365,12 +367,12 @@ MyFrame::MyFrame(const wxString& title)
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar(2);
-    SetStatusText(wxT("Welcome to wxWidgets!"));
+    SetStatusText("Welcome to wxWidgets!");
 #endif // wxUSE_STATUSBAR
 
     wxPanel *panel = new wxPanel(this, -1);
-    wxButton *button1 = new wxButton( panel, Minimal_StartSimplePopup, wxT("Show simple popup"), wxPoint(20,20) );
-    wxButton *button2 = new wxButton( panel, Minimal_StartScrolledPopup, wxT("Show scrolled popup"), wxPoint(20,70) );
+    wxButton *button1 = new wxButton( panel, Minimal_StartSimplePopup, "Show simple popup", wxPoint(20,20) );
+    wxButton *button2 = new wxButton( panel, Minimal_StartScrolledPopup, "Show scrolled popup", wxPoint(20,70) );
 
     m_logWin = new wxTextCtrl( panel, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                wxDefaultSize, wxTE_MULTILINE );
@@ -398,12 +400,12 @@ MyFrame::~MyFrame()
 
 void MyFrame::OnActivate(wxActivateEvent& WXUNUSED(event))
 {
-    wxLogMessage( wxT("In activate...") );
+    wxLogMessage( "In activate..." );
 }
 
 void MyFrame::OnStartSimplePopup(wxCommandEvent& event)
 {
-    wxLogMessage( wxT("================================================") );
+    wxLogMessage( "================================================" );
     delete m_simplePopup;
     m_simplePopup = new SimpleTransientPopup( this, false );
     wxWindow *btn = (wxWindow*) event.GetEventObject();
@@ -416,7 +418,7 @@ void MyFrame::OnStartSimplePopup(wxCommandEvent& event)
 
 void MyFrame::OnStartScrolledPopup(wxCommandEvent& event)
 {
-    wxLogMessage( wxT("================================================") );
+    wxLogMessage( "================================================" );
     delete m_scrolledPopup;
     m_scrolledPopup = new SimpleTransientPopup( this, true );
     wxWindow *btn = (wxWindow*) event.GetEventObject();
@@ -429,7 +431,7 @@ void MyFrame::OnStartScrolledPopup(wxCommandEvent& event)
 
 void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
 {
-    MyDialog dialog( wxT("Test") );
+    MyDialog dialog( "Test" );
     dialog.ShowModal();
 }
 
@@ -442,10 +444,10 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( wxT("This is the About dialog of the popup sample.\n")
-                wxT("Welcome to %s"), wxVERSION_STRING);
+    msg.Printf( "This is the About dialog of the popup sample.\n"
+                "Welcome to %s", wxVERSION_STRING);
 
-    wxMessageBox(msg, wxT("About Popup"), wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(msg, "About Popup", wxOK | wxICON_INFORMATION, this);
 }
 
 // ----------------------------------------------------------------------------
@@ -463,10 +465,10 @@ MyDialog::MyDialog(const wxString& title)
     m_simplePopup = m_scrolledPopup = NULL;
     wxPanel *panel = new wxPanel(this, -1);
 
-    wxButton *button1 = new wxButton( panel, Minimal_StartSimplePopup, wxT("Show simple popup"), wxPoint(20,20) );
-    wxButton *button2 = new wxButton( panel, Minimal_StartScrolledPopup, wxT("Show scrolled popup"), wxPoint(20,60) );
+    wxButton *button1 = new wxButton( panel, Minimal_StartSimplePopup, "Show simple popup", wxPoint(20,20) );
+    wxButton *button2 = new wxButton( panel, Minimal_StartScrolledPopup, "Show scrolled popup", wxPoint(20,60) );
 
-    wxButton *okButton = new wxButton( panel, wxID_OK, wxT("OK"), wxPoint(20,200) );
+    wxButton *okButton = new wxButton( panel, wxID_OK, "OK", wxPoint(20,200) );
 
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( button1, 0, wxALL, 5 );
@@ -479,7 +481,7 @@ MyDialog::MyDialog(const wxString& title)
 
 void MyDialog::OnStartSimplePopup(wxCommandEvent& event)
 {
-    wxLogMessage( wxT("================================================") );
+    wxLogMessage( "================================================" );
     delete m_simplePopup;
     m_simplePopup = new SimpleTransientPopup( this, false );
     wxWindow *btn = (wxWindow*) event.GetEventObject();
@@ -492,7 +494,7 @@ void MyDialog::OnStartSimplePopup(wxCommandEvent& event)
 
 void MyDialog::OnStartScrolledPopup(wxCommandEvent& event)
 {
-    wxLogMessage( wxT("================================================") );
+    wxLogMessage( "================================================" );
     delete m_scrolledPopup;
     m_scrolledPopup = new SimpleTransientPopup( this, true );
     wxWindow *btn = (wxWindow*) event.GetEventObject();

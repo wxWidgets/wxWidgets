@@ -39,6 +39,7 @@
     #include "wx/osx/dcclient.h"
     #include "wx/osx/dcmemory.h"
     #include "wx/osx/private.h"
+    #include "wx/osx/core/cfdictionary.h"
 #else
     #include "CoreServices/CoreServices.h"
     #include "ApplicationServices/ApplicationServices.h"
@@ -834,10 +835,10 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
     m_underlined = font.GetUnderlined();
     m_strikethrough = font.GetStrikethrough();
 
-    m_ctFont.reset( wxCFRetain( font.OSXGetCTFont() ) );
-    m_ctFontAttributes.reset( wxCFRetain( font.OSXGetCTFontAttributes() ) );
+    m_ctFont = wxCFRetain(font.OSXGetCTFont());
+    m_ctFontAttributes = wxCFRetain(font.OSXGetCTFontAttributes());
 #if wxOSX_USE_IPHONE
-    m_uiFont.reset( wxCFRetain( font.OSXGetUIFont() ) );
+    m_uiFont = wxCFRetain(font.OSXGetUIFont());
 #endif
 }
 
@@ -1302,13 +1303,23 @@ bool wxMacCoreGraphicsPathData::Contains( wxDouble x, wxDouble y, wxPolygonFillM
 class WXDLLEXPORT wxMacCoreGraphicsContext : public wxGraphicsContext
 {
 public:
-    wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, CGContextRef cgcontext, wxDouble width = 0, wxDouble height = 0 );
+    wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer,
+                              CGContextRef cgcontext,
+                              wxDouble width = 0,
+                              wxDouble height = 0,
+                              wxWindow* window = NULL );
 
     wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, wxWindow* window );
 
     wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer);
 
     ~wxMacCoreGraphicsContext();
+
+    // Enable offset on non-high DPI displays, i.e. those with scale factor <= 1.
+    void SetEnableOffsetFromScaleFactor(double factor)
+    {
+        m_enableOffset = factor <= 1.0;
+    }
 
     void Init();
 
@@ -1430,6 +1441,9 @@ public:
 private:
     bool EnsureIsValid();
     void CheckInvariants() const;
+    bool DoSetAntialiasMode(wxAntialiasMode antialias);
+    bool DoSetInterpolationQuality(wxInterpolationQuality interpolation);
+    bool DoSetCompositionMode(wxCompositionMode op);
 
     virtual void DoDrawText( const wxString &str, wxDouble x, wxDouble y ) wxOVERRIDE;
     virtual void DoDrawRotatedText( const wxString &str, wxDouble x, wxDouble y, wxDouble angle ) wxOVERRIDE;
@@ -1505,7 +1519,12 @@ void wxMacCoreGraphicsContext::Init()
     m_interpolation = wxINTERPOLATION_DEFAULT;
 }
 
-wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, CGContextRef cgcontext, wxDouble width, wxDouble height ) : wxGraphicsContext(renderer)
+wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer,
+                                                    CGContextRef cgcontext,
+                                                    wxDouble width,
+                                                    wxDouble height,
+                                                    wxWindow* window )
+    : wxGraphicsContext(renderer, window)
 {
     Init();
     SetNativeContext(cgcontext);
@@ -1514,11 +1533,13 @@ wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer
     m_initTransform = m_cgContext ? CGContextGetCTM(m_cgContext) : CGAffineTransformIdentity;
 }
 
-wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer, wxWindow* window ): wxGraphicsContext(renderer)
+wxMacCoreGraphicsContext::wxMacCoreGraphicsContext( wxGraphicsRenderer* renderer,
+                                                    wxWindow* window )
+    : wxGraphicsContext(renderer, window)
 {
     Init();
 
-    m_enableOffset = window->GetContentScaleFactor() <= 1;
+    SetEnableOffsetFromScaleFactor(window->GetContentScaleFactor());
     wxSize sz = window->GetSize();
     m_width = sz.x;
     m_height = sz.y;
@@ -1678,6 +1699,16 @@ bool wxMacCoreGraphicsContext::SetAntialiasMode(wxAntialiasMode antialias)
 
     m_antialias = antialias;
 
+    if ( !DoSetAntialiasMode(antialias) )
+    {
+        return false;
+    }
+    CheckInvariants();
+    return true;
+}
+
+bool wxMacCoreGraphicsContext::DoSetAntialiasMode(wxAntialiasMode antialias)
+{
     bool antialiasMode;
     switch (antialias)
     {
@@ -1691,7 +1722,6 @@ bool wxMacCoreGraphicsContext::SetAntialiasMode(wxAntialiasMode antialias)
             return false;
     }
     CGContextSetShouldAntialias(m_cgContext, antialiasMode);
-    CheckInvariants();
     return true;
 }
 
@@ -1704,9 +1734,20 @@ bool wxMacCoreGraphicsContext::SetInterpolationQuality(wxInterpolationQuality in
         return true;
 
     m_interpolation = interpolation;
+
+    if ( !DoSetInterpolationQuality(interpolation) )
+    {
+        return false;
+    }
+    CheckInvariants();
+    return true;
+}
+
+bool wxMacCoreGraphicsContext::DoSetInterpolationQuality(wxInterpolationQuality interpolation)
+{
     CGInterpolationQuality quality;
-    
-    switch (interpolation) 
+
+    switch (interpolation)
     {
         case wxINTERPOLATION_DEFAULT:
             quality = kCGInterpolationDefault;
@@ -1727,7 +1768,6 @@ bool wxMacCoreGraphicsContext::SetInterpolationQuality(wxInterpolationQuality in
             return false;
     }
     CGContextSetInterpolationQuality(m_cgContext, quality);
-    CheckInvariants();
     return true;
 }
 
@@ -1741,7 +1781,17 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
 
     m_composition = op;
 
-    if (m_composition == wxCOMPOSITION_DEST)
+    if ( !DoSetCompositionMode(op) )
+    {
+        return false;
+    }
+    CheckInvariants();
+    return true;
+}
+
+bool wxMacCoreGraphicsContext::DoSetCompositionMode(wxCompositionMode op)
+{
+    if (op == wxCOMPOSITION_DEST)
         return true;
 
     // TODO REMOVE if we don't need it because of bugs in 10.5
@@ -1751,44 +1801,44 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
         CGBlendMode mode = kCGBlendModeNormal;
         switch( op )
         {
-        case wxCOMPOSITION_CLEAR:
-            cop = kCGCompositeOperationClear;
-            break;
-        case wxCOMPOSITION_SOURCE:
-            cop = kCGCompositeOperationCopy;
-            break;
-        case wxCOMPOSITION_OVER:
-            mode = kCGBlendModeNormal;
-            break;
-        case wxCOMPOSITION_IN:
-            cop = kCGCompositeOperationSourceIn;
-            break;
-        case wxCOMPOSITION_OUT:
-            cop = kCGCompositeOperationSourceOut;
-            break;
-        case wxCOMPOSITION_ATOP:
-            cop = kCGCompositeOperationSourceAtop;
-            break;
-        case wxCOMPOSITION_DEST_OVER:
-            cop = kCGCompositeOperationDestinationOver;
-            break;
-        case wxCOMPOSITION_DEST_IN:
-            cop = kCGCompositeOperationDestinationIn;
-            break;
-        case wxCOMPOSITION_DEST_OUT:
-            cop = kCGCompositeOperationDestinationOut;
-            break;
-        case wxCOMPOSITION_DEST_ATOP:
-           cop = kCGCompositeOperationDestinationAtop;
-            break;
-        case wxCOMPOSITION_XOR:
-            cop = kCGCompositeOperationXOR;
-            break;
-        case wxCOMPOSITION_ADD:
-            mode = kCGBlendModePlusLighter ;
-            break;
-        default:
-            return false;
+            case wxCOMPOSITION_CLEAR:
+                cop = kCGCompositeOperationClear;
+                break;
+            case wxCOMPOSITION_SOURCE:
+                cop = kCGCompositeOperationCopy;
+                break;
+            case wxCOMPOSITION_OVER:
+                mode = kCGBlendModeNormal;
+                break;
+            case wxCOMPOSITION_IN:
+                cop = kCGCompositeOperationSourceIn;
+                break;
+            case wxCOMPOSITION_OUT:
+                cop = kCGCompositeOperationSourceOut;
+                break;
+            case wxCOMPOSITION_ATOP:
+                cop = kCGCompositeOperationSourceAtop;
+                break;
+            case wxCOMPOSITION_DEST_OVER:
+                cop = kCGCompositeOperationDestinationOver;
+                break;
+            case wxCOMPOSITION_DEST_IN:
+                cop = kCGCompositeOperationDestinationIn;
+                break;
+            case wxCOMPOSITION_DEST_OUT:
+                cop = kCGCompositeOperationDestinationOut;
+                break;
+            case wxCOMPOSITION_DEST_ATOP:
+                cop = kCGCompositeOperationDestinationAtop;
+                break;
+            case wxCOMPOSITION_XOR:
+                cop = kCGCompositeOperationXOR;
+                break;
+            case wxCOMPOSITION_ADD:
+                mode = kCGBlendModePlusLighter ;
+                break;
+            default:
+                return false;
         }
         if ( cop != kCGCompositeOperationSourceOver )
             CGContextSetCompositeOperation(m_cgContext, cop);
@@ -1800,50 +1850,47 @@ bool wxMacCoreGraphicsContext::SetCompositionMode(wxCompositionMode op)
         CGBlendMode mode = kCGBlendModeNormal;
         switch( op )
         {
-        case wxCOMPOSITION_CLEAR:
-            mode = kCGBlendModeClear;
-            break;
-        case wxCOMPOSITION_SOURCE:
-            mode = kCGBlendModeCopy;
-            break;
-        case wxCOMPOSITION_OVER:
-            mode = kCGBlendModeNormal;
-            break;
-        case wxCOMPOSITION_IN:
-            mode = kCGBlendModeSourceIn;
-            break;
-        case wxCOMPOSITION_OUT:
-            mode = kCGBlendModeSourceOut;
-            break;
-        case wxCOMPOSITION_ATOP:
-            mode = kCGBlendModeSourceAtop;
-            break;
-        case wxCOMPOSITION_DEST_OVER:
-            mode = kCGBlendModeDestinationOver;
-            break;
-        case wxCOMPOSITION_DEST_IN:
-            mode = kCGBlendModeDestinationIn;
-            break;
-        case wxCOMPOSITION_DEST_OUT:
-            mode = kCGBlendModeDestinationOut;
-            break;
-        case wxCOMPOSITION_DEST_ATOP:
-           mode = kCGBlendModeDestinationAtop;
-            break;
-        case wxCOMPOSITION_XOR:
-            mode = kCGBlendModeExclusion; // Not kCGBlendModeXOR!
-            break;
-
-        case wxCOMPOSITION_ADD:
-            mode = kCGBlendModePlusLighter ;
-            break;
-        default:
-            return false;
+            case wxCOMPOSITION_CLEAR:
+                mode = kCGBlendModeClear;
+                break;
+            case wxCOMPOSITION_SOURCE:
+                mode = kCGBlendModeCopy;
+                break;
+            case wxCOMPOSITION_OVER:
+                mode = kCGBlendModeNormal;
+                break;
+            case wxCOMPOSITION_IN:
+                mode = kCGBlendModeSourceIn;
+                break;
+            case wxCOMPOSITION_OUT:
+                mode = kCGBlendModeSourceOut;
+                break;
+            case wxCOMPOSITION_ATOP:
+                mode = kCGBlendModeSourceAtop;
+                break;
+            case wxCOMPOSITION_DEST_OVER:
+                mode = kCGBlendModeDestinationOver;
+                break;
+            case wxCOMPOSITION_DEST_IN:
+                mode = kCGBlendModeDestinationIn;
+                break;
+            case wxCOMPOSITION_DEST_OUT:
+                mode = kCGBlendModeDestinationOut;
+                break;
+            case wxCOMPOSITION_DEST_ATOP:
+                mode = kCGBlendModeDestinationAtop;
+                break;
+            case wxCOMPOSITION_XOR:
+                mode = kCGBlendModeExclusion; // Not kCGBlendModeXOR!
+                break;
+            case wxCOMPOSITION_ADD:
+                mode = kCGBlendModePlusLighter ;
+                break;
+            default:
+                return false;
         }
         CGContextSetBlendMode(m_cgContext, mode);
     }
-
-    CheckInvariants();
     return true;
 }
 
@@ -1939,6 +1986,12 @@ void wxMacCoreGraphicsContext::ResetClip()
         transformNew = CGAffineTransformInvert( transformNew ) ;
         CGContextConcatCTM( m_cgContext, transformNew);
         CGContextConcatCTM( m_cgContext, transform);
+        // Retain antialiasing mode
+        DoSetAntialiasMode(m_antialias);
+        // Retain interpolation quality
+        DoSetInterpolationQuality(m_interpolation);
+        // Retain composition mode
+        DoSetCompositionMode(m_composition);
     }
     else
     {
@@ -2159,8 +2212,15 @@ void wxMacCoreGraphicsContext::Rotate( wxDouble angle )
 
 void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
+#if wxOSX_USE_COCOA
+    {
+        CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
+        wxOSXDrawNSImage( m_cgContext, &r, bmp.GetImage());
+    }
+#else
     wxGraphicsBitmap bitmap = GetRenderer()->CreateBitmap(bmp);
     DrawBitmap(bitmap, x, y, w, h);
+#endif
 }
 
 void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
@@ -2218,10 +2278,7 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
 #if wxOSX_USE_COCOA
     {
         CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
-        const WX_NSImage nsImage = icon.GetNSImage();
-    
-        CGImageRef cgImage = wxOSXGetCGImageFromNSImage( nsImage , &r, m_cgContext );
-        wxMacDrawCGImage( m_cgContext, &r, cgImage);
+        wxOSXDrawNSImage( m_cgContext, &r, icon.GetImage());
     }
 #endif
     
@@ -2259,7 +2316,23 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
     CGColorRef col = wxMacCreateCGColor( fref->GetColour() );
     CTFontRef font = fref->OSXGetCTFont();
 
-    wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, fref->OSXGetCTFontAttributes()) );
+    wxCFDictionaryRef fontattr(wxCFRetain(fref->OSXGetCTFontAttributes()));
+    wxCFMutableDictionaryRef inlinefontattr;
+    
+    bool setColorsInLine = false;
+    
+    // if we emulate boldness the stroke color is not taken from the current context
+    // therefore we have to set it explicitly
+    if ( fontattr.GetValue(kCTStrokeWidthAttributeName) != NULL)
+    {
+        setColorsInLine = true;
+        inlinefontattr = fontattr.CreateMutableCopy();
+        inlinefontattr.SetValue(kCTForegroundColorFromContextAttributeName, kCFBooleanFalse);
+        inlinefontattr.SetValue(kCTForegroundColorAttributeName,col);
+        inlinefontattr.SetValue(kCTStrokeColorAttributeName,col);
+    }
+        
+    wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, setColorsInLine ? inlinefontattr : fontattr ) );
     wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
 
     y += CTFontGetAscent(font);
@@ -2638,26 +2711,18 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& dc )
 {
-    const wxDCImpl* impl = dc.GetImpl();
-    wxWindowDCImpl *win_impl = wxDynamicCast( impl, wxWindowDCImpl );
-    if (win_impl)
-    {
-        int w, h;
-        win_impl->GetSize( &w, &h );
-        CGContextRef cgctx = 0;
+    wxWindow* const win = dc.GetWindow();
+    wxCHECK_MSG( win, NULL, "Invalid wxWindowDC" );
 
-        wxASSERT_MSG(win_impl->GetWindow(), "Invalid wxWindow in wxMacCoreGraphicsRenderer::CreateContext");
-        if (win_impl->GetWindow())
-            cgctx =  (CGContextRef)(win_impl->GetWindow()->MacGetCGContextRef());
+    const wxSize sz = win->GetSize();
 
-        // having a cgctx being NULL is fine (will be created on demand)
-        // this is the case for all wxWindowDCs except wxPaintDC
-        wxMacCoreGraphicsContext *context = 
-            new wxMacCoreGraphicsContext( this, cgctx, (wxDouble) w, (wxDouble) h );
-        context->EnableOffset(dc.GetContentScaleFactor() < 2);
-        return context;
-    }
-    return NULL;
+    // having a cgctx being NULL is fine (will be created on demand)
+    // this is the case for all wxWindowDCs except wxPaintDC
+    CGContextRef cgctx = (CGContextRef)(win->MacGetCGContextRef());
+    wxMacCoreGraphicsContext *context =
+        new wxMacCoreGraphicsContext( this, cgctx, sz.x, sz.y, win );
+    context->SetEnableOffsetFromScaleFactor(dc.GetContentScaleFactor());
+    return context;
 }
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& dc )
@@ -2671,7 +2736,7 @@ wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxMemoryDC& 
         mem_impl->GetSize( &w, &h );
         wxMacCoreGraphicsContext* context = new wxMacCoreGraphicsContext( this,
             (CGContextRef)(mem_impl->GetGraphicsContext()->GetNativeContext()), (wxDouble) w, (wxDouble) h );
-        context->EnableOffset(dc.GetContentScaleFactor() < 2);
+        context->SetEnableOffsetFromScaleFactor(dc.GetContentScaleFactor());
         return context;
     }
 #endif
@@ -2892,23 +2957,10 @@ wxMacCoreGraphicsRenderer::CreateFont(double sizeInPixels,
                                       int flags,
                                       const wxColour& col)
 {
-    // This implementation is not ideal as we don't support fractional font
-    // sizes right now, but it's the simplest one.
-    //
     // Notice that under Mac we always use 72 DPI so the font size in pixels is
     // the same as the font size in points and we can pass it directly to wxFont
     // ctor.
-    wxFont font(wxRound(sizeInPixels),
-                wxFONTFAMILY_DEFAULT,
-                flags & wxFONTFLAG_ITALIC ? wxFONTSTYLE_ITALIC
-                                          : wxFONTSTYLE_NORMAL,
-                flags & wxFONTFLAG_BOLD ? wxFONTWEIGHT_BOLD
-                                        : wxFONTWEIGHT_NORMAL,
-                (flags & wxFONTFLAG_UNDERLINED) != 0,
-                facename);
-
-    if ( flags & wxFONTFLAG_STRIKETHROUGH )
-        font.MakeStrikethrough();
+    wxFont font(wxFontInfo(sizeInPixels).FaceName(facename).AllFlags(flags));
 
     wxGraphicsFont f;
     f.SetRefData(new wxMacCoreGraphicsFontData(this, font, col));

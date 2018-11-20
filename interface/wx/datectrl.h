@@ -74,7 +74,7 @@ enum
            control.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{pickers}
     @appearance{datepickerctrl}
 

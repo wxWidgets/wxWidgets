@@ -385,14 +385,14 @@ bool NumericValidation( const wxPGProperty* property,
                 if ( !maxOk )
                     msg = wxString::Format(
                                 _("Value must be %s or higher."),
-                                smin.c_str());
+                                smin);
                 else
                 {
                     wxVariant vmax = WXVARIANT(max);
                     wxString smax = property->ValueToString(vmax);
                     msg = wxString::Format(
                                 _("Value must be between %s and %s."),
-                                smin.c_str(), smax.c_str());
+                                smin, smax);
                 }
                 pValidationInfo->SetFailureMessage(msg);
             }
@@ -416,14 +416,14 @@ bool NumericValidation( const wxPGProperty* property,
                 if ( !minOk )
                     msg = wxString::Format(
                                 _("Value must be %s or less."),
-                                smax.c_str());
+                                smax);
                 else
                 {
                     wxVariant vmin = WXVARIANT(min);
                     wxString smin = property->ValueToString(vmin);
                     msg = wxString::Format(
                                 _("Value must be between %s and %s."),
-                                smin.c_str(), smax.c_str());
+                                smin, smax);
                 }
                 pValidationInfo->SetFailureMessage(msg);
             }
@@ -499,14 +499,14 @@ bool NumericValidation( const wxPGProperty* property,
                 if ( !maxOk )
                     msg = wxString::Format(
                                 _("Value must be %s or higher."),
-                                smin.c_str());
+                                smin);
                 else
                 {
                     wxVariant vmax = WXVARIANT(max);
                     wxString smax = property->ValueToString(vmax);
                     msg = wxString::Format(
                                 _("Value must be between %s and %s."),
-                                smin.c_str(), smax.c_str());
+                                smin, smax);
                 }
                 pValidationInfo->SetFailureMessage(msg);
             }
@@ -530,14 +530,14 @@ bool NumericValidation( const wxPGProperty* property,
                 if ( !minOk )
                     msg = wxString::Format(
                                 _("Value must be %s or less."),
-                                smax.c_str());
+                                smax);
                 else
                 {
                     wxVariant vmin = WXVARIANT(min);
                     wxString smin = property->ValueToString(vmin);
                     msg = wxString::Format(
                                 _("Value must be between %s and %s."),
-                                smin.c_str(), smax.c_str());
+                                smin, smax);
                 }
                 pValidationInfo->SetFailureMessage(msg);
             }
@@ -923,7 +923,7 @@ const wxString& wxPropertyGrid::DoubleToString(wxString& target,
             *precTemplate << wxS('f');
         }
 
-        target.Printf( precTemplate->c_str(), value );
+        target.Printf( *precTemplate, value );
     }
     else
     {
@@ -1131,7 +1131,7 @@ wxString wxBoolProperty::ValueToString( wxVariant& value,
             else
                 notFmt = wxS("Not %s");
 
-            return wxString::Format(notFmt.c_str(), m_label.c_str());
+            return wxString::Format(notFmt, m_label);
         }
     }
 
@@ -2315,11 +2315,10 @@ bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGr
     rowsizer->Add(ed, wxSizerFlags(1).Expand().Border(wxALL, spacing));
     topsizer->Add(rowsizer, wxSizerFlags(1).Expand());
 
-    wxStdDialogButtonSizer* buttonSizer = new wxStdDialogButtonSizer();
+    long btnSizerFlags = wxCANCEL;
     if ( !prop->HasFlag(wxPG_PROP_READONLY) )
-        buttonSizer->AddButton(new wxButton(dlg, wxID_OK));
-    buttonSizer->AddButton(new wxButton(dlg, wxID_CANCEL));
-    buttonSizer->Realize();
+        btnSizerFlags |= wxOK;
+    wxStdDialogButtonSizer* buttonSizer = dlg->CreateStdDialogButtonSizer(btnSizerFlags);
     topsizer->Add(buttonSizer, wxSizerFlags(0).Right().Border(wxBOTTOM|wxRIGHT, spacing));
 
     dlg->SetSizer( topsizer );
@@ -2494,10 +2493,7 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
     topsizer->Add(m_elb, wxSizerFlags(1).Expand().Border(0, spacing));
 
     // Standard dialog buttons
-    wxStdDialogButtonSizer* buttonSizer = new wxStdDialogButtonSizer();
-    buttonSizer->AddButton(new wxButton(this, wxID_OK));
-    buttonSizer->AddButton(new wxButton(this, wxID_CANCEL));
-    buttonSizer->Realize();
+    wxStdDialogButtonSizer* buttonSizer = CreateStdDialogButtonSizer(wxOK | wxCANCEL);
     topsizer->Add(buttonSizer, wxSizerFlags(0).Right().Border(wxALL, spacing));
 
     m_elb->SetFocus();

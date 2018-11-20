@@ -2481,7 +2481,8 @@ int wxImage::GetLoadFlags() const
 
 // Under Windows we can load wxImage not only from files but also from
 // resources.
-#if defined(__WINDOWS__) && wxUSE_WXDIB && wxUSE_IMAGE
+#if defined(__WINDOWS__) && wxUSE_WXDIB && wxUSE_IMAGE \
+&& !defined(__WXQT__) // undefined reference to `wxDIB::ConvertToImage(wxDIB::ConversionFlags) const'
     #define HAS_LOAD_FROM_RESOURCE
 #endif
 
@@ -2818,16 +2819,22 @@ bool wxImage::LoadFile( wxInputStream& stream, wxBitmapType type, int index )
 
     wxImageHandler *handler;
 
+    // do we issue warning/error messages?
+    const bool verbose = M_IMGDATA->m_loadFlags & Load_Verbose;
+
     if ( type == wxBITMAP_TYPE_ANY )
     {
         if ( !stream.IsSeekable() )
         {
-            // The error message about image data format being unknown below
-            // would be misleading in this case as we are not even going to try
-            // any handlers because CanRead() never does anything for not
-            // seekable stream, so try to be more precise here.
-            wxLogError(_("Can't automatically determine the image format "
-                         "for non-seekable input."));
+            if ( verbose )
+            {
+                // The error message about image data format being unknown below
+                // would be misleading in this case as we are not even going to try
+                // any handlers because CanRead() never does anything for not
+                // seekable stream, so try to be more precise here.
+                wxLogError(_("Can't automatically determine the image format "
+                             "for non-seekable input."));
+            }
             return false;
         }
 
@@ -2841,7 +2848,10 @@ bool wxImage::LoadFile( wxInputStream& stream, wxBitmapType type, int index )
                  return true;
         }
 
-        wxLogWarning( _("Unknown image data format.") );
+        if ( verbose )
+        {
+            wxLogWarning( _("Unknown image data format.") );
+        }
 
         return false;
     }
@@ -2850,13 +2860,19 @@ bool wxImage::LoadFile( wxInputStream& stream, wxBitmapType type, int index )
     handler = FindHandler(type);
     if ( !handler )
     {
-        wxLogWarning( _("No image handler for type %d defined."), type );
+        if ( verbose )
+        {
+            wxLogWarning( _("No image handler for type %d defined."), type );
+        }
         return false;
     }
 
     if ( stream.IsSeekable() && !handler->CanRead(stream) )
     {
-        wxLogError(_("This is not a %s."), handler->GetName());
+        if ( verbose )
+        {
+            wxLogError(_("This is not a %s."), handler->GetName());
+        }
         return false;
     }
 
@@ -2871,15 +2887,24 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int ind
 
     wxImageHandler *handler = FindHandlerMime(mimetype);
 
+    // do we issue warning/error messages?
+    const bool verbose = M_IMGDATA->m_loadFlags & Load_Verbose;
+
     if ( !handler )
     {
-        wxLogWarning( _("No image handler for type %s defined."), mimetype.GetData() );
+        if ( verbose )
+        {
+            wxLogWarning( _("No image handler for type %s defined."), mimetype.GetData() );
+        }
         return false;
     }
 
     if ( stream.IsSeekable() && !handler->CanRead(stream) )
     {
-        wxLogError(_("Image is not of type %s."), mimetype);
+        if ( verbose )
+        {
+            wxLogError(_("Image is not of type %s."), mimetype);
+        }
         return false;
     }
 

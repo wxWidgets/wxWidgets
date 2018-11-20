@@ -385,7 +385,7 @@ void Server::OnSocketEvent(wxSocketEvent& pEvent)
             {
                 wxLogError("Server: cannot get peer info");
             } else {
-                wxLogMessage("Got connection from %s:%d",addr.IPAddress().c_str(), addr.Service());
+                wxLogMessage("Got connection from %s:%d",addr.IPAddress(), addr.Service());
             }
             bool createThread;
 

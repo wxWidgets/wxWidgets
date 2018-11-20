@@ -41,7 +41,7 @@ bool wxCairoInit();
 #include "wx/private/graphics.h"
 #include "wx/rawbmp.h"
 #include "wx/vector.h"
-#if defined(__WXMSW__) && wxUSE_ENH_METAFILE
+#ifdef __WXMSW__
     #include "wx/msw/enhmeta.h"
 #endif
 
@@ -1830,7 +1830,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
 #endif
 
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& dc )
-: wxGraphicsContext(renderer)
+: wxGraphicsContext(renderer, dc.GetWindow())
 {
     int width, height;
     dc.GetSize( &width, &height );
@@ -2244,7 +2244,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
 }
 
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
-    : wxGraphicsContext(renderer)
+    : wxGraphicsContext(renderer, window)
 #ifdef __WXMSW__
     , m_mswWindowHDC(GetHwndOf(window))
 #endif

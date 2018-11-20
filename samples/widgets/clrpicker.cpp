@@ -125,7 +125,7 @@ wxEND_EVENT_TABLE()
     #define FAMILY_CTRLS GENERIC_CTRLS
 #endif
 
-IMPLEMENT_WIDGETS_PAGE(ColourPickerWidgetsPage, wxT("ColourPicker"),
+IMPLEMENT_WIDGETS_PAGE(ColourPickerWidgetsPage, "ColourPicker",
                        PICKER_CTRLS | FAMILY_CTRLS);
 
 ColourPickerWidgetsPage::ColourPickerWidgetsPage(WidgetsBookCtrl *book,
@@ -139,13 +139,13 @@ void ColourPickerWidgetsPage::CreateContent()
     // left pane
     wxSizer *boxleft = new wxBoxSizer(wxVERTICAL);
 
-    wxStaticBoxSizer *clrbox = new wxStaticBoxSizer(wxVERTICAL, this, wxT("&ColourPicker style"));
-    m_chkColourTextCtrl = CreateCheckBoxAndAddToSizer(clrbox, wxT("With textctrl"));
-    m_chkColourShowLabel = CreateCheckBoxAndAddToSizer(clrbox, wxT("With label"));
-    m_chkColourShowAlpha = CreateCheckBoxAndAddToSizer(clrbox, wxT("With opacity"));
+    wxStaticBoxSizer *clrbox = new wxStaticBoxSizer(wxVERTICAL, this, "&ColourPicker style");
+    m_chkColourTextCtrl = CreateCheckBoxAndAddToSizer(clrbox, "With textctrl");
+    m_chkColourShowLabel = CreateCheckBoxAndAddToSizer(clrbox, "With label");
+    m_chkColourShowAlpha = CreateCheckBoxAndAddToSizer(clrbox, "With opacity");
     boxleft->Add(clrbox, 0, wxALL|wxGROW, 5);
 
-    boxleft->Add(new wxButton(this, PickerPage_Reset, wxT("&Reset")),
+    boxleft->Add(new wxButton(this, PickerPage_Reset, "&Reset"),
                  0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     Reset();    // set checkboxes state
@@ -217,8 +217,8 @@ void ColourPickerWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 
 void ColourPickerWidgetsPage::OnColourChange(wxColourPickerEvent& event)
 {
-    wxLogMessage(wxT("The colour changed to '%s' !"),
-                 event.GetColour().GetAsString(wxC2S_CSS_SYNTAX).c_str());
+    wxLogMessage("The colour changed to '%s' !",
+                 event.GetColour().GetAsString(wxC2S_CSS_SYNTAX));
 }
 
 void ColourPickerWidgetsPage::OnCheckBox(wxCommandEvent &event)

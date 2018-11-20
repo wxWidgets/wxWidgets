@@ -2573,6 +2573,13 @@ bool wxWidgetCocoaImpl::IsVisible() const
 void wxWidgetCocoaImpl::SetVisibility( bool visible )
 {
     [m_osxView setHidden:(visible ? NO:YES)];
+    
+    // trigger redraw upon shown for layer-backed views
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+        if( !m_osxView.isHiddenOrHasHiddenAncestor )
+            SetNeedsDisplay(NULL);
+#endif
 }
 
 double wxWidgetCocoaImpl::GetContentScaleFactor() const
@@ -3024,12 +3031,32 @@ void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &hei
     }
 }
 
+static void SetSubviewsNeedDisplay( NSView *view )
+{
+    for ( NSView *sub in view.subviews )
+    {
+        if ( sub.isHidden )
+            continue;
+
+        [sub setNeedsDisplay:YES];
+        SetSubviewsNeedDisplay(sub);
+    }
+}
+
 void wxWidgetCocoaImpl::SetNeedsDisplay( const wxRect* where )
 {
     if ( where )
         [m_osxView setNeedsDisplayInRect:wxToNSRect(m_osxView, *where )];
     else
         [m_osxView setNeedsDisplay:YES];
+
+    // Layer-backed views (which are all in Mojave's Dark Mode) may not have
+    // their children implicitly redrawn with the parent. For compatibility,
+    // do it manually here:
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+        SetSubviewsNeedDisplay(m_osxView);
+#endif
 }
 
 bool wxWidgetCocoaImpl::GetNeedsDisplay() const
@@ -3118,7 +3145,14 @@ void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
 
     if ( [targetView respondsToSelector:@selector(setBackgroundColor:) ] )
     {
-        [targetView setBackgroundColor: col.OSXGetNSColor()];
+        wxWindow* peer = GetWXPeer();
+        if ( peer->GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
+        {
+            wxTopLevelWindow* toplevel = wxDynamicCast(peer,wxTopLevelWindow);
+
+            if ( toplevel == NULL || toplevel->GetShape().IsEmpty() )
+                [targetView setBackgroundColor: col.OSXGetNSColor()];
+        }
     }
 }
 
@@ -3129,6 +3163,8 @@ bool wxWidgetCocoaImpl::SetBackgroundStyle( wxBackgroundStyle style )
     if ( [m_osxView respondsToSelector:@selector(setOpaque:) ] )
     {
         [m_osxView setOpaque: opaque];
+        if ( style == wxBG_STYLE_TRANSPARENT )
+            [m_osxView setBackgroundColor:[NSColor clearColor]];
     }
     
     return true ;

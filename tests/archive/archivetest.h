@@ -42,8 +42,8 @@ public:
     ~TestOutputStream() { delete [] m_data; }
 
     int GetOptions() const { return m_options; }
-    wxFileOffset GetLength() const { return m_size; }
-    bool IsSeekable() const { return (m_options & PipeOut) == 0; }
+    wxFileOffset GetLength() const wxOVERRIDE { return m_size; }
+    bool IsSeekable() const wxOVERRIDE { return (m_options & PipeOut) == 0; }
 
     // gives away the data, this stream is then empty, and can be reused
     void GetData(char*& data, size_t& size);
@@ -51,9 +51,9 @@ public:
 private:
     void Init();
 
-    wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
-    wxFileOffset OnSysTell() const;
-    size_t OnSysWrite(const void *buffer, size_t size);
+    wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode) wxOVERRIDE;
+    wxFileOffset OnSysTell() const wxOVERRIDE;
+    size_t OnSysWrite(const void *buffer, size_t size) wxOVERRIDE;
 
     int m_options;
     size_t m_pos;
@@ -71,7 +71,7 @@ public:
         AtLast    = 0x01,   // eof before an attempt to read past the last byte
         WithError = 0x02    // give an error instead of eof
     };
-    
+
     // ctor takes the data from the output stream, which is then empty
     TestInputStream(TestOutputStream& out, int eoftype)
         : m_data(NULL), m_eoftype(eoftype) { SetData(out); }
@@ -80,17 +80,17 @@ public:
     ~TestInputStream() { delete [] m_data; }
 
     void Rewind();
-    wxFileOffset GetLength() const { return m_size; }
-    bool IsSeekable() const { return (m_options & PipeIn) == 0; }
+    wxFileOffset GetLength() const wxOVERRIDE { return m_size; }
+    bool IsSeekable() const wxOVERRIDE { return (m_options & PipeIn) == 0; }
     void SetData(TestOutputStream& out);
 
     void Chop(size_t size) { m_size = size; }
     char& operator [](size_t pos) { return m_data[pos]; }
 
 private:
-    wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
-    wxFileOffset OnSysTell() const;
-    size_t OnSysRead(void *buffer, size_t size);
+    wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode) wxOVERRIDE;
+    wxFileOffset OnSysTell() const wxOVERRIDE;
+    size_t OnSysRead(void *buffer, size_t size) wxOVERRIDE;
 
     int m_options;
     size_t m_pos;
@@ -171,7 +171,7 @@ protected:
     typedef typename ClassFactoryT::pairiter_type  PairIterT;
 
     // the entry point for the test
-    void runTest();
+    void runTest() wxOVERRIDE;
 
     // create the test data
     void CreateTestData();

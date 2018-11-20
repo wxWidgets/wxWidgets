@@ -52,7 +52,7 @@ WX_MSW_VERSION=$wx_major_version_number$wx_minor_version_number$wx_release_numbe
 
 dnl Autoconf-2.60 changed the meaning of top_builddir variable, so we have
 dnl to use our own replacement that will work with both 2.5x and 2.60+:
-wx_top_builddir="`pwd`"
+wx_top_builddir="`pwd -W 2> /dev/null || pwd`"
 AC_SUBST(wx_top_builddir)
 
 
@@ -952,7 +952,7 @@ WX_ARG_FEATURE(statusbar,   [  --enable-statusbar      use wxStatusBar class], w
 WX_ARG_FEATURE(taskbaricon, [  --enable-taskbaricon    use wxTaskBarIcon class], wxUSE_TASKBARICON)
 WX_ARG_FEATURE(tbarnative,  [  --enable-tbarnative     use native wxToolBar class], wxUSE_TOOLBAR_NATIVE)
 WX_ARG_FEATURE(textctrl,    [  --enable-textctrl       use wxTextCtrl class], wxUSE_TEXTCTRL)
-WX_ARG_FEATURE(datepick,    [  --enable-timepick       use wxTimePickerCtrl class], wxUSE_TIMEPICKCTRL)
+WX_ARG_FEATURE(timepick,    [  --enable-timepick       use wxTimePickerCtrl class], wxUSE_TIMEPICKCTRL)
 WX_ARG_FEATURE(tipwindow,   [  --enable-tipwindow      use wxTipWindow class], wxUSE_TIPWINDOW)
 WX_ARG_FEATURE(togglebtn,   [  --enable-togglebtn      use wxToggleButton class], wxUSE_TOGGLEBTN)
 WX_ARG_FEATURE(toolbar,     [  --enable-toolbar        use wxToolBar class], wxUSE_TOOLBAR)
@@ -1279,6 +1279,7 @@ elif test "x$wxUSE_MACOSX_VERSION_MIN" = "x"; then
 fi
 
 if test "x$MACOSX_SDK_OPTS" != "x"; then
+    eval "CPP=\"$CPP $MACOSX_SDK_OPTS\""
     eval "CC=\"$CC $MACOSX_SDK_OPTS\""
     eval "CXX=\"$CXX $MACOSX_SDK_OPTS\""
     eval "LD=\"$LD $MACOSX_SDK_OPTS\""
@@ -1291,6 +1292,7 @@ if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
     else
         MACOSX_VERSION_MIN_OPTS="-mmacosx-version-min=$wxUSE_MACOSX_VERSION_MIN"
     fi
+    eval "CPP=\"$CPP $MACOSX_VERSION_MIN_OPTS\""
     eval "CC=\"$CC $MACOSX_VERSION_MIN_OPTS\""
     eval "CXX=\"$CXX $MACOSX_VERSION_MIN_OPTS\""
     eval "LD=\"$LD $MACOSX_VERSION_MIN_OPTS\""
@@ -1474,6 +1476,10 @@ if test "$USE_UNIX" = 1 ; then
     wxUSE_UNIX=yes
     AC_DEFINE(__UNIX__)
 fi
+
+dnl Values of these variables shouldn't change any longer from now on, we
+dnl export them to ensure they're picked up by sub-configure scripts.
+export CC CFLAGS CPP CPPFLAGS CXX CXXFLAGS LDD LDFLAGS OBJCFLAGS OBJCXXFLAGS
 
 dnl ------------------------------------------------------------------------
 dnl Check for headers
@@ -2583,7 +2589,7 @@ dnl We need to disable the use of lzma in built-in libtiff explicitly, as
 dnl otherwise we'd depend on the system lzma library, which is typically
 dnl undesirable when using builtin libraries. We also disable the use of lzma
 dnl if it's not available anyhow, just to speed up libtiff configure a little.
-if test "$HAVE_LZMA" = "no" -o "$wxUSE_LIBTIFF" = "builtin"; then
+if test "$wxUSE_LIBLZMA" = "no" -a "$wxUSE_LIBTIFF" = "builtin"; then
     ac_configure_args="$ac_configure_args --disable-lzma"
 fi
 
@@ -2746,7 +2752,7 @@ if test "$USE_WIN32" = 1 ; then
 
     LIBS="$LIBS -luxtheme -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lcomdlg32 -ladvapi32 -lversion -lwsock32 -lgdi32"
     case "${host}" in
-        x86_64-*-mingw32* )
+        x86_64-*-mingw* )
             dnl we need to define this to embed the manifest for correct
             dnl platform from wx/msw/wx.rc (this is not needed for x86 which is
             dnl the default in wx/msw/rcdefs.h)
@@ -2785,7 +2791,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
         dnl -mwindows causes a heap of other default gui libs to be linked in.
         case "${host}" in
-            *-*-mingw32* )
+            *-*-mingw* )
                 WXCONFIG_LDFLAGS_GUI="$LDFLAGS -Wl,--subsystem,windows -mwindows"
         esac
     fi
@@ -3472,9 +3478,6 @@ if test "$wxUSE_DISPLAY" = "yes"; then
             AC_MSG_WARN([Xinerama not found; disabling wxDisplay])
             wxUSE_DISPLAY="no"
         fi
-    elif test "$wxUSE_MSW" = 1; then
-        dnl DirectDraw for MSW - optionally used by WxDisplay.
-        AC_CHECK_HEADER([ddraw.h], [], [], [#include <windows.h>])
     fi
 fi
 
@@ -4193,9 +4196,17 @@ fi
 
 dnl at least under IRIX with mipsPro the C99 round() function is available when
 dnl building using the C compiler but not when using C++ one
+AC_CACHE_CHECK([for round], wx_cv_func_round, [
 AC_LANG_PUSH(C++)
-WX_CHECK_FUNCS(round,,,[#include <math.h>])
+AC_TRY_LINK(
+    [#include <math.h>],
+    [return int(round(0.0))],
+    wx_cv_func_round=yes, wx_cv_func_round=no)
 AC_LANG_POP()
+])
+if test "$wx_cv_func_round" = yes; then
+    AC_DEFINE(HAVE_ROUND)
+fi
 
 dnl the following tests are for Unix(like) systems only
 if test "$TOOLKIT" != "MSW"; then
@@ -5003,7 +5014,7 @@ dnl from if !MSW
 else
     if test "$wxUSE_THREADS" = "yes" ; then
       case "${host}" in
-        x86_64-*-mingw32* )
+        x86_64-*-mingw* )
         ;;
         *-*-mingw32* )
             dnl check if the compiler accepts -mthreads
@@ -6597,6 +6608,9 @@ if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
             dnl he's doing if --without-xtest was explicitly specified.
             wxUSE_UIACTIONSIMULATOR=no
         fi
+    elif test "$wxUSE_DFB" = 1; then
+        AC_MSG_WARN([wxUIActionSimulator not yet supported under $TOOLKIT... disabled])
+        wxUSE_UIACTIONSIMULATOR=no
     fi
 
     if test "$wxUSE_UIACTIONSIMULATOR" = "yes" ; then
@@ -6960,7 +6974,7 @@ if test "$wxUSE_TOOLTIPS" = "yes"; then
         AC_MSG_WARN([wxTooltip not supported yet under Motif... disabled])
     else
         if test "$wxUSE_UNIVERSAL" = "yes"; then
-            AC_MSG_WARN([wxTooltip not supported yet in wxUniversal... disabled])
+            AC_MSG_WARN([wxTooltip not supported yet in $TOOLKIT... disabled])
         else
             AC_DEFINE(wxUSE_TOOLTIPS)
         fi
@@ -7518,6 +7532,8 @@ if test "$wxUSE_GRAPHICS_CONTEXT" = "yes"; then
         if test "$wx_cv_lib_gdiplus" = "yes"; then
             wx_has_graphics=1
         fi
+    elif test "$WXGTK1" = "1"; then
+        AC_MSG_WARN([wxGraphicsContext not supported with GTK +1])
     elif test "$wxUSE_GTK" = 1 -o "$wxUSE_QT" = 1 -o "$wxUSE_X11" = 1; then
         PKG_CHECK_MODULES(CAIRO, cairo,
             [wx_has_graphics=1],
@@ -7867,6 +7883,13 @@ elif test "$GXX" = yes ; then
     CXXWARNINGS="-Wall -Wundef -Wunused-parameter -Wno-ctor-dtor-privacy"
     AX_CXXFLAGS_GCC_OPTION(-Woverloaded-virtual, CXXWARNINGS)
 
+    dnl there are tons of warnings when building with GTK+ 1 which are never
+    dnl going to get fixed, so disable them to at least see new warnings/errors
+    dnl more clearly
+    if test "$WXGTK1" = "1"; then
+        CXXWARNINGS="$CXXWARNINGS -Wno-deprecated-declarations -Wno-narrowing -Wno-write-strings"
+    fi
+
     dnl when building using GTK+ 3 or Cocoa we currently get tons of deprecation
     dnl warnings from the standard headers -- disable them as we already know
     dnl that they're deprecated but we still have to use them to support older
@@ -7915,7 +7938,7 @@ EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
 EXTRALIBS_STC="-lwxscintilla${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $SDL_LIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"

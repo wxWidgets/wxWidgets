@@ -91,7 +91,8 @@ public:
     virtual bool SetForegroundColour( const wxColour &colour ) wxOVERRIDE;
 
     virtual bool SetBackgroundStyle(wxBackgroundStyle style) wxOVERRIDE;
-
+    virtual bool IsTransparentBackgroundSupported(wxString* reason = NULL) const wxOVERRIDE;
+    
     virtual int GetCharHeight() const wxOVERRIDE;
     virtual int GetCharWidth() const wxOVERRIDE;
     

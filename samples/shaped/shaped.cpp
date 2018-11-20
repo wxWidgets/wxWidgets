@@ -278,14 +278,17 @@ void MainFrame::OnShowShaped(wxCommandEvent& WXUNUSED(event))
 
 void MainFrame::OnShowTransparent(wxCommandEvent& WXUNUSED(event))
 {
-    if (IsTransparentBackgroundSupported())
+    wxString reason;
+    if (IsTransparentBackgroundSupported(&reason))
     {
         SeeThroughFrame *seeThroughFrame = new SeeThroughFrame;
         seeThroughFrame->Create();
         seeThroughFrame->Show(true);
     }
     else
-        wxMessageBox(wxS("transparent window requires a composited screen"));
+    {
+        wxLogError("%s, can't create transparent window.", reason);
+    }
 }
 
 void MainFrame::OnShowEffect(wxCommandEvent& event)
@@ -387,9 +390,9 @@ ShapedFrame::ShapedFrame(wxFrame *parent)
             )
 {
     m_shapeKind = Shape_Star;
-    m_bmp = wxBitmap(wxT("star.png"), wxBITMAP_TYPE_PNG);
+    m_bmp = wxBitmap("star.png", wxBITMAP_TYPE_PNG);
     SetSize(wxSize(m_bmp.GetWidth(), m_bmp.GetHeight()));
-    SetToolTip(wxT("Right-click to close, double click to cycle shape"));
+    SetToolTip("Right-click to close, double click to cycle shape");
     SetWindowShape();
 }
 

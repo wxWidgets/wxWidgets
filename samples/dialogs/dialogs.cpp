@@ -614,15 +614,15 @@ bool MyApp::OnInit()
     editMenu->Append(wxID_COPY, "&Copy\tCtrl+C");
     editMenu->Append(wxID_PASTE, "&Paste\tCtrl+V");
     editMenu->Append(wxID_CLEAR, "&Delete");
-    
+
     editMenu->AppendSeparator();
     editMenu->Append(wxID_SELECTALL, "Select All\tCtrl+A");
 
     wxMenuBar *menubar = new wxMenuBar;
     menubar->Append(menuDlg, "&Dialogs");
-    
+
     menubar->Append(editMenu, "&Edit");
-    
+
 #if wxUSE_ABOUTDLG
     menubar->Append(menuHelp, "&Help");
 #endif // wxUSE_ABOUTDLG
@@ -1049,7 +1049,7 @@ void MyFrame::PasswordEntry(wxCommandEvent& WXUNUSED(event))
                                          this);
     if ( !pwd.empty() )
     {
-        wxMessageBox(wxString::Format("Your password is '%s'", pwd.c_str()),
+        wxMessageBox(wxString::Format("Your password is '%s'", pwd),
                      "Got password", wxOK | wxICON_INFORMATION, this);
     }
 }
@@ -1133,7 +1133,7 @@ void MyFrame::MultiChoice(wxCommandEvent& WXUNUSED(event) )
             {
                 msg += wxString::Format("\t%u: %u (%s)\n",
                                         (unsigned)n, (unsigned)selections[n],
-                                        choices[selections[n]].c_str());
+                                        choices[selections[n]]);
             }
         }
         wxLogMessage(msg);
@@ -1568,9 +1568,9 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
                     "Path: %s\n"
                     "Name: %s\n"
                     "Custom window: %s",
-                    dialog.GetPath().c_str(),
-                    dialog.GetDirectory().c_str(),
-                    dialog.GetFilename().c_str(),
+                    dialog.GetPath(),
+                    dialog.GetDirectory(),
+                    dialog.GetFilename(),
                     extra ? static_cast<MyExtraPanel*>(extra)->GetInfo()
                           : wxString("None"));
         wxMessageDialog dialog2(this, info, "Selected file");
@@ -1637,7 +1637,7 @@ void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
         for ( size_t n = 0; n < count; n++ )
         {
             s.Printf("File %d: %s (%s)\n",
-                     (int)n, paths[n].c_str(), filenames[n].c_str());
+                     (int)n, paths[n], filenames[n]);
 
             msg += s;
         }
@@ -1663,7 +1663,7 @@ void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
     if (dialog.ShowModal() == wxID_OK)
     {
         wxLogMessage("%s, filter %d",
-                     dialog.GetPath().c_str(), dialog.GetFilterIndex());
+                     dialog.GetPath(), dialog.GetFilterIndex());
     }
 }
 #endif // wxUSE_FILEDLG
@@ -1689,9 +1689,9 @@ void MyFrame::FileOpenGeneric(wxCommandEvent& WXUNUSED(event) )
         info.Printf("Full file name: %s\n"
                     "Path: %s\n"
                     "Name: %s",
-                    dialog.GetPath().c_str(),
-                    dialog.GetDirectory().c_str(),
-                    dialog.GetFilename().c_str());
+                    dialog.GetPath(),
+                    dialog.GetDirectory(),
+                    dialog.GetFilename());
         wxMessageDialog dialog2(this, info, "Selected file");
         dialog2.ShowModal();
     }
@@ -1716,7 +1716,7 @@ void MyFrame::FilesOpenGeneric(wxCommandEvent& WXUNUSED(event) )
         for ( size_t n = 0; n < count; n++ )
         {
             s.Printf("File %d: %s (%s)\n",
-                     (int)n, paths[n].c_str(), filenames[n].c_str());
+                     (int)n, paths[n], filenames[n]);
 
             msg += s;
         }
@@ -1742,7 +1742,7 @@ void MyFrame::FileSaveGeneric(wxCommandEvent& WXUNUSED(event) )
     if (dialog.ShowModal() == wxID_OK)
     {
         wxLogMessage("%s, filter %d",
-                     dialog.GetPath().c_str(), dialog.GetFilterIndex());
+                     dialog.GetPath(), dialog.GetFilterIndex());
     }
 }
 #endif // USE_FILEDLG_GENERIC
@@ -1758,7 +1758,7 @@ void MyFrame::DoDirChoose(int style)
 
     if (dialog.ShowModal() == wxID_OK)
     {
-        wxLogMessage("Selected path: %s", dialog.GetPath().c_str());
+        wxLogMessage("Selected path: %s", dialog.GetPath());
     }
 }
 
@@ -2146,7 +2146,7 @@ private:
                 if ( !m_taskbarIcon )
                 {
                     m_taskbarIcon = new wxTaskBarIcon();
-                    m_taskbarIcon->SetIcon(reinterpret_cast<wxTopLevelWindow*>(GetParent())->GetIcon(), 
+                    m_taskbarIcon->SetIcon(reinterpret_cast<wxTopLevelWindow*>(GetParent())->GetIcon(),
                         "Dialogs Sample (Persistent)");
                 }
                 wxNotificationMessage::UseTaskBarIcon(m_taskbarIcon);
@@ -3018,17 +3018,17 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
     {
         wxLogMessage("Find %s'%s' (flags: %s)",
                      type == wxEVT_FIND_NEXT ? "next " : "",
-                     event.GetFindString().c_str(),
-                     DecodeFindDialogEventFlags(event.GetFlags()).c_str());
+                     event.GetFindString(),
+                     DecodeFindDialogEventFlags(event.GetFlags()));
     }
     else if ( type == wxEVT_FIND_REPLACE ||
                 type == wxEVT_FIND_REPLACE_ALL )
     {
         wxLogMessage("Replace %s'%s' with '%s' (flags: %s)",
                      type == wxEVT_FIND_REPLACE_ALL ? "all " : "",
-                     event.GetFindString().c_str(),
-                     event.GetReplaceString().c_str(),
-                     DecodeFindDialogEventFlags(event.GetFlags()).c_str());
+                     event.GetFindString(),
+                     event.GetReplaceString(),
+                     DecodeFindDialogEventFlags(event.GetFlags()));
     }
     else if ( type == wxEVT_FIND_CLOSE )
     {

@@ -930,15 +930,9 @@ wxSize wxSizer::ComputeFittingClientSize(wxWindow *window)
             return tlw->GetClientSize();
         }
 
-        // limit the window to the size of the display it is on
-        int disp = wxDisplay::GetFromWindow(window);
-        if ( disp == wxNOT_FOUND )
-        {
-            // or, if we don't know which one it is, of the main one
-            disp = 0;
-        }
-
-        sizeMax = wxDisplay(disp).GetClientArea().GetSize();
+        // limit the window to the size of the display it is on (or the main
+        // one if the window display can't be determined)
+        sizeMax = wxDisplay(window).GetClientArea().GetSize();
 
         // If determining the display size failed, skip the max size checks as
         // we really don't want to create windows of (0, 0) size.
@@ -2542,6 +2536,31 @@ wxSize wxBoxSizer::CalcMin()
     SizeInMajorDir(m_calculatedMinSize) += (int)(maxMinSizeToProp*m_totalProportion);
 
     return m_calculatedMinSize;
+}
+
+bool
+wxBoxSizer::InformFirstDirection(int direction, int size, int availableOtherDir)
+{
+    // In principle, we could propagate the information about the size in the
+    // sizer major direction too, but this would require refactoring CalcMin()
+    // to determine the actual sizes all our items would have with the given
+    // size and we don't do this yet, so for now handle only the simpler case
+    // of informing all our items about their size in the orthogonal direction.
+    if ( direction == GetOrientation() )
+        return false;
+
+    bool didUse = false;
+
+    for ( wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        didUse |= node->GetData()->InformFirstDirection(direction,
+                                                        size,
+                                                        availableOtherDir);
+    }
+
+    return didUse;
 }
 
 //---------------------------------------------------------------------------

@@ -402,7 +402,6 @@ void wxSVGFileDCImpl::Init(const wxString &filename, int Width, int Height,
     m_backgroundBrush = *wxTRANSPARENT_BRUSH;
     m_textForegroundColour = *wxBLACK;
     m_textBackgroundColour = *wxWHITE;
-    m_colour = wxColourDisplay();
 
     m_pen   = *wxBLACK_PEN;
     m_font  = *wxNORMAL_FONT;
@@ -576,27 +575,7 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
         else
             s += wxS("style=\" ");
 
-        wxString fontweight;
-        switch (m_font.GetWeight())
-        {
-            case wxFONTWEIGHT_MAX:
-                wxFAIL_MSG(wxS("invalid font weight value"));
-                wxFALLTHROUGH;
-
-            case wxFONTWEIGHT_NORMAL:
-                fontweight = wxS("normal");
-                break;
-
-            case wxFONTWEIGHT_LIGHT:
-                fontweight = wxS("lighter");
-                break;
-
-            case wxFONTWEIGHT_BOLD:
-                fontweight = wxS("bold");
-                break;
-        }
-
-        wxASSERT_MSG(!fontweight.empty(), wxS("unknown font weight value"));
+        wxString fontweight = wxString::Format(wxS("%d"),m_font.GetWeight());
 
         s += wxS("font-weight:") + fontweight + wxS("; ");
 

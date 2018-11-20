@@ -75,6 +75,8 @@ endmacro()
 
 # Set properties common to builtin third party libraries and wx libs
 function(wx_set_common_target_properties target_name)
+    cmake_parse_arguments(wxCOMMON_TARGET_PROPS "DEFAULT_WARNINGS" "" "" ${ARGN})
+
     if(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
         # TODO: implement for older CMake versions ?
         set_target_properties(${target_name} PROPERTIES CXX_STANDARD ${wxBUILD_CXX_STANDARD})
@@ -96,6 +98,13 @@ function(wx_set_common_target_properties target_name)
         ARCHIVE_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
         RUNTIME_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
         )
+    if(NOT wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
+        # Enable higher warnings for most compilers/IDEs
+        if(MSVC)
+            target_compile_options(${target_name} PRIVATE /W4)
+        endif()
+        # TODO: add warning flags for other compilers
+    endif()
 endfunction()
 
 # Set common properties on wx library target
@@ -282,11 +291,6 @@ macro(wx_add_library name)
         # collect all source files for mono library
         set(wxMONO_SRC_FILES ${wxMONO_SRC_FILES} ${src_files} PARENT_SCOPE)
     else()
-
-        if(wxBUILD_PRECOMP AND MSVC)
-            # Add dummy source file to be used by cotire for PCH creation
-            list(INSERT src_files 0 "${wxSOURCE_DIR}/src/common/dummy.cpp")
-        endif()
         list(APPEND src_files ${wxSETUP_HEADER_FILE})
 
         if(wxBUILD_SHARED)
@@ -348,7 +352,7 @@ macro(wx_finalize_lib target_name)
     set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)
     if(wxBUILD_PRECOMP)
         if(TARGET ${target_name})
-        wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
+            wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
         endif()
     elseif(MSVC)
         wx_lib_compile_definitions(${target_name} PRIVATE NOPCH)
@@ -451,7 +455,7 @@ function(wx_set_builtin_target_properties target_name)
 
     set_target_properties(${target_name} PROPERTIES FOLDER "Third Party Libraries")
 
-    wx_set_common_target_properties(${target_name})
+    wx_set_common_target_properties(${target_name} DEFAULT_WARNINGS)
     if(NOT wxBUILD_SHARED)
         wx_install(TARGETS ${name} ARCHIVE DESTINATION "lib${wxPLATFORM_LIB_DIR}")
     endif()
@@ -764,10 +768,6 @@ function(wx_add_test name)
         foreach(res ${TEST_RES})
             list(APPEND test_src ${wxSOURCE_DIR}/tests/${res})
         endforeach()
-    endif()
-    if(wxBUILD_PRECOMP AND MSVC)
-        # Add dummy source file to be used by cotire for PCH creation
-        list(INSERT test_src 0 "${wxSOURCE_DIR}/tests/dummy.cpp")
     endif()
     add_executable(${name} ${test_src})
     target_include_directories(${name} PRIVATE "${wxSOURCE_DIR}/tests" "${wxSOURCE_DIR}/3rdparty/catch/include")

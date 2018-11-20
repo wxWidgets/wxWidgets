@@ -139,7 +139,6 @@ void wxWindowDCImpl::Init()
     m_currentPenDash = NULL;
     m_currentStyle = -1;
     m_currentFill = -1;
-    m_colour = wxColourDisplay();
     m_display = NULL;
     m_pixmap = (WXPixmap) 0;
     m_autoSetting = 0;
