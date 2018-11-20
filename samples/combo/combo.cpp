@@ -1017,20 +1017,32 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     groupSizer->AddStretchSpacer();
 
     //
-    // Disabled ODComboBox
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,"Disabled:"),
+    // Disabled read-only ODComboBox
+    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,"Read-only disabled:"),
                    wxSizerFlags().Border(wxRIGHT, border) );
 
     odc = new wxOwnerDrawnComboBox(dlg,wxID_ANY,wxEmptyString,
                                      wxDefaultPosition, wxDefaultSize,
                                      m_arrItems,
-                                     wxCB_SORT|wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
+                                     wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
                                      );
 
     odc->SetValue("Dot Dash");
     odc->Enable(false);
 
     groupSizer->Add( odc, wxSizerFlags(3).Expand().Border(wxALL, border) );
+
+    // Disabled ODComboBox
+    groupSizer->Add(new wxStaticText(dlg, wxID_ANY, "Disabled:"),
+        wxSizerFlags().Border(wxRIGHT, border));
+
+    odc = new wxOwnerDrawnComboBox(dlg, wxID_ANY, wxEmptyString,
+        wxDefaultPosition, wxDefaultSize, m_arrItems);
+
+    odc->SetValue("Dot Dash");
+    odc->Enable(false);
+
+    groupSizer->Add(odc, wxSizerFlags(3).Expand().Border(wxALL, border));
 
     rowSizer->Add( groupSizer, 1, wxEXPAND|wxALL, border );
 
@@ -1077,20 +1089,33 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     groupSizer->AddStretchSpacer();
 
     //
-    // Disabled wxComboBox
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,"Disabled:"),
+    // Disabled read-only wxComboBox
+    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,"Read-only disabled:"),
                    wxSizerFlags().Border(wxRIGHT, border) );
 
     cb = new wxComboBox(dlg,wxID_ANY,wxEmptyString,
                         wxDefaultPosition, wxDefaultSize,
                         m_arrItems,
-                        wxCB_SORT|wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
+                        wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
                        );
 
     cb->SetValue("Dot Dash");
     cb->Enable(false);
 
     groupSizer->Add( cb, wxSizerFlags(3).Expand().Border(wxALL, border) );
+
+    //
+    // Disabled wxComboBox
+    groupSizer->Add(new wxStaticText(dlg, wxID_ANY, "Disabled:"),
+        wxSizerFlags().Border(wxRIGHT, border));
+
+    cb = new wxComboBox(dlg, wxID_ANY, wxEmptyString,
+        wxDefaultPosition, wxDefaultSize, m_arrItems);
+
+    cb->SetValue("Dot Dash");
+    cb->Enable(false);
+
+    groupSizer->Add(cb, wxSizerFlags(3).Expand().Border(wxALL, border));
 
     rowSizer->Add( groupSizer, 1, wxEXPAND|wxALL, border );
 
