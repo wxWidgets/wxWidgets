@@ -31,29 +31,41 @@
     #define wxHAS_SHGetStockIconInfo
 #endif
 
-// MinGW headers don't always define this symbol (up to at least 5.3 version),
-// so do it ourselves.
-//
-// Note that at least there is no need for run-time loading here, as it's
-// available since XP.
-#ifndef SHDefExtractIcon
-
-#ifdef UNICODE
-extern "C" HRESULT wxSTDCALL
-SHDefExtractIconW(LPCWSTR pszIconFile, int iIndex, UINT uFlags,
-                  HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize);
-#define SHDefExtractIcon SHDefExtractIconW
-#else // !UNICODE
-extern "C" HRESULT wxSTDCALL
-SHDefExtractIconA(LPCSTR pszIconFile, int iIndex, UINT uFlags,
-                  HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize);
-#define SHDefExtractIcon SHDefExtractIconA
-#endif // UNICODE/!UNICODE
-
-#endif // !defined(SHDefExtractIcon)
-
 namespace
 {
+
+#ifdef SHDefExtractIcon
+    #define MSW_SHDefExtractIcon SHDefExtractIcon
+#else // !defined(SHDefExtractIcon)
+
+// MinGW doesn't provide SHDefExtractIcon() up to at least the 5.3 version, so
+// define it ourselves.
+HRESULT
+MSW_SHDefExtractIcon(LPCTSTR pszIconFile, int iIndex, UINT uFlags,
+                     HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize)
+{
+    typedef HRESULT
+    (WINAPI *SHDefExtractIcon_t)(LPCTSTR, int, UINT, HICON*, HICON*, UINT);
+
+    static SHDefExtractIcon_t s_SHDefExtractIcon = NULL;
+    if ( !s_SHDefExtractIcon )
+    {
+        wxDynamicLibrary shell32(wxT("shell32.dll"));
+        wxDL_INIT_FUNC_AW(s_, SHDefExtractIcon, shell32);
+
+        if ( !s_SHDefExtractIcon )
+            return E_FAIL;
+
+        // Prevent the DLL from being unloaded while we use its function.
+        // Normally it's not a problem as shell32.dll is always loaded anyhow.
+        shell32.Detach();
+    }
+
+    return (*s_SHDefExtractIcon)(pszIconFile, iIndex, uFlags,
+                                 phiconLarge, phiconSmall, nIconSize);
+}
+
+#endif // !defined(SHDefExtractIcon)
 
 #ifdef wxHAS_SHGetStockIconInfo
 
@@ -111,7 +123,7 @@ wxBitmap
 MSWGetBitmapFromIconLocation(const TCHAR* path, int index, const wxSize& size)
 {
     HICON hIcon = NULL;
-    if ( SHDefExtractIcon(path, index, 0, &hIcon, NULL, size.x) != S_OK )
+    if ( MSW_SHDefExtractIcon(path, index, 0, &hIcon, NULL, size.x) != S_OK )
         return wxNullBitmap;
 
     // Note that using "size.x" twice here is not a typo: normally size.y is
