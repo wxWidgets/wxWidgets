@@ -121,7 +121,7 @@ bool wxTextCtrl::Create(wxWindow *parent,
     {
         m_qtLineEdit = new wxQtLineEdit( parent, this );
         m_qtTextEdit = NULL;
-        if( style & wxTE_PASSWORD )
+        if ( style & wxTE_PASSWORD )
             m_qtLineEdit->setEchoMode( QLineEdit::Password );
     }
     else
@@ -163,7 +163,7 @@ int wxTextCtrl::GetNumberOfLines() const
 
 bool wxTextCtrl::IsModified() const
 {
-    if( !IsMultiLine() )
+    if ( IsSingleLine() )
         return m_qtLineEdit->isModified();
     else
         return m_qtTextEdit->isWindowModified();
@@ -171,7 +171,7 @@ bool wxTextCtrl::IsModified() const
 
 void wxTextCtrl::MarkDirty()
 {
-    if( !IsMultiLine() )
+    if ( IsSingleLine() )
         return m_qtLineEdit->setModified( true );
     else
         return m_qtTextEdit->setWindowModified( true );
@@ -179,7 +179,7 @@ void wxTextCtrl::MarkDirty()
 
 void wxTextCtrl::DiscardEdits()
 {
-    if( !IsMultiLine() )
+    if ( IsSingleLine() )
         return m_qtLineEdit->setModified( false );
     else
         return m_qtTextEdit->setWindowModified( false );
