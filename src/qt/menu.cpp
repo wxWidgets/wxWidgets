@@ -184,6 +184,8 @@ wxMenuBar::wxMenuBar(size_t count, wxMenu *menus[], const wxString titles[], lon
 
 static QMenu *SetTitle( wxMenu *menu, const wxString &title )
 {
+    menu->SetTitle(title);
+
     QMenu *qtMenu = menu->GetHandle();
     qtMenu->setTitle( wxQtConvertString( title ));
 
@@ -241,6 +243,12 @@ void wxMenuBar::EnableTop(size_t pos, bool enable)
 {
     QAction *qtAction = GetActionAt( m_qtMenuBar, pos );
     qtAction->setEnabled( enable );
+}
+
+bool wxMenuBar::IsEnabledTop(size_t pos) const
+{
+    QAction *qtAction = GetActionAt( m_qtMenuBar, pos );
+    return qtAction->isEnabled();
 }
 
 
