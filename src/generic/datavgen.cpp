@@ -821,7 +821,7 @@ public:
 
     int GetLineStart( unsigned int row ) const;  // row * m_lineHeight in fixed mode
     int GetLineHeight( unsigned int row ) const; // m_lineHeight in fixed mode
-    int GetLineAt( int y ) const;                // y / m_lineHeight in fixed mode
+    int GetLineAt( unsigned int y ) const;       // y / m_lineHeight in fixed mode
 
     void SetRowHeight( int lineHeight ) { m_lineHeight = lineHeight; }
     int GetRowHeight() const { return m_lineHeight; }
@@ -3415,11 +3415,8 @@ int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
     }
 }
 
-int wxDataViewMainWindow::GetLineAt( int y ) const
+int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
 {
-    if (y < 0)
-        return -1;
-
     const wxDataViewModel *model = GetModel();
 
     // check for the easy case first
