@@ -165,5 +165,6 @@ void wxQtAction::onActionTriggered( bool checked )
 {
     wxMenuItem *handler = GetHandler();
     wxMenu *menu = handler->GetMenu();
+    if(handler->IsCheckable()) handler->Check(checked);
     menu->SendEvent( handler->GetId(), handler->IsCheckable() ? checked : -1 );
 }

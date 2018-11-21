@@ -53,7 +53,7 @@ static wxMenuItem *GetMenuItemAt( const wxMenu *menu, size_t position )
 
 
 static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previousItem,
-    const wxMenuItem *item, const wxMenuItem *successiveItem )
+    wxMenuItem *item, const wxMenuItem *successiveItem )
 {
     QMenu *qtMenu = menu->GetHandle();
     QAction *itemAction = item->GetHandle();
@@ -74,6 +74,7 @@ static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previous
             {
                 QActionGroup *actionGroup = new QActionGroup( qtMenu );
                 actionGroup->addAction( itemAction );
+                item->Check();
                 wxASSERT_MSG( itemAction->actionGroup() == actionGroup, "Must be the same action group" );
             }
             break;
