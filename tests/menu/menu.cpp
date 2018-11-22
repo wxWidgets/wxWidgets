@@ -90,11 +90,7 @@ private:
 #if wxUSE_INTL
         CPPUNIT_TEST( TranslatedMnemonics );
 #endif // wxUSE_INTL
-#ifndef __WXQT__
         CPPUNIT_TEST( RadioItems );
-#else
-        CPPUNIT_TEST( RadioItemsWithoutMutualExclusion );
-#endif
         CPPUNIT_TEST( RemoveAdd );
         CPPUNIT_TEST( ChangeBitmap );
         WXUISIM_TEST( Events );
@@ -111,7 +107,6 @@ private:
     void TranslatedMnemonics();
 #endif // wxUSE_INTL
     void RadioItems();
-    void RadioItemsWithoutMutualExclusion();
     void RemoveAdd();
     void ChangeBitmap();
     void Events();
@@ -411,10 +406,18 @@ void MenuTestCase::RadioItems()
     // First item of a radio group is checked by default.
     CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First) );
 
+    // Subsequent items in a group are not checked.
+    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 1) );
+
+#ifdef __WXQT__
+    WARN("Radio check test does not work under Qt");
+#else
     // Checking the second one make the first one unchecked however.
     menu->Check(MenuTestCase_First + 1, true);
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First) );
     CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 1) );
+    menu->Check(MenuTestCase_First, true);
+#endif
 
     // Adding more radio items after a separator creates another radio group...
     menu->AppendSeparator();
@@ -423,74 +426,51 @@ void MenuTestCase::RadioItems()
     menu->AppendRadioItem(MenuTestCase_First + 4, "Radio 4");
 
     // ... which is independent from the first one.
+    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First) );
     CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 2) );
 
+#ifdef __WXQT__
+    WARN("Radio check test does not work under Qt");
+#else
     menu->Check(MenuTestCase_First + 3, true);
     CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 3) );
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 2) );
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 1) );
+
+    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First) );
+    menu->Check(MenuTestCase_First + 2, true);
+#endif
 
     // Insert an item in the middle of an existing radio group.
     menu->InsertRadioItem(4, MenuTestCase_First + 5, "Radio 5");
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 3) );
+    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 2) );
+    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 5) );
 
+#ifdef __WXQT__
+    WARN("Radio check test does not work under Qt");
+#else
     menu->Check( MenuTestCase_First + 5, true );
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 3) );
 
+    menu->Check( MenuTestCase_First + 3, true );
+#endif
+
     // Prepend a couple of items before the first group.
     menu->PrependRadioItem(MenuTestCase_First + 6, "Radio 6");
     menu->PrependRadioItem(MenuTestCase_First + 7, "Radio 7");
-
-    // Items should not be checked, as they are part of an existing group.
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 6) );
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 7) );
+
+#ifdef __WXQT__
+    WARN("Radio check test does not work under Qt");
+#else
     menu->Check(MenuTestCase_First + 7, true);
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 1) );
 
-    // Check that the last radio group still works as expected.
-    menu->Check(MenuTestCase_First + 4, true);
-    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 5) );
-}
-
-void MenuTestCase::RadioItemsWithoutMutualExclusion()
-{
-    wxMenuBar * const bar = m_frame->GetMenuBar();
-    wxMenu * const menu = new wxMenu;
-    bar->Append(menu, "&Radio");
-
-    // Adding consecutive radio items creates a radio group.
-    menu->AppendRadioItem(MenuTestCase_First, "Radio 0");
-    menu->AppendRadioItem(MenuTestCase_First + 1, "Radio 1");
-
-    // First item of a radio group is checked by default.
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First) );
-
-    // Subsequent items in a group are not checked.
-    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 1) );
-
-    // Adding more radio items after a separator creates another radio group...
-    menu->AppendSeparator();
-    menu->AppendRadioItem(MenuTestCase_First + 2, "Radio 2");
-    menu->AppendRadioItem(MenuTestCase_First + 3, "Radio 3");
-    menu->AppendRadioItem(MenuTestCase_First + 4, "Radio 4");
-
-    // ... which is independent from the first one.
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First) );
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 2) );
-
-    // Insert an item in the middle of an existing radio group.
-    menu->InsertRadioItem(4, MenuTestCase_First + 5, "Radio 5");
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 2) );
-
-    // Prepend a couple of items before the first group.
-    menu->PrependRadioItem(MenuTestCase_First + 6, "Radio 6");
-    menu->PrependRadioItem(MenuTestCase_First + 7, "Radio 7");
-    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 6) );
-    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 7) );
 
     // Check that the last radio group still works as expected.
     menu->Check(MenuTestCase_First + 4, true);
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 5) );
+#endif
 }
 
 void MenuTestCase::RemoveAdd()
