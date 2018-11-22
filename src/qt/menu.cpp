@@ -70,6 +70,13 @@ static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previous
                 wxASSERT_MSG( previousItemActionGroup != NULL, "An action group should have been setup" );
                 previousItemActionGroup->addAction( itemAction );
             }
+            else if( successiveItem != NULL && successiveItem->GetKind() == wxITEM_RADIO )
+            {
+                QAction *successiveItemAction = successiveItem->GetHandle();
+                QActionGroup *successiveItemActionGroup = successiveItemAction->actionGroup();
+                wxASSERT_MSG( successiveItemActionGroup != NULL, "An action group should have been setup" );
+                successiveItemActionGroup->addAction( itemAction );
+            } 
             else
             {
                 QActionGroup *actionGroup = new QActionGroup( qtMenu );
