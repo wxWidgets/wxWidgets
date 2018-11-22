@@ -51,6 +51,13 @@ static wxMenuItem *GetMenuItemAt( const wxMenu *menu, size_t position )
         return NULL;
 }
 
+static void AddItemActionToGroup( const wxMenuItem *groupItem, QAction *itemAction )
+{
+    QAction *groupItemAction = groupItem->GetHandle();
+    QActionGroup *itemActionGroup = groupItemAction->actionGroup();
+    wxASSERT_MSG( itemActionGroup != NULL, "An action group should have been setup" );
+    itemActionGroup->addAction( itemAction );
+}
 
 static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previousItem,
     wxMenuItem *item, const wxMenuItem *successiveItem )
@@ -60,22 +67,16 @@ static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previous
     switch ( item->GetKind() )
     {
         case wxITEM_RADIO:
-            // If the previous menu item is a radio item then add this item to the
+            // If a neighbouring menu item is a radio item then add this item to the
             // same action group, otherwise start a new group:
 
             if ( previousItem != NULL && previousItem->GetKind() == wxITEM_RADIO )
             {
-                QAction *previousItemAction = previousItem->GetHandle();
-                QActionGroup *previousItemActionGroup = previousItemAction->actionGroup();
-                wxASSERT_MSG( previousItemActionGroup != NULL, "An action group should have been setup" );
-                previousItemActionGroup->addAction( itemAction );
+                AddItemActionToGroup( previousItem, itemAction );
             }
             else if( successiveItem != NULL && successiveItem->GetKind() == wxITEM_RADIO )
             {
-                QAction *successiveItemAction = successiveItem->GetHandle();
-                QActionGroup *successiveItemActionGroup = successiveItemAction->actionGroup();
-                wxASSERT_MSG( successiveItemActionGroup != NULL, "An action group should have been setup" );
-                successiveItemActionGroup->addAction( itemAction );
+                AddItemActionToGroup( successiveItem, itemAction );
             } 
             else
             {
