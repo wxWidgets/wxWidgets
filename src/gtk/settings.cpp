@@ -1045,10 +1045,13 @@ void wxSystemSettingsModule::OnExit()
 {
 #ifdef __WXGTK3__
     GtkSettings* settings = gtk_settings_get_default();
-    g_signal_handlers_disconnect_by_func(settings,
-        (void*)notify_gtk_theme_name, NULL);
-    g_signal_handlers_disconnect_by_func(settings,
-        (void*)notify_gtk_font_name, NULL);
+    if (settings)
+    {
+        g_signal_handlers_disconnect_by_func(settings,
+            (void*)notify_gtk_theme_name, NULL);
+        g_signal_handlers_disconnect_by_func(settings,
+            (void*)notify_gtk_font_name, NULL);
+    }
 #endif
     if (gs_tlw_parent)
     {
