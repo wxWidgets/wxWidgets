@@ -878,6 +878,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
                     Refresh(); // This is needed in wxMSW, otherwise resetting the position doesn't 'take'
                     SetCaretPosition(oldPos);
                     SetFocusObject(oldFocus, false);
+                    wxFALLTHROUGH;
                 default: break;
             }
             EndBatchUndo();

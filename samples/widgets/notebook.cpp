@@ -343,7 +343,7 @@ void BookWidgetsPage::RecreateBook()
     {
         default:
             wxFAIL_MSG( "unknown orientation" );
-            // fall through
+            wxFALLTHROUGH;
 
         case Orient_Top:
             flags |= wxBK_TOP;

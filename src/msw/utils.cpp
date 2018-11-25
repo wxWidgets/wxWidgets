@@ -713,11 +713,11 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
 
             default:
                 wxFAIL_MSG( wxT("unexpected WaitForSingleObject() return") );
-                // fall through
+                wxFALLTHROUGH;
 
             case WAIT_FAILED:
                 wxLogLastError(wxT("WaitForSingleObject"));
-                // fall through
+                wxFALLTHROUGH;
 
             case WAIT_TIMEOUT:
                 // Process didn't terminate: normally this is a failure but not
@@ -1274,6 +1274,7 @@ wxWinVersion wxGetWinVersion()
                 case 10:
                     return wxWinVersion_10;
             }
+            break;
         default:
             // Do nothing just to silence GCC warning
             break;

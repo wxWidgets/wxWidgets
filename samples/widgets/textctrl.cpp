@@ -293,7 +293,7 @@ private:
         {
             default:
                 wxFAIL_MSG( "unexpected HitTest() result" );
-                // fall through
+                wxFALLTHROUGH;
 
             case wxTE_HT_UNKNOWN:
                 x = y = -1;
@@ -690,6 +690,7 @@ void TextWidgetsPage::CreateText()
     {
         default:
             wxFAIL_MSG( "unexpected lines radio box selection" );
+            wxFALLTHROUGH;
 
         case TextLines_Single:
             break;
@@ -755,6 +756,7 @@ void TextWidgetsPage::CreateText()
     {
         default:
             wxFAIL_MSG( "unexpected kind radio box selection" );
+            wxFALLTHROUGH;
 
         case TextKind_Plain:
             break;

@@ -376,7 +376,7 @@ void RadioWidgetsPage::CreateRadio()
     {
         default:
             wxFAIL_MSG( "unexpected wxRadioBox layout direction" );
-            // fall through
+            wxFALLTHROUGH;
 
         case RadioDir_Default:
             break;
