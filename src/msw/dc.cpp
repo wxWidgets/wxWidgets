@@ -1713,7 +1713,7 @@ void wxMSWDCImpl::SetLogicalFunction(wxRasterOperationMode function)
 
 void wxMSWDCImpl::SetRop(WXHDC dc)
 {
-    if ( !dc || m_logicalFunction < 0 )
+    if ( !dc )
         return;
 
     int rop;
