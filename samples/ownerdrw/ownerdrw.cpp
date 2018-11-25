@@ -40,7 +40,7 @@ class OwnerDrawnFrame : public wxFrame
 public:
     // ctor & dtor
     OwnerDrawnFrame(wxFrame *frame, const wxString& title, int x, int y, int w, int h);
-    ~OwnerDrawnFrame(){};
+    ~OwnerDrawnFrame(){}
 
     // notifications
     void OnQuit             (wxCommandEvent& event);

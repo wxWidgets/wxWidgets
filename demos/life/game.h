@@ -29,7 +29,7 @@ public:
         m_description = description;
         m_rules       = rules;
         m_shape       = shape;
-    };
+    }
 
     // A more convenient ctor for the built-in samples
     LifePattern(wxString      name,
@@ -58,7 +58,7 @@ public:
 
             m_shape.Add( tmp );
         }
-    };
+    }
 
     wxString      m_name;
     wxString      m_description;
@@ -90,9 +90,9 @@ public:
     ~Life();
 
     // accessors
-    inline wxUint32 GetNumCells() const    { return m_numcells; };
-    inline wxString GetRules() const       { return m_rules; };
-    inline wxString GetDescription() const { return m_description; };
+    inline wxUint32 GetNumCells() const    { return m_numcells; }
+    inline wxString GetRules() const       { return m_rules; }
+    inline wxString GetDescription() const { return m_description; }
     bool IsAlive(wxInt32 x, wxInt32 y);
     void SetCell(wxInt32 x, wxInt32 y, bool alive = true);
     void SetPattern(const LifePattern &pattern);

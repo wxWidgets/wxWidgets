@@ -66,7 +66,7 @@ class MyApp : public wxApp
 {
 public:
     MyApp();
-    virtual ~MyApp(){};
+    virtual ~MyApp(){}
 
     virtual bool OnInit() wxOVERRIDE;
 
