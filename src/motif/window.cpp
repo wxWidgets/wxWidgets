@@ -886,7 +886,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     XCopyArea(display, window, window, gc, x1, y1, w1, h1, x2, y2);
 
     dcimpl->SetAutoSetting(true);
-    wxBrush brush(GetBackgroundColour(), wxSOLID);
+    wxBrush brush(GetBackgroundColour(), wxBRUSHSTYLE_SOLID);
     dc.SetBrush(brush); // FIXME: needed?
 
     wxWindowList::compatibility_iterator cnode = m_children.GetFirst();
@@ -1537,7 +1537,7 @@ void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
     if (eraseBack)
     {
         wxClientDC dc(this);
-        wxBrush backgroundBrush(GetBackgroundColour(), wxSOLID);
+        wxBrush backgroundBrush(GetBackgroundColour(), wxBRUSHSTYLE_SOLID);
         dc.SetBackground(backgroundBrush);
 
         wxClientDCImpl * const

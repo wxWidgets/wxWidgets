@@ -97,7 +97,7 @@ public:
                 const wxString &name = wxT("frame"))
                     : wxFrame(parent, id, title, pos, size, style | wxFRAME_SHAPED, name)
     {
-        SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
         m_amount=0;
         m_maxWidth=0;
         m_maxHeight=0;

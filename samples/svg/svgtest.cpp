@@ -342,7 +342,7 @@ void MyPage::OnDraw(wxDC& dc)
             wP = *wxCYAN_PEN;
             wP.SetWidth(3);
             dc.SetPen(wP);
-                                 //wxTRANSPARENT));
+                                 //wxBRUSHSTYLE_TRANSPARENT));
             dc.SetBrush (wxBrush ("SALMON"));
             dc.DrawEllipticArc(300,  0,200,100, 0.0,145.0);
                                  //same end point

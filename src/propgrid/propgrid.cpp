@@ -482,7 +482,7 @@ void wxPropertyGrid::Init2()
     RegainColours();
 
     // This helps with flicker
-    SetBackgroundStyle( wxBG_STYLE_CUSTOM );
+    SetBackgroundStyle( wxBG_STYLE_PAINT );
 
     // Rely on native double-buffering by default.
 #if wxALWAYS_NATIVE_DOUBLE_BUFFER

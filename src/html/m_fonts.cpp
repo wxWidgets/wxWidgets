@@ -140,7 +140,7 @@ TAG_HANDLER_BEGIN(FONT, "FONT" )
             m_WParser->SetActualBackgroundMode(oldbackmode);
             m_WParser->SetActualBackgroundColor(oldbackclr);
             m_WParser->GetContainer()->InsertCell(
-                new wxHtmlColourCell(oldbackclr, oldbackmode == wxTRANSPARENT ? wxHTML_CLR_TRANSPARENT_BACKGROUND : wxHTML_CLR_BACKGROUND));
+                new wxHtmlColourCell(oldbackclr, oldbackmode == wxBRUSHSTYLE_TRANSPARENT ? wxHTML_CLR_TRANSPARENT_BACKGROUND : wxHTML_CLR_BACKGROUND));
         }
 
         return true;

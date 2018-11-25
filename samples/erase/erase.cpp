@@ -178,7 +178,7 @@ private:
         dc.DrawRectangle(GetClientSize());
 
         dc.SetTextForeground(*wxBLUE);
-        dc.SetBackgroundMode(wxTRANSPARENT);
+        dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
         dc.DrawText(m_message, 0, 2);
 
         // Draw some bitmap/icon to ensure transparent bitmaps are indeed
@@ -436,7 +436,7 @@ void MyCanvas::OnEraseBackground( wxEraseEvent& event )
     }
 
     dc.SetTextForeground(*wxRED);
-    dc.SetBackgroundMode(wxSOLID);
+    dc.SetBackgroundMode(wxBRUSHSTYLE_SOLID);
     dc.DrawText("This text is drawn from OnEraseBackground", 60, 160);
 }
 

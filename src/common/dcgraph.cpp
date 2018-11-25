@@ -1127,7 +1127,7 @@ void wxGCDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
     {
         // Calculate origin for each line to avoid accumulation of
         // rounding errors.
-        if ( m_backgroundMode == wxTRANSPARENT )
+        if ( m_backgroundMode == wxBRUSHSTYLE_TRANSPARENT )
             m_graphicContext->DrawText( lines[lineNum], x + wxRound(lineNum*dx), y + wxRound(lineNum*dy), wxDegToRad(angle ));
         else
             m_graphicContext->DrawText( lines[lineNum], x + wxRound(lineNum*dx), y + wxRound(lineNum*dy), wxDegToRad(angle ), m_graphicContext->CreateBrush(m_textBackgroundColour) );
@@ -1170,7 +1170,7 @@ void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
     if ( !m_logicalFunctionSupported )
         return;
 
-    if ( m_backgroundMode == wxTRANSPARENT )
+    if ( m_backgroundMode == wxBRUSHSTYLE_TRANSPARENT )
         m_graphicContext->DrawText( str, x ,y);
     else
         m_graphicContext->DrawText( str, x ,y , m_graphicContext->CreateBrush(m_textBackgroundColour) );

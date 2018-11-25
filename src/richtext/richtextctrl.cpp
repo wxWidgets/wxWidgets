@@ -283,7 +283,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     SetDefaultStyle(defaultAttributes);
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     GetBuffer().Reset();
     GetBuffer().SetRichTextCtrl(this);

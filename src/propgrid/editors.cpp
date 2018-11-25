@@ -1543,7 +1543,7 @@ public:
         m_state = 0;
         m_boxHeight = 12;
 
-        SetBackgroundStyle( wxBG_STYLE_CUSTOM );
+        SetBackgroundStyle( wxBG_STYLE_PAINT );
     }
 
     virtual ~wxSimpleCheckBox();

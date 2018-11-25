@@ -228,7 +228,7 @@ public :
     {
         switch ( m_hatch )
         {
-            case wxBDIAGONAL_HATCH :
+            case wxHATCHSTYLE_BDIAGONAL :
                 {
                     CGPoint pts[] =
                     {
@@ -238,7 +238,7 @@ public :
                 }
                 break;
 
-            case wxCROSSDIAG_HATCH :
+            case wxHATCHSTYLE_CROSSDIAG :
                 {
                     CGPoint pts[] =
                     {
@@ -249,7 +249,7 @@ public :
                 }
                 break;
 
-            case wxFDIAGONAL_HATCH :
+            case wxHATCHSTYLE_FDIAGONAL :
                 {
                     CGPoint pts[] =
                     {
@@ -259,7 +259,7 @@ public :
                 }
                 break;
 
-            case wxCROSS_HATCH :
+            case wxHATCHSTYLE_CROSS :
                 {
                     CGPoint pts[] =
                     {
@@ -270,7 +270,7 @@ public :
                 }
                 break;
 
-            case wxHORIZONTAL_HATCH :
+            case wxHATCHSTYLE_HORIZONTAL :
                 {
                     CGPoint pts[] =
                     {
@@ -280,7 +280,7 @@ public :
                 }
                 break;
 
-            case wxVERTICAL_HATCH :
+            case wxHATCHSTYLE_VERTICAL :
                 {
                     CGPoint pts[] =
                     {

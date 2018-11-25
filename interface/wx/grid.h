@@ -2319,7 +2319,7 @@ public:
         wxPen MidiGrid::GetRowGridLinePen(int row)
         {
             if ( row % 12 == 7 )
-                return wxPen(*wxBLACK, 1, wxSOLID);
+                return wxPen(*wxBLACK, 1, wxPENSTYLE_SOLID);
             else
                 return GetDefaultGridLinePen();
         }

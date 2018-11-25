@@ -222,7 +222,7 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     if ( GetFont().IsOk() )
         dc.SetFont(GetFont());
-    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     // compute char height only once for all panes:
     int textHeight = dc.GetCharHeight();

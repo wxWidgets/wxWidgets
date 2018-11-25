@@ -669,7 +669,7 @@ void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     QPainter::CompositionMode savedOp = m_qtPainter->compositionMode();
     m_qtPainter->setCompositionMode( QPainter::CompositionMode_SourceOver );
 
-    if (m_backgroundMode == wxSOLID)
+    if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
     {
         m_qtPainter->setBackgroundMode(Qt::OpaqueMode);
 
@@ -698,7 +698,7 @@ void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
                                wxCoord x, wxCoord y, double angle)
 {
-    if (m_backgroundMode == wxSOLID)
+    if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
         m_qtPainter->setBackgroundMode(Qt::OpaqueMode);
 
     //Move and rotate (reverse angle direction in Qt and wx)
@@ -712,7 +712,7 @@ void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
     QPainter::CompositionMode savedOp = m_qtPainter->compositionMode();
     m_qtPainter->setCompositionMode( QPainter::CompositionMode_SourceOver );
 
-    if (m_backgroundMode == wxSOLID)
+    if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
     {
         m_qtPainter->setBackgroundMode(Qt::OpaqueMode);
 
