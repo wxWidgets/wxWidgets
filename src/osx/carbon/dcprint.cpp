@@ -149,7 +149,7 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& message 
         if (m_err == noErr)
             useDefaultResolution = true;
     }
-    
+
     // Ignore errors which may occur while retrieving the resolution and just
     // use the default one.
     if ( useDefaultResolution )

@@ -987,7 +987,7 @@ public:
     */
     void SetTextColour(const wxColour& colText);
 
-    
+
     void MergeWith(wxGridCellAttr *mergefrom);
 
     void SetSize(int num_rows, int num_cols);
@@ -4551,7 +4551,7 @@ public:
     */
     void SetRowAttr(int row, wxGridCellAttr* attr);
 
-    
+
     wxArrayInt CalcRowLabelsExposed( const wxRegion& reg );
     wxArrayInt CalcColLabelsExposed( const wxRegion& reg );
     wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg );
@@ -4697,7 +4697,7 @@ public:
 
 
     virtual void DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr );
-    
+
     virtual void DrawRowLabels( wxDC& dc, const wxArrayInt& rows );
     virtual void DrawRowLabel( wxDC& dc, int row );
 
@@ -4722,9 +4722,9 @@ public:
 
     void SetCellHighlightColour( const wxColour& );
     void SetCellHighlightPenWidth(int width);
-    void SetCellHighlightROPenWidth(int width);   
+    void SetCellHighlightROPenWidth(int width);
 
-    
+
 protected:
     /**
         Returns @true if this grid has support for cell attributes.

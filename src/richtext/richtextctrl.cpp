@@ -242,7 +242,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
                              const wxValidator& validator, const wxString& name)
 {
     style |= wxVSCROLL;
-    
+
     // If read-only, the programmer probably wants to retain dialog keyboard navigation.
     // If you don't, then pass wxWANTS_CHARS explicitly.
     if ((style & wxTE_READONLY) == 0)
@@ -2180,7 +2180,7 @@ bool wxRichTextCtrl::MoveRight(int noPositions, int flags)
                 SetFocusObject(actualContainer, false /* don't set caret position yet */);
                 bool caretLineStart = true;
                 long caretPosition = FindCaretPositionForCharacterPosition(newPos, hitTest, actualContainer, caretLineStart);
- 
+
                 SelectNone();
 
                 SetCaretPosition(caretPosition, caretLineStart);
@@ -2511,7 +2511,7 @@ bool wxRichTextCtrl::StartCellSelection(wxRichTextTable* table, wxRichTextParagr
         SetFocusObject(newCell, false /* don't set caret and clear selection */);
     MoveCaret(-1, false);
     SetDefaultStyleToCursorStyle();
-    
+
     return true;
 }
 
@@ -3001,7 +3001,7 @@ void wxRichTextCtrl::SetupScrollbars(bool atTop, bool fromOnPaint)
                 doSetScrollbars = false;
         }
     }
-    
+
     m_lastWindowSize = windowSize;
     m_setupScrollbarsCount ++;
     if (m_setupScrollbarsCount > 32000)

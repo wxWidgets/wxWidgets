@@ -1270,7 +1270,7 @@ wxWinVersion wxGetWinVersion()
 
                     }
                     break;
-                    
+
                 case 10:
                     return wxWinVersion_10;
             }

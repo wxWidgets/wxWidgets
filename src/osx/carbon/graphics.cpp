@@ -1352,7 +1352,7 @@ public:
     virtual bool SetAntialiasMode(wxAntialiasMode antialias) wxOVERRIDE;
 
     virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) wxOVERRIDE;
-    
+
     virtual bool SetCompositionMode(wxCompositionMode op) wxOVERRIDE;
 
     virtual void BeginLayer(wxDouble opacity) wxOVERRIDE;
@@ -1392,15 +1392,15 @@ public:
 
     // draws a path by first filling and then stroking
     virtual void DrawPath( const wxGraphicsPath &path, wxPolygonFillMode fillStyle = wxODDEVEN_RULE ) wxOVERRIDE;
-    
+
     // paints a transparent rectangle (only useful for bitmaps or windows)
     virtual void ClearRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
-    
+
     virtual bool ShouldOffset() const wxOVERRIDE
     {
         if ( !m_enableOffset )
             return false;
-        
+
         int penwidth = 0 ;
         if ( !m_pen.IsNull() )
         {
@@ -1428,10 +1428,10 @@ public:
     virtual void DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
 
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
-    
+
     // fast convenience methods
-    
-    
+
+
     virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
 
     void SetNativeContext( CGContextRef cg );
@@ -1617,7 +1617,7 @@ void wxMacCoreGraphicsContext::Flush()
 bool wxMacCoreGraphicsContext::EnsureIsValid()
 {
     CheckInvariants();
-    
+
     if ( !m_cgContext )
     {
         if (m_invisible)
@@ -1729,7 +1729,7 @@ bool wxMacCoreGraphicsContext::SetInterpolationQuality(wxInterpolationQuality in
 {
     if (!EnsureIsValid())
         return true;
-    
+
     if (m_interpolation == interpolation)
         return true;
 
@@ -1944,7 +1944,7 @@ void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
     // allow usage as measuring context
     // wxASSERT_MSG( m_cgContext != NULL, "Needs a valid context for clipping" );
 #endif
-    CheckInvariants();    
+    CheckInvariants();
 }
 
 // clips drawings to the rect
@@ -1969,7 +1969,7 @@ void wxMacCoreGraphicsContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDoubl
     // wxFAIL_MSG( "Needs a valid context for clipping" );
 #endif
     }
-    CheckInvariants();    
+    CheckInvariants();
 }
 
     // resets the clipping to original extent
@@ -2002,7 +2002,7 @@ void wxMacCoreGraphicsContext::ResetClip()
     // wxFAIL_MSG( "Needs a valid context for clipping" );
 #endif
     }
-    CheckInvariants();    
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h)
@@ -2056,7 +2056,7 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
     ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
     CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
     CGContextStrokePath( m_cgContext );
-    
+
     CheckInvariants();
 }
 
@@ -2111,7 +2111,7 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath &path , wxPolygonF
 
     CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
     CGContextDrawPath( m_cgContext , mode );
-    
+
     CheckInvariants();
 }
 
@@ -2143,7 +2143,7 @@ void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath &path , wxPolygonF
         else
             CGContextFillPath( m_cgContext );
     }
-    
+
     CheckInvariants();
 }
 
@@ -2263,7 +2263,7 @@ void wxMacCoreGraphicsContext::DrawBitmap( const wxGraphicsBitmap &bmp, wxDouble
         wxMacDrawCGImage( m_cgContext , &r , image );
     }
 #endif
-    
+
     CheckInvariants();
 }
 
@@ -2281,7 +2281,7 @@ void wxMacCoreGraphicsContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDoubl
         wxOSXDrawNSImage( m_cgContext, &r, icon.GetImage());
     }
 #endif
-    
+
     CheckInvariants();
 }
 
@@ -2318,9 +2318,9 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
 
     wxCFDictionaryRef fontattr(wxCFRetain(fref->OSXGetCTFontAttributes()));
     wxCFMutableDictionaryRef inlinefontattr;
-    
+
     bool setColorsInLine = false;
-    
+
     // if we emulate boldness the stroke color is not taken from the current context
     // therefore we have to set it explicitly
     if ( fontattr.GetValue(kCTStrokeWidthAttributeName) != NULL)
@@ -2331,7 +2331,7 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
         inlinefontattr.SetValue(kCTForegroundColorAttributeName,col);
         inlinefontattr.SetValue(kCTStrokeColorAttributeName,col);
     }
-        
+
     wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, setColorsInLine ? inlinefontattr : fontattr ) );
     wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
 
@@ -2352,7 +2352,7 @@ void wxMacCoreGraphicsContext::DoDrawText( const wxString &str, wxDouble x, wxDo
         CGFloat width = CTLineGetTypographicBounds(line, NULL, NULL, NULL);
 
         CGPoint points[] = { {0.0, -2.0},  {width, -2.0} };
-        
+
         CGContextSetStrokeColorWithColor(m_cgContext, col);
         CGContextSetShouldAntialias(m_cgContext, false);
         CGContextSetLineWidth(m_cgContext, 1.0);
@@ -2417,7 +2417,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
     wxMacCoreGraphicsFontData* fref = (wxMacCoreGraphicsFontData*)m_font.GetRefData();
 
     wxCFStringRef text(strToMeasure, wxLocale::GetSystemEncoding() );
-    
+
     wxCFRef<CFAttributedStringRef> attrtext( CFAttributedStringCreate(kCFAllocatorDefault, text, fref->OSXGetCTFontAttributes() ) );
     wxCFRef<CTLineRef> line( CTLineCreateWithAttributedString(attrtext) );
 
@@ -2436,7 +2436,7 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
     if ( externalLeading )
         *externalLeading = l;
 
-    CheckInvariants();    
+    CheckInvariants();
 }
 
 void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const
@@ -2479,7 +2479,7 @@ void wxMacCoreGraphicsContext::ClearRectangle( wxDouble x, wxDouble y, wxDouble 
 {
     if (!EnsureIsValid())
         return;
-    
+
     CGRect rect = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
     CGContextClearRect(m_cgContext, rect);
 }
@@ -2489,10 +2489,10 @@ void wxMacCoreGraphicsContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w
     if (!EnsureIsValid())
         return;
 
-    if (m_composition == wxCOMPOSITION_DEST) 
-        return; 
+    if (m_composition == wxCOMPOSITION_DEST)
+        return;
 
-    // when using shading, we have to go back to drawing paths 
+    // when using shading, we have to go back to drawing paths
     if ( !m_brush.IsNull() && ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
     {
         wxGraphicsContext::DrawRectangle( x,y,w,h );
@@ -2505,7 +2505,7 @@ void wxMacCoreGraphicsContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w
         ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->Apply(this);
         CGContextFillRect(m_cgContext, rect);
     }
-    
+
     wxQuartzOffsetHelper helper( m_cgContext , ShouldOffset() );
     if ( !m_pen.IsNull() )
     {

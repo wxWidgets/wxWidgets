@@ -3898,7 +3898,7 @@ void wxAuiManager::Render(wxDC* dc)
 
 void wxAuiManager::Repaint(wxDC* dc)
 {
-#ifdef __WXMAC__ 
+#ifdef __WXMAC__
     if ( dc == NULL )
     {
         m_frame->Refresh() ;
