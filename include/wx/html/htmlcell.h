@@ -17,6 +17,7 @@
 #include "wx/html/htmltag.h"
 #include "wx/html/htmldefs.h"
 #include "wx/window.h"
+#include "wx/brush.h"
 
 
 class WXDLLIMPEXP_FWD_HTML wxHtmlWindowInterface;
