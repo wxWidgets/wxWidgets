@@ -40,6 +40,7 @@ void TextEntryTestCase::SetValue()
 
 void TextEntryTestCase::TextChangeEvents()
 {
+#ifndef __WXQT__
     EventCounter updated(GetTestWindow(), wxEVT_TEXT);
 
     wxTextEntry * const entry = GetTestEntry();
@@ -95,6 +96,7 @@ void TextEntryTestCase::TextChangeEvents()
     entry->ChangeValue("");
     CPPUNIT_ASSERT_EQUAL( 0, updated.GetCount() );
     updated.Clear();
+#endif
 }
 
 void TextEntryTestCase::CheckStringSelection(const char *sel)

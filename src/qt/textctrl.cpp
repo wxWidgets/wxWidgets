@@ -146,19 +146,80 @@ wxSize wxTextCtrl::DoGetBestSize() const
     return wxTextCtrlBase::DoGetBestSize();
 
 }
-int wxTextCtrl::GetLineLength(long WXUNUSED(lineNo)) const
+
+int wxTextCtrl::GetLineLength(long lineNo) const
 {
-    return 0;
+    const wxString &value = GetValue();
+
+    if ( IsSingleLine() )
+        return value.length();
+
+    size_t pos = 0;
+    long cnt = 0;
+
+    while(pos < value.length())
+    {
+        size_t tpos = value.find('\n', pos);
+
+        if(cnt == lineNo)
+        {
+            if(tpos == wxString::npos)
+                tpos = value.length();
+            return tpos - pos;
+        }
+
+        if(tpos == wxString::npos) break;
+
+        pos = tpos + 1;
+        cnt++;
+    }
+
+    return -1;
 }
 
-wxString wxTextCtrl::GetLineText(long WXUNUSED(lineNo)) const
+wxString wxTextCtrl::GetLineText(long lineNo) const
 {
+    const wxString &value = GetValue();
+
+    if ( IsSingleLine() )
+        return value;
+
+    size_t pos = 0;
+    long cnt = 0;
+
+    while(pos < value.length())
+    {
+        size_t tpos = value.find('\n', pos);
+        if(tpos == wxString::npos) break;
+
+        if(cnt == lineNo)
+            return value.Mid(pos,  tpos - pos);
+
+        pos = tpos + 1;
+        cnt++;
+    }
+
     return wxString();
 }
 
 int wxTextCtrl::GetNumberOfLines() const
 {
-    return 0;
+    if ( IsSingleLine() )
+        return 1;
+
+    const wxString &value = GetValue();
+    size_t pos = 0;
+    size_t cnt = 1;
+
+    while(pos < value.length())
+    {
+        pos = value.find('\n', pos);
+        if(pos == wxString::npos) break;
+        pos++;
+        cnt++;
+    }
+
+    return cnt;
 }
 
 bool wxTextCtrl::IsModified() const
@@ -200,14 +261,76 @@ bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& WXUNUSED(style))
     return false;
 }
 
-long wxTextCtrl::XYToPosition(long WXUNUSED(x), long WXUNUSED(y)) const
+long wxTextCtrl::XYToPosition(long x, long y) const
 {
-    return 0;
+    const wxString &value = GetValue();
+
+    size_t pos = 0;
+    long cnt = 0;
+
+	if(x < 0 || y < 0)
+		return -1;
+
+    if( IsSingleLine() )
+    {
+        if(y == 0)
+        {
+            if(static_cast<size_t>(x) <= value.length()) return x;
+        }
+
+        return -1;
+    }
+
+    while(pos < value.length() && cnt < y)
+    {
+        size_t tpos = value.find('\n', pos);
+        if(tpos == wxString::npos) break;
+        pos = tpos + 1;
+        cnt++;
+    }
+
+    if(cnt == y && pos + x <= value.length())
+    {
+        size_t tpos = value.find('\n', pos);
+        if(tpos == wxString::npos || tpos - pos >= static_cast<size_t>(x))
+            return pos + x;
+    }
+
+    return -1;
 }
 
-bool wxTextCtrl::PositionToXY(long WXUNUSED(pos), long *WXUNUSED(x), long *WXUNUSED(y)) const
+bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 {
-    return false;
+    if(x == NULL || y == NULL || pos < 0)
+        return false;
+
+    const wxString &value = GetValue();
+
+    if(static_cast<size_t>(pos) > value.length()) return false;
+
+    if( IsSingleLine() )
+    {
+        *y = 0;
+        *x = pos;
+        return true;
+    }
+
+    int cnt = 0;
+    int xval = 0;
+
+    for(long xx = 0; xx < pos; xx++)
+    {
+        if(value[xx] == '\n')
+        {
+            xval = 0;
+            cnt++;
+        }
+        else xval++;
+    }
+    *y = cnt;
+    *x = xval;
+
+    return true;
 }
 
 void wxTextCtrl::ShowPosition(long WXUNUSED(pos))
@@ -227,7 +350,6 @@ bool wxTextCtrl::DoSaveFile(const wxString& WXUNUSED(file), int WXUNUSED(fileTyp
 void wxTextCtrl::SetInsertionPoint(long pos)
 {
     QTextCursor::MoveOperation op;
-    QTextCursor cursor;
 
     // check if pos indicates end of text:
     if ( pos == -1 )
@@ -239,7 +361,7 @@ void wxTextCtrl::SetInsertionPoint(long pos)
     {
         op = QTextCursor::Start;
     }
-    if ( !IsMultiLine() )
+    if ( IsSingleLine() )
     {
         if (op == QTextCursor::End)
             m_qtLineEdit->end(false);
@@ -248,8 +370,11 @@ void wxTextCtrl::SetInsertionPoint(long pos)
     }
     else
     {
-        cursor = m_qtTextEdit->textCursor();
+        QTextCursor cursor = m_qtTextEdit->textCursor();
         cursor.movePosition(op, QTextCursor::MoveAnchor, pos);
+
+        if (op != QTextCursor::End )
+            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor, pos);
         m_qtTextEdit->setTextCursor(cursor);
         m_qtTextEdit->ensureCursorVisible();
     }
@@ -257,25 +382,28 @@ void wxTextCtrl::SetInsertionPoint(long pos)
 
 long wxTextCtrl::GetInsertionPoint() const
 {
-    QTextCursor cursor;
-
-    if ( !IsMultiLine() )
+    if ( IsSingleLine() )
     {
+        long selectionStart = m_qtLineEdit->selectionStart();
+
+        if(selectionStart >= 0)
+            return selectionStart;
+
         return m_qtLineEdit->cursorPosition();
     }
     else
     {
-        cursor = m_qtTextEdit->textCursor();
-        return cursor.position();
+        QTextCursor cursor = m_qtTextEdit->textCursor();
+        return cursor.anchor();
     }
 }
 
 wxString wxTextCtrl::DoGetValue() const
 {
-    if ( IsMultiLine() )
-        return wxQtConvertString( m_qtTextEdit->toPlainText() );
-    else
+    if ( IsSingleLine() )
         return wxQtConvertString( m_qtLineEdit->text() );
+    else
+        return wxQtConvertString( m_qtTextEdit->toPlainText() );
 }
 
 void wxTextCtrl::SetSelection( long from, long to )
@@ -286,16 +414,21 @@ void wxTextCtrl::SetSelection( long from, long to )
         from = 0;
         to = GetValue().length();
     }
-    if ( IsMultiLine() )
+
+    if(to == -1)
+        to = GetValue().length();
+
+    if ( IsSingleLine() )
+    {
+        m_qtLineEdit->setSelection(from, to - from);
+    }
+    else
     {
         QTextCursor cursor = m_qtTextEdit->textCursor();
         cursor.setPosition(from);
+
         cursor.setPosition(to, QTextCursor::KeepAnchor);
         m_qtTextEdit->setTextCursor(cursor);
-    }
-    else // single line
-    {
-        m_qtLineEdit->setSelection(from, to);
     }
 }
 
@@ -325,7 +458,7 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
 void wxTextCtrl::WriteText( const wxString &text )
 {
     // Insert the text
-    if ( !IsMultiLine() )
+    if ( IsSingleLine() )
     {
         m_qtLineEdit->insert(wxQtConvertString( text ));
     }
@@ -342,14 +475,14 @@ void wxTextCtrl::DoSetValue( const wxString &text, int flags )
     // do not fire qt signals for certain methods (i.e. ChangeText)
     if ( !(flags & SetValue_SendEvent) )
     {
-        if ( !IsMultiLine() )
+        if ( IsSingleLine() )
             m_qtLineEdit->blockSignals(true);
         else
             m_qtTextEdit->blockSignals(true);
     }
 
     // Replace the text int the control
-    if ( !IsMultiLine() )
+    if ( IsSingleLine() )
     {
         m_qtLineEdit->setText(wxQtConvertString( text ));
     }
@@ -363,11 +496,12 @@ void wxTextCtrl::DoSetValue( const wxString &text, int flags )
     // re-enable qt signals
     if ( !(flags & SetValue_SendEvent) )
     {
-        if ( !IsMultiLine() )
+        if ( IsSingleLine() )
             m_qtLineEdit->blockSignals(false);
         else
             m_qtTextEdit->blockSignals(false);
     }
+    SetInsertionPoint(0);
 }
 
 QWidget *wxTextCtrl::GetHandle() const
