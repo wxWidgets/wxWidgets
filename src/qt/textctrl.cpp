@@ -23,7 +23,7 @@ public:
     wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler );
 
 private:
-    void textChanged(const QString &text);
+    void textChanged();
     void returnPressed();
 };
 
@@ -36,14 +36,12 @@ wxQtLineEdit::wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler )
             this, &wxQtLineEdit::returnPressed);
 }
 
-void wxQtLineEdit::textChanged(const QString &text)
+void wxQtLineEdit::textChanged()
 {
-    wxTextCtrl *handler = GetHandler();
+    wxTextEntryBase *handler = GetHandler();
     if ( handler )
     {
-        wxCommandEvent event( wxEVT_TEXT, handler->GetId() );
-        event.SetString( wxQtConvertString( text ) );
-        EmitEvent( event );
+        handler->SendTextUpdatedEventIfAllowed();
     }
 }
 
@@ -80,15 +78,12 @@ wxQtTextEdit::wxQtTextEdit( wxWindow *parent, wxTextCtrl *handler )
 
 void wxQtTextEdit::textChanged()
 {
-    wxTextCtrl *handler = GetHandler();
+    wxTextEntryBase *handler = GetHandler();
     if ( handler )
     {
-        wxCommandEvent event( wxEVT_TEXT, handler->GetId() );
-        event.SetString( handler->GetValue() );
-        EmitEvent( event );
+        handler->SendTextUpdatedEventIfAllowed();
     }
 }
-
 
 wxTextCtrl::wxTextCtrl()
 {
@@ -151,20 +146,22 @@ int wxTextCtrl::GetLineLength(long lineNo) const
 {
     const wxString &value = GetValue();
 
+    const size_t length = value.length();
+
     if ( IsSingleLine() )
-        return value.length();
+        return length;
 
     size_t pos = 0;
     long cnt = 0;
 
-    while(pos < value.length())
+    while(pos < length)
     {
         size_t tpos = value.find('\n', pos);
 
         if(cnt == lineNo)
         {
             if(tpos == wxString::npos)
-                tpos = value.length();
+                tpos = length;
             return tpos - pos;
         }
 
@@ -187,7 +184,9 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
     size_t pos = 0;
     long cnt = 0;
 
-    while(pos < value.length())
+    const size_t length = value.length();
+
+    while(pos < length)
     {
         size_t tpos = value.find('\n', pos);
         if(tpos == wxString::npos) break;
@@ -211,7 +210,9 @@ int wxTextCtrl::GetNumberOfLines() const
     size_t pos = 0;
     size_t cnt = 1;
 
-    while(pos < value.length())
+    const size_t length = value.length();
+
+    while(pos < length)
     {
         pos = value.find('\n', pos);
         if(pos == wxString::npos) break;
@@ -263,13 +264,13 @@ bool wxTextCtrl::SetDefaultStyle(const wxTextAttr& WXUNUSED(style))
 
 long wxTextCtrl::XYToPosition(long x, long y) const
 {
-    const wxString &value = GetValue();
-
     size_t pos = 0;
     long cnt = 0;
 
 	if(x < 0 || y < 0)
 		return -1;
+
+    const wxString &value = GetValue();
 
     if( IsSingleLine() )
     {
@@ -281,7 +282,9 @@ long wxTextCtrl::XYToPosition(long x, long y) const
         return -1;
     }
 
-    while(pos < value.length() && cnt < y)
+    const size_t length = value.length();
+
+    while(pos < length && cnt < y)
     {
         size_t tpos = value.find('\n', pos);
         if(tpos == wxString::npos) break;
@@ -289,7 +292,7 @@ long wxTextCtrl::XYToPosition(long x, long y) const
         cnt++;
     }
 
-    if(cnt == y && pos + x <= value.length())
+    if(cnt == y && pos + x <= length)
     {
         size_t tpos = value.find('\n', pos);
         if(tpos == wxString::npos || tpos - pos >= static_cast<size_t>(x))
@@ -481,7 +484,7 @@ void wxTextCtrl::DoSetValue( const wxString &text, int flags )
             m_qtTextEdit->blockSignals(true);
     }
 
-    // Replace the text int the control
+    // Replace the text in the control
     if ( IsSingleLine() )
     {
         m_qtLineEdit->setText(wxQtConvertString( text ));
@@ -519,3 +522,4 @@ QScrollArea *wxTextCtrl::QtGetScrollBarsContainer() const
     else
         return NULL;
 }
+

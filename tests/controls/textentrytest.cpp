@@ -40,23 +40,30 @@ void TextEntryTestCase::SetValue()
 
 void TextEntryTestCase::TextChangeEvents()
 {
-#ifndef __WXQT__
     EventCounter updated(GetTestWindow(), wxEVT_TEXT);
 
     wxTextEntry * const entry = GetTestEntry();
 
     // notice that SetValue() generates an event even if the text didn't change
+#ifndef __WXQT__
     entry->SetValue("");
     CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
     updated.Clear();
+#else
+    WARN("Events are only sent when text changes in WxQt");
+#endif
 
     entry->SetValue("foo");
     CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
     updated.Clear();
 
+#ifndef __WXQT__
     entry->SetValue("foo");
     CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
     updated.Clear();
+#else
+    WARN("Events are only sent when text changes in WxQt");
+#endif
 
     entry->SetValue("");
     CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
@@ -96,7 +103,6 @@ void TextEntryTestCase::TextChangeEvents()
     entry->ChangeValue("");
     CPPUNIT_ASSERT_EQUAL( 0, updated.GetCount() );
     updated.Clear();
-#endif
 }
 
 void TextEntryTestCase::CheckStringSelection(const char *sel)
