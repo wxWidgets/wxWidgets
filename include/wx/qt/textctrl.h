@@ -12,6 +12,8 @@ class QLineEdit;
 class QTextEdit;
 class QScrollArea;
 
+class wxQtEditBehaviour;
+
 class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
 {
 public:
@@ -24,6 +26,8 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString &name = wxTextCtrlNameStr);
+
+    virtual ~wxTextCtrl();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -71,8 +75,7 @@ protected:
     virtual QScrollArea *QtGetScrollBarsContainer() const;
 
 private:
-    QLineEdit *m_qtLineEdit;
-    QTextEdit *m_qtTextEdit;
+    wxQtEditBehaviour *m_qtEditBehaviour;
 
     wxDECLARE_DYNAMIC_CLASS( wxTextCtrl );
 };
