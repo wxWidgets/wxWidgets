@@ -26,11 +26,12 @@ public:
     // --------------
 
     virtual void SetLabel( const wxString &label );
-    virtual void DoSetBitmap(const wxBitmap& bitmap, State which);
 
     virtual QWidget *GetHandle() const;
 
 protected:
+    virtual wxBitmap DoGetBitmap(State state) const wxOVERRIDE;
+    virtual void DoSetBitmap(const wxBitmap& bitmap, State which) wxOVERRIDE;
 
     QPushButton *m_qtPushButton;
 
@@ -39,6 +40,7 @@ protected:
 
 private:
     typedef wxAnyButtonBase base_type;
+    wxBitmap  m_bitmap;
 
     wxDECLARE_NO_COPY_CLASS(wxAnyButton);
 };
