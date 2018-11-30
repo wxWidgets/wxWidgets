@@ -60,15 +60,18 @@ wxWindow *wxButton::SetDefault()
 
 }
 
-void wxButton::DoSetBitmap(const wxBitmap& bitmap, State WXUNUSED(which))
+void wxButton::DoSetBitmap(const wxBitmap& bitmap, State state)
 {
+    if( state != State_Normal)
+        return;
+
     m_bitmap = bitmap;
     m_qtPushButton->setIcon( QIcon( *m_bitmap.GetHandle() ) );
 }
 
-wxBitmap wxButton::DoGetBitmap(State WXUNUSED(which)) const
+wxBitmap wxButton::DoGetBitmap(State state) const
 {
-    return m_bitmap;
+    return state == State_Normal ? m_bitmap : wxNullBitmap;
 }
 
 /* static */
