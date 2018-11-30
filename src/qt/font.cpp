@@ -471,16 +471,14 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
 {
     switch(style)
     {
-        case( wxFONTSTYLE_ITALIC ):
-            m_qtFont.setItalic(true);
+        case wxFONTSTYLE_ITALIC:
+            m_qtFont.setStyle(QFont::StyleItalic);
             break;
-        case( wxFONTSTYLE_NORMAL ):
+        case wxFONTSTYLE_NORMAL:
             m_qtFont.setStyle(QFont::StyleNormal);
             break;
-        case( wxFONTSTYLE_SLANT ):
+        case wxFONTSTYLE_SLANT:
             m_qtFont.setStyle(QFont::StyleOblique);
-            break;
-        default:
             break;
     }
 }
