@@ -60,6 +60,17 @@ wxWindow *wxButton::SetDefault()
 
 }
 
+void wxButton::DoSetBitmap(const wxBitmap& bitmap, State WXUNUSED(which))
+{
+    m_bitmap = bitmap;
+    m_qtPushButton->setIcon( QIcon( *m_bitmap.GetHandle() ) );
+}
+
+wxBitmap wxButton::DoGetBitmap(State WXUNUSED(which)) const
+{
+    return m_bitmap;
+}
+
 /* static */
 wxSize wxButtonBase::GetDefaultSize()
 {

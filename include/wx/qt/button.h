@@ -31,8 +31,13 @@ public:
 
    virtual wxWindow *SetDefault();
 
+   virtual void DoSetBitmap(const wxBitmap& bitmap, State WXUNUSED(which)) wxOVERRIDE;
+   virtual wxBitmap DoGetBitmap(State WXUNUSED(which)) const wxOVERRIDE;
+
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxButton);
+
+    wxBitmap  m_bitmap;
 };
 
 
