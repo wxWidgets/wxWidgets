@@ -311,7 +311,7 @@ public:
         m_gcdc->SetGraphicsContext(ctx);
     }
 
-    virtual void FlushDC()
+    virtual void FlushDC() wxOVERRIDE
     {
         // Apparently, flushing native Direct2D renderer
         // is not enough to update underlying DC (bitmap)

@@ -139,7 +139,7 @@ void MyApp::Draw(wxDC&dc)
     // dc.Clear();
     dc.SetFont(m_testFont);
 
-    // dc.SetBackgroundMode(wxTRANSPARENT);
+    // dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     dc.SetPen(*wxBLACK_PEN);
     dc.SetBrush(*wxLIGHT_GREY_BRUSH);
@@ -679,7 +679,7 @@ void MyPrintout::DrawPageTwo()
     dc->DrawLine(50, 250, (long)(50.0 + logUnits), 250);
     dc->DrawLine(50, 250, 50, (long)(250.0 + logUnits));
 
-    dc->SetBackgroundMode(wxTRANSPARENT);
+    dc->SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     dc->SetBrush(*wxTRANSPARENT_BRUSH);
 
     { // GetTextExtent demo:

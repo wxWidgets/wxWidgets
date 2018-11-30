@@ -830,7 +830,7 @@ int wxMSWMessageDialog::MSWTranslateReturnCode(int msAns)
     {
         default:
             wxFAIL_MSG(wxT("unexpected return code"));
-            // fall through
+            wxFALLTHROUGH;
 
         case IDCANCEL:
             ans = wxID_CANCEL;

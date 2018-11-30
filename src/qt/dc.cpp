@@ -159,7 +159,7 @@ void wxQtDCImpl::SetPen(const wxPen& pen)
 void wxQtDCImpl::SetBrush(const wxBrush& brush)
 {
     m_brush = brush;
-    
+
     if (brush.GetStyle() == wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE)
     {
         // Use a monochrome mask: use foreground color for the mask
@@ -190,7 +190,7 @@ void wxQtDCImpl::SetBrush(const wxBrush& brush)
 void wxQtDCImpl::SetBackground(const wxBrush& brush)
 {
     m_backgroundBrush = brush;
-    
+
     if (m_qtPainter->isActive())
         m_qtPainter->setBackground(brush.GetHandle());
 }
@@ -375,7 +375,7 @@ void wxQtDCImpl::Clear()
 {
     int width, height;
     DoGetSize(&width, &height);
-    
+
     m_qtPainter->eraseRect(QRect(0, 0, width, height));
 }
 
@@ -486,7 +486,7 @@ bool wxQtDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
     if ( col )
     {
         wxCHECK_MSG( m_qtImage != NULL, false, "This DC doesn't support GetPixel()" );
-        
+
         QColor pixel = m_qtImage->pixel( x, y );
         col->Set( pixel.red(), pixel.green(), pixel.blue(), pixel.alpha() );
 
@@ -519,7 +519,7 @@ void wxQtDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
     qreal penWidth = m_qtPainter->pen().width();
     qreal lenRadius = l1.length() - penWidth / 2;
     QPointF centerToCorner( lenRadius, lenRadius );
-    
+
     QRect rectangle = QRectF( center - centerToCorner, center + centerToCorner ).toRect();
 
     // Calculate the angles
@@ -530,7 +530,7 @@ void wxQtDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
     {
         spanAngle = -spanAngle;
     }
-    
+
     if ( spanAngle == 0 )
         m_qtPainter->drawEllipse( rectangle );
     else
@@ -578,7 +578,7 @@ void wxQtDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
     y += penWidth / 2;
     width -= penWidth;
     height -= penWidth;
-    
+
     m_qtPainter->drawRoundedRect( x, y, width, height, radius, radius );
 }
 
@@ -591,7 +591,7 @@ void wxQtDCImpl::DoDrawEllipse(wxCoord x, wxCoord y,
     y += penWidth / 2;
     width -= penWidth;
     height -= penWidth;
-    
+
     if ( m_pen.IsNonTransparent() )
     {
         // Save pen/brush
@@ -620,7 +620,7 @@ void wxQtDCImpl::DoCrossHair(wxCoord x, wxCoord y)
     int left, top, right, bottom;
     inv.map( w, h, &right, &bottom );
     inv.map( 0, 0, &left, &top );
-    
+
     m_qtPainter->drawLine( left, y, right, y );
     m_qtPainter->drawLine( x, top, x, bottom );
 }
@@ -636,18 +636,18 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
     QPixmap pix = *bmp.GetHandle();
     if (pix.depth() == 1) {
         //Monochrome bitmap, draw using text fore/background
-        
+
         //Save pen/brush
         QBrush savedBrush = m_qtPainter->background();
         QPen savedPen = m_qtPainter->pen();
-        
+
         //Use text colors
         m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetQColor()));
         m_qtPainter->setPen(QPen(m_textForegroundColour.GetQColor()));
 
         //Draw
         m_qtPainter->drawPixmap(x, y, pix);
-        
+
         //Restore saved settings
         m_qtPainter->setBackground(savedBrush);
         m_qtPainter->setPen(savedPen);
@@ -668,11 +668,11 @@ void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     // Disable logical function
     QPainter::CompositionMode savedOp = m_qtPainter->compositionMode();
     m_qtPainter->setCompositionMode( QPainter::CompositionMode_SourceOver );
-    
-    if (m_backgroundMode == wxSOLID)
+
+    if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
     {
         m_qtPainter->setBackgroundMode(Qt::OpaqueMode);
-    
+
         //Save pen/brush
         QBrush savedBrush = m_qtPainter->background();
 
@@ -698,9 +698,9 @@ void wxQtDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
                                wxCoord x, wxCoord y, double angle)
 {
-    if (m_backgroundMode == wxSOLID)
+    if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
         m_qtPainter->setBackgroundMode(Qt::OpaqueMode);
-    
+
     //Move and rotate (reverse angle direction in Qt and wx)
     m_qtPainter->translate(x, y);
     m_qtPainter->rotate(-angle);
@@ -712,22 +712,22 @@ void wxQtDCImpl::DoDrawRotatedText(const wxString& text,
     QPainter::CompositionMode savedOp = m_qtPainter->compositionMode();
     m_qtPainter->setCompositionMode( QPainter::CompositionMode_SourceOver );
 
-    if (m_backgroundMode == wxSOLID)
+    if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
     {
         m_qtPainter->setBackgroundMode(Qt::OpaqueMode);
-        
+
         //Save pen/brush
         QBrush savedBrush = m_qtPainter->background();
-        
+
         //Use text colors
         m_qtPainter->setBackground(QBrush(m_textBackgroundColour.GetQColor()));
-        
+
         //Draw
         m_qtPainter->drawText(x, y, 1, 1, Qt::TextDontClip, wxQtConvertString(text));
-        
+
         //Restore saved settings
         m_qtPainter->setBackground(savedBrush);
-        
+
         m_qtPainter->setBackgroundMode(Qt::TransparentMode);
     }
     else
@@ -749,9 +749,9 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                     wxCoord WXUNUSED(ysrcMask) )
 {
     wxQtDCImpl *implSource = (wxQtDCImpl*)source->GetImpl();
-    
+
     QImage *qtSource = implSource->GetQImage();
-    
+
     // Not a CHECK on purpose
     if ( !qtSource )
         return false;
@@ -763,7 +763,7 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
     // Change logical function
     wxRasterOperationMode savedMode = GetLogicalFunction();
     SetLogicalFunction( rop );
-    
+
     m_qtPainter->drawImage( QRect( xdest, ydest, width, height ),
                            qtSourceConverted,
                            QRect( xsrc, ysrc, width, height ) );
@@ -806,7 +806,7 @@ void wxQtDCImpl::DoDrawPolygon(int n, const wxPoint points[],
     }
 
     Qt::FillRule fill = (fillStyle == wxWINDING_RULE) ? Qt::WindingFill : Qt::OddEvenFill;
-    
+
     m_qtPainter->translate(xoffset, yoffset);
     m_qtPainter->drawPolygon(qtPoints, fill);
     // Reset transform

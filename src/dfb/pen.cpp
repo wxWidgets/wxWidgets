@@ -43,7 +43,7 @@ public:
     {
         if ( style != wxPENSTYLE_SOLID && style != wxPENSTYLE_TRANSPARENT )
         {
-            wxFAIL_MSG( "only wxSOLID and wxTRANSPARENT styles are supported" );
+            wxFAIL_MSG( "only wxPENSTYLE_SOLID and wxPENSTYLE_TRANSPARENT styles are supported" );
             style = wxPENSTYLE_SOLID;
         }
 

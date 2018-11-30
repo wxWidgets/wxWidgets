@@ -895,7 +895,7 @@ void wxRibbonButtonBar::CommonInit(long WXUNUSED(style))
     m_lock_active_state = false;
     m_show_tooltips_for_disabled = false;
 
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 }
 
 void wxRibbonButtonBar::SetShowToolTipsForDisabled(bool show)

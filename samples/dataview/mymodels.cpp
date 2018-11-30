@@ -525,6 +525,7 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
                     return true;
                 }
             }
+            wxFALLTHROUGH;
 
         case Col_Custom:
             // do what the labels defined in GetValueByRow() hint at

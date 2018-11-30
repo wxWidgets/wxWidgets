@@ -1050,7 +1050,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 
     // don't erase the background of our control window
     // so that resizing is a bit smoother
-    m_ctrl->SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    m_ctrl->SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     // Create our playbin object
     m_playbin = gst_element_factory_make ("playbin", "play");

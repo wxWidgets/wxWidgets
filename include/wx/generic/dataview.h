@@ -409,7 +409,7 @@ class WXDLLIMPEXP_CORE wxDataViewCtrlAccessible: public wxWindowAccessible
 {
 public:
     wxDataViewCtrlAccessible(wxDataViewCtrl* win);
-    virtual ~wxDataViewCtrlAccessible() {};
+    virtual ~wxDataViewCtrlAccessible() {}
 
     virtual wxAccStatus HitTest(const wxPoint& pt, int* childId,
                                 wxAccessible** childObject) wxOVERRIDE;

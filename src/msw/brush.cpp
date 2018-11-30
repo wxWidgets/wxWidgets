@@ -186,7 +186,7 @@ HBRUSH wxBrushRefData::GetHBRUSH()
 
                 default:
                     wxFAIL_MSG( wxT("unknown brush style") );
-                    // fall through
+                    wxFALLTHROUGH;
 
                 case wxBRUSHSTYLE_SOLID:
                     m_hBrush = ::CreateSolidBrush(m_colour.GetPixel());

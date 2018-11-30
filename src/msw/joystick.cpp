@@ -67,7 +67,7 @@ public:
     {
         m_catchwin = win;
         m_polling = pollingFreq;
-    };
+    }
 
 
 private:

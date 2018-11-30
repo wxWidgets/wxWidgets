@@ -38,7 +38,7 @@ class FortyFrame: public wxFrame
 {
 public:
     FortyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, const wxSize& size, bool largecards);
-    virtual ~FortyFrame(){};
+    virtual ~FortyFrame(){}
 
     void OnCloseWindow(wxCloseEvent& event);
 

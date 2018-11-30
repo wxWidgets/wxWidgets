@@ -479,7 +479,7 @@ void MyCanvas::OnChar( wxKeyEvent &event )
                 wxCaretSuspend cs(this);
                 wxClientDC dc(this);
                 dc.SetFont(m_font);
-                dc.SetBackgroundMode(wxSOLID); // overwrite old value
+                dc.SetBackgroundMode(wxBRUSHSTYLE_SOLID); // overwrite old value
                 dc.DrawText(ch, m_xMargin + m_xCaret * m_widthChar,
                                 m_yMargin + m_yCaret * m_heightChar );
 

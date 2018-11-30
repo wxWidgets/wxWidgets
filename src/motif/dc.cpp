@@ -29,7 +29,7 @@ wxMotifDCImpl::wxMotifDCImpl(wxDC *owner)
 {
     m_ok = false;
 
-    m_backgroundMode = wxTRANSPARENT;
+    m_backgroundMode = wxBRUSHSTYLE_TRANSPARENT;
 }
 
 void wxMotifDCImpl::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)
