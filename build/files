@@ -2812,6 +2812,9 @@ WEBVIEW_GTK_HDR =
 WEBVIEW_GTK_SRC =
     src/gtk/webview_webkit.cpp
 
+WEBVIEW2_GTK_SRC =
+    src/gtk/webview_webkit2.cpp
+
 # wxXRC
 
 XRC_SRC =

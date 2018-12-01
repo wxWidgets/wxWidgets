@@ -356,7 +356,7 @@ wx_option(wxUSE_DRAGIMAGE "use wxDragImage")
 wx_option(wxUSE_UIACTIONSIMULATOR "use wxUIActionSimulator (experimental)")
 wx_option(wxUSE_DC_TRANSFORM_MATRIX "use wxDC::SetTransformMatrix and related")
 wx_option(wxUSE_WEBVIEW_WEBKIT "use wxWebView WebKit backend")
-# TODO: wxUSE_WEBVIEW_WEBKIT2
+wx_option(wxUSE_WEBVIEW_WEBKIT2 "use wxWebView WebKit2 backend")
 if(WIN32 OR APPLE)
     set(wxUSE_PRIVATE_FONTS_DEFAULT ON)
 else()
