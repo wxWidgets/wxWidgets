@@ -3057,7 +3057,7 @@ set(OPENGL_OSX_SHARED_SRC
     src/osx/glcanvas_osx.cpp
 )
 
-set(UNIX_SOUND_SRC_SDL
+set(UNIX_SOUND_SDL_SRC
     src/unix/sound_sdl.cpp
 )
 

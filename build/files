@@ -2997,7 +2997,7 @@ OPENGL_OSX_SHARED_SRC =
 
 # Misc plugin sources:
 
-UNIX_SOUND_SRC_SDL =
+UNIX_SOUND_SDL_SRC =
     src/unix/sound_sdl.cpp
 
 # wxAUI
