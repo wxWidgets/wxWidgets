@@ -2815,6 +2815,9 @@ WEBVIEW_GTK_SRC =
 WEBVIEW2_GTK_SRC =
     src/gtk/webview_webkit2.cpp
 
+WEBVIEW_WEBKIT2_EXTENSION_SRC =
+    src/gtk/webview_webkit2_extension.cpp
+
 # wxXRC
 
 XRC_SRC =

@@ -26,8 +26,9 @@ endif()
 wx_add_library(webview ${WEBVIEW_FILES})
 
 if(wxUSE_WEBVIEW_WEBKIT2)
+    set(WX_WEB_EXTENSIONS_DIRECTORY "lib/wx/${wxMAJOR_VERSION}.${wxMINOR_VERSION}/web-extensions")
     wx_lib_compile_definitions(webview PRIVATE
-        -DWX_WEB_EXTENSIONS_DIRECTORY="${CMAKE_INSTALL_PREFIX}/web-extensions"
+        -DWX_WEB_EXTENSIONS_DIRECTORY="${CMAKE_INSTALL_PREFIX}/${WX_WEB_EXTENSIONS_DIRECTORY}"
         )
 endif()
 
@@ -50,3 +51,35 @@ elseif(WXGTK)
 endif()
 
 wx_finalize_lib(webview)
+
+# webkit extension plugin
+# we can't use (all of the) macros and functions because this library should
+# always be build as a shared libary, and not included in the monolithic build.
+if(WXGTK AND LIBSOUP_FOUND AND wxUSE_WEBVIEW_WEBKIT2)
+    wx_append_sources(WEBKIT2_EXT_FILES WEBVIEW_WEBKIT2_EXTENSION)
+    add_library(webkit2_ext SHARED ${WEBKIT2_EXT_FILES})
+    wx_set_target_properties(webkit2_ext false)
+
+    # Change output name to match expected name in webview_webkit2.cpp: webkit2_ext*
+    if(wxUSE_UNICODE)
+        set(lib_unicode u)
+    endif()
+    set_target_properties(webkit2_ext PROPERTIES PREFIX "")
+    set_target_properties(webkit2_ext PROPERTIES
+        OUTPUT_NAME "webkit2_ext${lib_unicode}-${wxMAJOR_VERSION}.${wxMINOR_VERSION}"
+        OUTPUT_NAME_DEBUG "webkit2_ext${lib_unicode}d-${wxMAJOR_VERSION}.${wxMINOR_VERSION}"
+        )
+
+    target_include_directories(webkit2_ext PUBLIC
+        ${LIBSOUP_INCLUDE_DIRS}
+        ${WEBKIT2_INCLUDE_DIR}
+        )
+    target_link_libraries(webkit2_ext PUBLIC
+        ${LIBSOUP_LIBRARIES}
+        ${WEBKIT2_LIBRARIES}
+        )
+
+    wx_install(TARGETS webkit2_ext LIBRARY DESTINATION ${WX_WEB_EXTENSIONS_DIRECTORY})
+
+    add_dependencies(webview webkit2_ext)
+endif()

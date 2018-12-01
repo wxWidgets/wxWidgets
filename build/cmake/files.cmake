@@ -2873,6 +2873,10 @@ set(WEBVIEW2_GTK_SRC
     src/gtk/webview_webkit2.cpp
 )
 
+set(WEBVIEW_WEBKIT2_EXTENSION_SRC
+    src/gtk/webview_webkit2_extension.cpp
+)
+
 set(XRC_SRC
     src/xrc/xh_activityindicator.cpp
     src/xrc/xh_animatctrl.cpp
