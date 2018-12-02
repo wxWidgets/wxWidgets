@@ -33,9 +33,7 @@ if(wxUSE_WEBVIEW_WEBKIT2)
 endif()
 
 if(APPLE)
-    wx_lib_link_libraries(webview PUBLIC
-        "-framework WebKit"
-        )
+    wx_lib_link_libraries(webview PUBLIC "-framework WebKit")
 elseif(WXGTK)
     if(LIBSOUP_FOUND)
         wx_lib_include_directories(webview PUBLIC ${LIBSOUP_INCLUDE_DIRS})
