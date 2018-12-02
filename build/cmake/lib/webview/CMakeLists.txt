@@ -25,7 +25,7 @@ endif()
 
 wx_add_library(webview ${WEBVIEW_FILES})
 
-if(wxUSE_WEBVIEW_WEBKIT2)
+if(WXGTK AND wxUSE_WEBVIEW_WEBKIT2)
     set(WX_WEB_EXTENSIONS_DIRECTORY "lib/wx/${wxMAJOR_VERSION}.${wxMINOR_VERSION}/web-extensions")
     wx_lib_compile_definitions(webview PRIVATE
         -DWX_WEB_EXTENSIONS_DIRECTORY="${CMAKE_INSTALL_PREFIX}/${WX_WEB_EXTENSIONS_DIRECTORY}"
@@ -53,7 +53,7 @@ wx_finalize_lib(webview)
 # webkit extension plugin
 # we can't use (all of the) macros and functions because this library should
 # always be build as a shared libary, and not included in the monolithic build.
-if(WXGTK AND LIBSOUP_FOUND AND wxUSE_WEBVIEW_WEBKIT2)
+if(WXGTK AND wxUSE_WEBVIEW_WEBKIT2)
     wx_append_sources(WEBKIT2_EXT_FILES WEBVIEW_WEBKIT2_EXTENSION)
     add_library(webkit2_ext SHARED ${WEBKIT2_EXT_FILES})
     wx_set_target_properties(webkit2_ext false)
