@@ -82,5 +82,33 @@ public:
         Returns the wxToolBarBase associated with the control.
     */
     wxToolBarBase* GetToolBar() const;
+    
+    /**
+       Enables or disables the specified page. Icons for disabled pages are created by
+       wxBitmap::ConvertToDisabled().
+       
+       @param page The index of the page
+       @param enable @true to enable the page and @false to disable it.
+       
+       @return @true if successful, @false otherwise.
+       
+       @since 3.1.2
+    */
+    bool EnablePage(size_t page, bool enable);
+    
+   /**
+       Enables or disables the specified page. Icons for disabled pages are created by
+       wxBitmap::ConvertToDisabled().
+       
+       @param page Pointer of a page windows inside the book control.
+       @param enable @true to enable the page and @false to disable it.
+       
+       @return @true if successful, @false otherwise.
+       
+       @since 3.1.2
+    */
+    bool EnablePage(wxWindow *page, bool enable);
+    
+    
 };
 
