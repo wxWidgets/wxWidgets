@@ -341,7 +341,8 @@ bool wxToolbook::DeleteAllPages()
 bool wxToolbook::EnablePage(size_t page, bool enable)
 {
     GetToolBar()->EnableTool(page + 1, enable);
-    if (!enable && GetSelection() == (int)page) {
+    if (!enable && GetSelection() == (int)page)
+    {
         AdvanceSelection();
     }
     return true;
@@ -350,10 +351,10 @@ bool wxToolbook::EnablePage(size_t page, bool enable)
 bool wxToolbook::EnablePage(wxWindow *page, bool enable)
 {
     int pageIndex = FindPage(page);
-    if (pageIndex == wxNOT_FOUND) {
+    if (pageIndex == wxNOT_FOUND)
+    {
         return false;
     }
-
     return EnablePage(pageIndex, enable);
 }
 
