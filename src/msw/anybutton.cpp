@@ -184,6 +184,10 @@ private:
 
 #if wxUSE_UXTHEME
 
+// somehow the margin is one pixel greater than the value returned by
+// GetThemeMargins() call
+const int XP_BUTTON_EXTRA_MARGIN = 1;
+
 class wxXPButtonImageData : public wxButtonImageData
 {
 public:
@@ -520,19 +524,23 @@ void wxAnyButton::AdjustForBitmapSize(wxSize &size) const
         {
             wxUxThemeHandle theme(const_cast<wxAnyButton *>(this), L"BUTTON");
 
-            MARGINS margins;
-            if (::GetThemeMargins(theme, NULL, BP_PUSHBUTTON, PBS_NORMAL,
-                                  TMT_CONTENTMARGINS, NULL,
-                                  &margins) != S_OK)
-                wxZeroMemory(margins);
+            MARGINS margins = {3, 3, 3, 3};
+            ::GetThemeMargins(theme, NULL,
+                                                    BP_PUSHBUTTON,
+                                                    PBS_NORMAL,
+                                                    TMT_CONTENTMARGINS,
+                                                    NULL,
+                                                    &margins);
 
             // XP doesn't draw themed buttons correctly when the client
             // area is smaller than 8x8 - enforce this minimum size for
             // small bitmaps
             size.IncTo(wxSize(8, 8));
 
-            marginH = margins.cxLeftWidth + margins.cxRightWidth;
-            marginV = margins.cyTopHeight + margins.cyBottomHeight;
+            marginH = margins.cxLeftWidth + margins.cxRightWidth
+                        + 2*XP_BUTTON_EXTRA_MARGIN;
+            marginV = margins.cyTopHeight + margins.cyBottomHeight
+                        + 2*XP_BUTTON_EXTRA_MARGIN;
         }
         else
 #endif // wxUSE_UXTHEME
@@ -1141,13 +1149,11 @@ void DrawXPBackground(wxAnyButton *button, HDC hdc, RECT& rectBtn, UINT state)
                                 &rectBtn, NULL);
 
     // calculate content area margins
-    MARGINS margins;
-    if (::GetThemeMargins(theme, hdc, BP_PUSHBUTTON, iState,
-                          TMT_CONTENTMARGINS, &rectBtn,
-                          &margins) != S_OK)
-        wxZeroMemory(margins);
-
+    MARGINS margins = {3, 3, 3, 3};
+    ::GetThemeMargins(theme, hdc, BP_PUSHBUTTON, iState,
+                            TMT_CONTENTMARGINS, &rectBtn, &margins);
     ::InflateRect(&rectBtn, -margins.cxLeftWidth, -margins.cyTopHeight);
+    ::InflateRect(&rectBtn, -XP_BUTTON_EXTRA_MARGIN, -XP_BUTTON_EXTRA_MARGIN);
 
     if ( button->UseBgCol() && iState != PBS_HOT )
     {
