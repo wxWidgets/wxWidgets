@@ -302,30 +302,24 @@ void MenuDrawData::Init()
         wxWindow* window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
         wxUxThemeHandle hTheme(window, L"MENU");
 
-        if (::GetThemeMargins(hTheme, NULL, MENU_POPUPITEM, 0,
-                              TMT_CONTENTMARGINS, NULL,
-                              &ItemMargin) != S_OK)
-            wxZeroMemory(ItemMargin);
+        ::GetThemeMargins(hTheme, NULL, MENU_POPUPITEM, 0,
+                               TMT_CONTENTMARGINS, NULL,
+                               &ItemMargin);
 
-        if (::GetThemeMargins(hTheme, NULL, MENU_POPUPCHECK, 0,
-                              TMT_CONTENTMARGINS, NULL,
-                              &CheckMargin) != S_OK)
-            wxZeroMemory(CheckMargin);
+        ::GetThemeMargins(hTheme, NULL, MENU_POPUPCHECK, 0,
+                               TMT_CONTENTMARGINS, NULL,
+                               &CheckMargin);
+        ::GetThemeMargins(hTheme, NULL, MENU_POPUPCHECKBACKGROUND, 0,
+                               TMT_CONTENTMARGINS, NULL,
+                               &CheckBgMargin);
 
-        if (::GetThemeMargins(hTheme, NULL, MENU_POPUPCHECKBACKGROUND, 0,
-                              TMT_CONTENTMARGINS, NULL,
-                              &CheckBgMargin) != S_OK)
-            wxZeroMemory(CheckBgMargin);
+        ::GetThemeMargins(hTheme, NULL, MENU_POPUPSUBMENU, 0,
+                               TMT_CONTENTMARGINS, NULL,
+                               &ArrowMargin);
 
-        if (::GetThemeMargins(hTheme, NULL, MENU_POPUPSUBMENU, 0,
-                              TMT_CONTENTMARGINS, NULL,
-                              &ArrowMargin) != S_OK)
-            wxZeroMemory(ArrowMargin);
-
-        if (::GetThemeMargins(hTheme, NULL, MENU_POPUPSEPARATOR, 0,
-                              TMT_SIZINGMARGINS, NULL,
-                              &SeparatorMargin) != S_OK)
-            wxZeroMemory(SeparatorMargin);
+        ::GetThemeMargins(hTheme, NULL, MENU_POPUPSEPARATOR, 0,
+                               TMT_SIZINGMARGINS, NULL,
+                               &SeparatorMargin);
 
         ::GetThemePartSize(hTheme, NULL, MENU_POPUPCHECK, 0,
                                 NULL, TS_TRUE, &CheckSize);
