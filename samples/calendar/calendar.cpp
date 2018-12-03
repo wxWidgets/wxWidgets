@@ -625,7 +625,7 @@ void MyFrame::OnCalRClick(wxMouseEvent& event)
     {
         default:
             wxFAIL_MSG( "unexpected" );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxCAL_HITTEST_NOWHERE:
             msg += "nowhere";

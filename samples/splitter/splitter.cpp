@@ -151,7 +151,7 @@ class MyCanvas: public wxScrolledWindow
 {
 public:
     MyCanvas(wxWindow* parent, bool mirror);
-    virtual ~MyCanvas(){};
+    virtual ~MyCanvas(){}
 
     virtual void OnDraw(wxDC& dc) wxOVERRIDE;
 

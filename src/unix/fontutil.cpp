@@ -1317,11 +1317,11 @@ static wxNativeFont wxLoadQueryFont(float pointSize,
     logFont.lfCharSet = MWLF_CHARSET_DEFAULT; // TODO: select appropriate one
     logFont.lfOutPrecision = MWLF_TYPE_DEFAULT;
     logFont.lfClipPrecision = 0; // Not used
-    logFont.lfRoman = (family == wxROMAN ? 1 : 0) ;
-    logFont.lfSerif = (family == wxSWISS ? 0 : 1) ;
+    logFont.lfRoman = (family == wxFONTFAMILY_ROMAN ? 1 : 0) ;
+    logFont.lfSerif = (family == wxFONTFAMILY_SWISS ? 0 : 1) ;
     logFont.lfSansSerif = !logFont.lfSerif ;
-    logFont.lfModern = (family == wxMODERN ? 1 : 0) ;
-    logFont.lfProportional = (family == wxTELETYPE ? 0 : 1) ;
+    logFont.lfModern = (family == wxFONTFAMILY_MODERN ? 1 : 0) ;
+    logFont.lfProportional = (family == wxFONTFAMILY_TELETYPE ? 0 : 1) ;
     logFont.lfOblique = 0;
     logFont.lfSmallCaps = 0;
     logFont.lfPitch = 0; // 0 = default

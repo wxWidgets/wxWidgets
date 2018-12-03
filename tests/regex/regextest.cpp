@@ -204,7 +204,7 @@ void RegExTestCase::parseFlags(const wxString& flags)
             case 'i': m_compileFlags |= wxRE_ICASE; break;
             case 'o': m_compileFlags |= wxRE_NOSUB; break;
             case 'n': m_compileFlags |= wxRE_NEWLINE; break;
-            case 't': if (strchr("ep", m_mode)) break; // else fall through...
+            case 't': if (strchr("ep", m_mode)) break; wxFALLTHROUGH;
 
             // anything else we must skip the test
             default:

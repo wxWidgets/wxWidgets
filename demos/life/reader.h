@@ -22,14 +22,14 @@ class LifeReader
 public:
     LifeReader(wxInputStream& is);
 
-    inline bool          IsOk() const           { return m_ok; };
-    inline wxString      GetDescription() const { return m_description; };
-    inline wxString      GetRules() const       { return m_rules; };
-    inline wxArrayString GetShape() const       { return m_shape; };
+    inline bool          IsOk() const           { return m_ok; }
+    inline wxString      GetDescription() const { return m_description; }
+    inline wxString      GetRules() const       { return m_rules; }
+    inline wxArrayString GetShape() const       { return m_shape; }
     inline LifePattern   GetPattern() const
     {
         return LifePattern(wxEmptyString, m_description, m_rules, m_shape);
-    };
+    }
 
 private:
     bool             m_ok;

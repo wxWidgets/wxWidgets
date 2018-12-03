@@ -431,7 +431,7 @@ void ComboboxWidgetsPage::CreateCombo()
     {
         default:
             wxFAIL_MSG( "unknown combo kind" );
-            // fall through
+            wxFALLTHROUGH;
 
         case ComboKind_Default:
             break;

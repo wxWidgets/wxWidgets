@@ -31,7 +31,7 @@ public:
     virtual ~LifeCanvas();
 
     // view management
-    int  GetCellSize() const { return m_cellsize; };
+    int  GetCellSize() const { return m_cellsize; }
     void SetCellSize(int cellsize);
     void Recenter(wxInt32 i, wxInt32 j);
 
@@ -54,10 +54,10 @@ private:
     void OnEraseBackground(wxEraseEvent& event);
 
     // conversion between cell and screen coordinates
-    inline wxInt32 XToCell(wxCoord x) const { return (x / m_cellsize) + m_viewportX; };
-    inline wxInt32 YToCell(wxCoord y) const { return (y / m_cellsize) + m_viewportY; };
-    inline wxCoord CellToX(wxInt32 i) const { return (i - m_viewportX) * m_cellsize; };
-    inline wxCoord CellToY(wxInt32 j) const { return (j - m_viewportY) * m_cellsize; };
+    inline wxInt32 XToCell(wxCoord x) const { return (x / m_cellsize) + m_viewportX; }
+    inline wxInt32 YToCell(wxCoord y) const { return (y / m_cellsize) + m_viewportY; }
+    inline wxCoord CellToX(wxInt32 i) const { return (i - m_viewportX) * m_cellsize; }
+    inline wxCoord CellToY(wxInt32 j) const { return (j - m_viewportY) * m_cellsize; }
 
     // what is the user doing?
     enum MouseStatus

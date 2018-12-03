@@ -379,7 +379,7 @@ void ToggleWidgetsPage::CreateToggle()
 
         default:
             wxFAIL_MSG("unexpected radiobox selection");
-            // fall through
+            wxFALLTHROUGH;
 
         case ToggleHAlign_Centre:
             break;
@@ -397,7 +397,7 @@ void ToggleWidgetsPage::CreateToggle()
 
         default:
             wxFAIL_MSG("unexpected radiobox selection");
-            // fall through
+            wxFALLTHROUGH;
 
         case ToggleVAlign_Centre:
             // centre vertical alignment is the default (no style)

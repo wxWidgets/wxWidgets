@@ -280,7 +280,7 @@ public:
         {
             default:
                 wxFAIL_MSG( "invalid image alignment" );
-                // fall through
+                wxFALLTHROUGH;
 
             case BUTTON_IMAGELIST_ALIGN_LEFT:
                 return wxLEFT;
@@ -303,7 +303,7 @@ public:
         {
             default:
                 wxFAIL_MSG( "invalid direction" );
-                // fall through
+                wxFALLTHROUGH;
 
             case wxLEFT:
                 alignNew = BUTTON_IMAGELIST_ALIGN_LEFT;
@@ -1343,7 +1343,7 @@ bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
             {
                 default:
                     wxFAIL_MSG( "invalid direction" );
-                    // fall through
+                    wxFALLTHROUGH;
 
                 case wxLEFT:
                     rectBitmap.x = rectButton.x + margin.x;

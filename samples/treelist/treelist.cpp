@@ -695,7 +695,7 @@ void MyFrame::OnItemContextMenu(wxTreeListEvent& event)
 
         default:
             wxFAIL_MSG( "Unexpected menu selection" );
-            // Fall through.
+            wxFALLTHROUGH;
 
         case wxID_NONE:
             return;
