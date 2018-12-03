@@ -935,8 +935,7 @@ bool wxWindowQt::DoPopupMenu(wxMenu *menu, int x, int y)
 void wxWindowQt::SetAcceleratorTable( const wxAcceleratorTable& accel )
 {
     wxWindowBase::SetAcceleratorTable( accel );
-
-
+    
     if(m_qtShortcuts)
     {
         // Disable previously set accelerators
