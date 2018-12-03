@@ -140,6 +140,7 @@ All (GUI):
 - Add wxDisplay::GetPPI().
 - Add wxJoystickEvent::GetButtonOrdinal() (Mick Phillips).
 - Add wxGraphicsContext::GetWindow() and implement wxGraphicsContext::GetDPI().
+- Add wxToolbook::EnablePage() (Stefan Ziegler).
 
 wxGTK:
 

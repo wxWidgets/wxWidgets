@@ -167,7 +167,9 @@ bool wxToolbook::SetPageImage(size_t n, int imageId)
     if (!GetImageList())
         return false;
 
-    GetToolBar()->SetToolNormalBitmap(n + 1, GetImageList()->GetBitmap(imageId));
+    wxBitmap bmp = GetImageList()->GetBitmap(imageId);
+    GetToolBar()->SetToolNormalBitmap(n + 1, bmp);
+    GetToolBar()->SetToolDisabledBitmap(n + 1, bmp.ConvertToDisabled());
 
     return true;
 }
@@ -301,7 +303,7 @@ bool wxToolbook::InsertPage(size_t n,
     m_maxBitmapSize.y = wxMax(bitmap.GetHeight(), m_maxBitmapSize.y);
 
     GetToolBar()->SetToolBitmapSize(m_maxBitmapSize);
-    GetToolBar()->AddRadioTool(n + 1, text, bitmap, wxNullBitmap, text);
+    GetToolBar()->AddRadioTool(n + 1, text, bitmap, bitmap.ConvertToDisabled(), text);
 
     if (bSelect)
     {
@@ -334,6 +336,26 @@ bool wxToolbook::DeleteAllPages()
 {
     GetToolBar()->ClearTools();
     return wxBookCtrlBase::DeleteAllPages();
+}
+
+bool wxToolbook::EnablePage(size_t page, bool enable)
+{
+    GetToolBar()->EnableTool(page + 1, enable);
+    if (!enable && GetSelection() == (int)page)
+    {
+        AdvanceSelection();
+    }
+    return true;
+}
+
+bool wxToolbook::EnablePage(wxWindow *page, bool enable)
+{
+    const int pageIndex = FindPage(page);
+    if (pageIndex == wxNOT_FOUND)
+    {
+        return false;
+    }
+    return EnablePage(pageIndex, enable);
 }
 
 // ----------------------------------------------------------------------------

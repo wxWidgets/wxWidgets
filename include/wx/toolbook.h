@@ -92,6 +92,10 @@ public:
     // get the underlying toolbar
     wxToolBarBase* GetToolBar() const { return (wxToolBarBase*)m_bookctrl; }
 
+    // enable/disable a page
+    bool EnablePage(wxWindow *page, bool enable);
+    bool EnablePage(size_t page, bool enable);
+
     // must be called in OnIdle or by application to realize the toolbar and
     // select the initial page.
     void Realize();
