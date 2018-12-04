@@ -13,5 +13,5 @@ control.
 
 After doing this, please proceed with the build as with any official
 release, i.e. follow the instructions in the port-specific files, e.g.
-[wxMSW](docs/msw/install.txt), [wxGTK](docs/gtk/install.txt),
-[wxOSX](docs/osx/install.txt) and so on.
+[wxMSW](docs/msw/install.md), [wxGTK](docs/gtk/install.md),
+[wxOSX](docs/osx/install.md) and so on.
