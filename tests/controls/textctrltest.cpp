@@ -60,7 +60,6 @@ private:
         CPPUNIT_TEST( PositionToXYSingleLine );
         CPPUNIT_TEST( XYToPositionSingleLine );
         CPPUNIT_TEST( HitTestSingleLine );
-        CPPUNIT_TEST( LinesSingleLine );
         SINGLE_AND_MULTI_TESTS();
 
         // Now switch to the multi-line text controls.
@@ -110,7 +109,6 @@ private:
     void Style();
     void FontStyle();
     void Lines();
-    void LinesSingleLine();
     void LogTextCtrl();
     void LongText();
     void PositionToCoords();
@@ -552,19 +550,6 @@ void TextCtrlTestCase::FontStyle()
 #else
 	WARN("Does not work under WxQt");
 #endif
-}
-
-void TextCtrlTestCase::LinesSingleLine()
-{
-    const char *const lineValue = "line1\nline2\nlong long line 3";
-    m_text->SetValue(lineValue);
-    m_text->Refresh();
-    m_text->Update();
-
-    CPPUNIT_ASSERT_EQUAL(1, m_text->GetNumberOfLines());
-    CPPUNIT_ASSERT_EQUAL(28, m_text->GetLineLength(0));
-    CPPUNIT_ASSERT_EQUAL(lineValue, m_text->GetLineText(0));
-    CPPUNIT_ASSERT_EQUAL("", m_text->GetLineText(1));
 }
 
 void TextCtrlTestCase::Lines()
