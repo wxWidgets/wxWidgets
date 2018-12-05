@@ -44,7 +44,7 @@ function(wx_write_config)
 
     # TODO: set variables
     set(includedir "$")
-    wx_string_append(libdir "{prefix}/include")
+    wx_string_append(includedir "{prefix}/include")
     set(libdir "$")
     wx_string_append(libdir "{exec_prefix}/lib")
     set(bindir "$")
