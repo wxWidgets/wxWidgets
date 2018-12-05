@@ -226,6 +226,7 @@ protected:
     void OnKillFocus(wxFocusEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnCaptureLost(wxMouseCaptureLostEvent& evt);
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
 protected:
 
@@ -408,6 +409,7 @@ protected:
     void OnTabRightUp(wxAuiNotebookEvent& evt);
     void OnTabBgDClick(wxAuiNotebookEvent& evt);
     void OnNavigationKeyNotebook(wxNavigationKeyEvent& event);
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     // set selection to the given window (which must be non-NULL and be one of
     // our pages, otherwise an assert is raised)

@@ -30,7 +30,8 @@ public:
                 long style = 0,
                 const wxString &name = wxStaticTextNameStr );
 
-    void SetLabel(const wxString& label);
+    virtual void SetLabel(const wxString& label) wxOVERRIDE;
+    virtual wxString GetLabel() const wxOVERRIDE;
 
     virtual QWidget *GetHandle() const;
 

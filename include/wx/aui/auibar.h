@@ -344,6 +344,10 @@ public:
     virtual int ShowDropDown(
                          wxWindow* wnd,
                          const wxAuiToolBarItemArray& items) = 0;
+
+    // Provide opportunity for subclasses to recalculate colours
+    virtual void UpdateColoursFromSystem() {}
+
 };
 
 
@@ -428,6 +432,8 @@ public:
 
     virtual int ShowDropDown(wxWindow* wnd,
                              const wxAuiToolBarItemArray& items) wxOVERRIDE;
+
+    virtual void UpdateColoursFromSystem() wxOVERRIDE;
 
 protected:
 
@@ -651,6 +657,7 @@ protected: // handlers
     void OnLeaveWindow(wxMouseEvent& evt);
     void OnCaptureLost(wxMouseCaptureLostEvent& evt);
     void OnSetCursor(wxSetCursorEvent& evt);
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
 protected:
 

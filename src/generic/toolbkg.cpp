@@ -368,7 +368,7 @@ bool wxToolbook::EnablePage(size_t page, bool enable)
 
 bool wxToolbook::EnablePage(wxWindow *page, bool enable)
 {
-    int pageIndex = FindPage(page);
+    const int pageIndex = FindPage(page);
     if (pageIndex == wxNOT_FOUND)
     {
         return false;

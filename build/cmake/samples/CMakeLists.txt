@@ -152,7 +152,10 @@ wx_add_sample(typetest typetest.cpp typetest.h)
 wx_add_sample(uiaction DEPENDS wxUSE_UIACTIONSIMULATOR)
 wx_add_sample(validate validate.cpp validate.h DEPENDS wxUSE_VALIDATORS)
 wx_add_sample(vscroll vstest.cpp)
-wx_add_sample(webview LIBRARIES webview stc NAME webviewsample DEPENDS wxUSE_WEBVIEW)
+wx_add_sample(webview LIBRARIES webview NAME webviewsample DEPENDS wxUSE_WEBVIEW)
+if(TARGET webviewsample AND wxUSE_STC)
+    wx_exe_link_libraries(webviewsample stc)
+endif()
 # widgets Sample
 set(SAMPLE_WIDGETS_SRC
     activityindicator.cpp
