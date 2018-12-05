@@ -51,11 +51,6 @@ void wxDFBDCImpl::DFBInit(const wxIDirectFBSurfacePtr& surface)
 
     wxCHECK_RET( surface != NULL, "invalid surface" );
 
-    m_mm_to_pix_x = (double)wxGetDisplaySize().GetWidth() /
-                    (double)wxGetDisplaySizeMM().GetWidth();
-    m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
-                    (double)wxGetDisplaySizeMM().GetHeight();
-
     SetFont(DEFAULT_FONT);
     SetPen(DEFAULT_PEN);
     SetBrush(DEFAULT_BRUSH);
