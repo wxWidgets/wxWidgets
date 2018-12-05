@@ -309,7 +309,7 @@ bool wxToolbook::InsertPage(size_t n,
     GetToolBar()->InsertTool(n, toolId, text, bitmap, bitmap.ConvertToDisabled(), wxITEM_RADIO);
 
     // fix current selection
-    if (m_selection < 0)
+    if (m_selection == wxNOT_FOUND)
     {
         DoShowPage(page, true);
         m_selection = n;
@@ -317,13 +317,14 @@ bool wxToolbook::InsertPage(size_t n,
     else if (m_selection >= (int) n)
     {
         DoShowPage(page, false);
-        m_selection += 1;
+        m_selection++;
     }
-    else {
+    else
+    {
         DoShowPage(page, false);
     }
 
-    if (bSelect)
+    if ( bSelect )
     {
         SetSelection(n);
     }
@@ -377,7 +378,7 @@ bool wxToolbook::EnablePage(wxWindow *page, bool enable)
 
 int wxToolbook::PageToToolId(size_t page) const
 {
-    wxASSERT_MSG(page < GetPageCount(), "Invalid page number");
+    wxCHECK_MSG(page < GetPageCount(), wxID_NONE, "Invalid page number");
     return GetPage(page)->GetId();
 }
 
@@ -401,7 +402,7 @@ void wxToolbook::OnToolSelected(wxCommandEvent& event)
 {
     // find page for the tool
     int page = ToolIdToPage(event.GetId());
-    if (page < 0)
+    if (page == wxNOT_FOUND)
     {
         // this happens only of page id has changed afterwards
         return;

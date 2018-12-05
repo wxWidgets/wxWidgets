@@ -126,7 +126,7 @@ private:
     int PageToToolId(size_t page) const;
 
     // returns the page index for the specified tool ID or
-    // -1 if there is no page with that tool ID
+    // wxNOT_FOUND if there is no page with that tool ID
     int ToolIdToPage(int toolId) const;
 
 
