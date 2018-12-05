@@ -406,10 +406,18 @@ void MenuTestCase::RadioItems()
     // First item of a radio group is checked by default.
     CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First) );
 
+    // Subsequent items in a group are not checked.
+    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 1) );
+
+#ifdef __WXQT__
+    WARN("Radio check test does not work under Qt");
+#else
     // Checking the second one make the first one unchecked however.
     menu->Check(MenuTestCase_First + 1, true);
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First) );
     CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 1) );
+    menu->Check(MenuTestCase_First, true);
+#endif
 
     // Adding more radio items after a separator creates another radio group...
     menu->AppendSeparator();
@@ -418,25 +426,43 @@ void MenuTestCase::RadioItems()
     menu->AppendRadioItem(MenuTestCase_First + 4, "Radio 4");
 
     // ... which is independent from the first one.
+    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First) );
     CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 2) );
 
+#ifdef __WXQT__
+    WARN("Radio check test does not work under Qt");
+#else
     menu->Check(MenuTestCase_First + 3, true);
     CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 3) );
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 2) );
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 1) );
 
+    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First) );
+    menu->Check(MenuTestCase_First + 2, true);
+#endif
 
     // Insert an item in the middle of an existing radio group.
     menu->InsertRadioItem(4, MenuTestCase_First + 5, "Radio 5");
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 3) );
+    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 2) );
+    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 5) );
 
+#ifdef __WXQT__
+    WARN("Radio check test does not work under Qt");
+#else
     menu->Check( MenuTestCase_First + 5, true );
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 3) );
 
+    menu->Check( MenuTestCase_First + 3, true );
+#endif
 
     // Prepend a couple of items before the first group.
     menu->PrependRadioItem(MenuTestCase_First + 6, "Radio 6");
     menu->PrependRadioItem(MenuTestCase_First + 7, "Radio 7");
+    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 6) );
+    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 7) );
+
+#ifdef __WXQT__
+    WARN("Radio check test does not work under Qt");
+#else
     menu->Check(MenuTestCase_First + 7, true);
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 1) );
 
@@ -444,6 +470,7 @@ void MenuTestCase::RadioItems()
     // Check that the last radio group still works as expected.
     menu->Check(MenuTestCase_First + 4, true);
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 5) );
+#endif
 }
 
 void MenuTestCase::RemoveAdd()
