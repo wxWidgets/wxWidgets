@@ -2,7 +2,7 @@
 // Name:        wx/toolbook.h
 // Purpose:     wxToolbook: wxToolBar and wxNotebook combination
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Stefan Ziegler
 // Created:     2006-01-29
 // Copyright:   (c) 2006 Julian Smart
 // Licence:     wxWindows licence
@@ -122,6 +122,14 @@ protected:
 private:
     // common part of all constructors
     void Init();
+
+    // returns the tool identifier for the specified page
+    int PageToToolId(size_t page) const;
+
+    // returns the page index for the specified tool ID or
+    // -1 if there is no page with that tool ID
+    int ToolIdToPage(int toolId) const;
+
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxToolbook);
