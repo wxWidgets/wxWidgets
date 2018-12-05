@@ -142,6 +142,7 @@ All (GUI):
 - Add wxGraphicsContext::GetWindow() and implement wxGraphicsContext::GetDPI().
 - Add wxToolbook::EnablePage() (Stefan Ziegler).
 - Adapt AUI colours to system colour changes (Daniel Kulp).
+- Fix removing and inserting pages in wxToolbook (Stefan Ziegler).
 
 wxGTK:
 

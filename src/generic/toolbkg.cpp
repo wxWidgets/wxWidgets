@@ -42,7 +42,7 @@ wxDEFINE_EVENT( wxEVT_TOOLBOOK_PAGE_CHANGED,  wxBookCtrlEvent );
 
 wxBEGIN_EVENT_TABLE(wxToolbook, wxBookCtrlBase)
     EVT_SIZE(wxToolbook::OnSize)
-    EVT_TOOL_RANGE(1, 50, wxToolbook::OnToolSelected)
+    EVT_TOOL(wxID_ANY, wxToolbook::OnToolSelected)
     EVT_IDLE(wxToolbook::OnIdle)
 wxEND_EVENT_TABLE()
 
@@ -134,8 +134,8 @@ void wxToolbook::OnSize(wxSizeEvent& event)
 
 bool wxToolbook::SetPageText(size_t n, const wxString& strText)
 {
-    // Assume tool ids start from 1
-    wxToolBarToolBase* tool = GetToolBar()->FindById(n + 1);
+    int toolId = PageToToolId(n);
+    wxToolBarToolBase* tool = GetToolBar()->FindById(toolId);
     if (tool)
     {
         tool->SetLabel(strText);
@@ -147,7 +147,8 @@ bool wxToolbook::SetPageText(size_t n, const wxString& strText)
 
 wxString wxToolbook::GetPageText(size_t n) const
 {
-    wxToolBarToolBase* tool = GetToolBar()->FindById(n + 1);
+    int toolId = PageToToolId(n);
+    wxToolBarToolBase* tool = GetToolBar()->FindById(toolId);
     if (tool)
         return tool->GetLabel();
     else
@@ -167,9 +168,10 @@ bool wxToolbook::SetPageImage(size_t n, int imageId)
     if (!GetImageList())
         return false;
 
+    int toolId = PageToToolId(n);
     wxBitmap bmp = GetImageList()->GetBitmap(imageId);
-    GetToolBar()->SetToolNormalBitmap(n + 1, bmp);
-    GetToolBar()->SetToolDisabledBitmap(n + 1, bmp.ConvertToDisabled());
+    GetToolBar()->SetToolNormalBitmap(toolId, bmp);
+    GetToolBar()->SetToolDisabledBitmap(toolId, bmp.ConvertToDisabled());
 
     return true;
 }
@@ -199,7 +201,8 @@ void wxToolbook::MakeChangedEvent(wxBookCtrlEvent &event)
 
 void wxToolbook::UpdateSelectedPage(size_t newsel)
 {
-    GetToolBar()->ToggleTool(newsel + 1, true);
+    int toolId = PageToToolId(newsel);
+    GetToolBar()->ToggleTool(toolId, true);
 }
 
 // Not part of the wxBookctrl API, but must be called in OnIdle or
@@ -302,16 +305,30 @@ bool wxToolbook::InsertPage(size_t n,
     m_maxBitmapSize.x = wxMax(bitmap.GetWidth(), m_maxBitmapSize.x);
     m_maxBitmapSize.y = wxMax(bitmap.GetHeight(), m_maxBitmapSize.y);
 
+    int toolId = page->GetId();
     GetToolBar()->SetToolBitmapSize(m_maxBitmapSize);
-    GetToolBar()->AddRadioTool(n + 1, text, bitmap, bitmap.ConvertToDisabled(), text);
+    GetToolBar()->InsertTool(n, toolId, text, bitmap, bitmap.ConvertToDisabled(), wxITEM_RADIO);
 
-    if (bSelect)
+    // fix current selection
+    if (m_selection == wxNOT_FOUND)
     {
-        GetToolBar()->ToggleTool(n, true);
+        DoShowPage(page, true);
         m_selection = n;
     }
+    else if ((size_t) m_selection >= n)
+    {
+        DoShowPage(page, false);
+        m_selection++;
+    }
     else
-        page->Hide();
+    {
+        DoShowPage(page, false);
+    }
+
+    if ( bSelect )
+    {
+        SetSelection(n);
+    }
 
     InvalidateBestSize();
     return true;
@@ -319,11 +336,12 @@ bool wxToolbook::InsertPage(size_t n,
 
 wxWindow *wxToolbook::DoRemovePage(size_t page)
 {
+    int toolId = PageToToolId(page);
     wxWindow *win = wxBookCtrlBase::DoRemovePage(page);
 
     if ( win )
     {
-        GetToolBar()->DeleteTool(page + 1);
+        GetToolBar()->DeleteTool(toolId);
 
         DoSetSelectionAfterRemoval(page);
     }
@@ -340,7 +358,8 @@ bool wxToolbook::DeleteAllPages()
 
 bool wxToolbook::EnablePage(size_t page, bool enable)
 {
-    GetToolBar()->EnableTool(page + 1, enable);
+    int toolId = PageToToolId(page);
+    GetToolBar()->EnableTool(toolId, enable);
     if (!enable && GetSelection() == (int)page)
     {
         AdvanceSelection();
@@ -358,15 +377,39 @@ bool wxToolbook::EnablePage(wxWindow *page, bool enable)
     return EnablePage(pageIndex, enable);
 }
 
+int wxToolbook::PageToToolId(size_t page) const
+{
+    wxCHECK_MSG(page < GetPageCount(), wxID_NONE, "Invalid page number");
+    return GetPage(page)->GetId();
+}
+
+int wxToolbook::ToolIdToPage(int toolId) const
+{
+    for (size_t i = 0; i < m_pages.size(); i++)
+    {
+        if (m_pages[i]->GetId() == toolId)
+        {
+            return (int) i;
+        }
+    }
+    return wxNOT_FOUND;
+}
+
 // ----------------------------------------------------------------------------
 // wxToolbook events
 // ----------------------------------------------------------------------------
 
 void wxToolbook::OnToolSelected(wxCommandEvent& event)
 {
-    const int selNew = event.GetId() - 1;
+    // find page for the tool
+    int page = ToolIdToPage(event.GetId());
+    if (page == wxNOT_FOUND)
+    {
+        // this happens only of page id has changed afterwards
+        return;
+    }
 
-    if ( selNew == m_selection )
+    if (page == m_selection )
     {
         // this event can only come from our own Select(m_selection) below
         // which we call when the page change is vetoed, so we should simply
@@ -374,10 +417,10 @@ void wxToolbook::OnToolSelected(wxCommandEvent& event)
         return;
     }
 
-    SetSelection(selNew);
+    SetSelection(page);
 
     // change wasn't allowed, return to previous state
-    if (m_selection != selNew)
+    if (m_selection != page)
     {
         GetToolBar()->ToggleTool(m_selection, false);
     }
