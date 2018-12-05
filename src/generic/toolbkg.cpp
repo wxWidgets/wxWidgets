@@ -314,7 +314,7 @@ bool wxToolbook::InsertPage(size_t n,
         DoShowPage(page, true);
         m_selection = n;
     }
-    else if (m_selection >= (int) n)
+    else if ((size_t) m_selection >= n)
     {
         DoShowPage(page, false);
         m_selection++;
