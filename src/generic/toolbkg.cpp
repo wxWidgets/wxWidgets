@@ -391,7 +391,7 @@ int wxToolbook::ToolIdToPage(int toolId) const
             return (int) i;
         }
     }
-    return -1;
+    return wxNOT_FOUND;
 }
 
 // ----------------------------------------------------------------------------
