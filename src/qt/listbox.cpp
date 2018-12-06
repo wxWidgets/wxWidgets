@@ -89,6 +89,11 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     QListWidgetItem* item;
     m_qtWindow = m_qtListWidget = new wxQtListWidget( parent, this );
 
+    if ( style == wxLB_SORT )
+    {
+        m_qtListWidget->setSortingEnabled(true);
+    }
+
     while ( n-- > 0 )
     {
         item = new QListWidgetItem();
@@ -130,9 +135,17 @@ bool wxListBox::IsSelected(int n) const
     return item->isSelected();
 }
 
-int wxListBox::GetSelections(wxArrayInt& WXUNUSED(aSelections)) const
+int wxListBox::GetSelections(wxArrayInt& aSelections) const
 {
-    return 0;
+    aSelections.clear();
+
+    for ( unsigned int i = 0; i < GetCount(); ++i)
+    {
+        if ( IsSelected(i) )
+            aSelections.push_back(i);
+    }
+
+    return aSelections.size();
 }
 
 unsigned wxListBox::GetCount() const
@@ -169,6 +182,12 @@ void wxListBox::DoSetFirstItem(int WXUNUSED(n))
 
 void wxListBox::DoSetSelection(int n, bool select)
 {
+    if ( n == wxNOT_FOUND )
+    {
+        UnSelectAll();
+        return;
+    }
+
     return m_qtListWidget->setCurrentRow(n, select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect );
 }
 
@@ -234,4 +253,13 @@ void wxListBox::QtSendEvent(wxEventType evtType, const QModelIndex &index, bool 
 QScrollArea *wxListBox::QtGetScrollBarsContainer() const
 {
     return (QScrollArea *) m_qtListWidget;
+}
+
+void wxListBox::UnSelectAll()
+{
+    for ( unsigned int i = 0; i < GetCount(); ++i )
+    {
+        if ( IsSelected(i) )
+            DoSetSelection(i, false);
+    }
 }
