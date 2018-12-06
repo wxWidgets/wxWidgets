@@ -105,6 +105,10 @@ function(wx_set_common_target_properties target_name)
         endif()
         # TODO: add warning flags for other compilers
     endif()
+    if(CMAKE_USE_PTHREADS_INIT)
+        target_compile_options(${target_name} PRIVATE "-pthread")
+        set_target_properties(${target_name} PROPERTIES LINK_FLAGS "-pthread")
+    endif()
 endfunction()
 
 # Set common properties on wx library target
