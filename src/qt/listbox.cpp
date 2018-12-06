@@ -89,6 +89,11 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     QListWidgetItem* item;
     m_qtWindow = m_qtListWidget = new wxQtListWidget( parent, this );
 
+    if ( style == wxLB_SORT )
+    {
+        m_qtListWidget->setSortingEnabled(true);
+    }
+
     while ( n-- > 0 )
     {
         item = new QListWidgetItem();
