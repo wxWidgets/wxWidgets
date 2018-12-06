@@ -256,7 +256,7 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
             rasterColourOp = wxQtNONE;
             break;
         case wxNO_OP:       // dst
-            m_qtPainter->setCompositionMode( QPainter::QPainter::CompositionMode_DestinationOver );
+            m_qtPainter->setCompositionMode( QPainter::CompositionMode_DestinationOver );
             rasterColourOp = wxQtNONE;
             break;
         case wxNOR:         // (NOT src) AND (NOT dst)
