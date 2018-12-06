@@ -871,8 +871,32 @@ long wxListCtrl::DoInsertColumn(long col, const wxListItem& info)
 }
 
 
-void wxListCtrl::SetItemCount(long WXUNUSED(count))
+void wxListCtrl::SetItemCount(long count)
 {
+    int curr_count = GetItemCount();
+
+    if( curr_count == count )
+        return;
+
+    if( curr_count < count )
+    {
+        for( int i = curr_count; i < count; ++i )
+        {
+            wxListItem listItem;
+            listItem.m_itemId = i;
+            InsertItem(listItem);
+        }
+    }
+    else
+    {
+        QTreeWidgetItem* tmp;
+
+        for(int i = curr_count; i > count; --i)
+        {
+            tmp = m_qtTreeWidget->takeTopLevelItem(i);
+            delete tmp;
+        }
+    }
 }
 
 bool wxListCtrl::ScrollList(int dx, int dy)
@@ -888,16 +912,12 @@ bool wxListCtrl::SortItems(wxListCtrlCompare WXUNUSED(fn), wxIntPtr WXUNUSED(dat
 }
 
 // ----------------------------------------------------------------------------
-// virtual list controls (not currently implemented in wxQT)
+// virtual list controls ( OnGetItemColumnImage not currently implemented in wxQT)
 // ----------------------------------------------------------------------------
 
-wxString wxListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) const
+wxString wxListCtrl::OnGetItemText(long item, long col) const
 {
-    // this is a pure virtual function, in fact - which is not really pure
-    // because the controls which are not virtual don't need to implement it
-    wxFAIL_MSG( wxT("wxListCtrl::OnGetItemText not supposed to be called") );
-
-    return wxEmptyString;
+    return GetItemText(item, col);
 }
 
 int wxListCtrl::OnGetItemImage(long WXUNUSED(item)) const
