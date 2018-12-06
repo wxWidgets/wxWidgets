@@ -313,8 +313,6 @@ macro(wx_add_library name)
             RUNTIME DESTINATION "lib${wxPLATFORM_LIB_DIR}"
             BUNDLE DESTINATION Applications/wxWidgets
             )
-
-        list(APPEND wxLIB_TARGETS ${name})
     endif()
 endmacro()
 
@@ -349,7 +347,6 @@ endmacro()
 
 # Enable precompiled headers for wx libraries
 macro(wx_finalize_lib target_name)
-    set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)
     if(wxBUILD_PRECOMP)
         if(TARGET ${target_name})
             wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
