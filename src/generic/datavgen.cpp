@@ -4558,6 +4558,12 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         // setting focus to this window as most (all?) of them do by default,
         // so skip it to enable default handling.
         event.Skip();
+
+        // Also stop editing if any mouse button is pressed: this is not really
+        // necessary for the left button, as it would result in a focus loss
+        // that would make the editor close anyhow, but we do need to do it for
+        // the other ones and it does no harm to do it for the left one too.
+        FinishEditing();
     }
 
     // Handle right clicking here, before everything else as context menu
