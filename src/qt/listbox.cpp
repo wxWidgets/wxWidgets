@@ -135,9 +135,17 @@ bool wxListBox::IsSelected(int n) const
     return item->isSelected();
 }
 
-int wxListBox::GetSelections(wxArrayInt& WXUNUSED(aSelections)) const
+int wxListBox::GetSelections(wxArrayInt& aSelections) const
 {
-    return 0;
+    aSelections.clear();
+
+    for ( unsigned int i = 0; i < GetCount(); ++i)
+    {
+        if ( IsSelected(i) )
+            aSelections.push_back(i);
+    }
+
+    return aSelections.size();
 }
 
 unsigned wxListBox::GetCount() const
