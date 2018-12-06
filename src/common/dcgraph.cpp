@@ -106,9 +106,8 @@ wxGCDC::wxGCDC(const wxEnhMetaFileDC& dc)
 #endif
 
 wxGCDC::wxGCDC(wxGraphicsContext* context) :
-    wxDC( new wxGCDCImpl( this ) )
+    wxDC(new wxGCDCImpl(this, context))
 {
-    SetGraphicsContext(context);
 }
 
 wxGCDC::wxGCDC() :
@@ -121,6 +120,12 @@ wxGCDC::~wxGCDC()
 }
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxGCDCImpl, wxDCImpl);
+
+wxGCDCImpl::wxGCDCImpl(wxDC *owner, wxGraphicsContext* context) :
+    wxDCImpl(owner)
+{
+    Init(context);
+}
 
 wxGCDCImpl::wxGCDCImpl( wxDC *owner ) :
    wxDCImpl( owner )
