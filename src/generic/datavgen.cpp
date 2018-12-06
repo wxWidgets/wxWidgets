@@ -4525,14 +4525,6 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         return;
     }
 
-    if(event.ButtonDown())
-    {
-        // Not skipping button down events would prevent the system from
-        // setting focus to this window as most (all?) of them do by default,
-        // so skip it to enable default handling.
-        event.Skip();
-    }
-
     int x = event.GetX();
     int y = event.GetY();
     m_owner->CalcUnscrolledPosition( x, y, &x, &y );
@@ -4559,6 +4551,14 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
     const unsigned int current = GetLineAt( y );
     const wxDataViewItem item = GetItemByRow(current);
+
+    if(event.ButtonDown())
+    {
+        // Not skipping button down events would prevent the system from
+        // setting focus to this window as most (all?) of them do by default,
+        // so skip it to enable default handling.
+        event.Skip();
+    }
 
     // Handle right clicking here, before everything else as context menu
     // events should be sent even when we click outside of any item, unlike all
