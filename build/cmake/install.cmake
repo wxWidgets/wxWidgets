@@ -12,13 +12,19 @@ if(NOT wxBUILD_INSTALL)
 endif()
 
 install(CODE "message(STATUS \"Installing: Headers...\")")
-wx_install(
-    DIRECTORY "${wxSOURCE_DIR}/include/wx"
-    DESTINATION "include")
-if(MSVC)
+if(UNIX)
     wx_install(
-        DIRECTORY "${wxSOURCE_DIR}/include/msvc"
+        DIRECTORY "${wxSOURCE_DIR}/include/wx"
+        DESTINATION "include/wx-${wxMAJOR_VERSION}.${wxMINOR_VERSION}")
+else()
+    wx_install(
+        DIRECTORY "${wxSOURCE_DIR}/include/wx"
         DESTINATION "include")
+    if(MSVC)
+        wx_install(
+            DIRECTORY "${wxSOURCE_DIR}/include/msvc"
+            DESTINATION "include")
+    endif()
 endif()
 
 # setup header and wx-config
