@@ -331,7 +331,7 @@ bool wxListCtrl::SetItem(wxListItem& info)
                 wxCHECK_MSG(imglst, false, "invalid listctrl imagelist");
                 const wxBitmap bitmap = imglst->GetBitmap(info.m_image);
                 // set the new image:
-                qitem->setIcon( info.GetColumn(), QIcon( *bitmap.GetHandle() ));
+                qitem->setIcon( info.GetColumn(), QIcon( QPixmap::fromImage(*bitmap.GetHandle()) ));
             }
             else
             {

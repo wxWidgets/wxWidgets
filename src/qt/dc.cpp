@@ -633,7 +633,7 @@ void wxQtDCImpl::DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
 void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                           bool useMask )
 {
-    QPixmap pix = *bmp.GetHandle();
+    QPixmap pix = QPixmap::fromImage(*bmp.GetHandle());
     if (pix.depth() == 1) {
         //Monochrome bitmap, draw using text fore/background
 

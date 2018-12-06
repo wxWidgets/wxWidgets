@@ -103,14 +103,14 @@ wxRegion::wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance)
     }
 
     if ( tolerance == 0 ) {
-        m_refData = new wxRegionRefData(bmp.GetHandle()->createMaskFromColor(transp.GetQColor()));
+        m_refData = new wxRegionRefData(QPixmap::fromImage(*bmp.GetHandle()).createMaskFromColor(transp.GetQColor()));
         return;
     }
 
     wxScopedArray<unsigned char> raw(bmp.GetWidth()*bmp.GetHeight());
     memset(raw.get(), 0, bmp.GetWidth()*bmp.GetHeight());
 
-    QImage img(bmp.GetHandle()->toImage());
+    const QImage &img = *bmp.GetHandle();
     int r = transp.Red(), g = transp.Green(), b = transp.Blue();
     for(int y=0; y<img.height(); y++)
     {

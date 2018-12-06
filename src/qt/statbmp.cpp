@@ -50,10 +50,10 @@ bool wxStaticBitmap::Create( wxWindow *parent,
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
-static void SetPixmap( QLabel *label, const QPixmap *pixMap )
+static void SetPixmap( QLabel *label, const QImage *image )
 {
-    if ( pixMap != NULL )
-        label->setPixmap( *pixMap );
+    if ( image != NULL )
+        label->setPixmap( QPixmap::fromImage(*image) );
 }
 
 void wxStaticBitmap::SetIcon(const wxIcon& icon)

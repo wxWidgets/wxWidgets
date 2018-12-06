@@ -15,6 +15,7 @@ class WXDLLIMPEXP_FWD_CORE wxCursor;
 class QImage;
 
 class QPixmap;
+class QImage;
 class QBitmap;
 
 class WXDLLIMPEXP_CORE wxBitmap : public wxBitmapBase
@@ -22,6 +23,7 @@ class WXDLLIMPEXP_CORE wxBitmap : public wxBitmapBase
 public:
     wxBitmap();
     wxBitmap(QPixmap pix);
+		wxBitmap(QImage image);
     wxBitmap(const wxBitmap& bmp);
     wxBitmap(const char bits[], int width, int height, int depth = 1);
     wxBitmap(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
@@ -79,7 +81,7 @@ public:
     // disappear in the future
     bool HasAlpha() const;
 
-    QPixmap *GetHandle() const;
+    QImage *GetHandle() const;
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;

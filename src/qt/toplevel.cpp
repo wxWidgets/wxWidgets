@@ -112,7 +112,7 @@ void wxTopLevelWindowQt::SetIcons( const wxIconBundle& icons )
     QIcon qtIcons;
     for ( size_t i = 0; i < icons.GetIconCount(); i++ )
     {
-        qtIcons.addPixmap( *icons.GetIconByIndex( i ).GetHandle() );
+        qtIcons.addPixmap( QPixmap::fromImage(*icons.GetIconByIndex( i ).GetHandle()) );
     }
     GetHandle()->setWindowIcon( qtIcons );
 }

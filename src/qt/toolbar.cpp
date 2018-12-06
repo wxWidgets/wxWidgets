@@ -119,7 +119,7 @@ void wxToolBarTool::SetDropdownMenu(wxMenu* menu)
 
 void wxToolBarTool::SetIcon()
 {
-    m_qtToolButton->setIcon( QIcon( *GetNormalBitmap().GetHandle() ));
+    m_qtToolButton->setIcon( QIcon( QPixmap::fromImage(*GetNormalBitmap().GetHandle()) ));
 }
 
 void wxToolBarTool::ClearToolTip()

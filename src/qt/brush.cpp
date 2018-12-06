@@ -111,7 +111,7 @@ wxBrush::wxBrush(const wxColour& col, int style)
 wxBrush::wxBrush(const wxBitmap& stipple)
 {
     m_refData = new wxBrushRefData();
-    M_BRUSHDATA.setTexture(*stipple.GetHandle());
+    M_BRUSHDATA.setTexture(QPixmap::fromImage(*stipple.GetHandle()));
     if (stipple.GetMask() != NULL)
         M_STYLEDATA = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;
     else
@@ -141,7 +141,7 @@ void wxBrush::SetStyle(wxBrushStyle style)
 void wxBrush::SetStipple(const wxBitmap& stipple)
 {
     AllocExclusive();
-    M_BRUSHDATA.setTexture(*stipple.GetHandle());
+    M_BRUSHDATA.setTexture(QPixmap::fromImage(*stipple.GetHandle()));
 
     if (stipple.GetMask() != NULL)
         M_STYLEDATA = wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE;

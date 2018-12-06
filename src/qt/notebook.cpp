@@ -114,7 +114,7 @@ bool wxNotebook::SetPageImage(size_t n, int imageId)
         wxCHECK_MSG(HasImageList(), false, "invalid notebook imagelist");
         const wxBitmap bitmap = GetImageList()->GetBitmap(imageId);
         // set the new image:
-        m_qtTabWidget->setTabIcon( n, QIcon( *bitmap.GetHandle() ));
+        m_qtTabWidget->setTabIcon( n, QIcon(QPixmap::fromImage(*bitmap.GetHandle())) );
     }
     else
     {
@@ -136,7 +136,7 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
         if (HasImageList())
         {
             const wxBitmap bitmap = GetImageList()->GetBitmap(imageId);
-            m_qtTabWidget->insertTab( n, page->GetHandle(), QIcon( *bitmap.GetHandle() ), wxQtConvertString( text ));
+            m_qtTabWidget->insertTab( n, page->GetHandle(), QIcon( QPixmap::fromImage(*bitmap.GetHandle()) ), wxQtConvertString( text ));
         }
         else
         {

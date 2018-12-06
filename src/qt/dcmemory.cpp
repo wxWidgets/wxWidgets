@@ -70,7 +70,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
 
     m_selected = bitmap;
     if ( bitmap.IsOk() && !bitmap.GetHandle()->isNull() ) {
-        QPixmap pixmap(*bitmap.GetHandle());
+        QPixmap pixmap = QPixmap::fromImage(*bitmap.GetHandle());
         // apply mask before converting to image
         if ( bitmap.GetMask() && bitmap.GetMask()->GetHandle() )
             pixmap.setMask(*bitmap.GetMask()->GetHandle());

@@ -111,7 +111,7 @@ void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
     if ( m_kind == wxITEM_NORMAL )
     {
         m_bitmap = bitmap;
-        m_qtAction->setIcon( QIcon( *m_bitmap.GetHandle() ) );
+        m_qtAction->setIcon( QIcon(QPixmap::fromImage( *m_bitmap.GetHandle() )) );
     }
     else
     {
