@@ -220,7 +220,7 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
 {
     m_logicalFunction = function;
 
-    wxQtRasterColourOp rasterColourOp;
+    wxQtRasterColourOp rasterColourOp = wxQtNONE;
     switch ( function )
     {
         case wxCLEAR:       // 0
@@ -229,7 +229,6 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
             break;
         case wxXOR:         // src XOR dst
             m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceXorDestination );
-            rasterColourOp = wxQtNONE;
             break;
         case wxINVERT:      // NOT dst => dst XOR WHITE
             m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceXorDestination );
@@ -241,35 +240,27 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
             break;
         case wxAND_REVERSE: // src AND (NOT dst)
             m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceAndNotDestination );
-            rasterColourOp = wxQtNONE;
             break;
         case wxCOPY:        // src
             m_qtPainter->setCompositionMode( QPainter::CompositionMode_SourceOver );
-            rasterColourOp = wxQtNONE;
             break;
         case wxAND:         // src AND dst
             m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceAndDestination );
-            rasterColourOp = wxQtNONE;
             break;
         case wxAND_INVERT:  // (NOT src) AND dst
             m_qtPainter->setCompositionMode( QPainter::RasterOp_NotSourceAndDestination );
-            rasterColourOp = wxQtNONE;
             break;
         case wxNO_OP:       // dst
             m_qtPainter->setCompositionMode( QPainter::CompositionMode_DestinationOver );
-            rasterColourOp = wxQtNONE;
             break;
         case wxNOR:         // (NOT src) AND (NOT dst)
             m_qtPainter->setCompositionMode( QPainter::RasterOp_NotSourceAndNotDestination );
-            rasterColourOp = wxQtNONE;
             break;
         case wxEQUIV:       // (NOT src) XOR dst
             m_qtPainter->setCompositionMode( QPainter::RasterOp_NotSourceXorDestination );
-            rasterColourOp = wxQtNONE;
             break;
         case wxSRC_INVERT:  // (NOT src)
             m_qtPainter->setCompositionMode( QPainter::RasterOp_NotSource );
-            rasterColourOp = wxQtNONE;
             break;
         case wxOR_INVERT:   // (NOT src) OR dst
             m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceOrDestination );
@@ -277,11 +268,9 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
             break;
         case wxNAND:        // (NOT src) OR (NOT dst)
             m_qtPainter->setCompositionMode( QPainter::RasterOp_NotSourceOrNotDestination );
-            rasterColourOp = wxQtNONE;
             break;
         case wxOR:          // src OR dst
             m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceOrDestination );
-            rasterColourOp = wxQtNONE;
             break;
         case wxSET:          // 1
             m_qtPainter->setCompositionMode( QPainter::CompositionMode_SourceOver );
