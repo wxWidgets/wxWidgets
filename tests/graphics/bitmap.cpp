@@ -125,8 +125,8 @@ void BitmapTestCase::OverlappingBlit()
 
     if ( m_bmp.GetDepth() == 32 )
     {
-				wxAlphaPixelData npd( m_bmp );
-				CPPUNIT_ASSERT_MESSAGE( "Bitmap data is NULL",  npd );
+        wxAlphaPixelData npd( m_bmp );
+        CPPUNIT_ASSERT_MESSAGE( "Bitmap data is NULL",  npd );
         wxAlphaPixelData::Iterator it( npd );
 
         ASSERT_EQUAL_RGB( it, 255, 0, 0 );
