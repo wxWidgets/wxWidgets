@@ -90,6 +90,8 @@ protected:
 private:
     virtual void Init(); //common construction
 
+    void UnSelectAll();
+
     wxDECLARE_DYNAMIC_CLASS(wxListBox);
 };
 
