@@ -331,6 +331,7 @@ wxDCImpl::wxDCImpl( wxDC *owner )
         , m_scaleX(1.0), m_scaleY(1.0)
         , m_signX(1), m_signY(1)
         , m_contentScaleFactor(1)
+        , m_mm_to_pix_x(0.0), m_mm_to_pix_y(0.0)
         , m_minX(0), m_minY(0), m_maxX(0), m_maxY(0)
         , m_clipX1(0), m_clipY1(0), m_clipX2(0), m_clipY2(0)
         , m_logicalFunction(wxCOPY)
@@ -348,11 +349,6 @@ wxDCImpl::wxDCImpl( wxDC *owner )
 #endif // wxUSE_PALETTE
 {
     m_owner = owner;
-
-    m_mm_to_pix_x = (double)wxGetDisplaySize().GetWidth() /
-                    (double)wxGetDisplaySizeMM().GetWidth();
-    m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
-                    (double)wxGetDisplaySizeMM().GetHeight();
 }
 
 wxDCImpl::~wxDCImpl()
@@ -517,16 +513,16 @@ void wxDCImpl::SetMapMode( wxMappingMode mode )
     switch (mode)
     {
         case wxMM_TWIPS:
-          SetLogicalScale( twips2mm*m_mm_to_pix_x, twips2mm*m_mm_to_pix_y );
+          SetLogicalScale( twips2mm*GetMMToPXx(), twips2mm*GetMMToPXy() );
           break;
         case wxMM_POINTS:
-          SetLogicalScale( pt2mm*m_mm_to_pix_x, pt2mm*m_mm_to_pix_y );
+          SetLogicalScale( pt2mm*GetMMToPXx(), pt2mm*GetMMToPXy() );
           break;
         case wxMM_METRIC:
-          SetLogicalScale( m_mm_to_pix_x, m_mm_to_pix_y );
+          SetLogicalScale( GetMMToPXx(), GetMMToPXy() );
           break;
         case wxMM_LOMETRIC:
-          SetLogicalScale( m_mm_to_pix_x/10.0, m_mm_to_pix_y/10.0 );
+          SetLogicalScale( GetMMToPXx()/10.0, GetMMToPXy()/10.0 );
           break;
         default:
         case wxMM_TEXT:
@@ -1440,4 +1436,26 @@ float wxDCImpl::GetFontPointSizeAdjustment(float dpi)
     // ports need to emulate this bug too:
     const wxSize screenPPI = wxGetDisplayPPI();
     return float(screenPPI.y) / dpi;
+}
+
+double wxDCImpl::GetMMToPXx() const
+{
+    if ( wxIsNullDouble(m_mm_to_pix_x) )
+    {
+        m_mm_to_pix_x = (double)wxGetDisplaySize().GetWidth() /
+                        (double)wxGetDisplaySizeMM().GetWidth();
+    }
+
+    return m_mm_to_pix_x;
+}
+
+double wxDCImpl::GetMMToPXy() const
+{
+    if ( wxIsNullDouble(m_mm_to_pix_x) )
+    {
+        m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
+                        (double)wxGetDisplaySizeMM().GetHeight();
+    }
+
+    return m_mm_to_pix_y;
 }

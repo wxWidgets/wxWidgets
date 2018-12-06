@@ -563,15 +563,15 @@ void wxDFBDCImpl::DoGetSizeMM(int *width, int *height) const
     int w = 0;
     int h = 0;
     GetSize(&w, &h);
-    if ( width ) *width = int(double(w) / (m_userScaleX*m_mm_to_pix_x));
-    if ( height ) *height = int(double(h) / (m_userScaleY*m_mm_to_pix_y));
+    if ( width ) *width = int(double(w) / (m_userScaleX*GetMMToPXx()));
+    if ( height ) *height = int(double(h) / (m_userScaleY*GetMMToPXy()));
 }
 
 wxSize wxDFBDCImpl::GetPPI() const
 {
     #warning "move this to common code?"
-    return wxSize(int(double(m_mm_to_pix_x) * inches2mm),
-                  int(double(m_mm_to_pix_y) * inches2mm));
+    return wxSize(int(double(GetMMToPXx()) * inches2mm),
+                  int(double(GetMMToPXy()) * inches2mm));
 }
 
 
