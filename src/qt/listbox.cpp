@@ -160,7 +160,7 @@ wxString wxListBox::GetString(unsigned int n) const
     return wxQtConvertString( item->text() );
 }
 
-void wxListBox::SetString(unsigned int n, const wxString& WXUNUSED(s))
+void wxListBox::SetString(unsigned int n, const wxString& s)
 {
     QListWidgetItem* item = m_qtListWidget->item(n);
     wxCHECK_RET(item != NULL, wxT("wrong listbox index") );
@@ -169,6 +169,7 @@ void wxListBox::SetString(unsigned int n, const wxString& WXUNUSED(s))
         item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setCheckState(Qt::Unchecked);
     }
+    item->setText(wxQtConvertString(s));
 }
 
 int wxListBox::GetSelection() const
