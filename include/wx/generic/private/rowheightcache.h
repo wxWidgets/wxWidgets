@@ -128,7 +128,7 @@ WX_DECLARE_HASH_MAP(unsigned int, RowRanges*, wxIntegerHash, wxIntegerEqual,
     Use bisect algorithm in combination with GetLineStart() to
     find the appropriate item
 */
-class WXDLLIMPEXP_ADV HeightCache
+class WXDLLIMPEXP_CORE HeightCache
 {
 public:
     bool GetLineStart(unsigned int row, int& start);
