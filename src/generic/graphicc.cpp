@@ -1869,7 +1869,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 #endif
 
 #ifdef __WXQT__
-    m_qtPainter = (QPainter*) dc.GetHandle();
+    m_qtPainter =  static_cast<QPainter*>(dc.GetHandle());
     // create a internal buffer (fallback if cairo_qt_surface is missing)
     m_qtImage = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
     // clear the buffer to be painted over the current contents
@@ -2084,7 +2084,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 #endif
 
 #ifdef __WXQT__
-    m_qtPainter = NULL;
+    m_qtPainter = static_cast<QPainter*>(dc.GetHandle());
     // create a internal buffer (fallback if cairo_qt_surface is missing)
     m_qtImage = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
     // clear the buffer to be painted over the current contents
@@ -2093,6 +2093,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
                                                       CAIRO_FORMAT_ARGB32,
                                                       width, height,
                                                       m_qtImage->bytesPerLine());
+
     Init( cairo_create( m_qtSurface ) );
 #endif
 }
@@ -2566,6 +2567,8 @@ void wxCairoContext::Flush()
     if ( m_qtSurface )
     {
         cairo_surface_flush(m_qtSurface);
+        if ( m_qtPainter);
+            m_qtPainter->drawImage( 0,0, *m_qtImage );
     }
 #endif
 }
