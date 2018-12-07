@@ -62,37 +62,69 @@ bool wxTopLevelWindowQt::Create( wxWindow *parent, wxWindowID winId,
     return true;
 }
 
-void wxTopLevelWindowQt::Maximize(bool WXUNUSED(maximize)) 
+void wxTopLevelWindowQt::Maximize(bool maximize)
 {
+    QWidget *widget = GetHandle();
+
+    if ( maximize )
+    {
+        widget->showMaximized();
+    }
+    else
+    {
+        widget->showNormal();
+    }
 }
 
 void wxTopLevelWindowQt::Restore()
 {
+    GetHandle()->showNormal();
 }
 
-void wxTopLevelWindowQt::Iconize(bool WXUNUSED(iconize) )
+void wxTopLevelWindowQt::Iconize(bool iconize )
 {
+    QWidget *widget = GetHandle();
+
+    if ( iconize )
+    {
+        widget->showMinimized();
+    }
+    else
+    {
+        widget->showNormal();
+    }
 }
 
 bool wxTopLevelWindowQt::IsMaximized() const
 {
-    return false;
+    return GetHandle()->isMaximized();
 }
 
 bool wxTopLevelWindowQt::IsIconized() const
 {
-    return false;
+    return GetHandle()->isMinimized();
 }
 
 
-bool wxTopLevelWindowQt::ShowFullScreen(bool WXUNUSED(show), long WXUNUSED(style))
+bool wxTopLevelWindowQt::ShowFullScreen(bool show, long WXUNUSED(style))
 {
-    return false;
+    QWidget *widget = GetHandle();
+
+    if ( show )
+    {
+        widget->showFullScreen();
+    }
+    else
+    {
+        widget->showNormal();
+    }
+
+    return true;
 }
 
 bool wxTopLevelWindowQt::IsFullScreen() const
 {
-    return false;
+    return GetHandle()->isFullScreen();
 }
 
 void wxTopLevelWindowQt::SetTitle(const wxString& title)
