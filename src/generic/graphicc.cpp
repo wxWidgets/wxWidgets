@@ -3310,15 +3310,6 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetCairoRenderer()
     return &gs_cairoGraphicsRenderer;
 }
 
-#else // !wxUSE_CAIRO
-
-wxGraphicsRenderer* wxGraphicsRenderer::GetCairoRenderer()
-{
-    return NULL;
-}
-
-#endif  // wxUSE_CAIRO/!wxUSE_CAIRO
-
 // MSW and OS X have their own native default renderers, but the other ports
 // use Cairo by default
 #if !(defined(__WXMSW__) || defined(__WXOSX__))
@@ -3327,5 +3318,7 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
     return GetCairoRenderer();
 }
 #endif // !(__WXMSW__ || __WXOSX__)
+
+#endif  // wxUSE_CAIRO/!wxUSE_CAIRO
 
 #endif // wxUSE_GRAPHICS_CONTEXT
