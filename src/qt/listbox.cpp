@@ -155,8 +155,8 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
     {
         item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setCheckState(Qt::Unchecked);
-        item->setText(wxQtConvertString(s));
     }
+    item->setText(wxQtConvertString(s));
 }
 
 int wxListBox::GetSelection() const
