@@ -110,17 +110,16 @@ void RowRanges::Remove(const unsigned int row)
 void RowRanges::CleanUp(unsigned int idx)
 {
     size_t count = m_ranges.size();
+
+    wxCHECK_RET( idx < count, "Wrong index" );
+
     size_t rngIdx = 0;
     if (idx > 0)
     {
         // start one RowRange before
         rngIdx = idx - 1;
     }
-    if (idx >= count)
-    {
-        // should never reached, due CleanUp is private and internal called correctly
-        return;
-    }
+
     RowRange *prevRng = &m_ranges[rngIdx];
     rngIdx++;
     while (rngIdx <= idx + 1 && rngIdx < count)
