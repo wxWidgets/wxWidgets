@@ -1992,11 +1992,7 @@ wxDataViewMainWindow::~wxDataViewMainWindow()
 {
     DestroyTree();
     delete m_renameTimer;
-    if (m_rowHeightCache != NULL)
-    {
-        m_rowHeightCache->Clear();
-        delete m_rowHeightCache;
-    }
+    delete m_rowHeightCache;
 }
 
 
