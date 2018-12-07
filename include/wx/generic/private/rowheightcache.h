@@ -56,7 +56,13 @@ public:
     not including given row.
     */
     unsigned int CountTo(unsigned int row) const;
-    unsigned int GetSize() const; // for debugging statistics
+
+    /**
+        Returns the size of the range.
+
+        This is only used for testing and debugging.
+     */
+    unsigned int GetSize() const { return m_ranges.size(); }
 
 private:
     wxVector<RowRange> m_ranges;

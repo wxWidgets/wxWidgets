@@ -191,12 +191,6 @@ unsigned int RowRanges::CountTo(unsigned int row) const
     return ctr;
 }
 
-unsigned int RowRanges::GetSize() const // for debugging statistics
-{
-    return m_ranges.size();
-}
-
-
 // ----------------------------------------------------------------------------
 // HeightCache
 // ----------------------------------------------------------------------------
