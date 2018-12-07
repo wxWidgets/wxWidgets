@@ -475,3 +475,6 @@
 
 # /utils/wxrc/
 /utils/wxrc/*.sln
+
+#Jetbrains CLion metadata folder
+.idea
