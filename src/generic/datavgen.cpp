@@ -3300,9 +3300,6 @@ void wxDataViewMainWindow::SendSelectionChangedEvent( const wxDataViewItem& item
 
 void wxDataViewMainWindow::RefreshRows( unsigned int from, unsigned int to )
 {
-    if (from == to && from == ((unsigned)-1))
-        return;
-
     wxRect rect = GetLinesRect(from, to);
 
     m_owner->CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
