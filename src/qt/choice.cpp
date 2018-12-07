@@ -148,6 +148,10 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
 int wxChoice::DoInsertOneItem(const wxString& item, unsigned int pos)
 {
     m_qtComboBox->insertItem(pos, wxQtConvertString(item));
+
+    if ( IsSorted() )
+        m_qtComboBox->model()->sort(0);
+
     return pos;
 }
 
