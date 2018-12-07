@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        wx/private/rowheightcache.h
+// Name:        generic/rowheightcache.cpp
 // Purpose:     height cache of rows in a dataview
 // Author:      Jens Goepfert (mail@jensgoepfert.de)
 // Created:     2018-03-06
@@ -27,20 +27,15 @@
 
 #include "wx/generic/private/rowheightcache.h"
 
-// ----------------------------------------------------------------------------
-// private structs
-// ----------------------------------------------------------------------------
-
 // ============================================================================
 // implementation
 // ============================================================================
-
 
 // ----------------------------------------------------------------------------
 // RowRanges
 // ----------------------------------------------------------------------------
 
-void RowRanges::Add(const unsigned int row)
+void RowRanges::Add(unsigned int row)
 {
     size_t count = m_ranges.size();
     size_t rngIdx = 0;
@@ -63,7 +58,8 @@ void RowRanges::Add(const unsigned int row)
         }
         if (row == rng.to)
         {
-            // extend range at the end (set to row+1 because 'to' is not including)
+            // extend range at the end (set to row+1 because 'to' is not
+            // including)
             rng.to = row + 1;
             CleanUp(rngIdx);
             return;
@@ -71,7 +67,8 @@ void RowRanges::Add(const unsigned int row)
 
         if (rng.from > row + 1)
         {
-            // this range is already behind row index, so break here and insert a new range before
+            // this range is already behind row index, so break here and insert
+            // a new range before
             break;
         }
     }
@@ -82,7 +79,7 @@ void RowRanges::Add(const unsigned int row)
     m_ranges.insert(m_ranges.begin() + rngIdx, newRange);
 }
 
-void RowRanges::Remove(const unsigned int row)
+void RowRanges::Remove(unsigned int row)
 {
     size_t count = m_ranges.size();
     size_t rngIdx = 0;
@@ -129,7 +126,8 @@ void RowRanges::CleanUp(unsigned int idx)
         if (prevRng->to == rng.from)
         {
             // this range starts where the previous range began, so remove this
-            // and set the to-value of the previous range to the to-value of this range
+            // and set the to-value of the previous range to the to-value of
+            // this range
             prevRng->to = rng.to;
             m_ranges.erase(m_ranges.begin() + rngIdx);
             count--;
@@ -274,7 +272,8 @@ bool HeightCache::GetLineAt(int y, unsigned int &row)
         }
         else
         {
-            // should never happen, except the HeightCache has gaps which is an invalid state
+            // should never happen, except the HeightCache has gaps which is an
+            // invalid state
             return false;
         }
     }
@@ -295,7 +294,7 @@ bool HeightCache::GetLineAt(int y, unsigned int &row)
     }
 }
 
-void HeightCache::Put(const unsigned int row, const int height)
+void HeightCache::Put(unsigned int row, int height)
 {
     RowRanges *rowRanges = m_heightToRowRange[height];
     if (rowRanges == NULL)
@@ -306,7 +305,7 @@ void HeightCache::Put(const unsigned int row, const int height)
     rowRanges->Add(row);
 }
 
-void HeightCache::Remove(const unsigned int row)
+void HeightCache::Remove(unsigned int row)
 {
     HeightToRowRangesMap::iterator it;
     for (it = m_heightToRowRange.begin(); it != m_heightToRowRange.end(); ++it)

@@ -3447,7 +3447,7 @@ int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
                 if (!node)
                 {
                     // not really correct...
-                    return row + ((y - yy) / m_lineHeight);
+                    return row + ((y-yy) / m_lineHeight);
                 }
                 item = node->GetItem();
             }
