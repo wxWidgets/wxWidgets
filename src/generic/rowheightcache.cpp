@@ -23,7 +23,6 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/log.h"
 #endif // WX_PRECOMP
 
 #include "wx/generic/private/rowheightcache.h"
@@ -76,7 +75,6 @@ void RowRanges::Add(const unsigned int row)
             break;
         }
     }
-    //    wxLogMessage("New Range: %d" , count);
 
     RowRange newRange;
     newRange.from = row;
