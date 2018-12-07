@@ -32,53 +32,45 @@
 static wxImage ConvertImage( QImage qtImage )
 {
     bool hasAlpha = qtImage.hasAlphaChannel();
-    
-    int numPixels = qtImage.height() * qtImage.width();
+
+    const int imageHeight = qtImage.height();
+    const int imageWidth = qtImage.width();
+
+    wxImage result_image(imageWidth, imageHeight);
+
+    if (hasAlpha)
+        result_image.SetAlpha();
 
     //Convert to ARGB32 for scanLine
     qtImage = qtImage.convertToFormat(QImage::Format_ARGB32);
-    
-    unsigned char *data = (unsigned char *)malloc(sizeof(char) * 3 * numPixels);
-    unsigned char *startData = data;
-    
-    unsigned char *alpha = NULL;
-    if (hasAlpha)
-        alpha = (unsigned char *)malloc(sizeof(char) * numPixels);
 
-    unsigned char *startAlpha = alpha;
-    
-    for (int y = 0; y < qtImage.height(); y++)
+    for (int y = 0; y < imageHeight; ++y)
     {
-        QRgb *line = (QRgb*)qtImage.scanLine(y);
-        
-        for (int x = 0; x < qtImage.width(); x++)
+        for (int x = 0; x < imageWidth; ++x)
         {
-            QRgb colour = line[x];
-            
-            data[0] = qRed(colour);
-            data[1] = qGreen(colour);
-            data[2] = qBlue(colour);
-            
+            const QRgb colour = qtImage.pixel(x, y);
+            result_image.SetRGB(x, y, qRed(colour), qGreen(colour), qBlue(colour));
+
             if (hasAlpha)
             {
-                alpha[0] = qAlpha(colour);
-                alpha++;
+                result_image.SetAlpha( x, y, qAlpha(colour) );
             }
-            data += 3;
+
         }
     }
-    if (hasAlpha)
-        return wxImage(wxQtConvertSize(qtImage.size()), startData, startAlpha);
-    else
-        return wxImage(wxQtConvertSize(qtImage.size()), startData);
+
+    return result_image;
 }
+
+
 
 static QImage ConvertImage( const wxImage &image )
 {
     bool hasAlpha = image.HasAlpha();
     bool hasMask = image.HasMask();
+
     QImage qtImage( wxQtConvertSize( image.GetSize() ),
-                   ( (hasAlpha || hasMask ) ? QImage::Format_ARGB32 : QImage::Format_RGB32 ) );
+                   ( (hasAlpha || hasMask ) ? QImage::Format_RGBA8888 : QImage::Format_RGBX8888 ) );
     
     unsigned char *data = image.GetData();
     unsigned char *alpha = hasAlpha ? image.GetAlpha() : NULL;
@@ -91,10 +83,13 @@ static QImage ConvertImage( const wxImage &image )
         image.GetOrFindMaskColour( &r, &g, &b );
         maskedColour = ( r << 16 ) + ( g << 8 ) + b;
     }
+
+    const int imageHeight = image.GetHeight();
+    const int imageWidth = image.GetWidth();
     
-    for (int y = 0; y < image.GetHeight(); y++)
+    for (int y = 0; y < imageHeight; y++)
     {
-        for (int x = 0; x < image.GetWidth(); x++)
+        for (int x = 0; x < imageWidth; x++)
         {
             if (hasAlpha)
             {
@@ -114,6 +109,7 @@ static QImage ConvertImage( const wxImage &image )
             data += 3;
         }
     }
+
     return qtImage;
 }
 
@@ -125,8 +121,9 @@ static QImage CreateQImage(int width, int height,  int depth )
 	if (depth == 24)
 	    return QImage( width, height, QImage::Format_RGBX8888 );
 
-	return QImage( width, height, QImage::Format_RGBA8888);	
+	auto image = QImage( width, height, QImage::Format_RGBA8888);
 
+	return image;
 }
 
 //-----------------------------------------------------------------------------
@@ -149,7 +146,6 @@ class wxBitmapRefData: public wxGDIRefData
             m_qtImage(image),
             m_mask(NULL)
        {
-
        }
         
         wxBitmapRefData( QPixmap pix )
@@ -296,7 +292,10 @@ wxImage wxBitmap::ConvertToImage() const
 {
     QPixmap pixmap = QPixmap::fromImage(M_PIXDATA);
     if ( M_MASK && M_MASK->GetHandle() )
+    {
         pixmap.setMask(*M_MASK->GetHandle());
+    }
+
     return ConvertImage(pixmap.toImage());
 }
 
@@ -434,23 +433,19 @@ void wxBitmap::SetDepth(int depth)
 }
 #endif
 
-void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
+void *wxBitmap::GetRawData(wxPixelDataBase& data, int)
 {
-    void* bits = NULL;
     // allow access if bpp is valid and matches existence of alpha
-    if ( !M_PIXDATA.isNull() )
+    if ( M_PIXDATA.isNull() )
     {
-        QImage &qimage = M_PIXDATA;
-        bool hasAlpha = M_PIXDATA.hasAlphaChannel();
-        if ((bpp == 24 && !hasAlpha) || (bpp == 32 && hasAlpha))
-        {
-            data.m_height = qimage.height();
-            data.m_width = qimage.width();
-            data.m_stride = qimage.bytesPerLine();
-            bits = (void*) qimage.bits();
-        }
+        return NULL;
     }
-    return bits;
+
+    data.m_height = M_PIXDATA.height();
+    data.m_width = M_PIXDATA.width();
+    data.m_stride = M_PIXDATA.bytesPerLine();
+    return (void*) M_PIXDATA.bits();
+
 }
 
 void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
