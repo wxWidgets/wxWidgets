@@ -16,7 +16,6 @@
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner )
     : wxQtDCImpl( owner )
 {
-    m_qtImage = NULL;
     m_ok = false;
     m_qtPainter = new QPainter();
 }
@@ -24,7 +23,6 @@ wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner )
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap )
     : wxQtDCImpl( owner )
 {
-    m_qtImage = NULL;
     m_ok = false;
     m_qtPainter = new QPainter();
     DoSelect( bitmap );
@@ -33,7 +31,6 @@ wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxBitmap& bitmap )
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner, wxDC *WXUNUSED(dc) )
     : wxQtDCImpl( owner )
 {
-    m_qtImage = NULL;
     m_ok = false;
     m_qtPainter = new QPainter();
 }
@@ -50,39 +47,27 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     {
         // Finish the painting in the intermediate image device:
         m_qtPainter->end();
-
-        if (m_selected.IsOk() && !m_selected.GetHandle()->isNull())
-        {
-            // Copy intermediate image to the bitmap
-            m_qtPainter->begin( m_selected.GetHandle() );
-            m_qtPainter->drawImage( QPoint( 0, 0 ), *m_qtImage );
-            m_qtPainter->end();
-        }
         m_ok = false;
-    }
-
-    // clean up the intermediate image device:
-    if ( m_qtImage )
-    {
-        delete m_qtImage;
-        m_qtImage = NULL;
     }
 
     m_selected = bitmap;
     if ( bitmap.IsOk() && !bitmap.GetHandle()->isNull() ) {
-        QPixmap pixmap = QPixmap::fromImage(*bitmap.GetHandle());
-        // apply mask before converting to image
-        if ( bitmap.GetMask() && bitmap.GetMask()->GetHandle() )
-            pixmap.setMask(*bitmap.GetMask()->GetHandle());
-        // create the intermediate image for the pixmap:
-        m_qtImage = new QImage( pixmap.toImage() );
         // start drawing on the intermediary device:
-        m_ok = m_qtPainter->begin( m_qtImage );
-
+        m_ok = m_qtPainter->begin( m_selected.GetHandle() );
         SetPen(m_pen);
         SetBrush(m_brush);
         SetFont(m_font);
     }
+}
+
+bool wxMemoryDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
+{
+    if ( m_selected.IsNull())
+        return false;
+
+    QColor pixel = m_selected.GetHandle()->pixel( x, y );
+    col->Set( pixel.red(), pixel.green(), pixel.blue(), pixel.alpha() );
+    return true;
 }
 
 wxBitmap wxMemoryDCImpl::DoGetAsBitmap(const wxRect *subrect) const

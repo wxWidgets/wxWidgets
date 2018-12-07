@@ -47,7 +47,6 @@ wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     : wxDCImpl( owner )
 {
     m_clippingRegion = new wxRegion;
-    m_qtImage = NULL;
     m_rasterColourOp = wxQtNONE;
     m_qtPenColor = new QColor;
     m_qtBrushColor = new QColor;
@@ -479,21 +478,9 @@ bool wxQtDCImpl::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
 #endif
 }
 
-bool wxQtDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
+bool wxQtDCImpl::DoGetPixel(wxCoord, wxCoord, wxColour*) const
 {
-    wxCHECK_MSG( m_qtPainter->isActive(), false, "Invalid wxDC" );
-
-    if ( col )
-    {
-        wxCHECK_MSG( m_qtImage != NULL, false, "This DC doesn't support GetPixel()" );
-
-        QColor pixel = m_qtImage->pixel( x, y );
-        col->Set( pixel.red(), pixel.green(), pixel.blue(), pixel.alpha() );
-
-        return true;
-    }
-    else
-        return false;
+    return false;
 }
 
 void wxQtDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
@@ -634,6 +621,7 @@ void wxQtDCImpl::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
                           bool useMask )
 {
     QPixmap pix = QPixmap::fromImage(*bmp.GetHandle());
+
     if (pix.depth() == 1) {
         //Monochrome bitmap, draw using text fore/background
 
@@ -748,15 +736,15 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
                     wxCoord WXUNUSED(xsrcMask),
                     wxCoord WXUNUSED(ysrcMask) )
 {
-    wxQtDCImpl *implSource = (wxQtDCImpl*)source->GetImpl();
+    wxDCImpl *implSource = source->GetImpl();
 
-    QImage *qtSource = implSource->GetQImage();
-
-    // Not a CHECK on purpose
-    if ( !qtSource )
+    const wxBitmap &sourceBitmap = implSource->GetSelectedBitmap();
+    if (sourceBitmap.IsNull())
+    {
         return false;
+    }
 
-    QImage qtSourceConverted = *qtSource;
+    QImage qtSourceConverted = *sourceBitmap.GetHandle();
     if ( !useMask )
         qtSourceConverted = qtSourceConverted.convertToFormat( QImage::Format_RGB32 );
 

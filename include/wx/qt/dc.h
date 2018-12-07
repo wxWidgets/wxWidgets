@@ -9,7 +9,6 @@
 #define _WX_QT_DC_H_
 
 class QPainter;
-class QImage;
 
 class WXDLLIMPEXP_FWD_CORE wxRegion;
 
@@ -111,11 +110,7 @@ public:
     virtual void* GetHandle() const { return (void*) m_qtPainter; }
 
 protected:
-    virtual QImage *GetQImage() { return m_qtImage; }
-    
     QPainter *m_qtPainter;
-    QImage *m_qtImage;
-
     wxRegion *m_clippingRegion;
 private:
     enum wxQtRasterColourOp
