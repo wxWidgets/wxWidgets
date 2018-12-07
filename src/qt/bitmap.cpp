@@ -121,9 +121,7 @@ static QImage CreateQImage(int width, int height,  int depth )
 	if (depth == 24)
 	    return QImage( width, height, QImage::Format_RGBX8888 );
 
-	auto image = QImage( width, height, QImage::Format_RGBA8888);
-
-	return image;
+	return QImage( width, height, QImage::Format_RGBA8888);
 }
 
 //-----------------------------------------------------------------------------
