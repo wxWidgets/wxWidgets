@@ -69,7 +69,7 @@ improvements and even more bug fixes to list them all, but here is the
 maximally condensed summary:
 
 - Build system improvements: support for new compilers (MSVS 2017, g++ 8) and
-  OS versions as well as an entirely new new CMake build system.
+  OS versions as well as an entirely new CMake build system.
 - New features: support for mouse gesture events (GSoC 2017 project);
   fractional pen widths in wxGraphicsContext; arbitrary label windows in
   wxStaticBox; markup in wxDataViewCtrl items text; better support for high DPI

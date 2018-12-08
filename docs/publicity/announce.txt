@@ -16,8 +16,8 @@ for the incomplete list of the most important ones. Here is the
 maximally condensed summary of the changes compared to 3.0:
 
 - Build system improvements: support for new compilers (MSVS 2017, g++ 8) and
-  OS versions (macOS 10.14 and its dark mode) as well as an entirely new new
-  CMake build system.
+  OS versions (macOS 10.14 and its dark mode) as well as an entirely new CMake
+  build system.
 - New features: support for mouse gesture events (GSoC 2017 project);
   non-integer font sizes and arbitrary font weights in wxFont; fractional pen
   widths in wxGraphicsContext; arbitrary label windows in wxStaticBox; markup
