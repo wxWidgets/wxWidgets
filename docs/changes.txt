@@ -144,6 +144,7 @@ All (GUI):
 - Adapt AUI colours to system colour changes (Daniel Kulp).
 - Fix removing and inserting pages in wxToolbook (Stefan Ziegler).
 - Fix bug in template selection in docview framework (jwiesemann).
+- Implement wxAuiNotebook::HitTest() (Sebastian Walderich).
 
 wxGTK:
 
