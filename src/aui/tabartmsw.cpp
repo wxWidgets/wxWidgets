@@ -13,6 +13,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_AUI && wxUSE_UXTHEME && !defined(__WXUNIVERSAL__)
+
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
 #endif
@@ -22,8 +24,6 @@
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
 #include "wx/renderer.h"
-
-#if wxUSE_AUI && !defined(__WXUNIVERSAL__)
 
 wxAuiMSWTabArt::wxAuiMSWTabArt()
 {
@@ -469,4 +469,4 @@ bool wxAuiMSWTabArt::IsThemed() const
 }
 
 
-#endif // wxUSE_AUI
+#endif // wxUSE_AUI && wxUSE_UXTHEME && !defined(__WXUNIVERSAL__)
