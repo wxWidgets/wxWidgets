@@ -46,6 +46,11 @@ case $wxTOOLSET in
         echo 'Testing...' && echo -en 'travis_fold:start:script.testing\\r'
         pushd tests && ./test && popd
         echo -en 'travis_fold:end:script.testing\\r'
+        if [ "$(uname -s)" = "Linux" ]; then
+            echo 'Testing GUI...' && echo -en 'travis_fold:start:script.testing_gui\\r'
+            pushd tests && xvfb-run -a ./test_gui && popd
+            echo -en 'travis_fold:end:script.testing_gui\\r'
+        fi
         echo 'Building samples...' && echo -en 'travis_fold:start:script.samples\\r'
         (test "$wxSKIP_SAMPLES" && echo 'SKIPPED') || make samples
         echo -en 'travis_fold:end:script.samples\\r'
