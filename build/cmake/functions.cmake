@@ -105,9 +105,13 @@ function(wx_set_common_target_properties target_name)
         endif()
         # TODO: add warning flags for other compilers
     endif()
+
     if(CMAKE_USE_PTHREADS_INIT)
         target_compile_options(${target_name} PRIVATE "-pthread")
-        set_target_properties(${target_name} PROPERTIES LINK_FLAGS "-pthread")
+        # clang++.exe: warning: argument unused during compilation: '-pthread' [-Wunused-command-line-argument]
+        if(NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
+            set_target_properties(${target_name} PROPERTIES LINK_FLAGS "-pthread")
+        endif()
     endif()
 endfunction()
 
