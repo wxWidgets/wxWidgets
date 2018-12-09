@@ -54,7 +54,7 @@ Name: "{group}\{cm:ProgramOnTheWeb,wxWidgets}"; Filename: "{app}\wx.url"
 Name: {group}\wxWidgets Manual; Filename: {app}\docs\htmlhelp\wx.chm; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
 Name: {group}\Changes; Filename: {app}\docs\changes.txt; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
 Name: {group}\Readme; Filename: {app}\docs\readme.txt; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
-Name: {group}\Compiling wxWidgets; Filename: {app}\docs\msw\install.txt; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
+Name: {group}\Setting up wxWidgets; Filename: {app}\docs\msw\install.md; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
 Name: "{group}\Uninstall wxWidgets {#WX_VERSION}"; Filename: "{uninstallexe}"
 
 
