@@ -1518,6 +1518,9 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     // wxTopLevelWindow) should remove WS_CHILD in their MSWGetStyle()
     WXDWORD style = WS_CHILD;
 
+    if ( !IsThisEnabled() )
+        style |= WS_DISABLED;
+
     // using this flag results in very significant reduction in flicker,
     // especially with controls inside the static boxes (as the interior of the
     // box is not redrawn twice), but sometimes results in redraw problems, so

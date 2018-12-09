@@ -102,6 +102,14 @@ Changes in behaviour which may result in build errors
   removing its name.
 
 
+3.1.?: (released 2012-??-??)
+----------------------------
+
+All (GUI):
+
+- Make disabling the window before creating it actually work.
+
+
 3.1.2: (released 2018-12-10)
 ----------------------------
 

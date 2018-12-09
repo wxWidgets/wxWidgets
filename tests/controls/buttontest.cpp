@@ -102,8 +102,21 @@ void ButtonTestCase::Disabled()
 
     wxUIActionSimulator sim;
 
-    //In this test we disable the button and check events are not sent
-    m_button->Disable();
+    // In this test we disable the button and check events are not sent and we
+    // do it once by disabling the previously enabled button and once by
+    // creating the button in the disabled state.
+    SECTION("Disable after creation")
+    {
+        m_button->Disable();
+    }
+
+    SECTION("Create disabled")
+    {
+        delete m_button;
+        m_button = new wxButton();
+        m_button->Disable();
+        m_button->Create(wxTheApp->GetTopWindow(), wxID_ANY, "wxButton");
+    }
 
     sim.MouseMove(m_button->GetScreenPosition() + wxPoint(10, 10));
     wxYield();
