@@ -3378,7 +3378,7 @@ int wxAuiNotebook::HitTest (const wxPoint &pt, long *flags) const
                 position = wxBK_HITTEST_ONITEM;
             break;
         }
-        else if (tabframe->m_rect.Contains(pt) && tabframe->m_rect.y + tabframe->m_tabCtrlHeight < pt.y)
+        else if (tabframe->m_rect.Contains(pt))
         {
             w = tabframe->m_tabs->GetWindowFromIdx(tabframe->m_tabs->GetActivePage());
             if (w)
