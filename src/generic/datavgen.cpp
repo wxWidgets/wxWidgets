@@ -710,6 +710,7 @@ public:
     bool Cleared();
     void Resort()
     {
+        m_rowHeightCache->Clear();
         if (!IsVirtualList())
         {
             m_root->Resort(this);
@@ -822,6 +823,7 @@ public:
     int GetLineStart( unsigned int row ) const;  // row * m_lineHeight in fixed mode
     int GetLineHeight( unsigned int row ) const; // m_lineHeight in fixed mode
     int GetLineAt( unsigned int y ) const;       // y / m_lineHeight in fixed mode
+    int QueryAndCacheLineHeight(unsigned int row, wxDataViewItem item) const;
 
     void SetRowHeight( int lineHeight ) { m_lineHeight = lineHeight; }
     int GetRowHeight() const { return m_lineHeight; }
@@ -3344,60 +3346,29 @@ wxRect wxDataViewMainWindow::GetLinesRect( unsigned int rowFrom, unsigned int ro
 
 int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
 {
-    const wxDataViewModel *model = GetModel();
-
     if (GetOwner()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
     {
         int start = 0;
-        if (m_rowHeightCache->GetLineStart(row, start))
+        if ( m_rowHeightCache->GetLineStart(row, start) )
             return start;
 
         unsigned int r;
         for (r = 0; r < row; r++)
         {
             int height = 0;
-            if (m_rowHeightCache->GetLineHeight(r, height))
+            if ( m_rowHeightCache->GetLineHeight(r, height) )
             {
                 start += height;
                 continue;
             }
 
-            wxDataViewItem item;
-            if (IsList())
-            {
-                item = GetItemByRow(r);
-            }
-            else
-            {
-                const wxDataViewTreeNode* node = GetTreeNodeByRow(r);
-                if (!node) return start;
-                item = node->GetItem();
-            }
+            wxDataViewItem item  = GetItemByRow(r);
+            if ( !item )
+                break;
 
-            unsigned int cols = GetOwner()->GetColumnCount();
-            unsigned int col;
-            height = m_lineHeight;
-            for (col = 0; col < cols; col++)
-            {
-                const wxDataViewColumn *column = GetOwner()->GetColumn(col);
-                if (column->IsHidden())
-                    continue;      // skip it!
-
-                if ((col != 0) &&
-                    model->IsContainer(item) &&
-                    !model->HasContainerColumns(item))
-                    continue;      // skip it!
-
-                wxDataViewRenderer *renderer =
-                    const_cast<wxDataViewRenderer*>(column->GetRenderer());
-                renderer->PrepareForItem(model, item, column->GetModelColumn());
-
-                height = wxMax( height, renderer->GetSize().y );
-            }
+            height = QueryAndCacheLineHeight(r, item);
 
             start += height;
-
-            m_rowHeightCache->Put(r, height);
         }
 
         return start;
@@ -3410,8 +3381,6 @@ int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
 
 int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
 {
-    const wxDataViewModel *model = GetModel();
-
     // check for the easy case first
     if ( !GetOwner()->HasFlag(wxDV_VARIABLE_LINE_HEIGHT) )
         return y / m_lineHeight;
@@ -3419,55 +3388,21 @@ int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
     unsigned int row = 0;
     unsigned int yy = 0;
 
-    if (m_rowHeightCache->GetLineAt(y, row))
+    if ( m_rowHeightCache->GetLineAt(y, row) )
         return row;
 
     for (;;)
     {
         int height = 0;
-        if (!m_rowHeightCache->GetLineHeight(row, height))
+        if ( !m_rowHeightCache->GetLineHeight(row, height) )
         {
             // row height not in cache -> get it from the renderer...
 
-            wxDataViewItem item;
-            if (IsList())
-            {
-                item = GetItemByRow(row);
-            }
-            else
-            {
-                const wxDataViewTreeNode* node = GetTreeNodeByRow(row);
-                if (!node)
-                {
-                    // not really correct...
-                    return row + ((y-yy) / m_lineHeight);
-                }
-                item = node->GetItem();
-            }
+            wxDataViewItem item = GetItemByRow(row);
+            if ( !item )
+                return row; // should be the last row
 
-            unsigned int cols = GetOwner()->GetColumnCount();
-            unsigned int col;
-            height = m_lineHeight;
-            for (col = 0; col < cols; col++)
-            {
-                const wxDataViewColumn *column = GetOwner()->GetColumn(col);
-                if (column->IsHidden())
-                    continue;      // skip it!
-
-                if ((col != 0) &&
-                    model->IsContainer(item) &&
-                    !model->HasContainerColumns(item))
-                    continue;      // skip it!
-
-                wxDataViewRenderer *renderer =
-                    const_cast<wxDataViewRenderer*>(column->GetRenderer());
-                renderer->PrepareForItem(model, item, column->GetModelColumn());
-
-                height = wxMax( height, renderer->GetSize().y );
-            }
-
-            // ... and store the height in the cache
-            m_rowHeightCache->Put(row, height);
+            height = QueryAndCacheLineHeight(row, item);
         }
 
         yy += height;
@@ -3480,56 +3415,54 @@ int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
 
 int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
 {
-    const wxDataViewModel *model = GetModel();
-
     if (GetOwner()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
     {
         int height = 0;
-        if (m_rowHeightCache->GetLineHeight(row, height))
+        if ( m_rowHeightCache->GetLineHeight(row, height) )
             return height;
 
-        wxDataViewItem item;
-        if (IsList())
-        {
-            item = GetItemByRow(row);
-        }
-        else
-        {
-            const wxDataViewTreeNode* node = GetTreeNodeByRow(row);
-            // wxASSERT( node );
-            if (!node) return m_lineHeight;
-            item = node->GetItem();
-        }
+        wxDataViewItem item = GetItemByRow(row);
+        if ( !item )
+            return m_lineHeight;
 
-        height = m_lineHeight;
-        unsigned int cols = GetOwner()->GetColumnCount();
-        unsigned int col;
-        for (col = 0; col < cols; col++)
-        {
-            const wxDataViewColumn *column = GetOwner()->GetColumn(col);
-            if (column->IsHidden())
-                continue;      // skip it!
-
-            if ((col != 0) &&
-                model->IsContainer(item) &&
-                !model->HasContainerColumns(item))
-                continue;      // skip it!
-
-            wxDataViewRenderer *renderer =
-                const_cast<wxDataViewRenderer*>(column->GetRenderer());
-            renderer->PrepareForItem(model, item, column->GetModelColumn());
-
-            height = wxMax( height, renderer->GetSize().y );
-        }
-
-        m_rowHeightCache->Put(row, height);
-
+        height = QueryAndCacheLineHeight(row, item);
         return height;
     }
     else
     {
         return m_lineHeight;
     }
+}
+
+
+int wxDataViewMainWindow::QueryAndCacheLineHeight(unsigned int row, wxDataViewItem item) const
+{
+    const wxDataViewModel *model = GetModel();
+    int height = m_lineHeight;
+    unsigned int cols = GetOwner()->GetColumnCount();
+    unsigned int col;
+    for (col = 0; col < cols; col++)
+    {
+        const wxDataViewColumn *column = GetOwner()->GetColumn(col);
+        if (column->IsHidden())
+            continue;      // skip it!
+
+        if ((col != 0) &&
+            model->IsContainer(item) &&
+            !model->HasContainerColumns(item))
+            continue;      // skip it!
+
+        wxDataViewRenderer *renderer =
+            const_cast<wxDataViewRenderer*>(column->GetRenderer());
+        renderer->PrepareForItem(model, item, column->GetModelColumn());
+
+        height = wxMax(height, renderer->GetSize().y);
+    }
+
+    // ... and store the height in the cache
+    m_rowHeightCache->Put(row, height);
+
+    return height;
 }
 
 
