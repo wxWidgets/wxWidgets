@@ -102,7 +102,7 @@ Changes in behaviour which may result in build errors
   removing its name.
 
 
-3.1.2: (released 2018-??-??)
+3.1.2: (released 2018-12-10)
 ----------------------------
 
 All:
