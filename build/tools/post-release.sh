@@ -8,6 +8,11 @@ topdir=`dirname $0`/../..
 # Build the file list for sha1sums, from `docs/release.md`
 declare -a files=(`sed -n '/^## Download Verification/,/^## Binaries/p' $topdir/docs/release.md | sed -n -E 's/^\s*0{40}\s{2}(wx.*)/\1/p'`)
 
+if [ -z "$files" ]; then
+    echo "No lines with SHA-1 sums, has release.md format changed?" >&2
+    exit 1
+fi
+
 # Get the release version unless it's given explicitly on the command line.
 if [ -z $1 ]; then
     ver_string=`grep '#define wxVERSION_STRING ' $topdir/include/wx/version.h | sed 's/^.*"wxWidgets \(.*\)")/\1/'`
