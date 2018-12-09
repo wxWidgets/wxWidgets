@@ -8,6 +8,8 @@
 #ifndef _WX_QT_TEXTENTRY_H_
 #define _WX_QT_TEXTENTRY_H_
 
+class QLineEdit;
+
 class WXDLLIMPEXP_CORE wxTextEntry : public wxTextEntryBase
 {
 public:
@@ -36,6 +38,7 @@ public:
     virtual bool IsEditable() const;
     virtual void SetEditable(bool editable);
     
+    virtual void SetMaxLength(unsigned long len);
 protected:
     virtual wxString DoGetValue() const;
     virtual void DoSetValue(const wxString& value, int flags=0);
@@ -43,6 +46,7 @@ protected:
     virtual wxWindow *GetEditableWindow();
 
 private:
+    virtual QLineEdit *GetEditable()  const { return NULL; };
 };
 
 #endif // _WX_QT_TEXTENTRY_H_

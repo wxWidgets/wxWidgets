@@ -21,10 +21,14 @@ class wxQtLineEdit : public wxQtEventSignalHandler< QLineEdit, wxTextCtrl >
 {
 public:
     wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler );
-
+protected:
+    virtual void keyPressEvent(QKeyEvent *event) wxOVERRIDE;
 private:
     void textChanged(const QString &text);
     void returnPressed();
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 12, 0)
+    void inputRejected();
+#endif
 };
 
 wxQtLineEdit::wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler )
@@ -34,6 +38,10 @@ wxQtLineEdit::wxQtLineEdit( wxWindow *parent, wxTextCtrl *handler )
             this, &wxQtLineEdit::textChanged);
     connect(this, &QLineEdit::returnPressed,
             this, &wxQtLineEdit::returnPressed);
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 12, 0)
+    connect(this, &QLineEdit::inputRejected,
+            this, &wxQtLineEdit::inputRejected);
+#endif
 }
 
 void wxQtLineEdit::textChanged(const QString &text)
@@ -61,6 +69,36 @@ void wxQtLineEdit::returnPressed()
     }
 }
 
+#if QT_VERSION >= QT_VERSION_CHECK( 5, 12, 0)
+void wxQtLineEdit::inputRejected()
+{
+    wxTextCtrl *handler = GetHandler();
+    if( handler )
+    {
+        QLineEdit *line_edit = ((QLineEdit *) handler->GetHandle());
+        if( line_edit )
+        {
+            int max = line_edit->maxLength();
+            if( text.length() > max )
+            {
+                wxCommandEvent event( wxEVT_TEXT_MAXLEN, handler->GetId() );
+                EmitEvent( event );
+            }
+        }
+    }
+}
+#else
+void wxQtLineEdit::keyPressEvent(QKeyEvent *event)
+{
+    wxTextCtrl *handler = GetHandler();
+    if ( !event->text().isEmpty() && maxLength() == handler->GetValue().length() )
+    {
+        wxCommandEvent event( wxEVT_TEXT_MAXLEN, handler->GetId() );
+        EmitEvent( event );
+    }
+    QLineEdit::keyPressEvent( event );
+}
+#endif
 
 class wxQtTextEdit : public wxQtEventSignalHandler< QTextEdit, wxTextCtrl >
 {
@@ -384,4 +422,11 @@ QScrollArea *wxTextCtrl::QtGetScrollBarsContainer() const
         return (QScrollArea *) m_qtTextEdit;
     else
         return NULL;
+}
+
+QLineEdit *wxTextCtrl::GetEditable() const
+{
+    wxCHECK_MSG( IsSingleLine(), NULL, "shouldn't be called for multiline" );
+    
+    return m_qtLineEdit;
 }

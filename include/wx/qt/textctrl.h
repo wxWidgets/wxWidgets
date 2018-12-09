@@ -73,7 +73,8 @@ protected:
 private:
     QLineEdit *m_qtLineEdit;
     QTextEdit *m_qtTextEdit;
-
+    virtual QLineEdit *GetEditable() const wxOVERRIDE;
+    
     wxDECLARE_DYNAMIC_CLASS( wxTextCtrl );
 };
 
