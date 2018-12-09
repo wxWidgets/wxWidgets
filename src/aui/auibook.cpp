@@ -3381,13 +3381,15 @@ int wxAuiNotebook::HitTest (const wxPoint &pt, long *flags) const
         else if (tabframe->m_rect.Contains(pt) && tabframe->m_rect.y + tabframe->m_tabCtrlHeight < pt.y)
         {
             w = tabframe->m_tabs->GetWindowFromIdx(tabframe->m_tabs->GetActivePage());
-            if (w) position = wxBK_HITTEST_ONPAGE;
+            if (w)
+                position = wxBK_HITTEST_ONPAGE;
             break;
         }
     }
 
-    if (flags) *flags = position;
-    return w? GetPageIndex(w): wxNOT_FOUND;
+    if (flags)
+        *flags = position;
+    return w ? GetPageIndex(w) : wxNOT_FOUND;
 }
 
 int wxAuiNotebook::GetPageImage(size_t WXUNUSED(n)) const
