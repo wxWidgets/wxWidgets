@@ -3363,9 +3363,9 @@ int wxAuiNotebook::HitTest (const wxPoint &pt, long *flags) const
 {
     wxWindow *w = NULL;
     long position = wxBK_HITTEST_NOWHERE;
-    wxAuiPaneInfoArray& all_panes = const_cast<wxAuiManager&>(m_mgr).GetAllPanes();
-    size_t i, pane_count = all_panes.GetCount();
-    for (i = 0; i < pane_count; ++i)
+    const wxAuiPaneInfoArray& all_panes = const_cast<wxAuiManager&>(m_mgr).GetAllPanes();
+    const size_t pane_count = all_panes.GetCount();
+    for (size_t i = 0; i < pane_count; ++i)
     {
         if (all_panes.Item(i).name == wxT("dummy"))
             continue;
