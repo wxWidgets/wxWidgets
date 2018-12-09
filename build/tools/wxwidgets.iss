@@ -8,10 +8,8 @@
 #endif
 
 #if GetEnv("WXW_VER") == "Snapshot"
-    #define INFOFILE WXW_DIR + "\BuildGit.txt"
     #define WX_VERSION "Snapshot"
 #elif GetEnv("WXW_VER") != ""
-    #define INFOFILE WXW_DIR + "\docs\msw\install.txt"
     #define WX_VERSION GetEnv("WXW_VER")
 #else
     #error "WXW_VER environment variable must be defined."
@@ -34,7 +32,7 @@ UsePreviousAppDir=no
 DisableProgramGroupPage=yes
 LicenseFile={#WXW_DIR}\docs\licence.txt
 InfoBeforeFile={#WXW_DIR}\docs\readme.txt
-InfoAfterFile={#INFOFILE}
+InfoAfterFile={#WXW_DIR}\docs\msw\setup_after.txt
 OutputDir={#WXW_DIR}\..
 OutputBaseFilename={#SETUPFILENAME}
 PrivilegesRequired=none
