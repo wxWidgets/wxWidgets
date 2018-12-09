@@ -6,7 +6,7 @@ set -e
 topdir=`dirname $0`/../..
 
 # Build the file list for sha1sums, from `docs/release.md`
-declare -a files=(`sed -n '/^## Download Verification/,/^## Binaries/p' $topdir/docs/release.md | sed -n -E 's/^\s*0{40}\s{2}(wx.*)/\1/p'`)
+declare -a files=(`sed -n '/^To verify your download/,/^## Binaries/p' $topdir/docs/release.md | sed -n -E 's/^\s*0{40}\s{2}(wx.*)/\1/p'`)
 
 if [ -z "$files" ]; then
     echo "No lines with SHA-1 sums, has release.md format changed?" >&2
