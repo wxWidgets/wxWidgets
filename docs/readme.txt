@@ -111,8 +111,10 @@ Installation
 
 Unless you have downloaded the binaries for your compiler, you will need to
 build wxWidgets before you can test out the samples or write your own
-applications. For installation information, please see the install.txt file in
-the docs subdirectory appropriate for the platform you use.
+applications. For installation information, please see the install.md files in
+the docs subdirectory appropriate for the platform you use or the "Platform
+Details" page of the manual, which contains links to the rendered versions of
+these files.
 
 
 Licence

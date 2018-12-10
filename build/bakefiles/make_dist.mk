@@ -142,7 +142,6 @@ ALL_DIST: distrib_clean
 # but is not used when building wxBase distribution
 ALL_GUI_DIST: ALL_DIST
 	$(CP_P) $(DOCDIR)/readme.txt $(DISTDIR)/README.txt
-	$(CP_P) $(DOCDIR)/$(TOOLKITDIR)/install.txt $(DISTDIR)/INSTALL.txt
 	if test -f $(DOCDIR)/$(TOOLKITDIR)/changes.txt ; then \
 	  $(CP_P) $(DOCDIR)/$(TOOLKITDIR)/changes.txt $(DISTDIR)/CHANGES-$(TOOLKIT).txt ; fi
 	$(CP_P) $(DOCDIR)/$(TOOLKITDIR)/readme.txt $(DISTDIR)/README-$(TOOLKIT).txt
