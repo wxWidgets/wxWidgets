@@ -13,8 +13,10 @@
 bool wxFontEnumerator::EnumerateFacenames( wxFontEncoding WXUNUSED(encoding), bool fixedWidthOnly)
 {
     QFontDatabase fontDatabase;
-    for( const QString &fontFamily : fontDatabase.families(QFontDatabase::Any) )
+    const QStringList allFonts = fontDatabase.families(QFontDatabase::Any);
+    for( QStringList::const_iterator i = allFonts.begin(); i != allFonts.end(); ++i)
     {
+        const QString &fontFamily = *i;
         if ( !fixedWidthOnly || fontDatabase.isFixedPitch(fontFamily) )
         {
             this->OnFacename(fontFamily.toStdString());
