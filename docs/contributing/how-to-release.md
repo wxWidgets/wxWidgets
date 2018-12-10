@@ -51,7 +51,7 @@ and then run it using the new DLLs.
    automatically, but please also review and update the contents of the README
    and announcement text.
     * Update `docs/readme.txt`: version needs to be changed, content updated.
-    * Update `docs/release.md`: the release sha1sums should be set to zeroes.
+    * Update `docs/release.md`: also version and reset SHA-1 sums to zeroes.
     * Put a date on the release line in `docs/changes.txt`.
     * Update the date in the manual (`docs/doxygen/mainpages/manual.h`).
     * Update the release announcement post in `docs/publicity/announce.txt`.
@@ -91,10 +91,9 @@ ensure you have the appropriate tag or commit checked out.
 
    and copy/move it to the same directory.
 
-5. Update the version in `docs/release.md` (typically just a global search and
-   replace) and run `./build/tools/post-release.sh` to update the sha1sums in
-   it, then commit the changes. Notice that when making an RC, the version must
-   be explicitly specified on this script command line.
+5. Run `./build/tools/post-release.sh` to update the SHA-1 sums in
+   `docs/release.md`, then commit the changes. Notice that when making an RC,
+   the version must be explicitly specified on this script command line.
 
 ## Uploading
 

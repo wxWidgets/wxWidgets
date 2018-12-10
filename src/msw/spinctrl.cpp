@@ -244,6 +244,7 @@ void wxSpinCtrl::NormalizeValue()
 
     if ( changed )
     {
+        m_oldValue = value;
         SendSpinUpdate(value);
     }
 }
@@ -666,10 +667,7 @@ void wxSpinCtrl::SendSpinUpdate(int value)
     wxSpinEvent event(wxEVT_SPINCTRL, GetId());
     event.SetEventObject(this);
     event.SetInt(value);
-
     (void)HandleWindowEvent(event);
-
-    m_oldValue = value;
 }
 
 bool wxSpinCtrl::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
@@ -687,7 +685,10 @@ bool wxSpinCtrl::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
     // might be using 32 bit range.
     int new_value = GetValue();
     if (m_oldValue != new_value)
-       SendSpinUpdate( new_value );
+    {
+        m_oldValue = new_value;
+        SendSpinUpdate(new_value);
+    }
 
     return true;
 }

@@ -442,10 +442,10 @@ wxSVGFileDCImpl::~wxSVGFileDCImpl()
 void wxSVGFileDCImpl::DoGetSizeMM(int *width, int *height) const
 {
     if (width)
-        *width = wxRound( (double)m_width / m_mm_to_pix_x );
+        *width = wxRound( (double)m_width / GetMMToPXx() );
 
     if (height)
-        *height = wxRound( (double)m_height / m_mm_to_pix_y );
+        *height = wxRound( (double)m_height / GetMMToPXy() );
 }
 
 wxSize wxSVGFileDCImpl::GetPPI() const

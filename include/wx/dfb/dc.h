@@ -157,8 +157,6 @@ private:
 protected:
     wxIDirectFBSurfacePtr m_surface;
 
-    double            m_mm_to_pix_x, m_mm_to_pix_y;
-
     friend class WXDLLIMPEXP_FWD_CORE wxOverlayImpl; // for Init
 
     wxDECLARE_ABSTRACT_CLASS(wxDFBDCImpl);
