@@ -111,11 +111,19 @@ template < typename Button >
 static void AddChoices( QButtonGroup *qtButtonGroup, QBoxLayout *qtBoxLayout, int count, const wxString choices[] )
 {
     Button *btn;
+    bool isFirst = true;
+
     while ( count-- > 0 )
     {
         btn = new Button( wxQtConvertString( *choices++ ));
         qtButtonGroup->addButton( btn );
         qtBoxLayout->addWidget( btn );
+
+        if ( isFirst )
+        {
+            btn->setChecked(true);
+            isFirst = false;
+        }
     }
 }
 
