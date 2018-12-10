@@ -168,16 +168,16 @@ static QAbstractButton *GetButtonAt( const QButtonGroup *group, unsigned int n )
 
 bool wxRadioBox::Enable(unsigned int n, bool enable)
 {
-    if( enable && !m_qtGroupBox->isEnabled() )
+    if ( enable && !m_qtGroupBox->isEnabled() )
     {
         m_qtGroupBox->setEnabled( true );
 
-        for( unsigned int i = 0; i < GetCount(); ++i )
+        for ( unsigned int i = 0; i < GetCount(); ++i )
         {
             QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, i );
             CHECK_BUTTON( qtButton, false );
 
-            i == n ? qtButton->setEnabled( true ) : qtButton->setEnabled( false );
+            qtButton->setEnabled( i == n );
         }
     }
     else
@@ -192,9 +192,9 @@ bool wxRadioBox::Enable(unsigned int n, bool enable)
 
 bool wxRadioBox::Enable( bool enable )
 {
-    if( m_qtGroupBox->isEnabled() == enable )
+    if ( m_qtGroupBox->isEnabled() == enable )
     {
-        for( unsigned int i = 0; i < GetCount(); ++i )
+        for ( unsigned int i = 0; i < GetCount(); ++i )
         {
             QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, i );
             CHECK_BUTTON( qtButton, false );
