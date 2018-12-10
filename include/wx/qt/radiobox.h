@@ -68,6 +68,7 @@ public:
     virtual bool Enable(unsigned int n, bool enable = true) wxOVERRIDE;
     virtual bool Enable(bool enable = true) wxOVERRIDE;
     virtual bool Show(unsigned int n, bool show = true) wxOVERRIDE;
+    virtual bool Show(bool show = true) wxOVERRIDE;
     virtual bool IsItemEnabled(unsigned int n) const wxOVERRIDE;
     virtual bool IsItemShown(unsigned int n) const wxOVERRIDE;
 
