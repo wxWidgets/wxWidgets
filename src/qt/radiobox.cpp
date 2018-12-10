@@ -185,10 +185,43 @@ bool wxRadioBox::Enable(unsigned int n, bool enable)
 
 bool wxRadioBox::Show(unsigned int n, bool show)
 {
-    QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
-    CHECK_BUTTON( qtButton, false );
+    if ( show && !m_qtGroupBox->isVisible() )
+    {
+        m_qtGroupBox->setVisible(true);
 
-    qtButton->setVisible( show );
+        for ( unsigned int i = 0; i < GetCount(); ++i )
+        {
+            QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, i );
+            CHECK_BUTTON( qtButton, false );
+
+            i == n ? qtButton->setVisible( true ) : qtButton->setVisible( false );
+        }
+    }
+    else
+    {
+        QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
+        CHECK_BUTTON( qtButton, false );
+
+        qtButton->setVisible( show );
+    }
+
+    return true;
+}
+
+bool wxRadioBox::Show( bool show )
+{
+    if( m_qtGroupBox->isVisible() == show )
+    {
+        for( unsigned int i = 0; i < GetCount(); ++i )
+        {
+            QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, i );
+            CHECK_BUTTON( qtButton, false );
+            qtButton->setVisible( show );
+        }
+    }
+
+    m_qtGroupBox->setVisible( show );
+
     return true;
 }
 

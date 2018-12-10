@@ -69,6 +69,7 @@ public:
     virtual bool Show(unsigned int n, bool show = true);
     virtual bool IsItemEnabled(unsigned int n) const;
     virtual bool IsItemShown(unsigned int n) const;
+    virtual bool Show( bool show = true ) wxOVERRIDE;
 
     virtual unsigned int GetCount() const;
     virtual wxString GetString(unsigned int n) const;
