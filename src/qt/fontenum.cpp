@@ -8,6 +8,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 #include "wx/fontenum.h"
+#include "wx/qt/private/converter.h"
 
 #include <QtCore/QStringList>
 #include <QtGui/QFontDatabase>
@@ -21,7 +22,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding WXUNUSED(encoding), boo
         const QString& fontFamily = *i;
         if ( !fixedWidthOnly || fontDatabase.isFixedPitch(fontFamily) )
         {
-            if ( !OnFacename(fontFamily.toStdString()))
+            if ( !OnFacename(wxQtConvertString(fontFamily)) )
             {
                 return false;
             }
