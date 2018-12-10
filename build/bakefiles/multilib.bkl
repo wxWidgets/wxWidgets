@@ -190,6 +190,7 @@
 
     <lib id="webviewlib" template="wx_lib"
          cond="SHARED=='0' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
+        <define>$(webviewdll_ext_dir_define)</define>
         <sources>$(WEBVIEW_SRC)</sources>
         <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
     </lib>
