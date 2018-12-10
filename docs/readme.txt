@@ -24,39 +24,12 @@ download from:
 * https://github.com/wxWidgets/wxWidgets/releases/tag/v3.1.3/
 
 
-Changes since 3.1.1
+Changes since 3.1.2
 -------------------
 
-There have been more than 1200 commits from 75 contributors (41 with multiple
-contributions) since 3.1.1 release. This release primarily contains bug fixes
-(closing more than 100 bugs from wxTrac) and incremental improvements in
-preparation for the next stable 3.2.0 release, however there is a usual lot of
-new features as well, including:
+TODO: Fill in
 
-- Initial support for macOS 10.14 and its dark mode.
-- Support for non-integer font sizes and arbitrary font weights.
-- New wxLZMA{Input,Output}Stream classes.
-- Add wxDataViewToggleRenderer::ShowAsRadio(), wxDisplay::GetPPI(),
-  wxGrid::SetCornerLabelValue(), wxHtmlEasyPrinting::SetPromptMode(),
-  wxJoystickEvent::GetButtonOrdinal(), wxToolbook::EnablePage().
-
-Some of the other improvements:
-
-- There were again many improvements to the (still experimental) wxQt port.
-- Fix several bugs related to focus handling and TAB navigation in wxGTK.
-- Make it possible to control pagination in wxHTML more precisely.
-- Fix several problems with high-DPI displays.
-- wxOSX now uses native NSImage/UIImage representation for wxBitmap.
-- Support strike-through font attribute in XRC and wxDataViewCtrl markup too.
-- Support more than 4 buttons in wxJoystick.
-- Add wxwidgets.props property sheet file for MSVS users.
-
-Please refer to the detailed change log for the full list of changes:
-
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.3/docs/changes.txt
-
-
-Notice that this release is almost completely compatible with 3.1.1 at the API
+Notice that this release is almost completely compatible with 3.1.2 at the API
 level, so upgrading to it if you're already using wxWidgets 3 should be
 straightforward.
 
