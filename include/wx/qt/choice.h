@@ -72,6 +72,7 @@ protected:
     virtual void DoDeleteOneItem(unsigned int pos);
 
     QComboBox *m_qtComboBox;
+    long m_style;
 
 private:
 
