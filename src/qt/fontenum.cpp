@@ -24,7 +24,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding WXUNUSED(encoding), boo
         {
             if ( !OnFacename(wxQtConvertString(fontFamily)) )
             {
-               break;
+                break;
             }
         }
     }
