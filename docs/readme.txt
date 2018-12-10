@@ -1,4 +1,4 @@
-wxWidgets 3.1.2 Release Notes
+wxWidgets 3.1.3 Release Notes
 =============================
 
 Welcome to the latest development release of wxWidgets, a free and open source
@@ -16,12 +16,12 @@ more about wxWidgets at:
 
 Documentation is available online at:
 
-* https://docs.wxwidgets.org/3.1.2/
+* https://docs.wxwidgets.org/3.1.3/
 
 wxWidgets sources and binaries for the selected platforms are available for
 download from:
 
-* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.1.2/
+* https://github.com/wxWidgets/wxWidgets/releases/tag/v3.1.3/
 
 
 Changes since 3.1.1
@@ -53,7 +53,7 @@ Some of the other improvements:
 
 Please refer to the detailed change log for the full list of changes:
 
-https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.2/docs/changes.txt
+https://raw.githubusercontent.com/wxWidgets/wxWidgets/v3.1.3/docs/changes.txt
 
 
 Notice that this release is almost completely compatible with 3.1.1 at the API
