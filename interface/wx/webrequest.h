@@ -103,7 +103,7 @@
         A new block of data has been downloaded.
     @endEventTable
 
-    @since 3.1.2
+    @since 3.1.3
 
     @library{wxnet}
     @category{net}
