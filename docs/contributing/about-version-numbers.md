@@ -23,7 +23,6 @@ Here is the list of files that need to be updated:
 	docs/readme.txt (date needs manual editing)  [NOT UPDATED AUTOMATICALLY]
 	docs/doxygen/Doxyfile (PROJECT_NUMBER and DOCSET_FEEDNAME)
 	docs/doxygen/mainpages/manual.h (just date)  [NOT UPDATED AUTOMATICALLY]
-	docs/msw/install.txt {major release only}
 	include/wx/version.h
 	include/wx/osx/config_xcode.h
 	samples/docview/Info.plist
