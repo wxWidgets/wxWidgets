@@ -200,7 +200,7 @@ bool wxRadioBox::IsItemShown(unsigned int n) const
     return qtButton->isVisible();
 }
 
-unsigned wxRadioBox::GetCount() const
+unsigned int wxRadioBox::GetCount() const
 {
     QList< QAbstractButton * > buttons = m_qtButtonGroup->buttons();
     return buttons.size();
