@@ -120,27 +120,22 @@ Update https://www.wxwidgets.org:
 * Update release information (at least `version` and `released`) in `_data/relases.yml`.
 * Download information can then be updated by running `update_release_info.rb`.
   This will update the asset information from GitHub.
+* Update the list of compilers used for making MSW binaries in
+  `downloads/index.md` if necessary (note that there is no need to update
+  anything else, the page will dynamically show the release files with the
+  specified prefixes).
 * Add a news item. Usually a news item is enough but something
   more can be called for for major releases
 
 Post `docs/publicity/announce.txt` at least to wx-announce@googlegroups.com and
 to wx-users.
 
-Submit a link to https://www.reddit.com/r/programming
+Submit a link to https://www.reddit.com/r/cpp or r/programming (depending on
+the release importance).
 
-Submit to https://isocpp.org/blog/suggest
+Submit to https://isocpp.org/blog/suggest (need to be logged in to do it).
 
 For major releases, submit the announcement to https://slashdot.org/submission
-
-Modify the links at downloads/index.html to point to the new release. Also
-update the release date on this page.
-
-Also update docs/index.htm for the minor or major (i.e. not micro) releases.
-
-Post to wxBlog if necessary.
-
-Create a new post on our official Google+ page here:
-https://plus.google.com/+wxwidgets/ (contact Bryan for access)
 
 ## Version Updates
 
@@ -155,9 +150,6 @@ Run `misc/scripts/inc_release` to increment micro version, i.e. replace x.y.z
 with x.y.z+1 (minor or major versions updates require manual intervention)
 and rerun both `bakefile_gen` and `autoconf` afterwards to update the version
 in the generated files too.
-
-Update `master.cfg` in [wx/buildbot](https://github.com/wxWidgets/buildbot)
-repository after a minor or major version change.
 
 ## MSW Visual Studio Official Builds
 
