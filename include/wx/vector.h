@@ -219,6 +219,14 @@ public:
             { return m_ptr == it.m_ptr; }
         bool operator !=(const reverse_iterator& it) const
             { return m_ptr != it.m_ptr; }
+        bool operator<(const reverse_iterator& it) const
+            { return m_ptr > it.m_ptr; }
+        bool operator>(const reverse_iterator& it) const
+            { return m_ptr < it.m_ptr; }
+        bool operator<=(const reverse_iterator& it) const
+            { return m_ptr >= it.m_ptr; }
+        bool operator>=(const reverse_iterator& it) const
+            { return m_ptr <= it.m_ptr; }
 
     private:
         value_type *m_ptr;
@@ -274,6 +282,14 @@ public:
             { return m_ptr == it.m_ptr; }
         bool operator !=(const const_reverse_iterator& it) const
             { return m_ptr != it.m_ptr; }
+        bool operator<(const const_reverse_iterator& it) const
+            { return m_ptr > it.m_ptr; }
+        bool operator>(const const_reverse_iterator& it) const
+            { return m_ptr < it.m_ptr; }
+        bool operator<=(const const_reverse_iterator& it) const
+            { return m_ptr >= it.m_ptr; }
+        bool operator>=(const const_reverse_iterator& it) const
+            { return m_ptr <= it.m_ptr; }
 
     protected:
         const value_type *m_ptr;
