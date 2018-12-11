@@ -76,8 +76,12 @@ set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBLZMA "use liblzm
 wx_option(wxUSE_OPENGL "use OpenGL (or Mesa)")
 wx_option(wxUSE_LIBSDL "use SDL for audio on Unix")
 
-if(NOT WIN32)
+if(UNIX)
     wx_option(wxUSE_LIBICONV "use libiconv (character conversion)")
+    wx_option(wxUSE_LIBNOTIFY "use libnotify for notifications")
+    wx_option(wxUSE_XTEST "use XTest extension")
+    wx_option(wxUSE_LIBMSPACK "use libmspack (CHM help files loading)")
+    wx_option(wxUSE_LIBGNOMEVFS "use GNOME VFS for associating MIME types")
 endif()
 
 # ---------------------------------------------------------------------------
