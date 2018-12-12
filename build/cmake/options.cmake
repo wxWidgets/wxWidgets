@@ -46,6 +46,7 @@ endif()
 
 # STL options
 wx_option(wxUSE_STL "use standard C++ classes for everything" OFF)
+set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_STL "use C++ STL classes")
 wx_dependent_option(wxUSE_STD_CONTAINERS "use standard C++ container classes" ON "wxUSE_STL" OFF)
 
 wx_option(wxUSE_UNICODE "compile with Unicode support (NOT RECOMMENDED to be turned off)")
@@ -82,6 +83,9 @@ if(UNIX)
     wx_option(wxUSE_XTEST "use XTest extension")
     wx_option(wxUSE_LIBMSPACK "use libmspack (CHM help files loading)")
     wx_option(wxUSE_LIBGNOMEVFS "use GNOME VFS for associating MIME types")
+
+    set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBSDL "use SDL for audio on Unix")
+    set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBMSPACK "use libmspack (CHM help files loading)")
 endif()
 
 # ---------------------------------------------------------------------------
