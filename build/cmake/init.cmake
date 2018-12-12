@@ -154,15 +154,25 @@ if(wxUSE_LIBLZMA)
     find_package(LibLZMA REQUIRED)
 endif()
 
-if(UNIX AND wxUSE_SECRETSTORE)
-    # The required APIs are always available under MSW and OS X but we must
-    # have GNOME libsecret under Unix to be able to compile this class.
-    find_package(Libsecret REQUIRED)
-    if(NOT LIBSECRET_FOUND)
-        message(WARNING "libsecret not found, wxSecretStore won't be available")
-        wx_option_force_value(wxUSE_SECRETSTORE OFF)
+if(UNIX)
+    if(wxUSE_SECRETSTORE)
+        # The required APIs are always available under MSW and OS X but we must
+        # have GNOME libsecret under Unix to be able to compile this class.
+        find_package(Libsecret REQUIRED)
+        if(NOT LIBSECRET_FOUND)
+            message(WARNING "libsecret not found, wxSecretStore won't be available")
+            wx_option_force_value(wxUSE_SECRETSTORE OFF)
+        endif()
     endif()
-endif()
+
+    if(wxUSE_LIBICONV)
+        find_package(Iconv)
+        if(NOT ICONV_FOUND)
+            message(WARNING "iconv not found")
+            wx_option_force_value(wxUSE_LIBICONV OFF)
+        endif()
+    endif()
+endif(UNIX)
 
 if(wxUSE_GUI)
     if(WXMSW AND wxUSE_METAFILE)

@@ -217,9 +217,8 @@ macro(wx_get_socket_param_type name code)
 endmacro()
 
 # the following tests are for Unix(like) systems only
-if(NOT WIN32)
-    if(wxUSE_LIBICONV AND NOT APPLE)
-        find_package(Iconv REQUIRED)
+if(UNIX)
+    if(wxUSE_LIBICONV)
         set(HAVE_ICONV ON)
         set(ICONV_CONST " ")
         if(ICONV_SECOND_ARGUMENT_IS_CONST)
@@ -419,8 +418,8 @@ if(NOT WIN32)
         check_symbol_exists(getservbyname netdb.h HAVE_GETSERVBYNAME)
         check_symbol_exists(inet_aton arpa/inet.h HAVE_INET_ATON)
         check_symbol_exists(inet_addr arpa/inet.h HAVE_INET_ADDR)
-    endif() # wxUSE_SOCKETS
-endif() # NOT WIN32
+    endif(wxUSE_SOCKETS)
+endif(UNIX)
 
 if(CMAKE_USE_PTHREADS_INIT)
     cmake_push_check_state(RESET)
