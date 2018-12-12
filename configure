@@ -977,6 +977,8 @@ GTK_CONFIG
 GTK_LIBS
 GTK_CFLAGS
 subdirs
+LIBTIFF_LIBS
+LIBTIFF_CFLAGS
 PKG_CONFIG
 AR
 HAVE_CXX17
@@ -1364,6 +1366,8 @@ CXX
 CXXFLAGS
 CCC
 PKG_CONFIG
+LIBTIFF_CFLAGS
+LIBTIFF_LIBS
 DIRECTFB_CFLAGS
 DIRECTFB_LIBS
 XMKMF
@@ -2349,6 +2353,10 @@ Some influential environment variables:
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
   PKG_CONFIG  path to pkg-config utility
+  LIBTIFF_CFLAGS
+              C compiler flags for LIBTIFF, overriding pkg-config
+  LIBTIFF_LIBS
+              linker flags for LIBTIFF, overriding pkg-config
   DIRECTFB_CFLAGS
               C compiler flags for DIRECTFB, overriding pkg-config
   DIRECTFB_LIBS
@@ -23429,30 +23437,91 @@ fi
 
 
 TIFF_LINK=
-TIFF_PREREQ_LINKS=-lm
 if test "$wxUSE_LIBTIFF" != "no" ; then
     $as_echo "#define wxUSE_LIBTIFF 1" >>confdefs.h
 
 
     if test "$wxUSE_LIBTIFF" = "sys" -o "$wxUSE_LIBTIFF" = "yes" ; then
-                        if test "$wxUSE_LIBJPEG" = "sys"; then
-            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JPEG_LINK"
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBTIFF" >&5
+$as_echo_n "checking for LIBTIFF... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$LIBTIFF_CFLAGS"; then
+        pkg_cv_LIBTIFF_CFLAGS="$LIBTIFF_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libtiff-4\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libtiff-4") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBTIFF_CFLAGS=`$PKG_CONFIG --cflags "libtiff-4" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$LIBTIFF_LIBS"; then
+        pkg_cv_LIBTIFF_LIBS="$LIBTIFF_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libtiff-4\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libtiff-4") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_LIBTIFF_LIBS=`$PKG_CONFIG --libs "libtiff-4" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        LIBTIFF_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "libtiff-4"`
+        else
+	        LIBTIFF_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "libtiff-4"`
         fi
-        if test "$wxUSE_ZLIB" = "sys"; then
-            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $ZLIB_LINK"
-        fi
-        if test -n "$LZMA_LINK"; then
-            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $LZMA_LINK"
-        fi
-        if test "$wxUSE_LIBJBIG" = "yes"; then
-            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JBIG_LINK"
-        fi
-        ac_fn_c_check_header_compile "$LINENO" "tiffio.h" "ac_cv_header_tiffio_h" "
+	# Put the nasty error message in config.log where it belongs
+	echo "$LIBTIFF_PKG_ERRORS" >&5
+
+
+                TIFF_PREREQ_LINKS=-lm
+
+                                                if test "$wxUSE_LIBJPEG" = "sys"; then
+                    TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JPEG_LINK"
+                fi
+                if test "$wxUSE_ZLIB" = "sys"; then
+                    TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $ZLIB_LINK"
+                fi
+                if test -n "$LZMA_LINK"; then
+                    TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $LZMA_LINK"
+                fi
+                if test "$wxUSE_LIBJBIG" = "yes"; then
+                    TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JBIG_LINK"
+                fi
+                ac_fn_c_check_header_compile "$LINENO" "tiffio.h" "ac_cv_header_tiffio_h" "
 
 "
 if test "x$ac_cv_header_tiffio_h" = xyes; then :
 
-                            { $as_echo "$as_me:${as_lineno-$LINENO}: checking for TIFFError in -ltiff" >&5
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for TIFFError in -ltiff" >&5
 $as_echo_n "checking for TIFFError in -ltiff... " >&6; }
 if ${ac_cv_lib_tiff_TIFFError+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -23496,6 +23565,83 @@ fi
 fi
 
 
+
+elif test $pkg_failed = untried; then
+
+                TIFF_PREREQ_LINKS=-lm
+
+                                                if test "$wxUSE_LIBJPEG" = "sys"; then
+                    TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JPEG_LINK"
+                fi
+                if test "$wxUSE_ZLIB" = "sys"; then
+                    TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $ZLIB_LINK"
+                fi
+                if test -n "$LZMA_LINK"; then
+                    TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $LZMA_LINK"
+                fi
+                if test "$wxUSE_LIBJBIG" = "yes"; then
+                    TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JBIG_LINK"
+                fi
+                ac_fn_c_check_header_compile "$LINENO" "tiffio.h" "ac_cv_header_tiffio_h" "
+
+"
+if test "x$ac_cv_header_tiffio_h" = xyes; then :
+
+                                    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for TIFFError in -ltiff" >&5
+$as_echo_n "checking for TIFFError in -ltiff... " >&6; }
+if ${ac_cv_lib_tiff_TIFFError+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ltiff $TIFF_PREREQ_LINKS $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char TIFFError ();
+int
+main ()
+{
+return TIFFError ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_tiff_TIFFError=yes
+else
+  ac_cv_lib_tiff_TIFFError=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_tiff_TIFFError" >&5
+$as_echo "$ac_cv_lib_tiff_TIFFError" >&6; }
+if test "x$ac_cv_lib_tiff_TIFFError" = xyes; then :
+  TIFF_LINK=" -ltiff"
+fi
+
+
+fi
+
+
+
+else
+	LIBTIFF_CFLAGS=$pkg_cv_LIBTIFF_CFLAGS
+	LIBTIFF_LIBS=$pkg_cv_LIBTIFF_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+                TIFF_LINK=$LIBTIFF_LIBS
+                CFLAGS="$LIBTIFF_CFLAGS $CFLAGS"
+
+fi
 
         if test "x$TIFF_LINK" = "x" ; then
             if test "$wxUSE_LIBTIFF" = "sys" ; then
