@@ -126,6 +126,7 @@ void BitmapTestCase::OverlappingBlit()
     if ( m_bmp.GetDepth() == 32 )
     {
         wxAlphaPixelData npd( m_bmp );
+        CPPUNIT_ASSERT_MESSAGE( "Expected raw pixels to not be NULL", npd );
         wxAlphaPixelData::Iterator it( npd );
 
         ASSERT_EQUAL_RGB( it, 255, 0, 0 );
