@@ -2566,6 +2566,7 @@ void wxCairoContext::Flush()
     if ( m_qtSurface )
     {
         cairo_surface_flush(m_qtSurface);
+        m_qtPainter->drawImage( 0,0, *m_qtImage );
     }
 #endif
 }
