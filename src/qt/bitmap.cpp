@@ -144,6 +144,7 @@ class wxBitmapRefData: public wxGDIRefData
         virtual ~wxBitmapRefData() { delete m_mask; }
 
         QPixmap m_qtPixmap;
+        QImage m_rawPixelSource;
         wxMask *m_mask;
 
 private:
@@ -409,17 +410,19 @@ void wxBitmap::SetDepth(int depth)
 void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 {
     void* bits = NULL;
+
+    wxBitmapRefData *bitmapRefData = static_cast<wxBitmapRefData *>(m_refData);
+
     // allow access if bpp is valid and matches existence of alpha
-    if ( !M_PIXDATA.isNull() )
+    if ( !bitmapRefData->m_qtPixmap.isNull() )
     {
-        QImage qimage = M_PIXDATA.toImage();
-        bool hasAlpha = M_PIXDATA.hasAlphaChannel();
-        if ((bpp == 24 && !hasAlpha) || (bpp == 32 && hasAlpha))
+        bitmapRefData->m_rawPixelSource = bitmapRefData->m_qtPixmap.toImage().convertToFormat(QImage::Format_RGBA8888);
+        if ( bpp == 32 )
         {
-            data.m_height = qimage.height();
-            data.m_width = qimage.width();
-            data.m_stride = qimage.bytesPerLine();
-            bits = (void*) qimage.bits();
+            data.m_height = bitmapRefData->m_rawPixelSource.height();
+            data.m_width = bitmapRefData->m_rawPixelSource.width();
+            data.m_stride = bitmapRefData->m_rawPixelSource.bytesPerLine();
+            bits = (void*) bitmapRefData->m_rawPixelSource.bits();
         }
     }
     return bits;
@@ -427,7 +430,9 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 
 void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    wxBitmapRefData *bitmapRefData = static_cast<wxBitmapRefData *>(m_refData);
+    bitmapRefData->m_qtPixmap = QPixmap::fromImage(bitmapRefData->m_rawPixelSource);
+    bitmapRefData->m_rawPixelSource = QImage();
 }
 
 QPixmap *wxBitmap::GetHandle() const
