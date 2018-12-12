@@ -12,6 +12,7 @@
 #include "wx/qt/private/converter.h"
 
 #include <QtWidgets/QRadioButton>
+#include <QtWidgets/QButtonGroup>
 
 wxRadioButton::wxRadioButton()
 {
@@ -38,7 +39,38 @@ bool wxRadioButton::Create( wxWindow *parent,
              const wxValidator& validator,
              const wxString& name)
 {
-    m_qtRadioButton = new QRadioButton( parent->GetHandle() );
+    m_qtRadioButton = new QRadioButton(parent->GetHandle());
+
+    if ( ( style & wxRB_GROUP ) || ( style && wxRB_SINGLE ) )
+    {
+        createAndJoinNewGroup();
+    }
+    else
+    {
+        wxWindowList::compatibility_iterator node = parent->GetChildren().GetLast();
+        for ( ; node; node = node->GetPrevious() )
+        {
+            wxWindow *child = node->GetData();
+
+            if ( wxIsKindOf( child, wxRadioButton ) )
+            {
+                if ( !child->HasFlag( wxRB_SINGLE ) )
+                {
+                    QRadioButton *ptr = dynamic_cast<QRadioButton *>( child->GetHandle() );
+
+                    QButtonGroup* btnGroup = ptr->group();
+                    btnGroup->addButton( m_qtRadioButton );
+                }
+                else
+                {
+                    createAndJoinNewGroup();
+                }
+
+                break;
+            }
+        }
+    }
+
     m_qtRadioButton->setText( wxQtConvertString( label ));
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
@@ -57,4 +89,10 @@ bool wxRadioButton::GetValue() const
 QWidget *wxRadioButton::GetHandle() const
 {
     return m_qtRadioButton;
+}
+
+void wxRadioButton::createAndJoinNewGroup()
+{
+    m_qtButtonGroup = new QButtonGroup( );
+    m_qtButtonGroup->addButton(m_qtRadioButton);
 }

@@ -9,6 +9,7 @@
 #define _WX_QT_RADIOBUT_H_
 
 class QRadioButton;
+class QButtonGroup;
 
 class WXDLLIMPEXP_CORE wxRadioButton : public wxControl
 {
@@ -40,7 +41,10 @@ public:
 protected:
 
 private:
+    void createAndJoinNewGroup();
+
     QRadioButton *m_qtRadioButton;
+    QButtonGroup *m_qtButtonGroup;
 
     wxDECLARE_DYNAMIC_CLASS( wxRadioButton );
 };
