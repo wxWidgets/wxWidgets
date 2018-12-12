@@ -39,7 +39,7 @@ bool wxRadioButton::Create( wxWindow *parent,
              const wxValidator& validator,
              const wxString& name)
 {
-    m_qtRadioButton = new QRadioButton(parent->GetHandle());
+    m_qtRadioButton = new QRadioButton( parent->GetHandle() );
 
     if ( ( style & wxRB_GROUP ) || ( style && wxRB_SINGLE ) )
     {
@@ -94,5 +94,5 @@ QWidget *wxRadioButton::GetHandle() const
 void wxRadioButton::createAndJoinNewGroup()
 {
     m_qtButtonGroup = new QButtonGroup( );
-    m_qtButtonGroup->addButton(m_qtRadioButton);
+    m_qtButtonGroup->addButton( m_qtRadioButton );
 }
