@@ -23,14 +23,14 @@ goto :eof
 :mingw
 .\gcc_mswud\test.exe
 if %errorlevel% NEQ 0 goto :error
-.\gcc_mswud\test_gui.exe
+.\gcc_mswud\test_gui.exe -d 1
 goto :eof
 
 :msys2
 PATH=C:\projects\wxwidgets\lib;%PATH%
 .\test.exe
 if %errorlevel% NEQ 0 goto :error
-.\test_gui.exe
+.\test_gui.exe -d 1
 goto :eof
 
 :cygwin
