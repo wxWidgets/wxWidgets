@@ -111,6 +111,7 @@ Changes in behaviour which may result in build errors
 All (GUI):
 
 - Fix wxInfoBar close button size in high DPI (Stefan Ziegler).
+- Make disabling the window before creating it actually work.
 
 
 3.1.2: (released 2018-12-10)

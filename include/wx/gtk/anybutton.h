@@ -23,8 +23,6 @@ public:
         m_isPressed = false;
     }
 
-    virtual bool Enable( bool enable = true ) wxOVERRIDE;
-
     // implementation
     // --------------
 
@@ -40,6 +38,8 @@ public:
 
 protected:
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
+
+    virtual void DoEnable(bool enable) wxOVERRIDE;
 
     virtual wxBitmap DoGetBitmap(State which) const wxOVERRIDE;
     virtual void DoSetBitmap(const wxBitmap& bitmap, State which) wxOVERRIDE;
