@@ -98,8 +98,6 @@ void ButtonTestCase::Click()
 
 void ButtonTestCase::Disabled()
 {
-    EventCounter clicked(m_button, wxEVT_BUTTON);
-
     wxUIActionSimulator sim;
 
     // In this test we disable the button and check events are not sent and we
@@ -117,6 +115,8 @@ void ButtonTestCase::Disabled()
         m_button->Disable();
         m_button->Create(wxTheApp->GetTopWindow(), wxID_ANY, "wxButton");
     }
+
+    EventCounter clicked(m_button, wxEVT_BUTTON);
 
     sim.MouseMove(m_button->GetScreenPosition() + wxPoint(10, 10));
     wxYield();
