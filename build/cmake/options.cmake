@@ -74,9 +74,9 @@ wx_option(wxUSE_LIBLZMA "use LZMA compression" OFF)
 set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBLZMA "use liblzma for LZMA compression")
 
 wx_option(wxUSE_OPENGL "use OpenGL (or Mesa)")
-wx_option(wxUSE_LIBSDL "use SDL for audio on Unix")
 
 if(UNIX)
+    wx_option(wxUSE_LIBSDL "use SDL for audio on Unix")
     wx_option(wxUSE_LIBICONV "use libiconv (character conversion)")
     wx_option(wxUSE_LIBNOTIFY "use libnotify for notifications")
     wx_option(wxUSE_XTEST "use XTest extension")
