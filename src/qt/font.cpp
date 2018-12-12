@@ -451,10 +451,7 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
 
 wxFontEncoding wxNativeFontInfo::GetEncoding() const
 {
-//    QFontInfo info = QFontInfo(m_qtFont);
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
-    return wxFONTENCODING_MAX;
+    return wxFONTENCODING_UTF8;
 }
 
 void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
