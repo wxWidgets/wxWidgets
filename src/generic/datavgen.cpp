@@ -5172,9 +5172,6 @@ wxSize wxDataViewCtrl::GetSizeAvailableForScrollTarget(const wxSize& size)
 
 void wxDataViewCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
-    if ( m_clientArea && GetColumnCount() )
-        m_clientArea->UpdateColumnSizes();
-
     // We need to override OnSize so that our scrolled
     // window a) does call Layout() to use sizers for
     // positioning the controls but b) does not query
@@ -5185,6 +5182,11 @@ void wxDataViewCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
     Layout();
 
     AdjustScrollbars();
+
+    // Update the last column size to take all the available space. Note that
+    // this must be done after calling Layout() to update m_clientArea size.
+    if ( m_clientArea && GetColumnCount() )
+        m_clientArea->UpdateColumnSizes();
 
     // We must redraw the headers if their height changed. Normally this
     // shouldn't happen as the control shouldn't let itself be resized beneath
