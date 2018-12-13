@@ -475,6 +475,3 @@
 
 # /utils/wxrc/
 /utils/wxrc/*.sln
-
-# JetBrain's CLion
-.idea
