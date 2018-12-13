@@ -88,7 +88,6 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         const wxString& name )
 {
     m_qtComboBox = new wxQtChoice( parent, this );
-    m_style = style;
 
     while ( n-- > 0 )
         m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
@@ -150,7 +149,7 @@ int wxChoice::DoInsertOneItem(const wxString& item, unsigned int pos)
 {
     m_qtComboBox->insertItem(pos, wxQtConvertString(item));
 
-    if (m_style == wxCB_SORT)
+    if ( IsSorted() )
         m_qtComboBox->model()->sort(0);
 
     return pos;
