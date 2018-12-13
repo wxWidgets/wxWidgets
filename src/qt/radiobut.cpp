@@ -43,7 +43,7 @@ bool wxRadioButton::Create( wxWindow *parent,
 
     if ( ( style & wxRB_GROUP ) || ( style & wxRB_SINGLE ) )
     {
-        createAndJoinNewGroup();
+        JoinNewGroup();
     }
     else
     {
@@ -63,7 +63,7 @@ bool wxRadioButton::Create( wxWindow *parent,
                 }
                 else
                 {
-                    createAndJoinNewGroup();
+                    JoinNewGroup();
                 }
 
                 break;
@@ -91,7 +91,7 @@ QWidget *wxRadioButton::GetHandle() const
     return m_qtRadioButton;
 }
 
-void wxRadioButton::createAndJoinNewGroup()
+void wxRadioButton::JoinNewGroup()
 {
     m_qtButtonGroup = new QButtonGroup( );
     m_qtButtonGroup->addButton( m_qtRadioButton );
