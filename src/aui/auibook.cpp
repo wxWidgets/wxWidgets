@@ -26,6 +26,7 @@
     #include "wx/settings.h"
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/aui/tabmdi.h"
@@ -3358,10 +3359,37 @@ void wxAuiNotebook::SetPageSize (const wxSize& WXUNUSED(size))
     wxFAIL_MSG("Not implemented for wxAuiNotebook");
 }
 
-int wxAuiNotebook::HitTest (const wxPoint& WXUNUSED(pt), long* WXUNUSED(flags)) const
+int wxAuiNotebook::HitTest (const wxPoint &pt, long *flags) const
 {
-    wxFAIL_MSG("Not implemented for wxAuiNotebook");
-    return wxNOT_FOUND;
+    wxWindow *w = NULL;
+    long position = wxBK_HITTEST_NOWHERE;
+    const wxAuiPaneInfoArray& all_panes = const_cast<wxAuiManager&>(m_mgr).GetAllPanes();
+    const size_t pane_count = all_panes.GetCount();
+    for (size_t i = 0; i < pane_count; ++i)
+    {
+        if (all_panes.Item(i).name == wxT("dummy"))
+            continue;
+
+        wxTabFrame* tabframe = (wxTabFrame*) all_panes.Item(i).window;
+        if (tabframe->m_tab_rect.Contains(pt))
+        {
+            wxPoint tabpos = tabframe->m_tabs->ScreenToClient(ClientToScreen(pt));
+            if (tabframe->m_tabs->TabHitTest(tabpos.x, tabpos.y, &w))
+                position = wxBK_HITTEST_ONITEM;
+            break;
+        }
+        else if (tabframe->m_rect.Contains(pt))
+        {
+            w = tabframe->m_tabs->GetWindowFromIdx(tabframe->m_tabs->GetActivePage());
+            if (w)
+                position = wxBK_HITTEST_ONPAGE;
+            break;
+        }
+    }
+
+    if (flags)
+        *flags = position;
+    return w ? GetPageIndex(w) : wxNOT_FOUND;
 }
 
 int wxAuiNotebook::GetPageImage(size_t WXUNUSED(n)) const

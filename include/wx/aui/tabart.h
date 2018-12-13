@@ -318,7 +318,7 @@ protected:
         #define wxHAS_NATIVE_TABART
         #include "wx/aui/tabartgtk.h"
         #define wxAuiDefaultTabArt wxAuiGtkTabArt
-    #elif defined(__WXMSW__)
+    #elif defined(__WXMSW__) && wxUSE_UXTHEME
         #define wxHAS_NATIVE_TABART
         #include "wx/aui/tabartmsw.h"
         #define wxAuiDefaultTabArt wxAuiMSWTabArt

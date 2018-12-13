@@ -9,7 +9,6 @@
 
 include(../source_groups.cmake)
 
-set(wxLIB_TARGETS)
 if(wxBUILD_MONOLITHIC)
     # Initialize variables for monolithic build
     set(wxMONO_SRC_FILES)
@@ -98,7 +97,3 @@ if(wxBUILD_MONOLITHIC)
     endforeach()
     wx_finalize_lib(mono)
 endif()
-
-# Propagate variable(s) to parent scope
-set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)
-set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} PARENT_SCOPE)

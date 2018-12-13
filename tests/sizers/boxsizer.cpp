@@ -130,6 +130,8 @@ void BoxSizerTestCase::Size1()
 
 void BoxSizerTestCase::Size3()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     // check that various combinations of minimal sizes and proportions work as
     // expected for different window sizes
     static const struct LayoutTestData
@@ -188,6 +190,8 @@ void BoxSizerTestCase::Size3()
         { { 1, 2, 3, }, { 100, 100, 100, },  50, {  50,   0,   0, }, true },
         { { 1, 2, 3, }, { 100, 100, 100, },   0, {   0,   0,   0, }, true },
     };
+
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     wxWindow *child[3];
     child[0] = new wxWindow(m_win, wxID_ANY);
