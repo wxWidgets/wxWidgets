@@ -107,8 +107,6 @@ public:
         return m_flags;
     }
 
-    virtual bool IsResizeable() const wxOVERRIDE;
-
     virtual bool IsSortKey() const wxOVERRIDE
     {
         return m_sort;

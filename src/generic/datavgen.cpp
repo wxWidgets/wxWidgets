@@ -256,17 +256,6 @@ void wxDataViewColumn::SetSortOrder(bool ascending)
     m_owner->OnColumnChange(idx);
 }
 
-bool wxDataViewColumn::IsResizeable() const
-{
-    // The last column in generic wxDataViewCtrl is never resizeable by the
-    // user because it's always automatically expanded to consume all the
-    // available space, so prevent the user from resizing it.
-    if ( this == GetOwner()->GetColumn(GetOwner()->GetColumnCount() - 1) )
-        return false;
-
-    return wxDataViewColumnBase::IsResizeable();
-}
-
 //-----------------------------------------------------------------------------
 // wxDataViewHeaderWindow
 //-----------------------------------------------------------------------------
