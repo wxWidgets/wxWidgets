@@ -252,6 +252,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/ole/safearray.cpp
     src/msw/sound.cpp
     src/msw/ole/automtn.cpp
+    src/qt/graphics.cpp
 </set>
 
 <set var="QT_WIN32_HDR" hints="files">
@@ -263,6 +264,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/ole/oleutils.h
     wx/msw/ole/comimpl.h
     wx/msw/ole/uuid.h
+    wx/qt/graphics.h
 </set>
 
 <set var="QT_PLATFORM_SRC" hints="files">
