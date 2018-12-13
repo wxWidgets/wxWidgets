@@ -59,6 +59,9 @@ Changes in behaviour not resulting in compilation errors
   return just "N" under Linux and macOS. Use the new GetButtonOrdinal() to
   update the existing code if necessary.
 
+- Generic wxDataViewCtrl now always resizes its last column to fill all the
+  available space, as the GTK+ version always did.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
@@ -93,9 +96,6 @@ Changes in behaviour which may result in build errors
 - wxListCtrl::SetItem() overload taking the column index now returns bool and
   not long. Its return value hasn't changed, however, and is still always
   either true or false, so normally the existing code should continue to work.
-
-- Generic wxDataViewCtrl now always resizes its last column to fill all the
-  available space, as the GTK+ version always did.
 
 - configure only accepts the options it knows about now and doesn't silently
   ignore all the rest. If you get errors about unknown options, you may either
