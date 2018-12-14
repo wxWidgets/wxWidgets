@@ -267,7 +267,7 @@ public:
 	// appends a circle as a new closed subpath
 	virtual void AddCircle(wxDouble x, wxDouble y, wxDouble r) wxOVERRIDE
 	{
-		path->addEllipse(x - r, y - r, r, r);
+		path->addEllipse(x - r, y - r, r*2, r*2);
 		path->closeSubpath();
 	}
 
