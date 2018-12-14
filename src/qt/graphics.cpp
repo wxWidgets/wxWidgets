@@ -6,6 +6,14 @@
 #include "wx/graphics.h"
 #include "wx/private/graphics.h"
 
+namespace
+{
+    double RadiansToDegrees(double angle_in_radians)
+    {
+        return angle_in_radians * 180 / M_PI;
+    }
+}
+
 class WXDLLIMPEXP_CORE wxQtBrushData : public wxGraphicsObjectRefData
 {
 public:
@@ -13,7 +21,174 @@ public:
 		: wxGraphicsObjectRefData(renderer), brush(wxbrush.GetHandle())
 	{
 	}
+
+    const QBrush& getBrush() const
+	{
+        return brush;
+	}
+
+private:
 	QBrush brush;
+};
+
+class WXDLLIMPEXP_CORE wxQtPenData : public wxGraphicsObjectRefData
+{
+public:
+    wxQtPenData(wxGraphicsRenderer* renderer, const wxGraphicsPenInfo& info)
+        : wxGraphicsObjectRefData(renderer), pen(createPenFromInfo(info))
+    {
+    }
+
+    const QPen& getPen() const
+    {
+        return pen;
+    }
+
+private:
+    static QPen createPenFromInfo(const wxGraphicsPenInfo& info)
+    {
+        wxPen wxpen(info.GetColour(), info.GetWidth(), info.GetStyle());
+        wxpen.SetDashes(info.GetDashCount(), info.GetDash());
+        wxpen.SetJoin(info.GetJoin());
+        wxpen.SetCap(info.GetCap());
+        switch (info.GetStyle())
+        {
+            case wxPENSTYLE_STIPPLE:
+            case wxPENSTYLE_STIPPLE_MASK:
+            case wxPENSTYLE_STIPPLE_MASK_OPAQUE:
+            {
+                wxpen.SetStipple(info.GetStipple());
+                break;
+            }
+            default:
+                break;
+        }
+
+        return wxpen.GetHandle();
+    }
+    QPen pen;
+};
+
+class WXDLLIMPEXP_CORE wxQtMatrixData : public wxGraphicsMatrixData
+{
+public:
+	wxQtMatrixData(wxGraphicsRenderer* renderer)
+		: wxGraphicsMatrixData(renderer), m_transform(new QTransform)
+	{
+	}
+
+	virtual ~wxQtMatrixData()
+	{
+		delete m_transform;
+	}
+
+    virtual wxGraphicsObjectRefData* Clone() const wxOVERRIDE
+    {
+        wxQtMatrixData* new_matrix = new wxQtMatrixData(m_renderer);
+        *new_matrix->m_transform = *m_transform;
+        return new_matrix;
+    }
+
+	// concatenates the matrix
+	virtual void Concat(const wxGraphicsMatrixData *t) wxOVERRIDE
+	{
+        const wxQtMatrixData* rhs = static_cast<const wxQtMatrixData*>(t);
+        *m_transform = *rhs->m_transform * (*m_transform);
+	}
+
+	// sets the matrix to the respective values
+	virtual void Set(wxDouble a = 1.0, wxDouble b = 0.0, wxDouble c = 0.0, wxDouble d = 1.0,
+	wxDouble tx = 0.0, wxDouble ty = 0.0) wxOVERRIDE
+	{
+        m_transform->setMatrix(
+            a, b, 0.0,
+            c, d, 0.0,
+            tx, ty, 1.0);
+	}
+
+	// gets the component valuess of the matrix
+	virtual void Get(wxDouble* a = NULL, wxDouble* b = NULL, wxDouble* c = NULL,
+	wxDouble* d = NULL, wxDouble* tx = NULL, wxDouble* ty = NULL) const wxOVERRIDE
+	{
+        if (a) *a = m_transform->m11();
+        if (b) *b = m_transform->m12();
+        if (c) *c = m_transform->m21();
+        if (d) *d = m_transform->m22();
+        if (tx) *tx = m_transform->m31();
+        if (ty) *ty = m_transform->m32();
+    }
+
+	// makes this the inverse matrix
+	virtual void Invert() wxOVERRIDE
+	{
+        bool invertible = false;
+        const QTransform inverted_transform = m_transform->inverted(&invertible);
+        if (invertible)
+        {
+            *m_transform = inverted_transform;
+        }
+	}
+
+	// returns true if the elements of the transformation matrix are equal ?
+	virtual bool IsEqual(const wxGraphicsMatrixData* t) const wxOVERRIDE
+	{
+        const wxQtMatrixData* rhs = static_cast<const wxQtMatrixData*>(t);
+        return *m_transform == *rhs->m_transform;
+	}
+
+	// return true if this is the identity matrix
+	virtual bool IsIdentity() const wxOVERRIDE
+	{
+        return m_transform->isIdentity();
+	}
+
+	//
+	// transformation
+	//
+
+	// add the translation to this matrix
+	virtual void Translate(wxDouble dx, wxDouble dy) wxOVERRIDE
+	{
+        m_transform->translate(dx, dy);
+	}
+
+	// add the scale to this matrix
+	virtual void Scale(wxDouble xScale, wxDouble yScale) wxOVERRIDE
+	{
+        m_transform->scale(xScale, yScale);
+    }
+
+	// add the rotation to this matrix (radians)
+	virtual void Rotate(wxDouble angle) wxOVERRIDE
+	{
+        m_transform->rotateRadians(angle);
+	}
+
+	//
+	// apply the transforms
+	//
+
+	// applies that matrix to the point
+	virtual void TransformPoint(wxDouble *x, wxDouble *y) const wxOVERRIDE
+	{
+        qreal transformed_x, transformed_y;
+        m_transform->map(static_cast<qreal>(*x), static_cast<qreal>(*y), &transformed_x, &transformed_y);
+        *x = transformed_x;
+        *y = transformed_y;
+	}
+
+	// applies the matrix except for translations
+	virtual void TransformDistance(wxDouble *dx, wxDouble *dy) const wxOVERRIDE
+	{
+	}
+
+	// returns the native representation
+	virtual void * GetNativeMatrix() const wxOVERRIDE
+	{
+		return static_cast<void*>(m_transform);
+	}
+private:
+	QTransform* m_transform;
 };
 
 //-----------------------------------------------------------------------------
@@ -48,8 +223,8 @@ public:
 		path->moveTo(x, y);
 	}
 
-		// adds a straight line from the current point to (x,y)
-		virtual void AddLineToPoint(wxDouble x, wxDouble y) wxOVERRIDE
+	// adds a straight line from the current point to (x,y)
+	virtual void AddLineToPoint(wxDouble x, wxDouble y) wxOVERRIDE
 	{
 		path->lineTo(x, y);
 	}
@@ -57,8 +232,8 @@ public:
 	// adds a cubic Bezier curve from the current point, using two control points and an end point
 	virtual void AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y) wxOVERRIDE
 	{
+        path->cubicTo(QPointF(cx1, cy1), QPointF(cx2, cy2), QPointF(x, y));
 	}
-
 
 	// adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
 	virtual void AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise) wxOVERRIDE
@@ -73,8 +248,8 @@ public:
 		*y = position.y();
 	}
 
-		// adds another path
-		virtual void AddPath(const wxGraphicsPathData* path) wxOVERRIDE
+	// adds another path
+	virtual void AddPath(const wxGraphicsPathData* path) wxOVERRIDE
 	{
 	}
 
@@ -88,11 +263,6 @@ public:
 	// These are convenience functions which - if not available natively will be assembled
 	// using the primitives from above
 	//
-
-	// appends a rectangle as a new closed subpath
-	virtual void AddRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
-	{
-	}
 
 	// appends a circle as a new closed subpath
 	virtual void AddCircle(wxDouble x, wxDouble y, wxDouble r) wxOVERRIDE
@@ -132,11 +302,16 @@ public:
 	// gets the bounding box enclosing all points (possibly including control points)
 	virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const wxOVERRIDE
 	{
-	}
+        QRectF bounding_rect = path->boundingRect();
+        if (x) *x = bounding_rect.left();
+        if (y) *y = bounding_rect.top();
+        if (w) *w = bounding_rect.width();
+        if (h) *h = bounding_rect.height();
+    }
 
 	virtual bool Contains(wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxWINDING_RULE) const wxOVERRIDE
 	{
-		return false;
+        return path->contains(QPointF(x, y));
 	}
 
 private:
@@ -145,40 +320,42 @@ private:
 
 class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
 {
+    void initFromDC(const wxDC& dc)
+    {
+        QPainter* painter = reinterpret_cast<QPainter*>(dc.GetHandle());
+        m_qtPainter = new QPainter(painter->device());
+        wxSize sz = dc.GetSize();
+        m_width = sz.x;
+        m_height = sz.y;
+    }
 public:
 	wxQtGraphicsContext(wxGraphicsRenderer* renderer, const wxWindowDC& dc)
 		: wxGraphicsContext(renderer)
 	{
-		QPainter* painter = reinterpret_cast<QPainter*>(dc.GetHandle());
-		m_qtPainter = new QPainter(painter->device());
-		//m_qtPainter->fillRect(-100, -100, 200, 200, QBrush(QColor(192, 192, 192)));
+        initFromDC(dc);
 	}
 	wxQtGraphicsContext(wxGraphicsRenderer* renderer, const wxMemoryDC& dc)
 		: wxGraphicsContext(renderer)
 	{
-		QPainter* painter = reinterpret_cast<QPainter*>(dc.GetHandle());
-		m_qtPainter = new QPainter(painter->device());
-	}
+        initFromDC(dc);
+    }
 #if wxUSE_PRINTING_ARCHITECTURE
 	wxQtGraphicsContext(wxGraphicsRenderer* renderer, const wxPrinterDC& dc)
 		: wxGraphicsContext(renderer)
 	{
-		QPainter* painter = reinterpret_cast<QPainter*>(dc.GetHandle());
-		m_qtPainter = new QPainter(painter->device());
-	}
+        initFromDC(dc);
+    }
 #endif
 	wxQtGraphicsContext(wxGraphicsRenderer* renderer, wxWindow *window)
 		: wxGraphicsContext(renderer)
 	{
 		QPainter* painter = reinterpret_cast<QPainter*>(window->QtGetPainter());
 		m_qtPainter = new QPainter(painter->device());
-	}
 
-	// If this ctor is used, Init() must be called by the derived class later.
-	//wxQtGraphicsContext(wxGraphicsRenderer* renderer)
-	//	: wxGraphicsContext(renderer))
-	//{
-	//}
+        wxSize sz = window->GetClientSize();
+        m_width = sz.x;
+        m_height = sz.y;
+    }
 
 	virtual ~wxQtGraphicsContext()
 	{
@@ -239,7 +416,15 @@ public:
 
 	virtual void StrokePath(const wxGraphicsPath& p) wxOVERRIDE
 	{
-	}
+        if (m_pen.IsNull())
+        {
+            return;
+        }
+
+        QPainterPath* path_data = reinterpret_cast<QPainterPath*>(p.GetNativePath());
+        const QPen& pen = ((wxQtPenData*)m_pen.GetRefData())->getPen();
+        m_qtPainter->strokePath(*path_data, pen);
+    }
 	virtual void FillPath(const wxGraphicsPath& p, wxPolygonFillMode fillStyle = wxWINDING_RULE) wxOVERRIDE
 	{
 		if (m_brush.IsNull())
@@ -248,7 +433,7 @@ public:
 		}
 
 		QPainterPath* path_data = reinterpret_cast<QPainterPath*>(p.GetNativePath());
-		const QBrush& brush = ((wxQtBrushData*)m_brush.GetRefData())->brush;
+		const QBrush& brush = ((wxQtBrushData*)m_brush.GetRefData())->getBrush();
 		m_qtPainter->fillPath(*path_data, brush);
 	}
 	virtual void ClearRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
@@ -268,7 +453,7 @@ public:
 	virtual void Rotate(wxDouble angle) wxOVERRIDE
 	{
         // wx angle is in radians. Qt angle is in degrees.
-		m_qtPainter->rotate(angle*180/M_PI);
+		m_qtPainter->rotate(RadiansToDegrees(angle));
 	}
 
 	// concatenates this transform with the current transform of this context
@@ -529,9 +714,9 @@ wxGraphicsMatrix wxQtGraphicsRenderer::CreateMatrix(wxDouble a, wxDouble b, wxDo
 
 {
 	wxGraphicsMatrix m;
-//	wxCairoMatrixData* data = new wxCairoMatrixData(this);
-//	data->Set(a, b, c, d, tx, ty);
-//	m.SetRefData(data);
+	wxQtMatrixData* data = new wxQtMatrixData(this);
+	data->Set(a, b, c, d, tx, ty);
+	m.SetRefData(data);
 	return m;
 }
 
@@ -540,7 +725,7 @@ wxGraphicsPen wxQtGraphicsRenderer::CreatePen(const wxGraphicsPenInfo& info)
 	wxGraphicsPen p;
 	if (info.GetStyle() != wxPENSTYLE_TRANSPARENT)
 	{
-//		p.SetRefData(new wxCairoPenData(this, info));
+		p.SetRefData(new wxQtPenData(this, info));
 	}
 	return p;
 }
