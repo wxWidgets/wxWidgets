@@ -482,7 +482,7 @@ void wxPropertyGrid::Init2()
     RegainColours();
 
     // This helps with flicker
-    SetBackgroundStyle( wxBG_STYLE_CUSTOM );
+    SetBackgroundStyle( wxBG_STYLE_PAINT );
 
     // Rely on native double-buffering by default.
 #if wxALWAYS_NATIVE_DOUBLE_BUFFER
@@ -1427,7 +1427,7 @@ void wxPropertyGrid::RegainColours()
         wxColour capForeCol = wxPGAdjustColour(m_colCapBack,colDec,5000,5000,true);
         if (wxPGGetColAvg(m_colCapBack) < 100)
             capForeCol = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
-        
+
         m_colCapFore = capForeCol;
         m_categoryDefaultCell.GetData()->SetFgCol(capForeCol);
     }

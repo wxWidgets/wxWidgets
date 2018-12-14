@@ -27,17 +27,17 @@ public:
     {
         m_width = m_height = 0;
         m_field = NULL;
-    };
+    }
 
     ~BombsGame();
 
-    int GetWidth() const { return m_width; };
-    int GetHeight() const { return m_height; };
+    int GetWidth() const { return m_width; }
+    int GetHeight() const { return m_height; }
 
     int Get(int x, int y) const
     {
         return m_field[x+y*m_width];
-    };
+    }
 
     int IsFocussed(int x, int y) const
     {
@@ -47,42 +47,42 @@ public:
     int IsHidden(int x, int y) const
     {
         return Get(x,y) & BG_HIDDEN;
-    };
+    }
 
     int IsMarked(int x, int y) const
     {
         return Get(x,y) & BG_MARKED;
-    };
+    }
 
     int IsBomb(int x, int y) const
     {
         return Get(x,y) & BG_BOMB;
-    };
+    }
 
     int IsExploded(int x, int y) const
     {
         return Get(x,y) & BG_EXPLODED;
-    };
+    }
 
     int IsSelected(int x, int y) const
     {
         return Get(x,y) & BG_SELECTED;
-    };
+    }
 
     int GetNumBombs() const
     {
         return m_numBombCells;
-    };
+    }
 
     int GetNumRemainingCells() const
     {
         return m_numRemainingCells;
-    };
+    }
 
     int GetNumMarkedCells() const
     {
         return m_numMarkedCells;
-    };
+    }
 
 
     bool Init(int width, int height, bool easyCorner = false);

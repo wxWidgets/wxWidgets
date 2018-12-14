@@ -15,6 +15,9 @@ if(WIN32)
     wx_append_sources(CORE_SRC BASE_AND_GUI_WIN32)
 elseif(UNIX)
     wx_append_sources(CORE_SRC UNIX)
+    if(wxUSE_LIBSDL)
+        wx_append_sources(CORE_SRC UNIX_SOUND_SDL)
+    endif()
 endif()
 
 if(WXMSW)
@@ -62,27 +65,26 @@ foreach(lib JPEG PNG TIFF)
 endforeach()
 
 if(WIN32)
-    wx_lib_link_libraries(core PRIVATE
-        winmm
-    )
+    wx_lib_link_libraries(core PRIVATE winmm)
 endif()
 if(WXOSX_COCOA)
-    wx_lib_link_libraries(core PUBLIC
-        "-framework AudioToolbox"
-        )
+    wx_lib_link_libraries(core PUBLIC "-framework AudioToolbox")
     if(wxUSE_WEBKIT)
-        wx_lib_link_libraries(core PUBLIC
-            "-framework WebKit"
-            )
+        wx_lib_link_libraries(core PUBLIC "-framework WebKit")
     endif()
 endif()
 if(WXGTK AND wxUSE_PRIVATE_FONTS)
-    wx_lib_include_directories(core PUBLIC
-        ${FONTCONFIG_INCLUDE_DIR}
-    )
-    wx_lib_link_libraries(core PUBLIC
-        ${FONTCONFIG_LIBRARIES}
-    )
+    wx_lib_include_directories(core PUBLIC ${FONTCONFIG_INCLUDE_DIR})
+    wx_lib_link_libraries(core PUBLIC ${FONTCONFIG_LIBRARIES})
+endif()
+if(UNIX AND wxUSE_LIBSDL)
+    if(SDL2_FOUND)
+        wx_lib_include_directories(core PUBLIC ${SDL2_INCLUDE_DIR})
+        wx_lib_link_libraries(core PUBLIC ${SDL2_LIBRARY})
+    elseif(SDL_FOUND)
+        wx_lib_include_directories(core PUBLIC ${SDL_INCLUDE_DIR})
+        wx_lib_link_libraries(core PUBLIC ${SDL_LIBRARY})
+    endif()
 endif()
 
 wx_finalize_lib(core)

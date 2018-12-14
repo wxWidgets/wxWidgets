@@ -471,7 +471,7 @@ void wxRibbonAUIArtProvider::DrawTab(wxDC& dc,
         if(!label.IsEmpty())
         {
             dc.SetTextForeground(m_tab_label_colour);
-            dc.SetBackgroundMode(wxTRANSPARENT);
+            dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
             int offset = 0;
             if(icon.IsOk())

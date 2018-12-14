@@ -122,7 +122,7 @@ int wxMSWEventLoopBase::GetNextMessageTimeout(WXMSG *msg, unsigned long timeout)
             default:
                 wxLogDebug("unexpected MsgWaitForMultipleObjects() return "
                            "value %lu", rc);
-                // fall through
+                wxFALLTHROUGH;
 
             case WAIT_TIMEOUT:
                 return -1;

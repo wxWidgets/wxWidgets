@@ -455,7 +455,7 @@ public:
     enum
     {
         Hidden       = 0,
-        //Closing      = 1,
+        Closing      = 1,
         Animating    = 2,
         Visible      = 3
     };

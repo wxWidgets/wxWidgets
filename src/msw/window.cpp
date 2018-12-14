@@ -1562,6 +1562,9 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
     // wxTopLevelWindow) should remove WS_CHILD in their MSWGetStyle()
     WXDWORD style = WS_CHILD;
 
+    if ( !IsThisEnabled() )
+        style |= WS_DISABLED;
+
     // using this flag results in very significant reduction in flicker,
     // especially with controls inside the static boxes (as the interior of the
     // box is not redrawn twice), but sometimes results in redraw problems, so
@@ -1605,7 +1608,7 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
             default:
             case wxBORDER_DEFAULT:
                 wxFAIL_MSG( wxT("unknown border style") );
-                // fall through
+                wxFALLTHROUGH;
 
             case wxBORDER_NONE:
             case wxBORDER_SIMPLE:
@@ -2301,7 +2304,7 @@ wxSize wxWindowMSW::DoGetBorderSize() const
 
         default:
             wxFAIL_MSG( wxT("unknown border style") );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxBORDER_NONE:
             border = 0;
@@ -2584,7 +2587,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
 
                 case VK_PRIOR:
                     bForward = false;
-                    // fall through
+                    wxFALLTHROUGH;
 
                 case VK_NEXT:
                     // we treat PageUp/Dn as arrows because chances are that
@@ -4557,7 +4560,7 @@ bool wxWindowMSW::HandlePower(WXWPARAM wParam,
 
         default:
             wxLogDebug(wxT("Unknown WM_POWERBROADCAST(%d) event"), wParam);
-            // fall through
+            wxFALLTHROUGH;
 
         // these messages are currently not mapped to wx events
         case PBT_APMQUERYSTANDBY:
@@ -5161,7 +5164,7 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
                     return true;
                 }
             }
-            // fall through
+            wxFALLTHROUGH;
 
         case wxBG_STYLE_SYSTEM:
             if ( !DoEraseBackground(hdc) )

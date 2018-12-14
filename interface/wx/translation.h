@@ -137,6 +137,34 @@ public:
                                 const wxString& msgIdLanguage = "en");
 
     /**
+        Returns the languages of all translations that can be used for the @a
+        domain.
+
+        This is a more general version of GetBestTranslation(), which returns
+        the whole list of preferred UI languages for which a translation for
+        the @a domain was found instead of just the first, i.e. the most
+        preferred, element of this list.
+
+        @param domain
+            The catalog domain to look for.
+
+        @param msgIdLanguage
+            Specifies the language of "msgid" strings in source code (i.e.
+            arguments to GetString(), wxGetTranslation() and the _() macro).
+
+        @return An array of language codes if any suitable matches were found,
+            empty array otherwise.
+
+        @since 3.1.2
+     */
+    wxArrayString GetAcceptableTranslations(const wxString& domain,
+                                            wxLanguage msgIdLanguage);
+
+    /// @overload
+    wxArrayString GetAcceptableTranslations(const wxString& domain,
+                                            const wxString& msgIdLanguage = "en");
+
+        /**
         Add standard wxWidgets catalogs ("wxstd" and possible port-specific
         catalogs).
 
@@ -147,9 +175,10 @@ public:
     bool AddStdCatalog();
 
     /**
-        Add a catalog for use with the current locale.
+        Add a catalog for the preferred UI language. In case of multiple
+        preferences, add catalog for each language, if available.
 
-        By default, it is searched for in standard places (see
+        By default, the catalog is searched for in standard places (see
         wxFileTranslationsLoader), but you may also prepend additional
         directories to the search path with
         wxFileTranslationsLoader::AddCatalogLookupPathPrefix().
@@ -173,8 +202,9 @@ public:
             code are used instead.
 
         @return
-            @true if catalog was successfully loaded, @false otherwise (which might
-            mean that the catalog is not found or that it isn't in the correct format).
+            @true if catalog in the most preferred language was successfully loaded,
+            @false otherwise (which might mean that the catalog is not found or that
+            it isn't in the correct format).
      */
     bool AddCatalog(const wxString& domain,
                     wxLanguage msgIdLanguage = wxLANGUAGE_ENGLISH_US);
@@ -200,8 +230,9 @@ public:
             in case they use 8-bit characters (e.g. German or French strings).
 
         @return
-            @true if catalog was successfully loaded, @false otherwise (which might
-            mean that the catalog is not found or that it isn't in the correct format).
+            @true if catalog in the most preferred language was successfully loaded,
+            @false otherwise (which might mean that the catalog is not found or that
+            it isn't in the correct format).
      */
     bool AddCatalog(const wxString& domain,
                     wxLanguage msgIdLanguage,

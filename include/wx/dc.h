@@ -686,6 +686,16 @@ protected:
     // for rendering on higher-resolution DCs such as printer ones
     static float GetFontPointSizeAdjustment(float dpi);
 
+    // Return the number of pixels per mm in the horizontal and vertical
+    // directions, respectively.
+    //
+    // If the physical size of the DC is not known, or doesn't make sense, as
+    // for a SVG DC, for example, a fixed value corresponding to the standard
+    // DPI is used.
+    double GetMMToPXx() const;
+    double GetMMToPXy() const;
+
+
     // window on which the DC draws or NULL
     wxWindow   *m_window;
 
@@ -715,9 +725,12 @@ protected:
     
     double m_contentScaleFactor; // used by high resolution displays (retina)
 
-    // what is a mm on a screen you don't know the size of?
-    double       m_mm_to_pix_x,
-                 m_mm_to_pix_y;
+    // Pixel per mm in horizontal and vertical directions.
+    //
+    // These variables are computed on demand by GetMMToPX[xy]() functions,
+    // don't access them directly other than for assigning to them.
+    mutable double m_mm_to_pix_x,
+                   m_mm_to_pix_y;
 
     // bounding and clipping boxes
     wxCoord m_minX, m_minY, m_maxX, m_maxY; // Bounding box is stored in device units.

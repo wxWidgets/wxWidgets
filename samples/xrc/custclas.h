@@ -60,7 +60,7 @@ public:
                        );
 
     // Destructor.
-    ~MyResizableListCtrl(){};
+    ~MyResizableListCtrl(){}
 
 protected:
 

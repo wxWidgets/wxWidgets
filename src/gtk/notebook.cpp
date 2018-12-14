@@ -454,6 +454,12 @@ bool wxNotebook::InsertPage( size_t position,
 
     /* set the label text */
     pageData->m_label = gtk_label_new(wxGTK_CONV(wxStripMenuCodes(text)));
+
+    if (m_windowStyle & wxBK_LEFT)
+        gtk_label_set_angle(GTK_LABEL(pageData->m_label), 90);
+    if (m_windowStyle & wxBK_RIGHT)
+        gtk_label_set_angle(GTK_LABEL(pageData->m_label), 270);
+
     gtk_box_pack_end(GTK_BOX(pageData->m_box),
         pageData->m_label, false, false, m_padding);
 

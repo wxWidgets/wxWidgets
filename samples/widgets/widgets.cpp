@@ -902,7 +902,7 @@ void WidgetsFrame::OnSetBorder(wxCommandEvent& event)
 
         default:
             wxFAIL_MSG( "unknown border style" );
-            // fall through
+            wxFALLTHROUGH;
 
         case Widgets_BorderDefault: border = wxBORDER_DEFAULT; break;
     }

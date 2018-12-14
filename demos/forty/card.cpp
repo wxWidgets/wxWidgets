@@ -165,7 +165,7 @@ void Card::Draw(wxDC& dc, int x, int y)
     if (m_wayUp == facedown)
     {
         dc.SetBackground(* wxRED_BRUSH);
-        dc.SetBackgroundMode(wxSOLID);
+        dc.SetBackgroundMode(wxBRUSHSTYLE_SOLID);
         wxBrush* brush = wxTheBrushList->FindOrCreateBrush(
                             *wxBLACK, wxBRUSHSTYLE_CROSSDIAG_HATCH
                             );
@@ -183,7 +183,7 @@ void Card::Draw(wxDC& dc, int x, int y)
 
         memoryDC.SelectObject(*m_symbolBmap);
 
-//        dc.SetBackgroundMode(wxTRANSPARENT);
+//        dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
         dc.SetTextBackground(*wxWHITE);
         switch (m_suit)

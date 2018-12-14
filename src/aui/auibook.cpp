@@ -26,6 +26,7 @@
     #include "wx/settings.h"
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/aui/tabmdi.h"
@@ -998,6 +999,7 @@ wxBEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_KILL_FOCUS(wxAuiTabCtrl::OnKillFocus)
     EVT_CHAR(wxAuiTabCtrl::OnChar)
     EVT_MOUSE_CAPTURE_LOST(wxAuiTabCtrl::OnCaptureLost)
+    EVT_SYS_COLOUR_CHANGED(wxAuiTabCtrl::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 
@@ -1026,6 +1028,16 @@ void wxAuiTabCtrl::OnPaint(wxPaintEvent&)
 
     if (GetPageCount() > 0)
         Render(&dc, this);
+}
+
+void wxAuiTabCtrl::OnSysColourChanged(wxSysColourChangedEvent &event)
+{
+    event.Skip();
+
+    if (m_art)
+    {
+        m_art->UpdateColoursFromSystem();
+    }
 }
 
 void wxAuiTabCtrl::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
@@ -1669,7 +1681,29 @@ wxBEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
                       wxEVT_AUINOTEBOOK_BG_DCLICK,
                       wxAuiNotebook::OnTabBgDClick)
     EVT_NAVIGATION_KEY(wxAuiNotebook::OnNavigationKeyNotebook)
+    EVT_SYS_COLOUR_CHANGED(wxAuiNotebook::OnSysColourChanged)
 wxEND_EVENT_TABLE()
+
+void wxAuiNotebook::OnSysColourChanged(wxSysColourChangedEvent &event)
+{
+    event.Skip(true);
+    wxAuiTabArt* art = m_tabs.GetArtProvider();
+    art->UpdateColoursFromSystem();
+
+    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+    size_t i, pane_count = all_panes.GetCount();
+    for (i = 0; i < pane_count; ++i)
+    {
+        wxAuiPaneInfo& pane = all_panes.Item(i);
+        if (pane.name == wxT("dummy"))
+            continue;
+        wxTabFrame* tab_frame = (wxTabFrame*)pane.window;
+        wxAuiTabCtrl* tabctrl = tab_frame->m_tabs;
+        tabctrl->GetArtProvider()->UpdateColoursFromSystem();
+        tabctrl->Refresh();
+    }
+    Refresh();
+}
 
 void wxAuiNotebook::Init()
 {
@@ -3325,10 +3359,37 @@ void wxAuiNotebook::SetPageSize (const wxSize& WXUNUSED(size))
     wxFAIL_MSG("Not implemented for wxAuiNotebook");
 }
 
-int wxAuiNotebook::HitTest (const wxPoint& WXUNUSED(pt), long* WXUNUSED(flags)) const
+int wxAuiNotebook::HitTest (const wxPoint &pt, long *flags) const
 {
-    wxFAIL_MSG("Not implemented for wxAuiNotebook");
-    return wxNOT_FOUND;
+    wxWindow *w = NULL;
+    long position = wxBK_HITTEST_NOWHERE;
+    const wxAuiPaneInfoArray& all_panes = const_cast<wxAuiManager&>(m_mgr).GetAllPanes();
+    const size_t pane_count = all_panes.GetCount();
+    for (size_t i = 0; i < pane_count; ++i)
+    {
+        if (all_panes.Item(i).name == wxT("dummy"))
+            continue;
+
+        wxTabFrame* tabframe = (wxTabFrame*) all_panes.Item(i).window;
+        if (tabframe->m_tab_rect.Contains(pt))
+        {
+            wxPoint tabpos = tabframe->m_tabs->ScreenToClient(ClientToScreen(pt));
+            if (tabframe->m_tabs->TabHitTest(tabpos.x, tabpos.y, &w))
+                position = wxBK_HITTEST_ONITEM;
+            break;
+        }
+        else if (tabframe->m_rect.Contains(pt))
+        {
+            w = tabframe->m_tabs->GetWindowFromIdx(tabframe->m_tabs->GetActivePage());
+            if (w)
+                position = wxBK_HITTEST_ONPAGE;
+            break;
+        }
+    }
+
+    if (flags)
+        *flags = position;
+    return w ? GetPageIndex(w) : wxNOT_FOUND;
 }
 
 int wxAuiNotebook::GetPageImage(size_t WXUNUSED(n)) const

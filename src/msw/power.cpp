@@ -143,6 +143,7 @@ wxPowerType wxGetPowerType()
 
             default:
                 wxLogDebug(wxT("Unknown ACLineStatus=%u"), sps.ACLineStatus);
+                wxFALLTHROUGH;
             case 255:
                 break;
         }

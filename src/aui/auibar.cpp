@@ -124,27 +124,15 @@ const wxColour DISABLED_TEXT_COLOR(DISABLED_TEXT_GREY_HUE,
 
 wxAuiGenericToolBarArt::wxAuiGenericToolBarArt()
 {
-    m_baseColour = GetBaseColor();
+    UpdateColoursFromSystem();
 
     m_flags = 0;
     m_textOrientation = wxAUI_TBTOOL_TEXT_BOTTOM;
-    m_highlightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
 
     m_separatorSize = wxWindow::FromDIP( 7, NULL);
     m_gripperSize   = wxWindow::FromDIP( 7, NULL);
     m_overflowSize  = wxWindow::FromDIP(16, NULL);
     m_dropdownSize  = wxWindow::FromDIP(10, NULL);
-
-    wxColor darker1Colour = m_baseColour.ChangeLightness(85);
-    wxColor darker2Colour = m_baseColour.ChangeLightness(75);
-    wxColor darker3Colour = m_baseColour.ChangeLightness(60);
-    wxColor darker4Colour = m_baseColour.ChangeLightness(50);
-    wxColor darker5Colour = m_baseColour.ChangeLightness(40);
-
-    int pen_width = wxWindow::FromDIP(1, NULL);
-    m_gripperPen1 = wxPen(darker5Colour, pen_width);
-    m_gripperPen2 = wxPen(darker3Colour, pen_width);
-    m_gripperPen3 = wxPen(*wxWHITE, pen_width);
 
     // TODO: Provide x1.5 and x2.0 versions or migrate to SVG.
     static const unsigned char buttonDropdownBits[] = { 0xe0, 0xf1, 0xfb };
@@ -165,11 +153,25 @@ wxAuiGenericToolBarArt::~wxAuiGenericToolBarArt()
 {
     m_font = *wxNORMAL_FONT;
 }
-
-
 wxAuiToolBarArt* wxAuiGenericToolBarArt::Clone()
 {
     return static_cast<wxAuiToolBarArt*>(new wxAuiGenericToolBarArt);
+}
+
+void wxAuiGenericToolBarArt::UpdateColoursFromSystem()
+{
+    m_baseColour = GetBaseColor();
+    m_highlightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+    wxColor darker1Colour = m_baseColour.ChangeLightness(85);
+    wxColor darker2Colour = m_baseColour.ChangeLightness(75);
+    wxColor darker3Colour = m_baseColour.ChangeLightness(60);
+    wxColor darker4Colour = m_baseColour.ChangeLightness(50);
+    wxColor darker5Colour = m_baseColour.ChangeLightness(40);
+
+    int pen_width = wxWindow::FromDIP(1, NULL);
+    m_gripperPen1 = wxPen(darker5Colour, pen_width);
+    m_gripperPen2 = wxPen(darker3Colour, pen_width);
+    m_gripperPen3 = wxPen(*wxStockGDI::GetColour(wxStockGDI::COLOUR_WHITE), pen_width);
 }
 
 void wxAuiGenericToolBarArt::SetFlags(unsigned int flags)
@@ -858,6 +860,7 @@ wxBEGIN_EVENT_TABLE(wxAuiToolBar, wxControl)
     EVT_LEAVE_WINDOW(wxAuiToolBar::OnLeaveWindow)
     EVT_MOUSE_CAPTURE_LOST(wxAuiToolBar::OnCaptureLost)
     EVT_SET_CURSOR(wxAuiToolBar::OnSetCursor)
+    EVT_SYS_COLOUR_CHANGED(wxAuiToolBar::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 void wxAuiToolBar::Init()
@@ -912,7 +915,7 @@ bool wxAuiToolBar::Create(wxWindow* parent,
     SetExtraStyle(wxWS_EX_PROCESS_IDLE);
     if (style & wxAUI_TB_HORZ_LAYOUT)
         SetToolTextOrientation(wxAUI_TBTOOL_TEXT_RIGHT);
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     return true;
 }
@@ -2426,6 +2429,14 @@ void wxAuiToolBar::UpdateWindowUI(long flags)
     }
 
     wxControl::UpdateWindowUI(flags);
+}
+
+void wxAuiToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
+{
+    event.Skip();
+
+    m_art->UpdateColoursFromSystem();
+    Refresh();
 }
 
 void wxAuiToolBar::OnPaint(wxPaintEvent& WXUNUSED(evt))

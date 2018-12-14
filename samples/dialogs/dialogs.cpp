@@ -3080,7 +3080,7 @@ void MyFrame::OnFindDialog(wxFindDialogEvent& event)
 void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
     wxPaintDC dc(this);
-    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     dc.DrawText(
                 "wxWidgets common dialogs"
                 " test application"
@@ -3707,6 +3707,7 @@ long TestMessageBoxDialog::GetStyle()
     {
         case MsgDlgIcon_Max:
             wxFAIL_MSG( "unexpected selection" );
+            wxFALLTHROUGH;
 
         case MsgDlgIcon_No:
             break;

@@ -37,7 +37,7 @@ else()
         set(wxCXX_STANDARD_DEFAULT COMPILER_DEFAULT)
     endif()
     wx_option(wxBUILD_CXX_STANDARD "C++ standard used to build wxWidgets targets"
-        ${wxCXX_STANDARD_DEFAULT} STRINGS COMPILER_DEFAULT 98 11 14)
+              ${wxCXX_STANDARD_DEFAULT} STRINGS COMPILER_DEFAULT 98 11 14 17)
 endif()
 
 if(WIN32)
@@ -74,6 +74,7 @@ wx_option(wxUSE_LIBLZMA "use LZMA compression" OFF)
 set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBLZMA "use liblzma for LZMA compression")
 
 wx_option(wxUSE_OPENGL "use OpenGL (or Mesa)")
+wx_option(wxUSE_LIBSDL "use SDL for audio on Unix")
 
 if(NOT WIN32)
     wx_option(wxUSE_LIBICONV "use libiconv (character conversion)")
@@ -356,7 +357,6 @@ wx_option(wxUSE_DRAGIMAGE "use wxDragImage")
 wx_option(wxUSE_UIACTIONSIMULATOR "use wxUIActionSimulator (experimental)")
 wx_option(wxUSE_DC_TRANSFORM_MATRIX "use wxDC::SetTransformMatrix and related")
 wx_option(wxUSE_WEBVIEW_WEBKIT "use wxWebView WebKit backend")
-# TODO: wxUSE_WEBVIEW_WEBKIT2
 if(WIN32 OR APPLE)
     set(wxUSE_PRIVATE_FONTS_DEFAULT ON)
 else()

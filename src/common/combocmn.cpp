@@ -2277,7 +2277,7 @@ void wxComboCtrlBase::ShowPopup()
     wxSize ctrlSz = GetSize();
 
     screenHeight = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
-    scrPos = GetParent()->ClientToScreen(GetPosition());
+    scrPos = GetScreenPosition();
 
     spaceAbove = scrPos.y;
     spaceBelow = screenHeight - spaceAbove - ctrlSz.y;
@@ -2571,8 +2571,9 @@ void wxComboCtrlBase::OnPopupDismiss(bool generateEvent)
 void wxComboCtrlBase::HidePopup(bool generateEvent)
 {
     // Should be able to call this without popup interface
-    if ( IsPopupWindowState(Hidden) )
+    if ( IsPopupWindowState(Hidden) || IsPopupWindowState(Closing) )
         return;
+    m_popupWinState = Closing; // To prevent from reentering
 
     // transfer value and show it in textctrl, if any
     if ( !IsPopupWindowState(Animating) )

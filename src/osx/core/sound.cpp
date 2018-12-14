@@ -94,6 +94,7 @@ void wxOSXAudioToolboxSoundData::DoStop()
     if ( m_playing )
     {
         m_playing = false;
+        AudioServicesRemoveSystemSoundCompletion(m_soundID);
         AudioServicesDisposeSystemSoundID (m_soundID);
 
         wxSound::SoundStopped(this);

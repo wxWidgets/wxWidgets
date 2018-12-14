@@ -228,9 +228,15 @@ private:
     // wxNUM_VAL_ZERO_AS_BLANK flag.
     wxString NormalizeValue(LongestValueType value) const
     {
+        // We really want to compare with the exact 0 here, so disable gcc
+        // warning about doing this.
+        wxGCC_WARNING_SUPPRESS(float-equal)
+
         wxString s;
         if ( value != 0 || !BaseValidator::HasFlag(wxNUM_VAL_ZERO_AS_BLANK) )
             s = this->ToString(value);
+
+        wxGCC_WARNING_RESTORE(float-equal)
 
         return s;
     }

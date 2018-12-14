@@ -85,7 +85,7 @@ wxFSFile* wxWebViewArchiveHandler::GetFile(const wxString &uri)
             return NULL;
 
         wxString fspath = "file:" +
-                          EscapeFileNameCharsInURL(path.substr(doubleslash + 2).c_str());
+                          EscapeFileNameCharsInURL(path.substr(doubleslash + 2).utf8_str());
         return m_fileSystem->OpenFile(fspath);
     }
     //Otherwise we need to extract the protocol
@@ -108,7 +108,7 @@ wxFSFile* wxWebViewArchiveHandler::GetFile(const wxString &uri)
             return NULL;
 
         wxString fspath = "file:" +
-                          EscapeFileNameCharsInURL(mainpath.substr(doubleslash + 2).c_str())
+                          EscapeFileNameCharsInURL(mainpath.substr(doubleslash + 2).utf8_str())
                           + "#" + protocol +":" + archivepath;
         return m_fileSystem->OpenFile(fspath);
     }

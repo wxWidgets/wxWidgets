@@ -1965,7 +1965,7 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
 
     SetBackgroundColour( *wxWHITE );
 
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     m_penRule = wxPen(GetRuleColour());
 
@@ -4525,14 +4525,6 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         return;
     }
 
-    if(event.ButtonDown())
-    {
-        // Not skipping button down events would prevent the system from
-        // setting focus to this window as most (all?) of them do by default,
-        // so skip it to enable default handling.
-        event.Skip();
-    }
-
     int x = event.GetX();
     int y = event.GetY();
     m_owner->CalcUnscrolledPosition( x, y, &x, &y );
@@ -4559,6 +4551,20 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
 
     const unsigned int current = GetLineAt( y );
     const wxDataViewItem item = GetItemByRow(current);
+
+    if(event.ButtonDown())
+    {
+        // Not skipping button down events would prevent the system from
+        // setting focus to this window as most (all?) of them do by default,
+        // so skip it to enable default handling.
+        event.Skip();
+
+        // Also stop editing if any mouse button is pressed: this is not really
+        // necessary for the left button, as it would result in a focus loss
+        // that would make the editor close anyhow, but we do need to do it for
+        // the other ones and it does no harm to do it for the left one too.
+        FinishEditing();
+    }
 
     // Handle right clicking here, before everything else as context menu
     // events should be sent even when we click outside of any item, unlike all
