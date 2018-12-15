@@ -12,7 +12,6 @@
 
 #include "wx/defs.h"
 #include "wx/object.h"
-#include "wx/list.h"
 #include "wx/control.h"
 #include "wx/scrolwin.h"
 #include "wx/icon.h"
@@ -178,9 +177,6 @@ private:
 // ---------------------------------------------------------
 // wxDataViewCtrl
 // ---------------------------------------------------------
-
-WX_DECLARE_LIST_WITH_DECL(wxDataViewColumn, wxDataViewColumnList,
-                          class WXDLLIMPEXP_CORE);
 
 class WXDLLIMPEXP_CORE wxDataViewCtrl : public wxDataViewCtrlBase,
                                        public wxScrollHelper
@@ -366,7 +362,9 @@ private:
     void InvalidateColBestWidth(int idx);
     void UpdateColWidths();
 
-    wxDataViewColumnList      m_cols;
+    void DoClearColumns();
+
+    wxVector<wxDataViewColumn*> m_cols;
     // cached column best widths information, values are for
     // respective columns from m_cols and the arrays have same size
     struct CachedColWidthInfo
