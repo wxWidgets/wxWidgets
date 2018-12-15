@@ -74,6 +74,11 @@ public:
         // UpdateWidth() if the width didn't really change, even if we don't
         // care about its return value.
         (void)WXUpdateWidth(width);
+
+        // Do remember the last explicitly set width: this is used to prevent
+        // UpdateColumnSizes() from resizing the last column to be smaller than
+        // this size.
+        m_manuallySetWidth = width;
     }
     virtual int GetWidth() const wxOVERRIDE;
 
@@ -137,8 +142,14 @@ public:
         m_width = width;
         UpdateWidth();
 
+        // We must not update m_manuallySetWidth here as this method is called by
+        // UpdateColumnSizes() which resizes the column automatically, and not
+        // "manually".
+
         return true;
     }
+
+    int WXGetManuallySetWidth() const { return m_manuallySetWidth; }
 
 private:
     // common part of all ctors
@@ -152,6 +163,7 @@ private:
 
     wxString m_title;
     int m_width,
+        m_manuallySetWidth,
         m_minWidth;
     wxAlignment m_align;
     int m_flags;

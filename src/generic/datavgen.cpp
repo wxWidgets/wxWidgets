@@ -180,7 +180,8 @@ wxTextCtrl *CreateEditorTextCtrl(wxWindow *parent, const wxRect& labelRect, cons
 
 void wxDataViewColumn::Init(int width, wxAlignment align, int flags)
 {
-    m_width = width;
+    m_width =
+    m_manuallySetWidth = width;
     m_minWidth = 0;
     m_align = align;
     m_flags = flags;
@@ -5022,12 +5023,17 @@ void wxDataViewMainWindow::UpdateColumnSizes()
     int lastColX = colswidth - lastCol->GetWidth();
     if ( lastColX < fullWinWidth )
     {
-        int desiredWidth = wxMax(fullWinWidth - lastColX, lastCol->GetMinWidth());
-        if ( !lastCol->WXUpdateWidth(desiredWidth) )
+        const int availableWidth = fullWinWidth - lastColX;
+
+        // Never make the column automatically smaller than the last width it
+        // was explicitly given nor its minimum width.
+        if ( availableWidth <= wxMax(lastCol->GetMinWidth(),
+                                     lastCol->WXGetManuallySetWidth()) )
         {
-            // The column width didn't change, no need to do anything else.
             return;
         }
+
+        lastCol->WXUpdateWidth(availableWidth);
 
         // All columns fit on screen, so we don't need horizontal scrolling.
         // To prevent flickering scrollbar when resizing the window to be
@@ -5035,7 +5041,7 @@ void wxDataViewMainWindow::UpdateColumnSizes()
         // be corrected at idle time.
         SetVirtualSize(0, m_virtualSize.y);
 
-        RefreshRect(wxRect(lastColX, 0, fullWinWidth - lastColX, GetSize().y));
+        RefreshRect(wxRect(lastColX, 0, availableWidth, GetSize().y));
     }
     else
     {
