@@ -188,7 +188,6 @@ wxGCDCImpl::wxGCDCImpl(wxDC* owner, int)
 void wxGCDCImpl::Init(wxGraphicsContext* ctx)
 {
     m_ok = false;
-    m_colour = true;
     m_mm_to_pix_x = mm2pt;
     m_mm_to_pix_y = mm2pt;
 
