@@ -113,6 +113,10 @@ All (GUI):
 - Fix wxInfoBar close button size in high DPI (Stefan Ziegler).
 - Make disabling the window before creating it actually work.
 
+wxGTK:
+
+- Invalidate selection after deleting wxListBox item with GTK+ 3 too.
+
 
 3.1.2: (released 2018-12-10)
 ----------------------------
