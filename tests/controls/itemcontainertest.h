@@ -40,6 +40,7 @@ protected:
         CPPUNIT_TEST( Set ); \
         CPPUNIT_TEST( SetSelection ); \
         CPPUNIT_TEST( SetString ); \
+        CPPUNIT_TEST( SelectionAfterDelete ); \
         WXUISIM_TEST( SimSelect );
 
     void Append();
@@ -52,6 +53,7 @@ protected:
     void Set();
     void SetSelection();
     void SetString();
+    void SelectionAfterDelete();
 #if wxUSE_UIACTIONSIMULATOR
     virtual void SimSelect();
 #endif
