@@ -234,6 +234,12 @@ protected:
     bool m_isClipBoxValid;
 
 private:
+    // This method only initializes trivial fields.
+    void CommonInit();
+
+    // This method initializes all fields (including those initialized by
+    // CommonInit() as it calls it) and the given context, if non-null, which
+    // is assumed to be newly created.
     void Init(wxGraphicsContext*);
 
     wxDECLARE_CLASS(wxGCDCImpl);

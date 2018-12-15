@@ -185,23 +185,29 @@ wxGCDCImpl::wxGCDCImpl(wxDC* owner, int)
     Init(NULL);
 }
 
-void wxGCDCImpl::Init(wxGraphicsContext* ctx)
+void wxGCDCImpl::CommonInit()
 {
-    m_ok = false;
     m_mm_to_pix_x = mm2pt;
     m_mm_to_pix_y = mm2pt;
+
+    m_isClipBoxValid = false;
+
+    m_logicalFunctionSupported = true;
+}
+
+void wxGCDCImpl::Init(wxGraphicsContext* ctx)
+{
+    CommonInit();
+
+    m_ok = false;
 
     m_pen = *wxBLACK_PEN;
     m_font = *wxNORMAL_FONT;
     m_brush = *wxWHITE_BRUSH;
 
-    m_isClipBoxValid = false;
-
     m_graphicContext = NULL;
     if (ctx)
         SetGraphicsContext(ctx);
-
-    m_logicalFunctionSupported = true;
 }
 
 wxGCDCImpl::~wxGCDCImpl()
