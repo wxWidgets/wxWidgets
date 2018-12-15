@@ -24,7 +24,7 @@ protected:
 
     // and this one must be overridden to return the window which implements
     // wxItemContainer interface -- usually it will return the same pointer as
-    // GetTestEntry(), just as a different type
+    // GetContainer(), just as a different type
     virtual wxWindow *GetContainerWindow() const = 0;
 
     // this should be inserted in the derived class CPPUNIT_TEST_SUITE
