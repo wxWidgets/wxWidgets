@@ -124,7 +124,17 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxGCDCImpl, wxDCImpl);
 wxGCDCImpl::wxGCDCImpl(wxDC *owner, wxGraphicsContext* context) :
     wxDCImpl(owner)
 {
-    Init(context);
+    CommonInit();
+
+    m_graphicContext = context;
+    m_ok = m_graphicContext != NULL;
+
+    // We can't currently initialize m_font, m_pen and m_brush here as we don't
+    // have any way of converting the corresponding wxGraphicsXXX objects to
+    // plain wxXXX ones. This is obviously not ideal as it means that GetXXX()
+    // won't return the actual object being used, but is better than the only
+    // alternative which is overwriting the objects currently used in the
+    // graphics context with the defaults.
 }
 
 wxGCDCImpl::wxGCDCImpl( wxDC *owner ) :
