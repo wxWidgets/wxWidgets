@@ -7,7 +7,6 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-#include "wx/textctrl.h"
 #include "wx/textentry.h"
 #include "wx/qt/private/converter.h"
 
@@ -111,7 +110,7 @@ wxWindow *wxTextEntry::GetEditableWindow()
 
 void wxTextEntry::SetMaxLength(unsigned long len)
 {
-    QLineEdit *editor = GetEditable();
+    QLineEdit *editor = QTGetLineEdit();
     if( editor )
         editor->setMaxLength( len );
 }

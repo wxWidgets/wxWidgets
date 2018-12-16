@@ -38,7 +38,8 @@ public:
     virtual bool IsEditable() const;
     virtual void SetEditable(bool editable);
     
-    virtual void SetMaxLength(unsigned long len);
+    virtual void SetMaxLength(unsigned long len) wxOVERRIDE;
+
 protected:
     virtual wxString DoGetValue() const;
     virtual void DoSetValue(const wxString& value, int flags=0);
@@ -46,7 +47,7 @@ protected:
     virtual wxWindow *GetEditableWindow();
 
 private:
-    virtual QLineEdit *GetEditable()  const { return NULL; };
+    virtual QLineEdit *QTGetLineEdit()  const { return NULL; };
 };
 
 #endif // _WX_QT_TEXTENTRY_H_

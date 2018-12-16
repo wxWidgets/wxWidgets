@@ -71,9 +71,10 @@ protected:
     virtual QScrollArea *QtGetScrollBarsContainer() const;
 
 private:
+    virtual QLineEdit *QTGetLineEdit() const wxOVERRIDE;
+
     QLineEdit *m_qtLineEdit;
     QTextEdit *m_qtTextEdit;
-    virtual QLineEdit *GetEditable() const wxOVERRIDE;
     
     wxDECLARE_DYNAMIC_CLASS( wxTextCtrl );
 };
