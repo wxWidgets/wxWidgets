@@ -200,7 +200,9 @@ class WXDLLIMPEXP_CORE wxQtGraphicsPathData : public wxGraphicsPathData
 {
 public:
 	wxQtGraphicsPathData(wxGraphicsRenderer* renderer)
-		: wxGraphicsPathData(renderer), path(new QPainterPath())
+		: wxGraphicsPathData(renderer),
+          path(new QPainterPath()),
+          current_subpath_start(-1)
 	{
 	}
 	~wxQtGraphicsPathData()
@@ -221,23 +223,47 @@ public:
 	virtual void MoveToPoint(wxDouble x, wxDouble y) wxOVERRIDE
 	{
 		path->moveTo(x, y);
+        current_subpath_start = path->elementCount() - 1;
 	}
 
 	// adds a straight line from the current point to (x,y)
+    // if there is no current path, it is equivalent to a moveTo.
 	virtual void AddLineToPoint(wxDouble x, wxDouble y) wxOVERRIDE
 	{
-		path->lineTo(x, y);
+        if (current_subpath_start == -1)
+            MoveToPoint(x, y);
+        else
+		    path->lineTo(x, y);
 	}
 
 	// adds a cubic Bezier curve from the current point, using two control points and an end point
 	virtual void AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y) wxOVERRIDE
 	{
+	    if (current_subpath_start == -1)
+            MoveToPoint(cx1, cy1);
         path->cubicTo(QPointF(cx1, cy1), QPointF(cx2, cy2), QPointF(x, y));
 	}
 
 	// adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
 	virtual void AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise) wxOVERRIDE
 	{
+        if (current_subpath_start == -1)
+            MoveToPoint(x, y);
+
+        qreal arc_length;
+        if (clockwise)
+        {
+            if (endAngle < startAngle)
+                endAngle += 2 * M_PI;
+            arc_length = -RadiansToDegrees(endAngle - startAngle);
+        }
+        else
+        {
+            if (endAngle > startAngle)
+                endAngle -= 2 * M_PI;
+            arc_length = -RadiansToDegrees(endAngle - startAngle);
+        }
+        path->arcTo(x-r, y-r, r*2, r*2, -RadiansToDegrees(startAngle), arc_length);
 	}
 
 	// gets the last point of the current path, (0,0) if not yet set
@@ -256,7 +282,14 @@ public:
 	// closes the current sub-path
 	virtual void CloseSubpath() wxOVERRIDE
 	{
-		path->closeSubpath();
+        // Current position must be end of last path after close, not (0,0) as Qt sets.
+        if (!hasCurrentSubpath())
+            return;
+
+        const QPainterPath::Element first_element = path->elementAt(current_subpath_start);
+
+	    path->closeSubpath();
+        MoveToPoint(first_element.x, first_element.y);
 	}
 
 	//
@@ -264,18 +297,16 @@ public:
 	// using the primitives from above
 	//
 
-	// appends a circle as a new closed subpath
+    // appends a circle as a new closed subpath
 	virtual void AddCircle(wxDouble x, wxDouble y, wxDouble r) wxOVERRIDE
 	{
 		path->addEllipse(x - r, y - r, r*2, r*2);
-		path->closeSubpath();
-	}
+    }
 
 	// appends an ellipse as a new closed subpath fitting the passed rectangle
 	virtual void AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
 	{
 		path->addEllipse(x, y, w, h);
-		path->closeSubpath();
 	}
 
 	/*
@@ -302,7 +333,9 @@ public:
 	// gets the bounding box enclosing all points (possibly including control points)
 	virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const wxOVERRIDE
 	{
-        QRectF bounding_rect = path->boundingRect();
+        QRectF bounding_rect = path->controlPointRect();
+        if (!bounding_rect.isValid())
+            bounding_rect = QRectF();
         if (x) *x = bounding_rect.left();
         if (y) *y = bounding_rect.top();
         if (w) *w = bounding_rect.width();
@@ -315,7 +348,12 @@ public:
 	}
 
 private:
+    bool hasCurrentSubpath() const
+    {
+        return current_subpath_start != -1;
+    }
 	QPainterPath* path;
+    int current_subpath_start;
 };
 
 class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
