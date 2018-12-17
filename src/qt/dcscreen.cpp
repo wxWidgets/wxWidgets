@@ -34,15 +34,6 @@ void wxScreenDCImpl::DoGetSize(int *width, int *height) const
     wxDisplaySize(width, height);
 }
 
-bool wxScreenDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
-{
-//    const_cast<wxScreenDCImpl*>(this)->GetQImage();
-//    return wxQtDCImpl::DoGetPixel(x, y, col);
-    x = y = 0;
-    col = 0;
-    return false;
-}
-
 // defered allocation for blit
 QImage *wxScreenDCImpl::GetQImage()
 {
