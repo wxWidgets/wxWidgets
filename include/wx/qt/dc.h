@@ -111,10 +111,10 @@ public:
     virtual void* GetHandle() const { return (void*) m_qtPainter; }
 
 protected:
-    virtual QImage *GetQImage() { return m_qtImage; }
+    virtual QPixmap *GetQPixmap() { return m_qtPixmap; }
     
     QPainter *m_qtPainter;
-    QImage *m_qtImage;
+    QPixmap *m_qtPixmap;
 
     wxRegion *m_clippingRegion;
 private:

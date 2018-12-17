@@ -47,7 +47,7 @@ wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     : wxDCImpl( owner )
 {
     m_clippingRegion = new wxRegion;
-    m_qtImage = NULL;
+    m_qtPixmap = NULL;
     m_rasterColourOp = wxQtNONE;
     m_qtPenColor = new QColor;
     m_qtBrushColor = new QColor;
@@ -474,15 +474,18 @@ bool wxQtDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 
     if ( col )
     {
-        wxCHECK_MSG( m_qtImage != NULL, false, "This DC doesn't support GetPixel()" );
-
-        QColor pixel = m_qtImage->pixel( x, y );
+        wxCHECK_MSG( m_qtPixmap != NULL, false, "This DC doesn't support GetPixel()" );
+        QPixmap pixmap1px = m_qtPixmap->copy( x, y, 1, 1 );
+        QImage image = pixmap1px.toImage();
+        QColor pixel = image.pixel( 0, 0 );
         col->Set( pixel.red(), pixel.green(), pixel.blue(), pixel.alpha() );
 
         return true;
     }
     else
+    {
         return false;
+    }
 }
 
 void wxQtDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
@@ -739,23 +742,31 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
 {
     wxQtDCImpl *implSource = (wxQtDCImpl*)source->GetImpl();
 
-    QImage *qtSource = implSource->GetQImage();
+    QPixmap *qtSource = implSource->GetQPixmap();
 
     // Not a CHECK on purpose
     if ( !qtSource )
         return false;
 
-    QImage qtSourceConverted = *qtSource;
-    if ( !useMask )
-        qtSourceConverted = qtSourceConverted.convertToFormat( QImage::Format_RGB32 );
-
     // Change logical function
     wxRasterOperationMode savedMode = GetLogicalFunction();
     SetLogicalFunction( rop );
 
-    m_qtPainter->drawImage( QRect( xdest, ydest, width, height ),
-                           qtSourceConverted,
-                           QRect( xsrc, ysrc, width, height ) );
+    if ( useMask )
+    {
+        m_qtPainter->drawPixmap( QRect( xdest, ydest, width, height ),
+                                *qtSource,
+                                QRect( xsrc, ysrc, width, height ) );
+    }
+    else
+    {
+        QImage qtSourceConverted = qtSource->toImage();
+        qtSourceConverted = qtSourceConverted.convertToFormat(QImage::Format_RGB32);
+
+        m_qtPainter->drawImage( QRect( xdest, ydest, width, height ),
+                                qtSourceConverted,
+                                QRect( xsrc, ysrc, width, height ) );
+    }
 
     SetLogicalFunction( savedMode );
 
