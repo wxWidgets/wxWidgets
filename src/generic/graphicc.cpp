@@ -2234,6 +2234,11 @@ wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer, HWND hWnd)
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
 : wxGraphicsContext(renderer)
 {
+#ifdef __WXQT__
+    m_qtPainter =  NULL;
+    m_qtImage = NULL;
+    m_qtSurface = NULL;
+#endif
 #ifdef __WXMSW__
     m_mswSurface = NULL;
     m_mswStateSavedDC = 0;
@@ -2288,6 +2293,11 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
 wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer) :
     wxGraphicsContext(renderer)
 {
+#ifdef __WXQT__
+    m_qtPainter =  NULL;
+    m_qtImage = NULL;
+    m_qtSurface = NULL;
+#endif
 #ifdef __WXMSW__
     m_mswSurface = NULL;
     m_mswStateSavedDC = 0;
