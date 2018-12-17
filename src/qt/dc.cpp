@@ -475,14 +475,17 @@ bool wxQtDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
     if ( col )
     {
         wxCHECK_MSG( m_qtPixmap != NULL, false, "This DC doesn't support GetPixel()" );
-        QImage image = m_qtPixmap->toImage();
-        QColor pixel = image.pixel( x, y );
+        QPixmap pixmap1px = m_qtPixmap->copy( x, y, 1, 1 );
+        QImage image = pixmap1px.toImage();
+        QColor pixel = image.pixel( 0, 0 );
         col->Set( pixel.red(), pixel.green(), pixel.blue(), pixel.alpha() );
 
         return true;
     }
     else
+    {
         return false;
+    }
 }
 
 void wxQtDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
