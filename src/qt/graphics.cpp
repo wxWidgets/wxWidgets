@@ -191,6 +191,31 @@ private:
 	QTransform* m_transform;
 };
 
+class wxQtFontData : public wxGraphicsObjectRefData
+{
+public:
+    wxQtFontData(wxGraphicsRenderer* renderer, const wxFont &font, const wxColour &col)
+        : wxGraphicsObjectRefData(renderer),
+          m_font(font.GetHandle()),
+          m_color(col.GetQColor())
+    {
+    }
+
+    const QFont& GetFont() const
+    {
+        return m_font;
+    }
+
+    const QColor& GetColor() const
+    {
+        return m_color;
+    }
+
+private:
+    QFont m_font;
+    QColor m_color;
+};
+
 //-----------------------------------------------------------------------------
 // wxQtGraphicsPathData
 //-----------------------------------------------------------------------------
@@ -534,7 +559,21 @@ public:
 	virtual void GetTextExtent(const wxString &str, wxDouble *width, wxDouble *height,
 		wxDouble *descent, wxDouble *externalLeading) const wxOVERRIDE
 	{
-	}
+        wxCHECK_RET(!m_font.IsNull(), wxT("wxQtContext::DrawText - no valid font set"));
+
+        wxQtFontData* font_data = static_cast<wxQtFontData*>(m_font.GetRefData());
+
+        m_qtPainter->setFont(font_data->GetFont());
+
+        QFontMetrics metrics = m_qtPainter->fontMetrics();
+        QRect bounding_rect = metrics.boundingRect(QString(str));
+
+        if (width) *width = bounding_rect.width();
+        if (height) *height = bounding_rect.height();
+        if (descent) *descent = metrics.descent();
+        if (externalLeading) *externalLeading = metrics.leading() - (metrics.ascent() + metrics.descent());
+    }
+
 	virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const wxOVERRIDE
 	{
 	}
@@ -542,6 +581,13 @@ public:
 protected:
 	virtual void DoDrawText(const wxString &str, wxDouble x, wxDouble y) wxOVERRIDE
 	{
+        wxCHECK_RET(!m_font.IsNull(), wxT("wxQtContext::DrawText - no valid font set"));
+
+        wxQtFontData* font_data = static_cast<wxQtFontData*>(m_font.GetRefData());
+
+        m_qtPainter->setFont(font_data->GetFont());
+        m_qtPainter->setPen(QPen(font_data->GetColor()));
+        m_qtPainter->drawText(x, y, QString(str));
 	}
 
 	enum ApplyTransformMode { Apply_directly, Apply_scaled_dev_origin };
@@ -809,7 +855,7 @@ wxGraphicsFont wxQtGraphicsRenderer::CreateFont(const wxFont &font, const wxColo
 	wxGraphicsFont p;
 	if (font.IsOk())
 	{
-		//p.SetRefData(new wxCairoFontData(this, font, col));
+		p.SetRefData(new wxQtFontData(this, font, col));
 	}
 	return p;
 }
