@@ -1574,18 +1574,18 @@ bool wxTranslations::AddCatalog(const wxString& domain,
                    wxS("adding '%s' translation for domain '%s' (msgid language '%s')"),
                    *lang, domain, msgIdLang);
 
-        // No use loading languages that are less preferred than the
-        // msgid language, as by definition it contains all the strings
-        // in the msgid language.
-        if ( msgIdLang == *lang )
-            break;
-
         // We determine success by the success of loading/failing to load
         // the most preferred (i.e. the first one) language's catalog:
         if ( lang == domain_langs.begin() )
             success = LoadCatalog(domain, *lang, msgIdLang);
         else
             LoadCatalog(domain, *lang, msgIdLang);
+
+        // No use loading languages that are less preferred than the
+        // msgid language, as by definition it contains all the strings
+        // in the msgid language.
+        if ( msgIdLang == *lang )
+            break;
     }
 
     return success;
