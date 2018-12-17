@@ -277,6 +277,8 @@ public:
 	// adds another path
 	virtual void AddPath(const wxGraphicsPathData* path) wxOVERRIDE
 	{
+        const wxQtGraphicsPathData* new_path = static_cast<const wxQtGraphicsPathData*>(path);
+        m_path->addPath(*new_path->m_path);
 	}
 
 	// closes the current sub-path
