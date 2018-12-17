@@ -1676,9 +1676,9 @@ wxString wxTranslations::GetBestTranslation(const wxString& domain,
                                             const wxString& msgIdLanguage)
 {
     const wxArrayString allGoodOnes = GetAcceptableTranslations(domain, msgIdLanguage);
-
-    wxLogTrace(TRACE_I18N, " => using language '%s'", allGoodOnes[0]);
-    return allGoodOnes[0];
+    wxString best(allGoodOnes.empty() ? wxString() : allGoodOnes[0]);
+    wxLogTrace(TRACE_I18N, " => using language '%s'", best);
+    return best;
 }
 
 wxArrayString wxTranslations::GetAcceptableTranslations(const wxString& domain,
