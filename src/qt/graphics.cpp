@@ -17,10 +17,31 @@ namespace
 class WXDLLIMPEXP_CORE wxQtBrushData : public wxGraphicsObjectRefData
 {
 public:
+    wxQtBrushData(wxGraphicsRenderer* renderer)
+        : wxGraphicsObjectRefData(renderer)
+    {
+    }
+
 	wxQtBrushData(wxGraphicsRenderer* renderer, const wxBrush& wxbrush)
 		: wxGraphicsObjectRefData(renderer), brush(wxbrush.GetHandle())
 	{
 	}
+
+    void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+        wxDouble x2, wxDouble y2,
+        const wxGraphicsGradientStops& stops)
+    {
+        QLinearGradient gradient(x1, y1, x2, y2);
+        QGradientStops qstops;
+        for (size_t i = 0; i < stops.GetCount(); ++i)
+        {
+            const wxGraphicsGradientStop stop = stops.Item(i);
+            qstops.append(QGradientStop(stop.GetPosition(), stop.GetColour().GetQColor()));
+        }
+
+        gradient.setStops(qstops);
+        brush = QBrush(gradient);
+    }
 
     const QBrush& getBrush() const
 	{
@@ -503,9 +524,7 @@ public:
 	}
 	virtual void ClearRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
 	{
-	}
-	virtual void DrawRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
-	{
+        m_qtPainter->fillRect(x, y, w, h, QBrush(QColor(0, 0, 0, 0)));
 	}
 
 	virtual void Translate(wxDouble dx, wxDouble dy) wxOVERRIDE
@@ -542,6 +561,8 @@ public:
 	}
 	virtual void DrawBitmap(const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
 	{
+        QPixmap pix = *bmp.GetHandle();
+        m_qtPainter->drawPixmap(x, y, w, h, pix);
 	}
 	virtual void DrawIcon(const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
 	{
@@ -587,7 +608,9 @@ protected:
 
         m_qtPainter->setFont(font_data->GetFont());
         m_qtPainter->setPen(QPen(font_data->GetColor()));
-        m_qtPainter->drawText(x, y, QString(str));
+        QFontMetrics metrics = m_qtPainter->fontMetrics();
+
+        m_qtPainter->drawText(x, y+metrics.ascent(), QString(str));
 	}
 
 	enum ApplyTransformMode { Apply_directly, Apply_scaled_dev_origin };
@@ -714,14 +737,6 @@ wxGraphicsContext * wxQtGraphicsRenderer::CreateContext(const wxPrinterDC& dc)
 }
 #endif
 
-#if defined(__WXMSW__) && wxUSE_ENH_METAFILE
-wxGraphicsContext * wxQtGraphicsRenderer::CreateContext(const wxEnhMetaFileDC& dc)
-{
-	ENSURE_LOADED_OR_RETURN(NULL);
-	return new wxQtGraphicsContext(this, dc);
-}
-#endif // __WXMSW__ && wxUSE_ENH_METAFILE
-
 wxGraphicsContext * wxQtGraphicsRenderer::CreateContextFromNativeContext(void * context)
 {
 #ifdef __WXMSW__
@@ -751,13 +766,6 @@ wxGraphicsContext * wxQtGraphicsRenderer::CreateContextFromNativeWindow(void * w
 #endif
 }
 
-#ifdef __WXMSW__
-wxGraphicsContext * wxQtGraphicsRenderer::CreateContextFromNativeHDC(WXHDC dc)
-{
-	return new wxQtGraphicsContext(this, (HDC)dc);
-}
-#endif
-
 #if wxUSE_IMAGE
 wxGraphicsContext * wxQtGraphicsRenderer::CreateContextFromImage(wxImage& image)
 {
@@ -768,14 +776,8 @@ wxGraphicsContext * wxQtGraphicsRenderer::CreateContextFromImage(wxImage& image)
 
 wxGraphicsContext * wxQtGraphicsRenderer::CreateMeasuringContext()
 {
-#ifdef __WXGTK__
-	return CreateContextFromNativeWindow(gdk_get_default_root_window());
-#elif defined(__WXMSW__)
-	return new wxCairoMeasuringContext(this);
-#else
+	//return new wxCairoMeasuringContext(this);
 	return NULL;
-	// TODO
-#endif
 }
 
 wxGraphicsContext * wxQtGraphicsRenderer::CreateContext(wxWindow* window)
@@ -832,9 +834,9 @@ wxDouble x2, wxDouble y2,
 const wxGraphicsGradientStops& stops)
 {
 	wxGraphicsBrush p;
-	//wxCairoBrushData* d = new wxCairoBrushData(this);
-	//d->CreateLinearGradientBrush(x1, y1, x2, y2, stops);
-	//p.SetRefData(d);
+	wxQtBrushData* d = new wxQtBrushData(this);
+	d->CreateLinearGradientBrush(x1, y1, x2, y2, stops);
+	p.SetRefData(d);
 	return p;
 }
 
