@@ -22,16 +22,37 @@ public:
     {
     }
 
-	wxQtBrushData(wxGraphicsRenderer* renderer, const wxBrush& wxbrush)
-		: wxGraphicsObjectRefData(renderer), brush(wxbrush.GetHandle())
-	{
-	}
+    wxQtBrushData(wxGraphicsRenderer* renderer, const wxBrush& wxbrush)
+        : wxGraphicsObjectRefData(renderer), brush(wxbrush.GetHandle())
+    {
+    }
 
     void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
         wxDouble x2, wxDouble y2,
         const wxGraphicsGradientStops& stops)
     {
         QLinearGradient gradient(x1, y1, x2, y2);
+        setWxStops(gradient, stops);
+        brush = QBrush(gradient);
+    }
+
+    void CreateRadialGradientBrush(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
+        const wxGraphicsGradientStops& stops)
+    {
+        QRadialGradient gradient(QPointF(xc, yc), radius, QPointF(xo, yo));
+        setWxStops(gradient, stops);
+        brush = QBrush(gradient);
+    }
+
+    const QBrush& getBrush() const
+    {
+        return brush;
+    }
+
+private:
+
+    void setWxStops(QGradient& gradient, const wxGraphicsGradientStops& stops)
+    {
         QGradientStops qstops;
         for (size_t i = 0; i < stops.GetCount(); ++i)
         {
@@ -40,15 +61,7 @@ public:
         }
 
         gradient.setStops(qstops);
-        brush = QBrush(gradient);
     }
-
-    const QBrush& getBrush() const
-	{
-        return brush;
-	}
-
-private:
 	QBrush brush;
 };
 
@@ -881,9 +894,9 @@ wxDouble xc, wxDouble yc, wxDouble r,
 const wxGraphicsGradientStops& stops)
 {
 	wxGraphicsBrush p;
-	//wxCairoBrushData* d = new wxCairoBrushData(this);
-	//d->CreateRadialGradientBrush(xo, yo, xc, yc, r, stops);
-	//p.SetRefData(d);
+    wxQtBrushData* d = new wxQtBrushData(this);
+    d->CreateRadialGradientBrush(xo, yo, xc, yc, r, stops);
+	p.SetRefData(d);
 	return p;
 }
 
