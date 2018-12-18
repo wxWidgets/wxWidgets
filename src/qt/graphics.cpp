@@ -93,12 +93,17 @@ private:
 class WXDLLIMPEXP_CORE wxQtMatrixData : public wxGraphicsMatrixData
 {
 public:
-	wxQtMatrixData(wxGraphicsRenderer* renderer)
+	explicit wxQtMatrixData(wxGraphicsRenderer* renderer)
 		: wxGraphicsMatrixData(renderer), m_transform(new QTransform)
 	{
 	}
 
-	virtual ~wxQtMatrixData()
+    wxQtMatrixData(wxGraphicsRenderer* renderer, const QTransform& transform)
+        : wxGraphicsMatrixData(renderer), m_transform(new QTransform(transform))
+    {
+    }
+    
+    virtual ~wxQtMatrixData()
 	{
 		delete m_transform;
 	}
@@ -207,6 +212,11 @@ public:
 	virtual void * GetNativeMatrix() const wxOVERRIDE
 	{
 		return static_cast<void*>(m_transform);
+	}
+
+    const QTransform& GetQTransform() const
+	{
+        return *m_transform;
 	}
 private:
 	QTransform* m_transform;
@@ -533,7 +543,9 @@ public:
 	}
 	virtual void Scale(wxDouble xScale, wxDouble yScale) wxOVERRIDE
 	{
+        m_qtPainter->scale(xScale, yScale);
 	}
+
 	virtual void Rotate(wxDouble angle) wxOVERRIDE
 	{
         // wx angle is in radians. Qt angle is in degrees.
@@ -543,37 +555,60 @@ public:
 	// concatenates this transform with the current transform of this context
 	virtual void ConcatTransform(const wxGraphicsMatrix& matrix) wxOVERRIDE
 	{
+        wxGraphicsMatrix currentMatrix = GetTransform();
+        currentMatrix.Concat(matrix);
+        SetTransform(currentMatrix);
 	}
 
 	// sets the transform of this context
 	virtual void SetTransform(const wxGraphicsMatrix& matrix) wxOVERRIDE
 	{
+        const wxQtMatrixData* qmatrix = static_cast<const wxQtMatrixData*>(matrix.GetRefData());
+        m_qtPainter->setTransform(qmatrix->GetQTransform());
 	}
 
 	// gets the matrix of this context
 	virtual wxGraphicsMatrix GetTransform() const wxOVERRIDE
 	{
-		return wxGraphicsMatrix();
+        QTransform transform = m_qtPainter->transform();
+        wxGraphicsMatrix m;
+	    m.SetRefData(new wxQtMatrixData(GetRenderer(), transform));
+        return m;
 	}
 
 	virtual void DrawBitmap(const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
 	{
 	}
-	virtual void DrawBitmap(const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
+
+    void DoDrawBitmap(const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h, bool useMask) const
 	{
         QPixmap pix = *bmp.GetHandle();
+
+        if (useMask && bmp.GetMask() && bmp.GetMask()->GetHandle())
+            pix.setMask(*bmp.GetMask()->GetHandle());
+
         m_qtPainter->drawPixmap(x, y, w, h, pix);
 	}
-	virtual void DrawIcon(const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
+
+	virtual void DrawBitmap(const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
+	{
+        DoDrawBitmap(bmp, x, y, w, h, false);
+    }
+
+    virtual void DrawIcon(const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
+	{
+        DoDrawBitmap(icon, x, y, w, h, true);
+	}
+
+    virtual void PushState() wxOVERRIDE
 	{
 	}
-	virtual void PushState() wxOVERRIDE
+
+    virtual void PopState() wxOVERRIDE
 	{
 	}
-	virtual void PopState() wxOVERRIDE
-	{
-	}
-	virtual void Flush() wxOVERRIDE
+
+    virtual void Flush() wxOVERRIDE
 	{
 	}
 
@@ -617,8 +652,6 @@ protected:
 
 #ifdef __WXQT__
 	QPainter* m_qtPainter;
-	QImage* m_qtImage;
-//	cairo_surface_t* m_qtSurface;
 #endif
 
 private:
@@ -979,8 +1012,9 @@ wxString wxQtGraphicsRenderer::GetName() const
 
 void wxQtGraphicsRenderer::GetVersion(int *major, int *minor, int *micro) const
 {
-	if (major)
-		*major = 1;
+	if (major) *major = 1;
+    if (minor) *minor = 0;
+    if (micro) *micro = 0;
 }
 
 static wxQtGraphicsRenderer gs_qtGraphicsRenderer;
