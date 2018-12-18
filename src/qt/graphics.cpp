@@ -386,11 +386,6 @@ public:
         m_path->addEllipse(x, y, w, h);
 	}
 
-	/*
-	// draws a an arc to two tangents connecting (current) to (x1,y1) and (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
-	virtual void AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )  ;
-	*/
-
 	// returns the native path
 	virtual void * GetNativePath() const wxOVERRIDE
 	{
@@ -484,22 +479,30 @@ public:
 
 	virtual void Clip(const wxRegion &region) wxOVERRIDE
 	{
-	}
+        m_qtPainter->setClipRegion(region.GetHandle());
+    }
 
 	// clips drawings to the rect
 	virtual void Clip(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
 	{
+        m_qtPainter->setClipRect(x, y, w, h);
 	}
 
 	// resets the clipping to original extent
 	virtual void ResetClip() wxOVERRIDE
 	{
+        m_qtPainter->setClipping(false);
 	}
 
 	// returns bounding box of the clipping region
 	virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) wxOVERRIDE
 	{
-	}
+        QRectF box = m_qtPainter->clipBoundingRect();
+        if (x) *x = box.left();
+        if (y) *y = box.top();
+        if (w) *w = box.width();
+        if (h) *h = box.height();
+    }
 
 	virtual void * GetNativeContext() wxOVERRIDE
 	{
@@ -611,7 +614,7 @@ public:
 
 	virtual void DrawBitmap(const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
 	{
-        DoDrawBitmap(bmp, x, y, w, h, false);
+        DoDrawBitmap(bmp, x, y, w, h, true);
     }
 
     virtual void DrawIcon(const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
