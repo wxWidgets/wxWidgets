@@ -1,8 +1,10 @@
 #include "wx/qt/graphics.h"
-#include <QPainter>
 
 
 #if wxUSE_GRAPHICS_CONTEXT
+#include <QPainter>
+#include <QApplication>
+#include <QDesktopWidget>
 #include "wx/graphics.h"
 #include "wx/private/graphics.h"
 
@@ -433,12 +435,23 @@ class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
     void initFromDC(const wxDC& dc)
     {
         m_qtPainter = reinterpret_cast<QPainter*>(dc.GetHandle());
+        m_ownsPainter = false;
+
         wxSize sz = dc.GetSize();
         m_width = sz.x;
         m_height = sz.y;
     }
 public:
-	wxQtGraphicsContext(wxGraphicsRenderer* renderer, const wxWindowDC& dc)
+    wxQtGraphicsContext(wxGraphicsRenderer* renderer, QWidget* widget)
+        : wxGraphicsContext(renderer)
+    {
+        m_qtPainter = new QPainter(widget);
+        m_ownsPainter = true;
+
+        m_width = widget->width();
+        m_height = widget->height();
+    }
+    wxQtGraphicsContext(wxGraphicsRenderer* renderer, const wxWindowDC& dc)
 		: wxGraphicsContext(renderer)
 	{
         initFromDC(dc);
@@ -459,6 +472,7 @@ public:
 		: wxGraphicsContext(renderer)
 	{
 	    m_qtPainter = reinterpret_cast<QPainter*>(window->QtGetPainter());
+        m_ownsPainter = false;
 
         wxSize sz = window->GetClientSize();
         m_width = sz.x;
@@ -467,6 +481,8 @@ public:
 
 	virtual ~wxQtGraphicsContext()
 	{
+        if (m_ownsPainter)
+            delete m_qtPainter;
 	}
 
 	virtual bool ShouldOffset() const wxOVERRIDE
@@ -670,9 +686,21 @@ protected:
 	}
 
 	QPainter* m_qtPainter;
+    bool m_ownsPainter;
 
 private:
 	wxDECLARE_NO_COPY_CLASS(wxQtGraphicsContext);
+};
+
+class wxQtMeasuringContext : public wxQtGraphicsContext
+{
+public:
+    wxQtMeasuringContext(wxGraphicsRenderer* renderer) : wxQtGraphicsContext(renderer, QApplication::desktop())
+    {
+    }
+
+private:
+    QPainter painter;
 };
 
 //-----------------------------------------------------------------------------
@@ -821,8 +849,7 @@ wxGraphicsContext * wxQtGraphicsRenderer::CreateContextFromImage(wxImage& image)
 
 wxGraphicsContext * wxQtGraphicsRenderer::CreateMeasuringContext()
 {
-	//return new wxCairoMeasuringContext(this);
-	return NULL;
+	return new wxQtMeasuringContext(this);
 }
 
 wxGraphicsContext * wxQtGraphicsRenderer::CreateContext(wxWindow* window)
