@@ -602,11 +602,13 @@ public:
 
     virtual void PushState() wxOVERRIDE
 	{
+        m_qtPainter->save();
 	}
 
     virtual void PopState() wxOVERRIDE
 	{
-	}
+        m_qtPainter->restore();
+    }
 
     virtual void Flush() wxOVERRIDE
 	{
