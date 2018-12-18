@@ -55,7 +55,7 @@ void wxMemoryDCImpl::DoSelect( const wxBitmap& bitmap )
     m_qtPixmap = bitmap.GetHandle();
     if ( bitmap.IsOk() && !m_qtPixmap->isNull() )
     {
-        // apply mask before converting to image
+        // apply mask before drawing
         wxMask *mask = bitmap.GetMask();
         if ( mask && mask->GetHandle() )
             m_qtPixmap->setMask(*mask->GetHandle());
