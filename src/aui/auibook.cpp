@@ -3519,6 +3519,7 @@ wxSize wxAuiNotebook::DoGetBestSize() const
     wxAuiLayoutObjectArray layoutObj(wxAuiLayoutObject::CompareLayoutObject);
     const wxAuiPaneInfoArray& all_panes = const_cast<wxAuiManager&>(m_mgr).GetAllPanes();
     const size_t pane_count = all_panes.GetCount();
+    const int tabHeight = GetTabCtrlHeight();
     for (size_t n = 0; n < pane_count; ++n)
     {
         const wxAuiPaneInfo &pInfo = all_panes[n];
@@ -3532,6 +3533,7 @@ wxSize wxAuiNotebook::DoGetBestSize() const
         for (size_t pIdx = 0; pIdx < pages.GetCount(); pIdx++)
             bestPageSize.IncTo(pages[pIdx].window->GetBestSize());
 
+        bestPageSize.y += tabHeight;
         layoutObj.Add(new wxAuiLayoutObject(bestPageSize, pInfo.dock_layer, pInfo.dock_direction, pInfo.dock_row, pInfo.dock_pos));
     }
 
