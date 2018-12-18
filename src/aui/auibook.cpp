@@ -3471,18 +3471,23 @@ public:
         if (this == lo2)
             return;
 
-        if (direction != lo2->direction)
+        bool mergeHorizontal;
+        if (layer != lo2->layer || direction != lo2->direction)
+            mergeHorizontal = lo2->direction < 3;
+        else if (row != lo2->row)
+            mergeHorizontal = true;
+        else
+            mergeHorizontal = lo2->direction >= 3;
+
+        if (mergeHorizontal)
         {
-            if ( ( (layer != lo2->layer || direction != lo2->direction) && lo2->direction < 3 ) || row != lo2->row )
-            {
-                size.x += lo2->size.x;
-                if (lo2->size.y > size.y) size.y = lo2->size.y;
-            }
-            else
-            {
-                if (lo2->size.x > size.x) size.x = lo2->size.x;
-                size.y += lo2->size.y;
-            }
+            size.x += lo2->size.x;
+            if (lo2->size.y > size.y) size.y = lo2->size.y;
+        }
+        else
+        {
+            if (lo2->size.x > size.x) size.x = lo2->size.x;
+            size.y += lo2->size.y;
         }
     }
 
