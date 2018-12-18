@@ -660,7 +660,7 @@ protected:
 	{
         wxCHECK_RET(!m_font.IsNull(), wxT("wxQtContext::DrawText - no valid font set"));
 
-        wxQtFontData* font_data = static_cast<wxQtFontData*>(m_font.GetRefData());
+        const wxQtFontData* font_data = static_cast<wxQtFontData*>(m_font.GetRefData());
 
         m_qtPainter->setFont(font_data->GetFont());
         m_qtPainter->setPen(QPen(font_data->GetColor()));
@@ -669,18 +669,9 @@ protected:
         m_qtPainter->drawText(x, y+metrics.ascent(), QString(str));
 	}
 
-	enum ApplyTransformMode { Apply_directly, Apply_scaled_dev_origin };
-
-#ifdef __WXQT__
 	QPainter* m_qtPainter;
-#endif
 
 private:
-	//cairo_t* m_context;
-	//cairo_matrix_t m_internalTransform;
-
-	wxVector<float> m_layerOpacities;
-
 	wxDECLARE_NO_COPY_CLASS(wxQtGraphicsContext);
 };
 
