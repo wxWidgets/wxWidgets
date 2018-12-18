@@ -115,6 +115,11 @@ public:
     void ResetMode() { (void)ChangeMode(); }
 #endif // wxUSE_DISPLAY
 
+    // If the implementation caches any information about the displays, calling
+    // this function clears it -- this should be done e.g. after a display
+    // [dis]connection.
+    static void InvalidateCache();
+
 private:
     // returns the factory used to implement our static methods and create new
     // displays

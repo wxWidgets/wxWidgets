@@ -58,8 +58,9 @@
     #include "wx/ownerdrw.h"
 #endif
 
-#include "wx/hashmap.h"
+#include "wx/display.h"
 #include "wx/evtloop.h"
+#include "wx/hashmap.h"
 #include "wx/popupwin.h"
 #include "wx/power.h"
 #include "wx/scopeguard.h"
@@ -4692,6 +4693,8 @@ bool wxWindowMSW::HandleSysColorChange()
 
 bool wxWindowMSW::HandleDisplayChange()
 {
+    wxDisplay::InvalidateCache();
+
     wxDisplayChangedEvent event;
     event.SetEventObject(this);
 

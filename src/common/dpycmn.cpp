@@ -113,6 +113,11 @@ wxDisplay::wxDisplay(const wxWindow* window)
     return Factory().GetFromWindow(window);
 }
 
+/* static */ void wxDisplay::InvalidateCache()
+{
+    Factory().InvalidateCache();
+}
+
 // ----------------------------------------------------------------------------
 // functions forwarded to wxDisplayImpl
 // ----------------------------------------------------------------------------
@@ -229,13 +234,15 @@ wxSize wxDisplayImpl::GetPPI() const
 // wxDisplayFactory implementation
 // ============================================================================
 
-wxDisplayFactory::~wxDisplayFactory()
+void wxDisplayFactory::ClearImpls()
 {
     for ( size_t n = 0; n < m_impls.size(); ++n )
     {
         // It can be null, that's ok.
         delete m_impls[n];
     }
+
+    m_impls.clear();
 }
 
 int wxDisplayFactory::GetFromWindow(const wxWindow *window)
