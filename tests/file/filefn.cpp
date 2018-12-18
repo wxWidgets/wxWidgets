@@ -33,8 +33,8 @@ class FileFunctionsTestCase : public CppUnit::TestCase
 {
 public:
     FileFunctionsTestCase() { }
-    void setUp();
-    void tearDown();
+    void setUp() wxOVERRIDE;
+    void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( FileFunctionsTestCase );
@@ -453,7 +453,7 @@ void FileFunctionsTestCase::FileEof()
     bool failed = true;
     try
     {
-	file.Eof();
+    file.Eof();
         failed = false;
     }
     catch (...)

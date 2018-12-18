@@ -13,7 +13,7 @@ for the use in both open source and commercial applications, comes
 with the full, easy to read and modify, source and extensive
 documentation and a collection of more than a hundred examples.
 You can learn more about wxWidgets at https://www.wxwidgets.org/
-and read its documentation online at http://docs.wxwidgets.org/
+and read its documentation online at https://docs.wxwidgets.org/
 
 
 Platforms
@@ -22,7 +22,7 @@ Platforms
 [![AppVeyor](https://img.shields.io/appveyor/ci/wxWidgets/wxWidgets/master.svg?label=Windows)](https://ci.appveyor.com/project/wxWidgets/wxwidgets)
 [![Travis](https://img.shields.io/travis/wxWidgets/wxWidgets/master.svg?label=Linux)](https://travis-ci.org/wxWidgets/wxWidgets)
 
-wxWidgets currently supports the following primary platforms:
+This version of wxWidgets supports the following primary platforms:
 
 - Windows XP, Vista, 7, 8 and 10 (32/64 bits).
 - Most Unix variants using the GTK+ toolkit (version 2.6 or newer or 3.x).
@@ -49,25 +49,32 @@ Building
 --------
 
 For building the library, please see platform-specific documentation under
-`docs/<port>` directory.
+`docs/<port>` directory, e.g. here are the instructions for
+[wxGTK](docs/gtk/install.md), [wxMSW](docs/msw/install.md) and
+[wxOSX](docs/osx/install.md).
 
 If you're building the sources checked out from Git, and not from a released
-versions, please see these additional [Git-specific notes](README-GIT.md).
+version, please see these additional [Git-specific notes](README-GIT.md).
 
 
 Further information
 -------------------
 
-If you are looking for support, you can get it from
+If you are looking for community support, you can get it from
 
 - [Mailing Lists](https://www.wxwidgets.org/support/mailing-lists/)
 - [Discussion Forums](https://forums.wxwidgets.org/)
 - [#wxwidgets IRC channel](https://www.wxwidgets.org/support/irc/)
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/wxwidgets)
   (tag your questions with `wxwidgets`)
-- Please report bugs at https://trac.wxwidgets.org/newticket
+- And you can report bugs at https://trac.wxwidgets.org/newticket
 
-We would also gladly welcome [your contributions](.github/CONTRIBUTING.md).
+[Commercial support](https://www.wxwidgets.org/support/commercial/) is also
+available.
+
+Finally, keep in mind that wxWidgets is an open source project collaboratively
+developed by its users and your contributions to it are always welcome. Please
+check [our guidelines](.github/CONTRIBUTING.md) if you'd like to do it.
 
 
 Have fun!

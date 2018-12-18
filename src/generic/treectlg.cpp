@@ -1019,7 +1019,7 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
     if (!m_hasFont)
         SetOwnFont(attr.font);
 
-    // this is a misnomer: it's called "dotted pen" but uses (default) wxSOLID
+    // this is a misnomer: it's called "dotted pen" but uses (default) wxPENSTYLE_SOLID
     // style because we apparently get performance problems when using dotted
     // pen for drawing in some ports -- but under MSW it seems to work fine
 #ifdef __WXMSW__
@@ -2292,7 +2292,7 @@ void wxGenericTreeCtrl::ScrollTo(const wxTreeItemId &item)
     // update the control before scrolling it
     if (m_dirty)
     {
-#if defined( __WXMSW__ ) 
+#if defined( __WXMSW__ )
         Update();
 #elif defined(__WXMAC__)
         Update();
@@ -2301,7 +2301,7 @@ void wxGenericTreeCtrl::ScrollTo(const wxTreeItemId &item)
         DoDirtyProcessing();
 #endif
     }
-        
+
     wxGenericTreeItem *gitem = (wxGenericTreeItem*) item.m_pItem;
 
     int itemY = gitem->GetY();
@@ -2320,7 +2320,7 @@ void wxGenericTreeCtrl::ScrollTo(const wxTreeItemId &item)
         itemY += itemHeight - clientHeight;
 
         // because itemY below will be divided by PIXELS_PER_UNIT it may
-        // be rounded down, with the result of the item still only being 
+        // be rounded down, with the result of the item still only being
         // partially visible, so make sure we are rounding up
         itemY += PIXELS_PER_UNIT - 1;
     }
@@ -3516,7 +3516,6 @@ void wxGenericTreeCtrl::OnRenameCancelled(wxGenericTreeItem *item)
 {
     // let owner know that the edit was cancelled
     wxTreeEvent le(wxEVT_TREE_END_LABEL_EDIT, this, item);
-    le.m_label = wxEmptyString;
     le.m_editCancelled = true;
 
     GetEventHandler()->ProcessEvent( le );

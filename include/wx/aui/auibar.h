@@ -48,7 +48,8 @@ enum wxAuiToolBarArtSetting
 {
     wxAUI_TBART_SEPARATOR_SIZE = 0,
     wxAUI_TBART_GRIPPER_SIZE = 1,
-    wxAUI_TBART_OVERFLOW_SIZE = 2
+    wxAUI_TBART_OVERFLOW_SIZE = 2,
+    wxAUI_TBART_DROPDOWN_SIZE = 3
 };
 
 enum wxAuiToolBarToolTextOrientation
@@ -343,6 +344,10 @@ public:
     virtual int ShowDropDown(
                          wxWindow* wnd,
                          const wxAuiToolBarItemArray& items) = 0;
+
+    // Provide opportunity for subclasses to recalculate colours
+    virtual void UpdateColoursFromSystem() {}
+
 };
 
 
@@ -428,6 +433,8 @@ public:
     virtual int ShowDropDown(wxWindow* wnd,
                              const wxAuiToolBarItemArray& items) wxOVERRIDE;
 
+    virtual void UpdateColoursFromSystem() wxOVERRIDE;
+
 protected:
 
     wxBitmap m_buttonDropDownBmp;
@@ -447,6 +454,7 @@ protected:
     int m_separatorSize;
     int m_gripperSize;
     int m_overflowSize;
+    int m_dropdownSize;
 };
 
 
@@ -649,6 +657,7 @@ protected: // handlers
     void OnLeaveWindow(wxMouseEvent& evt);
     void OnCaptureLost(wxMouseCaptureLostEvent& evt);
     void OnSetCursor(wxSetCursorEvent& evt);
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
 protected:
 
@@ -750,7 +759,7 @@ typedef void (wxEvtHandler::*wxAuiToolBarEventFunction)(wxAuiToolBarEvent&);
 #define wxEVT_COMMAND_AUITOOLBAR_MIDDLE_CLICK     wxEVT_AUITOOLBAR_MIDDLE_CLICK
 #define wxEVT_COMMAND_AUITOOLBAR_BEGIN_DRAG       wxEVT_AUITOOLBAR_BEGIN_DRAG
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && wxUSE_UXTHEME
     #define wxHAS_NATIVE_TOOLBAR_ART
     #include "wx/aui/barartmsw.h"
     #define wxAuiDefaultToolBarArt wxAuiMSWToolBarArt

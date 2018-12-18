@@ -127,6 +127,9 @@ set(BASE_COREFOUNDATION_HDR
     wx/osx/core/evtloop.h
     wx/osx/core/objcid.h
     wx/osx/core/private.h
+    wx/osx/core/cfdictionary.h
+    wx/osx/core/cfarray.h
+    wx/osx/core/cftype.h
 )
 
 set(BASE_OSX_SHARED_SRC
@@ -162,11 +165,32 @@ set(BASE_OSX_NOTWXMAC_HDR
     ${BASE_COREFOUNDATION_HDR}
 )
 
+set(QT_WIN32_SRC
+    src/msw/ole/automtn.cpp
+    src/msw/ole/safearray.cpp
+    src/msw/sound.cpp
+    src/msw/ole/oleutils.cpp
+    src/msw/ole/uuid.cpp
+    src/msw/ole/comimpl.cpp
+    src/msw/dialup.cpp
+    src/msw/dib.cpp
+    src/msw/joystick.cpp
+)
+
+set(QT_WIN32_HDR
+    wx/msw/ole/automtn.h
+    wx/msw/joystick.h
+    wx/msw/dib.h
+    wx/msw/ole/uuid.h
+    wx/msw/ole/safearray.h
+    wx/msw/sound.h
+    wx/msw/ole/oleutils.h
+    wx/msw/ole/comimpl.h
+)
+
 set(QT_HDR
     wx/qt/accel.h
     wx/qt/app.h
-    wx/qt/apptbase.h
-    wx/qt/apptrait.h
     wx/qt/bitmap.h
     wx/qt/bmpbuttn.h
     wx/qt/brush.h
@@ -184,7 +208,6 @@ set(QT_HDR
     wx/qt/colour.h
     wx/qt/combobox.h
     wx/qt/control.h
-    wx/qt/converter.h
     wx/qt/ctrlsub.h
     wx/qt/cursor.h
     wx/qt/dataform.h
@@ -238,16 +261,20 @@ set(QT_HDR
     wx/qt/statusbar.h
     wx/qt/stattext.h
     wx/qt/textctrl.h
-    wx/qt/textdlg.h
     wx/qt/textentry.h
     wx/qt/tglbtn.h
-    wx/qt/timer.h
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
-    wx/qt/utils.h
     wx/qt/window.h
-    wx/qt/private/winevent.h
+    wx/qt/dvrenderer.h
+    wx/qt/dvrenderers.h
+    wx/generic/animate.h
+    wx/qt/calctrl.h
+    wx/qt/taskbar.h
+    wx/qt/dataview.h
+    wx/generic/activityindicator.h
+    ${QT_PLATFORM_HDR}
 )
 
 set(QT_SRC
@@ -282,7 +309,6 @@ set(QT_SRC
     src/qt/dcscreen.cpp
     src/qt/defs.cpp
     src/qt/dialog.cpp
-    src/unix/dialup.cpp
     src/qt/display.cpp
     src/qt/dnd.cpp
     src/qt/evtloop.cpp
@@ -338,35 +364,27 @@ set(QT_SRC
     src/qt/uiaction.cpp
     src/qt/utils.cpp
     src/qt/window.cpp
-)
-
-set(ADVANCED_QT_HDR
-    wx/generic/activityindicator.h
-    wx/generic/animate.h
-    wx/qt/calctrl.h
-    wx/qt/dataview.h
-    wx/qt/dvrenderer.h
-    wx/qt/dvrenderers.h
-    wx/qt/taskbar.h
-)
-
-set(ADVANCED_QT_SRC
+    src/qt/dvrenderers.cpp
+    src/qt/dvrenderer.cpp
     src/generic/activityindicator.cpp
+    src/common/taskbarcmn.cpp
     src/generic/animateg.cpp
     src/qt/calctrl.cpp
-    src/qt/converter.cpp
     src/qt/dataview.cpp
-    src/qt/dvrenderer.cpp
-    src/qt/dvrenderers.cpp
-    src/unix/joystick.cpp
-    src/unix/sound.cpp
     src/qt/taskbar.cpp
-    src/common/taskbarcmn.cpp
-    src/qt/utils.cpp
+    ${QT_PLATFORM_SRC}
 )
 
 set(MEDIA_QT_SRC
     src/qt/mediactrl.cpp
+)
+
+set(OPENGL_QT_HDR
+    wx/qt/glcanvas.h
+)
+
+set(OPENGL_QT_SRC
+    src/qt/glcanvas.cpp
 )
 
 set(BASE_CMN_SRC
@@ -385,7 +403,6 @@ set(BASE_CMN_SRC
     src/common/datetimefmt.cpp
     src/common/datstrm.cpp
     src/common/dircmn.cpp
-    src/common/dynarray.cpp
     src/common/dynlib.cpp
     src/common/dynload.cpp
     src/common/encconv.cpp
@@ -458,6 +475,7 @@ set(BASE_CMN_SRC
     src/common/zstream.cpp
     src/common/fswatchercmn.cpp
     src/generic/fswatcherg.cpp
+    src/common/lzmastream.cpp
 )
 
 set(BASE_AND_GUI_CMN_SRC
@@ -633,6 +651,7 @@ set(BASE_CMN_HDR
     wx/meta/removeref.h
     wx/fswatcher.h
     wx/generic/fswatcher.h
+    wx/lzmastream.h
 )
 
 set(NET_UNIX_SRC
@@ -854,6 +873,41 @@ set(GUI_CMN_SRC
     src/generic/vlbox.cpp
     src/generic/vscroll.cpp
     src/xrc/xmlreshandler.cpp
+    src/common/bmpcboxcmn.cpp
+    src/generic/grideditors.cpp
+    src/generic/gridctrl.cpp
+    src/generic/grid.cpp
+    src/generic/hyperlinkg.cpp
+    src/common/calctrlcmn.cpp
+    src/generic/notifmsgg.cpp
+    src/generic/odcombo.cpp
+    src/generic/splash.cpp
+    src/common/gridcmn.cpp
+    src/common/addremovectrl.cpp
+    src/generic/tipdlg.cpp
+    src/generic/aboutdlgg.cpp
+    src/generic/gridsel.cpp
+    src/generic/sashwin.cpp
+    src/generic/helpext.cpp
+    src/generic/richtooltipg.cpp
+    src/generic/bmpcboxg.cpp
+    src/generic/timectrlg.cpp
+    src/common/notifmsgcmn.cpp
+    src/generic/commandlinkbuttong.cpp
+    src/generic/propdlg.cpp
+    src/generic/treelist.cpp
+    src/common/datavcmn.cpp
+    src/common/animatecmn.cpp
+    src/common/odcombocmn.cpp
+    src/common/hyperlnkcmn.cpp
+    src/common/richtooltipcmn.cpp
+    src/generic/datectlg.cpp
+    src/generic/bannerwindow.cpp
+    src/generic/laywin.cpp
+    src/generic/calctrlg.cpp
+    src/generic/wizard.cpp
+    src/generic/editlbox.cpp
+    src/generic/datavgen.cpp
 )
 
 set(GUI_CMN_HDR
@@ -1004,7 +1058,6 @@ set(GUI_CMN_HDR
     wx/dialup.h
     wx/dirctrl.h
     wx/display.h
-    wx/display_impl.h
     wx/dnd.h
     wx/docmdi.h
     wx/docview.h
@@ -1092,6 +1145,57 @@ set(GUI_CMN_HDR
     wx/xpmdecod.h
     wx/xpmhand.h
     wx/xrc/xmlreshandler.h
+    wx/splash.h
+    wx/dateevt.h
+    wx/editlbox.h
+    wx/generic/hyperlink.h
+    wx/joystick.h
+    wx/dcbuffer.h
+    wx/timectrl.h
+    wx/hyperlink.h
+    wx/bmpcbox.h
+    wx/addremovectrl.h
+    wx/generic/gridctrl.h
+    wx/generic/notifmsg.h
+    wx/odcombo.h
+    wx/animate.h
+    wx/sashwin.h
+    wx/generic/propdlg.h
+    wx/tipdlg.h
+    wx/dataview.h
+    wx/generic/helpext.h
+    wx/grid.h
+    wx/generic/grid.h
+    wx/generic/grideditors.h
+    wx/wizard.h
+    wx/generic/dataview.h
+    wx/generic/wizard.h
+    wx/generic/dvrenderers.h
+    wx/generic/bmpcbox.h
+    wx/datetimectrl.h
+    wx/activityindicator.h
+    wx/bannerwindow.h
+    wx/dvrenderers.h
+    wx/generic/datectrl.h
+    wx/calctrl.h
+    wx/propdlg.h
+    wx/generic/dvrenderer.h
+    wx/generic/timectrl.h
+    wx/commandlinkbutton.h
+    wx/richtooltip.h
+    wx/sound.h
+    wx/generic/aboutdlgg.h
+    wx/taskbar.h
+    wx/treelist.h
+    wx/notifmsg.h
+    wx/datectrl.h
+    wx/laywin.h
+    wx/generic/gridsel.h
+    wx/aboutdlg.h
+    wx/generic/laywin.h
+    wx/generic/splash.h
+    wx/generic/calctrlg.h
+    wx/generic/sashwin.h
 )
 
 set(UNIX_SRC
@@ -1102,11 +1206,14 @@ set(XWIN_LOWLEVEL_SRC
     src/generic/caret.cpp
     src/generic/imaglist.cpp
     src/unix/dialup.cpp
-    src/unix/displayx11.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
     src/unix/uiactionx11.cpp
     src/unix/utilsx11.cpp
+    src/unix/sound.cpp
+    src/unix/joystick.cpp
+    src/unix/taskbarx11.cpp
+    src/common/taskbarcmn.cpp
 )
 
 set(XWIN_LOWLEVEL_HDR
@@ -1114,6 +1221,9 @@ set(XWIN_LOWLEVEL_HDR
     wx/generic/imaglist.h
     wx/unix/fontutil.h
     wx/unix/utilsx11.h
+    wx/unix/taskbarx11.h
+    wx/unix/sound.h
+    wx/unix/joystick.h
 )
 
 set(GTK_WIN32_SRC
@@ -1130,6 +1240,9 @@ set(GTK_WIN32_SRC
     src/msw/utilswin.cpp
     src/unix/fontenum.cpp
     src/unix/fontutil.cpp
+    src/msw/sound.cpp
+    src/msw/joystick.cpp
+    src/common/taskbarcmn.cpp
 )
 
 set(GTK_WIN32_HDR
@@ -1142,6 +1255,9 @@ set(GTK_WIN32_HDR
     wx/msw/ole/uuid.h
     wx/msw/dib.h
     wx/unix/fontutil.h
+    wx/msw/sound.h
+    wx/msw/taskbar.h
+    wx/msw/joystick.h
 )
 
 set(GTK_LOWLEVEL_SRC
@@ -1275,12 +1391,23 @@ set(GTK_SRC
     src/gtk/textentry.cpp
     src/gtk/tglbtn.cpp
     src/gtk/treeentry_gtk.c
+    src/gtk/taskbar.cpp
+    src/gtk/notifmsg.cpp
+    src/gtk/dataview.cpp
+    src/gtk/aboutdlg.cpp
+    src/gtk/calctrl.cpp
+    src/gtk/activityindicator.cpp
+    src/gtk/animate.cpp
+    src/gtk/bmpcbox.cpp
+    src/gtk/hyperlink.cpp
 )
 
 set(GTK2_SRC
     ${GTK_SRC}
     # Generic implementations used by wxGPE:
     src/generic/fontdlgg.cpp
+    src/generic/activityindicator.cpp
+    src/gtk/eggtrayicon.c
 )
 
 set(GTK_HDR
@@ -1334,6 +1461,16 @@ set(GTK_HDR
     wx/gtk/textctrl.h
     wx/gtk/textentry.h
     wx/gtk/tglbtn.h
+    wx/generic/activityindicator.h
+    wx/gtk/dataview.h
+    wx/gtk/dvrenderers.h
+    wx/gtk/calctrl.h
+    wx/gtk/animate.h
+    wx/gtk/bmpcbox.h
+    wx/gtk/dvrenderer.h
+    wx/gtk/taskbar.h
+    wx/gtk/activityindicator.h
+    wx/gtk/hyperlink.h
 )
 
 set(GTK2_HDR
@@ -1375,6 +1512,7 @@ set(GTK1_LOWLEVEL_SRC
     src/gtk1/utilsgtk.cpp
     src/gtk1/win_gtk.c
     src/gtk1/window.cpp
+    src/unix/displayx11.cpp
 )
 
 set(GTK1_LOWLEVEL_HDR
@@ -1453,6 +1591,10 @@ set(GTK1_SRC
     src/gtk1/toolbar.cpp
     src/gtk1/textctrl.cpp
     src/gtk1/tglbtn.cpp
+    src/generic/animateg.cpp
+    src/gtk1/eggtrayicon.c
+    src/generic/activityindicator.cpp
+    src/gtk1/taskbar.cpp
 )
 
 set(GTK1_HDR
@@ -1501,6 +1643,8 @@ set(GTK1_HDR
     wx/gtk1/textctrl.h
     wx/gtk1/tglbtn.h
     wx/gtk1/treectrl.h
+    wx/generic/activityindicator.h
+    wx/generic/animate.h
 )
 
 set(MOTIF_LOWLEVEL_SRC
@@ -1512,6 +1656,7 @@ set(MOTIF_LOWLEVEL_SRC
     src/x11/pen.cpp
     src/x11/region.cpp
     src/x11/utilsx.cpp
+    src/unix/displayx11.cpp
 )
 
 set(MOTIF_LOWLEVEL_HDR
@@ -1592,6 +1737,8 @@ set(MOTIF_SRC
     src/generic/statline.cpp
     src/generic/statusbr.cpp
     src/generic/tabg.cpp
+    src/generic/animateg.cpp
+    src/generic/activityindicator.cpp
 )
 
 set(MOTIF_HDR
@@ -1663,6 +1810,8 @@ set(MOTIF_HDR
     wx/motif/toolbar.h
     wx/motif/toplevel.h
     wx/motif/window.h
+    wx/generic/animateanimate.h
+    wx/generic/animate.h
 )
 
 set(X11_LOWLEVEL_SRC
@@ -1696,6 +1845,7 @@ set(X11_LOWLEVEL_SRC
     src/x11/utils.cpp
     src/x11/utilsx.cpp
     src/x11/window.cpp
+    src/unix/displayx11.cpp
 )
 
 set(X11_LOWLEVEL_HDR
@@ -1786,6 +1936,19 @@ set(MSW_LOWLEVEL_SRC
     src/msw/utilswin.cpp
     src/msw/uxtheme.cpp
     src/msw/window.cpp
+    src/msw/joystick.cpp
+    src/msw/rt/notifmsgrt.cpp
+    src/msw/aboutdlg.cpp
+    src/msw/sound.cpp
+    src/msw/ole/uuid.cpp
+    src/msw/helpchm.cpp
+    src/common/taskbarcmn.cpp
+    src/msw/helpwin.cpp
+    src/msw/notifmsg.cpp
+    src/msw/ole/automtn.cpp
+    src/msw/taskbar.cpp
+    src/msw/richtooltip.cpp
+    src/msw/evtloop.cpp
 )
 
 set(MSW_LOWLEVEL_HDR
@@ -1794,6 +1957,12 @@ set(MSW_LOWLEVEL_HDR
     wx/msw/popupwin.h
     wx/msw/uxtheme.h
     wx/msw/htmlhelp.h
+    wx/msw/helpchm.h
+    wx/msw/sound.h
+    wx/msw/joystick.h
+    wx/msw/helpwin.h
+    wx/msw/taskbar.h
+    wx/msw/evtloop.h
 )
 
 set(MSW_DESKTOP_LOWLEVEL_SRC
@@ -1831,7 +2000,6 @@ set(MSW_SRC
     src/msw/dialog.cpp
     src/msw/dirdlg.cpp
     src/msw/dragimag.cpp
-    src/msw/evtloop.cpp
     src/msw/filedlg.cpp
     src/msw/frame.cpp
     src/msw/gauge.cpp
@@ -1869,6 +2037,16 @@ set(MSW_SRC
     src/msw/textentry.cpp
     src/msw/tglbtn.cpp
     src/msw/treectrl.cpp
+    src/msw/bmpcbox.cpp
+    src/msw/datectrl.cpp
+    src/generic/animateg.cpp
+    src/msw/calctrl.cpp
+    src/msw/datecontrols.cpp
+    src/msw/timectrl.cpp
+    src/msw/commandlinkbutton.cpp
+    src/msw/datetimectrl.cpp
+    src/msw/hyperlink.cpp
+    src/generic/activityindicator.cpp
 )
 
 set(MSW_HDR
@@ -1906,7 +2084,6 @@ set(MSW_HDR
     wx/msw/dirdlg.h
     wx/msw/dragimag.h
     wx/msw/enhmeta.h
-    wx/msw/evtloop.h
     wx/msw/filedlg.h
     wx/msw/font.h
     wx/msw/frame.h
@@ -1969,6 +2146,15 @@ set(MSW_HDR
     wx/msw/toplevel.h
     wx/msw/treectrl.h
     wx/msw/window.h
+    wx/msw/calctrl.h
+    wx/msw/bmpcbox.h
+    wx/msw/datectrl.h
+    wx/msw/commandlinkbutton.h
+    wx/msw/hyperlink.h
+    wx/msw/datetimectrl.h
+    wx/msw/timectrl.h
+    wx/generic/animate.h
+    wx/generic/activityindicator.h
 )
 
 set(MSW_RSC
@@ -2049,6 +2235,7 @@ set(DFB_LOWLEVEL_SRC
     src/dfb/utils.cpp
     src/dfb/window.cpp
     src/dfb/wrapdfb.cpp
+    src/generic/animateg.cpp
 )
 
 set(DFB_LOWLEVEL_HDR
@@ -2077,6 +2264,7 @@ set(DFB_LOWLEVEL_HDR
     wx/dfb/toplevel.h
     wx/dfb/window.h
     wx/dfb/wrapdfb.h
+    wx/generic/animate.h
 )
 
 set(OSX_LOWLEVEL_SRC
@@ -2086,7 +2274,6 @@ set(OSX_LOWLEVEL_SRC
     src/osx/brush.cpp
     src/osx/dialog_osx.cpp
     src/osx/fontutil.cpp
-    src/osx/imaglist.cpp
     src/osx/minifram.cpp
     src/osx/nonownedwnd_osx.cpp
     src/osx/palette.cpp
@@ -2098,7 +2285,6 @@ set(OSX_LOWLEVEL_SRC
     src/osx/core/bitmap.cpp
     src/osx/core/colour.cpp
     src/osx/core/dcmemory.cpp
-    src/osx/core/display.cpp
     src/osx/core/fontenum.cpp
     src/osx/core/hid.cpp
     src/osx/core/printmac.cpp
@@ -2151,7 +2337,6 @@ set(OSX_COMMON_SRC
     src/osx/carbon/cursor.cpp
     src/osx/carbon/fontdlg.cpp
     src/osx/carbon/gdiobj.cpp
-    src/osx/carbon/icon.cpp
     src/osx/carbon/app.cpp
     src/osx/carbon/control.cpp
     src/osx/carbon/dataobj.cpp
@@ -2184,7 +2369,10 @@ set(OSX_COMMON_SRC
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
     src/generic/textmeasure.cpp
+    src/generic/icon.cpp
     #TODO: </if>
+    src/osx/statbmp_osx.cpp
+    src/generic/imaglist.cpp
 )
 
 set(OSX_SHARED_HDR
@@ -2226,8 +2414,6 @@ set(OSX_SHARED_HDR
     wx/osx/fontdlg.h
     wx/osx/frame.h
     wx/osx/gauge.h
-    wx/osx/icon.h
-    wx/osx/imaglist.h
     wx/osx/listbox.h
     wx/osx/listctrl.h
     wx/osx/mdi.h
@@ -2281,6 +2467,8 @@ set(OSX_SHARED_HDR
     wx/generic/prntdlgg.h
     wx/generic/statusbr.h
     wx/osx/appprogress.h
+    wx/generic/icon.h
+    wx/generic/imaglist.h
 )
 
 set(OSX_COCOA_SRC
@@ -2322,6 +2510,24 @@ set(OSX_COCOA_SRC
     src/osx/cocoa/toolbar.mm
     src/osx/cocoa/tooltip.mm
     src/osx/cocoa/window.mm
+    src/osx/core/hidjoystick.cpp
+    src/osx/sound_osx.cpp
+    src/osx/cocoa/datetimectrl.mm
+    src/osx/datetimectrl_osx.cpp
+    src/osx/cocoa/aboutdlg.mm
+    src/osx/timectrl_osx.cpp
+    src/osx/cocoa/activityindicator.mm
+    src/osx/cocoa/dataview.mm
+    src/osx/carbon/sound.cpp
+    src/osx/cocoa/taskbar.mm
+    src/generic/animateg.cpp
+    src/common/taskbarcmn.cpp
+    src/osx/dataview_osx.cpp
+    src/osx/cocoa/notifmsg.mm
+    src/osx/datectrl_osx.cpp
+    src/osx/core/sound.cpp
+    src/osx/cocoa/statbmp.mm
+    src/osx/core/display.cpp
 )
 
 set(OSX_COCOA_HDR
@@ -2330,13 +2536,24 @@ set(OSX_COCOA_HDR
     wx/osx/cocoa/private.h
     wx/osx/cocoa/stdpaths.h
     wx/generic/region.h
+    wx/osx/activityindicator.h
+    wx/osx/datectrl.h
+    wx/osx/sound.h
+    wx/osx/joystick.h
+    wx/osx/timectrl.h
+    wx/osx/dvrenderer.h
+    wx/osx/dataview.h
+    wx/osx/cocoa/dataview.h
+    wx/osx/datetimectrl.h
+    wx/osx/taskbarosx.h
+    wx/osx/dvrenderers.h
+    wx/generic/animate.h
+    wx/osx/core/joystick.h
 )
 
 set(OSX_IPHONE_SRC
     ${OSX_COMMON_SRC}
     src/generic/regiong.cpp
-    src/generic/icon.cpp
-    src/osx/cocoa/stdpaths.mm
     # iphone files
     src/osx/iphone/anybutton.mm
     src/osx/iphone/button.mm
@@ -2354,6 +2571,10 @@ set(OSX_IPHONE_SRC
     src/osx/iphone/toolbar.mm
     src/osx/iphone/utils.mm
     src/osx/iphone/window.mm
+    src/osx/sound_osx.cpp
+    src/generic/animateg.cpp
+    src/osx/core/sound.cpp
+    src/osx/iphone/statbmp.mm
 )
 
 set(OSX_IPHONE_HDR
@@ -2361,6 +2582,8 @@ set(OSX_IPHONE_HDR
     wx/osx/iphone/evtloop.h
     wx/osx/iphone/private.h
     wx/generic/region.h
+    wx/generic/animate.h
+    wx/osx/sound.h
 )
 
 set(UNIV_THEMES_SRC
@@ -2373,7 +2596,6 @@ set(UNIV_THEMES_SRC
 set(UNIV_SRC
     ${UNIV_PLATFORM_SRC}
     src/generic/accel.cpp
-    src/generic/activityindicator.cpp
     src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
@@ -2423,12 +2645,12 @@ set(UNIV_SRC
     src/univ/toolbar.cpp
     src/univ/topluniv.cpp
     src/univ/winuniv.cpp
+    src/generic/activityindicator.cpp
 )
 
 set(UNIV_HDR
     ${UNIV_PLATFORM_HDR}
     wx/generic/accel.h
-    wx/generic/activityindicator.h
     wx/generic/animate.h
     wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
@@ -2485,295 +2707,7 @@ set(UNIV_HDR
     wx/univ/toolbar.h
     wx/univ/toplevel.h
     wx/univ/window.h
-)
-
-set(ADVANCED_CMN_SRC
-    src/common/addremovectrl.cpp
-    src/common/animatecmn.cpp
-    src/common/bmpcboxcmn.cpp
-    src/common/calctrlcmn.cpp
-    src/common/datavcmn.cpp
-    src/common/gridcmn.cpp
-    src/common/hyperlnkcmn.cpp
-    src/common/notifmsgcmn.cpp
-    src/common/odcombocmn.cpp
-    src/common/richtooltipcmn.cpp
-    src/generic/aboutdlgg.cpp
-    src/generic/bannerwindow.cpp
-    src/generic/bmpcboxg.cpp
-    src/generic/calctrlg.cpp
-    src/generic/commandlinkbuttong.cpp
-    src/generic/datavgen.cpp
-    src/generic/datectlg.cpp
-    src/generic/editlbox.cpp
-    src/generic/grid.cpp
-    src/generic/gridctrl.cpp
-    src/generic/grideditors.cpp
-    src/generic/gridsel.cpp
-    src/generic/helpext.cpp
-    src/generic/hyperlinkg.cpp
-    src/generic/laywin.cpp
-    src/generic/notifmsgg.cpp
-    src/generic/odcombo.cpp
-    src/generic/propdlg.cpp
-    src/generic/richtooltipg.cpp
-    src/generic/sashwin.cpp
-    src/generic/splash.cpp
-    src/generic/timectrlg.cpp
-    src/generic/tipdlg.cpp
-    src/generic/treelist.cpp
-    src/generic/wizard.cpp
-)
-
-set(ADVANCED_CMN_HDR
-    wx/aboutdlg.h
-    wx/activityindicator.h
-    wx/addremovectrl.h
-    wx/animate.h
-    wx/bannerwindow.h
-    wx/bmpcbox.h
-    wx/calctrl.h
-    wx/commandlinkbutton.h
-    wx/dataview.h
-    wx/datectrl.h
-    wx/dateevt.h
-    wx/datetimectrl.h
-    wx/dcbuffer.h
-    wx/dvrenderers.h
-    wx/editlbox.h
-    wx/generic/aboutdlgg.h
-    wx/generic/bmpcbox.h
-    wx/generic/calctrlg.h
-    wx/generic/datectrl.h
-    wx/generic/dataview.h
-    wx/generic/dvrenderer.h
-    wx/generic/dvrenderers.h
-    wx/generic/grid.h
-    wx/generic/gridctrl.h
-    wx/generic/grideditors.h
-    wx/generic/gridsel.h
-    wx/generic/helpext.h
-    wx/generic/hyperlink.h
-    wx/generic/laywin.h
-    wx/generic/notifmsg.h
-    wx/generic/propdlg.h
-    wx/generic/sashwin.h
-    wx/generic/splash.h
-    wx/generic/timectrl.h
-    wx/generic/wizard.h
-    wx/grid.h
-    wx/hyperlink.h
-    wx/joystick.h
-    wx/laywin.h
-    wx/notifmsg.h
-    wx/odcombo.h
-    wx/propdlg.h
-    wx/richtooltip.h
-    wx/sashwin.h
-    wx/sound.h
-    wx/splash.h
-    wx/taskbar.h
-    wx/timectrl.h
-    wx/tipdlg.h
-    wx/treelist.h
-    wx/wizard.h
-)
-
-set(ADVANCED_MSW_SRC
-    src/generic/activityindicator.cpp
-    src/common/taskbarcmn.cpp
-    src/msw/aboutdlg.cpp
-    src/msw/notifmsg.cpp
-    src/msw/rt/notifmsgrt.cpp
-    src/msw/richtooltip.cpp
-    src/msw/sound.cpp
-    src/msw/taskbar.cpp
-)
-
-set(ADVANCED_MSW_HDR
     wx/generic/activityindicator.h
-    wx/msw/sound.h
-    wx/msw/taskbar.h
-)
-
-set(ADVANCED_MSW_NATIVE_SRC
-    src/generic/animateg.cpp
-    src/msw/bmpcbox.cpp
-    src/msw/calctrl.cpp
-    src/msw/commandlinkbutton.cpp
-    src/msw/datecontrols.cpp
-    src/msw/datectrl.cpp
-    src/msw/datetimectrl.cpp
-    src/msw/hyperlink.cpp
-    src/msw/timectrl.cpp
-)
-
-set(ADVANCED_MSW_NATIVE_HDR
-    wx/generic/animate.h
-    wx/msw/bmpcbox.h
-    wx/msw/commandlinkbutton.h
-    wx/msw/calctrl.h
-    wx/msw/datectrl.h
-    wx/msw/datetimectrl.h
-    wx/msw/hyperlink.h
-    wx/msw/timectrl.h
-)
-
-set(ADVANCED_MSW_DESKTOP_SRC
-    src/msw/joystick.cpp
-)
-
-set(ADVANCED_MSW_DESKTOP_HDR
-    wx/msw/joystick.h
-)
-
-set(ADVANCED_OSX_COCOA_SRC
-    src/common/taskbarcmn.cpp
-    src/generic/animateg.cpp
-    src/osx/cocoa/activityindicator.mm
-    src/osx/datetimectrl_osx.cpp
-    src/osx/datectrl_osx.cpp
-    src/osx/sound_osx.cpp
-    src/osx/timectrl_osx.cpp
-    src/osx/carbon/sound.cpp
-    src/osx/core/sound.cpp
-    src/osx/cocoa/aboutdlg.mm
-    src/osx/dataview_osx.cpp
-    src/osx/cocoa/dataview.mm
-    src/osx/cocoa/datetimectrl.mm
-    src/osx/cocoa/notifmsg.mm
-    src/osx/cocoa/taskbar.mm
-    src/osx/core/hidjoystick.cpp
-)
-
-set(ADVANCED_OSX_COCOA_HDR
-    wx/generic/animate.h
-    wx/osx/activityindicator.h
-    wx/osx/dataview.h
-    wx/osx/datectrl.h
-    wx/osx/datetimectrl.h
-    wx/osx/dvrenderer.h
-    wx/osx/dvrenderers.h
-    wx/osx/joystick.h
-    wx/osx/sound.h
-    wx/osx/taskbarosx.h
-    wx/osx/timectrl.h
-    wx/osx/core/joystick.h
-    wx/osx/cocoa/dataview.h
-)
-
-set(ADVANCED_OSX_IPHONE_SRC
-    src/generic/animateg.cpp
-    src/osx/sound_osx.cpp
-    src/osx/core/sound.cpp
-)
-
-set(ADVANCED_OSX_IPHONE_HDR
-    wx/generic/animate.h
-    wx/osx/sound.h
-)
-
-set(ADVANCED_COCOA_SRC
-    src/cocoa/taskbar.mm
-    src/common/taskbarcmn.cpp
-    src/generic/animateg.cpp
-    src/osx/core/hidjoystick.cpp
-)
-
-set(ADVANCED_COCOA_HDR
-    wx/cocoa/taskbar.h
-    wx/generic/animate.h
-    wx/osx/core/joystick.h
-)
-
-set(ADVANCED_UNIX_SRC
-    src/common/taskbarcmn.cpp
-    src/unix/joystick.cpp
-    src/unix/sound.cpp
-    src/unix/taskbarx11.cpp
-)
-
-set(ADVANCED_UNIX_HDR
-    wx/unix/joystick.h
-    wx/unix/sound.h
-    wx/unix/taskbarx11.h
-)
-
-set(ADVANCED_MOTIF_SRC
-    src/generic/activityindicator.cpp
-    src/generic/animateg.cpp
-)
-
-set(ADVANCED_MOTIF_HDR
-    wx/generic/animateanimate.h
-    wx/generic/animate.h
-)
-
-set(ADVANCED_GTK_WIN32_SRC
-    src/common/taskbarcmn.cpp
-    src/msw/joystick.cpp
-    src/msw/sound.cpp
-)
-
-set(ADVANCED_GTK_WIN32_HDR
-    wx/msw/joystick.h
-    wx/msw/sound.h
-    wx/msw/taskbar.h
-)
-
-set(ADVANCED_GTK_SRC
-    ${ADVANCED_GTK_PLATFORM_SRC}
-    src/gtk/notifmsg.cpp
-    src/gtk/taskbar.cpp
-)
-
-set(ADVANCED_GTK2_SRC
-    ${ADVANCED_GTK_SRC}
-    src/generic/activityindicator.cpp
-    src/gtk/eggtrayicon.c
-)
-
-set(ADVANCED_GTK_HDR
-    ${ADVANCED_GTK_PLATFORM_HDR}
-    wx/generic/activityindicator.h
-    wx/gtk/taskbar.h
-)
-
-set(ADVANCED_GTK2_HDR
-    ${ADVANCED_GTK_HDR}
-)
-
-set(ADVANCED_GTK_NATIVE_SRC
-    src/gtk/aboutdlg.cpp
-    src/gtk/activityindicator.cpp
-    src/gtk/animate.cpp
-    src/gtk/bmpcbox.cpp
-    src/gtk/calctrl.cpp
-    src/gtk/dataview.cpp
-    src/gtk/hyperlink.cpp
-)
-
-set(ADVANCED_GTK_NATIVE_HDR
-    wx/gtk/activityindicator.h
-    wx/gtk/animate.h
-    wx/gtk/bmpcbox.h
-    wx/gtk/calctrl.h
-    wx/gtk/dataview.h
-    wx/gtk/dvrenderer.h
-    wx/gtk/dvrenderers.h
-    wx/gtk/hyperlink.h
-)
-
-set(ADVANCED_GTK1_SRC
-    src/generic/activityindicator.cpp
-    src/generic/animateg.cpp
-    src/gtk1/eggtrayicon.c
-    src/gtk1/taskbar.cpp
-)
-
-set(ADVANCED_GTK1_HDR
-    wx/generic/activityindicator.h
-    wx/generic/animate.h
 )
 
 set(MEDIA_CMN_SRC
@@ -2933,6 +2867,14 @@ set(WEBVIEW_GTK_HDR
 
 set(WEBVIEW_GTK_SRC
     src/gtk/webview_webkit.cpp
+)
+
+set(WEBVIEW2_GTK_SRC
+    src/gtk/webview_webkit2.cpp
+)
+
+set(WEBVIEW_WEBKIT2_EXTENSION_SRC
+    src/gtk/webview_webkit2_extension.cpp
 )
 
 set(XRC_SRC
@@ -3115,7 +3057,7 @@ set(OPENGL_OSX_SHARED_SRC
     src/osx/glcanvas_osx.cpp
 )
 
-set(UNIX_SOUND_SRC_SDL
+set(UNIX_SOUND_SDL_SRC
     src/unix/sound_sdl.cpp
 )
 

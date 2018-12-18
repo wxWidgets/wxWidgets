@@ -88,7 +88,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 help: $(HELP_OBJECTS)
-	$(CXX) -o $@ $(HELP_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs html,adv,core,base`
+	$(CXX) -o $@ $(HELP_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs html,core,base`
 
 help_demo.o: ./demo.cpp
 	$(CXX) -c -o $@ $(HELP_CXXFLAGS) $(CPPDEPS) $<

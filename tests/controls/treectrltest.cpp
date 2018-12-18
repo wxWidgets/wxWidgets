@@ -38,13 +38,15 @@ class TreeCtrlTestCase : public CppUnit::TestCase
 public:
     TreeCtrlTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( TreeCtrlTestCase );
         WXUISIM_TEST( ItemClick );
         CPPUNIT_TEST( DeleteItem );
+        CPPUNIT_TEST( DeleteChildren );
+        CPPUNIT_TEST( DeleteAllItems );
         WXUISIM_TEST( LabelEdit );
         WXUISIM_TEST( KeyDown );
 #ifndef __WXGTK__
@@ -72,6 +74,8 @@ private:
 
     void ItemClick();
     void DeleteItem();
+    void DeleteChildren();
+    void DeleteAllItems();
     void LabelEdit();
     void KeyDown();
 #ifndef __WXGTK__
@@ -269,10 +273,27 @@ void TreeCtrlTestCase::DeleteItem()
 
     wxTreeItemId todelete = m_tree->AppendItem(m_root, "deleteme");
     m_tree->Delete(todelete);
-    // We do not test DeleteAllItems() as under some versions of Windows events
-    // are not generated.
 
     CPPUNIT_ASSERT_EQUAL(1, deleteitem.GetCount());
+}
+
+void TreeCtrlTestCase::DeleteChildren()
+{
+    EventCounter deletechildren(m_tree, wxEVT_TREE_DELETE_ITEM);
+
+    m_tree->AppendItem(m_child1, "another grandchild");
+    m_tree->DeleteChildren(m_child1);
+
+    CHECK( deletechildren.GetCount() == 2 );
+}
+
+void TreeCtrlTestCase::DeleteAllItems()
+{
+    EventCounter deleteall(m_tree, wxEVT_TREE_DELETE_ITEM);
+
+    m_tree->DeleteAllItems();
+
+    CHECK( deleteall.GetCount() == 4 );
 }
 
 #if wxUSE_UIACTIONSIMULATOR

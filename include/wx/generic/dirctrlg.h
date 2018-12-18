@@ -304,7 +304,7 @@ public:
 
     const wxSize& GetSize() const { return m_size; }
     void SetSize(const wxSize& sz) { m_size = sz; }
-    
+
     bool IsOk() const { return m_smallImageList != NULL; }
 
 protected:

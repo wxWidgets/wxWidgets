@@ -263,7 +263,7 @@ bool WebApp::OnInit()
 
     // Create the memory files
     wxImage::AddHandler(new wxPNGHandler);
-    wxMemoryFSHandler::AddFile("logo.png", 
+    wxMemoryFSHandler::AddFile("logo.png",
         wxBitmap(wxlogo_xpm), wxBITMAP_TYPE_PNG);
     wxMemoryFSHandler::AddFile("page1.htm",
         "<html><head><title>File System Example</title>"
@@ -314,7 +314,7 @@ WebFrame::WebFrame(const wxString& url) :
     m_toolbar_forward = m_toolbar->AddTool(wxID_ANY, _("Forward"), forward);
     m_toolbar_stop = m_toolbar->AddTool(wxID_ANY, _("Stop"), stop);
     m_toolbar_reload = m_toolbar->AddTool(wxID_ANY, _("Reload"),  refresh);
-    m_url = new wxTextCtrl(m_toolbar, wxID_ANY, wxT(""),  wxDefaultPosition, wxSize(400, -1), wxTE_PROCESS_ENTER );
+    m_url = new wxTextCtrl(m_toolbar, wxID_ANY, "",  wxDefaultPosition, wxSize(400, -1), wxTE_PROCESS_ENTER );
     m_toolbar->AddControl(m_url, _("URL"));
     m_toolbar_tools = m_toolbar->AddTool(wxID_ANY, _("Menu"), wxBitmap(wxlogo_xpm));
 
@@ -474,140 +474,80 @@ WebFrame::WebFrame(const wxString& url) :
 
 
     // Connect the toolbar events
-    Connect(m_toolbar_back->GetId(), wxEVT_TOOL,
-            wxCommandEventHandler(WebFrame::OnBack), NULL, this );
-    Connect(m_toolbar_forward->GetId(), wxEVT_TOOL,
-            wxCommandEventHandler(WebFrame::OnForward), NULL, this );
-    Connect(m_toolbar_stop->GetId(), wxEVT_TOOL,
-            wxCommandEventHandler(WebFrame::OnStop), NULL, this );
-    Connect(m_toolbar_reload->GetId(), wxEVT_TOOL,
-            wxCommandEventHandler(WebFrame::OnReload),NULL, this );
-    Connect(m_toolbar_tools->GetId(), wxEVT_TOOL,
-            wxCommandEventHandler(WebFrame::OnToolsClicked), NULL, this );
+    Bind(wxEVT_TOOL, &WebFrame::OnBack, this, m_toolbar_back->GetId());
+    Bind(wxEVT_TOOL, &WebFrame::OnForward, this, m_toolbar_forward->GetId());
+    Bind(wxEVT_TOOL, &WebFrame::OnStop, this, m_toolbar_stop->GetId());
+    Bind(wxEVT_TOOL, &WebFrame::OnReload, this, m_toolbar_reload->GetId());
+    Bind(wxEVT_TOOL, &WebFrame::OnToolsClicked, this, m_toolbar_tools->GetId());
 
-    Connect(m_url->GetId(), wxEVT_TEXT_ENTER,
-            wxCommandEventHandler(WebFrame::OnUrl), NULL, this );
+    Bind(wxEVT_TEXT_ENTER, &WebFrame::OnUrl, this, m_url->GetId());
 
     // Connect find toolbar events.
-    Connect(m_find_toolbar_done->GetId(), wxEVT_TOOL,
-            wxCommandEventHandler(WebFrame::OnFindDone), NULL, this );
-    Connect(m_find_toolbar_next->GetId(), wxEVT_TOOL,
-            wxCommandEventHandler(WebFrame::OnFindText), NULL, this );
-    Connect(m_find_toolbar_previous->GetId(), wxEVT_TOOL,
-            wxCommandEventHandler(WebFrame::OnFindText), NULL, this );
+    Bind(wxEVT_TOOL, &WebFrame::OnFindDone, this, m_find_toolbar_done->GetId());
+    Bind(wxEVT_TOOL, &WebFrame::OnFindText, this, m_find_toolbar_next->GetId());
+    Bind(wxEVT_TOOL, &WebFrame::OnFindText, this, m_find_toolbar_previous->GetId());
 
     // Connect find control events.
-    Connect(m_find_ctrl->GetId(), wxEVT_TEXT,
-            wxCommandEventHandler(WebFrame::OnFindText), NULL, this );
-    Connect(m_find_ctrl->GetId(), wxEVT_TEXT_ENTER,
-            wxCommandEventHandler(WebFrame::OnFindText), NULL, this );
+    Bind(wxEVT_TEXT, &WebFrame::OnFindText, this, m_find_ctrl->GetId());
+    Bind(wxEVT_TEXT_ENTER, &WebFrame::OnFindText, this, m_find_ctrl->GetId());
 
     // Connect the webview events
-    Connect(m_browser->GetId(), wxEVT_WEBVIEW_NAVIGATING,
-            wxWebViewEventHandler(WebFrame::OnNavigationRequest), NULL, this);
-    Connect(m_browser->GetId(), wxEVT_WEBVIEW_NAVIGATED,
-            wxWebViewEventHandler(WebFrame::OnNavigationComplete), NULL, this);
-    Connect(m_browser->GetId(), wxEVT_WEBVIEW_LOADED,
-            wxWebViewEventHandler(WebFrame::OnDocumentLoaded), NULL, this);
-    Connect(m_browser->GetId(), wxEVT_WEBVIEW_ERROR,
-            wxWebViewEventHandler(WebFrame::OnError), NULL, this);
-    Connect(m_browser->GetId(), wxEVT_WEBVIEW_NEWWINDOW,
-            wxWebViewEventHandler(WebFrame::OnNewWindow), NULL, this);
-    Connect(m_browser->GetId(), wxEVT_WEBVIEW_TITLE_CHANGED,
-            wxWebViewEventHandler(WebFrame::OnTitleChanged), NULL, this);
+    Bind(wxEVT_WEBVIEW_NAVIGATING, &WebFrame::OnNavigationRequest, this, m_browser->GetId());
+    Bind(wxEVT_WEBVIEW_NAVIGATED, &WebFrame::OnNavigationComplete, this, m_browser->GetId());
+    Bind(wxEVT_WEBVIEW_LOADED, &WebFrame::OnDocumentLoaded, this, m_browser->GetId());
+    Bind(wxEVT_WEBVIEW_ERROR, &WebFrame::OnError, this, m_browser->GetId());
+    Bind(wxEVT_WEBVIEW_NEWWINDOW, &WebFrame::OnNewWindow, this, m_browser->GetId());
+    Bind(wxEVT_WEBVIEW_TITLE_CHANGED, &WebFrame::OnTitleChanged, this, m_browser->GetId());
 
     // Connect the menu events
-    Connect(setPage->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnSetPage),  NULL, this );
-    Connect(viewSource->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnViewSourceRequest),  NULL, this );
-    Connect(viewText->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnViewTextRequest),  NULL, this );
-    Connect(print->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnPrint),  NULL, this );
-    Connect(m_tools_layout->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnZoomLayout),  NULL, this );
-    Connect(m_tools_tiny->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnSetZoom),  NULL, this );
-    Connect(m_tools_small->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnSetZoom),  NULL, this );
-    Connect(m_tools_medium->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnSetZoom),  NULL, this );
-    Connect(m_tools_large->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnSetZoom),  NULL, this );
-    Connect(m_tools_largest->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnSetZoom),  NULL, this );
-    Connect(clearhist->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnClearHistory),  NULL, this );
-    Connect(m_tools_enable_history->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnEnableHistory),  NULL, this );
-    Connect(m_edit_cut->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnCut),  NULL, this );
-    Connect(m_edit_copy->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnCopy),  NULL, this );
-    Connect(m_edit_paste->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnPaste),  NULL, this );
-    Connect(m_edit_undo->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnUndo),  NULL, this );
-    Connect(m_edit_redo->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRedo),  NULL, this );
-    Connect(m_edit_mode->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnMode),  NULL, this );
-    Connect(m_scroll_line_up->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnScrollLineUp),  NULL, this );
-    Connect(m_scroll_line_down->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnScrollLineDown),  NULL, this );
-    Connect(m_scroll_page_up->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnScrollPageUp),  NULL, this );
-    Connect(m_scroll_page_down->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnScrollPageDown),  NULL, this );
-    Connect(m_script_string->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScriptString),  NULL, this );
-    Connect(m_script_integer->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScriptInteger),  NULL, this );
-    Connect(m_script_double->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScriptDouble),  NULL, this );
-    Connect(m_script_bool->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScriptBool),  NULL, this );
-    Connect(m_script_object->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScriptObject),  NULL, this );
-    Connect(m_script_array->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScriptArray),  NULL, this );
-    Connect(m_script_dom->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScriptDOM),  NULL, this );
-    Connect(m_script_undefined->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScriptUndefined),  NULL, this );
-    Connect(m_script_null->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScriptNull),  NULL, this );
-    Connect(m_script_date->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScriptDate),  NULL, this );
+    Bind(wxEVT_MENU, &WebFrame::OnSetPage, this, setPage->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnViewSourceRequest, this, viewSource->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnViewTextRequest, this, viewText->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnPrint, this, print->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnZoomLayout, this, m_tools_layout->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnSetZoom, this, m_tools_tiny->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnSetZoom, this, m_tools_small->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnSetZoom, this, m_tools_medium->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnSetZoom, this, m_tools_large->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnSetZoom, this, m_tools_largest->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnClearHistory, this, clearhist->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnEnableHistory, this, m_tools_enable_history->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnCut, this, m_edit_cut->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnCopy, this, m_edit_copy->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnPaste, this, m_edit_paste->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnUndo, this, m_edit_undo->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnRedo, this, m_edit_redo->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnMode, this, m_edit_mode->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnScrollLineUp, this, m_scroll_line_up->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnScrollLineDown, this, m_scroll_line_down->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnScrollPageUp, this, m_scroll_page_up->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnScrollPageDown, this, m_scroll_page_down->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnRunScriptString, this, m_script_string->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnRunScriptInteger, this, m_script_integer->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnRunScriptDouble, this, m_script_double->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnRunScriptBool, this, m_script_bool->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnRunScriptObject, this, m_script_object->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnRunScriptArray, this, m_script_array->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnRunScriptDOM, this, m_script_dom->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnRunScriptUndefined, this, m_script_undefined->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnRunScriptNull, this, m_script_null->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnRunScriptDate, this, m_script_date->GetId());
 #if wxUSE_WEBVIEW_IE
-    Connect(m_script_object_el->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScriptObjectWithEmulationLevel),  NULL, this );
-    Connect(m_script_date_el->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScriptDateWithEmulationLevel),  NULL, this );
-    Connect(m_script_array_el->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScriptArrayWithEmulationLevel),  NULL, this );
+    Bind(wxEVT_MENU, &WebFrame::OnRunScriptObjectWithEmulationLevel, this, m_script_object_el->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnRunScriptDateWithEmulationLevel, this, m_script_date_el->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnRunScriptArrayWithEmulationLevel, this, m_script_array_el->GetId());
 #endif
-    Connect(m_script_custom->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnRunScriptCustom),  NULL, this );
-    Connect(m_selection_clear->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnClearSelection),  NULL, this );
-    Connect(m_selection_delete->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnDeleteSelection),  NULL, this );
-    Connect(selectall->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnSelectAll),  NULL, this );
-    Connect(loadscheme->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnLoadScheme),  NULL, this );
-    Connect(usememoryfs->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnUseMemoryFS),  NULL, this );
-    Connect(m_find->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnFind),  NULL, this );
-    Connect(m_context_menu->GetId(), wxEVT_MENU,
-            wxCommandEventHandler(WebFrame::OnEnableContextMenu), NULL, this );
+    Bind(wxEVT_MENU, &WebFrame::OnRunScriptCustom, this, m_script_custom->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnClearSelection, this, m_selection_clear->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnDeleteSelection, this, m_selection_delete->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnSelectAll, this, selectall->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnLoadScheme, this, loadscheme->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnUseMemoryFS, this, usememoryfs->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnFind, this, m_find->GetId());
+    Bind(wxEVT_MENU, &WebFrame::OnEnableContextMenu, this, m_context_menu->GetId());
 
     //Connect the idle events
-    Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(WebFrame::OnIdle), NULL, this);
+    Bind(wxEVT_IDLE, &WebFrame::OnIdle, this);
 }
 
 WebFrame::~WebFrame()
@@ -741,7 +681,13 @@ void WebFrame::OnMode(wxCommandEvent& WXUNUSED(evt))
 
 void WebFrame::OnLoadScheme(wxCommandEvent& WXUNUSED(evt))
 {
-    wxFileName helpfile("../help/doc.zip");
+    wxPathList pathlist;
+    pathlist.Add(".");
+    pathlist.Add("..");
+    pathlist.Add("../help");
+    pathlist.Add("../../../samples/help");
+
+    wxFileName helpfile(pathlist.FindValidPath("doc.zip"));
     helpfile.MakeAbsolute();
     wxString path = helpfile.GetFullPath();
     //Under MSW we need to flip the slashes
@@ -823,7 +769,7 @@ void WebFrame::OnFindText(wxCommandEvent& evt)
     {
         count++;
     }
-    wxLogMessage("Searching for:%s  current match:%li/%i", m_findText.c_str(), count, m_findCount);
+    wxLogMessage("Searching for:%s  current match:%li/%i", m_findText, count, m_findCount);
 }
 
 /**
@@ -882,7 +828,14 @@ void WebFrame::OnDocumentLoaded(wxWebViewEvent& evt)
   */
 void WebFrame::OnNewWindow(wxWebViewEvent& evt)
 {
-    wxLogMessage("%s", "New window; url='" + evt.GetURL() + "'");
+    wxString flag = " (other)";
+
+    if(evt.GetNavigationAction() == wxWEBVIEW_NAV_ACTION_USER)
+    {
+        flag = " (user)";
+    }
+
+    wxLogMessage("%s", "New window; url='" + evt.GetURL() + "'" + flag);
 
     //If we handle new window events then just load them in this window as we
     //are a single window browser
@@ -1005,8 +958,7 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     {
         item = m_tools_history_menu->AppendRadioItem(wxID_ANY, back[i]->GetTitle());
         m_histMenuItems[item->GetId()] = back[i];
-        Connect(item->GetId(), wxEVT_MENU,
-                wxCommandEventHandler(WebFrame::OnHistory), NULL, this );
+        Bind(wxEVT_MENU, &WebFrame::OnHistory, this, item->GetId());
     }
 
     wxString title = m_browser->GetCurrentTitle();
@@ -1022,8 +974,7 @@ void WebFrame::OnToolsClicked(wxCommandEvent& WXUNUSED(evt))
     {
         item = m_tools_history_menu->AppendRadioItem(wxID_ANY, forward[i]->GetTitle());
         m_histMenuItems[item->GetId()] = forward[i];
-        Connect(item->GetId(), wxEVT_TOOL,
-                wxCommandEventHandler(WebFrame::OnHistory), NULL, this );
+        Bind(wxEVT_TOOL, &WebFrame::OnHistory, this, item->GetId());
     }
 
     wxPoint position = ScreenToClient( wxGetMousePosition() );
@@ -1207,7 +1158,7 @@ void WebFrame::OnSelectAll(wxCommandEvent& WXUNUSED(evt))
   * Callback invoked when a loading error occurs
   */
 void WebFrame::OnError(wxWebViewEvent& evt)
-{   
+{
 #define WX_ERROR_CASE(type) \
     case type: \
         category = #type; \

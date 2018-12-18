@@ -925,9 +925,9 @@ class LifeModule: public wxModule
     wxDECLARE_DYNAMIC_CLASS(LifeModule);
 
 public:
-    LifeModule() {};
-    bool OnInit();
-    void OnExit();
+    LifeModule() {}
+    bool OnInit() wxOVERRIDE;
+    void OnExit() wxOVERRIDE;
 };
 
 wxIMPLEMENT_DYNAMIC_CLASS(LifeModule, wxModule);

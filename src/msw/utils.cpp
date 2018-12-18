@@ -713,11 +713,11 @@ int wxKill(long pid, wxSignal sig, wxKillError *krc, int flags)
 
             default:
                 wxFAIL_MSG( wxT("unexpected WaitForSingleObject() return") );
-                // fall through
+                wxFALLTHROUGH;
 
             case WAIT_FAILED:
                 wxLogLastError(wxT("WaitForSingleObject"));
-                // fall through
+                wxFALLTHROUGH;
 
             case WAIT_TIMEOUT:
                 // Process didn't terminate: normally this is a failure but not
@@ -1225,24 +1225,12 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 
 bool wxCheckOsVersion(int majorVsn, int minorVsn, int microVsn)
 {
-    OSVERSIONINFOEX osvi;
-    wxZeroMemory(osvi);
-    osvi.dwOSVersionInfoSize = sizeof(osvi);
+    int majorCur, minorCur, microCur;
+    wxGetOsVersion(&majorCur, &minorCur, &microCur);
 
-    DWORDLONG const dwlConditionMask =
-        ::VerSetConditionMask(
-        ::VerSetConditionMask(
-        ::VerSetConditionMask(
-        0, VER_MAJORVERSION, VER_GREATER_EQUAL),
-        VER_MINORVERSION, VER_GREATER_EQUAL),
-        VER_BUILDNUMBER, VER_GREATER_EQUAL);
-
-    osvi.dwMajorVersion = majorVsn;
-    osvi.dwMinorVersion = minorVsn;
-    osvi.dwBuildNumber = microVsn;
-
-    return ::VerifyVersionInfo(&osvi,
-        VER_MAJORVERSION | VER_MINORVERSION | VER_BUILDNUMBER, dwlConditionMask) != FALSE;
+    return majorCur > majorVsn
+        || (majorCur == majorVsn && minorCur > minorVsn)
+        || (majorCur == majorVsn && minorCur == minorVsn && microCur >= microVsn);
 }
 
 wxWinVersion wxGetWinVersion()
@@ -1282,10 +1270,11 @@ wxWinVersion wxGetWinVersion()
 
                     }
                     break;
-                    
+
                 case 10:
                     return wxWinVersion_10;
             }
+            break;
         default:
             // Do nothing just to silence GCC warning
             break;

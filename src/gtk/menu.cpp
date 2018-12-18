@@ -25,9 +25,7 @@
 #include "wx/accel.h"
 #include "wx/stockitem.h"
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/mnemonics.h"
 
 // Number of currently open modal dialogs, defined in src/gtk/toplevel.cpp.
@@ -808,8 +806,7 @@ wxMenu::~wxMenu()
     // Destroying a menu generates a "hide" signal even if it's not shown
     // currently, so disconnect it to avoid dummy wxEVT_MENU_CLOSE events
     // generation.
-    g_signal_handlers_disconnect_matched(m_menu,
-        GSignalMatchType(G_SIGNAL_MATCH_DATA), 0, 0, NULL, NULL, this);
+    g_signal_handlers_disconnect_by_data(m_menu, this);
 
     if (m_owner)
     {
@@ -993,8 +990,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
     GtkWidget * const mitem = item->GetMenuItem();
 
-    g_signal_handlers_disconnect_matched(mitem,
-        GSignalMatchType(G_SIGNAL_MATCH_DATA), 0, 0, NULL, NULL, item);
+    g_signal_handlers_disconnect_by_data(mitem, item);
 
 #ifdef __WXGTK3__
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), NULL);

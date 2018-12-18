@@ -139,7 +139,7 @@ bool MyApp::OnInit()
 {
     // Create the main frame window
 
-    MyFrame* frame = new MyFrame(NULL, -1, wxT("SVG Demo"),
+    MyFrame* frame = new MyFrame(NULL, -1, "SVG Demo",
                                  wxDefaultPosition, wxSize(500, 400));
 
     frame->Show(true);
@@ -174,8 +174,8 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
-    menu_bar->Append(file_menu, wxT("&File"));
-    menu_bar->Append(help_menu, wxT("&Help"));
+    menu_bar->Append(file_menu, "&File");
+    menu_bar->Append(help_menu, "&Help");
 
     // Associate the menu bar with the frame
     SetMenuBar(menu_bar);
@@ -198,12 +198,12 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    (void)wxMessageBox(wxT("wxWidgets SVG sample\n")
-        wxT("Authors:\n")
-        wxT("   Chris Elliott (c) 2002-2009\n")
-        wxT("   Prashant Kumar Nirmal (c) 2017\n")
-        wxT("Usage: click File|Save to Save the Selected SVG Test"),
-        wxT("About SVG Test"));
+    (void)wxMessageBox("wxWidgets SVG sample\n"
+        "Authors:\n"
+        "   Chris Elliott (c) 2002-2009\n"
+        "   Prashant Kumar Nirmal (c) 2017\n"
+        "Usage: click File|Save to Save the Selected SVG Test",
+        "About SVG Test");
 }
 
 void MyFrame::FileSavePicture(wxCommandEvent& WXUNUSED(event))
@@ -211,9 +211,9 @@ void MyFrame::FileSavePicture(wxCommandEvent& WXUNUSED(event))
 #if wxUSE_FILEDLG
     MyPage * const page = (MyPage *) m_notebook->GetCurrentPage();
 
-    wxFileDialog dialog(this, wxT("Save Picture as"), wxEmptyString,
+    wxFileDialog dialog(this, "Save Picture as", wxEmptyString,
         m_notebook->GetPageText(m_notebook->GetSelection()),
-        wxT("SVG vector picture files (*.svg)|*.svg"),
+        "SVG vector picture files (*.svg)|*.svg",
         wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 
     if (dialog.ShowModal() == wxID_OK)
@@ -280,10 +280,10 @@ void MyPage::OnDraw(wxDC& dc)
             dc.SetBrush(*wxCYAN_BRUSH);
             dc.SetPen(*wxRED_PEN);
             dc.DrawRectangle(10, 10, 100, 70);
-            wB = wxBrush (wxT("DARK ORCHID"), wxBRUSHSTYLE_TRANSPARENT);
+            wB = wxBrush ("DARK ORCHID", wxBRUSHSTYLE_TRANSPARENT);
             dc.SetBrush (wB);
             dc.DrawRoundedRectangle(50, 50, 100, 70, 20);
-            dc.SetBrush (wxBrush(wxT("GOLDENROD")) );
+            dc.SetBrush (wxBrush("GOLDENROD") );
             dc.DrawEllipse(100, 100, 100, 50);
 
             points[0].x = 100; points[0].y = 200;
@@ -301,21 +301,21 @@ void MyPage::OnDraw(wxDC& dc)
             // draw text in Arial or similar font
             dc.DrawLine(50,25,50,35);
             dc.DrawLine(45,30,55,30);
-            dc.DrawText(wxT("This is a Swiss-style string"), 50, 30);
+            dc.DrawText("This is a Swiss-style string", 50, 30);
             wC = dc.GetTextForeground();
-            dc.SetTextForeground (wxT("FIREBRICK"));
+            dc.SetTextForeground ("FIREBRICK");
 
             // no effect in msw ??
-            dc.SetTextBackground (wxT("WHEAT"));
-            dc.DrawText(wxT("This is a Red string"), 50, 200);
-            dc.DrawRotatedText(wxT("This is a 45 deg string"), 50, 200, 45);
-            dc.DrawRotatedText(wxT("This is a 90 deg string"), 50, 200, 90);
+            dc.SetTextBackground ("WHEAT");
+            dc.DrawText("This is a Red string", 50, 200);
+            dc.DrawRotatedText("This is a 45 deg string", 50, 200, 45);
+            dc.DrawRotatedText("This is a 90 deg string", 50, 200, 90);
             dc.SetFont(wxFontInfo(18)
                         .FaceName("Times New Roman")
                         .Family(wxFONTFAMILY_ROMAN)
                         .Italic().Bold());
             dc.SetTextForeground (wC);
-            dc.DrawText(wxT("This is a Times-style string"), 50, 60);
+            dc.DrawText("This is a Times-style string", 50, 60);
             break;
 
         case Page_Arcs:
@@ -328,11 +328,11 @@ void MyPage::OnDraw(wxDC& dc)
             dc.DrawArc ( 270-50, 270-86, 270-86, 270-50, 270,270 );
             dc.SetDeviceOrigin(0,0);
 
-            wP.SetColour (wxT("CADET BLUE"));
+            wP.SetColour ("CADET BLUE");
             dc.SetPen(wP);
             dc.DrawArc ( 75,125, 110, 40, 75, 75 );
 
-            wP.SetColour (wxT("SALMON"));
+            wP.SetColour ("SALMON");
             dc.SetPen(wP);
             dc.SetBrush(*wxRED_BRUSH);
             //top left corner, width and height, start and end angle
@@ -342,8 +342,8 @@ void MyPage::OnDraw(wxDC& dc)
             wP = *wxCYAN_PEN;
             wP.SetWidth(3);
             dc.SetPen(wP);
-                                 //wxTRANSPARENT));
-            dc.SetBrush (wxBrush (wxT("SALMON")));
+                                 //wxBRUSHSTYLE_TRANSPARENT));
+            dc.SetBrush (wxBrush ("SALMON"));
             dc.DrawEllipticArc(300,  0,200,100, 0.0,145.0);
                                  //same end point
             dc.DrawEllipticArc(300, 50,200,100,90.0,145.0);
@@ -353,7 +353,7 @@ void MyPage::OnDraw(wxDC& dc)
 
         case Page_Checkmarks:
             dc.DrawCheckMark ( 30,30,25,25);
-            dc.SetBrush (wxBrush (wxT("SALMON"),wxBRUSHSTYLE_TRANSPARENT));
+            dc.SetBrush (wxBrush ("SALMON",wxBRUSHSTYLE_TRANSPARENT));
             dc.DrawCheckMark ( 80,50,75,75);
             dc.DrawRectangle ( 80,50,75,75);
             break;
@@ -365,7 +365,7 @@ void MyPage::OnDraw(wxDC& dc)
                         .Italic().Bold());
             dc.DrawLine(0, 0, 200, 200);
             dc.DrawLine(200, 0, 0, 200);
-            dc.DrawText(wxT("This is an 18pt string"), 50, 60);
+            dc.DrawText("This is an 18pt string", 50, 60);
 
             // rescale and draw in blue
             wP = *wxCYAN_PEN;
@@ -374,10 +374,10 @@ void MyPage::OnDraw(wxDC& dc)
             dc.SetDeviceOrigin(200,0);
             dc.DrawLine(0, 0, 200, 200);
             dc.DrawLine(200, 0, 0, 200);
-            dc.DrawText(wxT("This is an 18pt string 2 x 0.5 UserScaled"), 50, 60);
+            dc.DrawText("This is an 18pt string 2 x 0.5 UserScaled", 50, 60);
             dc.SetUserScale (2.0,2.0);
             dc.SetDeviceOrigin(200,200);
-            dc.DrawText(wxT("This is an 18pt string 2 x 2 UserScaled"), 50, 60);
+            dc.DrawText("This is an 18pt string 2 x 2 UserScaled", 50, 60);
 
             wP = *wxRED_PEN;
             dc.SetPen(wP);
@@ -386,7 +386,7 @@ void MyPage::OnDraw(wxDC& dc)
             dc.SetMapMode (wxMM_METRIC); //svg ignores this
             dc.DrawLine(0, 0, 200, 200);
             dc.DrawLine(200, 0, 0, 200);
-            dc.DrawText(wxT("This is an 18pt string in MapMode"), 50, 60);
+            dc.DrawText("This is an 18pt string in MapMode", 50, 60);
             break;
 
         case Page_Bitmaps:
@@ -395,15 +395,15 @@ void MyPage::OnDraw(wxDC& dc)
             break;
 
         case Page_Clipping:
-            dc.SetTextForeground(wxT("RED"));
-            dc.DrawText(wxT("Red = Clipping Off"), 30, 5);
-            dc.SetTextForeground(wxT("GREEN"));
-            dc.DrawText(wxT("Green = Clipping On"), 30, 25);
+            dc.SetTextForeground("RED");
+            dc.DrawText("Red = Clipping Off", 30, 5);
+            dc.SetTextForeground("GREEN");
+            dc.DrawText("Green = Clipping On", 30, 25);
 
-            dc.SetTextForeground(wxT("BLACK"));
+            dc.SetTextForeground("BLACK");
 
             dc.SetPen(*wxRED_PEN);
-            dc.SetBrush (wxBrush (wxT("SALMON"),wxBRUSHSTYLE_TRANSPARENT));
+            dc.SetBrush (wxBrush ("SALMON",wxBRUSHSTYLE_TRANSPARENT));
             dc.DrawCheckMark ( 80,50,75,75);
             dc.DrawRectangle ( 80,50,75,75);
 
@@ -464,7 +464,7 @@ void MyPage::OnDraw(wxDC& dc)
             //dc.SetTextBackground(*wxBLUE);
 
             // Horizontal text
-            txtStr = wxT("Horizontal string");
+            txtStr = "Horizontal string";
             dc.GetTextExtent(txtStr, &txtW, &txtH, &txtDescent, &txtEL);
             txtX = 50;
             txtY = 300;
@@ -472,7 +472,7 @@ void MyPage::OnDraw(wxDC& dc)
             dc.DrawText(txtStr, txtX + txtPad, txtY + txtPad);
 
             // Vertical text
-            txtStr = wxT("Vertical string");
+            txtStr = "Vertical string";
             dc.GetTextExtent(txtStr, &txtW, &txtH, &txtDescent, &txtEL);
             txtX = 50;
             txtY = 250;
@@ -480,7 +480,7 @@ void MyPage::OnDraw(wxDC& dc)
             dc.DrawRotatedText(txtStr, txtX + txtPad, txtY - txtPad, 90);
 
             // 45 degree text
-            txtStr = wxT("45 deg string");
+            txtStr = "45 deg string";
             dc.GetTextExtent(txtStr, &txtW, &txtH, &txtDescent, &txtEL);
             double lenW = (double)(txtW + 2*txtPad) / sqrt(2.0);
             double lenH = (double)(txtH + 2*txtPad) / sqrt(2.0);

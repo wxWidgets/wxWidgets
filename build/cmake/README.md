@@ -28,9 +28,9 @@ Files
     * Every function should contain a short description of it's parameters as
       a comment before the function/macro
 * install.cmake
-    * Handles defintions for the `install` and `uninstall` target
+    * Handles definitions for the `install` and `uninstall` target
 * init.cmake
-    * Intializes various variables used during the build process and for
+    * Initializes various variables used during the build process and for
       generation of setup.h and configuration files
 * main.cmake
     * Includes all other cmake files
@@ -60,7 +60,7 @@ _.cmake_ files.
     * Defines build targets for demos via `wx_add_demo()`
 * lib
     * Defines build targets for all libraries and bundle third party libraries
-    * Each library is contained in a seperate directory and uses
+    * Each library is contained in a separate directory and uses
       `wx_add_library()` to define the library target
     * Bundled third party library without upstream CMake support are defined in
       a _.cmake_ file using `wx_add_builtin_library()` to define static library
@@ -70,8 +70,8 @@ _.cmake_ files.
     * Includes the [cotire module][4] used to for precompiled header generation
 * samples
     * Defines build targets for all samples via `wx_add_sample()`
-    * Defintions for trivial samples are included in _CMakeLists.txt_ more
-      complex samples might have a seperate .cmake file
+    * Definitions for trivial samples are included in _CMakeLists.txt_ more
+      complex samples might have a separate .cmake file
 * tests
     * Defines build targets for all tests
 * utils

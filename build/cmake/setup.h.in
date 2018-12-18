@@ -68,6 +68,9 @@
 /* Define this if your version of GTK+ is >= 3.0 */
 #cmakedefine __WXGTK3__ 1
 
+/* Define this if your version of GTK+ is >= 3.90.0 */
+#cmakedefine __WXGTK4__ 1
+
 /* Define this if you want to use GPE features */
 #cmakedefine __WXGPE__ 1
 
@@ -105,11 +108,20 @@
 #cmakedefine __UNIXWARE__ 1
 #cmakedefine __VMS__ 1
 
-#undef __IA64__
-#undef __ALPHA__
+#cmakedefine __IA64__ 1
+#cmakedefine __ALPHA__ 1
+
+/* NanoX (with wxX11) */
+#cmakedefine01 wxUSE_NANOX
+
+/* PowerPC Darwin & Mac OS X */
+#cmakedefine __POWERPC__ 1
 
 /* Hack to make IOGraphicsTypes.h not define Point conflicting with MacTypes */
 #undef __Point__
+
+/* MS-DOS with DJGPP */
+#cmakedefine __DOS__ 1
 
 /* Stupid hack; __WINDOWS__ clashes with wx/defs.h */
 #ifndef __WINDOWS__
@@ -123,10 +135,10 @@
 #cmakedefine __GNUWIN32__ 1
 #endif
 #ifndef STRICT
-#undef STRICT
+#cmakedefine STRICT
 #endif
 #ifndef WINVER
-#undef WINVER
+#cmakedefine WINVER
 #endif
 
 /* --- start common options --- */
@@ -274,6 +286,8 @@
 #cmakedefine01 wxUSE_TARSTREAM
 
 #cmakedefine01 wxUSE_ZLIB
+
+#cmakedefine01 wxUSE_LIBLZMA
 
 #cmakedefine01 wxUSE_APPLE_IEEE
 
@@ -638,9 +652,9 @@
 
    Recommended setting: 1 (wxMediaCtrl won't work by default without it).
  */
-#define wxUSE_GSTREAMER 0
+#cmakedefine01 wxUSE_GSTREAMER
 
-#define wxUSE_GSTREAMER_PLAYER 0
+#cmakedefine01 wxUSE_GSTREAMER_PLAYER
 
 /*
    Use XTest extension to implement wxUIActionSimulator?
@@ -650,7 +664,7 @@
 
    Recommended setting: 1, wxUIActionSimulator won't work in wxGTK3 without it.
  */
-#define wxUSE_XTEST 0
+#cmakedefine01 wxUSE_XTEST
 
 /* --- start MSW options --- */
 
@@ -747,39 +761,39 @@
 /*
  * Define if your compiler has <hash_map>
  */
-#undef HAVE_HASH_MAP
+#cmakedefine HAVE_HASH_MAP 1
 /*
  * Define if your compiler has <ext/hash_map>
  */
-#undef HAVE_EXT_HASH_MAP
+#cmakedefine HAVE_EXT_HASH_MAP 1
 /*
  * Define if your compiler has std::hash_map/hash_set
  */
-#undef HAVE_STD_HASH_MAP
+#cmakedefine HAVE_STD_HASH_MAP 1
 /*
  * Define if your compiler has __gnu_cxx::hash_map/hash_set
  */
-#undef HAVE_GNU_CXX_HASH_MAP
+#cmakedefine HAVE_GNU_CXX_HASH_MAP 1
 
 /*
  * Define if your compiler has std::unordered_map
  */
-#undef HAVE_STD_UNORDERED_MAP
+#cmakedefine HAVE_STD_UNORDERED_MAP 1
 
 /*
  * Define if your compiler has std::unordered_set
  */
-#undef HAVE_STD_UNORDERED_SET
+#cmakedefine HAVE_STD_UNORDERED_SET 1
 
 /*
  * Define if your compiler has std::tr1::unordered_map
  */
-#undef HAVE_TR1_UNORDERED_MAP
+#cmakedefine HAVE_TR1_UNORDERED_MAP 1
 
 /*
  * Define if your compiler has std::tr1::unordered_set
  */
-#undef HAVE_TR1_UNORDERED_SET
+#cmakedefine HAVE_TR1_UNORDERED_SET 1
 
 /*
  * Define if your compiler has <tr1/type_traits>
@@ -804,49 +818,49 @@
 /*
  * Define if compiler's visibility support in libstdc++ is broken
  */
-#undef HAVE_BROKEN_LIBSTDCXX_VISIBILITY
+#cmakedefine HAVE_BROKEN_LIBSTDCXX_VISIBILITY
 
 /*
  * The built-in regex supports advanced REs in additional to POSIX's basic
  * and extended. Your system regex probably won't support this, and in this
  * case WX_NO_REGEX_ADVANCED should be defined.
  */
-#undef WX_NO_REGEX_ADVANCED
+#cmakedefine WX_NO_REGEX_ADVANCED
 /*
  * On GNU systems use re_search instead of regexec, since the latter does a
  * strlen on the search text affecting the performance of some operations.
  */
-#undef HAVE_RE_SEARCH
+#cmakedefine HAVE_RE_SEARCH
 /*
  * Use SDL for audio (Unix)
  */
-#define wxUSE_LIBSDL 0
+#cmakedefine01 wxUSE_LIBSDL
 
 /*
  * Compile sound backends as plugins
  */
-#define wxUSE_PLUGINS 0
+#cmakedefine01 wxUSE_PLUGINS
 
 /*
  * Use GTK print for printing under GTK+ 2.10+
  */
-#define wxUSE_GTKPRINT 0
+#cmakedefine01 wxUSE_GTKPRINT
 /*
  * Use GNOME VFS for MIME types
  */
-#define wxUSE_LIBGNOMEVFS 0
+#cmakedefine01 wxUSE_LIBGNOMEVFS
 /*
  * Use libnotify library.
  */
-#define wxUSE_LIBNOTIFY 0
+#cmakedefine01 wxUSE_LIBNOTIFY
 /*
  * Use libnotify 0.7+ API.
  */
-#define wxUSE_LIBNOTIFY_0_7 0
+#cmakedefine01 wxUSE_LIBNOTIFY_0_7
 /*
  * Use libXpm
  */
-#define wxHAVE_LIB_XPM 0
+#cmakedefine01 wxHAVE_LIB_XPM
 /*
  * Define if you have pthread_cleanup_push/pop()
  */
@@ -858,7 +872,7 @@
 /*
  * Define if large (64 bit file offsets) files are supported.
  */
-#undef HAVE_LARGEFILE_SUPPORT
+#cmakedefine HAVE_LARGEFILE_SUPPORT 1
 
 /*
  * Use OpenGL
@@ -868,22 +882,17 @@
 /*
  * Use MS HTML Help via libmspack (Unix)
  */
-#define wxUSE_LIBMSPACK 0
+#cmakedefine01 wxUSE_LIBMSPACK
 
 /*
  * Matthews garbage collection (used for MrEd?)
  */
-#define WXGARBAGE_COLLECTION_ON 0
+#cmakedefine01 WXGARBAGE_COLLECTION_ON
 
 /*
  * wxWebKitCtrl
  */
-#define wxUSE_WEBKIT 0
-
-/*
- * Objective-C class name uniquifying
- */
-#define wxUSE_OBJC_UNIQUIFYING 0
+#cmakedefine01 wxUSE_WEBKIT
 
 /*
  * The const keyword is being introduced more in wxWindows.
@@ -899,7 +908,7 @@
 /*
  * use the session manager to detect KDE/GNOME
  */
-#define wxUSE_DETECT_SM     0
+#cmakedefine01 wxUSE_DETECT_SM
 
 
 /* define with the name of timezone variable */
@@ -919,13 +928,16 @@
 
 /* gettimeofday() usually takes 2 arguments, but some really old systems might
  * have only one, in which case define WX_GETTIMEOFDAY_NO_TZ */
-#undef WX_GETTIMEOFDAY_NO_TZ
+#cmakedefine WX_GETTIMEOFDAY_NO_TZ 1
 
 /* struct tm doesn't always have the tm_gmtoff field, define this if it does */
 #cmakedefine WX_GMTOFF_IN_TM 1
 
+/* check if nl_langinfo() can be called with argument _NL_TIME_FIRST_WEEKDAY */
+#cmakedefine HAVE_NL_TIME_FIRST_WEEKDAY 1
+
 /* Define if you have poll(2) function */
-#undef HAVE_POLL
+#cmakedefine HAVE_POLL 1
 
 /* Define if you have pw_gecos field in struct passwd */
 #cmakedefine HAVE_PW_GECOS 1
@@ -952,7 +964,7 @@
 #cmakedefine HAVE_NANOSLEEP 1
 
 /* Define if you have sched_yield */
-#undef HAVE_SCHED_YIELD
+#cmakedefine HAVE_SCHED_YIELD 1
 
 /* Define if you have pthread_mutexattr_t and functions to work with it */
 #cmakedefine HAVE_PTHREAD_MUTEXATTR_T 1
@@ -964,13 +976,13 @@
 #cmakedefine HAVE_PTHREAD_RECURSIVE_MUTEX_INITIALIZER 1
 
 /* Define if you have pthread_cancel */
-#undef HAVE_PTHREAD_CANCEL
+#cmakedefine HAVE_PTHREAD_CANCEL 1
 
 /* Define if you have pthread_mutex_timedlock */
-#undef HAVE_PTHREAD_MUTEX_TIMEDLOCK
+#cmakedefine HAVE_PTHREAD_MUTEX_TIMEDLOCK 1
 
 /* Define if you have pthread_attr_setstacksize */
-#undef HAVE_PTHREAD_ATTR_SETSTACKSIZE
+#cmakedefine HAVE_PTHREAD_ATTR_SETSTACKSIZE 1
 
 /* Define if you have shl_load() */
 #cmakedefine HAVE_SHL_LOAD 1
@@ -979,7 +991,7 @@
 #cmakedefine HAVE_SNPRINTF 1
 
 /* Define if you have snprintf() declaration in the header */
-#undef HAVE_SNPRINTF_DECL
+#cmakedefine HAVE_SNPRINTF_DECL 1
 
 /* Define if you have a snprintf() which supports positional arguments
    (defined in the unix98 standard) */
@@ -995,30 +1007,30 @@
 #cmakedefine HAVE_STATVFS 1
 
 /* Define if you have strtoull() and strtoll() */
-#undef HAVE_STRTOULL
+#cmakedefine HAVE_STRTOULL 1
 
 /* Define if you have all functions to set thread priority */
-#undef HAVE_THREAD_PRIORITY_FUNCTIONS
+#cmakedefine HAVE_THREAD_PRIORITY_FUNCTIONS 1
 
 /* Define if you have vsnprintf() */
 #cmakedefine HAVE_VSNPRINTF 1
 
 /* Define if you have vsnprintf() declaration in the header */
-#undef HAVE_VSNPRINTF_DECL
+#cmakedefine HAVE_VSNPRINTF_DECL 1
 
 /* Define if you have a _broken_ vsnprintf() declaration in the header,
  * with 'char*' for the 3rd parameter instead of 'const char*' */
-#undef HAVE_BROKEN_VSNPRINTF_DECL
+#cmakedefine HAVE_BROKEN_VSNPRINTF_DECL 1
 
 /* Define if you have a _broken_ vsscanf() declaration in the header,
  * with 'char*' for the 1st parameter instead of 'const char*' */
-#undef HAVE_BROKEN_VSSCANF_DECL
+#cmakedefine HAVE_BROKEN_VSSCANF_DECL 1
 
 /* Define if you have vsscanf() */
 #cmakedefine HAVE_VSSCANF 1
 
 /* Define if you have vsscanf() declaration in the header */
-#undef HAVE_VSSCANF_DECL
+#cmakedefine HAVE_VSSCANF_DECL 1
 
 /* Define if you have usleep() */
 #cmakedefine HAVE_USLEEP 1
@@ -1090,7 +1102,7 @@
 #cmakedefine HAVE_FLOCK 1
 
 /* Define if you have getaddrinfo function. */
-#undef HAVE_GETADDRINFO
+#cmakedefine HAVE_GETADDRINFO 1
 
 /* Define if you have a gethostbyname_r function taking 6 arguments. */
 #cmakedefine HAVE_FUNC_GETHOSTBYNAME_R_6 1
@@ -1108,13 +1120,13 @@
 #cmakedefine HAVE_GETHOSTNAME 1
 
 /* Define if you have a getservbyname_r function taking 6 arguments. */
-#undef HAVE_FUNC_GETSERVBYNAME_R_6
+#cmakedefine HAVE_FUNC_GETSERVBYNAME_R_6 1
 
 /* Define if you have a getservbyname_r function taking 5 arguments. */
-#undef HAVE_FUNC_GETSERVBYNAME_R_5
+#cmakedefine HAVE_FUNC_GETSERVBYNAME_R_5 1
 
 /* Define if you have a getservbyname_r function taking 4 arguments. */
-#undef HAVE_FUNC_GETSERVBYNAME_R_4
+#cmakedefine HAVE_FUNC_GETSERVBYNAME_R_4 1
 
 /* Define if you only have a getservbyname function */
 #cmakedefine HAVE_GETSERVBYNAME 1
@@ -1147,10 +1159,10 @@
 #cmakedefine HAVE_STRTOK_R 1
 
 /* Define if you have thr_setconcurrency function */
-#undef HAVE_THR_SETCONCURRENCY
+#cmakedefine HAVE_THR_SETCONCURRENCY 1
 
 /* Define if you have pthread_setconcurrency function */
-#undef HAVE_PTHREAD_SET_CONCURRENCY
+#cmakedefine HAVE_PTHREAD_SET_CONCURRENCY 1
 
 /* Define if you have the uname function.  */
 #cmakedefine HAVE_UNAME 1
@@ -1159,10 +1171,10 @@
 #cmakedefine HAVE_UNSETENV 1
 
 /* Define if you have the <X11/XKBlib.h> header file.  */
-#undef HAVE_X11_XKBLIB_H
+#cmakedefine HAVE_X11_XKBLIB_H 1
 
 /* Define if you have the <X11/extensions/xf86vmode.h> header file.  */
-#undef HAVE_X11_EXTENSIONS_XF86VMODE_H
+#cmakedefine HAVE_X11_EXTENSIONS_XF86VMODE_H 1
 
 /* Define if you have the <sched.h> header file.  */
 #cmakedefine HAVE_SCHED_H 1
@@ -1180,13 +1192,13 @@
 #cmakedefine HAVE_WCSTR_H 1
 
 /* Define if you have <widec.h> (Solaris only) */
-#undef HAVE_WIDEC_H
+#cmakedefine HAVE_WIDEC_H 1
 
 /* Define if you have the <iconv.h> header file and iconv() symbol.  */
 #cmakedefine HAVE_ICONV 1
 
 /* Define as "const" if the declaration of iconv() needs const.  */
-#define ICONV_CONST @ICONV_CONST@
+#cmakedefine ICONV_CONST @ICONV_CONST@
 
 /* Define if you have the <langinfo.h> header file.  */
 #cmakedefine HAVE_LANGINFO_H 1
@@ -1213,28 +1225,28 @@
 #cmakedefine HAVE_VSWPRINTF 1
 
 /* Define this if you have _vsnwprintf */
-#undef HAVE__VSNWPRINTF
+#cmakedefine HAVE__VSNWPRINTF 1
 
 /* vswscanf() */
 #cmakedefine HAVE_VSWSCANF 1
 
 /* Define if fseeko and ftello are available.  */
-#undef HAVE_FSEEKO
+#cmakedefine HAVE_FSEEKO 1
 
 /* Define this if you are using gtk and gdk contains support for X11R6 XIM */
-#undef HAVE_XIM
+#cmakedefine HAVE_XIM 1
 
 /* Define this if you have X11/extensions/shape.h */
-#undef HAVE_XSHAPE
+#cmakedefine HAVE_XSHAPE 1
 
 /* Define this if you have type SPBCDATA */
-#undef HAVE_SPBCDATA
+#cmakedefine HAVE_SPBCDATA 1
 
 /* Define if you have pango_font_family_is_monospace() (Pango >= 1.3.3) */
-#undef HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE
+#cmakedefine HAVE_PANGO_FONT_FAMILY_IS_MONOSPACE 1
 
 /* Define if you have Pango xft support */
-#undef HAVE_PANGO_XFT
+#cmakedefine HAVE_PANGO_XFT 1
 
 /* Define if you have the <sys/select.h> header file.  */
 #cmakedefine HAVE_SYS_SELECT_H 1
@@ -1277,10 +1289,10 @@
 
 /* When using an external jpeg library and the Windows headers already define
  * boolean, define to the type used by the jpeg library for boolean.  */
-#undef wxHACK_BOOLEAN
+#cmakedefine wxHACK_BOOLEAN
 
 /* Define if the header pbt.h is missing.  */
-#undef NEED_PBT_H
+#cmakedefine NEED_PBT_H
 
 #endif /* __WIN32__ */
 
@@ -1295,9 +1307,10 @@
  */
 
 /* wxLogChain class available */
-#define wxHAS_LOG_CHAIN
+#cmakedefine wxHAS_LOG_CHAIN
 
 /* define this when wxDC::Blit() respects SetDeviceOrigin() in wxGTK */
-#undef wxHAS_WORKING_GTK_DC_BLIT
+#cmakedefine wxHAS_WORKING_GTK_DC_BLIT
 
 #endif /* __WX_SETUP_H__ */
+

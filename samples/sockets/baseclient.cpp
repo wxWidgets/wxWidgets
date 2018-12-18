@@ -173,20 +173,20 @@ WX_DEFINE_LIST(EList);
 wxString
 CreateIdent(const wxIPV4address& addr)
 {
-    return wxString::Format(wxT("%s:%d"),addr.IPAddress().c_str(),addr.Service());
+    return wxString::Format("%s:%d",addr.IPAddress(),addr.Service());
 }
 
 void
 Client::OnInitCmdLine(wxCmdLineParser& pParser)
 {
     wxApp::OnInitCmdLine(pParser);
-    pParser.AddSwitch(wxT("e"),wxT("event"),_("Use event based worker (default)"),wxCMD_LINE_PARAM_OPTIONAL);
-    pParser.AddSwitch(wxT("t"),wxT("thread"),_("Use thread based worker"),wxCMD_LINE_PARAM_OPTIONAL);
-    pParser.AddSwitch(wxT("r"),wxT("random"),_("Send random data (default)"),wxCMD_LINE_PARAM_OPTIONAL);
-    pParser.AddOption(wxT("m"),wxT("message"),_("Send message from <str>"),wxCMD_LINE_VAL_STRING,wxCMD_LINE_PARAM_OPTIONAL);
-    pParser.AddOption(wxT("f"),wxT("file"),_("Send contents of <file>"),wxCMD_LINE_VAL_STRING,wxCMD_LINE_PARAM_OPTIONAL);
-    pParser.AddOption(wxT("H"),wxT("hostname"),_("IP or name of host to connect to"),wxCMD_LINE_VAL_STRING,wxCMD_LINE_PARAM_OPTIONAL);
-    pParser.AddOption(wxT("s"),wxT("stress"),_("stress test with <num> concurrent connections"),wxCMD_LINE_VAL_NUMBER,wxCMD_LINE_PARAM_OPTIONAL);
+    pParser.AddSwitch("e","event",_("Use event based worker (default)"),wxCMD_LINE_PARAM_OPTIONAL);
+    pParser.AddSwitch("t","thread",_("Use thread based worker"),wxCMD_LINE_PARAM_OPTIONAL);
+    pParser.AddSwitch("r","random",_("Send random data (default)"),wxCMD_LINE_PARAM_OPTIONAL);
+    pParser.AddOption("m","message",_("Send message from <str>"),wxCMD_LINE_VAL_STRING,wxCMD_LINE_PARAM_OPTIONAL);
+    pParser.AddOption("f","file",_("Send contents of <file>"),wxCMD_LINE_VAL_STRING,wxCMD_LINE_PARAM_OPTIONAL);
+    pParser.AddOption("H","hostname",_("IP or name of host to connect to"),wxCMD_LINE_VAL_STRING,wxCMD_LINE_PARAM_OPTIONAL);
+    pParser.AddOption("s","stress",_("stress test with <num> concurrent connections"),wxCMD_LINE_VAL_NUMBER,wxCMD_LINE_PARAM_OPTIONAL);
 }
 
 
@@ -199,38 +199,38 @@ Client::OnCmdLineParsed(wxCmdLineParser& pParser)
 
     if (pParser.Found(_("verbose")))
     {
-        wxLog::AddTraceMask(wxT("wxSocket"));
-        wxLog::AddTraceMask(wxT("epolldispatcher"));
-        wxLog::AddTraceMask(wxT("selectdispatcher"));
-        wxLog::AddTraceMask(wxT("thread"));
-        wxLog::AddTraceMask(wxT("events"));
+        wxLog::AddTraceMask("wxSocket");
+        wxLog::AddTraceMask("epolldispatcher");
+        wxLog::AddTraceMask("selectdispatcher");
+        wxLog::AddTraceMask("thread");
+        wxLog::AddTraceMask("events");
     }
 
-    if (pParser.Found(wxT("t")))
+    if (pParser.Found("t"))
         m_workMode = THREADS;
     m_sendType = SEND_RANDOM;
 
-    if (pParser.Found(wxT("m"),&m_message))
+    if (pParser.Found("m",&m_message))
         m_sendType = SEND_MESSAGE;
-    else if (pParser.Found(wxT("f"),&fname))
+    else if (pParser.Found("f",&fname))
     {
         wxFFile file(fname);
         if (!file.IsOpened()) {
-            wxLogError(wxT("Cannot open file %s"),fname.c_str());
+            wxLogError("Cannot open file %s",fname);
             return false;
         };
         if (!file.ReadAll(&m_message)) {
-            wxLogError(wxT("Cannot read content of file %s"),fname.c_str());
+            wxLogError("Cannot read content of file %s",fname);
             return false;
         };
         m_sendType = SEND_MESSAGE;
     };
 
-    if (pParser.Found(wxT("s"),&m_stressWorkers))
+    if (pParser.Found("s",&m_stressWorkers))
         m_sendType = STRESS_TEST;
 
-    m_host = wxT("127.0.0.1");
-    pParser.Found(wxT("H"),&m_host);
+    m_host = "127.0.0.1";
+    pParser.Found("H",&m_host);
     return wxApp::OnCmdLineParsed(pParser);
 };
 
@@ -352,7 +352,7 @@ Client::StartWorker(workMode pMode) {
     if (pMode == THREADS) {
         ThreadWorker* c = new ThreadWorker(m_host,buf,msgsize+2);
         if (c->Create() != wxTHREAD_NO_ERROR) {
-            wxLogError(wxT("Cannot create more threads"));
+            wxLogError("Cannot create more threads");
         } else {
             c->Run();
             m_threadWorkers.Append(c);
@@ -377,7 +377,7 @@ Client::StartWorker(workMode pMode, const wxString& pMessage) {
     if (pMode == THREADS) {
         ThreadWorker* c = new ThreadWorker(m_host,buf,msgsize+2);
         if (c->Create() != wxTHREAD_NO_ERROR) {
-            wxLogError(wxT("Cannot create more threads"));
+            wxLogError("Cannot create more threads");
         } else {
             c->Run();
             m_threadWorkers.Append(c);
@@ -476,7 +476,7 @@ void
 Client::RemoveEventWorker(EventWorker* p_worker) {
     for(EList::compatibility_iterator it = m_eventWorkers.GetFirst(); it ; it = it->GetNext()) {
         if (it->GetData() == p_worker) {
-            //wxLogDebug(wxT("Deleting event worker"));
+            //wxLogDebug("Deleting event worker");
             delete it->GetData();
             m_eventWorkers.DeleteNode(it);
             return;
@@ -496,7 +496,7 @@ Client::dumpStatistics() {
                 m_statFailed
                 ));
 
-    wxLogMessage(wxT("Current status:\n%s\n"),msg.c_str());
+    wxLogMessage("Current status:\n%s\n",msg);
 }
 
 void
@@ -533,7 +533,7 @@ EventWorker::Run() {
     m_clientSocket->Notify(true);
     m_currentType = WorkerEvent::CONNECTING;
     m_doneSent = false;
-    //wxLogMessage(wxT("EventWorker: Connecting....."));
+    //wxLogMessage("EventWorker: Connecting.....");
     m_clientSocket->Connect(ca,false);
 }
 
@@ -541,7 +541,7 @@ void
 EventWorker::OnSocketEvent(wxSocketEvent& pEvent) {
     switch(pEvent.GetSocketEvent()) {
         case wxSOCKET_INPUT:
-            //wxLogDebug(wxT("EventWorker: INPUT"));
+            //wxLogDebug("EventWorker: INPUT");
             do {
                 if (m_readed == m_insize)
                     return; //event already posted
@@ -550,80 +550,80 @@ EventWorker::OnSocketEvent(wxSocketEvent& pEvent) {
                 {
                     if (m_clientSocket->LastError() != wxSOCKET_WOULDBLOCK)
                     {
-                        wxLogError(wxT("%s: read error"),CreateIdent(m_localaddr).c_str());
+                        wxLogError("%s: read error",CreateIdent(m_localaddr));
                         SendEvent(true);
                     }
                 }
 
                 m_readed += m_clientSocket->LastCount();
-                //wxLogDebug(wxT("EventWorker: readed %d bytes, %d bytes to do"),m_clientSocket->LastCount(), m_insize - m_readed);
+                //wxLogDebug("EventWorker: readed %d bytes, %d bytes to do",m_clientSocket->LastCount(), m_insize - m_readed);
                 if (m_readed == m_insize)
                 {
                     if (!memcmp(m_inbuf,m_outbuf,m_insize)) {
-                        wxLogError(wxT("%s: data mismatch"),CreateIdent(m_localaddr).c_str());
+                        wxLogError("%s: data mismatch",CreateIdent(m_localaddr));
                         SendEvent(true);
                     }
                     m_currentType = WorkerEvent::DISCONNECTING;
-                    wxLogDebug(wxT("%s: DISCONNECTING"),CreateIdent(m_localaddr).c_str());
+                    wxLogDebug("%s: DISCONNECTING",CreateIdent(m_localaddr));
                     SendEvent(false);
 
-                    //wxLogDebug(wxT("EventWorker %p closing"),this);
+                    //wxLogDebug("EventWorker %p closing",this);
                     m_clientSocket->Close();
 
                     m_currentType = WorkerEvent::DONE;
-                    wxLogDebug(wxT("%s: DONE"),CreateIdent(m_localaddr).c_str());
+                    wxLogDebug("%s: DONE",CreateIdent(m_localaddr));
                     SendEvent(false);
                 }
             } while (!m_clientSocket->Error());
         break;
         case wxSOCKET_OUTPUT:
-            //wxLogDebug(wxT("EventWorker: OUTPUT"));
+            //wxLogDebug("EventWorker: OUTPUT");
             do {
                 if (m_written == m_outsize)
                     return;
                 if (m_written == 0)
                 {
                     m_currentType = WorkerEvent::SENDING;
-                    wxLogDebug(wxT("%s: SENDING"),CreateIdent(m_localaddr).c_str());
+                    wxLogDebug("%s: SENDING",CreateIdent(m_localaddr));
                 }
                 m_clientSocket->Write(m_outbuf + m_written, m_outsize - m_written);
                 if (m_clientSocket->Error())
                 {
                     if (m_clientSocket->LastError() != wxSOCKET_WOULDBLOCK) {
-                        wxLogError(wxT("%s: Write error"),CreateIdent(m_localaddr).c_str());
+                        wxLogError("%s: Write error",CreateIdent(m_localaddr));
                         SendEvent(true);
                     }
                 }
                 m_written += m_clientSocket->LastCount();
                 if (m_written != m_outsize)
                 {
-                    //wxLogDebug(wxT("EventWorker: written %d bytes, %d bytes to do"),m_clientSocket->LastCount(),m_outsize - m_written);
+                    //wxLogDebug("EventWorker: written %d bytes, %d bytes to do",m_clientSocket->LastCount(),m_outsize - m_written);
                 }
                 else
                 {
-                    //wxLogDebug(wxT("EventWorker %p SENDING->RECEIVING"),this);
+                    //wxLogDebug("EventWorker %p SENDING->RECEIVING",this);
                     m_currentType = WorkerEvent::RECEIVING;
-                    wxLogDebug(wxT("%s: RECEIVING"),CreateIdent(m_localaddr).c_str());
+                    wxLogDebug("%s: RECEIVING",CreateIdent(m_localaddr));
                     SendEvent(false);
                 }
             } while(!m_clientSocket->Error());
         break;
         case wxSOCKET_CONNECTION:
         {
-            //wxLogMessage(wxT("EventWorker: got connection"));
-            wxLogMessage(wxT("%s: starting writing message (2 bytes for signature and %d bytes of data to write)"),CreateIdent(m_localaddr).c_str(),m_outsize-2);
+            //wxLogMessage("EventWorker: got connection");
+            wxLogMessage("%s: starting writing message (2 bytes for signature and %d bytes of data to write)",CreateIdent(m_localaddr),m_outsize-2);
             if (!m_clientSocket->GetLocal(m_localaddr))
             {
                 wxLogError(_("Cannot get peer data for socket %p"),m_clientSocket);
             }
             m_currentType = WorkerEvent::SENDING;
-            wxLogDebug(wxT("%s: CONNECTING"),CreateIdent(m_localaddr).c_str());
+            wxLogDebug("%s: CONNECTING",CreateIdent(m_localaddr));
             SendEvent(false);
         }
         break;
         case wxSOCKET_LOST:
         {
-            wxLogError(_("%s: connection lost"),CreateIdent(m_localaddr).c_str());
+            wxLogError(_("%s: connection lost"),CreateIdent(m_localaddr));
             SendEvent(true);
         }
         break;
@@ -667,15 +667,15 @@ wxThread::ExitCode ThreadWorker::Entry()
     wxIPV4address ca;
     ca.Hostname(m_host);
     ca.Service(5678);
-    //wxLogDebug(wxT("ThreadWorker: Connecting....."));
+    //wxLogDebug("ThreadWorker: Connecting.....");
     m_clientSocket->SetTimeout(60);
     bool failed = false;
     WorkerEvent::evt_type etype = WorkerEvent::CONNECTING;
     if (!m_clientSocket->Connect(ca)) {
-        wxLogError(wxT("Cannot connect to %s:%d"),ca.IPAddress().c_str(), ca.Service());
+        wxLogError("Cannot connect to %s:%d",ca.IPAddress(), ca.Service());
         failed = true;
     } else {
-        //wxLogMessage(wxT("ThreadWorker: Connected. Sending %d bytes of data"),m_outsize);
+        //wxLogMessage("ThreadWorker: Connected. Sending %d bytes of data",m_outsize);
         etype = WorkerEvent::SENDING;
         WorkerEvent e(this,etype);
         wxGetApp().AddPendingEvent(e);
@@ -683,11 +683,11 @@ wxThread::ExitCode ThreadWorker::Entry()
         do {
             m_clientSocket->Write(m_outbuf,m_outsize);
             if (m_clientSocket->Error()) {
-                wxLogError(wxT("ThreadWorker: Write error"));
+                wxLogError("ThreadWorker: Write error");
                 failed  = true;
             }
             to_process -= m_clientSocket->LastCount();
-            //wxLogDebug(wxT("EventWorker: written %d bytes, %d bytes to do"),m_clientSocket->LastCount(),to_process);
+            //wxLogDebug("EventWorker: written %d bytes, %d bytes to do",m_clientSocket->LastCount(),to_process);
         } while(!m_clientSocket->Error() && to_process != 0);
 
         if (!failed) {
@@ -698,23 +698,23 @@ wxThread::ExitCode ThreadWorker::Entry()
             do {
                 m_clientSocket->Read(m_inbuf,m_insize);
                 if (m_clientSocket->Error()) {
-                    wxLogError(wxT("ThreadWorker: Read error"));
+                    wxLogError("ThreadWorker: Read error");
                     failed = true;
                     break;
                 }
                 to_process -= m_clientSocket->LastCount();
-                //wxLogDebug(wxT("EventWorker: readed %d bytes, %d bytes to do"),m_clientSocket->LastCount(),to_process);
+                //wxLogDebug("EventWorker: readed %d bytes, %d bytes to do",m_clientSocket->LastCount(),to_process);
             } while(!m_clientSocket->Error() && to_process != 0);
         }
 
         char* outdat = (char*)m_outbuf+2;
         if (!failed && (memcmp(m_inbuf,outdat,m_insize) != 0))
         {
-            wxLogError(wxT("Data mismatch"));
+            wxLogError("Data mismatch");
             failed = true;
         }
     }
-    //wxLogDebug(wxT("ThreadWorker: Finished"));
+    //wxLogDebug("ThreadWorker: Finished");
     if (!failed) {
         etype = WorkerEvent::DISCONNECTING;
         WorkerEvent e(this,etype);

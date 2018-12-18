@@ -87,7 +87,6 @@ class ToggleWidgetsPage : public WidgetsPage
 {
 public:
     ToggleWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~ToggleWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_toggle; }
     virtual void RecreateWidget() wxOVERRIDE { CreateToggle(); }
@@ -176,7 +175,7 @@ wxEND_EVENT_TABLE()
     #define FAMILY_CTRLS NATIVE_CTRLS
 #endif
 
-IMPLEMENT_WIDGETS_PAGE(ToggleWidgetsPage, wxT("ToggleButton"),
+IMPLEMENT_WIDGETS_PAGE(ToggleWidgetsPage, "ToggleButton",
                        FAMILY_CTRLS
                        );
 
@@ -214,14 +213,14 @@ void ToggleWidgetsPage::CreateContent()
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, wxT("Styles"));
+    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, "Styles");
 
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
 #ifdef wxHAS_BITMAPTOGGLEBUTTON
     m_chkBitmapOnly = CreateCheckBoxAndAddToSizer(sizerLeft, "&Bitmap only");
     m_chkTextAndBitmap = CreateCheckBoxAndAddToSizer(sizerLeft, "Text &and bitmap");
-    m_chkFit = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Fit exactly"));
+    m_chkFit = CreateCheckBoxAndAddToSizer(sizerLeft, "&Fit exactly");
 #endif // wxHAS_BITMAPTOGGLEBUTTON
 #if wxUSE_MARKUP
     m_chkUseMarkup = CreateCheckBoxAndAddToSizer(sizerLeft, "Interpret &markup");
@@ -262,22 +261,22 @@ void ToggleWidgetsPage::CreateContent()
     // should be in sync with enums Toggle[HV]Align!
     static const wxString halign[] =
     {
-        wxT("left"),
-        wxT("centre"),
-        wxT("right"),
+        "left",
+        "centre",
+        "right",
     };
 
     static const wxString valign[] =
     {
-        wxT("top"),
-        wxT("centre"),
-        wxT("bottom"),
+        "top",
+        "centre",
+        "bottom",
     };
 
-    m_radioHAlign = new wxRadioBox(this, wxID_ANY, wxT("&Horz alignment"),
+    m_radioHAlign = new wxRadioBox(this, wxID_ANY, "&Horz alignment",
                                    wxDefaultPosition, wxDefaultSize,
                                    WXSIZEOF(halign), halign);
-    m_radioVAlign = new wxRadioBox(this, wxID_ANY, wxT("&Vert alignment"),
+    m_radioVAlign = new wxRadioBox(this, wxID_ANY, "&Vert alignment",
                                    wxDefaultPosition, wxDefaultSize,
                                    WXSIZEOF(valign), valign);
 
@@ -287,18 +286,18 @@ void ToggleWidgetsPage::CreateContent()
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
 
-    wxButton *btn = new wxButton(this, TogglePage_Reset, wxT("&Reset"));
+    wxButton *btn = new wxButton(this, TogglePage_Reset, "&Reset");
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, wxT("&Operations"));
+    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, "&Operations");
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     wxSizer *sizerRow = CreateSizerWithTextAndButton(TogglePage_ChangeLabel,
-                                                     wxT("Change label"),
+                                                     "Change label",
                                                      wxID_ANY,
                                                      &m_textLabel);
-    m_textLabel->SetValue(wxT("&Toggle me!"));
+    m_textLabel->SetValue("&Toggle me!");
 
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
@@ -379,8 +378,8 @@ void ToggleWidgetsPage::CreateToggle()
             break;
 
         default:
-            wxFAIL_MSG(wxT("unexpected radiobox selection"));
-            // fall through
+            wxFAIL_MSG("unexpected radiobox selection");
+            wxFALLTHROUGH;
 
         case ToggleHAlign_Centre:
             break;
@@ -397,8 +396,8 @@ void ToggleWidgetsPage::CreateToggle()
             break;
 
         default:
-            wxFAIL_MSG(wxT("unexpected radiobox selection"));
-            // fall through
+            wxFAIL_MSG("unexpected radiobox selection");
+            wxFALLTHROUGH;
 
         case ToggleVAlign_Centre:
             // centre vertical alignment is the default (no style)
@@ -420,22 +419,22 @@ void ToggleWidgetsPage::CreateToggle()
         if ( m_chkUseBitmapClass->GetValue() )
         {
           btgl = new wxBitmapToggleButton(this, TogglePage_Picker,
-                                          CreateBitmap(wxT("normal")));
+                                          CreateBitmap("normal"));
         }
         else
         {
-          btgl = new wxToggleButton(this, TogglePage_Picker, wxT(""));
-          btgl->SetBitmapLabel(CreateBitmap(wxT("normal")));
+          btgl = new wxToggleButton(this, TogglePage_Picker, "");
+          btgl->SetBitmapLabel(CreateBitmap("normal"));
         }
 #ifdef wxHAS_ANY_BUTTON
         if ( m_chkUsePressed->GetValue() )
-            btgl->SetBitmapPressed(CreateBitmap(wxT("pushed")));
+            btgl->SetBitmapPressed(CreateBitmap("pushed"));
         if ( m_chkUseFocused->GetValue() )
-            btgl->SetBitmapFocus(CreateBitmap(wxT("focused")));
+            btgl->SetBitmapFocus(CreateBitmap("focused"));
         if ( m_chkUseCurrent->GetValue() )
-            btgl->SetBitmapCurrent(CreateBitmap(wxT("hover")));
+            btgl->SetBitmapCurrent(CreateBitmap("hover"));
         if ( m_chkUseDisabled->GetValue() )
-            btgl->SetBitmapDisabled(CreateBitmap(wxT("disabled")));
+            btgl->SetBitmapDisabled(CreateBitmap("disabled"));
 #endif // wxHAS_ANY_BUTTON
         m_toggle = btgl;
     }
@@ -528,8 +527,8 @@ wxBitmap ToggleWidgetsPage::CreateBitmap(const wxString& label)
     dc.SetBackground(*wxCYAN_BRUSH);
     dc.Clear();
     dc.SetTextForeground(*wxBLACK);
-    dc.DrawLabel(wxStripMenuCodes(m_textLabel->GetValue()) + wxT("\n")
-                    wxT("(") + label + wxT(" state)"),
+    dc.DrawLabel(wxStripMenuCodes(m_textLabel->GetValue()) + "\n"
+                    "(" + label + " state)",
                  wxArtProvider::GetBitmap(wxART_INFORMATION),
                  wxRect(10, 10, bmp.GetWidth() - 20, bmp.GetHeight() - 20),
                  wxALIGN_CENTRE);

@@ -15,7 +15,7 @@
 #include "wx/timer.h"
 #include "wx/qt/private/timer.h"
 
-#include <QtGlobal>
+#include <QtCore/QtGlobal>
 
 wxEventLoopBase *wxGUIAppTraits::CreateEventLoop()
 {
@@ -56,7 +56,8 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer,
 
 //#############################################################################
 
-#if wxUSE_CONSOLE_EVENTLOOP
+// this one fails to link under Windows; why is src/msw/basemsw.cpp picked up???
+#if wxUSE_CONSOLE_EVENTLOOP && !defined(__WINDOWS__)
 
 wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
 {

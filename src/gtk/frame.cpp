@@ -17,8 +17,7 @@
     #include "wx/statusbr.h"
 #endif // WX_PRECOMP
 
-#include <gtk/gtk.h>
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/wrapgtk.h"
 
 // ----------------------------------------------------------------------------
 // event tables

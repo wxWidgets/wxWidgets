@@ -1124,7 +1124,7 @@ void wxDocManager::OnFileNew(wxCommandEvent& WXUNUSED(event))
 
 void wxDocManager::OnFileOpen(wxCommandEvent& WXUNUSED(event))
 {
-    if ( !CreateDocument("") )
+    if ( !CreateDocument(wxString()) )
     {
         OnOpenFileFailure();
     }
@@ -1805,7 +1805,18 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
         // first choose the template using the extension, if this fails (i.e.
         // wxFileSelectorEx() didn't fill it), then use the path
         if ( FilterIndex != -1 )
+        {
             theTemplate = templates[FilterIndex];
+            if ( theTemplate )
+            {
+                // But don't use this template if it doesn't match the path as
+                // can happen if the user specified the extension explicitly
+                // but didn't bother changing the filter.
+                if ( !theTemplate->FileMatchesTemplate(path) )
+                    theTemplate = NULL;
+            }
+        }
+
         if ( !theTemplate )
             theTemplate = FindTemplateForPath(path);
         if ( !theTemplate )

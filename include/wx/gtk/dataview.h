@@ -11,7 +11,7 @@
 
 #include "wx/list.h"
 
-class WXDLLIMPEXP_FWD_ADV wxDataViewCtrlInternal;
+class WXDLLIMPEXP_FWD_CORE wxDataViewCtrlInternal;
 
 struct _GtkTreePath;
 
@@ -19,7 +19,7 @@ struct _GtkTreePath;
 // wxDataViewColumn
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewColumn: public wxDataViewColumnBase
+class WXDLLIMPEXP_CORE wxDataViewColumn: public wxDataViewColumnBase
 {
 public:
     wxDataViewColumn( const wxString &title, wxDataViewRenderer *renderer,
@@ -43,6 +43,7 @@ public:
 
     virtual void SetSortable( bool sortable ) wxOVERRIDE;
     virtual void SetSortOrder( bool ascending ) wxOVERRIDE;
+    virtual void UnsetAsSortKey() wxOVERRIDE;
 
     virtual void SetResizeable( bool resizable ) wxOVERRIDE;
     virtual void SetHidden( bool hidden ) wxOVERRIDE;
@@ -93,13 +94,13 @@ private:
 };
 
 WX_DECLARE_LIST_WITH_DECL(wxDataViewColumn, wxDataViewColumnList,
-                          class WXDLLIMPEXP_ADV);
+                          class WXDLLIMPEXP_CORE);
 
 // ---------------------------------------------------------
 // wxDataViewCtrl
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewCtrl: public wxDataViewCtrlBase
+class WXDLLIMPEXP_CORE wxDataViewCtrl: public wxDataViewCtrlBase
 {
 public:
     wxDataViewCtrl()
@@ -184,6 +185,12 @@ public:
     // failed.
     wxDataViewItem GTKPathToItem(struct _GtkTreePath *path) const;
 
+    // Return wxDataViewColumn matching the given GtkTreeViewColumn.
+    //
+    // If the input argument is NULL, return NULL too. Otherwise we must find
+    // the matching column and assert if we didn't.
+    wxDataViewColumn* GTKColumnToWX(GtkTreeViewColumn *gtk_col) const;
+
     virtual void OnInternalIdle() wxOVERRIDE;
 
     int GTKGetUniformRowHeight() const { return m_uniformRowHeight; }
@@ -220,12 +227,6 @@ private:
 
     virtual wxDataViewItem DoGetCurrentItem() const wxOVERRIDE;
     virtual void DoSetCurrentItem(const wxDataViewItem& item) wxOVERRIDE;
-
-    // Return wxDataViewColumn matching the given GtkTreeViewColumn.
-    //
-    // If the input argument is NULL, return NULL too. Otherwise we must find
-    // the matching column and assert if we didn't.
-    wxDataViewColumn* FromGTKColumn(GtkTreeViewColumn *gtk_col) const;
 
     friend class wxDataViewCtrlDCImpl;
     friend class wxDataViewColumn;

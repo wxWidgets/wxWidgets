@@ -87,6 +87,8 @@ wxFont wxDataViewItemAttr::GetEffectiveFont(const wxFont& font) const
         f.MakeBold();
     if ( GetItalic() )
         f.MakeItalic();
+    if ( GetStrikethrough() )
+        f.MakeStrikethrough();
     return f;
 }
 
@@ -728,7 +730,7 @@ bool wxDataViewRendererBase::StartEditing( const wxDataViewItem &item, wxRect la
 
     m_editorCtrl->PushEventHandler( handler );
 
-#if defined(__WXGTK20__) && !defined(wxUSE_GENERICDATAVIEWCTRL)
+#if defined(__WXGTK20__) && !defined(wxHAS_GENERIC_DATAVIEWCTRL)
     handler->SetFocusOnIdle();
 #else
     m_editorCtrl->SetFocus();
@@ -1683,6 +1685,7 @@ void wxDataViewEvent::Init(wxDataViewCtrlBase* dvc,
     m_dataSize = 0;
     m_dragFlags = 0;
     m_dropEffect = wxDragNone;
+    m_proposedDropIndex = -1;
 #endif // wxUSE_DRAG_AND_DROP
 
     SetEventObject(dvc);
@@ -2619,7 +2622,7 @@ wxDataViewItem wxDataViewTreeStore::GetNthChild( const wxDataViewItem& parent, u
 
     wxDataViewTreeStoreNode* const node = parent_node->GetChildren()[pos];
     if (node)
-        return wxDataViewItem(node->GetData());
+        return node->GetItem();
 
     return wxDataViewItem(0);
 }
@@ -3026,7 +3029,7 @@ void  wxDataViewTreeCtrl::DeleteAllItems()
 
 void wxDataViewTreeCtrl::OnExpanded( wxDataViewEvent &event )
 {
-    if (HasImageList()) return;
+    if (!HasImageList()) return;
 
     wxDataViewTreeStoreContainerNode* container = GetStore()->FindContainerNode( event.GetItem() );
     if (!container) return;
@@ -3038,7 +3041,7 @@ void wxDataViewTreeCtrl::OnExpanded( wxDataViewEvent &event )
 
 void wxDataViewTreeCtrl::OnCollapsed( wxDataViewEvent &event )
 {
-    if (HasImageList()) return;
+    if (!HasImageList()) return;
 
     wxDataViewTreeStoreContainerNode* container = GetStore()->FindContainerNode( event.GetItem() );
     if (!container) return;
@@ -3050,7 +3053,7 @@ void wxDataViewTreeCtrl::OnCollapsed( wxDataViewEvent &event )
 
 void wxDataViewTreeCtrl::OnSize( wxSizeEvent &event )
 {
-#if defined(wxUSE_GENERICDATAVIEWCTRL)
+#if defined(wxHAS_GENERIC_DATAVIEWCTRL)
     // automatically resize our only column to take the entire control width
     if ( GetColumnCount() )
     {

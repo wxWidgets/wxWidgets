@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/aui/tabartmsw.h
-// Purpose:     wxAuiMSWTabArt declaration
+// Name:        src/aui/tabartmsw.cpp
+// Purpose:     wxAuiMSWTabArt implementation
 // Author:      Tobias Taschner
 // Created:     2015-09-26
 // Copyright:   (c) 2015 wxWidgets development team
@@ -13,6 +13,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_AUI && wxUSE_UXTHEME && !defined(__WXUNIVERSAL__)
+
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
 #endif
@@ -22,8 +24,6 @@
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
 #include "wx/renderer.h"
-
-#if wxUSE_AUI
 
 wxAuiMSWTabArt::wxAuiMSWTabArt()
 {
@@ -262,7 +262,7 @@ void wxAuiMSWTabArt::DrawTab(wxDC& dc,
 int wxAuiMSWTabArt::GetIndentSize()
 {
     if ( IsThemed() )
-        return 3; // This should be 1 but we can't draw into the border from DrawTab
+        return wxWindow::FromDIP(3, NULL); // This should be 1 but we can't draw into the border from DrawTab
     else
         return wxAuiGenericTabArt::GetIndentSize();
 }
@@ -276,7 +276,7 @@ int wxAuiMSWTabArt::GetAdditionalBorderSpace(wxWindow* wnd)
 {
     if ( IsThemed() )
     {
-        return 4;
+        return wnd->FromDIP(4, NULL);
     }
     else
         return wxAuiGenericTabArt::GetAdditionalBorderSpace(wnd);
@@ -400,7 +400,7 @@ void wxAuiMSWTabArt::DrawButton(wxDC& dc,
         bitmap_id == wxAUI_BUTTON_RIGHT )
     {
         rect.y = in_rect.y;
-        rect.height = in_rect.height - 7;
+        rect.height = in_rect.height - wnd->FromDIP(7);
     }
 
     dc.SetPen(*wxTRANSPARENT_PEN);
@@ -469,4 +469,4 @@ bool wxAuiMSWTabArt::IsThemed() const
 }
 
 
-#endif // wxUSE_AUI
+#endif // wxUSE_AUI && wxUSE_UXTHEME && !defined(__WXUNIVERSAL__)

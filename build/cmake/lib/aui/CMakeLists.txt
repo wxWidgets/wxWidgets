@@ -13,7 +13,7 @@ wx_append_sources(AUI_FILES AUI_CMN)
 
 if(WXMSW)
     wx_append_sources(AUI_FILES AUI_MSW)
-elseif(WXGTK)
+elseif(WXGTK2)
     wx_append_sources(AUI_FILES AUI_GTK)
 endif()
 

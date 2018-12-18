@@ -77,7 +77,7 @@ void wxRibbonBar::AddPage(wxRibbonPage *page)
     wxString label;
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
         label = page->GetLabel();
-    wxBitmap icon = wxNullBitmap;
+    wxBitmap icon;
     if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
         icon = page->GetIcon();
     m_art->GetBarTabWidth(dcTemp, this, label, icon,
@@ -177,7 +177,7 @@ bool wxRibbonBar::Realize()
         wxString label;
         if(m_flags & wxRIBBON_BAR_SHOW_PAGE_LABELS)
             label = info.page->GetLabel();
-        wxBitmap icon = wxNullBitmap;
+        wxBitmap icon;
         if(m_flags & wxRIBBON_BAR_SHOW_PAGE_ICONS)
             icon = info.page->GetIcon();
         m_art->GetBarTabWidth(dcTemp, this, label, icon,
@@ -792,7 +792,7 @@ void wxRibbonBar::CommonInit(long style)
     {
         SetArtProvider(new wxRibbonDefaultArtProvider);
     }
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     m_toggle_button_hovered = false;
     m_bar_hovered = false;

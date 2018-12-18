@@ -3,7 +3,7 @@
 #
 # Super-strict variant that only accepts wx's builtin classes.
 #
-# See http://docs.wxwidgets.org/trunk/overview_xrcformat.html for freeform
+# See https://docs.wxwidgets.org/trunk/overview_xrcformat.html for freeform
 # description of the format.
 #
 

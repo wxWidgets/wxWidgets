@@ -70,7 +70,7 @@ bool MyApp::OnInit()
     }
 
     // Create the main window
-    gs_dialog = new MyDialog(wxT("wxTaskBarIcon Test Dialog"));
+    gs_dialog = new MyDialog("wxTaskBarIcon Test Dialog");
 
     gs_dialog->Show(true);
 
@@ -102,22 +102,22 @@ MyDialog::MyDialog(const wxString& title)
                       (
                         this,
                         wxID_ANY,
-                        wxT("Press 'Hide me' to hide this window, Exit to quit.")
+                        "Press 'Hide me' to hide this window, Exit to quit."
                       ), flags);
 
     sizerTop->Add(new wxStaticText
                       (
                         this,
                         wxID_ANY,
-                        wxT("Double-click on the taskbar icon to show me again.")
+                        "Double-click on the taskbar icon to show me again."
                       ), flags);
 
     sizerTop->AddStretchSpacer()->SetMinSize(200, 50);
 
     wxSizer * const sizerBtns = new wxBoxSizer(wxHORIZONTAL);
-    sizerBtns->Add(new wxButton(this, wxID_ABOUT, wxT("&About")), flags);
-    sizerBtns->Add(new wxButton(this, wxID_OK, wxT("&Hide")), flags);
-    sizerBtns->Add(new wxButton(this, wxID_EXIT, wxT("E&xit")), flags);
+    sizerBtns->Add(new wxButton(this, wxID_ABOUT, "&About"), flags);
+    sizerBtns->Add(new wxButton(this, wxID_OK, "&Hide"), flags);
+    sizerBtns->Add(new wxButton(this, wxID_EXIT, "E&xit"), flags);
 
     sizerTop->Add(sizerBtns, flags.Align(wxALIGN_CENTER_HORIZONTAL));
     SetSizerAndFit(sizerTop);
@@ -132,14 +132,14 @@ MyDialog::MyDialog(const wxString& title)
                                  "long tooltip whose length is\n"
                                  "greater than 64 characters.") )
     {
-        wxLogError(wxT("Could not set icon."));
+        wxLogError("Could not set icon.");
     }
 
 #if defined(__WXOSX__) && wxOSX_USE_COCOA
     m_dockIcon = new MyTaskBarIcon(wxTBI_DOCK);
     if ( !m_dockIcon->SetIcon(wxICON(sample)) )
     {
-        wxLogError(wxT("Could not set icon."));
+        wxLogError("Could not set icon.");
     }
 #endif
 }
@@ -234,37 +234,37 @@ void MyTaskBarIcon::OnMenuSetNewIcon(wxCommandEvent&)
 {
     wxIcon icon(smile_xpm);
 
-    if (!SetIcon(icon, wxT("wxTaskBarIcon Sample - a different icon")))
-        wxMessageBox(wxT("Could not set new icon."));
+    if (!SetIcon(icon, "wxTaskBarIcon Sample - a different icon"))
+        wxMessageBox("Could not set new icon.");
 }
 
 void MyTaskBarIcon::OnMenuSub(wxCommandEvent&)
 {
-    wxMessageBox(wxT("You clicked on a submenu!"));
+    wxMessageBox("You clicked on a submenu!");
 }
 
 // Overridables
 wxMenu *MyTaskBarIcon::CreatePopupMenu()
 {
     wxMenu *menu = new wxMenu;
-    menu->Append(PU_RESTORE, wxT("&Restore main window"));
+    menu->Append(PU_RESTORE, "&Restore main window");
     menu->AppendSeparator();
-    menu->Append(PU_NEW_ICON, wxT("&Set New Icon"));
+    menu->Append(PU_NEW_ICON, "&Set New Icon");
     menu->AppendSeparator();
-    menu->AppendCheckItem(PU_CHECKMARK, wxT("Test &check mark"));
+    menu->AppendCheckItem(PU_CHECKMARK, "Test &check mark");
     menu->AppendSeparator();
     wxMenu *submenu = new wxMenu;
-    submenu->Append(PU_SUB1, wxT("One submenu"));
+    submenu->Append(PU_SUB1, "One submenu");
     submenu->AppendSeparator();
-    submenu->Append(PU_SUB2, wxT("Another submenu"));
-    menu->Append(PU_SUBMAIN, wxT("Submenu"), submenu);
+    submenu->Append(PU_SUB2, "Another submenu");
+    menu->Append(PU_SUBMAIN, "Submenu", submenu);
     /* OSX has built-in quit menu for the dock menu, but not for the status item */
 #ifdef __WXOSX__ 
     if ( OSXIsStatusItem() )
 #endif
     {
         menu->AppendSeparator();
-        menu->Append(PU_EXIT,    wxT("E&xit"));
+        menu->Append(PU_EXIT,    "E&xit");
     }
     return menu;
 }

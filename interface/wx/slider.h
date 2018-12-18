@@ -58,7 +58,7 @@
     @style{wxSL_BOTTOM}
            Displays ticks on the bottom (this is the default).
     @style{wxSL_SELRANGE}
-           Allows the user to select a range on the slider. Windows only.
+           Displays a highlighted selection range. Windows only.
     @style{wxSL_INVERSE}
            Inverses the minimum and maximum endpoints on the slider. Not
            compatible with wxSL_SELRANGE.

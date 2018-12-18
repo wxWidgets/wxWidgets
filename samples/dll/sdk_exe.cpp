@@ -39,7 +39,7 @@ namespace
 
 const TCHAR *MAIN_WIN_CLASS_NAME = _TEXT("my_exe_main_win_class");
 
-const int IDB_RUN_GUI_FROM_DLL = 100;
+const INT_PTR IDB_RUN_GUI_FROM_DLL = 100;
 
 // ----------------------------------------------------------------------------
 // globals
@@ -65,7 +65,7 @@ OnCommand(HWND /* hwnd */, int id, HWND /* hwndCtl */, UINT /* codeNotify */)
     }
 }
 
-void OnDestroy(HWND hwnd)
+void OnDestroy(HWND /* hwnd */)
 {
     wx_dll_cleanup();
 
@@ -82,8 +82,6 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         default:
             return DefWindowProc(hwnd, msg, wParam, lParam);
     }
-
-    return 0;
 }
 
 // ----------------------------------------------------------------------------

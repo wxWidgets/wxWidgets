@@ -2487,11 +2487,30 @@ public:
     /**
         Constructor.
 
+        @param count
+            Number of the strings in @a labels array.
         @param labels
             Labels for choices.
+        @param values
+            Values for choices. If @NULL, indexes are used. Otherwise must have
+            at least @a count elements.
+
+        @since 3.1.2
+     */
+    wxPGChoices(size_t count, const wxString* labels, const long* values = NULL);
+
+    /**
+        Constructor overload taking wxChar strings.
+
+        This constructor is provided mostly for compatibility, prefer to use
+        one of the other constructor overloads in the new code.
+
+        @param labels
+            Labels for choices, @NULL-terminated.
 
         @param values
-            Values for choices. If @NULL, indexes are used.
+            Values for choices. If @NULL, indexes are used. Otherwise must have
+            at least the same size as @a labels.
     */
     wxPGChoices( const wxChar** labels, const long* values = NULL );
 
@@ -2502,7 +2521,8 @@ public:
             Labels for choices.
 
         @param values
-            Values for choices. If empty, indexes are used.
+            Values for choices. If empty, indexes are used. Otherwise must have
+            at least the same size as @a labels.
     */
     wxPGChoices( const wxArrayString& labels, const wxArrayInt& values = wxArrayInt() );
 
@@ -2520,16 +2540,35 @@ public:
         Adds to current. If did not have own copies, creates them now. If was empty,
         identical to set except that creates copies.
 
+        @param count
+            Number of the strings in @a labels array.
         @param labels
-            Labels for added choices.
-
+            Labels for choices.
         @param values
-            Values for added choices. If empty, relevant entry indexes are used.
-    */
-    void Add( const wxChar** labels, const ValArrItem* values = NULL );
+            Values for choices. If @NULL, indexes are used. Otherwise must have
+            at least @a count elements.
+
+        @since 3.1.2
+     */
+    void Add(size_t count, const wxString* labels, const long* values = NULL);
 
     /**
-        Adds to current. Version that works with wxArrayString and wxArrayInt.
+        Adds to current.
+
+        This overload is provided mostly for compatibility, prefer to use one
+        of the other ones in the new code.
+
+        @param labels
+            Labels for added choices, @NULL-terminated.
+
+        @param values
+            Values for added choices. If empty, relevant entry indexes are
+            used. Otherwise must have at least the same size as @a labels.
+    */
+    void Add( const wxChar** labels, const long* values = NULL );
+
+    /**
+        @overload
     */
     void Add( const wxArrayString& arr, const wxArrayInt& arrint );
 
@@ -2659,12 +2698,19 @@ public:
 
     /**
         Sets contents from lists of strings and values.
+
+        This is similar to calling Clear() and the corresponding overload of Add().
     */
+    void Set(size_t count, const wxString* labels, const long* values = NULL);
+
+    /**
+        @overload
+     */
     void Set( const wxChar** labels, const long* values = NULL );
 
     /**
-        Sets contents from lists of strings and values.
-    */
+        @overload
+     */
     void Set( const wxArrayString& labels, const wxArrayInt& values = wxArrayInt() );
 
     /**

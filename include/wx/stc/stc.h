@@ -5239,7 +5239,7 @@ public:
 
     virtual void Remove(long from, long to) wxOVERRIDE
     {
-        Replace(from, to, "");
+        Replace(from, to, wxString());
     }
     virtual void Replace(long from, long to, const wxString& text) wxOVERRIDE
     {
@@ -5542,7 +5542,7 @@ public:
     int  GetAnnotationsLinesAdded() const { return m_annotationLinesAdded; }
     int  GetUpdated() const               { return m_updated; }
     int  GetListCompletionMethod() const  { return m_listCompletionMethod; }
-    
+
 #ifdef STC_USE_DND
     // Kept for backwards compatibility, use GetString().
     wxString GetDragText()           { return GetString(); }
@@ -5583,8 +5583,8 @@ private:
     int m_x;
     int m_y;
 
-    int m_token;                // wxEVT_STC__MODIFIED with SC_MOD_CONTAINER 
-    int m_annotationLinesAdded; // wxEVT_STC_MODIFIED with SC_MOD_CHANGEANNOTATION 
+    int m_token;                // wxEVT_STC__MODIFIED with SC_MOD_CONTAINER
+    int m_annotationLinesAdded; // wxEVT_STC_MODIFIED with SC_MOD_CHANGEANNOTATION
     int m_updated;              // wxEVT_STC_UPDATEUI
     int m_listCompletionMethod;
 

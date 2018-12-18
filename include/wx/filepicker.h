@@ -277,9 +277,8 @@ public:     // overrides
 
     virtual void DoConnect( wxControl *sender, wxFileDirPickerCtrlBase *eventSink ) wxOVERRIDE
     {
-        sender->Connect( wxEVT_FILEPICKER_CHANGED,
-            wxFileDirPickerEventHandler( wxFileDirPickerCtrlBase::OnFileDirChange ),
-            NULL, eventSink );
+        sender->Bind(wxEVT_FILEPICKER_CHANGED,
+            &wxFileDirPickerCtrlBase::OnFileDirChange, eventSink );
     }
 
 
@@ -377,9 +376,8 @@ public:     // overrides
 
     virtual void DoConnect( wxControl *sender, wxFileDirPickerCtrlBase *eventSink ) wxOVERRIDE
     {
-        sender->Connect( wxEVT_DIRPICKER_CHANGED,
-            wxFileDirPickerEventHandler( wxFileDirPickerCtrlBase::OnFileDirChange ),
-            NULL, eventSink );
+        sender->Bind( wxEVT_DIRPICKER_CHANGED,
+            &wxFileDirPickerCtrlBase::OnFileDirChange, eventSink );
     }
 
 

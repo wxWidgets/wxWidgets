@@ -17,7 +17,7 @@ class FortyApp: public wxApp
 public:
     FortyApp(){}
     virtual ~FortyApp();
-    bool OnInit();
+    bool OnInit() wxOVERRIDE;
 
     static const wxColour& BackgroundColour();
     static const wxColour& TextColour();
@@ -38,7 +38,7 @@ class FortyFrame: public wxFrame
 {
 public:
     FortyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, const wxSize& size, bool largecards);
-    virtual ~FortyFrame(){};
+    virtual ~FortyFrame(){}
 
     void OnCloseWindow(wxCloseEvent& event);
 

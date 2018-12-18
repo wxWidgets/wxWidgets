@@ -8,13 +8,8 @@
 
 #include "wx/wxprec.h"
 
-#include "wx/defs.h"
-
-#include <gtk/gtk.h>
-#include "wx/gtk/private/win_gtk.h"
-
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
+#include "wx/gtk/private/win_gtk.h"
 
 /*
 wxPizza is a custom GTK+ widget derived from GtkFixed.  A custom widget
@@ -223,8 +218,6 @@ static void pizza_adjust_size_request(GtkWidget* widget, GtkOrientation orientat
     // will use the size request, if set, as the minimum.
     // But don't override if in a GtkToolbar, it uses the minimum as actual size.
     GtkWidget* parent = gtk_widget_get_parent(widget);
-    if (parent)
-        parent = gtk_widget_get_parent(parent);
     if (!GTK_IS_TOOL_ITEM(parent))
         *minimum = 0;
 }

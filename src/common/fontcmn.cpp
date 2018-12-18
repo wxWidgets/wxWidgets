@@ -28,7 +28,6 @@
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
     #include "wx/intl.h"
-    #include "wx/math.h"
     #include "wx/dcscreen.h"
     #include "wx/log.h"
     #include "wx/gdicmn.h"
@@ -51,20 +50,12 @@ extern const char *wxDumpFont(const wxFont *font)
 {
     static char buf[256];
 
-    const wxFontWeight weight = font->GetWeight();
-
     wxString s;
-    s.Printf(wxS("%s-%s-%s-%d-%d"),
+    s.Printf(wxS("%s-%d-%s-%.2f-%d"),
              font->GetFaceName(),
-             weight == wxFONTWEIGHT_NORMAL
-                ? wxT("normal")
-                : weight == wxFONTWEIGHT_BOLD
-                    ? wxT("bold")
-                    : wxT("light"),
-             font->GetStyle() == wxFONTSTYLE_NORMAL
-                ? wxT("regular")
-                : wxT("italic"),
-             font->GetPointSize(),
+             font->GetNumericWeight(),
+             font->GetStyle() == wxFONTSTYLE_NORMAL ? "regular" : "italic",
+             font->GetFractionalPointSize(),
              font->GetEncoding());
 
     wxStrlcpy(buf, s.mb_str(), WXSIZEOF(buf));
@@ -92,9 +83,16 @@ wxENUM_MEMBER( wxFONTSTYLE_SLANT )
 wxEND_ENUM( wxFontStyle )
 
 wxBEGIN_ENUM( wxFontWeight )
-wxENUM_MEMBER( wxFONTWEIGHT_NORMAL )
+wxENUM_MEMBER( wxFONTWEIGHT_THIN )
+wxENUM_MEMBER( wxFONTWEIGHT_EXTRALIGHT )
 wxENUM_MEMBER( wxFONTWEIGHT_LIGHT )
+wxENUM_MEMBER( wxFONTWEIGHT_NORMAL )
+wxENUM_MEMBER( wxFONTWEIGHT_MEDIUM )
+wxENUM_MEMBER( wxFONTWEIGHT_SEMIBOLD )
 wxENUM_MEMBER( wxFONTWEIGHT_BOLD )
+wxENUM_MEMBER( wxFONTWEIGHT_EXTRABOLD )
+wxENUM_MEMBER( wxFONTWEIGHT_HEAVY )
+wxENUM_MEMBER( wxFONTWEIGHT_EXTRAHEAVY )
 wxEND_ENUM( wxFontWeight )
 
 wxIMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI(wxFont, wxGDIObject, "wx/font.h");
@@ -106,9 +104,9 @@ wxPROPERTY( Size,int, SetPointSize, GetPointSize, 12, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group"))
 wxPROPERTY( Family, wxFontFamily , SetFamily, GetFamily, (wxFontFamily)wxDEFAULT, \
            0 /*flags*/, wxT("Helpstring"), wxT("group")) // wxFontFamily
-wxPROPERTY( Style, wxFontStyle, SetStyle, GetStyle, (wxFontStyle)wxNORMAL, 0 /*flags*/, \
+wxPROPERTY( Style, wxFontStyle, SetStyle, GetStyle, wxFONTSTYLE_NORMAL, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group")) // wxFontStyle
-wxPROPERTY( Weight, wxFontWeight, SetWeight, GetWeight, (wxFontWeight)wxNORMAL, 0 /*flags*/, \
+wxPROPERTY( Weight, wxFontWeight, SetWeight, GetWeight, wxFONTWEIGHT_NORMAL, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group")) // wxFontWeight
 wxPROPERTY( Underlined, bool, SetUnderlined, GetUnderlined, false, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group"))
@@ -225,6 +223,39 @@ bool wxFontBase::IsFixedWidth() const
     return GetFamily() == wxFONTFAMILY_TELETYPE;
 }
 
+
+// Convert to/from wxFontWeight enum elements and numeric weight values.
+
+/* static */
+int wxFontBase::ConvertFromLegacyWeightIfNecessary(int weight)
+{
+    switch ( weight )
+    {
+        case 90: return wxFONTWEIGHT_NORMAL;
+        case 91: return wxFONTWEIGHT_LIGHT;
+        case 92: return wxFONTWEIGHT_BOLD;
+        default: return weight;
+    }
+}
+
+/* static */
+int wxFontBase::GetNumericWeightOf(wxFontWeight weight_)
+{
+    const int weight = ConvertFromLegacyWeightIfNecessary(weight_);
+
+    wxASSERT(weight > wxFONTWEIGHT_INVALID);
+    wxASSERT(weight <= wxFONTWEIGHT_MAX);
+    wxASSERT(weight % 100 == 0);
+
+    return weight;
+}
+
+int wxFontBase::GetPointSize() const
+{
+    return wxFontInfo::ToIntPointSize(GetFractionalPointSize());
+}
+
+
 wxSize wxFontBase::GetPixelSize() const
 {
     wxScreenDC dc;
@@ -232,9 +263,21 @@ wxSize wxFontBase::GetPixelSize() const
     return wxSize(dc.GetCharWidth(), dc.GetCharHeight());
 }
 
+wxFontWeight wxFontBase::GetWeight() const
+{
+    wxCHECK_MSG( IsOk(), wxFONTWEIGHT_MAX, "invalid font" );
+
+    return wxFontInfo::GetWeightClosestToNumericValue(GetNumericWeight());
+}
+
 bool wxFontBase::IsUsingSizeInPixels() const
 {
     return false;
+}
+
+void wxFontBase::SetPointSize(int pointSize)
+{
+    SetFractionalPointSize(wxFontInfo::ToFloatPointSize(pointSize));
 }
 
 void wxFontBase::SetPixelSize( const wxSize& pixelSize )
@@ -300,13 +343,18 @@ void wxFontBase::SetPixelSize( const wxSize& pixelSize )
         SetPointSize(largestGood);
 }
 
+void wxFontBase::SetWeight(wxFontWeight weight)
+{
+    SetNumericWeight(GetNumericWeightOf(weight));
+}
+
 void wxFontBase::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 {
 #ifdef wxNO_NATIVE_FONTINFO
-    SetPointSize(info.pointSize);
+    SetFractionalPointSize(info.pointSize);
     SetFamily(info.family);
     SetStyle(info.style);
-    SetWeight(info.weight);
+    SetNumericWeight(info.weight);
     SetUnderlined(info.underlined);
     SetStrikethrough(info.strikethrough);
     SetFaceName(info.faceName);
@@ -397,7 +445,7 @@ bool wxFontBase::operator==(const wxFont& font) const
 #endif
             GetFamily() == font.GetFamily() &&
             GetStyle() == font.GetStyle() &&
-            GetWeight() == font.GetWeight() &&
+            GetNumericWeight() == font.GetNumericWeight() &&
             GetUnderlined() == font.GetUnderlined() &&
             GetStrikethrough() == font.GetStrikethrough() &&
             GetFaceName().IsSameAs(font.GetFaceName(), false) &&
@@ -455,9 +503,16 @@ wxString wxFontBase::GetWeightString() const
 
     switch ( GetWeight() )
     {
-        case wxFONTWEIGHT_NORMAL:   return "wxFONTWEIGHT_NORMAL";
-        case wxFONTWEIGHT_BOLD:     return "wxFONTWEIGHT_BOLD";
+        case wxFONTWEIGHT_THIN:     return "wxFONTWEIGHT_THIN";
+        case wxFONTWEIGHT_EXTRALIGHT: return "wxFONTWEIGHT_EXTRALIGHT";
         case wxFONTWEIGHT_LIGHT:    return "wxFONTWEIGHT_LIGHT";
+        case wxFONTWEIGHT_NORMAL:   return "wxFONTWEIGHT_NORMAL";
+        case wxFONTWEIGHT_MEDIUM:   return "wxFONTWEIGHT_MEDIUM";
+        case wxFONTWEIGHT_SEMIBOLD: return "wxFONTWEIGHT_SEMIBOLD";
+        case wxFONTWEIGHT_BOLD:     return "wxFONTWEIGHT_BOLD";
+        case wxFONTWEIGHT_EXTRABOLD: return "wxFONTWEIGHT_EXTRABOLD";
+        case wxFONTWEIGHT_HEAVY:    return "wxFONTWEIGHT_HEAVY";
+        case wxFONTWEIGHT_EXTRAHEAVY:    return "wxFONTWEIGHT_EXTRAHEAVY";
         default:                    return "wxFONTWEIGHT_DEFAULT";
     }
 }
@@ -475,6 +530,74 @@ bool wxFontBase::SetFaceName(const wxString& facename)
 #endif // wxUSE_FONTENUM/!wxUSE_FONTENUM
 
     return true;
+}
+
+namespace
+{
+
+void InitInfoWithLegacyParams(wxFontInfo& info,
+                              wxFontFamily family,
+                              wxFontStyle style,
+                              wxFontWeight weight,
+                              bool underlined,
+                              const wxString& face,
+                              wxFontEncoding encoding)
+{
+    if ( static_cast<int>(style) == wxDEFAULT )
+        style = wxFONTSTYLE_NORMAL;
+
+    if ( static_cast<int>(weight) == wxDEFAULT )
+        weight = wxFONTWEIGHT_NORMAL;
+
+    info
+        .Family(family)
+        .Style(style)
+        .Weight(wxFontBase::GetNumericWeightOf(weight))
+        .Underlined(underlined)
+        .FaceName(face)
+        .Encoding(encoding);
+}
+
+} // anonymous namespace
+
+/* static */
+wxFontInfo wxFontBase::InfoFromLegacyParams(int pointSize,
+                                            wxFontFamily family,
+                                            wxFontStyle style,
+                                            wxFontWeight weight,
+                                            bool underlined,
+                                            const wxString& face,
+                                            wxFontEncoding encoding)
+{
+    // Old code specifies wxDEFAULT instead of -1 or wxNORMAL instead of the
+    // new type-safe wxFONTSTYLE_NORMAL or wxFONTWEIGHT_NORMAL, continue
+    // handling this for compatibility.
+    if ( pointSize == wxDEFAULT )
+        pointSize = -1;
+
+    wxFontInfo info(pointSize);
+
+    InitInfoWithLegacyParams(info,
+                             family, style, weight, underlined, face, encoding);
+
+    return info;
+}
+
+/* static */
+wxFontInfo wxFontBase::InfoFromLegacyParams(const wxSize& pixelSize,
+                                            wxFontFamily family,
+                                            wxFontStyle style,
+                                            wxFontWeight weight,
+                                            bool underlined,
+                                            const wxString& face,
+                                            wxFontEncoding encoding)
+{
+    wxFontInfo info(pixelSize);
+
+    InitInfoWithLegacyParams(info,
+                             family, style, weight, underlined, face, encoding);
+
+    return info;
 }
 
 void wxFontBase::SetSymbolicSize(wxFontSymbolicSize size)
@@ -564,7 +687,7 @@ wxFont& wxFont::MakeStrikethrough()
 
 wxFont& wxFont::Scale(float x)
 {
-    SetPointSize(int(x*GetPointSize() + 0.5));
+    SetFractionalPointSize(x*GetFractionalPointSize());
     return *this;
 }
 
@@ -601,6 +724,15 @@ void wxNativeFontInfo::SetFaceName(const wxArrayString& facenames)
 #endif // wxUSE_FONTENUM/!wxUSE_FONTENUM
 }
 
+int wxNativeFontInfo::GetPointSize() const
+{
+    return wxFontInfo::ToIntPointSize(GetFractionalPointSize());
+}
+
+void wxNativeFontInfo::SetPointSize(int pointsize)
+{
+    SetFractionalPointSize(wxFontInfo::ToFloatPointSize(pointsize));
+}
 
 #ifdef wxNO_NATIVE_FONTINFO
 
@@ -615,6 +747,7 @@ void wxNativeFontInfo::SetFaceName(const wxArrayString& facenames)
 bool wxNativeFontInfo::FromString(const wxString& s)
 {
     long l;
+    double d;
     unsigned long version;
 
     wxStringTokenizer tokenizer(s, wxT(";"));
@@ -624,9 +757,11 @@ bool wxNativeFontInfo::FromString(const wxString& s)
         return false;
 
     token = tokenizer.GetNextToken();
-    if ( !token.ToLong(&l) )
+    if ( !token.ToCDouble(&d) )
         return false;
-    pointSize = (int)l;
+    pointSize = static_cast<float>(d);
+    if ( static_cast<double>(pointSize) != d )
+        return false;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
@@ -641,7 +776,9 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
         return false;
-    weight = (wxFontWeight)l;
+    weight = wxFont::ConvertFromLegacyWeightIfNecessary(l);
+    if ( weight <= wxFONTWEIGHT_INVALID || weight > wxFONTWEIGHT_MAX )
+        return false;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
@@ -675,12 +812,12 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
 
-    s.Printf(wxT("%d;%d;%d;%d;%d;%d;%d;%s;%d"),
+    s.Printf(wxT("%d;%s;%d;%d;%d;%d;%d;%s;%d"),
              1,                                 // version
-             pointSize,
+             wxString::FromCDouble(GetFractionalPointSize()),
              family,
              (int)style,
-             (int)weight,
+             weight,
              underlined,
              strikethrough,
              faceName.GetData(),
@@ -691,7 +828,7 @@ wxString wxNativeFontInfo::ToString() const
 
 void wxNativeFontInfo::Init()
 {
-    pointSize = 0;
+    pointSize = 0.0f;
     family = wxFONTFAMILY_DEFAULT;
     style = wxFONTSTYLE_NORMAL;
     weight = wxFONTWEIGHT_NORMAL;
@@ -701,7 +838,7 @@ void wxNativeFontInfo::Init()
     encoding = wxFONTENCODING_DEFAULT;
 }
 
-int wxNativeFontInfo::GetPointSize() const
+float wxNativeFontInfo::GetFractionalPointSize() const
 {
     return pointSize;
 }
@@ -711,7 +848,7 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
     return style;
 }
 
-wxFontWeight wxNativeFontInfo::GetWeight() const
+int wxNativeFontInfo::GetNumericWeight() const
 {
     return weight;
 }
@@ -741,7 +878,7 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return encoding;
 }
 
-void wxNativeFontInfo::SetPointSize(int pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
 {
     pointSize = pointsize;
 }
@@ -751,7 +888,7 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style_)
     style = style_;
 }
 
-void wxNativeFontInfo::SetWeight(wxFontWeight weight_)
+void wxNativeFontInfo::SetNumericWeight(int weight_)
 {
     weight = weight_;
 }
@@ -816,12 +953,40 @@ wxString wxNativeFontInfo::ToUserString() const
         case wxFONTWEIGHT_NORMAL:
             break;
 
+        case wxFONTWEIGHT_THIN:
+            desc << _(" thin");
+            break;
+
+        case wxFONTWEIGHT_EXTRALIGHT:
+            desc << _(" extra light");
+            break;
+
         case wxFONTWEIGHT_LIGHT:
             desc << _(" light");
             break;
 
+        case wxFONTWEIGHT_MEDIUM:
+            desc << _(" medium");
+            break;
+
+        case wxFONTWEIGHT_SEMIBOLD:
+            desc << _(" semi bold");
+            break;
+
         case wxFONTWEIGHT_BOLD:
             desc << _(" bold");
+            break;
+
+        case wxFONTWEIGHT_EXTRABOLD:
+            desc << _(" extra bold");
+            break;
+
+        case wxFONTWEIGHT_HEAVY:
+            desc << _(" heavy");
+            break;
+
+        case wxFONTWEIGHT_EXTRAHEAVY:
+            desc << _(" extra heavy");
             break;
     }
 
@@ -938,6 +1103,8 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
     bool encodingfound = false;
 #endif
     bool insideQuotes = false;
+    bool extraQualifierFound = false;
+    bool semiQualifierFound = false;
 
     while ( tokenizer.HasMoreTokens() )
     {
@@ -988,21 +1155,85 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
             SetUnderlined(true);
             SetStrikethrough(true);
         }
-        else if ( token == wxT("light") || token == _("light") )
+        else if ( token == wxS("thin") || token == _("thin") )
         {
-            SetWeight(wxFONTWEIGHT_LIGHT);
+            SetWeight(wxFONTWEIGHT_THIN);
             weightfound = true;
         }
-        else if ( token == wxT("bold") || token == _("bold") )
+        else if ( token == wxS("extra") || token == wxS("ultra"))
         {
-            SetWeight(wxFONTWEIGHT_BOLD);
+            extraQualifierFound = true;
+        }
+        else if ( token == wxS("semi") || token == wxS("demi") )
+        {
+            semiQualifierFound = true;
+        }
+       else if ( token == wxS("extralight") || token == _("extralight") )
+        {
+            SetWeight(wxFONTWEIGHT_EXTRALIGHT);
+            weightfound = true;
+        }
+        else if ( token == wxS("light") || token == _("light") )
+        {
+            if ( extraQualifierFound )
+                SetWeight(wxFONTWEIGHT_EXTRALIGHT);
+            else
+                SetWeight(wxFONTWEIGHT_LIGHT);
+            weightfound = true;
+        }
+        else if ( token == wxS("normal") || token == _("normal") )
+        {
+            SetWeight(wxFONTWEIGHT_NORMAL);
+            weightfound = true;
+        }
+        else if ( token == wxS("medium") || token == _("medium") )
+        {
+            SetWeight(wxFONTWEIGHT_MEDIUM);
+            weightfound = true;
+        }
+        else if ( token == wxS("semibold") || token == _("semibold") )
+        {
+            SetWeight(wxFONTWEIGHT_SEMIBOLD);
+            weightfound = true;
+        }
+        else if ( token == wxS("bold") || token == _("bold") )
+        {
+            if ( extraQualifierFound )
+                SetWeight(wxFONTWEIGHT_EXTRABOLD);
+            else if ( semiQualifierFound )
+                SetWeight(wxFONTWEIGHT_SEMIBOLD);
+            else
+                SetWeight(wxFONTWEIGHT_BOLD);
+            weightfound = true;
+        }
+        else if ( token == wxS("extrabold") || token == _("extrabold") )
+        {
+            SetWeight(wxFONTWEIGHT_EXTRABOLD);
+            weightfound = true;
+        }
+        else if ( token == wxS("semibold") || token == _("semibold") )
+        {
+            SetWeight(wxFONTWEIGHT_SEMIBOLD);
+            weightfound = true;
+        }
+        else if ( token == wxS("heavy") || token == _("heavy") )
+        {
+            if ( extraQualifierFound )
+                SetWeight(wxFONTWEIGHT_EXTRAHEAVY);
+            else
+                SetWeight(wxFONTWEIGHT_HEAVY);
+            weightfound = true;
+        }
+        else if ( token == wxS("extraheavy") || token == _("extraheavy") )
+        {
+            SetWeight(wxFONTWEIGHT_EXTRAHEAVY);
             weightfound = true;
         }
         else if ( token == wxT("italic") || token == _("italic") )
         {
             SetStyle(wxFONTSTYLE_ITALIC);
         }
-        else if ( token.ToULong(&size) )
+        else if ( token.ToULong(&size ) )
         {
             SetPointSize(size);
             pointsizefound = true;
@@ -1099,7 +1330,7 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
 
     // set point size to default value if size was not given
     if ( !pointsizefound )
-        SetPointSize(wxNORMAL_FONT->GetPointSize());
+        SetFractionalPointSize(wxNORMAL_FONT->GetFractionalPointSize());
 
     // set font weight to default value if weight was not given
     if ( !weightfound )
@@ -1116,6 +1347,19 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
 
 #endif // generic or wxMSW
 
+// compatibility functions using old API implemented using numeric weight values
+
+wxFontWeight wxNativeFontInfo::GetWeight() const
+{
+    return wxFontInfo::GetWeightClosestToNumericValue(GetNumericWeight());
+}
+
+void wxNativeFontInfo::SetWeight(wxFontWeight weight)
+{
+    const int numWeight = wxFontBase::GetNumericWeightOf(weight);
+    if ( numWeight != GetNumericWeight() )
+        SetNumericWeight(numWeight);
+}
 
 // wxFont <-> wxString utilities, used by wxConfig
 wxString wxToString(const wxFontBase& font)

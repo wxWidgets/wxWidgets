@@ -44,7 +44,7 @@ bool wxGenericStaticText::Create(wxWindow *parent,
 
     SetLabel(label);
     SetInitialSize(size);
-    Connect(wxEVT_PAINT, wxPaintEventHandler(wxGenericStaticText::OnPaint));
+    Bind(wxEVT_PAINT, &wxGenericStaticText::OnPaint, this);
     return true;
 }
 

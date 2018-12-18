@@ -65,7 +65,7 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxColour,WXDLLIMPEXP_CORE)
     not need the wxGDIObject machinery to handle colors, please add it to the
     list of ports which do not need it.
  */
-#if defined( __WXMAC__ ) || defined( __WXMSW__ ) || defined( __WXQT__ )
+#if defined( __WXMSW__ ) || defined( __WXQT__ )
 #define wxCOLOUR_IS_GDIOBJECT 0
 #else
 #define wxCOLOUR_IS_GDIOBJECT 1
@@ -118,6 +118,9 @@ public:
     virtual ChannelType Blue() const = 0;
     virtual ChannelType Alpha() const
         { return wxALPHA_OPAQUE ; }
+    
+    virtual bool IsSolid() const
+        { return true; }
 
     // implemented in colourcmn.cpp
     virtual wxString GetAsString(long flags = wxC2S_NAME | wxC2S_CSS_SYNTAX) const;

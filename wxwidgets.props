@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    This is a property sheet to be included in MSVS projects of the applications
+    using wxWidgets. Use "View|Property Manager" and choose "Add Existing
+    Property Sheet..." from the context menu to add it from the IDE or edit your
+    .vcxproj file directly and add <Import Project="path\to\wxwidgets.props">
+    tag to it.
+  -->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="build/msw/wx_setup.props" />
+    <Import Project="build/msw/wx_local.props" Condition="exists('build/msw/wx_local.props')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" Condition="'$(Configuration)'=='DLL Debug' or '$(Configuration)'=='DLL Release'">
+    <wxUsingDllDefine>WXUSINGDLL</wxUsingDllDefine>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>__WXMSW__;$(wxUsingDllDefine);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)include\msvc;$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>__WXMSW__;$(wxUsingDllDefine);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)lib\$(wxOutDirName)\$(wxToolkitPrefix)$(wxSuffix);$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>

@@ -99,7 +99,7 @@ protected:
 
     // (re)create the hyperctrl
     void CreateHyperlink();
-    void CreateHyperlinkLong(long);
+    void CreateHyperlinkLong(long align);
 
     // the controls
     // ------------
@@ -142,7 +142,7 @@ wxEND_EVENT_TABLE()
 // implementation
 // ============================================================================
 
-IMPLEMENT_WIDGETS_PAGE(HyperlinkWidgetsPage, wxT("Hyperlink"),
+IMPLEMENT_WIDGETS_PAGE(HyperlinkWidgetsPage, "Hyperlink",
                        GENERIC_CTRLS
                        );
 
@@ -157,33 +157,33 @@ void HyperlinkWidgetsPage::CreateContent()
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, wxT("Hyperlink details"));
+    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, "Hyperlink details");
 
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
-    sizerLeft->Add( CreateSizerWithTextAndButton( HyperlinkPage_SetLabel , wxT("Set &Label"), wxID_ANY, &m_label ),
+    sizerLeft->Add( CreateSizerWithTextAndButton( HyperlinkPage_SetLabel , "Set &Label", wxID_ANY, &m_label ),
                     0, wxALL | wxALIGN_RIGHT , 5 );
 
-    sizerLeft->Add( CreateSizerWithTextAndButton( HyperlinkPage_SetURL , wxT("Set &URL"), wxID_ANY, &m_url ),
+    sizerLeft->Add( CreateSizerWithTextAndButton( HyperlinkPage_SetURL , "Set &URL", wxID_ANY, &m_url ),
                     0, wxALL | wxALIGN_RIGHT , 5 );
 
     static const wxString alignments[] =
     {
-        wxT("&left"),
-        wxT("&centre"),
-        wxT("&right")
+        "&left",
+        "&centre",
+        "&right"
     };
     wxCOMPILE_TIME_ASSERT( WXSIZEOF(alignments) == Align_Max,
                            AlignMismatch );
 
-    m_radioAlignMode = new wxRadioBox(this, wxID_ANY, wxT("alignment"),
+    m_radioAlignMode = new wxRadioBox(this, wxID_ANY, "alignment",
                                       wxDefaultPosition, wxDefaultSize,
                                       WXSIZEOF(alignments), alignments);
     m_radioAlignMode->SetSelection(1);  // start with "centre" selected since
                                         // wxHL_DEFAULT_STYLE contains wxHL_ALIGN_CENTRE
     sizerLeft->Add(m_radioAlignMode, 0, wxALL|wxGROW, 5);
 
-    m_checkGeneric = new wxCheckBox(this, wxID_ANY, wxT("Use generic version"),
+    m_checkGeneric = new wxCheckBox(this, wxID_ANY, "Use generic version",
                                     wxDefaultPosition, wxDefaultSize);
     sizerLeft->Add(m_checkGeneric, 0, wxALL|wxGROW, 5);
 
@@ -191,24 +191,24 @@ void HyperlinkWidgetsPage::CreateContent()
     wxSizer *szHyperlinkLong = new wxBoxSizer(wxVERTICAL);
     wxSizer *szHyperlink = new wxBoxSizer(wxHORIZONTAL);
 
-    m_visit = new wxStaticText(this, wxID_ANY, wxT("Visit "));
+    m_visit = new wxStaticText(this, wxID_ANY, "Visit ");
 
     if (m_checkGeneric->IsChecked())
     {
         m_hyperlink = new wxGenericHyperlinkCtrl(this,
                                           HyperlinkPage_Ctrl,
-                                          wxT("wxWidgets website"),
-                                          wxT("www.wxwidgets.org"));
+                                          "wxWidgets website",
+                                          "www.wxwidgets.org");
     }
     else
     {
         m_hyperlink = new wxHyperlinkCtrl(this,
                                           HyperlinkPage_Ctrl,
-                                          wxT("wxWidgets website"),
-                                          wxT("www.wxwidgets.org"));
+                                          "wxWidgets website",
+                                          "www.wxwidgets.org");
     }
 
-    m_fun = new wxStaticText(this, wxID_ANY, wxT(" for fun!"));
+    m_fun = new wxStaticText(this, wxID_ANY, " for fun!");
 
     szHyperlink->Add(0, 0, 1, wxCENTRE);
     szHyperlink->Add(m_visit, 0, wxCENTRE);
@@ -221,15 +221,15 @@ void HyperlinkWidgetsPage::CreateContent()
     {
         m_hyperlinkLong = new wxGenericHyperlinkCtrl(this,
                                               wxID_ANY,
-                                              wxT("This is a long hyperlink"),
-                                              wxT("www.wxwidgets.org"));
+                                              "This is a long hyperlink",
+                                              "www.wxwidgets.org");
     }
     else
     {
         m_hyperlinkLong = new wxHyperlinkCtrl(this,
                                               wxID_ANY,
-                                              wxT("This is a long hyperlink"),
-                                              wxT("www.wxwidgets.org"));
+                                              "This is a long hyperlink",
+                                              "www.wxwidgets.org");
     }
 
     szHyperlinkLong->Add(0, 0, 1, wxCENTRE);
@@ -259,6 +259,9 @@ void HyperlinkWidgetsPage::CreateHyperlink()
 {
     const wxString label = m_hyperlink->GetLabel();
     const wxString url = m_hyperlink->GetURL();
+    long style = GetAttrs().m_defaultFlags;
+
+    style |= wxHL_DEFAULT_STYLE & ~wxBORDER_MASK;
 
     wxGenericHyperlinkCtrl *hyp;
     if (m_checkGeneric->IsChecked())
@@ -266,14 +269,20 @@ void HyperlinkWidgetsPage::CreateHyperlink()
         hyp = new wxGenericHyperlinkCtrl(this,
                                   HyperlinkPage_Ctrl,
                                   label,
-                                  url);
+                                  url,
+                                  wxDefaultPosition,
+                                  wxDefaultSize,
+                                  style);
     }
     else
     {
         hyp = new wxHyperlinkCtrl(this,
                                   HyperlinkPage_Ctrl,
                                   label,
-                                  url);
+                                  url,
+                                  wxDefaultPosition,
+                                  wxDefaultSize,
+                                  style);
     }
 
     // update sizer's child window
@@ -287,17 +296,19 @@ void HyperlinkWidgetsPage::CreateHyperlink()
     GetSizer()->Layout();
 }
 
-void HyperlinkWidgetsPage::CreateHyperlinkLong(long style)
+void HyperlinkWidgetsPage::CreateHyperlinkLong(long align)
 {
-    style = (wxHL_DEFAULT_STYLE & ~wxHL_ALIGN_CENTRE)|style;
+    long style = GetAttrs().m_defaultFlags;
+    style |= align;
+    style |= wxHL_DEFAULT_STYLE & ~(wxHL_ALIGN_CENTRE | wxBORDER_MASK);
 
     wxGenericHyperlinkCtrl *hyp;
     if (m_checkGeneric->IsChecked())
     {
         hyp = new wxGenericHyperlinkCtrl(this,
                                   wxID_ANY,
-                                  wxT("This is a long hyperlink"),
-                                  wxT("www.wxwidgets.org"),
+                                  "This is a long hyperlink",
+                                  "www.wxwidgets.org",
                                   wxDefaultPosition,
                                   wxDefaultSize,
                                   style);
@@ -306,8 +317,8 @@ void HyperlinkWidgetsPage::CreateHyperlinkLong(long style)
     {
         hyp = new wxHyperlinkCtrl(this,
                                   wxID_ANY,
-                                  wxT("This is a long hyperlink"),
-                                  wxT("www.wxwidgets.org"),
+                                  "This is a long hyperlink",
+                                  "www.wxwidgets.org",
                                   wxDefaultPosition,
                                   wxDefaultSize,
                                   style);
@@ -354,8 +365,8 @@ void HyperlinkWidgetsPage::OnAlignment(wxCommandEvent& WXUNUSED(event))
     {
         default:
         case Align_Max:
-            wxFAIL_MSG( wxT("unknown alignment") );
-            // fall through
+            wxFAIL_MSG( "unknown alignment" );
+            wxFALLTHROUGH;
 
         case Align_Left:
             addstyle = wxHL_ALIGN_LEFT;

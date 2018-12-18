@@ -14,7 +14,7 @@
 
 #if wxUSE_TOOLBAR
 
-#include <QActionGroup>
+#include <QtWidgets/QActionGroup>
 #include <QtWidgets/QToolButton>
 
 #ifndef WX_PRECOMP
@@ -185,6 +185,41 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord WXUNUSED(x),
     return NULL;
 }
 
+void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
+{
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
+    if ( tool )
+    {
+        (void)tool->SetShortHelp(helpString);
+        //TODO - other qt actions for tool tip string
+//        if (tool->m_item)
+//        {}
+    }
+}
+
+void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
+{
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
+    if ( tool )
+    {
+        wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
+
+        tool->SetNormalBitmap(bitmap);
+        tool->SetIcon();
+    }
+}
+
+void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
+{
+    wxToolBarTool* tool = static_cast<wxToolBarTool*>(FindById(id));
+    if ( tool )
+    {
+        wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
+
+        tool->SetDisabledBitmap(bitmap);
+    }
+}
+
 void wxToolBar::SetWindowStyleFlag( long style )
 {
     wxToolBarBase::SetWindowStyleFlag(style);
@@ -249,7 +284,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
     wxToolBarTool* tool = static_cast<wxToolBarTool*>(toolBase);
     QAction *before = NULL;
-    if (pos >= 0 && pos < (size_t)m_qtToolBar->actions().size())
+    if (pos < (size_t)m_qtToolBar->actions().size())
         before = m_qtToolBar->actions().at(pos);
 
     QAction *action;

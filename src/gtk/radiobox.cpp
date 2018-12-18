@@ -17,10 +17,7 @@
     #include "wx/tooltip.h"
 #endif
 
-#include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
 #include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
 
 //-----------------------------------------------------------------------------
 // wxGTKRadioButtonInfo
@@ -293,7 +290,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
                          // So far we assumed that label doesn't contain mnemonic
                          // and therefore single underscore characters were not
                          // replaced by two underscores. Now we have to double
-                         // all exisiting underscore characters.
+                         // all existing underscore characters.
                          label.Replace(wxS("_"), wxS("__"));
                          label += wxS('_');
                      }
@@ -490,8 +487,18 @@ void wxRadioBox::SetString(unsigned int item, const wxString& label)
 
 bool wxRadioBox::Enable( bool enable )
 {
-    if ( !wxControl::Enable( enable ) )
-        return false;
+    // Explicitly forward to the base class just because we need to override
+    // this function to prevent it from being hidden by Enable(int, bool)
+    // overload.
+    return wxControl::Enable(enable);
+}
+
+void wxRadioBox::DoEnable(bool enable)
+{
+    if ( !m_widget )
+        return;
+
+    wxControl::DoEnable(enable);
 
     wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
     while (node)
@@ -506,8 +513,6 @@ bool wxRadioBox::Enable( bool enable )
 
     if (enable)
         GTKFixSensitivity();
-
-    return true;
 }
 
 bool wxRadioBox::Enable(unsigned int item, bool enable)

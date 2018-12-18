@@ -53,9 +53,9 @@ class MyDebugReport : public wxDebugReportUpload
 public:
     MyDebugReport() : wxDebugReportUpload
                        (
-                        wxT("http://your.url.here/"),
-                        wxT("report:file"),
-                        wxT("action")
+                        "http://your.url.here/",
+                        "report:file",
+                        "action"
                        )
     {
     }
@@ -68,19 +68,19 @@ protected:
     {
         if ( reply.IsEmpty() )
         {
-            wxLogError(wxT("Didn't receive the expected server reply."));
+            wxLogError("Didn't receive the expected server reply.");
             return false;
         }
 
-        wxString s(wxT("Server replied:\n"));
+        wxString s("Server replied:\n");
 
         const size_t count = reply.GetCount();
         for ( size_t n = 0; n < count; n++ )
         {
-            s << wxT('\t') << reply[n] << wxT('\n');
+            s << '\t' << reply[n] << '\n';
         }
 
-        wxLogMessage(wxT("%s"), s.c_str());
+        wxLogMessage("%s", s);
 
         return true;
     }
@@ -99,12 +99,12 @@ public:
     {
         if ( !wxDebugReportCompress::DoProcess() )
             return false;
-        wxMailMessage msg(GetReportName() + wxT(" crash report"),
-                          wxT("vadim@wxwindows.org"),
+        wxMailMessage msg(GetReportName() + " crash report",
+                          "vadim@wxwindows.org",
                           wxEmptyString, // mail body
                           wxEmptyString, // from address
                           GetCompressedFileName(),
-                          wxT("crashreport.zip"));
+                          "crashreport.zip");
 
         return wxEmail::Send(msg);
     }
@@ -248,7 +248,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, wxT("wxWidgets Debug Report Sample"),
+       : wxFrame(NULL, wxID_ANY, "wxWidgets Debug Report Sample",
                  wxDefaultPosition, wxDefaultSize, wxFULL_REPAINT_ON_RESIZE|wxDEFAULT_FRAME_STYLE)
 {
     m_numLines = 10;
@@ -256,30 +256,30 @@ MyFrame::MyFrame()
     SetIcon(wxICON(sample));
 
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(DebugRpt_ListLoadedDLLs, wxT("&List loaded DLLs...\tCtrl-L"));
+    menuFile->Append(DebugRpt_ListLoadedDLLs, "&List loaded DLLs...\tCtrl-L");
     menuFile->AppendSeparator();
-    menuFile->Append(DebugRpt_Quit, wxT("E&xit\tAlt-X"));
+    menuFile->Append(DebugRpt_Quit, "E&xit\tAlt-X");
 
     wxMenu *menuReport = new wxMenu;
-    menuReport->Append(DebugRpt_Crash, wxT("Report for &crash\tCtrl-C"),
-                       wxT("Provoke a crash inside the program and create report for it"));
-    menuReport->Append(DebugRpt_Current, wxT("Report for c&urrent context\tCtrl-U"),
-                       wxT("Create report for the current program context"));
-    menuReport->Append(DebugRpt_Paint, wxT("Report for &paint handler\tCtrl-P"),
-                       wxT("Provoke a repeatable crash in wxEVT_PAINT handler"));
-    menuReport->Append(DebugRpt_Timer, wxT("Report for &timer handler\tCtrl-T"),
-                       wxT("Provoke a crash in wxEVT_TIMER handler"));
+    menuReport->Append(DebugRpt_Crash, "Report for &crash\tCtrl-C",
+                       "Provoke a crash inside the program and create report for it");
+    menuReport->Append(DebugRpt_Current, "Report for c&urrent context\tCtrl-U",
+                       "Create report for the current program context");
+    menuReport->Append(DebugRpt_Paint, "Report for &paint handler\tCtrl-P",
+                       "Provoke a repeatable crash in wxEVT_PAINT handler");
+    menuReport->Append(DebugRpt_Timer, "Report for &timer handler\tCtrl-T",
+                       "Provoke a crash in wxEVT_TIMER handler");
     menuReport->AppendSeparator();
-    menuReport->AppendCheckItem(DebugRpt_Upload, wxT("Up&load debug report"),
-                       wxT("You need to configure a web server accepting debug report uploads to use this function"));
+    menuReport->AppendCheckItem(DebugRpt_Upload, "Up&load debug report",
+                       "You need to configure a web server accepting debug report uploads to use this function");
 
     wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append(DebugRpt_About, wxT("&About\tF1"));
+    menuHelp->Append(DebugRpt_About, "&About\tF1");
 
     wxMenuBar *mbar = new wxMenuBar();
-    mbar->Append(menuFile, wxT("&File"));
-    mbar->Append(menuReport, wxT("&Report"));
-    mbar->Append(menuHelp, wxT("&Help"));
+    mbar->Append(menuFile, "&File");
+    mbar->Append(menuReport, "&Report");
+    mbar->Append(menuHelp, "&Help");
     SetMenuBar(mbar);
 
     CreateStatusBar();
@@ -371,8 +371,8 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox
     (
-        wxT("wxDebugReport sample\n(c) 2005 Vadim Zeitlin <vadim@wxwindows.org>"),
-        wxT("wxWidgets Debug Report Sample"),
+        "wxDebugReport sample\n(c) 2005 Vadim Zeitlin <vadim@wxwindows.org>",
+        "wxWidgets Debug Report Sample",
         wxOK | wxICON_INFORMATION,
         this
     );
@@ -426,16 +426,16 @@ void MyApp::GenerateReport(wxDebugReport::Context ctx)
     // you can also call report->AddFile(...) with your own log files, files
     // created using wxRegKey::Export() and so on, here we just add a test
     // file containing the date of the crash
-    wxFileName fn(report->GetDirectory(), wxT("timestamp.my"));
-    wxFFile file(fn.GetFullPath(), wxT("w"));
+    wxFileName fn(report->GetDirectory(), "timestamp.my");
+    wxFFile file(fn.GetFullPath(), "w");
     if ( file.IsOpened() )
     {
         wxDateTime dt = wxDateTime::Now();
-        file.Write(dt.FormatISODate() + wxT(' ') + dt.FormatISOTime());
+        file.Write(dt.FormatISODate() + ' ' + dt.FormatISOTime());
         file.Close();
     }
 
-    report->AddFile(fn.GetFullName(), wxT("timestamp of this report"));
+    report->AddFile(fn.GetFullName(), "timestamp of this report");
 
     // can also add an existing file directly, it will be copied
     // automatically
@@ -462,12 +462,12 @@ void MyApp::GenerateReport(wxDebugReport::Context ctx)
         {
             if ( m_uploadReport )
             {
-                wxLogMessage(wxT("Report successfully uploaded."));
+                wxLogMessage("Report successfully uploaded.");
             }
             else
             {
-                wxLogMessage(wxT("Report generated in \"%s\"."),
-                             report->GetCompressedFileName().c_str());
+                wxLogMessage("Report generated in \"%s\".",
+                             report->GetCompressedFileName());
                 report->Reset();
             }
         }

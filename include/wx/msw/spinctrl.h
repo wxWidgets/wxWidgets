@@ -36,7 +36,7 @@ public:
                const wxString& value = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+               long style = wxSP_ARROW_KEYS,
                int min = 0, int max = 100, int initial = 0,
                const wxString& name = wxT("wxSpinCtrl"))
     {
@@ -50,7 +50,7 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                long style = wxSP_ARROW_KEYS,
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = wxT("wxSpinCtrl"));
 
@@ -100,7 +100,7 @@ public:
     // for internal use only
 
     // get the subclassed window proc of the buddy text
-    WXFARPROC GetBuddyWndProc() const { return m_wndProcBuddy; }
+    WXWNDPROC GetBuddyWndProc() const { return m_wndProcBuddy; }
 
     // return the spinctrl object whose buddy is the given window or NULL
     static wxSpinCtrl *GetSpinForTextCtrl(WXHWND hwndBuddy);
@@ -145,7 +145,7 @@ protected:
 
     // the data for the "buddy" text ctrl
     WXHWND     m_hwndBuddy;
-    WXFARPROC  m_wndProcBuddy;
+    WXWNDPROC  m_wndProcBuddy;
 
     // Block text update event after SetValue()
     bool m_blockEvent;

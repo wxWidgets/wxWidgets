@@ -849,9 +849,7 @@ void StringTestCase::FromDouble()
     } testData[] =
     {
         { 1.23,             -1, "1.23" },
-        // All MSVC versions until MSVC 14 used 3 digits for the exponent
-        // unnecessarily, account for this non-standard behaviour.
-#if defined(wxUSING_VC_CRT_IO) && !wxCHECK_VISUALC_VERSION(14)
+#if defined(wxDEFAULT_MANTISSA_SIZE_3)
         { -3e-10,           -1, "-3e-010" },
 #else
         { -3e-10,           -1, "-3e-10" },

@@ -1,5 +1,7 @@
-wxWidgets for GTK+ installation
+wxWidgets for GTK+ installation        {#plat_gtk_install}
 -------------------------------
+
+[TOC]
 
 IMPORTANT NOTE:
 
@@ -13,19 +15,24 @@ IMPORTANT NOTE:
   using (including the beta) and what compiler on what system. One
   example: wxGTK 3.0.0, GCC 4.8.1, Fedora 19
 
-* The simplest case
+Installation                           {#gtk_install}
+============
+
+
+The simplest case                      {#gtk_simple}
 -------------------
 
 If you compile wxWidgets on Linux for the first time and don't like to read
 install instructions just do (in the base dir):
 
-> mkdir buildgtk
-> cd buildgtk
-> ../configure --with-gtk
-> make
-> su <type root password>
-> make install
-> ldconfig
+    > mkdir buildgtk
+    > cd buildgtk
+    > ../configure --with-gtk
+    > make
+    > su <type root password>
+    > make install
+    > ldconfig
+
 [if you get "ldconfig: command not found", try using "/sbin/ldconfig"]
 
 If you don't do the 'make install' part, you can still use the libraries from
@@ -33,14 +40,14 @@ the buildgtk directory, but they may not be available to other users.
 
 If you want to remove wxWidgets on Unix you can do this:
 
-> su <type root password>
-> make uninstall
-> ldconfig
+    > su <type root password>
+    > make uninstall
+    > ldconfig
 
 Note that by default, GTK+ 2.x is used. GTK+ 3 can be specified
 with --with-gtk=3.
 
-* The expert case
+The expert case                        {#gtk_expert}
 -----------------
 
 If you want to do some more serious cross-platform programming with wxWidgets,
@@ -53,28 +60,28 @@ with --enable-debug and one without.
 For building three versions (one GTK+, one Motif and a debug version of the GTK
 source) you'd do this:
 
-mkdir buildmotif
-cd buildmotif
-../configure --with-motif
-make
-cd ..
+    mkdir buildmotif
+    cd buildmotif
+    ../configure --with-motif
+    make
+    cd ..
 
-mkdir buildgtk
-cd buildgtk
-../configure --with-gtk
-make
-cd ..
+    mkdir buildgtk
+    cd buildgtk
+    ../configure --with-gtk
+    make
+    cd ..
 
-mkdir buildgtkd
-cd buildgtkd
-../configure --with-gtk --enable-debug
-make
-cd ..
+    mkdir buildgtkd
+    cd buildgtkd
+    ../configure --with-gtk --enable-debug
+    make
+    cd ..
 
 Note that you can install all those libraries concurrently, you just need to
 pass the appropriate flags when using them.
 
-* The simplest errors
+The simplest errors                    {#gtk_errors_simple}
 ---------------------
 
 For any configure errors: please look at config.log file which was generated
@@ -101,18 +108,18 @@ GCC 2.95 or later.
 
 You get immediate segfault when starting any sample or application: This is
 either due to having compiled the library with different flags or options than
-your program - typically you might have the __WXDEBUG__ option set for the
+your program - typically you might have the `__WXDEBUG__` option set for the
 library but not for your program - or due to using a compiler with optimisation
 bugs.
 
-* The simplest program
+The simplest program                   {#gtk_simple_app}
 ----------------------
 
 Now create your super-application myfoo.cpp and compile anywhere with
 
-g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
+    g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
 
-* GUI libraries
+GUI libraries                          {#gtk_libs_gui}
 ---------------
 
 wxWidgets/GTK+ requires the GTK+ library to be installed on your system. It has
@@ -127,7 +134,7 @@ You can get the newest version of the GTK+ from the GTK+ homepage at:
 We also mirror GTK+ at my ftp site. You'll find information about downloading
 at my homepage.
 
-* Additional libraries
+Additional libraries                   {#gtk_libs_misc}
 ----------------------
 
 wxWidgets/Gtk requires a thread library and X libraries known to work with
@@ -138,14 +145,14 @@ correct glibc 2 support.
 
 You can disable thread support by running
 
-./configure --disable-threads
-make
-su <type root password>
-make install
-ldconfig
-exit
+    ./configure --disable-threads
+    make
+    su <type root password>
+    make install
+    ldconfig
+    exit
 
-* Building wxGTK on Cygwin
+Building wxGTK on Cygwin               {#gtk_cygwin}
 --------------------------
 
 The normal build instructions should work fine on Cygwin. The one difference
@@ -159,10 +166,11 @@ will see linking errors. If this happens then you can work around the
 problem by setting LDFLAGS=-Wl,--export-all-symbols. Please also let us know
 about it on the wx-dev mailing list.
 
-* Create your configuration
+Create your configuration              {#gtk_config}
 ---------------------------
 
 Usage:
+
     ./configure options
 
 If you want to use system's C and C++ compiler,
@@ -182,7 +190,7 @@ have multiple configurations (for example, debug and release or GTK
 and Motif) simultaneously.
 
 
-* General options
+General options                        {#gtk_options}
 -----------------
 
 Given below are the commands to change the default behaviour,
@@ -259,7 +267,7 @@ The following options handle the kind of library you want to build.
                             option instead of --enable-debug_info/flag ones
                             separately.
 
-* Feature Options
+Feature Options                        {#gtk_feature_options}
 -----------------
 
 When producing an executable that is linked statically with wxGTK
@@ -316,7 +324,7 @@ Please see the output of "./configure --help" for comprehensive list
 of all configurable options.
 
 
-* Compiling
+Compiling                              {#gtk_compling}
 -----------
 
 The following must be done in the base directory (e.g. ~/wxGTK
@@ -352,43 +360,36 @@ make clean
 
 in the various directories will do the work for you.
 
-* Creating a new Project
+Creating a new Project                 {#gtk_new_project}
 --------------------------
 
-1) The first way uses the installed libraries and header files
-automatically using wx-config
+1. The first way uses the installed libraries and header files
+    automatically using wx-config
 
-g++ myfoo.cpp `wx-config --cxxflags --libs` -o myfoo
+        g++ myfoo.cpp `wx-config --cxxflags --libs` -o myfoo
 
-Using this way, a make file for the minimal sample would look
-like this
+    Using this way, a make file for the minimal sample would look
+    like this
 
-CXX = g++
+        CXX = g++
 
-minimal: minimal.o
-	$(CXX) -o minimal minimal.o `wx-config --libs`
+        minimal: minimal.o
+            $(CXX) -o minimal minimal.o `wx-config --libs`
 
-minimal.o: minimal.cpp
-	$(CXX) `wx-config --cxxflags` -c minimal.cpp -o minimal.o
+        minimal.o: minimal.cpp
+            $(CXX) `wx-config --cxxflags` -c minimal.cpp -o minimal.o
 
-clean:
-	rm -f *.o minimal
+        clean:
+            rm -f *.o minimal
 
-If your application uses only some of wxWidgets libraries, you can
-specify required libraries when running wx-config. For example,
-`wx-config --libs=html,core` will only output link command to link
-with libraries required by core GUI classes and wxHTML classes. See
-the manual for more information on the libraries.
+    If your application uses only some of wxWidgets libraries, you can
+    specify required libraries when running wx-config. For example,
+    `wx-config --libs=html,core` will only output link command to link
+    with libraries required by core GUI classes and wxHTML classes. See
+    the manual for more information on the libraries.
 
-2) The other way creates a project within the source code
+2. The other way creates a project within the source code
 directories of wxWidgets. For this endeavour, you'll need
 GNU autoconf version 2.14 and add an entry to your Makefile.in
 to the bottom of the configure.in script and run autoconf
 and configure before you can type make.
-
-----------------------
-
-In the hope that it will be useful,
-
-        Robert Roebling
-

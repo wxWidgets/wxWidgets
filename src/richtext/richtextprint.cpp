@@ -744,7 +744,7 @@ void wxRichTextHeaderFooterData::Clear()
 {
     int i;
     for (i = 0; i < 12; i++)
-        m_text[i] = wxEmptyString;
+        m_text[i].clear();
 }
 
 #endif // wxUSE_RICHTEXT & wxUSE_PRINTING_ARCHITECTURE

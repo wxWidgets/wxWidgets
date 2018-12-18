@@ -10,10 +10,8 @@
 
 #if wxDEBUG_LEVEL
 
-#include <gtk/gtk.h>
-#include "wx/gtk/assertdlg_gtk.h"
-#include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private.h"
+#include "wx/gtk/assertdlg_gtk.h"
 #include "wx/gtk/private/mnemonics.h"
 #include "wx/translation.h"
 #include "wx/stockitem.h"

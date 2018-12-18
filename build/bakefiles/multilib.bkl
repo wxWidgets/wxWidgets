@@ -73,7 +73,7 @@
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_CORE</define>
         <define>wxUSE_BASE=0</define>
-        <sources>$(BASE_AND_GUI_SRC) $(CORE_SRC)</sources>
+        <sources>$(BASE_AND_GUI_SRC) $(CORE_SRC) $(PLUGIN_SRC)</sources>
         <msvc-headers>$(ALL_GUI_HEADERS)</msvc-headers>
         <library>basedll</library>
     </dll>
@@ -81,7 +81,7 @@
     <lib id="corelib" template="wx_lib"
          cond="SHARED=='0' and USE_GUI=='1' and MONOLITHIC=='0'">
         <define>wxUSE_BASE=0</define>
-        <sources>$(BASE_AND_GUI_SRC) $(CORE_SRC)</sources>
+        <sources>$(BASE_AND_GUI_SRC) $(CORE_SRC) $(PLUGIN_SRC)</sources>
         <msvc-headers>$(ALL_GUI_HEADERS)</msvc-headers>
     </lib>
 
@@ -98,7 +98,7 @@
          cond="SHARED=='1' and USE_GUI=='1' and MONOLITHIC=='0'">
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_ADV</define>
-        <sources>$(ADVANCED_SRC) $(PLUGIN_ADV_SRC)</sources>
+        <sources>$(ADVANCED_SRC)</sources>
         <msvc-headers>$(ADVANCED_HDR)</msvc-headers>
         <library>coredll</library>
         <library>basedll</library>
@@ -107,7 +107,7 @@
 
     <lib id="advlib" template="wx_lib"
          cond="SHARED=='0' and USE_GUI=='1' and MONOLITHIC=='0'">
-        <sources>$(ADVANCED_SRC) $(PLUGIN_ADV_SRC)</sources>
+        <sources>$(ADVANCED_SRC)</sources>
         <msvc-headers>$(ADVANCED_HDR)</msvc-headers>
     </lib>
 
@@ -190,6 +190,7 @@
 
     <lib id="webviewlib" template="wx_lib"
          cond="SHARED=='0' and USE_GUI=='1' and USE_WEBVIEW=='1' and MONOLITHIC=='0'">
+        <define>$(webviewdll_ext_dir_define)</define>
         <sources>$(WEBVIEW_SRC)</sources>
         <msvc-headers>$(WEBVIEW_HDR)</msvc-headers>
     </lib>
@@ -266,7 +267,6 @@
         <define>WXMAKINGDLL_XRC</define>
         <sources>$(XRC_SRC)</sources>
         <library>$(htmldll_library_link)</library>
-        <library>advdll</library>
         <library>coredll</library>
         <library>xmldll</library>
         <library>basedll</library>
@@ -292,7 +292,6 @@
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_AUI</define>
         <sources>$(AUI_SRC)</sources>
-        <library>advdll</library>
         <library>coredll</library>
         <library>basedll</library>
         <msvc-headers>$(AUI_HDR)</msvc-headers>
@@ -317,7 +316,6 @@
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_RIBBON</define>
         <sources>$(RIBBON_SRC)</sources>
-        <library>advdll</library>
         <library>coredll</library>
         <library>basedll</library>
         <msvc-headers>$(RIBBON_HDR)</msvc-headers>
@@ -342,7 +340,6 @@
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_PROPGRID</define>
         <sources>$(PROPGRID_SRC)</sources>
-        <library>advdll</library>
         <library>coredll</library>
         <library>basedll</library>
         <msvc-headers>$(PROPGRID_HDR)</msvc-headers>
@@ -367,7 +364,6 @@
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_RICHTEXT</define>
         <sources>$(RICHTEXT_SRC)</sources>
-        <library>advdll</library>
         <library>$(htmldll_library_link)</library>
         <library>xmldll</library>
         <library>coredll</library>

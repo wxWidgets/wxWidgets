@@ -68,6 +68,8 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler);
     #endif
 #endif
 
+namespace
+{
 
 // VS: wxPNGInfoStruct declared below is a hack that needs some explanation.
 //     First, let me describe what's the problem: libpng uses jmp_buf in
@@ -93,9 +95,71 @@ struct wxPNGInfoStruct
         wxInputStream  *in;
         wxOutputStream *out;
     } stream;
+
 };
 
 #define WX_PNG_INFO(png_ptr) ((wxPNGInfoStruct*)png_get_io_ptr(png_ptr))
+
+// This is another helper struct which is used to pass parameters to
+// DoLoadPNGFile(). It allows us to use the usual RAII for freeing memory,
+// which wouldn't be possible inside DoLoadPNGFile() because it uses
+// setjmp/longjmp() functions for error handling, which are incompatible with
+// C++ destructors.
+struct wxPNGImageData
+{
+    wxPNGImageData()
+    {
+        lines = NULL;
+        numLines = 0;
+        info_ptr = (png_infop) NULL;
+        png_ptr = (png_structp) NULL;
+        ok = false;
+    }
+
+    bool Alloc(png_uint_32 width, png_uint_32 height)
+    {
+        lines = (unsigned char **)malloc(height * sizeof(unsigned char *));
+        if ( !lines )
+            return false;
+
+        for ( png_uint_32 n = 0; n < height; n++ )
+        {
+            lines[n] = (unsigned char *)malloc( (size_t)(width * 4));
+            if ( lines[n] )
+                ++numLines;
+            else
+                return false;
+        }
+
+        return true;
+    }
+
+    ~wxPNGImageData()
+    {
+        for ( unsigned int n = 0; n < numLines; n++ )
+            free( lines[n] );
+
+        free( lines );
+
+        if ( png_ptr )
+        {
+            if ( info_ptr )
+                png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
+            else
+                png_destroy_read_struct( &png_ptr, (png_infopp) NULL, (png_infopp) NULL );
+        }
+    }
+
+    void DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo);
+
+    unsigned char** lines;
+    png_uint_32 numLines;
+    png_infop info_ptr;
+    png_structp png_ptr;
+    bool ok;
+};
+
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // helper functions
@@ -247,28 +311,20 @@ void CopyDataFromPNG(wxImage *image,
     #pragma warning(disable:4611)
 #endif /* VC++ */
 
-bool
-wxPNGHandler::LoadFile(wxImage *image,
-                       wxInputStream& stream,
-                       bool verbose,
-                       int WXUNUSED(index))
+// This function uses wxPNGImageData to store some of its "local" variables in
+// order to avoid clobbering these variables by longjmp(): having them inside
+// the stack frame of the caller prevents this from happening. It also
+// "returns" its result via wxPNGImageData: use its "ok" field to check
+// whether loading succeeded or failed.
+void
+wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
 {
-    // VZ: as this function uses setjmp() the only fool-proof error handling
-    //     method is to use goto (setjmp is not really C++ dtors friendly...)
-
-    unsigned char **lines = NULL;
-    png_infop info_ptr = (png_infop) NULL;
-    wxPNGInfoStruct wxinfo;
-
-    png_uint_32 i, width, height = 0;
+    png_uint_32 width, height = 0;
     int bit_depth, color_type, interlace_type;
-
-    wxinfo.verbose = verbose;
-    wxinfo.stream.in = &stream;
 
     image->Destroy();
 
-    png_structp png_ptr = png_create_read_struct
+    png_ptr = png_create_read_struct
                           (
                             PNG_LIBPNG_VER_STRING,
                             NULL,
@@ -276,7 +332,7 @@ wxPNGHandler::LoadFile(wxImage *image,
                             wx_PNG_warning
                           );
     if (!png_ptr)
-        goto error;
+        return;
 
     // NB: please see the comment near wxPNGInfoStruct declaration for
     //     explanation why this line is mandatory
@@ -284,10 +340,10 @@ wxPNGHandler::LoadFile(wxImage *image,
 
     info_ptr = png_create_info_struct( png_ptr );
     if (!info_ptr)
-        goto error;
+        return;
 
     if (setjmp(wxinfo.jmpbuf))
-        goto error;
+        return;
 
     png_read_info( png_ptr, info_ptr );
     png_get_IHDR( png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, &interlace_type, NULL, NULL );
@@ -308,19 +364,10 @@ wxPNGHandler::LoadFile(wxImage *image,
     image->Create((int)width, (int)height, (bool) false /* no need to init pixels */);
 
     if (!image->IsOk())
-        goto error;
+        return;
 
-    // initialize all line pointers to NULL to ensure that they can be safely
-    // free()d if an error occurs before all of them could be allocated
-    lines = (unsigned char **)calloc(height, sizeof(unsigned char *));
-    if ( !lines )
-        goto error;
-
-    for (i = 0; i < height; i++)
-    {
-        if ((lines[i] = (unsigned char *)malloc( (size_t)(width * 4))) == NULL)
-            goto error;
-    }
+    if ( !Alloc(width, height) )
+        return;
 
     png_read_image( png_ptr, lines );
     png_read_end( png_ptr, info_ptr );
@@ -392,47 +439,42 @@ wxPNGHandler::LoadFile(wxImage *image,
     }
 
 
-    png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
-
     // loaded successfully, now init wxImage with this data
     CopyDataFromPNG(image, lines, width, height, color_type);
 
-    for ( i = 0; i < height; i++ )
-        free( lines[i] );
-    free( lines );
+    // This will indicate to the caller that loading succeeded.
+    ok = true;
+}
+
+bool
+wxPNGHandler::LoadFile(wxImage *image,
+                       wxInputStream& stream,
+                       bool verbose,
+                       int WXUNUSED(index))
+{
+    wxPNGInfoStruct wxinfo;
+    wxinfo.verbose = verbose;
+    wxinfo.stream.in = &stream;
+
+    wxPNGImageData data;
+    data.DoLoadPNGFile(image, wxinfo);
+
+    if ( !data.ok )
+    {
+        if (verbose)
+        {
+           wxLogError(_("Couldn't load a PNG image - file is corrupted or not enough memory."));
+        }
+
+        if ( image->IsOk() )
+        {
+            image->Destroy();
+        }
+
+        return false;
+    }
 
     return true;
-
-error:
-    if (verbose)
-    {
-       wxLogError(_("Couldn't load a PNG image - file is corrupted or not enough memory."));
-    }
-
-    if ( image->IsOk() )
-    {
-        image->Destroy();
-    }
-
-    if ( lines )
-    {
-        for ( unsigned int n = 0; n < height; n++ )
-            free( lines[n] );
-
-        free( lines );
-    }
-
-    if ( png_ptr )
-    {
-        if ( info_ptr )
-        {
-            png_destroy_read_struct( &png_ptr, &info_ptr, (png_infopp) NULL );
-            free(info_ptr);
-        }
-        else
-            png_destroy_read_struct( &png_ptr, (png_infopp) NULL, (png_infopp) NULL );
-    }
-    return false;
 }
 
 // ----------------------------------------------------------------------------

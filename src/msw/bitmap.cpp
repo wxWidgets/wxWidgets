@@ -558,6 +558,7 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon,
     {
         default:
             wxFAIL_MSG( wxT("unknown wxBitmapTransparency value") );
+            wxFALLTHROUGH;
 
         case wxBitmapTransparency_None:
             // nothing to do, refData->m_hasAlpha is false by default
@@ -710,7 +711,7 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
         free(data);
     }
 
-    SetHBITMAP((WXHBITMAP)hbmp);
+    refData->m_handle = (WXHANDLE)hbmp;
 }
 
 wxBitmap::wxBitmap(int w, int h, const wxDC& dc)
@@ -805,7 +806,7 @@ bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
 #endif // !ALWAYS_USE_DIB
     }
 
-    SetHBITMAP((WXHBITMAP)hbmp);
+    GetBitmapData()->m_handle = (WXHANDLE)hbmp;
 
     return IsOk();
 }
@@ -898,7 +899,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
 #endif // !ALWAYS_USE_DIB
 
     // validate this object
-    SetHBITMAP((WXHBITMAP)hbitmap);
+    refData->m_handle = (WXHANDLE)hbitmap;
 
     // finally also set the mask if we have one
     if ( image.HasMask() )
@@ -1290,6 +1291,34 @@ void wxBitmap::SetMask(wxMask *mask)
     GetBitmapData()->SetMask(mask);
 }
 
+bool wxBitmap::InitFromHBITMAP(WXHBITMAP bmp, int width, int height, int depth)
+{
+#if wxDEBUG_LEVEL >= 2
+    if ( bmp != NULL )
+    {
+        BITMAP bm;
+        if ( ::GetObject(bmp, sizeof(bm), &bm) == sizeof(bm) )
+        {
+            wxASSERT_MSG(bm.bmWidth == width && bm.bmHeight == height && bm.bmBitsPixel == depth,
+                         wxS("Inconsistent bitmap parameters"));
+        }
+        else
+        {
+            wxFAIL_MSG(wxS("Cannot retrieve parameters of the bitmap"));
+        }
+    }
+#endif // wxDEBUG_LEVEL >= 2
+
+    AllocExclusive();
+
+    GetBitmapData()->m_handle = (WXHANDLE)bmp;
+    GetBitmapData()->m_width = width;
+    GetBitmapData()->m_height = height;
+    GetBitmapData()->m_depth = depth;
+
+    return IsOk();
+}
+
 // ----------------------------------------------------------------------------
 // raw bitmap access support
 // ----------------------------------------------------------------------------
@@ -1620,9 +1649,7 @@ wxBitmap wxMask::GetBitmap() const
 
     // Create and return a new wxBitmap.
     wxBitmap bmp;
-    bmp.SetHBITMAP((WXHBITMAP)hNewBitmap);
-    bmp.SetSize(bm.bmWidth, bm.bmHeight);
-    bmp.SetDepth(bm.bmBitsPixel);
+    bmp.InitFromHBITMAP((WXHBITMAP)hNewBitmap, bm.bmWidth, bm.bmHeight, bm.bmBitsPixel);
 
     return bmp;
 }

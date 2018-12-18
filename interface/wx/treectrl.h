@@ -42,8 +42,11 @@
         flag is ignored under Windows unless you specify @c wxTR_NO_LINES as
         well.)
     @style{wxTR_LINES_AT_ROOT}
-        Use this style to show lines between root nodes. Only applicable if @c
-        wxTR_HIDE_ROOT is set and @c wxTR_NO_LINES is not set.
+        Use this style to show lines leading to the root nodes (unless no
+        @c wxTR_NO_LINES is also used, in which case no lines are shown). Note
+        that in the MSW version, if this style is omitted, not only the lines,
+        but also the button used for expanding the root item is not shown,
+        which can be unexpected, so it is recommended to always use it.
     @style{wxTR_HIDE_ROOT}
         Use this style to suppress the display of the root node, effectively
         causing the first-level nodes to appear as a series of root nodes.
@@ -132,7 +135,10 @@
           Processes a @c wxEVT_TREE_ITEM_GETTOOLTIP event type.
     @event{EVT_TREE_ITEM_MENU(id, func)}
           The context menu for the selected item has been requested, either by a
-          right click or by using the menu key.
+          right click or by using the menu key. Notice that these events always
+          carry a valid tree item and so are not generated when (right)
+          clicking outside of the items area. If you need to handle such
+          events, consider using @c wxEVT_CONTEXT_MENU instead.
           Processes a @c wxEVT_TREE_ITEM_MENU event type.
     @event{EVT_TREE_STATE_IMAGE_CLICK(id, func)}
           The state image has been clicked.
@@ -307,15 +313,19 @@ public:
     virtual void Delete(const wxTreeItemId& item);
 
     /**
-        Deletes all items in the control. Note that this may not generate
-        @c EVT_TREE_DELETE_ITEM events under some Windows versions although
-        normally such event is generated for each removed item.
+        Deletes all items in the control.
+
+        This function generates @c wxEVT_TREE_DELETE_ITEM events for each item
+        being deleted, including the root one if it is shown, i.e. unless
+        wxTR_HIDE_ROOT style is used.
     */
     virtual void DeleteAllItems();
 
     /**
-        Deletes all children of the given item (but not the item itself). Note
-        that this will @b not generate any events unlike Delete() method.
+        Deletes all children of the given item (but not the item itself).
+
+        A @c wxEVT_TREE_DELETE_ITEM event will be generated for every item
+        being deleted.
 
         If you have called SetItemHasChildren(), you may need to call it again
         since DeleteChildren() does not automatically clear the setting.
@@ -899,7 +909,8 @@ public:
                               wxTreeItemIcon which = wxTreeItemIcon_Normal);
 
     /**
-        Sets the specified item state. The value of @a state may be:
+        Sets the specified item state. The value of @a state may be an index
+        into the state image list, or one of the special values:
         - @c wxTREE_ITEMSTATE_NONE: to disable the item state (the state image will
             be not displayed).
         - @c wxTREE_ITEMSTATE_NEXT: to set the next item state.

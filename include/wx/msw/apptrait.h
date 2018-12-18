@@ -87,6 +87,31 @@ public:
     virtual bool WriteToStderr(const wxString& WXUNUSED(text)) { return false; }
 };
 
+#elif defined(__WXQT__)
+
+class WXDLLIMPEXP_CORE wxGUIAppTraits : public wxGUIAppTraitsBase
+{
+public:
+    virtual wxEventLoopBase *CreateEventLoop();
+    virtual void *BeforeChildWaitLoop() { return NULL; }
+    virtual void AfterChildWaitLoop(void*) { }
+#if wxUSE_TIMER
+    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
+#endif
+
+#if wxUSE_THREADS
+    virtual bool DoMessageFromThreadWait() { return true; }
+    virtual WXDWORD WaitForThread(WXHANDLE hThread, int WXUNUSED(flags))
+        { return DoSimpleWaitForThread(hThread); }
+#endif // wxUSE_THREADS
+    virtual wxPortId GetToolkitVersion(int *majVer = NULL,
+                                       int *minVer = NULL,
+                                       int *microVer = NULL) const;
+
+    virtual bool CanUseStderr() { return false; }
+    virtual bool WriteToStderr(const wxString&) { return false; }
+};
+
 #endif
 
 #endif // wxUSE_GUI

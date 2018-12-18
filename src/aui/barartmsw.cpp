@@ -13,6 +13,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_AUI && wxUSE_UXTHEME
+
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
     #include "wx/dcclient.h"
@@ -24,8 +26,6 @@
 #include "wx/aui/framemanager.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
-
-#if wxUSE_AUI
 
 wxAuiMSWToolBarArt::wxAuiMSWToolBarArt()
 {
@@ -53,6 +53,10 @@ wxAuiMSWToolBarArt::wxAuiMSWToolBarArt()
         ::GetThemePartSize(hThemeToolbar, NULL, TP_SEPARATOR, 0,
             NULL, TS_TRUE, &seperatorSize);
         m_separatorSize = seperatorSize.cx;
+
+        // TP_DROPDOWNBUTTON is only 7px, too small to fit the dropdown arrow,
+        // use 14px instead.
+        m_dropdownSize = window->FromDIP(14);
 
         SIZE buttonSize;
         ::GetThemePartSize(hThemeToolbar, NULL, TP_BUTTON, 0,
@@ -174,13 +178,13 @@ void wxAuiMSWToolBarArt::DrawButton(
         }
         else if ( m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT )
         {
-            bmpX = rect.x + 3;
+            bmpX = rect.x + wnd->FromDIP(3);
 
             bmpY = rect.y +
                 (rect.height / 2) -
                 (item.GetBitmap().GetHeight() / 2);
 
-            textX = bmpX + 3 + item.GetBitmap().GetWidth();
+            textX = bmpX + wnd->FromDIP(3) + item.GetBitmap().GetWidth();
             textY = rect.y +
                 (rect.height / 2) -
                 (textHeight / 2);
@@ -219,18 +223,16 @@ void wxAuiMSWToolBarArt::DrawDropDownButton(
     {
         wxUxThemeHandle hTheme(wnd, L"Toolbar");
 
-        int dropDownWidth = 14;
-
         int textWidth = 0, textHeight = 0, textX = 0, textY = 0;
         int bmpX = 0, bmpY = 0;
 
         wxRect buttonRect = wxRect(rect.x,
             rect.y,
-            rect.width - dropDownWidth,
+            rect.width - m_dropdownSize,
             rect.height);
-        wxRect dropDownRect = wxRect(rect.x + rect.width - dropDownWidth - 1,
+        wxRect dropDownRect = wxRect(rect.x + rect.width - m_dropdownSize - 1,
             rect.y,
-            dropDownWidth + 1,
+            m_dropdownSize + 1,
             rect.height);
 
         if ( m_flags & wxAUI_TB_TEXT )
@@ -292,13 +294,13 @@ void wxAuiMSWToolBarArt::DrawDropDownButton(
         }
         else if ( m_textOrientation == wxAUI_TBTOOL_TEXT_RIGHT )
         {
-            bmpX = rect.x + 3;
+            bmpX = rect.x + wnd->FromDIP(3);
 
             bmpY = rect.y +
                 (rect.height / 2) -
                 (item.GetBitmap().GetHeight() / 2);
 
-            textX = bmpX + 3 + item.GetBitmap().GetWidth();
+            textX = bmpX + wnd->FromDIP(3) + item.GetBitmap().GetWidth();
             textY = rect.y +
                 (rect.height / 2) -
                 (textHeight / 2);
@@ -444,7 +446,7 @@ wxSize wxAuiMSWToolBarArt::GetToolSize(
 
         wxSize size = wxAuiGenericToolBarArt::GetToolSize(dc, wnd, item);
 
-        size.IncBy(3); // Add some padding for native theme
+        size.IncBy(wnd->FromDIP(3)); // Add some padding for native theme
 
         return size;
     }
@@ -468,4 +470,4 @@ int wxAuiMSWToolBarArt::ShowDropDown(wxWindow* wnd,
     return wxAuiGenericToolBarArt::ShowDropDown(wnd, items);
 }
 
-#endif // wxUSE_AUI
+#endif // wxUSE_AUI && wxUSE_UXTHEME

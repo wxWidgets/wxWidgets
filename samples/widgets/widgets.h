@@ -41,6 +41,7 @@ class WXDLLIMPEXP_FWD_CORE wxCheckBox;
 class WXDLLIMPEXP_FWD_CORE wxSizer;
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
+class WXDLLIMPEXP_FWD_CORE wxTextEntryBase;
 class WXDLLIMPEXP_FWD_CORE WidgetsBookCtrl;
 
 class WidgetsPageInfo;
@@ -115,7 +116,7 @@ struct WidgetAttributes
     wxWindowVariant m_variant;
     wxCursor m_cursor;
     // the default flags, currently only contains border flags
-    int m_defaultFlags;
+    long m_defaultFlags;
 };
 
 class WidgetsPage : public wxPanel
@@ -196,7 +197,7 @@ public:
                                         wxImageList *imaglist);
 
     // our ctor
-    WidgetsPageInfo(Constructor ctor, const wxChar *label, int categories);
+    WidgetsPageInfo(Constructor ctor, const wxString& label, int categories);
 
     // accessors
     const wxString& GetLabel() const { return m_label; }

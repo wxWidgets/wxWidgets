@@ -28,9 +28,8 @@
 #include "wx/vector.h"              // wxVector<wxString>
 
 #ifdef __WXGTK__
-    #include <gtk/gtk.h>
+    #include "wx/gtk/private/wrapgtk.h"
     #include <gdk/gdkx.h>
-    #include "wx/gtk/private/gtk2-compat.h"
 #endif
 
 //=============================================================================
@@ -310,7 +309,7 @@ bool wxGStreamerMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 
     // don't erase the background of our control window
     // so that resizing is a bit smoother
-    m_ctrl->SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    m_ctrl->SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     // Tell gstreamer to play in our window
     gpointer window_handle = NULL;

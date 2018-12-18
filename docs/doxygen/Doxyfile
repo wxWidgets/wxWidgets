@@ -6,7 +6,7 @@
 
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = wxWidgets
-PROJECT_NUMBER         = 3.1.2
+PROJECT_NUMBER         = 3.1.3
 PROJECT_BRIEF          =
 PROJECT_LOGO           = logo.png
 OUTPUT_DIRECTORY       = out
@@ -100,7 +100,7 @@ ALIASES += appearance_brief{2}="\htmlonly<div class="appearance_brief"><table><t
 ALIASES += genericAppearance_brief{2}="\htmlonly<div class="appearance_brief"><table><tr><td>\endhtmlonly\n\1\htmlonly</td><td>\endhtmlonly\n\image html generic/\2.png\n\htmlonly</td></tr></table></div>\endhtmlonly"
 
 # aliases for the creation of "named member groups"
-# USAGE: the first argument must not contain spaces and be a unique identifier 
+# USAGE: the first argument must not contain spaces and be a unique identifier
 #        of the member group for the class being documented;
 #        the second argument is the member group name and can contain spaces
 #        See wxString as an usage example.
@@ -292,6 +292,13 @@ WARN_LOGFILE           = doxygen.log
 INPUT                  = mainpages \
                          groups \
                          overviews \
+                         ../gtk \
+                         ../ios \
+                         ../motif \
+                         ../msw \
+                         ../osx \
+                         ../qt \
+                         ../x11 \
                          ../../interface
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h *.md

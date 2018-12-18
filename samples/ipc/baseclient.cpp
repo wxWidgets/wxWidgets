@@ -47,7 +47,7 @@ class MyClient;
 class MyApp : public wxApp
 {
 public:
-    MyApp() { Connect(wxEVT_IDLE, wxIdleEventHandler(MyApp::OnIdle)); }
+    MyApp() { Bind(wxEVT_IDLE, &MyApp::OnIdle, this); }
 
     virtual bool OnInit() wxOVERRIDE;
     virtual int OnExit() wxOVERRIDE;
@@ -78,7 +78,7 @@ public:
     bool Connect(const wxString& sHost, const wxString& sService, const wxString& sTopic);
     void Disconnect();
     wxConnectionBase *OnMakeConnection() wxOVERRIDE;
-    bool IsConnected() { return m_connection != NULL; };
+    bool IsConnected() { return m_connection != NULL; }
 
     virtual void Notify() wxOVERRIDE;
 

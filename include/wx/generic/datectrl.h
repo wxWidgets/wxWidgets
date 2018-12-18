@@ -16,11 +16,11 @@
 
 class WXDLLIMPEXP_FWD_CORE wxComboCtrl;
 
-class WXDLLIMPEXP_FWD_ADV wxCalendarCtrl;
-class WXDLLIMPEXP_FWD_ADV wxCalendarComboPopup;
+class WXDLLIMPEXP_FWD_CORE wxCalendarCtrl;
+class WXDLLIMPEXP_FWD_CORE wxCalendarComboPopup;
 
-class WXDLLIMPEXP_ADV wxDatePickerCtrlGeneric
-    : public wxCompositeWindowSettersOnly< wxNavigationEnabled<wxDatePickerCtrlBase> >
+class WXDLLIMPEXP_CORE wxDatePickerCtrlGeneric
+    : public wxCompositeWindow< wxNavigationEnabled<wxDatePickerCtrlBase> >
 {
 public:
     // creating the control
@@ -80,7 +80,6 @@ private:
 
     void OnText(wxCommandEvent &event);
     void OnSize(wxSizeEvent& event);
-    void OnFocus(wxFocusEvent& event);
 
 #ifdef __WXOSX_COCOA__
     virtual void OSXGenerateEvent(const wxDateTime& WXUNUSED(dt)) wxOVERRIDE { }

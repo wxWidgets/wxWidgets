@@ -41,7 +41,7 @@ const int NumCards = 2 * PackSize;
 class Pile {
 public:
     Pile(int x, int y, int dx = 0, int dy = 0);
-    virtual ~Pile(){};
+    virtual ~Pile(){}
 
     // General functions
     virtual void ResetPile() { m_topCard = -1; }
@@ -68,7 +68,7 @@ public:
     virtual bool AcceptCard(Card*) { return false; }
     virtual void AddCard(Card* card); // Add card to top of pile
     virtual void AddCard(wxDC& pDC, Card* card); // Add card + redraw it
-        void SetPos(int x,int y) {m_x = x;m_y = y;};
+        void SetPos(int x,int y) {m_x = x;m_y = y;}
 
 protected:
     int   m_x, m_y; // Position of the pile on the screen

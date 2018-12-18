@@ -104,17 +104,16 @@ void InteractiveOutputTestCase::TestDllListLoaded()
     for ( size_t n = 0; n < count; ++n )
     {
         const wxDynamicLibraryDetails& details = dlls[n];
-        printf("%-45s", (const char *)details.GetPath().mb_str());
+        wxPrintf("%-45s", details.GetPath());
 
         void *addr wxDUMMY_INITIALIZE(NULL);
         size_t len wxDUMMY_INITIALIZE(0);
         if ( details.GetAddress(&addr, &len) )
         {
-            printf(" %08lx:%08lx",
-                   (unsigned long)addr, (unsigned long)((char *)addr + len));
+            wxPrintf(" %p:%p", addr, (void *)((char *)addr + len));
         }
 
-        printf(" %s\n", (const char *)details.GetVersion().mb_str());
+        wxPrintf(" %s\n", details.GetVersion());
     }
 
     wxPuts(wxEmptyString);
@@ -137,7 +136,7 @@ void InteractiveOutputTestCase::TestMimeEnum()
 
     size_t count = wxTheMimeTypesManager->EnumAllFileTypes(mimetypes);
 
-    wxPrintf(wxT("*** All %lu known filetypes: ***\n"), static_cast<unsigned long>(count));
+    wxPrintf(wxT("*** All %zu known filetypes: ***\n"), count);
 
     wxArrayString exts;
     wxString desc;
@@ -149,7 +148,7 @@ void InteractiveOutputTestCase::TestMimeEnum()
         if ( !filetype )
         {
             wxPrintf(wxT("   nothing known about the filetype '%s'!\n"),
-                   mimetypes[n].c_str());
+                     mimetypes[n]);
             continue;
         }
 
@@ -166,8 +165,7 @@ void InteractiveOutputTestCase::TestMimeEnum()
             extsAll += exts[e];
         }
 
-        wxPrintf(wxT("   %s: %s (%s)\n"),
-               mimetypes[n].c_str(), desc.c_str(), extsAll.c_str());
+        wxPrintf(wxT("   %s: %s (%s)\n"), mimetypes[n], desc, extsAll);
     }
 
     wxPuts(wxEmptyString);
@@ -194,7 +192,7 @@ void InteractiveOutputTestCase::TestMimeFilename()
         wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
         if ( !ft )
         {
-            wxPrintf(wxT("WARNING: extension '%s' is unknown.\n"), ext.c_str());
+            wxPrintf(wxT("WARNING: extension '%s' is unknown.\n"), ext);
         }
         else
         {
@@ -209,8 +207,7 @@ void InteractiveOutputTestCase::TestMimeFilename()
             else
                 cmd = wxString(wxT('"')) + cmd + wxT('"');
 
-            wxPrintf(wxT("To open %s (%s) run:\n   %s\n"),
-                     fname.c_str(), desc.c_str(), cmd.c_str());
+            wxPrintf(wxT("To open %s (%s) run:\n   %s\n"), fname, desc, cmd);
 
             delete ft;
         }
@@ -261,12 +258,12 @@ void InteractiveOutputTestCase::TestOsInfo()
     int major, minor;
     wxGetOsVersion(&major, &minor);
     wxPrintf(wxT("Running under: %s, version %d.%d\n"),
-            wxGetOsDescription().c_str(), major, minor);
+             wxGetOsDescription(), major, minor);
 
-    wxPrintf(wxT("%ld free bytes of memory left.\n"), wxGetFreeMemory().ToLong());
+    wxPrintf(wxT("%lld free bytes of memory left.\n"), wxGetFreeMemory());
 
     wxPrintf(wxT("Host name is %s (%s).\n"),
-           wxGetHostName().c_str(), wxGetFullHostName().c_str());
+             wxGetHostName(), wxGetFullHostName());
 
     wxPuts(wxEmptyString);
 #endif // TEST_INFO_FUNCTIONS
@@ -280,12 +277,12 @@ void InteractiveOutputTestCase::TestPlatformInfo()
     // get this platform
     wxPlatformInfo plat;
 
-    wxPrintf(wxT("Operating system family name is: %s\n"), plat.GetOperatingSystemFamilyName().c_str());
-    wxPrintf(wxT("Operating system name is: %s\n"), plat.GetOperatingSystemIdName().c_str());
-    wxPrintf(wxT("Port ID name is: %s\n"), plat.GetPortIdName().c_str());
-    wxPrintf(wxT("Port ID short name is: %s\n"), plat.GetPortIdShortName().c_str());
-    wxPrintf(wxT("Architecture is: %s\n"), plat.GetArchName().c_str());
-    wxPrintf(wxT("Endianness is: %s\n"), plat.GetEndiannessName().c_str());
+    wxPrintf(wxT("Operating system family name is: %s\n"), plat.GetOperatingSystemFamilyName());
+    wxPrintf(wxT("Operating system name is: %s\n"), plat.GetOperatingSystemIdName());
+    wxPrintf(wxT("Port ID name is: %s\n"), plat.GetPortIdName());
+    wxPrintf(wxT("Port ID short name is: %s\n"), plat.GetPortIdShortName());
+    wxPrintf(wxT("Architecture is: %s\n"), plat.GetArchName());
+    wxPrintf(wxT("Endianness is: %s\n"), plat.GetEndiannessName());
 
     wxPuts(wxEmptyString);
 #endif // TEST_INFO_FUNCTIONS
@@ -296,10 +293,10 @@ void InteractiveOutputTestCase::TestUserInfo()
 #ifdef TEST_INFO_FUNCTIONS
     wxPuts(wxT("*** Testing user info functions ***\n"));
 
-    wxPrintf(wxT("User id is:\t%s\n"), wxGetUserId().c_str());
-    wxPrintf(wxT("User name is:\t%s\n"), wxGetUserName().c_str());
-    wxPrintf(wxT("Home dir is:\t%s\n"), wxGetHomeDir().c_str());
-    wxPrintf(wxT("Email address:\t%s\n"), wxGetEmailAddress().c_str());
+    wxPrintf(wxT("User id is:\t%s\n"), wxGetUserId());
+    wxPrintf(wxT("User name is:\t%s\n"), wxGetUserName());
+    wxPrintf(wxT("Home dir is:\t%s\n"), wxGetHomeDir());
+    wxPrintf(wxT("Email address:\t%s\n"), wxGetEmailAddress());
 
     wxPuts(wxEmptyString);
 #endif // TEST_INFO_FUNCTIONS
@@ -322,7 +319,7 @@ public:
     {
     }
 
-    virtual void Walk(size_t skip = 1, size_t maxdepth = wxSTACKWALKER_MAX_DEPTH)
+    virtual void Walk(size_t skip = 1, size_t maxdepth = wxSTACKWALKER_MAX_DEPTH) wxOVERRIDE
     {
         wxPuts(wxT("Stack dump:"));
 
@@ -330,25 +327,23 @@ public:
     }
 
 protected:
-    virtual void OnStackFrame(const wxStackFrame& frame)
+    virtual void OnStackFrame(const wxStackFrame& frame) wxOVERRIDE
     {
-        printf("[%2d] ", (int) frame.GetLevel());
+        wxPrintf("[%2zu] ", frame.GetLevel());
 
         wxString name = frame.GetName();
         if ( !name.empty() )
         {
-            printf("%-20.40s", (const char*)name.mb_str());
+            wxPrintf("%-20.40s", name);
         }
         else
         {
-            printf("0x%08lx", (unsigned long)frame.GetAddress());
+            wxPrintf("0x%p", frame.GetAddress());
         }
 
         if ( frame.HasSourceLocation() )
         {
-            printf("\t%s:%d",
-                   (const char*)frame.GetFileName().mb_str(),
-                   (int)frame.GetLine());
+            wxPrintf("\t%s:%zu", frame.GetFileName(), frame.GetLine());
         }
 
         puts("");
@@ -356,9 +351,7 @@ protected:
         wxString type, val;
         for ( size_t n = 0; frame.GetParam(n, &type, &name, &val); n++ )
         {
-            printf("\t%s %s = %s\n", (const char*)type.mb_str(),
-                                     (const char*)name.mb_str(),
-                                     (const char*)val.mb_str());
+            wxPrintf("\t%s %s = %s\n", type, name, val);
         }
     }
 };
@@ -395,30 +388,30 @@ void InteractiveOutputTestCase::TestStandardPaths()
     wxTheApp->SetAppName(wxT("console"));
 
     wxStandardPathsBase& stdp = wxStandardPaths::Get();
-    wxPrintf(wxT("Config dir (sys):\t%s\n"), stdp.GetConfigDir().c_str());
-    wxPrintf(wxT("Config dir (user):\t%s\n"), stdp.GetUserConfigDir().c_str());
-    wxPrintf(wxT("Data dir (sys):\t\t%s\n"), stdp.GetDataDir().c_str());
-    wxPrintf(wxT("Data dir (sys local):\t%s\n"), stdp.GetLocalDataDir().c_str());
-    wxPrintf(wxT("Data dir (user):\t%s\n"), stdp.GetUserDataDir().c_str());
-    wxPrintf(wxT("Data dir (user local):\t%s\n"), stdp.GetUserLocalDataDir().c_str());
-    wxPrintf(wxT("Documents dir:\t\t%s\n"), stdp.GetDocumentsDir().c_str());
-    wxPrintf(wxT("Cache dir:\t\t%s\n"), stdp.GetUserDir(wxStandardPaths::Dir_Cache).c_str());
-    wxPrintf(wxT("Desktop dir:\t\t%s\n"), stdp.GetUserDir(wxStandardPaths::Dir_Desktop).c_str());
-    wxPrintf(wxT("Downloads dir:\t\t%s\n"), stdp.GetUserDir(wxStandardPaths::Dir_Downloads).c_str());
-    wxPrintf(wxT("Music dir:\t\t%s\n"), stdp.GetUserDir(wxStandardPaths::Dir_Music).c_str());
-    wxPrintf(wxT("Pictures dir:\t\t%s\n"), stdp.GetUserDir(wxStandardPaths::Dir_Pictures).c_str());
-    wxPrintf(wxT("Videos dir:\t\t%s\n"), stdp.GetUserDir(wxStandardPaths::Dir_Videos).c_str());
-    wxPrintf(wxT("Executable path:\t%s\n"), stdp.GetExecutablePath().c_str());
-    wxPrintf(wxT("Plugins dir:\t\t%s\n"), stdp.GetPluginsDir().c_str());
-    wxPrintf(wxT("Resources dir:\t\t%s\n"), stdp.GetResourcesDir().c_str());
+    wxPrintf(wxT("Config dir (sys):\t%s\n"), stdp.GetConfigDir());
+    wxPrintf(wxT("Config dir (user):\t%s\n"), stdp.GetUserConfigDir());
+    wxPrintf(wxT("Data dir (sys):\t\t%s\n"), stdp.GetDataDir());
+    wxPrintf(wxT("Data dir (sys local):\t%s\n"), stdp.GetLocalDataDir());
+    wxPrintf(wxT("Data dir (user):\t%s\n"), stdp.GetUserDataDir());
+    wxPrintf(wxT("Data dir (user local):\t%s\n"), stdp.GetUserLocalDataDir());
+    wxPrintf(wxT("Documents dir:\t\t%s\n"), stdp.GetDocumentsDir());
+    wxPrintf(wxT("Cache dir:\t\t%s\n"), stdp.GetUserDir(wxStandardPaths::Dir_Cache));
+    wxPrintf(wxT("Desktop dir:\t\t%s\n"), stdp.GetUserDir(wxStandardPaths::Dir_Desktop));
+    wxPrintf(wxT("Downloads dir:\t\t%s\n"), stdp.GetUserDir(wxStandardPaths::Dir_Downloads));
+    wxPrintf(wxT("Music dir:\t\t%s\n"), stdp.GetUserDir(wxStandardPaths::Dir_Music));
+    wxPrintf(wxT("Pictures dir:\t\t%s\n"), stdp.GetUserDir(wxStandardPaths::Dir_Pictures));
+    wxPrintf(wxT("Videos dir:\t\t%s\n"), stdp.GetUserDir(wxStandardPaths::Dir_Videos));
+    wxPrintf(wxT("Executable path:\t%s\n"), stdp.GetExecutablePath());
+    wxPrintf(wxT("Plugins dir:\t\t%s\n"), stdp.GetPluginsDir());
+    wxPrintf(wxT("Resources dir:\t\t%s\n"), stdp.GetResourcesDir());
     wxPrintf(wxT("Localized res. dir:\t%s\n"),
-             stdp.GetLocalizedResourcesDir(wxT("fr")).c_str());
+             stdp.GetLocalizedResourcesDir(wxT("fr")));
     wxPrintf(wxT("Message catalogs dir:\t%s\n"),
              stdp.GetLocalizedResourcesDir
                   (
                     wxT("fr"),
                     wxStandardPaths::ResourceCat_Messages
-                  ).c_str());
+                  ));
 
     wxPuts("\n");
 #endif // TEST_STDPATHS
@@ -462,7 +455,7 @@ void InteractiveOutputTestCase::TestFSVolume()
         return;
     }
 
-    wxPrintf(wxT("%u mounted volumes found:\n"), count);
+    wxPrintf(wxT("%zu mounted volumes found:\n"), count);
 
     for ( size_t n = 0; n < count; n++ )
     {
@@ -473,10 +466,10 @@ void InteractiveOutputTestCase::TestFSVolume()
             continue;
         }
 
-        wxPrintf(wxT("%u: %s (%s), %s, %s, %s\n"),
+        wxPrintf(wxT("%zu: %s (%s), %s, %s, %s\n"),
                  n + 1,
-                 vol.GetDisplayName().c_str(),
-                 vol.GetName().c_str(),
+                 vol.GetDisplayName(),
+                 vol.GetName(),
                  volumeKinds[vol.GetKind()],
                  vol.IsWritable() ? wxT("rw") : wxT("ro"),
                  vol.GetFlags() & wxFS_VOL_REMOVABLE ? wxT("removable")

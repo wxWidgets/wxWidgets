@@ -15,9 +15,8 @@
 #include "htmltag.h"
 
 #include "htmlpars.h"
-#include <stdio.h> // for vsscanf
-#include <stdarg.h>
 
+#include "wx/crt.h"
 
 //-----------------------------------------------------------------------------
 // wx28HtmlTagsCache

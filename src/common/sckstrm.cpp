@@ -40,7 +40,7 @@ wxSocketOutputStream::~wxSocketOutputStream()
 
 size_t wxSocketOutputStream::OnSysWrite(const void *buffer, size_t size)
 {
-    const size_t ret = m_o_socket->Write(buffer, size).LastCount();
+    const size_t ret = m_o_socket->Write(buffer, size).LastWriteCount();
     m_lasterror = m_o_socket->Error()
                     ? m_o_socket->IsClosed() ? wxSTREAM_EOF
                                              : wxSTREAM_WRITE_ERROR
@@ -63,7 +63,7 @@ wxSocketInputStream::~wxSocketInputStream()
 
 size_t wxSocketInputStream::OnSysRead(void *buffer, size_t size)
 {
-    const size_t ret = m_i_socket->Read(buffer, size).LastCount();
+    const size_t ret = m_i_socket->Read(buffer, size).LastReadCount();
     m_lasterror = m_i_socket->Error()
                     ? m_i_socket->IsClosed() ? wxSTREAM_EOF
                                              : wxSTREAM_READ_ERROR

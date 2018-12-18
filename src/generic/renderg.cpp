@@ -194,7 +194,7 @@ static void DrawSelectedCellFocusRect(wxDC& dc, const wxRect& rect)
 {
     // (This code is based on wxRendererGeneric::DrawFocusRect and modified.)
 
-    // draw the pixels manually because the "dots" in wxPen with wxDOT style
+    // draw the pixels manually because the "dots" in wxPen with wxPENSTYLE_DOT style
     // may be short traits and not really dots
     //
     // note that to behave in the same manner as DrawRect(), we must exclude
@@ -714,6 +714,8 @@ wxRendererGeneric::DrawCheckBox(wxWindow *WXUNUSED(win),
 
 wxSize wxRendererGeneric::GetCheckBoxSize(wxWindow *win)
 {
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
     return win->FromDIP(wxSize(16, 16));
 }
 
@@ -814,7 +816,7 @@ wxRendererGeneric::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
 void
 wxRendererGeneric::DrawFocusRect(wxWindow* WXUNUSED(win), wxDC& dc, const wxRect& rect, int WXUNUSED(flags))
 {
-    // draw the pixels manually because the "dots" in wxPen with wxDOT style
+    // draw the pixels manually because the "dots" in wxPen with wxPENSTYLE_DOT style
     // may be short traits and not really dots
     //
     // note that to behave in the same manner as DrawRect(), we must exclude

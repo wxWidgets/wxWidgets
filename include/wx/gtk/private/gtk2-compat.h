@@ -256,6 +256,11 @@ inline void wx_gtk_widget_set_can_focus(GtkWidget *widget, gboolean can)
 }
 #define gtk_widget_set_can_focus wx_gtk_widget_set_can_focus
 
+static inline gboolean wx_gtk_widget_has_focus(GtkWidget* widget)
+{
+    return GTK_WIDGET_HAS_FOCUS(widget);
+}
+#define gtk_widget_has_focus wx_gtk_widget_has_focus
 
 inline gboolean wx_gtk_widget_get_can_default(GtkWidget *widget)
 {
@@ -426,6 +431,14 @@ static inline void wx_gdk_cairo_set_source_window(cairo_t* cr, GdkWindow* window
 #endif
 
 // ----------------------------------------------------------------------------
+// the following were introduced in Glib 2.32
+
+#ifndef g_signal_handlers_disconnect_by_data
+#define g_signal_handlers_disconnect_by_data(instance, data) \
+      g_signal_handlers_disconnect_matched ((instance), G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, (data))
+#endif
+
+// ----------------------------------------------------------------------------
 // the following were introduced in GTK+ 3.0
 
 static inline void wx_gdk_window_get_geometry(GdkWindow* window, gint* x, gint* y, gint* width, gint* height)
@@ -525,6 +538,8 @@ static inline void wx_gtk_widget_get_preferred_size(GtkWidget* widget, GtkRequis
     gtk_widget_size_request(widget, req);
 }
 #define gtk_widget_get_preferred_size wx_gtk_widget_get_preferred_size
+
+#include <gdk/gdkkeysyms.h>
 
 #if defined(GDK_Alt_L) && !defined(GDK_KEY_Alt_L)
 #define GDK_KEY_Alt_L GDK_Alt_L

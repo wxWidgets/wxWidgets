@@ -279,7 +279,9 @@ public:
     /**
         Sets the status text for the @a i-th field.
 
-        The given text will replace the current text.
+        The given text will replace the current text. The display of the status
+        bar is updated immediately, so there is no need to call
+        wxWindow::Update() after calling this function.
 
         Note that if PushStatusText() had been called before the new text will
         also replace the last saved value to make sure that the next call to

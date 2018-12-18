@@ -206,8 +206,8 @@ public:
     void SubclassWin(WXHWND hWnd);
     void UnsubclassWin();
 
-    WXFARPROC MSWGetOldWndProc() const { return m_oldWndProc; }
-    void MSWSetOldWndProc(WXFARPROC proc) { m_oldWndProc = proc; }
+    WXWNDPROC MSWGetOldWndProc() const { return m_oldWndProc; }
+    void MSWSetOldWndProc(WXWNDPROC proc) { m_oldWndProc = proc; }
 
     // return true if the window is of a standard (i.e. not wxWidgets') class
     //
@@ -597,7 +597,7 @@ protected:
     WXHWND                m_hWnd;
 
     // the old window proc (we subclass all windows)
-    WXFARPROC             m_oldWndProc;
+    WXWNDPROC             m_oldWndProc;
 
     // additional (MSW specific) flags
     bool                  m_mouseInWindow:1;
@@ -729,8 +729,27 @@ private:
     bool MSWSafeIsDialogMessage(WXMSG* msg);
 #endif // __WXUNIVERSAL__
 
-#if wxUSE_DEFERRED_SIZING
+    static inline bool MSWIsPositionDirectlySupported(int x, int y)
+    {
+        // The supported coordinate intervals for various functions are:
+        // - MoveWindow, DeferWindowPos: [-32768, 32767] a.k.a. [SHRT_MIN, SHRT_MAX];
+        // - CreateWindow, CreateWindowEx: [-32768, 32554].
+        // CreateXXX will _sometimes_ manage to create the window at higher coordinates
+        // like 32580, 32684, 32710, but that was not consistent and the lowest common
+        // limit was 32554 (so far at least).
+        return (x >= SHRT_MIN && x <= 32554 && y >= SHRT_MIN && y <= 32554);
+    }
+
 protected:
+    WXHWND MSWCreateWindowAtAnyPosition(WXDWORD exStyle, const wxChar* clName,
+                                        const wxChar* title, WXDWORD style,
+                                        int x, int y, int width, int height,
+                                        WXHWND parent, wxWindowID id);
+
+    void MSWMoveWindowToAnyPosition(WXHWND hwnd, int x, int y,
+                                    int width, int height, bool bRepaint);
+
+#if wxUSE_DEFERRED_SIZING
     // this function is called after the window was resized to its new size
     virtual void MSWEndDeferWindowPos()
     {

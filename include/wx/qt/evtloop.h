@@ -10,7 +10,7 @@
 
 class QTimer;
 
-class WXDLLIMPEXP_BASE wxQtEventLoopBase : public wxEventLoopBase
+class WXDLLIMPEXP_CORE wxQtEventLoopBase : public wxEventLoopBase
 {
 public:
     wxQtEventLoopBase();
@@ -43,18 +43,6 @@ class WXDLLIMPEXP_CORE wxGUIEventLoop : public wxQtEventLoopBase
 public:
     wxGUIEventLoop();
 };
-
-#else // !wxUSE_GUI
-
-#if wxUSE_CONSOLE_EVENTLOOP
-
-class WXDLLIMPEXP_BASE wxConsoleEventLoop : public wxQtEventLoopBase
-{
-public:
-    wxConsoleEventLoop();
-};
-
-#endif // wxUSE_CONSOLE_EVENTLOOP
 
 #endif // wxUSE_GUI
 

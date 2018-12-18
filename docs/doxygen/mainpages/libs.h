@@ -29,7 +29,6 @@ digraph Dependencies
     wxNet      [fillcolor = deepskyblue, URL = "\ref page_libs_wxnet"];
     wxXML      [fillcolor = deepskyblue, URL = "\ref page_libs_wxxml"];
 
-    wxAdvanced [fillcolor = green, URL = "\ref page_libs_wxadv"];
     wxAUI      [fillcolor = green, URL = "\ref page_libs_wxaui"];
     wxGL       [fillcolor = green, URL = "\ref page_libs_wxgl"];
     wxHTML     [fillcolor = green, URL = "\ref page_libs_wxhtml"];
@@ -46,17 +45,16 @@ digraph Dependencies
     wxNet -> wxBase;
     wxXML -> wxBase;
 
-    wxAdvanced -> wxCore;
-    wxAUI -> wxAdvanced; wxAUI -> wxHTML;
+    wxAUI -> wxCore; wxAUI -> wxHTML;
     wxGL -> wxCore;
     wxHTML -> wxCore;
     wxMedia -> wxCore;
-    wxPropertyGrid -> wxAdvanced;
+    wxPropertyGrid -> wxCore;
     wxQA -> wxCore; wxQA -> wxXML;
     wxRibbon -> wxCore;
-    wxRichText -> wxAdvanced; wxRichText -> wxHTML; wxRichText -> wxXML;
+    wxRichText -> wxCore; wxRichText -> wxHTML; wxRichText -> wxXML;
     wxSTC -> wxCore;
-    wxXRC -> wxAdvanced; wxXRC -> wxHTML; wxXRC -> wxXML;
+    wxXRC -> wxCore; wxXRC -> wxHTML; wxXRC -> wxXML;
     wxWebView -> wxCore;
 }
 @enddot
@@ -66,32 +64,17 @@ libraries depend on the @ref page_libs_wxbase library (i.e. they are non-GUI
 libraries), and all green libraries depend on the @ref page_libs_wxcore library
 (i.e. they are GUI libraries).
 
-
-
-@section page_libs_wxadv wxAdvanced
-
-Advanced or rarely used GUI classes:
-
-@li wxCalendarCtrl
-@li wxGrid classes
-@li wxJoystick
-@li wxLayoutAlgorithm
-@li wxSplashScreen
-@li wxTaskBarIcon
-@li wxSound
-@li wxWizard
-@li wxSashLayoutWindow
-@li wxSashWindow
-@li ...others
-
-Requires @ref page_libs_wxcore and @ref page_libs_wxbase.
+@note Until wxWidgets 3.1.2 some core GUI classes were in a separate wxAdvanced
+    library, but this library was merged into wxCore and, while it's still
+    preserved as an empty library for compatibility, should be never used any
+    longer and will disappear completely in the future.
 
 
 @section page_libs_wxaui wxAui
 
 This contains the Advanced User Interface docking library.
 
-Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml,
+Requires @ref page_libs_wxhtml, @ref page_libs_wxxml,
 @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
@@ -156,7 +139,7 @@ Requires @ref page_libs_wxbase.
 
 This contains the wxPropertyGrid control.
 
-Requires @ref page_libs_wxadv, @ref page_libs_wxcore, @ref page_libs_wxbase.
+Requires @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
 @section page_libs_wxqa wxQA
@@ -179,7 +162,7 @@ Requires @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 This contains generic rich text control functionality.
 
-Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml,
+Requires @ref page_libs_wxhtml, @ref page_libs_wxxml,
 @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 
@@ -209,7 +192,7 @@ Requires @ref page_libs_wxbase.
 This library contains wxXmlResource class that provides access to XML resource
 files in XRC format.
 
-Requires @ref page_libs_wxadv, @ref page_libs_wxhtml, @ref page_libs_wxxml,
+Requires @ref page_libs_wxhtml, @ref page_libs_wxxml,
 @ref page_libs_wxcore, @ref page_libs_wxbase.
 
 */

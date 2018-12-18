@@ -97,6 +97,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_filestream.obj \
 	$(OBJS)\test_iostreams.obj \
 	$(OBJS)\test_largefile.obj \
+	$(OBJS)\test_lzmastream.obj \
 	$(OBJS)\test_memstream.obj \
 	$(OBJS)\test_socketstream.obj \
 	$(OBJS)\test_sstream.obj \
@@ -174,6 +175,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_boundingbox.obj \
 	$(OBJS)\test_gui_clippingbox.obj \
 	$(OBJS)\test_gui_graphmatrix.obj \
+	$(OBJS)\test_gui_graphpath.obj \
 	$(OBJS)\test_gui_config.obj \
 	$(OBJS)\test_gui_bitmapcomboboxtest.obj \
 	$(OBJS)\test_gui_bitmaptogglebuttontest.obj \
@@ -234,6 +236,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_rawbmp.obj \
 	$(OBJS)\test_gui_htmlparser.obj \
 	$(OBJS)\test_gui_htmlwindow.obj \
+	$(OBJS)\test_gui_htmprint.obj \
 	$(OBJS)\test_gui_accelentry.obj \
 	$(OBJS)\test_gui_menu.obj \
 	$(OBJS)\test_gui_guifuncs.obj \
@@ -260,6 +263,9 @@ TEST_GUI_RESOURCES =  \
 !if "$(TARGET_CPU)" == "AMD64"
 ARCH_SUFFIX = _x64
 !endif
+!if "$(TARGET_CPU)" == "ARM64"
+ARCH_SUFFIX = _arm64
+!endif
 !if "$(TARGET_CPU)" == "IA64"
 ARCH_SUFFIX = _ia64
 !endif
@@ -268,6 +274,9 @@ ARCH_SUFFIX = _x64
 !endif
 !if "$(TARGET_CPU)" == "amd64"
 ARCH_SUFFIX = _x64
+!endif
+!if "$(TARGET_CPU)" == "arm64"
+ARCH_SUFFIX = _arm64
 !endif
 !if "$(TARGET_CPU)" == "ia64"
 ARCH_SUFFIX = _ia64
@@ -308,6 +317,9 @@ LIBTYPE_SUFFIX = dll
 !if "$(TARGET_CPU)" == "AMD64"
 LINK_TARGET_CPU = /MACHINE:X64
 !endif
+!if "$(TARGET_CPU)" == "ARM64"
+LINK_TARGET_CPU = /MACHINE:ARM64
+!endif
 !if "$(TARGET_CPU)" == "IA64"
 LINK_TARGET_CPU = /MACHINE:IA64
 !endif
@@ -316,6 +328,9 @@ LINK_TARGET_CPU = /MACHINE:X64
 !endif
 !if "$(TARGET_CPU)" == "amd64"
 LINK_TARGET_CPU = /MACHINE:X64
+!endif
+!if "$(TARGET_CPU)" == "arm64"
+LINK_TARGET_CPU = /MACHINE:ARM64
 !endif
 !if "$(TARGET_CPU)" == "ia64"
 LINK_TARGET_CPU = /MACHINE:IA64
@@ -479,10 +494,6 @@ __WXLIB_MEDIA_p = \
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_XRC_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc.lib
-!endif
-!if "$(MONOLITHIC)" == "0"
-__WXLIB_ADV_p = \
-	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_HTML_p = \
@@ -698,7 +709,7 @@ $(OBJS)\test_drawingplugin.dll: $(TEST_DRAWINGPLUGIN_OBJECTS)
 !if "$(USE_GUI)" == "1"
 $(OBJS)\test_gui.exe: $(OBJS)\test_gui_dummy.obj  $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample.res
 	link /NOLOGO /OUT:$@  $(__DEBUGINFO_4) /pdb:"$(OBJS)\test_gui.pdb" $(__DEBUGINFO_51)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:CONSOLE $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @<<
-	$(TEST_GUI_OBJECTS) $(TEST_GUI_RESOURCES)  $(__WXLIB_WEBVIEW_p) $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib
+	$(TEST_GUI_OBJECTS) $(TEST_GUI_RESOURCES)  $(__WXLIB_WEBVIEW_p) $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib shlwapi.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib version.lib wsock32.lib wininet.lib
 <<
 !endif
 
@@ -913,6 +924,9 @@ $(OBJS)\test_iostreams.obj: .\streams\iostreams.cpp
 $(OBJS)\test_largefile.obj: .\streams\largefile.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\streams\largefile.cpp
 
+$(OBJS)\test_lzmastream.obj: .\streams\lzmastream.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\streams\lzmastream.cpp
+
 $(OBJS)\test_memstream.obj: .\streams\memstream.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_CXXFLAGS) .\streams\memstream.cpp
 
@@ -1044,6 +1058,9 @@ $(OBJS)\test_gui_clippingbox.obj: .\graphics\clippingbox.cpp
 
 $(OBJS)\test_gui_graphmatrix.obj: .\graphics\graphmatrix.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\graphics\graphmatrix.cpp
+
+$(OBJS)\test_gui_graphpath.obj: .\graphics\graphpath.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\graphics\graphpath.cpp
 
 $(OBJS)\test_gui_config.obj: .\config\config.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\config\config.cpp
@@ -1224,6 +1241,9 @@ $(OBJS)\test_gui_htmlparser.obj: .\html\htmlparser.cpp
 
 $(OBJS)\test_gui_htmlwindow.obj: .\html\htmlwindow.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\html\htmlwindow.cpp
+
+$(OBJS)\test_gui_htmprint.obj: .\html\htmprint.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\html\htmprint.cpp
 
 $(OBJS)\test_gui_accelentry.obj: .\menu\accelentry.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(TEST_GUI_CXXFLAGS) .\menu\accelentry.cpp

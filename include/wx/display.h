@@ -10,6 +10,9 @@
 #ifndef _WX_DISPLAY_H_BASE_
 #define _WX_DISPLAY_H_BASE_
 
+#include "wx/defs.h"
+#include "wx/gdicmn.h"      // wxSize
+
 // NB: no #if wxUSE_DISPLAY here, the display geometry part of this class (but
 //     not the video mode stuff) is always available but if wxUSE_DISPLAY == 0
 //     it becomes just a trivial wrapper around the old wxDisplayXXX() functions
@@ -46,9 +49,12 @@ public:
     // primary display and the only one which is always supported
     wxDisplay(unsigned n = 0);
 
+    // create display object corresponding to the display of the given window
+    // or the default one if the window display couldn't be found
+    explicit wxDisplay(const wxWindow* window);
+
     // dtor is not virtual as this is a concrete class not meant to be derived
     // from
-    ~wxDisplay();
 
 
     // return the number of available displays, valid parameters to
@@ -72,6 +78,12 @@ public:
 
     // get the client area of the display, i.e. without taskbars and such
     wxRect GetClientArea() const;
+
+    // get the depth, i.e. number of bits per pixel (0 if unknown)
+    int GetDepth() const;
+
+    // get the resolution of this monitor in pixels per inch
+    wxSize GetPPI() const;
 
     // name may be empty
     wxString GetName() const;

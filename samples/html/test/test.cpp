@@ -113,10 +113,10 @@ public:
     virtual wxString Process(const wxString& s) const wxOVERRIDE
     {
         wxString r(s);
-        r.Replace(wxT("<b>"), wxEmptyString);
-        r.Replace(wxT("<B>"), wxEmptyString);
-        r.Replace(wxT("</b>"), wxEmptyString);
-        r.Replace(wxT("</B>"), wxEmptyString);
+        r.Replace("<b>", wxEmptyString);
+        r.Replace("<B>", wxEmptyString);
+        r.Replace("</b>", wxEmptyString);
+        r.Replace("</B>", wxEmptyString);
 
         return r;
     }
@@ -175,7 +175,7 @@ bool MyApp::OnInit()
         return false;
 
 #if wxUSE_SYSTEM_OPTIONS
-    wxSystemOptions::SetOption(wxT("no-maskblt"), 1);
+    wxSystemOptions::SetOption("no-maskblt", 1);
 #endif
 
     wxInitAllImageHandlers();
@@ -183,8 +183,8 @@ bool MyApp::OnInit()
     wxFileSystem::AddHandler(new wxInternetFSHandler);
 #endif
 
-    SetVendorName(wxT("wxWidgets"));
-    SetAppName(wxT("wxHtmlTest"));
+    SetVendorName("wxWidgets");
+    SetAppName("wxHtmlTest");
     // the following call to wxConfig::Get will use it to create an object...
 
     // Create the main application window
@@ -203,7 +203,7 @@ bool MyApp::OnInit()
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
    : wxFrame((wxFrame *)NULL, wxID_ANY, title, pos, size,
-             wxDEFAULT_FRAME_STYLE, wxT("html_test_app"))
+             wxDEFAULT_FRAME_STYLE, "html_test_app")
 {
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
@@ -254,10 +254,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_Html->SetRelatedStatusBar(1);
 #endif // wxUSE_STATUSBAR
     m_Html->ReadCustomization(wxConfig::Get());
-    m_Html->LoadFile(wxFileName(wxT("test.htm")));
+    m_Html->LoadFile(wxFileName("test.htm"));
     m_Html->AddProcessor(m_Processor);
 
-    wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, wxT(""),
+    wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, "",
                                       wxDefaultPosition, wxDefaultSize,
                                       wxTE_MULTILINE);
 
@@ -285,7 +285,7 @@ void MyFrame::OnPageOpen(wxCommandEvent& WXUNUSED(event))
 {
 #if wxUSE_FILEDLG
     wxString p = wxFileSelector(_("Open HTML document"), wxEmptyString,
-        wxEmptyString, wxEmptyString, wxT("HTML files|*.htm;*.html"));
+        wxEmptyString, wxEmptyString, "HTML files|*.htm;*.html");
 
     if (!p.empty())
     {
@@ -314,7 +314,7 @@ void MyFrame::OnDefaultWebBrowser(wxCommandEvent& WXUNUSED(event))
     wxString page = m_Html->GetOpenedPage();
     if (!page.empty())
     {
-        wxLaunchDefaultBrowser(wxT("http://www.google.com"));
+        wxLaunchDefaultBrowser("http://www.google.com");
     }
 }
 
@@ -347,7 +347,7 @@ void MyFrame::OnDrawCustomBg(wxCommandEvent& event)
 
 void MyFrame::OnHtmlLinkClicked(wxHtmlLinkEvent &event)
 {
-    wxLogMessage(wxT("The url '%s' has been clicked!"), event.GetLinkInfo().GetHref().c_str());
+    wxLogMessage("The url '%s' has been clicked!", event.GetLinkInfo().GetHref());
 
     // skipping this event the default behaviour (load the clicked URL)
     // will happen...
@@ -356,13 +356,13 @@ void MyFrame::OnHtmlLinkClicked(wxHtmlLinkEvent &event)
 
 void MyFrame::OnHtmlCellHover(wxHtmlCellEvent &event)
 {
-    wxLogMessage(wxT("Mouse moved over cell %p at %d;%d"),
+    wxLogMessage("Mouse moved over cell %p at %d;%d",
                  event.GetCell(), event.GetPoint().x, event.GetPoint().y);
 }
 
 void MyFrame::OnHtmlCellClicked(wxHtmlCellEvent &event)
 {
-    wxLogMessage(wxT("Click over cell %p at %d;%d"),
+    wxLogMessage("Click over cell %p at %d;%d",
                  event.GetCell(), event.GetPoint().x, event.GetPoint().y);
 
     // if we don't skip the event, OnHtmlLinkClicked won't be called!
@@ -373,7 +373,7 @@ wxHtmlOpeningStatus MyHtmlWindow::OnOpeningURL(wxHtmlURLType WXUNUSED(type),
                                                const wxString& url,
                                                wxString *WXUNUSED(redirect)) const
 {
-    GetRelatedFrame()->SetStatusText(url + wxT(" lately opened"),1);
+    GetRelatedFrame()->SetStatusText(url + " lately opened",1);
     return wxHTML_OPEN;
 }
 
@@ -397,17 +397,17 @@ void MyHtmlWindow::OnClipboardEvent(wxClipboardTextEvent& WXUNUSED(event))
             const wxString text = data.GetText();
             const size_t maxTextLength = 100;
 
-            wxLogStatus(wxString::Format(wxT("Clipboard: '%s%s'"),
-                        wxString(text, maxTextLength).c_str(),
-                        (text.length() > maxTextLength) ? wxT("...")
-                                                        : wxT("")));
+            wxLogStatus(wxString::Format("Clipboard: '%s%s'",
+                        wxString(text, maxTextLength),
+                        (text.length() > maxTextLength) ? "..."
+                                                        : ""));
             wxTheClipboard->Close();
 
             return;
         }
     }
 
-    wxLogStatus(wxT("Clipboard: nothing"));
+    wxLogStatus("Clipboard: nothing");
 }
 #endif // wxUSE_CLIPBOARD
 

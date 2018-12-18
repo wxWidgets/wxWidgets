@@ -585,8 +585,6 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
         return false;
     }
 
-    printout->SetPPIScreen(wxGetDisplayPPI());
-
     PMResolution res;
     PMPrinter printer;
     wxOSXPrintData* nativeData = (wxOSXPrintData*)
@@ -607,15 +605,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     printout->SetPPIPrinter(int(res.hRes), int(res.vRes));
 
     // Set printout parameters
-    printout->SetDC(dc);
-
-    int w, h;
-    dc->GetSize(&w, &h);
-    printout->SetPageSizePixels((int)w, (int)h);
-    printout->SetPaperRectPixels(dc->GetPaperRect());
-    wxCoord mw, mh;
-    dc->GetSizeMM(&mw, &mh);
-    printout->SetPageSizeMM((int)mw, (int)mh);
+    printout->SetUp(*dc);
 
     // Create an abort window
     wxBeginBusyCursor();

@@ -15,10 +15,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/progdlg.h"
-    #include "wx/stdpaths.h"
     #include "wx/wx.h"
 #endif
 
+#include "wx/stdpaths.h"
 #include "wx/taskbarbutton.h"
 
 enum
@@ -98,7 +98,7 @@ wxIcon CreateRandomIcon()
 class MyApp : public wxApp
 {
 public:
-    virtual bool OnInit();
+    virtual bool OnInit() wxOVERRIDE;
 };
 
 class MyFrame : public wxFrame
@@ -140,19 +140,19 @@ bool MyApp::OnInit()
     wxTaskBarJumpListItem *item1 = new wxTaskBarJumpListItem(
         NULL,
         wxTASKBAR_JUMP_LIST_TASK,
-        wxT("Task 1"),
+        "Task 1",
         wxStandardPaths::Get().GetExecutablePath(),
         wxEmptyString,
-        wxT("Test Task"),
+        "Test Task",
         wxStandardPaths::Get().GetExecutablePath(),
         0);
     wxTaskBarJumpListItem *item2 = new wxTaskBarJumpListItem(
         NULL,
         wxTASKBAR_JUMP_LIST_TASK,
-        wxT("Task 2"),
+        "Task 2",
         wxStandardPaths::Get().GetExecutablePath(),
         wxEmptyString,
-        wxT("Test Task"),
+        "Test Task",
         wxStandardPaths::Get().GetExecutablePath(),
         0);
     jumpList.GetTasks().Append(item1);
@@ -163,14 +163,14 @@ bool MyApp::OnInit()
     jumpList.ShowFrequentCategory();
 
     wxTaskBarJumpListCategory* customCategory =
-        new wxTaskBarJumpListCategory(&jumpList, wxT("Custom"));
+        new wxTaskBarJumpListCategory(&jumpList, "Custom");
     wxTaskBarJumpListItem* item3 = new wxTaskBarJumpListItem(
         customCategory,
         wxTASKBAR_JUMP_LIST_DESTINATION,
-        wxT("Help"),
+        "Help",
         wxStandardPaths::Get().GetExecutablePath(),
-        wxT("--help"),
-        wxT("wxTaskBarButton help."),
+        "--help",
+        "wxTaskBarButton help.",
         wxStandardPaths::Get().GetExecutablePath(),
         0);
     customCategory->Append(item3);
@@ -213,7 +213,7 @@ MyFrame::MyFrame(const wxString& title)
 
     // SetProgressValue section.
     wxStaticBoxSizer *spvSizer =
-        new wxStaticBoxSizer(wxVERTICAL, panel, wxT("SetProgressValue"));
+        new wxStaticBoxSizer(wxVERTICAL, panel, "SetProgressValue");
     int flags = wxSL_MIN_MAX_LABELS | wxSL_VALUE_LABEL | wxSL_AUTOTICKS;
     m_slider = new wxSlider(spvSizer->GetStaticBox(), ProgressValueSlider,
                             0, 0, 100,
@@ -234,15 +234,15 @@ MyFrame::MyFrame(const wxString& title)
                                           1, wxRA_SPECIFY_ROWS);
    // SetThumbnailTooltip section.
     wxStaticBoxSizer *sttSizer =
-        new wxStaticBoxSizer(wxVERTICAL, panel, wxT("SetThumbnailTooltip"));
+        new wxStaticBoxSizer(wxVERTICAL, panel, "SetThumbnailTooltip");
     m_textCtrl = new wxTextCtrl(panel, wxID_ANY);
-    wxButton *btn = new wxButton(panel, ThumbnailTooltipSetBtn, wxT("Set"));
+    wxButton *btn = new wxButton(panel, ThumbnailTooltipSetBtn, "Set");
     sttSizer->Add(m_textCtrl, 1, wxEXPAND | wxALL, 2);
     sttSizer->Add(btn, 1, wxEXPAND | wxALL, 2);
 
     // SetProgressState section.
     wxStaticBoxSizer *spsSizer =
-        new wxStaticBoxSizer(wxVERTICAL, panel, wxT("SetProgressState"));
+        new wxStaticBoxSizer(wxVERTICAL, panel, "SetProgressState");
     const wxString choices[] =
     {
         "wxNoProgress",
@@ -258,33 +258,33 @@ MyFrame::MyFrame(const wxString& title)
 
     // SetOverlayIcon section.
     wxStaticBoxSizer *soiSizer =
-        new wxStaticBoxSizer(wxVERTICAL, panel, wxT("SetOverlayIcon"));
+        new wxStaticBoxSizer(wxVERTICAL, panel, "SetOverlayIcon");
     wxButton *setOverlayIconBtn =
-        new wxButton(panel, SetOverlayIconBtn, wxT("Set Overlay Icon"));
+        new wxButton(panel, SetOverlayIconBtn, "Set Overlay Icon");
     wxButton *clearOverlayIconBtn =
-        new wxButton(panel, ClearOverlayIconBtn, wxT("Clear Overlay Icon"));
+        new wxButton(panel, ClearOverlayIconBtn, "Clear Overlay Icon");
     soiSizer->Add(setOverlayIconBtn, 1, wxEXPAND | wxALL, 2);
     soiSizer->Add(clearOverlayIconBtn, 1, wxEXPAND | wxALL, 2);
 
     // SetThumbnailClip section.
     wxStaticBoxSizer *stcSizer =
-        new wxStaticBoxSizer(wxVERTICAL, panel, wxT("SetThumbnailClip"));
+        new wxStaticBoxSizer(wxVERTICAL, panel, "SetThumbnailClip");
     wxButton *setThumbnailClipBtn =
-        new wxButton(panel, SetThumbnailClipBtn, wxT("Set Thumbnail Clip"));
+        new wxButton(panel, SetThumbnailClipBtn, "Set Thumbnail Clip");
     wxButton *restoreThumbnailClipBtn =
         new wxButton(panel, RestoreThumbnailClipBtn,
-                     wxT("Restore Thumbnail Clip"));
+                     "Restore Thumbnail Clip");
     stcSizer->Add(setThumbnailClipBtn, 1, wxEXPAND | wxALL, 2);
     stcSizer->Add(restoreThumbnailClipBtn, 1, wxEXPAND | wxALL, 2);
 
     // Thumbnail Toolbar Buttons section.
     wxStaticBoxSizer *ttbSizer =
-        new wxStaticBoxSizer(wxVERTICAL, panel, wxT("ThumbBar Buttons"));
+        new wxStaticBoxSizer(wxVERTICAL, panel, "ThumbBar Buttons");
     wxButton *addThumbBarButtonBtn =
-        new wxButton(panel, AddThumbBarButtonBtn, wxT("Add ThumbBar Button"));
+        new wxButton(panel, AddThumbBarButtonBtn, "Add ThumbBar Button");
     wxButton *showThumbnailToolbarBtn =
         new wxButton(panel, RemoveThumbBarButtonBtn,
-                     wxT("Remove Last ThumbBar Button"));
+                     "Remove Last ThumbBar Button");
     ttbSizer->Add(addThumbBarButtonBtn, 1, wxEXPAND | wxALL, 2);
     ttbSizer->Add(showThumbnailToolbarBtn, 1, wxEXPAND | wxALL, 2);
 
@@ -297,7 +297,7 @@ MyFrame::MyFrame(const wxString& title)
     gs->Add(ttbSizer, 0, wxEXPAND);
 
     wxStaticText *text = new wxStaticText(
-        panel, wxID_ANY, wxT("Welcome to wxTaskBarButton sample"));
+        panel, wxID_ANY, "Welcome to wxTaskBarButton sample");
     mainSizer->Add(text, 0, wxALIGN_CENTRE_HORIZONTAL);
     mainSizer->Add(gs);
 
@@ -429,7 +429,7 @@ void MyFrame::OnRemoveThubmBarButton(wxCommandEvent& WXUNUSED(event))
 
     wxThumbBarButton* button = m_thumbBarButtons.back();
     m_thumbBarButtons.pop_back();
-    MSWGetTaskBarButton()->RemoveThumbBarButton(button);
+    delete MSWGetTaskBarButton()->RemoveThumbBarButton(button);
 }
 
 void MyFrame::OnThumbnailToolbarBtnClicked(wxCommandEvent& event)

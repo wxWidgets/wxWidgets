@@ -30,7 +30,7 @@
 class URLTestCase : public CppUnit::TestCase
 {
 public:
-    URLTestCase(); 
+    URLTestCase();
     ~URLTestCase();
 
 private:

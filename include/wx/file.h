@@ -65,7 +65,7 @@ public:
 
   // assign an existing file descriptor and get it back from wxFile object
   void Attach(int lfd) { Close(); m_fd = lfd; m_lasterror = 0; }
-  int  Detach() { int fdOld = m_fd; m_fd = fd_invalid; return fdOld; }
+  int  Detach() { const int fdOld = m_fd; m_fd = fd_invalid; return fdOld; }
   int  fd() const { return m_fd; }
 
   // read/write (unbuffered)

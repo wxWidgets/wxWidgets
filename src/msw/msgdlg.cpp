@@ -162,10 +162,7 @@ wxMessageDialog::HookFunction(int code, WXWPARAM wParam, WXLPARAM lParam)
 void wxMessageDialog::ReplaceStaticWithEdit()
 {
     // check if the message box fits the display
-    int nDisplay = wxDisplay::GetFromWindow(this);
-    if ( nDisplay == wxNOT_FOUND )
-        nDisplay = 0;
-    const wxRect rectDisplay = wxDisplay(nDisplay).GetClientArea();
+    const wxRect rectDisplay = wxDisplay(this).GetClientArea();
 
     if ( rectDisplay.Contains(GetRect()) )
     {
@@ -833,7 +830,7 @@ int wxMSWMessageDialog::MSWTranslateReturnCode(int msAns)
     {
         default:
             wxFAIL_MSG(wxT("unexpected return code"));
-            // fall through
+            wxFALLTHROUGH;
 
         case IDCANCEL:
             ans = wxID_CANCEL;

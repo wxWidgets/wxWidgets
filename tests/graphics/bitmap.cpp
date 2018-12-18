@@ -12,6 +12,8 @@
 
 #include "testprec.h"
 
+#ifdef wxHAS_RAW_BITMAP
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -37,8 +39,8 @@ class BitmapTestCase : public CppUnit::TestCase
 public:
     BitmapTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( BitmapTestCase );
@@ -87,7 +89,8 @@ void BitmapTestCase::Mask()
     m_bmp.SetMask(mask);
 
     // copying masks should work
-    wxMask *mask2 = new wxMask(*mask);
+    wxMask *mask2 = NULL;
+    REQUIRE_NOTHROW(mask2 = new wxMask(*mask));
     m_bmp.SetMask(mask2);
 }
 
@@ -123,6 +126,7 @@ void BitmapTestCase::OverlappingBlit()
     if ( m_bmp.GetDepth() == 32 )
     {
         wxAlphaPixelData npd( m_bmp );
+        CPPUNIT_ASSERT_MESSAGE( "Expected raw pixels to not be NULL", npd );
         wxAlphaPixelData::Iterator it( npd );
 
         ASSERT_EQUAL_RGB( it, 255, 0, 0 );
@@ -153,3 +157,5 @@ void BitmapTestCase::OverlappingBlit()
         }
     }
 }
+
+#endif //wxHAS_RAW_BITMAP

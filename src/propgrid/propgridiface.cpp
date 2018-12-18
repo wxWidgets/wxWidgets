@@ -399,7 +399,7 @@ void wxPGTypeOperationFailed( const wxPGProperty* p,
 {
     wxASSERT( p != NULL );
     wxLogError( _("Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT \"%s\"."),
-        op.c_str(), p->GetLabel().c_str(), p->GetValue().GetType().c_str(), typestr.c_str() );
+        op, p->GetLabel(), p->GetValue().GetType(), typestr );
 }
 
 // -----------------------------------------------------------------------
@@ -434,7 +434,7 @@ void wxPropertyGridInterface::SetValidationFailureBehavior( int vfbFlags )
 wxPGProperty* wxPropertyGridInterface::GetPropertyByNameA( const wxString& name ) const
 {
     wxPGProperty* p = GetPropertyByName(name);
-    wxASSERT_MSG(p,wxString::Format(wxS("no property with name '%s'"),name.c_str()));
+    wxASSERT_MSG(p,wxString::Format(wxS("no property with name '%s'"),name));
     return p;
 }
 
@@ -796,7 +796,7 @@ TRET wxPropertyGridInterface::GetPropertyValueAs##BIGNAME( wxPGPropArg id ) cons
     return (TRET)value.Get##BIGNAME(); \
 }
 
-// String is different than others.
+// String is different from others.
 wxString wxPropertyGridInterface::GetPropertyValueAsString( wxPGPropArg id ) const
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxEmptyString)
@@ -896,15 +896,16 @@ wxPGVIterator wxPropertyGridInterface::GetVIterator( int flags ) const
 static wxString EscapeDelimiters(const wxString& s)
 {
     wxString result;
-    result.Alloc(s.length());
-    const wxChar* ch = s.c_str();
-    while (*ch)
+    result.reserve(s.length());
+
+    for (wxString::const_iterator it = s.begin(); it != s.end(); ++it)
     {
-        if (*ch == wxT(';') || *ch == wxT('|') || *ch == wxT(','))
-            result += wxT('\\');
-        result += *ch;
-        ++ch;
+        wxStringCharType ch = *it;
+        if ( ch == wxS(';') || ch == wxS('|') || ch == wxS(',') )
+            result += wxS('\\');
+        result += ch;
     }
+
     return result;
 }
 
@@ -942,7 +943,6 @@ wxString wxPropertyGridInterface::SaveEditableState( int includedStates ) const
         }
         if ( includedStates & ExpandedState )
         {
-            wxArrayPGProperty ptrs;
             wxPropertyGridConstIterator it =
                 wxPropertyGridConstIterator( pageState,
                                              wxPG_ITERATE_ALL_PARENTS_RECURSIVELY|wxPG_ITERATE_HIDDEN,

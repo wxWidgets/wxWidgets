@@ -26,10 +26,11 @@ using @ifdef_ and not @if_.
 @itemdef{__WXBASE__, Only wxBase, no GUI features (same as @c wxUSE_GUI == 0)}
 @itemdef{__WXDFB__, wxUniversal using DirectFB}
 @itemdef{__WXGTK__, GTK+}
-@itemdef{__WXGTK12__, GTK+ 1.2 or higher}
-@itemdef{__WXGTK20__, GTK+ 2.0 or higher}
-@itemdef{__WXGTK24__, GTK+ 2.4 or higher}
+@itemdef{__WXGTK127__, GTK+ 1.2.7 or higher}
+@itemdef{__WXGTK20__, GTK+ 2.0 (2.6) or higher}
 @itemdef{__WXGTK210__, GTK+ 2.10 or higher}
+@itemdef{__WXGTK218__, GTK+ 2.18 or higher}
+@itemdef{__WXGTK220__, GTK+ 2.20 or higher}
 @itemdef{__WXMAC__, old define, same as <tt>__WXOSX__</tt>}
 @itemdef{__WXMOTIF__, Motif}
 @itemdef{__WXMOTIF20__, Motif 2.0 or higher}
@@ -218,7 +219,6 @@ desirable, for example because some of them were not built and this is where
 the symbols in this section can be helpful: defining them allows to not link
 with the corresponding library. The following symbols are honoured:
 
-    - wxNO_ADV_LIB
     - wxNO_AUI_LIB
     - wxNO_HTML_LIB
     - wxNO_MEDIA_LIB

@@ -389,7 +389,7 @@ void wxButtonToolBar::DoLayout()
             if (!tool->GetButton())
             {
                 wxBitmapButton* bmpButton = new wxBitmapButton(this, tool->GetId(), tool->GetNormalBitmap(), wxPoint(tool->m_x, tool->m_y), wxDefaultSize,
-                                                               wxBU_AUTODRAW|wxBORDER_NONE);
+                                                               wxBORDER_NONE);
                 if (!tool->GetShortHelp().empty())
                     bmpButton->SetLabel(tool->GetShortHelp());
 
@@ -500,7 +500,7 @@ void wxButtonToolBar::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxPaintDC dc(this);
 
     dc.SetFont(GetFont());
-    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
           node;

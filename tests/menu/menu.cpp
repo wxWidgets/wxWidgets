@@ -77,8 +77,8 @@ class MenuTestCase : public CppUnit::TestCase
 public:
     MenuTestCase() {}
 
-    virtual void setUp() { CreateFrame(); }
-    virtual void tearDown() { m_frame->Destroy(); }
+    virtual void setUp() wxOVERRIDE { CreateFrame(); }
+    virtual void tearDown() wxOVERRIDE { m_frame->Destroy(); }
 
 private:
     CPPUNIT_TEST_SUITE( MenuTestCase );
@@ -254,7 +254,7 @@ void MenuTestCase::FindInMenu()
 
     // Find by id:
     CPPUNIT_ASSERT( menuHelp->FindItem(MenuTestCase_Bar) );
-    CPPUNIT_ASSERT( menuHelp->FindItem(MenuTestCase_Foo) == NULL );
+    CPPUNIT_ASSERT( !menuHelp->FindItem(MenuTestCase_Foo) );
 
     for (n=0; n < menuHelp->GetMenuItemCount(); ++n)
     {
@@ -406,10 +406,18 @@ void MenuTestCase::RadioItems()
     // First item of a radio group is checked by default.
     CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First) );
 
+    // Subsequent items in a group are not checked.
+    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 1) );
+
+#ifdef __WXQT__
+    WARN("Radio check test does not work under Qt");
+#else
     // Checking the second one make the first one unchecked however.
     menu->Check(MenuTestCase_First + 1, true);
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First) );
     CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 1) );
+    menu->Check(MenuTestCase_First, true);
+#endif
 
     // Adding more radio items after a separator creates another radio group...
     menu->AppendSeparator();
@@ -418,25 +426,43 @@ void MenuTestCase::RadioItems()
     menu->AppendRadioItem(MenuTestCase_First + 4, "Radio 4");
 
     // ... which is independent from the first one.
+    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First) );
     CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 2) );
 
+#ifdef __WXQT__
+    WARN("Radio check test does not work under Qt");
+#else
     menu->Check(MenuTestCase_First + 3, true);
     CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 3) );
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 2) );
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 1) );
 
+    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First) );
+    menu->Check(MenuTestCase_First + 2, true);
+#endif
 
     // Insert an item in the middle of an existing radio group.
     menu->InsertRadioItem(4, MenuTestCase_First + 5, "Radio 5");
-    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 3) );
+    CPPUNIT_ASSERT( menu->IsChecked(MenuTestCase_First + 2) );
+    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 5) );
 
+#ifdef __WXQT__
+    WARN("Radio check test does not work under Qt");
+#else
     menu->Check( MenuTestCase_First + 5, true );
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 3) );
 
+    menu->Check( MenuTestCase_First + 3, true );
+#endif
 
     // Prepend a couple of items before the first group.
     menu->PrependRadioItem(MenuTestCase_First + 6, "Radio 6");
     menu->PrependRadioItem(MenuTestCase_First + 7, "Radio 7");
+    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 6) );
+    CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 7) );
+
+#ifdef __WXQT__
+    WARN("Radio check test does not work under Qt");
+#else
     menu->Check(MenuTestCase_First + 7, true);
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 1) );
 
@@ -444,6 +470,7 @@ void MenuTestCase::RadioItems()
     // Check that the last radio group still works as expected.
     menu->Check(MenuTestCase_First + 4, true);
     CPPUNIT_ASSERT( !menu->IsChecked(MenuTestCase_First + 5) );
+#endif
 }
 
 void MenuTestCase::RemoveAdd()
@@ -488,6 +515,55 @@ void MenuTestCase::ChangeBitmap()
     wxDELETE(menu);
 }
 
+#if wxUSE_UIACTIONSIMULATOR
+
+// In C++98 this class can't be defined inside Events() method, unfortunately,
+// as its OnMenu() method wouldn't be usable with template Bind() then.
+class MenuEventHandler : public wxEvtHandler
+{
+public:
+    MenuEventHandler(wxWindow* win)
+        : m_win(win)
+    {
+        m_win->Bind(wxEVT_MENU, &MenuEventHandler::OnMenu, this);
+
+        m_gotEvent = false;
+        m_event = NULL;
+    }
+
+    virtual ~MenuEventHandler()
+    {
+        m_win->Unbind(wxEVT_MENU, &MenuEventHandler::OnMenu, this);
+
+        delete m_event;
+    }
+
+    const wxCommandEvent& GetEvent()
+    {
+        CPPUNIT_ASSERT( m_gotEvent );
+
+        m_gotEvent = false;
+
+        return *m_event;
+    }
+
+private:
+    void OnMenu(wxCommandEvent& event)
+    {
+        CPPUNIT_ASSERT( !m_gotEvent );
+
+        delete m_event;
+        m_event = static_cast<wxCommandEvent*>(event.Clone());
+        m_gotEvent = true;
+    }
+
+    wxWindow* const m_win;
+    wxCommandEvent* m_event;
+    bool m_gotEvent;
+};
+
+#endif // wxUSE_UIACTIONSIMULATOR
+
 void MenuTestCase::Events()
 {
 #ifdef __WXGTK__
@@ -502,55 +578,6 @@ void MenuTestCase::Events()
 #endif // __WXGTK__
 
 #if wxUSE_UIACTIONSIMULATOR
-    class MenuEventHandler : public wxEvtHandler
-    {
-    public:
-        MenuEventHandler(wxWindow* win)
-            : m_win(win)
-        {
-            m_win->Connect(wxEVT_MENU,
-                           wxCommandEventHandler(MenuEventHandler::OnMenu),
-                           NULL,
-                           this);
-
-            m_gotEvent = false;
-            m_event = NULL;
-        }
-
-        virtual ~MenuEventHandler()
-        {
-            m_win->Disconnect(wxEVT_MENU,
-                              wxCommandEventHandler(MenuEventHandler::OnMenu),
-                              NULL,
-                              this);
-
-            delete m_event;
-        }
-
-        const wxCommandEvent& GetEvent()
-        {
-            CPPUNIT_ASSERT( m_gotEvent );
-
-            m_gotEvent = false;
-
-            return *m_event;
-        }
-
-    private:
-        void OnMenu(wxCommandEvent& event)
-        {
-            CPPUNIT_ASSERT( !m_gotEvent );
-
-            delete m_event;
-            m_event = static_cast<wxCommandEvent*>(event.Clone());
-            m_gotEvent = true;
-        }
-
-        wxWindow* const m_win;
-        wxCommandEvent* m_event;
-        bool m_gotEvent;
-    };
-
     MenuEventHandler handler(m_frame);
 
     // Invoke the accelerator.

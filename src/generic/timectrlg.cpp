@@ -86,48 +86,18 @@ public:
         // nice to add support to "%k" and "%l" (hours with leading blanks
         // instead of zeros) too as this is the most common unsupported case in
         // practice.
-#if wxUSE_XLOCALE
+#if wxUSE_INTL
         m_useAMPM = wxLocale::GetInfo(wxLOCALE_TIME_FMT).Contains("%p");
 #else
         m_useAMPM = false;
 #endif
 
-        m_text->Connect
-                (
-                    wxEVT_SET_FOCUS,
-                    wxFocusEventHandler(wxTimePickerGenericImpl::OnTextSetFocus),
-                    NULL,
-                    this
-                );
-        m_text->Connect
-                (
-                    wxEVT_KEY_DOWN,
-                    wxKeyEventHandler(wxTimePickerGenericImpl::OnTextKeyDown),
-                    NULL,
-                    this
-                );
-        m_text->Connect
-                (
-                    wxEVT_LEFT_DOWN,
-                    wxMouseEventHandler(wxTimePickerGenericImpl::OnTextClick),
-                    NULL,
-                    this
-                );
+        m_text->Bind(wxEVT_SET_FOCUS, &wxTimePickerGenericImpl::OnTextSetFocus, this);
+        m_text->Bind(wxEVT_KEY_DOWN, &wxTimePickerGenericImpl::OnTextKeyDown, this);
+        m_text->Bind(wxEVT_LEFT_DOWN, &wxTimePickerGenericImpl::OnTextClick, this);
 
-        m_btn->Connect
-               (
-                    wxEVT_SPIN_UP,
-                    wxSpinEventHandler(wxTimePickerGenericImpl::OnArrowUp),
-                    NULL,
-                    this
-               );
-        m_btn->Connect
-               (
-                    wxEVT_SPIN_DOWN,
-                    wxSpinEventHandler(wxTimePickerGenericImpl::OnArrowDown),
-                    NULL,
-                    this
-               );
+        m_btn->Bind(wxEVT_SPIN_UP, &wxTimePickerGenericImpl::OnArrowUp, this);
+        m_btn->Bind(wxEVT_SPIN_DOWN, &wxTimePickerGenericImpl::OnArrowDown, this);
     }
 
     // Set the new value.

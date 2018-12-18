@@ -31,7 +31,7 @@
 class OwnerDrawnApp: public wxApp
 {
 public:
-    bool OnInit();
+    bool OnInit() wxOVERRIDE;
 };
 
 // Define a new frame type
@@ -40,7 +40,7 @@ class OwnerDrawnFrame : public wxFrame
 public:
     // ctor & dtor
     OwnerDrawnFrame(wxFrame *frame, const wxString& title, int x, int y, int w, int h);
-    ~OwnerDrawnFrame(){};
+    ~OwnerDrawnFrame(){}
 
     // notifications
     void OnQuit             (wxCommandEvent& event);
@@ -115,75 +115,75 @@ void OwnerDrawnFrame::InitMenu()
            fontBmp(wxFontInfo(14));
 
     // sorry for my artistic skills...
-    wxBitmap bmpBell(wxT("bell")),
-             bmpSound(wxT("sound")),
-             bmpNoSound(wxT("nosound")),
-             bmpInfo(wxT("info")),
-             bmpInfo_mono(wxT("info_mono"));
+    wxBitmap bmpBell("bell"),
+             bmpSound("sound"),
+             bmpNoSound("nosound"),
+             bmpInfo("info"),
+             bmpInfo_mono("info_mono");
 
     // construct submenu
-    pItem = new wxMenuItem(sub_menu, Menu_Sub1, wxT("Submenu &first"), wxT("large"));
+    pItem = new wxMenuItem(sub_menu, Menu_Sub1, "Submenu &first", "large");
 
     pItem->SetFont(fontLarge);
     sub_menu->Append(pItem);
 
-    pItem = new wxMenuItem(sub_menu, Menu_Sub2, wxT("Submenu &second"), wxT("italic"),
+    pItem = new wxMenuItem(sub_menu, Menu_Sub2, "Submenu &second", "italic",
                            wxITEM_CHECK);
     pItem->SetFont(fontItalic);
     sub_menu->Append(pItem);
 
-    pItem = new wxMenuItem(sub_menu, Menu_Sub3, wxT("Submenu &third"), wxT("underlined"),
+    pItem = new wxMenuItem(sub_menu, Menu_Sub3, "Submenu &third", "underlined",
                            wxITEM_CHECK);
     pItem->SetFont(fontUlined);
     sub_menu->Append(pItem);
 
     // construct menu
-    pItem = new wxMenuItem(file_menu, Menu_Test1, wxT("&Uncheckable"), wxT("red item"));
+    pItem = new wxMenuItem(file_menu, Menu_Test1, "&Uncheckable", "red item");
     pItem->SetFont(*wxITALIC_FONT);
     pItem->SetTextColour(wxColor(255, 0, 0));
     file_menu->Append(pItem);
 
-    pItem = new wxMenuItem(file_menu, Menu_Test2, wxT("&Checkable"),
-                           wxT("checkable item"), wxITEM_CHECK);
+    pItem = new wxMenuItem(file_menu, Menu_Test2, "&Checkable",
+                           "checkable item", wxITEM_CHECK);
     pItem->SetFont(*wxSMALL_FONT);
     file_menu->Append(pItem);
     file_menu->Check(Menu_Test2, true);
 
-    pItem = new wxMenuItem(file_menu, Menu_Test3, wxT("&Disabled"), wxT("disabled item"));
+    pItem = new wxMenuItem(file_menu, Menu_Test3, "&Disabled", "disabled item");
     pItem->SetFont(*wxNORMAL_FONT);
     file_menu->Append(pItem);
     file_menu->Enable(Menu_Test3, false);
 
     file_menu->AppendSeparator();
 
-    pItem = new wxMenuItem(file_menu, Menu_Bitmap, wxT("&Bell"),
-                           wxT("check/uncheck me!"), wxITEM_CHECK);
+    pItem = new wxMenuItem(file_menu, Menu_Bitmap, "&Bell",
+                           "check/uncheck me!", wxITEM_CHECK);
     pItem->SetFont(fontBmp);
     pItem->SetBitmaps(bmpBell);
     file_menu->Append(pItem);
 
-    pItem = new wxMenuItem(file_menu, Menu_Bitmap2, wxT("So&und"),
-                           wxT("icon changes!"), wxITEM_CHECK);
+    pItem = new wxMenuItem(file_menu, Menu_Bitmap2, "So&und",
+                           "icon changes!", wxITEM_CHECK);
     pItem->SetFont(fontBmp);
     pItem->SetBitmaps(bmpSound, bmpNoSound);
     file_menu->Append(pItem);
 
     file_menu->AppendSeparator();
 
-    pItem = new wxMenuItem(file_menu, Menu_Submenu, wxT("&Sub menu"), wxT(""),
+    pItem = new wxMenuItem(file_menu, Menu_Submenu, "&Sub menu", "",
                            wxITEM_CHECK, sub_menu);
     pItem->SetFont(*wxSWISS_FONT);
     file_menu->Append(pItem);
 
     file_menu->AppendSeparator();
-    pItem = new wxMenuItem(file_menu, Menu_Toggle, wxT("&Disable/Enable\tCtrl+D"),
-                          wxT("enables/disables the About-Item"), wxITEM_NORMAL);
+    pItem = new wxMenuItem(file_menu, Menu_Toggle, "&Disable/Enable\tCtrl+D",
+                          "enables/disables the About-Item", wxITEM_NORMAL);
     pItem->SetFont(*wxNORMAL_FONT);
     file_menu->Append(pItem);
 
     // Of course Ctrl+RatherLongAccel will not work in this example:
-    pAboutItem = new wxMenuItem(file_menu, Menu_About, wxT("&About\tCtrl+RatherLongAccel"),
-                                wxT("display program information"), wxITEM_NORMAL);
+    pAboutItem = new wxMenuItem(file_menu, Menu_About, "&About\tCtrl+RatherLongAccel",
+                                "display program information", wxITEM_NORMAL);
     pAboutItem->SetBitmap(bmpInfo);
     pAboutItem->SetDisabledBitmap(bmpInfo_mono);
     file_menu->Append(pAboutItem);
@@ -191,66 +191,66 @@ void OwnerDrawnFrame::InitMenu()
     file_menu->AppendSeparator();
 #endif
 
-    pItem = new wxMenuItem(file_menu, Menu_Quit, wxT("&Quit"), wxT("Normal item"),
+    pItem = new wxMenuItem(file_menu, Menu_Quit, "&Quit", "Normal item",
                            wxITEM_NORMAL);
     file_menu->Append(pItem);
 
     wxMenu* drawn_menu = new wxMenu;
-    pItem = new wxMenuItem(drawn_menu, Menu_Drawn1, wxT("&Menu item\tCtrl+K"));
+    pItem = new wxMenuItem(drawn_menu, Menu_Drawn1, "&Menu item\tCtrl+K");
     drawn_menu->Append(pItem);
 
     drawn_menu->AppendSeparator();
 
-    pItem = new wxMenuItem(drawn_menu, Menu_Drawn2, wxT("&Checked item"),
-        wxT("check/uncheck me!"), wxITEM_CHECK);
+    pItem = new wxMenuItem(drawn_menu, Menu_Drawn2, "&Checked item",
+        "check/uncheck me!", wxITEM_CHECK);
     drawn_menu->Append(pItem);
     drawn_menu->Check(Menu_Drawn2, true);
 
-    pItem = new wxMenuItem(drawn_menu, Menu_Drawn3, wxT("&Radio item"),
-        wxT("check/uncheck me!"), wxITEM_RADIO);
+    pItem = new wxMenuItem(drawn_menu, Menu_Drawn3, "&Radio item",
+        "check/uncheck me!", wxITEM_RADIO);
     drawn_menu->Append(pItem);
 
     drawn_menu->AppendSeparator();
 
-    pItem = new wxMenuItem(drawn_menu, Menu_Drawn4, wxT("&Disabled item\tCtrl+RatherLongAccel"),
-        wxT("disabled item"));
+    pItem = new wxMenuItem(drawn_menu, Menu_Drawn4, "&Disabled item\tCtrl+RatherLongAccel",
+        "disabled item");
     pItem->Enable(false);
     drawn_menu->Append(pItem);
 
-    pItem = new wxMenuItem(drawn_menu, Menu_Drawn5, wxT("&Other\tCtrl+O"), wxT("other item"));
+    pItem = new wxMenuItem(drawn_menu, Menu_Drawn5, "&Other\tCtrl+O", "other item");
     pItem->SetTextColour(*wxRED);
     drawn_menu->Append(pItem);
 
     wxMenu* native_menu = new wxMenu;
-    pItem = new wxMenuItem(native_menu, Menu_Native1, wxT("&Menu item\tCtrl+K"));
+    pItem = new wxMenuItem(native_menu, Menu_Native1, "&Menu item\tCtrl+K");
     native_menu->Append(pItem);
 
     native_menu->AppendSeparator();
 
-    pItem = new wxMenuItem(native_menu, Menu_Native2, wxT("&Checked item"),
-        wxT("check/uncheck me!"), wxITEM_CHECK);
+    pItem = new wxMenuItem(native_menu, Menu_Native2, "&Checked item",
+        "check/uncheck me!", wxITEM_CHECK);
     native_menu->Append(pItem);
     native_menu->Check(Menu_Native2, true);
 
-    pItem = new wxMenuItem(native_menu, Menu_Native3, wxT("&Radio item"),
-        wxT("check/uncheck me!"), wxITEM_RADIO);
+    pItem = new wxMenuItem(native_menu, Menu_Native3, "&Radio item",
+        "check/uncheck me!", wxITEM_RADIO);
     native_menu->Append(pItem);
 
     native_menu->AppendSeparator();
 
-    pItem = new wxMenuItem(native_menu, Menu_Native4, wxT("&Disabled item\tCtrl+RatherLongAccel"),
-        wxT("disabled item"));
+    pItem = new wxMenuItem(native_menu, Menu_Native4, "&Disabled item\tCtrl+RatherLongAccel",
+        "disabled item");
     pItem->Enable(false);
     native_menu->Append(pItem);
 
-    pItem = new wxMenuItem(native_menu, Menu_Native5, wxT("&Other\tCtrl+O"), wxT("other item"));
+    pItem = new wxMenuItem(native_menu, Menu_Native5, "&Other\tCtrl+O", "other item");
     native_menu->Append(pItem);
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
-    menu_bar->Append(file_menu, wxT("&File"));
-    menu_bar->Append(drawn_menu, wxT("&Drawn"));
-    menu_bar->Append(native_menu, wxT("&Native"));
+    menu_bar->Append(file_menu, "&File");
+    menu_bar->Append(drawn_menu, "&Drawn");
+    menu_bar->Append(native_menu, "&Native");
     SetMenuBar(menu_bar);
 }
 
@@ -270,16 +270,16 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxString& title,
     const int widths[] = { -1, 60 };
     CreateStatusBar(2);
     SetStatusWidths(2, widths);
-    SetStatusText(wxT("no selection"), 0);
+    SetStatusText("no selection", 0);
 #endif // wxUSE_STATUSBAR
 
     // make a panel with some controls
     wxPanel *pPanel = new wxPanel(this);
 
     // check list box
-    static const wxChar* aszChoices[] = { wxT("Hello"), wxT("world"), wxT("and"),
-                                          wxT("goodbye"), wxT("cruel"), wxT("world"),
-                                          wxT("-------"), wxT("owner-drawn"), wxT("listbox") };
+    static const wxString aszChoices[] = { "Hello", "world", "and",
+                                          "goodbye", "cruel", "world",
+                                          "-------", "owner-drawn", "listbox" };
 
     wxString *astrChoices = new wxString[WXSIZEOF(aszChoices)];
     unsigned int ui;
@@ -308,9 +308,9 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, const wxString& title,
     m_pListBox->Check(2);
 
     // normal (but owner-drawn) listbox
-    static const wxChar* aszColors[] = { wxT("Red"), wxT("Blue"), wxT("Pink"),
-                                         wxT("Green"), wxT("Yellow"),
-                                         wxT("Black"), wxT("Violet")  };
+    static const wxString aszColors[] = { "Red", "Blue", "Pink",
+                                         "Green", "Yellow",
+                                         "Black", "Violet"  };
 
     astrChoices = new wxString[WXSIZEOF(aszColors)];
 
@@ -376,8 +376,8 @@ void OwnerDrawnFrame::OnMenuToggle(wxCommandEvent& WXUNUSED(event))
 void OwnerDrawnFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageDialog dialog(this,
-                           wxT("Demo of owner-drawn controls\n"),
-                           wxT("About wxOwnerDrawn"), wxYES_NO | wxCANCEL);
+                           "Demo of owner-drawn controls\n",
+                           "About wxOwnerDrawn", wxYES_NO | wxCANCEL);
     dialog.ShowModal();
 }
 
@@ -386,8 +386,8 @@ void OwnerDrawnFrame::OnListboxSelect(wxCommandEvent& event)
 #if wxUSE_STATUSBAR
     wxString strSelection;
     unsigned int nSel = event.GetSelection();
-    strSelection.Printf(wxT("item %d selected (%schecked)"), nSel,
-                        m_pListBox->IsChecked(nSel) ? wxT("") : wxT("not "));
+    strSelection.Printf("item %d selected (%schecked)", nSel,
+                        m_pListBox->IsChecked(nSel) ? "" : "not ");
     SetStatusText(strSelection);
 #else
     wxUnusedVar(event);
@@ -397,7 +397,7 @@ void OwnerDrawnFrame::OnListboxSelect(wxCommandEvent& event)
 void OwnerDrawnFrame::OnListboxDblClick(wxCommandEvent& WXUNUSED(event))
 {
     wxString strSelection;
-    strSelection.Printf(wxT("item %d double clicked"),
+    strSelection.Printf("item %d double clicked",
                         m_pListBox->GetSelection());
     wxMessageDialog dialog(this, strSelection);
     dialog.ShowModal();
@@ -408,8 +408,8 @@ void OwnerDrawnFrame::OnCheckboxToggle(wxCommandEvent& event)
 #if wxUSE_STATUSBAR
     wxString strSelection;
     unsigned int nItem = event.GetInt();
-    strSelection.Printf(wxT("item %d was %schecked"), nItem,
-                        m_pListBox->IsChecked(nItem) ? wxT("") : wxT("un"));
+    strSelection.Printf("item %d was %schecked", nItem,
+                        m_pListBox->IsChecked(nItem) ? "" : "un");
     SetStatusText(strSelection);
 #else
     wxUnusedVar(event);

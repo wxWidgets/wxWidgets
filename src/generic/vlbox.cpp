@@ -79,11 +79,6 @@ bool wxVListBox::Create(wxWindow *parent,
                         long style,
                         const wxString& name)
 {
-#ifdef __WXMSW__
-    if ( (style & wxBORDER_MASK) == wxDEFAULT )
-        style |= wxBORDER_THEME;
-#endif
-
     style |= wxWANTS_CHARS | wxFULL_REPAINT_ON_RESIZE;
     if ( !wxVScrolledWindow::Create(parent, id, pos, size, style, name) )
         return false;
@@ -100,7 +95,7 @@ bool wxVListBox::Create(wxWindow *parent,
     m_colBgSel = wxNullColour;
 
     // flicker-free drawing requires this
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     return true;
 }

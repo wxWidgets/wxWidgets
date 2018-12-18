@@ -79,7 +79,7 @@ WX_DEFINE_EXPORTED_ARRAY_PTR(wxTreeItemIdValue, wxArrayTreeItemIdsBase);
 // this is a wrapper around the array class defined above which allow to wok
 // with values of natural wxTreeItemId type instead of using wxTreeItemIdValue
 // and does it without any loss of efficiency
-class WXDLLIMPEXP_CORE wxArrayTreeItemIds : public wxArrayTreeItemIdsBase
+class wxArrayTreeItemIds : public wxArrayTreeItemIdsBase
 {
 public:
     void Add(const wxTreeItemId& id)

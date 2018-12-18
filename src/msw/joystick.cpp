@@ -37,7 +37,111 @@
 
 #include <regstr.h>
 
+
+enum {
+    wxJS_AXIS_X = 0,
+    wxJS_AXIS_Y,
+    wxJS_AXIS_Z,
+    wxJS_AXIS_RUDDER,
+    wxJS_AXIS_U,
+    wxJS_AXIS_V,
+
+    wxJS_AXIS_MAX = 32767,
+    wxJS_AXIS_MIN = -32767,
+    wxJS_MAX_AXES = 6,      // WinMM supports up to 6 axes.
+    wxJS_MAX_BUTTONS = 32,  // WinMM supports up to 32 buttons.
+};
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject);
+
+////////////////////////////////////////////////////////////////////////////
+// Background thread for reading the joystick device
+////////////////////////////////////////////////////////////////////////////
+
+class wxJoystickThread : public wxThread
+{
+public:
+    explicit wxJoystickThread(int joystick);
+    void* Entry() wxOVERRIDE;
+    void SetPolling(wxWindow* win, int pollingFreq)
+    {
+        m_catchwin = win;
+        m_polling = pollingFreq;
+    }
+
+
+private:
+    void      SendEvent(wxEventType type, long ts, int change = 0);
+    int       m_joystick;
+    int       m_buttons;
+    wxWindow* m_catchwin;
+    int       m_polling;
+    JOYINFO   m_joyInfo;
+    JOYINFO   m_lastJoyInfo;
+};
+
+
+wxJoystickThread::wxJoystickThread(int joystick)
+    : m_joystick(joystick),
+      m_buttons(0),
+      m_catchwin(NULL),
+      m_polling(0),
+      m_joyInfo(),
+      m_lastJoyInfo()
+{
+}
+
+void wxJoystickThread::SendEvent(wxEventType type, long ts, int change)
+{
+    wxJoystickEvent joystickEvent(type, (int)m_buttons, m_joystick, change);
+
+    joystickEvent.SetTimestamp(ts);
+    joystickEvent.SetPosition(wxPoint( (int)m_joyInfo.wXpos, (int)m_joyInfo.wYpos) );
+    joystickEvent.SetZPosition( (int)m_joyInfo.wZpos );
+    joystickEvent.SetEventObject(m_catchwin);
+
+    if (m_catchwin)
+        m_catchwin->GetEventHandler()->ProcessThreadEvent(joystickEvent);
+}
+
+void* wxJoystickThread::Entry()
+{
+    joyGetPos(m_joystick, &m_lastJoyInfo);
+
+    while (!TestDestroy())
+    {
+        Sleep(m_polling);
+        long ts = GetTickCount();
+
+        joyGetPos(m_joystick, &m_joyInfo);
+        m_buttons = m_joyInfo.wButtons;
+        UINT delta = m_buttons ^ m_lastJoyInfo.wButtons;
+        UINT deltaUp = delta & !m_buttons;
+        UINT deltaDown = delta & m_buttons;
+
+        // Use count trailing zeros to determine which button changed.
+        // Was using JOYINFOEX.dwButtons, because the docs state this is
+        // "Current button number that is pressed.", but it turns out
+        // it is the *total* number of buttons pressed.
+        if (deltaUp)
+            SendEvent(wxEVT_JOY_BUTTON_UP, ts, deltaUp);
+        if (deltaDown)
+            SendEvent(wxEVT_JOY_BUTTON_DOWN, ts, deltaDown);
+
+        if ((m_joyInfo.wXpos != m_lastJoyInfo.wXpos) ||
+            (m_joyInfo.wYpos != m_lastJoyInfo.wYpos) ||
+            (m_joyInfo.wZpos != m_lastJoyInfo.wZpos)   )
+        {
+            SendEvent(wxEVT_JOY_MOVE, ts);
+        }
+
+        m_lastJoyInfo = m_joyInfo;
+    }
+
+    return NULL;
+}
+
+
 
 // Attributes
 ////////////////////////////////////////////////////////////////////////////
@@ -62,6 +166,8 @@ wxJoystick::wxJoystick(int joystick)
             {
                 /* Found the one we want, store actual OS id and return */
                 m_joystick = i;
+                m_thread = new wxJoystickThread(m_joystick);
+                m_thread->Run();
                 return;
             }
             joystick --;
@@ -72,6 +178,15 @@ wxJoystick::wxJoystick(int joystick)
     m_joystick = 0;
     return;
 }
+
+
+wxJoystick::~wxJoystick()
+{
+    ReleaseCapture();
+    if (m_thread)
+        m_thread->Delete();  // It's detached so it will delete itself
+}
+
 
 wxPoint wxJoystick::GetPosition() const
 {
@@ -256,7 +371,7 @@ int wxJoystick::GetMovementThreshold() const
     MMRESULT res = joyGetThreshold(m_joystick, & thresh);
     if (res == JOYERR_NOERROR )
     {
-        return thresh;
+        return (int)thresh;
     }
     else
         return 0;
@@ -264,8 +379,7 @@ int wxJoystick::GetMovementThreshold() const
 
 void wxJoystick::SetMovementThreshold(int threshold)
 {
-    UINT thresh = threshold;
-    joySetThreshold(m_joystick, thresh);
+    joySetThreshold(m_joystick, (UINT)threshold);
 }
 
 // Capabilities
@@ -332,13 +446,22 @@ wxString wxJoystick::GetProductName() const
     wxRegKey key1(wxString::Format(wxT("HKEY_LOCAL_MACHINE\\%s\\%s\\%s"),
                    REGSTR_PATH_JOYCONFIG, joyCaps.szRegKey, REGSTR_KEY_JOYCURR));
 
-    key1.QueryValue(wxString::Format(wxT("Joystick%d%s"),
-                                     m_joystick + 1, REGSTR_VAL_JOYOEMNAME),
-                    str);
+    if ( key1.Exists() )
+    {
+        key1.QueryValue(wxString::Format(wxT("Joystick%d%s"),
+                                        m_joystick + 1, REGSTR_VAL_JOYOEMNAME),
+                        str);
+    }
 
-    wxRegKey key2(wxString::Format(wxT("HKEY_LOCAL_MACHINE\\%s\\%s"),
-                                        REGSTR_PATH_JOYOEM, str.c_str()));
-    key2.QueryValue(REGSTR_VAL_JOYOEMNAME, str);
+    if ( !str.empty() )
+    {
+        wxRegKey key2(wxString::Format(wxT("HKEY_LOCAL_MACHINE\\%s\\%s"),
+                                       REGSTR_PATH_JOYOEM, str.c_str()));
+        if ( key2.Exists() )
+        {
+            key2.QueryValue(REGSTR_VAL_JOYOEMNAME, str);
+        }
+    }
 #endif
     return str;
 }
@@ -569,26 +692,28 @@ bool wxJoystick::HasPOVCTS() const
         return ((joyCaps.wCaps & JOYCAPS_POVCTS) == JOYCAPS_POVCTS);
 }
 
+////////////////////////////////////////////////////////////////////////////
 // Operations
 ////////////////////////////////////////////////////////////////////////////
 
 bool wxJoystick::SetCapture(wxWindow* win, int pollingFreq)
 {
-#ifdef __WXMSW__
-    BOOL changed = (pollingFreq == 0);
-    MMRESULT res = joySetCapture((HWND) win->GetHWND(), m_joystick, pollingFreq, changed);
-    return (res == JOYERR_NOERROR);
-#else
-    wxUnusedVar(win);
-    wxUnusedVar(pollingFreq);
+    if (m_thread)
+    {
+        m_thread->SetPolling(win, pollingFreq);
+        return true;
+    }
     return false;
-#endif
 }
 
 bool wxJoystick::ReleaseCapture()
 {
-    MMRESULT res = joyReleaseCapture(m_joystick);
-    return (res == JOYERR_NOERROR);
+    if (m_thread)
+    {
+        m_thread->SetPolling(NULL, 0);
+        return true;
+    }
+    return false;
 }
 
 #endif // wxUSE_JOYSTICK

@@ -163,12 +163,12 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
         height = *max_y;
     }
 
-    if (DrawIt && wxColourDisplay())
+    if (DrawIt)
     {
         dc->SetBrush(*wxLIGHT_GREY_BRUSH);
         dc->SetPen(*wxGREY_PEN);
         dc->DrawRectangle(0, 0, width, height);
-        dc->SetBackgroundMode(wxTRANSPARENT);
+        dc->SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     }
 
     // See what ACTUAL char height is
@@ -347,20 +347,18 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
     if (DrawIt)
     {
         // Draw dark grey thick border
-        if (wxColourDisplay())
-        {
-            dc->SetBrush(*wxGREY_BRUSH);
-            dc->SetPen(*wxGREY_PEN);
+        dc->SetBrush(*wxGREY_BRUSH);
+        dc->SetPen(*wxGREY_PEN);
 
-            // Left side
-            dc->DrawRectangle(0, 0, THIN_LINE_BORDER, height);
-            // Top side
-            dc->DrawRectangle(THIN_LINE_BORDER, 0, width-THIN_LINE_BORDER, THIN_LINE_BORDER);
-            // Right side
-            dc->DrawRectangle(width-THIN_LINE_BORDER, THIN_LINE_BORDER, width, height-THIN_LINE_BORDER);
-            // Bottom side
-            dc->DrawRectangle(THIN_LINE_BORDER, height-THIN_LINE_BORDER, width-THIN_LINE_BORDER, height);
-        }
+        // Left side
+        dc->DrawRectangle(0, 0, THIN_LINE_BORDER, height);
+        // Top side
+        dc->DrawRectangle(THIN_LINE_BORDER, 0, width-THIN_LINE_BORDER, THIN_LINE_BORDER);
+        // Right side
+        dc->DrawRectangle(width-THIN_LINE_BORDER, THIN_LINE_BORDER, width, height-THIN_LINE_BORDER);
+        // Bottom side
+        dc->DrawRectangle(THIN_LINE_BORDER, height-THIN_LINE_BORDER, width-THIN_LINE_BORDER, height);
+
         // Draw border
         // Have grey background, plus 3-d border -
         // One black rectangle.
@@ -376,10 +374,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
 
         // Right and bottom white lines - 'grey' (black!) if
         // we're running on a mono display.
-        if (wxColourDisplay())
-            dc->SetPen(*wxWHITE_PEN);
-        else
-            dc->SetPen(*wxBLACK_PEN);
+        dc->SetPen(*wxWHITE_PEN);
 
         dc->DrawLine(width-THICK_LINE_BORDER, THICK_LINE_BORDER,
                      width-THICK_LINE_BORDER, height-THICK_LINE_BORDER);
@@ -691,6 +686,8 @@ void MyCanvas::OnChar(wxKeyEvent& event)
 
         case WXK_ESCAPE:
             TheMainWindow->Close(true);
+            break;
+
         default:
             break;
     }

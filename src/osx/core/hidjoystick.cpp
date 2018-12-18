@@ -872,7 +872,7 @@ void* wxJoystickThread::Entry()
                 wxevent.SetEventType(wxEVT_JOY_BUTTON_UP);
             }
 
-            wxevent.SetButtonChange(nIndex+1);
+            wxevent.SetButtonChange(1 << nIndex);
         }
         else if (nIndex == wxJS_AXIS_X)
         {

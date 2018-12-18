@@ -31,6 +31,8 @@
 
 #include "wx/display.h"
 
+#include "wx/private/tlwgeom.h"
+
 // ----------------------------------------------------------------------------
 // event table
 // ----------------------------------------------------------------------------
@@ -247,8 +249,7 @@ void wxTopLevelWindowBase::DoCentre(int dir)
     // we need the display rect anyhow so store it first: notice that we should
     // be centered on the same display as our parent window, the display of
     // this window itself is not really defined yet
-    int nDisplay = wxDisplay::GetFromWindow(GetParent() ? GetParent() : this);
-    wxDisplay dpy(nDisplay == wxNOT_FOUND ? 0 : nDisplay);
+    wxDisplay dpy(GetParent() ? GetParent() : this);
     const wxRect rectDisplay(dpy.GetClientArea());
 
     // what should we centre this window on?
@@ -308,6 +309,28 @@ void wxTopLevelWindowBase::DoCentre(int dir)
 
     // -1 could be valid coordinate here if there are several displays
     SetSize(rect, wxSIZE_ALLOW_MINUS_ONE);
+}
+
+// ----------------------------------------------------------------------------
+// Saving/restoring geometry
+// ----------------------------------------------------------------------------
+
+bool wxTopLevelWindowBase::SaveGeometry(const GeometrySerializer& ser) const
+{
+    wxTLWGeometry geom;
+    if ( !geom.GetFrom(static_cast<const wxTopLevelWindow*>(this)) )
+        return false;
+
+    return geom.Save(ser);
+}
+
+bool wxTopLevelWindowBase::RestoreToGeometry(GeometrySerializer& ser)
+{
+    wxTLWGeometry geom;
+    if ( !geom.Restore(ser) )
+        return false;
+
+    return geom.ApplyTo(static_cast<wxTopLevelWindow*>(this));
 }
 
 // ----------------------------------------------------------------------------

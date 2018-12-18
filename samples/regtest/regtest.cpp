@@ -42,7 +42,7 @@
 class RegApp : public wxApp
 {
 public:
-    bool OnInit();
+    bool OnInit() wxOVERRIDE;
 };
 
 // ----------------------------------------------------------------------------
@@ -135,7 +135,7 @@ private:
         void Refresh();
         bool DeleteChild(TreeNode *child);
         void DestroyChildren();
-        const wxChar *FullName() const;
+        const wxString FullName() const;
         void SetRegistryView(wxRegKey::WOW64ViewMode viewMode);
 
         // get the associated key: make sure the pointer is !NULL
@@ -186,7 +186,7 @@ class RegFrame : public wxFrame
 {
 public:
     // ctor & dtor
-    RegFrame(wxFrame *parent, const wxChar *title, int x, int y, int w, int h);
+    RegFrame(wxFrame *parent, const wxString& title, int x, int y, int w, int h);
     virtual ~RegFrame();
 
     // callbacks
@@ -304,38 +304,38 @@ wxEND_EVENT_TABLE()
 wxMenu *CreateRegistryMenu()
 {
     wxMenu *pMenuNew = new wxMenu;
-    pMenuNew->Append(Menu_NewKey,    wxT("&Key"),          wxT("Create a new key"));
+    pMenuNew->Append(Menu_NewKey,    "&Key",          "Create a new key");
     pMenuNew->AppendSeparator();
-    pMenuNew->Append(Menu_NewText,   wxT("&Text value"),   wxT("Create a new text value"));
-    pMenuNew->Append(Menu_NewBinary, wxT("&Binary value"), wxT("Create a new binary value"));
+    pMenuNew->Append(Menu_NewText,   "&Text value",   "Create a new text value");
+    pMenuNew->Append(Menu_NewBinary, "&Binary value", "Create a new binary value");
 
     wxMenu *pMenuView = new wxMenu;
     pMenuView->AppendRadioItem(
         Menu_ViewDefault,
-        wxT("&Default"),
-        wxT("Default registry view for the program environment."));
+        "&Default",
+        "Default registry view for the program environment.");
     pMenuView->AppendRadioItem(
         Menu_View32,
-        wxT("32-bit Registry"),
-        wxT("View 32-bit registry."));
+        "32-bit Registry",
+        "View 32-bit registry.");
     pMenuView->AppendRadioItem(
         Menu_View64,
-        wxT("64-bit Registry"),
-        wxT("View 64-bit registry."));
+        "64-bit Registry",
+        "View 64-bit registry.");
 
     wxMenu *pMenuReg = new wxMenu;
-    pMenuReg->Append(Menu_New, wxT("&New"), pMenuNew);
-    pMenuReg->Append(Menu_Delete,   wxT("&Delete..."), wxT("Delete selected key/value"));
+    pMenuReg->Append(Menu_New, "&New", pMenuNew);
+    pMenuReg->Append(Menu_Delete,   "&Delete...", "Delete selected key/value");
     pMenuReg->AppendSeparator();
-    pMenuReg->Append(Menu_GoTo,     wxT("&Go to...\tCtrl-G"),    wxT("Go to registry key"));
-    pMenuReg->Append(Menu_Expand,   wxT("&Expand"),    wxT("Expand current key"));
-    pMenuReg->Append(Menu_Collapse, wxT("&Collapse"),  wxT("Collapse current key"));
-    pMenuReg->Append(Menu_Toggle,   wxT("&Toggle"),    wxT("Toggle current key"));
+    pMenuReg->Append(Menu_GoTo,     "&Go to...\tCtrl-G",    "Go to registry key");
+    pMenuReg->Append(Menu_Expand,   "&Expand",    "Expand current key");
+    pMenuReg->Append(Menu_Collapse, "&Collapse",  "Collapse current key");
+    pMenuReg->Append(Menu_Toggle,   "&Toggle",    "Toggle current key");
     pMenuReg->AppendSeparator();
-    pMenuReg->Append(Menu_Refresh,  wxT("&Refresh"),   wxT("Refresh the subtree"));
-    pMenuReg->Append(Menu_View,     wxT("&View"),      pMenuView);
+    pMenuReg->Append(Menu_Refresh,  "&Refresh",   "Refresh the subtree");
+    pMenuReg->Append(Menu_View,     "&View",      pMenuView);
     pMenuReg->AppendSeparator();
-    pMenuReg->Append(Menu_Info,     wxT("&Properties"),wxT("Information about current selection"));
+    pMenuReg->Append(Menu_Info,     "&Properties","Information about current selection");
 
     return pMenuReg;
 }
@@ -352,7 +352,7 @@ bool RegApp::OnInit()
         return false;
 
     // create the main frame window and show it
-    RegFrame *frame = new RegFrame(NULL, wxT("wxRegTest"), 50, 50, 600, 350);
+    RegFrame *frame = new RegFrame(NULL, "wxRegTest", 50, 50, 600, 350);
     frame->Show(true);
 
     return true;
@@ -362,7 +362,7 @@ bool RegApp::OnInit()
 // RegFrame
 // ----------------------------------------------------------------------------
 
-RegFrame::RegFrame(wxFrame *parent, const wxChar *title, int x, int y, int w, int h)
+RegFrame::RegFrame(wxFrame *parent, const wxString& title, int x, int y, int w, int h)
         : wxFrame(parent, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
     // this reduces flicker effects
@@ -370,20 +370,20 @@ RegFrame::RegFrame(wxFrame *parent, const wxChar *title, int x, int y, int w, in
 
     // set the icon
     // ------------
-    SetIcon(wxIcon(wxT("app_icon")));
+    SetIcon(wxIcon("app_icon"));
 
     // create menu
     // -----------
     wxMenu *pMenuFile = new wxMenu;
-    pMenuFile->Append(Menu_Test, wxT("Te&st"), wxT("Test key creation"));
+    pMenuFile->Append(Menu_Test, "Te&st", "Test key creation");
     pMenuFile->AppendSeparator();
-    pMenuFile->Append(Menu_About, wxT("&About"), wxT("Show an extraordinarily beautiful dialog"));
+    pMenuFile->Append(Menu_About, "&About", "Show an extraordinarily beautiful dialog");
     pMenuFile->AppendSeparator();
-    pMenuFile->Append(Menu_Quit,  wxT("E&xit"), wxT("Quit this program"));
+    pMenuFile->Append(Menu_Quit,  "E&xit", "Quit this program");
 
     wxMenuBar *pMenu = new wxMenuBar;
-    pMenu->Append(pMenuFile, wxT("&File"));
-    pMenu->Append(CreateRegistryMenu(),  wxT("&Registry"));
+    pMenu->Append(pMenuFile, "&File");
+    pMenu->Append(CreateRegistryMenu(),  "&Registry");
     SetMenuBar(pMenu);
 
 #if DO_REGTEST
@@ -415,9 +415,9 @@ void RegFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void RegFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageDialog dialog(this,
-        wxT("wxRegistry sample\n")
-        wxT("(c) 1998, 2000 Vadim Zeitlin"),
-        wxT("About wxRegTest"), wxOK);
+        "wxRegistry sample\n"
+        "(c) 1998, 2000 Vadim Zeitlin",
+        "About wxRegTest", wxOK);
 
     dialog.ShowModal();
 }
@@ -431,11 +431,11 @@ void RegFrame::OnTest(wxCommandEvent& WXUNUSED(event))
 
 void RegFrame::OnGoTo(wxCommandEvent& WXUNUSED(event))
 {
-    static wxString s_location = wxT("HKEY_CURRENT_USER\\Software\\wxWidgets");
+    static wxString s_location = "HKEY_CURRENT_USER\\Software\\wxWidgets";
 
     wxString location = wxGetTextFromUser(
-        wxT("Enter the location to go to:"),
-        wxT("wxRegTest question"),
+        "Enter the location to go to:",
+        "wxRegTest question",
         s_location,
         this);
 
@@ -489,7 +489,7 @@ void RegFrame::OnNewKey(wxCommandEvent& WXUNUSED(event))
     if ( m_treeCtrl->IsKeySelected() )
     {
         m_treeCtrl->CreateNewKey(
-            wxGetTextFromUser(wxT("Enter the name of the new key")));
+            wxGetTextFromUser("Enter the name of the new key"));
     }
 #endif
 }
@@ -500,7 +500,7 @@ void RegFrame::OnNewText(wxCommandEvent& WXUNUSED(event))
     if ( m_treeCtrl->IsKeySelected() )
     {
         m_treeCtrl->CreateNewTextValue(
-            wxGetTextFromUser(wxT("Enter the name for the new text value")));
+            wxGetTextFromUser("Enter the name for the new text value"));
     }
 #endif
 }
@@ -511,7 +511,7 @@ void RegFrame::OnNewBinary(wxCommandEvent& WXUNUSED(event))
     if ( m_treeCtrl->IsKeySelected() )
     {
         m_treeCtrl->CreateNewBinaryValue(
-            wxGetTextFromUser(wxT("Enter the name for the new binary value")));
+            wxGetTextFromUser("Enter the name for the new binary value"));
     }
 #endif
 }
@@ -556,8 +556,8 @@ void RegFrame::OnViewChange(wxCommandEvent& event)
 RegImageList::RegImageList() : wxImageList(16, 16, true)
 {
     // should be in sync with enum RegImageList::RegIcon
-    static const wxChar *aszIcons[] = { wxT("key1"),wxT("key2"),wxT("key3"),wxT("value1"),wxT("value2") };
-    wxString str = wxT("icon_");
+    static const wxString aszIcons[] = { "key1","key2","key3","value1","value2" };
+    wxString str = "icon_";
     for ( unsigned int n = 0; n < WXSIZEOF(aszIcons); n++ )
     {
         Add(wxIcon(str + aszIcons[n], wxBITMAP_TYPE_ICO_RESOURCE));
@@ -597,7 +597,7 @@ RegTreeCtrl::TreeNode *RegTreeCtrl::InsertNewTreeNode(
         pNewNode->m_id  = AddRoot(strName);
     }
 
-    wxASSERT_MSG( pNewNode->m_id, wxT("can't create tree control item!"));
+    wxASSERT_MSG( pNewNode->m_id, "can't create tree control item!");
 
     // save the pointer in the item
     SetItemData(pNewNode->m_id, pNewNode);
@@ -643,7 +643,7 @@ RegTreeCtrl::RegTreeCtrl(wxWindow *parent, wxWindowID id)
     m_pRoot =
         InsertNewTreeNode(
             NULL,
-            wxT("Registry Root"),
+            "Registry Root",
             RegImageList::Root,
             NULL,
             m_viewMode);
@@ -682,7 +682,7 @@ void RegTreeCtrl::OnIdle(wxIdleEvent& WXUNUSED(event))
     if ( m_restoreStatus )
     {
         // restore it after OnItemExpanding()
-        wxLogStatus(wxT("Ok"));
+        wxLogStatus("Ok");
         wxSetCursor(*wxSTANDARD_CURSOR);
 
         m_restoreStatus = false;
@@ -714,40 +714,40 @@ void RegTreeCtrl::OnMenuTest()
     wxTreeItemId lId = GetSelection();
     TreeNode *pNode = (TreeNode *)GetItemData(lId);
 
-    wxCHECK_RET( pNode != NULL, wxT("tree item without data?") );
+    wxCHECK_RET( pNode != NULL, "tree item without data?" );
 
     if ( pNode->IsRoot() )
     {
-        wxLogError(wxT("Can't create a subkey under the root key."));
+        wxLogError("Can't create a subkey under the root key.");
         return;
     }
 
     if ( !pNode->IsKey() )
     {
-        wxLogError(wxT("Can't create a subkey under a value!"));
+        wxLogError("Can't create a subkey under a value!");
         return;
     }
 
-    wxRegKey key1(pNode->Key(), wxT("key1"));
+    wxRegKey key1(pNode->Key(), "key1");
     if ( key1.Create() )
     {
-        wxRegKey key2a(key1, wxT("key2a")), key2b(key1, wxT("key2b"));
+        wxRegKey key2a(key1, "key2a"), key2b(key1, "key2b");
         if ( key2a.Create() && key2b.Create() )
         {
             // put some values under the newly created keys
-            key1.SetValue(wxT("first_term"), wxT("10"));
-            key1.SetValue(wxT("second_term"), wxT("7"));
-            key2a = wxT("this is the unnamed value");
-            key2b.SetValue(wxT("sum"), 17);
+            key1.SetValue("first_term", "10");
+            key1.SetValue("second_term", "7");
+            key2a = "this is the unnamed value";
+            key2b.SetValue("sum", 17);
 
             // refresh tree
             pNode->Refresh();
-            wxLogStatus(wxT("Test keys successfully added."));
+            wxLogStatus("Test keys successfully added.");
             return;
         }
     }
 
-    wxLogError(wxT("Creation of test keys failed."));
+    wxLogError("Creation of test keys failed.");
 }
 
 void RegTreeCtrl::OnChar(wxKeyEvent& event)
@@ -787,7 +787,7 @@ void RegTreeCtrl::OnItemExpanding(wxTreeEvent& event)
 
     // expansion might take some time
     wxSetCursor(*wxHOURGLASS_CURSOR);
-    wxLogStatus(wxT("Working..."));
+    wxLogStatus("Working...");
     wxYield();  // to give the status line a chance to refresh itself
     m_restoreStatus = true;   // some time later...
 
@@ -812,7 +812,7 @@ void RegTreeCtrl::OnBeginEdit(wxTreeEvent& event)
     TreeNode *pNode = GetNode(event);
     if ( pNode->IsRoot() || pNode->Parent()->IsRoot() )
     {
-        wxLogStatus(wxT("This registry key can't be renamed."));
+        wxLogStatus("This registry key can't be renamed.");
 
         event.Veto();
     }
@@ -844,8 +844,8 @@ void RegTreeCtrl::OnEndEdit(wxTreeEvent& event)
 
     if ( !ok )
     {
-        wxLogError(wxT("Failed to rename '%s' to '%s'."),
-            m_nameOld.c_str(), name.c_str());
+        wxLogError("Failed to rename '%s' to '%s'.",
+            m_nameOld, name);
     }
 #if 0   // MSW tree ctrl doesn't like this at all, it hangs
     else
@@ -862,13 +862,13 @@ void RegTreeCtrl::OnBeginDrag(wxTreeEvent& event)
     TreeNode *pNode = GetNode(event);
     if ( pNode->IsRoot() || pNode->Parent()->IsRoot() )
     {
-        wxLogStatus(wxT("This registry key can't be %s."),
-            m_copyOnDrop ? wxT("copied") : wxT("moved"));
+        wxLogStatus("This registry key can't be %s.",
+            m_copyOnDrop ? "copied" : "moved");
     }
     else
     {
-        wxLogStatus(wxT("%s item %s..."),
-            m_copyOnDrop ? wxT("Copying") : wxT("Moving"),
+        wxLogStatus("%s item %s...",
+            m_copyOnDrop ? "Copying" : "Moving",
             pNode->FullName());
 
         m_draggedItem = pNode;
@@ -879,7 +879,7 @@ void RegTreeCtrl::OnBeginDrag(wxTreeEvent& event)
 
 void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
 {
-    wxCHECK_RET( m_draggedItem, wxT("end drag without begin drag?") );
+    wxCHECK_RET( m_draggedItem, "end drag without begin drag?" );
 
     // clear the pointer anyhow
     TreeNode *src = m_draggedItem;
@@ -895,7 +895,7 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
 
     if ( !dst || dst->IsRoot() )
     {
-        wxLogError(wxT("Can't create a key here."));
+        wxLogError("Can't create a key here.");
 
         return;
     }
@@ -903,7 +903,7 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
     bool isKey = src->IsKey();
     if ( (isKey && (src == dst)) ||
          (!isKey && (dst->Parent() == src)) ) {
-        wxLogStatus(wxT("Can't copy something on itself"));
+        wxLogStatus("Can't copy something on itself");
 
         return;
     }
@@ -914,18 +914,18 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
     nameDst << wxString(dst->FullName()).AfterFirst('\\') << '\\'
             << wxString(src->FullName()).AfterLast('\\');
 
-    wxString verb = m_copyOnDrop ? wxT("copy") : wxT("move");
-    wxString what = isKey ? wxT("key") : wxT("value");
+    wxString verb = m_copyOnDrop ? "copy" : "move";
+    wxString what = isKey ? "key" : "value";
 
     if ( wxMessageBox(wxString::Format
                         (
-                         wxT("Do you really want to %s the %s %s to %s?"),
-                         verb.c_str(),
-                         what.c_str(),
-                         nameSrc.c_str(),
-                         nameDst.c_str()
+                         "Do you really want to %s the %s %s to %s?",
+                         verb,
+                         what,
+                         nameSrc,
+                         nameDst
                         ),
-                      wxT("RegTest Confirm"),
+                      "RegTest Confirm",
                       wxICON_QUESTION | wxYES_NO | wxCANCEL, this) != wxYES ) {
       return;
     }
@@ -938,7 +938,7 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
         ok = keyDst.Create(false);
         if ( !ok )
         {
-            wxLogError(wxT("Key '%s' already exists"), keyDst.GetName().c_str());
+            wxLogError("Key '%s' already exists", keyDst.GetName());
         }
         else
         {
@@ -968,8 +968,8 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
 
     if ( !ok )
     {
-        wxLogError(wxT("Failed to %s registry %s."),
-                   verb.c_str(), what.c_str());
+        wxLogError("Failed to %s registry %s.",
+                   verb, what);
     }
     else
     {
@@ -1009,7 +1009,7 @@ bool RegTreeCtrl::TreeNode::OnExpand()
 
     if ( !m_pKey->Open() )
     {
-        wxLogError(wxT("The key '%s' can't be opened."), FullName());
+        wxLogError("The key '%s' can't be opened.", FullName());
         return false;
     }
 
@@ -1043,10 +1043,10 @@ bool RegTreeCtrl::TreeNode::OnExpand()
     {
         wxString strItem;
         if (str.empty())
-            strItem = wxT("<default>");
+            strItem = "<default>";
         else
             strItem = str;
-        strItem += wxT(" = ");
+        strItem += " = ";
 
         // determine the appropriate icon
         RegImageList::Icon icon;
@@ -1074,8 +1074,7 @@ bool RegTreeCtrl::TreeNode::OnExpand()
             m_pKey->QueryValue(str, &l);
             strItem << l;
         }
-
-        // fall through
+        wxFALLTHROUGH;
 
         default:
             icon = RegImageList::BinaryValue;
@@ -1131,7 +1130,7 @@ bool RegTreeCtrl::TreeNode::DeleteChild(TreeNode *child)
 {
     int index = m_aChildren.Index(child);
     wxCHECK_MSG( index != wxNOT_FOUND, false,
-                 wxT("our child in tree should be in m_aChildren") );
+                 "our child in tree should be in m_aChildren" );
 
     m_aChildren.RemoveAt((size_t)index);
 
@@ -1177,20 +1176,20 @@ RegTreeCtrl::TreeNode::~TreeNode()
     delete m_pKey;
 }
 
-const wxChar *RegTreeCtrl::TreeNode::FullName() const
+const wxString RegTreeCtrl::TreeNode::FullName() const
 {
     static wxString s_strName;
 
     if ( IsRoot() )
     {
-        return wxT("Registry Root");
+        return "Registry Root";
     }
     else
     {
         // our own registry key might not (yet) exist or we might be a value,
         // so just use the parent's and concatenate
         s_strName = Parent()->FullName();
-        s_strName << wxT('\\') << m_strName;
+        s_strName << '\\' << m_strName;
 
         return s_strName.t_str();
     }
@@ -1212,7 +1211,7 @@ void RegTreeCtrl::TreeNode::SetRegistryView(wxRegKey::WOW64ViewMode viewMode)
 
 void RegTreeCtrl::GoTo(const wxString& location)
 {
-    wxStringTokenizer tk(location, wxT("\\"));
+    wxStringTokenizer tk(location, "\\");
 
     wxTreeItemId id = GetRootItem();
 
@@ -1255,7 +1254,7 @@ void RegTreeCtrl::GoTo(const wxString& location)
 
         if ( !id.IsOk() )
         {
-            wxLogError(wxT("No such key '%s'."), location.c_str());
+            wxLogError("No such key '%s'.", location);
 
             return;
         }
@@ -1272,28 +1271,28 @@ void RegTreeCtrl::DeleteSelected()
 
     if ( lParent == GetRootItem() )
     {
-        wxLogError(wxT("Can't delete root key."));
+        wxLogError("Can't delete root key.");
         return;
     }
 
     TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent),
              *pParent  = (TreeNode *)GetItemData(lParent);
 
-    wxCHECK_RET(pCurrent && pParent, wxT("either node or parent without data?"));
+    wxCHECK_RET(pCurrent && pParent, "either node or parent without data?");
 
     if ( pParent->IsRoot() )
     {
-        wxLogError(wxT("Can't delete standard key."));
+        wxLogError("Can't delete standard key.");
         return;
     }
 
-    wxString what = pCurrent->IsKey() ? wxT("key") : wxT("value");
+    wxString what = pCurrent->IsKey() ? "key" : "value";
     if ( wxMessageBox(wxString::Format
         (
-            wxT("Do you really want to delete this %s?"),
-            what.c_str()
+            "Do you really want to delete this %s?",
+            what
         ),
-        wxT("Confirmation"),
+        "Confirmation",
         wxICON_QUESTION | wxYES_NO | wxCANCEL, this) != wxYES )
     {
         return;
@@ -1307,13 +1306,13 @@ void RegTreeCtrl::CreateNewKey(const wxString& strName)
     wxTreeItemId lCurrent = GetSelection();
     TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent);
 
-    wxCHECK_RET( pCurrent != NULL, wxT("node without data?") );
+    wxCHECK_RET( pCurrent != NULL, "node without data?" );
 
     wxASSERT( pCurrent->IsKey() );  // check must have been done before
 
     if ( pCurrent->IsRoot() )
     {
-        wxLogError(wxT("Can't create a new key under the root key."));
+        wxLogError("Can't create a new key under the root key.");
         return;
     }
 
@@ -1327,13 +1326,13 @@ void RegTreeCtrl::CreateNewTextValue(const wxString& strName)
     wxTreeItemId lCurrent = GetSelection();
     TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent);
 
-    wxCHECK_RET( pCurrent != NULL, wxT("node without data?") );
+    wxCHECK_RET( pCurrent != NULL, "node without data?" );
 
     wxASSERT( pCurrent->IsKey() );  // check must have been done before
 
     if ( pCurrent->IsRoot() )
     {
-        wxLogError(wxT("Can't create a new value under the root key."));
+        wxLogError("Can't create a new value under the root key.");
         return;
     }
 
@@ -1346,13 +1345,13 @@ void RegTreeCtrl::CreateNewBinaryValue(const wxString& strName)
     wxTreeItemId lCurrent = GetSelection();
     TreeNode *pCurrent = (TreeNode *)GetItemData(lCurrent);
 
-    wxCHECK_RET( pCurrent != NULL, wxT("node without data?") );
+    wxCHECK_RET( pCurrent != NULL, "node without data?" );
 
     wxASSERT( pCurrent->IsKey() );  // check must have been done before
 
     if ( pCurrent->IsRoot() )
     {
-        wxLogError(wxT("Can't create a new value under the root key."));
+        wxLogError("Can't create a new value under the root key.");
         return;
     }
 
@@ -1374,7 +1373,7 @@ void RegTreeCtrl::ShowProperties()
 
     if ( !pCurrent || pCurrent->IsRoot() )
     {
-        wxLogStatus(wxT("No properties"));
+        wxLogStatus("No properties");
 
         return;
     }
@@ -1385,27 +1384,27 @@ void RegTreeCtrl::ShowProperties()
         size_t nSubKeys, nValues;
         if ( !key.GetKeyInfo(&nSubKeys, NULL, &nValues, NULL) )
         {
-            wxLogError(wxT("Couldn't get key info"));
+            wxLogError("Couldn't get key info");
         }
         else
         {
-            wxLogMessage(wxT("Key '%s' has %u subkeys and %u values."),
-                         key.GetName().c_str(), nSubKeys, nValues);
+            wxLogMessage("Key '%s' has %u subkeys and %u values.",
+                         key.GetName(), nSubKeys, nValues);
         }
     }
     else // it's a value
     {
         TreeNode *parent = pCurrent->Parent();
-        wxCHECK_RET( parent, wxT("reg value without key?") );
+        wxCHECK_RET( parent, "reg value without key?" );
 
         const wxRegKey& key = parent->Key();
         const wxChar *value = pCurrent->m_strName.c_str();
-        wxLogMessage(wxT("Value '%s' under the key '%s' is of type ")
-            wxT("%d (%s)."),
+        wxLogMessage("Value '%s' under the key '%s' is of type "
+            "%d (%s).",
             value,
-            parent->m_strName.c_str(),
+            parent->m_strName,
             key.GetValueType(value),
-            key.IsNumericValue(value) ? wxT("numeric") : wxT("string"));
+            key.IsNumericValue(value) ? "numeric" : "string");
 
     }
 }
@@ -1428,7 +1427,7 @@ void RegTreeCtrl::DoRefresh()
 
     TreeNode *pNode = (TreeNode *) GetItemData(lId);
 
-    wxCHECK_RET( pNode != NULL, wxT("tree item without data?") );
+    wxCHECK_RET( pNode != NULL, "tree item without data?" );
 
     pNode->Refresh();
 }

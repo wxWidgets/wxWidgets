@@ -14,6 +14,7 @@
 
 #include "wx/statusbr.h"
 #include "wx/platinfo.h"
+#include "wx/settings.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dc.h"
@@ -67,6 +68,13 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
     // normal system font is too tall for fitting into the standard height
     SetWindowVariant( wxWINDOW_VARIANT_SMALL );
 
+    InitColours();
+
+    return true;
+}
+
+void wxStatusBarMac::InitColours()
+{
 #if MAC_OS_X_VERSION_MIN_REQUIRED < 101000
     if ( !wxPlatformInfo::Get().CheckOSVersion(10, 10) )
     {
@@ -82,17 +90,46 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
     else
 #endif // MAC_OS_X_VERSION_MIN_REQUIRED < 101000
     {
-        // 10.10 Yosemite and newer:
-        m_textActive = wxColour(0x40, 0x40, 0x40);
-        m_textInactive = wxColour(0x4B, 0x4B, 0x4B);
-        m_bgActiveFrom = wxColour(0xE9, 0xE7, 0xEA);
-        m_bgActiveTo = wxColour(0xCD, 0xCB, 0xCE);
-        m_borderActive = wxColour(0xBA, 0xB8, 0xBB);
-        m_borderInactive = wxColour(0xC3, 0xC3, 0xC3);
-        SetBackgroundColour(wxColour(0xF4, 0xF4, 0xF4)); // inactive bg
-    }
+        if (!wxPlatformInfo::Get().CheckOSVersion(10, 14))
+        {
+            // 10.10 Yosemite to 10.13 :
+            m_textActive = wxColour(0x40, 0x40, 0x40);
+            m_textInactive = wxColour(0x4B, 0x4B, 0x4B);
+            m_bgActiveFrom = wxColour(0xE9, 0xE7, 0xEA);
+            m_bgActiveTo = wxColour(0xCD, 0xCB, 0xCE);
+            m_borderActive = wxColour(0xBA, 0xB8, 0xBB);
+            m_borderInactive = wxColour(0xC3, 0xC3, 0xC3);
+            SetBackgroundColour(wxColour(0xF4, 0xF4, 0xF4)); // inactive bg
+        }
+        else
+        {
+            // FIXME: None of this is correct and is only very loose
+            //        approximation. 10.14's dark mode uses dynamic colors that
+            //        use desktop tinting. The only correct way to render the
+            //        statusbar is to use windowBackgroundColor in a NSBox.
+            wxColour bg = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
+            m_textActive = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT);
+            m_textInactive = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
 
-    return true;
+            if ( bg.Red() < 128 )
+            {
+                // dark mode appearance
+                m_textActive = wxColour(0xB0, 0xB0, 0xB0);
+                m_bgActiveFrom = wxColour(0x32, 0x32, 0x34);
+                m_bgActiveTo = wxColour(0x29, 0x29, 0x2A);
+                m_borderActive = wxColour(0x00, 0x00, 0x00);
+                m_borderInactive = wxColour(0x00, 0x00, 0x00);
+            }
+            else
+            {
+                m_bgActiveFrom = wxColour(0xE9, 0xE7, 0xEA);
+                m_bgActiveTo = wxColour(0xCD, 0xCB, 0xCE);
+                m_borderActive = wxColour(0xBA, 0xB8, 0xBB);
+                m_borderInactive = wxColour(0xC3, 0xC3, 0xC3);
+            }
+            SetBackgroundColour(bg); // inactive bg
+        }
+    }
 }
 
 void wxStatusBarMac::DrawFieldText(wxDC& dc, const wxRect& rect, int i, int textHeight)
@@ -185,7 +222,7 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     if ( GetFont().IsOk() )
         dc.SetFont(GetFont());
-    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     // compute char height only once for all panes:
     int textHeight = dc.GetCharHeight();

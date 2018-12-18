@@ -244,7 +244,7 @@ public:
         if ( !m_data )
             return false;
 
-        wxStringToNumHashMap::const_iterator it = m_data->numValues.find(key);
+        const wxStringToNumHashMap::const_iterator it = m_data->numValues.find(key);
         if ( it == m_data->numValues.end() )
             return false;
 
@@ -258,7 +258,7 @@ public:
         if ( !m_data )
             return false;
 
-        wxStringToStringHashMap::const_iterator it = m_data->strValues.find(key);
+        const wxStringToStringHashMap::const_iterator it = m_data->strValues.find(key);
         if ( it == m_data->strValues.end() )
             return false;
 
@@ -379,7 +379,7 @@ public:
             return EnableThreadLogging(enable);
 #endif // wxUSE_THREADS
 
-        bool doLogOld = ms_doLog;
+        const bool doLogOld = ms_doLog;
         ms_doLog = enable;
         return doLogOld;
     }

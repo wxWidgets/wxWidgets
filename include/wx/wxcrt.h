@@ -257,7 +257,7 @@ inline size_t wxStrlcpy(char *dest, const char *src, size_t n)
     {
         if ( n-- > len )
             n = len;
-        wxCRT_StrncpyA(dest, src, n);
+        memcpy(dest, src, n);
         dest[n] = '\0';
     }
 
@@ -270,7 +270,7 @@ inline size_t wxStrlcpy(wchar_t *dest, const wchar_t *src, size_t n)
     {
         if ( n-- > len )
             n = len;
-        wxCRT_StrncpyW(dest, src, n);
+        memcpy(dest, src, n * sizeof(wchar_t));
         dest[n] = L'\0';
     }
 

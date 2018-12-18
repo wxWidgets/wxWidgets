@@ -68,7 +68,7 @@ void EnvTestCase::GetSet()
 void EnvTestCase::Path()
 {
     wxString contents;
-    
+
     CPPUNIT_ASSERT(wxGetEnv(wxT("PATH"), &contents));
     CPPUNIT_ASSERT(!contents.empty());
 }

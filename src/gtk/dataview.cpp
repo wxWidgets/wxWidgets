@@ -13,7 +13,7 @@
 
 #include "wx/dataview.h"
 
-#ifndef wxUSE_GENERICDATAVIEWCTRL
+#ifndef wxHAS_GENERIC_DATAVIEWCTRL
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -32,11 +32,9 @@
 #include "wx/gtk/dcclient.h"
 #endif
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 #include "wx/gtk/private/event.h"
 #include "wx/gtk/private/gdkconv.h"
-#include "wx/gtk/private/gtk2-compat.h"
 #include "wx/gtk/private/list.h"
 #include "wx/gtk/private/treeview.h"
 using namespace wxGTKImpl;
@@ -76,7 +74,8 @@ public:
     ~wxGtkTreePathList()
     {
         // Delete the list contents, wxGtkList will delete the list itself.
-        g_list_foreach(m_list, (GFunc)gtk_tree_path_free, NULL);
+        for (GList* p = m_list; p; p = p->next)
+            gtk_tree_path_free(static_cast<GtkTreePath*>(p->data));
     }
 };
 
@@ -2277,6 +2276,23 @@ void GtkApplyAttr(GtkCellRendererText *renderer, const wxDataViewItemAttr& attr)
         g_value_unset( &gvalue );
     }
 
+    if (attr.GetStrikethrough())
+    {
+        GValue gvalue = G_VALUE_INIT;
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, TRUE );
+        g_object_set_property( G_OBJECT(renderer), "strikethrough", &gvalue );
+        g_value_unset( &gvalue );
+    }
+    else
+    {
+        GValue gvalue = G_VALUE_INIT;
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, FALSE );
+        g_object_set_property( G_OBJECT(renderer), "strikethrough-set", &gvalue );
+        g_value_unset( &gvalue );
+    }
+
     if (attr.HasBackgroundColour())
     {
         GValue gvalue = G_VALUE_INIT;
@@ -2539,6 +2555,11 @@ wxDataViewToggleRenderer::wxDataViewToggleRenderer( const wxString &varianttype,
 
     SetMode(mode);
     SetAlignment(align);
+}
+
+void wxDataViewToggleRenderer::ShowAsRadio()
+{
+    gtk_cell_renderer_toggle_set_radio(GTK_CELL_RENDERER_TOGGLE(m_renderer), TRUE);
 }
 
 bool wxDataViewToggleRenderer::SetValue( const wxVariant &value )
@@ -3340,6 +3361,17 @@ void wxDataViewColumn::SetSortOrder( bool ascending )
     internal->SetSortOrder(order);
     internal->SetSortColumn(m_model_column);
     internal->SetDataViewSortColumn(this);
+}
+
+void wxDataViewColumn::UnsetAsSortKey()
+{
+    GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(m_column);
+
+    gtk_tree_view_column_set_sort_indicator( column, FALSE );
+
+    wxDataViewCtrlInternal* internal = m_owner->GtkGetInternal();
+    internal->SetSortColumn(-1);
+    internal->SetDataViewSortColumn(NULL);
 }
 
 bool wxDataViewColumn::IsSortOrderAscending() const
@@ -4429,10 +4461,11 @@ wxdataview_selection_changed_callback( GtkTreeSelection* WXUNUSED(selection), wx
 
 static void
 wxdataview_row_activated_callback( GtkTreeView* WXUNUSED(treeview), GtkTreePath *path,
-                                   GtkTreeViewColumn *WXUNUSED(column), wxDataViewCtrl *dv )
+                                   GtkTreeViewColumn *column, wxDataViewCtrl *dv )
 {
     wxDataViewItem item(dv->GTKPathToItem(path));
-    wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_ACTIVATED, dv, item);
+    wxDataViewEvent
+        event(wxEVT_DATAVIEW_ITEM_ACTIVATED, dv, dv->GTKColumnToWX(column), item);
     dv->HandleWindowEvent( event );
 }
 
@@ -4558,11 +4591,14 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
         // If the right click is on an item that isn't selected, select it, as is
         // commonly done. Do not do it if the item under mouse is already selected,
         // because it could be a part of multi-item selection.
-        GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(dv->GtkGetTreeView()));
-        if ( !gtk_tree_selection_path_is_selected(selection, path) )
+        if ( path )
         {
-            gtk_tree_selection_unselect_all(selection);
-            gtk_tree_selection_select_path(selection, path);
+            GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(dv->GtkGetTreeView()));
+            if ( !gtk_tree_selection_path_is_selected(selection, path) )
+            {
+                gtk_tree_selection_unselect_all(selection);
+                gtk_tree_selection_select_path(selection, path);
+            }
         }
 
         wxDataViewEvent
@@ -4585,7 +4621,7 @@ wxDataViewCtrl::~wxDataViewCtrl()
         GtkTreeViewColumn *col;
         gtk_tree_view_get_cursor(GTK_TREE_VIEW(m_treeview), NULL, &col);
 
-        wxDataViewColumn * const wxcol = FromGTKColumn(col);
+        wxDataViewColumn * const wxcol = GTKColumnToWX(col);
         if ( wxcol )
         {
             // This won't do anything if we're not editing it
@@ -4830,7 +4866,7 @@ unsigned int wxDataViewCtrl::GetColumnCount() const
     return m_cols.GetCount();
 }
 
-wxDataViewColumn* wxDataViewCtrl::FromGTKColumn(GtkTreeViewColumn *gtk_col) const
+wxDataViewColumn* wxDataViewCtrl::GTKColumnToWX(GtkTreeViewColumn *gtk_col) const
 {
     if ( !gtk_col )
         return NULL;
@@ -4854,7 +4890,7 @@ wxDataViewColumn* wxDataViewCtrl::GetColumn( unsigned int pos ) const
 {
     GtkTreeViewColumn *gtk_col = gtk_tree_view_get_column( GTK_TREE_VIEW(m_treeview), pos );
 
-    return FromGTKColumn(gtk_col);
+    return GTKColumnToWX(gtk_col);
 }
 
 bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
@@ -5026,7 +5062,7 @@ wxDataViewColumn *wxDataViewCtrl::GetCurrentColumn() const
 
     GtkTreeViewColumn *col;
     gtk_tree_view_get_cursor(GTK_TREE_VIEW(m_treeview), NULL, &col);
-    return FromGTKColumn(col);
+    return GTKColumnToWX(col);
 }
 
 void wxDataViewCtrl::EditItem(const wxDataViewItem& item, const wxDataViewColumn *column)
@@ -5219,11 +5255,11 @@ void wxDataViewCtrl::HitTest(const wxPoint& point,
     GtkTreeViewDropPosition pos = GTK_TREE_VIEW_DROP_INTO_OR_AFTER;
     gint cell_x = 0;
     gint cell_y = 0;
-    
+
     // cannot directly call GtkGetTreeView(), HitTest is const and so is this pointer
     wxDataViewCtrl* self = const_cast<wxDataViewCtrl *>(this); // ugly workaround, self is NOT const
     GtkTreeView* treeView = GTK_TREE_VIEW(self->GtkGetTreeView());
-    
+
     // is there possibly a better suited function to get the column?
     gtk_tree_view_get_path_at_pos(                // and this is the wrong call but it delivers the column
       treeView,
@@ -5232,13 +5268,13 @@ void wxDataViewCtrl::HitTest(const wxPoint& point,
       &GtkColumn,                                 // here we get the GtkColumn
       &cell_x,
       &cell_y );
-      
+
     if ( GtkColumn != NULL )
-    {                                             
+    {
         // we got GTK column
         // the right call now which takes the header into account
         gtk_tree_view_get_dest_row_at_pos( treeView, (int) point.x, (int) point.y, path.ByRef(), &pos);
-          
+
         if (path)
             item = wxDataViewItem(GTKPathToItem(path));
         // else we got a GTK column but the position is not over an item, e.g. below last item
@@ -5256,10 +5292,71 @@ void wxDataViewCtrl::HitTest(const wxPoint& point,
 }
 
 wxRect
-wxDataViewCtrl::GetItemRect(const wxDataViewItem& WXUNUSED(item),
-                            const wxDataViewColumn *WXUNUSED(column)) const
+wxDataViewCtrl::GetItemRect(const wxDataViewItem& item,
+                            const wxDataViewColumn *column) const
 {
-    return wxRect();
+    if ( !item )
+        return wxRect();
+
+    GtkTreeViewColumn *gcolumn = NULL ;
+    if (column)
+        gcolumn = GTK_TREE_VIEW_COLUMN(column->GetGtkHandle());
+
+    GtkTreeIter iter;
+    iter.user_data = item.GetID();
+    wxGtkTreePath path(m_internal->get_path( &iter ));
+
+    GdkRectangle item_rect;
+    gtk_tree_view_get_cell_area(GTK_TREE_VIEW(m_treeview), path, gcolumn, &item_rect);
+
+    // GTK returns rectangles with the position and height, but not width, for
+    // some reason, set to 0 if the item is not currently shown, so an explicit
+    // check is needed as this rectangle is not quite the empty rectangle we're
+    // supposed to return in this case.
+    if ( item_rect.height == 0 )
+        return wxRect();
+
+    // If column is NULL we compute the combined width of all the columns
+    if ( !column )
+    {
+        unsigned int cols = GetColumnCount();
+        int width = 0;
+        for (unsigned int i = 0; i < cols; ++i)
+        {
+            wxDataViewColumn * col = GetColumn(i);
+            if ( !col->IsHidden() )
+                width += col->GetWidth();
+        }
+        item_rect.width = width;
+    }
+
+    // We need to convert logical coordinates to physical ones, i.e. the
+    // rectangle of the topmost item should start at ~0, even if it's a 100th
+    // item shown on top only because the window is scrolled.
+#if GTK_CHECK_VERSION(2, 12, 0)
+    if ( wx_is_at_least_gtk2(12) )
+    {
+        gtk_tree_view_convert_bin_window_to_widget_coords
+        (
+            GTK_TREE_VIEW(m_treeview),
+            item_rect.x, item_rect.y,
+            &item_rect.x, &item_rect.y
+        );
+
+        if ( item_rect.y > GetClientSize().y ||
+                item_rect.y + item_rect.height < 0 )
+        {
+            // If it turns out that the item is not visible at all, indicate it
+            // by returning an empty rectangle for it.
+            return wxRect();
+        }
+    }
+    //else: There doesn't seem to be anything reasonable to do here, so we'll
+    //      just return wrong values with the very old GTK+ versions if the
+    //      window is scrolled.
+#endif // GTK+ 2.12+
+
+    return wxRectFromGDKRect(&item_rect);
 }
 
 bool wxDataViewCtrl::SetRowHeight(int rowHeight)
@@ -5315,6 +5412,6 @@ void wxDataViewCtrl::DoApplyWidgetStyle(GtkRcStyle *style)
     GTKApplyStyle(m_treeview, style);
 }
 
-#endif // !wxUSE_GENERICDATAVIEWCTRL
+#endif // !wxHAS_GENERIC_DATAVIEWCTRL
 
 #endif // wxUSE_DATAVIEWCTRL

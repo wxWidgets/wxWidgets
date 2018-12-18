@@ -24,40 +24,38 @@ elseif(APPLE)
     endif()
 elseif(UNIX)
     wx_append_sources(BASE_FILES BASE_UNIX)
-    if(wxUSE_SECRETSTORE)
-        # The required APIs are always available under MSW and OS X but we must
-        # have GNOME libsecret under Unix to be able to compile this class.
-        find_package(Libsecret REQUIRED)
-        if(NOT LIBSECRET_FOUND)
-            message(WARNING "libsecret not found, wxSecretStore won't be available")
-            wx_option_force_value(wxUSE_SECRETSTORE OFF)
-        endif()
-    endif()
 endif()
 
 wx_add_library(base IS_BASE ${BASE_FILES})
-wx_lib_link_libraries(base PRIVATE
-    ${ZLIB_LIBRARIES}
-    ${REGEX_LIBRARIES}
-)
+
 if(NOT wxBUILD_MONOLITHIC)
     wx_lib_compile_definitions(base PRIVATE wxUSE_BASE=1)
 endif()
+
 if(wxUSE_ZLIB)
     wx_lib_include_directories(base PRIVATE ${ZLIB_INCLUDE_DIRS})
+    wx_lib_link_libraries(base PRIVATE ${ZLIB_LIBRARIES})
 endif()
 if(wxUSE_REGEX)
     wx_lib_include_directories(base PRIVATE ${REGEX_INCLUDE_DIRS})
+    wx_lib_link_libraries(base PRIVATE ${REGEX_LIBRARIES})
 endif()
-if(LIBSECRET_FOUND)
+if(wxUSE_LIBLZMA)
+    wx_lib_include_directories(base PRIVATE ${LIBLZMA_INCLUDE_DIRS})
+    wx_lib_link_libraries(base PRIVATE ${LIBLZMA_LIBRARIES})
+endif()
+if(UNIX AND wxUSE_SECRETSTORE)
     wx_lib_include_directories(base PRIVATE ${LIBSECRET_INCLUDE_DIRS})
+    wx_lib_link_libraries(base PRIVATE ${LIBSECRET_LIBRARIES})
 endif()
-if(wxUSE_LIBICONV AND ICONV_LIBRARIES)
+if(wxUSE_LIBICONV)
+    wx_lib_include_directories(base PRIVATE ${ICONV_INCLUDE_DIR})
     wx_lib_link_libraries(base PRIVATE ${ICONV_LIBRARIES})
 endif()
 if(wxUSE_THREADS AND CMAKE_THREAD_LIBS_INIT)
     wx_lib_link_libraries(base PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 endif()
+
 if(APPLE)
     wx_lib_link_libraries(base
         PRIVATE
@@ -69,10 +67,7 @@ if(APPLE)
         "-framework IOKit"
     )
 elseif(UNIX)
-    wx_lib_link_libraries(base PRIVATE
-        dl
-        ${LIBSECRET_LIBRARIES}
-    )
+    wx_lib_link_libraries(base PRIVATE dl)
 endif()
 
 wx_finalize_lib(base)

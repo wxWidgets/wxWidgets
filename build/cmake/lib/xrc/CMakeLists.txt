@@ -12,6 +12,6 @@ include(../../source_groups.cmake)
 wx_append_sources(XRC_FILES XRC)
 
 wx_add_library(xrc ${XRC_FILES})
-wx_lib_link_libraries(xrc PRIVATE adv html xml)
+wx_lib_link_libraries(xrc PRIVATE html xml)
 
 wx_finalize_lib(xrc)

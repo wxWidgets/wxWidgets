@@ -337,7 +337,7 @@ wxString wxAcceleratorEntry::AsPossiblyLocalizedString(bool localized) const
     if ( flags & wxACCEL_RAW_CTRL )
         text += PossiblyLocalize(wxTRANSLATE("RawCtrl+"), localized);
 #endif
-    
+
     const int code = GetKeyCode();
 
     if ( code >= WXK_F1 && code <= WXK_F12 )

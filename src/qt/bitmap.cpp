@@ -144,6 +144,7 @@ class wxBitmapRefData: public wxGDIRefData
         virtual ~wxBitmapRefData() { delete m_mask; }
 
         QPixmap m_qtPixmap;
+        QImage m_rawPixelSource;
         wxMask *m_mask;
 
 private:
@@ -386,8 +387,7 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
     return IsOk();
 }
 
-
-// implementation:
+#if WXWIN_COMPATIBILITY_3_0
 void wxBitmap::SetHeight(int height)
 {
     M_PIXDATA = QPixmap(GetWidth(), height);
@@ -405,22 +405,24 @@ void wxBitmap::SetDepth(int depth)
     else
         M_PIXDATA = QPixmap(GetWidth(), GetHeight());
 }
-
+#endif
 
 void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 {
     void* bits = NULL;
-    // allow access if bpp is valid and matches existence of alpha
-    if ( !M_PIXDATA.isNull() )
+
+    wxBitmapRefData *refData = static_cast<wxBitmapRefData *>(m_refData);
+
+    // allow access if bpp is valid
+    if ( !refData->m_qtPixmap.isNull() )
     {
-        QImage qimage = M_PIXDATA.toImage();
-        bool hasAlpha = M_PIXDATA.hasAlphaChannel();
-        if ((bpp == 24 && !hasAlpha) || (bpp == 32 && hasAlpha))
+        if ( bpp == 32 )
         {
-            data.m_height = qimage.height();
-            data.m_width = qimage.width();
-            data.m_stride = qimage.bytesPerLine();
-            bits = (void*) qimage.bits();
+            refData->m_rawPixelSource = refData->m_qtPixmap.toImage().convertToFormat(QImage::Format_RGBA8888);
+            data.m_height = refData->m_rawPixelSource.height();
+            data.m_width = refData->m_rawPixelSource.width();
+            data.m_stride = refData->m_rawPixelSource.bytesPerLine();
+            bits = refData->m_rawPixelSource.bits();
         }
     }
     return bits;
@@ -428,7 +430,9 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 
 void wxBitmap::UngetRawData(wxPixelDataBase& WXUNUSED(data))
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    wxBitmapRefData *refData = static_cast<wxBitmapRefData *>(m_refData);
+    refData->m_qtPixmap = QPixmap::fromImage(refData->m_rawPixelSource);
+    refData->m_rawPixelSource = QImage();
 }
 
 QPixmap *wxBitmap::GetHandle() const

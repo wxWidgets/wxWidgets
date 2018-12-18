@@ -25,7 +25,7 @@ enum wxTaskBarIconType
     For a list of the event macros meant to be used with wxTaskBarIconEvent,
     please look at wxTaskBarIcon description.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{events}
 */
 class wxTaskBarIconEvent : public wxEvent
@@ -84,7 +84,7 @@ public:
         in the menu being displayed on the current platform.
     @endEventTable
 
-    @library{wxadv}
+    @library{wxcore}
     @category{misc}
 */
 class wxTaskBarIcon : public wxEvtHandler

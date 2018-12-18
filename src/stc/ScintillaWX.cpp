@@ -117,7 +117,7 @@ public:
 #endif
           m_ct(ct), m_swx(swx), m_cx(wxDefaultCoord), m_cy(wxDefaultCoord)
         {
-            SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+            SetBackgroundStyle(wxBG_STYLE_PAINT);
             SetName("wxSTCCallTip");
         }
 
@@ -366,9 +366,9 @@ bool ScintillaWX::SetIdle(bool on) {
     if (idler.state != on) {
         // connect or disconnect the EVT_IDLE handler
         if (on)
-            stc->Connect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(wxStyledTextCtrl::OnIdle));
+            stc->Bind(wxEVT_IDLE, &wxStyledTextCtrl::OnIdle, stc);
         else
-            stc->Disconnect(wxID_ANY, wxEVT_IDLE, wxIdleEventHandler(wxStyledTextCtrl::OnIdle));
+            stc->Unbind(wxEVT_IDLE, &wxStyledTextCtrl::OnIdle, stc);
         idler.state = on;
     }
     return idler.state;
@@ -548,8 +548,8 @@ void ScintillaWX::Paste() {
 
 #if wxUSE_UNICODE
         // free up the old character buffer in case the text is real big
-        data.SetText(wxEmptyString);
-        text = wxEmptyString;
+        text.clear();
+        data.SetText(text);
 #endif
         const size_t len = buf.length();
         SelectionPosition selStart = sel.IsRectangular() ?
@@ -782,7 +782,7 @@ sptr_t ScintillaWX::DefWndProc(unsigned int /*iMessage*/, uptr_t /*wParam*/, spt
 sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
       switch (iMessage) {
 #if 0  // TODO: check this
-          
+
       case SCI_CALLTIPSHOW: {
           // NOTE: This is copied here from scintilla/src/ScintillaBase.cxx
           // because of the little tweak that needs done below for wxGTK.
@@ -825,7 +825,7 @@ sptr_t ScintillaWX::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam)
       }
 #endif
 
-#if wxUSE_GRAPHICS_DIRECT2D
+#if defined(__WXMSW__) && wxUSE_GRAPHICS_DIRECT2D
         case SCI_SETTECHNOLOGY:
             if ((wParam == SC_TECHNOLOGY_DEFAULT) || (wParam == SC_TECHNOLOGY_DIRECTWRITE)) {
                 if (technology != static_cast<int>(wParam)) {
@@ -896,7 +896,7 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
         // highlight positions.  So trigger a new paint event that will
         // repaint the whole window.
         stc->Refresh(false);
-        
+
 #if defined(__WXOSX__)
         // On Mac we also need to finish the current paint to make sure that
         // everything is on the screen that needs to be there between now and

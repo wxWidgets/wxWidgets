@@ -21,12 +21,12 @@
         for dialog navigation (e.g. activating the default button in the
         dialog) under MSW.
     @style{wxALIGN_LEFT}
-        Same as wxTE_LEFT for wxTextCtrl: the text is left aligned.
+        Same as wxTE_LEFT for wxTextCtrl: the text is left aligned (this is the
+        default).
     @style{wxALIGN_CENTRE_HORIZONTAL}
         Same as wxTE_CENTRE for wxTextCtrl: the text is centered.
     @style{wxALIGN_RIGHT}
-        Same as wxTE_RIGHT for wxTextCtrl: the text is right aligned (this is
-        the default).
+        Same as wxTE_RIGHT for wxTextCtrl: the text is right aligned.
     @endStyleTable
 
 
@@ -98,7 +98,7 @@ public:
                const wxString& value = wxEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+               long style = wxSP_ARROW_KEYS,
                int min = 0, int max = 100,
                int initial = 0, const wxString& name = "wxSpinCtrl");
 
@@ -110,7 +110,7 @@ public:
                 const wxString& value = wxEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                long style = wxSP_ARROW_KEYS | wxALIGN_RIGHT,
+                long style = wxSP_ARROW_KEYS,
                 int min = 0, int max = 100,
                 int initial = 0, const wxString& name = "wxSpinCtrl");
 

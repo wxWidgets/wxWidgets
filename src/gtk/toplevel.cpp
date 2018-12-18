@@ -32,17 +32,15 @@
 #include "wx/evtloop.h"
 #include "wx/sysopt.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private.h"
+#include "wx/gtk/private/gtk3-compat.h"
+#include "wx/gtk/private/win_gtk.h"
+
 #ifdef GDK_WINDOWING_X11
     #include <gdk/gdkx.h>
     #include <X11/Xatom.h>  // XA_CARDINAL
     #include "wx/unix/utilsx11.h"
 #endif
-
-#include "wx/gtk/private.h"
-#include "wx/gtk/private/gtk2-compat.h"
-#include "wx/gtk/private/gtk3-compat.h"
-#include "wx/gtk/private/win_gtk.h"
 
 // ----------------------------------------------------------------------------
 // data
@@ -470,7 +468,7 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
     Atom type;
     int format;
     gulong nitems, bytes_after;
-    guchar* data;
+    guchar* data = NULL;
     Status status = XGetWindowProperty(
         GDK_DISPLAY_XDISPLAY(display),
         GDK_WINDOW_XID(window),
@@ -480,11 +478,17 @@ bool wxGetFrameExtents(GdkWindow* window, int* left, int* right, int* top, int* 
     const bool success = status == Success && data && nitems == 4;
     if (success)
     {
+        // We need to convert the X11 physical extents to GTK+ "logical" units
+        int scale = 1;
+#if GTK_CHECK_VERSION(3,10,0)
+        if (wx_is_at_least_gtk3(10))
+            scale = gdk_window_get_scale_factor(window);
+#endif
         long* p = (long*)data;
-        if (left)   *left   = int(p[0]);
-        if (right)  *right  = int(p[1]);
-        if (top)    *top    = int(p[2]);
-        if (bottom) *bottom = int(p[3]);
+        if (left)   *left   = int(p[0]) / scale;
+        if (right)  *right  = int(p[1]) / scale;
+        if (top)    *top    = int(p[2]) / scale;
+        if (bottom) *bottom = int(p[3]) / scale;
     }
     if (data)
         XFree(data);
@@ -967,6 +971,11 @@ bool wxTopLevelWindowGTK::Show( bool show )
     if (deferShow)
     {
         deferShow = m_deferShowAllowed &&
+            // Assume size (from cache or wxPersistentTLW) is correct.
+            // Avoids problems when WM initially provides an incorrect value
+            // for extents, then corrects it later.
+            m_decorSize.top == 0 &&
+
             gs_requestFrameExtentsStatus != RFE_STATUS_BROKEN &&
             !gtk_widget_get_realized(m_widget) &&
             GDK_IS_X11_DISPLAY(gtk_widget_get_display(m_widget)) &&

@@ -582,7 +582,7 @@ enum wxPG_INTERNAL_FLAGS
     wxPG_FL_VALUE_CHANGE_IN_EVENT       = 0x10000000,
     // Editor control width should not change on resize
     wxPG_FL_FIXED_WIDTH_EDITOR          = 0x20000000,
-    // Width of panel can be different than width of grid
+    // Width of panel can be different from width of grid
     wxPG_FL_HAS_VIRTUAL_WIDTH           = 0x40000000,
     // Prevents RecalculateVirtualSize re-entrancy
     wxPG_FL_RECALCULATING_VIRTUAL_SIZE  = 0x80000000
@@ -1572,8 +1572,8 @@ protected:
     wxPGCell            m_unspecifiedAppearance;
 
     // List of properties to be deleted/removed in idle event handler.
-    wxArrayPGProperty   m_deletedProperties;
-    wxArrayPGProperty   m_removedProperties;
+    wxVector<wxPGProperty*>  m_deletedProperties;
+    wxVector<wxPGProperty*>  m_removedProperties;
 
 #if !WXWIN_COMPATIBILITY_3_0
     // List of editors and their event handlers to be deleted in idle event handler.
@@ -2280,7 +2280,7 @@ public:
     // added.
     wxPGProperty* GetCurParent() const
     {
-        return (wxPGProperty*) m_propHierarchy[m_propHierarchy.size()-1];
+        return m_propHierarchy.back();
     }
 
     wxPropertyGridPageState* GetState() { return m_state; }
@@ -2309,7 +2309,7 @@ protected:
     wxPropertyGridPageState*    m_state;
 
     // Tree-hierarchy of added properties (that can have children).
-    wxArrayPGProperty       m_propHierarchy;
+    wxVector<wxPGProperty*> m_propHierarchy;
 
     // Hashmap for string-id to wxPGChoicesData mapping.
     wxPGHashMapS2P          m_dictIdChoices;

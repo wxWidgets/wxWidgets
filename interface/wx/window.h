@@ -358,6 +358,7 @@ public:
             Pointer to a parent window.
         @param id
             Window identifier. If wxID_ANY, will automatically create an identifier.
+            See @ref overview_windowids for more information about IDs.
         @param pos
             Window position. wxDefaultPosition indicates that wxWidgets
             should generate a default position for the window.
@@ -391,6 +392,63 @@ public:
     virtual ~wxWindow();
 
 
+    /**
+        Construct the actual window object after creating the C++ object.
+
+        The non-default constructor of wxWindow class does two things: it
+        initializes the C++ object and it also creates the window object in the
+        underlying graphical toolkit. The Create() method can be used to
+        perform the second part later, while the default constructor can be
+        used to perform the first part only.
+
+        Please note that the underlying window must be created exactly once,
+        i.e. if you use the default constructor, which doesn't do this, you @em
+        must call Create() before using the window and if you use the
+        non-default constructor, you can @em not call Create(), as the
+        underlying window is already created.
+
+        Note that it is possible and, in fact, useful, to call some methods on
+        the object between creating the C++ object itself and calling Create()
+        on it, e.g. a common pattern to avoid showing the contents of a window
+        before it is fully initialized is:
+        @code
+            wxPanel* panel = new wxPanel(); // Note: default constructor used.
+            panel->Hide(); // Can be called before actually creating it.
+            panel->Create(parent, wxID_ANY, ...); // Won't be shown yet.
+            ... create all the panel children ...
+            panel->Show(); // Now everything will be shown at once.
+        @endcode
+
+        Also note that it is possible to create an object of a derived type and
+        then call Create() on it:
+        @code
+            // Suppose we have this function (which would typically be in a
+            // different translation unit (file) from the rest of the code).
+            wxWindow* MyCreateWindowObjectFunction() {
+                return new MyCustomClassDerivingFromWindow();
+            }
+
+            // Then we can create a window of MyCustomClassDerivingFromWindow
+            // class without really knowing about this type, as we would have
+            // to do if we wanted to use the non-default constructor, like this:
+
+            // First create the C++ object using the factory function.
+            wxWindow* window = MyCreateWindowObjectFunction();
+
+            // And now create the underlying window.
+            //
+            // This calls the base wxWindow::Create() as it is not virtual, so
+            // the derived class can't customize this part.
+            window->Create(parent, wxID_ANY, ...);
+        @endcode
+        This is notably used by @ref overview_xrc.
+
+        The parameters of this method have exactly the same meaning as the
+        non-default constructor parameters, please refer to them for their
+        description.
+
+        @return @true if window creation succeeded or @false if it failed
+     */
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
@@ -2776,6 +2834,14 @@ public:
         disabled, all of its children are disabled as well and they are reenabled again
         when the parent is.
 
+        A window can be created initially disabled by calling this method on it
+        @e before calling Create() to create the actual underlying window, e.g.
+        @code
+            wxWindow* w = new MyWindow(); // Note: default ctor is used here.
+            w->Enable(false);
+            w->Create(parent, ... all the usual non-default ctor arguments ...);
+        @endcode
+
         @param enable
             If @true, enables the window for input. If @false, disables the window.
 
@@ -3825,7 +3891,9 @@ public:
         or panel item label. If @a parent is @NULL, the search will start from all
         top-level frames and dialog boxes; if non-@NULL, the search will be
         limited to the given window hierarchy.
-        The search is recursive in both cases.
+
+        The search is recursive in both cases and, unlike with FindWindow(),
+        recurses into top level child windows too.
 
         @see FindWindow()
 
@@ -3842,10 +3910,14 @@ public:
         and dialog boxes; if non-@NULL, the search will be limited to the given
         window hierarchy.
 
-        The search is recursive in both cases. If no window with such name is found,
-        FindWindowByLabel() is called.
+        The search is recursive in both cases and, unlike FindWindow(),
+        recurses into top level child windows too.
 
-        @see FindWindow()
+        If no window with such name is found, FindWindowByLabel() is called,
+        i.e. the name is interpreted as (internal) name first but if this
+        fails, it's internal as (user-visible) label. As this behaviour may be
+        confusing, it is usually better to use either the FindWindow() overload
+        taking the name or FindWindowByLabel() directly.
 
         @return Window with the given @a name or @NULL if not found.
     */

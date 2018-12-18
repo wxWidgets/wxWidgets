@@ -361,7 +361,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxString canname = m_locale.GetCanonicalName();
 
     localeInfo.Printf(_("Language: %s\nSystem locale name: %s\nCanonical locale name: %s\n"),
-                      locale.c_str(), sysname.c_str(), canname.c_str() );
+                      locale, sysname, canname );
 
     wxMessageDialog dlg(
                         this,
@@ -397,9 +397,9 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
     }
     else if ( num == 9 )
     {
-        // this message is not translated (not in catalog) because we used wxT()
-        // and not _() around it
-        str = wxT("You've found a bug in this program!");
+        // this message is not translated (not in catalog) because we
+        // did not put _() around it
+        str = "You've found a bug in this program!";
     }
     else if ( num == 17 )
     {
@@ -445,17 +445,17 @@ void MyFrame::OnTestLocaleAvail(wxCommandEvent& WXUNUSED(event))
     const wxLanguageInfo * const info = wxLocale::FindLanguageInfo(s_locale);
     if ( !info )
     {
-        wxLogError(_("Locale \"%s\" is unknown."), s_locale.c_str());
+        wxLogError(_("Locale \"%s\" is unknown."), s_locale);
         return;
     }
 
     if ( wxLocale::IsAvailable(info->Language) )
     {
-        wxLogMessage(_("Locale \"%s\" is available."), s_locale.c_str());
+        wxLogMessage(_("Locale \"%s\" is available."), s_locale);
     }
     else
     {
-        wxLogWarning(_("Locale \"%s\" is not available."), s_locale.c_str());
+        wxLogWarning(_("Locale \"%s\" is not available."), s_locale);
     }
 }
 

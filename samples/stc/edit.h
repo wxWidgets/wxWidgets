@@ -112,7 +112,7 @@ public:
     wxString DeterminePrefs (const wxString &filename);
     bool InitializePrefs (const wxString &filename);
     bool UserSettings (const wxString &filename);
-    LanguageInfo const* GetLanguageInfo () {return m_language;};
+    LanguageInfo const* GetLanguageInfo () {return m_language;}
 
     //! load/save file
     bool LoadFile ();
@@ -120,8 +120,8 @@ public:
     bool SaveFile ();
     bool SaveFile (const wxString &filename);
     bool Modified ();
-    wxString GetFilename () {return m_filename;};
-    void SetFilename (const wxString &filename) {m_filename = filename;};
+    wxString GetFilename () {return m_filename;}
+    void SetFilename (const wxString &filename) {m_filename = filename;}
 
 private:
     // file
@@ -162,7 +162,7 @@ class EditPrint: public wxPrintout {
 public:
 
     //! constructor
-    EditPrint (Edit *edit, const wxChar *title = wxT(""));
+    EditPrint (Edit *edit, const wxString& title = "");
 
     //! event handlers
     bool OnPrintPage (int page) wxOVERRIDE;

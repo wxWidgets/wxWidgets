@@ -572,9 +572,13 @@ public:
     /**
         Returns the number of seconds since Jan 1, 1970 UTC.
 
-        If the date is not in the range covered by 32 bit @c time_t type, @c -1
-        is returned, use GetValue() if you work with dates outside of this
-        range.
+        This function is provided solely for interoperability with the standard
+        C library and other libraries using @c time_t values. If you just need
+        to get the value represented by this object as a number, use GetValue()
+        instead, which doesn't lose precision and covers the entire supported
+        range of dates, unlike this one which is limited to the range of
+        positive 32 bit values, i.e. from Jan 1, 1970 to around Jan 19, 2038
+        and returns @c -1 for the dates outside of it.
 
         Additionally, this method must be called on an initialized date object
         and an assertion failure occurs if it is called on an object for which

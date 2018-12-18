@@ -95,7 +95,7 @@ class MyFrame: public wxFrame
 public:
     MyFrame(wxFrame *parent,
             wxWindowID id = wxID_ANY,
-            const wxString& title = wxT("wxToolBar Sample"),
+            const wxString& title = "wxToolBar Sample",
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE);
@@ -306,13 +306,13 @@ bool MyApp::OnInit()
 
     // Create the main frame window
     MyFrame* frame = new MyFrame((wxFrame *) NULL, wxID_ANY,
-                                 wxT("wxToolBar Sample"),
+                                 "wxToolBar Sample",
                                   wxPoint(100, 100), wxSize(650, 350));
 
     frame->Show(true);
 
 #if wxUSE_STATUSBAR
-    frame->SetStatusText(wxT("Hello, wxWidgets"));
+    frame->SetStatusText("Hello, wxWidgets");
 #endif
 
     wxInitAllImageHandlers();
@@ -421,41 +421,41 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     // size to fit the biggest icon used anyhow but it doesn't hurt neither
     toolBar->SetToolBitmapSize(wxSize(w, h));
 
-    toolBar->AddTool(wxID_NEW, wxT("New"),
+    toolBar->AddTool(wxID_NEW, "New",
                      toolBarBitmaps[Tool_new], wxNullBitmap, wxITEM_DROPDOWN,
-                     wxT("New file"), wxT("This is help for new file tool"));
+                     "New file", "This is help for new file tool");
 
     wxMenu* menu = new wxMenu;
-    menu->Append(wxID_ANY, wxT("&First dummy item"));
-    menu->Append(wxID_ANY, wxT("&Second dummy item"));
+    menu->Append(wxID_ANY, "&First dummy item");
+    menu->Append(wxID_ANY, "&Second dummy item");
     menu->AppendSeparator();
-    menu->Append(wxID_EXIT, wxT("Exit"));
+    menu->Append(wxID_EXIT, "Exit");
     toolBar->SetDropdownMenu(wxID_NEW, menu);
 
-    toolBar->AddTool(wxID_OPEN, wxT("Open"),
+    toolBar->AddTool(wxID_OPEN, "Open",
                      toolBarBitmaps[Tool_open], wxNullBitmap, wxITEM_NORMAL,
-                     wxT("Open file"), wxT("This is help for open file tool"));
+                     "Open file", "This is help for open file tool");
 
 #if USE_CONTROLS_IN_TOOLBAR
     // adding a combo to a vertical toolbar is not very smart
     if ( !toolBar->IsVertical() )
     {
         wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, wxEmptyString, wxDefaultPosition, wxSize(100,-1) );
-        combo->Append(wxT("This"));
-        combo->Append(wxT("is a"));
-        combo->Append(wxT("combobox"));
-        combo->Append(wxT("in a"));
-        combo->Append(wxT("toolbar"));
-        toolBar->AddControl(combo, wxT("Combo Label"));
+        combo->Append("This");
+        combo->Append("is a");
+        combo->Append("combobox");
+        combo->Append("in a");
+        combo->Append("toolbar");
+        toolBar->AddControl(combo, "Combo Label");
     }
 #endif // USE_CONTROLS_IN_TOOLBAR
 
-    toolBar->AddTool(wxID_SAVE, wxT("Save"), toolBarBitmaps[Tool_save], wxT("Toggle button 1"), wxITEM_CHECK);
+    toolBar->AddTool(wxID_SAVE, "Save", toolBarBitmaps[Tool_save], "Toggle button 1", wxITEM_CHECK);
 
     toolBar->AddSeparator();
-    toolBar->AddTool(wxID_COPY, wxT("Copy"), toolBarBitmaps[Tool_copy], wxT("Toggle button 2"), wxITEM_CHECK);
-    toolBar->AddTool(wxID_CUT, wxT("Cut"), toolBarBitmaps[Tool_cut], wxT("Toggle/Untoggle help button"));
-    toolBar->AddTool(wxID_PASTE, wxT("Paste"), toolBarBitmaps[Tool_paste], wxT("Paste"));
+    toolBar->AddTool(wxID_COPY, "Copy", toolBarBitmaps[Tool_copy], "Toggle button 2", wxITEM_CHECK);
+    toolBar->AddTool(wxID_CUT, "Cut", toolBarBitmaps[Tool_cut], "Toggle/Untoggle help button");
+    toolBar->AddTool(wxID_PASTE, "Paste", toolBarBitmaps[Tool_paste], "Paste");
     toolBar->AddSeparator();
 
     if ( m_useCustomDisabled )
@@ -471,13 +471,13 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
             dc.DrawLine(0, 0, w, h);
         }
 
-        toolBar->AddTool(wxID_PRINT, wxT("Print"), toolBarBitmaps[Tool_print],
+        toolBar->AddTool(wxID_PRINT, "Print", toolBarBitmaps[Tool_print],
                          bmpDisabled);
     }
     else
     {
-        toolBar->AddTool(wxID_PRINT, wxT("Print"), toolBarBitmaps[Tool_print],
-                         wxT("Delete this tool. This is a very long tooltip to test whether it does the right thing when the tooltip is more than Windows can cope with."));
+        toolBar->AddTool(wxID_PRINT, "Print", toolBarBitmaps[Tool_print],
+                         "Delete this tool. This is a very long tooltip to test whether it does the right thing when the tooltip is more than Windows can cope with.");
     }
 
     m_nPrint = 1;
@@ -485,7 +485,7 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     // add a stretchable space before the "Help" button to make it
     // right-aligned
     toolBar->AddStretchableSpace();
-    toolBar->AddTool(wxID_HELP, wxT("Help"), toolBarBitmaps[Tool_help], wxT("Help button"), wxITEM_CHECK);
+    toolBar->AddTool(wxID_HELP, "Help", toolBarBitmaps[Tool_help], "Help button", wxITEM_CHECK);
 
     if ( !m_pathBmp.empty() )
     {
@@ -497,7 +497,7 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
                 img = img.GetSubImage(wxRect(0, 0, w, h));
 
             toolBar->AddSeparator();
-            toolBar->AddTool(wxID_ANY, wxT("Custom"), img);
+            toolBar->AddTool(wxID_ANY, "Custom", img);
         }
     }
 
@@ -544,84 +544,84 @@ MyFrame::MyFrame(wxFrame* parent,
     // Make a menubar
     wxMenu *tbarMenu = new wxMenu;
     tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLE_TOOLBAR,
-                              wxT("Toggle &toolbar\tCtrl-Z"),
-                              wxT("Show or hide the toolbar"));
+                              "Toggle &toolbar\tCtrl-Z",
+                              "Show or hide the toolbar");
 
     tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR,
-                              wxT("Toggle &another toolbar\tCtrl-A"),
-                              wxT("Show/hide another test toolbar"));
+                              "Toggle &another toolbar\tCtrl-A",
+                              "Show/hide another test toolbar");
 
     tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLE_HORIZONTAL_TEXT,
-                              wxT("Toggle hori&zontal text\tCtrl-H"),
-                              wxT("Show text under/alongside the icon"));
+                              "Toggle hori&zontal text\tCtrl-H",
+                              "Show text under/alongside the icon");
 
     tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLETOOLBARSIZE,
-                              wxT("&Toggle toolbar size\tCtrl-S"),
-                              wxT("Toggle between big/small toolbar"));
+                              "&Toggle toolbar size\tCtrl-S",
+                              "Toggle between big/small toolbar");
 
     tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLETOOLBARROWS,
-                              wxT("Toggle number of &rows\tCtrl-R"),
-                              wxT("Toggle number of toolbar rows between 1 and 2"));
+                              "Toggle number of &rows\tCtrl-R",
+                              "Toggle number of toolbar rows between 1 and 2");
 
     tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLETOOLTIPS,
-                              wxT("Show &tooltips\tCtrl-L"),
-                              wxT("Show tooltips for the toolbar tools"));
+                              "Show &tooltips\tCtrl-L",
+                              "Show tooltips for the toolbar tools");
 
     tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLECUSTOMDISABLED,
-                              wxT("Use c&ustom disabled images\tCtrl-U"),
-                              wxT("Switch between using system-generated and custom disabled images"));
+                              "Use c&ustom disabled images\tCtrl-U",
+                              "Switch between using system-generated and custom disabled images");
 
 
     tbarMenu->AppendSeparator();
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_TOP_ORIENTATION,
-                              wxT("Set toolbar at the top of the window"),
-                              wxT("Set toolbar at the top of the window"));
+                              "Set toolbar at the top of the window",
+                              "Set toolbar at the top of the window");
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_LEFT_ORIENTATION,
-                              wxT("Set toolbar at the left of the window"),
-                              wxT("Set toolbar at the left of the window"));
+                              "Set toolbar at the left of the window",
+                              "Set toolbar at the left of the window");
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_BOTTOM_ORIENTATION,
-                              wxT("Set toolbar at the bottom of the window"),
-                              wxT("Set toolbar at the bottom of the window"));
+                              "Set toolbar at the bottom of the window",
+                              "Set toolbar at the bottom of the window");
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_RIGHT_ORIENTATION,
-                              wxT("Set toolbar at the right edge of the window"),
-                              wxT("Set toolbar at the right edge of the window"));
+                              "Set toolbar at the right edge of the window",
+                              "Set toolbar at the right edge of the window");
     tbarMenu->AppendSeparator();
 
-    tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_TEXT, wxT("Show &text\tCtrl-Alt-T"));
-    tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_ICONS, wxT("Show &icons\tCtrl-Alt-I"));
-    tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_BOTH, wxT("Show &both\tCtrl-Alt-B"));
+    tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_TEXT, "Show &text\tCtrl-Alt-T");
+    tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_ICONS, "Show &icons\tCtrl-Alt-I");
+    tbarMenu->AppendRadioItem(IDM_TOOLBAR_SHOW_BOTH, "Show &both\tCtrl-Alt-B");
     tbarMenu->AppendSeparator();
-    tbarMenu->Append(IDM_TOOLBAR_BG_COL, wxT("Choose bac&kground colour..."));
-    tbarMenu->Append(IDM_TOOLBAR_CUSTOM_PATH, wxT("Custom &bitmap...\tCtrl-B"));
+    tbarMenu->Append(IDM_TOOLBAR_BG_COL, "Choose bac&kground colour...");
+    tbarMenu->Append(IDM_TOOLBAR_CUSTOM_PATH, "Custom &bitmap...\tCtrl-B");
 
     wxMenu *toolMenu = new wxMenu;
-    toolMenu->Append(IDM_TOOLBAR_ENABLEPRINT, wxT("&Enable print button\tCtrl-E"));
-    toolMenu->Append(IDM_TOOLBAR_DELETEPRINT, wxT("&Delete print button\tCtrl-D"));
-    toolMenu->Append(IDM_TOOLBAR_INSERTPRINT, wxT("&Insert print button\tCtrl-I"));
-    toolMenu->Append(IDM_TOOLBAR_TOGGLEHELP, wxT("Toggle &help button\tCtrl-T"));
-    toolMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLESEARCH, wxT("Toggle &search field\tCtrl-F"));
+    toolMenu->Append(IDM_TOOLBAR_ENABLEPRINT, "&Enable print button\tCtrl-E");
+    toolMenu->Append(IDM_TOOLBAR_DELETEPRINT, "&Delete print button\tCtrl-D");
+    toolMenu->Append(IDM_TOOLBAR_INSERTPRINT, "&Insert print button\tCtrl-I");
+    toolMenu->Append(IDM_TOOLBAR_TOGGLEHELP, "Toggle &help button\tCtrl-T");
+    toolMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLESEARCH, "Toggle &search field\tCtrl-F");
     toolMenu->AppendSeparator();
-    toolMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN1, wxT("Toggle &1st radio button\tCtrl-1"));
-    toolMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN2, wxT("Toggle &2nd radio button\tCtrl-2"));
-    toolMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN3, wxT("Toggle &3rd radio button\tCtrl-3"));
+    toolMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN1, "Toggle &1st radio button\tCtrl-1");
+    toolMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN2, "Toggle &2nd radio button\tCtrl-2");
+    toolMenu->Append(IDM_TOOLBAR_TOGGLERADIOBTN3, "Toggle &3rd radio button\tCtrl-3");
     toolMenu->AppendSeparator();
-    toolMenu->Append(IDM_TOOLBAR_CHANGE_TOOLTIP, wxT("Change tooltip of \"New\""));
+    toolMenu->Append(IDM_TOOLBAR_CHANGE_TOOLTIP, "Change tooltip of \"New\"");
     toolMenu->AppendSeparator();
-    toolMenu->Append(IDM_TOOLBAR_INC_TOOL_SPACING, wxT("Increase spacing\tCtrl-+"));
-    toolMenu->Append(IDM_TOOLBAR_DEC_TOOL_SPACING, wxT("Decrease spacing\tCtrl--"));
+    toolMenu->Append(IDM_TOOLBAR_INC_TOOL_SPACING, "Increase spacing\tCtrl-+");
+    toolMenu->Append(IDM_TOOLBAR_DEC_TOOL_SPACING, "Decrease spacing\tCtrl--");
 
     wxMenu *fileMenu = new wxMenu;
-    fileMenu->Append(wxID_EXIT, wxT("E&xit\tAlt-X"), wxT("Quit toolbar sample") );
+    fileMenu->Append(wxID_EXIT, "E&xit\tAlt-X", "Quit toolbar sample" );
 
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(wxID_HELP, wxT("&About"), wxT("About toolbar sample"));
+    helpMenu->Append(wxID_HELP, "&About", "About toolbar sample");
 
     wxMenuBar* menuBar = new wxMenuBar( wxMB_DOCKABLE );
 
-    menuBar->Append(fileMenu, wxT("&File"));
-    menuBar->Append(tbarMenu, wxT("&Toolbar"));
-    menuBar->Append(toolMenu, wxT("Tool&s"));
-    menuBar->Append(helpMenu, wxT("&Help"));
+    menuBar->Append(fileMenu, "&File");
+    menuBar->Append(tbarMenu, "&Toolbar");
+    menuBar->Append(toolMenu, "Tool&s");
+    menuBar->Append(helpMenu, "&Help");
 
     // Associate the menu bar with the frame
     SetMenuBar(menuBar);
@@ -740,12 +740,12 @@ void MyFrame::OnToggleAnotherToolbar(wxCommandEvent& WXUNUSED(event))
 
         m_tbar->SetMargins(4, 4);
 
-        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_1, wxT("First"), wxBITMAP(new));
-        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_2, wxT("Second"), wxBITMAP(open));
-        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_3, wxT("Third"), wxBITMAP(save));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_1, "First", wxBITMAP(new));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_2, "Second", wxBITMAP(open));
+        m_tbar->AddRadioTool(IDM_TOOLBAR_OTHER_3, "Third", wxBITMAP(save));
         m_tbar->AddSeparator();
-        m_tbar->AddTool(wxID_HELP, wxT("Help"), wxBITMAP(help));
-        m_tbar->AddTool(IDM_TOOLBAR_OTHER_4, wxT("Disabled"), wxBITMAP(cut), wxBITMAP(paste));
+        m_tbar->AddTool(wxID_HELP, "Help", wxBITMAP(help));
+        m_tbar->AddTool(IDM_TOOLBAR_OTHER_4, "Disabled", wxBITMAP(cut), wxBITMAP(paste));
         m_tbar->EnableTool(IDM_TOOLBAR_OTHER_4, false);
 
         m_tbar->Realize();
@@ -815,17 +815,17 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& event)
 {
     if ( event.IsChecked() )
-        m_textWindow->AppendText( wxT("Help button down now.\n") );
+        m_textWindow->AppendText( "Help button down now.\n" );
     else
-        m_textWindow->AppendText( wxT("Help button up now.\n") );
+        m_textWindow->AppendText( "Help button up now.\n" );
 
-    (void)wxMessageBox(wxT("wxWidgets toolbar sample"), wxT("About wxToolBar"));
+    (void)wxMessageBox("wxWidgets toolbar sample", "About wxToolBar");
 }
 
 void MyFrame::OnToolLeftClick(wxCommandEvent& event)
 {
     wxString str;
-    str.Printf( wxT("Clicked on tool %d\n"), event.GetId());
+    str.Printf( "Clicked on tool %d\n", event.GetId());
     m_textWindow->AppendText( str );
 
     if (event.GetId() == wxID_COPY)
@@ -847,13 +847,13 @@ void MyFrame::OnToolLeftClick(wxCommandEvent& event)
 void MyFrame::OnToolRightClick(wxCommandEvent& event)
 {
     m_textWindow->AppendText(
-            wxString::Format(wxT("Tool %d right clicked.\n"),
+            wxString::Format("Tool %d right clicked.\n",
                              (int) event.GetInt()));
 }
 
 void MyFrame::OnCombo(wxCommandEvent& event)
 {
-    wxLogStatus(wxT("Combobox string '%s' selected"), event.GetString().c_str());
+    wxLogStatus("Combobox string '%s' selected", event.GetString());
 }
 
 void MyFrame::DoEnablePrint()
@@ -928,7 +928,7 @@ void MyFrame::OnUpdateToggleHorzText(wxUpdateUIEvent& event)
 
 void MyFrame::OnChangeToolTip(wxCommandEvent& WXUNUSED(event))
 {
-    GetToolBar()->SetToolShortHelp(wxID_NEW, wxT("New toolbar button"));
+    GetToolBar()->SetToolShortHelp(wxID_NEW, "New toolbar button");
 }
 
 void MyFrame::OnIncToolSpacing(wxCommandEvent& WXUNUSED(event))
@@ -992,11 +992,11 @@ void MyFrame::OnInsertPrint(wxCommandEvent& WXUNUSED(event))
     m_nPrint++;
 
     wxToolBarBase *tb = GetToolBar();
-    tb->InsertTool(0, wxID_PRINT, wxT("New print"),
+    tb->InsertTool(0, wxID_PRINT, "New print",
                    wxBITMAP(print), wxNullBitmap,
                    wxITEM_NORMAL,
-                   wxT("Delete this tool"),
-                   wxT("This button was inserted into the toolbar"));
+                   "Delete this tool",
+                   "This button was inserted into the toolbar");
 
     // must call Realize() after adding a new button
     tb->Realize();
@@ -1014,7 +1014,7 @@ void MyFrame::OnToggleRadioBtn(wxCommandEvent& event)
 void MyFrame::OnToolDropdown(wxCommandEvent& event)
 {
     wxString str;
-    str.Printf( wxT("Dropdown on tool %d\n"), event.GetId());
+    str.Printf( "Dropdown on tool %d\n", event.GetId());
     m_textWindow->AppendText( str );
 
     event.Skip();

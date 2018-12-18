@@ -25,8 +25,8 @@ class SpinCtrlDoubleTestCase : public CppUnit::TestCase
 public:
     SpinCtrlDoubleTestCase() { }
 
-    void setUp();
-    void tearDown();
+    void setUp() wxOVERRIDE;
+    void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( SpinCtrlDoubleTestCase );
@@ -89,7 +89,7 @@ void SpinCtrlDoubleTestCase::NoEventsInCtor()
 
 void SpinCtrlDoubleTestCase::Arrows()
 {
-#ifndef __WXGTK__
+#if wxUSE_UIACTIONSIMULATOR && !defined(__WXGTK__)
     EventCounter updated(m_spin, wxEVT_SPINCTRLDOUBLE);
 
     wxUIActionSimulator sim;

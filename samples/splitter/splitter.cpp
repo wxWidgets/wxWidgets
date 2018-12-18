@@ -151,7 +151,7 @@ class MyCanvas: public wxScrolledWindow
 {
 public:
     MyCanvas(wxWindow* parent, bool mirror);
-    virtual ~MyCanvas(){};
+    virtual ~MyCanvas(){}
 
     virtual void OnDraw(wxDC& dc) wxOVERRIDE;
 
@@ -213,7 +213,7 @@ wxEND_EVENT_TABLE()
 
 // My frame constructor
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, wxT("wxSplitterWindow sample"),
+       : wxFrame(NULL, wxID_ANY, "wxSplitterWindow sample",
                  wxDefaultPosition, wxSize(420, 300),
                  wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
 {
@@ -226,58 +226,58 @@ MyFrame::MyFrame()
     // Make a menubar
     wxMenu *splitMenu = new wxMenu;
     splitMenu->Append(SPLIT_VERTICAL,
-                      wxT("Split &Vertically\tCtrl-V"),
-                      wxT("Split vertically"));
+                      "Split &Vertically\tCtrl-V",
+                      "Split vertically");
     splitMenu->Append(SPLIT_HORIZONTAL,
-                      wxT("Split &Horizontally\tCtrl-H"),
-                      wxT("Split horizontally"));
+                      "Split &Horizontally\tCtrl-H",
+                      "Split horizontally");
     splitMenu->Append(SPLIT_UNSPLIT,
-                      wxT("&Unsplit\tCtrl-U"),
-                      wxT("Unsplit"));
+                      "&Unsplit\tCtrl-U",
+                      "Unsplit");
     splitMenu->AppendCheckItem(SPLIT_INVISIBLE,
-                      wxT("Toggle sash &invisibility\tCtrl-I"),
-                      wxT("Toggle sash invisibility"));
+                      "Toggle sash &invisibility\tCtrl-I",
+                      "Toggle sash invisibility");
     splitMenu->AppendSeparator();
 
     splitMenu->AppendCheckItem(SPLIT_LIVE,
-                               wxT("&Live update\tCtrl-L"),
-                               wxT("Toggle live update mode"));
+                               "&Live update\tCtrl-L",
+                               "Toggle live update mode");
     splitMenu->AppendCheckItem(SPLIT_BORDER,
-                               wxT("3D &Border"),
-                               wxT("Toggle wxSP_BORDER flag"));
+                               "3D &Border",
+                               "Toggle wxSP_BORDER flag");
     splitMenu->Check(SPLIT_BORDER, true);
     splitMenu->AppendCheckItem(SPLIT_3DSASH,
-                               wxT("&3D Sash"),
-                               wxT("Toggle wxSP_3DSASH flag"));
+                               "&3D Sash",
+                               "Toggle wxSP_3DSASH flag");
     splitMenu->Check(SPLIT_3DSASH, true);
 #ifdef __WXMSW__
     splitMenu->AppendCheckItem(SPLIT_NOTHEME,
-                               wxT("Disable XP &theme"),
-                               wxT("Toggle wxSP_NO_XP_THEME flag"));
+                               "Disable XP &theme",
+                               "Toggle wxSP_NO_XP_THEME flag");
 #endif
     splitMenu->AppendCheckItem(SPLIT_CUSTOM_COLOUR,
-                               wxT("Use custom &colour"),
-                               wxT("Toggle custom colour"));
+                               "Use custom &colour",
+                               "Toggle custom colour");
     splitMenu->Append(SPLIT_SETPOSITION,
-                      wxT("Set splitter &position\tCtrl-P"),
-                      wxT("Set the splitter position"));
+                      "Set splitter &position\tCtrl-P",
+                      "Set the splitter position");
     splitMenu->Append(SPLIT_SETMINSIZE,
-                      wxT("Set &min size\tCtrl-M"),
-                      wxT("Set minimum pane size"));
+                      "Set &min size\tCtrl-M",
+                      "Set minimum pane size");
     splitMenu->Append(SPLIT_SETGRAVITY,
-                      wxT("Set &gravity\tCtrl-G"),
-                      wxT("Set gravity of sash"));
+                      "Set &gravity\tCtrl-G",
+                      "Set gravity of sash");
     splitMenu->AppendSeparator();
 
     splitMenu->Append(SPLIT_REPLACE,
-                      wxT("&Replace right window"),
-                      wxT("Replace right window"));
+                      "&Replace right window",
+                      "Replace right window");
     splitMenu->AppendSeparator();
 
-    splitMenu->Append(SPLIT_QUIT, wxT("E&xit\tAlt-X"), wxT("Exit"));
+    splitMenu->Append(SPLIT_QUIT, "E&xit\tAlt-X", "Exit");
 
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(splitMenu, wxT("&Splitter"));
+    menuBar->Append(splitMenu, "&Splitter");
 
     SetMenuBar(menuBar);
 
@@ -300,8 +300,8 @@ MyFrame::MyFrame()
     m_right = new MyCanvas(m_splitter, false);
     m_right->SetBackgroundColour(*wxCYAN);
 #else // for testing kbd navigation inside the splitter
-    m_left = new wxTextCtrl(m_splitter, wxID_ANY, wxT("first text"));
-    m_right = new wxTextCtrl(m_splitter, wxID_ANY, wxT("second text"));
+    m_left = new wxTextCtrl(m_splitter, wxID_ANY, "first text");
+    m_right = new wxTextCtrl(m_splitter, wxID_ANY, "second text");
 #endif
 
     // you can also do this to start with a single window
@@ -314,7 +314,7 @@ MyFrame::MyFrame()
 #endif
 
 #if wxUSE_STATUSBAR
-    SetStatusText(wxT("Min pane size = 0"), 1);
+    SetStatusText("Min pane size = 0", 1);
 #endif // wxUSE_STATUSBAR
 
     m_replacewindow = NULL;
@@ -344,7 +344,7 @@ void MyFrame::OnSplitHorizontal(wxCommandEvent& WXUNUSED(event) )
     m_replacewindow = NULL;
 
 #if wxUSE_STATUSBAR
-    SetStatusText(wxT("Splitter split horizontally"), 1);
+    SetStatusText("Splitter split horizontally", 1);
 #endif // wxUSE_STATUSBAR
 }
 
@@ -358,7 +358,7 @@ void MyFrame::OnSplitVertical(wxCommandEvent& WXUNUSED(event) )
     m_replacewindow = NULL;
 
 #if wxUSE_STATUSBAR
-    SetStatusText(wxT("Splitter split vertically"), 1);
+    SetStatusText("Splitter split vertically", 1);
 #endif // wxUSE_STATUSBAR
 }
 
@@ -367,7 +367,7 @@ void MyFrame::OnUnsplit(wxCommandEvent& WXUNUSED(event) )
     if ( m_splitter->IsSplit() )
         m_splitter->Unsplit();
 #if wxUSE_STATUSBAR
-    SetStatusText(wxT("No splitter"));
+    SetStatusText("No splitter");
 #endif // wxUSE_STATUSBAR
 }
 
@@ -390,9 +390,9 @@ void MyFrame::ToggleFlag(int flag, bool enable)
 void MyFrame::OnSetPosition(wxCommandEvent& WXUNUSED(event) )
 {
     wxString str;
-    str.Printf( wxT("%d"), m_splitter->GetSashPosition());
+    str.Printf( "%d", m_splitter->GetSashPosition());
 #if wxUSE_TEXTDLG
-    str = wxGetTextFromUser(wxT("Enter splitter position:"), wxT(""), str, this);
+    str = wxGetTextFromUser("Enter splitter position:", "", str, this);
 #endif
     if ( str.empty() )
         return;
@@ -400,21 +400,21 @@ void MyFrame::OnSetPosition(wxCommandEvent& WXUNUSED(event) )
     long pos;
     if ( !str.ToLong(&pos) )
     {
-        wxLogError(wxT("The splitter position should be an integer."));
+        wxLogError("The splitter position should be an integer.");
         return;
     }
 
     m_splitter->SetSashPosition(pos);
 
-    wxLogStatus(this, wxT("Splitter position set to %ld"), pos);
+    wxLogStatus(this, "Splitter position set to %ld", pos);
 }
 
 void MyFrame::OnSetMinSize(wxCommandEvent& WXUNUSED(event) )
 {
     wxString str;
-    str.Printf( wxT("%d"), m_splitter->GetMinimumPaneSize());
+    str.Printf( "%d", m_splitter->GetMinimumPaneSize());
 #if wxUSE_TEXTDLG
-    str = wxGetTextFromUser(wxT("Enter minimal size for panes:"), wxT(""), str, this);
+    str = wxGetTextFromUser("Enter minimal size for panes:", "", str, this);
 #endif
     if ( str.empty() )
         return;
@@ -422,7 +422,7 @@ void MyFrame::OnSetMinSize(wxCommandEvent& WXUNUSED(event) )
     int minsize = wxStrtol( str, (wxChar**)NULL, 10 );
     m_splitter->SetMinimumPaneSize(minsize);
 #if wxUSE_STATUSBAR
-    str.Printf( wxT("Min pane size = %d"), minsize);
+    str.Printf( "Min pane size = %d", minsize);
     SetStatusText(str, 1);
 #endif // wxUSE_STATUSBAR
 }
@@ -430,9 +430,9 @@ void MyFrame::OnSetMinSize(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::OnSetGravity(wxCommandEvent& WXUNUSED(event) )
 {
     wxString str;
-    str.Printf( wxT("%g"), m_splitter->GetSashGravity());
+    str.Printf( "%g", m_splitter->GetSashGravity());
 #if wxUSE_TEXTDLG
-    str = wxGetTextFromUser(wxT("Enter sash gravity (0,1):"), wxT(""), str, this);
+    str = wxGetTextFromUser("Enter sash gravity (0,1):", "", str, this);
 #endif
     if ( str.empty() )
         return;
@@ -440,7 +440,7 @@ void MyFrame::OnSetGravity(wxCommandEvent& WXUNUSED(event) )
     double gravity = wxStrtod( str, (wxChar**)NULL);
     m_splitter->SetSashGravity(gravity);
 #if wxUSE_STATUSBAR
-    str.Printf( wxT("Gravity = %g"), gravity);
+    str.Printf( "Gravity = %g", gravity);
     SetStatusText(str, 1);
 #endif // wxUSE_STATUSBAR
 }
@@ -513,7 +513,7 @@ MySplitterWindow::MySplitterWindow(wxFrame *parent)
 
 void MySplitterWindow::OnPositionChanged(wxSplitterEvent& event)
 {
-    wxLogStatus(m_frame, wxT("Position has changed, now = %d (or %d)"),
+    wxLogStatus(m_frame, "Position has changed, now = %d (or %d)",
                 event.GetSashPosition(), GetSashPosition());
 
     event.Skip();
@@ -521,7 +521,7 @@ void MySplitterWindow::OnPositionChanged(wxSplitterEvent& event)
 
 void MySplitterWindow::OnPositionChanging(wxSplitterEvent& event)
 {
-    wxLogStatus(m_frame, wxT("Position is changing, now = %d (or %d)"),
+    wxLogStatus(m_frame, "Position is changing, now = %d (or %d)",
                 event.GetSashPosition(), GetSashPosition());
 
     event.Skip();
@@ -530,7 +530,7 @@ void MySplitterWindow::OnPositionChanging(wxSplitterEvent& event)
 void MySplitterWindow::OnDClick(wxSplitterEvent& event)
 {
 #if wxUSE_STATUSBAR
-    m_frame->SetStatusText(wxT("Splitter double clicked"), 1);
+    m_frame->SetStatusText("Splitter double clicked", 1);
 #endif // wxUSE_STATUSBAR
 
     event.Skip();
@@ -539,7 +539,7 @@ void MySplitterWindow::OnDClick(wxSplitterEvent& event)
 void MySplitterWindow::OnUnsplitEvent(wxSplitterEvent& event)
 {
 #if wxUSE_STATUSBAR
-    m_frame->SetStatusText(wxT("Splitter unsplit"), 1);
+    m_frame->SetStatusText("Splitter unsplit", 1);
 #endif // wxUSE_STATUSBAR
 
     event.Skip();
@@ -565,7 +565,7 @@ void MyCanvas::OnDraw(wxDC& dcOrig)
     dc.DrawLine(0, 0, 100, 200);
 
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
-    dc.DrawText(wxT("Testing"), 50, 50);
+    dc.DrawText("Testing", 50, 50);
 
     dc.SetPen(*wxRED_PEN);
     dc.SetBrush(*wxGREEN_BRUSH);

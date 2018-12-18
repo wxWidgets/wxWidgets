@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/qt/toolbar.h
+// Name:        src/qt/clipbrd.cpp
 // Author:      Sean D'Epagnier
 // Copyright:   (c) Sean D'Epagnier 2014
 // Licence:     wxWindows licence
@@ -12,8 +12,8 @@
     #pragma hdrstop
 #endif
 
-#include <QApplication>
-#include <QClipboard>
+#include <QtWidgets/QApplication>
+#include <QtGui/QClipboard>
 
 #include "wx/clipbrd.h"
 #include "wx/scopedarray.h"

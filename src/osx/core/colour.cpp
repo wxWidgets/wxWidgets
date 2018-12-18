@@ -18,123 +18,242 @@
 
 #include "wx/osx/private.h"
 
+CGColorSpaceRef wxMacGetGenericRGBColorSpace();
+
+class wxCGColorRefData : public wxColourRefData
+{
+public:
+    wxCGColorRefData(CGFloat r, CGFloat g, CGFloat b, CGFloat a = 1.0);
+
+    wxCGColorRefData(CGFloat components[4]);
+
+    wxCGColorRefData(CGColorRef);
+
+    wxCGColorRefData(const wxCGColorRefData& other);
+
+    virtual bool IsOk() const  wxOVERRIDE{ return m_cgColour != NULL; }
+
+    virtual CGFloat Red() const wxOVERRIDE { return m_red; }
+    virtual CGFloat Green() const wxOVERRIDE { return m_green; }
+    virtual CGFloat Blue() const wxOVERRIDE { return m_blue; }
+    virtual CGFloat Alpha() const wxOVERRIDE { return m_alpha; }
+
+    CGColorRef GetCGColor() const wxOVERRIDE { return m_cgColour; }
+
+    virtual wxColourRefData* Clone() const wxOVERRIDE { return new wxCGColorRefData(*this); }
+
+private:
+    void Init(CGFloat components[4]);
+
+    wxCFRef<CGColorRef> m_cgColour;
+
+    CGFloat m_red;
+    CGFloat m_blue;
+    CGFloat m_green;
+    CGFloat m_alpha;
+
+    wxDECLARE_NO_ASSIGN_CLASS(wxCGColorRefData);
+};
+
+wxCGColorRefData::wxCGColorRefData(CGFloat r, CGFloat g, CGFloat b, CGFloat a)
+{
+    CGFloat components[4];
+    components[0] = r;
+    components[1] = g;
+    components[2] = b;
+    components[3] = a;
+
+    Init(components);
+}
+
+wxCGColorRefData::wxCGColorRefData(CGFloat components[4])
+{
+    Init(components);
+}
+
+wxCGColorRefData::wxCGColorRefData(const wxCGColorRefData& other)
+{
+    m_red = other.m_red;
+    m_blue = other.m_blue;
+    m_green = other.m_green;
+    m_alpha = other.m_alpha;
+
+    m_cgColour = other.m_cgColour;
+}
+
+void wxCGColorRefData::Init(CGFloat components[4])
+{
+    m_red = components[0];
+    m_green = components[1];
+    m_blue = components[2];
+    m_alpha = components[3];
+
+    m_cgColour = CGColorCreate(wxMacGetGenericRGBColorSpace(), components);
+}
+
+wxCGColorRefData::wxCGColorRefData(CGColorRef col)
+{
+    wxASSERT_MSG(col != NULL, "Invalid CoreGraphics Color");
+    m_cgColour.reset(col);
+
+    wxCFRef<CGColorRef> rgbacol;
+    size_t noComp = CGColorGetNumberOfComponents(col);
+    const CGFloat* components = CGColorGetComponents(col);
+
+    // set default alpha
+    m_alpha = 1.0;
+    bool isRGB = true;
+
+    CGColorSpaceModel model = CGColorSpaceGetModel(CGColorGetColorSpace(col));
+    if (model == kCGColorSpaceModelMonochrome)
+    {
+        wxASSERT_MSG(1 <= noComp && noComp <= 2, "Monochrome Color unexpected components");
+        m_red = components[0];
+        m_green = components[0];
+        m_blue = components[0];
+        if (noComp > 1)
+            m_alpha = components[1];
+        isRGB = false;
+    }
+    else if (model != kCGColorSpaceModelRGB)
+    {
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11
+        if (wxPlatformInfo::Get().CheckOSVersion(10, 11))
+        {
+            rgbacol = CGColorCreateCopyByMatchingToColorSpace(wxMacGetGenericRGBColorSpace(), kCGRenderingIntentDefault, col, NULL);
+            noComp = CGColorGetNumberOfComponents(rgbacol);
+            components = CGColorGetComponents(rgbacol);
+        }
+        else
+#endif
+        {
+            isRGB = false;
+        }
+    }
+
+    if (isRGB)
+    {
+        wxASSERT_MSG(3 <= noComp && noComp <= 4, "RGB Color unexpected components");
+        m_red = components[0];
+        m_green = components[1];
+        m_blue = components[2];
+
+        if (noComp == 4)
+            m_alpha = components[3];
+    }
+}
+
+#define M_COLDATA static_cast<wxColourRefData*>(m_refData)
+
 #if wxOSX_USE_COCOA_OR_CARBON
 wxColour::wxColour(const RGBColor& col)
 {
-    InitRGBColor(col);
+    CGFloat components[4] = { (CGFloat)(col.red / 65535.0), (CGFloat)(col.green / 65535.0),
+        (CGFloat)(col.blue / 65535.0), (CGFloat)1.0 };
+    m_refData = new wxCGColorRefData(components);
 }
 #endif
 
 wxColour::wxColour(CGColorRef col)
 {
-    InitCGColorRef(col);
+    wxASSERT_MSG(col != NULL, "Invalid CoreGraphics Color");
+
+    m_refData = new wxCGColorRefData(col);
+}
+
+wxColour::ChannelType wxColour::Red() const
+{
+    wxCHECK_MSG( IsOk(), 0, "invalid colour" );
+
+    return wxRound(M_COLDATA->Red() * 255.0);
+}
+
+wxColour::ChannelType wxColour::Green() const
+{
+    wxCHECK_MSG( IsOk(), 0, "invalid colour" );
+
+    return wxRound(M_COLDATA->Green() * 255.0);
+}
+
+wxColour::ChannelType wxColour::Blue() const
+{
+    wxCHECK_MSG( IsOk(), 0, "invalid colour" );
+
+    return wxRound(M_COLDATA->Blue() * 255.0);
+}
+
+wxColour::ChannelType wxColour::Alpha() const
+{
+    wxCHECK_MSG( IsOk(), 0, "invalid colour" );
+
+    return wxRound(M_COLDATA->Alpha() * 255.0);
+}
+
+bool wxColour::IsSolid() const
+{
+    wxCHECK_MSG( IsOk(), false, "invalid colour" );
+
+    return M_COLDATA->IsSolid();
 }
 
 #if wxOSX_USE_COCOA_OR_CARBON
-void wxColour::GetRGBColor( RGBColor *col ) const
+void wxColour::GetRGBColor(RGBColor* col) const
 {
-    col->red = (m_red << 8) + m_red;
-    col->blue = (m_blue << 8) + m_blue;
-    col->green = (m_green << 8) + m_green;
-}
+    wxCHECK_RET( IsOk(), "invalid colour" );
 
-wxColour& wxColour::operator=(const RGBColor& col)
-{
-    InitRGBColor(col);
-    return *this;
+    col->red = M_COLDATA->Red() * 65535.0;
+    col->blue = M_COLDATA->Blue() * 65535.0;
+    col->green = M_COLDATA->Green() * 65535.0;
 }
 #endif
 
-wxColour& wxColour::operator=(CGColorRef col)
+CGColorRef wxColour::GetCGColor() const
 {
-    InitCGColorRef(col);
-    return *this;
+    wxCHECK_MSG( IsOk(), NULL, "invalid colour" );
+
+    return M_COLDATA->GetCGColor();
+}
+
+#if wxOSX_USE_COCOA
+WX_NSColor wxColour::OSXGetNSColor() const
+{
+    wxCHECK_MSG( IsOk(), NULL, "invalid colour" );
+
+    return M_COLDATA->GetNSColor();
+}
+#endif
+
+void wxColour::InitRGBA(ChannelType r, ChannelType g, ChannelType b, ChannelType a)
+{
+    CGFloat components[4] = { (CGFloat)(r / 255.0), (CGFloat)(g / 255.0), (CGFloat)(b / 255.0), (CGFloat)(a / 255.0) };
+    m_refData = new wxCGColorRefData(components);
 }
 
 wxColour& wxColour::operator=(const wxColour& col)
 {
-    m_red = col.m_red;
-    m_green = col.m_green;
-    m_blue = col.m_blue;
-    m_alpha = col.m_alpha;
-    m_cgColour = col.m_cgColour;
+    wxObject::operator=(col);
+
     return *this;
 }
 
-void wxColour::InitRGBA (ChannelType r, ChannelType g, ChannelType b, ChannelType a)
+bool wxColour::operator==(const wxColour& other) const
 {
-    m_red = r;
-    m_green = g;
-    m_blue = b;
-    m_alpha = a ;
+    if (m_refData == other.m_refData)
+        return true;
 
-    CGColorRef col = 0 ;
-#if wxOSX_USE_COCOA_OR_CARBON 
-    col = CGColorCreateGenericRGB( (CGFloat)(r / 255.0), (CGFloat) (g / 255.0), (CGFloat) (b / 255.0), (CGFloat) (a / 255.0) );
-#else
-    CGFloat components[4] = { (CGFloat)(r / 255.0), (CGFloat) (g / 255.0), (CGFloat) (b / 255.0), (CGFloat) (a / 255.0) } ;
-    col = CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ;
-#endif
-    wxASSERT_MSG(col != NULL, "Invalid CoreGraphics Color");
-    m_cgColour.reset( col );
+    if (!m_refData || !other.m_refData)
+        return false;
+
+    return CGColorEqualToColor(GetCGColor(), other.GetCGColor());
 }
 
-#if wxOSX_USE_COCOA_OR_CARBON
-void wxColour::InitRGBColor( const RGBColor& col )
+wxGDIRefData* wxColour::CreateGDIRefData() const
 {
-    m_red = col.red >> 8;
-    m_blue = col.blue >> 8;
-    m_green = col.green >> 8;
-    m_alpha = wxALPHA_OPAQUE;
-    CGColorRef cfcol;
-    cfcol = CGColorCreateGenericRGB((CGFloat)(col.red / 65535.0), (CGFloat)(col.green / 65535.0),
-                                        (CGFloat)(col.blue / 65535.0), (CGFloat) 1.0 );
-    wxASSERT_MSG(cfcol != NULL, "Invalid CoreGraphics Color");
-    m_cgColour.reset( cfcol );
-}
-#endif
-
-void wxColour::InitCGColorRef( CGColorRef col )
-{
-    wxASSERT_MSG(col != NULL, "Invalid CoreGraphics Color");
-    m_cgColour.reset( col );
-    size_t noComp = CGColorGetNumberOfComponents( col );
-
-    const CGFloat *components = NULL;
-    if ( noComp >= 1 && noComp <= 4 )
-    {
-        // TODO verify whether we really are on a RGB color space
-        m_alpha = wxALPHA_OPAQUE;
-        components = CGColorGetComponents( col );
-    }
-
-    if ( noComp < 1 || !components )
-    {
-        m_alpha = wxALPHA_OPAQUE;
-        m_red = m_green = m_blue = 0;
-        return;
-    }
-
-    if ( noComp >= 3 )
-    {
-        m_red = (int)(components[0]*255+0.5);
-        m_green = (int)(components[1]*255+0.5);
-        m_blue = (int)(components[2]*255+0.5);
-        if ( noComp == 4 )
-            m_alpha =  (int)(components[3]*255+0.5);
-    }
-    else
-    {
-        m_red = (int)(components[0]*255+0.5);
-        m_green = (int)(components[0]*255+0.5);
-        m_blue = (int)(components[0]*255+0.5);
-    }
+    // black
+    return new wxCGColorRefData(0.0, 0.0, 0.0);
 }
 
-bool wxColour::operator == (const wxColour& colour) const
+wxGDIRefData* wxColour::CloneGDIRefData(const wxGDIRefData* data) const
 {
-    return ( (IsOk() == colour.IsOk()) && (!IsOk() ||
-                                           CGColorEqualToColor( m_cgColour, colour.m_cgColour ) ) );
+    return static_cast<const wxColourRefData*>(data)->Clone();
 }
-
-

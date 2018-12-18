@@ -183,7 +183,7 @@ void wxGridCellEditorEvtHandler::OnChar(wxKeyEvent& event)
 
             int textWidth = 0;
             wxString value = m_grid->GetCellValue(row, col);
-            if ( wxEmptyString != value )
+            if (!value.empty())
             {
                 // get width of cell CONTENTS (text)
                 int y;

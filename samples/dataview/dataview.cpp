@@ -108,6 +108,10 @@ private:
 
     void OnPrependList(wxCommandEvent& event);
     void OnDeleteList(wxCommandEvent& event);
+
+    // Third (wxDataViewListCtrl) page.
+    void OnListValueChanged(wxDataViewEvent& event);
+
     // Fourth page.
     void OnDeleteTreeItem(wxCommandEvent& event);
     void OnDeleteAllTreeItems(wxCommandEvent& event);
@@ -143,6 +147,7 @@ private:
     void OnShowAttributes( wxCommandEvent &event);
 
     void OnMultipleSort( wxCommandEvent &event);
+    void OnSortByFirstColumn( wxCommandEvent &event);
 
 #if wxUSE_DRAG_AND_DROP
     void OnBeginDrag( wxDataViewEvent &event );
@@ -176,6 +181,9 @@ private:
     wxLog *m_logOld;
 
 private:
+    // Flag used by OnListValueChanged(), see there.
+    bool m_eventFromProgram;
+
     wxDECLARE_EVENT_TABLE();
 };
 
@@ -356,6 +364,7 @@ enum
     ID_HIDE_ATTRIBUTES  = 204,
     ID_SHOW_ATTRIBUTES  = 205,
     ID_MULTIPLE_SORT    = 206,
+    ID_SORT_BY_FIRST_COLUMN,
 
     // Fourth page.
     ID_DELETE_TREE_ITEM = 400,
@@ -400,6 +409,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_HIDE_ATTRIBUTES, MyFrame::OnHideAttributes)
     EVT_BUTTON( ID_SHOW_ATTRIBUTES, MyFrame::OnShowAttributes)
     EVT_CHECKBOX( ID_MULTIPLE_SORT, MyFrame::OnMultipleSort)
+    EVT_CHECKBOX( ID_SORT_BY_FIRST_COLUMN, MyFrame::OnSortByFirstColumn)
     
     // Fourth page.
     EVT_BUTTON( ID_DELETE_TREE_ITEM, MyFrame::OnDeleteTreeItem )
@@ -449,6 +459,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_ctrl[1] = NULL;
     m_ctrl[2] = NULL;
     m_ctrl[3] = NULL;
+
+    m_eventFromProgram = false;
 
     SetIcon(wxICON(sample));
 
@@ -550,12 +562,17 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     button_sizer2->Add( new wxButton( secondPanel, ID_ADD_MANY,    "Add 1000"),               0, wxALL, 10 );
     button_sizer2->Add( new wxButton( secondPanel, ID_HIDE_ATTRIBUTES,    "Hide attributes"), 0, wxALL, 10 );
     button_sizer2->Add( new wxButton( secondPanel, ID_SHOW_ATTRIBUTES,    "Show attributes"), 0, wxALL, 10 );
-    button_sizer2->Add( new wxCheckBox(secondPanel, ID_MULTIPLE_SORT, "Allow multisort"),
-                        wxSizerFlags().Centre().DoubleBorder() );
+
+    wxBoxSizer *sortSizer = new wxBoxSizer(wxHORIZONTAL);
+    sortSizer->Add(new wxCheckBox(secondPanel, ID_SORT_BY_FIRST_COLUMN, "Sort by first column"),
+                   wxSizerFlags().Centre().DoubleBorder());
+    sortSizer->Add(new wxCheckBox(secondPanel, ID_MULTIPLE_SORT, "Allow multisort"),
+                   wxSizerFlags().Centre().DoubleBorder());
 
     wxSizer *secondPanelSz = new wxBoxSizer( wxVERTICAL );
     secondPanelSz->Add(m_ctrl[1], 1, wxGROW|wxALL, 5);
     secondPanelSz->Add(button_sizer2);
+    secondPanelSz->Add(sortSizer);
     secondPanel->SetSizerAndFit(secondPanelSz);
 
 
@@ -622,9 +639,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             m_ctrl[0] =
                 new wxDataViewCtrl( parent, ID_MUSIC_CTRL, wxDefaultPosition,
                                     wxDefaultSize, style );
-            m_ctrl[0]->Connect(wxEVT_CHAR,
-                               wxKeyEventHandler(MyFrame::OnDataViewChar),
-                               NULL, this);
+            m_ctrl[0]->Bind(wxEVT_CHAR, &MyFrame::OnDataViewChar, this);
 
             m_music_model = new MyMusicTreeModel;
             m_ctrl[0]->AssociateModel( m_music_model.get() );
@@ -710,6 +725,11 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             m_list_model = new MyListModel;
             m_ctrl[1]->AssociateModel( m_list_model.get() );
 
+            m_ctrl[1]->AppendToggleColumn(L"\u2714",
+                                          MyListModel::Col_Toggle,
+                                          wxDATAVIEW_CELL_ACTIVATABLE,
+                                          wxCOL_WIDTH_AUTOSIZE);
+
             // the various columns
             m_ctrl[1]->AppendTextColumn("editable string",
                                         MyListModel::Col_EditableText,
@@ -761,6 +781,17 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             page2_model->DecRef();
 
             lc->AppendToggleColumn( "Toggle" );
+
+            // We're not limited to convenience column-appending functions, it
+            // can also be done fully manually, which allows us to customize
+            // the renderer being used.
+            wxDataViewToggleRenderer* const rendererRadio =
+                new wxDataViewToggleRenderer("bool", wxDATAVIEW_CELL_ACTIVATABLE);
+            rendererRadio->ShowAsRadio();
+            wxDataViewColumn* const colRadio =
+                new wxDataViewColumn("Radio", rendererRadio, 1);
+            lc->AppendColumn(colRadio, "bool");
+
             lc->AppendTextColumn( "Text" );
             lc->AppendProgressColumn( "Progress" );
 
@@ -769,11 +800,14 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             {
                 data.clear();
                 data.push_back( (i%3) == 0 );
+                data.push_back( i == 7 ); // select a single (random) radio item
                 data.push_back( wxString::Format("row %d", i) );
                 data.push_back( long(5*i) );
 
                 lc->AppendItem( data );
             }
+
+            lc->Bind(wxEVT_DATAVIEW_ITEM_VALUE_CHANGED, &MyFrame::OnListValueChanged, this);
         }
         break;
 
@@ -997,7 +1031,7 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
     wxAboutDialogInfo info;
     info.SetName(_("DataView sample"));
     info.SetDescription(_("This sample demonstrates wxDataViewCtrl"));
-    info.SetCopyright(wxT("(C) 2007-2009 Robert Roebling"));
+    info.SetCopyright("(C) 2007-2009 Robert Roebling");
     info.AddDeveloper("Robert Roebling");
     info.AddDeveloper("Francesco Montorsi");
 
@@ -1180,7 +1214,8 @@ void MyFrame::OnValueChanged( wxDataViewEvent &event )
 void MyFrame::OnActivated( wxDataViewEvent &event )
 {
     wxString title = m_music_model->GetTitle( event.GetItem() );
-    wxLogMessage( "wxEVT_DATAVIEW_ITEM_ACTIVATED, Item: %s", title );
+    wxLogMessage( "wxEVT_DATAVIEW_ITEM_ACTIVATED, Item: %s; Column: %d",
+                  title, event.GetColumn() );
 
     if (m_ctrl[0]->IsExpanded( event.GetItem() ))
     {
@@ -1393,6 +1428,48 @@ void MyFrame::OnShowAttributes(wxCommandEvent& WXUNUSED(event))
 }
 
 // ----------------------------------------------------------------------------
+// MyFrame - event handlers for the third (wxDataViewListCtrl) page
+// ----------------------------------------------------------------------------
+
+void MyFrame::OnListValueChanged(wxDataViewEvent& event)
+{
+    // Ignore changes coming from our own SetToggleValue() calls below.
+    if ( m_eventFromProgram )
+    {
+        m_eventFromProgram = false;
+        return;
+    }
+
+    wxDataViewListCtrl* const lc = static_cast<wxDataViewListCtrl*>(m_ctrl[2]);
+
+    const int columnToggle = 1;
+
+    // Handle selecting a radio button by unselecting all the other ones.
+    if ( event.GetColumn() == columnToggle )
+    {
+        const int rowChanged = lc->ItemToRow(event.GetItem());
+        if ( lc->GetToggleValue(rowChanged, columnToggle) )
+        {
+            for ( int row = 0; row < lc->GetItemCount(); ++row )
+            {
+                if ( row != rowChanged )
+                {
+                    m_eventFromProgram = true;
+                    lc->SetToggleValue(false, row, columnToggle);
+                }
+            }
+        }
+        else // The item was cleared.
+        {
+            // Explicitly check it back, we want to always have exactly one
+            // checked radio item in this column.
+            m_eventFromProgram = true;
+            lc->SetToggleValue(true, rowChanged, columnToggle);
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
 // MyFrame - event handlers for the fourth page
 // ----------------------------------------------------------------------------
 
@@ -1437,3 +1514,11 @@ void MyFrame::OnMultipleSort( wxCommandEvent &event )
         wxLogMessage("Sorting by multiple columns not supported");
 }
 
+void MyFrame::OnSortByFirstColumn(wxCommandEvent& event)
+{
+    wxDataViewColumn* const col = m_ctrl[1]->GetColumn(0);
+    if ( event.IsChecked() )
+        col->SetSortOrder(true /* ascending */);
+    else
+        col->UnsetAsSortKey();
+}

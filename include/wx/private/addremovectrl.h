@@ -145,8 +145,10 @@ protected:
 
 #ifdef __WXOSX__
     #include "wx/osx/private/addremovectrl.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK20__)
     #include "wx/gtk/private/addremovectrl.h"
+#elif defined(__WXGTK__)
+    #include "wx/gtk1/private/addremovectrl.h"
 #else
     #include "wx/generic/private/addremovectrl.h"
 #endif

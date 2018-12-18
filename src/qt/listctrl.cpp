@@ -12,7 +12,7 @@
     #pragma hdrstop
 #endif
 
-#include <QHeaderView>
+#include <QtWidgets/QHeaderView>
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -329,12 +329,9 @@ bool wxListCtrl::SetItem(wxListItem& info)
             {
                 wxImageList *imglst = GetImageList(InReportView() ? wxIMAGE_LIST_SMALL : wxIMAGE_LIST_NORMAL);
                 wxCHECK_MSG(imglst, false, "invalid listctrl imagelist");
-                const wxBitmap* bitmap = imglst->GetBitmapPtr(info.m_image);
-                if (bitmap != NULL)
-                {
-                    // set the new image:
-                    qitem->setIcon( info.GetColumn(), QIcon( *bitmap->GetHandle() ));
-                }
+                const wxBitmap bitmap = imglst->GetBitmap(info.m_image);
+                // set the new image:
+                qitem->setIcon( info.GetColumn(), QIcon( *bitmap.GetHandle() ));
             }
             else
             {

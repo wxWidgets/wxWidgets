@@ -55,14 +55,14 @@ void EventCloneTestCase::CheckAll()
     for (; ci; ci = ci->GetNext())
     {
         wxString cn = wxString(ci->GetClassName());
-    
+
         // is this class derived from wxEvent?
         if ( !ci->IsKindOf(CLASSINFO(wxEvent)) ||
              cn == "wxEvent" )
             continue;
 
         const std::string
-            msg = std::string("Event class \"") + 
+            msg = std::string("Event class \"") +
                   std::string(cn.c_str()) + "\"";
 
         CPPUNIT_ASSERT_MESSAGE( msg, ci->IsDynamic() );

@@ -257,6 +257,9 @@ $fatpacked{"Makefile/Update/Bakefile0.pm"} = '#line '.(1+__LINE__).' "'.__FILE__
       # depending on whether we have seen them in the input file as values.
       my %files;
   
+      # <if>-related state.
+      my ($seen_any_files, $wrapped_in_if, $if_nesting_level, $add_new_files);
+  
       # Set to 1 if we made any changes.
       my $changed = 0;
       while (<$in>) {
@@ -265,28 +268,36 @@ $fatpacked{"Makefile/Update/Bakefile0.pm"} = '#line '.(1+__LINE__).' "'.__FILE__
           if (/<set var="(\w+)" hints="files">/ && exists $vars->{$1}) {
               $var = $1;
               %files = map { $_ => 0 } @{$vars->{$var}};
+              $seen_any_files = 0;
+              $if_nesting_level = 0;
+              $add_new_files = 0;
           } elsif (defined $var) {
               local $_ = $_;
               s/<!-- .* -->//;
               s/^\s+//;
               s/\s+$//;
-              s{<if [^>]+>}{};
-              s{</if>}{};
-              if (m{</set>}) {
-                  # Check if we have any new files.
-                  #
-                  # TODO Insert them in alphabetical order.
-                  while (my ($file, $seen) = each(%files)) {
-                      if (!$seen) {
-                          # This file was wasn't present in the input, add it.
-                          # TODO Use proper indentation.
-                          print $out "    $file\n";
   
-                          $changed = 1;
-                      }
+              # We need to handle <if>...</if> inside the files list if only
+              # because we need to insert any newly added files before the final
+              # </if>.
+              if (m{<if [^>]+>}) {
+                  if (!$seen_any_files) {
+                      # Remember that the closing tag will be </if>, not </set>.
+                      $wrapped_in_if = 1
                   }
   
-                  undef $var;
+                  $if_nesting_level++;
+              } elsif (m{</if>}) {
+                  if (!--$if_nesting_level && $wrapped_in_if) {
+                      # We need to add any new files here, before the last
+                      # </if> as otherwise they would end up outside of it.
+                      $add_new_files = 1;
+                  }
+              } elsif (m{</set>}) {
+                  # Note that if we're in the $wrapped_in_if case, then this had
+                  # already been done and $var was undefined, so we don't do it
+                  # twice.
+                  $add_new_files = 1
               } elsif ($_) {
                   if (not exists $files{$_}) {
                       # This file was removed.
@@ -301,6 +312,24 @@ $fatpacked{"Makefile/Update/Bakefile0.pm"} = '#line '.(1+__LINE__).' "'.__FILE__
                       $files{$_} = 1;
                   }
               }
+          }
+  
+          if ($add_new_files) {
+              # Check if we have any new files.
+              #
+              # TODO Insert them in alphabetical order.
+              while (my ($file, $seen) = each(%files)) {
+                  if (!$seen) {
+                      # This file was wasn't present in the input, add it.
+                      # TODO Use proper indentation.
+                      print $out "    $file\n";
+  
+                      $changed = 1;
+                  }
+              }
+  
+              undef $var;
+              $add_new_files = 0
           }
   
           print $out "$_\n";

@@ -168,8 +168,13 @@ int wxMessageDialog::ShowModal()
     {
         NSAlert* alert = (NSAlert*)ConstructNSAlert();
 
+        OSXBeginModalDialog();
+
         int button = -1;
         button = [alert runModal];
+        
+        OSXEndModalDialog();
+
         ModalFinishedCallback(alert, button);
         [alert release];
     }

@@ -40,7 +40,7 @@
 // ----------------------------------------------------------------------------
 
 extern
-WXDLLIMPEXP_DATA_ADV(const char) wxAddRemoveCtrlNameStr[] = "wxAddRemoveCtrl";
+WXDLLIMPEXP_DATA_CORE(const char) wxAddRemoveCtrlNameStr[] = "wxAddRemoveCtrl";
 
 bool
 wxAddRemoveCtrl::Create(wxWindow* parent,
@@ -54,7 +54,7 @@ wxAddRemoveCtrl::Create(wxWindow* parent,
         return false;
 
     // We don't do anything here, the buttons are created when we're given the
-    // adaptor to use them with in SetAdaptor().
+    // adaptor to use them with SetAdaptor().
     return true;
 }
 

@@ -35,6 +35,7 @@
     #include "wx/textctrl.h"
 #endif
 
+#include "wx/artprov.h"
 #include "wx/filename.h"
 
 #include "wx/generic/statbmpg.h"
@@ -61,7 +62,7 @@ private:
 
     void OnMouseEvent(wxMouseEvent& WXUNUSED(event))
     {
-        wxLogMessage(wxT("wxStaticBitmap clicked."));
+        wxLogMessage("wxStaticBitmap clicked.");
     }
 
     wxStaticBitmapBase *m_statbmp;
@@ -73,7 +74,7 @@ private:
     DECLARE_WIDGETS_PAGE(StatBmpWidgetsPage)
 };
 
-IMPLEMENT_WIDGETS_PAGE(StatBmpWidgetsPage, wxT("StaticBitmap"),
+IMPLEMENT_WIDGETS_PAGE(StatBmpWidgetsPage, "StaticBitmap",
                        ALL_CTRLS);
 
 void StatBmpWidgetsPage::CreateContent()
@@ -90,7 +91,13 @@ void StatBmpWidgetsPage::CreateContent()
 
     wxString testImage;
 #if wxUSE_LIBPNG
-    wxFileName fn("../image/toucan.png");
+    wxPathList pathlist;
+    pathlist.Add(".");
+    pathlist.Add("..");
+    pathlist.Add("../image");
+    pathlist.Add("../../../samples/image");
+
+    wxFileName fn(pathlist.FindValidPath("toucan.png"));
     if ( fn.FileExists() )
         testImage = fn.GetFullPath();
 #endif // wxUSE_LIBPNG
@@ -109,10 +116,8 @@ void StatBmpWidgetsPage::CreateContent()
 
     wxInitAllImageHandlers();
 
-    Connect(wxEVT_FILEPICKER_CHANGED,
-            wxFileDirPickerEventHandler(StatBmpWidgetsPage::OnFileChange));
-    Connect(wxEVT_RADIOBOX,
-            wxCommandEventHandler(StatBmpWidgetsPage::OnRadioChange));
+    Bind(wxEVT_FILEPICKER_CHANGED, &StatBmpWidgetsPage::OnFileChange, this);
+    Bind(wxEVT_RADIOBOX, &StatBmpWidgetsPage::OnRadioChange, this);
 
     m_statbmp = NULL;
     RecreateWidget();
@@ -122,20 +127,42 @@ void StatBmpWidgetsPage::RecreateWidget()
 {
     wxDELETE(m_statbmp);
 
-    wxString filepath = m_filepicker->GetPath();
-    if ( filepath.empty() )
-        return;
+    wxBitmap bmp;
 
-    wxImage image(filepath);
-    if (! image.IsOk() )
+    wxString filepath = m_filepicker->GetPath();
+    if ( !filepath.empty() )
     {
-        wxLogMessage("Reading image from file '%s' failed.", filepath.c_str());
-        return;
+        wxImage image(filepath);
+        if ( image.IsOk() )
+        {
+            bmp = image;
+        }
+        else
+        {
+            wxLogMessage("Reading image from file '%s' failed.", filepath);
+        }
     }
+
+    if ( !bmp.IsOk() )
+    {
+        // Show at least something.
+        bmp = wxArtProvider::GetBitmap(wxART_MISSING_IMAGE);
+    }
+
+    long style = GetAttrs().m_defaultFlags;
+
     if (m_radio->GetSelection() == 0)
-        m_statbmp = new wxStaticBitmap(this, wxID_ANY, wxBitmap(image));
+    {
+        m_statbmp = new wxStaticBitmap(this, wxID_ANY, bmp,
+                                       wxDefaultPosition, wxDefaultSize,
+                                       style);
+    }
     else
-        m_statbmp = new wxGenericStaticBitmap(this, wxID_ANY, wxBitmap(image));
+    {
+        m_statbmp = new wxGenericStaticBitmap(this, wxID_ANY, bmp,
+                                              wxDefaultPosition, wxDefaultSize,
+                                              style);
+    }
 
     wxStaticBitmapBase::ScaleMode scaleMode = (wxStaticBitmapBase::ScaleMode) m_scaleRadio->GetSelection();
     m_statbmp->SetScaleMode(scaleMode);
@@ -154,9 +181,8 @@ void StatBmpWidgetsPage::RecreateWidget()
     }
     m_sbsizer->Add(m_statbmp, wxSizerFlags(1).Expand());
     GetSizer()->Layout();
-    m_statbmp->Connect(wxEVT_LEFT_DOWN,
-                       wxMouseEventHandler(StatBmpWidgetsPage::OnMouseEvent),
-                       NULL, this);
+    m_statbmp->Bind(wxEVT_LEFT_DOWN, &StatBmpWidgetsPage::OnMouseEvent, this);
+
     // When switching from generic to native control on wxMSW under Wine,
     // the explicit Refresh() is necessary
     m_statbmp->Refresh();

@@ -8,6 +8,8 @@
 
 #include "testprec.h"
 
+#if wxUSE_HTML
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -25,12 +27,12 @@ class HtmlListBoxTestCase : public ItemContainerTestCase,
 public:
     HtmlListBoxTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
-    virtual wxItemContainer *GetContainer() const { return m_htmllbox; }
-    virtual wxWindow *GetContainerWindow() const { return m_htmllbox; }
+    virtual wxItemContainer *GetContainer() const wxOVERRIDE { return m_htmllbox; }
+    virtual wxWindow *GetContainerWindow() const wxOVERRIDE { return m_htmllbox; }
 
     CPPUNIT_TEST_SUITE( HtmlListBoxTestCase );
         wxITEM_CONTAINER_TESTS();
@@ -56,3 +58,5 @@ void HtmlListBoxTestCase::tearDown()
 {
     wxDELETE(m_htmllbox);
 }
+
+#endif //wxUSE_HTML

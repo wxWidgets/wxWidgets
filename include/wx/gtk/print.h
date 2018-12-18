@@ -245,7 +245,9 @@ public:
     wxSize GetPPI() const wxOVERRIDE;
     virtual int GetDepth() const wxOVERRIDE { return 24; }
     void SetBackgroundMode(int mode) wxOVERRIDE;
+#if wxUSE_PALETTE
     void SetPalette(const wxPalette& WXUNUSED(palette)) wxOVERRIDE { }
+#endif
     void SetResolution(int ppi);
 
     // overridden for wxPrinterDC Impl

@@ -198,6 +198,8 @@ public:
                              wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                              int align = wxDVR_DEFAULT_ALIGNMENT);
 
+    void ShowAsRadio();
+
     virtual bool MacRender();
 
     virtual void OSXOnCellChanged(NSObject *value,
@@ -205,6 +207,8 @@ public:
                                   unsigned col);
 
 private:
+    void DoInitButtonCell(int buttonType);
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewToggleRenderer);
 };
 

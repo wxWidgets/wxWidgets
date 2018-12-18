@@ -15,6 +15,7 @@
 #include "wx/cpp.h"
 #include "wx/object.h"
 #include "wx/clntdata.h"
+#include "wx/math.h"
 
 #if wxUSE_GUI
     #include "wx/gdicmn.h"
@@ -81,9 +82,9 @@ typedef int wxEventType;
 
 #define wxEVT_ANY           ((wxEventType)-1)
 
-// this is used to make the event table entry type safe, so that for an event
-// handler only a function with proper parameter list can be given. See also
-// the wxEVENT_HANDLER_CAST-macro.
+// This macro exists for compatibility only (even though it was never public,
+// it still appears in some code using wxWidgets), see public
+// wxEVENT_HANDLER_CAST instead.
 #define wxStaticCastEvent(type, val) static_cast<type>(val)
 
 #define wxDECLARE_EVENT_TABLE_ENTRY(type, winid, idLast, fn, obj) \
@@ -122,10 +123,30 @@ extern WXDLLIMPEXP_BASE wxEventType wxNewEventType();
 #define wxDECLARE_EXPORTED_EVENT_ALIAS( expdecl, name, type ) \
     extern const expdecl wxEventTypeTag< type > name
 
-// Try to cast the given event handler to the correct handler type:
+// The type-erased method signature used for event handling.
+typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
 
+template <typename T>
+inline wxEventFunction wxEventFunctionCast(void (wxEvtHandler::*func)(T&))
+{
+    // There is no going around the cast here: we do rely calling the event
+    // handler method, which takes a reference to an object of a class derived
+    // from wxEvent, as if it took wxEvent itself. On all platforms supported
+    // by wxWidgets, this cast is harmless, but it's not a valid cast in C++
+    // and gcc 8 started giving warnings about this (with -Wextra), so suppress
+    // them locally to avoid generating hundreds of them when compiling any
+    // code using event table macros.
+
+    wxGCC_WARNING_SUPPRESS_CAST_FUNCTION_TYPE()
+
+    return reinterpret_cast<wxEventFunction>(func);
+
+    wxGCC_WARNING_RESTORE_CAST_FUNCTION_TYPE()
+}
+
+// Try to cast the given event handler to the correct handler type:
 #define wxEVENT_HANDLER_CAST( functype, func ) \
-    ( wxObjectEventFunction )( wxEventFunction )wxStaticCastEvent( functype, &func )
+    wxEventFunctionCast(static_cast<functype>(&func))
 
 
 // The tag is a type associated to the event type (which is an integer itself,
@@ -149,9 +170,6 @@ public:
 private:
     wxEventType m_type;
 };
-
-// These are needed for the functor definitions
-typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
 
 // We had some trouble with using wxEventFunction
 // in the past so we had introduced wxObjectEventFunction which
@@ -295,8 +313,8 @@ struct HandlerImpl<T, A, true>
     static wxEvtHandler *ConvertToEvtHandler(T *p)
         { return p; }
     static wxEventFunction ConvertToEvtMethod(void (T::*f)(A&))
-        { return static_cast<wxEventFunction>(
-                    reinterpret_cast<void (T::*)(wxEvent&)>(f)); }
+        { return wxEventFunctionCast(
+                    static_cast<void (wxEvtHandler::*)(A&)>(f)); }
 };
 
 // specialization for handlers not deriving from wxEvtHandler
@@ -955,7 +973,7 @@ public:
     // propagation level value
     int StopPropagation()
     {
-        int propagationLevel = m_propagationLevel;
+        const int propagationLevel = m_propagationLevel;
         m_propagationLevel = wxEVENT_PROPAGATE_NONE;
         return propagationLevel;
     }
@@ -1893,7 +1911,7 @@ public:
     bool IsGestureEnd() const { return m_isEnd; }
     void SetGestureEnd(bool isEnd = true) { m_isEnd = isEnd; }
 
-    virtual wxEvent *Clone() const { return new wxGestureEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxGestureEvent(*this); }
 
 protected:
     wxPoint m_pos;
@@ -1926,7 +1944,7 @@ public:
     wxPoint GetDelta() const { return m_delta; }
     void SetDelta(const wxPoint& delta) { m_delta = delta; }
 
-    virtual wxEvent *Clone() const { return new wxPanGestureEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxPanGestureEvent(*this); }
 
 private:
     wxPoint m_delta;
@@ -1955,7 +1973,7 @@ public:
     double GetZoomFactor() const { return m_zoomFactor; }
     void SetZoomFactor(double zoomFactor) { m_zoomFactor = zoomFactor; }
 
-    virtual wxEvent *Clone() const { return new wxZoomGestureEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxZoomGestureEvent(*this); }
 
 private:
     double m_zoomFactor;
@@ -1984,7 +2002,7 @@ public:
     double GetRotationAngle() const { return m_rotationAngle; }
     void SetRotationAngle(double rotationAngle) { m_rotationAngle = rotationAngle; }
 
-    virtual wxEvent *Clone() const { return new wxRotateGestureEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxRotateGestureEvent(*this); }
 
 private:
     double m_rotationAngle;
@@ -2008,7 +2026,7 @@ public:
     wxTwoFingerTapEvent(const wxTwoFingerTapEvent& event) : wxGestureEvent(event)
     { }
 
-    virtual wxEvent *Clone() const { return new wxTwoFingerTapEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxTwoFingerTapEvent(*this); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxTwoFingerTapEvent);
@@ -2030,7 +2048,7 @@ public:
     wxLongPressEvent(const wxLongPressEvent& event) : wxGestureEvent(event)
     { }
 
-    virtual wxEvent *Clone() const { return new wxLongPressEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxLongPressEvent(*this); }
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxLongPressEvent);
 };
@@ -2051,7 +2069,7 @@ public:
     wxPressAndTapEvent(const wxPressAndTapEvent& event) : wxGestureEvent(event)
     { }
 
-    virtual wxEvent *Clone() const { return new wxPressAndTapEvent(*this); }
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxPressAndTapEvent(*this); }
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxPressAndTapEvent);
 };
@@ -2743,6 +2761,7 @@ public:
     int GetZPosition() const { return m_zPosition; }
     int GetButtonState() const { return m_buttonState; }
     int GetButtonChange() const { return m_buttonChange; }
+    int GetButtonOrdinal() const { return wxCTZ(m_buttonChange); }
     int GetJoystick() const { return m_joyStick; }
 
     void SetJoystick(int stick) { m_joyStick = stick; }

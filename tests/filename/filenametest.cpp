@@ -27,7 +27,7 @@
 
 #ifdef __WINDOWS__
     #include "wx/msw/registry.h"
-    #include <shlobj.h>
+    #include "wx/msw/wrapshl.h"
     #include "wx/msw/ole/oleutils.h"
     #include "wx/msw/private/comptr.h"
 #endif // __WINDOWS__
@@ -665,7 +665,7 @@ void FileNameTestCase::TestCreateTempFileName()
         if (testData[n].shouldSucceed)
         {
             errDesc += "; path is " + path.ToStdString();
-        
+
             // test the place where the temp file has been created
             wxString expected = testData[n].expectedFolder;
             expected.Replace("$SYSTEM_TEMP", wxStandardPaths::Get().GetTempDir());
@@ -688,7 +688,7 @@ void FileNameTestCase::TestGetTimes()
     wxDateTime dtAccess, dtMod, dtCreate;
     CPPUNIT_ASSERT( fn.GetTimes(&dtAccess, &dtMod, &dtCreate) );
 
-    // make sure all retrieved dates are equal to the current date&time 
+    // make sure all retrieved dates are equal to the current date&time
     // with an accuracy up to 1 minute
     CPPUNIT_ASSERT(dtCreate.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));
     CPPUNIT_ASSERT(dtMod.IsEqualUpTo(wxDateTime::Now(), wxTimeSpan(0,1)));

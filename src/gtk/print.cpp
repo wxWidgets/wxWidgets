@@ -34,7 +34,7 @@
 #include "wx/paper.h"
 #include "wx/modalhook.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 #if GTK_CHECK_VERSION(2,14,0)
 #include <gtk/gtkunixprint.h>
@@ -46,7 +46,6 @@
 wxFORCE_LINK_THIS_MODULE(gtk_print)
 
 #include "wx/gtk/private/object.h"
-#include "wx/gtk/private/gtk2-compat.h"
 
 // Useful to convert angles from degrees to radians.
 static const double DEG2RAD  = M_PI / 180.0;
@@ -1024,19 +1023,8 @@ void wxGtkPrinter::BeginPrint(wxPrintout *printout, GtkPrintOperation *operation
         return;
     }
 
-    printout->SetPPIScreen(wxGetDisplayPPI());
-    printout->SetPPIPrinter( printDC->GetResolution(),
-                             printDC->GetResolution() );
+    printout->SetUp(*m_dc);
 
-    printout->SetDC(m_dc);
-
-    int w, h;
-    m_dc->GetSize(&w, &h);
-    printout->SetPageSizePixels((int)w, (int)h);
-    printout->SetPaperRectPixels(wxRect(0, 0, w, h));
-    int mw, mh;
-    m_dc->GetSizeMM(&mw, &mh);
-    printout->SetPageSizeMM((int)mw, (int)mh);
     printout->OnPreparePrinting();
 
     // Get some parameters from the printout, if defined.

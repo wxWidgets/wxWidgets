@@ -431,10 +431,10 @@ void LifeFrame::OnMenu(wxCommandEvent& event)
             m_running = true;
             m_topspeed = true;
             UpdateUI();
-            
+
             const long YIELD_INTERVAL = 1000 / 30;
             wxMilliClock_t lastyield = 0, now;
-            
+
             while (m_running && m_topspeed)
             {
                 OnStep();
@@ -444,7 +444,7 @@ void LifeFrame::OnMenu(wxCommandEvent& event)
                     lastyield = now;
                 }
             }
- 
+
             break;
         }
     }
@@ -534,7 +534,7 @@ void LifeFrame::OnNavigate(wxCommandEvent& event)
         case ID_CENTER: c = m_life->FindCenter(); break;
         default :
             wxFAIL;
-            // Fall through!
+            wxFALLTHROUGH;
         case ID_ORIGIN: c.i = c.j = 0; break;
     }
 
@@ -797,17 +797,17 @@ void LifeCanvas::DrawCell(wxInt32 i, wxInt32 j, wxDC &dc)
 void LifeCanvas::DrawChanged()
 {
     wxClientDC dc(this);
-    
+
     size_t ncells;
     LifeCell *cells;
     bool done = false;
-    
+
     m_life->BeginFind(m_viewportX,
                       m_viewportY,
                       m_viewportX + m_viewportW,
                       m_viewportY + m_viewportH,
                       true);
-    
+
     if (m_cellsize == 1)
     {
         dc.SetPen(*wxWHITE_PEN);
@@ -818,11 +818,11 @@ void LifeCanvas::DrawChanged()
         dc.SetBrush(*wxWHITE_BRUSH);
     }
     dc.SetLogicalFunction(wxXOR);
-    
+
     while (!done)
     {
         done = m_life->FindMore(&cells, &ncells);
-        
+
         for (size_t m = 0; m < ncells; m++)
             DrawCell(cells[m].i, cells[m].j, dc);
     }

@@ -112,11 +112,9 @@ bool wxNotebook::SetPageImage(size_t n, int imageId)
     if (imageId >= 0)
     {
         wxCHECK_MSG(HasImageList(), false, "invalid notebook imagelist");
-        const wxBitmap* bitmap = GetImageList()->GetBitmapPtr(imageId);
-        if (bitmap == NULL)
-            return false;
+        const wxBitmap bitmap = GetImageList()->GetBitmap(imageId);
         // set the new image:
-        m_qtTabWidget->setTabIcon( n, QIcon( *bitmap->GetHandle() ));
+        m_qtTabWidget->setTabIcon( n, QIcon( *bitmap.GetHandle() ));
     }
     else
     {
@@ -137,8 +135,8 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
     {
         if (HasImageList())
         {
-            const wxBitmap* bitmap = GetImageList()->GetBitmapPtr(imageId);
-            m_qtTabWidget->insertTab( n, page->GetHandle(), QIcon( *bitmap->GetHandle() ), wxQtConvertString( text ));
+            const wxBitmap bitmap = GetImageList()->GetBitmap(imageId);
+            m_qtTabWidget->insertTab( n, page->GetHandle(), QIcon( *bitmap.GetHandle() ), wxQtConvertString( text ));
         }
         else
         {
@@ -150,7 +148,7 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
         m_qtTabWidget->insertTab( n, page->GetHandle(), wxQtConvertString( text ));
     }
 
-    m_pages.Insert(page, n);
+    m_pages.insert(m_pages.begin() + n, page);
     m_images.insert(m_images.begin() + n, imageId);
 
     // reenable firing qt signals as internal wx initialization was completed

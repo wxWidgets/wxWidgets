@@ -19,6 +19,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/debug.h"
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -103,13 +105,17 @@
     #include "wx/msw/private.h"
 #endif
 
-#if wxUSE_GUI && defined(__WXGTK__)
-    #include <gtk/gtk.h>    // for GTK_XXX_VERSION constants
+#if wxUSE_GUI
+    // Include the definitions of GTK_XXX_VERSION constants.
+    #ifdef __WXGTK20__
+        #include "wx/gtk/private/wrapgtk.h"
+    #elif defined(__WXGTK__)
+        #include <gtk/gtk.h>
+    #elif defined(__WXQT__)
+        #include <QtCore/QtGlobal>       // for QT_VERSION_STR constants
+    #endif
 #endif
 
-#if wxUSE_GUI && defined(__WXQT__)
-    #include <QtGlobal>       // for QT_VERSION_STR constants
-#endif
 #if wxUSE_BASE
 
 // ============================================================================
@@ -1011,6 +1017,27 @@ unsigned int wxGCD(unsigned int u, unsigned int v)
     return u << shift;
 }
 
+// ----------------------------------------------------------------------------
+// wxCTZ
+// Count trailing zeros. Use optimised builtin where available.
+// ----------------------------------------------------------------------------
+unsigned int wxCTZ(wxUint32 x)
+{
+    wxCHECK_MSG(x > 0, 0, "Undefined for x == 0.");
+#ifdef __GNUC__
+   return __builtin_ctz(x);
+#else
+   int n;
+   n = 1;
+   if ((x & 0x0000FFFF) == 0) {n = n +16; x = x >>16;}
+   if ((x & 0x000000FF) == 0) {n = n + 8; x = x >> 8;}
+   if ((x & 0x0000000F) == 0) {n = n + 4; x = x >> 4;}
+   if ((x & 0x00000003) == 0) {n = n + 2; x = x >> 2;}
+   return n - (x & 1);
+#endif
+}
+
+
 #endif // wxUSE_BASE
 
 // ============================================================================
@@ -1033,7 +1060,7 @@ bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 // Launch default browser
 // ----------------------------------------------------------------------------
 
-#if defined(__WINDOWS__) || \
+#if defined(__WINDOWS__) && !defined(__WXQT__) || \
     defined(__WXX11__) || defined(__WXGTK__) || defined(__WXMOTIF__) || \
     defined(__WXOSX__)
 

@@ -356,14 +356,14 @@ bool NumericValidation( const wxPGProperty* property,
                 if ( !maxOk )
                     msg = wxString::Format(
                                 _("Value must be %s or higher."),
-                                smin.c_str());
+                                smin);
                 else
                 {
                     wxVariant vmax = WXVARIANT(max);
                     wxString smax = property->ValueToString(vmax);
                     msg = wxString::Format(
                                 _("Value must be between %s and %s."),
-                                smin.c_str(), smax.c_str());
+                                smin, smax);
                 }
                 pValidationInfo->SetFailureMessage(msg);
             }
@@ -387,14 +387,14 @@ bool NumericValidation( const wxPGProperty* property,
                 if ( !minOk )
                     msg = wxString::Format(
                                 _("Value must be %s or less."),
-                                smax.c_str());
+                                smax);
                 else
                 {
                     wxVariant vmin = WXVARIANT(min);
                     wxString smin = property->ValueToString(vmin);
                     msg = wxString::Format(
                                 _("Value must be between %s and %s."),
-                                smin.c_str(), smax.c_str());
+                                smin, smax);
                 }
                 pValidationInfo->SetFailureMessage(msg);
             }
@@ -470,14 +470,14 @@ bool NumericValidation( const wxPGProperty* property,
                 if ( !maxOk )
                     msg = wxString::Format(
                                 _("Value must be %s or higher."),
-                                smin.c_str());
+                                smin);
                 else
                 {
                     wxVariant vmax = WXVARIANT(max);
                     wxString smax = property->ValueToString(vmax);
                     msg = wxString::Format(
                                 _("Value must be between %s and %s."),
-                                smin.c_str(), smax.c_str());
+                                smin, smax);
                 }
                 pValidationInfo->SetFailureMessage(msg);
             }
@@ -501,14 +501,14 @@ bool NumericValidation( const wxPGProperty* property,
                 if ( !minOk )
                     msg = wxString::Format(
                                 _("Value must be %s or less."),
-                                smax.c_str());
+                                smax);
                 else
                 {
                     wxVariant vmin = WXVARIANT(min);
                     wxString smin = property->ValueToString(vmin);
                     msg = wxString::Format(
                                 _("Value must be between %s and %s."),
-                                smin.c_str(), smax.c_str());
+                                smin, smax);
                 }
                 pValidationInfo->SetFailureMessage(msg);
             }
@@ -894,7 +894,7 @@ const wxString& wxPropertyGrid::DoubleToString(wxString& target,
             *precTemplate << wxS('f');
         }
 
-        target.Printf( precTemplate->c_str(), value );
+        target.Printf( *precTemplate, value );
     }
     else
     {
@@ -1102,7 +1102,7 @@ wxString wxBoolProperty::ValueToString( wxVariant& value,
             else
                 notFmt = wxS("Not %s");
 
-            return wxString::Format(notFmt.c_str(), m_label.c_str());
+            return wxString::Format(notFmt, m_label);
         }
     }
 
@@ -2280,11 +2280,10 @@ bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGr
     rowsizer->Add(ed, wxSizerFlags(1).Expand().Border(wxALL, spacing));
     topsizer->Add(rowsizer, wxSizerFlags(1).Expand());
 
-    wxStdDialogButtonSizer* buttonSizer = new wxStdDialogButtonSizer();
+    long btnSizerFlags = wxCANCEL;
     if ( !prop->HasFlag(wxPG_PROP_READONLY) )
-        buttonSizer->AddButton(new wxButton(dlg, wxID_OK));
-    buttonSizer->AddButton(new wxButton(dlg, wxID_CANCEL));
-    buttonSizer->Realize();
+        btnSizerFlags |= wxOK;
+    wxStdDialogButtonSizer* buttonSizer = dlg->CreateStdDialogButtonSizer(btnSizerFlags);
     topsizer->Add(buttonSizer, wxSizerFlags(0).Right().Border(wxBOTTOM|wxRIGHT, spacing));
 
     dlg->SetSizer( topsizer );
@@ -2436,46 +2435,30 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
         arr.push_back(ArrayGet(i));
     m_elb->SetStrings(arr);
 
+    m_elbSubPanel = m_elb->GetNewButton()->GetParent();
+
     // Connect event handlers
-    wxButton* but;
     wxListCtrl* lc = m_elb->GetListCtrl();
 
-    but = m_elb->GetNewButton();
-    m_elbSubPanel = but->GetParent();
-    but->Connect(but->GetId(), wxEVT_BUTTON,
-        wxCommandEventHandler(wxPGArrayEditorDialog::OnAddClick),
-        NULL, this);
+    m_elb->GetNewButton()->Bind(wxEVT_BUTTON,
+                                &wxPGArrayEditorDialog::OnAddClick, this);
+    m_elb->GetDelButton()->Bind(wxEVT_BUTTON,
+                                &wxPGArrayEditorDialog::OnDeleteClick, this);
+    m_elb->GetUpButton()->Bind(wxEVT_BUTTON,
+                               &wxPGArrayEditorDialog::OnUpClick, this);
+    m_elb->GetDownButton()->Bind(wxEVT_BUTTON,
+                                 &wxPGArrayEditorDialog::OnDownClick, this);
 
-    but = m_elb->GetDelButton();
-    but->Connect(but->GetId(), wxEVT_BUTTON,
-        wxCommandEventHandler(wxPGArrayEditorDialog::OnDeleteClick),
-        NULL, this);
+    lc->Bind(wxEVT_LIST_BEGIN_LABEL_EDIT,
+             &wxPGArrayEditorDialog::OnBeginLabelEdit, this);
 
-    but = m_elb->GetUpButton();
-    but->Connect(but->GetId(), wxEVT_BUTTON,
-        wxCommandEventHandler(wxPGArrayEditorDialog::OnUpClick),
-        NULL, this);
-
-    but = m_elb->GetDownButton();
-    but->Connect(but->GetId(), wxEVT_BUTTON,
-        wxCommandEventHandler(wxPGArrayEditorDialog::OnDownClick),
-        NULL, this);
-
-    lc->Connect(lc->GetId(), wxEVT_LIST_BEGIN_LABEL_EDIT,
-        wxListEventHandler(wxPGArrayEditorDialog::OnBeginLabelEdit),
-        NULL, this);
-
-    lc->Connect(lc->GetId(), wxEVT_LIST_END_LABEL_EDIT,
-        wxListEventHandler(wxPGArrayEditorDialog::OnEndLabelEdit),
-        NULL, this);
+    lc->Bind(wxEVT_LIST_END_LABEL_EDIT,
+             &wxPGArrayEditorDialog::OnEndLabelEdit, this);
 
     topsizer->Add(m_elb, wxSizerFlags(1).Expand().Border(0, spacing));
 
     // Standard dialog buttons
-    wxStdDialogButtonSizer* buttonSizer = new wxStdDialogButtonSizer();
-    buttonSizer->AddButton(new wxButton(this, wxID_OK));
-    buttonSizer->AddButton(new wxButton(this, wxID_CANCEL));
-    buttonSizer->Realize();
+    wxStdDialogButtonSizer* buttonSizer = CreateStdDialogButtonSizer(wxOK | wxCANCEL);
     topsizer->Add(buttonSizer, wxSizerFlags(0).Right().Border(wxALL, spacing));
 
     m_elb->SetFocus();

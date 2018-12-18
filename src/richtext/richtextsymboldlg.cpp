@@ -605,7 +605,7 @@ void wxSymbolPickerDialog::ShowAtSubset()
 void wxSymbolPickerDialog::OnFontCtrlSelected( wxCommandEvent& WXUNUSED(event) )
 {
     if (m_fontCtrl->GetSelection() == 0)
-        m_fontName = wxEmptyString;
+        m_fontName.clear();
     else
         m_fontName = m_fontCtrl->GetStringSelection();
 
@@ -619,13 +619,9 @@ void wxSymbolPickerDialog::OnSymbolSelected( wxCommandEvent& event )
         return;
 
     int sel = event.GetSelection();
-    if (sel == wxNOT_FOUND)
-        m_symbol = wxEmptyString;
-    else
-    {
-        m_symbol = wxEmptyString;
+    m_symbol.clear();
+    if (sel != wxNOT_FOUND)
         m_symbol << (wxChar) sel;
-    }
 
 #if defined(__UNICODE__)
     if (sel != -1 && m_fromUnicode)
@@ -801,7 +797,7 @@ bool wxSymbolListCtrl::Create(wxWindow *parent,
     m_colBgSel = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
 
     // flicker-free drawing requires this
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     SetFont(*wxNORMAL_FONT);
 

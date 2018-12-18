@@ -407,13 +407,14 @@ wxgtk_initialize_web_extensions(WebKitWebContext *context,
     GVariant *user_data = g_variant_new("(s)", address);
 
     // The first value is the location in which the extension is supposed to be
-    // normally installed, while the other two are used as fallbacks to allow
+    // normally installed, while the other three are used as fallbacks to allow
     // running the tests and sample using wxWebView before installing it.
     const char* const directories[] =
     {
         WX_WEB_EXTENSIONS_DIRECTORY,
         "..",
         "../..",
+        "lib",
     };
 
     const char* dir = NULL;
@@ -589,9 +590,8 @@ wxWebViewWebKit::~wxWebViewWebKit()
     if (m_dbusServer)
     {
         g_dbus_server_stop(m_dbusServer);
-        g_signal_handlers_disconnect_matched(
-            webkit_web_context_get_default(), G_SIGNAL_MATCH_DATA,
-            0, 0, NULL, NULL, m_dbusServer);
+        g_signal_handlers_disconnect_by_data(
+            webkit_web_context_get_default(), m_dbusServer);
     }
     g_clear_object(&m_dbusServer);
     g_clear_object(&m_extension);

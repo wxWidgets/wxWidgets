@@ -88,7 +88,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 ribbon: $(RIBBON_OBJECTS)
-	$(CXX) -o $@ $(RIBBON_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs ribbon,adv,core,base`
+	$(CXX) -o $@ $(RIBBON_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs ribbon,core,base`
 
 ribbon_ribbondemo.o: ./ribbondemo.cpp
 	$(CXX) -c -o $@ $(RIBBON_CXXFLAGS) $(CPPDEPS) $<

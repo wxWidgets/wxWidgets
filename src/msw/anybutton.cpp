@@ -280,7 +280,7 @@ public:
         {
             default:
                 wxFAIL_MSG( "invalid image alignment" );
-                // fall through
+                wxFALLTHROUGH;
 
             case BUTTON_IMAGELIST_ALIGN_LEFT:
                 return wxLEFT;
@@ -303,7 +303,7 @@ public:
         {
             default:
                 wxFAIL_MSG( "invalid direction" );
-                // fall through
+                wxFALLTHROUGH;
 
             case wxLEFT:
                 alignNew = BUTTON_IMAGELIST_ALIGN_LEFT;
@@ -441,7 +441,7 @@ wxSize wxMSWButton::IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size
         // so make them as high as it.
         int yText;
         wxGetCharSize(GetHwndOf(btn), NULL, &yText, btn->GetFont());
-        yText = EDIT_HEIGHT_FROM_CHAR_HEIGHT(yText);
+        yText = wxGetEditHeightFromCharHeight(yText, btn);
 
         sizeBtn.IncTo(wxSize(-1, yText));
     }
@@ -524,7 +524,9 @@ void wxAnyButton::AdjustForBitmapSize(wxSize &size) const
         {
             wxUxThemeHandle theme(const_cast<wxAnyButton *>(this), L"BUTTON");
 
-            MARGINS margins;
+            // Initialize margins with the default values (at least under
+            // Windows 7) in case GetThemeMargins() fails.
+            MARGINS margins = {3, 3, 3, 3};
             ::GetThemeMargins(theme, NULL,
                                                     BP_PUSHBUTTON,
                                                     PBS_NORMAL,
@@ -930,21 +932,51 @@ void DrawButtonText(HDC hdc,
         {
             // draw multiline label
 
-            // center text horizontally in any case
-            flags |= DT_CENTER;
-
             // first we need to compute its bounding rect
             RECT rc;
             ::CopyRect(&rc, pRect);
             ::DrawText(hdc, text.t_str(), text.length(), &rc,
-                       DT_CENTER | DT_CALCRECT);
+                       flags | DT_CALCRECT);
 
-            // now center this rect inside the entire button area
+            // now position this rect inside the entire button area: notice
+            // that DrawText() doesn't respect alignment flags for multiline
+            // text, which is why we have to do it on our own (but still use
+            // the horizontal alignment flags for the individual lines to be
+            // aligned correctly)
             const LONG w = rc.right - rc.left;
             const LONG h = rc.bottom - rc.top;
-            rc.left = pRect->left + (pRect->right - pRect->left)/2 - w/2;
+
+            if ( btn->HasFlag(wxBU_RIGHT) )
+            {
+                rc.left = pRect->right - w;
+
+                flags |= DT_RIGHT;
+            }
+            else if ( !btn->HasFlag(wxBU_LEFT) )
+            {
+                rc.left = pRect->left + (pRect->right - pRect->left)/2 - w/2;
+
+                flags |= DT_CENTER;
+            }
+            else // wxBU_LEFT
+            {
+                rc.left = pRect->left;
+            }
+
+            if ( btn->HasFlag(wxBU_BOTTOM) )
+            {
+                rc.top = pRect->bottom - h;
+            }
+            else if ( !btn->HasFlag(wxBU_TOP) )
+            {
+                rc.top = pRect->top + (pRect->bottom - pRect->top)/2 - h/2;
+            }
+            else // wxBU_TOP
+            {
+                rc.top = pRect->top;
+            }
+
             rc.right = rc.left+w;
-            rc.top = pRect->top + (pRect->bottom - pRect->top)/2 - h/2;
             rc.bottom = rc.top+h;
 
             ::DrawText(hdc, text.t_str(), text.length(), &rc, flags);
@@ -1118,8 +1150,9 @@ void DrawXPBackground(wxAnyButton *button, HDC hdc, RECT& rectBtn, UINT state)
     ::DrawThemeBackground(theme, hdc, BP_PUSHBUTTON, iState,
                                 &rectBtn, NULL);
 
-    // calculate content area margins
-    MARGINS margins;
+    // calculate content area margins, using the defaults in case we fail to
+    // retrieve the current theme margins
+    MARGINS margins = {3, 3, 3, 3};
     ::GetThemeMargins(theme, hdc, BP_PUSHBUTTON, iState,
                             TMT_CONTENTMARGINS, &rectBtn, &margins);
     ::InflateRect(&rectBtn, -margins.cxLeftWidth, -margins.cyTopHeight);
@@ -1313,7 +1346,7 @@ bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
             {
                 default:
                     wxFAIL_MSG( "invalid direction" );
-                    // fall through
+                    wxFALLTHROUGH;
 
                 case wxLEFT:
                     rectBitmap.x = rectButton.x + margin.x;

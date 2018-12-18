@@ -13,7 +13,6 @@
 
 #include "wx/stattext.h"
 
-#include <gtk/gtk.h>
 #include "wx/gtk/private.h"
 
 //-----------------------------------------------------------------------------

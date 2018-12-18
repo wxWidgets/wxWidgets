@@ -101,6 +101,59 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
         CHECK(!frame->IsMaximized());
         CHECK(!frame->IsIconized());
 
+        // Next try that restoring a minimized frame works correctly: for
+        // Iconize() to have effect, we must show the frame first.
+        frame->Iconize();
+        frame->Show();
+
         delete frame;
     }
+
+    // Check geometry after restoring the minimized frame.
+    {
+        wxFrame* const frame = CreatePersistenceTestFrame();
+
+        CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame));
+
+        CHECK(!frame->IsMaximized());
+        CHECK(frame->IsIconized());
+
+        frame->Restore();
+
+        CHECK(pos.x == frame->GetPosition().x);
+        CHECK(pos.y == frame->GetPosition().y);
+        CHECK(size.x == frame->GetSize().GetWidth());
+        CHECK(size.y == frame->GetSize().GetHeight());
+
+        // Next try that restoring a maximized frame works correctly: again,
+        // for it to be really maximized, it must be shown.
+        frame->Maximize();
+        frame->Show();
+
+        delete frame;
+    }
+
+    // Check geometry after restoring the maximized frame.
+    //
+    // This test currently fails under non-MSW platforms as they only save the
+    // maximized frame size, and its normal size is lost and can't be restored.
+#ifdef __WXMSW__
+    {
+        wxFrame* const frame = CreatePersistenceTestFrame();
+
+        CHECK(wxPersistenceManager::Get().RegisterAndRestore(frame));
+
+        CHECK(frame->IsMaximized());
+        CHECK(!frame->IsIconized());
+
+        frame->Restore();
+
+        CHECK(pos.x == frame->GetPosition().x);
+        CHECK(pos.y == frame->GetPosition().y);
+        CHECK(size.x == frame->GetSize().GetWidth());
+        CHECK(size.y == frame->GetSize().GetHeight());
+
+        delete frame;
+    }
+#endif // __WXMSW__
 }

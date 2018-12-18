@@ -31,6 +31,8 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/display.h"
+
 #ifdef __WXMSW__
     #include "wx/msw/enhmeta.h"
 #endif
@@ -455,6 +457,12 @@ void wxGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, 
 {
     wxPoint2DDouble current;
     GetCurrentPoint(&current.m_x, &current.m_y);
+    if ( current == wxPoint(0, 0) )
+    {
+        // (0, 0) is returned by GetCurrentPoint() also when the last point is not yet actually set,
+        // so we should reposition it to (0, 0) to be sure that a last point is initially set.
+        MoveToPoint(0, 0);
+    }
     wxPoint2DDouble p1(x1, y1);
     wxPoint2DDouble p2(x2, y2);
 
@@ -479,18 +487,15 @@ void wxGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, 
          alpha == 0 || alpha == 180 || r == 0 )
     {
         AddLineToPoint(p1.m_x, p1.m_y);
-        AddLineToPoint(p2.m_x, p2.m_y);
         return;
     }
 
     // Determine spatial relation between the vectors.
     bool drawClockwiseArc = v1.GetCrossProduct(v2) < 0;
 
-    alpha = wxDegToRad(alpha) / 2.0;
-    wxDouble distT = r / sin(alpha) * cos(alpha);
-    wxDouble distC = r / sin(alpha);
-    wxASSERT_MSG( distT <= v1Length && distT <= v2Length,
-                  wxS("Radius is too big to fit the arc to given points") );
+    alpha = wxDegToRad(alpha);
+    wxDouble distT = r / sin(alpha) * (1.0 + cos(alpha)); // = r / tan(a/2) =  r / sin(a/2) * cos(a/2)
+    wxDouble distC = r / sin(alpha / 2.0);
     // Calculate tangential points
     v1.Normalize();
     v2.Normalize();
@@ -513,7 +518,6 @@ void wxGraphicsPathData::AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, 
 
     AddLineToPoint(t1.m_x, t1.m_y);
     AddArc(c.m_x, c.m_y, r, wxDegToRad(a1), wxDegToRad(a2), drawClockwiseArc);
-    AddLineToPoint(p2.m_x, p2.m_y);
 }
 
 //-----------------------------------------------------------------------------
@@ -563,12 +567,14 @@ void * wxGraphicsBitmap::GetNativeBitmap() const
 wxIMPLEMENT_ABSTRACT_CLASS(wxGraphicsContext, wxObject);
 
 
-wxGraphicsContext::wxGraphicsContext(wxGraphicsRenderer* renderer) :
-    wxGraphicsObject(renderer),
+wxGraphicsContext::wxGraphicsContext(wxGraphicsRenderer* renderer,
+                                     wxWindow* window)
+    : wxGraphicsObject(renderer),
       m_antialias(wxANTIALIAS_DEFAULT),
       m_composition(wxCOMPOSITION_OVER),
       m_interpolation(wxINTERPOLATION_DEFAULT),
-      m_enableOffset(false)
+      m_enableOffset(false),
+      m_window(window)
 {
 }
 
@@ -616,8 +622,19 @@ wxDouble wxGraphicsContext::GetAlpha() const
 
 void wxGraphicsContext::GetDPI( wxDouble* dpiX, wxDouble* dpiY)
 {
-    *dpiX = 72.0;
-    *dpiY = 72.0;
+    if ( m_window )
+    {
+        const wxSize ppi = wxDisplay(m_window).GetPPI();
+        *dpiX = ppi.x;
+        *dpiY = ppi.y;
+    }
+    else
+    {
+        // Use some standard DPI value, it doesn't make much sense for the
+        // contexts not using any pixels anyhow.
+        *dpiX = 72.0;
+        *dpiY = 72.0;
+    }
 }
 
 // sets the pen

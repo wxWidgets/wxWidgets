@@ -27,8 +27,8 @@ class RadioButtonTestCase : public CppUnit::TestCase
 public:
     RadioButtonTestCase() { }
 
-    void setUp();
-    void tearDown();
+    void setUp() wxOVERRIDE;
+    void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( RadioButtonTestCase );

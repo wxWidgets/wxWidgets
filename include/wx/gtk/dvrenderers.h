@@ -107,6 +107,8 @@ public:
                               wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT,
                               int align = wxDVR_DEFAULT_ALIGNMENT );
 
+    void ShowAsRadio();
+
     bool SetValue( const wxVariant &value ) wxOVERRIDE;
     bool GetValue( wxVariant &value ) const wxOVERRIDE;
 

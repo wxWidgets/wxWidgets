@@ -593,7 +593,7 @@ public:
                           wxEmptyString, wxEmptyString);
     }
 
-    
+
     // implementation only from now on
     // -------------------------------
 

@@ -14,13 +14,13 @@
 
 #if wxUSE_ADDREMOVECTRL
 
-extern WXDLLIMPEXP_DATA_ADV(const char) wxAddRemoveCtrlNameStr[];
+extern WXDLLIMPEXP_DATA_CORE(const char) wxAddRemoveCtrlNameStr[];
 
 // ----------------------------------------------------------------------------
 // wxAddRemoveAdaptor: used by wxAddRemoveCtrl to work with the list control
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxAddRemoveAdaptor
+class WXDLLIMPEXP_CORE wxAddRemoveAdaptor
 {
 public:
     // Default ctor and trivial but virtual dtor.
@@ -53,7 +53,7 @@ private:
 // wxAddRemoveCtrl: a list-like control combined with add/remove buttons
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxAddRemoveCtrl : public wxPanel
+class WXDLLIMPEXP_CORE wxAddRemoveCtrl : public wxPanel
 {
 public:
     wxAddRemoveCtrl()

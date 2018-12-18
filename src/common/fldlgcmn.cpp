@@ -190,7 +190,7 @@ wxSize wxFileDialogBase::GetExtraControlSize()
     // create the extra control in an empty dialog just to find its size: this
     // is not terribly efficient but we do need to know the size before
     // creating the native dialog and this seems to be the only way
-    wxDialog dlg(NULL, wxID_ANY, "");
+    wxDialog dlg(NULL, wxID_ANY, wxString());
     return (*m_extraControlCreator)(&dlg)->GetSize();
 }
 

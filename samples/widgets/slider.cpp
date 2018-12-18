@@ -94,7 +94,6 @@ class SliderWidgetsPage : public WidgetsPage
 {
 public:
     SliderWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~SliderWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_slider; }
     virtual void RecreateWidget() wxOVERRIDE { CreateSlider(); }
@@ -227,7 +226,7 @@ wxEND_EVENT_TABLE()
     #define FAMILY_CTRLS NATIVE_CTRLS
 #endif
 
-IMPLEMENT_WIDGETS_PAGE(SliderWidgetsPage, wxT("Slider"), FAMILY_CTRLS );
+IMPLEMENT_WIDGETS_PAGE(SliderWidgetsPage, "Slider", FAMILY_CTRLS );
 
 SliderWidgetsPage::SliderWidgetsPage(WidgetsBookCtrl *book,
                                      wxImageList *imaglist)
@@ -254,43 +253,43 @@ void SliderWidgetsPage::CreateContent()
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
-    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, wxT("&Set style"));
+    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, "&Set style");
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
-    m_chkInverse = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("&Inverse"));
-    m_chkTicks = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("Show &ticks"));
-    m_chkMinMaxLabels = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("Show min/max &labels"));
-    m_chkValueLabel = CreateCheckBoxAndAddToSizer(sizerLeft, wxT("Show &value label"));
+    m_chkInverse = CreateCheckBoxAndAddToSizer(sizerLeft, "&Inverse");
+    m_chkTicks = CreateCheckBoxAndAddToSizer(sizerLeft, "Show &ticks");
+    m_chkMinMaxLabels = CreateCheckBoxAndAddToSizer(sizerLeft, "Show min/max &labels");
+    m_chkValueLabel = CreateCheckBoxAndAddToSizer(sizerLeft, "Show &value label");
     static const wxString sides[] =
     {
-        wxT("default"),
-        wxT("top"),
-        wxT("bottom"),
-        wxT("left"),
-        wxT("right"),
+        "default",
+        "top",
+        "bottom",
+        "left",
+        "right",
     };
-    m_radioSides = new wxRadioBox(this, SliderPage_RadioSides, wxT("&Label position"),
+    m_radioSides = new wxRadioBox(this, SliderPage_RadioSides, "&Label position",
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(sides), sides,
                                  1, wxRA_SPECIFY_COLS);
     sizerLeft->Add(m_radioSides, 0, wxGROW | wxALL, 5);
     m_chkBothSides = CreateCheckBoxAndAddToSizer
-                     (sizerLeft, wxT("&Both sides"), SliderPage_BothSides);
+                     (sizerLeft, "&Both sides", SliderPage_BothSides);
 #if wxUSE_TOOLTIPS
-    m_chkBothSides->SetToolTip( wxT("\"Both sides\" is only supported \nin Universal") );
+    m_chkBothSides->SetToolTip("\"Both sides\" is only supported \nin Universal");
 #endif // wxUSE_TOOLTIPS
 
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
 
-    wxButton *btn = new wxButton(this, SliderPage_Reset, wxT("&Reset"));
+    wxButton *btn = new wxButton(this, SliderPage_Reset, "&Reset");
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, wxT("&Change slider value"));
+    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, "&Change slider value");
     wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
 
     wxTextCtrl *text;
-    wxSizer *sizerRow = CreateSizerWithTextAndLabel(wxT("Current value"),
+    wxSizer *sizerRow = CreateSizerWithTextAndLabel("Current value",
                                                     SliderPage_CurValueText,
                                                     &text);
     text->SetEditable(false);
@@ -298,49 +297,49 @@ void SliderWidgetsPage::CreateContent()
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetValue,
-                                            wxT("Set &value"),
+                                            "Set &value",
                                             SliderPage_ValueText,
                                             &m_textValue);
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetMinAndMax,
-                                            wxT("&Min and max"),
+                                            "&Min and max",
                                             SliderPage_MinText,
                                             &m_textMin);
 
     m_textMax = new wxTextCtrl(this, SliderPage_MaxText, wxEmptyString);
     sizerRow->Add(m_textMax, 1, wxLEFT | wxALIGN_CENTRE_VERTICAL, 5);
 
-    m_textMin->SetValue( wxString::Format(wxT("%d"), m_min) );
-    m_textMax->SetValue( wxString::Format(wxT("%d"), m_max) );
+    m_textMin->SetValue( wxString::Format("%d", m_min) );
+    m_textMax->SetValue( wxString::Format("%d", m_max) );
 
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetLineSize,
-                                            wxT("Li&ne size"),
+                                            "Li&ne size",
                                             SliderPage_LineSizeText,
                                             &m_textLineSize);
 
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetPageSize,
-                                            wxT("P&age size"),
+                                            "P&age size",
                                             SliderPage_PageSizeText,
                                             &m_textPageSize);
 
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetTickFreq,
-                                            wxT("Tick &frequency"),
+                                            "Tick &frequency",
                                             SliderPage_TickFreqText,
                                             &m_textTickFreq);
 
-    m_textTickFreq->SetValue(wxT("10"));
+    m_textTickFreq->SetValue("10");
 
     sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetThumbLen,
-                                            wxT("Thumb &length"),
+                                            "Thumb &length",
                                             SliderPage_ThumbLenText,
                                             &m_textThumbLen);
 
@@ -354,8 +353,8 @@ void SliderWidgetsPage::CreateContent()
     Reset();
     CreateSlider();
 
-    m_textLineSize->SetValue(wxString::Format(wxT("%d"), m_slider->GetLineSize()));
-    m_textPageSize->SetValue(wxString::Format(wxT("%d"), m_slider->GetPageSize()));
+    m_textLineSize->SetValue(wxString::Format("%d", m_slider->GetLineSize()));
+    m_textPageSize->SetValue(wxString::Format("%d", m_slider->GetPageSize()));
 
     // the 3 panes panes compose the window
     sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
@@ -430,7 +429,7 @@ void SliderWidgetsPage::CreateSlider()
             break;
 
         default:
-            wxFAIL_MSG(wxT("unexpected radiobox selection"));
+            wxFAIL_MSG("unexpected radiobox selection");
             // fall through
     }
 
@@ -489,7 +488,7 @@ void SliderWidgetsPage::DoSetLineSize()
     long lineSize;
     if ( !m_textLineSize->GetValue().ToLong(&lineSize) )
     {
-        wxLogWarning(wxT("Invalid slider line size"));
+        wxLogWarning("Invalid slider line size");
 
         return;
     }
@@ -498,7 +497,7 @@ void SliderWidgetsPage::DoSetLineSize()
 
     if ( m_slider->GetLineSize() != lineSize )
     {
-        wxLogWarning(wxT("Invalid line size in slider."));
+        wxLogWarning("Invalid line size in slider.");
     }
 }
 
@@ -507,7 +506,7 @@ void SliderWidgetsPage::DoSetPageSize()
     long pageSize;
     if ( !m_textPageSize->GetValue().ToLong(&pageSize) )
     {
-        wxLogWarning(wxT("Invalid slider page size"));
+        wxLogWarning("Invalid slider page size");
 
         return;
     }
@@ -516,7 +515,7 @@ void SliderWidgetsPage::DoSetPageSize()
 
     if ( m_slider->GetPageSize() != pageSize )
     {
-        wxLogWarning(wxT("Invalid page size in slider."));
+        wxLogWarning("Invalid page size in slider.");
     }
 }
 
@@ -525,7 +524,7 @@ void SliderWidgetsPage::DoSetTickFreq()
     long freq;
     if ( !m_textTickFreq->GetValue().ToLong(&freq) )
     {
-        wxLogWarning(wxT("Invalid slider tick frequency"));
+        wxLogWarning("Invalid slider tick frequency");
 
         return;
     }
@@ -538,7 +537,7 @@ void SliderWidgetsPage::DoSetThumbLen()
     long len;
     if ( !m_textThumbLen->GetValue().ToLong(&len) )
     {
-        wxLogWarning(wxT("Invalid slider thumb length"));
+        wxLogWarning("Invalid slider thumb length");
 
         return;
     }
@@ -585,7 +584,7 @@ void SliderWidgetsPage::OnButtonSetMinAndMax(wxCommandEvent& WXUNUSED(event))
          !m_textMax->GetValue().ToLong(&maxNew) ||
          minNew >= maxNew )
     {
-        wxLogWarning(wxT("Invalid min/max values for the slider."));
+        wxLogWarning("Invalid min/max values for the slider.");
 
         return;
     }
@@ -598,7 +597,7 @@ void SliderWidgetsPage::OnButtonSetMinAndMax(wxCommandEvent& WXUNUSED(event))
     if ( m_slider->GetMin() != m_min ||
          m_slider->GetMax() != m_max )
     {
-        wxLogWarning(wxT("Invalid range in slider."));
+        wxLogWarning("Invalid range in slider.");
     }
 }
 
@@ -607,7 +606,7 @@ void SliderWidgetsPage::OnButtonSetValue(wxCommandEvent& WXUNUSED(event))
     long val;
     if ( !m_textValue->GetValue().ToLong(&val) || !IsValidValue(val) )
     {
-        wxLogWarning(wxT("Invalid slider value."));
+        wxLogWarning("Invalid slider value.");
 
         return;
     }
@@ -674,7 +673,7 @@ void SliderWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 
 void SliderWidgetsPage::OnUpdateUICurValueText(wxUpdateUIEvent& event)
 {
-    event.SetText( wxString::Format(wxT("%d"), m_slider->GetValue()) );
+    event.SetText( wxString::Format("%d", m_slider->GetValue()) );
 }
 
 void SliderWidgetsPage::OnUpdateUIRadioSides(wxUpdateUIEvent& event)
@@ -694,7 +693,7 @@ void SliderWidgetsPage::OnUpdateUIBothSides(wxUpdateUIEvent& event)
 void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
 {
     wxASSERT_MSG( event.GetInt() == m_slider->GetValue(),
-                  wxT("slider value should be the same") );
+                  "slider value should be the same" );
 
     wxEventType eventType = event.GetEventType();
 
@@ -703,17 +702,17 @@ void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
         include/wx/event.h
         (section "wxScrollBar and wxSlider event identifiers")
     */
-    static const wxChar *eventNames[] =
+    static const wxString eventNames[] =
     {
-        wxT("wxEVT_SCROLL_TOP"),
-        wxT("wxEVT_SCROLL_BOTTOM"),
-        wxT("wxEVT_SCROLL_LINEUP"),
-        wxT("wxEVT_SCROLL_LINEDOWN"),
-        wxT("wxEVT_SCROLL_PAGEUP"),
-        wxT("wxEVT_SCROLL_PAGEDOWN"),
-        wxT("wxEVT_SCROLL_THUMBTRACK"),
-        wxT("wxEVT_SCROLL_THUMBRELEASE"),
-        wxT("wxEVT_SCROLL_CHANGED")
+        "wxEVT_SCROLL_TOP",
+        "wxEVT_SCROLL_BOTTOM",
+        "wxEVT_SCROLL_LINEUP",
+        "wxEVT_SCROLL_LINEDOWN",
+        "wxEVT_SCROLL_PAGEUP",
+        "wxEVT_SCROLL_PAGEDOWN",
+        "wxEVT_SCROLL_THUMBTRACK",
+        "wxEVT_SCROLL_THUMBRELEASE",
+        "wxEVT_SCROLL_CHANGED"
     };
 
     int index = eventType - wxEVT_SCROLL_TOP;
@@ -723,12 +722,12 @@ void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
         should be added to the above eventNames array.
     */
     wxASSERT_MSG(index >= 0 && (size_t)index < WXSIZEOF(eventNames),
-                 wxT("Unknown slider event") );
+                 "Unknown slider event" );
 
 
     static int s_numSliderEvents = 0;
 
-    wxLogMessage(wxT("Slider event #%d: %s (pos = %d, int value = %d)"),
+    wxLogMessage("Slider event #%d: %s (pos = %d, int value = %d)",
                  s_numSliderEvents++,
                  eventNames[index],
                  event.GetPosition(),

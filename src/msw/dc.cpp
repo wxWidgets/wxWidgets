@@ -390,7 +390,7 @@ HDC CreateCompatibleDCWithLayout(HDC hdc);
 // ----------------------------------------------------------------------------
 
 // instead of duplicating the same code which sets and then restores text
-// colours in each wxDC method working with wxSTIPPLE_MASK_OPAQUE brushes,
+// colours in each wxDC method working with wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE brushes,
 // encapsulate this in a small helper class
 
 // wxBrushAttrsSetter: changes the text colours in the ctor if required and
@@ -574,8 +574,7 @@ void wxMSWDCImpl::UpdateClipBox()
     m_isClipBoxValid = true;
 }
 
-void
-wxMSWDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
+bool wxMSWDCImpl::DoGetClippingRect(wxRect& rect) const
 {
     // check if we should try to retrieve the clipping region possibly not set
     // by our SetClippingRegion() but preset or modified by Windows: this
@@ -589,14 +588,22 @@ wxMSWDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) co
         self->UpdateClipBox();
     }
 
-    if ( x )
-        *x = m_clipX1;
-    if ( y )
-        *y = m_clipY1;
-    if ( w )
-        *w = m_clipX2 - m_clipX1;
-    if ( h )
-        *h = m_clipY2 - m_clipY1;
+    // Unfortunately we can't just call wxDCImpl::DoGetClippingRect() here
+    // because it wouldn't return the correct result if there is no clipping
+    // region and this DC has a world transform applied to it, as the base
+    // class version doesn't know anything about world transforms and wouldn't
+    // apply it to GetLogicalArea() that it returns in this case.
+    //
+    // We could solve this by overriding GetLogicalArea() in wxMSW and using
+    // DPtoLP() to perform the conversion correctly ourselves, but it's even
+    // simpler to just use the value returned by our UpdateClipBox() which is
+    // already correct in any case, so just do this instead.
+    rect = wxRect(m_clipX1,
+                  m_clipY1,
+                  m_clipX2 - m_clipX1,
+                  m_clipY2 - m_clipY1);
+
+    return m_clipping;
 }
 
 // common part of DoSetClippingRegion() and DoSetDeviceClippingRegion()
@@ -812,7 +819,7 @@ void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
     wxCoord r = (wxCoord)sqrt(dx*dx + dy*dy);
 
 
-    wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
+    wxBrushAttrsSetter cc(*this); // needed for wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE handling
 
     // treat the special case of full circle separately
     if ( x1 == x2 && y1 == y2 )
@@ -891,7 +898,7 @@ void wxMSWDCImpl::DoDrawPolygon(int n,
                          wxCoord yoffset,
                          wxPolygonFillMode fillStyle)
 {
-    wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
+    wxBrushAttrsSetter cc(*this); // needed for wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE handling
 
     // Do things less efficiently if we have offsets
     if (xoffset != 0 || yoffset != 0)
@@ -930,7 +937,7 @@ wxMSWDCImpl::DoDrawPolyPolygon(int n,
                         wxCoord yoffset,
                         wxPolygonFillMode fillStyle)
 {
-    wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
+    wxBrushAttrsSetter cc(*this); // needed for wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE handling
     int i, cnt;
     for (i = cnt = 0; i < n; i++)
         cnt += count[i];
@@ -991,7 +998,7 @@ void wxMSWDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset, wx
 
 void wxMSWDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
+    wxBrushAttrsSetter cc(*this); // needed for wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE handling
 
     wxCoord x2 = x + width;
     wxCoord y2 = y + height;
@@ -1024,7 +1031,7 @@ void wxMSWDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
 
 void wxMSWDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height, double radius)
 {
-    wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
+    wxBrushAttrsSetter cc(*this); // needed for wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE handling
 
     // Now, a negative radius value is interpreted to mean
     // 'the proportion of the smallest X or Y dimension'
@@ -1056,7 +1063,7 @@ void wxMSWDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width, wx
 
 void wxMSWDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
-    wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
+    wxBrushAttrsSetter cc(*this); // needed for wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE handling
 
     // +1 below makes the ellipse more similar to other platforms.
     // In particular, DoDrawEllipse(x,y,1,1) should draw one point.
@@ -1171,7 +1178,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
 // Chris Breeze 20/5/98: first implementation of DrawEllipticArc on Windows
 void wxMSWDCImpl::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,double ea)
 {
-    wxBrushAttrsSetter cc(*this); // needed for wxSTIPPLE_MASK_OPAQUE handling
+    wxBrushAttrsSetter cc(*this); // needed for wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE handling
 
     wxCoord x2 = x + w;
     wxCoord y2 = y + h;
@@ -1706,7 +1713,7 @@ void wxMSWDCImpl::SetLogicalFunction(wxRasterOperationMode function)
 
 void wxMSWDCImpl::SetRop(WXHDC dc)
 {
-    if ( !dc || m_logicalFunction < 0 )
+    if ( !dc )
         return;
 
     int rop;

@@ -27,8 +27,8 @@ class SpinCtrlTestCase : public CppUnit::TestCase
 public:
     SpinCtrlTestCase() { }
 
-    void setUp();
-    void tearDown();
+    void setUp() wxOVERRIDE;
+    void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( SpinCtrlTestCase );
@@ -38,6 +38,7 @@ private:
         WXUISIM_TEST( Wrap );
         CPPUNIT_TEST( Range );
         CPPUNIT_TEST( Value );
+        WXUISIM_TEST( SetValueInsideEventHandler );
     CPPUNIT_TEST_SUITE_END();
 
     void Initial();
@@ -46,6 +47,10 @@ private:
     void Wrap();
     void Range();
     void Value();
+    void SetValueInsideEventHandler();
+
+    // Helper event handler for SetValueInsideEventHandler() test.
+    void OnSpinSetValue(wxSpinEvent &e);
 
     wxSpinCtrl* m_spin;
 
@@ -222,6 +227,43 @@ void SpinCtrlTestCase::Value()
     // Calling SetValue() shouldn't have generated any events.
     CPPUNIT_ASSERT_EQUAL(0, updatedSpin.GetCount());
     CPPUNIT_ASSERT_EQUAL(0, updatedText.GetCount());
+}
+
+void SpinCtrlTestCase::OnSpinSetValue(wxSpinEvent &e)
+{
+    // Constrain the value to be in the 1..16 range or 32.
+    int newVal = e.GetValue();
+
+    if ( newVal == 31 )
+        m_spin->SetValue(16);
+    else if ( newVal > 16 )
+        m_spin->SetValue(32);
+}
+
+void SpinCtrlTestCase::SetValueInsideEventHandler()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    m_spin->Bind(wxEVT_SPINCTRL, &SpinCtrlTestCase::OnSpinSetValue, this);
+
+    wxUIActionSimulator sim;
+
+    // run multiple times to make sure there are no issues with keeping old value
+    for ( size_t i = 0; i < 2; i++ )
+    {
+        m_spin->SetFocus();
+        wxYield();
+
+        sim.Char(WXK_DELETE);
+        sim.Char(WXK_DELETE);
+        sim.Text("20");
+        wxYield();
+
+        wxTheApp->GetTopWindow()->SetFocus();
+        wxYield();
+
+        CPPUNIT_ASSERT_EQUAL(32, m_spin->GetValue());
+    }
+#endif // wxUSE_UIACTIONSIMULATOR
 }
 
 #endif

@@ -14,7 +14,7 @@
 
 #include "wx/spinbutt.h"
 
-#include <gtk/gtk.h>
+#include "wx/gtk/private/wrapgtk.h"
 
 //-----------------------------------------------------------------------------
 // data
@@ -173,16 +173,16 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
     GtkEnableEvents();
 }
 
-bool wxSpinButton::Enable( bool enable )
+void wxSpinButton::DoEnable(bool enable)
 {
-    if (!base_type::Enable(enable))
-        return false;
+    if ( !m_widget )
+        return;
+
+    base_type::DoEnable(enable);
 
     // Work around lack of visual update when enabling
     if (enable)
         GTKFixSensitivity(false /* fix even if not under mouse */);
-
-    return true;
 }
 
 void wxSpinButton::GtkDisableEvents() const

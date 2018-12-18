@@ -32,7 +32,7 @@
 
     The control uses a wxListCtrl internally and emit its events.
 
-    @library{wxadv}
+    @library{wxcore}
     @category{ctrl}
 
     @see wxListBox, wxListCtrl

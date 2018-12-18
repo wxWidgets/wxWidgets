@@ -1741,6 +1741,7 @@ void wxWidgetCocoaImpl::ZoomGestureEvent(NSMagnificationGestureRecognizer* magni
              gestureState = NSGestureRecognizerStateBegan;
              break;
         case NSGestureRecognizerStateChanged:
+             gestureState = NSGestureRecognizerStateChanged;
              break;
         case NSGestureRecognizerStateEnded:
         case NSGestureRecognizerStateCancelled:
@@ -1789,6 +1790,7 @@ void wxWidgetCocoaImpl::RotateGestureEvent(NSRotationGestureRecognizer* rotation
              gestureState = NSGestureRecognizerStateBegan;
              break;
         case NSGestureRecognizerStateChanged:
+             gestureState = NSGestureRecognizerStateChanged;
              break;
         case NSGestureRecognizerStateEnded:
         case NSGestureRecognizerStateCancelled:
@@ -1840,6 +1842,7 @@ void wxWidgetCocoaImpl::LongPressEvent(NSPressGestureRecognizer* pressGestureRec
             gestureState = NSGestureRecognizerStateBegan;
             break;
         case NSGestureRecognizerStateChanged:
+            gestureState = NSGestureRecognizerStateChanged;
             break;
         case NSGestureRecognizerStateEnded:
         case NSGestureRecognizerStateCancelled:
@@ -2288,84 +2291,96 @@ void wxWidgetCocoaImpl::drawRect(void* rect, WXWidget slf, void *WXUNUSED(_cmd))
     wxpeer->GetUpdateRegion() = updateRgn;
 
     // setting up the drawing context
-    
+    // note that starting from 10.14 this may be NULL in certain views
     CGContextRef context = (CGContextRef) [[NSGraphicsContext currentContext] graphicsPort];
-    CGContextSaveGState( context );
-    
-#if OSX_DEBUG_DRAWING
-    CGContextBeginPath( context );
-    CGContextMoveToPoint(context, 0, 0);
-    NSRect bounds = [slf bounds];
-    CGContextAddLineToPoint(context, 10, 0);
-    CGContextMoveToPoint(context, 0, 0);
-    CGContextAddLineToPoint(context, 0, 10);
-    CGContextMoveToPoint(context, bounds.size.width, bounds.size.height);
-    CGContextAddLineToPoint(context, bounds.size.width, bounds.size.height-10);
-    CGContextMoveToPoint(context, bounds.size.width, bounds.size.height);
-    CGContextAddLineToPoint(context, bounds.size.width-10, bounds.size.height);
-    CGContextClosePath( context );
-    CGContextStrokePath(context);
-#endif
-    
-    if ( ![slf isFlipped] )
-    {
-        CGContextTranslateCTM( context, 0,  [m_osxView bounds].size.height );
-        CGContextScaleCTM( context, 1, -1 );
-    }
-    
     wxpeer->MacSetCGContextRef( context );
+    if ( context != NULL )
+    {
+        CGContextSaveGState( context );
+        
+#if OSX_DEBUG_DRAWING
+        CGContextBeginPath( context );
+        CGContextMoveToPoint(context, 0, 0);
+        NSRect bounds = [slf bounds];
+        CGContextAddLineToPoint(context, 10, 0);
+        CGContextMoveToPoint(context, 0, 0);
+        CGContextAddLineToPoint(context, 0, 10);
+        CGContextMoveToPoint(context, bounds.size.width, bounds.size.height);
+        CGContextAddLineToPoint(context, bounds.size.width, bounds.size.height-10);
+        CGContextMoveToPoint(context, bounds.size.width, bounds.size.height);
+        CGContextAddLineToPoint(context, bounds.size.width-10, bounds.size.height);
+        CGContextClosePath( context );
+        CGContextStrokePath(context);
+#endif
+        
+        if ( ![slf isFlipped] )
+        {
+            CGContextTranslateCTM( context, 0,  [m_osxView bounds].size.height );
+            CGContextScaleCTM( context, 1, -1 );
+        }
+    }
 
     bool handled = wxpeer->MacDoRedraw( 0 );
-    CGContextRestoreGState( context );
-
-    CGContextSaveGState( context );
+    if ( context != NULL )
+    {
+        CGContextRestoreGState( context );
+        CGContextSaveGState( context );
+    }
+    
     if ( !handled )
     {
         // call super
         SEL _cmd = @selector(drawRect:);
         wxOSX_DrawRectHandlerPtr superimpl = (wxOSX_DrawRectHandlerPtr) [[slf superclass] instanceMethodForSelector:_cmd];
         superimpl(slf, _cmd, *(NSRect*)rect);
-        CGContextRestoreGState( context );
-        CGContextSaveGState( context );
-    }
-    // as we called restore above, we have to flip again if necessary
-    if ( ![slf isFlipped] )
-    {
-        CGContextTranslateCTM( context, 0,  [m_osxView bounds].size.height );
-        CGContextScaleCTM( context, 1, -1 );
-    }
-
-    if ( isTopLevel )
-    {
-        // We also need to explicitly draw the part of the top level window
-        // outside of its region with transparent colour to ensure that it is
-        // really transparent.
-        if ( clearRgn.IsOk() )
+        if ( context != NULL )
         {
-            wxMacCGContextStateSaver saveState(context);
-            wxWindowDC dc(wxpeer);
-            dc.SetBackground(wxBrush(wxTransparentColour));
-            dc.SetDeviceClippingRegion(clearRgn);
-            dc.Clear();
+            CGContextRestoreGState( context );
+            CGContextSaveGState( context );
         }
-
+    }
+    
+    if ( context != NULL )
+    {
+        // as we called restore above, we have to flip again if necessary
+        if ( ![slf isFlipped] )
+        {
+            CGContextTranslateCTM( context, 0,  [m_osxView bounds].size.height );
+            CGContextScaleCTM( context, 1, -1 );
+        }
+        
+        if ( isTopLevel )
+        {
+            // We also need to explicitly draw the part of the top level window
+            // outside of its region with transparent colour to ensure that it is
+            // really transparent.
+            if ( clearRgn.IsOk() )
+            {
+                wxMacCGContextStateSaver saveState(context);
+                wxWindowDC dc(wxpeer);
+                dc.SetBackground(wxBrush(wxTransparentColour));
+                dc.SetDeviceClippingRegion(clearRgn);
+                dc.Clear();
+            }
+            
 #if wxUSE_GRAPHICS_CONTEXT
-        // If the window shape is defined by a path, stroke the path to show
-        // the window border.
-        const wxGraphicsPath& path = tlwParent->GetShapePath();
-        if ( !path.IsNull() )
-        {
-            CGContextSetLineWidth(context, 1);
-            CGContextSetStrokeColorWithColor(context, wxLIGHT_GREY->GetCGColor());
-            CGContextAddPath(context, (CGPathRef) path.GetNativePath());
-            CGContextStrokePath(context);
-        }
+            // If the window shape is defined by a path, stroke the path to show
+            // the window border.
+            const wxGraphicsPath& path = tlwParent->GetShapePath();
+            if ( !path.IsNull() )
+            {
+                CGContextSetLineWidth(context, 1);
+                CGContextSetStrokeColorWithColor(context, wxLIGHT_GREY->GetCGColor());
+                CGContextAddPath(context, (CGPathRef) path.GetNativePath());
+                CGContextStrokePath(context);
+            }
 #endif // wxUSE_GRAPHICS_CONTEXT
+        }
+        
+        wxpeer->MacPaintChildrenBorders();
+        CGContextRestoreGState( context );
     }
-
-    wxpeer->MacPaintChildrenBorders();
     wxpeer->MacSetCGContextRef( NULL );
-    CGContextRestoreGState( context );
 }
 
 void wxWidgetCocoaImpl::controlAction( WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd), void *WXUNUSED(sender))
@@ -2415,7 +2430,7 @@ void wxWidgetCocoaImpl::controlTextDidChange()
 
 #endif
 
-void wxOSXCocoaClassAddWXMethods(Class c)
+void wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags)
 {
 
 #if OBJC_API_VERSION < 2
@@ -2462,7 +2477,9 @@ void wxOSXCocoaClassAddWXMethods(Class c)
 #if !wxOSX_USE_NATIVE_FLIPPED
     wxOSX_CLASS_ADD_METHOD(c, @selector(isFlipped), (IMP) wxOSX_isFlipped, "c@:" )
 #endif
-    wxOSX_CLASS_ADD_METHOD(c, @selector(drawRect:), (IMP) wxOSX_drawRect, "v@:{_NSRect={_NSPoint=ff}{_NSSize=ff}}" )
+        
+    if ( !(skipFlags & wxOSXSKIP_DRAW) )
+        wxOSX_CLASS_ADD_METHOD(c, @selector(drawRect:), (IMP) wxOSX_drawRect, "v@:{_NSRect={_NSPoint=ff}{_NSSize=ff}}" )
 
     wxOSX_CLASS_ADD_METHOD(c, @selector(controlAction:), (IMP) wxOSX_controlAction, "v@:@" )
     wxOSX_CLASS_ADD_METHOD(c, @selector(controlDoubleAction:), (IMP) wxOSX_controlDoubleAction, "v@:@" )
@@ -2556,6 +2573,13 @@ bool wxWidgetCocoaImpl::IsVisible() const
 void wxWidgetCocoaImpl::SetVisibility( bool visible )
 {
     [m_osxView setHidden:(visible ? NO:YES)];
+    
+    // trigger redraw upon shown for layer-backed views
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+        if( !m_osxView.isHiddenOrHasHiddenAncestor )
+            SetNeedsDisplay(NULL);
+#endif
 }
 
 double wxWidgetCocoaImpl::GetContentScaleFactor() const
@@ -3007,12 +3031,32 @@ void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &hei
     }
 }
 
+static void SetSubviewsNeedDisplay( NSView *view )
+{
+    for ( NSView *sub in view.subviews )
+    {
+        if ( sub.isHidden )
+            continue;
+
+        [sub setNeedsDisplay:YES];
+        SetSubviewsNeedDisplay(sub);
+    }
+}
+
 void wxWidgetCocoaImpl::SetNeedsDisplay( const wxRect* where )
 {
     if ( where )
         [m_osxView setNeedsDisplayInRect:wxToNSRect(m_osxView, *where )];
     else
         [m_osxView setNeedsDisplay:YES];
+
+    // Layer-backed views (which are all in Mojave's Dark Mode) may not have
+    // their children implicitly redrawn with the parent. For compatibility,
+    // do it manually here:
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+        SetSubviewsNeedDisplay(m_osxView);
+#endif
 }
 
 bool wxWidgetCocoaImpl::GetNeedsDisplay() const
@@ -3101,7 +3145,14 @@ void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
 
     if ( [targetView respondsToSelector:@selector(setBackgroundColor:) ] )
     {
-        [targetView setBackgroundColor: col.OSXGetNSColor()];
+        wxWindow* peer = GetWXPeer();
+        if ( peer->GetBackgroundStyle() != wxBG_STYLE_TRANSPARENT )
+        {
+            wxTopLevelWindow* toplevel = wxDynamicCast(peer,wxTopLevelWindow);
+
+            if ( toplevel == NULL || toplevel->GetShape().IsEmpty() )
+                [targetView setBackgroundColor: col.OSXGetNSColor()];
+        }
     }
 }
 
@@ -3112,6 +3163,8 @@ bool wxWidgetCocoaImpl::SetBackgroundStyle( wxBackgroundStyle style )
     if ( [m_osxView respondsToSelector:@selector(setOpaque:) ] )
     {
         [m_osxView setOpaque: opaque];
+        if ( style == wxBG_STYLE_TRANSPARENT )
+            [m_osxView setBackgroundColor:[NSColor clearColor]];
     }
     
     return true ;

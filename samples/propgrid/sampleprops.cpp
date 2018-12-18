@@ -69,7 +69,7 @@ wxFontDataProperty::wxFontDataProperty( const wxString& label, const wxString& n
     m_value_wxFontData << fontData;
 
     // Add extra children.
-    AddPrivateChild( new wxColourProperty(wxT("Colour"), wxPG_LABEL,
+    AddPrivateChild( new wxColourProperty("Colour", wxPG_LABEL,
                                           fontData.GetColour() ) );
 }
 
@@ -77,9 +77,9 @@ wxFontDataProperty::~wxFontDataProperty () { }
 
 void wxFontDataProperty::OnSetValue()
 {
-    if ( !m_value.IsType(wxT("wxFontData")) )
+    if ( !m_value.IsType("wxFontData") )
     {
-        if ( m_value.IsType(wxT("wxFont")) )
+        if ( m_value.IsType("wxFont") )
         {
             wxFont font;
             font << m_value;
@@ -101,7 +101,7 @@ void wxFontDataProperty::OnSetValue()
         }
         else
         {
-            wxFAIL_MSG(wxT("Value to wxFontDataProperty must be either wxFontData or wxFont"));
+            wxFAIL_MSG("Value to wxFontDataProperty must be either wxFontData or wxFont");
         }
     }
     else
@@ -201,8 +201,8 @@ wxSizeProperty::wxSizeProperty( const wxString& label, const wxString& name,
     const wxSize& value) : wxPGProperty(label,name)
 {
     SetValueI(value);
-    AddPrivateChild( new wxIntProperty(wxT("Width"),wxPG_LABEL,value.x) );
-    AddPrivateChild( new wxIntProperty(wxT("Height"),wxPG_LABEL,value.y) );
+    AddPrivateChild( new wxIntProperty("Width",wxPG_LABEL,value.x) );
+    AddPrivateChild( new wxIntProperty("Height",wxPG_LABEL,value.y) );
 }
 
 wxSizeProperty::~wxSizeProperty() { }
@@ -241,8 +241,8 @@ wxPointProperty::wxPointProperty( const wxString& label, const wxString& name,
     const wxPoint& value) : wxPGProperty(label,name)
 {
     SetValueI(value);
-    AddPrivateChild( new wxIntProperty(wxT("X"),wxPG_LABEL,value.x) );
-    AddPrivateChild( new wxIntProperty(wxT("Y"),wxPG_LABEL,value.y) );
+    AddPrivateChild( new wxIntProperty("X",wxPG_LABEL,value.x) );
+    AddPrivateChild( new wxIntProperty("Y",wxPG_LABEL,value.y) );
 }
 
 wxPointProperty::~wxPointProperty() { }
@@ -277,7 +277,7 @@ wxVariant wxPointProperty::ChildChanged( wxVariant& thisValue,
 // -----------------------------------------------------------------------
 
 WX_PG_IMPLEMENT_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(wxDirsProperty, ',',
-                                                    wxT("Browse"))
+                                                    "Browse")
 
 #if wxUSE_VALIDATORS
 
@@ -292,7 +292,7 @@ wxValidator* wxDirsProperty::DoGetValidator() const
 bool wxDirsProperty::OnCustomStringEdit( wxWindow* parent, wxString& value )
 {
     wxDirDialog dlg(parent,
-                    wxT("Select a directory to be added to the list:"),
+                    "Select a directory to be added to the list:",
                     value,
                     0);
 
@@ -474,7 +474,7 @@ bool operator == (const wxArrayDouble& a, const wxArrayDouble& b)
         // Can't do direct equality comparison with floating point numbers.
         if ( fabs(a[i] - b[i]) > 0.0000000001 )
         {
-            //wxLogDebug(wxT("%f != %f"),a[i],b[i]);
+            //wxLogDebug("%f != %f",a[i],b[i]);
             return false;
         }
     }
@@ -498,10 +498,10 @@ wxArrayDoubleProperty::wxArrayDoubleProperty (const wxString& label,
     //
     // Need to figure out delimiter needed for this locale
     // (i.e. can't use comma when comma acts as decimal point in float).
-    wxChar use_delimiter = wxT(',');
+    wxChar use_delimiter = ',';
 
-    if (wxString::Format(wxT("%.2f"),12.34).Find(use_delimiter) >= 0)
-        use_delimiter = wxT(';');
+    if (wxString::Format("%.2f",12.34).Find(use_delimiter) >= 0)
+        use_delimiter = ';';
 
     m_delimiter = use_delimiter;
 
@@ -540,7 +540,7 @@ wxString wxArrayDoubleProperty::ValueToString( wxVariant& value,
 
 void wxArrayDoubleProperty::GenerateValueAsString( wxString& target, int prec, bool removeZeroes ) const
 {
-    wxChar between[3] = wxT(", ");
+    wxString between = ", ";
     size_t i;
 
     between[0] = m_delimiter;
@@ -667,9 +667,9 @@ wxValidator* wxArrayDoubleProperty::DoGetValidator() const
 bool wxArrayDoubleProperty::ValidateValue(wxVariant& value,
                                  wxPGValidationInfo& validationInfo) const
 {
-    if (!value.IsType(wxT("wxArrayDouble")))
+    if (!value.IsType("wxArrayDouble"))
     {
-        validationInfo.SetFailureMessage(wxT("At least one element is not a valid floating-point number."));
+        validationInfo.SetFailureMessage("At least one element is not a valid floating-point number.");
         return false;
     }
 

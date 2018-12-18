@@ -32,8 +32,8 @@ class ButtonTestCase : public CppUnit::TestCase
 public:
     ButtonTestCase() { }
 
-    void setUp();
-    void tearDown();
+    void setUp() wxOVERRIDE;
+    void tearDown() wxOVERRIDE;
 
 private:
     CPPUNIT_TEST_SUITE( ButtonTestCase );
@@ -98,12 +98,25 @@ void ButtonTestCase::Click()
 
 void ButtonTestCase::Disabled()
 {
-    EventCounter clicked(m_button, wxEVT_BUTTON);
-
     wxUIActionSimulator sim;
 
-    //In this test we disable the button and check events are not sent
-    m_button->Disable();
+    // In this test we disable the button and check events are not sent and we
+    // do it once by disabling the previously enabled button and once by
+    // creating the button in the disabled state.
+    SECTION("Disable after creation")
+    {
+        m_button->Disable();
+    }
+
+    SECTION("Create disabled")
+    {
+        delete m_button;
+        m_button = new wxButton();
+        m_button->Disable();
+        m_button->Create(wxTheApp->GetTopWindow(), wxID_ANY, "wxButton");
+    }
+
+    EventCounter clicked(m_button, wxEVT_BUTTON);
 
     sim.MouseMove(m_button->GetScreenPosition() + wxPoint(10, 10));
     wxYield();
@@ -164,7 +177,7 @@ void ButtonTestCase::Bitmap()
     CPPUNIT_ASSERT(!m_button->GetBitmap().IsOk());
 
 
-    m_button->SetBitmap(wxArtProvider::GetIcon(wxART_INFORMATION, 
+    m_button->SetBitmap(wxArtProvider::GetIcon(wxART_INFORMATION,
                                                wxART_OTHER,
                                                wxSize(32, 32)));
 

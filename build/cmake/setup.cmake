@@ -217,10 +217,10 @@ macro(wx_get_socket_param_type name code)
 endmacro()
 
 # the following tests are for Unix(like) systems only
-if(NOT WIN32)
-    if(wxUSE_LIBICONV AND NOT APPLE)
-        find_package(Iconv REQUIRED)
+if(UNIX)
+    if(wxUSE_LIBICONV)
         set(HAVE_ICONV ON)
+        set(ICONV_CONST " ")
         if(ICONV_SECOND_ARGUMENT_IS_CONST)
             set(ICONV_CONST "const")
         endif()
@@ -310,7 +310,7 @@ if(NOT WIN32)
             statfs(\"/\", &fs);"
             HAVE_STATFS_DECL)
     else()
-        # TODO: implment statvfs checks
+        # TODO: implement statvfs checks
         if(HAVE_STATVFS)
             set(WX_STATFS_T statvfs_t)
         endif()
@@ -418,8 +418,8 @@ if(NOT WIN32)
         check_symbol_exists(getservbyname netdb.h HAVE_GETSERVBYNAME)
         check_symbol_exists(inet_aton arpa/inet.h HAVE_INET_ATON)
         check_symbol_exists(inet_addr arpa/inet.h HAVE_INET_ADDR)
-    endif() # wxUSE_SOCKETS
-endif() # NOT WIN32
+    endif(wxUSE_SOCKETS)
+endif(UNIX)
 
 if(CMAKE_USE_PTHREADS_INIT)
     cmake_push_check_state(RESET)
@@ -554,7 +554,7 @@ endforeach()
 # Check various functions
 foreach(func
     fsync
-    snprintf vsnprintf strnlen
+    snprintf vsnprintf strnlen strtoull
     setpriority
     )
     string(TOUPPER ${func} func_upper)
@@ -640,7 +640,10 @@ endif()
 
 if(wxUSE_XLOCALE)
     check_include_file(xlocale.h HAVE_XLOCALE_H)
-    set(CMAKE_EXTRA_INCLUDE_FILES xlocale.h locale.h)
+    set(CMAKE_EXTRA_INCLUDE_FILES locale.h)
+    if(HAVE_XLOCALE_H)
+        list(APPEND CMAKE_EXTRA_INCLUDE_FILES xlocale.h)
+    endif()
     check_type_size(locale_t LOCALE_T)
     set(CMAKE_EXTRA_INCLUDE_FILES)
 endif()

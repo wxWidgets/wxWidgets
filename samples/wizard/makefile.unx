@@ -88,7 +88,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 wizard: $(WIZARD_OBJECTS)
-	$(CXX) -o $@ $(WIZARD_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs adv,core,base`
+	$(CXX) -o $@ $(WIZARD_OBJECTS)   $(LDFLAGS)  `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
 
 wizard_wizard.o: ./wizard.cpp
 	$(CXX) -c -o $@ $(WIZARD_CXXFLAGS) $(CPPDEPS) $<

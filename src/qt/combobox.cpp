@@ -20,6 +20,8 @@ class wxQtComboBox : public wxQtEventSignalHandler< QComboBox, wxComboBox >
 {
 public:
     wxQtComboBox( wxWindow *parent, wxComboBox *handler );
+    virtual void showPopup() wxOVERRIDE;
+    virtual void hidePopup() wxOVERRIDE;
 
 private:
     void activated(int index);
@@ -34,6 +36,20 @@ wxQtComboBox::wxQtComboBox( wxWindow *parent, wxComboBox *handler )
             this, &wxQtComboBox::activated);
     connect(this, &QComboBox::editTextChanged,
             this, &wxQtComboBox::editTextChanged);
+}
+
+void wxQtComboBox::showPopup()
+{
+    wxCommandEvent event( wxEVT_COMBOBOX_DROPDOWN, GetHandler()->GetId() );
+    EmitEvent( event );
+    QComboBox::showPopup();
+}
+
+void wxQtComboBox::hidePopup()
+{
+    wxCommandEvent event( wxEVT_COMBOBOX_CLOSEUP, GetHandler()->GetId() );
+    EmitEvent( event );
+    QComboBox::hidePopup();
 }
 
 void wxQtComboBox::activated(int WXUNUSED(index))
@@ -118,6 +134,14 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
+void wxComboBox::SetValue(const wxString& value)
+{
+    if ( HasFlag(wxCB_READONLY) )
+        SetStringSelection(value);
+    else
+        wxTextEntry::SetValue(value);
+}
+
 wxString wxComboBox::DoGetValue() const
 {
     return wxQtConvertString( m_qtComboBox->currentText() );
@@ -131,6 +155,12 @@ void wxComboBox::Popup()
 void wxComboBox::Dismiss()
 {
     static_cast<QComboBox *>(GetHandle())->hidePopup();
+}
+
+void wxComboBox::Clear()
+{
+    wxTextEntry::Clear();
+    wxItemContainer::Clear();
 }
 
 void wxComboBox::SetSelection( long from, long to )

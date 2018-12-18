@@ -73,7 +73,7 @@ class FileKindTestCase : public CppUnit::TestCase
 };
 
 // test a wxFFile and wxFFileInput/OutputStreams of a known type
-// 
+//
 void FileKindTestCase::TestFILE(wxFFile& file, bool expected)
 {
     CPPUNIT_ASSERT(file.IsOpened());
@@ -191,7 +191,7 @@ void FileKindTestCase::MemoryStream()
 }
 
 // Stdin will usually be a terminal, if so then test it
-// 
+//
 void FileKindTestCase::Stdin()
 {
     if (isatty(0))

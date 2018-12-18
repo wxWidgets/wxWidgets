@@ -46,6 +46,8 @@ if(wxBUILD_TOOLKIT MATCHES "^gtk*")
     set(WXGTK ON)
 elseif(wxBUILD_TOOLKIT MATCHES "^osx*")
     set(WXOSX ON)
+elseif(wxBUILD_TOOLKIT MATCHES "qt")
+    set(WXQT ON)
 endif()
 
 set(wxTOOLKIT_DEFINITIONS __WX${toolkit_upper}__)
@@ -82,9 +84,50 @@ if(WXGTK)
     list(APPEND wxTOOLKIT_DEFINITIONS ${${gtk_lib}_DEFINITIONS})
     list(APPEND wxTOOLKIT_DEFINITIONS __WXGTK__)
     set(wxTOOLKIT_VERSION ${${gtk_lib}_VERSION})
+
+    if(WIN32 AND MSVC)
+        if(WXGTK4)
+            list(APPEND wxTOOLKIT_LIBRARIES
+                libgtk-4.dll.a
+                libgdk-4.dll.a
+            )
+        elseif(WXGTK3)
+            list(APPEND wxTOOLKIT_LIBRARIES
+                libgtk-3.dll.a
+                libgdk-3.dll.a
+            )
+        elseif(WXGTK2)
+            list(APPEND wxTOOLKIT_LIBRARIES
+                gtk-win32-2.0
+                gdk-win32-2.0
+            )
+        endif()
+        list(APPEND wxTOOLKIT_LIBRARIES
+            gio-2.0
+            pangocairo-1.0
+            gdk_pixbuf-2.0
+            cairo
+            pango-1.0
+            gobject-2.0
+            gthread-2.0
+            glib-2.0
+        )
+    endif()
+endif()
+
+if(WXQT)
+    set(QT_COMPONENTS Core Widgets Gui OpenGL Test)
+    foreach(QT_COMPONENT ${QT_COMPONENTS})
+        find_package(Qt5 COMPONENTS ${QT_COMPONENT} REQUIRED)
+        list(APPEND wxTOOLKIT_INCLUDE_DIRS ${Qt5${QT_COMPONENT}_INCLUDE_DIRS})
+        list(APPEND wxTOOLKIT_LIBRARIES ${Qt5${QT_COMPONENT}_LIBRARIES})
+        list(APPEND wxTOOLKIT_DEFINITIONS ${Qt5${QT_COMPONENT}_COMPILE_DEFINITIONS})
+    endforeach()
+    set(wxTOOLKIT_VERSION ${Qt5Core_VERSION})
 endif()
 
 if(APPLE)
     list(APPEND wxTOOLKIT_DEFINITIONS __WXMAC__ __WXOSX__)
 endif()
+
 endif() # wxUSE_GUI

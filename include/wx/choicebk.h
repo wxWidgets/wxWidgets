@@ -86,8 +86,7 @@ protected:
 
     void UpdateSelectedPage(size_t newsel) wxOVERRIDE
     {
-        m_selection = static_cast<int>(newsel);
-        GetChoiceCtrl()->Select(m_selection);
+        GetChoiceCtrl()->Select(newsel);
     }
 
     wxBookCtrlEvent* CreatePageChangingEvent() const wxOVERRIDE;

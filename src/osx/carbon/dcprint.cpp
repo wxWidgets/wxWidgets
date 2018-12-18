@@ -149,7 +149,7 @@ bool wxMacCarbonPrinterDC::StartDoc(  wxPrinterDC* dc , const wxString& message 
         if (m_err == noErr)
             useDefaultResolution = true;
     }
-    
+
     // Ignore errors which may occur while retrieving the resolution and just
     // use the default one.
     if ( useDefaultResolution )
@@ -366,7 +366,7 @@ void wxPrinterDCImpl::StartPage()
 
     m_logicalFunction = wxCOPY;
     //  m_textAlignment = wxALIGN_TOP_LEFT;
-    m_backgroundMode = wxTRANSPARENT;
+    m_backgroundMode = wxBRUSHSTYLE_TRANSPARENT;
 
     m_textForegroundColour = *wxBLACK;
     m_textBackgroundColour = *wxWHITE;

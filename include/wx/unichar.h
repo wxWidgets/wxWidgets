@@ -14,7 +14,12 @@
 #include "wx/chartype.h"
 #include "wx/stringimpl.h"
 
-#include <algorithm>        // only for std::swap specialization below
+// We need to get std::swap() declaration in order to specialize it below and
+// it is declared in different headers for C++98 and C++11. Instead of testing
+// which one is being used, just include both of them as it's simpler and less
+// error-prone.
+#include <algorithm>        // std::swap() for C++98
+#include <utility>          // std::swap() for C++11
 
 class WXDLLIMPEXP_FWD_BASE wxUniCharRef;
 class WXDLLIMPEXP_FWD_BASE wxString;
@@ -93,14 +98,14 @@ public:
     static wxUint16 HighSurrogate(wxUint32 value)
     {
         wxASSERT_MSG(IsSupplementary(value), "wxUniChar::HighSurrogate() must be called on a supplementary character");
-        return 0xD800 | ((value - 0x10000) >> 10);
+        return static_cast<wxUint16>(0xD800 | ((value - 0x10000) >> 10));
     }
 
     // Returns the low surrogate code unit for the supplementary character
     static wxUint16 LowSurrogate(wxUint32 value)
     {
         wxASSERT_MSG(IsSupplementary(value), "wxUniChar::LowSurrogate() must be called on a supplementary character");
-        return 0xDC00 | ((value - 0x10000) & 0x03FF);
+        return static_cast<wxUint16>(0xDC00 | ((value - 0x10000) & 0x03FF));
     }
 
     // Returns true if the character is a BMP character:

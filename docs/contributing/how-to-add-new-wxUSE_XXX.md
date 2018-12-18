@@ -72,6 +72,16 @@ c) configure.in
    If you have a sample/foo which should be only built when `wxUSE_FOO==1`,
    then only add it to the SAMPLES_SUBDIRS if `wxUSE_FOO=yes` in configure.
 
-d) docs/doxygen/mainpages/const_wxusedef.h
+d) build/cmake/options.cmake
+
+   To include the option in CMake, add a new line in the appropriate
+   section of options.cmake.
+
+    wx_option(wxUSE_FOO "enable FOO")
+
+   As an optional third parameter you may specify `OFF` when the option
+   should be disabled by default.
+
+e) docs/doxygen/mainpages/const_wxusedef.h
 
    Add a brief description of the new constant.

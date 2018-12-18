@@ -41,12 +41,12 @@ class TextCtrlTestCase : public TextEntryTestCase, public CppUnit::TestCase
 public:
     TextCtrlTestCase() { }
 
-    virtual void setUp();
-    virtual void tearDown();
+    virtual void setUp() wxOVERRIDE;
+    virtual void tearDown() wxOVERRIDE;
 
 private:
-    virtual wxTextEntry *GetTestEntry() const { return m_text; }
-    virtual wxWindow *GetTestWindow() const { return m_text; }
+    virtual wxTextEntry *GetTestEntry() const wxOVERRIDE { return m_text; }
+    virtual wxWindow *GetTestWindow() const wxOVERRIDE { return m_text; }
 
     #define SINGLE_AND_MULTI_TESTS() \
         WXUISIM_TEST( ReadOnly ); \
@@ -59,24 +59,15 @@ private:
         WXUISIM_TEST( MaxLength );
         CPPUNIT_TEST( PositionToXYSingleLine );
         CPPUNIT_TEST( XYToPositionSingleLine );
+        CPPUNIT_TEST( HitTestSingleLine );
         SINGLE_AND_MULTI_TESTS();
 
         // Now switch to the multi-line text controls.
         CPPUNIT_TEST( PseudoTestSwitchToMultiLineStyle );
 
-        // Rerun some of the tests above. Notice that not all of them pass, so
-        // we can't just use wxTEXT_ENTRY_TESTS() here. For some of them it's
-        // normal, e.g. Hint() test isn't supposed to work for multi-line
-        // controls. Others, such as InsertionPoint() and TextChangeEvents()
-        // don't pass neither but this could be a bug.
-        CPPUNIT_TEST( SetValue );
-        CPPUNIT_TEST( Selection );
-        CPPUNIT_TEST( InsertionPoint );
-        CPPUNIT_TEST( Replace );
-        WXUISIM_TEST( Editable );
-        CPPUNIT_TEST( CopyPaste );
-        CPPUNIT_TEST( UndoRedo );
-
+        // Rerun the text entry tests not specific to single line controls for
+        // multiline ones now.
+        wxTEXT_ENTRY_TESTS();
         SINGLE_AND_MULTI_TESTS();
 
 
@@ -112,6 +103,7 @@ private:
     void MaxLength();
     void StreamInput();
     void Redirector();
+    void HitTestSingleLine();
     //void ProcessEnter();
     void Url();
     void Style();
@@ -164,12 +156,8 @@ long TextCtrlTestCase::ms_style = 0;
 
 void TextCtrlTestCase::CreateText(long extraStyles)
 {
-    wxSize size;
-    if ( ms_style == wxTE_MULTILINE )
-        size = wxSize(400, TEXT_HEIGHT);
-
     m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, "",
-                            wxDefaultPosition, size,
+                            wxDefaultPosition, wxSize(400, TEXT_HEIGHT),
                             ms_style | extraStyles);
 }
 
@@ -225,7 +213,7 @@ void TextCtrlTestCase::ReadOnly()
 
     // SetEditable() is supposed to override wxTE_READONLY
     m_text->SetEditable(true);
-    
+
 #if defined(__WXOSX__) || defined(__WXUNIVERSAL__)
     // a ready only text field might not have been focusable at all
     m_text->SetFocus();
@@ -340,6 +328,51 @@ void TextCtrlTestCase::Redirector()
     CPPUNIT_ASSERT_EQUAL("stringinput1010003.142.71a", m_text->GetValue());
 
 #endif
+}
+
+void TextCtrlTestCase::HitTestSingleLine()
+{
+    m_text->ChangeValue("Hit me");
+
+    // We don't know the size of the text borders, so we can't really do any
+    // exact tests, just try to verify that the results are roughly as
+    // expected.
+    const wxSize sizeChar = m_text->GetTextExtent("X");
+    const int yMid = sizeChar.y / 2;
+
+    long pos = -1;
+
+    // Hitting a point near the left side of the control should find one of the
+    // first few characters under it.
+    SECTION("Normal")
+    {
+        REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
+        CHECK( pos >= 0 );
+        CHECK( pos < 3 );
+    }
+
+    // Hitting a point well beyond the end of the text shouldn't find any valid
+    // character.
+    SECTION("Beyond")
+    {
+        REQUIRE( m_text->HitTest(wxPoint(20*sizeChar.x, yMid), &pos) == wxTE_HT_BEYOND );
+        CHECK( pos == m_text->GetLastPosition() );
+    }
+
+    // Making the control scroll, by ensuring that its contents is too long to
+    // show inside its window, should change the hit test result for the same
+    // position as used above.
+    SECTION("Scrolled")
+    {
+        m_text->ChangeValue(wxString(200, 'X'));
+        m_text->SetInsertionPointEnd();
+
+        // wxGTK must be given an opportunity to lay the text out.
+        wxYield();
+
+        REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
+        CHECK( pos > 3 );
+    }
 }
 
 #if 0

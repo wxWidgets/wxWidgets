@@ -91,16 +91,9 @@ bool wxPickerBase::CreateBase(wxWindow *parent,
         // set the initial contents of the textctrl
         m_text->SetValue(text);
 
-        m_text->Connect(m_text->GetId(), wxEVT_TEXT,
-                wxCommandEventHandler(wxPickerBase::OnTextCtrlUpdate),
-                NULL, this);
-        m_text->Connect(m_text->GetId(), wxEVT_KILL_FOCUS,
-                wxFocusEventHandler(wxPickerBase::OnTextCtrlKillFocus),
-                NULL, this);
-
-        m_text->Connect(m_text->GetId(), wxEVT_DESTROY,
-                wxWindowDestroyEventHandler(wxPickerBase::OnTextCtrlDelete),
-                NULL, this);
+        m_text->Bind(wxEVT_TEXT, &wxPickerBase::OnTextCtrlUpdate, this);
+        m_text->Bind(wxEVT_KILL_FOCUS, &wxPickerBase::OnTextCtrlKillFocus, this);
+        m_text->Bind(wxEVT_DESTROY, &wxPickerBase::OnTextCtrlDelete, this);
 
         m_sizer->Add(m_text,
                      wxSizerFlags(1).CentreVertical().Border(wxRIGHT));

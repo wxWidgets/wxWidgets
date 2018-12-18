@@ -83,9 +83,6 @@ run_sed docs/readme.txt \
     "/\//s/$ver_for_sed/$ver_string_new/" \
     "/naming: while/s/$ver_for_sed/$ver_string_new/" 
 
-run_sed docs/msw/install.txt \
-    "/^wxWidgets\/releases\//s/$ver_for_sed/$ver_string_new/"
-
 run_sed docs/doxygen/Doxyfile \
     "/^PROJECT_NUMBER/s/$ver_for_sed/$ver_string_new/"
 
@@ -96,10 +93,6 @@ run_sed include/wx/version.h \
 
 run_sed include/wx/osx/config_xcode.h \
     "/^#define PACKAGE/s/$ver_for_sed/$ver_string_new/"
-
-run_sed samples/Info.plist \
-    "/version/s/$ver_for_sed/$ver_string_new/" \
-    "/<string>/s/$ver_for_sed/$ver_string_new/"
 
 run_sed samples/minimal/Info_cocoa.plist \
     "/<string>/s/$ver_for_sed/$ver_string_new/"

@@ -403,19 +403,28 @@ and can be one of the following "sub-properties":
 
 @beginTable
 @hdr3col{property, type, description}
-@row3col{size, unsigned integer,
+@row3col{size, float,
     Pixel size of the font (default: wxNORMAL_FONT's size or @c sysfont's
     size if the @c sysfont property is used or the current size of the font
-    of the enclosing control if the @c inherit property is used.}
+    of the enclosing control if the @c inherit property is used. Note that
+    versions of wxWidgets until 3.1.2 only supported integer values for the
+    font size.}
 @row3col{style, enum,
     One of "normal", "italic" or "slant" (default: normal).}
-@row3col{weight, enum,
-    One of "normal", "bold" or "light" (default: normal).}
+@row3col{weight, enum or integer,
+    One of "thin", "extralight", "light", "normal", "medium", "semibold",
+    "bold", "extrabold", "heavy", "extraheavy", corresponding to the similarly
+    named elements of ::wxFontWeight enum, or a numeric value between 1 and
+    1000 (default: normal). Note that versions of wxWidgets until 3.1.2 only
+    supported "light", "normal" and "bold" values for weight.}
 @row3col{family, enum,
     One of "default", "roman", "script", "decorative", "swiss", "modern" or "teletype"
     (default: default).}
 @row3col{underlined, @ref overview_xrcformat_type_bool,
     Whether the font should be underlined (default: 0).}
+@row3col{strikethrough, @ref overview_xrcformat_type_bool,
+    Whether the strikethrough font should be used (default: 0). This property
+    is only supported since wxWidgets 3.1.2.}
 @row3col{face, ,
     Comma-separated list of face names; the first one available is used
     (default: unspecified).}
@@ -1349,7 +1358,7 @@ must be of wxMDIChildFrame type.
 wxMDIChildFrame supports the same properties that @ref xrc_wxfrane and
 @ref xrc_wxmdiparentframe do.
 
-wxMDIChildFrame can only be used as as immediate child of @ref
+wxMDIChildFrame can only be used as immediate child of @ref
 xrc_wxmdiparentframe.
 
 wxMDIChildFrame may have optional children: either exactly one

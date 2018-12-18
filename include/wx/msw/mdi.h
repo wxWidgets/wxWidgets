@@ -85,6 +85,13 @@ public:
     virtual void RemoveMDIChild(wxMDIChildFrame *child);
 #endif // wxUSE_MENUS
 
+    // Retrieve the current window menu label: it can be different from
+    // "Window" when using non-English translations and can also be different
+    // from wxGetTranslation("Window") if the locale has changed since the
+    // "Window" menu was added.
+    const wxString& MSWGetCurrentWindowMenuLabel() const
+        { return m_currentWindowMenuLabel; }
+
     // handlers
     // --------
 
@@ -149,6 +156,9 @@ private:
     // if true, indicates whether the event wasn't really processed even though
     // it was "handled", see OnActivate() and HandleActivate()
     bool m_activationNotHandled;
+
+    // holds the current translation for the window menu label
+    wxString m_currentWindowMenuLabel;
 
 
     friend class WXDLLIMPEXP_FWD_CORE wxMDIChildFrame;

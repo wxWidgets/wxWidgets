@@ -50,8 +50,43 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog);
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// font dialog hook proc used for setting the dialog title if necessary
+// ----------------------------------------------------------------------------
+
+static
+UINT_PTR CALLBACK
+wxFontDialogHookProc(HWND hwnd,
+                     UINT uiMsg,
+                     WPARAM WXUNUSED(wParam),
+                     LPARAM lParam)
+{
+    if ( uiMsg == WM_INITDIALOG )
+    {
+        CHOOSEFONT *pCH = (CHOOSEFONT *)lParam;
+        wxFontDialog * const
+            dialog = reinterpret_cast<wxFontDialog *>(pCH->lCustData);
+
+        ::SetWindowText(hwnd, dialog->GetTitle().t_str());
+    }
+
+    return 0;
+}
+
+// ----------------------------------------------------------------------------
 // wxFontDialog
 // ----------------------------------------------------------------------------
+
+void wxFontDialog::SetTitle(const wxString& title)
+{
+    // Just store the title here, we can't set it right now because the dialog
+    // doesn't exist yet -- it will be created only when ShowModal() is called.
+    m_title = title;
+}
+
+wxString wxFontDialog::GetTitle() const
+{
+    return m_title;
+}
 
 int wxFontDialog::ShowModal()
 {
@@ -70,6 +105,15 @@ int wxFontDialog::ShowModal()
     chooseFontStruct.lStructSize = sizeof(CHOOSEFONT);
     chooseFontStruct.hwndOwner = hWndParent;
     chooseFontStruct.lpLogFont = &logFont;
+
+    // Currently we only use the hook to set the title, so only set it up if
+    // we really need to do this.
+    if ( !m_title.empty() )
+    {
+        flags |= CF_ENABLEHOOK;
+        chooseFontStruct.lCustData = (LPARAM)this;
+        chooseFontStruct.lpfnHook = wxFontDialogHookProc;
+    }
 
     if ( m_fontData.m_initialFont.IsOk() )
     {

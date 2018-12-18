@@ -287,6 +287,8 @@
 
 #define wxUSE_ZLIB          0
 
+#define wxUSE_LIBLZMA       0
+
 #define wxUSE_APPLE_IEEE          0
 
 #define wxUSE_JOYSTICK            0

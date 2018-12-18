@@ -41,6 +41,12 @@
     is to use wxRearrangeCtrl which combines it with two standard buttons to
     move the current item up or down.
 
+    Note that while most of the methods for items manipulation such as
+    Append(), Insert() or Delete(), inherited from wxItemContainer work as
+    expected for this class, Set() somewhat unexpectedly resets the order of
+    the items as it clears the control first, also clearing the order as a side
+    effect, before adding the new items.
+
     @since 2.9.0
 
     @library{wxcore}

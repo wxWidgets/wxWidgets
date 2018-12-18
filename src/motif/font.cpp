@@ -72,15 +72,15 @@ class wxFontRefData: public wxGDIRefData
     friend class wxFont;
 
 public:
-    wxFontRefData(int size = wxDEFAULT,
-                  wxFontFamily family = wxFONTFAMILY_DEFAULT,
-                  wxFontStyle style = wxFONTSTYLE_NORMAL,
-                  wxFontWeight weight = wxFONTWEIGHT_NORMAL,
-                  bool underlined = false,
-                  const wxString& faceName = wxEmptyString,
-                  wxFontEncoding encoding = wxFONTENCODING_DEFAULT)
+    wxFontRefData(const wxFontInfo& info = wxFontInfo())
     {
-        Init(size, family, style, weight, underlined, faceName, encoding);
+        Init(info.GetFractionalPointSize(),
+             info.GetFamily(),
+             info.GetStyle(),
+             info.GetNumericWeight(),
+             info.IsUnderlined(),
+             info.GetFaceName(),
+             info.GetEncoding());
     }
 
     wxFontRefData(const wxFontRefData& data)
@@ -93,19 +93,19 @@ public:
 
 protected:
     // common part of all ctors
-    void Init(int size,
+    void Init(float size,
               wxFontFamily family,
               wxFontStyle style,
-              wxFontWeight weight,
+              int weight,
               bool underlined,
               const wxString& faceName,
               wxFontEncoding encoding);
 
     // font attributes
-    int           m_pointSize;
+    float         m_pointSize;
     wxFontFamily  m_family;
     wxFontStyle   m_style;
-    wxFontWeight  m_weight;
+    int           m_weight;
     bool          m_underlined;
     wxString      m_faceName;
     wxFontEncoding m_encoding;
@@ -163,10 +163,10 @@ wxXFont::~wxXFont()
 // wxFontRefData
 // ----------------------------------------------------------------------------
 
-void wxFontRefData::Init(int pointSize,
+void wxFontRefData::Init(float pointSize,
                          wxFontFamily family,
                          wxFontStyle style,
-                         wxFontWeight weight,
+                         int weight,
                          bool underlined,
                          const wxString& faceName,
                          wxFontEncoding encoding)
@@ -178,17 +178,10 @@ void wxFontRefData::Init(int pointSize,
 
     m_faceName = faceName;
 
-    if (style == wxDEFAULT)
-        m_style = wxFONTSTYLE_NORMAL;
-    else
-        m_style = style;
+    m_style = style;
+    m_weight = weight;
 
-    if (weight == wxDEFAULT)
-        m_weight = wxFONTWEIGHT_NORMAL;
-    else
-        m_weight = weight;
-
-    if (pointSize == wxDEFAULT)
+    if (pointSize < 0)
         m_pointSize = 12;
     else
         m_pointSize = pointSize;
@@ -220,6 +213,21 @@ wxFont::wxFont(const wxNativeFontInfo& info)
     (void)Create(info.GetXFontName());
 }
 
+wxFont::wxFont(const wxString& nativeFontInfoString)
+{
+    wxNativeFontInfo info;
+    if ( info.FromString(nativeFontInfoString) )
+        (void)Create(info.GetXFontName());
+}
+
+wxFont::wxFont(const wxFontInfo& info)
+{
+    m_refData = new wxFontRefData(info);
+
+    if ( info.IsUsingSizeInPixels() )
+        SetPixelSize(info.GetPixelSize());
+}
+
 bool wxFont::Create(int pointSize,
                     wxFontFamily family,
                     wxFontStyle style,
@@ -229,8 +237,10 @@ bool wxFont::Create(int pointSize,
                     wxFontEncoding encoding)
 {
     UnRef();
-    m_refData = new wxFontRefData(pointSize, family, style, weight,
-                                  underlined, faceName, encoding);
+
+    m_refData = new wxFontRefData(InfoFromLegacyParams(pointSize, family,
+                                                       style, weight, underlined,
+                                                       faceName, encoding));
 
     return true;
 }
@@ -371,7 +381,7 @@ void wxFont::Unshare()
     }
 }
 
-void wxFont::SetPointSize(int pointSize)
+void wxFont::SetFractionalPointSize(float pointSize)
 {
     Unshare();
 
@@ -395,7 +405,7 @@ void wxFont::SetStyle(wxFontStyle style)
     M_FONTDATA->m_nativeFontInfo.GetXFontName().Clear(); // invalid now
 }
 
-void wxFont::SetWeight(wxFontWeight weight)
+void wxFont::SetNumericWeight(int weight)
 {
     Unshare();
 
@@ -439,7 +449,7 @@ void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 // query font attributes
 // ----------------------------------------------------------------------------
 
-int wxFont::GetPointSize() const
+float wxFont::GetFractionalPointSize() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid font") );
 
@@ -465,7 +475,7 @@ wxFontStyle wxFont::GetStyle() const
     return M_FONTDATA->m_style;
 }
 
-wxFontWeight wxFont::GetWeight() const
+int wxFont::GetNumericWeight() const
 {
     wxCHECK_MSG( IsOk(), wxFONTWEIGHT_MAX, wxT("invalid font") );
 

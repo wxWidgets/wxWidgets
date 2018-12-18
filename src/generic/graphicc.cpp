@@ -22,7 +22,7 @@
 
 // keep cairo.h from defining dllimport as we're defining the symbols inside
 // the wx dll in order to load them dynamically.
-#define cairo_public 
+#define cairo_public
 
 #include <cairo.h>
 #include <float.h>
@@ -41,7 +41,7 @@ bool wxCairoInit();
 #include "wx/private/graphics.h"
 #include "wx/rawbmp.h"
 #include "wx/vector.h"
-#if defined(__WXMSW__) && wxUSE_ENH_METAFILE
+#ifdef __WXMSW__
     #include "wx/msw/enhmeta.h"
 #endif
 
@@ -83,7 +83,11 @@ using namespace std;
 #endif
 
 #ifdef __WXGTK__
+#ifdef __WXGTK20__
+#include "wx/gtk/private/wrapgtk.h"
+#else // GTK+ 1.x
 #include <gtk/gtk.h>
+#endif
 #include "wx/fontutil.h"
 #ifndef __WXGTK3__
 #include "wx/gtk/dc.h"
@@ -440,7 +444,7 @@ public:
     {
         if ( !m_enableOffset )
             return false;
-        
+
         int penwidth = 0 ;
         if ( !m_pen.IsNull() )
         {
@@ -478,7 +482,7 @@ public:
     virtual void FillPath( const wxGraphicsPath& p , wxPolygonFillMode fillStyle = wxWINDING_RULE ) wxOVERRIDE;
     virtual void ClearRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) wxOVERRIDE;
     virtual void DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE;
-    
+
     virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
     virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
     virtual void Rotate( wxDouble angle ) wxOVERRIDE;
@@ -1191,7 +1195,17 @@ void wxCairoPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h)
 {
     double x1,y1,x2,y2;
 
-    cairo_stroke_extents( m_pathContext, &x1, &y1, &x2, &y2 );
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+    if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 6, 0) )
+    {
+        cairo_path_extents(m_pathContext, &x1, &y1, &x2, &y2);
+    }
+    else
+#endif
+    {
+        cairo_stroke_extents(m_pathContext, &x1, &y1, &x2, &y2);
+    }
+
     if ( x2 < x1 )
     {
         *x = x2;
@@ -1544,7 +1558,7 @@ wxCairoBitmapData::wxCairoBitmapData( wxGraphicsRenderer* renderer, const wxBitm
     }
 
 #if defined(__WXMSW__) || defined(__WXGTK3__) || defined(__WXOSX__)
-    // if there is a mask, set the alpha bytes in the target buffer to 
+    // if there is a mask, set the alpha bytes in the target buffer to
     // fully transparent or fully opaque
 #if defined(__WXMSW__)
     if (bmp.GetMask() != NULL && !bmp.HasAlpha())
@@ -1782,7 +1796,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
 : wxGraphicsContext(renderer)
 {
 #ifdef __WXMSW__
-    // wxMSW contexts always use MM_ANISOTROPIC, which messes up 
+    // wxMSW contexts always use MM_ANISOTROPIC, which messes up
     // text rendering when printing using Cairo. Switch it to MM_TEXT
     // map mode to avoid this problem.
     HDC hdc = (HDC)dc.GetHDC();
@@ -1816,7 +1830,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxPrinterDC&
 #endif
 
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& dc )
-: wxGraphicsContext(renderer)
+: wxGraphicsContext(renderer, dc.GetWindow())
 {
     int width, height;
     dc.GetSize( &width, &height );
@@ -1855,7 +1869,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxWindowDC& 
 #endif
 
 #ifdef __WXQT__
-    m_qtPainter = (QPainter*) dc.GetHandle();
+    m_qtPainter = static_cast<QPainter*>(dc.GetHandle());
     // create a internal buffer (fallback if cairo_qt_surface is missing)
     m_qtImage = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
     // clear the buffer to be painted over the current contents
@@ -1999,9 +2013,9 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
         // bug 96482) so in this case we would need to pass non-transformed
         // DC to Cairo and to apply original DC transformation to the Cairo
         // context operations on our own.
-        // We believe this bug will be fixed in the next Cairo version.
-#if CAIRO_VERSION <= CAIRO_VERSION_ENCODE(1, 15, 2)
-        if ( cairo_version() <= CAIRO_VERSION_ENCODE(1, 15, 2) )
+        // Bug 96482 was fixed in Cairo 1.15.12 so this workaround needs
+        // to be applied only for older Cairo versions.
+        if ( cairo_version() < CAIRO_VERSION_ENCODE(1, 15, 12) )
         {
             wxCoord orgX, orgY;
             dc.GetDeviceOrigin(&orgX, &orgY);
@@ -2014,7 +2028,6 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
                 adjustTransformFromDC = true;
             }
         }
-#endif // Cairo <= 1.15.2
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 15, 4)
         if ( cairo_version() >= CAIRO_VERSION_ENCODE(1, 15, 4) )
@@ -2045,7 +2058,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
     if ( adjustTransformFromDC )
         ApplyTransformFromDC(dc);
 #endif // __WXMSW__
-    
+
 #ifdef __WXGTK3__
     cairo_t* cr = static_cast<cairo_t*>(dc.GetImpl()->GetCairoContext());
     Init(cr ? cairo_reference(cr) : NULL);
@@ -2071,7 +2084,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, const wxMemoryDC& 
 #endif
 
 #ifdef __WXQT__
-    m_qtPainter = NULL;
+    m_qtPainter = static_cast<QPainter*>(dc.GetHandle());
     // create a internal buffer (fallback if cairo_qt_surface is missing)
     m_qtImage = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
     // clear the buffer to be painted over the current contents
@@ -2143,9 +2156,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, HDC handle )
     // bug 96482) so in this case we would need to pass non-transformed
     // DC to Cairo and to apply original DC transformation to the Cairo
     // context operations on our own.
-    // We believe this bug will be fixed in the next Cairo version.
-#if CAIRO_VERSION <= CAIRO_VERSION_ENCODE(1, 15, 2)
-    if ( cairo_version() <= CAIRO_VERSION_ENCODE(1, 15, 2) )
+    if ( cairo_version() < CAIRO_VERSION_ENCODE(1, 15, 12) )
     {
         POINT devOrg;
         ::GetViewportOrgEx(handle, &devOrg);
@@ -2173,7 +2184,6 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, HDC handle )
             adjustTransformFromDC = true;
         }
     }
-#endif // Cairo <= 1.15.2
     m_mswSurface = cairo_win32_surface_create(handle);
     Init( cairo_create(m_mswSurface) );
     if ( adjustTransformFromDC )
@@ -2224,6 +2234,11 @@ wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer, HWND hWnd)
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
 : wxGraphicsContext(renderer)
 {
+#ifdef __WXQT__
+    m_qtPainter = NULL;
+    m_qtImage = NULL;
+    m_qtSurface = NULL;
+#endif
 #ifdef __WXMSW__
     m_mswSurface = NULL;
     m_mswStateSavedDC = 0;
@@ -2234,7 +2249,7 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, cairo_t *context )
 }
 
 wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
-    : wxGraphicsContext(renderer)
+    : wxGraphicsContext(renderer, window)
 #ifdef __WXMSW__
     , m_mswWindowHDC(GetHwndOf(window))
 #endif
@@ -2278,6 +2293,11 @@ wxCairoContext::wxCairoContext( wxGraphicsRenderer* renderer, wxWindow *window)
 wxCairoContext::wxCairoContext(wxGraphicsRenderer* renderer) :
     wxGraphicsContext(renderer)
 {
+#ifdef __WXQT__
+    m_qtPainter = NULL;
+    m_qtImage = NULL;
+    m_qtSurface = NULL;
+#endif
 #ifdef __WXMSW__
     m_mswSurface = NULL;
     m_mswStateSavedDC = 0;
@@ -2556,6 +2576,7 @@ void wxCairoContext::Flush()
     if ( m_qtSurface )
     {
         cairo_surface_flush(m_qtSurface);
+        m_qtPainter->drawImage( 0,0, *m_qtImage );
     }
 #endif
 }

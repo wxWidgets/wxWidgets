@@ -54,12 +54,12 @@ bool MyApp::OnInit()
     wxJoystick stick(wxJOYSTICK1);
     if (!stick.IsOk())
     {
-        wxMessageBox(wxT("No joystick detected!"));
+        wxMessageBox("No joystick detected!");
         return false;
     }
 
 #if wxUSE_SOUND
-    m_fire.Create(wxT("buttonpress.wav"));
+    m_fire.Create("buttonpress.wav");
 #endif // wxUSE_SOUND
 
     m_minX = stick.GetXMin();
@@ -69,7 +69,7 @@ bool MyApp::OnInit()
 
     // Create the main frame window
 
-    frame = new MyFrame(NULL, wxT("Joystick Demo"), wxDefaultPosition,
+    frame = new MyFrame(NULL, "Joystick Demo", wxDefaultPosition,
         wxSize(500, 400), wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
 
     frame->SetIcon(wxICON(sample));
@@ -77,18 +77,18 @@ bool MyApp::OnInit()
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(JOYTEST_QUIT, wxT("&Exit"));
+    file_menu->Append(JOYTEST_QUIT, "&Exit");
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
-    menu_bar->Append(file_menu, wxT("&File"));
+    menu_bar->Append(file_menu, "&File");
 
     // Associate the menu bar with the frame
     frame->SetMenuBar(menu_bar);
 
 #if wxUSE_STATUSBAR
     frame->CreateStatusBar();
-    frame->SetStatusText(wxString::Format(wxT("Device [%s] (PID:[%i] MID:[%i]) Ready... # of joysticks:[%i]"), stick.GetProductName().c_str(), stick.GetProductId(), stick.GetManufacturerId(), wxJoystick::GetNumberJoysticks()));
+    frame->SetStatusText(wxString::Format("Device [%s] (PID:[%i] MID:[%i]) Ready... # of joysticks:[%i]", stick.GetProductName(), stick.GetProductId(), stick.GetManufacturerId(), wxJoystick::GetNumberJoysticks()));
 #endif // wxUSE_STATUSBAR
 
     frame->CenterOnScreen();
@@ -159,15 +159,15 @@ void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
 #if wxUSE_STATUSBAR
     wxString buf;
     if (event.ButtonDown())
-        buf.Printf(wxT("Joystick (%ld, %ld) #%i Fire!"), xpos, ypos, event.GetButtonChange());
+        buf.Printf("Joystick (%ld, %ld) #%i Fire!", xpos, ypos, event.GetButtonOrdinal());
     else
-        buf.Printf(wxT("Joystick (%ld, %ld)  "), xpos, ypos);
+        buf.Printf("Joystick (%ld, %ld)  ", xpos, ypos);
 
 /*
     for(int i = 0; i < nButtons; ++i)
     {
-        buf += wxString(wxT("[")) +
-        ((event.GetButtonState() & (1 << i)) ? wxT("Y") : wxT("N")) + wxString(wxT("]"));
+        buf += wxString("[") +
+        ((event.GetButtonState() & (1 << i)) ? "Y" : "N") + wxString("]");
     }
 */
 

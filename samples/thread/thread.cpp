@@ -66,7 +66,7 @@ class MyApp : public wxApp
 {
 public:
     MyApp();
-    virtual ~MyApp(){};
+    virtual ~MyApp(){}
 
     virtual bool OnInit() wxOVERRIDE;
 
@@ -356,29 +356,29 @@ MyFrame::MyFrame(const wxString& title)
     wxMenuBar *menuBar = new wxMenuBar;
 
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(THREAD_CLEAR, wxT("&Clear log\tCtrl-L"));
+    menuFile->Append(THREAD_CLEAR, "&Clear log\tCtrl-L");
     menuFile->AppendSeparator();
-    menuFile->Append(THREAD_QUIT, wxT("E&xit\tAlt-X"));
-    menuBar->Append(menuFile, wxT("&File"));
+    menuFile->Append(THREAD_QUIT, "E&xit\tAlt-X");
+    menuBar->Append(menuFile, "&File");
 
     wxMenu *menuThread = new wxMenu;
-    menuThread->Append(THREAD_START_THREAD, wxT("&Start a new thread\tCtrl-N"));
-    menuThread->Append(THREAD_START_THREADS, wxT("Start &many threads at once"));
-    menuThread->Append(THREAD_STOP_THREAD, wxT("S&top the last spawned thread\tCtrl-S"));
+    menuThread->Append(THREAD_START_THREAD, "&Start a new thread\tCtrl-N");
+    menuThread->Append(THREAD_START_THREADS, "Start &many threads at once");
+    menuThread->Append(THREAD_STOP_THREAD, "S&top the last spawned thread\tCtrl-S");
     menuThread->AppendSeparator();
-    menuThread->Append(THREAD_PAUSE_THREAD, wxT("&Pause the last spawned running thread\tCtrl-P"));
-    menuThread->Append(THREAD_RESUME_THREAD, wxT("&Resume the first suspended thread\tCtrl-R"));
+    menuThread->Append(THREAD_PAUSE_THREAD, "&Pause the last spawned running thread\tCtrl-P");
+    menuThread->Append(THREAD_RESUME_THREAD, "&Resume the first suspended thread\tCtrl-R");
     menuThread->AppendSeparator();
-    menuThread->Append(THREAD_START_WORKER, wxT("Start a &worker thread\tCtrl-W"));
-    menuThread->Append(THREAD_EXEC_MAIN, wxT("&Launch a program from main thread\tF5"));
-    menuThread->Append(THREAD_START_GUI_THREAD, wxT("Launch a &GUI thread\tF6"));
-    menuBar->Append(menuThread, wxT("&Thread"));
+    menuThread->Append(THREAD_START_WORKER, "Start a &worker thread\tCtrl-W");
+    menuThread->Append(THREAD_EXEC_MAIN, "&Launch a program from main thread\tF5");
+    menuThread->Append(THREAD_START_GUI_THREAD, "Launch a &GUI thread\tF6");
+    menuBar->Append(menuThread, "&Thread");
 
     wxMenu *menuHelp = new wxMenu;
-    menuHelp->Append(THREAD_SHOWCPUS, wxT("&Show CPU count"));
+    menuHelp->Append(THREAD_SHOWCPUS, "&Show CPU count");
     menuHelp->AppendSeparator();
-    menuHelp->Append(THREAD_ABOUT, wxT("&About"));
-    menuBar->Append(menuHelp, wxT("&Help"));
+    menuHelp->Append(THREAD_ABOUT, "&About");
+    menuBar->Append(menuHelp, "&Help");
 
     SetMenuBar(menuBar);
 
@@ -402,8 +402,7 @@ MyFrame::MyFrame(const wxString& title)
     wxLog::SetActiveTarget(this);
 
     // use fixed width font to align output in nice columns
-    wxFont font(wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_TELETYPE,
-                wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    wxFont font(wxFontInfo().Family(wxFONTFAMILY_TELETYPE));
     header->SetFont(font);
     m_txtctrl->SetFont(font);
 
@@ -489,7 +488,7 @@ MyThread *MyFrame::CreateThread()
 
     if ( thread->Create() != wxTHREAD_NO_ERROR )
     {
-        wxLogError(wxT("Can't create thread!"));
+        wxLogError("Can't create thread!");
     }
 
     wxCriticalSectionLocker enter(wxGetApp().m_critsect);
@@ -516,7 +515,7 @@ void MyFrame::UpdateThreadStatus()
         m_nRunning = nRunning;
         m_nCount = nCount;
 
-        wxLogStatus(this, wxT("%u threads total, %u running."), unsigned(nCount), unsigned(nRunning));
+        wxLogStatus(this, "%u threads total, %u running.", unsigned(nCount), unsigned(nRunning));
     }
     //else: avoid flicker - don't print anything
 }
@@ -536,8 +535,8 @@ void MyFrame::OnStartThreads(wxCommandEvent& WXUNUSED(event) )
 {
     static long s_num;
 
-    s_num = wxGetNumberFromUser(wxT("How many threads to start: "), wxT(""),
-                                wxT("wxThread sample"), s_num, 1, 10000, this);
+    s_num = wxGetNumberFromUser("How many threads to start: ", "",
+                                "wxThread sample", s_num, 1, 10000, this);
     if ( s_num == -1 )
     {
         s_num = 10;
@@ -569,7 +568,7 @@ void MyFrame::OnStartThreads(wxCommandEvent& WXUNUSED(event) )
 
 #if wxUSE_STATUSBAR
     wxString msg;
-    msg.Printf(wxT("%d new threads created."), count);
+    msg.Printf("%d new threads created.", count);
     SetStatusText(msg, 1);
 #endif // wxUSE_STATUSBAR
 
@@ -586,11 +585,11 @@ void MyFrame::OnStartThread(wxCommandEvent& WXUNUSED(event) )
 
     if ( thread->Run() != wxTHREAD_NO_ERROR )
     {
-        wxLogError(wxT("Can't start thread!"));
+        wxLogError("Can't start thread!");
     }
 
 #if wxUSE_STATUSBAR
-    SetStatusText(wxT("New thread started."), 1);
+    SetStatusText("New thread started.", 1);
 #endif // wxUSE_STATUSBAR
 }
 
@@ -603,7 +602,7 @@ void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
     // stop the last thread
     if ( wxGetApp().m_threads.IsEmpty() )
     {
-        wxLogError(wxT("No thread to stop!"));
+        wxLogError("No thread to stop!");
     }
     else
     {
@@ -618,7 +617,7 @@ void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
         toDelete->Delete();
 
 #if wxUSE_STATUSBAR
-        SetStatusText(wxT("Last thread stopped."), 1);
+        SetStatusText("Last thread stopped.", 1);
 #endif // wxUSE_STATUSBAR
     }
 }
@@ -634,14 +633,14 @@ void MyFrame::OnResumeThread(wxCommandEvent& WXUNUSED(event) )
 
     if ( n == count )
     {
-        wxLogError(wxT("No thread to resume!"));
+        wxLogError("No thread to resume!");
     }
     else
     {
         wxGetApp().m_threads[n]->Resume();
 
 #if wxUSE_STATUSBAR
-        SetStatusText(wxT("Thread resumed."), 1);
+        SetStatusText("Thread resumed.", 1);
 #endif // wxUSE_STATUSBAR
     }
 }
@@ -657,14 +656,14 @@ void MyFrame::OnPauseThread(wxCommandEvent& WXUNUSED(event) )
 
     if ( n < 0 )
     {
-        wxLogError(wxT("No thread to pause!"));
+        wxLogError("No thread to pause!");
     }
     else
     {
         wxGetApp().m_threads[n]->Pause();
 
 #if wxUSE_STATUSBAR
-        SetStatusText(wxT("Thread paused."), 1);
+        SetStatusText("Thread paused.", 1);
 #endif // wxUSE_STATUSBAR
     }
 }
@@ -694,7 +693,7 @@ void MyFrame::OnExecMain(wxCommandEvent& WXUNUSED(event))
     if (cmd.IsEmpty())
         return;     // user clicked cancel
 
-    wxLogMessage(wxT("The exit code from the main program is %ld"),
+    wxLogMessage("The exit code from the main program is %ld",
                  EXEC(cmd));
 }
 
@@ -706,19 +705,19 @@ void MyFrame::OnShowCPUs(wxCommandEvent& WXUNUSED(event))
     switch ( nCPUs )
     {
         case -1:
-            msg = wxT("Unknown number of CPUs");
+            msg = "Unknown number of CPUs";
             break;
 
         case 0:
-            msg = wxT("WARNING: you're running without any CPUs!");
+            msg = "WARNING: you're running without any CPUs!";
             break;
 
         case 1:
-            msg = wxT("This system only has one CPU.");
+            msg = "This system only has one CPU.";
             break;
 
         default:
-            msg.Printf(wxT("This system has %d CPUs"), nCPUs);
+            msg.Printf("This system has %d CPUs", nCPUs);
     }
 
     wxLogMessage(msg);
@@ -727,11 +726,11 @@ void MyFrame::OnShowCPUs(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
     wxMessageDialog dialog(this,
-                           wxT("wxWidgets multithreaded application sample\n")
-                           wxT("(c) 1998 Julian Smart, Guilhem Lavaux\n")
-                           wxT("(c) 2000 Robert Roebling\n")
-                           wxT("(c) 1999,2009 Vadim Zeitlin"),
-                           wxT("About wxThread sample"),
+                           "wxWidgets multithreaded application sample\n"
+                           "(c) 1998 Julian Smart, Guilhem Lavaux\n"
+                           "(c) 2000 Robert Roebling\n"
+                           "(c) 1999,2009 Vadim Zeitlin",
+                           "About wxThread sample",
                            wxOK | wxICON_INFORMATION);
 
     dialog.ShowModal();
@@ -753,14 +752,14 @@ void MyFrame::OnStartWorker(wxCommandEvent& WXUNUSED(event))
 
     if ( thread->Create() != wxTHREAD_NO_ERROR )
     {
-        wxLogError(wxT("Can't create thread!"));
+        wxLogError("Can't create thread!");
         return;
     }
 
     m_dlgProgress = new wxProgressDialog
                         (
-                         wxT("Progress dialog"),
-                         wxT("Wait until the thread terminates or press [Cancel]"),
+                         "Progress dialog",
+                         "Wait until the thread terminates or press [Cancel]",
                          100,
                          this,
                          wxPD_CAN_ABORT |
@@ -849,7 +848,7 @@ MyImageDialog::MyImageDialog(wxFrame *parent)
     if ( m_thread.Create() != wxTHREAD_NO_ERROR ||
          m_thread.Run() != wxTHREAD_NO_ERROR )
     {
-        wxLogError(wxT("Can't create/run thread!"));
+        wxLogError("Can't create/run thread!");
         return;
     }
 }

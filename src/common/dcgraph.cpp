@@ -106,9 +106,8 @@ wxGCDC::wxGCDC(const wxEnhMetaFileDC& dc)
 #endif
 
 wxGCDC::wxGCDC(wxGraphicsContext* context) :
-    wxDC( new wxGCDCImpl( this ) )
+    wxDC(new wxGCDCImpl(this, context))
 {
-    SetGraphicsContext(context);
 }
 
 wxGCDC::wxGCDC() :
@@ -121,6 +120,12 @@ wxGCDC::~wxGCDC()
 }
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxGCDCImpl, wxDCImpl);
+
+wxGCDCImpl::wxGCDCImpl(wxDC *owner, wxGraphicsContext* context) :
+    wxDCImpl(owner)
+{
+    Init(context);
+}
 
 wxGCDCImpl::wxGCDCImpl( wxDC *owner ) :
    wxDCImpl( owner )
@@ -282,6 +287,17 @@ void wxGCDCImpl::UpdateClipBox()
     double x, y, w, h;
     m_graphicContext->GetClipBox(&x, &y, &w, &h);
 
+    // We shouldn't reset m_clipping if the clipping region that we set happens
+    // to be empty (e.g. because its intersection with the previous clipping
+    // region was empty), but we should set it to true if we do have a valid
+    // clipping region and it was false which may happen if the clipping region
+    // set from the outside of wxWidgets code.
+    if ( !m_clipping )
+    {
+        if ( w != 0. && h != 0. )
+            m_clipping = true;
+    }
+
     m_clipX1 = wxRound(x);
     m_clipY1 = wxRound(y);
     m_clipX2 = wxRound(x+w);
@@ -289,9 +305,9 @@ void wxGCDCImpl::UpdateClipBox()
     m_isClipBoxValid = true;
 }
 
-void wxGCDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
+bool wxGCDCImpl::DoGetClippingRect(wxRect& rect) const
 {
-    wxCHECK_RET( IsOk(), wxS("wxGCDC::DoGetClippingRegion - invalid GC") );
+    wxCHECK_MSG( IsOk(), false, wxS("wxGCDC::DoGetClippingRegion - invalid GC") );
     // Check if we should retrieve the clipping region possibly not set
     // by SetClippingRegion() but modified by application: this can
     // happen when we're associated with an existing graphics context using
@@ -303,14 +319,7 @@ void wxGCDCImpl::DoGetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h
         self->UpdateClipBox();
     }
 
-    if ( x )
-        *x = m_clipX1;
-    if ( y )
-        *y = m_clipY1;
-    if ( w )
-        *w = m_clipX2 - m_clipX1;
-    if ( h )
-        *h = m_clipY2 - m_clipY1;
+    return wxDCImpl::DoGetClippingRect(rect);
 }
 
 void wxGCDCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
@@ -376,7 +385,7 @@ void wxGCDCImpl::DestroyClippingRegion()
     m_graphicContext->SetPen( m_pen );
     m_graphicContext->SetBrush( m_brush );
 
-    ResetClipping();
+    wxDCImpl::DestroyClippingRegion();
     m_isClipBoxValid = false;
 }
 
@@ -386,9 +395,9 @@ void wxGCDCImpl::DoGetSizeMM( int* width, int* height ) const
 
     GetOwner()->GetSize( &w, &h );
     if (width)
-        *width = long( double(w) / (m_scaleX * m_mm_to_pix_x) );
+        *width = long( double(w) / (m_scaleX * GetMMToPXx()) );
     if (height)
-        *height = long( double(h) / (m_scaleY * m_mm_to_pix_y) );
+        *height = long( double(h) / (m_scaleY * GetMMToPXy()) );
 }
 
 void wxGCDCImpl::SetTextForeground( const wxColour &col )
@@ -414,6 +423,15 @@ void wxGCDCImpl::SetTextBackground( const wxColour &col )
 
 wxSize wxGCDCImpl::GetPPI() const
 {
+    if ( m_graphicContext )
+    {
+        wxDouble x, y;
+        m_graphicContext->GetDPI(&x, &y);
+        return wxSize(wxRound(x), wxRound(y));
+    }
+
+    // This is the same value that wxGraphicsContext::GetDPI() returns by
+    // default.
     return wxSize(72, 72);
 }
 
@@ -457,10 +475,12 @@ void* wxGCDCImpl::GetHandle() const
     return cgctx;
 }
 
+#if wxUSE_PALETTE
 void wxGCDCImpl::SetPalette( const wxPalette& WXUNUSED(palette) )
 {
 
 }
+#endif
 
 void wxGCDCImpl::SetBackgroundMode( int mode )
 {
@@ -1092,40 +1112,40 @@ void wxGCDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
     if ( (angle == 0.0) && m_font.IsOk() )
     {
         DoDrawText(text, x, y);
-        
+
         // Bounding box already updated by DoDrawText(), no need to do it again.
         return;
     }
-            
+
     // Get extent of whole text.
     wxCoord w, h, heightLine;
     GetOwner()->GetMultiLineTextExtent(text, &w, &h, &heightLine);
-    
+
     // Compute the shift for the origin of the next line.
     const double rad = wxDegToRad(angle);
     const double dx = heightLine * sin(rad);
     const double dy = heightLine * cos(rad);
-    
+
     // Draw all text line by line
     const wxArrayString lines = wxSplit(text, '\n', '\0');
     for ( size_t lineNum = 0; lineNum < lines.size(); lineNum++ )
     {
         // Calculate origin for each line to avoid accumulation of
         // rounding errors.
-        if ( m_backgroundMode == wxTRANSPARENT )
+        if ( m_backgroundMode == wxBRUSHSTYLE_TRANSPARENT )
             m_graphicContext->DrawText( lines[lineNum], x + wxRound(lineNum*dx), y + wxRound(lineNum*dy), wxDegToRad(angle ));
         else
             m_graphicContext->DrawText( lines[lineNum], x + wxRound(lineNum*dx), y + wxRound(lineNum*dy), wxDegToRad(angle ), m_graphicContext->CreateBrush(m_textBackgroundColour) );
    }
-            
+
     // call the bounding box by adding all four vertices of the rectangle
     // containing the text to it (simpler and probably not slower than
     // determining which of them is really topmost/leftmost/...)
-    
+
     // "upper left" and "upper right"
     CalcBoundingBox(x, y);
     CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
-    
+
     // "bottom left" and "bottom right"
     x += (wxCoord)(h*sin(rad));
     y += (wxCoord)(h*cos(rad));
@@ -1155,7 +1175,7 @@ void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
     if ( !m_logicalFunctionSupported )
         return;
 
-    if ( m_backgroundMode == wxTRANSPARENT )
+    if ( m_backgroundMode == wxBRUSHSTYLE_TRANSPARENT )
         m_graphicContext->DrawText( str, x ,y);
     else
         m_graphicContext->DrawText( str, x ,y , m_graphicContext->CreateBrush(m_textBackgroundColour) );
@@ -1239,7 +1259,7 @@ wxCoord wxGCDCImpl::GetCharHeight(void) const
 void wxGCDCImpl::Clear(void)
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::Clear - invalid DC") );
-    
+
     if ( m_backgroundBrush.IsOk() )
     {
         m_graphicContext->SetBrush( m_backgroundBrush );

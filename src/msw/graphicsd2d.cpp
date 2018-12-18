@@ -14,9 +14,6 @@
 // Minimum supported client: Windows 8 and Platform Update for Windows 7
 #define wxD2D_DEVICE_CONTEXT_SUPPORTED 0
 
-// Ensure no previous defines interfere with the Direct2D API headers
-#undef GetHwnd
-
 // We load these functions at runtime from the d2d1.dll.
 // However, since they are also used inside the d2d1.h header we must provide
 // implementations matching the exact declarations. These defines ensures we
@@ -26,6 +23,9 @@
 #define D2D1MakeSkewMatrix wxD2D1MakeSkewMatrix
 #define D2D1IsMatrixInvertible wxD2D1IsMatrixInvertible
 #define D2D1InvertMatrix wxD2D1InvertMatrix
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+#define D3D11CreateDevice wxD3D11CreateDevice
+#endif
 
 // There are clashes between the names of the member fields and parameters
 // in the standard d2d1helper.h header resulting in C4458 with VC14,
@@ -36,9 +36,7 @@
     #pragma warning(disable:4458) // declaration of 'xxx' hides class member
 #endif
 
-#include <d2d1.h>
-#include <dwrite.h>
-#include <wincodec.h>
+#include "wx/msw/private/graphicsd2d.h"
 
 #ifdef __MINGW64_TOOLCHAIN__
 #ifndef DWRITE_E_NOFONT
@@ -47,9 +45,9 @@
 #endif
 
 #if wxD2D_DEVICE_CONTEXT_SUPPORTED
-#include <D3D11.h>
-#include <D2d1_1.h>
-#include <DXGI1_2.h>
+#include <d3d11.h>
+#include <d2d1_1.h>
+#include <dxgi1_2.h>
 #endif
 
 #ifdef __VISUALC__
@@ -78,7 +76,6 @@
 #include "wx/private/graphics.h"
 #include "wx/stack.h"
 #include "wx/sharedptr.h"
-#include "wx/msw/private/graphicsd2d.h"
 
 // This must be the last header included to only affect the DEFINE_GUID()
 // occurrences below but not any GUIDs declared in the standard files included
@@ -161,6 +158,11 @@ private:
         if ( !m_dllDirectWrite.Load(wxT("dwrite.dll"), wxDL_VERBATIM | wxDL_QUIET) )
             return false;
 
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+        if (!m_dllDirect3d.Load(wxT("d3d11.dll"), wxDL_VERBATIM | wxDL_QUIET))
+            return false;
+#endif
+
         #define wxLOAD_FUNC(dll, name)                    \
         name = (name##_t)dll.RawGetSymbol(#name);         \
             if ( !name )                                  \
@@ -172,6 +174,10 @@ private:
         wxLOAD_FUNC(m_dllDirect2d, D2D1IsMatrixInvertible);
         wxLOAD_FUNC(m_dllDirect2d, D2D1InvertMatrix);
         wxLOAD_FUNC(m_dllDirectWrite, DWriteCreateFactory);
+
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+        wxLOAD_FUNC(m_dllDirect3d, D3D11CreateDevice);
+#endif
 
         m_D2DRuntimeVersion = wxD2D_VERSION_1_0;
 
@@ -197,6 +203,11 @@ public:
     typedef HRESULT (WINAPI *DWriteCreateFactory_t)(DWRITE_FACTORY_TYPE, REFIID, IUnknown**);
     static DWriteCreateFactory_t DWriteCreateFactory;
 
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+    typedef HRESULT (WINAPI *D3D11CreateDevice_t)(IDXGIAdapter*, D3D_DRIVER_TYPE, HMODULE, UINT, CONST D3D_FEATURE_LEVEL*, UINT, UINT, ID3D11Device**, D3D_FEATURE_LEVEL*, ID3D11DeviceContext**);
+    static D3D11CreateDevice_t D3D11CreateDevice;
+#endif
+
 private:
     static bool m_initialized;
     static bool m_hasDirect2DSupport;
@@ -204,6 +215,9 @@ private:
 
     static wxDynamicLibrary m_dllDirect2d;
     static wxDynamicLibrary m_dllDirectWrite;
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+    static wxDynamicLibrary m_dllDirect3d;
+#endif
 };
 
 // define the members
@@ -213,6 +227,9 @@ wxDirect2D::wxD2DVersion wxDirect2D::m_D2DRuntimeVersion = wxD2D_VERSION_NONE;
 
 wxDynamicLibrary wxDirect2D::m_dllDirect2d;
 wxDynamicLibrary wxDirect2D::m_dllDirectWrite;
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+wxDynamicLibrary wxDirect2D::m_dllDirect3d;
+#endif
 
 // define the (not yet imported) functions
 wxDirect2D::D2D1CreateFactory_t wxDirect2D::D2D1CreateFactory = NULL;
@@ -221,6 +238,10 @@ wxDirect2D::D2D1MakeSkewMatrix_t wxDirect2D::D2D1MakeSkewMatrix = NULL;
 wxDirect2D::D2D1IsMatrixInvertible_t wxDirect2D::D2D1IsMatrixInvertible = NULL;
 wxDirect2D::D2D1InvertMatrix_t wxDirect2D::D2D1InvertMatrix = NULL;
 wxDirect2D::DWriteCreateFactory_t wxDirect2D::DWriteCreateFactory = NULL;
+
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+wxDirect2D::D3D11CreateDevice_t wxDirect2D::D3D11CreateDevice = NULL;
+#endif
 
 // define the interface GUIDs
 DEFINE_GUID(wxIID_IWICImagingFactory,
@@ -240,6 +261,11 @@ DEFINE_GUID(GUID_WICPixelFormat32bppPBGRA,
 
 DEFINE_GUID(GUID_WICPixelFormat32bppBGR,
             0x6fddc324, 0x4e03, 0x4bfe, 0xb1, 0x85, 0x3d, 0x77, 0x76, 0x8d, 0xc9, 0x0e);
+
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+DEFINE_GUID(IID_IDXGIDevice,
+            0x54ec77fa, 0x1377, 0x44e6, 0x8c, 0x32, 0x88, 0xfd, 0x5f, 0x44, 0xc8, 0x4c);
+#endif
 
 #ifndef CLSID_WICImagingFactory
 DEFINE_GUID(CLSID_WICImagingFactory,
@@ -303,6 +329,36 @@ BOOL WINAPI wxD2D1InvertMatrix(
 
     return wxDirect2D::D2D1InvertMatrix(matrix);
 }
+
+#if wxD2D_DEVICE_CONTEXT_SUPPORTED
+HRESULT WINAPI wxD3D11CreateDevice(
+    IDXGIAdapter* pAdapter,
+    D3D_DRIVER_TYPE DriverType,
+    HMODULE Software,
+    UINT Flags,
+    CONST D3D_FEATURE_LEVEL* pFeatureLevels,
+    UINT FeatureLevels,
+    UINT SDKVersion,
+    ID3D11Device** ppDevice,
+    D3D_FEATURE_LEVEL* pFeatureLevel,
+    ID3D11DeviceContext** ppImmediateContext)
+{
+    if (!wxDirect2D::Initialize())
+        return S_FALSE;
+
+    return wxDirect2D::D3D11CreateDevice(
+        pAdapter,
+        DriverType,
+        Software,
+        Flags,
+        pFeatureLevels,
+        FeatureLevels,
+        SDKVersion,
+        ppDevice,
+        pFeatureLevel,
+        ppImmediateContext);
+}
+#endif
 
 static IWICImagingFactory* gs_WICImagingFactory = NULL;
 
@@ -407,7 +463,7 @@ public:
     // was not previously acquired
     virtual void* GetResource() = 0;
 
-    virtual ~wxResourceHolder(){};
+    virtual ~wxResourceHolder() {}
 };
 
 class wxD2DResourceManager;
@@ -420,13 +476,13 @@ public:
     virtual bool IsBound() = 0;
     virtual wxD2DResourceManager* GetManager() = 0;
 
-    virtual ~wxD2DManagedObject() {};
+    virtual ~wxD2DManagedObject() {}
 };
 
 class wxManagedResourceHolder : public wxResourceHolder, public wxD2DManagedObject
 {
 public:
-    virtual ~wxManagedResourceHolder() {};
+    virtual ~wxManagedResourceHolder() {}
 };
 
 // A Direct2D resource manager handles the device-dependent
@@ -600,7 +656,7 @@ public:
 
     virtual wxD2DManagedObject* GetManagedObject() = 0;
 
-    ~wxD2DManagedGraphicsData() {};
+    ~wxD2DManagedGraphicsData() {}
 };
 
 D2D1_CAP_STYLE wxD2DConvertPenCap(wxPenCap cap)
@@ -1121,7 +1177,7 @@ public :
     void* GetNativePath() const wxOVERRIDE;
 
     // give the native path returned by GetNativePath() back (there might be some deallocations necessary)
-    void UnGetNativePath(void* WXUNUSED(p)) const wxOVERRIDE {};
+    void UnGetNativePath(void* WXUNUSED(p)) const wxOVERRIDE {}
 
     // transforms each point of this path by the matrix
     void Transform(const wxGraphicsMatrixData* matrix) wxOVERRIDE;
@@ -1456,11 +1512,8 @@ void wxD2DPathData::MoveToPoint(wxDouble x, wxDouble y)
 {
     // Close current sub-path (leaving the figure as is).
     EndFigure(D2D1_FIGURE_END_OPEN);
-    // And open a new sub-path.
-    D2D1_POINT_2F p = D2D1::Point2F(x, y);
-    EnsureFigureOpen(p);
-
-    m_currentPoint = p;
+    // Store new current point
+    m_currentPoint = D2D1::Point2F(x, y);
     m_currentPointSet = true;
 }
 
@@ -1486,10 +1539,10 @@ void wxD2DPathData::AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2, wx
 {
     // If no current point is set then this function should behave
     // as if preceded by a call to MoveToPoint(cx1, cy1).
-    if( m_currentPointSet )
-        EnsureFigureOpen(m_currentPoint);
-    else
+    if( !m_currentPointSet )
         MoveToPoint(cx1, cy1);
+
+    EnsureFigureOpen(m_currentPoint);
 
     D2D1_BEZIER_SEGMENT bezierSegment = {
         { (FLOAT)cx1, (FLOAT)cy1 },
@@ -1542,13 +1595,19 @@ void wxD2DPathData::AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAng
     // To ensure compatibility with Cairo an initial
     // line segment to the beginning of the arc needs
     // to be added to the path.
-    if (m_figureOpened)
+    if ( m_figureOpened )
     {
+        AddLineToPoint(start.m_x + x, start.m_y + y);
+    }
+    else if ( m_currentPointSet )
+    {
+        EnsureFigureOpen(m_currentPoint);
         AddLineToPoint(start.m_x + x, start.m_y + y);
     }
     else
     {
         MoveToPoint(start.m_x + x, start.m_y + y);
+        EnsureFigureOpen(m_currentPoint);
     }
 
     D2D1_SWEEP_DIRECTION sweepDirection = clockwise ?
@@ -1632,6 +1691,8 @@ void wxD2DPathData::AddEllipse(wxDouble x, wxDouble y, wxDouble w, wxDouble h)
     const wxDouble ry = h / 2.0;
 
     MoveToPoint(x + w, y + ry);
+    // Open new subpath
+    EnsureFigureOpen(m_currentPoint);
 
     D2D1_ARC_SEGMENT arcSegmentLower =
     {
@@ -1853,11 +1914,17 @@ void wxD2DPathData::GetBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble *h) c
 {
     D2D1_RECT_F bounds;
     ID2D1Geometry *curGeometry = GetFullGeometry();
-    curGeometry->GetBounds(D2D1::Matrix3x2F::Identity(), &bounds);
-    if (x != NULL) *x = bounds.left;
-    if (y != NULL) *y = bounds.top;
-    if (w != NULL) *w = bounds.right - bounds.left;
-    if (h != NULL) *h = bounds.bottom - bounds.top;
+    HRESULT hr = curGeometry->GetBounds(D2D1::Matrix3x2F::Identity(), &bounds);
+    wxCHECK_HRESULT_RET(hr);
+    // Check if bounds are empty
+    if ( bounds.left > bounds.right )
+    {
+        bounds.left = bounds.top = bounds.right = bounds.bottom = 0.0F;
+    }
+    if (x) *x = bounds.left;
+    if (y) *y = bounds.top;
+    if (w) *w = bounds.right - bounds.left;
+    if (h) *h = bounds.bottom - bounds.top;
 }
 
 bool wxD2DPathData::Contains(wxDouble x, wxDouble y, wxPolygonFillMode WXUNUSED(fillStyle)) const
@@ -2194,7 +2261,7 @@ public:
         wxGraphicsBitmapData(renderer), m_bitmapHolder(bitmap) {}
 
     wxD2DBitmapData(wxGraphicsRenderer* renderer, const void* pseudoNativeBitmap) :
-        wxGraphicsBitmapData(renderer), m_bitmapHolder(*static_cast<const NativeType*>(pseudoNativeBitmap)) {};
+        wxGraphicsBitmapData(renderer), m_bitmapHolder(*static_cast<const NativeType*>(pseudoNativeBitmap)) {}
 
     // returns the native representation
     void* GetNativeBitmap() const wxOVERRIDE;
@@ -2263,8 +2330,8 @@ template <typename B>
 class wxD2DBrushResourceHolder : public wxD2DResourceHolder<B>
 {
 public:
-    wxD2DBrushResourceHolder(const wxBrush& brush) : m_sourceBrush(brush) {};
-    virtual ~wxD2DBrushResourceHolder() {};
+    wxD2DBrushResourceHolder(const wxBrush& brush) : m_sourceBrush(brush) {}
+    virtual ~wxD2DBrushResourceHolder() {}
 protected:
     const wxBrush m_sourceBrush;
 };
@@ -2632,7 +2699,7 @@ wxD2DPenData* wxGetD2DPenData(const wxGraphicsPen& pen)
 class wxD2DFontData : public wxGraphicsObjectRefData
 {
 public:
-    wxD2DFontData(wxGraphicsRenderer* renderer, ID2D1Factory* d2d1Factory, const wxFont& font, const wxColor& color);
+    wxD2DFontData(wxGraphicsRenderer* renderer, const wxFont& font, const wxColor& color);
 
     wxCOMPtr<IDWriteTextLayout> CreateTextLayout(const wxString& text) const;
 
@@ -2640,7 +2707,7 @@ public:
 
     wxCOMPtr<IDWriteTextFormat> GetTextFormat() const { return m_textFormat; }
 
-    wxCOMPtr<IDWriteFont> GetFont() { return m_font; };
+    wxCOMPtr<IDWriteFont> GetFont() { return m_font; }
 
 private:
     // The native, device-independent font object
@@ -2657,7 +2724,7 @@ private:
     bool m_strikethrough;
 };
 
-wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFactory, const wxFont& font, const wxColor& color) :
+wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, const wxFont& font, const wxColor& color) :
     wxGraphicsObjectRefData(renderer), m_brushData(renderer, wxBrush(color)),
     m_underlined(font.GetUnderlined()), m_strikethrough(font.GetStrikethrough())
 {
@@ -2710,16 +2777,15 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFact
     hr = familyNames->GetString(0, name, length+1);
     wxCHECK_HRESULT_RET(hr);
 
-    FLOAT dpiX, dpiY;
-    d2dFactory->GetDesktopDpi(&dpiX, &dpiY);
-
     hr = wxDWriteFactory()->CreateTextFormat(
         name,
         NULL,
         m_font->GetWeight(),
         m_font->GetStyle(),
         m_font->GetStretch(),
-        (FLOAT)(font.GetPixelSize().GetHeight()) / (dpiY / 96.0),
+        // We need to use DIP units for the font size, with 1dip = 1/96in,
+        // while wxFont uses points with 1pt = 1/72in.
+        font.GetFractionalPointSize()*96/72,
         L"en-us",
         &m_textFormat);
 
@@ -3396,9 +3462,19 @@ public:
 class wxD2DContext : public wxGraphicsContext, wxD2DResourceManager
 {
 public:
-    wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, HWND hwnd);
+    // Create the context for the given HWND, which may be associated (if it's
+    // non-null) with the given wxWindow.
+    wxD2DContext(wxGraphicsRenderer* renderer,
+                 ID2D1Factory* direct2dFactory,
+                 HWND hwnd,
+                 wxWindow* window = NULL);
 
-    wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, HDC hdc, const wxSize& dcSize,
+    // Create the context for the given HDC which may be associated (if it's
+    // non-null) with the given wxDC.
+    wxD2DContext(wxGraphicsRenderer* renderer,
+                 ID2D1Factory* direct2dFactory,
+                 HDC hdc,
+                 const wxDC* dc = NULL,
                  D2D1_ALPHA_MODE alphaMode = D2D1_ALPHA_MODE_IGNORE);
 
 #if wxUSE_IMAGE
@@ -3546,8 +3622,11 @@ private:
 // wxD2DContext implementation
 //-----------------------------------------------------------------------------
 
-wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, HWND hwnd) :
-    wxGraphicsContext(renderer), m_direct2dFactory(direct2dFactory),
+wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer,
+                           ID2D1Factory* direct2dFactory,
+                           HWND hwnd,
+                           wxWindow* window) :
+    wxGraphicsContext(renderer, window), m_direct2dFactory(direct2dFactory),
 #if wxD2D_DEVICE_CONTEXT_SUPPORTED
     m_renderTargetHolder(new wxD2DDeviceContextResourceHolder(direct2dFactory, hwnd))
 #else
@@ -3560,13 +3639,21 @@ wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dF
     Init();
 }
 
-wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer, ID2D1Factory* direct2dFactory, HDC hdc,
-                           const wxSize& dcSize, D2D1_ALPHA_MODE alphaMode) :
-    wxGraphicsContext(renderer), m_direct2dFactory(direct2dFactory),
+wxD2DContext::wxD2DContext(wxGraphicsRenderer* renderer,
+                           ID2D1Factory* direct2dFactory,
+                           HDC hdc,
+                           const wxDC* dc,
+                           D2D1_ALPHA_MODE alphaMode) :
+    wxGraphicsContext(renderer, dc->GetWindow()), m_direct2dFactory(direct2dFactory),
     m_renderTargetHolder(new wxD2DDCRenderTargetResourceHolder(direct2dFactory, hdc, alphaMode))
 {
-    m_width = dcSize.GetWidth();
-    m_height = dcSize.GetHeight();
+    if ( dc )
+    {
+        const wxSize dcSize = dc->GetSize();
+        m_width = dcSize.GetWidth();
+        m_height = dcSize.GetHeight();
+    }
+
     Init();
 }
 
@@ -4527,7 +4614,7 @@ wxD2DRenderer::~wxD2DRenderer()
 
 wxGraphicsContext* wxD2DRenderer::CreateContext(const wxWindowDC& dc)
 {
-    return new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), dc.GetSize());
+    return new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), &dc);
 }
 
 wxGraphicsContext* wxD2DRenderer::CreateContext(const wxMemoryDC& dc)
@@ -4535,7 +4622,7 @@ wxGraphicsContext* wxD2DRenderer::CreateContext(const wxMemoryDC& dc)
     wxBitmap bmp = dc.GetSelectedBitmap();
     wxASSERT_MSG( bmp.IsOk(), wxS("Should select a bitmap before creating wxGraphicsContext") );
 
-    return new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), dc.GetSize(),
+    return new wxD2DContext(this, m_direct2dFactory, dc.GetHDC(), &dc,
                             bmp.HasAlpha() ? D2D1_ALPHA_MODE_PREMULTIPLIED : D2D1_ALPHA_MODE_IGNORE);
 }
 
@@ -4567,12 +4654,12 @@ wxGraphicsContext* wxD2DRenderer::CreateContextFromNativeWindow(void* window)
 
 wxGraphicsContext* wxD2DRenderer::CreateContextFromNativeHDC(WXHDC dc)
 {
-    return new wxD2DContext(this, m_direct2dFactory, (HDC)dc, wxSize(0, 0));
+    return new wxD2DContext(this, m_direct2dFactory, (HDC)dc);
 }
 
 wxGraphicsContext* wxD2DRenderer::CreateContext(wxWindow* window)
 {
-    return new wxD2DContext(this, m_direct2dFactory, (HWND)window->GetHWND());
+    return new wxD2DContext(this, m_direct2dFactory, (HWND)window->GetHWND(), window);
 }
 
 #if wxUSE_IMAGE
@@ -4703,7 +4790,7 @@ wxImage wxD2DRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
 
 wxGraphicsFont wxD2DRenderer::CreateFont(const wxFont& font, const wxColour& col)
 {
-    wxD2DFontData* fontData = new wxD2DFontData(this, GetD2DFactory(), font, col);
+    wxD2DFontData* fontData = new wxD2DFontData(this, font, col);
     if ( !fontData->GetFont() )
     {
         // Apparently a non-TrueType font is given and hence

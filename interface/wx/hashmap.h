@@ -86,7 +86,7 @@
                          wxIntegerEqual,
                          MyHash );
 
-    // using an user-defined class for keys
+    // using a user-defined class for keys
     class MyKey { ... };
 
     // hashing function

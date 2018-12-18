@@ -13,6 +13,8 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_UXTHEME
+
 #include "wx/msw/private.h"     // we use GetHwndOf()
 #include <uxtheme.h>
 
@@ -112,7 +114,10 @@ enum BORDERSTATES {
     CBB_DISABLED = 4,
 };
 
-enum MENUPARTS
+// The MENUPARTS enum is defined in MSVS 2005 SDK, even though it doesn't have
+// vssym32.h, but it doesn't define the constants we use, so still define them,
+// but make the enum unnamed for compatibility.
+enum /* MENUPARTS -- FIXME-VC8: uncomment this when support for it is dropped */
 {
     MENU_MENUITEM_TMSCHEMA = 1,
     MENU_SEPARATOR_TMSCHEMA = 6,
@@ -249,6 +254,12 @@ private:
 
     wxDECLARE_NO_COPY_CLASS(wxUxThemeHandle);
 };
+
+#else // !wxUSE_UXTHEME
+
+inline bool wxUxThemeIsActive() { return false; }
+
+#endif // wxUSE_UXTHEME/!wxUSE_UXTHEME
 
 #endif // _WX_UXTHEME_H_
 

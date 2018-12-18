@@ -3114,8 +3114,7 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                         processed = true;
                     }
                 }
-
-                // fall through
+                wxFALLTHROUGH;
 
             case WM_RBUTTONUP:
 #if wxUSE_DRAGIMAGE
@@ -3288,7 +3287,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     {
         case TVN_BEGINDRAG:
             eventType = wxEVT_TREE_BEGIN_DRAG;
-            // fall through
+            wxFALLTHROUGH;
 
         case TVN_BEGINRDRAG:
             {
@@ -3379,7 +3378,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
         case TVN_GETDISPINFO:
             eventType = wxEVT_TREE_GET_INFO;
-            // fall through
+            wxFALLTHROUGH;
 
         case TVN_SETDISPINFO:
             {
@@ -3403,7 +3402,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 {
                     default:
                         wxLogDebug(wxT("unexpected code %d in TVN_ITEMEXPAND message"), tv->action);
-                        // fall through
+                        wxFALLTHROUGH;
 
                     case TVE_EXPAND:
                         what = IDX_EXPAND;
@@ -3471,7 +3470,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             {
                 eventType = wxEVT_TREE_SEL_CHANGED;
             }
-            // fall through
+            wxFALLTHROUGH;
 
         case TVN_SELCHANGINGA:
         case TVN_SELCHANGINGW:
@@ -3690,7 +3689,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     break;
                 }
             }
-            // fall through
+            wxFALLTHROUGH;
 
         default:
             return wxControl::MSWOnNotify(idCtrl, lParam, result);

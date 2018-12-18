@@ -151,7 +151,6 @@ class TextWidgetsPage : public WidgetsPage
 public:
     // ctor(s) and dtor
     TextWidgetsPage(WidgetsBookCtrl *book, wxImageList *imaglist);
-    virtual ~TextWidgetsPage(){};
 
     virtual wxWindow *GetWidget() const wxOVERRIDE { return m_text; }
     virtual wxTextEntryBase *GetTextEntry() const wxOVERRIDE { return m_text; }
@@ -277,48 +276,49 @@ public:
                     int flags)
         : wxTextCtrl(parent, id, value, wxDefaultPosition, wxDefaultSize, flags)
     {
+        Bind(wxEVT_LEFT_DOWN, &WidgetsTextCtrl::OnLeftClick, this);
     }
 
-protected:
-    void OnRightClick(wxMouseEvent& event)
+private:
+    // Show the result of HitTest() at the mouse position if Alt is pressed.
+    void OnLeftClick(wxMouseEvent& event)
     {
+        event.Skip();
+        if ( !event.AltDown() )
+            return;
+
         wxString where;
         wxTextCoord x, y;
         switch ( HitTest(event.GetPosition(), &x, &y) )
         {
             default:
-                wxFAIL_MSG( wxT("unexpected HitTest() result") );
-                // fall through
+                wxFAIL_MSG( "unexpected HitTest() result" );
+                wxFALLTHROUGH;
 
             case wxTE_HT_UNKNOWN:
                 x = y = -1;
-                where = wxT("nowhere near");
+                where = "nowhere near";
                 break;
 
             case wxTE_HT_BEFORE:
-                where = wxT("before");
+                where = "before";
                 break;
 
             case wxTE_HT_BELOW:
-                where = wxT("below");
+                where = "below";
                 break;
 
             case wxTE_HT_BEYOND:
-                where = wxT("beyond");
+                where = "beyond";
                 break;
 
             case wxTE_HT_ON_TEXT:
-                where = wxT("at");
+                where = "at";
                 break;
         }
 
-        wxLogMessage(wxT("Mouse is %s (%ld, %ld)"), where.c_str(), x, y);
-
-        event.Skip();
+        wxLogMessage("Mouse is %s (%ld, %ld)", where, x, y);
     }
-
-private:
-    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------
@@ -354,10 +354,6 @@ wxBEGIN_EVENT_TABLE(TextWidgetsPage, WidgetsPage)
     EVT_RADIOBOX(wxID_ANY, TextWidgetsPage::OnCheckOrRadioBox)
 wxEND_EVENT_TABLE()
 
-wxBEGIN_EVENT_TABLE(WidgetsTextCtrl, wxTextCtrl)
-    EVT_RIGHT_UP(WidgetsTextCtrl::OnRightClick)
-wxEND_EVENT_TABLE()
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -370,7 +366,7 @@ wxEND_EVENT_TABLE()
     #define FAMILY_CTRLS NATIVE_CTRLS
 #endif
 
-IMPLEMENT_WIDGETS_PAGE(TextWidgetsPage, wxT("Text"),
+IMPLEMENT_WIDGETS_PAGE(TextWidgetsPage, "Text",
                        FAMILY_CTRLS | EDITABLE_CTRLS
                        );
 
@@ -419,12 +415,12 @@ void TextWidgetsPage::CreateContent()
     // left pane
     static const wxString modes[] =
     {
-        wxT("single line"),
-        wxT("multi line"),
+        "single line",
+        "multi line",
     };
 
-    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, wxT("&Set textctrl parameters"));
-    m_radioTextLines = new wxRadioBox(this, wxID_ANY, wxT("&Number of lines:"),
+    wxStaticBox *box = new wxStaticBox(this, wxID_ANY, "&Set textctrl parameters");
+    m_radioTextLines = new wxRadioBox(this, wxID_ANY, "&Number of lines:",
                                       wxDefaultPosition, wxDefaultSize,
                                       WXSIZEOF(modes), modes,
                                       1, wxRA_SPECIFY_COLS);
@@ -435,22 +431,22 @@ void TextWidgetsPage::CreateContent()
     sizerLeft->AddSpacer(5);
 
     m_chkPassword = CreateCheckBoxAndAddToSizer(
-                        sizerLeft, wxT("&Password control"), TextPage_Password
+                        sizerLeft, "&Password control", TextPage_Password
                     );
     m_chkReadonly = CreateCheckBoxAndAddToSizer(
-                        sizerLeft, wxT("&Read-only mode")
+                        sizerLeft, "&Read-only mode"
                     );
     m_chkProcessEnter = CreateCheckBoxAndAddToSizer(
-                        sizerLeft, wxT("Process &Enter")
+                        sizerLeft, "Process &Enter"
                     );
     m_chkProcessTab = CreateCheckBoxAndAddToSizer(
-                        sizerLeft, wxT("Process &Tab")
+                        sizerLeft, "Process &Tab"
                     );
     m_chkFilename = CreateCheckBoxAndAddToSizer(
-                        sizerLeft, wxT("&Filename control")
+                        sizerLeft, "&Filename control"
                     );
     m_chkNoVertScrollbar = CreateCheckBoxAndAddToSizer(
-                        sizerLeft, wxT("No &vertical scrollbar"),
+                        sizerLeft, "No &vertical scrollbar",
                         TextPage_NoVertScrollbar
                     );
     m_chkFilename->Disable(); // not implemented yet
@@ -458,13 +454,13 @@ void TextWidgetsPage::CreateContent()
 
     static const wxString wrap[] =
     {
-        wxT("no wrap"),
-        wxT("word wrap"),
-        wxT("char wrap"),
-        wxT("best wrap"),
+        "no wrap",
+        "word wrap",
+        "char wrap",
+        "best wrap",
     };
 
-    m_radioWrap = new wxRadioBox(this, TextPage_WrapLines, wxT("&Wrap style:"),
+    m_radioWrap = new wxRadioBox(this, TextPage_WrapLines, "&Wrap style:",
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(wrap), wrap,
                                  1, wxRA_SPECIFY_COLS);
@@ -472,12 +468,12 @@ void TextWidgetsPage::CreateContent()
 
     static const wxString halign[] =
     {
-        wxS("left"),
-        wxS("centre"),
-        wxS("right"),
+        "left",
+        "centre",
+        "right",
     };
 
-    m_radioAlign = new wxRadioBox(this, wxID_ANY, wxS("&Text alignment"),
+    m_radioAlign = new wxRadioBox(this, wxID_ANY, "&Text alignment",
                                     wxDefaultPosition, wxDefaultSize,
                                     WXSIZEOF(halign), halign, 1);
     sizerLeft->Add(m_radioAlign, 0, wxGROW | wxALL, 5);
@@ -485,12 +481,12 @@ void TextWidgetsPage::CreateContent()
 #ifdef __WXMSW__
     static const wxString kinds[] =
     {
-        wxT("plain edit"),
-        wxT("rich edit"),
-        wxT("rich edit 2.0"),
+        "plain edit",
+        "rich edit",
+        "rich edit 2.0",
     };
 
-    m_radioKind = new wxRadioBox(this, wxID_ANY, wxT("Control &kind"),
+    m_radioKind = new wxRadioBox(this, wxID_ANY, "Control &kind",
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(kinds), kinds,
                                  1, wxRA_SPECIFY_COLS);
@@ -499,33 +495,33 @@ void TextWidgetsPage::CreateContent()
     sizerLeft->Add(m_radioKind, 0, wxGROW | wxALL, 5);
 #endif // __WXMSW__
 
-    wxButton *btn = new wxButton(this, TextPage_Reset, wxT("&Reset"));
+    wxButton *btn = new wxButton(this, TextPage_Reset, "&Reset");
     sizerLeft->Add(2, 2, 0, wxGROW | wxALL, 1); // spacer
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, wxT("&Change contents:"));
+    wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, "&Change contents:");
     wxSizer *sizerMiddleUp = new wxStaticBoxSizer(box2, wxVERTICAL);
 
-    btn = new wxButton(this, TextPage_Set, wxT("&Set text value"));
+    btn = new wxButton(this, TextPage_Set, "&Set text value");
     sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
 
-    btn = new wxButton(this, TextPage_Add, wxT("&Append text"));
+    btn = new wxButton(this, TextPage_Add, "&Append text");
     sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
 
-    btn = new wxButton(this, TextPage_Insert, wxT("&Insert text"));
+    btn = new wxButton(this, TextPage_Insert, "&Insert text");
     sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
 
-    btn = new wxButton(this, TextPage_Load, wxT("&Load file"));
+    btn = new wxButton(this, TextPage_Load, "&Load file");
     sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
 
-    btn = new wxButton(this, TextPage_Clear, wxT("&Clear"));
+    btn = new wxButton(this, TextPage_Clear, "&Clear");
     sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
 
-    btn = new wxButton(this, TextPage_StreamRedirector, wxT("St&ream redirection"));
+    btn = new wxButton(this, TextPage_StreamRedirector, "St&ream redirection");
     sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 1);
 
-    wxStaticBox *box4 = new wxStaticBox(this, wxID_ANY, wxT("&Info:"));
+    wxStaticBox *box4 = new wxStaticBox(this, wxID_ANY, "&Info:");
     wxSizer *sizerMiddleDown = new wxStaticBoxSizer(box4, wxVERTICAL);
 
     m_textPosCur = CreateInfoText();
@@ -535,19 +531,19 @@ void TextWidgetsPage::CreateContent()
     wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
     sizerRow->Add(CreateTextWithLabelSizer
                   (
-                    wxT("Current pos:"),
+                    "Current pos:",
                     m_textPosCur
                   ),
                   0, wxRIGHT, 5);
     sizerRow->Add(CreateTextWithLabelSizer
                   (
-                    wxT("Col:"),
+                    "Col:",
                     m_textColCur
                   ),
                   0, wxLEFT | wxRIGHT, 5);
     sizerRow->Add(CreateTextWithLabelSizer
                   (
-                    wxT("Row:"),
+                    "Row:",
                     m_textRowCur
                   ),
                   0, wxLEFT, 5);
@@ -559,9 +555,9 @@ void TextWidgetsPage::CreateContent()
                      (
                         CreateTextWithLabelSizer
                         (
-                          wxT("Number of lines:"),
+                          "Number of lines:",
                           m_textLineLast,
-                          wxT("Last position:"),
+                          "Last position:",
                           m_textPosLast
                         ),
                         0, wxALL, 5
@@ -573,9 +569,9 @@ void TextWidgetsPage::CreateContent()
                      (
                         CreateTextWithLabelSizer
                         (
-                          wxT("Selection: from"),
+                          "Selection: from",
                           m_textSelFrom,
-                          wxT("to"),
+                          "to",
                           m_textSelTo
                         ),
                         0, wxALL, 5
@@ -588,10 +584,21 @@ void TextWidgetsPage::CreateContent()
                      (
                         CreateTextWithLabelSizer
                         (
-                          wxT("Range 10..20:"),
+                          "Range 10..20:",
                           m_textRange
                         ),
                         0, wxALL, 5
+                     );
+
+    sizerMiddleDown->Add
+                     (
+                          new wxStaticText
+                          (
+                            this,
+                            wxID_ANY,
+                            "Alt-click in the text to see HitTest() result"
+                          ),
+                          wxSizerFlags().Border()
                      );
 
     wxSizer *sizerMiddle = new wxBoxSizer(wxVERTICAL);
@@ -599,7 +606,7 @@ void TextWidgetsPage::CreateContent()
     sizerMiddle->Add(sizerMiddleDown, 1, wxGROW | wxTOP, 5);
 
     // right pane
-    wxStaticBox *box3 = new wxStaticBox(this, wxID_ANY, wxT("&Text:"));
+    wxStaticBox *box3 = new wxStaticBox(this, wxID_ANY, "&Text:");
     m_sizerText = new wxStaticBoxSizer(box3, wxHORIZONTAL);
     Reset();
     CreateText();
@@ -624,7 +631,7 @@ wxTextCtrl *TextWidgetsPage::CreateInfoText()
     if ( !s_maxWidth )
     {
         // calc it once only
-        GetTextExtent(wxT("9999999"), &s_maxWidth, NULL);
+        GetTextExtent("9999999", &s_maxWidth, NULL);
     }
 
     wxTextCtrl *text = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
@@ -682,7 +689,8 @@ void TextWidgetsPage::CreateText()
     switch ( m_radioTextLines->GetSelection() )
     {
         default:
-            wxFAIL_MSG( wxT("unexpected lines radio box selection") );
+            wxFAIL_MSG( "unexpected lines radio box selection" );
+            wxFALLTHROUGH;
 
         case TextLines_Single:
             break;
@@ -707,7 +715,7 @@ void TextWidgetsPage::CreateText()
     switch ( m_radioWrap->GetSelection() )
     {
         default:
-            wxFAIL_MSG( wxT("unexpected wrap style radio box selection") );
+            wxFAIL_MSG( "unexpected wrap style radio box selection" );
             wxFALLTHROUGH;
 
         case WrapStyle_None:
@@ -740,14 +748,15 @@ void TextWidgetsPage::CreateText()
             flags |= wxTE_RIGHT;
             break;
         default:
-            wxFAIL_MSG( wxS("unexpected alignment style radio box selection") );
+            wxFAIL_MSG( "unexpected alignment style radio box selection" );
     }
 
 #ifdef __WXMSW__
     switch ( m_radioKind->GetSelection() )
     {
         default:
-            wxFAIL_MSG( wxT("unexpected kind radio box selection") );
+            wxFAIL_MSG( "unexpected kind radio box selection" );
+            wxFALLTHROUGH;
 
         case TextKind_Plain:
             break;
@@ -772,7 +781,7 @@ void TextWidgetsPage::CreateText()
     }
     else
     {
-        valueOld = wxT("Hello, Universe!");
+        valueOld = "Hello, Universe!";
     }
 
     m_text = new WidgetsTextCtrl(this, TextPage_Textctrl, valueOld, flags);
@@ -832,7 +841,7 @@ void TextWidgetsPage::OnIdle(wxIdleEvent& WXUNUSED(event))
     if ( m_textLineLast )
     {
         m_textLineLast->SetValue(
-                wxString::Format(wxT("%d"), m_text->GetNumberOfLines()) );
+                wxString::Format("%d", m_text->GetNumberOfLines()) );
     }
 
     if ( m_textSelFrom && m_textSelTo )
@@ -877,8 +886,8 @@ void TextWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 void TextWidgetsPage::OnButtonSet(wxCommandEvent& WXUNUSED(event))
 {
     m_text->SetValue(m_text->GetWindowStyle() & wxTE_MULTILINE
-                        ? wxT("Here,\nthere and\neverywhere")
-                        : wxT("Yellow submarine"));
+                        ? "Here,\nthere and\neverywhere"
+                        : "Yellow submarine");
 
     m_text->SetFocus();
 }
@@ -887,18 +896,18 @@ void TextWidgetsPage::OnButtonAdd(wxCommandEvent& WXUNUSED(event))
 {
     if ( m_text->GetWindowStyle() & wxTE_MULTILINE )
     {
-        m_text->AppendText(wxT("We all live in a\n"));
+        m_text->AppendText("We all live in a\n");
     }
 
-    m_text->AppendText(wxT("Yellow submarine"));
+    m_text->AppendText("Yellow submarine");
 }
 
 void TextWidgetsPage::OnButtonInsert(wxCommandEvent& WXUNUSED(event))
 {
-    m_text->WriteText(wxT("Is there anybody going to listen to my story"));
+    m_text->WriteText("Is there anybody going to listen to my story");
     if ( m_text->GetWindowStyle() & wxTE_MULTILINE )
     {
-        m_text->WriteText(wxT("\nall about the girl who came to stay"));
+        m_text->WriteText("\nall about the girl who came to stay");
     }
 }
 
@@ -912,14 +921,15 @@ void TextWidgetsPage::OnButtonLoad(wxCommandEvent& WXUNUSED(event))
 {
     // search for the file in several dirs where it's likely to be
     wxPathList pathlist;
-    pathlist.Add(wxT("."));
-    pathlist.Add(wxT(".."));
-    pathlist.Add(wxT("../../../samples/widgets"));
+    pathlist.Add(".");
+    pathlist.Add("..");
+    pathlist.Add("../widgets");
+    pathlist.Add("../../../samples/widgets");
 
-    wxString filename = pathlist.FindValidPath(wxT("textctrl.cpp"));
+    wxString filename = pathlist.FindValidPath("textctrl.cpp");
     if ( !filename )
     {
-        wxLogError(wxT("File textctrl.cpp not found."));
+        wxLogError("File textctrl.cpp not found.");
     }
     else // load it
     {
@@ -927,13 +937,13 @@ void TextWidgetsPage::OnButtonLoad(wxCommandEvent& WXUNUSED(event))
         if ( !m_text->LoadFile(filename) )
         {
             // this is not supposed to happen ...
-            wxLogError(wxT("Error loading file."));
+            wxLogError("Error loading file.");
         }
         else
         {
             long elapsed = sw.Time();
-            wxLogMessage(wxT("Loaded file '%s' in %lu.%us"),
-                         filename.c_str(), elapsed / 1000,
+            wxLogMessage("Loaded file '%s' in %lu.%us",
+                         filename, elapsed / 1000,
                          (unsigned int) elapsed % 1000);
         }
     }
@@ -988,12 +998,12 @@ void TextWidgetsPage::OnText(wxCommandEvent& WXUNUSED(event))
         return;
     }
 
-    wxLogMessage(wxT("Text ctrl value changed"));
+    wxLogMessage("Text ctrl value changed");
 }
 
 void TextWidgetsPage::OnTextEnter(wxCommandEvent& event)
 {
-    wxLogMessage(wxT("Text entered: '%s'"), event.GetString().c_str());
+    wxLogMessage("Text entered: '%s'", event.GetString());
     event.Skip();
 }
 
@@ -1025,7 +1035,7 @@ void TextWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
                 flags |= wxTE_RIGHT;
                 break;
             default:
-                wxFAIL_MSG( wxS("unexpected alignment style radio box selection") );
+                wxFAIL_MSG( "unexpected alignment style radio box selection" );
                 return;
         }
 
@@ -1050,9 +1060,9 @@ void TextWidgetsPage::OnStreamRedirector(wxCommandEvent& WXUNUSED(event))
 {
 #if wxHAS_TEXT_WINDOW_STREAM
     wxStreamToTextRedirector redirect(m_text);
-    wxString str( wxT("Outputed to cout, appears in wxTextCtrl!") );
+    wxString str( "Outputed to cout, appears in wxTextCtrl!" );
     wxSTD cout << str << wxSTD endl;
 #else
-    wxMessageBox(wxT("This wxWidgets build does not support wxStreamToTextRedirector"));
+    wxMessageBox("This wxWidgets build does not support wxStreamToTextRedirector");
 #endif
 }

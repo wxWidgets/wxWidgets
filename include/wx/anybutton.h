@@ -25,7 +25,7 @@
 #define wxBU_BOTTOM          0x0200
 #define wxBU_ALIGN_MASK      ( wxBU_LEFT | wxBU_TOP | wxBU_RIGHT | wxBU_BOTTOM )
 
-// These two flags are obsolete
+// These two flags are obsolete and have no effect any longer.
 #define wxBU_NOAUTODRAW      0x0000
 #define wxBU_AUTODRAW        0x0004
 

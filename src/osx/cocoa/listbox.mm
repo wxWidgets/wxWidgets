@@ -297,24 +297,12 @@ protected:
 
     int row = [self selectedRow];
 
-    if (row == -1) 
-    {
-        // no row selected
-    } 
-    else 
-    {
-        wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-        wxListBox *list = static_cast<wxListBox*> ( impl->GetWXPeer());
-        wxCHECK_RET( list != NULL , wxT("Listbox expected"));
+    wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
+    wxListBox* const list = wxDynamicCast(impl->GetWXPeer(), wxListBox);
+    wxCHECK_RET( list != NULL , "Associated control should be a wxListBox" );
 
-        if ((row < 0) || (row > (int) list->GetCount()))  // OS X can select an item below the last item
-            return;
-
-        if ( !list->MacGetBlockEvents() )
-            list->HandleLineEvent( row, false );
-    }
-
-} 
+    list->MacHandleSelectionChange(row);
+}
 
 - (void)setFont:(NSFont *)aFont
 {

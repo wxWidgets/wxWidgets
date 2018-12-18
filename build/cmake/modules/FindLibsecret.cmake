@@ -30,7 +30,7 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 find_package(PkgConfig)
-pkg_check_modules(LIBSECRET libsecret-1)
+pkg_check_modules(LIBSECRET QUIET libsecret-1)
 
 set(VERSION_OK TRUE)
 if (LIBSECRET_VERSION)

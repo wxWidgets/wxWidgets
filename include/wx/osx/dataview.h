@@ -60,6 +60,7 @@ public:
     virtual void SetMinWidth   (int minWidth);
     virtual void SetReorderable(bool reorderable);
     virtual void SetResizeable (bool resizable);
+    virtual void UnsetAsSortKey();
     virtual void SetSortable   (bool sortable);
     virtual void SetSortOrder  (bool ascending);
     virtual void SetTitle      (wxString const& title);

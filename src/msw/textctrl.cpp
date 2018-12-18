@@ -584,7 +584,7 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
         }
 #endif
         if ( !contextMenuConnected )
-            Connect(wxEVT_CONTEXT_MENU, wxContextMenuEventHandler(wxTextCtrl::OnContextMenu));
+            Bind(wxEVT_CONTEXT_MENU, &wxTextCtrl::OnContextMenu, this);
     }
     else
 #endif // wxUSE_RICHEDIT
@@ -1997,7 +1997,7 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
             {
                 default:
                     wxFAIL_MSG( wxT("how many modifiers have we got?") );
-                    // fall through
+                    wxFALLTHROUGH;
 
                 case 0:
                     switch ( vkey )
@@ -2006,14 +2006,14 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
                             // This one is only special for multi line controls.
                             if ( !IsMultiLine() )
                                 break;
-                            // fall through
+                            wxFALLTHROUGH;
 
                         case VK_DELETE:
                         case VK_HOME:
                         case VK_END:
                             return false;
                     }
-                    // fall through
+                    wxFALLTHROUGH;
                 case 2:
                     break;
 
@@ -2262,9 +2262,14 @@ wxTextCtrl::MSWHandleMessage(WXLRESULT *rc,
             // for plain EDIT controls though), so explicitly work around this
             if ( IsRich() )
             {
+                // wxCurrentPopupMenu stores the popup menu that will receive
+                // WM_COMMAND, but it may be non-NULL even when the underlying
+                // native menu is no longer shown. Use ::IsMenu() to check whether
+                // the menu still exists.
                 extern wxMenu *wxCurrentPopupMenu;
                 if ( wxCurrentPopupMenu &&
-                        wxCurrentPopupMenu->GetInvokingWindow() == this )
+                        wxCurrentPopupMenu->GetInvokingWindow() == this &&
+                        ::IsMenu(GetHmenuOf(wxCurrentPopupMenu)) )
                     ::SetCursor(GetHcursorOf(*wxSTANDARD_CURSOR));
             }
 #endif // wxUSE_MENUS
@@ -2292,7 +2297,7 @@ bool wxTextCtrl::SendUpdateEvent()
 
         default:
             wxFAIL_MSG( wxT("unexpected wxTextCtrl::m_updatesCount value") );
-            // fall through
+            wxFALLTHROUGH;
 
         case -1:
             // we hadn't updated the control ourselves, this event comes from
@@ -2424,7 +2429,7 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     int cx, cy;
     wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
 
-    DWORD wText = 1;
+    DWORD wText = FromDIP(1);
     ::SystemParametersInfo(SPI_GETCARETWIDTH, 0, &wText, 0);
     wText += xlen;
 
@@ -2459,7 +2464,7 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     // stand out).
     if ( !HasFlag(wxBORDER_NONE) )
     {
-        wText += 9; // borders and inner margins
+        wText += FromDIP(9); // borders and inner margins
 
         // we have to add the adjustments for the control height only once, not
         // once per line, so do it after multiplication above

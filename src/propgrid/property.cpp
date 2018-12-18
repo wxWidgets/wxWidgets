@@ -295,7 +295,7 @@ bool wxPGDefaultRenderer::Render( wxDC& dc, const wxRect& rect,
             {
                 wxString unitsString = property->GetAttribute(wxPG_ATTR_UNITS, wxEmptyString);
                 if ( !unitsString.empty() )
-                    text = wxString::Format(wxS("%s %s"), text.c_str(), unitsString.c_str() );
+                    text = wxString::Format(wxS("%s %s"), text, unitsString );
             }
         }
 
@@ -781,7 +781,7 @@ wxPropertyGrid* wxPGProperty::GetGrid() const
 
 int wxPGProperty::Index( const wxPGProperty* p ) const
 {
-    return m_children.Index(const_cast<wxPGProperty*>(p));
+    return wxPGItemIndexInVector<wxPGProperty*>(m_children, const_cast<wxPGProperty*>(p));
 }
 
 bool wxPGProperty::ValidateValue( wxVariant& WXUNUSED(value), wxPGValidationInfo& WXUNUSED(validationInfo) ) const
@@ -877,7 +877,7 @@ void wxPGProperty::GetDisplayInfo( unsigned int column,
 
     wxASSERT_MSG( cell.GetData(),
                   wxString::Format(wxS("Invalid cell for property %s"),
-                                   GetName().c_str()) );
+                                   GetName()) );
 
     // We need to return customized cell object.
     if (pCell)
@@ -1428,7 +1428,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
             wxVariant newValue;
             AdaptListToValue(value, &newValue);
             value = newValue;
-            //wxLogDebug(wxS(">> %s.SetValue() adapted list value to type '%s'"),GetName().c_str(),value.GetType().c_str());
+            //wxLogDebug(wxS(">> %s.SetValue() adapted list value to type '%s'"),GetName(),value.GetType());
         }
 
         if ( HasFlag( wxPG_PROP_AGGREGATE) )
@@ -1444,7 +1444,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
             wxVariantList::iterator node;
             unsigned int i = 0;
 
-            //wxLogDebug(wxS(">> %s.SetValue() pList parsing"),GetName().c_str());
+            //wxLogDebug(wxS(">> %s.SetValue() pList parsing"),GetName());
 
             // Children in list can be in any order, but we will give hint to
             // GetPropertyByNameWH(). This optimizes for full list parsing.
@@ -1454,7 +1454,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
                 wxPGProperty* child = GetPropertyByNameWH(childValue.GetName(), i);
                 if ( child )
                 {
-                    //wxLogDebug(wxS("%i: child = %s, childValue.GetType()=%s"),i,child->GetBaseName().c_str(),childValue.GetType().c_str());
+                    //wxLogDebug(wxS("%i: child = %s, childValue.GetType()=%s"),i,child->GetBaseName(),childValue.GetType());
                     if ( childValue.IsType(wxPG_VARIANT_TYPE_LIST) )
                     {
                         if ( child->HasFlag(wxPG_PROP_AGGREGATE) && !(flags & wxPG_SETVAL_AGGREGATED) )
@@ -1924,7 +1924,7 @@ double wxPGProperty::GetAttributeAsDouble( const wxString& name, double defVal )
 wxVariant wxPGProperty::GetAttributesAsList() const
 {
     wxVariantList tempList;
-    wxVariant v( tempList, wxString::Format(wxS("@%s@attr"),m_name.c_str()) );
+    wxVariant v( tempList, wxString::Format(wxS("@%s@attr"),m_name) );
 
     wxPGAttributeStorage::const_iterator it = m_attributes.StartIteration();
     wxVariant variant;
@@ -2254,7 +2254,7 @@ wxPGProperty* wxPGProperty::GetMainParent() const
     const wxPGProperty* curChild = this;
     const wxPGProperty* curParent = m_parent;
 
-    while ( curParent && !curParent->IsCategory() )
+    while ( !curParent->IsRoot() && !curParent->IsCategory() )
     {
         curChild = curParent;
         curParent = curParent->m_parent;
@@ -2416,17 +2416,7 @@ wxPGProperty* wxPGProperty::InsertChild( int index,
 
 void wxPGProperty::RemoveChild( wxPGProperty* p )
 {
-    wxArrayPGProperty::iterator it;
-    wxArrayPGProperty& children = m_children;
-
-    for ( it=children.begin(); it != children.end(); ++it )
-    {
-        if ( *it == p )
-        {
-            children.erase(it);
-            break;
-        }
-    }
+    wxPGRemoveItemFromVector<wxPGProperty*>(m_children, p);
 }
 
 void wxPGProperty::RemoveChild(unsigned int index)
@@ -2436,12 +2426,8 @@ void wxPGProperty::RemoveChild(unsigned int index)
 
 void wxPGProperty::SortChildren(int (*fCmp)(wxPGProperty**, wxPGProperty**))
 {
-    m_children.Sort(fCmp);
-
-#if 0
-    // For wxVector w/ wxUSE_STL=1, you would use code like this instead:
-    std::sort(m_children.begin(), m_children.end(), fCmp);
-#endif
+    wxArray_SortFunction<wxPGProperty*> sf(fCmp);
+    std::sort(m_children.begin(), m_children.end(), sf);
 }
 
 void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
@@ -2468,7 +2454,7 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
     unsigned int n = 0;
     wxVariant childValue = list[n];
 
-    //wxLogDebug(wxS(">> %s.AdaptListToValue()"),GetBaseName().c_str());
+    //wxLogDebug(wxS(">> %s.AdaptListToValue()"),GetBaseName());
 
     for ( unsigned int i = 0; i < GetChildCount(); i++ )
     {
@@ -2476,7 +2462,7 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
 
         if ( childValue.GetName() == child->GetBaseName() )
         {
-            //wxLogDebug(wxS("  %s(n=%i), %s"),childValue.GetName().c_str(),n,childValue.GetType().c_str());
+            //wxLogDebug(wxS("  %s(n=%i), %s"),childValue.GetName(),n,childValue.GetType());
 
             if ( childValue.IsType(wxPG_VARIANT_TYPE_LIST) )
             {
@@ -2650,11 +2636,11 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
     /*
     if ( current )
     {
-        wxLogDebug(wxS("%s::GetItemAtY(%i) -> %s"),this->GetLabel().c_str(),y,current->GetLabel().c_str());
+        wxLogDebug(wxS("%s::GetItemAtY(%i) -> %s"),this->GetLabel(),y,current->GetLabel());
     }
     else
     {
-        wxLogDebug(wxS("%s::GetItemAtY(%i) -> NULL"),this->GetLabel().c_str(),y);
+        wxLogDebug(wxS("%s::GetItemAtY(%i) -> NULL"),this->GetLabel(),y);
     }
     */
 
@@ -3009,6 +2995,20 @@ wxPGChoiceEntry& wxPGChoices::AddAsSorted( const wxString& label, int value )
 
     wxPGChoiceEntry entry(label, value);
     return m_data->Insert( index, entry );
+}
+
+// -----------------------------------------------------------------------
+
+void wxPGChoices::Add(size_t count, const wxString* labels, const long* values)
+{
+    AllocExclusive();
+
+    for ( size_t i = 0; i < count; ++i )
+    {
+        const int value = values ? values[i] : i;
+        wxPGChoiceEntry entry(labels[i], value);
+        m_data->Insert( i, entry );
+    }
 }
 
 // -----------------------------------------------------------------------

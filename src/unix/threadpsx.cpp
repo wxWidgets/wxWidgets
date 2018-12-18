@@ -987,36 +987,29 @@ wxThreadInternal::~wxThreadInternal()
 {
 }
 
-#ifdef HAVE_PTHREAD_ATTR_SETSTACKSIZE
-    #define WXUNUSED_STACKSIZE(identifier)  identifier
-#else
-    #define WXUNUSED_STACKSIZE(identifier)  WXUNUSED(identifier)
-#endif
-
-wxThreadError wxThreadInternal::Create(wxThread *thread,
-                                       unsigned int WXUNUSED_STACKSIZE(stackSize))
+static bool SetThreadPriority(pthread_attr_t& attr, int prio)
 {
-    if ( GetState() != STATE_NEW )
+    if ( prio == wxPRIORITY_DEFAULT )
     {
-        // don't recreate thread
-        return wxTHREAD_RUNNING;
+        // Don't even try to do anything, there is no need for it and it could
+        // result in failures if we don't handle setting the priority correctly
+        // under the current platform, see e.g. #18195.
+        return true;
     }
-
-    // set up the thread attribute: right now, we only set thread priority
-    pthread_attr_t attr;
-    pthread_attr_init(&attr);
-
-#ifdef HAVE_PTHREAD_ATTR_SETSTACKSIZE
-    if (stackSize)
-      pthread_attr_setstacksize(&attr, stackSize);
-#endif
 
 #ifdef HAVE_THREAD_PRIORITY_FUNCTIONS
     int policy;
     if ( pthread_attr_getschedpolicy(&attr, &policy) != 0 )
     {
         wxLogError(_("Cannot retrieve thread scheduling policy."));
+        return false;
     }
+
+    // TODO: on most (all?) systems, thread priorities can't be used with
+    //       SCHED_OTHER policy, so we need to check if this is the current
+    //       policy and change it to something else (SCHED_FIFO or SCHED_RR?)
+    //       in order to be able to actually change the priority as without
+    //       doing it the code below just not going to work.
 
 #ifdef __VMS__
    /* the pthread.h contains too many spaces. This is a work-around */
@@ -1029,41 +1022,71 @@ wxThreadError wxThreadInternal::Create(wxThread *thread,
 #endif
 
     int max_prio = sched_get_priority_max(policy),
-        min_prio = sched_get_priority_min(policy),
-        prio = GetPriority();
+        min_prio = sched_get_priority_min(policy);
 
     if ( min_prio == -1 || max_prio == -1 )
     {
         wxLogError(_("Cannot get priority range for scheduling policy %d."),
                    policy);
+        return false;
     }
-    else if ( max_prio == min_prio )
+
+    if ( max_prio == min_prio )
     {
-        if ( prio != wxPRIORITY_DEFAULT )
-        {
-            // notify the programmer that this doesn't work here
-            wxLogWarning(_("Thread priority setting is ignored."));
-        }
-        //else: we have default priority, so don't complain
-
-        // anyhow, don't do anything because priority is just ignored
+        // notify the programmer that this doesn't work here
+        wxLogWarning(_("Thread priority setting is ignored."));
+        return false;
     }
-    else
+
+    struct sched_param sp;
+    if ( pthread_attr_getschedparam(&attr, &sp) != 0 )
     {
-        struct sched_param sp;
-        if ( pthread_attr_getschedparam(&attr, &sp) != 0 )
-        {
-            wxFAIL_MSG(wxT("pthread_attr_getschedparam() failed"));
-        }
-
-        sp.sched_priority = min_prio + (prio*(max_prio - min_prio))/100;
-
-        if ( pthread_attr_setschedparam(&attr, &sp) != 0 )
-        {
-            wxFAIL_MSG(wxT("pthread_attr_setschedparam(priority) failed"));
-        }
+        wxFAIL_MSG(wxT("pthread_attr_getschedparam() failed"));
+        return false;
     }
+
+    sp.sched_priority = min_prio + (prio*(max_prio - min_prio))/100;
+
+    if ( pthread_attr_setschedparam(&attr, &sp) != 0 )
+    {
+        wxFAIL_MSG(wxT("pthread_attr_setschedparam(priority) failed"));
+        return false;
+    }
+
+    return true;
+#else // !HAVE_THREAD_PRIORITY_FUNCTIONS
+    wxUnusedVar(attr);
+
+    return false;
 #endif // HAVE_THREAD_PRIORITY_FUNCTIONS
+}
+
+wxThreadError wxThreadInternal::Create(wxThread *thread, unsigned int stackSize)
+{
+    if ( GetState() != STATE_NEW )
+    {
+        // don't recreate thread
+        return wxTHREAD_RUNNING;
+    }
+
+    // set up the thread attribute: such as priority and stack size
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
+
+#ifdef HAVE_PTHREAD_ATTR_SETSTACKSIZE
+    if (stackSize)
+      pthread_attr_setstacksize(&attr, stackSize);
+#else
+    wxUnusedVar(stackSize);
+#endif
+
+    if ( !SetThreadPriority(attr, GetPriority()) )
+    {
+        // We currently ignore the failure to set the thread priority as it
+        // seems better to create a thread with default priority than to
+        // not create one at all.
+        wxLogDebug("Failed to set thread priority to %d", GetPriority());
+    }
 
 #ifdef HAVE_PTHREAD_ATTR_SETSCOPE
     // this will make the threads created by this process really concurrent

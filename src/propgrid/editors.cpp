@@ -645,10 +645,11 @@ public:
 
         // Enabling double-click processor makes sense
         // only for wxBoolProperty.
-        wxPGProperty* selProp = GetGrid()->GetSelection();
-        if (wxDynamicCast(selProp, wxBoolProperty))
+        m_selProp = GetGrid()->GetSelection();
+        wxASSERT(m_selProp);
+        if (wxDynamicCast(m_selProp, wxBoolProperty))
         {
-            m_dclickProcessor = new wxPGDoubleClickProcessor(this, selProp);
+            m_dclickProcessor = new wxPGDoubleClickProcessor(this, m_selProp);
             PushEventHandler(m_dclickProcessor);
         }
 
@@ -729,9 +730,12 @@ public:
         );
     }
 
+    wxPGProperty* GetProperty() const { return m_selProp; }
+
 private:
     wxPGDoubleClickProcessor*   m_dclickProcessor;
     bool                        m_sizeEventCalled;
+    wxPGProperty*               m_selProp;
 };
 
 
@@ -741,7 +745,8 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
                                        wxRect& rect,
                                        int flags )
 {
-    wxPGProperty* p = GetSelection();
+    wxPGProperty* p = pCb->GetProperty();
+
     wxString text;
 
     const wxPGChoices& choices = p->GetChoices();
@@ -1538,7 +1543,7 @@ public:
         m_state = 0;
         m_boxHeight = 12;
 
-        SetBackgroundStyle( wxBG_STYLE_CUSTOM );
+        SetBackgroundStyle( wxBG_STYLE_PAINT );
     }
 
     virtual ~wxSimpleCheckBox();
@@ -1776,12 +1781,7 @@ wxPGCheckBoxEditor::~wxPGCheckBoxEditor()
 
 wxWindow* wxPropertyGrid::GetEditorControl() const
 {
-    wxWindow* ctrl = m_wndEditor;
-
-    if ( !ctrl )
-        return ctrl;
-
-    return ctrl;
+    return  m_wndEditor;
 }
 
 // -----------------------------------------------------------------------
@@ -2061,7 +2061,7 @@ wxWindow* wxPropertyGrid::GenerateEditorButton( const wxPoint& pos, const wxSize
 
   #ifdef __WXGTK__
     wxFont font = GetFont();
-    font.SetPointSize(font.GetPointSize()-2);
+    font.SetFractionalPointSize(font.GetFractionalPointSize()-2);
     but->SetFont(font);
   #else
     but->SetFont(GetFont());
