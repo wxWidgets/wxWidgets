@@ -316,7 +316,8 @@ public:
 	// adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
 	virtual void AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise) wxOVERRIDE
 	{
-        if (!hasCurrentSubpath())
+        const bool fixupFirst = !hasCurrentSubpath();
+        if (fixupFirst)
             MoveToPoint(x, y);
 
         qreal arc_length;
@@ -333,6 +334,11 @@ public:
             arc_length = -RadiansToDegrees(endAngle - startAngle);
         }
         m_path->arcTo(x-r, y-r, r*2, r*2, -RadiansToDegrees(startAngle), arc_length);
+        if (fixupFirst)
+        {
+            QPainterPath::Element element = m_path->elementAt(m_current_subpath_start+1);
+            m_path->setElementPositionAt(m_current_subpath_start, element.x, element.y);
+        }
 	}
 
 	// gets the last point of the current path, (0,0) if not yet set
