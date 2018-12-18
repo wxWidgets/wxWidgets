@@ -356,6 +356,8 @@ public:
     virtual bool InsertPage(size_t index, wxWindow *page, const wxString &text,
                             bool select, int imageId) wxOVERRIDE;
 
+    wxSize DoGetBestSize() const;
+
 protected:
     // Common part of all ctors.
     void Init();

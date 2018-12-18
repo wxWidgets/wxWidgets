@@ -3446,6 +3446,121 @@ bool wxAuiNotebook::InsertPage(size_t index, wxWindow *page,
     }
 }
 
+class wxAuiLayoutObject
+{
+public:
+    wxAuiLayoutObject(wxSize &s, unsigned short l, unsigned short dir, unsigned short r, unsigned short pos)
+    {
+        size = s;
+        layer = l;
+        direction = dir;
+        switch (dir)
+        {
+            case wxAUI_DOCK_CENTER: direction = 0; break;
+            case wxAUI_DOCK_LEFT:   direction = 1; break;
+            case wxAUI_DOCK_RIGHT:  direction = 2; break;
+            case wxAUI_DOCK_TOP:    direction = 3; break;
+            case wxAUI_DOCK_BOTTOM: direction = 4; break;
+            default:                direction = 5;
+        }
+        row = r;
+        position = pos;
+    }
+
+    wxSize size;
+    unsigned short layer;
+    unsigned char direction;
+    unsigned short row;
+    unsigned short position;
+
+    static int CompareLayoutObject(wxAuiLayoutObject *lo1, wxAuiLayoutObject *lo2)
+    {
+        int res = lo1->layer - lo2->layer;
+        if (res)
+            return res;
+        res = lo1->direction - lo2->direction;
+        if (res)
+            return res;
+        res = lo1->row - lo2->row;
+        if (res)
+            return res;
+        return lo1->position - lo2->position;
+    }
+};
+
+WX_DEFINE_SORTED_ARRAY(wxAuiLayoutObject*, wxAuiLayoutObjectArray);
+
+void MergeLayout(wxAuiLayoutObject *lo1, wxAuiLayoutObject *lo2)
+{
+    if (lo1 == lo2)
+        return;
+
+    if (lo1->direction != lo2->direction)
+    {
+        if ( ( (lo1->layer != lo2->layer || lo1->direction != lo2->direction) && lo2->direction < 3 ) || lo1->row != lo2->row )
+        {
+            lo1->size.x += lo2->size.x;
+            if (lo2->size.y > lo1->size.y) lo1->size.y = lo2->size.y;
+        }
+        else
+        {
+            if (lo2->size.x > lo1->size.x) lo1->size.x = lo2->size.x;
+            lo1->size.y += lo2->size.y;
+        }
+    }
+}
+
+wxSize wxAuiNotebook::DoGetBestSize() const
+{
+    wxAuiLayoutObjectArray layoutObj(wxAuiLayoutObject::CompareLayoutObject);
+    const wxAuiPaneInfoArray& all_panes = const_cast<wxAuiManager&>(m_mgr).GetAllPanes();
+    const size_t pane_count = all_panes.GetCount();
+    for (size_t n = 0; n < pane_count; ++n)
+    {
+        const wxAuiPaneInfo &pInfo = all_panes[n];
+        if (pInfo.name == wxT("dummy") || pInfo.IsFloating())
+            continue;
+
+        const wxTabFrame* tabframe = (wxTabFrame*) all_panes.Item(n).window;
+        const wxAuiNotebookPageArray &pages = tabframe->m_tabs->GetPages();
+
+        wxSize bestPageSize;
+        for (size_t pIdx = 0; pIdx < pages.GetCount(); pIdx++)
+            bestPageSize.IncTo(pages[pIdx].window->GetBestSize());
+
+        layoutObj.Add(new wxAuiLayoutObject(bestPageSize, pInfo.dock_layer, pInfo.dock_direction, pInfo.dock_row, pInfo.dock_pos));
+    }
+
+    size_t pos = 0;
+    for (size_t n = 1; n < layoutObj.GetCount(); n++)
+    {
+        if (layoutObj[n]->layer != layoutObj[pos]->layer)
+        {
+            MergeLayout(layoutObj[0], layoutObj[pos]);
+            pos = n;
+        }
+        else if (layoutObj[n]->direction != layoutObj[pos]->direction)
+        {
+            MergeLayout(layoutObj[0], layoutObj[pos]);
+            pos = n;
+        }
+        else if (layoutObj[n]->row != layoutObj[pos]->row)
+        {
+            MergeLayout(layoutObj[0], layoutObj[pos]);
+            pos = n;
+        }
+        else
+        {
+            MergeLayout(layoutObj[pos], layoutObj[n]);
+        }
+    }
+    MergeLayout(layoutObj[0], layoutObj[pos]);
+
+    wxSize bestSize = layoutObj[0]->size;
+    WX_CLEAR_ARRAY(layoutObj);
+    return bestSize;
+}
+
 int wxAuiNotebook::DoModifySelection(size_t n, bool events)
 {
     wxWindow* wnd = m_tabs.GetWindowFromIdx(n);
