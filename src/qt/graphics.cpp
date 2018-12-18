@@ -432,8 +432,7 @@ class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
 {
     void initFromDC(const wxDC& dc)
     {
-        QPainter* painter = reinterpret_cast<QPainter*>(dc.GetHandle());
-        m_qtPainter = new QPainter(painter->device());
+        m_qtPainter = reinterpret_cast<QPainter*>(dc.GetHandle());
         wxSize sz = dc.GetSize();
         m_width = sz.x;
         m_height = sz.y;
@@ -459,8 +458,7 @@ public:
 	wxQtGraphicsContext(wxGraphicsRenderer* renderer, wxWindow *window)
 		: wxGraphicsContext(renderer)
 	{
-		QPainter* painter = reinterpret_cast<QPainter*>(window->QtGetPainter());
-		m_qtPainter = new QPainter(painter->device());
+	    m_qtPainter = reinterpret_cast<QPainter*>(window->QtGetPainter());
 
         wxSize sz = window->GetClientSize();
         m_width = sz.x;
@@ -469,7 +467,6 @@ public:
 
 	virtual ~wxQtGraphicsContext()
 	{
-		delete m_qtPainter;
 	}
 
 	virtual bool ShouldOffset() const wxOVERRIDE
