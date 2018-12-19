@@ -574,29 +574,13 @@ void wxQtDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
 void wxQtDCImpl::DoDrawEllipse(wxCoord x, wxCoord y,
                            wxCoord width, wxCoord height)
 {
-    QBrush savedBrush;
-    int penWidth = m_qtPainter->pen().width();
+    const int penWidth = m_qtPainter->pen().width();
     x += penWidth / 2;
     y += penWidth / 2;
     width -= penWidth;
     height -= penWidth;
 
-    if ( m_pen.IsNonTransparent() )
-    {
-        // Save pen/brush
-        savedBrush = m_qtPainter->brush();
-        // Fill with text background color ("no fill" like in wxGTK):
-        m_qtPainter->setBrush(QBrush(m_textBackgroundColour.GetQColor()));
-    }
-
-    // Draw
     m_qtPainter->drawEllipse( x, y, width, height );
-
-    if ( m_pen.IsNonTransparent() )
-    {
-        //Restore saved settings
-        m_qtPainter->setBrush(savedBrush);
-    }
 }
 
 void wxQtDCImpl::DoCrossHair(wxCoord x, wxCoord y)
