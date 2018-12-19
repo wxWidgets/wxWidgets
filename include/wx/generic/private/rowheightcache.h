@@ -134,6 +134,7 @@ public:
     bool GetLineStart(unsigned int row, int& start);
     bool GetLineHeight(unsigned int row, int& height);
     bool GetLineAt(int y, unsigned int& row);
+    bool GetLineInfo(unsigned int row, int &start, int &height);
 
     void Put(unsigned int row, int height);
 
@@ -146,8 +147,6 @@ public:
     void Clear();
 
 private:
-    bool GetLineInfo(unsigned int row, int &start, int &height);
-
     HeightToRowRangesMap m_heightToRowRange;
 };
 

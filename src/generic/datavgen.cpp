@@ -3346,37 +3346,32 @@ wxRect wxDataViewMainWindow::GetLinesRect( unsigned int rowFrom, unsigned int ro
 
 int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
 {
-    if (GetOwner()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
+    // check for the easy case first
+    if (!GetOwner()->HasFlag(wxDV_VARIABLE_LINE_HEIGHT))
+        return row * m_lineHeight;
+
+    int start = 0;
+    if ( m_rowHeightCache->GetLineStart(row, start) )
+        return start;
+
+    unsigned int r;
+    for (r = 0; r < row; r++)
     {
-        int start = 0;
-        if ( m_rowHeightCache->GetLineStart(row, start) )
-            return start;
-
-        unsigned int r;
-        for (r = 0; r < row; r++)
+        int height = 0;
+        if ( !m_rowHeightCache->GetLineHeight(r, height) )
         {
-            int height = 0;
-            if ( m_rowHeightCache->GetLineHeight(r, height) )
-            {
-                start += height;
-                continue;
-            }
-
-            wxDataViewItem item  = GetItemByRow(r);
-            if ( !item )
+            // row height not in cache -> get it from the renderer...
+            wxDataViewItem item = GetItemByRow(r);
+            if (!item)
                 break;
 
             height = QueryAndCacheLineHeight(r, item);
-
-            start += height;
         }
 
-        return start;
+        start += height;
     }
-    else
-    {
-        return row * m_lineHeight;
-    }
+
+    return start;
 }
 
 int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
@@ -3386,54 +3381,68 @@ int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
         return y / m_lineHeight;
 
     unsigned int row = 0;
-    unsigned int yy = 0;
-
     if ( m_rowHeightCache->GetLineAt(y, row) )
         return row;
 
+    // OnPaint asks GetLineAt for the very last y position and this is always
+    // below the last item (--> an invalid item). To prevent iterating over all
+    // items, check if y is below the last row.
+    // Because this is done very often (for each repaint) its worth to handle
+    // this special case separately.
+    int height = 0;
+    int start = 0;
+    unsigned int rowCount = GetRowCount();
+    if (rowCount == 0 ||
+        (m_rowHeightCache->GetLineInfo(rowCount - 1, start, height) &&
+         y >= start + height))
+    {
+        return rowCount;
+    }
+
+    // sum all item heights until y is reached
+    unsigned int yy = 0;
     for (;;)
     {
-        int height = 0;
+        height = 0;
         if ( !m_rowHeightCache->GetLineHeight(row, height) )
         {
             // row height not in cache -> get it from the renderer...
-
             wxDataViewItem item = GetItemByRow(row);
             if ( !item )
-                return row; // should be the last row
+            {
+                wxASSERT(row >= GetRowCount());
+                break;
+            }
 
             height = QueryAndCacheLineHeight(row, item);
         }
 
         yy += height;
         if (y < yy)
-            return row;
+            break;
 
         row++;
     }
+    return row;
 }
 
 int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
 {
-    if (GetOwner()->GetWindowStyle() & wxDV_VARIABLE_LINE_HEIGHT)
-    {
-        int height = 0;
-        if ( m_rowHeightCache->GetLineHeight(row, height) )
-            return height;
-
-        wxDataViewItem item = GetItemByRow(row);
-        if ( !item )
-            return m_lineHeight;
-
-        height = QueryAndCacheLineHeight(row, item);
-        return height;
-    }
-    else
-    {
+    // check for the easy case first
+    if (!GetOwner()->HasFlag(wxDV_VARIABLE_LINE_HEIGHT))
         return m_lineHeight;
-    }
-}
 
+    int height = 0;
+    if ( m_rowHeightCache->GetLineHeight(row, height) )
+        return height;
+
+    wxDataViewItem item = GetItemByRow(row);
+    if ( !item )
+        return m_lineHeight;
+
+    height = QueryAndCacheLineHeight(row, item);
+    return height;
+}
 
 int wxDataViewMainWindow::QueryAndCacheLineHeight(unsigned int row, wxDataViewItem item) const
 {
