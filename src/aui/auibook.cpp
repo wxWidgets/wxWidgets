@@ -3465,28 +3465,28 @@ public:
         row = pInfo.dock_row;
         position = pInfo.dock_pos;
     }
-    void MergeLayout(wxAuiLayoutObject *lo2)
+    void MergeLayout(const wxAuiLayoutObject &lo2)
     {
-        if (this == lo2)
+        if (this == &lo2)
             return;
 
         bool mergeHorizontal;
-        if (layer != lo2->layer || direction != lo2->direction)
-            mergeHorizontal = lo2->direction < 3;
-        else if (row != lo2->row)
+        if (layer != lo2.layer || direction != lo2.direction)
+            mergeHorizontal = lo2.direction < 3;
+        else if (row != lo2.row)
             mergeHorizontal = true;
         else
-            mergeHorizontal = lo2->direction >= 3;
+            mergeHorizontal = lo2.direction >= 3;
 
         if (mergeHorizontal)
         {
-            size.x += lo2->size.x;
-            if (lo2->size.y > size.y) size.y = lo2->size.y;
+            size.x += lo2.size.x;
+            if (lo2.size.y > size.y) size.y = lo2.size.y;
         }
         else
         {
-            if (lo2->size.x > size.x) size.x = lo2->size.x;
-            size.y += lo2->size.y;
+            if (lo2.size.x > size.x) size.x = lo2.size.x;
+            size.y += lo2.size.y;
         }
     }
 
@@ -3541,25 +3541,25 @@ wxSize wxAuiNotebook::DoGetBestSize() const
     {
         if (layoutObj[n]->layer != layoutObj[pos]->layer)
         {
-            layoutObj[0]->MergeLayout(layoutObj[pos]);
+            layoutObj[0]->MergeLayout(*layoutObj[pos]);
             pos = n;
         }
         else if (layoutObj[n]->direction != layoutObj[pos]->direction)
         {
-            layoutObj[0]->MergeLayout(layoutObj[pos]);
+            layoutObj[0]->MergeLayout(*layoutObj[pos]);
             pos = n;
         }
         else if (layoutObj[n]->row != layoutObj[pos]->row)
         {
-            layoutObj[0]->MergeLayout(layoutObj[pos]);
+            layoutObj[0]->MergeLayout(*layoutObj[pos]);
             pos = n;
         }
         else
         {
-            layoutObj[pos]->MergeLayout(layoutObj[n]);
+            layoutObj[pos]->MergeLayout(*layoutObj[n]);
         }
     }
-    layoutObj[0]->MergeLayout(layoutObj[pos]);
+    layoutObj[0]->MergeLayout(*layoutObj[pos]);
 
     wxSize bestSize = layoutObj[0]->size;
     WX_CLEAR_ARRAY(layoutObj);
