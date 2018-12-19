@@ -3492,12 +3492,15 @@ public:
     unsigned char m_direction;
 
     bool operator<(const wxAuiLayoutObject& lo2) const {
-        if (m_pInfo.dock_layer < lo2.m_pInfo.dock_layer)
-            return true;
-        if (m_direction < lo2.m_direction)
-            return true;
-        if (m_pInfo.dock_row < lo2.m_pInfo.dock_row)
-            return true;
+        int diff = m_pInfo.dock_layer - lo2.m_pInfo.dock_layer;
+        if (diff)
+            return diff < 0;
+        diff = m_direction - lo2.m_direction;
+        if (diff)
+            return diff < 0;
+        diff = m_pInfo.dock_row - lo2.m_pInfo.dock_row;
+        if (diff)
+            return diff < 0;
         return m_pInfo.dock_pos < lo2.m_pInfo.dock_pos;
     }
 };
