@@ -3449,12 +3449,11 @@ bool wxAuiNotebook::InsertPage(size_t index, wxWindow *page,
 class wxAuiLayoutObject
 {
 public:
-    wxAuiLayoutObject(wxSize &s, unsigned short l, unsigned short dir, unsigned short r, unsigned short pos)
+    wxAuiLayoutObject(wxSize &s, const wxAuiPaneInfo &pInfo)
     {
         size = s;
-        layer = l;
-        direction = dir;
-        switch (dir)
+        layer = pInfo.dock_layer;
+        switch (pInfo.dock_direction)
         {
             case wxAUI_DOCK_CENTER: direction = 0; break;
             case wxAUI_DOCK_LEFT:   direction = 1; break;
@@ -3463,8 +3462,8 @@ public:
             case wxAUI_DOCK_BOTTOM: direction = 4; break;
             default:                direction = 5;
         }
-        row = r;
-        position = pos;
+        row = pInfo.dock_row;
+        position = pInfo.dock_pos;
     }
     void MergeLayout(wxAuiLayoutObject *lo2)
     {
@@ -3534,7 +3533,7 @@ wxSize wxAuiNotebook::DoGetBestSize() const
             bestPageSize.IncTo(pages[pIdx].window->GetBestSize());
 
         bestPageSize.y += tabHeight;
-        layoutObj.Add(new wxAuiLayoutObject(bestPageSize, pInfo.dock_layer, pInfo.dock_direction, pInfo.dock_row, pInfo.dock_pos));
+        layoutObj.Add(new wxAuiLayoutObject(bestPageSize, pInfo));
     }
 
     size_t pos = 0;
