@@ -222,6 +222,21 @@ public:
 	// applies the matrix except for translations
 	virtual void TransformDistance(wxDouble *dx, wxDouble *dy) const wxOVERRIDE
 	{
+        const QTransform untranslated_transform(
+            m_transform->m11(),
+            m_transform->m12(),
+            m_transform->m13(),
+            m_transform->m21(),
+            m_transform->m22(),
+            m_transform->m23(),
+            0.0,
+            0.0,
+            1.0);
+
+	    qreal transformed_x, transformed_y;
+        untranslated_transform.map(static_cast<qreal>(*dx), static_cast<qreal>(*dy), &transformed_x, &transformed_y);
+        *dx = transformed_x;
+        *dy = transformed_y;
 	}
 
 	// returns the native representation
