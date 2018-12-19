@@ -53,7 +53,7 @@ public:
 
 private:
 
-    void setWxStops(QGradient& gradient, const wxGraphicsGradientStops& stops)
+    static void setWxStops(QGradient& gradient, const wxGraphicsGradientStops& stops)
     {
         QGradientStops qstops;
         for (size_t i = 0; i < stops.GetCount(); ++i)
@@ -64,6 +64,7 @@ private:
 
         gradient.setStops(qstops);
     }
+
 	QBrush brush;
 };
 
@@ -147,9 +148,9 @@ public:
             tx, ty, 1.0);
 	}
 
-	// gets the component valuess of the matrix
-	virtual void Get(wxDouble* a = NULL, wxDouble* b = NULL, wxDouble* c = NULL,
-	wxDouble* d = NULL, wxDouble* tx = NULL, wxDouble* ty = NULL) const wxOVERRIDE
+	// gets the component values of the matrix
+	virtual void Get(wxDouble* a, wxDouble* b, wxDouble* c,
+                    	wxDouble* d, wxDouble* tx, wxDouble* ty) const wxOVERRIDE
 	{
         if (a) *a = m_transform->m11();
         if (b) *b = m_transform->m12();
@@ -451,22 +452,26 @@ public:
         m_width = widget->width();
         m_height = widget->height();
     }
+
     wxQtGraphicsContext(wxGraphicsRenderer* renderer, const wxWindowDC& dc)
 		: wxGraphicsContext(renderer)
 	{
         initFromDC(dc);
 	}
+
 	wxQtGraphicsContext(wxGraphicsRenderer* renderer, const wxMemoryDC& dc)
 		: wxGraphicsContext(renderer)
 	{
         initFromDC(dc);
     }
+
 #if wxUSE_PRINTING_ARCHITECTURE
 	wxQtGraphicsContext(wxGraphicsRenderer* renderer, const wxPrinterDC& dc)
 		: wxGraphicsContext(renderer)
 	{
         initFromDC(dc);
     }
+
 #endif
 	wxQtGraphicsContext(wxGraphicsRenderer* renderer, wxWindow *window)
 		: wxGraphicsContext(renderer)
@@ -866,7 +871,6 @@ wxGraphicsPath wxQtGraphicsRenderer::CreatePath()
 	return path;
 }
 
-
 // Matrix
 
 wxGraphicsMatrix wxQtGraphicsRenderer::CreateMatrix(wxDouble a, wxDouble b, wxDouble c, wxDouble d,
@@ -900,10 +904,10 @@ wxGraphicsBrush wxQtGraphicsRenderer::CreateBrush(const wxBrush& brush)
 	return p;
 }
 
-wxGraphicsBrush
-wxQtGraphicsRenderer::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
-wxDouble x2, wxDouble y2,
-const wxGraphicsGradientStops& stops)
+wxGraphicsBrush wxQtGraphicsRenderer::CreateLinearGradientBrush(
+    wxDouble x1, wxDouble y1,
+    wxDouble x2, wxDouble y2,
+    const wxGraphicsGradientStops& stops)
 {
 	wxGraphicsBrush p;
 	wxQtBrushData* d = new wxQtBrushData(this);
@@ -912,10 +916,10 @@ const wxGraphicsGradientStops& stops)
 	return p;
 }
 
-wxGraphicsBrush
-wxQtGraphicsRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-wxDouble xc, wxDouble yc, wxDouble r,
-const wxGraphicsGradientStops& stops)
+wxGraphicsBrush wxQtGraphicsRenderer::CreateRadialGradientBrush(
+    wxDouble xo, wxDouble yo,
+    wxDouble xc, wxDouble yc, wxDouble r,
+    const wxGraphicsGradientStops& stops)
 {
 	wxGraphicsBrush p;
     wxQtBrushData* d = new wxQtBrushData(this);
