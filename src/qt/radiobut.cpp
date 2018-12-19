@@ -45,6 +45,9 @@ bool wxRadioButton::Create( wxWindow *parent,
 
     if ( (style & wxRB_GROUP) || (style & wxRB_SINGLE) )
     {
+        QButtonGroup* qtButtonGroup = new QButtonGroup();
+        qtButtonGroup->addButton( m_qtRadioButton );
+
         if ( style & wxRB_SINGLE )
         {
             // Ensure that other buttons cannot join the last existing group
@@ -52,9 +55,6 @@ bool wxRadioButton::Create( wxWindow *parent,
         }
         else
         {
-            QButtonGroup* qtButtonGroup = new QButtonGroup();
-            qtButtonGroup->addButton( m_qtRadioButton );
-
             m_lastGroup[parent] = qtButtonGroup;
             m_qtRadioButton->setChecked(true); // The first button in a group should be selected
         }
