@@ -3446,12 +3446,20 @@ bool wxAuiNotebook::InsertPage(size_t index, wxWindow *page,
     }
 }
 
+// Helper class to calculate the best size of a wxAuiNotebook
 class wxAuiLayoutObject
 {
 public:
     wxAuiLayoutObject(wxSize &s, const wxAuiPaneInfo &pInfo): m_pInfo(pInfo)
     {
         m_size = s;
+        /* To speed up the sorting of the panes, the direction is mapped to a
+         * useful increasing value. This avoids complicated comparison of the
+         * enum values during the sort. The size calculation is done from the
+         * inner to the outermost direction. Therefore CENTER < LEFT/RIGHT <
+         * TOP/BOTTOM (It doesn't matter it LEFT or RIGHT is done first, as
+         * both extend the best size horizontally; the same applies for
+         * TOP/BOTTOM in vertical direction) */
         switch (pInfo.dock_direction)
         {
             case wxAUI_DOCK_CENTER: m_dir = 0; break;
@@ -3510,6 +3518,11 @@ public:
 
 wxSize wxAuiNotebook::DoGetBestSize() const
 {
+    /* The best size of the wxAuiNotebook is a combination of all panes inside
+     * the object. To be able to efficiently  calculate the dimensions (i.e.
+     * without iterating over the panes multiple times) the panes need to be
+     * processed in a specific order. Therefore we need to collect them in the
+     * following variable which is sorted later on. */
     wxVector<wxAuiLayoutObject> layouts;
     const wxAuiPaneInfoArray& all_panes = const_cast<wxAuiManager&>(m_mgr).GetAllPanes();
     const size_t pane_count = all_panes.GetCount();
@@ -3528,10 +3541,15 @@ wxSize wxAuiNotebook::DoGetBestSize() const
             bestPageSize.IncTo(pages[pIdx].window->GetBestSize());
 
         bestPageSize.y += tabHeight;
+        // Store the current pane with its largest window dimensions
         layouts.push_back(wxAuiLayoutObject(bestPageSize, pInfo));
     }
     wxVectorSort(layouts);
 
+    /* The sizes of the panes are merged here. As the center pane is always at
+     * position 0 all sizes are merged there. As panes can be stacked using the
+     * dock_pos property, different positions are merged at the first (i.e.
+     * dock_pos = 0) element before being merged with the center pane. */
     size_t pos = 0;
     for (size_t n = 1; n < layouts.size(); n++)
     {
