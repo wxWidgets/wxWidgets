@@ -181,20 +181,22 @@ bool wxCalendarCtrl::SetDateRange(const wxDateTime& lowerdate,
 bool wxCalendarCtrl::GetDateRange(wxDateTime *lowerdate,
                                   wxDateTime *upperdate) const
 {
-    bool status = true;
-
     if ( !m_qtCalendar )
         return false;
 
+    bool status = false;
+
     if ( lowerdate && IsQDateValid( m_qtCalendar->minimumDate() ) )
+    {
         *lowerdate = wxQtConvertDate(m_qtCalendar->minimumDate());
-    else
-        status = false;
+        status = true;
+    }
 
     if ( upperdate && IsQDateValid( m_qtCalendar->maximumDate() ) )
+    {
         *upperdate = wxQtConvertDate(m_qtCalendar->maximumDate());
-    else
-        status = false;
+        status = true;
+    }
 
     return status;
 }
