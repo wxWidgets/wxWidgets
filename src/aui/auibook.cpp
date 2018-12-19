@@ -3450,7 +3450,8 @@ bool wxAuiNotebook::InsertPage(size_t index, wxWindow *page,
 class wxAuiLayoutObject
 {
 public:
-    wxAuiLayoutObject(const wxSize &size, const wxAuiPaneInfo &pInfo): m_pInfo(pInfo)
+    wxAuiLayoutObject(const wxSize &size,
+                      const wxAuiPaneInfo &pInfo) : m_pInfo(pInfo)
     {
         m_size = size;
         /* To speed up the sorting of the panes, the direction is mapped to a
@@ -3524,7 +3525,8 @@ wxSize wxAuiNotebook::DoGetBestSize() const
      * processed in a specific order. Therefore we need to collect them in the
      * following variable which is sorted later on. */
     wxVector<wxAuiLayoutObject> layouts;
-    const wxAuiPaneInfoArray& all_panes = const_cast<wxAuiManager&>(m_mgr).GetAllPanes();
+    const wxAuiPaneInfoArray& all_panes =
+        const_cast<wxAuiManager&>(m_mgr).GetAllPanes();
     const size_t pane_count = all_panes.GetCount();
     const int tabHeight = GetTabCtrlHeight();
     for (size_t n = 0; n < pane_count; ++n)
