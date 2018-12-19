@@ -24,6 +24,11 @@
 #include <QtGui/QTextCharFormat>
 #include <QtWidgets/QCalendarWidget>
 
+namespace
+{
+    const int MAX_YEAR_QT = 7999;
+}
+
 class wxQtCalendarWidget : public wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >
 {
 
@@ -95,7 +100,6 @@ bool wxCalendarCtrl::Create(wxWindow *parent, wxWindowID id, const wxDateTime& d
     }
 
     UpdateStyle();
-
     if ( date.IsValid() )
         SetDate(date);
 
@@ -120,6 +124,11 @@ void wxCalendarCtrl::UpdateStyle()
     RefreshHolidays();
 }
 
+bool wxCalendarCtrl::IsQDateValid(const QDate &date) const
+{
+    return date.isValid() && !date.isNull() && date.day() > 0 && date.month() > 0 && date.year() > 0 && date.year() < MAX_YEAR_QT;
+}
+
 void wxCalendarCtrl::SetWindowStyleFlag(long style)
 {
     const long styleOld = GetWindowStyleFlag();
@@ -134,6 +143,9 @@ bool wxCalendarCtrl::SetDate(const wxDateTime& date)
 {
     wxCHECK_MSG( date.IsValid(), false, "invalid date" );
     if ( !m_qtCalendar )
+        return false;
+
+    if ( wxQtConvertDate( date ) > m_qtCalendar->maximumDate() || wxQtConvertDate( date ) < m_qtCalendar->minimumDate() )
         return false;
 
     m_qtCalendar->blockSignals(true);
@@ -168,15 +180,22 @@ bool wxCalendarCtrl::SetDateRange(const wxDateTime& lowerdate,
 bool wxCalendarCtrl::GetDateRange(wxDateTime *lowerdate,
                                   wxDateTime *upperdate) const
 {
+    bool status = true;
+
     if ( !m_qtCalendar )
-        return false;
+        status = false;
 
-    if (lowerdate)
+    if ( lowerdate && IsQDateValid( m_qtCalendar->minimumDate() ) )
         *lowerdate = wxQtConvertDate(m_qtCalendar->minimumDate());
-    if (upperdate)
-        *upperdate = wxQtConvertDate(m_qtCalendar->maximumDate());
+    else
+        status = false;
 
-    return true;
+    if ( upperdate && IsQDateValid( m_qtCalendar->maximumDate() ) )
+        *upperdate = wxQtConvertDate(m_qtCalendar->maximumDate());
+    else
+        status = false;
+
+    return status;
 }
 
 // Copied from wxMSW

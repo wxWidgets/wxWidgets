@@ -12,6 +12,7 @@
 
 #include "wx/calctrl.h"
 class QCalendarWidget;
+class QDate;
 
 class WXDLLIMPEXP_ADV wxCalendarCtrl : public wxCalendarCtrlBase
 {
@@ -78,6 +79,7 @@ protected:
 private:
     void Init();
     void UpdateStyle();
+    bool IsQDateValid(const QDate &date) const;
 
     QCalendarWidget *m_qtCalendar;
     wxColour m_colHeaderFg,
