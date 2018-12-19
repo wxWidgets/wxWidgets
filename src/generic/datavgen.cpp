@@ -3018,6 +3018,7 @@ bool wxDataViewMainWindow::Cleared()
     DestroyTree();
     m_selection.Clear();
     m_currentRow = (unsigned)-1;
+    m_rowHeightCache->Clear();
 
     if (GetModel())
     {
