@@ -8,6 +8,8 @@
 #ifndef _WX_QT_RADIOBUT_H_
 #define _WX_QT_RADIOBUT_H_
 
+#include <map>
+
 class QRadioButton;
 class QButtonGroup;
 
@@ -33,6 +35,8 @@ public:
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxRadioButtonNameStr );
 
+    virtual ~wxRadioButton();
+
     virtual void SetValue(bool value);
     virtual bool GetValue() const;
 
@@ -45,6 +49,8 @@ private:
 
     QRadioButton *m_qtRadioButton;
     QButtonGroup *m_qtButtonGroup;
+
+    static std::map<wxWindow*, QButtonGroup*> m_lastGroup;
 
     wxDECLARE_DYNAMIC_CLASS( wxRadioButton );
 };

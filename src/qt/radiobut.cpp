@@ -14,6 +14,8 @@
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QButtonGroup>
 
+std::map<wxWindow*, QButtonGroup*> wxRadioButton::m_lastGroup;
+
 wxRadioButton::wxRadioButton()
 {
 }
@@ -44,36 +46,44 @@ bool wxRadioButton::Create( wxWindow *parent,
     if ( (style & wxRB_GROUP) || (style & wxRB_SINGLE) )
     {
         JoinNewGroup();
+
+        if( style & wxRB_SINGLE )
+        {
+            // Ensure that other buttons cannot join this group
+            m_lastGroup.erase(parent);
+        }
+        else
+        {
+            m_lastGroup[parent] = m_qtButtonGroup;
+            m_qtRadioButton->setChecked(true); // The first button in a group should be selected
+        }
     }
     else
     {
-        wxWindowList::compatibility_iterator node = parent->GetChildren().GetLast();
-        for ( ; node; node = node->GetPrevious() )
+        // Add it to the previous group, if any
+        std::map<wxWindow*, QButtonGroup*>::iterator it = m_lastGroup.find(parent);
+        if ( it != m_lastGroup.end() )
         {
-            wxWindow *child = node->GetData();
-
-            if ( wxIsKindOf( child, wxRadioButton ) )
-            {
-                if ( !child->HasFlag( wxRB_SINGLE ) )
-                {
-                    QRadioButton *ptr = dynamic_cast<QRadioButton *>( child->GetHandle() );
-
-                    QButtonGroup* btnGroup = ptr->group();
-                    btnGroup->addButton( m_qtRadioButton );
-                }
-                else
-                {
-                    JoinNewGroup();
-                }
-
-                break;
-            }
+            it->second->addButton(m_qtRadioButton);
         }
     }
 
     m_qtRadioButton->setText( wxQtConvertString( label ));
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
+}
+
+wxRadioButton::~wxRadioButton()
+{
+    if ( m_qtRadioButton->group() &&
+         m_qtRadioButton->group()->buttons().size() == 1 )
+    {
+        std::map<wxWindow*, QButtonGroup*>::iterator it = m_lastGroup.find( GetParent() );
+        if ( it != m_lastGroup.end() && m_qtRadioButton->group() == it->second )
+        {
+            m_lastGroup.erase(it);
+        }
+    }
 }
 
 void wxRadioButton::SetValue(bool value)
