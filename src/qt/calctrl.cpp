@@ -100,6 +100,7 @@ bool wxCalendarCtrl::Create(wxWindow *parent, wxWindowID id, const wxDateTime& d
     }
 
     UpdateStyle();
+
     if ( date.IsValid() )
         SetDate(date);
 
@@ -183,7 +184,7 @@ bool wxCalendarCtrl::GetDateRange(wxDateTime *lowerdate,
     bool status = true;
 
     if ( !m_qtCalendar )
-        status = false;
+        return false;
 
     if ( lowerdate && IsQDateValid( m_qtCalendar->minimumDate() ) )
         *lowerdate = wxQtConvertDate(m_qtCalendar->minimumDate());
