@@ -3449,10 +3449,9 @@ bool wxAuiNotebook::InsertPage(size_t index, wxWindow *page,
 class wxAuiLayoutObject
 {
 public:
-    wxAuiLayoutObject(wxSize &s, const wxAuiPaneInfo &pInfo)
+    wxAuiLayoutObject(wxSize &s, const wxAuiPaneInfo &pInfo): m_pInfo(pInfo)
     {
         m_size = s;
-        m_layer = pInfo.dock_layer;
         switch (pInfo.dock_direction)
         {
             case wxAUI_DOCK_CENTER: m_direction = 0; break;
@@ -3462,8 +3461,6 @@ public:
             case wxAUI_DOCK_BOTTOM: m_direction = 4; break;
             default:                m_direction = 5;
         }
-        m_row = pInfo.dock_row;
-        m_position = pInfo.dock_pos;
     }
     void MergeLayout(const wxAuiLayoutObject &lo2)
     {
@@ -3471,9 +3468,9 @@ public:
             return;
 
         bool mergeHorizontal;
-        if (m_layer != lo2.m_layer || m_direction != lo2.m_direction)
+        if (m_pInfo.dock_layer != lo2.m_pInfo.dock_layer || m_direction != lo2.m_direction)
             mergeHorizontal = lo2.m_direction < 3;
-        else if (m_row != lo2.m_row)
+        else if (m_pInfo.dock_row != lo2.m_pInfo.dock_row)
             mergeHorizontal = true;
         else
             mergeHorizontal = lo2.m_direction >= 3;
@@ -3491,19 +3488,17 @@ public:
     }
 
     wxSize m_size;
-    unsigned short m_layer;
+    const wxAuiPaneInfo &m_pInfo;
     unsigned char m_direction;
-    unsigned short m_row;
-    unsigned short m_position;
 
     bool operator<(const wxAuiLayoutObject& lo2) const {
-        if (m_layer < lo2.m_layer)
+        if (m_pInfo.dock_layer < lo2.m_pInfo.dock_layer)
             return true;
         if (m_direction < lo2.m_direction)
             return true;
-        if (m_row < lo2.m_row)
+        if (m_pInfo.dock_row < lo2.m_pInfo.dock_row)
             return true;
-        return m_position < lo2.m_position;
+        return m_pInfo.dock_pos < lo2.m_pInfo.dock_pos;
     }
 };
 
@@ -3534,7 +3529,7 @@ wxSize wxAuiNotebook::DoGetBestSize() const
     size_t pos = 0;
     for (size_t n = 1; n < layoutObj.size(); n++)
     {
-        if (layoutObj[n].m_layer != layoutObj[pos].m_layer)
+        if (layoutObj[n].m_pInfo.dock_layer != layoutObj[pos].m_pInfo.dock_layer)
         {
             layoutObj[0].MergeLayout(layoutObj[pos]);
             pos = n;
@@ -3544,7 +3539,7 @@ wxSize wxAuiNotebook::DoGetBestSize() const
             layoutObj[0].MergeLayout(layoutObj[pos]);
             pos = n;
         }
-        else if (layoutObj[n].m_row != layoutObj[pos].m_row)
+        else if (layoutObj[n].m_pInfo.dock_row != layoutObj[pos].m_pInfo.dock_row)
         {
             layoutObj[0].MergeLayout(layoutObj[pos]);
             pos = n;
