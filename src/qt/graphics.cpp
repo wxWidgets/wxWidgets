@@ -438,14 +438,16 @@ public:
 	}
 
 	// give the native path returned by GetNativePath() back (there might be some deallocations necessary)
-	virtual void UnGetNativePath(void *p) const wxOVERRIDE
+	virtual void UnGetNativePath(void *) const wxOVERRIDE
 	{
 	}
 
 	// transforms each point of this path by the matrix
 	virtual void Transform(const wxGraphicsMatrixData* matrix) wxOVERRIDE
 	{
-	}
+        const wxQtMatrixData* qmatrix = static_cast<const wxQtMatrixData*>(matrix);
+        *m_path = qmatrix->GetQTransform().map(*m_path);
+    }
 
 	// gets the bounding box enclosing all points (possibly including control points)
 	virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const wxOVERRIDE
