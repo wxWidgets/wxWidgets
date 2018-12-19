@@ -3496,26 +3496,20 @@ public:
     unsigned short m_row;
     unsigned short m_position;
 
-    static int CompareLayoutObject(wxAuiLayoutObject *lo1, wxAuiLayoutObject *lo2)
-    {
-        int res = lo1->m_layer - lo2->m_layer;
-        if (res)
-            return res;
-        res = lo1->m_direction - lo2->m_direction;
-        if (res)
-            return res;
-        res = lo1->m_row - lo2->m_row;
-        if (res)
-            return res;
-        return lo1->m_position - lo2->m_position;
+    bool operator<(const wxAuiLayoutObject& lo2) const {
+        if (m_layer < lo2.m_layer)
+            return true;
+        if (m_direction < lo2.m_direction)
+            return true;
+        if (m_row < lo2.m_row)
+            return true;
+        return m_position < lo2.m_position;
     }
 };
 
-WX_DEFINE_SORTED_ARRAY(wxAuiLayoutObject*, wxAuiLayoutObjectArray);
-
 wxSize wxAuiNotebook::DoGetBestSize() const
 {
-    wxAuiLayoutObjectArray layoutObj(wxAuiLayoutObject::CompareLayoutObject);
+    wxVector<wxAuiLayoutObject> layoutObj;
     const wxAuiPaneInfoArray& all_panes = const_cast<wxAuiManager&>(m_mgr).GetAllPanes();
     const size_t pane_count = all_panes.GetCount();
     const int tabHeight = GetTabCtrlHeight();
@@ -3533,37 +3527,36 @@ wxSize wxAuiNotebook::DoGetBestSize() const
             bestPageSize.IncTo(pages[pIdx].window->GetBestSize());
 
         bestPageSize.y += tabHeight;
-        layoutObj.Add(new wxAuiLayoutObject(bestPageSize, pInfo));
+        layoutObj.push_back(wxAuiLayoutObject(bestPageSize, pInfo));
     }
+    wxVectorSort(layoutObj);
 
     size_t pos = 0;
-    for (size_t n = 1; n < layoutObj.GetCount(); n++)
+    for (size_t n = 1; n < layoutObj.size(); n++)
     {
-        if (layoutObj[n]->m_layer != layoutObj[pos]->m_layer)
+        if (layoutObj[n].m_layer != layoutObj[pos].m_layer)
         {
-            layoutObj[0]->MergeLayout(*layoutObj[pos]);
+            layoutObj[0].MergeLayout(layoutObj[pos]);
             pos = n;
         }
-        else if (layoutObj[n]->m_direction != layoutObj[pos]->m_direction)
+        else if (layoutObj[n].m_direction != layoutObj[pos].m_direction)
         {
-            layoutObj[0]->MergeLayout(*layoutObj[pos]);
+            layoutObj[0].MergeLayout(layoutObj[pos]);
             pos = n;
         }
-        else if (layoutObj[n]->m_row != layoutObj[pos]->m_row)
+        else if (layoutObj[n].m_row != layoutObj[pos].m_row)
         {
-            layoutObj[0]->MergeLayout(*layoutObj[pos]);
+            layoutObj[0].MergeLayout(layoutObj[pos]);
             pos = n;
         }
         else
         {
-            layoutObj[pos]->MergeLayout(*layoutObj[n]);
+            layoutObj[pos].MergeLayout(layoutObj[n]);
         }
     }
-    layoutObj[0]->MergeLayout(*layoutObj[pos]);
+    layoutObj[0].MergeLayout(layoutObj[pos]);
 
-    wxSize bestSize = layoutObj[0]->m_size;
-    WX_CLEAR_ARRAY(layoutObj);
-    return bestSize;
+    return layoutObj[0].m_size;
 }
 
 int wxAuiNotebook::DoModifySelection(size_t n, bool events)
