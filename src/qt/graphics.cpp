@@ -263,6 +263,33 @@ public:
     {
     }
 
+    wxQtFontData(
+        wxGraphicsRenderer* renderer,
+        double sizeInPixels,
+        const wxString& facename,
+        int flags,
+        const wxColour& col)
+        : wxGraphicsObjectRefData(renderer),
+          m_color(col.GetQColor())
+    {
+        m_font.setFamily(QString(facename));
+        m_font.setPixelSize(static_cast<int>(sizeInPixels));
+        if (flags & wxFONTFLAG_LIGHT)
+            m_font.setWeight(QFont::Light);
+        if (flags & wxFONTFLAG_BOLD)
+            m_font.setWeight(QFont::Bold);
+        if (flags & (wxFONTFLAG_ITALIC | wxFONTFLAG_SLANT))
+            m_font.setItalic(true);
+        if (flags & wxFONTFLAG_ANTIALIASED)
+            m_font.setStyleStrategy(QFont::PreferAntialias);
+        if (flags & wxFONTFLAG_NOT_ANTIALIASED)
+            m_font.setStyleStrategy(QFont::NoAntialias);
+        if (flags & wxFONTFLAG_UNDERLINED)
+            m_font.setUnderline(true);
+        if (flags & wxFONTFLAG_STRIKETHROUGH)
+            m_font.setStrikeOut(true);
+    }
+
     const QFont& GetFont() const
     {
         return m_font;
@@ -953,14 +980,14 @@ wxGraphicsFont wxQtGraphicsRenderer::CreateFont(const wxFont &font, const wxColo
 	return p;
 }
 
-wxGraphicsFont
-wxQtGraphicsRenderer::CreateFont(double sizeInPixels,
-const wxString& facename,
-int flags,
-const wxColour& col)
+wxGraphicsFont wxQtGraphicsRenderer::CreateFont(
+    double sizeInPixels,
+    const wxString& facename,
+    int flags,
+    const wxColour& col)
 {
 	wxGraphicsFont font;
-	//font.SetRefData(new wxCairoFontData(this, sizeInPixels, facename, flags, col));
+	font.SetRefData(new wxQtFontData(this, sizeInPixels, facename, flags, col));
 	return font;
 }
 
