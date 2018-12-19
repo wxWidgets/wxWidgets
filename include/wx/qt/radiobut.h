@@ -45,9 +45,7 @@ public:
 protected:
 
 private:
-
     QRadioButton *m_qtRadioButton;
-    QButtonGroup *m_qtButtonGroup;
 
     static std::map<wxWindow*, QButtonGroup*> m_lastGroup;
 
