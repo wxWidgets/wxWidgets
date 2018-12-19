@@ -3450,9 +3450,9 @@ bool wxAuiNotebook::InsertPage(size_t index, wxWindow *page,
 class wxAuiLayoutObject
 {
 public:
-    wxAuiLayoutObject(wxSize &s, const wxAuiPaneInfo &pInfo): m_pInfo(pInfo)
+    wxAuiLayoutObject(const wxSize &size, const wxAuiPaneInfo &pInfo): m_pInfo(pInfo)
     {
-        m_size = s;
+        m_size = size;
         /* To speed up the sorting of the panes, the direction is mapped to a
          * useful increasing value. This avoids complicated comparison of the
          * enum values during the sort. The size calculation is done from the
