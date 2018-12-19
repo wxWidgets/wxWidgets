@@ -45,7 +45,6 @@ public:
 protected:
 
 private:
-    void JoinNewGroup();
 
     QRadioButton *m_qtRadioButton;
     QButtonGroup *m_qtButtonGroup;

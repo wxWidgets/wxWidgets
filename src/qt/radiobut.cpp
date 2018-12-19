@@ -45,11 +45,12 @@ bool wxRadioButton::Create( wxWindow *parent,
 
     if ( (style & wxRB_GROUP) || (style & wxRB_SINGLE) )
     {
-        JoinNewGroup();
+        m_qtButtonGroup = new QButtonGroup();
+        m_qtButtonGroup->addButton( m_qtRadioButton );
 
-        if( style & wxRB_SINGLE )
+        if ( style & wxRB_SINGLE )
         {
-            // Ensure that other buttons cannot join this group
+            // Ensure that other buttons cannot join the last existing group
             m_lastGroup.erase(parent);
         }
         else
@@ -78,6 +79,7 @@ wxRadioButton::~wxRadioButton()
     if ( m_qtRadioButton->group() &&
          m_qtRadioButton->group()->buttons().size() == 1 )
     {
+        // If this button is the only member of the last group, remove the map entry for the group
         std::map<wxWindow*, QButtonGroup*>::iterator it = m_lastGroup.find( GetParent() );
         if ( it != m_lastGroup.end() && m_qtRadioButton->group() == it->second )
         {
@@ -99,10 +101,4 @@ bool wxRadioButton::GetValue() const
 QWidget *wxRadioButton::GetHandle() const
 {
     return m_qtRadioButton;
-}
-
-void wxRadioButton::JoinNewGroup()
-{
-    m_qtButtonGroup = new QButtonGroup( );
-    m_qtButtonGroup->addButton( m_qtRadioButton );
 }
