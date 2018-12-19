@@ -573,16 +573,75 @@ public:
 
 	virtual bool SetAntialiasMode(wxAntialiasMode antialias) wxOVERRIDE
 	{
-		return true;
-	}
+        switch (antialias)
+        {
+            case wxANTIALIAS_DEFAULT:
+                m_qtPainter->setRenderHints(QPainter::Antialiasing|QPainter::TextAntialiasing, true);
+                break;
+            case wxANTIALIAS_NONE:
+                m_qtPainter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing, false);
+                break;
+            default:
+                return false;
+        }
+        m_antialias = antialias;
+        return true;
+    }
 
 	virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) wxOVERRIDE
 	{
-		return true;
+		return false;
 	}
 
-	virtual bool SetCompositionMode(wxCompositionMode op) wxOVERRIDE
+	virtual bool SetCompositionMode(wxCompositionMode composition) wxOVERRIDE
 	{
+        QPainter::CompositionMode q_composition_mode;
+        switch (composition)
+        {
+        case wxCOMPOSITION_CLEAR:
+            q_composition_mode = QPainter::CompositionMode_Clear;
+            break;
+        case wxCOMPOSITION_SOURCE:
+            q_composition_mode = QPainter::CompositionMode_Source;
+            break;
+        case wxCOMPOSITION_OVER:
+            q_composition_mode = QPainter::CompositionMode_SourceOver;
+            break;
+        case wxCOMPOSITION_IN:
+            q_composition_mode = QPainter::CompositionMode_SourceIn;
+            break;
+        case wxCOMPOSITION_OUT:
+            q_composition_mode = QPainter::CompositionMode_SourceOut;
+            break;
+        case wxCOMPOSITION_ATOP:
+            q_composition_mode = QPainter::CompositionMode_SourceAtop;
+            break;
+        case wxCOMPOSITION_DEST:
+            q_composition_mode = QPainter::CompositionMode_Destination;
+            break;
+        case wxCOMPOSITION_DEST_OVER:
+            q_composition_mode = QPainter::CompositionMode_DestinationOver;
+            break;
+        case wxCOMPOSITION_DEST_IN:
+            q_composition_mode = QPainter::CompositionMode_DestinationIn;
+            break;
+        case wxCOMPOSITION_DEST_OUT:
+            q_composition_mode = QPainter::CompositionMode_DestinationOut;
+            break;
+        case wxCOMPOSITION_DEST_ATOP:
+            q_composition_mode = QPainter::CompositionMode_DestinationAtop;
+            break;
+        case wxCOMPOSITION_XOR:
+            q_composition_mode = QPainter::CompositionMode_Xor;
+            break;
+        case wxCOMPOSITION_ADD:
+            q_composition_mode = QPainter::CompositionMode_Plus;
+            break;
+        default:
+            return false;
+        }
+        m_qtPainter->setCompositionMode(q_composition_mode);
+        m_composition = composition;
 		return true;
 	}
 
