@@ -27,6 +27,11 @@
 namespace
 {
     const int MAX_YEAR_QT = 7999;
+
+    bool IsQDateValid(const QDate &date)
+    {
+        return date.isValid() && date.year() > 0 && date.year() < MAX_YEAR_QT;
+    }
 }
 
 class wxQtCalendarWidget : public wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >
@@ -123,11 +128,6 @@ void wxCalendarCtrl::UpdateStyle()
         m_qtCalendar->setVerticalHeaderFormat(QCalendarWidget::NoVerticalHeader);
 
     RefreshHolidays();
-}
-
-bool wxCalendarCtrl::IsQDateValid(const QDate &date) const
-{
-    return date.isValid() && !date.isNull() && date.day() > 0 && date.month() > 0 && date.year() > 0 && date.year() < MAX_YEAR_QT;
 }
 
 void wxCalendarCtrl::SetWindowStyleFlag(long style)

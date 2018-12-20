@@ -79,7 +79,6 @@ protected:
 private:
     void Init();
     void UpdateStyle();
-    bool IsQDateValid(const QDate &date) const;
 
     QCalendarWidget *m_qtCalendar;
     wxColour m_colHeaderFg,
