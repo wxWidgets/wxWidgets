@@ -2439,6 +2439,24 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                         colRect.x += colRect.width;
                     }
                 }
+                else // Not using column focus.
+                {
+                    flags |= wxCONTROL_CURRENT | wxCONTROL_FOCUSED;
+
+                    // We still need to show the current item if it's not
+                    // selected.
+                    if ( !selected )
+                    {
+                        wxRendererNative::Get().DrawFocusRect
+                                                (
+                                                    this,
+                                                    dc,
+                                                    rowRect,
+                                                    flags
+                                                );
+                    }
+                    //else: The current item is selected, will be drawn below.
+                }
             }
 
             // draw selection and whole-item focus:
@@ -2449,7 +2467,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                     this,
                     dc,
                     rowRect,
-                    flags | wxCONTROL_CURRENT
+                    flags
                     );
             }
         }
