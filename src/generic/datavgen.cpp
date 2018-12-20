@@ -180,7 +180,8 @@ wxTextCtrl *CreateEditorTextCtrl(wxWindow *parent, const wxRect& labelRect, cons
 
 void wxDataViewColumn::Init(int width, wxAlignment align, int flags)
 {
-    m_width = width;
+    m_width =
+    m_manuallySetWidth = width;
     m_minWidth = 0;
     m_align = align;
     m_flags = flags;
@@ -5022,12 +5023,17 @@ void wxDataViewMainWindow::UpdateColumnSizes()
     int lastColX = colswidth - lastCol->GetWidth();
     if ( lastColX < fullWinWidth )
     {
-        int desiredWidth = wxMax(fullWinWidth - lastColX, lastCol->GetMinWidth());
-        if ( !lastCol->WXUpdateWidth(desiredWidth) )
+        const int availableWidth = fullWinWidth - lastColX;
+
+        // Never make the column automatically smaller than the last width it
+        // was explicitly given nor its minimum width.
+        if ( availableWidth <= wxMax(lastCol->GetMinWidth(),
+                                     lastCol->WXGetManuallySetWidth()) )
         {
-            // The column width didn't change, no need to do anything else.
             return;
         }
+
+        lastCol->WXUpdateWidth(availableWidth);
 
         // All columns fit on screen, so we don't need horizontal scrolling.
         // To prevent flickering scrollbar when resizing the window to be
@@ -5035,7 +5041,7 @@ void wxDataViewMainWindow::UpdateColumnSizes()
         // be corrected at idle time.
         SetVirtualSize(0, m_virtualSize.y);
 
-        RefreshRect(wxRect(lastColX, 0, fullWinWidth - lastColX, GetSize().y));
+        RefreshRect(wxRect(lastColX, 0, availableWidth, GetSize().y));
     }
     else
     {
@@ -5048,8 +5054,6 @@ void wxDataViewMainWindow::UpdateColumnSizes()
 // wxDataViewCtrl
 //-----------------------------------------------------------------------------
 
-WX_DEFINE_LIST(wxDataViewColumnList)
-
 wxIMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl, wxDataViewCtrlBase);
 wxBEGIN_EVENT_TABLE(wxDataViewCtrl, wxDataViewCtrlBase)
     EVT_SIZE(wxDataViewCtrl::OnSize)
@@ -5060,8 +5064,7 @@ wxDataViewCtrl::~wxDataViewCtrl()
     if (m_notifier)
         GetModel()->RemoveNotifier( m_notifier );
 
-    m_cols.Clear();
-    m_colsBestWidths.clear();
+    DoClearColumns();
 
 #if wxUSE_ACCESSIBILITY
     SetAccessible(NULL);
@@ -5071,7 +5074,6 @@ wxDataViewCtrl::~wxDataViewCtrl()
 
 void wxDataViewCtrl::Init()
 {
-    m_cols.DeleteContents(true);
     m_notifier = NULL;
 
     m_headerArea = NULL;
@@ -5172,9 +5174,6 @@ wxSize wxDataViewCtrl::GetSizeAvailableForScrollTarget(const wxSize& size)
 
 void wxDataViewCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
-    if ( m_clientArea && GetColumnCount() )
-        m_clientArea->UpdateColumnSizes();
-
     // We need to override OnSize so that our scrolled
     // window a) does call Layout() to use sizers for
     // positioning the controls but b) does not query
@@ -5185,6 +5184,11 @@ void wxDataViewCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
     Layout();
 
     AdjustScrollbars();
+
+    // Update the last column size to take all the available space. Note that
+    // this must be done after calling Layout() to update m_clientArea size.
+    if ( m_clientArea && GetColumnCount() )
+        m_clientArea->UpdateColumnSizes();
 
     // We must redraw the headers if their height changed. Normally this
     // shouldn't happen as the control shouldn't let itself be resized beneath
@@ -5321,7 +5325,7 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
     if (!wxDataViewCtrlBase::AppendColumn(col))
         return false;
 
-    m_cols.Append( col );
+    m_cols.push_back( col );
     m_colsBestWidths.push_back(CachedColWidthInfo());
     OnColumnsCountChanged();
     return true;
@@ -5332,7 +5336,7 @@ bool wxDataViewCtrl::PrependColumn( wxDataViewColumn *col )
     if (!wxDataViewCtrlBase::PrependColumn(col))
         return false;
 
-    m_cols.Insert( col );
+    m_cols.insert(m_cols.begin(), col);
     m_colsBestWidths.insert(m_colsBestWidths.begin(), CachedColWidthInfo());
     OnColumnsCountChanged();
     return true;
@@ -5343,7 +5347,7 @@ bool wxDataViewCtrl::InsertColumn( unsigned int pos, wxDataViewColumn *col )
     if (!wxDataViewCtrlBase::InsertColumn(pos,col))
         return false;
 
-    m_cols.Insert( pos, col );
+    m_cols.insert(m_cols.begin() + pos, col);
     m_colsBestWidths.insert(m_colsBestWidths.begin() + pos, CachedColWidthInfo());
     OnColumnsCountChanged();
     return true;
@@ -5392,7 +5396,7 @@ void wxDataViewCtrl::DoSetIndent()
 
 unsigned int wxDataViewCtrl::GetColumnCount() const
 {
-    return m_cols.GetCount();
+    return m_cols.size();
 }
 
 bool wxDataViewCtrl::SetRowHeight( int lineHeight )
@@ -5544,12 +5548,12 @@ void wxDataViewCtrl::ColumnMoved(wxDataViewColumn *col, unsigned int new_pos)
 
 bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
 {
-    wxDataViewColumnList::compatibility_iterator ret = m_cols.Find( column );
-    if (!ret)
+    const int idx = GetColumnIndex(column);
+    if ( idx == wxNOT_FOUND )
         return false;
 
-    m_colsBestWidths.erase(m_colsBestWidths.begin() + GetColumnIndex(column));
-    m_cols.Erase(ret);
+    m_colsBestWidths.erase(m_colsBestWidths.begin() + idx);
+    m_cols.erase(m_cols.begin() + idx);
 
     if ( m_clientArea->GetCurrentColumn() == column )
         m_clientArea->ClearCurrentColumn();
@@ -5559,10 +5563,20 @@ bool wxDataViewCtrl::DeleteColumn( wxDataViewColumn *column )
     return true;
 }
 
+void wxDataViewCtrl::DoClearColumns()
+{
+    typedef wxVector<wxDataViewColumn*>::const_iterator citer;
+    for ( citer it = m_cols.begin(); it != m_cols.end(); ++it )
+        delete *it;
+}
+
 bool wxDataViewCtrl::ClearColumns()
 {
     SetExpanderColumn(NULL);
-    m_cols.Clear();
+
+    DoClearColumns();
+
+    m_cols.clear();
     m_sortingColumnIdxs.clear();
     m_colsBestWidths.clear();
 
