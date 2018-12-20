@@ -3395,7 +3395,7 @@ int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
     unsigned int rowCount = GetRowCount();
     if (rowCount == 0 ||
         (m_rowHeightCache->GetLineInfo(rowCount - 1, start, height) &&
-         y >= start + height))
+         y >= static_cast<unsigned int>(start + height)))
     {
         return rowCount;
     }
