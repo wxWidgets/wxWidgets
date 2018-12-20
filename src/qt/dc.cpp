@@ -115,14 +115,46 @@ bool wxQtDCImpl::CanGetTextExtent() const
 
 void wxQtDCImpl::DoGetSize(int *width, int *height) const
 {
-    if (width)  *width  = m_qtPainter->device()->width();
-    if (height) *height = m_qtPainter->device()->height();
+    QPaintDevice *pDevice = m_qtPainter->device();
+
+    int deviceWidth;
+    int deviceHeight;
+
+    if (pDevice)
+    {
+        deviceWidth = pDevice->width();
+        deviceHeight = pDevice->height();
+    }
+    else
+    {
+        deviceWidth = 0;
+        deviceHeight = 0;
+
+    }
+    if (width) *width  = deviceWidth;
+    if (height) *height = deviceHeight;
 }
 
 void wxQtDCImpl::DoGetSizeMM(int* width, int* height) const
 {
-    if (width)  *width  = m_qtPainter->device()->widthMM();
-    if (height) *height = m_qtPainter->device()->heightMM();
+    QPaintDevice *pDevice = m_qtPainter->device();
+
+    int deviceWidthMM;
+    int deviceHeightMM;
+
+    if (pDevice)
+    {
+        deviceWidthMM = pDevice->widthMM();
+        deviceHeightMM = pDevice->heightMM();
+    }
+    else
+    {
+        deviceWidthMM = 0;
+        deviceHeightMM = 0;
+    }
+
+    if (width)  *width  = deviceWidthMM;
+    if (height) *height = deviceHeightMM;
 }
 
 int wxQtDCImpl::GetDepth() const
