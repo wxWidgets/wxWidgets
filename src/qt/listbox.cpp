@@ -106,13 +106,16 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 bool wxListBox::Create(wxWindow *parent, wxWindowID id,
             const wxPoint& pos,
             const wxSize& size,
-            const wxArrayString& WXUNUSED(choices),
+            const wxArrayString& choices,
             long style,
             const wxValidator& validator,
             const wxString& name)
 {
     Init();
     m_qtWindow = m_qtListWidget = new wxQtListWidget( parent, this );
+
+    for (size_t i = 0; i < choices.size(); ++i)
+        m_qtListWidget->addItem(wxQtConvertString(choices[i]));
 
     return wxListBoxBase::Create( parent, id, pos, size, style, validator, name );
 }
