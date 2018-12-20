@@ -3450,6 +3450,15 @@ bool wxAuiNotebook::InsertPage(size_t index, wxWindow *page,
 class wxAuiLayoutObject
 {
 public:
+    enum {
+        DockDir_Center,
+        DockDir_Left,
+        DockDir_Right,
+        DockDir_Vertical,   // Merge elements from here vertically
+        DockDir_Top,
+        DockDir_Bottom,
+        DockDir_None
+    };
     wxAuiLayoutObject(const wxSize &size, const wxAuiPaneInfo &pInfo)
     {
         m_size = size;
@@ -3463,12 +3472,12 @@ public:
          * TOP/BOTTOM in vertical direction) */
         switch (pInfo.dock_direction)
         {
-            case wxAUI_DOCK_CENTER: m_dir = 0; break;
-            case wxAUI_DOCK_LEFT:   m_dir = 1; break;
-            case wxAUI_DOCK_RIGHT:  m_dir = 2; break;
-            case wxAUI_DOCK_TOP:    m_dir = 3; break;
-            case wxAUI_DOCK_BOTTOM: m_dir = 4; break;
-            default:                m_dir = 5;
+            case wxAUI_DOCK_CENTER: m_dir = DockDir_Center; break;
+            case wxAUI_DOCK_LEFT:   m_dir = DockDir_Left; break;
+            case wxAUI_DOCK_RIGHT:  m_dir = DockDir_Right; break;
+            case wxAUI_DOCK_TOP:    m_dir = DockDir_Top; break;
+            case wxAUI_DOCK_BOTTOM: m_dir = DockDir_Bottom; break;
+            default:                m_dir = DockDir_None;
         }
     }
     void MergeLayout(const wxAuiLayoutObject &lo2)
@@ -3478,11 +3487,11 @@ public:
 
         bool mergeHorizontal;
         if (m_pInfo->dock_layer != lo2.m_pInfo->dock_layer || m_dir != lo2.m_dir)
-            mergeHorizontal = lo2.m_dir < 3;
+            mergeHorizontal = lo2.m_dir < DockDir_Vertical;
         else if (m_pInfo->dock_row != lo2.m_pInfo->dock_row)
             mergeHorizontal = true;
         else
-            mergeHorizontal = lo2.m_dir >= 3;
+            mergeHorizontal = lo2.m_dir >= DockDir_Vertical;
 
         if (mergeHorizontal)
         {
