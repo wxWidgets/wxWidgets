@@ -6,7 +6,7 @@ All about wxWidgets Version Numbers
 There are several places in the wxWidgets source tree that
 define the version number for the library.
 
-The script misc/scripts/inc_release can be used for incrementing the release
+The script `misc/scripts/inc_release` can be used for incrementing the release
 field of the version, i.e. changing 2.8.x to 2.8.x+1 but it does not take
 care of version.bkl and can't be used for changing the other version
 components, this needs to be done manually. It also doesn't update
@@ -16,19 +16,18 @@ instructions there.
 Here is the list of files that need to be updated:
 
 	build/bakefiles/version.bkl {C:R:A}          [NOT UPDATED AUTOMATICALLY]
-	build/bakefiles/wxpresets/presets/wx.bkl     [NOT UPDATED AUTOMATICALLY]
+	build/bakefiles/wxpresets/presets/wx.bkl     [NOT UPDATED AUTOMATICALLY, not-micro]
 	configure.in
 	build/osx/wxvers.xcconfig
 	docs/changes.txt
 	docs/readme.txt (date needs manual editing)  [NOT UPDATED AUTOMATICALLY]
 	docs/doxygen/Doxyfile (PROJECT_NUMBER and DOCSET_FEEDNAME)
 	docs/doxygen/mainpages/manual.h (just date)  [NOT UPDATED AUTOMATICALLY]
-	docs/msw/install.txt {major release only}
 	include/wx/version.h
 	include/wx/osx/config_xcode.h
 	samples/docview/Info.plist
 	samples/minimal/Info_cocoa.plist
-	samples/minimal/borland_ide.cpp {major release only}
+	samples/minimal/borland_ide.cpp              [not-micro]
 
 Do not forget to rebake everything after updating version.bkl!
 

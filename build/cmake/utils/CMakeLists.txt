@@ -20,8 +20,8 @@ if(wxUSE_XRC)
 
     set_target_properties(wxrc PROPERTIES FOLDER "Utilities")
 
+    wx_install(TARGETS wxrc RUNTIME DESTINATION "bin")
     if(UNIX)
-        wx_install(TARGETS wxrc RUNTIME DESTINATION "bin")
         install(CODE "execute_process( \
             COMMAND ${CMAKE_COMMAND} -E rename \
             ${CMAKE_INSTALL_PREFIX}/bin/wxrc \

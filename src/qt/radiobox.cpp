@@ -111,11 +111,19 @@ template < typename Button >
 static void AddChoices( QButtonGroup *qtButtonGroup, QBoxLayout *qtBoxLayout, int count, const wxString choices[] )
 {
     Button *btn;
+    bool isFirst = true;
+
     while ( count-- > 0 )
     {
         btn = new Button( wxQtConvertString( *choices++ ));
         qtButtonGroup->addButton( btn );
         qtBoxLayout->addWidget( btn );
+
+        if ( isFirst )
+        {
+            btn->setChecked(true);
+            isFirst = false;
+        }
     }
 }
 
@@ -168,19 +176,84 @@ static QAbstractButton *GetButtonAt( const QButtonGroup *group, unsigned int n )
 
 bool wxRadioBox::Enable(unsigned int n, bool enable)
 {
-    QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
-    CHECK_BUTTON( qtButton, false );
+    if ( enable && !m_qtGroupBox->isEnabled() )
+    {
+        m_qtGroupBox->setEnabled( true );
 
-    qtButton->setEnabled( enable );
+        for ( unsigned int i = 0; i < GetCount(); ++i )
+        {
+            QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, i );
+            CHECK_BUTTON( qtButton, false );
+
+            qtButton->setEnabled( i == n );
+        }
+    }
+    else
+    {
+        QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
+        CHECK_BUTTON( qtButton, false );
+        qtButton->setEnabled(enable);
+    }
+
+    return true;
+}
+
+bool wxRadioBox::Enable( bool enable )
+{
+    if ( m_qtGroupBox->isEnabled() == enable )
+    {
+        for ( unsigned int i = 0; i < GetCount(); ++i )
+        {
+            QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, i );
+            CHECK_BUTTON( qtButton, false );
+            qtButton->setEnabled( enable );
+        }
+    }
+
+    m_qtGroupBox->setEnabled( enable );
+
     return true;
 }
 
 bool wxRadioBox::Show(unsigned int n, bool show)
 {
-    QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
-    CHECK_BUTTON( qtButton, false );
+    if ( show && !m_qtGroupBox->isVisible() )
+    {
+        m_qtGroupBox->setVisible(true);
 
-    qtButton->setVisible( show );
+        for ( unsigned int i = 0; i < GetCount(); ++i )
+        {
+            QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, i );
+            CHECK_BUTTON( qtButton, false );
+
+            i == n ? qtButton->setVisible( true ) : qtButton->setVisible( false );
+        }
+    }
+    else
+    {
+        QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, n );
+        CHECK_BUTTON( qtButton, false );
+
+        qtButton->setVisible( show );
+    }
+
+    return true;
+}
+
+bool wxRadioBox::Show( bool show )
+{
+    if( m_qtGroupBox->isVisible() == show )
+    {
+        for( unsigned int i = 0; i < GetCount(); ++i )
+        {
+            QAbstractButton *qtButton = GetButtonAt( m_qtButtonGroup, i );
+            CHECK_BUTTON( qtButton, false );
+            qtButton->setVisible( show );
+        }
+    }
+
+    m_qtGroupBox->setVisible( show );
+
     return true;
 }
 
@@ -200,7 +273,7 @@ bool wxRadioBox::IsItemShown(unsigned int n) const
     return qtButton->isVisible();
 }
 
-unsigned wxRadioBox::GetCount() const
+unsigned int wxRadioBox::GetCount() const
 {
     QList< QAbstractButton * > buttons = m_qtButtonGroup->buttons();
     return buttons.size();

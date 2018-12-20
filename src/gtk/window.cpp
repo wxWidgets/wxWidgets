@@ -2913,6 +2913,11 @@ void wxWindowGTK::PostCreation()
 
     SetLayoutDirection(wxLayout_Default);
 
+    // if the window had been disabled before being created, it should be
+    // created in the initially disabled state
+    if ( !m_isEnabled )
+        DoEnable(false);
+
     // unless the window was created initially hidden (i.e. Hide() had been
     // called before Create()), we should show it at GTK+ level as well
     if (m_isShown)
@@ -4196,7 +4201,12 @@ bool wxWindowGTK::IsShown() const
 
 void wxWindowGTK::DoEnable( bool enable )
 {
-    wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
+    if ( !m_widget )
+    {
+        // The window can be disabled before being created, so just don't do
+        // anything in this case and, in particular, don't assert.
+        return;
+    }
 
     gtk_widget_set_sensitive( m_widget, enable );
     if (m_wxwindow && (m_wxwindow != m_widget))

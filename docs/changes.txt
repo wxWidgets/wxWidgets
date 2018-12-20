@@ -59,6 +59,9 @@ Changes in behaviour not resulting in compilation errors
   return just "N" under Linux and macOS. Use the new GetButtonOrdinal() to
   update the existing code if necessary.
 
+- Generic wxDataViewCtrl now always resizes its last column to fill all the
+  available space, as the GTK+ version always did.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
@@ -102,7 +105,21 @@ Changes in behaviour which may result in build errors
   removing its name.
 
 
-3.1.2: (released 2018-??-??)
+3.1.3: (released 2019-??-??)
+----------------------------
+
+All:
+
+- Fix regression in wxTranslations::AddCatalog() in 3.1.2 (Tomasz Słodkowicz).
+
+All (GUI):
+
+- Fix wxInfoBar close button size in high DPI (Stefan Ziegler).
+- Make disabling the window before creating it actually work.
+- Improve wxDataViewCtrl performance with variable line heights (Jens Goepfert).
+
+
+3.1.2: (released 2018-12-10)
 ----------------------------
 
 All:
@@ -144,7 +161,7 @@ All (GUI):
 - Adapt AUI colours to system colour changes (Daniel Kulp).
 - Fix removing and inserting pages in wxToolbook (Stefan Ziegler).
 - Fix bug in template selection in docview framework (jwiesemann).
-- Improve wxDataViewCtrl performance with variable line heights (Jens Goepfert).
+- Implement wxAuiNotebook::HitTest() (Sebastian Walderich).
 
 wxGTK:
 
@@ -174,6 +191,7 @@ wxMSW:
 - Send wxEVT_WEBVIEW_NAVIGATING when redirecting (Josue Andrade Gomes).
 - Fix build with MSVS 2005 broken in 3.1.1.
 - Add wxwidgets.props property sheet file for MSVS users.
+- Fix jumping to the given position in wxMediaCtrl (ashishmore).
 
 wxOSX:
 

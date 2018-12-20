@@ -69,10 +69,13 @@ wxgtk_button_released_callback(GtkWidget *WXUNUSED(widget), wxAnyButton *button)
 // wxAnyButton
 //-----------------------------------------------------------------------------
 
-bool wxAnyButton::Enable( bool enable )
+void wxAnyButton::DoEnable(bool enable)
 {
-    if (!base_type::Enable(enable))
-        return false;
+    // See wxWindow::DoEnable()
+    if ( !m_widget )
+        return;
+
+    base_type::DoEnable(enable);
 
     gtk_widget_set_sensitive(gtk_bin_get_child(GTK_BIN(m_widget)), enable);
 
@@ -80,8 +83,6 @@ bool wxAnyButton::Enable( bool enable )
         GTKFixSensitivity();
 
     GTKUpdateBitmap();
-
-    return true;
 }
 
 GdkWindow *wxAnyButton::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const

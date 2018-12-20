@@ -141,13 +141,38 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
                   wxClientDataType type)
 {
     InvalidateBestSize();
+
+    // Hack: to avoid resorting the model many times in DoInsertOneItem(),
+    // which will be called for each item from DoInsertItemsInLoop(), reset the
+    // wxCB_SORT style if we have it temporarily and only sort once at the end.
+    bool wasSorted = false;
+    if ( IsSorted() )
+    {
+        wasSorted = true;
+        ToggleWindowStyle(wxCB_SORT);
+    }
+
     int n = DoInsertItemsInLoop(items, pos, clientData, type);
+
+    if ( wasSorted )
+    {
+        // Restore the flag turned off above.
+        ToggleWindowStyle(wxCB_SORT);
+
+        // And actually sort items now.
+        m_qtComboBox->model()->sort(0);
+    }
+
     return n;
 }
 
 int wxChoice::DoInsertOneItem(const wxString& item, unsigned int pos)
 {
     m_qtComboBox->insertItem(pos, wxQtConvertString(item));
+
+    if ( IsSorted() )
+        m_qtComboBox->model()->sort(0);
+
     return pos;
 }
 
