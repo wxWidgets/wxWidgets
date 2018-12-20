@@ -131,7 +131,8 @@ void wxQtDCImpl::DoGetSize(int *width, int *height) const
         deviceHeight = 0;
 
     }
-    if (width) *width  = deviceWidth;
+    if ( width )
+        *width = deviceWidth;
     if ( height )
         *height = deviceHeight;
 }
