@@ -3557,24 +3557,16 @@ wxSize wxAuiNotebook::DoGetBestSize() const
     size_t pos = 0;
     for (size_t n = 1; n < layouts.size(); n++)
     {
-        if (layouts[n].m_pInfo.dock_layer != layouts[pos].m_pInfo.dock_layer)
+        if (layouts[n].m_pInfo.dock_layer == layouts[pos].m_pInfo.dock_layer &&
+            layouts[n].m_dir == layouts[pos].m_dir &&
+            layouts[n].m_pInfo.dock_row == layouts[pos].m_pInfo.dock_row)
         {
-            layouts[0].MergeLayout(layouts[pos]);
-            pos = n;
-        }
-        else if (layouts[n].m_dir != layouts[pos].m_dir)
-        {
-            layouts[0].MergeLayout(layouts[pos]);
-            pos = n;
-        }
-        else if (layouts[n].m_pInfo.dock_row != layouts[pos].m_pInfo.dock_row)
-        {
-            layouts[0].MergeLayout(layouts[pos]);
-            pos = n;
+            layouts[pos].MergeLayout(layouts[n]);
         }
         else
         {
-            layouts[pos].MergeLayout(layouts[n]);
+            layouts[0].MergeLayout(layouts[pos]);
+            pos = n;
         }
     }
     layouts[0].MergeLayout(layouts[pos]);
