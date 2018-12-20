@@ -3487,11 +3487,13 @@ public:
         if (mergeHorizontal)
         {
             m_size.x += lo2.m_size.x;
-            if (lo2.m_size.y > m_size.y) m_size.y = lo2.m_size.y;
+            if (lo2.m_size.y > m_size.y)
+                m_size.y = lo2.m_size.y;
         }
         else
         {
-            if (lo2.m_size.x > m_size.x) m_size.x = lo2.m_size.x;
+            if (lo2.m_size.x > m_size.x)
+                m_size.x = lo2.m_size.x;
             m_size.y += lo2.m_size.y;
         }
     }
