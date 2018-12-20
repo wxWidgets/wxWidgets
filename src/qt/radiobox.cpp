@@ -56,7 +56,10 @@ void wxQtButtonGroup::buttonClicked(int index) {
 wxIMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl);
 
 
-wxRadioBox::wxRadioBox()
+wxRadioBox::wxRadioBox() :
+    m_qtGroupBox(NULL),
+    m_qtButtonGroup(NULL),
+    m_qtBoxLayout(NULL)
 {
 }
 
@@ -149,7 +152,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     // GetMajorDim() is the number of rows.
     if ( style & wxRA_SPECIFY_COLS )
         m_qtBoxLayout = new QHBoxLayout;
-    else if ( style & wxRA_SPECIFY_ROWS )
+    else
         m_qtBoxLayout = new QVBoxLayout;
 
     AddChoices< QRadioButton >( m_qtButtonGroup, m_qtBoxLayout, n, choices );
@@ -242,6 +245,9 @@ bool wxRadioBox::Show(unsigned int n, bool show)
 
 bool wxRadioBox::Show( bool show )
 {
+    if (!m_qtGroupBox)
+        return false;
+
     if( m_qtGroupBox->isVisible() == show )
     {
         for( unsigned int i = 0; i < GetCount(); ++i )

@@ -154,6 +154,7 @@ void wxListCtrl::Init()
     m_ownsImageListSmall = false;
     m_imageListState = NULL;
     m_ownsImageListState = false;
+    m_qtTreeWidget = NULL;
 }
 
 wxListCtrl::~wxListCtrl()

@@ -90,7 +90,9 @@ void wxQtTextEdit::textChanged()
 }
 
 
-wxTextCtrl::wxTextCtrl()
+wxTextCtrl::wxTextCtrl() :
+    m_qtLineEdit(NULL),
+    m_qtTextEdit(NULL)
 {
 }
 

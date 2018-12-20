@@ -20,6 +20,8 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxAppBase);
 wxApp::wxApp()
 {
     m_qtApplication = NULL;
+    m_qtArgc = 0;
+    m_qtArgv = NULL;
 }
 
 

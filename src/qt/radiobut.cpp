@@ -13,7 +13,8 @@
 
 #include <QtWidgets/QRadioButton>
 
-wxRadioButton::wxRadioButton()
+wxRadioButton::wxRadioButton() :
+    m_qtRadioButton(NULL)
 {
 }
 
