@@ -120,7 +120,7 @@ void wxQtDCImpl::DoGetSize(int *width, int *height) const
     int deviceWidth;
     int deviceHeight;
 
-    if (pDevice)
+    if ( pDevice )
     {
         deviceWidth = pDevice->width();
         deviceHeight = pDevice->height();
