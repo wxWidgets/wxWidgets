@@ -3450,10 +3450,10 @@ bool wxAuiNotebook::InsertPage(size_t index, wxWindow *page,
 class wxAuiLayoutObject
 {
 public:
-    wxAuiLayoutObject(const wxSize &size,
-                      const wxAuiPaneInfo &pInfo) : m_pInfo(pInfo)
+    wxAuiLayoutObject(const wxSize &size, const wxAuiPaneInfo &pInfo)
     {
         m_size = size;
+        m_pInfo = &pInfo;
         /* To speed up the sorting of the panes, the direction is mapped to a
          * useful increasing value. This avoids complicated comparison of the
          * enum values during the sort. The size calculation is done from the
@@ -3477,9 +3477,9 @@ public:
             return;
 
         bool mergeHorizontal;
-        if (m_pInfo.dock_layer != lo2.m_pInfo.dock_layer || m_dir != lo2.m_dir)
+        if (m_pInfo->dock_layer != lo2.m_pInfo->dock_layer || m_dir != lo2.m_dir)
             mergeHorizontal = lo2.m_dir < 3;
-        else if (m_pInfo.dock_row != lo2.m_pInfo.dock_row)
+        else if (m_pInfo->dock_row != lo2.m_pInfo->dock_row)
             mergeHorizontal = true;
         else
             mergeHorizontal = lo2.m_dir >= 3;
@@ -3499,23 +3499,23 @@ public:
     }
 
     wxSize m_size;
-    const wxAuiPaneInfo &m_pInfo;
+    const wxAuiPaneInfo *m_pInfo;
     unsigned char m_dir;
 
     /* As the caulculation is done from the inner to the outermost pane, the
      * panes are sorted in the following order: layer, direction, row,
      * position. */
     bool operator<(const wxAuiLayoutObject& lo2) const {
-        int diff = m_pInfo.dock_layer - lo2.m_pInfo.dock_layer;
+        int diff = m_pInfo->dock_layer - lo2.m_pInfo->dock_layer;
         if (diff)
             return diff < 0;
         diff = m_dir - lo2.m_dir;
         if (diff)
             return diff < 0;
-        diff = m_pInfo.dock_row - lo2.m_pInfo.dock_row;
+        diff = m_pInfo->dock_row - lo2.m_pInfo->dock_row;
         if (diff)
             return diff < 0;
-        return m_pInfo.dock_pos < lo2.m_pInfo.dock_pos;
+        return m_pInfo->dock_pos < lo2.m_pInfo->dock_pos;
     }
 };
 
@@ -3557,9 +3557,9 @@ wxSize wxAuiNotebook::DoGetBestSize() const
     size_t pos = 0;
     for (size_t n = 1; n < layouts.size(); n++)
     {
-        if (layouts[n].m_pInfo.dock_layer == layouts[pos].m_pInfo.dock_layer &&
+        if (layouts[n].m_pInfo->dock_layer == layouts[pos].m_pInfo->dock_layer &&
             layouts[n].m_dir == layouts[pos].m_dir &&
-            layouts[n].m_pInfo.dock_row == layouts[pos].m_pInfo.dock_row)
+            layouts[n].m_pInfo->dock_row == layouts[pos].m_pInfo->dock_row)
         {
             layouts[pos].MergeLayout(layouts[n]);
         }
