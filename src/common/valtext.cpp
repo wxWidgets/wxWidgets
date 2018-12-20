@@ -433,7 +433,7 @@ bool wxTextValidator::IsValid(const wxUniChar& c) const
     if ( IsCharIncluded(c) )
         return true;
 
-    static const long mask = wxFILTER_ASCII|wxFILTER_ALPHA|wxFILTER_NUMERIC
+    static const long mask = wxFILTER_ASCII|wxFILTER_ALPHA|wxFILTER_NUMERIC|
                       wxFILTER_ALPHANUMERIC|wxFILTER_DIGITS|wxFILTER_XDIGITS;
     
     long flags = m_style & mask;

@@ -79,6 +79,14 @@ public:
     void SetIncludes(const wxArrayString& includes){ DoSetIncludes(includes); }
     void AddInclude(const wxString& include){ DoAddInclude(include); }
     const wxArrayString& GetIncludes() const { return m_includes; }
+    
+    wxString GetCharIncludes() const 
+    { 
+        if ( HasFlag(wxFILTER_INCLUDE_CHAR_LIST) )
+            return m_includes.Last();
+
+        return wxString();
+    }
 
     // strings & chars exclusions:
     // ---------------------------
@@ -89,6 +97,14 @@ public:
     void SetExcludes(const wxArrayString& excludes){ DoSetExcludes(excludes); }
     void AddExclude(const wxString& exclude){ DoAddExclude(exclude); }
     const wxArrayString& GetExcludes() const { return m_excludes; }
+
+    wxString GetCharExcludes() const 
+    { 
+        if ( HasFlag(wxFILTER_EXCLUDE_CHAR_LIST) )
+            return m_excludes.Last();
+
+        return wxString();
+    }
 
     bool HasFlag(wxTextValidatorStyle style) const
         { return (m_style & style) != 0; }

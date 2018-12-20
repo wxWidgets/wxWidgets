@@ -160,47 +160,41 @@ wxNumericPropertyValidator::
     wxNumericPropertyValidator( NumericType numericType, int base )
     : wxTextValidator(wxFILTER_INCLUDE_CHAR_LIST)
 {
-    wxArrayString arr;
-    arr.Add(wxS("0"));
-    arr.Add(wxS("1"));
-    arr.Add(wxS("2"));
-    arr.Add(wxS("3"));
-    arr.Add(wxS("4"));
-    arr.Add(wxS("5"));
-    arr.Add(wxS("6"));
-    arr.Add(wxS("7"));
+    long style = GetStyle();
 
-    if ( base >= 10 )
+    // always allow plus and minus signs
+    wxString allowedChars("+-");
+
+    switch (base)
     {
-        arr.Add(wxS("8"));
-        arr.Add(wxS("9"));
-        if ( base >= 16 )
-        {
-            arr.Add(wxS("a")); arr.Add(wxS("A"));
-            arr.Add(wxS("b")); arr.Add(wxS("B"));
-            arr.Add(wxS("c")); arr.Add(wxS("C"));
-            arr.Add(wxS("d")); arr.Add(wxS("D"));
-            arr.Add(wxS("e")); arr.Add(wxS("E"));
-            arr.Add(wxS("f")); arr.Add(wxS("F"));
-        }
+        case 2:
+            allowedChars += wxS("01");
+            break;
+        case 8:
+            allowedChars += wxS("01234567");
+            break;
+        case 10:
+            style |= wxFILTER_DIGITS;
+            break;
+        case 16:
+            style |= wxFILTER_XDIGITS;
+            break;
+
+        default:
+            wxLogWarning( _("Unknown base %d. Base 10 will be used."), base );
+            style |= wxFILTER_DIGITS;
     }
 
-    if ( numericType == Signed )
+    if ( numericType == Float )
     {
-        arr.Add(wxS("+"));
-        arr.Add(wxS("-"));
-    }
-    else if ( numericType == Float )
-    {
-        arr.Add(wxS("+"));
-        arr.Add(wxS("-"));
-        arr.Add(wxS("e")); arr.Add(wxS("E"));
+        allowedChars += wxS("eE");
 
         // Use locale-specific decimal point
-        arr.Add(wxString::Format(wxS("%g"), 1.1)[1]);
+        allowedChars += wxString::Format(wxS("%g"), 1.1)[1];
     }
 
-    SetIncludes(arr);
+    SetStyle(style);
+    SetCharIncludes(allowedChars);
 }
 
 bool wxNumericPropertyValidator::Validate(wxWindow* parent)
@@ -2021,15 +2015,7 @@ wxValidator* wxFileProperty::GetClassValidator()
     static wxString v;
     wxTextValidator* validator = new wxTextValidator(wxFILTER_EXCLUDE_CHAR_LIST,&v);
 
-    wxArrayString exChars;
-    exChars.Add(wxS("?"));
-    exChars.Add(wxS("*"));
-    exChars.Add(wxS("|"));
-    exChars.Add(wxS("<"));
-    exChars.Add(wxS(">"));
-    exChars.Add(wxS("\""));
-
-    validator->SetExcludes(exChars);
+    validator->SetCharExcludes(wxString("?*|<>\""));
 
     WX_PG_DOGETVALIDATOR_EXIT(validator)
 #else
