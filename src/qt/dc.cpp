@@ -144,7 +144,7 @@ void wxQtDCImpl::DoGetSizeMM(int* width, int* height) const
     int deviceWidthMM;
     int deviceHeightMM;
 
-    if (pDevice)
+    if ( pDevice )
     {
         deviceWidthMM = pDevice->widthMM();
         deviceHeightMM = pDevice->heightMM();
