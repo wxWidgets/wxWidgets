@@ -70,7 +70,7 @@ bool wxRearrangeList::Create(wxWindow *parent,
     }
 
     // do create the real control
-    m_order = order;
+    m_order.resize(count);
 
     if ( !wxCheckListBox::Create(parent, id, pos, size, itemsInOrder,
                                  style, validator, name) )
