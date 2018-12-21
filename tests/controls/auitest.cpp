@@ -132,4 +132,6 @@ TEST_CASE( "wxAuiNotebook::DoGetBestSize", "[aui]" ) {
     CHECK( auiSize.x == 250 );
     CHECK( auiSize.y == 175 + 3*tabHeight );
   }
+
+  wxDELETE(nb);
 }
