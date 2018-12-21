@@ -25,31 +25,35 @@ enum wxTextValidatorStyle
     wxFILTER_EMPTY = 0x1,
     wxFILTER_ASCII = 0x2,
     wxFILTER_ALPHA = 0x4,
-    wxFILTER_DIGITS = 0x8,
-    wxFILTER_XDIGITS = 0x10,
-    wxFILTER_ALPHANUMERIC = wxFILTER_ALPHA|wxFILTER_DIGITS|wxFILTER_XDIGITS,
+    wxFILTER_ALPHANUMERIC = 0x8,
+    wxFILTER_DIGITS = 0x10,
     wxFILTER_NUMERIC = 0x20,
     wxFILTER_INCLUDE_LIST = 0x40,
     wxFILTER_INCLUDE_CHAR_LIST = 0x80,
     wxFILTER_EXCLUDE_LIST = 0x100,
     wxFILTER_EXCLUDE_CHAR_LIST = 0x200,
-    wxFILTER_SPACE = 0x400
+    wxFILTER_XDIGITS = 0x400,
+    wxFILTER_SPACE = 0x800
 };
 
 // ----------------------------------------------------------------------------
-// wxTextValidatorBase
+// wxTextValidator
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTextValidatorBase: public wxValidator
+class WXDLLIMPEXP_CORE wxTextValidator: public wxValidator
 {
 public:
-    explicit wxTextValidatorBase(wxString* str, long style = wxFILTER_NONE);
+    wxTextValidator(long style = wxFILTER_NONE, wxString *val = NULL);
+    wxTextValidator(const wxTextValidator& val);
 
-    wxTextValidatorBase(const wxTextValidatorBase& val);
+    virtual ~wxTextValidator(){}
 
-    virtual ~wxTextValidatorBase(){}
-
-    bool Copy(const wxTextValidatorBase& val);
+    // Make a clone of this validator (or return NULL) - currently necessary
+    // if you're passing a reference to a validator.
+    // Another possibility is to always pass a pointer to a new validator
+    // (so the calling code can use a copy constructor of the relevant class).
+    virtual wxObject *Clone() const wxOVERRIDE { return new wxTextValidator(*this); }
+    bool Copy(const wxTextValidator& val);
 
     // Called when the value in the window must be validated.
     // This function can pop up an error message.
@@ -65,8 +69,8 @@ public:
     void OnChar(wxKeyEvent& event);
 
     // ACCESSORS
-    inline long GetStyle() const { return m_style; }
-    void SetStyle(long style){ DoSetStyle(style); }
+    inline long GetStyle() const { return m_validatorStyle; }
+    void SetStyle(long style);
 
     wxTextEntry *GetTextEntry();
 
@@ -76,17 +80,11 @@ public:
     void SetCharIncludes(const wxString& chars);
     void AddCharIncludes(const wxString& chars);
 
-    void SetIncludes(const wxArrayString& includes){ DoSetIncludes(includes); }
-    void AddInclude(const wxString& include){ DoAddInclude(include); }
-    const wxArrayString& GetIncludes() const { return m_includes; }
-    
-    wxString GetCharIncludes() const 
-    { 
-        if ( HasFlag(wxFILTER_INCLUDE_CHAR_LIST) )
-            return m_includes.Last();
+    void SetIncludes(const wxArrayString& includes) { DoSetIncludes(includes); }
+    void AddInclude(const wxString& include) { DoAddInclude(include); }
 
-        return wxString();
-    }
+    const wxArrayString& GetIncludes() const { return m_includes; }
+    wxString GetCharIncludes() const { return m_charIncludes; }
 
     // strings & chars exclusions:
     // ---------------------------
@@ -94,69 +92,36 @@ public:
     void SetCharExcludes(const wxString& chars);
     void AddCharExcludes(const wxString& chars);
 
-    void SetExcludes(const wxArrayString& excludes){ DoSetExcludes(excludes); }
-    void AddExclude(const wxString& exclude){ DoAddExclude(exclude); }
+    void SetExcludes(const wxArrayString& excludes) { DoSetExcludes(excludes); }
+    void AddExclude(const wxString& exclude) { DoAddExclude(exclude); }
+
     const wxArrayString& GetExcludes() const { return m_excludes; }
-
-    wxString GetCharExcludes() const 
-    { 
-        if ( HasFlag(wxFILTER_EXCLUDE_CHAR_LIST) )
-            return m_excludes.Last();
-
-        return wxString();
-    }
+    wxString GetCharExcludes() const { return m_charExcludes; }
 
     bool HasFlag(wxTextValidatorStyle style) const
-        { return (m_style & style) != 0; }
+        { return (m_validatorStyle & style) != 0; }
 
 protected:
 
     bool IsCharIncluded(const wxUniChar& c) const
     {
-        if ( HasFlag(wxFILTER_INCLUDE_CHAR_LIST) )
-            // The string of included chars is always kept at
-            // the end of m_includes member.
-            return (m_includes.Last().Find(c) != wxNOT_FOUND);
-
-        return false;
+        return m_charIncludes.Find(c) != wxNOT_FOUND;
     }
 
     bool IsCharExcluded(const wxUniChar& c) const
     {
-        if ( HasFlag(wxFILTER_EXCLUDE_CHAR_LIST) )
-            // The string of excluded chars is always kept at
-            // the end of m_excludes member.
-            return (m_excludes.Last().Find(c) != wxNOT_FOUND);
-
-        return false;
-    }
-
-    // Helper used by IsIncluded() and IsExcluded() methods
-    inline bool IsStringFound(const wxArrayString& arr,
-                              const wxString& str,
-                              const bool excludeLastString) const
-    {
-        const int idx = arr.Index(str);
-
-        const bool found = idx != wxNOT_FOUND;
-
-        if ( excludeLastString )
-        {
-            return found &&
-                   (int)arr.GetCount() > idx+1; // the [inc|exc]lude char list
-        }
-
-        return found;
+        return m_charExcludes.Find(c) != wxNOT_FOUND;
     }
 
     bool IsIncluded(const wxString& str) const
     {
-        return IsStringFound(m_includes, str, HasFlag(wxFILTER_INCLUDE_CHAR_LIST));
+        return m_includes.empty() || 
+                m_includes.Index(str) != wxNOT_FOUND;
     }
 
     bool IsExcluded(const wxString& str) const
     {
-        return IsStringFound(m_excludes, str, HasFlag(wxFILTER_EXCLUDE_CHAR_LIST));
+        return m_excludes.Index(str) != wxNOT_FOUND;
     }
 
     virtual void DoSetIncludes(const wxArrayString& strs);
@@ -169,56 +134,23 @@ protected:
     wxString IsValid(const wxString& str) const;
 
     // returns false if the character is invalid
-    virtual bool IsValid(const wxUniChar& c) const = 0;
+    virtual bool IsValid(const wxUniChar& c) const;
 
     // Called by Validate() to do the actual validation
-    virtual wxString DoValidate(const wxString& str) = 0;
-
-    // For each derived class set m_style properly
-    virtual void DoSetStyle(long style){ m_style = style; }
+    virtual wxString DoValidate(const wxString& str);
 
 protected:
-    long      m_style;
-    wxString* m_string;
-
-    wxArrayString m_includes;
-    wxArrayString m_excludes;
-
-private:
-    wxDECLARE_NO_ASSIGN_CLASS(wxTextValidatorBase);
-    wxDECLARE_ABSTRACT_CLASS(wxTextValidatorBase);
-    wxDECLARE_EVENT_TABLE();
-};
-
-class WXDLLIMPEXP_CORE wxTextValidator: public wxTextValidatorBase
-{
-public:
-    explicit wxTextValidator(wxString *str, long style = wxFILTER_NONE);
-    wxTextValidator(long style = wxFILTER_NONE, wxString *str = NULL);
-
-    wxTextValidator(const wxTextValidator& val);
-
-    virtual ~wxTextValidator(){}
-
-    // Make a clone of this validator (or return NULL) - currently necessary
-    // if you're passing a reference to a validator.
-    // Another possibility is to always pass a pointer to a new validator
-    // (so the calling code can use a copy constructor of the relevant class).
-    virtual wxObject *Clone() const wxOVERRIDE { return new wxTextValidator(*this); }
-    bool Copy(const wxTextValidator& val);
-
-protected:
-    // returns false if the character is invalid
-    virtual bool IsValid(const wxUniChar& c) const wxOVERRIDE;
-
-    // Called by Validate() to do the actual validation
-    virtual wxString DoValidate(const wxString& str) wxOVERRIDE;
-
-    virtual void DoSetStyle(long style) wxOVERRIDE;
+    long                 m_validatorStyle;
+    wxString*            m_stringValue;
+    wxString             m_charIncludes;
+    wxString             m_charExcludes;
+    wxArrayString        m_includes;
+    wxArrayString        m_excludes;
 
 private:
     wxDECLARE_NO_ASSIGN_CLASS(wxTextValidator);
     wxDECLARE_DYNAMIC_CLASS(wxTextValidator);
+    wxDECLARE_EVENT_TABLE();
 };
 
 #endif
