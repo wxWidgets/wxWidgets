@@ -1179,7 +1179,6 @@ void wxDocManager::DoOpenMRUFile(unsigned n)
     if ( filename.empty() )
         return;
 
-    wxString errMsg; // must contain exactly one "%s" if non-empty
     if ( wxFile::Exists(filename) )
     {
         // Try to open it but don't give an error if it failed: this could be
