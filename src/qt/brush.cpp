@@ -15,6 +15,7 @@
 
 #include <QtGui/QBrush>
 
+wxIMPLEMENT_DYNAMIC_CLASS(wxBrush,wxBrushBase);
 
 static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
 {

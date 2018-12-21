@@ -65,6 +65,8 @@ public:
                 const wxString& name = wxFrameNameStr);
 
     virtual void Activate();
+
+    wxDECLARE_DYNAMIC_CLASS(wxMDIChildFrame);
 };
 
 
@@ -75,6 +77,7 @@ public:
     wxMDIClientWindow();
     
     virtual bool CreateClient(wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL);
+    wxDECLARE_DYNAMIC_CLASS(wxMDIClientWindow);
 };
 
 #endif // _WX_QT_MDI_H_

@@ -88,6 +88,8 @@ void wxMDIParentFrame::ActivatePrevious()
 
 //##############################################################################
 
+wxIMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame,wxMDIChildFrameBase)
+
 wxMDIChildFrame::wxMDIChildFrame()
 {
 }
@@ -128,6 +130,8 @@ void wxMDIChildFrame::Activate()
 }
 
 //##############################################################################
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow,wxMDIClientWindowBase)
 
 wxMDIClientWindow::wxMDIClientWindow()
 {

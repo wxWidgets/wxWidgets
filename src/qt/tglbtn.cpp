@@ -103,6 +103,8 @@ QWidget *wxBitmapToggleButton::GetHandle() const
 
 //##############################################################################
 
+wxIMPLEMENT_DYNAMIC_CLASS(wxToggleButton, wxToggleButtonBase);
+
 wxToggleButton::wxToggleButton()
 {
 }

@@ -13,6 +13,8 @@
 #include "wx/qt/private/utils.h"
 #include <QtGui/QPen>
 
+wxIMPLEMENT_DYNAMIC_CLASS(wxPen,wxPenBase);
+
 static Qt::PenStyle ConvertPenStyle(wxPenStyle style)
 {
     switch(style)
