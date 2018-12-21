@@ -2551,6 +2551,10 @@ public:
         }
         @endcode
 
+        @note Currently support for this method is not implemented in the
+            native macOS version of the control, i.e. it will be never called
+            there.
+
         @see ActivateCell()
     */
     virtual wxWindow* CreateEditorCtrl(wxWindow* parent,
