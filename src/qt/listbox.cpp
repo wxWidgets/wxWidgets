@@ -114,8 +114,12 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     Init();
     m_qtWindow = m_qtListWidget = new wxQtListWidget( parent, this );
 
+    QStringList items;
+
     for (size_t i = 0; i < choices.size(); ++i)
-        m_qtListWidget->addItem(wxQtConvertString(choices[i]));
+        items.push_back(wxQtConvertString(choices[i]));
+
+    m_qtListWidget->addItems(items);
 
     return wxListBoxBase::Create( parent, id, pos, size, style, validator, name );
 }
