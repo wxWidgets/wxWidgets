@@ -2467,6 +2467,12 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
                                   wxEL_ALLOW_EDIT |
                                   wxEL_ALLOW_DELETE);
 
+    // Set custom text for "New" button, if provided
+    if ( !m_customNewButtonText.empty() )
+    {
+        m_elb->GetNewButton()->SetToolTip(m_customNewButtonText);
+    }
+
     // Populate the list box
     wxArrayString arr;
     for ( unsigned int i=0; i<ArrayGetCount(); i++ )

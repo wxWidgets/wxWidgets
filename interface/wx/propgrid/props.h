@@ -726,7 +726,11 @@ public:
                  const wxSize& sz = wxDefaultSize );
 
     void EnableCustomNewAction();
-    
+
+    /** Sets tooltip text for button allowing the user to enter new string.
+    */
+    void SetNewButtonText(const wxString& text);
+
     /** Set value modified by dialog.
     */
     virtual void SetDialogValue( const wxVariant& value );

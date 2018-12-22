@@ -116,6 +116,8 @@ All (GUI):
 
 - Fix wxInfoBar close button size in high DPI (Stefan Ziegler).
 - Make disabling the window before creating it actually work.
+- Allow changing tooltip text for button allowing to enter a new string
+  in wxPGArrayEditorDialog.
 
 
 3.1.2: (released 2018-12-10)
