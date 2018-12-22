@@ -163,6 +163,8 @@ target_include_directories(wxscintilla PRIVATE
 target_compile_definitions(wxscintilla PUBLIC
     NO_CXX11_REGEX
     __WX__
+    SCI_LEXER
+    LINK_LEXERS
 )
 
 if(wxBUILD_PRECOMP)
@@ -183,6 +185,8 @@ wx_lib_include_directories(stc PRIVATE
     ${wxSOURCE_DIR}/src/stc/scintilla/src
     )
 wx_lib_compile_definitions(stc PRIVATE
+    NO_CXX11_REGEX
+    __WX__
     SCI_LEXER
     LINK_LEXERS
 )
