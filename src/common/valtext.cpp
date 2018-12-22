@@ -152,7 +152,7 @@ bool wxTextValidator::Validate(wxWindow *parent)
     if ( !text )
         return false;
 
-    const wxString errormsg = DoValidate(text->GetValue());
+    const wxString errormsg = IsValid(text->GetValue());
 
     if ( !errormsg.empty() )
     {
@@ -198,13 +198,21 @@ bool wxTextValidator::TransferFromWindow()
 
 wxString wxTextValidator::IsValid(const wxString& str) const
 {
+    if ( HasFlag(wxFILTER_EMPTY) && str.empty() )
+        return _("Required information entry is empty.");
+    else if ( IsExcluded(str) )
+        return wxString::Format(_("'%s' is one of the invalid strings"), str);
+    else if ( !IsIncluded(str) )
+        return wxString::Format(_("'%s' is not one of the valid strings"), str);
+
+    // check the whole string for invalid chars.
     for ( wxString::const_iterator i = str.begin(), end = str.end();
           i != end; ++i )
     {
         if ( !IsValid(*i) )
         {
-            // N.B. this format string should contain exactly one '%s'
-            return _("'%s' contains invalid character(s)!");
+            return wxString::Format(
+                _("'%s' contains invalid character(s)"), str);
         }
     }
 
@@ -379,30 +387,6 @@ bool wxTextValidator::IsValid(const wxUniChar& c) const
     }
 
     return flags != 0;
-}
-
-wxString wxTextValidator::DoValidate(const wxString& str)
-{
-    // We can only do some kinds of validation once the input is complete, so
-    // check for them here:
-    if ( HasFlag(wxFILTER_EMPTY) && str.empty() )
-        return _("Required information entry is empty.");
-    else if ( IsExcluded(str) )
-        return wxString::Format(_("'%s' is one of the invalid strings"), str);
-    else if ( !IsIncluded(str) )
-        return wxString::Format(_("'%s' is not one of the valid strings"), str);
-
-    wxString errormsg = IsValid(str);
-
-    if ( !errormsg.empty() )
-    {
-        // NB: this format string should always contain exactly one '%s'
-        wxString buf;
-        buf.Printf(errormsg, str);
-        return buf;
-    }
-
-    return wxString();
 }
 
 #endif

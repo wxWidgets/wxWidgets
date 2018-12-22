@@ -136,9 +136,6 @@ protected:
     // returns false if the character is invalid
     virtual bool IsValid(const wxUniChar& c) const;
 
-    // Called by Validate() to do the actual validation
-    virtual wxString DoValidate(const wxString& str);
-
 protected:
     long                 m_validatorStyle;
     wxString*            m_stringValue;
