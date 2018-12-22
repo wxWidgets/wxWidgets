@@ -392,7 +392,7 @@ wxString wxTextValidator::DoValidate(const wxString& str)
     else if ( !IsIncluded(str) )
         return wxString::Format(_("'%s' is not one of the valid strings"), str);
 
-    wxString errormsg = wxTextValidator::IsValid(str);
+    wxString errormsg = IsValid(str);
 
     if ( !errormsg.empty() )
     {
