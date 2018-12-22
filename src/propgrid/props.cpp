@@ -2405,9 +2405,12 @@ wxPGArrayEditorDialog::wxPGArrayEditorDialog()
 
 void wxPGArrayEditorDialog::Init()
 {
+    m_elb = NULL;
+    m_elbSubPanel = NULL;
     m_lastFocused = NULL;
     m_hasCustomNewAction = false;
     m_itemPendingAtIndex = -1;
+    m_modified = false;
 }
 
 // -----------------------------------------------------------------------
