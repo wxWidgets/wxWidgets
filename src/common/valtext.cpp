@@ -280,32 +280,6 @@ void wxTextValidator::AddCharExcludes(const wxString& chars)
     m_charExcludes += chars;
 }
 
-void wxTextValidator::DoSetIncludes(const wxArrayString& includes)
-{
-    m_includes = includes;
-}
-
-void wxTextValidator::DoSetExcludes(const wxArrayString& excludes)
-{
-    m_excludes = excludes;
-}
-
-void wxTextValidator::DoAddInclude(const wxString& include)
-{
-    if ( include.empty() )
-        return;
-
-    m_includes.Add(include);
-}
-
-void wxTextValidator::DoAddExclude(const wxString& exclude)
-{
-    if ( exclude.empty() )
-        return;
-
-    m_excludes.Add(exclude);
-}
-
 void wxTextValidator::OnChar(wxKeyEvent& event)
 {
     // Let the event propagate by default.

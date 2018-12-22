@@ -80,8 +80,12 @@ public:
     void SetCharIncludes(const wxString& chars);
     void AddCharIncludes(const wxString& chars);
 
-    void SetIncludes(const wxArrayString& includes) { DoSetIncludes(includes); }
-    void AddInclude(const wxString& include) { DoAddInclude(include); }
+    void SetIncludes(const wxArrayString& includes) { m_includes = includes; }
+    void AddInclude(const wxString& include)
+    {
+        if ( !include.empty() )
+            m_includes.Add(include);
+    }
 
     const wxArrayString& GetIncludes() const { return m_includes; }
     wxString GetCharIncludes() const { return m_charIncludes; }
@@ -92,8 +96,12 @@ public:
     void SetCharExcludes(const wxString& chars);
     void AddCharExcludes(const wxString& chars);
 
-    void SetExcludes(const wxArrayString& excludes) { DoSetExcludes(excludes); }
-    void AddExclude(const wxString& exclude) { DoAddExclude(exclude); }
+    void SetExcludes(const wxArrayString& excludes) { m_excludes = excludes; }
+    void AddExclude(const wxString& exclude)
+    {
+        if ( !exclude.empty() )
+            m_excludes.Add(exclude);
+    }
 
     const wxArrayString& GetExcludes() const { return m_excludes; }
     wxString GetCharExcludes() const { return m_charExcludes; }
@@ -124,17 +132,11 @@ protected:
         return m_excludes.Index(str) != wxNOT_FOUND;
     }
 
-    virtual void DoSetIncludes(const wxArrayString& strs);
-    virtual void DoSetExcludes(const wxArrayString& strs);
-
-    virtual void DoAddInclude(const wxString& str);
-    virtual void DoAddExclude(const wxString& str);
-
     // returns the error message if the contents of 'str' are invalid
     wxString IsValid(const wxString& str) const;
 
     // returns false if the character is invalid
-    virtual bool IsValid(const wxUniChar& c) const;
+    bool IsValid(const wxUniChar& c) const;
 
 protected:
     long                 m_validatorStyle;
