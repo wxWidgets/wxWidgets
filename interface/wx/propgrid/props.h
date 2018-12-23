@@ -728,6 +728,7 @@ public:
     void EnableCustomNewAction();
 
     /** Sets tooltip text for button allowing the user to enter new string.
+        @since 3.1.3
     */
     void SetNewButtonText(const wxString& text);
 
