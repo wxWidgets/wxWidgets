@@ -414,6 +414,9 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
     if (!raw_dc || !raw_dc->IsOk())
         return;
 
+    if (m_rect.IsEmpty())
+        return;
+
     wxMemoryDC dc;
 
     // use the same layout direction as the window DC uses to ensure that the
