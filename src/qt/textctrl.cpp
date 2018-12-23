@@ -122,7 +122,7 @@ public:
         while(cnt < lineNo)
         {
             size_t tpos = value.find('\n', pos);
-            if(tpos == wxString::npos)
+            if ( tpos == wxString::npos )
               return wxQtLineInfo(tpos, tpos);
 
             pos = tpos + 1;
@@ -130,7 +130,7 @@ public:
         }
 
         size_t end = value.find('\n', pos);
-        if(end == wxString::npos)
+        if ( end == wxString::npos )
             end = value.length();
 
         return wxQtLineInfo(pos, end);
@@ -139,7 +139,7 @@ public:
     virtual int GetLineLength(long lineNo) const wxOVERRIDE
     {
         wxQtLineInfo start = getLineStart(lineNo, DoGetValue());
-        if(start.startPos == wxString::npos)
+        if ( start.startPos == wxString::npos )
             return -1;
 
         return start.endPos - start.startPos;
@@ -150,7 +150,7 @@ public:
         const wxString &value = DoGetValue();
 
         wxQtLineInfo start = getLineStart(lineNo, value);
-        if(start.startPos == wxString::npos)
+        if ( start.startPos == wxString::npos )
             return wxString();
 
         return value.Mid(start.startPos, start.endPos - start.startPos);
@@ -158,14 +158,14 @@ public:
 
     virtual long XYToPosition(long x, long y) const wxOVERRIDE
     {
-        if(x < 0 || y < 0)
+        if ( x < 0 || y < 0 )
             return -1;
 
         wxQtLineInfo start = getLineStart(y, DoGetValue());
-        if(start.startPos == wxString::npos)
+        if ( start.startPos == wxString::npos )
             return -1;
 
-        if(start.endPos - start.startPos < static_cast<size_t>(x))
+        if ( start.endPos - start.startPos < static_cast<size_t>(x) )
             return -1;
 
         return start.startPos + x;
@@ -175,14 +175,15 @@ public:
     {
         const wxString &value = DoGetValue();
 
-        if(static_cast<size_t>(pos) > value.length()) return false;
+        if ( static_cast<size_t>(pos) > value.length() )
+          return false;
 
         int cnt = 0;
         int xval = 0;
 
         for(long xx = 0; xx < pos; xx++)
         {
-            if(value[xx] == '\n')
+            if ( value[xx] == '\n' )
             {
                 xval = 0;
                 cnt++;
@@ -300,7 +301,7 @@ public:
     {
         long selectionStart = edit->selectionStart();
 
-        if(selectionStart >= 0)
+        if ( selectionStart >= 0 )
             return selectionStart;
 
         return edit->cursorPosition();
@@ -371,9 +372,10 @@ public:
 
     virtual long XYToPosition(long x, long y) const wxOVERRIDE
     {
-        if(y == 0 && x >= 0)
+        if ( y == 0 && x >= 0 )
         {
-            if(static_cast<size_t>(x) <= DoGetValue().length()) return x;
+            if ( static_cast<size_t>(x) <= DoGetValue().length() )
+              return x;
         }
 
         return -1;
@@ -383,7 +385,8 @@ public:
     {
         const wxString &value = DoGetValue();
 
-        if(static_cast<size_t>(pos) > value.length()) return false;
+        if ( static_cast<size_t>(pos) > value.length() )
+          return false;
 
         *y = 0;
         *x = pos;
@@ -564,7 +567,7 @@ long wxTextCtrl::XYToPosition(long x, long y) const
 
 bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 {
-    if(x == NULL || y == NULL || pos < 0)
+    if ( x == NULL || y == NULL || pos < 0 )
         return false;
 
     return m_qtEdit->PositionToXY(pos, x, y);
@@ -602,10 +605,10 @@ wxString wxTextCtrl::DoGetValue() const
 void wxTextCtrl::SetSelection( long from, long to )
 {
     // SelectAll uses -1 to -1, adjust for qt:
-    if(to == -1)
+    if ( to == -1 )
         to = GetValue().length();
 
-    if(from == -1)
+    if ( from == -1 )
         from = 0;
 
     m_qtEdit->SetSelection( from, to );
@@ -613,7 +616,7 @@ void wxTextCtrl::SetSelection( long from, long to )
 
 void wxTextCtrl::GetSelection(long* from, long* to) const
 {
-    if(m_qtEdit->GetSelection(from, to))
+    if ( m_qtEdit->GetSelection(from, to) )
         return;
     // No selection, call base for default behaviour:
     wxTextEntry::GetSelection(from, to);
