@@ -209,7 +209,7 @@ wxString wxTextValidator::IsValid(const wxString& str) const
     for ( wxString::const_iterator i = str.begin(), end = str.end();
           i != end; ++i )
     {
-        if ( !IsValid(*i) )
+        if ( !IsValidChar(*i) )
         {
             return wxString::Format(
                 _("'%s' contains invalid character(s)"), str);
@@ -302,7 +302,7 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
         return;
 
     // Filter out invalid characters
-    if ( IsValid(static_cast<wxUniChar>(keyCode)) )
+    if ( IsValidChar(static_cast<wxUniChar>(keyCode)) )
         return;
 
     if ( !wxValidator::IsSilent() )
@@ -312,7 +312,7 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
     event.Skip(false);
 }
 
-bool wxTextValidator::IsValid(const wxUniChar& c) const
+bool wxTextValidator::IsValidChar(const wxUniChar& c) const
 {
     if ( !m_validatorStyle ) // no filtering if HasFlag(wxFILTER_NONE)
         return true;
