@@ -273,12 +273,6 @@ void MyServer::Advise()
         const wxString s = now.FormatTime() + " " + now.FormatDate();
         m_connection->Advise(m_connection->m_advise, s.mb_str(), wxNO_LEN);
 
-#if wxUSE_DDE_FOR_IPC
-        wxLogMessage("DDE Advise type argument cannot be wxIPC_PRIVATE. "
-                     "The client will receive it as wxIPC_TEXT, "
-                     " and receive the correct no of bytes, "
-                     "but not print a correct log entry.");
-#endif
         char bytes[3] = { '1', '2', '3' };
         m_connection->Advise(m_connection->m_advise, bytes, 3, wxIPC_PRIVATE);
     }
