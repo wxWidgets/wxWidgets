@@ -1157,7 +1157,8 @@ void FormMain::PopulateWithStandardItems ()
     // Set test information for cells in columns 3 and 4
     // (reserve column 2 for displaying units)
     wxPropertyGridIterator it;
-    wxBitmap bmp = wxArtProvider::GetBitmap(wxART_FOLDER);
+    int bmpH = pg->GetGrid()->GetRowHeight() - 2;
+    wxBitmap bmp = wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, wxSize(bmpH, bmpH));
 
     for ( it = pg->GetGrid()->GetIterator();
           !it.AtEnd();
