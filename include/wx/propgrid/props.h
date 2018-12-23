@@ -796,8 +796,8 @@ wxValidator* PROPNAME::DoGetValidator () const \
 
 #if wxUSE_EDITABLELISTBOX
 
+#include "wx/bmpbuttn.h"
 #include "wx/editlbox.h"
-#include <wx/bmpbuttn.h>
 
 #define wxAEDIALOG_STYLE \
     (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE)
