@@ -9,31 +9,7 @@
 #define _WX_QT_TEXTCTRL_H_
 
 class QScrollArea;
-
-class wxQtEdit
-{
-public:
-    virtual ~wxQtEdit() {}
-
-    virtual bool IsModified() const = 0;
-    virtual int GetNumberOfLines() const = 0;
-    virtual wxString DoGetValue() const = 0;
-    virtual long GetInsertionPoint() const = 0;
-    virtual QWidget *GetHandle() const = 0;
-    virtual int GetLineLength(long lineNo) const = 0;
-    virtual wxString GetLineText(long lineNo) const = 0;
-    virtual bool GetSelection(long *from, long *to) const = 0;
-    virtual long XYToPosition(long x, long y) const = 0;
-    virtual bool PositionToXY(long pos, long *x, long *y) const = 0;
-    virtual QScrollArea *ScrollBarsContainer() const = 0;
-    virtual void WriteText( const wxString &text ) = 0;
-    virtual void MarkDirty() = 0;
-    virtual void DiscardEdits() = 0;
-    virtual void blockSignals(bool block) = 0;
-    virtual void SetValue( const wxString &value ) = 0;
-    virtual void SetSelection( long from, long to ) = 0;
-    virtual void SetInsertionPoint(long pos) = 0;
-};
+class wxQtEdit;
 
 class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
 {

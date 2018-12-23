@@ -14,13 +14,53 @@
 #include "wx/qt/private/winevent.h"
 #include "wx/qt/private/utils.h"
 
-#include <algorithm>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QTextEdit>
 
 
+
+/*
+ * Abstract base class for wxQtSingleLineEdit and wxQtMultiLineEdit.
+ * This splits the polymorphic behaviour into two separate classes, avoiding
+ * unnecessary branches.
+ */
+class wxQtEdit
+{
+public:
+    virtual ~wxQtEdit() {}
+
+    virtual bool IsModified() const = 0;
+    virtual int GetNumberOfLines() const = 0;
+    virtual wxString DoGetValue() const = 0;
+    virtual long GetInsertionPoint() const = 0;
+    virtual QWidget *GetHandle() const = 0;
+    virtual int GetLineLength(long lineNo) const = 0;
+    virtual wxString GetLineText(long lineNo) const = 0;
+    virtual bool GetSelection(long *from, long *to) const = 0;
+    virtual long XYToPosition(long x, long y) const = 0;
+    virtual bool PositionToXY(long pos, long *x, long *y) const = 0;
+    virtual QScrollArea *ScrollBarsContainer() const = 0;
+    virtual void WriteText( const wxString &text ) = 0;
+    virtual void MarkDirty() = 0;
+    virtual void DiscardEdits() = 0;
+    virtual void blockSignals(bool block) = 0;
+    virtual void SetValue( const wxString &value ) = 0;
+    virtual void SetSelection( long from, long to ) = 0;
+    virtual void SetInsertionPoint(long pos) = 0;
+};
+
 namespace
 {
+struct wxQtLineInfo 
+{
+  size_t startPos, endPos;
+  wxQtLineInfo(size_t start, size_t end) :
+    startPos(start),
+    endPos(end)
+  {
+  }
+};
+
 class wxQtLineEdit : public wxQtEventSignalHandler< QLineEdit, wxTextCtrl >
 {
 public:
@@ -74,7 +114,7 @@ public:
         return std::count(value.begin(), value.end(), '\n') + 1;
     }
 
-    std::pair<size_t, size_t> getLineStart(long lineNo, const wxString &value) const
+    wxQtLineInfo getLineStart(long lineNo, const wxString &value) const
     {
         size_t pos = 0;
         long cnt = 0;
@@ -82,7 +122,8 @@ public:
         while(cnt < lineNo)
         {
             size_t tpos = value.find('\n', pos);
-            if(tpos == wxString::npos) return std::make_pair(tpos, tpos);
+            if(tpos == wxString::npos)
+              return wxQtLineInfo(tpos, tpos);
 
             pos = tpos + 1;
             cnt++;
@@ -92,27 +133,27 @@ public:
         if(end == wxString::npos)
             end = value.length();
 
-        return std::make_pair(pos, end);
+        return wxQtLineInfo(pos, end);
     }
 
     virtual int GetLineLength(long lineNo) const wxOVERRIDE
     {
-        std::pair<size_t, size_t> start = getLineStart(lineNo, DoGetValue());
-        if(start.first == wxString::npos)
+        wxQtLineInfo start = getLineStart(lineNo, DoGetValue());
+        if(start.startPos == wxString::npos)
             return -1;
 
-        return start.second - start.first;
+        return start.endPos - start.startPos;
     }
 
     virtual wxString GetLineText(long lineNo) const wxOVERRIDE
     {
         const wxString &value = DoGetValue();
 
-        std::pair<size_t, size_t> start = getLineStart(lineNo, value);
-        if(start.first == wxString::npos)
+        wxQtLineInfo start = getLineStart(lineNo, value);
+        if(start.startPos == wxString::npos)
             return wxString();
 
-        return value.Mid(start.first, start.second - start.first);
+        return value.Mid(start.startPos, start.endPos - start.startPos);
     }
 
     virtual long XYToPosition(long x, long y) const wxOVERRIDE
@@ -120,14 +161,14 @@ public:
         if(x < 0 || y < 0)
             return -1;
 
-        std::pair<size_t, size_t> start = getLineStart(y, DoGetValue());
-        if(start.first == wxString::npos)
+        wxQtLineInfo start = getLineStart(y, DoGetValue());
+        if(start.startPos == wxString::npos)
             return -1;
 
-        if(start.second - start.first < static_cast<size_t>(x))
+        if(start.endPos - start.startPos < static_cast<size_t>(x))
             return -1;
 
-        return start.first +  x;
+        return start.startPos + x;
     }
 
     virtual bool PositionToXY(long pos, long *x, long *y) const wxOVERRIDE
