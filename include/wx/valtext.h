@@ -133,7 +133,7 @@ protected:
     }
 
     // returns the error message if the contents of 'str' are invalid
-    wxString IsValid(const wxString& str) const;
+    virtual wxString IsValid(const wxString& str) const;
 
     // returns false if the character is invalid
     bool IsValid(const wxUniChar& c) const;
