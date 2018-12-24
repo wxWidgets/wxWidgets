@@ -748,12 +748,20 @@ bool wxDDEConnection::DoAdvise(const wxString& item,
                                size_t size,
                                wxIPCFormat format)
 {
+    // Unfortunately we currently always use the same CF_TEXT in StartAdvise()
+    // but allow calling Advise() with different formats. This doesn't map well
+    // to the DDE API, so the price to pay for it is that we need to send the
+    // actual format used as part of the data, even if this means making
+    // another copy of it.
+    wxCharBuffer buf;
+    buf.extend(size + 1);
+    *buf.data() = format;
+    memcpy(buf.data() + 1, data, size);
+
     HSZ item_atom = DDEGetAtom(item);
     HSZ topic_atom = DDEGetAtom(m_topicName);
-    m_sendingData = data;  // mrf: potential for scope problems here?
-    m_dataSize = size;
-    // wxIPC_PRIVATE does not succeed, so use text instead
-    m_dataType = format == wxIPC_PRIVATE ? wxIPC_TEXT : format;
+    m_sendingData = buf.data();
+    m_dataSize = size + 1;
 
     bool ok = DdePostAdvise(DDEIdInst, topic_atom, item_atom) != 0;
     if ( !ok )
@@ -986,11 +994,12 @@ _DDECallback(UINT wType,
                                         connection->m_dataSize,
                                         0,
                                         hsz2,
-                                        connection->m_dataType,
+                                        wFmt,
                                         0
                                     );
 
                     connection->m_sendingData = NULL;
+                    connection->m_dataSize = 0;
 
                     return (DDERETURN)data;
                 }
@@ -1008,18 +1017,21 @@ _DDECallback(UINT wType,
 
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
 
-                    void *data = connection->GetBufferAtLeast(len);
+                    BYTE* const data = static_cast<BYTE*>(connection->GetBufferAtLeast(len));
                     wxASSERT_MSG(data != NULL,
                                  wxT("Buffer too small in _DDECallback (XTYP_ADVDATA)") );
 
-                    DdeGetData(hData, (LPBYTE)data, len, 0);
+                    DdeGetData(hData, data, len, 0);
 
                     DdeFreeDataHandle(hData);
+
+                    // Our code in DoAdvise() prepends the actual format of the
+                    // data as the first byte, extract it back now.
                     if ( connection->OnAdvise(connection->m_topicName,
                                               item_name,
-                                              data,
-                                              (int)len,
-                                              (wxIPCFormat) wFmt) )
+                                              data + 1,
+                                              (int)len - 1,
+                                              (wxIPCFormat)*data) )
                     {
                         return (DDERETURN)(DWORD)DDE_FACK;
                     }

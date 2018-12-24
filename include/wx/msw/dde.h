@@ -70,7 +70,6 @@ public:
   WXHCONV       m_hConv;
   const void*   m_sendingData;
   int           m_dataSize;
-  wxIPCFormat   m_dataType;
 
   wxDECLARE_NO_COPY_CLASS(wxDDEConnection);
   wxDECLARE_DYNAMIC_CLASS(wxDDEConnection);
