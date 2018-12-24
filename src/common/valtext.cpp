@@ -92,13 +92,6 @@ void wxTextValidator::SetStyle(long style)
 
         m_validatorStyle |= wxFILTER_ALPHANUMERIC;
     }
-
-    // the following flags are no longer needed, and should be unset here
-    // unconditionally to not break our validation logic.
-    m_validatorStyle &= ~wxFILTER_INCLUDE_LIST;
-    m_validatorStyle &= ~wxFILTER_INCLUDE_CHAR_LIST;
-    m_validatorStyle &= ~wxFILTER_EXCLUDE_LIST;
-    m_validatorStyle &= ~wxFILTER_EXCLUDE_CHAR_LIST;
 }
 
 bool wxTextValidator::Copy(const wxTextValidator& val)
@@ -269,12 +262,54 @@ void wxTextValidator::AddCharExcludes(const wxString& chars)
     m_charExcludes += chars;
 }
 
+void wxTextValidator::SetIncludes(const wxArrayString& includes)
+{
+    // preserve compatibily with versions prior 3.1.3 which used m_includes
+    // to store the list of char includes.
+    if ( HasFlag(wxFILTER_INCLUDE_CHAR_LIST) )
+    {
+        for ( wxArrayString::const_iterator i = includes.begin(),
+              end = includes.end(); i != end; ++i )
+        {
+            AddCharIncludes(*i);
+        }
+
+        return;
+    }
+
+    wxCHECK_RET( (m_includes.Index(wxString()) == wxNOT_FOUND),
+        _("Empty strings can't be added to the list of includes.") );
+
+    m_includes = includes;
+}
+
 void wxTextValidator::AddInclude(const wxString& include)
 {
     wxCHECK_RET( !include.empty(),
         _("Empty strings can't be added to the list of includes.") );
 
     m_includes.push_back(include);
+}
+
+void wxTextValidator::SetExcludes(const wxArrayString& excludes)
+{
+    // preserve compatibily with versions prior 3.1.3 which used m_excludes
+    // to store the list of char excludes.
+    if ( HasFlag(wxFILTER_EXCLUDE_CHAR_LIST) )
+    {
+        for ( wxArrayString::const_iterator i = excludes.begin(),
+              end = excludes.end(); i != end; ++i )
+        {
+            AddCharExcludes(*i);
+        }
+
+        return;
+    }
+
+    wxCHECK_RET( (m_excludes.Index(wxString()) == wxNOT_FOUND),
+        _("Empty strings can't be added to the list of excludes.") );
+
+    m_excludes = excludes;
 }
 
 void wxTextValidator::AddExclude(const wxString& exclude)

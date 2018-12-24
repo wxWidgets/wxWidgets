@@ -80,7 +80,7 @@ public:
     void SetCharIncludes(const wxString& chars);
     void AddCharIncludes(const wxString& chars);
 
-    void SetIncludes(const wxArrayString& includes) { m_includes = includes; }
+    void SetIncludes(const wxArrayString& includes);
     void AddInclude(const wxString& include);
 
     const wxArrayString& GetIncludes() const { return m_includes; }
@@ -92,7 +92,7 @@ public:
     void SetCharExcludes(const wxString& chars);
     void AddCharExcludes(const wxString& chars);
 
-    void SetExcludes(const wxArrayString& excludes) { m_excludes = excludes; }
+    void SetExcludes(const wxArrayString& excludes);
     void AddExclude(const wxString& exclude);
 
     const wxArrayString& GetExcludes() const { return m_excludes; }
