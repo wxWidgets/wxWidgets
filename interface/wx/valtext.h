@@ -62,7 +62,18 @@ enum wxTextValidatorStyle
     /// Use an exclude list. The validator checks if each input character is
     /// in the list (one character per list element), complaining if it is.
     /// See wxTextValidator::SetCharExcludes().
-    wxFILTER_EXCLUDE_CHAR_LIST
+    wxFILTER_EXCLUDE_CHAR_LIST,
+
+    /// Non-hexadecimal characters are filtered out.
+    /// Uses the wxWidgets wrapper for the standard CRT function @c isxdigit
+    /// (which is locale-dependent) on all characters of the string.
+    wxFILTER_XDIGITS,
+
+    /// A convenience flag for use with the other flags.
+    /// The space character is more often used with alphanumeric characters
+    /// which makes setting a flag more easier than calling SetCharIncludes(" ")
+    /// for that matter.
+    wxFILTER_SPACE
 };
 
 /**
@@ -83,7 +94,7 @@ class wxTextValidator : public wxValidator
 {
 public:
     /**
-        Default constructor.
+        Copy constructor.
     */
     wxTextValidator(const wxTextValidator& validator);
 
@@ -106,14 +117,28 @@ public:
     virtual wxObject* Clone() const;
 
     /**
-        Returns a reference to the exclude list (the list of invalid values).
+        Returns a copy of the exclude char list (the list of invalid characters).
+
+        @since 3.1.3
     */
-    wxArrayString& GetExcludes();
+    wxString GetCharExcludes() const;
 
     /**
-        Returns a reference to the include list (the list of valid values).
+        Returns a copy of the include char list (the list of additional valid characters).
+
+        @since 3.1.3
     */
-    wxArrayString& GetIncludes();
+    wxString GetCharIncludes() const;
+
+    /**
+        Returns a const reference to the exclude list (the list of invalid values).
+    */
+    const wxArrayString& GetExcludes() const;
+
+    /**
+        Returns a const reference to the include list (the list of valid values).
+    */
+    const wxArrayString& GetIncludes() const;
 
     /**
         Returns the validator style.
@@ -139,11 +164,10 @@ public:
     void SetExcludes(const wxArrayString& stringList);
 
     /**
-        Breaks the given @a chars strings in single characters and sets the
-        internal wxArrayString used to store the "excluded" characters
-        (see SetExcludes()).
+        Sets the exclude char list (invalid characters for the user input).
 
-        This function is mostly useful when @c wxFILTER_EXCLUDE_CHAR_LIST was used.
+        This function may cancel the effect of @c wxFILTER_SPACE if the passed
+        in string @a chars contains the @b space character.
     */
     void SetCharExcludes(const wxString& chars);
 
@@ -153,23 +177,45 @@ public:
     void SetIncludes(const wxArrayString& stringList);
 
     /**
-        Breaks the given @a chars strings in single characters and sets the
-        internal wxArrayString used to store the "included" characters
-        (see SetIncludes()).
-
-        This function is mostly useful when @c wxFILTER_INCLUDE_CHAR_LIST was used.
+        Sets the include char list (additional valid values for the user input).
     */
     void SetCharIncludes(const wxString& chars);
+
+    /**
+        Adds @a exclude to the list of excluded values.
+
+        @since 3.1.3
+    */
+    void AddExclude(const wxString& exclude);
+
+    /**
+        Adds @a include to the list of included values.
+
+        @since 3.1.3
+    */
+    void AddInclude(const wxString& include);
+
+    /**
+        Adds @a chars to the list of excluded characters.
+
+        @since 3.1.3
+    */
+    void AddCharExcludes(const wxString& chars);
+
+    /**
+        Adds @a chars to the list of included characters.
+
+        @since 3.1.3
+    */
+    void AddCharIncludes(const wxString& chars);
+
 
     /**
         Sets the validator style which must be a combination of one or more
         of the ::wxTextValidatorStyle values.
 
-        Note that not all possible combinations make sense!
-        Also note that the order in which the checks are performed is important,
-        in case you specify more than a single style.
-        wxTextValidator will perform the checks in the same definition order
-        used in the ::wxTextValidatorStyle enumeration.
+        Note that wxFILTER_{INCLUDE,EXCLUDE}[_CHAR]_LIST pairs are no longer
+        required and are kept for backward compatibility only.
     */
     void SetStyle(long style);
 
@@ -192,21 +238,48 @@ public:
 protected:
 
     /**
-        Returns @true if all the characters of the given @a val string
-        are present in the include list (set by SetIncludes() or SetCharIncludes()).
+        Returns @true if the char @a c is allowed to be in the user input string.
+        additional characters, set by SetCharIncludes() or AddCharIncludes() are
+        also considered.
+
+        @since 3.1.3
     */
-    bool ContainsOnlyIncludedCharacters(const wxString& val) const;
+    bool IsCharIncluded(const wxUniChar& c) const;
 
     /**
-        Returns true if at least one character of the given @a val string
-        is present in the exclude list (set by SetExcludes() or SetCharExcludes()).
+        Returns @true if the char @a c is not allowed to be in the user input string.
+        (characters set by SetCharExcludes() or AddCharExcludes()).
+
+        @since 3.1.3
     */
-    bool ContainsExcludedCharacters(const wxString& val) const;
+    bool IsCharExcluded(const wxUniChar& c) const;
+
+    /**
+        Returns @true if the string @a str is one of the includes strings set by
+        SetIncludes() or AddInclude().
+
+        Notice that an empty include list is ignored (i.e. we should return true
+        if the include list is empty).
+
+        @since 3.1.3
+    */
+    bool IsIncluded(const wxString& str) const;
+
+    /**
+        Returns @true if the string @a str is one of the excludes strings set by
+        SetExcludes() or AddExclude().
+
+        @since 3.1.3
+    */
+    bool IsExcluded(const wxString& str) const;
 
     /**
         Returns the error message if the contents of @a val are invalid
         or the empty string if @a val is valid.
     */
     virtual wxString IsValid(const wxString& val) const;
+
+    /// Returns false if the character @a c is invalid.
+    bool IsValidChar(const wxUniChar& c) const;
 };
 
