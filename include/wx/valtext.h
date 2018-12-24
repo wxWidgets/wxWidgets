@@ -81,11 +81,7 @@ public:
     void AddCharIncludes(const wxString& chars);
 
     void SetIncludes(const wxArrayString& includes) { m_includes = includes; }
-    void AddInclude(const wxString& include)
-    {
-        if ( !include.empty() )
-            m_includes.Add(include);
-    }
+    void AddInclude(const wxString& include);
 
     const wxArrayString& GetIncludes() const { return m_includes; }
     wxString GetCharIncludes() const { return m_charIncludes; }
@@ -97,11 +93,7 @@ public:
     void AddCharExcludes(const wxString& chars);
 
     void SetExcludes(const wxArrayString& excludes) { m_excludes = excludes; }
-    void AddExclude(const wxString& exclude)
-    {
-        if ( !exclude.empty() )
-            m_excludes.Add(exclude);
-    }
+    void AddExclude(const wxString& exclude);
 
     const wxArrayString& GetExcludes() const { return m_excludes; }
     wxString GetCharExcludes() const { return m_charExcludes; }
@@ -113,16 +105,17 @@ protected:
 
     bool IsCharIncluded(const wxUniChar& c) const
     {
-        return m_charIncludes.Find(c) != wxNOT_FOUND;
+        return m_charIncludes.find(c) != wxString::npos;
     }
 
     bool IsCharExcluded(const wxUniChar& c) const
     {
-        return m_charExcludes.Find(c) != wxNOT_FOUND;
+        return m_charExcludes.find(c) != wxString::npos;
     }
 
     bool IsIncluded(const wxString& str) const
     {
+        // N.B. the m_includes list should be ignored if it is empty.
         return m_includes.empty() || 
                 m_includes.Index(str) != wxNOT_FOUND;
     }

@@ -92,6 +92,13 @@ void wxTextValidator::SetStyle(long style)
 
         m_validatorStyle |= wxFILTER_ALPHANUMERIC;
     }
+
+    // the following flags are no longer needed, and should be unset here
+    // unconditionally to not break our validation logic.
+    m_validatorStyle &= ~wxFILTER_INCLUDE_LIST;
+    m_validatorStyle &= ~wxFILTER_INCLUDE_CHAR_LIST;
+    m_validatorStyle &= ~wxFILTER_EXCLUDE_LIST;
+    m_validatorStyle &= ~wxFILTER_EXCLUDE_CHAR_LIST;
 }
 
 bool wxTextValidator::Copy(const wxTextValidator& val)
@@ -222,17 +229,9 @@ wxString wxTextValidator::IsValid(const wxString& str) const
 
 void wxTextValidator::SetCharIncludes(const wxString& chars)
 {
-    for ( wxString::const_iterator i = chars.begin(), end = chars.end();
-          i != end; ++i )
-    {
-        if ( m_charExcludes.Find(*i) != wxNOT_FOUND )
-        {
-            wxLogWarning(_("A char should either be included or excluded!"));
-            return;
-        }
-    }
+    m_charIncludes.clear();
 
-    m_charIncludes = chars;
+    AddCharIncludes(chars);
 }
 
 void wxTextValidator::AddCharIncludes(const wxString& chars)
@@ -240,10 +239,9 @@ void wxTextValidator::AddCharIncludes(const wxString& chars)
     for ( wxString::const_iterator i = chars.begin(), end = chars.end();
           i != end; ++i )
     {
-        if ( m_charExcludes.Find(*i) != wxNOT_FOUND )
+        if ( m_charExcludes.find(*i) != wxString::npos )
         {
-            wxLogWarning(_("A char should either be included or excluded!"));
-            return;
+            wxFAIL_MSG("A char should either be included or excluded!");
         }
     }
 
@@ -252,17 +250,9 @@ void wxTextValidator::AddCharIncludes(const wxString& chars)
 
 void wxTextValidator::SetCharExcludes(const wxString& chars)
 {
-    for ( wxString::const_iterator i = chars.begin(), end = chars.end();
-          i != end; ++i )
-    {
-        if ( m_charIncludes.Find(*i) != wxNOT_FOUND )
-        {
-            wxLogWarning(_("A char should either be included or excluded!"));
-            return;
-        }
-    }
+    m_charExcludes.clear();
 
-    m_charExcludes = chars;
+    AddCharExcludes(chars);
 }
 
 void wxTextValidator::AddCharExcludes(const wxString& chars)
@@ -270,14 +260,29 @@ void wxTextValidator::AddCharExcludes(const wxString& chars)
     for ( wxString::const_iterator i = chars.begin(), end = chars.end();
           i != end; ++i )
     {
-        if ( m_charIncludes.Find(*i) != wxNOT_FOUND )
+        if ( m_charIncludes.find(*i) != wxString::npos )
         {
-            wxLogWarning(_("A char should either be included or excluded!"));
-            return;
+            wxFAIL_MSG("A char should either be included or excluded!");
         }
     }
 
     m_charExcludes += chars;
+}
+
+void wxTextValidator::AddInclude(const wxString& include)
+{
+    wxCHECK_RET( !include.empty(),
+        _("Empty strings can't be added to the list of includes.") );
+
+    m_includes.push_back(include);
+}
+
+void wxTextValidator::AddExclude(const wxString& exclude)
+{
+    wxCHECK_RET( !exclude.empty(),
+        _("Empty strings can't be added to the list of excludes.") );
+
+    m_excludes.push_back(exclude);
 }
 
 void wxTextValidator::OnChar(wxKeyEvent& event)
@@ -317,50 +322,38 @@ bool wxTextValidator::IsValidChar(const wxUniChar& c) const
     if ( !m_validatorStyle ) // no filtering if HasFlag(wxFILTER_NONE)
         return true;
 
-    if ( HasFlag(wxFILTER_SPACE) && wxIsspace(c) )
-        return true;
-
-    // Notice that if the same char is mistakenly present in both the
-    // include char list and exclude char list than the char will be
-    // excluded and a warning is given in debug build.
-
-    if ( IsCharExcluded(c) )
+    if ( IsCharExcluded(c) ) // disallow any char in the m_charExcludes.
         return false;
 
-    if ( IsCharIncluded(c) )
+    if ( IsCharIncluded(c) ) // allow any char in the m_charIncludes.
         return true;
 
-    static const long mask = wxFILTER_ASCII|wxFILTER_ALPHA|wxFILTER_NUMERIC|
-                      wxFILTER_ALPHANUMERIC|wxFILTER_DIGITS|wxFILTER_XDIGITS;
-    
-    long flags = m_validatorStyle & mask;
-
-    if ( !flags )
-        // accept whatever this character is.
+    if ( HasFlag(wxFILTER_SPACE) && wxIsspace(c) )
+        return true;
+    if ( HasFlag(wxFILTER_ASCII) && c.IsAscii() )
+        return true;
+    if ( HasFlag(wxFILTER_NUMERIC) && wxIsNumeric(c) )
+        return true;
+    if ( HasFlag(wxFILTER_ALPHANUMERIC) && wxIsalnum(c) )
+        return true;
+    if ( HasFlag(wxFILTER_ALPHA) && wxIsalpha(c) )
+        return true;
+    if ( HasFlag(wxFILTER_DIGITS) && wxIsdigit(c) )
+        return true;
+    if ( HasFlag(wxFILTER_XDIGITS) && wxIsxdigit(c) )
         return true;
 
-    // Turn off the wxFILTER_XXX if the corresponding check failed...
+    // N.B. if we are here, this means that the char c does not belong to any
+    //  of the character classes checked above (e.g. emoji char) in wich case
+    //  we should return false or none of them has been set when creating the
+    //  validator, which is logically equivalent to wxFILTER_NONE (i.e. no
+    //  filtering should take place) and true should be returned in this case.
 
-    if ( HasFlag(wxFILTER_ASCII) && !c.IsAscii() )
-        flags ^= wxFILTER_ASCII;
-    if ( HasFlag(wxFILTER_NUMERIC) && !wxIsNumeric(c) )
-        flags ^= wxFILTER_NUMERIC;
+    static const long mask =
+        wxFILTER_SPACE|wxFILTER_ASCII|wxFILTER_NUMERIC|
+        wxFILTER_ALPHANUMERIC|wxFILTER_ALPHA|wxFILTER_DIGITS|wxFILTER_XDIGITS;
 
-    if ( HasFlag(wxFILTER_ALPHANUMERIC) && !wxIsalnum(c) )
-    {
-        flags ^= wxFILTER_ALPHANUMERIC;
-    }
-    else
-    {
-        if ( HasFlag(wxFILTER_ALPHA) && !wxIsalpha(c) )
-            flags ^= wxFILTER_ALPHA;
-        if ( HasFlag(wxFILTER_DIGITS) && !wxIsdigit(c) )
-            flags ^= wxFILTER_DIGITS;
-        if ( HasFlag(wxFILTER_XDIGITS) && !wxIsxdigit(c) )
-            flags ^= wxFILTER_XDIGITS;
-    }
-
-    return flags != 0;
+    return !(m_validatorStyle & mask);
 }
 
 #endif
