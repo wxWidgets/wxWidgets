@@ -131,6 +131,10 @@ protected:
     // returns false if the character is invalid
     bool IsValidChar(const wxUniChar& c) const;
 
+    // These two functions (undocumented now) are kept for compatibility reasons.
+    bool ContainsOnlyIncludedCharacters(const wxString& val) const;
+    bool ContainsExcludedCharacters(const wxString& val) const;
+
 protected:
     long                 m_validatorStyle;
     wxString*            m_stringValue;

@@ -391,5 +391,31 @@ bool wxTextValidator::IsValidChar(const wxUniChar& c) const
     return !(m_validatorStyle & mask);
 }
 
+// kept for compatibility reasons.
+bool wxTextValidator::ContainsOnlyIncludedCharacters(const wxString& str) const
+{
+    for ( wxString::const_iterator i = str.begin(), end = str.end();
+          i != end; ++i )
+    {
+        if ( !IsCharIncluded(*i) )
+            return false;
+    }
+
+    return true;
+}
+
+// kept for compatibility reasons.
+bool wxTextValidator::ContainsExcludedCharacters(const wxString& str) const
+{
+    for ( wxString::const_iterator i = str.begin(), end = str.end();
+          i != end; ++i )
+    {
+        if ( IsCharExcluded(*i) )
+            return true;
+    }
+
+    return false;
+}
+
 #endif
   // wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
