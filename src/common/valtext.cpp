@@ -86,9 +86,8 @@ void wxTextValidator::SetStyle(long style)
     if ( HasFlag(wxFILTER_ALPHA) && 
         (HasFlag(wxFILTER_DIGITS) || HasFlag(wxFILTER_XDIGITS)) )
     {
-        m_validatorStyle &= ~wxFILTER_ALPHA;
-        m_validatorStyle &= ~wxFILTER_DIGITS;
-        m_validatorStyle &= ~wxFILTER_XDIGITS;
+        m_validatorStyle &=
+            ~(wxFILTER_ALPHA|wxFILTER_DIGITS|wxFILTER_XDIGITS);
 
         m_validatorStyle |= wxFILTER_ALPHANUMERIC;
     }
