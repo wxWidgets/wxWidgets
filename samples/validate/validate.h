@@ -48,7 +48,6 @@ public:
             const wxSize& size = wxDefaultSize,
             const long style = wxDEFAULT_DIALOG_STYLE);
 
-    bool TransferDataToWindow() wxOVERRIDE;
     wxTextCtrl *m_text;
     wxComboBox *m_combobox;
 

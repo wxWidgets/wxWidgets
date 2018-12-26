@@ -40,8 +40,6 @@
 // Global data
 // ----------------------------------------------------------------------------
 
-MyData g_data;
-
 wxString g_listbox_choices[] =
     {"one",  "two",  "three"};
 
@@ -50,6 +48,8 @@ wxString g_combobox_choices[] =
 
 wxString g_radiobox_choices[] =
     {"green", "yellow", "red"};
+
+MyData g_data;
 
 // ----------------------------------------------------------------------------
 // MyData
@@ -63,6 +63,7 @@ MyData::MyData()
     m_string = "Spaces are invalid here";
     m_string2 = "Valid text";
     m_listbox_choices.Add(0);
+    m_combobox_choice = g_combobox_choices[0];
     m_intValue = 0;
     m_smallIntValue = 3;
     m_doubleValue = 12354.31;
@@ -391,17 +392,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     // make the dialog a bit bigger than its minimal size:
     SetSize(GetBestSize()*1.5);
-}
 
-bool MyDialog::TransferDataToWindow()
-{
-    bool r = wxDialog::TransferDataToWindow();
-
-    // These function calls have to be made here, after the
-    // dialog has been created.
+    // Now sets the focus to m_text
     m_text->SetFocus();
-    m_combobox->SetSelection(0);
-
-    return r;
 }
-
