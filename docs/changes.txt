@@ -124,6 +124,10 @@ All (GUI):
 - Allow changing tooltip text for button allowing to enter a new string
   in wxPGArrayEditorDialog.
 
+wxMSW:
+
+- Fix passing Unicode strings via wxIPC when using DDE.
+
 
 3.1.2: (released 2018-12-10)
 ----------------------------
