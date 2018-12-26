@@ -4910,11 +4910,10 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                             m_draggedSplitter = splitterHit;
                             m_dragOffset = splitterHitOffset;
 
-                        #if wxPG_REFRESH_CONTROLS
-                            // Fixes button disappearance bug
                             if ( m_wndEditor2 )
-                                m_wndEditor2->Show ( false );
-                        #endif
+                            {
+                                m_wndEditor2->Hide();
+                            }
 
                             m_startingSplitterX = x - splitterHitOffset;
                         }
@@ -5273,11 +5272,10 @@ bool wxPropertyGrid::HandleMouseUp( int x, unsigned int WXUNUSED(y),
             m_wndEditor->Show ( true );
         }
 
-    #if wxPG_REFRESH_CONTROLS
-        // Fixes button disappearance bug
         if ( m_wndEditor2 )
-            m_wndEditor2->Show ( true );
-    #endif
+        {
+            m_wndEditor2->Show(true);
+        }
 
         // This clears the focus.
         m_editorFocused = false;
