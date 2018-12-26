@@ -2823,12 +2823,16 @@ void wxPropertyGrid::DoSetSplitterPosition( int newxpos,
 
 void wxPropertyGrid::ResetColumnSizes( bool enableAutoResizing )
 {
-    wxPropertyGridPageState* state = m_pState;
-    if ( state )
-        state->ResetColumnSizes(0);
+    if ( m_pState )
+    {
+        m_pState->ResetColumnSizes(0);
+        if ( GetSelection() )
+            CorrectEditorWidgetSizeX();
+        Refresh();
 
-    if ( enableAutoResizing && HasFlag(wxPG_SPLITTER_AUTO_CENTER) )
-        m_pState->m_dontCenterSplitter = false;
+        if ( enableAutoResizing && HasFlag(wxPG_SPLITTER_AUTO_CENTER) )
+            m_pState->m_dontCenterSplitter = false;
+    }
 }
 
 // -----------------------------------------------------------------------
