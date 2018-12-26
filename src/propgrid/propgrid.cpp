@@ -2182,10 +2182,17 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     int gridWidth = state->GetVirtualWidth();
 
-    // Calculate position of the right edge of the last cell
-    int cellX = x + 1;
+    // Calculate splitters positions
+    wxVector<int> splitterPos;
+    splitterPos.reserve(colCount);
+    int sx = x;
     for (wxVector<int>::const_iterator cit = colWidths.begin(); cit != colWidths.end(); ++cit)
-        cellX += *cit;
+    {
+        sx += *cit;
+        splitterPos.push_back(sx);
+    }
+    // Calculate position of the right edge of the last cell
+    int cellX = sx + 1;
 
     y = firstItemTopY;
     for ( unsigned int arrInd=1;
@@ -2244,12 +2251,10 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         }
 
         // Splitters
-        int sx = x;
-
-        for ( unsigned int si = 0; si < colCount; si++ )
+        for (wxVector<int>::const_iterator spit = splitterPos.begin(); spit != splitterPos.end(); ++spit)
         {
-            sx += colWidths[si];
-            dc.DrawLine( sx, y, sx, y2 );
+            int spx = *spit;
+            dc.DrawLine(spx, y, spx, y2);
         }
 
         // Horizontal Line, below
