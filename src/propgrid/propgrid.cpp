@@ -2182,6 +2182,11 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     int gridWidth = state->GetVirtualWidth();
 
+    // Calculate position of the right edge of the last cell
+    int cellX = x + 1;
+    for (wxVector<int>::const_iterator cit = colWidths.begin(); cit != colWidths.end(); ++cit)
+        cellX += *cit;
+
     y = firstItemTopY;
     for ( unsigned int arrInd=1;
           nextP && y <= lastItemBottomY;
@@ -2377,16 +2382,12 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         int firstCellX = cellRect.x;
 
         // Calculate cellRect.x for the last cell
-        unsigned int ci = 0;
-        int cellX = x + 1;
-        for ( ci = 0; ci < colCount; ci++ )
-            cellX += colWidths[ci];
         cellRect.x = cellX;
 
         // Draw cells from back to front so that we can easily tell if the
         // cell on the right was empty from text
         bool prevFilled = true;
-        ci = colCount;
+        unsigned int ci = colCount;
         do
         {
             ci--;
