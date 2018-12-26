@@ -1010,33 +1010,12 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
 
     unsigned int i;
     unsigned int lastColumn = m_colWidths.size() - 1;
-    int width = m_width;
     int clientWidth = pg->GetClientSize().x;
-
-    //
-    // Column to reduce, if needed. Take last one that exceeds minimum width.
-    int reduceCol = -1;
 
     wxLogTrace("propgrid",
                wxS("ColumnWidthCheck (virtualWidth: %i, clientWidth: %i)"),
-               width, clientWidth);
+               m_width, clientWidth);
 
-    //
-    // Check min sizes
-    for ( i=0; i<m_colWidths.size(); i++ )
-    {
-        int min = GetColumnMinWidth(i);
-        if ( m_colWidths[i] <= min )
-        {
-            m_colWidths[i] = min;
-        }
-        else
-        {
-            // Always reduce the last column that is larger than minimum size
-            // (looks nicer, even with auto-centering enabled).
-            reduceCol = i;
-        }
-    }
 
     int colsWidth = pg->GetMarginWidth();
     for ( i=0; i<m_colWidths.size(); i++ )
@@ -1049,30 +1028,36 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
     // Then mode-based requirement
     if ( !pg->HasVirtualWidth() )
     {
-        int widthHigher = width - colsWidth;
+        int widthHigher = m_width - colsWidth;
 
         // Adapt colsWidth to width
-        if ( colsWidth < width )
+        if ( colsWidth < m_width )
         {
             // Increase column
             wxLogTrace("propgrid",
                        wxS("  Adjust last column to %i"),
                        m_colWidths[lastColumn] + widthHigher);
-            m_colWidths[lastColumn] = m_colWidths[lastColumn] + widthHigher;
+            m_colWidths[lastColumn] += widthHigher;
         }
-        else if ( colsWidth > width )
+        else if ( colsWidth > m_width )
         {
-            // Reduce column
-            if ( reduceCol != -1 )
+            widthHigher = -widthHigher;
+            // Always reduce the last column that is larger than minimum size
+            // (looks nicer, even with auto-centering enabled).
+            for (int reduceCol = (int)lastColumn; reduceCol >= 0 && widthHigher > 0; reduceCol--)
             {
-                wxLogTrace("propgrid",
-                           wxS("  Reduce column %i (by %i)"),
-                           reduceCol, -widthHigher);
+                // Reduce column, if possible.
+                if ( m_colWidths[reduceCol] > GetColumnMinWidth(reduceCol) )
+                {
+                    int d = wxMin(m_colWidths[reduceCol] - GetColumnMinWidth(reduceCol), widthHigher);
+                    wxLogTrace("propgrid", wxS("  Reduce column %i (by %i)"), reduceCol, d);
 
-                // Reduce widest column, and recheck
-                m_colWidths[reduceCol] = m_colWidths[reduceCol] + widthHigher;
-                CheckColumnWidths();
+                    m_colWidths[reduceCol] -= d;
+                    colsWidth -= d;
+                    widthHigher -= d;
+                }
             }
+            m_width = colsWidth;
         }
     }
     else
