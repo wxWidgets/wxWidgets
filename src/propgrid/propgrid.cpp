@@ -2124,11 +2124,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     wxBrush capbgbrush(m_colCapBack,wxBRUSHSTYLE_SOLID);
     wxPen linepen(m_colLine,1,wxPENSTYLE_SOLID);
 
-    wxColour selBackCol;
-    if ( isPgEnabled )
-        selBackCol = m_colSelBack;
-    else
-        selBackCol = m_colMargin;
+    wxColour selBackCol = isPgEnabled ? m_colSelBack : m_colMargin;
 
     // pen that has same colour as text
     wxPen outlinepen(m_colPropFore,1,wxPENSTYLE_SOLID);
