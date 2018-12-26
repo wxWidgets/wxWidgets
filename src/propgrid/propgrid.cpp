@@ -4980,9 +4980,7 @@ bool wxPropertyGrid::HandleMouseDoubleClick( int WXUNUSED(x),
     if ( m_propHover )
     {
         // Select property here as well
-        wxPGProperty* p = m_propHover;
-
-        AddToSelectionFromInputEvent(p, m_colHover, &event);
+        AddToSelectionFromInputEvent(m_propHover, m_colHover, &event);
 
         // Send double-click event.
         SendEvent( wxEVT_PG_DOUBLE_CLICK, m_propHover );
