@@ -1008,7 +1008,6 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
 
     wxPropertyGrid* pg = GetGrid();
 
-    unsigned int i;
     int clientWidth = pg->GetClientSize().x;
 
     wxLogTrace("propgrid",
@@ -1017,8 +1016,8 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
 
 
     int colsWidth = pg->GetMarginWidth();
-    for ( i=0; i<m_colWidths.size(); i++ )
-        colsWidth += m_colWidths[i];
+    for (wxVector<int>::const_iterator it = m_colWidths.begin(); it != m_colWidths.end(); ++it)
+        colsWidth += *it;
 
     wxLogTrace("propgrid",
                wxS("  HasVirtualWidth: %i  colsWidth: %i"),
@@ -1074,9 +1073,9 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
             pg->RecalculateVirtualSize();
     }
 
-    for ( i=0; i<m_colWidths.size(); i++ )
+    for (size_t i=0; i<m_colWidths.size(); i++)
     {
-        wxLogTrace("propgrid", wxS("col%i: %i"), i, m_colWidths[i]);
+        wxLogTrace("propgrid", wxS("col%zu: %i"), i, m_colWidths[i]);
     }
 
     // Auto center splitter
