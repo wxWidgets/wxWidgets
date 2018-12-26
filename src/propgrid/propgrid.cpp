@@ -841,7 +841,7 @@ bool wxPropertyGrid::AddToSelectionFromInputEvent( wxPGProperty* prop,
             {
                 // Allow right-click for context menu without
                 // disturbing the selection.
-                if ( GetSelectedProperties().size() <= 1 ||
+                if ( selection.size() <= 1 ||
                      !alreadySelected )
                     return DoSelectAndEdit(prop, colIndex, selFlags);
                 return true;
@@ -870,7 +870,7 @@ bool wxPropertyGrid::AddToSelectionFromInputEvent( wxPGProperty* prop,
         {
             res = DoAddToSelection(prop, selFlags);
         }
-        else if ( GetSelectedProperties().size() > 1 )
+        else if ( selection.size() > 1 )
         {
             res = DoRemoveFromSelection(prop, selFlags);
         }
