@@ -854,7 +854,7 @@ bool wxPropertyGrid::AddToSelectionFromInputEvent( wxPGProperty* prop,
                 }
                 else if ( mouseEvent->ShiftDown() )
                 {
-                    if ( selection.size() > 0 && !prop->IsCategory() )
+                    if ( !selection.empty() && !prop->IsCategory() )
                         addToExistingSelection = 2;
                     else
                         addToExistingSelection = 1;
