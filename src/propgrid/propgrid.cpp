@@ -4873,7 +4873,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                                       m_propHover,
                                       NULL,
                                       wxPG_SEL_NOVALIDATE,
-                                      (unsigned int)m_draggedSplitter);
+                                      0); // dragged splitter is always 0 here
                         }
                     }
                     else if ( m_dragStatus == 0 )
