@@ -602,6 +602,19 @@ void TextValidatorDialog::SetValidatorFor(wxTextCtrl* txtCtrl)
     }
 
     tooltip.RemoveLast(); // remove the trailing '|' char.
+
+    if ( !m_charIncludes.empty() )
+    {
+        tooltip += "\nAllowed chars: ";
+        tooltip += m_charIncludes;
+    }
+
+    if ( !m_charExcludes.empty() )
+    {
+        tooltip += "\nDisallowed chars: ";
+        tooltip += m_charExcludes;
+    }
+
     txtCtrl->SetToolTip(tooltip);
 
     // Prepare @ set the wxTextValidator

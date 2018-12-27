@@ -16,6 +16,15 @@
     wxTextValidator::SetCharIncludes(), wxTextValidator::SetCharExcludes(),
     wxTextValidator::SetIncludes() or wxTextValidator::SetExcludes()
     after creating the validator with or without those flags changes nothing.
+
+    Caveat
+        wxFILTER_INCLUDE_CHAR_LIST is an exception from the notice above:
+        If this style is set with one or more of the following styles:
+        wxFILTER_ASCII, wxFILTER_ALPHA, wxFILTER_ALPHANUMERIC, wxFILTER_DIGITS,
+        wxFILTER_XDIGITS, wxFILTER_NUMERIC it just extends the character class
+        denoted by the aforementioned styles with those specified in the include
+        char list. If set alone, then the charactes allowed to be in the user input
+        are restricted to those, and only those, present in the include char list. 
 */
 enum wxTextValidatorStyle
 {

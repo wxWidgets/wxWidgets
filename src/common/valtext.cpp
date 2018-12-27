@@ -384,8 +384,8 @@ bool wxTextValidator::IsValidChar(const wxUniChar& c) const
     //  filtering should take place) and true should be returned in this case.
 
     static const long mask =
-        wxFILTER_SPACE|wxFILTER_ASCII|wxFILTER_NUMERIC|
-        wxFILTER_ALPHANUMERIC|wxFILTER_ALPHA|wxFILTER_DIGITS|wxFILTER_XDIGITS;
+        wxFILTER_SPACE|wxFILTER_ASCII|wxFILTER_NUMERIC|wxFILTER_ALPHANUMERIC|
+        wxFILTER_ALPHA|wxFILTER_DIGITS|wxFILTER_XDIGITS|wxFILTER_INCLUDE_CHAR_LIST;
 
     return !(m_validatorStyle & mask);
 }
