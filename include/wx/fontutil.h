@@ -118,7 +118,7 @@ public:
     // set the XFLD
     void SetXFontName(const wxString& xFontName);
 #elif defined(__WXMSW__)
-    wxNativeFontInfo(const LOGFONT& lf_) : lf(lf_), pointSize(0.0f) { }
+    wxNativeFontInfo(const LOGFONT& lf_);
 
     LOGFONT      lf;
 
@@ -126,6 +126,8 @@ public:
     // store the fractional point size separately if it was initially specified
     // as we can't losslessly recover it from LOGFONT later.
     float        pointSize;
+
+    int          m_ppi;
 #elif defined(__WXOSX__)
 public:
     wxNativeFontInfo(const wxNativeFontInfo& info) { Init(info); }
@@ -264,6 +266,7 @@ public:
     int GetPointSize() const;
     float GetFractionalPointSize() const;
     wxSize GetPixelSize() const;
+    int GetPPI() const;
     wxFontStyle GetStyle() const;
     wxFontWeight GetWeight() const;
     int GetNumericWeight() const;
@@ -276,6 +279,7 @@ public:
     void SetPointSize(int pointsize);
     void SetFractionalPointSize(float pointsize);
     void SetPixelSize(const wxSize& pixelSize);
+    void SetPPI(int ppi);
     void SetStyle(wxFontStyle style);
     void SetNumericWeight(int weight);
     void SetWeight(wxFontWeight weight);

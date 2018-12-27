@@ -69,6 +69,7 @@ public:
     void OnMouseEvent(wxMouseEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
     void OnEraseBackground(wxEraseEvent& event);
+    void OnDisplayChanged(wxDisplayChangedEvent& event);
 
     void SetFocus() wxOVERRIDE {}
 

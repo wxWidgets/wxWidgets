@@ -531,7 +531,7 @@ bool wxMSWOwnerDrawnButtonBase::MSWDrawButton(WXDRAWITEMSTRUCT *item)
     // choose the values consistent with those used for native, non
     // owner-drawn, buttons
     static const int MARGIN = 3;
-    int CXMENUCHECK = ::GetSystemMetrics(SM_CXMENUCHECK) + 1;
+    int CXMENUCHECK = wxGetSystemMetrics(SM_CXMENUCHECK, m_win) + 1;
 
     // the buttons were even bigger under Windows XP
     if ( wxGetWinVersion() < wxWinVersion_6 )

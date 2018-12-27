@@ -449,7 +449,8 @@ bool wxFontBase::operator==(const wxFont& font) const
             GetUnderlined() == font.GetUnderlined() &&
             GetStrikethrough() == font.GetStrikethrough() &&
             GetFaceName().IsSameAs(font.GetFaceName(), false) &&
-            GetEncoding() == font.GetEncoding()
+            GetEncoding() == font.GetEncoding() &&
+            GetPPI() == font.GetPPI()
            );
 }
 

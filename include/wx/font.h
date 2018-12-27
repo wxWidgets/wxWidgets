@@ -427,6 +427,7 @@ public:
     virtual int GetPointSize() const;
     virtual float GetFractionalPointSize() const = 0;
     virtual wxSize GetPixelSize() const;
+    virtual int GetPPI() const { return 0; }
     virtual bool IsUsingSizeInPixels() const;
     wxFontFamily GetFamily() const;
     virtual wxFontStyle GetStyle() const = 0;
@@ -449,6 +450,7 @@ public:
     virtual void SetPointSize( int pointSize );
     virtual void SetFractionalPointSize( float pointSize ) = 0;
     virtual void SetPixelSize( const wxSize& pixelSize );
+    virtual void SetPPI(int WXUNUSED(dpi)) {}
     virtual void SetFamily( wxFontFamily family ) = 0;
     virtual void SetStyle( wxFontStyle style ) = 0;
     virtual void SetNumericWeight( int weight ) = 0;

@@ -2132,7 +2132,7 @@ public:
         // reset the column widths
         lv->SetColumnWidth(0, IconWidth()+4);
         lv->SetColumnWidth(1, w - 2 - lv->GetColumnWidth(0) -
-                           wxSystemSettings::GetMetric(wxSYS_VSCROLL_X));
+                           wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, this));
         event.Skip();
     }
 
@@ -2409,8 +2409,9 @@ PRectangle ListBoxImpl::GetDesiredRect() {
 
     // give it a default if there are no lines, and/or add a bit more
     if (maxw == 0) maxw = 100;
+    wxWindow* win = wxDynamicCast(wid, wxWindow);
     maxw += aveCharWidth * 3 +
-            GETLBW(wid)->IconWidth() + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+            GETLBW(wid)->IconWidth() + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, win);
     if (maxw > 350)
         maxw = 350;
 

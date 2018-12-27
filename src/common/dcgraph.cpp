@@ -25,6 +25,7 @@
     #include "wx/dcmemory.h"
     #include "wx/math.h"
     #include "wx/geometry.h"
+    #include "wx/window.h"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -152,8 +153,8 @@ void wxGCDCImpl::SetGraphicsContext( wxGraphicsContext* ctx )
 wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxWindowDC& dc ) :
    wxDCImpl( owner )
 {
+    m_window = dc.GetWindow(); // before Init(), so m_window can be accessed
     Init(wxGraphicsContext::Create(dc));
-    m_window = dc.GetWindow();
 }
 
 wxGCDCImpl::wxGCDCImpl( wxDC *owner, const wxMemoryDC& dc ) :
@@ -195,6 +196,9 @@ void wxGCDCImpl::Init(wxGraphicsContext* ctx)
     m_pen = *wxBLACK_PEN;
     m_font = *wxNORMAL_FONT;
     m_brush = *wxWHITE_BRUSH;
+
+    if (m_window)
+        m_font.SetPPI(m_window->GetFont().GetPPI());
 
     m_isClipBoxValid = false;
 
@@ -490,9 +494,13 @@ void wxGCDCImpl::SetBackgroundMode( int mode )
 void wxGCDCImpl::SetFont( const wxFont &font )
 {
     m_font = font;
+
+    if (m_window)
+        m_font.SetPPI(m_window->GetFont().GetPPI());
+
     if ( m_graphicContext )
     {
-        m_graphicContext->SetFont(font, m_textForegroundColour);
+        m_graphicContext->SetFont(m_font, m_textForegroundColour);
     }
 }
 

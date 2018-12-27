@@ -792,13 +792,18 @@ wxSize wxWindowBase::DoGetBestSize() const
 
 double wxWindowBase::GetContentScaleFactor() const
 {
-    // Currently we don't support per-monitor DPI, so it's useless to construct
-    // a DC associated with this window, just use the global value.
-    //
-    // We also use just the vertical component of the DPI because it's the one
+    // We use just the vertical component of the DPI because it's the one
     // that counts most and, in practice, it's equal to the horizontal one
     // anyhow.
-    return double(wxScreenDC().GetPPI().y) / BASELINE_DPI;
+    wxSize activeDPI = wxDefaultSize;
+    wxTopLevelWindow *const tlw = wxDynamicCast(wxGetTopLevelParent(wxStaticCast(this, wxWindow)), wxTopLevelWindow);
+    if (tlw)
+        activeDPI = tlw->GetActiveDPI();
+
+    if (activeDPI != wxDefaultSize)
+        return double(activeDPI.y) / BASELINE_DPI;
+    else
+        return double(wxScreenDC().GetPPI().y) / BASELINE_DPI;
 }
 
 // helper of GetWindowBorderSize(): as many ports don't implement support for
@@ -1710,6 +1715,10 @@ wxFont wxWindowBase::GetFont() const
         if ( !font.IsOk() )
             font = GetClassDefaultAttributes().font;
 
+        wxTopLevelWindow *const tlw = wxDynamicCast(wxGetTopLevelParent(wxStaticCast(this, wxWindow)), wxTopLevelWindow);
+        if (tlw)
+            font.SetPPI(tlw->GetActiveDPI().y);
+
         return font;
     }
     else
@@ -1718,13 +1727,25 @@ wxFont wxWindowBase::GetFont() const
 
 bool wxWindowBase::SetFont(const wxFont& font)
 {
-    if ( font == m_font )
+    bool setPPI = false;
+    wxTopLevelWindow *const tlw = wxDynamicCast(wxGetTopLevelParent(wxStaticCast(this, wxWindow)), wxTopLevelWindow);
+    if (tlw)
+        setPPI = !font.IsOk() || (font.GetPPI() != tlw->GetActiveDPI().y) || tlw->IsDPIUpdating();
+
+    if (font == m_font && !setPPI)
     {
         // no change
         return false;
     }
 
     m_font = font;
+
+    if (!m_font.IsOk())
+        m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+
+    if (setPPI)
+        m_font.SetPPI(tlw->GetActiveDPI().y);
+
     m_hasFont = font.IsOk();
     m_inheritFont = m_hasFont;
 
@@ -2862,9 +2883,16 @@ void wxWindowBase::OnInternalIdle()
 
 /* static */
 wxSize
-wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
+wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* w)
 {
-    const wxSize dpi = wxScreenDC().GetPPI();
+    wxSize dpi = wxDefaultSize;
+    if (w) {
+        wxTopLevelWindow *const tlw = wxDynamicCast(wxGetTopLevelParent(wxStaticCast(w, wxWindow)), wxTopLevelWindow);
+        if (tlw)
+            dpi = tlw->GetActiveDPI();
+    }
+    if (dpi == wxDefaultSize)
+        dpi = wxScreenDC().GetPPI();
 
     // Take care to not scale -1 because it has a special meaning of
     // "unspecified" which should be preserved.
@@ -2874,9 +2902,16 @@ wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
 
 /* static */
 wxSize
-wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* WXUNUSED(w))
+wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* w)
 {
-    const wxSize dpi = wxScreenDC().GetPPI();
+    wxSize dpi = wxDefaultSize;
+    if (w) {
+        wxTopLevelWindow *const tlw = wxDynamicCast(wxGetTopLevelParent(wxStaticCast(w, wxWindow)), wxTopLevelWindow);
+        if (tlw)
+            dpi = tlw->GetActiveDPI();
+    }
+    if (dpi == wxDefaultSize)
+        dpi = wxScreenDC().GetPPI();
 
     // Take care to not scale -1 because it has a special meaning of
     // "unspecified" which should be preserved.

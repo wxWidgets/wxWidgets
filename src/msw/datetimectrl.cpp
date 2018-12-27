@@ -148,7 +148,7 @@ wxSize wxDateTimePickerCtrl::DoGetBestSize() const
         size = dc.GetTextExtent(s);
 
         // account for the drop-down arrow or spin arrows
-        size.x += wxSystemSettings::GetMetric(wxSYS_HSCROLL_ARROW_X);
+        size.x += wxSystemSettings::GetMetric(wxSYS_HSCROLL_ARROW_X, m_parent);
     }
 
     // We need to account for the checkbox, if we have one, ourselves as

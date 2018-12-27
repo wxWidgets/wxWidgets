@@ -474,8 +474,8 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     else
 #endif
         // were we asked for a large icon?
-    if ( desiredWidth == ::GetSystemMetrics(SM_CXICON) &&
-         desiredHeight == ::GetSystemMetrics(SM_CYICON) )
+    if ( desiredWidth == wxGetSystemMetrics(SM_CXICON) &&
+         desiredHeight == wxGetSystemMetrics(SM_CYICON) )
     {
         // get the specified large icon from file
         if ( !::ExtractIconEx(nameReal.t_str(), iconIndex, &hicon, NULL, 1) )
@@ -487,8 +487,8 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
                        name.c_str());
         }
     }
-    else if ( desiredWidth == ::GetSystemMetrics(SM_CXSMICON) &&
-              desiredHeight == ::GetSystemMetrics(SM_CYSMICON) )
+    else if ( desiredWidth == wxGetSystemMetrics(SM_CXSMICON) &&
+              desiredHeight == wxGetSystemMetrics(SM_CYSMICON) )
     {
         // get the specified small icon from file
         if ( !::ExtractIconEx(nameReal.t_str(), iconIndex, NULL, &hicon, 1) )
@@ -668,8 +668,8 @@ wxSize wxGetHiconSize(HICON hicon)
     if ( !size.x )
     {
         // use default icon size on this hardware
-        size.x = ::GetSystemMetrics(SM_CXICON);
-        size.y = ::GetSystemMetrics(SM_CYICON);
+        size.x = wxGetSystemMetrics(SM_CXICON);
+        size.y = wxGetSystemMetrics(SM_CYICON);
     }
 
     return size;

@@ -124,6 +124,10 @@ All (GUI):
 - Allow changing tooltip text for button allowing to enter a new string
   in wxPGArrayEditorDialog.
 
+wxMSW:
+
+- Add support for per-monitor DPI-awareness (Maarten Bent).
+
 
 3.1.2: (released 2018-12-10)
 ----------------------------

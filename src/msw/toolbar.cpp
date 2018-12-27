@@ -123,6 +123,7 @@ wxBEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
     EVT_MOUSE_EVENTS(wxToolBar::OnMouseEvent)
     EVT_SYS_COLOUR_CHANGED(wxToolBar::OnSysColourChanged)
     EVT_ERASE_BACKGROUND(wxToolBar::OnEraseBackground)
+    EVT_DISPLAY_CHANGED(wxToolBar::OnDisplayChanged)
 wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -537,7 +538,7 @@ wxSize wxToolBar::DoGetBestSize() const
         // maybe an old (< 0x400) Windows version? try to approximate the
         // toolbar size ourselves
         sizeBest = GetToolSize();
-        sizeBest.y += 2 * ::GetSystemMetrics(SM_CYBORDER); // Add borders
+        sizeBest.y += 2 * wxGetSystemMetrics(SM_CYBORDER, m_parent); // Add borders
         sizeBest.x *= GetToolsCount();
 
         // reverse horz and vertical components if necessary
@@ -1849,6 +1850,11 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
 #ifdef wxHAS_MSW_BACKGROUND_ERASE_HOOK
     MSWDoEraseBackground(event.GetDC()->GetHDC());
 #endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
+}
+
+void wxToolBar::OnDisplayChanged(wxDisplayChangedEvent& WXUNUSED(event))
+{
+    Realize();
 }
 
 bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)

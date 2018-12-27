@@ -56,7 +56,7 @@ public:
     virtual wxRect GetClientArea() const wxOVERRIDE
     {
         RECT rc;
-        SystemParametersInfo(SPI_GETWORKAREA, 0, &rc, 0);
+        wxSystemParametersInfo(SPI_GETWORKAREA, 0, &rc, 0);
 
         wxRect rectClient;
         wxCopyRECTToRect(rc, rectClient);

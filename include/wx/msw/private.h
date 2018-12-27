@@ -871,6 +871,10 @@ inline wxString wxGetFullModuleName()
     return wxGetFullModuleName((HMODULE)wxGetInstance());
 }
 
+extern int wxGetSystemMetrics(int nIndex, wxWindow* win = NULL);
+
+extern bool wxSystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, wxWindow* win = NULL);
+
 // return the run-time version of the OS in a format similar to
 // WINVER/_WIN32_WINNT compile-time macros:
 //

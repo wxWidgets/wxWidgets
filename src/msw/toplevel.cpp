@@ -104,6 +104,10 @@ void wxTopLevelWindowMSW::Init()
     m_fsIsShowing = false;
 
     m_menuSystem = NULL;
+
+    m_activeDPI = wxDefaultSize;
+    m_updatingDPI = false;
+    m_perMonitorDPIaware = false;
 }
 
 WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
@@ -483,6 +487,8 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     {
         EnableCloseButton(false);
     }
+
+    DetermineActiveDPI(m_activeDPI, m_perMonitorDPIaware);
 
     // for standard dialogs the dialog manager generates WM_CHANGEUISTATE
     // itself but for custom windows we have to do it ourselves in order to
@@ -974,7 +980,7 @@ bool wxTopLevelWindowMSW::DoSelectAndSetIcon(const wxIconBundle& icons,
                                              int smY,
                                              int i)
 {
-    const wxSize size(::GetSystemMetrics(smX), ::GetSystemMetrics(smY));
+    const wxSize size(wxGetSystemMetrics(smX, this), wxGetSystemMetrics(smY, this));
 
     wxIcon icon = icons.GetIcon(size, wxIconBundle::FALLBACK_NEAREST_LARGER);
 
@@ -1144,6 +1150,39 @@ wxMenu *wxTopLevelWindowMSW::MSWGetSystemMenu() const
 #endif // #ifndef __WXUNIVERSAL__
 
     return m_menuSystem;
+}
+
+wxSize wxTopLevelWindowMSW::GetActiveDPI() const
+{
+    wxSize dpi = m_activeDPI;
+
+    if (dpi == wxDefaultSize)
+    {
+        bool temp;
+        DetermineActiveDPI(dpi, temp);
+    }
+
+    return dpi;
+}
+
+void wxTopLevelWindowMSW::SetActiveDPI(const wxSize& dpi)
+{
+    m_activeDPI = dpi;
+}
+
+bool wxTopLevelWindowMSW::IsDPIUpdating() const
+{
+    return m_updatingDPI;
+}
+
+void wxTopLevelWindowMSW::SetDPIUpdating(const bool active)
+{
+    m_updatingDPI = active;
+}
+
+bool wxTopLevelWindowMSW::IsPerMonitorDPIAware() const
+{
+    return m_perMonitorDPIaware;
 }
 
 // ----------------------------------------------------------------------------

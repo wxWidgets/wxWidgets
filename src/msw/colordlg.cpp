@@ -38,6 +38,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/private/dpiaware.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -146,6 +147,8 @@ int wxColourDialog::ShowModal()
 
     if ( m_colourData.GetChooseFull() )
         chooseColorStruct.Flags |= CC_FULLOPEN;
+
+    AutoSystemDpiAware dpiAwareness;
 
     // do show the modal dialog
     if ( !::ChooseColor(&chooseColorStruct) )

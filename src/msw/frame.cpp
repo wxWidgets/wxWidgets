@@ -335,6 +335,9 @@ void wxFrame::PositionStatusBar()
     //else: no adjustments necessary for the toolbar on top
 #endif // wxUSE_TOOLBAR
 
+    int swOld, shOld;
+    m_frameStatusBar->GetSize(&swOld, &shOld);
+
     // Resize the status bar to its default height, as it could have been set
     // to a wrong value before by WM_SIZE sent during the frame creation and
     // our status bars preserve their programmatically set size to avoid being
@@ -344,6 +347,7 @@ void wxFrame::PositionStatusBar()
 
     int sw, sh;
     m_frameStatusBar->GetSize(&sw, &sh);
+    h += shOld - sh;
 
     // Since we wish the status bar to be directly under the client area,
     // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.

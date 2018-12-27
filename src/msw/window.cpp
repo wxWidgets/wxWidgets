@@ -468,7 +468,6 @@ void wxWindowMSW::Init()
     m_pendingPosition = wxDefaultPosition;
     m_pendingSize = wxDefaultSize;
 #endif // wxUSE_DEFERRED_SIZING
-
 }
 
 // Destructor
@@ -2952,6 +2951,17 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             break;
 
+        case WM_DPICHANGED:
+            {
+                int const xDPI = (int)LOWORD(wParam);
+                int const yDPI = (int)HIWORD(wParam);
+                const RECT* const prcNewWindow = (RECT*)lParam;
+
+                processed = HandleDPIChange(wxSize(xDPI, yDPI),
+                                            wxRectFromRECT(*prcNewWindow));
+            }
+            break;
+
         case WM_DESTROY:
             // never set processed to true and *always* pass WM_DESTROY to
             // DefWindowProc() as Windows may do some internal cleanup when
@@ -4675,6 +4685,217 @@ wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 }
 
 // ---------------------------------------------------------------------------
+// DPI
+// ---------------------------------------------------------------------------
+
+/*extern*/
+int wxGetSystemMetrics(int nIndex, wxWindow* win)
+{
+    wxTopLevelWindow* tlw = NULL;
+    if (win)
+    {
+        tlw = wxDynamicCast(wxGetTopLevelParent(win), wxTopLevelWindow);
+    }
+    else
+    {
+        wxWindow* window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
+        if (window)
+            tlw = wxDynamicCast(wxGetTopLevelParent(window), wxTopLevelWindow);
+    }
+
+    if (tlw && tlw->IsPerMonitorDPIAware())
+    {
+        wxDynamicLibrary dllUser32;
+        if ( dllUser32.Load(wxS("User32.dll"), wxDL_VERBATIM | wxDL_QUIET))
+        {
+            typedef int(WINAPI *GetSystemMetricsForDpi_t)(int nIndex, UINT dpi);
+            GetSystemMetricsForDpi_t wxDL_INIT_FUNC(pfn, GetSystemMetricsForDpi, dllUser32);
+
+            if (pfnGetSystemMetricsForDpi)
+            {
+                return pfnGetSystemMetricsForDpi(nIndex, tlw->GetActiveDPI().GetX());
+            }
+        }
+    }
+
+    return ::GetSystemMetrics(nIndex);
+}
+
+/*extern*/
+bool wxSystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, wxWindow* win)
+{
+    wxTopLevelWindow* tlw = NULL;
+    if (win)
+    {
+        tlw = wxDynamicCast(wxGetTopLevelParent(win), wxTopLevelWindow);
+    }
+    else
+    {
+        wxWindow* window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
+        if (window)
+            tlw = wxDynamicCast(wxGetTopLevelParent(window), wxTopLevelWindow);
+    }
+
+    if (tlw && tlw->IsPerMonitorDPIAware())
+    {
+        wxDynamicLibrary dllUser32;
+        if (dllUser32.Load(wxS("User32.dll"), wxDL_VERBATIM | wxDL_QUIET))
+        {
+            typedef int(WINAPI *SystemParametersInfoForDpi_t)(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, UINT dpi);
+            SystemParametersInfoForDpi_t wxDL_INIT_FUNC(pfn, SystemParametersInfoForDpi, dllUser32);
+
+            if (pfnSystemParametersInfoForDpi)
+            {
+                return pfnSystemParametersInfoForDpi(uiAction, uiParam, pvParam, fWinIni, tlw->GetActiveDPI().GetX());
+            }
+        }
+    }
+
+    return ::SystemParametersInfo(uiAction, uiParam, pvParam, fWinIni);
+}
+
+void wxWindowMSW::DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware) const
+{
+    wxSize dpi = wxDefaultSize;
+    bool perMonitorAwareV2 = false;
+
+#if wxUSE_DYNLIB_CLASS
+
+    wxDynamicLibrary dllUser32;
+    if (dllUser32.Load(wxS("User32.dll"), wxDL_VERBATIM | wxDL_QUIET))
+    {
+        // determine active DPI of the window
+        typedef UINT(WINAPI *GetDpiForWindow_t)(HWND hwnd);
+        GetDpiForWindow_t wxDL_INIT_FUNC(pfn, GetDpiForWindow, dllUser32);
+
+        if (pfnGetDpiForWindow)
+        {
+            UINT dpiWindow = pfnGetDpiForWindow(GetHwnd());
+            if (dpiWindow != 0)
+            {
+                dpi = wxSize((int)dpiWindow, (int)dpiWindow);
+            }
+        }
+
+        // determine if 'Per Monitor v2' awareness is used
+        typedef DPI_AWARENESS_CONTEXT(WINAPI *GetWindowDpiAwarenessContext_t)(HWND hwnd);
+        GetWindowDpiAwarenessContext_t wxDL_INIT_FUNC(pfn, GetWindowDpiAwarenessContext, dllUser32);
+
+        typedef BOOL(WINAPI *AreDpiAwarenessContextsEqual_t)(DPI_AWARENESS_CONTEXT dpiContextA, DPI_AWARENESS_CONTEXT dpiContextB);
+        AreDpiAwarenessContextsEqual_t wxDL_INIT_FUNC(pfn, AreDpiAwarenessContextsEqual, dllUser32);
+
+        if (pfnGetWindowDpiAwarenessContext && pfnAreDpiAwarenessContextsEqual)
+        {
+            DPI_AWARENESS_CONTEXT dpiAwarenessContext = pfnGetWindowDpiAwarenessContext(GetHwnd());
+
+            if (pfnAreDpiAwarenessContextsEqual(dpiAwarenessContext, DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
+            {
+                perMonitorAwareV2 = true;
+            }
+        }
+    }
+
+#endif // wxUSE_DYNLIB_CLASS
+
+    // not initialized above, use old method
+    if (dpi == wxDefaultSize)
+    {
+        HDC hdc = GetDC(GetHwnd());
+        dpi.x = ::GetDeviceCaps(hdc, LOGPIXELSX);
+        dpi.y = ::GetDeviceCaps(hdc, LOGPIXELSY);
+    }
+
+    activeDPI = dpi;
+    perMonitorDPIaware = perMonitorAwareV2;
+}
+
+bool wxWindowMSW::HandleDPIChange(const wxSize newDPI, const wxRect newRect)
+{
+    wxTopLevelWindow *const tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+    if (!tlw || !tlw->IsPerMonitorDPIAware())
+        return false;
+
+    wxSize const oldDPI = tlw->GetActiveDPI();
+
+    tlw->SetDPIUpdating(true);
+
+    tlw->SetActiveDPI(newDPI);
+
+    if (oldDPI != newDPI)
+    {
+        HandleDPIChange(this, oldDPI, newDPI);
+    }
+
+    SetSize(newRect);
+    Layout();
+
+    tlw->SetDPIUpdating(false);
+
+    Refresh();
+
+    return true;
+}
+
+void wxWindowMSW::HandleDPIChange(wxWindow* win, const wxSize oldDPI, const wxSize newDPI) const
+{
+    // update min and max size
+    double const scaleFactor = (double)newDPI.y / oldDPI.y;
+
+    if (win->m_minHeight != wxDefaultCoord)
+    {
+        double const newMinHeight = win->m_minHeight * scaleFactor;
+        win->m_minHeight = (scaleFactor > 1.0) ? ceil(newMinHeight) : floor(newMinHeight);
+    }
+    if (win->m_minWidth != wxDefaultCoord)
+    {
+        double const newMinWidth = win->m_minWidth * scaleFactor;
+        win->m_minWidth = (scaleFactor > 1.0) ? ceil(newMinWidth) : floor(newMinWidth);
+    }
+    if (win->m_maxHeight != wxDefaultCoord)
+    {
+        double const newMaxHeight = win->m_maxHeight * scaleFactor;
+        win->m_maxHeight = (scaleFactor > 1.0) ? ceil(newMaxHeight) : floor(newMaxHeight);
+    }
+    if (win->m_maxWidth != wxDefaultCoord)
+    {
+        double const newMaxWidth = win->m_maxWidth * scaleFactor;
+        win->m_maxWidth = (scaleFactor > 1.0) ? ceil(newMaxWidth) : floor(newMaxWidth);
+    }
+
+    win->InvalidateBestSize();
+
+    // update font
+    wxFont newFont(win->GetFont());
+    newFont.SetPPI(newDPI.y);
+    win->m_font = newFont; // needs to be set here explicitly, so wxSubWindows uses correct font
+    win->SetFont(win->m_font);
+
+    // update children
+    wxWindowList::compatibility_iterator current = win->GetChildren().GetFirst();
+    while (current)
+    {
+        wxWindow *childWin = current->GetData();
+        // Update all children, except other top-level windows.
+        // These could be on a different monitor and will get their own dpi-changed event.
+        if (childWin && !childWin->IsTopLevel())
+        {
+            HandleDPIChange(childWin, oldDPI, newDPI);
+        }
+
+        current = current->GetNext();
+    }
+
+    // update font again after updating children
+    win->SetFont(win->m_font);
+
+    wxDisplayChangedEvent event;
+    event.SetOldDPI(oldDPI);
+    event.SetNewDPI(newDPI);
+    event.SetEventObject(win);
+    win->HandleWindowEvent(event);
+}
+
+// ---------------------------------------------------------------------------
 // colours and palettes
 // ---------------------------------------------------------------------------
 
@@ -5749,8 +5970,8 @@ wxWindowMSW::HandleMouseWheel(wxMouseWheelAxis axis,
     static int s_linesPerRotation = -1;
     if ( s_linesPerRotation == -1 )
     {
-        if ( !::SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0,
-                                     &s_linesPerRotation, 0))
+        if ( !wxSystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0,
+                                     &s_linesPerRotation, 0, this))
         {
             // this is not supposed to happen
             wxLogLastError(wxT("SystemParametersInfo(GETWHEELSCROLLLINES)"));
@@ -5763,8 +5984,8 @@ wxWindowMSW::HandleMouseWheel(wxMouseWheelAxis axis,
     static int s_columnsPerRotation = -1;
     if ( s_columnsPerRotation == -1 )
     {
-        if ( !::SystemParametersInfo(SPI_GETWHEELSCROLLCHARS, 0,
-                                     &s_columnsPerRotation, 0))
+        if ( !wxSystemParametersInfo(SPI_GETWHEELSCROLLCHARS, 0,
+                                     &s_columnsPerRotation, 0, this))
         {
             // this setting is not supported on Windows 2000/XP, so use the value of 1
             // http://msdn.microsoft.com/en-us/library/ms997498.aspx
@@ -6689,7 +6910,7 @@ static inline bool wxIsKeyDown(WXWORD vk)
 {
     if ( vk == VK_LBUTTON || vk == VK_RBUTTON )
     {
-        if ( ::GetSystemMetrics(SM_SWAPBUTTON) )
+        if ( wxGetSystemMetrics(SM_SWAPBUTTON) )
         {
             if ( vk == VK_LBUTTON )
                 vk = VK_RBUTTON;

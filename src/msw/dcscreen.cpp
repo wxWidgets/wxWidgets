@@ -41,7 +41,7 @@ wxScreenDCImpl::wxScreenDCImpl( wxScreenDC *owner ) :
 void wxScreenDCImpl::DoGetSize(int *width, int *height) const
 {
     if ( width )
-        *width = ::GetSystemMetrics(SM_CXVIRTUALSCREEN);
+        *width = wxGetSystemMetrics(SM_CXVIRTUALSCREEN);
     if ( height )
-        *height = ::GetSystemMetrics(SM_CYVIRTUALSCREEN);
+        *height = wxGetSystemMetrics(SM_CYVIRTUALSCREEN);
 }

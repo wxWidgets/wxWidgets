@@ -146,7 +146,7 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
     // NB: the reason we use "/ 2" here is that we don't know where the current
     //     cursors hot spot is... it would be nice if we could find this out
     //     though
-    y += wxSystemSettings::GetMetric(wxSYS_CURSOR_Y) / 2;
+    y += wxSystemSettings::GetMetric(wxSYS_CURSOR_Y, this) / 2;
 
 #if wxUSE_POPUPWIN
     Position(wxPoint(x, y), wxSize(0,0));

@@ -523,12 +523,12 @@ wxRendererMSW::DrawTitleBarBitmap(wxWindow *win,
 
 wxSize wxRendererMSW::GetCheckBoxSize(wxWindow* win)
 {
-    // Even though we don't use the window in this implementation, still check
-    // that it's valid to avoid surprises when using themes.
+    // We must have a valid window in order to return the size which is correct
+    // for the display this window is on.
     wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
 
-    return wxSize(::GetSystemMetrics(SM_CXMENUCHECK),
-                  ::GetSystemMetrics(SM_CYMENUCHECK));
+    return wxSize(wxGetSystemMetrics(SM_CXMENUCHECK, win),
+                  wxGetSystemMetrics(SM_CYMENUCHECK, win));
 }
 
 int wxRendererMSW::GetHeaderButtonHeight(wxWindow * win)
