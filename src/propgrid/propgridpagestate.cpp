@@ -1015,9 +1015,7 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
                m_width, clientWidth);
 
 
-    int colsWidth = pg->GetMarginWidth();
-    for (wxVector<int>::const_iterator it = m_colWidths.begin(); it != m_colWidths.end(); ++it)
-        colsWidth += *it;
+    int colsWidth = wxPGGetSumVectorItems<int>(m_colWidths, pg->GetMarginWidth());
 
     wxLogTrace("propgrid",
                wxS("  HasVirtualWidth: %i  colsWidth: %i"),
@@ -1144,9 +1142,7 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
 void wxPropertyGridPageState::ResetColumnSizes( int setSplitterFlags )
 {
     // Calculate sum of proportions
-    int psum = 0;
-    for (wxVector<int>::const_iterator it = m_columnProportions.begin(); it != m_columnProportions.end(); ++it)
-        psum += *it;
+    int psum = wxPGGetSumVectorItems<int>(m_columnProportions, 0);
     int puwid = (m_pPropGrid->m_width*256) / psum;
     int cpos = 0;
 
