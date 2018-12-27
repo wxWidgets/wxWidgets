@@ -2368,7 +2368,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
             cellRect.x += 1;
         }
 
-        int firstCellWidth = colWidths[0] - (greyDepthX - m_marginWidth);
+        int firstCellWidth = colWidths[0] - (greyDepth - m_marginWidth);
         int firstCellX = cellRect.x;
 
         // Calculate cellRect.x for the last cell
