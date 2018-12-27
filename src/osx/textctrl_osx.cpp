@@ -412,9 +412,10 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 event.SetString( GetValue() );
                 if ( HandleWindowEvent(event) )
                     return;
+                // If we don't eat the key a space character is appended to the text control.
+                eat_key = true;
             }
-
-            if ( !(m_windowStyle & wxTE_MULTILINE) )
+            else if ( !(m_windowStyle & wxTE_MULTILINE) )
             {
                 wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
                 if ( tlw && tlw->GetDefaultItem() )
