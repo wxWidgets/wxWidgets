@@ -9,8 +9,13 @@
 /**
     Styles used by wxTextValidator.
 
-    Note that when you specify more styles in wxTextValidator the validation checks
-    are performed in the order in which the styles of this enumeration are defined.
+    Notice that wxFILTER_{INCLUDE,EXCLUDE}[_CHAR]_LIST pairs can be used to
+    document the purpose of the validator only and are not enforced in the
+    implementation of the wxTextValidator. Therefore, calling the corresponding
+    member functions:
+    wxTextValidator::SetCharIncludes(), wxTextValidator::SetCharExcludes(),
+    wxTextValidator::SetIncludes() or wxTextValidator::SetExcludes()
+    after creating the validator with or without those flags changes nothing.
 */
 enum wxTextValidatorStyle
 {
@@ -35,7 +40,7 @@ enum wxTextValidatorStyle
     /// (which is locale-dependent) on all characters of the string.
     wxFILTER_ALPHANUMERIC,
 
-    /// Non-numeric characters are filtered out.
+    /// Non-digit characters are filtered out.
     /// Uses the wxWidgets wrapper for the standard CRT function @c isdigit
     /// (which is locale-dependent) on all characters of the string.
     wxFILTER_DIGITS,
@@ -50,18 +55,18 @@ enum wxTextValidatorStyle
     /// the list, complaining if not. See wxTextValidator::SetIncludes().
     wxFILTER_INCLUDE_LIST,
 
-    /// Use an include list. The validator checks if each input character is
-    /// in the list (one character per list element), complaining if not.
-    /// See wxTextValidator::SetCharIncludes().
+    /// Use an include char list.
+    /// Characters in the include char list will be allowed to be in the
+    /// user input. See wxTextValidator::SetCharIncludes().
     wxFILTER_INCLUDE_CHAR_LIST,
 
     /// Use an exclude list. The validator checks if the user input is on
     /// the list, complaining if it is. See wxTextValidator::SetExcludes().
     wxFILTER_EXCLUDE_LIST,
 
-    /// Use an exclude list. The validator checks if each input character is
-    /// in the list (one character per list element), complaining if it is.
-    /// See wxTextValidator::SetCharExcludes().
+    /// Use an exclude char list.
+    /// Characters in the exclude char list won't be allowed to be in the
+    /// user input. See wxTextValidator::SetCharExcludes().
     wxFILTER_EXCLUDE_CHAR_LIST,
 
     /// Non-hexadecimal characters are filtered out.
@@ -166,7 +171,8 @@ public:
     /**
         Sets the exclude char list (invalid characters for the user input).
 
-        This function may cancel the effect of @c wxFILTER_SPACE if the passed
+        @note It's an error to exclude an already included character.
+        @note This function may cancel the effect of @c wxFILTER_SPACE if the passed
         in string @a chars contains the @b space character.
     */
     void SetCharExcludes(const wxString& chars);
@@ -178,6 +184,8 @@ public:
 
     /**
         Sets the include char list (additional valid values for the user input).
+
+        @note It's an error to include an already excluded character.
     */
     void SetCharIncludes(const wxString& chars);
 
@@ -199,6 +207,8 @@ public:
         Adds @a chars to the list of excluded characters.
 
         @since 3.1.3
+
+        @note It's an error to exclude an already included character.
     */
     void AddCharExcludes(const wxString& chars);
 
@@ -206,6 +216,8 @@ public:
         Adds @a chars to the list of included characters.
 
         @since 3.1.3
+
+        @note It's an error to include an already excluded character.
     */
     void AddCharIncludes(const wxString& chars);
 
