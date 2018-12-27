@@ -48,11 +48,66 @@ public:
             const wxSize& size = wxDefaultSize,
             const long style = wxDEFAULT_DIALOG_STYLE);
 
+    void OnChangeValidator(wxCommandEvent& event);
+
     wxTextCtrl *m_text;
     wxComboBox *m_combobox;
 
     wxTextCtrl *m_numericTextInt;
     wxTextCtrl *m_numericTextDouble;
+};
+
+// ----------------------------------------------------------------------------
+// TextValidatorDialog
+// ----------------------------------------------------------------------------
+class TextValidatorDialog : public wxDialog
+{
+public:
+    TextValidatorDialog(wxWindow *parent);
+
+    void OnUpdateUI(wxUpdateUIEvent& event);
+    void OnChecked(wxCommandEvent& event);
+    void OnKillFocus( wxFocusEvent &event );
+
+    void SetValidatorFor(wxTextCtrl* txtCtrl);
+
+private:
+    bool HasFlag(wxTextValidatorStyle style) const
+    {
+        return (m_validatorStyle & style) != 0;
+    }
+
+    enum
+    {
+        // CheckBoxes Ids (should be in sync with wxTextValidatorStyle)
+        Id_None = wxID_HIGHEST,
+        Id_Empty,
+        Id_Ascii,
+        Id_Alpha,
+        Id_Alphanumeric,
+        Id_Digits,
+        Id_Numeric,
+        Id_IncludeList,
+        Id_IncludeCharList,
+        Id_ExcludeList,
+        Id_ExcludeCharList,
+        Id_Xdigits,
+        Id_Space,
+
+        // TextCtrls Ids
+        Id_IncludeListTxt,
+        Id_IncludeCharListTxt,
+        Id_ExcludeListTxt,
+        Id_ExcludeCharListTxt,
+    };
+
+    bool m_noValidation;
+    long m_validatorStyle;
+
+    wxString        m_charIncludes;
+    wxString        m_charExcludes;
+    wxArrayString   m_includes;
+    wxArrayString   m_excludes;
 };
 
 class MyData
