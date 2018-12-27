@@ -1143,20 +1143,19 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
 
 void wxPropertyGridPageState::ResetColumnSizes( int setSplitterFlags )
 {
-    unsigned int i;
     // Calculate sum of proportions
     int psum = 0;
-    for ( i=0; i<m_colWidths.size(); i++ )
-        psum += m_columnProportions[i];
+    for (wxVector<int>::const_iterator it = m_columnProportions.begin(); it != m_columnProportions.end(); ++it)
+        psum += *it;
     int puwid = (m_pPropGrid->m_width*256) / psum;
     int cpos = 0;
 
     // Convert proportion to splitter positions
-    for ( i=0; i<(m_colWidths.size() - 1); i++ )
+    for (size_t i=0; i<(m_colWidths.size() - 1); i++)
     {
         int cwid = (puwid*m_columnProportions[i]) / 256;
         cpos += cwid;
-        DoSetSplitterPosition(cpos, i,
+        DoSetSplitterPosition(cpos, (int)i,
                               setSplitterFlags);
     }
 }
