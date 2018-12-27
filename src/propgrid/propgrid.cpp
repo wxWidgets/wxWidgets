@@ -3737,6 +3737,7 @@ wxRect wxPropertyGrid::GetEditorWidgetRect( wxPGProperty* p, int column ) const
 
     int vx, vy;  // Top left corner of client
     GetViewStart(&vx, &vy);
+    vx *= wxPG_PIXELS_PER_UNIT;
     vy *= wxPG_PIXELS_PER_UNIT;
 
     if ( column == 1 )
@@ -3759,7 +3760,7 @@ wxRect wxPropertyGrid::GetEditorWidgetRect( wxPGProperty* p, int column ) const
 
     return wxRect
       (
-        splitterX+imageOffset+wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1,
+        splitterX+imageOffset+wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1-vx,
         itemy-vy,
         colEnd-splitterX-wxPG_XBEFOREWIDGET-wxPG_CONTROL_MARGIN-imageOffset-1,
         m_lineHeight-1
