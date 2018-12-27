@@ -18,6 +18,12 @@
 #ifndef WX_PRECOMP
 #endif
 
+typedef wxWindowWithItems<wxControl, wxComboBoxBase> RealwxComboBoxBase;
+
+wxBEGIN_EVENT_TABLE(wxComboBox, RealwxComboBoxBase)
+    EVT_KEY_DOWN(wxComboBox::OnKeyDown)
+wxEND_EVENT_TABLE()
+
 // work in progress
 
 wxComboBox::~wxComboBox()
@@ -232,6 +238,35 @@ void wxComboBox::Popup()
 void wxComboBox::Dismiss()
 {
     GetComboPeer()->Dismiss();
+}
+
+void wxComboBox::OnKeyDown(wxKeyEvent& event)
+{
+    if (event.GetModifiers() == wxMOD_CONTROL)
+    {
+        switch(event.GetKeyCode())
+        {
+            case 'A':
+                SelectAll();
+                return;
+            case 'C':
+                if (CanCopy())
+                    Copy();
+                return;
+            case 'V':
+                if (CanPaste())
+                    Paste();
+                return;
+            case 'X':
+                if (CanCut())
+                    Cut();
+                return;
+            default:
+                break;
+        }
+    }
+    // no, we didn't process it
+    event.Skip();
 }
 
 #endif // wxUSE_COMBOBOX && wxOSX_USE_COCOA
