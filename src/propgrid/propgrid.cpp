@@ -2028,7 +2028,7 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
 #if WXWIN_COMPATIBILITY_3_0
 int wxPropertyGrid::DoDrawItemsBase( wxDC& dc,
                                  const wxRect* itemsRect,
-                                 bool isBuffered ) const
+                                 bool WXUNUSED(isBuffered) ) const
 #else
 int wxPropertyGrid::DoDrawItems( wxDC& dc,
                                  const wxRect* itemsRect ) const
@@ -2043,8 +2043,9 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     if ( !lastItem )
         lastItem = GetLastItem( wxPG_ITERATE_VISIBLE );
 
-    int vy;
-    GetViewStart(NULL, &vy);
+    int vx, vy;
+    GetViewStart(&vx, &vy);
+    vx *= wxPG_PIXELS_PER_UNIT;
     vy *= wxPG_PIXELS_PER_UNIT;
 
     if ( IsFrozen() || m_height < 1 || firstItem == NULL )
@@ -2090,22 +2091,10 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     long windowStyle = m_windowStyle;
 
-#if WXWIN_COMPATIBILITY_3_0
-    int xRelMod = 0;
-
-    if ( isBuffered )
-    {
-        xRelMod = itemsRect->x;
-        // itemsRect conversion
-        firstItemTopY -= vy;
-        lastItemBottomY -= vy;
-    }
-#else
-    int xRelMod = itemsRect->x;
+    int xRelMod = vx;
     // itemsRect conversion
     firstItemTopY -= vy;
     lastItemBottomY -= vy;
-#endif
 
     int x = m_marginWidth - xRelMod;
 
