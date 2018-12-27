@@ -2951,17 +2951,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
             break;
 
-        case WM_DPICHANGED:
-            {
-                int const xDPI = (int)LOWORD(wParam);
-                int const yDPI = (int)HIWORD(wParam);
-                const RECT* const prcNewWindow = (RECT*)lParam;
-
-                processed = HandleDPIChange(wxSize(xDPI, yDPI),
-                                            wxRectFromRECT(*prcNewWindow));
-            }
-            break;
-
         case WM_DESTROY:
             // never set processed to true and *always* pass WM_DESTROY to
             // DefWindowProc() as Windows may do some internal cleanup when
@@ -3461,6 +3450,17 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
         case WM_DISPLAYCHANGE:
             processed = HandleDisplayChange();
+            break;
+
+        case WM_DPICHANGED:
+            {
+                int const xDPI = (int)LOWORD(wParam);
+                int const yDPI = (int)HIWORD(wParam);
+                const RECT* const prcNewWindow = (RECT*)lParam;
+
+                processed = HandleDPIChange(wxSize(xDPI, yDPI),
+                                            wxRectFromRECT(*prcNewWindow));
+            }
             break;
 
         case WM_PALETTECHANGED:
