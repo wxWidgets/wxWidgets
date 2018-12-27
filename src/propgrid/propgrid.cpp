@@ -2330,8 +2330,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                         lh );
 
         // Default cell rect fill the entire row
-        wxRect cellRect(greyDepthX, y,
-                        gridWidth - greyDepth + 2, rowHeight-1 );
+        wxRect cellRect(greyDepthX, y, cellX - greyDepthX, rowHeight-1);
 
         bool isCategory = p->IsCategory();
 
