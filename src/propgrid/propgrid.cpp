@@ -2165,7 +2165,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     wxPGProperty* nextP = visPropArray[0];
 
-    int gridWidth = state->GetVirtualWidth();
+    int gridWidth = itemsRect->x + itemsRect->width;
 
     // Calculate splitters positions
     wxVector<int> splitterPos;
@@ -2500,6 +2500,11 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
         y += rowHeight;
     }
+
+    // Clear empty space beyond the right edge of the grid
+    dc.SetPen(wxPen(m_colEmptySpace));
+    dc.SetBrush(wxBrush(m_colEmptySpace));
+    dc.DrawRectangle(cellX, firstItemTopY, gridWidth - cellX, lastItemBottomY - firstItemTopY);
 
     return y - 1  + vy;
 }
