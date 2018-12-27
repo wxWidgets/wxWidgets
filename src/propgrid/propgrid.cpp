@@ -2248,7 +2248,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
              nextP && nextP->IsCategory() )
             dc.SetPen(m_colCapBack);
 
-        dc.DrawLine( greyDepthX, y2-1, gridWidth-xRelMod, y2-1 );
+        dc.DrawLine(greyDepthX, y2 - 1, cellX, y2 - 1);
 
         //
         // Need to override row colours?
