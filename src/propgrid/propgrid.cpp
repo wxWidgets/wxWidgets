@@ -4691,6 +4691,8 @@ void wxPropertyGrid::SetVirtualWidth( int width )
         SetInternalFlag(wxPG_FL_HAS_VIRTUAL_WIDTH);
     }
     m_pState->SetVirtualWidth( width );
+    RecalculateVirtualSize();
+    Refresh();
 }
 
 void wxPropertyGrid::SetFocusOnCanvas()
