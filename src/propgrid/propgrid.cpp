@@ -2564,8 +2564,7 @@ void wxPropertyGrid::DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 )
         GetViewStart(&vx, &vy);
         vx *= wxPG_PIXELS_PER_UNIT;
         vy *= wxPG_PIXELS_PER_UNIT;
-        r.x -= vx;
-        r.y -= vy;
+        r.Offset(-vx, -vy);
         RefreshRect(r);
         Update();
     }
