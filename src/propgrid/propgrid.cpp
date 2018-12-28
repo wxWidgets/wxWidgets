@@ -2855,8 +2855,8 @@ void wxPropertyGrid::CenterSplitter( bool enableAutoResizing )
 // it itself will be returned
 wxPGProperty* wxPropertyGrid::GetNearestPaintVisible( wxPGProperty* p ) const
 {
-    int vx,vy1;// Top left corner of client
-    GetViewStart(&vx,&vy1);
+    int vy1;// Top left corner of client
+    GetViewStart(NULL,&vy1);
     vy1 *= wxPG_PIXELS_PER_UNIT;
 
     int vy2 = vy1 + m_height;
