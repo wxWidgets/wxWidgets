@@ -2796,17 +2796,23 @@ void wxPropertyGrid::DoSetSplitterPosition( int newxpos,
     if ( ( newxpos < wxPG_DRAG_MARGIN ) )
         return;
 
-    wxPropertyGridPageState* state = m_pState;
-
     if ( flags & wxPG_SPLITTER_FROM_EVENT )
-        state->m_dontCenterSplitter = true;
+        m_pState->m_dontCenterSplitter = true;
 
-    state->DoSetSplitterPosition(newxpos, splitterIndex, flags);
+    // Save position and size of column 1 used for main editor widgets
+    int xPosEditorCol = m_pState->DoGetSplitterPosition(0);
+    int widthEditorCol = m_pState->GetColumnWidth(1);
+
+    m_pState->DoSetSplitterPosition(newxpos, splitterIndex, flags);
 
     if ( flags & wxPG_SPLITTER_REFRESH )
     {
         if ( GetSelection() )
-            CorrectEditorWidgetSizeX();
+        {
+            int xPosChange = m_pState->DoGetSplitterPosition(0) - xPosEditorCol;
+            int widthColChange = m_pState->GetColumnWidth(1) - widthEditorCol;
+            CorrectEditorWidgetSizeX(xPosChange, widthColChange);
+        }
 
         Refresh();
     }
@@ -2820,9 +2826,17 @@ void wxPropertyGrid::ResetColumnSizes( bool enableAutoResizing )
 {
     if ( m_pState )
     {
+        // Save position and size of column 1 used for main editor widgets
+        int xPosEditorCol = m_pState->DoGetSplitterPosition(0);
+        int widthEditorCol = m_pState->GetColumnWidth(1);
+
         m_pState->ResetColumnSizes(0);
         if ( GetSelection() )
-            CorrectEditorWidgetSizeX();
+        {
+            int xPosChange = m_pState->DoGetSplitterPosition(0) - xPosEditorCol;
+            int widthColChange = m_pState->GetColumnWidth(1) - widthEditorCol;
+            CorrectEditorWidgetSizeX(xPosChange, widthColChange);
+        }
         Refresh();
 
         if ( enableAutoResizing && HasFlag(wxPG_SPLITTER_AUTO_CENTER) )
@@ -4221,9 +4235,10 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                     if ( p->HasFlag(wxPG_PROP_MODIFIED) &&
                          (m_windowStyle & wxPG_BOLD_MODIFIED) )
                         SetCurControlBoldFont();
-
+#if WXWIN_COMPATIBILITY_3_0
                     // Store x relative to splitter (we'll need it).
                     m_ctrlXAdjust = m_wndEditor->GetPosition().x - splitterX;
+#endif // WXWIN_COMPATIBILITY_3_0
 
                     // Check if background clear is not necessary
                     wxPoint pos = m_wndEditor->GetPosition();
@@ -4556,6 +4571,13 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
 
     m_iFlags |= wxPG_FL_RECALCULATING_VIRTUAL_SIZE;
 
+    // Save position and size of column 1 used for main editor widgets
+    int vx;
+    GetViewStart(&vx, NULL);
+    vx *= wxPG_PIXELS_PER_UNIT;
+    int xPosEditorCol = m_pState->DoGetSplitterPosition(0) - vx;
+    int widthEditorCol = m_pState->GetColumnWidth(1);
+
     int x = m_pState->GetVirtualWidth();
     int y = m_pState->m_virtualHeight;
 
@@ -4607,7 +4629,13 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
     m_pState->CheckColumnWidths();
 
     if ( GetSelection() )
-        CorrectEditorWidgetSizeX();
+    {
+        GetViewStart(&vx, NULL);
+        vx *= wxPG_PIXELS_PER_UNIT;
+        int xPosChange = m_pState->DoGetSplitterPosition(0) - vx - xPosEditorCol;
+        int widthColChange = m_pState->GetColumnWidth(1) - widthEditorCol;
+        CorrectEditorWidgetSizeX(xPosChange, widthColChange);
+    }
 
     m_iFlags &= ~wxPG_FL_RECALCULATING_VIRTUAL_SIZE;
 }

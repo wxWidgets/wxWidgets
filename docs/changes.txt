@@ -123,6 +123,7 @@ All (GUI):
 - Implement wxAuiNotebook::GetBestSize() (Sebastian Walderich).
 - Allow changing tooltip text for button allowing to enter a new string
   in wxPGArrayEditorDialog.
+- Fix wxPropertyGrid issues with horizontal scrolling.
 
 
 3.1.2: (released 2018-12-10)
