@@ -3047,16 +3047,15 @@ public:
 class WXDLLIMPEXP_CORE wxDPIChangedEvent : public wxEvent
 {
 public:
-    wxDPIChangedEvent()
+    explicit
+    wxDPIChangedEvent(const wxSize& oldDPI = wxDefaultSize,
+                      const wxSize& newDPI = wxDefaultSize)
         : wxEvent(0, wxEVT_DPI_CHANGED)
-        , m_oldDPI(wxDefaultSize)
-        , m_newDPI(wxDefaultSize)
+        , m_oldDPI(oldDPI)
+        , m_newDPI(newDPI)
         { }
 
-    void SetOldDPI(const wxSize& oldDPI) { m_oldDPI = oldDPI; }
     wxSize GetOldDPI() const { return m_oldDPI; }
-
-    void SetNewDPI(const wxSize& newDPI) { m_newDPI = newDPI; }
     wxSize GetNewDPI() const { return m_newDPI; }
 
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxDPIChangedEvent(*this); }

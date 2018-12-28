@@ -3321,34 +3321,11 @@ class wxDPIChangedEvent : public wxEvent
 {
 public:
     /**
-        Constructor.
-    */
-    wxDPIChangedEvent();
-
-    /**
-        Sets the old DPI.
-
-        @param oldDPI The old DPI.
-
-        @since 3.1.3
-    */
-    void SetOldDPI(wxSize const oldDPI);
-
-    /**
         Returns the old DPI.
 
         @since 3.1.3
     */
     wxSize GetOldDPI() const;
-
-    /**
-        Sets the new DPI.
-
-        @param newDPI The new DPI.
-
-        @since 3.1.3
-    */
-    void SetNewDPI(wxSize const newDPI);
 
     /**
         Returns the new DPI.
