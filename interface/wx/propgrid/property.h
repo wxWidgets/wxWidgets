@@ -1147,16 +1147,17 @@ public:
 
         NOTE: Following applies when OnMeasureImage() returns a "flexible" height (
         using wxPG_FLEXIBLE_SIZE(W,H) macro), which implies variable height items:
-        If rect.x is < 0, then this is a measure item call, which means that
-        dc is invalid and only thing that should be done is to set paintdata.m_drawnHeight
-        to the height of the image of item at index paintdata.m_choiceItem. This call
-        may be done even as often as once every drop-down popup show.
+        If (rect.x+rect.width) is < 0, then this is a measure item call, which
+        means that dc is invalid and only thing that should be done is to set
+        paintdata.m_drawnHeight to the height of the image of item at index
+        paintdata.m_choiceItem. This call may be done even as often as once every
+        drop-down popup show.
 
         @param dc
         wxDC to paint on.
         @param rect
         Box reserved for custom graphics. Includes surrounding rectangle, if any.
-        If x is < 0, then this is a measure item call (see above).
+        If x+width is < 0, then this is a measure item call (see above).
         @param paintdata
         wxPGPaintData structure with much useful data about painted item.
         @code

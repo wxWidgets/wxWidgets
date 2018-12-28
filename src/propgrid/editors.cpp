@@ -797,7 +797,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         cis = GetImageSize(p, item);
     }
 
-    if ( rect.x < 0 )
+    if ( rect.x + rect.width < 0 )
     {
         // Default measure behaviour (no flexible, custom paint image only)
         if ( rect.width < 0 )
