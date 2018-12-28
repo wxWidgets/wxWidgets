@@ -267,6 +267,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     wxTextCtrl* txt2 =
              new wxTextCtrl(this, VALIDATE_TEXT2, wxEmptyString,
                             wxDefaultPosition, wxDefaultSize, 0, textVal);
+//    txt2->Bind(wxEVT_VALIDATE_FAILED, &MyDialog::OnValidationFailed, this);
     txt2->SetToolTip("uses wxTextValidator with wxFILTER_EMPTY|wxFILTER_EXCLUDE_CHAR_LIST to exclude 'bcwyz'");
     flexgridsizer->Add(txt2, 1, wxGROW);
 
@@ -391,6 +392,8 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     // make the dialog a bit bigger than its minimal size:
     SetSize(GetBestSize()*1.5);
+
+    Bind(wxEVT_VALIDATE, &MyDialog::OnValidationFailed, this);
 }
 
 bool MyDialog::TransferDataToWindow()
@@ -405,3 +408,23 @@ bool MyDialog::TransferDataToWindow()
     return r;
 }
 
+void MyDialog::OnValidationFailed(wxValidationEvent& event)
+{
+    if ( event.GetEventType() == wxEVT_TXT_VALIDATE )
+    {
+        if ( event.GetErrorCode() == static_cast<long>(wxFILTER_EMPTY) )
+        {
+            // override the error message for wxFILTER_EMPTY.
+            // use wxLogError() for simplicity.
+            wxLogError("Empty strings are not allowed here.");
+            return;
+        }
+
+        event.Skip();
+    }
+#if 0
+    else if ( event.GetEventType() == wxEVT_NUM_VALIDATE )
+    {
+    }
+#endif
+}

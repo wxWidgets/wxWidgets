@@ -24,7 +24,6 @@
   #include "wx/textctrl.h"
   #include "wx/combobox.h"
   #include "wx/utils.h"
-  #include "wx/msgdlg.h"
   #include "wx/intl.h"
 #endif
 
@@ -145,6 +144,8 @@ wxTextEntry *wxTextValidator::GetTextEntry()
 // This function can pop up an error message.
 bool wxTextValidator::Validate(wxWindow *parent)
 {
+    wxUnusedVar(parent);
+
     // If window is disabled, simply return
     if ( !m_validatorWindow->IsEnabled() )
         return true;
@@ -155,29 +156,30 @@ bool wxTextValidator::Validate(wxWindow *parent)
 
     wxString val(text->GetValue());
 
-    wxString errormsg;
+    EventMsg msg;
 
     // We can only do some kinds of validation once the input is complete, so
     // check for them here:
     if ( HasFlag(wxFILTER_EMPTY) && val.empty() )
-        errormsg = _("Required information entry is empty.");
+        msg = { wxFILTER_EMPTY, _("Required information entry is empty.") };
     else if ( HasFlag(wxFILTER_INCLUDE_LIST) && m_includes.Index(val) == wxNOT_FOUND )
-        errormsg = wxString::Format(_("'%s' is not one of the valid strings"), val);
+        msg = { wxFILTER_INCLUDE_LIST,
+                wxString::Format(_("'%s' is not one of the valid strings"), val) };
     else if ( HasFlag(wxFILTER_EXCLUDE_LIST) && m_excludes.Index(val) != wxNOT_FOUND )
-        errormsg = wxString::Format(_("'%s' is one of the invalid strings"), val);
-    else if ( !(errormsg = IsValid(val)).empty() )
+        msg = { wxFILTER_EXCLUDE_LIST,
+                wxString::Format(_("'%s' is one of the invalid strings"), val) };
+    else if ( !(msg.errormsg = IsValid(val)).empty() )
     {
         // NB: this format string should always contain exactly one '%s'
         wxString buf;
-        buf.Printf(errormsg, val.c_str());
-        errormsg = buf;
+        buf.Printf(msg.errormsg, val.c_str());
+        msg.errormsg = buf;
+        msg.errorcode = -1; // should be set to one of the other flags!
     }
 
-    if ( !errormsg.empty() )
+    if ( !msg.errormsg.empty() )
     {
-        m_validatorWindow->SetFocus();
-        wxMessageBox(errormsg, _("Validation conflict"),
-                     wxOK | wxICON_EXCLAMATION, parent);
+        SendEvent(wxEVT_TXT_VALIDATE, msg);
 
         return false;
     }

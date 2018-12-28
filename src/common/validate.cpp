@@ -20,6 +20,7 @@
 #include "wx/validate.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/msgdlg.h"
     #include "wx/window.h"
 #endif
 
@@ -38,6 +39,29 @@ wxValidator::wxValidator()
 
 wxValidator::~wxValidator()
 {
+}
+
+void wxValidator::DoProcessEvent(wxValidationEvent& event)
+{
+    if ( !m_validatorWindow->GetEventHandler()->ProcessEvent(event) )
+    {
+        m_validatorWindow->SetFocus();
+        wxMessageBox(event.GetErrorMessage(), _("Validation conflict"),
+                     wxOK | wxICON_EXCLAMATION, NULL);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// wxValidationEvent
+// ----------------------------------------------------------------------------
+wxIMPLEMENT_DYNAMIC_CLASS(wxValidationEvent, wxCommandEvent);
+wxDEFINE_EVENT(wxEVT_VALIDATE, wxValidationEvent);
+
+wxValidationEvent::wxValidationEvent(
+    wxValidator *validator, wxEventType type, wxWindow *win)
+    : wxCommandEvent(type, win->GetId())
+{
+    SetEventObject(validator);
 }
 
 #endif

@@ -17,8 +17,43 @@
 
 #include "wx/event.h"
 
+class WXDLLIMPEXP_FWD_CORE wxValidator;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxWindowBase;
+
+// ----------------------------------------------------------------------------
+// wxValidationEvent
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxValidationEvent : public wxCommandEvent
+{
+public:
+    wxValidationEvent() {}
+    wxValidationEvent(wxValidator *validator, wxEventType type, wxWindow *win);
+
+    void SetErrorMessage(const wxString& errormsg) { SetString(errormsg); }
+    wxString GetErrorMessage() const { return GetString(); }
+
+    void SetErrorCode(long code) { SetExtraLong(code); }
+    long GetErrorCode() const { return GetExtraLong(); }
+
+    // default copy ctor and dtor are ok
+    virtual wxEvent *Clone() const wxOVERRIDE { return new wxValidationEvent(*this); }
+
+private:
+
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxValidationEvent);
+};
+
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_VALIDATE, wxValidationEvent);
+
+typedef void (wxEvtHandler::*wxValidationEventFunction)(wxValidationEvent&);
+
+#define wxValidationEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxValidationEventFunction, func)
+
+#define EVT_VALIDATE(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_VALIDATE, id, wxValidationEventHandler(fn))
 
 /*
  A validator has up to three purposes:
@@ -88,7 +123,28 @@ public:
 #endif
 
 protected:
+    struct EventMsg
+    {
+        long errorcode;
+        wxString errormsg;
+    };
+
+    void SendEvent(wxEventType type, const EventMsg& msg)
+    {
+        if ( !m_validatorWindow || msg.errormsg.empty() )
+            return;
+
+        wxValidationEvent event(this, type, m_validatorWindow);
+        event.SetErrorCode(msg.errorcode);
+        event.SetErrorMessage(msg.errormsg);
+
+        DoProcessEvent(event);
+    }
+
     wxWindow *m_validatorWindow;
+
+private:
+    void DoProcessEvent(wxValidationEvent& event);
 
 private:
     static bool ms_isSilent;

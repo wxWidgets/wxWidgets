@@ -19,6 +19,9 @@ class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 
 #include "wx/validate.h"
 
+#define wxEVT_TXT_VALIDATE wxEVT_VALIDATE
+#define EVT_TXT_VALIDATE EVT_VALIDATE
+
 enum wxTextValidatorStyle
 {
     wxFILTER_NONE = 0x0,
