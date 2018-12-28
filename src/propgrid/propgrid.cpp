@@ -2284,10 +2284,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                 else if ( isPgEnabled )
                 {
                     rowFgCol = m_colPropFore;
-                    if ( p == firstSelected )
-                        rowBgCol = m_colMargin;
-                    else
-                        rowBgCol = selBackCol;
+                    rowBgCol = p == firstSelected ? m_colMargin : selBackCol;
                 }
                 else
                 {
@@ -2440,10 +2437,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                 {
                     dc.SetBrush(m_colPropBack);
                     dc.SetPen(m_colPropBack);
-                    if ( p->IsEnabled() )
-                        dc.SetTextForeground(m_colPropFore);
-                    else
-                        dc.SetTextForeground(m_colDisPropFore);
+                    dc.SetTextForeground(p->IsEnabled() ? m_colPropFore : m_colDisPropFore);
                 }
             }
             else
