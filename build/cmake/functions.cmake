@@ -286,6 +286,9 @@ function(wx_set_target_properties target_name is_base)
     wx_set_common_target_properties(${target_name})
 endfunction()
 
+# List of libraries added via wx_add_library() to use for wx-config
+set(wxLIB_TARGETS)
+
 # Add a wxWidgets library
 # wx_add_library(<target_name> [IS_BASE] <src_files>...)
 # first parameter is the name of the library
@@ -294,6 +297,9 @@ endfunction()
 macro(wx_add_library name)
     cmake_parse_arguments(wxADD_LIBRARY "IS_BASE" "" "" ${ARGN})
     set(src_files ${wxADD_LIBRARY_UNPARSED_ARGUMENTS})
+
+    list(APPEND wxLIB_TARGETS ${name})
+    set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)
 
     if(wxBUILD_MONOLITHIC AND NOT ${name} STREQUAL "mono")
         # collect all source files for mono library
