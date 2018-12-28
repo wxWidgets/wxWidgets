@@ -2188,7 +2188,6 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         wxPGProperty* p = nextP;
         nextP = visPropArray[arrInd];
 
-        int rowHeight = m_fontHeight+(m_spacingy*2)+1;
         int textMarginHere = x;
         int renderFlags = 0;
 
@@ -2327,7 +2326,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                         lh );
 
         // Default cell rect fill the entire row
-        wxRect cellRect(greyDepthX, y, cellX - greyDepthX, rowHeight-1);
+        wxRect cellRect(greyDepthX, y, cellX - greyDepthX, lh-1);
 
         bool isCategory = p->IsCategory();
 
@@ -2491,7 +2490,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         if ( fontChanged )
             dc.SetFont(normalFont);
 
-        y += rowHeight;
+        y += lh;
     }
 
     // Clear empty space beyond the right edge of the grid
