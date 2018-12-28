@@ -156,7 +156,7 @@ wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_KEY_DOWN                (wxStyledTextCtrl::OnKeyDown)
     EVT_KILL_FOCUS              (wxStyledTextCtrl::OnLoseFocus)
     EVT_SET_FOCUS               (wxStyledTextCtrl::OnGainFocus)
-    EVT_DISPLAY_CHANGED         (wxStyledTextCtrl::OnDisplayChanged)
+    EVT_DPI_CHANGED             (wxStyledTextCtrl::OnDPIChanged)
     EVT_SYS_COLOUR_CHANGED      (wxStyledTextCtrl::OnSysColourChanged)
     EVT_ERASE_BACKGROUND        (wxStyledTextCtrl::OnEraseBackground)
     EVT_MENU_RANGE              (10, 16, wxStyledTextCtrl::OnMenu)
@@ -5371,11 +5371,8 @@ void wxStyledTextCtrl::OnGainFocus(wxFocusEvent& evt) {
 }
 
 
-void wxStyledTextCtrl::OnDisplayChanged(wxDisplayChangedEvent& evt)
+void wxStyledTextCtrl::OnDPIChanged(wxDPIChangedEvent& evt)
 {
-    if (evt.GetOldDPI() == wxDefaultSize || evt.GetNewDPI() == wxDefaultSize)
-        return;
-
     int ptSizeOld = StyleGetSize(wxSTC_STYLE_DEFAULT);
     int ptSizeNew = ptSizeOld * ((double)evt.GetNewDPI().y / evt.GetOldDPI().y);
 

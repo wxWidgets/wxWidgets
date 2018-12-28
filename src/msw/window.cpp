@@ -4888,7 +4888,7 @@ void wxWindowMSW::HandleDPIChange(wxWindow* win, const wxSize oldDPI, const wxSi
     // update font again after updating children
     win->SetFont(win->m_font);
 
-    wxDisplayChangedEvent event;
+    wxDPIChangedEvent event;
     event.SetOldDPI(oldDPI);
     event.SetNewDPI(newDPI);
     event.SetEventObject(win);

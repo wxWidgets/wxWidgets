@@ -92,6 +92,7 @@
     wxIMPLEMENT_DYNAMIC_CLASS(wxSetCursorEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxSysColourChangedEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxDisplayChangedEvent, wxEvent);
+    wxIMPLEMENT_DYNAMIC_CLASS(wxDPIChangedEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxUpdateUIEvent, wxCommandEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxNavigationKeyEvent, wxEvent);
     wxIMPLEMENT_DYNAMIC_CLASS(wxPaletteChangedEvent, wxEvent);
@@ -302,6 +303,7 @@ wxDEFINE_EVENT( wxEVT_MENU_HIGHLIGHT, wxMenuEvent );
 wxDEFINE_EVENT( wxEVT_CONTEXT_MENU, wxContextMenuEvent );
 wxDEFINE_EVENT( wxEVT_SYS_COLOUR_CHANGED, wxSysColourChangedEvent );
 wxDEFINE_EVENT( wxEVT_DISPLAY_CHANGED, wxDisplayChangedEvent );
+wxDEFINE_EVENT( wxEVT_DPI_CHANGED, wxDPIChangedEvent );
 wxDEFINE_EVENT( wxEVT_QUERY_NEW_PALETTE, wxQueryNewPaletteEvent );
 wxDEFINE_EVENT( wxEVT_PALETTE_CHANGED, wxPaletteChangedEvent );
 wxDEFINE_EVENT( wxEVT_JOY_BUTTON_DOWN, wxJoystickEvent );
