@@ -1861,19 +1861,14 @@ void wxPropertyGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
     }
 
     // Find out where the window is scrolled to
-    int vy;                     // Top of the client
-    GetViewStart(NULL, &vy);
+    int vx, vy;
+    GetViewStart(&vx, &vy);
+    vx *= wxPG_PIXELS_PER_UNIT;
     vy *= wxPG_PIXELS_PER_UNIT;
 
     // Update everything inside the box
     wxRect r = GetUpdateRegion().GetBox();
-
-    r.y += vy;
-
-    // FIXME: This is just a workaround for a bug that causes splitters not
-    //        to paint when other windows are being dragged over the grid.
-    r.x = 0;
-    r.width = GetClientSize().x;
+    r.Offset(vx, vy);
 
     // Repaint this rectangle
     DrawItems(*dcPtr, r.y, r.y + r.height-1, &r);
@@ -2133,8 +2128,6 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     const wxVector<int>& colWidths = state->m_colWidths;
     const unsigned int colCount = state->GetColumnCount();
 
-    // TODO: Only render columns that are within clipping region.
-
     dc.SetFont(normalFont);
 
     wxPropertyGridConstIterator it( state, wxPG_ITERATE_VISIBLE, firstItem );
@@ -2165,8 +2158,6 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     wxPGProperty* nextP = visPropArray[0];
 
-    int gridWidth = itemsRect->x + itemsRect->width;
-
     // Calculate splitters positions
     wxVector<int> splitterPos;
     splitterPos.reserve(colCount);
@@ -2176,8 +2167,18 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         sx += *cit;
         splitterPos.push_back(sx);
     }
+
+    int viewLeftEdge = itemsRect->x - vx;
+    int viewRightEdge = viewLeftEdge + itemsRect->width - 1;
+    // Determine columns range to be drawn
+    unsigned int firstCol = 0;
+    while ( firstCol < colCount-1 && splitterPos[firstCol] < viewLeftEdge )
+        firstCol++;
+    unsigned int lastCol = firstCol;
+    while ( lastCol < colCount-1 && splitterPos[lastCol] < viewRightEdge )
+        lastCol++;
     // Calculate position of the right edge of the last cell
-    int cellX = sx + 1;
+    int cellX = splitterPos[lastCol]+ 1;
 
     y = firstItemTopY;
     for ( unsigned int arrInd=1;
@@ -2236,10 +2237,9 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         }
 
         // Splitters
-        for (wxVector<int>::const_iterator spit = splitterPos.begin(); spit != splitterPos.end(); ++spit)
+        for (unsigned int i = firstCol; i <= lastCol; i++)
         {
-            int spx = *spit;
-            dc.DrawLine(spx, y, spx, y2);
+            dc.DrawLine(splitterPos[i], y, splitterPos[i], y2);
         }
 
         // Horizontal Line, below
@@ -2376,7 +2376,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         // Draw cells from back to front so that we can easily tell if the
         // cell on the right was empty from text
         bool prevFilled = true;
-        unsigned int ci = colCount;
+        unsigned int ci = lastCol + 1;
         do
         {
             ci--;
@@ -2490,9 +2490,9 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                 prevFilled = true;
             }
 
-            dc.DestroyClippingRegion(); // Is this really necessary?
+            dc.DestroyClippingRegion();
         }
-        while ( ci > 0 );
+        while ( ci > firstCol );
 
         if ( fontChanged )
             dc.SetFont(normalFont);
@@ -2503,7 +2503,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     // Clear empty space beyond the right edge of the grid
     dc.SetPen(wxPen(m_colEmptySpace));
     dc.SetBrush(wxBrush(m_colEmptySpace));
-    dc.DrawRectangle(cellX, firstItemTopY, gridWidth - cellX, lastItemBottomY - firstItemTopY);
+    dc.DrawRectangle(cellX, firstItemTopY, viewRightEdge - cellX + 1, lastItemBottomY - firstItemTopY);
 
     return y - 1  + vy;
 }
