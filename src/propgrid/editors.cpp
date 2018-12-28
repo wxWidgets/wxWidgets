@@ -824,143 +824,131 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
     wxDC& dc = *pDc;
     dc.SetBrush(*wxWHITE_BRUSH);
 
-    if ( rect.x >= 0 )
+    //
+    // DrawItem call
+    wxPGCellRenderer* renderer = NULL;
+    const wxPGChoiceEntry* cell = NULL;
+
+    wxPoint pt(rect.x + wxPG_CONTROL_MARGIN - wxPG_CHOICEXADJUST - 1,
+                rect.y + 1);
+
+    int renderFlags = wxPGCellRenderer::DontUseCellColours;
+    bool useCustomPaintProcedure;
+
+    // If custom image had some size, we will start from the assumption
+    // that custom paint procedure is required
+    if ( cis.x > 0 )
+        useCustomPaintProcedure = true;
+    else
+        useCustomPaintProcedure = false;
+
+    if ( flags & wxODCB_PAINTING_SELECTED )
+        renderFlags |= wxPGCellRenderer::Selected;
+
+    if ( flags & wxODCB_PAINTING_CONTROL )
     {
-        //
-        // DrawItem call
-        wxPGCellRenderer* renderer = NULL;
-        const wxPGChoiceEntry* cell = NULL;
+        renderFlags |= wxPGCellRenderer::Control;
 
-        wxPoint pt(rect.x + wxPG_CONTROL_MARGIN - wxPG_CHOICEXADJUST - 1,
-                   rect.y + 1);
-
-        int renderFlags = wxPGCellRenderer::DontUseCellColours;
-        bool useCustomPaintProcedure;
-
-        // If custom image had some size, we will start from the assumption
-        // that custom paint procedure is required
-        if ( cis.x > 0 )
-            useCustomPaintProcedure = true;
-        else
+        // If wxPG_PROP_CUSTOMIMAGE was set, then that means any custom
+        // image will not appear on the control row (it may be too
+        // large to fit, for instance). Also do not draw custom image
+        // if no choice was selected.
+        if ( !p->HasFlag(wxPG_PROP_CUSTOMIMAGE) || item < 0 )
             useCustomPaintProcedure = false;
-
-        if ( flags & wxODCB_PAINTING_SELECTED )
-            renderFlags |= wxPGCellRenderer::Selected;
-
-        if ( flags & wxODCB_PAINTING_CONTROL )
-        {
-            renderFlags |= wxPGCellRenderer::Control;
-
-            // If wxPG_PROP_CUSTOMIMAGE was set, then that means any custom
-            // image will not appear on the control row (it may be too
-            // large to fit, for instance). Also do not draw custom image
-            // if no choice was selected.
-            if ( !p->HasFlag(wxPG_PROP_CUSTOMIMAGE) || item < 0 )
-                useCustomPaintProcedure = false;
-        }
-        else
-        {
-            renderFlags |= wxPGCellRenderer::ChoicePopup;
-
-            // For consistency, always use normal font when drawing drop down
-            // items
-            dc.SetFont(GetFont());
-        }
-
-        // If not drawing a selected popup item, then give property's
-        // value image a chance.
-        if ( p->GetValueImage() && item != pCb->GetSelection() )
-            useCustomPaintProcedure = false;
-        // If current choice had a bitmap set by the application, then
-        // use it instead of any custom paint procedure
-        // (only if not drawn in the control field).
-        else if ( itemBitmap && !(flags & wxODCB_PAINTING_CONTROL) )
-            useCustomPaintProcedure = false;
-
-        if ( useCustomPaintProcedure )
-        {
-            pt.x += wxCC_CUSTOM_IMAGE_MARGIN1;
-            wxRect r(pt, cis);
-
-            if ( flags & wxODCB_PAINTING_CONTROL )
-            {
-                //r.width = cis.x;
-                r.height = wxPG_STD_CUST_IMAGE_HEIGHT(m_lineHeight);
-            }
-
-            paintdata.m_drawnWidth = r.width;
-
-            dc.SetPen(m_colPropFore);
-            if ( comValIndex >= 0 )
-            {
-                const wxPGCommonValue* cv = GetCommonValue(comValIndex);
-                renderer = cv->GetRenderer();
-                r.width = rect.width;
-                renderer->Render( dc, r, this, p, m_selColumn, comValIndex, renderFlags );
-                return;
-            }
-            else if ( item >= 0 )
-            {
-                p->OnCustomPaint( dc, r, paintdata );
-            }
-            else
-            {
-                dc.DrawRectangle( r );
-            }
-
-            pt.x += paintdata.m_drawnWidth + wxCC_CUSTOM_IMAGE_MARGIN2 - 1;
-        }
-        else
-        {
-            // TODO: This aligns text so that it seems to be horizontally
-            //       on the same line as property values. Not really
-            //       sure if it is needed, but seems to not cause any harm.
-            pt.x -= 1;
-
-            if ( item < 0 && (flags & wxODCB_PAINTING_CONTROL) )
-                item = pCb->GetSelection();
-
-            if ( choices.IsOk() && item >= 0 && comValIndex < 0 )
-            {
-                // This aligns bitmap horizontally so that it is
-                // on the same position as bitmap drawn for static content
-                // (without editor).
-                wxRect r(rect);
-                r.x -= 1;
-
-                cell = &choices.Item(item);
-                renderer = wxPGGlobalVars->m_defaultRenderer;
-                int imageOffset = renderer->PreDrawCell(dc, r, *cell,
-                                                        renderFlags );
-                if ( imageOffset )
-                    imageOffset += wxCC_CUSTOM_IMAGE_MARGIN1 +
-                                   wxCC_CUSTOM_IMAGE_MARGIN2;
-                pt.x += imageOffset;
-            }
-        }
-
-        //
-        // Draw text
-        //
-
-        pt.y += (rect.height-m_fontHeight)/2 - 1;
-
-        pt.x += 1;
-
-        dc.DrawText( text, pt.x + wxPG_XBEFORETEXT, pt.y );
-
-        if ( renderer )
-            renderer->PostDrawCell(dc, this, *cell, renderFlags);
     }
     else
     {
-        //
-        // MeasureItem call
+        renderFlags |= wxPGCellRenderer::ChoicePopup;
 
-        p->OnCustomPaint( dc, rect, paintdata );
-        rect.height = paintdata.m_drawnHeight + 2;
-        rect.width = cis.x + wxCC_CUSTOM_IMAGE_MARGIN1 + wxCC_CUSTOM_IMAGE_MARGIN2 + 9;
+        // For consistency, always use normal font when drawing drop down
+        // items
+        dc.SetFont(GetFont());
     }
+
+    // If not drawing a selected popup item, then give property's
+    // value image a chance.
+    if ( p->GetValueImage() && item != pCb->GetSelection() )
+        useCustomPaintProcedure = false;
+    // If current choice had a bitmap set by the application, then
+    // use it instead of any custom paint procedure
+    // (only if not drawn in the control field).
+    else if ( itemBitmap && !(flags & wxODCB_PAINTING_CONTROL) )
+        useCustomPaintProcedure = false;
+
+    if ( useCustomPaintProcedure )
+    {
+        pt.x += wxCC_CUSTOM_IMAGE_MARGIN1;
+        wxRect r(pt, cis);
+
+        if ( flags & wxODCB_PAINTING_CONTROL )
+        {
+            //r.width = cis.x;
+            r.height = wxPG_STD_CUST_IMAGE_HEIGHT(m_lineHeight);
+        }
+
+        paintdata.m_drawnWidth = r.width;
+
+        dc.SetPen(m_colPropFore);
+        if ( comValIndex >= 0 )
+        {
+            const wxPGCommonValue* cv = GetCommonValue(comValIndex);
+            renderer = cv->GetRenderer();
+            r.width = rect.width;
+            renderer->Render( dc, r, this, p, m_selColumn, comValIndex, renderFlags );
+            return;
+        }
+        else if ( item >= 0 )
+        {
+            p->OnCustomPaint( dc, r, paintdata );
+        }
+        else
+        {
+            dc.DrawRectangle( r );
+        }
+
+        pt.x += paintdata.m_drawnWidth + wxCC_CUSTOM_IMAGE_MARGIN2 - 1;
+    }
+    else
+    {
+        // TODO: This aligns text so that it seems to be horizontally
+        //       on the same line as property values. Not really
+        //       sure if it is needed, but seems to not cause any harm.
+        pt.x -= 1;
+
+        if ( item < 0 && (flags & wxODCB_PAINTING_CONTROL) )
+            item = pCb->GetSelection();
+
+        if ( choices.IsOk() && item >= 0 && comValIndex < 0 )
+        {
+            // This aligns bitmap horizontally so that it is
+            // on the same position as bitmap drawn for static content
+            // (without editor).
+            wxRect r(rect);
+            r.x -= 1;
+
+            cell = &choices.Item(item);
+            renderer = wxPGGlobalVars->m_defaultRenderer;
+            int imageOffset = renderer->PreDrawCell(dc, r, *cell,
+                                                    renderFlags );
+            if ( imageOffset )
+                imageOffset += wxCC_CUSTOM_IMAGE_MARGIN1 +
+                                wxCC_CUSTOM_IMAGE_MARGIN2;
+            pt.x += imageOffset;
+        }
+    }
+
+    //
+    // Draw text
+    //
+
+    pt.y += (rect.height-m_fontHeight)/2 - 1;
+
+    pt.x += 1;
+
+    dc.DrawText( text, pt.x + wxPG_XBEFORETEXT, pt.y );
+
+    if ( renderer )
+        renderer->PostDrawCell(dc, this, *cell, renderFlags);
 }
 
 static
