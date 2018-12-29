@@ -123,6 +123,7 @@ All (GUI):
 - Implement wxAuiNotebook::GetBestSize() (Sebastian Walderich).
 - Allow changing tooltip text for button allowing to enter a new string
   in wxPGArrayEditorDialog.
+- Add wxWindow::GetDPI().
 
 wxMSW:
 

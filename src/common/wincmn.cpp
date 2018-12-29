@@ -74,6 +74,7 @@
     #include "wx/sysopt.h"
 #endif
 
+#include "wx/display.h"
 #include "wx/platinfo.h"
 #include "wx/recguard.h"
 #include "wx/private/window.h"
@@ -2878,6 +2879,11 @@ void wxWindowBase::OnInternalIdle()
 // ----------------------------------------------------------------------------
 // DPI-independent pixels and dialog units translations
 // ----------------------------------------------------------------------------
+
+wxSize wxWindowBase::GetDPI() const
+{
+    return wxDisplay(static_cast<const wxWindow*>(this)).GetPPI();
+}
 
 #ifndef wxHAVE_DPI_INDEPENDENT_PIXELS
 

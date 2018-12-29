@@ -488,7 +488,28 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         EnableCloseButton(false);
     }
 
-    DetermineActiveDPI(m_activeDPI, m_perMonitorDPIaware);
+    SetActiveDPI(GetDPI());
+
+#if wxUSE_DYNLIB_CLASS
+    wxLoadedDLL dllUser32(wxS("user32.dll"));
+
+    // determine if 'Per Monitor v2' awareness is used
+    typedef DPI_AWARENESS_CONTEXT(WINAPI *GetWindowDpiAwarenessContext_t)(HWND hwnd);
+    GetWindowDpiAwarenessContext_t wxDL_INIT_FUNC(pfn, GetWindowDpiAwarenessContext, dllUser32);
+
+    typedef BOOL(WINAPI *AreDpiAwarenessContextsEqual_t)(DPI_AWARENESS_CONTEXT dpiContextA, DPI_AWARENESS_CONTEXT dpiContextB);
+    AreDpiAwarenessContextsEqual_t wxDL_INIT_FUNC(pfn, AreDpiAwarenessContextsEqual, dllUser32);
+
+    if (pfnGetWindowDpiAwarenessContext && pfnAreDpiAwarenessContextsEqual)
+    {
+        DPI_AWARENESS_CONTEXT dpiAwarenessContext = pfnGetWindowDpiAwarenessContext(GetHwnd());
+
+        if (pfnAreDpiAwarenessContextsEqual(dpiAwarenessContext, DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
+        {
+            m_perMonitorDPIaware = true;
+        }
+    }
+#endif // wxUSE_DYNLIB_CLASS
 
     // for standard dialogs the dialog manager generates WM_CHANGEUISTATE
     // itself but for custom windows we have to do it ourselves in order to
@@ -1158,8 +1179,7 @@ wxSize wxTopLevelWindowMSW::GetActiveDPI() const
 
     if (dpi == wxDefaultSize)
     {
-        bool temp;
-        DetermineActiveDPI(dpi, temp);
+        dpi = GetDPI();
     }
 
     return dpi;

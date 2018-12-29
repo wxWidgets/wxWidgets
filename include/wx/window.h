@@ -949,6 +949,9 @@ public:
     // translation between different units
     // -----------------------------------
 
+        // Get the DPI used by the given window or wxSize(0, 0) if unknown.
+    virtual wxSize GetDPI() const;
+
         // DPI-independent pixels, or DIPs, are pixel values for the standard
         // 96 DPI display, they are scaled to take the current resolution into
         // account (i.e. multiplied by the same factor as returned by

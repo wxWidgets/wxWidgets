@@ -99,6 +99,8 @@ public:
 
     virtual bool Reparent(wxWindowBase *newParent) wxOVERRIDE;
 
+    virtual wxSize GetDPI() const wxOVERRIDE;
+
     virtual void WarpPointer(int x, int y) wxOVERRIDE;
     virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
 
@@ -191,14 +193,6 @@ public:
 
     // unregister a previously registered handler
     static void MSWUnregisterMessageHandler(int msg, MSWMessageHandler handler);
-
-
-    // DPI-related, should probably become portable and public later.
-    // --------------------------------------------------------------
-
-    // Return the per-window DPI if possible, i.e. when running under Windows
-    // 10 v1607 or later, or wxSize(0, 0) if it's not available.
-    wxSize MSWTryGetWindowDPI() const;
 
 
     // implementation from now on
@@ -584,6 +578,10 @@ public:
     // Return true if the button was clicked, false otherwise.
     static bool MSWClickButtonIfPossible(wxButton* btn);
 
+    // Return the per-window DPI if possible, i.e. when running under Windows
+    // 10 v1607 or later, or wxSize(0, 0) if it's not available.
+    wxSize MSWTryGetWindowDPI() const;
+
 protected:
     // this allows you to implement standard control borders without
     // repeating the code in different classes that are not derived from
@@ -721,7 +719,6 @@ protected:
     }
 
     // per-monitor DPI related functions
-    void DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware) const;
     bool HandleDPIChange(const wxSize newDPI, const wxRect newRect);
     void HandleDPIChange(wxWindow* win, const wxSize oldDPI, const wxSize newDPI) const;
 

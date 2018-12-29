@@ -31,8 +31,6 @@
     #include "wx/log.h"
 #endif
 
-#include "wx/display.h"
-
 #ifdef __WXMSW__
     #include "wx/msw/enhmeta.h"
 #endif
@@ -624,7 +622,7 @@ void wxGraphicsContext::GetDPI( wxDouble* dpiX, wxDouble* dpiY)
 {
     if ( m_window )
     {
-        const wxSize ppi = wxDisplay(m_window).GetPPI();
+        const wxSize ppi = m_window->GetDPI();
         *dpiX = ppi.x;
         *dpiY = ppi.y;
     }

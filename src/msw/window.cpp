@@ -4777,47 +4777,17 @@ wxSize wxWindowMSW::MSWTryGetWindowDPI() const
     return wxSize();
 }
 
-void wxWindowMSW::DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware) const
+wxSize wxWindowMSW::GetDPI() const
 {
     wxSize dpi = MSWTryGetWindowDPI();
-    bool perMonitorAwareV2 = false;
-
-#if wxUSE_DYNLIB_CLASS
-
-    if ( dpi != wxDefaultSize )
-    {
-        wxLoadedDLL dllUser32(wxS("user32.dll"));
-
-        // determine if 'Per Monitor v2' awareness is used
-        typedef DPI_AWARENESS_CONTEXT(WINAPI *GetWindowDpiAwarenessContext_t)(HWND hwnd);
-        GetWindowDpiAwarenessContext_t wxDL_INIT_FUNC(pfn, GetWindowDpiAwarenessContext, dllUser32);
-
-        typedef BOOL(WINAPI *AreDpiAwarenessContextsEqual_t)(DPI_AWARENESS_CONTEXT dpiContextA, DPI_AWARENESS_CONTEXT dpiContextB);
-        AreDpiAwarenessContextsEqual_t wxDL_INIT_FUNC(pfn, AreDpiAwarenessContextsEqual, dllUser32);
-
-        if (pfnGetWindowDpiAwarenessContext && pfnAreDpiAwarenessContextsEqual)
-        {
-            DPI_AWARENESS_CONTEXT dpiAwarenessContext = pfnGetWindowDpiAwarenessContext(GetHwnd());
-
-            if (pfnAreDpiAwarenessContextsEqual(dpiAwarenessContext, DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
-            {
-                perMonitorAwareV2 = true;
-            }
-        }
-    }
-
-#endif // wxUSE_DYNLIB_CLASS
-
-    // not initialized above, use old method
-    if (dpi == wxDefaultSize)
+    if ( !dpi.x || !dpi.y )
     {
         WindowHDC hdc(GetHwnd());
         dpi.x = ::GetDeviceCaps(hdc, LOGPIXELSX);
         dpi.y = ::GetDeviceCaps(hdc, LOGPIXELSY);
     }
 
-    activeDPI = dpi;
-    perMonitorDPIaware = perMonitorAwareV2;
+    return dpi;
 }
 
 bool wxWindowMSW::HandleDPIChange(const wxSize newDPI, const wxRect newRect)
