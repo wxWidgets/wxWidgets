@@ -4796,7 +4796,7 @@ void wxWindowMSW::DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware
     // not initialized above, use old method
     if (dpi == wxDefaultSize)
     {
-        HDC hdc = GetDC(GetHwnd());
+        WindowHDC hdc(GetHwnd());
         dpi.x = ::GetDeviceCaps(hdc, LOGPIXELSX);
         dpi.y = ::GetDeviceCaps(hdc, LOGPIXELSY);
     }
