@@ -825,11 +825,7 @@ bool wxWindowMSW::SetFont(const wxFont& font)
         // just been reset and in this case we need to change the font used by
         // the native window to the default for this class, i.e. exactly what
         // GetFont() returns
-        WXHANDLE hFont = GetFont().GetResourceHandle();
-
-        wxASSERT_MSG( hFont, wxT("should have valid font") );
-
-        ::SendMessage(hWnd, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
+        wxSetWindowFont(hWnd, GetFont());
     }
 
     return true;
