@@ -4750,28 +4750,43 @@ bool wxSystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWi
     return ::SystemParametersInfo(uiAction, uiParam, pvParam, fWinIni);
 }
 
+wxSize wxWindowMSW::MSWTryGetWindowDPI() const
+{
+#if wxUSE_DYNLIB_CLASS
+    typedef UINT (WINAPI *GetDpiForWindow_t)(HWND hwnd);
+
+    static GetDpiForWindow_t s_pfnGetDpiForWindow = NULL;
+    static bool s_initDone = false;
+    if ( !s_initDone )
+    {
+        wxLoadedDLL dllUser32(wxS("user32.dll"));
+
+        wxDL_INIT_FUNC(s_pfn, GetDpiForWindow, dllUser32);
+
+        s_initDone = true;
+    }
+
+    if ( s_pfnGetDpiForWindow )
+    {
+        const int dpi = static_cast<int>(s_pfnGetDpiForWindow(GetHwnd()));
+
+        return wxSize(dpi, dpi);
+    }
+#endif // wxUSE_DYNLIB_CLASS
+
+    return wxSize();
+}
+
 void wxWindowMSW::DetermineActiveDPI(wxSize& activeDPI, bool& perMonitorDPIaware) const
 {
-    wxSize dpi = wxDefaultSize;
+    wxSize dpi = MSWTryGetWindowDPI();
     bool perMonitorAwareV2 = false;
 
 #if wxUSE_DYNLIB_CLASS
 
-    wxDynamicLibrary dllUser32;
-    if (dllUser32.Load(wxS("User32.dll"), wxDL_VERBATIM | wxDL_QUIET))
+    if ( dpi != wxDefaultSize )
     {
-        // determine active DPI of the window
-        typedef UINT(WINAPI *GetDpiForWindow_t)(HWND hwnd);
-        GetDpiForWindow_t wxDL_INIT_FUNC(pfn, GetDpiForWindow, dllUser32);
-
-        if (pfnGetDpiForWindow)
-        {
-            UINT dpiWindow = pfnGetDpiForWindow(GetHwnd());
-            if (dpiWindow != 0)
-            {
-                dpi = wxSize((int)dpiWindow, (int)dpiWindow);
-            }
-        }
+        wxLoadedDLL dllUser32(wxS("user32.dll"));
 
         // determine if 'Per Monitor v2' awareness is used
         typedef DPI_AWARENESS_CONTEXT(WINAPI *GetWindowDpiAwarenessContext_t)(HWND hwnd);

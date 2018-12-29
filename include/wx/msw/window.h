@@ -193,6 +193,14 @@ public:
     static void MSWUnregisterMessageHandler(int msg, MSWMessageHandler handler);
 
 
+    // DPI-related, should probably become portable and public later.
+    // --------------------------------------------------------------
+
+    // Return the per-window DPI if possible, i.e. when running under Windows
+    // 10 v1607 or later, or wxSize(0, 0) if it's not available.
+    wxSize MSWTryGetWindowDPI() const;
+
+
     // implementation from now on
     // ==========================
 
