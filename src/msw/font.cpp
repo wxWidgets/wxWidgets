@@ -878,7 +878,6 @@ void wxFont::SetFractionalPointSize(float pointSize)
 {
     AllocExclusive();
 
-    M_FONTDATA->Free();
     M_FONTDATA->SetFractionalPointSize(pointSize);
 }
 
