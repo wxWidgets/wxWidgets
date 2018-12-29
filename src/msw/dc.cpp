@@ -2437,10 +2437,24 @@ void wxMSWDCImpl::DoGetSizeMM(int *w, int *h) const
 
 wxSize wxMSWDCImpl::GetPPI() const
 {
-    int x = ::GetDeviceCaps(GetHdc(), LOGPIXELSX);
-    int y = ::GetDeviceCaps(GetHdc(), LOGPIXELSY);
+    // As documented by MSDN, GetDeviceCaps() returns the same value for all
+    // HDCs on the system, and so can't be used to retrieve the correct value
+    // for the HDCs associated with the windows on monitors other than the
+    // primary one if they use different DPI. Hence prefer to get this
+    // information from the associated window, if possible.
+    wxSize ppi;
+    if ( m_window )
+    {
+        ppi = m_window->MSWTryGetWindowDPI();
+    }
 
-    return wxSize(x, y);
+    if ( !ppi.x || !ppi.y )
+    {
+        ppi.x = ::GetDeviceCaps(GetHdc(), LOGPIXELSX);
+        ppi.y = ::GetDeviceCaps(GetHdc(), LOGPIXELSY);
+    }
+
+    return ppi;
 }
 
 // ----------------------------------------------------------------------------
