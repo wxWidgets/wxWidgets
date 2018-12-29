@@ -564,8 +564,7 @@ bool wxSpinCtrl::SetFont(const wxFont& font)
         return false;
     }
 
-    WXHANDLE hFont = GetFont().GetResourceHandle();
-    (void)::SendMessage(GetBuddyHwnd(), WM_SETFONT, (WPARAM)hFont, TRUE);
+    wxSetWindowFont(GetBuddyHwnd(), GetFont());
 
     return true;
 }

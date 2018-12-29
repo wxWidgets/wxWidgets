@@ -965,6 +965,12 @@ WXDLLIMPEXP_CORE void wxFillLogFont(LOGFONT *logFont, const wxFont *font);
 WXDLLIMPEXP_CORE wxFont wxCreateFontFromLogFont(const LOGFONT *logFont);
 WXDLLIMPEXP_CORE wxFontEncoding wxGetFontEncFromCharSet(int charset);
 
+inline void wxSetWindowFont(HWND hwnd, const wxFont& font)
+{
+    ::SendMessage(hwnd, WM_SETFONT,
+                  (WPARAM)GetHfontOf(font), MAKELPARAM(TRUE, 0));
+}
+
 WXDLLIMPEXP_CORE void wxSliderEvent(WXHWND control, WXWORD wParam, WXWORD pos);
 WXDLLIMPEXP_CORE void wxScrollBarEvent(WXHWND hbar, WXWORD wParam, WXWORD pos);
 
