@@ -123,8 +123,6 @@ public:
     wxSize GetActiveDPI() const wxOVERRIDE;
     bool IsPerMonitorDPIAware() const;
 
-    void SetActiveDPI(const wxSize& dpi);
-
 protected:
     // common part of all ctors
     void Init();
@@ -167,6 +165,9 @@ protected:
                                           const wxSize& size,
                                           int& x, int& y,
                                           int& w, int& h) const wxOVERRIDE;
+
+    // WM_DPICHANGED handler.
+    bool HandleDPIChange(const wxSize newDPI, const wxRect newRect);
 
     // This field contains the show command to use when showing the window the
     // next time and also indicates whether the window should be considered

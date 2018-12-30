@@ -3448,17 +3448,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             processed = HandleDisplayChange();
             break;
 
-        case WM_DPICHANGED:
-            {
-                int const xDPI = (int)LOWORD(wParam);
-                int const yDPI = (int)HIWORD(wParam);
-                const RECT* const prcNewWindow = (RECT*)lParam;
-
-                processed = HandleDPIChange(wxSize(xDPI, yDPI),
-                                            wxRectFromRECT(*prcNewWindow));
-            }
-            break;
-
         case WM_PALETTECHANGED:
             processed = HandlePaletteChanged((WXHWND)wParam);
             break;
@@ -4790,28 +4779,6 @@ wxSize wxWindowMSW::GetDPI() const
     return dpi;
 }
 
-bool wxWindowMSW::HandleDPIChange(const wxSize newDPI, const wxRect newRect)
-{
-    wxTopLevelWindow *const tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
-    if (!tlw || !tlw->IsPerMonitorDPIAware())
-        return false;
-
-    wxSize const oldDPI = tlw->GetActiveDPI();
-
-    tlw->SetActiveDPI(newDPI);
-
-    if (oldDPI != newDPI)
-    {
-        HandleDPIChange(this, oldDPI, newDPI);
-    }
-
-    SetSize(newRect);
-
-    Refresh();
-
-    return true;
-}
-
 // Helper function to update the given coordinate by the scaling factor if it
 // is set, i.e. different from wxDefaultCoord.
 static void ScaleCoordIfSet(int& coord, float scaleFactor)
@@ -4823,29 +4790,30 @@ static void ScaleCoordIfSet(int& coord, float scaleFactor)
     }
 }
 
-void wxWindowMSW::HandleDPIChange(wxWindow* win, const wxSize oldDPI, const wxSize newDPI) const
+void
+wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
 {
     // update min and max size if necessary
     const float scaleFactor = (float)newDPI.y / oldDPI.y;
 
-    ScaleCoordIfSet(win->m_minHeight, scaleFactor);
-    ScaleCoordIfSet(win->m_minWidth, scaleFactor);
-    ScaleCoordIfSet(win->m_maxHeight, scaleFactor);
-    ScaleCoordIfSet(win->m_maxWidth, scaleFactor);
+    ScaleCoordIfSet(m_minHeight, scaleFactor);
+    ScaleCoordIfSet(m_minWidth, scaleFactor);
+    ScaleCoordIfSet(m_maxHeight, scaleFactor);
+    ScaleCoordIfSet(m_maxWidth, scaleFactor);
 
-    win->InvalidateBestSize();
+    InvalidateBestSize();
 
     // update font if necessary
-    if ( win->m_font.IsOk() )
+    if ( m_font.IsOk() )
     {
-        win->m_font.WXAdjustToPPI(newDPI);
+        m_font.WXAdjustToPPI(newDPI);
 
         // WXAdjustToPPI() changes the HFONT, so reassociate it with the window.
-        wxSetWindowFont(GetHwndOf(win), win->m_font);
+        wxSetWindowFont(GetHwnd(), m_font);
     }
 
     // update children
-    wxWindowList::compatibility_iterator current = win->GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator current = GetChildren().GetFirst();
     while (current)
     {
         wxWindow *childWin = current->GetData();
@@ -4853,15 +4821,15 @@ void wxWindowMSW::HandleDPIChange(wxWindow* win, const wxSize oldDPI, const wxSi
         // These could be on a different monitor and will get their own dpi-changed event.
         if (childWin && !childWin->IsTopLevel())
         {
-            HandleDPIChange(childWin, oldDPI, newDPI);
+            childWin->MSWUpdateOnDPIChange(oldDPI, newDPI);
         }
 
         current = current->GetNext();
     }
 
     wxDPIChangedEvent event(oldDPI, newDPI);
-    event.SetEventObject(win);
-    win->HandleWindowEvent(event);
+    event.SetEventObject(this);
+    HandleWindowEvent(event);
 }
 
 // ---------------------------------------------------------------------------

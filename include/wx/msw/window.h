@@ -582,6 +582,11 @@ public:
     // 10 v1607 or later, or wxSize(0, 0) if it's not available.
     wxSize MSWTryGetWindowDPI() const;
 
+    // Called from WM_DPICHANGED handler for all windows to let them update
+    // any sizes and fonts used internally when the DPI changes and generate
+    // wxDPIChangedEvent to let the user code do the same thing as well.
+    void MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI);
+
 protected:
     // this allows you to implement standard control borders without
     // repeating the code in different classes that are not derived from
@@ -717,10 +722,6 @@ protected:
     {
         return NULL;
     }
-
-    // per-monitor DPI related functions
-    bool HandleDPIChange(const wxSize newDPI, const wxRect newRect);
-    void HandleDPIChange(wxWindow* win, const wxSize oldDPI, const wxSize newDPI) const;
 
 private:
     // common part of all ctors

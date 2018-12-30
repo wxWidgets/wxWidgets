@@ -249,6 +249,27 @@ WXHWND wxTopLevelWindowMSW::MSWGetParent() const
     return (WXHWND)hwndParent;
 }
 
+bool wxTopLevelWindowMSW::HandleDPIChange(const wxSize newDPI, const wxRect newRect)
+{
+    if ( !IsPerMonitorDPIAware() )
+        return false;
+
+    const wxSize oldDPI = GetActiveDPI();
+
+    m_activeDPI = newDPI;
+
+    if (oldDPI != newDPI)
+    {
+        MSWUpdateOnDPIChange(oldDPI, newDPI);
+    }
+
+    SetSize(newRect);
+
+    Refresh();
+
+    return true;
+}
+
 WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     WXLRESULT rc = 0;
@@ -307,6 +328,17 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
                         processed = true;
                 }
 #endif // #ifndef __WXUNIVERSAL__
+            }
+            break;
+
+        case WM_DPICHANGED:
+            {
+                int const xDPI = (int)LOWORD(wParam);
+                int const yDPI = (int)HIWORD(wParam);
+                const RECT* const prcNewWindow = (RECT*)lParam;
+
+                processed = HandleDPIChange(wxSize(xDPI, yDPI),
+                                            wxRectFromRECT(*prcNewWindow));
             }
             break;
     }
@@ -487,7 +519,7 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         EnableCloseButton(false);
     }
 
-    SetActiveDPI(GetDPI());
+    m_activeDPI = GetDPI();
 
 #if wxUSE_DYNLIB_CLASS
     wxLoadedDLL dllUser32(wxS("user32.dll"));
@@ -1182,11 +1214,6 @@ wxSize wxTopLevelWindowMSW::GetActiveDPI() const
     }
 
     return dpi;
-}
-
-void wxTopLevelWindowMSW::SetActiveDPI(const wxSize& dpi)
-{
-    m_activeDPI = dpi;
 }
 
 bool wxTopLevelWindowMSW::IsPerMonitorDPIAware() const
