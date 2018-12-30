@@ -1687,10 +1687,10 @@ protected:
 
     // Which column's editor is selected (usually 1)?
     unsigned int        m_selColumn;
-
+#if WXWIN_COMPATIBILITY_3_0
     // x relative to splitter (needed for resize).
     int                 m_ctrlXAdjust;
-
+#endif // WXWIN_COMPATIBILITY_3_0
     // lines between cells
     wxColour            m_colLine;
     // property labels and values are written in this colour
@@ -1803,7 +1803,11 @@ protected:
 
     wxRect GetEditorWidgetRect( wxPGProperty* p, int column ) const;
 
+#if WXWIN_COMPATIBILITY_3_0
+    wxDEPRECATED_MSG("Don't use this function. It works only if horizontal scrolling is not active")
     void CorrectEditorWidgetSizeX();
+#endif // WXWIN_COMPATIBILITY_3_0
+    void CorrectEditorWidgetSizeX(int xPosChange, int widthChange);
 
     // Called in RecalculateVirtualSize() to reposition control
     // on virtual height changes.
