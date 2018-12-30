@@ -4677,19 +4677,13 @@ wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 int wxGetSystemMetrics(int nIndex, wxWindow* win)
 {
 #if wxUSE_DYNLIB_CLASS
-    wxTopLevelWindow* tlw = NULL;
-    if (win)
+    const wxWindow* window = win;
+    if ( !window )
     {
-        tlw = wxDynamicCast(wxGetTopLevelParent(win), wxTopLevelWindow);
-    }
-    else
-    {
-        wxWindow* window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
-        if (window)
-            tlw = wxDynamicCast(wxGetTopLevelParent(window), wxTopLevelWindow);
+        window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
     }
 
-    if (tlw && tlw->IsPerMonitorDPIAware())
+    if ( window )
     {
         typedef int (WINAPI *GetSystemMetricsForDpi_t)(int nIndex, UINT dpi);
 
@@ -4706,7 +4700,7 @@ int wxGetSystemMetrics(int nIndex, wxWindow* win)
 
         if ( s_pfnGetSystemMetricsForDpi )
         {
-            return s_pfnGetSystemMetricsForDpi(nIndex, tlw->GetActiveDPI().GetX());
+            return s_pfnGetSystemMetricsForDpi(nIndex, window->GetDPI().y);
         }
     }
 #else
@@ -4720,19 +4714,13 @@ int wxGetSystemMetrics(int nIndex, wxWindow* win)
 bool wxSystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, wxWindow* win)
 {
 #if wxUSE_DYNLIB_CLASS
-    wxTopLevelWindow* tlw = NULL;
-    if (win)
+    const wxWindow* window = win;
+    if ( !window )
     {
-        tlw = wxDynamicCast(wxGetTopLevelParent(win), wxTopLevelWindow);
-    }
-    else
-    {
-        wxWindow* window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
-        if (window)
-            tlw = wxDynamicCast(wxGetTopLevelParent(window), wxTopLevelWindow);
+        window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
     }
 
-    if (tlw && tlw->IsPerMonitorDPIAware())
+    if ( window )
     {
         typedef int (WINAPI *SystemParametersInfoForDpi_t)(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, UINT dpi);
 
@@ -4749,7 +4737,7 @@ bool wxSystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWi
 
         if ( s_pfnSystemParametersInfoForDpi )
         {
-            return s_pfnSystemParametersInfoForDpi(uiAction, uiParam, pvParam, fWinIni, tlw->GetActiveDPI().GetX());
+            return s_pfnSystemParametersInfoForDpi(uiAction, uiParam, pvParam, fWinIni, window->GetDPI().y);
         }
     }
 #else
