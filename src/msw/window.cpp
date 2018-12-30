@@ -4844,11 +4844,14 @@ void wxWindowMSW::HandleDPIChange(wxWindow* win, const wxSize oldDPI, const wxSi
 
     win->InvalidateBestSize();
 
-    // update font
-    wxFont newFont(win->GetFont());
-    newFont.SetPPI(newDPI.y);
-    win->m_font = newFont; // needs to be set here explicitly, so wxSubWindows uses correct font
-    win->SetFont(win->m_font);
+    // update font if necessary
+    if ( win->m_font.IsOk() )
+    {
+        win->m_font.WXAdjustToPPI(newDPI);
+
+        // WXAdjustToPPI() changes the HFONT, so reassociate it with the window.
+        wxSetWindowFont(GetHwndOf(win), win->m_font);
+    }
 
     // update children
     wxWindowList::compatibility_iterator current = win->GetChildren().GetFirst();
@@ -4864,9 +4867,6 @@ void wxWindowMSW::HandleDPIChange(wxWindow* win, const wxSize oldDPI, const wxSi
 
         current = current->GetNext();
     }
-
-    // update font again after updating children
-    win->SetFont(win->m_font);
 
     wxDPIChangedEvent event(oldDPI, newDPI);
     event.SetEventObject(win);

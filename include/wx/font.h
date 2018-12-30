@@ -427,7 +427,6 @@ public:
     virtual int GetPointSize() const;
     virtual float GetFractionalPointSize() const = 0;
     virtual wxSize GetPixelSize() const;
-    virtual int GetPPI() const { return 0; }
     virtual bool IsUsingSizeInPixels() const;
     wxFontFamily GetFamily() const;
     virtual wxFontStyle GetStyle() const = 0;
@@ -450,7 +449,6 @@ public:
     virtual void SetPointSize( int pointSize );
     virtual void SetFractionalPointSize( float pointSize ) = 0;
     virtual void SetPixelSize( const wxSize& pixelSize );
-    virtual void SetPPI(int WXUNUSED(dpi)) {}
     virtual void SetFamily( wxFontFamily family ) = 0;
     virtual void SetStyle( wxFontStyle style ) = 0;
     virtual void SetNumericWeight( int weight ) = 0;
@@ -502,6 +500,15 @@ public:
     // ConvertFromLegacyWeightIfNecessary(), so takes legacy values into
     // account as well.
     static int GetNumericWeightOf(wxFontWeight weight);
+
+
+    // Some ports need to modify the font object when the DPI of the window it
+    // is used with changes, this function can be used to do it.
+    //
+    // Currently it is only used in wxMSW and is not considered to be part of
+    // wxWidgets public API.
+    virtual void WXAdjustToPPI(const wxSize& WXUNUSED(ppi)) { }
+
 
     // this doesn't do anything and is kept for compatibility only
 #if WXWIN_COMPATIBILITY_2_8

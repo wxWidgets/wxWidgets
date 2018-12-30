@@ -1718,7 +1718,7 @@ wxFont wxWindowBase::GetFont() const
 
         wxTopLevelWindow *const tlw = wxDynamicCast(wxGetTopLevelParent(wxStaticCast(this, wxWindow)), wxTopLevelWindow);
         if (tlw)
-            font.SetPPI(tlw->GetActiveDPI().y);
+            font.WXAdjustToPPI(tlw->GetActiveDPI());
 
         return font;
     }
@@ -1728,12 +1728,7 @@ wxFont wxWindowBase::GetFont() const
 
 bool wxWindowBase::SetFont(const wxFont& font)
 {
-    bool setPPI = false;
-    wxTopLevelWindow *const tlw = wxDynamicCast(wxGetTopLevelParent(wxStaticCast(this, wxWindow)), wxTopLevelWindow);
-    if (tlw)
-        setPPI = !font.IsOk() || (font.GetPPI() != tlw->GetActiveDPI().y) || tlw->IsDPIUpdating();
-
-    if (font == m_font && !setPPI)
+    if (font == m_font)
     {
         // no change
         return false;
@@ -1744,8 +1739,9 @@ bool wxWindowBase::SetFont(const wxFont& font)
     if (!m_font.IsOk())
         m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 
-    if (setPPI)
-        m_font.SetPPI(tlw->GetActiveDPI().y);
+    wxTopLevelWindow *const tlw = wxDynamicCast(wxGetTopLevelParent(wxStaticCast(this, wxWindow)), wxTopLevelWindow);
+    if (tlw)
+        m_font.WXAdjustToPPI(tlw->GetActiveDPI());
 
     m_hasFont = font.IsOk();
     m_inheritFont = m_hasFont;

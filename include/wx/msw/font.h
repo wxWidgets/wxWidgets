@@ -97,7 +97,6 @@ public:
     // implement base class pure virtuals
     virtual float GetFractionalPointSize() const wxOVERRIDE;
     virtual wxSize GetPixelSize() const wxOVERRIDE;
-    virtual int GetPPI() const wxOVERRIDE;
     virtual bool IsUsingSizeInPixels() const wxOVERRIDE;
     virtual wxFontStyle GetStyle() const wxOVERRIDE;
     virtual int GetNumericWeight() const wxOVERRIDE;
@@ -109,7 +108,6 @@ public:
 
     virtual void SetFractionalPointSize(float pointSize) wxOVERRIDE;
     virtual void SetPixelSize(const wxSize& pixelSize) wxOVERRIDE;
-    virtual void SetPPI(int ppi) wxOVERRIDE;
     virtual void SetFamily(wxFontFamily family) wxOVERRIDE;
     virtual void SetStyle(wxFontStyle style) wxOVERRIDE;
     virtual void SetNumericWeight(int weight) wxOVERRIDE;
@@ -121,6 +119,8 @@ public:
     wxDECLARE_COMMON_FONT_METHODS();
 
     virtual bool IsFixedWidth() const wxOVERRIDE;
+
+    virtual void WXAdjustToPPI(const wxSize& ppi) wxOVERRIDE;
 
     wxDEPRECATED_MSG("use wxFONT{FAMILY,STYLE,WEIGHT}_XXX constants ie: wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD")
     wxFont(int size,

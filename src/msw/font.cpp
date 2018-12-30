@@ -87,11 +87,6 @@ public:
         return m_nativeFontInfo.GetPixelSize();
     }
 
-    int GetPPI() const
-    {
-        return m_nativeFontInfo.GetPPI();
-    }
-
     bool IsUsingSizeInPixels() const
     {
         return m_sizeUsingPixels;
@@ -157,6 +152,16 @@ public:
         return m_hFont != 0;
     }
 
+    int GetLogFontHeight() const
+    {
+        return m_nativeFontInfo.lf.lfHeight;
+    }
+
+    int GetLogFontHeightAtPPI(int ppi) const
+    {
+        return m_nativeFontInfo.GetLogFontHeightAtPPI(ppi);
+    }
+
     // ... and setters: notice that all of them invalidate the currently
     // allocated HFONT, if any, so that the next call to GetHFONT() recreates a
     // new one
@@ -177,13 +182,6 @@ public:
 
         m_nativeFontInfo.SetPixelSize(pixelSize);
         m_sizeUsingPixels = true;
-    }
-
-    void SetPPI(int ppi)
-    {
-        Free();
-
-        m_nativeFontInfo.SetPPI(ppi);
     }
 
     void SetFamily(wxFontFamily family)
@@ -233,6 +231,13 @@ public:
         Free();
 
         m_nativeFontInfo.SetEncoding(encoding);
+    }
+
+    void SetLogFontHeight(int height)
+    {
+        Free();
+
+        m_nativeFontInfo.lf.lfHeight = height;
     }
 
     const wxNativeFontInfo& GetNativeFontInfo() const
@@ -398,15 +403,17 @@ void wxFontRefData::Free()
 // ----------------------------------------------------------------------------
 
 wxNativeFontInfo::wxNativeFontInfo(const LOGFONT& lf_)
-    : lf(lf_), pointSize(0.0f)
+    : lf(lf_)
 {
-    m_ppi = (int)::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
+    // Determine the size in points using the primary screen DPI as we don't
+    // have anything else here.
+    const float ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
+    pointSize = 72.0f * abs(lf.lfHeight) / ppi;
 }
 
 void wxNativeFontInfo::Init()
 {
     wxZeroMemory(lf);
-    m_ppi = (int)::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
 
     // we get better font quality if we use PROOF_QUALITY instead of
     // DEFAULT_QUALITY but some fonts (e.g. "Terminal 6pt") are not available
@@ -421,10 +428,7 @@ void wxNativeFontInfo::Init()
 
 float wxNativeFontInfo::GetFractionalPointSize() const
 {
-    if ( pointSize != 0.0f )
-        return pointSize;
-
-    return (72.0*abs(lf.lfHeight)) / (double)m_ppi;
+    return pointSize;
 }
 
 wxSize wxNativeFontInfo::GetPixelSize() const
@@ -433,11 +437,6 @@ wxSize wxNativeFontInfo::GetPixelSize() const
     ret.SetHeight(abs((int)lf.lfHeight));
     ret.SetWidth(lf.lfWidth);
     return ret;
-}
-
-int wxNativeFontInfo::GetPPI() const
-{
-    return m_ppi;
 }
 
 wxFontStyle wxNativeFontInfo::GetStyle() const
@@ -510,13 +509,31 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxGetFontEncFromCharSet(lf.lfCharSet);
 }
 
-void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
+int wxNativeFontInfo::GetLogFontHeightAtPPI(int ppi) const
 {
-    // Store it to be able to return it from GetFractionalPointSize() later
-    // exactly.
-    pointSize = pointsize;
+    return -wxRound(pointSize * ppi / 72.0);
+}
 
-    lf.lfHeight = -wxRound(pointsize*((double)m_ppi)/72.0);
+void wxNativeFontInfo::SetFractionalPointSize(float pointSizeNew)
+{
+    if ( pointSize == 0.0f )
+    {
+        // Do this before calling GetLogFontHeightAtPPI() below.
+        pointSize = pointSizeNew;
+
+        // We don't have the correct DPI to use here, so use that of the
+        // primary screen.
+        const int ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
+        lf.lfHeight = GetLogFontHeightAtPPI(ppi);
+    }
+    else // Changing the size of a valid font.
+    {
+        // Scale the font using the ratio of sizes, to ensure that we use the
+        // same DPI as before.
+        lf.lfHeight = -wxRound(abs(lf.lfHeight) * pointSizeNew / pointSize);
+
+        pointSize = pointSizeNew;
+    }
 }
 
 void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
@@ -532,13 +549,11 @@ void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
     // versions by passing a negative value explicitly itself.
     lf.lfHeight = -abs(pixelSize.GetHeight());
     lf.lfWidth = pixelSize.GetWidth();
-}
 
-void wxNativeFontInfo::SetPPI(int ppi)
-{
-    int ps = GetPointSize();
-    m_ppi = ppi;
-    SetPointSize(ps);
+    // We don't have the right DPI to use here neither, but we need to update
+    // the point size too, so fall back to the default.
+    const float ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
+    pointSize = 72.0f * pixelSize.GetHeight() / ppi;
 }
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
@@ -888,11 +903,17 @@ void wxFont::SetPixelSize(const wxSize& pixelSize)
     M_FONTDATA->SetPixelSize(pixelSize);
 }
 
-void wxFont::SetPPI(int ppi)
+void wxFont::WXAdjustToPPI(const wxSize& ppi)
 {
-    AllocExclusive();
+    // We only use vertical component here as we only adjust LOGFONT::lfHeight.
+    const int heightNew = M_FONTDATA->GetLogFontHeightAtPPI(ppi.y);
 
-    M_FONTDATA->SetPPI(ppi);
+    if ( heightNew != M_FONTDATA->GetLogFontHeight() )
+    {
+        AllocExclusive();
+
+        M_FONTDATA->SetLogFontHeight(heightNew);
+    }
 }
 
 void wxFont::SetFamily(wxFontFamily family)
@@ -977,13 +998,6 @@ wxSize wxFont::GetPixelSize() const
     wxCHECK_MSG( IsOk(), wxDefaultSize, wxT("invalid font") );
 
     return M_FONTDATA->GetPixelSize();
-}
-
-int wxFont::GetPPI() const
-{
-    wxCHECK_MSG(IsOk(), 0, wxT("invalid font"));
-
-    return M_FONTDATA->GetPPI();
 }
 
 bool wxFont::IsUsingSizeInPixels() const

@@ -1562,8 +1562,7 @@ void wxMSWDCImpl::SetFont(const wxFont& font)
     if ( font.IsOk() )
     {
         wxFont fontCopy(font);
-        if (m_window)
-            fontCopy.SetPPI(m_window->GetFont().GetPPI());
+        fontCopy.WXAdjustToPPI(GetPPI());
 
         HGDIOBJ hfont = ::SelectObject(GetHdc(), GetHfontOf(fontCopy));
         if ( hfont == HGDI_ERROR )
