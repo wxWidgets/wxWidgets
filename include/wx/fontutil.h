@@ -118,7 +118,11 @@ public:
     // set the XFLD
     void SetXFontName(const wxString& xFontName);
 #elif defined(__WXMSW__)
-    wxNativeFontInfo(const LOGFONT& lf_) : lf(lf_), pointSize(0.0f) { }
+    wxNativeFontInfo(const LOGFONT& lf_);
+
+    // MSW-specific: get the height value in pixels using LOGFONT convention
+    // (i.e. negative) corresponding to the given size in points and DPI.
+    int GetLogFontHeightAtPPI(int ppi) const;
 
     LOGFONT      lf;
 
