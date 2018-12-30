@@ -509,31 +509,14 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxGetFontEncFromCharSet(lf.lfCharSet);
 }
 
-int wxNativeFontInfo::GetLogFontHeightAtPPI(int ppi) const
-{
-    return -wxRound(pointSize * ppi / 72.0);
-}
-
 void wxNativeFontInfo::SetFractionalPointSize(float pointSizeNew)
 {
-    if ( pointSize == 0.0f )
-    {
-        // Do this before calling GetLogFontHeightAtPPI() below.
-        pointSize = pointSizeNew;
+    // We don't have the correct DPI to use here, so use that of the
+    // primary screen.
+    const int ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
+    lf.lfHeight = GetLogFontHeightAtPPI(pointSizeNew, ppi);
 
-        // We don't have the correct DPI to use here, so use that of the
-        // primary screen.
-        const int ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
-        lf.lfHeight = GetLogFontHeightAtPPI(ppi);
-    }
-    else // Changing the size of a valid font.
-    {
-        // Scale the font using the ratio of sizes, to ensure that we use the
-        // same DPI as before.
-        lf.lfHeight = -wxRound(abs(lf.lfHeight) * pointSizeNew / pointSize);
-
-        pointSize = pointSizeNew;
-    }
+    pointSize = pointSizeNew;
 }
 
 void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
