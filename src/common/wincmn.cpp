@@ -799,6 +799,8 @@ double wxWindowBase::GetContentScaleFactor() const
     wxSize dpi = GetDPI();
     if ( !dpi.x || !dpi.y )
         dpi = wxScreenDC().GetPPI();
+    if ( !dpi.x || !dpi.y )
+        return 1;
 
     return GetDPI().y / (double)BASELINE_DPI;
 }
@@ -2884,6 +2886,8 @@ wxWindowBase::FromDIP(const wxSize& sz, const wxWindowBase* w)
         dpi = w->GetDPI();
     if ( !dpi.x || !dpi.y )
         dpi = wxScreenDC().GetPPI();
+    if ( !dpi.x || !dpi.y )
+        return sz;
 
     // Take care to not scale -1 because it has a special meaning of
     // "unspecified" which should be preserved.
@@ -2900,6 +2904,8 @@ wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* w)
         dpi = w->GetDPI();
     if ( !dpi.x || !dpi.y )
         dpi = wxScreenDC().GetPPI();
+    if ( !dpi.x || !dpi.y )
+        return sz;
 
     // Take care to not scale -1 because it has a special meaning of
     // "unspecified" which should be preserved.
