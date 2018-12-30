@@ -131,6 +131,7 @@ protected:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,
                              WXWORD pos, WXHWND control) wxOVERRIDE;
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
     // handle processing of special keys
     void OnChar(wxKeyEvent& event);

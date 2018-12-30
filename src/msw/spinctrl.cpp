@@ -223,6 +223,14 @@ void wxSpinCtrl::OnKillFocus(wxFocusEvent& event)
     event.Skip();
 }
 
+void wxSpinCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxSpinButton::MSWUpdateFontOnDPIChange(newDPI);
+
+    if ( m_font.IsOk() )
+        wxSetWindowFont(GetBuddyHwnd(), m_font);
+}
+
 void wxSpinCtrl::OnSetFocus(wxFocusEvent& event)
 {
     // when we get focus, give it to our buddy window as it needs it more than
@@ -577,7 +585,8 @@ bool wxSpinCtrl::SetFont(const wxFont& font)
         return false;
     }
 
-    wxSetWindowFont(GetBuddyHwnd(), GetFont());
+    if ( m_font.IsOk() )
+        wxSetWindowFont(GetBuddyHwnd(), m_font);
 
     return true;
 }
