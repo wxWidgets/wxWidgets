@@ -1731,7 +1731,7 @@ wxFont wxWindowBase::GetFont() const
 
 bool wxWindowBase::SetFont(const wxFont& font)
 {
-    if (font == m_font)
+    if ( font == m_font )
     {
         // no change
         return false;
@@ -1739,13 +1739,11 @@ bool wxWindowBase::SetFont(const wxFont& font)
 
     m_font = font;
 
-    if (!m_font.IsOk())
-        m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-
-    m_font.WXAdjustToPPI(GetDPI());
-
     m_hasFont = font.IsOk();
     m_inheritFont = m_hasFont;
+
+    if ( m_hasFont )
+        m_font.WXAdjustToPPI(GetDPI());
 
     InvalidateBestSize();
 
