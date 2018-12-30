@@ -103,7 +103,14 @@ bool IsInCaptureStack(wxWindowBase* win);
 
 // We consider 96 DPI to be the standard value, this is correct at least for
 // MSW, but could conceivably need adjustment for the other platforms.
-static const int BASELINE_DPI = 96;
+// Since Window Vista the default DPI is defined in WinUser.h.
+static const int BASELINE_DPI =
+#if defined(__WXMSW__) && defined(USER_DEFAULT_SCREEN_DPI)
+    USER_DEFAULT_SCREEN_DPI
+#else
+    96
+#endif
+    ;
 
 // ----------------------------------------------------------------------------
 // static data
