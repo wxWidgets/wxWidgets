@@ -176,6 +176,8 @@ protected:
     int m_selectedButton;
 
 private:
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
     wxDECLARE_DYNAMIC_CLASS(wxRadioBox);
     wxDECLARE_NO_COPY_CLASS(wxRadioBox);
 };

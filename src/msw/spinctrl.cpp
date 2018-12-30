@@ -52,6 +52,7 @@ wxBEGIN_EVENT_TABLE(wxSpinCtrl, wxSpinButton)
     EVT_CHAR(wxSpinCtrl::OnChar)
     EVT_SET_FOCUS(wxSpinCtrl::OnSetFocus)
     EVT_KILL_FOCUS(wxSpinCtrl::OnKillFocus)
+    EVT_DPI_CHANGED(wxSpinCtrl::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 #define GetBuddyHwnd()      (HWND)(m_hwndBuddy)
@@ -221,6 +222,11 @@ void wxSpinCtrl::OnKillFocus(wxFocusEvent& event)
     // ensure that a correct value is shown by the control
     NormalizeValue();
     event.Skip();
+}
+
+void wxSpinCtrl::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
+{
+    wxSetWindowFont(GetBuddyHwnd(), m_font);
 }
 
 void wxSpinCtrl::OnSetFocus(wxFocusEvent& event)

@@ -218,6 +218,8 @@ bool wxRadioBox::Create(wxWindow *parent,
         m_subControls.Add(subid);
     }
 
+    Bind(wxEVT_DPI_CHANGED, &wxRadioBox::OnDPIChanged, this);
+
     // Create a dummy radio control to end the group.
     m_dummyId = NewControlId();
 
@@ -750,6 +752,11 @@ int wxRadioBox::GetItemFromPoint(const wxPoint& pt) const
     }
 
     return wxNOT_FOUND;
+}
+
+void wxRadioBox::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
+{
+    m_radioButtons->SetFont(m_font);
 }
 
 // ----------------------------------------------------------------------------
