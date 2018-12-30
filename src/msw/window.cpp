@@ -4812,31 +4812,26 @@ bool wxWindowMSW::HandleDPIChange(const wxSize newDPI, const wxRect newRect)
     return true;
 }
 
+// Helper function to update the given coordinate by the scaling factor if it
+// is set, i.e. different from wxDefaultCoord.
+static void ScaleCoordIfSet(int& coord, float scaleFactor)
+{
+    if ( coord != wxDefaultCoord )
+    {
+        const float coordScaled = coord * scaleFactor;
+        coord = scaleFactor > 1.0 ? ceil(coordScaled) : floor(coordScaled);
+    }
+}
+
 void wxWindowMSW::HandleDPIChange(wxWindow* win, const wxSize oldDPI, const wxSize newDPI) const
 {
-    // update min and max size
-    double const scaleFactor = (double)newDPI.y / oldDPI.y;
+    // update min and max size if necessary
+    const float scaleFactor = (float)newDPI.y / oldDPI.y;
 
-    if (win->m_minHeight != wxDefaultCoord)
-    {
-        double const newMinHeight = win->m_minHeight * scaleFactor;
-        win->m_minHeight = (scaleFactor > 1.0) ? ceil(newMinHeight) : floor(newMinHeight);
-    }
-    if (win->m_minWidth != wxDefaultCoord)
-    {
-        double const newMinWidth = win->m_minWidth * scaleFactor;
-        win->m_minWidth = (scaleFactor > 1.0) ? ceil(newMinWidth) : floor(newMinWidth);
-    }
-    if (win->m_maxHeight != wxDefaultCoord)
-    {
-        double const newMaxHeight = win->m_maxHeight * scaleFactor;
-        win->m_maxHeight = (scaleFactor > 1.0) ? ceil(newMaxHeight) : floor(newMaxHeight);
-    }
-    if (win->m_maxWidth != wxDefaultCoord)
-    {
-        double const newMaxWidth = win->m_maxWidth * scaleFactor;
-        win->m_maxWidth = (scaleFactor > 1.0) ? ceil(newMaxWidth) : floor(newMaxWidth);
-    }
+    ScaleCoordIfSet(win->m_minHeight, scaleFactor);
+    ScaleCoordIfSet(win->m_minWidth, scaleFactor);
+    ScaleCoordIfSet(win->m_maxHeight, scaleFactor);
+    ScaleCoordIfSet(win->m_maxWidth, scaleFactor);
 
     win->InvalidateBestSize();
 
