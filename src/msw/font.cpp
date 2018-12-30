@@ -516,24 +516,14 @@ int wxNativeFontInfo::GetLogFontHeightAtPPI(int ppi) const
 
 void wxNativeFontInfo::SetFractionalPointSize(float pointSizeNew)
 {
-    if ( pointSize == 0.0f )
-    {
-        // Do this before calling GetLogFontHeightAtPPI() below.
-        pointSize = pointSizeNew;
+    // Do this before calling GetLogFontHeightAtPPI() below.
+    pointSize = pointSizeNew;
 
-        // We don't have the correct DPI to use here, so use that of the
-        // primary screen.
-        const int ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
-        lf.lfHeight = GetLogFontHeightAtPPI(ppi);
-    }
-    else // Changing the size of a valid font.
-    {
-        // Scale the font using the ratio of sizes, to ensure that we use the
-        // same DPI as before.
-        lf.lfHeight = -wxRound(abs(lf.lfHeight) * pointSizeNew / pointSize);
-
-        pointSize = pointSizeNew;
-    }
+    // We don't have the correct DPI to use here, so use that of the
+    // primary screen and rely on WXAdjustToPPI() changing it later if
+    // necessary.
+    const int ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
+    lf.lfHeight = GetLogFontHeightAtPPI(ppi);
 }
 
 void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
