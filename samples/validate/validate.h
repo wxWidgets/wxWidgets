@@ -63,13 +63,33 @@ public:
 class TextValidatorDialog : public wxDialog
 {
 public:
-    TextValidatorDialog(wxWindow *parent);
+    TextValidatorDialog(wxWindow *parent, wxTextCtrl* txtCtrl);
 
     void OnUpdateUI(wxUpdateUIEvent& event);
     void OnChecked(wxCommandEvent& event);
     void OnKillFocus( wxFocusEvent &event );
 
-    void SetValidatorFor(wxTextCtrl* txtCtrl);
+    void ApplyValidator();
+
+private:
+    // Special validator for our checkboxes
+    class StyleValidator : public wxValidator
+    {
+    public:
+        StyleValidator(long* style) { m_style = style; }
+
+        virtual bool Validate(wxWindow *WXUNUSED(parent)) { return true; }
+        virtual wxObject* Clone() const wxOVERRIDE { return new StyleValidator(*this); }
+
+        // Called to transfer data to the window
+        virtual bool TransferToWindow() wxOVERRIDE;
+
+        // Called to transfer data from the window
+        virtual bool TransferFromWindow() wxOVERRIDE;
+
+    private:
+        long* m_style;
+    };
 
 private:
     bool HasFlag(wxTextValidatorStyle style) const
@@ -100,6 +120,8 @@ private:
         Id_ExcludeListTxt,
         Id_ExcludeCharListTxt,
     };
+
+    wxTextCtrl* const m_txtCtrl;
 
     bool m_noValidation;
     long m_validatorStyle;

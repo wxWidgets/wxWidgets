@@ -391,67 +391,106 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
 void MyDialog::OnChangeValidator(wxCommandEvent& WXUNUSED(event))
 {
-    TextValidatorDialog dialog(this);
+    TextValidatorDialog dialog(this, m_text);
 
     if ( dialog.ShowModal() == wxID_OK )
     {
-        dialog.SetValidatorFor(m_text);
+        dialog.ApplyValidator();
     }
 }
 
 // ----------------------------------------------------------------------------
 // TextValidatorDialog
 // ----------------------------------------------------------------------------
-TextValidatorDialog::TextValidatorDialog(wxWindow *parent)
-    : wxDialog(parent, wxID_ANY, "wxTextValidator Dialog")
+TextValidatorDialog::TextValidatorDialog(wxWindow *parent, wxTextCtrl* txtCtrl)
+    : wxDialog(parent, wxID_ANY, "wxTextValidator Dialog"), m_txtCtrl(txtCtrl)
     , m_noValidation(true), m_validatorStyle(wxFILTER_NONE)
 {
+    if ( m_txtCtrl )
+    {
+        wxTextValidator* txtValidator =
+            wxDynamicCast(m_txtCtrl->GetValidator(), wxTextValidator);
+
+        if ( txtValidator )
+        {
+            m_validatorStyle = txtValidator->GetStyle();
+
+            if ( m_validatorStyle != wxFILTER_NONE )
+                m_noValidation = false;
+
+            m_charIncludes = txtValidator->GetCharIncludes();
+            m_charExcludes = txtValidator->GetCharExcludes();
+            m_includes = txtValidator->GetIncludes();
+            m_excludes = txtValidator->GetExcludes();
+        }
+    }
+
     wxFlexGridSizer *fgSizer = new wxFlexGridSizer(13, 2, 5, 5);
     const wxSizerFlags center = wxSizerFlags().CenterVertical();
+
+    const StyleValidator styleVal(&m_validatorStyle);
 
     wxCheckBox* filterNone = new wxCheckBox(this, Id_None, "wxFILTER_NONE");
     filterNone->SetValue(m_noValidation);
     fgSizer->Add(filterNone);
     fgSizer->Add(new wxStaticText(this, wxID_ANY, "No filtering takes place."));
 
-    fgSizer->Add(new wxCheckBox(this, Id_Empty, "wxFILTER_EMPTY"));
+    fgSizer->Add(new wxCheckBox(this, Id_Empty, "wxFILTER_EMPTY"))
+        ->GetWindow()->SetValidator(styleVal);
     fgSizer->Add(new wxStaticText(this, wxID_ANY, "Empty strings are filtered out."));
 
-    fgSizer->Add(new wxCheckBox(this, Id_Ascii, "wxFILTER_ASCII"));
+    fgSizer->Add(new wxCheckBox(this, Id_Ascii, "wxFILTER_ASCII"))
+        ->GetWindow()->SetValidator(styleVal);
     fgSizer->Add(new wxStaticText(this, wxID_ANY, "Non-ASCII characters are filtered out."));
 
-    fgSizer->Add(new wxCheckBox(this, Id_Alpha, "wxFILTER_ALPHA"));
+    fgSizer->Add(new wxCheckBox(this, Id_Alpha, "wxFILTER_ALPHA"))
+        ->GetWindow()->SetValidator(styleVal);
     fgSizer->Add(new wxStaticText(this, wxID_ANY, "Non-alpha characters are filtered out."));
 
-    fgSizer->Add(new wxCheckBox(this, Id_Alphanumeric, "wxFILTER_ALPHANUMERIC"));
+    fgSizer->Add(new wxCheckBox(this, Id_Alphanumeric, "wxFILTER_ALPHANUMERIC"))
+        ->GetWindow()->SetValidator(styleVal);
     fgSizer->Add(new wxStaticText(this, wxID_ANY, "Non-alphanumeric characters are filtered out."));
 
-    fgSizer->Add(new wxCheckBox(this, Id_Digits, "wxFILTER_DIGITS"));
+    fgSizer->Add(new wxCheckBox(this, Id_Digits, "wxFILTER_DIGITS"))
+        ->GetWindow()->SetValidator(styleVal);
     fgSizer->Add(new wxStaticText(this, wxID_ANY, "Non-digit characters are filtered out."));
 
-    fgSizer->Add(new wxCheckBox(this, Id_Numeric, "wxFILTER_NUMERIC"));
+    fgSizer->Add(new wxCheckBox(this, Id_Numeric, "wxFILTER_NUMERIC"))
+        ->GetWindow()->SetValidator(styleVal);
     fgSizer->Add(new wxStaticText(this, wxID_ANY, "Non-numeric characters are filtered out."));
 
-    fgSizer->Add(new wxCheckBox(this, Id_IncludeList, "wxFILTER_INCLUDE_LIST"), center);
-    fgSizer->Add(new wxTextCtrl(this, Id_IncludeListTxt), wxSizerFlags().Expand())->GetWindow()
-        ->Bind(wxEVT_KILL_FOCUS, &TextValidatorDialog::OnKillFocus, this);
+    fgSizer->Add(new wxCheckBox(this, Id_IncludeList, "wxFILTER_INCLUDE_LIST"), center)
+        ->GetWindow()->SetValidator(styleVal);
+    // TODO: add validator to this wxTextCtrl
+    fgSizer->Add(new wxTextCtrl(this, Id_IncludeListTxt), wxSizerFlags().Expand())
+        ->GetWindow()->Bind(wxEVT_KILL_FOCUS, &TextValidatorDialog::OnKillFocus, this);
 
-    fgSizer->Add(new wxCheckBox(this, Id_IncludeCharList, "wxFILTER_INCLUDE_CHAR_LIST"), center);
-    fgSizer->Add(new wxTextCtrl(this, Id_IncludeCharListTxt), wxSizerFlags().Expand())->GetWindow()
-        ->Bind(wxEVT_KILL_FOCUS, &TextValidatorDialog::OnKillFocus, this);
+    fgSizer->Add(new wxCheckBox(this, Id_IncludeCharList, "wxFILTER_INCLUDE_CHAR_LIST"), center)
+        ->GetWindow()->SetValidator(styleVal);
+    fgSizer->Add(new wxTextCtrl(this, Id_IncludeCharListTxt, wxString(), wxDefaultPosition,
+                                wxDefaultSize, 0, wxGenericValidator(&m_charIncludes)),
+                 wxSizerFlags().Expand())
+        ->GetWindow()->Bind(wxEVT_KILL_FOCUS, &TextValidatorDialog::OnKillFocus, this);
 
-    fgSizer->Add(new wxCheckBox(this, Id_ExcludeList, "wxFILTER_EXCLUDE_LIST"), center);
-    fgSizer->Add(new wxTextCtrl(this, Id_ExcludeListTxt), wxSizerFlags().Expand())->GetWindow()
-        ->Bind(wxEVT_KILL_FOCUS, &TextValidatorDialog::OnKillFocus, this);
+    fgSizer->Add(new wxCheckBox(this, Id_ExcludeList, "wxFILTER_EXCLUDE_LIST"), center)
+        ->GetWindow()->SetValidator(styleVal);
+    // TODO: add validator to this wxTextCtrl
+    fgSizer->Add(new wxTextCtrl(this, Id_ExcludeListTxt), wxSizerFlags().Expand())
+        ->GetWindow()->Bind(wxEVT_KILL_FOCUS, &TextValidatorDialog::OnKillFocus, this);
 
-    fgSizer->Add(new wxCheckBox(this, Id_ExcludeCharList, "wxFILTER_EXCLUDE_CHAR_LIST"), center);
-    fgSizer->Add(new wxTextCtrl(this, Id_ExcludeCharListTxt), wxSizerFlags().Expand())->GetWindow()
-        ->Bind(wxEVT_KILL_FOCUS, &TextValidatorDialog::OnKillFocus, this);
+    fgSizer->Add(new wxCheckBox(this, Id_ExcludeCharList, "wxFILTER_EXCLUDE_CHAR_LIST"), center)
+        ->GetWindow()->SetValidator(styleVal);
+    fgSizer->Add(new wxTextCtrl(this, Id_ExcludeCharListTxt, wxString(), wxDefaultPosition,
+                                wxDefaultSize, 0, wxGenericValidator(&m_charExcludes)),
+                 wxSizerFlags().Expand())
+        ->GetWindow()->Bind(wxEVT_KILL_FOCUS, &TextValidatorDialog::OnKillFocus, this);
 
-    fgSizer->Add(new wxCheckBox(this, Id_Xdigits, "wxFILTER_XDIGITS"));
+    fgSizer->Add(new wxCheckBox(this, Id_Xdigits, "wxFILTER_XDIGITS"))
+        ->GetWindow()->SetValidator(styleVal);
     fgSizer->Add(new wxStaticText(this, wxID_ANY, "Non-xdigit characters are filtered out."));
 
-    fgSizer->Add(new wxCheckBox(this, Id_Space, "wxFILTER_SPACE"));
+    fgSizer->Add(new wxCheckBox(this, Id_Space, "wxFILTER_SPACE"))
+        ->GetWindow()->SetValidator(styleVal);
     fgSizer->Add(new wxStaticText(this, wxID_ANY, "Allow spaces."));
 
     // Set the main sizer.
@@ -466,8 +505,7 @@ TextValidatorDialog::TextValidatorDialog(wxWindow *parent)
     mainsizer->SetSizeHints(this);
 
     // Bind event handlers.
-    Bind(wxEVT_CHECKBOX, &TextValidatorDialog::OnChecked,
-         this, Id_None, Id_Space);
+    Bind(wxEVT_CHECKBOX, &TextValidatorDialog::OnChecked, this);
     Bind(wxEVT_UPDATE_UI, &TextValidatorDialog::OnUpdateUI,
          this, Id_Ascii, Id_ExcludeCharListTxt);
 }
@@ -482,9 +520,7 @@ void TextValidatorDialog::OnUpdateUI(wxUpdateUIEvent& event)
 
 void TextValidatorDialog::OnChecked(wxCommandEvent& event)
 {
-    const int id = event.GetId();
-
-    if ( id == Id_None )
+    if ( event.GetId() == Id_None )
     {
         m_noValidation = event.IsChecked();
 
@@ -503,15 +539,6 @@ void TextValidatorDialog::OnChecked(wxCommandEvent& event)
             m_includes.clear();
             m_excludes.clear();
         }
-    }
-    else
-    {
-        // Set or unset the wxTextValidatorStyle corresponding to the
-        // Checkbox's id.
-        if ( event.IsChecked() )
-            m_validatorStyle |=  (1 << (id - wxID_HIGHEST - 1));
-        else
-            m_validatorStyle &= ~(1 << (id - wxID_HIGHEST - 1));
     }
 }
 
@@ -559,9 +586,9 @@ void TextValidatorDialog::OnKillFocus(wxFocusEvent &event)
     event.Skip();
 }
 
-void TextValidatorDialog::SetValidatorFor(wxTextCtrl* txtCtrl)
+void TextValidatorDialog::ApplyValidator()
 {
-    if ( !txtCtrl )
+    if ( !m_txtCtrl )
         return;
 
     wxString tooltip = "uses wxTextValidator with ";
@@ -615,7 +642,7 @@ void TextValidatorDialog::SetValidatorFor(wxTextCtrl* txtCtrl)
         tooltip += m_charExcludes;
     }
 
-    txtCtrl->SetToolTip(tooltip);
+    m_txtCtrl->SetToolTip(tooltip);
 
     // Prepare @ set the wxTextValidator
     wxTextValidator txtVal(m_validatorStyle, &g_data.m_string);
@@ -624,6 +651,47 @@ void TextValidatorDialog::SetValidatorFor(wxTextCtrl* txtCtrl)
     txtVal.SetIncludes(m_includes);
     txtVal.SetExcludes(m_excludes);
 
-    txtCtrl->SetValidator(txtVal);
-    txtCtrl->SetFocus();
+    m_txtCtrl->SetValidator(txtVal);
+    m_txtCtrl->SetFocus();
+}
+
+//---
+
+bool TextValidatorDialog::StyleValidator::TransferToWindow()
+{
+    wxASSERT( wxDynamicCast(m_validatorWindow, wxCheckBox) );
+
+    if ( m_style )
+    {
+        wxCheckBox* cb = (wxCheckBox*)GetWindow();
+        if ( !cb )
+            return false;
+
+        const long style = 1 << (cb->GetId()-wxID_HIGHEST-1);
+
+        cb->SetValue((*m_style & style) != 0);
+    }
+
+    return true;
+}
+
+bool TextValidatorDialog::StyleValidator::TransferFromWindow()
+{
+    wxASSERT( wxDynamicCast(m_validatorWindow, wxCheckBox) );
+
+    if ( m_style )
+    {
+        wxCheckBox* cb = (wxCheckBox*)GetWindow();
+        if ( !cb )
+            return false;
+
+        const long style = 1 << (cb->GetId()-wxID_HIGHEST-1);
+
+        if ( cb->IsChecked() )
+            *m_style |= style;
+        else
+            *m_style &= ~style;
+    }
+
+    return true;
 }
