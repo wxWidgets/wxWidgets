@@ -40,6 +40,7 @@
     #include "wx/wxcrtvararg.h"
 #endif
 
+#include "wx/fontutil.h"
 #include "wx/scopedptr.h"
 #include "wx/stack.h"
 #include "wx/sysopt.h"
@@ -2826,14 +2827,13 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
                      CFM_ITALIC | CFM_BOLD | CFM_UNDERLINE | CFM_STRIKEOUT;
 
         // fill in data from LOGFONT but recalculate lfHeight because we need
-        // the real height in twips and not the negative number which
-        // wxFillLogFont() returns (this is correct in general and works with
+        // the real height in twips and not the negative number used inside
+        // LOGFONT returns (this is correct in general and works with
         // the Windows font mapper, but not here)
 
         wxFont font(style.GetFont());
 
-        LOGFONT lf;
-        wxFillLogFont(&lf, &font);
+        LOGFONT lf = font.GetNativeFontInfo()->lf;
         cf.yHeight = 20*font.GetPointSize(); // 1 pt = 20 twips
         cf.bCharSet = lf.lfCharSet;
         cf.bPitchAndFamily = lf.lfPitchAndFamily;
@@ -3157,7 +3157,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     else
         lf.lfWeight = FW_NORMAL;
 
-    wxFont font = wxCreateFontFromLogFont(& lf);
+    wxFont font(lf);
     if (font.IsOk())
     {
         style.SetFont(font);
