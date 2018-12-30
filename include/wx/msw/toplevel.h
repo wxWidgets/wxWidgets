@@ -119,10 +119,6 @@ public:
     // This function is only for internal use.
     void MSWSetShowCommand(WXUINT showCmd) { m_showCmd = showCmd; }
 
-    // dpi related
-    wxSize GetActiveDPI() const wxOVERRIDE;
-    bool IsPerMonitorDPIAware() const;
-
 protected:
     // common part of all ctors
     void Init();
