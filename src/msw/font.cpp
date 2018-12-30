@@ -512,7 +512,8 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
 void wxNativeFontInfo::SetFractionalPointSize(float pointSizeNew)
 {
     // We don't have the correct DPI to use here, so use that of the
-    // primary screen.
+    // primary screen and rely on WXAdjustToPPI() changing it later if
+    // necessary.
     const int ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
     lf.lfHeight = GetLogFontHeightAtPPI(pointSizeNew, ppi);
 
@@ -897,6 +898,19 @@ void wxFont::SetPixelSize(const wxSize& pixelSize)
     AllocExclusive();
 
     M_FONTDATA->SetPixelSize(pixelSize);
+}
+
+void wxFont::WXAdjustToPPI(const wxSize& ppi)
+{
+    // We only use vertical component here as we only adjust LOGFONT::lfHeight.
+    const int heightNew = M_FONTDATA->GetLogFontHeightAtPPI(ppi.y);
+
+    if ( heightNew != M_FONTDATA->GetLogFontHeight() )
+    {
+        AllocExclusive();
+
+        M_FONTDATA->SetLogFontHeight(heightNew);
+    }
 }
 
 void wxFont::SetFamily(wxFontFamily family)

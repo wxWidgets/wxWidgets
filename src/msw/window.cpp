@@ -4837,6 +4837,17 @@ wxSize wxWindowMSW::GetDPI() const
     return dpi;
 }
 
+void wxWindowMSW::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    if ( m_font.IsOk() )
+    {
+        m_font.WXAdjustToPPI(newDPI);
+
+        // WXAdjustToPPI() changes the HFONT, so reassociate it with the window.
+        wxSetWindowFont(GetHwnd(), m_font);
+    }
+}
+
 // Helper function to update the given coordinate by the scaling factor if it
 // is set, i.e. different from wxDefaultCoord.
 static void ScaleCoordIfSet(int& coord, float scaleFactor)
@@ -4860,6 +4871,9 @@ wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
     ScaleCoordIfSet(m_maxWidth, scaleFactor);
 
     InvalidateBestSize();
+
+    // update font if necessary
+    MSWUpdateFontOnDPIChange(newDPI);
 
     // update children
     wxWindowList::compatibility_iterator current = GetChildren().GetFirst();
