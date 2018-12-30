@@ -29,6 +29,7 @@
     #include "wx/pen.h"
     #include "wx/region.h"
     #include "wx/log.h"
+    #include "wx/window.h"
 #endif
 
 #ifdef __WXMSW__
