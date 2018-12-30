@@ -934,8 +934,6 @@ extern const wxCursor *wxGetGlobalCursor(); // from msw/cursor.cpp
 WXDLLIMPEXP_CORE void wxGetCursorPosMSW(POINT* pt);
 
 WXDLLIMPEXP_CORE void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font);
-WXDLLIMPEXP_CORE void wxFillLogFont(LOGFONT *logFont, const wxFont *font);
-WXDLLIMPEXP_CORE wxFont wxCreateFontFromLogFont(const LOGFONT *logFont);
 WXDLLIMPEXP_CORE wxFontEncoding wxGetFontEncFromCharSet(int charset);
 
 inline void wxSetWindowFont(HWND hwnd, const wxFont& font)

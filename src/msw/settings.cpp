@@ -323,7 +323,7 @@ extern wxFont wxGetCCDefaultFont()
                 0
            ) )
     {
-        return wxFont(wxCreateFontFromLogFont(&lf));
+        return wxFont(lf);
     }
     else
     {

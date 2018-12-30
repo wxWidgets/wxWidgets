@@ -36,6 +36,7 @@
     #include "wx/math.h"
 #endif
 
+#include "wx/fontutil.h"
 #include "wx/msw/private/dpiaware.h"
 
 #include <stdlib.h>
@@ -120,7 +121,7 @@ int wxFontDialog::ShowModal()
     if ( m_fontData.m_initialFont.IsOk() )
     {
         flags |= CF_INITTOLOGFONTSTRUCT;
-        wxFillLogFont(&logFont, &m_fontData.m_initialFont);
+        logFont = m_fontData.m_initialFont.GetNativeFontInfo()->lf;
     }
 
     if ( m_fontData.m_fontColour.IsOk() )
@@ -154,7 +155,7 @@ int wxFontDialog::ShowModal()
     if ( ChooseFont(&chooseFontStruct) != 0 )
     {
         wxRGBToColour(m_fontData.m_fontColour, chooseFontStruct.rgbColors);
-        m_fontData.m_chosenFont = wxCreateFontFromLogFont(&logFont);
+        m_fontData.m_chosenFont = wxFont(wxNativeFontInfo(logFont));
         m_fontData.EncodingInfo().facename = logFont.lfFaceName;
         m_fontData.EncodingInfo().charset = logFont.lfCharSet;
 
