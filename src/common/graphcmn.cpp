@@ -673,8 +673,12 @@ void wxGraphicsContext::SetFont(const wxFont& font, const wxColour& colour)
 {
     if ( font.IsOk() )
     {
+        wxFont fontCopy(font);
+        if ( m_window )
+            fontCopy.SetPPI(m_window->GetFont().GetPPI());
+
         // Change current font only if new graphics font is successfully created.
-        wxGraphicsFont grFont = CreateFont(font, colour);
+        wxGraphicsFont grFont = CreateFont(fontCopy, colour);
         if ( !grFont.IsSameAs(wxNullGraphicsFont) )
         {
             SetFont(grFont);

@@ -197,9 +197,6 @@ void wxGCDCImpl::Init(wxGraphicsContext* ctx)
     m_font = *wxNORMAL_FONT;
     m_brush = *wxWHITE_BRUSH;
 
-    if (m_window)
-        m_font.SetPPI(m_window->GetFont().GetPPI());
-
     m_isClipBoxValid = false;
 
     m_graphicContext = NULL;
@@ -494,9 +491,6 @@ void wxGCDCImpl::SetBackgroundMode( int mode )
 void wxGCDCImpl::SetFont( const wxFont &font )
 {
     m_font = font;
-
-    if (m_window)
-        m_font.SetPPI(m_window->GetFont().GetPPI());
 
     if ( m_graphicContext )
     {
