@@ -3123,8 +3123,9 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     LOGFONT lf;
     // Convert the height from the units of 1/20th of the point in which
     // CHARFORMAT stores it to pixel-based units used by LOGFONT.
-    const wxCoord ppi = wxClientDC(this).GetPPI().y;
-    lf.lfHeight = wxNativeFontInfo::GetLogFontHeightAtPPI(cf.yHeight/20.0f, ppi);
+    // Note that RichEdit seems to always use standard DPI of 96, even when the
+    // window is a monitor using a higher DPI.
+    lf.lfHeight = wxNativeFontInfo::GetLogFontHeightAtPPI(cf.yHeight/20.0f, 96);
     lf.lfWidth = 0;
     lf.lfCharSet = ANSI_CHARSET; // FIXME: how to get correct charset?
     lf.lfClipPrecision = 0;
