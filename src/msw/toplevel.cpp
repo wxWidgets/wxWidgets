@@ -106,7 +106,6 @@ void wxTopLevelWindowMSW::Init()
     m_menuSystem = NULL;
 
     m_activeDPI = wxDefaultSize;
-    m_updatingDPI = false;
     m_perMonitorDPIaware = false;
 }
 
@@ -1188,16 +1187,6 @@ wxSize wxTopLevelWindowMSW::GetActiveDPI() const
 void wxTopLevelWindowMSW::SetActiveDPI(const wxSize& dpi)
 {
     m_activeDPI = dpi;
-}
-
-bool wxTopLevelWindowMSW::IsDPIUpdating() const
-{
-    return m_updatingDPI;
-}
-
-void wxTopLevelWindowMSW::SetDPIUpdating(const bool active)
-{
-    m_updatingDPI = active;
 }
 
 bool wxTopLevelWindowMSW::IsPerMonitorDPIAware() const

@@ -301,7 +301,6 @@ public:
 
     // dpi related
     virtual wxSize GetActiveDPI() const { return wxDefaultSize; };
-    virtual bool IsDPIUpdating() const { return false; };
 
 protected:
     // the frame client to screen translation should take account of the

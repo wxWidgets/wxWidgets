@@ -4798,8 +4798,6 @@ bool wxWindowMSW::HandleDPIChange(const wxSize newDPI, const wxRect newRect)
 
     wxSize const oldDPI = tlw->GetActiveDPI();
 
-    tlw->SetDPIUpdating(true);
-
     tlw->SetActiveDPI(newDPI);
 
     if (oldDPI != newDPI)
@@ -4808,8 +4806,6 @@ bool wxWindowMSW::HandleDPIChange(const wxSize newDPI, const wxRect newRect)
     }
 
     SetSize(newRect);
-
-    tlw->SetDPIUpdating(false);
 
     Refresh();
 
