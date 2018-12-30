@@ -108,7 +108,7 @@ int wxSizerFlags::DoGetDefaultBorderInPx()
     // have any associated window, so this is wrong on systems using multiple
     // monitors with different resolutions too -- but, again, without changes
     // in the API, there is nothing we can do about this.
-    return wxWindow::FromDIP(5, wxTheApp->GetTopWindow());
+    return wxWindow::FromDIP(5, wxTheApp ? wxTheApp->GetTopWindow() : NULL);
 }
 
 #endif // wxNEEDS_BORDER_IN_PX
