@@ -76,6 +76,9 @@ public:
                           int buttonState,
                           const wxRect& rect,
                           wxAuiPaneInfo& pane) = 0;
+
+    // Provide opportunity for subclasses to recalculate colours
+    virtual void UpdateColoursFromSystem() {}
 };
 
 
@@ -135,6 +138,9 @@ public:
                   const wxRect& rect,
                   wxAuiPaneInfo& pane);
 #endif
+
+    virtual void UpdateColoursFromSystem() wxOVERRIDE;
+
 
 protected:
 

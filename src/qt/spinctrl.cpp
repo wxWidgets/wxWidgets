@@ -42,8 +42,8 @@ bool wxSpinCtrlQt< T, Widget >::Create( wxWindow *parent, wxWindowID id,
 
     m_qtSpinBox->setAccelerated(true); // to match gtk behavior
 
-    SetValue( initial );
     SetRange( min, max );
+    SetValue( initial );
     SetIncrement( inc );
 
     if ( !value.IsEmpty() )

@@ -47,7 +47,7 @@ wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     : wxDCImpl( owner )
 {
     m_clippingRegion = new wxRegion;
-    m_qtImage = NULL;
+    m_qtPixmap = NULL;
     m_rasterColourOp = wxQtNONE;
     m_qtPenColor = new QColor;
     m_qtBrushColor = new QColor;
@@ -220,7 +220,7 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
 {
     m_logicalFunction = function;
 
-    wxQtRasterColourOp rasterColourOp;
+    wxQtRasterColourOp rasterColourOp = wxQtNONE;
     switch ( function )
     {
         case wxCLEAR:       // 0
@@ -229,7 +229,6 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
             break;
         case wxXOR:         // src XOR dst
             m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceXorDestination );
-            rasterColourOp = wxQtNONE;
             break;
         case wxINVERT:      // NOT dst => dst XOR WHITE
             m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceXorDestination );
@@ -241,35 +240,27 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
             break;
         case wxAND_REVERSE: // src AND (NOT dst)
             m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceAndNotDestination );
-            rasterColourOp = wxQtNONE;
             break;
         case wxCOPY:        // src
             m_qtPainter->setCompositionMode( QPainter::CompositionMode_SourceOver );
-            rasterColourOp = wxQtNONE;
             break;
         case wxAND:         // src AND dst
             m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceAndDestination );
-            rasterColourOp = wxQtNONE;
             break;
         case wxAND_INVERT:  // (NOT src) AND dst
             m_qtPainter->setCompositionMode( QPainter::RasterOp_NotSourceAndDestination );
-            rasterColourOp = wxQtNONE;
             break;
         case wxNO_OP:       // dst
-            m_qtPainter->setCompositionMode( QPainter::QPainter::CompositionMode_DestinationOver );
-            rasterColourOp = wxQtNONE;
+            m_qtPainter->setCompositionMode( QPainter::CompositionMode_DestinationOver );
             break;
         case wxNOR:         // (NOT src) AND (NOT dst)
             m_qtPainter->setCompositionMode( QPainter::RasterOp_NotSourceAndNotDestination );
-            rasterColourOp = wxQtNONE;
             break;
         case wxEQUIV:       // (NOT src) XOR dst
             m_qtPainter->setCompositionMode( QPainter::RasterOp_NotSourceXorDestination );
-            rasterColourOp = wxQtNONE;
             break;
         case wxSRC_INVERT:  // (NOT src)
             m_qtPainter->setCompositionMode( QPainter::RasterOp_NotSource );
-            rasterColourOp = wxQtNONE;
             break;
         case wxOR_INVERT:   // (NOT src) OR dst
             m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceOrDestination );
@@ -277,11 +268,9 @@ void wxQtDCImpl::SetLogicalFunction(wxRasterOperationMode function)
             break;
         case wxNAND:        // (NOT src) OR (NOT dst)
             m_qtPainter->setCompositionMode( QPainter::RasterOp_NotSourceOrNotDestination );
-            rasterColourOp = wxQtNONE;
             break;
         case wxOR:          // src OR dst
             m_qtPainter->setCompositionMode( QPainter::RasterOp_SourceOrDestination );
-            rasterColourOp = wxQtNONE;
             break;
         case wxSET:          // 1
             m_qtPainter->setCompositionMode( QPainter::CompositionMode_SourceOver );
@@ -485,15 +474,18 @@ bool wxQtDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 
     if ( col )
     {
-        wxCHECK_MSG( m_qtImage != NULL, false, "This DC doesn't support GetPixel()" );
-
-        QColor pixel = m_qtImage->pixel( x, y );
+        wxCHECK_MSG( m_qtPixmap != NULL, false, "This DC doesn't support GetPixel()" );
+        QPixmap pixmap1px = m_qtPixmap->copy( x, y, 1, 1 );
+        QImage image = pixmap1px.toImage();
+        QColor pixel = image.pixel( 0, 0 );
         col->Set( pixel.red(), pixel.green(), pixel.blue(), pixel.alpha() );
 
         return true;
     }
     else
+    {
         return false;
+    }
 }
 
 void wxQtDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
@@ -585,29 +577,13 @@ void wxQtDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
 void wxQtDCImpl::DoDrawEllipse(wxCoord x, wxCoord y,
                            wxCoord width, wxCoord height)
 {
-    QBrush savedBrush;
-    int penWidth = m_qtPainter->pen().width();
+    const int penWidth = m_qtPainter->pen().width();
     x += penWidth / 2;
     y += penWidth / 2;
     width -= penWidth;
     height -= penWidth;
 
-    if ( m_pen.IsNonTransparent() )
-    {
-        // Save pen/brush
-        savedBrush = m_qtPainter->brush();
-        // Fill with text background color ("no fill" like in wxGTK):
-        m_qtPainter->setBrush(QBrush(m_textBackgroundColour.GetQColor()));
-    }
-
-    // Draw
     m_qtPainter->drawEllipse( x, y, width, height );
-
-    if ( m_pen.IsNonTransparent() )
-    {
-        //Restore saved settings
-        m_qtPainter->setBrush(savedBrush);
-    }
 }
 
 void wxQtDCImpl::DoCrossHair(wxCoord x, wxCoord y)
@@ -750,23 +726,31 @@ bool wxQtDCImpl::DoBlit(wxCoord xdest, wxCoord ydest,
 {
     wxQtDCImpl *implSource = (wxQtDCImpl*)source->GetImpl();
 
-    QImage *qtSource = implSource->GetQImage();
+    QPixmap *qtSource = implSource->GetQPixmap();
 
     // Not a CHECK on purpose
     if ( !qtSource )
         return false;
 
-    QImage qtSourceConverted = *qtSource;
-    if ( !useMask )
-        qtSourceConverted = qtSourceConverted.convertToFormat( QImage::Format_RGB32 );
-
     // Change logical function
     wxRasterOperationMode savedMode = GetLogicalFunction();
     SetLogicalFunction( rop );
 
-    m_qtPainter->drawImage( QRect( xdest, ydest, width, height ),
-                           qtSourceConverted,
-                           QRect( xsrc, ysrc, width, height ) );
+    if ( useMask )
+    {
+        m_qtPainter->drawPixmap( QRect( xdest, ydest, width, height ),
+                                *qtSource,
+                                QRect( xsrc, ysrc, width, height ) );
+    }
+    else
+    {
+        QImage qtSourceConverted = qtSource->toImage();
+        qtSourceConverted = qtSourceConverted.convertToFormat(QImage::Format_RGB32);
+
+        m_qtPainter->drawImage( QRect( xdest, ydest, width, height ),
+                                qtSourceConverted,
+                                QRect( xsrc, ysrc, width, height ) );
+    }
 
     SetLogicalFunction( savedMode );
 

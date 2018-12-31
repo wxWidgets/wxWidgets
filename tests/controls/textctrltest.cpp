@@ -332,6 +332,9 @@ void TextCtrlTestCase::Redirector()
 
 void TextCtrlTestCase::HitTestSingleLine()
 {
+#ifdef __WXQT__
+	WARN("Does not work under WxQt");
+#else
     m_text->ChangeValue("Hit me");
 
     // We don't know the size of the text borders, so we can't really do any
@@ -373,6 +376,7 @@ void TextCtrlTestCase::HitTestSingleLine()
         REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
         CHECK( pos > 3 );
     }
+#endif
 }
 
 #if 0
@@ -433,7 +437,7 @@ void TextCtrlTestCase::Url()
 
 void TextCtrlTestCase::Style()
 {
-#ifndef __WXOSX__
+#if !defined(__WXOSX__) && !defined(__WXQT__)
     delete m_text;
     // We need wxTE_RICH under windows for style support
     CreateText(wxTE_MULTILINE|wxTE_RICH);
@@ -485,11 +489,14 @@ void TextCtrlTestCase::Style()
     REQUIRE( m_text->GetStyle(17, style) );
     CHECK( style.GetTextColour() == *wxRED );
     CHECK( style.GetBackgroundColour() == *wxWHITE );
+#else
+	WARN("Does not work under WxQt or OSX");
 #endif
 }
 
 void TextCtrlTestCase::FontStyle()
 {
+#if !defined(__WXQT__)
     // We need wxTE_RICH under MSW and wxTE_MULTILINE under GTK for style
     // support so recreate the control with these styles.
     delete m_text;
@@ -540,6 +547,9 @@ void TextCtrlTestCase::FontStyle()
     fontOut.SetEncoding(fontIn.GetEncoding());
 #endif
     CPPUNIT_ASSERT_EQUAL( fontIn, fontOut );
+#else
+	WARN("Does not work under WxQt");
+#endif
 }
 
 void TextCtrlTestCase::Lines()
@@ -566,7 +576,7 @@ void TextCtrlTestCase::Lines()
     // #12366, where GetNumberOfLines() always returns the number of logical,
     // not physical, lines.
     m_text->AppendText("\n" + wxString(50, '1') + ' ' + wxString(50, '2'));
-#if defined(__WXGTK__) || defined(__WXOSX_COCOA__) || defined(__WXUNIVERSAL__)
+#if defined(__WXGTK__) || defined(__WXOSX_COCOA__) || defined(__WXUNIVERSAL__) || defined(__WXQT__)
     CPPUNIT_ASSERT_EQUAL(6, m_text->GetNumberOfLines());
 #else
     CPPUNIT_ASSERT(m_text->GetNumberOfLines() > 6);

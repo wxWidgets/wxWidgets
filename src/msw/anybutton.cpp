@@ -524,7 +524,9 @@ void wxAnyButton::AdjustForBitmapSize(wxSize &size) const
         {
             wxUxThemeHandle theme(const_cast<wxAnyButton *>(this), L"BUTTON");
 
-            MARGINS margins;
+            // Initialize margins with the default values (at least under
+            // Windows 7) in case GetThemeMargins() fails.
+            MARGINS margins = {3, 3, 3, 3};
             ::GetThemeMargins(theme, NULL,
                                                     BP_PUSHBUTTON,
                                                     PBS_NORMAL,
@@ -1148,8 +1150,9 @@ void DrawXPBackground(wxAnyButton *button, HDC hdc, RECT& rectBtn, UINT state)
     ::DrawThemeBackground(theme, hdc, BP_PUSHBUTTON, iState,
                                 &rectBtn, NULL);
 
-    // calculate content area margins
-    MARGINS margins;
+    // calculate content area margins, using the defaults in case we fail to
+    // retrieve the current theme margins
+    MARGINS margins = {3, 3, 3, 3};
     ::GetThemeMargins(theme, hdc, BP_PUSHBUTTON, iState,
                             TMT_CONTENTMARGINS, &rectBtn, &margins);
     ::InflateRect(&rectBtn, -margins.cxLeftWidth, -margins.cyTopHeight);

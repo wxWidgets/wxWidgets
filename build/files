@@ -2812,6 +2812,12 @@ WEBVIEW_GTK_HDR =
 WEBVIEW_GTK_SRC =
     src/gtk/webview_webkit.cpp
 
+WEBVIEW2_GTK_SRC =
+    src/gtk/webview_webkit2.cpp
+
+WEBVIEW_WEBKIT2_EXTENSION_SRC =
+    src/gtk/webview_webkit2_extension.cpp
+
 # wxXRC
 
 XRC_SRC =
@@ -2991,7 +2997,7 @@ OPENGL_OSX_SHARED_SRC =
 
 # Misc plugin sources:
 
-UNIX_SOUND_SRC_SDL =
+UNIX_SOUND_SDL_SRC =
     src/unix/sound_sdl.cpp
 
 # wxAUI

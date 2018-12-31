@@ -53,3 +53,8 @@ if(POLICY CMP0067)
     # Honor language standard in try_compile() source-file signature.
     cmake_policy(SET CMP0067 NEW)
 endif()
+
+if(POLICY CMP0072)
+    # FindOpenGL prefers GLVND by default when available.
+    cmake_policy(SET CMP0072 NEW)
+endif()

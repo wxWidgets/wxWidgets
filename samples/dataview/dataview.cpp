@@ -793,7 +793,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             lc->AppendColumn(colRadio, "bool");
 
             lc->AppendTextColumn( "Text" );
-            lc->AppendProgressColumn( "Progress" );
+            lc->AppendProgressColumn( "Progress" )->SetMinWidth(100);
 
             wxVector<wxVariant> data;
             for (unsigned int i=0; i<10; i++)

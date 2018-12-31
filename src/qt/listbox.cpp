@@ -89,6 +89,11 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     QListWidgetItem* item;
     m_qtWindow = m_qtListWidget = new wxQtListWidget( parent, this );
 
+    if ( style == wxLB_SORT )
+    {
+        m_qtListWidget->setSortingEnabled(true);
+    }
+
     while ( n-- > 0 )
     {
         item = new QListWidgetItem();
@@ -106,13 +111,20 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 bool wxListBox::Create(wxWindow *parent, wxWindowID id,
             const wxPoint& pos,
             const wxSize& size,
-            const wxArrayString& WXUNUSED(choices),
+            const wxArrayString& choices,
             long style,
             const wxValidator& validator,
             const wxString& name)
 {
     Init();
     m_qtWindow = m_qtListWidget = new wxQtListWidget( parent, this );
+
+    QStringList items;
+
+    for (size_t i = 0; i < choices.size(); ++i)
+        items.push_back(wxQtConvertString(choices[i]));
+
+    m_qtListWidget->addItems(items);
 
     return wxListBoxBase::Create( parent, id, pos, size, style, validator, name );
 }
@@ -130,9 +142,17 @@ bool wxListBox::IsSelected(int n) const
     return item->isSelected();
 }
 
-int wxListBox::GetSelections(wxArrayInt& WXUNUSED(aSelections)) const
+int wxListBox::GetSelections(wxArrayInt& aSelections) const
 {
-    return 0;
+    aSelections.clear();
+
+    for ( unsigned int i = 0; i < GetCount(); ++i)
+    {
+        if ( IsSelected(i) )
+            aSelections.push_back(i);
+    }
+
+    return aSelections.size();
 }
 
 unsigned wxListBox::GetCount() const
@@ -147,7 +167,7 @@ wxString wxListBox::GetString(unsigned int n) const
     return wxQtConvertString( item->text() );
 }
 
-void wxListBox::SetString(unsigned int n, const wxString& WXUNUSED(s))
+void wxListBox::SetString(unsigned int n, const wxString& s)
 {
     QListWidgetItem* item = m_qtListWidget->item(n);
     wxCHECK_RET(item != NULL, wxT("wrong listbox index") );
@@ -156,6 +176,7 @@ void wxListBox::SetString(unsigned int n, const wxString& WXUNUSED(s))
         item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setCheckState(Qt::Unchecked);
     }
+    item->setText(wxQtConvertString(s));
 }
 
 int wxListBox::GetSelection() const
@@ -169,6 +190,12 @@ void wxListBox::DoSetFirstItem(int WXUNUSED(n))
 
 void wxListBox::DoSetSelection(int n, bool select)
 {
+    if ( n == wxNOT_FOUND )
+    {
+        UnSelectAll();
+        return;
+    }
+
     return m_qtListWidget->setCurrentRow(n, select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect );
 }
 
@@ -234,4 +261,13 @@ void wxListBox::QtSendEvent(wxEventType evtType, const QModelIndex &index, bool 
 QScrollArea *wxListBox::QtGetScrollBarsContainer() const
 {
     return (QScrollArea *) m_qtListWidget;
+}
+
+void wxListBox::UnSelectAll()
+{
+    for ( unsigned int i = 0; i < GetCount(); ++i )
+    {
+        if ( IsSelected(i) )
+            DoSetSelection(i, false);
+    }
 }

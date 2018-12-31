@@ -13,6 +13,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_AUI && wxUSE_UXTHEME
+
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
     #include "wx/dcclient.h"
@@ -24,8 +26,6 @@
 #include "wx/aui/framemanager.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
-
-#if wxUSE_AUI
 
 wxAuiMSWToolBarArt::wxAuiMSWToolBarArt()
 {
@@ -470,4 +470,4 @@ int wxAuiMSWToolBarArt::ShowDropDown(wxWindow* wnd,
     return wxAuiGenericToolBarArt::ShowDropDown(wnd, items);
 }
 
-#endif // wxUSE_AUI
+#endif // wxUSE_AUI && wxUSE_UXTHEME

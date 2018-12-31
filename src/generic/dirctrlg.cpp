@@ -694,7 +694,7 @@ void wxGenericDirCtrl::PopulateNode(wxTreeItemId parentId)
 
     wxASSERT(data);
 
-    wxString search,path,filename;
+    wxString path;
 
     wxString dirName(data->m_path);
 

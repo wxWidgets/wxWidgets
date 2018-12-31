@@ -2405,9 +2405,12 @@ wxPGArrayEditorDialog::wxPGArrayEditorDialog()
 
 void wxPGArrayEditorDialog::Init()
 {
+    m_elb = NULL;
+    m_elbSubPanel = NULL;
     m_lastFocused = NULL;
     m_hasCustomNewAction = false;
     m_itemPendingAtIndex = -1;
+    m_modified = false;
 }
 
 // -----------------------------------------------------------------------
@@ -2463,6 +2466,12 @@ bool wxPGArrayEditorDialog::Create( wxWindow *parent,
                                   wxEL_ALLOW_NEW |
                                   wxEL_ALLOW_EDIT |
                                   wxEL_ALLOW_DELETE);
+
+    // Set custom text for "New" button, if provided
+    if ( !m_customNewButtonText.empty() )
+    {
+        m_elb->GetNewButton()->SetToolTip(m_customNewButtonText);
+    }
 
     // Populate the list box
     wxArrayString arr;

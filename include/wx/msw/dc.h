@@ -294,9 +294,6 @@ protected:
     // MSW-specific member variables
     // -----------------------------
 
-    // the window associated with this DC (may be NULL)
-    wxWindow         *m_canvas;
-
     wxBitmap          m_selectedBitmap;
 
     // TRUE => DeleteDC() in dtor, FALSE => only ReleaseDC() it

@@ -37,7 +37,7 @@ wx_add_sample(test
     LIBRARIES net html NAME htmltest)
 wx_add_sample(virtual DATA start.htm LIBRARIES html)
 wx_add_sample(widget DATA start.htm LIBRARIES html)
-wx_add_sample(zip DATA pages.zip start.htm LIBRARIES html DEPENDS wxUSE_FSZIP)
+wx_add_sample(zip DATA pages.zip start.htm LIBRARIES html DEPENDS wxUSE_FS_ZIP)
 
 set(wxSAMPLE_SUBDIR)
 set(wxSAMPLE_FOLDER)

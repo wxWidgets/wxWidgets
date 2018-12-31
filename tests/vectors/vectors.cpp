@@ -365,6 +365,13 @@ TEST_CASE("wxVector::reverse_iterator", "[vector][reverse_iterator]")
     CHECK( ri - rb == 2 );
     CHECK( re - ri == 8 );
 
+    CHECK( rb < ri );
+    CHECK( rb <= ri );
+    CHECK( ri <= ri );
+    CHECK( ri >= ri );
+    CHECK( ri < re );
+    CHECK( ri <= re );
+
 #if wxUSE_STD_CONTAINERS_COMPATIBLY
     std::vector<int> stdvec(rb, re);
     REQUIRE( stdvec.size() == 10 );

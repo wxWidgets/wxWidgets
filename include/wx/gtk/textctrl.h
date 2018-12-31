@@ -95,7 +95,6 @@ public:
 
     // Overridden wxWindow methods
     virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
-    virtual bool Enable( bool enable = true ) wxOVERRIDE;
 
     // Implementation from now on
     void OnDropFiles( wxDropFilesEvent &event );
@@ -177,6 +176,8 @@ protected:
 
 private:
     void Init();
+
+    virtual void DoEnable(bool enable) wxOVERRIDE;
 
     // overridden wxTextEntry virtual methods
     virtual GtkEditable *GetEditable() const wxOVERRIDE;

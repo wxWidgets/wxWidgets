@@ -981,7 +981,7 @@ wxSize wxPropertyGridPageState::DoFitColumns( bool WXUNUSED(allowGridResize) )
 
     // Expand last one to fill the width
     int remaining = m_width - accWid;
-    m_colWidths[GetColumnCount()-1] += remaining;
+    m_colWidths.back() += remaining;
 
     m_dontCenterSplitter = true;
 
@@ -1008,39 +1008,14 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
 
     wxPropertyGrid* pg = GetGrid();
 
-    unsigned int i;
-    unsigned int lastColumn = m_colWidths.size() - 1;
-    int width = m_width;
     int clientWidth = pg->GetClientSize().x;
-
-    //
-    // Column to reduce, if needed. Take last one that exceeds minimum width.
-    int reduceCol = -1;
 
     wxLogTrace("propgrid",
                wxS("ColumnWidthCheck (virtualWidth: %i, clientWidth: %i)"),
-               width, clientWidth);
+               m_width, clientWidth);
 
-    //
-    // Check min sizes
-    for ( i=0; i<m_colWidths.size(); i++ )
-    {
-        int min = GetColumnMinWidth(i);
-        if ( m_colWidths[i] <= min )
-        {
-            m_colWidths[i] = min;
-        }
-        else
-        {
-            // Always reduce the last column that is larger than minimum size
-            // (looks nicer, even with auto-centering enabled).
-            reduceCol = i;
-        }
-    }
 
-    int colsWidth = pg->GetMarginWidth();
-    for ( i=0; i<m_colWidths.size(); i++ )
-        colsWidth += m_colWidths[i];
+    int colsWidth = wxPGGetSumVectorItems<int>(m_colWidths, pg->GetMarginWidth());
 
     wxLogTrace("propgrid",
                wxS("  HasVirtualWidth: %i  colsWidth: %i"),
@@ -1049,30 +1024,36 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
     // Then mode-based requirement
     if ( !pg->HasVirtualWidth() )
     {
-        int widthHigher = width - colsWidth;
+        int widthHigher = m_width - colsWidth;
 
         // Adapt colsWidth to width
-        if ( colsWidth < width )
+        if ( colsWidth < m_width )
         {
             // Increase column
             wxLogTrace("propgrid",
                        wxS("  Adjust last column to %i"),
-                       m_colWidths[lastColumn] + widthHigher);
-            m_colWidths[lastColumn] = m_colWidths[lastColumn] + widthHigher;
+                       m_colWidths.back() + widthHigher);
+            m_colWidths.back() += widthHigher;
         }
-        else if ( colsWidth > width )
+        else if ( colsWidth > m_width )
         {
-            // Reduce column
-            if ( reduceCol != -1 )
+            widthHigher = -widthHigher;
+            // Always reduce the last column that is larger than minimum size
+            // (looks nicer, even with auto-centering enabled).
+            for (int reduceCol = (int)m_colWidths.size() - 1; reduceCol >= 0 && widthHigher > 0; reduceCol--)
             {
-                wxLogTrace("propgrid",
-                           wxS("  Reduce column %i (by %i)"),
-                           reduceCol, -widthHigher);
+                // Reduce column, if possible.
+                if ( m_colWidths[reduceCol] > GetColumnMinWidth(reduceCol) )
+                {
+                    int d = wxMin(m_colWidths[reduceCol] - GetColumnMinWidth(reduceCol), widthHigher);
+                    wxLogTrace("propgrid", wxS("  Reduce column %i (by %i)"), reduceCol, d);
 
-                // Reduce widest column, and recheck
-                m_colWidths[reduceCol] = m_colWidths[reduceCol] + widthHigher;
-                CheckColumnWidths();
+                    m_colWidths[reduceCol] -= d;
+                    colsWidth -= d;
+                    widthHigher -= d;
+                }
             }
+            m_width = colsWidth;
         }
     }
     else
@@ -1080,7 +1061,7 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
         // Only check colsWidth against clientWidth
         if ( colsWidth < clientWidth )
         {
-            m_colWidths[lastColumn] = m_colWidths[lastColumn] + (clientWidth-colsWidth);
+            m_colWidths.back() += (clientWidth-colsWidth);
         }
 
         m_width = colsWidth;
@@ -1090,9 +1071,9 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
             pg->RecalculateVirtualSize();
     }
 
-    for ( i=0; i<m_colWidths.size(); i++ )
+    for (size_t i=0; i<m_colWidths.size(); i++)
     {
-        wxLogTrace("propgrid", wxS("col%i: %i"), i, m_colWidths[i]);
+        wxLogTrace("propgrid", wxS("col%zu: %i"), i, m_colWidths[i]);
     }
 
     // Auto center splitter
@@ -1160,20 +1141,17 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
 
 void wxPropertyGridPageState::ResetColumnSizes( int setSplitterFlags )
 {
-    unsigned int i;
     // Calculate sum of proportions
-    int psum = 0;
-    for ( i=0; i<m_colWidths.size(); i++ )
-        psum += m_columnProportions[i];
+    int psum = wxPGGetSumVectorItems<int>(m_columnProportions, 0);
     int puwid = (m_pPropGrid->m_width*256) / psum;
     int cpos = 0;
 
     // Convert proportion to splitter positions
-    for ( i=0; i<(m_colWidths.size() - 1); i++ )
+    for (size_t i=0; i<(m_colWidths.size() - 1); i++)
     {
         int cwid = (puwid*m_columnProportions[i]) / 256;
         cpos += cwid;
-        DoSetSplitterPosition(cpos, i,
+        DoSetSplitterPosition(cpos, (int)i,
                               setSplitterFlags);
     }
 }

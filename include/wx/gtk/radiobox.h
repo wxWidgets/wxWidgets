@@ -141,6 +141,8 @@ protected:
     virtual void DoApplyWidgetStyle(GtkRcStyle *style) wxOVERRIDE;
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
 
+    virtual void DoEnable(bool enable) wxOVERRIDE;
+
     virtual bool GTKNeedsToFilterSameWindowFocus() const wxOVERRIDE { return true; }
 
     virtual bool GTKWidgetNeedsMnemonic() const wxOVERRIDE;
