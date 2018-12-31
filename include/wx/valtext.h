@@ -33,7 +33,12 @@ enum wxTextValidatorStyle
     wxFILTER_EXCLUDE_LIST = 0x100,
     wxFILTER_EXCLUDE_CHAR_LIST = 0x200,
     wxFILTER_XDIGITS = 0x400,
-    wxFILTER_SPACE = 0x800
+    wxFILTER_SPACE = 0x800,
+
+    // filter char class (for internal use only)
+    wxFILTER_CC = wxFILTER_SPACE|wxFILTER_ASCII|wxFILTER_NUMERIC|
+                  wxFILTER_ALPHANUMERIC|wxFILTER_ALPHA|
+                  wxFILTER_DIGITS|wxFILTER_XDIGITS
 };
 
 // ----------------------------------------------------------------------------
@@ -101,6 +106,12 @@ public:
     bool HasFlag(wxTextValidatorStyle style) const
         { return (m_validatorStyle & style) != 0; }
 
+    // implementation only
+    // --------------------
+
+    // returns the error message if the contents of 'str' are invalid
+    virtual wxString IsValid(const wxString& str) const;
+
 protected:
 
     bool IsCharIncluded(const wxUniChar& c) const
@@ -115,18 +126,18 @@ protected:
 
     bool IsIncluded(const wxString& str) const
     {
-        // N.B. the m_includes list should be ignored if it is empty.
-        return m_includes.empty() || 
-                m_includes.Index(str) != wxNOT_FOUND;
+        if ( HasFlag(wxFILTER_INCLUDE_LIST) )
+            return m_includes.Index(str) != wxNOT_FOUND;
+
+        // m_includes should be ignored (i.e. return true)
+        // if the style is not set.
+        return true;
     }
 
     bool IsExcluded(const wxString& str) const
     {
         return m_excludes.Index(str) != wxNOT_FOUND;
     }
-
-    // returns the error message if the contents of 'str' are invalid
-    virtual wxString IsValid(const wxString& str) const;
 
     // returns false if the character is invalid
     bool IsValidChar(const wxUniChar& c) const;

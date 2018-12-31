@@ -106,8 +106,7 @@ Changes in behaviour which may result in build errors
 
 - wxTextValidator::Get{In,Ex}cludes() now return a const reference to
   wxArrayString. Please update your code to use the appropriate setter
-  Set[Char]{In,Ex}cludes(), instead of mutating the internal data directly
-  which is admittedly a bad coding habit anyhow.
+  Set[Char]{In,Ex}cludes(), instead of mutating the internal data directly.
 
 
 3.1.3: (released 2019-??-??)
