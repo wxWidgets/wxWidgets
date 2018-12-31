@@ -1263,6 +1263,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\validators\valtext.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\virtlistctrltest.cpp"
 				>
 			</File>

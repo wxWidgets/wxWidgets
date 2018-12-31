@@ -272,6 +272,7 @@
             sizers/wrapsizer.cpp
             toplevel/toplevel.cpp
             validators/valnum.cpp
+            validators/valtext.cpp
             window/clientsize.cpp
             window/setsize.cpp
             xml/xrctest.cpp
