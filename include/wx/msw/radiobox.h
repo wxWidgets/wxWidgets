@@ -162,6 +162,8 @@ protected:
 
     virtual WXHRGN MSWGetRegionWithoutChildren() wxOVERRIDE;
 
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
+
     // resolve ambiguity in base classes
     virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxRadioBoxBase::GetDefaultBorder(); }
 
@@ -176,8 +178,6 @@ protected:
     int m_selectedButton;
 
 private:
-    void OnDPIChanged(wxDPIChangedEvent& event);
-
     wxDECLARE_DYNAMIC_CLASS(wxRadioBox);
     wxDECLARE_NO_COPY_CLASS(wxRadioBox);
 };

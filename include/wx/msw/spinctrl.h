@@ -127,12 +127,12 @@ protected:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,
                              WXWORD pos, WXHWND control) wxOVERRIDE;
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
     // handle processing of special keys
     void OnChar(wxKeyEvent& event);
     void OnSetFocus(wxFocusEvent& event);
     void OnKillFocus(wxFocusEvent& event);
-    void OnDPIChanged(wxDPIChangedEvent& event);
 
     // generate spin control update event with the given value
     void SendSpinUpdate(int value);
