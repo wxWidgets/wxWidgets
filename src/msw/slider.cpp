@@ -615,6 +615,14 @@ WXHBRUSH wxSlider::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
     return hBrush;
 }
 
+void wxSlider::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxSliderBase::MSWUpdateFontOnDPIChange(newDPI);
+
+    if ( m_font.IsOk() )
+        m_labels->SetFont(m_font);
+}
+
 // ----------------------------------------------------------------------------
 // slider-specific methods
 // ----------------------------------------------------------------------------
