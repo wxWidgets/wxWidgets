@@ -335,8 +335,13 @@ void wxFrame::PositionStatusBar()
     //else: no adjustments necessary for the toolbar on top
 #endif // wxUSE_TOOLBAR
 
-    int swOld, shOld;
-    m_frameStatusBar->GetSize(&swOld, &shOld);
+    // GetSize returns the height of the clientSize in which the statusbar
+    // height is subtracted (see wxFrame::DoGetClientSize). When the DPI of the
+    // window changes, the statusbar height will likely change so we need to
+    // account for this difference. If not, the statusbar will be positioned
+    // too high or low.
+    int shOld;
+    m_frameStatusBar->GetSize(NULL, &shOld);
 
     // Resize the status bar to its default height, as it could have been set
     // to a wrong value before by WM_SIZE sent during the frame creation and
@@ -345,8 +350,8 @@ void wxFrame::PositionStatusBar()
     // this here, the status bar would retain the possibly wrong current height.
     m_frameStatusBar->SetSize(x, h, w, wxDefaultCoord, wxSIZE_AUTO_HEIGHT);
 
-    int sw, sh;
-    m_frameStatusBar->GetSize(&sw, &sh);
+    int sh;
+    m_frameStatusBar->GetSize(NULL, &sh);
     h += shOld - sh;
 
     // Since we wish the status bar to be directly under the client area,

@@ -132,6 +132,7 @@ protected:
     void OnChar(wxKeyEvent& event);
     void OnSetFocus(wxFocusEvent& event);
     void OnKillFocus(wxFocusEvent& event);
+    void OnDPIChanged(wxDPIChangedEvent& event);
 
     // generate spin control update event with the given value
     void SendSpinUpdate(int value);

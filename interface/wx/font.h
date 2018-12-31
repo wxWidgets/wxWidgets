@@ -800,17 +800,6 @@ public:
     virtual wxSize GetPixelSize() const;
 
     /**
-        Gets the points per inch (PPI) of the font.
-
-        Currently only supported in wxMSW, other platforms return @c 0.
-
-        @see SetPPI()
-
-        @since 3.1.3
-    */
-    virtual int GetPPI() const;
-
-    /**
         Gets the font style. See ::wxFontStyle for a list of valid styles.
 
         @see SetStyle()
@@ -1166,20 +1155,6 @@ public:
         @see GetPixelSize()
     */
     virtual void SetPixelSize(const wxSize& pixelSize);
-
-    /**
-        Sets the points per inch (PPI) of the font.
-
-        Normally, your application should not call this function: it is called in the
-        wxWidgets implementation to handle DPI changes.
-
-        Currently only supported in wxMSW, it has no effect on other platforms.
-
-        @see GetPPI()
-
-        @since 3.1.3
-    */
-    virtual void SetPPI(int ppi);
 
     /**
         Sets the font style.

@@ -251,10 +251,16 @@ WXHWND wxTopLevelWindowMSW::MSWGetParent() const
 
 bool wxTopLevelWindowMSW::HandleDPIChange(const wxSize newDPI, const wxRect newRect)
 {
-    if ( !IsPerMonitorDPIAware() )
+    if ( !m_perMonitorDPIaware)
         return false;
 
-    const wxSize oldDPI = GetActiveDPI();
+
+    wxSize oldDPI = m_activeDPI;
+
+    if (oldDPI == wxDefaultSize)
+    {
+        oldDPI = GetDPI();
+    }
 
     m_activeDPI = newDPI;
 
@@ -1202,23 +1208,6 @@ wxMenu *wxTopLevelWindowMSW::MSWGetSystemMenu() const
 #endif // #ifndef __WXUNIVERSAL__
 
     return m_menuSystem;
-}
-
-wxSize wxTopLevelWindowMSW::GetActiveDPI() const
-{
-    wxSize dpi = m_activeDPI;
-
-    if (dpi == wxDefaultSize)
-    {
-        dpi = GetDPI();
-    }
-
-    return dpi;
-}
-
-bool wxTopLevelWindowMSW::IsPerMonitorDPIAware() const
-{
-    return m_perMonitorDPIaware;
 }
 
 // ----------------------------------------------------------------------------

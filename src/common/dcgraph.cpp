@@ -25,7 +25,6 @@
     #include "wx/dcmemory.h"
     #include "wx/math.h"
     #include "wx/geometry.h"
-    #include "wx/window.h"
 #endif
 
 //-----------------------------------------------------------------------------

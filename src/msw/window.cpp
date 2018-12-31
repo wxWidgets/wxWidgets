@@ -4676,32 +4676,36 @@ wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 /*extern*/
 int wxGetSystemMetrics(int nIndex, wxWindow* win)
 {
-    wxTopLevelWindow* tlw = NULL;
-    if (win)
+#if wxUSE_DYNLIB_CLASS
+    const wxWindow* window = win;
+    if ( !window )
     {
-        tlw = wxDynamicCast(wxGetTopLevelParent(win), wxTopLevelWindow);
-    }
-    else
-    {
-        wxWindow* window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
-        if (window)
-            tlw = wxDynamicCast(wxGetTopLevelParent(window), wxTopLevelWindow);
+        window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
     }
 
-    if (tlw && tlw->IsPerMonitorDPIAware())
+    if ( window )
     {
-        wxDynamicLibrary dllUser32;
-        if ( dllUser32.Load(wxS("User32.dll"), wxDL_VERBATIM | wxDL_QUIET))
+        typedef int (WINAPI *GetSystemMetricsForDpi_t)(int nIndex, UINT dpi);
+
+        static GetSystemMetricsForDpi_t s_pfnGetSystemMetricsForDpi = NULL;
+        static bool s_initDone = false;
+        if ( !s_initDone )
         {
-            typedef int(WINAPI *GetSystemMetricsForDpi_t)(int nIndex, UINT dpi);
-            GetSystemMetricsForDpi_t wxDL_INIT_FUNC(pfn, GetSystemMetricsForDpi, dllUser32);
+            wxLoadedDLL dllUser32(wxS("user32.dll"));
 
-            if (pfnGetSystemMetricsForDpi)
-            {
-                return pfnGetSystemMetricsForDpi(nIndex, tlw->GetActiveDPI().GetX());
-            }
+            wxDL_INIT_FUNC(s_pfn, GetSystemMetricsForDpi, dllUser32);
+
+            s_initDone = true;
+        }
+
+        if ( s_pfnGetSystemMetricsForDpi )
+        {
+            return s_pfnGetSystemMetricsForDpi(nIndex, window->GetDPI().y);
         }
     }
+#else
+    wxUnusedVar(win);
+#endif // wxUSE_DYNLIB_CLASS
 
     return ::GetSystemMetrics(nIndex);
 }
@@ -4709,32 +4713,36 @@ int wxGetSystemMetrics(int nIndex, wxWindow* win)
 /*extern*/
 bool wxSystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, wxWindow* win)
 {
-    wxTopLevelWindow* tlw = NULL;
-    if (win)
+#if wxUSE_DYNLIB_CLASS
+    const wxWindow* window = win;
+    if ( !window )
     {
-        tlw = wxDynamicCast(wxGetTopLevelParent(win), wxTopLevelWindow);
-    }
-    else
-    {
-        wxWindow* window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
-        if (window)
-            tlw = wxDynamicCast(wxGetTopLevelParent(window), wxTopLevelWindow);
+        window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
     }
 
-    if (tlw && tlw->IsPerMonitorDPIAware())
+    if ( window )
     {
-        wxDynamicLibrary dllUser32;
-        if (dllUser32.Load(wxS("User32.dll"), wxDL_VERBATIM | wxDL_QUIET))
+        typedef int (WINAPI *SystemParametersInfoForDpi_t)(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, UINT dpi);
+
+        static SystemParametersInfoForDpi_t s_pfnSystemParametersInfoForDpi = NULL;
+        static bool s_initDone = false;
+        if ( !s_initDone )
         {
-            typedef int(WINAPI *SystemParametersInfoForDpi_t)(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, UINT dpi);
-            SystemParametersInfoForDpi_t wxDL_INIT_FUNC(pfn, SystemParametersInfoForDpi, dllUser32);
+            wxLoadedDLL dllUser32(wxS("user32.dll"));
 
-            if (pfnSystemParametersInfoForDpi)
-            {
-                return pfnSystemParametersInfoForDpi(uiAction, uiParam, pvParam, fWinIni, tlw->GetActiveDPI().GetX());
-            }
+            wxDL_INIT_FUNC(s_pfn, SystemParametersInfoForDpi, dllUser32);
+
+            s_initDone = true;
+        }
+
+        if ( s_pfnSystemParametersInfoForDpi )
+        {
+            return s_pfnSystemParametersInfoForDpi(uiAction, uiParam, pvParam, fWinIni, window->GetDPI().y);
         }
     }
+#else
+    wxUnusedVar(win);
+#endif // wxUSE_DYNLIB_CLASS
 
     return ::SystemParametersInfo(uiAction, uiParam, pvParam, fWinIni);
 }

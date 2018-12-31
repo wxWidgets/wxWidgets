@@ -1561,10 +1561,7 @@ void wxMSWDCImpl::SetFont(const wxFont& font)
 
     if ( font.IsOk() )
     {
-        wxFont fontCopy(font);
-        fontCopy.WXAdjustToPPI(GetPPI());
-
-        HGDIOBJ hfont = ::SelectObject(GetHdc(), GetHfontOf(fontCopy));
+        HGDIOBJ hfont = ::SelectObject(GetHdc(), GetHfontOf(font));
         if ( hfont == HGDI_ERROR )
         {
             wxLogLastError(wxT("SelectObject(font)"));
@@ -1574,7 +1571,7 @@ void wxMSWDCImpl::SetFont(const wxFont& font)
             if ( !m_oldFont )
                 m_oldFont = (WXHFONT)hfont;
 
-            m_font = fontCopy;
+            m_font = font;
         }
     }
     else // invalid font, reset the current font
