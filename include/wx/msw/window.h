@@ -588,6 +588,11 @@ public:
     void MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI);
 
 protected:
+    // Called from MSWUpdateOnDPIChange() specifically to update the control
+    // font, as this may need to be done differently for some specific native
+    // controls. The default version updates m_font of this window.
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI);
+
     // this allows you to implement standard control borders without
     // repeating the code in different classes that are not derived from
     // wxControl
