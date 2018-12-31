@@ -545,7 +545,7 @@ wxSize wxSlider::DoGetBestSize() const
     wxSize size;
     if ( HasFlag(wxSL_VERTICAL) )
     {
-        size.Set(THUMB, length);
+        size = FromDIP(wxSize(THUMB, length));
         width = &size.x;
 
         if ( m_labels )
@@ -568,7 +568,7 @@ wxSize wxSlider::DoGetBestSize() const
     }
     else // horizontal
     {
-        size.Set(length, THUMB);
+        size = FromDIP(wxSize(length, THUMB));
         width = &size.y;
 
         if ( m_labels )
