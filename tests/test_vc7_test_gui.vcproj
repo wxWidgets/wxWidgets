@@ -593,6 +593,9 @@
 				RelativePath=".\validators\valnum.cpp">
 			</File>
 			<File
+				RelativePath=".\validators\valtxt.cpp">
+			</File>
+			<File
 				RelativePath=".\controls\virtlistctrltest.cpp">
 			</File>
 			<File

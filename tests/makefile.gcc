@@ -241,6 +241,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_wrapsizer.o \
 	$(OBJS)\test_gui_toplevel.o \
 	$(OBJS)\test_gui_valnum.o \
+	$(OBJS)\test_gui_valtxt.o \
 	$(OBJS)\test_gui_clientsize.o \
 	$(OBJS)\test_gui_setsize.o \
 	$(OBJS)\test_gui_xrctest.o
@@ -1074,6 +1075,9 @@ $(OBJS)\test_gui_toplevel.o: ./toplevel/toplevel.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_valnum.o: ./validators/valnum.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_valtxt.o: ./validators/valtxt.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_clientsize.o: ./window/clientsize.cpp
