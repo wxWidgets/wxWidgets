@@ -164,12 +164,16 @@ bool wxSlider::Create(wxWindow *parent,
 
             m_labels->Set(n, wnd, lblid);
         }
-        m_labels->SetFont(GetFont());
     }
 
     // now create the main control too
     if ( !MSWCreateControl(TRACKBAR_CLASS, wxEmptyString, pos, size) )
         return false;
+
+    if ( m_labels )
+    {
+        m_labels->SetFont(GetFont());
+    }
 
     // and initialize everything
     SetRange(minValue, maxValue);
