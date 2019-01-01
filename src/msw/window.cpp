@@ -4777,6 +4777,14 @@ wxSize wxWindowMSW::MSWTryGetWindowDPI() const
 wxSize wxWindowMSW::GetDPI() const
 {
     wxSize dpi = MSWTryGetWindowDPI();
+
+    if ( !dpi.x || !dpi.y )
+    {
+        const wxWindow* tlw = wxGetTopLevelParent(const_cast<wxWindow*>(this));
+        if ( tlw )
+            dpi = tlw->MSWTryGetWindowDPI();
+    }
+
     if ( !dpi.x || !dpi.y )
     {
         WindowHDC hdc(GetHwnd());
