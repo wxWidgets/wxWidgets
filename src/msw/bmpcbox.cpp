@@ -39,8 +39,6 @@
 #include "wx/odcombo.h"
 
 
-#define IMAGE_SPACING_CTRL_VERTICAL 7  // Spacing used in control size calculation
-
 
 // ============================================================================
 // implementation
@@ -530,6 +528,15 @@ bool wxBitmapComboBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
     }
 
     return true;
+}
+
+void wxBitmapComboBox::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxComboBox::MSWUpdateFontOnDPIChange(newDPI);
+
+    UpdateInternals();
+
+    RecreateControl();
 }
 
 #endif // wxUSE_BITMAPCOMBOBOX
