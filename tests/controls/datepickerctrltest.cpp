@@ -85,8 +85,13 @@ void DatePickerCtrlTestCase::Range()
     // minimum as it doesn't support dates before 1601-01-01, hence don't rely
     // on GetRange() returning false.
     wxDateTime dtRangeStart, dtRangeEnd;
+
+    // Default end date for QT is 31/12/7999 which is considered valid,
+    // therefore we should omit this assertion for QT
+#ifndef __WXQT__
     m_datepicker->GetRange(&dtRangeStart, &dtRangeEnd);
     CPPUNIT_ASSERT( !dtRangeEnd.IsValid() );
+#endif
 
     // After we set it we should be able to get it back.
     const wxDateTime

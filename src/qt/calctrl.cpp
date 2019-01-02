@@ -24,15 +24,6 @@
 #include <QtGui/QTextCharFormat>
 #include <QtWidgets/QCalendarWidget>
 
-namespace
-{
-    const int MAX_YEAR_QT = 7999;
-
-    bool IsQDateValid(const QDate &date)
-    {
-        return date.isValid() && date.year() > 0 && date.year() < MAX_YEAR_QT;
-    }
-}
 
 class wxQtCalendarWidget : public wxQtEventSignalHandler< QCalendarWidget, wxCalendarCtrl >
 {
@@ -186,13 +177,13 @@ bool wxCalendarCtrl::GetDateRange(wxDateTime *lowerdate,
 
     bool status = false;
 
-    if ( lowerdate && IsQDateValid( m_qtCalendar->minimumDate() ) )
+    if ( lowerdate )
     {
         *lowerdate = wxQtConvertDate(m_qtCalendar->minimumDate());
         status = true;
     }
 
-    if ( upperdate && IsQDateValid( m_qtCalendar->maximumDate() ) )
+    if ( upperdate )
     {
         *upperdate = wxQtConvertDate(m_qtCalendar->maximumDate());
         status = true;
