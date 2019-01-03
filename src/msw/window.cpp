@@ -3707,60 +3707,54 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_NCCALCSIZE:
             {
                 const wxBorder border = TranslateBorder(GetBorder());
-
                 if (wxUxThemeIsActive() && border == wxBORDER_THEME)
                 {
-                    RECT newrcClient; // new client rect
-
                     // first ask the widget to calculate the border size
                     rc.result = MSWDefWindowProc(message, wParam, lParam);
                     processed = true;
 
-                    if (wParam)
+                    // now alter the client size making room for drawing a
+                    // themed border
+                    LPRECT pNewrcClient; // new client rect
+                    LPNCCALCSIZE_PARAMS pNCCSP = NULL;
+                    if ( wParam )
                     {
-                        LPNCCALCSIZE_PARAMS pnccsp = (LPNCCALCSIZE_PARAMS)lParam;
-                        // pnccsp->rgrc[0] is the computed new client rect
-                        // pnccsp->rgrc[1] is going to be the dst blit rect
-                        // pnccsp->rgrc[2] is going to be the src blit rect
-
-						//::CopyRect(&newrcClient, &pnccsp->rgrc[0]);
-                        newrcClient = pnccsp->rgrc[0];
+                        pNCCSP = (LPNCCALCSIZE_PARAMS)lParam;
+                        pNewrcClient = &pNCCSP->rgrc[0];
+                        // pNCCSP->rgrc[0] is the computed new client rect
                     }
-                    else // wParam == 0: Windows wants us to map a single rect w->c
-						//::CopyRect(&newrcClient, (LPRECT)lParam);
-                        newrcClient = *(LPRECT)lParam;
+                    else
+                    {
+                        pNewrcClient = (LPRECT)lParam;
+                    }
 
                     wxUxThemeHandle hTheme((const wxWindow *)this, L"EDIT");
+                    RECT rcContent = *pNewrcClient;
                     wxClientDC dc((wxWindow *)this);
-                    wxMSWDCImpl *impl = (wxMSWDCImpl*)dc.GetImpl();
-
-                    RECT rcContent = newrcClient;
-                    //::CopyRect(&rcContent, &newrcClient);
+                    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
 
                     // Get the state ID
                     int nState;
 
-                    if (!IsEnabled())
+                    if ( !IsEnabled() )
                         nState = ETS_DISABLED;
-                    // Should we check this?
-                    //else if (::GetWindowLong(GetHwnd(), GWL_STYLE) & ES_READONLY)
-                    //    nState = ETS_READONLY;
                     else
                         nState = ETS_NORMAL;
 
                     ::GetThemeBackgroundContentRect(hTheme, GetHdcOf(*impl), EP_EDITTEXT,
-                                                    nState, &newrcClient, &rcContent);
+                                                    nState, pNewrcClient, &rcContent);
 
                     ::InflateRect(&rcContent, -1, -1);
 
-                    if (wParam)
-                    {
-                        LPNCCALCSIZE_PARAMS pnccsp = (LPNCCALCSIZE_PARAMS)lParam;
-
-                        pnccsp->rgrc[0] = rcContent;
-                    }
+                    if ( wParam )
+                        pNCCSP->rgrc[0] = rcContent;
                     else
                         *(LPRECT)lParam = rcContent;
+
+
+                        // WVR_REDRAW triggers a bug whereby child windows are moved up and left,
+                        // so don't use.
+                        // rc.result = WVR_REDRAW;
                 }
             }
             break;
@@ -3768,7 +3762,6 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
         case WM_NCPAINT:
             {
                 const wxBorder border = TranslateBorder(GetBorder());
-
                 if (wxUxThemeIsActive() && border == wxBORDER_THEME)
                 {
                     // first ask the widget to paint its non-client area, such as scrollbars, etc.
@@ -3777,28 +3770,24 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                     wxUxThemeHandle hTheme((const wxWindow *)this, L"EDIT");
                     wxWindowDC dc((wxWindow *)this);
-                    wxMSWDCImpl *impl = (wxMSWDCImpl*)dc.GetImpl();
+                    wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
 
                     // Clip the DC so that you only draw on the non-client area
-                    RECT rcClient;
-                    wxCopyRectToRECT(GetSize(), rcClient);
+                    RECT rcBounding;
+                    wxCopyRectToRECT(GetSize(), rcBounding);
 
-                    RECT rcContent = rcClient;
-                    //::CopyRect(&rcContent, &rcClient);
+                    RECT rcContent = rcBounding;
 
                     // Get the state ID
                     int nState;
 
-                    if (!IsEnabled())
+                    if ( !IsEnabled() )
                         nState = ETS_DISABLED;
-                    // Should we check this?
-                    //else if (::GetWindowLong(GetHwnd(), GWL_STYLE) & ES_READONLY)
-                    //    nState = ETS_READONLY;
                     else
                         nState = ETS_NORMAL;
 
                     ::GetThemeBackgroundContentRect(hTheme, GetHdcOf(*impl), EP_EDITTEXT,
-                                                    nState, &rcClient, &rcContent);
+                                                    nState, &rcBounding, &rcContent);
 
                     ::InflateRect(&rcContent, -1, -1);
 
@@ -3807,13 +3796,14 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
 
                     // Make sure the background is in a proper state
                     if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, nState))
-                        ::DrawThemeParentBackground(GetHwnd(), GetHdcOf(*impl), &rcClient);
+                        ::DrawThemeParentBackground(GetHwnd(), GetHdcOf(*impl), &rcBounding);
 
                     // Draw the border
-                    ::DrawThemeBackground(hTheme, GetHdcOf(*impl), EP_EDITTEXT, nState, &rcClient, NULL);
+                    ::DrawThemeBackground(hTheme, GetHdcOf(*impl), EP_EDITTEXT, nState, &rcBounding, NULL);
                 }
             }
             break;
+
 #endif // wxUSE_UXTHEME
 
         default:
