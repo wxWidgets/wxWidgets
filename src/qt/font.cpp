@@ -271,11 +271,24 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
     return &M_FONTDATA;
 }
 
+bool wxFont::GetStrikethrough() const
+{
+    return M_FONTDATA.GetStrikethrough();
+}
+
+
 void wxFont::SetFractionalPointSize(float pointSize)
 {
     AllocExclusive();
 
     M_FONTDATA.SetFractionalPointSize(pointSize);
+}
+
+void wxFont::SetPixelSize(const wxSize& pixelSize)
+{
+    AllocExclusive();
+
+    M_FONTDATA.SetPixelSize(pixelSize);
 }
 
 bool wxFont::SetFaceName(const wxString& facename)
@@ -311,6 +324,13 @@ void wxFont::SetUnderlined( bool underlined )
     AllocExclusive();
 
     M_FONTDATA.SetUnderlined(underlined);
+}
+
+void wxFont::SetStrikethrough(bool strikethrough)
+{
+    AllocExclusive();
+
+    M_FONTDATA.SetStrikethrough(strikethrough);
 }
 
 void wxFont::SetEncoding(wxFontEncoding encoding)
@@ -470,7 +490,7 @@ void wxNativeFontInfo::SetStrikethrough(bool strikethrough)
 bool wxNativeFontInfo::SetFaceName(const wxString& facename)
 {
     m_qtFont.setFamily(wxQtConvertString(facename));
-    // qt uses a "font matching algoritm" so the font will be allways valid
+    // qt uses a "font matching algorithm" so the font will be always valid
     return true;
 }
 
