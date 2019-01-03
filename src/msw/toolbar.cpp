@@ -123,7 +123,6 @@ wxBEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
     EVT_MOUSE_EVENTS(wxToolBar::OnMouseEvent)
     EVT_SYS_COLOUR_CHANGED(wxToolBar::OnSysColourChanged)
     EVT_ERASE_BACKGROUND(wxToolBar::OnEraseBackground)
-    EVT_DPI_CHANGED(wxToolBar::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -1852,8 +1851,10 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
 #endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
 }
 
-void wxToolBar::OnDPIChanged(wxDPIChangedEvent& WXUNUSED(event))
+void wxToolBar::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 {
+    wxToolBarBase::MSWUpdateFontOnDPIChange(newDPI);
+
     Realize();
 }
 
