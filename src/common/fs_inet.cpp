@@ -117,9 +117,15 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
             }
             delete s;
 
+            // Content-Type header, as defined by the RFC 2045, has the form of
+            // "type/subtype" optionally followed by (multiple) "; parameter"
+            // and we need just the MIME type here.
+            wxString mimetype = content.BeforeFirst(';');
+            mimetype.Trim();
+
             return new wxFSFile(new wxTemporaryFileInputStream(tmpfile),
                                 right,
-                                content,
+                                mimetype,
                                 GetAnchor(location)
 #if wxUSE_DATETIME
                                 , wxDateTime::Now()
