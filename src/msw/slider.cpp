@@ -623,7 +623,7 @@ void wxSlider::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 {
     wxSliderBase::MSWUpdateFontOnDPIChange(newDPI);
 
-    if ( m_font.IsOk() )
+    if ( m_labels && m_font.IsOk() )
         m_labels->SetFont(m_font);
 }
 
