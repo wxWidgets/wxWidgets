@@ -2223,7 +2223,7 @@ void wxWindowMac::MacRepositionScrollBars()
 
 bool wxWindowMac::AcceptsFocus() const
 {
-    if ( GetPeer() == NULL || GetPeer()->IsUserPane() )
+    if ( GetPeer() == NULL || GetPeer()->HasUserKeyHandling() )
         return wxWindowBase::AcceptsFocus();
     else
         return GetPeer()->CanFocus();
@@ -2745,7 +2745,17 @@ wxWidgetImpl::wxWidgetImpl( wxWindowMac* peer , bool isRootControl, bool isUserP
 {
     Init();
     m_isRootControl = isRootControl;
+    m_wantsUserKey = m_isUserPane = isUserPane;
+    m_wxPeer = peer;
+    m_shouldSendEvents = true;
+}
+
+wxWidgetImpl::wxWidgetImpl( wxWindowMac* peer , bool isRootControl, bool isUserPane, bool wantsUserKey )
+{
+    Init();
+    m_isRootControl = isRootControl;
     m_isUserPane = isUserPane;
+    m_wantsUserKey = wantsUserKey;
     m_wxPeer = peer;
     m_shouldSendEvents = true;
 }

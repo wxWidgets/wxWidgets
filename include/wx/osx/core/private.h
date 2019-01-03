@@ -216,6 +216,7 @@ protected :
 class WXDLLIMPEXP_CORE wxWidgetImpl : public wxObject
 {
 public :
+    wxWidgetImpl( wxWindowMac* peer , bool isRootControl, bool isUserPane, bool wantsUserKey );
     wxWidgetImpl( wxWindowMac* peer , bool isRootControl = false, bool isUserPane = false );
     wxWidgetImpl();
     virtual ~wxWidgetImpl();
@@ -224,8 +225,12 @@ public :
 
     bool                IsRootControl() const { return m_isRootControl; }
     
+    // is a completely control that has all events handled in wx code, no built-ins
     bool                IsUserPane() const { return m_isUserPane; }
 
+    // we are doing keyboard handling in wx code, other events might be handled natively
+    virtual bool        HasUserKeyHandling() const { return m_wantsUserKey; }
+    
     wxWindowMac*        GetWXPeer() const { return m_wxPeer; }
 
     bool IsOk() const { return GetWXWidget() != NULL; }
@@ -572,6 +577,7 @@ public :
 protected :
     bool                m_isRootControl;
     bool                m_isUserPane;
+    bool                m_wantsUserKey;
     wxWindowMac*        m_wxPeer;
     bool                m_needsFocusRect;
     bool                m_needsFrame;
