@@ -22,7 +22,7 @@
     #include "wx/button.h"
     #include "wx/dcclient.h"
     #include "wx/menu.h"
-    #include "wx/dcmemory.h"
+    #include "wx/dcbuffer.h"
 #endif //WX_PRECOMP
 
 #if !wxUSE_NATIVE_SEARCH_CONTROL
@@ -51,7 +51,7 @@ class wxSearchTextCtrl : public wxTextCtrl
 public:
     wxSearchTextCtrl(wxSearchCtrl *search, const wxString& value, int style)
         : wxTextCtrl(search, wxID_ANY, value, wxDefaultPosition, wxDefaultSize,
-                     (style & ~wxBORDER_MASK) | wxNO_BORDER | wxTE_PROCESS_ENTER)
+                     (style & ~wxBORDER_MASK) | wxBORDER_NONE | wxTE_PROCESS_ENTER)
     {
         m_search = search;
 
@@ -160,7 +160,7 @@ class wxSearchButton : public wxControl
 {
 public:
     wxSearchButton(wxSearchCtrl *search, int eventType, const wxBitmap& bmp)
-        : wxControl(search, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNO_BORDER),
+        : wxControl(search, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_NONE),
           m_search(search),
           m_eventType(eventType),
           m_bmp(bmp)
@@ -220,9 +220,15 @@ protected:
     }
 
     void OnPaint(wxPaintEvent&)
-    {
-        wxPaintDC dc(this);
-        dc.DrawBitmap(m_bmp, 0,0, true);
+    {        
+        // Clear the background in case of a user bitmap with alpha channel
+        wxAutoBufferedPaintDC bufPaintDC(this);
+        wxColour bg = m_search->GetBackgroundColour();
+
+        bufPaintDC.SetBrush(wxBrush(bg));
+        bufPaintDC.SetPen(wxPen(bg));
+        bufPaintDC.Clear();
+        bufPaintDC.DrawBitmap(m_bmp, 0, 0, true);
     }
 
 
@@ -311,9 +317,11 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
                                         wxEVT_SEARCH,
                                         m_searchBitmap);
 
-    SetBackgroundColour( m_text->GetBackgroundColour() );
-    m_text->SetBackgroundColour(wxColour());
+    m_cancelButton = new wxSearchButton(this,
+                                        wxEVT_SEARCH_CANCEL,
+                                        m_cancelBitmap);
 
+    SetBackgroundColour(m_text->GetBackgroundColour());
     RecalcBitmaps();
 
     SetInitialSize(size);
@@ -408,24 +416,20 @@ void wxSearchCtrl::ShowCancelButton( bool show )
         return;
     }
 
-    // This button is not shown initially, so create it on demand if necessary,
-    // i.e. if it's the first time we show it.
-    if ( !m_cancelButton )
+    if ( show )
     {
-        m_cancelButton = new wxSearchButton(this,
-                                            wxEVT_SEARCH_CANCEL,
-                                            m_cancelBitmap);
         RecalcBitmaps();
+        m_cancelButton->Show();
     }
-
-    m_cancelButton->Show(show);
+    else // Requested to hide it.
+            m_cancelButton->Hide();
 
     LayoutControls();
 }
 
 bool wxSearchCtrl::IsCancelButtonVisible() const
 {
-    return m_cancelButton && m_cancelButton->IsShown();
+    return m_cancelButton->IsShown();
 }
 
 void wxSearchCtrl::SetDescriptiveText(const wxString& text)
@@ -460,12 +464,11 @@ wxSize wxSearchCtrl::DoGetBestClientSize() const
         cancelMargin = FromDIP(MARGIN);
     }
 
-    int horizontalBorder = FromDIP(1) + ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
+    const int horizontalBorder = (sizeText.y - sizeText.y * 14 / 20) / 2;
 
     // buttons are square and equal to the height of the text control
-    int height = sizeText.y;
-    return wxSize(sizeSearch.x + searchMargin + sizeText.x + cancelMargin + sizeCancel.x + 2*horizontalBorder,
-                  height);
+    return wxSize(sizeSearch.x + searchMargin + sizeText.x + cancelMargin +
+                  sizeCancel.x + 2 * horizontalBorder, sizeText.y);
 }
 
 void wxSearchCtrl::LayoutControls()
@@ -474,15 +477,14 @@ void wxSearchCtrl::LayoutControls()
         return;
 
     const wxSize sizeTotal = GetClientSize();
-    int width = sizeTotal.x,
-        height = sizeTotal.y;
-
+    const int width = sizeTotal.x,
+              height = sizeTotal.y;
     wxSize sizeText = m_text->GetBestSize();
+
     // make room for the search menu & clear button
-    int horizontalBorder = FromDIP(1) + ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
-    int x = horizontalBorder;
-    width -= horizontalBorder*2;
-    if (width < 0) width = 0;
+    const int horizontalBorder = (sizeText.y - sizeText.y * 14 / 20) / 2;
+    int x = 0;
+    int textWidth = width;
 
     wxSize sizeSearch(0,0);
     wxSize sizeCancel(0,0);
@@ -492,29 +494,36 @@ void wxSearchCtrl::LayoutControls()
     {
         sizeSearch = m_searchButton->GetBestSize();
         searchMargin = FromDIP(MARGIN);
+        x += horizontalBorder;
+        textWidth -= horizontalBorder;
     }
     if ( IsCancelButtonVisible() )
     {
         sizeCancel = m_cancelButton->GetBestSize();
         cancelMargin = FromDIP(MARGIN);
+        textWidth -= horizontalBorder;
     }
 
-    if ( sizeSearch.x + sizeCancel.x > width )
+    if ( (sizeSearch.x + sizeCancel.x) > width )
     {
         sizeSearch.x = width/2;
         sizeCancel.x = width/2;
         searchMargin = 0;
         cancelMargin = 0;
     }
-    wxCoord textWidth = width - sizeSearch.x - sizeCancel.x - searchMargin - cancelMargin - FromDIP(1);
+
+    textWidth -= sizeSearch.x + sizeCancel.x + searchMargin + cancelMargin;
+
     if (textWidth < 0) textWidth = 0;
 
     // position the subcontrols inside the client area
-
-    m_searchButton->SetSize(x, (height - sizeSearch.y) / 2,
-                            sizeSearch.x, sizeSearch.y);
-    x += sizeSearch.x;
-    x += searchMargin;
+    if ( m_searchButton )
+    {
+        m_searchButton->SetSize(x, (height - sizeSearch.y) / 2,
+                                sizeSearch.x, sizeSearch.y);
+        x += sizeSearch.x;
+        x += searchMargin;
+    }
 
 #ifdef __WXMSW__
     // The text control is too high up on Windows; normally a text control looks OK because
@@ -528,12 +537,12 @@ void wxSearchCtrl::LayoutControls()
 
     m_text->SetSize(x, textY, textWidth, height-textY);
     x += textWidth;
-    x += cancelMargin;
 
     if ( m_cancelButton )
     {
+        x += cancelMargin;
         m_cancelButton->SetSize(x, (height - sizeCancel.y) / 2,
-                                sizeCancel.x, height);
+                                sizeCancel.x, sizeCancel.y);
     }
 }
 
@@ -950,7 +959,7 @@ static void RescaleBitmap(wxBitmap& bmp, const wxSize& sizeNeeded)
     newBmp.UseAlpha(bmp.HasAlpha());
 #endif // __WXMSW__ || __WXOSX__
     {
-        wxMemoryDC dc(newBmp);
+        wxBufferedDC dc(NULL, newBmp);
         double scX = (double)sizeNeeded.GetWidth() / bmp.GetWidth();
         double scY = (double)sizeNeeded.GetHeight() / bmp.GetHeight();
         dc.SetUserScale(scX, scY);
@@ -992,30 +1001,29 @@ wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
     penWidth = penWidth * x / 20;
 
     wxBitmap bitmap( multiplier*x, multiplier*y );
-    wxMemoryDC mem;
-    mem.SelectObject(bitmap);
+    wxBufferedDC bufDC(NULL, bitmap);
 
     // clear background
-    mem.SetBrush( wxBrush(bg) );
-    mem.SetPen( wxPen(bg) );
-    mem.DrawRectangle(0,0,bitmap.GetWidth(),bitmap.GetHeight());
+    bufDC.SetBrush(wxBrush(bg));
+    bufDC.SetPen(wxPen(bg));
+    bufDC.DrawRectangle(0, 0, bitmap.GetWidth(), bitmap.GetHeight());
 
     // draw drop glass
-    mem.SetBrush( wxBrush(fg) );
-    mem.SetPen( wxPen(fg) );
+    bufDC.SetBrush(wxBrush(fg));
+    bufDC.SetPen(wxPen(fg));
     int glassBase = 5 * x / 20;
     int glassFactor = 2*glassBase + 1;
     int radius = multiplier*glassFactor/2;
-    mem.DrawCircle(radius,radius,radius);
-    mem.SetBrush( wxBrush(bg) );
-    mem.SetPen( wxPen(bg) );
-    mem.DrawCircle(radius,radius,radius-penWidth);
+    bufDC.DrawCircle(radius, radius, radius);
+    bufDC.SetBrush(wxBrush(bg));
+    bufDC.SetPen(wxPen(bg));
+    bufDC.DrawCircle(radius, radius, radius - penWidth);
 
     // draw handle
     int lineStart = radius + (radius-penWidth/2) * 707 / 1000; // 707 / 1000 = 0.707 = 1/sqrt(2);
 
-    mem.SetPen( wxPen(fg) );
-    mem.SetBrush( wxBrush(fg) );
+    bufDC.SetPen(wxPen(fg));
+    bufDC.SetBrush(wxBrush(fg));
     int handleCornerShift = penWidth * 707 / 1000 / 2; // 707 / 1000 = 0.707 = 1/sqrt(2);
     handleCornerShift = wxMax( handleCornerShift, 1 );
     int handleBase = 4 * x / 20;
@@ -1027,7 +1035,7 @@ wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
         wxPoint(multiplier*handleLength/2+handleCornerShift,multiplier*handleLength/2-handleCornerShift),
         wxPoint(multiplier*handleLength/2-handleCornerShift,multiplier*handleLength/2+handleCornerShift),
     };
-    mem.DrawPolygon(WXSIZEOF(handlePolygon),handlePolygon,lineStart,lineStart);
+    bufDC.DrawPolygon(WXSIZEOF(handlePolygon), handlePolygon, lineStart, lineStart);
 
     // draw drop triangle
     int triangleX = 13 * x / 20;
@@ -1042,9 +1050,9 @@ wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
             wxPoint(multiplier*triangleFactor-1,multiplier*0), // triangle right
             wxPoint(multiplier*triangleFactor/2,multiplier*triangleFactor/2), // triangle bottom
         };
-        mem.DrawPolygon(WXSIZEOF(dropPolygon),dropPolygon,multiplier*triangleX,multiplier*triangleY);
+        bufDC.DrawPolygon(WXSIZEOF(dropPolygon), dropPolygon, multiplier * triangleX, multiplier * triangleY);
     }
-    mem.SelectObject(wxNullBitmap);
+    bufDC.SelectObject(wxNullBitmap);
 
     //===============================================================================
     // end drawing code
@@ -1095,26 +1103,25 @@ wxBitmap wxSearchCtrl::RenderCancelBitmap( int x, int y )
     int penWidth = multiplier * x / 14;
 
     wxBitmap bitmap( multiplier*x, multiplier*y );
-    wxMemoryDC mem;
-    mem.SelectObject(bitmap);
+    wxBufferedDC bufDC(NULL, bitmap);
 
     // clear background
-    mem.SetBrush( wxBrush(bg) );
-    mem.SetPen( wxPen(bg) );
-    mem.DrawRectangle(0,0,bitmap.GetWidth(),bitmap.GetHeight());
+    bufDC.SetBrush(wxBrush(bg));
+    bufDC.SetPen(wxPen(bg));
+    bufDC.DrawRectangle(0, 0, bitmap.GetWidth(), bitmap.GetHeight());
 
-    // draw drop glass
-    mem.SetBrush( wxBrush(fg) );
-    mem.SetPen( wxPen(fg) );
+    // draw circle
+    bufDC.SetBrush(wxBrush(fg));
+    bufDC.SetPen(wxPen(fg));
     int radius = multiplier*x/2;
-    mem.DrawCircle(radius,radius,radius);
+    bufDC.DrawCircle(radius, radius, radius);
 
     // draw cross
     int lineStartBase = 4 * x / 14;
     int lineLength = x - 2*lineStartBase;
 
-    mem.SetPen( wxPen(bg) );
-    mem.SetBrush( wxBrush(bg) );
+    bufDC.SetPen(wxPen(bg));
+    bufDC.SetBrush(wxBrush(bg));
     int handleCornerShift = penWidth/2;
     handleCornerShift = wxMax( handleCornerShift, 1 );
     wxPoint handlePolygon[] =
@@ -1124,7 +1131,8 @@ wxBitmap wxSearchCtrl::RenderCancelBitmap( int x, int y )
         wxPoint(multiplier*lineLength+handleCornerShift,multiplier*lineLength-handleCornerShift),
         wxPoint(multiplier*lineLength-handleCornerShift,multiplier*lineLength+handleCornerShift),
     };
-    mem.DrawPolygon(WXSIZEOF(handlePolygon),handlePolygon,multiplier*lineStartBase,multiplier*lineStartBase);
+    bufDC.DrawPolygon(WXSIZEOF(handlePolygon), handlePolygon, multiplier * lineStartBase, multiplier * lineStartBase);
+
     wxPoint handlePolygon2[] =
     {
         wxPoint(+handleCornerShift,+handleCornerShift),
@@ -1132,7 +1140,9 @@ wxBitmap wxSearchCtrl::RenderCancelBitmap( int x, int y )
         wxPoint(multiplier*lineLength-handleCornerShift,-multiplier*lineLength-handleCornerShift),
         wxPoint(multiplier*lineLength+handleCornerShift,-multiplier*lineLength+handleCornerShift),
     };
-    mem.DrawPolygon(WXSIZEOF(handlePolygon2),handlePolygon2,multiplier*lineStartBase,multiplier*(x-lineStartBase));
+    bufDC.DrawPolygon(WXSIZEOF(handlePolygon2), handlePolygon2, multiplier * lineStartBase, multiplier * (x - lineStartBase));
+    
+    bufDC.SelectObject(wxNullBitmap);
 
     //===============================================================================
     // end drawing code
@@ -1154,7 +1164,7 @@ void wxSearchCtrl::RecalcBitmaps()
     }
     wxSize sizeText = m_text->GetBestSize();
 
-    int bitmapHeight = sizeText.y - FromDIP(4);
+    int bitmapHeight = sizeText.y;
     int bitmapWidth  = sizeText.y * 20 / 14;
 
     if ( !m_searchBitmapUser )
@@ -1193,15 +1203,15 @@ void wxSearchCtrl::RecalcBitmaps()
     }
 #endif // wxUSE_MENUS
 
-    if ( m_cancelButton && !m_cancelBitmapUser )
+    if ( !m_cancelBitmapUser )
     {
         if (
             !m_cancelBitmap.IsOk() ||
             m_cancelBitmap.GetHeight() != bitmapHeight ||
-            m_cancelBitmap.GetWidth() != bitmapHeight
+            m_cancelBitmap.GetWidth() != bitmapWidth
             )
         {
-            m_cancelBitmap = RenderCancelBitmap(bitmapHeight,bitmapHeight); // square
+            m_cancelBitmap = RenderCancelBitmap(bitmapWidth,bitmapHeight);
             m_cancelButton->SetBitmapLabel(m_cancelBitmap);
         }
         // else this bitmap was set by user, don't alter
