@@ -32,6 +32,8 @@
 #include "wx/valnum.h"
 #include "wx/numformatter.h"
 
+wxDEFINE_EVENT(wxEVT_NUM_VALIDATE, wxValidationEvent);
+
 // ============================================================================
 // wxNumValidatorBase implementation
 // ============================================================================
@@ -217,32 +219,63 @@ wxIntegerValidatorBase::FromString(const wxString& s, LongestValueType *value)
 bool
 wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
 {
-    // We may accept minus sign if we can represent negative numbers at all.
-    if ( ch == '-' )
+    if ( ch < '0' || ch > '9' )
     {
-        // Notice that entering '-' can make our value invalid, for example if
-        // we're limited to -5..15 range and the current value is 12, then the
-        // new value would be (invalid) -12. We consider it better to let the
-        // user do this because perhaps he is going to press Delete key next to
-        // make it -2 and forcing him to delete 1 first would be unnatural.
-        //
-        // TODO: It would be nice to indicate that the current control contents
-        //       is invalid (if it's indeed going to be the case) once
-        //       wxValidator supports doing this non-intrusively.
-        return m_min < 0 && IsMinusOk(val, pos);
+        // We may accept minus sign if we can represent negative numbers at all.
+        if ( ch == '-' )
+        {
+            if ( !IsMinusOk(val, pos) )
+                return false;
+
+            // Notice that entering '-' can make our value invalid, for example if
+            // we're limited to -5..15 range and the current value is 12, then the
+            // new value would be (invalid) -12. We consider it better to let the
+            // user do this because perhaps he is going to press Delete key next to
+            // make it -2 and forcing him to delete 1 first would be unnatural.
+        }
+        else
+        {
+            // We only accept digits here.
+            return false;
+        }
     }
 
-    // We only accept digits here (remember that '-' is taken care of by the
-    // base class already).
-    if ( ch < '0' || ch > '9' )
-        return false;
+    // Check whether the value we'd obtain if we accepted this key is correct.
+    const wxString newval(GetValueAfterInsertingChar(val, pos, ch));
 
-    // And the value after insertion needs to be in the defined range.
     LongestValueType value;
-    if ( !FromString(GetValueAfterInsertingChar(val, pos, ch), &value) )
+    if ( !FromString(newval, &value) )
         return false;
 
-    return IsInRange(value);
+    // Finally check whether it is in the range.
+
+    if ( IsInRange(value) )
+    {
+        if ( m_state != wxNUM_VAL_OK )
+        {
+            m_state = wxNUM_VAL_OK; // remember current state
+
+            (const_cast<wxIntegerValidatorBase*>(this))->
+                SendEvent(wxEVT_NUM_VALIDATE, EventMsg(m_state));
+        }
+    }
+    else
+    {
+        if ( m_state != wxNUM_VAL_RANGE )
+        {
+
+            m_state = wxNUM_VAL_RANGE; // remember current state
+
+            EventMsg msg;
+            msg.errorcode = m_state;
+            msg.errormsg.Printf(_("%s: out of range."), newval);
+
+            (const_cast<wxIntegerValidatorBase*>(this))->
+                SendEvent(wxEVT_NUM_VALIDATE, msg);
+        }
+    }
+
+    return true;
 }
 
 // ============================================================================
@@ -273,34 +306,39 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
                                        int pos,
                                        wxChar ch) const
 {
-    // We may accept minus sign if we can represent negative numbers at all.
-    if ( ch == '-' )
-        return m_min < 0 && IsMinusOk(val, pos);
-
-    const wxChar separator = wxNumberFormatter::GetDecimalSeparator();
-    if ( ch == separator )
+    if ( ch < '0' || ch > '9' )
     {
-        if ( val.find(separator) != wxString::npos )
+        // We may accept minus sign if we can represent negative numbers at all.
+        if ( ch == '-' )
         {
-            // There is already a decimal separator, can't insert another one.
+            if ( !IsMinusOk(val, pos) )
+                return false;
+        }
+        else if ( ch == wxNumberFormatter::GetDecimalSeparator() )
+        {
+            if ( val.find(ch) != wxString::npos )
+            {
+                // There is already a decimal separator, can't insert another one.
+                return false;
+            }
+
+            // Prepending a separator before the minus sign isn't allowed.
+            if ( pos == 0 && !val.empty() && val[0] == '-' )
+                return false;
+
+            // Otherwise always accept it, adding a decimal separator doesn't
+            // change the number value and, in particular, can't make it invalid.
+            // OTOH the checks below might not pass because strings like "." or
+            // "-." are not valid numbers so parsing them would fail, hence we need
+            // to treat it specially here.
+            return true;
+        }
+        else
+        {
+            // We only accept digits here.
             return false;
         }
-
-        // Prepending a separator before the minus sign isn't allowed.
-        if ( pos == 0 && !val.empty() && val[0] == '-' )
-            return false;
-
-        // Otherwise always accept it, adding a decimal separator doesn't
-        // change the number value and, in particular, can't make it invalid.
-        // OTOH the checks below might not pass because strings like "." or
-        // "-." are not valid numbers so parsing them would fail, hence we need
-        // to treat it specially here.
-        return true;
     }
-
-    // Must be a digit then.
-    if ( ch < '0' || ch > '9' )
-        return false;
 
     // Check whether the value we'd obtain if we accepted this key is correct.
     const wxString newval(GetValueAfterInsertingChar(val, pos, ch));
@@ -310,12 +348,39 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
         return false;
 
     // Also check that it doesn't have too many decimal digits.
-    const size_t posSep = newval.find(separator);
+    const size_t posSep = newval.find(wxNumberFormatter::GetDecimalSeparator());
     if ( posSep != wxString::npos && newval.length() - posSep - 1 > m_precision )
         return false;
 
     // Finally check whether it is in the range.
-    return IsInRange(value);
+
+    if ( IsInRange(value) )
+    {
+        if ( m_state != wxNUM_VAL_OK )
+        {
+            m_state = wxNUM_VAL_OK; // remember current state
+
+            (const_cast<wxFloatingPointValidatorBase*>(this))->
+                SendEvent(wxEVT_NUM_VALIDATE, EventMsg(m_state));
+        }
+    }
+    else // out of range!
+    {
+        if ( m_state != wxNUM_VAL_RANGE )
+        {
+
+            m_state = wxNUM_VAL_RANGE; // remember current state
+
+            EventMsg msg;
+            msg.errorcode = m_state;
+            msg.errormsg.Printf(_("%s: out of range."), newval);
+
+            (const_cast<wxFloatingPointValidatorBase*>(this))->
+                SendEvent(wxEVT_NUM_VALIDATE, msg);
+        }
+    }
+
+    return true;
 }
 
 #endif // wxUSE_VALIDATORS && wxUSE_TEXTCTRL

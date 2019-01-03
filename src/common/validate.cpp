@@ -24,6 +24,8 @@
     #include "wx/window.h"
 #endif
 
+#include <wx/richtooltip.h>
+
 const wxValidator wxDefaultValidator;
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxValidator, wxEvtHandler);
@@ -43,11 +45,22 @@ wxValidator::~wxValidator()
 
 void wxValidator::DoProcessEvent(wxValidationEvent& event)
 {
+    // First, give a chance to the m_validatorWindow to process the event
+    // by itself. If no handler was found to process the event, or it was
+    // just skipped, process it here by popping up the error message using
+    // a wxRichToolTip or wxMessageBox (depending on the configuration)
+
     if ( !m_validatorWindow->GetEventHandler()->ProcessEvent(event) )
     {
+    #if wxUSE_RICHTOOLTIP
+        wxRichToolTip tip(_("Validation conflict"), event.GetErrorMessage());
+        tip.SetIcon(wxICON_ERROR);
+        tip.ShowFor(m_validatorWindow);
+    #else
         m_validatorWindow->SetFocus();
         wxMessageBox(event.GetErrorMessage(), _("Validation conflict"),
                      wxOK | wxICON_EXCLAMATION, NULL);
+    #endif // wxUSE_RICHTOOLTIP
     }
 }
 

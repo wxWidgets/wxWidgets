@@ -161,13 +161,19 @@ bool wxTextValidator::Validate(wxWindow *parent)
     // We can only do some kinds of validation once the input is complete, so
     // check for them here:
     if ( HasFlag(wxFILTER_EMPTY) && val.empty() )
-        msg = { wxFILTER_EMPTY, _("Required information entry is empty.") };
+    {
+        msg = EventMsg(wxFILTER_EMPTY, _("Required information entry is empty."));
+    }
     else if ( HasFlag(wxFILTER_INCLUDE_LIST) && m_includes.Index(val) == wxNOT_FOUND )
-        msg = { wxFILTER_INCLUDE_LIST,
-                wxString::Format(_("'%s' is not one of the valid strings"), val) };
+    {
+        msg = EventMsg(wxFILTER_INCLUDE_LIST,
+            wxString::Format(_("'%s' is not one of the valid strings"), val));
+    }
     else if ( HasFlag(wxFILTER_EXCLUDE_LIST) && m_excludes.Index(val) != wxNOT_FOUND )
-        msg = { wxFILTER_EXCLUDE_LIST,
-                wxString::Format(_("'%s' is one of the invalid strings"), val) };
+    {
+        msg = EventMsg(wxFILTER_EXCLUDE_LIST,
+            wxString::Format(_("'%s' is one of the invalid strings"), val));
+    }
     else if ( !(msg.errormsg = IsValid(val)).empty() )
     {
         // NB: this format string should always contain exactly one '%s'

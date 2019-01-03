@@ -35,6 +35,17 @@ enum wxNumValidatorStyle
     wxNUM_VAL_NO_TRAILING_ZEROES    = 0x4
 };
 
+enum wxNumValidatorError
+{
+    wxNUM_VAL_OK = 0x0,
+    wxNUM_VAL_RANGE = 0x1,
+};
+
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_NUM_VALIDATE, wxValidationEvent);
+
+#define EVT_NUM_VALIDATE(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_NUM_VALIDATE, id, wxValidationEventHandler(fn))
+
 // ----------------------------------------------------------------------------
 // Base class for all numeric validators.
 // ----------------------------------------------------------------------------
@@ -45,10 +56,13 @@ public:
     // Change the validator style. Usually it's specified during construction.
     void SetStyle(int style) { m_style = style; }
 
+    virtual bool Validate(wxWindow * WXUNUSED(parent)) wxOVERRIDE
+    {
+        // As the validation is done on the fly here, m_state will always be
+        // updated to reflect the current state of the validation.
 
-    // Override base class method to not do anything but always return success:
-    // we don't need this as we do our validation on the fly here.
-    virtual bool Validate(wxWindow * WXUNUSED(parent)) wxOVERRIDE { return true; }
+        return m_state == wxNUM_VAL_OK;
+    }
 
     // Override base class method to check that the window is a text control or
     // combobox.
@@ -58,11 +72,13 @@ protected:
     wxNumValidatorBase(int style)
     {
         m_style = style;
+        m_state = wxNUM_VAL_OK;
     }
 
     wxNumValidatorBase(const wxNumValidatorBase& other) : wxValidator(other)
     {
         m_style = other.m_style;
+        m_state = other.m_state;
     }
 
     bool HasFlag(wxNumValidatorStyle style) const
@@ -92,6 +108,9 @@ protected:
         return val;
     }
 
+    // state of the control. either ok or out-of-range.
+    mutable int m_state;
+
 private:
     // Check whether the specified character can be inserted in the control at
     // the given position in the string representing the current controls
@@ -117,7 +136,6 @@ private:
 
     // Combination of wxVAL_NUM_XXX values.
     int m_style;
-
 
     wxDECLARE_EVENT_TABLE();
 

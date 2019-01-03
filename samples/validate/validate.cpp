@@ -394,6 +394,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     SetSize(GetBestSize()*1.5);
 
     Bind(wxEVT_VALIDATE, &MyDialog::OnValidationFailed, this);
+    Bind(wxEVT_NUM_VALIDATE, &MyDialog::OnValidationFailed, this);
 }
 
 bool MyDialog::TransferDataToWindow()
@@ -415,16 +416,37 @@ void MyDialog::OnValidationFailed(wxValidationEvent& event)
         if ( event.GetErrorCode() == static_cast<long>(wxFILTER_EMPTY) )
         {
             // override the error message for wxFILTER_EMPTY.
-            // use wxLogError() for simplicity.
-            wxLogError("Empty strings are not allowed here.");
-            return;
+            event.SetErrorMessage("Empty strings are not allowed here.");
         }
 
         event.Skip();
     }
-#if 0
     else if ( event.GetEventType() == wxEVT_NUM_VALIDATE )
     {
+        wxValidator* const val =
+            wxDynamicCast(event.GetEventObject(), wxValidator);
+
+        wxWindow* win = val->GetWindow();
+
+        if ( event.GetErrorCode() == wxNUM_VAL_OK )
+        {
+            // Restore the default properties.
+            win->SetBackgroundColour(wxNullColour);
+            win->SetForegroundColour(wxNullColour);
+
+            // don't skip this event as it's not an error, but is generated
+            // once the control's state changed from invalid to valid state
+            // to help us restore the default properties of the control.
+        }
+        else if ( event.GetErrorCode() == wxNUM_VAL_RANGE )
+        {
+            // Make the control reflect the invalid state.
+            win->SetBackgroundColour(wxTheColourDatabase->Find("ORANGE"));
+            win->SetForegroundColour(wxTheColourDatabase->Find("YELLOW"));
+
+            // and skip the event to show the error message.
+            // don't skip it if you don't want to pop up any message.
+            event.Skip();
+        }
     }
-#endif
 }

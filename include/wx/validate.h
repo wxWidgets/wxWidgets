@@ -123,15 +123,21 @@ public:
 #endif
 
 protected:
+    // Helper struct to ease transferring data to SendEvent()
     struct EventMsg
     {
-        long errorcode;
+        explicit EventMsg(long code=0, const wxString& msg="")
+            : errorcode(code), errormsg(msg)
+        {}
+
+        long errorcode; // depend on the type of the validator.
         wxString errormsg;
     };
 
+    // Derived classes use this function to generate the appropriate event.
     void SendEvent(wxEventType type, const EventMsg& msg)
     {
-        if ( !m_validatorWindow || msg.errormsg.empty() )
+        if ( !m_validatorWindow )
             return;
 
         wxValidationEvent event(this, type, m_validatorWindow);
@@ -144,6 +150,7 @@ protected:
     wxWindow *m_validatorWindow;
 
 private:
+    // Process the event. (might pop up error messages).
     void DoProcessEvent(wxValidationEvent& event);
 
 private:
