@@ -231,6 +231,10 @@ public :
     // we are doing keyboard handling in wx code, other events might be handled natively
     virtual bool        HasUserKeyHandling() const { return m_wantsUserKey; }
     
+    // we are doing mouse handling in wx code, other events might be handled natively
+    // right now this is always in sync with HasUserKeyHandling
+    virtual bool        HasUserMouseHandling() const { return m_wantsUserKey; }
+
     wxWindowMac*        GetWXPeer() const { return m_wxPeer; }
 
     bool IsOk() const { return GetWXWidget() != NULL; }
