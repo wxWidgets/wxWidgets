@@ -346,6 +346,7 @@ wxFontFamily wxFont::DoGetFamily() const
 
 void wxNativeFontInfo::Init()
 {
+    m_wxFontWeight = wxFONTWEIGHT_INVALID;
 }
 
 float wxNativeFontInfo::GetFractionalPointSize() const
@@ -372,37 +373,7 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
 
 int wxNativeFontInfo::GetNumericWeight() const
 {
-    int w = m_qtFont.weight();
-
-    // Special case of wxQFont_Thin == 0.
-    if ( w == wxQFont_Thin )
-        return wxFONTWEIGHT_THIN;
-
-    if ( TryToMap(w, wxQFont_Thin, wxQFont_ExtraLight,
-                     wxFONTWEIGHT_THIN, wxFONTWEIGHT_EXTRALIGHT) ||
-         TryToMap(w, wxQFont_ExtraLight, wxQFont_Light,
-                     wxFONTWEIGHT_EXTRALIGHT, wxFONTWEIGHT_LIGHT) ||
-         TryToMap(w, wxQFont_Light, wxQFont_Normal,
-                     wxFONTWEIGHT_LIGHT, wxFONTWEIGHT_NORMAL) ||
-         TryToMap(w, wxQFont_Normal, wxQFont_Medium,
-                     wxFONTWEIGHT_NORMAL, wxFONTWEIGHT_MEDIUM) ||
-         TryToMap(w, wxQFont_Medium, wxQFont_DemiBold,
-                     wxFONTWEIGHT_MEDIUM, wxFONTWEIGHT_SEMIBOLD) ||
-         TryToMap(w, wxQFont_DemiBold, wxQFont_Bold,
-                     wxFONTWEIGHT_SEMIBOLD, wxFONTWEIGHT_BOLD) ||
-         TryToMap(w, wxQFont_Bold, wxQFont_ExtraBold,
-                     wxFONTWEIGHT_BOLD, wxFONTWEIGHT_EXTRABOLD) ||
-         TryToMap(w, wxQFont_ExtraBold, wxQFont_Black,
-                     wxFONTWEIGHT_EXTRABOLD, wxFONTWEIGHT_HEAVY) ||
-         TryToMap(w, wxQFont_Black, 99,
-                     wxFONTWEIGHT_HEAVY, wxFONTWEIGHT_EXTRAHEAVY) )
-    {
-        return w;
-    }
-
-    wxFAIL_MSG( "Invalid QFont weight" );
-
-    return wxFONTWEIGHT_NORMAL;
+    return m_wxFontWeight;
 }
 
 bool wxNativeFontInfo::GetUnderlined() const
@@ -482,6 +453,7 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
 
 void wxNativeFontInfo::SetNumericWeight(int weight)
 {
+    m_wxFontWeight = weight;
     m_qtFont.setWeight(ConvertFontWeight(weight));
 }
 
