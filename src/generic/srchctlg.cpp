@@ -422,7 +422,7 @@ void wxSearchCtrl::ShowCancelButton( bool show )
         m_cancelButton->Show();
     }
     else // Requested to hide it.
-            m_cancelButton->Hide();
+        m_cancelButton->Hide();
 
     LayoutControls();
 }
