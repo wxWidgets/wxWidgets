@@ -247,7 +247,9 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
     if ( !FromString(newval, &value) )
         return false;
 
-    // Finally check whether it is in the range.
+    // Check to see if 'value' is in the expected range, send out-of-range
+    // message if not. Notice also that an event is sent in case we transition
+    // from invalid to valid state.
 
     if ( IsInRange(value) )
     {
@@ -352,7 +354,9 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
     if ( posSep != wxString::npos && newval.length() - posSep - 1 > m_precision )
         return false;
 
-    // Finally check whether it is in the range.
+    // Check to see if 'value' is in the expected range, send out-of-range
+    // message if not. Notice also that an event is sent in case we transition
+    // from invalid to valid state.
 
     if ( IsInRange(value) )
     {
