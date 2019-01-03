@@ -511,6 +511,13 @@ void wxChoice::DoMoveWindow(int x, int y, int width, int height)
     wxControl::DoMoveWindow(x, y, width, heightWithItems);
 }
 
+void wxChoice::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxChoiceBase::MSWUpdateFontOnDPIChange(newDPI);
+
+    m_heightOwn = wxDefaultCoord;
+}
+
 void wxChoice::DoGetSize(int *w, int *h) const
 {
     wxControl::DoGetSize(w, h);

@@ -139,6 +139,8 @@ protected:
     // set the height of the visible part of the control to m_heightOwn
     void MSWUpdateVisibleHeight();
 
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
+
     // create and initialize the control
     bool CreateAndInit(wxWindow *parent, wxWindowID id,
                        const wxPoint& pos,

@@ -107,7 +107,7 @@ wxChoiceBase::~wxChoiceBase()
 wxSize wxChoiceBase::DoGetBestSize() const
 {
     // a reasonable width for an empty choice list
-    wxSize best(80, -1);
+    wxSize best(FromDIP(80), -1);
 
     const unsigned int nItems = GetCount();
     if ( nItems > 0 )
