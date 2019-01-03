@@ -334,8 +334,8 @@ void wxOSXIPhoneClassAddWXMethods(Class c)
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWidgetIPhoneImpl , wxWidgetImpl);
 
-wxWidgetIPhoneImpl::wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, bool isRootControl, bool isUserPane ) :
-    wxWidgetImpl( peer, isRootControl, isUserPane ), m_osxView(w)
+wxWidgetIPhoneImpl::wxWidgetIPhoneImpl( wxWindowMac* peer , WXWidget w, int flags ) :
+    wxWidgetImpl( peer, flags ), m_osxView(w)
 {
 }
 
@@ -821,7 +821,7 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
     sv.clipsToBounds = YES;
     sv.contentMode =  UIViewContentModeRedraw;
     sv.clearsContextBeforeDrawing = NO;
-    wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v, false, true );
+    wxWidgetIPhoneImpl* c = new wxWidgetIPhoneImpl( wxpeer, v, Widget_IsUserPane );
     return c;
 }
 

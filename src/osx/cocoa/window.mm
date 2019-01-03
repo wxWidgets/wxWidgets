@@ -2512,24 +2512,8 @@ void wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags)
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWidgetCocoaImpl , wxWidgetImpl);
 
-wxWidgetCocoaImpl::wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, bool isRootControl, bool isUserPane, bool wantsKey ) :
-    wxWidgetImpl( peer, isRootControl, isUserPane, wantsKey )
-{
-    Init();
-    m_osxView = w;
-
-    // check if the user wants to create the control initially hidden
-    if ( !peer->IsShown() )
-        SetVisibility(false);
-
-    // gc aware handling
-    if ( m_osxView )
-        CFRetain(m_osxView);
-    [m_osxView release];
-}
-
-wxWidgetCocoaImpl::wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, bool isRootControl, bool isUserPane ) :
-wxWidgetImpl( peer, isRootControl, isUserPane )
+wxWidgetCocoaImpl::wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, int flags ) :
+wxWidgetImpl( peer, flags )
 {
     Init();
     m_osxView = w;
@@ -3834,7 +3818,7 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSView* v = [[wxNSView alloc] initWithFrame:r];
 
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v, false, true );
+    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v, Widget_IsUserPane );
     return c;
 }
 
@@ -3846,7 +3830,7 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     if ( now->IsNativeWindowWrapper() )
     {
         NSView* cv = [tlw contentView];
-        c = new wxWidgetCocoaImpl( now, cv, true );
+        c = new wxWidgetCocoaImpl( now, cv, Widget_IsRoot );
         if ( cv != nil )
         {
             // increase ref count, because the impl destructor will decrement it again
@@ -3858,7 +3842,7 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     else
     {
         wxNSView* v = [[wxNSView alloc] initWithFrame:[[tlw contentView] frame]];
-        c = new wxWidgetCocoaImpl( now, v, true );
+        c = new wxWidgetCocoaImpl( now, v, Widget_IsRoot );
         c->InstallEventHandler();
         [tlw setContentView:v];
     }
