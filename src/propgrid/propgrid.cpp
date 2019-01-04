@@ -3810,12 +3810,8 @@ wxSize wxPropertyGrid::GetImageSize( wxPGProperty* p, int item ) const
 // takes scrolling into account
 void wxPropertyGrid::ImprovedClientToScreen( int* px, int* py )
 {
-    int vx, vy;
-    GetViewStart(&vx,&vy);
-    vy*=wxPG_PIXELS_PER_UNIT;
-    vx*=wxPG_PIXELS_PER_UNIT;
-    *px -= vx;
-    *py -= vy;
+    wxASSERT(px && py);
+    CalcScrolledPosition(*px, *py, px, py);
     ClientToScreen( px, py );
 }
 
@@ -3823,14 +3819,7 @@ void wxPropertyGrid::ImprovedClientToScreen( int* px, int* py )
 
 wxPropertyGridHitTestResult wxPropertyGrid::HitTest( const wxPoint& pt ) const
 {
-    wxPoint pt2;
-    GetViewStart(&pt2.x,&pt2.y);
-    pt2.x *= wxPG_PIXELS_PER_UNIT;
-    pt2.y *= wxPG_PIXELS_PER_UNIT;
-    pt2.x += pt.x;
-    pt2.y += pt.y;
-
-    return m_pState->HitTest(pt2);
+    return m_pState->HitTest(CalcUnscrolledPosition(pt));
 }
 
 // -----------------------------------------------------------------------
