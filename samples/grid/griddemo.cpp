@@ -249,6 +249,8 @@ GridFrame::GridFrame()
 {
     SetIcon(wxICON(sample));
 
+    SetBackgroundColour(*wxWHITE);
+
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append( ID_VTABLE, "&Virtual table test\tCtrl-V");
     fileMenu->Append( ID_BUGS_TABLE, "&Bugs table test\tCtrl-B");
@@ -587,7 +589,8 @@ GridFrame::GridFrame()
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( grid,
                    1,
-                   wxEXPAND );
+                   wxEXPAND | wxALL,
+                   50 );
 
 #if wxUSE_LOG
     topSizer->Add( logWin,
