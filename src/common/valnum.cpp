@@ -60,12 +60,18 @@ void wxNumValidatorBase::SetWindow(wxWindow *win)
 
 #if wxUSE_TEXTCTRL
     if ( wxDynamicCast(m_validatorWindow, wxTextCtrl) )
+    {
+        m_validatorWindow->Bind(wxEVT_TEXT, &wxNumValidatorBase::OnValueChanged, this);
         return;
+    }
 #endif // wxUSE_TEXTCTRL
 
 #if wxUSE_COMBOBOX
     if ( wxDynamicCast(m_validatorWindow, wxComboBox) )
+    {
+        m_validatorWindow->Bind(wxEVT_TEXT, &wxNumValidatorBase::OnValueChanged, this);
         return;
+    }
 #endif // wxUSE_COMBOBOX
 
     wxFAIL_MSG("Can only be used with wxTextCtrl or wxComboBox");
@@ -201,6 +207,52 @@ void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
     event.Skip();
 }
 
+void wxNumValidatorBase::OnValueChanged(wxCommandEvent& event)
+{
+    // Check to see if 'value' is valid and in the expected range.
+    // Send the appropriete message based on that check. Notice also that
+    // an event is sent in case we transition from invalid to valid state.
+
+    const wxString& newval = event.GetString();
+    const wxNumValidatorError state = CheckValue(newval);
+
+    switch ( state )
+    {
+    default: wxFALLTHROUGH;
+
+    case wxNUM_VAL_OK:
+        {
+            if ( m_state != wxNUM_VAL_OK )
+            {
+                m_state = wxNUM_VAL_OK; // remember current state
+
+                SendEvent(wxEVT_NUM_VALIDATE, EventMsg(m_state));
+            }
+        }
+        break;
+
+    case wxNUM_VAL_RANGE:
+    case wxNUM_VAL_INVALID:
+        {
+            if ( m_state != state )
+            {
+
+                m_state = state; // remember current state
+
+                EventMsg msg(m_state,
+                    ( m_state == wxNUM_VAL_RANGE )
+                    ? wxString::Format(_("Out of range: %s"), newval)
+                    : wxString::Format(_("Invalid value: %s"), newval));
+
+                SendEvent(wxEVT_NUM_VALIDATE, msg);
+            }
+        }
+        break;
+    }
+
+    event.Skip();
+}
+
 // ============================================================================
 // wxIntegerValidatorBase implementation
 // ============================================================================
@@ -240,44 +292,20 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
         }
     }
 
-    // Check whether the value we'd obtain if we accepted this key is correct.
-    const wxString newval(GetValueAfterInsertingChar(val, pos, ch));
+    return true;
+}
+
+wxNumValidatorError
+wxIntegerValidatorBase::CheckValue(const wxString& newval) const
+{
+    if ( newval.empty() && HasFlag(wxNUM_VAL_ZERO_AS_BLANK) )
+        return wxNUM_VAL_OK;
 
     LongestValueType value;
     if ( !FromString(newval, &value) )
-        return false;
+        return wxNUM_VAL_INVALID;
 
-    // Check to see if 'value' is in the expected range, send out-of-range
-    // message if not. Notice also that an event is sent in case we transition
-    // from invalid to valid state.
-
-    if ( IsInRange(value) )
-    {
-        if ( m_state != wxNUM_VAL_OK )
-        {
-            m_state = wxNUM_VAL_OK; // remember current state
-
-            (const_cast<wxIntegerValidatorBase*>(this))->
-                SendEvent(wxEVT_NUM_VALIDATE, EventMsg(m_state));
-        }
-    }
-    else
-    {
-        if ( m_state != wxNUM_VAL_RANGE )
-        {
-
-            m_state = wxNUM_VAL_RANGE; // remember current state
-
-            EventMsg msg;
-            msg.errorcode = m_state;
-            msg.errormsg.Printf(_("%s: out of range."), newval);
-
-            (const_cast<wxIntegerValidatorBase*>(this))->
-                SendEvent(wxEVT_NUM_VALIDATE, msg);
-        }
-    }
-
-    return true;
+    return IsInRange(value) ? wxNUM_VAL_OK : wxNUM_VAL_RANGE;
 }
 
 // ============================================================================
@@ -342,49 +370,26 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
         }
     }
 
-    // Check whether the value we'd obtain if we accepted this key is correct.
-    const wxString newval(GetValueAfterInsertingChar(val, pos, ch));
+    return true;
+}
+
+wxNumValidatorError
+wxFloatingPointValidatorBase::CheckValue(const wxString& newval) const
+{
+    if ( newval.empty() && HasFlag(wxNUM_VAL_ZERO_AS_BLANK) )
+        return wxNUM_VAL_OK;
 
     LongestValueType value;
     if ( !FromString(newval, &value) )
-        return false;
+        return wxNUM_VAL_INVALID;
 
     // Also check that it doesn't have too many decimal digits.
     const size_t posSep = newval.find(wxNumberFormatter::GetDecimalSeparator());
     if ( posSep != wxString::npos && newval.length() - posSep - 1 > m_precision )
-        return false;
+        return wxNUM_VAL_INVALID;
 
-    // Check to see if 'value' is in the expected range, send out-of-range
-    // message if not. Notice also that an event is sent in case we transition
-    // from invalid to valid state.
 
-    if ( IsInRange(value) )
-    {
-        if ( m_state != wxNUM_VAL_OK )
-        {
-            m_state = wxNUM_VAL_OK; // remember current state
-
-            (const_cast<wxFloatingPointValidatorBase*>(this))->
-                SendEvent(wxEVT_NUM_VALIDATE, EventMsg(m_state));
-        }
-    }
-    else // out of range!
-    {
-        if ( m_state != wxNUM_VAL_RANGE )
-        {
-
-            m_state = wxNUM_VAL_RANGE; // remember current state
-
-            EventMsg msg;
-            msg.errorcode = m_state;
-            msg.errormsg.Printf(_("%s: out of range."), newval);
-
-            (const_cast<wxFloatingPointValidatorBase*>(this))->
-                SendEvent(wxEVT_NUM_VALIDATE, msg);
-        }
-    }
-
-    return true;
+    return IsInRange(value) ? wxNUM_VAL_OK : wxNUM_VAL_RANGE;
 }
 
 #endif // wxUSE_VALIDATORS && wxUSE_TEXTCTRL

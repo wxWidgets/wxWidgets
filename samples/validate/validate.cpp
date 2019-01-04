@@ -426,9 +426,10 @@ void MyDialog::OnValidationFailed(wxValidationEvent& event)
         wxValidator* const val =
             wxDynamicCast(event.GetEventObject(), wxValidator);
 
-        wxWindow* win = val->GetWindow();
+        wxWindow* const win = val->GetWindow();
+        const int state = event.GetErrorCode();
 
-        if ( event.GetErrorCode() == wxNUM_VAL_OK )
+        if ( state == wxNUM_VAL_OK )
         {
             // Restore the default properties.
             win->SetBackgroundColour(wxNullColour);
@@ -438,7 +439,7 @@ void MyDialog::OnValidationFailed(wxValidationEvent& event)
             // once the control's state changed from invalid to valid state
             // to help us restore the default properties of the control.
         }
-        else if ( event.GetErrorCode() == wxNUM_VAL_RANGE )
+        else if ( state == wxNUM_VAL_RANGE || state == wxNUM_VAL_INVALID )
         {
             // Make the control reflect the invalid state.
             win->SetBackgroundColour(wxTheColourDatabase->Find("ORANGE"));

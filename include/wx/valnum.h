@@ -37,8 +37,9 @@ enum wxNumValidatorStyle
 
 enum wxNumValidatorError
 {
-    wxNUM_VAL_OK = 0x0,
-    wxNUM_VAL_RANGE = 0x1,
+    wxNUM_VAL_OK        = 0x0, // value is ok.
+    wxNUM_VAL_RANGE     = 0x1, // value is out-of-range
+    wxNUM_VAL_INVALID   = 0x2  // value does not represent a valid number.
 };
 
 wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_NUM_VALIDATE, wxValidationEvent);
@@ -108,8 +109,8 @@ protected:
         return val;
     }
 
-    // state of the control. either ok or out-of-range.
-    mutable int m_state;
+    // state of the control. one of the wxNumValidatorError enum.
+    int m_state;
 
 private:
     // Check whether the specified character can be inserted in the control at
@@ -124,11 +125,13 @@ private:
     // empty string otherwise.
     virtual wxString NormalizeString(const wxString& s) const = 0;
 
+    //
+    virtual wxNumValidatorError CheckValue(const wxString& s) const = 0;
 
     // Event handlers.
     void OnChar(wxKeyEvent& event);
     void OnKillFocus(wxFocusEvent& event);
-
+    void OnValueChanged(wxCommandEvent& event);
 
     // Determine the current insertion point and text in the associated control.
     void GetCurrentValueAndInsertionPoint(wxString& val, int& pos) const;
@@ -313,8 +316,9 @@ protected:
         return m_min <= value && value <= m_max;
     }
 
-    // Implement wxNumValidatorBase pure virtual method.
+    // Implement wxNumValidatorBase pure virtual methods.
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const wxOVERRIDE;
+    virtual wxNumValidatorError CheckValue(const wxString& newval) const wxOVERRIDE;
 
 private:
     // Minimal and maximal values accepted (inclusive).
@@ -415,8 +419,9 @@ protected:
         return m_min <= value && value <= m_max;
     }
 
-    // Implement wxNumValidatorBase pure virtual method.
+    // Implement wxNumValidatorBase pure virtual methods.
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const wxOVERRIDE;
+    virtual wxNumValidatorError CheckValue(const wxString& newval) const wxOVERRIDE;
 
 private:
     // Maximum number of decimals digits after the decimal separator.
