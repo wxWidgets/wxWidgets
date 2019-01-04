@@ -75,13 +75,13 @@ public:                                                                       \
 // the names of the hasher and comparator classes are interpreted as naming
 // the base class which is inaccessible.
 // The workaround is to prefix the class names with 'struct'; however, don't
-// do this on MSVC because it causes a warning there if the class was
-// declared as a 'class' rather than a 'struct' (and MSVC's std::unordered_set
-// implementation does not suffer from the access problem).
-#ifdef _MSC_VER
-#define WX_MAYBE_PREFIX_WITH_STRUCT(STRUCTNAME) STRUCTNAME
-#else
+// do this unconditionally, as with other compilers (both MSVC and clang)
+// doing it causes a warning if the class was declared as a 'class' rather than
+// a 'struct'.
+#if defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ == 7)
 #define WX_MAYBE_PREFIX_WITH_STRUCT(STRUCTNAME) struct STRUCTNAME
+#else
+#define WX_MAYBE_PREFIX_WITH_STRUCT(STRUCTNAME) STRUCTNAME
 #endif
 
 #define _WX_DECLARE_HASH_SET( KEY_T, HASH_T, KEY_EQ_T, PTROP, CLASSNAME, CLASSEXP )   \
