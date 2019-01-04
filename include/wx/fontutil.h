@@ -183,7 +183,7 @@ private:
 public :
 #elif defined(__WXQT__)
     QFont m_qtFont;
-    double m_wxFontWeight;
+    int m_wxFontWeight;
 #else // other platforms
     //
     //  This is a generic implementation that should work on all ports
