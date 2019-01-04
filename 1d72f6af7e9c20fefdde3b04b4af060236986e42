@@ -1,0 +1,1 @@
+wxMSW: Fix compilation in deprecated ANSI build mode.
