@@ -236,14 +236,29 @@ bool wxFont::Create(wxSize size, wxFontFamily family, wxFontStyle style,
     return true;
 }
 
+int wxFont::GetPointSize() const
+{
+    return M_FONTDATA.wxNativeFontInfo::GetPointSize();
+}
+
 float wxFont::GetFractionalPointSize() const
 {
     return M_FONTDATA.GetFractionalPointSize();
 }
 
+wxSize wxFont::GetPixelSize() const
+{
+    return M_FONTDATA.GetPixelSize();
+}
+
 wxFontStyle wxFont::GetStyle() const
 {
     return M_FONTDATA.GetStyle();
+}
+
+wxFontWeight wxFont::GetWeight() const
+{
+    return M_FONTDATA.GetWeight();
 }
 
 int wxFont::GetNumericWeight() const
@@ -340,6 +355,30 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
     M_FONTDATA.SetEncoding(encoding);
 }
 
+bool wxFont::SetNativeFontInfo(const wxString& info)
+{
+    wxNativeFontInfo fontInfo;
+    if ( !info.empty() && fontInfo.FromString(info) )
+    {
+        SetNativeFontInfo(fontInfo);
+        return true;
+    }
+
+    return false;
+}
+
+void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
+{
+    SetFractionalPointSize(info.GetPointSize());
+    SetFamily(info.GetFamily());
+    SetStyle(info.GetStyle());
+    SetNumericWeight(info.GetWeight());
+    SetUnderlined(info.GetUnderlined());
+    SetStrikethrough(info.GetStrikethrough());
+    SetFaceName(info.GetFaceName());
+    SetEncoding(info.GetEncoding());
+}
+
 wxGDIRefData *wxFont::CreateGDIRefData() const
 {
     return new wxFontRefData;
@@ -366,12 +405,17 @@ wxFontFamily wxFont::DoGetFamily() const
 
 void wxNativeFontInfo::Init()
 {
-    m_wxFontWeight = wxFONTWEIGHT_INVALID;
+    m_wxFontWeight = wxFONTWEIGHT_NORMAL;
 }
 
 float wxNativeFontInfo::GetFractionalPointSize() const
 {
     return m_qtFont.pointSizeF();
+}
+
+wxSize wxNativeFontInfo::GetPixelSize() const
+{
+    return wxSize{ m_qtFont.pixelSize(), m_qtFont.pixelSize() };
 }
 
 wxFontStyle wxNativeFontInfo::GetStyle() const

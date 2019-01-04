@@ -50,8 +50,11 @@ public:
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
     // accessors: get the font characteristics
+    virtual int GetPointSize() const wxOVERRIDE;
     virtual float GetFractionalPointSize() const wxOVERRIDE;
+    virtual wxSize GetPixelSize() const wxOVERRIDE;
     virtual wxFontStyle GetStyle() const;
+    virtual wxFontWeight GetWeight() const wxOVERRIDE;
     virtual int GetNumericWeight() const wxOVERRIDE;
     virtual bool GetUnderlined() const;
     virtual wxString GetFaceName() const;
@@ -69,6 +72,11 @@ public:
     virtual void SetUnderlined( bool underlined );
     virtual void SetStrikethrough(bool strikethrough);
     virtual void SetEncoding(wxFontEncoding encoding);
+//    virtual bool SetNativeFontInfo(const wxString& info) wxOVERRIDE;
+//    virtual void SetNativeFontInfo(const wxNativeFontInfo& info) wxOVERRIDE
+    bool SetNativeFontInfo(const wxString& info);
+    void SetNativeFontInfo(const wxNativeFontInfo& info)
+    { DoSetNativeFontInfo(info); }
     
     wxDECLARE_COMMON_FONT_METHODS();
 
@@ -78,6 +86,7 @@ protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
     virtual wxFontFamily DoGetFamily() const;
+    virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info) wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxFont);
 

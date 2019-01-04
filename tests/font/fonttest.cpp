@@ -244,8 +244,10 @@ TEST_CASE("wxFont::GetSet", "[font][getters]")
 
 
         // test Get/SetFaceName()
+#ifndef __WXQT__
         CHECK( !test.SetFaceName("a dummy face name") );
         CHECK( !test.IsOk() );
+#endif
 
         // if the call to SetFaceName() below fails on your system/port,
         // consider adding another branch to this #if
@@ -295,6 +297,7 @@ TEST_CASE("wxFont::GetSet", "[font][getters]")
         // test Get/SetPixelSize()
 
         test.SetPixelSize(wxSize(0,30));
+
         CHECK( test.IsOk() );
         CHECK( test.GetPixelSize().GetHeight() <= 30 );
             // NOTE: the match found by SetPixelSize() may be not 100% precise; it
@@ -370,7 +373,7 @@ TEST_CASE("wxFont::NativeFontInfo", "[font][fontinfo]")
     // never returns an error at all so this assertion fails there -- and as it
     // doesn't seem to be possible to do anything about it maybe we should
     // change wxMSW and other ports to also accept any strings?
-#if !defined(__WXGTK__) && !defined(__WXX11__)
+#if !defined(__WXGTK__) && !defined(__WXX11__) && !defined(__WXQT__)
     CHECK( !font.SetNativeFontInfo("bloordyblop") );
 #endif
 
