@@ -5787,12 +5787,45 @@ void wxGrid::DrawAllGridLines( wxDC& dc, const wxRegion & WXUNUSED(reg) )
             if ((cell_rows > 1) || (cell_cols > 1))
             {
                 rect = CellToRect(j,i);
+
+                // top most grid guide line
+                if (j == 0 && m_gridLinesEnabled)
+                {
+                    ++rect.y;
+                    --rect.height;
+                }
+
+                // left most grid guide line
+                if (i == 0 && m_gridLinesEnabled)
+                {
+                    ++rect.x;
+                    --rect.width;
+                }
+
                 CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
                 clippedcells.Subtract(rect);
             }
             else if ((cell_rows < 0) || (cell_cols < 0))
             {
-                rect = CellToRect(j + cell_rows, i + cell_cols);
+                int owner_row = j + cell_rows;
+                int owner_col = i + cell_cols;
+
+                rect = CellToRect(owner_row, owner_col);
+
+                // top most grid guide line
+                if (owner_row == 0 && m_gridLinesEnabled)
+                {
+                    ++rect.y;
+                    --rect.height;
+                }
+
+                // left most grid guide line
+                if (owner_col == 0 && m_gridLinesEnabled)
+                {
+                    ++rect.x;
+                    --rect.width;
+                }
+
                 CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
                 clippedcells.Subtract(rect);
             }
@@ -5815,7 +5848,14 @@ wxGrid::DoDrawGridLines(wxDC& dc,
                         int topRow, int leftCol,
                         int bottomRow, int rightCol)
 {
-    // horizontal grid lines
+    // top most horizontal grid lines
+    if (GetColLabelSize() == 0 && topRow <= bottomRow && topRow >= top)
+    {
+        dc.SetPen(GetRowGridLinePen(topRow));
+        dc.DrawLine(left, top, right, top);
+    }
+
+    // other horizontal grid lines
     for ( int i = topRow; i < bottomRow; i++ )
     {
         int bot = GetRowBottom(i) - 1;
@@ -5830,7 +5870,14 @@ wxGrid::DoDrawGridLines(wxDC& dc,
         }
     }
 
-    // vertical grid lines
+    // left most vertical grid line
+    if (GetRowLabelSize() == 0 && leftCol <= rightCol && leftCol >= left)
+    {
+        dc.SetPen(GetColGridLinePen(leftCol));
+        dc.DrawLine(left, top, left, bottom);
+    }
+
+    // other vertical grid lines
     for ( int colPos = leftCol; colPos < rightCol; colPos++ )
     {
         int i = GetColAt( colPos );
