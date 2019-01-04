@@ -360,7 +360,7 @@ bool wxFont::SetNativeFontInfo(const wxString& info)
     wxNativeFontInfo fontInfo;
     if ( !info.empty() && fontInfo.FromString(info) )
     {
-        SetNativeFontInfo(fontInfo);
+        DoSetNativeFontInfo( fontInfo );
         return true;
     }
 
@@ -369,14 +369,14 @@ bool wxFont::SetNativeFontInfo(const wxString& info)
 
 void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 {
-    SetFractionalPointSize(info.GetPointSize());
-    SetFamily(info.GetFamily());
-    SetStyle(info.GetStyle());
-    SetNumericWeight(info.GetWeight());
-    SetUnderlined(info.GetUnderlined());
-    SetStrikethrough(info.GetStrikethrough());
-    SetFaceName(info.GetFaceName());
-    SetEncoding(info.GetEncoding());
+    SetFractionalPointSize( info.GetPointSize() );
+    SetFamily( info.GetFamily() );
+    SetStyle( info.GetStyle() );
+    SetNumericWeight( info.GetWeight() );
+    SetUnderlined( info.GetUnderlined() );
+    SetStrikethrough( info.GetStrikethrough() );
+    SetFaceName( info.GetFaceName() );
+    SetEncoding( info.GetEncoding() );
 }
 
 wxGDIRefData *wxFont::CreateGDIRefData() const
@@ -415,7 +415,7 @@ float wxNativeFontInfo::GetFractionalPointSize() const
 
 wxSize wxNativeFontInfo::GetPixelSize() const
 {
-    return wxSize{ m_qtFont.pixelSize(), m_qtFont.pixelSize() };
+    return wxSize( m_qtFont.pixelSize(), m_qtFont.pixelSize() );
 }
 
 wxFontStyle wxNativeFontInfo::GetStyle() const
