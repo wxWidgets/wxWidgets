@@ -1774,13 +1774,13 @@ wxWindow* wxPropertyGrid::GetEditorControl() const
 
 // -----------------------------------------------------------------------
 
-#if WXWIN_COMPATIBILITY_3_0
 void wxPropertyGrid::CorrectEditorWidgetSizeX()
 {
     int secWid = 0;
 
     // Use fixed selColumn 1 for main editor widgets
-    int newSplitterx = m_pState->DoGetSplitterPosition(0);
+    int newSplitterx;
+    CalcScrolledPosition(m_pState->DoGetSplitterPosition(0), 0, &newSplitterx, NULL);
     int newWidth = newSplitterx + m_pState->GetColumnWidth(1);
 
     if ( m_wndEditor2 )
@@ -1809,32 +1809,6 @@ void wxPropertyGrid::CorrectEditorWidgetSizeX()
 
         if ( !(m_iFlags & wxPG_FL_FIXED_WIDTH_EDITOR) )
             r.width = newWidth - r.x - secWid;
-
-        m_wndEditor->SetSize(r);
-    }
-
-    if ( m_wndEditor2 )
-        m_wndEditor2->Refresh();
-}
-#endif // WXWIN_COMPATIBILITY_3_0
-
-void wxPropertyGrid::CorrectEditorWidgetSizeX(int xPosChange, int widthChange)
-{
-    if ( m_wndEditor2 )
-    {
-        // if width change occurred, move secondary wnd by that amount
-        wxPoint p = m_wndEditor2->GetPosition();
-        p.x += xPosChange + widthChange;
-        m_wndEditor2->SetPosition(p);
-    }
-
-    if ( m_wndEditor )
-    {
-        wxRect r = m_wndEditor->GetRect();
-        r.x += xPosChange;
-
-        if ( !(m_iFlags & wxPG_FL_FIXED_WIDTH_EDITOR) )
-            r.width += widthChange;
 
         m_wndEditor->SetSize(r);
     }
