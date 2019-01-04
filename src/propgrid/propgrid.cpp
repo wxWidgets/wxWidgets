@@ -5471,9 +5471,12 @@ bool wxPropertyGrid::OnMouseChildCommon( wxMouseEvent &event, int* px, int *py )
     int splitterX = GetSplitterPosition();
 
     wxRect r = topCtrlWnd->GetRect();
+    int ux, uy;
+    CalcUnscrolledPosition(r.x + x, r.y + y, &ux, &uy);
+
     if ( !m_dragStatus &&
-         x > (splitterX-r.x+wxPG_SPLITTERX_DETECTMARGIN2) &&
-         y >= 0 && y < r.height \
+         ux > (splitterX + wxPG_SPLITTERX_DETECTMARGIN2) &&
+         y >= 0 && y < r.height
        )
     {
         if ( m_curcursor != wxCURSOR_ARROW ) CustomSetCursor ( wxCURSOR_ARROW );
@@ -5481,8 +5484,14 @@ bool wxPropertyGrid::OnMouseChildCommon( wxMouseEvent &event, int* px, int *py )
     }
     else
     {
-        CalcUnscrolledPosition( event.m_x + r.x, event.m_y + r.y, \
-            px, py );
+        if ( px )
+        {
+            *px = ux;
+        }
+        if ( py )
+        {
+            *py = uy;
+        }
         return true;
     }
     return false;
