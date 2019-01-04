@@ -135,13 +135,12 @@ public:
         if ( info.IsUsingSizeInPixels() )
             m_nativeFontInfo.SetPixelSize(info.GetPixelSize());
         else
-            m_nativeFontInfo.SetFractionalPointSize(info.GetFractionalPointSize());
+            m_nativeFontInfo.SetSizeOrDefault(info.GetFractionalPointSize());
 
         m_nativeFontInfo.SetStyle(info.GetStyle());
         m_nativeFontInfo.SetWeight(info.GetWeight());
         m_nativeFontInfo.SetUnderlined(info.IsUnderlined());
         m_nativeFontInfo.SetStrikethrough(info.IsStrikethrough());
-
     }
 
     wxFontRefData( const wxFontRefData& data )
