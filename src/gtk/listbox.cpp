@@ -497,6 +497,25 @@ void wxListBox::DoDeleteOneItem(unsigned int n)
     // this returns false if iter is invalid (e.g. deleting item at end) but
     // since we don't use iter, we ignore the return value
     gtk_list_store_remove(m_liststore, &iter);
+
+#ifdef __WXGTK3__
+    // Invalidate selection in a single-selection control for consistency with
+    // MSW and GTK+ 2 where this happens automatically when deleting the
+    // selected item or any item before it.
+    if ( !HasMultipleSelection() )
+    {
+        const int sel = GetSelection();
+        if ( sel != wxNOT_FOUND && static_cast<unsigned>(sel) >= n )
+        {
+            // Don't call SetSelection() from here, it's not totally clear if
+            // it is safe to do, so just do this at GTK+ level.
+            gtk_tree_selection_unselect_all
+            (
+                gtk_tree_view_get_selection(m_treeview)
+            );
+        }
+    }
+#endif // __WXGTK3__
 }
 
 // ----------------------------------------------------------------------------

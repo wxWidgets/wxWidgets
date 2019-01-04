@@ -125,6 +125,10 @@ All (GUI):
   in wxPGArrayEditorDialog.
 - Fix wxPropertyGrid issues with horizontal scrolling.
 
+wxGTK:
+
+- Invalidate selection after deleting wxListBox item with GTK+ 3 too.
+
 
 3.1.2: (released 2018-12-10)
 ----------------------------

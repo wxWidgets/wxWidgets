@@ -908,7 +908,7 @@ public:
         "Safe parts" are all non-UI elements (e.g. all layout determining parameters like the
         size, position etc.). "Unsafe parts" (pointers to button, frame and window) are not
         modified by this write operation.
-	 
+
         @remark This method is used when loading perspectives.
     */
     void SafeSet(wxAuiPaneInfo source);
