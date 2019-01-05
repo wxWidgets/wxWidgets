@@ -125,8 +125,6 @@ public:
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget ) wxOVERRIDE;
 
-    // Accept files for dragging
-    virtual void DragAcceptFiles( bool accept ) wxOVERRIDE;
 #endif
 
     // implementation from now on

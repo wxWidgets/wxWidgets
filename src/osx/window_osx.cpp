@@ -621,11 +621,6 @@ void wxWindowMac::SetDropTarget(wxDropTarget *pDropTarget)
     GetPeer()->SetDropTarget(m_dropTarget) ;
 }
 
-// Old-style File Manager Drag & Drop
-void wxWindowMac::DragAcceptFiles(bool WXUNUSED(accept))
-{
-    // TODO:
-}
 #endif
 
 // From a wx position / size calculate the appropriate size of the native control
