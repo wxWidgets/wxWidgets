@@ -276,7 +276,7 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
         // We may accept minus sign if we can represent negative numbers at all.
         if ( ch == '-' )
         {
-            if ( !IsMinusOk(val, pos) )
+            if ( m_min >= 0 || !IsMinusOk(val, pos) )
                 return false;
 
             // Notice that entering '-' can make our value invalid, for example if
@@ -341,7 +341,7 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
         // We may accept minus sign if we can represent negative numbers at all.
         if ( ch == '-' )
         {
-            if ( !IsMinusOk(val, pos) )
+            if ( m_min >= 0 || !IsMinusOk(val, pos) )
                 return false;
         }
         else if ( ch == wxNumberFormatter::GetDecimalSeparator() )
