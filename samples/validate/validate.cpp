@@ -27,6 +27,7 @@
 
 #include "validate.h"
 
+#include <wx/richtooltip.h>
 #include "wx/sizer.h"
 #include "wx/valgen.h"
 #include "wx/valtext.h"
@@ -57,11 +58,11 @@ MyData g_data;
 
 MyData::MyData()
 {
+    m_useRichToolTip = false;
+
     // This string will be passed to an alpha-only validator, which
     // will complain because spaces aren't alpha. Note that validation
     // is performed only when 'OK' is pressed.
-    m_string = "Spaces are invalid here";
-    m_string2 = "Valid text";
     m_listbox_choices.Add(0);
     m_combobox_choice = g_combobox_choices[0];
     m_intValue = 0;
@@ -84,7 +85,8 @@ bool MyComboBoxValidator::Validate(wxWindow *WXUNUSED(parent))
     {
         // we accept any string != g_combobox_choices[1|2] !
 
-        wxLogError("Invalid combo box text!");
+        SendEvent(wxEVT_VALIDATE, wxString("Invalid combo box text!"));
+
         return false;
     }
 
@@ -153,6 +155,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(VALIDATE_TEST_DIALOG, MyFrame::OnTestDialog)
     EVT_MENU(VALIDATE_TOGGLE_BELL, MyFrame::OnToggleBell)
+    EVT_MENU(VALIDATE_TOGGLE_RTTIP, MyFrame::OnToggleRichToolTip)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int h)
@@ -169,6 +172,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
 
     file_menu->Append(VALIDATE_TEST_DIALOG, "&Test dialog...\tCtrl-T", "Demonstrate validators");
     file_menu->AppendCheckItem(VALIDATE_TOGGLE_BELL, "&Bell on error", "Toggle bell on error");
+    file_menu->AppendCheckItem(VALIDATE_TOGGLE_RTTIP, "Use wx&RichToolTip",
+        "Use wxRichToolTip to popup validation errors");
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, "E&xit");
 
@@ -208,7 +213,6 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
         // when we created the validators.
         m_listbox->Clear();
         m_listbox->Append(wxString("string: ") + g_data.m_string);
-        m_listbox->Append(wxString("string #2: ") + g_data.m_string2);
 
         for(unsigned int i = 0; i < g_data.m_listbox_choices.GetCount(); ++i)
         {
@@ -232,6 +236,12 @@ void MyFrame::OnToggleBell(wxCommandEvent& event)
 {
     m_silent = !m_silent;
     wxValidator::SuppressBellOnError(m_silent);
+    event.Skip();
+}
+
+void MyFrame::OnToggleRichToolTip(wxCommandEvent& event)
+{
+    g_data.m_useRichToolTip = !g_data.m_useRichToolTip;
     event.Skip();
 }
 
@@ -386,6 +396,8 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     // Now sets the focus to m_text
     m_text->SetFocus();
+
+    Bind(wxEVT_VALIDATE, &MyDialog::OnValidationFailed, this);
 }
 
 void MyDialog::OnChangeValidator(wxCommandEvent& WXUNUSED(event))
@@ -396,6 +408,51 @@ void MyDialog::OnChangeValidator(wxCommandEvent& WXUNUSED(event))
     {
         dialog.ApplyValidator();
     }
+}
+
+void MyDialog::OnValidationFailed(wxValidationErrorEvent& event)
+{
+    wxValidator* const val =
+        wxDynamicCast(event.GetEventObject(), wxValidator);
+
+    wxWindow* const win = val->GetWindow();
+    const wxString& errormsg = event.GetErrorMessage();
+
+    if ( errormsg.empty() )
+    {
+        // Notice that this event is sent whenever the window transition
+        // from invalid to valid state, so that we can reset the control
+        // to its normal look and feel.
+
+        // Restore the default properties.
+        win->SetBackgroundColour(wxNullColour);
+        win->SetForegroundColour(wxNullColour);
+    }
+    else
+    {
+        // Make the control reflect the invalid state.
+        win->SetBackgroundColour(wxTheColourDatabase->Find("ORANGE"));
+        win->SetForegroundColour(wxTheColourDatabase->Find("YELLOW"));
+
+        if ( !PopupRichToolTip(win, errormsg) )
+            event.Skip();
+    }
+}
+
+bool MyDialog::PopupRichToolTip(wxWindow* const win, const wxString& errormsg)
+{
+#if wxUSE_RICHTOOLTIP
+    if ( g_data.m_useRichToolTip )
+    {
+        wxRichToolTip tip(_("Validation conflict"), errormsg);
+        tip.SetIcon(wxICON_ERROR);
+        tip.ShowFor(win);
+
+        return true;
+    }
+#endif
+
+    return false;
 }
 
 // ----------------------------------------------------------------------------

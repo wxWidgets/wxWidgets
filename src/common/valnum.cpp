@@ -58,12 +58,18 @@ void wxNumValidatorBase::SetWindow(wxWindow *win)
 
 #if wxUSE_TEXTCTRL
     if ( wxDynamicCast(m_validatorWindow, wxTextCtrl) )
+    {
+        m_validatorWindow->Bind(wxEVT_TEXT, &wxNumValidatorBase::OnValueChanged, this);
         return;
+    }
 #endif // wxUSE_TEXTCTRL
 
 #if wxUSE_COMBOBOX
     if ( wxDynamicCast(m_validatorWindow, wxComboBox) )
+    {
+        m_validatorWindow->Bind(wxEVT_TEXT, &wxNumValidatorBase::OnValueChanged, this);
         return;
+    }
 #endif // wxUSE_COMBOBOX
 
     wxFAIL_MSG("Can only be used with wxTextCtrl or wxComboBox");
@@ -199,6 +205,38 @@ void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
     event.Skip();
 }
 
+void wxNumValidatorBase::OnValueChanged(wxCommandEvent& event)
+{
+    // Check to see if 'value' is valid and in the expected range.
+    // Send the appropriete message based on that check. Notice also that
+    // an event is sent in case we transition from invalid to valid state.
+
+    const wxString& newval  = event.GetString();
+    const wxString errormsg = CheckValue(newval);
+
+    if ( errormsg.empty() )
+    {
+        if ( !m_isOk )
+        {
+            m_isOk = true;
+
+            SendEvent(wxEVT_VALIDATE, wxString());
+        }
+    }
+    else
+    {
+        if ( m_isOk )
+        {
+            m_isOk = false;
+
+            SendEvent(wxEVT_VALIDATE,
+                wxString::Format("%s: %s", errormsg, newval));
+        }
+    }
+
+    event.Skip();
+}
+
 // ============================================================================
 // wxIntegerValidatorBase implementation
 // ============================================================================
@@ -226,9 +264,6 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
         // user do this because perhaps he is going to press Delete key next to
         // make it -2 and forcing him to delete 1 first would be unnatural.
         //
-        // TODO: It would be nice to indicate that the current control contents
-        //       is invalid (if it's indeed going to be the case) once
-        //       wxValidator supports doing this non-intrusively.
         return m_min < 0 && IsMinusOk(val, pos);
     }
 
@@ -237,14 +272,24 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
     if ( ch < '0' || ch > '9' )
         return false;
 
-    // And the value after insertion needs to be in the defined range.
-    LongestValueType value;
-    if ( !FromString(GetValueAfterInsertingChar(val, pos, ch), &value) )
-        return false;
-
-    return IsInRange(value);
+    return true;
 }
 
+wxString
+wxIntegerValidatorBase::CheckValue(const wxString& newval) const
+{
+    if ( newval.empty() && HasFlag(wxNUM_VAL_ZERO_AS_BLANK) )
+        return wxString();
+
+    LongestValueType value;
+    if ( !FromString(newval, &value) )
+        return _("Invalid value");
+
+    if ( !IsInRange(value) )
+        return _("Value out of range");
+
+    return wxString();
+}
 // ============================================================================
 // wxFloatingPointValidatorBase implementation
 // ============================================================================
@@ -302,20 +347,28 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
     if ( ch < '0' || ch > '9' )
         return false;
 
-    // Check whether the value we'd obtain if we accepted this key is correct.
-    const wxString newval(GetValueAfterInsertingChar(val, pos, ch));
+    return true;
+}
+
+wxString
+wxFloatingPointValidatorBase::CheckValue(const wxString& newval) const
+{
+    if ( newval.empty() && HasFlag(wxNUM_VAL_ZERO_AS_BLANK) )
+        return wxString();
 
     LongestValueType value;
     if ( !FromString(newval, &value) )
-        return false;
+        return _("Invalid value");
 
     // Also check that it doesn't have too many decimal digits.
-    const size_t posSep = newval.find(separator);
+    const size_t posSep = newval.find(wxNumberFormatter::GetDecimalSeparator());
     if ( posSep != wxString::npos && newval.length() - posSep - 1 > m_precision )
-        return false;
+        return _("Invalid value");
 
-    // Finally check whether it is in the range.
-    return IsInRange(value);
+    if ( !IsInRange(value) )
+        return _("Value out of range");
+
+    return wxString();
 }
 
 #endif // wxUSE_VALIDATORS && wxUSE_TEXTCTRL

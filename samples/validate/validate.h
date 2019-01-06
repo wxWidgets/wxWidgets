@@ -32,6 +32,7 @@ public:
     void OnQuit(wxCommandEvent& event);
     void OnTestDialog(wxCommandEvent& event);
     void OnToggleBell(wxCommandEvent& event);
+    void OnToggleRichToolTip(wxCommandEvent& event);
 
 private:
     wxListBox *m_listbox;
@@ -49,6 +50,9 @@ public:
             const long style = wxDEFAULT_DIALOG_STYLE);
 
     void OnChangeValidator(wxCommandEvent& event);
+    void OnValidationFailed(wxValidationErrorEvent& event);
+
+    bool PopupRichToolTip(wxWindow* const win, const wxString& errormsg);
 
     wxTextCtrl *m_text;
     wxComboBox *m_combobox;
@@ -137,10 +141,12 @@ class MyData
 public:
     MyData();
 
+    bool m_useRichToolTip;
+
     // These data members are designed for transfer to and from
     // controls, via validators. For instance, a text control's
     // transferred value is a string:
-    wxString m_string, m_string2;
+    wxString m_string;
 
     // Listboxes may permit multiple selections, so their state
     // is transferred to an integer-array class.
@@ -184,6 +190,7 @@ enum
 
     VALIDATE_TEST_DIALOG,
     VALIDATE_TOGGLE_BELL,
+    VALIDATE_TOGGLE_RTTIP,
 
     VALIDATE_TEXT,
     VALIDATE_TEXT2,

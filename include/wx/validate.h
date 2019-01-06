@@ -17,8 +17,42 @@
 
 #include "wx/event.h"
 
+class WXDLLIMPEXP_FWD_CORE wxValidator;
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxWindowBase;
+
+// ----------------------------------------------------------------------------
+// wxValidationErrorEvent
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxValidationErrorEvent : public wxCommandEvent
+{
+public:
+    wxValidationErrorEvent() {}
+    wxValidationErrorEvent(wxValidator *val, wxEventType type, wxWindow *win);
+
+    void SetErrorMessage(const wxString& errormsg) { SetString(errormsg); }
+    wxString GetErrorMessage() const { return GetString(); }
+
+    // default copy ctor and dtor are ok
+    virtual wxEvent *Clone() const wxOVERRIDE
+      { return new wxValidationErrorEvent(*this); }
+
+private:
+
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxValidationErrorEvent);
+};
+
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_VALIDATE, wxValidationErrorEvent);
+
+typedef void (wxEvtHandler::*wxValidationErrorEventFunction)(wxValidationErrorEvent&);
+
+#define wxValidationErrorEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxValidationErrorEventFunction, func)
+
+#define EVT_VALIDATE(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_VALIDATE, id, wxValidationErrorEventHandler(fn))
+
 
 /*
  A validator has up to three purposes:
@@ -88,7 +122,27 @@ public:
 #endif
 
 protected:
+
+    // Derived classes use this function to generate the appropriate event.
+    // Notice that the errormsg may be empty, in which case, the generated
+    // event is sent to notify the event handler that the control has just
+    // transitioned from invalid to valid state.
+    void SendEvent(wxEventType type, const wxString& errormsg)
+    {
+        if ( !m_validatorWindow )
+            return;
+
+        wxValidationErrorEvent event(this, type, m_validatorWindow);
+        event.SetErrorMessage(errormsg);
+
+        DoProcessEvent(event);
+    }
+
     wxWindow *m_validatorWindow;
+
+private:
+    // Process the event. (might pop up error messages).
+    void DoProcessEvent(wxValidationErrorEvent& event);
 
 private:
     static bool ms_isSilent;

@@ -25,7 +25,6 @@
   #include "wx/combobox.h"
   #include "wx/log.h"
   #include "wx/utils.h"
-  #include "wx/msgdlg.h"
   #include "wx/intl.h"
 #endif
 
@@ -141,12 +140,12 @@ bool wxTextValidator::Validate(wxWindow *parent)
 
     if ( !errormsg.empty() )
     {
-        m_validatorWindow->SetFocus();
-        wxMessageBox(errormsg, _("Validation conflict"),
-                     wxOK | wxICON_EXCLAMATION, parent);
+        SendEvent(wxEVT_VALIDATE, errormsg);
 
         return false;
     }
+
+    SendEvent(wxEVT_VALIDATE, wxString());
 
     return true;
 }
