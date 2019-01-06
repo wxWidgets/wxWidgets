@@ -534,7 +534,7 @@ void LifeFrame::OnNavigate(wxCommandEvent& event)
         case ID_CENTER: c = m_life->FindCenter(); break;
         default :
             wxFAIL;
-            // Fall through!
+            wxFALLTHROUGH;
         case ID_ORIGIN: c.i = c.j = 0; break;
     }
 

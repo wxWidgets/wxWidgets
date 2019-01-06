@@ -722,7 +722,7 @@ void wxMDIParentFrame::OnMDICommand(wxCommandEvent& event)
 
         case wxID_MDI_WINDOW_TILE_HORZ:
             wParam |= MDITILE_HORIZONTAL;
-            // fall through
+            wxFALLTHROUGH;
 
         case wxID_MDI_WINDOW_TILE_VERT:
             if ( !wParam )
@@ -1152,7 +1152,7 @@ WXLRESULT wxMDIChildFrame::MSWWindowProc(WXUINT message,
 
                 processed = HandleMDIActivate(act, hwndAct, hwndDeact);
             }
-            // fall through
+            wxFALLTHROUGH;
 
         case WM_MOVE:
             // must pass WM_MOVE to DefMDIChildProc() to recalculate MDI client

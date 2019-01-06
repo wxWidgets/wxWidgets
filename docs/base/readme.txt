@@ -65,7 +65,7 @@ b) Cygwin
 
 c) Borland
 
-   Please refer to the docs/msw/install.txt. The console sample compiles and
+   Please refer to the docs/msw/install.md. The console sample compiles and
    runs but does not pass all tests.
 
 d) Other compilers

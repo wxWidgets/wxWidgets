@@ -896,7 +896,7 @@ void MyCanvas::DrawText(wxDC& dc)
     dc.SetFont( *wxSWISS_FONT );
 
     wxString text;
-    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     for ( int n = -180; n < 180; n += 30 )
     {
@@ -2197,7 +2197,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_yLogicalOrigin = 0;
     m_xAxisReversed =
     m_yAxisReversed = false;
-    m_backgroundMode = wxSOLID;
+    m_backgroundMode = wxBRUSHSTYLE_SOLID;
     m_colourForeground = *wxBLACK;
     m_colourBackground = *wxLIGHT_GREY;
     m_textureBackground = false;
@@ -2463,8 +2463,9 @@ void MyFrame::OnOption(wxCommandEvent& event)
 #endif // wxUSE_COLOURDLG
 
         case Colour_BackgroundMode:
-            m_backgroundMode = m_backgroundMode == wxSOLID ? wxTRANSPARENT
-                                                           : wxSOLID;
+            m_backgroundMode = m_backgroundMode == wxBRUSHSTYLE_SOLID
+                                                 ? wxBRUSHSTYLE_TRANSPARENT
+                                                 : wxBRUSHSTYLE_SOLID;
             break;
 
         case Colour_TextureBackgound:

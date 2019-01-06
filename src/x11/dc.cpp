@@ -33,7 +33,7 @@ wxX11DCImpl::wxX11DCImpl( wxDC *owner ) :
     m_font = *wxNORMAL_FONT;
     m_brush = *wxWHITE_BRUSH;
 
-    m_backgroundMode = wxTRANSPARENT;
+    m_backgroundMode = wxBRUSHSTYLE_TRANSPARENT;
 }
 
 void wxX11DCImpl::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
@@ -51,9 +51,9 @@ void wxX11DCImpl::DoGetSizeMM( int* width, int* height ) const
     DoGetSize( &w, &h );
 
     if ( width )
-        *width = int( double(w) / (m_scaleX*m_mm_to_pix_x) );
+        *width = int( double(w) / (m_scaleX*GetMMToPXx()) );
     if ( height )
-        *height = int( double(h) / (m_scaleY*m_mm_to_pix_y) );
+        *height = int( double(h) / (m_scaleY*GetMMToPXy()) );
 }
 
 // Resolution in pixels per logical inch

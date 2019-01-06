@@ -78,7 +78,7 @@ if (dialog.ShowModal() == wxID_OK)
 {
     wxColourData retData = dialog.GetColourData();
     wxColour col = retData.GetColour();
-    wxBrush brush(col, wxSOLID);
+    wxBrush brush(col, wxBRUSHSTYLE_SOLID);
     myWindow->SetBackground(brush);
     myWindow->Clear();
     myWindow->Refresh();

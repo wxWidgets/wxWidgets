@@ -1,16 +1,18 @@
-# - Find Webkit-3.0
-# Find the Webkit-3.0 includes and library
+# - Find Webkit
+# Find the Webkit includes and library
 #
 #  WEBKIT_INCLUDE_DIR - Where to find webkit include sub-directory.
-#  WEBKIT_LIBRARIES   - List of libraries when using Webkit-3.0.
-#  WEBKIT_FOUND       - True if Webkit-3.0 found.
+#  WEBKIT_LIBRARIES   - List of libraries when using Webkit.
+#  WEBKIT_FOUND       - True if Webkit found.
 
-SET( WEBKIT_VERSION "1.0")
+SET(WEBKIT_VERSION 1.0)
+if(DEFINED Webkit_FIND_VERSION)
+    SET(WEBKIT_VERSION ${Webkit_FIND_VERSION})
+endif()
 
-IF (WEBKIT_INCLUDE_DIR)
-    # Already in cache, be silent.
-    SET(WEBKIT_FIND_QUIETLY TRUE)
-ENDIF (WEBKIT_INCLUDE_DIR)
+SET(WEBKIT_INCLUDE_DIR WEBKIT_INCLUDE_DIR-NOTFOUND)
+SET(WEBKIT_LIBRARY WEBKIT_LIBRARY-NOTFOUND)
+SET(WEBKIT_LIBRARIES WEBKIT_LIBRARIES-NOTFOUND)
 
 FIND_PATH(WEBKIT_INCLUDE_DIR webkit/webkit.h
     PATH_SUFFIXES "webkitgtk-${WEBKIT_VERSION}"
@@ -35,4 +37,4 @@ ELSE(WEBKIT_FOUND)
     SET( WEBKIT_LIBRARIES )
 ENDIF(WEBKIT_FOUND)
 
-MARK_AS_ADVANCED( WEBKIT_LIBRARY WEBKIT_INCLUDE_DIR )
+MARK_AS_ADVANCED(WEBKIT_LIBRARY WEBKIT_LIBRARIES WEBKIT_INCLUDE_DIR)

@@ -277,7 +277,7 @@ wxVariant wxPointProperty::ChildChanged( wxVariant& thisValue,
 // -----------------------------------------------------------------------
 
 WX_PG_IMPLEMENT_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(wxDirsProperty, ',',
-                                                    "Browse")
+                                                    wxT("Browse")) // This literal has to be of wxChar* type
 
 #if wxUSE_VALIDATORS
 
@@ -650,16 +650,12 @@ wxValidator* wxArrayDoubleProperty::DoGetValidator() const
 #if wxUSE_VALIDATORS
     WX_PG_DOGETVALIDATOR_ENTRY()
 
-    wxTextValidator* validator = new wxTextValidator(wxFILTER_INCLUDE_CHAR_LIST);
+    wxTextValidator* validator =
+        new wxNumericPropertyValidator(wxNumericPropertyValidator::Float);
 
-    // Accept characters for numeric elements
-    wxNumericPropertyValidator numValidator(wxNumericPropertyValidator::Float);
-    wxArrayString incChars(numValidator.GetIncludes());
     // Accept also a delimiter and space character
-    incChars.Add(m_delimiter);
-    incChars.Add(" ");
-
-    validator->SetIncludes(incChars);
+    validator->AddCharIncludes(m_delimiter);
+    validator->AddCharIncludes(" ");
 
     WX_PG_DOGETVALIDATOR_EXIT(validator)
 #else

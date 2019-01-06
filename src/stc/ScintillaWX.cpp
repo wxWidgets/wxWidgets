@@ -117,7 +117,7 @@ public:
 #endif
           m_ct(ct), m_swx(swx), m_cx(wxDefaultCoord), m_cy(wxDefaultCoord)
         {
-            SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+            SetBackgroundStyle(wxBG_STYLE_PAINT);
             SetName("wxSTCCallTip");
         }
 

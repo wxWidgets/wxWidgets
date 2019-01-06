@@ -126,7 +126,7 @@ void SafeArrayConvertTestCase::VariantListReturnSafeArray()
     wxVariantDataSafeArray*
         vsa = wxStaticCastVariantData(variantCopy.GetData(),
                                       wxVariantDataSafeArray);
-    long bound;
+    long bound wxDUMMY_INITIALIZE(0);
 
     CPPUNIT_ASSERT( vsa );
     CPPUNIT_ASSERT( safeArray.Attach(vsa->GetValue()) );
@@ -177,7 +177,7 @@ void SafeArrayConvertTestCase::StringsReturnSafeArray()
     wxVariantDataSafeArray*
         vsa = wxStaticCastVariantData(variant.GetData(),
                                       wxVariantDataSafeArray);
-    long bound;
+    long bound wxDUMMY_INITIALIZE(0);
 
     CPPUNIT_ASSERT( vsa );
     CPPUNIT_ASSERT( safeArray.Attach(vsa->GetValue()) );

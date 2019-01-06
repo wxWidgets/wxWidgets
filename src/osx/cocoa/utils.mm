@@ -68,6 +68,7 @@ void wxBell()
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
+    [NSApp stop:nil];
     wxTheApp->OSXOnDidFinishLaunching();
 }
 
@@ -325,7 +326,6 @@ void wxBell()
 // here we subclass NSApplication, for the purpose of being able to override sendEvent.
 @interface wxNSApplication : NSApplication
 {
-    BOOL firstPass;
 }
 
 - (id)init;
@@ -340,7 +340,7 @@ void wxBell()
 {
     if ( self = [super init] )
     {
-        firstPass = YES;
+        // further init
     }
     return self;
 }
@@ -370,14 +370,7 @@ void wxBell()
     if ([anEvent type] == NSKeyUp && ([anEvent modifierFlags] & NSCommandKeyMask))
         [[self keyWindow] sendEvent:anEvent];
     else
-        [super sendEvent:anEvent];
-    
-    if ( firstPass )
-    {
-        [NSApp stop:nil];
-        firstPass = NO;
-        return;
-    }
+        [super sendEvent:anEvent];    
 }
 
 @end
@@ -416,12 +409,6 @@ bool wxApp::DoInitGui()
         appcontroller = OSXCreateAppController();
         [[NSApplication sharedApplication] setDelegate:(id <NSApplicationDelegate>)appcontroller];
         [NSColor setIgnoresAlpha:NO];
-
-        // calling finishLaunching so early before running the loop seems to trigger some 'MenuManager compatibility' which leads
-        // to the duplication of menus under 10.5 and a warning under 10.6
-#if 0
-        [NSApp finishLaunching];
-#endif
     }
     gNSLayoutManager = [[NSLayoutManager alloc] init];
     

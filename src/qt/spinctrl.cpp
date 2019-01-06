@@ -40,10 +40,15 @@ bool wxSpinCtrlQt< T, Widget >::Create( wxWindow *parent, wxWindowID id,
     if ( style & wxSP_WRAP )
         m_qtSpinBox->setWrapping(true);
 
+    if ( style & wxALIGN_CENTRE_HORIZONTAL )
+        m_qtSpinBox->setAlignment(Qt::AlignHCenter);
+    else if ( style & wxALIGN_RIGHT )
+        m_qtSpinBox->setAlignment(Qt::AlignRight);
+
     m_qtSpinBox->setAccelerated(true); // to match gtk behavior
 
-    SetValue( initial );
     SetRange( min, max );
+    SetValue( initial );
     SetIncrement( inc );
 
     if ( !value.IsEmpty() )

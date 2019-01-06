@@ -802,7 +802,7 @@ void MyFrame::OnImageInfo( wxCommandEvent &WXUNUSED(event) )
             {
                 default:
                     wxFAIL_MSG( "unknown image resolution units" );
-                    // fall through
+                    wxFALLTHROUGH;
 
                 case wxIMAGE_RESOLUTION_NONE:
                     info += " in default units";

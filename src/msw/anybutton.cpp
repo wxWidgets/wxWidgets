@@ -280,7 +280,7 @@ public:
         {
             default:
                 wxFAIL_MSG( "invalid image alignment" );
-                // fall through
+                wxFALLTHROUGH;
 
             case BUTTON_IMAGELIST_ALIGN_LEFT:
                 return wxLEFT;
@@ -303,7 +303,7 @@ public:
         {
             default:
                 wxFAIL_MSG( "invalid direction" );
-                // fall through
+                wxFALLTHROUGH;
 
             case wxLEFT:
                 alignNew = BUTTON_IMAGELIST_ALIGN_LEFT;
@@ -524,7 +524,9 @@ void wxAnyButton::AdjustForBitmapSize(wxSize &size) const
         {
             wxUxThemeHandle theme(const_cast<wxAnyButton *>(this), L"BUTTON");
 
-            MARGINS margins;
+            // Initialize margins with the default values (at least under
+            // Windows 7) in case GetThemeMargins() fails.
+            MARGINS margins = {3, 3, 3, 3};
             ::GetThemeMargins(theme, NULL,
                                                     BP_PUSHBUTTON,
                                                     PBS_NORMAL,
@@ -1148,8 +1150,9 @@ void DrawXPBackground(wxAnyButton *button, HDC hdc, RECT& rectBtn, UINT state)
     ::DrawThemeBackground(theme, hdc, BP_PUSHBUTTON, iState,
                                 &rectBtn, NULL);
 
-    // calculate content area margins
-    MARGINS margins;
+    // calculate content area margins, using the defaults in case we fail to
+    // retrieve the current theme margins
+    MARGINS margins = {3, 3, 3, 3};
     ::GetThemeMargins(theme, hdc, BP_PUSHBUTTON, iState,
                             TMT_CONTENTMARGINS, &rectBtn, &margins);
     ::InflateRect(&rectBtn, -margins.cxLeftWidth, -margins.cyTopHeight);
@@ -1343,7 +1346,7 @@ bool wxAnyButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
             {
                 default:
                     wxFAIL_MSG( "invalid direction" );
-                    // fall through
+                    wxFALLTHROUGH;
 
                 case wxLEFT:
                     rectBitmap.x = rectButton.x + margin.x;

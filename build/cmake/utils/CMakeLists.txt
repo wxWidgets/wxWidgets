@@ -17,8 +17,24 @@ if(wxUSE_XRC)
         wx_exe_link_libraries(wxrc xml)
     endif()
     wx_exe_link_libraries(wxrc base)
-    # TODO: install
+
     set_target_properties(wxrc PROPERTIES FOLDER "Utilities")
+
+    wx_install(TARGETS wxrc RUNTIME DESTINATION "bin")
+    if(UNIX)
+        install(CODE "execute_process( \
+            COMMAND ${CMAKE_COMMAND} -E rename \
+            ${CMAKE_INSTALL_PREFIX}/bin/wxrc \
+            ${CMAKE_INSTALL_PREFIX}/bin/wxrc-${wxMAJOR_VERSION}.${wxMINOR_VERSION} \
+            )"
+        )
+        install(CODE "execute_process( \
+            COMMAND ${CMAKE_COMMAND} -E create_symlink \
+            ${CMAKE_INSTALL_PREFIX}/bin/wxrc-${wxMAJOR_VERSION}.${wxMINOR_VERSION} \
+            ${CMAKE_INSTALL_PREFIX}/bin/wxrc \
+            )"
+        )
+    endif()
 endif()
 
 # TODO: build targets for other utils

@@ -482,7 +482,7 @@ void wxPropertyGrid::Init2()
     RegainColours();
 
     // This helps with flicker
-    SetBackgroundStyle( wxBG_STYLE_CUSTOM );
+    SetBackgroundStyle( wxBG_STYLE_PAINT );
 
     // Rely on native double-buffering by default.
 #if wxALWAYS_NATIVE_DOUBLE_BUFFER
@@ -841,7 +841,7 @@ bool wxPropertyGrid::AddToSelectionFromInputEvent( wxPGProperty* prop,
             {
                 // Allow right-click for context menu without
                 // disturbing the selection.
-                if ( GetSelectedProperties().size() <= 1 ||
+                if ( selection.size() <= 1 ||
                      !alreadySelected )
                     return DoSelectAndEdit(prop, colIndex, selFlags);
                 return true;
@@ -854,7 +854,7 @@ bool wxPropertyGrid::AddToSelectionFromInputEvent( wxPGProperty* prop,
                 }
                 else if ( mouseEvent->ShiftDown() )
                 {
-                    if ( selection.size() > 0 && !prop->IsCategory() )
+                    if ( !selection.empty() && !prop->IsCategory() )
                         addToExistingSelection = 2;
                     else
                         addToExistingSelection = 1;
@@ -870,7 +870,7 @@ bool wxPropertyGrid::AddToSelectionFromInputEvent( wxPGProperty* prop,
         {
             res = DoAddToSelection(prop, selFlags);
         }
-        else if ( GetSelectedProperties().size() > 1 )
+        else if ( selection.size() > 1 )
         {
             res = DoRemoveFromSelection(prop, selFlags);
         }
@@ -1427,7 +1427,7 @@ void wxPropertyGrid::RegainColours()
         wxColour capForeCol = wxPGAdjustColour(m_colCapBack,colDec,5000,5000,true);
         if (wxPGGetColAvg(m_colCapBack) < 100)
             capForeCol = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
-        
+
         m_colCapFore = capForeCol;
         m_categoryDefaultCell.GetData()->SetFgCol(capForeCol);
     }
@@ -1861,19 +1861,14 @@ void wxPropertyGrid::OnPaint( wxPaintEvent& WXUNUSED(event) )
     }
 
     // Find out where the window is scrolled to
-    int vy;                     // Top of the client
-    GetViewStart(NULL, &vy);
+    int vx, vy;
+    GetViewStart(&vx, &vy);
+    vx *= wxPG_PIXELS_PER_UNIT;
     vy *= wxPG_PIXELS_PER_UNIT;
 
     // Update everything inside the box
     wxRect r = GetUpdateRegion().GetBox();
-
-    r.y += vy;
-
-    // FIXME: This is just a workaround for a bug that causes splitters not
-    //        to paint when other windows are being dragged over the grid.
-    r.x = 0;
-    r.width = GetClientSize().x;
+    r.Offset(vx, vy);
 
     // Repaint this rectangle
     DrawItems(*dcPtr, r.y, r.y + r.height-1, &r);
@@ -2028,7 +2023,7 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
 #if WXWIN_COMPATIBILITY_3_0
 int wxPropertyGrid::DoDrawItemsBase( wxDC& dc,
                                  const wxRect* itemsRect,
-                                 bool isBuffered ) const
+                                 bool WXUNUSED(isBuffered) ) const
 #else
 int wxPropertyGrid::DoDrawItems( wxDC& dc,
                                  const wxRect* itemsRect ) const
@@ -2043,8 +2038,9 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     if ( !lastItem )
         lastItem = GetLastItem( wxPG_ITERATE_VISIBLE );
 
-    int vy;
-    GetViewStart(NULL, &vy);
+    int vx, vy;
+    GetViewStart(&vx, &vy);
+    vx *= wxPG_PIXELS_PER_UNIT;
     vy *= wxPG_PIXELS_PER_UNIT;
 
     if ( IsFrozen() || m_height < 1 || firstItem == NULL )
@@ -2090,22 +2086,10 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     long windowStyle = m_windowStyle;
 
-#if WXWIN_COMPATIBILITY_3_0
-    int xRelMod = 0;
-
-    if ( isBuffered )
-    {
-        xRelMod = itemsRect->x;
-        // itemsRect conversion
-        firstItemTopY -= vy;
-        lastItemBottomY -= vy;
-    }
-#else
-    int xRelMod = itemsRect->x;
+    int xRelMod = vx;
     // itemsRect conversion
     firstItemTopY -= vy;
     lastItemBottomY -= vy;
-#endif
 
     int x = m_marginWidth - xRelMod;
 
@@ -2124,11 +2108,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     wxBrush capbgbrush(m_colCapBack,wxBRUSHSTYLE_SOLID);
     wxPen linepen(m_colLine,1,wxPENSTYLE_SOLID);
 
-    wxColour selBackCol;
-    if ( isPgEnabled )
-        selBackCol = m_colSelBack;
-    else
-        selBackCol = m_colMargin;
+    wxColour selBackCol = isPgEnabled ? m_colSelBack : m_colMargin;
 
     // pen that has same colour as text
     wxPen outlinepen(m_colPropFore,1,wxPENSTYLE_SOLID);
@@ -2147,8 +2127,6 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     const wxPropertyGridPageState* state = m_pState;
     const wxVector<int>& colWidths = state->m_colWidths;
     const unsigned int colCount = state->GetColumnCount();
-
-    // TODO: Only render columns that are within clipping region.
 
     dc.SetFont(normalFont);
 
@@ -2180,7 +2158,27 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     wxPGProperty* nextP = visPropArray[0];
 
-    int gridWidth = state->GetVirtualWidth();
+    // Calculate splitters positions
+    wxVector<int> splitterPos;
+    splitterPos.reserve(colCount);
+    int sx = x;
+    for (wxVector<int>::const_iterator cit = colWidths.begin(); cit != colWidths.end(); ++cit)
+    {
+        sx += *cit;
+        splitterPos.push_back(sx);
+    }
+
+    int viewLeftEdge = itemsRect->x - vx;
+    int viewRightEdge = viewLeftEdge + itemsRect->width - 1;
+    // Determine columns range to be drawn
+    unsigned int firstCol = 0;
+    while ( firstCol < colCount-1 && splitterPos[firstCol] < viewLeftEdge )
+        firstCol++;
+    unsigned int lastCol = firstCol;
+    while ( lastCol < colCount-1 && splitterPos[lastCol] < viewRightEdge )
+        lastCol++;
+    // Calculate position of the right edge of the last cell
+    int cellX = splitterPos[lastCol]+ 1;
 
     y = firstItemTopY;
     for ( unsigned int arrInd=1;
@@ -2190,7 +2188,6 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         wxPGProperty* p = nextP;
         nextP = visPropArray[arrInd];
 
-        int rowHeight = m_fontHeight+(m_spacingy*2)+1;
         int textMarginHere = x;
         int renderFlags = 0;
 
@@ -2239,12 +2236,9 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         }
 
         // Splitters
-        int sx = x;
-
-        for ( unsigned int si = 0; si < colCount; si++ )
+        for (unsigned int i = firstCol; i <= lastCol; i++)
         {
-            sx += colWidths[si];
-            dc.DrawLine( sx, y, sx, y2 );
+            dc.DrawLine(splitterPos[i], y, splitterPos[i], y2);
         }
 
         // Horizontal Line, below
@@ -2253,7 +2247,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
              nextP && nextP->IsCategory() )
             dc.SetPen(m_colCapBack);
 
-        dc.DrawLine( greyDepthX, y2-1, gridWidth-xRelMod, y2-1 );
+        dc.DrawLine(greyDepthX, y2 - 1, cellX, y2 - 1);
 
         //
         // Need to override row colours?
@@ -2289,10 +2283,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                 else if ( isPgEnabled )
                 {
                     rowFgCol = m_colPropFore;
-                    if ( p == firstSelected )
-                        rowBgCol = m_colMargin;
-                    else
-                        rowBgCol = selBackCol;
+                    rowBgCol = p == firstSelected ? m_colMargin : selBackCol;
                 }
                 else
                 {
@@ -2335,8 +2326,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                         lh );
 
         // Default cell rect fill the entire row
-        wxRect cellRect(greyDepthX, y,
-                        gridWidth - greyDepth + 2, rowHeight-1 );
+        wxRect cellRect(greyDepthX, y, cellX - greyDepthX, lh-1);
 
         bool isCategory = p->IsCategory();
 
@@ -2373,20 +2363,16 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
             cellRect.x += 1;
         }
 
-        int firstCellWidth = colWidths[0] - (greyDepthX - m_marginWidth);
+        int firstCellWidth = colWidths[0] - (greyDepth - m_marginWidth);
         int firstCellX = cellRect.x;
 
         // Calculate cellRect.x for the last cell
-        unsigned int ci = 0;
-        int cellX = x + 1;
-        for ( ci = 0; ci < colCount; ci++ )
-            cellX += colWidths[ci];
         cellRect.x = cellX;
 
         // Draw cells from back to front so that we can easily tell if the
         // cell on the right was empty from text
         bool prevFilled = true;
-        ci = colCount;
+        unsigned int ci = lastCol + 1;
         do
         {
             ci--;
@@ -2450,10 +2436,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                 {
                     dc.SetBrush(m_colPropBack);
                     dc.SetPen(m_colPropBack);
-                    if ( p->IsEnabled() )
-                        dc.SetTextForeground(m_colPropFore);
-                    else
-                        dc.SetTextForeground(m_colDisPropFore);
+                    dc.SetTextForeground(p->IsEnabled() ? m_colPropFore : m_colDisPropFore);
                 }
             }
             else
@@ -2500,15 +2483,20 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
                 prevFilled = true;
             }
 
-            dc.DestroyClippingRegion(); // Is this really necessary?
+            dc.DestroyClippingRegion();
         }
-        while ( ci > 0 );
+        while ( ci > firstCol );
 
         if ( fontChanged )
             dc.SetFont(normalFont);
 
-        y += rowHeight;
+        y += lh;
     }
+
+    // Clear empty space beyond the right edge of the grid
+    dc.SetPen(wxPen(m_colEmptySpace));
+    dc.SetBrush(wxBrush(m_colEmptySpace));
+    dc.DrawRectangle(cellX, firstItemTopY, viewRightEdge - cellX + 1, lastItemBottomY - firstItemTopY);
 
     return y - 1  + vy;
 }
@@ -2575,8 +2563,7 @@ void wxPropertyGrid::DrawItems( const wxPGProperty* p1, const wxPGProperty* p2 )
         GetViewStart(&vx, &vy);
         vx *= wxPG_PIXELS_PER_UNIT;
         vy *= wxPG_PIXELS_PER_UNIT;
-        r.x -= vx;
-        r.y -= vy;
+        r.Offset(-vx, -vy);
         RefreshRect(r);
         Update();
     }
@@ -2801,17 +2788,17 @@ void wxPropertyGrid::DoSetSplitterPosition( int newxpos,
     if ( ( newxpos < wxPG_DRAG_MARGIN ) )
         return;
 
-    wxPropertyGridPageState* state = m_pState;
-
     if ( flags & wxPG_SPLITTER_FROM_EVENT )
-        state->m_dontCenterSplitter = true;
+        m_pState->m_dontCenterSplitter = true;
 
-    state->DoSetSplitterPosition(newxpos, splitterIndex, flags);
+    m_pState->DoSetSplitterPosition(newxpos, splitterIndex, flags);
 
     if ( flags & wxPG_SPLITTER_REFRESH )
     {
         if ( GetSelection() )
+        {
             CorrectEditorWidgetSizeX();
+        }
 
         Refresh();
     }
@@ -2823,12 +2810,18 @@ void wxPropertyGrid::DoSetSplitterPosition( int newxpos,
 
 void wxPropertyGrid::ResetColumnSizes( bool enableAutoResizing )
 {
-    wxPropertyGridPageState* state = m_pState;
-    if ( state )
-        state->ResetColumnSizes(0);
+    if ( m_pState )
+    {
+        m_pState->ResetColumnSizes(0);
+        if ( GetSelection() )
+        {
+            CorrectEditorWidgetSizeX();
+        }
+        Refresh();
 
-    if ( enableAutoResizing && HasFlag(wxPG_SPLITTER_AUTO_CENTER) )
-        m_pState->m_dontCenterSplitter = false;
+        if ( enableAutoResizing && HasFlag(wxPG_SPLITTER_AUTO_CENTER) )
+            m_pState->m_dontCenterSplitter = false;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -2849,8 +2842,8 @@ void wxPropertyGrid::CenterSplitter( bool enableAutoResizing )
 // it itself will be returned
 wxPGProperty* wxPropertyGrid::GetNearestPaintVisible( wxPGProperty* p ) const
 {
-    int vx,vy1;// Top left corner of client
-    GetViewStart(&vx,&vy1);
+    int vy1;// Top left corner of client
+    GetViewStart(NULL,&vy1);
     vy1 *= wxPG_PIXELS_PER_UNIT;
 
     int vy2 = vy1 + m_height;
@@ -3738,6 +3731,7 @@ wxRect wxPropertyGrid::GetEditorWidgetRect( wxPGProperty* p, int column ) const
 
     int vx, vy;  // Top left corner of client
     GetViewStart(&vx, &vy);
+    vx *= wxPG_PIXELS_PER_UNIT;
     vy *= wxPG_PIXELS_PER_UNIT;
 
     if ( column == 1 )
@@ -3760,7 +3754,7 @@ wxRect wxPropertyGrid::GetEditorWidgetRect( wxPGProperty* p, int column ) const
 
     return wxRect
       (
-        splitterX+imageOffset+wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1,
+        splitterX+imageOffset+wxPG_XBEFOREWIDGET+wxPG_CONTROL_MARGIN+1-vx,
         itemy-vy,
         colEnd-splitterX-wxPG_XBEFOREWIDGET-wxPG_CONTROL_MARGIN-imageOffset-1,
         m_lineHeight-1
@@ -3816,12 +3810,8 @@ wxSize wxPropertyGrid::GetImageSize( wxPGProperty* p, int item ) const
 // takes scrolling into account
 void wxPropertyGrid::ImprovedClientToScreen( int* px, int* py )
 {
-    int vx, vy;
-    GetViewStart(&vx,&vy);
-    vy*=wxPG_PIXELS_PER_UNIT;
-    vx*=wxPG_PIXELS_PER_UNIT;
-    *px -= vx;
-    *py -= vy;
+    wxASSERT(px && py);
+    CalcScrolledPosition(*px, *py, px, py);
     ClientToScreen( px, py );
 }
 
@@ -3829,14 +3819,7 @@ void wxPropertyGrid::ImprovedClientToScreen( int* px, int* py )
 
 wxPropertyGridHitTestResult wxPropertyGrid::HitTest( const wxPoint& pt ) const
 {
-    wxPoint pt2;
-    GetViewStart(&pt2.x,&pt2.y);
-    pt2.x *= wxPG_PIXELS_PER_UNIT;
-    pt2.y *= wxPG_PIXELS_PER_UNIT;
-    pt2.x += pt.x;
-    pt2.y += pt.y;
-
-    return m_pState->HitTest(pt2);
+    return m_pState->HitTest(CalcUnscrolledPosition(pt));
 }
 
 // -----------------------------------------------------------------------
@@ -4136,7 +4119,9 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
         {
             int propY = p->GetY2(m_lineHeight);
 
-            int splitterX = GetSplitterPosition();
+            int splitterX;
+            CalcScrolledPosition(GetSplitterPosition(), 0, &splitterX, NULL);
+
             m_editorFocused = false;
             m_iFlags |= wxPG_FL_PRIMARY_FILLS_ENTIRE;
 
@@ -4221,7 +4206,6 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                     if ( p->HasFlag(wxPG_PROP_MODIFIED) &&
                          (m_windowStyle & wxPG_BOLD_MODIFIED) )
                         SetCurControlBoldFont();
-
                     // Store x relative to splitter (we'll need it).
                     m_ctrlXAdjust = m_wndEditor->GetPosition().x - splitterX;
 
@@ -4607,7 +4591,9 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
     m_pState->CheckColumnWidths();
 
     if ( GetSelection() )
+    {
         CorrectEditorWidgetSizeX();
+    }
 
     m_iFlags &= ~wxPG_FL_RECALCULATING_VIRTUAL_SIZE;
 }
@@ -4685,6 +4671,8 @@ void wxPropertyGrid::SetVirtualWidth( int width )
         SetInternalFlag(wxPG_FL_HAS_VIRTUAL_WIDTH);
     }
     m_pState->SetVirtualWidth( width );
+    RecalculateVirtualSize();
+    Refresh();
 }
 
 void wxPropertyGrid::SetFocusOnCanvas()
@@ -4869,7 +4857,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                                       m_propHover,
                                       NULL,
                                       wxPG_SEL_NOVALIDATE,
-                                      (unsigned int)m_draggedSplitter);
+                                      0); // dragged splitter is always 0 here
                         }
                     }
                     else if ( m_dragStatus == 0 )
@@ -4906,11 +4894,10 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                             m_draggedSplitter = splitterHit;
                             m_dragOffset = splitterHitOffset;
 
-                        #if wxPG_REFRESH_CONTROLS
-                            // Fixes button disappearance bug
                             if ( m_wndEditor2 )
-                                m_wndEditor2->Show ( false );
-                        #endif
+                            {
+                                m_wndEditor2->Hide();
+                            }
 
                             m_startingSplitterX = x - splitterHitOffset;
                         }
@@ -4976,9 +4963,7 @@ bool wxPropertyGrid::HandleMouseDoubleClick( int WXUNUSED(x),
     if ( m_propHover )
     {
         // Select property here as well
-        wxPGProperty* p = m_propHover;
-
-        AddToSelectionFromInputEvent(p, m_colHover, &event);
+        AddToSelectionFromInputEvent(m_propHover, m_colHover, &event);
 
         // Send double-click event.
         SendEvent( wxEVT_PG_DOUBLE_CLICK, m_propHover );
@@ -5271,11 +5256,10 @@ bool wxPropertyGrid::HandleMouseUp( int x, unsigned int WXUNUSED(y),
             m_wndEditor->Show ( true );
         }
 
-    #if wxPG_REFRESH_CONTROLS
-        // Fixes button disappearance bug
         if ( m_wndEditor2 )
-            m_wndEditor2->Show ( true );
-    #endif
+        {
+            m_wndEditor2->Show(true);
+        }
 
         // This clears the focus.
         m_editorFocused = false;
@@ -5453,9 +5437,12 @@ bool wxPropertyGrid::OnMouseChildCommon( wxMouseEvent &event, int* px, int *py )
     int splitterX = GetSplitterPosition();
 
     wxRect r = topCtrlWnd->GetRect();
+    int ux, uy;
+    CalcUnscrolledPosition(r.x + x, r.y + y, &ux, &uy);
+
     if ( !m_dragStatus &&
-         x > (splitterX-r.x+wxPG_SPLITTERX_DETECTMARGIN2) &&
-         y >= 0 && y < r.height \
+         ux > (splitterX + wxPG_SPLITTERX_DETECTMARGIN2) &&
+         y >= 0 && y < r.height
        )
     {
         if ( m_curcursor != wxCURSOR_ARROW ) CustomSetCursor ( wxCURSOR_ARROW );
@@ -5463,8 +5450,14 @@ bool wxPropertyGrid::OnMouseChildCommon( wxMouseEvent &event, int* px, int *py )
     }
     else
     {
-        CalcUnscrolledPosition( event.m_x + r.x, event.m_y + r.y, \
-            px, py );
+        if ( px )
+        {
+            *px = ux;
+        }
+        if ( py )
+        {
+            *py = uy;
+        }
         return true;
     }
     return false;

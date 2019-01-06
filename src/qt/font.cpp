@@ -451,10 +451,7 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
 
 wxFontEncoding wxNativeFontInfo::GetEncoding() const
 {
-//    QFontInfo info = QFontInfo(m_qtFont);
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
-    return wxFONTENCODING_MAX;
+    return wxFONTENCODING_UTF8;
 }
 
 void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
@@ -469,9 +466,18 @@ void wxNativeFontInfo::SetPixelSize(const wxSize& size)
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
 {
-    m_qtFont.setItalic(style == wxFONTSTYLE_ITALIC);
-//case wxFONTSTYLE_SLANT:
-//case wxFONTSTYLE_NORMAL:
+    switch(style)
+    {
+        case wxFONTSTYLE_ITALIC:
+            m_qtFont.setStyle(QFont::StyleItalic);
+            break;
+        case wxFONTSTYLE_NORMAL:
+            m_qtFont.setStyle(QFont::StyleNormal);
+            break;
+        case wxFONTSTYLE_SLANT:
+            m_qtFont.setStyle(QFont::StyleOblique);
+            break;
+    }
 }
 
 void wxNativeFontInfo::SetNumericWeight(int weight)

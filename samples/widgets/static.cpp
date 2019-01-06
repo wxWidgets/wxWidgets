@@ -417,7 +417,7 @@ void StaticWidgetsPage::CreateStatic()
     {
         default:
             wxFAIL_MSG("unexpected radiobox selection");
-            // fall through
+            wxFALLTHROUGH;
 
         case StaticHAlign_Left:
             align |= wxALIGN_LEFT;
@@ -436,7 +436,7 @@ void StaticWidgetsPage::CreateStatic()
     {
         default:
             wxFAIL_MSG("unexpected radiobox selection");
-            // fall through
+            wxFALLTHROUGH;
 
         case StaticVAlign_Top:
             align |= wxALIGN_TOP;
@@ -457,7 +457,7 @@ void StaticWidgetsPage::CreateStatic()
         {
             default:
                 wxFAIL_MSG("unexpected radiobox selection");
-                // fall through
+                wxFALLTHROUGH;
 
             case StaticEllipsize_Start:
                 flagsDummyText |= wxST_ELLIPSIZE_START;

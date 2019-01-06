@@ -48,6 +48,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxGridNameStr[];
 #define wxGRID_VALUE_NUMBER     wxT("long")
 #define wxGRID_VALUE_FLOAT      wxT("double")
 #define wxGRID_VALUE_CHOICE     wxT("choice")
+#define wxGRID_VALUE_DATE       wxT("date")
 
 #define wxGRID_VALUE_TEXT wxGRID_VALUE_STRING
 #define wxGRID_VALUE_LONG wxGRID_VALUE_NUMBER
@@ -98,6 +99,9 @@ class WXDLLIMPEXP_FWD_CORE wxComboBox;
 class WXDLLIMPEXP_FWD_CORE wxTextCtrl;
 #if wxUSE_SPINCTRL
 class WXDLLIMPEXP_FWD_CORE wxSpinCtrl;
+#endif
+#if wxUSE_DATEPICKCTRL
+class WXDLLIMPEXP_FWD_CORE wxDatePickerCtrl;
 #endif
 
 class wxGridFixedIndicesSet;
@@ -1354,6 +1358,7 @@ public:
     void     SetColFormatBool(int col);
     void     SetColFormatNumber(int col);
     void     SetColFormatFloat(int col, int width = -1, int precision = -1);
+    void     SetColFormatDate(int col, const wxString& format = wxString());
     void     SetColFormatCustom(int col, const wxString& typeName);
 
     // ------ row and col formatting

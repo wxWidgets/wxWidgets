@@ -1350,17 +1350,14 @@ void wxTextCtrl::SetEditable( bool editable )
     }
 }
 
-bool wxTextCtrl::Enable( bool enable )
+void wxTextCtrl::DoEnable(bool enable)
 {
-    if (!wxWindowBase::Enable(enable))
-    {
-        // nothing to do
-        return false;
-    }
+    if ( !m_text )
+        return;
+
+    wxTextCtrlBase::DoEnable(enable);
 
     gtk_widget_set_sensitive( m_text, enable );
-
-    return true;
 }
 
 void wxTextCtrl::MarkDirty()

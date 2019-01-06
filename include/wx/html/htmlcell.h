@@ -17,6 +17,7 @@
 #include "wx/html/htmltag.h"
 #include "wx/html/htmldefs.h"
 #include "wx/window.h"
+#include "wx/brush.h"
 
 
 class WXDLLIMPEXP_FWD_HTML wxHtmlWindowInterface;
@@ -81,7 +82,7 @@ enum wxHtmlSelectionState
 class WXDLLIMPEXP_HTML wxHtmlRenderingState
 {
 public:
-    wxHtmlRenderingState() : m_selState(wxHTML_SEL_OUT) { m_bgMode = wxSOLID; }
+    wxHtmlRenderingState() : m_selState(wxHTML_SEL_OUT) { m_bgMode = wxBRUSHSTYLE_SOLID; }
 
     void SetSelectionState(wxHtmlSelectionState s) { m_selState = s; }
     wxHtmlSelectionState GetSelectionState() const { return m_selState; }

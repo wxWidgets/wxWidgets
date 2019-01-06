@@ -801,7 +801,7 @@ public:
         The messages will be written in the encoding specified by the
         given @c wxMBConv.
 
-		The @a conv argument is only available in wxWidgets 3.1.1 and later.
+        The @a conv argument is only available in wxWidgets 3.1.1 and later.
 
         @note
             In practice, it is only advisable to specify @c wxConvUTF8 as

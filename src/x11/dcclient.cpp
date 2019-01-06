@@ -1606,7 +1606,7 @@ void wxWindowDCImpl::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
 
     // First draw a rectangle representing the text background, if a text
     // background is specified
-    if (m_textBackgroundColour.IsOk () && (m_backgroundMode != wxTRANSPARENT))
+    if (m_textBackgroundColour.IsOk () && (m_backgroundMode != wxBRUSHSTYLE_TRANSPARENT))
     {
         // Since X draws from the baseline of the text, must add the text height
         int cx = 0;
@@ -1907,35 +1907,35 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
     int lineStyle = LineSolid;
     switch (m_pen.GetStyle())
     {
-        case wxUSER_DASH:
+        case wxPENSTYLE_USER_DASH:
         {
             lineStyle = LineOnOffDash;
             req_nb_dash = m_pen.GetDashCount();
             req_dash = (wxX11Dash*)m_pen.GetDash();
             break;
         }
-        case wxDOT:
+        case wxPENSTYLE_DOT:
         {
             lineStyle = LineOnOffDash;
             req_nb_dash = 2;
             req_dash = dotted;
             break;
         }
-        case wxLONG_DASH:
+        case wxPENSTYLE_LONG_DASH:
         {
             lineStyle = LineOnOffDash;
             req_nb_dash = 2;
             req_dash = long_dashed;
             break;
         }
-        case wxSHORT_DASH:
+        case wxPENSTYLE_SHORT_DASH:
         {
             lineStyle = LineOnOffDash;
             req_nb_dash = 2;
             req_dash = short_dashed;
             break;
         }
-        case wxDOT_DASH:
+        case wxPENSTYLE_DOT_DASH:
         {
 //            lineStyle = LineDoubleDash;
             lineStyle = LineOnOffDash;
@@ -1944,10 +1944,10 @@ void wxWindowDCImpl::SetPen( const wxPen &pen )
             break;
         }
 
-        case wxTRANSPARENT:
-        case wxSTIPPLE_MASK_OPAQUE:
-        case wxSTIPPLE:
-        case wxSOLID:
+        case wxPENSTYLE_TRANSPARENT:
+        case wxPENSTYLE_STIPPLE_MASK_OPAQUE:
+        case wxPENSTYLE_STIPPLE:
+        case wxPENSTYLE_SOLID:
         default:
         {
             lineStyle = LineSolid;
@@ -2033,7 +2033,7 @@ void wxWindowDCImpl::SetBrush( const wxBrush &brush )
     if (m_brush.IsHatch())
     {
         XSetFillStyle( (Display*) m_display, (GC) m_brushGC, FillStippled );
-        int num = m_brush.GetStyle() - wxBDIAGONAL_HATCH;
+        int num = m_brush.GetStyle() - wxBRUSHSTYLE_BDIAGONAL_HATCH;
         XSetStipple( (Display*) m_display, (GC) m_brushGC, hatches[num] );
     }
 }
@@ -2078,7 +2078,7 @@ void wxWindowDCImpl::SetBackground( const wxBrush &brush )
     if (m_backgroundBrush.IsHatch())
     {
         XSetFillStyle( (Display*) m_display, (GC) m_bgGC, FillStippled );
-        int num = m_backgroundBrush.GetStyle() - wxBDIAGONAL_HATCH;
+        int num = m_backgroundBrush.GetStyle() - wxBRUSHSTYLE_BDIAGONAL_HATCH;
         XSetStipple( (Display*) m_display, (GC) m_bgGC, hatches[num] );
     }
 }
@@ -2203,7 +2203,7 @@ void wxWindowDCImpl::SetBackgroundMode( int mode )
     m_backgroundMode = mode;
 
 #if wxUSE_NANOX
-    GrSetGCUseBackground((GC) m_textGC, mode == wxTRANSPARENT ? FALSE : TRUE);
+    GrSetGCUseBackground((GC) m_textGC, mode == wxBRUSHSTYLE_TRANSPARENT ? FALSE : TRUE);
 #endif
 
     if (!m_x11window) return;
@@ -2214,7 +2214,7 @@ void wxWindowDCImpl::SetBackgroundMode( int mode )
     if (m_brush.GetStyle() != wxBRUSHSTYLE_SOLID && m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
     {
         XSetFillStyle( (Display*) m_display, (GC) m_brushGC,
-          (m_backgroundMode == wxTRANSPARENT) ? FillStippled : FillOpaqueStippled );
+          (m_backgroundMode == wxBRUSHSTYLE_TRANSPARENT) ? FillStippled : FillOpaqueStippled );
     }
 }
 

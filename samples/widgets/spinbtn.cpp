@@ -368,7 +368,7 @@ void SpinBtnWidgetsPage::CreateSpin()
     {
         default:
             wxFAIL_MSG("unexpected radiobox selection");
-            // fall through
+            wxFALLTHROUGH;
 
         case Align_Left:
             textFlags |= wxALIGN_LEFT;  // no-op

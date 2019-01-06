@@ -32,7 +32,7 @@ MAKEARGS = LINK_DLL_FLAGS="$(LINK_DLL_FLAGS)" \
 	WINDRES="$(WINDRES)"
 CPPDEPS = -MT$@ -MF$@.d -MD -MP
 WX_RELEASE_NODOT = 31
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)2
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)3
 COMPILER_PREFIX = gcc
 OBJS = \
 	$(COMPILER_PREFIX)$(COMPILER_VERSION)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -174,8 +174,10 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_tile.o \
 	$(OBJS)\wxtiff_tif_version.o \
 	$(OBJS)\wxtiff_tif_warning.o \
+	$(OBJS)\wxtiff_tif_webp.o \
 	$(OBJS)\wxtiff_tif_write.o \
-	$(OBJS)\wxtiff_tif_zip.o
+	$(OBJS)\wxtiff_tif_zip.o \
+	$(OBJS)\wxtiff_tif_zstd.o
 WXEXPAT_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -DNDEBUG -I$(LIBDIRNAME) $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
@@ -5743,7 +5745,7 @@ $(SETUPHDIR)\wx\msw\rcdefs.h: $(SETUPHDIR)\wx\msw ..\..\include\wx\msw\genrcdefs
 build_cfg_file: $(SETUPHDIR)
 	@echo WXVER_MAJOR=3 >$(BUILD_CFG_FILE)
 	@echo WXVER_MINOR=1 >>$(BUILD_CFG_FILE)
-	@echo WXVER_RELEASE=2 >>$(BUILD_CFG_FILE)
+	@echo WXVER_RELEASE=3 >>$(BUILD_CFG_FILE)
 	@echo BUILD=$(BUILD) >>$(BUILD_CFG_FILE)
 	@echo MONOLITHIC=$(MONOLITHIC) >>$(BUILD_CFG_FILE)
 	@echo SHARED=$(SHARED) >>$(BUILD_CFG_FILE)
@@ -6132,10 +6134,16 @@ $(OBJS)\wxtiff_tif_version.o: ../../src/tiff/libtiff/tif_version.c
 $(OBJS)\wxtiff_tif_warning.o: ../../src/tiff/libtiff/tif_warning.c
 	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\wxtiff_tif_webp.o: ../../src/tiff/libtiff/tif_webp.c
+	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\wxtiff_tif_write.o: ../../src/tiff/libtiff/tif_write.c
 	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxtiff_tif_zip.o: ../../src/tiff/libtiff/tif_zip.c
+	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\wxtiff_tif_zstd.o: ../../src/tiff/libtiff/tif_zstd.c
 	$(CC) -c -o $@ $(WXTIFF_CFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\wxexpat_xmlparse.o: ../../src/expat/expat/lib/xmlparse.c

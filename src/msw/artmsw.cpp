@@ -25,6 +25,7 @@
 #include "wx/volume.h"
 #include "wx/msw/private.h"
 #include "wx/msw/wrapwin.h"
+#include "wx/msw/wrapshl.h"
 
 #ifdef SHGSI_ICON
     #define wxHAS_SHGetStockIconInfo
@@ -32,6 +33,39 @@
 
 namespace
 {
+
+#ifdef SHDefExtractIcon
+    #define MSW_SHDefExtractIcon SHDefExtractIcon
+#else // !defined(SHDefExtractIcon)
+
+// MinGW doesn't provide SHDefExtractIcon() up to at least the 5.3 version, so
+// define it ourselves.
+HRESULT
+MSW_SHDefExtractIcon(LPCTSTR pszIconFile, int iIndex, UINT uFlags,
+                     HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize)
+{
+    typedef HRESULT
+    (WINAPI *SHDefExtractIcon_t)(LPCTSTR, int, UINT, HICON*, HICON*, UINT);
+
+    static SHDefExtractIcon_t s_SHDefExtractIcon = NULL;
+    if ( !s_SHDefExtractIcon )
+    {
+        wxDynamicLibrary shell32(wxT("shell32.dll"));
+        wxDL_INIT_FUNC_AW(s_, SHDefExtractIcon, shell32);
+
+        if ( !s_SHDefExtractIcon )
+            return E_FAIL;
+
+        // Prevent the DLL from being unloaded while we use its function.
+        // Normally it's not a problem as shell32.dll is always loaded anyhow.
+        shell32.Detach();
+    }
+
+    return (*s_SHDefExtractIcon)(pszIconFile, iIndex, uFlags,
+                                 phiconLarge, phiconSmall, nIconSize);
+}
+
+#endif // !defined(SHDefExtractIcon)
 
 #ifdef wxHAS_SHGetStockIconInfo
 
@@ -51,6 +85,9 @@ SHSTOCKICONID MSWGetStockIconIdForArtProviderId(const wxArtID& art_id)
     else if ( art_id == wxART_FLOPPY )      return SIID_DRIVE35;
     else if ( art_id == wxART_CDROM )       return SIID_DRIVECD;
     else if ( art_id == wxART_REMOVABLE )   return SIID_DRIVEREMOVE;
+    else if ( art_id == wxART_PRINT )       return SIID_PRINTER;
+    else if ( art_id == wxART_EXECUTABLE_FILE ) return SIID_APPLICATION;
+    else if ( art_id == wxART_NORMAL_FILE ) return SIID_DOCNOASSOC;
 
     return SIID_INVALID;
 };
@@ -81,32 +118,53 @@ MSW_SHGetStockIconInfo(SHSTOCKICONID siid,
 
 #endif // #ifdef wxHAS_SHGetStockIconInfo
 
+// Wrapper for SHDefExtractIcon().
+wxBitmap
+MSWGetBitmapFromIconLocation(const TCHAR* path, int index, const wxSize& size)
+{
+    HICON hIcon = NULL;
+    if ( MSW_SHDefExtractIcon(path, index, 0, &hIcon, NULL, size.x) != S_OK )
+        return wxNullBitmap;
+
+    // Note that using "size.x" twice here is not a typo: normally size.y is
+    // the same anyhow, of course, but if it isn't, the actual icon size would
+    // be size.x in both directions as we only pass "x" to SHDefExtractIcon()
+    // above.
+    wxIcon icon;
+    if ( !icon.InitFromHICON((WXHICON)hIcon, size.x, size.x) )
+        return wxNullBitmap;
+
+    return wxBitmap(icon);
+}
+
+#if !wxUSE_UNICODE
+
+// SHSTOCKICONINFO always uses WCHAR, even in ANSI build, so we need to convert
+// it to TCHAR, which is just CHAR in this case, used by the other functions.
+// Provide an overload doing it as this keeps the code in the main function
+// clean and this entire block (inside !wxUSE_UNICODE check) can be just
+// removed when support for ANSI build is finally dropped.
+wxBitmap
+MSWGetBitmapFromIconLocation(const WCHAR* path, int index, const wxSize& size)
+{
+    return MSWGetBitmapFromIconLocation(wxString(path).mb_str(), index, size);
+}
+
+#endif // !wxUSE_UNICODE
+
 wxBitmap
 MSWGetBitmapForPath(const wxString& path, const wxSize& size, DWORD uFlags = 0)
 {
     SHFILEINFO fi;
     wxZeroMemory(fi);
 
-    uFlags |= SHGFI_USEFILEATTRIBUTES | SHGFI_ICON;
-    if ( size != wxDefaultSize )
-    {
-        if ( size.x <= 16 )
-            uFlags |= SHGFI_SMALLICON;
-        else if ( size.x >= 64 )
-            uFlags |= SHGFI_LARGEICON;
-    }
+    uFlags |= SHGFI_USEFILEATTRIBUTES | SHGFI_ICONLOCATION;
 
     if ( !SHGetFileInfo(path.t_str(), FILE_ATTRIBUTE_DIRECTORY,
                         &fi, sizeof(SHFILEINFO), uFlags) )
-        return wxNullBitmap;
+       return wxNullBitmap;
 
-    wxIcon icon;
-    icon.CreateFromHICON((WXHICON)fi.hIcon);
-
-    wxBitmap bitmap(icon);
-    ::DestroyIcon(fi.hIcon);
-
-    return bitmap;
+    return MSWGetBitmapFromIconLocation(fi.szDisplayName, fi.iIcon, size);
 }
 
 #if wxUSE_FSVOLUME
@@ -178,33 +236,21 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
     {
         WinStruct<SHSTOCKICONINFO> sii;
 
-        UINT uFlags = SHGSI_ICON;
-        if ( size != wxDefaultSize )
-        {
-            if ( size.x <= 16 )
-                uFlags |= SHGSI_SMALLICON;
-            else if ( size.x >= 64 )
-                uFlags |= SHGSI_LARGEICON;
-        }
+        UINT uFlags = SHGSI_ICONLOCATION | SHGSI_SYSICONINDEX;
 
         HRESULT res = MSW_SHGetStockIconInfo(stockIconId, uFlags, &sii);
         if ( res == S_OK )
         {
-            wxIcon icon;
-            icon.CreateFromHICON( (WXHICON)sii.hIcon );
+            const wxSize
+                sizeNeeded = size.IsFullySpecified()
+                                ? size
+                                : wxArtProvider::GetNativeSizeHint(client);
 
-            bitmap = wxBitmap(icon);
-            ::DestroyIcon(sii.hIcon);
-
+            bitmap = MSWGetBitmapFromIconLocation(sii.szPath, sii.iIcon,
+                                                  sizeNeeded);
             if ( bitmap.IsOk() )
             {
-                const wxSize
-                    sizeNeeded = size.IsFullySpecified()
-                                    ? size
-                                    : wxArtProvider::GetNativeSizeHint(client);
-
-                if ( sizeNeeded.IsFullySpecified() &&
-                        bitmap.GetSize() != sizeNeeded )
+                if ( bitmap.GetSize() != sizeNeeded )
                 {
                     wxArtProvider::RescaleBitmap(bitmap, sizeNeeded);
                 }

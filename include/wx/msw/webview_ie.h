@@ -157,7 +157,6 @@ private:
     wxIEContainer* m_container;
     wxAutomationObject m_ie;
     IWebBrowser2* m_webBrowser;
-    DWORD m_dwCookie;
     wxCOMPtr<DocHostUIHandler> m_uiHandler;
 
     //We store the current zoom type;

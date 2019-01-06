@@ -258,7 +258,7 @@ wxMutexError wxMutexInternal::LockTimeout(DWORD milliseconds)
             // the previous caller died without releasing the mutex, so even
             // though we did get it, log a message about this
             wxLogDebug(wxT("WaitForSingleObject() returned WAIT_ABANDONED"));
-            // fall through
+            wxFALLTHROUGH;
 
         case WAIT_OBJECT_0:
             // ok
@@ -269,7 +269,7 @@ wxMutexError wxMutexInternal::LockTimeout(DWORD milliseconds)
 
         default:
             wxFAIL_MSG(wxT("impossible return value in wxMutex::Lock"));
-            // fall through
+            wxFALLTHROUGH;
 
         case WAIT_FAILED:
             wxLogLastError(wxT("WaitForSingleObject(mutex)"));

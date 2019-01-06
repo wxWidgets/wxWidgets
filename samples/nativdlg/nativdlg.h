@@ -12,7 +12,7 @@
 class MyApp: public wxApp
 {
   public:
-    MyApp(void){};
+    MyApp(void){}
     bool OnInit(void) wxOVERRIDE;
 };
 

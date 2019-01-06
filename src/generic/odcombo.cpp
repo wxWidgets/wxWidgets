@@ -219,17 +219,14 @@ void wxVListBoxComboPopup::DismissWithEvent()
 
     int selection = wxVListBox::GetSelection();
 
-    Dismiss();
-
     if ( selection != wxNOT_FOUND )
         m_stringValue = m_strings[selection];
     else
         m_stringValue.clear();
 
-    if ( m_stringValue != m_combo->GetValue() )
-        m_combo->SetValueByUser(m_stringValue);
-
     m_value = selection;
+
+    Dismiss();
 
     SendComboBoxEvent(selection);
 }
@@ -243,7 +240,7 @@ void wxVListBoxComboPopup::SendComboBoxEvent( int selection )
     evt.SetInt(selection);
 
     // Set client data, if any
-    if ( selection >= 0 && (int)m_clientDatas.GetCount() > selection )
+    if ( selection >= 0 && (int)m_clientDatas.size() > selection )
     {
         void* clientData = m_clientDatas[selection];
         if ( m_clientDataItemsType == wxClientData_Object )
@@ -526,9 +523,9 @@ void wxVListBoxComboPopup::Insert( const wxString& item, int pos )
 
     m_strings.Insert(item,pos);
     if ( (int)m_clientDatas.size() >= pos )
-        m_clientDatas.Insert(NULL, pos);
+        m_clientDatas.insert(m_clientDatas.begin()+pos, NULL);
 
-    m_widths.Insert(-1,pos);
+    m_widths.insert(m_widths.begin()+pos, -1);
     m_widthsDirty = true;
 
     if ( IsCreated() )
@@ -564,7 +561,7 @@ void wxVListBoxComboPopup::Clear()
     wxASSERT(m_combo);
 
     m_strings.Empty();
-    m_widths.Empty();
+    m_widths.clear();
 
     m_widestWidth = 0;
     m_widestItem = -1;
@@ -581,11 +578,11 @@ void wxVListBoxComboPopup::ClearClientDatas()
 {
     if ( m_clientDataItemsType == wxClientData_Object )
     {
-        for ( size_t i=0; i<m_clientDatas.GetCount(); i++ )
-            delete (wxClientData*) m_clientDatas[i];
+        for ( wxVector<void*>::iterator it = m_clientDatas.begin(); it != m_clientDatas.end(); ++it )
+            delete (wxClientData*) *it;
     }
 
-    m_clientDatas.Empty();
+    m_clientDatas.clear();
     m_clientDataItemsType = wxClientData_None;
 }
 
@@ -603,25 +600,22 @@ void wxVListBoxComboPopup::SetItemClientData( unsigned int n,
 
 void* wxVListBoxComboPopup::GetItemClientData(unsigned int n) const
 {
-    if ( m_clientDatas.GetCount() > n )
-        return m_clientDatas[n];
-
-    return NULL;
+    return n < m_clientDatas.size() ? m_clientDatas[n] : NULL;
 }
 
 void wxVListBoxComboPopup::Delete( unsigned int item )
 {
     // Remove client data, if set
-    if ( m_clientDatas.GetCount() )
+    if ( !m_clientDatas.empty() )
     {
         if ( m_clientDataItemsType == wxClientData_Object )
             delete (wxClientData*) m_clientDatas[item];
 
-        m_clientDatas.RemoveAt(item);
+        m_clientDatas.erase(m_clientDatas.begin()+item);
     }
 
     m_strings.RemoveAt(item);
-    m_widths.RemoveAt(item);
+    m_widths.erase(m_widths.begin()+item);
 
     if ( (int)item == m_widestItem )
         m_findWidest = true;
@@ -715,9 +709,9 @@ void wxVListBoxComboPopup::CalcWidths()
     // Measure items with dirty width.
     if ( m_widthsDirty )
     {
-        unsigned int n = m_widths.GetCount();
+        unsigned int n = m_widths.size();
         int dirtyHandled = 0;
-        wxArrayInt& widths = m_widths;
+        wxVector<int>& widths = m_widths;
 
         // I think using wxDC::GetTextExtent is faster than
         // wxWindow::GetTextExtent (assuming same dc is used
@@ -775,7 +769,7 @@ void wxVListBoxComboPopup::CalcWidths()
 
     if ( doFindWidest )
     {
-        unsigned int n = m_widths.GetCount();
+        unsigned int n = m_widths.size();
 
         int bestWidth = -1;
         int bestIndex = -1;
@@ -852,7 +846,7 @@ void wxVListBoxComboPopup::Populate( const wxArrayString& choices )
         m_strings.Add(item);
     }
 
-    m_widths.SetCount(n,-1);
+    m_widths.resize(n,-1);
     m_widthsDirty = true;
 
     if ( IsCreated() )

@@ -202,7 +202,7 @@ void wxFontRefData::InitFromNative()
         m_pointSize = wxDEFAULT_FONT_SIZE;
     }
 
-    // examine the spacing: if the font is monospaced, assume wxTELETYPE
+    // examine the spacing: if the font is monospaced, assume wxFONTFAMILY_TELETYPE
     // family for compatibility with the old code which used it instead of
     // IsFixedWidth()
     if ( m_nativeFontInfo.GetXFontComponent(wxXLFD_SPACING).Upper() == wxT('M') )

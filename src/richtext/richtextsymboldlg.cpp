@@ -797,7 +797,7 @@ bool wxSymbolListCtrl::Create(wxWindow *parent,
     m_colBgSel = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
 
     // flicker-free drawing requires this
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 
     SetFont(*wxNORMAL_FONT);
 

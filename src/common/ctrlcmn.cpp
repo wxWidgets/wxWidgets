@@ -118,8 +118,12 @@ void wxControlBase::InitCommandEvent(wxCommandEvent& event) const
 
 bool wxControlBase::SetFont(const wxFont& font)
 {
+    if ( !wxWindow::SetFont(font) )
+        return false;
+
     InvalidateBestSize();
-    return wxWindow::SetFont(font);
+
+    return true;
 }
 
 // wxControl-specific processing after processing the update event

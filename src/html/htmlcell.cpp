@@ -400,7 +400,7 @@ static void SwitchSelState(wxDC& dc, wxHtmlRenderingInfo& info,
 
     if ( toSelection )
     {
-        dc.SetBackgroundMode(wxSOLID);
+        dc.SetBackgroundMode(wxBRUSHSTYLE_SOLID);
         dc.SetTextForeground(info.GetStyle().GetSelectedTextColour(fg));
         dc.SetTextBackground(info.GetStyle().GetSelectedTextBgColour(bg));
         dc.SetBackground(info.GetStyle().GetSelectedTextBgColour(bg));
@@ -411,7 +411,7 @@ static void SwitchSelState(wxDC& dc, wxHtmlRenderingInfo& info,
         dc.SetBackgroundMode(mode);
         dc.SetTextForeground(fg);
         dc.SetTextBackground(bg);
-        if ( mode != wxTRANSPARENT )
+        if ( mode != wxBRUSHSTYLE_TRANSPARENT )
             dc.SetBackground(bg);
     }
 }
@@ -1469,23 +1469,23 @@ void wxHtmlColourCell::DrawInvisible(wxDC& dc,
     if (m_Flags & wxHTML_CLR_BACKGROUND)
     {
         state.SetBgColour(m_Colour);
-        state.SetBgMode(wxSOLID);
+        state.SetBgMode(wxBRUSHSTYLE_SOLID);
         const wxColour c = state.GetSelectionState() == wxHTML_SEL_IN
                          ? info.GetStyle().GetSelectedTextBgColour(m_Colour)
                          : m_Colour;
         dc.SetTextBackground(c);
         dc.SetBackground(c);
-        dc.SetBackgroundMode(wxSOLID);
+        dc.SetBackgroundMode(wxBRUSHSTYLE_SOLID);
     }
     if (m_Flags & wxHTML_CLR_TRANSPARENT_BACKGROUND)
     {
         state.SetBgColour(m_Colour);
-        state.SetBgMode(wxTRANSPARENT);
+        state.SetBgMode(wxBRUSHSTYLE_TRANSPARENT);
         const wxColour c = state.GetSelectionState() == wxHTML_SEL_IN
                          ? info.GetStyle().GetSelectedTextBgColour(m_Colour)
                          : m_Colour;
         dc.SetTextBackground(c);
-        dc.SetBackgroundMode(wxTRANSPARENT);
+        dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     }
 }
 
