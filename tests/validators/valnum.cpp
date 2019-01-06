@@ -52,6 +52,8 @@ private:
     void Interactive();
 #endif // wxUSE_UIACTIONSIMULATOR
 
+    void OnValidationFailed(wxValidationErrorEvent& event);
+
     wxTextCtrl *m_text;
 
     wxDECLARE_NO_COPY_CLASS(NumValidatorTestCase);
@@ -66,11 +68,19 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( NumValidatorTestCase, "NumValidatorTestCa
 void NumValidatorTestCase::setUp()
 {
     m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
+    m_text->Bind(wxEVT_VALIDATE, &NumValidatorTestCase::OnValidationFailed, this);
 }
 
 void NumValidatorTestCase::tearDown()
 {
+    m_text->Unbind(wxEVT_VALIDATE, &NumValidatorTestCase::OnValidationFailed, this);
     wxTheApp->GetTopWindow()->DestroyChildren();
+}
+
+void NumValidatorTestCase::OnValidationFailed(wxValidationErrorEvent& event)
+{
+    // don't popup any message.
+    event.Skip(false);
 }
 
 // N.B. Instead of using ChangeValue(), SetValue() is used here because the
@@ -252,6 +262,7 @@ void NumValidatorTestCase::Interactive()
     wxFloatingPointValidator<float> valFloat(3);
     valFloat.SetRange(-10., 10.);
     text2->SetValidator(valFloat);
+    text2->Bind(wxEVT_VALIDATE, &NumValidatorTestCase::OnValidationFailed, this);
 
     wxUIActionSimulator sim;
 
@@ -321,8 +332,7 @@ void NumValidatorTestCase::Interactive()
 
     sim.Char('9');
     wxYield();
-    CPPUNIT_ASSERT_EQUAL( "9", text2->GetValue() ); // <- should not pass!
-    CPPUNIT_ASSERT_EQUAL( "99", text2->GetValue() ); // <- Why this also pass?
+    CPPUNIT_ASSERT_EQUAL( "99", text2->GetValue() );
     CPPUNIT_ASSERT( !text2->GetValidator()->Validate(NULL) );
 }
 
