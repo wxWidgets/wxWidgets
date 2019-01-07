@@ -1580,7 +1580,7 @@ protected:
 
 #if !WXWIN_COMPATIBILITY_3_0
     // List of editors and their event handlers to be deleted in idle event handler.
-    wxArrayPGObject     m_deletedEditorObjects;
+    wxVector<wxObject*> m_deletedEditorObjects;
 #endif
 
     // List of key codes that will not be handed over to editor controls.
