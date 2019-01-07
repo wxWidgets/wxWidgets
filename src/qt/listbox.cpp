@@ -45,7 +45,8 @@ void wxQtListWidget::doubleClicked( const QModelIndex &index )
 }
 
 
-wxListBox::wxListBox()
+wxListBox::wxListBox() :
+    m_qtListWidget(NULL)
 {
     Init();
 }

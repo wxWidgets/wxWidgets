@@ -27,7 +27,8 @@ class wxQtScrollBar : public wxQtEventSignalHandler< QScrollBar, wxScrollBar >
 };
 
 
-wxScrollBar::wxScrollBar()
+wxScrollBar::wxScrollBar() :
+    m_qtScrollBar(NULL)
 {
 }
 

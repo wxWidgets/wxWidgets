@@ -41,7 +41,8 @@ void wxQtSpinButton::valueChanged(int value)
 }
 
 
-wxSpinButton::wxSpinButton()
+wxSpinButton::wxSpinButton() :
+    m_qtSpinBox(NULL)
 {
 }
 

@@ -1074,6 +1074,7 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
                             dc.SetDeviceClippingRegion( m_updateRegion );
 
                             wxEraseEvent erase( GetId(), &dc );
+                            erase.SetEventObject(this);
                             if ( ProcessWindowEvent(erase) )
                             {
                                 // background erased, don't do it again
