@@ -3574,6 +3574,10 @@ wxSize wxAuiNotebook::DoGetBestSize() const
         // Store the current pane with its largest window dimensions
         layouts.push_back(wxAuiLayoutObject(bestPageSize, pInfo));
     }
+
+    if ( layouts.empty() )
+        return wxSize(0, 0);
+
     wxVectorSort(layouts);
 
     /*
