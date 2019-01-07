@@ -106,6 +106,39 @@ private:
     QPen pen;
 };
 
+class WXDLLIMPEXP_CORE wxQtBitmapData : public wxGraphicsBitmapData
+{
+public:
+    wxQtBitmapData(wxGraphicsRenderer* renderer, QPixmap* pixmap) :
+        wxGraphicsBitmapData(renderer),
+        m_pixmap(pixmap)
+    {
+    }
+    wxQtBitmapData(wxGraphicsRenderer* renderer, const wxBitmap &bmp) :
+        wxGraphicsBitmapData(renderer),
+        m_pixmap(bmp.GetHandle())
+    {
+    }
+
+    QPixmap* GetPixmap() const
+    {
+        return m_pixmap;
+    }
+
+    virtual void* GetNativeBitmap() const wxOVERRIDE
+    {
+        return m_pixmap;
+    }
+
+#if wxUSE_IMAGE
+    //wxImage ConvertToImage() const;
+#endif // wxUSE_IMAGE
+
+private:
+    QPixmap* m_pixmap;
+};
+
+
 class WXDLLIMPEXP_CORE wxQtMatrixData : public wxGraphicsMatrixData
 {
 public:
@@ -721,6 +754,8 @@ public:
 
 	virtual void DrawBitmap(const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
 	{
+        const QPixmap* pixmap = static_cast<const wxQtBitmapData*>(bmp.GetBitmapData())->GetPixmap();
+        m_qtPainter->drawPixmap(x, y, w, h, *pixmap);
 	}
 
     void DoDrawBitmap(const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h, bool useMask) const
@@ -1055,7 +1090,7 @@ wxGraphicsBitmap wxQtGraphicsRenderer::CreateBitmap(const wxBitmap& bmp)
 	wxGraphicsBitmap p;
 	if (bmp.IsOk())
 	{
-		//p.SetRefData(new wxCairoBitmapData(this, bmp));
+		p.SetRefData(new wxQtBitmapData(this, bmp));
 	}
 	return p;
 }
@@ -1068,7 +1103,7 @@ wxGraphicsBitmap wxQtGraphicsRenderer::CreateBitmapFromImage(const wxImage& imag
 
 	if (image.IsOk())
 	{
-		//bmp.SetRefData(new wxCairoBitmapData(this, image));
+		bmp.SetRefData(new wxQtBitmapData(this, image));
 	}
 
 	return bmp;
@@ -1094,7 +1129,7 @@ wxGraphicsBitmap wxQtGraphicsRenderer::CreateBitmapFromNativeBitmap(void* bitmap
 	wxGraphicsBitmap p;
 	if (bitmap != NULL)
 	{
-		//p.SetRefData(new wxCairoBitmapData(this, (cairo_surface_t*)bitmap));
+		p.SetRefData(new wxQtBitmapData(this, (QPixmap*)bitmap));
 	}
 	return p;
 }
@@ -1104,48 +1139,24 @@ wxQtGraphicsRenderer::CreateSubBitmap(const wxGraphicsBitmap& bitmap,
 wxDouble x, wxDouble y,
 wxDouble w, wxDouble h)
 {
-//	wxCHECK_MSG(!bitmap.IsNull(), wxNullGraphicsBitmap, wxS("Invalid bitmap"));
-//
-//	wxCairoBitmapData* dataSrc = static_cast<wxCairoBitmapData*>(bitmap.GetRefData());
-//	cairo_surface_t* srcSurface = dataSrc->GetCairoSurface();
-//	wxCHECK_MSG(srcSurface, wxNullGraphicsBitmap, wxS("Invalid bitmap"));
-//
-//	int srcWidth = cairo_image_surface_get_width(srcSurface);
-//	int srcHeight = cairo_image_surface_get_height(srcSurface);
-//
-//	int dstWidth = wxRound(w);
-//	int dstHeight = wxRound(h);
-//
-//	wxCHECK_MSG(x >= 0.0 && y >= 0.0 && dstWidth > 0 && dstHeight > 0 &&
-//		x + dstWidth <= srcWidth && y + dstHeight <= srcHeight,
-//		wxNullGraphicsBitmap, wxS("Invalid bitmap region"));
-//
-//	cairo_surface_t* dstSurface;
-//#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
-//	if (cairo_version() >= CAIRO_VERSION_ENCODE(1, 12, 0))
-//	{
-//		dstSurface = cairo_surface_create_similar_image(srcSurface,
-//			cairo_image_surface_get_format(srcSurface),
-//			dstWidth, dstHeight);
-//	}
-//	else
-//#endif // Cairo 1.12
-//	{
-//		dstSurface = cairo_surface_create_similar(srcSurface,
-//			CAIRO_CONTENT_COLOR_ALPHA,
-//			dstWidth, dstHeight);
-//	}
-//
-//	cairo_t* cr = cairo_create(dstSurface);
-//	cairo_set_source_surface(cr, srcSurface, -x, -y);
-//
-//	cairo_rectangle(cr, 0.0, 0.0, dstWidth, dstHeight);
-//	cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-//	cairo_fill(cr);
-//	cairo_destroy(cr);
-//
+    wxCHECK_MSG(!bitmap.IsNull(), wxNullGraphicsBitmap, wxS("Invalid bitmap"));
+
+    const QPixmap* source_pixmap = static_cast<const wxQtBitmapData*>(bitmap.GetBitmapData())->GetPixmap();
+    wxCHECK_MSG(source_pixmap, wxNullGraphicsBitmap, wxS("Invalid bitmap"));
+
+    const int srcWidth = source_pixmap->width();
+    const int srcHeight = source_pixmap->height();
+    const int dstWidth = wxRound(w);
+    const int dstHeight = wxRound(h);
+
+    wxCHECK_MSG(x >= 0.0 && y >= 0.0 && dstWidth > 0 && dstHeight > 0 &&
+    	    x + dstWidth <= srcWidth && y + dstHeight <= srcHeight,
+    	    wxNullGraphicsBitmap, wxS("Invalid bitmap region"));
+
+    QPixmap* sub_pixmap = new QPixmap(source_pixmap->copy(x, y, w, h));
+
 	wxGraphicsBitmap bmpRes;
-	//bmpRes.SetRefData(new wxCairoBitmapData(this, dstSurface));
+	bmpRes.SetRefData(new wxQtBitmapData(this, sub_pixmap));
 	return bmpRes;
 }
 
