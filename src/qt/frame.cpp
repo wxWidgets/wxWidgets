@@ -179,7 +179,7 @@ void wxFrame::DoGetClientSize(int *width, int *height) const
         }
 
 
-        if ( QMenuBar *qmb = GetQMainWindow()->menuBar() )
+        if ( QWidget *qmb = GetQMainWindow()->menuWidget() )
         {
             *height -= qmb->geometry().height();
         }
