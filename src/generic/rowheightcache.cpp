@@ -325,3 +325,8 @@ void HeightCache::Clear()
     }
     m_heightToRowRange.clear();
 }
+
+HeightCache::~HeightCache()
+{
+    Clear();
+}

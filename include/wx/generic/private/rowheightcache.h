@@ -131,6 +131,7 @@ WX_DECLARE_HASH_MAP(unsigned int, RowRanges*, wxIntegerHash, wxIntegerEqual,
 class WXDLLIMPEXP_CORE HeightCache
 {
 public:
+    ~HeightCache();
     bool GetLineStart(unsigned int row, int& start);
     bool GetLineHeight(unsigned int row, int& height);
     bool GetLineAt(int y, unsigned int& row);
