@@ -321,7 +321,7 @@ private:
             else if ( i == colCount-1 )
             {
                 // Compensate for the internal border and scrollbar
-                int margin = pg->GetMarginWidth() + borderWidth + sbWidth;
+                int margin = borderWidth;
 
                 colWidth += margin;
                 colMinWidth += margin;
@@ -378,8 +378,12 @@ private:
             }
             else if ( evtType == wxEVT_HEADER_BEGIN_RESIZE )
             {
+                // Don't allow resizing the rightmost column
+                // (like it's not allowed for the rightmost wxPropertyGrid splitter)
+                if ( col == (int)m_page->GetColumnCount() - 1 )
+                    hcEvent->Veto();
                 // Never allow column resize if layout is static
-                if ( m_manager->HasFlag(wxPG_STATIC_SPLITTER) )
+                else if ( m_manager->HasFlag(wxPG_STATIC_SPLITTER) )
                     hcEvent->Veto();
                 // Allow application to veto dragging
                 else if ( pg->SendEvent(wxEVT_PG_COL_BEGIN_DRAG,
@@ -1936,6 +1940,7 @@ void wxPropertyGridManager::ReconnectEventHandlers(wxWindowID oldId, wxWindowID 
                oldId);
         Unbind(wxEVT_PG_COL_DRAGGING, &wxPropertyGridManager::OnPGColDrag, this,
                oldId);
+        Unbind(wxEVT_PG_HSCROLL, &wxPropertyGridManager::OnPGScrollH, this, oldId);
     }
 
     if (newId != wxID_NONE)
@@ -1944,6 +1949,7 @@ void wxPropertyGridManager::ReconnectEventHandlers(wxWindowID oldId, wxWindowID 
              newId);
         Bind(wxEVT_PG_COL_DRAGGING, &wxPropertyGridManager::OnPGColDrag, this,
              newId);
+        Bind(wxEVT_PG_HSCROLL, &wxPropertyGridManager::OnPGScrollH, this, newId);
     }
 }
 
@@ -1968,6 +1974,16 @@ wxPropertyGridManager::OnPGColDrag( wxPropertyGridEvent& WXUNUSED(event) )
     if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
         m_pHeaderCtrl->OnColumWidthsChanged();
 #endif
+}
+
+void wxPropertyGridManager::OnPGScrollH(wxPropertyGridEvent& evt)
+{
+#if wxUSE_HEADERCTRL
+    if ( m_pHeaderCtrl )
+    {
+        m_pHeaderCtrl->ScrollWindow(evt.GetInt(), 0);
+    }
+#endif // wxUSE_HEADERCTRL
 }
 
 // -----------------------------------------------------------------------

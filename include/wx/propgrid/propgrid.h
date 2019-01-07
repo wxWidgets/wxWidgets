@@ -1456,7 +1456,10 @@ public:
     virtual bool SetFont( const wxFont& font ) wxOVERRIDE;
     virtual void SetExtraStyle( long exStyle ) wxOVERRIDE;
     virtual bool Reparent( wxWindowBase *newParent ) wxOVERRIDE;
-
+    virtual void ScrollWindow(int dx, int dy, const wxRect* rect) wxOVERRIDE;
+    virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
+                               int noUnitsX, int noUnitsY,
+                               int xPos, int yPos, bool noRefresh) wxOVERRIDE;
 protected:
     virtual void DoThaw() wxOVERRIDE;
 
@@ -1928,6 +1931,8 @@ protected:
                     unsigned int selFlags = wxPG_SEL_NOVALIDATE,
                     unsigned int column = 1 );
 
+    void SendEvent(wxEventType eventType, int intVal);
+
     // This function only moves focus to the wxPropertyGrid if it already
     // was on one of its child controls.
     void SetFocusOnCanvas();
@@ -2025,6 +2030,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
                           wxEVT_PG_COL_DRAGGING, wxPropertyGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
                           wxEVT_PG_COL_END_DRAG, wxPropertyGridEvent );
+wxDECLARE_EVENT(wxEVT_PG_HSCROLL, wxPropertyGridEvent);
 
 #else
     enum {

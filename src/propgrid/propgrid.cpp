@@ -1276,6 +1276,38 @@ bool wxPropertyGrid::Reparent( wxWindowBase *newParent )
 }
 
 // -----------------------------------------------------------------------
+
+void wxPropertyGrid::ScrollWindow(int dx, int dy, const wxRect* rect)
+{
+    wxControl::ScrollWindow(dx, dy, rect);
+    if ( dx != 0 )
+    {
+        // Notify wxPropertyGridManager about the grid being scrolled horizontally
+        // to scroll the column header, if present.
+        SendEvent(wxEVT_PG_HSCROLL, dx);
+    }
+}
+// -----------------------------------------------------------------------
+
+void wxPropertyGrid::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
+                                   int noUnitsX, int noUnitsY,
+                                   int xPos, int yPos, bool noRefresh)
+{
+    int oldX;
+    CalcUnscrolledPosition(0, 0, &oldX, NULL);
+    wxScrollHelper::SetScrollbars(pixelsPerUnitX, pixelsPerUnitY,
+                                  noUnitsX, noUnitsY, xPos, yPos, noRefresh);
+    int newX;
+    CalcUnscrolledPosition(0, 0, &newX, NULL);
+    if ( newX != oldX )
+    {
+        // Notify wxPropertyGridManager about the grid being scrolled horizontally
+        // to scroll the column header, if present.
+        SendEvent(wxEVT_PG_HSCROLL, oldX - newX);
+    }
+}
+
+// -----------------------------------------------------------------------
 // wxPropertyGrid Font and Colour Methods
 // -----------------------------------------------------------------------
 
@@ -4752,6 +4784,21 @@ bool wxPropertyGrid::SendEvent( int eventType, wxPGProperty* p,
     return evt.WasVetoed();
 }
 
+void wxPropertyGrid::SendEvent(wxEventType eventType, int intVal)
+{
+    wxPropertyGridEvent evt(eventType, m_eventObject->GetId());
+    evt.SetPropertyGrid(this);
+    evt.SetEventObject(m_eventObject);
+    evt.SetProperty(NULL);
+    evt.SetColumn(0);
+    evt.SetInt(intVal);
+
+    wxPropertyGridEvent* prevProcessedEvent = m_processedEvent;
+    m_processedEvent = &evt;
+    m_eventObject->HandleWindowEvent(evt);
+    m_processedEvent = prevProcessedEvent;
+}
+
 // -----------------------------------------------------------------------
 
 // Return false if should be skipped
@@ -6276,6 +6323,7 @@ wxDEFINE_EVENT( wxEVT_PG_LABEL_EDIT_ENDING, wxPropertyGridEvent );
 wxDEFINE_EVENT( wxEVT_PG_COL_BEGIN_DRAG, wxPropertyGridEvent );
 wxDEFINE_EVENT( wxEVT_PG_COL_DRAGGING, wxPropertyGridEvent );
 wxDEFINE_EVENT( wxEVT_PG_COL_END_DRAG, wxPropertyGridEvent );
+wxDEFINE_EVENT( wxEVT_PG_HSCROLL, wxPropertyGridEvent);
 
 // -----------------------------------------------------------------------
 

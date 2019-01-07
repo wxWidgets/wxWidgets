@@ -544,6 +544,7 @@ protected:
     void OnResize( wxSizeEvent& event );
     void OnPropertyGridSelect( wxPropertyGridEvent& event );
     void OnPGColDrag( wxPropertyGridEvent& event );
+    void OnPGScrollH(wxPropertyGridEvent& evt);
 
 
     wxPropertyGrid* m_pPropGrid;
