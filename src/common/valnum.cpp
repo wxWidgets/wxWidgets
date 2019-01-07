@@ -56,23 +56,19 @@ void wxNumValidatorBase::SetWindow(wxWindow *win)
 {
     wxValidator::SetWindow(win);
 
+    bool isValidWindow = false;
+
 #if wxUSE_TEXTCTRL
     if ( wxDynamicCast(m_validatorWindow, wxTextCtrl) )
-    {
-        m_validatorWindow->Bind(wxEVT_TEXT, &wxNumValidatorBase::OnValueChanged, this);
-
-        if ( !HasFlag(wxNUM_VAL_CUSTOM_ERROR_REPORT) )
-        {
-            m_validatorWindow->Bind(wxEVT_VALIDATE,
-                &wxNumValidatorBase::OnValidationFailed, this);
-        }
-
-        return;
-    }
+        isValidWindow = true;
 #endif // wxUSE_TEXTCTRL
 
 #if wxUSE_COMBOBOX
     if ( wxDynamicCast(m_validatorWindow, wxComboBox) )
+        isValidWindow = true;
+#endif // wxUSE_COMBOBOX
+
+    if ( isValidWindow )
     {
         m_validatorWindow->Bind(wxEVT_TEXT, &wxNumValidatorBase::OnValueChanged, this);
 
@@ -84,7 +80,6 @@ void wxNumValidatorBase::SetWindow(wxWindow *win)
 
         return;
     }
-#endif // wxUSE_COMBOBOX
 
     wxFAIL_MSG("Can only be used with wxTextCtrl or wxComboBox");
 }
