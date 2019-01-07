@@ -115,20 +115,25 @@ void wxFrame::SetStatusBar( wxStatusBar *statusBar )
 
 void wxFrame::SetToolBar(wxToolBar *toolbar)
 {
-    int area = 0;
     if ( toolbar != NULL )
     {
-        if (toolbar->HasFlag(wxTB_LEFT))   area |= Qt::LeftToolBarArea;
-        if (toolbar->HasFlag(wxTB_RIGHT))  area |= Qt::RightToolBarArea;
-        if (toolbar->HasFlag(wxTB_TOP))    area |= Qt::TopToolBarArea;
-        if (toolbar->HasFlag(wxTB_BOTTOM)) area |= Qt::BottomToolBarArea;
+        if ( m_frameToolBar != NULL )
+        {
+            GetQMainWindow()->removeToolBar(m_frameToolBar->GetQToolBar());
+        }
+        else
+        {
+            int area = 0;
 
-        GetQMainWindow()->addToolBar((Qt::ToolBarArea)area, toolbar->GetQToolBar());
+            if ( toolbar->HasFlag(wxTB_LEFT) )   area |= Qt::LeftToolBarArea;
+            if ( toolbar->HasFlag(wxTB_RIGHT) )  area |= Qt::RightToolBarArea;
+            if ( toolbar->HasFlag(wxTB_TOP) )    area |= Qt::TopToolBarArea;
+            if ( toolbar->HasFlag(wxTB_BOTTOM) ) area |= Qt::BottomToolBarArea;
+
+            GetQMainWindow()->addToolBar( (Qt::ToolBarArea)area, toolbar->GetQToolBar() );
+        }
     }
-    else if ( m_frameToolBar != NULL )
-    {
-        GetQMainWindow()->removeToolBar(m_frameToolBar->GetQToolBar());
-    }
+
     wxFrameBase::SetToolBar( toolbar );
 }
 
