@@ -899,8 +899,6 @@ public:
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxQtGraphicsRenderer, wxGraphicsRenderer);
 
-static wxQtGraphicsRenderer gs_cairoGraphicsRenderer;
-
 wxGraphicsContext * wxQtGraphicsRenderer::CreateContext(const wxWindowDC& dc)
 {
 	return new wxQtGraphicsContext(this, dc);
