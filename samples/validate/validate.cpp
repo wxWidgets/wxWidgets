@@ -308,6 +308,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     const wxSizerFlags center = wxSizerFlags().CenterVertical();
 
     wxIntegerValidator<int> valInt(&g_data.m_intValue,
+                                   wxNUM_VAL_CUSTOM_ERROR_REPORT |
                                    wxNUM_VAL_THOUSANDS_SEPARATOR |
                                    wxNUM_VAL_ZERO_AS_BLANK);
     valInt.SetMin(0); // Only allow positive numbers

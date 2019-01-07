@@ -60,6 +60,13 @@ void wxNumValidatorBase::SetWindow(wxWindow *win)
     if ( wxDynamicCast(m_validatorWindow, wxTextCtrl) )
     {
         m_validatorWindow->Bind(wxEVT_TEXT, &wxNumValidatorBase::OnValueChanged, this);
+
+        if ( !HasFlag(wxNUM_VAL_CUSTOM_ERROR_REPORT) )
+        {
+            m_validatorWindow->Bind(wxEVT_VALIDATE,
+                &wxNumValidatorBase::OnValidationFailed, this);
+        }
+
         return;
     }
 #endif // wxUSE_TEXTCTRL
@@ -68,6 +75,13 @@ void wxNumValidatorBase::SetWindow(wxWindow *win)
     if ( wxDynamicCast(m_validatorWindow, wxComboBox) )
     {
         m_validatorWindow->Bind(wxEVT_TEXT, &wxNumValidatorBase::OnValueChanged, this);
+
+        if ( !HasFlag(wxNUM_VAL_CUSTOM_ERROR_REPORT) )
+        {
+            m_validatorWindow->Bind(wxEVT_VALIDATE,
+                &wxNumValidatorBase::OnValidationFailed, this);
+        }
+
         return;
     }
 #endif // wxUSE_COMBOBOX
@@ -235,6 +249,13 @@ void wxNumValidatorBase::OnValueChanged(wxCommandEvent& event)
     }
 
     event.Skip();
+}
+
+void wxNumValidatorBase::OnValidationFailed(wxValidationErrorEvent& event)
+{
+    // TODO:
+    //   - make the control (visually) reflect the validation state.
+    event.Skip(false);
 }
 
 // ============================================================================
