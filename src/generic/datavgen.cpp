@@ -710,7 +710,9 @@ public:
     bool Cleared();
     void Resort()
     {
-        m_rowHeightCache->Clear();
+        if ( m_rowHeightCache )
+            m_rowHeightCache->Clear();
+
         if (!IsVirtualList())
         {
             m_root->Resort(this);
@@ -2752,7 +2754,7 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
     }
     else
     {
-        if (GetOwner()->HasFlag(wxDV_VARIABLE_LINE_HEIGHT))
+        if ( m_rowHeightCache )
         {
             // specific position (row) is unclear, so clear whole height cache
             m_rowHeightCache->Clear();
@@ -2899,7 +2901,7 @@ bool wxDataViewMainWindow::ItemDeleted(const wxDataViewItem& parent,
             return true;
         }
 
-        if (GetOwner()->HasFlag(wxDV_VARIABLE_LINE_HEIGHT))
+        if ( m_rowHeightCache )
             m_rowHeightCache->Remove(GetRowByItem(parent) + itemPosInNode);
 
         // Delete the item from wxDataViewTreeNode representation:
@@ -2966,7 +2968,7 @@ bool wxDataViewMainWindow::DoItemChanged(const wxDataViewItem & item, int view_c
 {
     if ( !IsVirtualList() )
     {
-        if (GetOwner()->HasFlag(wxDV_VARIABLE_LINE_HEIGHT))
+        if ( m_rowHeightCache )
             m_rowHeightCache->Remove(GetRowByItem(item));
 
         // Move this node to its new correct place after it was updated.
@@ -3018,7 +3020,9 @@ bool wxDataViewMainWindow::Cleared()
     DestroyTree();
     m_selection.Clear();
     m_currentRow = (unsigned)-1;
-    m_rowHeightCache->Clear();
+
+    if ( m_rowHeightCache )
+        m_rowHeightCache->Clear();
 
     if (GetModel())
     {
@@ -3348,7 +3352,7 @@ wxRect wxDataViewMainWindow::GetLinesRect( unsigned int rowFrom, unsigned int ro
 int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
 {
     // check for the easy case first
-    if (!GetOwner()->HasFlag(wxDV_VARIABLE_LINE_HEIGHT))
+    if ( !m_rowHeightCache || !GetOwner()->HasFlag(wxDV_VARIABLE_LINE_HEIGHT) )
         return row * m_lineHeight;
 
     int start = 0;
@@ -3378,7 +3382,7 @@ int wxDataViewMainWindow::GetLineStart( unsigned int row ) const
 int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
 {
     // check for the easy case first
-    if ( !GetOwner()->HasFlag(wxDV_VARIABLE_LINE_HEIGHT) )
+    if ( !m_rowHeightCache || !GetOwner()->HasFlag(wxDV_VARIABLE_LINE_HEIGHT) )
         return y / m_lineHeight;
 
     unsigned int row = 0;
@@ -3430,7 +3434,7 @@ int wxDataViewMainWindow::GetLineAt( unsigned int y ) const
 int wxDataViewMainWindow::GetLineHeight( unsigned int row ) const
 {
     // check for the easy case first
-    if (!GetOwner()->HasFlag(wxDV_VARIABLE_LINE_HEIGHT))
+    if ( !m_rowHeightCache || !GetOwner()->HasFlag(wxDV_VARIABLE_LINE_HEIGHT) )
         return m_lineHeight;
 
     int height = 0;
@@ -3613,7 +3617,7 @@ void wxDataViewMainWindow::Expand( unsigned int row )
     if (!node->HasChildren())
         return;
 
-    if (GetOwner()->HasFlag(wxDV_VARIABLE_LINE_HEIGHT))
+    if ( m_rowHeightCache )
     {
         // Expand makes new rows visible thus we invalidates all following
         // rows in the height cache
@@ -3669,7 +3673,7 @@ void wxDataViewMainWindow::Collapse(unsigned int row)
     if (!node->HasChildren())
         return;
 
-    if (GetOwner()->HasFlag(wxDV_VARIABLE_LINE_HEIGHT))
+    if ( m_rowHeightCache )
     {
         // Collapse hides rows thus we invalidates all following
         // rows in the height cache
