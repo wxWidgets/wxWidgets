@@ -10,7 +10,7 @@
 
 #include "wx/palette.h"
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxPalette,wxPaletteBase)
+wxIMPLEMENT_DYNAMIC_CLASS(wxPalette,wxGDIObject)
 
 wxPalette::wxPalette()
 {

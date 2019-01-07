@@ -111,7 +111,7 @@ wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
     PostCreation();
 }
 
-wxIMPLEMENT_CLASS(wxMessageDialog,wxMessageDialogBase);
+wxIMPLEMENT_CLASS(wxMessageDialog,wxDialog);
 
 int wxMessageDialog::ShowModal()
 {
