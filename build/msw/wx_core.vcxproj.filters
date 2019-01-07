@@ -603,6 +603,9 @@
     <ClCompile Include="..\..\src\generic\richtooltipg.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\generic\rowheightcache.cpp">
+      <Filter>Generic Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\generic\sashwin.cpp">
       <Filter>Generic Sources</Filter>
     </ClCompile>
