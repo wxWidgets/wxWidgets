@@ -54,7 +54,6 @@ public:
     virtual float GetFractionalPointSize() const wxOVERRIDE;
     virtual wxSize GetPixelSize() const wxOVERRIDE;
     virtual wxFontStyle GetStyle() const;
-    virtual wxFontWeight GetWeight() const wxOVERRIDE;
     virtual int GetNumericWeight() const wxOVERRIDE;
     virtual bool GetUnderlined() const;
     virtual wxString GetFaceName() const;

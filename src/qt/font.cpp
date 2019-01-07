@@ -255,11 +255,6 @@ wxFontStyle wxFont::GetStyle() const
     return M_FONTDATA.GetStyle();
 }
 
-wxFontWeight wxFont::GetWeight() const
-{
-    return M_FONTDATA.GetWeight();
-}
-
 int wxFont::GetNumericWeight() const
 {
     return M_FONTDATA.GetNumericWeight();
