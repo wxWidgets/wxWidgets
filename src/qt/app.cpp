@@ -15,7 +15,7 @@
 #include <QtCore/QStringList>
 #include <QtWidgets/QApplication>
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxAppBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler);
 
 wxApp::wxApp()
 {

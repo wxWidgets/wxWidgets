@@ -43,6 +43,8 @@ static void SetBrushColour( QPainter *qtPainter, QColor col )
     qtPainter->setBrush( b );
 }
 
+wxIMPLEMENT_CLASS(wxQtDCImpl,wxDCImpl);
+
 wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     : wxDCImpl( owner )
 {

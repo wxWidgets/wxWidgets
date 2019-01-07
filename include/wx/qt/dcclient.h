@@ -20,6 +20,10 @@ public:
 
 protected:
     wxWindow *m_window;
+
+private:
+    wxDECLARE_CLASS(wxWindowDCImpl);
+    wxDECLARE_NO_COPY_CLASS(wxWindowDCImpl);
 };
 
 
@@ -30,6 +34,9 @@ public:
     wxClientDCImpl( wxDC *owner, wxWindow *win );
 
     ~wxClientDCImpl();
+private:
+    wxDECLARE_CLASS(wxClientDCImpl);
+    wxDECLARE_NO_COPY_CLASS(wxClientDCImpl);
 };
 
 
@@ -38,6 +45,9 @@ class WXDLLIMPEXP_CORE wxPaintDCImpl : public wxWindowDCImpl
 public:
     wxPaintDCImpl( wxDC *owner );
     wxPaintDCImpl( wxDC *owner, wxWindow *win );
+private:
+    wxDECLARE_CLASS(wxPaintDCImpl);
+    wxDECLARE_NO_COPY_CLASS(wxPaintDCImpl);
 };
 
 #endif // _WX_QT_DCCLIENT_H_

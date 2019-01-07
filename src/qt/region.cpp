@@ -53,6 +53,8 @@ class wxRegionRefData: public wxGDIRefData
 
 #define M_REGIONDATA ((wxRegionRefData *)m_refData)->m_qtRegion
 
+wxIMPLEMENT_DYNAMIC_CLASS(wxRegion,wxGDIObject);
+
 wxRegion::wxRegion()
 {
     m_refData = new wxRegionRefData();
@@ -254,6 +256,8 @@ const QRegion &wxRegion::GetHandle() const
 }
 
 //##############################################################################
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxRegionIterator,wxObject);
 
 wxRegionIterator::wxRegionIterator()
 {

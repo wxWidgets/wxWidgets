@@ -72,6 +72,7 @@ public:
     virtual QWidget *GetHandle() const;
 
 private:
+    wxDECLARE_DYNAMIC_CLASS(wxToggleButton);
 
 };
 

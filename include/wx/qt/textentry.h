@@ -41,8 +41,6 @@ protected:
     virtual void DoSetValue(const wxString& value, int flags=0);
 
     virtual wxWindow *GetEditableWindow();
-
-private:
 };
 
 #endif // _WX_QT_TEXTENTRY_H_

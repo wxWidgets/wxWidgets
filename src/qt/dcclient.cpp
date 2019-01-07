@@ -27,6 +27,8 @@
 
 //##############################################################################
 
+wxIMPLEMENT_CLASS(wxWindowDCImpl,wxQtDCImpl);
+
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner )
     : wxQtDCImpl( owner )
 {
@@ -59,6 +61,7 @@ wxWindowDCImpl::~wxWindowDCImpl()
 
 //##############################################################################
 
+wxIMPLEMENT_CLASS(wxClientDCImpl,wxWindowDCImpl);
 
 wxClientDCImpl::wxClientDCImpl( wxDC *owner )
     : wxWindowDCImpl( owner )
@@ -117,6 +120,8 @@ wxClientDCImpl::~wxClientDCImpl()
 }
 
 //##############################################################################
+
+wxIMPLEMENT_CLASS(wxPaintDCImpl,wxClientDCImpl);
 
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner )
     : wxWindowDCImpl( owner )

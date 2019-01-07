@@ -129,6 +129,9 @@ private:
     QColor *m_qtPenColor;
     QColor *m_qtBrushColor;
     void ApplyRasterColourOp();
+
+    wxDECLARE_CLASS(wxQtDCImpl);
+    wxDECLARE_NO_COPY_CLASS(wxQtDCImpl);
     
 };
 

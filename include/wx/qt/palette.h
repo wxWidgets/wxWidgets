@@ -23,6 +23,9 @@ protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
 
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxPalette);
+
 };
 
 #endif // _WX_QT_PALETTE_H_
