@@ -287,6 +287,9 @@ void wxWindowQt::PostCreation(bool generic)
     SetForegroundColour(wxColour(GetHandle()->palette().foreground().color()));
 
     GetHandle()->setFont( wxWindowBase::GetFont().GetHandle() );
+
+    wxWindowCreateEvent event(this);
+    wxPostEvent(this, event);
 }
 
 void wxWindowQt::AddChild( wxWindowBase *child )
