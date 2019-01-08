@@ -14,6 +14,7 @@
 
 #include <QtGui/QPicture>
 #include <QtGui/QPainter>
+#include <QtWidgets/QScrollBar>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
@@ -66,6 +67,69 @@ class wxQtScrollArea : public wxQtEventSignalHandler< QScrollArea, wxWindowQt >
 wxQtScrollArea::wxQtScrollArea( wxWindowQt *parent, wxWindowQt *handler )
     : wxQtEventSignalHandler< QScrollArea, wxWindowQt >( parent, handler )
 {
+}
+
+class wxQtInternalScrollBar : public wxQtEventSignalHandler< QScrollBar, wxWindowQt >
+{
+public:
+    wxQtInternalScrollBar(wxWindowQt *parent, wxWindowQt *handler );
+    void actionTriggered( int action );
+    void sliderReleased();
+    void valueChanged( int position );
+};
+
+wxQtInternalScrollBar::wxQtInternalScrollBar( wxWindowQt *parent, wxWindowQt *handler )
+    : wxQtEventSignalHandler< QScrollBar, wxWindowQt >( parent, handler )
+{
+    connect( this, &QScrollBar::actionTriggered, this, &wxQtInternalScrollBar::actionTriggered );
+    connect( this, &QScrollBar::sliderReleased, this, &wxQtInternalScrollBar::sliderReleased );
+}
+
+
+void wxQtInternalScrollBar::actionTriggered( int action )
+{
+    wxEventType eventType = wxEVT_NULL;
+    switch( action )
+    {
+        case QAbstractSlider::SliderSingleStepAdd:
+            eventType = wxEVT_SCROLLWIN_LINEDOWN;
+            break;
+        case QAbstractSlider::SliderSingleStepSub:
+            eventType = wxEVT_SCROLLWIN_LINEUP;
+            break;
+        case QAbstractSlider::SliderPageStepAdd:
+            eventType = wxEVT_SCROLLWIN_PAGEDOWN;
+            break;
+        case QAbstractSlider::SliderPageStepSub:
+            eventType = wxEVT_SCROLLWIN_PAGEUP;
+            break;
+        case QAbstractSlider::SliderToMinimum:
+            eventType = wxEVT_SCROLLWIN_TOP;
+            break;
+        case QAbstractSlider::SliderToMaximum:
+            eventType = wxEVT_SCROLLWIN_BOTTOM;
+            break;
+        case QAbstractSlider::SliderMove:
+            eventType = wxEVT_SCROLLWIN_THUMBTRACK;
+            break;
+        default:
+            return;
+    }
+
+    if ( GetHandler() )
+    {
+        wxScrollWinEvent e( eventType, sliderPosition(), wxQtConvertOrientation( orientation() ) );
+        EmitEvent( e );
+    }
+}
+
+void wxQtInternalScrollBar::sliderReleased()
+{
+    if ( GetHandler() )
+    {
+        wxScrollWinEvent e( wxEVT_SCROLLWIN_THUMBRELEASE, sliderPosition(), wxQtConvertOrientation( orientation() ) );
+        EmitEvent( e );
+    }
 }
 
 #if wxUSE_ACCEL || defined( Q_MOC_RUN )
@@ -487,11 +551,11 @@ void wxWindowQt::DoGetTextExtent(const wxString& string, int *x, int *y, int *de
 
 /* Returns a scrollbar for the given orientation, or NULL if the scrollbar
  * has not been previously created and create is false */
-wxScrollBar *wxWindowQt::QtGetScrollBar( int orientation ) const
+QScrollBar *wxWindowQt::QtGetScrollBar( int orientation ) const
 {
     wxCHECK_MSG( CanScroll( orientation ), NULL, "Window can't scroll in that orientation" );
 
-    wxScrollBar *scrollBar = NULL;
+    QScrollBar *scrollBar = NULL;
 
     if ( orientation == wxHORIZONTAL )
         scrollBar = m_horzScrollBar;
@@ -503,7 +567,7 @@ wxScrollBar *wxWindowQt::QtGetScrollBar( int orientation ) const
 
 /* Returns a new scrollbar for the given orientation, or set the scrollbar
  * passed as parameter */
-wxScrollBar *wxWindowQt::QtSetScrollBar( int orientation, wxScrollBar *scrollBar )
+QScrollBar *wxWindowQt::QtSetScrollBar( int orientation, QScrollBar *scrollBar )
 {
     QScrollArea *scrollArea = QtGetScrollBarsContainer();
     wxCHECK_MSG( scrollArea, NULL, "Window without scrolling area" );
@@ -511,30 +575,19 @@ wxScrollBar *wxWindowQt::QtSetScrollBar( int orientation, wxScrollBar *scrollBar
     // Create a new scrollbar if needed
     if ( !scrollBar )
     {
-        scrollBar = new wxScrollBar( const_cast< wxWindowQt* >( this ), wxID_ANY,
-                                     wxDefaultPosition, wxDefaultSize,
-                                     orientation == wxHORIZONTAL ? wxSB_HORIZONTAL : wxSB_VERTICAL);
-
-        // Connect scrollbar events to this window
-        scrollBar->Bind( wxEVT_SCROLL_LINEUP, &wxWindowQt::QtOnScrollBarEvent, this );
-        scrollBar->Bind( wxEVT_SCROLL_LINEDOWN, &wxWindowQt::QtOnScrollBarEvent, this );
-        scrollBar->Bind( wxEVT_SCROLL_PAGEUP, &wxWindowQt::QtOnScrollBarEvent, this );
-        scrollBar->Bind( wxEVT_SCROLL_PAGEDOWN, &wxWindowQt::QtOnScrollBarEvent, this );
-        scrollBar->Bind( wxEVT_SCROLL_TOP, &wxWindowQt::QtOnScrollBarEvent, this );
-        scrollBar->Bind( wxEVT_SCROLL_BOTTOM, &wxWindowQt::QtOnScrollBarEvent, this );
-        scrollBar->Bind( wxEVT_SCROLL_THUMBTRACK, &wxWindowQt::QtOnScrollBarEvent, this );
-        scrollBar->Bind( wxEVT_SCROLL_THUMBRELEASE, &wxWindowQt::QtOnScrollBarEvent, this );
+        scrollBar = new wxQtInternalScrollBar(this, this);
+        scrollBar->setOrientation( wxHORIZONTAL ? Qt::Horizontal : Qt::Vertical );
     }
 
     // Let Qt handle layout
     if ( orientation == wxHORIZONTAL )
     {
-        scrollArea->setHorizontalScrollBar( scrollBar->GetQScrollBar() );
+        scrollArea->setHorizontalScrollBar( scrollBar );
         m_horzScrollBar = scrollBar;
     }
     else
     {
-        scrollArea->setVerticalScrollBar( scrollBar->GetQScrollBar() );
+        scrollArea->setVerticalScrollBar( scrollBar );
         m_vertScrollBar = scrollBar;
     }
     return scrollBar;
@@ -546,7 +599,7 @@ void wxWindowQt::SetScrollbar( int orientation, int pos, int thumbvisible, int r
     wxCHECK_RET( CanScroll( orientation ), "Window can't scroll in that orientation" );
 
     //If not exist, create the scrollbar
-    wxScrollBar *scrollBar = QtGetScrollBar( orientation );
+    QScrollBar *scrollBar = QtGetScrollBar( orientation );
     if ( scrollBar == NULL )
         scrollBar = QtSetScrollBar( orientation );
 
@@ -554,79 +607,53 @@ void wxWindowQt::SetScrollbar( int orientation, int pos, int thumbvisible, int r
     // scrollBar == NULL and it is not a problem
     if ( scrollBar )
     {
-        scrollBar->SetScrollbar( pos, thumbvisible, range, thumbvisible, refresh );
-        if ( HasFlag( wxALWAYS_SHOW_SB ) && ( range == 0 ) )
+        scrollBar->setRange( 0, range - thumbvisible );
+        scrollBar->setPageStep( thumbvisible );
+        scrollBar->blockSignals( true );
+        scrollBar->setValue(pos);
+        scrollBar->blockSignals( false );
+        scrollBar->show();
+
+        if ( HasFlag(wxALWAYS_SHOW_SB) && (range == 0) )
         {
             // Disable instead of hide
-            scrollBar->GetHandle()->show();
-            scrollBar->GetHandle()->setEnabled( false );
+            scrollBar->setEnabled( false );
         }
         else
-            scrollBar->GetHandle()->setEnabled( true );
+            scrollBar->setEnabled( true );
     }
+
 }
 
 void wxWindowQt::SetScrollPos( int orientation, int pos, bool WXUNUSED( refresh ))
 {
-    wxScrollBar *scrollBar = QtGetScrollBar( orientation );
+    QScrollBar *scrollBar = QtGetScrollBar( orientation );
     if ( scrollBar )
-        scrollBar->SetThumbPosition( pos );
+        scrollBar->setValue( pos );
 }
 
 int wxWindowQt::GetScrollPos( int orientation ) const
 {
-    wxScrollBar *scrollBar = QtGetScrollBar( orientation );
+    QScrollBar *scrollBar = QtGetScrollBar( orientation );
     wxCHECK_MSG( scrollBar, 0, "Invalid scrollbar" );
 
-    return scrollBar->GetThumbPosition();
+    return scrollBar->value();
 }
 
 int wxWindowQt::GetScrollThumb( int orientation ) const
 {
-    wxScrollBar *scrollBar = QtGetScrollBar( orientation );
+    QScrollBar *scrollBar = QtGetScrollBar( orientation );
     wxCHECK_MSG( scrollBar, 0, "Invalid scrollbar" );
 
-    return scrollBar->GetThumbSize();
+    return scrollBar->pageStep();
 }
 
 int wxWindowQt::GetScrollRange( int orientation ) const
 {
-    wxScrollBar *scrollBar = QtGetScrollBar( orientation );
+    QScrollBar *scrollBar = QtGetScrollBar( orientation );
     wxCHECK_MSG( scrollBar, 0, "Invalid scrollbar" );
 
-    return scrollBar->GetRange();
-}
-
-// Handle event from scrollbars
-void wxWindowQt::QtOnScrollBarEvent( wxScrollEvent& event )
-{
-    wxEventType windowEventType = 0;
-
-    // Map the scroll bar event to the corresponding scroll window event:
-
-    wxEventType scrollBarEventType = event.GetEventType();
-    if ( scrollBarEventType == wxEVT_SCROLL_TOP )
-        windowEventType = wxEVT_SCROLLWIN_TOP;
-    else if ( scrollBarEventType == wxEVT_SCROLL_BOTTOM )
-        windowEventType = wxEVT_SCROLLWIN_BOTTOM;
-    else if ( scrollBarEventType == wxEVT_SCROLL_PAGEUP )
-        windowEventType = wxEVT_SCROLLWIN_PAGEUP;
-    else if ( scrollBarEventType == wxEVT_SCROLL_PAGEDOWN )
-        windowEventType = wxEVT_SCROLLWIN_PAGEDOWN;
-    else if ( scrollBarEventType == wxEVT_SCROLL_LINEUP )
-        windowEventType = wxEVT_SCROLLWIN_LINEUP;
-    else if ( scrollBarEventType == wxEVT_SCROLL_LINEDOWN )
-        windowEventType = wxEVT_SCROLLWIN_LINEDOWN;
-    else if ( scrollBarEventType == wxEVT_SCROLL_THUMBTRACK )
-        windowEventType = wxEVT_SCROLLWIN_THUMBTRACK;
-    else if ( scrollBarEventType == wxEVT_SCROLL_THUMBRELEASE )
-        windowEventType = wxEVT_SCROLLWIN_THUMBRELEASE;
-
-    if ( windowEventType != 0 )
-    {
-        wxScrollWinEvent e( windowEventType, event.GetPosition(), event.GetOrientation() );
-        ProcessWindowEvent( e );
-    }
+    return scrollBar->maximum();
 }
 
 // scroll window to the specified position
