@@ -758,7 +758,7 @@ public:
         @beginWxPerlOnly
         In wxPerl this function takes 4 arguments: @a id, @a lastid,
         @a type, @a method; if @a method is undef, the handler is
-        disconnected.}
+        disconnected.
         @endWxPerlOnly
 
         @see Bind<>()
