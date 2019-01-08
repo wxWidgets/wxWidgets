@@ -1117,8 +1117,6 @@ wxGraphicsBitmap wxQtGraphicsRenderer::CreateBitmapFromImage(const wxImage& imag
 
 wxImage wxQtGraphicsRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
 {
-	wxImage image;
-
     const QPixmap* pixmap = wxQtBitmapData::GetPixmapFromBitmap(bmp);
 
     wxBitmap bitmap(*pixmap);
