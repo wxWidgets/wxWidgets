@@ -15,9 +15,8 @@ class QShortcut;
 template < class T > class QList;
 
 class QWidget;
-class QScrollWindow;
-class QAbstractScrollArea;
 class QScrollArea;
+class QScrollBar;
 class QPicture;
 class QPainter;
 
@@ -215,12 +214,11 @@ private:
     void Init();
     QScrollArea *m_qtContainer;
 
-    wxScrollBar *m_horzScrollBar;
-    wxScrollBar *m_vertScrollBar;
-    void QtOnScrollBarEvent( wxScrollEvent& event );
-    
-    wxScrollBar *QtGetScrollBar( int orientation ) const;
-    wxScrollBar *QtSetScrollBar( int orientation, wxScrollBar *scrollBar=NULL );
+    QScrollBar *m_horzScrollBar;
+    QScrollBar *m_vertScrollBar;
+
+    QScrollBar *QtGetScrollBar( int orientation ) const;
+    QScrollBar *QtSetScrollBar( int orientation, QScrollBar *scrollBar=NULL );
 
     bool QtSetBackgroundStyle();
 
