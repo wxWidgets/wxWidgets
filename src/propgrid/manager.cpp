@@ -520,7 +520,7 @@ void wxPropertyGridManager::Init1()
 
     m_extraHeight = 0;
     m_dragStatus = 0;
-    m_onSplitter = 0;
+    m_onSplitter = false;
     m_iFlags = 0;
 }
 
@@ -2033,7 +2033,7 @@ void wxPropertyGridManager::OnMouseEntry( wxMouseEvent& WXUNUSED(event) )
     // Correct cursor. This is required at least for wxGTK, for which
     // setting button's cursor to *wxSTANDARD_CURSOR does not work.
     SetCursor( wxNullCursor );
-    m_onSplitter = 0;
+    m_onSplitter = false;
 }
 
 // -----------------------------------------------------------------------
@@ -2079,7 +2079,7 @@ void wxPropertyGridManager::OnMouseMove( wxMouseEvent &event )
         if ( y >= m_splitterY && y < (m_splitterY+m_splitterHeight+2) )
         {
             SetCursor ( m_cursorSizeNS );
-            m_onSplitter = 1;
+            m_onSplitter = true;
         }
         else
         {
@@ -2087,7 +2087,7 @@ void wxPropertyGridManager::OnMouseMove( wxMouseEvent &event )
             {
                 SetCursor ( wxNullCursor );
             }
-            m_onSplitter = 0;
+            m_onSplitter = false;
         }
     }
 }

@@ -589,7 +589,7 @@ protected:
 
     unsigned char   m_dragStatus;
 
-    unsigned char   m_onSplitter;
+    bool            m_onSplitter;
 
     bool            m_showHeader;
 
