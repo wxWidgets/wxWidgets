@@ -842,7 +842,13 @@ protected:
         m_qtPainter->setPen(QPen(font_data->GetColor()));
         QFontMetrics metrics = m_qtPainter->fontMetrics();
 
-        m_qtPainter->drawText(x, y+metrics.ascent(), QString(str));
+        wxStringTokenizer tokenizer(str, "\n");
+        while(tokenizer.HasMoreTokens())
+        {
+            const wxString line = tokenizer.GetNextToken();
+            m_qtPainter->drawText(x, y + metrics.ascent(), QString(line));
+            y += metrics.lineSpacing();
+        }
 	}
 
 	QPainter* m_qtPainter;
