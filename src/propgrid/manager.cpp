@@ -242,8 +242,11 @@ public:
 
     virtual ~wxPGHeaderCtrl()
     {
-        for (size_t i = 0; i < m_columns.size(); i++ )
-            delete m_columns[i];
+        for (wxVector<wxHeaderColumnSimple*>::const_iterator it = m_columns.begin();
+             it != m_columns.end(); ++it)
+        {
+            delete *it;
+        }
     }
 
     void OnPageChanged(const wxPropertyGridPage* page)
