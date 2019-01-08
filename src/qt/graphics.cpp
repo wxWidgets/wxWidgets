@@ -130,6 +130,12 @@ public:
         return m_pixmap;
     }
 
+    static const QPixmap* GetPixmapFromBitmap(const wxGraphicsBitmap& bitmap)
+    {
+        return static_cast<const wxQtBitmapData*>(bitmap.GetBitmapData())->GetPixmap();
+    }
+
+
 #if wxUSE_IMAGE
     //wxImage ConvertToImage() const;
 #endif // wxUSE_IMAGE
@@ -754,7 +760,7 @@ public:
 
 	virtual void DrawBitmap(const wxGraphicsBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
 	{
-        const QPixmap* pixmap = static_cast<const wxQtBitmapData*>(bmp.GetBitmapData())->GetPixmap();
+        const QPixmap* pixmap = wxQtBitmapData::GetPixmapFromBitmap(bmp);
         m_qtPainter->drawPixmap(x, y, w, h, *pixmap);
 	}
 
@@ -1113,12 +1119,10 @@ wxImage wxQtGraphicsRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
 {
 	wxImage image;
 
-	//const wxCairoBitmapData* const
-	//	data = static_cast<wxCairoBitmapData*>(bmp.GetGraphicsData());
-	//if (data)
-	//	image = data->ConvertToImage();
+    const QPixmap* pixmap = wxQtBitmapData::GetPixmapFromBitmap(bmp);
 
-	return image;
+    wxBitmap bitmap(*pixmap);
+    return bitmap.ConvertToImage();
 }
 
 #endif // wxUSE_IMAGE
@@ -1141,7 +1145,7 @@ wxDouble w, wxDouble h)
 {
     wxCHECK_MSG(!bitmap.IsNull(), wxNullGraphicsBitmap, wxS("Invalid bitmap"));
 
-    const QPixmap* source_pixmap = static_cast<const wxQtBitmapData*>(bitmap.GetBitmapData())->GetPixmap();
+    const QPixmap* source_pixmap = wxQtBitmapData::GetPixmapFromBitmap(bitmap);
     wxCHECK_MSG(source_pixmap, wxNullGraphicsBitmap, wxS("Invalid bitmap"));
 
     const int srcWidth = source_pixmap->width();
