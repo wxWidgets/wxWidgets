@@ -562,8 +562,6 @@ protected:
 
     wxPropertyGridPage*     m_emptyPage;
 
-    wxArrayString   m_columnLabels;
-
     long            m_iFlags;
 
     // Selected page index.
