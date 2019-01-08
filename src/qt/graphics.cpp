@@ -1,4 +1,6 @@
 #include "wx/qt/graphics.h"
+#include <wx/qt/private/converter.h>
+#include "wx/tokenzr.h"
 
 
 #if wxUSE_GRAPHICS_CONTEXT
@@ -137,7 +139,11 @@ public:
 
 
 #if wxUSE_IMAGE
-    //wxImage ConvertToImage() const;
+    wxImage DoConvertToImage() const
+    {
+        wxBitmap bitmap(*m_pixmap);
+        return bitmap.ConvertToImage();
+    }
 #endif // wxUSE_IMAGE
 
 private:
@@ -525,6 +531,11 @@ class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
         m_width = sz.x;
         m_height = sz.y;
     }
+protected:
+    wxQtGraphicsContext(wxGraphicsRenderer* renderer)
+        : wxGraphicsContext(renderer)
+    {
+    }
 public:
     wxQtGraphicsContext(wxGraphicsRenderer* renderer, QWidget* widget)
         : wxGraphicsContext(renderer)
@@ -852,6 +863,31 @@ private:
     QPainter painter;
 };
 
+class wxQtImageContext : public wxQtGraphicsContext
+{
+public:
+    wxQtImageContext(wxGraphicsRenderer* renderer, wxImage& image) :
+        wxQtGraphicsContext(renderer),
+        image(image)
+    {
+        const wxBitmap wxbitmap(image);
+        pixmap = *wxbitmap.GetHandle();
+        m_qtPainter = new QPainter(&pixmap);
+        m_ownsPainter = false;
+    }
+
+    ~wxQtImageContext()
+    {
+        wxQtBitmapData bitmap(GetRenderer(), &pixmap);
+        image = bitmap.DoConvertToImage();
+        delete m_qtPainter;
+    }
+
+private:
+    QPixmap pixmap;
+    wxImage& image;
+};
+
 //-----------------------------------------------------------------------------
 // wxQtGraphicsRenderer declaration
 //-----------------------------------------------------------------------------
@@ -989,8 +1025,7 @@ wxGraphicsContext * wxQtGraphicsRenderer::CreateContextFromNativeWindow(void * w
 #if wxUSE_IMAGE
 wxGraphicsContext * wxQtGraphicsRenderer::CreateContextFromImage(wxImage& image)
 {
-//	return new wxCairoImageContext(this, image);
-	return NULL;
+	return new wxQtImageContext(this, image);
 }
 #endif // wxUSE_IMAGE
 
@@ -1117,14 +1152,9 @@ wxGraphicsBitmap wxQtGraphicsRenderer::CreateBitmapFromImage(const wxImage& imag
 
 wxImage wxQtGraphicsRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
 {
-    const QPixmap* pixmap = wxQtBitmapData::GetPixmapFromBitmap(bmp);
-
-    wxBitmap bitmap(*pixmap);
-    return bitmap.ConvertToImage();
+    return static_cast<const wxQtBitmapData*>(bmp.GetBitmapData())->DoConvertToImage();
 }
-
 #endif // wxUSE_IMAGE
-
 
 wxGraphicsBitmap wxQtGraphicsRenderer::CreateBitmapFromNativeBitmap(void* bitmap)
 {
