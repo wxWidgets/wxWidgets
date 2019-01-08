@@ -110,7 +110,7 @@ private:
 
     // Return error message if newval does not represent a valid numeric value,
     // or value is out of range. return empty string otherwise.
-    virtual wxString CheckValue(const wxString& newval) const = 0;
+    virtual wxString IsValid(const wxString& newval) const = 0;
 
     // Event handlers.
     void OnChar(wxKeyEvent& event);
@@ -308,7 +308,7 @@ protected:
 
     // Implement wxNumValidatorBase pure virtual method.
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const wxOVERRIDE;
-    virtual wxString CheckValue(const wxString& newval) const wxOVERRIDE;
+    virtual wxString IsValid(const wxString& newval) const wxOVERRIDE;
 
 private:
     // Minimal and maximal values accepted (inclusive).
@@ -411,7 +411,7 @@ protected:
 
     // Implement wxNumValidatorBase pure virtual method.
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const wxOVERRIDE;
-    virtual wxString CheckValue(const wxString& newval) const wxOVERRIDE;
+    virtual wxString IsValid(const wxString& newval) const wxOVERRIDE;
 
 private:
     // Maximum number of decimals digits after the decimal separator.

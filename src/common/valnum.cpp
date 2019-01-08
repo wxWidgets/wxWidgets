@@ -221,7 +221,7 @@ void wxNumValidatorBase::OnValueChanged(wxCommandEvent& event)
     // an event is sent in case we transition from invalid to valid state.
 
     const wxString& newval  = event.GetString();
-    const wxString errormsg = CheckValue(newval);
+    const wxString errormsg = IsValid(newval);
 
     if ( errormsg.empty() )
     {
@@ -292,7 +292,7 @@ wxIntegerValidatorBase::IsCharOk(const wxString& val, int pos, wxChar ch) const
 }
 
 wxString
-wxIntegerValidatorBase::CheckValue(const wxString& newval) const
+wxIntegerValidatorBase::IsValid(const wxString& newval) const
 {
     if ( newval.empty() && HasFlag(wxNUM_VAL_ZERO_AS_BLANK) )
         return wxString();
@@ -367,7 +367,7 @@ wxFloatingPointValidatorBase::IsCharOk(const wxString& val,
 }
 
 wxString
-wxFloatingPointValidatorBase::CheckValue(const wxString& newval) const
+wxFloatingPointValidatorBase::IsValid(const wxString& newval) const
 {
     if ( newval.empty() && HasFlag(wxNUM_VAL_ZERO_AS_BLANK) )
         return wxString();
