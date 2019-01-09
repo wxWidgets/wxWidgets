@@ -5183,12 +5183,12 @@ void wxDataViewCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
 
     Layout();
 
-    AdjustScrollbars();
-
     // Update the last column size to take all the available space. Note that
     // this must be done after calling Layout() to update m_clientArea size.
     if ( m_clientArea && GetColumnCount() )
         m_clientArea->UpdateColumnSizes();
+
+    AdjustScrollbars();
 
     // We must redraw the headers if their height changed. Normally this
     // shouldn't happen as the control shouldn't let itself be resized beneath
