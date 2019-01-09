@@ -248,6 +248,12 @@ bool wxRadioBox::Show(unsigned int n, bool show)
 
 bool wxRadioBox::Show( bool show )
 {
+    if ( !wxControl::Show(show) )
+        return false;
+
+    if ( !m_qtGroupBox )
+        return false;
+
     if( m_qtGroupBox->isVisible() == show )
     {
         for( unsigned int i = 0; i < GetCount(); ++i )
