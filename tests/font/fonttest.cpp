@@ -197,7 +197,16 @@ TEST_CASE("wxFont::Weight", "[font][weight]")
 {
     wxFont font;
     font.SetNumericWeight(123);
+
+// WX to QT font weight conversions do not map directly
+// which is why we check if the numeric weight is within
+// a range rather than checking for an exact match
+#ifdef __WXQT__
+    CHECK( ( font.GetNumericWeight() > 113 && font.GetNumericWeight() < 133 ) );
+#else
     CHECK( font.GetNumericWeight() == 123 );
+#endif
+
     CHECK( font.GetWeight() == wxFONTWEIGHT_THIN );
 
     font.SetNumericWeight(wxFONTWEIGHT_SEMIBOLD);

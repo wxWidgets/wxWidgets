@@ -71,7 +71,6 @@ public:
     virtual void SetUnderlined( bool underlined );
     virtual void SetStrikethrough(bool strikethrough) wxOVERRIDE;
     virtual void SetEncoding(wxFontEncoding encoding);
-    bool SetNativeFontInfo(const wxString& info);
 
     wxDECLARE_COMMON_FONT_METHODS();
 
