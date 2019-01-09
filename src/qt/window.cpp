@@ -393,13 +393,35 @@ void wxWindowQt::WarpPointer(int x, int y)
 void wxWindowQt::Update()
 {
     wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::Update %s"), GetName());
+
+    QWidget *widget;
+
     // send the paint event to the inner widget in scroll areas:
     if ( QtGetScrollBarsContainer() )
     {
-        QtGetScrollBarsContainer()->viewport()->update();
+        widget = QtGetScrollBarsContainer()->viewport();
     } else {
-        GetHandle()->update();
+        widget = GetHandle();
     }
+
+    widget->repaint();
+
+    wxWindowDC dc(this);
+
+    const int id = GetId();
+
+    wxEraseEvent eraseEvent( id, &dc );
+    eraseEvent.SetEventObject( this );
+    HandleWindowEvent( eraseEvent );
+
+    wxNcPaintEvent ncPaintEvent( GetId() );
+    ncPaintEvent.SetEventObject( this );
+    HandleWindowEvent( ncPaintEvent );
+
+    wxPaintEvent paintEvent( id );
+    paintEvent.SetEventObject( this );
+    HandleWindowEvent( paintEvent );
+
 }
 
 void wxWindowQt::Refresh( bool WXUNUSED( eraseBackground ), const wxRect *rect )
