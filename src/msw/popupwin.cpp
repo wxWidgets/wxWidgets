@@ -64,13 +64,24 @@ WXDWORD wxPopupWindow::MSWGetStyle(long flags, WXDWORD *exstyle) const
     // we only honour the border flags, the others don't make sense for us
     WXDWORD style = wxWindow::MSWGetStyle(flags & wxBORDER_MASK, exstyle);
 
-    // We need to be a popup (i.e. not a child) window in order to not be
-    // confined to the parent window area, as is required for a drop down, for
-    // example. Old implementation used WS_CHILD and made this window a child
-    // of the desktop window, but this resulted in problems with handling input
-    // in the popup children, and so was changed to the current version.
-    style &= ~WS_CHILD;
-    style |= WS_POPUP;
+    // wxMSW uses 2 rather different implementations of wxPopupWindow
+    // internally, each one with its own limitations, so we allow specifying
+    // wxPU_CONTAINS_CONTROLS flag to select which one is used. The default is
+    // to use a child window of the desktop for the popup, which is compatible
+    // with the previous wxWidgets versions and works well for simple popups,
+    // but many standard controls can't work as children of such a window
+    // because it doesn't accept focus. So an alternative implementation for
+    // the popups that will contain such controls is available, but this one
+    // has problems due to the fact that it does take focus and not only can
+    // (and does) this break existing code, but it also prevents the parent
+    // window from keeping focus while showing the popup, as must be done when
+    // using auto-completion tooltips, for example. So neither implementation
+    // can be used in all cases and you have to explicitly choose your poison.
+    if ( HasFlag(wxPU_CONTAINS_CONTROLS) )
+    {
+        style &= ~WS_CHILD;
+        style |= WS_POPUP;
+    }
 
     if ( exstyle )
     {
@@ -81,6 +92,31 @@ WXDWORD wxPopupWindow::MSWGetStyle(long flags, WXDWORD *exstyle) const
     return style;
 }
 
+WXHWND wxPopupWindow::MSWGetParent() const
+{
+    if ( HasFlag(wxPU_CONTAINS_CONTROLS) )
+    {
+        return wxPopupWindowBase::MSWGetParent();
+    }
+    else
+    {
+        // we must be a child of the desktop to be able to extend beyond the
+        // parent window client area (like the comboboxes drop downs do)
+        return (WXHWND)::GetDesktopWindow();
+    }
+}
+
+void wxPopupWindow::SetFocus()
+{
+    // Focusing on a popup window does not work on MSW unless WS_POPUP style
+    // is set. Since this is only the case if the style wxPU_CONTAINS_CONTROLS
+    // is used, we'll handle the focus in that case and otherwise do nothing.
+    if ( HasFlag(wxPU_CONTAINS_CONTROLS) )
+    {
+        wxPopupWindowBase::SetFocus();
+    }
+}
+
 bool wxPopupWindow::Show(bool show)
 {
     // It's important to update wxCurrentPopupWindow before showing the window,
@@ -88,7 +124,30 @@ bool wxPopupWindow::Show(bool show)
     // from inside Show() so that it knows to remain [appearing] active.
     wxCurrentPopupWindow = show ? this : NULL;
 
-    return wxPopupWindowBase::Show(show);
+    if ( HasFlag(wxPU_CONTAINS_CONTROLS) )
+    {
+        return wxPopupWindowBase::Show(show);
+    }
+    else
+    {
+        if ( !wxWindowMSW::Show(show) )
+            return false;
+
+        if ( show )
+        {
+            // raise to top of z order
+            if ( !::SetWindowPos(GetHwnd(), HWND_TOP, 0, 0, 0, 0,
+                                 SWP_NOMOVE | SWP_NOSIZE) )
+            {
+                wxLogLastError(wxT("SetWindowPos"));
+            }
+
+            // and set it as the foreground window so the mouse can be captured
+            ::SetForegroundWindow(GetHwnd());
+        }
+
+        return true;
+    }
 }
 
 // ----------------------------------------------------------------------------
