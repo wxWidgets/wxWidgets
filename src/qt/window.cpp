@@ -1242,6 +1242,10 @@ bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *eve
 
 bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
 {
+    // Forward captured event
+    if( s_capturedWindow && s_capturedWindow != this )
+        return s_capturedWindow->QtHandleMouseEvent(handler, event);
+
     // Convert event type
     wxEventType wxType = 0;
     switch ( event->type() )
