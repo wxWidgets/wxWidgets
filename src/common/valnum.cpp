@@ -52,32 +52,28 @@ int wxNumValidatorBase::GetFormatFlags() const
     return flags;
 }
 
-void wxNumValidatorBase::SetWindow(wxWindow *win)
+bool wxNumValidatorBase::CheckValidatorWindow() const
 {
-    wxValidator::SetWindow(win);
-
-    bool isValidWindow = false;
-
 #if wxUSE_TEXTCTRL
     if ( wxDynamicCast(m_validatorWindow, wxTextCtrl) )
-        isValidWindow = true;
+        return true;
 #endif // wxUSE_TEXTCTRL
 
 #if wxUSE_COMBOBOX
     if ( wxDynamicCast(m_validatorWindow, wxComboBox) )
-        isValidWindow = true;
+        return true;
 #endif // wxUSE_COMBOBOX
 
-    if ( isValidWindow )
+    return false;
+}
+
+void wxNumValidatorBase::SetWindow(wxWindow *win)
+{
+    wxValidator::SetWindow(win);
+
+    if ( CheckValidatorWindow() )
     {
         m_validatorWindow->Bind(wxEVT_TEXT, &wxNumValidatorBase::OnValueChanged, this);
-
-        if ( !HasFlag(wxNUM_VAL_CUSTOM_ERROR_REPORT) )
-        {
-            m_validatorWindow->Bind(wxEVT_VALIDATE,
-                &wxNumValidatorBase::OnValidationFailed, this);
-        }
-
         return;
     }
 
@@ -229,7 +225,7 @@ void wxNumValidatorBase::OnValueChanged(wxCommandEvent& event)
         {
             m_isOk = true;
 
-            SendEvent(wxEVT_VALIDATE, wxString());
+            SendEvent(wxEVT_VALIDATE_OK);
         }
     }
     else
@@ -238,19 +234,12 @@ void wxNumValidatorBase::OnValueChanged(wxCommandEvent& event)
         {
             m_isOk = false;
 
-            SendEvent(wxEVT_VALIDATE,
+            SendEvent(wxEVT_VALIDATE_ERROR,
                 wxString::Format("%s: %s", errormsg, newval));
         }
     }
 
     event.Skip();
-}
-
-void wxNumValidatorBase::OnValidationFailed(wxValidationErrorEvent& event)
-{
-    // TODO:
-    //   - make the control (visually) reflect the validation state.
-    event.Skip(false);
 }
 
 // ============================================================================

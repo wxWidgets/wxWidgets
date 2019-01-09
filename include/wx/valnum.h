@@ -32,8 +32,7 @@ enum wxNumValidatorStyle
     wxNUM_VAL_DEFAULT               = 0x0,
     wxNUM_VAL_THOUSANDS_SEPARATOR   = 0x1,
     wxNUM_VAL_ZERO_AS_BLANK         = 0x2,
-    wxNUM_VAL_NO_TRAILING_ZEROES    = 0x4,
-    wxNUM_VAL_CUSTOM_ERROR_REPORT   = 0x8,
+    wxNUM_VAL_NO_TRAILING_ZEROES    = 0x4
 };
 
 // ----------------------------------------------------------------------------
@@ -116,12 +115,13 @@ private:
     void OnChar(wxKeyEvent& event);
     void OnKillFocus(wxFocusEvent& event);
     void OnValueChanged(wxCommandEvent& event);
-    void OnValidationFailed(wxValidationErrorEvent& event);
 
 
     // Determine the current insertion point and text in the associated control.
     void GetCurrentValueAndInsertionPoint(wxString& val, int& pos) const;
 
+    // Return true if the associated control support this validator type.
+    bool CheckValidatorWindow() const;
 
     // Combination of wxVAL_NUM_XXX values.
     int m_style;

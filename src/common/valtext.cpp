@@ -24,6 +24,7 @@
   #include "wx/textctrl.h"
   #include "wx/combobox.h"
   #include "wx/log.h"
+  #include "wx/msgdlg.h"
   #include "wx/utils.h"
   #include "wx/intl.h"
 #endif
@@ -59,6 +60,9 @@ static bool wxIsNumeric(const wxString& val)
 wxIMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator);
 wxBEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
     EVT_CHAR(wxTextValidator::OnChar)
+
+    EVT_VALIDATE_OK(wxID_ANY, wxTextValidator::OnValidation)
+    EVT_VALIDATE_ERROR(wxID_ANY, wxTextValidator::OnValidation)
 wxEND_EVENT_TABLE()
 
 wxTextValidator::wxTextValidator(long style, wxString *val)
@@ -140,12 +144,12 @@ bool wxTextValidator::Validate(wxWindow *parent)
 
     if ( !errormsg.empty() )
     {
-        SendEvent(wxEVT_VALIDATE, errormsg);
+        SendEvent(wxEVT_VALIDATE_ERROR, errormsg);
 
         return false;
     }
 
-    SendEvent(wxEVT_VALIDATE, wxString());
+    SendEvent(wxEVT_VALIDATE_OK);
 
     return true;
 }
@@ -178,6 +182,27 @@ bool wxTextValidator::TransferFromWindow()
     }
 
     return true;
+}
+
+void wxTextValidator::OnValidation(wxValidationStatusEvent& event)
+{
+    if ( event.GetEventType() == wxEVT_VALIDATE_OK )
+    {
+        // Do nothing.
+
+        // Should this be kept for future use, or it's not worth it ?
+    }
+    else if ( event.GetEventType() == wxEVT_VALIDATE_ERROR )
+    {
+        const wxString& errormsg = event.GetErrorMessage();
+
+        if ( errormsg.empty() )
+            return;
+
+        m_validatorWindow->SetFocus();
+        wxMessageBox(errormsg, _("Validation conflict"),
+                     wxOK | wxICON_EXCLAMATION, NULL);
+    }
 }
 
 wxString wxTextValidator::IsValid(const wxString& str) const

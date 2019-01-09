@@ -20,7 +20,6 @@
 #include "wx/validate.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/msgdlg.h"
     #include "wx/window.h"
 #endif
 
@@ -41,38 +40,40 @@ wxValidator::~wxValidator()
 {
 }
 
-void wxValidator::DoProcessEvent(wxValidationErrorEvent& event)
+void wxValidator::DoProcessEvent(wxValidationStatusEvent& event)
 {
     // First, give a chance to the m_validatorWindow to process the event
     // on its own. If no handler was found to process the event, or it was
-    // just skipped, process it here by just popping up the error message.
+    // just skipped, pass the event to the validator itself to process it.
 
     if ( !m_validatorWindow->ProcessWindowEvent(event) )
     {
-        const wxString errormsg = event.GetErrorMessage();
-
-        // N.B. event may carry empty error messages to signal transitions
-        //      from Invalid to Valid state (i.e. non-error event).
-        if ( errormsg.empty() )
-            return;
-
-        m_validatorWindow->SetFocus();
-        wxMessageBox(errormsg, _("Validation conflict"),
-                     wxOK | wxICON_EXCLAMATION, NULL);
+        ProcessEventLocally(event);
     }
 }
 
 // ----------------------------------------------------------------------------
-// wxValidationErrorEvent
+// wxValidationStatusEvent
 // ----------------------------------------------------------------------------
-wxIMPLEMENT_DYNAMIC_CLASS(wxValidationErrorEvent, wxCommandEvent);
-wxDEFINE_EVENT(wxEVT_VALIDATE, wxValidationErrorEvent);
+wxIMPLEMENT_DYNAMIC_CLASS(wxValidationStatusEvent, wxCommandEvent);
+wxDEFINE_EVENT(wxEVT_VALIDATE_OK, wxValidationStatusEvent);
+wxDEFINE_EVENT(wxEVT_VALIDATE_ERROR, wxValidationStatusEvent);
 
-wxValidationErrorEvent::wxValidationErrorEvent(
-    wxValidator *val, wxEventType type, wxWindow *win)
+wxValidationStatusEvent::wxValidationStatusEvent(wxEventType type, wxWindow *win)
     : wxCommandEvent(type, win->GetId())
 {
-    SetEventObject(val);
+    // N.B. According to "How Events are Processed" documentation, step (2) says:
+    //
+    //   2. If the object is a wxWindow and has an associated validator,
+    //      wxValidator gets a chance to process the event.
+    //
+    // So, by setting the event object to the window validator and not to the
+    //     window itself, we make sure that this step is skipped, and any user
+    //     defined handler will get a chance to handle the event before the
+    //     validator, which will take over the event, and the processing would
+    //     stop there. see wxWindowBase::TryBefore().
+
+    SetEventObject(win->GetValidator());
 }
 
 #endif

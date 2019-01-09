@@ -50,7 +50,7 @@ public:
             const long style = wxDEFAULT_DIALOG_STYLE);
 
     void OnChangeValidator(wxCommandEvent& event);
-    void OnValidationFailed(wxValidationErrorEvent& event);
+    void OnValidation(wxValidationStatusEvent& event);
 
     bool PopupRichToolTip(wxWindow* const win, const wxString& errormsg);
 

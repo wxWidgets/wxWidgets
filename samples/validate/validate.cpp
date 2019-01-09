@@ -27,7 +27,7 @@
 
 #include "validate.h"
 
-#include <wx/richtooltip.h>
+#include "wx/richtooltip.h"
 #include "wx/sizer.h"
 #include "wx/valgen.h"
 #include "wx/valtext.h"
@@ -85,7 +85,7 @@ bool MyComboBoxValidator::Validate(wxWindow *WXUNUSED(parent))
     {
         // we accept any string != g_combobox_choices[1|2] !
 
-        SendEvent(wxEVT_VALIDATE, wxString("Invalid combo box text!"));
+        SendEvent(wxEVT_VALIDATE_ERROR, wxString("Invalid combo box text!"));
 
         return false;
     }
@@ -93,6 +93,7 @@ bool MyComboBoxValidator::Validate(wxWindow *WXUNUSED(parent))
     if (m_var)
         *m_var = cb->GetValue();
 
+    SendEvent(wxEVT_VALIDATE_OK);
     return true;
 }
 
@@ -308,7 +309,6 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     const wxSizerFlags center = wxSizerFlags().CenterVertical();
 
     wxIntegerValidator<int> valInt(&g_data.m_intValue,
-                                   wxNUM_VAL_CUSTOM_ERROR_REPORT |
                                    wxNUM_VAL_THOUSANDS_SEPARATOR |
                                    wxNUM_VAL_ZERO_AS_BLANK);
     valInt.SetMin(0); // Only allow positive numbers
@@ -398,7 +398,8 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     // Now sets the focus to m_text
     m_text->SetFocus();
 
-    Bind(wxEVT_VALIDATE, &MyDialog::OnValidationFailed, this);
+    Bind(wxEVT_VALIDATE_OK, &MyDialog::OnValidation, this);
+    Bind(wxEVT_VALIDATE_ERROR, &MyDialog::OnValidation, this);
 }
 
 void MyDialog::OnChangeValidator(wxCommandEvent& WXUNUSED(event))
@@ -411,31 +412,28 @@ void MyDialog::OnChangeValidator(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void MyDialog::OnValidationFailed(wxValidationErrorEvent& event)
+void MyDialog::OnValidation(wxValidationStatusEvent& event)
 {
     wxValidator* const val =
         wxDynamicCast(event.GetEventObject(), wxValidator);
 
     wxWindow* const win = val->GetWindow();
-    const wxString& errormsg = event.GetErrorMessage();
 
-    if ( errormsg.empty() )
+    if ( event.GetEventType() == wxEVT_VALIDATE_OK )
     {
-        // Notice that this event is sent whenever the window transition
+        // Notice that this event is sent whenever the window transitions
         // from invalid to valid state, so that we can reset the control
         // to its normal look and feel.
 
         // Restore the default properties.
         win->SetBackgroundColour(wxNullColour);
-        win->SetForegroundColour(wxNullColour);
     }
-    else
+    else if ( event.GetEventType() == wxEVT_VALIDATE_ERROR )
     {
         // Make the control reflect the invalid state.
-        win->SetBackgroundColour(wxTheColourDatabase->Find("ORANGE"));
-        win->SetForegroundColour(wxTheColourDatabase->Find("YELLOW"));
+        win->SetBackgroundColour(wxColour("#f2bdcd")); // Orchid pink
 
-        if ( !PopupRichToolTip(win, errormsg) )
+        if ( !PopupRichToolTip(win, event.GetErrorMessage()) )
             event.Skip();
     }
 }
