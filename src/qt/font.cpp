@@ -135,7 +135,7 @@ public:
         if ( info.IsUsingSizeInPixels() )
             m_nativeFontInfo.SetPixelSize(info.GetPixelSize());
         else
-            m_nativeFontInfo.SetFractionalPointSize(info.GetFractionalPointSize());
+            m_nativeFontInfo.SetSizeOrDefault(info.GetFractionalPointSize());
 
         m_nativeFontInfo.SetStyle(info.GetStyle());
         m_nativeFontInfo.SetWeight(info.GetWeight());
@@ -236,9 +236,19 @@ bool wxFont::Create(wxSize size, wxFontFamily family, wxFontStyle style,
     return true;
 }
 
+int wxFont::GetPointSize() const
+{
+    return M_FONTDATA.wxNativeFontInfo::GetPointSize();
+}
+
 float wxFont::GetFractionalPointSize() const
 {
     return M_FONTDATA.GetFractionalPointSize();
+}
+
+wxSize wxFont::GetPixelSize() const
+{
+    return M_FONTDATA.GetPixelSize();
 }
 
 wxFontStyle wxFont::GetStyle() const
@@ -271,11 +281,24 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
     return &M_FONTDATA;
 }
 
+bool wxFont::GetStrikethrough() const
+{
+    return M_FONTDATA.GetStrikethrough();
+}
+
+
 void wxFont::SetFractionalPointSize(float pointSize)
 {
     AllocExclusive();
 
     M_FONTDATA.SetFractionalPointSize(pointSize);
+}
+
+void wxFont::SetPixelSize(const wxSize& pixelSize)
+{
+    AllocExclusive();
+
+    M_FONTDATA.SetPixelSize(pixelSize);
 }
 
 bool wxFont::SetFaceName(const wxString& facename)
@@ -313,11 +336,30 @@ void wxFont::SetUnderlined( bool underlined )
     M_FONTDATA.SetUnderlined(underlined);
 }
 
+void wxFont::SetStrikethrough(bool strikethrough)
+{
+    AllocExclusive();
+
+    M_FONTDATA.SetStrikethrough(strikethrough);
+}
+
 void wxFont::SetEncoding(wxFontEncoding encoding)
 {
     AllocExclusive();
 
     M_FONTDATA.SetEncoding(encoding);
+}
+
+void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
+{
+    SetFractionalPointSize(info.GetPointSize());
+    SetFamily(info.GetFamily());
+    SetStyle(info.GetStyle());
+    SetNumericWeight(info.GetWeight());
+    SetUnderlined(info.GetUnderlined());
+    SetStrikethrough(info.GetStrikethrough());
+    SetFaceName(info.GetFaceName());
+    SetEncoding(info.GetEncoding());
 }
 
 wxGDIRefData *wxFont::CreateGDIRefData() const
@@ -351,6 +393,11 @@ void wxNativeFontInfo::Init()
 float wxNativeFontInfo::GetFractionalPointSize() const
 {
     return m_qtFont.pointSizeF();
+}
+
+wxSize wxNativeFontInfo::GetPixelSize() const
+{
+    return wxSize(0, m_qtFont.pixelSize());
 }
 
 wxFontStyle wxNativeFontInfo::GetStyle() const
