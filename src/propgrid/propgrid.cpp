@@ -4746,7 +4746,7 @@ void wxPropertyGrid::SetFocusOnCanvas()
 
 // selFlags uses same values DoSelectProperty's flags
 // Returns true if event was vetoed.
-bool wxPropertyGrid::SendEvent( int eventType, wxPGProperty* p,
+bool wxPropertyGrid::SendEvent( wxEventType eventType, wxPGProperty* p,
                                 wxVariant* pValue,
                                 unsigned int selFlags,
                                 unsigned int column )

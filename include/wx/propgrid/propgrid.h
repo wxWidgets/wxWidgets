@@ -1926,7 +1926,7 @@ protected:
 
     // Send event from the property grid.
     // Omit the wxPG_SEL_NOVALIDATE flag to allow vetoing the event
-    bool SendEvent( int eventType, wxPGProperty* p,
+    bool SendEvent( wxEventType eventType, wxPGProperty* p,
                     wxVariant* pValue = NULL,
                     unsigned int selFlags = wxPG_SEL_NOVALIDATE,
                     unsigned int column = 1 );
