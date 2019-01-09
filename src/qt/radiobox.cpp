@@ -146,6 +146,9 @@ bool wxRadioBox::Create(wxWindow *parent,
     m_qtGroupBox->setTitle( wxQtConvertString( title ) );
     m_qtButtonGroup = new wxQtButtonGroup( m_qtGroupBox, this );
 
+    if ( !(style & (wxRA_SPECIFY_ROWS | wxRA_SPECIFY_COLS)) )
+        style |= wxRA_SPECIFY_COLS;
+
     // wxRA_SPECIFY_COLS means that we arrange buttons in
     // left to right order and GetMajorDim() is the number of columns while
     // wxRA_SPECIFY_ROWS means that the buttons are arranged top to bottom and
