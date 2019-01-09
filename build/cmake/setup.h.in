@@ -714,6 +714,8 @@
 
 #cmakedefine01 wxUSE_INICONF
 
+#cmakedefine01 wxUSE_WINSOCK2
+
 
 #cmakedefine01 wxUSE_DATEPICKCTRL_GENERIC
 
