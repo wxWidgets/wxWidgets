@@ -59,10 +59,13 @@ bool wxDialog::Create( wxWindow *parent, wxWindowID id,
     style |= wxTAB_TRAVERSAL;
 
     m_qtWindow = new wxQtDialog( parent, this );
-    
+
+    if ( !wxTopLevelWindow::Create( parent, id, title, pos, size, style, name ) )
+        return false;
+
     PostCreation();
 
-    return wxTopLevelWindow::Create( parent, id, title, pos, size, style, name );
+    return true;
 }
 
 int wxDialog::ShowModal()

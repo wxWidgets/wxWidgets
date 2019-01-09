@@ -70,9 +70,11 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     GetQMainWindow()->setCentralWidget( new wxQtCentralWidget( parent, this ) );
 
-    PostCreation();
+    if ( !wxFrameBase::Create( parent, id, title, pos, size, style, name ) )
+        return false;
 
-    return wxFrameBase::Create( parent, id, title, pos, size, style, name );
+    PostCreation();
+    return true;
 }
 
 void wxFrame::SetMenuBar( wxMenuBar *menuBar )

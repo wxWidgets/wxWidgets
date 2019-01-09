@@ -248,7 +248,7 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
 
     PostCreation();
 
-    return ( true );
+    return true;
 }
 
 void wxWindowQt::PostCreation(bool generic)
@@ -289,7 +289,7 @@ void wxWindowQt::PostCreation(bool generic)
     GetHandle()->setFont( wxWindowBase::GetFont().GetHandle() );
 
     wxWindowCreateEvent event(this);
-    wxPostEvent(this, event);
+    HandleWindowEvent(event);
 }
 
 void wxWindowQt::AddChild( wxWindowBase *child )
