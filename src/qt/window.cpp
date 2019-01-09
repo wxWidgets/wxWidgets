@@ -553,8 +553,6 @@ void wxWindowQt::DoGetTextExtent(const wxString& string, int *x, int *y, int *de
  * has not been previously created and create is false */
 QScrollBar *wxWindowQt::QtGetScrollBar( int orientation ) const
 {
-    wxCHECK_MSG( CanScroll( orientation ), NULL, "Window can't scroll in that orientation" );
-
     QScrollBar *scrollBar = NULL;
 
     if ( orientation == wxHORIZONTAL )
@@ -576,7 +574,7 @@ QScrollBar *wxWindowQt::QtSetScrollBar( int orientation, QScrollBar *scrollBar )
     if ( !scrollBar )
     {
         scrollBar = new wxQtInternalScrollBar(this, this);
-        scrollBar->setOrientation( wxHORIZONTAL ? Qt::Horizontal : Qt::Vertical );
+        scrollBar->setOrientation( orientation == wxHORIZONTAL ? Qt::Horizontal : Qt::Vertical );
     }
 
     // Let Qt handle layout
@@ -596,8 +594,6 @@ QScrollBar *wxWindowQt::QtSetScrollBar( int orientation, QScrollBar *scrollBar )
 
 void wxWindowQt::SetScrollbar( int orientation, int pos, int thumbvisible, int range, bool refresh )
 {
-    wxCHECK_RET( CanScroll( orientation ), "Window can't scroll in that orientation" );
-
     //If not exist, create the scrollbar
     QScrollBar *scrollBar = QtGetScrollBar( orientation );
     if ( scrollBar == NULL )
