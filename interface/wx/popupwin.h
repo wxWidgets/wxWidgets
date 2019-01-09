@@ -11,6 +11,17 @@
     A special kind of top level window used for popup menus,
     combobox popups and such.
 
+    @beginStyleTable
+    @style{wxPU_CONTAINS_CONTROLS}
+        By default in MSW, a popup window will not take focus from its parent
+        window. However some controls such as wxTextCtrl need focus to
+        function correctly and will not work when placed on a default popup.
+        This flag can be used to make the popup take focus and let all
+        controls work. This style is currently only implemented in MSW.
+        @since 3.1.3
+
+    @endStyleTable
+
     @library{wxcore}
     @category{managedwnd}
 
