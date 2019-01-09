@@ -498,7 +498,7 @@ void wxNativeFontInfo::SetStrikethrough(bool strikethrough)
 bool wxNativeFontInfo::SetFaceName(const wxString& facename)
 {
     m_qtFont.setFamily(wxQtConvertString(facename));
-    // qt uses a "font matching algoritm" so the font will be allways valid
+    // Qt uses a "font matching algorithm" so the font will be always valid
     return true;
 }
 
