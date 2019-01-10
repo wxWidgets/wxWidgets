@@ -110,6 +110,10 @@ bool wxWebViewIE::Create(wxWindow* parent,
 
     EnableControlFeature(21 /* FEATURE_DISABLE_NAVIGATION_SOUNDS */);
 
+    // Make behaviour consistent with the other backends when loading localhost
+    // pages without any physical network connection.
+    SetOfflineMode(false);
+
     LoadURL(url);
     return true;
 }
