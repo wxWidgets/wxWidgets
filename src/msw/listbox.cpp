@@ -190,6 +190,14 @@ WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
+void wxListBox::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxListBoxBase::MSWUpdateFontOnDPIChange(newDPI);
+
+    if ( m_font.IsOk() )
+        SetFont(m_font);
+}
+
 void wxListBox::OnInternalIdle()
 {
     wxWindow::OnInternalIdle();
@@ -695,21 +703,21 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
 bool wxListBox::SetFont(const wxFont &font)
 {
+    wxListBoxBase::SetFont(font);
+
     if ( HasFlag(wxLB_OWNERDRAW) )
     {
         const unsigned count = m_aItems.GetCount();
         for ( unsigned i = 0; i < count; i++ )
-            m_aItems[i]->SetFont(font);
+            m_aItems[i]->SetFont(m_font);
 
         // Non owner drawn list boxes update the item height on their own, but
         // we need to do it manually in the owner drawn case.
         wxClientDC dc(this);
-        dc.SetFont(font);
+        dc.SetFont(m_font);
         SendMessage(GetHwnd(), LB_SETITEMHEIGHT, 0,
                     dc.GetCharHeight() + 2 * LISTBOX_EXTRA_SPACE);
     }
-
-    wxListBoxBase::SetFont(font);
 
     return true;
 }
