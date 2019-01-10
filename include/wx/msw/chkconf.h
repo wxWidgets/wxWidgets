@@ -118,6 +118,14 @@
 #    endif
 #endif  /* wxUSE_UXTHEME */
 
+#ifndef wxUSE_WINSOCK2
+#    ifdef wxABORT_ON_CONFIG_ERROR
+#        error "wxUSE_WINSOCK2 must be defined."
+#    else
+#        define wxUSE_WINSOCK2 0
+#    endif
+#endif  /* wxUSE_WINSOCK2 */
+
 /*
  * Unfortunately we can't use compiler TLS support if the library can be used
  * inside a dynamically loaded DLL under Windows XP, as this can result in hard
