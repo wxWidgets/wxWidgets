@@ -394,6 +394,7 @@ private:
 
 private:
     void OnSize( wxSizeEvent &event );
+    void OnDPIChanged( wxDPIChangedEvent& event );
     virtual wxSize GetSizeAvailableForScrollTarget(const wxSize& size) wxOVERRIDE;
 
     // we need to return a special WM_GETDLGCODE value to process just the

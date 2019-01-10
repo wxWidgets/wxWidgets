@@ -5057,6 +5057,7 @@ void wxDataViewMainWindow::UpdateColumnSizes()
 wxIMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl, wxDataViewCtrlBase);
 wxBEGIN_EVENT_TABLE(wxDataViewCtrl, wxDataViewCtrlBase)
     EVT_SIZE(wxDataViewCtrl::OnSize)
+    EVT_DPI_CHANGED(wxDataViewCtrl::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 wxDataViewCtrl::~wxDataViewCtrl()
@@ -5198,6 +5199,20 @@ void wxDataViewCtrl::OnSize( wxSizeEvent &WXUNUSED(event) )
             m_headerArea->GetSize().y <= m_headerArea->GetBestSize(). y )
     {
         m_headerArea->Refresh();
+    }
+}
+
+void wxDataViewCtrl::OnDPIChanged( wxDPIChangedEvent &WXUNUSED(event) )
+{
+    if (m_clientArea)
+    {
+        m_clientArea->SetRowHeight(m_clientArea->GetDefaultRowHeight());
+    }
+
+    if (m_headerArea || m_clientArea)
+    {
+        InvalidateColBestWidths();
+        Layout();
     }
 }
 
