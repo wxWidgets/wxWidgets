@@ -73,6 +73,11 @@ class wxQtInternalScrollBar : public wxQtEventSignalHandler< QScrollBar, wxWindo
 {
 public:
     wxQtInternalScrollBar(wxWindowQt *parent, wxWindowQt *handler );
+    ~wxQtInternalScrollBar()
+    {
+        disconnect( this, &QScrollBar::actionTriggered, this, &wxQtInternalScrollBar::actionTriggered );
+        disconnect( this, &QScrollBar::sliderReleased, this, &wxQtInternalScrollBar::sliderReleased );
+    }
     void actionTriggered( int action );
     void sliderReleased();
     void valueChanged( int position );
@@ -263,6 +268,16 @@ wxWindowQt::~wxWindowQt()
         m_qtWindow->blockSignals(true);
         // Reset the pointer to avoid handling pending event and signals
         QtStoreWindowPointer( GetHandle(), NULL );
+        if(m_horzScrollBar)
+        {
+            QtStoreWindowPointer( m_horzScrollBar, NULL );
+            m_horzScrollBar->deleteLater();
+        }
+        if(m_vertScrollBar)
+        {
+            QtStoreWindowPointer( m_vertScrollBar, NULL );
+            m_vertScrollBar->deleteLater();
+        }
         // Delete QWidget when control return to event loop (safer)
         m_qtWindow->deleteLater();
         m_qtWindow = NULL;
