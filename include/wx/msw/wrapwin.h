@@ -31,8 +31,8 @@
 // For IPv6 support, we must include winsock2.h before winsock.h, and
 // windows.h include winsock.h so do it before including it
 #if wxUSE_IPV6
-#    undef wxUSE_WINSOCK2
-#    define wxUSE_WINSOCK2 1
+    #undef wxUSE_WINSOCK2
+    #define wxUSE_WINSOCK2 1
 #endif
 
 #if wxUSE_WINSOCK2
