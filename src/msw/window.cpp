@@ -824,8 +824,12 @@ bool wxWindowMSW::SetFont(const wxFont& font)
         // note the use of GetFont() instead of m_font: our own font could have
         // just been reset and in this case we need to change the font used by
         // the native window to the default for this class, i.e. exactly what
-        // GetFont() returns
-        wxSetWindowFont(hWnd, GetFont());
+        // GetFont() returns.
+        // Assign GetFont() to m_font because GetFont() could change the HFONT
+        // when calling WXAdjustToPPI, which makes the original reference invalid
+        if (!m_hasFont)
+            wxWindowBase::SetFont(GetFont());
+        wxSetWindowFont(hWnd, m_font);
     }
 
     return true;

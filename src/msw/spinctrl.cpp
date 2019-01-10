@@ -572,7 +572,8 @@ bool wxSpinCtrl::SetFont(const wxFont& font)
         return false;
     }
 
-    wxSetWindowFont(GetBuddyHwnd(), GetFont());
+    if ( m_font.IsOk() )
+        wxSetWindowFont(GetBuddyHwnd(), m_font);
 
     return true;
 }
