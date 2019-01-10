@@ -63,6 +63,7 @@ public:
     // so we need to override these functions
     virtual wxOwnerDrawn *CreateLboxItem(size_t n) wxOVERRIDE;
     virtual bool MSWOnMeasure(WXMEASUREITEMSTRUCT *item) wxOVERRIDE;
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
 protected:
     // pressing space or clicking the check box toggles the item
