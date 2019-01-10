@@ -36,6 +36,23 @@ class DocHostUIHandler;
 class wxFindPointers;
 class wxIInternetProtocol;
 
+//Feel free to specify highest level even not installed, taken from
+//https://msdn.microsoft.com/library/ee330730.aspx#browser_emulation
+//FORCE options are not recommended, DEFAULT resets to system default.
+enum wxWebViewIE_EmulationLevel
+{
+    wxWEBVIEWIE_EMU_DEFAULT =    0,
+    wxWEBVIEWIE_EMU_IE7 =        7000,
+    wxWEBVIEWIE_EMU_IE8 =        8000,
+    wxWEBVIEWIE_EMU_IE8_FORCE =  8888,
+    wxWEBVIEWIE_EMU_IE9 =        9000,
+    wxWEBVIEWIE_EMU_IE9_FORCE =  9999,
+    wxWEBVIEWIE_EMU_IE10 =       10000,
+    wxWEBVIEWIE_EMU_IE10_FORCE = 10001,
+    wxWEBVIEWIE_EMU_IE11 =       11000,
+    wxWEBVIEWIE_EMU_IE11_FORCE = 11001
+};
+
 class WXDLLIMPEXP_WEBVIEW wxWebViewIE : public wxWebView
 {
 public:
@@ -144,9 +161,15 @@ public:
     void onActiveXEvent(wxActiveXEvent& evt);
     void onEraseBg(wxEraseEvent&) {}
 
-    // Establish sufficiently modern emulation level for the browser control to
-    // allow RunScript() to return any kind of values.
-    static bool MSWSetModernEmulationLevel(bool modernLevel = true);
+    // Switch to specific emulation level for the browser control to
+    // ensure RunScript() or webpages work as designed, send corresponding
+    // User-Agent string to web server.
+    static bool MSWSetEmulationLevel(wxWebViewIE_EmulationLevel level = wxWEBVIEWIE_EMU_IE11);
+    // For compatibility reason, consider using MSWSetEmulationLevel() instead.
+    static bool MSWSetModernEmulationLevel(bool modernLevel = true)
+    {
+        return MSWSetEmulationLevel(modernLevel ? wxWEBVIEWIE_EMU_IE8 : wxWEBVIEWIE_EMU_DEFAULT);
+    }
 
     wxDECLARE_EVENT_TABLE();
 

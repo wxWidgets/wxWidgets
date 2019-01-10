@@ -110,6 +110,10 @@ bool wxWebViewIE::Create(wxWindow* parent,
 
     EnableControlFeature(21 /* FEATURE_DISABLE_NAVIGATION_SOUNDS */);
 
+    //make behaviour consistent with IE / WebBrowserCtrl default
+    //when loading localhost webpages without any physical network connection.
+    SetOfflineMode(false);
+
     LoadURL(url);
     return true;
 }
@@ -541,15 +545,14 @@ bool wxWebViewIE::IsOfflineMode()
 
 void wxWebViewIE::SetOfflineMode(bool offline)
 {
-    // FIXME: the wxWidgets docs do not really document what the return
-    //        parameter of PutProperty is
+    //HRESULT can neither be cast to bool nor simply compared with S_OK.
 #if wxDEBUG_LEVEL
-    const bool success =
+    const HRESULT success =
 #endif
             m_ie.PutProperty("Offline", (offline ?
                                          VARIANT_TRUE :
                                          VARIANT_FALSE));
-    wxASSERT(success);
+    wxASSERT(SUCCEEDED(success));
 }
 
 bool wxWebViewIE::IsBusy() const
@@ -855,7 +858,7 @@ wxString wxWebViewIE::GetPageText() const
     }
 }
 
-bool wxWebViewIE::MSWSetModernEmulationLevel(bool modernLevel)
+bool wxWebViewIE::MSWSetEmulationLevel(wxWebViewIE_EmulationLevel level)
 {
     // Registry key where emulation level for programs are set
     static const wxChar* IE_EMULATION_KEY =
@@ -870,12 +873,9 @@ bool wxWebViewIE::MSWSetModernEmulationLevel(bool modernLevel)
     }
 
     const wxString programName = wxGetFullModuleName().AfterLast('\\');
-    if ( modernLevel )
+    if (wxWEBVIEWIE_EMU_DEFAULT != level)
     {
-        // IE8 (8000) is sufficiently modern for our needs, see
-        // https://msdn.microsoft.com/library/ee330730.aspx#browser_emulation
-        // for other values that could be used here.
-        if ( !key.SetValue(programName, 8000) )
+        if ( !key.SetValue(programName, level) )
         {
             wxLogWarning(_("Failed to set web view to modern emulation level"));
             return false;
