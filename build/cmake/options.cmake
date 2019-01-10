@@ -174,6 +174,7 @@ if(WIN32)
     endif()
     wx_option(wxUSE_DBGHELP "use dbghelp.dll API" ${wxUSE_DBGHELP_DEFAULT})
     wx_option(wxUSE_INICONF "use wxIniConfig")
+    wx_option(wxUSE_WINSOCK2 "include <winsock2.h> rather than <winsock.h>" OFF)
     wx_option(wxUSE_REGKEY "use wxRegKey class")
 endif()
 

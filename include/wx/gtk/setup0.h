@@ -1713,6 +1713,13 @@
 // Recommended setting: 0, nobody uses .INI files any more
 #define wxUSE_INICONF 0
 
+// Set to 1 if you need to include <winsock2.h> over <winsock.h>
+//
+// Default is 0.
+//
+// Recommended setting: 0, set to 1 automatically if wxUSE_IPV6 is 1.
+#define wxUSE_WINSOCK2 0
+
 // ----------------------------------------------------------------------------
 // Generic versions of native controls
 // ----------------------------------------------------------------------------
