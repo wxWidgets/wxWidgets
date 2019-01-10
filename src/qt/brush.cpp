@@ -62,7 +62,8 @@ static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
 class wxBrushRefData: public wxGDIRefData
 {
     public:
-        wxBrushRefData()
+        wxBrushRefData() :
+            m_style(wxBRUSHSTYLE_INVALID)
         {
         }
         
