@@ -33,12 +33,15 @@ public:
     void SetErrorMessage(const wxString& errormsg) { SetString(errormsg); }
     wxString GetErrorMessage() const { return GetString(); }
 
+    // Return the window associated with the validator generating the event.
+    wxWindow *GetWindow() const;
+
     // default copy ctor and dtor are ok
+
     virtual wxEvent *Clone() const wxOVERRIDE
       { return new wxValidationStatusEvent(*this); }
 
 private:
-
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxValidationStatusEvent);
 };
 
@@ -125,11 +128,10 @@ public:
 
 protected:
 
-    // Derived classes use this function to generate the appropriate event.
     // Notice that the errormsg may be empty, in which case, the generated
     // event is sent to notify the event handler that the control has just
     // transitioned from invalid to valid state.
-    void SendEvent(wxEventType type, const wxString& errormsg=wxString())
+    void SendEvent(wxEventType type, const wxString& errormsg = wxString())
     {
         if ( !m_validatorWindow )
             return;
@@ -138,6 +140,17 @@ protected:
         event.SetErrorMessage(errormsg);
 
         DoProcessEvent(event);
+    }
+
+    // Derived classes use these functions to generate the appropriate event.
+
+    void SendOkEvent() { SendEvent(wxEVT_VALIDATE_OK); }
+
+    void SendErrorEvent(const wxString& errormsg)
+    {
+        wxASSERT_MSG(!errormsg.empty(), "Error message shouldn't be empty.");
+
+        SendEvent(wxEVT_VALIDATE_ERROR, errormsg);
     }
 
     wxWindow *m_validatorWindow;

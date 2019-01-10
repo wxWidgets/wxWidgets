@@ -76,5 +76,10 @@ wxValidationStatusEvent::wxValidationStatusEvent(wxEventType type, wxWindow *win
     SetEventObject(win->GetValidator());
 }
 
+wxWindow* wxValidationStatusEvent::GetWindow() const
+{
+    return static_cast<wxValidator*>(GetEventObject())->GetWindow();
+}
+
 #endif
   // wxUSE_VALIDATORS

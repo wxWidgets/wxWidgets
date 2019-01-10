@@ -85,7 +85,7 @@ bool MyComboBoxValidator::Validate(wxWindow *WXUNUSED(parent))
     {
         // we accept any string != g_combobox_choices[1|2] !
 
-        SendEvent(wxEVT_VALIDATE_ERROR, wxString("Invalid combo box text!"));
+        SendErrorEvent(wxString("Invalid combo box text!"));
 
         return false;
     }
@@ -93,7 +93,7 @@ bool MyComboBoxValidator::Validate(wxWindow *WXUNUSED(parent))
     if (m_var)
         *m_var = cb->GetValue();
 
-    SendEvent(wxEVT_VALIDATE_OK);
+    SendOkEvent();
     return true;
 }
 
@@ -414,10 +414,7 @@ void MyDialog::OnChangeValidator(wxCommandEvent& WXUNUSED(event))
 
 void MyDialog::OnValidation(wxValidationStatusEvent& event)
 {
-    wxValidator* const val =
-        wxDynamicCast(event.GetEventObject(), wxValidator);
-
-    wxWindow* const win = val->GetWindow();
+    wxWindow* const win = event.GetWindow();
 
     if ( event.GetEventType() == wxEVT_VALIDATE_OK )
     {

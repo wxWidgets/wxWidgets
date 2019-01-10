@@ -46,8 +46,8 @@ public:
     void SetStyle(int style) { m_style = style; }
 
 
-    // As we'll do the validation on the fly here, Validate() just return the
-    // (kept updated) validator state.
+    // As we'll do the validation on the fly here, Validate() just returns the
+    // (already up to date) validator state.
     virtual bool Validate(wxWindow * WXUNUSED(parent)) wxOVERRIDE { return m_isOk; }
 
     // Override base class method to check that the window is a text control or

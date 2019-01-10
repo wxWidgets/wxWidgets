@@ -216,8 +216,8 @@ void wxNumValidatorBase::OnValueChanged(wxCommandEvent& event)
     // Send the appropriete message based on that check. Notice also that
     // an event is sent in case we transition from invalid to valid state.
 
-    const wxString& newval  = event.GetString();
-    const wxString errormsg = IsValid(newval);
+    const wxString& newval   = event.GetString();
+    const wxString& errormsg = IsValid(newval);
 
     if ( errormsg.empty() )
     {
@@ -225,18 +225,16 @@ void wxNumValidatorBase::OnValueChanged(wxCommandEvent& event)
         {
             m_isOk = true;
 
-            SendEvent(wxEVT_VALIDATE_OK);
+            SendOkEvent();
         }
     }
     else
     {
-        if ( m_isOk )
-        {
-            m_isOk = false;
+        m_isOk = false;
 
-            SendEvent(wxEVT_VALIDATE_ERROR,
-                wxString::Format("%s: %s", errormsg, newval));
-        }
+        // N.B. Always send this event to ensure that the error message is
+        //      properly updated to the new one.
+        SendErrorEvent(wxString::Format("%s: %s", errormsg, newval));
     }
 
     event.Skip();

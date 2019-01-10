@@ -61,8 +61,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator);
 wxBEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
     EVT_CHAR(wxTextValidator::OnChar)
 
-    EVT_VALIDATE_OK(wxID_ANY, wxTextValidator::OnValidation)
-    EVT_VALIDATE_ERROR(wxID_ANY, wxTextValidator::OnValidation)
+    EVT_VALIDATE_ERROR(wxID_ANY, wxTextValidator::OnValidationError)
 wxEND_EVENT_TABLE()
 
 wxTextValidator::wxTextValidator(long style, wxString *val)
@@ -144,12 +143,12 @@ bool wxTextValidator::Validate(wxWindow *parent)
 
     if ( !errormsg.empty() )
     {
-        SendEvent(wxEVT_VALIDATE_ERROR, errormsg);
+        SendErrorEvent(errormsg);
 
         return false;
     }
 
-    SendEvent(wxEVT_VALIDATE_OK);
+    SendOkEvent();
 
     return true;
 }
@@ -184,25 +183,11 @@ bool wxTextValidator::TransferFromWindow()
     return true;
 }
 
-void wxTextValidator::OnValidation(wxValidationStatusEvent& event)
+void wxTextValidator::OnValidationError(wxValidationStatusEvent& event)
 {
-    if ( event.GetEventType() == wxEVT_VALIDATE_OK )
-    {
-        // Do nothing.
-
-        // Should this be kept for future use, or it's not worth it ?
-    }
-    else if ( event.GetEventType() == wxEVT_VALIDATE_ERROR )
-    {
-        const wxString& errormsg = event.GetErrorMessage();
-
-        if ( errormsg.empty() )
-            return;
-
-        m_validatorWindow->SetFocus();
-        wxMessageBox(errormsg, _("Validation conflict"),
-                     wxOK | wxICON_EXCLAMATION, NULL);
-    }
+    m_validatorWindow->SetFocus();
+    wxMessageBox(event.GetErrorMessage(), _("Validation conflict"),
+                 wxOK | wxICON_EXCLAMATION, NULL);
 }
 
 wxString wxTextValidator::IsValid(const wxString& str) const

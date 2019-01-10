@@ -72,7 +72,7 @@ public:
 
     // Filter keystrokes
     void OnChar(wxKeyEvent& event);
-    void OnValidation(wxValidationStatusEvent& event);
+    void OnValidationError(wxValidationStatusEvent& event);
 
     // ACCESSORS
     inline long GetStyle() const { return m_validatorStyle; }
