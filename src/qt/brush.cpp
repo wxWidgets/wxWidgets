@@ -68,9 +68,9 @@ class wxBrushRefData: public wxGDIRefData
         }
         
         wxBrushRefData( const wxBrushRefData& data )
-        : wxGDIRefData()
         {
             m_qtBrush = data.m_qtBrush;
+            m_style = data.m_style;
         }
         
         bool operator == (const wxBrushRefData& data) const
