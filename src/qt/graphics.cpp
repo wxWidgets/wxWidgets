@@ -537,14 +537,14 @@ protected:
     {
     }
 public:
-    wxQtGraphicsContext(wxGraphicsRenderer* renderer, QWidget* widget)
+    wxQtGraphicsContext(wxGraphicsRenderer* renderer, QPaintDevice* device)
         : wxGraphicsContext(renderer)
     {
-        m_qtPainter = new QPainter(widget);
+        m_qtPainter = new QPainter(device);
         m_ownsPainter = true;
 
-        m_width = widget->width();
-        m_height = widget->height();
+        m_width = device->width();
+        m_height = device->height();
     }
 
     wxQtGraphicsContext(wxGraphicsRenderer* renderer, const wxWindowDC& dc)
@@ -1001,31 +1001,12 @@ wxGraphicsContext * wxQtGraphicsRenderer::CreateContext(const wxPrinterDC& dc)
 
 wxGraphicsContext * wxQtGraphicsRenderer::CreateContextFromNativeContext(void * context)
 {
-#ifdef __WXMSW__
-	DWORD objType = ::GetObjectType((HGDIOBJ)context);
-	if (objType == 0)
-		return new wxQtGraphicsContext(this, (cairo_t*)context);
-
-	if (objType == OBJ_DC || objType == OBJ_MEMDC)
-		return new wxQtGraphicsContext(this, (HDC)context);
-
-	return NULL;
-#else
-	return NULL;
-#endif
+    return new wxQtGraphicsContext(this, static_cast<QPaintDevice*>(context));
 }
-
 
 wxGraphicsContext * wxQtGraphicsRenderer::CreateContextFromNativeWindow(void * window)
 {
-#ifdef __WXGTK__
-	return new wxQtGraphicsContext(this, static_cast<GdkWindow*>(window));
-#elif defined(__WXMSW__)
-	return new wxQtGraphicsContext(this, static_cast<HWND>(window));
-#else
-	wxUnusedVar(window);
-	return NULL;
-#endif
+    return new wxQtGraphicsContext(this, static_cast<QWidget*>(window));
 }
 
 #if wxUSE_IMAGE
@@ -1212,12 +1193,9 @@ void wxQtGraphicsRenderer::GetVersion(int *major, int *minor, int *micro) const
 
 static wxQtGraphicsRenderer gs_qtGraphicsRenderer;
 
-// MSW and OS X have their own native default renderers, but the other ports
-// use Cairo by default
 wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
 {
 	return &gs_qtGraphicsRenderer;
 }
-
 
 #endif // wxUSE_GRAPHICS_CONTEXT
