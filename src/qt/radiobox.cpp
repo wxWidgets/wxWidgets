@@ -59,7 +59,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl);
 wxRadioBox::wxRadioBox() :
     m_qtGroupBox(NULL),
     m_qtButtonGroup(NULL),
-    m_qtBoxLayout(NULL)
+    m_qtGridLayout(NULL)
 {
 }
 
@@ -110,19 +110,46 @@ bool wxRadioBox::Create(wxWindow *parent,
 }
 
 
-static void AddChoices( QButtonGroup *qtButtonGroup, QBoxLayout *qtBoxLayout, int count, const wxString choices[] )
+static void AddChoices( QButtonGroup *qtButtonGroup, QGridLayout *qtGridLayout, int count, const wxString choices[], int style, int majorDim )
 {
+    if ( count <= 0 )
+        return;
+
+    // wxRA_SPECIFY_COLS means that we arrange buttons in
+    // left to right order and GetMajorDim() is the number of columns while
+    // wxRA_SPECIFY_ROWS means that the buttons are arranged top to bottom and
+    // GetMajorDim() is the number of rows.
+
+   const bool columnMajor = style & wxRA_SPECIFY_COLS;
+   const int numMajor = majorDim > 0 ? majorDim : count;
+
     bool isFirst = true;
 
-    for (int i = 0; i < count; ++i )
+    for ( int i = 0; i < count; ++i )
     {
-        QRadioButton *btn = new QRadioButton( wxQtConvertString( choices[i] ));
+        QRadioButton *btn = new QRadioButton(wxQtConvertString (choices[i]) );
         qtButtonGroup->addButton( btn, i );
-        qtBoxLayout->addWidget( btn );
 
-        if ( isFirst )
+        int row;
+        int col;
+
+        if (columnMajor)
         {
-            btn->setChecked(true);
+            col = i % numMajor;
+            row = i / numMajor;
+
+        }
+        else
+        {
+            col = i / numMajor;
+            row = i % numMajor;
+        }
+
+        qtGridLayout->addWidget( btn, row, col );
+
+        if (isFirst)
+        {
+            btn->setChecked( true );
             isFirst = false;
         }
     }
@@ -135,7 +162,7 @@ bool wxRadioBox::Create(wxWindow *parent,
             const wxPoint& pos,
             const wxSize& size,
             int n, const wxString choices[],
-            int WXUNUSED(majorDim),
+            int majorDim,
             long style,
             const wxValidator& val,
             const wxString& name)
@@ -147,18 +174,10 @@ bool wxRadioBox::Create(wxWindow *parent,
     if ( !(style & (wxRA_SPECIFY_ROWS | wxRA_SPECIFY_COLS)) )
         style |= wxRA_SPECIFY_COLS;
 
-    // wxRA_SPECIFY_COLS means that we arrange buttons in
-    // left to right order and GetMajorDim() is the number of columns while
-    // wxRA_SPECIFY_ROWS means that the buttons are arranged top to bottom and
-    // GetMajorDim() is the number of rows.
-    if ( style & wxRA_SPECIFY_COLS )
-        m_qtBoxLayout = new QHBoxLayout;
-    else if ( style & wxRA_SPECIFY_ROWS )
-        m_qtBoxLayout = new QVBoxLayout;
+    m_qtGridLayout = new QGridLayout;
 
-    AddChoices( m_qtButtonGroup, m_qtBoxLayout, n, choices );
-    m_qtBoxLayout->addStretch(1);
-    m_qtGroupBox->setLayout(m_qtBoxLayout);
+    AddChoices( m_qtButtonGroup, m_qtGridLayout, n, choices, style, majorDim );
+    m_qtGroupBox->setLayout(m_qtGridLayout);
 
     return QtCreateControl( parent, id, pos, size, style, val, name );
 }
