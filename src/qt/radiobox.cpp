@@ -110,17 +110,14 @@ bool wxRadioBox::Create(wxWindow *parent,
 }
 
 
-template < typename Button >
 static void AddChoices( QButtonGroup *qtButtonGroup, QBoxLayout *qtBoxLayout, int count, const wxString choices[] )
 {
-    Button *btn;
     bool isFirst = true;
-
     int id = 0;
 
     while ( count-- > 0 )
     {
-        btn = new Button( wxQtConvertString( *choices++ ));
+        QRadioButton *btn = new QRadioButton( wxQtConvertString( *choices++ ));
         qtButtonGroup->addButton( btn, id++ );
         qtBoxLayout->addWidget( btn );
 
@@ -160,7 +157,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     else if ( style & wxRA_SPECIFY_ROWS )
         m_qtBoxLayout = new QVBoxLayout;
 
-    AddChoices< QRadioButton >( m_qtButtonGroup, m_qtBoxLayout, n, choices );
+    AddChoices( m_qtButtonGroup, m_qtBoxLayout, n, choices );
     m_qtBoxLayout->addStretch(1);
     m_qtGroupBox->setLayout(m_qtBoxLayout);
 
