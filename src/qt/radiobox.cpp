@@ -113,12 +113,11 @@ bool wxRadioBox::Create(wxWindow *parent,
 static void AddChoices( QButtonGroup *qtButtonGroup, QBoxLayout *qtBoxLayout, int count, const wxString choices[] )
 {
     bool isFirst = true;
-    int id = 0;
 
-    while ( count-- > 0 )
+    for (int i = 0; i < count; ++i )
     {
-        QRadioButton *btn = new QRadioButton( wxQtConvertString( *choices++ ));
-        qtButtonGroup->addButton( btn, id++ );
+        QRadioButton *btn = new QRadioButton( wxQtConvertString( choices[i] ));
+        qtButtonGroup->addButton( btn, i );
         qtBoxLayout->addWidget( btn );
 
         if ( isFirst )
