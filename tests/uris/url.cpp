@@ -22,6 +22,7 @@
 
 #include "wx/url.h"
 #include "wx/mstream.h"
+#include "wx/scopedptr.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -73,7 +74,7 @@ void URLTestCase::GetInputStream()
     wxURL url("http://www.wxwidgets.org/assets/img/header-logo.png");
     CPPUNIT_ASSERT_EQUAL(wxURL_NOERR, url.GetError());
 
-    wxInputStream *in_stream = url.GetInputStream();
+    wxScopedPtr<wxInputStream> in_stream(url.GetInputStream());
     CPPUNIT_ASSERT(in_stream);
     CPPUNIT_ASSERT(in_stream->IsOk());
 
@@ -81,9 +82,6 @@ void URLTestCase::GetInputStream()
     CPPUNIT_ASSERT(in_stream->Read(ostream).GetLastError() == wxSTREAM_EOF);
 
     CPPUNIT_ASSERT_EQUAL(17334, ostream.GetSize());
-
-    // we have to delete the object created by GetInputStream()
-    delete in_stream;
 }
 
 void URLTestCase::CopyAndAssignment()
