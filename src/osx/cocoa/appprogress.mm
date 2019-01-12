@@ -65,7 +65,7 @@
 
 - (void)reset
 {
-    [m_dockTile setContentView:nil];
+    [m_progIndicator setHidden:YES];
 }
 
 @end
