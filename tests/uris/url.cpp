@@ -23,6 +23,7 @@
 #include "wx/url.h"
 #include "wx/mstream.h"
 #include "wx/scopedptr.h"
+#include "wx/utils.h"
 
 // ----------------------------------------------------------------------------
 // test class
@@ -75,6 +76,15 @@ void URLTestCase::GetInputStream()
     CPPUNIT_ASSERT_EQUAL(wxURL_NOERR, url.GetError());
 
     wxScopedPtr<wxInputStream> in_stream(url.GetInputStream());
+    if ( !in_stream && IsAutomaticTest() )
+    {
+        // Sometimes the connection fails during CI runs, try to connect once
+        // again if this happens in the hope it was just a transient error.
+        wxSleep(3);
+        WARN("Connection to www.wxwidgets.org failed, retrying...");
+        in_stream.reset(url.GetInputStream());
+    }
+
     CPPUNIT_ASSERT(in_stream);
     CPPUNIT_ASSERT(in_stream->IsOk());
 
