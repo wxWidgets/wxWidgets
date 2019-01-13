@@ -431,7 +431,7 @@ wxSize wxMSWButton::IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size
         //
         // Note that we intentionally don't use GetDefaultSize() here, because
         // it's inexact -- dialog units depend on this dialog's font.
-        const wxSize sizeDef = btn->ConvertDialogToPixels(wxSize(50, 14));
+        const wxSize sizeDef = btn->ConvertDialogToPixels(btn->FromDIP(wxSize(50, 14)));
 
         sizeBtn.IncTo(sizeDef);
     }
