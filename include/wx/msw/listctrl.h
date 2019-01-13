@@ -394,6 +394,10 @@ protected:
     virtual void DoSetToolTip(wxToolTip *tip) wxOVERRIDE;
 #endif // wxUSE_TOOLTIPS
 
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
+
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
     wxSize MSWGetBestViewRect(int x, int y) const;
 
     // Implement base class pure virtual methods.
