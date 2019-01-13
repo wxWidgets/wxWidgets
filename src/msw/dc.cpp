@@ -1435,6 +1435,9 @@ void wxMSWDCImpl::DoDrawRotatedText(const wxString& text,
     //     because it's not TrueType and so can't have non zero
     //     orientation/escapement
     wxFont font = m_font.IsOk() ? m_font : *wxSWISS_FONT;
+    if ( !m_font.IsOk() && m_window )
+        font.WXAdjustToPPI(m_window->GetDPI());
+
     LOGFONT lf;
     if ( ::GetObject(GetHfontOf(font), sizeof(lf), &lf) == 0 )
     {
@@ -1561,7 +1564,11 @@ void wxMSWDCImpl::SetFont(const wxFont& font)
 
     if ( font.IsOk() )
     {
-        HGDIOBJ hfont = ::SelectObject(GetHdc(), GetHfontOf(font));
+        wxFont f(font);
+        if ( m_window )
+            f.WXAdjustToPPI(m_window->GetDPI());
+
+        HGDIOBJ hfont = ::SelectObject(GetHdc(), GetHfontOf(f));
         if ( hfont == HGDI_ERROR )
         {
             wxLogLastError(wxT("SelectObject(font)"));
@@ -1571,7 +1578,7 @@ void wxMSWDCImpl::SetFont(const wxFont& font)
             if ( !m_oldFont )
                 m_oldFont = (WXHFONT)hfont;
 
-            m_font = font;
+            m_font = f;
         }
     }
     else // invalid font, reset the current font
