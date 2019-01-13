@@ -603,9 +603,9 @@ void wxGraphicsContext::Flush()
 {
 }
 
-void wxGraphicsContext::EnableOffset(bool enable) 
-{ 
-    m_enableOffset = enable; 
+void wxGraphicsContext::EnableOffset(bool enable)
+{
+    m_enableOffset = enable;
 }
 
 #if 0
@@ -782,7 +782,7 @@ void wxGraphicsContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDou
 
 void wxGraphicsContext::ClearRectangle( wxDouble WXUNUSED(x), wxDouble WXUNUSED(y), wxDouble WXUNUSED(w), wxDouble WXUNUSED(h))
 {
-    
+
 }
 
 void wxGraphicsContext::DrawEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h)
