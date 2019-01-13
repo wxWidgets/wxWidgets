@@ -582,7 +582,7 @@ bool wxHeaderCtrl::SetFont(const wxFont& font)
 
     if ( wxMSWHeaderCtrlCustomDraw* customDraw = GetCustomDraw() )
     {
-        customDraw->m_attr.SetFont(font);
+        customDraw->m_attr.SetFont(m_font);
     }
 
     return true;
