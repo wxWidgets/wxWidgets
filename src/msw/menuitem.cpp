@@ -1235,6 +1235,7 @@ void wxMenuItem::GetFontToUse(wxFont& font) const
     font = GetFont();
     if ( !font.IsOk() )
         font = MenuDrawData::Get()->Font;
+    font.WXAdjustToPPI(GetMenu()->GetWindow()->GetDPI());
 }
 
 void wxMenuItem::GetColourToUse(wxODStatus stat, wxColour& colText, wxColour& colBack) const
