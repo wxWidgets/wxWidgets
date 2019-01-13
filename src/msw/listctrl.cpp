@@ -405,6 +405,35 @@ WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     return wstyle;
 }
 
+void wxListCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxListCtrlBase::MSWUpdateFontOnDPIChange(newDPI);
+
+    for ( int i = 0; i < GetItemCount(); i++ )
+    {
+        wxMSWListItemData *data = MSWGetItemData(i);
+        if ( data && data->attr && data->attr->HasFont() )
+        {
+            wxFont f = data->attr->GetFont();
+            f.WXAdjustToPPI(newDPI);
+            SetItemFont(i, f);
+        }
+    }
+
+    if ( m_headerCustomDraw && m_headerCustomDraw->m_attr.HasFont() )
+    {
+        wxItemAttr item(m_headerCustomDraw->m_attr);
+        wxFont f = item.GetFont();
+        f.WXAdjustToPPI(newDPI);
+        item.SetFont(f);
+
+        // reset the item attribute first so wxListCtrl::SetHeaderAttr
+        // will detect the font change
+        SetHeaderAttr(wxItemAttr());
+        SetHeaderAttr(item);
+    }
+}
+
 #if WXWIN_COMPATIBILITY_3_0
 // Deprecated
 void wxListCtrl::UpdateStyle()
@@ -616,11 +645,16 @@ bool wxListCtrl::SetHeaderAttr(const wxItemAttr& attr)
             // Don't just reset the font if no font is specified, as the header
             // uses the same font as the listview control and not the ugly
             // default GUI font by default.
-            const wxFont& font = attr.HasFont() ? attr.GetFont() : GetFont();
-
-            // We need to tell the header about its new font to let it compute
-            // its new height.
-            wxSetWindowFont(hwndHdr, font);
+            if ( attr.HasFont() )
+            {
+                wxSetWindowFont(hwndHdr, attr.GetFont());
+            }
+            else
+            {
+                // make sure m_font is valid before using its HFONT reference
+                SetFont(GetFont());
+                wxSetWindowFont(hwndHdr, m_font);
+            }
         }
 
         // Refreshing the listview makes it notice the change in height of its
@@ -918,6 +952,12 @@ bool wxListCtrl::SetItem(wxListItem& info)
                 data->attr->AssignFrom(attrNew);
             else
                 data->attr = new wxItemAttr(attrNew);
+
+            if ( data->attr->HasFont() ) {
+                wxFont f = data->attr->GetFont();
+                f.WXAdjustToPPI(GetDPI());
+                data->attr->SetFont(f);
+            }
         }
     }
 
