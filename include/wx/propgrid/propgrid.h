@@ -1785,6 +1785,8 @@ protected:
 
     void OnSysColourChanged( wxSysColourChangedEvent &event );
 
+    void OnDPIChanged( wxDPIChangedEvent& event );
+
     void OnTLPClose( wxCloseEvent& event );
 
 protected:

@@ -276,6 +276,7 @@ wxBEGIN_EVENT_TABLE(wxPropertyGrid, wxControl)
   EVT_SET_FOCUS(wxPropertyGrid::OnFocusEvent)
   EVT_KILL_FOCUS(wxPropertyGrid::OnFocusEvent)
   EVT_SYS_COLOUR_CHANGED(wxPropertyGrid::OnSysColourChanged)
+  EVT_DPI_CHANGED(wxPropertyGrid::OnDPIChanged)
   EVT_MOTION(wxPropertyGrid::OnMouseMove)
   EVT_LEFT_DOWN(wxPropertyGrid::OnMouseClick)
   EVT_LEFT_UP(wxPropertyGrid::OnMouseUp)
@@ -1343,6 +1344,12 @@ void wxPropertyGrid::OnSysColourChanged( wxSysColourChangedEvent &WXUNUSED(event
     }
 }
 
+void wxPropertyGrid::OnDPIChanged( wxDPIChangedEvent &WXUNUSED(event) )
+{
+    CalculateFontAndBitmapStuff(m_vspacing);
+    Refresh();
+}
+
 // -----------------------------------------------------------------------
 
 static wxColour wxPGAdjustColour(const wxColour& src, int ra,
@@ -1698,8 +1705,8 @@ wxPoint wxPropertyGrid::GetGoodEditorDialogPosition( wxPGProperty* p,
 
     ImprovedClientToScreen( &x, &y );
 
-    int sw = wxSystemSettings::GetMetric( ::wxSYS_SCREEN_X, this);
-    int sh = wxSystemSettings::GetMetric( ::wxSYS_SCREEN_Y, this);
+    int sw = wxSystemSettings::GetMetric(wxSYS_SCREEN_X, this);
+    int sh = wxSystemSettings::GetMetric(wxSYS_SCREEN_Y, this);
 
     int new_x;
     int new_y;
