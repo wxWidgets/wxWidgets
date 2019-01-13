@@ -269,6 +269,8 @@ public:
 
     wxWindow* GetWindow() const { return m_window; }
 
+    void SetWindow(wxWindow* w) { m_window = w; }
+
     virtual bool IsOk() const { return m_ok; }
 
     // query capabilities
@@ -1363,6 +1365,9 @@ protected:
     wxDC(wxDCImpl *pimpl) : m_pimpl(pimpl) { }
 
     wxDCImpl * const m_pimpl;
+
+    void SetWindow(wxWindow* w)
+        { return m_pimpl->SetWindow(w); }
 
 private:
     wxDECLARE_ABSTRACT_CLASS(wxDC);
