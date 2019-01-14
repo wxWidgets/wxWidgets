@@ -619,7 +619,7 @@ public:
 
 	virtual void * GetNativeContext() wxOVERRIDE
 	{
-		return NULL;
+		return static_cast<void*>(m_qtPainter);
 	}
 
 	virtual bool SetAntialiasMode(wxAntialiasMode antialias) wxOVERRIDE
