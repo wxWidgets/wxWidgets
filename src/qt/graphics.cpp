@@ -59,6 +59,8 @@ private:
     }
 
 	QBrush m_brush;
+
+    wxDECLARE_NO_COPY_CLASS(wxQtBrushData);
 };
 
 class WXDLLIMPEXP_CORE wxQtPenData : public wxGraphicsObjectRefData
@@ -97,6 +99,8 @@ private:
         return wxpen.GetHandle();
     }
     QPen m_pen;
+
+    wxDECLARE_NO_COPY_CLASS(wxQtPenData);
 };
 
 class WXDLLIMPEXP_CORE wxQtBitmapData : public wxGraphicsBitmapData
@@ -139,6 +143,8 @@ public:
 
 private:
     QPixmap* m_pixmap;
+
+    wxDECLARE_NO_COPY_CLASS(wxQtBitmapData);
 };
 
 
@@ -287,6 +293,8 @@ public:
 	}
 private:
 	QTransform* m_transform;
+
+    wxDECLARE_NO_COPY_CLASS(wxQtMatrixData);
 };
 
 class wxQtFontData : public wxGraphicsObjectRefData
@@ -339,6 +347,8 @@ public:
 private:
     QFont m_font;
     QColor m_color;
+
+    wxDECLARE_NO_COPY_CLASS(wxQtFontData);
 };
 
 //-----------------------------------------------------------------------------
@@ -519,6 +529,8 @@ private:
 
 	QPainterPath* m_path;
     int m_current_subpath_start;
+
+    wxQtGraphicsPathData& operator=(const wxQtGraphicsPathData&);
 };
 
 class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
