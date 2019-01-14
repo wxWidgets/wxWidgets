@@ -1203,9 +1203,9 @@ wxString wxQtGraphicsRenderer::GetName() const
 
 void wxQtGraphicsRenderer::GetVersion(int *major, int *minor, int *micro) const
 {
-	if (major) *major = 1;
-    if (minor) *minor = 0;
-    if (micro) *micro = 0;
+	if (major) *major = QT_VERSION_MAJOR;
+    if (minor) *minor = QT_VERSION_MINOR;
+    if (micro) *micro = QT_VERSION_PATCH;
 }
 
 static wxQtGraphicsRenderer gs_qtGraphicsRenderer;
