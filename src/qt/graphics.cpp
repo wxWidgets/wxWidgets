@@ -1,11 +1,11 @@
 #include "wx/qt/graphics.h"
-#include "wx/tokenzr.h"
 
 
 #if wxUSE_GRAPHICS_CONTEXT
 #include <QPainter>
 #include <QApplication>
 #include <QDesktopWidget>
+#include "wx/tokenzr.h"
 #include "wx/graphics.h"
 #include "wx/private/graphics.h"
 
@@ -1172,8 +1172,8 @@ wxGraphicsBitmap wxQtGraphicsRenderer::CreateBitmapFromNativeBitmap(void* bitmap
 
 wxGraphicsBitmap
 wxQtGraphicsRenderer::CreateSubBitmap(const wxGraphicsBitmap& bitmap,
-wxDouble x, wxDouble y,
-wxDouble w, wxDouble h)
+    wxDouble x, wxDouble y,
+    wxDouble w, wxDouble h)
 {
     wxCHECK_MSG(!bitmap.IsNull(), wxNullGraphicsBitmap, wxS("Invalid bitmap"));
 
