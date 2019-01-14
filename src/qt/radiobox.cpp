@@ -178,11 +178,15 @@ bool wxRadioBox::Create(wxWindow *parent,
 
     AddChoices( m_qtButtonGroup, m_qtGridLayout, n, choices, style, majorDim );
 
-    QVBoxLayout *qtBoxLayout = new QVBoxLayout;
-    qtBoxLayout->addLayout(m_qtGridLayout);
-    qtBoxLayout->addStretch();
+    QVBoxLayout *vertLayout = new QVBoxLayout;
+    vertLayout->addLayout(m_qtGridLayout);
+    vertLayout->addStretch();
 
-    m_qtGroupBox->setLayout(qtBoxLayout);
+    QHBoxLayout *horzLayout = new QHBoxLayout;
+    horzLayout->addLayout(vertLayout);
+    horzLayout->addStretch();
+
+    m_qtGroupBox->setLayout(horzLayout);
 
     return QtCreateControl( parent, id, pos, size, style, val, name );
 }
