@@ -14,7 +14,14 @@
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QButtonGroup>
 
-std::map<wxWindow*, QButtonGroup*> wxRadioButton::m_lastGroup;
+
+typedef std::map<wxWindow*, QButtonGroup*> WindowToButtonGroupMap;
+
+static WindowToButtonGroupMap& GetWindowToButtonGroupMap()
+{
+    static WindowToButtonGroupMap s_map;
+    return s_map;
+}
 
 wxRadioButton::wxRadioButton()
 {
@@ -43,27 +50,24 @@ bool wxRadioButton::Create( wxWindow *parent,
 {
     m_qtRadioButton = new QRadioButton( parent->GetHandle() );
 
-    if ( (style & wxRB_GROUP) || (style & wxRB_SINGLE) )
+    if ( style & wxRB_SINGLE )
     {
-        QButtonGroup* qtButtonGroup = new QButtonGroup();
-        qtButtonGroup->addButton( m_qtRadioButton );
+        // Ensure that other buttons cannot join the last existing group
+        GetWindowToButtonGroupMap().erase(parent);
+    }
+    else if ( style & wxRB_GROUP )
+    {
+        m_qtButtonGroup = new QButtonGroup();
+        m_qtButtonGroup->addButton( m_qtRadioButton );
 
-        if ( style & wxRB_SINGLE )
-        {
-            // Ensure that other buttons cannot join the last existing group
-            m_lastGroup.erase(parent);
-        }
-        else
-        {
-            m_lastGroup[parent] = qtButtonGroup;
-            m_qtRadioButton->setChecked(true); // The first button in a group should be selected
-        }
+        GetWindowToButtonGroupMap()[parent] = m_qtButtonGroup;
+        m_qtRadioButton->setChecked(true);
     }
     else
     {
         // Add it to the previous group, if any
-        std::map<wxWindow*, QButtonGroup*>::iterator it = m_lastGroup.find(parent);
-        if ( it != m_lastGroup.end() )
+        std::map<wxWindow*, QButtonGroup*>::iterator it = GetWindowToButtonGroupMap().find(parent);
+        if ( it != GetWindowToButtonGroupMap().end() )
         {
             it->second->addButton(m_qtRadioButton);
         }
@@ -76,14 +80,18 @@ bool wxRadioButton::Create( wxWindow *parent,
 
 wxRadioButton::~wxRadioButton()
 {
-    if ( m_qtRadioButton->group() &&
-         m_qtRadioButton->group()->buttons().size() == 1 )
+    if ( m_qtRadioButton->group() && m_qtRadioButton->group()->buttons().size() == 1 )
     {
         // If this button is the only member of the last group, remove the map entry for the group
-        std::map<wxWindow*, QButtonGroup*>::iterator it = m_lastGroup.find( GetParent() );
-        if ( it != m_lastGroup.end() && m_qtRadioButton->group() == it->second )
+        std::map<wxWindow*, QButtonGroup*>::iterator it = GetWindowToButtonGroupMap().find( GetParent() );
+        if ( it != GetWindowToButtonGroupMap().end() && m_qtRadioButton->group() == it->second )
         {
-            m_lastGroup.erase(it);
+            GetWindowToButtonGroupMap().erase(it);
+
+            if( m_qtButtonGroup )
+            {
+                delete m_qtButtonGroup;
+            }
         }
     }
 }

@@ -46,8 +46,7 @@ protected:
 
 private:
     QRadioButton *m_qtRadioButton;
-
-    static std::map<wxWindow*, QButtonGroup*> m_lastGroup;
+    QButtonGroup* m_qtButtonGroup;
 
     wxDECLARE_DYNAMIC_CLASS( wxRadioButton );
 };
