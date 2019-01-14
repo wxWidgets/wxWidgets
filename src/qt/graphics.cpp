@@ -355,6 +355,7 @@ public:
         m_current_subpath_start(-1)
 	{
 	}
+
 	~wxQtGraphicsPathData()
 	{
 		delete m_path;
@@ -362,7 +363,7 @@ public:
 
 	virtual wxGraphicsObjectRefData *Clone() const wxOVERRIDE
 	{
-		return NULL;
+        return new wxQtGraphicsPathData(*this);
 	}
 
 	//
@@ -503,10 +504,19 @@ public:
 	}
 
 private:
+    // for Clone
+    wxQtGraphicsPathData(const wxQtGraphicsPathData& rhs) :
+        wxGraphicsPathData(rhs.GetRenderer()),
+        m_path(new QPainterPath(*rhs.m_path)),
+        m_current_subpath_start(rhs.m_current_subpath_start)
+    {
+    }
+
     bool hasCurrentSubpath() const
     {
         return m_current_subpath_start != -1;
     }
+
 	QPainterPath* m_path;
     int m_current_subpath_start;
 };
