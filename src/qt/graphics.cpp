@@ -352,7 +352,7 @@ public:
 	wxQtGraphicsPathData(wxGraphicsRenderer* renderer)
 		: wxGraphicsPathData(renderer),
           m_path(new QPainterPath()),
-        m_current_subpath_start(-1)
+          m_current_subpath_start(-1)
 	{
 	}
 
