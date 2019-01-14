@@ -18,7 +18,7 @@ public:
     }
 
     wxQtBrushData(wxGraphicsRenderer* renderer, const wxBrush& wxbrush)
-        : wxGraphicsObjectRefData(renderer), brush(wxbrush.GetHandle())
+        : wxGraphicsObjectRefData(renderer), m_brush(wxbrush.GetHandle())
     {
     }
 
@@ -28,7 +28,7 @@ public:
     {
         QLinearGradient gradient(x1, y1, x2, y2);
         setWxStops(gradient, stops);
-        brush = QBrush(gradient);
+        m_brush = QBrush(gradient);
     }
 
     void CreateRadialGradientBrush(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
@@ -36,12 +36,12 @@ public:
     {
         QRadialGradient gradient(QPointF(xc, yc), radius, QPointF(xo, yo));
         setWxStops(gradient, stops);
-        brush = QBrush(gradient);
+        m_brush = QBrush(gradient);
     }
 
     const QBrush& getBrush() const
     {
-        return brush;
+        return m_brush;
     }
 
 private:
@@ -58,20 +58,20 @@ private:
         gradient.setStops(qstops);
     }
 
-	QBrush brush;
+	QBrush m_brush;
 };
 
 class WXDLLIMPEXP_CORE wxQtPenData : public wxGraphicsObjectRefData
 {
 public:
     wxQtPenData(wxGraphicsRenderer* renderer, const wxGraphicsPenInfo& info)
-        : wxGraphicsObjectRefData(renderer), pen(createPenFromInfo(info))
+        : wxGraphicsObjectRefData(renderer), m_pen(createPenFromInfo(info))
     {
     }
 
     const QPen& getPen() const
     {
-        return pen;
+        return m_pen;
     }
 
 private:
@@ -96,7 +96,7 @@ private:
 
         return wxpen.GetHandle();
     }
-    QPen pen;
+    QPen m_pen;
 };
 
 class WXDLLIMPEXP_CORE wxQtBitmapData : public wxGraphicsBitmapData
