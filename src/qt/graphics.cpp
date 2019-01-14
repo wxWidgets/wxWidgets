@@ -471,7 +471,7 @@ public:
 	// returns the native path
 	virtual void * GetNativePath() const wxOVERRIDE
 	{
-		return reinterpret_cast<void*>(m_path);
+		return static_cast<void*>(m_path);
 	}
 
 	// give the native path returned by GetNativePath() back (there might be some deallocations necessary)
@@ -525,7 +525,7 @@ class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
 {
     void initFromDC(const wxDC& dc)
     {
-        m_qtPainter = reinterpret_cast<QPainter*>(dc.GetHandle());
+        m_qtPainter = static_cast<QPainter*>(dc.GetHandle());
         m_ownsPainter = false;
 
         wxSize sz = dc.GetSize();
@@ -571,7 +571,7 @@ public:
 	wxQtGraphicsContext(wxGraphicsRenderer* renderer, wxWindow *window)
 		: wxGraphicsContext(renderer)
 	{
-	    m_qtPainter = reinterpret_cast<QPainter*>(window->QtGetPainter());
+	    m_qtPainter = static_cast<QPainter*>(window->QtGetPainter());
         m_ownsPainter = false;
 
         wxSize sz = window->GetClientSize();
@@ -713,7 +713,7 @@ public:
             return;
         }
 
-        QPainterPath* path_data = reinterpret_cast<QPainterPath*>(p.GetNativePath());
+        QPainterPath* path_data = static_cast<QPainterPath*>(p.GetNativePath());
         const QPen& pen = ((wxQtPenData*)m_pen.GetRefData())->getPen();
         m_qtPainter->strokePath(*path_data, pen);
     }
@@ -723,8 +723,8 @@ public:
 		{
 			return;
 		}
-
-		QPainterPath* path_data = reinterpret_cast<QPainterPath*>(p.GetNativePath());
+        
+		QPainterPath* path_data = static_cast<QPainterPath*>(p.GetNativePath());
 		const QBrush& brush = ((wxQtBrushData*)m_brush.GetRefData())->getBrush();
 		m_qtPainter->fillPath(*path_data, brush);
 	}
