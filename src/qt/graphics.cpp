@@ -1,5 +1,4 @@
 #include "wx/qt/graphics.h"
-#include <wx/qt/private/converter.h>
 #include "wx/tokenzr.h"
 
 
@@ -9,14 +8,6 @@
 #include <QDesktopWidget>
 #include "wx/graphics.h"
 #include "wx/private/graphics.h"
-
-namespace
-{
-    double RadiansToDegrees(double angle_in_radians)
-    {
-        return angle_in_radians * 180 / M_PI;
-    }
-}
 
 class WXDLLIMPEXP_CORE wxQtBrushData : public wxGraphicsObjectRefData
 {
@@ -415,15 +406,15 @@ public:
         {
             if (endAngle < startAngle)
                 endAngle += 2 * M_PI;
-            arc_length = -RadiansToDegrees(endAngle - startAngle);
+            arc_length = -wxRadToDeg(endAngle - startAngle);
         }
         else
         {
             if (endAngle > startAngle)
                 endAngle -= 2 * M_PI;
-            arc_length = -RadiansToDegrees(endAngle - startAngle);
+            arc_length = -wxRadToDeg(endAngle - startAngle);
         }
-        m_path->arcTo(x-r, y-r, r*2, r*2, -RadiansToDegrees(startAngle), arc_length);
+        m_path->arcTo(x-r, y-r, r*2, r*2, -wxRadToDeg(startAngle), arc_length);
         if (fixupFirst)
         {
             QPainterPath::Element element = m_path->elementAt(m_current_subpath_start+1);
@@ -506,7 +497,7 @@ public:
         if (h) *h = bounding_rect.height();
     }
 
-	virtual bool Contains(wxDouble x, wxDouble y, wxPolygonFillMode fillStyle = wxWINDING_RULE) const wxOVERRIDE
+	virtual bool Contains(wxDouble x, wxDouble y, wxPolygonFillMode /*fillStyle = wxWINDING_RULE*/) const wxOVERRIDE
 	{
         return m_path->contains(QPointF(x, y));
 	}
@@ -695,13 +686,15 @@ public:
 		return true;
 	}
 
-	virtual void BeginLayer(wxDouble opacity) wxOVERRIDE
+	virtual void BeginLayer(wxDouble /*opacity*/) wxOVERRIDE
 	{
-	}
+        wxFAIL_MSG("BeginLayer not implemented");
+    }
 
 	virtual void EndLayer() wxOVERRIDE
 	{
-	}
+        wxFAIL_MSG("EndLayer not implemented");
+    }
 
 	virtual void StrokePath(const wxGraphicsPath& p) wxOVERRIDE
 	{
@@ -714,7 +707,7 @@ public:
         const QPen& pen = ((wxQtPenData*)m_pen.GetRefData())->getPen();
         m_qtPainter->strokePath(*path_data, pen);
     }
-	virtual void FillPath(const wxGraphicsPath& p, wxPolygonFillMode fillStyle = wxWINDING_RULE) wxOVERRIDE
+	virtual void FillPath(const wxGraphicsPath& p, wxPolygonFillMode /*fillStyle = wxWINDING_RULE*/) wxOVERRIDE
 	{
 		if (m_brush.IsNull())
 		{
@@ -742,7 +735,7 @@ public:
 	virtual void Rotate(wxDouble angle) wxOVERRIDE
 	{
         // wx angle is in radians. Qt angle is in degrees.
-		m_qtPainter->rotate(RadiansToDegrees(angle));
+		m_qtPainter->rotate(wxRadToDeg(angle));
 	}
 
 	// concatenates this transform with the current transform of this context
@@ -827,8 +820,9 @@ public:
         if (externalLeading) *externalLeading = metrics.leading() - (metrics.ascent() + metrics.descent());
     }
 
-	virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const wxOVERRIDE
+	virtual void GetPartialTextExtents(const wxString& /*text*/, wxArrayDouble& /*widths*/) const wxOVERRIDE
 	{
+        wxFAIL_MSG("GetPartialTextExtents not implemented");
 	}
 
 protected:
