@@ -1,3 +1,20 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        src/qt/graphics.cpp
+// Purpose:     Graphics context methods for the Qt platform
+// Author:      Jay Nabonne
+// Modified by:
+// Created:
+// Copyright:   (c) Jay Nabonne
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#if defined(__BORLANDC__)
+#pragma hdrstop
+#endif
+
 #if wxUSE_GRAPHICS_CONTEXT
 #include <QPainter>
 #include <QApplication>
