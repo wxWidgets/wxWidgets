@@ -27,7 +27,7 @@ public:
         const wxGraphicsGradientStops& stops)
     {
         QLinearGradient gradient(x1, y1, x2, y2);
-        setWxStops(gradient, stops);
+        SetStops(gradient, stops);
         m_brush = QBrush(gradient);
     }
 
@@ -35,7 +35,7 @@ public:
         const wxGraphicsGradientStops& stops)
     {
         QRadialGradient gradient(QPointF(xc, yc), radius, QPointF(xo, yo));
-        setWxStops(gradient, stops);
+        SetStops(gradient, stops);
         m_brush = QBrush(gradient);
     }
 
@@ -46,7 +46,7 @@ public:
 
 private:
 
-    static void setWxStops(QGradient& gradient, const wxGraphicsGradientStops& stops)
+    static void SetStops(QGradient& gradient, const wxGraphicsGradientStops& stops)
     {
         QGradientStops qstops;
         for (size_t i = 0; i < stops.GetCount(); ++i)
@@ -67,17 +67,17 @@ class WXDLLIMPEXP_CORE wxQtPenData : public wxGraphicsObjectRefData
 {
 public:
     wxQtPenData(wxGraphicsRenderer* renderer, const wxGraphicsPenInfo& info)
-        : wxGraphicsObjectRefData(renderer), m_pen(createPenFromInfo(info))
+        : wxGraphicsObjectRefData(renderer), m_pen(CreatePenFromInfo(info))
     {
     }
 
-    const QPen& getPen() const
+    const QPen& GetPen() const
     {
         return m_pen;
     }
 
 private:
-    static QPen createPenFromInfo(const wxGraphicsPenInfo& info)
+    static QPen CreatePenFromInfo(const wxGraphicsPenInfo& info)
     {
         wxPen wxpen(info.GetColour(), info.GetWidth(), info.GetStyle());
         wxpen.SetDashes(info.GetDashCount(), info.GetDash());
@@ -391,7 +391,7 @@ public:
     // if there is no current path, it is equivalent to a moveTo.
     virtual void AddLineToPoint(wxDouble x, wxDouble y) wxOVERRIDE
     {
-        if (!hasCurrentSubpath())
+        if (!HasCurrentSubpath())
             MoveToPoint(x, y);
         else
             m_path->lineTo(x, y);
@@ -400,7 +400,7 @@ public:
     // adds a cubic Bezier curve from the current point, using two control points and an end point
     virtual void AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y) wxOVERRIDE
     {
-        if (!hasCurrentSubpath())
+        if (!HasCurrentSubpath())
             MoveToPoint(cx1, cy1);
         m_path->cubicTo(QPointF(cx1, cy1), QPointF(cx2, cy2), QPointF(x, y));
     }
@@ -408,7 +408,7 @@ public:
     // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
     virtual void AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise) wxOVERRIDE
     {
-        const bool fixupFirst = !hasCurrentSubpath();
+        const bool fixupFirst = !HasCurrentSubpath();
         if (fixupFirst)
             MoveToPoint(x, y);
 
@@ -452,7 +452,7 @@ public:
     virtual void CloseSubpath() wxOVERRIDE
     {
         // Current position must be end of last path after close, not (0,0) as Qt sets.
-        if (!hasCurrentSubpath())
+        if (!HasCurrentSubpath())
             return;
 
         const QPainterPath::Element first_element = m_path->elementAt(m_current_subpath_start);
@@ -522,7 +522,7 @@ private:
     {
     }
 
-    bool hasCurrentSubpath() const
+    bool HasCurrentSubpath() const
     {
         return m_current_subpath_start != -1;
     }
@@ -535,12 +535,12 @@ private:
 
 class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
 {
-    void initFromDC(const wxDC& dc)
+    void InitFromDC(const wxDC& dc)
     {
         m_qtPainter = static_cast<QPainter*>(dc.GetHandle());
         m_ownsPainter = false;
 
-        wxSize sz = dc.GetSize();
+        const wxSize sz = dc.GetSize();
         m_width = sz.x;
         m_height = sz.y;
     }
@@ -565,20 +565,20 @@ public:
     wxQtGraphicsContext(wxGraphicsRenderer* renderer, const wxWindowDC& dc)
         : wxGraphicsContext(renderer)
     {
-        initFromDC(dc);
+        InitFromDC(dc);
     }
 
     wxQtGraphicsContext(wxGraphicsRenderer* renderer, const wxMemoryDC& dc)
         : wxGraphicsContext(renderer)
     {
-        initFromDC(dc);
+        InitFromDC(dc);
     }
 
 #if wxUSE_PRINTING_ARCHITECTURE
     wxQtGraphicsContext(wxGraphicsRenderer* renderer, const wxPrinterDC& dc)
         : wxGraphicsContext(renderer)
     {
-        initFromDC(dc);
+        InitFromDC(dc);
     }
 
 #endif
@@ -588,7 +588,7 @@ public:
         m_qtPainter = static_cast<QPainter*>(window->QtGetPainter());
         m_ownsPainter = false;
 
-        wxSize sz = window->GetClientSize();
+        const wxSize sz = window->GetClientSize();
         m_width = sz.x;
         m_height = sz.y;
     }
@@ -624,7 +624,7 @@ public:
     // returns bounding box of the clipping region
     virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) wxOVERRIDE
     {
-        QRectF box = m_qtPainter->clipBoundingRect();
+        const QRectF box = m_qtPainter->clipBoundingRect();
         if (x) *x = box.left();
         if (y) *y = box.top();
         if (w) *w = box.width();
@@ -729,8 +729,8 @@ public:
             return;
         }
 
-        QPainterPath* path_data = static_cast<QPainterPath*>(p.GetNativePath());
-        const QPen& pen = ((wxQtPenData*)m_pen.GetRefData())->getPen();
+        const QPainterPath* path_data = static_cast<QPainterPath*>(p.GetNativePath());
+        const QPen& pen = static_cast<wxQtPenData*>(m_pen.GetRefData())->GetPen();
         m_qtPainter->strokePath(*path_data, pen);
     }
     virtual void FillPath(const wxGraphicsPath& p, wxPolygonFillMode /*fillStyle = wxWINDING_RULE*/) wxOVERRIDE
@@ -740,8 +740,8 @@ public:
             return;
         }
         
-        QPainterPath* path_data = static_cast<QPainterPath*>(p.GetNativePath());
-        const QBrush& brush = ((wxQtBrushData*)m_brush.GetRefData())->getBrush();
+        const QPainterPath* path_data = static_cast<QPainterPath*>(p.GetNativePath());
+        const QBrush& brush = static_cast<wxQtBrushData*>(m_brush.GetRefData())->getBrush();
         m_qtPainter->fillPath(*path_data, brush);
     }
     virtual void ClearRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
@@ -782,7 +782,7 @@ public:
     // gets the matrix of this context
     virtual wxGraphicsMatrix GetTransform() const wxOVERRIDE
     {
-        QTransform transform = m_qtPainter->transform();
+        const QTransform& transform = m_qtPainter->transform();
         wxGraphicsMatrix m;
         m.SetRefData(new wxQtMatrixData(GetRenderer(), transform));
         return m;
@@ -910,24 +910,24 @@ class wxQtImageContext : public wxQtGraphicsContext
 public:
     wxQtImageContext(wxGraphicsRenderer* renderer, wxImage& image) :
         wxQtGraphicsContext(renderer),
-        image(image)
+        m_image(image)
     {
         const wxBitmap wxbitmap(image);
-        pixmap = *wxbitmap.GetHandle();
-        m_qtPainter = new QPainter(&pixmap);
+        m_pixmap = *wxbitmap.GetHandle();
+        m_qtPainter = new QPainter(&m_pixmap);
         m_ownsPainter = false;
     }
 
     ~wxQtImageContext()
     {
-        wxQtBitmapData bitmap(GetRenderer(), &pixmap);
-        image = bitmap.DoConvertToImage();
+        wxQtBitmapData bitmap(GetRenderer(), &m_pixmap);
+        m_image = bitmap.DoConvertToImage();
         delete m_qtPainter;
     }
 
 private:
-    QPixmap pixmap;
-    wxImage& image;
+    QPixmap m_pixmap;
+    wxImage& m_image;
 };
 
 //-----------------------------------------------------------------------------
