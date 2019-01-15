@@ -656,6 +656,7 @@ public:
     virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) wxOVERRIDE
     {
         m_qtPainter->setRenderHint(QPainter::SmoothPixmapTransform, interpolation == wxINTERPOLATION_BEST);
+        m_interpolation = interpolation;
         return true;
     }
 
