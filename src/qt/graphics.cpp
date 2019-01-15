@@ -676,47 +676,47 @@ public:
         QPainter::CompositionMode q_composition_mode;
         switch ( composition )
         {
-        case wxCOMPOSITION_CLEAR:
-            q_composition_mode = QPainter::CompositionMode_Clear;
-            break;
-        case wxCOMPOSITION_SOURCE:
-            q_composition_mode = QPainter::CompositionMode_Source;
-            break;
-        case wxCOMPOSITION_OVER:
-            q_composition_mode = QPainter::CompositionMode_SourceOver;
-            break;
-        case wxCOMPOSITION_IN:
-            q_composition_mode = QPainter::CompositionMode_SourceIn;
-            break;
-        case wxCOMPOSITION_OUT:
-            q_composition_mode = QPainter::CompositionMode_SourceOut;
-            break;
-        case wxCOMPOSITION_ATOP:
-            q_composition_mode = QPainter::CompositionMode_SourceAtop;
-            break;
-        case wxCOMPOSITION_DEST:
-            q_composition_mode = QPainter::CompositionMode_Destination;
-            break;
-        case wxCOMPOSITION_DEST_OVER:
-            q_composition_mode = QPainter::CompositionMode_DestinationOver;
-            break;
-        case wxCOMPOSITION_DEST_IN:
-            q_composition_mode = QPainter::CompositionMode_DestinationIn;
-            break;
-        case wxCOMPOSITION_DEST_OUT:
-            q_composition_mode = QPainter::CompositionMode_DestinationOut;
-            break;
-        case wxCOMPOSITION_DEST_ATOP:
-            q_composition_mode = QPainter::CompositionMode_DestinationAtop;
-            break;
-        case wxCOMPOSITION_XOR:
-            q_composition_mode = QPainter::CompositionMode_Xor;
-            break;
-        case wxCOMPOSITION_ADD:
-            q_composition_mode = QPainter::CompositionMode_Plus;
-            break;
-        default:
-            return false;
+            case wxCOMPOSITION_CLEAR:
+                q_composition_mode = QPainter::CompositionMode_Clear;
+                break;
+            case wxCOMPOSITION_SOURCE:
+                q_composition_mode = QPainter::CompositionMode_Source;
+                break;
+            case wxCOMPOSITION_OVER:
+                q_composition_mode = QPainter::CompositionMode_SourceOver;
+                break;
+            case wxCOMPOSITION_IN:
+                q_composition_mode = QPainter::CompositionMode_SourceIn;
+                break;
+            case wxCOMPOSITION_OUT:
+                q_composition_mode = QPainter::CompositionMode_SourceOut;
+                break;
+            case wxCOMPOSITION_ATOP:
+                q_composition_mode = QPainter::CompositionMode_SourceAtop;
+                break;
+            case wxCOMPOSITION_DEST:
+                q_composition_mode = QPainter::CompositionMode_Destination;
+                break;
+            case wxCOMPOSITION_DEST_OVER:
+                q_composition_mode = QPainter::CompositionMode_DestinationOver;
+                break;
+            case wxCOMPOSITION_DEST_IN:
+                q_composition_mode = QPainter::CompositionMode_DestinationIn;
+                break;
+            case wxCOMPOSITION_DEST_OUT:
+                q_composition_mode = QPainter::CompositionMode_DestinationOut;
+                break;
+            case wxCOMPOSITION_DEST_ATOP:
+                q_composition_mode = QPainter::CompositionMode_DestinationAtop;
+                break;
+            case wxCOMPOSITION_XOR:
+                q_composition_mode = QPainter::CompositionMode_Xor;
+                break;
+            case wxCOMPOSITION_ADD:
+                q_composition_mode = QPainter::CompositionMode_Plus;
+                break;
+            default:
+                return false;
         }
         m_qtPainter->setCompositionMode(q_composition_mode);
         m_composition = composition;
@@ -988,7 +988,6 @@ public:
     virtual wxGraphicsMatrix CreateMatrix(wxDouble a = 1.0, wxDouble b = 0.0, wxDouble c = 0.0, wxDouble d = 1.0,
         wxDouble tx = 0.0, wxDouble ty = 0.0) wxOVERRIDE;
 
-
     virtual wxGraphicsPen CreatePen(const wxGraphicsPenInfo& info) wxOVERRIDE;
 
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush) wxOVERRIDE;
@@ -1182,12 +1181,10 @@ wxGraphicsBitmap wxQtGraphicsRenderer::CreateBitmap(const wxBitmap& bmp)
 wxGraphicsBitmap wxQtGraphicsRenderer::CreateBitmapFromImage(const wxImage& image)
 {
     wxGraphicsBitmap bmp;
-
     if ( image.IsOk() )
     {
         bmp.SetRefData(new wxQtBitmapData(this, image));
     }
-
     return bmp;
 }
 
