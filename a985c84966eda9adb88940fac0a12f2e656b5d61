@@ -1,0 +1,1 @@
+wxOSX: Fix crash in wxGauge with wxGA_PROGRESS (Konstantin Matveyev).
