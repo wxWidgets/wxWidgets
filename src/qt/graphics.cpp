@@ -828,14 +828,13 @@ public:
     virtual void GetTextExtent(const wxString &str, wxDouble *width, wxDouble *height,
         wxDouble *descent, wxDouble *externalLeading) const wxOVERRIDE
     {
-        wxCHECK_RET(!m_font.IsNull(), wxT("wxQtContext::DrawText - no valid font set"));
+        wxCHECK_RET(!m_font.IsNull(), wxT("wxQtContext::GetTextExtent - no valid font set"));
 
-        wxQtFontData* font_data = static_cast<wxQtFontData*>(m_font.GetRefData());
-
+        const wxQtFontData* font_data = static_cast<wxQtFontData*>(m_font.GetRefData());
         m_qtPainter->setFont(font_data->GetFont());
 
-        QFontMetrics metrics = m_qtPainter->fontMetrics();
-        QRect bounding_rect = metrics.boundingRect(QString(str));
+        const QFontMetrics metrics = m_qtPainter->fontMetrics();
+        const QRect bounding_rect = metrics.boundingRect(QString(str));
 
         if (width) *width = bounding_rect.width();
         if (height) *height = bounding_rect.height();
@@ -843,9 +842,26 @@ public:
         if (externalLeading) *externalLeading = metrics.leading() - (metrics.ascent() + metrics.descent());
     }
 
-    virtual void GetPartialTextExtents(const wxString& /*text*/, wxArrayDouble& /*widths*/) const wxOVERRIDE
+    virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const wxOVERRIDE
     {
-        wxFAIL_MSG("GetPartialTextExtents not implemented");
+        wxCHECK_RET(!m_font.IsNull(), wxT("wxQtContext::GetPartialTextExtents - no valid font set"));
+
+        const wxQtFontData* font_data = static_cast<wxQtFontData*>(m_font.GetRefData());
+        m_qtPainter->setFont(font_data->GetFont());
+
+        const QFontMetrics metrics = m_qtPainter->fontMetrics();
+
+        const size_t text_length = text.length();
+
+        widths.Empty();
+        widths.Add(0, text_length);
+
+        for (size_t i = 1; i < text_length; ++i)
+        {
+            const wxString sub_string = text.substr(0, i);
+            const QRect bounding_rect = metrics.boundingRect(QString(sub_string));
+            widths[i] = bounding_rect.width();
+        }
     }
 
 protected:
