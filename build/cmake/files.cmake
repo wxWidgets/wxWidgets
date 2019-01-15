@@ -187,7 +187,6 @@ set(QT_WIN32_HDR
     wx/msw/sound.h
     wx/msw/ole/oleutils.h
     wx/msw/ole/comimpl.h
-    wx/qt/graphics.h
 )
 
 set(QT_HDR

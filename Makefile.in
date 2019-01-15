@@ -2188,8 +2188,7 @@ COND_PLATFORM_WIN32_1_QT_PLATFORM_HDR =  \
 	wx/msw/ole/safearray.h \
 	wx/msw/ole/oleutils.h \
 	wx/msw/ole/comimpl.h \
-	wx/msw/ole/uuid.h \
-	wx/qt/graphics.h
+	wx/msw/ole/uuid.h
 @COND_PLATFORM_WIN32_1@QT_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_QT_PLATFORM_HDR)
 COND_PLATFORM_MACOSX_1_GTK_PLATFORM_HDR =  \
 	wx/generic/caret.h \

@@ -1,6 +1,3 @@
-#include "wx/qt/graphics.h"
-
-
 #if wxUSE_GRAPHICS_CONTEXT
 #include <QPainter>
 #include <QApplication>

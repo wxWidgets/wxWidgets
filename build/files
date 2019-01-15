@@ -210,7 +210,6 @@ QT_WIN32_HDR=
     wx/msw/dib.h
     wx/msw/joystick.h
     wx/msw/sound.h
-    wx/qt/graphics.h
 
 QT_HDR =
     $(QT_PLATFORM_HDR)
