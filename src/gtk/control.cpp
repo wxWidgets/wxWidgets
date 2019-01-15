@@ -267,6 +267,18 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
     attr.font = wxFont(info);
     gdk_rgba_free(fc);
     gdk_rgba_free(bc);
+
+    // Go up the parent chain for a background color
+    while (attr.colBg.Alpha() == 0 && (widget = gtk_widget_get_parent(widget)))
+    {
+        sc = gtk_widget_get_style_context(widget);
+        gtk_style_context_save(sc);
+        gtk_style_context_set_state(sc, stateFlag);
+        gtk_style_context_get(sc, stateFlag, "background-color", &bc, NULL);
+        gtk_style_context_restore(sc);
+        attr.colBg = wxColour(*bc);
+        gdk_rgba_free(bc);
+    }
 #else
     GtkStyle* style;
 
