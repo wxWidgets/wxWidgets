@@ -851,9 +851,7 @@ public:
 
     static wxGraphicsRenderer* GetDefaultRenderer();
 
-#if wxUSE_CAIRO
     static wxGraphicsRenderer* GetCairoRenderer();
-#endif
 
 #ifdef __WXMSW__
 #if wxUSE_GRAPHICS_GDIPLUS
