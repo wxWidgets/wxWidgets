@@ -111,7 +111,10 @@ void wxMenuItem::SetBitmap(const wxBitmap& bitmap)
     if ( m_kind == wxITEM_NORMAL )
     {
         m_bitmap = bitmap;
-        m_qtAction->setIcon( QIcon( *m_bitmap.GetHandle() ) );
+        if ( !m_bitmap.IsNull() )
+        {
+            m_qtAction->setIcon( QIcon(*m_bitmap.GetHandle()) );
+        }
     }
     else
     {
@@ -165,5 +168,7 @@ void wxQtAction::onActionTriggered( bool checked )
 {
     wxMenuItem *handler = GetHandler();
     wxMenu *menu = handler->GetMenu();
+    if ( handler->IsCheckable() )
+        handler->Check(checked);
     menu->SendEvent( handler->GetId(), handler->IsCheckable() ? checked : -1 );
 }

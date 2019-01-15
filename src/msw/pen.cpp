@@ -205,7 +205,7 @@ static int ConvertPenStyle(wxPenStyle style)
 
         default:
             wxFAIL_MSG( wxT("unknown pen style") );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxPENSTYLE_DOT:
             return PS_DOT;
@@ -241,7 +241,7 @@ static int ConvertJoinStyle(wxPenJoin join)
 
         default:
             wxFAIL_MSG( wxT("unknown pen join style") );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxJOIN_ROUND:
             return PS_JOIN_ROUND;
@@ -260,7 +260,7 @@ static int ConvertCapStyle(wxPenCap cap)
 
         default:
             wxFAIL_MSG( wxT("unknown pen cap style") );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxCAP_ROUND:
             return PS_ENDCAP_ROUND;

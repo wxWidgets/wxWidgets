@@ -1179,7 +1179,6 @@ void wxDocManager::DoOpenMRUFile(unsigned n)
     if ( filename.empty() )
         return;
 
-    wxString errMsg; // must contain exactly one "%s" if non-empty
     if ( wxFile::Exists(filename) )
     {
         // Try to open it but don't give an error if it failed: this could be
@@ -1805,7 +1804,18 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
         // first choose the template using the extension, if this fails (i.e.
         // wxFileSelectorEx() didn't fill it), then use the path
         if ( FilterIndex != -1 )
+        {
             theTemplate = templates[FilterIndex];
+            if ( theTemplate )
+            {
+                // But don't use this template if it doesn't match the path as
+                // can happen if the user specified the extension explicitly
+                // but didn't bother changing the filter.
+                if ( !theTemplate->FileMatchesTemplate(path) )
+                    theTemplate = NULL;
+            }
+        }
+
         if ( !theTemplate )
             theTemplate = FindTemplateForPath(path);
         if ( !theTemplate )

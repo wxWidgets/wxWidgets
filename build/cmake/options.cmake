@@ -37,7 +37,7 @@ else()
         set(wxCXX_STANDARD_DEFAULT COMPILER_DEFAULT)
     endif()
     wx_option(wxBUILD_CXX_STANDARD "C++ standard used to build wxWidgets targets"
-        ${wxCXX_STANDARD_DEFAULT} STRINGS COMPILER_DEFAULT 98 11 14)
+              ${wxCXX_STANDARD_DEFAULT} STRINGS COMPILER_DEFAULT 98 11 14 17)
 endif()
 
 if(WIN32)
@@ -46,6 +46,7 @@ endif()
 
 # STL options
 wx_option(wxUSE_STL "use standard C++ classes for everything" OFF)
+set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_STL "use C++ STL classes")
 wx_dependent_option(wxUSE_STD_CONTAINERS "use standard C++ container classes" ON "wxUSE_STL" OFF)
 
 wx_option(wxUSE_UNICODE "compile with Unicode support (NOT RECOMMENDED to be turned off)")
@@ -75,8 +76,16 @@ set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBLZMA "use liblzm
 
 wx_option(wxUSE_OPENGL "use OpenGL (or Mesa)")
 
-if(NOT WIN32)
+if(UNIX)
+    wx_option(wxUSE_LIBSDL "use SDL for audio on Unix")
     wx_option(wxUSE_LIBICONV "use libiconv (character conversion)")
+    wx_option(wxUSE_LIBNOTIFY "use libnotify for notifications")
+    wx_option(wxUSE_XTEST "use XTest extension")
+    wx_option(wxUSE_LIBMSPACK "use libmspack (CHM help files loading)")
+    wx_option(wxUSE_LIBGNOMEVFS "use GNOME VFS for associating MIME types")
+
+    set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBSDL "use SDL for audio on Unix")
+    set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_LIBMSPACK "use libmspack (CHM help files loading)")
 endif()
 
 # ---------------------------------------------------------------------------
@@ -356,7 +365,6 @@ wx_option(wxUSE_DRAGIMAGE "use wxDragImage")
 wx_option(wxUSE_UIACTIONSIMULATOR "use wxUIActionSimulator (experimental)")
 wx_option(wxUSE_DC_TRANSFORM_MATRIX "use wxDC::SetTransformMatrix and related")
 wx_option(wxUSE_WEBVIEW_WEBKIT "use wxWebView WebKit backend")
-# TODO: wxUSE_WEBVIEW_WEBKIT2
 if(WIN32 OR APPLE)
     set(wxUSE_PRIVATE_FONTS_DEFAULT ON)
 else()

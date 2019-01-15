@@ -22,7 +22,7 @@ class wxDisplayFactory
 {
 public:
     wxDisplayFactory() { }
-    virtual ~wxDisplayFactory();
+    virtual ~wxDisplayFactory() { ClearImpls(); }
 
     // Create the display if necessary using CreateDisplay(), otherwise just
     // get it from cache.
@@ -48,6 +48,9 @@ public:
     // the window pointer must not be NULL (i.e. caller should check it)
     virtual int GetFromWindow(const wxWindow *window);
 
+    // Trigger recreation of wxDisplayImpl when they're needed the next time.
+    void InvalidateCache() { ClearImpls(); }
+
 protected:
     // create a new display object
     //
@@ -55,6 +58,9 @@ protected:
     virtual wxDisplayImpl *CreateDisplay(unsigned n) = 0;
 
 private:
+    // Delete all the elements of m_impls vector and clear it.
+    void ClearImpls();
+
     // On-demand populated vector of wxDisplayImpl objects.
     wxVector<wxDisplayImpl*> m_impls;
 

@@ -3287,7 +3287,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                             Misc plugin sources:                       -->
 <!-- ====================================================================== -->
 
-<set var="UNIX_SOUND_SRC_SDL" hints="files">
+<set var="UNIX_SOUND_SDL_SRC" hints="files">
     src/unix/sound_sdl.cpp
 </set>
 
@@ -3708,7 +3708,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- wxAdv sources -->
     <set var="PLUGIN_SRC">
         <if cond="FORMAT=='autoconf' and PLATFORM_UNIX=='1' and USE_PLUGINS=='0'">
-            $(UNIX_SOUND_SRC_SDL)
+            $(UNIX_SOUND_SDL_SRC)
         </if>
     </set>
 

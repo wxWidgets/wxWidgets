@@ -104,9 +104,9 @@ wxPROPERTY( Size,int, SetPointSize, GetPointSize, 12, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group"))
 wxPROPERTY( Family, wxFontFamily , SetFamily, GetFamily, (wxFontFamily)wxDEFAULT, \
            0 /*flags*/, wxT("Helpstring"), wxT("group")) // wxFontFamily
-wxPROPERTY( Style, wxFontStyle, SetStyle, GetStyle, (wxFontStyle)wxNORMAL, 0 /*flags*/, \
+wxPROPERTY( Style, wxFontStyle, SetStyle, GetStyle, wxFONTSTYLE_NORMAL, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group")) // wxFontStyle
-wxPROPERTY( Weight, wxFontWeight, SetWeight, GetWeight, (wxFontWeight)wxNORMAL, 0 /*flags*/, \
+wxPROPERTY( Weight, wxFontWeight, SetWeight, GetWeight, wxFONTWEIGHT_NORMAL, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group")) // wxFontWeight
 wxPROPERTY( Underlined, bool, SetUnderlined, GetUnderlined, false, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group"))

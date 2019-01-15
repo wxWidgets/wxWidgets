@@ -2839,6 +2839,14 @@ public:
         disabled, all of its children are disabled as well and they are reenabled again
         when the parent is.
 
+        A window can be created initially disabled by calling this method on it
+        @e before calling Create() to create the actual underlying window, e.g.
+        @code
+            wxWindow* w = new MyWindow(); // Note: default ctor is used here.
+            w->Enable(false);
+            w->Create(parent, ... all the usual non-default ctor arguments ...);
+        @endcode
+
         @param enable
             If @true, enables the window for input. If @false, disables the window.
 

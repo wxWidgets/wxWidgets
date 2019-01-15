@@ -7865,6 +7865,16 @@ void wxGrid::SetColFormatFloat(int col, int width, int precision)
     SetColFormatCustom(col, typeName);
 }
 
+void wxGrid::SetColFormatDate(int col, const wxString& format)
+{
+    wxString typeName = wxGRID_VALUE_DATE;
+    if ( !format.empty() )
+    {
+        typeName << ':' << format;
+    }
+    SetColFormatCustom(col, typeName);
+}
+
 void wxGrid::SetColFormatCustom(int col, const wxString& typeName)
 {
     wxGridCellAttr *attr = m_table->GetAttr(-1, col, wxGridCellAttr::Col );
@@ -9364,6 +9374,15 @@ int wxGridTypeRegistry::FindDataType(const wxString& typeName)
         }
         else
 #endif // wxUSE_COMBOBOX
+#if wxUSE_DATEPICKCTRL
+        if ( typeName == wxGRID_VALUE_DATE )
+        {
+            RegisterDataType(wxGRID_VALUE_DATE,
+                             new wxGridCellDateRenderer,
+                             new wxGridCellDateEditor);
+        }
+        else
+#endif // wxUSE_DATEPICKCTRL
         {
             return wxNOT_FOUND;
         }

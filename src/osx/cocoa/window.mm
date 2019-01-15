@@ -897,7 +897,7 @@ static void SetDrawingEnabledIfFrozenRecursive(wxWidgetCocoaImpl *impl, bool ena
 - (BOOL) canBecomeKeyView
 {
     wxWidgetCocoaImpl* viewimpl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
-    if ( viewimpl && viewimpl->IsUserPane() && viewimpl->GetWXPeer() )
+    if ( viewimpl && viewimpl->HasUserKeyHandling() && viewimpl->GetWXPeer() )
         return viewimpl->GetWXPeer()->AcceptsFocus();
     return NO;
 }
@@ -1454,7 +1454,7 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
     {
         // for plain NSView mouse events would propagate to parents otherwise
         // scrollwheel events have to be propagated if not handled in all cases
-        if (!IsUserPane() || [event type] == NSScrollWheel )
+        if (!HasUserMouseHandling() || [event type] == NSScrollWheel )
         {
             wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
             superimpl(slf, (SEL)_cmd, event);
@@ -2101,7 +2101,7 @@ void wxCocoaGesturesImpl::TouchesEnded(NSEvent* event)
 void wxWidgetCocoaImpl::insertText(NSString* text, WXWidget slf, void *_cmd)
 {
     bool result = false;
-    if ( IsUserPane() && !m_hasEditor && [text length] > 0)
+    if ( HasUserKeyHandling() && !m_hasEditor && [text length] > 0)
     {
         if ( m_lastKeyDownEvent!=NULL && [text isEqualToString:[m_lastKeyDownEvent characters]])
         {
@@ -2190,7 +2190,7 @@ bool wxWidgetCocoaImpl::performKeyEquivalent(WX_NSEvent event, WXWidget slf, voi
 
 bool wxWidgetCocoaImpl::acceptsFirstResponder(WXWidget slf, void *_cmd)
 {
-    if ( IsUserPane() )
+    if ( HasUserKeyHandling() )
         return m_wxPeer->AcceptsFocus();
     else
     {
@@ -2512,21 +2512,22 @@ void wxOSXCocoaClassAddWXMethods(Class c, wxOSXSkipOverrides skipFlags)
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxWidgetCocoaImpl , wxWidgetImpl);
 
-wxWidgetCocoaImpl::wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, bool isRootControl, bool isUserPane ) :
-    wxWidgetImpl( peer, isRootControl, isUserPane )
+wxWidgetCocoaImpl::wxWidgetCocoaImpl( wxWindowMac* peer , WXWidget w, int flags ) :
+wxWidgetImpl( peer, flags )
 {
     Init();
     m_osxView = w;
-
+    
     // check if the user wants to create the control initially hidden
     if ( !peer->IsShown() )
         SetVisibility(false);
-
+    
     // gc aware handling
     if ( m_osxView )
         CFRetain(m_osxView);
     [m_osxView release];
 }
+
 
 wxWidgetCocoaImpl::wxWidgetCocoaImpl()
 {
@@ -3525,7 +3526,7 @@ bool wxWidgetCocoaImpl::EnableTouchEvents(int eventsMask)
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
     if ( wxPlatformInfo::Get().CheckOSVersion(10, 10) )
     {
-        if ( IsUserPane() )
+        if ( HasUserMouseHandling() )
         {
             if ( eventsMask == wxTOUCH_NONE )
             {
@@ -3658,7 +3659,7 @@ bool wxWidgetCocoaImpl::DoHandleKeyEvent(NSEvent *event)
             return true;
     }
 
-    if ( IsUserPane() && [event type] == NSKeyDown)
+    if ( HasUserKeyHandling() && [event type] == NSKeyDown)
     {
         // Don't fire wxEVT_KEY_DOWN here in order to allow IME to intercept
         // some key events. If the event is not handled by IME, either
@@ -3817,7 +3818,7 @@ wxWidgetImpl* wxWidgetImpl::CreateUserPane( wxWindowMac* wxpeer, wxWindowMac* WX
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSView* v = [[wxNSView alloc] initWithFrame:r];
 
-    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v, false, true );
+    wxWidgetCocoaImpl* c = new wxWidgetCocoaImpl( wxpeer, v, Widget_IsUserPane );
     return c;
 }
 
@@ -3829,7 +3830,7 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     if ( now->IsNativeWindowWrapper() )
     {
         NSView* cv = [tlw contentView];
-        c = new wxWidgetCocoaImpl( now, cv, true );
+        c = new wxWidgetCocoaImpl( now, cv, Widget_IsRoot );
         if ( cv != nil )
         {
             // increase ref count, because the impl destructor will decrement it again
@@ -3841,7 +3842,7 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     else
     {
         wxNSView* v = [[wxNSView alloc] initWithFrame:[[tlw contentView] frame]];
-        c = new wxWidgetCocoaImpl( now, v, true );
+        c = new wxWidgetCocoaImpl( now, v, Widget_IsRoot );
         c->InstallEventHandler();
         [tlw setContentView:v];
     }

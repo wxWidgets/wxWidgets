@@ -1380,8 +1380,6 @@ void wxPGProperty::OnCustomPaint( wxDC& dc,
 
     wxCHECK_RET( bmp && bmp->IsOk(), wxS("invalid bitmap") );
 
-    wxCHECK_RET( rect.x >= 0, wxS("unexpected measure call") );
-
     dc.DrawBitmap(*bmp,rect.x,rect.y);
 }
 

@@ -291,8 +291,8 @@ public:
 
 
     // These are what make the sizer do size calculations and layout
-    virtual void RecalcSizes() wxOVERRIDE;
     virtual wxSize CalcMin() wxOVERRIDE;
+    virtual void RepositionChildren(const wxSize& minSize) wxOVERRIDE;
 
 
     // Look at all items and see if any intersect (or would overlap) the given

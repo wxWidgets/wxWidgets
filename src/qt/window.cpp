@@ -936,13 +936,17 @@ void wxWindowQt::SetAcceleratorTable( const wxAcceleratorTable& accel )
 {
     wxWindowBase::SetAcceleratorTable( accel );
 
-    // Disable previously set accelerators
-    while ( !m_qtShortcuts->isEmpty() )
-        delete m_qtShortcuts->takeFirst();
+    if ( m_qtShortcuts )
+    {
+        // Disable previously set accelerators
+        while ( !m_qtShortcuts->isEmpty() )
+            delete m_qtShortcuts->takeFirst();
 
-    // Create new shortcuts (use GetHandle() so all events inside
-    // the window are handled, not only in the container subwindow)
-    delete m_qtShortcuts;
+        // Create new shortcuts (use GetHandle() so all events inside
+        // the window are handled, not only in the container subwindow)
+        delete m_qtShortcuts;
+    }
+
     m_qtShortcuts = accel.ConvertShortcutTable( GetHandle() );
 
     // Connect shortcuts to window

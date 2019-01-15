@@ -156,48 +156,7 @@ wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size)
 
 wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 {
-#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
-    wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
-#else
-    wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-#endif
-
-    // the baseColour is too pale to use as our base colour,
-    // so darken it a bit --
-    if ((255-baseColour.Red()) +
-        (255-baseColour.Green()) +
-        (255-baseColour.Blue()) < 60)
-    {
-        baseColour = baseColour.ChangeLightness(92);
-    }
-
-    m_baseColour = baseColour;
-    wxColor darker1Colour = baseColour.ChangeLightness(85);
-    wxColor darker2Colour = baseColour.ChangeLightness(75);
-    wxColor darker3Colour = baseColour.ChangeLightness(60);
-    //wxColor darker4Colour = baseColour.ChangeLightness(50);
-    wxColor darker5Colour = baseColour.ChangeLightness(40);
-
-    m_activeCaptionColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
-    m_activeCaptionGradientColour = wxAuiLightContrastColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
-    m_activeCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-    m_inactiveCaptionColour = darker1Colour;
-    m_inactiveCaptionGradientColour = baseColour.ChangeLightness(97);
-#ifdef __WXMAC__
-    m_inactiveCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT);
-#else
-    m_inactiveCaptionTextColour = *wxBLACK;
-#endif
-
-    m_sashBrush = wxBrush(baseColour);
-    m_backgroundBrush = wxBrush(baseColour);
-    m_gripperBrush = wxBrush(baseColour);
-
-    m_borderPen = wxPen(darker2Colour);
-    int pen_width = wxWindow::FromDIP(1, NULL);
-    m_gripperPen1 = wxPen(darker5Colour, pen_width);
-    m_gripperPen2 = wxPen(darker3Colour, pen_width);
-    m_gripperPen3 = wxPen(*wxWHITE, pen_width);
+    UpdateColoursFromSystem();
 
 #ifdef __WXMAC__
     m_captionFont = *wxSMALL_FONT;
@@ -294,6 +253,53 @@ wxAuiDefaultDockArt::InitBitmaps ()
 
     m_inactivePinBitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, m_inactiveCaptionTextColour);
     m_activePinBitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, m_activeCaptionTextColour);
+}
+
+void wxAuiDefaultDockArt::UpdateColoursFromSystem()
+{
+#if defined( __WXMAC__ ) && wxOSX_USE_COCOA_OR_CARBON
+    wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+#else
+    wxColor baseColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
+#endif
+
+    // the baseColour is too pale to use as our base colour,
+    // so darken it a bit --
+    if ((255-baseColour.Red()) +
+        (255-baseColour.Green()) +
+        (255-baseColour.Blue()) < 60)
+    {
+        baseColour = baseColour.ChangeLightness(92);
+    }
+
+    m_baseColour = baseColour;
+    wxColor darker1Colour = baseColour.ChangeLightness(85);
+    wxColor darker2Colour = baseColour.ChangeLightness(75);
+    wxColor darker3Colour = baseColour.ChangeLightness(60);
+    //wxColor darker4Colour = baseColour.ChangeLightness(50);
+    wxColor darker5Colour = baseColour.ChangeLightness(40);
+
+    m_activeCaptionColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+    m_activeCaptionGradientColour = wxAuiLightContrastColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+    m_activeCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+    m_inactiveCaptionColour = darker1Colour;
+    m_inactiveCaptionGradientColour = baseColour.ChangeLightness(97);
+#ifdef __WXMAC__
+    m_inactiveCaptionTextColour = wxSystemSettings::GetColour(wxSYS_COLOUR_INACTIVECAPTIONTEXT);
+#else
+    m_inactiveCaptionTextColour = *wxBLACK;
+#endif
+
+    m_sashBrush = wxBrush(baseColour);
+    m_backgroundBrush = wxBrush(baseColour);
+    m_gripperBrush = wxBrush(baseColour);
+
+    m_borderPen = wxPen(darker2Colour);
+    int pen_width = wxWindow::FromDIP(1, NULL);
+    m_gripperPen1 = wxPen(darker5Colour, pen_width);
+    m_gripperPen2 = wxPen(darker3Colour, pen_width);
+    m_gripperPen3 = wxPen(*wxStockGDI::GetColour(wxStockGDI::COLOUR_WHITE), pen_width);
+    InitBitmaps();
 }
 
 int wxAuiDefaultDockArt::GetMetric(int id)

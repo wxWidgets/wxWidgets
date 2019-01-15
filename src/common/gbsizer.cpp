@@ -497,13 +497,12 @@ wxSize wxGridBagSizer::CalcMin()
     for (idx=0; idx < m_rows; idx++)
         height += m_rowHeights[idx] + ( idx == m_rows-1 ? 0 : m_vgap );
 
-    m_calculatedMinSize = wxSize(width, height);
-    return m_calculatedMinSize;
+    return wxSize(width, height);
 }
 
 
 
-void wxGridBagSizer::RecalcSizes()
+void wxGridBagSizer::RepositionChildren(const wxSize& minSize)
 {
     // We can't lay out our elements if we don't have at least a single row and
     // a single column. Notice that this may happen even if we have some
@@ -519,7 +518,7 @@ void wxGridBagSizer::RecalcSizes()
     m_cols = m_colWidths.GetCount();
     int idx, width, height;
 
-    AdjustForGrowables(sz);
+    AdjustForGrowables(sz, minSize);
 
     // Find the start positions on the window of the rows and columns
     wxArrayInt rowpos;

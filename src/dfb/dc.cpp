@@ -51,11 +51,6 @@ void wxDFBDCImpl::DFBInit(const wxIDirectFBSurfacePtr& surface)
 
     wxCHECK_RET( surface != NULL, "invalid surface" );
 
-    m_mm_to_pix_x = (double)wxGetDisplaySize().GetWidth() /
-                    (double)wxGetDisplaySizeMM().GetWidth();
-    m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
-                    (double)wxGetDisplaySizeMM().GetHeight();
-
     SetFont(DEFAULT_FONT);
     SetPen(DEFAULT_PEN);
     SetBrush(DEFAULT_BRUSH);
@@ -135,7 +130,7 @@ void wxDFBDCImpl::Clear()
 {
     wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
-    if ( m_backgroundBrush.GetStyle() == wxTRANSPARENT )
+    if ( m_backgroundBrush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT )
         return;
 
     wxColour clr = m_backgroundBrush.GetColour();
@@ -181,7 +176,7 @@ void wxDFBDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 {
     wxCHECK_RET( IsOk(), wxT("invalid dc") );
 
-    if ( m_pen.GetStyle() == wxTRANSPARENT )
+    if ( m_pen.GetStyle() == wxPENSTYLE_TRANSPARENT )
         return;
 
     wxCoord xx1 = XLOG2DEV(x1);
@@ -278,7 +273,7 @@ void wxDFBDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
         yy = yy - hh;
     }
 
-    if ( m_brush.GetStyle() != wxTRANSPARENT )
+    if ( m_brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT )
     {
         SelectColour(m_brush.GetColour());
         m_surface->FillRectangle(xx, yy, ww, hh);
@@ -287,7 +282,7 @@ void wxDFBDCImpl::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord h
         SelectColour(m_pen.GetColour());
     }
 
-    if ( m_pen.GetStyle() != wxTRANSPARENT )
+    if ( m_pen.GetStyle() != wxPENSTYLE_TRANSPARENT )
     {
         m_surface->DrawRectangle(xx, yy, ww, hh);
     }
@@ -343,7 +338,7 @@ void wxDFBDCImpl::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     CalcBoundingBox(x + w, y + h);
 
     // if background mode is solid, DrawText must paint text's background:
-    if ( m_backgroundMode == wxSOLID )
+    if ( m_backgroundMode == wxBRUSHSTYLE_SOLID )
     {
         wxCHECK_RET( m_textBackgroundColour.IsOk(),
                      wxT("invalid background color") );
@@ -563,15 +558,15 @@ void wxDFBDCImpl::DoGetSizeMM(int *width, int *height) const
     int w = 0;
     int h = 0;
     GetSize(&w, &h);
-    if ( width ) *width = int(double(w) / (m_userScaleX*m_mm_to_pix_x));
-    if ( height ) *height = int(double(h) / (m_userScaleY*m_mm_to_pix_y));
+    if ( width ) *width = int(double(w) / (m_userScaleX*GetMMToPXx()));
+    if ( height ) *height = int(double(h) / (m_userScaleY*GetMMToPXy()));
 }
 
 wxSize wxDFBDCImpl::GetPPI() const
 {
     #warning "move this to common code?"
-    return wxSize(int(double(m_mm_to_pix_x) * inches2mm),
-                  int(double(m_mm_to_pix_y) * inches2mm));
+    return wxSize(int(double(GetMMToPXx()) * inches2mm),
+                  int(double(GetMMToPXy()) * inches2mm));
 }
 
 

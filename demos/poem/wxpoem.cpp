@@ -168,7 +168,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
         dc->SetBrush(*wxLIGHT_GREY_BRUSH);
         dc->SetPen(*wxGREY_PEN);
         dc->DrawRectangle(0, 0, width, height);
-        dc->SetBackgroundMode(wxTRANSPARENT);
+        dc->SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
     }
 
     // See what ACTUAL char height is
@@ -686,6 +686,8 @@ void MyCanvas::OnChar(wxKeyEvent& event)
 
         case WXK_ESCAPE:
             TheMainWindow->Close(true);
+            break;
+
         default:
             break;
     }

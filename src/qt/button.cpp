@@ -45,7 +45,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id,
        const wxString& name )
 {     
     QtCreate(parent);
-    SetLabel( wxIsStockID( id ) ? wxGetStockLabel( id ) : label );
+    SetLabel( label.IsEmpty() && wxIsStockID( id ) ? wxGetStockLabel( id ) : label );
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }

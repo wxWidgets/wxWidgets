@@ -27,7 +27,7 @@
 
 #ifdef __WINDOWS__
     #include "wx/msw/registry.h"
-    #include <shlobj.h>
+    #include "wx/msw/wrapshl.h"
     #include "wx/msw/ole/oleutils.h"
     #include "wx/msw/private/comptr.h"
 #endif // __WINDOWS__

@@ -541,7 +541,7 @@ HRASCONN wxDialUpManagerMSW::FindActiveConnection()
             // is used, for example, to select the connection to hang up and so
             // we may hang up the wrong connection here...
             wxLogWarning(_("Several active dialup connections found, choosing one randomly."));
-            // fall through
+            wxFALLTHROUGH;
 
         case 1:
             // exactly 1 connection, great
@@ -1231,7 +1231,7 @@ static DWORD wxRasMonitorThread(wxRasThreadData *data)
 
             default:
                 wxFAIL_MSG( wxT("unexpected return of WaitForMultipleObjects()") );
-                // fall through
+                wxFALLTHROUGH;
 
             case WAIT_FAILED:
                 // using wxLogLastError() from here is dangerous: we risk to

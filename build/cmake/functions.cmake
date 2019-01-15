@@ -105,6 +105,14 @@ function(wx_set_common_target_properties target_name)
         endif()
         # TODO: add warning flags for other compilers
     endif()
+
+    if(CMAKE_USE_PTHREADS_INIT)
+        target_compile_options(${target_name} PRIVATE "-pthread")
+        # clang++.exe: warning: argument unused during compilation: '-pthread' [-Wunused-command-line-argument]
+        if(NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
+            set_target_properties(${target_name} PROPERTIES LINK_FLAGS "-pthread")
+        endif()
+    endif()
 endfunction()
 
 # Set common properties on wx library target
@@ -313,8 +321,6 @@ macro(wx_add_library name)
             RUNTIME DESTINATION "lib${wxPLATFORM_LIB_DIR}"
             BUNDLE DESTINATION Applications/wxWidgets
             )
-
-        list(APPEND wxLIB_TARGETS ${name})
     endif()
 endmacro()
 
@@ -349,7 +355,6 @@ endmacro()
 
 # Enable precompiled headers for wx libraries
 macro(wx_finalize_lib target_name)
-    set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)
     if(wxBUILD_PRECOMP)
         if(TARGET ${target_name})
             wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
@@ -519,16 +524,36 @@ function(wx_add_thirdparty_library var_name lib_name help_str)
 endfunction()
 
 function(wx_print_thirdparty_library_summary)
+    set(nameLength 0)
+    set(nameValLength 0)
     set(var_name)
-    set(message "Which libraries should wxWidgets use?\n")
-    foreach(entry IN
-        LISTS wxTHIRD_PARTY_LIBRARIES
-        ITEMS wxUSE_STL "Use C++ STL classes")
-
+    foreach(entry IN LISTS wxTHIRD_PARTY_LIBRARIES)
         if(NOT var_name)
             set(var_name ${entry})
         else()
-            wx_string_append(message "    ${var_name}: ${${var_name}} (${entry})\n")
+            string(LENGTH ${var_name} len)
+            if(len GREATER nameLength)
+                set(nameLength ${len})
+            endif()
+            string(LENGTH ${${var_name}} len)
+            if(len GREATER nameValLength)
+                set(nameValLength ${len})
+            endif()
+            set(var_name)
+        endif()
+    endforeach()
+    math(EXPR nameLength "${nameLength}+1") # account for :
+
+    set(message "Which libraries should wxWidgets use?\n")
+    foreach(entry IN LISTS wxTHIRD_PARTY_LIBRARIES)
+        if(NOT var_name)
+            set(var_name ${entry})
+        else()
+            set(namestr "${var_name}:          ")
+            set(nameval "${${var_name}}          ")
+            string(SUBSTRING ${namestr} 0 ${nameLength} namestr)
+            string(SUBSTRING ${nameval} 0 ${nameValLength} nameval)
+            wx_string_append(message "    ${namestr}  ${nameval}  (${entry})\n")
             set(var_name)
         endif()
     endforeach()

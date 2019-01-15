@@ -18,8 +18,11 @@ void wxTextEntry::WriteText(const wxString& WXUNUSED(text))
 {
 }
 
-void wxTextEntry::Remove(long WXUNUSED(from), long WXUNUSED(to))
+void wxTextEntry::Remove(long from, long to)
 {
+    wxString string = GetValue();
+    string.erase(from, to - from);
+    SetValue(string);
 }
 
 void wxTextEntry::Copy()
@@ -63,7 +66,7 @@ long wxTextEntry::GetInsertionPoint() const
 
 long wxTextEntry::GetLastPosition() const
 {
-    return 0;
+    return GetValue().length();
 }
 
 void wxTextEntry::SetSelection(long WXUNUSED(from), long WXUNUSED(to))

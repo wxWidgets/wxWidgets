@@ -88,11 +88,8 @@ private:
     wxDECLARE_NO_COPY_CLASS(ComboBoxTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ComboBoxTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ComboBoxTestCase, "ComboBoxTestCase" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(ComboBoxTestCase,
+                               "[ComboBoxTestCase][item-container]");
 
 // ----------------------------------------------------------------------------
 // test initialization

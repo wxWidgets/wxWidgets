@@ -62,6 +62,11 @@ void wxStaticText::SetLabel(const wxString& label)
     m_qtLabel->setText( wxQtConvertString( label ) );
 }
 
+wxString wxStaticText::GetLabel() const
+{
+    return wxQtConvertString( m_qtLabel->text() );
+}
+
 QWidget *wxStaticText::GetHandle() const
 {
     return m_qtLabel;

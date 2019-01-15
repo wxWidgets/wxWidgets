@@ -130,3 +130,14 @@ QWidget *wxCheckBox::GetHandle() const
 {
     return m_qtCheckBox;
 }
+
+wxString wxCheckBox::GetLabel() const
+{
+    return wxQtConvertString( m_qtCheckBox->text() );
+}
+
+void wxCheckBox::SetLabel(const wxString& label)
+{
+    m_qtCheckBox->setText( wxQtConvertString(label) );
+}
+

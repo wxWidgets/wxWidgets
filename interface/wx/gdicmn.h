@@ -902,7 +902,7 @@ wxColourDatabase* wxTheColourDatabase;
     @class wxSize
 
     A wxSize is a useful data structure for graphics operations.
-    It simply contains integer @e width and @e height members.
+    It simply contains integer @e x and @e y members.
 
     Note that the width and height stored inside a wxSize object may be negative
     and that wxSize functions do not perform any check against negative values

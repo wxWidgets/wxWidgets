@@ -14,7 +14,7 @@
 class MyApp: public wxApp
 {
 public:
-    MyApp(){};
+    MyApp(){}
     bool OnInit() wxOVERRIDE;
 };
 

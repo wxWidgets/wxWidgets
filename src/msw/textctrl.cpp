@@ -1997,7 +1997,7 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
             {
                 default:
                     wxFAIL_MSG( wxT("how many modifiers have we got?") );
-                    // fall through
+                    wxFALLTHROUGH;
 
                 case 0:
                     switch ( vkey )
@@ -2006,14 +2006,14 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
                             // This one is only special for multi line controls.
                             if ( !IsMultiLine() )
                                 break;
-                            // fall through
+                            wxFALLTHROUGH;
 
                         case VK_DELETE:
                         case VK_HOME:
                         case VK_END:
                             return false;
                     }
-                    // fall through
+                    wxFALLTHROUGH;
                 case 2:
                     break;
 
@@ -2297,7 +2297,7 @@ bool wxTextCtrl::SendUpdateEvent()
 
         default:
             wxFAIL_MSG( wxT("unexpected wxTextCtrl::m_updatesCount value") );
-            // fall through
+            wxFALLTHROUGH;
 
         case -1:
             // we hadn't updated the control ourselves, this event comes from

@@ -38,7 +38,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 	-DWX_FLAVOUR="$(WX_FLAVOUR)" -DWX_LIB_FLAVOUR="$(WX_LIB_FLAVOUR)" \
 	-DCFG="$(CFG)" -DRUNTIME_LIBS="$(RUNTIME_LIBS)"
 WX_RELEASE_NODOT = 31
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)2
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)3
 COMPILER_PREFIX = bcc
 OBJS = \
 	$(COMPILER_PREFIX)$(COMPILER_VERSION)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -185,8 +185,10 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_tile.obj \
 	$(OBJS)\wxtiff_tif_version.obj \
 	$(OBJS)\wxtiff_tif_warning.obj \
+	$(OBJS)\wxtiff_tif_webp.obj \
 	$(OBJS)\wxtiff_tif_write.obj \
-	$(OBJS)\wxtiff_tif_zip.obj
+	$(OBJS)\wxtiff_tif_zip.obj \
+	$(OBJS)\wxtiff_tif_zstd.obj
 WXEXPAT_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG -I$(LIBDIRNAME) -w-8004 -w-8008 \
 	-w-8012 -w-8057 -w-8066 $(CPPFLAGS) $(CFLAGS)
@@ -5561,7 +5563,7 @@ $(SETUPHDIR)\wx\msw\rcdefs.h: $(SETUPHDIR)\wx\msw ..\..\include\wx\msw\genrcdefs
 build_cfg_file: $(SETUPHDIR)
 	@echo WXVER_MAJOR=3 >$(BUILD_CFG_FILE)
 	@echo WXVER_MINOR=1 >>$(BUILD_CFG_FILE)
-	@echo WXVER_RELEASE=2 >>$(BUILD_CFG_FILE)
+	@echo WXVER_RELEASE=3 >>$(BUILD_CFG_FILE)
 	@echo BUILD=$(BUILD) >>$(BUILD_CFG_FILE)
 	@echo MONOLITHIC=$(MONOLITHIC) >>$(BUILD_CFG_FILE)
 	@echo SHARED=$(SHARED) >>$(BUILD_CFG_FILE)
@@ -5950,11 +5952,17 @@ $(OBJS)\wxtiff_tif_version.obj: ..\..\src\tiff\libtiff\tif_version.c
 $(OBJS)\wxtiff_tif_warning.obj: ..\..\src\tiff\libtiff\tif_warning.c
 	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_warning.c
 
+$(OBJS)\wxtiff_tif_webp.obj: ..\..\src\tiff\libtiff\tif_webp.c
+	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_webp.c
+
 $(OBJS)\wxtiff_tif_write.obj: ..\..\src\tiff\libtiff\tif_write.c
 	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_write.c
 
 $(OBJS)\wxtiff_tif_zip.obj: ..\..\src\tiff\libtiff\tif_zip.c
 	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_zip.c
+
+$(OBJS)\wxtiff_tif_zstd.obj: ..\..\src\tiff\libtiff\tif_zstd.c
+	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_zstd.c
 
 $(OBJS)\wxexpat_xmlparse.obj: ..\..\src\expat\expat\lib\xmlparse.c
 	$(CC) -q -c -P- -o$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\xmlparse.c

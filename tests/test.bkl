@@ -184,6 +184,7 @@
             graphics/graphmatrix.cpp
             graphics/graphpath.cpp
             config/config.cpp
+            controls/auitest.cpp
             controls/bitmapcomboboxtest.cpp
             controls/bitmaptogglebuttontest.cpp
             controls/bookctrlbasetest.cpp
@@ -271,6 +272,7 @@
             sizers/wrapsizer.cpp
             toplevel/toplevel.cpp
             validators/valnum.cpp
+            validators/valtext.cpp
             window/clientsize.cpp
             window/setsize.cpp
             xml/xrctest.cpp
@@ -282,6 +284,7 @@
             wxWebView is not available.
          -->
         <sys-lib>$(WXLIB_WEBVIEW)</sys-lib>
+        <wx-lib>aui</wx-lib>
         <wx-lib>richtext</wx-lib>
         <wx-lib>media</wx-lib>
         <wx-lib>xrc</wx-lib>
