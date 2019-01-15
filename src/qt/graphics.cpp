@@ -546,7 +546,9 @@ class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
     }
 protected:
     wxQtGraphicsContext(wxGraphicsRenderer* renderer)
-        : wxGraphicsContext(renderer)
+        : wxGraphicsContext(renderer),
+          m_qtPainter(NULL),
+          m_ownsPainter(false)
     {
     }
 public:
