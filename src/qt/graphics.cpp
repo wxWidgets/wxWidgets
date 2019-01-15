@@ -18,21 +18,24 @@ public:
     }
 
     wxQtBrushData(wxGraphicsRenderer* renderer, const wxBrush& wxbrush)
-        : wxGraphicsObjectRefData(renderer), m_brush(wxbrush.GetHandle())
+        : wxGraphicsObjectRefData(renderer),
+          m_brush(wxbrush.GetHandle())
     {
     }
 
     void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
-        wxDouble x2, wxDouble y2,
-        const wxGraphicsGradientStops& stops)
+                                   wxDouble x2, wxDouble y2,
+                                   const wxGraphicsGradientStops& stops)
     {
         QLinearGradient gradient(x1, y1, x2, y2);
         SetStops(gradient, stops);
         m_brush = QBrush(gradient);
     }
 
-    void CreateRadialGradientBrush(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-        const wxGraphicsGradientStops& stops)
+    void CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                                   wxDouble xc, wxDouble yc,
+                                   wxDouble radius,
+                                   const wxGraphicsGradientStops& stops)
     {
         QRadialGradient gradient(QPointF(xc, yc), radius, QPointF(xo, yo));
         SetStops(gradient, stops);
@@ -49,7 +52,7 @@ private:
     static void SetStops(QGradient& gradient, const wxGraphicsGradientStops& stops)
     {
         QGradientStops qstops;
-        for (size_t i = 0; i < stops.GetCount(); ++i)
+        for ( size_t i = 0; i < stops.GetCount(); ++i )
         {
             const wxGraphicsGradientStop stop = stops.Item(i);
             qstops.append(QGradientStop(stop.GetPosition(), stop.GetColour().GetQColor()));
@@ -67,7 +70,8 @@ class WXDLLIMPEXP_CORE wxQtPenData : public wxGraphicsObjectRefData
 {
 public:
     wxQtPenData(wxGraphicsRenderer* renderer, const wxGraphicsPenInfo& info)
-        : wxGraphicsObjectRefData(renderer), m_pen(CreatePenFromInfo(info))
+        : wxGraphicsObjectRefData(renderer),
+          m_pen(CreatePenFromInfo(info))
     {
     }
 
@@ -83,7 +87,7 @@ private:
         wxpen.SetDashes(info.GetDashCount(), info.GetDash());
         wxpen.SetJoin(info.GetJoin());
         wxpen.SetCap(info.GetCap());
-        switch (info.GetStyle())
+        switch ( info.GetStyle() )
         {
             case wxPENSTYLE_STIPPLE:
             case wxPENSTYLE_STIPPLE_MASK:
@@ -106,14 +110,15 @@ private:
 class WXDLLIMPEXP_CORE wxQtBitmapData : public wxGraphicsBitmapData
 {
 public:
-    wxQtBitmapData(wxGraphicsRenderer* renderer, QPixmap* pixmap) :
-        wxGraphicsBitmapData(renderer),
-        m_pixmap(pixmap)
+    wxQtBitmapData(wxGraphicsRenderer* renderer, QPixmap* pixmap)
+        : wxGraphicsBitmapData(renderer),
+          m_pixmap(pixmap)
     {
     }
-    wxQtBitmapData(wxGraphicsRenderer* renderer, const wxBitmap &bmp) :
-        wxGraphicsBitmapData(renderer),
-        m_pixmap(bmp.GetHandle())
+
+    wxQtBitmapData(wxGraphicsRenderer* renderer, const wxBitmap &bmp)
+        : wxGraphicsBitmapData(renderer),
+          m_pixmap(bmp.GetHandle())
     {
     }
 
@@ -152,12 +157,14 @@ class WXDLLIMPEXP_CORE wxQtMatrixData : public wxGraphicsMatrixData
 {
 public:
     explicit wxQtMatrixData(wxGraphicsRenderer* renderer)
-        : wxGraphicsMatrixData(renderer), m_transform(new QTransform)
+        : wxGraphicsMatrixData(renderer),
+          m_transform(new QTransform)
     {
     }
 
     wxQtMatrixData(wxGraphicsRenderer* renderer, const QTransform& transform)
-        : wxGraphicsMatrixData(renderer), m_transform(new QTransform(transform))
+        : wxGraphicsMatrixData(renderer),
+          m_transform(new QTransform(transform))
     {
     }
     
@@ -181,8 +188,9 @@ public:
     }
 
     // sets the matrix to the respective values
-    virtual void Set(wxDouble a = 1.0, wxDouble b = 0.0, wxDouble c = 0.0, wxDouble d = 1.0,
-    wxDouble tx = 0.0, wxDouble ty = 0.0) wxOVERRIDE
+    virtual void Set(wxDouble a = 1.0, wxDouble b = 0.0,
+                     wxDouble c = 0.0, wxDouble d = 1.0,
+                     wxDouble tx = 0.0, wxDouble ty = 0.0) wxOVERRIDE
     {
         m_transform->setMatrix(
             a, b, 0.0,
@@ -191,15 +199,16 @@ public:
     }
 
     // gets the component values of the matrix
-    virtual void Get(wxDouble* a, wxDouble* b, wxDouble* c,
-                        wxDouble* d, wxDouble* tx, wxDouble* ty) const wxOVERRIDE
+    virtual void Get(wxDouble* a, wxDouble* b,
+                     wxDouble* c, wxDouble* d,
+                     wxDouble* tx, wxDouble* ty) const wxOVERRIDE
     {
-        if (a) *a = m_transform->m11();
-        if (b) *b = m_transform->m12();
-        if (c) *c = m_transform->m21();
-        if (d) *d = m_transform->m22();
-        if (tx) *tx = m_transform->m31();
-        if (ty) *ty = m_transform->m32();
+        if ( a ) *a = m_transform->m11();
+        if ( b ) *b = m_transform->m12();
+        if ( c ) *c = m_transform->m21();
+        if ( d ) *d = m_transform->m22();
+        if ( tx ) *tx = m_transform->m31();
+        if ( ty ) *ty = m_transform->m32();
     }
 
     // makes this the inverse matrix
@@ -207,7 +216,7 @@ public:
     {
         bool invertible = false;
         const QTransform inverted_transform = m_transform->inverted(&invertible);
-        if (invertible)
+        if ( invertible )
         {
             *m_transform = inverted_transform;
         }
@@ -277,6 +286,7 @@ public:
 
         qreal transformed_x, transformed_y;
         untranslated_transform.map(static_cast<qreal>(*dx), static_cast<qreal>(*dy), &transformed_x, &transformed_y);
+
         *dx = transformed_x;
         *dy = transformed_y;
     }
@@ -318,19 +328,19 @@ public:
     {
         m_font.setFamily(QString(facename));
         m_font.setPixelSize(static_cast<int>(sizeInPixels));
-        if (flags & wxFONTFLAG_LIGHT)
+        if ( flags & wxFONTFLAG_LIGHT )
             m_font.setWeight(QFont::Light);
-        if (flags & wxFONTFLAG_BOLD)
+        if ( flags & wxFONTFLAG_BOLD )
             m_font.setWeight(QFont::Bold);
-        if (flags & (wxFONTFLAG_ITALIC | wxFONTFLAG_SLANT))
+        if ( flags & (wxFONTFLAG_ITALIC | wxFONTFLAG_SLANT) )
             m_font.setItalic(true);
-        if (flags & wxFONTFLAG_ANTIALIASED)
+        if ( flags & wxFONTFLAG_ANTIALIASED )
             m_font.setStyleStrategy(QFont::PreferAntialias);
-        if (flags & wxFONTFLAG_NOT_ANTIALIASED)
+        if ( flags & wxFONTFLAG_NOT_ANTIALIASED )
             m_font.setStyleStrategy(QFont::NoAntialias);
-        if (flags & wxFONTFLAG_UNDERLINED)
+        if ( flags & wxFONTFLAG_UNDERLINED )
             m_font.setUnderline(true);
-        if (flags & wxFONTFLAG_STRIKETHROUGH)
+        if ( flags & wxFONTFLAG_STRIKETHROUGH )
             m_font.setStrikeOut(true);
     }
 
@@ -354,7 +364,6 @@ private:
 //-----------------------------------------------------------------------------
 // wxQtGraphicsPathData
 //-----------------------------------------------------------------------------
-
 
 class WXDLLIMPEXP_CORE wxQtGraphicsPathData : public wxGraphicsPathData
 {
@@ -391,7 +400,7 @@ public:
     // if there is no current path, it is equivalent to a moveTo.
     virtual void AddLineToPoint(wxDouble x, wxDouble y) wxOVERRIDE
     {
-        if (!HasCurrentSubpath())
+        if ( !HasCurrentSubpath() )
             MoveToPoint(x, y);
         else
             m_path->lineTo(x, y);
@@ -400,7 +409,7 @@ public:
     // adds a cubic Bezier curve from the current point, using two control points and an end point
     virtual void AddCurveToPoint(wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y) wxOVERRIDE
     {
-        if (!HasCurrentSubpath())
+        if ( !HasCurrentSubpath() )
             MoveToPoint(cx1, cy1);
         m_path->cubicTo(QPointF(cx1, cy1), QPointF(cx2, cy2), QPointF(x, y));
     }
@@ -409,24 +418,24 @@ public:
     virtual void AddArc(wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise) wxOVERRIDE
     {
         const bool fixupFirst = !HasCurrentSubpath();
-        if (fixupFirst)
+        if ( fixupFirst )
             MoveToPoint(x, y);
 
         qreal arc_length;
-        if (clockwise)
+        if ( clockwise )
         {
-            if (endAngle < startAngle)
+            if ( endAngle < startAngle )
                 endAngle += 2 * M_PI;
             arc_length = -wxRadToDeg(endAngle - startAngle);
         }
         else
         {
-            if (endAngle > startAngle)
+            if ( endAngle > startAngle )
                 endAngle -= 2 * M_PI;
             arc_length = -wxRadToDeg(endAngle - startAngle);
         }
         m_path->arcTo(x-r, y-r, r*2, r*2, -wxRadToDeg(startAngle), arc_length);
-        if (fixupFirst)
+        if ( fixupFirst )
         {
             QPainterPath::Element element = m_path->elementAt(m_current_subpath_start+1);
             m_path->setElementPositionAt(m_current_subpath_start, element.x, element.y);
@@ -452,7 +461,7 @@ public:
     virtual void CloseSubpath() wxOVERRIDE
     {
         // Current position must be end of last path after close, not (0,0) as Qt sets.
-        if (!HasCurrentSubpath())
+        if ( !HasCurrentSubpath() )
             return;
 
         const QPainterPath::Element first_element = m_path->elementAt(m_current_subpath_start);
@@ -500,12 +509,14 @@ public:
     virtual void GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wxDouble *h) const wxOVERRIDE
     {
         QRectF bounding_rect = m_path->controlPointRect();
-        if (!bounding_rect.isValid())
+
+        if ( !bounding_rect.isValid() )
             bounding_rect = QRectF();
-        if (x) *x = bounding_rect.left();
-        if (y) *y = bounding_rect.top();
-        if (w) *w = bounding_rect.width();
-        if (h) *h = bounding_rect.height();
+
+        if ( x ) *x = bounding_rect.left();
+        if ( y ) *y = bounding_rect.top();
+        if ( w ) *w = bounding_rect.width();
+        if ( h ) *h = bounding_rect.height();
     }
 
     virtual bool Contains(wxDouble x, wxDouble y, wxPolygonFillMode /*fillStyle = wxWINDING_RULE*/) const wxOVERRIDE
@@ -515,10 +526,10 @@ public:
 
 private:
     // for Clone
-    wxQtGraphicsPathData(const wxQtGraphicsPathData& rhs) :
-        wxGraphicsPathData(rhs.GetRenderer()),
-        m_path(new QPainterPath(*rhs.m_path)),
-        m_current_subpath_start(rhs.m_current_subpath_start)
+    wxQtGraphicsPathData(const wxQtGraphicsPathData& rhs)
+        : wxGraphicsPathData(rhs.GetRenderer()),
+          m_path(new QPainterPath(*rhs.m_path)),
+          m_current_subpath_start(rhs.m_current_subpath_start)
     {
     }
 
@@ -544,6 +555,7 @@ class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
         m_width = sz.x;
         m_height = sz.y;
     }
+
 protected:
     wxQtGraphicsContext(wxGraphicsRenderer* renderer)
         : wxGraphicsContext(renderer),
@@ -551,6 +563,7 @@ protected:
           m_ownsPainter(false)
     {
     }
+
 public:
     wxQtGraphicsContext(wxGraphicsRenderer* renderer, QPaintDevice* device)
         : wxGraphicsContext(renderer)
@@ -582,6 +595,7 @@ public:
     }
 
 #endif
+
     wxQtGraphicsContext(wxGraphicsRenderer* renderer, wxWindow *window)
         : wxGraphicsContext(renderer)
     {
@@ -595,7 +609,7 @@ public:
 
     virtual ~wxQtGraphicsContext()
     {
-        if (m_ownsPainter)
+        if ( m_ownsPainter )
             delete m_qtPainter;
     }
 
@@ -625,10 +639,10 @@ public:
     virtual void GetClipBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble* h) wxOVERRIDE
     {
         const QRectF box = m_qtPainter->clipBoundingRect();
-        if (x) *x = box.left();
-        if (y) *y = box.top();
-        if (w) *w = box.width();
-        if (h) *h = box.height();
+        if ( x ) *x = box.left();
+        if ( y ) *y = box.top();
+        if ( w ) *w = box.width();
+        if ( h ) *h = box.height();
     }
 
     virtual void * GetNativeContext() wxOVERRIDE
@@ -638,7 +652,7 @@ public:
 
     virtual bool SetAntialiasMode(wxAntialiasMode antialias) wxOVERRIDE
     {
-        switch (antialias)
+        switch ( antialias )
         {
             case wxANTIALIAS_DEFAULT:
                 m_qtPainter->setRenderHints(QPainter::Antialiasing|QPainter::TextAntialiasing, true);
@@ -663,7 +677,7 @@ public:
     virtual bool SetCompositionMode(wxCompositionMode composition) wxOVERRIDE
     {
         QPainter::CompositionMode q_composition_mode;
-        switch (composition)
+        switch ( composition )
         {
         case wxCOMPOSITION_CLEAR:
             q_composition_mode = QPainter::CompositionMode_Clear;
@@ -724,7 +738,7 @@ public:
 
     virtual void StrokePath(const wxGraphicsPath& p) wxOVERRIDE
     {
-        if (m_pen.IsNull())
+        if ( m_pen.IsNull() )
         {
             return;
         }
@@ -733,9 +747,10 @@ public:
         const QPen& pen = static_cast<wxQtPenData*>(m_pen.GetRefData())->GetPen();
         m_qtPainter->strokePath(*path_data, pen);
     }
+
     virtual void FillPath(const wxGraphicsPath& p, wxPolygonFillMode /*fillStyle = wxWINDING_RULE*/) wxOVERRIDE
     {
-        if (m_brush.IsNull())
+        if ( m_brush.IsNull() )
         {
             return;
         }
@@ -744,6 +759,7 @@ public:
         const QBrush& brush = static_cast<wxQtBrushData*>(m_brush.GetRefData())->getBrush();
         m_qtPainter->fillPath(*path_data, brush);
     }
+
     virtual void ClearRectangle(wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
     {
         m_qtPainter->fillRect(x, y, w, h, QBrush(QColor(0, 0, 0, 0)));
@@ -753,6 +769,7 @@ public:
     {
         m_qtPainter->translate(dx, dy);
     }
+
     virtual void Scale(wxDouble xScale, wxDouble yScale) wxOVERRIDE
     {
         m_qtPainter->scale(xScale, yScale);
@@ -794,16 +811,6 @@ public:
         m_qtPainter->drawPixmap(x, y, w, h, *pixmap);
     }
 
-    void DoDrawBitmap(const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h, bool useMask) const
-    {
-        QPixmap pix = *bmp.GetHandle();
-
-        if (useMask && bmp.GetMask() && bmp.GetMask()->GetHandle())
-            pix.setMask(*bmp.GetMask()->GetHandle());
-
-        m_qtPainter->drawPixmap(x, y, w, h, pix);
-    }
-
     virtual void DrawBitmap(const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h) wxOVERRIDE
     {
         DoDrawBitmap(bmp, x, y, w, h, true);
@@ -828,8 +835,11 @@ public:
     {
     }
 
-    virtual void GetTextExtent(const wxString &str, wxDouble *width, wxDouble *height,
-        wxDouble *descent, wxDouble *externalLeading) const wxOVERRIDE
+    virtual void GetTextExtent(const wxString &str,
+                               wxDouble *width,
+                               wxDouble *height,
+                               wxDouble *descent,
+                               wxDouble *externalLeading) const wxOVERRIDE
     {
         wxCHECK_RET(!m_font.IsNull(), wxT("wxQtContext::GetTextExtent - no valid font set"));
 
@@ -839,10 +849,10 @@ public:
         const QFontMetrics metrics = m_qtPainter->fontMetrics();
         const QRect bounding_rect = metrics.boundingRect(QString(str));
 
-        if (width) *width = bounding_rect.width();
-        if (height) *height = bounding_rect.height();
-        if (descent) *descent = metrics.descent();
-        if (externalLeading) *externalLeading = metrics.leading() - (metrics.ascent() + metrics.descent());
+        if ( width ) *width = bounding_rect.width();
+        if ( height ) *height = bounding_rect.height();
+        if ( descent ) *descent = metrics.descent();
+        if ( externalLeading ) *externalLeading = metrics.leading() - (metrics.ascent() + metrics.descent());
     }
 
     virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const wxOVERRIDE
@@ -859,7 +869,7 @@ public:
         widths.Empty();
         widths.Add(0, text_length);
 
-        for (size_t i = 1; i < text_length; ++i)
+        for ( size_t i = 1; i < text_length; ++i )
         {
             const wxString sub_string = text.substr(0, i);
             const QRect bounding_rect = metrics.boundingRect(QString(sub_string));
@@ -876,15 +886,26 @@ protected:
 
         m_qtPainter->setFont(font_data->GetFont());
         m_qtPainter->setPen(QPen(font_data->GetColor()));
+
         QFontMetrics metrics = m_qtPainter->fontMetrics();
 
         wxStringTokenizer tokenizer(str, "\n");
-        while(tokenizer.HasMoreTokens())
+        while ( tokenizer.HasMoreTokens() )
         {
             const wxString line = tokenizer.GetNextToken();
             m_qtPainter->drawText(x, y + metrics.ascent(), QString(line));
             y += metrics.lineSpacing();
         }
+    }
+
+    void DoDrawBitmap(const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h, bool useMask) const
+    {
+        QPixmap pix = *bmp.GetHandle();
+
+        if (useMask && bmp.GetMask() && bmp.GetMask()->GetHandle())
+            pix.setMask(*bmp.GetMask()->GetHandle());
+
+        m_qtPainter->drawPixmap(x, y, w, h, pix);
     }
 
     QPainter* m_qtPainter;
@@ -1087,7 +1108,7 @@ wxGraphicsMatrix wxQtGraphicsRenderer::CreateMatrix(wxDouble a, wxDouble b, wxDo
 wxGraphicsPen wxQtGraphicsRenderer::CreatePen(const wxGraphicsPenInfo& info)
 {
     wxGraphicsPen p;
-    if (info.GetStyle() != wxPENSTYLE_TRANSPARENT)
+    if ( info.GetStyle() != wxPENSTYLE_TRANSPARENT )
     {
         p.SetRefData(new wxQtPenData(this, info));
     }
@@ -1097,7 +1118,7 @@ wxGraphicsPen wxQtGraphicsRenderer::CreatePen(const wxGraphicsPenInfo& info)
 wxGraphicsBrush wxQtGraphicsRenderer::CreateBrush(const wxBrush& brush)
 {
     wxGraphicsBrush p;
-    if (brush.IsOk() && brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
+    if ( brush.IsOk() && brush.GetStyle() != wxBRUSHSTYLE_TRANSPARENT )
     {
         p.SetRefData(new wxQtBrushData(this, brush));
     }
@@ -1131,7 +1152,7 @@ wxGraphicsBrush wxQtGraphicsRenderer::CreateRadialGradientBrush(
 wxGraphicsFont wxQtGraphicsRenderer::CreateFont(const wxFont &font, const wxColour &col)
 {
     wxGraphicsFont p;
-    if (font.IsOk())
+    if ( font.IsOk() )
     {
         p.SetRefData(new wxQtFontData(this, font, col));
     }
@@ -1152,7 +1173,7 @@ wxGraphicsFont wxQtGraphicsRenderer::CreateFont(
 wxGraphicsBitmap wxQtGraphicsRenderer::CreateBitmap(const wxBitmap& bmp)
 {
     wxGraphicsBitmap p;
-    if (bmp.IsOk())
+    if ( bmp.IsOk() )
     {
         p.SetRefData(new wxQtBitmapData(this, bmp));
     }
@@ -1165,7 +1186,7 @@ wxGraphicsBitmap wxQtGraphicsRenderer::CreateBitmapFromImage(const wxImage& imag
 {
     wxGraphicsBitmap bmp;
 
-    if (image.IsOk())
+    if ( image.IsOk() )
     {
         bmp.SetRefData(new wxQtBitmapData(this, image));
     }
@@ -1182,7 +1203,7 @@ wxImage wxQtGraphicsRenderer::CreateImageFromBitmap(const wxGraphicsBitmap& bmp)
 wxGraphicsBitmap wxQtGraphicsRenderer::CreateBitmapFromNativeBitmap(void* bitmap)
 {
     wxGraphicsBitmap p;
-    if (bitmap != NULL)
+    if ( bitmap != NULL )
     {
         p.SetRefData(new wxQtBitmapData(this, (QPixmap*)bitmap));
     }
@@ -1222,9 +1243,9 @@ wxString wxQtGraphicsRenderer::GetName() const
 
 void wxQtGraphicsRenderer::GetVersion(int *major, int *minor, int *micro) const
 {
-    if (major) *major = QT_VERSION_MAJOR;
-    if (minor) *minor = QT_VERSION_MINOR;
-    if (micro) *micro = QT_VERSION_PATCH;
+    if ( major ) *major = QT_VERSION_MAJOR;
+    if ( minor ) *minor = QT_VERSION_MINOR;
+    if ( micro ) *micro = QT_VERSION_PATCH;
 }
 
 static wxQtGraphicsRenderer gs_qtGraphicsRenderer;
