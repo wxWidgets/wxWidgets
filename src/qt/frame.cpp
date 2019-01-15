@@ -130,10 +130,7 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
     }
     else if ( m_frameToolBar != NULL )
     {
-        if (m_frameToolBar->GetHandle() != NULL)
-        {
-            GetQMainWindow()->removeToolBar(m_frameToolBar->GetQToolBar());
-        }
+        GetQMainWindow()->removeToolBar(m_frameToolBar->GetQToolBar());
     }
     wxFrameBase::SetToolBar( toolbar );
 }
