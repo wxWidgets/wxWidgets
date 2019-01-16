@@ -354,7 +354,7 @@ wxWidgetImpl* wxWidgetImpl::CreateContentView( wxNonOwnedWindow* now )
     [contentview setController:controller];
     [contentview setHidden:YES];
     
-    wxWidgetIPhoneImpl* impl = new wxWidgetIPhoneImpl( now, contentview, true );
+    wxWidgetIPhoneImpl* impl = new wxWidgetIPhoneImpl( now, contentview, Widget_IsRoot );
     impl->InstallEventHandler();
     
     if ([toplevelwindow respondsToSelector:@selector(setRootViewController:)])

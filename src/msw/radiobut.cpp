@@ -92,7 +92,7 @@ void wxRadioButton::SetValue(bool value)
     else // owner drawn buttons don't react to this message
         Refresh();
 
-    if ( !value )
+    if ( !value || HasFlag(wxRB_SINGLE) )
         return;
 
     // if we set the value of one radio button we also must clear all the other

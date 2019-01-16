@@ -178,7 +178,7 @@ protected:
     void StopPartialCompletion();
 
     wxArrayString           m_strings;
-    wxArrayPtrVoid          m_clientDatas;
+    wxVector<void*>         m_clientDatas;
 
     wxFont                  m_useFont;
 

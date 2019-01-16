@@ -35,11 +35,13 @@ private:
         WXUISIM_TEST( Click );
         CPPUNIT_TEST( Value );
         CPPUNIT_TEST( Group );
+        CPPUNIT_TEST( Single );
     CPPUNIT_TEST_SUITE_END();
 
     void Click();
     void Value();
     void Group();
+    void Single();
 
     wxRadioButton* m_radio;
 
@@ -148,6 +150,38 @@ void RadioButtonTestCase::Group()
     wxDELETE(g1radio1);
     wxDELETE(g2radio0);
     wxDELETE(g2radio1);
+}
+
+void RadioButtonTestCase::Single()
+{
+    //Create a group of 2 buttons, having second button selected
+    wxScopedPtr<wxRadioButton> gradio0(new wxRadioButton(wxTheApp->GetTopWindow(),
+        wxID_ANY, "wxRadioButton",
+        wxDefaultPosition,
+        wxDefaultSize, wxRB_GROUP));
+
+    wxScopedPtr<wxRadioButton> gradio1(new wxRadioButton(wxTheApp->GetTopWindow(),
+        wxID_ANY, "wxRadioButton"));
+
+    gradio1->SetValue(true);
+
+    //Create a "single" button (by default it will not be selected)
+    wxScopedPtr<wxRadioButton> sradio(new wxRadioButton(wxTheApp->GetTopWindow(),
+        wxID_ANY, "wxRadioButton",
+        wxDefaultPosition,
+        wxDefaultSize, wxRB_SINGLE));
+
+    //Create a non-grouped button and select it
+    wxScopedPtr<wxRadioButton> ngradio(new wxRadioButton(wxTheApp->GetTopWindow(),
+        wxID_ANY, "wxRadioButton"));
+
+    ngradio->SetValue(true);
+
+    //Select the "single" button
+    sradio->SetValue(true);
+
+    CHECK(gradio1->GetValue());
+    CHECK(ngradio->GetValue());
 }
 
 #endif //wxUSE_RADIOBTN

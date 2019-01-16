@@ -59,6 +59,24 @@ wxArrayString::wxArrayString(size_t sz, const wxString* a)
 
 #include "wx/arrstr.h"
 
+#if __cplusplus >= 201103L
+
+int wxArrayString::Index(const wxString& str, bool bCase, bool WXUNUSED(bFromEnd)) const
+{
+    int n = 0;
+    for ( const auto& s: *this )
+    {
+        if ( s.IsSameAs(str, bCase) )
+            return n;
+
+        ++n;
+    }
+
+    return wxNOT_FOUND;
+}
+
+#else // C++98 version
+
 #include "wx/beforestd.h"
 #include <functional>
 #include "wx/afterstd.h"
@@ -130,9 +148,20 @@ wxStringCompareLess<F> wxStringCompare(F f)
     return wxStringCompareLess<F>(f);
 }
 
+#endif // C++11/C++98
+
 void wxArrayString::Sort(CompareFunction function)
 {
-    std::sort(begin(), end(), wxStringCompare(function));
+    std::sort(begin(), end(),
+#if __cplusplus >= 201103L
+              [function](const wxString& s1, const wxString& s2)
+              {
+                  return function(s1, s2) < 0;
+              }
+#else // C++98 version
+              wxStringCompare(function)
+#endif // C++11/C++98
+             );
 }
 
 void wxArrayString::Sort(bool reverseOrder)
@@ -155,7 +184,16 @@ int wxSortedArrayString::Index(const wxString& str,
                   "search parameters ignored for sorted array" );
 
     wxSortedArrayString::const_iterator
-        it = std::lower_bound(begin(), end(), str, wxStringCompare(wxStringCmp()));
+        it = std::lower_bound(begin(), end(), str,
+#if __cplusplus >= 201103L
+                              [](const wxString& s1, const wxString& s2)
+                              {
+                                  return s1 < s2;
+                              }
+#else // C++98 version
+                              wxStringCompare(wxStringCmp())
+#endif // C++11/C++98
+                              );
 
     if ( it == end() || str.Cmp(*it) != 0 )
         return wxNOT_FOUND;

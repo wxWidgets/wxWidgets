@@ -77,28 +77,27 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
 
 #if wxUSE_DATETIME
 
-// Enables a grid cell to display a formatted date and or time
+// Enables a grid cell to display a formatted date
 
-wxGridCellDateTimeRenderer::wxGridCellDateTimeRenderer(const wxString& outformat, const wxString& informat)
+wxGridCellDateRenderer::wxGridCellDateRenderer(const wxString& outformat)
 {
-    m_iformat = informat;
-    m_oformat = outformat;
+    if ( outformat.empty() )
+    {
+        m_oformat = "%x"; // Localized date representation.
+    }
+    else
+    {
+        m_oformat = outformat;
+    }
     m_tz = wxDateTime::Local;
-    m_dateDef = wxDefaultDateTime;
 }
 
-wxGridCellRenderer *wxGridCellDateTimeRenderer::Clone() const
+wxGridCellRenderer *wxGridCellDateRenderer::Clone() const
 {
-    wxGridCellDateTimeRenderer *renderer = new wxGridCellDateTimeRenderer;
-    renderer->m_iformat = m_iformat;
-    renderer->m_oformat = m_oformat;
-    renderer->m_dateDef = m_dateDef;
-    renderer->m_tz = m_tz;
-
-    return renderer;
+    return new wxGridCellDateRenderer(*this);
 }
 
-wxString wxGridCellDateTimeRenderer::GetString(const wxGrid& grid, int row, int col)
+wxString wxGridCellDateRenderer::GetString(const wxGrid& grid, int row, int col)
 {
     wxGridTableBase *table = grid.GetTable();
 
@@ -121,8 +120,7 @@ wxString wxGridCellDateTimeRenderer::GetString(const wxGrid& grid, int row, int 
     if (!hasDatetime )
     {
         text = table->GetValue(row, col);
-        const char * const end = val.ParseFormat(text, m_iformat, m_dateDef);
-        hasDatetime = end && !*end;
+        hasDatetime = Parse(text, val);
     }
 
     if ( hasDatetime )
@@ -132,12 +130,18 @@ wxString wxGridCellDateTimeRenderer::GetString(const wxGrid& grid, int row, int 
     return text;
 }
 
-void wxGridCellDateTimeRenderer::Draw(wxGrid& grid,
-                                   wxGridCellAttr& attr,
-                                   wxDC& dc,
-                                   const wxRect& rectCell,
-                                   int row, int col,
-                                   bool isSelected)
+bool wxGridCellDateRenderer::Parse(const wxString& text, wxDateTime& result)
+{
+    wxString::const_iterator end;
+    return result.ParseDate(text, &end) && end == text.end();
+}
+
+void wxGridCellDateRenderer::Draw(wxGrid& grid,
+                                  wxGridCellAttr& attr,
+                                  wxDC& dc,
+                                  const wxRect& rectCell,
+                                  int row, int col,
+                                  bool isSelected)
 {
     wxGridCellRenderer::Draw(grid, attr, dc, rectCell, row, col, isSelected);
 
@@ -154,18 +158,39 @@ void wxGridCellDateTimeRenderer::Draw(wxGrid& grid,
     grid.DrawTextRectangle(dc, GetString(grid, row, col), rect, hAlign, vAlign);
 }
 
-wxSize wxGridCellDateTimeRenderer::GetBestSize(wxGrid& grid,
-                                            wxGridCellAttr& attr,
-                                            wxDC& dc,
-                                            int row, int col)
+wxSize wxGridCellDateRenderer::GetBestSize(wxGrid& grid,
+                                           wxGridCellAttr& attr,
+                                           wxDC& dc,
+                                           int row, int col)
 {
     return DoGetBestSize(attr, dc, GetString(grid, row, col));
 }
 
-void wxGridCellDateTimeRenderer::SetParameters(const wxString& params)
+void wxGridCellDateRenderer::SetParameters(const wxString& params)
 {
     if (!params.empty())
         m_oformat=params;
+}
+
+
+// Enables a grid cell to display a formatted date and or time
+
+wxGridCellDateTimeRenderer::wxGridCellDateTimeRenderer(const wxString& outformat, const wxString& informat)
+    : wxGridCellDateRenderer(outformat)
+{
+    m_iformat = informat;
+    m_dateDef = wxDefaultDateTime;
+}
+
+wxGridCellRenderer *wxGridCellDateTimeRenderer::Clone() const
+{
+    return new wxGridCellDateTimeRenderer(*this);
+}
+
+bool wxGridCellDateTimeRenderer::Parse(const wxString& text, wxDateTime& result)
+{
+    const char * const end = result.ParseFormat(text, m_iformat, m_dateDef);
+    return end && !*end;
 }
 
 #endif // wxUSE_DATETIME

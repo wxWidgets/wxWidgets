@@ -555,6 +555,16 @@ GridFrame::GridFrame()
     grid->SetCellAlignment(3, 9, wxALIGN_CENTRE, wxALIGN_TOP);
     grid->SetCellValue(3, 10, "<- This numeric cell should be centred");
 
+    grid->SetColFormatDate(13); // Localized by default.
+    grid->SetColFormatDate(14, "%Y-%m-%d"); // ISO 8601 date format.
+
+    grid->SetCellValue(7, 0, "Today");
+    grid->SetCellRenderer(7, 0, new wxGridCellDateRenderer);
+    grid->SetCellEditor(7, 0, new wxGridCellDateEditor);
+    grid->SetCellValue(8, 0, "Tomorrow");
+    grid->SetCellRenderer(8, 0, new wxGridCellDateRenderer("%Y-%m-%d"));
+    grid->SetCellEditor(8, 0, new wxGridCellDateEditor);
+
     const wxString choices[] =
     {
         "Please select a choice",

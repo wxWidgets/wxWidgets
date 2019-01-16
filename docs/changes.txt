@@ -104,18 +104,39 @@ Changes in behaviour which may result in build errors
   e.g. if the error is due to spelling an option name wrongly, fixing or
   removing its name.
 
+- wxTextValidator::Get{In,Ex}cludes() now return a const reference to
+  wxArrayString. Please update your code to use the appropriate setter
+  Set[Char]{In,Ex}cludes(), instead of mutating the internal data directly.
+
 
 3.1.3: (released 2019-??-??)
 ----------------------------
 
-All:
+INCOMPATIBLE CHANGES SINCE 3.1.2:
 
-- Fix regression in wxTranslations::AddCatalog() in 3.1.2 (Tomasz Słodkowicz).
+- New wxTranslations::GetAcceptableTranslations() method was problematic and
+  was removed, fixing various regressions in wxTranslations::AddCatalog() that
+  were introduced by it. Thanks to Tomasz Słodkowicz and Dummy for reporting
+  this and providing fixes for it.
+
 
 All (GUI):
 
 - Fix wxInfoBar close button size in high DPI (Stefan Ziegler).
 - Make disabling the window before creating it actually work.
+- Implement wxAuiNotebook::GetBestSize() (Sebastian Walderich).
+- Add support for editing dates (without time) to wxGrid (Pavel Kalugin).
+- Allow changing tooltip text for button allowing to enter a new string
+  in wxPGArrayEditorDialog.
+- Fix wxPropertyGrid issues with horizontal scrolling.
+
+wxGTK:
+
+- Invalidate selection after deleting wxListBox item with GTK+ 3 too.
+
+wxMSW:
+
+- Fix passing Unicode strings via wxIPC when using DDE.
 
 
 3.1.2: (released 2018-12-10)

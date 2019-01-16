@@ -2223,7 +2223,7 @@ void wxWindowMac::MacRepositionScrollBars()
 
 bool wxWindowMac::AcceptsFocus() const
 {
-    if ( GetPeer() == NULL || GetPeer()->IsUserPane() )
+    if ( GetPeer() == NULL || GetPeer()->HasUserKeyHandling() )
         return wxWindowBase::AcceptsFocus();
     else
         return GetPeer()->CanFocus();
@@ -2741,11 +2741,23 @@ void wxWidgetImpl::RemoveAssociation(WXWidget control)
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxWidgetImpl, wxObject);
 
-wxWidgetImpl::wxWidgetImpl( wxWindowMac* peer , bool isRootControl, bool isUserPane )
+wxWidgetImpl::wxWidgetImpl( wxWindowMac* peer , int flags )
+{
+    Init();    
+    m_isRootControl = flags & Widget_IsRoot;
+    m_isUserPane = flags & Widget_IsUserPane;
+    m_wantsUserKey = m_isUserPane || (flags & Widget_UserKeyEvents);
+    m_wantsUserMouse = m_isUserPane || (flags & Widget_UserMouseEvents);
+    m_wxPeer = peer;
+    m_shouldSendEvents = true;
+}
+
+wxWidgetImpl::wxWidgetImpl( wxWindowMac* peer , bool isRootControl, bool isUserPane, bool wantsUserKey )
 {
     Init();
     m_isRootControl = isRootControl;
     m_isUserPane = isUserPane;
+    m_wantsUserKey = wantsUserKey;
     m_wxPeer = peer;
     m_shouldSendEvents = true;
 }
@@ -2763,6 +2775,8 @@ wxWidgetImpl::~wxWidgetImpl()
 void wxWidgetImpl::Init()
 {
     m_isRootControl = false;
+    m_wantsUserKey = false;
+    m_wantsUserMouse = false;
     m_wxPeer = NULL;
     m_needsFocusRect = false;
     m_needsFrame = true;

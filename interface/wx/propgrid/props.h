@@ -726,7 +726,12 @@ public:
                  const wxSize& sz = wxDefaultSize );
 
     void EnableCustomNewAction();
-    
+
+    /** Sets tooltip text for button allowing the user to enter new string.
+        @since 3.1.3
+    */
+    void SetNewButtonText(const wxString& text);
+
     /** Set value modified by dialog.
     */
     virtual void SetDialogValue( const wxVariant& value );
@@ -745,27 +750,25 @@ public:
     */
     virtual wxValidator* GetTextCtrlValidator() const;
 
-    // Returns true if array was actually modified
+    /** Returns true if array was actually modified
+    */
     bool IsModified() const;
 
-    // wxEditableListBox utilities
     int GetSelection() const;
 
 protected:
     wxEditableListBox*  m_elb;
-
-    // These are used for focus repair
     wxWindow*           m_elbSubPanel;
     wxWindow*           m_lastFocused;
 
-    // A new item, edited by user, is pending at this index.
-    // It will be committed once list ctrl item editing is done.
+    /** A new item, edited by user, is pending at this index.
+        It will be committed once list ctrl item editing is done.
+    */
     int             m_itemPendingAtIndex;
 
     bool            m_modified;
     bool            m_hasCustomNewAction;
 
-    // These must be overridden - must return true on success.
     virtual wxString ArrayGet( size_t index ) = 0;
     virtual size_t ArrayGetCount() = 0;
     virtual bool ArrayInsert( const wxString& str, int index ) = 0;

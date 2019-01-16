@@ -18,9 +18,7 @@ class QPushButton;
 class WXDLLIMPEXP_CORE wxAnyButton : public wxAnyButtonBase
 {
 public:
-    wxAnyButton()
-    {
-    }
+    wxAnyButton();
 
     // implementation
     // --------------

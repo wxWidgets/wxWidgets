@@ -422,6 +422,7 @@ enum
     ID_SETPROPERTYVALUE,
     ID_TESTREPLACE,
     ID_SETCOLUMNS,
+    ID_SETVIRTWIDTH,
     ID_TESTXRC,
     ID_ENABLECOMMONVALUES,
     ID_SELECTSTYLE,
@@ -522,6 +523,7 @@ wxBEGIN_EVENT_TABLE(FormMain, wxFrame)
 
     EVT_MENU( ID_CATCOLOURS, FormMain::OnCatColours )
     EVT_MENU( ID_SETCOLUMNS, FormMain::OnSetColumns )
+    EVT_MENU( ID_SETVIRTWIDTH, FormMain::OnSetVirtualWidth )
     EVT_MENU( ID_TESTXRC, FormMain::OnTestXRC )
     EVT_MENU( ID_ENABLECOMMONVALUES, FormMain::OnEnableCommonValues )
     EVT_MENU( ID_SELECTSTYLE, FormMain::OnSelectStyle )
@@ -1157,7 +1159,8 @@ void FormMain::PopulateWithStandardItems ()
     // Set test information for cells in columns 3 and 4
     // (reserve column 2 for displaying units)
     wxPropertyGridIterator it;
-    wxBitmap bmp = wxArtProvider::GetBitmap(wxART_FOLDER);
+    int bmpH = pg->GetGrid()->GetRowHeight() - 2;
+    wxBitmap bmp = wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, wxSize(bmpH, bmpH));
 
     for ( it = pg->GetGrid()->GetIterator();
           !it.AtEnd();
@@ -2119,6 +2122,7 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     menuTry->AppendCheckItem(ID_BOOL_CHECKBOX, "Render Boolean values as checkboxes",
         "Renders Boolean values as checkboxes");
     menuTry->Append(ID_SETCOLUMNS, "Set Number of Columns" );
+    menuTry->Append(ID_SETVIRTWIDTH, "Set Virtual Width");
     menuTry->AppendSeparator();
     menuTry->Append(ID_TESTXRC, "Display XRC sample" );
 
@@ -2937,6 +2941,26 @@ void FormMain::OnSetColumns( wxCommandEvent& WXUNUSED(event) )
     if ( colCount >= 2 )
     {
         m_pPropGridManager->SetColumnCount(colCount);
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void FormMain::OnSetVirtualWidth(wxCommandEvent& WXUNUSED(evt))
+{
+    long oldWidth = m_pPropGridManager->GetState()->GetVirtualWidth();
+    long newWidth = oldWidth;
+    {
+        wxNumberEntryDialog dlg(this, "Enter virtual width (-1-2000).", "Width:",
+                                "Change Virtual Width", oldWidth, -1, 2000);
+        if ( dlg.ShowModal() == wxID_OK )
+        {
+            newWidth = dlg.GetValue();
+        }
+    }
+    if ( newWidth != oldWidth )
+    {
+        m_pPropGridManager->GetGrid()->SetVirtualWidth((int)newWidth);
     }
 }
 

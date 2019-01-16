@@ -31,8 +31,19 @@ enum wxTextValidatorStyle
     wxFILTER_INCLUDE_LIST = 0x40,
     wxFILTER_INCLUDE_CHAR_LIST = 0x80,
     wxFILTER_EXCLUDE_LIST = 0x100,
-    wxFILTER_EXCLUDE_CHAR_LIST = 0x200
+    wxFILTER_EXCLUDE_CHAR_LIST = 0x200,
+    wxFILTER_XDIGITS = 0x400,
+    wxFILTER_SPACE = 0x800,
+
+    // filter char class (for internal use only)
+    wxFILTER_CC = wxFILTER_SPACE|wxFILTER_ASCII|wxFILTER_NUMERIC|
+                  wxFILTER_ALPHANUMERIC|wxFILTER_ALPHA|
+                  wxFILTER_DIGITS|wxFILTER_XDIGITS
 };
+
+// ----------------------------------------------------------------------------
+// wxTextValidator
+// ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxTextValidator: public wxValidator
 {
@@ -68,31 +79,78 @@ public:
 
     wxTextEntry *GetTextEntry();
 
+    // strings & chars inclusions:
+    // ---------------------------
+
     void SetCharIncludes(const wxString& chars);
-    void SetIncludes(const wxArrayString& includes) { m_includes = includes; }
-    inline wxArrayString& GetIncludes() { return m_includes; }
+    void AddCharIncludes(const wxString& chars);
+
+    void SetIncludes(const wxArrayString& includes);
+    void AddInclude(const wxString& include);
+
+    const wxArrayString& GetIncludes() const { return m_includes; }
+    wxString GetCharIncludes() const { return m_charIncludes; }
+
+    // strings & chars exclusions:
+    // ---------------------------
 
     void SetCharExcludes(const wxString& chars);
-    void SetExcludes(const wxArrayString& excludes) { m_excludes = excludes; }
-    inline wxArrayString& GetExcludes() { return m_excludes; }
+    void AddCharExcludes(const wxString& chars);
+
+    void SetExcludes(const wxArrayString& excludes);
+    void AddExclude(const wxString& exclude);
+
+    const wxArrayString& GetExcludes() const { return m_excludes; }
+    wxString GetCharExcludes() const { return m_charExcludes; }
 
     bool HasFlag(wxTextValidatorStyle style) const
         { return (m_validatorStyle & style) != 0; }
 
+    // implementation only
+    // --------------------
+
+    // returns the error message if the contents of 'str' are invalid
+    virtual wxString IsValid(const wxString& str) const;
+
 protected:
 
-    // returns true if all characters of the given string are present in m_includes
+    bool IsCharIncluded(const wxUniChar& c) const
+    {
+        return m_charIncludes.find(c) != wxString::npos;
+    }
+
+    bool IsCharExcluded(const wxUniChar& c) const
+    {
+        return m_charExcludes.find(c) != wxString::npos;
+    }
+
+    bool IsIncluded(const wxString& str) const
+    {
+        if ( HasFlag(wxFILTER_INCLUDE_LIST) )
+            return m_includes.Index(str) != wxNOT_FOUND;
+
+        // m_includes should be ignored (i.e. return true)
+        // if the style is not set.
+        return true;
+    }
+
+    bool IsExcluded(const wxString& str) const
+    {
+        return m_excludes.Index(str) != wxNOT_FOUND;
+    }
+
+    // returns false if the character is invalid
+    bool IsValidChar(const wxUniChar& c) const;
+
+    // These two functions (undocumented now) are kept for compatibility reasons.
     bool ContainsOnlyIncludedCharacters(const wxString& val) const;
-
-    // returns true if at least one character of the given string is present in m_excludes
     bool ContainsExcludedCharacters(const wxString& val) const;
-
-    // returns the error message if the contents of 'val' are invalid
-    virtual wxString IsValid(const wxString& val) const;
 
 protected:
     long                 m_validatorStyle;
     wxString*            m_stringValue;
+    wxString             m_charIncludes;
+    wxString             m_charExcludes;
     wxArrayString        m_includes;
     wxArrayString        m_excludes;
 
