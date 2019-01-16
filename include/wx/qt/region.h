@@ -47,6 +47,9 @@ protected:
     virtual bool DoIntersect(const wxRegion& region);
     virtual bool DoSubtract(const wxRegion& region);
     virtual bool DoXor(const wxRegion& region);
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxRegion);
 };
 
 
@@ -81,6 +84,8 @@ public:
 private:
     QVector < QRect > *m_qtRects;
     int m_pos;
+
+    wxDECLARE_DYNAMIC_CLASS(wxRegionIterator);
 };
 
 #endif // _WX_QT_REGION_H_

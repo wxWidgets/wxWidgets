@@ -98,9 +98,9 @@ public:
                            wxCoord xoffset, wxCoord yoffset,
                            wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
 
-protected:
-
 private:
+    wxDECLARE_CLASS(wxPrinterDCImpl);
+    wxDECLARE_NO_COPY_CLASS(wxPrinterDCImpl);
 };
 
 #endif // _WX_QT_DCPRINT_H_

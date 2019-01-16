@@ -1061,6 +1061,7 @@
     <ClCompile Include="..\..\src\generic\hyperlinkg.cpp" />
     <ClCompile Include="..\..\src\generic\notifmsgg.cpp" />
     <ClCompile Include="..\..\src\common\bmpcboxcmn.cpp" />
+    <ClCompile Include="..\..\src\generic\rowheightcache.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\msw\version.rc">

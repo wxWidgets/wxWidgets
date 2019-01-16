@@ -105,6 +105,7 @@ void wxStatusBar::Refresh( bool eraseBackground, const wxRect *rect )
 
 void wxStatusBar::Init()
 {
+    m_qtStatusBar = NULL;
     m_qtPanes = NULL;
 }
 

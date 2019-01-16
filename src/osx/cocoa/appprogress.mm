@@ -66,6 +66,8 @@
 - (void)reset
 {
     [m_progIndicator setHidden:YES];
+
+    [m_dockTile display];
 }
 
 @end

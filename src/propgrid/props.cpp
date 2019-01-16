@@ -162,8 +162,7 @@ wxNumericPropertyValidator::
 {
     long style = GetStyle();
 
-    // always allow plus and minus signs
-    wxString allowedChars("+-");
+    wxString allowedChars;
 
     switch ( base )
     {
@@ -185,7 +184,11 @@ wxNumericPropertyValidator::
             style |= wxFILTER_DIGITS;
     }
 
-    if ( numericType == Float )
+    if ( numericType == Signed )
+    {
+        allowedChars += wxS("-+");
+    }
+    else if ( numericType == Float )
     {
         allowedChars += wxS("eE");
 

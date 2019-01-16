@@ -13,6 +13,8 @@
 
 #include <QtGui/QPainter>
 
+wxIMPLEMENT_CLASS(wxMemoryDCImpl,wxQtDCImpl);
+
 wxMemoryDCImpl::wxMemoryDCImpl( wxMemoryDC *owner )
     : wxQtDCImpl( owner )
 {

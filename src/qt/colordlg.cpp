@@ -21,6 +21,8 @@ public:
         { }
 };
 
+wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog,wxDialog)
+
 bool wxColourDialog::Create(wxWindow *parent, wxColourData *data )
 {
     m_qtWindow = new wxQtColorDialog( parent, this );

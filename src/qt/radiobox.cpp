@@ -56,7 +56,10 @@ void wxQtButtonGroup::buttonClicked(int index) {
 wxIMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl);
 
 
-wxRadioBox::wxRadioBox()
+wxRadioBox::wxRadioBox() :
+    m_qtGroupBox(NULL),
+    m_qtButtonGroup(NULL),
+    m_qtBoxLayout(NULL)
 {
 }
 
@@ -113,10 +116,12 @@ static void AddChoices( QButtonGroup *qtButtonGroup, QBoxLayout *qtBoxLayout, in
     Button *btn;
     bool isFirst = true;
 
+    int id = 0;
+
     while ( count-- > 0 )
     {
         btn = new Button( wxQtConvertString( *choices++ ));
-        qtButtonGroup->addButton( btn );
+        qtButtonGroup->addButton( btn, id++ );
         qtBoxLayout->addWidget( btn );
 
         if ( isFirst )
@@ -142,6 +147,9 @@ bool wxRadioBox::Create(wxWindow *parent,
     m_qtGroupBox = new wxQtRadioBox( parent, this );
     m_qtGroupBox->setTitle( wxQtConvertString( title ) );
     m_qtButtonGroup = new wxQtButtonGroup( m_qtGroupBox, this );
+
+    if ( !(style & (wxRA_SPECIFY_ROWS | wxRA_SPECIFY_COLS)) )
+        style |= wxRA_SPECIFY_COLS;
 
     // wxRA_SPECIFY_COLS means that we arrange buttons in
     // left to right order and GetMajorDim() is the number of columns while
@@ -242,6 +250,12 @@ bool wxRadioBox::Show(unsigned int n, bool show)
 
 bool wxRadioBox::Show( bool show )
 {
+    if ( !wxControl::Show(show) )
+        return false;
+
+    if ( !m_qtGroupBox )
+        return false;
+
     if( m_qtGroupBox->isVisible() == show )
     {
         for( unsigned int i = 0; i < GetCount(); ++i )

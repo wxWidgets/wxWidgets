@@ -37,7 +37,8 @@ void wxQtChoice::activated(int WXUNUSED(index))
 }
 
 
-wxChoice::wxChoice()
+wxChoice::wxChoice() :
+    m_qtComboBox(NULL)
 {
 }
 

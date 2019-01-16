@@ -46,7 +46,8 @@ void wxQtCheckBox::clicked( bool checked )
 }
 
 
-wxCheckBox::wxCheckBox()
+wxCheckBox::wxCheckBox() :
+    m_qtCheckBox(NULL)
 {
 }
 

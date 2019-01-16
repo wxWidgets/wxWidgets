@@ -23,7 +23,8 @@ public:
 };
 
 
-wxStaticBox::wxStaticBox()
+wxStaticBox::wxStaticBox() :
+    m_qtGroupBox(NULL)
 {
 }
 
