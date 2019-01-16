@@ -3738,7 +3738,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                                  hTheme,
                                  GetHdcOf(*impl),
                                  EP_EDITTEXT,
-                                 ETS_NORMAL,
+                                 IsEnabled() ? ETS_NORMAL : ETS_DISABLED,
                                  rect,
                                  &rcClient) == S_OK )
                     {
@@ -3774,21 +3774,22 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     wxCopyRectToRECT(GetSize(), rcBorder);
 
                     RECT rcClient;
+
+                    const int nState = IsEnabled() ? ETS_NORMAL : ETS_DISABLED;
                     ::GetThemeBackgroundContentRect(
-                        hTheme, GetHdcOf(*impl), EP_EDITTEXT, ETS_NORMAL, &rcBorder, &rcClient);
+                        hTheme, GetHdcOf(*impl), EP_EDITTEXT, nState, &rcBorder, &rcClient);
                     InflateRect(&rcClient, -1, -1);
 
                     ::ExcludeClipRect(GetHdcOf(*impl), rcClient.left, rcClient.top,
                                       rcClient.right, rcClient.bottom);
 
                     // Make sure the background is in a proper state
-                    if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, ETS_NORMAL))
+                    if (::IsThemeBackgroundPartiallyTransparent(hTheme, EP_EDITTEXT, nState))
                     {
                         ::DrawThemeParentBackground(GetHwnd(), GetHdcOf(*impl), &rcBorder);
                     }
 
                     // Draw the border
-                    const int nState = IsEnabled() ? ETS_NORMAL : ETS_DISABLED;
                     ::DrawThemeBackground(hTheme, GetHdcOf(*impl), EP_EDITTEXT, nState, &rcBorder, NULL);
                 }
             }
