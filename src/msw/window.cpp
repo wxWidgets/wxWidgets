@@ -3729,7 +3729,12 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     }
 
                     wxUxThemeHandle hTheme((const wxWindow *)this, L"EDIT");
-                    RECT rcClient = { 0, 0, 0, 0 };
+
+                    // There is no need to initialize rcClient: either it will
+                    // be done by GetThemeBackgroundContentRect() or we'll do
+                    // it below if it fails.
+                    RECT rcClient;
+
                     wxClientDC dc((wxWindow *)this);
                     wxMSWDCImpl *impl = (wxMSWDCImpl*) dc.GetImpl();
 
