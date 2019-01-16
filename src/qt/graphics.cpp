@@ -883,9 +883,9 @@ public:
         widths.Empty();
         widths.Add(0, text_length);
 
-        for ( size_t i = 1; i < text_length; ++i )
+        for ( size_t i = 0; i < text_length; ++i )
         {
-            const wxString sub_string = text.substr(0, i);
+            const wxString sub_string = text.substr(0, i+1);
             const QRect bounding_rect = metrics.boundingRect(QString(sub_string));
             widths[i] = bounding_rect.width();
         }
