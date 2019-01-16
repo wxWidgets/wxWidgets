@@ -108,8 +108,9 @@ Changes in behaviour which may result in build errors
   wxArrayString. Please update your code to use the appropriate setter
   Set[Char]{In,Ex}cludes(), instead of mutating the internal data directly.
 
-- Under macOS, configure builds use 10.9 SDK by default now. 10.7 SDK is still
-  supported, but must be explicitly selected.
+- Under macOS, 10.9 SDK is used by default now. 10.7 SDK is still supported,
+  but must be explicitly selected (and libstdc++ must be installed in order
+  to use it).
 
 
 3.1.3: (released 2019-??-??)
