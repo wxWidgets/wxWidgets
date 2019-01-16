@@ -71,6 +71,8 @@ protected:
     virtual void DoClear();
     virtual void DoDeleteOneItem(unsigned int pos);
 
+    virtual void InitialiseSort(QComboBox *combo);
+
     QComboBox *m_qtComboBox;
 
 private:

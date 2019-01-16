@@ -128,6 +128,8 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxString& name )
 {
     m_qtComboBox = new wxQtComboBox( parent, this );
+    InitialiseSort(m_qtComboBox);
+
     while ( n-- > 0 )
         m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
     m_qtComboBox->setEditText( wxQtConvertString( value ));
@@ -140,7 +142,10 @@ void wxComboBox::SetValue(const wxString& value)
     if ( HasFlag(wxCB_READONLY) )
         SetStringSelection(value);
     else
+    {
         wxTextEntry::SetValue(value);
+        m_qtComboBox->setEditText( wxQtConvertString(value) );
+    }
 }
 
 wxString wxComboBox::DoGetValue() const
