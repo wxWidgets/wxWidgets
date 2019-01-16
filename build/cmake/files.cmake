@@ -175,6 +175,7 @@ set(QT_WIN32_SRC
     src/msw/dialup.cpp
     src/msw/dib.cpp
     src/msw/joystick.cpp
+    src/qt/graphics.cpp
 )
 
 set(QT_WIN32_HDR
