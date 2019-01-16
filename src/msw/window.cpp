@@ -3788,14 +3788,7 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     }
 
                     // Draw the border
-                    int nState;
-                    if ( !IsEnabled() )
-                        nState = ETS_DISABLED;
-                    // should we check this?
-                    //else if ( ::GetWindowLong(GetHwnd(), GWL_STYLE) & ES_READONLY)
-                    //    nState = ETS_READONLY;
-                    else
-                        nState = ETS_NORMAL;
+                    const int nState = IsEnabled() ? ETS_NORMAL : ETS_DISABLED;
                     ::DrawThemeBackground(hTheme, GetHdcOf(*impl), EP_EDITTEXT, nState, &rcBorder, NULL);
                 }
             }
