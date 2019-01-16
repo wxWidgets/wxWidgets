@@ -3740,18 +3740,23 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                                  EP_EDITTEXT,
                                  IsEnabled() ? ETS_NORMAL : ETS_DISABLED,
                                  rect,
-                                 &rcClient) == S_OK )
+                                 &rcClient) != S_OK )
                     {
-                        InflateRect(&rcClient, -1, -1);
-                        if (wParam)
-                            csparam->rgrc[0] = rcClient;
-                        else
-                            *((RECT*)lParam) = rcClient;
-
-                        // WVR_REDRAW triggers a bug whereby child windows are moved up and left,
-                        // so don't use.
-                        // rc.result = WVR_REDRAW;
+                        // If GetThemeBackgroundContentRect() failed, as can
+                        // happen with at least some custom themes, just use
+                        // the original client rectangle.
+                        rcClient = *rect;
                     }
+
+                    InflateRect(&rcClient, -1, -1);
+                    if (wParam)
+                        csparam->rgrc[0] = rcClient;
+                    else
+                        *((RECT*)lParam) = rcClient;
+
+                    // WVR_REDRAW triggers a bug whereby child windows are moved up and left,
+                    // so don't use.
+                    // rc.result = WVR_REDRAW;
                 }
             }
             break;
@@ -3776,8 +3781,23 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
                     RECT rcClient;
 
                     const int nState = IsEnabled() ? ETS_NORMAL : ETS_DISABLED;
-                    ::GetThemeBackgroundContentRect(
-                        hTheme, GetHdcOf(*impl), EP_EDITTEXT, nState, &rcBorder, &rcClient);
+
+                    if ( ::GetThemeBackgroundContentRect
+                                (
+                                 hTheme,
+                                 GetHdcOf(*impl),
+                                 EP_EDITTEXT,
+                                 nState,
+                                 &rcBorder,
+                                 &rcClient
+                                ) != S_OK )
+                    {
+                        // As above in WM_NCCALCSIZE, fall back on something
+                        // reasonable for themes which don't implement this
+                        // function.
+                        rcClient = rcBorder;
+                    }
+
                     InflateRect(&rcClient, -1, -1);
 
                     ::ExcludeClipRect(GetHdcOf(*impl), rcClient.left, rcClient.top,
