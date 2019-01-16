@@ -10,7 +10,35 @@
 
 #include "wx/choice.h"
 #include "wx/qt/private/winevent.h"
+
 #include <QtWidgets/QComboBox>
+#include <QtCore/QSortFilterProxyModel>
+
+class LexicalSortProxyModel : public QSortFilterProxyModel
+{
+    public:
+        bool lessThan( const QModelIndex &left, const QModelIndex &right ) const
+        {
+            const QVariant leftData = sourceModel()->data(left);
+            const QVariant rightData = sourceModel()->data(right);
+
+            if( leftData.type() != QVariant::String )
+                return false;
+
+            int insensitiveResult = QString::compare(
+                    leftData.value<QString>(),
+                    rightData.value<QString>(),
+                    Qt::CaseInsensitive);
+
+            if ( insensitiveResult == 0 )
+            {
+                return QString::compare( leftData.value<QString>(),
+                        rightData.value<QString>() ) < 0;
+            }
+
+            return insensitiveResult < 0;
+        }
+};
 
 class wxQtChoice : public wxQtEventSignalHandler< QComboBox, wxChoice >
 {
@@ -40,6 +68,14 @@ void wxQtChoice::activated(int WXUNUSED(index))
 wxChoice::wxChoice() :
     m_qtComboBox(NULL)
 {
+}
+
+void wxChoice::InitialiseSort(QComboBox *combo)
+{
+    QSortFilterProxyModel *proxyModel = new LexicalSortProxyModel();
+    proxyModel->setSourceModel(combo->model());
+    combo->model()->setParent(proxyModel);
+    combo->setModel(proxyModel);
 }
 
 
@@ -89,6 +125,8 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
         const wxString& name )
 {
     m_qtComboBox = new wxQtChoice( parent, this );
+
+    InitialiseSort(m_qtComboBox);
 
     while ( n-- > 0 )
         m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
@@ -197,6 +235,10 @@ void wxChoice::DoClear()
 
 void wxChoice::DoDeleteOneItem(unsigned int pos)
 {
+    if( GetSelection() == pos )
+    {
+        SetSelection(wxNOT_FOUND);
+    }
     m_qtComboBox->removeItem(pos);
 }
 

@@ -13,8 +13,16 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
+#include <QtCore/QSortFilterProxyModel>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QLineEdit>
+
+
+class LexicalSortProxyModel : public QSortFilterProxyModel
+{
+    public:
+        bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+};
 
 class wxQtComboBox : public wxQtEventSignalHandler< QComboBox, wxComboBox >
 {
@@ -128,6 +136,8 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxString& name )
 {
     m_qtComboBox = new wxQtComboBox( parent, this );
+    InitialiseSort(m_qtComboBox);
+
     while ( n-- > 0 )
         m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
     m_qtComboBox->setEditText( wxQtConvertString( value ));
@@ -140,7 +150,10 @@ void wxComboBox::SetValue(const wxString& value)
     if ( HasFlag(wxCB_READONLY) )
         SetStringSelection(value);
     else
+    {
         wxTextEntry::SetValue(value);
+        m_qtComboBox->setEditText( wxQtConvertString(value) );
+    }
 }
 
 wxString wxComboBox::DoGetValue() const
