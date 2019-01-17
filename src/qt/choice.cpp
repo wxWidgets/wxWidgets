@@ -240,6 +240,12 @@ void wxChoice::DoClear()
 
 void wxChoice::DoDeleteOneItem(unsigned int pos)
 {
+    const int selection = GetSelection();
+
+    if ( selection >= 0 && static_cast<unsigned int>(selection) == pos )
+    {
+        SetSelection( wxNOT_FOUND );
+    }
     m_qtComboBox->removeItem(pos);
 }
 
