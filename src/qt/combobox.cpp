@@ -30,14 +30,36 @@ public:
     wxQtComboBox( wxWindow *parent, wxComboBox *handler );
     virtual void showPopup() wxOVERRIDE;
     virtual void hidePopup() wxOVERRIDE;
+    void ignoreTextChange(bool ignore);
+
+    struct Ignore
+    {
+        Ignore(QComboBox *combo) :
+            handler(dynamic_cast<wxQtComboBox*>(combo))
+        {
+            if(handler)
+                handler->ignoreTextChange(true);
+        }
+        ~Ignore()
+        {
+            if(handler)
+                handler->ignoreTextChange(false);
+        }
+
+        private:
+        wxQtComboBox *handler;
+    };
 
 private:
     void activated(int index);
     void editTextChanged(const QString &text);
+
+    bool textChangeIgnored;
 };
 
 wxQtComboBox::wxQtComboBox( wxWindow *parent, wxComboBox *handler )
-    : wxQtEventSignalHandler< QComboBox, wxComboBox >( parent, handler )
+    : wxQtEventSignalHandler< QComboBox, wxComboBox >( parent, handler ),
+    textChangeIgnored(false)
 {
     setEditable( true );
     connect(this, static_cast<void (QComboBox::*)(int index)>(&QComboBox::activated),
@@ -67,8 +89,16 @@ void wxQtComboBox::activated(int WXUNUSED(index))
         handler->SendSelectionChangedEvent(wxEVT_COMBOBOX);
 }
 
+void wxQtComboBox::ignoreTextChange(bool ignore)
+{
+    textChangeIgnored = ignore;
+}
+
 void wxQtComboBox::editTextChanged(const QString &text)
 {
+    if( textChangeIgnored )
+        return;
+
     wxComboBox *handler = GetHandler();
     if ( handler )
     {
@@ -78,6 +108,11 @@ void wxQtComboBox::editTextChanged(const QString &text)
     }
 }
 
+void wxComboBox::SetSelection(int n)
+{
+    wxQtComboBox::Ignore ignore( m_qtComboBox );
+    wxChoice::SetSelection( n );
+}
 
 wxComboBox::wxComboBox()
 {
@@ -145,7 +180,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
-void wxComboBox::SetValue(const wxString& value)
+void wxComboBox::SetActualValue(const wxString &value)
 {
     if ( HasFlag(wxCB_READONLY) )
         SetStringSelection(value);
@@ -154,6 +189,51 @@ void wxComboBox::SetValue(const wxString& value)
         wxTextEntry::SetValue(value);
         m_qtComboBox->setEditText( wxQtConvertString(value) );
     }
+}
+
+void wxComboBox::SetValue(const wxString& value)
+{
+    SetActualValue( value );
+    SetInsertionPoint( 0 );
+}
+
+void wxComboBox::ChangeValue(const wxString &value)
+{
+    wxQtComboBox::Ignore ignore( m_qtComboBox );
+    SetValue( value );
+}
+
+void wxComboBox::AppendText(const wxString &value)
+{
+    SetActualValue( GetValue() + value );
+}
+
+void wxComboBox::Replace(long from, long to, const wxString &value)
+{
+    const wxString original( GetValue() );
+    if(from == 0)
+    {
+        SetActualValue( value + original.SubString(to, original.length()) );
+    }
+
+    wxString front = original.SubString( 0, from - 1 ) + value;
+
+    long iPoint = front.length();
+    if( front.length() <= original.length() )
+    {
+        SetActualValue( front + original.SubString(to, original.length()) );
+    }
+    else
+    {
+        SetActualValue( front );
+    }
+    SetInsertionPoint( iPoint );
+}
+
+void wxComboBox::WriteText(const wxString &value)
+{
+    long point = GetInsertionPoint();
+    Replace( point, point, value );
 }
 
 wxString wxComboBox::DoGetValue() const
@@ -179,15 +259,40 @@ void wxComboBox::Clear()
 
 void wxComboBox::SetSelection( long from, long to )
 {
-    // SelectAll uses -1 to -1, adjust for qt:
-    if (from == -1 && to == -1)
+    if( from == -1 )
     {
         from = 0;
+    }
+    if( to == -1 )
+    {
         to = GetValue().length();
     }
+
+    SetInsertionPoint( from );
     // use the inner text entry widget (note that can be null if not editable)
     if ( m_qtComboBox->lineEdit() != NULL )
-        m_qtComboBox->lineEdit()->setSelection(from, to);
+    {
+        m_qtComboBox->lineEdit()->setSelection( from, to - from );
+    }
+}
+
+void wxComboBox::SetInsertionPoint( long pos )
+{
+    // check if pos indicates end of text:
+    if ( pos == -1 )
+        m_qtComboBox->lineEdit()->end( false );
+    else
+        m_qtComboBox->lineEdit()->setCursorPosition( pos );
+}
+
+long wxComboBox::GetInsertionPoint() const
+{
+    long selectionStart = m_qtComboBox->lineEdit()->selectionStart();
+
+    if ( selectionStart >= 0 )
+        return selectionStart;
+
+    return m_qtComboBox->lineEdit()->cursorPosition();
 }
 
 void wxComboBox::GetSelection(long* from, long* to) const
