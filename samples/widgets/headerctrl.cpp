@@ -28,7 +28,9 @@
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
     #include "wx/button.h"
+    #include "wx/checkbox.h"
     #include "wx/sizer.h"
+    #include "wx/statbox.h"
     #include "wx/stattext.h"
 #endif
 
@@ -59,9 +61,23 @@ public:
     virtual void CreateContent() wxOVERRIDE;
 
 protected:
+    // event handlers
+    void OnStyleCheckBox(wxCommandEvent& evt);
+    void OnResetButton(wxCommandEvent& evt);
+    void OnUpdateUIResetButton(wxUpdateUIEvent& evt);
+
+    // reset the header styles
+    void Reset();
+    // compose style flags based on selected styles
+    long GetStyleFlags() const;
+
     // the control itself and the sizer it is in
     wxHeaderCtrlSimple *m_header;
     wxSizer *m_sizerHeader;
+    // the check boxes for styles
+    wxCheckBox *m_chkAllowReorder;
+    wxCheckBox *m_chkAllowHide;
+    wxCheckBox *m_chkBitmapOnRight;
 
 private:
     DECLARE_WIDGETS_PAGE(HeaderCtrlWidgetsPage)
@@ -82,22 +98,44 @@ IMPLEMENT_WIDGETS_PAGE(HeaderCtrlWidgetsPage,
 
 void HeaderCtrlWidgetsPage::CreateContent()
 {
+    // left pane
+    wxStaticBox* box = new wxStaticBox(this, wxID_ANY, "&Set style");
+    wxSizer* sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
+
+    m_chkAllowReorder = CreateCheckBoxAndAddToSizer(sizerLeft, "Allow &reorder");
+    m_chkAllowHide = CreateCheckBoxAndAddToSizer(sizerLeft, "Alow &hide");
+    m_chkBitmapOnRight = CreateCheckBoxAndAddToSizer(sizerLeft, "&Bitmap on right");
+
+    sizerLeft->Add(5, 5, wxSizerFlags().Expand().Border(wxALL, 5)); // spacer
+
+    wxButton* btnReset = new wxButton(this, wxID_ANY, "&Reset");
+    sizerLeft->Add(btnReset, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+
+    // right pane
     m_sizerHeader = new wxStaticBoxSizer(wxVERTICAL, this, "Header");
+    Reset();
     RecreateWidget();
 
-    wxSizer* const sizerTop = new wxBoxSizer(wxHORIZONTAL);
+    // the 2 panes compose the window
+    wxSizer* sizerTop = new wxBoxSizer(wxHORIZONTAL);
+    sizerTop->Add(sizerLeft, wxSizerFlags().Expand().DoubleBorder());
     sizerTop->Add(m_sizerHeader, wxSizerFlags(1).Expand().DoubleBorder());
 
     SetSizer(sizerTop);
+
+    // Bind event handlers
+    m_chkAllowReorder->Bind(wxEVT_CHECKBOX, &HeaderCtrlWidgetsPage::OnStyleCheckBox, this);
+    m_chkAllowHide->Bind(wxEVT_CHECKBOX, &HeaderCtrlWidgetsPage::OnStyleCheckBox, this);
+    m_chkBitmapOnRight->Bind(wxEVT_CHECKBOX, &HeaderCtrlWidgetsPage::OnStyleCheckBox, this);
+    btnReset->Bind(wxEVT_BUTTON, &HeaderCtrlWidgetsPage::OnResetButton, this);
+    btnReset->Bind(wxEVT_UPDATE_UI, &HeaderCtrlWidgetsPage::OnUpdateUIResetButton, this);
 }
 
 void HeaderCtrlWidgetsPage::RecreateWidget()
 {
     m_sizerHeader->Clear(true /* delete windows */);
 
-    int flags = GetAttrs().m_defaultFlags;
-
-    flags |= wxHD_DEFAULT_STYLE;
+    long flags = GetAttrs().m_defaultFlags | GetStyleFlags();
 
     m_header = new wxHeaderCtrlSimple(this, wxID_ANY,
                                       wxDefaultPosition, wxDefaultSize,
@@ -109,6 +147,47 @@ void HeaderCtrlWidgetsPage::RecreateWidget()
     m_sizerHeader->Add(m_header, wxSizerFlags().Expand());
     m_sizerHeader->AddStretchSpacer();
     m_sizerHeader->Layout();
+}
+
+void HeaderCtrlWidgetsPage::Reset()
+{
+    m_chkAllowReorder->SetValue((wxHD_DEFAULT_STYLE & wxHD_ALLOW_REORDER) != 0);
+    m_chkAllowHide->SetValue((wxHD_DEFAULT_STYLE & wxHD_ALLOW_HIDE) != 0);
+    m_chkBitmapOnRight->SetValue((wxHD_DEFAULT_STYLE & wxHD_BITMAP_ON_RIGHT) != 0);
+}
+
+long HeaderCtrlWidgetsPage::GetStyleFlags() const
+{
+    long flags = 0;
+
+    if ( m_chkAllowReorder->IsChecked() )
+        flags |= wxHD_ALLOW_REORDER;
+    if ( m_chkAllowHide->IsChecked() )
+        flags |= wxHD_ALLOW_HIDE;
+    if ( m_chkBitmapOnRight->IsChecked() )
+        flags |= wxHD_BITMAP_ON_RIGHT;
+
+    return flags;
+}
+
+// ----------------------------------------------------------------------------
+// event handlers
+// ----------------------------------------------------------------------------
+
+void HeaderCtrlWidgetsPage::OnStyleCheckBox(wxCommandEvent& WXUNUSED(evt))
+{
+    RecreateWidget();
+}
+
+void HeaderCtrlWidgetsPage::OnResetButton(wxCommandEvent& WXUNUSED(evt))
+{
+    Reset();
+    RecreateWidget();
+}
+
+void HeaderCtrlWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& evt)
+{
+    evt.Enable(GetStyleFlags() != wxHD_DEFAULT_STYLE);
 }
 
 #endif // wxUSE_HEADERCTRL
