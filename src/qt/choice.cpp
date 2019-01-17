@@ -212,10 +212,16 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
 
 int wxChoice::DoInsertOneItem(const wxString& item, unsigned int pos)
 {
+    // Maintain unselected state
+    const bool unselected = m_qtComboBox->currentIndex() == -1;
+
     m_qtComboBox->insertItem(pos, wxQtConvertString(item));
 
     if ( IsSorted() )
         m_qtComboBox->model()->sort(0);
+
+    if ( unselected )
+        m_qtComboBox->setCurrentIndex(-1);
 
     return pos;
 }
