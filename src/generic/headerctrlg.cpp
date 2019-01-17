@@ -686,7 +686,7 @@ void wxHeaderCtrl::OnMouse(wxMouseEvent& mevent)
             wxASSERT_MSG( !IsResizing(), "reentering column resize mode?" );
             StartOrContinueResizing(col, xPhysical);
         }
-        else // on column itself
+        else if ( HasFlag(wxHD_ALLOW_REORDER) ) // on column itself
         {
             // start dragging the column
             wxASSERT_MSG( !IsReordering(), "reentering column move mode?" );
