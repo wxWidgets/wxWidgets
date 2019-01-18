@@ -13,16 +13,9 @@
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
 
-#include <QtCore/QSortFilterProxyModel>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QLineEdit>
 
-
-class LexicalSortProxyModel : public QSortFilterProxyModel
-{
-    public:
-        bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
-};
 
 class wxQtComboBox : public wxQtEventSignalHandler< QComboBox, wxComboBox >
 {
@@ -34,16 +27,16 @@ public:
 
     struct Ignore
     {
-        Ignore(QComboBox *combo) :
-            handler(dynamic_cast<wxQtComboBox*>(combo))
+        Ignore( QComboBox *combo ) :
+            handler( dynamic_cast<wxQtComboBox*>(combo) )
         {
-            if(handler)
-                handler->ignoreTextChange(true);
+            if( handler )
+                handler->ignoreTextChange( true );
         }
         ~Ignore()
         {
-            if(handler)
-                handler->ignoreTextChange(false);
+            if( handler )
+                handler->ignoreTextChange( false );
         }
 
         private:
@@ -59,7 +52,7 @@ private:
 
 wxQtComboBox::wxQtComboBox( wxWindow *parent, wxComboBox *handler )
     : wxQtEventSignalHandler< QComboBox, wxComboBox >( parent, handler ),
-    textChangeIgnored(false)
+    textChangeIgnored( false )
 {
     setEditable( true );
     connect(this, static_cast<void (QComboBox::*)(int index)>(&QComboBox::activated),
@@ -89,7 +82,7 @@ void wxQtComboBox::activated(int WXUNUSED(index))
         handler->SendSelectionChangedEvent(wxEVT_COMBOBOX);
 }
 
-void wxQtComboBox::ignoreTextChange(bool ignore)
+void wxQtComboBox::ignoreTextChange( bool ignore )
 {
     textChangeIgnored = ignore;
 }
@@ -108,7 +101,7 @@ void wxQtComboBox::editTextChanged(const QString &text)
     }
 }
 
-void wxComboBox::SetSelection(int n)
+void wxComboBox::SetSelection( int n )
 {
     wxQtComboBox::Ignore ignore( m_qtComboBox );
     wxChoice::SetSelection( n );
@@ -171,7 +164,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxString& name )
 {
     m_qtComboBox = new wxQtComboBox( parent, this );
-    InitialiseSort(m_qtComboBox);
+    InitialiseSort( m_qtComboBox );
 
     while ( n-- > 0 )
         m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
@@ -183,10 +176,10 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 void wxComboBox::SetActualValue(const wxString &value)
 {
     if ( HasFlag(wxCB_READONLY) )
-        SetStringSelection(value);
+        SetStringSelection( value );
     else
     {
-        wxTextEntry::SetValue(value);
+        wxTextEntry::SetValue( value );
         m_qtComboBox->setEditText( wxQtConvertString(value) );
     }
 }
@@ -211,7 +204,8 @@ void wxComboBox::AppendText(const wxString &value)
 void wxComboBox::Replace(long from, long to, const wxString &value)
 {
     const wxString original( GetValue() );
-    if(from == 0)
+
+    if( from == 0 )
     {
         SetActualValue( value + original.SubString(to, original.length()) );
     }

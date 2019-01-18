@@ -19,8 +19,8 @@ class LexicalSortProxyModel : public QSortFilterProxyModel
     public:
         bool lessThan( const QModelIndex &left, const QModelIndex &right ) const
         {
-            const QVariant leftData = sourceModel()->data(left);
-            const QVariant rightData = sourceModel()->data(right);
+            const QVariant leftData = sourceModel()->data( left );
+            const QVariant rightData = sourceModel()->data( right );
 
             if( leftData.type() != QVariant::String )
                 return false;
@@ -28,7 +28,7 @@ class LexicalSortProxyModel : public QSortFilterProxyModel
             int insensitiveResult = QString::compare(
                     leftData.value<QString>(),
                     rightData.value<QString>(),
-                    Qt::CaseInsensitive);
+                    Qt::CaseInsensitive );
 
             if ( insensitiveResult == 0 )
             {
@@ -70,12 +70,12 @@ wxChoice::wxChoice() :
 {
 }
 
-void wxChoice::InitialiseSort(QComboBox *combo)
+void wxChoice::InitialiseSort( QComboBox *combo )
 {
     QSortFilterProxyModel *proxyModel = new LexicalSortProxyModel();
-    proxyModel->setSourceModel(combo->model());
-    combo->model()->setParent(proxyModel);
-    combo->setModel(proxyModel);
+    proxyModel->setSourceModel( combo->model() );
+    combo->model()->setParent( proxyModel );
+    combo->setModel( proxyModel );
 }
 
 
@@ -126,7 +126,7 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
 {
     m_qtComboBox = new wxQtChoice( parent, this );
 
-    InitialiseSort(m_qtComboBox);
+    InitialiseSort( m_qtComboBox );
 
     while ( n-- > 0 )
         m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
@@ -207,10 +207,15 @@ int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
 
 int wxChoice::DoInsertOneItem(const wxString& item, unsigned int pos)
 {
+    // Maintain unselected state
+    const bool unselected = m_qtComboBox->currentIndex() == -1;
+
     m_qtComboBox->insertItem(pos, wxQtConvertString(item));
 
     if ( IsSorted() )
         m_qtComboBox->model()->sort(0);
+
+    if(unselected) m_qtComboBox->setCurrentIndex(-1);
 
     return pos;
 }
@@ -227,7 +232,6 @@ void *wxChoice::DoGetItemClientData(unsigned int n) const
     return variant.value<void *>();
 }
 
-
 void wxChoice::DoClear()
 {
     m_qtComboBox->clear();
@@ -235,9 +239,11 @@ void wxChoice::DoClear()
 
 void wxChoice::DoDeleteOneItem(unsigned int pos)
 {
-    if( GetSelection() == pos )
+    const int selection = GetSelection();
+
+    if( selection >= 0 && static_cast<unsigned int>(selection) == pos )
     {
-        SetSelection(wxNOT_FOUND);
+        SetSelection( wxNOT_FOUND );
     }
     m_qtComboBox->removeItem(pos);
 }
