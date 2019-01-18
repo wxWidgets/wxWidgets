@@ -5,13 +5,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-class QToolBar;
 
 #ifndef _WX_QT_TOOLBAR_H_
 #define _WX_QT_TOOLBAR_H_
 
 class QActionGroup;
-class wxQtToolBar;
+class QToolBar;
 
 class WXDLLIMPEXP_CORE wxToolBar : public wxToolBarBase
 {
