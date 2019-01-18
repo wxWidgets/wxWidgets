@@ -10,7 +10,7 @@
 
 class QGroupBox;
 class QButtonGroup;
-class QBoxLayout;
+class QGridLayout;
 
 class WXDLLIMPEXP_CORE wxRadioBox : public wxControl, public wxRadioBoxBase
 {
@@ -89,7 +89,7 @@ private:
     QButtonGroup *m_qtButtonGroup;
 
     // Autofit layout for buttons (either vert. or horiz.):
-    QBoxLayout *m_qtBoxLayout;
+    QGridLayout *m_qtGridLayout;
 
     wxDECLARE_DYNAMIC_CLASS(wxRadioBox);
 };
