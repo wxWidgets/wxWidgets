@@ -10,6 +10,8 @@
 
 #include "wx/qt/dc.h"
 
+class QPicture;
+
 class WXDLLIMPEXP_CORE wxWindowDCImpl : public wxQtDCImpl
 {
 public:
@@ -37,6 +39,8 @@ public:
 private:
     wxDECLARE_CLASS(wxClientDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxClientDCImpl);
+
+    QPicture* m_pic;
 };
 
 

@@ -54,7 +54,7 @@ wxWindowDCImpl::~wxWindowDCImpl()
     }
     if ( m_window )
     {
-        // do not destroy as it is owned by the window
+        // do not destroy in base class as it is owned by the window
         m_qtPainter = NULL;
     }
 }
@@ -67,6 +67,7 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner )
     : wxWindowDCImpl( owner )
 {
     m_window = NULL;
+    m_qtPainter = NULL;
 }
 
 wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
@@ -74,8 +75,11 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
 {
     m_window = win;
 
-    QPicture *pic = win->QtGetPicture();
-    m_ok = m_qtPainter->begin( pic );
+    m_qtPainter = new QPainter();
+
+    m_pic = new QPicture();
+    m_ok = m_qtPainter->begin( m_pic );
+
     QtPreparePainter();
 }
 
@@ -88,10 +92,12 @@ wxClientDCImpl::~wxClientDCImpl()
     {
         m_qtPainter->end();
         m_ok = false;
-        QPicture *pict = m_window->QtGetPicture();
+
 
         if ( m_window != NULL )
         {
+            m_window->QtSetPicture( m_pic );
+
             // get the inner widget in scroll areas:
             QWidget *widget;
             if ( m_window->QtGetScrollBarsContainer() )
@@ -102,21 +108,26 @@ wxClientDCImpl::~wxClientDCImpl()
             }
             // force paint event if there is something to replay and
             // if not currently inside a paint event (to avoid recursion)
-            QRect rect = pict->boundingRect();
-            if ( !pict->isNull() && !widget->paintingActive() && !rect.isEmpty() )
+            QRect rect = m_pic->boundingRect();
+            if ( !m_pic->isNull() && !widget->paintingActive() && !rect.isEmpty() )
             {
                 // only force the update of the rect affected by the DC
-                widget->repaint( rect );
+                widget->update( rect );
             }
             else
             {
                 // Not drawing anything, reset picture to avoid issues in handler
-                pict->setData( NULL, 0 );
+                m_pic->setData( NULL, 0 );
             }
+
+            m_window->QtSetPicture( NULL );
+
             // let destroy the m_qtPainter (see inherited classes destructors)
             m_window = NULL;
         }
     }
+
+    // Painter will be deleted by base class
 }
 
 //##############################################################################

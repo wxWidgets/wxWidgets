@@ -213,7 +213,7 @@ void wxWindowQt::Init()
     m_horzScrollBar = NULL;
     m_vertScrollBar = NULL;
 
-    m_qtPicture = new QPicture();
+    m_qtPicture = NULL;
     m_qtPainter = new QPainter();
 
     m_mouseInside = false;
@@ -252,7 +252,6 @@ wxWindowQt::~wxWindowQt()
 
     DestroyChildren(); // This also destroys scrollbars
 
-    delete m_qtPicture;
     delete m_qtPainter;
 
 #if wxUSE_ACCEL
@@ -1094,7 +1093,7 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
         {
             bool handled;
 
-            if ( m_qtPicture->isNull() )
+            if ( m_qtPicture == NULL)
             {
                 // Real paint event (not for wxClientDC), prepare the background
                 switch ( GetBackgroundStyle() )
@@ -1522,9 +1521,9 @@ QScrollArea *wxWindowQt::QtGetScrollBarsContainer() const
     return m_qtContainer;
 }
 
-QPicture *wxWindowQt::QtGetPicture() const
+void wxWindowQt::QtSetPicture( QPicture* pict )
 {
-    return m_qtPicture;
+    m_qtPicture = pict;
 }
 
 QPainter *wxWindowQt::QtGetPainter()

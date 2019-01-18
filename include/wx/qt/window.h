@@ -147,7 +147,7 @@ public:
 
     // wxQt implementation internals:
 
-    virtual QPicture *QtGetPicture() const;
+    void QtSetPicture( QPicture* pict );
 
     QPainter *QtGetPainter();
 
