@@ -188,6 +188,7 @@ bool wxRadioBox::Create(wxWindow *parent,
 
     m_qtGroupBox->setLayout(horzLayout);
 
+    SetMajorDim(majorDim == 0 ? n : majorDim, style);
     return QtCreateControl( parent, id, pos, size, style, val, name );
 }
 
