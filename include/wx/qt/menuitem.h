@@ -13,7 +13,6 @@
 
 class QAction;
 
-class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxMenu;
 
 class WXDLLIMPEXP_CORE wxMenuItem : public wxMenuItemBase
