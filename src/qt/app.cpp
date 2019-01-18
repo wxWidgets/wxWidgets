@@ -10,9 +10,6 @@
 
 #include "wx/app.h"
 #include "wx/apptrait.h"
-#include "wx/qt/private/utils.h"
-#include "wx/qt/private/converter.h"
-#include <QtCore/QStringList>
 #include <QtWidgets/QApplication>
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler);
@@ -87,4 +84,9 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
     }
 
     return true;
+}
+
+void wxApp::SetUIStyle(const wxString& style_name)
+{
+    QApplication::setStyle(QString(style_name));
 }

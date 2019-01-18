@@ -18,6 +18,8 @@ public:
     
     virtual bool Initialize(int& argc, wxChar **argv);
 
+    static void SetUIStyle(const wxString& style_name);
+
 private:
     QApplication *m_qtApplication;
     int m_qtArgc;
