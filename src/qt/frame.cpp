@@ -115,8 +115,6 @@ void wxFrame::SetStatusBar( wxStatusBar *statusBar )
 
 void wxFrame::SetToolBar(wxToolBar *toolbar)
 {
-    m_frameToolBar  = toolbar;
-
     if ( toolbar != NULL )
     {
         int area = 0;

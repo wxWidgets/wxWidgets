@@ -40,7 +40,7 @@ public:
                 const wxString& name = wxToolBarNameStr);
 
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const wxOVERRIDE;
-    virtual QToolBar *GetQToolBar() const { return m_qtToolBar; }
+    QToolBar *GetQToolBar() const { return m_qtToolBar; }
 
     virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
 
