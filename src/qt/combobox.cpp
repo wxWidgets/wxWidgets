@@ -226,8 +226,7 @@ void wxComboBox::Replace(long from, long to, const wxString &value)
 
 void wxComboBox::WriteText(const wxString &value)
 {
-    long point = GetInsertionPoint();
-    Replace( point, point, value );
+    m_qtComboBox->lineEdit()->insert( wxQtConvertString( value ) );
 }
 
 wxString wxComboBox::DoGetValue() const
