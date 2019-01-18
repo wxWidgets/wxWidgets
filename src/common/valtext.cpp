@@ -33,6 +33,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "wx/regex.h"
 #include "wx/clipbrd.h"
 #include "wx/combo.h"
 
@@ -447,6 +448,66 @@ bool wxTextValidator::ContainsExcludedCharacters(const wxString& str) const
 
     return false;
 }
+
+#if wxUSE_REGEX
+
+// ----------------------------------------------------------------------------
+// wxRegexTextValidator implementation
+// ----------------------------------------------------------------------------
+wxIMPLEMENT_DYNAMIC_CLASS(wxRegexTextValidator, wxTextValidator);
+
+wxRegexTextValidator::wxRegexTextValidator() {}
+wxRegexTextValidator::wxRegexTextValidator(const wxString& expr, int flags,
+                                           long style, wxString *str)
+    : wxTextValidator(style, str), m_regex(new wxRegEx)
+{
+    wxASSERT_MSG(
+        (!expr.empty() && m_regex->Compile(expr, flags)),
+        "Invalid expression passed to wxRegexTextValidator ctor"
+    );
+}
+
+wxRegexTextValidator::wxRegexTextValidator(const wxSharedPtr<wxRegEx>& regex,
+                                           long style, wxString *str)
+    : wxTextValidator(style, str), m_regex(regex)
+{
+    wxASSERT_MSG(
+        (m_regex && m_regex->IsValid()),
+        "Invalid regex object passed to wxRegexTextValidator ctor"
+    );
+}
+
+wxRegexTextValidator::wxRegexTextValidator(const wxRegexTextValidator& val)
+    : wxTextValidator(val), m_regex(val.m_regex)
+{
+}
+
+wxRegexTextValidator::~wxRegexTextValidator() {}
+
+void wxRegexTextValidator::SetRegEx(const wxSharedPtr<wxRegEx>& regex)
+{
+    m_regex = regex;
+}
+
+wxString wxRegexTextValidator::IsValid(const wxString& str) const
+{
+    wxASSERT_MSG(
+        (m_regex && m_regex->IsValid()),
+        "Regex object not properly initialized"
+    );
+
+    const wxString errormsg = wxTextValidator::IsValid(str);
+
+    if ( !errormsg.empty() )
+        return errormsg;
+
+    if ( !m_regex->Matches(str) )
+        return wxString::Format(_("'%s' doesn't match regex pattern"), str);
+
+    return wxString();
+}
+
+#endif // wxUSE_REGEX
 
 #endif
   // wxUSE_VALIDATORS

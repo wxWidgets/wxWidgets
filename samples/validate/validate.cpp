@@ -27,7 +27,9 @@
 
 #include "validate.h"
 
+#include "wx/regex.h"
 #include "wx/richtooltip.h"
+#include "wx/scopedptr.h"
 #include "wx/sizer.h"
 #include "wx/valgen.h"
 #include "wx/valtext.h"
@@ -551,6 +553,14 @@ TextValidatorDialog::TextValidatorDialog(wxWindow *parent, wxTextCtrl* txtCtrl)
 
     mainsizer->Add(fgSizer, wxSizerFlags(1).Border(wxALL, 10).Expand());
 
+#if wxUSE_REGEX
+    wxTextCtrl* regexTxtCtrl =
+        new wxTextCtrl(this, wxID_ANY, wxString(), wxDefaultPosition,
+                        wxDefaultSize, 0, wxGenericValidator(&m_expr));
+    regexTxtCtrl->SetHint("Enter a regex to create a wxRegexTextValidator");
+    mainsizer->Add(regexTxtCtrl, wxSizerFlags().Border(wxALL, 10).Expand());
+#endif // wxUSE_REGEX
+
     mainsizer->Add(CreateButtonSizer(wxOK | wxCANCEL),
                    wxSizerFlags().Expand().DoubleBorder());
 
@@ -629,7 +639,7 @@ void TextValidatorDialog::ApplyValidator()
     if ( !m_txtCtrl )
         return;
 
-    wxString tooltip = "uses wxTextValidator with ";
+    wxString tooltip;
 
     if ( m_noValidation )
     {
@@ -680,16 +690,31 @@ void TextValidatorDialog::ApplyValidator()
         tooltip += m_charExcludes;
     }
 
-    m_txtCtrl->SetToolTip(tooltip);
-
     // Prepare and set the wxTextValidator
-    wxTextValidator txtVal(m_validatorStyle, &g_data.m_string);
-    txtVal.SetCharIncludes(m_charIncludes);
-    txtVal.SetCharExcludes(m_charExcludes);
-    txtVal.SetIncludes(m_includes);
-    txtVal.SetExcludes(m_excludes);
+    wxScopedPtr<wxTextValidator> txtVal;
 
-    m_txtCtrl->SetValidator(txtVal);
+    if ( !m_expr.empty() )
+    {
+        tooltip.Prepend("Uses wxRegexTextValidator with ");
+        tooltip += "\nRegular expression: ";
+        tooltip += m_expr;
+
+        txtVal.reset(new wxRegexTextValidator(
+            m_expr, wxRE_ADVANCED, m_validatorStyle, &g_data.m_string));
+    }
+    else
+    {
+        tooltip.Prepend("Uses wxTextValidator with ");
+        txtVal.reset(new wxTextValidator(m_validatorStyle, &g_data.m_string));
+    }
+
+    txtVal->SetCharIncludes(m_charIncludes);
+    txtVal->SetCharExcludes(m_charExcludes);
+    txtVal->SetIncludes(m_includes);
+    txtVal->SetExcludes(m_excludes);
+
+    m_txtCtrl->SetToolTip(tooltip);
+    m_txtCtrl->SetValidator(*txtVal);
     m_txtCtrl->SetFocus();
 }
 

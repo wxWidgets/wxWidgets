@@ -130,6 +130,8 @@ private:
     bool m_noValidation;
     long m_validatorStyle;
 
+    wxString m_expr;
+
     wxString        m_charIncludes;
     wxString        m_charExcludes;
     wxArrayString   m_includes;
