@@ -22,11 +22,10 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_VALIDATORS && wxUSE_TEXTCTRL
+#if wxUSE_VALIDATORS
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
-    #include "wx/combobox.h"
 #endif
 
 #include "wx/valnum.h"
@@ -36,7 +35,7 @@
 // wxNumValidatorBase implementation
 // ============================================================================
 
-wxBEGIN_EVENT_TABLE(wxNumValidatorBase, wxValidator)
+wxBEGIN_EVENT_TABLE(wxNumValidatorBase, wxTextValidatorBase)
     EVT_CHAR(wxNumValidatorBase::OnChar)
     EVT_KILL_FOCUS(wxNumValidatorBase::OnKillFocus)
 wxEND_EVENT_TABLE()
@@ -52,47 +51,11 @@ int wxNumValidatorBase::GetFormatFlags() const
     return flags;
 }
 
-bool wxNumValidatorBase::CheckValidatorWindow() const
-{
-#if wxUSE_TEXTCTRL
-    if ( wxDynamicCast(m_validatorWindow, wxTextCtrl) )
-        return true;
-#endif // wxUSE_TEXTCTRL
-
-#if wxUSE_COMBOBOX
-    if ( wxDynamicCast(m_validatorWindow, wxComboBox) )
-        return true;
-#endif // wxUSE_COMBOBOX
-
-    return false;
-}
-
 void wxNumValidatorBase::SetWindow(wxWindow *win)
 {
-    wxValidator::SetWindow(win);
+    wxTextValidatorBase::SetWindow(win);
 
-    if ( CheckValidatorWindow() )
-    {
-        m_validatorWindow->Bind(wxEVT_TEXT, &wxNumValidatorBase::OnValueChanged, this);
-        return;
-    }
-
-    wxFAIL_MSG("Can only be used with wxTextCtrl or wxComboBox");
-}
-
-wxTextEntry *wxNumValidatorBase::GetTextEntry() const
-{
-#if wxUSE_TEXTCTRL
-    if ( wxTextCtrl *text = wxDynamicCast(m_validatorWindow, wxTextCtrl) )
-        return text;
-#endif // wxUSE_TEXTCTRL
-
-#if wxUSE_COMBOBOX
-    if ( wxComboBox *combo = wxDynamicCast(m_validatorWindow, wxComboBox) )
-        return combo;
-#endif // wxUSE_COMBOBOX
-
-    return NULL;
+    GetWindow()->Bind(wxEVT_TEXT, &wxNumValidatorBase::OnValueChanged, this);
 }
 
 void
@@ -374,4 +337,4 @@ wxFloatingPointValidatorBase::IsValid(const wxString& newval) const
     return wxString();
 }
 
-#endif // wxUSE_VALIDATORS && wxUSE_TEXTCTRL
+#endif // wxUSE_VALIDATORS

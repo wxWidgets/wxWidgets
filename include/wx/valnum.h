@@ -16,7 +16,7 @@
 #if wxUSE_VALIDATORS
 
 #include "wx/textentry.h"
-#include "wx/validate.h"
+#include "wx/valtext.h"
 
 // This header uses std::numeric_limits<>::min/max, but these symbols are,
 // unfortunately, often defined as macros and the code here wouldn't compile in
@@ -39,7 +39,7 @@ enum wxNumValidatorStyle
 // Base class for all numeric validators.
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxNumValidatorBase : public wxValidator
+class WXDLLIMPEXP_CORE wxNumValidatorBase : public wxTextValidatorBase
 {
 public:
     // Change the validator style. Usually it's specified during construction.
@@ -61,7 +61,8 @@ protected:
         m_isOk  = true;
     }
 
-    wxNumValidatorBase(const wxNumValidatorBase& other) : wxValidator(other)
+    wxNumValidatorBase(const wxNumValidatorBase& other)
+        : wxTextValidatorBase(other)
     {
         m_style = other.m_style;
         m_isOk  = other.m_isOk;
@@ -72,11 +73,6 @@ protected:
         return (m_style & style) != 0;
     }
 
-    // Get the text entry of the associated control. Normally shouldn't ever
-    // return NULL (and will assert if it does return it) but the caller should
-    // still test the return value for safety.
-    wxTextEntry *GetTextEntry() const;
-
     // Convert wxNUM_VAL_THOUSANDS_SEPARATOR and wxNUM_VAL_NO_TRAILING_ZEROES
     // bits of our style to the corresponding wxNumberFormatter::Style values.
     int GetFormatFlags() const;
@@ -85,14 +81,6 @@ protected:
     // contents and insertion point. This is meant to be called from the
     // derived class IsCharOk() implementation.
     bool IsMinusOk(const wxString& val, int pos) const;
-
-    // Return the string which would result from inserting the given character
-    // at the specified position.
-    wxString GetValueAfterInsertingChar(wxString val, int pos, wxChar ch) const
-    {
-        val.insert(pos, ch);
-        return val;
-    }
 
 private:
     // Check whether the specified character can be inserted in the control at
@@ -120,8 +108,6 @@ private:
     // Determine the current insertion point and text in the associated control.
     void GetCurrentValueAndInsertionPoint(wxString& val, int& pos) const;
 
-    // Return true if the associated control support this validator type.
-    bool CheckValidatorWindow() const;
 
     // Combination of wxVAL_NUM_XXX values.
     int m_style;

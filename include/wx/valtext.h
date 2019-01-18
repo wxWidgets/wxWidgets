@@ -13,7 +13,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
+#if wxUSE_VALIDATORS
 
 class WXDLLIMPEXP_FWD_CORE wxTextEntry;
 
@@ -42,10 +42,41 @@ enum wxTextValidatorStyle
 };
 
 // ----------------------------------------------------------------------------
+// wxTextValidatorBase
+// ----------------------------------------------------------------------------
+class WXDLLIMPEXP_CORE wxTextValidatorBase : public wxValidator
+{
+public:
+    wxTextValidatorBase() {}
+    wxTextValidatorBase(const wxTextValidatorBase& other)
+        : wxValidator(other)
+    {}
+
+    // Override the base class to make it fail (in debug build) if @param win
+    // is not a wxTextEntry object, i.e: wxTextCtrl, wxComboBox, ...
+    virtual void SetWindow(wxWindow *win) wxOVERRIDE;
+
+    virtual wxString IsValid(const wxString& str) const = 0;
+
+protected:
+    // Get the text entry of the associated control. Normally shouldn't ever
+    // return NULL (and will assert if it does return it) but the caller should
+    // still test the return value for safety.
+    wxTextEntry *GetTextEntry() const;
+
+    // Event handlers
+    void OnPasteText(wxClipboardTextEvent& event);
+
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_NO_ASSIGN_CLASS(wxTextValidatorBase);
+};
+
+
+// ----------------------------------------------------------------------------
 // wxTextValidator
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTextValidator: public wxValidator
+class WXDLLIMPEXP_CORE wxTextValidator: public wxTextValidatorBase
 {
 public:
     wxTextValidator(long style = wxFILTER_NONE, wxString *val = NULL);
@@ -78,7 +109,6 @@ public:
     inline long GetStyle() const { return m_validatorStyle; }
     void SetStyle(long style);
 
-    wxTextEntry *GetTextEntry();
 
     // strings & chars inclusions:
     // ---------------------------
@@ -162,6 +192,6 @@ private:
 };
 
 #endif
-  // wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
+  // wxUSE_VALIDATORS
 
 #endif // _WX_VALTEXT_H_

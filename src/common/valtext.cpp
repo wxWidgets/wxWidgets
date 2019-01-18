@@ -15,7 +15,7 @@
   #pragma hdrstop
 #endif
 
-#if wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
+#if wxUSE_VALIDATORS
 
 #include "wx/valtext.h"
 
@@ -33,6 +33,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "wx/clipbrd.h"
 #include "wx/combo.h"
 
 // ----------------------------------------------------------------------------
@@ -54,11 +55,102 @@ static bool wxIsNumeric(const wxString& val)
 }
 
 // ----------------------------------------------------------------------------
+// wxTextValidatorBase
+// ----------------------------------------------------------------------------
+wxBEGIN_EVENT_TABLE(wxTextValidatorBase, wxValidator)
+    EVT_TEXT_PASTE(wxID_ANY, wxTextValidatorBase::OnPasteText)
+wxEND_EVENT_TABLE()
+
+void wxTextValidatorBase::SetWindow(wxWindow *win)
+{
+    wxValidator::SetWindow(win);
+
+    if ( !GetTextEntry() )
+        wxFAIL_MSG("Can only be used with wxTextEntry objects");
+}
+
+wxTextEntry *wxTextValidatorBase::GetTextEntry() const
+{
+#ifndef wxNO_RTTI
+    return dynamic_cast<wxTextEntry*>(m_validatorWindow);
+#else // wxNO_RTTI
+
+    // TODO: is there a way to get rid of these wxDynamicCasts ?
+
+#if wxUSE_TEXTCTRL
+    if (wxDynamicCast(m_validatorWindow, wxTextCtrl))
+    {
+        return (wxTextCtrl*)m_validatorWindow;
+    }
+#endif
+
+#if wxUSE_COMBOBOX
+    if (wxDynamicCast(m_validatorWindow, wxComboBox))
+    {
+        return (wxComboBox*)m_validatorWindow;
+    }
+#endif
+
+#if wxUSE_COMBOCTRL
+    if (wxDynamicCast(m_validatorWindow, wxComboCtrl))
+    {
+        return (wxComboCtrl*)m_validatorWindow;
+    }
+#endif
+
+    return (wxTextEntry *)NULL;
+#endif
+}
+
+void wxTextValidatorBase::OnPasteText(wxClipboardTextEvent& event)
+{
+#if wxUSE_CLIPBOARD
+    wxTextEntry * const entry = GetTextEntry();
+    if ( !entry )
+        return;
+
+    wxClipboardLocker clipLock;
+    if ( !clipLock )
+        return;
+
+    wxTextDataObject data;
+
+    if ( wxTheClipboard->IsSupported(data.GetFormat())
+            && wxTheClipboard->GetData(data) )
+    {
+        wxString text = entry->GetValue();
+
+        long from, to;
+        entry->GetSelection(&from, &to);
+
+        if ( from != to )
+        {
+            // Replace selection with the pasted text.
+            text.replace(from, (to - from), data.GetText());
+        }
+        else
+        {
+            text.insert(entry->GetInsertionPoint(), data.GetText());
+        }
+
+        if ( IsValid(text).empty() )
+        {
+            // Accept the pasted text.
+            event.Skip();
+        }
+    }
+#else
+    wxUnusedVar(event);
+#endif // wxUSE_CLIPBOARD
+}
+
+
+// ----------------------------------------------------------------------------
 // wxTextValidator
 // ----------------------------------------------------------------------------
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator);
-wxBEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
+wxBEGIN_EVENT_TABLE(wxTextValidator, wxTextValidatorBase)
     EVT_CHAR(wxTextValidator::OnChar)
 
     EVT_VALIDATE_ERROR(wxID_ANY, wxTextValidator::OnValidationError)
@@ -71,9 +163,14 @@ wxTextValidator::wxTextValidator(long style, wxString *val)
 }
 
 wxTextValidator::wxTextValidator(const wxTextValidator& val)
-    : wxValidator()
+    : wxTextValidatorBase(val),
+      m_validatorStyle(val.m_validatorStyle),
+      m_stringValue(val.m_stringValue),
+      m_charIncludes(val.m_charIncludes),
+      m_charExcludes(val.m_charExcludes),
+      m_includes(val.m_includes),
+      m_excludes(val.m_excludes)
 {
-    Copy(val);
 }
 
 void wxTextValidator::SetStyle(long style)
@@ -96,40 +193,9 @@ bool wxTextValidator::Copy(const wxTextValidator& val)
     return true;
 }
 
-wxTextEntry *wxTextValidator::GetTextEntry()
-{
-#if wxUSE_TEXTCTRL
-    if (wxDynamicCast(m_validatorWindow, wxTextCtrl))
-    {
-        return (wxTextCtrl*)m_validatorWindow;
-    }
-#endif
-
-#if wxUSE_COMBOBOX
-    if (wxDynamicCast(m_validatorWindow, wxComboBox))
-    {
-        return (wxComboBox*)m_validatorWindow;
-    }
-#endif
-
-#if wxUSE_COMBOCTRL
-    if (wxDynamicCast(m_validatorWindow, wxComboCtrl))
-    {
-        return (wxComboCtrl*)m_validatorWindow;
-    }
-#endif
-
-    wxFAIL_MSG(
-        "wxTextValidator can only be used with wxTextCtrl, wxComboBox, "
-        "or wxComboCtrl"
-    );
-
-    return NULL;
-}
-
 // Called when the value in the window must be validated.
 // This function can pop up an error message.
-bool wxTextValidator::Validate(wxWindow *parent)
+bool wxTextValidator::Validate(wxWindow *WXUNUSED(parent))
 {
     // If window is disabled, simply return
     if ( !m_validatorWindow->IsEnabled() )
@@ -383,4 +449,4 @@ bool wxTextValidator::ContainsExcludedCharacters(const wxString& str) const
 }
 
 #endif
-  // wxUSE_VALIDATORS && (wxUSE_TEXTCTRL || wxUSE_COMBOBOX)
+  // wxUSE_VALIDATORS
