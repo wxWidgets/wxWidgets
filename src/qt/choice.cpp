@@ -215,7 +215,8 @@ int wxChoice::DoInsertOneItem(const wxString& item, unsigned int pos)
     if ( IsSorted() )
         m_qtComboBox->model()->sort(0);
 
-    if(unselected) m_qtComboBox->setCurrentIndex(-1);
+    if( unselected )
+        m_qtComboBox->setCurrentIndex(-1);
 
     return pos;
 }
