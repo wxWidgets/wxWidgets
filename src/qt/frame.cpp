@@ -120,10 +120,10 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
     int area = 0;
     if ( toolbar != NULL )
     {
-        if (toolbar->HasFlag(wxTB_LEFT))   area |= Qt::LeftToolBarArea;
-        if (toolbar->HasFlag(wxTB_RIGHT))  area |= Qt::RightToolBarArea;
-        if (toolbar->HasFlag(wxTB_TOP))    area |= Qt::TopToolBarArea;
-        if (toolbar->HasFlag(wxTB_BOTTOM)) area |= Qt::BottomToolBarArea;
+        if      (toolbar->HasFlag(wxTB_LEFT))  { area |= Qt::LeftToolBarArea;  }
+        else if (toolbar->HasFlag(wxTB_RIGHT)) { area |= Qt::RightToolBarArea; }
+        else if (toolbar->HasFlag(wxTB_TOP))   { area |= Qt::TopToolBarArea;   }
+        else if (toolbar->HasFlag(wxTB_BOTTOM)){ area |= Qt::BottomToolBarArea;}
 
         GetQMainWindow()->addToolBar((Qt::ToolBarArea)area, toolbar->GetQToolBar());
     }
