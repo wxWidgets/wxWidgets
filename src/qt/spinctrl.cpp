@@ -18,7 +18,8 @@
 #include <QtWidgets/QSpinBox>
 
 template< typename T, typename Widget >
-wxSpinCtrlQt< T, Widget >::wxSpinCtrlQt()
+wxSpinCtrlQt< T, Widget >::wxSpinCtrlQt() :
+    m_qtSpinBox(NULL)
 {
 }
 

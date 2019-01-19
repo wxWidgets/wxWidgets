@@ -112,8 +112,9 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name )
 {
-    return Create( parent, id, value, pos, size, choices.size(), &choices[ 0 ],
-        style, validator, name );
+    const wxString *pChoices = choices.size() ? &choices[ 0 ] : NULL;
+    return Create(parent, id, value, pos, size, choices.size(), pChoices,
+                  style, validator, name );
 }
 
 

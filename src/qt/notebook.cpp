@@ -50,7 +50,8 @@ void wxQtTabWidget::currentChanged(int index)
 }
 
 
-wxNotebook::wxNotebook()
+wxNotebook::wxNotebook() :
+    m_qtTabWidget(NULL)
 {
 }
 

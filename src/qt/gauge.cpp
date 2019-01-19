@@ -29,7 +29,8 @@ wxQtProgressBar::wxQtProgressBar( wxWindow *parent, wxGauge *handler )
 }
 
 
-wxGauge::wxGauge()
+wxGauge::wxGauge() :
+    m_qtProgressBar(NULL)
 {
 }
 

@@ -915,22 +915,19 @@ wxString wxPropertyGridInterface::SaveEditableState( int includedStates ) const
 
     //
     // Save state on page basis
-    unsigned int pageIndex = 0;
-    wxArrayPtrVoid pageStates;
-
-    for (;;)
+    wxVector<wxPropertyGridPageState*> pageStates;
+    for (int pageIndex = 0; ; pageIndex++)
     {
         wxPropertyGridPageState* page = GetPageState(pageIndex);
         if ( !page ) break;
 
-        pageStates.Add(page);
-
-        pageIndex++;
+        pageStates.push_back(page);
     }
 
-    for ( pageIndex=0; pageIndex < pageStates.size(); pageIndex++ )
+    for (wxVector<wxPropertyGridPageState*>::const_iterator it_ps = pageStates.begin();
+         it_ps != pageStates.end(); ++it_ps)
     {
-        wxPropertyGridPageState* pageState = (wxPropertyGridPageState*) pageStates[pageIndex];
+        wxPropertyGridPageState* pageState = *it_ps;
 
         if ( includedStates & SelectionState )
         {

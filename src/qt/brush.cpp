@@ -15,6 +15,7 @@
 
 #include <QtGui/QBrush>
 
+wxIMPLEMENT_DYNAMIC_CLASS(wxBrush,wxGDIObject);
 
 static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
 {
@@ -61,14 +62,15 @@ static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
 class wxBrushRefData: public wxGDIRefData
 {
     public:
-        wxBrushRefData()
+        wxBrushRefData() :
+            m_style(wxBRUSHSTYLE_INVALID)
         {
         }
         
         wxBrushRefData( const wxBrushRefData& data )
-        : wxGDIRefData()
         {
             m_qtBrush = data.m_qtBrush;
+            m_style = data.m_style;
         }
         
         bool operator == (const wxBrushRefData& data) const

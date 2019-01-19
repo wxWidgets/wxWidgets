@@ -474,4 +474,4 @@
 /utils/hhp2cached/*Carbon?Release*
 
 # /utils/wxrc/
-/utils/wxrc/*.sln
+/utils/wxrc/wxrc_vc[789].sln

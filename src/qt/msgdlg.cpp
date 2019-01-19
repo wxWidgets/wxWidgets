@@ -111,6 +111,8 @@ wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
     PostCreation();
 }
 
+wxIMPLEMENT_CLASS(wxMessageDialog,wxDialog);
+
 int wxMessageDialog::ShowModal()
 {
     wxCHECK_MSG( m_qtWindow, -1, "Invalid dialog" );

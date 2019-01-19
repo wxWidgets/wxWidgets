@@ -107,6 +107,46 @@ enum wxWebViewNavigationActionFlags
     wxWEBVIEW_NAV_ACTION_OTHER
 };
 
+/**
+    Internet Explorer emulation modes for wxWebViewIE.
+
+    Elements of this enum can be used with wxWebView::MSWSetEmulationLevel().
+
+    Note that using the @c _FORCE variants is not recommended.
+
+    @since 3.1.3
+*/
+enum wxWebViewIE_EmulationLevel
+{
+    /**
+        Clear FEATURE_BROWSER_EMULATION registry setting to default,
+        corresponding application specific registry key will be deleted
+    */
+    wxWEBVIEWIE_EMU_DEFAULT =    0,
+
+    /** Prefer IE7 Standards mode, default value for the control. */
+    wxWEBVIEWIE_EMU_IE7 =        7000,
+
+    /** Prefer IE8 mode, default value for Internet Explorer 8. */
+    wxWEBVIEWIE_EMU_IE8 =        8000,
+    /** Force IE8 Standards mode, ignore !DOCTYPE directives. */
+    wxWEBVIEWIE_EMU_IE8_FORCE =  8888,
+
+    /** Prefer IE9 mode, default value for Internet Explorer 9. */
+    wxWEBVIEWIE_EMU_IE9 =        9000,
+    /** Force IE9 Standards mode, ignore !DOCTYPE directives. */
+    wxWEBVIEWIE_EMU_IE9_FORCE =  9999,
+
+    /** Prefer IE10 mode, default value for Internet Explorer 10. */
+    wxWEBVIEWIE_EMU_IE10 =       10000,
+    /** Force IE10 Standards mode, ignore !DOCTYPE directives. */
+    wxWEBVIEWIE_EMU_IE10_FORCE = 10001,
+
+    /** Prefer IE11 edge mode, default value for Internet Explorer 11. */
+    wxWEBVIEWIE_EMU_IE11 =       11000,
+    /** Force IE11 edge mode, ignore !DOCTYPE directives. */
+    wxWEBVIEWIE_EMU_IE11_FORCE = 11001
+};
 
 /**
     @class wxWebViewHistoryItem
@@ -233,7 +273,7 @@ public:
     is only available for the MSW port. By default recent versions of the
     <a href="http://msdn.microsoft.com/en-us/library/aa752085%28v=VS.85%29.aspx">WebBrowser</a>
     control, which this backend uses, emulate Internet Explorer 7. This can be
-    changed with a registry setting, see
+    changed with a registry setting by wxWebView::MSWSetEmulationLevel() see
     <a href="http://msdn.microsoft.com/en-us/library/ee330730%28v=vs.85%29.aspx#browser_emulation">
     this</a> article for more information. This backend has full support for
     custom schemes and virtual file systems.
@@ -475,32 +515,48 @@ public:
     virtual void Reload(wxWebViewReloadFlags flags = wxWEBVIEW_RELOAD_DEFAULT) = 0;
 
     /**
-        Sets emulation level to more modern level.
+        Sets emulation level.
 
-        This function is useful to enable some minimally modern emulation level
-        of the system browser control used for wxWebView implementation under
-        MSW, rather than using the currently default, IE7-compatible,
-        emulation level. Currently the modern emulation level is only IE8, but
-        this could change in the future and shouldn't be relied on.
+        This function is useful to change the emulation level of
+        the system browser control used for wxWebView implementation under
+        MSW, rather than using the currently default, IE7-compatible, level.
 
         Please notice that this function works by modifying the per-user part
         of MSW registry, which has several implications: first, it is
         sufficient to call it only once (per user) as the changes done by it
         are persistent and, second, if you do not want them to be persistent,
-        you need to call it with @false argument explicitly.
+        you need to call it with @c wxWEBVIEWIE_EMU_DEFAULT argument explicitly.
 
         In particular, this function should be called to allow RunScript() to
         work for JavaScript code returning arbitrary objects, which is not
         supported at the default emulation level.
+
+        If set to a level higher than installed version, the highest available
+        level will be used instead. @c wxWEBVIEWIE_EMU_IE11 is recommended for
+        best performance and experience.
 
         This function is MSW-specific and doesn't exist under other platforms.
 
         See https://msdn.microsoft.com/en-us/library/ee330730#browser_emulation
         for more information about browser control emulation levels.
 
-        @param modernLevel @true to set level to a level modern enough to allow
-            all wxWebView features to work (currently IE8), @false to reset the
-            emulation level to its default, compatible value.
+        @param level the target emulation level
+        @return @true on success, @false on failure (a warning message is also
+        logged in the latter case).
+
+        @since 3.1.3
+    */
+    bool MSWSetEmulationLevel(wxWebViewIE_EmulationLevel level = wxWEBVIEWIE_EMU_IE11);
+
+    /**
+        @deprecated
+        This function is kept mostly for backwards compatibility.
+
+        Please explicitly specify emulation level with MSWSetEmulationLevel().
+
+        @param modernLevel @true to set level to IE8, synonym for @c wxWEBVIEWIE_EMU_IE8.
+            @false to reset the emulation level to its default,
+            synonym for @c wxWEBVIEWIE_EMU_DEFAULT.
         @return @true on success, @false on failure (a warning message is also
             logged in the latter case).
 
@@ -556,7 +612,7 @@ public:
         object-to-JSON conversion as a fallback for this case, however it is
         not as full-featured, well-tested or performing as the implementation
         of this functionality in the browser control itself, so it is
-        recommended to use MSWSetModernEmulationLevel() to change emulation
+        recommended to use MSWSetEmulationLevel() to change emulation
         level to a more modern one in which JSON conversion is done by the
         control itself.
 

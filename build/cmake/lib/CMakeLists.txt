@@ -97,3 +97,6 @@ if(wxBUILD_MONOLITHIC)
     endforeach()
     wx_finalize_lib(mono)
 endif()
+
+# Propagate variable(s) to parent scope
+set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)
