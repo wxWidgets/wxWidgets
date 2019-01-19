@@ -27,7 +27,6 @@
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
-    #include "wx/artprov.h"
     #include "wx/button.h"
     #include "wx/checkbox.h"
     #include "wx/radiobox.h"
@@ -37,6 +36,8 @@
 #endif
 
 #include "wx/headerctrl.h"
+
+#include "wx/artprov.h"
 
 #include "widgets.h"
 
