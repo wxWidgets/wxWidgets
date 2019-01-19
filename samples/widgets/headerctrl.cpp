@@ -134,7 +134,7 @@ void HeaderCtrlWidgetsPage::CreateContent()
     sizerLeft->Add(sizerHeader, wxSizerFlags().Expand());
 
     // column flags
-    for ( int i = 0; i < WXSIZEOF(m_colSettings); i++ )
+    for ( int i = 0; i < (int)WXSIZEOF(m_colSettings); i++ )
     {
         wxSizer* sizerCol = new wxStaticBoxSizer(wxVERTICAL, this, wxString::Format("Column %i style", i+1));
         m_colSettings[i].chkAllowResize = CreateCheckBoxAndAddToSizer(sizerCol, "Allow resize");
@@ -169,7 +169,7 @@ void HeaderCtrlWidgetsPage::CreateContent()
     m_chkAllowReorder->Bind(wxEVT_CHECKBOX, &HeaderCtrlWidgetsPage::OnStyleCheckOrRadioBox, this);
     m_chkAllowHide->Bind(wxEVT_CHECKBOX, &HeaderCtrlWidgetsPage::OnStyleCheckOrRadioBox, this);
     m_chkBitmapOnRight->Bind(wxEVT_CHECKBOX, &HeaderCtrlWidgetsPage::OnStyleCheckOrRadioBox, this);
-    for ( int i = 0; i < WXSIZEOF(m_colSettings); i++ )
+    for ( int i = 0; i < (int)WXSIZEOF(m_colSettings); i++ )
     {
         m_colSettings[i].chkAllowResize->Bind(wxEVT_CHECKBOX, &HeaderCtrlWidgetsPage::OnStyleCheckOrRadioBox, this);
         m_colSettings[i].chkAllowReorder->Bind(wxEVT_CHECKBOX, &HeaderCtrlWidgetsPage::OnStyleCheckOrRadioBox, this);
@@ -234,7 +234,7 @@ long HeaderCtrlWidgetsPage::GetHeaderStyleFlags() const
 
 void HeaderCtrlWidgetsPage::ResetColumnStyle(int col)
 {
-    wxASSERT(col < WXSIZEOF(m_colSettings));
+    wxASSERT(col < (int)WXSIZEOF(m_colSettings));
     m_colSettings[col].chkAllowResize->SetValue((wxCOL_DEFAULT_FLAGS & wxCOL_RESIZABLE) != 0);
     m_colSettings[col].chkAllowReorder->SetValue((wxCOL_DEFAULT_FLAGS & wxCOL_REORDERABLE) != 0);
     m_colSettings[col].chkAllowSort->SetValue((wxCOL_DEFAULT_FLAGS & wxCOL_SORTABLE) != 0);
@@ -245,7 +245,7 @@ void HeaderCtrlWidgetsPage::ResetColumnStyle(int col)
 
 int HeaderCtrlWidgetsPage::GetColumnStyleFlags(int col) const
 {
-    wxASSERT(col < WXSIZEOF(m_colSettings));
+    wxASSERT(col < (int)WXSIZEOF(m_colSettings));
     int flags = 0;
 
     if ( m_colSettings[col].chkAllowResize->IsChecked() )
@@ -262,7 +262,7 @@ int HeaderCtrlWidgetsPage::GetColumnStyleFlags(int col) const
 
 wxAlignment HeaderCtrlWidgetsPage::GetColumnAlignmentFlag(int col) const
 {
-    wxASSERT(col < WXSIZEOF(m_colSettings));
+    wxASSERT(col < (int)WXSIZEOF(m_colSettings));
     wxASSERT(WXSIZEOF(gs_colAlignments) == WXSIZEOF(gs_colAlignFlags));
     int sel = m_colSettings[col].rbAlignments->GetSelection();
     return sel == wxNOT_FOUND ? COL_ALIGNMENT_FLAG_DEFAULT : gs_colAlignFlags[sel];
@@ -280,7 +280,7 @@ void HeaderCtrlWidgetsPage::OnStyleCheckOrRadioBox(wxCommandEvent& WXUNUSED(evt)
 void HeaderCtrlWidgetsPage::OnResetButton(wxCommandEvent& WXUNUSED(evt))
 {
     ResetHeaderStyle();
-    for ( int i = 0; i < WXSIZEOF(m_colSettings); i++ )
+    for ( int i = 0; i < (int)WXSIZEOF(m_colSettings); i++ )
     {
         ResetColumnStyle(i);
     }
@@ -290,7 +290,7 @@ void HeaderCtrlWidgetsPage::OnResetButton(wxCommandEvent& WXUNUSED(evt))
 void HeaderCtrlWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& evt)
 {
     bool enable = GetHeaderStyleFlags() != wxHD_DEFAULT_STYLE;
-    for ( int i = 0; !enable && i < WXSIZEOF(m_colSettings); i++ )
+    for ( int i = 0; !enable && i < (int)WXSIZEOF(m_colSettings); i++ )
     {
         enable = enable || GetColumnStyleFlags(i) != wxCOL_DEFAULT_FLAGS
                  || m_colSettings[i].chkWithBitmap->IsChecked() != COL_WITH_BITMAP_DEFAULT
