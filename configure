@@ -20147,8 +20147,7 @@ if test "$wxUSE_MAC" = 1; then
 if test "x$wxUSE_MACOSX_SDK" = "xno"; then
     wxUSE_MACOSX_SDK=
 elif test "x$wxUSE_MACOSX_SDK" = "xyes"; then
-    # TODO: Search for most recent SDK and use it.
-    wxUSE_MACOSX_SDK="/Developer/SDKs/MacOSX10.4u.sdk"
+        wxUSE_MACOSX_SDK="`xcode-select -p`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
 fi
 
 
@@ -20198,7 +20197,7 @@ $as_echo "$as_me: WARNING: Could not determine deployment target from SDKSetting
         wxUSE_MACOSX_VERSION_MIN=
     fi
 elif test "x$wxUSE_MACOSX_VERSION_MIN" = "x"; then
-    wxUSE_MACOSX_VERSION_MIN=10.7
+    wxUSE_MACOSX_VERSION_MIN=10.9
 fi
 
 if test "x$MACOSX_SDK_OPTS" != "x"; then

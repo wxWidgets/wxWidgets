@@ -4546,8 +4546,6 @@ public:
     Notice that the event is not triggered when the application is iconized
     (minimized) or restored under wxMSW.
 
-    @onlyfor{wxmsw,wxgtk}
-
     @beginEventTable{wxShowEvent}
     @event{EVT_SHOW(func)}
         Process a @c wxEVT_SHOW event.
