@@ -190,7 +190,7 @@ wxNumericPropertyValidator::
     }
     else if ( numericType == Float )
     {
-        allowedChars += wxS("eE");
+        allowedChars += wxS("-+eE");
 
         // Use locale-specific decimal point
         allowedChars += wxString::Format(wxS("%g"), 1.1)[1];
