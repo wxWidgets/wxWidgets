@@ -610,7 +610,7 @@ QScrollBar *wxWindowQt::QtSetScrollBar( int orientation, QScrollBar *scrollBar )
 }
 
 
-void wxWindowQt::SetScrollbar( int orientation, int pos, int thumbvisible, int range, bool refresh )
+void wxWindowQt::SetScrollbar( int orientation, int pos, int thumbvisible, int range, bool WXUNUSED(refresh) )
 {
     //If not exist, create the scrollbar
     QScrollBar *scrollBar = QtGetScrollBar( orientation );
