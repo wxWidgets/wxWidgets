@@ -19,6 +19,7 @@
     #include "wx/valtext.h"
 #endif // WX_PRECOMP
 
+#include "wx/regex.h"
 #include "wx/uiaction.h"
 
 class TextValidatorTestCase
@@ -179,11 +180,101 @@ TEXT_VALIDATOR_TEST_CASE("wxTextValidator::IsValid", "[wxTextValidator][filters]
         val.SetCharExcludes("tuvwxyz.012+-");
 
         CHECK( val.IsValid("A*B=?").empty() );
-        CHECK( !val.IsValid("0.6/t").empty() ); // t is excluded
+        CHECK( !val.IsValid("69/t").empty() ); // t is excluded
 
         val.AddCharIncludes("t"); // exclusion takes priority over inclusion.
 
-        CHECK( !val.IsValid("0.6/t").empty() ); // t still excluded
+        CHECK( !val.IsValid("69/t").empty() ); // t still excluded
+    }
+}
+
+TEXT_VALIDATOR_TEST_CASE("wxRegexTextValidator::IsValid", "[wxRegexTextValidator][paste]")
+{
+    wxString value = "";
+
+    // validator that uses regex to match an email address (eg.: foo@example.com)
+    wxRegexTextValidator val("^([^@ -]+)@([[:alnum:]_]+).([[:alnum:]]{2,4})$",
+        wxRE_DEFAULT, wxFILTER_NONE, &value);
+
+    SECTION("With wxFILTER_NONE")
+    {
+        // Valid email addresses.
+        CHECK( val.IsValid("foo@example.com").empty() );
+        CHECK( val.IsValid("b98@_example.fr").empty() );
+
+        // Invalid email addresses.
+        CHECK( !val.IsValid("foo@example.c").empty() );
+        CHECK( !val.IsValid("b 8@_example.fr").empty() );
+        CHECK( !val.IsValid("www.wxwidgets.org").empty() );
+    }
+
+    SECTION("With wxFILTER_EXCLUDE_LIST")
+    {
+        val.SetStyle(wxFILTER_EXCLUDE_LIST);
+
+        wxArrayString excludes;
+        excludes.push_back("b98@_example.fr");
+        val.SetExcludes(excludes);
+
+        CHECK( val.IsValid("foo@example.com").empty() );
+
+        CHECK( !val.IsValid("b 8@_example.fr").empty() ); // invalid address.
+        CHECK( !val.IsValid("b98@_example.fr").empty() ); // explicitly excluded.
+    }
+
+    SECTION("Test paste operation - with VALID email address")
+    {
+        const wxString email = "foo@example.net";
+        m_text->AppendText(email);
+        m_text->SelectAll();
+
+        m_text->SetValidator(val); // Set the validator
+
+        if ( m_text->CanCut() && m_text->CanPaste() )
+        {
+            m_text->Cut();
+            CHECK( m_text->IsEmpty() );
+
+            wxYield();
+
+            m_text->Paste();
+            CHECK( m_text->GetValue() == email );
+
+            wxYield();
+
+            // Pasting once again will not be allowed.
+            CHECK( m_text->CanPaste() );
+            m_text->Paste();
+            CHECK( m_text->GetValue() == email );
+        }
+        else
+        {
+            WARN("Cut&Paste operations not performed!");
+        }
+    }
+
+    SECTION("Test paste operation - with INVALID email address")
+    {
+        m_text->AppendText("b-8@_example.fr"); // invalid address.
+        m_text->SelectAll();
+
+        m_text->SetValidator(val); // Set the validator.
+
+        if ( m_text->CanCut() && m_text->CanPaste() )
+        {
+            m_text->Cut();
+            CHECK( m_text->IsEmpty() );
+
+            wxYield();
+
+            // Pasting invalid address is not allowed.
+            m_text->Paste();
+            CHECK( m_text->IsEmpty() );
+        }
+        else
+        {
+            WARN("Cut&Paste operations not performed!");
+        }
     }
 }
 
