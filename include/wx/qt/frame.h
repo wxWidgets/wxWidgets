@@ -19,7 +19,7 @@ class QScrollArea;
 class WXDLLIMPEXP_CORE wxFrame : public wxFrameBase
 {
 public:
-    wxFrame() { }
+    wxFrame() { Init(); }
     wxFrame(wxWindow *parent,
                wxWindowID id,
                const wxString& title,
@@ -28,6 +28,8 @@ public:
                long style = wxDEFAULT_FRAME_STYLE,
                const wxString& name = wxFrameNameStr)
     {
+        Init();
+
         Create( parent, id, title, pos, size, style, name );
     }
     virtual ~wxFrame();
@@ -56,6 +58,15 @@ protected:
     virtual void DoGetClientSize(int *width, int *height) const;
 
 private:
+    // Common part of all ctors.
+    void Init()
+    {
+        m_qtToolBar = NULL;
+    }
+
+
+    // Currently active native toolbar.
+    class QToolBar* m_qtToolBar;
 
     wxDECLARE_DYNAMIC_CLASS( wxFrame );
 };

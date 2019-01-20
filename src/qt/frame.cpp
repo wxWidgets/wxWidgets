@@ -115,11 +115,17 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
         else if (toolbar->HasFlag(wxTB_TOP))   { area |= Qt::TopToolBarArea;   }
         else if (toolbar->HasFlag(wxTB_BOTTOM)){ area |= Qt::BottomToolBarArea;}
 
-        GetQMainWindow()->addToolBar((Qt::ToolBarArea)area, toolbar->GetQToolBar());
+        // We keep the current toolbar handle in our own member variable
+        // because we can't get it from half-destroyed wxToolBar when it calls
+        // this function from wxToolBarBase dtor.
+        m_qtToolBar = toolbar->GetQToolBar();
+
+        GetQMainWindow()->addToolBar((Qt::ToolBarArea)area, m_qtToolBar);
     }
     else if ( m_frameToolBar != NULL )
     {
-        GetQMainWindow()->removeToolBar(m_frameToolBar->GetQToolBar());
+        GetQMainWindow()->removeToolBar(m_qtToolBar);
+        m_qtToolBar = NULL;
     }
     wxFrameBase::SetToolBar( toolbar );
 }
