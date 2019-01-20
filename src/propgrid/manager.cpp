@@ -229,8 +229,9 @@ void wxPropertyGridPage::DoSetSplitterPosition( int pos,
 class wxPGHeaderCtrl : public wxHeaderCtrl
 {
 public:
-    wxPGHeaderCtrl(wxPropertyGridManager* manager) :
-        wxHeaderCtrl()
+    wxPGHeaderCtrl(wxPropertyGridManager* manager, wxWindowID id, const wxPoint& pos,
+                   const wxSize& size, long style) :
+        wxHeaderCtrl(manager, id, pos, size, style)
     {
         m_manager = manager;
         EnsureColumnCount(2);
@@ -1637,12 +1638,9 @@ void wxPropertyGridManager::RecreateControls()
 #if wxUSE_HEADERCTRL
     if ( m_showHeader )
     {
-
         if ( !m_pHeaderCtrl )
         {
-            wxPGHeaderCtrl* hc = new wxPGHeaderCtrl(this);
-            hc->Create(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0);
-            m_pHeaderCtrl = hc;
+            m_pHeaderCtrl = new wxPGHeaderCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0);
         }
         else
         {
