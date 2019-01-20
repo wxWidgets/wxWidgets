@@ -16,7 +16,6 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QLineEdit>
 
-
 class wxQtComboBox : public wxQtEventSignalHandler< QComboBox, wxComboBox >
 {
 public:
@@ -25,21 +24,22 @@ public:
     virtual void hidePopup() wxOVERRIDE;
     void ignoreTextChange(bool ignore);
 
-    struct Ignore
+    class Ignore
     {
-        Ignore( QComboBox *combo ) :
+    public:
+        explicit Ignore( QComboBox *combo ) :
             handler( dynamic_cast<wxQtComboBox*>(combo) )
         {
-            if( handler )
+            if ( handler )
                 handler->ignoreTextChange( true );
         }
         ~Ignore()
         {
-            if( handler )
+            if ( handler )
                 handler->ignoreTextChange( false );
         }
 
-        private:
+    private:
         wxQtComboBox *handler;
     };
 
@@ -89,7 +89,7 @@ void wxQtComboBox::ignoreTextChange( bool ignore )
 
 void wxQtComboBox::editTextChanged(const QString &text)
 {
-    if( textChangeIgnored )
+    if ( textChangeIgnored )
         return;
 
     wxComboBox *handler = GetHandler();
@@ -164,7 +164,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxString& name )
 {
     m_qtComboBox = new wxQtComboBox( parent, this );
-    InitialiseSort( m_qtComboBox );
+    QtInitSort( m_qtComboBox );
 
     while ( n-- > 0 )
         m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
@@ -176,7 +176,9 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 void wxComboBox::SetActualValue(const wxString &value)
 {
     if ( HasFlag(wxCB_READONLY) )
+    {
         SetStringSelection( value );
+    }
     else
     {
         wxTextEntry::SetValue( value );
@@ -205,17 +207,22 @@ void wxComboBox::Replace(long from, long to, const wxString &value)
 {
     const wxString original( GetValue() );
 
-    if( from == 0 )
+    if( to < 0 )
     {
-        SetActualValue( value + original.SubString(to, original.length()) );
+        to = original.length();
     }
 
-    wxString front = original.SubString( 0, from - 1 ) + value;
+    if ( from == 0 )
+    {
+        SetActualValue( value + original.substr(to, original.length()) );
+    }
+
+    wxString front = original.substr( 0, from ) + value;
 
     long iPoint = front.length();
-    if( front.length() <= original.length() )
+    if ( front.length() <= original.length() )
     {
-        SetActualValue( front + original.SubString(to, original.length()) );
+        SetActualValue( front + original.substr(to, original.length()) );
     }
     else
     {
@@ -252,11 +259,11 @@ void wxComboBox::Clear()
 
 void wxComboBox::SetSelection( long from, long to )
 {
-    if( from == -1 )
+    if ( from == -1 )
     {
         from = 0;
     }
-    if( to == -1 )
+    if ( to == -1 )
     {
         to = GetValue().length();
     }
