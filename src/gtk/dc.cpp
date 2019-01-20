@@ -45,6 +45,28 @@ wxGTKCairoDCImpl::wxGTKCairoDCImpl(wxDC* owner, wxWindow* window)
     m_height = 0;
 }
 
+void wxGTKCairoDCImpl::Clear()
+{
+    wxCHECK_RET(IsOk(), "invalid DC");
+
+    cairo_t* cr = NULL;
+    if (m_graphicContext)
+        cr = static_cast<cairo_t*>(m_graphicContext->GetNativeContext());
+    if (cr)
+    {
+        double x1, y1, x2, y2;
+        cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
+        m_graphicContext->SetBrush(m_backgroundBrush);
+        m_graphicContext->SetPen(wxPen());
+        const wxCompositionMode mode = m_graphicContext->GetCompositionMode();
+        m_graphicContext->SetCompositionMode(wxCOMPOSITION_SOURCE);
+        m_graphicContext->DrawRectangle(x1, y1, x2 - x1, y2 - y1);
+        m_graphicContext->SetCompositionMode(mode);
+        m_graphicContext->SetPen(m_pen);
+        m_graphicContext->SetBrush(m_brush);
+    }
+}
+
 void wxGTKCairoDCImpl::DoDrawBitmap(const wxBitmap& bitmap, int x, int y, bool useMask)
 {
     wxCHECK_RET(IsOk(), "invalid DC");

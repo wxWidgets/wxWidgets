@@ -21,6 +21,7 @@ public:
     wxGTKCairoDCImpl(wxDC* owner, int);
     wxGTKCairoDCImpl(wxDC* owner, wxWindow* window);
 
+    virtual void Clear();
     virtual void DoDrawBitmap(const wxBitmap& bitmap, int x, int y, bool useMask);
     virtual void DoDrawIcon(const wxIcon& icon, int x, int y);
 #if wxUSE_IMAGE
