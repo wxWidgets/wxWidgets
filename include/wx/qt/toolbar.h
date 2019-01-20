@@ -39,7 +39,6 @@ public:
                 const wxString& name = wxToolBarNameStr);
 
     virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const wxOVERRIDE;
-    virtual QToolBar *GetQToolBar() const { return m_qtToolBar; }
 
     virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
 
@@ -61,6 +60,9 @@ public:
     virtual wxToolBarToolBase *CreateTool(wxControl *control,
                                           const wxString& label) wxOVERRIDE;
     QWidget *GetHandle() const wxOVERRIDE;
+
+    // Private, only used by wxFrame.
+    QToolBar *GetQToolBar() const { return m_qtToolBar; }
 
 protected:
     QActionGroup* GetActionGroup(size_t pos);
