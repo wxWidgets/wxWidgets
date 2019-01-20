@@ -513,18 +513,28 @@ void wxNativeFontInfo::SetPixelSize(const wxSize& size)
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
 {
-    switch(style)
+    QFont::Style qtStyle;
+
+    switch ( style )
     {
         case wxFONTSTYLE_ITALIC:
-            m_qtFont.setStyle(QFont::StyleItalic);
+            qtStyle = QFont::StyleItalic;
             break;
+
         case wxFONTSTYLE_NORMAL:
-            m_qtFont.setStyle(QFont::StyleNormal);
+            qtStyle = QFont::StyleNormal;
             break;
+
         case wxFONTSTYLE_SLANT:
-            m_qtFont.setStyle(QFont::StyleOblique);
+            qtStyle = QFont::StyleOblique;
             break;
+
+        case wxFONTSTYLE_MAX:
+            wxFAIL_MSG("unknown font style");
+            return;
     }
+
+    m_qtFont.setStyle(qtStyle);
 }
 
 void wxNativeFontInfo::SetNumericWeight(int weight)

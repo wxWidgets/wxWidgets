@@ -82,7 +82,7 @@
 wxAppProgressIndicator::wxAppProgressIndicator(wxWindow* WXUNUSED(parent), int maxValue ):
     m_maxValue(maxValue)
 {
-    wxAppProgressDockIcon* dockIcon = [[wxAppProgressDockIcon alloc] init]; // retainCount == 1
+    wxAppProgressDockIcon* dockIcon = [[wxAppProgressDockIcon alloc] init];
     
     m_dockIcon = dockIcon;
 }
