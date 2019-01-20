@@ -153,7 +153,7 @@ void HeaderCtrlWidgetsPage::CreateContent()
 
     sizerLeft->Add(5, 5, wxSizerFlags().Expand().Border(wxALL, 5)); // spacer
     wxButton* btnReset = new wxButton(this, wxID_ANY, "&Reset");
-    sizerLeft->Add(btnReset, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+    sizerLeft->Add(btnReset, wxSizerFlags().CenterHorizontal().Border(wxALL, 15));
 
     // right pane
     m_sizerHeader = new wxStaticBoxSizer(wxVERTICAL, this, "Header");
