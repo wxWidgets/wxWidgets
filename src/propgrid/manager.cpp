@@ -1641,7 +1641,7 @@ void wxPropertyGridManager::RecreateControls()
         if ( !m_pHeaderCtrl )
         {
             wxPGHeaderCtrl* hc = new wxPGHeaderCtrl(this);
-            hc->Create(this, wxID_ANY);
+            hc->Create(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0);
             m_pHeaderCtrl = hc;
         }
         else
