@@ -90,10 +90,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     QListWidgetItem* item;
     m_qtWindow = m_qtListWidget = new wxQtListWidget( parent, this );
 
-    if ( style == wxLB_SORT )
-    {
-        m_qtListWidget->setSortingEnabled(true);
-    }
+    setStyle(style);
 
     while ( n-- > 0 )
     {
@@ -120,6 +117,8 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     Init();
     m_qtWindow = m_qtListWidget = new wxQtListWidget( parent, this );
 
+    setStyle(style);
+
     QStringList items;
 
     for (size_t i = 0; i < choices.size(); ++i)
@@ -128,6 +127,27 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     m_qtListWidget->addItems(items);
 
     return wxListBoxBase::Create( parent, id, pos, size, style, validator, name );
+}
+
+void wxListBox::setStyle(long style)
+{
+    if ( style & wxLB_SORT )
+    {
+        m_qtListWidget->setSortingEnabled(true);
+    }
+
+    if ( style & wxLB_SINGLE )
+    {
+        m_qtListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+    }
+    else if ( style & wxLB_MULTIPLE )
+    {
+        m_qtListWidget->setSelectionMode(QAbstractItemView::MultiSelection);
+    }
+    else if ( style & wxLB_EXTENDED )
+    {
+        wxMISSING_IMPLEMENTATION( wxSTRINGIZE( wxLB_EXTENDED ));
+    }
 }
 
 void wxListBox::Init()
