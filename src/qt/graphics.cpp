@@ -19,6 +19,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPainter>
+#include <QPicture>
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -33,6 +34,32 @@
 #include "wx/tokenzr.h"
 
 #include "wx/private/graphics.h"
+
+namespace
+{
+    class EnsureActive
+    {
+    public:
+        EnsureActive(QPainter* painter)
+            : m_painter(painter),
+              m_wasActive(painter->isActive())
+        {
+            if (!m_wasActive)
+                m_painter->begin(&picture);
+        }
+
+        ~EnsureActive()
+        {
+            if (!m_wasActive)
+                m_painter->end();
+        }
+
+    private:
+        QPainter* m_painter;
+        bool m_wasActive;
+        QPicture picture;
+    };
+}
 
 class WXDLLIMPEXP_CORE wxQtBrushData : public wxGraphicsObjectRefData
 {
@@ -654,6 +681,13 @@ public:
 
 #endif
 
+    wxQtGraphicsContext(wxGraphicsRenderer* renderer, QPainter* painter, bool ownsPainter = true)
+        : wxGraphicsContext(renderer),
+          m_qtPainter(painter),
+          m_ownsPainter(ownsPainter)
+    {
+    }
+
     wxQtGraphicsContext(wxGraphicsRenderer* renderer, wxWindow *window)
         : wxGraphicsContext(renderer)
     {
@@ -928,6 +962,8 @@ public:
         wxCHECK_RET( !m_font.IsNull(),
                      "wxQtContext::GetTextExtent - no valid font set" );
 
+        EnsureActive active(m_qtPainter);
+
         const wxQtFontData*
             fontData = static_cast<wxQtFontData*>(m_font.GetRefData());
         m_qtPainter->setFont(fontData->GetFont());
@@ -951,6 +987,8 @@ public:
     {
         wxCHECK_RET( !m_font.IsNull(),
                      "wxQtContext::GetPartialTextExtents - no valid font set" );
+
+        EnsureActive active(m_qtPainter);
 
         const wxQtFontData*
             fontData = static_cast<wxQtFontData*>(m_font.GetRefData());
@@ -1020,12 +1058,9 @@ class wxQtMeasuringContext : public wxQtGraphicsContext
 {
 public:
     wxQtMeasuringContext(wxGraphicsRenderer* renderer)
-        : wxQtGraphicsContext(renderer, QApplication::desktop())
+        : wxQtGraphicsContext(renderer, new QPainter())
     {
     }
-
-private:
-    QPainter painter;
 };
 
 class wxQtImageContext : public wxQtGraphicsContext
