@@ -19,6 +19,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPainter>
+#include <QPicture>
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -33,6 +34,38 @@
 #include "wx/tokenzr.h"
 
 #include "wx/private/graphics.h"
+
+namespace
+{
+
+// Ensure that the given painter is active by calling begin() if it isn't. If
+// it already is, don't do anything.
+class EnsurePainterIsActive
+{
+public:
+    explicit EnsurePainterIsActive(QPainter* painter)
+        : m_painter(painter),
+          m_wasActive(painter->isActive())
+    {
+        if ( !m_wasActive )
+            m_painter->begin(&m_picture);
+    }
+
+    ~EnsurePainterIsActive()
+    {
+        if ( !m_wasActive )
+            m_painter->end();
+    }
+
+private:
+    QPainter* m_painter;
+    QPicture m_picture;
+    bool m_wasActive;
+
+    wxDECLARE_NO_COPY_CLASS(EnsurePainterIsActive);
+};
+
+} // anonymous namespace
 
 class WXDLLIMPEXP_CORE wxQtBrushData : public wxGraphicsObjectRefData
 {
@@ -935,6 +968,8 @@ public:
         wxCHECK_RET( !m_font.IsNull(),
                      "wxQtContext::GetTextExtent - no valid font set" );
 
+        EnsurePainterIsActive active(m_qtPainter);
+
         const wxQtFontData*
             fontData = static_cast<wxQtFontData*>(m_font.GetRefData());
         m_qtPainter->setFont(fontData->GetFont());
@@ -958,6 +993,8 @@ public:
     {
         wxCHECK_RET( !m_font.IsNull(),
                      "wxQtContext::GetPartialTextExtents - no valid font set" );
+
+        EnsurePainterIsActive active(m_qtPainter);
 
         const wxQtFontData*
             fontData = static_cast<wxQtFontData*>(m_font.GetRefData());
