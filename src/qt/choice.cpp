@@ -12,6 +12,9 @@
 #include "wx/qt/private/winevent.h"
 #include <QtWidgets/QComboBox>
 
+namespace
+{
+
 class wxQtChoice : public wxQtEventSignalHandler< QComboBox, wxChoice >
 {
 public:
@@ -35,6 +38,8 @@ void wxQtChoice::activated(int WXUNUSED(index))
     if ( handler )
         handler->SendSelectionChangedEvent(wxEVT_CHOICE);
 }
+
+} // anonymous namespace
 
 
 wxChoice::wxChoice() :
