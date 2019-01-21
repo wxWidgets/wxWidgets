@@ -43,6 +43,7 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxComboBoxNameStr);
+
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxString& value,
                 const wxPoint& pos,
@@ -55,7 +56,11 @@ public:
     virtual void SetSelection(int n) wxOVERRIDE;
     virtual void SetSelection(long from, long to) wxOVERRIDE;
 
-    virtual int GetSelection() const wxOVERRIDE { return wxChoice::GetSelection(); }
+    virtual int GetSelection() const wxOVERRIDE
+    {
+        return wxChoice::GetSelection();
+    }
+
     virtual void GetSelection(long *from, long *to) const wxOVERRIDE;
 
     virtual wxString GetStringSelection() const wxOVERRIDE
@@ -66,8 +71,14 @@ public:
     virtual void Clear() wxOVERRIDE;
 
     // See wxComboBoxBase discussion of IsEmpty().
-    bool IsListEmpty() const { return wxItemContainer::IsEmpty(); }
-    bool IsTextEmpty() const { return wxTextEntry::IsEmpty(); }
+    bool IsListEmpty() const
+    {
+        return wxItemContainer::IsEmpty();
+    }
+    bool IsTextEmpty() const
+    {
+        return wxTextEntry::IsEmpty();
+    }
 
     virtual void SetValue(const wxString& value) wxOVERRIDE;
     virtual void ChangeValue(const wxString& value) wxOVERRIDE;
@@ -86,10 +97,13 @@ protected:
     virtual wxString DoGetValue() const wxOVERRIDE;
 
 private:
-    void SetActualValue(const wxString& value);
+    void SetActualValue(const wxString &value);
 
     // From wxTextEntry:
-    virtual wxWindow *GetEditableWindow() wxOVERRIDE { return this; }
+    virtual wxWindow *GetEditableWindow() wxOVERRIDE
+    {
+        return this;
+    }
 
     wxDECLARE_DYNAMIC_CLASS(wxComboBox);
 };

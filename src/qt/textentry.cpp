@@ -24,7 +24,8 @@ void wxTextEntry::Remove(long from, long to)
     wxString string = GetValue();
     string.erase(from, to - from);
     SetValue(string);
-    SetInsertionPoint( std::min(insertionPoint, static_cast<long>(string.length())) );
+    SetInsertionPoint(std::min(insertionPoint,
+                               static_cast<long>(string.length())));
 }
 
 void wxTextEntry::Copy()

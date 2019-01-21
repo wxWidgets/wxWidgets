@@ -280,7 +280,6 @@ void TextEntryTestCase::Editable()
     CPPUNIT_ASSERT_EQUAL("abcdef", entry->GetValue());
     CPPUNIT_ASSERT_EQUAL(6, updated.GetCount());
 
-
     // And that the event carries the right value.
     TextEventHandler handler(window);
 
@@ -326,7 +325,7 @@ void TextEntryTestCase::CopyPaste()
     entry->AppendText("sometext");
     entry->SelectAll();
 
-    if(entry->CanCopy() && entry->CanPaste())
+    if ( entry->CanCopy() && entry->CanPaste() )
     {
         entry->Copy();
         entry->Clear();
@@ -346,12 +345,12 @@ void TextEntryTestCase::UndoRedo()
 
     entry->AppendText("sometext");
 
-    if(entry->CanUndo())
+    if ( entry->CanUndo() )
     {
         entry->Undo();
         CPPUNIT_ASSERT(entry->IsEmpty());
 
-        if(entry->CanRedo())
+        if ( entry->CanRedo() )
         {
             entry->Redo();
             CPPUNIT_ASSERT_EQUAL("sometext", entry->GetValue());
