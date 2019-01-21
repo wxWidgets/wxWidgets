@@ -22,6 +22,7 @@
     #include "wx/frame.h"
     #include "wx/textctrl.h"
     #include "wx/toplevel.h"
+    #include "wx/utils.h"
 #endif // WX_PRECOMP
 
 static void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
@@ -59,6 +60,49 @@ static void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
 #endif
 }
 
+class MaximizedFrame : public wxFrame
+{
+public:
+    MaximizedFrame() : wxFrame(NULL, -1, "Maximized wxFrame test"),
+        m_ShowReceived(false)
+    {
+        // Tests whether wxShowEvent is received
+        // when the frame is shown after being set maximized.
+
+        Bind(wxEVT_SHOW, &MaximizedFrame::OnShow, this);
+    }
+
+    void OnShow(wxShowEvent& event)
+    {
+        m_ShowReceived = true;
+        event.Skip();
+    }
+
+    void TestShowReceived()
+    {
+        Maximize();
+        Show();
+
+        // Wait for the event to be received for the maximum of 2 seconds
+        for (unsigned i = 0; i < 40; i++)
+        {
+            wxTheApp->Yield();
+
+            if ( m_ShowReceived )
+                break;
+
+            wxMilliSleep(50);
+        }
+
+        CHECK(m_ShowReceived);
+
+        Hide();
+    }
+
+private:
+    bool m_ShowReceived;
+};
+
 TEST_CASE("wxTopLevel::Show", "[tlw][show]")
 {
     SECTION("Dialog")
@@ -72,6 +116,13 @@ TEST_CASE("wxTopLevel::Show", "[tlw][show]")
     {
         wxFrame* frame = new wxFrame(NULL, -1, "Frame test");
         TopLevelWindowShowTest(frame);
+        frame->Destroy();
+    }
+
+    SECTION("MaximizedFrame")
+    {
+        MaximizedFrame* frame = new MaximizedFrame();
+        frame->TestShowReceived();
         frame->Destroy();
     }
 }
