@@ -654,6 +654,13 @@ public:
 
 #endif
 
+    wxQtGraphicsContext(wxGraphicsRenderer* renderer, QPainter* painter, bool ownsPainter = true)
+        : wxGraphicsContext(renderer),
+          m_qtPainter(painter),
+          m_ownsPainter(ownsPainter)
+    {
+    }
+
     wxQtGraphicsContext(wxGraphicsRenderer* renderer, wxWindow *window)
         : wxGraphicsContext(renderer)
     {
@@ -1020,12 +1027,9 @@ class wxQtMeasuringContext : public wxQtGraphicsContext
 {
 public:
     wxQtMeasuringContext(wxGraphicsRenderer* renderer)
-        : wxQtGraphicsContext(renderer, QApplication::desktop())
+        : wxQtGraphicsContext(renderer, new QPainter())
     {
     }
-
-private:
-    QPainter painter;
 };
 
 class wxQtImageContext : public wxQtGraphicsContext
