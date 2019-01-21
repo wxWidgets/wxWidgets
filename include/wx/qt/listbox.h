@@ -49,8 +49,8 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxListBoxNameStr);
 
-    virtual bool IsSelected(int n) const;
-    virtual int GetSelections(wxArrayInt& aSelections) const;
+    virtual bool IsSelected(int n) const wxOVERRIDE;
+    virtual int GetSelections(wxArrayInt& aSelections) const wxOVERRIDE;
     
     virtual unsigned int GetCount() const;
     virtual wxString GetString(unsigned int n) const;
@@ -63,9 +63,9 @@ public:
     void QtSendEvent(wxEventType evtType, const QModelIndex &index, bool selected);
 
 protected:
-    virtual void DoSetFirstItem(int n);
+    virtual void DoSetFirstItem(int n) wxOVERRIDE;
 
-    virtual void DoSetSelection(int n, bool select);
+    virtual void DoSetSelection(int n, bool select) wxOVERRIDE;
     
     virtual int DoInsertItems(const wxArrayStringsAdapter & items,
                               unsigned int pos,
