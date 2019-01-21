@@ -8,6 +8,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/modalhook.h"
 #include "wx/dialog.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/winevent.h"
@@ -70,6 +71,7 @@ bool wxDialog::Create( wxWindow *parent, wxWindowID id,
 
 int wxDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
     wxCHECK_MSG( GetHandle() != NULL, -1, "Invalid dialog" );
 
     bool ret = GetDialogHandle()->exec();
