@@ -667,8 +667,7 @@ public:
     wxQtGraphicsContext(wxGraphicsRenderer* renderer, QPaintDevice* device)
         : wxGraphicsContext(renderer)
     {
-        m_qtPainter = new QPainter(device);
-        m_ownsPainter = true;
+        AttachPainter(new QPainter(device));
 
         m_width = device->width();
         m_height = device->height();
