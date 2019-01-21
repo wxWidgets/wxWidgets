@@ -202,7 +202,20 @@ void wxListBox::SetString(unsigned int n, const wxString& s)
 
 int wxListBox::GetSelection() const
 {
-    return m_qtListWidget->currentIndex().row();
+    if ( m_qtListWidget->selectedItems().empty() )
+    {
+        return wxNOT_FOUND;
+    }
+
+    for ( unsigned int i = 0; i < GetCount(); ++i)
+    {
+        if( m_qtListWidget->item(i) == m_qtListWidget->selectedItems().first() )
+        {
+            return i;
+        }
+    }
+
+    return wxNOT_FOUND;
 }
 
 void wxListBox::DoSetFirstItem(int WXUNUSED(n))
@@ -217,7 +230,7 @@ void wxListBox::DoSetSelection(int n, bool select)
         return;
     }
 
-    return m_qtListWidget->setCurrentRow(n, select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect );
+    m_qtListWidget->setItemSelected( m_qtListWidget->item(n), select);
 }
 
 int wxListBox::DoInsertItems(const wxArrayStringsAdapter & items,
