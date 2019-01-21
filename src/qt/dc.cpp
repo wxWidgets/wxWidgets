@@ -435,10 +435,14 @@ void wxQtDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y,
         // Set internal state for getters
         /* Note: Qt states that QPainter::clipRegion() may be slow, so we
          * keep the region manually, which should be faster */
-        if ( m_clipping )
-            m_clippingRegion.Union( wxRect( x, y, width, height ) );
-        else
-            m_clippingRegion.Intersect( wxRect( x, y, width, height ) );
+        if ( !m_clipping || m_clippingRegion.IsEmpty() )
+        {
+            int dcwidth, dcheight;
+            DoGetSize(&dcwidth, &dcheight);
+
+            m_clippingRegion = wxRegion(0, 0, dcwidth, dcheight);
+        }
+        m_clippingRegion.Intersect( wxRect(x, y, width, height) );
 
         wxRect clipRect = m_clippingRegion.GetBox();
 
