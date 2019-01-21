@@ -154,6 +154,7 @@ void wxRegion::Clear()
 
 void wxRegion::QtSetRegion(QRegion region)
 {
+    AllocExclusive();
     M_REGIONDATA = region;
 }
 
@@ -219,47 +220,98 @@ bool wxRegion::DoOffset(wxCoord x, wxCoord y)
     return true;
 }
 
-bool wxRegion::DoUnionWithRect(const wxRect& rect)
+// combine another region with this one
+bool wxRegion::DoCombine(const wxRegion& region, wxRegionOp op)
 {
-    wxCHECK_MSG( IsOk(), false, "Invalid region" );
+    // we can't use the API functions if we don't have a valid region
+    if ( !m_refData )
+    {
+        // combining with an empty/invalid region works differently depending
+        // on the operation
+        switch ( op )
+        {
+            case wxRGN_COPY:
+            case wxRGN_OR:
+            case wxRGN_XOR:
+                *this = region;
+                break;
 
-    M_REGIONDATA = M_REGIONDATA.united( wxQtConvertRect( rect ) );
+            default:
+                wxFAIL_MSG(wxT("unknown region operation"));
+                wxFALLTHROUGH;
+
+            case wxRGN_AND:
+            case wxRGN_DIFF:
+                // leave empty/invalid
+                return false;
+        }
+    }
+    else // we have a valid region
+    {
+        AllocExclusive();
+
+        switch ( op )
+        {
+        case wxRGN_AND:
+            M_REGIONDATA = M_REGIONDATA.intersected(region.GetHandle());
+            break;
+
+        case wxRGN_OR:
+            M_REGIONDATA = M_REGIONDATA.united(region.GetHandle());
+            break;
+
+        case wxRGN_XOR:
+            M_REGIONDATA = M_REGIONDATA.xored(region.GetHandle());
+            break;
+
+        case wxRGN_DIFF:
+            M_REGIONDATA = M_REGIONDATA.subtracted(region.GetHandle());
+            break;
+
+        default:
+            wxFAIL_MSG(wxT("unknown region operation"));
+            wxFALLTHROUGH;
+
+        case wxRGN_COPY:
+            M_REGIONDATA = QRegion(region.GetHandle());
+            break;
+        }
+    }
     return true;
 }
 
 bool wxRegion::DoUnionWithRegion(const wxRegion& region)
 {
-    wxCHECK_MSG( IsOk(), false, "Invalid region" );
-    wxCHECK_MSG( region.IsOk(), false, "Invalid parameter region" );
-    
-    M_REGIONDATA = M_REGIONDATA.united( region.GetHandle() );
-    return true;
+    return DoCombine(region, wxRGN_OR);
 }
 
 bool wxRegion::DoIntersect(const wxRegion& region)
 {
-    wxCHECK_MSG( IsOk(), false, "Invalid region" );
-    wxCHECK_MSG( region.IsOk(), false, "Invalid parameter region" );
-    
-    M_REGIONDATA = M_REGIONDATA.intersected( region.GetHandle() );
-    return true;
+    return DoCombine(region, wxRGN_AND);
 }
 
 bool wxRegion::DoSubtract(const wxRegion& region)
 {
-    wxCHECK_MSG( IsOk(), false, "Invalid region" );
-    wxCHECK_MSG( region.IsOk(), false, "Invalid parameter region" );
-    
-    M_REGIONDATA = M_REGIONDATA.subtracted( region.GetHandle() );
-    return true;
+    return DoCombine(region, wxRGN_DIFF);
 }
 
 bool wxRegion::DoXor(const wxRegion& region)
 {
+    return DoCombine(region, wxRGN_XOR);
+}
+
+bool wxRegion::DoUnionWithRect(const wxRect& rect)
+{
+    if ( m_refData == NULL )
+    {
+        m_refData = new wxRegionRefData(wxQtConvertRect(rect));
+        return true;
+    }
+
     wxCHECK_MSG( IsOk(), false, "Invalid region" );
-    wxCHECK_MSG( region.IsOk(), false, "Invalid parameter region" );
-    
-    M_REGIONDATA = M_REGIONDATA.xored( region.GetHandle() );
+
+    AllocExclusive();
+    M_REGIONDATA = M_REGIONDATA.united( wxQtConvertRect( rect ) );
     return true;
 }
 

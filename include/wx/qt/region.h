@@ -48,6 +48,8 @@ protected:
     virtual bool DoSubtract(const wxRegion& region);
     virtual bool DoXor(const wxRegion& region);
 
+    virtual bool DoCombine(const wxRegion& rgn, wxRegionOp op);
+
 private:
     wxDECLARE_DYNAMIC_CLASS(wxRegion);
 };
