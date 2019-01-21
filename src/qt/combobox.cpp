@@ -128,7 +128,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxString& name )
 {
     m_qtComboBox = new wxQtComboBox( parent, this );
-    InitialiseSort(m_qtComboBox);
+    QtInitSort( m_qtComboBox );
 
     while ( n-- > 0 )
         m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
