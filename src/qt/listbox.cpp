@@ -167,10 +167,9 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
 {
     aSelections.clear();
 
-    for ( unsigned int i = 0; i < GetCount(); ++i)
+    Q_FOREACH(QListWidgetItem* l, m_qtListWidget->selectedItems())
     {
-        if ( IsSelected(i) )
-            aSelections.push_back(i);
+        aSelections.push_back( m_qtListWidget->row(l) );
     }
 
     return aSelections.size();
@@ -299,9 +298,8 @@ QScrollArea *wxListBox::QtGetScrollBarsContainer() const
 
 void wxListBox::UnSelectAll()
 {
-    for ( unsigned int i = 0; i < GetCount(); ++i )
+    Q_FOREACH(QListWidgetItem* l, m_qtListWidget->selectedItems())
     {
-        if ( IsSelected(i) )
-            DoSetSelection(i, false);
+        m_qtListWidget->setItemSelected( l, false );
     }
 }
