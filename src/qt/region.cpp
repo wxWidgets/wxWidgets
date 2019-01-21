@@ -20,35 +20,35 @@
 
 class wxRegionRefData: public wxGDIRefData
 {
-    public:
-        wxRegionRefData()
-        {
-        }
+public:
+    wxRegionRefData()
+    {
+    }
 
-        wxRegionRefData( QRect r ) : m_qtRegion( r )
-        {
-        }
+    wxRegionRefData( QRect r ) : m_qtRegion( r )
+    {
+    }
 
-        wxRegionRefData( QBitmap b ) : m_qtRegion ( b )
-        {
-        }
+    wxRegionRefData( QBitmap b ) : m_qtRegion ( b )
+    {
+    }
 
-        wxRegionRefData( QPolygon p, Qt::FillRule fr ) : m_qtRegion( p, fr )
-        {
-        }
+    wxRegionRefData( QPolygon p, Qt::FillRule fr ) : m_qtRegion( p, fr )
+    {
+    }
 
-        wxRegionRefData( const wxRegionRefData& data )
+    wxRegionRefData( const wxRegionRefData& data )
         : wxGDIRefData()
-        {
-            m_qtRegion = data.m_qtRegion;
-        }
-        
-        bool operator == (const wxRegionRefData& data) const
-        {
-            return m_qtRegion == data.m_qtRegion;
-        }
-        
-        QRegion m_qtRegion;
+    {
+        m_qtRegion = data.m_qtRegion;
+    }
+
+    bool operator == (const wxRegionRefData& data) const
+    {
+        return m_qtRegion == data.m_qtRegion;
+    }
+
+    QRegion m_qtRegion;
 };
 
 #define M_REGIONDATA ((wxRegionRefData *)m_refData)->m_qtRegion
