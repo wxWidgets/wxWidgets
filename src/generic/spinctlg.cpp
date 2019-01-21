@@ -298,7 +298,14 @@ void wxSpinCtrlGenericBase::DoMoveWindow(int x, int y, int width, int height)
     wxControl::DoMoveWindow(x, y, width, height);
 
     // position the subcontrols inside the client area
-    wxSize sizeBtn = m_spinButton->GetSize();
+
+    // Use GetBestSize instead of GetSize to get the size of the spin control.
+    // This fixes a problem on wxMSW when the size si set after a DPI change.
+    // GetSize returns the old, invalid, size. GetBestSize will return the size
+    // that the control should be. Normally, GetBestSize and GetSize should
+    // always return the same value because the size of the spinButton never
+    // changes.
+    wxSize sizeBtn = m_spinButton->GetBestSize();
 
     wxCoord wText = width - sizeBtn.x - MARGIN;
     m_textCtrl->SetSize(0, 0, wText, height);
