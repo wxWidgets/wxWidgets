@@ -416,6 +416,17 @@ void wxQtDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y,
     }
     else
     {
+        if ( width < 0 )
+        {
+            width = -width;
+            x -= width - 1;
+        }
+        if ( height < 0 )
+        {
+            height = -height;
+            y -= height - 1;
+        }
+
         if (m_qtPainter->isActive())
         {
             // Set QPainter clipping (intersection if not the first one)
