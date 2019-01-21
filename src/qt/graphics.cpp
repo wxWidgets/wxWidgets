@@ -31,6 +31,7 @@
 #endif
 
 #include "wx/graphics.h"
+#include "wx/scopedptr.h"
 #include "wx/tokenzr.h"
 
 #include "wx/private/graphics.h"
@@ -640,7 +641,6 @@ class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
     void InitFromDC(const wxDC& dc)
     {
         m_qtPainter = static_cast<QPainter*>(dc.GetHandle());
-        m_ownsPainter = false;
 
         const wxSize sz = dc.GetSize();
         m_width = sz.x;
@@ -653,13 +653,14 @@ protected:
     void AttachPainter(QPainter* painter)
     {
         m_qtPainter = painter;
-        m_ownsPainter = true;
+
+        // Ensure that it will be destroyed when this object is.
+        m_ownedPainter.reset(m_qtPainter);
     }
 
     wxQtGraphicsContext(wxGraphicsRenderer* renderer)
         : wxGraphicsContext(renderer),
-          m_qtPainter(NULL),
-          m_ownsPainter(false)
+          m_qtPainter(NULL)
     {
     }
 
@@ -698,17 +699,10 @@ public:
         : wxGraphicsContext(renderer)
     {
         m_qtPainter = static_cast<QPainter*>(window->QtGetPainter());
-        m_ownsPainter = false;
 
         const wxSize sz = window->GetClientSize();
         m_width = sz.x;
         m_height = sz.y;
-    }
-
-    virtual ~wxQtGraphicsContext()
-    {
-        if ( m_ownsPainter )
-            delete m_qtPainter;
     }
 
     virtual bool ShouldOffset() const wxOVERRIDE
@@ -1056,7 +1050,8 @@ protected:
     QPainter* m_qtPainter;
 
 private:
-    bool m_ownsPainter;
+    // This pointer may be empty if we don't own m_qtPainter.
+    wxScopedPtr<QPainter> m_ownedPainter;
 
     wxDECLARE_NO_COPY_CLASS(wxQtGraphicsContext);
 };
