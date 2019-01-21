@@ -648,6 +648,14 @@ class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
     }
 
 protected:
+    // Use the specified painter and take ownership of it, i.e. it will be
+    // destroyed in this class dtor.
+    void AttachPainter(QPainter* painter)
+    {
+        m_qtPainter = painter;
+        m_ownsPainter = true;
+    }
+
     wxQtGraphicsContext(wxGraphicsRenderer* renderer)
         : wxGraphicsContext(renderer),
           m_qtPainter(NULL),
@@ -686,13 +694,6 @@ public:
     }
 
 #endif
-
-    wxQtGraphicsContext(wxGraphicsRenderer* renderer, QPainter* painter, bool ownsPainter = true)
-        : wxGraphicsContext(renderer),
-          m_qtPainter(painter),
-          m_ownsPainter(ownsPainter)
-    {
-    }
 
     wxQtGraphicsContext(wxGraphicsRenderer* renderer, wxWindow *window)
         : wxGraphicsContext(renderer)
@@ -1054,9 +1055,10 @@ protected:
     }
 
     QPainter* m_qtPainter;
-    bool m_ownsPainter;
 
 private:
+    bool m_ownsPainter;
+
     wxDECLARE_NO_COPY_CLASS(wxQtGraphicsContext);
 };
 
@@ -1064,8 +1066,9 @@ class wxQtMeasuringContext : public wxQtGraphicsContext
 {
 public:
     wxQtMeasuringContext(wxGraphicsRenderer* renderer)
-        : wxQtGraphicsContext(renderer, new QPainter())
+        : wxQtGraphicsContext(renderer)
     {
+        AttachPainter(new QPainter());
     }
 };
 
@@ -1078,15 +1081,13 @@ public:
     {
         const wxBitmap wxbitmap(image);
         m_pixmap = *wxbitmap.GetHandle();
-        m_qtPainter = new QPainter(&m_pixmap);
-        m_ownsPainter = false;
+        AttachPainter(new QPainter(&m_pixmap));
     }
 
     ~wxQtImageContext()
     {
         wxQtBitmapData bitmap(GetRenderer(), &m_pixmap);
         m_image = bitmap.DoConvertToImage();
-        delete m_qtPainter;
     }
 
 private:
