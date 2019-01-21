@@ -113,16 +113,16 @@ wxRegion::wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance)
     memset(raw.get(), 0, bmp.GetWidth()*bmp.GetHeight());
 
     QImage img(bmp.GetHandle()->toImage());
-    int r = transp.Red(), g = transp.Green(), b = transp.Blue();
+    const int r = transp.Red(), g = transp.Green(), b = transp.Blue();
     for(int y=0; y<img.height(); y++)
     {
         for(int x=0; x<img.width(); x++)
         {
-            QColor c = img.pixel(x, y);
+            const QColor c = img.pixel(x, y);
             if ( abs(c.red()   - r ) > tolerance ||
                abs(c.green() - g) > tolerance ||
                abs(c.blue()  - b) > tolerance) {
-                    int ind = y*img.width()+x;
+                    const int ind = y*img.width()+x;
                     raw[ind>>3] |= 1<<(ind&7);
             }
         }
@@ -189,7 +189,7 @@ bool wxRegion::DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const
 
     wxCHECK_MSG( IsOk(), false, "Invalid region" );
 
-    QRect bounding = M_REGIONDATA.boundingRect();
+    const QRect bounding = M_REGIONDATA.boundingRect();
     x = bounding.x();
     y = bounding.y();
     w = bounding.width();
