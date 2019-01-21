@@ -8,6 +8,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/modalhook.h"
 #include "wx/msgdlg.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/winevent.h"
@@ -115,6 +116,7 @@ wxIMPLEMENT_CLASS(wxMessageDialog,wxDialog);
 
 int wxMessageDialog::ShowModal()
 {
+    WX_HOOK_MODAL_DIALOG();
     wxCHECK_MSG( m_qtWindow, -1, "Invalid dialog" );
     
     // Exec may return a wx identifier if a close event is generated
