@@ -86,11 +86,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name)
 {
-    Init();
-    QListWidgetItem* item;
-    m_qtWindow = m_qtListWidget = new wxQtListWidget( parent, this );
+    DoCreate(parent, style);
 
-    setStyle(style);
+    QListWidgetItem* item;
 
     while ( n-- > 0 )
     {
@@ -114,10 +112,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name)
 {
-    Init();
-    m_qtWindow = m_qtListWidget = new wxQtListWidget( parent, this );
-
-    setStyle(style);
+    DoCreate(parent, style);
 
     QStringList items;
 
@@ -129,8 +124,13 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     return wxListBoxBase::Create( parent, id, pos, size, style, validator, name );
 }
 
-void wxListBox::setStyle(long style)
+void wxListBox::DoCreate(wxWindow* parent, long style)
 {
+    Init();
+
+    m_qtWindow =
+    m_qtListWidget = new wxQtListWidget( parent, this );
+
     if ( style & wxLB_SORT )
     {
         m_qtListWidget->setSortingEnabled(true);

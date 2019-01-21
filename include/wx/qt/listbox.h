@@ -90,7 +90,9 @@ protected:
 private:
     virtual void Init(); //common construction
 
-    void setStyle(long style);
+    // Common part of both Create() overloads.
+    void DoCreate(wxWindow* parent, long style);
+
     void UnSelectAll();
 
     wxDECLARE_DYNAMIC_CLASS(wxListBox);
