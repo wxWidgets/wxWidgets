@@ -82,6 +82,7 @@ wxQtEventLoopBase::wxQtEventLoopBase()
 
 wxQtEventLoopBase::~wxQtEventLoopBase()
 {
+    qApp->removeEventFilter(m_qtIdleTimer);
     delete m_qtIdleTimer;
 }
 
