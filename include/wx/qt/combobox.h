@@ -75,6 +75,7 @@ public:
     {
         return wxItemContainer::IsEmpty();
     }
+
     bool IsTextEmpty() const
     {
         return wxTextEntry::IsEmpty();
