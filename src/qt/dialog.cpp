@@ -74,7 +74,12 @@ int wxDialog::ShowModal()
     WX_HOOK_MODAL_DIALOG();
     wxCHECK_MSG( GetHandle() != NULL, -1, "Invalid dialog" );
 
-    bool ret = GetDialogHandle()->exec();
+    QDialog *qDialog = GetDialogHandle();
+    qDialog->setModal(true);
+
+    Show(true);
+
+    bool ret = qDialog->exec();
     if ( GetReturnCode() == 0 )
         return ret ? wxID_OK : wxID_CANCEL;
     return GetReturnCode();
@@ -93,6 +98,25 @@ bool wxDialog::IsModal() const
     wxCHECK_MSG( GetDialogHandle() != NULL, false, "Invalid dialog" );
 
     return GetDialogHandle()->isModal();
+}
+
+bool wxDialog::Show(bool show)
+{
+    if ( show == IsShown() )
+        return false;
+
+    if ( !show && IsModal() )
+        EndModal(wxID_CANCEL);
+
+    if ( show && CanDoLayoutAdaptation() )
+        DoLayoutAdaptation();
+
+    const bool ret = wxDialogBase::Show(show);
+
+    if (show)
+        InitDialog();
+
+    return ret;
 }
 
 QDialog *wxDialog::GetDialogHandle() const

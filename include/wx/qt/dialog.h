@@ -34,6 +34,7 @@ public:
     virtual int ShowModal() wxOVERRIDE;
     virtual void EndModal(int retCode) wxOVERRIDE;
     virtual bool IsModal() const wxOVERRIDE;
+    virtual bool Show(bool show) wxOVERRIDE;
 
     QDialog *GetDialogHandle() const;
 
