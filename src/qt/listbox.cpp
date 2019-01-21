@@ -136,6 +136,7 @@ void wxListBox::setStyle(long style)
         m_qtListWidget->setSortingEnabled(true);
     }
 
+    // The following styles are mutually exclusive
     if ( style & wxLB_SINGLE )
     {
         m_qtListWidget->setSelectionMode(QAbstractItemView::SingleSelection);
