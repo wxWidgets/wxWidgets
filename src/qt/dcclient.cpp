@@ -127,6 +127,7 @@ wxClientDCImpl::~wxClientDCImpl()
         }
     }
 
+    delete m_pic;
     // Painter will be deleted by base class
 }
 
