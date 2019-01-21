@@ -605,6 +605,16 @@ bool wxTopLevelWindowMSW::Show(bool show)
 
     DoShowWindow(nShowCmd);
 
+    if ( show && nShowCmd == SW_MAXIMIZE )
+    {
+        // We don't receive WM_SHOWWINDOW when shown in the maximized state,
+        // cf. https://docs.microsoft.com/en-us/windows/desktop/winmsg/wm-showwindow
+        // and so we have to issue the event ourselves in this case.
+        wxShowEvent event(GetId(), true);
+        event.SetEventObject(this);
+        AddPendingEvent(event);
+    }
+
     return true;
 }
 
