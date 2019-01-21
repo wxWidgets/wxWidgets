@@ -434,9 +434,9 @@ void wxQtDCImpl::DoSetClippingRegion(wxCoord x, wxCoord y,
         wxRect clipRect = m_clippingRegion->GetBox();
 
         m_clipX1 = clipRect.GetLeft();
-        m_clipX2 = clipRect.GetRight();
+        m_clipX2 = clipRect.GetRight() + 1;
         m_clipY1 = clipRect.GetTop();
-        m_clipY2 = clipRect.GetBottom();
+        m_clipY2 = clipRect.GetBottom() + 1;
         m_clipping = true;
     }
 }
@@ -472,9 +472,9 @@ void wxQtDCImpl::DoSetDeviceClippingRegion(const wxRegion& region)
         wxRect clipRect = m_clippingRegion->GetBox();
 
         m_clipX1 = clipRect.GetLeft();
-        m_clipX2 = clipRect.GetRight();
+        m_clipX2 = clipRect.GetRight() + 1;
         m_clipY1 = clipRect.GetTop();
-        m_clipY2 = clipRect.GetBottom();
+        m_clipY2 = clipRect.GetBottom() + 1;
         m_clipping = true;
     }
 }
