@@ -583,7 +583,7 @@ public:
             wxString result;
             if ( webview->RunScript
                           (
-                            "document.getElementById('some_id').innderHTML",
+                            "document.getElementById('some_id').innerHTML",
                             &result
                           ) )
             {
