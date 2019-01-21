@@ -57,7 +57,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxRegion,wxGDIObject);
 
 wxRegion::wxRegion()
 {
-    m_refData = new wxRegionRefData();
+    m_refData = NULL;
 }
 
 wxRegion::wxRegion(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
@@ -133,14 +133,20 @@ wxRegion::wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance)
 
 bool wxRegion::IsEmpty() const
 {
-    wxCHECK_MSG( IsOk(), true, "Invalid region" );
+    if ( IsNull() )
+        return true;
+
+    wxCHECK_MSG(IsOk(), true, "Invalid region" );
     
     return M_REGIONDATA.isEmpty();
 }
 
 void wxRegion::Clear()
 {
-    wxCHECK_RET( IsOk(), "Invalid region" );
+    if ( IsNull() )
+        return;
+
+    wxCHECK_RET(IsOk(), "Invalid region" );
 
     AllocExclusive();
     M_REGIONDATA = QRegion();
@@ -171,6 +177,15 @@ bool wxRegion::DoIsEqual(const wxRegion& region) const
 
 bool wxRegion::DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const
 {
+    if ( m_refData == NULL )
+    {
+        x =
+        y =
+        w =
+        h = 0;
+        return false;
+    }
+
     wxCHECK_MSG( IsOk(), false, "Invalid region" );
 
     QRect bounding = M_REGIONDATA.boundingRect();
