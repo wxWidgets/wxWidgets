@@ -207,15 +207,10 @@ int wxListBox::GetSelection() const
         return wxNOT_FOUND;
     }
 
-    for ( unsigned int i = 0; i < GetCount(); ++i)
-    {
-        if( m_qtListWidget->item(i) == m_qtListWidget->selectedItems().first() )
-        {
-            return i;
-        }
-    }
 
-    return wxNOT_FOUND;
+    QListWidgetItem* item = m_qtListWidget->selectedItems().first();
+
+    return m_qtListWidget->row(item);
 }
 
 void wxListBox::DoSetFirstItem(int WXUNUSED(n))
