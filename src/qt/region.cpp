@@ -114,9 +114,9 @@ wxRegion::wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance)
 
     QImage img(bmp.GetHandle()->toImage());
     const int r = transp.Red(), g = transp.Green(), b = transp.Blue();
-    for(int y=0; y<img.height(); y++)
+    for ( int y = 0; y < img.height(); y++ )
     {
-        for(int x=0; x<img.width(); x++)
+        for ( int x = 0; x < img.width(); x++ )
         {
             const QColor c = img.pixel(x, y);
             if ( abs(c.red()   - r ) > tolerance ||
