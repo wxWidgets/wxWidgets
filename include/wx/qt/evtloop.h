@@ -24,6 +24,8 @@ public:
     virtual void WakeUp() wxOVERRIDE;
     virtual void DoYieldFor(long eventsToProcess) wxOVERRIDE;
 
+    void ScheduleIdleCheck();
+
 #if wxUSE_EVENTLOOP_SOURCE
     virtual wxEventLoopSource *AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags);
 #endif // wxUSE_EVENTLOOP_SOURCE
