@@ -31,9 +31,9 @@ public:
             long style = wxDEFAULT_DIALOG_STYLE,
             const wxString &name = wxDialogNameStr );
 
-    virtual int ShowModal();
-    virtual void EndModal(int retCode);
-    virtual bool IsModal() const;
+    virtual int ShowModal() wxOVERRIDE;
+    virtual void EndModal(int retCode) wxOVERRIDE;
+    virtual bool IsModal() const wxOVERRIDE;
 
     QDialog *GetDialogHandle() const;
 
