@@ -18,44 +18,47 @@ namespace
 {
     class LexicalSortProxyModel : public QSortFilterProxyModel
     {
-        public:
-            bool lessThan( const QModelIndex &left, const QModelIndex &right ) const wxOVERRIDE
+    public:
+        bool lessThan(const QModelIndex &left,
+                      const QModelIndex &right) const wxOVERRIDE
+        {
+            const QVariant leftData = sourceModel()->data(left);
+            const QVariant rightData = sourceModel()->data(right);
+
+            if ( leftData.type() != QVariant::String )
+                return false;
+
+            int insensitiveResult = QString::compare(
+                                                     leftData.value<QString>(),
+                                                     rightData.value<QString>(),
+                                                     Qt::CaseInsensitive);
+
+            if ( insensitiveResult == 0 )
             {
-                const QVariant leftData = sourceModel()->data( left );
-                const QVariant rightData = sourceModel()->data( right );
-
-                if ( leftData.type() != QVariant::String )
-                    return false;
-
-                int insensitiveResult = QString::compare(
-                        leftData.value<QString>(),
-                        rightData.value<QString>(),
-                        Qt::CaseInsensitive );
-
-                if ( insensitiveResult == 0 )
-                {
-                    return QString::compare( leftData.value<QString>(),
-                            rightData.value<QString>() ) < 0;
-                }
-
-                return insensitiveResult < 0;
+                return QString::compare(leftData.value<QString>(),
+                                        rightData.value<QString>()) < 0;
             }
+
+            return insensitiveResult < 0;
+        }
     };
 
-    class wxQtChoice : public wxQtEventSignalHandler< QComboBox, wxChoice >
+    class wxQtChoice : public wxQtEventSignalHandler<QComboBox, wxChoice>
     {
-        public:
-            wxQtChoice( wxWindow *parent, wxChoice *handler );
+    public:
+        wxQtChoice(wxWindow *parent, wxChoice *handler);
 
-        private:
-            void activated(int index);
+    private:
+        void activated(int index);
     };
 
-    wxQtChoice::wxQtChoice( wxWindow *parent, wxChoice *handler )
-        : wxQtEventSignalHandler< QComboBox, wxChoice >( parent, handler )
+    wxQtChoice::wxQtChoice(wxWindow *parent, wxChoice *handler)
+        : wxQtEventSignalHandler<QComboBox, wxChoice>(parent, handler)
     {
-        // the activated signal is overloaded, the following explicit cast is needed:
-        connect(this, static_cast<void (QComboBox::*)(int index)>(&QComboBox::activated),
+        // the activated signal is overloaded, the following explicit cast is
+        // needed:
+        typedef void (QComboBox::*IntMemFunc)(int index);
+        connect(this, static_cast<IntMemFunc>(&QComboBox::activated),
                 this, &wxQtChoice::activated);
     }
 
@@ -72,68 +75,65 @@ wxChoice::wxChoice() :
 {
 }
 
-void wxChoice::QtInitSort( QComboBox *combo )
+void wxChoice::QtInitSort(QComboBox *combo)
 {
     QSortFilterProxyModel *proxyModel = new LexicalSortProxyModel();
-    proxyModel->setSourceModel( combo->model() );
-    combo->model()->setParent( proxyModel );
-    combo->setModel( proxyModel );
+    proxyModel->setSourceModel(combo->model());
+    combo->model()->setParent(proxyModel);
+    combo->setModel(proxyModel);
 }
 
-
-wxChoice::wxChoice( wxWindow *parent, wxWindowID id,
+wxChoice::wxChoice(wxWindow *parent, wxWindowID id,
         const wxPoint& pos,
         const wxSize& size,
         int n, const wxString choices[],
         long style,
         const wxValidator& validator,
-        const wxString& name )
+        const wxString& name)
 {
-    Create( parent, id, pos, size, n, choices, style, validator, name );
+    Create(parent, id, pos, size, n, choices, style, validator, name);
 }
 
-
-wxChoice::wxChoice( wxWindow *parent, wxWindowID id,
+wxChoice::wxChoice(wxWindow *parent, wxWindowID id,
         const wxPoint& pos,
         const wxSize& size,
         const wxArrayString& choices,
         long style,
         const wxValidator& validator,
-        const wxString& name )
+        const wxString& name)
 {
-    Create( parent, id, pos, size, choices, style, validator, name );
+    Create(parent, id, pos, size, choices, style, validator, name);
 }
 
-
-bool wxChoice::Create( wxWindow *parent, wxWindowID id,
+bool wxChoice::Create(wxWindow *parent, wxWindowID id,
         const wxPoint& pos,
         const wxSize& size,
         const wxArrayString& choices,
         long style,
         const wxValidator& validator,
-        const wxString& name )
+        const wxString& name)
 {
-    return Create( parent, id, pos, size, choices.size(), choices.size() ? &choices[ 0 ] : NULL, style,
-        validator, name );
+    return Create(parent, id, pos, size, choices.size(),
+                  choices.size() ? &choices[0] : NULL,
+                  style, validator, name);
 }
 
-
-bool wxChoice::Create( wxWindow *parent, wxWindowID id,
+bool wxChoice::Create(wxWindow *parent, wxWindowID id,
         const wxPoint& pos,
         const wxSize& size,
         int n, const wxString choices[],
         long style,
         const wxValidator& validator,
-        const wxString& name )
+        const wxString& name)
 {
-    m_qtComboBox = new wxQtChoice( parent, this );
+    m_qtComboBox = new wxQtChoice(parent, this);
 
-    QtInitSort( m_qtComboBox );
+    QtInitSort(m_qtComboBox);
 
     while ( n-- > 0 )
-        m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
+        m_qtComboBox->addItem(wxQtConvertString(*choices++));
 
-    return QtCreateControl( parent, id, pos, size, style, validator, name );
+    return QtCreateControl(parent, id, pos, size, style, validator, name);
 }
 
 wxSize wxChoice::DoGetBestSize() const
@@ -141,13 +141,12 @@ wxSize wxChoice::DoGetBestSize() const
     wxSize basesize = wxChoiceBase::DoGetBestSize();
     wxSize size = wxControl::DoGetBestSize();
     // mix calculated size by wx base prioritizing qt hint (max):
-    if (size.GetWidth() < basesize.GetWidth())
+    if ( size.GetWidth() < basesize.GetWidth() )
         size.SetWidth(basesize.GetWidth());
-    if (size.GetHeight() < basesize.GetHeight())
+    if ( size.GetHeight() < basesize.GetHeight() )
         size.SetHeight(basesize.GetHeight());
     return size;
 }
-
 
 unsigned wxChoice::GetCount() const
 {
@@ -156,14 +155,13 @@ unsigned wxChoice::GetCount() const
 
 wxString wxChoice::GetString(unsigned int n) const
 {
-    return wxQtConvertString( m_qtComboBox->itemText(n) );
+    return wxQtConvertString(m_qtComboBox->itemText(n));
 }
 
 void wxChoice::SetString(unsigned int n, const wxString& s)
 {
     m_qtComboBox->setItemText(n, wxQtConvertString(s));
 }
-
 
 void wxChoice::SetSelection(int n)
 {
@@ -174,7 +172,6 @@ int wxChoice::GetSelection() const
 {
     return m_qtComboBox->currentIndex();
 }
-
 
 int wxChoice::DoInsertItems(const wxArrayStringsAdapter & items,
                   unsigned int pos,
@@ -246,7 +243,7 @@ void wxChoice::DoDeleteOneItem(unsigned int pos)
 
     if ( selection >= 0 && static_cast<unsigned int>(selection) == pos )
     {
-        SetSelection( wxNOT_FOUND );
+        SetSelection(wxNOT_FOUND);
     }
     m_qtComboBox->removeItem(pos);
 }
