@@ -193,7 +193,7 @@ public:
     @category{validator}
 
     @see @ref overview_validator, wxValidator, wxGenericValidator,
-    wxTextValidator, wxMakeIntegerValidator()
+    wxTextValidator, wxRegexTextValidator, wxMakeIntegerValidator()
 
     @since 2.9.2
 */
@@ -293,7 +293,7 @@ wxMakeIntegerValidator(T *value, int style = wxNUM_VAL_DEFAULT);
     @category{validator}
 
     @see @ref overview_validator, wxValidator, wxGenericValidator,
-    wxTextValidator, wxMakeIntegerValidator()
+    wxTextValidator, wxRegexTextValidator, wxMakeIntegerValidator()
 
     @since 2.9.2
 */

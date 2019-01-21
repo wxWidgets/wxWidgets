@@ -98,8 +98,8 @@ enum wxTextValidatorStyle
     @library{wxcore}
     @category{validator}
 
-    @see @ref overview_validator, wxValidator, wxGenericValidator,
-        wxIntegerValidator, wxFloatingPointValidator
+    @see @ref overview_validator, wxValidator, wxRegexTextValidator,
+        wxGenericValidator, wxIntegerValidator, wxFloatingPointValidator
 */
 class wxTextValidator : public wxValidator
 {
@@ -314,3 +314,89 @@ protected:
     bool IsValidChar(const wxUniChar& c) const;
 };
 
+/**
+    @class wxRegexTextValidator
+
+    wxRegexTextValidator, as its name implies, validates text controls against
+    a regular expression.
+
+    For more information, please see @ref overview_validator.
+
+    @since 3.1.3
+
+    @library{wxcore}
+    @category{validator}
+
+    @see @ref overview_validator, wxValidator, wxTextValidator, wxGenericValidator,
+        wxIntegerValidator, wxFloatingPointValidator
+*/
+class wxRegexTextValidator : public wxTextValidator
+{
+public:
+    /**
+        Constructor.
+    */
+    wxRegexTextValidator();
+
+    /**
+        Constructor taking the expression (pattern) and flags (to construct the
+        wxRegEx object), a style and optional pointer to a wxString variable.
+
+        @param expr
+            Pattern from which the regular expression will be compiled.
+        @param flags
+            See @ref wxRE_FLAGS.
+        @param style
+            One or more of the ::wxTextValidatorStyle styles. See SetStyle().
+        @param valPtr
+            A pointer to a wxString variable that contains the value. This
+            variable should have a lifetime equal to or longer than the
+            validator lifetime (which is usually determined by the lifetime of
+            the window).
+    */
+    wxRegexTextValidator(const wxString& expr, int flags,
+                         long style = wxFILTER_NONE, wxString *valPtr = NULL);
+
+    /**
+        Constructor taking a pre-constructed regex object, a style and optional
+        pointer to a wxString variable.
+
+        @param regex
+            Must be a valid compiled regular expression object.
+        @param style
+            One or more of the ::wxTextValidatorStyle styles. See SetStyle().
+        @param valPtr
+            A pointer to a wxString variable that contains the value. This
+            variable should have a lifetime equal to or longer than the
+            validator lifetime (which is usually determined by the lifetime of
+            the window).
+    */
+    wxRegexTextValidator(const wxSharedPtr<wxRegEx>& regex,
+                         long style = wxFILTER_NONE, wxString *valPtr = NULL);
+
+    /**
+        Copy constructor.
+    */
+    wxRegexTextValidator(const wxRegexTextValidator& val);
+
+    /**
+        Destructor.
+    */
+    ~wxRegexTextValidator();
+
+    /**
+        Clones the regex validator using the copy constructor.
+    */
+    virtual wxObject *Clone() const;
+
+    /**
+        Set a new valid compiled regular expression object.
+    */
+    void SetRegEx(const wxSharedPtr<wxRegEx>& regex);
+
+    /**
+        Returns the error message if the contents of @a val are invalid
+        or the empty string if @a val is valid.
+    */
+    virtual wxString IsValid(const wxString& val) const;
+};

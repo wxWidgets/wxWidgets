@@ -51,8 +51,8 @@ giving the error, and the dialog is not dismissed.
 Note that any wxWindow may have a validator and it will be used when
 transferring data to or from the parent window.
 
-@see wxValidator, wxTextValidator, wxGenericValidator, wxIntegerValidator,
-     wxFloatingPointValidator
+@see wxValidator, wxTextValidator, wxRegexTextValidator, wxGenericValidator,
+     wxIntegerValidator, wxFloatingPointValidator
 
 
 
