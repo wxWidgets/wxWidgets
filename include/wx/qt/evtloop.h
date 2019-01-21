@@ -9,6 +9,7 @@
 #define _WX_QT_EVTLOOP_H_
 
 class QTimer;
+class QEventLoop;
 
 class WXDLLIMPEXP_CORE wxQtEventLoopBase : public wxEventLoopBase
 {
@@ -32,6 +33,7 @@ public:
 protected:
 
 private:
+    QEventLoop *m_qtEventLoop;
     QTimer *m_qtIdleTimer;
     
     wxDECLARE_NO_COPY_CLASS(wxQtEventLoopBase);
