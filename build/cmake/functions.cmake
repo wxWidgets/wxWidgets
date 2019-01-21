@@ -178,7 +178,9 @@ function(wx_set_target_properties target_name is_base)
         set_target_properties(${target_name}
             PROPERTIES
                 OUTPUT_NAME wx_${lib_toolkit}${lib_unicode}${lib_suffix}-${lib_version}
-                OUTPUT_NAME_DEBUG wx_${lib_toolkit}${lib_unicode}d${lib_suffix}-${lib_version}
+                # NOTE: wx-config can not be used to connect the libraries with the debug suffix.
+                #OUTPUT_NAME_DEBUG wx_${lib_toolkit}${lib_unicode}d${lib_suffix}-${lib_version}
+                OUTPUT_NAME_DEBUG wx_${lib_toolkit}${lib_unicode}${lib_suffix}-${lib_version}
             )
     endif()
     if(CYGWIN)
