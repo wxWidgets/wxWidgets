@@ -14,7 +14,14 @@
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QButtonGroup>
 
-
+/*
+   Qt provides the QButtonGroup class to provide grouping behaviour for button widgets. As there is no direct
+   counterpart to this class in Wx, we need wxRadioButton to both use and store it, in order to provide this
+   functionality (some external class having to manage something which only this class is concerned with makes no
+   sense).
+   Having a static map (with wxWindow* as the key and the value being the last QButtonGroup*) allows the wxRadioButton
+   to access the required QButtonGroup or add to the map as necessary.
+*/
 typedef std::map<wxWindow*, QButtonGroup*> WindowToLastButtonGroupMap;
 
 static WindowToLastButtonGroupMap& GetWindowToLastButtonGroupMap()
