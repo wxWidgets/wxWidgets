@@ -83,7 +83,7 @@ wxRadioButton::~wxRadioButton()
     if ( m_qtRadioButton->group() && m_qtRadioButton->group()->buttons().size() == 1 )
     {
         // If this button is the only member of the last group, remove the map entry for the group
-        std::map<wxWindow*, QButtonGroup*>::iterator it = GetWindowToButtonGroupMap().find( GetParent() );
+        WindowToButtonGroupMap::iterator it = GetWindowToButtonGroupMap().find( GetParent() );
         if ( it != GetWindowToButtonGroupMap().end() && m_qtRadioButton->group() == it->second )
         {
             GetWindowToButtonGroupMap().erase(it);
