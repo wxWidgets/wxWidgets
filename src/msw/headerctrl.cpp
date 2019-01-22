@@ -747,7 +747,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             //   HDN_ITEMCHANGED
             // In both cases last HDN_ITEMCHANGING notification is sent
             // after HDN_ENDTRACK so we have to skip it.
-            if ( nmhdr->pitem && (nmhdr->pitem->mask & HDI_WIDTH) && m_isColBeingResized )
+            if ( nmhdr->pitem && (nmhdr->pitem->mask & HDI_WIDTH) )
             {
                 // prevent the column from being shrunk beneath its min width
                 width = nmhdr->pitem->cxy;
@@ -757,13 +757,19 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     // happening
                     veto = true;
                 }
-                else // width is acceptable
+                // width is acceptable and notification arrived before HDN_ENDTRACK
+                else if ( m_isColBeingResized )
                 {
                     // generate the resizing event from here as we don't seem
                     // to be getting HDN_TRACK events at all, at least with
                     // comctl32.dll v6
                     evtType = wxEVT_HEADER_RESIZING;
                 }
+                // else
+                // Nnotification arriving after HDN_ENDTRACK is handled normally
+                // by the control but EVT_HEADER_RESIZING event cannot be generated
+                // because EVT_HEADER_END_RESIZE finalizing the resizing has been
+                // already emitted.
             }
             break;
 
