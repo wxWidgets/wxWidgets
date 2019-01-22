@@ -66,7 +66,7 @@ bool wxRadioButton::Create( wxWindow *parent,
     else
     {
         // Add it to the previous group, if any
-        std::map<wxWindow*, QButtonGroup*>::iterator it = GetWindowToButtonGroupMap().find(parent);
+        WindowToButtonGroupMap::iterator it = GetWindowToButtonGroupMap().find(parent);
         if ( it != GetWindowToButtonGroupMap().end() )
         {
             it->second->addButton(m_qtRadioButton);
