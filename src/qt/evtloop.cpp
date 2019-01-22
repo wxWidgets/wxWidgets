@@ -17,6 +17,7 @@
 #include <QtCore/QAbstractEventDispatcher>
 #include <QtCore/QSocketNotifier>
 #include <QtCore/QTimer>
+#include <QtCore/QEventLoop>
 
 #include <QtWidgets/QApplication>
 
@@ -40,14 +41,13 @@ wxQtIdleTimer::wxQtIdleTimer( wxQtEventLoopBase *eventLoop )
 
     connect( this, &QTimer::timeout, this, &wxQtIdleTimer::idle );
     setSingleShot( true );
-    start( 0 );
 }
 
 bool wxQtIdleTimer::eventFilter( QObject *WXUNUSED( watched ), QEvent *WXUNUSED( event ) )
 {
     // Called for each Qt event, start with timeout 0 (run as soon as idle)
     if ( !isActive() )
-        start( 0 );
+        m_eventLoop->ScheduleIdleCheck();
 
     return false; // Continue handling the event
 }
@@ -57,10 +57,10 @@ void wxQtIdleTimer::idle()
     // Process pending events
     if ( wxTheApp )
         wxTheApp->ProcessPendingEvents();
-    
+
     // Send idle event
     if ( m_eventLoop->ProcessIdle() )
-        start( 0 );
+        m_eventLoop->ScheduleIdleCheck();
 }
 
 wxQtEventLoopBase::wxQtEventLoopBase()
@@ -78,10 +78,15 @@ wxQtEventLoopBase::wxQtEventLoopBase()
     // Pass all events to the idle timer, so it can be restarted each time
     // an event is received
     qApp->installEventFilter( m_qtIdleTimer );
+
+
+    m_qtEventLoop = new QEventLoop;
 }
 
 wxQtEventLoopBase::~wxQtEventLoopBase()
 {
+    qApp->removeEventFilter(m_qtIdleTimer);
+    delete m_qtEventLoop;
     delete m_qtIdleTimer;
 }
 
@@ -89,44 +94,31 @@ void wxQtEventLoopBase::ScheduleExit(int rc)
 {
     wxCHECK_RET( IsInsideRun(), wxT("can't call ScheduleExit() if not started") );
     m_shouldExit = true;
-    QCoreApplication::exit( rc );
+    m_qtEventLoop->exit(rc);
 }
 
 int wxQtEventLoopBase::DoRun()
 {
-    int ret;
-
-    // This is placed inside of a loop to take into account nested event loops
-    while ( !m_shouldExit )
-    {
-        // This will print Qt warnins if app already started:
-        // "QCoreApplication::exec: The event loop is already running"
-        // TODO: check the loopLevel (nested) like in wxGTK
-        ret = QCoreApplication::exec();
-        // process pending events (if exec was started previously)
-        // TODO: use a real new QEventLoop() ?
-        QCoreApplication::processEvents();
-    }
+    const int ret = m_qtEventLoop->exec();
     OnExit();
     return ret;
 }
 
 bool wxQtEventLoopBase::Pending() const
 {
-    return QCoreApplication::hasPendingEvents();
+    QAbstractEventDispatcher *instance = QAbstractEventDispatcher::instance();
+    return instance->hasPendingEvents();
 }
 
 bool wxQtEventLoopBase::Dispatch()
 {
-    QCoreApplication::processEvents();
-
+    m_qtEventLoop->processEvents();
     return true;
 }
 
 int wxQtEventLoopBase::DispatchTimeout(unsigned long timeout)
 {
-    QCoreApplication::processEvents( QEventLoop::AllEvents, timeout );
-
+    m_qtEventLoop->processEvents(QEventLoop::AllEvents, timeout);
     return true;
 }
 
@@ -144,6 +136,12 @@ void wxQtEventLoopBase::DoYieldFor(long eventsToProcess)
         wxTheApp->Dispatch();
 
     wxEventLoopBase::DoYieldFor(eventsToProcess);
+}
+
+void wxQtEventLoopBase::ScheduleIdleCheck()
+{
+    if ( IsInsideRun() )
+        m_qtIdleTimer->start(0);
 }
 
 #if wxUSE_EVENTLOOP_SOURCE
