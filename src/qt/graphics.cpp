@@ -19,6 +19,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPainter>
+#include <QPicture>
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -30,9 +31,42 @@
 #endif
 
 #include "wx/graphics.h"
+#include "wx/scopedptr.h"
 #include "wx/tokenzr.h"
 
 #include "wx/private/graphics.h"
+
+namespace
+{
+
+// Ensure that the given painter is active by calling begin() if it isn't. If
+// it already is, don't do anything.
+class EnsurePainterIsActive
+{
+public:
+    explicit EnsurePainterIsActive(QPainter* painter)
+        : m_painter(painter),
+          m_wasActive(painter->isActive())
+    {
+        if ( !m_wasActive )
+            m_painter->begin(&m_picture);
+    }
+
+    ~EnsurePainterIsActive()
+    {
+        if ( !m_wasActive )
+            m_painter->end();
+    }
+
+private:
+    QPainter* m_painter;
+    QPicture m_picture;
+    bool m_wasActive;
+
+    wxDECLARE_NO_COPY_CLASS(EnsurePainterIsActive);
+};
+
+} // anonymous namespace
 
 class WXDLLIMPEXP_CORE wxQtBrushData : public wxGraphicsObjectRefData
 {
@@ -607,7 +641,6 @@ class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
     void InitFromDC(const wxDC& dc)
     {
         m_qtPainter = static_cast<QPainter*>(dc.GetHandle());
-        m_ownsPainter = false;
 
         const wxSize sz = dc.GetSize();
         m_width = sz.x;
@@ -615,10 +648,19 @@ class WXDLLIMPEXP_CORE wxQtGraphicsContext : public wxGraphicsContext
     }
 
 protected:
+    // Use the specified painter and take ownership of it, i.e. it will be
+    // destroyed in this class dtor.
+    void AttachPainter(QPainter* painter)
+    {
+        m_qtPainter = painter;
+
+        // Ensure that it will be destroyed when this object is.
+        m_ownedPainter.reset(m_qtPainter);
+    }
+
     wxQtGraphicsContext(wxGraphicsRenderer* renderer)
         : wxGraphicsContext(renderer),
-          m_qtPainter(NULL),
-          m_ownsPainter(false)
+          m_qtPainter(NULL)
     {
     }
 
@@ -626,8 +668,7 @@ public:
     wxQtGraphicsContext(wxGraphicsRenderer* renderer, QPaintDevice* device)
         : wxGraphicsContext(renderer)
     {
-        m_qtPainter = new QPainter(device);
-        m_ownsPainter = true;
+        AttachPainter(new QPainter(device));
 
         m_width = device->width();
         m_height = device->height();
@@ -658,17 +699,10 @@ public:
         : wxGraphicsContext(renderer)
     {
         m_qtPainter = static_cast<QPainter*>(window->QtGetPainter());
-        m_ownsPainter = false;
 
         const wxSize sz = window->GetClientSize();
         m_width = sz.x;
         m_height = sz.y;
-    }
-
-    virtual ~wxQtGraphicsContext()
-    {
-        if ( m_ownsPainter )
-            delete m_qtPainter;
     }
 
     virtual bool ShouldOffset() const wxOVERRIDE
@@ -928,6 +962,8 @@ public:
         wxCHECK_RET( !m_font.IsNull(),
                      "wxQtContext::GetTextExtent - no valid font set" );
 
+        EnsurePainterIsActive active(m_qtPainter);
+
         const wxQtFontData*
             fontData = static_cast<wxQtFontData*>(m_font.GetRefData());
         m_qtPainter->setFont(fontData->GetFont());
@@ -951,6 +987,8 @@ public:
     {
         wxCHECK_RET( !m_font.IsNull(),
                      "wxQtContext::GetPartialTextExtents - no valid font set" );
+
+        EnsurePainterIsActive active(m_qtPainter);
 
         const wxQtFontData*
             fontData = static_cast<wxQtFontData*>(m_font.GetRefData());
@@ -1010,9 +1048,11 @@ protected:
     }
 
     QPainter* m_qtPainter;
-    bool m_ownsPainter;
 
 private:
+    // This pointer may be empty if we don't own m_qtPainter.
+    wxScopedPtr<QPainter> m_ownedPainter;
+
     wxDECLARE_NO_COPY_CLASS(wxQtGraphicsContext);
 };
 
@@ -1020,12 +1060,10 @@ class wxQtMeasuringContext : public wxQtGraphicsContext
 {
 public:
     wxQtMeasuringContext(wxGraphicsRenderer* renderer)
-        : wxQtGraphicsContext(renderer, QApplication::desktop())
+        : wxQtGraphicsContext(renderer)
     {
+        AttachPainter(new QPainter());
     }
-
-private:
-    QPainter painter;
 };
 
 class wxQtImageContext : public wxQtGraphicsContext
@@ -1037,15 +1075,13 @@ public:
     {
         const wxBitmap wxbitmap(image);
         m_pixmap = *wxbitmap.GetHandle();
-        m_qtPainter = new QPainter(&m_pixmap);
-        m_ownsPainter = false;
+        AttachPainter(new QPainter(&m_pixmap));
     }
 
     ~wxQtImageContext()
     {
         wxQtBitmapData bitmap(GetRenderer(), &m_pixmap);
         m_image = bitmap.DoConvertToImage();
-        delete m_qtPainter;
     }
 
 private:
