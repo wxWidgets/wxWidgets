@@ -8,7 +8,6 @@
 #ifndef _WX_QT_RADIOBUT_H_
 #define _WX_QT_RADIOBUT_H_
 
-#include <map>
 
 class QRadioButton;
 class QButtonGroup;
