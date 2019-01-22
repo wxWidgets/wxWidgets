@@ -127,9 +127,8 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
 
 void wxChoice::SetSelection(int n)
 {
-    m_qtComboBox->blockSignals(true);
+    QSignalBlocker signalBlocker(m_qtComboBox);
     m_qtComboBox->setCurrentIndex(n);
-    m_qtComboBox->blockSignals(false);
 }
 
 int wxChoice::GetSelection() const
