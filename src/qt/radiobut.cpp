@@ -15,11 +15,11 @@
 #include <QtWidgets/QButtonGroup>
 
 
-typedef std::map<wxWindow*, QButtonGroup*> WindowToButtonGroupMap;
+typedef std::map<wxWindow*, QButtonGroup*> WindowToLastButtonGroupMap;
 
-static WindowToButtonGroupMap& GetWindowToButtonGroupMap()
+static WindowToLastButtonGroupMap& GetWindowToLastButtonGroupMap()
 {
-    static WindowToButtonGroupMap s_map;
+    static WindowToLastButtonGroupMap s_map;
     return s_map;
 }
 
@@ -53,21 +53,21 @@ bool wxRadioButton::Create( wxWindow *parent,
     if ( style & wxRB_SINGLE )
     {
         // Ensure that other buttons cannot join the last existing group
-        GetWindowToButtonGroupMap().erase(parent);
+        GetWindowToLastButtonGroupMap().erase(parent);
     }
     else if ( style & wxRB_GROUP )
     {
         m_qtButtonGroup = new QButtonGroup();
         m_qtButtonGroup->addButton( m_qtRadioButton );
 
-        GetWindowToButtonGroupMap()[parent] = m_qtButtonGroup;
+        GetWindowToLastButtonGroupMap()[parent] = m_qtButtonGroup;
         m_qtRadioButton->setChecked(true);
     }
     else
     {
         // Add it to the previous group, if any
-        WindowToButtonGroupMap::iterator it = GetWindowToButtonGroupMap().find(parent);
-        if ( it != GetWindowToButtonGroupMap().end() )
+        WindowToLastButtonGroupMap::iterator it = GetWindowToLastButtonGroupMap().find(parent);
+        if ( it != GetWindowToLastButtonGroupMap().end() )
         {
             it->second->addButton(m_qtRadioButton);
         }
@@ -83,10 +83,10 @@ wxRadioButton::~wxRadioButton()
     if ( m_qtRadioButton->group() && m_qtRadioButton->group()->buttons().size() == 1 )
     {
         // If this button is the only member of the last group, remove the map entry for the group
-        WindowToButtonGroupMap::iterator it = GetWindowToButtonGroupMap().find( GetParent() );
-        if ( it != GetWindowToButtonGroupMap().end() && m_qtRadioButton->group() == it->second )
+        WindowToLastButtonGroupMap::iterator it = GetWindowToLastButtonGroupMap().find( GetParent() );
+        if ( it != GetWindowToLastButtonGroupMap().end() && m_qtRadioButton->group() == it->second )
         {
-            GetWindowToButtonGroupMap().erase(it);
+            GetWindowToLastButtonGroupMap().erase(it);
 
             if( m_qtButtonGroup )
             {
