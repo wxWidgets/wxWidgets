@@ -10,7 +10,6 @@
 
 
 class QRadioButton;
-class QButtonGroup;
 
 class WXDLLIMPEXP_CORE wxRadioButton : public wxControl
 {
@@ -45,7 +44,6 @@ protected:
 
 private:
     QRadioButton *m_qtRadioButton;
-    QButtonGroup* m_qtButtonGroup;
 
     wxDECLARE_DYNAMIC_CLASS( wxRadioButton );
 };

@@ -57,10 +57,10 @@ bool wxRadioButton::Create( wxWindow *parent,
     }
     else if ( style & wxRB_GROUP )
     {
-        m_qtButtonGroup = new QButtonGroup();
-        m_qtButtonGroup->addButton( m_qtRadioButton );
+        QButtonGroup *qtButtonGroup = new QButtonGroup();
+        qtButtonGroup->addButton( m_qtRadioButton );
 
-        GetWindowToLastButtonGroupMap()[parent] = m_qtButtonGroup;
+        GetWindowToLastButtonGroupMap()[parent] = qtButtonGroup;
         m_qtRadioButton->setChecked(true);
     }
     else
@@ -86,12 +86,8 @@ wxRadioButton::~wxRadioButton()
         WindowToLastButtonGroupMap::iterator it = GetWindowToLastButtonGroupMap().find( GetParent() );
         if ( it != GetWindowToLastButtonGroupMap().end() && m_qtRadioButton->group() == it->second )
         {
+            delete it->second;
             GetWindowToLastButtonGroupMap().erase(it);
-
-            if( m_qtButtonGroup )
-            {
-                delete m_qtButtonGroup;
-            }
         }
     }
 }
