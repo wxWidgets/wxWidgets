@@ -141,13 +141,13 @@ void wxQtEventLoopBase::DoYieldFor(long eventsToProcess)
         flags |= QEventLoop::ExcludeSocketNotifiers;
 
     m_qtEventLoop->processEvents(flags);
-    
+
     wxEventLoopBase::DoYieldFor(eventsToProcess);
 }
 
 void wxQtEventLoopBase::ScheduleIdleCheck()
 {
-    if ( IsInsideRun() )
+    if ( IsInsideRun() && !m_shouldExit )
         m_qtIdleTimer->start(0);
 }
 
