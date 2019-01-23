@@ -131,10 +131,17 @@ void wxQtEventLoopBase::WakeUp()
 
 void wxQtEventLoopBase::DoYieldFor(long eventsToProcess)
 {
-    while (wxTheApp && wxTheApp->Pending())
-        // TODO: implement event filtering using the eventsToProcess mask
-        wxTheApp->Dispatch();
 
+    QEventLoop::ProcessEventsFlags flags = QEventLoop::AllEvents;
+
+    if ( !(eventsToProcess & wxEVT_CATEGORY_USER_INPUT) )
+        flags |= QEventLoop::ExcludeUserInputEvents;
+
+    if ( !(eventsToProcess & wxEVT_CATEGORY_SOCKET) )
+        flags |= QEventLoop::ExcludeSocketNotifiers;
+
+    m_qtEventLoop->processEvents(flags);
+    
     wxEventLoopBase::DoYieldFor(eventsToProcess);
 }
 
