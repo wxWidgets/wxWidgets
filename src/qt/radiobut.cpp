@@ -65,7 +65,7 @@ bool wxRadioButton::Create( wxWindow *parent,
     else if ( style & wxRB_GROUP )
     {
         QButtonGroup *qtButtonGroup = new QButtonGroup();
-        qtButtonGroup->addButton( m_qtRadioButton );
+        qtButtonGroup->addButton(m_qtRadioButton);
 
         GetWindowToLastButtonGroupMap()[parent] = qtButtonGroup;
         m_qtRadioButton->setChecked(true);
