@@ -26,9 +26,32 @@
 
 #include "testableframe.h"
 
-static void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
+namespace
+{
+int waitForEvent(EventCounter &countShow)
+{
+    // Wait for the event to be received for the maximum of 2 seconds.
+    int showCount = 0;
+    for ( int i = 0; i < 40; i++ )
+    {
+        wxYield();
+
+        showCount = countShow.GetCount();
+
+        if ( showCount )
+            break;
+
+        wxMilliSleep(50);
+    }
+    return showCount;
+}
+
+void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
 {
     CHECK(!tlw->IsShown());
+#ifdef __WXQT__
+    EventCounter countShow(tlw, wxEVT_ACTIVATE);
+#endif
 
     wxTextCtrl* textCtrl = new wxTextCtrl(tlw, -1, "test");
     textCtrl->SetFocus();
@@ -47,6 +70,11 @@ static void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
 
     tlw->Show(true);
 
+    // wxQT needs one or two rounds of yield for window to become activated
+#ifdef __WXQT__
+    waitForEvent(countShow);
+#endif
+
     // wxGTK needs many event loop iterations before the TLW becomes active and
     // this doesn't happen in this test, so avoid checking for it.
 #ifndef __WXGTK__
@@ -59,6 +87,7 @@ static void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
 #ifndef __WXGTK__
     CHECK(!tlw->IsActive());
 #endif
+}
 }
 
 TEST_CASE("wxTopLevel::Show", "[tlw][show]")
@@ -88,19 +117,7 @@ TEST_CASE("wxTopLevel::ShowEvent", "[tlw][show][event]")
     frame->Maximize();
     frame->Show();
 
-    // Wait for the event to be received for the maximum of 2 seconds.
-    int showCount = 0;
-    for ( int i = 0; i < 40; i++ )
-    {
-        wxYield();
-
-        showCount = countShow.GetCount();
-
-        if ( showCount )
-            break;
-
-        wxMilliSleep(50);
-    }
+    int showCount = waitForEvent(countShow);
 
     CHECK( showCount == 1 );
 }
