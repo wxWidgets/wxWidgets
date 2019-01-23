@@ -154,7 +154,16 @@ public:
                 this, &wxQtSpinBox::valueChanged);
     }
 private:
-    void valueChanged(int value);
+    void valueChanged(int value)
+    {
+        wxControl *handler = GetHandler();
+        if ( handler )
+        {
+            wxSpinEvent event( wxEVT_SPINCTRL, handler->GetId() );
+            event.SetInt( value );
+            EmitEvent( event );
+        }
+    }
 };
 
 class wxQtDoubleSpinBox : public wxQtSpinBoxBase< QDoubleSpinBox >
@@ -167,19 +176,17 @@ public:
                 this, &wxQtDoubleSpinBox::valueChanged);
     }
 private:
-    void valueChanged(double value);
-};
-
-void wxQtDoubleSpinBox::valueChanged(double value)
-{
-    wxControl *handler = GetHandler();
-    if ( handler )
+    void valueChanged(double value)
     {
-        wxSpinDoubleEvent event( wxEVT_SPINCTRLDOUBLE, handler->GetId() );
-        event.SetValue(value);
-        EmitEvent( event );
+        wxControl *handler = GetHandler();
+        if ( handler )
+        {
+            wxSpinDoubleEvent event( wxEVT_SPINCTRLDOUBLE, handler->GetId() );
+            event.SetValue(value);
+            EmitEvent( event );
+        }
     }
-}
+};
 
 
 //##############################################################################
@@ -234,17 +241,6 @@ void wxSpinCtrl::SetValue( const wxString &value )
     wxQtSpinBox * qtSpinBox = dynamic_cast<wxQtSpinBox *> ((QSpinBox *) m_qtSpinBox);
     if (qtSpinBox != NULL)
         qtSpinBox->setValue( qtSpinBox->valueFromText( wxQtConvertString( value )));
-}
-
-void wxQtSpinBox::valueChanged(int value)
-{
-    wxControl *handler = GetHandler();
-    if ( handler )
-    {
-        wxSpinEvent event( wxEVT_SPINCTRL, handler->GetId() );
-        event.SetInt( value );
-        EmitEvent( event );
-    }
 }
 
 //##############################################################################
