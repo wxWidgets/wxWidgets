@@ -156,8 +156,7 @@ public:
 private:
     void valueChanged(int value)
     {
-        wxControl *handler = GetHandler();
-        if ( handler )
+        if ( wxControl *handler = GetHandler() )
         {
             wxSpinEvent event( wxEVT_SPINCTRL, handler->GetId() );
             event.SetInt( value );
@@ -178,8 +177,7 @@ public:
 private:
     void valueChanged(double value)
     {
-        wxControl *handler = GetHandler();
-        if ( handler )
+        if ( wxControl *handler = GetHandler() )
         {
             wxSpinDoubleEvent event( wxEVT_SPINCTRLDOUBLE, handler->GetId() );
             event.SetValue(value);
