@@ -907,7 +907,7 @@ void wxWindowQt::DoSetSize(int x, int y, int width, int height, int sizeFlags )
     }
 
     int w, h;
-    GetSize(&w, &h);
+    DoGetClientSize(&w, &h);
     if (width == -1)
         width = w;
     if (height == -1)
