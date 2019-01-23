@@ -33,7 +33,7 @@ public:
 
     virtual QWidget *GetHandle() const;
 
-    void SetLabel( const wxString &label ) wxOVERRIDE;
+    void SetLabel(const wxString &label) wxOVERRIDE;
     wxString GetLabel() const wxOVERRIDE;
 
 protected:
