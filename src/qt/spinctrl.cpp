@@ -162,8 +162,24 @@ class wxQtDoubleSpinBox : public wxQtSpinBoxBase< QDoubleSpinBox >
 public:
     wxQtDoubleSpinBox( wxWindow *parent, wxControl *handler )
         : wxQtSpinBoxBase< QDoubleSpinBox >( parent, handler )
-    { }
+    {
+        connect(this, static_cast<void (QDoubleSpinBox::*)(double value)>(&QDoubleSpinBox::valueChanged),
+                this, &wxQtDoubleSpinBox::valueChanged);
+    }
+private:
+    void valueChanged(double value);
 };
+
+void wxQtDoubleSpinBox::valueChanged(double value)
+{
+    wxControl *handler = GetHandler();
+    if ( handler )
+    {
+        wxSpinDoubleEvent event( wxEVT_SPINCTRLDOUBLE, handler->GetId() );
+        event.SetValue(value);
+        EmitEvent( event );
+    }
+}
 
 
 //##############################################################################
