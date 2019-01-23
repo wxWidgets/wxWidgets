@@ -2792,6 +2792,11 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
             if ( TreeView_HitTest(GetHwnd(), &tvhti) )
                 item = wxTreeItemId(tvhti.hItem);
+
+            //bricsys change merged on wxwidgets upgrade
+            //select the right-clicked item
+            if (!isMultiple && item.IsOk())
+                SelectItem(item);
         }
 
         // create the event
