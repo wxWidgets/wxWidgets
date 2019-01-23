@@ -90,7 +90,7 @@ wxRadioButton::~wxRadioButton()
     if ( m_qtRadioButton->group() && m_qtRadioButton->group()->buttons().size() == 1 )
     {
         // If this button is the only member of the last group, remove the map entry for the group
-        WindowToLastButtonGroupMap::iterator it = GetWindowToLastButtonGroupMap().find( GetParent() );
+        WindowToLastButtonGroupMap::iterator it = GetWindowToLastButtonGroupMap().find(GetParent());
         if ( it != GetWindowToLastButtonGroupMap().end() && m_qtRadioButton->group() == it->second )
         {
             delete it->second;
