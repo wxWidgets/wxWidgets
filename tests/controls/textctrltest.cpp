@@ -496,7 +496,6 @@ void TextCtrlTestCase::Style()
 
 void TextCtrlTestCase::FontStyle()
 {
-#if !defined(__WXQT__)
     // We need wxTE_RICH under MSW and wxTE_MULTILINE under GTK for style
     // support so recreate the control with these styles.
     delete m_text;
@@ -547,9 +546,6 @@ void TextCtrlTestCase::FontStyle()
     fontOut.SetEncoding(fontIn.GetEncoding());
 #endif
     CPPUNIT_ASSERT_EQUAL( fontIn, fontOut );
-#else
-	WARN("Does not work under WxQt");
-#endif
 }
 
 void TextCtrlTestCase::Lines()
