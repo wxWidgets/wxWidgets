@@ -3622,6 +3622,20 @@ wxWindowMSW::MSWHandleMessage(WXLRESULT *result,
             }
 #endif
 
+        //bricsys change merged on wxwidgets upgrade
+        //added: open context help immediately (TaskDD952)
+        case WM_SYSCOMMAND:
+            {
+                if (wParam == SC_CONTEXTHELP)
+                {
+                    wxHelpEvent event(wxEVT_HELP);
+                    event.SetEventObject(this);
+                    if (GetEventHandler()->ProcessEvent(event))
+                        return true;
+                }
+            }
+            break;
+
         case WM_HELP:
             {
                 // by default, WM_HELP is propagated by DefWindowProc() upwards
