@@ -8,7 +8,6 @@
 #ifndef _WX_QT_RADIOBUT_H_
 #define _WX_QT_RADIOBUT_H_
 
-
 class QRadioButton;
 
 class WXDLLIMPEXP_CORE wxRadioButton : public wxControl
