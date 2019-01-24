@@ -2942,6 +2942,15 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
     if (!drop.IsToolbar())
         layer_insert_offset = m_frame->FromDIP(wxSize(auiLayerInsertOffset, auiLayerInsertOffset));
 
+    //bricsys change merged on wxwidgets upgrade
+    // removed next two lines to fix vertical 
+    // docking of toolbars when main frame is maximized: 
+    // cfr. http://www.kirix.com/forums/viewtopic.php?f=16&t=181
+#if 0
+    else
+        layer_insert_offset = wxSize(0, 0);
+#endif
+
     wxSize layer_insert_pixels = m_frame->FromDIP(wxSize(auiLayerInsertPixels, auiLayerInsertPixels));
 
     if (pt.x < layer_insert_offset.x &&
