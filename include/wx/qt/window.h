@@ -173,6 +173,11 @@ public:
 
     virtual QScrollArea *QtGetScrollBarsContainer() const;
 
+#if wxUSE_TOOLTIPS
+    // applies tooltip to the widget.
+    virtual void QtApplyToolTip(const wxString& text);
+#endif // wxUSE_TOOLTIPS
+
 protected:
     virtual void DoGetTextExtent(const wxString& string,
                                  int *x, int *y,

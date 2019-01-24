@@ -10,7 +10,8 @@
 
 #include "wx/object.h"
 
-class wxWindow;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
+
 class WXDLLIMPEXP_CORE wxToolTip : public wxObject
 {
 public:
