@@ -63,7 +63,7 @@ const wxString &wxToolTip::GetTip() const
 
 void wxToolTip::SetWindow(wxWindow *win)
 {
-    wxASSERT(win);
+    wxCHECK_RET(win != NULL, "window should not be NULL");
     m_window = win;
     m_window->QtApplyToolTip(m_text);
 }

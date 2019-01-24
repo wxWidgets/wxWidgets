@@ -964,7 +964,7 @@ void wxWindowQt::DoSetToolTip( wxToolTip *tip )
     wxWindowBase::DoSetToolTip( tip );
 
     if ( m_tooltip )
-        m_tooltip->SetWindow(static_cast<wxWindow*>(this));
+        m_tooltip->SetWindow(this);
     else
         QtApplyToolTip(wxString());
 }
