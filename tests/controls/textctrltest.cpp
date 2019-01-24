@@ -26,6 +26,10 @@
 #include "wx/scopeguard.h"
 #include "wx/uiaction.h"
 
+#ifdef __WXGTK__
+    #include "wx/stopwatch.h"
+#endif
+
 #include "textentrytest.h"
 #include "testableframe.h"
 #include "asserthelper.h"
