@@ -292,7 +292,7 @@ protected:
     void Init();
 
     // Implement base class pure virtual methods.
-    long DoInsertColumn(long col, const wxListItem& info);
+    virtual long DoInsertColumn(long col, const wxListItem& info) wxOVERRIDE;
 
     QTreeWidgetItem *QtGetItem(int id) const;
 

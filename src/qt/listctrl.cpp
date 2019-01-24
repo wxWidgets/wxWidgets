@@ -413,11 +413,11 @@ bool wxListCtrl::SetItemColumnImage(long item, long column, int image)
     return SetItem(info);
 }
 
-wxString wxListCtrl::GetItemText(long item, int WXUNUSED(col)) const
+wxString wxListCtrl::GetItemText(long item, int col) const
 {
     QTreeWidgetItem *qitem = QtGetItem(item);
     if ( qitem )
-        return wxQtConvertString( qitem->text(0) );
+        return wxQtConvertString( qitem->text(col) );
     else
         return wxString();
 }
@@ -762,7 +762,7 @@ long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
                 !partial ? Qt::MatchExactly : Qt::MatchContains );
     for (int i=0; i<qitems.length(); i++)
     {
-        ret = m_qtTreeWidget->indexOfTopLevelItem(qitems.at(0));
+        ret = m_qtTreeWidget->indexOfTopLevelItem(qitems.at(i));
         if ( ret >= start )
             return ret;
     }
