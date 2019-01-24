@@ -63,3 +63,26 @@ EventCounter::~EventCounter()
     m_frame = NULL;
     m_win = NULL;
 }
+
+bool EventCounter::WaitEvent(int timeInMs)
+{
+    static const int SINGLE_WAIT_DURATION = 50;
+
+    for ( int i = 0; i < timeInMs / SINGLE_WAIT_DURATION; ++i )
+    {
+        wxYield();
+
+        const int count = GetCount();
+        if ( count )
+        {
+            CHECK( count == 1 );
+
+            Clear();
+            return true;
+        }
+
+        wxMilliSleep(SINGLE_WAIT_DURATION);
+    }
+
+    return false;
+}
