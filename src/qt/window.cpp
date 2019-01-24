@@ -1225,6 +1225,7 @@ bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *eve
 
     // Build the event
     wxKeyEvent e( event->type() == QEvent::KeyPress ? wxEVT_KEY_DOWN : wxEVT_KEY_UP );
+    e.SetEventObject(this);
     // TODO: m_x, m_y
     e.m_keyCode = wxQtConvertKeyCode( event->key(), event->modifiers() );
 
@@ -1267,6 +1268,7 @@ bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *eve
 #endif // wxUSE_ACCEL
 
         e.SetEventType( wxEVT_CHAR );
+        e.SetEventObject(this);
 
         // Translated key code (including control + letter -> 1-26)
         int translated = 0;
