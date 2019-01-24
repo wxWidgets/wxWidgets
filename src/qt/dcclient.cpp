@@ -27,6 +27,28 @@
 
 //##############################################################################
 
+namespace
+{
+    class QtPictureSetter
+    {
+    public:
+        QtPictureSetter(wxWindow *window, QPicture *pic)
+        {
+            m_window = window;
+            m_window->QtSetPicture( pic );
+        }
+
+        ~QtPictureSetter()
+        {
+            m_window->QtSetPicture( NULL );
+        }
+
+    private:
+        wxWindow *m_window;
+    };
+}
+
+
 wxIMPLEMENT_CLASS(wxWindowDCImpl,wxQtDCImpl);
 
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner )
@@ -96,7 +118,8 @@ wxClientDCImpl::~wxClientDCImpl()
 
         if ( m_window != NULL )
         {
-            m_window->QtSetPicture( m_pic );
+            //m_window->QtSetPicture( m_pic );
+            QtPictureSetter(m_window, m_pic);
 
             // get the inner widget in scroll areas:
             QWidget *widget;
@@ -112,7 +135,7 @@ wxClientDCImpl::~wxClientDCImpl()
             if ( !m_pic->isNull() && !widget->paintingActive() && !rect.isEmpty() )
             {
                 // only force the update of the rect affected by the DC
-                widget->update( rect );
+                widget->repaint( rect );
             }
             else
             {
@@ -120,7 +143,7 @@ wxClientDCImpl::~wxClientDCImpl()
                 m_pic->setData( NULL, 0 );
             }
 
-            m_window->QtSetPicture( NULL );
+            //m_window->QtSetPicture( NULL );
 
             // let destroy the m_qtPainter (see inherited classes destructors)
             m_window = NULL;

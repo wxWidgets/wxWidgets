@@ -147,6 +147,7 @@ public:
 
     // wxQt implementation internals:
 
+    // Caller maintains ownership of pict - window will NOT delete it
     void QtSetPicture( QPicture* pict );
 
     QPainter *QtGetPainter();
