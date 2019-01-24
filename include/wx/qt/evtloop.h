@@ -8,7 +8,7 @@
 #ifndef _WX_QT_EVTLOOP_H_
 #define _WX_QT_EVTLOOP_H_
 
-class QTimer;
+class wxQtIdleTimer;
 class QEventLoop;
 
 class WXDLLIMPEXP_CORE wxQtEventLoopBase : public wxEventLoopBase
@@ -30,12 +30,11 @@ public:
 #if wxUSE_EVENTLOOP_SOURCE
     virtual wxEventLoopSource *AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags);
 #endif // wxUSE_EVENTLOOP_SOURCE
-protected:
 
 private:
     QEventLoop *m_qtEventLoop;
-    QTimer *m_qtIdleTimer;
-    
+    wxObjectDataPtr<wxQtIdleTimer> m_qtIdleTimer;
+
     wxDECLARE_NO_COPY_CLASS(wxQtEventLoopBase);
 };
 
