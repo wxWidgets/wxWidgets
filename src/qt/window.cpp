@@ -1267,6 +1267,7 @@ bool wxWindowQt::QtHandleKeyEvent ( QWidget *WXUNUSED( handler ), QKeyEvent *eve
 #endif // wxUSE_ACCEL
 
         e.SetEventType( wxEVT_CHAR );
+        e.SetEventObject(this);
 
         // Translated key code (including control + letter -> 1-26)
         int translated = 0;
