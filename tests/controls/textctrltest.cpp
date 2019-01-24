@@ -24,11 +24,11 @@
 #endif // WX_PRECOMP
 
 #include "wx/scopeguard.h"
+#include "wx/uiaction.h"
 
 #include "textentrytest.h"
 #include "testableframe.h"
 #include "asserthelper.h"
-#include "wx/uiaction.h"
 
 static const int TEXT_HEIGHT = 200;
 
