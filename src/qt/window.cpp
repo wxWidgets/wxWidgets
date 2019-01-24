@@ -951,14 +951,22 @@ void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
 
 
 #if wxUSE_TOOLTIPS
+void wxWindowQt::QtApplyToolTip(const wxString& text)
+{
+    GetHandle()->setToolTip(wxQtConvertString(text));
+}
+
 void wxWindowQt::DoSetToolTip( wxToolTip *tip )
 {
+    if ( m_tooltip == tip )
+        return;
+
     wxWindowBase::DoSetToolTip( tip );
 
-    if ( tip != NULL )
-        GetHandle()->setToolTip( wxQtConvertString( tip->GetTip() ));
+    if ( m_tooltip )
+        m_tooltip->SetWindow(static_cast<wxWindow*>(this));
     else
-        GetHandle()->setToolTip( QString() );
+        QtApplyToolTip(wxString());
 }
 #endif // wxUSE_TOOLTIPS
 
