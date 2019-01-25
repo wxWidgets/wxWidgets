@@ -29,6 +29,7 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
     
+    virtual bool Show(bool show = true) wxOVERRIDE;
     virtual void Maximize(bool maximize = true);
     virtual void Restore();
     virtual void Iconize(bool iconize = true);
