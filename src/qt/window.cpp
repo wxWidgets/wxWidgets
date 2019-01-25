@@ -1480,7 +1480,9 @@ bool wxWindowQt::QtHandleContextMenuEvent ( QWidget *WXUNUSED( handler ), QConte
 
 bool wxWindowQt::QtHandleFocusEvent ( QWidget *WXUNUSED( handler ), QFocusEvent *event )
 {
-    wxFocusEvent e( event->gotFocus() ? wxEVT_SET_FOCUS : wxEVT_KILL_FOCUS );
+    wxFocusEvent e( event->gotFocus() ? wxEVT_SET_FOCUS : wxEVT_KILL_FOCUS, GetId() );
+    e.SetEventObject(this);
+    e.SetWindow(event->gotFocus() ? this : FindFocus());
 
     bool handled = ProcessWindowEvent( e );
 
