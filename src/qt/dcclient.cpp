@@ -118,7 +118,6 @@ wxClientDCImpl::~wxClientDCImpl()
 
         if ( m_window != NULL )
         {
-            //m_window->QtSetPicture( m_pic );
             QtPictureSetter(m_window, m_pic);
 
             // get the inner widget in scroll areas:
@@ -142,8 +141,6 @@ wxClientDCImpl::~wxClientDCImpl()
                 // Not drawing anything, reset picture to avoid issues in handler
                 m_pic->setData( NULL, 0 );
             }
-
-            //m_window->QtSetPicture( NULL );
 
             // let destroy the m_qtPainter (see inherited classes destructors)
             m_window = NULL;
