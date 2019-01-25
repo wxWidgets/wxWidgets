@@ -106,7 +106,7 @@ wxClientDCImpl::~wxClientDCImpl()
             if ( !pict->isNull() && !widget->paintingActive() && !rect.isEmpty() )
             {
                 // only force the update of the rect affected by the DC
-                widget->repaint( rect );
+                widget->update( rect );
             }
             else
             {
