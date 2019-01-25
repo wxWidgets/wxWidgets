@@ -22,6 +22,11 @@
 #include "wx/cursor.h"
 #include "wx/qt/private/converter.h"
 
+namespace
+{
+    wxScopedPtr<QCursor> gs_nullCursor;
+}
+
 void wxSetCursor(const wxCursor& cursor)
 {
     if (cursor.GetHandle().shape() == Qt::ArrowCursor)
@@ -61,6 +66,9 @@ public:
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxCursor, wxGDIObject);
 
+wxCursor::wxCursor()
+{
+}
 
 #if wxUSE_IMAGE
 wxCursor::wxCursor(const wxString& cursor_file,
@@ -93,7 +101,17 @@ wxPoint wxCursor::GetHotSpot() const
 
 QCursor &wxCursor::GetHandle() const
 {
-    return static_cast<wxCursorRefData*>(m_refData)->m_qtCursor;
+    if ( m_refData != NULL )
+    {
+        return static_cast<wxCursorRefData*>(m_refData)->m_qtCursor;    
+    }
+
+    if ( gs_nullCursor == NULL )
+    {
+        gs_nullCursor.reset(new QCursor(Qt::ArrowCursor));
+    }
+   
+    return *gs_nullCursor;
 }
 
 void wxCursor::InitFromStock( wxStockCursor cursorId )
@@ -121,7 +139,7 @@ void wxCursor::InitFromStock( wxStockCursor cursorId )
     case wxCURSOR_SIZING:      qt_cur = Qt::SizeAllCursor;  break;
 //    case wxCURSOR_SPRAYCAN:
     case wxCURSOR_IBEAM:       qt_cur = Qt::IBeamCursor;    break;
-//    case wxCURSOR_PENCIL:
+    case wxCURSOR_PENCIL:      qt_cur = Qt::CrossCursor;    break;
     case wxCURSOR_NO_ENTRY:    qt_cur = Qt::ForbiddenCursor; break;
     case wxCURSOR_SIZENWSE:    qt_cur = Qt::SizeFDiagCursor; break;
     case wxCURSOR_SIZENESW:    qt_cur = Qt::SizeBDiagCursor; break;
