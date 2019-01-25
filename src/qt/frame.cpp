@@ -67,6 +67,17 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     return true;
 }
 
+bool wxFrame::Show(bool show)
+{
+    if ( !wxFrameBase::Show(show) )
+        return false;
+
+    if ( show )
+        m_qtWindow->activateWindow();
+
+    return true;
+}
+
 void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 {
     if ( menuBar )
