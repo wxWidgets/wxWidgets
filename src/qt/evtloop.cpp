@@ -81,7 +81,7 @@ void wxQtIdleTimer::idle()
 
 namespace
 {
-    wxQtIdleTimer *gs_idleTimer = NULL;
+    wxObjectDataPtr<wxQtIdleTimer> gs_idleTimer;
 }
 
 void wxQtIdleTimer::ScheduleIdleCheck()
@@ -95,13 +95,7 @@ wxQtEventLoopBase::wxQtEventLoopBase()
 {
     // Create an idle timer to run each time there are no events (timeout = 0)
     if ( !gs_idleTimer )
-    {
-        gs_idleTimer = new wxQtIdleTimer();
-    }
-    else
-    {
-        gs_idleTimer->IncRef();
-    }
+        gs_idleTimer.reset(new wxQtIdleTimer());
 
     m_qtIdleTimer = gs_idleTimer;
     m_qtEventLoop = new QEventLoop;
@@ -109,8 +103,9 @@ wxQtEventLoopBase::wxQtEventLoopBase()
 
 wxQtEventLoopBase::~wxQtEventLoopBase()
 {
-    if ( gs_idleTimer->GetRefCount() <= 1 )
-        gs_idleTimer = NULL;
+    //Clear the shared timer if this is the only external reference to it
+    if ( gs_idleTimer->GetRefCount() <= 2 )
+        gs_idleTimer.reset(NULL);
 
     delete m_qtEventLoop;
 }
