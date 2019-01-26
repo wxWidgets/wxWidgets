@@ -1161,9 +1161,9 @@ public:
         @a n may be either positive (counting from the beginning of the month)
         or negative (counting from the end of it).
 
-        For example, SetToWeekDay(2, wxDateTime::Wed) will set the date to the
+        For example, SetToWeekDay(wxDateTime::Wed, 2) will set the date to the
         second Wednesday in the current month and
-        SetToWeekDay(-1, wxDateTime::Sun) will set the date to the last Sunday
+        SetToWeekDay(wxDateTime::Sun, -1) will set the date to the last Sunday
         in the current month.
 
         @return @true if the date was modified successfully, @false otherwise
