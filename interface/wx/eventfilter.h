@@ -13,8 +13,8 @@
 
     This is a very simple class which just provides FilterEvent() virtual
     method to be called by wxEvtHandler before starting process of any event.
-    Thus, inheriting from this class and overriding FilterEvent() allows to
-    capture and possibly handle or ignore all the events happening in the
+    Thus, inheriting from this class and overriding FilterEvent() allows
+    capturing and possibly handling or ignoring all the events happening in the
     program. Of course, having event filters adds additional overhead to every
     event processing and so should not be used lightly and your FilterEvent()
     code should try to return as quickly as possible, especially for the events
@@ -22,7 +22,7 @@
 
     An example of using this class:
     @code
-    // This class allows to determine the last time the user has worked with
+    // This class allows determining the last time the user has worked with
     // this application:
     class LastActivityTimeDetector : public wxEventFilter
     {
@@ -72,8 +72,8 @@
     filter during its creation so you may also override FilterEvent() method in
     your wxApp-derived class and, in fact, this is often the most convenient
     way to do it. However creating a new class deriving directly from
-    wxEventFilter allows to isolate the event filtering code in its own
-    separate class and also to have several independent filters, if necessary.
+    wxEventFilter allows isolating the event filtering code in its own
+    separate class and also having several independent filters, if necessary.
 
     @category{events}
 
@@ -118,7 +118,7 @@ public:
     /**
         Override this method to implement event pre-processing.
 
-        This method allows to filter all the events processed by the program,
+        This method allows filtering all the events processed by the program,
         so you should try to return quickly from it to avoid slowing down the
         program to a crawl.
 

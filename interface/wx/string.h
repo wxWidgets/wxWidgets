@@ -2038,7 +2038,7 @@ public:
 //@{
 
 /**
-    Allows to extend a function with the signature:
+    Allows extending a function with the signature:
     @code bool SomeFunc(const wxUniChar& c) @endcode
     which operates on a single character, to an entire wxString.
 

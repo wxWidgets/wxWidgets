@@ -181,7 +181,7 @@ public:
     /**
         Attach a Windows icon handle.
 
-        This wxMSW-specific method allows to assign a native Windows @c HICON
+        This wxMSW-specific method allows assigning a native Windows @c HICON
         (which must be castes to @c WXHICON opaque handle type) to wxIcon.
         Notice that this means that the @c HICON will be destroyed by wxIcon
         when it is destroyed.

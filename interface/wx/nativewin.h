@@ -10,7 +10,7 @@
 /**
     @class wxNativeWindow
 
-    Allows to embed a native widget in an application using wxWidgets.
+    Allows embedding a native widget in an application using wxWidgets.
 
     This class can be used as a bridge between wxWidgets and native GUI
     toolkit, i.e. standard Windows controls under MSW, GTK+ widgets or Cocoa

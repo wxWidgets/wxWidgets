@@ -248,7 +248,7 @@ public:
     /**
         Set the column flags.
 
-        This method allows to set all flags at once, see also generic
+        This method allows setting all flags at once, see also generic
         ChangeFlag(), SetFlag(), ClearFlag() and ToggleFlag() methods below as
         well as specific SetResizeable(), SetSortable(), SetReorderable() and
         SetHidden() ones.

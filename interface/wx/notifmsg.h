@@ -8,7 +8,7 @@
 /**
     @class wxNotificationMessage
 
-    This class allows to show the user a message non intrusively.
+    This class allows showing the user a message non intrusively.
 
     Currently it is implemented natively for Windows, OS X, GTK and uses
     generic toast notifications under the other platforms. It's not recommended

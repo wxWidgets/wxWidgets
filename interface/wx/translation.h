@@ -7,7 +7,7 @@
 
 
 /**
-    This class allows to get translations for strings.
+    This class allows getting translations for strings.
 
     In wxWidgets this class manages message catalogs which contain the
     translations of the strings used to the current language. Unlike wxLocale,
@@ -539,7 +539,7 @@ public:
 
     If @a context is not empty (notice that this argument is only available
     starting from wxWidgets 3.1.1), item translation is looked up in the
-    specified context. This allows to have different translations for the same
+    specified context. This allows having different translations for the same
     string appearing in different contexts, e.g. it may be necessary to
     translate the same English "Open" verb differently depending on the object
     it applies to. To do this, you need to use @c msgctxt in the source message

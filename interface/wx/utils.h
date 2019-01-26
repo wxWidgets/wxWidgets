@@ -868,8 +868,8 @@ wxString wxGetOsDescription();
 /**
     Gets the version and the operating system ID for currently running OS. 
     The returned wxOperatingSystemId value can be used for a basic categorization
-    of the OS family; the major, minor, and micro version numbers allows to
-    detect a specific system.
+    of the OS family; the major, minor, and micro version numbers allows
+    detecting a specific system.
 
     If on Unix-like systems the version can't be detected all three version
     numbers will have a value of -1.
@@ -1026,7 +1026,7 @@ enum
         Always show the child process console under MSW.
 
         The child console is hidden by default if the child IO is redirected,
-        this flag allows to change this and show it nevertheless.
+        this flag allows changing this and showing it nevertheless.
 
         This flag is ignored under the other platforms.
      */

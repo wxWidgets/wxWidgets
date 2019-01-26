@@ -257,7 +257,7 @@ enum wxWindowVariant
     @style{wxWS_EX_BLOCK_EVENTS}
            wxCommandEvents and the objects of the derived classes are
            forwarded to the parent window and so on recursively by default.
-           Using this flag for the given window allows to block this
+           Using this flag for the given window allows blocking this
            propagation at this window, i.e. prevent the events from being
            propagated further upwards. Dialogs have this flag on by default
            for the reasons explained in the @ref overview_events.

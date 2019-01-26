@@ -67,7 +67,7 @@ public:
 
     /**
         Creates an object without any associated parent (and hence no id neither)
-        but allows to specify the @a flags which can have the value of
+        but allows specifying the @a flags which can have the value of
         @c wxPROCESS_DEFAULT or @c wxPROCESS_REDIRECT.
 
         Specifying the former value has no particular effect while using the latter
@@ -174,7 +174,7 @@ public:
         Returns @true if there is data to be read on the child process standard
         output stream.
 
-        This allows to write simple (and extremely inefficient) polling-based code
+        This allows writing simple (and extremely inefficient) polling-based code
         waiting for a better mechanism in future wxWidgets versions.
         See the @ref page_samples_exec "exec sample" for an example of using this
         function.

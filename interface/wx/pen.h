@@ -105,7 +105,7 @@ enum wxPenCap
     @class wxPenInfo
 
     This class is a helper used for wxPen creation using named parameter
-    idiom: it allows to specify various wxPen attributes using the chained
+    idiom: it allows specifying various wxPen attributes using the chained
     calls to its clearly named methods instead of passing them in the fixed
     order to wxPen constructors.
 

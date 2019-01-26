@@ -146,7 +146,7 @@ struct wxFontMetrics
     stated. Logical units are arbitrary units mapped to device units using
     the current mapping mode (see wxDC::SetMapMode).
 
-    This mechanism allows to reuse the same code which prints on e.g. a window
+    This mechanism allows reusing the same code which prints on e.g. a window
     on the screen to print on e.g. a paper.
 
 
@@ -853,7 +853,7 @@ public:
     /**
         Returns the various font characteristics.
 
-        This method allows to retrieve some of the font characteristics not
+        This method allows retrieving some of the font characteristics not
         returned by GetTextExtent(), notably internal leading and average
         character width.
 
@@ -1213,7 +1213,7 @@ public:
     /**
         Copy from a source DC to this DC possibly changing the scale.
 
-        Unlike Blit(), this method allows to specify different source and
+        Unlike Blit(), this method allows specifying different source and
         destination region sizes, meaning that it can stretch or shrink it
         while copying. The same can be achieved by changing the scale of the
         source or target DC but calling this method is simpler and can also be

@@ -137,7 +137,7 @@ enum wxDirFlags
     @class wxDir
 
     wxDir is a portable equivalent of Unix open/read/closedir functions which
-    allow enumerating of the files in a directory. wxDir allows to enumerate
+    allow enumerating of the files in a directory. wxDir allows enumerating
     files as well as directories.
 
     wxDir also provides a flexible way to enumerate files recursively using

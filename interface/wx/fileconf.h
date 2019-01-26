@@ -96,7 +96,7 @@ public:
     virtual bool Save(wxOutputStream& os, const wxMBConv& conv = wxConvAuto());
 
     /**
-        Allows to set the mode to be used for the config file creation. For example, to
+        Allows setting the mode to be used for the config file creation. For example, to
         create a config file which is not readable by other users (useful if it stores
         some sensitive information, such as passwords), you could use @c SetUmask(0077).
 

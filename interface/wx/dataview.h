@@ -1634,7 +1634,7 @@ public:
     /**
         Set custom colours and/or font to use for the header.
 
-        This method allows to customize the display of the control header (it
+        This method allows customizing the display of the control header (it
         does nothing if @c wxDV_NO_HEADER style is used).
 
         Currently it is only implemented in the generic version and just

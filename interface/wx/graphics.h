@@ -1565,7 +1565,7 @@ public:
     @class wxGraphicsPenInfo
 
     This class is a helper used for wxGraphicsPen creation using named parameter
-    idiom: it allows to specify various wxGraphicsPen attributes using the chained
+    idiom: it allows specifying various wxGraphicsPen attributes using the chained
     calls to its clearly named methods instead of passing them in the fixed
     order to wxGraphicsPen constructors.
 
