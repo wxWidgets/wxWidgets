@@ -10,7 +10,7 @@
 /**
     @class wxFileSystemWatcher
 
-    The wxFileSystemWatcher class allows to receive notifications of file
+    The wxFileSystemWatcher class allows receiving notifications of file
     system changes.
 
     @note Implementation limitations: this class is currently implemented for

@@ -74,7 +74,7 @@ public:
         way (e.g. automatically uploaded to a remote server) but if the user is
         asked to manually upload or send the report, it may be more convenient
         to generate it in e.g. the users home directory and this function
-        allows to do this.
+        allows doing this.
 
         Notice that it should be called before wxDebugReport::Process() or it
         has no effect.
@@ -90,8 +90,8 @@ public:
     /**
         Set the base name of the generated debug report file.
 
-        This function is similar to SetCompressedFileDirectory() but allows to
-        change the base name of the file. Notice that the file extension will
+        This function is similar to SetCompressedFileDirectory() but allows
+        changing the base name of the file. Notice that the file extension will
         always be @c .zip.
 
         By default, a unique name constructed from wxApp::GetAppName(), the

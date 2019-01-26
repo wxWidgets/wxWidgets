@@ -467,8 +467,8 @@ public:
     void SetIcon(const wxIcon& icon);
 
     /**
-        Sets several icons of different sizes for this window: this allows to
-        use different icons for different situations (e.g. task switching bar,
+        Sets several icons of different sizes for this window: this allows
+        using different icons for different situations (e.g. task switching bar,
         taskbar, window title bar) instead of scaling, with possibly bad looking
         results, the only icon set by SetIcon().
 

@@ -88,7 +88,7 @@ public:
     /**
         General constructor.
 
-        This constructor allows to specify all supported attributes by calling
+        This constructor allows specifying all supported attributes by calling
         the appropriate methods on wxBusyInfoFlags object passed to it as
         parameter. All of them are optional but usually at least the message
         should be specified.

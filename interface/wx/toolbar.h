@@ -809,7 +809,7 @@ public:
 
     /**
         Removes the given tool from the toolbar but doesn't delete it. This
-        allows to insert/add this tool back to this (or another) toolbar later.
+        allows inserting/adding this tool back to this (or another) toolbar later.
 
         @note It is unnecessary to call Realize() for the change to take place,
             it will happen immediately.

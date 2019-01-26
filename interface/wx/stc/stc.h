@@ -6829,7 +6829,7 @@ public:
     void SetWrapVisualFlags(int wrapVisualFlags);
 
     /**
-        Retrive the display mode of visual flags for wrapped lines.
+        Retrieve the display mode of visual flags for wrapped lines.
 
         The return value will be a bit list containing one or more of the
         @link wxStyledTextCtrl::wxSTC_WRAPVISUALFLAG_NONE wxSTC_WRAPVISUALFLAG_* @endlink constants.
@@ -6845,7 +6845,7 @@ public:
     void SetWrapVisualFlagsLocation(int wrapVisualFlagsLocation);
 
     /**
-        Retrive the location of visual flags for wrapped lines.
+        Retrieve the location of visual flags for wrapped lines.
 
         The return value will be a bit list containing one or more of the
         @link wxStyledTextCtrl::wxSTC_WRAPVISUALFLAGLOC_DEFAULT wxSTC_WRAPVISUALFLAGLOC_* @endlink constants.
@@ -6858,7 +6858,7 @@ public:
     void SetWrapStartIndent(int indent);
 
     /**
-        Retrive the start indent for wrapped lines.
+        Retrieve the start indent for wrapped lines.
     */
     int GetWrapStartIndent() const;
 

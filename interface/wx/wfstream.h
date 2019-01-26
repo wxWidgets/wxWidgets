@@ -276,7 +276,7 @@ public:
 /**
     @class wxFFileStream
 
-    This stream allows to both read from and write to a file using buffered
+    This stream allows both reading from and writing to a file using buffered
     STDIO functions.
 
     @library{wxbase}
