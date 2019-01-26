@@ -1166,6 +1166,10 @@ public:
         SetToWeekDay(wxDateTime::Sun, -1) will set the date to the last Sunday
         in the current month.
 
+        Note that leaving the month or year parameters as their default values
+        will result in the current month or year being substituted, overwriting
+        any previous values in the wxDateTime object.
+
         @return @true if the date was modified successfully, @false otherwise
                  meaning that the specified date doesn't exist.
     */
