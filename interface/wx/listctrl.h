@@ -133,7 +133,7 @@ enum
     A special case of report view quite different from the other modes of the list
     control is a virtual control in which the items data (including text, images
     and attributes) is managed by the main program and is requested by the control
-    itself only when needed which allows to have controls with millions of items
+    itself only when needed which allows having controls with millions of items
     without consuming much memory. To use virtual list control you must use
     wxListCtrl::SetItemCount first and override at least wxListCtrl::OnGetItemText
     (and optionally wxListCtrl::OnGetItemImage or wxListCtrl::OnGetItemColumnImage and
@@ -449,7 +449,7 @@ public:
     /**
         Finish editing the label.
 
-        This method allows to programmatically end editing a list control item
+        This method allows one to programmatically end editing a list control item
         in place. Usually it will only be called when editing is in progress,
         i.e. if GetEditControl() returns non-NULL. In particular, do not call
         it from EVT_LIST_BEGIN_LABEL_EDIT handler as the edit control is not

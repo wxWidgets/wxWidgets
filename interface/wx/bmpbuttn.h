@@ -12,7 +12,7 @@
 
     Notice that since wxWidgets 2.9.1 bitmap display is supported by the base
     wxButton class itself and the only tiny advantage of using this class is
-    that it allows to specify the bitmap in its constructor, unlike wxButton.
+    that it allows specifying the bitmap in its constructor, unlike wxButton.
     Please see the base class documentation for more information about images
     support in wxButton.
 

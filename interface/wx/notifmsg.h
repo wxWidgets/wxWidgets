@@ -8,7 +8,7 @@
 /**
     @class wxNotificationMessage
 
-    This class allows to show the user a message non intrusively.
+    This class allows showing the user a message non intrusively.
 
     Currently it is implemented natively for Windows and GTK and uses
     (non-modal) dialogs for the display of the notifications under the other

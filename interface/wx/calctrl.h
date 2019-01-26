@@ -244,7 +244,7 @@ enum wxCalendarHitTestResult
 
     An item without custom attributes is drawn with the default colours and
     font and without border, but setting custom attributes with SetAttr()
-    allows to modify its appearance. Just create a custom attribute object and
+    allows modifying its appearance. Just create a custom attribute object and
     set it for the day you want to be displayed specially (note that the
     control will take ownership of the pointer, i.e. it will delete it itself).
     A day may be marked as being a holiday, even if it is not recognized as

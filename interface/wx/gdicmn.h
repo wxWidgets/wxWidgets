@@ -1158,7 +1158,7 @@ void wxSetCursor(const wxCursor& cursor);
 /**
     Returns the dimensions of the work area on the display.
 
-    This is the same as wxGetClientDisplayRect() but allows to retrieve the
+    This is the same as wxGetClientDisplayRect() but allows retrieving the
     individual components instead of the entire rectangle.
 
     Any of the output pointers can be @NULL if the corresponding value is not

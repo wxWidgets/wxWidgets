@@ -21,7 +21,7 @@
     one after the user finished entering the first one and so on.
 
     When inheriting from this class you need to implement its two pure virtual
-    methods. This allows to return the results incrementally and may or not be
+    methods. This allows returning the results incrementally and may or not be
     convenient depending on where do they come from. If you prefer to return
     all the completions at once, you should inherit from wxTextCompleterSimple
     instead.

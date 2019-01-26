@@ -155,8 +155,8 @@ public:
 
          Normally a Cancel button press is indicated by Update() returning
          @false but sometimes it may be more convenient to check if the dialog
-         was cancelled from elsewhere in the code and this function allows to
-         do it.
+         was cancelled from elsewhere in the code and this function allows
+         doing it.
 
          It always returns @false if the Cancel button is not shown at all.
 

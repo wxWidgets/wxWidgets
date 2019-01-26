@@ -22,7 +22,7 @@ enum wxTextFileType
 /**
     @class wxTextFile
 
-    The wxTextFile is a simple class which allows to work with text files on line by
+    The wxTextFile is a simple class which allows working with text files on line by
     line basis. It also understands the differences in line termination characters
     under different platforms and will not do anything bad to files with "non
     native" line termination sequences - in fact, it can be also used to modify the
@@ -169,7 +169,7 @@ public:
     /**
         Gets the last line of the file.
 
-        Together with GetPrevLine() it allows to enumerate the lines
+        Together with GetPrevLine() it allows enumerating the lines
         in the file from the end to the beginning like this:
 
         @code

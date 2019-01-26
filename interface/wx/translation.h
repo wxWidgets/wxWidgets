@@ -7,7 +7,7 @@
 
 
 /**
-    This class allows to get translations for strings.
+    This class allows getting translations for strings.
 
     In wxWidgets this class manages message catalogs which contain the
     translations of the strings used to the current language. Unlike wxLocale,

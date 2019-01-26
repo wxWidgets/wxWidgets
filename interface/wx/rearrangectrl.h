@@ -13,8 +13,8 @@
     A listbox-like control allowing the user to rearrange the items and to
     enable or disable them.
 
-    This class allows to change the order of the items shown in it as well as
-    to check or uncheck them individually. The data structure used to allow
+    This class allows changing the order of the items shown in it as well as
+    checking or unchecking them individually. The data structure used to allow
     this is the order array which contains the items indices indexed by their
     position with an added twist that the unchecked items are represented by
     the bitwise complement of the corresponding index (for any architecture

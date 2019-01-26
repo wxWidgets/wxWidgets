@@ -158,7 +158,7 @@ public:
     /**
         If the help viewer is not running, runs it, and searches for sections matching
         the given keyword. If one match is found, the file is displayed at this section.
-        The optional parameter allows to search the index (wxHELP_SEARCH_INDEX)
+        The optional parameter allows searching the index (wxHELP_SEARCH_INDEX)
         but this currently is only supported by the wxHtmlHelpController.
 
         - @e WinHelp, MS HTML Help:

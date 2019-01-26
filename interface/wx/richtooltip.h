@@ -51,7 +51,7 @@ enum wxTipKind
     wxTipKind_Auto
 };
 /**
-    Allows to show a tool tip with more customizations than wxToolTip.
+    Allows showing a tool tip with more customizations than wxToolTip.
 
     Using this class is very simple, to give a standard warning for a password
     text control if the password was entered correctly you could simply do:

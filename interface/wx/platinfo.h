@@ -11,7 +11,7 @@
     whose version can be detected at run-time.
 
     The values of the constants are chosen so that they can be combined as flags;
-    this allows to check for operating system families like e.g. @c wxOS_MAC and @c wxOS_UNIX.
+    this allows checking for operating system families like e.g. @c wxOS_MAC and @c wxOS_UNIX.
     
     Note that you can obtain more detailed information about the current OS
     version in use by checking the major and minor version numbers returned

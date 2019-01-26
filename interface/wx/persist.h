@@ -62,7 +62,7 @@ public:
         Globally disable restoring the persistence object properties.
 
         By default, restoring properties in Restore() is enabled but this
-        function allows to disable it. This is mostly useful for testing.
+        function allows disabling it. This is mostly useful for testing.
 
         @see DisableSaving()
      */

@@ -954,7 +954,7 @@ public:
     @style{wxTE_READONLY}
            The text will not be user-editable.
     @style{wxTE_RICH}
-           Use rich text control under Win32, this allows to have more than
+           Use rich text control under Win32, this allows having more than
            64KB of text in the control even under Win9x. This style is ignored
            under other platforms.
     @style{wxTE_RICH2}
@@ -1440,7 +1440,7 @@ public:
     /**
         Converts given text position to client coordinates in pixels.
 
-        This function allows to find where is the character at the given
+        This function allows finding where is the character at the given
         position displayed in the text control.
 
         @onlyfor{wxmsw,wxgtk}. Additionally, wxGTK only implements this method

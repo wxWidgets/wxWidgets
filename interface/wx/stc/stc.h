@@ -245,7 +245,7 @@
 
 /// If CARET_EVEN is not set, instead of having symmetrical UZs,
 /// the left and bottom UZs are extended up to right and top UZs respectively.
-/// This way, we favour the displaying of useful information: the begining of lines,
+/// This way, we favour the displaying of useful information: the beginning of lines,
 /// where most code reside, and the lines after the caret, eg. the body of a function.
 #define wxSTC_CARET_EVEN 0x08
 #define wxSTC_SEL_STREAM 0
@@ -3954,7 +3954,7 @@ public:
     void SetWrapVisualFlags(int wrapVisualFlags);
 
     /**
-        Retrive the display mode of visual flags for wrapped lines.
+        Retrieve the display mode of visual flags for wrapped lines.
     */
     int GetWrapVisualFlags() const;
 
@@ -3964,7 +3964,7 @@ public:
     void SetWrapVisualFlagsLocation(int wrapVisualFlagsLocation);
 
     /**
-        Retrive the location of visual flags for wrapped lines.
+        Retrieve the location of visual flags for wrapped lines.
     */
     int GetWrapVisualFlagsLocation() const;
 
@@ -3974,7 +3974,7 @@ public:
     void SetWrapStartIndent(int indent);
 
     /**
-        Retrive the start indent for wrapped lines.
+        Retrieve the start indent for wrapped lines.
     */
     int GetWrapStartIndent() const;
 

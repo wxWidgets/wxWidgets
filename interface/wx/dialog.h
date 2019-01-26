@@ -590,7 +590,7 @@ public:
         EndModal().
 
         Notice that it is possible to call ShowModal() for a dialog which had
-        been previously shown with Show(), this allows to make an existing
+        been previously shown with Show(), this allows making an existing
         modeless dialog modal. However ShowModal() can't be called twice
         without intervening EndModal() calls.
 

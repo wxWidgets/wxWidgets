@@ -1510,7 +1510,7 @@ public:
     wxVariant GetAttributesAsList() const;
 
     /**
-       Return atributes storage map.
+       Return attributes storage map.
      */
     const wxPGAttributeStorage& GetAttributes() const;
 

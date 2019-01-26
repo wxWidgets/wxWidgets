@@ -184,7 +184,7 @@ public:
 
     /**
         Returns the default size for the buttons. It is advised to make all the dialog
-        buttons of the same size and this function allows to retrieve the (platform and
+        buttons of the same size and this function allows retrieving the (platform and
         current font dependent size) which should be the best suited for this.
     */
     static wxSize GetDefaultSize();

@@ -193,7 +193,7 @@ public:
            automatically synchronized with button's value. Use functions
            defined in wxPickerBase to modify the text control.
     @style{wxDIRP_DIR_MUST_EXIST}
-           Creates a picker which allows to select only existing directories.
+           Creates a picker which allows selecting only existing directories.
            wxGTK control always adds this flag internally as it does not
            support its absence.
     @style{wxDIRP_CHANGE_DIR}
