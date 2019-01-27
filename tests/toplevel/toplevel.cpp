@@ -88,19 +88,5 @@ TEST_CASE("wxTopLevel::ShowEvent", "[tlw][show][event]")
     frame->Maximize();
     frame->Show();
 
-    // Wait for the event to be received for the maximum of 2 seconds.
-    int showCount = 0;
-    for ( int i = 0; i < 40; i++ )
-    {
-        wxYield();
-
-        showCount = countShow.GetCount();
-
-        if ( showCount )
-            break;
-
-        wxMilliSleep(50);
-    }
-
-    CHECK( showCount == 1 );
+    CHECK( countShow.WaitEvent() );
 }
