@@ -284,7 +284,7 @@ void ButtonWidgetsPage::CreateContent()
     m_radioImagePos = new wxRadioBox(this, wxID_ANY, "Image &position",
                                      wxDefaultPosition, wxDefaultSize,
                                      WXSIZEOF(dirs), dirs);
-    sizerLeft->Add(m_radioImagePos, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(m_radioImagePos, wxSizerFlags().Expand().Border());
     sizerLeft->AddSpacer(15);
 
     // should be in sync with enums Button[HV]Align!
@@ -309,13 +309,13 @@ void ButtonWidgetsPage::CreateContent()
                                    wxDefaultPosition, wxDefaultSize,
                                    WXSIZEOF(valign), valign);
 
-    sizerLeft->Add(m_radioHAlign, 0, wxGROW | wxALL, 5);
-    sizerLeft->Add(m_radioVAlign, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(m_radioHAlign, wxSizerFlags().Expand().Border());
+    sizerLeft->Add(m_radioVAlign, wxSizerFlags().Expand().Border());
 
-    sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
+    sizerLeft->AddSpacer(5);
 
     wxButton *btn = new wxButton(this, ButtonPage_Reset, "&Reset");
-    sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border(wxALL, 15));
 
     // middle pane
     wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, "&Operations");
@@ -326,7 +326,7 @@ void ButtonWidgetsPage::CreateContent()
                                                      wxID_ANY,
                                                      &m_textLabel);
     m_textLabel->SetValue("&Press me!");
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
 #if wxUSE_COMMANDLINKBUTTON
     m_sizerNote = CreateSizerWithTextAndButton(ButtonPage_ChangeNote,
@@ -335,7 +335,7 @@ void ButtonWidgetsPage::CreateContent()
                                                &m_textNote);
     m_textNote->SetValue("Writes down button clicks in the log.");
 
-    sizerMiddle->Add(m_sizerNote, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(m_sizerNote, wxSizerFlags().Expand().Border());
 #endif
 
     // right pane
@@ -343,9 +343,12 @@ void ButtonWidgetsPage::CreateContent()
     m_sizerButton->SetMinSize(150, 0);
 
     // the 3 panes panes compose the window
-    sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 1, wxGROW | wxALL, 10);
-    sizerTop->Add(m_sizerButton, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(sizerLeft,
+                  wxSizerFlags(0).Expand().Border((wxALL & ~wxLEFT), 10));
+    sizerTop->Add(sizerMiddle,
+                  wxSizerFlags(1).Expand().Border(wxALL, 10));
+    sizerTop->Add(m_sizerButton,
+                  wxSizerFlags(1).Expand().Border((wxALL & ~wxRIGHT), 10));
 
     // do create the main control
     Reset();
