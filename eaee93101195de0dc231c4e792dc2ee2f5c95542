@@ -1,0 +1,1 @@
+wxGTK: Fix wxEVT_KEY_DOWN for non-ASCII characters (Scott Talbert).
