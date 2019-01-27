@@ -60,14 +60,6 @@ enum
     RadioPage_Radio
 };
 
-// layout direction radiobox selections
-enum
-{
-    RadioDir_Default,
-    RadioDir_LtoR,
-    RadioDir_TtoB
-};
-
 // default values for the number of radiobox items
 static const unsigned int DEFAULT_NUM_ENTRIES = 12;
 static const unsigned int DEFAULT_MAJOR_DIM = 3;
@@ -123,7 +115,6 @@ protected:
     wxCheckBox *m_chkSpecifyRows;
     wxCheckBox *m_chkEnableItem;
     wxCheckBox *m_chkShowItem;
-    wxRadioBox *m_radioDir;
 
     // the gauge itself and the sizer it is in
     wxRadioBox *m_radio;
@@ -197,8 +188,7 @@ RadioWidgetsPage::RadioWidgetsPage(WidgetsBookCtrl *book,
     m_textLabelBtns =
     m_textLabel = (wxTextCtrl *)NULL;
 
-    m_radio =
-    m_radioDir = (wxRadioBox *)NULL;
+    m_radio = (wxRadioBox *)NULL;
     m_sizerRadio = (wxSizer *)NULL;
 }
 
@@ -216,24 +206,6 @@ void RadioWidgetsPage::CreateContent()
                         sizerLeft,
                         "Major specifies &rows count"
                        );
-
-    static const wxString layoutDir[] =
-    {
-        "default",
-        "left to right",
-        "top to bottom"
-    };
-
-    m_radioDir = new wxRadioBox(this, wxID_ANY, "Numbering:",
-                                wxDefaultPosition, wxDefaultSize,
-                                WXSIZEOF(layoutDir), layoutDir,
-                                1, wxRA_SPECIFY_COLS);
-    sizerLeft->Add(m_radioDir, 0, wxGROW | wxALL, 5);
-
-    // if it's not defined, we can't change the radiobox direction
-#ifndef wxRA_LEFTTORIGHT
-    m_radioDir->Disable();
-#endif // wxRA_LEFTTORIGHT
 
     wxSizer *sizerRow;
     sizerRow = CreateSizerWithTextAndLabel("&Major dimension:",
@@ -320,7 +292,6 @@ void RadioWidgetsPage::Reset()
     m_chkSpecifyRows->SetValue(false);
     m_chkEnableItem->SetValue(true);
     m_chkShowItem->SetValue(true);
-    m_radioDir->SetSelection(RadioDir_Default);
 }
 
 void RadioWidgetsPage::CreateRadio()
@@ -370,26 +341,6 @@ void RadioWidgetsPage::CreateRadio()
                                              : wxRA_SPECIFY_COLS;
 
     flags |= GetAttrs().m_defaultFlags;
-
-#ifdef wxRA_LEFTTORIGHT
-    switch ( m_radioDir->GetSelection() )
-    {
-        default:
-            wxFAIL_MSG( "unexpected wxRadioBox layout direction" );
-            wxFALLTHROUGH;
-
-        case RadioDir_Default:
-            break;
-
-        case RadioDir_LtoR:
-            flags |= wxRA_LEFTTORIGHT;
-            break;
-
-        case RadioDir_TtoB:
-            flags |= wxRA_TOPTOBOTTOM;
-            break;
-    }
-#endif // wxRA_LEFTTORIGHT
 
     m_radio = new wxRadioBox(this, RadioPage_Radio,
                              m_textLabel->GetValue(),
