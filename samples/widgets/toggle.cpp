@@ -108,8 +108,11 @@ protected:
     // (re)create the toggle
     void CreateToggle();
 
+    // add m_button to m_sizerButton using current value of m_chkFit
+    void AddButtonToSizer();
+
     // helper function: create a bitmap for wxBitmapToggleButton
-    wxBitmap CreateBitmap(const wxString& label);
+    wxBitmap CreateBitmap(const wxString& label, const wxArtID& type);
 
     // the controls
     // ------------
@@ -122,7 +125,8 @@ protected:
     wxCheckBox *m_chkBitmapOnly,
                *m_chkTextAndBitmap,
                *m_chkFit,
-               *m_chkUseBitmapClass;
+               *m_chkUseBitmapClass,
+               *m_chkDisable;
 
     // more checkboxes for wxBitmapToggleButton only
     wxCheckBox *m_chkUsePressed,
@@ -192,6 +196,7 @@ ToggleWidgetsPage::ToggleWidgetsPage(WidgetsBookCtrl *book,
     m_chkTextAndBitmap =
     m_chkFit =
     m_chkUseBitmapClass =
+    m_chkDisable =
     m_chkUsePressed =
     m_chkUseFocused =
     m_chkUseCurrent =
@@ -230,6 +235,8 @@ void ToggleWidgetsPage::CreateContent()
     m_chkUseBitmapClass = CreateCheckBoxAndAddToSizer(sizerLeft,
         "Use wxBitmapToggleButton");
     m_chkUseBitmapClass->SetValue(true);
+
+    m_chkDisable = CreateCheckBoxAndAddToSizer(sizerLeft, "Disable");
 
     sizerLeft->AddSpacer(5);
 
@@ -327,6 +334,7 @@ void ToggleWidgetsPage::Reset()
     m_chkUseMarkup->SetValue(false);
 #endif // wxUSE_MARKUP
     m_chkUseBitmapClass->SetValue(true);
+    m_chkDisable->SetValue(false);
 
     m_chkUsePressed->SetValue(true);
     m_chkUseFocused->SetValue(true);
@@ -419,22 +427,22 @@ void ToggleWidgetsPage::CreateToggle()
         if ( m_chkUseBitmapClass->GetValue() )
         {
           btgl = new wxBitmapToggleButton(this, TogglePage_Picker,
-                                          CreateBitmap("normal"));
+                                          CreateBitmap("normal", wxART_INFORMATION));
         }
         else
         {
           btgl = new wxToggleButton(this, TogglePage_Picker, "");
-          btgl->SetBitmapLabel(CreateBitmap("normal"));
+          btgl->SetBitmapLabel(CreateBitmap("normal", wxART_INFORMATION));
         }
 #ifdef wxHAS_ANY_BUTTON
         if ( m_chkUsePressed->GetValue() )
-            btgl->SetBitmapPressed(CreateBitmap("pushed"));
+            btgl->SetBitmapPressed(CreateBitmap("pushed", wxART_HELP));
         if ( m_chkUseFocused->GetValue() )
-            btgl->SetBitmapFocus(CreateBitmap("focused"));
+            btgl->SetBitmapFocus(CreateBitmap("focused", wxART_ERROR));
         if ( m_chkUseCurrent->GetValue() )
-            btgl->SetBitmapCurrent(CreateBitmap("hover"));
+            btgl->SetBitmapCurrent(CreateBitmap("hover", wxART_WARNING));
         if ( m_chkUseDisabled->GetValue() )
-            btgl->SetBitmapDisabled(CreateBitmap("disabled"));
+            btgl->SetBitmapDisabled(CreateBitmap("disabled", wxART_MISSING_IMAGE));
 #endif // wxHAS_ANY_BUTTON
         m_toggle = btgl;
     }
@@ -473,6 +481,7 @@ void ToggleWidgetsPage::CreateToggle()
 #endif // wxHAS_ANY_BUTTON
 
     m_chkUseBitmapClass->Enable(showsBitmap);
+    m_chkTextAndBitmap->Enable(!m_chkBitmapOnly->IsChecked());
 
     m_chkUsePressed->Enable(showsBitmap);
     m_chkUseFocused->Enable(showsBitmap);
@@ -480,10 +489,25 @@ void ToggleWidgetsPage::CreateToggle()
     m_chkUseDisabled->Enable(showsBitmap);
 #endif // wxHAS_BITMAPTOGGLEBUTTON
 
-    m_sizerToggle->Add(0, 0, 1, wxCENTRE);
-    m_sizerToggle->Add(m_toggle, 1, wxCENTRE);
-    m_sizerToggle->Add(0, 0, 1, wxCENTRE);
+    m_toggle->Enable(!m_chkDisable->IsChecked());
+
+    AddButtonToSizer();
+
     m_sizerToggle->Layout();
+}
+
+void ToggleWidgetsPage::AddButtonToSizer()
+{
+    if ( m_chkFit->GetValue() )
+    {
+        m_sizerToggle->AddStretchSpacer(1);
+        m_sizerToggle->Add(m_toggle, wxSizerFlags(0).Centre().Border());
+        m_sizerToggle->AddStretchSpacer(1);
+    }
+    else // take up the entire space
+    {
+        m_sizerToggle->Add(m_toggle, wxSizerFlags(1).Expand().Border());
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -512,6 +536,9 @@ void ToggleWidgetsPage::OnButtonChangeLabel(wxCommandEvent& WXUNUSED(event))
     else
 #endif // wxUSE_MARKUP
         m_toggle->SetLabel(labelText);
+
+    if ( m_chkBitmapOnly->IsChecked() )
+        CreateToggle();
 }
 
 #ifdef wxHAS_BITMAPTOGGLEBUTTON
@@ -519,17 +546,18 @@ void ToggleWidgetsPage::OnButtonChangeLabel(wxCommandEvent& WXUNUSED(event))
 // bitmap toggle button stuff
 // ----------------------------------------------------------------------------
 
-wxBitmap ToggleWidgetsPage::CreateBitmap(const wxString& label)
+wxBitmap ToggleWidgetsPage::CreateBitmap(const wxString& label, const wxArtID& type)
 {
-    wxBitmap bmp(180, 70); // shouldn't hardcode but it's simpler like this
+    wxBitmap bmp(FromDIP(wxSize(180, 70))); // shouldn't hardcode but it's simpler like this
     wxMemoryDC dc;
     dc.SelectObject(bmp);
+    dc.SetFont(GetFont());
     dc.SetBackground(*wxCYAN_BRUSH);
     dc.Clear();
     dc.SetTextForeground(*wxBLACK);
     dc.DrawLabel(wxStripMenuCodes(m_textLabel->GetValue()) + "\n"
                     "(" + label + " state)",
-                 wxArtProvider::GetBitmap(wxART_INFORMATION),
+                 wxArtProvider::GetBitmap(type),
                  wxRect(10, 10, bmp.GetWidth() - 20, bmp.GetHeight() - 20),
                  wxALIGN_CENTRE);
 

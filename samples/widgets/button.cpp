@@ -115,7 +115,7 @@ protected:
     void AddButtonToSizer();
 
     // helper function: create a bitmap for wxBitmapButton
-    wxBitmap CreateBitmap(const wxString& label);
+    wxBitmap CreateBitmap(const wxString& label, const wxArtID& type);
 
 
     // the controls
@@ -133,7 +133,8 @@ protected:
                *m_chkUseMarkup,
 #endif // wxUSE_MARKUP
                *m_chkDefault,
-               *m_chkUseBitmapClass;
+               *m_chkUseBitmapClass,
+               *m_chkDisable;
 
     // more checkboxes for wxBitmapButton only
     wxCheckBox *m_chkUsePressed,
@@ -216,6 +217,7 @@ ButtonWidgetsPage::ButtonWidgetsPage(WidgetsBookCtrl *book,
 #endif // wxUSE_MARKUP
     m_chkDefault =
     m_chkUseBitmapClass =
+    m_chkDisable =
     m_chkUsePressed =
     m_chkUseFocused =
     m_chkUseCurrent =
@@ -255,6 +257,8 @@ void ButtonWidgetsPage::CreateContent()
     m_chkUseBitmapClass = CreateCheckBoxAndAddToSizer(sizerLeft,
         "Use wxBitmapButton");
     m_chkUseBitmapClass->SetValue(true);
+
+    m_chkDisable = CreateCheckBoxAndAddToSizer(sizerLeft, "Disable");
 
     sizerLeft->AddSpacer(5);
 
@@ -368,6 +372,7 @@ void ButtonWidgetsPage::Reset()
     m_chkUseMarkup->SetValue(false);
 #endif // wxUSE_MARKUP
     m_chkUseBitmapClass->SetValue(true);
+    m_chkDisable->SetValue(false);
 
     m_chkUsePressed->SetValue(true);
     m_chkUseFocused->SetValue(true);
@@ -456,22 +461,22 @@ void ButtonWidgetsPage::CreateButton()
         if ( m_chkUseBitmapClass->GetValue() )
         {
           bbtn = new wxBitmapButton(this, ButtonPage_Button,
-                                    CreateBitmap("normal"),
+                                    CreateBitmap("normal", wxART_INFORMATION),
                                     wxDefaultPosition, wxDefaultSize, flags);
         }
         else
         {
           bbtn = new wxButton(this, ButtonPage_Button);
-          bbtn->SetBitmapLabel(CreateBitmap("normal"));
+          bbtn->SetBitmapLabel(CreateBitmap("normal", wxART_INFORMATION));
         }
         if ( m_chkUsePressed->GetValue() )
-            bbtn->SetBitmapPressed(CreateBitmap("pushed"));
+            bbtn->SetBitmapPressed(CreateBitmap("pushed", wxART_HELP));
         if ( m_chkUseFocused->GetValue() )
-            bbtn->SetBitmapFocus(CreateBitmap("focused"));
+            bbtn->SetBitmapFocus(CreateBitmap("focused", wxART_ERROR));
         if ( m_chkUseCurrent->GetValue() )
-            bbtn->SetBitmapCurrent(CreateBitmap("hover"));
+            bbtn->SetBitmapCurrent(CreateBitmap("hover", wxART_WARNING));
         if ( m_chkUseDisabled->GetValue() )
-            bbtn->SetBitmapDisabled(CreateBitmap("disabled"));
+            bbtn->SetBitmapDisabled(CreateBitmap("disabled", wxART_MISSING_IMAGE));
         m_button = bbtn;
 #if wxUSE_COMMANDLINKBUTTON
         m_cmdLnkButton = NULL;
@@ -543,6 +548,8 @@ void ButtonWidgetsPage::CreateButton()
     if ( m_chkDefault->GetValue() )
         m_button->SetDefault();
 
+    m_button->Enable(!m_chkDisable->IsChecked());
+
     AddButtonToSizer();
 
     m_sizerButton->Layout();
@@ -597,6 +604,9 @@ void ButtonWidgetsPage::OnButtonChangeLabel(wxCommandEvent& WXUNUSED(event))
             m_button->SetLabel(labelText);
     }
 
+    if ( m_chkBitmapOnly->IsChecked() )
+        CreateButton();
+
     m_sizerButton->Layout();
 }
 
@@ -618,17 +628,18 @@ void ButtonWidgetsPage::OnButton(wxCommandEvent& WXUNUSED(event))
 // bitmap button stuff
 // ----------------------------------------------------------------------------
 
-wxBitmap ButtonWidgetsPage::CreateBitmap(const wxString& label)
+wxBitmap ButtonWidgetsPage::CreateBitmap(const wxString& label, const wxArtID& type)
 {
-    wxBitmap bmp(180, 70); // shouldn't hardcode but it's simpler like this
+    wxBitmap bmp(FromDIP(wxSize(180, 70))); // shouldn't hardcode but it's simpler like this
     wxMemoryDC dc;
     dc.SelectObject(bmp);
+    dc.SetFont(GetFont());
     dc.SetBackground(*wxCYAN_BRUSH);
     dc.Clear();
     dc.SetTextForeground(*wxBLACK);
     dc.DrawLabel(wxStripMenuCodes(m_textLabel->GetValue()) + "\n"
                     "(" + label + " state)",
-                 wxArtProvider::GetBitmap(wxART_INFORMATION),
+                 wxArtProvider::GetBitmap(type),
                  wxRect(10, 10, bmp.GetWidth() - 20, bmp.GetHeight() - 20),
                  wxALIGN_CENTRE);
 
