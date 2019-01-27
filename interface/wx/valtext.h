@@ -328,13 +328,16 @@ protected:
     @category{validator}
 
     @see @ref overview_validator, wxValidator, wxTextValidator, wxGenericValidator,
-        wxIntegerValidator, wxFloatingPointValidator
+        wxIntegerValidator, wxFloatingPointValidator, wxRegEx
 */
 class wxRegexTextValidator : public wxTextValidator
 {
 public:
     /**
         Constructor.
+
+        Create a validator that accepts any string, including the empty one.
+        The regex object can be set later by calling SetRegEx().
     */
     wxRegexTextValidator();
 
@@ -390,7 +393,24 @@ public:
     virtual wxObject *Clone() const;
 
     /**
-        Set a new valid compiled regular expression object.
+        Set a new regular expression object.
+
+        If @a expr is empty or contains an (syntactically) invalid expression,
+        an assertion failure will occur and the old regex object won't be affected.
+
+        @note
+            If necessary, caret (^) and dollar ($) anchors will be added to the
+            start and end of @a expr to require that the match occur as a whole
+            string. Notice that with the overload taking @a wxRegEx parameter
+            the caller is responsible for ensuring this requirement is met.
+    */
+    void SetRegEx(const wxString& expr, int flags);
+
+    /**
+        Set a new regular expression object.
+
+        If @a regex is not valid, an assertion failure will occur and the old
+        regex object won't be affected.
     */
     void SetRegEx(const wxSharedPtr<wxRegEx>& regex);
 

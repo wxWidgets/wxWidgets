@@ -190,11 +190,16 @@ TEXT_VALIDATOR_TEST_CASE("wxTextValidator::IsValid", "[wxTextValidator][filters]
 
 TEXT_VALIDATOR_TEST_CASE("wxRegexTextValidator::IsValid", "[wxRegexTextValidator][paste]")
 {
-    wxString value = "";
+    wxRegexTextValidator val;
+
+    SECTION("Default constucted wxRegexTextValidator")
+    {
+        CHECK( val.IsValid(wxString()).empty() );
+        CHECK( val.IsValid("wx-90.?! @_~E+{   ").empty() );
+    }
 
     // validator that uses regex to match an email address (eg.: foo@example.com)
-    wxRegexTextValidator val("^([^@ -]+)@([[:alnum:]_]+).([[:alnum:]]{2,4})$",
-        wxRE_DEFAULT, wxFILTER_NONE, &value);
+    val.SetRegEx("([^@ -]+)@([[:alnum:]_]+).([[:alnum:]]{2,4})", wxRE_DEFAULT);
 
     SECTION("With wxFILTER_NONE")
     {

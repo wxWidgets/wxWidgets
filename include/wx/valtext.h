@@ -217,6 +217,7 @@ public:
 
     virtual wxObject *Clone() const wxOVERRIDE { return new wxRegexTextValidator(*this); }
 
+    void SetRegEx(const wxString& expr, int flags);
     void SetRegEx(const wxSharedPtr<wxRegEx>& regex);
 
     // returns the error message if the contents of 'str' are invalid

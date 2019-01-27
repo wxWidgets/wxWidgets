@@ -456,25 +456,24 @@ bool wxTextValidator::ContainsExcludedCharacters(const wxString& str) const
 // ----------------------------------------------------------------------------
 wxIMPLEMENT_DYNAMIC_CLASS(wxRegexTextValidator, wxTextValidator);
 
-wxRegexTextValidator::wxRegexTextValidator() {}
+wxRegexTextValidator::wxRegexTextValidator()
+    : wxTextValidator(),
+      m_regex(new wxRegEx(".*", wxRE_DEFAULT))
+{
+}
+
 wxRegexTextValidator::wxRegexTextValidator(const wxString& expr, int flags,
                                            long style, wxString *str)
     : wxTextValidator(style, str), m_regex(new wxRegEx)
 {
-    wxASSERT_MSG(
-        (!expr.empty() && m_regex->Compile(expr, flags)),
-        "Invalid expression passed to wxRegexTextValidator ctor"
-    );
+    SetRegEx(expr, flags);
 }
 
 wxRegexTextValidator::wxRegexTextValidator(const wxSharedPtr<wxRegEx>& regex,
                                            long style, wxString *str)
-    : wxTextValidator(style, str), m_regex(regex)
+    : wxTextValidator(style, str)
 {
-    wxASSERT_MSG(
-        (m_regex && m_regex->IsValid()),
-        "Invalid regex object passed to wxRegexTextValidator ctor"
-    );
+    SetRegEx(regex);
 }
 
 wxRegexTextValidator::wxRegexTextValidator(const wxRegexTextValidator& val)
@@ -484,8 +483,36 @@ wxRegexTextValidator::wxRegexTextValidator(const wxRegexTextValidator& val)
 
 wxRegexTextValidator::~wxRegexTextValidator() {}
 
+void wxRegexTextValidator::SetRegEx(const wxString& expr, int flags)
+{
+    wxCHECK_RET( !expr.empty(), "Invalid expression passed to SetRegEx()" );
+
+    wxString anchoredExpr = expr;
+    size_t length = anchoredExpr.length() - 1;
+
+    if ( anchoredExpr.GetChar(0u) != '^' )
+    {
+        anchoredExpr.Prepend('^');
+        length += 1; // count the added '^' char.
+    }
+
+    if ( anchoredExpr.GetChar(length) != '$' )
+        anchoredExpr.Append('$');
+
+    wxSharedPtr<wxRegEx> regex(new wxRegEx(anchoredExpr, flags));
+
+    wxCHECK_RET( regex->IsValid(), "Invalid expression passed to SetRegEx()" );
+
+    m_regex = regex;
+}
+
 void wxRegexTextValidator::SetRegEx(const wxSharedPtr<wxRegEx>& regex)
 {
+    wxCHECK_RET(
+        regex && regex->IsValid(),
+        "Invalid regex object passed to SetRegEx()"
+    );
+
     m_regex = regex;
 }
 
