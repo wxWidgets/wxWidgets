@@ -586,10 +586,9 @@ wxSize wxRadioBox::GetTotalButtonSize(const wxSize& sizeBtn) const
             reinterpret_cast<wxWindow*>(const_cast<wxRadioBox*>(this))).y / 2;
 
     // and also wide enough for its label
-    int widthLabel;
-    GetTextExtent(GetLabelText(), &widthLabel, NULL);
-    if ( widthLabel > width )
-        width = widthLabel;
+    int widthBox = wxStaticBox::DoGetBestSize().x;
+    if ( widthBox > width )
+        width = widthBox;
 
     return wxSize(width, height);
 }
