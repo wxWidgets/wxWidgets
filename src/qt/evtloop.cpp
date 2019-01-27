@@ -21,33 +21,48 @@
 
 #include <QtWidgets/QApplication>
 
-class wxQtIdleTimer : public QTimer
+class wxQtIdleTimer : public QTimer, public wxRefCounter
 {
 
 public:
-    wxQtIdleTimer( wxQtEventLoopBase *eventLoop );
+    wxQtIdleTimer();
+    ~wxQtIdleTimer();
     virtual bool eventFilter( QObject * watched, QEvent * event  );
 
 private:
     void idle();
-
-private:
-    wxQtEventLoopBase *m_eventLoop;
+    void ScheduleIdleCheck();
 };
 
-wxQtIdleTimer::wxQtIdleTimer( wxQtEventLoopBase *eventLoop )
+wxQtIdleTimer::wxQtIdleTimer()
 {
-    m_eventLoop = eventLoop;
+    // We need a QCoreApplication for event loops, create it here if it doesn't
+    // already exist as we can't modify wxAppConsole
+    if ( !QCoreApplication::instance() )
+    {
+        new QApplication(wxAppConsole::GetInstance()->argc, wxAppConsole::GetInstance()->argv);
+    }
 
-    connect( this, &QTimer::timeout, this, &wxQtIdleTimer::idle );
-    setSingleShot( true );
+
+    // Pass all events to the idle timer, so it can be restarted each time
+    // an event is received
+    qApp->installEventFilter(this);
+
+    connect(this, &QTimer::timeout, this, &wxQtIdleTimer::idle);
+    setSingleShot(true);
+}
+
+
+wxQtIdleTimer::~wxQtIdleTimer()
+{
+    qApp->removeEventFilter(this);
 }
 
 bool wxQtIdleTimer::eventFilter( QObject *WXUNUSED( watched ), QEvent *WXUNUSED( event ) )
 {
     // Called for each Qt event, start with timeout 0 (run as soon as idle)
     if ( !isActive() )
-        m_eventLoop->ScheduleIdleCheck();
+       ScheduleIdleCheck();
 
     return false; // Continue handling the event
 }
@@ -59,35 +74,40 @@ void wxQtIdleTimer::idle()
         wxTheApp->ProcessPendingEvents();
 
     // Send idle event
-    if ( m_eventLoop->ProcessIdle() )
-        m_eventLoop->ScheduleIdleCheck();
+    if (wxTheApp->ProcessIdle())
+        ScheduleIdleCheck();
+}
+
+
+namespace
+{
+    wxObjectDataPtr<wxQtIdleTimer> gs_idleTimer;
+}
+
+void wxQtIdleTimer::ScheduleIdleCheck()
+{
+    wxQtEventLoopBase *eventLoop = static_cast<wxQtEventLoopBase*>(wxEventLoop::GetActive());
+    if ( eventLoop )
+        eventLoop->ScheduleIdleCheck();
 }
 
 wxQtEventLoopBase::wxQtEventLoopBase()
 {
-    // We need a QCoreApplication for event loops, create it here if it doesn't
-    // already exist as we can't modify wxAppConsole
-    if ( !QCoreApplication::instance() )
-    {
-        new QApplication( wxAppConsole::GetInstance()->argc, wxAppConsole::GetInstance()->argv );
-    }
-    
     // Create an idle timer to run each time there are no events (timeout = 0)
-    m_qtIdleTimer = new wxQtIdleTimer( this );
+    if ( !gs_idleTimer )
+        gs_idleTimer.reset(new wxQtIdleTimer());
 
-    // Pass all events to the idle timer, so it can be restarted each time
-    // an event is received
-    qApp->installEventFilter( m_qtIdleTimer );
-
-
+    m_qtIdleTimer = gs_idleTimer;
     m_qtEventLoop = new QEventLoop;
 }
 
 wxQtEventLoopBase::~wxQtEventLoopBase()
 {
-    qApp->removeEventFilter(m_qtIdleTimer);
+    //Clear the shared timer if this is the only external reference to it
+    if ( gs_idleTimer->GetRefCount() <= 2 )
+        gs_idleTimer.reset(NULL);
+
     delete m_qtEventLoop;
-    delete m_qtIdleTimer;
 }
 
 void wxQtEventLoopBase::ScheduleExit(int rc)
@@ -131,16 +151,23 @@ void wxQtEventLoopBase::WakeUp()
 
 void wxQtEventLoopBase::DoYieldFor(long eventsToProcess)
 {
-    while (wxTheApp && wxTheApp->Pending())
-        // TODO: implement event filtering using the eventsToProcess mask
-        wxTheApp->Dispatch();
+
+    QEventLoop::ProcessEventsFlags flags = QEventLoop::AllEvents;
+
+    if ( !(eventsToProcess & wxEVT_CATEGORY_USER_INPUT) )
+        flags |= QEventLoop::ExcludeUserInputEvents;
+
+    if ( !(eventsToProcess & wxEVT_CATEGORY_SOCKET) )
+        flags |= QEventLoop::ExcludeSocketNotifiers;
+
+    m_qtEventLoop->processEvents(flags);
 
     wxEventLoopBase::DoYieldFor(eventsToProcess);
 }
 
 void wxQtEventLoopBase::ScheduleIdleCheck()
 {
-    if ( IsInsideRun() )
+    if ( IsInsideRun() && !m_shouldExit )
         m_qtIdleTimer->start(0);
 }
 
