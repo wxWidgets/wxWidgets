@@ -1071,14 +1071,10 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
 
     wxLogTrace(TRACE_KEYS, wxT("\t-> wxKeyCode %ld"), key_code);
 
-    // sending unknown key events doesn't really make sense
-    if ( !key_code )
-        return false;
-
     event.m_keyCode = key_code;
 
 #if wxUSE_UNICODE
-    event.m_uniChar = gdk_keyval_to_unicode(key_code);
+    event.m_uniChar = gdk_keyval_to_unicode(key_code ? key_code : gdk_event->keyval);
     if ( !event.m_uniChar && event.m_keyCode <= WXK_DELETE )
     {
         // Set Unicode key code to the ASCII equivalent for compatibility. E.g.
@@ -1087,6 +1083,10 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
         event.m_uniChar = event.m_keyCode;
     }
 #endif // wxUSE_UNICODE
+
+    // sending unknown key events doesn't really make sense
+    if ( !key_code && !event.m_uniChar )
+        return false;
 
     // now fill all the other fields
     wxFillOtherKeyEventFields(event, win, gdk_event);
