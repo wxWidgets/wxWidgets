@@ -1657,13 +1657,14 @@ bool wxPropertyGrid::EnsureVisible( wxPGPropArg id )
     if ( !p->IsVisible() )
     {
         // expand parents
+        // *** Bricsys change : expand ALL parents, not just parent and grandparent.
         wxPGProperty* parent = p->GetParent();
-        wxPGProperty* grandparent = parent->GetParent();
-
-        if ( grandparent && grandparent != m_pState->DoGetRoot() )
-            Expand( grandparent );
-
-        Expand( parent );
+        while (parent)
+		{
+			if ( parent != m_pState->DoGetRoot() )
+				Expand(parent);
+			parent = parent->GetParent();
+		}
         changed = true;
     }
 
@@ -1676,13 +1677,15 @@ bool wxPropertyGrid::EnsureVisible( wxPGPropArg id )
 
     if ( y < vy )
     {
-        Scroll(vx, y/wxPG_PIXELS_PER_UNIT );
+        // *** Bricsys : scroll the property to the middle of the view, not the top
+        Scroll (vx, (y - (m_height/2))/wxPG_PIXELS_PER_UNIT );
         m_iFlags |= wxPG_FL_SCROLLED;
         changed = true;
     }
     else if ( (y+m_lineHeight) > (vy+m_height) )
     {
-        Scroll(vx, (y-m_height+(m_lineHeight*2))/wxPG_PIXELS_PER_UNIT );
+        // *** Bricsys : scroll the property to the middle of the view, not the bottom
+        Scroll (vx, (y-(m_height/2)+(m_lineHeight*2))/wxPG_PIXELS_PER_UNIT );
         m_iFlags |= wxPG_FL_SCROLLED;
         changed = true;
     }
