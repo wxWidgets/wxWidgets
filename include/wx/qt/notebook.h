@@ -45,6 +45,8 @@ public:
     int SetSelection(size_t nPage) { return DoSetSelection(nPage, SetSelection_SendEvent); }
     int ChangeSelection(size_t nPage) { return DoSetSelection(nPage); }
 
+    virtual bool DeleteAllPages() wxOVERRIDE;
+
     virtual QWidget *GetHandle() const;
 
 protected:
