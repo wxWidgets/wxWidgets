@@ -42,5 +42,8 @@ public:
                   const wxIcon &none = wxNullIcon);
     
     virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
+
+private:
+    wxWindow* m_parentWindow;
 };
 #endif // _WX_QT_DND_H_

@@ -12,11 +12,8 @@
     #pragma hdrstop
 #endif
 
-#include "wx/qt/private/converter.h"
-#include "wx/qt/private/utils.h"
 #include "wx/dataobj.h"
-
-#include <QtCore/QMimeData>
+#include "wx/scopedarray.h"
 
 namespace
 {
@@ -118,64 +115,33 @@ bool wxDataFormat::operator!=(const wxDataFormat& format) const
 
 wxDataObject::wxDataObject()
 {
-    m_qtMimeData = new QMimeData;
 }
 
 wxDataObject::~wxDataObject()
 {
-    delete m_qtMimeData;
 }
 
-bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction) const
+bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) const
 {
-    return wxDataFormat(format) != wxDF_INVALID;
-}
-wxDataFormat wxDataObject::GetPreferredFormat(Direction) const
-{
-    /* formats are in order of preference */
-    if (m_qtMimeData->formats().count())
-        return m_qtMimeData->formats().first();
-
-    return wxDataFormat();
-}
-
-size_t wxDataObject::GetFormatCount(Direction) const
-{
-    return m_qtMimeData->formats().count();
-}
-
-void wxDataObject::GetAllFormats(wxDataFormat *formats, Direction) const
-{
-    int i = 0;
-    foreach (QString format, m_qtMimeData->formats())
+    const size_t formatCount = GetFormatCount(dir);
+    if ( formatCount == 1 )
     {
-        formats[i] = format;
-        i++;
+        return format == GetPreferredFormat();
     }
+    
+    wxScopedArray<wxDataFormat> formats(formatCount);
+    GetAllFormats(formats.get(), dir);
+
+    for ( size_t n = 0; n < formatCount; ++n )
+    {
+        if ( formats[n] == format )
+            return true;
+    }
+
+    return false;
 }
 
-size_t wxDataObject::GetDataSize(const wxDataFormat& format) const
-{
-    return  m_qtMimeData->data( wxQtConvertString(format.m_MimeType) ).count();
-}
-
-bool wxDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
-{
-    if (!m_qtMimeData->hasFormat(wxQtConvertString(format.m_MimeType)))
-        return false;
-
-    QByteArray data = m_qtMimeData->data( wxQtConvertString(format.m_MimeType) ).data();
-    memcpy(buf, data.constData(), data.size());
-    return true;
-}
-
-bool wxDataObject::SetData(const wxDataFormat& format, size_t len, const void * buf)
-{
-    QByteArray bytearray((const char*)buf, len);
-    m_qtMimeData->setData(wxQtConvertString(format.m_MimeType), bytearray);
-
-    return true;
-}
+//#############################################################################
 
 wxBitmapDataObject::wxBitmapDataObject()
 {
@@ -185,6 +151,8 @@ wxBitmapDataObject::wxBitmapDataObject( const wxBitmap &WXUNUSED(bitmap) )
 {
 }
 
+//#############################################################################
+
 wxFileDataObject::wxFileDataObject()
 {
 }
@@ -193,3 +161,5 @@ void wxFileDataObject::AddFile( const wxString &WXUNUSED(filename) )
 {
 
 }
+
+
