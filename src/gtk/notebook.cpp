@@ -483,10 +483,7 @@ bool wxNotebook::InsertPage( size_t position,
     }
 #endif
 
-    if (select && GetPageCount() > 1)
-    {
-        SetSelection( position );
-    }
+    DoSetSelectionAfterInsertion(position, select);
 
     InvalidateBestSize();
     return true;
