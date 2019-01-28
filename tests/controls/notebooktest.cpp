@@ -20,7 +20,9 @@
 #endif // WX_PRECOMP
 
 #include "wx/notebook.h"
+
 #include "bookctrlbasetest.h"
+#include "testableframe.h"
 
 class NotebookTestCase : public BookCtrlBaseTestCase, public CppUnit::TestCase
 {
@@ -116,6 +118,27 @@ void NotebookTestCase::NoEventsOnDestruction()
     m_notebook->Destroy();
     m_notebook = NULL;
     CHECK( m_numPageChanges == 1 );
+}
+
+TEST_CASE("wxNotebook::NoEventsForFirstPage", "[wxNotebook][event]")
+{
+    wxNotebook* const
+        notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
+                                  wxDefaultPosition, wxSize(400, 200));
+
+    CHECK( notebook->GetSelection() == wxNOT_FOUND );
+
+    EventCounter countPageChanging(notebook, wxEVT_NOTEBOOK_PAGE_CHANGING);
+    EventCounter countPageChanged(notebook, wxEVT_NOTEBOOK_PAGE_CHANGED);
+
+    notebook->AddPage(new wxPanel(notebook), "First page");
+
+    // The selection should have been changed.
+    CHECK( notebook->GetSelection() == 0 );
+
+    // But no events should have been generated.
+    CHECK( countPageChanging.GetCount() == 0 );
+    CHECK( countPageChanged.GetCount() == 0 );
 }
 
 #endif //wxUSE_NOTEBOOK
