@@ -62,6 +62,17 @@ bool wxTopLevelWindowQt::Create( wxWindow *parent, wxWindowID winId,
     return true;
 }
 
+bool wxTopLevelWindowQt::Show(bool show)
+{
+    if ( !wxTopLevelWindowBase::Show(show) )
+        return false;
+
+    if ( show )
+        m_qtWindow->activateWindow();
+
+    return true;
+}
+
 void wxTopLevelWindowQt::Maximize(bool maximize)
 {
     QWidget *widget = GetHandle();

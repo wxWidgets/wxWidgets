@@ -42,8 +42,6 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    bool Show(bool show = true) wxOVERRIDE;
-
     virtual void SetMenuBar(wxMenuBar *menubar);
     virtual void SetStatusBar(wxStatusBar *statusBar );
     virtual void SetToolBar(wxToolBar *toolbar);
