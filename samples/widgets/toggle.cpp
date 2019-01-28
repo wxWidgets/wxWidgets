@@ -508,10 +508,10 @@ void ToggleWidgetsPage::AddButtonToSizer()
         m_sizerToggle->AddStretchSpacer(1);
     }
     else // take up the entire space
+#endif // wxHAS_BITMAPTOGGLEBUTTON
     {
         m_sizerToggle->Add(m_toggle, wxSizerFlags(1).Expand().Border());
     }
-#endif // wxHAS_BITMAPTOGGLEBUTTON
 }
 
 // ----------------------------------------------------------------------------
