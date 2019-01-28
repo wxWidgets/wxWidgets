@@ -490,9 +490,8 @@ void ToggleWidgetsPage::CreateToggle()
     m_chkUseFocused->Enable(showsBitmap);
     m_chkUseCurrent->Enable(showsBitmap);
     m_chkUseDisabled->Enable(showsBitmap);
-#endif // wxHAS_BITMAPTOGGLEBUTTON
-
     m_toggle->Enable(!m_chkDisable->IsChecked());
+#endif // wxHAS_BITMAPTOGGLEBUTTON
 
     AddButtonToSizer();
 
@@ -501,6 +500,7 @@ void ToggleWidgetsPage::CreateToggle()
 
 void ToggleWidgetsPage::AddButtonToSizer()
 {
+#ifdef wxHAS_BITMAPTOGGLEBUTTON
     if ( m_chkFit->GetValue() )
     {
         m_sizerToggle->AddStretchSpacer(1);
@@ -508,6 +508,7 @@ void ToggleWidgetsPage::AddButtonToSizer()
         m_sizerToggle->AddStretchSpacer(1);
     }
     else // take up the entire space
+#endif // wxHAS_BITMAPTOGGLEBUTTON
     {
         m_sizerToggle->Add(m_toggle, wxSizerFlags(1).Expand().Border());
     }
@@ -540,8 +541,10 @@ void ToggleWidgetsPage::OnButtonChangeLabel(wxCommandEvent& WXUNUSED(event))
 #endif // wxUSE_MARKUP
         m_toggle->SetLabel(labelText);
 
+#ifdef wxHAS_BITMAPTOGGLEBUTTON
     if ( m_chkBitmapOnly->IsChecked() )
         CreateToggle();
+#endif // wxHAS_BITMAPTOGGLEBUTTON
 }
 
 #ifdef wxHAS_BITMAPTOGGLEBUTTON
