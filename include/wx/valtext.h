@@ -72,6 +72,7 @@ public:
 
     // Filter keystrokes
     void OnChar(wxKeyEvent& event);
+    void OnKillFocus(wxFocusEvent& event);
     void OnValidationError(wxValidationStatusEvent& event);
 
     // ACCESSORS

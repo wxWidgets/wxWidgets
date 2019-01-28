@@ -128,9 +128,9 @@ public:
 
 protected:
 
-    // Notice that the errormsg may be empty, in which case, the generated
-    // event is sent to notify the event handler that the control has just
-    // transitioned from invalid to valid state.
+    // Notice that the errormsg may be empty (for wxEVT_VALIDATE_ERROR event),
+    // in which case, the generated event is sent as a notification to the event
+    // handler that the control's content is invalid.
     void SendEvent(wxEventType type, const wxString& errormsg = wxString())
     {
         if ( !m_validatorWindow )
@@ -148,8 +148,6 @@ protected:
 
     void SendErrorEvent(const wxString& errormsg)
     {
-        wxASSERT_MSG(!errormsg.empty(), "Error message shouldn't be empty.");
-
         SendEvent(wxEVT_VALIDATE_ERROR, errormsg);
     }
 

@@ -60,6 +60,7 @@ static bool wxIsNumeric(const wxString& val)
 wxIMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator);
 wxBEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
     EVT_CHAR(wxTextValidator::OnChar)
+    EVT_KILL_FOCUS(wxTextValidator::OnKillFocus)
 
     EVT_VALIDATE_ERROR(wxID_ANY, wxTextValidator::OnValidationError)
 wxEND_EVENT_TABLE()
@@ -185,6 +186,11 @@ bool wxTextValidator::TransferFromWindow()
 
 void wxTextValidator::OnValidationError(wxValidationStatusEvent& event)
 {
+    const wxString& errormsg = event.GetErrorMessage();
+
+    if ( errormsg.empty() )
+        return;
+
     m_validatorWindow->SetFocus();
     wxMessageBox(event.GetErrorMessage(), _("Validation conflict"),
                  wxOK | wxICON_EXCLAMATION, NULL);
@@ -314,6 +320,27 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
 
     // eat message
     event.Skip(false);
+}
+
+void wxTextValidator::OnKillFocus(wxFocusEvent& event)
+{
+    event.Skip();
+
+    wxTextEntry * const control = GetTextEntry();
+    if ( !control )
+        return;
+
+    if ( IsValid(control->GetValue()).empty() )
+    {
+        SendOkEvent();
+    }
+    else
+    {
+        // To avoid the focus problem (The focus changes back and forth between
+        // the message box and the control) we just send a notification that the
+        // current input is invalid.
+        SendErrorEvent(wxString());
+    }
 }
 
 bool wxTextValidator::IsValidChar(const wxUniChar& c) const
