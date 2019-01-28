@@ -154,9 +154,13 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
 
     // reenable firing qt signals as internal wx initialization was completed
     m_qtTabWidget->blockSignals(false);
-    m_selection = m_qtTabWidget->currentIndex();
 
-    if (bSelect && GetPageCount() > 1)
+    if ( m_selection == wxNOT_FOUND && GetPageCount() == 1 )
+    {
+        m_selection = m_qtTabWidget->currentIndex();
+        SendPageChangedEvent(m_selection, wxNOT_FOUND);
+    }
+    else if (bSelect && GetPageCount() > 1)
     {
         SetSelection( n );
     }
