@@ -45,10 +45,12 @@ private:
         CPPUNIT_TEST( Image );
         CPPUNIT_TEST( RowCount );
         CPPUNIT_TEST( NoEventsOnDestruction );
+        CPPUNIT_TEST( AddingInitialPageChangesSelection );
     CPPUNIT_TEST_SUITE_END();
 
     void RowCount();
     void NoEventsOnDestruction();
+    void AddingInitialPageChangesSelection();
 
     void OnPageChanged(wxNotebookEvent&) { m_numPageChanges++; }
 
@@ -116,6 +118,25 @@ void NotebookTestCase::NoEventsOnDestruction()
     m_notebook->Destroy();
     m_notebook = NULL;
     CHECK( m_numPageChanges == 1 );
+}
+
+void NotebookTestCase::AddingInitialPageChangesSelection()
+{
+    m_notebook->DeleteAllPages();
+    CHECK( m_notebook->GetSelection() == wxNOT_FOUND );
+
+    m_notebook->Bind(wxEVT_NOTEBOOK_PAGE_CHANGED,
+                     &NotebookTestCase::OnPageChanged, this);
+
+    wxPanel *first_panel = new wxPanel(m_notebook);
+    m_notebook->AddPage(first_panel, "Panel 1");
+    CHECK( m_numPageChanges == 1 );
+    CHECK( m_notebook->GetSelection() == 0);
+
+    wxPanel *second_panel = new wxPanel(m_notebook);
+    m_notebook->AddPage(second_panel, "Panel 2");
+    CHECK( m_numPageChanges == 1 );
+    CHECK( m_notebook->GetSelection() == 0);
 }
 
 #endif //wxUSE_NOTEBOOK
