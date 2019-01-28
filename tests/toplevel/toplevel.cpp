@@ -31,6 +31,10 @@ static void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
     CHECK(!tlw->IsShown());
 
     wxTextCtrl* textCtrl = new wxTextCtrl(tlw, -1, "test");
+#ifndef __WXGTK__
+    EventCounter countShow(textCtrl, wxEVT_ACTIVATE);
+#endif
+
     textCtrl->SetFocus();
 
 // only run this test on platforms where ShowWithoutActivating is implemented.
@@ -50,6 +54,7 @@ static void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
     // wxGTK needs many event loop iterations before the TLW becomes active and
     // this doesn't happen in this test, so avoid checking for it.
 #ifndef __WXGTK__
+    countShow.WaitEvent();
     CHECK(tlw->IsActive());
 #endif
     CHECK(tlw->IsShown());
