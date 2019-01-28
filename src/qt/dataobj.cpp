@@ -18,102 +18,100 @@
 
 #include <QtCore/QMimeData>
 
-wxDataFormat::wxDataFormat()
+namespace
 {
-}
-
-static wxString DataFormatIdToMimeType( wxDataFormatId formatId )
-{
-    switch(formatId) {
-        case wxDF_TEXT: return "text/plain";
-        case wxDF_BITMAP: return "image/bmp";
-        case wxDF_TIFF: return "image/tiff";
-        case wxDF_WAVE: return "audio/x-wav";
-        case wxDF_UNICODETEXT: return "text/plain";
-        case wxDF_HTML: return "text/html";
-        case wxDF_METAFILE:
-        case wxDF_SYLK:
-        case wxDF_DIF:
-        case wxDF_OEMTEXT:
-        case wxDF_DIB:
-        case wxDF_PALETTE:
-        case wxDF_PENDATA:
-        case wxDF_RIFF:
-        case wxDF_ENHMETAFILE:
-        case wxDF_FILENAME:
-        case wxDF_LOCALE:
-        case wxDF_PRIVATE:
-        case wxDF_INVALID:
-        case wxDF_MAX:
-            break;
+    wxString DataFormatIdToMimeType(wxDataFormatId formatId)
+    {
+        switch ( formatId )
+        {
+            case wxDF_TEXT: return "text/plain";
+            case wxDF_BITMAP: return "image/bmp";
+            case wxDF_TIFF: return "image/tiff";
+            case wxDF_WAVE: return "audio/x-wav";
+            case wxDF_UNICODETEXT: return "text/plain";
+            case wxDF_HTML: return "text/html";
+            case wxDF_METAFILE:
+            case wxDF_SYLK:
+            case wxDF_DIF:
+            case wxDF_OEMTEXT:
+            case wxDF_DIB:
+            case wxDF_PALETTE:
+            case wxDF_PENDATA:
+            case wxDF_RIFF:
+            case wxDF_ENHMETAFILE:
+            case wxDF_FILENAME:
+            case wxDF_LOCALE:
+            case wxDF_PRIVATE:
+            case wxDF_INVALID:
+            case wxDF_MAX:
+            default:
+                return "";
+        }
     }
-    return "";
 }
 
-wxDataFormat::wxDataFormat( wxDataFormatId formatId )
+wxDataFormat::wxDataFormat(wxDataFormatId formatId)
 {
-    m_MimeType = DataFormatIdToMimeType(formatId);
+    SetType(formatId);
 }
 
 wxDataFormat::wxDataFormat(const wxString &id)
 {
-    m_MimeType = id;
+    SetId(id);
 }
 
-wxDataFormat::wxDataFormat(const wxChar *id)
+const wxString& wxDataFormat::GetMimeType() const
 {
-    m_MimeType = id;
+    return m_mimeType;
 }
 
-wxDataFormat::wxDataFormat(const QString &id)
+void wxDataFormat::SetMimeType(const wxString& mimeType)
 {
-    m_MimeType = wxQtConvertString(id);
+    m_mimeType = mimeType;
+    m_formatId = wxDF_INVALID;
 }
 
-void wxDataFormat::SetId( const wxChar *id )
+void wxDataFormat::SetId(const wxString& id)
 {
-    m_MimeType = id;
+    SetMimeType(id);
 }
 
-void wxDataFormat::SetId( const wxString& id )
+const wxString& wxDataFormat::GetId() const
 {
-    m_MimeType = id;
-}
-
-wxString wxDataFormat::GetId() const
-{
-    return m_MimeType;
+    return m_mimeType;
 }
 
 wxDataFormatId wxDataFormat::GetType() const
 {
-    wxMISSING_IMPLEMENTATION( "wxDataFormat GetType" );
-    return wxDataFormatId();
+    return m_formatId;
 }
 
-void wxDataFormat::SetType( wxDataFormatId WXUNUSED(type) )
+void wxDataFormat::SetType(wxDataFormatId formatId)
 {
-    wxMISSING_IMPLEMENTATION( "wxDataFormat SetType" );
+    m_mimeType = DataFormatIdToMimeType(formatId);
+    m_formatId = formatId;
 }
 
 bool wxDataFormat::operator==(wxDataFormatId format) const
 {
-    return m_MimeType == DataFormatIdToMimeType(format);
+    return m_mimeType == DataFormatIdToMimeType(format)
+        && m_formatId == format;
 }
 
 bool wxDataFormat::operator!=(wxDataFormatId format) const
 {
-    return m_MimeType != DataFormatIdToMimeType(format);
+    return !operator==(format);
 }
 
 bool wxDataFormat::operator==(const wxDataFormat& format) const
 {
-    return m_MimeType == format.m_MimeType;
+    return m_mimeType == format.m_mimeType
+        && m_formatId == format.m_formatId;
 }
 
 bool wxDataFormat::operator!=(const wxDataFormat& format) const
 {
-    return m_MimeType != format.m_MimeType;
+    return !operator==(format);
 }
 
 //#############################################################################
