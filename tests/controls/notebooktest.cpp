@@ -120,7 +120,7 @@ void NotebookTestCase::NoEventsOnDestruction()
     CHECK( m_numPageChanges == 1 );
 }
 
-TEST_CASE("wxNotebook::NoEventsForFirstPage", "[wxNotebook][event]")
+TEST_CASE("wxNotebook::AddPageEvents", "[wxNotebook][AddPage][event]")
 {
     wxNotebook* const
         notebook = new wxNotebook(wxTheApp->GetTopWindow(), wxID_ANY,
@@ -131,7 +131,8 @@ TEST_CASE("wxNotebook::NoEventsForFirstPage", "[wxNotebook][event]")
     EventCounter countPageChanging(notebook, wxEVT_NOTEBOOK_PAGE_CHANGING);
     EventCounter countPageChanged(notebook, wxEVT_NOTEBOOK_PAGE_CHANGED);
 
-    notebook->AddPage(new wxPanel(notebook), "First page");
+    // Add the first page, it is special.
+    notebook->AddPage(new wxPanel(notebook), "Initial page");
 
     // The selection should have been changed.
     CHECK( notebook->GetSelection() == 0 );
@@ -139,6 +140,28 @@ TEST_CASE("wxNotebook::NoEventsForFirstPage", "[wxNotebook][event]")
     // But no events should have been generated.
     CHECK( countPageChanging.GetCount() == 0 );
     CHECK( countPageChanged.GetCount() == 0 );
+
+
+    // Add another page without selecting it.
+    notebook->AddPage(new wxPanel(notebook), "Unselected page");
+
+    // Selection shouldn't have changed.
+    CHECK( notebook->GetSelection() == 0 );
+
+    // And no events should have been generated, of course.
+    CHECK( countPageChanging.GetCount() == 0 );
+    CHECK( countPageChanged.GetCount() == 0 );
+
+
+    // Finally add another page and do select it.
+    notebook->AddPage(new wxPanel(notebook), "Selected page", true);
+
+    // It should have become selected.
+    CHECK( notebook->GetSelection() == 2 );
+
+    // And events for the selection change should have been generated.
+    CHECK( countPageChanging.GetCount() == 1 );
+    CHECK( countPageChanged.GetCount() == 1 );
 }
 
 #endif //wxUSE_NOTEBOOK
