@@ -53,18 +53,14 @@ static void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
     tlw->Show(true);
     countActivate.WaitEvent();
 
-    // wxGTK needs many event loop iterations before the TLW becomes active and
-    // this doesn't happen in this test, so avoid checking for it.
-#ifndef __WXGTK__
     CHECK(tlw->IsActive());
-#endif
     CHECK(tlw->IsShown());
 
     tlw->Hide();
     CHECK(!tlw->IsShown());
-#ifndef __WXGTK__
+
+    countActivate.WaitEvent();
     CHECK(!tlw->IsActive());
-#endif
 }
 
 TEST_CASE("wxTopLevel::Show", "[tlw][show]")
