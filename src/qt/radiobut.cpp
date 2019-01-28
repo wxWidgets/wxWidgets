@@ -12,6 +12,7 @@
 #include "wx/qt/private/converter.h"
 
 #include <QtWidgets/QRadioButton>
+#include <QtWidgets/QButtonGroup>
 
 wxRadioButton::wxRadioButton() :
     m_qtRadioButton(NULL)
@@ -42,7 +43,20 @@ bool wxRadioButton::Create( wxWindow *parent,
     m_qtRadioButton = new QRadioButton( parent->GetHandle() );
     m_qtRadioButton->setText( wxQtConvertString( label ));
 
+    if ( ( style & wxRB_GROUP ) )
+    {
+        m_qtButtonGroup = new QButtonGroup( parent->GetHandle() );
+    }
+
     return QtCreateControl( parent, id, pos, size, style, validator, name );
+}
+
+wxRadioButton::~wxRadioButton()
+{
+    if ( m_qtButtonGroup )
+    {
+        delete m_qtButtonGroup;
+    }
 }
 
 void wxRadioButton::SetValue(bool value)
