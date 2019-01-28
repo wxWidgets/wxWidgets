@@ -82,6 +82,9 @@ public:
         (void)Compile(expr, flags);
     }
 
+    wxRegEx(const wxRegEx& rhs);
+    wxRegEx &operator=(const wxRegEx& rhs);
+
     // return true if this is a valid compiled regular expression
     bool IsValid() const { return m_impl != NULL; }
 
@@ -151,11 +154,6 @@ private:
 
     // the real guts of this class
     wxRegExImpl *m_impl;
-
-    // as long as the class wxRegExImpl is not ref-counted,
-    // instances of the handle wxRegEx must not be copied.
-    wxRegEx(const wxRegEx&);
-    wxRegEx &operator=(const wxRegEx&);
 };
 
 #endif // wxUSE_REGEX
