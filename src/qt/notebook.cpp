@@ -169,6 +169,17 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
     return sizePage;
 }
 
+bool wxNotebook::DeleteAllPages()
+{
+    if ( !wxNotebookBase::DeleteAllPages() )
+        return false;
+
+    m_qtTabWidget->blockSignals(true);
+    m_qtTabWidget->clear();
+    m_qtTabWidget->blockSignals(false);
+    return true;
+}
+
 int wxNotebook::DoSetSelection(size_t page, int flags)
 {
     wxCHECK_MSG(page < GetPageCount(), wxNOT_FOUND, "invalid notebook index");
