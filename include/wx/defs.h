@@ -1568,9 +1568,8 @@ enum wxBorder
 
 /*
  * wxRadioBox style flags
+ * These styles are not used in any port.
  */
-/*  should we number the items from left to right or from top to bottom in a 2d */
-/*  radiobox? */
 #define wxRA_LEFTTORIGHT    0x0001
 #define wxRA_TOPTOBOTTOM    0x0002
 
