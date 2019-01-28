@@ -670,6 +670,7 @@ bool wxRegEx::Compile(const wxString& expr, int flags)
     {
         // error message already given in wxRegExImpl::Compile
         m_impl->DecRef();
+        m_impl = NULL;
 
         return false;
     }
