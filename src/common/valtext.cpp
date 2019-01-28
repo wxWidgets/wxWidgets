@@ -192,7 +192,7 @@ void wxTextValidator::OnValidationError(wxValidationStatusEvent& event)
         return;
 
     m_validatorWindow->SetFocus();
-    wxMessageBox(event.GetErrorMessage(), _("Validation conflict"),
+    wxMessageBox(errormsg, _("Validation conflict"),
                  wxOK | wxICON_EXCLAMATION, NULL);
 }
 
