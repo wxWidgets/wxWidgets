@@ -62,6 +62,7 @@ bool wxControl::QtCreateControl( wxWindow *parent, wxWindowID id,
     if (!CreateControl( parent, id, pos, size, style, validator, name ))
         return false;
 
+    SetInitialSize(wxQtConvertSize(GetHandle()->size()));
     PostCreation(false);
     return true;
 }
