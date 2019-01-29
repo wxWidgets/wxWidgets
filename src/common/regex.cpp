@@ -167,8 +167,8 @@ public:
     int Replace(wxString *pattern, const wxString& replacement,
                 size_t maxMatches = 0) const;
 
-    void SetObject(wxUIntPtr obj) { m_obj = obj; }
-    bool IsValidObject(wxUIntPtr obj) const { return m_obj == obj; }
+    void SetActiveObject(wxUIntPtr obj) { m_obj = obj; }
+    bool IsActiveObject(wxUIntPtr obj) const { return m_obj == obj; }
 
 private:
     // return the string containing the error message for the given err code
@@ -661,18 +661,18 @@ wxRegEx::~wxRegEx()
 {
     if ( m_impl )
     {
-        if ( IsValidObject() )
-            m_impl->SetObject(0u);
+        if ( IsActiveObject() )
+            m_impl->SetActiveObject(0u);
 
         m_impl->DecRef();
         m_impl = NULL;
     }
 }
 
-bool wxRegEx::IsValidObject() const
+bool wxRegEx::IsActiveObject() const
 {
     // This will be called after IsValid() return true.
-    return m_impl->IsValidObject(wxPtrToUInt(this));
+    return m_impl->IsActiveObject(wxPtrToUInt(this));
 }
 
 bool wxRegEx::Compile(const wxString& expr, int flags)
@@ -699,7 +699,7 @@ bool wxRegEx::Matches(const wxString& str, int flags) const
     wxCHECK_MSG( IsValid(), false, wxT("must successfully Compile() first") );
 
     // Register the object which most recently called Matches().
-    m_impl->SetObject(wxPtrToUInt(this));
+    m_impl->SetActiveObject(wxPtrToUInt(this));
 
     return m_impl->Matches(WXREGEX_CHAR(str), flags
                             WXREGEX_IF_NEED_LEN(str.length()));
@@ -708,7 +708,7 @@ bool wxRegEx::Matches(const wxString& str, int flags) const
 bool wxRegEx::GetMatch(size_t *start, size_t *len, size_t index) const
 {
     wxCHECK_MSG( IsValid(), false, wxT("must successfully Compile() first") );
-    wxCHECK_MSG( IsValidObject(), false, "must call Matches() first" );
+    wxCHECK_MSG( IsActiveObject(), false, "must call Matches() first" );
 
     return m_impl->GetMatch(start, len, index);
 }
@@ -725,7 +725,7 @@ wxString wxRegEx::GetMatch(const wxString& text, size_t index) const
 size_t wxRegEx::GetMatchCount() const
 {
     wxCHECK_MSG( IsValid(), 0, wxT("must successfully Compile() first") );
-    wxCHECK_MSG( IsValidObject(), 0, "must call Matches() first" );
+    wxCHECK_MSG( IsActiveObject(), 0, "must call Matches() first" );
 
     return m_impl->GetMatchCount();
 }
@@ -735,7 +735,7 @@ int wxRegEx::Replace(wxString *pattern,
                      size_t maxMatches) const
 {
     wxCHECK_MSG( IsValid(), wxNOT_FOUND, wxT("must successfully Compile() first") );
-    wxCHECK_MSG( IsValidObject(), wxNOT_FOUND, "must call Matches() first" );
+    wxCHECK_MSG( IsActiveObject(), wxNOT_FOUND, "must call Matches() first" );
 
     return m_impl->Replace(pattern, replacement, maxMatches);
 }

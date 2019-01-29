@@ -153,7 +153,7 @@ private:
     void Init();
 
     // Return true if Matches() was called for this object.
-    bool IsValidObject() const;
+    bool IsActiveObject() const;
 
     // the real guts of this class
     wxRegExImpl *m_impl;
