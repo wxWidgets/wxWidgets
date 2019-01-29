@@ -661,6 +661,9 @@ wxRegEx::~wxRegEx()
 {
     if ( m_impl )
     {
+        if ( IsValidObject() )
+            m_impl->SetObject(0u);
+
         m_impl->DecRef();
         m_impl = NULL;
     }
