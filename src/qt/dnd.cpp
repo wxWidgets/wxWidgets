@@ -18,6 +18,7 @@
 #include <QDrag>
 #include <QWidget>
 #include <QMimeData>
+#include <QCloseEvent>
 
 namespace
 {
@@ -35,6 +36,21 @@ namespace
                 return wxDragLink;
             default:
                 return wxDragNone;
+        }
+    }
+
+    Qt::DropAction DragResultToDropAction(wxDragResult result)
+    {
+        switch ( result )
+        {
+            case wxDragCopy:
+                return Qt::CopyAction;
+            case wxDragMove:
+                return Qt::MoveAction;
+            case wxDragLink:
+                return Qt::LinkAction;
+            default:
+                return Qt::IgnoreAction;
         }
     }
 
@@ -66,29 +82,120 @@ namespace
     }
 }
 
-wxDropTarget::wxDropTarget(wxDataObject *WXUNUSED(dataObject))
+class wxDropTarget::PendingMimeDataSetter
+{
+public:
+    PendingMimeDataSetter(wxDropTarget* dropTarget, const QMimeData* mimeData)
+        : m_dropTarget(dropTarget)
+    {
+        m_dropTarget->m_pendingMimeData = mimeData;
+    }
+
+    ~PendingMimeDataSetter()
+    {
+        m_dropTarget->m_pendingMimeData = NULL;
+    }
+
+private:
+    wxDropTarget* m_dropTarget;
+   
+};
+
+wxDropTarget::wxDropTarget(wxDataObject *dataObject)
+    : wxDropTargetBase(dataObject),
+      m_pendingMimeData(NULL)
 {
 }
 
 bool wxDropTarget::OnDrop(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
 {
-    return false;
+    return !GetMatchingPair().GetMimeType().empty();
 }
 
-wxDragResult wxDropTarget::OnData(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxDragResult WXUNUSED(def))
+wxDragResult wxDropTarget::OnData(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxDragResult default_drag_result)
 {
-    return wxDragResult();
+    GetData();
+    return default_drag_result;
 }
 
 bool wxDropTarget::GetData()
 {
-    return false;
+    const wxDataFormat droppedFormat = GetMatchingPair();
+
+    const wxString mimeType = droppedFormat.GetMimeType();
+    if ( mimeType.empty() )
+        return false;
+
+    const QByteArray data = m_pendingMimeData->data(wxQtConvertString(mimeType));
+    
+    return m_dataObject->SetData(droppedFormat, data.size(), data.data());
 }
 
 wxDataFormat wxDropTarget::GetMatchingPair()
 {
-    wxFAIL_MSG("wxDropTarget::GetMatchingPair() not implemented in src/qt/dnd.cpp");
-    return wxDF_INVALID;
+    if ( m_pendingMimeData == NULL || m_dataObject == NULL )
+        return wxFormatInvalid;
+
+    const QStringList formats = m_pendingMimeData->formats();
+    for ( int i = 0; i < formats.count(); ++i )
+    {
+        const wxDataFormat format(wxQtConvertString(formats[i]));
+
+        if ( m_dataObject->IsSupportedFormat(format) )
+        {
+            return format;
+        }
+    }
+    return wxFormatInvalid;
+}
+
+void wxDropTarget::OnQtEnter(QEvent* event)
+{
+    event->accept();
+    
+    QDragEnterEvent *e = static_cast<QDragEnterEvent*>(event);
+    const QPoint where = e->pos();
+
+    PendingMimeDataSetter setter(this, e->mimeData());
+
+    wxDragResult result = OnEnter(where.x(), where.y(), DropActionToDragResult(e->proposedAction()));
+
+    e->setDropAction(DragResultToDropAction(result));
+}
+
+void wxDropTarget::OnQtLeave(QEvent* event)
+{
+    event->accept();
+    OnLeave();
+}
+
+void wxDropTarget::OnQtMove(QEvent* event)
+{
+    event->accept();
+
+    QDragMoveEvent *e = static_cast<QDragMoveEvent*>(event);
+    const QPoint where = e->pos();
+
+    PendingMimeDataSetter setter(this, e->mimeData());
+
+    wxDragResult result = OnDragOver(where.x(), where.y(), DropActionToDragResult(e->proposedAction()));
+
+    e->setDropAction(DragResultToDropAction(result));
+}
+
+void wxDropTarget::OnQtDrop(QEvent* event)
+{
+    event->accept();
+
+    const QDropEvent *e = static_cast<QDropEvent*>(event);
+    const QPoint where = e->pos();
+
+    PendingMimeDataSetter setter(this, e->mimeData());
+
+    if ( OnDrop(where.x(), where.y()) )
+    {
+        OnData(where.x(), where.y(), DropActionToDragResult(e->dropAction()));
+    }
 }
 
 //##############################################################################

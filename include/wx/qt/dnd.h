@@ -10,22 +10,30 @@
 
 #define wxDROP_ICON(name)   wxICON(name)
 
+class QMimeData;
+
 class WXDLLIMPEXP_CORE wxDropTarget : public wxDropTargetBase
 {
 public:
-    wxDropTarget(wxDataObject *dataObject = NULL );
+    wxDropTarget(wxDataObject *dataObject = NULL);
     
-    virtual bool OnDrop(wxCoord x, wxCoord y);
-    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
-    virtual bool GetData();
+    virtual bool OnDrop(wxCoord x, wxCoord y) wxOVERRIDE;
+    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE;
+    virtual bool GetData() wxOVERRIDE;
 
     wxDataFormat GetMatchingPair();
 
-protected:
+    void OnQtEnter(QEvent* event);
+    void OnQtLeave(QEvent* event);
+    void OnQtMove(QEvent* event);
+    void OnQtDrop(QEvent* event);
 
 private:
-};
+    class PendingMimeDataSetter;
+    friend class PendingMimeDataSetter;
 
+    const QMimeData* m_pendingMimeData;
+};
 
 class WXDLLIMPEXP_CORE wxDropSource: public wxDropSourceBase
 {

@@ -102,6 +102,12 @@ bool wxDataFormat::operator!=(wxDataFormatId format) const
 
 bool wxDataFormat::operator==(const wxDataFormat& format) const
 {
+    // If mime types match, then that's good enough.
+    // (Could be comparing a standard constructed format to a
+    // custom constructed one, where both are actually the same.)
+    if (!m_mimeType.empty() && m_mimeType == format.m_mimeType)
+        return true;
+
     return m_mimeType == format.m_mimeType
         && m_formatId == format.m_formatId;
 }
