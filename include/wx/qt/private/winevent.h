@@ -63,6 +63,14 @@ public:
 
     }
 
+    bool event(QEvent *e) wxOVERRIDE
+    {
+        if ( !GetHandler() )
+            return false;
+
+        return Widget::event(e);
+    }
+
     void HandleDestroyedSignal()
     {
     }
@@ -71,11 +79,13 @@ public:
     {
         // Only process the signal / event if the wxWindow is not destroyed
         if ( !wxWindow::QtRetrieveWindowPointer( this ) )
-        {
             return NULL;
-        }
-        else
-            return wxQtSignalHandler< Handler >::GetHandler();
+
+        Handler *handler = wxQtSignalHandler< Handler >::GetHandler();
+        if ( wxTheApp && wxTheApp->IsScheduledForDestruction(handler) )
+            return NULL;
+
+        return handler;
     }
 
 protected:
