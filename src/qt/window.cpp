@@ -259,6 +259,10 @@ wxWindowQt::~wxWindowQt()
     delete m_qtShortcuts;
 #endif
 
+#if wxUSE_DRAG_AND_DROP
+    SetDropTarget(NULL);
+#endif
+
     // Delete only if the qt widget was created or assigned to this base class
     if (m_qtWindow)
     {
