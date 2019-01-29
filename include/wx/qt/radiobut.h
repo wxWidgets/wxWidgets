@@ -40,8 +40,6 @@ public:
 
     virtual QWidget *GetHandle() const;
 
-    void addButtonToGroup(QRadioButton* radioButton);
-
 private:
     void createAndJoinNewGroup( wxWindow *parent );
     void searchForPreviousGroupToJoin( wxWindow *parent );

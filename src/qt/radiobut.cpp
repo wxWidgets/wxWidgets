@@ -110,11 +110,3 @@ void wxRadioButton::searchForPreviousGroupToJoin( wxWindow *parent )
         }
     }
 }
-
-void wxRadioButton::addButtonToGroup(QRadioButton* radioButton)
-{
-    if( !m_qtButtonGroup )
-        return;
-
-    m_qtButtonGroup->addButton(radioButton);
-}
