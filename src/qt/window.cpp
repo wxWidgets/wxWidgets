@@ -367,6 +367,9 @@ void wxWindowQt::PostCreation(bool generic)
 
     GetHandle()->setFont( wxWindowBase::GetFont().GetHandle() );
 
+    //Update the visible property on the QWidget as show may have been called before create
+    GetHandle()->setVisible(m_isShown);
+
     wxWindowCreateEvent event(this);
     HandleWindowEvent(event);
 }
