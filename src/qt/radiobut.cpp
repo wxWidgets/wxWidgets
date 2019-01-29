@@ -90,13 +90,13 @@ void wxRadioButton::searchForPreviousGroupToJoin( wxWindow *parent )
 
     for ( ; node; node = node->GetPrevious() )
     {
-        wxWindow *child = node->GetData();
+        wxWindow *previous = node->GetData();
 
-        if ( wxIsKindOf( child, wxRadioButton ) )
+        if ( wxIsKindOf( previous, wxRadioButton ) )
         {
-            if ( !child->HasFlag( wxRB_SINGLE ) )
+            if ( !previous->HasFlag( wxRB_SINGLE ) )
             {
-                QRadioButton *ptr = dynamic_cast<QRadioButton *>( child->GetHandle() );
+                QRadioButton *ptr = dynamic_cast<QRadioButton *>( previous->GetHandle() );
 
                 QButtonGroup* btnGroup = ptr->group();
                 btnGroup->addButton( m_qtRadioButton );
