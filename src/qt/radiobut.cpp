@@ -48,11 +48,11 @@ bool wxRadioButton::Create( wxWindow *parent,
 
     if ( style & wxRB_GROUP )
     {
-        createAndJoinNewGroup( parent );
+        CreateAndJoinNewGroup();
     }
     else if ( !( style & wxRB_SINGLE) )
     {
-        searchForPreviousGroupToJoin( parent );
+        SearchForPreviousGroupToJoin( parent );
     }
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
@@ -78,13 +78,13 @@ QWidget *wxRadioButton::GetHandle() const
     return m_qtRadioButton;
 }
 
-void wxRadioButton::createAndJoinNewGroup( wxWindow *parent )
+void wxRadioButton::CreateAndJoinNewGroup()
 {
-    m_qtButtonGroup = new QButtonGroup( parent->GetHandle() );
+    m_qtButtonGroup = new QButtonGroup( GetHandle() );
     m_qtButtonGroup->addButton( m_qtRadioButton );
 }
 
-void wxRadioButton::searchForPreviousGroupToJoin( wxWindow *parent )
+void wxRadioButton::SearchForPreviousGroupToJoin( wxWindow *parent )
 {
     wxWindowList::compatibility_iterator node = parent->GetChildren().GetLast();
 
@@ -96,7 +96,7 @@ void wxRadioButton::searchForPreviousGroupToJoin( wxWindow *parent )
         {
             if ( previous->HasFlag( wxRB_SINGLE ) )
             {
-                createAndJoinNewGroup(parent);
+                CreateAndJoinNewGroup();
             }
             else
             {

@@ -41,8 +41,8 @@ public:
     virtual QWidget *GetHandle() const;
 
 private:
-    void createAndJoinNewGroup( wxWindow *parent );
-    void searchForPreviousGroupToJoin( wxWindow *parent );
+    void CreateAndJoinNewGroup();
+    void SearchForPreviousGroupToJoin( wxWindow *parent );
 
     QRadioButton *m_qtRadioButton;
     QButtonGroup *m_qtButtonGroup;
