@@ -689,7 +689,20 @@ void wxWindowQt::ScrollWindow( int dx, int dy, const wxRect *rect )
 #if wxUSE_DRAG_AND_DROP
 void wxWindowQt::SetDropTarget( wxDropTarget *dropTarget )
 {
-    dnd_event_adapter.SetDropTarget(dropTarget, m_qtWindow);
+    if ( m_dropTarget == dropTarget )
+        return;
+
+    if ( m_dropTarget != NULL )
+    {
+        m_dropTarget->DisconnectFromQWidget(m_qtWindow);
+    }
+
+    m_dropTarget = dropTarget;
+
+    if (m_dropTarget != NULL)
+    {
+        m_dropTarget->ConnectToQWidget(m_qtWindow);
+    }
 }
 #endif
 
@@ -1541,61 +1554,4 @@ QPicture *wxWindowQt::QtGetPicture() const
 QPainter *wxWindowQt::QtGetPainter()
 {
     return m_qtPainter;
-}
-
-//##############################################################################
-// DnDEventAdapter
-//##############################################################################
-
-wxWindow::DnDEventAdapter::DnDEventAdapter() : m_dropTarget(NULL)
-{
-}
-
-bool wxWindow::DnDEventAdapter::eventFilter(QObject* watched, QEvent* event)
-{
-    if ( m_dropTarget != NULL )
-    {
-        switch ( event->type() )
-        {
-            case QEvent::Drop:
-                m_dropTarget->OnQtDrop(event);
-                return true;
-
-            case QEvent::DragEnter:
-                m_dropTarget->OnQtEnter(event);
-                return true;
-
-            case QEvent::DragMove:
-                m_dropTarget->OnQtMove(event);
-                return true;
-
-            case QEvent::DragLeave:
-                m_dropTarget->OnQtLeave(event);
-                return true;
-
-            default:
-                break;
-        }
-    }
-
-    return QObject::eventFilter(watched, event);
-}
-
-void wxWindow::DnDEventAdapter::SetDropTarget(wxDropTarget* dropTarget, QWidget* window)
-{
-    if ( m_dropTarget == dropTarget )
-        return;
-
-    m_dropTarget = dropTarget;
-
-    if ( m_dropTarget == NULL )
-    {
-        window->removeEventFilter(this);
-        window->setAcceptDrops(false);
-    }
-    else
-    {
-        window->installEventFilter(this);
-        window->setAcceptDrops(true);
-    }
 }

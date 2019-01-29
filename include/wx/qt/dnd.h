@@ -10,8 +10,6 @@
 
 #define wxDROP_ICON(name)   wxICON(name)
 
-class QMimeData;
-
 class WXDLLIMPEXP_CORE wxDropTarget : public wxDropTargetBase
 {
 public:
@@ -24,10 +22,8 @@ public:
 
     wxDataFormat GetMatchingPair();
 
-    void OnQtEnter(QEvent* event);
-    void OnQtLeave(QEvent* event);
-    void OnQtMove(QEvent* event);
-    void OnQtDrop(QEvent* event);
+    void ConnectToQWidget(QWidget* widget);
+    void DisconnectFromQWidget(QWidget* widget);
 
 private:
     class Impl;

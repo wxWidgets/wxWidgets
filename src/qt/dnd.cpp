@@ -82,13 +82,6 @@ namespace
     }
 }
 
-
-class wxDropTarget::Impl
-{
-public:
-    const QMimeData* m_pendingMimeData;
-};
-
 namespace
 {
     class PendingMimeDataSetter
@@ -110,9 +103,99 @@ namespace
     };
 }
 
+class wxDropTarget::Impl : public QObject
+{
+public:
+    explicit Impl(wxDropTarget* dropTarget) : m_dropTarget(dropTarget)
+    {
+    }
+
+    virtual bool eventFilter(QObject* watched, QEvent* event) wxOVERRIDE
+    {
+        if ( m_dropTarget != NULL )
+        {
+            switch ( event->type() )
+            {
+                case QEvent::Drop:
+                    OnDrop(event);
+                    return true;
+
+                case QEvent::DragEnter:
+                    OnEnter(event);
+                    return true;
+
+                case QEvent::DragMove:
+                    OnMove(event);
+                    return true;
+
+                case QEvent::DragLeave:
+                    OnLeave(event);
+                    return true;
+
+                default:
+                    break;
+            }
+        }
+
+        return QObject::eventFilter(watched, event);
+    }
+
+    void OnEnter(QEvent* event)
+    {
+        event->accept();
+
+        QDragEnterEvent *e = static_cast<QDragEnterEvent*>(event);
+        const QPoint where = e->pos();
+
+        PendingMimeDataSetter setter(m_pendingMimeData, e->mimeData());
+
+        wxDragResult result = m_dropTarget->OnEnter(where.x(), where.y(), DropActionToDragResult(e->proposedAction()));
+
+        e->setDropAction(DragResultToDropAction(result));
+    }
+
+    void OnLeave(QEvent* event)
+    {
+        event->accept();
+        m_dropTarget->OnLeave();
+    }
+
+    void OnMove(QEvent* event)
+    {
+        event->accept();
+
+        QDragMoveEvent *e = static_cast<QDragMoveEvent*>(event);
+        const QPoint where = e->pos();
+
+        PendingMimeDataSetter setter(m_pendingMimeData, e->mimeData());
+
+        wxDragResult result = m_dropTarget->OnDragOver(where.x(), where.y(), DropActionToDragResult(e->proposedAction()));
+
+        e->setDropAction(DragResultToDropAction(result));
+    }
+
+    void OnDrop(QEvent* event)
+    {
+        event->accept();
+
+        const QDropEvent *e = static_cast<QDropEvent*>(event);
+        const QPoint where = e->pos();
+
+        PendingMimeDataSetter setter(m_pendingMimeData, e->mimeData());
+
+        if ( m_dropTarget->OnDrop(where.x(), where.y()) )
+        {
+            m_dropTarget->OnData(where.x(), where.y(), DropActionToDragResult(e->dropAction()));
+        }
+    }
+    
+    const QMimeData* m_pendingMimeData;
+    wxDropTarget* m_dropTarget;
+};
+
 wxDropTarget::wxDropTarget(wxDataObject *dataObject)
     : wxDropTargetBase(dataObject),
-      m_pImpl(new Impl)
+      m_pImpl(new Impl(this))
 {
 }
 
@@ -163,53 +246,16 @@ wxDataFormat wxDropTarget::GetMatchingPair()
     return wxFormatInvalid;
 }
 
-void wxDropTarget::OnQtEnter(QEvent* event)
+void wxDropTarget::ConnectToQWidget(QWidget* widget)
 {
-    event->accept();
-    
-    QDragEnterEvent *e = static_cast<QDragEnterEvent*>(event);
-    const QPoint where = e->pos();
-
-    PendingMimeDataSetter setter(m_pImpl->m_pendingMimeData, e->mimeData());
-
-    wxDragResult result = OnEnter(where.x(), where.y(), DropActionToDragResult(e->proposedAction()));
-
-    e->setDropAction(DragResultToDropAction(result));
+    widget->setAcceptDrops(true);
+    widget->installEventFilter(m_pImpl);
 }
 
-void wxDropTarget::OnQtLeave(QEvent* event)
+void wxDropTarget::DisconnectFromQWidget(QWidget* widget)
 {
-    event->accept();
-    OnLeave();
-}
-
-void wxDropTarget::OnQtMove(QEvent* event)
-{
-    event->accept();
-
-    QDragMoveEvent *e = static_cast<QDragMoveEvent*>(event);
-    const QPoint where = e->pos();
-
-    PendingMimeDataSetter setter(m_pImpl->m_pendingMimeData, e->mimeData());
-
-    wxDragResult result = OnDragOver(where.x(), where.y(), DropActionToDragResult(e->proposedAction()));
-
-    e->setDropAction(DragResultToDropAction(result));
-}
-
-void wxDropTarget::OnQtDrop(QEvent* event)
-{
-    event->accept();
-
-    const QDropEvent *e = static_cast<QDropEvent*>(event);
-    const QPoint where = e->pos();
-
-    PendingMimeDataSetter setter(m_pImpl->m_pendingMimeData, e->mimeData());
-
-    if ( OnDrop(where.x(), where.y()) )
-    {
-        OnData(where.x(), where.y(), DropActionToDragResult(e->dropAction()));
-    }
+    widget->setAcceptDrops(false);
+    widget->removeEventFilter(m_pImpl);
 }
 
 //##############################################################################

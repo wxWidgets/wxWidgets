@@ -217,16 +217,6 @@ protected:
     QWidget *m_qtWindow;
 
 private:
-    class DnDEventAdapter : public QObject
-    {
-    public:
-        DnDEventAdapter();
-        virtual bool eventFilter(QObject* watched, QEvent* event);
-        void SetDropTarget(wxDropTarget* dropTarget, QWidget* window);
-    private:
-        wxDropTarget *m_dropTarget;
-    };
-
     void Init();
     QScrollArea *m_qtContainer;
 
@@ -248,10 +238,6 @@ private:
     wxQtShortcutHandler *m_qtShortcutHandler;
     bool m_processingShortcut;
 #endif // wxUSE_ACCEL
-
-#if wxUSE_DRAG_AND_DROP
-    DnDEventAdapter dnd_event_adapter;
-#endif
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxWindowQt );
 };
