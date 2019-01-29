@@ -30,9 +30,6 @@
 
 wxPoint wxQtConvertPoint( const QPoint &point )
 {
-    if (point.isNull())
-        return wxDefaultPosition;
-
     return wxPoint( point.x(), point.y() );
 }
 
