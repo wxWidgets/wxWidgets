@@ -102,8 +102,12 @@ void wxRadioButton::searchForPreviousGroupToJoin( wxWindow *parent )
             {
                 QRadioButton *ptr = dynamic_cast<QRadioButton *>( previous->GetHandle() );
 
-                QButtonGroup* btnGroup = ptr->group();
-                btnGroup->addButton( m_qtRadioButton );
+                QButtonGroup *btnGroup = ptr->group();
+
+                if ( btnGroup )
+                {
+                    btnGroup->addButton(m_qtRadioButton);
+                }
             }
 
             break;
