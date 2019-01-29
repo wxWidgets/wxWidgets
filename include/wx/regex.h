@@ -152,6 +152,9 @@ private:
     // common part of all ctors
     void Init();
 
+    // Return true if Matches() was called for this object.
+    bool IsValidObject() const;
+
     // the real guts of this class
     wxRegExImpl *m_impl;
 };
