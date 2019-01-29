@@ -260,7 +260,7 @@ void wxDropTarget::DisconnectFromQWidget(QWidget* widget)
 
 //##############################################################################
 
-wxDropSource::wxDropSource( wxWindow *win,
+wxDropSource::wxDropSource(wxWindow *win,
               const wxIcon &WXUNUSED(copy),
               const wxIcon &WXUNUSED(move),
               const wxIcon &WXUNUSED(none))
@@ -268,7 +268,7 @@ wxDropSource::wxDropSource( wxWindow *win,
 {
 }
 
-wxDropSource::wxDropSource( wxDataObject& data,
+wxDropSource::wxDropSource(wxDataObject& data,
               wxWindow *win,
               const wxIcon &WXUNUSED(copy),
               const wxIcon &WXUNUSED(move),

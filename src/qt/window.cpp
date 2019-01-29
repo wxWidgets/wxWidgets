@@ -699,7 +699,7 @@ void wxWindowQt::SetDropTarget( wxDropTarget *dropTarget )
 
     m_dropTarget = dropTarget;
 
-    if (m_dropTarget != NULL)
+    if ( m_dropTarget != NULL )
     {
         m_dropTarget->ConnectToQWidget(m_qtWindow);
     }
