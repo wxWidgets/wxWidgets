@@ -33,8 +33,6 @@ public:
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxRadioButtonNameStr );
 
-    virtual ~wxRadioButton();
-
     virtual void SetValue(bool value);
     virtual bool GetValue() const;
 

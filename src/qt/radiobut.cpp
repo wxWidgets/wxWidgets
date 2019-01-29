@@ -58,11 +58,6 @@ bool wxRadioButton::Create( wxWindow *parent,
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
-wxRadioButton::~wxRadioButton()
-{
-    delete m_qtButtonGroup;
-}
-
 void wxRadioButton::SetValue(bool value)
 {
     m_qtRadioButton->setChecked( value );
