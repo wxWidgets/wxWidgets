@@ -94,16 +94,16 @@ void wxRadioButton::searchForPreviousGroupToJoin( wxWindow *parent )
 
         if ( wxIsKindOf( previous, wxRadioButton ) )
         {
-            if ( !previous->HasFlag( wxRB_SINGLE ) )
+            if ( previous->HasFlag( wxRB_SINGLE ) )
+            {
+                createAndJoinNewGroup(parent);
+            }
+            else
             {
                 QRadioButton *ptr = dynamic_cast<QRadioButton *>( previous->GetHandle() );
 
                 QButtonGroup* btnGroup = ptr->group();
                 btnGroup->addButton( m_qtRadioButton );
-            }
-            else
-            {
-                createAndJoinNewGroup(parent);
             }
 
             break;
