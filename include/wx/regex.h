@@ -145,17 +145,15 @@ public:
     // dtor not virtual, don't derive from this class
     ~wxRegEx();
 
+    wxRegEx(const wxRegEx&);
+    wxRegEx &operator=(const wxRegEx&);
+
 private:
     // common part of all ctors
     void Init();
 
     // the real guts of this class
     wxRegExImpl *m_impl;
-
-    // as long as the class wxRegExImpl is not ref-counted,
-    // instances of the handle wxRegEx must not be copied.
-    wxRegEx(const wxRegEx&);
-    wxRegEx &operator=(const wxRegEx&);
 };
 
 #endif // wxUSE_REGEX

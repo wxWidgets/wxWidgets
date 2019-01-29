@@ -148,7 +148,7 @@ typedef char wxRegChar;
 #endif
 
 // the real implementation of wxRegEx
-class wxRegExImpl
+class wxRegExImpl : public wxRefCounter
 {
 public:
     // ctor and dtor
@@ -627,22 +627,50 @@ void wxRegEx::Init()
     m_impl = NULL;
 }
 
+wxRegEx::wxRegEx(const wxRegEx& rhs)
+    : m_impl(rhs.m_impl)
+{
+    if ( m_impl )
+        m_impl->IncRef();
+}
+
+wxRegEx& wxRegEx::operator=(const wxRegEx& rhs)
+{
+    if ( this != &rhs )
+    {
+        if ( m_impl )
+            m_impl->DecRef();
+
+        m_impl = rhs.m_impl;
+
+        if ( m_impl )
+            m_impl->IncRef();
+    }
+
+    return *this;
+}
+
 wxRegEx::~wxRegEx()
 {
-    delete m_impl;
+    if ( m_impl )
+    {
+        m_impl->DecRef();
+        m_impl = NULL;
+    }
 }
 
 bool wxRegEx::Compile(const wxString& expr, int flags)
 {
-    if ( !m_impl )
-    {
-        m_impl = new wxRegExImpl;
-    }
+    if ( m_impl )
+        m_impl->DecRef();
+
+    m_impl = new wxRegExImpl;
 
     if ( !m_impl->Compile(expr, flags) )
     {
         // error message already given in wxRegExImpl::Compile
-        wxDELETE(m_impl);
+        m_impl->DecRef();
+        m_impl = NULL;
 
         return false;
     }
