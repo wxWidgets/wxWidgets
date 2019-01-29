@@ -16,6 +16,7 @@ class WXDLLIMPEXP_CORE wxDropTarget : public wxDropTargetBase
 {
 public:
     wxDropTarget(wxDataObject *dataObject = NULL);
+    virtual ~wxDropTarget();
     
     virtual bool OnDrop(wxCoord x, wxCoord y) wxOVERRIDE;
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE;
@@ -29,10 +30,8 @@ public:
     void OnQtDrop(QEvent* event);
 
 private:
-    class PendingMimeDataSetter;
-    friend class PendingMimeDataSetter;
-
-    const QMimeData* m_pendingMimeData;
+    class Impl;
+    Impl* m_pImpl;
 };
 
 class WXDLLIMPEXP_CORE wxDropSource: public wxDropSourceBase
