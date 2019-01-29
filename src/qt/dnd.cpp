@@ -106,10 +106,40 @@ namespace
 class wxDropTarget::Impl : public QObject
 {
 public:
-    explicit Impl(wxDropTarget* dropTarget) : m_dropTarget(dropTarget)
+    explicit Impl(wxDropTarget* dropTarget)
+        : m_dropTarget(dropTarget),
+          m_widget(NULL)
     {
     }
 
+    ~Impl()
+    {
+        Disconnect();
+    }
+
+    void ConnectTo(QWidget* widget)
+    {
+        Disconnect();
+
+        m_widget = widget;
+
+        if ( m_widget != NULL )
+        {
+            m_widget->setAcceptDrops(true);
+            m_widget->installEventFilter(this);
+        }
+    }
+
+    void Disconnect()
+    {
+        if ( m_widget != NULL )
+        {
+            m_widget->setAcceptDrops(false);
+            m_widget->removeEventFilter(this);
+            m_widget = NULL;
+        }
+    }
+    
     virtual bool eventFilter(QObject* watched, QEvent* event) wxOVERRIDE
     {
         if ( m_dropTarget != NULL )
@@ -191,6 +221,7 @@ public:
     
     const QMimeData* m_pendingMimeData;
     wxDropTarget* m_dropTarget;
+    QWidget* m_widget;
 };
 
 wxDropTarget::wxDropTarget(wxDataObject *dataObject)
@@ -246,16 +277,14 @@ wxDataFormat wxDropTarget::GetMatchingPair()
     return wxFormatInvalid;
 }
 
-void wxDropTarget::ConnectToQWidget(QWidget* widget)
+void wxDropTarget::ConnectTo(QWidget* widget)
 {
-    widget->setAcceptDrops(true);
-    widget->installEventFilter(m_pImpl);
+    m_pImpl->ConnectTo(widget);
 }
 
-void wxDropTarget::DisconnectFromQWidget(QWidget* widget)
+void wxDropTarget::Disconnect()
 {
-    widget->setAcceptDrops(false);
-    widget->removeEventFilter(m_pImpl);
+    m_pImpl->Disconnect();
 }
 
 //##############################################################################

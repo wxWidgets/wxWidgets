@@ -22,8 +22,8 @@ public:
 
     wxDataFormat GetMatchingPair();
 
-    void ConnectToQWidget(QWidget* widget);
-    void DisconnectFromQWidget(QWidget* widget);
+    void ConnectTo(QWidget* widget);
+    void Disconnect();
 
 private:
     class Impl;

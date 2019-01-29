@@ -698,14 +698,14 @@ void wxWindowQt::SetDropTarget( wxDropTarget *dropTarget )
 
     if ( m_dropTarget != NULL )
     {
-        m_dropTarget->DisconnectFromQWidget(m_qtWindow);
+        m_dropTarget->Disconnect();
     }
 
     m_dropTarget = dropTarget;
 
     if ( m_dropTarget != NULL )
     {
-        m_dropTarget->ConnectToQWidget(m_qtWindow);
+        m_dropTarget->ConnectTo(m_qtWindow);
     }
 }
 #endif
