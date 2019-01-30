@@ -17,7 +17,9 @@ public:
     virtual ~wxDropTarget();
     
     virtual bool OnDrop(wxCoord x, wxCoord y) wxOVERRIDE;
-    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def) wxOVERRIDE;
+    virtual wxDragResult OnData(wxCoord x,
+                                wxCoord y,
+                                wxDragResult def) wxOVERRIDE;
     virtual bool GetData() wxOVERRIDE;
 
     wxDataFormat GetMatchingPair();

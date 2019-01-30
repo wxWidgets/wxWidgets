@@ -117,7 +117,7 @@ bool wxDataFormat::operator!=(const wxDataFormat& format) const
     return !operator==(format);
 }
 
-//#############################################################################
+//############################################################################
 
 wxDataObject::wxDataObject()
 {
@@ -127,7 +127,8 @@ wxDataObject::~wxDataObject()
 {
 }
 
-bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) const
+bool wxDataObject::IsSupportedFormat(const wxDataFormat& format,
+                                     Direction dir) const
 {
     const size_t formatCount = GetFormatCount(dir);
     if ( formatCount == 1 )
@@ -147,7 +148,7 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) 
     return false;
 }
 
-//#############################################################################
+//############################################################################
 
 wxBitmapDataObject::wxBitmapDataObject()
 {
@@ -160,7 +161,7 @@ wxBitmapDataObject::wxBitmapDataObject( const wxBitmap &WXUNUSED(bitmap) )
 //#############################################################################
 // ----------------------------------------------------------------------------
 // wxTextDataObject
-// ----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 #if wxUSE_UNICODE
 void wxTextDataObject::GetAllFormats(wxDataFormat *formats,
