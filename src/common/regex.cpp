@@ -167,10 +167,10 @@ public:
     int Replace(wxString *pattern, const wxString& replacement,
                 size_t maxMatches = 0) const;
 
-    void SetInstance(wxRegEx* instance) { m_reInstance = instance; }
-    bool IsCurrentInstance(wxRegEx* instance) const
+    void SetInstance(wxUIntPtr instance) { m_reInstance = instance; }
+    bool IsCurrentInstance(wxUIntPtr instance) const
     {
-        return (m_reInstance != NULL) && (m_reInstance == instance);
+        return (m_reInstance != 0u) && (m_reInstance == instance);
     }
 
 private:
@@ -183,7 +183,7 @@ private:
         m_isCompiled = false;
         m_Matches = NULL;
         m_nMatches = 0;
-        m_reInstance = NULL;
+        m_reInstance = 0u;
     }
 
     // free the RE if compiled
@@ -216,7 +216,7 @@ private:
 
     // Will be updated to the last wxRegEx object which successfully called
     // Matches(), NULL otherwise. (see notice at wxRegEx::CanGetMatches()).
-    wxRegEx*        m_reInstance;
+    wxUIntPtr       m_reInstance;
 };
 
 
@@ -666,16 +666,16 @@ wxRegEx::~wxRegEx()
     if ( IsValid() )
     {
         if ( CanGetMatches() )
-            m_impl->SetInstance(NULL);
+            m_impl->SetInstance(0u);
 
         m_impl->DecRef();
         m_impl = NULL;
     }
 }
 
-bool wxRegEx::CanGetMatches() const;
+bool wxRegEx::CanGetMatches() const
 {
-    m_impl->IsCurrentInstance(this);
+    return m_impl->IsCurrentInstance(wxPtrToUInt(this));
 }
 
 bool wxRegEx::Compile(const wxString& expr, int flags)
@@ -705,7 +705,7 @@ bool wxRegEx::Matches(const wxString& str, int flags) const
         m_impl->Matches(WXREGEX_CHAR(str), flags
                             WXREGEX_IF_NEED_LEN(str.length()));
 
-    m_impl->SetInstance(success ? this : (wxRegEx *)NULL);
+    m_impl->SetInstance(success ? wxPtrToUInt(this) : 0u);
 
     return success;
 }
