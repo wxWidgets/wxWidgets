@@ -9,6 +9,8 @@
 #ifndef _WX_QT_APP_H_
 #define _WX_QT_APP_H_
 
+#include <QtCore/QScopedPointer>
+
 class QApplication;
 class WXDLLIMPEXP_CORE wxApp : public wxAppBase
 {
@@ -19,9 +21,9 @@ public:
     virtual bool Initialize(int& argc, wxChar **argv);
 
 private:
-    QApplication *m_qtApplication;
+    QScopedPointer<QApplication> m_qtApplication;
     int m_qtArgc;
-    char **m_qtArgv;
+    QScopedArrayPointer<char*> m_qtArgv;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxApp );
 };
