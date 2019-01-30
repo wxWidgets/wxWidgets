@@ -15,8 +15,7 @@
 #include <QtWidgets/QButtonGroup>
 
 wxRadioButton::wxRadioButton() :
-    m_qtRadioButton(NULL),
-    m_qtButtonGroup(NULL)
+    m_qtRadioButton(NULL)
 {
 }
 
@@ -28,8 +27,7 @@ wxRadioButton::wxRadioButton( wxWindow *parent,
                long style,
                const wxValidator& validator,
                const wxString& name) :
-        m_qtRadioButton(NULL),
-        m_qtButtonGroup(NULL)
+        m_qtRadioButton(NULL)
 {
     Create( parent, id, label, pos, size, style, validator, name );
 }
@@ -75,8 +73,8 @@ QWidget *wxRadioButton::GetHandle() const
 
 void wxRadioButton::CreateAndJoinNewGroup()
 {
-    m_qtButtonGroup = new QButtonGroup( GetHandle() );
-    m_qtButtonGroup->addButton( m_qtRadioButton );
+    QButtonGroup* qtButtonGroup = new QButtonGroup( GetHandle() );
+    qtButtonGroup->addButton( m_qtRadioButton );
 }
 
 void wxRadioButton::SearchForPreviousGroupToJoin( wxWindow *parent )
