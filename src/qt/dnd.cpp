@@ -265,8 +265,7 @@ bool wxDropTarget::OnDrop(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y))
 
 wxDragResult wxDropTarget::OnData(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxDragResult def)
 {
-    GetData();
-    return def;
+    return GetData() ? def : wxDragNone;
 }
 
 bool wxDropTarget::GetData()
