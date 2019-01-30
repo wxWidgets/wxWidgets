@@ -81,6 +81,12 @@ namespace
 
         return mimeData;
     }
+
+    void SetDragCursor(QDrag& drag, const wxCursor& cursor, Qt::DropAction action)
+    {
+        if ( cursor.IsOk() )
+            drag.setDragCursor(cursor.GetHandle().pixmap(), action);
+    }
 }
 
 namespace
@@ -310,19 +316,21 @@ void wxDropTarget::Disconnect()
 //##############################################################################
 
 wxDropSource::wxDropSource(wxWindow *win,
-              const wxIcon &WXUNUSED(copy),
-              const wxIcon &WXUNUSED(move),
-              const wxIcon &WXUNUSED(none))
-    : m_parentWindow(win)
+              const wxCursor &copy,
+              const wxCursor &move,
+              const wxCursor &none)
+    : wxDropSourceBase(copy, move, none),
+      m_parentWindow(win)
 {
 }
 
 wxDropSource::wxDropSource(wxDataObject& data,
               wxWindow *win,
-              const wxIcon &WXUNUSED(copy),
-              const wxIcon &WXUNUSED(move),
-              const wxIcon &WXUNUSED(none))
-    : m_parentWindow(win)
+              const wxCursor &copy,
+              const wxCursor &move,
+              const wxCursor &none)
+    : wxDropSourceBase(copy, move, none), 
+      m_parentWindow(win)
 {
     SetData(data);
 }
@@ -334,6 +342,10 @@ wxDragResult wxDropSource::DoDragDrop(int flags /*=wxDrag_CopyOnly*/)
 
     QDrag drag(m_parentWindow->GetHandle());
     drag.setMimeData(CreateMimeData(m_data));
+
+    SetDragCursor(drag, m_cursorCopy, Qt::CopyAction);
+    SetDragCursor(drag, m_cursorMove, Qt::MoveAction);
+    SetDragCursor(drag, m_cursorStop, Qt::IgnoreAction);
 
     Qt::DropActions actions = Qt::CopyAction | Qt::MoveAction;
     Qt::DropAction defaultAction = Qt::CopyAction;

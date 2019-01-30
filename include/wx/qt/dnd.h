@@ -8,7 +8,7 @@
 #ifndef _WX_QT_DND_H_
 #define _WX_QT_DND_H_
 
-#define wxDROP_ICON(name)   wxICON(name)
+#define wxDROP_ICON(name)   wxCursor(name##_xpm)
 
 class WXDLLIMPEXP_CORE wxDropTarget : public wxDropTargetBase
 {
@@ -34,15 +34,15 @@ class WXDLLIMPEXP_CORE wxDropSource: public wxDropSourceBase
 {
 public:
     wxDropSource( wxWindow *win = NULL,
-                  const wxIcon &copy = wxNullIcon,
-                  const wxIcon &move = wxNullIcon,
-                  const wxIcon &none = wxNullIcon);
+                  const wxCursor &copy = wxNullCursor,
+                  const wxCursor &move = wxNullCursor,
+                  const wxCursor &none = wxNullCursor);
 
     wxDropSource( wxDataObject& data,
                   wxWindow *win,
-                  const wxIcon &copy = wxNullIcon,
-                  const wxIcon &move = wxNullIcon,
-                  const wxIcon &none = wxNullIcon);
+                  const wxCursor &copy = wxNullCursor,
+                  const wxCursor &move = wxNullCursor,
+                  const wxCursor &none = wxNullCursor);
     
     virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
 
