@@ -167,6 +167,12 @@ public:
     int Replace(wxString *pattern, const wxString& replacement,
                 size_t maxMatches = 0) const;
 
+    void SetInstance(wxRegEx* instance) { m_reInstance = instance; }
+    bool IsCurrentInstance(wxRegEx* instance) const
+    {
+        return (m_reInstance != NULL) && (m_reInstance == instance);
+    }
+
 private:
     // return the string containing the error message for the given err code
     wxString GetErrorMsg(int errorcode, bool badconv) const;
@@ -177,6 +183,7 @@ private:
         m_isCompiled = false;
         m_Matches = NULL;
         m_nMatches = 0;
+        m_reInstance = NULL;
     }
 
     // free the RE if compiled
@@ -206,6 +213,10 @@ private:
 
     // true if m_RegEx is valid
     bool            m_isCompiled;
+
+    // Will be updated to the last wxRegEx object which successfully called
+    // Matches(), NULL otherwise. (see notice at wxRegEx::CanGetMatches()).
+    wxRegEx*        m_reInstance;
 };
 
 
@@ -652,11 +663,19 @@ wxRegEx& wxRegEx::operator=(const wxRegEx& rhs)
 
 wxRegEx::~wxRegEx()
 {
-    if ( m_impl )
+    if ( IsValid() )
     {
+        if ( CanGetMatches() )
+            m_impl->SetInstance(NULL);
+
         m_impl->DecRef();
         m_impl = NULL;
     }
+}
+
+bool wxRegEx::CanGetMatches() const;
+{
+    m_impl->IsCurrentInstance(this);
 }
 
 bool wxRegEx::Compile(const wxString& expr, int flags)
@@ -682,13 +701,20 @@ bool wxRegEx::Matches(const wxString& str, int flags) const
 {
     wxCHECK_MSG( IsValid(), false, wxT("must successfully Compile() first") );
 
-    return m_impl->Matches(WXREGEX_CHAR(str), flags
+    const bool success =
+        m_impl->Matches(WXREGEX_CHAR(str), flags
                             WXREGEX_IF_NEED_LEN(str.length()));
+
+    m_impl->SetInstance(success ? this : (wxRegEx *)NULL);
+
+    return success;
 }
 
 bool wxRegEx::GetMatch(size_t *start, size_t *len, size_t index) const
 {
     wxCHECK_MSG( IsValid(), false, wxT("must successfully Compile() first") );
+    wxCHECK_MSG( CanGetMatches(), false,
+        "may only be called after successful call to Matches()" );
 
     return m_impl->GetMatch(start, len, index);
 }
@@ -706,6 +732,11 @@ size_t wxRegEx::GetMatchCount() const
 {
     wxCHECK_MSG( IsValid(), 0, wxT("must successfully Compile() first") );
 
+    // wxRegExImpl::GetMatchCount() may only be called after successful
+    // call to Matches()
+    if ( !CanGetMatches() )
+        return 0;
+
     return m_impl->GetMatchCount();
 }
 
@@ -714,6 +745,10 @@ int wxRegEx::Replace(wxString *pattern,
                      size_t maxMatches) const
 {
     wxCHECK_MSG( IsValid(), wxNOT_FOUND, wxT("must successfully Compile() first") );
+
+    // Notice that wxRegExImpl::Replace() will always update its internal state
+    // by doing the Matches() internally. thus, no need for this check here:
+    // wxCHECK_MSG( CanGetMatches(), wxNOT_FOUND, "..." );
 
     return m_impl->Replace(pattern, replacement, maxMatches);
 }

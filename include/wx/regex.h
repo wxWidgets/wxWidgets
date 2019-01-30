@@ -103,7 +103,7 @@ public:
     // get the start index and the length of the match of the expression
     // (index 0) or a bracketed subexpression (index != 0)
     //
-    // may only be called after successful call to Matches()
+    // may only be called right after successful call to Matches()
     //
     // return false if no match or on error
     bool GetMatch(size_t *start, size_t *len, size_t index = 0) const;
@@ -111,7 +111,7 @@ public:
     // return the part of string corresponding to the match, empty string is
     // returned if match failed
     //
-    // may only be called after successful call to Matches()
+    // may only be called right after successful call to Matches()
     wxString GetMatch(const wxString& text, size_t index = 0) const;
 
     // return the size of the array of matches, i.e. the number of bracketed
@@ -145,12 +145,23 @@ public:
     // dtor not virtual, don't derive from this class
     ~wxRegEx();
 
+    // copy constructor & assignment operator.
     wxRegEx(const wxRegEx&);
     wxRegEx &operator=(const wxRegEx&);
 
 private:
     // common part of all ctors
     void Init();
+
+    // Notice that wxRegExImpl is a ref-counted class. And as such, wxRegExImpl::
+    // {m_Matches & m_nMatches} will be shared by all the wxRegEx objects sharing
+    // the same m_impl handle. And to prevent any API misuse, m_impl will always
+    // remember the wxRegEx object which successfully called Matches(), because
+    // {m_Matches & m_nMatches} will ever be meaningful to that object only.
+
+    // Return @true if the last successful call to Matches()
+    // was performed by this object.
+    bool CanGetMatches() const;
 
     // the real guts of this class
     wxRegExImpl *m_impl;
