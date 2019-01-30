@@ -23,8 +23,7 @@
     #include <QtCore/QDate>
 #endif // wxUSE_DATETIME
 
-#include "wx/kbdstate.h"
-#include "wx/gdicmn.h"
+#include "wx/qt/private/converter.h"
 
 
 wxPoint wxQtConvertPoint( const QPoint &point )
