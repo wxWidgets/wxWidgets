@@ -87,10 +87,7 @@ namespace
         if ( cursor.IsOk() )
             drag.setDragCursor(cursor.GetHandle().pixmap(), action);
     }
-}
 
-namespace
-{
     class PendingMimeDataSetter
     {
     public:
