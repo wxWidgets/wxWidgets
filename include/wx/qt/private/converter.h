@@ -12,23 +12,23 @@
 #define _WX_QT_CONVERTER_H_
 
 #include "wx/defs.h"
-#include <QtCore/Qt>
 
 #include "wx/kbdstate.h"
 #include "wx/gdicmn.h"
 
+#include <QtCore/QRect>
+#include <QtCore/QSize>
+#include <QtCore/QString>
+
 // Rely on overloading and let the compiler pick the correct version, which makes
 // them easier to use then to write wxQtConvertQtRectToWxRect() or wxQtConvertWxRectToQtRect()
 
-class QPoint;
 wxPoint wxQtConvertPoint( const QPoint &point );
 QPoint wxQtConvertPoint( const wxPoint &point );
 
-class QRect;
 wxRect wxQtConvertRect( const QRect &rect );
 QRect  wxQtConvertRect( const wxRect &rect );
 
-class QString;
 wxString wxQtConvertString( const QString &str );
 QString  wxQtConvertString( const wxString &str );
 
@@ -42,7 +42,6 @@ QDate wxQtConvertDate(const wxDateTime& date);
 
 #endif // wxUSE_DATETIME
 
-class QSize;
 wxSize wxQtConvertSize( const QSize  &size );
 QSize  wxQtConvertSize( const wxSize &size );
 

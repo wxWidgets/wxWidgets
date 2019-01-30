@@ -13,10 +13,7 @@
     #pragma hdrstop
 #endif
 
-#include <QtCore/QRect>
-#include <QtCore/QString>
 #include <QtGui/QFont>
-#include <QtCore/QSize>
 
 #if wxUSE_DATETIME
     #include "wx/datetime.h"
