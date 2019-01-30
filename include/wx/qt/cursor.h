@@ -29,7 +29,7 @@ public:
 
     virtual wxPoint GetHotSpot() const;
     QCursor &GetHandle() const;
-    
+
 protected:
     void InitFromStock( wxStockCursor cursorId );
 #if wxUSE_IMAGE

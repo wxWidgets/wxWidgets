@@ -14,7 +14,7 @@ class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
 {
 public:
     wxStaticBox();
-    
+
     wxStaticBox(wxWindow *parent, wxWindowID id,
                 const wxString& label,
                 const wxPoint& pos = wxDefaultPosition,

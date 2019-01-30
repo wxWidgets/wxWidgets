@@ -16,6 +16,7 @@ class WXDLLIMPEXP_CORE wxDataObject : public wxDataObjectBase
 {
 public:
     wxDataObject();
+
     virtual ~wxDataObject();
     
     virtual bool IsSupportedFormat( const wxDataFormat& format, Direction dir = Get ) const;

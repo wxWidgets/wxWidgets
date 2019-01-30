@@ -374,7 +374,7 @@ public:
        @return @true if all columns were successfully deleted, @false otherwise.
     */
     bool DeleteAllColumns();
-    
+
     /**
         Deletes all items in the list control.
 
@@ -1405,7 +1405,7 @@ protected:
     @event{EVT_LIST_ITEM_RIGHT_CLICK(id, func)}
         The right mouse button has been clicked on an item.
     @event{EVT_LIST_KEY_DOWN(id, func)}
-        A key has been pressed. GetIndex() may be -1 if no item is selected. 
+        A key has been pressed. GetIndex() may be -1 if no item is selected.
     @event{EVT_LIST_INSERT_ITEM(id, func)}
         An item has been inserted.
     @event{EVT_LIST_COL_CLICK(id, func)}
@@ -1516,7 +1516,7 @@ public:
     */
     bool IsEditCancelled() const;
 
-    
+
     /**
        @see GetKeyCode()
     */

@@ -3411,10 +3411,10 @@ int wxAuiNotebook::ChangeSelection(size_t n)
     return DoModifySelection(n, false);
 }
 
-bool wxAuiNotebook::AddPage(wxWindow *page, const wxString &text, bool select, 
+bool wxAuiNotebook::AddPage(wxWindow *page, const wxString &text, bool select,
                             int imageId)
 {
-    if(HasImageList()) 
+    if(HasImageList())
     {
         return AddPage(page, text, select, GetImageList()->GetBitmap(imageId));
     }
@@ -3434,13 +3434,13 @@ bool wxAuiNotebook::DeleteAllPages()
     return true;
 }
 
-bool wxAuiNotebook::InsertPage(size_t index, wxWindow *page, 
-                               const wxString &text, bool select, 
+bool wxAuiNotebook::InsertPage(size_t index, wxWindow *page,
+                               const wxString &text, bool select,
                                int imageId)
 {
     if(HasImageList())
     {
-        return InsertPage(index, page, text, select, 
+        return InsertPage(index, page, text, select,
                           GetImageList()->GetBitmap(imageId));
     }
     else

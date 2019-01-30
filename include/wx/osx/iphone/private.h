@@ -63,7 +63,7 @@ public :
     virtual void        GetSize( int &width, int &height ) const;
     virtual void        SetControlSize( wxWindowVariant variant );
     virtual double      GetContentScaleFactor() const ;
-    
+
     virtual void        SetNeedsDisplay( const wxRect* where = NULL );
     virtual bool        GetNeedsDisplay() const;
 
@@ -176,7 +176,7 @@ public :
     virtual bool IsFullScreen() const;
 
     virtual bool EnableFullScreenView(bool enable);
-    
+
     virtual bool ShowFullScreen(bool show, long style);
 
     virtual void RequestUserAttention(int flags);

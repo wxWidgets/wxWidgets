@@ -33,7 +33,7 @@ bool wxGetNativeFontEncoding(wxFontEncoding WXUNUSED(encoding),
                           wxNativeEncodingInfo *info)
 {
     *info = wxNativeEncodingInfo();
-    
+
     return false;
 }
 

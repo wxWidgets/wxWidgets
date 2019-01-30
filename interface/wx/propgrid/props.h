@@ -312,7 +312,7 @@ public:
                     const wxChar* const* labels = NULL,
                     const long* values = NULL,
                     int value = 0 );
-    
+
     wxEnumProperty( const wxString& label,
                     const wxString& name,
                     wxPGChoices& choices,

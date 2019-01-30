@@ -557,7 +557,7 @@ public:
      */
     void SetBottomLeft(const wxPoint &p);
 
-    
+
     //@{
     /**
         Modifies the rectangle to contain the bounding box of this rectangle

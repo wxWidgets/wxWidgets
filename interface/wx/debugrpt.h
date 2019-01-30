@@ -221,8 +221,8 @@ public:
         is copied to a file in the debug report directory with the same name.
         Otherwise the file will be searched in the temporary directory returned
         by GetDirectory().
-        
-        The argument @a description only exists to be displayed to the user in 
+
+        The argument @a description only exists to be displayed to the user in
         the report summary shown by wxDebugReportPreview.
 
         @see GetDirectory(), AddText()

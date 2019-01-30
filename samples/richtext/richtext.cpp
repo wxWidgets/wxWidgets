@@ -763,7 +763,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
 #ifdef __WXMAC__
     SetWindowVariant(wxWINDOW_VARIANT_SMALL);
 #endif
-    
+
     // set the frame icon
     SetIcon(wxICON(sample));
 
@@ -1247,14 +1247,14 @@ void MyFrame::WriteInitialText()
                 r.WriteText(msg);
             }
         }
-        
+
         // Demonstrate colspan and rowspan
         wxRichTextCell* cell = table->GetCell(1, 0);
         cell->SetColSpan(2);
         r.SetFocusObject(cell);
         cell->Clear();
         r.WriteText("This cell spans 2 columns");
-        
+
         cell = table->GetCell(1, 3);
         cell->SetRowSpan(2);
         r.SetFocusObject(cell);
@@ -2010,7 +2010,7 @@ void MyFrame::OnTableDeleteColumn(wxCommandEvent& WXUNUSED(event))
         {
             col = table->GetColumnCount() - 1;
         }
-            
+
         table->DeleteColumns(col, 1);
     }
 }
@@ -2025,7 +2025,7 @@ void MyFrame::OnTableDeleteRow(wxCommandEvent& WXUNUSED(event))
         {
             row = table->GetRowCount() - 1;
         }
-            
+
         table->DeleteRows(row, 1);
     }
 }

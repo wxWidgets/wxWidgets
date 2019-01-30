@@ -294,7 +294,7 @@ public:
                      int flag = 0,
                      int border = 0,
                      wxObject* userData = NULL);
-    
+
     /**
         Appends a spacer child to the sizer.
 
@@ -309,7 +309,7 @@ public:
     wxSizerItem* Add( int width, int height, const wxSizerFlags& flags);
 
     wxSizerItem* Add(wxSizerItem* item);
-    
+
     /**
         This base function adds non-stretchable space to both the horizontal
         and vertical orientation of the sizer.
@@ -439,7 +439,7 @@ public:
     */
     virtual bool InformFirstDirection(int direction, int size, int availableOtherDir);
 
-    
+
     //@{
     /**
         Returns the list of the items in this sizer.
@@ -460,7 +460,7 @@ public:
        Set the window this sizer is used in.
     */
     void SetContainingWindow(wxWindow *window);
-    
+
     /**
        Returns the number of items in the sizer.
 
@@ -617,7 +617,7 @@ public:
                         const wxSizerFlags& flags);
 
     wxSizerItem* Insert(size_t index, wxSizerItem* item);
-    
+
     /**
         Inserts non-stretchable space to the sizer.
         More readable way of calling wxSizer::Insert(index, size, size).
@@ -713,7 +713,7 @@ public:
     wxSizerItem* Prepend(int width, int height, const wxSizerFlags& flags);
 
     wxSizerItem* Prepend(wxSizerItem* item);
-    
+
     /**
         Prepends non-stretchable space to the sizer.
         More readable way of calling wxSizer::Prepend(size, size, 0).
@@ -1715,7 +1715,7 @@ public:
 
     virtual void RecalcSizes();
     virtual wxSize CalcMin();
-    
+
 };
 
 
@@ -1778,7 +1778,7 @@ public:
         number of columns or rows being currently used, see GetEffectiveColsCount()
     */
     int GetCols() const;
-    
+
     /**
         Returns the number of rows that has been specified for the
         sizer.
@@ -1798,7 +1798,7 @@ public:
         @since 2.9.1
     */
     int GetEffectiveColsCount() const;
-    
+
     /**
         Returns the number of rows currently used by the sizer.
 

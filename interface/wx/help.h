@@ -247,7 +247,7 @@ public:
 
     This is an alias for one of a family of help controller classes which is
     most appropriate for the current platform.
-    
+
     A help controller allows an application to display help, at the contents
     or at a particular topic, and shut the help program down on termination.
     This avoids proliferation of many instances of the help viewer whenever the

@@ -177,7 +177,7 @@ void wxTextDataObject::GetAllFormats(wxDataFormat *formats,
 wxFileDataObject::wxFileDataObject()
 {
 }
- 
+
 void wxFileDataObject::AddFile( const wxString &WXUNUSED(filename) )
 {
 

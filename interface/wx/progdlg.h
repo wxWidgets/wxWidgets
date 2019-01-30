@@ -167,7 +167,7 @@ public:
 
     /**
         Changes the maximum value of the progress meter given in the constructor.
-        This function can only be called (with a positive value) if the value passed 
+        This function can only be called (with a positive value) if the value passed
         in the constructor was positive.
 
         @since 2.9.1

@@ -32,7 +32,7 @@ public:
     wxQtPrintPreview(wxPrintout *printout,
                           wxPrintout *printoutForPrinting,
                           wxPrintData *data);
-    
+
     virtual bool Print(bool interactive);
     virtual void DetermineScaling();
 

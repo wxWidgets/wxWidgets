@@ -262,7 +262,7 @@
     #define TVM_GETEXTENDEDSTYLE    (TV_FIRST + 45)
 #endif
 
-// Various defines used by the webview library that are needed by mingw 
+// Various defines used by the webview library that are needed by mingw
 
 #ifndef DISPID_COMMANDSTATECHANGE
 #define DISPID_COMMANDSTATECHANGE 105

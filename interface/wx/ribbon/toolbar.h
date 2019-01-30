@@ -8,11 +8,11 @@
 
 /**
     @class wxRibbonToolBar
-    
+
     A ribbon tool bar is similar to a traditional toolbar which has no labels.
     It contains one or more tool groups, each of which contains one or more
     tools. Each tool is represented by a (generally small, i.e. 16x15) bitmap.
-    
+
     @beginEventEmissionTable{wxRibbonToolBarEvent}
     @event{EVT_RIBBONTOOLBAR_CLICKED(id, func)}
         Triggered when the normal (non-dropdown) region of a tool on the tool
@@ -23,7 +23,7 @@
         event handler if it wants to display a popup menu (which is what most
         dropdown tools should be doing).
     @endEventTable
-    
+
     @library{wxribbon}
     @category{ribbon}
 */
@@ -39,7 +39,7 @@ public:
 
     /**
         Construct a ribbon tool bar with the given parameters.
-        
+
         @param parent
             Parent window for the tool bar (typically a wxRibbonPanel).
         @param id
@@ -84,7 +84,7 @@ public:
 
     /**
         Add a dropdown tool to the tool bar (simple version).
-        
+
         @see AddTool()
     */
     virtual wxRibbonToolBarToolBase* AddDropdownTool(
@@ -94,7 +94,7 @@ public:
 
     /**
         Add a hybrid tool to the tool bar (simple version).
-        
+
         @see AddTool()
     */
     virtual wxRibbonToolBarToolBase* AddHybridTool(
@@ -116,7 +116,7 @@ public:
 
     /**
         Add a tool to the tool bar.
-        
+
         @param tool_id
             ID of the new tool (used for event callbacks).
         @param bitmap
@@ -132,10 +132,10 @@ public:
             The kind of tool to add.
         @param client_data
             Client data to associate with the new tool.
-        
+
         @return An opaque pointer which can be used only with other tool bar
             methods.
-            
+
         @see AddDropdownTool(), AddHybridTool(), AddSeparator(), InsertTool()
     */
     virtual wxRibbonToolBarToolBase* AddTool(
@@ -148,7 +148,7 @@ public:
 
     /**
         Add a separator to the tool bar.
-        
+
         Separators are used to separate tools into groups. As such, a separator
         is not explicitly drawn, but is visually seen as the gap between tool
         groups.
@@ -404,12 +404,12 @@ public:
 
     /**
         Set the number of rows to distribute tool groups over.
-        
+
         Tool groups can be distributed over a variable number of rows. The way
         in which groups are assigned to rows is not specified, and the order
         of groups may change, but they will be distributed in such a way as to
         minimise the overall size of the tool bar.
-        
+
         @param nMin
             The minimum number of rows to use.
         @param nMax

@@ -144,37 +144,37 @@ public:
         @see GetItemLabelText(), GetItemLabel()
     */
     static wxString GetLabelText(const wxString& text);
-    
-    
+
+
     /**
         @name Getters
     */
     //@{
-    
+
     /**
         Returns the background colour associated with the menu item.
-        
+
         @onlyfor{wxmsw}
     */
     wxColour& GetBackgroundColour() const;
 
     /**
         Returns the checked or unchecked bitmap.
-        
+
         @onlyfor{wxmsw}
     */
     virtual const wxBitmap& GetBitmap(bool checked = true) const;
 
     /**
         Returns the bitmap to be used for disabled items.
-        
+
         @onlyfor{wxmsw}
     */
     virtual const wxBitmap& GetDisabledBitmap() const;
-    
+
     /**
         Returns the font associated with the menu item.
-        
+
         @onlyfor{wxmsw}
     */
     wxFont& GetFont() const;
@@ -223,7 +223,7 @@ public:
 
     /**
         Gets the width of the menu item checkmark bitmap.
-        
+
         @onlyfor{wxmsw}
     */
     int GetMarginWidth() const;
@@ -238,7 +238,7 @@ public:
         Returns the text associated with the menu item.
 
         @deprecated This function is deprecated. Please use GetItemLabel() or GetItemLabelText() instead.
-        
+
         @see GetItemLabel(), GetItemLabelText()
     */
     wxString GetName() const;
@@ -260,11 +260,11 @@ public:
 
     /**
         Returns the text colour associated with the menu item.
-        
+
         @onlyfor{wxmsw}
     */
     wxColour& GetTextColour() const;
-    
+
     /**
        Extract the accelerator from the given menu string, return NULL if none
        found.
@@ -277,9 +277,9 @@ public:
     virtual wxAcceleratorEntry *GetAccel() const;
 
     //@}
-    
-    
-    
+
+
+
     /**
         @name Checkers
     */
@@ -329,11 +329,11 @@ public:
         Returns @true if the item is a submenu.
     */
     bool IsSubMenu() const;
-    
+
     //@}
-    
-    
-    
+
+
+
     /**
         @name Setters
     */
@@ -341,7 +341,7 @@ public:
 
     /**
         Sets the background colour associated with the menu item.
-        
+
         @onlyfor{wxmsw}
     */
     void SetBackgroundColour(const wxColour& colour);
@@ -349,7 +349,7 @@ public:
     /**
         Sets the bitmap for the menu item.
 
-        It is equivalent to wxMenuItem::SetBitmaps(bmp, wxNullBitmap) if 
+        It is equivalent to wxMenuItem::SetBitmaps(bmp, wxNullBitmap) if
         @a checked is @true (default value) or SetBitmaps(wxNullBitmap, bmp)
         otherwise.
 
@@ -386,7 +386,7 @@ public:
 
     /**
         Sets the font associated with the menu item.
-        
+
         @onlyfor{wxmsw}
     */
     void SetFont(const wxFont& font);
@@ -398,19 +398,19 @@ public:
 
     /**
         Sets the label associated with the menu item.
-        
-        Note that if the ID of this menu item corresponds to a stock ID, then it is 
+
+        Note that if the ID of this menu item corresponds to a stock ID, then it is
         not necessary to specify a label: wxWidgets will automatically use the stock
         item label associated with that ID. See the @ref wxMenuItem::wxMenuItem "constructor"
         for more info.
-        
-        The label string for the normal menu items (not separators) may include the 
+
+        The label string for the normal menu items (not separators) may include the
         accelerator which can be used to activate the menu item from keyboard.
-        An accelerator key can be specified using the ampersand <tt>&</tt> character. 
-        In order to embed an ampersand character in the menu item text, the ampersand 
+        An accelerator key can be specified using the ampersand <tt>&</tt> character.
+        In order to embed an ampersand character in the menu item text, the ampersand
         must be doubled.
-        
-        Optionally you can specify also an accelerator string appending a tab character 
+
+        Optionally you can specify also an accelerator string appending a tab character
         <tt>\\t</tt> followed by a valid key combination (e.g. <tt>CTRL+V</tt>).
         Its general syntax is any combination of @c "CTRL", @c "RAWCTRL",  @c
         "ALT" and @c "SHIFT" strings (case doesn't matter) separated by either
@@ -507,7 +507,7 @@ public:
 
     /**
         Sets the width of the menu item checkmark bitmap.
-        
+
         @onlyfor{wxmsw}
     */
     void SetMarginWidth(int width);
@@ -526,18 +526,18 @@ public:
         Sets the text associated with the menu item.
 
         @deprecated This function is deprecated in favour of SetItemLabel().
-        
+
         @see SetItemLabel().
     */
     virtual void SetText(const wxString& text);
 
     /**
         Sets the text colour associated with the menu item.
-        
+
         @onlyfor{wxmsw}
     */
     void SetTextColour(const wxColour& colour);
-    
+
     /**
        Set the accel for this item - this may also be done indirectly with
        SetText()

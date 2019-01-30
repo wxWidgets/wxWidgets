@@ -23,7 +23,7 @@ public:
     wxRegion(size_t n, const wxPoint *points, wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
     wxRegion(const wxBitmap& bmp);
     wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance = 0);
-    
+
     virtual bool IsEmpty() const;
     virtual void Clear();
 
@@ -82,7 +82,7 @@ public:
     wxCoord GetH() const;
     wxCoord GetHeight() const;
     wxRect GetRect() const;
-    
+
 private:
     QVector < QRect > *m_qtRects;
     int m_pos;

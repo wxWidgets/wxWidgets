@@ -45,7 +45,7 @@ public:
     virtual void SetMenuBar(wxMenuBar *menubar);
     virtual void SetStatusBar(wxStatusBar *statusBar );
     virtual void SetToolBar(wxToolBar *toolbar);
-    
+
     virtual void SetWindowStyleFlag( long style );
 
     virtual void AddChild( wxWindowBase *child );

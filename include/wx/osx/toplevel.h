@@ -82,7 +82,7 @@ public:
 
     virtual void SetLabel(const wxString& label) wxOVERRIDE { SetTitle( label ); }
     virtual wxString GetLabel() const            wxOVERRIDE { return GetTitle(); }
-    
+
     virtual void OSXSetModified(bool modified) wxOVERRIDE;
     virtual bool OSXIsModified() const wxOVERRIDE;
 

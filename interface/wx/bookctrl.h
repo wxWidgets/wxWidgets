@@ -249,7 +249,10 @@ public:
         The page must have the book control itself as the parent and must not
         have been added to this control previously.
 
-        The call to this function may generate the page changing events.
+        The call to this function will generate the page changing and page
+        changed events if @a select is true, but not when inserting the very
+        first page (as there is no previous page selection to switch from in
+        this case and so it wouldn't make sense to e.g. veto such event).
 
         @param page
             Specifies the new page.

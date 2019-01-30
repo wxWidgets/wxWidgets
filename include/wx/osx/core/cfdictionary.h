@@ -119,7 +119,7 @@ public:
     {
         SetValue(key, wxCFNumberRef(v));
     }
-    
+
     CFMutableDictionaryRef CreateCopy() const
     {
         return CFDictionaryCreateMutableCopy(kCFAllocatorDefault, 0, this->m_ptr);

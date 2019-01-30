@@ -58,7 +58,7 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
-    
+
 private:
     // implement base class pure virtuals
     virtual void DoSetCount(unsigned int count) wxOVERRIDE;

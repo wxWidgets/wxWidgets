@@ -532,7 +532,7 @@ public:
     virtual void SetRowHeight(int height);
     virtual void SetRowHeight(const wxDataViewItem& item, unsigned int height);
     virtual void OnSize();
-    
+
     virtual void StartEditor( const wxDataViewItem & item, unsigned int column );
 
     // drag & drop helper methods

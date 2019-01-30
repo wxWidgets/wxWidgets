@@ -21,7 +21,7 @@ debugging. Both assertions and debug logging are also used by wxWidgets itself
 so you may encounter them even if you don't use either of these features
 yourself.
 
-@see wxLog, @ref group_funcmacro_log, @ref group_funcmacro_debug 
+@see wxLog, @ref group_funcmacro_log, @ref group_funcmacro_debug
 
 
 

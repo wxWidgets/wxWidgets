@@ -458,7 +458,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_SHOW_ATTRIBUTES, MyFrame::OnShowAttributes)
     EVT_CHECKBOX( ID_MULTIPLE_SORT, MyFrame::OnMultipleSort)
     EVT_CHECKBOX( ID_SORT_BY_FIRST_COLUMN, MyFrame::OnSortByFirstColumn)
-    
+
     // Fourth page.
     EVT_BUTTON( ID_DELETE_TREE_ITEM, MyFrame::OnDeleteTreeItem )
     EVT_BUTTON( ID_DELETE_ALL_TREE_ITEMS, MyFrame::OnDeleteAllTreeItems )

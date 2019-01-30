@@ -58,7 +58,7 @@ free library.  If the library is modified by someone else and
 passed on, we want its recipients to know that what they have is
 not the original version, so that any problems introduced by
 others will not reflect on the original authors' reputations.
- 
+
 Finally, any free program is threatened constantly by software
 patents.  We wish to avoid the danger that companies
 distributing free software will individually obtain patent
@@ -148,7 +148,7 @@ constitute a work based on the Library (independent of the use
 of the Library in a tool for writing it).  Whether that is true
 depends on what the Library does and what the program that uses
 the Library does.
-  
+
 1. You may copy and distribute verbatim copies of the Library's
 complete source code as you receive it, in any medium, provided
 that you conspicuously and appropriately publish on each copy an
@@ -160,7 +160,7 @@ along with the Library.
 You may charge a fee for the physical act of transferring a
 copy, and you may at your option offer warranty protection in
 exchange for a fee.
- 
+
 2. You may modify your copy or copies of the Library or any
 portion of it, thus forming a work based on the Library, and
 copy and distribute such modifications or work under the terms
@@ -220,7 +220,7 @@ Public License, version 2, instead of to this License.  (If a
 newer version than version 2 of the ordinary GNU General Public
 License has appeared, then you can specify that version instead
 if you wish.)  Do not make any other change in these notices.
- 
+
 Once this change is made in a given copy, it is irreversible for
 that copy, so the ordinary GNU General Public License applies to
 all subsequent copies and derivative works made from that copy.
@@ -278,7 +278,7 @@ distribute the object code for the work under the terms of
 Section 6. Any executables containing that work also fall under
 Section 6, whether or not they are linked directly with the
 Library itself.
- 
+
 6. As an exception to the Sections above, you may also compile
 or link a "work that uses the Library" with the Library to
 produce a work containing portions of the Library, and
@@ -332,7 +332,7 @@ restrictions of other proprietary libraries that do not normally
 accompany the operating system.  Such a contradiction means you
 cannot use both them and the Library together in an executable
 that you distribute.
- 
+
 7. You may place library facilities that are a work based on the
 Library side-by-side in a single library together with other
 library facilities not covered by this License, and distribute
@@ -376,7 +376,7 @@ modify the Library subject to these terms and conditions.  You
 may not impose any further restrictions on the recipients'
 exercise of the rights granted herein. You are not responsible
 for enforcing compliance by third parties to this License.
- 
+
 11. If, as a consequence of a court judgment or allegation of
 patent infringement or for any other reason (not limited to
 patent issues), conditions are imposed on you (whether by court

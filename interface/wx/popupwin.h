@@ -38,7 +38,7 @@ public:
       Default constructor
     */
     wxPopupWindow();
-    
+
     /**
       Constructor
     */
@@ -125,5 +125,5 @@ protected:
        else but direct call to Dismiss().
     */
     virtual void OnDismiss();
-    
+
 };

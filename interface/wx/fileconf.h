@@ -105,7 +105,7 @@ public:
         @see wxCHANGE_UMASK()
     */
     void SetUmask(int mode);
-    
+
   // implement inherited pure virtual functions
   virtual void SetPath(const wxString& strPath);
   virtual const wxString& GetPath() const;

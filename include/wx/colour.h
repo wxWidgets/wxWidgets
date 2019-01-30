@@ -118,7 +118,7 @@ public:
     virtual ChannelType Blue() const = 0;
     virtual ChannelType Alpha() const
         { return wxALPHA_OPAQUE ; }
-    
+
     virtual bool IsSolid() const
         { return true; }
 

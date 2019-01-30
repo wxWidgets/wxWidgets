@@ -516,7 +516,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     Note that when displaying the value, sign is omitted if the resulting
     textual representation is effectively zero (for example, -0.0001 with
-    precision of 3 will become 0.0 instead of -0.0). This behaviour is unlike 
+    precision of 3 will become 0.0 instead of -0.0). This behaviour is unlike
     what C standard library does, but should result in better end-user
     experience in almost all cases.
 

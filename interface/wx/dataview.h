@@ -78,10 +78,10 @@
     @endcode
 
     A potentially better way to avoid memory leaks is to use wxObjectDataPtr
-    
+
     @code
         wxObjectDataPtr<MyMusicModel> musicModel;
-        
+
         wxDataViewCtrl *musicCtrl = new wxDataViewCtrl( this, wxID_ANY );
         musicModel = new MyMusicModel;
         m_musicCtrl->AssociateModel( musicModel.get() );
@@ -382,7 +382,7 @@ public:
     */
     bool ValueChanged(const wxDataViewItem& item, unsigned int col);
 
-    
+
     virtual bool IsListModel() const;
     virtual bool IsVirtualListModel() const;
 
@@ -527,7 +527,7 @@ public:
     have other reason to use a virtual control.
 
     @see wxDataViewListModel for the API.
-    
+
     @library{wxcore}
     @category{dvc}
 */
@@ -2064,7 +2064,7 @@ public:
     */
     virtual bool Validate(wxVariant& value);
 
-    
+
     virtual bool HasEditorCtrl() const;
     virtual wxWindow* CreateEditorCtrl(wxWindow * parent,
                                        wxRect labelRect,
@@ -3284,7 +3284,7 @@ public:
         Returns true if item is a container.
     */
     bool IsContainer( const wxDataViewItem& item );
-    
+
     /**
         Calls the same method from wxDataViewTreeStore but uses
         an index position in the image list instead of a wxIcon.

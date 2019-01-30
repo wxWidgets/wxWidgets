@@ -176,7 +176,7 @@ public:
      */
     wxCFRef(refType p) : m_ptr(p)
     {
-        
+
     }
     /*! @method     wxCFRef
         @abstract   Assumes ownership of p and creates a reference to it.
@@ -190,7 +190,7 @@ public:
                     This method is templated and takes an otherType *p.  This prevents implicit conversion
                     using an operator refType() in a different ref-holding class type.
     */
-    
+
     template <class otherType>
     explicit wxCFRef(otherType *p)
     :   m_ptr(p) // Implicit conversion from otherType* to refType should occur.

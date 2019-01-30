@@ -48,14 +48,14 @@ const char wxFileSelectorDefaultWildcardStr[];
                 return;
             //else: proceed asking to the user the new file to open
         }
-        
-        wxFileDialog 
+
+        wxFileDialog
             openFileDialog(this, _("Open XYZ file"), "", "",
                            "XYZ files (*.xyz)|*.xyz", wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 
         if (openFileDialog.ShowModal() == wxID_CANCEL)
             return;     // the user changed idea...
-        
+
         // proceed loading the file chosen by the user;
         // this can be done with e.g. wxWidgets input streams:
         wxFileInputStream input_stream(openFileDialog.GetPath());
@@ -64,22 +64,22 @@ const char wxFileSelectorDefaultWildcardStr[];
             wxLogError("Cannot open file '%s'.", openFileDialog.GetPath());
             return;
         }
-        
+
         ...
     }
     @endcode
-    
+
     The typical usage for the save file dialog is instead somewhat simpler:
     @code
     void MyFrame::OnSaveAs(wxCommandEvent& WXUNUSED(event))
     {
-        wxFileDialog 
+        wxFileDialog
             saveFileDialog(this, _("Save XYZ file"), "", "",
                            "XYZ files (*.xyz)|*.xyz", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 
         if (saveFileDialog.ShowModal() == wxID_CANCEL)
             return;     // the user changed idea...
-        
+
         // save the current contents in the file;
         // this can be done with e.g. wxWidgets output streams:
         wxFileOutputStream output_stream(saveFileDialog.GetPath());
@@ -88,7 +88,7 @@ const char wxFileSelectorDefaultWildcardStr[];
             wxLogError("Cannot save current contents in file '%s'.", saveFileDialog.GetPath());
             return;
         }
-        
+
         ...
     }
     @endcode
@@ -136,7 +136,7 @@ const char wxFileSelectorDefaultWildcardStr[];
     @style{wxFD_MULTIPLE}
            For open dialog only: allows selecting multiple files.
     @style{wxFD_CHANGE_DIR}
-           Change the current working directory (when the dialog is dismissed) 
+           Change the current working directory (when the dialog is dismissed)
            to the directory where the file(s) chosen by the user are.
     @style{wxFD_PREVIEW}
            Show the preview of the selected files (currently only supported by
@@ -302,7 +302,7 @@ public:
 
     /**
         Sets the default filename.
-        
+
         In wxGTK this will have little effect unless a default directory has previously been set.
     */
     virtual void SetFilename(const wxString& setfilename);

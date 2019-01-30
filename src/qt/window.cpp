@@ -315,7 +315,7 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
             m_qtWindow = new wxQtWidget( parent, this );
     }
 
-    
+
     GetHandle()->setMouseTracking(true);
     if ( !wxWindowBase::CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
         return false;
@@ -522,7 +522,7 @@ bool wxWindowQt::SetCursor( const wxCursor &cursor )
         return false;
 
     GetHandle()->setCursor(cursor.GetHandle());
-    
+
     return true;
 }
 

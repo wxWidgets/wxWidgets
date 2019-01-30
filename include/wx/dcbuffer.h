@@ -134,7 +134,7 @@ private:
     int m_style;
 
     wxSize m_area;
-    
+
     wxDECLARE_DYNAMIC_CLASS(wxBufferedDC);
     wxDECLARE_NO_COPY_CLASS(wxBufferedDC);
 };

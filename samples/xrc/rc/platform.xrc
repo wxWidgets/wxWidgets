@@ -109,27 +109,27 @@
             <object class="wxStaticText" name="download_mac_statictext">
                 <label>Get latest update at www.mycompany.com/download/mac</label>
             </object>
-        </object>     
-        <object platform="win" class="sizeritem"> 
+        </object>
+        <object platform="win" class="sizeritem">
             <flag>wxALIGN_CENTRE|wxALL</flag>
             <border>5</border>
             <object class="wxStaticText" name="download_win_statictext">
                 <label>Get latest update at www.mycompany.com/download/win</label>
             </object>
-        </object>    
+        </object>
         <object platform="unix" class="sizeritem">
             <flag>wxALIGN_CENTRE|wxALL</flag>
             <border>5</border>
             <object class="wxStaticText" name="download_unix_statictext">
                 <label>Get latest update at www.mycompany.com/download/unix</label>
             </object>
-        </object>    
+        </object>
         <object platform="os2" class="sizeritem">
             <flag>wxALIGN_CENTRE|wxALL</flag>
             <border>5</border>
             <object class="wxStaticText" name="download_os2_statictext">
                 <label>Get latest update at www.mycompany.com/download/os2</label>
-            </object>        
+            </object>
         </object>
         <object class="sizeritem">
             <flag>wxALIGN_CENTRE|wxALL</flag>

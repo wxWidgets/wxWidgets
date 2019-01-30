@@ -382,27 +382,27 @@ public:
         @remarks Use only after the menubar has been associated with a frame.
     */
     virtual void SetMenuLabel(size_t pos, const wxString& label);
-    
-    /**        
+
+    /**
         Enables you to set the global menubar on Mac, that is, the menubar displayed
         when the app is running without any frames open.
-        
+
         @param menubar
             The menubar to set.
-            
-        @remarks Only exists on Mac, other platforms do not have this method. 
+
+        @remarks Only exists on Mac, other platforms do not have this method.
 
         @onlyfor{wxosx}
     */
     static void MacSetCommonMenuBar(wxMenuBar* menubar);
-    
-    /**        
+
+    /**
         Enables you to get the global menubar on Mac, that is, the menubar displayed
         when the app is running without any frames open.
-        
+
         @return The global menubar.
-            
-        @remarks Only exists on Mac, other platforms do not have this method. 
+
+        @remarks Only exists on Mac, other platforms do not have this method.
 
         @onlyfor{wxosx}
     */
@@ -511,7 +511,7 @@ public:
         Constructs a wxMenu object.
     */
     wxMenu();
-    
+
     /**
         Constructs a wxMenu object.
 
@@ -1050,7 +1050,7 @@ public:
     */
     void UpdateUI(wxEvtHandler* source = NULL);
 
-    
+
     void SetInvokingWindow(wxWindow *win);
     wxWindow *GetInvokingWindow() const;
     wxWindow *GetWindow() const;

@@ -167,10 +167,10 @@ public:
         @param maxValue
             Maximum slider position.
         @param pos
-            Window position. 
+            Window position.
             If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Window size. 
+            Window size.
             If ::wxDefaultSize is specified then a default size is chosen.
         @param style
             Window style. See wxSlider.
@@ -306,7 +306,7 @@ public:
 
         @param minValue
             The new bottom end of the slider range.
-            
+
         @see GetMin(), SetRange()
     */
     void SetMin( int minValue );
@@ -316,7 +316,7 @@ public:
 
         @param maxValue
             The new top end of the slider range.
-            
+
         @see GetMax(), SetRange()
     */
     void SetMax( int maxValue );

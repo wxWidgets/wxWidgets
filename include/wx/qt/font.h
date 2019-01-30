@@ -71,11 +71,11 @@ public:
     virtual void SetUnderlined( bool underlined );
     virtual void SetStrikethrough(bool strikethrough) wxOVERRIDE;
     virtual void SetEncoding(wxFontEncoding encoding);
-    
+
     wxDECLARE_COMMON_FONT_METHODS();
 
     virtual QFont GetHandle() const;
-    
+
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
     virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;

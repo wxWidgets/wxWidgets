@@ -536,7 +536,7 @@ enum wxBackgroundStyle
         with this style.
      */
     wxBG_STYLE_PAINT,
-    
+
     /* this style is deprecated and doesn't do anything, don't use */
     wxBG_STYLE_COLOUR,
 
@@ -907,7 +907,7 @@ enum wxKeyCode
     WXK_CONTROL_X,
     WXK_CONTROL_Y,
     WXK_CONTROL_Z,
-    
+
     WXK_BACK    =    8,     //!< Backspace.
     WXK_TAB     =    9,
     WXK_RETURN  =    13,
@@ -1034,7 +1034,7 @@ enum wxKeyCode
     WXK_WINDOWS_LEFT,
     WXK_WINDOWS_RIGHT,
     WXK_WINDOWS_MENU ,
-    
+
     /** This special key code was used to represent the key used for keyboard shortcuts. Under OS X,
       * this key maps to the 'Command' (aka logo or 'Apple') key, whereas on Linux/Windows/others
       * this is the Control key, with the new semantic of WXK_CONTROL, WXK_COMMAND is not needed anymore
@@ -1095,11 +1095,11 @@ enum wxKeyModifier
     wxMOD_SHIFT     = 0x0004,
     wxMOD_META      = 0x0008,
     wxMOD_WIN       = wxMOD_META,
-    
+
     /** used to describe the true Ctrl Key under OS X,
     identic to @c wxMOD_CONTROL on other platforms */
     wxMOD_RAW_CONTROL,
-    
+
     /** deprecated, identic to @c wxMOD_CONTROL on all platforms */
     wxMOD_CMD       = wxMOD_CONTROL,
     wxMOD_ALL       = 0xffff

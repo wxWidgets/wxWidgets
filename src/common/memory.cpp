@@ -27,7 +27,7 @@
     #include "wx/app.h"
     #include "wx/hash.h"
     #include "wx/log.h"
-    #include "wx/wxcrtvararg.h" // for wxVsnprintf 
+    #include "wx/wxcrtvararg.h" // for wxVsnprintf
 #endif
 
 #if wxUSE_THREADS

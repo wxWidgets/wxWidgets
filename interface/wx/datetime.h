@@ -325,7 +325,7 @@ public:
        Copy constructor.
     */
     wxDateTime(const wxDateTime& date);
-    
+
     /**
         Same as Set().
     */
@@ -387,7 +387,7 @@ public:
        @a wxDateTime::Tm structure.
     */
     wxDateTime& Set(const Tm& tm);
-    
+
     /**
         Sets the date from the so-called Julian Day Number.
 

@@ -30,7 +30,7 @@ public:
     // returns true if any of the accepted formats of this dataobj is in the pasteboard
     bool HasDataInPasteboard( void * pasteboardRef );
     bool GetFromPasteboard( void * pasteboardRef );
-    
+
 #if wxOSX_USE_COCOA
     virtual void AddSupportedTypes( void* cfarray);
 #endif

@@ -170,7 +170,7 @@ public:
 
 
     static WXHMENU MacGetWindowMenuHMenu() { return s_macWindowMenuHandle ; }
-    
+
     virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetClientSize(int *width, int *height) const;

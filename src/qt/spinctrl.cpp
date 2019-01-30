@@ -193,7 +193,7 @@ template class wxSpinCtrlQt< int, QSpinBox >;
 
 wxSpinCtrl::wxSpinCtrl()
 {
-    Init(); 
+    Init();
 }
 
 wxSpinCtrl::wxSpinCtrl(wxWindow *parent, wxWindowID id, const wxString& value,

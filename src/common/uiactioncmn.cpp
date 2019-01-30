@@ -89,7 +89,7 @@ bool wxUIActionSimulatorImpl::MouseDragDrop(long x1, long y1, long x2, long y2,
     MouseDown(button);
     MouseMove(x2, y2);
     MouseUp(button);
-    
+
     return true;
 }
 
