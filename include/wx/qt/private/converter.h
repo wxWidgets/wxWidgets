@@ -23,14 +23,36 @@
 // Rely on overloading and let the compiler pick the correct version, which makes
 // them easier to use then to write wxQtConvertQtRectToWxRect() or wxQtConvertWxRectToQtRect()
 
-wxPoint wxQtConvertPoint( const QPoint &point );
-QPoint wxQtConvertPoint( const wxPoint &point );
+inline wxPoint wxQtConvertPoint( const QPoint &point )
+{
+    return wxPoint( point.x(), point.y() );
+}
+inline QPoint wxQtConvertPoint( const wxPoint &point )
+{
+    return QPoint( point.x, point.y );
+}
 
-wxRect wxQtConvertRect( const QRect &rect );
-QRect  wxQtConvertRect( const wxRect &rect );
+inline wxRect wxQtConvertRect( const QRect &rect )
+{
+    return wxRect( rect.x(), rect.y(), rect.width(), rect.height() );
+}
 
-wxString wxQtConvertString( const QString &str );
-QString  wxQtConvertString( const wxString &str );
+inline QRect wxQtConvertRect( const wxRect &rect )
+{
+    return QRect( rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight() );
+}
+
+// TODO: Check whether QString::toStdString/QString::toStdWString might be faster
+
+inline wxString wxQtConvertString( const QString &str )
+{
+    return wxString( str.toUtf8().data(), wxConvUTF8 );
+}
+
+inline QString wxQtConvertString( const wxString &str )
+{
+    return QString( str.utf8_str() );
+}
 
 #if wxUSE_DATETIME
 
@@ -42,8 +64,20 @@ QDate wxQtConvertDate(const wxDateTime& date);
 
 #endif // wxUSE_DATETIME
 
-wxSize wxQtConvertSize( const QSize  &size );
-QSize  wxQtConvertSize( const wxSize &size );
+inline wxSize wxQtConvertSize( const QSize  &size )
+{
+    if (size.isNull())
+        return wxDefaultSize;
+
+    return wxSize(size.width(), size.height());
+}
+inline QSize wxQtConvertSize( const wxSize &size )
+{
+    if (size == wxDefaultSize)
+        return QSize();
+
+    return QSize(size.GetWidth(), size.GetHeight());
+}
 
 Qt::Orientation wxQtConvertOrientation( long style, wxOrientation defaultOrientation );
 wxOrientation wxQtConvertOrientation( Qt::Orientation );

@@ -23,42 +23,6 @@
 #include "wx/qt/private/converter.h"
 
 
-wxPoint wxQtConvertPoint( const QPoint &point )
-{
-    return wxPoint( point.x(), point.y() );
-}
-
-QPoint wxQtConvertPoint( const wxPoint &point )
-{
-    return QPoint( point.x, point.y );
-}
-
-
-QRect wxQtConvertRect( const wxRect &rect )
-{
-    return QRect( rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight() );
-}
-
-wxRect wxQtConvertRect( const QRect &rect )
-{
-    return wxRect( rect.x(), rect.y(), rect.width(), rect.height() );
-}
-
-// TODO: Check whether QString::toStdString/QString::toStdWString might be faster
-
-wxString wxQtConvertString( const QString &str )
-{
-    return wxString( str.toUtf8().data(), wxConvUTF8 );
-}
-
-QString  wxQtConvertString( const wxString &str )
-{
-    return QString( str.utf8_str() );
-}
-
-
-
-
 #if wxUSE_DATETIME
 
 wxDateTime wxQtConvertDate(const QDate& date)
@@ -80,22 +44,6 @@ QDate wxQtConvertDate(const wxDateTime& date)
 }
 
 #endif // wxUSE_DATETIME
-
-wxSize wxQtConvertSize( const QSize  &size )
-{
-    if (size.isNull())
-        return wxDefaultSize;
-
-    return wxSize(size.width(), size.height());
-}
-
-QSize  wxQtConvertSize( const wxSize &size )
-{
-    if (size == wxDefaultSize)
-        return QSize();
-
-    return QSize(size.GetWidth(), size.GetHeight());
-}
 
 Qt::Orientation wxQtConvertOrientation( long style, wxOrientation defaultOrientation )
 {
