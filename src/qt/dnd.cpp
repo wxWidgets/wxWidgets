@@ -178,7 +178,7 @@ public:
     {
         QDragEnterEvent *e = static_cast<QDragEnterEvent*>(event);
 
-        PendingMimeDataSetter setter(m_pendingMimeData, e->mimeData());
+        const PendingMimeDataSetter setter(m_pendingMimeData, e->mimeData());
 
         if ( !CanDropHere() )
         {
@@ -189,7 +189,7 @@ public:
         event->accept();
 
         const QPoint where = e->pos();
-        wxDragResult result = m_dropTarget->OnEnter(where.x(), where.y(), DropActionToDragResult(e->proposedAction()));
+        const wxDragResult result = m_dropTarget->OnEnter(where.x(), where.y(), DropActionToDragResult(e->proposedAction()));
 
         e->setDropAction(DragResultToDropAction(result));
     }
@@ -206,10 +206,10 @@ public:
 
         QDragMoveEvent *e = static_cast<QDragMoveEvent*>(event);
 
-        PendingMimeDataSetter setter(m_pendingMimeData, e->mimeData());
+        const PendingMimeDataSetter setter(m_pendingMimeData, e->mimeData());
 
         const QPoint where = e->pos();
-        wxDragResult result = m_dropTarget->OnDragOver(where.x(), where.y(), DropActionToDragResult(e->proposedAction()));
+        const wxDragResult result = m_dropTarget->OnDragOver(where.x(), where.y(), DropActionToDragResult(e->proposedAction()));
 
         e->setDropAction(DragResultToDropAction(result));
     }
@@ -220,7 +220,7 @@ public:
 
         const QDropEvent *e = static_cast<QDropEvent*>(event);
 
-        PendingMimeDataSetter setter(m_pendingMimeData, e->mimeData());
+        const PendingMimeDataSetter setter(m_pendingMimeData, e->mimeData());
 
         const QPoint where = e->pos();
         if ( m_dropTarget->OnDrop(where.x(), where.y()) )
