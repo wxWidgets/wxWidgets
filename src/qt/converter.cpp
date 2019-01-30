@@ -30,17 +30,11 @@
 
 wxPoint wxQtConvertPoint( const QPoint &point )
 {
-    if (point.isNull())
-        return wxDefaultPosition;
-
     return wxPoint( point.x(), point.y() );
 }
 
 QPoint wxQtConvertPoint( const wxPoint &point )
 {
-    if (point == wxDefaultPosition)
-        return QPoint();
-
     return QPoint( point.x, point.y );
 }
 
