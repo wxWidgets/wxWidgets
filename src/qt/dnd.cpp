@@ -112,7 +112,8 @@ class wxDropTarget::Impl : public QObject
 public:
     explicit Impl(wxDropTarget* dropTarget)
         : m_dropTarget(dropTarget),
-          m_widget(NULL)
+          m_widget(NULL),
+          m_pendingMimeData(NULL)
     {
     }
 
@@ -241,9 +242,9 @@ private:
         return !m_dropTarget->GetMatchingPair().GetMimeType().empty();
     }
     
-    const QMimeData* m_pendingMimeData;
     wxDropTarget* m_dropTarget;
     QWidget* m_widget;
+    const QMimeData* m_pendingMimeData;
 };
 
 wxDropTarget::wxDropTarget(wxDataObject *dataObject)
