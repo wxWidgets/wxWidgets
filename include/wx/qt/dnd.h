@@ -33,16 +33,16 @@ private:
 class WXDLLIMPEXP_CORE wxDropSource: public wxDropSourceBase
 {
 public:
-    wxDropSource( wxWindow *win = NULL,
-                  const wxCursor &copy = wxNullCursor,
-                  const wxCursor &move = wxNullCursor,
-                  const wxCursor &none = wxNullCursor);
+    wxDropSource(wxWindow *win = NULL,
+                 const wxCursor &copy = wxNullCursor,
+                 const wxCursor &move = wxNullCursor,
+                 const wxCursor &none = wxNullCursor);
 
-    wxDropSource( wxDataObject& data,
-                  wxWindow *win,
-                  const wxCursor &copy = wxNullCursor,
-                  const wxCursor &move = wxNullCursor,
-                  const wxCursor &none = wxNullCursor);
+    wxDropSource(wxDataObject& data,
+                 wxWindow *win,
+                 const wxCursor &copy = wxNullCursor,
+                 const wxCursor &move = wxNullCursor,
+                 const wxCursor &none = wxNullCursor);
     
     virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
 
