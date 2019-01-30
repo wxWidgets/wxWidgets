@@ -25,7 +25,6 @@
 
 #include "wx/kbdstate.h"
 #include "wx/gdicmn.h"
-#include "wx/gdicmn.h"
 
 
 wxPoint wxQtConvertPoint( const QPoint &point )
