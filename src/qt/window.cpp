@@ -518,7 +518,10 @@ bool wxWindowQt::SetCursor( const wxCursor &cursor )
     if (!wxWindowBase::SetCursor(cursor))
         return false;
 
-    GetHandle()->setCursor(cursor.GetHandle());
+    if ( cursor.IsOk() )
+        GetHandle()->setCursor(cursor.GetHandle());
+    else
+        GetHandle()->unsetCursor();
 
     return true;
 }
