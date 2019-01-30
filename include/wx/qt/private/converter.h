@@ -66,16 +66,10 @@ QDate wxQtConvertDate(const wxDateTime& date);
 
 inline wxSize wxQtConvertSize( const QSize  &size )
 {
-    if (size.isNull())
-        return wxDefaultSize;
-
     return wxSize(size.width(), size.height());
 }
 inline QSize wxQtConvertSize( const wxSize &size )
 {
-    if (size == wxDefaultSize)
-        return QSize();
-
     return QSize(size.GetWidth(), size.GetHeight());
 }
 
