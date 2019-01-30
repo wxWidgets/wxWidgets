@@ -12,6 +12,7 @@
 
 #include "wx/dnd.h"
 #include "wx/scopedarray.h"
+#include "wx/window.h"
 
 #include "wx/qt/private/converter.h"
 
