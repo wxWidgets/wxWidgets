@@ -372,19 +372,15 @@ wxDragResult wxDropSource::DoDragDrop(int flags /*=wxDrag_CopyOnly*/)
     SetDragCursor(drag, m_cursorMove, Qt::MoveAction);
     SetDragCursor(drag, m_cursorStop, Qt::IgnoreAction);
 
-    Qt::DropActions actions = Qt::CopyAction | Qt::MoveAction;
-    Qt::DropAction defaultAction = Qt::CopyAction;
-    switch ( flags )
-    {
-        case wxDrag_CopyOnly:
-            actions = Qt::CopyAction;
-            break;
-        case wxDrag_DefaultMove:
-            defaultAction = Qt::MoveAction;
-            break;
-        default:
-            break;
-    }
+    const Qt::DropActions actions =
+        flags == wxDrag_CopyOnly
+            ? Qt::CopyAction
+            : Qt::CopyAction | Qt::MoveAction;
+
+    const Qt::DropAction defaultAction =
+        flags == wxDrag_DefaultMove
+            ? Qt::MoveAction
+            : Qt::CopyAction;
 
     return DropActionToDragResult(drag.exec(actions, defaultAction));
 }
