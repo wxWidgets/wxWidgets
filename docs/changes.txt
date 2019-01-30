@@ -62,6 +62,9 @@ Changes in behaviour not resulting in compilation errors
 - Generic wxDataViewCtrl now always resizes its last column to fill all the
   available space, as the GTK+ version always did.
 
+- wxGTK wxNotebook::AddPage() doesn't generate any events any more for the
+  first page being added, for consistency with the other ports.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
