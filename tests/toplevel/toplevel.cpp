@@ -45,20 +45,22 @@ static void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
     CHECK(!tlw->IsActive());
 #endif
 
-    tlw->Show(true);
+    // Note that at least under MSW, ShowWithoutActivating() still generates
+    // wxActivateEvent, so we must only start counting these events after the
+    // end of the tests above.
+    EventCounter countActivate(tlw, wxEVT_ACTIVATE);
 
-    // wxGTK needs many event loop iterations before the TLW becomes active and
-    // this doesn't happen in this test, so avoid checking for it.
-#ifndef __WXGTK__
+    tlw->Show(true);
+    countActivate.WaitEvent();
+
     CHECK(tlw->IsActive());
-#endif
     CHECK(tlw->IsShown());
 
     tlw->Hide();
     CHECK(!tlw->IsShown());
-#ifndef __WXGTK__
+
+    countActivate.WaitEvent();
     CHECK(!tlw->IsActive());
-#endif
 }
 
 TEST_CASE("wxTopLevel::Show", "[tlw][show]")
