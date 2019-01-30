@@ -67,7 +67,7 @@ bool wxTopLevelWindowQt::Show(bool show)
     if ( !wxTopLevelWindowBase::Show(show) )
         return false;
 
-    if ( show && !m_qtWindow->isActiveWindow())
+    if ( show && !m_qtWindow->isActiveWindow() )
         m_qtWindow->activateWindow();
 
     return true;
