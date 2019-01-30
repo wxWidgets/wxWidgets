@@ -4486,7 +4486,7 @@ protected:
 
     // Whether the paragraph is impacted by floating objects from above
     int                 m_impactedByFloatingObjects;
-    
+
     // Default tabstops
     static wxArrayInt  sm_defaultTabs;
 
@@ -5702,7 +5702,7 @@ protected:
 
     wxRichTextCell is the cell in a table, in which the user can type. As well as
     text, it can also contain objects e.g. an image, or even another wxRichTextTable.
-    
+
     A cell's appearance can be changed via its associated wxRichTextAttr; for example
     its size altered or its background colour set. It also has the properties of
     column- and row-span. By default these are 1, meaning that the cell only spans
@@ -5745,46 +5745,46 @@ public:
 
     /**
         Returns the number of columns spanned by the cell.
-        
+
         By default a cell doesn't span extra columns, so this function returns 1.
-        
+
         @since 2.9.5
-        
+
         @see SetColSpan(), GetRowSpan()
     */
     int GetColSpan() const;
 
     /**
         Set the number of columns spanned by the cell.
-        
+
         By default colspan is 1 i.e. a cell doesn't span extra columns. Pass a value >1
         to change this. Attempting to set a colspan <1 will assert and be ignored.
-        
+
         @since 2.9.5
-        
+
         @see GetColSpan(), SetRowSpan()
     */
     void SetColSpan(long span);
 
     /**
         Returns the number of rows spanned by the cell.
-        
+
         By default a cell doesn't span extra rows, so this function returns 1.
-        
+
         @since 2.9.5
-        
+
         @see SetRowSpan(), GetColSpan()
     */
     int GetRowSpan() const;
 
     /**
         Set the number of rows spanned by the cell.
-        
+
         By default colspan is 1 i.e. a cell doesn't span extra rows. Pass a value >1
         to change this. Attempting to set a rowspan <1 will assert and be ignored.
-        
+
         @since 2.9.5
-        
+
         @see GetRowSpan(), SetColSpan()
     */
     void SetRowSpan(long span);
@@ -5912,7 +5912,7 @@ public:
 
     /**
         Returns the coordinates of the cell with keyboard focus, or (-1,-1) if none.
-    */    
+    */
     virtual wxPosition GetFocusedCell() const;
 
 // Operations
@@ -5996,7 +5996,7 @@ public:
     wxRichTextTableBlock(const wxRichTextTableBlock& block) { Copy(block); }
 
     void Init() { m_colStart = 0; m_colEnd = 0; m_rowStart = 0; m_rowEnd = 0; }
-    
+
     void Copy(const wxRichTextTableBlock& block)
     {
         m_colStart = block.m_colStart; m_colEnd = block.m_colEnd; m_rowStart = block.m_rowStart; m_rowEnd = block.m_rowEnd;

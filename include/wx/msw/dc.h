@@ -125,7 +125,7 @@ public:
     }
 
     void* GetHandle() const wxOVERRIDE { return (void*)GetHDC(); }
-    
+
     const wxBitmap& GetSelectedBitmap() const wxOVERRIDE { return m_selectedBitmap; }
     wxBitmap& GetSelectedBitmap() wxOVERRIDE { return m_selectedBitmap; }
 

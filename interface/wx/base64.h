@@ -13,7 +13,7 @@
 /** @addtogroup group_funcmacro_misc */
 //@{
 
-/** 
+/**
     Elements of this enum specify the possible behaviours of wxBase64Decode
     when an invalid character is encountered.
 */

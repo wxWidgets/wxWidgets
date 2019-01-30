@@ -70,7 +70,7 @@ void wxNotificationMessageBase::SetParent(wxWindow *parent)
 void wxNotificationMessageBase::SetFlags(int flags)
 {
     wxASSERT_MSG(flags == wxICON_INFORMATION ||
-        flags == wxICON_WARNING || flags == wxICON_ERROR || 
+        flags == wxICON_WARNING || flags == wxICON_ERROR ||
         flags == 0,
         "Invalid icon flags specified");
 

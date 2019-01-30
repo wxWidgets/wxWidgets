@@ -67,7 +67,7 @@ bool wxStatusBar::GetFieldRect(int i, wxRect& rect) const
 
     if ( static_cast<size_t>(m_qtPanes->count()) != m_panes.GetCount() )
         const_cast<wxStatusBar*>(this)->UpdateFields();
-    
+
     rect = wxQtConvertRect((*m_qtPanes)[i]->geometry());
     return true;
 }

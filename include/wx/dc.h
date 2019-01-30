@@ -283,7 +283,7 @@ public:
     }
 
     virtual void* GetHandle() const { return NULL; }
-    
+
     // query dimension, colour deps, resolution
 
     virtual void DoGetSize(int *width, int *height) const = 0;
@@ -528,7 +528,7 @@ public:
 
     // this needs to overidden if the axis is inverted
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
-    
+
     virtual double GetContentScaleFactor() const { return m_contentScaleFactor; }
 
 #ifdef __WXMSW__
@@ -722,7 +722,7 @@ protected:
     double m_scaleX, m_scaleY;  // calculated from logical scale and user scale
 
     int m_signX, m_signY;  // Used by SetAxisOrientation() to invert the axes
-    
+
     double m_contentScaleFactor; // used by high resolution displays (retina)
 
     // Pixel per mm in horizontal and vertical directions.

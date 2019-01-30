@@ -52,8 +52,8 @@ protected:
     // ref counting code
     virtual wxObjectRefData *CreateRefData() const;
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
-    
-private:  
+
+private:
     wxDECLARE_DYNAMIC_CLASS(wxAcceleratorTable);
 };
 

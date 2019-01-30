@@ -107,9 +107,9 @@ public:
 
     /**
         Returns true if the Control key (also under OS X).
-     
+
         This function doesn't distinguish between right and left control keys.
-     
+
         Notice that GetModifiers() should usually be used instead of this one.
      */
     bool RawControlDown() const;
@@ -127,7 +127,7 @@ public:
         Returns true if the Meta/Windows/Apple key is pressed.
 
         This function tests the state of the key traditionally called Meta
-        under Unix systems, Windows keys under MSW 
+        under Unix systems, Windows keys under MSW
         Notice that GetModifiers() should usually be used instead of this one.
 
         @see CmdDown()
@@ -149,7 +149,7 @@ public:
      */
     bool CmdDown() const;
 
-    
+
     void SetControlDown(bool down);
     void SetRawControlDown(bool down);
     void SetShiftDown(bool down);

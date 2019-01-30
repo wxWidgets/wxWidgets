@@ -95,9 +95,9 @@ public:
 protected:
     // common part of all ctors
     void Init();
-    
+
     void DoLayout();
-    
+
     void DoSetSize(int x, int y, int width, int height, int sizeFlags) wxOVERRIDE;
 
 #ifndef __WXOSX_IPHONE__

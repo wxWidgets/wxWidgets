@@ -718,7 +718,7 @@ public:
 /**
     Used in a C++ implementation file to complete the declaration of a class
     that has run-time type information.
-    
+
     @header{wx/object.h}
 
     Example:
@@ -736,7 +736,7 @@ public:
 
 /**
     Used in a C++ implementation file to complete the declaration of a class
-    that has run-time type information and two base classes. 
+    that has run-time type information and two base classes.
 
     @header{wx/object.h}
 */

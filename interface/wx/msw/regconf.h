@@ -25,7 +25,7 @@ public:
     /**
         The wxRegConfig constructor. For more info see the docs for the
         wxConfigBase::wxConfigBase() constructor.
-        
+
         Note that wxRegConfig's @a style argument defaults to @c wxCONFIG_USE_GLOBAL_FILE,
         i.e. to the use of the @c HKLM key (also known as "HKEY_LOCAL_MACHINE").
     */

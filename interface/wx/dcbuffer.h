@@ -122,7 +122,7 @@ public:
     /**
        Blits the buffer to the dc, and detaches the dc from the buffer (so it
        can be effectively used once only).
-    
+
        Usually only called in the destructor or by the destructor of derived
        classes if the BufferedDC must blit before the derived class (which may
        own the dc it's blitting to) is destroyed.

@@ -60,7 +60,7 @@ public:
 
     wxGCDC();
     virtual ~wxGCDC();
-    
+
     /**
        Retrieves associated wxGraphicsContext
     */

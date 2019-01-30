@@ -350,7 +350,7 @@ protected:
     /**
        Called to get the number of images available in a multi-image file
        type, if supported.
-       
+
        NOTE: this function is allowed to change the current stream position
              since GetImageCount() will take care of restoring it later
     */
@@ -358,7 +358,7 @@ protected:
 
     /**
        Called to test if this handler can read an image from the given stream.
-       
+
        NOTE: this function is allowed to change the current stream position
              since CallDoCanRead() will take care of restoring it later
     */
@@ -512,7 +512,7 @@ public:
 
         double hue;
         double saturation;
-        double value;        
+        double value;
     };
 
     /**
@@ -1744,7 +1744,7 @@ public:
     /**
        Set the color of the pixel at the given x and y coordinate.
     */
-    
+
     void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
 
     /**

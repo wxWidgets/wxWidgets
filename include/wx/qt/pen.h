@@ -43,7 +43,7 @@ public:
 
     wxDEPRECATED_MSG("use wxPENSTYLE_XXX constants")
     void SetStyle(int style) { SetStyle((wxPenStyle)style); }
-        
+
     QPen GetHandle() const;
 
 protected:

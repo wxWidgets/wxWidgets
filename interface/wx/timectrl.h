@@ -57,7 +57,7 @@ public:
        Default constructor.
     */
     wxTimePickerCtrl();
-    
+
     /**
         Initializes the object and calls Create() with all the parameters.
     */

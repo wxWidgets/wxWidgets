@@ -7,7 +7,7 @@
 
 /**
     The behaviour of wxStringTokenizer is governed by the
-    wxStringTokenizer::wxStringTokenizer() or wxStringTokenizer::SetString() 
+    wxStringTokenizer::wxStringTokenizer() or wxStringTokenizer::SetString()
     with the parameter @e mode, which may be one of the following:
 */
 enum wxStringTokenizerMode
@@ -27,7 +27,7 @@ enum wxStringTokenizerMode
 
     /**
         In this mode, the empty tokens in the middle of the string will be returned,
-        i.e. @c "a::b:" will be tokenized in three tokens @c 'a', @c '' and @c 'b'. 
+        i.e. @c "a::b:" will be tokenized in three tokens @c 'a', @c '' and @c 'b'.
         Notice that all trailing delimiters are ignored in this mode, not just the last one,
         i.e. a string @c "a::b::" would still result in the same set of tokens.
     */
@@ -72,7 +72,7 @@ enum wxStringTokenizerMode
     string to tokenize and also the delimiters which separate tokens in the string
     (by default, white space characters will be used).
 
-    Then wxStringTokenizer::GetNextToken() may be called repeatedly until 
+    Then wxStringTokenizer::GetNextToken() may be called repeatedly until
     wxStringTokenizer::HasMoreTokens() returns @false.
 
     For example:
@@ -169,17 +169,17 @@ public:
 //@{
 
 /**
-    This is a convenience function wrapping wxStringTokenizer which simply 
+    This is a convenience function wrapping wxStringTokenizer which simply
     returns all tokens found in the given @a str as an array.
 
-    Please see wxStringTokenizer::wxStringTokenizer for the description 
+    Please see wxStringTokenizer::wxStringTokenizer for the description
     of the other parameters.
 
     @return The array with the parsed tokens.
 
     @header{wx/tokenzr.h}
 */
-wxArrayString 
+wxArrayString
 wxStringTokenize(const wxString& str,
                  const wxString& delims = wxDEFAULT_DELIMITERS,
                  wxStringTokenizerMode mode = wxTOKEN_DEFAULT);

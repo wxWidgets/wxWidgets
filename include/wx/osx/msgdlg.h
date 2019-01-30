@@ -24,7 +24,7 @@ public:
 #if wxOSX_USE_COCOA
     ~wxMessageDialog();
 #endif
-    
+
     virtual int ShowModal();
 
 #if wxOSX_USE_COCOA

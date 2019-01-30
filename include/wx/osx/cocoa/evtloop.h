@@ -15,16 +15,16 @@ class WXDLLIMPEXP_BASE wxGUIEventLoop : public wxCFEventLoop
 public:
     wxGUIEventLoop();
     ~wxGUIEventLoop();
-    
+
     void BeginModalSession( wxWindow* modalWindow );
-    
+
     void EndModalSession();
 
     virtual void WakeUp();
 
     void OSXUseLowLevelWakeup(bool useIt)
         { m_osxLowLevelWakeUp = useIt ; }
-    
+
 protected:
     virtual int DoDispatchTimeout(unsigned long timeout);
 
@@ -32,15 +32,15 @@ protected:
     virtual void OSXDoStop();
 
     virtual CFRunLoopRef CFGetCurrentRunLoop() const;
-    
+
     void* m_modalSession;
-    
+
     wxWindow* m_modalWindow;
-    
+
     WXWindow m_dummyWindow;
-    
+
     int m_modalNestedLevel;
-    
+
     bool m_osxLowLevelWakeUp;
 };
 

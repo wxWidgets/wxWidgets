@@ -301,7 +301,7 @@ public:
 
     /**
         Effectively creates the dialog for an object created using the default
-        constructor. 
+        constructor.
 
         @param parent
             The dialog parent, possibly @NULL.

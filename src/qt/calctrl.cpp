@@ -325,7 +325,7 @@ void wxCalendarCtrl::SetAttr(size_t day, wxCalendarDateAttr *attr)
     // wxFont is not implemented yet
     //if ( attr->HasFont() )
     //    format.setFont(attr->GetFont().GetQFont());
-    
+
     m_qtCalendar->setDateTextFormat(date, format);
 }
 

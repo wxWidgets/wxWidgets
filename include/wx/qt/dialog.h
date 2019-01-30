@@ -23,7 +23,7 @@ public:
             const wxString &name = wxDialogNameStr );
 
     virtual ~wxDialog();
-    
+
     bool Create( wxWindow *parent, wxWindowID id,
             const wxString &title,
             const wxPoint &pos = wxDefaultPosition,

@@ -86,7 +86,7 @@ use Wx ':docview';   # import constants (optional)
 @endcode
 @endWxPerlOnly
 
-@see @ref group_class_docview, 
+@see @ref group_class_docview,
 
 
 

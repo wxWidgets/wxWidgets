@@ -59,7 +59,7 @@ class wxFontPickerCtrl : public wxPickerBase
 {
 public:
     wxFontPickerCtrl();
-    
+
     /**
         Initializes the object and calls Create() with
         all the parameters.

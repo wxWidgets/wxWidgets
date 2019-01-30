@@ -113,7 +113,7 @@ class WXDLLIMPEXP_BASE wxObjectConstructorWriter: public wxObjectWriterFunctor
 {
 public:
     wxObjectConstructorWriter(const wxClassTypeInfo* cti,
-        wxObjectCodeReaderCallback* writer) : 
+        wxObjectCodeReaderCallback* writer) :
     m_cti(cti),m_writer(writer)
     {}
 
@@ -194,20 +194,20 @@ void wxObjectCodeReaderCallback::CreateObject(int objectID,
                                      )
 {
     int i;
-    m_source += ( wxString::Format( "\t%s->Create(", 
+    m_source += ( wxString::Format( "\t%s->Create(",
                        m_data->GetObjectName(objectID) ) );
     for (i = 0; i < paramCount; i++)
     {
         if ( objectIDValues[i] != wxInvalidObjectID )
         {
-            wxString str = 
-                wxString::Format( "%s", 
+            wxString str =
+                wxString::Format( "%s",
                                   m_data->GetObjectName( objectIDValues[i] ) );
             m_source += ( str );
         }
         else
         {
-            m_source += ( 
+            m_source += (
                 wxString::Format( "%s", ValueAsCode(params[i]) ) );
         }
         if (i < paramCount - 1)
@@ -236,11 +236,11 @@ void wxObjectCodeReaderCallback::ConstructObject(int objectID,
     for (i = 0; i < paramCount; i++)
     {
         if ( objectIDValues[i] != wxInvalidObjectID )
-            m_source += ( wxString::Format( "%s", 
+            m_source += ( wxString::Format( "%s",
                                m_data->GetObjectName( objectIDValues[i] ) ) );
         else
         {
-            m_source += ( 
+            m_source += (
                 wxString::Format( "%s", ValueAsCode(params[i]) ) );
         }
         if (i < paramCount - 1)
@@ -308,7 +308,7 @@ void wxObjectCodeReaderCallback::SetConnect(int eventSourceObjectID,
     wxString ehsource = m_data->GetObjectName( eventSourceObjectID );
     wxString ehsink = m_data->GetObjectName(eventSinkObjectID);
     wxString ehsinkClass = eventSinkClassInfo->GetClassName();
-    const wxEventSourceTypeInfo *delegateTypeInfo = 
+    const wxEventSourceTypeInfo *delegateTypeInfo =
         wx_dynamic_cast(const wxEventSourceTypeInfo*, delegateInfo->GetTypeInfo());
     if ( delegateTypeInfo )
     {
@@ -316,7 +316,7 @@ void wxObjectCodeReaderCallback::SetConnect(int eventSourceObjectID,
         wxString handlerName = handlerInfo->GetName();
 
         wxString code =
-            wxString::Format( 
+            wxString::Format(
                 "\t%s->Connect( %s->GetId(), %d, "
                 "(wxObjectEventFunction)(wxEventFunction) & %s::%s, NULL, %s );",
                 ehsource, ehsource, eventType, ehsinkClass,

@@ -14,7 +14,7 @@ class WXDLLIMPEXP_CORE wxDropTarget : public wxDropTargetBase
 {
 public:
     wxDropTarget(wxDataObject *dataObject = NULL );
-    
+
     virtual bool OnDrop(wxCoord x, wxCoord y);
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def);
     virtual bool GetData();
@@ -40,7 +40,7 @@ public:
                   const wxIcon &copy = wxNullIcon,
                   const wxIcon &move = wxNullIcon,
                   const wxIcon &none = wxNullIcon);
-    
+
     virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
 };
 #endif // _WX_QT_DND_H_

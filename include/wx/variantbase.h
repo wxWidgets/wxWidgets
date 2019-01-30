@@ -85,9 +85,9 @@ public:
     // If it based on wxObject return the ClassInfo.
     virtual wxClassInfo* GetValueClassInfo() { return NULL; }
 
-    int GetRefCount() const 
+    int GetRefCount() const
         { return m_count; }
-    void IncRef() 
+    void IncRef()
         { m_count++; }
     void DecRef()
     {
@@ -151,7 +151,7 @@ public:
     wxVariantBase(const wxVariantBase& variant);
     wxVariantBase(wxVariantData* data, const wxString& name = wxEmptyString);
 
-    template<typename T> 
+    template<typename T>
         wxVariantBase(const T& data, const wxString& name = wxEmptyString) :
             m_data(new wxVariantDataT<T>(data)), m_name(name) {}
 
@@ -207,19 +207,19 @@ public:
     // FIXME wxXTI methods:
 
     // get the typeinfo of the stored object
-    const wxTypeInfo* GetTypeInfo() const 
-    { 
+    const wxTypeInfo* GetTypeInfo() const
+    {
         if (!m_data)
             return NULL;
-        return m_data->GetTypeInfo(); 
+        return m_data->GetTypeInfo();
     }
 
     // get a ref to the stored data
     template<typename T> T& Get()
     {
-        wxVariantDataT<T> *dataptr = 
+        wxVariantDataT<T> *dataptr =
             wx_dynamic_cast(wxVariantDataT<T>*, m_data);
-        wxASSERT_MSG( dataptr, 
+        wxASSERT_MSG( dataptr,
             wxString::Format(wxT("Cast to %s not possible"), typeid(T).name()) );
         return dataptr->Get();
     }
@@ -227,16 +227,16 @@ public:
     // get a const ref to the stored data
     template<typename T> const T& Get() const
     {
-        const wxVariantDataT<T> *dataptr = 
+        const wxVariantDataT<T> *dataptr =
             wx_dynamic_cast(const wxVariantDataT<T>*, m_data);
-        wxASSERT_MSG( dataptr, 
+        wxASSERT_MSG( dataptr,
             wxString::Format(wxT("Cast to %s not possible"), typeid(T).name()) );
         return dataptr->Get();
     }
 
     template<typename T> bool HasData() const
     {
-        const wxVariantDataT<T> *dataptr = 
+        const wxVariantDataT<T> *dataptr =
             wx_dynamic_cast(const wxVariantDataT<T>*, m_data);
         return dataptr != NULL;
     }
@@ -244,7 +244,7 @@ public:
     // returns this value as string
     wxString GetAsString() const;
 
-    // gets the stored data casted to a wxObject*, 
+    // gets the stored data casted to a wxObject*,
     // returning NULL if cast is not possible
     wxObject* GetAsObject();
 

@@ -80,7 +80,7 @@ class wxPowerEvent : public wxEvent
 public:
     wxPowerEvent();
     wxPowerEvent(wxEventType evtType);
-    
+
     /**
         Call this to prevent suspend from taking place in @c wxEVT_POWER_SUSPENDING
         handler (it is ignored for all the others).

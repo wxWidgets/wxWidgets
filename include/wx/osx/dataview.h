@@ -205,7 +205,7 @@ public:
 
  // finishes editing of custom items; if no custom item is currently edited the method does nothing
   void FinishCustomItemEditing();
-  
+
   virtual void EditItem(const wxDataViewItem& item, const wxDataViewColumn *column) wxOVERRIDE;
 
  // returns the n-th pointer to a column;

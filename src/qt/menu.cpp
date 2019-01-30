@@ -211,7 +211,7 @@ bool wxMenuBar::Append( wxMenu *menu, const wxString& title )
 
     QMenu *qtMenu = SetTitle( menu, title );
     m_qtMenuBar->addMenu( qtMenu );
-    
+
     return true;
 }
 

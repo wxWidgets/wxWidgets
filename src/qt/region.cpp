@@ -127,7 +127,7 @@ wxRegion::wxRegion(const wxBitmap& bmp, const wxColour& transp, int tolerance)
             }
         }
     }
-            
+
     m_refData = new wxRegionRefData(QBitmap::fromData(bmp.GetHandle()->size(), raw.get()));
 }
 
@@ -137,7 +137,7 @@ bool wxRegion::IsEmpty() const
         return true;
 
     wxCHECK_MSG(IsOk(), true, "Invalid region" );
-    
+
     return M_REGIONDATA.isEmpty();
 }
 
@@ -172,7 +172,7 @@ bool wxRegion::DoIsEqual(const wxRegion& region) const
 {
     wxCHECK_MSG( IsOk(), false, "Invalid region" );
     wxCHECK_MSG( region.IsOk(), false, "Invalid parameter region" );
-    
+
     return M_REGIONDATA == region.GetHandle();
 }
 
@@ -194,21 +194,21 @@ bool wxRegion::DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const
     y = bounding.y();
     w = bounding.width();
     h = bounding.height();
-    
+
     return true;
 }
 
 wxRegionContain wxRegion::DoContainsPoint(wxCoord x, wxCoord y) const
 {
     wxCHECK_MSG( IsOk(), wxOutRegion, "Invalid region" );
-    
+
     return M_REGIONDATA.contains( QPoint( x, y ) ) ? wxInRegion : wxOutRegion;
 }
 
 wxRegionContain wxRegion::DoContainsRect(const wxRect& rect) const
 {
     wxCHECK_MSG( IsOk(), wxOutRegion, "Invalid region" );
-    
+
     return M_REGIONDATA.contains( wxQtConvertRect( rect ) ) ? wxInRegion : wxOutRegion;
 }
 
@@ -352,9 +352,9 @@ wxRegionIterator::~wxRegionIterator()
 wxRegionIterator& wxRegionIterator::operator=(const wxRegionIterator& ri)
 {
     delete m_qtRects;
-    
+
     m_qtRects = new QVector< QRect >( *ri.m_qtRects );
-    m_pos = ri.m_pos;    
+    m_pos = ri.m_pos;
     return *this;
 }
 
@@ -374,7 +374,7 @@ void wxRegionIterator::Reset(const wxRegion& region)
 bool wxRegionIterator::HaveRects() const
 {
     wxCHECK_MSG( m_qtRects != NULL, false, "Invalid iterator" );
-    
+
     return m_pos < m_qtRects->size();
 }
 
@@ -400,7 +400,7 @@ wxCoord wxRegionIterator::GetX() const
 {
     wxCHECK_MSG( m_qtRects != NULL, 0, "Invalid iterator" );
     wxCHECK_MSG( m_pos < m_qtRects->size(), 0, "Invalid position" );
-    
+
     return m_qtRects->at( m_pos ).x();
 }
 
@@ -408,7 +408,7 @@ wxCoord wxRegionIterator::GetY() const
 {
     wxCHECK_MSG( m_qtRects != NULL, 0, "Invalid iterator" );
     wxCHECK_MSG( m_pos < m_qtRects->size(), 0, "Invalid position" );
-    
+
     return m_qtRects->at( m_pos ).y();
 }
 
@@ -421,7 +421,7 @@ wxCoord wxRegionIterator::GetWidth() const
 {
     wxCHECK_MSG( m_qtRects != NULL, 0, "Invalid iterator" );
     wxCHECK_MSG( m_pos < m_qtRects->size(), 0, "Invalid position" );
-    
+
     return m_qtRects->at( m_pos ).width();
 }
 
@@ -434,7 +434,7 @@ wxCoord wxRegionIterator::GetHeight() const
 {
     wxCHECK_MSG( m_qtRects != NULL, 0, "Invalid iterator" );
     wxCHECK_MSG( m_pos < m_qtRects->size(), 0, "Invalid position" );
-    
+
     return m_qtRects->at( m_pos ).height();
 }
 
@@ -442,7 +442,7 @@ wxRect wxRegionIterator::GetRect() const
 {
     wxCHECK_MSG( m_qtRects != NULL, wxRect(), "Invalid iterator" );
     wxCHECK_MSG( m_pos < m_qtRects->size(), wxRect(), "Invalid position" );
-    
+
     return wxQtConvertRect( m_qtRects->at( m_pos ) );
 }
 

@@ -8,7 +8,7 @@
 
 /**
    @class wxHtmlRenderingStyle
- 
+
    wxHtmlSelection is data holder with information about text selection.
    Selection is defined by two positions (beginning and end of the selection)
    and two leaf(!) cells at these positions.

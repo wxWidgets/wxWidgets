@@ -15,7 +15,7 @@ class WXDLLIMPEXP_CORE wxDataObject : public wxDataObjectBase
 public:
     wxDataObject();
     ~wxDataObject();
-    
+
     virtual bool IsSupportedFormat(const wxDataFormat& format, Direction dir) const;
     virtual wxDataFormat GetPreferredFormat(Direction dir = Get) const;
     virtual size_t GetFormatCount(Direction dir = Get) const;

@@ -41,7 +41,7 @@ enum
 
 /**
     @class wxTreeListItem
-   
+
     Unique identifier of an item in wxTreeListCtrl.
 
     This is an opaque class which can't be used by the application in any other
@@ -74,7 +74,7 @@ public:
 
 /**
     @class wxTreeListItemComparator
-   
+
     Class defining sort order for the items in wxTreeListCtrl.
 
     @see wxTreeListCtrl

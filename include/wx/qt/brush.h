@@ -35,7 +35,7 @@ public:
 
     wxDEPRECATED_MSG("use wxBRUSHSTYLE_XXX constants")
     void SetStyle(int style) { SetStyle((wxBrushStyle)style); }
-    
+
     QBrush GetHandle() const;
 
 protected:

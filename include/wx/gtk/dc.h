@@ -136,7 +136,7 @@ public:
 
     virtual GdkWindow* GetGDKWindow() const { return NULL; }
     virtual void* GetHandle() const wxOVERRIDE { return GetGDKWindow(); }
-    
+
     // base class pure virtuals implemented here
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height) wxOVERRIDE;
     virtual void DoGetSizeMM(int* width, int* height) const wxOVERRIDE;

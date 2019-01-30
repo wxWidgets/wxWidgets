@@ -48,7 +48,7 @@ OBJECTS = dockart.obj,floatpane.obj,framemanager.obj,auibook.obj,tabmdi.obj,\
 
 SOURCES = dockart.cpp floatpane.cpp framemanager.cpp auibook.cpp tabmdi.cpp \
 	auibar.cpp tabart.cpp
-  
+
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
 .ifdef __WXMOTIF__

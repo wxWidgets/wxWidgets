@@ -64,7 +64,7 @@ public:
     virtual void UnsubclassWin();
 
     virtual wxPoint GetClientAreaOrigin() const;
-    
+
     // implement base class pure virtuals
 
     virtual bool SetTransparent(wxByte alpha);
@@ -151,7 +151,7 @@ protected:
 
 private :
     static clock_t s_lastFlush;
-    
+
     wxRegion m_shape;
 #if wxUSE_GRAPHICS_CONTEXT
     wxGraphicsPath m_shapePath;

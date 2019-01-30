@@ -16,10 +16,10 @@ public:
     wxFontDialog() { }
     wxFontDialog(wxWindow *parent) { Create(parent); }
     wxFontDialog(wxWindow *parent, const wxFontData& data) { Create(parent, data); }
-    
+
 protected:
     bool DoCreate(wxWindow *parent);
-    
+
 private:
 
     wxFontData m_data;

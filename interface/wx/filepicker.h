@@ -83,7 +83,7 @@ class wxFilePickerCtrl : public wxPickerBase
 {
 public:
     wxFilePickerCtrl();
-    
+
     /**
         Initializes the object and calls Create() with
         all the parameters.
@@ -237,7 +237,7 @@ class wxDirPickerCtrl : public wxPickerBase
 {
 public:
     wxDirPickerCtrl();
-    
+
     /**
         Initializes the object and calls Create() with
         all the parameters.

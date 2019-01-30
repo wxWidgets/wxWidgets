@@ -507,7 +507,7 @@ public:
 
     /**
         Show all pending output and clear the buffer.
-        
+
         Some of wxLog implementations, most notably the standard wxLogGui class,
         buffer the messages (for example, to avoid showing the user a zillion of modal
         message boxes one after another -- which would be really annoying).
@@ -1398,8 +1398,8 @@ void wxVLogError(const char* formatString, va_list argPtr);
     make sense to separate them from other debug messages.
 
     Trace messages can be separated into different categories; these functions in facts
-    only log the message if the given @a mask is currently enabled in wxLog. 
-    This lets you selectively trace only some operations and not others by enabling the 
+    only log the message if the given @a mask is currently enabled in wxLog.
+    This lets you selectively trace only some operations and not others by enabling the
     desired trace masks with wxLog::AddTraceMask() or by setting the
     @ref overview_envvars "@c WXTRACE environment variable".
 

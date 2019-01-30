@@ -755,7 +755,7 @@ bool wxListCtrl::EnsureVisible(long item)
 }
 
 long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
-{    
+{
     int ret;
     QList <QTreeWidgetItem *> qitems = m_qtTreeWidget->findItems(
                 wxQtConvertString(str),

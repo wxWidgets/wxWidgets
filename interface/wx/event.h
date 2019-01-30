@@ -1867,7 +1867,7 @@ public:
     int GetPosition() const;
 
     void SetOrientation(int orient);
-    void SetPosition(int pos);    
+    void SetPosition(int pos);
 };
 
 
@@ -3298,7 +3298,7 @@ class wxQueryNewPaletteEvent : public wxEvent
 {
 public:
     wxQueryNewPaletteEvent(wxWindowID winid = 0);
-    
+
     void SetPaletteRealized(bool realized);
     bool GetPaletteRealized();
 };
@@ -3653,9 +3653,9 @@ public:
     */
     int GetPosition() const;
 
-    
+
     void SetOrientation(int orient);
-    void SetPosition(int pos);    
+    void SetPosition(int pos);
 };
 
 
@@ -4179,7 +4179,7 @@ public:
 
     /**
         Sets the flags for this event.
-        The @a flags can be a combination of the 
+        The @a flags can be a combination of the
         wxNavigationKeyEvent::wxNavigationKeyEventFlags values.
     */
     void SetFlags(long flags);
@@ -4563,7 +4563,7 @@ public:
 
     wxRect GetRect() const;
     void SetRect(const wxRect& rect);
-    void SetPosition(const wxPoint& pos);    
+    void SetPosition(const wxPoint& pos);
 };
 
 
@@ -4587,7 +4587,7 @@ public:
     @b Important : Sizers ( see @ref overview_sizer ) rely on size events to function
     correctly. Therefore, in a sizer-based layout, do not forget to call Skip on all
     size events you catch (and don't catch size events at all when you don't need to).
- 
+
     @beginEventTable{wxSizeEvent}
     @event{EVT_SIZE(func)}
         Process a @c wxEVT_SIZE event.
@@ -4844,7 +4844,7 @@ wxEventType wxNewEventType();
     In the implementation file you'll need to use the wxBEGIN_EVENT_TABLE()
     and the wxEND_EVENT_TABLE() macros, plus some additional @c EVT_xxx macro
     to capture events.
-    
+
     Note that this macro requires a final semicolon.
 
     @see @ref overview_events_eventtables

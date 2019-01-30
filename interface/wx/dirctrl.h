@@ -52,7 +52,7 @@ enum
     @library{wxcore}
     @category{ctrl}
     @appearance{genericdirctrl}
-    
+
     @beginEventEmissionTable
     @event{EVT_DIRCTRL_SELECTIONCHANGED(id, func)}
           Selected directory has changed.

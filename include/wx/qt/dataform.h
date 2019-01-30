@@ -20,7 +20,7 @@ public:
     wxDataFormat(const wxChar *id);
 
     void SetId( const wxChar *id );
-    
+
     bool operator==(wxDataFormatId format) const;
     bool operator!=(wxDataFormatId format) const;
     bool operator==(const wxDataFormat& format) const;

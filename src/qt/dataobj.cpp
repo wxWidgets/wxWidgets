@@ -190,7 +190,7 @@ wxBitmapDataObject::wxBitmapDataObject( const wxBitmap &WXUNUSED(bitmap) )
 wxFileDataObject::wxFileDataObject()
 {
 }
- 
+
 void wxFileDataObject::AddFile( const wxString &WXUNUSED(filename) )
 {
 

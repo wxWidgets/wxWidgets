@@ -112,7 +112,7 @@ public:
 
 protected:
     virtual QPixmap *GetQPixmap() { return m_qtPixmap; }
-    
+
     QPainter *m_qtPainter;
     QPixmap *m_qtPixmap;
 
@@ -132,7 +132,7 @@ private:
 
     wxDECLARE_CLASS(wxQtDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxQtDCImpl);
-    
+
 };
 
 #endif // _WX_QT_DC_H_

@@ -43,7 +43,7 @@ public:
     virtual void WakeUp();
 
     bool ShouldProcessIdleEvents() const { return m_processIdleEvents ; }
-    
+
 #if wxUSE_UIACTIONSIMULATOR
     // notifies Yield and Dispatch to wait for at least one event before
     // returning, this is necessary, because the synthesized events need to be

@@ -163,7 +163,7 @@ public :
 #endif
 
     virtual double      GetContentScaleFactor() const;
-    
+
     // cocoa thunk connected calls
 
 #if wxUSE_DRAG_AND_DROP
@@ -281,20 +281,20 @@ public :
     virtual void SetRepresentedFilename(const wxString& filename) wxOVERRIDE;
 
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
-    
+
     CGWindowLevel   GetWindowLevel() const wxOVERRIDE { return m_macWindowLevel; }
     void            RestoreWindowLevel() wxOVERRIDE;
-    
+
     static WX_NSResponder GetNextFirstResponder() ;
     static WX_NSResponder GetFormerFirstResponder() ;
 protected :
     CGWindowLevel   m_macWindowLevel;
     WXWindow        m_macWindow;
     void *          m_macFullScreenData ;
-    
+
 private:
     void SetUpForModalParent();
-    
+
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxNonOwnedWindowCocoaImpl);
 };
 
@@ -308,7 +308,7 @@ public:
 #if wxUSE_MARKUP
     virtual void SetLabelMarkup(const wxString& markup);
 #endif // wxUSE_MARKUP
-    
+
     void SetPressedBitmap( const wxBitmap& bitmap );
     void GetLayoutInset(int &left , int &top , int &right, int &bottom) const;
     void SetAcceleratorFromLabel(const wxString& label);

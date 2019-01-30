@@ -233,7 +233,7 @@ public:
         would be unchanged and should include ::wxDIR_DIRS flag to recurse into
         subdirectories (both flags are included in the value by default).
         See ::wxDirFlags for the list of the possible flags.
-        
+
         @return Returns the total number of files found while traversing
                 the directory @a dirname (i.e. the number of entries appended
                 to the @a files array).
@@ -324,7 +324,7 @@ public:
 
     /**
         Creates a directory.
-        
+
         This is just an alias for wxFileName::Mkdir(); refer to that function
         for more info.
     */
@@ -339,12 +339,12 @@ public:
 
     /**
         Removes a directory.
-        
+
         This is just an alias for wxFileName::Rmdir(); refer to that function
         for more info.
     */
     static bool Remove(const wxString &dir, int flags = 0);
-    
+
     /**
         Enumerate all files and directories under the given directory.
 

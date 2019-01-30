@@ -108,7 +108,7 @@ public:
                                      wxWindowID winid,
                                      const wxString& name);
     virtual wxToolBar *GetToolBar() const;
-    
+
     // no maximize etc
     virtual void Maximize(bool maximize = true);
     virtual void Restore();

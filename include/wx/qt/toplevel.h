@@ -28,7 +28,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
-    
+
     virtual bool Show(bool show = true) wxOVERRIDE;
     virtual void Maximize(bool maximize = true);
     virtual void Restore();
@@ -41,10 +41,10 @@ public:
     virtual void SetTitle(const wxString& title);
     virtual wxString GetTitle() const;
     virtual void SetIcons(const wxIconBundle& icons);
-    
+
     // Styles
     virtual void SetWindowStyleFlag( long style );
     virtual long GetWindowStyleFlag() const;
 };
-    
+
 #endif // _WX_QT_TOPLEVEL_H_

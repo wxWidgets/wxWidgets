@@ -57,7 +57,7 @@ class wxColourPickerCtrl : public wxPickerBase
 {
 public:
     wxColourPickerCtrl();
-    
+
     /**
         Initializes the object and calls Create() with all the parameters.
     */

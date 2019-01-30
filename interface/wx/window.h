@@ -486,7 +486,7 @@ public:
         container windows.
      */
     virtual bool AcceptsFocusRecursively() const;
-    
+
     /**
      Can this window itself have focus?
     */
@@ -494,7 +494,7 @@ public:
 
     /**
        Can this window have focus right now?
-        
+
        If this method returns true, it means that calling SetFocus() will
        put focus either to this window or one of its children, if you need
        to know whether this window accepts focus itself, use IsFocusable()
@@ -1410,7 +1410,7 @@ public:
     InformFirstDirection(int direction,
                          int size,
                          int availableOtherDir);
-    
+
     /**
         Resets the cached best size value so it will be recalculated the next time it
         is needed.
@@ -1793,7 +1793,7 @@ public:
     wxRect GetClientRect() const;
 
 
-    
+
     /**
         Moves the window to the given position.
 
@@ -3609,7 +3609,7 @@ public:
     */
     wxBorder GetBorder() const;
 
-    
+
     /**
         Does the window-specific updating after processing the update event.
         This function is called by UpdateWindowUI() in order to check return
@@ -3721,7 +3721,7 @@ public:
     */
     virtual bool IsTopLevel() const;
 
-    
+
     /**
         This virtual function is normally only used internally, but
         sometimes an application may need it to implement functionality

@@ -18,7 +18,7 @@
 
 class wxQtMessageDialog : public wxQtEventSignalHandler< QMessageBox, wxMessageDialog >
 {
-    
+
     public:
         wxQtMessageDialog( wxWindow *parent, wxMessageDialog *handler );
 };
@@ -35,7 +35,7 @@ wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
     Move( pos );
     dlg->setText( wxQtConvertString( message ) );
     dlg->setWindowTitle( wxQtConvertString( caption ) );
-    
+
     // Apply the style
     SetWindowStyleFlag( style );
 
@@ -89,7 +89,7 @@ wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
         numIcons++;
         dlg->setIcon( QMessageBox::Question );
     }
-        
+
     if ( style & wxICON_INFORMATION )
     {
         numIcons++;
@@ -118,7 +118,7 @@ int wxMessageDialog::ShowModal()
 {
     WX_HOOK_MODAL_DIALOG();
     wxCHECK_MSG( m_qtWindow, -1, "Invalid dialog" );
-    
+
     // Exec may return a wx identifier if a close event is generated
     int ret = static_cast<QDialog*>(m_qtWindow)->exec();
     switch ( ret )
@@ -134,7 +134,7 @@ int wxMessageDialog::ShowModal()
         default:
             //wxFAIL_MSG( "unexpected QMessageBox return code" );
             return ret;
-    }                                        
+    }
 }
 
 wxMessageDialog::~wxMessageDialog()

@@ -604,7 +604,7 @@ void wxMouseEvent::Assign(const wxMouseEvent& event)
     m_linesPerAction = event.m_linesPerAction;
     m_columnsPerAction = event.m_columnsPerAction;
     m_wheelAxis = event.m_wheelAxis;
-    
+
     m_magnification = event.m_magnification;
 }
 

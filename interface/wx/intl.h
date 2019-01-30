@@ -98,15 +98,15 @@ enum wxLocaleCategory
 
 /**
     The values understood by wxLocale::GetInfo().
-    
-    Note that for the @c wxLOCALE_*_FMT constants (the date and time formats), 
+
+    Note that for the @c wxLOCALE_*_FMT constants (the date and time formats),
     the strings returned by wxLocale::GetInfo() use strftime() or,
     equivalently, wxDateTime::Format() format. If the relevant format
     couldn't be determined, an empty string is returned -- there is no
     fallback value so that the application could determine the best course
     of actions itself in such case.
 
-    All of these values are used with @c wxLOCALE_CAT_DATE in wxLocale::GetInfo() or, 
+    All of these values are used with @c wxLOCALE_CAT_DATE in wxLocale::GetInfo() or,
     more typically, with @c wxLOCALE_CAT_DEFAULT as they only apply to a single category.
 */
 enum wxLocaleInfo

@@ -333,12 +333,12 @@ public:
     /**
         LoadPaneInfo() is similar to LoadPerspective, with the exception that it
         only loads information about a single pane.
-     
+
         This method writes the serialized data into the passed pane. Pointers to
         UI elements are not modified.
 
         @notice This operation also changes the name in the pane information!
-     
+
         @sa LoadPerspective
         @sa SavePaneInfo().
         @sa SavePerspective
@@ -347,9 +347,9 @@ public:
 
     /**
         Loads a saved perspective.
-     
+
         A perspective is the layout state of an AUI managed window.
-     
+
         All currently existing panes that have an object in "perspective"
         with the same name ("equivalent") will receive the layout parameters of the object in
         "perspective". Existing panes that do not have an equivalent in "perspective" remain
@@ -358,7 +358,7 @@ public:
         @param perspective Serialized layout information of a perspective (excl. pointers to UI elements).
         @param update      If update is @true, wxAuiManager::Update() is automatically invoked,
                            thus realizing the specified perspective on screen.
-     
+
         @sa LoadPaneInfo
         @sa LoadPerspective
         @sa SavePerspective
@@ -384,12 +384,12 @@ public:
     /**
         SavePaneInfo() is similar to SavePerspective, with the exception that it only
         saves information about a single pane.
-     
+
         @param pane Pane whose layout parameters should be serialized.
         @return     The serialized layout parameters of the pane are returned within
                     the string. Information about the pointers to UI elements stored
                     in the pane are not serialized.
-     
+
         @sa LoadPaneInfo
         @sa LoadPerspective
         @sa SavePerspective
@@ -399,7 +399,7 @@ public:
     /**
         Saves the entire user interface layout into an encoded wxString, which
         can then be stored by the application (probably using wxConfig).
-     
+
         @sa LoadPerspective
         @sa LoadPaneInfo
         @sa SavePaneInfo
@@ -953,7 +953,7 @@ public:
     */
     wxAuiPaneInfo& operator=(const wxAuiPaneInfo& c);
 
-    
+
     /// name of the pane
     wxString name;
 
@@ -961,7 +961,7 @@ public:
     wxString caption;
 
     /// icon of the pane, may be invalid
-    wxBitmap icon;        
+    wxBitmap icon;
 
     /// window that is in this pane
     wxWindow* window;
@@ -1003,12 +1003,12 @@ public:
     int dock_proportion;
 
     /// buttons on the pane
-    wxAuiPaneButtonArray buttons; 
+    wxAuiPaneButtonArray buttons;
 
     /// current rectangle (populated by wxAUI)
     wxRect rect;
 
-    bool IsValid() const;    
+    bool IsValid() const;
 };
 
 
@@ -1137,7 +1137,7 @@ public:
     bool IsOk() const;
     bool IsHorizontal() const;
     bool IsVertical() const;
-    
+
     wxAuiPaneInfoPtrArray panes; // array of panes
     wxRect rect;              // current rectangle
     int dock_direction;       // dock direction (top, bottom, left, right, center)
