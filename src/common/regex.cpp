@@ -35,6 +35,8 @@
     #include "wx/crt.h"
 #endif //WX_PRECOMP
 
+#include "wx/hashmap.h" // for wxStringHash
+
 // At least FreeBSD requires this.
 #if defined(__UNIX__)
 #   include <sys/types.h>
@@ -148,15 +150,17 @@ typedef char wxRegChar;
 #endif
 
 // the real implementation of wxRegEx
-class wxRegExImpl
+class wxRegExImpl : public wxRefCounter
 {
 public:
     // ctor and dtor
     wxRegExImpl();
     ~wxRegExImpl();
 
+    wxRegExImpl* Clone() const;
+
     // return true if Compile() had been called successfully
-    bool IsValid() const { return m_isCompiled; }
+    bool IsValid() const { return m_RegEx != NULL; }
 
     // RE operations
     bool Compile(const wxString& expr, int flags = 0);
@@ -167,16 +171,40 @@ public:
     int Replace(wxString *pattern, const wxString& replacement,
                 size_t maxMatches = 0) const;
 
+    bool NeedUnshared(const wxString& str)
+    {
+        if ( GetRefCount() > 1 )
+        {
+            unsigned long h = wxStringHash()(str);
+
+            if ( h != m_hash )
+            {
+                m_hash = h;
+                return true;
+            }
+        }
+
+        // No need to unshare if no more than one object is referencing this
+        // instance, or the matched string is not changed.
+
+        return false;
+    }
+
 private:
+    // copy constructor
+    wxRegExImpl(const wxRegExImpl& other);
+
     // return the string containing the error message for the given err code
     wxString GetErrorMsg(int errorcode, bool badconv) const;
 
     // init the members
     void Init()
     {
-        m_isCompiled = false;
         m_Matches = NULL;
         m_nMatches = 0;
+        // Set the m_hash to ULONG_MAX which indicates that no Matches
+        // was attempted yet.
+        m_hash = -1;
     }
 
     // free the RE if compiled
@@ -184,7 +212,13 @@ private:
     {
         if ( IsValid() )
         {
-            wx_regfree(&m_RegEx);
+            m_RegEx->DecRef();
+
+            if ( m_RegEx->GetRefCount() < 1 )
+            {
+                wx_regfree(&m_RegEx->handle);
+                m_RegEx = NULL;
+            }
         }
 
         delete m_Matches;
@@ -197,15 +231,19 @@ private:
         Init();
     }
 
-    // compiled RE
-    regex_t         m_RegEx;
+    struct wxRegExHandle : public wxRefCounter
+    {
+        // compiled RE
+        regex_t handle;
+    };
+
+    wxRegExHandle  *m_RegEx;
 
     // the subexpressions data
     wxRegExMatches *m_Matches;
     size_t          m_nMatches;
-
-    // true if m_RegEx is valid
-    bool            m_isCompiled;
+    // Remember the string passed to Matches() by its hash.
+    unsigned long   m_hash;
 };
 
 
@@ -219,12 +257,46 @@ private:
 
 wxRegExImpl::wxRegExImpl()
 {
+    // N.B. initialize m_RegEx here and not inside Init()
+    m_RegEx = NULL;
+
     Init();
 }
 
 wxRegExImpl::~wxRegExImpl()
 {
     Free();
+}
+
+wxRegExImpl::wxRegExImpl(const wxRegExImpl& other)
+    : m_RegEx(other.m_RegEx),
+      m_Matches(NULL),
+      m_nMatches(other.m_nMatches)
+{
+    // The copy ctor is private and is only called by the Clone() method.
+    // Therefore, the m_RegEx is guaranteed to be valid here.
+    m_RegEx->IncRef();
+
+    if ( m_nMatches )
+    {
+        // We have to do a deep copy of the m_Matches here.
+        m_Matches = new wxRegExMatches(m_nMatches);
+    }
+}
+
+wxRegExImpl* wxRegExImpl::Clone() const
+{
+    if ( !IsValid() )
+        return NULL;
+
+    wxRegExImpl* implNew = new wxRegExImpl(*this);
+
+    // wxRegEx::m_impl will be assigned the implNew, so we should DecRef()
+    // before returning. Notice that this cast is safe because wxRegExImpl
+    // inside wxRegEx is mutable.
+    const_cast<wxRegExImpl *>(this)->DecRef();
+
+    return implNew;
 }
 
 wxString wxRegExImpl::GetErrorMsg(int errorcode, bool badconv) const
@@ -241,14 +313,15 @@ wxString wxRegExImpl::GetErrorMsg(int errorcode, bool badconv) const
 #endif
 
     wxString szError;
+    regex_t* regex = &m_RegEx->handle;
 
     // first get the string length needed
-    int len = wx_regerror(errorcode, &m_RegEx, NULL, 0);
+    int len = wx_regerror(errorcode, regex, NULL, 0);
     if ( len > 0 )
     {
         char* szcmbError = new char[++len];
 
-        (void)wx_regerror(errorcode, &m_RegEx, szcmbError, len);
+        (void)wx_regerror(errorcode, regex, szcmbError, len);
 
         szError = wxConvLibc.cMB2WX(szcmbError);
         delete [] szcmbError;
@@ -293,16 +366,21 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
     if ( flags & wxRE_NEWLINE )
         flagsRE |= REG_NEWLINE;
 
+    if ( !m_RegEx )
+        m_RegEx = new wxRegExHandle;
+
+    regex_t* regex = &m_RegEx->handle;
+
     // compile it
 #ifdef WXREGEX_USING_BUILTIN
     bool conv = true;
     // FIXME-UTF8: use wc_str() after removing ANSI build
-    int errorcode = wx_re_comp(&m_RegEx, expr.c_str(), expr.length(), flagsRE);
+    int errorcode = wx_re_comp(regex, expr.c_str(), expr.length(), flagsRE);
 #else
     // FIXME-UTF8: this is potentially broken, we shouldn't even try it
     //             and should always use builtin regex library (or PCRE?)
     const wxWX2MBbuf conv = expr.mbc_str();
-    int errorcode = conv ? regcomp(&m_RegEx, conv, flagsRE) : REG_BADPAT;
+    int errorcode = conv ? regcomp(regex, conv, flagsRE) : REG_BADPAT;
 #endif
 
     if ( errorcode )
@@ -310,7 +388,7 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
         wxLogError(_("Invalid regular expression '%s': %s"),
                    expr.c_str(), GetErrorMsg(errorcode, !conv).c_str());
 
-        m_isCompiled = false;
+        wxDELETE( m_RegEx );
     }
     else // ok
     {
@@ -352,8 +430,6 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
                 }
             }
         }
-
-        m_isCompiled = true;
     }
 
     return IsValid();
@@ -411,13 +487,15 @@ bool wxRegExImpl::Matches(const wxRegChar *str,
 
     wxRegExMatches::match_type matches = m_Matches ? m_Matches->get() : NULL;
 
+    regex_t* regex = &self->m_RegEx->handle;
+
     // do match it
 #if defined WXREGEX_USING_BUILTIN
-    int rc = wx_re_exec(&self->m_RegEx, str, len, NULL, m_nMatches, matches, flagsRE);
+    int rc = wx_re_exec(regex, str, len, NULL, m_nMatches, matches, flagsRE);
 #elif defined WXREGEX_USING_RE_SEARCH
-    int rc = str ? ReSearch(&self->m_RegEx, str, len, matches, flagsRE) : REG_BADPAT;
+    int rc = str ? ReSearch(regex, str, len, matches, flagsRE) : REG_BADPAT;
 #else
-    int rc = str ? regexec(&self->m_RegEx, str, m_nMatches, matches, flagsRE) : REG_BADPAT;
+    int rc = str ? regexec(regex, str, m_nMatches, matches, flagsRE) : REG_BADPAT;
 #endif
 
     switch ( rc )
@@ -627,22 +705,50 @@ void wxRegEx::Init()
     m_impl = NULL;
 }
 
+wxRegEx::wxRegEx(const wxRegEx& rhs)
+    : m_impl(rhs.m_impl)
+{
+    if ( m_impl )
+        m_impl->IncRef();
+}
+
+wxRegEx& wxRegEx::operator=(const wxRegEx& rhs)
+{
+    if ( this != &rhs )
+    {
+        if ( m_impl )
+            m_impl->DecRef();
+
+        m_impl = rhs.m_impl;
+
+        if ( m_impl )
+            m_impl->IncRef();
+    }
+
+    return *this;
+}
+
 wxRegEx::~wxRegEx()
 {
-    delete m_impl;
+    if ( m_impl )
+    {
+        m_impl->DecRef();
+        m_impl = NULL;
+    }
 }
 
 bool wxRegEx::Compile(const wxString& expr, int flags)
 {
-    if ( !m_impl )
-    {
-        m_impl = new wxRegExImpl;
-    }
+    if ( m_impl )
+        m_impl->DecRef();
+
+    m_impl = new wxRegExImpl;
 
     if ( !m_impl->Compile(expr, flags) )
     {
         // error message already given in wxRegExImpl::Compile
-        wxDELETE(m_impl);
+        m_impl->DecRef();
+        m_impl = NULL;
 
         return false;
     }
@@ -653,6 +759,11 @@ bool wxRegEx::Compile(const wxString& expr, int flags)
 bool wxRegEx::Matches(const wxString& str, int flags) const
 {
     wxCHECK_MSG( IsValid(), false, wxT("must successfully Compile() first") );
+
+    if ( m_impl->NeedUnshared(str) )
+    {
+        m_impl = m_impl->Clone();
+    }
 
     return m_impl->Matches(WXREGEX_CHAR(str), flags
                             WXREGEX_IF_NEED_LEN(str.length()));
