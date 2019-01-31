@@ -51,10 +51,15 @@ namespace
         {
            const QPoint event_position = wxQtConvertPoint(event.GetPosition());
            const QPoint global_position  = m_actualParent->mapToGlobal(event_position);
+
            //For some reason this always gives us the offset from the header info the internal control
            //So we need to treat this as an offset rather than a position.
-           const QPoint offset = GetHandle()->mapFromGlobal(global_position);
-           GetHandle()->move(event_position + offset);
+            QWidget *widget = GetHandle();
+            const QPoint offset = widget->mapFromGlobal(global_position);
+
+            widget->blockSignals(true);
+            widget->move(event_position + offset);
+            widget->blockSignals(false);
         }
 
     private:
