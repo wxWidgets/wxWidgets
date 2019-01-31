@@ -77,7 +77,7 @@ public:
 
     QWidget *createEditor(int WXUNUSED(userType), QWidget *parent) const wxOVERRIDE
     {
-        m_textCtrl =  new wxQtListTextCtrl(m_parent, parent);
+        m_textCtrl = new wxQtListTextCtrl(m_parent, parent);
         m_textCtrl->SetFocus();
         return m_textCtrl->GetHandle();
     }
