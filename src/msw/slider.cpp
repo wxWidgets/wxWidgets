@@ -54,8 +54,7 @@ enum
 // the gaps between the slider and the labels, in pixels
 const int HGAP = 5;
 const int VGAP = 4;
-// these 2 values are arbitrary:
-const int THUMB = 24;
+// this value is arbitrary:
 const int TICK = 8;
 
 } // anonymous namespace
@@ -193,6 +192,9 @@ WXDWORD wxSlider::MSWGetStyle(long style, WXDWORD *exstyle) const
 
     // TBS_HORZ, TBS_RIGHT and TBS_BOTTOM are 0 but do include them for clarity
     msStyle |= style & wxSL_VERTICAL ? TBS_VERT : TBS_HORZ;
+
+    // allow setting thumb size
+    msStyle |= TBS_FIXEDLENGTH;
 
     if ( style & wxSL_BOTH )
     {
@@ -390,7 +392,7 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
         return;
     }
 
-    const int thumbSize = FromDIP(THUMB);
+    const int thumbSize = GetThumbLength();
     const int tickSize = FromDIP(TICK);
 
     int minLabelWidth,
@@ -540,7 +542,7 @@ wxSize wxSlider::DoGetBestSize() const
 {
     // this value is arbitrary:
     static const int length = FromDIP(100);
-    const int thumbSize = FromDIP(THUMB);
+    const int thumbSize = GetThumbLength();
     const int tickSize = FromDIP(TICK);
 
     int *width;
@@ -732,6 +734,8 @@ void wxSlider::SetSelection(int minPos, int maxPos)
 void wxSlider::SetThumbLength(int len)
 {
     ::SendMessage(GetHwnd(), TBM_SETTHUMBLENGTH, (WPARAM) len, (LPARAM) 0);
+
+    InvalidateBestSize();
 }
 
 int wxSlider::GetThumbLength() const

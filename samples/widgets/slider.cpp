@@ -543,6 +543,14 @@ void SliderWidgetsPage::DoSetThumbLen()
     }
 
     m_slider->SetThumbLength(len);
+
+    if ( m_slider->GetThumbLength() != len )
+    {
+        wxLogWarning(wxString::Format("Invalid thumb length in slider: %d",
+                                      m_slider->GetThumbLength()));
+    }
+
+    Layout();
 }
 
 // ----------------------------------------------------------------------------
