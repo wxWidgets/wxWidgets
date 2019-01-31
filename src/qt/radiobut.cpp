@@ -86,7 +86,7 @@ void wxRadioButton::SearchForPreviousGroupToJoin( wxWindow *parent )
 {
     wxWindowList::compatibility_iterator nodeThis = parent->GetChildren().Find(this);
 
-    for ( wxWindowList::compatibility_iterator node = nodeThis->GetPrevious(); node; node = node->GetPrevious() )
+    for ( wxWindow* previous = GetPrevSibling(); previous; previous = GetPrevSibling() )
     {
         wxWindow *previous = node->GetData();
 
