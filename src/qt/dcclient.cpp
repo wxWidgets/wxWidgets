@@ -29,23 +29,25 @@
 
 namespace
 {
-    class QtPictureSetter
+class QtPictureSetter
+{
+public:
+    QtPictureSetter(wxWindow *window, QPicture *pict)
+        : m_window( window )
     {
-    public:
-        QtPictureSetter(wxWindow *window, QPicture *pic)
-        {
-            m_window = window;
-            m_window->QtSetPicture( pic );
-        }
+        m_window->QtSetPicture( pict );
+    }
 
-        ~QtPictureSetter()
-        {
-            m_window->QtSetPicture( NULL );
-        }
+    ~QtPictureSetter()
+    {
+        m_window->QtSetPicture( NULL );
+    }
 
-    private:
-        wxWindow *m_window;
-    };
+private:
+    wxWindow* const m_window;
+
+    wxDECLARE_NO_COPY_CLASS(QtPictureSetter);
+};
 }
 
 
@@ -99,8 +101,8 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
 
     m_qtPainter = new QPainter();
 
-    m_pic = new QPicture();
-    m_ok = m_qtPainter->begin( m_pic );
+    m_pict.reset(new QPicture());
+    m_ok = m_qtPainter->begin( m_pict.get() );
 
     QtPreparePainter();
 }
@@ -115,10 +117,9 @@ wxClientDCImpl::~wxClientDCImpl()
         m_qtPainter->end();
         m_ok = false;
 
-
         if ( m_window != NULL )
         {
-            QtPictureSetter(m_window, m_pic);
+            QtPictureSetter pictureSetter(m_window, m_pict.get());
 
             // get the inner widget in scroll areas:
             QWidget *widget;
@@ -130,8 +131,8 @@ wxClientDCImpl::~wxClientDCImpl()
             }
             // force paint event if there is something to replay and
             // if not currently inside a paint event (to avoid recursion)
-            QRect rect = m_pic->boundingRect();
-            if ( !m_pic->isNull() && !widget->paintingActive() && !rect.isEmpty() )
+            QRect rect = m_pict->boundingRect();
+            if ( !m_pict->isNull() && !widget->paintingActive() && !rect.isEmpty() )
             {
                 // only force the update of the rect affected by the DC
                 widget->repaint( rect );
@@ -139,7 +140,7 @@ wxClientDCImpl::~wxClientDCImpl()
             else
             {
                 // Not drawing anything, reset picture to avoid issues in handler
-                m_pic->setData( NULL, 0 );
+                m_pict->setData( NULL, 0 );
             }
 
             // let destroy the m_qtPainter (see inherited classes destructors)
@@ -147,7 +148,6 @@ wxClientDCImpl::~wxClientDCImpl()
         }
     }
 
-    delete m_pic;
     // Painter will be deleted by base class
 }
 

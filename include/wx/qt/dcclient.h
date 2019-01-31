@@ -37,10 +37,10 @@ public:
 
     ~wxClientDCImpl();
 private:
+    wxScopedPtr<QPicture> m_pict;
+
     wxDECLARE_CLASS(wxClientDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxClientDCImpl);
-
-    QPicture* m_pic;
 };
 
 
