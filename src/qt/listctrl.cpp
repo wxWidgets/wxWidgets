@@ -27,7 +27,7 @@
 
 namespace
 {
-    //wxQT Doesn't have a mechanism for "adopting" external widgets so
+    // wxQT Doesn't have a mechanism for "adopting" external widgets so
     //we have to create an instance of wxTextCtrl rather than adopting
     //the control QT would create.
     //
