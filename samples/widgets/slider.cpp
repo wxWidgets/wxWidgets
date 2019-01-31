@@ -352,9 +352,6 @@ void SliderWidgetsPage::CreateContent()
     Reset();
     CreateSlider();
 
-    m_textLineSize->SetValue(wxString::Format("%d", m_slider->GetLineSize()));
-    m_textPageSize->SetValue(wxString::Format("%d", m_slider->GetPageSize()));
-
     // the 3 panes panes compose the window
     sizerTop->Add(sizerLeft,
                   wxSizerFlags(0).Expand().Border((wxALL & ~wxLEFT), 10));
@@ -444,7 +441,7 @@ void SliderWidgetsPage::CreateSlider()
     if ( m_slider )
     {
         int valOld = m_slider->GetValue();
-        if ( !IsValidValue(valOld) )
+        if ( IsValidValue(valOld) )
         {
             val = valOld;
         }
@@ -477,12 +474,16 @@ void SliderWidgetsPage::CreateSlider()
         m_sizerSlider->Add(m_slider, wxSizerFlags(1).Centre().Border());
     }
 
+    m_textLineSize->SetValue(wxString::Format("%d", m_slider->GetLineSize()));
+    m_textPageSize->SetValue(wxString::Format("%d", m_slider->GetPageSize()));
+    m_textThumbLen->SetValue(wxString::Format("%d", m_slider->GetThumbLength()));
+
     if ( m_chkTicks->GetValue() )
     {
         DoSetTickFreq();
     }
 
-    m_sizerSlider->Layout();
+    Layout();
 }
 
 void SliderWidgetsPage::DoSetLineSize()
@@ -694,7 +695,7 @@ void SliderWidgetsPage::OnUpdateUIRadioSides(wxUpdateUIEvent& event)
 void SliderWidgetsPage::OnUpdateUIBothSides(wxUpdateUIEvent& event)
 {
 #if defined(__WXMSW__) || defined(__WXUNIVERSAL__)
-    event.Enable( m_chkTicks->GetValue() );
+    event.Enable( true );
 #else
     event.Enable( false );
 #endif // defined(__WXMSW__) || defined(__WXUNIVERSAL__)
