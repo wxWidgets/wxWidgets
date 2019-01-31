@@ -401,10 +401,10 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
     }
 
     int tickOffset = 0;
-    if ( HasFlag(wxSL_TICKS))
-       tickOffset = TICK;
-    if ( HasFlag(wxSL_BOTH))
-       tickOffset *= 2;
+    if ( HasFlag(wxSL_TICKS) )
+        tickOffset = TICK;
+    if ( HasFlag(wxSL_BOTH) )
+        tickOffset *= 2;
 
     // be careful to position the slider itself after moving the labels as
     // otherwise our GetBoundingBox(), which is called from WM_SIZE handler,
@@ -419,7 +419,7 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
                 sliderOffset += longestLabelWidth + HGAP;
         }
 
-        int labelHeightUsed = 0 ;
+        int labelHeightUsed = 0;
 
         if ( HasFlag(wxSL_MIN_MAX_LABELS) )
         {
@@ -429,9 +429,12 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
             if ( HasFlag(wxSL_LEFT) )
             {
                 // Label aligned to the left edge of the slider.
-                xPos = sliderOffset + tickOffset;
-                holdTopX = xPos;
-                holdBottomX = xPos;
+                xPos = sliderOffset + THUMB / 2;
+                if ( HasFlag(wxSL_TICKS) )
+                    xPos += TICK;
+
+                holdTopX = xPos - minLabelWidth / 2;
+                holdBottomX = xPos - maxLabelWidth / 2;
                 if ( holdTopX + minLabelWidth > width )
                     holdTopX = width - minLabelWidth;
                 if ( holdBottomX + maxLabelWidth > width )
@@ -440,22 +443,16 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
             else // wxSL_RIGHT
             {
                 // Label aligned to the right edge of the slider.
-                if ( HasFlag(wxSL_BOTH) )
-                    xPos = sliderOffset + THUMB + tickOffset/2;
-                else
-                    xPos = sliderOffset + THUMB;
+                xPos = sliderOffset + THUMB / 2;
+                if ( HasFlag(wxSL_TICKS) && HasFlag(wxSL_BOTH) )
+                    xPos += TICK;
 
-                holdTopX = xPos - minLabelWidth;
-                holdBottomX = xPos - maxLabelWidth;
+                holdTopX = xPos - minLabelWidth / 2;
+                holdBottomX = xPos - maxLabelWidth / 2;
                 if ( holdTopX < 0 )
                     holdTopX = 0;
                 if ( holdBottomX < 0 )
                     holdBottomX = 0;
-            }
-
-            if ( HasFlag(wxSL_INVERSE) )
-            {
-                wxSwap(holdTopX, holdBottomX);
             }
 
             DoMoveSibling((HWND)(*m_labels)[SliderLabel_Min],
@@ -467,14 +464,14 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
                 y + height - labelHeight,
                 maxLabelWidth, labelHeight);
 
-            labelHeightUsed = labelHeight ;
+            labelHeightUsed = labelHeight;
         }
 
         if ( HasFlag(wxSL_VALUE_LABEL) )
         {
             DoMoveSibling((HWND)(*m_labels)[SliderLabel_Value],
                 x + ( HasFlag(wxSL_LEFT) ? THUMB + tickOffset + HGAP : 0 ),
-                y + (height - labelHeight)/2,
+                y + (height - labelHeight) / 2,
                 longestLabelWidth, labelHeight);
         }
 
@@ -488,20 +485,20 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
     else // horizontal
     {
         int yLabelMinMax =
-            (y + ((THUMB + tickOffset) / 2)) - (labelHeight / 2);
+            ((THUMB + tickOffset) / 2) - (labelHeight / 2);
         int xLabelValue =
-            x + minLabelWidth +
-            ((width  - (minLabelWidth + maxLabelWidth)) / 2) -
+            minLabelWidth +
+            ((width - (minLabelWidth + maxLabelWidth)) / 2) -
             (longestLabelWidth / 2);
 
-        int ySlider = y;
-        int minLabelWidthUsed = 0 ;
-        int maxLabelWidthUsed = 0 ;
+        int ySlider = 0;
+        int minLabelWidthUsed = 0;
+        int maxLabelWidthUsed = 0;
 
         if ( HasFlag(wxSL_VALUE_LABEL) )
         {
             DoMoveSibling((HWND)(*m_labels)[SliderLabel_Value],
-                xLabelValue,
+                x + xLabelValue,
                 y + (HasFlag(wxSL_BOTTOM) ? 0 : THUMB + tickOffset),
                 longestLabelWidth, labelHeight);
 
@@ -516,21 +513,21 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
         {
             DoMoveSibling((HWND)(*m_labels)[SliderLabel_Min],
                 x,
-                yLabelMinMax,
+                y + yLabelMinMax,
                 minLabelWidth, labelHeight);
             DoMoveSibling((HWND)(*m_labels)[SliderLabel_Max],
                 x + width - maxLabelWidth,
-                yLabelMinMax,
+                y + yLabelMinMax,
                 maxLabelWidth, labelHeight);
 
-            minLabelWidthUsed = minLabelWidth + VGAP ;
-            maxLabelWidthUsed = maxLabelWidth + VGAP ;
+            minLabelWidthUsed = minLabelWidth + VGAP;
+            maxLabelWidthUsed = maxLabelWidth + VGAP;
         }
 
         // position the slider itself along the top/bottom edge
         wxSliderBase::DoMoveWindow(
             x + minLabelWidthUsed,
-            ySlider,
+            y + ySlider,
             width - (minLabelWidthUsed + maxLabelWidthUsed),
             THUMB + tickOffset);
     }
@@ -559,7 +556,7 @@ wxSize wxSlider::DoGetBestSize() const
             if ( HasFlag(wxSL_VALUE_LABEL) )
                 size.x += longestLabelWidth + HGAP;
 
-            if (HasFlag(wxSL_MIN_MAX_LABELS))
+            if ( HasFlag(wxSL_MIN_MAX_LABELS) )
             {
                 size.x = wxMax(size.x, longestLabelWidth);
                 size.y += hLabel * 2;
