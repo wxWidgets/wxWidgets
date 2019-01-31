@@ -39,7 +39,7 @@ public:
 
 private:
     void CreateAndJoinNewGroup();
-    void SearchForPreviousGroupToJoin( wxWindow *parent );
+    void SearchForPreviousGroupToJoin();
 
     QRadioButton *m_qtRadioButton;
 

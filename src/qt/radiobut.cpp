@@ -52,7 +52,7 @@ bool wxRadioButton::Create( wxWindow *parent,
     }
     else
     {
-        SearchForPreviousGroupToJoin(parent);
+        SearchForPreviousGroupToJoin();
     }
 
     return createdOk;
@@ -82,14 +82,10 @@ void wxRadioButton::CreateAndJoinNewGroup()
     qtButtonGroup->addButton( m_qtRadioButton );
 }
 
-void wxRadioButton::SearchForPreviousGroupToJoin( wxWindow *parent )
+void wxRadioButton::SearchForPreviousGroupToJoin()
 {
-    wxWindowList::compatibility_iterator nodeThis = parent->GetChildren().Find(this);
-
     for ( wxWindow* previous = GetPrevSibling(); previous; previous = GetPrevSibling() )
     {
-        wxWindow *previous = node->GetData();
-
         if ( wxIsKindOf( previous, wxRadioButton ) )
         {
             if ( !previous->HasFlag( wxRB_SINGLE ) )
