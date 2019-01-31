@@ -272,17 +272,17 @@ void SliderWidgetsPage::CreateContent()
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(sides), sides,
                                  1, wxRA_SPECIFY_COLS);
-    sizerLeft->Add(m_radioSides, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(m_radioSides, wxSizerFlags().Expand().Border());
     m_chkBothSides = CreateCheckBoxAndAddToSizer
                      (sizerLeft, "&Both sides", SliderPage_BothSides);
 #if wxUSE_TOOLTIPS
     m_chkBothSides->SetToolTip("\"Both sides\" is only supported \nin Universal");
 #endif // wxUSE_TOOLTIPS
 
-    sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
+    sizerLeft->AddSpacer(5);
 
     wxButton *btn = new wxButton(this, SliderPage_Reset, "&Reset");
-    sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border(wxALL, 15));
 
     // middle pane
     wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, "&Change slider value");
@@ -294,13 +294,13 @@ void SliderWidgetsPage::CreateContent()
                                                     &text);
     text->SetEditable(false);
 
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetValue,
                                             "Set &value",
                                             SliderPage_ValueText,
                                             &m_textValue);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetMinAndMax,
                                             "&Min and max",
@@ -308,26 +308,26 @@ void SliderWidgetsPage::CreateContent()
                                             &m_textMin);
 
     m_textMax = new wxTextCtrl(this, SliderPage_MaxText, wxEmptyString);
-    sizerRow->Add(m_textMax, 1, wxLEFT | wxALIGN_CENTRE_VERTICAL, 5);
+    sizerRow->Add(m_textMax, wxSizerFlags(1).CentreVertical().Border(wxLEFT));
 
     m_textMin->SetValue( wxString::Format("%d", m_min) );
     m_textMax->SetValue( wxString::Format("%d", m_max) );
 
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetLineSize,
                                             "Li&ne size",
                                             SliderPage_LineSizeText,
                                             &m_textLineSize);
 
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetPageSize,
                                             "P&age size",
                                             SliderPage_PageSizeText,
                                             &m_textPageSize);
 
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetTickFreq,
                                             "Tick &frequency",
@@ -336,18 +336,17 @@ void SliderWidgetsPage::CreateContent()
 
     m_textTickFreq->SetValue("10");
 
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetThumbLen,
                                             "Thumb &length",
                                             SliderPage_ThumbLenText,
                                             &m_textThumbLen);
 
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);
-    sizerRight->SetMinSize(150, 40);
     m_sizerSlider = sizerRight; // save it to modify it later
 
     Reset();
@@ -357,9 +356,12 @@ void SliderWidgetsPage::CreateContent()
     m_textPageSize->SetValue(wxString::Format("%d", m_slider->GetPageSize()));
 
     // the 3 panes panes compose the window
-    sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 0, wxGROW | wxALL, 10);
-    sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(sizerLeft,
+                  wxSizerFlags(0).Expand().Border((wxALL & ~wxLEFT), 10));
+    sizerTop->Add(sizerMiddle,
+                  wxSizerFlags(1).Expand().Border(wxALL, 10));
+    sizerTop->Add(sizerRight,
+                  wxSizerFlags(1).Expand().Border((wxALL & ~wxRIGHT), 10));
 
     // final initializations
     SetSizer(sizerTop);
@@ -466,13 +468,13 @@ void SliderWidgetsPage::CreateSlider()
 
     if ( m_slider->HasFlag(wxSL_VERTICAL) )
     {
-        m_sizerSlider->Add(0, 0, 1);
-        m_sizerSlider->Add(m_slider, 0, wxGROW | wxALL, 5);
-        m_sizerSlider->Add(0, 0, 1);
+        m_sizerSlider->AddStretchSpacer(1);
+        m_sizerSlider->Add(m_slider, wxSizerFlags(0).Expand().Border());
+        m_sizerSlider->AddStretchSpacer(1);
     }
     else
     {
-        m_sizerSlider->Add(m_slider, 1, wxCENTRE | wxALL, 5);
+        m_sizerSlider->Add(m_slider, wxSizerFlags(1).Centre().Border());
     }
 
     if ( m_chkTicks->GetValue() )
