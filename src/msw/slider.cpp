@@ -651,7 +651,7 @@ void wxSlider::SetRange(int minValue, int maxValue)
 
     if ( m_labels )
     {
-        Move(wxDefaultPosition); // Force a re-layout the labels.
+        Move(wxDefaultPosition, wxSIZE_FORCE); // Force a re-layout the labels.
 
         // Update the label with the value adjusted by the control as
         // old value can be out of the new range.
