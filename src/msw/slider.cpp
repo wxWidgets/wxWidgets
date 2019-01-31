@@ -390,6 +390,9 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
         return;
     }
 
+    const int thumbSize = FromDIP(THUMB);
+    const int tickSize = FromDIP(TICK);
+
     int minLabelWidth,
         maxLabelWidth;
     const int labelHeight = GetLabelsSize(&minLabelWidth, &maxLabelWidth);
@@ -402,7 +405,7 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
 
     int tickOffset = 0;
     if ( HasFlag(wxSL_TICKS) )
-        tickOffset = TICK;
+        tickOffset = tickSize;
     if ( HasFlag(wxSL_BOTH) )
         tickOffset *= 2;
 
@@ -429,9 +432,9 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
             if ( HasFlag(wxSL_LEFT) )
             {
                 // Label aligned to the left edge of the slider.
-                xPos = sliderOffset + THUMB / 2;
+                xPos = sliderOffset + thumbSize / 2;
                 if ( HasFlag(wxSL_TICKS) )
-                    xPos += TICK;
+                    xPos += tickSize;
 
                 holdTopX = xPos - minLabelWidth / 2;
                 holdBottomX = xPos - maxLabelWidth / 2;
@@ -443,9 +446,9 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
             else // wxSL_RIGHT
             {
                 // Label aligned to the right edge of the slider.
-                xPos = sliderOffset + THUMB / 2;
+                xPos = sliderOffset + thumbSize / 2;
                 if ( HasFlag(wxSL_TICKS) && HasFlag(wxSL_BOTH) )
-                    xPos += TICK;
+                    xPos += tickSize;
 
                 holdTopX = xPos - minLabelWidth / 2;
                 holdBottomX = xPos - maxLabelWidth / 2;
@@ -470,7 +473,7 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
         if ( HasFlag(wxSL_VALUE_LABEL) )
         {
             DoMoveSibling((HWND)(*m_labels)[SliderLabel_Value],
-                x + ( HasFlag(wxSL_LEFT) ? THUMB + tickOffset + HGAP : 0 ),
+                x + ( HasFlag(wxSL_LEFT) ? thumbSize + tickOffset + HGAP : 0 ),
                 y + (height - labelHeight) / 2,
                 longestLabelWidth, labelHeight);
         }
@@ -479,13 +482,13 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
         wxSliderBase::DoMoveWindow(
             x + sliderOffset,
             y + labelHeightUsed,
-            THUMB + tickOffset,
+            thumbSize + tickOffset,
             height - (labelHeightUsed * 2));
     }
     else // horizontal
     {
         int yLabelMinMax =
-            ((THUMB + tickOffset) / 2) - (labelHeight / 2);
+            ((thumbSize + tickOffset) / 2) - (labelHeight / 2);
         int xLabelValue =
             minLabelWidth +
             ((width - (minLabelWidth + maxLabelWidth)) / 2) -
@@ -499,7 +502,7 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
         {
             DoMoveSibling((HWND)(*m_labels)[SliderLabel_Value],
                 x + xLabelValue,
-                y + (HasFlag(wxSL_BOTTOM) ? 0 : THUMB + tickOffset),
+                y + (HasFlag(wxSL_BOTTOM) ? 0 : thumbSize + tickOffset),
                 longestLabelWidth, labelHeight);
 
             if ( HasFlag(wxSL_BOTTOM) )
@@ -529,20 +532,22 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
             x + minLabelWidthUsed,
             y + ySlider,
             width - (minLabelWidthUsed + maxLabelWidthUsed),
-            THUMB + tickOffset);
+            thumbSize + tickOffset);
     }
 }
 
 wxSize wxSlider::DoGetBestSize() const
 {
     // this value is arbitrary:
-    static const int length = 100;
+    static const int length = FromDIP(100);
+    const int thumbSize = FromDIP(THUMB);
+    const int tickSize = FromDIP(TICK);
 
     int *width;
     wxSize size;
     if ( HasFlag(wxSL_VERTICAL) )
     {
-        size.Set(THUMB, length);
+        size.Set(thumbSize, length);
         width = &size.x;
 
         if ( m_labels )
@@ -565,7 +570,7 @@ wxSize wxSlider::DoGetBestSize() const
     }
     else // horizontal
     {
-        size.Set(length, THUMB);
+        size.Set(length, thumbSize);
         width = &size.y;
 
         if ( m_labels )
@@ -585,10 +590,10 @@ wxSize wxSlider::DoGetBestSize() const
     // need extra space to show ticks
     if ( HasFlag(wxSL_TICKS) )
     {
-        *width += TICK;
+        *width += tickSize;
         // and maybe twice as much if we show them on both sides
         if ( HasFlag(wxSL_BOTH) )
-            *width += TICK;
+            *width += tickSize;
     }
     return size;
 }
