@@ -44,13 +44,9 @@ bool wxRadioButton::Create( wxWindow *parent,
     m_qtRadioButton = new QRadioButton( parent->GetHandle() );
     m_qtRadioButton->setText( wxQtConvertString( label ));
 
-    if ( style & wxRB_GROUP )
+    if( ( style & wxRB_GROUP ) || ( style & wxRB_SINGLE ) || ( ! ))
     {
         CreateAndJoinNewGroup();
-    }
-    else if ( !( style & wxRB_SINGLE) )
-    {
-        SearchForPreviousGroupToJoin( parent );
     }
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
@@ -77,7 +73,7 @@ void wxRadioButton::CreateAndJoinNewGroup()
     qtButtonGroup->addButton( m_qtRadioButton );
 }
 
-void wxRadioButton::SearchForPreviousGroupToJoin( wxWindow *parent )
+bool wxRadioButton::SearchForPreviousGroupToJoin( wxWindow *parent )
 {
     wxWindowList::compatibility_iterator node = parent->GetChildren().GetLast();
 
@@ -87,11 +83,7 @@ void wxRadioButton::SearchForPreviousGroupToJoin( wxWindow *parent )
 
         if ( wxIsKindOf( previous, wxRadioButton ) )
         {
-            if ( previous->HasFlag( wxRB_SINGLE ) )
-            {
-                CreateAndJoinNewGroup();
-            }
-            else
+            if ( !previous->HasFlag( wxRB_SINGLE ) )
             {
                 QRadioButton *ptr = dynamic_cast<QRadioButton *>( previous->GetHandle() );
 
@@ -100,10 +92,13 @@ void wxRadioButton::SearchForPreviousGroupToJoin( wxWindow *parent )
                 if ( btnGroup )
                 {
                     btnGroup->addButton(m_qtRadioButton);
+                    return true;
                 }
             }
 
             break;
         }
     }
+
+    return false;
 }
