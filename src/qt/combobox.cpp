@@ -55,7 +55,6 @@ wxQtComboBox::wxQtComboBox( wxWindow *parent, wxComboBox *handler )
     : wxQtEventSignalHandler< QComboBox, wxComboBox >( parent, handler ),
       m_textChangeIgnored( false )
 {
-    setEditable( true );
     connect(this, static_cast<void (QComboBox::*)(int index)>(&QComboBox::activated),
             this, &wxQtComboBox::activated);
     connect(this, &QComboBox::editTextChanged,
@@ -160,8 +159,8 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
             const wxString& name )
 {
     m_qtComboBox = new wxQtComboBox( parent, this );
+    m_qtComboBox->setEditable(!(style & wxCB_READONLY));
     QtInitSort( m_qtComboBox );
-
     while ( n-- > 0 )
         m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
     m_qtComboBox->setEditText( wxQtConvertString( value ));
@@ -249,8 +248,8 @@ void wxComboBox::Dismiss()
 
 void wxComboBox::Clear()
 {
-    wxTextEntry::Clear();
-    wxItemContainer::Clear();
+    m_qtComboBox->clear();
+    m_qtComboBox->clearEditText();
 }
 
 void wxComboBox::SetSelection( long from, long to )
