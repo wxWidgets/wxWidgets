@@ -44,7 +44,8 @@ bool wxRadioButton::Create( wxWindow *parent,
     m_qtRadioButton = new QRadioButton(parent->GetHandle());
     m_qtRadioButton->setText(wxQtConvertString(label));
 
-    bool createdOk = QtCreateControl(parent, id, pos, size, style, validator, name);
+    if ( !QtCreateControl(parent, id, pos, size, style, validator, name) )
+        return false;
 
     if ( (style & wxRB_GROUP) || (style & wxRB_SINGLE) )
     {
@@ -55,7 +56,7 @@ bool wxRadioButton::Create( wxWindow *parent,
         SearchForPreviousGroupToJoin();
     }
 
-    return createdOk;
+    return true;
 }
 
 void wxRadioButton::SetValue(bool value)
