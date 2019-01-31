@@ -44,6 +44,8 @@ bool wxRadioButton::Create( wxWindow *parent,
     m_qtRadioButton = new QRadioButton( parent->GetHandle() );
     m_qtRadioButton->setText( wxQtConvertString( label ));
 
+    bool createdOk = QtCreateControl( parent, id, pos, size, style, validator, name );
+
     if( ( style & wxRB_GROUP ) || ( style & wxRB_SINGLE ) )
     {
         CreateAndJoinNewGroup();
@@ -53,7 +55,7 @@ bool wxRadioButton::Create( wxWindow *parent,
         SearchForPreviousGroupToJoin(parent);
     }
 
-    return QtCreateControl( parent, id, pos, size, style, validator, name );
+    return createdOk;
 }
 
 void wxRadioButton::SetValue(bool value)
@@ -81,9 +83,9 @@ void wxRadioButton::CreateAndJoinNewGroup()
 
 void wxRadioButton::SearchForPreviousGroupToJoin( wxWindow *parent )
 {
-    wxWindowList::compatibility_iterator node = parent->GetChildren().GetLast();
+    wxWindowList::compatibility_iterator nodeThis = parent->GetChildren().Find(this);
 
-    for ( ; node; node = node->GetPrevious() )
+    for ( wxWindowList::compatibility_iterator node = nodeThis->GetPrevious(); node; node = node->GetPrevious() )
     {
         wxWindow *previous = node->GetData();
 
