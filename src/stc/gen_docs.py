@@ -844,7 +844,13 @@ docSubstitutions = {
         'SC_SEL_RECTANGLE':'wxSTC_SEL_RECTANGLE','SC_SEL_THIN':'wxSTC_SEL_THIN',
         'SC_SEL_LINES':'wxSTC_SEL_LINES'},
 
-    'SetFontQuality':{' from the FontQuality enumeration':''}
+    'SetFontQuality':{' from the FontQuality enumeration':''},
+
+    'GetWrapVisualFlags':{'Retrive':'Retrieve'},
+
+    'GetWrapVisualFlagsLocation':{'Retrive':'Retrieve'},
+
+    'GetWrapStartIndent':{'Retrive':'Retrieve'}
 }
 
 
