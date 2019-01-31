@@ -41,7 +41,8 @@ namespace
     public:
         wxQtListTextCtrl(wxWindow *parent, QWidget *actualParent) :
             wxTextCtrl(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxNO_BORDER),
-            m_actualParent(actualParent)
+            m_actualParent(actualParent),
+            m_moving(false)
         {
 
             Bind(wxEVT_MOVE, &wxQtListTextCtrl::onMove, this);
@@ -49,7 +50,19 @@ namespace
 
         void onMove(wxMoveEvent &event)
         {
-           const QPoint event_position = wxQtConvertPoint(event.GetPosition());
+
+            //QWidget::move generates a QMoveEvent so we need to guard against reenterant calls
+            if ( m_moving )
+            {
+                event.Skip();
+                return;
+            }
+
+
+            m_moving = true;
+
+
+            const QPoint event_position = wxQtConvertPoint(event.GetPosition());
            const QPoint global_position  = m_actualParent->mapToGlobal(event_position);
 
            //For some reason this always gives us the offset from the header info the internal control
@@ -57,13 +70,14 @@ namespace
             QWidget *widget = GetHandle();
             const QPoint offset = widget->mapFromGlobal(global_position);
 
-            widget->blockSignals(true);
             widget->move(event_position + offset);
-            widget->blockSignals(false);
+
+            m_moving = false;
         }
 
     private:
         QWidget *m_actualParent;
+        bool m_moving;
     };
 }
 
