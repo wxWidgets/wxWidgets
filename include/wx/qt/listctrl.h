@@ -305,7 +305,6 @@ protected:
                       m_ownsImageListState;
 private:
     wxQtTreeWidget *m_qtTreeWidget;
-    wxQtItemEditorFactory *m_qtEditorFactory;
 
     wxDECLARE_DYNAMIC_CLASS( wxListCtrl );
 };

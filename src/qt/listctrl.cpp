@@ -102,20 +102,19 @@ private:
 class wxQtTreeWidget : public wxQtEventSignalHandler< QTreeWidget, wxListCtrl >
 {
 public:
-    wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler, wxQtItemEditorFactory* editorFactory );
+    wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler);
 
     void EmitListEvent(wxEventType typ, QTreeWidgetItem *qitem, int column) const;
 
     void closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint) wxOVERRIDE
     {
         QTreeWidget::closeEditor(editor, hint);
-        m_editorFactory->ClearEditor();
+        m_editorFactory.ClearEditor();
     }
 
-    void RestoreDefaultEditorFactory()
+    wxTextCtrl *GetEditControl()
     {
-        QItemDelegate *qItemDelegate = static_cast<QItemDelegate*>(itemDelegate());
-        qItemDelegate->setItemEditorFactory(m_oldFactory);
+        return m_editorFactory.GetEditControl();
     }
 
 private:
@@ -123,26 +122,25 @@ private:
     void itemActivated(QTreeWidgetItem * item, int column);
     void itemPressed(QTreeWidgetItem * item, int column);
 
-    void ChangeEditorFactory(QItemEditorFactory *editorFactory)
+    void ChangeEditorFactory()
     {
         QItemDelegate *qItemDelegate = static_cast<QItemDelegate*>(itemDelegate());
-        m_oldFactory = qItemDelegate->itemEditorFactory();
-        qItemDelegate->setItemEditorFactory(editorFactory);
+        qItemDelegate->itemEditorFactory();
+        qItemDelegate->setItemEditorFactory(&m_editorFactory);
     }
 
-    wxQtItemEditorFactory *m_editorFactory;
-    QItemEditorFactory *m_oldFactory;
+    wxQtItemEditorFactory m_editorFactory;
 };
 
-wxQtTreeWidget::wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler, wxQtItemEditorFactory* editorFactory )
+wxQtTreeWidget::wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler )
     : wxQtEventSignalHandler< QTreeWidget, wxListCtrl >( parent, handler ),
-	m_editorFactory(editorFactory)
+        m_editorFactory(handler)
 {
     connect(this, &QTreeWidget::itemClicked, this, &wxQtTreeWidget::itemClicked);
     connect(this, &QTreeWidget::itemPressed, this, &wxQtTreeWidget::itemPressed);
     connect(this, &QTreeWidget::itemActivated, this, &wxQtTreeWidget::itemActivated);
 
-    ChangeEditorFactory(editorFactory);
+    ChangeEditorFactory();
 }
 
 void wxQtTreeWidget::EmitListEvent(wxEventType typ, QTreeWidgetItem *qitem, int column) const
@@ -236,7 +234,7 @@ bool wxListCtrl::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    m_qtTreeWidget = new wxQtTreeWidget(parent, this, m_qtEditorFactory);
+    m_qtTreeWidget = new wxQtTreeWidget(parent, this);
 
     if (style & wxLC_NO_HEADER)
         m_qtTreeWidget->setHeaderHidden(true);
@@ -248,8 +246,6 @@ bool wxListCtrl::Create(wxWindow *parent,
 
 void wxListCtrl::Init()
 {
-    m_qtEditorFactory = new wxQtItemEditorFactory(this);
-
     m_imageListNormal = NULL;
     m_ownsImageListNormal = false;
     m_imageListSmall = NULL;
@@ -261,12 +257,6 @@ void wxListCtrl::Init()
 
 wxListCtrl::~wxListCtrl()
 {
-    if ( m_qtTreeWidget )
-    {
-        m_qtTreeWidget->RestoreDefaultEditorFactory();
-        delete m_qtEditorFactory;
-    }
-
     if (m_ownsImageListNormal)
         delete m_imageListNormal;
     if (m_ownsImageListSmall)
@@ -358,7 +348,7 @@ wxRect wxListCtrl::GetViewRect() const
 
 wxTextCtrl* wxListCtrl::GetEditControl() const
 {
-    return m_qtEditorFactory->GetEditControl();
+    return m_qtTreeWidget->GetEditControl();
 }
 
 QTreeWidgetItem *wxListCtrl::QtGetItem(int id) const
