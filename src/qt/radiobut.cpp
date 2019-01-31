@@ -69,6 +69,8 @@ QWidget *wxRadioButton::GetHandle() const
 
 void wxRadioButton::CreateAndJoinNewGroup()
 {
+    // Note that the QButtonGroup created below will be deallocated by the QRadioButton owing
+    // to using that as its parent.
     QButtonGroup* qtButtonGroup = new QButtonGroup( GetHandle() );
     qtButtonGroup->addButton( m_qtRadioButton );
 }
