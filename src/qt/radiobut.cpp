@@ -85,7 +85,7 @@ void wxRadioButton::CreateAndJoinNewGroup()
 
 void wxRadioButton::SearchForPreviousGroupToJoin()
 {
-    for ( wxWindow* previous = GetPrevSibling(); previous; previous = GetPrevSibling() )
+    for ( wxWindow* previous = GetPrevSibling(); previous; previous = previous->GetPrevSibling() )
     {
         if ( wxIsKindOf(previous, wxRadioButton) )
         {
