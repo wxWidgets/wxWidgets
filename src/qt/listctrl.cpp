@@ -50,7 +50,6 @@ namespace
 
         void onMove(wxMoveEvent &event)
         {
-
             //QWidget::move generates a QMoveEvent so we need to guard against reenterant calls
             if ( m_moving )
             {
@@ -58,11 +57,9 @@ namespace
                 return;
             }
 
-
             m_moving = true;
 
-
-            const QPoint event_position = wxQtConvertPoint(event.GetPosition());
+           const QPoint event_position = wxQtConvertPoint(event.GetPosition());
            const QPoint global_position  = m_actualParent->mapToGlobal(event_position);
 
            //For some reason this always gives us the offset from the header info the internal control
