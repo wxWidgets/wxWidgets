@@ -50,7 +50,6 @@ public:
 
 namespace
 {
-
 struct wxQtLineInfo
 {
   wxQtLineInfo(size_t start, size_t end) :
@@ -253,19 +252,19 @@ public:
     {
         m_edit->setReadOnly(flags & wxTE_READONLY);
 
-        if (flags & wxNO_BORDER)
+        if ( flags & wxNO_BORDER )
             m_edit->setFrameStyle(QFrame::NoFrame);
 
         if ( flags & wxTE_RICH || flags & wxTE_RICH2 )
             m_edit->setAcceptRichText(true);
 
-        if (flags & wxTE_LEFT)
+        if ( flags & wxTE_LEFT )
             m_edit->setAlignment(Qt::AlignLeft);
 
-        if (flags & wxTE_CENTRE)
+        if ( flags & wxTE_CENTRE )
             m_edit->setAlignment(Qt::AlignHCenter);
 
-        if (flags & wxTE_RIGHT)
+        if ( flags & wxTE_RIGHT )
             m_edit->setAlignment(Qt::AlignRight);
     }
 
@@ -427,16 +426,16 @@ public:
         m_edit->setFrame(!(flags & wxNO_BORDER));
         m_edit->setReadOnly(flags & wxTE_READONLY);
 
-        if (flags & wxTE_PASSWORD)
+        if ( flags & wxTE_PASSWORD )
             m_edit->setEchoMode(QLineEdit::Password);
 
-        if (flags & wxTE_LEFT)
+        if ( flags & wxTE_LEFT )
             m_edit->setAlignment(Qt::AlignLeft);
 
-        if (flags & wxTE_CENTRE)
+        if ( flags & wxTE_CENTRE )
             m_edit->setAlignment(Qt::AlignHCenter);
 
-        if (flags & wxTE_RIGHT)
+        if ( flags & wxTE_RIGHT )
             m_edit->setAlignment(Qt::AlignRight);
     }
 
