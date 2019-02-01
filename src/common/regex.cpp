@@ -171,11 +171,15 @@ public:
     int Replace(wxString *pattern, const wxString& replacement,
                 size_t maxMatches = 0) const;
 
-    bool NeedUnshared(const wxString& str)
+    bool NeedUnshared(const wxString& str, int flags)
     {
         if ( GetRefCount() > 1 )
         {
-            unsigned long h = wxStringHash()(str);
+            wxString text = str;
+            if ( !flags )
+                text << flags;
+
+            unsigned long h = wxStringHash()(text);
 
             if ( h != m_hash )
             {
@@ -760,7 +764,7 @@ bool wxRegEx::Matches(const wxString& str, int flags) const
 {
     wxCHECK_MSG( IsValid(), false, wxT("must successfully Compile() first") );
 
-    if ( m_impl->NeedUnshared(str) )
+    if ( m_impl->NeedUnshared(str, flags) )
     {
         m_impl = m_impl->Clone();
     }
