@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 14 June 2016                                                        *
+# Date : 1 February 2019                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -95,7 +95,8 @@ OBJECTS = \
 		editlbox.obj,datavgen.obj,dbgrptg.obj,dragimgg.obj,\
 		richmsgdlgg.obj,commandlinkbuttong.obj,spinctlg.obj,\
 		markuptext.obj,bannerwindow.obj,timectrlg.obj,richtooltipg.obj\
-		,statbmpg.obj,splash.obj,collheaderctrlg.obj,graphicc.obj
+		,statbmpg.obj,splash.obj,collheaderctrlg.obj,graphicc.obj,\
+		rowheightcache.obj
 
 SOURCES = \
 		aboutdlgg.cpp,\
@@ -168,7 +169,8 @@ SOURCES = \
 		datavgen.cpp,dbgrptg.cpp,dragimgg.cpp,richmsgdlgg.cpp,\
 		commandlinkbuttong.cpp,spinctlg.cpp markuptext.cpp \
 		bannerwindow.cpp timectrlg.cpp richtooltipg.cpp statbmpg.cpp \
-		textmeasure.cpp collheaderctrlg.cpp graphicc.cpp
+		textmeasure.cpp collheaderctrlg.cpp graphicc.cpp \
+		rowheightcache.cpp
 
 .ifdef __WXMOTIF__
 OBJECTS0=statusbr.obj,statline.obj,notebook.obj,spinctlg.obj,collpaneg.obj,\
@@ -314,3 +316,4 @@ textmeasure.obj : textmeasure.cpp
 editlbox.obj : editlbox.cpp
 collheaderctrlg.obj : collheaderctrlg.cpp
 graphicc.obj : graphicc.cpp
+rowheightcache.obj : rowheightcache.cpp
