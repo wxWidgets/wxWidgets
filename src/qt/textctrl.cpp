@@ -45,6 +45,7 @@ public:
     virtual void SetValue( const wxString &value ) = 0;
     virtual void SetSelection( long from, long to ) = 0;
     virtual void SetInsertionPoint(long pos) = 0;
+    virtual void SetStyleFlags(long flags) = 0;
 };
 
 namespace
@@ -248,6 +249,26 @@ public:
         return (QScrollArea *) m_edit;
     }
 
+    virtual void SetStyleFlags(long flags) wxOVERRIDE
+    {
+        m_edit->setReadOnly(flags & wxTE_READONLY);
+
+        if ( flags & wxNO_BORDER )
+            m_edit->setFrameStyle(QFrame::NoFrame);
+
+        if ( flags & wxTE_RICH || flags & wxTE_RICH2 )
+            m_edit->setAcceptRichText(true);
+
+        if ( flags & wxTE_LEFT )
+            m_edit->setAlignment(Qt::AlignLeft);
+
+        if ( flags & wxTE_CENTRE )
+            m_edit->setAlignment(Qt::AlignHCenter);
+
+        if ( flags & wxTE_RIGHT )
+            m_edit->setAlignment(Qt::AlignRight);
+    }
+
 private:
     wxQtLineInfo GetLineInfo(long lineNo, const wxString &value) const
     {
@@ -401,6 +422,24 @@ public:
         return NULL;
     }
 
+    virtual void SetStyleFlags(long flags) wxOVERRIDE
+    {
+        m_edit->setFrame(!(flags & wxNO_BORDER));
+        m_edit->setReadOnly(flags & wxTE_READONLY);
+
+        if ( flags & wxTE_PASSWORD )
+            m_edit->setEchoMode(QLineEdit::Password);
+
+        if ( flags & wxTE_LEFT )
+            m_edit->setAlignment(Qt::AlignLeft);
+
+        if ( flags & wxTE_CENTRE )
+            m_edit->setAlignment(Qt::AlignHCenter);
+
+        if ( flags & wxTE_RIGHT )
+            m_edit->setAlignment(Qt::AlignRight);
+    }
+
 private:
     QLineEdit *m_edit;
 
@@ -490,12 +529,10 @@ bool wxTextCtrl::Create(wxWindow *parent,
     }
     else
     {
-        wxQtLineEdit *lineEdit = new wxQtLineEdit(parent, this);
-        if ( style & wxTE_PASSWORD )
-            lineEdit->setEchoMode( QLineEdit::Password );
-
-        m_qtEdit = new wxQtSingleLineEdit(lineEdit);
+        m_qtEdit = new wxQtSingleLineEdit(new wxQtLineEdit(parent, this));
     }
+
+    m_qtEdit->SetStyleFlags(style);
 
     if ( QtCreateControl( parent, id, pos, size, style, validator, name ) )
     {
