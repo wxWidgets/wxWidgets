@@ -12,6 +12,30 @@
 #include "wx/qt/private/converter.h"
 
 #include <QtWidgets/QRadioButton>
+#include "wx/qt/private/winevent.h"
+
+class wxQtRadioButton : public wxQtEventSignalHandler< QRadioButton, wxRadioButton >
+{
+public:
+    wxQtRadioButton( wxWindow *parent, wxRadioButton *handler ) :
+         wxQtEventSignalHandler< QRadioButton, wxRadioButton >(parent, handler)
+
+    {
+        connect(this, &QRadioButton::clicked, this, &wxQtRadioButton::OnClicked);
+    }
+
+    void OnClicked(bool checked = false)
+    {
+        wxRadioButton* handler = GetHandler();
+        if ( handler == NULL)
+            return;
+
+        wxCommandEvent event(wxEVT_RADIOBUTTON, handler->GetId() );
+        event.SetInt( checked ? 1 : 0);
+        EmitEvent(event);
+    }
+    
+};
 
 wxRadioButton::wxRadioButton() :
     m_qtRadioButton(NULL)
@@ -39,7 +63,7 @@ bool wxRadioButton::Create( wxWindow *parent,
              const wxValidator& validator,
              const wxString& name)
 {
-    m_qtRadioButton = new QRadioButton( parent->GetHandle() );
+    m_qtRadioButton = new wxQtRadioButton( parent, this );
     m_qtRadioButton->setText( wxQtConvertString( label ));
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
