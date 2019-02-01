@@ -181,9 +181,9 @@ public:
 
             unsigned long h = wxStringHash()(text);
 
-            if ( h != m_hash )
+            if ( h != m_matchHash )
             {
-                m_hash = h;
+                m_matchHash = h;
                 return true;
             }
         }
@@ -206,9 +206,9 @@ private:
     {
         m_Matches = NULL;
         m_nMatches = 0;
-        // Set the m_hash to ULONG_MAX which indicates that no Matches
+        // Set the m_matchHash to ULONG_MAX which indicates that no Matches
         // was attempted yet.
-        m_hash = -1;
+        m_matchHash = -1;
     }
 
     // free the RE if compiled
@@ -247,7 +247,7 @@ private:
     wxRegExMatches *m_Matches;
     size_t          m_nMatches;
     // Remember the string passed to Matches() by its hash.
-    unsigned long   m_hash;
+    unsigned long   m_matchHash;
 };
 
 
