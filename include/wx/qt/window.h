@@ -9,8 +9,6 @@
 #ifndef _WX_QT_WINDOW_H_
 #define _WX_QT_WINDOW_H_
 
-#include <list>
-
 class QShortcut;
 template < class T > class QList;
 

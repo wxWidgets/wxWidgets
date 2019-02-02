@@ -31,11 +31,11 @@
 #endif // WX_PRECOMP
 
 #include "wx/window.h"
+#include "wx/dnd.h"
 #include "wx/tooltip.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
-
 
 #define VERT_SCROLLBAR_POSITION 0, 1
 #define HORZ_SCROLLBAR_POSITION 1, 0
@@ -193,9 +193,6 @@ static const char WINDOW_POINTER_PROPERTY_NAME[] = "wxWindowPointer";
     return const_cast< wxWindowQt * >( ( variant.value< const wxWindow * >() ));
 }
 
-
-
-
 static wxWindowQt *s_capturedWindow = NULL;
 
 /* static */ wxWindowQt *wxWindowBase::DoFindFocus()
@@ -225,6 +222,8 @@ void wxWindowQt::Init()
 #endif
     m_qtWindow = NULL;
     m_qtContainer = NULL;
+
+    m_dropTarget = NULL;
 }
 
 wxWindowQt::wxWindowQt()
@@ -258,6 +257,10 @@ wxWindowQt::~wxWindowQt()
 #if wxUSE_ACCEL
     m_qtShortcutHandler->deleteLater();
     delete m_qtShortcuts;
+#endif
+
+#if wxUSE_DRAG_AND_DROP
+    SetDropTarget(NULL);
 #endif
 
     // Delete only if the qt widget was created or assigned to this base class
@@ -696,9 +699,22 @@ void wxWindowQt::ScrollWindow( int dx, int dy, const wxRect *rect )
 
 
 #if wxUSE_DRAG_AND_DROP
-void wxWindowQt::SetDropTarget( wxDropTarget * WXUNUSED( dropTarget ) )
+void wxWindowQt::SetDropTarget( wxDropTarget *dropTarget )
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    if ( m_dropTarget == dropTarget )
+        return;
+
+    if ( m_dropTarget != NULL )
+    {
+        m_dropTarget->Disconnect();
+    }
+
+    m_dropTarget = dropTarget;
+
+    if ( m_dropTarget != NULL )
+    {
+        m_dropTarget->ConnectTo(m_qtWindow);
+    }
 }
 #endif
 
