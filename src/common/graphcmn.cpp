@@ -989,25 +989,6 @@ wxGraphicsBitmap wxGraphicsContext::CreateSubBitmap( const wxGraphicsBitmap &bmp
 
 wxGraphicsContext* wxGraphicsContext::CreateFromUnknownDC(const wxDC& dc)
 {
-#ifndef wxNO_RTTI
-    if ( const wxWindowDC *windc = dynamic_cast<const wxWindowDC*>(&dc) )
-        return Create(*windc);
-
-    if ( const wxMemoryDC *memdc = dynamic_cast<const wxMemoryDC*>(&dc) )
-        return Create(*memdc);
-
-#if wxUSE_PRINTING_ARCHITECTURE
-    if ( const wxPrinterDC *printdc = dynamic_cast<const wxPrinterDC*>(&dc) )
-        return Create(*printdc);
-#endif
-
-#ifdef __WXMSW__
-#if wxUSE_ENH_METAFILE
-    if ( const wxEnhMetaFileDC *mfdc = dynamic_cast<const wxEnhMetaFileDC*>(&dc) )
-        return Create(*mfdc);
-#endif
-#endif
-#else // wxNO_RTTI
     if ( const wxWindowDC *windc = wxDynamicCast(&dc, wxWindowDC) )
         return Create(*windc);
 
@@ -1025,7 +1006,6 @@ wxGraphicsContext* wxGraphicsContext::CreateFromUnknownDC(const wxDC& dc)
         return Create(*mfdc);
 #endif
 #endif
-#endif // !wxNO_RTTI/wxNO_RTTI
 
     return NULL;
 }
