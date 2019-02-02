@@ -17,6 +17,7 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/radiobut.h"
+    #include "wx/stattext.h"
 #endif // WX_PRECOMP
 
 #include "wx/uiaction.h"
@@ -120,6 +121,11 @@ void RadioButtonTestCase::Group()
 
     wxRadioButton* g2radio1 = new wxRadioButton(parent, wxID_ANY, "radio 2.1");
 
+    // Check that having another control between radio buttons doesn't break
+    // grouping.
+    wxStaticText* text = new wxStaticText(parent, wxID_ANY, "Label");
+    wxRadioButton* g2radio2 = new wxRadioButton(parent, wxID_ANY, "radio 2.1");
+
     g1radio0->SetValue(true);
     g2radio0->SetValue(true);
 
@@ -136,6 +142,11 @@ void RadioButtonTestCase::Group()
     CPPUNIT_ASSERT(!g2radio0->GetValue());
     CPPUNIT_ASSERT(g2radio1->GetValue());
 
+    g2radio2->SetValue(true);
+    CPPUNIT_ASSERT(!g2radio0->GetValue());
+    CPPUNIT_ASSERT(!g2radio1->GetValue());
+    CPPUNIT_ASSERT(g2radio2->GetValue());
+
     g1radio0->SetValue(true);
     g2radio0->SetValue(true);
 
@@ -148,6 +159,8 @@ void RadioButtonTestCase::Group()
     wxDELETE(g1radio1);
     wxDELETE(g2radio0);
     wxDELETE(g2radio1);
+    wxDELETE(g2radio2);
+    wxDELETE(text);
 }
 
 void RadioButtonTestCase::Single()
