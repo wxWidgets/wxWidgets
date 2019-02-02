@@ -216,13 +216,10 @@ unsigned char *InitAlpha(wxImage *image, png_uint_32 x, png_uint_32 y)
 
     // set alpha for the pixels we had so far
     png_uint_32 end = y * image->GetWidth() + x;
-    for ( png_uint_32 i = 0; i < end; i++ )
-    {
-        // all the previous pixels were opaque
-        *alpha++ = 0xff;
-    }
+    // all the previous pixels were opaque
+    memset(alpha, 0xff, end);
 
-    return alpha;
+    return alpha + end;
 }
 
 // ----------------------------------------------------------------------------
