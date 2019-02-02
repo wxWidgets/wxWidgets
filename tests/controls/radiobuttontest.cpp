@@ -105,22 +105,20 @@ void RadioButtonTestCase::Value()
 
 void RadioButtonTestCase::Group()
 {
-    //Add another button to the first group and create another of two buttons
-    wxRadioButton* g1radio0 = new wxRadioButton(wxTheApp->GetTopWindow(),
-                                                wxID_ANY, "wxRadioButton",
-                                                wxDefaultPosition,
-                                                wxDefaultSize, wxRB_GROUP);
+    wxWindow* const parent = wxTheApp->GetTopWindow();
 
-    wxRadioButton* g1radio1 = new wxRadioButton(wxTheApp->GetTopWindow(),
-                                                wxID_ANY, "wxRadioButton");
+    // Create two different radio groups.
+    wxRadioButton* g1radio0 = new wxRadioButton(parent, wxID_ANY, "radio 1.0",
+                                                wxDefaultPosition, wxDefaultSize,
+                                                wxRB_GROUP);
 
-    wxRadioButton* g2radio0 = new wxRadioButton(wxTheApp->GetTopWindow(),
-                                                wxID_ANY, "wxRadioButton",
-                                                wxDefaultPosition,
-                                                wxDefaultSize, wxRB_GROUP);
+    wxRadioButton* g1radio1 = new wxRadioButton(parent, wxID_ANY, "radio 1.1");
 
-    wxRadioButton* g2radio1 = new wxRadioButton(wxTheApp->GetTopWindow(),
-                                                wxID_ANY, "wxRadioButton");
+    wxRadioButton* g2radio0 = new wxRadioButton(parent, wxID_ANY, "radio 2.0",
+                                                wxDefaultPosition, wxDefaultSize,
+                                                wxRB_GROUP);
+
+    wxRadioButton* g2radio1 = new wxRadioButton(parent, wxID_ANY, "radio 2.1");
 
     g1radio0->SetValue(true);
     g2radio0->SetValue(true);
