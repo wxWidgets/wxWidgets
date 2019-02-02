@@ -9,8 +9,6 @@
 #ifndef _WX_QT_WINDOW_H_
 #define _WX_QT_WINDOW_H_
 
-#include <list>
-
 class QShortcut;
 template < class T > class QList;
 
@@ -147,7 +145,8 @@ public:
 
     // wxQt implementation internals:
 
-    virtual QPicture *QtGetPicture() const;
+    // Caller maintains ownership of pict - window will NOT delete it
+    void QtSetPicture( QPicture* pict );
 
     QPainter *QtGetPainter();
 

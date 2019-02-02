@@ -13,6 +13,9 @@
 #endif
 
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QItemDelegate>
+#include <QtWidgets/QItemEditorFactory>
 
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
@@ -20,9 +23,105 @@
 
 #include "wx/listctrl.h"
 #include "wx/imaglist.h"
+#include "wx/recguard.h"
+
 #include "wx/qt/private/winevent.h"
 
-#include <QtWidgets/QTreeWidget>
+namespace
+{
+
+// wxQT Doesn't have a mechanism for "adopting" external widgets so we have to
+// create an instance of wxTextCtrl rather than adopting the control QT would
+// create.
+//
+// Unfortunately the factory is given an internal widget as the parent for
+// editor.
+//
+// To work around these issues we create a wxTextCtl parented by the wxListCtrl
+// then recalculate its position relative to the internal widget.
+class wxQtListTextCtrl : public wxTextCtrl
+{
+public:
+    wxQtListTextCtrl(wxWindow* parent, QWidget* actualParent)
+        : wxTextCtrl(parent, wxID_ANY, wxEmptyString,
+                     wxDefaultPosition, wxDefaultSize,
+                     wxNO_BORDER),
+        m_actualParent(actualParent),
+        m_moving(0)
+    {
+
+        Bind(wxEVT_MOVE, &wxQtListTextCtrl::onMove, this);
+    }
+
+    void onMove(wxMoveEvent &event)
+    {
+        // QWidget::move generates a QMoveEvent so we need to guard against
+        // reentrant calls.
+        wxRecursionGuard guard(m_moving);
+        if ( guard.IsInside() )
+        {
+            event.Skip();
+            return;
+        }
+
+        const QPoint eventPosition = wxQtConvertPoint(event.GetPosition());
+        const QPoint globalPosition  = m_actualParent->mapToGlobal(eventPosition);
+
+        // For some reason this always gives us the offset from the header info
+        // the internal control. So we need to treat this as an offset rather
+        // than a position.
+        QWidget* widget = GetHandle();
+        const QPoint offset = widget->mapFromGlobal(globalPosition);
+
+        widget->move(eventPosition + offset);
+    }
+
+private:
+    QWidget* m_actualParent;
+    wxRecursionGuardFlag m_moving;
+
+    wxDECLARE_NO_COPY_CLASS(wxQtListTextCtrl);
+};
+
+} // anonymous namespace
+
+
+// QT doesn't give us direct access to the editor within the QTreeWidget.
+// Instead, we'll supply a factory to create the widget for QT and keep track
+// of it ourselves.
+class wxQtItemEditorFactory : public QItemEditorFactory
+{
+public:
+    explicit wxQtItemEditorFactory(wxWindow* parent)
+        : m_parent(parent),
+          m_textCtrl(NULL)
+    {
+    }
+
+    QWidget* createEditor(int WXUNUSED(userType), QWidget* parent) const wxOVERRIDE
+    {
+        m_textCtrl = new wxQtListTextCtrl(m_parent, parent);
+        m_textCtrl->SetFocus();
+        return m_textCtrl->GetHandle();
+    }
+
+    wxTextCtrl* GetEditControl()
+    {
+        return m_textCtrl;
+    }
+
+    void ClearEditor()
+    {
+        delete m_textCtrl;
+        m_textCtrl = NULL;
+    }
+
+private:
+    wxWindow* m_parent;
+    mutable wxTextCtrl* m_textCtrl;
+
+    wxDECLARE_NO_COPY_CLASS(wxQtItemEditorFactory);
+};
 
 class wxQtTreeWidget : public wxQtEventSignalHandler< QTreeWidget, wxListCtrl >
 {
@@ -31,18 +130,41 @@ public:
 
     void EmitListEvent(wxEventType typ, QTreeWidgetItem *qitem, int column) const;
 
+    void closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint) wxOVERRIDE
+    {
+        QTreeWidget::closeEditor(editor, hint);
+        m_editorFactory.ClearEditor();
+    }
+
+    wxTextCtrl *GetEditControl()
+    {
+        return m_editorFactory.GetEditControl();
+    }
+
 private:
     void itemClicked(QTreeWidgetItem * item, int column);
     void itemActivated(QTreeWidgetItem * item, int column);
     void itemPressed(QTreeWidgetItem * item, int column);
+
+    void ChangeEditorFactory()
+    {
+        QItemDelegate *qItemDelegate = static_cast<QItemDelegate*>(itemDelegate());
+        qItemDelegate->itemEditorFactory();
+        qItemDelegate->setItemEditorFactory(&m_editorFactory);
+    }
+
+    wxQtItemEditorFactory m_editorFactory;
 };
 
 wxQtTreeWidget::wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler )
-    : wxQtEventSignalHandler< QTreeWidget, wxListCtrl >( parent, handler )
+    : wxQtEventSignalHandler< QTreeWidget, wxListCtrl >( parent, handler ),
+      m_editorFactory(handler)
 {
     connect(this, &QTreeWidget::itemClicked, this, &wxQtTreeWidget::itemClicked);
     connect(this, &QTreeWidget::itemPressed, this, &wxQtTreeWidget::itemPressed);
     connect(this, &QTreeWidget::itemActivated, this, &wxQtTreeWidget::itemActivated);
+
+    ChangeEditorFactory();
 }
 
 void wxQtTreeWidget::EmitListEvent(wxEventType typ, QTreeWidgetItem *qitem, int column) const
@@ -251,7 +373,7 @@ wxRect wxListCtrl::GetViewRect() const
 
 wxTextCtrl* wxListCtrl::GetEditControl() const
 {
-    return NULL;
+    return m_qtTreeWidget->GetEditControl();
 }
 
 QTreeWidgetItem *wxListCtrl::QtGetItem(int id) const

@@ -31,11 +31,11 @@
 #endif // WX_PRECOMP
 
 #include "wx/window.h"
+#include "wx/dnd.h"
 #include "wx/tooltip.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
-
 
 #define VERT_SCROLLBAR_POSITION 0, 1
 #define HORZ_SCROLLBAR_POSITION 1, 0
@@ -193,9 +193,6 @@ static const char WINDOW_POINTER_PROPERTY_NAME[] = "wxWindowPointer";
     return const_cast< wxWindowQt * >( ( variant.value< const wxWindow * >() ));
 }
 
-
-
-
 static wxWindowQt *s_capturedWindow = NULL;
 
 /* static */ wxWindowQt *wxWindowBase::DoFindFocus()
@@ -213,7 +210,7 @@ void wxWindowQt::Init()
     m_horzScrollBar = NULL;
     m_vertScrollBar = NULL;
 
-    m_qtPicture = new QPicture();
+    m_qtPicture = NULL;
     m_qtPainter = new QPainter();
 
     m_mouseInside = false;
@@ -225,6 +222,8 @@ void wxWindowQt::Init()
 #endif
     m_qtWindow = NULL;
     m_qtContainer = NULL;
+
+    m_dropTarget = NULL;
 }
 
 wxWindowQt::wxWindowQt()
@@ -252,12 +251,15 @@ wxWindowQt::~wxWindowQt()
 
     DestroyChildren(); // This also destroys scrollbars
 
-    delete m_qtPicture;
     delete m_qtPainter;
 
 #if wxUSE_ACCEL
     m_qtShortcutHandler->deleteLater();
     delete m_qtShortcuts;
+#endif
+
+#if wxUSE_DRAG_AND_DROP
+    SetDropTarget(NULL);
 #endif
 
     // Delete only if the qt widget was created or assigned to this base class
@@ -366,6 +368,11 @@ void wxWindowQt::PostCreation(bool generic)
     SetForegroundColour(wxColour(GetHandle()->palette().foreground().color()));
 
     GetHandle()->setFont( wxWindowBase::GetFont().GetHandle() );
+
+    // The window might have been hidden before Create() and it needs to remain
+    // hidden in this case, so do it (unfortunately there doesn't seem to be
+    // any way to create the window initially hidden with Qt).
+    GetHandle()->setVisible(m_isShown);
 
     wxWindowCreateEvent event(this);
     HandleWindowEvent(event);
@@ -518,7 +525,10 @@ bool wxWindowQt::SetCursor( const wxCursor &cursor )
     if (!wxWindowBase::SetCursor(cursor))
         return false;
 
-    GetHandle()->setCursor(cursor.GetHandle());
+    if ( cursor.IsOk() )
+        GetHandle()->setCursor(cursor.GetHandle());
+    else
+        GetHandle()->unsetCursor();
 
     return true;
 }
@@ -688,9 +698,22 @@ void wxWindowQt::ScrollWindow( int dx, int dy, const wxRect *rect )
 
 
 #if wxUSE_DRAG_AND_DROP
-void wxWindowQt::SetDropTarget( wxDropTarget * WXUNUSED( dropTarget ) )
+void wxWindowQt::SetDropTarget( wxDropTarget *dropTarget )
 {
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
+    if ( m_dropTarget == dropTarget )
+        return;
+
+    if ( m_dropTarget != NULL )
+    {
+        m_dropTarget->Disconnect();
+    }
+
+    m_dropTarget = dropTarget;
+
+    if ( m_dropTarget != NULL )
+    {
+        m_dropTarget->ConnectTo(m_qtWindow);
+    }
 }
 #endif
 
@@ -1102,7 +1125,7 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
         {
             bool handled;
 
-            if ( m_qtPicture->isNull() )
+            if ( m_qtPicture == NULL )
             {
                 // Real paint event (not for wxClientDC), prepare the background
                 switch ( GetBackgroundStyle() )
@@ -1534,9 +1557,9 @@ QScrollArea *wxWindowQt::QtGetScrollBarsContainer() const
     return m_qtContainer;
 }
 
-QPicture *wxWindowQt::QtGetPicture() const
+void wxWindowQt::QtSetPicture( QPicture* pict )
 {
-    return m_qtPicture;
+    m_qtPicture = pict;
 }
 
 QPainter *wxWindowQt::QtGetPainter()
