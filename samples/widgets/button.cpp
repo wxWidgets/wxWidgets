@@ -456,7 +456,9 @@ void ButtonWidgetsPage::CreateButton()
     bool showsBitmap = false;
     if ( m_chkBitmapOnly->GetValue() )
     {
+#if wxUSE_COMMANDLINKBUTTON
         m_chkCommandLink->SetValue(false); // wxCommandLinkButton cannot be "Bitmap only"
+#endif
 
         showsBitmap = true;
 
@@ -537,7 +539,9 @@ void ButtonWidgetsPage::CreateButton()
 
     m_chkTextAndBitmap->Enable(!m_chkBitmapOnly->IsChecked());
     m_chkBitmapOnly->Enable(!m_chkTextAndBitmap->IsChecked());
+#if wxUSE_COMMANDLINKBUTTON
     m_chkCommandLink->Enable(!m_chkBitmapOnly->IsChecked());
+#endif
     m_chkUseBitmapClass->Enable(showsBitmap);
 
     m_chkUsePressed->Enable(showsBitmap);

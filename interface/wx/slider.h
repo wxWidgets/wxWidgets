@@ -57,6 +57,8 @@
            Displays ticks on the top.
     @style{wxSL_BOTTOM}
            Displays ticks on the bottom (this is the default).
+    @style{wxSL_BOTH}
+           Displays ticks on both sides of the slider. Windows only.
     @style{wxSL_SELRANGE}
            Displays a highlighted selection range. Windows only.
     @style{wxSL_INVERSE}
