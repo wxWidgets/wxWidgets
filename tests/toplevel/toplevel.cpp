@@ -26,6 +26,25 @@
 
 #include "testableframe.h"
 
+class DestroyOnScopeExit
+{
+public:
+    explicit DestroyOnScopeExit(wxTopLevelWindow* tlw)
+        : m_tlw(tlw)
+    {
+    }
+
+    ~DestroyOnScopeExit()
+    {
+        m_tlw->Destroy();
+    }
+
+private:
+    wxTopLevelWindow* const m_tlw;
+
+    wxDECLARE_NO_COPY_CLASS(DestroyOnScopeExit);
+};
+
 static void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
 {
     CHECK(!tlw->IsShown());
@@ -68,15 +87,17 @@ TEST_CASE("wxTopLevel::Show", "[tlw][show]")
     SECTION("Dialog")
     {
         wxDialog* dialog = new wxDialog(NULL, -1, "Dialog Test");
+        DestroyOnScopeExit destroy(dialog);
+
         TopLevelWindowShowTest(dialog);
-        dialog->Destroy();
     }
 
     SECTION("Frame")
     {
         wxFrame* frame = new wxFrame(NULL, -1, "Frame test");
+        DestroyOnScopeExit destroy(frame);
+
         TopLevelWindowShowTest(frame);
-        frame->Destroy();
     }
 }
 
@@ -84,6 +105,7 @@ TEST_CASE("wxTopLevel::Show", "[tlw][show]")
 TEST_CASE("wxTopLevel::ShowEvent", "[tlw][show][event]")
 {
     wxFrame* const frame = new wxFrame(NULL, wxID_ANY, "Maximized frame");
+    DestroyOnScopeExit destroy(frame);
 
     EventCounter countShow(frame, wxEVT_SHOW);
 
