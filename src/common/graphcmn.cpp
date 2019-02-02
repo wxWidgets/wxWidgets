@@ -989,21 +989,26 @@ wxGraphicsBitmap wxGraphicsContext::CreateSubBitmap( const wxGraphicsBitmap &bmp
 
 wxGraphicsContext* wxGraphicsContext::CreateFromUnknownDC(const wxDC& dc)
 {
+    return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromUnknownDC(dc);
+}
+
+wxGraphicsContext* wxGraphicsRenderer::CreateContextFromUnknownDC(const wxDC& dc)
+{
     if ( const wxWindowDC *windc = wxDynamicCast(&dc, wxWindowDC) )
-        return Create(*windc);
+        return CreateContext(*windc);
 
     if ( const wxMemoryDC *memdc = wxDynamicCast(&dc, wxMemoryDC) )
-        return Create(*memdc);
+        return CreateContext(*memdc);
 
 #if wxUSE_PRINTING_ARCHITECTURE
     if ( const wxPrinterDC *printdc = wxDynamicCast(&dc, wxPrinterDC) )
-        return Create(*printdc);
+        return CreateContext(*printdc);
 #endif
 
 #ifdef __WXMSW__
 #if wxUSE_ENH_METAFILE
     if ( const wxEnhMetaFileDC *mfdc = wxDynamicCast(&dc, wxEnhMetaFileDC) )
-        return Create(*mfdc);
+        return CreateContext(*mfdc);
 #endif
 #endif
 
