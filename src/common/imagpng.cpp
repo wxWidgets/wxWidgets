@@ -42,9 +42,6 @@
 // local functions
 // ----------------------------------------------------------------------------
 
-// init the alpha channel for the image and fill it with 1s up to (x, y)
-static unsigned char *InitAlpha(wxImage *image, png_uint_32 x, png_uint_32 y);
-
 // is the pixel with this value of alpha a fully opaque one?
 static inline
 bool IsOpaque(unsigned char a)
@@ -207,6 +204,8 @@ PNGLINKAGEMODE wx_PNG_error(png_structp png_ptr, png_const_charp message)
 // LoadFile() helpers
 // ----------------------------------------------------------------------------
 
+// init the alpha channel for the image and fill it with 1s up to (x, y)
+static
 unsigned char *InitAlpha(wxImage *image, png_uint_32 x, png_uint_32 y)
 {
     // create alpha channel
@@ -289,7 +288,7 @@ void
 wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
 {
     png_uint_32 width, height = 0;
-    int bit_depth, color_type, interlace_type;
+    int bit_depth, color_type;
 
     image->Destroy();
 
@@ -315,7 +314,7 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
         return;
 
     png_read_info( png_ptr, info_ptr );
-    png_get_IHDR( png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, &interlace_type, NULL, NULL );
+    png_get_IHDR( png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, NULL, NULL, NULL );
 
     if (color_type == PNG_COLOR_TYPE_PALETTE)
         png_set_expand( png_ptr );
