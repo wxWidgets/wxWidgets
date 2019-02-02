@@ -36,7 +36,7 @@
     Otherwise, wxBufferedDC can be used in the same way as any other device
     context.
 
-    There is another possible use for wxBufferedDC is to use it to maintain a
+    Another possible use for wxBufferedDC is to use it to maintain a
     backing store for the window contents. In this case, the associated @e DC
     may be @NULL but a valid backing store bitmap should be specified.
 

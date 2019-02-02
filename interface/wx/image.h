@@ -953,9 +953,8 @@ public:
         than @a threshold are replaced with the mask colour and the alpha
         channel is removed. Otherwise nothing is done.
 
-        The mask colour is chosen automatically using
-        FindFirstUnusedColour() by this function, see the overload below if you
-        this is not appropriate.
+        The mask colour is chosen automatically using FindFirstUnusedColour(),
+        see the overload below if this is not appropriate.
 
         @return Returns @true on success, @false on error.
     */
