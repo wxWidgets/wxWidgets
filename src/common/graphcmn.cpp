@@ -992,29 +992,6 @@ wxGraphicsContext* wxGraphicsContext::CreateFromUnknownDC(const wxDC& dc)
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromUnknownDC(dc);
 }
 
-wxGraphicsContext* wxGraphicsRenderer::CreateContextFromUnknownDC(const wxDC& dc)
-{
-    if ( const wxWindowDC *windc = wxDynamicCast(&dc, wxWindowDC) )
-        return CreateContext(*windc);
-
-    if ( const wxMemoryDC *memdc = wxDynamicCast(&dc, wxMemoryDC) )
-        return CreateContext(*memdc);
-
-#if wxUSE_PRINTING_ARCHITECTURE
-    if ( const wxPrinterDC *printdc = wxDynamicCast(&dc, wxPrinterDC) )
-        return CreateContext(*printdc);
-#endif
-
-#ifdef __WXMSW__
-#if wxUSE_ENH_METAFILE
-    if ( const wxEnhMetaFileDC *mfdc = wxDynamicCast(&dc, wxEnhMetaFileDC) )
-        return CreateContext(*mfdc);
-#endif
-#endif
-
-    return NULL;
-}
-
 wxGraphicsContext* wxGraphicsContext::CreateFromNative( void * context )
 {
     return wxGraphicsRenderer::GetDefaultRenderer()->CreateContextFromNativeContext(context);
@@ -1054,5 +1031,28 @@ wxGraphicsContext* wxGraphicsContext::Create()
 //-----------------------------------------------------------------------------
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxGraphicsRenderer, wxObject);
+
+wxGraphicsContext* wxGraphicsRenderer::CreateContextFromUnknownDC(const wxDC& dc)
+{
+    if ( const wxWindowDC *windc = wxDynamicCast(&dc, wxWindowDC) )
+        return CreateContext(*windc);
+
+    if ( const wxMemoryDC *memdc = wxDynamicCast(&dc, wxMemoryDC) )
+        return CreateContext(*memdc);
+
+#if wxUSE_PRINTING_ARCHITECTURE
+    if ( const wxPrinterDC *printdc = wxDynamicCast(&dc, wxPrinterDC) )
+        return CreateContext(*printdc);
+#endif
+
+#ifdef __WXMSW__
+#if wxUSE_ENH_METAFILE
+    if ( const wxEnhMetaFileDC *mfdc = wxDynamicCast(&dc, wxEnhMetaFileDC) )
+        return CreateContext(*mfdc);
+#endif
+#endif
+
+    return NULL;
+}
 
 #endif // wxUSE_GRAPHICS_CONTEXT
