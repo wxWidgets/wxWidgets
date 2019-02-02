@@ -23,101 +23,103 @@
 
 namespace
 {
-    wxDragResult DropActionToDragResult(Qt::DropAction action)
-    {
-        switch ( action )
-        {
-            case Qt::IgnoreAction:
-                return wxDragCancel;
-            case Qt::CopyAction:
-                return wxDragCopy;
-            case Qt::MoveAction:
-            case Qt::TargetMoveAction:
-                return wxDragMove;
-            case Qt::LinkAction:
-                return wxDragLink;
-        }
 
-        wxFAIL_MSG("Illegal drop action");
-        return wxDragNone;
+wxDragResult DropActionToDragResult(Qt::DropAction action)
+{
+    switch ( action )
+    {
+        case Qt::IgnoreAction:
+            return wxDragCancel;
+        case Qt::CopyAction:
+            return wxDragCopy;
+        case Qt::MoveAction:
+        case Qt::TargetMoveAction:
+            return wxDragMove;
+        case Qt::LinkAction:
+            return wxDragLink;
     }
 
-    Qt::DropAction DragResultToDropAction(wxDragResult result)
-    {
-        switch ( result )
-        {
-            case wxDragCopy:
-                return Qt::CopyAction;
-            case wxDragMove:
-                return Qt::MoveAction;
-            case wxDragLink:
-                return Qt::LinkAction;
-            case wxDragError:
-            case wxDragNone:
-            case wxDragCancel:
-                return Qt::IgnoreAction;
-        }
-
-        wxFAIL_MSG("Illegal drag result");
-        return Qt::IgnoreAction;
-    }
-
-    void AddDataFormat(wxDataObject* dataObject,
-                       QMimeData* mimeData,
-                       const wxDataFormat& format)
-    {
-        const size_t data_size = dataObject->GetDataSize(format);
-
-        QByteArray data(static_cast<int>(data_size), Qt::Initialization());
-        dataObject->GetDataHere(format, data.data());
-
-        mimeData->setData(wxQtConvertString(format.GetMimeType()), data);
-    }
-
-    QMimeData* CreateMimeData(wxDataObject* dataObject)
-    {
-        QMimeData* mimeData = new QMimeData();
-
-        const size_t count = dataObject->GetFormatCount();
-
-        wxScopedArray<wxDataFormat> array(dataObject->GetFormatCount());
-        dataObject->GetAllFormats(array.get());
-
-        for ( size_t i = 0; i < count; i++ )
-        {
-            AddDataFormat(dataObject, mimeData, array[i]);
-        }
-
-        return mimeData;
-    }
-
-    void SetDragCursor(QDrag& drag,
-                       const wxCursor& cursor,
-                       Qt::DropAction action)
-    {
-        if ( cursor.IsOk() )
-            drag.setDragCursor(cursor.GetHandle().pixmap(), action);
-    }
-
-    class PendingMimeDataSetter
-    {
-    public:
-        PendingMimeDataSetter(const QMimeData*& targetMimeData,
-                              const QMimeData* mimeData)
-            : m_targetMimeData(targetMimeData)
-        {
-            m_targetMimeData = mimeData;
-        }
-
-        ~PendingMimeDataSetter()
-        {
-            m_targetMimeData = NULL;
-        }
-
-    private:
-        const QMimeData*& m_targetMimeData;
-    };
+    wxFAIL_MSG("Illegal drop action");
+    return wxDragNone;
 }
+
+Qt::DropAction DragResultToDropAction(wxDragResult result)
+{
+    switch ( result )
+    {
+        case wxDragCopy:
+            return Qt::CopyAction;
+        case wxDragMove:
+            return Qt::MoveAction;
+        case wxDragLink:
+            return Qt::LinkAction;
+        case wxDragError:
+        case wxDragNone:
+        case wxDragCancel:
+            return Qt::IgnoreAction;
+    }
+
+    wxFAIL_MSG("Illegal drag result");
+    return Qt::IgnoreAction;
+}
+
+void AddDataFormat(wxDataObject* dataObject,
+                   QMimeData* mimeData,
+                   const wxDataFormat& format)
+{
+    const size_t data_size = dataObject->GetDataSize(format);
+
+    QByteArray data(static_cast<int>(data_size), Qt::Initialization());
+    dataObject->GetDataHere(format, data.data());
+
+    mimeData->setData(wxQtConvertString(format.GetMimeType()), data);
+}
+
+QMimeData* CreateMimeData(wxDataObject* dataObject)
+{
+    QMimeData* mimeData = new QMimeData();
+
+    const size_t count = dataObject->GetFormatCount();
+
+    wxScopedArray<wxDataFormat> array(dataObject->GetFormatCount());
+    dataObject->GetAllFormats(array.get());
+
+    for ( size_t i = 0; i < count; i++ )
+    {
+        AddDataFormat(dataObject, mimeData, array[i]);
+    }
+
+    return mimeData;
+}
+
+void SetDragCursor(QDrag& drag,
+                   const wxCursor& cursor,
+                   Qt::DropAction action)
+{
+    if ( cursor.IsOk() )
+        drag.setDragCursor(cursor.GetHandle().pixmap(), action);
+}
+
+class PendingMimeDataSetter
+{
+public:
+    PendingMimeDataSetter(const QMimeData*& targetMimeData,
+                          const QMimeData* mimeData)
+        : m_targetMimeData(targetMimeData)
+    {
+        m_targetMimeData = mimeData;
+    }
+
+    ~PendingMimeDataSetter()
+    {
+        m_targetMimeData = NULL;
+    }
+
+private:
+    const QMimeData*& m_targetMimeData;
+};
+
+} // anonymous namespace
 
 class wxDropTarget::Impl : public QObject
 {

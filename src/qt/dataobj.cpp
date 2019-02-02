@@ -17,35 +17,37 @@
 
 namespace
 {
-    wxString DataFormatIdToMimeType(wxDataFormatId formatId)
+
+wxString DataFormatIdToMimeType(wxDataFormatId formatId)
+{
+    switch ( formatId )
     {
-        switch ( formatId )
-        {
-            case wxDF_TEXT: return "text/plain";
-            case wxDF_BITMAP: return "image/bmp";
-            case wxDF_TIFF: return "image/tiff";
-            case wxDF_WAVE: return "audio/x-wav";
-            case wxDF_UNICODETEXT: return "text/plain";
-            case wxDF_HTML: return "text/html";
-            case wxDF_METAFILE:
-            case wxDF_SYLK:
-            case wxDF_DIF:
-            case wxDF_OEMTEXT:
-            case wxDF_DIB:
-            case wxDF_PALETTE:
-            case wxDF_PENDATA:
-            case wxDF_RIFF:
-            case wxDF_ENHMETAFILE:
-            case wxDF_FILENAME:
-            case wxDF_LOCALE:
-            case wxDF_PRIVATE:
-            case wxDF_INVALID:
-            case wxDF_MAX:
-            default:
-                return "";
-        }
+        case wxDF_TEXT: return "text/plain";
+        case wxDF_BITMAP: return "image/bmp";
+        case wxDF_TIFF: return "image/tiff";
+        case wxDF_WAVE: return "audio/x-wav";
+        case wxDF_UNICODETEXT: return "text/plain";
+        case wxDF_HTML: return "text/html";
+        case wxDF_METAFILE:
+        case wxDF_SYLK:
+        case wxDF_DIF:
+        case wxDF_OEMTEXT:
+        case wxDF_DIB:
+        case wxDF_PALETTE:
+        case wxDF_PENDATA:
+        case wxDF_RIFF:
+        case wxDF_ENHMETAFILE:
+        case wxDF_FILENAME:
+        case wxDF_LOCALE:
+        case wxDF_PRIVATE:
+        case wxDF_INVALID:
+        case wxDF_MAX:
+        default:
+            return "";
     }
 }
+
+} // anonymous namespace
 
 wxDataFormat::wxDataFormat(wxDataFormatId formatId)
 {
