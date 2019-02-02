@@ -31,6 +31,7 @@
 #include "wx/imaglist.h"
 #include "wx/tokenzr.h"
 #include "wx/dynlib.h"
+#include "wx/scopedarray.h"
 
 #ifdef wxHAS_RAW_BITMAP
 #include "wx/rawbmp.h"
@@ -508,17 +509,36 @@ wxBitmap BitmapFromRGBAImage(int width, int height, const unsigned char *pixelsI
     }
     return bmp;
 }
+#else
+wxBitmap BitmapFromRGBAImage(int width, int height, const unsigned char *pixelsImage)
+{
+    const int totalPixels = width * height;
+    wxScopedArray<unsigned char> data(3*totalPixels);
+    wxScopedArray<unsigned char> alpha(totalPixels);
+    int curDataLocation = 0, curAlphaLocation = 0, curPixelsImageLocation = 0;
+
+    for ( int i = 0; i < totalPixels; ++i )
+    {
+        data[curDataLocation++] = pixelsImage[curPixelsImageLocation++];
+        data[curDataLocation++] = pixelsImage[curPixelsImageLocation++];
+        data[curDataLocation++] = pixelsImage[curPixelsImageLocation++];
+        alpha[curAlphaLocation++] = pixelsImage[curPixelsImageLocation++];
+    }
+
+    wxImage img(width, height, data.get(), alpha.get(), true);
+    wxBitmap bmp(img);
+
+    return bmp;
+}
 #endif
 
 
 void SurfaceImpl::DrawRGBAImage(PRectangle rc, int width, int height,
                                 const unsigned char *pixelsImage)
 {
-#ifdef wxHAS_RAW_BITMAP
     wxRect r = wxRectFromPRectangle(rc);
     wxBitmap bmp = BitmapFromRGBAImage(width, height, pixelsImage);
     hdc->DrawBitmap(bmp, r.x, r.y, true);
-#endif
 }
 
 
@@ -2551,10 +2571,8 @@ void ListBoxImpl::RegisterImage(int type, const char *xpm_data) {
 void ListBoxImpl::RegisterRGBAImage(int type, int width, int height,
                                     const unsigned char *pixelsImage)
 {
-#ifdef wxHAS_RAW_BITMAP
     wxBitmap bmp = BitmapFromRGBAImage(width, height, pixelsImage);
     RegisterImageHelper(type, bmp);
-#endif
 }
 
 
