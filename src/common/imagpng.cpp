@@ -241,39 +241,12 @@ static
 void CopyDataFromPNG(wxImage *image,
                      unsigned char **lines,
                      png_uint_32 width,
-                     png_uint_32 height,
-                     int color_type)
+                     png_uint_32 height)
 {
     // allocated on demand if we have any non-opaque pixels
     unsigned char *alpha = NULL;
 
     unsigned char *ptrDst = image->GetData();
-    if ( !(color_type & PNG_COLOR_MASK_COLOR) )
-    {
-        // grey image: GAGAGA... where G == grey component and A == alpha
-        for ( png_uint_32 y = 0; y < height; y++ )
-        {
-            const unsigned char *ptrSrc = lines[y];
-            for ( png_uint_32 x = 0; x < width; x++ )
-            {
-                unsigned char g = *ptrSrc++;
-                unsigned char a = *ptrSrc++;
-
-                // the first time we encounter a transparent pixel we must
-                // allocate alpha channel for the image
-                if ( !IsOpaque(a) && !alpha )
-                    alpha = InitAlpha(image, x, y);
-
-                if ( alpha )
-                    *alpha++ = a;
-
-                *ptrDst++ = g;
-                *ptrDst++ = g;
-                *ptrDst++ = g;
-            }
-        }
-    }
-    else // colour image: RGBRGB...
     {
         for ( png_uint_32 y = 0; y < height; y++ )
         {
@@ -285,7 +258,8 @@ void CopyDataFromPNG(wxImage *image,
                 unsigned char b = *ptrSrc++;
                 unsigned char a = *ptrSrc++;
 
-                // the logic here is the same as for the grey case
+                // the first time we encounter a transparent pixel we must
+                // allocate alpha channel for the image
                 if ( !IsOpaque(a) && !alpha )
                     alpha = InitAlpha(image, x, y);
 
@@ -350,6 +324,7 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
     if (bit_depth < 8)
         png_set_expand( png_ptr );
 
+    png_set_gray_to_rgb(png_ptr);
     png_set_strip_16( png_ptr );
     png_set_packing( png_ptr );
     if (png_get_valid( png_ptr, info_ptr, PNG_INFO_tRNS))
@@ -435,7 +410,7 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
 
 
     // loaded successfully, now init wxImage with this data
-    CopyDataFromPNG(image, lines, width, height, color_type);
+    CopyDataFromPNG(image, lines, width, height);
 
     // This will indicate to the caller that loading succeeded.
     ok = true;
