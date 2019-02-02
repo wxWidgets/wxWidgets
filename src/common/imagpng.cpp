@@ -110,7 +110,7 @@ struct wxPNGImageData
     wxPNGImageData()
     {
         lines = NULL;
-        numLines = 0;
+        m_buf = NULL;
         info_ptr = (png_infop) NULL;
         png_ptr = (png_structp) NULL;
         ok = false;
@@ -122,23 +122,21 @@ struct wxPNGImageData
         if ( !lines )
             return false;
 
-        for ( png_uint_32 n = 0; n < height; n++ )
-        {
-            lines[n] = (unsigned char *)malloc( (size_t)(width * 4));
-            if ( lines[n] )
-                ++numLines;
-            else
-                return false;
-        }
+        const size_t w = width * size_t(4);
+        m_buf = static_cast<unsigned char*>(malloc(w * height));
+        if (!m_buf)
+            return false;
+
+        lines[0] = m_buf;
+        for (png_uint_32 i = 1; i < height; i++)
+            lines[i] = lines[i - 1] + w;
 
         return true;
     }
 
     ~wxPNGImageData()
     {
-        for ( unsigned int n = 0; n < numLines; n++ )
-            free( lines[n] );
-
+        free(m_buf);
         free( lines );
 
         if ( png_ptr )
@@ -153,7 +151,7 @@ struct wxPNGImageData
     void DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo);
 
     unsigned char** lines;
-    png_uint_32 numLines;
+    unsigned char* m_buf;
     png_infop info_ptr;
     png_structp png_ptr;
     bool ok;
