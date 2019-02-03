@@ -362,7 +362,7 @@ if(wxUSE_GUI)
         set(wxUSE_GSTREAMER_PLAYER OFF)
     endif()
 
-    if(wxUSE_SOUND AND UNIX AND wxUSE_LIBSDL)
+    if(wxUSE_SOUND AND wxUSE_LIBSDL AND UNIX AND NOT APPLE)
         find_package(SDL2)
         if(NOT SDL2_FOUND)
             find_package(SDL)
