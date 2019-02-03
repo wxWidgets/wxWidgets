@@ -108,17 +108,21 @@ struct DialogSubclassingData
 // colour dialog subclass proc
 // ----------------------------------------------------------------------------
 
-LRESULT  CALLBACK
+LRESULT CALLBACK
 wxColourDialogSubClassProc(HWND hwnd,
-        UINT uiMsg,
-        WPARAM wParam,
-        LPARAM lParam)
+                           UINT uiMsg,
+                           WPARAM wParam,
+                           LPARAM lParam)
 {
 
     DialogSubclassingData* dialogData = (DialogSubclassingData*)GetProp(hwnd, SUBCLASSING_PROP);
-    wxASSERT(dialogData);
+    if (!dialogData)
+    {
+        // WM_NCDESTROY is the last message received when exiting but lets be safe.
+        return 0;
+    }
 
-    // Let the original procedure process the event first.
+    // Call the original procedure process the event first.
     const LRESULT retValue = CallWindowProc(dialogData->originalProc, hwnd, uiMsg, wParam, lParam);
 
     switch (uiMsg)
@@ -139,9 +143,10 @@ wxColourDialogSubClassProc(HWND hwnd,
          }
         break;
 
-        case WM_DESTROY:
+        case WM_NCDESTROY:
         {
             delete dialogData;
+            RemoveProp(hwnd, SUBCLASSING_PROP);
         }
         break;
     }
