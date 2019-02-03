@@ -32133,7 +32133,7 @@ if test "x$ac_cv_lib_socket_inet_addr" = xyes; then :
   INET_LINK="socket"
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for inet_addr in -lnetwork" >&5
+                                { $as_echo "$as_me:${as_lineno-$LINENO}: checking for inet_addr in -lnetwork" >&5
 $as_echo_n "checking for inet_addr in -lnetwork... " >&6; }
 if ${ac_cv_lib_network_inet_addr+:} false; then :
   $as_echo_n "(cached) " >&6
