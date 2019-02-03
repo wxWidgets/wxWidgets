@@ -2111,33 +2111,40 @@ void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDo
     wxCHECK_RET( !m_font.IsNull(), wxT("wxGDIPlusContext::GetTextExtent - no valid font set") );
 
     wxWCharBuffer s = str.wc_str( *wxConvUI );
-    FontFamily ffamily ;
     Font* f = ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusFont();
 
-    f->GetFamily(&ffamily) ;
+    // Get the font metrics if we actually need them.
+    if ( descent || externalLeading || (height && str.empty()) )
+    {
+        FontFamily ffamily ;
+        f->GetFamily(&ffamily) ;
 
-    REAL factorY = m_fontScaleRatio;
+        REAL factorY = m_fontScaleRatio;
 
-    // Notice that we must use the real font style or the results would be
-    // incorrect for italic/bold fonts.
-    const INT style = f->GetStyle();
-    const REAL size = f->GetSize();
-    const REAL emHeight = ffamily.GetEmHeight(style);
-    REAL rDescent = ffamily.GetCellDescent(style) * size / emHeight;
-    REAL rAscent = ffamily.GetCellAscent(style) * size / emHeight;
-    REAL rHeight = ffamily.GetLineSpacing(style) * size / emHeight;
+        // Notice that we must use the real font style or the results would be
+        // incorrect for italic/bold fonts.
+        const INT style = f->GetStyle();
+        const REAL size = f->GetSize();
+        const REAL emHeight = ffamily.GetEmHeight(style);
+        REAL rDescent = ffamily.GetCellDescent(style) * size / emHeight;
+        REAL rAscent = ffamily.GetCellAscent(style) * size / emHeight;
+        REAL rHeight = ffamily.GetLineSpacing(style) * size / emHeight;
 
-    if ( height )
-        *height = rHeight * factorY;
-    if ( descent )
-        *descent = rDescent * factorY;
-    if ( externalLeading )
-        *externalLeading = (rHeight - rAscent - rDescent) * factorY;
+        if ( height && str.empty() )
+            *height = rHeight * factorY;
+        if ( descent )
+            *descent = rDescent * factorY;
+        if ( externalLeading )
+            *externalLeading = (rHeight - rAscent - rDescent) * factorY;
+    }
+
     // measuring empty strings is not guaranteed, so do it by hand
     if ( str.IsEmpty())
     {
         if ( width )
             *width = 0 ;
+
+        // Height already assigned above if necessary.
     }
     else
     {
