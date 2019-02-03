@@ -243,8 +243,8 @@ void MyApp::Draw(wxDC&dc)
         gc->DrawText(text, 25.0, 60.0);
 
         // draw rectangle around the text
-        double w, h, d, el;
-        gc->GetTextExtent(text, &w, &h, &d, &el);
+        double w, h;
+        gc->GetTextExtent(text, &w, &h);
         gc->SetPen( *wxBLACK_PEN );
         gc->DrawRectangle(25.0, 60.0, w, h);
 
