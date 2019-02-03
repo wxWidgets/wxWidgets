@@ -4530,7 +4530,7 @@ AC_CHECK_FUNCS(inet_addr,
                         AC_CHECK_LIB(socket, inet_addr,
                             INET_LINK="socket",
                             [
-				AC_CHECK_LIB(network, inet_addr,
+                                AC_CHECK_LIB(network, inet_addr,
                                    INET_LINK="network"
                                 )
                             ]
@@ -5560,7 +5560,7 @@ fi
 
 WITH_PLUGIN_SDL=0
 if test "$wxUSE_SOUND" = "yes"; then
-  if test "$USE_UNIX" = 1 ; then
+  if test "$USE_UNIX" = 1 -a "$USE_MAC" != 1 ; then
     if test "$wxUSE_LIBSDL" != "no"; then
       PKG_CHECK_MODULES([SDL], [sdl2 >= 2.0.0],
                   [
@@ -5579,7 +5579,7 @@ if test "$wxUSE_SOUND" = "yes"; then
                                   AC_DEFINE(wxUSE_LIBSDL)
                                 ],
                                 [wxUSE_LIBSDL="no"])
-		  ])
+                  ])
       if test "$wxUSE_LIBSDL" = "yes" -a "$wxUSE_PLUGINS" = "yes" ; then
         WITH_PLUGIN_SDL=1
       fi
