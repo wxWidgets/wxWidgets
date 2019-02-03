@@ -174,7 +174,7 @@ class WXDLLIMPEXP_CORE wxColourPickerEvent : public wxCommandEvent
 {
 public:
     wxColourPickerEvent() {}
-    wxColourPickerEvent(wxObject *generator, int id, const wxColour &col, wxEventType commandType)
+    wxColourPickerEvent(wxObject *generator, int id, const wxColour &col, wxEventType commandType = wxEVT_COLOURPICKER_CHANGED)
         : wxCommandEvent(commandType, id),
           m_colour(col)
     {
