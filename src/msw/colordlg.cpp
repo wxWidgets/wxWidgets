@@ -126,30 +126,24 @@ wxColourDialogSubClassProc(HWND hwnd,
     // Call the original procedure first.
     const LRESULT retValue = CallWindowProc(dialogData->originalProc, hwnd, uiMsg, wParam, lParam);
 
-    switch (uiMsg)
+    // Check the current selected color.
+   if (const COLORINFO* pCI = (COLORINFO*)GetProp(hwnd, COLORPROP))
+   {
+       if (dialogData->selectedColor != pCI->currentRGB)
+       {
+           dialogData->selectedColor = pCI->currentRGB;
+
+           wxColour colour;
+           wxRGBToColour(colour, pCI->currentRGB);
+           dialogData->colourDialog->OnColorSelected(colour);
+       }
+   }
+
+    // Handle the destroy message.
+    if (uiMsg == WM_NCDESTROY)
     {
-        case WM_LBUTTONDOWN:
-        case WM_MOUSEMOVE:
-        {
-
-            const COLORINFO* pCI = (COLORINFO*)GetProp(hwnd, COLORPROP);
-            if (dialogData->selectedColor != pCI->currentRGB)
-            {
-                dialogData->selectedColor = pCI->currentRGB;
-
-                wxColour colour;
-                wxRGBToColour(colour, pCI->currentRGB);
-                dialogData->colourDialog->OnColorSelected(colour);
-            }
-         }
-        break;
-
-        case WM_NCDESTROY:
-        {
-            delete dialogData;
-            RemoveProp(hwnd, SUBCLASSING_PROP);
-        }
-        break;
+        delete dialogData;
+        RemoveProp(hwnd, SUBCLASSING_PROP);
     }
 
     return retValue;
