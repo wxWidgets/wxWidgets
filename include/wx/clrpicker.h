@@ -126,6 +126,10 @@ public:         // public API
     wxColour GetColour() const
         { return ((wxColourPickerWidget *)m_picker)->GetColour(); }
 
+    // get the selected color
+    wxColour GetSelectedColour() const
+        { return m_selectedColour; }
+
     // set currently displayed color
     void SetColour(const wxColour& col);
 
@@ -152,6 +156,8 @@ protected:
         { return (style & (wxCLRP_SHOW_LABEL | wxCLRP_SHOW_ALPHA)); }
 
 private:
+    wxColour m_selectedColour;
+
     wxDECLARE_DYNAMIC_CLASS(wxColourPickerCtrl);
 };
 

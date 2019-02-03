@@ -67,6 +67,8 @@ bool wxColourPickerCtrl::Create( wxWindow *parent, wxWindowID id,
                                         wxDefaultPosition, wxDefaultSize,
                                         GetPickerStyle(style));
 
+    m_selectedColour = col;
+
     // complete sizer creation
     wxPickerBase::PostCreation();
 
@@ -85,6 +87,8 @@ bool wxColourPickerCtrl::Create( wxWindow *parent, wxWindowID id,
 void wxColourPickerCtrl::SetColour(const wxColour &col)
 {
     M_PICKER->SetColour(col);
+    m_selectedColour = col;
+
     UpdateTextCtrlFromPicker();
 }
 
@@ -93,7 +97,10 @@ bool wxColourPickerCtrl::SetColour(const wxString &text)
     wxColour col(text);     // smart wxString->wxColour conversion
     if ( !col.IsOk() )
         return false;
+
     M_PICKER->SetColour(col);
+    m_selectedColour = col;
+
     UpdateTextCtrlFromPicker();
 
     return true;
@@ -145,12 +152,16 @@ void wxColourPickerCtrl::OnColourChange(wxColourPickerEvent &ev)
 
 void wxColourPickerCtrl::OnColourSelect(wxColourPickerEvent &ev)
 {
+    m_selectedColour = ev.GetColour();
+
     wxColourPickerEvent event(this, GetId(), ev.GetColour(), wxEVT_COLOUR_SELECTED);
     GetEventHandler()->ProcessEvent(event);
 }
 
 void wxColourPickerCtrl::OnColourCancel(wxColourPickerEvent &ev)
 {
+    m_selectedColour = ev.GetColour();
+
     wxColourPickerEvent event(this, GetId(), ev.GetColour(), wxEVT_COLOUR_CANCELED);
     GetEventHandler()->ProcessEvent(event);
 }
