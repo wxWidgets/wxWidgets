@@ -52,12 +52,6 @@
 // and "Define Custom Colors" extension not shown
 static wxRect gs_rectDialog(0, 0, 222, 324);
 
-// Humm and what if multiple dialogs ?
-// Use an unornered map ?
-static WNDPROC gs_originalDialogProc;
-static COLORREF gs_selectedColor;
-static wxColourDialog* gs_colourDialog = nullptr;
-
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -70,7 +64,10 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog);
 
 #define COLORBOXES 64
 #define COLORPROP (LPCTSTR) 0xA000L
-typedef struct {
+#define SUBCLASSING_PROP L"PROP_SUBCLASSING"
+
+struct COLORINFO
+{
     UINT           ApiType;
     LPCHOOSECOLOR  pCC;
     HANDLE         hLocal;
@@ -98,8 +95,14 @@ typedef struct {
     RECT           rColorSamples;
     BOOL           bFoldOut;
     DWORD          rgbBoxColor[COLORBOXES];
-} COLORINFO;
-typedef COLORINFO *PCOLORINFO;
+} ;
+
+struct DialogSubclassingData
+{
+    WNDPROC originalProc;
+    COLORREF selectedColor;
+    wxColourDialog* colourDialog;
+};
 
 // ----------------------------------------------------------------------------
 // colour dialog subclass proc
@@ -111,22 +114,36 @@ wxColourDialogSubClassProc(HWND hwnd,
         WPARAM wParam,
         LPARAM lParam)
 {
-    const LRESULT res = CallWindowProc(gs_originalDialogProc, hwnd, uiMsg, wParam, lParam);
 
-    if (uiMsg == WM_LBUTTONDOWN || uiMsg == WM_MOUSEMOVE)
+    DialogSubclassingData* dialogData = (DialogSubclassingData*)GetProp(hwnd, SUBCLASSING_PROP);
+    wxASSERT(dialogData);
+
+    // Let the original procedure process the event first.
+    const LRESULT retValue = CallWindowProc(dialogData->originalProc, hwnd, uiMsg, wParam, lParam);
+
+    switch (uiMsg)
     {
-        const PCOLORINFO pCI = (PCOLORINFO)GetProp(hwnd, COLORPROP);
-        if (gs_selectedColor != pCI->currentRGB)
+        case WM_LBUTTONDOWN:
+        case WM_MOUSEMOVE:
         {
-            gs_selectedColor = pCI->currentRGB;
 
-            wxColour colour;
-            wxRGBToColour(colour, pCI->currentRGB);
-            gs_colourDialog->OnColorSelected(colour);
+            const COLORINFO* pCI = (COLORINFO*)GetProp(hwnd, COLORPROP);
+            if (dialogData->selectedColor != pCI->currentRGB)
+            {
+                dialogData->selectedColor = pCI->currentRGB;
+
+                wxColour colour;
+                wxRGBToColour(colour, pCI->currentRGB);
+                dialogData->colourDialog->OnColorSelected(colour);
+            }
+         }
+        case WM_DESTROY:
+        {
+            delete dialogData;
         }
     }
 
-    return res;
+    return retValue;
 }
 
 // ----------------------------------------------------------------------------
@@ -141,13 +158,23 @@ wxColourDialogHookProc(HWND hwnd,
 {
     if ( uiMsg == WM_INITDIALOG )
     {
-        const wxString title = gs_colourDialog->GetTitle();
+        CHOOSECOLOR *pCC = (CHOOSECOLOR *)lParam;
+        wxColourDialog * const
+            dialog = reinterpret_cast<wxColourDialog *>(pCC->lCustData);
+
+        // Init the dialog procedure data
+        DialogSubclassingData* procData = new DialogSubclassingData();
+        procData->originalProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)wxColourDialogSubClassProc);
+        procData->selectedColor = pCC->rgbResult;
+        procData->colourDialog = dialog;
+        SetProp(hwnd, SUBCLASSING_PROP, procData);
+
+        // Init the window title
+        const wxString title = dialog->GetTitle();
         if ( !title.empty() )
             ::SetWindowText(hwnd, title.t_str());
 
-        gs_originalDialogProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)wxColourDialogSubClassProc);
-
-        gs_colourDialog->MSWOnInitDone((WXHWND)hwnd);
+        dialog->MSWOnInitDone((WXHWND)hwnd);
     }
 
     return 0;
@@ -201,12 +228,10 @@ int wxColourDialog::ShowModal()
             custColours[i] = RGB(255,255,255);
     }
 
-    gs_selectedColor = wxColourToRGB(m_colourData.GetColour());
-    gs_colourDialog = this;
-
     chooseColorStruct.lStructSize = sizeof(CHOOSECOLOR);
     chooseColorStruct.hwndOwner = hWndParent;
-    chooseColorStruct.rgbResult = gs_selectedColor;
+    chooseColorStruct.lCustData = (LPARAM)this;
+    chooseColorStruct.rgbResult = wxColourToRGB(m_colourData.GetColour());
     chooseColorStruct.lpCustColors = custColours;
 
     chooseColorStruct.Flags = CC_RGBINIT | CC_ENABLEHOOK;
