@@ -101,7 +101,7 @@ struct DialogSubclassingData
 {
     WNDPROC originalProc;
     COLORREF selectedColor;
-    wxColourDialog* colourDialog;
+    wxColourDialog* colourDialog = nullptr;
 };
 
 // ----------------------------------------------------------------------------
@@ -118,11 +118,12 @@ wxColourDialogSubClassProc(HWND hwnd,
     DialogSubclassingData* dialogData = (DialogSubclassingData*)GetProp(hwnd, SUBCLASSING_PROP);
     if (!dialogData)
     {
-        // WM_NCDESTROY is the last message received when exiting but lets be safe.
+        // Must not happen since WM_NCDESTROY is the last message received when closing the dialog.
+        wxASSERT(false, "No dialog data to process subclassing message");
         return 0;
     }
 
-    // Call the original procedure process the event first.
+    // Call the original procedure first.
     const LRESULT retValue = CallWindowProc(dialogData->originalProc, hwnd, uiMsg, wParam, lParam);
 
     switch (uiMsg)
@@ -167,20 +168,21 @@ wxColourDialogHookProc(HWND hwnd,
     if ( uiMsg == WM_INITDIALOG )
     {
         CHOOSECOLOR *pCC = (CHOOSECOLOR *)lParam;
-        wxColourDialog * const  dialog = (wxColourDialog *)(pCC->lCustData);
+        wxColourDialog * const  dialog = (wxColourDialog *)pCC->lCustData;
            
-        // Init the dialog procedure data
+        // Init the dialog subclassing data.
         DialogSubclassingData* procData = new DialogSubclassingData();
         procData->originalProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)wxColourDialogSubClassProc);
         procData->selectedColor = pCC->rgbResult;
         procData->colourDialog = dialog;
         SetProp(hwnd, SUBCLASSING_PROP, procData);
 
-        // Init the window title
+        // Init the window title.
         const wxString title = dialog->GetTitle();
         if ( !title.empty() )
             ::SetWindowText(hwnd, title.t_str());
 
+        // Finalize initialization.
         dialog->MSWOnInitDone((WXHWND)hwnd);
     }
 
