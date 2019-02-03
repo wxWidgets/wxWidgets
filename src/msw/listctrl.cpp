@@ -261,6 +261,7 @@ private:
 wxBEGIN_EVENT_TABLE(wxListCtrl, wxListCtrlBase)
     EVT_PAINT(wxListCtrl::OnPaint)
     EVT_CHAR_HOOK(wxListCtrl::OnCharHook)
+    EVT_DPI_CHANGED(wxListCtrl::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 // ============================================================================
@@ -314,6 +315,9 @@ bool wxListCtrl::Create(wxWindow *parent,
 
     if ( InReportView() )
         MSWSetExListStyles();
+
+    if ( HasFlag(wxLC_LIST) )
+        m_colCount = 1;
 
     return true;
 }
@@ -431,6 +435,17 @@ void wxListCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
         // will detect the font change
         SetHeaderAttr(wxItemAttr());
         SetHeaderAttr(item);
+    }
+}
+
+void wxListCtrl::OnDPIChanged(wxDPIChangedEvent &event)
+{
+    const int numCols = GetColumnCount();
+    for ( int i = 0; i < numCols; ++i ) {
+        int width = GetColumnWidth(i);
+        if ( width > 0 )
+            width = width * event.GetNewDPI().x / event.GetOldDPI().x;
+        SetColumnWidth(i, width);
     }
 }
 

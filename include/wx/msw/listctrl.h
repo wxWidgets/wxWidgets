@@ -373,6 +373,8 @@ public:
 
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
     // special Windows message handling
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg,
                                     WXWPARAM wParam,
