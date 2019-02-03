@@ -38,6 +38,7 @@
 
 #if wxUSE_GRAPHICS_CONTEXT
     #include "wx/graphics.h"
+    #include "wx/scopedptr.h"
 #endif
 
 #ifdef __WXMAC__
@@ -219,7 +220,7 @@ void MyApp::Draw(wxDC&dc)
         dc.DrawBitmap( m_bitmap, 10, 10 );
 
 #if wxUSE_GRAPHICS_CONTEXT
-    wxGraphicsContext *gc = wxGraphicsContext::CreateFromUnknownDC(dc);
+    wxScopedPtr<wxGraphicsContext> gc(wxGraphicsContext::CreateFromUnknownDC(dc));
 
     if (gc)
     {
@@ -247,8 +248,6 @@ void MyApp::Draw(wxDC&dc)
         gc->GetTextExtent(text, &w, &h);
         gc->SetPen( *wxBLACK_PEN );
         gc->DrawRectangle(25.0, 60.0, w, h);
-
-        delete gc;
     }
 #endif
 
