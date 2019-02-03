@@ -144,7 +144,7 @@ public:        // internal functions
 
     // event handlers for our picker
     void OnColourChange(wxColourPickerEvent &);
-    void OnColourSelected(wxColourPickerEvent &);
+    void OnColourSelect(wxColourPickerEvent &);
     void OnColourCancel(wxColourPickerEvent &);
 
 protected:
@@ -161,8 +161,8 @@ private:
 // ----------------------------------------------------------------------------
 
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COLOURPICKER_CHANGED, wxColourPickerEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COLOUR_SELECT, wxColourPickerEvent );
-wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COLOUR_CANCEL, wxColourPickerEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COLOUR_SELECTED, wxColourPickerEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COLOUR_CANCELED, wxColourPickerEvent );
 
 class WXDLLIMPEXP_CORE wxColourPickerEvent : public wxCommandEvent
 {
@@ -200,11 +200,11 @@ typedef void (wxEvtHandler::*wxColourPickerEventFunction)(wxColourPickerEvent&);
 #define EVT_COLOURPICKER_CHANGED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COLOURPICKER_CHANGED, id, wxColourPickerEventHandler(fn))
 
-#define EVT_COLOUR_SELECT(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COLOUR_SELECT, id, wxColourPickerEventHandler(fn))
+#define EVT_COLOUR_SELECTED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COLOUR_SELECTED, id, wxColourPickerEventHandler(fn))
 
-#define EVT_COLOUR_CANCEL(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COLOUR_CANCEL, id, wxColourPickerEventHandler(fn))
+#define EVT_COLOUR_CANCELED(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COLOUR_CANCELED, id, wxColourPickerEventHandler(fn))
 
 // old wxEVT_COMMAND_* constant
 #define wxEVT_COMMAND_COLOURPICKER_CHANGED   wxEVT_COLOURPICKER_CHANGED

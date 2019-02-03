@@ -86,15 +86,21 @@ void wxGenericColourButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
 
     // create the colour dialog and display it
     wxColourDialog dlg(this, &ms_data);
-    if (dlg.ShowModal() == wxID_OK)
+    dlg.Bind(wxEVT_COLOUR_SELECTED, [this](wxColourPickerEvent& ev)
     {
-        ms_data = dlg.GetColourData();
-        SetColour(ms_data.GetColour());
-
-        // fire an event
-        wxColourPickerEvent event(this, GetId(), m_colour, wxEVT_COLOURPICKER_CHANGED);
+        wxColourPickerEvent event(this, GetId(), m_colour, wxEVT_COLOUR_SELECTED);
         GetEventHandler()->ProcessEvent(event);
-    }
+    });
+
+    const int res = dlg.ShowModal();
+    wxASSERT(res == wxID_OK || res == wxID_CANCEL);
+
+    ms_data = dlg.GetColourData();
+    SetColour(ms_data.GetColour());
+
+    // fire an event
+    wxColourPickerEvent event(this, GetId(), m_colour, res == wxID_OK ? wxEVT_COLOURPICKER_CHANGED : wxEVT_COLOUR_CANCELED);
+    GetEventHandler()->ProcessEvent(event);
 }
 
 void wxGenericColourButton::UpdateColour()

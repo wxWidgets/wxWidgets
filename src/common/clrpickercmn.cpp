@@ -39,8 +39,8 @@ const char wxColourPickerWidgetNameStr[] = "colourpickerwidget";
 // ============================================================================
 
 wxDEFINE_EVENT(wxEVT_COLOURPICKER_CHANGED, wxColourPickerEvent);
-wxDEFINE_EVENT(wxEVT_COLOUR_SELECT, wxColourPickerEvent);
-wxDEFINE_EVENT(wxEVT_COLOUR_CANCEL, wxColourPickerEvent);
+wxDEFINE_EVENT(wxEVT_COLOUR_SELECTED, wxColourPickerEvent);
+wxDEFINE_EVENT(wxEVT_COLOUR_CANCELED, wxColourPickerEvent);
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxColourPickerCtrl, wxPickerBase);
 wxIMPLEMENT_DYNAMIC_CLASS(wxColourPickerEvent, wxEvent);
@@ -72,6 +72,12 @@ bool wxColourPickerCtrl::Create( wxWindow *parent, wxWindowID id,
 
     m_picker->Bind(wxEVT_COLOURPICKER_CHANGED,
             &wxColourPickerCtrl::OnColourChange, this);
+
+    m_picker->Bind(wxEVT_COLOUR_SELECTED,
+        &wxColourPickerCtrl::OnColourSelect, this);
+
+    m_picker->Bind(wxEVT_COLOUR_CANCELED,
+        &wxColourPickerCtrl::OnColourCancel, this);
 
     return true;
 }
@@ -123,7 +129,6 @@ void wxColourPickerCtrl::UpdateTextCtrlFromPicker()
 }
 
 
-
 // ----------------------------------------------------------------------------
 // wxColourPickerCtrl - event handlers
 // ----------------------------------------------------------------------------
@@ -138,15 +143,15 @@ void wxColourPickerCtrl::OnColourChange(wxColourPickerEvent &ev)
     GetEventHandler()->ProcessEvent(event);
 }
 
-void wxColourPickerCtrl::OnColourSelected(wxColourPickerEvent &ev)
+void wxColourPickerCtrl::OnColourSelect(wxColourPickerEvent &ev)
 {
-    wxColourPickerEvent event(this, GetId(), ev.GetColour(), wxEVT_COLOUR_SELECT);
+    wxColourPickerEvent event(this, GetId(), ev.GetColour(), wxEVT_COLOUR_SELECTED);
     GetEventHandler()->ProcessEvent(event);
 }
 
 void wxColourPickerCtrl::OnColourCancel(wxColourPickerEvent &ev)
 {
-    wxColourPickerEvent event(this, GetId(), ev.GetColour(), wxEVT_COLOUR_CANCEL);
+    wxColourPickerEvent event(this, GetId(), ev.GetColour(), wxEVT_COLOUR_CANCELED);
     GetEventHandler()->ProcessEvent(event);
 }
 

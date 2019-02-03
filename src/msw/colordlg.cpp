@@ -18,6 +18,7 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+#include "wx/clrpicker.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
@@ -50,6 +51,10 @@
 // this is ok if color dialog created with standart color
 // and "Define Custom Colors" extension not shown
 static wxRect gs_rectDialog(0, 0, 222, 324);
+
+static WNDPROC gs_originalDialogProc;
+
+static COLORREF gs_selectedColor;
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -94,9 +99,6 @@ typedef struct {
 } COLORINFO;
 typedef COLORINFO *PCOLORINFO;
 
-
-WNDPROC g_OrigREditTex;
-
 // ----------------------------------------------------------------------------
 // colour dialog subclass proc
 // ----------------------------------------------------------------------------
@@ -107,22 +109,23 @@ wxColourDialogSubClassProc(HWND hwnd,
         WPARAM wParam,
         LPARAM lParam)
 {
-    auto res = CallWindowProc(g_OrigREditTex, hwnd, uiMsg, wParam, lParam);
+    const LRESULT res = CallWindowProc(gs_originalDialogProc, hwnd, uiMsg, wParam, lParam);
 
-    if (uiMsg == WM_LBUTTONDOWN)
+    if (uiMsg == WM_LBUTTONDOWN || uiMsg == WM_MOUSEMOVE)
     {
-        PCOLORINFO pCI = (PCOLORINFO)GetProp(hwnd, COLORPROP);
-        wxColour colour;
-        wxRGBToColour(colour, pCI->currentRGB);
-        wxLogMessage("Color is = %d // %d // %d", colour.Red(), colour.Green(), colour.Blue());
-    }
+        const PCOLORINFO pCI = (PCOLORINFO)GetProp(hwnd, COLORPROP);
+        if (gs_selectedColor != pCI->currentRGB)
+        {
+            gs_selectedColor = pCI->currentRGB;
 
-    if (uiMsg == WM_MOUSEMOVE)
-    {
-        PCOLORINFO pCI = (PCOLORINFO)GetProp(hwnd, COLORPROP);
-        wxColour colour;
-        wxRGBToColour(colour, pCI->currentRGB);
-        wxLogMessage("Color is = %d // %d // %d", colour.Red(), colour.Green(), colour.Blue());
+            CHOOSECOLOR *pCC = (CHOOSECOLOR *)lParam;
+            wxColourDialog * const
+                dialog = reinterpret_cast<wxColourDialog *>(pCC->lCustData);
+
+            wxColour colour;
+            wxRGBToColour(colour, pCI->currentRGB);
+            dialog->OnColorSelected(colour);
+        }
     }
 
     return res;
@@ -148,7 +151,7 @@ wxColourDialogHookProc(HWND hwnd,
         if ( !title.empty() )
             ::SetWindowText(hwnd, title.t_str());
 
-        g_OrigREditTex = (WNDPROC)SetWindowLongPtrA(hwnd, GWLP_WNDPROC, (LONG_PTR)wxColourDialogSubClassProc); //GWL_WNDPROC 32 bits
+        gs_originalDialogProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)wxColourDialogSubClassProc);
 
         dialog->MSWOnInitDone((WXHWND)hwnd);
     }
@@ -204,9 +207,11 @@ int wxColourDialog::ShowModal()
             custColours[i] = RGB(255,255,255);
     }
 
+    gs_selectedColor = wxColourToRGB(m_colourData.GetColour());
+
     chooseColorStruct.lStructSize = sizeof(CHOOSECOLOR);
     chooseColorStruct.hwndOwner = hWndParent;
-    chooseColorStruct.rgbResult = wxColourToRGB(m_colourData.GetColour());
+    chooseColorStruct.rgbResult = gs_selectedColor;
     chooseColorStruct.lpCustColors = custColours;
 
     chooseColorStruct.Flags = CC_RGBINIT | CC_ENABLEHOOK;
@@ -245,6 +250,12 @@ int wxColourDialog::ShowModal()
     //m_colourData.SetChooseFull((chooseColorStruct.Flags & CC_FULLOPEN) != 0);
 
     return wxID_OK;
+}
+
+void wxColourDialog::OnColorSelected(const wxColour& colour)
+{
+    wxColourPickerEvent event(this, GetId(), colour, wxEVT_COLOUR_SELECTED);
+    GetEventHandler()->ProcessEvent(event);
 }
 
 // ----------------------------------------------------------------------------

@@ -32,6 +32,8 @@ public:
 
     wxColourData& GetColourData() { return m_colourData; }
 
+    void OnColorSelected(const wxColour& colour);
+
     // override some base class virtuals
     virtual void SetTitle(const wxString& title) wxOVERRIDE;
     virtual wxString GetTitle() const wxOVERRIDE;
