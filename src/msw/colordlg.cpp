@@ -40,7 +40,7 @@
 #include "wx/msw/private.h"
 
 #include <stdlib.h>
-#include <string.h>
+#include <winuser.h>
 
 // ----------------------------------------------------------------------------
 // globals
@@ -61,6 +61,73 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog);
 // implementation
 // ============================================================================
 
+#define COLORBOXES 64
+#define COLORPROP (LPCTSTR) 0xA000L
+typedef struct {
+    UINT           ApiType;
+    LPCHOOSECOLOR  pCC;
+    HANDLE         hLocal;
+    HANDLE         hDialog;
+    HPALETTE       hPal;
+    DWORD          currentRGB;
+    WORD           currentHue;
+    WORD           currentSat;
+    WORD           currentLum;
+    WORD           nHueWidth;
+    WORD           nSatHeight;
+    WORD           nLumHeight;
+    WORD           nCurMix;
+    WORD           nCurDsp;
+    WORD           nCurBox;
+    WORD           nHuePos;
+    WORD           nSatPos;
+    WORD           nLumPos;
+    RECT           rOriginal;
+    RECT           rRainbow;
+    RECT           rLumScroll;
+    RECT           rLumPaint;
+    RECT           rCurrentColor;
+    RECT           rNearestPure;
+    RECT           rColorSamples;
+    BOOL           bFoldOut;
+    DWORD          rgbBoxColor[COLORBOXES];
+} COLORINFO;
+typedef COLORINFO *PCOLORINFO;
+
+
+WNDPROC g_OrigREditTex;
+
+// ----------------------------------------------------------------------------
+// colour dialog subclass proc
+// ----------------------------------------------------------------------------
+
+LRESULT  CALLBACK
+wxColourDialogSubClassProc(HWND hwnd,
+        UINT uiMsg,
+        WPARAM wParam,
+        LPARAM lParam)
+{
+    auto res = CallWindowProc(g_OrigREditTex, hwnd, uiMsg, wParam, lParam);
+
+    if (uiMsg == WM_LBUTTONDOWN)
+    {
+        PCOLORINFO pCI = (PCOLORINFO)GetProp(hwnd, COLORPROP);
+        wxColour colour;
+        wxRGBToColour(colour, pCI->currentRGB);
+        wxLogMessage("Color is = %d // %d // %d", colour.Red(), colour.Green(), colour.Blue());
+    }
+
+    if (uiMsg == WM_MOUSEMOVE)
+    {
+        PCOLORINFO pCI = (PCOLORINFO)GetProp(hwnd, COLORPROP);
+        wxColour colour;
+        wxRGBToColour(colour, pCI->currentRGB);
+        wxLogMessage("Color is = %d // %d // %d", colour.Red(), colour.Green(), colour.Blue());
+    }
+
+    return res;
+}
+
 // ----------------------------------------------------------------------------
 // colour dialog hook proc
 // ----------------------------------------------------------------------------
@@ -77,9 +144,11 @@ wxColourDialogHookProc(HWND hwnd,
         wxColourDialog * const
             dialog = reinterpret_cast<wxColourDialog *>(pCC->lCustData);
 
-        const wxString title = dialog->GetTitle();
+        const wxString title = dialog->GetTitle(); 
         if ( !title.empty() )
             ::SetWindowText(hwnd, title.t_str());
+
+        g_OrigREditTex = (WNDPROC)SetWindowLongPtrA(hwnd, GWLP_WNDPROC, (LONG_PTR)wxColourDialogSubClassProc); //GWL_WNDPROC 32 bits
 
         dialog->MSWOnInitDone((WXHWND)hwnd);
     }

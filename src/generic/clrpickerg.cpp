@@ -92,7 +92,7 @@ void wxGenericColourButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
         SetColour(ms_data.GetColour());
 
         // fire an event
-        wxColourPickerEvent event(this, GetId(), m_colour);
+        wxColourPickerEvent event(this, GetId(), m_colour, wxEVT_COLOURPICKER_CHANGED);
         GetEventHandler()->ProcessEvent(event);
     }
 }

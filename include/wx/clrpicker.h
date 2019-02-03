@@ -142,8 +142,10 @@ public:        // internal functions
     // update the text control to match the button's colour
     void UpdateTextCtrlFromPicker() wxOVERRIDE;
 
-    // event handler for our picker
+    // event handlers for our picker
     void OnColourChange(wxColourPickerEvent &);
+    void OnColourSelected(wxColourPickerEvent &);
+    void OnColourCancel(wxColourPickerEvent &);
 
 protected:
     virtual long GetPickerStyle(long style) const wxOVERRIDE
@@ -159,13 +161,15 @@ private:
 // ----------------------------------------------------------------------------
 
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COLOURPICKER_CHANGED, wxColourPickerEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COLOUR_SELECT, wxColourPickerEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_CORE, wxEVT_COLOUR_CANCEL, wxColourPickerEvent );
 
 class WXDLLIMPEXP_CORE wxColourPickerEvent : public wxCommandEvent
 {
 public:
     wxColourPickerEvent() {}
-    wxColourPickerEvent(wxObject *generator, int id, const wxColour &col)
-        : wxCommandEvent(wxEVT_COLOURPICKER_CHANGED, id),
+    wxColourPickerEvent(wxObject *generator, int id, const wxColour &col, wxEventType commandType)
+        : wxCommandEvent(commandType, id),
           m_colour(col)
     {
         SetEventObject(generator);
@@ -196,6 +200,11 @@ typedef void (wxEvtHandler::*wxColourPickerEventFunction)(wxColourPickerEvent&);
 #define EVT_COLOURPICKER_CHANGED(id, fn) \
     wx__DECLARE_EVT1(wxEVT_COLOURPICKER_CHANGED, id, wxColourPickerEventHandler(fn))
 
+#define EVT_COLOUR_SELECT(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COLOUR_SELECT, id, wxColourPickerEventHandler(fn))
+
+#define EVT_COLOUR_CANCEL(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COLOUR_CANCEL, id, wxColourPickerEventHandler(fn))
 
 // old wxEVT_COMMAND_* constant
 #define wxEVT_COMMAND_COLOURPICKER_CHANGED   wxEVT_COLOURPICKER_CHANGED
