@@ -88,7 +88,7 @@ void wxGenericColourButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
     wxColourDialog dlg(this, &ms_data);
     dlg.Bind(wxEVT_COLOUR_SELECTED, [this](wxColourPickerEvent& ev)
     {
-        wxColourPickerEvent event(this, GetId(), m_colour, wxEVT_COLOUR_SELECTED);
+        wxColourPickerEvent event(this, GetId(), ev.GetColour(), wxEVT_COLOUR_SELECTED);
         GetEventHandler()->ProcessEvent(event);
     });
 
