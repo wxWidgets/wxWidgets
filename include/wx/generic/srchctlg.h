@@ -206,6 +206,8 @@ protected:
 
     void OnSize( wxSizeEvent& event );
 
+    void OnDPIChanged( wxDPIChangedEvent& event );
+
     bool HasMenu() const
     {
 #if wxUSE_MENUS
