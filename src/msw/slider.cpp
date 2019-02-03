@@ -188,6 +188,8 @@ bool wxSlider::Create(wxWindow *parent,
         SetSize(size);
     }
 
+    Bind(wxEVT_DPI_CHANGED, &wxSlider::OnDPIChanged, this);
+
     return true;
 }
 
@@ -549,7 +551,7 @@ wxSize wxSlider::DoGetBestSize() const
     wxSize size;
     if ( HasFlag(wxSL_VERTICAL) )
     {
-        size = FromDIP(wxSize(THUMB, length));
+        size.Set(THUMB, length);
         width = &size.x;
 
         if ( m_labels )
@@ -572,7 +574,7 @@ wxSize wxSlider::DoGetBestSize() const
     }
     else // horizontal
     {
-        size = FromDIP(wxSize(length, THUMB));
+        size.Set(length, THUMB);
         width = &size.y;
 
         if ( m_labels )
@@ -625,6 +627,17 @@ void wxSlider::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 
     if ( m_labels && m_font.IsOk() )
         m_labels->SetFont(m_font);
+}
+
+void wxSlider::OnDPIChanged( wxDPIChangedEvent &event )
+{
+    double thumbLen = GetThumbLength();
+
+    const double scaleFactor = (double)event.GetNewDPI().x / event.GetOldDPI().x;
+    const double thumbLenScaled = thumbLen * scaleFactor;
+    thumbLen = scaleFactor > 1.0 ? ceil(thumbLenScaled) : floor(thumbLenScaled);
+
+    SetThumbLength((int)thumbLen);
 }
 
 // ----------------------------------------------------------------------------

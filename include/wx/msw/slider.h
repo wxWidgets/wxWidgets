@@ -124,6 +124,7 @@ protected:
 
     virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
+    void OnDPIChanged( wxDPIChangedEvent& event );
 
     // the labels windows, if any
     wxSubwindows  *m_labels;
