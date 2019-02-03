@@ -239,11 +239,12 @@ int wxColourDialog::ShowModal()
 
     chooseColorStruct.lStructSize = sizeof(CHOOSECOLOR);
     chooseColorStruct.hwndOwner = hWndParent;
-    chooseColorStruct.lCustData = (LPARAM)this;
+
     chooseColorStruct.rgbResult = wxColourToRGB(m_colourData.GetColour());
     chooseColorStruct.lpCustColors = custColours;
 
     chooseColorStruct.Flags = CC_RGBINIT | CC_ENABLEHOOK;
+    chooseColorStruct.lCustData = (LPARAM)this;
     chooseColorStruct.lpfnHook = wxColourDialogHookProc;
 
     if ( m_colourData.GetChooseFull() )
