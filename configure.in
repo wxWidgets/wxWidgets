@@ -5560,7 +5560,7 @@ fi
 
 WITH_PLUGIN_SDL=0
 if test "$wxUSE_SOUND" = "yes"; then
-  if test "$USE_UNIX" = 1 ; then
+  if test "$USE_UNIX" = 1 -a "$USE_MAC" != 1 ; then
     if test "$wxUSE_LIBSDL" != "no"; then
       PKG_CHECK_MODULES([SDL], [sdl2 >= 2.0.0],
                   [
