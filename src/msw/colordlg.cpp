@@ -137,10 +137,13 @@ wxColourDialogSubClassProc(HWND hwnd,
                 dialogData->colourDialog->OnColorSelected(colour);
             }
          }
+        break;
+
         case WM_DESTROY:
         {
             delete dialogData;
         }
+        break;
     }
 
     return retValue;
