@@ -52,9 +52,11 @@
 // and "Define Custom Colors" extension not shown
 static wxRect gs_rectDialog(0, 0, 222, 324);
 
+// Humm and what if multiple dialogs ?
+// Use an unornered map ?
 static WNDPROC gs_originalDialogProc;
-
 static COLORREF gs_selectedColor;
+static wxColourDialog* gs_colourDialog = nullptr;
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -118,13 +120,9 @@ wxColourDialogSubClassProc(HWND hwnd,
         {
             gs_selectedColor = pCI->currentRGB;
 
-            CHOOSECOLOR *pCC = (CHOOSECOLOR *)lParam;
-            wxColourDialog * const
-                dialog = reinterpret_cast<wxColourDialog *>(pCC->lCustData);
-
             wxColour colour;
             wxRGBToColour(colour, pCI->currentRGB);
-            dialog->OnColorSelected(colour);
+            gs_colourDialog->OnColorSelected(colour);
         }
     }
 
@@ -143,17 +141,13 @@ wxColourDialogHookProc(HWND hwnd,
 {
     if ( uiMsg == WM_INITDIALOG )
     {
-        CHOOSECOLOR *pCC = (CHOOSECOLOR *)lParam;
-        wxColourDialog * const
-            dialog = reinterpret_cast<wxColourDialog *>(pCC->lCustData);
-
-        const wxString title = dialog->GetTitle(); 
+        const wxString title = gs_colourDialog->GetTitle();
         if ( !title.empty() )
             ::SetWindowText(hwnd, title.t_str());
 
         gs_originalDialogProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)wxColourDialogSubClassProc);
 
-        dialog->MSWOnInitDone((WXHWND)hwnd);
+        gs_colourDialog->MSWOnInitDone((WXHWND)hwnd);
     }
 
     return 0;
@@ -208,6 +202,7 @@ int wxColourDialog::ShowModal()
     }
 
     gs_selectedColor = wxColourToRGB(m_colourData.GetColour());
+    gs_colourDialog = this;
 
     chooseColorStruct.lStructSize = sizeof(CHOOSECOLOR);
     chooseColorStruct.hwndOwner = hWndParent;
@@ -215,7 +210,6 @@ int wxColourDialog::ShowModal()
     chooseColorStruct.lpCustColors = custColours;
 
     chooseColorStruct.Flags = CC_RGBINIT | CC_ENABLEHOOK;
-    chooseColorStruct.lCustData = (LPARAM)this;
     chooseColorStruct.lpfnHook = wxColourDialogHookProc;
 
     if ( m_colourData.GetChooseFull() )
