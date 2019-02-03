@@ -752,7 +752,7 @@ wxString MyFrame::LoadUserImage(wxImage& image)
     {
         if ( !image.LoadFile(filename) )
         {
-            wxLogError("Couldn't load image from '%s'.", filename.c_str());
+            wxLogError("Couldn't load image from '%s'.", filename);
 
             return wxEmptyString;
         }
@@ -802,7 +802,7 @@ void MyFrame::OnImageInfo( wxCommandEvent &WXUNUSED(event) )
             {
                 default:
                     wxFAIL_MSG( "unknown image resolution units" );
-                    // fall through
+                    wxFALLTHROUGH;
 
                 case wxIMAGE_RESOLUTION_NONE:
                     info += " in default units";
@@ -962,7 +962,7 @@ void MyFrame::OnThumbnail( wxCommandEvent &WXUNUSED(event) )
     wxStopWatch sw;
     if ( !image.LoadFile(filename) )
     {
-        wxLogError("Couldn't load image from '%s'.", filename.c_str());
+        wxLogError("Couldn't load image from '%s'.", filename);
         return;
     }
 

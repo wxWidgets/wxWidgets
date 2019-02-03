@@ -4591,11 +4591,14 @@ gtk_dataview_button_press_callback( GtkWidget *WXUNUSED(widget),
         // If the right click is on an item that isn't selected, select it, as is
         // commonly done. Do not do it if the item under mouse is already selected,
         // because it could be a part of multi-item selection.
-        GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(dv->GtkGetTreeView()));
-        if ( !gtk_tree_selection_path_is_selected(selection, path) )
+        if ( path )
         {
-            gtk_tree_selection_unselect_all(selection);
-            gtk_tree_selection_select_path(selection, path);
+            GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(dv->GtkGetTreeView()));
+            if ( !gtk_tree_selection_path_is_selected(selection, path) )
+            {
+                gtk_tree_selection_unselect_all(selection);
+                gtk_tree_selection_select_path(selection, path);
+            }
         }
 
         wxDataViewEvent
@@ -5289,10 +5292,71 @@ void wxDataViewCtrl::HitTest(const wxPoint& point,
 }
 
 wxRect
-wxDataViewCtrl::GetItemRect(const wxDataViewItem& WXUNUSED(item),
-                            const wxDataViewColumn *WXUNUSED(column)) const
+wxDataViewCtrl::GetItemRect(const wxDataViewItem& item,
+                            const wxDataViewColumn *column) const
 {
-    return wxRect();
+    if ( !item )
+        return wxRect();
+
+    GtkTreeViewColumn *gcolumn = NULL ;
+    if (column)
+        gcolumn = GTK_TREE_VIEW_COLUMN(column->GetGtkHandle());
+
+    GtkTreeIter iter;
+    iter.user_data = item.GetID();
+    wxGtkTreePath path(m_internal->get_path( &iter ));
+
+    GdkRectangle item_rect;
+    gtk_tree_view_get_cell_area(GTK_TREE_VIEW(m_treeview), path, gcolumn, &item_rect);
+
+    // GTK returns rectangles with the position and height, but not width, for
+    // some reason, set to 0 if the item is not currently shown, so an explicit
+    // check is needed as this rectangle is not quite the empty rectangle we're
+    // supposed to return in this case.
+    if ( item_rect.height == 0 )
+        return wxRect();
+
+    // If column is NULL we compute the combined width of all the columns
+    if ( !column )
+    {
+        unsigned int cols = GetColumnCount();
+        int width = 0;
+        for (unsigned int i = 0; i < cols; ++i)
+        {
+            wxDataViewColumn * col = GetColumn(i);
+            if ( !col->IsHidden() )
+                width += col->GetWidth();
+        }
+        item_rect.width = width;
+    }
+
+    // We need to convert logical coordinates to physical ones, i.e. the
+    // rectangle of the topmost item should start at ~0, even if it's a 100th
+    // item shown on top only because the window is scrolled.
+#if GTK_CHECK_VERSION(2, 12, 0)
+    if ( wx_is_at_least_gtk2(12) )
+    {
+        gtk_tree_view_convert_bin_window_to_widget_coords
+        (
+            GTK_TREE_VIEW(m_treeview),
+            item_rect.x, item_rect.y,
+            &item_rect.x, &item_rect.y
+        );
+
+        if ( item_rect.y > GetClientSize().y ||
+                item_rect.y + item_rect.height < 0 )
+        {
+            // If it turns out that the item is not visible at all, indicate it
+            // by returning an empty rectangle for it.
+            return wxRect();
+        }
+    }
+    //else: There doesn't seem to be anything reasonable to do here, so we'll
+    //      just return wrong values with the very old GTK+ versions if the
+    //      window is scrolled.
+#endif // GTK+ 2.12+
+
+    return wxRectFromGDKRect(&item_rect);
 }
 
 bool wxDataViewCtrl::SetRowHeight(int rowHeight)

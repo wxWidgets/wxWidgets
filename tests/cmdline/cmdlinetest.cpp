@@ -299,6 +299,8 @@ void CmdLineTestCase::ArgumentsCollection()
 
 void CmdLineTestCase::Usage()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     // check that Usage() returns roughly what we expect (don't check all the
     // details, its format can change in the future)
     static const wxCmdLineEntryDesc desc[] =
@@ -318,6 +320,8 @@ void CmdLineTestCase::Usage()
         { wxCMD_LINE_USAGE_TEXT, NULL, NULL, "\nEven more usage text" },
         { wxCMD_LINE_NONE }
     };
+
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     wxCmdLineParser p(desc);
     const wxArrayString usageLines = wxSplit(p.GetUsageString(), '\n');
@@ -348,6 +352,8 @@ void CmdLineTestCase::Usage()
 
 void CmdLineTestCase::Found()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const wxCmdLineEntryDesc desc[] =
     {
         { wxCMD_LINE_SWITCH, "v", "verbose", "be verbose" },
@@ -358,6 +364,8 @@ void CmdLineTestCase::Found()
         { wxCMD_LINE_PARAM,  NULL, NULL, "input file", },
         { wxCMD_LINE_NONE }
     };
+
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     wxCmdLineParser p(desc);
     p.SetCmdLine ("-v --output hello -s 2 --date=2014-02-17 -f 0.2 input-file.txt");

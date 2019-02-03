@@ -227,7 +227,7 @@ class wxPropertyGridIterator : public wxPropertyGridIteratorBase
 public:
     wxPropertyGridIterator();
     wxPropertyGridIterator( wxPropertyGridPageState* state,
-                            int flags = wxPG_ITERATE_DEFAULT, 
+                            int flags = wxPG_ITERATE_DEFAULT,
                             wxPGProperty* property = NULL, int dir = 1 );
     wxPropertyGridIterator( wxPropertyGridPageState* state,
                             int flags, int startPos, int dir = 0 );
@@ -252,7 +252,7 @@ public:
 
     wxPropertyGridConstIterator();
     wxPropertyGridConstIterator( const wxPropertyGridPageState* state,
-                                 int flags = wxPG_ITERATE_DEFAULT, 
+                                 int flags = wxPG_ITERATE_DEFAULT,
                                  const wxPGProperty* property = NULL, int dir = 1 );
     wxPropertyGridConstIterator( wxPropertyGridPageState* state,
                                  int flags, int startPos, int dir = 0 );

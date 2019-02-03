@@ -56,7 +56,7 @@
     The position of the image inside the button be configured using
     SetBitmapPosition(). By default the image is on the left of the text.
 
-    Please also notice that GTK+ uses a global setting called @c gtk-button-images 
+    Please also notice that GTK+ uses a global setting called @c gtk-button-images
     to determine if the images should be shown in the buttons
     at all. If it is off (which is the case in e.g. Gnome 2.28 by default), no
     images will be shown, consistently with the native behaviour.
@@ -180,7 +180,7 @@ public:
 
     /**
         Returns the default size for the buttons. It is advised to make all the dialog
-        buttons of the same size and this function allows to retrieve the (platform and
+        buttons of the same size and this function allows retrieving the (platform and
         current font dependent size) which should be the best suited for this.
     */
     static wxSize GetDefaultSize();

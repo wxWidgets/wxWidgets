@@ -733,10 +733,10 @@ accomplish the task:
 @code
     // Have property editor focus on Enter
     propgrid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_RETURN );
-    
+
     // Have Enter work as action trigger even when editor is focused
     propgrid->DedicateKey( WXK_RETURN );
-    
+
     // Let Enter also navigate to the next property
     propgrid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
 

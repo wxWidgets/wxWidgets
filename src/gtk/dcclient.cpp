@@ -2072,7 +2072,7 @@ void wxWindowDCImpl::ComputeScaleAndOrigin()
 // Resolution in pixels per logical inch
 wxSize wxWindowDCImpl::GetPPI() const
 {
-    return wxSize( (int) (m_mm_to_pix_x * 25.4 + 0.5), (int) (m_mm_to_pix_y * 25.4 + 0.5));
+    return wxSize( (int) (GetMMToPXx() * 25.4 + 0.5), (int) (GetMMToPXy() * 25.4 + 0.5));
 }
 
 int wxWindowDCImpl::GetDepth() const

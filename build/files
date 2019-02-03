@@ -199,6 +199,7 @@ QT_WIN32_SRC=
     src/msw/dib.cpp
     src/msw/joystick.cpp
     src/msw/sound.cpp
+    src/qt/graphics.cpp
 
 QT_WIN32_HDR=
     wx/msw/ole/automtn.h
@@ -899,6 +900,7 @@ GUI_CMN_SRC =
     src/generic/renderg.cpp
     src/generic/richmsgdlgg.cpp
     src/generic/richtooltipg.cpp
+    src/generic/rowheightcache.cpp
     src/generic/sashwin.cpp
     src/generic/scrlwing.cpp
     src/generic/selstore.cpp
@@ -1884,7 +1886,6 @@ X11_LOWLEVEL_HDR =
 
 MSW_LOWLEVEL_SRC =
     src/common/taskbarcmn.cpp
-    src/generic/activityindicator.cpp
     src/msw/aboutdlg.cpp
     src/msw/app.cpp
     src/msw/bitmap.cpp
@@ -1903,6 +1904,7 @@ MSW_LOWLEVEL_SRC =
     src/msw/dib.cpp
     src/msw/display.cpp
     src/msw/enhmeta.cpp
+    src/msw/evtloop.cpp
     src/msw/font.cpp
     src/msw/fontenum.cpp
     src/msw/fontutil.cpp
@@ -1951,7 +1953,7 @@ MSW_LOWLEVEL_SRC =
     src/msw/window.cpp
 
 MSW_LOWLEVEL_HDR =
-    wx/generic/activityindicator.h
+    wx/msw/evtloop.h
     wx/msw/helpchm.h
     wx/msw/helpwin.h
     wx/msw/htmlhelp.h
@@ -1964,6 +1966,7 @@ MSW_LOWLEVEL_HDR =
     wx/msw/uxtheme.h
 
 MSW_SRC =
+    src/generic/activityindicator.cpp
     src/generic/animateg.cpp
     src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
@@ -1993,7 +1996,6 @@ MSW_SRC =
     src/msw/dialog.cpp
     src/msw/dirdlg.cpp
     src/msw/dragimag.cpp
-    src/msw/evtloop.cpp
     src/msw/filedlg.cpp
     src/msw/frame.cpp
     src/msw/gauge.cpp
@@ -2035,6 +2037,7 @@ MSW_SRC =
     src/msw/treectrl.cpp
 
 MSW_HDR =
+    wx/generic/activityindicator.h
     wx/generic/animate.h
     wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
@@ -2075,7 +2078,6 @@ MSW_HDR =
     wx/msw/dirdlg.h
     wx/msw/dragimag.h
     wx/msw/enhmeta.h
-    wx/msw/evtloop.h
     wx/msw/filedlg.h
     wx/msw/font.h
     wx/msw/frame.h
@@ -2256,7 +2258,6 @@ OSX_LOWLEVEL_SRC =
     src/osx/brush.cpp
     src/osx/dialog_osx.cpp
     src/osx/fontutil.cpp
-    src/osx/imaglist.cpp
     src/osx/minifram.cpp
     src/osx/nonownedwnd_osx.cpp
     src/osx/palette.cpp
@@ -2347,6 +2348,7 @@ OSX_COMMON_SRC =
     src/generic/fontdlgg.cpp
     src/generic/fontpickerg.cpp
     src/generic/icon.cpp
+    src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
@@ -2393,7 +2395,6 @@ OSX_SHARED_HDR =
     wx/osx/fontdlg.h
     wx/osx/frame.h
     wx/osx/gauge.h
-    wx/osx/imaglist.h
     wx/osx/listbox.h
     wx/osx/listctrl.h
     wx/osx/mdi.h
@@ -2444,6 +2445,7 @@ OSX_SHARED_HDR =
     wx/generic/fontdlgg.h
     wx/generic/fontpickerg.h
     wx/generic/icon.h
+    wx/generic/imaglist.h
     wx/generic/listctrl.h
     wx/generic/prntdlgg.h
     wx/generic/statusbr.h
@@ -2812,6 +2814,12 @@ WEBVIEW_GTK_HDR =
 WEBVIEW_GTK_SRC =
     src/gtk/webview_webkit.cpp
 
+WEBVIEW2_GTK_SRC =
+    src/gtk/webview_webkit2.cpp
+
+WEBVIEW_WEBKIT2_EXTENSION_SRC =
+    src/gtk/webview_webkit2_extension.cpp
+
 # wxXRC
 
 XRC_SRC =
@@ -2991,7 +2999,7 @@ OPENGL_OSX_SHARED_SRC =
 
 # Misc plugin sources:
 
-UNIX_SOUND_SRC_SDL =
+UNIX_SOUND_SDL_SRC =
     src/unix/sound_sdl.cpp
 
 # wxAUI

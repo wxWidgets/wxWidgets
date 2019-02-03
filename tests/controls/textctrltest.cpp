@@ -24,11 +24,15 @@
 #endif // WX_PRECOMP
 
 #include "wx/scopeguard.h"
+#include "wx/uiaction.h"
+
+#ifdef __WXGTK__
+    #include "wx/stopwatch.h"
+#endif
 
 #include "textentrytest.h"
 #include "testableframe.h"
 #include "asserthelper.h"
-#include "wx/uiaction.h"
 
 static const int TEXT_HEIGHT = 200;
 
@@ -65,19 +69,9 @@ private:
         // Now switch to the multi-line text controls.
         CPPUNIT_TEST( PseudoTestSwitchToMultiLineStyle );
 
-        // Rerun some of the tests above. Notice that not all of them pass, so
-        // we can't just use wxTEXT_ENTRY_TESTS() here. For some of them it's
-        // normal, e.g. Hint() test isn't supposed to work for multi-line
-        // controls. Others, such as InsertionPoint() and TextChangeEvents()
-        // don't pass neither but this could be a bug.
-        CPPUNIT_TEST( SetValue );
-        CPPUNIT_TEST( Selection );
-        CPPUNIT_TEST( InsertionPoint );
-        CPPUNIT_TEST( Replace );
-        WXUISIM_TEST( Editable );
-        CPPUNIT_TEST( CopyPaste );
-        CPPUNIT_TEST( UndoRedo );
-
+        // Rerun the text entry tests not specific to single line controls for
+        // multiline ones now.
+        wxTEXT_ENTRY_TESTS();
         SINGLE_AND_MULTI_TESTS();
 
 
@@ -342,6 +336,9 @@ void TextCtrlTestCase::Redirector()
 
 void TextCtrlTestCase::HitTestSingleLine()
 {
+#ifdef __WXQT__
+	WARN("Does not work under WxQt");
+#else
     m_text->ChangeValue("Hit me");
 
     // We don't know the size of the text borders, so we can't really do any
@@ -383,6 +380,7 @@ void TextCtrlTestCase::HitTestSingleLine()
         REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
         CHECK( pos > 3 );
     }
+#endif
 }
 
 #if 0
@@ -443,7 +441,7 @@ void TextCtrlTestCase::Url()
 
 void TextCtrlTestCase::Style()
 {
-#ifndef __WXOSX__
+#if !defined(__WXOSX__) && !defined(__WXQT__)
     delete m_text;
     // We need wxTE_RICH under windows for style support
     CreateText(wxTE_MULTILINE|wxTE_RICH);
@@ -495,6 +493,8 @@ void TextCtrlTestCase::Style()
     REQUIRE( m_text->GetStyle(17, style) );
     CHECK( style.GetTextColour() == *wxRED );
     CHECK( style.GetBackgroundColour() == *wxWHITE );
+#else
+	WARN("Does not work under WxQt or OSX");
 #endif
 }
 
@@ -576,7 +576,7 @@ void TextCtrlTestCase::Lines()
     // #12366, where GetNumberOfLines() always returns the number of logical,
     // not physical, lines.
     m_text->AppendText("\n" + wxString(50, '1') + ' ' + wxString(50, '2'));
-#if defined(__WXGTK__) || defined(__WXOSX_COCOA__) || defined(__WXUNIVERSAL__)
+#if defined(__WXGTK__) || defined(__WXOSX_COCOA__) || defined(__WXUNIVERSAL__) || defined(__WXQT__)
     CPPUNIT_ASSERT_EQUAL(6, m_text->GetNumberOfLines());
 #else
     CPPUNIT_ASSERT(m_text->GetNumberOfLines() > 6);

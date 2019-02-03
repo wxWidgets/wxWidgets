@@ -70,15 +70,15 @@ enum
 
     @beginEventEmissionTable{wxDateEvent}
     @event{EVT_DATE_CHANGED(id, func)}
-           This event fires when the user changes the current selection in the
-           control.
+           Process a wxEVT_DATE_CHANGED event, which fires when the user
+           changes the current selection in the control.
     @endEventTable
 
     @library{wxcore}
     @category{pickers}
     @appearance{datepickerctrl}
 
-    @see wxCalendarCtrl, wxDateEvent
+    @see wxTimePickerCtrl, wxCalendarCtrl, wxDateEvent
 */
 class wxDatePickerCtrl : public wxControl
 {
@@ -87,7 +87,7 @@ public:
        Default constructor.
     */
     wxDatePickerCtrl();
-    
+
     /**
         Initializes the object and calls Create() with all the parameters.
     */

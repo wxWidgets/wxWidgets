@@ -24,6 +24,10 @@
 #include "wx/longlong.h"
 #include "wx/clntdata.h"
 
+#if wxUSE_STD_CONTAINERS
+#include <numeric>
+#endif // wxUSE_STD_CONTAINERS
+
 // -----------------------------------------------------------------------
 
 //
@@ -308,9 +312,11 @@ WX_DECLARE_HASH_SET_WITH_DECL(int,
                               wxPGHashSetInt,
                               class WXDLLIMPEXP_PROPGRID);
 
+#if WXWIN_COMPATIBILITY_3_0
 WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(wxObject*, wxArrayPGObject,
                                   wxBaseArrayPtrVoid,
                                   class WXDLLIMPEXP_PROPGRID);
+#endif // WXWIN_COMPATIBILITY_3_0
 
 // -----------------------------------------------------------------------
 
@@ -547,7 +553,7 @@ expdecl classname& classname##RefFromVariant( wxVariant& variant ) \
                   wxString::Format(wxS("Variant type should have been '%s'") \
                                    wxS("instead of '%s'"), \
                                    wxS(#classname), \
-                                   variant.GetType().c_str())); \
+                                   variant.GetType())); \
     classname##VariantData *data = \
         (classname##VariantData*) variant.GetData(); \
     return data->GetValue();\
@@ -558,7 +564,7 @@ expdecl const classname& classname##RefFromVariant( const wxVariant& variant ) \
                   wxString::Format(wxS("Variant type should have been '%s'") \
                                    wxS("instead of '%s'"), \
                                    wxS(#classname), \
-                                   variant.GetType().c_str())); \
+                                   variant.GetType())); \
     classname##VariantData *data = \
         (classname##VariantData*) variant.GetData(); \
     return data->GetValue();\
@@ -698,6 +704,81 @@ protected:
 
 #define WX_PG_TOKENIZER2_END() \
     }
+
+// -----------------------------------------------------------------------
+// wxVector utilities
+
+// Utility to check if specific item is in a vector.
+template<typename T>
+inline bool wxPGItemExistsInVector(const wxVector<T>& vector, const T& item)
+{
+#if wxUSE_STL
+    return std::find(vector.begin(), vector.end(), item) != vector.end();
+#else
+    for (typename wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
+    {
+        if ( *it == item )
+            return true;
+    }
+    return false;
+#endif // wxUSE_STL/!wxUSE_STL
+}
+
+// Utility to determine the index of the item in the vector.
+template<typename T>
+inline int wxPGItemIndexInVector(const wxVector<T>& vector, const T& item)
+{
+#if wxUSE_STL
+    typename wxVector<T>::const_iterator it = std::find(vector.begin(), vector.end(), item);
+    if ( it != vector.end() )
+        return (int)(it - vector.begin());
+
+    return wxNOT_FOUND;
+#else
+    for (typename wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
+    {
+        if ( *it == item )
+            return (int)(it - vector.begin());
+    }
+    return wxNOT_FOUND;
+#endif // wxUSE_STL/!wxUSE_STL
+}
+
+// Utility to remove given item from the vector.
+template<typename T>
+inline void wxPGRemoveItemFromVector(wxVector<T>& vector, const T& item)
+{
+#if wxUSE_STL
+    typename wxVector<T>::iterator it = std::find(vector.begin(), vector.end(), item);
+    if ( it != vector.end() )
+    {
+        vector.erase(it);
+    }
+#else
+    for (typename wxVector<T>::iterator it = vector.begin(); it != vector.end(); ++it)
+    {
+        if ( *it == item )
+        {
+            vector.erase(it);
+            return;
+        }
+    }
+#endif // wxUSE_STL/!wxUSE_STL
+}
+
+// Utility to calaculate sum of all elements of the vector.
+template<typename T>
+inline T wxPGGetSumVectorItems(const wxVector<T>& vector, T init)
+{
+#if wxUSE_STD_CONTAINERS
+    return std::accumulate(vector.begin(), vector.end(), init);
+#else
+    for (typename wxVector<T>::const_iterator it = vector.begin(); it != vector.end(); ++it)
+        init += *it;
+
+    return init;
+#endif // wxUSE_STD_CONTAINERS/!wxUSE_STD_CONTAINERS
+}
 
 // -----------------------------------------------------------------------
 

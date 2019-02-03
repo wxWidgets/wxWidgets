@@ -218,8 +218,6 @@ static void pizza_adjust_size_request(GtkWidget* widget, GtkOrientation orientat
     // will use the size request, if set, as the minimum.
     // But don't override if in a GtkToolbar, it uses the minimum as actual size.
     GtkWidget* parent = gtk_widget_get_parent(widget);
-    if (parent)
-        parent = gtk_widget_get_parent(parent);
     if (!GTK_IS_TOOL_ITEM(parent))
         *minimum = 0;
 }

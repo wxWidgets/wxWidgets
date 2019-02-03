@@ -10,7 +10,7 @@
 
 class QGroupBox;
 class QButtonGroup;
-class QBoxLayout;
+class QGridLayout;
 
 class WXDLLIMPEXP_CORE wxRadioBox : public wxControl, public wxRadioBoxBase
 {
@@ -65,10 +65,12 @@ public:
     using wxWindowBase::Enable;
     using wxRadioBoxBase::GetDefaultBorder;
 
-    virtual bool Enable(unsigned int n, bool enable = true);
-    virtual bool Show(unsigned int n, bool show = true);
-    virtual bool IsItemEnabled(unsigned int n) const;
-    virtual bool IsItemShown(unsigned int n) const;
+    virtual bool Enable(unsigned int n, bool enable = true) wxOVERRIDE;
+    virtual bool Enable(bool enable = true) wxOVERRIDE;
+    virtual bool Show(unsigned int n, bool show = true) wxOVERRIDE;
+    virtual bool Show(bool show = true) wxOVERRIDE;
+    virtual bool IsItemEnabled(unsigned int n) const wxOVERRIDE;
+    virtual bool IsItemShown(unsigned int n) const wxOVERRIDE;
 
     virtual unsigned int GetCount() const;
     virtual wxString GetString(unsigned int n) const;
@@ -87,7 +89,7 @@ private:
     QButtonGroup *m_qtButtonGroup;
 
     // Autofit layout for buttons (either vert. or horiz.):
-    QBoxLayout *m_qtBoxLayout;
+    QGridLayout *m_qtGridLayout;
 
     wxDECLARE_DYNAMIC_CLASS(wxRadioBox);
 };

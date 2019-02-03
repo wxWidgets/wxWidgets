@@ -187,9 +187,18 @@ void wxButtonCocoaImpl::SetAcceleratorFromLabel(const wxString& label)
     {
         wxString accelstring(label[accelPos + 1]); // Skip '&' itself
         accelstring.MakeLower();
-        wxCFStringRef cfText(accelstring);
-        [GetNSButton() setKeyEquivalent:cfText.AsNSString()];
-        [GetNSButton() setKeyEquivalentModifierMask:NSCommandKeyMask];
+        // Avoid Cmd+C closing dialog on Mac.
+        if (accelstring == "c" && GetWXPeer()->GetId() == wxID_CANCEL)
+        {
+            [GetNSButton() setKeyEquivalent:@""];
+        }
+        else
+        {
+            wxString cancelLabel(_("&Cancel"));
+            wxCFStringRef cfText(accelstring);
+            [GetNSButton() setKeyEquivalent:cfText.AsNSString()];
+            [GetNSButton() setKeyEquivalentModifierMask:NSCommandKeyMask];
+        }
     }
     else
     {

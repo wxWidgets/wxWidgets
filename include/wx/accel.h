@@ -33,7 +33,7 @@ enum wxAcceleratorEntryFlags
     wxACCEL_CTRL    = 0x0002,   // hold Ctrl key down
     wxACCEL_SHIFT   = 0x0004,   // hold Shift key down
 #if defined(__WXMAC__)
-    wxACCEL_RAW_CTRL= 0x0008,   // 
+    wxACCEL_RAW_CTRL= 0x0008,   //
 #else
     wxACCEL_RAW_CTRL= wxACCEL_CTRL,
 #endif

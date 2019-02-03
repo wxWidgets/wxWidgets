@@ -188,7 +188,7 @@ public:
         if ( val.find(m_invalidWord) == wxString::npos )
             return true;
 
-        ::wxMessageBox(wxString::Format("%s is not allowed word",m_invalidWord.c_str()),
+        ::wxMessageBox(wxString::Format("%s is not allowed word",m_invalidWord),
                        "Validation Failure");
 
         return false;
@@ -422,6 +422,7 @@ enum
     ID_SETPROPERTYVALUE,
     ID_TESTREPLACE,
     ID_SETCOLUMNS,
+    ID_SETVIRTWIDTH,
     ID_TESTXRC,
     ID_ENABLECOMMONVALUES,
     ID_SELECTSTYLE,
@@ -522,6 +523,7 @@ wxBEGIN_EVENT_TABLE(FormMain, wxFrame)
 
     EVT_MENU( ID_CATCOLOURS, FormMain::OnCatColours )
     EVT_MENU( ID_SETCOLUMNS, FormMain::OnSetColumns )
+    EVT_MENU( ID_SETVIRTWIDTH, FormMain::OnSetVirtualWidth )
     EVT_MENU( ID_TESTXRC, FormMain::OnTestXRC )
     EVT_MENU( ID_ENABLECOMMONVALUES, FormMain::OnEnableCommonValues )
     EVT_MENU( ID_SELECTSTYLE, FormMain::OnSelectStyle )
@@ -650,7 +652,7 @@ void FormMain::OnPropertyGridChanging( wxPropertyGridEvent& event )
     {
         int res =
         wxMessageBox(wxString::Format("'%s' is about to change (to variant of type '%s')\n\nAllow or deny?",
-                                      p->GetName().c_str(),event.GetValue().GetType().c_str()),
+                                      p->GetName(),event.GetValue().GetType()),
                      "Testing wxEVT_PG_CHANGING", wxYES_NO, m_pPropGridManager);
 
         if ( res == wxNO )
@@ -787,7 +789,7 @@ void FormMain::OnPropertyGridPageChange( wxPropertyGridEvent& WXUNUSED(event) )
 void FormMain::OnPropertyGridLabelEditBegin( wxPropertyGridEvent& event )
 {
     wxLogMessage("wxPG_EVT_LABEL_EDIT_BEGIN(%s)",
-                 event.GetProperty()->GetLabel().c_str());
+                 event.GetProperty()->GetLabel());
 }
 
 // -----------------------------------------------------------------------
@@ -795,7 +797,7 @@ void FormMain::OnPropertyGridLabelEditBegin( wxPropertyGridEvent& event )
 void FormMain::OnPropertyGridLabelEditEnding( wxPropertyGridEvent& event )
 {
     wxLogMessage("wxPG_EVT_LABEL_EDIT_ENDING(%s)",
-                 event.GetProperty()->GetLabel().c_str());
+                 event.GetProperty()->GetLabel());
 }
 
 // -----------------------------------------------------------------------
@@ -1157,7 +1159,8 @@ void FormMain::PopulateWithStandardItems ()
     // Set test information for cells in columns 3 and 4
     // (reserve column 2 for displaying units)
     wxPropertyGridIterator it;
-    wxBitmap bmp = wxArtProvider::GetBitmap(wxART_FOLDER);
+    int bmpH = pg->GetGrid()->GetRowHeight() - 2;
+    wxBitmap bmp = wxArtProvider::GetBitmap(wxART_FOLDER, wxART_OTHER, wxSize(bmpH, bmpH));
 
     for ( it = pg->GetGrid()->GetIterator();
           !it.AtEnd();
@@ -1784,7 +1787,7 @@ void wxMyPropertyGridPage::OnPropertySelect( wxPropertyGridEvent& event )
     wxPGProperty* p = event.GetProperty();
     wxUnusedVar(p);
     wxLogDebug("wxMyPropertyGridPage::OnPropertySelect('%s' is %s",
-               p->GetName().c_str(),
+               p->GetName(),
                IsPropertySelected(p)? "selected": "unselected");
 }
 
@@ -1792,16 +1795,16 @@ void wxMyPropertyGridPage::OnPropertyChange( wxPropertyGridEvent& event )
 {
     wxPGProperty* p = event.GetProperty();
     wxLogVerbose("wxMyPropertyGridPage::OnPropertyChange('%s', to value '%s')",
-               p->GetName().c_str(),
-               p->GetDisplayedString().c_str());
+               p->GetName(),
+               p->GetDisplayedString());
 }
 
 void wxMyPropertyGridPage::OnPropertyChanging( wxPropertyGridEvent& event )
 {
     wxPGProperty* p = event.GetProperty();
     wxLogVerbose("wxMyPropertyGridPage::OnPropertyChanging('%s', to value '%s')",
-               p->GetName().c_str(),
-               event.GetValue().GetString().c_str());
+               p->GetName(),
+               event.GetValue().GetString());
 }
 
 void wxMyPropertyGridPage::OnPageChange( wxPropertyGridEvent& WXUNUSED(event) )
@@ -2119,6 +2122,7 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
     menuTry->AppendCheckItem(ID_BOOL_CHECKBOX, "Render Boolean values as checkboxes",
         "Renders Boolean values as checkboxes");
     menuTry->Append(ID_SETCOLUMNS, "Set Number of Columns" );
+    menuTry->Append(ID_SETVIRTWIDTH, "Set Virtual Width");
     menuTry->AppendSeparator();
     menuTry->Append(ID_TESTXRC, "Display XRC sample" );
 
@@ -2186,7 +2190,7 @@ void GenerateUniquePropertyLabel( wxPropertyGridManager* pg, wxString& baselabel
         for (;;)
         {
             count++;
-            newlabel.Printf("%s%i",baselabel.c_str(),count);
+            newlabel.Printf("%s%i",baselabel,count);
             if ( !pg->GetPropertyByLabel( newlabel ) ) break;
         }
     }
@@ -2359,8 +2363,8 @@ int IterateMessage( wxPGProperty* prop )
 {
     wxString s;
 
-    s.Printf( "\"%s\" class = %s, valuetype = %s", prop->GetLabel().c_str(),
-        prop->GetClassInfo()->GetClassName(), prop->GetValueType().c_str() );
+    s.Printf( "\"%s\" class = %s, valuetype = %s", prop->GetLabel(),
+        prop->GetClassInfo()->GetClassName(), prop->GetValueType() );
 
     return wxMessageBox( s, "Iterating... (press CANCEL to end)", wxOK|wxCANCEL );
 }
@@ -2571,8 +2575,8 @@ FormMain::OnSetBackgroundColour( wxCommandEvent& event )
 
     if ( col.IsOk() )
     {
-        bool recursively = (event.GetId()==ID_SETBGCOLOURRECUR) ? true : false;
-        pg->SetPropertyBackgroundColour(prop, col, recursively);
+        int flags = (event.GetId()==ID_SETBGCOLOURRECUR) ? wxPG_RECURSE : 0;
+        pg->SetPropertyBackgroundColour(prop, col, flags);
     }
 }
 
@@ -2595,7 +2599,7 @@ void FormMain::OnRemovePage( wxCommandEvent& WXUNUSED(event) )
 void FormMain::OnSaveState( wxCommandEvent& WXUNUSED(event) )
 {
     m_savedState = m_pPropGridManager->SaveEditableState();
-    wxLogDebug("Saved editable state string: \"%s\"", m_savedState.c_str());
+    wxLogDebug("Saved editable state string: \"%s\"", m_savedState);
 }
 
 // -----------------------------------------------------------------------
@@ -2658,6 +2662,7 @@ void FormMain::OnTestReplaceClick( wxCommandEvent& WXUNUSED(event) )
 void FormMain::OnClearModifyStatusClick( wxCommandEvent& WXUNUSED(event) )
 {
     m_pPropGridManager->ClearModifiedStatus();
+    m_pPropGridManager->Refresh();
 }
 
 // -----------------------------------------------------------------------
@@ -2936,6 +2941,26 @@ void FormMain::OnSetColumns( wxCommandEvent& WXUNUSED(event) )
     if ( colCount >= 2 )
     {
         m_pPropGridManager->SetColumnCount(colCount);
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void FormMain::OnSetVirtualWidth(wxCommandEvent& WXUNUSED(evt))
+{
+    long oldWidth = m_pPropGridManager->GetState()->GetVirtualWidth();
+    long newWidth = oldWidth;
+    {
+        wxNumberEntryDialog dlg(this, "Enter virtual width (-1-2000).", "Width:",
+                                "Change Virtual Width", oldWidth, -1, 2000);
+        if ( dlg.ShowModal() == wxID_OK )
+        {
+            newWidth = dlg.GetValue();
+        }
+    }
+    if ( newWidth != oldWidth )
+    {
+        m_pPropGridManager->GetGrid()->SetVirtualWidth((int)newWidth);
     }
 }
 

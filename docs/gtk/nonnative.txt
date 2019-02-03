@@ -8,7 +8,7 @@ List of classes which should use their native GTK+ equivalents but don't:
 
 - wxTreeCtrl
     Ryan Norton has implemented this
-    
+
 - wxListCtrl
     Could be reimplemeted in terms of wxDataViewCtrl?
 

@@ -50,7 +50,7 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
-    
+
 private:
     // implement base class pure virtuals
     virtual void DoSetCount(unsigned int count) wxOVERRIDE;
@@ -97,6 +97,10 @@ private:
     // that this means that we return column 0 even if the position is over
     // column 1 but close enough to the divider separating it from column 0)
     unsigned int FindColumnAtPoint(int x, bool *onSeparator = NULL) const;
+
+    // return the result of FindColumnAtPoint() if it is a valid column,
+    // otherwise the index of the last (rightmost) displayed column
+    unsigned int FindColumnClosestToPoint(int xPhysical) const;
 
     // return true if a drag resizing operation is currently in progress
     bool IsResizing() const;

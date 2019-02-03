@@ -944,12 +944,12 @@ void MyFrame::OnComboBoxUpdate( wxCommandEvent& event )
     }
     else if ( event.GetEventType() == wxEVT_TEXT )
     {
-        wxLogDebug("EVT_TEXT(id=%i,string=\"%s\")",event.GetId(),event.GetString().c_str());
+        wxLogDebug("EVT_TEXT(id=%i,string=\"%s\")",event.GetId(),event.GetString());
     }
     else if ( event.GetEventType() == wxEVT_TEXT_ENTER )
     {
         wxLogDebug("EVT_TEXT_ENTER(id=%i,string=\"%s\")",
-                   event.GetId(), event.GetString().c_str());
+                   event.GetId(), event.GetString());
     }
 }
 
@@ -1017,20 +1017,32 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     groupSizer->AddStretchSpacer();
 
     //
-    // Disabled ODComboBox
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,"Disabled:"),
+    // Disabled read-only ODComboBox
+    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,"Read-only disabled:"),
                    wxSizerFlags().Border(wxRIGHT, border) );
 
     odc = new wxOwnerDrawnComboBox(dlg,wxID_ANY,wxEmptyString,
                                      wxDefaultPosition, wxDefaultSize,
                                      m_arrItems,
-                                     wxCB_SORT|wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
+                                     wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
                                      );
 
     odc->SetValue("Dot Dash");
     odc->Enable(false);
 
     groupSizer->Add( odc, wxSizerFlags(3).Expand().Border(wxALL, border) );
+
+    // Disabled ODComboBox
+    groupSizer->Add(new wxStaticText(dlg, wxID_ANY, "Disabled:"),
+        wxSizerFlags().Border(wxRIGHT, border));
+
+    odc = new wxOwnerDrawnComboBox(dlg, wxID_ANY, wxEmptyString,
+        wxDefaultPosition, wxDefaultSize, m_arrItems);
+
+    odc->SetValue("Dot Dash");
+    odc->Enable(false);
+
+    groupSizer->Add(odc, wxSizerFlags(3).Expand().Border(wxALL, border));
 
     rowSizer->Add( groupSizer, 1, wxEXPAND|wxALL, border );
 
@@ -1077,20 +1089,33 @@ void MyFrame::OnShowComparison( wxCommandEvent& WXUNUSED(event) )
     groupSizer->AddStretchSpacer();
 
     //
-    // Disabled wxComboBox
-    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,"Disabled:"),
+    // Disabled read-only wxComboBox
+    groupSizer->Add( new wxStaticText(dlg,wxID_ANY,"Read-only disabled:"),
                    wxSizerFlags().Border(wxRIGHT, border) );
 
     cb = new wxComboBox(dlg,wxID_ANY,wxEmptyString,
                         wxDefaultPosition, wxDefaultSize,
                         m_arrItems,
-                        wxCB_SORT|wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
+                        wxCB_READONLY // wxNO_BORDER|wxCB_READONLY
                        );
 
     cb->SetValue("Dot Dash");
     cb->Enable(false);
 
     groupSizer->Add( cb, wxSizerFlags(3).Expand().Border(wxALL, border) );
+
+    //
+    // Disabled wxComboBox
+    groupSizer->Add(new wxStaticText(dlg, wxID_ANY, "Disabled:"),
+        wxSizerFlags().Border(wxRIGHT, border));
+
+    cb = new wxComboBox(dlg, wxID_ANY, wxEmptyString,
+        wxDefaultPosition, wxDefaultSize, m_arrItems);
+
+    cb->SetValue("Dot Dash");
+    cb->Enable(false);
+
+    groupSizer->Add(cb, wxSizerFlags(3).Expand().Border(wxALL, border));
 
     rowSizer->Add( groupSizer, 1, wxEXPAND|wxALL, border );
 
@@ -1123,7 +1148,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                     "This is the wxWidgets wxComboCtrl and wxOwnerDrawnComboBox sample\n"
                     "running under %s.",
                     wxVERSION_STRING,
-                    wxGetOsDescription().c_str()
+                    wxGetOsDescription()
                  ),
                  "About wxComboCtrl sample",
                  wxOK | wxICON_INFORMATION,

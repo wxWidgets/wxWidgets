@@ -166,6 +166,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_graphmatrix.o \
 	$(OBJS)\test_gui_graphpath.o \
 	$(OBJS)\test_gui_config.o \
+	$(OBJS)\test_gui_auitest.o \
 	$(OBJS)\test_gui_bitmapcomboboxtest.o \
 	$(OBJS)\test_gui_bitmaptogglebuttontest.o \
 	$(OBJS)\test_gui_bookctrlbasetest.o \
@@ -236,11 +237,13 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_socket.o \
 	$(OBJS)\test_gui_tlw.o \
 	$(OBJS)\test_gui_dataview.o \
+	$(OBJS)\test_gui_rowheightcachetest.o \
 	$(OBJS)\test_gui_boxsizer.o \
 	$(OBJS)\test_gui_gridsizer.o \
 	$(OBJS)\test_gui_wrapsizer.o \
 	$(OBJS)\test_gui_toplevel.o \
 	$(OBJS)\test_gui_valnum.o \
+	$(OBJS)\test_gui_valtext.o \
 	$(OBJS)\test_gui_clientsize.o \
 	$(OBJS)\test_gui_setsize.o \
 	$(OBJS)\test_gui_xrctest.o
@@ -332,6 +335,10 @@ ifeq ($(USE_WEBVIEW),1)
 __WXLIB_WEBVIEW_p = \
 	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview
 endif
+endif
+ifeq ($(MONOLITHIC),0)
+__WXLIB_AUI_p = \
+	-lwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui
 endif
 ifeq ($(MONOLITHIC),0)
 __WXLIB_RICHTEXT_p = \
@@ -496,7 +503,7 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\test_gui.exe: $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample_rc.o
-	$(CXX) -o $@ $(TEST_GUI_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_WEBVIEW_p) $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lwsock32 -lwininet -loleacc -luxtheme
+	$(CXX) -o $@ $(TEST_GUI_OBJECTS)  $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS)  $(__WXLIB_WEBVIEW_p) $(__WXLIB_AUI_p)  $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   -lwxzlib$(WXDEBUGFLAG) -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lshlwapi -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lversion -lwsock32 -lwininet -loleacc -luxtheme
 endif
 
 data: 
@@ -851,6 +858,9 @@ $(OBJS)\test_gui_graphpath.o: ./graphics/graphpath.cpp
 $(OBJS)\test_gui_config.o: ./config/config.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_gui_auitest.o: ./controls/auitest.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_gui_bitmapcomboboxtest.o: ./controls/bitmapcomboboxtest.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
@@ -1061,6 +1071,9 @@ $(OBJS)\test_gui_tlw.o: ./persistence/tlw.cpp
 $(OBJS)\test_gui_dataview.o: ./persistence/dataview.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\test_gui_rowheightcachetest.o: ./rowheightcache/rowheightcachetest.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\test_gui_boxsizer.o: ./sizers/boxsizer.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
@@ -1074,6 +1087,9 @@ $(OBJS)\test_gui_toplevel.o: ./toplevel/toplevel.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_valnum.o: ./validators/valnum.cpp
+	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_gui_valtext.o: ./validators/valtext.cpp
 	$(CXX) -c -o $@ $(TEST_GUI_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_gui_clientsize.o: ./window/clientsize.cpp

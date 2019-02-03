@@ -33,7 +33,7 @@ wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 // void wxGUIAppTraits::MutexGuiEnter()
 // {
 // }
-// 
+//
 // void wxGUIAppTraits::MutexGuiLeave()
 // {
 // }

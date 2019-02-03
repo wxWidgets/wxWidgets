@@ -8,7 +8,7 @@
 
 /**
     @class wxNativeFontInfo
-   
+
     wxNativeFontInfo is platform-specific font representation: this class
     should be considered as an opaque font description only used by the native
     functions, the user code can only get the objects of this type from

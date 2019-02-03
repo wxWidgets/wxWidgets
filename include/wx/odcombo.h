@@ -178,7 +178,7 @@ protected:
     void StopPartialCompletion();
 
     wxArrayString           m_strings;
-    wxArrayPtrVoid          m_clientDatas;
+    wxVector<void*>         m_clientDatas;
 
     wxFont                  m_useFont;
 
@@ -192,7 +192,7 @@ protected:
 private:
 
     // Cached item widths (in pixels).
-    wxArrayInt              m_widths;
+    wxVector<int>           m_widths;
 
     // Width of currently widest item.
     int                     m_widestWidth;

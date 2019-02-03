@@ -14,7 +14,7 @@ class WXDLLIMPEXP_CORE wxPrinterDCImpl : public wxDCImpl
 {
 public:
     wxPrinterDCImpl( wxPrinterDC *, const wxPrintData & );
-    
+
     virtual bool CanDrawBitmap() const;
     virtual bool CanGetTextExtent() const;
 
@@ -35,7 +35,7 @@ public:
 #endif // wxUSE_PALETTE
 
     virtual void SetLogicalFunction(wxRasterOperationMode function);
-    
+
     virtual wxCoord GetCharHeight() const;
     virtual wxCoord GetCharWidth() const;
     virtual void DoGetTextExtent(const wxString& string,
@@ -43,7 +43,7 @@ public:
                                  wxCoord *descent = NULL,
                                  wxCoord *externalLeading = NULL,
                                  const wxFont *theFont = NULL) const;
-    
+
     virtual void Clear();
 
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
@@ -53,7 +53,7 @@ public:
 
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,
                              wxFloodFillStyle style = wxFLOOD_SURFACE);
-    
+
     virtual bool DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const;
 
     virtual void DoDrawPoint(wxCoord x, wxCoord y);
@@ -98,9 +98,9 @@ public:
                            wxCoord xoffset, wxCoord yoffset,
                            wxPolygonFillMode fillStyle = wxODDEVEN_RULE);
 
-protected:
-
 private:
+    wxDECLARE_CLASS(wxPrinterDCImpl);
+    wxDECLARE_NO_COPY_CLASS(wxPrinterDCImpl);
 };
 
 #endif // _WX_QT_DCPRINT_H_

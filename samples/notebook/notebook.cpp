@@ -686,7 +686,7 @@ void MyFrame::OnHitTest(wxCommandEvent& WXUNUSED(event))
                  pt.x,
                  pt.y,
                  pagePos,
-                 flagsStr.c_str());
+                 flagsStr);
 }
 
 void MyFrame::OnType(wxCommandEvent& event)
@@ -960,7 +960,7 @@ void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
             selection << nSel;
 
         wxString title;
-        title.Printf("Notebook and friends (%d pages, selection: %s)", nPages, selection.c_str());
+        title.Printf("Notebook and friends (%d pages, selection: %s)", nPages, selection);
 
         SetTitle(title);
     }
@@ -1073,13 +1073,13 @@ void MyFrame::OnBookCtrl(wxBookCtrlBaseEvent& event)
 
     wxLogMessage("Event #%d: %s: %s (%d) new sel %d, old %d, current %d%s",
                  ++s_num,
-                 nameControl.c_str(),
-                 nameEvent.c_str(),
+                 nameControl,
+                 nameEvent,
                  eventType,
                  event.GetSelection(),
                  event.GetOldSelection(),
                  book->GetSelection(),
-                 veto.c_str());
+                 veto);
 
 #if USE_LOG
     m_text->SetInsertionPointEnd();

@@ -769,15 +769,16 @@ long style, long extraStyle, const wxString& WXUNUSED(name) )
 
     [m_macWindow setDelegate:controller];
     [controller addObservers:m_macWindow];
-
-    if ( ( style & wxFRAME_SHAPED) )
-    {
-        [m_macWindow setOpaque:NO];
-        [m_macWindow setAlphaValue:1.0];
-    }
     
     if ( !(style & wxFRAME_TOOL_WINDOW) )
         [m_macWindow setHidesOnDeactivate:NO];
+    
+    if ( GetWXPeer()->GetBackgroundStyle() == wxBG_STYLE_TRANSPARENT )
+    {
+        [m_macWindow setOpaque:NO];
+        [m_macWindow setAlphaValue:1.0];
+        [m_macWindow setBackgroundColor:[NSColor clearColor]];
+    }
 }
 
 void wxNonOwnedWindowCocoaImpl::Create( wxWindow* WXUNUSED(parent), WXWindow nativeWindow )
@@ -1091,10 +1092,18 @@ bool wxNonOwnedWindowCocoaImpl::EnableFullScreenView(bool enable)
     if (enable)
     {
         collectionBehavior |= NSWindowCollectionBehaviorFullScreenPrimary;
+        collectionBehavior &= ~NSWindowCollectionBehaviorFullScreenAuxiliary;
     }
     else
     {
+        // Note that just turning "Full Screen Primary" is not enough, the
+        // window would still be made full screen when the green button in the
+        // title bar is pressed, and we need to explicitly turn on the "Full
+        // Screen Auxiliary" style to prevent this from happening. This works,
+        // at least under 10.11 and 10.14, even though it's not really clear
+        // from the documentation that it should.
         collectionBehavior &= ~NSWindowCollectionBehaviorFullScreenPrimary;
+        collectionBehavior |= NSWindowCollectionBehaviorFullScreenAuxiliary;
     }
     [m_macWindow setCollectionBehavior: collectionBehavior];
 

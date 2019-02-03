@@ -184,6 +184,7 @@
             graphics/graphmatrix.cpp
             graphics/graphpath.cpp
             config/config.cpp
+            controls/auitest.cpp
             controls/bitmapcomboboxtest.cpp
             controls/bitmaptogglebuttontest.cpp
             controls/bookctrlbasetest.cpp
@@ -266,11 +267,13 @@
             net/socket.cpp
             persistence/tlw.cpp
             persistence/dataview.cpp
+            rowheightcache/rowheightcachetest.cpp
             sizers/boxsizer.cpp
             sizers/gridsizer.cpp
             sizers/wrapsizer.cpp
             toplevel/toplevel.cpp
             validators/valnum.cpp
+            validators/valtext.cpp
             window/clientsize.cpp
             window/setsize.cpp
             xml/xrctest.cpp
@@ -282,6 +285,7 @@
             wxWebView is not available.
          -->
         <sys-lib>$(WXLIB_WEBVIEW)</sys-lib>
+        <wx-lib>aui</wx-lib>
         <wx-lib>richtext</wx-lib>
         <wx-lib>media</wx-lib>
         <wx-lib>xrc</wx-lib>
@@ -295,9 +299,9 @@
 
     <wx-data id="data">
         <files>testdata.fc</files>
-        
+
         <!-- test data for image/image.cpp test unit: -->
-        <files>horse.ani  horse.bmp  horse.cur  horse.gif  horse.ico  horse.jpg  
+        <files>horse.ani  horse.bmp  horse.cur  horse.gif  horse.ico  horse.jpg
                horse.pcx  horse.png  horse.pnm  horse.tga  horse.tif  horse.xpm</files>
     </wx-data>
 

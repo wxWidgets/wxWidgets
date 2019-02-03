@@ -136,15 +136,15 @@ public:
         Sets font sizes to be relative to the given size or the system
         default size; use either specified or default font
 
-        @param size 
+        @param size
             Point size of the default HTML text
         @param normal_face
-            This is face name for normal (i.e. non-fixed) font. It can be 
-            either empty string (then the default face is chosen) or 
-            platform-specific face name. Examples are "helvetica" under 
+            This is face name for normal (i.e. non-fixed) font. It can be
+            either empty string (then the default face is chosen) or
+            platform-specific face name. Examples are "helvetica" under
             Unix or "Times New Roman" under Windows.
         @param fixed_face
-            The same thing for fixed face ( \<TT\>..\</TT\> ) 
+            The same thing for fixed face ( \<TT\>..\</TT\> )
 
         @see SetSize()
     */
@@ -301,7 +301,7 @@ public:
     */
     void SetFonts(const wxString& normal_face, const wxString& fixed_face,
                   const int* sizes = NULL);
-  
+
     /**
         Sets the name used for preview frames and setup dialogs.
 
@@ -310,7 +310,7 @@ public:
     void SetName(const wxString& name);
 
     /**
-        Sets default font sizes and/or default font size. 
+        Sets default font sizes and/or default font size.
         See wxHtmlDCRenderer::SetStandardFonts for detailed description.
         @see SetFonts()
     */

@@ -139,7 +139,7 @@ void StatBmpWidgetsPage::RecreateWidget()
         }
         else
         {
-            wxLogMessage("Reading image from file '%s' failed.", filepath.c_str());
+            wxLogMessage("Reading image from file '%s' failed.", filepath);
         }
     }
 

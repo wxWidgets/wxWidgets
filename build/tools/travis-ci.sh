@@ -32,6 +32,10 @@ case $wxTOOLSET in
             ctest -V -C Debug -R "test_base" --output-on-failure --interactive-debug-mode 0 .
             echo 'travis_fold:end:testing'
         fi
+        echo 'Installing...' && echo -en 'travis_fold:start:script.install\\r'
+        sudo env "PATH=$PATH" cmake --build . --target install
+        echo -en 'travis_fold:end:script.install\\r'
+        popd
         ;;
     *)
         echo 'Configuring...' && echo -en 'travis_fold:start:script.configure\\r'
@@ -52,9 +56,10 @@ case $wxTOOLSET in
         echo 'Installing...' && echo -en 'travis_fold:start:script.install\\r'
         sudo make install
         echo -en 'travis_fold:end:script.install\\r'
-        echo 'Testing installation...' && echo -en 'travis_fold:start:script.testinstall\\r'
-        make -C samples/minimal -f makefile.unx clean
-        make -C samples/minimal -f makefile.unx $wxMAKEFILE_FLAGS
-        echo -en 'travis_fold:end:script.testinstall\\r'
         ;;
 esac
+
+echo 'Testing installation...' && echo -en 'travis_fold:start:script.testinstall\\r'
+make -C samples/minimal -f makefile.unx clean
+make -C samples/minimal -f makefile.unx $wxMAKEFILE_FLAGS
+echo -en 'travis_fold:end:script.testinstall\\r'

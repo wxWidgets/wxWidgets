@@ -76,6 +76,9 @@ protected:
     void CheckParams(const wxString& label, const wxString& url, long style);
 
 public:
+    // Send wxHyperlinkEvent and open our link in the default browser if it
+    // wasn't handled.
+    //
     // not part of the public API but needs to be public as used by
     // GTK+ callbacks:
     void SendEvent();

@@ -82,7 +82,7 @@ public:
     //@{
     /**
         Adds the given item to the given position.
-        
+
         @return A valid pointer if the item was successfully placed at the
                  given position, or @NULL if something was already there.
     */
@@ -299,7 +299,7 @@ public:
     */
     bool SetSpan(const wxGBSpan& span);
 
-    
+
     wxGridBagSizer* GetGBSizer() const;
     void SetGBSizer(wxGridBagSizer* sizer);
 };

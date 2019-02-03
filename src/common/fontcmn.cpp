@@ -104,9 +104,9 @@ wxPROPERTY( Size,int, SetPointSize, GetPointSize, 12, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group"))
 wxPROPERTY( Family, wxFontFamily , SetFamily, GetFamily, (wxFontFamily)wxDEFAULT, \
            0 /*flags*/, wxT("Helpstring"), wxT("group")) // wxFontFamily
-wxPROPERTY( Style, wxFontStyle, SetStyle, GetStyle, (wxFontStyle)wxNORMAL, 0 /*flags*/, \
+wxPROPERTY( Style, wxFontStyle, SetStyle, GetStyle, wxFONTSTYLE_NORMAL, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group")) // wxFontStyle
-wxPROPERTY( Weight, wxFontWeight, SetWeight, GetWeight, (wxFontWeight)wxNORMAL, 0 /*flags*/, \
+wxPROPERTY( Weight, wxFontWeight, SetWeight, GetWeight, wxFONTWEIGHT_NORMAL, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group")) // wxFontWeight
 wxPROPERTY( Underlined, bool, SetUnderlined, GetUnderlined, false, 0 /*flags*/, \
            wxT("Helpstring"), wxT("group"))
@@ -439,8 +439,7 @@ bool wxFontBase::operator==(const wxFont& font) const
             // in wxGTK1 GetPixelSize() calls GetInternalFont() which uses
             // operator==() resulting in infinite recursion so we can't use it
             // in that port
-            // in wxQT, GetPixelSize is too slow to be used here
-#if (!defined(__WXGTK__) || defined(__WXGTK20__)) && !defined(__WXQT__)
+#if (!defined(__WXGTK__) || defined(__WXGTK20__))
             GetPixelSize() == font.GetPixelSize() &&
 #endif
             GetFamily() == font.GetFamily() &&
@@ -812,9 +811,9 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
 
-    s.Printf(wxT("%d;%f;%d;%d;%d;%d;%d;%s;%d"),
+    s.Printf(wxT("%d;%s;%d;%d;%d;%d;%d;%s;%d"),
              1,                                 // version
-             GetFractionalPointSize(),
+             wxString::FromCDouble(GetFractionalPointSize()),
              family,
              (int)style,
              weight,

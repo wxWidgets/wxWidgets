@@ -41,7 +41,7 @@ wx_top_builddir = @wx_top_builddir@
 
 DESTDIR = 
 WX_RELEASE = 3.1
-WX_VERSION = $(WX_RELEASE).2
+WX_VERSION = $(WX_RELEASE).3
 LIBDIRNAME = $(wx_top_builddir)/lib
 DIALOGS_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
@@ -198,6 +198,9 @@ dialogs_sample_rc.o: $(srcdir)/../../samples/sample.rc
 dialogs_dialogs.o: $(srcdir)/dialogs.cpp
 	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/dialogs.cpp
 
+dialogs_fontdlgg.o: $(srcdir)/../../src/generic/fontdlgg.cpp
+	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/fontdlgg.cpp
+
 @COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@dialogs_colrdlgg.o: $(srcdir)/../../src/generic/colrdlgg.cpp
 @COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/colrdlgg.cpp
 
@@ -219,9 +222,6 @@ dialogs_dialogs.o: $(srcdir)/dialogs.cpp
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@dialogs_filedlgg.o: $(srcdir)/../../src/generic/filedlgg.cpp
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/filedlgg.cpp
 
-
-@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@dialogs_fontdlgg.o: $(srcdir)/../../src/generic/fontdlgg.cpp
-@COND_SHARED_0_TOOLKIT_MSW_WXUNIV_0@	$(CXXC) -c -o $@ $(DIALOGS_CXXFLAGS) $(srcdir)/../../src/generic/fontdlgg.cpp
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include ./.deps/*.d

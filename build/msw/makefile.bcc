@@ -38,7 +38,7 @@ MAKEARGS = -DCC="$(CC)" -DCXX="$(CXX)" -DCFLAGS="$(CFLAGS)" \
 	-DWX_FLAVOUR="$(WX_FLAVOUR)" -DWX_LIB_FLAVOUR="$(WX_LIB_FLAVOUR)" \
 	-DCFG="$(CFG)" -DRUNTIME_LIBS="$(RUNTIME_LIBS)"
 WX_RELEASE_NODOT = 31
-WX_VERSION_NODOT = $(WX_RELEASE_NODOT)2
+WX_VERSION_NODOT = $(WX_RELEASE_NODOT)3
 COMPILER_PREFIX = bcc
 OBJS = \
 	$(COMPILER_PREFIX)$(COMPILER_VERSION)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
@@ -185,8 +185,10 @@ WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_tile.obj \
 	$(OBJS)\wxtiff_tif_version.obj \
 	$(OBJS)\wxtiff_tif_warning.obj \
+	$(OBJS)\wxtiff_tif_webp.obj \
 	$(OBJS)\wxtiff_tif_write.obj \
-	$(OBJS)\wxtiff_tif_zip.obj
+	$(OBJS)\wxtiff_tif_zip.obj \
+	$(OBJS)\wxtiff_tif_zstd.obj
 WXEXPAT_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -DNDEBUG -I$(LIBDIRNAME) -w-8004 -w-8008 \
 	-w-8012 -w-8057 -w-8066 $(CPPFLAGS) $(CFLAGS)
@@ -1851,8 +1853,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_sound.obj \
 	$(OBJS)\monodll_automtn.obj \
 	$(OBJS)\monodll_notifmsgrt.obj \
-	$(OBJS)\monodll_activityindicator.obj \
 	$(OBJS)\monodll_uuid.obj \
+	$(OBJS)\monodll_evtloop.obj \
 	$(OBJS)\monodll_clrpickerg.obj \
 	$(OBJS)\monodll_collpaneg.obj \
 	$(OBJS)\monodll_filepickerg.obj \
@@ -1874,7 +1876,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_msw_dialog.obj \
 	$(OBJS)\monodll_dirdlg.obj \
 	$(OBJS)\monodll_dragimag.obj \
-	$(OBJS)\monodll_evtloop.obj \
 	$(OBJS)\monodll_filedlg.obj \
 	$(OBJS)\monodll_frame.obj \
 	$(OBJS)\monodll_msw_gauge.obj \
@@ -1922,6 +1923,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datetimectrl.obj \
 	$(OBJS)\monodll_timectrl.obj \
 	$(OBJS)\monodll_datecontrols.obj \
+	$(OBJS)\monodll_activityindicator.obj \
 	$(OBJS)\monodll_msw_checklst.obj \
 	$(OBJS)\monodll_msw_fdrepdlg.obj \
 	$(OBJS)\monodll_fontdlg.obj \
@@ -2124,7 +2126,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavgen.obj \
 	$(OBJS)\monodll_editlbox.obj \
 	$(OBJS)\monodll_laywin.obj \
-	$(OBJS)\monodll_calctrlg.obj
+	$(OBJS)\monodll_calctrlg.obj \
+	$(OBJS)\monodll_rowheightcache.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_OBJECTS =  \
@@ -2192,9 +2195,9 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_sound.obj \
 	$(OBJS)\monodll_automtn.obj \
 	$(OBJS)\monodll_notifmsgrt.obj \
-	$(OBJS)\monodll_activityindicator.obj \
 	$(OBJS)\monodll_uuid.obj \
 	$(OBJS)\monodll_evtloop.obj \
+	$(OBJS)\monodll_animateg.obj \
 	$(OBJS)\monodll_generic_accel.obj \
 	$(OBJS)\monodll_clrpickerg.obj \
 	$(OBJS)\monodll_collpaneg.obj \
@@ -2449,7 +2452,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_datavgen.obj \
 	$(OBJS)\monodll_editlbox.obj \
 	$(OBJS)\monodll_laywin.obj \
-	$(OBJS)\monodll_calctrlg.obj
+	$(OBJS)\monodll_calctrlg.obj \
+	$(OBJS)\monodll_rowheightcache.obj
 !endif
 !if "$(USE_STC)" == "1"
 ____MONOLIB_STC_SRC_FILENAMES_OBJECTS =  \
@@ -2680,8 +2684,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_sound.obj \
 	$(OBJS)\monolib_automtn.obj \
 	$(OBJS)\monolib_notifmsgrt.obj \
-	$(OBJS)\monolib_activityindicator.obj \
 	$(OBJS)\monolib_uuid.obj \
+	$(OBJS)\monolib_evtloop.obj \
 	$(OBJS)\monolib_clrpickerg.obj \
 	$(OBJS)\monolib_collpaneg.obj \
 	$(OBJS)\monolib_filepickerg.obj \
@@ -2703,7 +2707,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_msw_dialog.obj \
 	$(OBJS)\monolib_dirdlg.obj \
 	$(OBJS)\monolib_dragimag.obj \
-	$(OBJS)\monolib_evtloop.obj \
 	$(OBJS)\monolib_filedlg.obj \
 	$(OBJS)\monolib_frame.obj \
 	$(OBJS)\monolib_msw_gauge.obj \
@@ -2751,6 +2754,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datetimectrl.obj \
 	$(OBJS)\monolib_timectrl.obj \
 	$(OBJS)\monolib_datecontrols.obj \
+	$(OBJS)\monolib_activityindicator.obj \
 	$(OBJS)\monolib_msw_checklst.obj \
 	$(OBJS)\monolib_msw_fdrepdlg.obj \
 	$(OBJS)\monolib_fontdlg.obj \
@@ -2953,7 +2957,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavgen.obj \
 	$(OBJS)\monolib_editlbox.obj \
 	$(OBJS)\monolib_laywin.obj \
-	$(OBJS)\monolib_calctrlg.obj
+	$(OBJS)\monolib_calctrlg.obj \
+	$(OBJS)\monolib_rowheightcache.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_1_OBJECTS =  \
@@ -3021,9 +3026,9 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_sound.obj \
 	$(OBJS)\monolib_automtn.obj \
 	$(OBJS)\monolib_notifmsgrt.obj \
-	$(OBJS)\monolib_activityindicator.obj \
 	$(OBJS)\monolib_uuid.obj \
 	$(OBJS)\monolib_evtloop.obj \
+	$(OBJS)\monolib_animateg.obj \
 	$(OBJS)\monolib_generic_accel.obj \
 	$(OBJS)\monolib_clrpickerg.obj \
 	$(OBJS)\monolib_collpaneg.obj \
@@ -3278,7 +3283,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_datavgen.obj \
 	$(OBJS)\monolib_editlbox.obj \
 	$(OBJS)\monolib_laywin.obj \
-	$(OBJS)\monolib_calctrlg.obj
+	$(OBJS)\monolib_calctrlg.obj \
+	$(OBJS)\monolib_rowheightcache.obj
 !endif
 !if "$(USE_STC)" == "1"
 ____MONOLIB_STC_SRC_FILENAMES_1_OBJECTS =  \
@@ -3384,8 +3390,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_sound.obj \
 	$(OBJS)\coredll_automtn.obj \
 	$(OBJS)\coredll_notifmsgrt.obj \
-	$(OBJS)\coredll_activityindicator.obj \
 	$(OBJS)\coredll_uuid.obj \
+	$(OBJS)\coredll_evtloop.obj \
 	$(OBJS)\coredll_clrpickerg.obj \
 	$(OBJS)\coredll_collpaneg.obj \
 	$(OBJS)\coredll_filepickerg.obj \
@@ -3407,7 +3413,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_msw_dialog.obj \
 	$(OBJS)\coredll_dirdlg.obj \
 	$(OBJS)\coredll_dragimag.obj \
-	$(OBJS)\coredll_evtloop.obj \
 	$(OBJS)\coredll_filedlg.obj \
 	$(OBJS)\coredll_frame.obj \
 	$(OBJS)\coredll_msw_gauge.obj \
@@ -3455,6 +3460,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_datetimectrl.obj \
 	$(OBJS)\coredll_timectrl.obj \
 	$(OBJS)\coredll_datecontrols.obj \
+	$(OBJS)\coredll_activityindicator.obj \
 	$(OBJS)\coredll_msw_checklst.obj \
 	$(OBJS)\coredll_msw_fdrepdlg.obj \
 	$(OBJS)\coredll_fontdlg.obj \
@@ -3657,7 +3663,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_datavgen.obj \
 	$(OBJS)\coredll_editlbox.obj \
 	$(OBJS)\coredll_laywin.obj \
-	$(OBJS)\coredll_calctrlg.obj
+	$(OBJS)\coredll_calctrlg.obj \
+	$(OBJS)\coredll_rowheightcache.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_2_OBJECTS =  \
@@ -3725,9 +3732,9 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_sound.obj \
 	$(OBJS)\coredll_automtn.obj \
 	$(OBJS)\coredll_notifmsgrt.obj \
-	$(OBJS)\coredll_activityindicator.obj \
 	$(OBJS)\coredll_uuid.obj \
 	$(OBJS)\coredll_evtloop.obj \
+	$(OBJS)\coredll_animateg.obj \
 	$(OBJS)\coredll_generic_accel.obj \
 	$(OBJS)\coredll_clrpickerg.obj \
 	$(OBJS)\coredll_collpaneg.obj \
@@ -3982,7 +3989,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_datavgen.obj \
 	$(OBJS)\coredll_editlbox.obj \
 	$(OBJS)\coredll_laywin.obj \
-	$(OBJS)\coredll_calctrlg.obj
+	$(OBJS)\coredll_calctrlg.obj \
+	$(OBJS)\coredll_rowheightcache.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1"
 __corelib___depname = \
@@ -4054,8 +4062,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_sound.obj \
 	$(OBJS)\corelib_automtn.obj \
 	$(OBJS)\corelib_notifmsgrt.obj \
-	$(OBJS)\corelib_activityindicator.obj \
 	$(OBJS)\corelib_uuid.obj \
+	$(OBJS)\corelib_evtloop.obj \
 	$(OBJS)\corelib_clrpickerg.obj \
 	$(OBJS)\corelib_collpaneg.obj \
 	$(OBJS)\corelib_filepickerg.obj \
@@ -4077,7 +4085,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_msw_dialog.obj \
 	$(OBJS)\corelib_dirdlg.obj \
 	$(OBJS)\corelib_dragimag.obj \
-	$(OBJS)\corelib_evtloop.obj \
 	$(OBJS)\corelib_filedlg.obj \
 	$(OBJS)\corelib_frame.obj \
 	$(OBJS)\corelib_msw_gauge.obj \
@@ -4125,6 +4132,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_datetimectrl.obj \
 	$(OBJS)\corelib_timectrl.obj \
 	$(OBJS)\corelib_datecontrols.obj \
+	$(OBJS)\corelib_activityindicator.obj \
 	$(OBJS)\corelib_msw_checklst.obj \
 	$(OBJS)\corelib_msw_fdrepdlg.obj \
 	$(OBJS)\corelib_fontdlg.obj \
@@ -4327,7 +4335,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_datavgen.obj \
 	$(OBJS)\corelib_editlbox.obj \
 	$(OBJS)\corelib_laywin.obj \
-	$(OBJS)\corelib_calctrlg.obj
+	$(OBJS)\corelib_calctrlg.obj \
+	$(OBJS)\corelib_rowheightcache.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_3_OBJECTS =  \
@@ -4395,9 +4404,9 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_sound.obj \
 	$(OBJS)\corelib_automtn.obj \
 	$(OBJS)\corelib_notifmsgrt.obj \
-	$(OBJS)\corelib_activityindicator.obj \
 	$(OBJS)\corelib_uuid.obj \
 	$(OBJS)\corelib_evtloop.obj \
+	$(OBJS)\corelib_animateg.obj \
 	$(OBJS)\corelib_generic_accel.obj \
 	$(OBJS)\corelib_clrpickerg.obj \
 	$(OBJS)\corelib_collpaneg.obj \
@@ -4652,7 +4661,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_datavgen.obj \
 	$(OBJS)\corelib_editlbox.obj \
 	$(OBJS)\corelib_laywin.obj \
-	$(OBJS)\corelib_calctrlg.obj
+	$(OBJS)\corelib_calctrlg.obj \
+	$(OBJS)\corelib_rowheightcache.obj
 !endif
 !if "$(SHARED)" == "1"
 ____wxcore_namedll_DEP = $(__coredll___depname)
@@ -5561,7 +5571,7 @@ $(SETUPHDIR)\wx\msw\rcdefs.h: $(SETUPHDIR)\wx\msw ..\..\include\wx\msw\genrcdefs
 build_cfg_file: $(SETUPHDIR)
 	@echo WXVER_MAJOR=3 >$(BUILD_CFG_FILE)
 	@echo WXVER_MINOR=1 >>$(BUILD_CFG_FILE)
-	@echo WXVER_RELEASE=2 >>$(BUILD_CFG_FILE)
+	@echo WXVER_RELEASE=3 >>$(BUILD_CFG_FILE)
 	@echo BUILD=$(BUILD) >>$(BUILD_CFG_FILE)
 	@echo MONOLITHIC=$(MONOLITHIC) >>$(BUILD_CFG_FILE)
 	@echo SHARED=$(SHARED) >>$(BUILD_CFG_FILE)
@@ -5950,11 +5960,17 @@ $(OBJS)\wxtiff_tif_version.obj: ..\..\src\tiff\libtiff\tif_version.c
 $(OBJS)\wxtiff_tif_warning.obj: ..\..\src\tiff\libtiff\tif_warning.c
 	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_warning.c
 
+$(OBJS)\wxtiff_tif_webp.obj: ..\..\src\tiff\libtiff\tif_webp.c
+	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_webp.c
+
 $(OBJS)\wxtiff_tif_write.obj: ..\..\src\tiff\libtiff\tif_write.c
 	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_write.c
 
 $(OBJS)\wxtiff_tif_zip.obj: ..\..\src\tiff\libtiff\tif_zip.c
 	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_zip.c
+
+$(OBJS)\wxtiff_tif_zstd.obj: ..\..\src\tiff\libtiff\tif_zstd.c
+	$(CC) -q -c -P- -o$@ $(WXTIFF_CFLAGS) ..\..\src\tiff\libtiff\tif_zstd.c
 
 $(OBJS)\wxexpat_xmlparse.obj: ..\..\src\expat\expat\lib\xmlparse.c
 	$(CC) -q -c -P- -o$@ $(WXEXPAT_CFLAGS) ..\..\src\expat\expat\lib\xmlparse.c
@@ -6934,9 +6950,6 @@ $(OBJS)\monodll_systhemectrl.obj: ..\..\src\msw\systhemectrl.cpp
 $(OBJS)\monodll_customdraw.obj: ..\..\src\msw\customdraw.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\customdraw.cpp
 
-$(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\animateg.cpp
-
 $(OBJS)\monodll_commandlinkbutton.obj: ..\..\src\msw\commandlinkbutton.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\commandlinkbutton.cpp
 
@@ -7888,18 +7901,13 @@ $(OBJS)\monodll_notifmsgrt.obj: ..\..\src\msw\rt\notifmsgrt.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monodll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
+$(OBJS)\monodll_uuid.obj: ..\..\src\msw\ole\uuid.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\ole\uuid.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_uuid.obj: ..\..\src\msw\ole\uuid.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\ole\uuid.cpp
+$(OBJS)\monodll_evtloop.obj: ..\..\src\msw\evtloop.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -7928,8 +7936,13 @@ $(OBJS)\monodll_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monodll_evtloop.obj: ..\..\src\msw\evtloop.cpp
-	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
+$(OBJS)\monodll_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\animateg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -8932,6 +8945,11 @@ $(OBJS)\monodll_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\calctrlg.cpp
 !endif
 
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_rowheightcache.obj: ..\..\src\generic\rowheightcache.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\rowheightcache.cpp
+!endif
+
 $(OBJS)\monodll_version.res: ..\..\src\msw\version.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) -i$(SETUPHDIR) -i..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) -dWXBUILDING -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG) -i$(BCCDIR)\include\windows\sdk  -i..\..\src\tiff\libtiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib -i..\..\src\regex -i..\..\src\expat\expat\lib -i..\..\src\stc\scintilla\include -i..\..\src\stc\scintilla\lexlib -i..\..\src\stc\scintilla\src -d__WX__ -dSCI_LEXER -dNO_CXX11_REGEX -dLINK_LEXERS -dwxUSE_BASE=1 -dWXMAKINGDLL  ..\..\src\msw\version.rc
 
@@ -9477,9 +9495,6 @@ $(OBJS)\monolib_systhemectrl.obj: ..\..\src\msw\systhemectrl.cpp
 
 $(OBJS)\monolib_customdraw.obj: ..\..\src\msw\customdraw.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\customdraw.cpp
-
-$(OBJS)\monolib_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\animateg.cpp
 
 $(OBJS)\monolib_commandlinkbutton.obj: ..\..\src\msw\commandlinkbutton.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\commandlinkbutton.cpp
@@ -10432,18 +10447,13 @@ $(OBJS)\monolib_notifmsgrt.obj: ..\..\src\msw\rt\notifmsgrt.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\monolib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
+$(OBJS)\monolib_uuid.obj: ..\..\src\msw\ole\uuid.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\ole\uuid.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_uuid.obj: ..\..\src\msw\ole\uuid.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\ole\uuid.cpp
+$(OBJS)\monolib_evtloop.obj: ..\..\src\msw\evtloop.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -10472,8 +10482,13 @@ $(OBJS)\monolib_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\monolib_evtloop.obj: ..\..\src\msw\evtloop.cpp
-	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
+$(OBJS)\monolib_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\animateg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -11476,6 +11491,11 @@ $(OBJS)\monolib_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\calctrlg.cpp
 !endif
 
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_rowheightcache.obj: ..\..\src\generic\rowheightcache.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\rowheightcache.cpp
+!endif
+
 $(OBJS)\basedll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
@@ -12436,9 +12456,6 @@ $(OBJS)\coredll_systhemectrl.obj: ..\..\src\msw\systhemectrl.cpp
 $(OBJS)\coredll_customdraw.obj: ..\..\src\msw\customdraw.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\customdraw.cpp
 
-$(OBJS)\coredll_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\animateg.cpp
-
 $(OBJS)\coredll_commandlinkbutton.obj: ..\..\src\msw\commandlinkbutton.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\commandlinkbutton.cpp
 
@@ -12940,18 +12957,13 @@ $(OBJS)\coredll_notifmsgrt.obj: ..\..\src\msw\rt\notifmsgrt.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\coredll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\coredll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
+$(OBJS)\coredll_uuid.obj: ..\..\src\msw\ole\uuid.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\ole\uuid.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\coredll_uuid.obj: ..\..\src\msw\ole\uuid.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\ole\uuid.cpp
+$(OBJS)\coredll_evtloop.obj: ..\..\src\msw\evtloop.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -12980,8 +12992,13 @@ $(OBJS)\coredll_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\coredll_evtloop.obj: ..\..\src\msw\evtloop.cpp
-	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\msw\evtloop.cpp
+$(OBJS)\coredll_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\animateg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -13984,6 +14001,11 @@ $(OBJS)\coredll_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\calctrlg.cpp
 !endif
 
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_rowheightcache.obj: ..\..\src\generic\rowheightcache.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\rowheightcache.cpp
+!endif
+
 $(OBJS)\corelib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) -H ..\..\src\common\dummy.cpp
 
@@ -14166,9 +14188,6 @@ $(OBJS)\corelib_systhemectrl.obj: ..\..\src\msw\systhemectrl.cpp
 
 $(OBJS)\corelib_customdraw.obj: ..\..\src\msw\customdraw.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\customdraw.cpp
-
-$(OBJS)\corelib_animateg.obj: ..\..\src\generic\animateg.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\animateg.cpp
 
 $(OBJS)\corelib_commandlinkbutton.obj: ..\..\src\msw\commandlinkbutton.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\commandlinkbutton.cpp
@@ -14671,18 +14690,13 @@ $(OBJS)\corelib_notifmsgrt.obj: ..\..\src\msw\rt\notifmsgrt.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\corelib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
-!endif
-
-!if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
-$(OBJS)\corelib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
+$(OBJS)\corelib_uuid.obj: ..\..\src\msw\ole\uuid.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\ole\uuid.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\corelib_uuid.obj: ..\..\src\msw\ole\uuid.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\ole\uuid.cpp
+$(OBJS)\corelib_evtloop.obj: ..\..\src\msw\evtloop.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -14711,8 +14725,13 @@ $(OBJS)\corelib_prntdlgg.obj: ..\..\src\generic\prntdlgg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
-$(OBJS)\corelib_evtloop.obj: ..\..\src\msw\evtloop.cpp
-	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\msw\evtloop.cpp
+$(OBJS)\corelib_animateg.obj: ..\..\src\generic\animateg.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\animateg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_activityindicator.obj: ..\..\src\generic\activityindicator.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\activityindicator.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
@@ -15713,6 +15732,11 @@ $(OBJS)\corelib_laywin.obj: ..\..\src\generic\laywin.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\calctrlg.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_rowheightcache.obj: ..\..\src\generic\rowheightcache.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\rowheightcache.cpp
 !endif
 
 $(OBJS)\advdll_dummy.obj: ..\..\src\common\dummy.cpp

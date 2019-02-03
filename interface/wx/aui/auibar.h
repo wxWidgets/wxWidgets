@@ -179,11 +179,11 @@ public:
     */
     int GetToolId() const;
 
-    
+
     void SetDropDownClicked(bool c);
     void SetClickPoint(const wxPoint& p);
     void SetItemRect(const wxRect& r);
-    void SetToolId(int toolId);    
+    void SetToolId(int toolId);
 };
 
 wxEventType wxEVT_AUITOOLBAR_TOOL_DROPDOWN;

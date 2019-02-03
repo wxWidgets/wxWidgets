@@ -111,12 +111,12 @@ public:
     virtual void* GetHandle() const { return (void*) m_qtPainter; }
 
 protected:
-    virtual QImage *GetQImage() { return m_qtImage; }
-    
-    QPainter *m_qtPainter;
-    QImage *m_qtImage;
+    virtual QPixmap *GetQPixmap() { return m_qtPixmap; }
 
-    wxRegion *m_clippingRegion;
+    QPainter *m_qtPainter;
+    QPixmap *m_qtPixmap;
+
+    wxRegion m_clippingRegion;
 private:
     enum wxQtRasterColourOp
     {
@@ -129,7 +129,10 @@ private:
     QColor *m_qtPenColor;
     QColor *m_qtBrushColor;
     void ApplyRasterColourOp();
-    
+
+    wxDECLARE_CLASS(wxQtDCImpl);
+    wxDECLARE_NO_COPY_CLASS(wxQtDCImpl);
+
 };
 
 #endif // _WX_QT_DC_H_

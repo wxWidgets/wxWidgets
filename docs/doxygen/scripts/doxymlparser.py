@@ -38,23 +38,23 @@ class ClassDefinition:
         self.includes = []
         self.bases = []
         self.enums = {}
-        
+
     def __str__(self):
         str_repr = """
 Class: %s
 Bases: %s
 Includes: %s
-Brief Description: 
+Brief Description:
 %s
 
 Detailed Description:
 %s
 """ % (self.name, string.join(self.bases, ", "), self.includes, self.brief_description, self.detailed_description)
         str_repr += "Methods:\n"
-        
+
         for method in self.methods:
             str_repr += str(method)
-        
+
         return str_repr
 
 class MethodDefinition:
@@ -66,20 +66,20 @@ class MethodDefinition:
         self.params = []
         self.brief_description = ""
         self.detailed_description = ""
-        
+
     def __str__(self):
         str_repr = """
 Method: %s
 Return Type: %s
 Params: %r
 Prototype: %s
-Brief Description: 
+Brief Description:
 %s
 
 Detailed Description:
 %s
 """ % (self.name, self.return_type, self.params, self.definition + self.argsstring, self.brief_description, self.detailed_description)
-        return str_repr     
+        return str_repr
 
 def getTextValue(node, recursive=False):
     text = ""
@@ -89,7 +89,7 @@ def getTextValue(node, recursive=False):
         if child.nodeType == child.TEXT_NODE:
             # Add a space to ensure we have a space between qualifiers and parameter names
             text += child.nodeValue.strip() + " "
-            
+
     return text.strip()
 
 def doxyMLToText(node):
@@ -104,7 +104,7 @@ class DoxyMLParser:
         for aclass in self.classes:
             if aclass.name == name:
                 return aclass
-                
+
         return None
 
     def get_enums_and_functions(self, filename, aclass):
@@ -119,17 +119,17 @@ class DoxyMLParser:
     def is_derived_from_base(self, aclass, abase):
         base = get_first_value(aclass.bases)
         while base and base != "":
-            
+
             if base == abase:
                 return True
-                
+
             parentclass = self.find_class(base)
-            
+
             if parentclass:
                 base = get_first_value(parentclass.bases)
             else:
                 base = None
-                
+
         return False
 
     def parse(self, filename):
@@ -138,7 +138,7 @@ class DoxyMLParser:
             new_class = self.parse_class(node)
             self.classes.append(new_class)
             self.get_enums_and_functions(filename, new_class)
-            
+
     def parse_class(self, class_node):
         new_class = ClassDefinition()
         new_class.name = getTextValue(class_node.getElementsByTagName("compoundname")[0])
@@ -156,21 +156,21 @@ class DoxyMLParser:
         self.parse_methods(new_class, class_node)
 
         return new_class
-        
+
     def parse_enum(self, new_class, enum, root):
         enum_name = ""
         enum_values = []
-        
+
         for node in enum.childNodes:
             if node.nodeName == "name":
                 enum_name = getTextValue(node)
             elif node.nodeName == "enumvalue":
                 enum_values.append(getTextValue(node.getElementsByTagName("name")[0]))
-        
+
         new_class.enums[enum_name] = enum_values
-        
+
     def parse_methods(self, new_class, root):
-        for method in root.getElementsByTagName("memberdef"):                
+        for method in root.getElementsByTagName("memberdef"):
             new_method = MethodDefinition()
             for node in method.childNodes:
                 if node.nodeName == "name":
@@ -187,10 +187,10 @@ class DoxyMLParser:
                         if child.nodeType == child.ELEMENT_NODE:
                             param[child.nodeName] = getTextValue(child)
                     new_method.params.append(param)
-            
+
             if self.verbose:
                 print "Adding %s" % (new_method.name + new_method.argsstring)
-            
+
             if new_method.name == new_class.name:
                 new_class.constructors.append(new_method)
             elif new_method.name == "~" + new_class.name:
@@ -199,30 +199,30 @@ class DoxyMLParser:
                 new_class.methods.append(new_method)
 
 if __name__ == "__main__":
-    option_dict = { 
+    option_dict = {
                 "report"        : (False, "Print out the classes and methods found by this script."),
                 "verbose"       : (False, "Provide status updates and other information."),
               }
-        
+
     parser = optparse.OptionParser(usage="usage: %prog [options] <doxyml files to parse>\n" + __description__, version="%prog 1.0")
-    
+
     for opt in option_dict:
         default = option_dict[opt][0]
-        
+
         action = "store"
         if type(default) == types.BooleanType:
             action = "store_true"
         parser.add_option("--" + opt, default=default, action=action, dest=opt, help=option_dict[opt][1])
-    
+
     options, arguments = parser.parse_args()
 
     if len(arguments) < 1:
         parser.print_usage()
         sys.exit(1)
-    
+
     doxyparse = DoxyMLParser(verbose = options.verbose)
     for arg in arguments:
-        doxyparse.parse(arg)        
+        doxyparse.parse(arg)
 
     if options.report:
         for aclass in doxyparse.classes:

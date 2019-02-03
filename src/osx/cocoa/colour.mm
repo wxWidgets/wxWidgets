@@ -27,6 +27,8 @@ public:
     virtual CGFloat Blue() const wxOVERRIDE;
     virtual CGFloat Alpha() const wxOVERRIDE;
     
+    virtual bool IsSolid() const wxOVERRIDE;
+
     CGColorRef GetCGColor() const wxOVERRIDE;
     
     virtual wxColourRefData* Clone() const wxOVERRIDE { return new wxNSColorRefData(*this); }
@@ -92,6 +94,11 @@ CGFloat wxNSColorRefData::Alpha() const
         return [colRGBA alphaComponent];
     
     return 0.0;
+}
+
+bool wxNSColorRefData::IsSolid() const
+{
+    return [m_nsColour colorUsingColorSpaceName:NSCalibratedRGBColorSpace] != nil;
 }
 
 CGColorRef wxNSColorRefData::GetCGColor() const

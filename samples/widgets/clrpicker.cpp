@@ -218,7 +218,7 @@ void ColourPickerWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 void ColourPickerWidgetsPage::OnColourChange(wxColourPickerEvent& event)
 {
     wxLogMessage("The colour changed to '%s' !",
-                 event.GetColour().GetAsString(wxC2S_CSS_SYNTAX).c_str());
+                 event.GetColour().GetAsString(wxC2S_CSS_SYNTAX));
 }
 
 void ColourPickerWidgetsPage::OnCheckBox(wxCommandEvent &event)

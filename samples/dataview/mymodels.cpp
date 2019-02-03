@@ -312,6 +312,19 @@ unsigned int MyMusicTreeModel::GetChildren( const wxDataViewItem &parent,
 }
 
 
+// ----------------------------------------------------------------------------
+// MyLongMusicTreeModel
+// ----------------------------------------------------------------------------
+
+MyLongMusicTreeModel::MyLongMusicTreeModel() : MyMusicTreeModel()
+{
+    for (int i = 0; i < 50; i++)
+    {
+        AddToClassical("The Four Seasons", "Antonio Vivaldi", 1721);
+        AddToClassical("La costanza trionfante degl'amori e de gl'odii", "Antonio Vivaldi", 1716);
+    }
+}
+
 
 // ----------------------------------------------------------------------------
 // MyListModel
@@ -525,6 +538,7 @@ bool MyListModel::GetAttrByRow( unsigned int row, unsigned int col,
                     return true;
                 }
             }
+            wxFALLTHROUGH;
 
         case Col_Custom:
             // do what the labels defined in GetValueByRow() hint at

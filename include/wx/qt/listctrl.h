@@ -10,7 +10,7 @@
 
 #include "wx/textctrl.h"
 
-class QTreeWidget;
+class wxQtTreeWidget;
 class QTreeWidgetItem;
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
@@ -292,7 +292,7 @@ protected:
     void Init();
 
     // Implement base class pure virtual methods.
-    long DoInsertColumn(long col, const wxListItem& info);
+    virtual long DoInsertColumn(long col, const wxListItem& info) wxOVERRIDE;
 
     QTreeWidgetItem *QtGetItem(int id) const;
 
@@ -303,7 +303,7 @@ protected:
                       m_ownsImageListSmall,
                       m_ownsImageListState;
 private:
-    QTreeWidget *m_qtTreeWidget;
+    wxQtTreeWidget *m_qtTreeWidget;
 
     wxDECLARE_DYNAMIC_CLASS( wxListCtrl );
 };

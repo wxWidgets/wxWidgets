@@ -106,9 +106,8 @@ wxGCDC::wxGCDC(const wxEnhMetaFileDC& dc)
 #endif
 
 wxGCDC::wxGCDC(wxGraphicsContext* context) :
-    wxDC( new wxGCDCImpl( this ) )
+    wxDC(new wxGCDCImpl(this, context))
 {
-    SetGraphicsContext(context);
 }
 
 wxGCDC::wxGCDC() :
@@ -121,6 +120,12 @@ wxGCDC::~wxGCDC()
 }
 
 wxIMPLEMENT_ABSTRACT_CLASS(wxGCDCImpl, wxDCImpl);
+
+wxGCDCImpl::wxGCDCImpl(wxDC *owner, wxGraphicsContext* context) :
+    wxDCImpl(owner)
+{
+    Init(context);
+}
 
 wxGCDCImpl::wxGCDCImpl( wxDC *owner ) :
    wxDCImpl( owner )
@@ -390,9 +395,9 @@ void wxGCDCImpl::DoGetSizeMM( int* width, int* height ) const
 
     GetOwner()->GetSize( &w, &h );
     if (width)
-        *width = long( double(w) / (m_scaleX * m_mm_to_pix_x) );
+        *width = long( double(w) / (m_scaleX * GetMMToPXx()) );
     if (height)
-        *height = long( double(h) / (m_scaleY * m_mm_to_pix_y) );
+        *height = long( double(h) / (m_scaleY * GetMMToPXy()) );
 }
 
 void wxGCDCImpl::SetTextForeground( const wxColour &col )
@@ -418,6 +423,15 @@ void wxGCDCImpl::SetTextBackground( const wxColour &col )
 
 wxSize wxGCDCImpl::GetPPI() const
 {
+    if ( m_graphicContext )
+    {
+        wxDouble x, y;
+        m_graphicContext->GetDPI(&x, &y);
+        return wxSize(wxRound(x), wxRound(y));
+    }
+
+    // This is the same value that wxGraphicsContext::GetDPI() returns by
+    // default.
     return wxSize(72, 72);
 }
 
@@ -1098,40 +1112,40 @@ void wxGCDCImpl::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
     if ( (angle == 0.0) && m_font.IsOk() )
     {
         DoDrawText(text, x, y);
-        
+
         // Bounding box already updated by DoDrawText(), no need to do it again.
         return;
     }
-            
+
     // Get extent of whole text.
     wxCoord w, h, heightLine;
     GetOwner()->GetMultiLineTextExtent(text, &w, &h, &heightLine);
-    
+
     // Compute the shift for the origin of the next line.
     const double rad = wxDegToRad(angle);
     const double dx = heightLine * sin(rad);
     const double dy = heightLine * cos(rad);
-    
+
     // Draw all text line by line
     const wxArrayString lines = wxSplit(text, '\n', '\0');
     for ( size_t lineNum = 0; lineNum < lines.size(); lineNum++ )
     {
         // Calculate origin for each line to avoid accumulation of
         // rounding errors.
-        if ( m_backgroundMode == wxTRANSPARENT )
+        if ( m_backgroundMode == wxBRUSHSTYLE_TRANSPARENT )
             m_graphicContext->DrawText( lines[lineNum], x + wxRound(lineNum*dx), y + wxRound(lineNum*dy), wxDegToRad(angle ));
         else
             m_graphicContext->DrawText( lines[lineNum], x + wxRound(lineNum*dx), y + wxRound(lineNum*dy), wxDegToRad(angle ), m_graphicContext->CreateBrush(m_textBackgroundColour) );
    }
-            
+
     // call the bounding box by adding all four vertices of the rectangle
     // containing the text to it (simpler and probably not slower than
     // determining which of them is really topmost/leftmost/...)
-    
+
     // "upper left" and "upper right"
     CalcBoundingBox(x, y);
     CalcBoundingBox(x + wxCoord(w*cos(rad)), y - wxCoord(w*sin(rad)));
-    
+
     // "bottom left" and "bottom right"
     x += (wxCoord)(h*sin(rad));
     y += (wxCoord)(h*cos(rad));
@@ -1161,7 +1175,7 @@ void wxGCDCImpl::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
     if ( !m_logicalFunctionSupported )
         return;
 
-    if ( m_backgroundMode == wxTRANSPARENT )
+    if ( m_backgroundMode == wxBRUSHSTYLE_TRANSPARENT )
         m_graphicContext->DrawText( str, x ,y);
     else
         m_graphicContext->DrawText( str, x ,y , m_graphicContext->CreateBrush(m_textBackgroundColour) );
@@ -1245,7 +1259,7 @@ wxCoord wxGCDCImpl::GetCharHeight(void) const
 void wxGCDCImpl::Clear(void)
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::Clear - invalid DC") );
-    
+
     if ( m_backgroundBrush.IsOk() )
     {
         m_graphicContext->SetBrush( m_backgroundBrush );

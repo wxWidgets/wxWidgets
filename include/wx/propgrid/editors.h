@@ -458,7 +458,7 @@ public:
     wxPGMultiButton( wxPropertyGrid* pg, const wxSize& sz );
     virtual ~wxPGMultiButton() {}
 
-    wxWindow* GetButton( unsigned int i ) { return (wxWindow*) m_buttons[i]; }
+    wxWindow* GetButton( unsigned int i ) { return m_buttons[i]; }
     const wxWindow* GetButton( unsigned int i ) const
         { return (const wxWindow*) m_buttons[i]; }
 
@@ -486,7 +486,7 @@ protected:
 
     int GenId( int id ) const;
 
-    wxArrayPtrVoid  m_buttons;
+    wxVector<wxWindow*> m_buttons;
     wxSize          m_fullEditorSize;
     int             m_buttonsWidth;
 };

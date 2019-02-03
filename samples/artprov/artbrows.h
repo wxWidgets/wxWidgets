@@ -28,12 +28,17 @@ public:
 
 private:
     void OnSelectItem(wxListEvent &event);
+    void OnChangeSize(wxCommandEvent &event);
     void OnChooseClient(wxCommandEvent &event);
+
+    wxSize GetSelectedBitmapSize() const;
 
     wxListCtrl *m_list;
     wxStaticBitmap *m_canvas;
     wxStaticText *m_text;
     wxString m_client;
+    wxChoice *m_sizes;
+    wxString m_currentArtId;
 
     wxDECLARE_EVENT_TABLE();
 };

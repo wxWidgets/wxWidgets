@@ -853,7 +853,7 @@ void MyFrame::OnToolRightClick(wxCommandEvent& event)
 
 void MyFrame::OnCombo(wxCommandEvent& event)
 {
-    wxLogStatus("Combobox string '%s' selected", event.GetString().c_str());
+    wxLogStatus("Combobox string '%s' selected", event.GetString());
 }
 
 void MyFrame::DoEnablePrint()

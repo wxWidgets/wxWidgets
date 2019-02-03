@@ -347,7 +347,7 @@ void MyFrame::OnDrawCustomBg(wxCommandEvent& event)
 
 void MyFrame::OnHtmlLinkClicked(wxHtmlLinkEvent &event)
 {
-    wxLogMessage("The url '%s' has been clicked!", event.GetLinkInfo().GetHref().c_str());
+    wxLogMessage("The url '%s' has been clicked!", event.GetLinkInfo().GetHref());
 
     // skipping this event the default behaviour (load the clicked URL)
     // will happen...
@@ -398,7 +398,7 @@ void MyHtmlWindow::OnClipboardEvent(wxClipboardTextEvent& WXUNUSED(event))
             const size_t maxTextLength = 100;
 
             wxLogStatus(wxString::Format("Clipboard: '%s%s'",
-                        wxString(text, maxTextLength).c_str(),
+                        wxString(text, maxTextLength),
                         (text.length() > maxTextLength) ? "..."
                                                         : ""));
             wxTheClipboard->Close();

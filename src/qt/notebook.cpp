@@ -50,7 +50,8 @@ void wxQtTabWidget::currentChanged(int index)
 }
 
 
-wxNotebook::wxNotebook()
+wxNotebook::wxNotebook() :
+    m_qtTabWidget(NULL)
 {
 }
 
@@ -112,11 +113,9 @@ bool wxNotebook::SetPageImage(size_t n, int imageId)
     if (imageId >= 0)
     {
         wxCHECK_MSG(HasImageList(), false, "invalid notebook imagelist");
-        const wxBitmap* bitmap = GetImageList()->GetBitmapPtr(imageId);
-        if (bitmap == NULL)
-            return false;
+        const wxBitmap bitmap = GetImageList()->GetBitmap(imageId);
         // set the new image:
-        m_qtTabWidget->setTabIcon( n, QIcon( *bitmap->GetHandle() ));
+        m_qtTabWidget->setTabIcon( n, QIcon( *bitmap.GetHandle() ));
     }
     else
     {
@@ -137,8 +136,8 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
     {
         if (HasImageList())
         {
-            const wxBitmap* bitmap = GetImageList()->GetBitmapPtr(imageId);
-            m_qtTabWidget->insertTab( n, page->GetHandle(), QIcon( *bitmap->GetHandle() ), wxQtConvertString( text ));
+            const wxBitmap bitmap = GetImageList()->GetBitmap(imageId);
+            m_qtTabWidget->insertTab( n, page->GetHandle(), QIcon( *bitmap.GetHandle() ), wxQtConvertString( text ));
         }
         else
         {
@@ -156,10 +155,7 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
     // reenable firing qt signals as internal wx initialization was completed
     m_qtTabWidget->blockSignals(false);
 
-    if (bSelect && GetPageCount() > 1)
-    {
-        SetSelection( n );
-    }
+    DoSetSelectionAfterInsertion(n, bSelect);
 
     return true;
 }
@@ -169,27 +165,42 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
     return sizePage;
 }
 
-int wxNotebook::DoSetSelection(size_t page, int flags)
+bool wxNotebook::DeleteAllPages()
+{
+    if ( !wxNotebookBase::DeleteAllPages() )
+        return false;
+
+    m_qtTabWidget->blockSignals(true);
+    m_qtTabWidget->clear();
+    m_qtTabWidget->blockSignals(false);
+    return true;
+}
+
+int wxNotebook::SetSelection(size_t page)
 {
     wxCHECK_MSG(page < GetPageCount(), wxNOT_FOUND, "invalid notebook index");
 
     int selOld = GetSelection();
 
-    // do not fire signals for certain methods (i.e. ChangeSelection
-    if ( !(flags & SetSelection_SendEvent) )
-    {
-        m_qtTabWidget->blockSignals(true);
-    }
     // change the QTabWidget selected page:
     m_selection = page;
     m_qtTabWidget->setCurrentIndex( page );
-    if ( !(flags & SetSelection_SendEvent) )
-    {
-        m_qtTabWidget->blockSignals(false);
-    }
+
     return selOld;
 }
 
+int wxNotebook::ChangeSelection(size_t nPage)
+{
+    // ChangeSelection() is not supposed to generate events, unlike
+    // SetSelection().
+    m_qtTabWidget->blockSignals(true);
+
+    const int selOld = SetSelection(nPage);
+
+    m_qtTabWidget->blockSignals(false);
+
+    return selOld;
+}
 
 wxWindow *wxNotebook::DoRemovePage(size_t page)
 {

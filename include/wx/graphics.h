@@ -35,7 +35,7 @@ enum wxInterpolationQuality
     // default interpolation
     wxINTERPOLATION_DEFAULT,
     // no interpolation
-    wxINTERPOLATION_NONE, 
+    wxINTERPOLATION_NONE,
     // fast interpolation, suited for interactivity
     wxINTERPOLATION_FAST,
     // better quality
@@ -206,7 +206,7 @@ public:
 #if wxUSE_IMAGE
     wxImage ConvertToImage() const;
 #endif // wxUSE_IMAGE
-    
+
     void* GetNativeBitmap() const;
 
     const wxGraphicsBitmapData* GetBitmapData() const
@@ -452,7 +452,7 @@ private:
 class WXDLLIMPEXP_CORE wxGraphicsContext : public wxGraphicsObject
 {
 public:
-    wxGraphicsContext(wxGraphicsRenderer* renderer);
+    wxGraphicsContext(wxGraphicsRenderer* renderer, wxWindow* window = NULL);
 
     virtual ~wxGraphicsContext();
 
@@ -489,6 +489,9 @@ public:
 
     // create a context that can be used for measuring texts only, no drawing allowed
     static wxGraphicsContext * Create();
+
+    // Return the window this context is associated with, if any.
+    wxWindow* GetWindow() const { return m_window; }
 
     // begin a new document (relevant only for printing / pdf etc) if there is a progress dialog, message will be shown
     virtual bool StartDoc( const wxString& message );
@@ -598,10 +601,10 @@ public:
 
     // returns the current interpolation quality
     virtual wxInterpolationQuality GetInterpolationQuality() const { return m_interpolation; }
-    
+
     // sets the interpolation quality, returns true if it supported
     virtual bool SetInterpolationQuality(wxInterpolationQuality interpolation) = 0;
-    
+
     // returns the current compositing operator
     virtual wxCompositionMode GetCompositionMode() const { return m_composition; }
 
@@ -751,14 +754,14 @@ public:
 
     // helper to determine if a 0.5 offset should be applied for the drawing operation
     virtual bool ShouldOffset() const { return false; }
-    
-    // indicates whether the context should try to offset for pixel boundaries, this only makes sense on 
+
+    // indicates whether the context should try to offset for pixel boundaries, this only makes sense on
     // bitmap devices like screen, by default this is turned off
     virtual void EnableOffset(bool enable = true);
-    
+
     void DisableOffset() { EnableOffset(false); }
     bool OffsetEnabled() { return m_enableOffset; }
-    
+
 protected:
     // These fields must be initialized in the derived class ctors.
     wxDouble m_width,
@@ -787,6 +790,12 @@ protected:
                                          wxDouble x, wxDouble y,
                                          wxDouble angle,
                                          const wxGraphicsBrush& backgroundBrush);
+
+private:
+    // The associated window, if any, i.e. if one was passed directly to
+    // Create() or the associated window of the wxDC this context was created
+    // from.
+    wxWindow* const m_window;
 
     wxDECLARE_NO_COPY_CLASS(wxGraphicsContext);
     wxDECLARE_ABSTRACT_CLASS(wxGraphicsContext);

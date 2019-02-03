@@ -36,7 +36,7 @@ public:
 
     QStatusBar *GetQStatusBar() const { return m_qtStatusBar; }
     QWidget *GetHandle() const;
-    
+
 protected:
     virtual void DoUpdateStatusText(int number);
 

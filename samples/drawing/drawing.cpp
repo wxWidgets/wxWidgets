@@ -461,6 +461,10 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+#if wxUSE_LIBPNG
+      wxImage::AddHandler( new wxPNGHandler );
+#endif
+
     // Create the main application window
     MyFrame *frame = new MyFrame("Drawing sample",
                                  wxDefaultPosition, wxSize(550, 840));
@@ -477,9 +481,6 @@ bool MyApp::OnInit()
         // still continue, the sample can be used without images too if they're
         // missing for whatever reason
     }
-#if wxUSE_LIBPNG
-      wxImage::AddHandler( new wxPNGHandler );
-#endif
 
     return true;
 }
@@ -895,7 +896,7 @@ void MyCanvas::DrawText(wxDC& dc)
     dc.SetFont( *wxSWISS_FONT );
 
     wxString text;
-    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     for ( int n = -180; n < 180; n += 30 )
     {
@@ -2018,7 +2019,7 @@ void MyCanvas::UseGraphicRenderer(wxGraphicsRenderer* renderer)
         int major, minor, micro;
         renderer->GetVersion(&major, &minor, &micro);
         wxString str = wxString::Format("Graphics renderer: %s %i.%i.%i",
-                         renderer->GetName().c_str(), major, minor, micro);
+                         renderer->GetName(), major, minor, micro);
         m_owner->SetStatusText(str, 1);
     }
     else
@@ -2196,7 +2197,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_yLogicalOrigin = 0;
     m_xAxisReversed =
     m_yAxisReversed = false;
-    m_backgroundMode = wxSOLID;
+    m_backgroundMode = wxBRUSHSTYLE_SOLID;
     m_colourForeground = *wxBLACK;
     m_colourBackground = *wxLIGHT_GREY;
     m_textureBackground = false;
@@ -2462,8 +2463,9 @@ void MyFrame::OnOption(wxCommandEvent& event)
 #endif // wxUSE_COLOURDLG
 
         case Colour_BackgroundMode:
-            m_backgroundMode = m_backgroundMode == wxSOLID ? wxTRANSPARENT
-                                                           : wxSOLID;
+            m_backgroundMode = m_backgroundMode == wxBRUSHSTYLE_SOLID
+                                                 ? wxBRUSHSTYLE_TRANSPARENT
+                                                 : wxBRUSHSTYLE_SOLID;
             break;
 
         case Colour_TextureBackgound:

@@ -22,7 +22,8 @@ public:
 };
 
 
-wxStaticText::wxStaticText()
+wxStaticText::wxStaticText() :
+    m_qtLabel(NULL)
 {
 }
 
@@ -60,6 +61,11 @@ bool wxStaticText::Create(wxWindow *parent,
 void wxStaticText::SetLabel(const wxString& label)
 {
     m_qtLabel->setText( wxQtConvertString( label ) );
+}
+
+wxString wxStaticText::GetLabel() const
+{
+    return wxQtConvertString( m_qtLabel->text() );
 }
 
 QWidget *wxStaticText::GetHandle() const

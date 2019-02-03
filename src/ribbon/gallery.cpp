@@ -135,7 +135,7 @@ void wxRibbonGallery::CommonInit(long WXUNUSED(style))
     m_extension_button_state = wxRIBBON_GALLERY_BUTTON_NORMAL;
     m_hovered = false;
 
-    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 }
 
 void wxRibbonGallery::OnMouseEnter(wxMouseEvent& evt)

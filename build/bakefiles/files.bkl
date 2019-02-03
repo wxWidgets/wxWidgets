@@ -252,6 +252,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/ole/safearray.cpp
     src/msw/sound.cpp
     src/msw/ole/automtn.cpp
+    src/qt/graphics.cpp
 </set>
 
 <set var="QT_WIN32_HDR" hints="files">
@@ -1005,6 +1006,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/editlbox.cpp
     src/generic/laywin.cpp
     src/generic/calctrlg.cpp
+    src/generic/rowheightcache.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
     wx/affinematrix2dbase.h
@@ -2073,8 +2075,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/sound.cpp
     src/msw/ole/automtn.cpp
     src/msw/rt/notifmsgrt.cpp
-    src/generic/activityindicator.cpp
     src/msw/ole/uuid.cpp
+    src/msw/evtloop.cpp
 </set>
 <set var="MSW_LOWLEVEL_HDR" hints="files">
     wx/msw/nonownedwnd.h
@@ -2082,12 +2084,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/popupwin.h
     wx/msw/uxtheme.h
     wx/msw/htmlhelp.h
-    wx/generic/activityindicator.h
     wx/msw/helpwin.h
     wx/msw/taskbar.h
     wx/msw/helpchm.h
     wx/msw/sound.h
     wx/msw/joystick.h
+    wx/msw/evtloop.h
 </set>
 
 <set var="MSW_SRC" hints="files">
@@ -2112,7 +2114,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/dialog.cpp
     src/msw/dirdlg.cpp
     src/msw/dragimag.cpp
-    src/msw/evtloop.cpp
     src/msw/filedlg.cpp
     src/msw/frame.cpp
     src/msw/gauge.cpp
@@ -2160,6 +2161,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/datetimectrl.cpp
     src/msw/timectrl.cpp
     src/msw/datecontrols.cpp
+    src/generic/activityindicator.cpp
 </set>
 <set var="MSW_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -2196,7 +2198,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/dirdlg.h
     wx/msw/dragimag.h
     wx/msw/enhmeta.h
-    wx/msw/evtloop.h
     wx/msw/filedlg.h
     wx/msw/font.h
     wx/msw/frame.h
@@ -2267,6 +2268,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/timectrl.h
     wx/msw/datectrl.h
     wx/msw/calctrl.h
+    wx/generic/activityindicator.h
 </set>
 <set var="MSW_RSC" hints="files">
     <!-- Resources must be installed together with headers: -->
@@ -2395,7 +2397,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/brush.cpp
     src/osx/dialog_osx.cpp
     src/osx/fontutil.cpp
-    src/osx/imaglist.cpp
     src/osx/minifram.cpp
     src/osx/nonownedwnd_osx.cpp
     src/osx/palette.cpp
@@ -2495,6 +2496,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/textmeasure.cpp
     src/generic/icon.cpp
     src/osx/statbmp_osx.cpp
+    src/generic/imaglist.cpp
 </if>
 </set>
 
@@ -2538,7 +2540,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/fontdlg.h
     wx/osx/frame.h
     wx/osx/gauge.h
-    wx/osx/imaglist.h
     wx/osx/listbox.h
     wx/osx/listctrl.h
     wx/osx/mdi.h
@@ -2593,6 +2594,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/statusbr.h
     wx/osx/appprogress.h
     wx/generic/icon.h
+    wx/generic/imaglist.h
 </set>
 
 <!-- ====================================================================== -->
@@ -2730,9 +2732,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="UNIV_PLATFORM_SRC" hints="files">
-    <if cond="TOOLKIT=='MSW'">
-        src/msw/evtloop.cpp
-    </if>
 <!--
     Including src/generic/animateg.cpp hre unconditionally results in bakefile
     errors when not fixing the value of TOOLKIT to MSW in msvc format, see #15327.
@@ -2748,9 +2747,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </if>
 </set>
 <set var="UNIV_PLATFORM_HDR" hints="files">
-    <if cond="TOOLKIT=='MSW'">
-        wx/msw/evtloop.h
-    </if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
         wx/generic/animate.h
     </if>
@@ -3293,7 +3289,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                             Misc plugin sources:                       -->
 <!-- ====================================================================== -->
 
-<set var="UNIX_SOUND_SRC_SDL" hints="files">
+<set var="UNIX_SOUND_SDL_SRC" hints="files">
     src/unix/sound_sdl.cpp
 </set>
 
@@ -3714,7 +3710,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- wxAdv sources -->
     <set var="PLUGIN_SRC">
         <if cond="FORMAT=='autoconf' and PLATFORM_UNIX=='1' and USE_PLUGINS=='0'">
-            $(UNIX_SOUND_SRC_SDL)
+            $(UNIX_SOUND_SDL_SRC)
         </if>
     </set>
 

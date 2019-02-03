@@ -557,7 +557,7 @@ public:
      */
     void SetBottomLeft(const wxPoint &p);
 
-    
+
     //@{
     /**
         Modifies the rectangle to contain the bounding box of this rectangle
@@ -902,7 +902,7 @@ wxColourDatabase* wxTheColourDatabase;
     @class wxSize
 
     A wxSize is a useful data structure for graphics operations.
-    It simply contains integer @e width and @e height members.
+    It simply contains integer @e x and @e y members.
 
     Note that the width and height stored inside a wxSize object may be negative
     and that wxSize functions do not perform any check against negative values
@@ -1220,7 +1220,7 @@ void wxSetCursor(const wxCursor& cursor);
 /**
     Returns the dimensions of the work area on the display.
 
-    This is the same as wxGetClientDisplayRect() but allows to retrieve the
+    This is the same as wxGetClientDisplayRect() but allows retrieving the
     individual components instead of the entire rectangle.
 
     Any of the output pointers can be @NULL if the corresponding value is not

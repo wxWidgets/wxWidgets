@@ -31,6 +31,8 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/display.h"
+
 #ifdef __WXMSW__
     #include "wx/msw/enhmeta.h"
 #endif
@@ -565,12 +567,14 @@ void * wxGraphicsBitmap::GetNativeBitmap() const
 wxIMPLEMENT_ABSTRACT_CLASS(wxGraphicsContext, wxObject);
 
 
-wxGraphicsContext::wxGraphicsContext(wxGraphicsRenderer* renderer) :
-    wxGraphicsObject(renderer),
+wxGraphicsContext::wxGraphicsContext(wxGraphicsRenderer* renderer,
+                                     wxWindow* window)
+    : wxGraphicsObject(renderer),
       m_antialias(wxANTIALIAS_DEFAULT),
       m_composition(wxCOMPOSITION_OVER),
       m_interpolation(wxINTERPOLATION_DEFAULT),
-      m_enableOffset(false)
+      m_enableOffset(false),
+      m_window(window)
 {
 }
 
@@ -600,9 +604,9 @@ void wxGraphicsContext::Flush()
 {
 }
 
-void wxGraphicsContext::EnableOffset(bool enable) 
-{ 
-    m_enableOffset = enable; 
+void wxGraphicsContext::EnableOffset(bool enable)
+{
+    m_enableOffset = enable;
 }
 
 #if 0
@@ -618,8 +622,19 @@ wxDouble wxGraphicsContext::GetAlpha() const
 
 void wxGraphicsContext::GetDPI( wxDouble* dpiX, wxDouble* dpiY)
 {
-    *dpiX = 72.0;
-    *dpiY = 72.0;
+    if ( m_window )
+    {
+        const wxSize ppi = wxDisplay(m_window).GetPPI();
+        *dpiX = ppi.x;
+        *dpiY = ppi.y;
+    }
+    else
+    {
+        // Use some standard DPI value, it doesn't make much sense for the
+        // contexts not using any pixels anyhow.
+        *dpiX = 72.0;
+        *dpiY = 72.0;
+    }
 }
 
 // sets the pen
@@ -764,7 +779,7 @@ void wxGraphicsContext::DrawRectangle( wxDouble x, wxDouble y, wxDouble w, wxDou
 
 void wxGraphicsContext::ClearRectangle( wxDouble WXUNUSED(x), wxDouble WXUNUSED(y), wxDouble WXUNUSED(w), wxDouble WXUNUSED(h))
 {
-    
+
 }
 
 void wxGraphicsContext::DrawEllipse( wxDouble x, wxDouble y, wxDouble w, wxDouble h)

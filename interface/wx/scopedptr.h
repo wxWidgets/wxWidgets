@@ -238,8 +238,8 @@ public:
     T& operator*() const;
 
     /**
-        Smart pointer member access. Returns pointer to object. 
-        
+        Smart pointer member access. Returns pointer to object.
+
         If the internal pointer is @NULL this method will cause an assert in debug mode.
     */
     T* operator->() const;

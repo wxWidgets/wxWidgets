@@ -110,7 +110,7 @@ void wxStatusBarMac::InitColours()
             wxColour bg = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
             m_textActive = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT);
             m_textInactive = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
-            
+
             if ( bg.Red() < 128 )
             {
                 // dark mode appearance
@@ -222,7 +222,7 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     if ( GetFont().IsOk() )
         dc.SetFont(GetFont());
-    dc.SetBackgroundMode(wxTRANSPARENT);
+    dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
     // compute char height only once for all panes:
     int textHeight = dc.GetCharHeight();

@@ -125,7 +125,7 @@ public:
     }
 
     void* GetHandle() const wxOVERRIDE { return (void*)GetHDC(); }
-    
+
     const wxBitmap& GetSelectedBitmap() const wxOVERRIDE { return m_selectedBitmap; }
     wxBitmap& GetSelectedBitmap() wxOVERRIDE { return m_selectedBitmap; }
 
@@ -293,9 +293,6 @@ protected:
 
     // MSW-specific member variables
     // -----------------------------
-
-    // the window associated with this DC (may be NULL)
-    wxWindow         *m_canvas;
 
     wxBitmap          m_selectedBitmap;
 

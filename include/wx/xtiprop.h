@@ -159,47 +159,47 @@ public:                                                                     \
 class WXDLLIMPEXP_BASE wxPropertyAccessor
 {
 public:
-    wxPropertyAccessor( wxPropertySetter *setter, wxPropertyGetter *getter, 
+    wxPropertyAccessor( wxPropertySetter *setter, wxPropertyGetter *getter,
                         wxPropertyCollectionAdder *adder, wxPropertyCollectionGetter *collectionGetter )
-    { m_setter = setter; m_getter = getter; m_adder = adder; 
+    { m_setter = setter; m_getter = getter; m_adder = adder;
       m_collectionGetter = collectionGetter; }
 
     virtual ~wxPropertyAccessor() {}
 
     // Setting a simple property (non-collection)
     virtual void SetProperty(wxObject *object, const wxAny &value) const
-    { 
-        if ( m_setter ) 
-            m_setter->Set( object, value ); 
-        else 
-            wxLogError( wxGetTranslation("SetProperty called w/o valid setter") ); 
+    {
+        if ( m_setter )
+            m_setter->Set( object, value );
+        else
+            wxLogError( wxGetTranslation("SetProperty called w/o valid setter") );
     }
 
     // Getting a simple property (non-collection)
     virtual void GetProperty(const wxObject *object, wxAny &result) const
-    { 
-        if ( m_getter ) 
-            m_getter->Get( object, result ); 
-        else 
-            wxLogError( wxGetTranslation("GetProperty called w/o valid getter") ); 
+    {
+        if ( m_getter )
+            m_getter->Get( object, result );
+        else
+            wxLogError( wxGetTranslation("GetProperty called w/o valid getter") );
     }
 
     // Adding an element to a collection property
     virtual void AddToPropertyCollection(wxObject *object, const wxAny &value) const
-    { 
-        if ( m_adder ) 
-            m_adder->Add( object, value ); 
-        else 
-            wxLogError( wxGetTranslation("AddToPropertyCollection called w/o valid adder") ); 
+    {
+        if ( m_adder )
+            m_adder->Add( object, value );
+        else
+            wxLogError( wxGetTranslation("AddToPropertyCollection called w/o valid adder") );
     }
 
     // Getting a collection property
     virtual void GetPropertyCollection( const wxObject *obj, wxAnyList &result) const
-    { 
-        if ( m_collectionGetter ) 
-            m_collectionGetter->Get( obj, result); 
-        else 
-            wxLogError( wxGetTranslation("GetPropertyCollection called w/o valid collection getter") ); 
+    {
+        if ( m_collectionGetter )
+            m_collectionGetter->Get( obj, result);
+        else
+            wxLogError( wxGetTranslation("GetPropertyCollection called w/o valid collection getter") );
     }
 
     virtual bool HasSetter() const { return m_setter != NULL; }
@@ -249,17 +249,17 @@ public:
     virtual void GetProperty(const wxObject *object, wxAny &value) const;
 
     // Adding an element to a collection property
-    virtual void AddToPropertyCollection(wxObject *WXUNUSED(object), 
+    virtual void AddToPropertyCollection(wxObject *WXUNUSED(object),
                                          const wxAny &WXUNUSED(value)) const
-    { 
-        wxLogError( wxGetTranslation("AddToPropertyCollection called on a generic accessor") ); 
+    {
+        wxLogError( wxGetTranslation("AddToPropertyCollection called on a generic accessor") );
     }
 
     // Getting a collection property
-    virtual void GetPropertyCollection( const wxObject *WXUNUSED(obj), 
+    virtual void GetPropertyCollection( const wxObject *WXUNUSED(obj),
                                         wxAnyList &WXUNUSED(result)) const
-    { 
-        wxLogError ( wxGetTranslation("GetPropertyCollection called on a generic accessor") ); 
+    {
+        wxLogError ( wxGetTranslation("GetPropertyCollection called on a generic accessor") );
     }
 
 private:
@@ -271,7 +271,7 @@ private:
 };
 
 typedef long wxPropertyInfoFlags;
-enum 
+enum
 {
     // will be removed in future releases
     wxPROP_DEPRECATED       = 0x00000001,
@@ -279,11 +279,11 @@ enum
     // object graph property, will be streamed with priority (after constructor properties)
     wxPROP_OBJECT_GRAPH     = 0x00000002,
 
-    // this will only be streamed out and in as enum/set, the internal representation 
+    // this will only be streamed out and in as enum/set, the internal representation
     // is still a long
     wxPROP_ENUM_STORE_LONG  = 0x00000004,
 
-    // don't stream out this property, needed eg to avoid streaming out children 
+    // don't stream out this property, needed eg to avoid streaming out children
     // that are always created by their parents
     wxPROP_DONT_STREAM      = 0x00000008
 };
@@ -442,7 +442,7 @@ private:
 
 // stl is giving problems when forwarding declarations, therefore we define it as a subclass
 
-WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo*, wxPropertyInfoMapBase, 
+WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo*, wxPropertyInfoMapBase,
                                       class WXDLLIMPEXP_BASE );
 
 class WXDLLIMPEXP_BASE wxPropertyInfoMap : public wxPropertyInfoMapBase {

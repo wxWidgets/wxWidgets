@@ -516,7 +516,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     Note that when displaying the value, sign is omitted if the resulting
     textual representation is effectively zero (for example, -0.0001 with
-    precision of 3 will become 0.0 instead of -0.0). This behaviour is unlike 
+    precision of 3 will become 0.0 instead of -0.0). This behaviour is unlike
     what C standard library does, but should result in better end-user
     experience in almost all cases.
 
@@ -1147,16 +1147,17 @@ public:
 
         NOTE: Following applies when OnMeasureImage() returns a "flexible" height (
         using wxPG_FLEXIBLE_SIZE(W,H) macro), which implies variable height items:
-        If rect.x is < 0, then this is a measure item call, which means that
-        dc is invalid and only thing that should be done is to set paintdata.m_drawnHeight
-        to the height of the image of item at index paintdata.m_choiceItem. This call
-        may be done even as often as once every drop-down popup show.
+        If (rect.x+rect.width) is < 0, then this is a measure item call, which
+        means that dc is invalid and only thing that should be done is to set
+        paintdata.m_drawnHeight to the height of the image of item at index
+        paintdata.m_choiceItem. This call may be done even as often as once every
+        drop-down popup show.
 
         @param dc
         wxDC to paint on.
         @param rect
         Box reserved for custom graphics. Includes surrounding rectangle, if any.
-        If x is < 0, then this is a measure item call (see above).
+        If x+width is < 0, then this is a measure item call (see above).
         @param paintdata
         wxPGPaintData structure with much useful data about painted item.
         @code

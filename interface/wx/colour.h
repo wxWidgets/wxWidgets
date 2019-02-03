@@ -86,7 +86,7 @@ public:
             A packed RGB value.
     */
     wxColour(unsigned long colRGB);
-    
+
     /**
         Copy constructor.
     */
@@ -182,6 +182,11 @@ public:
     */
     virtual unsigned char Red() const;
 
+    /**
+        Returns @true if the color can be described using RGB values, ie is solid,
+        @false if it is a pattern (currently only possible on macOS)
+    */
+    virtual bool IsSolid() const;
     //@{
     /**
         Sets the RGB intensity values using the given values (first overload),
@@ -189,8 +194,8 @@ public:
         string (third overload).
 
         When using third form, Set() accepts: colour names (those listed in
-        wxColourDatabase), the CSS-like @c "rgb(r,g,b)" or @c "rgba(r,g,b,a)" syntax 
-        (case insensitive) and the HTML-like syntax: @c "#" followed by 6 hexadecimal 
+        wxColourDatabase), the CSS-like @c "rgb(r,g,b)" or @c "rgba(r,g,b,a)" syntax
+        (case insensitive) and the HTML-like syntax: @c "#" followed by 6 hexadecimal
         digits for red, green, blue components.
 
         Returns @true if the conversion was successful, @false otherwise.
@@ -228,7 +233,7 @@ public:
         @since 2.9.0
     */
     static void MakeMono(unsigned char* r, unsigned char* g, unsigned char* b, bool on);
-    
+
     /**
         Create a disabled (dimmed) colour from (in/out) rgb parameters.
         @since 2.9.0
@@ -249,7 +254,7 @@ public:
         @since 2.9.0
     */
     static void MakeGrey(unsigned char* r, unsigned char* g, unsigned char* b);
-    
+
     /**
         Create a grey colour from (in/out) rgb parameters using floating point arithmetic.
         Defaults to using the standard ITU-T BT.601 when converting to YUV, where every pixel equals
@@ -264,7 +269,7 @@ public:
         @since 2.9.0
     */
     static unsigned char AlphaBlend(unsigned char fg, unsigned char bg, double alpha);
-    
+
     /**
         ChangeLightness() is a utility function that simply darkens
         or lightens a color, based on the specified percentage

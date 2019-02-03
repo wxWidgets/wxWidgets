@@ -51,29 +51,38 @@ static wxMenuItem *GetMenuItemAt( const wxMenu *menu, size_t position )
         return NULL;
 }
 
+static void AddItemActionToGroup( const wxMenuItem *groupItem, QAction *itemAction )
+{
+    QAction *groupItemAction = groupItem->GetHandle();
+    QActionGroup *itemActionGroup = groupItemAction->actionGroup();
+    wxASSERT_MSG( itemActionGroup != NULL, "An action group should have been setup" );
+    itemActionGroup->addAction( itemAction );
+}
 
 static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previousItem,
-    const wxMenuItem *item, const wxMenuItem *successiveItem )
+    wxMenuItem *item, const wxMenuItem *successiveItem )
 {
     QMenu *qtMenu = menu->GetHandle();
     QAction *itemAction = item->GetHandle();
     switch ( item->GetKind() )
     {
         case wxITEM_RADIO:
-            // If the previous menu item is a radio item then add this item to the
+            // If a neighbouring menu item is a radio item then add this item to the
             // same action group, otherwise start a new group:
 
             if ( previousItem != NULL && previousItem->GetKind() == wxITEM_RADIO )
             {
-                QAction *previousItemAction = previousItem->GetHandle();
-                QActionGroup *previousItemActionGroup = previousItemAction->actionGroup();
-                wxASSERT_MSG( previousItemActionGroup != NULL, "An action group should have been setup" );
-                previousItemActionGroup->addAction( itemAction );
+                AddItemActionToGroup( previousItem, itemAction );
+            }
+            else if ( successiveItem != NULL && successiveItem->GetKind() == wxITEM_RADIO )
+            {
+                AddItemActionToGroup( successiveItem, itemAction );
             }
             else
             {
                 QActionGroup *actionGroup = new QActionGroup( qtMenu );
                 actionGroup->addAction( itemAction );
+                item->Check();
                 wxASSERT_MSG( itemAction->actionGroup() == actionGroup, "Must be the same action group" );
             }
             break;
@@ -184,6 +193,8 @@ wxMenuBar::wxMenuBar(size_t count, wxMenu *menus[], const wxString titles[], lon
 
 static QMenu *SetTitle( wxMenu *menu, const wxString &title )
 {
+    menu->SetTitle(title);
+
     QMenu *qtMenu = menu->GetHandle();
     qtMenu->setTitle( wxQtConvertString( title ));
 
@@ -200,7 +211,7 @@ bool wxMenuBar::Append( wxMenu *menu, const wxString& title )
 
     QMenu *qtMenu = SetTitle( menu, title );
     m_qtMenuBar->addMenu( qtMenu );
-    
+
     return true;
 }
 
@@ -241,6 +252,12 @@ void wxMenuBar::EnableTop(size_t pos, bool enable)
 {
     QAction *qtAction = GetActionAt( m_qtMenuBar, pos );
     qtAction->setEnabled( enable );
+}
+
+bool wxMenuBar::IsEnabledTop(size_t pos) const
+{
+    QAction *qtAction = GetActionAt( m_qtMenuBar, pos );
+    return qtAction->isEnabled();
 }
 
 

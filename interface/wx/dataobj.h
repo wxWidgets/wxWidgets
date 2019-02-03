@@ -791,7 +791,7 @@ public:
     @class wxHTMLDataObject
 
     wxHTMLDataObject is used for working with HTML-formatted text.
-    
+
     @library{wxcore}
     @category{dnd}
 
@@ -809,7 +809,7 @@ public:
         Returns the HTML string.
     */
     virtual wxString GetHTML() const;
-    
+
     /**
         Sets the HTML string.
     */

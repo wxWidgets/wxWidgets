@@ -46,11 +46,8 @@ private:
     wxDECLARE_NO_COPY_CLASS(RearrangeListTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( RearrangeListTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( RearrangeListTestCase, "RearrangeListTestCase" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(RearrangeListTestCase,
+                               "[RearrangeListTestCase][item-container]");
 
 void RearrangeListTestCase::setUp()
 {

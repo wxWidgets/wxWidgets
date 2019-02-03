@@ -625,7 +625,7 @@ void MyFrame::OnCalRClick(wxMouseEvent& event)
     {
         default:
             wxFAIL_MSG( "unexpected" );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxCAL_HITTEST_NOWHERE:
             msg += "nowhere";
@@ -735,7 +735,7 @@ MyPanel::MyPanel(wxWindow *parent)
 
     wxString date;
     date.Printf("Selected date: %s",
-                wxDateTime::Today().FormatISODate().c_str());
+                wxDateTime::Today().FormatISODate());
     m_date = new wxStaticText(this, wxID_ANY, date);
     m_calendar = DoCreateCalendar(wxDefaultDateTime,
                                   wxCAL_SHOW_HOLIDAYS);
@@ -761,13 +761,13 @@ void MyPanel::OnCalendar(wxCalendarEvent& event)
 
     m_calendar->Mark(event.GetDate().GetDay(), mark);
     wxLogMessage("Selected (and %smarked) %s from calendar.",
-                 mark ? "" : "un", s_dateLast.FormatISODate().c_str());
+                 mark ? "" : "un", s_dateLast.FormatISODate());
 }
 
 void MyPanel::OnCalendarChange(wxCalendarEvent& event)
 {
     wxString s;
-    s.Printf("Selected date: %s", event.GetDate().FormatISODate().c_str());
+    s.Printf("Selected date: %s", event.GetDate().FormatISODate());
 
     m_date->SetLabel(s);
     wxLogStatus(s);
@@ -783,7 +783,7 @@ void MyPanel::OnCalMonthChange(wxCalendarEvent& event)
 void MyPanel::OnCalendarWeekDayClick(wxCalendarEvent& event)
 {
     wxLogMessage("Clicked on %s",
-                 wxDateTime::GetWeekDayName(event.GetWeekDay()).c_str());
+                 wxDateTime::GetWeekDayName(event.GetWeekDay()));
 }
 
 void MyPanel::OnCalendarWeekClick(wxCalendarEvent& event)

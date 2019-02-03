@@ -45,17 +45,25 @@ void TextEntryTestCase::TextChangeEvents()
     wxTextEntry * const entry = GetTestEntry();
 
     // notice that SetValue() generates an event even if the text didn't change
+#ifndef __WXQT__
     entry->SetValue("");
     CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
     updated.Clear();
+#else
+    WARN("Events are only sent when text changes in WxQt");
+#endif
 
     entry->SetValue("foo");
     CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
     updated.Clear();
 
+#ifndef __WXQT__
     entry->SetValue("foo");
     CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
     updated.Clear();
+#else
+    WARN("Events are only sent when text changes in WxQt");
+#endif
 
     entry->SetValue("");
     CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
@@ -82,6 +90,18 @@ void TextEntryTestCase::TextChangeEvents()
 
     entry->Clear();
     CPPUNIT_ASSERT_EQUAL( 1, updated.GetCount() );
+    updated.Clear();
+
+    entry->ChangeValue("");
+    CPPUNIT_ASSERT_EQUAL( 0, updated.GetCount() );
+    updated.Clear();
+
+    entry->ChangeValue("non-empty");
+    CPPUNIT_ASSERT_EQUAL( 0, updated.GetCount() );
+    updated.Clear();
+
+    entry->ChangeValue("");
+    CPPUNIT_ASSERT_EQUAL( 0, updated.GetCount() );
     updated.Clear();
 }
 
@@ -179,6 +199,28 @@ void TextEntryTestCase::Replace()
     entry->Replace(0, 6, "Un");
     CPPUNIT_ASSERT_EQUAL("Unchanged", entry->GetValue());
     CPPUNIT_ASSERT_EQUAL(2, entry->GetInsertionPoint());
+}
+
+void TextEntryTestCase::WriteText()
+{
+    wxTextEntry * const entry = GetTestEntry();
+
+    entry->SetValue("foo");
+    entry->SetInsertionPoint(3);
+    entry->WriteText("bar");
+    CPPUNIT_ASSERT_EQUAL( "foobar", entry->GetValue() );
+
+    entry->SetValue("foo");
+    entry->SetInsertionPoint(0);
+    entry->WriteText("bar");
+    CPPUNIT_ASSERT_EQUAL( "barfoo", entry->GetValue() );
+
+    entry->SetValue("abxxxhi");
+    entry->SetSelection(2, 5);
+    entry->WriteText("cdefg");
+    CPPUNIT_ASSERT_EQUAL( "abcdefghi", entry->GetValue() );
+    CPPUNIT_ASSERT_EQUAL( 7, entry->GetInsertionPoint() );
+    CPPUNIT_ASSERT_EQUAL( false, entry->HasSelection() );
 }
 
 #if wxUSE_UIACTIONSIMULATOR

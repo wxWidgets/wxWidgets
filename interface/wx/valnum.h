@@ -364,7 +364,7 @@ public:
 /**
     Creates a wxFloatingPointValidator object with automatic type deduction.
 
-    Similarly to wxMakeIntegerValidator(), this function allows to avoid
+    Similarly to wxMakeIntegerValidator(), this function allows avoiding
     explicitly specifying the validator type.
 
     @since 2.9.2

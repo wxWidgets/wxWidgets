@@ -180,16 +180,23 @@ image_draw(GtkWidget* widget, cairo_t* cr, wxToolBarTool* tool)
 image_expose_event(GtkWidget* widget, GdkEventExpose*, wxToolBarTool* tool)
 #endif
 {
+#ifdef __WXGTK3__
+    const wxBitmap& bitmap = tool->GetBitmap();
+    if (!bitmap.IsOk() || (tool->IsEnabled() && bitmap.GetScaleFactor() <= 1))
+        return false;
+#else
     const wxBitmap& bitmap = tool->GetDisabledBitmap();
     if (tool->IsEnabled() || !bitmap.IsOk())
         return false;
+#endif
 
-    // draw disabled bitmap ourselves, GtkImage has no way to specify it
     GtkAllocation alloc;
     gtk_widget_get_allocation(widget, &alloc);
-    int x = (alloc.width - bitmap.GetWidth()) / 2;
-    int y = (alloc.height - bitmap.GetHeight()) / 2;
+    int x = (alloc.width - bitmap.GetScaledWidth()) / 2;
+    int y = (alloc.height - bitmap.GetScaledHeight()) / 2;
 #ifdef __WXGTK3__
+    gtk_render_background(gtk_widget_get_style_context(widget),
+        cr, 0, 0, alloc.width, alloc.height);
     bitmap.Draw(cr, x, y);
 #else
     x += alloc.x;
@@ -266,9 +273,24 @@ void wxToolBarTool::SetImage()
     wxCHECK_RET(bitmap.IsOk(), "invalid bitmap for wxToolBar icon");
 
     GtkWidget* image = gtk_tool_button_get_icon_widget(GTK_TOOL_BUTTON(m_item));
-    // always use pixbuf, because pixmap mask does not
-    // work with disabled images in some themes
-    gtk_image_set_from_pixbuf(GTK_IMAGE(image), bitmap.GetPixbuf());
+#ifdef __WXGTK3__
+    if (bitmap.GetScaleFactor() > 1)
+    {
+        // Use a scaled pixbuf with the correct logical size. It will be used
+        // for the disabled state if no disabled bitmap is specifed, otherwise
+        // the original will be used by our "draw" signal handler.
+        GdkPixbuf* pixbuf = gdk_pixbuf_scale_simple(bitmap.GetPixbuf(),
+            bitmap.GetScaledWidth(), bitmap.GetScaledHeight(), GDK_INTERP_BILINEAR);
+        gtk_image_set_from_pixbuf(GTK_IMAGE(image), pixbuf);
+        g_object_unref(pixbuf);
+    }
+    else
+#endif
+    {
+        // always use pixbuf, because pixmap mask does not
+        // work with disabled images in some themes
+        gtk_image_set_from_pixbuf(GTK_IMAGE(image), bitmap.GetPixbuf());
+    }
 }
 
 // helper to create a dropdown menu item

@@ -171,6 +171,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_graphmatrix.obj \
 	$(OBJS)\test_gui_graphpath.obj \
 	$(OBJS)\test_gui_config.obj \
+	$(OBJS)\test_gui_auitest.obj \
 	$(OBJS)\test_gui_bitmapcomboboxtest.obj \
 	$(OBJS)\test_gui_bitmaptogglebuttontest.obj \
 	$(OBJS)\test_gui_bookctrlbasetest.obj \
@@ -241,11 +242,13 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_socket.obj \
 	$(OBJS)\test_gui_tlw.obj \
 	$(OBJS)\test_gui_dataview.obj \
+	$(OBJS)\test_gui_rowheightcachetest.obj \
 	$(OBJS)\test_gui_boxsizer.obj \
 	$(OBJS)\test_gui_gridsizer.obj \
 	$(OBJS)\test_gui_wrapsizer.obj \
 	$(OBJS)\test_gui_toplevel.obj \
 	$(OBJS)\test_gui_valnum.obj \
+	$(OBJS)\test_gui_valtext.obj \
 	$(OBJS)\test_gui_clientsize.obj \
 	$(OBJS)\test_gui_setsize.obj \
 	$(OBJS)\test_gui_xrctest.obj
@@ -330,6 +333,10 @@ __DLLFLAG_p_7 = -dWXUSINGDLL
 !if "$(MONOLITHIC)" == "0" && "$(USE_WEBVIEW)" == "1"
 __WXLIB_WEBVIEW_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview.lib
+!endif
+!if "$(MONOLITHIC)" == "0"
+__WXLIB_AUI_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_RICHTEXT_p = \
@@ -518,7 +525,7 @@ $(OBJS)\test_drawingplugin.dll: $(TEST_DRAWINGPLUGIN_OBJECTS)
 !if "$(USE_GUI)" == "1"
 $(OBJS)\test_gui.exe: $(OBJS)\test_gui_dummy.obj  $(TEST_GUI_OBJECTS)  $(OBJS)\test_gui_sample.res
 	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0x32.obj $(TEST_GUI_OBJECTS),$@,, $(__WXLIB_WEBVIEW_p) $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,, $(OBJS)\test_gui_sample.res
+	c0x32.obj $(TEST_GUI_OBJECTS),$@,, $(__WXLIB_WEBVIEW_p) $(__WXLIB_AUI_p)  $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,, $(OBJS)\test_gui_sample.res
 |
 !endif
 
@@ -874,6 +881,9 @@ $(OBJS)\test_gui_graphpath.obj: .\graphics\graphpath.cpp
 $(OBJS)\test_gui_config.obj: .\config\config.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\config\config.cpp
 
+$(OBJS)\test_gui_auitest.obj: .\controls\auitest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\auitest.cpp
+
 $(OBJS)\test_gui_bitmapcomboboxtest.obj: .\controls\bitmapcomboboxtest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\bitmapcomboboxtest.cpp
 
@@ -1084,6 +1094,9 @@ $(OBJS)\test_gui_tlw.obj: .\persistence\tlw.cpp
 $(OBJS)\test_gui_dataview.obj: .\persistence\dataview.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\persistence\dataview.cpp
 
+$(OBJS)\test_gui_rowheightcachetest.obj: .\rowheightcache\rowheightcachetest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\rowheightcache\rowheightcachetest.cpp
+
 $(OBJS)\test_gui_boxsizer.obj: .\sizers\boxsizer.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\sizers\boxsizer.cpp
 
@@ -1098,6 +1111,9 @@ $(OBJS)\test_gui_toplevel.obj: .\toplevel\toplevel.cpp
 
 $(OBJS)\test_gui_valnum.obj: .\validators\valnum.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\validators\valnum.cpp
+
+$(OBJS)\test_gui_valtext.obj: .\validators\valtext.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\validators\valtext.cpp
 
 $(OBJS)\test_gui_clientsize.obj: .\window\clientsize.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\window\clientsize.cpp

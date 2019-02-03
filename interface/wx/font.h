@@ -11,7 +11,7 @@
     the generic properties of the font without hardcoding in the sources a specific
     face name.
 
-    wxFontFamily thus allows to group the font face names of fonts with similar
+    wxFontFamily thus allows grouping the font face names of fonts with similar
     properties. Most wxWidgets ports use lists of fonts for each font family
     inspired by the data taken from http://www.codestyle.org/css/font-family.
 */
@@ -291,7 +291,7 @@ enum wxFontEncoding
     @class wxFontInfo
 
     This class is a helper used for wxFont creation using named parameter
-    idiom: it allows to specify various wxFont attributes using the chained
+    idiom: it allows specifying various wxFont attributes using the chained
     calls to its clearly named methods instead of passing them in the fixed
     order to wxFont constructors.
 
@@ -1169,7 +1169,7 @@ public:
     /**
         Sets the font size using a predefined symbolic size name.
 
-        This function allows to change font size to be (very) large or small
+        This function allows changing font size to be (very) large or small
         compared to the standard font size.
 
         @see SetSymbolicSizeRelativeTo().

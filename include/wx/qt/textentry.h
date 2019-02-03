@@ -20,7 +20,7 @@ public:
     virtual void Copy();
     virtual void Cut();
     virtual void Paste();
-    
+
     virtual void Undo();
     virtual void Redo();
     virtual bool CanUndo() const;
@@ -32,17 +32,15 @@ public:
 
     virtual void SetSelection(long from, long to);
     virtual void GetSelection(long *from, long *to) const;
-    
+
     virtual bool IsEditable() const;
     virtual void SetEditable(bool editable);
-    
+
 protected:
     virtual wxString DoGetValue() const;
     virtual void DoSetValue(const wxString& value, int flags=0);
 
     virtual wxWindow *GetEditableWindow();
-
-private:
 };
 
 #endif // _WX_QT_TEXTENTRY_H_

@@ -142,7 +142,7 @@ private:
 
             default:
                 wxFAIL_MSG("unknown wxPowerType value");
-                // fall through
+                wxFALLTHROUGH;
 
             case wxPOWER_UNKNOWN:
                 powerStr = "psychic";
@@ -170,7 +170,7 @@ private:
 
             default:
                 wxFAIL_MSG("unknown wxBatteryState value");
-                // fall through
+                wxFALLTHROUGH;
 
             case wxBATTERY_UNKNOWN_STATE:
                 batteryStr = "unknown";
@@ -179,8 +179,8 @@ private:
 
         SetStatusText(wxString::Format(
                         "System is on %s power, battery state is %s",
-                        powerStr.c_str(),
-                        batteryStr.c_str()));
+                        powerStr,
+                        batteryStr));
     }
 
     void OnStartTaskClicked( wxCommandEvent& WXUNUSED(event) )

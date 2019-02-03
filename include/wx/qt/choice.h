@@ -14,7 +14,7 @@ class WXDLLIMPEXP_CORE wxChoice : public wxChoiceBase
 {
 public:
     wxChoice();
-    
+
     wxChoice( wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
@@ -22,7 +22,7 @@ public:
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr );
-    
+
     wxChoice( wxWindow *parent, wxWindowID id,
             const wxPoint& pos,
             const wxSize& size,
@@ -38,7 +38,7 @@ public:
             long style = 0,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxChoiceNameStr );
-    
+
     bool Create( wxWindow *parent, wxWindowID id,
             const wxPoint& pos,
             const wxSize& size,
@@ -64,12 +64,14 @@ protected:
                               void **clientData,
                               wxClientDataType type);
     virtual int DoInsertOneItem(const wxString& item, unsigned int pos);
-    
+
     virtual void DoSetItemClientData(unsigned int n, void *clientData);
     virtual void *DoGetItemClientData(unsigned int n) const;
 
     virtual void DoClear();
     virtual void DoDeleteOneItem(unsigned int pos);
+
+    void QtInitSort(QComboBox *combo);
 
     QComboBox *m_qtComboBox;
 

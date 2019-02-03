@@ -26,6 +26,7 @@
     #include "wx/settings.h"
     #include "wx/dcclient.h"
     #include "wx/dcmemory.h"
+    #include "wx/frame.h"
 #endif
 
 #include "wx/aui/tabmdi.h"
@@ -411,6 +412,9 @@ void wxAuiTabContainer::SetTabOffset(size_t offset)
 void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
 {
     if (!raw_dc || !raw_dc->IsOk())
+        return;
+
+    if (m_rect.IsEmpty())
         return;
 
     wxMemoryDC dc;
@@ -998,6 +1002,7 @@ wxBEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_KILL_FOCUS(wxAuiTabCtrl::OnKillFocus)
     EVT_CHAR(wxAuiTabCtrl::OnChar)
     EVT_MOUSE_CAPTURE_LOST(wxAuiTabCtrl::OnCaptureLost)
+    EVT_SYS_COLOUR_CHANGED(wxAuiTabCtrl::OnSysColourChanged)
 wxEND_EVENT_TABLE()
 
 
@@ -1026,6 +1031,16 @@ void wxAuiTabCtrl::OnPaint(wxPaintEvent&)
 
     if (GetPageCount() > 0)
         Render(&dc, this);
+}
+
+void wxAuiTabCtrl::OnSysColourChanged(wxSysColourChangedEvent &event)
+{
+    event.Skip();
+
+    if (m_art)
+    {
+        m_art->UpdateColoursFromSystem();
+    }
 }
 
 void wxAuiTabCtrl::OnEraseBackground(wxEraseEvent& WXUNUSED(evt))
@@ -1669,7 +1684,29 @@ wxBEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
                       wxEVT_AUINOTEBOOK_BG_DCLICK,
                       wxAuiNotebook::OnTabBgDClick)
     EVT_NAVIGATION_KEY(wxAuiNotebook::OnNavigationKeyNotebook)
+    EVT_SYS_COLOUR_CHANGED(wxAuiNotebook::OnSysColourChanged)
 wxEND_EVENT_TABLE()
+
+void wxAuiNotebook::OnSysColourChanged(wxSysColourChangedEvent &event)
+{
+    event.Skip(true);
+    wxAuiTabArt* art = m_tabs.GetArtProvider();
+    art->UpdateColoursFromSystem();
+
+    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+    size_t i, pane_count = all_panes.GetCount();
+    for (i = 0; i < pane_count; ++i)
+    {
+        wxAuiPaneInfo& pane = all_panes.Item(i);
+        if (pane.name == wxT("dummy"))
+            continue;
+        wxTabFrame* tab_frame = (wxTabFrame*)pane.window;
+        wxAuiTabCtrl* tabctrl = tab_frame->m_tabs;
+        tabctrl->GetArtProvider()->UpdateColoursFromSystem();
+        tabctrl->Refresh();
+    }
+    Refresh();
+}
 
 void wxAuiNotebook::Init()
 {
@@ -3325,10 +3362,37 @@ void wxAuiNotebook::SetPageSize (const wxSize& WXUNUSED(size))
     wxFAIL_MSG("Not implemented for wxAuiNotebook");
 }
 
-int wxAuiNotebook::HitTest (const wxPoint& WXUNUSED(pt), long* WXUNUSED(flags)) const
+int wxAuiNotebook::HitTest (const wxPoint &pt, long *flags) const
 {
-    wxFAIL_MSG("Not implemented for wxAuiNotebook");
-    return wxNOT_FOUND;
+    wxWindow *w = NULL;
+    long position = wxBK_HITTEST_NOWHERE;
+    const wxAuiPaneInfoArray& all_panes = const_cast<wxAuiManager&>(m_mgr).GetAllPanes();
+    const size_t pane_count = all_panes.GetCount();
+    for (size_t i = 0; i < pane_count; ++i)
+    {
+        if (all_panes.Item(i).name == wxT("dummy"))
+            continue;
+
+        wxTabFrame* tabframe = (wxTabFrame*) all_panes.Item(i).window;
+        if (tabframe->m_tab_rect.Contains(pt))
+        {
+            wxPoint tabpos = tabframe->m_tabs->ScreenToClient(ClientToScreen(pt));
+            if (tabframe->m_tabs->TabHitTest(tabpos.x, tabpos.y, &w))
+                position = wxBK_HITTEST_ONITEM;
+            break;
+        }
+        else if (tabframe->m_rect.Contains(pt))
+        {
+            w = tabframe->m_tabs->GetWindowFromIdx(tabframe->m_tabs->GetActivePage());
+            if (w)
+                position = wxBK_HITTEST_ONPAGE;
+            break;
+        }
+    }
+
+    if (flags)
+        *flags = position;
+    return w ? GetPageIndex(w) : wxNOT_FOUND;
 }
 
 int wxAuiNotebook::GetPageImage(size_t WXUNUSED(n)) const
@@ -3347,10 +3411,10 @@ int wxAuiNotebook::ChangeSelection(size_t n)
     return DoModifySelection(n, false);
 }
 
-bool wxAuiNotebook::AddPage(wxWindow *page, const wxString &text, bool select, 
+bool wxAuiNotebook::AddPage(wxWindow *page, const wxString &text, bool select,
                             int imageId)
 {
-    if(HasImageList()) 
+    if(HasImageList())
     {
         return AddPage(page, text, select, GetImageList()->GetBitmap(imageId));
     }
@@ -3370,19 +3434,176 @@ bool wxAuiNotebook::DeleteAllPages()
     return true;
 }
 
-bool wxAuiNotebook::InsertPage(size_t index, wxWindow *page, 
-                               const wxString &text, bool select, 
+bool wxAuiNotebook::InsertPage(size_t index, wxWindow *page,
+                               const wxString &text, bool select,
                                int imageId)
 {
     if(HasImageList())
     {
-        return InsertPage(index, page, text, select, 
+        return InsertPage(index, page, text, select,
                           GetImageList()->GetBitmap(imageId));
     }
     else
     {
         return InsertPage(index, page, text, select, wxNullBitmap);
     }
+}
+
+namespace
+{
+
+// Helper class to calculate the best size of a wxAuiNotebook
+class wxAuiLayoutObject
+{
+public:
+    enum
+    {
+        DockDir_Center,
+        DockDir_Left,
+        DockDir_Right,
+        DockDir_Vertical,   // Merge elements from here vertically
+        DockDir_Top,
+        DockDir_Bottom,
+        DockDir_None
+    };
+
+    wxAuiLayoutObject(const wxSize &size, const wxAuiPaneInfo &pInfo)
+    {
+        m_size = size;
+        m_pInfo = &pInfo;
+        /*
+            To speed up the sorting of the panes, the direction is mapped to a
+            useful increasing value. This avoids complicated comparison of the
+            enum values during the sort. The size calculation is done from the
+            inner to the outermost direction. Therefore CENTER < LEFT/RIGHT <
+            TOP/BOTTOM (It doesn't matter it LEFT or RIGHT is done first, as
+            both extend the best size horizontally; the same applies for
+            TOP/BOTTOM in vertical direction)
+         */
+        switch ( pInfo.dock_direction )
+        {
+            case wxAUI_DOCK_CENTER: m_dir = DockDir_Center; break;
+            case wxAUI_DOCK_LEFT:   m_dir = DockDir_Left; break;
+            case wxAUI_DOCK_RIGHT:  m_dir = DockDir_Right; break;
+            case wxAUI_DOCK_TOP:    m_dir = DockDir_Top; break;
+            case wxAUI_DOCK_BOTTOM: m_dir = DockDir_Bottom; break;
+            default:                m_dir = DockDir_None;
+        }
+    }
+    void MergeLayout(const wxAuiLayoutObject &lo2)
+    {
+        if ( this == &lo2 )
+            return;
+
+        bool mergeHorizontal;
+        if ( m_pInfo->dock_layer != lo2.m_pInfo->dock_layer || m_dir != lo2.m_dir )
+            mergeHorizontal = lo2.m_dir < DockDir_Vertical;
+        else if ( m_pInfo->dock_row != lo2.m_pInfo->dock_row )
+            mergeHorizontal = true;
+        else
+            mergeHorizontal = lo2.m_dir >= DockDir_Vertical;
+
+        if ( mergeHorizontal )
+        {
+            m_size.x += lo2.m_size.x;
+            if ( lo2.m_size.y > m_size.y )
+                m_size.y = lo2.m_size.y;
+        }
+        else
+        {
+            if ( lo2.m_size.x > m_size.x )
+                m_size.x = lo2.m_size.x;
+            m_size.y += lo2.m_size.y;
+        }
+    }
+
+    wxSize m_size;
+    const wxAuiPaneInfo *m_pInfo;
+    unsigned char m_dir;
+
+    /*
+        As the caulculation is done from the inner to the outermost pane, the
+        panes are sorted in the following order: layer, direction, row,
+        position.
+     */
+    bool operator<(const wxAuiLayoutObject& lo2) const
+    {
+        int diff = m_pInfo->dock_layer - lo2.m_pInfo->dock_layer;
+        if ( diff )
+            return diff < 0;
+        diff = m_dir - lo2.m_dir;
+        if ( diff )
+            return diff < 0;
+        diff = m_pInfo->dock_row - lo2.m_pInfo->dock_row;
+        if ( diff )
+            return diff < 0;
+        return m_pInfo->dock_pos < lo2.m_pInfo->dock_pos;
+    }
+};
+
+} // anonymous namespace
+
+wxSize wxAuiNotebook::DoGetBestSize() const
+{
+    /*
+        The best size of the wxAuiNotebook is a combination of all panes inside
+        the object. To be able to efficiently  calculate the dimensions (i.e.
+        without iterating over the panes multiple times) the panes need to be
+        processed in a specific order. Therefore we need to collect them in the
+        following variable which is sorted later on.
+     */
+    wxVector<wxAuiLayoutObject> layouts;
+    const wxAuiPaneInfoArray& all_panes =
+        const_cast<wxAuiManager&>(m_mgr).GetAllPanes();
+    const size_t pane_count = all_panes.GetCount();
+    const int tabHeight = GetTabCtrlHeight();
+    for ( size_t n = 0; n < pane_count; ++n )
+    {
+        const wxAuiPaneInfo &pInfo = all_panes[n];
+        if ( pInfo.name == wxT("dummy") || pInfo.IsFloating() )
+            continue;
+
+        const wxTabFrame* tabframe = (wxTabFrame*) all_panes.Item(n).window;
+        const wxAuiNotebookPageArray &pages = tabframe->m_tabs->GetPages();
+
+        wxSize bestPageSize;
+        for ( size_t pIdx = 0; pIdx < pages.GetCount(); pIdx++ )
+            bestPageSize.IncTo(pages[pIdx].window->GetBestSize());
+
+        bestPageSize.y += tabHeight;
+        // Store the current pane with its largest window dimensions
+        layouts.push_back(wxAuiLayoutObject(bestPageSize, pInfo));
+    }
+
+    if ( layouts.empty() )
+        return wxSize(0, 0);
+
+    wxVectorSort(layouts);
+
+    /*
+        The sizes of the panes are merged here. As the center pane is always at
+        position 0 all sizes are merged there. As panes can be stacked using
+        the dock_pos property, different positions are merged at the first
+        (i.e. dock_pos = 0) element before being merged with the center pane.
+     */
+    size_t pos = 0;
+    for ( size_t n = 1; n < layouts.size(); n++ )
+    {
+        if ( layouts[n].m_pInfo->dock_layer == layouts[pos].m_pInfo->dock_layer &&
+             layouts[n].m_dir == layouts[pos].m_dir &&
+             layouts[n].m_pInfo->dock_row == layouts[pos].m_pInfo->dock_row )
+        {
+            layouts[pos].MergeLayout(layouts[n]);
+        }
+        else
+        {
+            layouts[0].MergeLayout(layouts[pos]);
+            pos = n;
+        }
+    }
+    layouts[0].MergeLayout(layouts[pos]);
+
+    return layouts[0].m_size;
 }
 
 int wxAuiNotebook::DoModifySelection(size_t n, bool events)
@@ -3423,14 +3644,6 @@ int wxAuiNotebook::DoModifySelection(size_t n, bool events)
         int old_curpage = m_curPage;
         m_curPage = n;
 
-        // program allows the page change
-        if(events)
-        {
-            evt.SetEventType(wxEVT_AUINOTEBOOK_PAGE_CHANGED);
-            (void)GetEventHandler()->ProcessEvent(evt);
-        }
-
-
         wxAuiTabCtrl* ctrl;
         int ctrl_idx;
         if (FindTab(wnd, &ctrl, &ctrl_idx))
@@ -3463,6 +3676,13 @@ int wxAuiNotebook::DoModifySelection(size_t n, bool events)
             // This is Firefox-like behaviour.
             if (wnd->IsShownOnScreen() && FindFocus() != ctrl)
                 wnd->SetFocus();
+
+            // program allows the page change
+            if(events)
+            {
+                evt.SetEventType(wxEVT_AUINOTEBOOK_PAGE_CHANGED);
+                (void)GetEventHandler()->ProcessEvent(evt);
+            }
 
             return old_curpage;
         }

@@ -742,6 +742,14 @@ bool wxDDEConnection::StopAdvise(const wxString& item)
     return ok;
 }
 
+// Small helper function converting the data from the format used by the given
+// conversion to UTF-8.
+static
+wxCharBuffer ConvertToUTF8(const wxMBConv& conv, const void* data, size_t size)
+{
+    return wxConvUTF8.cWC2MB(conv.cMB2WC((const char*)data, size, NULL));
+}
+
 // Calls that SERVER can make
 bool wxDDEConnection::DoAdvise(const wxString& item,
                                const void *data,
@@ -750,10 +758,55 @@ bool wxDDEConnection::DoAdvise(const wxString& item,
 {
     HSZ item_atom = DDEGetAtom(item);
     HSZ topic_atom = DDEGetAtom(m_topicName);
-    m_sendingData = data;  // mrf: potential for scope problems here?
-    m_dataSize = size;
-    // wxIPC_PRIVATE does not succeed, so use text instead
-    m_dataType = format == wxIPC_PRIVATE ? wxIPC_TEXT : format;
+
+    // Define the buffer which, if it's used at all, needs to stay alive until
+    // after DdePostAdvise() call which uses it.
+    wxCharBuffer buf;
+
+    // As we always use CF_TEXT for XTYP_ADVSTART, we have to use wxIPC_TEXT
+    // here, even if a different format was specified for this value. Of
+    // course, this can only be done for just a few of the formats, so check
+    // that we have one of them here.
+    switch ( format )
+    {
+        case wxIPC_TEXT:
+        case wxIPC_OEMTEXT:
+        case wxIPC_UTF8TEXT:
+        case wxIPC_PRIVATE:
+            // Use the data directly.
+            m_sendingData = data;
+            m_dataSize = size;
+            break;
+
+        case wxIPC_UTF16TEXT:
+        case wxIPC_UTF32TEXT:
+            // We need to convert the data to UTF-8 as UTF-16 or 32 would
+            // appear as mojibake in the client when received as CF_TEXT.
+            buf = format == wxIPC_UTF16TEXT
+                    ? ConvertToUTF8(wxMBConvUTF16(), data, size)
+                    : ConvertToUTF8(wxMBConvUTF32(), data, size);
+
+            m_sendingData = buf.data();
+            m_dataSize = buf.length();
+            break;
+
+        case wxIPC_INVALID:
+        case wxIPC_BITMAP:
+        case wxIPC_METAFILE:
+        case wxIPC_SYLK:
+        case wxIPC_DIF:
+        case wxIPC_TIFF:
+        case wxIPC_DIB:
+        case wxIPC_PALETTE:
+        case wxIPC_PENDATA:
+        case wxIPC_RIFF:
+        case wxIPC_WAVE:
+        case wxIPC_ENHMETAFILE:
+        case wxIPC_FILENAME:
+        case wxIPC_LOCALE:
+            wxFAIL_MSG( "Unsupported IPC format for Advise()" );
+            return false;
+    };
 
     bool ok = DdePostAdvise(DDEIdInst, topic_atom, item_atom) != 0;
     if ( !ok )
@@ -986,7 +1039,7 @@ _DDECallback(UINT wType,
                                         connection->m_dataSize,
                                         0,
                                         hsz2,
-                                        connection->m_dataType,
+                                        wFmt,
                                         0
                                     );
 
@@ -1008,18 +1061,34 @@ _DDECallback(UINT wType,
 
                     DWORD len = DdeGetData(hData, NULL, 0, 0);
 
-                    void *data = connection->GetBufferAtLeast(len);
+                    char* const data = (char *)connection->GetBufferAtLeast(len);
                     wxASSERT_MSG(data != NULL,
                                  wxT("Buffer too small in _DDECallback (XTYP_ADVDATA)") );
 
                     DdeGetData(hData, (LPBYTE)data, len, 0);
 
                     DdeFreeDataHandle(hData);
+
+                    // We always get data in CF_TEXT format, but it could
+                    // actually be UTF-8, so try recovering the original format
+                    // if possible.
+                    if ( wFmt != CF_TEXT )
+                    {
+                        wxLogDebug("Unexpected format %02x in XTYP_ADVDATA", wFmt);
+                        return (DDERETURN)DDE_FNOTPROCESSED;
+                    }
+
+                    wxIPCFormat format;
+                    if ( wxConvUTF8.ToWChar(NULL, 0, data, len) != wxCONV_FAILED )
+                        format = wxIPC_UTF8TEXT;
+                    else
+                        format = wxIPC_TEXT;
+
                     if ( connection->OnAdvise(connection->m_topicName,
                                               item_name,
                                               data,
                                               (int)len,
-                                              (wxIPCFormat) wFmt) )
+                                              format) )
                     {
                         return (DDERETURN)(DWORD)DDE_FACK;
                     }

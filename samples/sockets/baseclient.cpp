@@ -173,7 +173,7 @@ WX_DEFINE_LIST(EList);
 wxString
 CreateIdent(const wxIPV4address& addr)
 {
-    return wxString::Format("%s:%d",addr.IPAddress().c_str(),addr.Service());
+    return wxString::Format("%s:%d",addr.IPAddress(),addr.Service());
 }
 
 void
@@ -216,11 +216,11 @@ Client::OnCmdLineParsed(wxCmdLineParser& pParser)
     {
         wxFFile file(fname);
         if (!file.IsOpened()) {
-            wxLogError("Cannot open file %s",fname.c_str());
+            wxLogError("Cannot open file %s",fname);
             return false;
         };
         if (!file.ReadAll(&m_message)) {
-            wxLogError("Cannot read content of file %s",fname.c_str());
+            wxLogError("Cannot read content of file %s",fname);
             return false;
         };
         m_sendType = SEND_MESSAGE;
@@ -496,7 +496,7 @@ Client::dumpStatistics() {
                 m_statFailed
                 ));
 
-    wxLogMessage("Current status:\n%s\n",msg.c_str());
+    wxLogMessage("Current status:\n%s\n",msg);
 }
 
 void
@@ -550,7 +550,7 @@ EventWorker::OnSocketEvent(wxSocketEvent& pEvent) {
                 {
                     if (m_clientSocket->LastError() != wxSOCKET_WOULDBLOCK)
                     {
-                        wxLogError("%s: read error",CreateIdent(m_localaddr).c_str());
+                        wxLogError("%s: read error",CreateIdent(m_localaddr));
                         SendEvent(true);
                     }
                 }
@@ -560,18 +560,18 @@ EventWorker::OnSocketEvent(wxSocketEvent& pEvent) {
                 if (m_readed == m_insize)
                 {
                     if (!memcmp(m_inbuf,m_outbuf,m_insize)) {
-                        wxLogError("%s: data mismatch",CreateIdent(m_localaddr).c_str());
+                        wxLogError("%s: data mismatch",CreateIdent(m_localaddr));
                         SendEvent(true);
                     }
                     m_currentType = WorkerEvent::DISCONNECTING;
-                    wxLogDebug("%s: DISCONNECTING",CreateIdent(m_localaddr).c_str());
+                    wxLogDebug("%s: DISCONNECTING",CreateIdent(m_localaddr));
                     SendEvent(false);
 
                     //wxLogDebug("EventWorker %p closing",this);
                     m_clientSocket->Close();
 
                     m_currentType = WorkerEvent::DONE;
-                    wxLogDebug("%s: DONE",CreateIdent(m_localaddr).c_str());
+                    wxLogDebug("%s: DONE",CreateIdent(m_localaddr));
                     SendEvent(false);
                 }
             } while (!m_clientSocket->Error());
@@ -584,13 +584,13 @@ EventWorker::OnSocketEvent(wxSocketEvent& pEvent) {
                 if (m_written == 0)
                 {
                     m_currentType = WorkerEvent::SENDING;
-                    wxLogDebug("%s: SENDING",CreateIdent(m_localaddr).c_str());
+                    wxLogDebug("%s: SENDING",CreateIdent(m_localaddr));
                 }
                 m_clientSocket->Write(m_outbuf + m_written, m_outsize - m_written);
                 if (m_clientSocket->Error())
                 {
                     if (m_clientSocket->LastError() != wxSOCKET_WOULDBLOCK) {
-                        wxLogError("%s: Write error",CreateIdent(m_localaddr).c_str());
+                        wxLogError("%s: Write error",CreateIdent(m_localaddr));
                         SendEvent(true);
                     }
                 }
@@ -603,7 +603,7 @@ EventWorker::OnSocketEvent(wxSocketEvent& pEvent) {
                 {
                     //wxLogDebug("EventWorker %p SENDING->RECEIVING",this);
                     m_currentType = WorkerEvent::RECEIVING;
-                    wxLogDebug("%s: RECEIVING",CreateIdent(m_localaddr).c_str());
+                    wxLogDebug("%s: RECEIVING",CreateIdent(m_localaddr));
                     SendEvent(false);
                 }
             } while(!m_clientSocket->Error());
@@ -611,19 +611,19 @@ EventWorker::OnSocketEvent(wxSocketEvent& pEvent) {
         case wxSOCKET_CONNECTION:
         {
             //wxLogMessage("EventWorker: got connection");
-            wxLogMessage("%s: starting writing message (2 bytes for signature and %d bytes of data to write)",CreateIdent(m_localaddr).c_str(),m_outsize-2);
+            wxLogMessage("%s: starting writing message (2 bytes for signature and %d bytes of data to write)",CreateIdent(m_localaddr),m_outsize-2);
             if (!m_clientSocket->GetLocal(m_localaddr))
             {
                 wxLogError(_("Cannot get peer data for socket %p"),m_clientSocket);
             }
             m_currentType = WorkerEvent::SENDING;
-            wxLogDebug("%s: CONNECTING",CreateIdent(m_localaddr).c_str());
+            wxLogDebug("%s: CONNECTING",CreateIdent(m_localaddr));
             SendEvent(false);
         }
         break;
         case wxSOCKET_LOST:
         {
-            wxLogError(_("%s: connection lost"),CreateIdent(m_localaddr).c_str());
+            wxLogError(_("%s: connection lost"),CreateIdent(m_localaddr));
             SendEvent(true);
         }
         break;
@@ -672,7 +672,7 @@ wxThread::ExitCode ThreadWorker::Entry()
     bool failed = false;
     WorkerEvent::evt_type etype = WorkerEvent::CONNECTING;
     if (!m_clientSocket->Connect(ca)) {
-        wxLogError("Cannot connect to %s:%d",ca.IPAddress().c_str(), ca.Service());
+        wxLogError("Cannot connect to %s:%d",ca.IPAddress(), ca.Service());
         failed = true;
     } else {
         //wxLogMessage("ThreadWorker: Connected. Sending %d bytes of data",m_outsize);

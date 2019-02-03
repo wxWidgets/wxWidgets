@@ -22,6 +22,7 @@
 #  gstreamer-interfaces: GSTREAMER_INTERFACES_INCLUDE_DIRS and GSTREAMER_INTERFACES_LIBRARIES
 #  gstreamer-pbutils:    GSTREAMER_PBUTILS_INCLUDE_DIRS and GSTREAMER_PBUTILS_LIBRARIES
 #  gstreamer-video:      GSTREAMER_VIDEO_INCLUDE_DIRS and GSTREAMER_VIDEO_LIBRARIES
+#  gstreamer-player:     GSTREAMER_PLAYER_INCLUDE_DIRS and GSTREAMER_PLAYER_LIBRARIES
 #
 # Copyright (C) 2012 Raphael Kubo da Costa <rakuco@webkit.org>
 #
@@ -48,28 +49,32 @@
 
 find_package(PkgConfig)
 
-# The minimum GStreamer version we support.
-set(GSTREAMER_MINIMUM_VERSION 0.10.30)
+# Determine the version in the library name, default is 1.0
+set(GST_LIB_VERSION 1.0)
+if(DEFINED GStreamer_FIND_VERSION AND GStreamer_FIND_VERSION VERSION_LESS 1.0)
+    set(GST_LIB_VERSION 0.10)
+endif()
 
 # Helper macro to find a GStreamer plugin (or GStreamer itself)
 #   _component_prefix is prepended to the _INCLUDE_DIRS and _LIBRARIES variables (eg. "GSTREAMER_AUDIO")
-#   _pkgconfig_name is the component's pkg-config name (eg. "gstreamer-0.10", or "gstreamer-video-0.10").
-#   _header is the component's header, relative to the gstreamer-0.10 directory (eg. "gst/gst.h").
-#   _library is the component's library name (eg. "gstreamer-0.10" or "gstvideo-0.10")
+#   _pkgconfig_name is the component's pkg-config name (eg. "gstreamer", or "gstreamer-video").
+#   _header is the component's header, relative to the gstreamer-${GST_LIB_VERSION} directory (eg. "gst/gst.h").
+#   _library is the component's library name (eg. "gstreamer" or "gstvideo")
 macro(FIND_GSTREAMER_COMPONENT _component_prefix _pkgconfig_name _header _library)
-    # FIXME: The QUIET keyword can be used once we require CMake 2.8.2.
-    pkg_check_modules(PC_${_component_prefix} ${_pkgconfig_name})
+    pkg_check_modules(PC_${_component_prefix} QUIET ${_pkgconfig_name}-${GST_LIB_VERSION})
 
     find_path(${_component_prefix}_INCLUDE_DIRS
         NAMES ${_header}
         HINTS ${PC_${_component_prefix}_INCLUDE_DIRS} ${PC_${_component_prefix}_INCLUDEDIR}
-        PATH_SUFFIXES gstreamer-0.10
+        PATH_SUFFIXES gstreamer-${GST_LIB_VERSION}
     )
 
     find_library(${_component_prefix}_LIBRARIES
-        NAMES ${_library}
+        NAMES ${_library}-${GST_LIB_VERSION}
         HINTS ${PC_${_component_prefix}_LIBRARY_DIRS} ${PC_${_component_prefix}_LIBDIR}
     )
+
+    mark_as_advanced(${_component_prefix}_INCLUDE_DIRS ${_component_prefix}_LIBRARIES)
 endmacro()
 
 # ------------------------
@@ -77,8 +82,8 @@ endmacro()
 # ------------------------
 
 # 1.1. Find headers and libraries
-FIND_GSTREAMER_COMPONENT(GSTREAMER gstreamer-0.10 gst/gst.h gstreamer-0.10)
-FIND_GSTREAMER_COMPONENT(GSTREAMER_BASE gstreamer-base-0.10 gst/gst.h gstbase-0.10)
+FIND_GSTREAMER_COMPONENT(GSTREAMER gstreamer gst/gst.h gstreamer)
+FIND_GSTREAMER_COMPONENT(GSTREAMER_BASE gstreamer-base gst/gst.h gstbase)
 
 # 1.2. Check GStreamer version
 if (GSTREAMER_INCLUDE_DIRS)
@@ -98,28 +103,22 @@ if (GSTREAMER_INCLUDE_DIRS)
     endif ()
 endif ()
 
-# FIXME: With CMake 2.8.3 we can just pass GSTREAMER_VERSION to FIND_PACKAGE_HANDLE_STARNDARD_ARGS as VERSION_VAR
-#        and remove the version check here (GSTREAMER_MINIMUM_VERSION would be passed to FIND_PACKAGE).
-set(VERSION_OK TRUE)
-if ("${GSTREAMER_VERSION}" VERSION_LESS "${GSTREAMER_MINIMUM_VERSION}")
-    set(VERSION_OK FALSE)
-endif ()
-
 # -------------------------
 # 2. Find GStreamer plugins
 # -------------------------
 
-FIND_GSTREAMER_COMPONENT(GSTREAMER_APP gstreamer-app-0.10 gst/app/gstappsink.h gstapp-0.10)
-FIND_GSTREAMER_COMPONENT(GSTREAMER_AUDIO gstreamer-audio-0.10 gst/audio/audio.h gstaudio-0.10)
-FIND_GSTREAMER_COMPONENT(GSTREAMER_FFT gstreamer-fft-0.10 gst/fft/gstfft.h gstfft-0.10)
-FIND_GSTREAMER_COMPONENT(GSTREAMER_INTERFACES gstreamer-interfaces-0.10 gst/interfaces/mixer.h gstinterfaces-0.10)
-FIND_GSTREAMER_COMPONENT(GSTREAMER_PBUTILS gstreamer-pbutils-0.10 gst/pbutils/pbutils.h gstpbutils-0.10)
-FIND_GSTREAMER_COMPONENT(GSTREAMER_VIDEO gstreamer-video-0.10 gst/video/video.h gstvideo-0.10)
+FIND_GSTREAMER_COMPONENT(GSTREAMER_APP gstreamer-app gst/app/gstappsink.h gstapp)
+FIND_GSTREAMER_COMPONENT(GSTREAMER_AUDIO gstreamer-audio gst/audio/audio.h gstaudio)
+FIND_GSTREAMER_COMPONENT(GSTREAMER_FFT gstreamer-fft gst/fft/gstfft.h gstfft)
+FIND_GSTREAMER_COMPONENT(GSTREAMER_INTERFACES gstreamer-interfaces gst/interfaces/mixer.h gstinterfaces)
+FIND_GSTREAMER_COMPONENT(GSTREAMER_PBUTILS gstreamer-pbutils gst/pbutils/pbutils.h gstpbutils)
+FIND_GSTREAMER_COMPONENT(GSTREAMER_VIDEO gstreamer-video gst/video/video.h gstvideo)
+FIND_GSTREAMER_COMPONENT(GSTREAMER_PLAYER gstreamer-player gst/player/player.h gstplayer)
 
 # ------------------------------------------------
 # 3. Process the COMPONENTS passed to FIND_PACKAGE
 # ------------------------------------------------
-set(_GSTREAMER_REQUIRED_VARS GSTREAMER_INCLUDE_DIRS GSTREAMER_LIBRARIES VERSION_OK GSTREAMER_BASE_INCLUDE_DIRS GSTREAMER_BASE_LIBRARIES)
+set(_GSTREAMER_REQUIRED_VARS GSTREAMER_VERSION GSTREAMER_INCLUDE_DIRS GSTREAMER_LIBRARIES GSTREAMER_BASE_INCLUDE_DIRS GSTREAMER_BASE_LIBRARIES)
 
 foreach (_component ${GStreamer_FIND_COMPONENTS})
     set(_gst_component "GSTREAMER_${_component}")

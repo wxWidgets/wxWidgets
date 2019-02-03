@@ -78,7 +78,7 @@ public:
     bool Connect(const wxString& sHost, const wxString& sService, const wxString& sTopic);
     void Disconnect();
     wxConnectionBase *OnMakeConnection() wxOVERRIDE;
-    bool IsConnected() { return m_connection != NULL; };
+    bool IsConnected() { return m_connection != NULL; }
 
     virtual void Notify() wxOVERRIDE;
 

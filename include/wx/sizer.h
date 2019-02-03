@@ -619,6 +619,10 @@ public:
 
     // Inform sizer about the first direction that has been decided (by parent item)
     // Returns true if it made use of the information (and recalculated min size)
+    //
+    // Note that while this method doesn't do anything by default, it should
+    // almost always be overridden in the derived classes and should have been
+    // pure virtual if not for backwards compatibility constraints.
     virtual bool InformFirstDirection( int WXUNUSED(direction), int WXUNUSED(size), int WXUNUSED(availableOtherDir) )
         { return false; }
 
@@ -654,10 +658,26 @@ public:
 
     // These virtual functions are used by the layout algorithm: first
     // CalcMin() is called to calculate the minimal size of the sizer and
-    // prepare for laying it out and then RecalcSizes() is called to really
-    // update all the sizer items
+    // prepare for laying it out and then RepositionChildren() is called with
+    // this size to really update all the sizer items.
     virtual wxSize CalcMin() = 0;
-    virtual void RecalcSizes() = 0;
+
+    // This method should be overridden but isn't pure virtual for backwards
+    // compatibility.
+    virtual void RepositionChildren(const wxSize& WXUNUSED(minSize))
+    {
+        RecalcSizes();
+    }
+
+    // This is a deprecated version of RepositionChildren() which doesn't take
+    // the minimal size parameter which is not needed for very simple sizers
+    // but typically is for anything more complicated, so prefer to override
+    // RepositionChildren() in new code.
+    //
+    // If RepositionChildren() is not overridden, this method must be
+    // overridden, calling the base class version results in an assertion
+    // failure.
+    virtual void RecalcSizes();
 
     virtual void Layout();
 
@@ -766,7 +786,7 @@ public:
     wxGridSizer( int rows, int cols, int vgap, int hgap );
     wxGridSizer( int rows, int cols, const wxSize& gap );
 
-    virtual void RecalcSizes() wxOVERRIDE;
+    virtual void RepositionChildren(const wxSize& minSize) wxOVERRIDE;
     virtual wxSize CalcMin() wxOVERRIDE;
 
     void SetCols( int cols )
@@ -897,13 +917,13 @@ public:
     const wxArrayInt& GetColWidths() const  { return m_colWidths; }
 
     // implementation
-    virtual void RecalcSizes() wxOVERRIDE;
+    virtual void RepositionChildren(const wxSize& minSize) wxOVERRIDE;
     virtual wxSize CalcMin() wxOVERRIDE;
 
 protected:
     void AdjustForFlexDirection();
-    void AdjustForGrowables(const wxSize& sz);
-    void FindWidthsAndHeights(int nrows, int ncols);
+    void AdjustForGrowables(const wxSize& sz, const wxSize& minSize);
+    wxSize FindWidthsAndHeights(int nrows, int ncols);
 
     // the heights/widths of all rows/columns
     wxArrayInt  m_rowHeights,
@@ -921,9 +941,6 @@ protected:
     // both directions or only one
     int m_flexDirection;
     wxFlexSizerGrowMode m_growMode;
-
-    // saves CalcMin result to optimize RecalcSizes
-    wxSize m_calculatedMinSize;
 
 private:
     wxDECLARE_CLASS(wxFlexGridSizer);
@@ -956,7 +973,11 @@ public:
 
     // implementation of our resizing logic
     virtual wxSize CalcMin() wxOVERRIDE;
-    virtual void RecalcSizes() wxOVERRIDE;
+    virtual void RepositionChildren(const wxSize& minSize) wxOVERRIDE;
+
+    virtual bool InformFirstDirection(int direction,
+                                      int size,
+                                      int availableOtherDir) wxOVERRIDE;
 
 protected:
     // Only overridden to perform extra debugging checks.
@@ -1014,10 +1035,6 @@ protected:
     // the sum of proportion of all of our elements
     int m_totalProportion;
 
-    // the minimal size needed for this sizer as calculated by the last call to
-    // our CalcMin()
-    wxSize m_calculatedMinSize;
-
 private:
     wxDECLARE_CLASS(wxBoxSizer);
 };
@@ -1037,8 +1054,8 @@ public:
     wxStaticBoxSizer(int orient, wxWindow *win, const wxString& label = wxEmptyString);
     virtual ~wxStaticBoxSizer();
 
-    void RecalcSizes() wxOVERRIDE;
-    wxSize CalcMin() wxOVERRIDE;
+    virtual wxSize CalcMin() wxOVERRIDE;
+    virtual void RepositionChildren(const wxSize& minSize) wxOVERRIDE;
 
     wxStaticBox *GetStaticBox() const
         { return m_staticBox; }

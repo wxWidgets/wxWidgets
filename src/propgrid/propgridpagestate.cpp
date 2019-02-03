@@ -43,7 +43,6 @@
 
 #define wxPG_DEFAULT_SPLITTERX      110
 
-
 // -----------------------------------------------------------------------
 // wxPropertyGridIterator
 // -----------------------------------------------------------------------
@@ -303,16 +302,8 @@ void wxPropertyGridPageState::DoClear()
         for (unsigned int i = 0; i < m_regularArray.GetChildCount(); i++)
         {
             wxPGProperty* p = m_regularArray.Item(i);
-            int index = m_pPropGrid->m_deletedProperties.Index(p);
-            if (index != wxNOT_FOUND)
-            {
-                m_pPropGrid->m_deletedProperties.RemoveAt(index);
-            }
-            index = m_pPropGrid->m_removedProperties.Index(p);
-            if (index != wxNOT_FOUND)
-            {
-                m_pPropGrid->m_removedProperties.RemoveAt(index);
-            }
+            wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_deletedProperties, p);
+            wxPGRemoveItemFromVector<wxPGProperty*>(m_pPropGrid->m_removedProperties, p);
         }
 
         m_regularArray.Empty();
@@ -990,7 +981,7 @@ wxSize wxPropertyGridPageState::DoFitColumns( bool WXUNUSED(allowGridResize) )
 
     // Expand last one to fill the width
     int remaining = m_width - accWid;
-    m_colWidths[GetColumnCount()-1] += remaining;
+    m_colWidths.back() += remaining;
 
     m_dontCenterSplitter = true;
 
@@ -1017,39 +1008,14 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
 
     wxPropertyGrid* pg = GetGrid();
 
-    unsigned int i;
-    unsigned int lastColumn = m_colWidths.size() - 1;
-    int width = m_width;
     int clientWidth = pg->GetClientSize().x;
-
-    //
-    // Column to reduce, if needed. Take last one that exceeds minimum width.
-    int reduceCol = -1;
 
     wxLogTrace("propgrid",
                wxS("ColumnWidthCheck (virtualWidth: %i, clientWidth: %i)"),
-               width, clientWidth);
+               m_width, clientWidth);
 
-    //
-    // Check min sizes
-    for ( i=0; i<m_colWidths.size(); i++ )
-    {
-        int min = GetColumnMinWidth(i);
-        if ( m_colWidths[i] <= min )
-        {
-            m_colWidths[i] = min;
-        }
-        else
-        {
-            // Always reduce the last column that is larger than minimum size
-            // (looks nicer, even with auto-centering enabled).
-            reduceCol = i;
-        }
-    }
 
-    int colsWidth = pg->GetMarginWidth();
-    for ( i=0; i<m_colWidths.size(); i++ )
-        colsWidth += m_colWidths[i];
+    int colsWidth = wxPGGetSumVectorItems<int>(m_colWidths, pg->GetMarginWidth());
 
     wxLogTrace("propgrid",
                wxS("  HasVirtualWidth: %i  colsWidth: %i"),
@@ -1058,30 +1024,36 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
     // Then mode-based requirement
     if ( !pg->HasVirtualWidth() )
     {
-        int widthHigher = width - colsWidth;
+        int widthHigher = m_width - colsWidth;
 
         // Adapt colsWidth to width
-        if ( colsWidth < width )
+        if ( colsWidth < m_width )
         {
             // Increase column
             wxLogTrace("propgrid",
                        wxS("  Adjust last column to %i"),
-                       m_colWidths[lastColumn] + widthHigher);
-            m_colWidths[lastColumn] = m_colWidths[lastColumn] + widthHigher;
+                       m_colWidths.back() + widthHigher);
+            m_colWidths.back() += widthHigher;
         }
-        else if ( colsWidth > width )
+        else if ( colsWidth > m_width )
         {
-            // Reduce column
-            if ( reduceCol != -1 )
+            widthHigher = -widthHigher;
+            // Always reduce the last column that is larger than minimum size
+            // (looks nicer, even with auto-centering enabled).
+            for (int reduceCol = (int)m_colWidths.size() - 1; reduceCol >= 0 && widthHigher > 0; reduceCol--)
             {
-                wxLogTrace("propgrid",
-                           wxS("  Reduce column %i (by %i)"),
-                           reduceCol, -widthHigher);
+                // Reduce column, if possible.
+                if ( m_colWidths[reduceCol] > GetColumnMinWidth(reduceCol) )
+                {
+                    int d = wxMin(m_colWidths[reduceCol] - GetColumnMinWidth(reduceCol), widthHigher);
+                    wxLogTrace("propgrid", wxS("  Reduce column %i (by %i)"), reduceCol, d);
 
-                // Reduce widest column, and recheck
-                m_colWidths[reduceCol] = m_colWidths[reduceCol] + widthHigher;
-                CheckColumnWidths();
+                    m_colWidths[reduceCol] -= d;
+                    colsWidth -= d;
+                    widthHigher -= d;
+                }
             }
+            m_width = colsWidth;
         }
     }
     else
@@ -1089,7 +1061,7 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
         // Only check colsWidth against clientWidth
         if ( colsWidth < clientWidth )
         {
-            m_colWidths[lastColumn] = m_colWidths[lastColumn] + (clientWidth-colsWidth);
+            m_colWidths.back() += (clientWidth-colsWidth);
         }
 
         m_width = colsWidth;
@@ -1099,9 +1071,9 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
             pg->RecalculateVirtualSize();
     }
 
-    for ( i=0; i<m_colWidths.size(); i++ )
+    for (size_t i=0; i<m_colWidths.size(); i++)
     {
-        wxLogTrace("propgrid", wxS("col%i: %i"), i, m_colWidths[i]);
+        wxLogTrace("propgrid", wxS("col%zu: %i"), i, m_colWidths[i]);
     }
 
     // Auto center splitter
@@ -1169,20 +1141,17 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
 
 void wxPropertyGridPageState::ResetColumnSizes( int setSplitterFlags )
 {
-    unsigned int i;
     // Calculate sum of proportions
-    int psum = 0;
-    for ( i=0; i<m_colWidths.size(); i++ )
-        psum += m_columnProportions[i];
+    int psum = wxPGGetSumVectorItems<int>(m_columnProportions, 0);
     int puwid = (m_pPropGrid->m_width*256) / psum;
     int cpos = 0;
 
     // Convert proportion to splitter positions
-    for ( i=0; i<(m_colWidths.size() - 1); i++ )
+    for (size_t i=0; i<(m_colWidths.size() - 1); i++)
     {
         int cwid = (puwid*m_columnProportions[i]) / 256;
         cpos += cwid;
-        DoSetSplitterPosition(cpos, i,
+        DoSetSplitterPosition(cpos, (int)i,
                               setSplitterFlags);
     }
 }
@@ -1190,11 +1159,8 @@ void wxPropertyGridPageState::ResetColumnSizes( int setSplitterFlags )
 void wxPropertyGridPageState::SetColumnCount( int colCount )
 {
     wxASSERT( colCount >= 2 );
-    m_colWidths.SetCount( colCount, wxPG_DRAG_MARGIN );
-    m_columnProportions.SetCount( colCount, 1 );
-    if ( m_colWidths.size() > (unsigned int)colCount )
-        m_colWidths.RemoveAt( m_colWidths.size()-1,
-                              m_colWidths.size() - colCount );
+    m_colWidths.resize(colCount, wxPG_DRAG_MARGIN);
+    m_columnProportions.resize(colCount, 1);
 
     if ( m_pPropGrid->GetState() == this )
         m_pPropGrid->RecalculateVirtualSize();
@@ -1573,7 +1539,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
                             wxStrcmp(current->GetType(), p->GetValue().GetType()) == 0,
                             wxString::Format(
                                 wxS("setting value of property \"%s\" from variant"),
-                                p->GetName().c_str())
+                                p->GetName())
                         );
 
                         p->SetValue(*current);
@@ -2004,14 +1970,14 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
         // Prevent adding duplicates to the lists.
         if ( doDelete )
         {
-            if ( pg->m_deletedProperties.Index(item) != wxNOT_FOUND )
+            if ( wxPGItemExistsInVector<wxPGProperty*>(pg->m_deletedProperties, item) )
                 return;
 
             pg->m_deletedProperties.push_back(item);
         }
         else
         {
-            if ( pg->m_removedProperties.Index(item) != wxNOT_FOUND )
+            if ( wxPGItemExistsInVector<wxPGProperty*>(pg->m_removedProperties, item) )
                 return;
 
             pg->m_removedProperties.push_back(item);
@@ -2112,20 +2078,12 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     {
         // Remove the item from both lists of pending operations.
         // (Deleted item cannot be also the subject of further removal.)
-        int index = pg->m_deletedProperties.Index(item);
-        if ( index != wxNOT_FOUND )
-        {
-            pg->m_deletedProperties.RemoveAt(index);
-        }
-        wxASSERT_MSG( pg->m_deletedProperties.Index(item) == wxNOT_FOUND,
+        wxPGRemoveItemFromVector<wxPGProperty*>(pg->m_deletedProperties, item);
+        wxASSERT_MSG( !wxPGItemExistsInVector<wxPGProperty*>(pg->m_deletedProperties, item),
                     wxS("Too many occurrences of the item"));
 
-        index = pg->m_removedProperties.Index(item);
-        if ( index != wxNOT_FOUND )
-        {
-            pg->m_removedProperties.RemoveAt(index);
-        }
-        wxASSERT_MSG( pg->m_removedProperties.Index(item) == wxNOT_FOUND,
+        wxPGRemoveItemFromVector<wxPGProperty*>(pg->m_removedProperties, item);
+        wxASSERT_MSG( !wxPGItemExistsInVector<wxPGProperty*>(pg->m_removedProperties, item),
                     wxS("Too many occurrences of the item"));
 
         delete item;
@@ -2133,12 +2091,8 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     else
     {
         // Remove the item from the list of pending removals.
-        int index = pg->m_removedProperties.Index(item);
-        if ( index != wxNOT_FOUND )
-        {
-            pg->m_removedProperties.RemoveAt(index);
-        }
-        wxASSERT_MSG( pg->m_removedProperties.Index(item) == wxNOT_FOUND,
+        wxPGRemoveItemFromVector<wxPGProperty*>(pg->m_removedProperties, item);
+        wxASSERT_MSG( !wxPGItemExistsInVector<wxPGProperty*>(pg->m_removedProperties, item),
                     wxS("Too many occurrences of the item"));
 
         item->OnDetached(this, pg);

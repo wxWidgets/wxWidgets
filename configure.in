@@ -14,7 +14,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [3.1.2], [wx-dev@googlegroups.com])
+AC_INIT([wxWidgets], [3.1.3], [wx-dev@googlegroups.com])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -40,7 +40,7 @@ dnl wx_release_number += 1
 
 wx_major_version_number=3
 wx_minor_version_number=1
-wx_release_number=2
+wx_release_number=3
 wx_subrelease_number=0
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
@@ -1223,8 +1223,8 @@ dnl NOTE: We clobber wxUSE_MACOSX_SDK with the SDK path
 if test "x$wxUSE_MACOSX_SDK" = "xno"; then
     wxUSE_MACOSX_SDK=
 elif test "x$wxUSE_MACOSX_SDK" = "xyes"; then
-    # TODO: Search for most recent SDK and use it.
-    wxUSE_MACOSX_SDK="/Developer/SDKs/MacOSX10.4u.sdk"
+    dnl Try to use the default SDK.
+    wxUSE_MACOSX_SDK="`xcode-select -p`/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
 fi
 
 
@@ -1276,10 +1276,11 @@ dnl We need to quote the next line where we don't need macros and do need [] in 
         wxUSE_MACOSX_VERSION_MIN=
     fi
 elif test "x$wxUSE_MACOSX_VERSION_MIN" = "x"; then
-    wxUSE_MACOSX_VERSION_MIN=10.7
+    wxUSE_MACOSX_VERSION_MIN=10.9
 fi
 
 if test "x$MACOSX_SDK_OPTS" != "x"; then
+    eval "CPP=\"$CPP $MACOSX_SDK_OPTS\""
     eval "CC=\"$CC $MACOSX_SDK_OPTS\""
     eval "CXX=\"$CXX $MACOSX_SDK_OPTS\""
     eval "LD=\"$LD $MACOSX_SDK_OPTS\""
@@ -1292,6 +1293,7 @@ if test "x$wxUSE_MACOSX_VERSION_MIN" != "x"; then
     else
         MACOSX_VERSION_MIN_OPTS="-mmacosx-version-min=$wxUSE_MACOSX_VERSION_MIN"
     fi
+    eval "CPP=\"$CPP $MACOSX_VERSION_MIN_OPTS\""
     eval "CC=\"$CC $MACOSX_VERSION_MIN_OPTS\""
     eval "CXX=\"$CXX $MACOSX_VERSION_MIN_OPTS\""
     eval "LD=\"$LD $MACOSX_VERSION_MIN_OPTS\""
@@ -1475,6 +1477,10 @@ if test "$USE_UNIX" = 1 ; then
     wxUSE_UNIX=yes
     AC_DEFINE(__UNIX__)
 fi
+
+dnl Values of these variables shouldn't change any longer from now on, we
+dnl export them to ensure they're picked up by sub-configure scripts.
+export CC CFLAGS CPP CPPFLAGS CXX CXXFLAGS LDD LDFLAGS OBJCFLAGS OBJCXXFLAGS
 
 dnl ------------------------------------------------------------------------
 dnl Check for headers
@@ -2580,12 +2586,15 @@ if test "$wxUSE_LIBLZMA" != "no"; then
     fi
 fi
 
-dnl We need to disable the use of lzma in built-in libtiff explicitly, as
-dnl otherwise we'd depend on the system lzma library, which is typically
-dnl undesirable when using builtin libraries. We also disable the use of lzma
-dnl if it's not available anyhow, just to speed up libtiff configure a little.
-if test "$HAVE_LZMA" = "no" -o "$wxUSE_LIBTIFF" = "builtin"; then
-    ac_configure_args="$ac_configure_args --disable-lzma"
+dnl Disable the use of lzma, webp and zstd in built-in libtiff explicitly, as
+dnl otherwise we'd depend on the system libraries, which is typically
+dnl undesirable when using builtin libraries. If we use lzma ourselves, keep it
+dnl enabled.
+if test "$wxUSE_LIBTIFF" = "builtin"; then
+    ac_configure_args="$ac_configure_args --disable-webp --disable-zstd"
+    if test "$wxUSE_LIBLZMA" = "no"; then
+        ac_configure_args="$ac_configure_args --disable-lzma"
+    fi
 fi
 
 dnl ------------------------------------------------------------------------
@@ -2604,35 +2613,47 @@ dnl Check for tiff library
 dnl ------------------------------------------------------------------------
 
 TIFF_LINK=
-TIFF_PREREQ_LINKS=-lm
 if test "$wxUSE_LIBTIFF" != "no" ; then
     AC_DEFINE(wxUSE_LIBTIFF)
 
     if test "$wxUSE_LIBTIFF" = "sys" -o "$wxUSE_LIBTIFF" = "yes" ; then
-        dnl libtiff may depend on libjpeg and libz so use them in the test
-        dnl below or it would fail
-        if test "$wxUSE_LIBJPEG" = "sys"; then
-            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JPEG_LINK"
-        fi
-        if test "$wxUSE_ZLIB" = "sys"; then
-            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $ZLIB_LINK"
-        fi
-        if test -n "$LZMA_LINK"; then
-            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $LZMA_LINK"
-        fi
-        if test "$wxUSE_LIBJBIG" = "yes"; then
-            TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JBIG_LINK"
-        fi
-        AC_CHECK_HEADER(tiffio.h,
-                        [
-                            AC_CHECK_LIB(tiff, TIFFError,
-                                         TIFF_LINK=" -ltiff",
-                                         ,
-                                         $TIFF_PREREQ_LINKS)
-                        ],
-                        [],
-                        [ ]
-                       )
+        dnl First try using pkg-config as it's the most reliable way to detect
+        dnl libtiff.
+        PKG_CHECK_MODULES(LIBTIFF, [libtiff-4],
+            [
+                TIFF_LINK=$LIBTIFF_LIBS
+                CFLAGS="$LIBTIFF_CFLAGS $CFLAGS"
+            ],
+            [
+                AC_MSG_RESULT([not found via pkg-config])
+
+                TIFF_PREREQ_LINKS=-lm
+
+                dnl libtiff may depend on libjpeg and libz so use them in the test
+                dnl below or it would fail
+                if test "$wxUSE_LIBJPEG" = "sys"; then
+                    TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JPEG_LINK"
+                fi
+                if test "$wxUSE_ZLIB" = "sys"; then
+                    TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $ZLIB_LINK"
+                fi
+                if test -n "$LZMA_LINK"; then
+                    TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $LZMA_LINK"
+                fi
+                if test "$wxUSE_LIBJBIG" = "yes"; then
+                    TIFF_PREREQ_LINKS="$TIFF_PREREQ_LINKS $JBIG_LINK"
+                fi
+                AC_CHECK_HEADER(tiffio.h,
+                                [
+                                    AC_CHECK_LIB(tiff, TIFFError,
+                                                 TIFF_LINK=" -ltiff",
+                                                 ,
+                                                 $TIFF_PREREQ_LINKS)
+                                ],
+                                [],
+                                [ ]
+                               )
+            ])
 
         if test "x$TIFF_LINK" = "x" ; then
             if test "$wxUSE_LIBTIFF" = "sys" ; then
@@ -7938,7 +7959,7 @@ EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_MEDIA="$GST_LIBS"
 EXTRALIBS_STC="-lwxscintilla${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
+    EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $SDL_LIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $LZMA_LINK $JBIG_LINK $WEBKIT_LINK`
 fi
 if test "$wxUSE_OPENGL" = "yes"; then
     EXTRALIBS_OPENGL="$LDFLAGS_GL $OPENGL_LIBS"

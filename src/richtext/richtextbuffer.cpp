@@ -5691,6 +5691,7 @@ bool wxRichTextParagraph::InsertText(long pos, const wxString& text)
 void wxRichTextParagraph::Copy(const wxRichTextParagraph& obj)
 {
     wxRichTextCompositeObject::Copy(obj);
+    m_impactedByFloatingObjects = obj.m_impactedByFloatingObjects;
 }
 
 /// Clear the cached lines
@@ -9657,7 +9658,7 @@ bool wxRichTextFieldTypeStandard::Draw(wxRichTextField* obj, wxDC& dc, wxRichTex
             int w, h, maxDescent;
             dc.SetFont(m_font);
             dc.GetTextExtent(m_label, & w, &h, & maxDescent);
-            dc.SetBackgroundMode(wxTRANSPARENT);
+            dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
             dc.SetTextForeground(textColour);
 
             int x = clientArea.x + (clientArea.width - w)/2;

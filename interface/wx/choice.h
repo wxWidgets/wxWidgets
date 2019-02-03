@@ -51,7 +51,7 @@ public:
             Window position.
             If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Window size. 
+            Window size.
             If ::wxDefaultSize is specified then the choice is sized appropriately.
         @param n
             Number of strings with which to initialise the choice control.
@@ -172,7 +172,7 @@ public:
     virtual void SetColumns(int n = 1);
 
     virtual bool IsSorted() const;
-    
+
     virtual unsigned int GetCount() const ;
     virtual int GetSelection() const ;
     virtual void SetSelection(int n);

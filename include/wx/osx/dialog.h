@@ -62,7 +62,7 @@ public:
     static bool OSXHasModalDialogsOpen();
     void OSXBeginModalDialog();
     void OSXEndModalDialog();
-    
+
 #if wxOSX_USE_COCOA
     bool OSXGetWorksWhenModal();
     void OSXSetWorksWhenModal(bool worksWhenModal);
@@ -94,7 +94,7 @@ protected:
 
 private:
     void Init();
-    
+
     static wxVector<wxDialog*> s_modalStack;
 #if wxOSX_USE_COCOA
     static wxVector<bool> s_modalWorksStack;

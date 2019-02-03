@@ -8,9 +8,8 @@
 #ifndef _WX_QT_TEXTCTRL_H_
 #define _WX_QT_TEXTCTRL_H_
 
-class QLineEdit;
-class QTextEdit;
 class QScrollArea;
+class wxQtEdit;
 
 class WXDLLIMPEXP_CORE wxTextCtrl : public wxTextCtrlBase
 {
@@ -24,6 +23,8 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString &name = wxTextCtrlNameStr);
+
+    virtual ~wxTextCtrl();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -45,7 +46,7 @@ public:
     virtual bool SetStyle(long start, long end, const wxTextAttr& style);
     virtual bool GetStyle(long position, wxTextAttr& style);
     virtual bool SetDefaultStyle(const wxTextAttr& style);
-    
+
     virtual long XYToPosition(long x, long y) const;
     virtual bool PositionToXY(long pos, long *x, long *y) const;
 
@@ -71,8 +72,7 @@ protected:
     virtual QScrollArea *QtGetScrollBarsContainer() const;
 
 private:
-    QLineEdit *m_qtLineEdit;
-    QTextEdit *m_qtTextEdit;
+    wxQtEdit *m_qtEdit;
 
     wxDECLARE_DYNAMIC_CLASS( wxTextCtrl );
 };

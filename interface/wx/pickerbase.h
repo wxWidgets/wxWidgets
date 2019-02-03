@@ -163,7 +163,7 @@ public:
 
     virtual void UpdatePickerFromTextCtrl() = 0;
     virtual void UpdateTextCtrlFromPicker() = 0;
-    
+
 protected:
     virtual long GetTextCtrlStyle(long style) const;
     virtual long GetPickerStyle(long style) const;

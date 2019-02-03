@@ -22,7 +22,7 @@ class wxDisplayFactory
 {
 public:
     wxDisplayFactory() { }
-    virtual ~wxDisplayFactory();
+    virtual ~wxDisplayFactory() { ClearImpls(); }
 
     // Create the display if necessary using CreateDisplay(), otherwise just
     // get it from cache.
@@ -48,6 +48,9 @@ public:
     // the window pointer must not be NULL (i.e. caller should check it)
     virtual int GetFromWindow(const wxWindow *window);
 
+    // Trigger recreation of wxDisplayImpl when they're needed the next time.
+    void InvalidateCache() { ClearImpls(); }
+
 protected:
     // create a new display object
     //
@@ -55,6 +58,9 @@ protected:
     virtual wxDisplayImpl *CreateDisplay(unsigned n) = 0;
 
 private:
+    // Delete all the elements of m_impls vector and clear it.
+    void ClearImpls();
+
     // On-demand populated vector of wxDisplayImpl objects.
     wxVector<wxDisplayImpl*> m_impls;
 
@@ -81,8 +87,11 @@ public:
     // return the depth or 0 if unknown
     virtual int GetDepth() const = 0;
 
-    // return the resolution of the display, uses GetSizeMM() by default but
-    // can be also overridden directly
+    // return the scale factor used to convert logical pixels to physical ones
+    virtual double GetScaleFactor() const { return 1.0; }
+
+    // return the resolution of the display, uses GetSize(), GetScaleFactor()
+    // and GetSizeMM() by default but can be also overridden directly
     virtual wxSize GetPPI() const;
 
     // return the physical size of the display or (0, 0) if unknown: this is
@@ -114,6 +123,11 @@ public:
 protected:
     // create the object providing access to the display with the given index
     wxDisplayImpl(unsigned n) : m_index(n) { }
+
+    // Compute PPI from the sizes in pixels and mm.
+    //
+    // Return (0, 0) if physical size (in mm) is not known, i.e. 0.
+    static wxSize ComputePPI(int pxX, int pxY, int mmX, int mmY);
 
 
     // the index of this display (0 is always the primary one)

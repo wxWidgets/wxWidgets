@@ -15,11 +15,13 @@
 #include <QtCore/QStringList>
 #include <QtWidgets/QApplication>
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxAppBase);
+wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler);
 
 wxApp::wxApp()
 {
     m_qtApplication = NULL;
+    m_qtArgc = 0;
+    m_qtArgv = NULL;
 }
 
 
@@ -67,7 +69,7 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
          * deleted as they are internally kept by Qt in a list after calling arguments().
          * However, there isn't any guarantee of that in the docs, so we keep arguments
          * ourselves and only delete then after the QApplication is deleted */
-        
+
         // Qt changed the arguments
         delete [] argv;
         argv = new wxChar *[qtArgs.size() + 1];

@@ -272,7 +272,7 @@ bool wxBitmapRefData::Create(CGContextRef context)
     return IsOk() ;
 }
 
-bool wxBitmapRefData::Create(int w, int h, int d, double logicalscale)
+bool wxBitmapRefData::Create(int w, int h, int WXUNUSED(d), double logicalscale)
 {
     size_t m_width = wxMax(1, w);
     size_t m_height = wxMax(1, h);
@@ -1062,7 +1062,9 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
 
             maskbuf.UngetWriteBuf( maskbufsize ) ;
         }
-        ret.SetMask( new wxMask( maskbuf , destwidth , destheight , rowBytes ) ) ;
+        wxMask* const mask = new wxMask();
+        mask->OSXCreate( maskbuf , destwidth , destheight , rowBytes );
+        ret.SetMask(mask) ;
     }
     else if ( HasAlpha() )
         ret.UseAlpha() ;
@@ -1505,22 +1507,14 @@ wxMask::wxMask(const wxMask &tocopy) : wxMaskBase()
 wxMask::wxMask( const wxBitmap& bitmap, const wxColour& colour )
 {
     Init() ;
-    wxMaskBase::Create( bitmap, colour );
+    Create( bitmap, colour );
 }
 
 // Construct a mask from a mono bitmap (copies the bitmap).
 wxMask::wxMask( const wxBitmap& bitmap )
 {
     Init() ;
-    wxMaskBase::Create( bitmap );
-}
-
-// Construct a mask from a mono bitmap (copies the bitmap).
-
-wxMask::wxMask( const wxMemoryBuffer& data, int width , int height , int bytesPerRow )
-{
-    Init() ;
-    Create( data, width , height , bytesPerRow );
+    Create( bitmap );
 }
 
 wxMask::~wxMask()
@@ -1591,7 +1585,7 @@ void wxMask::RealizeNative()
 
 // Create a mask from a mono bitmap (copies the bitmap).
 
-bool wxMask::Create(const wxMemoryBuffer& data,int width , int height , int bytesPerRow)
+bool wxMask::OSXCreate(const wxMemoryBuffer& data,int width , int height , int bytesPerRow)
 {
     wxASSERT( data.GetDataLen() == (size_t)(height * bytesPerRow) ) ;
 

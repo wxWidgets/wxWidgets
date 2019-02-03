@@ -16,17 +16,16 @@
 #include <QtWidgets/QApplication>
 #include <QtGui/QPixmap>
 
-wxIMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl);
+wxIMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxQtDCImpl);
 
 wxScreenDCImpl::wxScreenDCImpl( wxScreenDC *owner )
     : wxWindowDCImpl( owner )
 {
-    m_qtImage = NULL;
 }
 
 wxScreenDCImpl::~wxScreenDCImpl( )
 {
-    delete m_qtImage;
+    delete m_qtPixmap;
 }
 
 void wxScreenDCImpl::DoGetSize(int *width, int *height) const
@@ -34,19 +33,10 @@ void wxScreenDCImpl::DoGetSize(int *width, int *height) const
     wxDisplaySize(width, height);
 }
 
-bool wxScreenDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
-{
-//    const_cast<wxScreenDCImpl*>(this)->GetQImage();
-//    return wxQtDCImpl::DoGetPixel(x, y, col);
-    x = y = 0;
-    col = 0;
-    return false;
-}
-
 // defered allocation for blit
-QImage *wxScreenDCImpl::GetQImage()
+QPixmap *wxScreenDCImpl::GetQPixmap()
 {
-    if ( !m_qtImage )
-        m_qtImage = new QImage(QApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId()).toImage());
-    return m_qtImage;
+    if ( !m_qtPixmap )
+        m_qtPixmap = new QPixmap(QApplication::primaryScreen()->grabWindow(QApplication::desktop()->winId()));
+    return m_qtPixmap;
 }

@@ -36,6 +36,31 @@ class DocHostUIHandler;
 class wxFindPointers;
 class wxIInternetProtocol;
 
+// Note that the highest emulation level may be used even when the
+// corresponding browser version is not installed.
+//
+// Using FORCE options is not recommended, DEFAULT can be used to reset level
+// to the system default.
+//
+// The value of the constants were taken from
+//
+//   https://msdn.microsoft.com/library/ee330730.aspx#browser_emulation
+//
+// and must not be changed.
+enum wxWebViewIE_EmulationLevel
+{
+    wxWEBVIEWIE_EMU_DEFAULT =    0,
+    wxWEBVIEWIE_EMU_IE7 =        7000,
+    wxWEBVIEWIE_EMU_IE8 =        8000,
+    wxWEBVIEWIE_EMU_IE8_FORCE =  8888,
+    wxWEBVIEWIE_EMU_IE9 =        9000,
+    wxWEBVIEWIE_EMU_IE9_FORCE =  9999,
+    wxWEBVIEWIE_EMU_IE10 =       10000,
+    wxWEBVIEWIE_EMU_IE10_FORCE = 10001,
+    wxWEBVIEWIE_EMU_IE11 =       11000,
+    wxWEBVIEWIE_EMU_IE11_FORCE = 11001
+};
+
 class WXDLLIMPEXP_WEBVIEW wxWebViewIE : public wxWebView
 {
 public:
@@ -144,9 +169,19 @@ public:
     void onActiveXEvent(wxActiveXEvent& evt);
     void onEraseBg(wxEraseEvent&) {}
 
-    // Establish sufficiently modern emulation level for the browser control to
-    // allow RunScript() to return any kind of values.
-    static bool MSWSetModernEmulationLevel(bool modernLevel = true);
+    // Switch to specific emulation level for the browser control to
+    // ensure RunScript() and web pages work as designed and also change the
+    // value of User-Agent header sent to web server.
+    static bool
+    MSWSetEmulationLevel(wxWebViewIE_EmulationLevel level = wxWEBVIEWIE_EMU_IE11);
+
+    // This function is provided only for compatibility reasons, use
+    // MSWSetEmulationLevel() in the new code instead.
+    static bool MSWSetModernEmulationLevel(bool modernLevel = true)
+    {
+        return MSWSetEmulationLevel(modernLevel ? wxWEBVIEWIE_EMU_IE8
+                                                : wxWEBVIEWIE_EMU_DEFAULT);
+    }
 
     wxDECLARE_EVENT_TABLE();
 
@@ -157,7 +192,6 @@ private:
     wxIEContainer* m_container;
     wxAutomationObject m_ie;
     IWebBrowser2* m_webBrowser;
-    DWORD m_dwCookie;
     wxCOMPtr<DocHostUIHandler> m_uiHandler;
 
     //We store the current zoom type;

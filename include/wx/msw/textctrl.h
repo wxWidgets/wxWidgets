@@ -290,9 +290,6 @@ private:
     // false if we hit the limit set by SetMaxLength() and so didn't change it.
     bool AdjustSpaceLimit();
 
-    wxDECLARE_EVENT_TABLE();
-    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxTextCtrl);
-
     wxMenu* m_privateContextMenu;
 
     bool m_isNativeCaretShown;
@@ -301,6 +298,8 @@ private:
     int  m_isInkEdit;
 #endif
 
+    wxDECLARE_EVENT_TABLE();
+    wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxTextCtrl);
 };
 
 #endif // _WX_TEXTCTRL_H_

@@ -364,12 +364,18 @@ void ArraysTestCase::wxStringArrayTest()
     a6.Add("Foo");
     a6.Insert(a6[0], 1, 100);
 
+    // The whole point of this code is to test self-assignment, so suppress
+    // clang warning about it.
+    wxCLANG_WARNING_SUPPRESS(self-assign-overloaded)
+
     wxArrayString a7;
     a7 = a7;
     CPPUNIT_ASSERT_EQUAL( 0, a7.size() );
     a7.Add("Bar");
     a7 = a7;
     CPPUNIT_ASSERT_EQUAL( 1, a7.size() );
+
+    wxCLANG_WARNING_RESTORE(self-assign-overloaded)
 }
 
 void ArraysTestCase::SortedArray()

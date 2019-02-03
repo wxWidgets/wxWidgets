@@ -83,12 +83,14 @@
              The item will be expanded as much as possible while also
              maintaining its aspect ratio.}
     @itemdef{wxFIXED_MINSIZE,
-             Normally wxSizers will use GetAdjustedBestSize() to determine what
-             the minimal size of window items should be, and will use that size
-             to calculate the layout. This allows layouts to adjust when an
-             item changes and its best size becomes different. If you would
-             rather have a window item stay the size it started with then use
-             @c wxFIXED_MINSIZE.}
+             Normally sizers use the "best", i.e. most appropriate, size of the
+             window to determine what the minimal size of window items should be.
+             This allows layouts to adjust correctly when the item contents,
+             and hence its best size, changes. If this behaviour is unwanted,
+             @c wxFIXED_MINSIZE can be used to fix minimal size of the window
+             to its initial value and not change it any more in the future.
+             Note that the same thing can be accomplished by calling
+             wxWindow::SetMinSize() explicitly as well.}
     @itemdef{wxRESERVE_SPACE_EVEN_IF_HIDDEN,
              Normally wxSizers don't allocate space for hidden windows or other
              items. This flag overrides this behaviour so that sufficient space
@@ -292,7 +294,7 @@ public:
                      int flag = 0,
                      int border = 0,
                      wxObject* userData = NULL);
-    
+
     /**
         Appends a spacer child to the sizer.
 
@@ -307,7 +309,7 @@ public:
     wxSizerItem* Add( int width, int height, const wxSizerFlags& flags);
 
     wxSizerItem* Add(wxSizerItem* item);
-    
+
     /**
         This base function adds non-stretchable space to both the horizontal
         and vertical orientation of the sizer.
@@ -437,7 +439,7 @@ public:
     */
     virtual bool InformFirstDirection(int direction, int size, int availableOtherDir);
 
-    
+
     //@{
     /**
         Returns the list of the items in this sizer.
@@ -458,7 +460,7 @@ public:
        Set the window this sizer is used in.
     */
     void SetContainingWindow(wxWindow *window);
-    
+
     /**
        Returns the number of items in the sizer.
 
@@ -615,7 +617,7 @@ public:
                         const wxSizerFlags& flags);
 
     wxSizerItem* Insert(size_t index, wxSizerItem* item);
-    
+
     /**
         Inserts non-stretchable space to the sizer.
         More readable way of calling wxSizer::Insert(index, size, size).
@@ -711,7 +713,7 @@ public:
     wxSizerItem* Prepend(int width, int height, const wxSizerFlags& flags);
 
     wxSizerItem* Prepend(wxSizerItem* item);
-    
+
     /**
         Prepends non-stretchable space to the sizer.
         More readable way of calling wxSizer::Prepend(size, size, 0).
@@ -725,11 +727,16 @@ public:
     wxSizerItem* PrependStretchSpacer(int prop = 1);
 
     /**
-        This method is abstract and has to be overwritten by any derived class.
-        Here, the sizer will do the actual calculation of its children's
-        positions and sizes.
+        Method which must be overridden in the derived sizer classes.
+
+        The implementation should reposition the children using the current
+        total size available to the sizer (@c m_size) and the size computed by
+        the last call to CalcMin().
+
+        @since 3.1.3, before this version RecalcSizes() method not taking any
+            arguments had to be overridden in the derived classes instead.
     */
-    virtual void RecalcSizes() = 0;
+    virtual void RepositionChildren(const wxSize& minSize) = 0;
 
     /**
         Removes a child window from the sizer, but does @b not destroy it
@@ -1708,7 +1715,7 @@ public:
 
     virtual void RecalcSizes();
     virtual wxSize CalcMin();
-    
+
 };
 
 
@@ -1771,7 +1778,7 @@ public:
         number of columns or rows being currently used, see GetEffectiveColsCount()
     */
     int GetCols() const;
-    
+
     /**
         Returns the number of rows that has been specified for the
         sizer.
@@ -1791,7 +1798,7 @@ public:
         @since 2.9.1
     */
     int GetEffectiveColsCount() const;
-    
+
     /**
         Returns the number of rows currently used by the sizer.
 

@@ -58,6 +58,7 @@ wxOSXAudioToolboxSoundData::wxOSXAudioToolboxSoundData(SystemSoundID soundID) :
 wxOSXAudioToolboxSoundData::~wxOSXAudioToolboxSoundData()
 {
     DoStop();
+    AudioServicesDisposeSystemSoundID (m_soundID);
 }
 
 void
@@ -94,8 +95,7 @@ void wxOSXAudioToolboxSoundData::DoStop()
     if ( m_playing )
     {
         m_playing = false;
-        AudioServicesDisposeSystemSoundID (m_soundID);
-
+        AudioServicesRemoveSystemSoundCompletion(m_soundID);
         wxSound::SoundStopped(this);
     }
 }

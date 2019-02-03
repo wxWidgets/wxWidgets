@@ -87,7 +87,7 @@ public:
     /// be removed from the page. By default, these effects are not shown as they
     /// have no effect in the editor.
     static int GetAllowedTextEffects() { return sm_allowedTextEffects; }
-    
+
     /// Sets the allowed text effects in the page.
     static void SetAllowedTextEffects(int allowed) { sm_allowedTextEffects = allowed; }
 

@@ -31,7 +31,7 @@ class MyApp: public wxApp
 public:
     virtual bool OnInit() wxOVERRIDE;
     virtual int OnExit() wxOVERRIDE;
-    MyFrame *GetFrame() { return m_frame; };
+    MyFrame *GetFrame() { return m_frame; }
 
 protected:
     MyFrame        *m_frame;
@@ -96,8 +96,8 @@ public:
     bool Connect(const wxString& sHost, const wxString& sService, const wxString& sTopic);
     void Disconnect();
     wxConnectionBase *OnMakeConnection() wxOVERRIDE;
-    bool IsConnected() { return m_connection != NULL; };
-    MyConnection *GetConnection() { return m_connection; };
+    bool IsConnected() { return m_connection != NULL; }
+    MyConnection *GetConnection() { return m_connection; }
 
 protected:
     MyConnection     *m_connection;

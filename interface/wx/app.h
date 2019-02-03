@@ -1063,7 +1063,7 @@ public:
         is specified in the @c Info.plist file.
 
         @onlyfor{wxosx}
-        
+
         @since 3.0.1
     */
     virtual bool OSXIsGUIApplication();

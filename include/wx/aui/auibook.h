@@ -226,6 +226,7 @@ protected:
     void OnKillFocus(wxFocusEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnCaptureLost(wxMouseCaptureLostEvent& evt);
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
 protected:
 
@@ -349,11 +350,13 @@ public:
 
     virtual int ChangeSelection(size_t n) wxOVERRIDE;
 
-    virtual bool AddPage(wxWindow *page, const wxString &text, bool select, 
+    virtual bool AddPage(wxWindow *page, const wxString &text, bool select,
                          int imageId) wxOVERRIDE;
     virtual bool DeleteAllPages() wxOVERRIDE;
     virtual bool InsertPage(size_t index, wxWindow *page, const wxString &text,
                             bool select, int imageId) wxOVERRIDE;
+
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
 protected:
     // Common part of all ctors.
@@ -408,6 +411,7 @@ protected:
     void OnTabRightUp(wxAuiNotebookEvent& evt);
     void OnTabBgDClick(wxAuiNotebookEvent& evt);
     void OnNavigationKeyNotebook(wxNavigationKeyEvent& event);
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
 
     // set selection to the given window (which must be non-NULL and be one of
     // our pages, otherwise an assert is raised)

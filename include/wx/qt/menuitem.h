@@ -9,9 +9,10 @@
 #define _WX_QT_MENUITEM_H_
 
 #include "wx/menuitem.h"
+#include "wx/bitmap.h"
+
 class QAction;
 
-class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxMenu;
 
 class WXDLLIMPEXP_CORE wxMenuItem : public wxMenuItemBase
@@ -24,23 +25,24 @@ public:
                wxItemKind kind = wxITEM_NORMAL,
                wxMenu *subMenu = NULL);
 
-    virtual void SetItemLabel(const wxString& str);
-    virtual void SetCheckable(bool checkable);
+    virtual void SetItemLabel(const wxString& str) wxOVERRIDE;
+    virtual void SetCheckable(bool checkable) wxOVERRIDE;
 
-    virtual void Enable(bool enable = true);
-    virtual bool IsEnabled() const;
+    virtual void Enable(bool enable = true) wxOVERRIDE;
+    virtual bool IsEnabled() const wxOVERRIDE;
 
-    virtual void Check(bool check = true);
-    virtual bool IsChecked() const;
+    virtual void Check(bool check = true) wxOVERRIDE;
+    virtual bool IsChecked() const wxOVERRIDE;
 
-    void SetBitmap(const wxBitmap& bitmap);
-    const wxBitmap& GetBitmap() const;
+    virtual void SetBitmap(const wxBitmap& bitmap);
+    virtual const wxBitmap& GetBitmap() const { return m_bitmap; };
 
     virtual QAction *GetHandle() const;
 
 private:
     // Qt is using an action instead of a menu item.
     QAction *m_qtAction;
+    wxBitmap m_bitmap;
 
     wxDECLARE_DYNAMIC_CLASS( wxMenuItem );
 };

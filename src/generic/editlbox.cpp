@@ -121,61 +121,53 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
     wxPanel *subp = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                                 wxSUNKEN_BORDER | wxTAB_TRAVERSAL);
     wxSizer *subsizer = new wxBoxSizer(wxHORIZONTAL);
-    subsizer->Add(new wxStaticText(subp, wxID_ANY, label), 1, wxALIGN_CENTRE_VERTICAL | wxLEFT, 4);
 
-#ifdef __WXMSW__
-    #define BTN_BORDER 4
-    // FIXME - why is this needed? There's some reason why sunken border is
-    //         ignored by sizers in wxMSW but not in wxGTK that I can't
-    //         figure out...
-#else
-    #define BTN_BORDER 0
-#endif
+    subsizer->Add(new wxStaticText(subp, wxID_ANY, label),
+                  wxSizerFlags(1).Center().Border(wxLEFT));
+
+    const wxSizerFlags flagsCentered = wxSizerFlags().Center();
 
     if ( m_style & wxEL_ALLOW_EDIT )
     {
         m_bEdit = new wxBitmapButton(subp, wxID_ELB_EDIT,
                                      wxArtProvider::GetBitmap(wxART_EDIT, wxART_BUTTON));
-        subsizer->Add(m_bEdit, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+        m_bEdit->SetToolTip(_("Edit item"));
+        subsizer->Add(m_bEdit, flagsCentered);
     }
 
     if ( m_style & wxEL_ALLOW_NEW )
     {
         m_bNew = new wxBitmapButton(subp, wxID_ELB_NEW,
                                     wxArtProvider::GetBitmap(wxART_NEW, wxART_BUTTON));
-        subsizer->Add(m_bNew, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+        m_bNew->SetToolTip(_("New item"));
+        subsizer->Add(m_bNew, flagsCentered);
     }
 
     if ( m_style & wxEL_ALLOW_DELETE )
     {
         m_bDel = new wxBitmapButton(subp, wxID_ELB_DELETE,
                                     wxArtProvider::GetBitmap(wxART_DELETE, wxART_BUTTON));
-        subsizer->Add(m_bDel, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+        m_bDel->SetToolTip(_("Delete item"));
+        subsizer->Add(m_bDel, flagsCentered);
     }
 
     if (!(m_style & wxEL_NO_REORDER))
     {
         m_bUp = new wxBitmapButton(subp, wxID_ELB_UP,
                                    wxArtProvider::GetBitmap(wxART_GO_UP, wxART_BUTTON));
-        subsizer->Add(m_bUp, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+        m_bUp->SetToolTip(_("Move up"));
+        subsizer->Add(m_bUp, flagsCentered);
 
         m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN,
                                      wxArtProvider::GetBitmap(wxART_GO_DOWN, wxART_BUTTON));
-        subsizer->Add(m_bDown, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+        m_bDown->SetToolTip(_("Move down"));
+        subsizer->Add(m_bDown, flagsCentered);
     }
-
-#if wxUSE_TOOLTIPS
-    if ( m_bEdit ) m_bEdit->SetToolTip(_("Edit item"));
-    if ( m_bNew ) m_bNew->SetToolTip(_("New item"));
-    if ( m_bDel ) m_bDel->SetToolTip(_("Delete item"));
-    if ( m_bUp ) m_bUp->SetToolTip(_("Move up"));
-    if ( m_bDown ) m_bDown->SetToolTip(_("Move down"));
-#endif
 
     subp->SetSizer(subsizer);
     subsizer->Fit(subp);
 
-    sizer->Add(subp, 0, wxEXPAND);
+    sizer->Add(subp, wxSizerFlags().Expand());
 
     long st = wxLC_REPORT | wxLC_NO_HEADER | wxLC_SINGLE_SEL | wxSUNKEN_BORDER;
     if ( style & wxEL_ALLOW_EDIT )
@@ -185,7 +177,7 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
     wxArrayString empty_ar;
     SetStrings(empty_ar);
 
-    sizer->Add(m_listCtrl, 1, wxEXPAND);
+    sizer->Add(m_listCtrl, wxSizerFlags(1).Expand());
 
     SetSizer(sizer);
     Layout();

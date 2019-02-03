@@ -914,7 +914,7 @@ control.
 
 The wxWebView sample demonstarates the various capabilities of the wxWebView
 control. It is set up as a simple single window web browser, but with support
-for many of the more complex wxWebView features, including browsing through 
+for many of the more complex wxWebView features, including browsing through
 archives.
 
 @sampledir{webview}

@@ -135,7 +135,7 @@ public:
         if ( info.IsUsingSizeInPixels() )
             m_nativeFontInfo.SetPixelSize(info.GetPixelSize());
         else
-            m_nativeFontInfo.SetFractionalPointSize(info.GetFractionalPointSize());
+            m_nativeFontInfo.SetSizeOrDefault(info.GetFractionalPointSize());
 
         m_nativeFontInfo.SetStyle(info.GetStyle());
         m_nativeFontInfo.SetWeight(info.GetWeight());
@@ -236,9 +236,19 @@ bool wxFont::Create(wxSize size, wxFontFamily family, wxFontStyle style,
     return true;
 }
 
+int wxFont::GetPointSize() const
+{
+    return M_FONTDATA.wxNativeFontInfo::GetPointSize();
+}
+
 float wxFont::GetFractionalPointSize() const
 {
     return M_FONTDATA.GetFractionalPointSize();
+}
+
+wxSize wxFont::GetPixelSize() const
+{
+    return M_FONTDATA.GetPixelSize();
 }
 
 wxFontStyle wxFont::GetStyle() const
@@ -271,11 +281,24 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
     return &M_FONTDATA;
 }
 
+bool wxFont::GetStrikethrough() const
+{
+    return M_FONTDATA.GetStrikethrough();
+}
+
+
 void wxFont::SetFractionalPointSize(float pointSize)
 {
     AllocExclusive();
 
     M_FONTDATA.SetFractionalPointSize(pointSize);
+}
+
+void wxFont::SetPixelSize(const wxSize& pixelSize)
+{
+    AllocExclusive();
+
+    M_FONTDATA.SetPixelSize(pixelSize);
 }
 
 bool wxFont::SetFaceName(const wxString& facename)
@@ -313,11 +336,30 @@ void wxFont::SetUnderlined( bool underlined )
     M_FONTDATA.SetUnderlined(underlined);
 }
 
+void wxFont::SetStrikethrough(bool strikethrough)
+{
+    AllocExclusive();
+
+    M_FONTDATA.SetStrikethrough(strikethrough);
+}
+
 void wxFont::SetEncoding(wxFontEncoding encoding)
 {
     AllocExclusive();
 
     M_FONTDATA.SetEncoding(encoding);
+}
+
+void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
+{
+    SetFractionalPointSize(info.GetPointSize());
+    SetFamily(info.GetFamily());
+    SetStyle(info.GetStyle());
+    SetNumericWeight(info.GetWeight());
+    SetUnderlined(info.GetUnderlined());
+    SetStrikethrough(info.GetStrikethrough());
+    SetFaceName(info.GetFaceName());
+    SetEncoding(info.GetEncoding());
 }
 
 wxGDIRefData *wxFont::CreateGDIRefData() const
@@ -351,6 +393,11 @@ void wxNativeFontInfo::Init()
 float wxNativeFontInfo::GetFractionalPointSize() const
 {
     return m_qtFont.pointSizeF();
+}
+
+wxSize wxNativeFontInfo::GetPixelSize() const
+{
+    return wxSize(0, m_qtFont.pixelSize());
 }
 
 wxFontStyle wxNativeFontInfo::GetStyle() const
@@ -451,10 +498,7 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
 
 wxFontEncoding wxNativeFontInfo::GetEncoding() const
 {
-//    QFontInfo info = QFontInfo(m_qtFont);
-    wxMISSING_IMPLEMENTATION( __FUNCTION__ );
-
-    return wxFONTENCODING_MAX;
+    return wxFONTENCODING_UTF8;
 }
 
 void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
@@ -469,9 +513,28 @@ void wxNativeFontInfo::SetPixelSize(const wxSize& size)
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
 {
-    m_qtFont.setItalic(style == wxFONTSTYLE_ITALIC);
-//case wxFONTSTYLE_SLANT:
-//case wxFONTSTYLE_NORMAL:
+    QFont::Style qtStyle;
+
+    switch ( style )
+    {
+        case wxFONTSTYLE_ITALIC:
+            qtStyle = QFont::StyleItalic;
+            break;
+
+        case wxFONTSTYLE_NORMAL:
+            qtStyle = QFont::StyleNormal;
+            break;
+
+        case wxFONTSTYLE_SLANT:
+            qtStyle = QFont::StyleOblique;
+            break;
+
+        case wxFONTSTYLE_MAX:
+            wxFAIL_MSG("unknown font style");
+            return;
+    }
+
+    m_qtFont.setStyle(qtStyle);
 }
 
 void wxNativeFontInfo::SetNumericWeight(int weight)
@@ -492,7 +555,7 @@ void wxNativeFontInfo::SetStrikethrough(bool strikethrough)
 bool wxNativeFontInfo::SetFaceName(const wxString& facename)
 {
     m_qtFont.setFamily(wxQtConvertString(facename));
-    // qt uses a "font matching algoritm" so the font will be allways valid
+    // Qt uses a "font matching algorithm" so the font will be always valid
     return true;
 }
 

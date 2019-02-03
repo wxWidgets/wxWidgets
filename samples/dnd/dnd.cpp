@@ -1523,7 +1523,7 @@ void DnDFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        wxLogMessage("Text '%s' put on the clipboard", m_strText.c_str());
+        wxLogMessage("Text '%s' put on the clipboard", m_strText);
     }
 
     wxTheClipboard->Close();
@@ -1554,7 +1554,7 @@ void DnDFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
     else
     {
         wxLogMessage("Text '%s' pasted from the clipboard",
-                     text.GetText().c_str());
+                     text.GetText());
     }
 
     wxTheClipboard->Close();

@@ -14,7 +14,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX__) 
+#if wxUSE_WEBVIEW && wxUSE_WEBVIEW_WEBKIT && defined(__WXOSX__)
 
 #include "wx/control.h"
 #include "wx/webview.h"
@@ -86,10 +86,10 @@ public:
 
     //Find function
     virtual long Find(const wxString& text, int flags = wxWEBVIEW_FIND_DEFAULT) wxOVERRIDE
-    { 
+    {
         wxUnusedVar(text);
         wxUnusedVar(flags);
-        return wxNOT_FOUND; 
+        return wxNOT_FOUND;
     }
 
     //Clipboard functions

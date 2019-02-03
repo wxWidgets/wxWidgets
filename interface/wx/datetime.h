@@ -164,7 +164,7 @@ public:
     };
 
     /**
-        Date calculations often depend on the country and wxDateTime allows to set
+        Date calculations often depend on the country and wxDateTime allows setting
         the country whose conventions should be used using SetCountry(). It takes
         one of the following values as parameter.
     */
@@ -325,7 +325,7 @@ public:
        Copy constructor.
     */
     wxDateTime(const wxDateTime& date);
-    
+
     /**
         Same as Set().
     */
@@ -387,7 +387,7 @@ public:
        @a wxDateTime::Tm structure.
     */
     wxDateTime& Set(const Tm& tm);
-    
+
     /**
         Sets the date from the so-called Julian Day Number.
 
@@ -795,7 +795,7 @@ public:
     /**
        Returns the difference between this object and @a dt as a wxDateSpan.
 
-       This method allows to find the number of entire years, months, weeks and
+       This method allows finding the number of entire years, months, weeks and
        days between @a dt and this date.
 
        @since 2.9.5
@@ -1161,10 +1161,14 @@ public:
         @a n may be either positive (counting from the beginning of the month)
         or negative (counting from the end of it).
 
-        For example, SetToWeekDay(2, wxDateTime::Wed) will set the date to the
+        For example, SetToWeekDay(wxDateTime::Wed, 2) will set the date to the
         second Wednesday in the current month and
-        SetToWeekDay(-1, wxDateTime::Sun) will set the date to the last Sunday
+        SetToWeekDay(wxDateTime::Sun, -1) will set the date to the last Sunday
         in the current month.
+
+        Note that leaving the month or year parameters as their default values
+        will result in the current month or year being substituted, overwriting
+        any previous values in the wxDateTime object.
 
         @return @true if the date was modified successfully, @false otherwise
                  meaning that the specified date doesn't exist.

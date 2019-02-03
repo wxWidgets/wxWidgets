@@ -19,6 +19,8 @@
 
 #include "wx/defs.h"
 
+#include "wx/math.h"
+
 // just some classes using wxRTTI for wxStaticCast() test
 #include "wx/tarstrm.h"
 #include "wx/zipstrm.h"
@@ -150,3 +152,12 @@ void MiscTestCase::StaticCast()
 #endif // wxUSE_TARSTREAM
 }
 
+TEST_CASE("wxCTZ", "[math]")
+{
+    CHECK( wxCTZ(1) == 0 );
+    CHECK( wxCTZ(4) == 2 );
+    CHECK( wxCTZ(17) == 0 );
+    CHECK( wxCTZ(0x80000000) == 31 );
+
+    WX_ASSERT_FAILS_WITH_ASSERT( wxCTZ(0) );
+}

@@ -86,7 +86,7 @@ public:
         // nice to add support to "%k" and "%l" (hours with leading blanks
         // instead of zeros) too as this is the most common unsupported case in
         // practice.
-#if wxUSE_XLOCALE
+#if wxUSE_INTL
         m_useAMPM = wxLocale::GetInfo(wxLOCALE_TIME_FMT).Contains("%p");
 #else
         m_useAMPM = false;
@@ -209,6 +209,21 @@ private:
                 if ( m_currentField != Field_AMPM )
                 {
                     AppendDigitToCurrentField(key - '0');
+                }
+                break;
+            case WXK_NUMPAD0:
+            case WXK_NUMPAD1:
+            case WXK_NUMPAD2:
+            case WXK_NUMPAD3:
+            case WXK_NUMPAD4:
+            case WXK_NUMPAD5:
+            case WXK_NUMPAD6:
+            case WXK_NUMPAD7:
+            case WXK_NUMPAD8:
+            case WXK_NUMPAD9:
+                if ( m_currentField != Field_AMPM )
+                {
+                    AppendDigitToCurrentField(key - WXK_NUMPAD0);
                 }
                 break;
 

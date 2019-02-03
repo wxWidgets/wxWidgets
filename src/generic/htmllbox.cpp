@@ -672,6 +672,18 @@ void wxSimpleHtmlListBox::Clear()
 
 void wxSimpleHtmlListBox::DoDeleteOneItem(unsigned int n)
 {
+    // For consistency with the other wxItemContainer-derived classes, deselect
+    // the currently selected item if it, or any item before it, is being
+    // deleted, from a single-selection control.
+    if ( !HasMultipleSelection() )
+    {
+        const int sel = GetSelection();
+        if ( sel != wxNOT_FOUND && static_cast<unsigned>(sel) >= n )
+        {
+            SetSelection(wxNOT_FOUND);
+        }
+    }
+
     m_items.RemoveAt(n);
 
     m_HTMLclientData.RemoveAt(n);

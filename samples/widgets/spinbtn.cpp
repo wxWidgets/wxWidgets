@@ -368,7 +368,7 @@ void SpinBtnWidgetsPage::CreateSpin()
     {
         default:
             wxFAIL_MSG("unexpected radiobox selection");
-            // fall through
+            wxFALLTHROUGH;
 
         case Align_Left:
             textFlags |= wxALIGN_LEFT;  // no-op
@@ -587,7 +587,7 @@ void SpinBtnWidgetsPage::OnSpinCtrlDouble(wxSpinDoubleEvent& event)
 void SpinBtnWidgetsPage::OnSpinText(wxCommandEvent& event)
 {
     wxLogMessage("Text changed in spin control, now \"%s\"",
-                 event.GetString().c_str());
+                 event.GetString());
 }
 
 void SpinBtnWidgetsPage::OnSpinTextEnter(wxCommandEvent& event)

@@ -258,7 +258,7 @@ wxMutexError wxMutexInternal::LockTimeout(DWORD milliseconds)
             // the previous caller died without releasing the mutex, so even
             // though we did get it, log a message about this
             wxLogDebug(wxT("WaitForSingleObject() returned WAIT_ABANDONED"));
-            // fall through
+            wxFALLTHROUGH;
 
         case WAIT_OBJECT_0:
             // ok
@@ -269,7 +269,7 @@ wxMutexError wxMutexInternal::LockTimeout(DWORD milliseconds)
 
         default:
             wxFAIL_MSG(wxT("impossible return value in wxMutex::Lock"));
-            // fall through
+            wxFALLTHROUGH;
 
         case WAIT_FAILED:
             wxLogLastError(wxT("WaitForSingleObject(mutex)"));
@@ -873,6 +873,20 @@ bool wxThreadInternal::Suspend()
                       static_cast<unsigned long>(wxPtrToUInt(m_hThread)));
 
         return false;
+    }
+
+    // Calling GetThreadContext() forces the thread to actually be suspended:
+    // just calling SuspendThread() is not enough, it just asks the scheduler
+    // to suspend the thread at the next opportunity and by then we may already
+    // exit wxThread::Pause() and leave m_critsect, meaning that the thread
+    // could enter it and end up suspended inside a CS, which will inevitably
+    // result in a deadlock later.
+    CONTEXT ctx;
+    // We don't really need the context, but we still must initialize it.
+    ctx.ContextFlags = CONTEXT_FULL;
+    if ( !::GetThreadContext(m_hThread, &ctx) )
+    {
+        wxLogLastError(wxS("GetThreadContext"));
     }
 
     m_state = STATE_PAUSED;

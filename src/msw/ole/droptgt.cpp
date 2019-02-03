@@ -681,7 +681,7 @@ static wxDragResult ConvertDragEffectToResult(DWORD dwEffect)
 
         default:
             wxFAIL_MSG(wxT("invalid value in ConvertDragEffectToResult"));
-            // fall through
+            wxFALLTHROUGH;
 
         case DROPEFFECT_NONE:
             return wxDragNone;
@@ -702,7 +702,7 @@ static DWORD ConvertDragResultToEffect(wxDragResult result)
 
         default:
             wxFAIL_MSG(wxT("invalid value in ConvertDragResultToEffect"));
-            // fall through
+            wxFALLTHROUGH;
 
         case wxDragNone:
             return DROPEFFECT_NONE;

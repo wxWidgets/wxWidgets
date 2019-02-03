@@ -78,10 +78,10 @@
     @endcode
 
     A potentially better way to avoid memory leaks is to use wxObjectDataPtr
-    
+
     @code
         wxObjectDataPtr<MyMusicModel> musicModel;
-        
+
         wxDataViewCtrl *musicCtrl = new wxDataViewCtrl( this, wxID_ANY );
         musicModel = new MyMusicModel;
         m_musicCtrl->AssociateModel( musicModel.get() );
@@ -382,7 +382,7 @@ public:
     */
     bool ValueChanged(const wxDataViewItem& item, unsigned int col);
 
-    
+
     virtual bool IsListModel() const;
     virtual bool IsVirtualListModel() const;
 
@@ -527,7 +527,7 @@ public:
     have other reason to use a virtual control.
 
     @see wxDataViewListModel for the API.
-    
+
     @library{wxcore}
     @category{dvc}
 */
@@ -1446,8 +1446,14 @@ public:
     int GetIndent() const;
 
     /**
-        Returns item rectangle. Coordinates of the rectangle are specified in
-        wxDataViewCtrl client area coordinates.
+        Returns item rectangle.
+
+        If item is not currently visible, either because its parent is
+        collapsed or it is outside of the visible part of the control due to
+        the current vertical scrollbar position, return an empty rectangle.
+
+        Coordinates of the rectangle are specified in wxDataViewCtrl client
+        area coordinates.
 
         @param item
             A valid item.
@@ -1455,10 +1461,6 @@ public:
             If non-@NULL, the rectangle returned corresponds to the
             intersection of the item with the specified column. If @NULL, the
             rectangle spans all the columns.
-
-        @note This method is currently not implemented at all in wxGTK and only
-              implemented for non-@NULL @a col argument in wxOSX. It is fully
-              implemented in the generic version of the control.
     */
     virtual wxRect GetItemRect(const wxDataViewItem& item,
                                const wxDataViewColumn* col = NULL) const;
@@ -1556,6 +1558,9 @@ public:
 
     /**
         Return @true if the item is expanded.
+
+        @note When using the native macOS version this method has a bug which
+              may result in returning @true even for items without children.
     */
     virtual bool IsExpanded(const wxDataViewItem& item) const;
 
@@ -1629,7 +1634,7 @@ public:
     /**
         Set custom colours and/or font to use for the header.
 
-        This method allows to customize the display of the control header (it
+        This method allows customizing the display of the control header (it
         does nothing if @c wxDV_NO_HEADER style is used).
 
         Currently it is only implemented in the generic version and just
@@ -2059,7 +2064,7 @@ public:
     */
     virtual bool Validate(wxVariant& value);
 
-    
+
     virtual bool HasEditorCtrl() const;
     virtual wxWindow* CreateEditorCtrl(wxWindow * parent,
                                        wxRect labelRect,
@@ -2545,6 +2550,10 @@ public:
                         labelRect.GetTopLeft(), labelRect.GetSize(), 0, 0, 100, l );
         }
         @endcode
+
+        @note Currently support for this method is not implemented in the
+            native macOS version of the control, i.e. it will be never called
+            there.
 
         @see ActivateCell()
     */
@@ -3275,7 +3284,7 @@ public:
         Returns true if item is a container.
     */
     bool IsContainer( const wxDataViewItem& item );
-    
+
     /**
         Calls the same method from wxDataViewTreeStore but uses
         an index position in the image list instead of a wxIcon.

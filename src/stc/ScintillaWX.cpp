@@ -117,7 +117,7 @@ public:
 #endif
           m_ct(ct), m_swx(swx), m_cx(wxDefaultCoord), m_cy(wxDefaultCoord)
         {
-            SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+            SetBackgroundStyle(wxBG_STYLE_PAINT);
             SetName("wxSTCCallTip");
         }
 
@@ -520,7 +520,7 @@ void ScintillaWX::Paste() {
     pdoc->BeginUndoAction();
     ClearSelection(multiPasteMode == SC_MULTIPASTE_EACH);
 
-#if wxUSE_DATAOBJ
+#if wxUSE_CLIPBOARD
     wxTextDataObject data;
     bool gotData = false;
     bool isRectangularClipboard = false;
@@ -568,7 +568,7 @@ void ScintillaWX::Paste() {
             InsertPaste(buf, len);
         }
     }
-#endif // wxUSE_DATAOBJ
+#endif // wxUSE_CLIPBOARD
 
     pdoc->EndUndoAction();
     NotifyChange();
@@ -660,6 +660,7 @@ void ScintillaWX::AddToPopUp(const char *label, int cmd, bool enabled) {
 // can paste with the middle button.
 void ScintillaWX::ClaimSelection() {
 #ifdef __WXGTK__
+#if wxUSE_CLIPBOARD
     // Put the selected text in the PRIMARY selection
     if (!sel.Empty()) {
         SelectionText st;
@@ -672,6 +673,7 @@ void ScintillaWX::ClaimSelection() {
         }
         wxTheClipboard->UsePrimarySelection(false);
     }
+#endif // wxUSE_CLIPBOARD
 #endif
 }
 
@@ -1073,6 +1075,7 @@ void ScintillaWX::DoMiddleButtonUp(Point pt) {
     int newPos = PositionFromLocation(pt);
     MovePositionTo(newPos, Selection::noSel, true);
 
+#if wxUSE_CLIPBOARD
     pdoc->BeginUndoAction();
     wxTextDataObject data;
     bool gotData = false;
@@ -1094,6 +1097,7 @@ void ScintillaWX::DoMiddleButtonUp(Point pt) {
     pdoc->EndUndoAction();
     NotifyChange();
     Redraw();
+#endif // wxUSE_CLIPBOARD
 
     ShowCaretAtCurrentPosition();
     EnsureCaretVisible();

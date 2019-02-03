@@ -29,6 +29,8 @@
     #include "wx/utils.h"
 #endif // WX_PRECOMP
 
+WX_CHECK_BUILD_OPTIONS("wxQA")
+
 #if wxUSE_DEBUGREPORT && wxUSE_XML
 
 #include "wx/debugrpt.h"
@@ -56,8 +58,6 @@
     #include "wx/wfstream.h"
     #include "wx/zipstrm.h"
 #endif // wxUSE_ZIPSTREAM
-
-WX_CHECK_BUILD_OPTIONS("wxQA")
 
 // ----------------------------------------------------------------------------
 // XmlStackWalker: stack walker specialization which dumps stack in XML

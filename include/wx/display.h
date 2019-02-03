@@ -49,6 +49,10 @@ public:
     // primary display and the only one which is always supported
     wxDisplay(unsigned n = 0);
 
+    // create display object corresponding to the display of the given window
+    // or the default one if the window display couldn't be found
+    explicit wxDisplay(const wxWindow* window);
+
     // dtor is not virtual as this is a concrete class not meant to be derived
     // from
 
@@ -110,6 +114,11 @@ public:
     // restore the default video mode (just a more readable synonym)
     void ResetMode() { (void)ChangeMode(); }
 #endif // wxUSE_DISPLAY
+
+    // If the implementation caches any information about the displays, calling
+    // this function clears it -- this should be done e.g. after a display
+    // [dis]connection.
+    static void InvalidateCache();
 
 private:
     // returns the factory used to implement our static methods and create new

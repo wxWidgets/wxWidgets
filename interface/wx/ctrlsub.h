@@ -354,6 +354,12 @@ public:
         failure in debug builds) to remove an item with the index negative or
         greater or equal than the number of items in the control.
 
+        If there is a currently selected item below the item being deleted,
+        i.e. if GetSelection() returns a valid index greater than or equal to
+        @a n, the selection is invalidated when this function is called.
+        However if the selected item appears before the item being deleted, the
+        selection is preserved unchanged.
+
         @param n
             The zero-based item index.
 

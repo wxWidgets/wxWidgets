@@ -15,6 +15,7 @@
 #include "wx/dcclient.h"
 #include "wx/dcmemory.h"
 #include "wx/dcscreen.h"
+#include "wx/display.h"
 #include "wx/gdicmn.h"
 #include "wx/icon.h"
 #include "wx/gtk/dc.h"
@@ -238,7 +239,7 @@ wxSize wxGTKCairoDCImpl::GetPPI() const
 {
     if ( m_window )
     {
-        return wxGetDisplayPPI();
+        return wxDisplay(m_window).GetPPI();
     }
 
     // For a non-window-based DC the concept of PPI doesn't make much sense
@@ -505,8 +506,8 @@ void wxGTKDCImpl::DoGetSizeMM( int* width, int* height ) const
     int w = 0;
     int h = 0;
     GetOwner()->GetSize( &w, &h );
-    if (width) *width = int( double(w) / (m_userScaleX*m_mm_to_pix_x) );
-    if (height) *height = int( double(h) / (m_userScaleY*m_mm_to_pix_y) );
+    if (width) *width = int( double(w) / (m_userScaleX*GetMMToPXx()) );
+    if (height) *height = int( double(h) / (m_userScaleY*GetMMToPXy()) );
 }
 
 // Resolution in pixels per logical inch

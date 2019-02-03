@@ -20,7 +20,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxString& name = wxNotebookNameStr);
-    
+
     bool Create(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
@@ -42,14 +42,15 @@ public:
 
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
 
-    int SetSelection(size_t nPage) { return DoSetSelection(nPage, SetSelection_SendEvent); }
-    int ChangeSelection(size_t nPage) { return DoSetSelection(nPage); }
+    int SetSelection(size_t nPage);
+    int ChangeSelection(size_t nPage);
+
+    virtual bool DeleteAllPages() wxOVERRIDE;
 
     virtual QWidget *GetHandle() const;
 
 protected:
     virtual wxWindow *DoRemovePage(size_t page);
-    int DoSetSelection(size_t nPage, int flags = 0);
 
 private:
     QTabWidget *m_qtTabWidget;

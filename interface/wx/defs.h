@@ -292,7 +292,7 @@ enum wxBorder
 
 /*  wxCommandEvents and the objects of the derived classes are forwarded to the */
 /*  parent window and so on recursively by default. Using this flag for the */
-/*  given window allows to block this propagation at this window, i.e. prevent */
+/*  given window allows blocking this propagation at this window, i.e. preventing */
 /*  the events from being propagated further upwards. The dialogs have this */
 /*  flag on by default. */
 #define wxWS_EX_BLOCK_EVENTS            0x00000002
@@ -379,9 +379,8 @@ enum wxBorder
 
 /*
  * wxRadioBox style flags
+ * These styles are not used in any port.
  */
-/*  should we number the items from left to right or from top to bottom in a 2d */
-/*  radiobox? */
 #define wxRA_LEFTTORIGHT    0x0001
 #define wxRA_TOPTOBOTTOM    0x0002
 
@@ -537,7 +536,7 @@ enum wxBackgroundStyle
         with this style.
      */
     wxBG_STYLE_PAINT,
-    
+
     /* this style is deprecated and doesn't do anything, don't use */
     wxBG_STYLE_COLOUR,
 
@@ -908,7 +907,7 @@ enum wxKeyCode
     WXK_CONTROL_X,
     WXK_CONTROL_Y,
     WXK_CONTROL_Z,
-    
+
     WXK_BACK    =    8,     //!< Backspace.
     WXK_TAB     =    9,
     WXK_RETURN  =    13,
@@ -1035,7 +1034,7 @@ enum wxKeyCode
     WXK_WINDOWS_LEFT,
     WXK_WINDOWS_RIGHT,
     WXK_WINDOWS_MENU ,
-    
+
     /** This special key code was used to represent the key used for keyboard shortcuts. Under OS X,
       * this key maps to the 'Command' (aka logo or 'Apple') key, whereas on Linux/Windows/others
       * this is the Control key, with the new semantic of WXK_CONTROL, WXK_COMMAND is not needed anymore
@@ -1096,11 +1095,11 @@ enum wxKeyModifier
     wxMOD_SHIFT     = 0x0004,
     wxMOD_META      = 0x0008,
     wxMOD_WIN       = wxMOD_META,
-    
+
     /** used to describe the true Ctrl Key under OS X,
     identic to @c wxMOD_CONTROL on other platforms */
     wxMOD_RAW_CONTROL,
-    
+
     /** deprecated, identic to @c wxMOD_CONTROL on all platforms */
     wxMOD_CMD       = wxMOD_CONTROL,
     wxMOD_ALL       = 0xffff

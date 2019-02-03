@@ -198,6 +198,7 @@ public:
     void OnCatColoursUpdateUI( wxUpdateUIEvent& event );
     void OnCatColours( wxCommandEvent& event );
     void OnSetColumns( wxCommandEvent& event );
+    void OnSetVirtualWidth(wxCommandEvent& evt);
     void OnMisc( wxCommandEvent& event );
     void OnPopulateClick( wxCommandEvent& event );
     void OnSetSpinCtrlEditorClick( wxCommandEvent& event );

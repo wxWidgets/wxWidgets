@@ -136,6 +136,10 @@ bool wxCalendarCtrl::SetDate(const wxDateTime& date)
     if ( !m_qtCalendar )
         return false;
 
+    if ( wxQtConvertDate( date ) > m_qtCalendar->maximumDate() ||
+            wxQtConvertDate( date ) < m_qtCalendar->minimumDate() )
+        return false;
+
     m_qtCalendar->blockSignals(true);
     m_qtCalendar->setSelectedDate(wxQtConvertDate(date));
     m_qtCalendar->blockSignals(false);
@@ -171,12 +175,21 @@ bool wxCalendarCtrl::GetDateRange(wxDateTime *lowerdate,
     if ( !m_qtCalendar )
         return false;
 
-    if (lowerdate)
-        *lowerdate = wxQtConvertDate(m_qtCalendar->minimumDate());
-    if (upperdate)
-        *upperdate = wxQtConvertDate(m_qtCalendar->maximumDate());
+    bool status = false;
 
-    return true;
+    if ( lowerdate )
+    {
+        *lowerdate = wxQtConvertDate(m_qtCalendar->minimumDate());
+        status = true;
+    }
+
+    if ( upperdate )
+    {
+        *upperdate = wxQtConvertDate(m_qtCalendar->maximumDate());
+        status = true;
+    }
+
+    return status;
 }
 
 // Copied from wxMSW
@@ -312,7 +325,7 @@ void wxCalendarCtrl::SetAttr(size_t day, wxCalendarDateAttr *attr)
     // wxFont is not implemented yet
     //if ( attr->HasFont() )
     //    format.setFont(attr->GetFont().GetQFont());
-    
+
     m_qtCalendar->setDateTextFormat(date, format);
 }
 

@@ -19,12 +19,12 @@
         <tooltip>Controls Example</tooltip>
         <bitmap>controls.xpm</bitmap>
         <longhelp>A notebook displaying all the wxWidgets controls</longhelp>
-    </object>        
+    </object>
     <object class="tool" name="uncentered_tool_or_menuitem">
         <tooltip>Uncentered Example</tooltip>
         <bitmap>uncenter.xpm</bitmap>
         <longhelp>Disable autocentering of a dialog on its parent</longhelp>
-    </object>  
+    </object>
     <object class="separator"/>
      <object class="tool" name="aui_demo_tool_or_menuitem">
         <bitmap>aui.xpm</bitmap>
@@ -40,7 +40,7 @@
         <tooltip>Custom Class Example</tooltip>
         <bitmap>custclas.xpm</bitmap>
         <longhelp>Embed your own custom classes into an XRC</longhelp>
-    </object>  
+    </object>
     <object class="tool" name="platform_property_tool_or_menuitem">
         <tooltip>Platform Specific Example</tooltip>
         <bitmap>platform.xpm</bitmap>
@@ -55,7 +55,7 @@
         <tooltip>Variable Expansion Example</tooltip>
         <bitmap>variable.xpm</bitmap>
         <longhelp>Replace variables in the XRC file at runtime</longhelp>
-    </object>        
+    </object>
 </object>
- 
+
 </resource>

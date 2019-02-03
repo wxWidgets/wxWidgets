@@ -75,6 +75,8 @@ endmacro()
 
 # Set properties common to builtin third party libraries and wx libs
 function(wx_set_common_target_properties target_name)
+    cmake_parse_arguments(wxCOMMON_TARGET_PROPS "DEFAULT_WARNINGS" "" "" ${ARGN})
+
     if(DEFINED wxBUILD_CXX_STANDARD AND NOT wxBUILD_CXX_STANDARD STREQUAL COMPILER_DEFAULT)
         # TODO: implement for older CMake versions ?
         set_target_properties(${target_name} PROPERTIES CXX_STANDARD ${wxBUILD_CXX_STANDARD})
@@ -96,6 +98,21 @@ function(wx_set_common_target_properties target_name)
         ARCHIVE_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
         RUNTIME_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
         )
+    if(NOT wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
+        # Enable higher warnings for most compilers/IDEs
+        if(MSVC)
+            target_compile_options(${target_name} PRIVATE /W4)
+        endif()
+        # TODO: add warning flags for other compilers
+    endif()
+
+    if(CMAKE_USE_PTHREADS_INIT)
+        target_compile_options(${target_name} PRIVATE "-pthread")
+        # clang++.exe: warning: argument unused during compilation: '-pthread' [-Wunused-command-line-argument]
+        if(NOT (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
+            set_target_properties(${target_name} PROPERTIES LINK_FLAGS "-pthread")
+        endif()
+    endif()
 endfunction()
 
 # Set common properties on wx library target
@@ -161,7 +178,9 @@ function(wx_set_target_properties target_name is_base)
         set_target_properties(${target_name}
             PROPERTIES
                 OUTPUT_NAME wx_${lib_toolkit}${lib_unicode}${lib_suffix}-${lib_version}
-                OUTPUT_NAME_DEBUG wx_${lib_toolkit}${lib_unicode}d${lib_suffix}-${lib_version}
+                # NOTE: wx-config can not be used to connect the libraries with the debug suffix.
+                #OUTPUT_NAME_DEBUG wx_${lib_toolkit}${lib_unicode}d${lib_suffix}-${lib_version}
+                OUTPUT_NAME_DEBUG wx_${lib_toolkit}${lib_unicode}${lib_suffix}-${lib_version}
             )
     endif()
     if(CYGWIN)
@@ -269,6 +288,9 @@ function(wx_set_target_properties target_name is_base)
     wx_set_common_target_properties(${target_name})
 endfunction()
 
+# List of libraries added via wx_add_library() to use for wx-config
+set(wxLIB_TARGETS)
+
 # Add a wxWidgets library
 # wx_add_library(<target_name> [IS_BASE] <src_files>...)
 # first parameter is the name of the library
@@ -277,6 +299,9 @@ endfunction()
 macro(wx_add_library name)
     cmake_parse_arguments(wxADD_LIBRARY "IS_BASE" "" "" ${ARGN})
     set(src_files ${wxADD_LIBRARY_UNPARSED_ARGUMENTS})
+
+    list(APPEND wxLIB_TARGETS ${name})
+    set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)
 
     if(wxBUILD_MONOLITHIC AND NOT ${name} STREQUAL "mono")
         # collect all source files for mono library
@@ -304,8 +329,6 @@ macro(wx_add_library name)
             RUNTIME DESTINATION "lib${wxPLATFORM_LIB_DIR}"
             BUNDLE DESTINATION Applications/wxWidgets
             )
-
-        list(APPEND wxLIB_TARGETS ${name})
     endif()
 endmacro()
 
@@ -340,7 +363,6 @@ endmacro()
 
 # Enable precompiled headers for wx libraries
 macro(wx_finalize_lib target_name)
-    set(wxLIB_TARGETS ${wxLIB_TARGETS} PARENT_SCOPE)
     if(wxBUILD_PRECOMP)
         if(TARGET ${target_name})
             wx_target_enable_precomp(${target_name} "${wxSOURCE_DIR}/include/wx/wxprec.h")
@@ -446,7 +468,7 @@ function(wx_set_builtin_target_properties target_name)
 
     set_target_properties(${target_name} PROPERTIES FOLDER "Third Party Libraries")
 
-    wx_set_common_target_properties(${target_name})
+    wx_set_common_target_properties(${target_name} DEFAULT_WARNINGS)
     if(NOT wxBUILD_SHARED)
         wx_install(TARGETS ${name} ARCHIVE DESTINATION "lib${wxPLATFORM_LIB_DIR}")
     endif()
@@ -510,16 +532,36 @@ function(wx_add_thirdparty_library var_name lib_name help_str)
 endfunction()
 
 function(wx_print_thirdparty_library_summary)
+    set(nameLength 0)
+    set(nameValLength 0)
     set(var_name)
-    set(message "Which libraries should wxWidgets use?\n")
-    foreach(entry IN
-        LISTS wxTHIRD_PARTY_LIBRARIES
-        ITEMS wxUSE_STL "Use C++ STL classes")
-
+    foreach(entry IN LISTS wxTHIRD_PARTY_LIBRARIES)
         if(NOT var_name)
             set(var_name ${entry})
         else()
-            wx_string_append(message "    ${var_name}: ${${var_name}} (${entry})\n")
+            string(LENGTH ${var_name} len)
+            if(len GREATER nameLength)
+                set(nameLength ${len})
+            endif()
+            string(LENGTH ${${var_name}} len)
+            if(len GREATER nameValLength)
+                set(nameValLength ${len})
+            endif()
+            set(var_name)
+        endif()
+    endforeach()
+    math(EXPR nameLength "${nameLength}+1") # account for :
+
+    set(message "Which libraries should wxWidgets use?\n")
+    foreach(entry IN LISTS wxTHIRD_PARTY_LIBRARIES)
+        if(NOT var_name)
+            set(var_name ${entry})
+        else()
+            set(namestr "${var_name}:          ")
+            set(nameval "${${var_name}}          ")
+            string(SUBSTRING ${namestr} 0 ${nameLength} namestr)
+            string(SUBSTRING ${nameval} 0 ${nameValLength} nameval)
+            wx_string_append(message "    ${namestr}  ${nameval}  (${entry})\n")
             set(var_name)
         endif()
     endforeach()

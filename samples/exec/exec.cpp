@@ -627,7 +627,7 @@ void MyFrame::OnKill(wxCommandEvent& WXUNUSED(event))
     {
         default:
             wxFAIL_MSG( "unexpected return value" );
-            // fall through
+            wxFALLTHROUGH;
 
         case -1:
             // cancelled
@@ -854,13 +854,13 @@ void MyFrame::DoAsyncExec(const wxString& cmd)
     m_pidLast = wxExecute(cmd, wxEXEC_ASYNC | GetExecFlags(), process);
     if ( !m_pidLast )
     {
-        wxLogError("Execution of '%s' failed.", cmd.c_str());
+        wxLogError("Execution of '%s' failed.", cmd);
 
         delete process;
     }
     else
     {
-        wxLogStatus("Process %ld (%s) launched.", m_pidLast, cmd.c_str());
+        wxLogStatus("Process %ld (%s) launched.", m_pidLast, cmd);
 
         m_cmdLast = cmd;
 
@@ -877,12 +877,12 @@ void MyFrame::OnSyncExec(wxCommandEvent& WXUNUSED(event))
     if ( !QueryExec(cmd, env) )
         return;
 
-    wxLogStatus( "'%s' is running please wait...", cmd.c_str() );
+    wxLogStatus( "'%s' is running please wait...", cmd );
 
     int code = wxExecute(cmd, wxEXEC_SYNC | GetExecFlags(), NULL, &env);
 
     wxLogStatus("Process '%s' terminated with exit code %d.",
-        cmd.c_str(), code);
+        cmd, code);
 
     m_cmdLast = cmd;
 }
@@ -910,7 +910,7 @@ void MyFrame::OnShell(wxCommandEvent& WXUNUSED(event))
 
     int code = wxShell(cmd);
     wxLogStatus("Shell command '%s' terminated with exit code %d.",
-                cmd.c_str(), code);
+                cmd, code);
     m_cmdLast = cmd;
 }
 
@@ -969,7 +969,7 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
         MyPipedProcess *process = new MyPipedProcess(this, cmd);
         if ( !wxExecute(cmd, wxEXEC_ASYNC, process) )
         {
-            wxLogError("Execution of '%s' failed.", cmd.c_str());
+            wxLogError("Execution of '%s' failed.", cmd);
 
             delete process;
         }
@@ -1004,13 +1004,13 @@ void MyFrame::OnExecWithPipe(wxCommandEvent& WXUNUSED(event))
     long pid = wxExecute(cmd, wxEXEC_ASYNC, process);
     if ( pid )
     {
-        wxLogStatus("Process %ld (%s) launched.", pid, cmd.c_str());
+        wxLogStatus("Process %ld (%s) launched.", pid, cmd);
 
         AddPipedProcess(process);
     }
     else
     {
-        wxLogError("Execution of '%s' failed.", cmd.c_str());
+        wxLogError("Execution of '%s' failed.", cmd);
 
         delete process;
     }
@@ -1083,7 +1083,7 @@ void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
     if ( !ft )
     {
         wxLogError("Impossible to determine the file type for extension '%s'",
-                   ext.c_str());
+                   ext);
         return;
     }
 
@@ -1101,7 +1101,7 @@ void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
     if ( !ok )
     {
         wxLogError("Impossible to find out how to open files of extension '%s'",
-                   ext.c_str());
+                   ext);
         return;
     }
 
@@ -1173,7 +1173,7 @@ void MyFrame::OnOpenURL(wxCommandEvent& WXUNUSED(event))
 
     if ( !wxLaunchDefaultBrowser(s_url) )
     {
-        wxLogError("Failed to open URL \"%s\"", s_url.c_str());
+        wxLogError("Failed to open URL \"%s\"", s_url);
     }
 }
 
@@ -1217,14 +1217,14 @@ void MyFrame::OnDDEExec(wxCommandEvent& WXUNUSED(event))
     if ( !conn )
     {
         wxLogError("Failed to connect to the DDE server '%s'.",
-                   m_server.c_str());
+                   m_server);
     }
     else
     {
         if ( !conn->Execute(m_cmdDde) )
         {
             wxLogError("Failed to execute command '%s' via DDE.",
-                       m_cmdDde.c_str());
+                       m_cmdDde);
         }
         else
         {
@@ -1243,14 +1243,14 @@ void MyFrame::OnDDERequest(wxCommandEvent& WXUNUSED(event))
     if ( !conn )
     {
         wxLogError("Failed to connect to the DDE server '%s'.",
-                   m_server.c_str());
+                   m_server);
     }
     else
     {
         if ( !conn->Request(m_cmdDde) )
         {
             wxLogError("Failed to  send request '%s' via DDE.",
-                       m_cmdDde.c_str());
+                       m_cmdDde);
         }
         else
         {
@@ -1336,7 +1336,7 @@ void MyFrame::ShowOutput(const wxString& cmd,
         return;
 
     m_lbox->Append(wxString::Format("--- %s of '%s' ---",
-                                    title.c_str(), cmd.c_str()));
+                                    title, cmd));
 
     for ( size_t n = 0; n < count; n++ )
     {
@@ -1344,7 +1344,7 @@ void MyFrame::ShowOutput(const wxString& cmd,
     }
 
     m_lbox->Append(wxString::Format("--- End of %s ---",
-                                    title.Lower().c_str()));
+                                    title.Lower()));
 }
 
 // ----------------------------------------------------------------------------
@@ -1354,7 +1354,7 @@ void MyFrame::ShowOutput(const wxString& cmd,
 void MyProcess::OnTerminate(int pid, int status)
 {
     wxLogStatus(m_parent, "Process %u ('%s') terminated with exit code %d.",
-                pid, m_cmd.c_str(), status);
+                pid, m_cmd, status);
 
     m_parent->OnAsyncTermination(this);
 }

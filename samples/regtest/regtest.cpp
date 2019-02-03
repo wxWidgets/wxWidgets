@@ -845,7 +845,7 @@ void RegTreeCtrl::OnEndEdit(wxTreeEvent& event)
     if ( !ok )
     {
         wxLogError("Failed to rename '%s' to '%s'.",
-            m_nameOld.c_str(), name.c_str());
+            m_nameOld, name);
     }
 #if 0   // MSW tree ctrl doesn't like this at all, it hangs
     else
@@ -920,10 +920,10 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
     if ( wxMessageBox(wxString::Format
                         (
                          "Do you really want to %s the %s %s to %s?",
-                         verb.c_str(),
-                         what.c_str(),
-                         nameSrc.c_str(),
-                         nameDst.c_str()
+                         verb,
+                         what,
+                         nameSrc,
+                         nameDst
                         ),
                       "RegTest Confirm",
                       wxICON_QUESTION | wxYES_NO | wxCANCEL, this) != wxYES ) {
@@ -938,7 +938,7 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
         ok = keyDst.Create(false);
         if ( !ok )
         {
-            wxLogError("Key '%s' already exists", keyDst.GetName().c_str());
+            wxLogError("Key '%s' already exists", keyDst.GetName());
         }
         else
         {
@@ -969,7 +969,7 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
     if ( !ok )
     {
         wxLogError("Failed to %s registry %s.",
-                   verb.c_str(), what.c_str());
+                   verb, what);
     }
     else
     {
@@ -1074,8 +1074,7 @@ bool RegTreeCtrl::TreeNode::OnExpand()
             m_pKey->QueryValue(str, &l);
             strItem << l;
         }
-
-        // fall through
+        wxFALLTHROUGH;
 
         default:
             icon = RegImageList::BinaryValue;
@@ -1255,7 +1254,7 @@ void RegTreeCtrl::GoTo(const wxString& location)
 
         if ( !id.IsOk() )
         {
-            wxLogError("No such key '%s'.", location.c_str());
+            wxLogError("No such key '%s'.", location);
 
             return;
         }
@@ -1291,7 +1290,7 @@ void RegTreeCtrl::DeleteSelected()
     if ( wxMessageBox(wxString::Format
         (
             "Do you really want to delete this %s?",
-            what.c_str()
+            what
         ),
         "Confirmation",
         wxICON_QUESTION | wxYES_NO | wxCANCEL, this) != wxYES )
@@ -1390,7 +1389,7 @@ void RegTreeCtrl::ShowProperties()
         else
         {
             wxLogMessage("Key '%s' has %u subkeys and %u values.",
-                         key.GetName().c_str(), nSubKeys, nValues);
+                         key.GetName(), nSubKeys, nValues);
         }
     }
     else // it's a value
@@ -1403,7 +1402,7 @@ void RegTreeCtrl::ShowProperties()
         wxLogMessage("Value '%s' under the key '%s' is of type "
             "%d (%s).",
             value,
-            parent->m_strName.c_str(),
+            parent->m_strName,
             key.GetValueType(value),
             key.IsNumericValue(value) ? "numeric" : "string");
 

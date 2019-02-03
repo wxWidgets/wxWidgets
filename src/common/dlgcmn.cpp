@@ -273,12 +273,7 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
 
     if (flags & wxCANCEL)
     {
-        // Avoid Cmd+C closing dialog on Mac.
-        wxString cancelLabel(_("&Cancel"));
-#ifdef __WXMAC__
-        cancelLabel.Replace("&",wxEmptyString);
-#endif
-        wxButton *cancel = new wxButton(this, wxID_CANCEL, cancelLabel);
+        wxButton *cancel = new wxButton(this, wxID_CANCEL);
         sizer->AddButton(cancel);
     }
 
@@ -871,7 +866,7 @@ int wxStandardDialogLayoutAdapter::DoMustScroll(wxDialog* dialog, wxSize& window
     wxSize minWindowSize = dialog->GetSizer()->GetMinSize();
     windowSize = dialog->GetSize();
     windowSize = wxSize(wxMax(windowSize.x, minWindowSize.x), wxMax(windowSize.y, minWindowSize.y));
-    displaySize = wxDisplay(wxDisplay::GetFromWindow(dialog)).GetClientArea().GetSize();
+    displaySize = wxDisplay(dialog).GetClientArea().GetSize();
 
     int flags = 0;
 

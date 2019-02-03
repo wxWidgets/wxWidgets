@@ -1042,11 +1042,19 @@ public:
     wxThreadError Create(unsigned int stackSize = 0);
 
     /**
-        Calling Delete() gracefully terminates a @b detached thread, either when
-        the thread calls TestDestroy() or when it finishes processing.
+        Calling Delete() requests termination of any thread.
+
+        Note that Delete() doesn't actually stop the thread, but simply asks it
+        to terminate and so will work only if the thread calls TestDestroy()
+        periodically. For detached threads, Delete() returns immediately,
+        without waiting for the thread to actually terminate, while for
+        joinable threads it does wait for the thread to terminate and may also
+        return its exit code in @a rc argument.
 
         @param rc
-            The thread exit code, if rc is not NULL.
+            For joinable threads, filled with the thread exit code on
+            successful return, if non-@NULL. For detached threads this
+            parameter is not used.
 
         @param waitMode
             As described in wxThreadWait documentation, wxTHREAD_WAIT_BLOCK
@@ -1216,7 +1224,7 @@ public:
         of detached threads.
 
         This function can only be called from another thread context.
-        
+
         Finally, note that once a thread has completed and its Entry() function
         returns, you cannot call Run() on it again (an assert will fail in debug
         builds or @c wxTHREAD_RUNNING will be returned in release builds).

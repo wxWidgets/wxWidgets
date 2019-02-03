@@ -1456,7 +1456,10 @@ public:
     virtual bool SetFont( const wxFont& font ) wxOVERRIDE;
     virtual void SetExtraStyle( long exStyle ) wxOVERRIDE;
     virtual bool Reparent( wxWindowBase *newParent ) wxOVERRIDE;
-
+    virtual void ScrollWindow(int dx, int dy, const wxRect* rect) wxOVERRIDE;
+    virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
+                               int noUnitsX, int noUnitsY,
+                               int xPos, int yPos, bool noRefresh) wxOVERRIDE;
 protected:
     virtual void DoThaw() wxOVERRIDE;
 
@@ -1572,12 +1575,12 @@ protected:
     wxPGCell            m_unspecifiedAppearance;
 
     // List of properties to be deleted/removed in idle event handler.
-    wxArrayPGProperty   m_deletedProperties;
-    wxArrayPGProperty   m_removedProperties;
+    wxVector<wxPGProperty*>  m_deletedProperties;
+    wxVector<wxPGProperty*>  m_removedProperties;
 
 #if !WXWIN_COMPATIBILITY_3_0
     // List of editors and their event handlers to be deleted in idle event handler.
-    wxArrayPGObject     m_deletedEditorObjects;
+    wxVector<wxObject*> m_deletedEditorObjects;
 #endif
 
     // List of key codes that will not be handed over to editor controls.
@@ -1687,10 +1690,8 @@ protected:
 
     // Which column's editor is selected (usually 1)?
     unsigned int        m_selColumn;
-
     // x relative to splitter (needed for resize).
     int                 m_ctrlXAdjust;
-
     // lines between cells
     wxColour            m_colLine;
     // property labels and values are written in this colour
@@ -1925,10 +1926,12 @@ protected:
 
     // Send event from the property grid.
     // Omit the wxPG_SEL_NOVALIDATE flag to allow vetoing the event
-    bool SendEvent( int eventType, wxPGProperty* p,
+    bool SendEvent( wxEventType eventType, wxPGProperty* p,
                     wxVariant* pValue = NULL,
                     unsigned int selFlags = wxPG_SEL_NOVALIDATE,
                     unsigned int column = 1 );
+
+    void SendEvent(wxEventType eventType, int intVal);
 
     // This function only moves focus to the wxPropertyGrid if it already
     // was on one of its child controls.
@@ -2027,6 +2030,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
                           wxEVT_PG_COL_DRAGGING, wxPropertyGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
                           wxEVT_PG_COL_END_DRAG, wxPropertyGridEvent );
+wxDECLARE_EVENT(wxEVT_PG_HSCROLL, wxPropertyGridEvent);
 
 #else
     enum {
@@ -2280,7 +2284,7 @@ public:
     // added.
     wxPGProperty* GetCurParent() const
     {
-        return (wxPGProperty*) m_propHierarchy[m_propHierarchy.size()-1];
+        return m_propHierarchy.back();
     }
 
     wxPropertyGridPageState* GetState() { return m_state; }
@@ -2309,7 +2313,7 @@ protected:
     wxPropertyGridPageState*    m_state;
 
     // Tree-hierarchy of added properties (that can have children).
-    wxArrayPGProperty       m_propHierarchy;
+    wxVector<wxPGProperty*> m_propHierarchy;
 
     // Hashmap for string-id to wxPGChoicesData mapping.
     wxPGHashMapS2P          m_dictIdChoices;

@@ -62,7 +62,7 @@ const char wxMessageBoxCaptionStr[] = "Message";
         with @c wxYES_NO so it's usually unnecessary to specify it explicitly.
         This style is not supported for message dialogs under wxMSW when a task
         dialog is used to implement them (i.e. when running under Windows Vista
-        or later) because <a href="http://msdn.microsoft.com/en-us/library/aa511273.aspx">Microsoft
+        or later) because <a href="https://docs.microsoft.com/en-us/windows/desktop/uxguide/mess-confirm">Microsoft
         guidelines</a> indicate that no icon should be used for routine
         confirmations. If it is specified, no icon will be displayed.
     @style{wxICON_INFORMATION}

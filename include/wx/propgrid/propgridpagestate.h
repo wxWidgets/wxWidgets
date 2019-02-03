@@ -642,13 +642,13 @@ protected:
     wxPGHashMapS2P              m_dictName;
 
     // List of column widths (first column does not include margin).
-    wxArrayInt                  m_colWidths;
+    wxVector<int>               m_colWidths;
 
     // List of indices of columns the user can edit by clicking it.
-    wxArrayInt                  m_editableColumns;
+    wxVector<int>               m_editableColumns;
 
     // Column proportions.
-    wxArrayInt                  m_columnProportions;
+    wxVector<int>               m_columnProportions;
 
     double                      m_fSplitterX;
 

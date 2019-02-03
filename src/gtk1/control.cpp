@@ -205,7 +205,7 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
 
     // get the style's font
     // TODO: isn't there a way to get a standard gtk 1.2 font?
-    attr.font = wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
+    attr.font = wxFont( 12, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL );
 
     return attr;
 }

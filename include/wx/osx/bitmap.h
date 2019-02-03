@@ -47,12 +47,7 @@ public:
     // Construct a mask from a mono bitmap (black meaning show pixels, white meaning transparent)
     wxMask(const wxBitmap& bitmap);
 
-    // implementation helper only : construct a mask from a 32 bit memory buffer
-    wxMask(const wxMemoryBuffer& buf, int width , int height , int bytesPerRow ) ;
-
     virtual ~wxMask();
-
-    bool Create(const wxMemoryBuffer& buf, int width , int height , int bytesPerRow ) ;
 
     wxBitmap GetBitmap() const;
 
@@ -70,6 +65,9 @@ public:
     void RealizeNative() ;
 
     WXHBITMAP GetHBITMAP() const ;
+
+    // implementation helper only : construct a mask from a 32 bit memory buffer
+    bool OSXCreate(const wxMemoryBuffer& buf, int width , int height , int bytesPerRow ) ;
 
 protected:
     // this function is called from Create() to free the existing mask data
@@ -109,7 +107,7 @@ public:
 
     // Constructor for generalised creation from data
     wxBitmap(const void* data, wxBitmapType type, int width, int height, int depth = 1);
-    
+
     // creates an bitmap from the native image format
     wxBitmap(CGImageRef image, double scale = 1.0);
     wxBitmap(WXImage image);
@@ -117,7 +115,7 @@ public:
 
     // Create a bitmap compatible with the given DC
     wxBitmap(int width, int height, const wxDC& dc);
-    
+
     // If depth is omitted, will create a bitmap compatible with the display
     wxBitmap(int width, int height, int depth = -1) { (void)Create(width, height, depth); }
     wxBitmap(const wxSize& sz, int depth = -1) { (void)Create(sz, depth); }
@@ -143,13 +141,13 @@ public:
     bool Create( CGImageRef image, double scale = 1.0 );
     bool Create( WXImage image );
     bool Create( CGContextRef bitmapcontext);
-    
+
     // Create a bitmap compatible with the given DC, inheriting its magnification factor
     bool Create(int width, int height, const wxDC& dc);
 
     // Create a bitmap with a scale factor, width and height are multiplied with that factor
     bool CreateScaled(int logwidth, int logheight, int depth, double logicalScale);
-    
+
     // virtual bool Create( WXHICON icon) ;
     virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
     virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;

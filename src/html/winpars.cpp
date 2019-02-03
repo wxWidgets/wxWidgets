@@ -217,7 +217,7 @@ void wxHtmlWinParser::InitParser(const wxString& source)
     m_ActualBackgroundColor = m_windowInterface
                             ? m_windowInterface->GetHTMLBackgroundColour()
                             : windowColour;
-    m_ActualBackgroundMode = wxTRANSPARENT;
+    m_ActualBackgroundMode = wxBRUSHSTYLE_TRANSPARENT;
     m_Align = wxHTML_ALIGN_LEFT;
     m_ScriptMode = wxHTML_SCRIPT_NORMAL;
     m_ScriptBaseline = 0;
@@ -248,7 +248,7 @@ void wxHtmlWinParser::InitParser(const wxString& source)
                    new wxHtmlColourCell
                        (
                          m_ActualBackgroundColor,
-                         m_ActualBackgroundMode == wxTRANSPARENT ? wxHTML_CLR_TRANSPARENT_BACKGROUND : wxHTML_CLR_BACKGROUND
+                         m_ActualBackgroundMode == wxBRUSHSTYLE_TRANSPARENT ? wxHTML_CLR_TRANSPARENT_BACKGROUND : wxHTML_CLR_BACKGROUND
                        )
                   );
 
@@ -766,7 +766,7 @@ void wxHtmlWinTagHandler::ApplyStyle(const wxHtmlStyleParams &styleParams)
         if ( wxHtmlTag::ParseAsColour(str, &clr) )
         {
             m_WParser->SetActualBackgroundColor(clr);
-            m_WParser->SetActualBackgroundMode(wxSOLID);
+            m_WParser->SetActualBackgroundMode(wxBRUSHSTYLE_SOLID);
             m_WParser->GetContainer()->InsertCell(new wxHtmlColourCell(clr, wxHTML_CLR_BACKGROUND));
         }
     }

@@ -257,7 +257,7 @@ wxBitmap wxWindowDCImpl::DoGetAsBitmap(const wxRect *subrect) const
         CGContextTranslateCTM( context, -subrect->x, -subrect->y ) ;
 
     UIGraphicsPushContext(context);
-    [ (NSView*) m_window->GetHandle() drawRect:CGRectMake(left, top, width, height ) ];
+    [ (UIView*) m_window->GetHandle() drawRect:CGRectMake(left, top, width, height ) ];
     UIGraphicsPopContext();
     CGContextRestoreGState(context);
 

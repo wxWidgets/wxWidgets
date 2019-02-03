@@ -44,7 +44,8 @@ protected:
         WXUISIM_TEST( Editable ); \
         CPPUNIT_TEST( Hint ); \
         CPPUNIT_TEST( CopyPaste ); \
-        CPPUNIT_TEST( UndoRedo )
+        CPPUNIT_TEST( UndoRedo ); \
+        CPPUNIT_TEST( WriteText )
 
     void SetValue();
     void TextChangeEvents();
@@ -55,6 +56,7 @@ protected:
     void Hint();
     void CopyPaste();
     void UndoRedo();
+    void WriteText();
 
 private:
     // Selection() test helper: verify that selection is as described by the

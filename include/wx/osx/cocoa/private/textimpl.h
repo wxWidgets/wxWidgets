@@ -97,7 +97,7 @@ public:
     virtual ~wxNSTextViewControl();
 
     virtual void insertText(NSString* text, WXWidget slf, void *_cmd) wxOVERRIDE;
-    
+
     virtual wxString GetStringValue() const wxOVERRIDE ;
     virtual void SetStringValue( const wxString &str) wxOVERRIDE ;
     virtual void Copy() wxOVERRIDE ;

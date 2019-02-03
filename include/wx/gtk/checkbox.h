@@ -39,7 +39,6 @@ public:
     bool GetValue() const wxOVERRIDE;
 
     virtual void SetLabel( const wxString& label ) wxOVERRIDE;
-    virtual bool Enable( bool enable = true ) wxOVERRIDE;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -51,6 +50,8 @@ public:
 protected:
     virtual void DoApplyWidgetStyle(GtkRcStyle *style) wxOVERRIDE;
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
+
+    virtual void DoEnable(bool enable) wxOVERRIDE;
 
     void DoSet3StateValue(wxCheckBoxState state) wxOVERRIDE;
     wxCheckBoxState DoGet3StateValue() const wxOVERRIDE;

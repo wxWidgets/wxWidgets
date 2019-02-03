@@ -229,7 +229,7 @@ wxPG_EX_NO_TOOLBAR_DIVIDER              = 0x04000000,
 */
 wxPG_EX_TOOLBAR_SEPARATOR               = 0x08000000,
 
-/** Allows to take focus on the entire area (on canvas)
+/** Allows taking focus on the entire area (on canvas)
     even if wxPropertyGrid is not a standalone control.
     @hideinitializer
 */

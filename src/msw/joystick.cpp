@@ -37,23 +37,6 @@
 
 #include <regstr.h>
 
-// Use optimised count trailing zeros where available.
-static int wxCtz(unsigned x)
-{
-    wxCHECK_MSG(x > 0, 0, "Undefined for x == 0.");
-#ifdef __GNUC__
-   return __builtin_ctz(x);
-#else
-   int n;
-   n = 1;
-   if ((x & 0x0000FFFF) == 0) {n = n +16; x = x >>16;}
-   if ((x & 0x000000FF) == 0) {n = n + 8; x = x >> 8;}
-   if ((x & 0x0000000F) == 0) {n = n + 4; x = x >> 4;}
-   if ((x & 0x00000003) == 0) {n = n + 2; x = x >> 2;}
-   return n - (x & 1);
-#endif
-}
-
 
 enum {
     wxJS_AXIS_X = 0,
@@ -84,13 +67,13 @@ public:
     {
         m_catchwin = win;
         m_polling = pollingFreq;
-    };
+    }
 
 
 private:
     void      SendEvent(wxEventType type, long ts, int change = 0);
     int       m_joystick;
-    UINT      m_buttons;
+    int       m_buttons;
     wxWindow* m_catchwin;
     int       m_polling;
     JOYINFO   m_joyInfo;
@@ -141,9 +124,9 @@ void* wxJoystickThread::Entry()
         // "Current button number that is pressed.", but it turns out
         // it is the *total* number of buttons pressed.
         if (deltaUp)
-            SendEvent(wxEVT_JOY_BUTTON_UP, ts, wxCtz(deltaUp)+1);
+            SendEvent(wxEVT_JOY_BUTTON_UP, ts, deltaUp);
         if (deltaDown)
-            SendEvent(wxEVT_JOY_BUTTON_DOWN, ts, wxCtz(deltaDown)+1);
+            SendEvent(wxEVT_JOY_BUTTON_DOWN, ts, deltaDown);
 
         if ((m_joyInfo.wXpos != m_lastJoyInfo.wXpos) ||
             (m_joyInfo.wYpos != m_lastJoyInfo.wYpos) ||

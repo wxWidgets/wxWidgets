@@ -429,13 +429,11 @@ void wxWizard::AddButtonRow(wxBoxSizer *mainColumn)
         btnHelp=new wxButton(this, wxID_HELP, wxEmptyString, wxDefaultPosition, wxDefaultSize, buttonStyle);
 #endif
 
-    m_btnNext = new wxButton(this, wxID_FORWARD, _("&Next >"));
-    // Avoid Cmd+C closing dialog on Mac.
-    wxString cancelLabel(_("&Cancel"));
-#ifdef __WXMAC__
-    cancelLabel.Replace("&",wxEmptyString);
-#endif
-    wxButton *btnCancel=new wxButton(this, wxID_CANCEL, cancelLabel, wxDefaultPosition, wxDefaultSize, buttonStyle);
+    m_nextLabel = _("&Next >");
+    m_finishLabel = _("&Finish");
+
+    m_btnNext = new wxButton(this, wxID_FORWARD, m_nextLabel);
+    wxButton *btnCancel=new wxButton(this, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, buttonStyle);
 #ifndef __WXMAC__
     if (GetExtraStyle() & wxWIZARD_EX_HELPBUTTON)
         btnHelp=new wxButton(this, wxID_HELP, _("&Help"), wxDefaultPosition, wxDefaultSize, buttonStyle);
@@ -629,7 +627,7 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     m_btnPrev->Enable(m_page != m_firstpage);
 
     const bool hasNext = HasNextPage(m_page);
-    const wxString label = hasNext ? _("&Next >") : _("&Finish");
+    const wxString& label = hasNext ? m_nextLabel : m_finishLabel;
     if ( label != m_btnNext->GetLabel() )
         m_btnNext->SetLabel(label);
 

@@ -306,7 +306,7 @@ public:
         SetWindowMenu() is called again).
 
         To remove the window completely, you can use the wxFRAME_NO_WINDOW_MENU
-        window style but this function also allows to do it by passing @NULL
+        window style but this function also allows doing it by passing @NULL
         pointer as @a menu.
 
         The menu may include the items with the following standard identifiers

@@ -49,7 +49,7 @@
 
     @stdobjects
     @li ::wxNullXLocale
-    
+
     @see wxLocale
 */
 class wxXLocale
@@ -85,7 +85,7 @@ public:
         or @false otherwise.
     */
     bool IsOk() const;
-    
+
     /**
         Comparison operator.
     */

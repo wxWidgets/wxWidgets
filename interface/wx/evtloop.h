@@ -324,7 +324,7 @@ public:
     @class wxGUIEventLoop
 
     A generic implementation of the GUI event loop.
-    
+
     @library{wxbase}
     @category{appmanagement}
 */

@@ -1095,6 +1095,19 @@ public:
     */
     virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY);
 
+    /**
+        Returns the associated window if any.
+
+        If this context was created using Create() overload taking wxWindow or
+        wxWindowDC, this method returns the corresponding window. Otherwise
+        returns @NULL.
+
+        @return A possibly @NULL window pointer.
+
+        @since 3.1.2
+     */
+    wxWindow* GetWindow() const;
+
     /** @}
     */
 
@@ -1552,7 +1565,7 @@ public:
     @class wxGraphicsPenInfo
 
     This class is a helper used for wxGraphicsPen creation using named parameter
-    idiom: it allows to specify various wxGraphicsPen attributes using the chained
+    idiom: it allows specifying various wxGraphicsPen attributes using the chained
     calls to its clearly named methods instead of passing them in the fixed
     order to wxGraphicsPen constructors.
 

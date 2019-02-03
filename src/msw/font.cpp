@@ -524,7 +524,7 @@ void wxNativeFontInfo::SetStyle(wxFontStyle style)
     {
         default:
             wxFAIL_MSG( "unknown font style" );
-            // fall through
+            wxFALLTHROUGH;
 
         case wxFONTSTYLE_NORMAL:
             lf.lfItalic = FALSE;
@@ -739,9 +739,9 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
 
-    s.Printf(wxS("%d;%f;%ld;%ld;%ld;%ld;%ld;%d;%d;%d;%d;%d;%d;%d;%d;%s"),
+    s.Printf(wxS("%d;%s;%ld;%ld;%ld;%ld;%ld;%d;%d;%d;%d;%d;%d;%d;%d;%s"),
              1, // version
-             pointSize,
+             wxString::FromCDouble(pointSize),
              lf.lfHeight,
              lf.lfWidth,
              lf.lfEscapement,

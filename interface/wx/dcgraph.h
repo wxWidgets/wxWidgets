@@ -40,6 +40,10 @@ public:
 
     /**
        Construct a wxGCDC from an existing graphics context.
+
+       Note that this object takes ownership of @a context and will delete it
+       when it is destroyed or when SetGraphicsContext() is called with a
+       different context object.
     */
     wxGCDC(wxGraphicsContext* context);
 
@@ -56,7 +60,7 @@ public:
 
     wxGCDC();
     virtual ~wxGCDC();
-    
+
     /**
        Retrieves associated wxGraphicsContext
     */
@@ -64,8 +68,11 @@ public:
 
     /**
        Set the graphics context to be used for this wxGCDC.
+
+       Note that this object takes ownership of @a context and will delete it when
+       it is destroyed or when SetGraphicsContext() is called again.
     */
-    void SetGraphicsContext( wxGraphicsContext* ctx );
+    void SetGraphicsContext(wxGraphicsContext* context);
 
 };
 

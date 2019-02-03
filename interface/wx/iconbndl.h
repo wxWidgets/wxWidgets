@@ -140,10 +140,10 @@ public:
         always returned. Otherwise, the behaviour depends on the flags. If only
         wxIconBundle::FALLBACK_NONE is given, the function returns an invalid
         icon. If wxIconBundle::FALLBACK_SYSTEM is given, it tries to find the
-        icon of standard system size, regardless of the size passed as 
+        icon of standard system size, regardless of the size passed as
         parameter. Otherwise, or if the icon system size is not found neither,
         but wxIconBundle::FALLBACK_NEAREST_LARGER flag is specified, the
-        function returns the smallest icon of the size larger than the 
+        function returns the smallest icon of the size larger than the
         requested one or, if this fails too, just the icon closest to the
         specified size.
 

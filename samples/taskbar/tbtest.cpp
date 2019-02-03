@@ -259,7 +259,7 @@ wxMenu *MyTaskBarIcon::CreatePopupMenu()
     submenu->Append(PU_SUB2, "Another submenu");
     menu->Append(PU_SUBMAIN, "Submenu", submenu);
     /* OSX has built-in quit menu for the dock menu, but not for the status item */
-#ifdef __WXOSX__ 
+#ifdef __WXOSX__
     if ( OSXIsStatusItem() )
 #endif
     {

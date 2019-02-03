@@ -254,7 +254,7 @@ void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
         wxString msg;
         if ( focus )
         {
-            msg.Printf("Focus is at %s", s_windowFocus->GetName().c_str());
+            msg.Printf("Focus is at %s", s_windowFocus->GetName());
         }
         else
         {

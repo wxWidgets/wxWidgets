@@ -32,7 +32,7 @@ public:
     wxGCDC( const wxEnhMetaFileDC& dc );
 #endif
     wxGCDC(wxGraphicsContext* context);
-    
+
     wxGCDC();
     virtual ~wxGCDC();
 
@@ -60,6 +60,10 @@ public:
 #if defined(__WXMSW__) && wxUSE_ENH_METAFILE
     wxGCDCImpl( wxDC *owner, const wxEnhMetaFileDC& dc );
 #endif
+
+    // Ctor using an existing graphics context given to wxGCDC ctor.
+    wxGCDCImpl(wxDC *owner, wxGraphicsContext* context);
+
     wxGCDCImpl( wxDC *owner );
 
     virtual ~wxGCDCImpl();

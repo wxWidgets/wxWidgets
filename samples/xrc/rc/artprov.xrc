@@ -37,7 +37,7 @@
                     <object class="wxStaticBitmap" name="my_bitmap">
                         <bitmap stock_id="wxART_INFORMATION" stock_client="wxART_MESSAGE_BOX">derivdlg.xpm</bitmap>
                     </object>
-                </object>                
+                </object>
                 <object class="sizeritem">
                     <flag>wxALIGN_CENTRE|wxALL</flag>
                     <border>5</border>

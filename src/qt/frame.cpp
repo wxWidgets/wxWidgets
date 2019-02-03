@@ -44,16 +44,6 @@ class wxQtCentralWidget : public wxQtEventSignalHandler< QScrollArea, wxFrame >
 };
 
 
-wxFrame::wxFrame()
-{
-}
-
-wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString& title,
-        const wxPoint& pos, const wxSize& size, long style, const wxString& name )
-{
-    Create( parent, id, title, pos, size, style, name );
-}
-
 wxFrame::~wxFrame()
 {
     // central widget should be deleted by qt when the main window is destroyed
@@ -70,9 +60,11 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     GetQMainWindow()->setCentralWidget( new wxQtCentralWidget( parent, this ) );
 
-    PostCreation();
+    if ( !wxFrameBase::Create( parent, id, title, pos, size, style, name ) )
+        return false;
 
-    return wxFrameBase::Create( parent, id, title, pos, size, style, name );
+    PostCreation();
+    return true;
 }
 
 void wxFrame::SetMenuBar( wxMenuBar *menuBar )
@@ -118,16 +110,22 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
     int area = 0;
     if ( toolbar != NULL )
     {
-        if (toolbar->HasFlag(wxTB_LEFT))   area |= Qt::LeftToolBarArea;
-        if (toolbar->HasFlag(wxTB_RIGHT))  area |= Qt::RightToolBarArea;
-        if (toolbar->HasFlag(wxTB_TOP))    area |= Qt::TopToolBarArea;
-        if (toolbar->HasFlag(wxTB_BOTTOM)) area |= Qt::BottomToolBarArea;
+        if      (toolbar->HasFlag(wxTB_LEFT))  { area |= Qt::LeftToolBarArea;  }
+        else if (toolbar->HasFlag(wxTB_RIGHT)) { area |= Qt::RightToolBarArea; }
+        else if (toolbar->HasFlag(wxTB_TOP))   { area |= Qt::TopToolBarArea;   }
+        else if (toolbar->HasFlag(wxTB_BOTTOM)){ area |= Qt::BottomToolBarArea;}
 
-        GetQMainWindow()->addToolBar((Qt::ToolBarArea)area, toolbar->GetQToolBar());
+        // We keep the current toolbar handle in our own member variable
+        // because we can't get it from half-destroyed wxToolBar when it calls
+        // this function from wxToolBarBase dtor.
+        m_qtToolBar = toolbar->GetQToolBar();
+
+        GetQMainWindow()->addToolBar((Qt::ToolBarArea)area, m_qtToolBar);
     }
     else if ( m_frameToolBar != NULL )
     {
-        GetQMainWindow()->removeToolBar(m_frameToolBar->GetQToolBar());
+        GetQMainWindow()->removeToolBar(m_qtToolBar);
+        m_qtToolBar = NULL;
     }
     wxFrameBase::SetToolBar( toolbar );
 }
@@ -179,7 +177,7 @@ void wxFrame::DoGetClientSize(int *width, int *height) const
         }
 
 
-        if ( QMenuBar *qmb = GetQMainWindow()->menuBar() )
+        if ( QWidget *qmb = GetQMainWindow()->menuWidget() )
         {
             *height -= qmb->geometry().height();
         }

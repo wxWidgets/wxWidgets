@@ -46,7 +46,8 @@ void wxQtCheckBox::clicked( bool checked )
 }
 
 
-wxCheckBox::wxCheckBox()
+wxCheckBox::wxCheckBox() :
+    m_qtCheckBox(NULL)
 {
 }
 
@@ -117,7 +118,7 @@ wxCheckBoxState wxCheckBox::DoGet3StateValue() const
 
     case Qt::Checked:
         return wxCHK_CHECKED;
-        
+
     case Qt::PartiallyChecked:
         return wxCHK_UNDETERMINED;
     }
@@ -130,3 +131,14 @@ QWidget *wxCheckBox::GetHandle() const
 {
     return m_qtCheckBox;
 }
+
+wxString wxCheckBox::GetLabel() const
+{
+    return wxQtConvertString( m_qtCheckBox->text() );
+}
+
+void wxCheckBox::SetLabel(const wxString& label)
+{
+    m_qtCheckBox->setText( wxQtConvertString(label) );
+}
+
