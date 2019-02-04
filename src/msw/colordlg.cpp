@@ -115,7 +115,7 @@ wxColourDialogSubClassProc(HWND hwnd,
                            LPARAM lParam)
 {
 
-    DialogSubclassingData* dialogData = (DialogSubclassingData*)GetProp(hwnd, SUBCLASSING_PROP);
+    DialogSubclassingData* const dialogData = static_cast<DialogSubclassingData*>(GetProp(hwnd, SUBCLASSING_PROP));
     if (!dialogData)
     {
         // Must not happen since WM_NCDESTROY is the last message received when closing the dialog.
