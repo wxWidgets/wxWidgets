@@ -278,7 +278,7 @@ int wxColourDialog::ShowModal()
 void wxColourDialog::OnColorSelected(const wxColour& colour)
 {
     wxColourPickerEvent event(this, GetId(), colour, wxEVT_COLOUR_SELECTED);
-    GetEventHandler()->ProcessEvent(event);
+    ProcessWindowEvent(event);
 }
 
 // ----------------------------------------------------------------------------
