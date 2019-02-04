@@ -209,6 +209,12 @@ enum wxLocaleInfo
 
     @see @ref overview_i18n, @ref page_samples_internat, wxXLocale, wxTranslations
 */
+enum wxLocaleInitFlags
+{
+    wxLOCALE_DONT_LOAD_DEFAULT = 0x0000,     ///< Don't load wxstd.mo catalog.
+    wxLOCALE_LOAD_DEFAULT      = 0x0001      ///< Load wxstd.mo (done by default).
+};
+
 class wxLocale
 {
 public:
