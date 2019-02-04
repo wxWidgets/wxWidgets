@@ -87,6 +87,7 @@ protected:
 
 private:
     void SetActualValue(const wxString& value);
+    bool IsReadOnly() const;
 
     // From wxTextEntry:
     virtual wxWindow *GetEditableWindow() wxOVERRIDE { return this; }

@@ -171,7 +171,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
 void wxComboBox::SetActualValue(const wxString &value)
 {
-    if ( HasFlag(wxCB_READONLY) )
+    if ( IsReadOnly() )
     {
         SetStringSelection( value );
     }
@@ -182,11 +182,16 @@ void wxComboBox::SetActualValue(const wxString &value)
     }
 }
 
+bool wxComboBox::IsReadOnly() const
+{
+    return HasFlag( wxCB_READONLY );
+}
+
 void wxComboBox::SetValue(const wxString& value)
 {
     SetActualValue( value );
 
-    if ( !HasFlag(wxCB_READONLY) )
+    if ( !IsReadOnly() )
         SetInsertionPoint( 0 );
 }
 
@@ -251,7 +256,7 @@ void wxComboBox::Dismiss()
 
 void wxComboBox::Clear()
 {
-    if ( !HasFlag(wxCB_READONLY) )
+    if ( !IsReadOnly() )
         wxTextEntry::Clear();
 
     wxItemContainer::Clear();
