@@ -129,7 +129,7 @@ wxColourDialogSubClassProc(HWND hwnd,
     // Check the current selected color.
    if ( const COLORINFO* pCI = (COLORINFO*)GetProp(hwnd, COLORPROP) )
    {
-       if (dialogData->selectedColor != pCI->currentRGB)
+       if ( dialogData->selectedColor != pCI->currentRGB )
        {
            dialogData->selectedColor = pCI->currentRGB;
 
