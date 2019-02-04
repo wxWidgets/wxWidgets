@@ -95,7 +95,7 @@ struct COLORINFO
     RECT           rColorSamples;
     BOOL           bFoldOut;
     DWORD          rgbBoxColor[COLORBOXES];
-} ;
+};
 
 struct DialogSubclassingData
 {
