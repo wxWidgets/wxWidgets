@@ -185,7 +185,9 @@ void wxComboBox::SetActualValue(const wxString &value)
 void wxComboBox::SetValue(const wxString& value)
 {
     SetActualValue( value );
-    SetInsertionPoint( 0 );
+
+    if ( !HasFlag(wxCB_READONLY) )
+        SetInsertionPoint( 0 );
 }
 
 void wxComboBox::ChangeValue(const wxString &value)
@@ -249,7 +251,9 @@ void wxComboBox::Dismiss()
 
 void wxComboBox::Clear()
 {
-    wxTextEntry::Clear();
+    if ( !HasFlag(wxCB_READONLY) )
+        wxTextEntry::Clear();
+
     wxItemContainer::Clear();
 }
 
