@@ -127,7 +127,7 @@ wxColourDialogSubClassProc(HWND hwnd,
     const LRESULT retValue = CallWindowProc(dialogData->originalProc, hwnd, uiMsg, wParam, lParam);
 
     // Check the current selected color.
-   if (const COLORINFO* pCI = (COLORINFO*)GetProp(hwnd, COLORPROP))
+   if ( const COLORINFO* pCI = (COLORINFO*)GetProp(hwnd, COLORPROP) )
    {
        if (dialogData->selectedColor != pCI->currentRGB)
        {
