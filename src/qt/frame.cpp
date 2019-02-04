@@ -134,7 +134,9 @@ void wxFrame::SetWindowStyleFlag( long style )
 {
     wxWindow::SetWindowStyleFlag( style );
 
-    Qt::WindowFlags qtFlags = GetQMainWindow()->windowFlags();
+    QMainWindow *qtFrame = GetQMainWindow();
+    Qt::WindowFlags qtFlags = qtFrame->windowFlags();
+    qtFlags |= Qt::CustomizeWindowHint;
 
     if ( HasFlag( wxFRAME_TOOL_WINDOW ) )
     {
@@ -142,7 +144,46 @@ void wxFrame::SetWindowStyleFlag( long style )
         qtFlags |= Qt::Tool;
     }
 
-    GetQMainWindow()->setWindowFlags( qtFlags );
+    if ( HasFlag(wxCAPTION) )
+    {
+        qtFlags |= Qt::WindowTitleHint;
+    }
+
+    if ( HasFlag(wxSYSTEM_MENU) )
+    {
+        qtFlags |= Qt::WindowSystemMenuHint;
+    }
+
+    if ( HasFlag(wxSTAY_ON_TOP) )
+    {
+        qtFlags |= Qt::WindowStaysOnTopHint;
+    }
+
+    if ( HasFlag(wxMINIMIZE_BOX) )
+    {
+        qtFlags |= Qt::WindowMinimizeButtonHint;
+    }
+
+    if ( HasFlag(wxMAXIMIZE_BOX) )
+    {
+        qtFlags |= Qt::WindowMaximizeButtonHint;
+    }
+
+    if ( HasFlag(wxCLOSE_BOX) )
+    {
+        qtFlags |= Qt::WindowCloseButtonHint;
+    }
+
+    if ( HasFlag(wxNO_BORDER) )
+    {
+        //Note any of the other window decoration hints (e.g. Qt::WindowCloseButtonHint, Qt::WindowTitleHint)
+        //override this style.  It doesn't seem possible to create a QMainWindow with a title bar but without
+        //a resize border.
+        qtFlags |= Qt::FramelessWindowHint;
+    }
+
+    qtFrame->setWindowFlags(qtFlags);
+
 }
 
 void wxFrame::AddChild( wxWindowBase *child )
