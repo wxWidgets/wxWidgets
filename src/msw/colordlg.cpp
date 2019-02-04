@@ -97,7 +97,7 @@ struct COLORINFO
     DWORD          rgbBoxColor[COLORBOXES];
 };
 
-struct DialogSubclassingData
+struct ColourDialogSubclassingData
 {
     WNDPROC originalProc;
     COLORREF selectedColor;
