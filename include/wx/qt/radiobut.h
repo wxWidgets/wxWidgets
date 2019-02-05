@@ -37,8 +37,6 @@ public:
 
     virtual QWidget *GetHandle() const;
 
-protected:
-
 private:
     QRadioButton *m_qtRadioButton;
 
