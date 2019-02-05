@@ -9,6 +9,7 @@
 #include "wx/wxprec.h"
 #include "wx/treectrl.h"
 #include "wx/qt/private/winevent.h"
+#include "wx/imaglist.h"
 
 #include <QtWidgets/QTreeWidget>
 
@@ -38,12 +39,26 @@ namespace
         const int currentCount = item->childCount();
         size_t totalCount = currentCount;
 
-        for(int i = 0; i < totalCount; ++i)
+        for(int i = 0; i < currentCount; ++i)
         {
-            totalCount += CountChildren(item->child(0));
+            totalCount += CountChildren(item->child(i));
         }
 
         return totalCount;
+    }
+
+    QIcon::Mode TreeIconToQIconMode(wxTreeItemIcon icon)
+    {
+        switch (icon)
+        {
+        case wxTreeItemIcon_Normal:
+            return QIcon::Normal;
+        case wxTreeItemIcon_Selected:
+            return QIcon::Selected;
+        }
+
+        wxFAIL_MSG("Unspported tree icon state");
+        return QIcon::Normal;
     }
 
 }
@@ -84,7 +99,11 @@ wxTreeCtrl::~wxTreeCtrl()
 
 unsigned wxTreeCtrl::GetCount() const
 {
-    return m_qtTreeWidget->topLevelItemCount();
+    QTreeWidgetItem *root = m_qtTreeWidget->invisibleRootItem();
+    if (root->childCount() == 0)
+        return 0;
+
+    return CountChildren(root->child(0));
 }
 
 unsigned wxTreeCtrl::GetIndent() const
@@ -116,11 +135,11 @@ wxString wxTreeCtrl::GetItemText(const wxTreeItemId& item) const
     return wxQtConvertString(qTreeItem->text(0));
 }
 
-int wxTreeCtrl::GetItemImage(const wxTreeItemId& item, wxTreeItemIcon WXUNUSED(which)) const
+int wxTreeCtrl::GetItemImage(const wxTreeItemId& item, wxTreeItemIcon which) const
 {
     wxCHECK_MSG(item.IsOk(), 0, "invalid tree item");
-
     return 0;
+
 }
 
 wxTreeItemData *wxTreeCtrl::GetItemData(const wxTreeItemId& item) const
@@ -165,9 +184,22 @@ void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
     qTreeItem->setText(0, wxQtConvertString(text));
 }
 
-void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int WXUNUSED(image), wxTreeItemIcon WXUNUSED(which))
+void wxTreeCtrl::SetItemImage(const wxTreeItemId& item, int image, wxTreeItemIcon which)
 {
-    wxCHECK_RET(item.IsOk(), "invalid tree item");
+    if (m_imageListNormal == NULL)
+        return;
+
+    if (image == -1)
+        return;
+
+    wxBitmap bitmap = m_imageListNormal->GetBitmap(image);
+    wxASSERT(bitmap.IsOk());
+
+    QTreeWidgetItem* qTreeItem = wxQtConvertTreeItem(item);
+    QIcon::Mode mode = TreeIconToQIconMode(which);
+    QIcon icon = qTreeItem->icon(0);
+    icon.addPixmap(*bitmap.GetHandle(), mode);
+    qTreeItem->setIcon(0, icon);
 }
 
 void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data)
@@ -728,6 +760,8 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
     }
 
     wxTreeItemId wxItem = wxQtConvertTreeItem(newItem);
+    SetItemImage(wxItem, image, wxTreeItemIcon_Normal);
+    SetItemImage(wxItem, selImage, wxTreeItemIcon_Selected);
 
     if (data != NULL)
         data->SetId(wxItem);
