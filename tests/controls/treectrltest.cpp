@@ -70,6 +70,7 @@ private:
         CPPUNIT_TEST( SelectItemMulti );
         CPPUNIT_TEST( PseudoTest_SetHiddenRoot );
         CPPUNIT_TEST( HasChildren );
+        CPPUNIT_TEST( GetCount );
     CPPUNIT_TEST_SUITE_END();
 
     void ItemClick();
@@ -94,6 +95,7 @@ private:
     void Sort();
     void KeyNavigation();
     void HasChildren();
+    void GetCount();
     void SelectItemSingle();
     void SelectItemMulti();
     void PseudoTest_MultiSelect() { ms_multiSelect = true; }
@@ -173,6 +175,11 @@ void TreeCtrlTestCase::HasChildren()
     CPPUNIT_ASSERT( m_tree->HasChildren(m_child1) );
     CPPUNIT_ASSERT( !m_tree->HasChildren(m_child2) );
     CPPUNIT_ASSERT( !m_tree->HasChildren(m_grandchild) );
+}
+
+void TreeCtrlTestCase::GetCount()
+{
+    CPPUNIT_ASSERT_EQUAL(3, m_tree->GetCount());
 }
 
 void TreeCtrlTestCase::SelectItemSingle()
