@@ -297,14 +297,6 @@ size_t wxTreeCtrl::GetChildrenCount(const wxTreeItemId& item, bool recursively) 
 wxTreeItemId wxTreeCtrl::GetRootItem() const
 {
     QTreeWidgetItem *root = m_qtTreeWidget->invisibleRootItem();
-    if (HasFlag(wxTR_HIDE_ROOT))
-    {
-        return wxQtConvertTreeItem(root);
-    }
-
-    if (root->childCount() == 0)
-        return wxTreeItemId();
-
     return wxQtConvertTreeItem(root->child(0));
 }
 
@@ -509,15 +501,8 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
                              int image, int selImage,
                              wxTreeItemData *data)
 {
-    QTreeWidgetItem *item = m_qtTreeWidget->invisibleRootItem();
-
-    if ( HasFlag(wxTR_HIDE_ROOT) )
-    {
-        item->setText(0, wxQtConvertString(text));
-        return wxQtConvertTreeItem(item);
-    }
-
-    return DoInsertItem(wxQtConvertTreeItem(item), 0, text, image, selImage, data);
+    QTreeWidgetItem *root = m_qtTreeWidget->invisibleRootItem();
+    return DoInsertItem(wxQtConvertTreeItem(root), 0, text, image, selImage, data);
 }
 
 void wxTreeCtrl::Delete(const wxTreeItemId& item)
