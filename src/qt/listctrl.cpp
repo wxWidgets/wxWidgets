@@ -123,10 +123,10 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxQtItemEditorFactory);
 };
 
-class wxQtTreeWidget : public wxQtEventSignalHandler< QTreeWidget, wxListCtrl >
+class wxQtListTreeWidget : public wxQtEventSignalHandler< QTreeWidget, wxListCtrl >
 {
 public:
-    wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler );
+    wxQtListTreeWidget( wxWindow *parent, wxListCtrl *handler );
 
     void EmitListEvent(wxEventType typ, QTreeWidgetItem *qitem, int column) const;
 
@@ -156,18 +156,18 @@ private:
     wxQtItemEditorFactory m_editorFactory;
 };
 
-wxQtTreeWidget::wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler )
+wxQtListTreeWidget::wxQtListTreeWidget( wxWindow *parent, wxListCtrl *handler )
     : wxQtEventSignalHandler< QTreeWidget, wxListCtrl >( parent, handler ),
       m_editorFactory(handler)
 {
-    connect(this, &QTreeWidget::itemClicked, this, &wxQtTreeWidget::itemClicked);
-    connect(this, &QTreeWidget::itemPressed, this, &wxQtTreeWidget::itemPressed);
-    connect(this, &QTreeWidget::itemActivated, this, &wxQtTreeWidget::itemActivated);
+    connect(this, &QTreeWidget::itemClicked, this, &wxQtListTreeWidget::itemClicked);
+    connect(this, &QTreeWidget::itemPressed, this, &wxQtListTreeWidget::itemPressed);
+    connect(this, &QTreeWidget::itemActivated, this, &wxQtListTreeWidget::itemActivated);
 
     ChangeEditorFactory();
 }
 
-void wxQtTreeWidget::EmitListEvent(wxEventType typ, QTreeWidgetItem *qitem, int column) const
+void wxQtListTreeWidget::EmitListEvent(wxEventType typ, QTreeWidgetItem *qitem, int column) const
 {
     wxListCtrl *handler = GetHandler();
     if ( handler )
@@ -187,17 +187,17 @@ void wxQtTreeWidget::EmitListEvent(wxEventType typ, QTreeWidgetItem *qitem, int 
     }
 }
 
-void wxQtTreeWidget::itemClicked(QTreeWidgetItem *qitem, int column)
+void wxQtListTreeWidget::itemClicked(QTreeWidgetItem *qitem, int column)
 {
     EmitListEvent(wxEVT_LIST_ITEM_SELECTED, qitem, column);
 }
 
-void wxQtTreeWidget::itemPressed(QTreeWidgetItem *qitem, int column)
+void wxQtListTreeWidget::itemPressed(QTreeWidgetItem *qitem, int column)
 {
     EmitListEvent(wxEVT_LIST_ITEM_SELECTED, qitem, column);
 }
 
-void wxQtTreeWidget::itemActivated(QTreeWidgetItem *qitem, int column)
+void wxQtListTreeWidget::itemActivated(QTreeWidgetItem *qitem, int column)
 {
     EmitListEvent(wxEVT_LIST_ITEM_ACTIVATED, qitem, column);
 }
@@ -258,7 +258,7 @@ bool wxListCtrl::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    m_qtTreeWidget = new wxQtTreeWidget( parent, this );
+    m_qtTreeWidget = new wxQtListTreeWidget( parent, this );
 
     if (style & wxLC_NO_HEADER)
         m_qtTreeWidget->setHeaderHidden(true);
