@@ -76,6 +76,12 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
     return QtCreateControl(parent, id, pos, size, style, validator, name);
 }
 
+wxTreeCtrl::~wxTreeCtrl()
+{
+    if (m_qtTreeWidget != NULL)
+        m_qtTreeWidget->deleteLater();
+}
+
 unsigned wxTreeCtrl::GetCount() const
 {
     return m_qtTreeWidget->topLevelItemCount();
