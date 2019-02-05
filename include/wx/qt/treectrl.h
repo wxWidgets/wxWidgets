@@ -112,6 +112,8 @@ public:
 
     virtual bool GetBoundingRect(const wxTreeItemId& item, wxRect& rect, bool textOnly = false) const wxOVERRIDE;
 
+    virtual void SetWindowStyleFlag(long styles) wxOVERRIDE;
+
     virtual QWidget *GetHandle() const wxOVERRIDE;
 
 protected:

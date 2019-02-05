@@ -71,6 +71,7 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxString& name)
 {
     m_qtTreeWidget = new wxQTreeWidget(parent, this);
+    SetWindowStyleFlag(style);
 
     return QtCreateControl(parent, id, pos, size, style, validator, name);
 }
@@ -337,9 +338,7 @@ void wxTreeCtrl::SetFocusedItem(const wxTreeItemId& item)
 
 void wxTreeCtrl::ClearFocusedItem()
 {
-    QTreeWidgetItem *current = m_qtTreeWidget->currentItem();
-    if (current != NULL)
-        current->setSelected(false);
+    m_qtTreeWidget->setCurrentItem(NULL);
 }
 
 wxTreeItemId wxTreeCtrl::GetFocusedItem() const
@@ -622,11 +621,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
     {
         QList<QTreeWidgetItem *> selections = m_qtTreeWidget->selectedItems();
         const size_t nSelections = selections.size();
-
-        for (size_t i = 0; i < nSelections; ++i)
-        {
-            selections[i]->setSelected(false);
-        }
+        m_qtTreeWidget->clearSelection();
     }
 
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
@@ -698,6 +693,13 @@ bool wxTreeCtrl::GetBoundingRect(const wxTreeItemId& item, wxRect& rect, bool te
 {
     wxCHECK_MSG(item.IsOk(), false, "invalid tree item");
     return false;
+}
+
+void wxTreeCtrl::SetWindowStyleFlag(long styles)
+{
+    wxControl::SetWindowStyleFlag(styles);
+    m_qtTreeWidget->invisibleRootItem()->setHidden((styles & wxTR_HIDE_ROOT) != 0);
+    m_qtTreeWidget->setSelectionMode(styles & wxTR_MULTIPLE ? QTreeWidget::MultiSelection : QTreeWidget::SingleSelection);
 }
 
 int wxTreeCtrl::DoGetItemState(const wxTreeItemId& item) const
