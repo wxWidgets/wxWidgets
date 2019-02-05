@@ -276,6 +276,7 @@ set(QT_HDR
     wx/qt/dataview.h
     wx/generic/activityindicator.h
     ${QT_PLATFORM_HDR}
+    wx/qt/treectrl.h
 )
 
 set(QT_SRC
@@ -374,6 +375,7 @@ set(QT_SRC
     src/qt/dataview.cpp
     src/qt/taskbar.cpp
     ${QT_PLATFORM_SRC}
+    src/qt/treectrl.cpp
 )
 
 set(MEDIA_QT_SRC

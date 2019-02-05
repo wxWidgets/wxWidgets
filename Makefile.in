@@ -3575,7 +3575,8 @@ COND_TOOLKIT_QT_GUI_HDR =  \
 	wx/generic/activityindicator.h \
 	wx/qt/dataview.h \
 	wx/qt/dvrenderers.h \
-	$(QT_PLATFORM_HDR)
+	$(QT_PLATFORM_HDR) \
+	wx/qt/treectrl.h
 @COND_TOOLKIT_QT@GUI_HDR = $(COND_TOOLKIT_QT_GUI_HDR)
 @COND_TOOLKIT_COCOA@MEDIA_PLATFORM_HDR = 
 @COND_TOOLKIT_GTK@MEDIA_PLATFORM_HDR = 
@@ -5542,7 +5543,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_textctrl.o \
 	monodll_msw_textentry.o \
 	monodll_msw_tglbtn.o \
-	monodll_treectrl.o \
+	monodll_msw_treectrl.o \
 	monodll_systhemectrl.o \
 	monodll_customdraw.o \
 	monodll_animateg.o \
@@ -5736,7 +5737,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS =  \
 	monodll_qt_uiaction.o \
 	monodll_qt_utils.o \
 	monodll_qt_window.o \
-	$(__QT_PLATFORM_SRC_OBJECTS)
+	$(__QT_PLATFORM_SRC_OBJECTS) \
+	monodll_qt_treectrl.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS)
 COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS =  \
 	monodll_comimpl.o \
@@ -7521,7 +7523,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_textctrl.o \
 	monolib_msw_textentry.o \
 	monolib_msw_tglbtn.o \
-	monolib_treectrl.o \
+	monolib_msw_treectrl.o \
 	monolib_systhemectrl.o \
 	monolib_customdraw.o \
 	monolib_animateg.o \
@@ -7715,7 +7717,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1 =  \
 	monolib_qt_uiaction.o \
 	monolib_qt_utils.o \
 	monolib_qt_window.o \
-	$(__QT_PLATFORM_SRC_OBJECTS_1)
+	$(__QT_PLATFORM_SRC_OBJECTS_1) \
+	monolib_qt_treectrl.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1)
 COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_comimpl.o \
@@ -9647,7 +9650,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_textctrl.o \
 	coredll_msw_textentry.o \
 	coredll_msw_tglbtn.o \
-	coredll_treectrl.o \
+	coredll_msw_treectrl.o \
 	coredll_systhemectrl.o \
 	coredll_customdraw.o \
 	coredll_animateg.o \
@@ -9841,7 +9844,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2 =  \
 	coredll_qt_uiaction.o \
 	coredll_qt_utils.o \
 	coredll_qt_window.o \
-	$(__QT_PLATFORM_SRC_OBJECTS_2)
+	$(__QT_PLATFORM_SRC_OBJECTS_2) \
+	coredll_qt_treectrl.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2)
 COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_2 =  \
 	coredll_comimpl.o \
@@ -11368,7 +11372,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_textctrl.o \
 	corelib_msw_textentry.o \
 	corelib_msw_tglbtn.o \
-	corelib_treectrl.o \
+	corelib_msw_treectrl.o \
 	corelib_systhemectrl.o \
 	corelib_customdraw.o \
 	corelib_animateg.o \
@@ -11562,7 +11566,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3 =  \
 	corelib_qt_uiaction.o \
 	corelib_qt_utils.o \
 	corelib_qt_window.o \
-	$(__QT_PLATFORM_SRC_OBJECTS_3)
+	$(__QT_PLATFORM_SRC_OBJECTS_3) \
+	corelib_qt_treectrl.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3)
 COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_3 =  \
 	corelib_comimpl.o \
@@ -16338,7 +16343,7 @@ monodll_msw_textentry.o: $(srcdir)/src/msw/textentry.cpp $(MONODLL_ODEP)
 monodll_msw_tglbtn.o: $(srcdir)/src/msw/tglbtn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/tglbtn.cpp
 
-monodll_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(MONODLL_ODEP)
+monodll_msw_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/treectrl.cpp
 
 monodll_systhemectrl.o: $(srcdir)/src/msw/systhemectrl.cpp $(MONODLL_ODEP)
@@ -16832,6 +16837,9 @@ monodll_qt_window.o: $(srcdir)/src/qt/window.cpp $(MONODLL_ODEP)
 
 monodll_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
+
+monodll_qt_treectrl.o: $(srcdir)/src/qt/treectrl.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/treectrl.cpp
 
 monodll_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
@@ -21597,7 +21605,7 @@ monolib_msw_textentry.o: $(srcdir)/src/msw/textentry.cpp $(MONOLIB_ODEP)
 monolib_msw_tglbtn.o: $(srcdir)/src/msw/tglbtn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/tglbtn.cpp
 
-monolib_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(MONOLIB_ODEP)
+monolib_msw_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/treectrl.cpp
 
 monolib_systhemectrl.o: $(srcdir)/src/msw/systhemectrl.cpp $(MONOLIB_ODEP)
@@ -22091,6 +22099,9 @@ monolib_qt_window.o: $(srcdir)/src/qt/window.cpp $(MONOLIB_ODEP)
 
 monolib_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
+
+monolib_qt_treectrl.o: $(srcdir)/src/qt/treectrl.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/treectrl.cpp
 
 monolib_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
@@ -27516,7 +27527,7 @@ coredll_msw_textentry.o: $(srcdir)/src/msw/textentry.cpp $(COREDLL_ODEP)
 coredll_msw_tglbtn.o: $(srcdir)/src/msw/tglbtn.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/tglbtn.cpp
 
-coredll_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(COREDLL_ODEP)
+coredll_msw_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/treectrl.cpp
 
 coredll_systhemectrl.o: $(srcdir)/src/msw/systhemectrl.cpp $(COREDLL_ODEP)
@@ -28010,6 +28021,9 @@ coredll_qt_window.o: $(srcdir)/src/qt/window.cpp $(COREDLL_ODEP)
 
 coredll_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
+
+coredll_qt_treectrl.o: $(srcdir)/src/qt/treectrl.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/treectrl.cpp
 
 coredll_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
@@ -31770,7 +31784,7 @@ corelib_msw_textentry.o: $(srcdir)/src/msw/textentry.cpp $(CORELIB_ODEP)
 corelib_msw_tglbtn.o: $(srcdir)/src/msw/tglbtn.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/tglbtn.cpp
 
-corelib_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(CORELIB_ODEP)
+corelib_msw_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/treectrl.cpp
 
 corelib_systhemectrl.o: $(srcdir)/src/msw/systhemectrl.cpp $(CORELIB_ODEP)
@@ -32264,6 +32278,9 @@ corelib_qt_window.o: $(srcdir)/src/qt/window.cpp $(CORELIB_ODEP)
 
 corelib_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
+
+corelib_qt_treectrl.o: $(srcdir)/src/qt/treectrl.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/treectrl.cpp
 
 corelib_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
