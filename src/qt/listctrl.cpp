@@ -89,10 +89,10 @@ private:
 // QT doesn't give us direct access to the editor within the QTreeWidget.
 // Instead, we'll supply a factory to create the widget for QT and keep track
 // of it ourselves.
-class wxQtItemEditorFactory : public QItemEditorFactory
+class wxQtTreeItemEditorFactory : public QItemEditorFactory
 {
 public:
-    explicit wxQtItemEditorFactory(wxWindow* parent)
+    explicit wxQtTreeItemEditorFactory(wxWindow* parent)
         : m_parent(parent),
           m_textCtrl(NULL)
     {
@@ -120,7 +120,7 @@ private:
     wxWindow* m_parent;
     mutable wxTextCtrl* m_textCtrl;
 
-    wxDECLARE_NO_COPY_CLASS(wxQtItemEditorFactory);
+    wxDECLARE_NO_COPY_CLASS(wxQtTreeItemEditorFactory);
 };
 
 class wxQtListTreeWidget : public wxQtEventSignalHandler< QTreeWidget, wxListCtrl >
@@ -153,7 +153,7 @@ private:
         qItemDelegate->setItemEditorFactory(&m_editorFactory);
     }
 
-    wxQtItemEditorFactory m_editorFactory;
+    wxQtTreeItemEditorFactory m_editorFactory;
 };
 
 wxQtListTreeWidget::wxQtListTreeWidget( wxWindow *parent, wxListCtrl *handler )
