@@ -14,6 +14,7 @@
 #include "wx/qt/private/treeitemfactory.h"
 
 #include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QHeaderView>
 #include <QtGui/QPainter>
 
 namespace
@@ -254,6 +255,8 @@ bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxString& name)
 {
     m_qtTreeWidget = new wxQTreeWidget(parent, this);
+    m_qtTreeWidget->header()->hide();
+
     SetWindowStyleFlag(style);
 
     return QtCreateControl(parent, id, pos, size, style, validator, name);
