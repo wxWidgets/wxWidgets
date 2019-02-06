@@ -8,8 +8,10 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 #include "wx/treectrl.h"
-#include "wx/qt/private/winevent.h"
 #include "wx/imaglist.h"
+
+#include "wx/qt/private/winevent.h"
+#include "wx/qt/private/treeitemfactory.h"
 
 #include <QtWidgets/QTreeWidget>
 
@@ -25,102 +27,12 @@ namespace
         return wxTreeItemId(item);
     }
 
-    class wxQTreeWidget : public wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>
-    {
-    public:
-        wxQTreeWidget(wxWindow *parent, wxTreeCtrl *handler) :
-            wxQtEventSignalHandler(parent, handler)
-        {      
-            connect(this, &QTreeWidget::currentItemChanged, this, &wxQTreeWidget::OnCurrentItemChanged);
-            connect(this, &QTreeWidget::itemActivated, this, &wxQTreeWidget::OnItemActivated);
-            connect(this, &QTreeWidget::itemClicked, this, &wxQTreeWidget::OnItemClicked);
-            connect(this, &QTreeWidget::itemCollapsed, this, &wxQTreeWidget::OnItemCollapsed);
-            connect(this, &QTreeWidget::itemExpanded, this, &wxQTreeWidget::OnItemExpanded);
-        }
-
-    private:
-        void OnCurrentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
-        {
-            wxTreeEvent changingEvent(wxEVT_TREE_SEL_CHANGING, GetHandler(), wxQtConvertTreeItem(current));
-            EmitEvent(changingEvent);
-
-            if ( !changingEvent.IsAllowed() )
-            {
-                blockSignals(true);
-                setCurrentItem(previous);
-                blockSignals(false);
-                return;
-            }
-
-            wxTreeEvent changedEvent(wxEVT_TREE_SEL_CHANGED, GetHandler(), wxQtConvertTreeItem(current));
-            EmitEvent(changedEvent);
-        }
-
-        void OnItemActivated(QTreeWidgetItem *item, int WXUNUSED(column))
-        {
-            wxTreeEvent event(wxEVT_TREE_ITEM_ACTIVATED, GetHandler(), wxQtConvertTreeItem(item));
-            EmitEvent(event);
-        }
-
-        void OnItemClicked(QTreeWidgetItem *item)
-        {
-            wxMouseState mouseState = wxGetMouseState();
-
-            wxEventType eventType;
-            if (mouseState.RightIsDown())
-                eventType = wxEVT_TREE_ITEM_RIGHT_CLICK;
-            else if (mouseState.MiddleIsDown())
-                eventType = wxEVT_TREE_ITEM_MIDDLE_CLICK;
-            else
-                return;
-
-            wxTreeEvent event(eventType, GetHandler(), wxQtConvertTreeItem(item));
-            EmitEvent(event);
-        }
-
-        void OnItemCollapsed(QTreeWidgetItem *item)
-        {
-            wxTreeEvent collapsingEvent(wxEVT_TREE_ITEM_COLLAPSING, GetHandler(), wxQtConvertTreeItem(item));
-            EmitEvent(collapsingEvent);
-
-            if (!collapsingEvent.IsAllowed())
-            {
-                blockSignals(true);
-                item->setExpanded(true);
-                blockSignals(false);
-                return;
-            }
-
-            wxTreeEvent collapsedEvent(wxEVT_TREE_ITEM_COLLAPSED, GetHandler(), wxQtConvertTreeItem(item));
-            EmitEvent(collapsedEvent);
-        }
-
-        void OnItemExpanded(QTreeWidgetItem *item)
-        {
-            wxTreeEvent expandingEvent(wxEVT_TREE_ITEM_EXPANDING, GetHandler(), wxQtConvertTreeItem(item));
-            EmitEvent(expandingEvent);
-
-            if (!expandingEvent.IsAllowed())
-            {
-                blockSignals(true);
-                item->setExpanded(false);
-                blockSignals(false);
-                return;
-            }
-
-            wxTreeEvent expandedEvent(wxEVT_TREE_ITEM_EXPANDED, GetHandler(), wxQtConvertTreeItem(item));
-            EmitEvent(expandedEvent);
-
-        }
-    };
-
-
     size_t CountChildren(QTreeWidgetItem *item)
     {
         const int currentCount = item->childCount();
         size_t totalCount = currentCount;
 
-        for(int i = 0; i < currentCount; ++i)
+        for (int i = 0; i < currentCount; ++i)
         {
             totalCount += CountChildren(item->child(i));
         }
@@ -141,8 +53,106 @@ namespace
         wxFAIL_MSG("Unspported tree icon state");
         return QIcon::Normal;
     }
-
 }
+
+class wxQTreeWidget : public wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>
+{
+public:
+    wxQTreeWidget(wxWindow *parent, wxTreeCtrl *handler) :
+        wxQtEventSignalHandler(parent, handler),
+        m_editorFactory(handler)
+    {
+        connect(this, &QTreeWidget::currentItemChanged, this, &wxQTreeWidget::OnCurrentItemChanged);
+        connect(this, &QTreeWidget::itemActivated, this, &wxQTreeWidget::OnItemActivated);
+        connect(this, &QTreeWidget::itemClicked, this, &wxQTreeWidget::OnItemClicked);
+        connect(this, &QTreeWidget::itemCollapsed, this, &wxQTreeWidget::OnItemCollapsed);
+        connect(this, &QTreeWidget::itemExpanded, this, &wxQTreeWidget::OnItemExpanded);
+
+        m_editorFactory.AttachTo(this);
+    }
+
+    wxTextCtrl *GetEditControl()
+    {
+        return m_editorFactory.GetEditControl();
+    }
+
+private:
+    void OnCurrentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+    {
+        wxTreeEvent changingEvent(wxEVT_TREE_SEL_CHANGING, GetHandler(), wxQtConvertTreeItem(current));
+        EmitEvent(changingEvent);
+
+        if ( !changingEvent.IsAllowed() )
+        {
+            blockSignals(true);
+            setCurrentItem(previous);
+            blockSignals(false);
+            return;
+        }
+
+        wxTreeEvent changedEvent(wxEVT_TREE_SEL_CHANGED, GetHandler(), wxQtConvertTreeItem(current));
+        EmitEvent(changedEvent);
+    }
+
+    void OnItemActivated(QTreeWidgetItem *item, int WXUNUSED(column))
+    {
+        wxTreeEvent event(wxEVT_TREE_ITEM_ACTIVATED, GetHandler(), wxQtConvertTreeItem(item));
+        EmitEvent(event);
+    }
+
+    void OnItemClicked(QTreeWidgetItem *item)
+    {
+        wxMouseState mouseState = wxGetMouseState();
+
+        wxEventType eventType;
+        if ( mouseState.RightIsDown() )
+            eventType = wxEVT_TREE_ITEM_RIGHT_CLICK;
+        else if ( mouseState.MiddleIsDown() )
+            eventType = wxEVT_TREE_ITEM_MIDDLE_CLICK;
+        else
+            return;
+
+        wxTreeEvent event(eventType, GetHandler(), wxQtConvertTreeItem(item));
+        EmitEvent(event);
+    }
+
+    void OnItemCollapsed(QTreeWidgetItem *item)
+    {
+        wxTreeEvent collapsingEvent(wxEVT_TREE_ITEM_COLLAPSING, GetHandler(), wxQtConvertTreeItem(item));
+        EmitEvent(collapsingEvent);
+
+        if ( !collapsingEvent.IsAllowed() )
+        {
+            blockSignals(true);
+            item->setExpanded(true);
+            blockSignals(false);
+            return;
+        }
+
+        wxTreeEvent collapsedEvent(wxEVT_TREE_ITEM_COLLAPSED, GetHandler(), wxQtConvertTreeItem(item));
+        EmitEvent(collapsedEvent);
+    }
+
+    void OnItemExpanded(QTreeWidgetItem *item)
+    {
+        wxTreeEvent expandingEvent(wxEVT_TREE_ITEM_EXPANDING, GetHandler(), wxQtConvertTreeItem(item));
+        EmitEvent(expandingEvent);
+
+        if ( !expandingEvent.IsAllowed() )
+        {
+            blockSignals(true);
+            item->setExpanded(false);
+            blockSignals(false);
+            return;
+        }
+
+        wxTreeEvent expandedEvent(wxEVT_TREE_ITEM_EXPANDED, GetHandler(), wxQtConvertTreeItem(item));
+        EmitEvent(expandedEvent);
+
+    }
+
+    wxQtTreeItemEditorFactory m_editorFactory;
+};
 
 wxTreeCtrl::wxTreeCtrl() :
     m_qtTreeWidget(NULL)
@@ -772,17 +782,22 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId& item)
 wxTextCtrl *wxTreeCtrl::EditLabel(const wxTreeItemId& item, wxClassInfo* textCtrlClass)
 {
     wxCHECK_MSG(item.IsOk(), NULL, "invalid tree item");
-    return NULL;
+
+    QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
+    m_qtTreeWidget->openPersistentEditor(qTreeItem);
+    return m_qtTreeWidget->GetEditControl();
 }
 
 wxTextCtrl *wxTreeCtrl::GetEditControl() const
 {
-    return NULL;
+    return m_qtTreeWidget->GetEditControl();
 }
 
 void wxTreeCtrl::EndEditLabel(const wxTreeItemId& item, bool discardChanges)
 {
     wxCHECK_RET(item.IsOk(), "invalid tree item");
+    QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
+    m_qtTreeWidget->closePersistentEditor(qTreeItem);
 }
 
 void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
