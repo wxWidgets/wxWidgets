@@ -298,7 +298,15 @@ QT_HDR =
     wx/qt/tooltip.h
     wx/qt/toplevel.h
 		wx/qt/treectrl.h
-    wx/qt/window.h
+		wx/qt/window.h
+		wx/qt/private/converter.h
+		wx/qt/private/winevent.h
+		wx/qt/private/winevent.h
+		wx/qt/private/converter.h
+		wx/qt/private/pointer.h
+		wx/qt/private/timer.h
+		wx/qt/private/treeitemfactory.h
+		wx/qt/private/utils.h
 
 QT_SRC=
     $(QT_PLATFORM_SRC)
