@@ -24,7 +24,7 @@ class wxQtPushButton : public wxQtEventSignalHandler< QPushButton, wxAnyButton >
 {
 
 public:
-    virtual bool eventFilter(QObject *watched, QEvent *event);
+    virtual bool eventFilter(QObject *watched, QEvent *event) wxOVERRIDE;
     wxQtPushButton( wxWindow *parent, wxAnyButton *handler);
 
 private:
@@ -136,31 +136,20 @@ QWidget *wxAnyButton::GetHandle() const
     return m_qtPushButton;
 }
 
-void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
+void wxAnyButton::DoSetBitmap(State which)
 {
-    switch ( which )
-    {
-        case State_Normal:
-            QtSetBitmap(bitmap);
-            InvalidateBestSize();
-            break;
+    QtSetBitmap(DoGetBitmap(which));
+    InvalidateBestSize();
+}
 
-        case State_Pressed:
-            break;
+wxBitmap wxAnyButton::DoGetBitmap(State state) const
+{
+    return IsStateValid(state) ? m_bitmaps[state] : wxNullBitmap;
+}
 
-        case State_Current:
-            break;
-
-        case State_Focused:
-            break;
-
-        case State_Disabled:
-            break;
-
-        case State_Max:
-            break;
-    }
-    m_bitmaps[which] = bitmap;
+bool wxAnyButton::IsStateValid(State state)
+{
+    return state >= State_Normal && state < State_Max;
 }
 
 #endif // wxHAS_ANY_BUTTON
