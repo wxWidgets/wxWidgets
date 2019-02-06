@@ -61,7 +61,6 @@ public:
 
     void OnButtonClick(wxCommandEvent &);
 
-
 protected:
     wxBitmap    m_bitmap;
 
@@ -75,6 +74,8 @@ protected:
     static wxColourData ms_data;
 
 private:
+    void OnColourSelected(wxColourPickerEvent &);
+
     wxDECLARE_DYNAMIC_CLASS(wxGenericColourButton);
 };
 

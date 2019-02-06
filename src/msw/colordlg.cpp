@@ -41,7 +41,6 @@
 #include "wx/msw/private.h"
 
 #include <stdlib.h>
-#include <winuser.h>
 
 // ----------------------------------------------------------------------------
 // globals
@@ -51,6 +50,19 @@
 // this is ok if color dialog created with standart color
 // and "Define Custom Colors" extension not shown
 static wxRect gs_rectDialog(0, 0, 222, 324);
+
+namespace
+{
+    // The data required by the subclassing procedure.
+    struct ColourDialogSubclassingData
+    {
+        WNDPROC originalProc;
+        COLORREF selectedColor;
+        wxColourDialog* colourDialog;
+    };
+
+    ColourDialogSubclassingData g_subclassingData;
+}
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -62,47 +74,49 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog);
 // implementation
 // ============================================================================
 
-#define COLORBOXES 64
-#define COLORPROP (LPCTSTR) 0xA000L
-#define SUBCLASSING_PROP L"PROP_SUBCLASSING"
+#ifndef COLORBOXES
+    #define COLORBOXES 64
+#endif
 
-struct COLORINFO
-{
-    UINT           ApiType;
-    LPCHOOSECOLOR  pCC;
-    HANDLE         hLocal;
-    HANDLE         hDialog;
-    HPALETTE       hPal;
-    DWORD          currentRGB;
-    WORD           currentHue;
-    WORD           currentSat;
-    WORD           currentLum;
-    WORD           nHueWidth;
-    WORD           nSatHeight;
-    WORD           nLumHeight;
-    WORD           nCurMix;
-    WORD           nCurDsp;
-    WORD           nCurBox;
-    WORD           nHuePos;
-    WORD           nSatPos;
-    WORD           nLumPos;
-    RECT           rOriginal;
-    RECT           rRainbow;
-    RECT           rLumScroll;
-    RECT           rLumPaint;
-    RECT           rCurrentColor;
-    RECT           rNearestPure;
-    RECT           rColorSamples;
-    BOOL           bFoldOut;
-    DWORD          rgbBoxColor[COLORBOXES];
-};
+#ifndef COLORPROP
+    #define COLORPROP (LPCTSTR) 0xA000L
+#endif
 
-struct ColourDialogSubclassingData
+namespace
 {
-    WNDPROC originalProc;
-    COLORREF selectedColor;
-    wxColourDialog* colourDialog = nullptr;
-};
+	// The color info structure.
+	// See https://social.msdn.microsoft.com/Forums/en-US/c5fcfd9f-6b27-4848-bb9d-94bec105eabd/get-the-current-clicked-color-from-choosecolor-dialog?forum=windowsgeneraldevelopmentissues
+    struct COLORINFO
+    {
+        UINT           ApiType;
+        LPCHOOSECOLOR  pCC;
+        HANDLE         hLocal;
+        HANDLE         hDialog;
+        HPALETTE       hPal;
+        DWORD          currentRGB;
+        WORD           currentHue;
+        WORD           currentSat;
+        WORD           currentLum;
+        WORD           nHueWidth;
+        WORD           nSatHeight;
+        WORD           nLumHeight;
+        WORD           nCurMix;
+        WORD           nCurDsp;
+        WORD           nCurBox;
+        WORD           nHuePos;
+        WORD           nSatPos;
+        WORD           nLumPos;
+        RECT           rOriginal;
+        RECT           rRainbow;
+        RECT           rLumScroll;
+        RECT           rLumPaint;
+        RECT           rCurrentColor;
+        RECT           rNearestPure;
+        RECT           rColorSamples;
+        BOOL           bFoldOut;
+        DWORD          rgbBoxColor[COLORBOXES];
+    };
+}
 
 // ----------------------------------------------------------------------------
 // colour dialog subclass proc
@@ -114,37 +128,21 @@ wxColourDialogSubClassProc(HWND hwnd,
                            WPARAM wParam,
                            LPARAM lParam)
 {
-
-    DialogSubclassingData* const dialogData = static_cast<DialogSubclassingData*>(GetProp(hwnd, SUBCLASSING_PROP));
-    if ( !dialogData )
-    {
-        // Must not happen since WM_NCDESTROY is the last message received when closing the dialog.
-        wxFAIL_MSG("No dialog data to process subclassing message");
-        return 0;
-    }
-
     // Call the original procedure first.
-    const LRESULT retValue = CallWindowProc(dialogData->originalProc, hwnd, uiMsg, wParam, lParam);
+    const LRESULT retValue = CallWindowProc(g_subclassingData.originalProc, hwnd, uiMsg, wParam, lParam);
 
     // Check the current selected color.
    if ( const COLORINFO* pCI = (COLORINFO*)GetProp(hwnd, COLORPROP) )
    {
-       if ( dialogData->selectedColor != pCI->currentRGB )
+       if (g_subclassingData.selectedColor != pCI->currentRGB )
        {
-           dialogData->selectedColor = pCI->currentRGB;
+           g_subclassingData.selectedColor = pCI->currentRGB;
 
            wxColour colour;
            wxRGBToColour(colour, pCI->currentRGB);
-           dialogData->colourDialog->OnColorSelected(colour);
+           g_subclassingData.colourDialog->MSWOnColourSelected(colour);
        }
    }
-
-    // Handle the destroy message.
-    if (uiMsg == WM_NCDESTROY)
-    {
-        delete dialogData;
-        RemoveProp(hwnd, SUBCLASSING_PROP);
-    }
 
     return retValue;
 }
@@ -164,12 +162,10 @@ wxColourDialogHookProc(HWND hwnd,
         CHOOSECOLOR *pCC = (CHOOSECOLOR *)lParam;
         wxColourDialog * const  dialog = (wxColourDialog *)pCC->lCustData;
            
-        // Init the dialog subclassing data.
-        DialogSubclassingData* procData = new DialogSubclassingData();
-        procData->originalProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)wxColourDialogSubClassProc);
-        procData->selectedColor = pCC->rgbResult;
-        procData->colourDialog = dialog;
-        SetProp(hwnd, SUBCLASSING_PROP, procData);
+        // Init the subclassing data.
+        g_subclassingData.originalProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)wxColourDialogSubClassProc);
+        g_subclassingData.selectedColor = pCC->rgbResult;
+        g_subclassingData.colourDialog = dialog;
 
         // Init the window title.
         const wxString title = dialog->GetTitle();
@@ -233,7 +229,6 @@ int wxColourDialog::ShowModal()
 
     chooseColorStruct.lStructSize = sizeof(CHOOSECOLOR);
     chooseColorStruct.hwndOwner = hWndParent;
-
     chooseColorStruct.rgbResult = wxColourToRGB(m_colourData.GetColour());
     chooseColorStruct.lpCustColors = custColours;
 
@@ -275,7 +270,7 @@ int wxColourDialog::ShowModal()
     return wxID_OK;
 }
 
-void wxColourDialog::OnColorSelected(const wxColour& colour)
+void wxColourDialog::MSWOnColourSelected(const wxColour& colour)
 {
     wxColourPickerEvent event(this, GetId(), colour, wxEVT_COLOUR_SELECTED);
     ProcessWindowEvent(event);

@@ -32,8 +32,6 @@ public:
 
     wxColourData& GetColourData() { return m_colourData; }
 
-    void OnColorSelected(const wxColour& colour);
-
     // override some base class virtuals
     virtual void SetTitle(const wxString& title) wxOVERRIDE;
     virtual wxString GetTitle() const wxOVERRIDE;
@@ -42,6 +40,9 @@ public:
 
     // wxMSW-specific implementation from now on
     // -----------------------------------------
+
+    // called from the subsclassing procedure.
+    void MSWOnColourSelected(const wxColour& colour);
 
     // called from the hook procedure on WM_INITDIALOG reception
     virtual void MSWOnInitDone(WXHWND hDlg);
