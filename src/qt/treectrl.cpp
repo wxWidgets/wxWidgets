@@ -511,11 +511,10 @@ size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds& selections) const
     QList<QTreeWidgetItem*> qtSelections = m_qtTreeWidget->selectedItems();
 
     const size_t numberOfSelections = qtSelections.size();
-    selections.SetCount(numberOfSelections);
-
     for (size_t i = 0; i < numberOfSelections; ++i)
     {
-        selections[i] = qtSelections[i];
+        QTreeWidgetItem *item = qtSelections[i];
+        selections.Add(wxQtConvertTreeItem(item));
     }
 
     return numberOfSelections;
