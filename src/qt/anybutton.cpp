@@ -29,6 +29,7 @@ public:
 
 private:
     void clicked(bool);
+    void checkAndSetIcon(QPushButton *button, wxAnyButton *wxbutton, int state);
 };
 
 wxQtPushButton::wxQtPushButton(wxWindow *parent, wxAnyButton *handler)
@@ -45,61 +46,67 @@ bool wxQtPushButton::eventFilter(QObject *watched, QEvent *event)
     QPushButton *button = qobject_cast<QPushButton *>( watched );
     wxAnyButton *wxbutton = GetHandler();
     QIcon icon = button->icon();
-    if( event->type() == QEvent::HoverMove && button->isEnabled() )
+
+    switch ( event->type() )
     {
-        if( wxbutton->GetStateBitmaps()[1].IsOk() )
-        {
-            button->setIcon( QIcon( *( wxbutton->GetStateBitmaps()[1].GetHandle() ) ) );
-        }
-    }
-    else if( event->type() == QEvent::MouseButtonPress && button->isEnabled() )
-    {
-        if( wxbutton->GetStateBitmaps()[2].IsOk() )
-        {
-            button->setIcon( QIcon( *( wxbutton->GetStateBitmaps()[2].GetHandle() ) ) );
-        }
-    }
-    else if( event->type() == QEvent::FocusIn && button->isEnabled() )
-    {
-        if( wxbutton->GetStateBitmaps()[4].IsOk() )
-            button->setIcon( QIcon( *( wxbutton->GetStateBitmaps()[4].GetHandle() ) ) );
-    }
-    else if( event->type() == QEvent::EnabledChange )
-    {
-        if( !button->isEnabled() && wxbutton->GetStateBitmaps()[3].IsOk() )
-            button->setIcon( QIcon( *( wxbutton->GetStateBitmaps()[3].GetHandle() ) ) );
-        else
-        {
-            if( button->hasFocus() && wxbutton->GetStateBitmaps()[4].IsOk() )
-                button->setIcon( QIcon( *( wxbutton->GetStateBitmaps()[4].GetHandle() ) ) );
-            if( !button->hasFocus() && wxbutton->GetStateBitmaps()[0].IsOk() )
-                button->setIcon( QIcon( *( wxbutton->GetStateBitmaps()[0].GetHandle() ) ) );
-        }
-    }
-    else if( event->type() == QEvent::HoverLeave )
-    {
-        if( button->hasFocus() && wxbutton->GetStateBitmaps()[4].IsOk() )
-            button->setIcon( QIcon( *( wxbutton->GetStateBitmaps()[4].GetHandle() ) ) );
-        else if( !button->isEnabled() && wxbutton->GetStateBitmaps()[3].IsOk() )
-            button->setIcon( QIcon( *( wxbutton->GetStateBitmaps()[3].GetHandle() ) ) );
-        else if( wxbutton->GetStateBitmaps()[0].IsOk() )
-            button->setIcon( QIcon( *( wxbutton->GetStateBitmaps()[0].GetHandle() ) ) );
-    }
-    else if( event->type() == QEvent::FocusOut )
-    {
-        if( !button->isEnabled() && wxbutton->GetStateBitmaps()[3].IsOk() )
-            button->setIcon( QIcon( *( wxbutton->GetStateBitmaps()[3].GetHandle() ) ) );
-        else if( wxbutton->GetStateBitmaps()[0].IsOk() )
-            button->setIcon( QIcon( *( wxbutton->GetStateBitmaps()[0].GetHandle() ) ) );
-    }
-    else if( event->type() == QEvent::MouseButtonRelease )
-    {
-        if( !button->isEnabled() && wxbutton->GetStateBitmaps()[3].IsOk() )
-            button->setIcon( QIcon( *( wxbutton->GetStateBitmaps()[3].GetHandle() ) ) );
-        else if( wxbutton->GetStateBitmaps()[0].IsOk() )
-            button->setIcon( QIcon( *( wxbutton->GetStateBitmaps()[0].GetHandle() ) ) );
+        case QEvent::HoverMove:
+            if( button->isEnabled() )
+                checkAndSetIcon(button, wxbutton, 1);
+            break;
+
+        case QEvent::MouseButtonPress:
+            if( button->isEnabled() )
+                checkAndSetIcon(button, wxbutton, 2);
+            break;
+
+        case QEvent::FocusIn:
+            if( button->isEnabled() )
+                checkAndSetIcon(button, wxbutton, 4);
+            break;
+
+        case QEvent::EnabledChange:
+            if( button->isEnabled() )
+                checkAndSetIcon(button, wxbutton, 3);
+            else
+                if( button->hasFocus() )
+                    checkAndSetIcon(button, wxbutton, 4);
+                else
+                    checkAndSetIcon(button, wxbutton, 0);
+            break;
+
+        case QEvent::HoverLeave:
+            if( button->hasFocus() )
+                checkAndSetIcon(button, wxbutton, 4);
+            else
+                if( !button->isEnabled() )
+                    checkAndSetIcon(button, wxbutton, 3);
+                else
+                    checkAndSetIcon(button, wxbutton, 0);
+            break;
+
+        case QEvent::FocusOut:
+            if( button->isEnabled() )
+                checkAndSetIcon(button, wxbutton, 3);
+            else
+                checkAndSetIcon(button, wxbutton, 0);
+            break;
+
+        case QEvent::MouseButtonRelease:
+            if( !button->isEnabled() )
+                checkAndSetIcon(button, wxbutton, 3);
+            else
+                checkAndSetIcon(button, wxbutton, 0);
+            break;
     }
     return false;
+}
+
+void wxQtPushButton::checkAndSetIcon(QPushButton *button, wxAnyButton *wxbutton, int state)
+{
+    if( wxbutton->GetStateBitmaps()[state].IsOk() && button->isEnabled() )
+    {
+        button->setIcon( QIcon( *( wxbutton->GetStateBitmaps()[state].GetHandle() ) ) );
+    }
 }
 
 void wxQtPushButton::clicked( bool WXUNUSED(checked) )
