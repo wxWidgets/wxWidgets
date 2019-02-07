@@ -19,6 +19,34 @@
 
 namespace
 {
+    struct TreeItemDataQt
+    {
+        TreeItemDataQt() : data(NULL)
+        {
+        }
+        TreeItemDataQt(wxTreeItemData* data) : data(data)
+        {
+            if ( !registered )
+            {
+                qRegisterMetaTypeStreamOperators<TreeItemDataQt>("TreeItemDataQt");
+                registered = true;
+            }
+        }
+        wxTreeItemData *data;
+        static bool registered;
+    };
+    bool TreeItemDataQt::registered = false;
+    Q_DECLARE_METATYPE(TreeItemDataQt)
+
+    QDataStream &operator<<(QDataStream &out, const TreeItemDataQt &myObj)
+    {
+        return out;
+    }
+    QDataStream &operator>>(QDataStream &in, TreeItemDataQt &myObj)
+    {
+        return in;
+    }
+
     QTreeWidgetItem *wxQtConvertTreeItem(const wxTreeItemId &item)
     {
         return static_cast<QTreeWidgetItem*>(item.GetID());
@@ -84,6 +112,9 @@ public:
         connect(this, &QTreeWidget::itemExpanded, this, &wxQTreeWidget::OnItemExpanded);
 
         m_editorFactory.AttachTo(this);
+        setDragEnabled(true);
+        viewport()->setAcceptDrops(true);
+        setDropIndicatorShown(true);
     }
 
     wxTextCtrl *GetEditControl()
@@ -197,6 +228,50 @@ private:
         EmitEvent(expandedEvent);
     }
 
+        virtual void dragEnterEvent(QDragEnterEvent* event) wxOVERRIDE
+        {
+            wxEventType command = (event->mouseButtons() & Qt::RightButton)
+                ? wxEVT_TREE_BEGIN_RDRAG
+                : wxEVT_TREE_BEGIN_DRAG;
+
+
+            QTreeWidgetItem *hitItem = itemAt(event->pos());
+
+            wxTreeEvent tree_event(
+                command,
+                GetHandler(),
+                wxQtConvertTreeItem(hitItem)
+            );
+
+            tree_event.SetPoint(wxQtConvertPoint(event->pos()));
+
+            // Vetoed unless explicitly accepted.
+            tree_event.Veto();
+
+            EmitEvent(tree_event);
+
+            if ( tree_event.IsAllowed() )
+            {
+                event->accept();
+            }
+        }
+
+        virtual void dropEvent(QDropEvent* event) wxOVERRIDE
+        {
+            const wxPoint pos = wxQtConvertPoint(event->pos());
+            QTreeWidgetItem *hitItem = itemAt(event->pos());
+
+            wxTreeEvent tree_event(
+                wxEVT_TREE_END_DRAG,
+                GetHandler(),
+                wxQtConvertTreeItem(hitItem)
+            );
+
+            tree_event.SetPoint(wxQtConvertPoint(event->pos()));
+
+            EmitEvent(tree_event);
+        }
+
     int ChooseBestImage(QTreeWidgetItem *item) const
     {
         int imageIndex = -1;
@@ -224,10 +299,7 @@ private:
                 imageIndex = states[wxTreeItemIcon_Selected];
         }
 
-        if (imageIndex == -1)
-            imageIndex = states[wxTreeItemIcon_Normal];
-
-        return imageIndex;
+        return QIcon::Normal;
     }
 
     wxQtTreeItemEditorFactory m_editorFactory;
@@ -328,8 +400,8 @@ wxTreeItemData *wxTreeCtrl::GetItemData(const wxTreeItemId& item) const
 
     QTreeWidgetItem* qTreeItem = wxQtConvertTreeItem(item);
     QVariant itemData = qTreeItem->data(0, Qt::UserRole);
-    void* value =  itemData.value<void *>();
-    return static_cast<wxTreeItemData*>(value);
+    TreeItemDataQt value = itemData.value<TreeItemDataQt>();
+    return value.data;
 }
 
 wxColour wxTreeCtrl::GetItemTextColour(const wxTreeItemId& item) const
@@ -338,7 +410,6 @@ wxColour wxTreeCtrl::GetItemTextColour(const wxTreeItemId& item) const
 
     QTreeWidgetItem* qTreeItem = wxQtConvertTreeItem(item);
     return wxQtConvertColour(qTreeItem->textColor(0));
-
 }
 
 wxColour wxTreeCtrl::GetItemBackgroundColour(const wxTreeItemId& item) const
@@ -378,7 +449,8 @@ void wxTreeCtrl::SetItemData(const wxTreeItemId& item, wxTreeItemData *data)
         data->SetId(item);
 
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-    qTreeItem->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void*>(data)));
+    TreeItemDataQt treeItemData(data);
+    qTreeItem->setData(0, Qt::UserRole, QVariant::fromValue(treeItemData));
 }
 
 void wxTreeCtrl::SetItemHasChildren(const wxTreeItemId& item, bool has)
@@ -922,7 +994,9 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
 
     QTreeWidgetItem *newItem = new QTreeWidgetItem;
     newItem->setText(0, wxQtConvertString(text));
-    newItem->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void*>(data)));
+    TreeItemDataQt treeItemData(data);
+
+    newItem->setData(0, Qt::UserRole, QVariant::fromValue(treeItemData));
 
     if (pos == static_cast<size_t>(-1))
     {
