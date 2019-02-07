@@ -189,6 +189,7 @@ private:
         wxTreeCtrl* treeCtrl = GetHandler();
 
         wxTreeEvent changingEvent(wxEVT_TREE_SEL_CHANGING, treeCtrl, wxQtConvertTreeItem(current));
+        changingEvent.SetOldItem(wxQtConvertTreeItem(previous));
         EmitEvent(changingEvent);
 
         if ( !changingEvent.IsAllowed() )
@@ -204,6 +205,7 @@ private:
         // wxTreeCtrl::GetSelection returns the new selection in the
         // wx event handler.
         wxTreeEvent changedEvent(wxEVT_TREE_SEL_CHANGED, treeCtrl, wxQtConvertTreeItem(current));
+        changedEvent.SetOldItem(wxQtConvertTreeItem(previous));
         wxPostEvent(treeCtrl, changedEvent);
     }
 
