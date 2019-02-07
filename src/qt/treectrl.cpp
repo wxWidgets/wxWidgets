@@ -110,6 +110,7 @@ public:
         connect(this, &QTreeWidget::itemClicked, this, &wxQTreeWidget::OnItemClicked);
         connect(this, &QTreeWidget::itemCollapsed, this, &wxQTreeWidget::OnItemCollapsed);
         connect(this, &QTreeWidget::itemExpanded, this, &wxQTreeWidget::OnItemExpanded);
+        connect(this, &QTreeWidget::itemChanged, this, &wxQTreeWidget::OnItemChanged);
 
         m_editorFactory.AttachTo(this);
         setDragEnabled(true);
@@ -226,6 +227,12 @@ private:
 
         wxTreeEvent expandedEvent(wxEVT_TREE_ITEM_EXPANDED, GetHandler(), wxQtConvertTreeItem(item));
         EmitEvent(expandedEvent);
+    }
+
+    void OnItemChanged(QTreeWidgetItem *item, int WXUNUSED(column))
+    {
+        wxTreeEvent event(wxEVT_TREE_END_LABEL_EDIT, GetHandler(), wxQtConvertTreeItem(item));
+        EmitEvent(event);
     }
 
     virtual void dragEnterEvent(QDragEnterEvent* event) wxOVERRIDE
