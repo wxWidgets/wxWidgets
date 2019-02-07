@@ -38,11 +38,11 @@ namespace
     bool TreeItemDataQt::registered = false;
     Q_DECLARE_METATYPE(TreeItemDataQt)
 
-    QDataStream &operator<<(QDataStream &out, const TreeItemDataQt &myObj)
+    QDataStream &operator<<(QDataStream &out, const TreeItemDataQt &)
     {
         return out;
     }
-    QDataStream &operator>>(QDataStream &in, TreeItemDataQt &myObj)
+    QDataStream &operator>>(QDataStream &in, TreeItemDataQt &)
     {
         return in;
     }
@@ -228,49 +228,49 @@ private:
         EmitEvent(expandedEvent);
     }
 
-        virtual void dragEnterEvent(QDragEnterEvent* event) wxOVERRIDE
+    virtual void dragEnterEvent(QDragEnterEvent* event) wxOVERRIDE
+    {
+        wxEventType command = (event->mouseButtons() & Qt::RightButton)
+            ? wxEVT_TREE_BEGIN_RDRAG
+            : wxEVT_TREE_BEGIN_DRAG;
+
+
+        QTreeWidgetItem *hitItem = itemAt(event->pos());
+
+        wxTreeEvent tree_event(
+            command,
+            GetHandler(),
+            wxQtConvertTreeItem(hitItem)
+        );
+
+        tree_event.SetPoint(wxQtConvertPoint(event->pos()));
+
+        // Vetoed unless explicitly accepted.
+        tree_event.Veto();
+
+        EmitEvent(tree_event);
+
+        if ( tree_event.IsAllowed() )
         {
-            wxEventType command = (event->mouseButtons() & Qt::RightButton)
-                ? wxEVT_TREE_BEGIN_RDRAG
-                : wxEVT_TREE_BEGIN_DRAG;
-
-
-            QTreeWidgetItem *hitItem = itemAt(event->pos());
-
-            wxTreeEvent tree_event(
-                command,
-                GetHandler(),
-                wxQtConvertTreeItem(hitItem)
-            );
-
-            tree_event.SetPoint(wxQtConvertPoint(event->pos()));
-
-            // Vetoed unless explicitly accepted.
-            tree_event.Veto();
-
-            EmitEvent(tree_event);
-
-            if ( tree_event.IsAllowed() )
-            {
-                event->accept();
-            }
+            event->accept();
         }
+    }
 
-        virtual void dropEvent(QDropEvent* event) wxOVERRIDE
-        {
-            const wxPoint pos = wxQtConvertPoint(event->pos());
-            QTreeWidgetItem *hitItem = itemAt(event->pos());
+    virtual void dropEvent(QDropEvent* event) wxOVERRIDE
+    {
+        const wxPoint pos = wxQtConvertPoint(event->pos());
+        QTreeWidgetItem *hitItem = itemAt(event->pos());
 
-            wxTreeEvent tree_event(
-                wxEVT_TREE_END_DRAG,
-                GetHandler(),
-                wxQtConvertTreeItem(hitItem)
-            );
+        wxTreeEvent tree_event(
+            wxEVT_TREE_END_DRAG,
+            GetHandler(),
+            wxQtConvertTreeItem(hitItem)
+        );
 
-            tree_event.SetPoint(wxQtConvertPoint(event->pos()));
+        tree_event.SetPoint(wxQtConvertPoint(event->pos()));
 
-            EmitEvent(tree_event);
-        }
+        EmitEvent(tree_event);
+    }
 
     int ChooseBestImage(QTreeWidgetItem *item) const
     {
