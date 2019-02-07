@@ -579,7 +579,7 @@ void wxTreeCtrl::SetItemBackgroundColour(const wxTreeItemId& item, const wxColou
     wxCHECK_RET(item.IsOk(), "invalid tree item");
 
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-    qTreeItem->setTextColor(0, wxQtConvertColour(col));
+    qTreeItem->setBackgroundColor(0, wxQtConvertColour(col));
 }
 
 void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
