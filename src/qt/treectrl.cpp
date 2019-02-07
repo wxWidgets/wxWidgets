@@ -851,8 +851,13 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
                              wxTreeItemData *data)
 {
     QTreeWidgetItem *root = m_qtTreeWidget->invisibleRootItem();
-    wxTreeItemId newItem =  DoInsertItem(wxQtConvertTreeItem(root), 0, text, image, selImage, data);
+    wxTreeItemId newItem = DoInsertItem(wxQtConvertTreeItem(root), 0, text, image, selImage, data);
     m_qtTreeWidget->setCurrentItem(NULL);
+
+    if ( (GetWindowStyleFlag() & wxTR_HIDE_ROOT) != 0 )
+        m_qtTreeWidget->setRootIndex(m_qtTreeWidget->model()->index(0, 0));
+    else
+        m_qtTreeWidget->setRootIndex(QModelIndex());
 
     return newItem;
 }
@@ -1043,7 +1048,7 @@ bool wxTreeCtrl::GetBoundingRect(const wxTreeItemId& item, wxRect& WXUNUSED(rect
 void wxTreeCtrl::SetWindowStyleFlag(long styles)
 {
     wxControl::SetWindowStyleFlag(styles);
-    m_qtTreeWidget->invisibleRootItem()->setHidden((styles & wxTR_HIDE_ROOT) != 0);
+
     m_qtTreeWidget->setSelectionMode(styles & wxTR_MULTIPLE ? QTreeWidget::ExtendedSelection : QTreeWidget::SingleSelection);
 }
 
