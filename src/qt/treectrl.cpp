@@ -76,7 +76,8 @@ namespace
 class ImageState
 {
 public:
-    ImageState()
+    ImageState() :
+        m_state(wxTREE_ITEMSTATE_NONE)
     {
         for (int i = wxTreeItemIcon_Normal; i < wxTreeItemIcon_Max; ++i)
         {
@@ -94,7 +95,19 @@ public:
         return m_imageStates[index];
     }
 
+    void SetState(int state)
+    {
+        m_state = state;
+    }
+
+    int GetState() const
+    {
+        return m_state;
+    }
+
+private:
     int m_imageStates[wxTreeItemIcon_Max];
+    int m_state;
     
 };
 
@@ -134,6 +147,20 @@ public:
             return 0;
 
         return m_imageStates[item][which];
+    }
+
+    void SetItemState(QTreeWidgetItem *item, int state)
+    {
+        m_imageStates[item].SetState(state);
+    }
+        
+    int GetItemState(QTreeWidgetItem *item) const
+    {
+        ImageStateMap::const_iterator i = m_imageStates.find(item);
+        if (i == m_imageStates.end())
+            return wxTREE_ITEMSTATE_NONE;
+
+        return i->second.GetState();
     }
 
 protected:
@@ -985,12 +1012,13 @@ void wxTreeCtrl::SetWindowStyleFlag(long styles)
 int wxTreeCtrl::DoGetItemState(const wxTreeItemId& item) const
 {
     wxCHECK_MSG(item.IsOk(), wxTREE_ITEMSTATE_NONE, "invalid tree item");
-    return 0;
+    return m_qtTreeWidget->GetItemState(wxQtConvertTreeItem(item));
 }
 
-void wxTreeCtrl::DoSetItemState(const wxTreeItemId& item, int WXUNUSED(state))
+void wxTreeCtrl::DoSetItemState(const wxTreeItemId& item, int state)
 {
     wxCHECK_RET(item.IsOk(), "invalid tree item");
+    m_qtTreeWidget->SetItemState(wxQtConvertTreeItem(item), state);
 }
 
 wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
