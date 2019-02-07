@@ -933,6 +933,10 @@ wxTextCtrl *wxTreeCtrl::EditLabel(const wxTreeItemId& item, wxClassInfo* WXUNUSE
 {
     wxCHECK_MSG(item.IsOk(), NULL, "invalid tree item");
 
+    wxTreeEvent event(wxEVT_TREE_BEGIN_LABEL_EDIT, this, item);
+    if ( HandleWindowEvent(event) && !event.IsAllowed() )
+        return NULL;
+
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
     m_qtTreeWidget->openPersistentEditor(qTreeItem);
     return m_qtTreeWidget->GetEditControl();
