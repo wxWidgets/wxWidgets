@@ -107,8 +107,7 @@ public:
 
 private:
     int m_imageStates[wxTreeItemIcon_Max];
-    int m_state;
-    
+    int m_state;   
 };
 
 class wxQTreeWidget : public wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>
@@ -124,6 +123,7 @@ public:
         connect(this, &QTreeWidget::itemCollapsed, this, &wxQTreeWidget::OnItemCollapsed);
         connect(this, &QTreeWidget::itemExpanded, this, &wxQTreeWidget::OnItemExpanded);
         connect(this, &QTreeWidget::itemChanged, this, &wxQTreeWidget::OnItemChanged);
+        connect(this, &QTreeWidget::iconSizeChanged, this, &wxQTreeWidget::OnIconSizeChanged);
 
         m_editorFactory.AttachTo(this);
         setDragEnabled(true);
@@ -161,6 +161,11 @@ public:
             return wxTREE_ITEMSTATE_NONE;
 
         return i->second.GetState();
+    }
+
+    QPixmap GetPlaceHolderImage()
+    {
+        return m_placeHolderImage;
     }
 
 protected:
@@ -265,6 +270,12 @@ private:
         EmitEvent(event);
     }
 
+    void OnIconSizeChanged(const QSize &size)
+    {
+        m_placeHolderImage = QPixmap(size);
+        m_placeHolderImage.fill(Qt::transparent);
+    }
+
     void tryStartDrag(const QMouseEvent *event)
     {
         wxEventType command = (event->buttons() & Qt::RightButton)
@@ -363,6 +374,8 @@ private:
 
     typedef std::map<QTreeWidgetItem*,ImageState> ImageStateMap;
     ImageStateMap m_imageStates;
+    //Place holder image to reserve enough space in a row for us to draw our icon
+    QPixmap m_placeHolderImage;
 };
 
 wxTreeCtrl::wxTreeCtrl() :
@@ -1072,9 +1085,7 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
     m_qtTreeWidget->SetItemImage(newItem, image, wxTreeItemIcon_Normal);
     m_qtTreeWidget->SetItemImage(newItem, selImage, wxTreeItemIcon_Selected);
 
-    QPixmap pixmap(m_qtTreeWidget->iconSize());
-    pixmap.fill(Qt::transparent);
-    newItem->setIcon(0, pixmap);
+    newItem->setIcon(0, m_qtTreeWidget->GetPlaceHolderImage());
 
     wxTreeItemId wxItem = wxQtConvertTreeItem(newItem);
 
