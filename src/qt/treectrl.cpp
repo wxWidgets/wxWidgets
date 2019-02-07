@@ -170,7 +170,7 @@ protected:
 
         QTreeWidget::drawBranches(painter, rect, index);
         const int imageIndex = ChooseBestImage(item);
-        if (imageIndex != -1 )
+        if ( imageIndex != -1 )
         {
             wxImageList *imageList = GetHandler()->GetImageList();
             wxBitmap bitmap = imageList->GetBitmap(imageIndex);
@@ -194,8 +194,10 @@ private:
             return;
         }
 
-        //QT doesnt update the selection until this singal has been processed.  //Defering this event ensures 
-        //that wxTreeCtrl::GetSelection returns the new selection in the wx event handler.
+        // QT doesn't update the selection until this signal has been
+        // processed. Deferring this event ensures that
+        // wxTreeCtrl::GetSelection returns the new selection in the
+        // wx event handler.
         wxTreeEvent changedEvent(wxEVT_TREE_SEL_CHANGED, treeCtrl, wxQtConvertTreeItem(current));
         wxPostEvent(treeCtrl, changedEvent);
     }
@@ -256,18 +258,18 @@ private:
         EmitEvent(expandedEvent);
     }
 
+
     void OnItemChanged(QTreeWidgetItem *item, int WXUNUSED(column))
     {
         wxTreeEvent event(wxEVT_TREE_END_LABEL_EDIT, GetHandler(), wxQtConvertTreeItem(item));
         EmitEvent(event);
     }
 
-    virtual void dragEnterEvent(QDragEnterEvent* event) wxOVERRIDE
+    void tryStartDrag(const QMouseEvent *event)
     {
-        wxEventType command = (event->mouseButtons() & Qt::RightButton)
+        wxEventType command = (event->buttons() & Qt::RightButton)
             ? wxEVT_TREE_BEGIN_RDRAG
             : wxEVT_TREE_BEGIN_DRAG;
-
 
         QTreeWidgetItem *hitItem = itemAt(event->pos());
 
@@ -284,16 +286,17 @@ private:
 
         EmitEvent(tree_event);
 
-        if ( tree_event.IsAllowed() )
+        if ( !tree_event.IsAllowed() )
         {
-            event->accept();
+            setState(DragSelectingState);
         }
     }
 
-    virtual void dropEvent(QDropEvent* event) wxOVERRIDE
+    void endDrag(QPoint position)
     {
-        const wxPoint pos = wxQtConvertPoint(event->pos());
-        QTreeWidgetItem *hitItem = itemAt(event->pos());
+        const wxPoint pos = wxQtConvertPoint(position);
+        QTreeWidgetItem *hitItem = itemAt(position);
+        OutputDebugStringA(hitItem->text(0).toUtf8().data());
 
         wxTreeEvent tree_event(
             wxEVT_TREE_END_DRAG,
@@ -301,9 +304,29 @@ private:
             wxQtConvertTreeItem(hitItem)
         );
 
-        tree_event.SetPoint(wxQtConvertPoint(event->pos()));
+        tree_event.SetPoint(wxQtConvertPoint(position));
 
         EmitEvent(tree_event);
+    }
+
+    virtual void dropEvent(QDropEvent* event) wxOVERRIDE
+    {
+        endDrag(event->pos());
+
+        // We don't want Qt to actually do the drop.
+        event->ignore();
+    }
+
+    virtual void mouseMoveEvent(QMouseEvent *event) wxOVERRIDE
+    {
+        const bool wasDragging = state() == DraggingState;
+        wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>::mouseMoveEvent(event);
+
+        const bool nowDragging = state() == DraggingState;
+        if ( !wasDragging && nowDragging )
+        {
+            tryStartDrag(event);
+        }
     }
 
     int ChooseBestImage(QTreeWidgetItem *item) const
