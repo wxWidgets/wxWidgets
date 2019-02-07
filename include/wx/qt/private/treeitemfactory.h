@@ -2,6 +2,8 @@
 #define _WX_TREEITEM_FACTORY_H_
 
 #include <QtWidgets/QItemEditorFactory>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QItemDelegate>
 
 #include "wx/recguard.h"
 #include "wx/textctrl.h"
@@ -69,6 +71,12 @@ public:
         : m_parent(parent),
         m_textCtrl(NULL)
     {
+    }
+
+    void AttachTo(QTreeWidget *tree)
+    {
+        QItemDelegate *qItemDelegate = static_cast<QItemDelegate*>(tree->itemDelegate());
+        qItemDelegate->setItemEditorFactory(this);
     }
 
     QWidget* createEditor(int WXUNUSED(userType), QWidget* parent) const wxOVERRIDE

@@ -8,7 +8,7 @@
 #ifndef _WX_QT_TREECTRL_H_
 #define _WX_QT_TREECTRL_H_
 
-class QTreeWidget;
+class wxQTreeWidget;
 
 class WXDLLIMPEXP_CORE wxTreeCtrl : public wxTreeCtrlBase
 {
@@ -140,7 +140,7 @@ private:
     void SendDeleteEvent(const wxTreeItemId &item);
     wxTreeItemId GetNext(const wxTreeItemId &item) const;
 
-    QTreeWidget *m_qtTreeWidget;
+    wxQTreeWidget *m_qtTreeWidget;
     wxDECLARE_DYNAMIC_CLASS(wxTreeCtrl);
 };
 
