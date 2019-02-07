@@ -103,8 +103,7 @@ class wxQTreeWidget : public wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>
 public:
     wxQTreeWidget(wxWindow *parent, wxTreeCtrl *handler) :
         wxQtEventSignalHandler(parent, handler),
-        m_editorFactory(handler),
-        m_dropped(false)
+        m_editorFactory(handler)
     {
         connect(this, &QTreeWidget::currentItemChanged, this, &wxQTreeWidget::OnCurrentItemChanged);
         connect(this, &QTreeWidget::itemActivated, this, &wxQTreeWidget::OnItemActivated);
@@ -233,8 +232,6 @@ private:
 
     void tryStartDrag(const QMouseEvent *event)
     {
-        m_dropped = false;
-
         wxEventType command = (event->buttons() & Qt::RightButton)
             ? wxEVT_TREE_BEGIN_RDRAG
             : wxEVT_TREE_BEGIN_DRAG;
@@ -260,10 +257,11 @@ private:
         }
     }
 
-    void endDrag(const QMouseEvent* event)
+    void endDrag(QPoint position)
     {
-        const wxPoint pos = wxQtConvertPoint(event->pos());
-        QTreeWidgetItem *hitItem = itemAt(event->pos());
+        const wxPoint pos = wxQtConvertPoint(position);
+        QTreeWidgetItem *hitItem = itemAt(position);
+        OutputDebugStringA(hitItem->text(0).toUtf8().data());
 
         wxTreeEvent tree_event(
             wxEVT_TREE_END_DRAG,
@@ -271,14 +269,14 @@ private:
             wxQtConvertTreeItem(hitItem)
         );
 
-        tree_event.SetPoint(wxQtConvertPoint(event->pos()));
+        tree_event.SetPoint(wxQtConvertPoint(position));
 
         EmitEvent(tree_event);
     }
 
     virtual void dropEvent(QDropEvent* event) wxOVERRIDE
     {
-        m_dropped = true;
+        endDrag(event->pos());
 
         // We don't want Qt to actually do the drop.
         event->ignore();
@@ -288,17 +286,11 @@ private:
     {
         const bool wasDragging = state() == DraggingState;
         wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>::mouseMoveEvent(event);
+
         const bool nowDragging = state() == DraggingState;
         if ( !wasDragging && nowDragging )
         {
             tryStartDrag(event);
-        }
-        else if ( wasDragging && !nowDragging )
-        {
-            // Only emit "end drag" if we have dropped
-            // (e.g. not hit escape to cancel).
-            if ( m_dropped )
-                endDrag(event);
         }
     }
 
@@ -336,7 +328,6 @@ private:
 
     typedef std::map<QTreeWidgetItem*,ImageState> ImageStateMap;
     ImageStateMap m_imageStates;
-    bool m_dropped;
 };
 
 wxTreeCtrl::wxTreeCtrl() :
