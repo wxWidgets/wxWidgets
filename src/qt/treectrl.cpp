@@ -813,7 +813,6 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
     if ( !HasFlag(wxTR_MULTIPLE) )
     {
         QList<QTreeWidgetItem *> selections = m_qtTreeWidget->selectedItems();
-        const size_t nSelections = selections.size();
         m_qtTreeWidget->clearSelection();
     }
 
@@ -858,7 +857,7 @@ void wxTreeCtrl::ScrollTo(const wxTreeItemId& item)
     m_qtTreeWidget->scrollToItem(qTreeItem);
 }
 
-wxTextCtrl *wxTreeCtrl::EditLabel(const wxTreeItemId& item, wxClassInfo* textCtrlClass)
+wxTextCtrl *wxTreeCtrl::EditLabel(const wxTreeItemId& item, wxClassInfo* WXUNUSED(textCtrlClass))
 {
     wxCHECK_MSG(item.IsOk(), NULL, "invalid tree item");
 
@@ -872,7 +871,7 @@ wxTextCtrl *wxTreeCtrl::GetEditControl() const
     return m_qtTreeWidget->GetEditControl();
 }
 
-void wxTreeCtrl::EndEditLabel(const wxTreeItemId& item, bool discardChanges)
+void wxTreeCtrl::EndEditLabel(const wxTreeItemId& item, bool WXUNUSED(discardChanges))
 {
     wxCHECK_RET(item.IsOk(), "invalid tree item");
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
@@ -887,7 +886,7 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
     qTreeItem->sortChildren(0, Qt::AscendingOrder);
 }
 
-bool wxTreeCtrl::GetBoundingRect(const wxTreeItemId& item, wxRect& rect, bool textOnly) const
+bool wxTreeCtrl::GetBoundingRect(const wxTreeItemId& item, wxRect& WXUNUSED(rect), bool WXUNUSED(textOnly)) const
 {
     wxCHECK_MSG(item.IsOk(), false, "invalid tree item");
     return false;
@@ -906,7 +905,7 @@ int wxTreeCtrl::DoGetItemState(const wxTreeItemId& item) const
     return 0;
 }
 
-void wxTreeCtrl::DoSetItemState(const wxTreeItemId& item, int state)
+void wxTreeCtrl::DoSetItemState(const wxTreeItemId& item, int WXUNUSED(state))
 {
     wxCHECK_RET(item.IsOk(), "invalid tree item");
 }
