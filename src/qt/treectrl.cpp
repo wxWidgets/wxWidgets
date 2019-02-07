@@ -167,8 +167,10 @@ private:
             return;
         }
 
-        //QT doesnt update the selection until this singal has been processed.  //Defering this event ensures 
-        //that wxTreeCtrl::GetSelection returns the new selection in the wx event handler.
+        // QT doesn't update the selection until this signal has been
+        // processed. Deferring this event ensures that
+        // wxTreeCtrl::GetSelection returns the new selection in the
+        // wx event handler.
         wxTreeEvent changedEvent(wxEVT_TREE_SEL_CHANGED, treeCtrl, wxQtConvertTreeItem(current));
         wxPostEvent(treeCtrl, changedEvent);
     }
