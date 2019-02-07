@@ -122,7 +122,9 @@ protected:
 private:
     void OnCurrentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
     {
-        wxTreeEvent changingEvent(wxEVT_TREE_SEL_CHANGING, GetHandler(), wxQtConvertTreeItem(current));
+        wxTreeCtrl* treeCtrl = GetHandler();
+
+        wxTreeEvent changingEvent(wxEVT_TREE_SEL_CHANGING, treeCtrl, wxQtConvertTreeItem(current));
         EmitEvent(changingEvent);
 
         if ( !changingEvent.IsAllowed() )
@@ -133,8 +135,10 @@ private:
             return;
         }
 
-        wxTreeEvent changedEvent(wxEVT_TREE_SEL_CHANGED, GetHandler(), wxQtConvertTreeItem(current));
-        EmitEvent(changedEvent);
+        //QT doesnt update the selection until this singal has been processed.  //Defering this event ensures 
+        //that wxTreeCtrl::GetSelection returns the new selection in the wx event handler.
+        wxTreeEvent changedEvent(wxEVT_TREE_SEL_CHANGED, treeCtrl, wxQtConvertTreeItem(current));
+        wxPostEvent(treeCtrl, changedEvent);
     }
 
     void OnItemActivated(QTreeWidgetItem *item, int WXUNUSED(column))
@@ -703,7 +707,10 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
                              wxTreeItemData *data)
 {
     QTreeWidgetItem *root = m_qtTreeWidget->invisibleRootItem();
-    return DoInsertItem(wxQtConvertTreeItem(root), 0, text, image, selImage, data);
+    wxTreeItemId newItem =  DoInsertItem(wxQtConvertTreeItem(root), 0, text, image, selImage, data);
+    m_qtTreeWidget->setCurrentItem(NULL);
+
+    return newItem;
 }
 
 void wxTreeCtrl::Delete(const wxTreeItemId& item)
@@ -890,7 +897,7 @@ void wxTreeCtrl::SetWindowStyleFlag(long styles)
 {
     wxControl::SetWindowStyleFlag(styles);
     m_qtTreeWidget->invisibleRootItem()->setHidden((styles & wxTR_HIDE_ROOT) != 0);
-    m_qtTreeWidget->setSelectionMode(styles & wxTR_MULTIPLE ? QTreeWidget::MultiSelection : QTreeWidget::SingleSelection);
+    m_qtTreeWidget->setSelectionMode(styles & wxTR_MULTIPLE ? QTreeWidget::ExtendedSelection : QTreeWidget::SingleSelection);
 }
 
 int wxTreeCtrl::DoGetItemState(const wxTreeItemId& item) const
