@@ -1075,15 +1075,6 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
 
     newItem->setData(0, Qt::UserRole, QVariant::fromValue(treeItemData));
 
-    if (pos == static_cast<size_t>(-1))
-    {
-        qTreeItem->addChild(newItem);
-    }
-    else
-    {
-        qTreeItem->insertChild(pos, newItem);
-    }
-
     m_qtTreeWidget->SetItemImage(newItem, image, wxTreeItemIcon_Normal);
     m_qtTreeWidget->SetItemImage(newItem, selImage, wxTreeItemIcon_Selected);
 
@@ -1093,6 +1084,15 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
 
     if (data != NULL)
         data->SetId(wxItem);
+
+    if (pos == static_cast<size_t>(-1))
+    {
+        qTreeItem->addChild(newItem);
+    }
+    else
+    {
+        qTreeItem->insertChild(pos, newItem);
+    }
 
     return wxItem;
 }
