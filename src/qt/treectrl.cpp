@@ -14,6 +14,7 @@
 
 #include "wx/treectrl.h"
 #include "wx/imaglist.h"
+#include "wx/settings.h"
 
 #include "wx/qt/private/winevent.h"
 #include "wx/qt/private/treeitemfactory.h"
@@ -46,7 +47,6 @@ struct TreeItemDataQt
 };
 
 bool TreeItemDataQt::registered = false;
-Q_DECLARE_METATYPE(TreeItemDataQt)
 
 QDataStream &operator<<(QDataStream &out, const TreeItemDataQt &WXUNUSED(obj))
 {
@@ -119,11 +119,13 @@ private:
 
 }
 
+Q_DECLARE_METATYPE(TreeItemDataQt)
+
 class wxQTreeWidget : public wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>
 {
 public:
     wxQTreeWidget(wxWindow *parent, wxTreeCtrl *handler) :
-        wxQtEventSignalHandler(parent, handler),
+        wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>(parent, handler),
         m_editorFactory(handler)
     {
         connect(this, &QTreeWidget::currentItemChanged,
@@ -796,7 +798,7 @@ wxTreeItemId wxTreeCtrl::GetNextChild(
 {
     wxCHECK_MSG(item.IsOk(), wxTreeItemId(), "invalid tree item");
 
-    int currentIndex = reinterpret_cast<int>(cookie);
+    wxIntPtr currentIndex = reinterpret_cast<wxIntPtr>(cookie);
     ++currentIndex;
 
     const QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);

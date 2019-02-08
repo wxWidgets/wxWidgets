@@ -15,6 +15,7 @@
 
 #include "wx/kbdstate.h"
 #include "wx/gdicmn.h"
+#include "wx/colour.h"
 
 #include <QtCore/QRect>
 #include <QtCore/QSize>
