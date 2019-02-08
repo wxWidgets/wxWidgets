@@ -1,9 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/treeitemfactory.h
+// Name:        wx/qt/private/treeitemfactory.h
 // Purpose:     Factory to create text edit controls for the tree items
 // Author:      Graham Dawes
-// Modified by:
-// Created:     02/2019
+// Created:     2019-02-07
 // Copyright:   Graham Dawes
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
