@@ -883,7 +883,7 @@ wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const
 
     do
     {
-        if (IsVisible(itemid))
+        if ( IsVisible(itemid) )
             return itemid;
         itemid = GetNext(itemid);
     } while ( itemid.IsOk() );
@@ -893,8 +893,8 @@ wxTreeItemId wxTreeCtrl::GetFirstVisibleItem() const
 
 wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
 {
-    wxCHECK_MSG(item.IsOk(), wxTreeItemId(), wxT("invalid tree item"));
-    wxASSERT_MSG(IsVisible(item), wxT("this item itself should be visible"));
+    wxCHECK_MSG(item.IsOk(), wxTreeItemId(), "invalid tree item");
+    wxASSERT_MSG(IsVisible(item), "this item itself should be visible");
 
     wxTreeItemId id = item;
     if ( id.IsOk() )
@@ -910,8 +910,8 @@ wxTreeItemId wxTreeCtrl::GetNextVisible(const wxTreeItemId& item) const
 
 wxTreeItemId wxTreeCtrl::GetPrevVisible(const wxTreeItemId& item) const
 {
-    wxCHECK_MSG(item.IsOk(), wxTreeItemId(), wxT("invalid tree item"));
-    wxASSERT_MSG(IsVisible(item), wxT("this item itself should be visible"));
+    wxCHECK_MSG(item.IsOk(), wxTreeItemId(), "invalid tree item");
+    wxASSERT_MSG(IsVisible(item), "this item itself should be visible");
 
     // find out the starting point
     wxTreeItemId prevItem = GetPrevSibling(item);
@@ -1247,16 +1247,22 @@ wxTreeItemId wxTreeCtrl::DoTreeHitTest(const wxPoint& point, int& flags) const
     int w, h;
     GetSize(&w, &h);
     flags = 0;
-    if ( point.x < 0 ) flags |= wxTREE_HITTEST_TOLEFT;
-    else if ( point.x > w ) flags |= wxTREE_HITTEST_TORIGHT;
-    if ( point.y < 0 ) flags |= wxTREE_HITTEST_ABOVE;
-    else if ( point.y > h ) flags |= wxTREE_HITTEST_BELOW;
+    if ( point.x < 0 )
+        flags |= wxTREE_HITTEST_TOLEFT;
+    else if ( point.x > w )
+        flags |= wxTREE_HITTEST_TORIGHT;
+
+    if ( point.y < 0 )
+        flags |= wxTREE_HITTEST_ABOVE;
+    else if ( point.y > h )
+        flags |= wxTREE_HITTEST_BELOW;
+
     if ( flags != 0 )
         return wxTreeItemId();
 
     QTreeWidgetItem *hitItem = m_qtTreeWidget->itemAt(wxQtConvertPoint(point));
 
-    if (hitItem == NULL)
+    if ( hitItem == NULL )
         flags |= wxTREE_HITTEST_NOWHERE;
 
     return wxQtConvertTreeItem(hitItem);
@@ -1276,7 +1282,7 @@ void wxTreeCtrl::SendDeleteEvent(const wxTreeItemId &item)
 
 wxTreeItemId wxTreeCtrl::GetNext(const wxTreeItemId &item) const
 {
-    wxCHECK_MSG(item.IsOk(), wxTreeItemId(), wxT("invalid tree item"));
+    wxCHECK_MSG(item.IsOk(), wxTreeItemId(), "invalid tree item");
 
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
 
