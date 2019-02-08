@@ -370,6 +370,7 @@ public:
     bool HandleRotateGesture(const wxPoint& pt, WXDWORD angleArgument, WXDWORD flags);
     bool HandleTwoFingerTap(const wxPoint& pt, WXDWORD flags);
     bool HandlePressAndTap(const wxPoint& pt, WXDWORD flags);
+    bool HandleTouch(WXWPARAM wParam, WXLPARAM lParam);
 
     bool HandleChar(WXWPARAM wParam, WXLPARAM lParam);
     bool HandleKeyDown(WXWPARAM wParam, WXLPARAM lParam);

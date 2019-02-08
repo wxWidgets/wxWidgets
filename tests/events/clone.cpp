@@ -58,7 +58,8 @@ void EventCloneTestCase::CheckAll()
 
         // is this class derived from wxEvent?
         if ( !ci->IsKindOf(CLASSINFO(wxEvent)) ||
-             cn == "wxEvent" )
+             cn == "wxEvent" ||
+             cn == "wxTouchEventBase" )
             continue;
 
         const std::string
