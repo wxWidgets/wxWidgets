@@ -185,7 +185,7 @@ public:
     }
 
 protected:
-    void drawBranches(
+    virtual void drawBranches(
         QPainter *painter,
         const QRect &rect,
         const QModelIndex &index
