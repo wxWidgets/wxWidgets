@@ -1,3 +1,13 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/treeitemfactory.h
+// Purpose:     Factory to create text edit controls for the tree items
+// Author:      Graham Dawes
+// Modified by:
+// Created:     02/2019
+// Copyright:   Graham Dawes
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_TREEITEM_FACTORY_H_
 #define _WX_TREEITEM_FACTORY_H_
 
@@ -17,6 +27,7 @@
 //
 // To work around these issues we create a wxTextCtl parented by the wxListCtrl
 // then recalculate its position relative to the internal widget.
+
 class wxQtListTextCtrl : public wxTextCtrl
 {
 public:
@@ -27,7 +38,6 @@ public:
         m_actualParent(actualParent),
         m_moving(0)
     {
-
         Bind(wxEVT_MOVE, &wxQtListTextCtrl::onMove, this);
     }
 
@@ -36,22 +46,23 @@ public:
         // QWidget::move generates a QMoveEvent so we need to guard against
         // reentrant calls.
         wxRecursionGuard guard(m_moving);
-        if (guard.IsInside())
+
+        if ( guard.IsInside() )
         {
             event.Skip();
             return;
         }
 
-        const QPoint eventPosition = wxQtConvertPoint(event.GetPosition());
-        const QPoint globalPosition = m_actualParent->mapToGlobal(eventPosition);
+        const QPoint eventPos = wxQtConvertPoint(event.GetPosition());
+        const QPoint globalPos = m_actualParent->mapToGlobal(eventPos);
 
         // For some reason this always gives us the offset from the header info
         // the internal control. So we need to treat this as an offset rather
         // than a position.
         QWidget* widget = GetHandle();
-        const QPoint offset = widget->mapFromGlobal(globalPosition);
+        const QPoint offset = widget->mapFromGlobal(globalPos);
 
-        widget->move(eventPosition + offset);
+        widget->move(eventPos + offset);
     }
 
 private:
@@ -64,29 +75,34 @@ private:
 // QT doesn't give us direct access to the editor within the QTreeWidget.
 // Instead, we'll supply a factory to create the widget for QT and keep track
 // of it ourselves.
+
 class wxQtTreeItemEditorFactory : public QItemEditorFactory
 {
 public:
     explicit wxQtTreeItemEditorFactory(wxWindow* parent)
         : m_parent(parent),
-        m_textCtrl(NULL)
+          m_textCtrl(NULL)
     {
     }
 
     void AttachTo(QTreeWidget *tree)
     {
-        QItemDelegate *qItemDelegate = static_cast<QItemDelegate*>(tree->itemDelegate());
+        QAbstractItemDelegate* delegate = tree->itemDelegate();
+        QItemDelegate *qItemDelegate = static_cast<QItemDelegate*>(delegate);
         qItemDelegate->setItemEditorFactory(this);
     }
 
-    QWidget* createEditor(int WXUNUSED(userType), QWidget* parent) const wxOVERRIDE
+    virtual QWidget* createEditor(
+        int WXUNUSED(userType),
+        QWidget* parent
+    ) const wxOVERRIDE
     {
         m_textCtrl = new wxQtListTextCtrl(m_parent, parent);
         m_textCtrl->SetFocus();
         return m_textCtrl->GetHandle();
     }
 
-    wxTextCtrl* GetEditControl()
+    wxTextCtrl* GetEditControl() const
     {
         return m_textCtrl;
     }
@@ -105,4 +121,3 @@ private:
 };
 
 #endif //_WX_TREEITEM_FACTORY_H_
-
