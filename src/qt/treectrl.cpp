@@ -1152,12 +1152,19 @@ void wxTreeCtrl::SortChildren(const wxTreeItemId& item)
 
 bool wxTreeCtrl::GetBoundingRect(
     const wxTreeItemId& item,
-    wxRect& WXUNUSED(rect),
+    wxRect& rect,
     bool WXUNUSED(textOnly)
 ) const
 {
     wxCHECK_MSG(item.IsOk(), false, "invalid tree item");
-    return false;
+
+    const QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
+    const QRect visualRect = m_qtTreeWidget->visualItemRect(qTreeItem);
+    if ( !visualRect.isValid() )
+        return false;
+
+    rect = wxQtConvertRect(visualRect);
+    return true;
 }
 
 void wxTreeCtrl::SetWindowStyleFlag(long styles)
