@@ -27,6 +27,9 @@ public:
 
     virtual QWidget *GetHandle() const;
 
+    // implementation only
+    void QtUpdateState();
+
 protected:
     virtual wxBitmap DoGetBitmap(State state) const wxOVERRIDE;
     virtual void DoSetBitmap(const wxBitmap& bitmap, State which) wxOVERRIDE;
@@ -37,8 +40,10 @@ protected:
     void QtSetBitmap( const wxBitmap &bitmap );
 
 private:
+    State QtGetCurrentState() const;
+
     typedef wxAnyButtonBase base_type;
-    wxBitmap  m_bitmap;
+    wxBitmap  m_bitmaps[State_Max];
 
     wxDECLARE_NO_COPY_CLASS(wxAnyButton);
 };
