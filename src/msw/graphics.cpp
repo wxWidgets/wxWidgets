@@ -507,7 +507,6 @@ class wxGDIPlusPrintingContext : public wxGDIPlusContext
 {
 public:
     wxGDIPlusPrintingContext( wxGraphicsRenderer* renderer, const wxDC& dc );
-    virtual ~wxGDIPlusPrintingContext() { }
 protected:
 };
 
