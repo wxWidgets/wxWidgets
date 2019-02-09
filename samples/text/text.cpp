@@ -1200,11 +1200,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_tab = new MyTextCtrl( this, 100, "Multiline, allow <TAB> processing.",
       wxPoint(180,90), wxSize(200,70), wxTE_MULTILINE |  wxTE_PROCESS_TAB );
-    m_tab->SetClientData((void *)"tab");
+    m_tab->SetClientData((void *)wxS("tab"));
 
     m_enter = new MyTextCtrl( this, 100, "Multiline, allow <ENTER> processing.",
       wxPoint(180,170), wxSize(200,70), wxTE_MULTILINE | wxTE_PROCESS_ENTER );
-    m_enter->SetClientData((void *)"enter");
+    m_enter->SetClientData((void *)wxS("enter"));
 
     m_textrich = new MyTextCtrl(this, wxID_ANY, "Allows more than 30Kb of text\n"
                                 "(on all Windows versions)\n"
