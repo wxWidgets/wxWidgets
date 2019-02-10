@@ -338,9 +338,6 @@ inline void wxSetGenericValidator(W* win, TComposite<T>& value)
 
 #else // !wxUSE_DATATRANSFER
 
-class WXDLLIMPEXP_FWD_BASE wxDateTime;
-class WXDLLIMPEXP_FWD_BASE wxFileName;
-
 // ----------------------------------------------------------------------------
 // wxGenericValidator performs data transfer between many standard controls and
 // variables of the type corresponding to their values.
