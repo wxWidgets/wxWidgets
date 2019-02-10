@@ -18,25 +18,24 @@
 #include "wx/private/datatransfer.h"
 
 #if wxUSE_DATATRANSFER
-    #include "wx/debug.h"
-    #include "wx/typeinfo.h"
 
-    #if defined(HAVE_TYPE_TRAITS)
+#include "wx/debug.h"
+#include "wx/typeinfo.h"
+
+#if defined(HAVE_TYPE_TRAITS)
+    #include <type_traits>
+#elif defined(HAVE_TR1_TYPE_TRAITS)
+    #ifdef __VISUALC__
         #include <type_traits>
-    #elif defined(HAVE_TR1_TYPE_TRAITS)
-        #ifdef __VISUALC__
-            #include <type_traits>
-        #else
-            #include <tr1/type_traits>
-        #endif
+    #else
+        #include <tr1/type_traits>
     #endif
+#endif
 
-    #ifdef HAVE_STD_VARIANT
-        #include <variant>
-        #include "wx/meta/typelist.h"
-    #endif // HAVE_STD_VARIANT
-#endif // wxUSE_DATATRANSFER
-
+#ifdef HAVE_STD_VARIANT
+    #include <variant>
+    #include "wx/meta/typelist.h"
+#endif // HAVE_STD_VARIANT
 
 template<class W>
 struct wxDataTransfer
