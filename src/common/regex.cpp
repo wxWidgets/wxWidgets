@@ -278,7 +278,8 @@ wxRegExImpl::~wxRegExImpl()
 wxRegExImpl::wxRegExImpl(const wxRegExImpl& other)
     : m_RegEx(other.m_RegEx),
       m_Matches(NULL),
-      m_nMatches(other.m_nMatches)
+      m_nMatches(other.m_nMatches),
+      m_matchHash(other.m_matchHash)
 {
     if ( m_nMatches )
     {
