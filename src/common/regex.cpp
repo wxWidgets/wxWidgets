@@ -180,6 +180,25 @@ public:
     int Replace(wxString *pattern, const wxString& replacement,
                 size_t maxMatches = 0) const;
 
+    bool AlreadyCompiled(const wxString& expr, int flags)
+    {
+        if ( !IsValid() )
+            return false;
+
+        wxString text = expr;
+        text << flags;
+
+        unsigned long h = wxStringHash()(text);
+
+        if ( h != m_compileHash )
+        {
+            m_compileHash = h;
+            return false;
+        }
+
+        return true;
+    }
+
     wxRegExImpl* UnshareIfNecessary(const wxString& str, int flags)
     {
         // No need to check for validity of m_RegEx here because we already
@@ -223,9 +242,10 @@ private:
     {
         m_Matches = NULL;
         m_nMatches = 0;
-        // Set the m_matchHash to ULONG_MAX which indicates that no Matches
-        // was attempted yet.
+        // Set the m_matchHash/m_compileHash to ULONG_MAX which indicates that
+        //  no Matches/Compile was attempted yet.
         m_matchHash = -1;
+        m_compileHash = -1;
     }
 
     // free the RE if compiled
@@ -254,6 +274,8 @@ private:
     size_t          m_nMatches;
     // Remember the string and flags passed to Matches() by their hash value.
     unsigned long   m_matchHash;
+    // Remember the string and flags passed to Compile() by their hash value.
+    unsigned long   m_compileHash;
 };
 
 
@@ -279,7 +301,8 @@ wxRegExImpl::wxRegExImpl(const wxRegExImpl& other)
     : m_RegEx(other.m_RegEx),
       m_Matches(NULL),
       m_nMatches(other.m_nMatches),
-      m_matchHash(other.m_matchHash)
+      m_matchHash(other.m_matchHash),
+      m_compileHash(other.m_compileHash)
 {
     if ( m_nMatches )
     {
@@ -742,7 +765,12 @@ wxRegEx::~wxRegEx()
 bool wxRegEx::Compile(const wxString& expr, int flags)
 {
     if ( m_impl )
+    {
+        if ( m_impl->AlreadyCompiled(expr, flags) )
+            return true;
+
         m_impl->DecRef();
+    }
 
     m_impl = new wxRegExImpl;
 
