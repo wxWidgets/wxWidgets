@@ -11,7 +11,7 @@
 
 #include "wx/valgen.h"
 
-#if wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
+#if wxUSE_DATATRANSFER
 
 #include "wx/panel.h"
 
@@ -270,6 +270,6 @@ protected:
 
 #endif // defined(HAVE_STD_VARIANT)
 
-#endif // wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
+#endif // wxUSE_DATATRANSFER
 
 #endif // _WX_VALPNLH__

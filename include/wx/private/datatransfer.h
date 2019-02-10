@@ -12,18 +12,15 @@
 
 #include "wx/defs.h"
 
-
-#if defined(HAVE_DECLTYPE) && \
-    (defined(HAVE_TYPE_TRAITS) || defined(HAVE_TR1_TYPE_TRAITS))
-    #define wxCAN_USE_DATATRANSFER 1
-#else
-    #define wxCAN_USE_DATATRANSFER 0
-#endif
-
 #ifndef HAVE_VARIADIC_MACROS
   #error "Variadic macros support required."
 #endif // HAVE_VARIADIC_MACROS
 
+#if !defined(HAVE_DECLTYPE) || (!defined(HAVE_TYPE_TRAITS) && \
+                                !defined(HAVE_TR1_TYPE_TRAITS))
+    #undef wxUSE_DATATRANSFER
+    #define wxUSE_DATATRANSFER 0
+#endif
 
 class WXDLLIMPEXP_FWD_BASE wxFileName;
 class WXDLLIMPEXP_FWD_BASE wxDateTime;

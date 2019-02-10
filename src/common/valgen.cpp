@@ -52,7 +52,7 @@
 #include "wx/valgen.h"
 
 
-#if !wxUSE_DATATRANSFER || !wxCAN_USE_DATATRANSFER
+#if !wxUSE_DATATRANSFER
 
 
 wxIMPLEMENT_CLASS(wxGenericValidator, wxValidator);
@@ -714,7 +714,7 @@ void wxGenericValidator::Initialize()
     m_pDouble = NULL;
 }
 
-#else // wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
+#else // wxUSE_DATATRANSFER
 
 wxIMPLEMENT_CLASS(wxGenericValidatorBase, wxValidator);
 
@@ -1359,6 +1359,6 @@ bool wxDataTransferImpl<wxDateTimePickerCtrlBase>::From(wxDateTimePickerCtrlBase
 
 #endif // wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL
 
-#endif // !wxUSE_DATATRANSFER || !wxCAN_USE_DATATRANSFER
+#endif // !wxUSE_DATATRANSFER
 
 #endif // wxUSE_VALIDATORS

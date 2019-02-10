@@ -15,8 +15,9 @@
 
 #if wxUSE_VALIDATORS
 
+#include "wx/private/datatransfer.h"
+
 #if wxUSE_DATATRANSFER
-    #include "wx/private/datatransfer.h"
     #include "wx/debug.h"
     #include "wx/typeinfo.h"
 
@@ -36,8 +37,6 @@
     #endif // HAVE_STD_VARIANT
 #endif // wxUSE_DATATRANSFER
 
-
-#if wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
 
 template<class W>
 struct wxDataTransfer
@@ -337,7 +336,7 @@ inline void wxSetGenericValidator(W* win, TComposite<T>& value)
 }
 #endif // defined(HAVE_VARIADIC_TEMPLATES)
 
-#else // !wxUSE_DATATRANSFER || !wxCAN_USE_DATATRANSFER
+#else // !wxUSE_DATATRANSFER
 
 class WXDLLIMPEXP_FWD_BASE wxDateTime;
 class WXDLLIMPEXP_FWD_BASE wxFileName;
@@ -424,7 +423,7 @@ inline void wxSetGenericValidator(W* win, T* value)
     win->SetValidator( wxGenericValidator(static_cast<T*>(value)) );
 }
 
-#endif // wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
+#endif // wxUSE_DATATRANSFER
 
 #endif // wxUSE_VALIDATORS
 

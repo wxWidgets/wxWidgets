@@ -83,7 +83,7 @@ static inline wxString GetString(const wxScopedPtr<wxString>& ptr)
 
 static inline wxString GetString(const wxString& var){ return var; }
 
-#if wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
+#if wxUSE_DATATRANSFER
 
 // we don't have to derive a whole new class from wxValidator
 // just to customize validation behaviour. All we have to do 
@@ -270,7 +270,7 @@ static auto GetString(const MyData::VariantType2& var)
 
 #endif // defined(HAVE_STD_VARIANT)
 
-#else // wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
+#else // wxUSE_DATATRANSFER
 
 // ----------------------------------------------------------------------------
 // MyComboBoxValidator
@@ -346,7 +346,7 @@ bool MyComboBoxValidator::TransferFromWindow()
     return true;
 }
 
-#endif // wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
+#endif // wxUSE_DATATRANSFER
 
 // ----------------------------------------------------------------------------
 // MyApp
@@ -507,7 +507,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(g_combobox_choices), g_combobox_choices, 0L);
 
-#if wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
+#if wxUSE_DATATRANSFER
     wxSetGenericValidator(m_combobox, &g_data.m_combobox_choice);
     m_combobox->SetToolTip("uses generic validator (with validation)");
 
@@ -531,7 +531,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     m_combobox->SetToolTip("uses a custom validator (MyComboBoxValidator)");
 
     m_combobox2->Disable();
-#endif // wxUSE_DATATRANSFER && wxCAN_USE_DATATRANSFER
+#endif // wxUSE_DATATRANSFER
 
     combosizer->Add(m_combobox, wxSizerFlags().CenterHorizontal());
     combosizer->AddSpacer(10);
