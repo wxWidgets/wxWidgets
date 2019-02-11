@@ -366,7 +366,6 @@ private:
 
     void endDrag(QPoint position)
     {
-        const wxPoint pos = wxQtConvertPoint(position);
         QTreeWidgetItem *hitItem = itemAt(position);
 
         wxTreeEvent tree_event(
