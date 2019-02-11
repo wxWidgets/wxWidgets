@@ -279,9 +279,10 @@ void TreeCtrlTestCase::DeleteItem()
     EventCounter deleteitem(m_tree, wxEVT_TREE_DELETE_ITEM);
 
     wxTreeItemId todelete = m_tree->AppendItem(m_root, "deleteme");
+    m_tree->AppendItem(todelete, "deleteme2");
     m_tree->Delete(todelete);
 
-    CPPUNIT_ASSERT_EQUAL(1, deleteitem.GetCount());
+    CPPUNIT_ASSERT_EQUAL(2, deleteitem.GetCount());
 }
 
 void TreeCtrlTestCase::DeleteChildren()

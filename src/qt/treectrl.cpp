@@ -977,6 +977,8 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
     QTreeWidgetItem *parent = qTreeItem->parent();
 
+    DeleteChildren(qTreeItem);
+
     if ( parent != NULL )
     {
         parent->removeChild(qTreeItem);
