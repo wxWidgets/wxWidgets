@@ -426,6 +426,9 @@ private:
                 imageIndex = states[wxTreeItemIcon_Selected];
         }
 
+        if ( imageIndex == -1 )
+            imageIndex = states[wxTreeItemIcon_Normal];
+
         return imageIndex;
     }
 
