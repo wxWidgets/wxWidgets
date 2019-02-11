@@ -426,7 +426,7 @@ private:
                 imageIndex = states[wxTreeItemIcon_Selected];
         }
 
-        return QIcon::Normal;
+        return imageIndex;
     }
 
     wxQtTreeItemEditorFactory m_editorFactory;
