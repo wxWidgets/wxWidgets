@@ -149,6 +149,14 @@ public:
         setDropIndicatorShown(true);
     }
 
+    virtual void paintEvent (QPaintEvent * event)
+    {
+        //QT generates warnings if we try to paint to a QTreeWidget
+        //(perhaps because it's a compound widget) so we've disabled
+        //wx paint and erase background events
+        QTreeWidget::paintEvent(event);
+    }
+
     wxTextCtrl *GetEditControl()
     {
         return m_editorFactory.GetEditControl();
@@ -187,22 +195,24 @@ public:
     }
 
 protected:
-    virtual void drawBranches(
+    virtual void drawRow(
         QPainter *painter,
-        const QRect &rect,
+        const QStyleOptionViewItem &options,
         const QModelIndex &index
+
     ) const wxOVERRIDE
     {
+        QTreeWidget::drawRow(painter, options, index);
+
         QTreeWidgetItem *item = itemFromIndex(index);
-
-        QTreeWidget::drawBranches(painter, rect, index);
-
         const int imageIndex = ChooseBestImage(item);
+
         if ( imageIndex != -1 )
         {
             const wxImageList *imageList = GetHandler()->GetImageList();
             const wxBitmap bitmap = imageList->GetBitmap(imageIndex);
-            painter->drawPixmap(rect.topRight(), *bitmap.GetHandle());
+            const QRect rect = visualRect(index);
+            painter->drawPixmap(rect.topLeft(), *bitmap.GetHandle());
         }
     }
 
