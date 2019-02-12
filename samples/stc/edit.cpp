@@ -52,6 +52,22 @@
 // The (uniform) style used for the annotations.
 const int ANNOTATION_STYLE = wxSTC_STYLE_LASTPREDEFINED + 1;
 
+// A small image of a hashtag symbol used in the autocompletion window.
+const char* hashtag_xpm[] = {
+"10 10 2 1",
+" 	c None",
+".	c #BD08F9",
+"  ..  ..  ",
+"  ..  ..  ",
+"..........",
+"..........",
+"  ..  ..  ",
+"  ..  ..  ",
+"..........",
+"..........",
+"  ..  ..  ",
+"  ..  ..  "};
+
 //============================================================================
 // implementation
 //============================================================================
@@ -168,6 +184,10 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
 
     // annotations
     AnnotationSetVisible(wxSTC_ANNOTATION_BOXED);
+
+    // autocompletion
+    wxBitmap bmp(hashtag_xpm);
+    RegisterImage(0, bmp);
 
     // miscellaneous
     m_LineNrMargin = TextWidth (wxSTC_STYLE_LINENUMBER, "_999999");
@@ -480,6 +500,11 @@ void Edit::OnCharAdded (wxStyledTextEvent &event) {
         if (lineInd == 0) return;
         SetLineIndentation (currentLine, lineInd);
         GotoPos(PositionFromLine (currentLine) + lineInd);
+    }
+    else if (chr == '#') {
+        wxString s = "define?0 elif?0 else?0 endif?0 error?0 if?0 ifdef?0 "
+                     "ifndef?0 include?0 line?0 pragma?0 undef?0";
+        AutoCompShow(0,s);
     }
 }
 
