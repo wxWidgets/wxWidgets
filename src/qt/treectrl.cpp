@@ -140,8 +140,6 @@ public:
                 this, &wxQTreeWidget::OnItemExpanded);
         connect(this, &QTreeWidget::itemChanged,
                 this, &wxQTreeWidget::OnItemChanged);
-        connect(this, &QTreeWidget::iconSizeChanged,
-                this, &wxQTreeWidget::OnIconSizeChanged);
 
         m_editorFactory.AttachTo(this);
         setDragEnabled(true);
@@ -189,6 +187,13 @@ public:
         return i->second.GetState();
     }
 
+    void ResizeIcons(const QSize &size)
+    {
+        m_placeHolderImage = QPixmap(size);
+        m_placeHolderImage.fill(Qt::transparent);
+        ReplaceIcons(invisibleRootItem());
+    }
+
     QPixmap GetPlaceHolderImage() const
     {
         return m_placeHolderImage;
@@ -217,6 +222,16 @@ protected:
     }
 
 private:
+    void ReplaceIcons(QTreeWidgetItem *item)
+    {
+        item->setIcon(0, m_placeHolderImage);
+        const int childCount = item->childCount();
+        for ( int i = 0; i < childCount; ++i )
+        {
+            ReplaceIcons(item->child(i));
+        }
+    }
+
     void OnCurrentItemChanged(
         QTreeWidgetItem *current,
         QTreeWidgetItem *previous
@@ -339,12 +354,6 @@ private:
             wxQtConvertTreeItem(item)
         );
         EmitEvent(event);
-    }
-
-    void OnIconSizeChanged(const QSize &size)
-    {
-        m_placeHolderImage = QPixmap(size);
-        m_placeHolderImage.fill(Qt::transparent);
     }
 
     void tryStartDrag(const QMouseEvent *event)
@@ -513,7 +522,7 @@ void wxTreeCtrl::SetImageList(wxImageList *imageList)
 
     int width, height;
     m_imageListNormal->GetSize(0, width, height);
-    m_qtTreeWidget->setIconSize(QSize(width, height));
+    m_qtTreeWidget->ResizeIcons(QSize(width, height));
     m_qtTreeWidget->update();
 }
 
