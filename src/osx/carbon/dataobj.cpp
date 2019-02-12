@@ -469,14 +469,20 @@ bool wxDataObject::GetFromPasteboard( void * pb )
                             {
                                  // revert the translation and decomposition to arrive at a proper utf8 string again
                                 CFURLRef url = CFURLCreateWithBytes( kCFAllocatorDefault, CFDataGetBytePtr( flavorData ), flavorDataSize, kCFStringEncodingUTF8, NULL );
-                                CFStringRef cfString = CFURLCopyFileSystemPath( url, kCFURLPOSIXPathStyle );
-                                CFRelease( url );
-                                CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(NULL, 0, cfString);
-                                CFRelease( cfString );
-                                CFStringNormalize(cfMutableString,kCFStringNormalizationFormC);
-                                wxString path = wxCFStringRef(cfMutableString).AsString();
-                                if (!path.empty())
-                                    filenamesPassed += path + wxT("\n");
+                                if ( url )
+                                {
+                                    CFStringRef cfString = CFURLCopyFileSystemPath( url, kCFURLPOSIXPathStyle );
+                                    CFRelease( url );
+                                    if ( cfString )
+                                    {
+                                        CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(NULL, 0, cfString);
+                                        CFRelease( cfString );
+                                        CFStringNormalize(cfMutableString,kCFStringNormalizationFormC);
+                                        wxString path = wxCFStringRef(cfMutableString).AsString();
+                                        if (!path.empty())
+                                            filenamesPassed += path + wxT("\n");
+                                    }
+                                }
                             }
                             else
                             {
