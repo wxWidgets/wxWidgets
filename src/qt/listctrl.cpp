@@ -649,31 +649,48 @@ wxSize wxListCtrl::GetItemSpacing() const
     return wxSize();
 }
 
-void wxListCtrl::SetItemTextColour( long WXUNUSED(item), const wxColour& WXUNUSED(col))
+void wxListCtrl::SetItemTextColour( long item, const wxColour& col)
 {
+    QTreeWidgetItem *treeItem = QtGetItem(item);
+    wxCHECK_RET(treeItem != NULL, "Invalid list index");
+    treeItem->setTextColor(0, QColor(col.Red(), col.Green(), col.Blue()));
 }
 
-wxColour wxListCtrl::GetItemTextColour( long WXUNUSED(item) ) const
+wxColour wxListCtrl::GetItemTextColour( long item ) const
 {
-    return wxColour();
+    QTreeWidgetItem *treeItem = QtGetItem(item);
+    wxCHECK_MSG(treeItem != NULL, wxColour(), "Invalid list index");
+    const QColor colour = treeItem->textColor(0);
+    return wxColour(colour.red(), colour.green(), colour.blue(), colour.alpha());
 }
 
-void wxListCtrl::SetItemBackgroundColour( long WXUNUSED(item), const wxColour &WXUNUSED(col))
+void wxListCtrl::SetItemBackgroundColour( long item, const wxColour &col)
 {
+    QTreeWidgetItem *treeItem = QtGetItem(item);
+    wxCHECK_RET(treeItem != NULL, "Invalid list index");
+    treeItem->setBackgroundColor(0, QColor(col.Red(), col.Green(), col.Blue()));
 }
 
-wxColour wxListCtrl::GetItemBackgroundColour( long WXUNUSED(item) ) const
+wxColour wxListCtrl::GetItemBackgroundColour( long item ) const
 {
-    return wxColour();
+    QTreeWidgetItem *treeItem = QtGetItem(item);
+    wxCHECK_MSG(treeItem != NULL, wxColour(), "Invalid list index");
+    const QColor colour = treeItem->backgroundColor(0);
+    return wxColour(colour.red(), colour.green(), colour.blue(), colour.alpha());
 }
 
-void wxListCtrl::SetItemFont( long WXUNUSED(item), const wxFont &WXUNUSED(f))
+void wxListCtrl::SetItemFont( long item, const wxFont &f)
 {
+    QTreeWidgetItem *treeItem = QtGetItem(item);
+    wxCHECK_RET(treeItem != NULL, "Invalid list index");
+    treeItem->setFont(0, f.GetHandle());
 }
 
-wxFont wxListCtrl::GetItemFont( long WXUNUSED(item) ) const
+wxFont wxListCtrl::GetItemFont( long item ) const
 {
-    return wxFont();
+    QTreeWidgetItem *treeItem = QtGetItem(item);
+    wxCHECK_MSG(treeItem != NULL, wxNullFont, "Invalid list index");
+    return wxFont(treeItem->font(0));
 }
 
 int wxListCtrl::GetSelectedItemCount() const
@@ -683,11 +700,16 @@ int wxListCtrl::GetSelectedItemCount() const
 
 wxColour wxListCtrl::GetTextColour() const
 {
-    return wxColour();
+    const QPalette palette = m_qtTreeWidget->palette();
+    const QColor color = palette.color(QPalette::WindowText);
+    return wxColour(color.red(), color.green(), color.blue(), color.alpha());
 }
 
-void wxListCtrl::SetTextColour(const wxColour& WXUNUSED(col))
+void wxListCtrl::SetTextColour(const wxColour& col)
 {
+    QPalette palette = m_qtTreeWidget->palette();
+    palette.setColor(QPalette::WindowText, QColor(col.Red(), col.Green(), col.Blue(), col.Alpha()));
+    m_qtTreeWidget->setPalette(palette);
 }
 
 long wxListCtrl::GetTopItem() const
