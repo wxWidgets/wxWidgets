@@ -23,35 +23,6 @@
 
 #include <QtWidgets/QPushButton>
 
-class wxQtToggleButton : public wxQtEventSignalHandler< QPushButton, wxAnyButton >
-{
-
-public:
-    wxQtToggleButton( wxWindow *parent, wxAnyButton *handler);
-
-private:
-    void clicked( bool checked );
-};
-
-wxQtToggleButton::wxQtToggleButton(wxWindow *parent, wxAnyButton *handler)
-    : wxQtEventSignalHandler< QPushButton, wxAnyButton >( parent, handler )
-{
-    setCheckable( true );
-    connect(this, &QPushButton::clicked, this, &wxQtToggleButton::clicked);
-}
-
-void wxQtToggleButton::clicked( bool checked )
-{
-    wxAnyButton *handler = GetHandler();
-    if ( handler )
-    {
-        // for toggle buttons, send the checked state in the wx event:
-        wxCommandEvent event( wxEVT_TOGGLEBUTTON, handler->GetId() );
-        event.SetInt( checked );
-        EmitEvent( event );
-    }
-}
-
 wxDEFINE_EVENT( wxEVT_TOGGLEBUTTON, wxCommandEvent );
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxBitmapToggleButton, wxToggleButton);
@@ -80,10 +51,22 @@ bool wxBitmapToggleButton::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    // this button is toggleable and has a bitmap label:
-    QtSetBitmap( label );
+    if ( !wxToggleButton::Create(parent, id, wxString(), pos, size, style, validator, name) )
+    {
+        return false;
+    }
 
-    return QtCreateControl( parent, id, pos, size, style, validator, name );
+    // this button is toggleable and has a bitmap label:
+    if ( label.IsOk() )
+    {
+        SetBitmapLabel(label);
+
+        // we need to adjust the size after setting the bitmap as it may be too
+        // big for the default button size
+        SetInitialSize(size);
+    }
+
+    return true;
 }
 
 //##############################################################################
@@ -115,7 +98,8 @@ bool wxToggleButton::Create(wxWindow *parent,
             const wxString& name)
 {
     // create a checkable push button
-    m_qtPushButton = new wxQtToggleButton( parent, this );
+    QtCreate(parent);
+    m_qtPushButton->setCheckable(true);
 
     // this button is toggleable and has a text label
     SetLabel( wxIsStockID( id ) ? wxGetStockLabel( id ) : label );

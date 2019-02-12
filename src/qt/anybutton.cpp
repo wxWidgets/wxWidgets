@@ -40,12 +40,16 @@ wxQtPushButton::wxQtPushButton(wxWindow *parent, wxAnyButton *handler)
     connect(this, &QPushButton::released, this, &wxQtPushButton::action);
 }
 
-void wxQtPushButton::clicked( bool WXUNUSED(checked) )
+void wxQtPushButton::clicked(bool checked)
 {
     wxAnyButton *handler = GetHandler();
     if ( handler )
     {
-        wxCommandEvent event( wxEVT_BUTTON, handler->GetId() );
+        wxCommandEvent event( handler->GetEventType(), handler->GetId() );
+        if ( isCheckable() ) // toggle buttons
+        {
+            event.SetInt(checked);
+        }
         EmitEvent( event );
     }
 }

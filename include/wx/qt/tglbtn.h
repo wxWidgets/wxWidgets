@@ -35,6 +35,8 @@ public:
     virtual void SetValue(bool state);
     virtual bool GetValue() const;
 
+    // implementation only
+    virtual int GetEventType() const wxOVERRIDE { return wxEVT_TOGGLEBUTTON; }
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxToggleButton);
