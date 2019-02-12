@@ -958,6 +958,11 @@ long wxListCtrl::InsertItem(const wxListItem& info)
             wxListItem tmp = info;
             // set the text, image, etc.:
             SetItem(tmp);
+
+            wxListEvent event(wxEVT_LIST_INSERT_ITEM, GetId());
+            event.SetItem(tmp);
+            event.SetEventObject(this);
+            HandleWindowEvent(event);
         }
     }
     return index;
