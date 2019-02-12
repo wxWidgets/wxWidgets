@@ -803,6 +803,15 @@ bool wxListCtrl::DeleteItem(long item)
     QTreeWidgetItem *qitem = QtGetItem(item);
     if ( qitem != NULL )
     {
+        wxListItem listItem;
+        listItem.SetId(item);
+
+        wxListEvent event(wxEVT_LIST_DELETE_ITEM, GetId());
+        event.SetEventObject(this);
+        event.SetItem(listItem);
+
+        HandleWindowEvent(event);
+
         delete qitem;
         return true;
     }
@@ -813,6 +822,11 @@ bool wxListCtrl::DeleteItem(long item)
 bool wxListCtrl::DeleteAllItems()
 {
     m_qtTreeWidget->clear();
+
+    wxListEvent event(wxEVT_LIST_DELETE_ALL_ITEMS, GetId());
+    event.SetEventObject(this);
+    HandleWindowEvent(event);
+
     return true;
 }
 
