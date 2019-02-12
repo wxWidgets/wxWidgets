@@ -692,6 +692,14 @@ void wxListCtrl::SetTextColour(const wxColour& WXUNUSED(col))
 
 long wxListCtrl::GetTopItem() const
 {
+    const long itemCount = GetItemCount();
+    for ( long i = 0; i < itemCount; ++i )
+    {
+        wxRect itemRect;
+        GetItemRect(i, itemRect);
+        if ( itemRect.GetY() >= 0 )
+            return i;
+    }
     return 0;
 }
 
