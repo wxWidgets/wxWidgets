@@ -86,21 +86,6 @@ bool wxBitmapToggleButton::Create(wxWindow *parent,
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
 
-void wxBitmapToggleButton::SetValue(bool state)
-{
-    m_qtPushButton->setChecked( state );
-}
-
-bool wxBitmapToggleButton::GetValue() const
-{
-    return m_qtPushButton->isChecked();
-}
-
-QWidget *wxBitmapToggleButton::GetHandle() const
-{
-    return m_qtPushButton;
-}
-
 //##############################################################################
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxToggleButton, wxControl);
@@ -146,9 +131,4 @@ void wxToggleButton::SetValue(bool state)
 bool wxToggleButton::GetValue() const
 {
     return m_qtPushButton->isChecked();
-}
-
-QWidget *wxToggleButton::GetHandle() const
-{
-    return m_qtPushButton;
 }

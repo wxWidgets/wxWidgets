@@ -35,7 +35,6 @@ public:
     virtual void SetValue(bool state);
     virtual bool GetValue() const;
 
-    virtual QWidget *GetHandle() const;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxToggleButton);
@@ -65,10 +64,6 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxCheckBoxNameStr);
 
-    virtual void SetValue(bool state);
-    virtual bool GetValue() const;
-
-    virtual QWidget *GetHandle() const;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxBitmapToggleButton);
