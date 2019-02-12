@@ -1286,10 +1286,7 @@ wxTreeItemId wxTreeCtrl::DoTreeHitTest(const wxPoint& point, int& flags) const
         return wxTreeItemId();
 
     QTreeWidgetItem *hitItem = m_qtTreeWidget->itemAt(wxQtConvertPoint(point));
-
-    if ( hitItem == NULL )
-        flags |= wxTREE_HITTEST_NOWHERE;
-
+    flags = hitItem == NULL ? wxTREE_HITTEST_NOWHERE : wxTREE_HITTEST_ONITEM;
     return wxQtConvertTreeItem(hitItem);
 }
 
