@@ -44,7 +44,7 @@ private:
 
 
 
-class WXDLLIMPEXP_CORE wxBitmapToggleButton: public wxToggleButtonBase
+class WXDLLIMPEXP_CORE wxBitmapToggleButton: public wxToggleButton
 {
 public:
     wxBitmapToggleButton();

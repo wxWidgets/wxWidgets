@@ -52,9 +52,9 @@ void wxQtToggleButton::clicked( bool checked )
     }
 }
 
-wxDEFINE_EVENT( wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, wxCommandEvent );
+wxDEFINE_EVENT( wxEVT_TOGGLEBUTTON, wxCommandEvent );
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxBitmapToggleButton, wxControl);
+wxIMPLEMENT_DYNAMIC_CLASS(wxBitmapToggleButton, wxToggleButton);
 
 wxBitmapToggleButton::wxBitmapToggleButton()
 {
