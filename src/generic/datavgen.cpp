@@ -2768,8 +2768,6 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
         wxDataViewVirtualListModel *list_model =
             (wxDataViewVirtualListModel*) GetModel();
         m_count = list_model->GetCount();
-
-        m_selection.OnItemsInserted(GetRowByItem(item), 1);
     }
     else
     {
@@ -2859,6 +2857,8 @@ bool wxDataViewMainWindow::ItemAdded(const wxDataViewItem & parent, const wxData
 
         InvalidateCount();
     }
+
+    m_selection.OnItemsInserted(GetRowByItem(item), 1);
 
     GetOwner()->InvalidateColBestWidths();
     UpdateDisplay();
