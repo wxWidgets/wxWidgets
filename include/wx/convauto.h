@@ -91,6 +91,12 @@ public:
         return m_bomType;
     }
 
+    // Return true if the fall-back encoding is used
+    bool IsFallbackEncoding() const
+    {
+        return m_ownsConv && m_bomType == wxBOM_None;
+    }
+
 private:
     // common part of all ctors
     void Init()
