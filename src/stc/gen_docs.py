@@ -40,7 +40,8 @@ categoriesList = [
     ('OtherSettings'                   ,'Other settings', 0),
     ('BraceHighlighting'               ,'Brace highlighting', 0),
     ('TabsAndIndentationGuides'        ,'Tabs and Indentation Guides', 0),
-    ('Markers'                         ,'Markers', 0),
+    ('Markers'                         ,'Markers',
+        ('@see MarkerDefineBitmap',)),
     ('Indicators'                      ,'Indicators', 0),
     ('Autocompletion'                  ,'Autocompletion', 0),
     ('UserLists'                       ,'User lists', 0),
@@ -1406,7 +1407,9 @@ sinceAnnotations= {
     'SetMouseWheelCaptures':'3.1.1',
     'SetTabDrawMode':'3.1.1',
     'TargetWholeDocument':'3.1.1',
-    'ToggleFoldShowText':'3.1.1'
+    'ToggleFoldShowText':'3.1.1',
+
+    'MarkerDefinePixmap':'3.1.3'
 }
 
 

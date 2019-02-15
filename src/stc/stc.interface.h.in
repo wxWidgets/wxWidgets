@@ -353,6 +353,11 @@ public:
     */
     void AnnotationClearLine(int line);
 
+    /**
+       Define a marker with a wxBitmap.
+    */
+    void MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
+
     //@}
 
 

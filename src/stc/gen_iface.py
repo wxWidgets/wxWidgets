@@ -213,22 +213,11 @@ methodOverrideMap = {
     ),
 
 
-    'MarkerDefinePixmap' :
-    ('MarkerDefineBitmap',
-     '''void %s(int markerNumber, const wxBitmap& bmp);''',
-     '''void %s(int markerNumber, const wxBitmap& bmp) {
-        // convert bmp to a xpm in a string
-        wxMemoryOutputStream strm;
-        wxImage img = bmp.ConvertToImage();
-        if (img.HasAlpha())
-            img.ConvertAlphaToMask();
-        img.SaveFile(strm, wxBITMAP_TYPE_XPM);
-        size_t len = strm.GetSize();
-        char* buff = new char[len+1];
-        strm.CopyTo(buff, len);
-        buff[len] = 0;
-        SendMsg(%s, markerNumber, (sptr_t)buff);
-        delete [] buff;'''
+   'MarkerDefinePixmap' :
+    (0,
+     '''void %s(int markerNumber, const char* const* xpmData);''',
+     '''void %s(int markerNumber, const char* const* xpmData) {
+        SendMsg(%s, markerNumber, (sptr_t)xpmData);'''
     ),
 
     'GetMargins' : ('GetMarginCount', 0, 0),
