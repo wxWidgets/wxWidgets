@@ -11,7 +11,7 @@
 #include "wx/textctrl.h"
 
 class wxQtTreeWidget;
-class QTreeWidgetItem;
+class wxQtListModel;
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
@@ -294,8 +294,6 @@ protected:
     // Implement base class pure virtual methods.
     virtual long DoInsertColumn(long col, const wxListItem& info) wxOVERRIDE;
 
-    QTreeWidgetItem *QtGetItem(int id) const;
-
     wxImageList *     m_imageListNormal; // The image list for normal icons
     wxImageList *     m_imageListSmall;  // The image list for small icons
     wxImageList *     m_imageListState;  // The image list state icons (not implemented yet)
@@ -304,6 +302,7 @@ protected:
                       m_ownsImageListState;
 private:
     wxQtTreeWidget *m_qtTreeWidget;
+    wxQtListModel *m_model;
 
     wxDECLARE_DYNAMIC_CLASS( wxListCtrl );
 };
