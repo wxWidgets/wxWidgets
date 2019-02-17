@@ -267,9 +267,22 @@ public:
         switch ( role )
         {
             case Qt::DisplayRole:
-            case Qt::EditRole:
             {
                 return QVariant::fromValue(columnItem.m_label);
+            }
+            case Qt::EditRole:
+            {
+                wxListItem listItem;
+                listItem.SetId(row);
+                listItem.SetColumn(col);
+
+                wxListEvent event(wxEVT_LIST_BEGIN_LABEL_EDIT, m_listCtrl->GetId());
+                event.SetEventObject(m_listCtrl);
+                event.SetItem(listItem); 
+                if ( m_listCtrl->HandleWindowEvent(event) && !event.IsAllowed())
+                    return QVariant();
+
+                return QVariant::fromValue(columnItem.m_label); 
             }
             case Qt::DecorationRole:
             {
@@ -328,10 +341,22 @@ public:
         const int row = index.row();
         const int col = index.column();
 
+         wxCHECK_MSG(row >= 0 && static_cast<size_t>(row) < m_rows.size(), false, "Invalid row index");
+         wxCHECK_MSG(col > 0 && m_rows[row].m_columns.size(), false, "Invalid column index");
+
         if ( role == Qt::DisplayRole || role == Qt::EditRole )
-        {
-            wxCHECK_MSG(row >= 0 && static_cast<size_t>(row) < m_rows.size(), false, "Invalid row index");
-            wxCHECK_MSG(col > 0 && m_rows[row].m_columns.size(), false, "Invalid column index");
+        { 
+            wxListItem listItem;
+            listItem.SetId(row);
+            listItem.SetColumn(col);
+
+            wxListEvent event(wxEVT_LIST_END_LABEL_EDIT, m_listCtrl->GetId());
+            event.SetEventObject(m_listCtrl);
+            event.SetItem(listItem); 
+
+            if ( m_listCtrl->HandleWindowEvent(event) && !event.IsAllowed())
+                return false;
+
             m_rows[row][col].m_label = value.toString();
             return true;
         }
