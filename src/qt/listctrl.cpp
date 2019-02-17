@@ -347,6 +347,16 @@ public:
         return QVariant();
     }
 
+    Qt::ItemFlags flags(const QModelIndex &index) const wxOVERRIDE
+    {
+        Qt::ItemFlags itemFlags = Qt::ItemIsSelectable | Qt::ItemNeverHasChildren;
+
+        if ( m_listCtrl->HasFlag(wxLC_EDIT_LABELS) )
+            itemFlags |= Qt::ItemIsEditable;
+
+        return itemFlags;
+    }
+
     bool removeRows(int row, int count, const QModelIndex &parent) wxOVERRIDE
     {
         beginRemoveRows(parent, row, row + count - 1);
