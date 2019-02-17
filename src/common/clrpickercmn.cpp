@@ -40,7 +40,7 @@ const char wxColourPickerWidgetNameStr[] = "colourpickerwidget";
 
 wxDEFINE_EVENT(wxEVT_COLOURPICKER_CHANGED, wxColourPickerEvent);
 wxDEFINE_EVENT(wxEVT_COLOUR_SELECTED, wxColourPickerEvent);
-wxDEFINE_EVENT(wxEVT_COLOUR_CANCELED, wxColourPickerEvent);
+wxDEFINE_EVENT(wxEVT_COLOUR_CANCELLED, wxColourPickerEvent);
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxColourPickerCtrl, wxPickerBase);
 wxIMPLEMENT_DYNAMIC_CLASS(wxColourPickerEvent, wxEvent);
@@ -77,7 +77,7 @@ bool wxColourPickerCtrl::Create( wxWindow *parent, wxWindowID id,
     m_picker->Bind(wxEVT_COLOUR_SELECTED,
         &wxColourPickerCtrl::OnColourSelect, this);
 
-    m_picker->Bind(wxEVT_COLOUR_CANCELED,
+    m_picker->Bind(wxEVT_COLOUR_CANCELLED,
         &wxColourPickerCtrl::OnColourCancel, this);
 
     return true;
@@ -152,7 +152,7 @@ void wxColourPickerCtrl::OnColourSelect(wxColourPickerEvent &ev)
 
 void wxColourPickerCtrl::OnColourCancel(wxColourPickerEvent &ev)
 {
-    wxColourPickerEvent event(this, GetId(), ev.GetColour(), wxEVT_COLOUR_CANCELED);
+    wxColourPickerEvent event(this, GetId(), ev.GetColour(), wxEVT_COLOUR_CANCELLED);
     GetEventHandler()->ProcessEvent(event);
 }
 

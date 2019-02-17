@@ -95,7 +95,7 @@ void wxGenericColourButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
     SetColour(ms_data.GetColour());
 
     // fire an event
-    const wxEventType eventType = res == wxID_OK ? wxEVT_COLOURPICKER_CHANGED : wxEVT_COLOUR_CANCELED;
+    const wxEventType eventType = res == wxID_OK ? wxEVT_COLOURPICKER_CHANGED : wxEVT_COLOUR_CANCELLED;
     wxColourPickerEvent event(this, GetId(), m_colour, eventType);
 
     ProcessWindowEvent(event);
