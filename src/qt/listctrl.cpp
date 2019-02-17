@@ -1170,8 +1170,9 @@ void wxListCtrl::SetSingleStyle(long WXUNUSED(style), bool WXUNUSED(add))
 {
 }
 
-void wxListCtrl::SetWindowStyleFlag(long WXUNUSED(style))
+void wxListCtrl::SetWindowStyleFlag(long style)
 {
+   m_qtTreeWidget->setHeaderHidden((style & wxLC_NO_HEADER) != 0);
 }
 
 long wxListCtrl::GetNextItem(long item, int WXUNUSED(geometry), int state) const
@@ -1457,10 +1458,6 @@ bool wxListCtrl::SortItems(wxListCtrlCompare fn, wxIntPtr data)
     m_model->SortItems(fn, data);
 	return true;
 }
-
-// ----------------------------------------------------------------------------
-// virtual list controls (not currently implemented in wxQT)
-// ----------------------------------------------------------------------------
 
 wxString wxListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) const
 {
