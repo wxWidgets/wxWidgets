@@ -7421,7 +7421,8 @@ static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win)
 
 #if !wxDIALOG_UNIT_COMPATIBILITY
     // and select the current font into it
-    HFONT hfont = GetHfontOf(win->GetFont());
+    wxFont f(win->GetFont());
+    HFONT hfont = GetHfontOf(f);
     if ( hfont )
     {
         hfont = (HFONT)::SelectObject(hdc, hfont);
