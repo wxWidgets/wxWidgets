@@ -83,6 +83,9 @@ protected:
 
 
     void OnColourChange(wxColourPickerEvent &ev);
+    void OnColourSelect(wxColourPickerEvent &ev);
+    void OnColourCancel(wxColourPickerEvent &ev);
+
     void OnCheckBox(wxCommandEvent &ev);
     void OnButtonReset(wxCommandEvent &ev);
 
@@ -111,6 +114,8 @@ wxBEGIN_EVENT_TABLE(ColourPickerWidgetsPage, WidgetsPage)
     EVT_BUTTON(PickerPage_Reset, ColourPickerWidgetsPage::OnButtonReset)
 
     EVT_COLOURPICKER_CHANGED(PickerPage_Colour, ColourPickerWidgetsPage::OnColourChange)
+    EVT_COLOUR_SELECTED(PickerPage_Colour, ColourPickerWidgetsPage::OnColourSelect)
+    EVT_COLOUR_CANCELLED(PickerPage_Colour, ColourPickerWidgetsPage::OnColourCancel)
 
     EVT_CHECKBOX(wxID_ANY, ColourPickerWidgetsPage::OnCheckBox)
 wxEND_EVENT_TABLE()
@@ -219,6 +224,18 @@ void ColourPickerWidgetsPage::OnColourChange(wxColourPickerEvent& event)
 {
     wxLogMessage("The colour changed to '%s' !",
                  event.GetColour().GetAsString(wxC2S_CSS_SYNTAX));
+}
+
+void ColourPickerWidgetsPage::OnColourSelect(wxColourPickerEvent& event)
+{
+    wxLogMessage("The selected colour changed to '%s' !",
+        event.GetColour().GetAsString(wxC2S_CSS_SYNTAX));
+}
+
+void ColourPickerWidgetsPage::OnColourCancel(wxColourPickerEvent& event)
+{
+    wxLogMessage("Colour cancel. Colour is now '%s' !",
+        event.GetColour().GetAsString(wxC2S_CSS_SYNTAX));
 }
 
 void ColourPickerWidgetsPage::OnCheckBox(wxCommandEvent &event)
