@@ -874,6 +874,7 @@ bool wxListCtrl::Create(wxWindow *parent,
         m_qtTreeWidget->setHeaderHidden(true);
 
     m_qtTreeWidget->setRootIsDecorated(false);
+    m_qtTreeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     m_model->SetView(m_qtTreeWidget);
 
@@ -1264,6 +1265,8 @@ void wxListCtrl::SetWindowStyleFlag(long style)
 {
     wxControl::SetWindowStyleFlag(style);
     m_qtTreeWidget->setHeaderHidden((style & wxLC_NO_HEADER) != 0);
+    m_qtTreeWidget->setSelectionMode((style & wxLC_SINGLE_SEL) != 0 ? 
+        QAbstractItemView::SingleSelection : QAbstractItemView::ExtendedSelection);
     bool needVirtual = (style & wxLC_VIRTUAL) != 0;
     
     if ( needVirtual != m_model->IsVirtual() )
