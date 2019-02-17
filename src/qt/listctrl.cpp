@@ -239,9 +239,9 @@ wxListColumnFormat wxQtConvertAlignFlag(int align)
 class wxQtListModel : public QAbstractTableModel
 {
 public:
-    wxQtListModel() :
-        m_imageListNormal(NULL),
-        m_view(NULL)
+    wxQtListModel(wxListCtrl *listCtrl) :
+        m_view(NULL),
+        m_listCtrl(listCtrl)
     {
     }
 
@@ -273,7 +273,9 @@ public:
             }
             case Qt::DecorationRole:
             {
-                if ( m_imageListNormal == NULL)
+                int requiredList = m_listCtrl->HasFlag(wxLC_SMALL_ICON) ? wxIMAGE_LIST_SMALL : wxIMAGE_LIST_NORMAL;
+                wxImageList *imageList = m_listCtrl->GetImageList(requiredList);
+                if ( imageList == NULL)
                     return QVariant();
 
                 int imageIndex = -1;
@@ -291,7 +293,7 @@ public:
                 if ( imageIndex == -1 )
                     return QVariant();
 
-                wxBitmap image = m_imageListNormal->GetBitmap(imageIndex);
+                wxBitmap image = imageList->GetBitmap(imageIndex);
                 wxCHECK_MSG(image.IsOk(), QVariant(), "Invalid image");
                 return QVariant::fromValue(*image.GetHandle());
             }
@@ -521,11 +523,6 @@ public:
         return wxFont(m_rows[item][0].m_font);
     }
 
-    void ChangeImageList(wxImageList *imageList)
-    {
-        m_imageListNormal = imageList;
-    }
-
     long FindItem(long start, const QString& str, bool partial) const
     {
 		if ( start < 0 )
@@ -750,8 +747,8 @@ private:
 
     std::vector<ColumnItem> m_headers;
     std::vector<RowItem> m_rows;
-    wxImageList *m_imageListNormal;
     QTreeView *m_view;
+    wxListCtrl *m_listCtrl;
 };
 
 
@@ -796,7 +793,7 @@ bool wxListCtrl::Create(wxWindow *parent,
 
 void wxListCtrl::Init()
 {
-    m_model = new wxQtListModel;
+    m_model = new wxQtListModel(this);
     m_imageListNormal = NULL;
     m_ownsImageListNormal = false;
     m_imageListSmall = NULL;
@@ -1244,8 +1241,6 @@ void wxListCtrl::SetImageList(wxImageList *imageList, int which)
         m_imageListState = imageList;
         m_ownsImageListState = false;
     }
-
-    m_model->ChangeImageList(m_imageListNormal);
 }
 
 void wxListCtrl::AssignImageList(wxImageList *imageList, int which)
