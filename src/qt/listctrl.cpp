@@ -300,13 +300,23 @@ public:
                 return QVariant::fromValue(columnItem.m_font);
 
             case Qt::BackgroundRole:
-				return columnItem.m_backgroundColour.isValid() ? QVariant::fromValue(columnItem.m_backgroundColour) : QVariant();
+				return columnItem.m_backgroundColour.isValid() ?
+                     QVariant::fromValue(columnItem.m_backgroundColour) : QVariant();
 
             case Qt::ForegroundRole:
-                return columnItem.m_textColour.isValid() ? QVariant::fromValue(columnItem.m_textColour) : QVariant();
+                return columnItem.m_textColour.isValid() ?
+                    QVariant::fromValue(columnItem.m_textColour) : QVariant();
 
             case Qt::TextAlignmentRole:
                 return columnItem.m_align;
+
+             case Qt::CheckStateRole:
+                {
+                  if ( !m_listCtrl->HasCheckBoxes() || col > 0 )
+                    return QVariant();
+
+                  return rowItem.m_checked; 
+                }
 
             default:
                 return QVariant();
@@ -315,17 +325,31 @@ public:
 
     bool setData(const QModelIndex &index, const QVariant &value, int role) wxOVERRIDE
     {
-        if ( role != Qt::DisplayRole)
-            return false;
-
         const int row = index.row();
         const int col = index.column();
 
-        wxCHECK_MSG(row >= 0 && static_cast<size_t>(row) < m_rows.size(), false, "Invalid row index");
-        wxCHECK_MSG(col > 0 && m_rows[row].m_columns.size(), false, "Invalid column index");
+        if ( role == Qt::DisplayRole || role == Qt::EditRole )
+        {
+            wxCHECK_MSG(row >= 0 && static_cast<size_t>(row) < m_rows.size(), false, "Invalid row index");
+            wxCHECK_MSG(col > 0 && m_rows[row].m_columns.size(), false, "Invalid column index");
+            m_rows[row][col].m_label = value.toString();
+            return true;
+        }
+    
+        if ( role == Qt::CheckStateRole && col == 0)
+        {
+            m_rows[row].m_checked = value.toBool();
 
-        m_rows[row][col].m_label = value.toString();
-		return true;
+            wxListItem listItem;
+            listItem.SetId(row);
+
+            wxListEvent event(wxEVT_LIST_ITEM_CHECKED, m_listCtrl->GetId());
+            event.SetEventObject(m_listCtrl);
+            event.SetItem(listItem);
+            m_listCtrl->HandleWindowEvent(event);
+        }
+
+		return false;
     }
 
     QVariant headerData(int section, Qt::Orientation orientation, int role) const wxOVERRIDE
@@ -353,6 +377,9 @@ public:
 
         if ( m_listCtrl->HasFlag(wxLC_EDIT_LABELS) )
             itemFlags |= Qt::ItemIsEditable;
+
+         if (index.column() == 0 && m_listCtrl->HasCheckBoxes() )
+            itemFlags |= Qt::ItemIsUserCheckable;
 
         return itemFlags;
     }
@@ -425,10 +452,10 @@ public:
             }
             if ( info.m_stateMask & wxLIST_STATE_SELECTED )
             {
-								const QModelIndex modelIndex = index(row,col);
-								QModelIndexList selectedIndices = m_view->selectionModel()->selectedIndexes();
-								if ( selectedIndices.contains(modelIndex) )
-									info.m_state |= wxLIST_STATE_SELECTED;
+                const QModelIndex modelIndex = index(row,col);
+                QModelIndexList selectedIndices = m_view->selectionModel()->selectedIndexes();
+                if ( selectedIndices.contains(modelIndex) )
+                    info.m_state |= wxLIST_STATE_SELECTED;
             }
         }
 
@@ -472,7 +499,8 @@ public:
             if (info.m_stateMask & wxLIST_STATE_SELECTED)
             {
                 QItemSelectionModel *selection = m_view->selectionModel();
-                QItemSelectionModel::SelectionFlag flag = info.m_state & wxLIST_STATE_SELECTED ? QItemSelectionModel::Select : QItemSelectionModel::Deselect;
+                QItemSelectionModel::SelectionFlag flag = info.m_state & wxLIST_STATE_SELECTED ? 
+                    QItemSelectionModel::Select : QItemSelectionModel::Deselect;
                 selection->select(modelIndex,  flag | QItemSelectionModel::Rows);
             }
         }
@@ -677,6 +705,27 @@ public:
         std::sort(m_rows.begin(), m_rows.end(), compare);
     }
 
+    bool IsItemChecked(long item) const
+    {
+        wxCHECK_MSG(item >= 0 && static_cast<size_t>(item) <= m_rows.size(),
+            false, "Invalid row");
+
+        return m_rows[item].m_checked;
+    }
+
+    void CheckItem(long item, bool check)
+    {
+        wxCHECK_RET(item >= 0 && static_cast<size_t>(item) <= m_rows.size(),
+            "Invalid row");
+
+        m_rows[item].m_checked = check;
+
+        QVector<int> roles;
+        roles.push_back(Qt::CheckStateRole); 
+        const QModelIndex modelIndex = index(item,0);
+        dataChanged(modelIndex, modelIndex, roles);
+    }
+
     virtual bool IsVirtual() const
     {
         return false;
@@ -733,13 +782,15 @@ private:
     struct RowItem
     {
         RowItem() :
-            m_data(NULL)
+            m_data(NULL),
+            m_checked(false)
         {
         }
 
         RowItem(int columnCount ) :
             m_columns(columnCount),
-            m_data(NULL)
+            m_data(NULL),
+            m_checked(false)
         {
         }
 
@@ -755,6 +806,7 @@ private:
 
         std::vector<ColumnItem> m_columns;
         void *m_data;
+        bool m_checked;
 
     };
 
@@ -887,6 +939,7 @@ bool wxListCtrl::Create(wxWindow *parent,
 
 void wxListCtrl::Init()
 {
+    m_hasCheckBoxes = false;
     m_model = new wxQtListModel(this);
     m_imageListNormal = NULL;
     m_ownsImageListNormal = false;
@@ -1255,6 +1308,32 @@ long wxListCtrl::GetTopItem() const
             return i;
     }
     return 0;
+}
+
+bool wxListCtrl::HasCheckBoxes() const
+{
+    return m_hasCheckBoxes;
+}
+
+bool wxListCtrl::EnableCheckBoxes(bool enable /*= true*/)
+{  
+    m_hasCheckBoxes = enable;
+    QVector<int> roles;
+    roles.push_back(Qt::CheckStateRole); 
+    m_model->dataChanged(m_model->index(0,0), 
+        m_model->index(GetItemCount() - 1, GetColumnCount() - 1), 
+        roles);
+    return true;
+}
+
+bool wxListCtrl::IsItemChecked(long item) const
+{
+    return m_model->IsItemChecked(item);
+}
+
+void wxListCtrl::CheckItem(long item, bool check)
+{
+    m_model->CheckItem(item, check);
 }
 
 void wxListCtrl::SetSingleStyle(long WXUNUSED(style), bool WXUNUSED(add))
