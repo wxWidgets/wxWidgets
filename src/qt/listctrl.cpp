@@ -273,8 +273,7 @@ public:
             }
             case Qt::DecorationRole:
             {
-                int requiredList = m_listCtrl->HasFlag(wxLC_SMALL_ICON) ? wxIMAGE_LIST_SMALL : wxIMAGE_LIST_NORMAL;
-                wxImageList *imageList = m_listCtrl->GetImageList(requiredList);
+                wxImageList *imageList = GetImageList();
                 if ( imageList == NULL)
                     return QVariant();
 
@@ -668,6 +667,27 @@ public:
         std::sort(m_rows.begin(), m_rows.end(), compare);
     }
 
+    virtual bool IsVirtual() const
+    {
+        return false;
+    }
+
+    virtual void SetVirtualItemCount(long WXUNUSED(count))
+    {
+    }
+
+protected:
+    wxImageList *GetImageList() const
+    {
+        int requiredList = m_listCtrl->HasFlag(wxLC_SMALL_ICON) ? wxIMAGE_LIST_SMALL : wxIMAGE_LIST_NORMAL;
+        return m_listCtrl->GetImageList(requiredList);
+    }
+
+    wxListCtrl *GetListCtrl() const
+    {
+        return m_listCtrl;
+    }
+
 private:
     template <typename  T>
     static void eraseFromContainer(T &container, int start_index, int count)
@@ -751,6 +771,65 @@ private:
     wxListCtrl *m_listCtrl;
 };
 
+class wxQtVirtualListModel : public wxQtListModel
+{
+public:
+    wxQtVirtualListModel(wxListCtrl *listCtrl) :
+        wxQtListModel(listCtrl),
+        m_rowCount(0)
+    {
+    }
+
+    int rowCount(const QModelIndex& WXUNUSED(parent)) const wxOVERRIDE
+    {
+        return m_rowCount;
+    }
+
+
+    QVariant data(const QModelIndex &index, int role) const wxOVERRIDE
+    {
+        wxListCtrl *listCtrl = GetListCtrl();
+
+        const int row = index.row();
+        const int col = index.column();
+
+        if ( role == Qt::DisplayRole || role == Qt::EditRole )
+        {
+            wxString text = listCtrl->OnGetItemText(row, col);
+            return QVariant::fromValue(wxQtConvertString(text));
+        }
+
+
+        if ( role == Qt::DecorationRole )
+        {
+            wxImageList *imageList = GetImageList();
+            if ( imageList == NULL )
+                return QVariant();
+
+            const int imageIndex = listCtrl->OnGetItemColumnImage(row, col);
+            wxBitmap image = imageList->GetBitmap(imageIndex);
+            wxCHECK_MSG(image.IsOk(), QVariant(), "Invalid Bitmap");
+            return QVariant::fromValue(*image.GetHandle());
+        }
+
+        return QVariant();
+    }
+
+    virtual bool IsVirtual() const wxOVERRIDE
+    {
+        return true;
+    }
+
+    virtual void SetVirtualItemCount(long count) wxOVERRIDE
+    {
+        beginInsertRows(QModelIndex(), 0, count - 1);
+        m_rowCount = static_cast<int>(count);
+        endInsertRows();
+    }
+private:
+    int m_rowCount;
+};
+
 
 wxListCtrl::wxListCtrl()
 {
@@ -788,7 +867,11 @@ bool wxListCtrl::Create(wxWindow *parent,
 
     m_model->SetView(m_qtTreeWidget);
 
-    return QtCreateControl( parent, id, pos, size, style, validator, name );
+    if ( !QtCreateControl( parent, id, pos, size, style, validator, name ) )
+        return false;
+
+    SetWindowStyleFlag(style);
+    return true;
 }
 
 void wxListCtrl::Init()
@@ -1169,7 +1252,18 @@ void wxListCtrl::SetSingleStyle(long WXUNUSED(style), bool WXUNUSED(add))
 
 void wxListCtrl::SetWindowStyleFlag(long style)
 {
-   m_qtTreeWidget->setHeaderHidden((style & wxLC_NO_HEADER) != 0);
+    wxControl::SetWindowStyleFlag(style);
+    m_qtTreeWidget->setHeaderHidden((style & wxLC_NO_HEADER) != 0);
+    bool needVirtual = (style & wxLC_VIRTUAL) != 0;
+    
+    if ( needVirtual != m_model->IsVirtual() )
+    {
+        wxQtListModel *oldModel = m_model;
+        m_model = needVirtual ? new wxQtVirtualListModel(this) : new wxQtListModel(this);
+        m_model->SetView(m_qtTreeWidget);
+        m_qtTreeWidget->setModel(m_model);
+        delete oldModel;
+    }
 }
 
 long wxListCtrl::GetNextItem(long item, int WXUNUSED(geometry), int state) const
@@ -1436,9 +1530,10 @@ long wxListCtrl::DoInsertColumn(long col, const wxListItem& info)
 }
 
 
-void wxListCtrl::SetItemCount(long WXUNUSED(count))
+void wxListCtrl::SetItemCount(long count)
 {
     wxASSERT( HasFlag(wxLC_VIRTUAL) );
+    m_model->SetVirtualItemCount(count);
 }
 
 bool wxListCtrl::ScrollList(int dx, int dy)
