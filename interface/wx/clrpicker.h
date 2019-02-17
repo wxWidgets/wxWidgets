@@ -46,9 +46,9 @@ wxEventType wxEVT_COLOURPICKER_CHANGED;
            in this case the event is fired only if the user’s input is valid,
            i.e. recognizable).
     @event{EVT_COLOUR_SELECTED(id, func)}
-           The user changed the colour selected in the dialog associated with the control.
+           The user changed the colour selected in the dialog associated with the control. Currently only implemented on wxMSW.
     @event{EVT_COLOUR_CANCELLED(id, func)}
-           The user closed the colour dialog associated with the control or clicked on its cancel button.
+           The user closed the colour dialog associated with the control or clicked on its cancel button. Currently only implemented on wxMSW.
     @endEventTable
 
     @library{wxcore}
