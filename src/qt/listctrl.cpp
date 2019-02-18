@@ -261,7 +261,7 @@ bool wxListCtrl::SetColumnsOrder(const wxArrayInt& WXUNUSED(orders))
 int wxListCtrl::GetCountPerPage() const
 {
     // this may not be exact but should be a good approximation:
-    int h = m_qtTreeWidget->visualItemRect(m_qtTreeWidget->headerItem()).height();
+    const int h = m_qtTreeWidget->visualItemRect(m_qtTreeWidget->headerItem()).height();
     if ( h )
         return m_qtTreeWidget->height() / h;
     else
@@ -272,7 +272,7 @@ wxRect wxListCtrl::GetViewRect() const
 {
     // this may not be exact but should be a good approximation:
     wxRect rect = wxQtConvertRect(m_qtTreeWidget->rect());
-    int h = m_qtTreeWidget->header()->defaultSectionSize();
+    const int h = m_qtTreeWidget->header()->defaultSectionSize();
     rect.SetTop(h);
     rect.SetHeight(rect.GetHeight() - h);
     return rect;
@@ -613,8 +613,8 @@ void wxListCtrl::SetWindowStyleFlag(long WXUNUSED(style))
 long wxListCtrl::GetNextItem(long item, int WXUNUSED(geometry), int state) const
 {
     wxListItem info;
-    long ret = item,
-         max = GetItemCount();
+    long ret = item;
+    const long max = GetItemCount();
     wxCHECK_MSG( (ret == -1) || (ret < max), -1,
                  wxT("invalid listctrl index in GetNextItem()") );
 
@@ -631,8 +631,7 @@ long wxListCtrl::GetNextItem(long item, int WXUNUSED(geometry), int state) const
         // any will do
         return (size_t)ret;
 
-    size_t count = GetItemCount();
-    for ( size_t line = (size_t)ret; line < count; line++ )
+    for ( long line = ret; line < max; line++ )
     {
         if ( GetItemState(line, state) )
             return line;
@@ -758,7 +757,7 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* WXUNUSED(textControlCl
 
 bool wxListCtrl::EndEditLabel(bool WXUNUSED(cancel))
 {
-    int item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
+    const int item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
     if (item > 0)
     {
         QTreeWidgetItem *qitem = QtGetItem(item);
