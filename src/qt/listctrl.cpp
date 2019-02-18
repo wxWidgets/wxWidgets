@@ -962,7 +962,8 @@ public:
 
     virtual void SetVirtualItemCount(long count) wxOVERRIDE
     {
-        beginInsertRows(QModelIndex(), 0, count - 1);
+        const int last = count > 0 ? count - 1 : 0;
+        beginInsertRows(QModelIndex(), 0, last);
         m_rowCount = static_cast<int>(count);
         endInsertRows();
     }
