@@ -159,6 +159,11 @@ public:
     // list or report view
     long GetTopItem() const;
 
+    virtual bool HasCheckBoxes() const wxOVERRIDE;
+    virtual bool EnableCheckBoxes(bool enable = true) wxOVERRIDE;
+    virtual bool IsItemChecked(long item) const wxOVERRIDE;
+    virtual void CheckItem(long item, bool check) wxOVERRIDE;
+
     // Add or remove a single window style
     void SetSingleStyle(long style, bool add = true);
 
@@ -300,6 +305,7 @@ protected:
     bool              m_ownsImageListNormal,
                       m_ownsImageListSmall,
                       m_ownsImageListState;
+    bool              m_hasCheckBoxes;
 private:
     wxQtTreeWidget *m_qtTreeWidget;
     wxQtListModel *m_model;
