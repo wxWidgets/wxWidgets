@@ -1374,7 +1374,8 @@ wxFont wxListCtrl::GetItemFont( long item ) const
 int wxListCtrl::GetSelectedItemCount() const
 {
     QItemSelectionModel *selectionModel = m_qtTreeWidget->selectionModel();
-    return selectionModel->selectedIndexes().length();
+    QModelIndexList selectedRows = selectionModel->selectedRows();
+    return selectedRows.length();
 }
 
 wxColour wxListCtrl::GetTextColour() const
