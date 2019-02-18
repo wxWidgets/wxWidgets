@@ -269,6 +269,8 @@ public:
         const RowItem &rowItem = m_rows[row];
         const ColumnItem &columnItem = rowItem[col];
 
+        const bool isSelected = IsSelected(index);
+
         switch ( role )
         {
             case Qt::DisplayRole:
@@ -299,7 +301,7 @@ public:
 
                 if ( columnItem.m_selectedImage != -1 )
                 {
-                    if ( IsSelected(index) )
+                    if ( isSelected )
                         imageIndex = columnItem.m_selectedImage;
                 }
 
@@ -317,12 +319,12 @@ public:
                 return QVariant::fromValue(columnItem.m_font);
 
             case Qt::BackgroundRole:
-                return columnItem.m_backgroundColour.isValid()
+                return columnItem.m_backgroundColour.isValid() && !isSelected
                     ? QVariant::fromValue(columnItem.m_backgroundColour)
                     : QVariant();
 
             case Qt::ForegroundRole:
-                return columnItem.m_textColour.isValid()
+                return columnItem.m_textColour.isValid() && !isSelected
                     ? QVariant::fromValue(columnItem.m_textColour)
                     : QVariant();
 
@@ -357,7 +359,7 @@ public:
             "Invalid row index"
         );
         wxCHECK_MSG(
-            col > 0 && static_cast<size_t>(col) < m_rows[row].m_columns.size(),
+            col >= 0 && static_cast<size_t>(col) < m_rows[row].m_columns.size(),
             false,
             "Invalid column index"
         );
@@ -381,12 +383,15 @@ public:
     
         if ( role == Qt::CheckStateRole && col == 0)
         {
-            m_rows[row].m_checked = value.toBool();
+            m_rows[row].m_checked = static_cast<Qt::CheckState>(value.toUInt()) == Qt::Checked;
 
             wxListItem listItem;
             listItem.SetId(row);
 
-            wxListEvent event(wxEVT_LIST_ITEM_CHECKED, m_listCtrl->GetId());
+            const wxEventType eventType = m_rows[row].m_checked ?
+                wxEVT_LIST_ITEM_CHECKED : wxEVT_LIST_ITEM_UNCHECKED;
+
+            wxListEvent event(eventType, m_listCtrl->GetId());
             event.SetEventObject(m_listCtrl);
             event.SetItem(listItem);
             m_listCtrl->HandleWindowEvent(event);
@@ -431,7 +436,7 @@ public:
          if ( index.column() == 0 && m_listCtrl->HasCheckBoxes() )
             itemFlags |= Qt::ItemIsUserCheckable;
 
-        return itemFlags;
+         return itemFlags | QAbstractTableModel::flags(index);
     }
 
     bool removeRows(int row, int count, const QModelIndex &parent) wxOVERRIDE
@@ -966,7 +971,8 @@ public:
 
     void SetVirtualItemCount(long count) wxOVERRIDE
     {
-        beginInsertRows(QModelIndex(), 0, count - 1);
+        const int last = count > 0 ? count - 1 : 0;
+        beginInsertRows(QModelIndex(), 0, last);
         m_rowCount = static_cast<int>(count);
         endInsertRows();
     }
@@ -1429,7 +1435,6 @@ void wxListCtrl::SetSingleStyle(long WXUNUSED(style), bool WXUNUSED(add))
 
 void wxListCtrl::SetWindowStyleFlag(long style)
 {
-    wxControl::SetWindowStyleFlag(style);
     m_qtTreeWidget->setHeaderHidden((style & wxLC_NO_HEADER) != 0);
     m_qtTreeWidget->setSelectionMode((style & wxLC_SINGLE_SEL) != 0
         ? QAbstractItemView::SingleSelection
