@@ -123,10 +123,10 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxQtItemEditorFactory);
 };
 
-class wxQtTreeWidget : public wxQtEventSignalHandler< QTreeView, wxListCtrl >
+class wxQtListTreeWidget : public wxQtEventSignalHandler< QTreeView, wxListCtrl >
 {
 public:
-    wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler );
+    wxQtListTreeWidget( wxWindow *parent, wxListCtrl *handler );
 
     void EmitListEvent(wxEventType typ, const QModelIndex &index) const;
 
@@ -163,18 +163,18 @@ private:
     wxQtItemEditorFactory m_editorFactory;
 };
 
-wxQtTreeWidget::wxQtTreeWidget( wxWindow *parent, wxListCtrl *handler )
+wxQtListTreeWidget::wxQtListTreeWidget( wxWindow *parent, wxListCtrl *handler )
     : wxQtEventSignalHandler< QTreeView, wxListCtrl >( parent, handler ),
       m_editorFactory(handler)
 {
-    connect(this, &QTreeView::clicked, this, &wxQtTreeWidget::itemClicked);
-    connect(this, &QTreeView::pressed, this, &wxQtTreeWidget::itemPressed);
-    connect(this, &QTreeView::activated, this, &wxQtTreeWidget::itemActivated);
+    connect(this, &QTreeView::clicked, this, &wxQtListTreeWidget::itemClicked);
+    connect(this, &QTreeView::pressed, this, &wxQtListTreeWidget::itemPressed);
+    connect(this, &QTreeView::activated, this, &wxQtListTreeWidget::itemActivated);
 
     ChangeEditorFactory();
 }
 
-void wxQtTreeWidget::EmitListEvent(wxEventType typ, const QModelIndex &index) const
+void wxQtListTreeWidget::EmitListEvent(wxEventType typ, const QModelIndex &index) const
 {
     wxListCtrl *handler = GetHandler();
     if ( handler )
@@ -195,17 +195,17 @@ void wxQtTreeWidget::EmitListEvent(wxEventType typ, const QModelIndex &index) co
     }
 }
 
-void wxQtTreeWidget::itemClicked(const QModelIndex &index)
+void wxQtListTreeWidget::itemClicked(const QModelIndex &index)
 {
     EmitListEvent(wxEVT_LIST_ITEM_SELECTED, index);
 }
 
-void wxQtTreeWidget::itemPressed(const QModelIndex &index)
+void wxQtListTreeWidget::itemPressed(const QModelIndex &index)
 {
     EmitListEvent(wxEVT_LIST_ITEM_SELECTED, index);
 }
 
-void wxQtTreeWidget::itemActivated(const QModelIndex &index)
+void wxQtListTreeWidget::itemActivated(const QModelIndex &index)
 {
     EmitListEvent(wxEVT_LIST_ITEM_ACTIVATED,index);
 }
@@ -1033,7 +1033,7 @@ bool wxListCtrl::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
-    m_qtTreeWidget = new wxQtTreeWidget(parent, this);
+    m_qtTreeWidget = new wxQtListTreeWidget(parent, this);
     m_qtTreeWidget->setModel(m_model);
 
     if ( style & wxLC_NO_HEADER )

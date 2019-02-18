@@ -10,7 +10,7 @@
 
 #include "wx/textctrl.h"
 
-class wxQtTreeWidget;
+class wxQtListTreeWidget;
 class wxQtListModel;
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
@@ -307,7 +307,7 @@ protected:
                       m_ownsImageListState;
     bool              m_hasCheckBoxes;
 private:
-    wxQtTreeWidget *m_qtTreeWidget;
+    wxQtListTreeWidget *m_qtTreeWidget;
     wxQtListModel *m_model;
 
     wxDECLARE_DYNAMIC_CLASS( wxListCtrl );
