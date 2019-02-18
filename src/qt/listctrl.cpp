@@ -340,8 +340,10 @@ public:
         const int row = index.row();
         const int col = index.column();
 
-         wxCHECK_MSG(row >= 0 && static_cast<size_t>(row) < m_rows.size(), false, "Invalid row index");
-         wxCHECK_MSG(col > 0 && m_rows[row].m_columns.size(), false, "Invalid column index");
+         wxCHECK_MSG(row >= 0 && static_cast<size_t>(row) < m_rows.size(),
+             false, "Invalid row index");
+         wxCHECK_MSG(col > 0 && static_cast<size_t>(col) < m_rows[row].m_columns.size(),
+             false, "Invalid column index");
 
         if ( role == Qt::DisplayRole || role == Qt::EditRole )
         { 
@@ -381,7 +383,9 @@ public:
         if ( orientation == Qt::Vertical)
             return QVariant();
         
-        wxCHECK_MSG(static_cast<size_t>(section) < m_headers.size(), QVariant(), "Invalid header index");
+        wxCHECK_MSG(static_cast<size_t>(section) < m_headers.size(),
+            QVariant(), "Invalid header index");
+
         const ColumnItem& header =  m_headers[section];
 
         switch ( role  )
@@ -434,7 +438,8 @@ public:
 
     bool GetColumn(int index, wxListItem &info) const
     {
-        wxCHECK_MSG(static_cast<size_t>(index) < m_headers.size(), false, "Invalid column");
+        wxCHECK_MSG(static_cast<size_t>(index) < m_headers.size(),
+            false, "Invalid column");
 
         const ColumnItem &column = m_headers[index];
         info.SetText(wxQtConvertString(column.m_label));
@@ -448,8 +453,11 @@ public:
         const int row = static_cast<int>(info.GetId());
         const int col = info.m_col;
 
-        wxCHECK_MSG( row >= 0 && static_cast<size_t>(row) < m_rows.size(), false, "Invalid row");
-        wxCHECK_MSG( col >= 0 && static_cast<size_t>(col) < m_headers.size(), false, "Invalid col");
+        wxCHECK_MSG( row >= 0 && static_cast<size_t>(row) < m_rows.size(),
+            false, "Invalid row");
+
+        wxCHECK_MSG( col >= 0 && static_cast<size_t>(col) < m_rows[col].m_columns.size(),
+            false, "Invalid col");
 
         const RowItem &rowItem = m_rows[row];
         const ColumnItem &columnItem = rowItem[col];
@@ -489,8 +497,10 @@ public:
         const int row = static_cast<int>(info.GetId());
         const int col = info.m_col;
 
-        wxCHECK_MSG( static_cast<size_t>(row) < m_rows.size(), false, "Invalid row");
-        wxCHECK_MSG( static_cast<size_t>(col) < m_headers.size(), false, "Invalid col");
+        wxCHECK_MSG( static_cast<size_t>(row) < m_rows.size(),
+            false, "Invalid row");
+        wxCHECK_MSG( static_cast<size_t>(col) < m_headers.size(),
+            false, "Invalid col");
 
         const QModelIndex modelIndex = index(row, col);
         RowItem &rowItem = m_rows[row];
@@ -563,22 +573,33 @@ public:
 
     wxColour GetItemTextColour(long item)
     {
-        wxCHECK_MSG(item >= 0 && static_cast<size_t>(item) < m_rows.size(), wxNullColour, "Invalid row");
-        wxCHECK_MSG(!m_rows[item].m_columns.empty(), wxNullColour, "No columns in model");
+        wxCHECK_MSG(item >= 0 && static_cast<size_t>(item) < m_rows.size(),
+            wxNullColour, "Invalid row");
+
+        wxCHECK_MSG(!m_rows[item].m_columns.empty(),
+            wxNullColour, "No columns in model");
+
         return wxColour(m_rows[item][0].m_textColour);
     }
 
     wxColour GetItemBackgroundColour(long item)
     {
-        wxCHECK_MSG(item >= 0 && static_cast<size_t>(item) < m_rows.size(), wxNullColour, "Invalid row");
-        wxCHECK_MSG(!m_headers.empty(), wxNullColour, "No columns in model");
+        wxCHECK_MSG(item >= 0 && static_cast<size_t>(item) < m_rows.size(),
+            wxNullColour, "Invalid row");
+        wxCHECK_MSG(!m_headers.empty(),
+            wxNullColour, "No columns in model");
+
         return wxColour(m_rows[item][0].m_backgroundColour);
     }
 
     wxFont GetItemFont(long item)
     {
-        wxCHECK_MSG(item >= 0 && static_cast<size_t>(item) < m_rows.size(), wxNullFont, "Invalid row");
-        wxCHECK_MSG(!m_headers.empty(), wxNullFont, "No columns in model");
+        wxCHECK_MSG(item >= 0 && static_cast<size_t>(item) < m_rows.size(),
+            wxNullFont, "Invalid row");
+
+        wxCHECK_MSG(!m_headers.empty(),
+            wxNullFont, "No columns in model");
+
         return wxFont(m_rows[item][0].m_font);
     }
 
@@ -598,8 +619,8 @@ public:
             {
                 for (long j = 0; j < numberOfColumns; ++j )
                 {
-                    const QString currentUpper = m_rows[i][j].m_label.toUpper();
-                    if ( currentUpper.contains(strUpper) )
+                    const QString current = m_rows[i][j].m_label.toUpper();
+                    if ( current.contains(strUpper) )
                         return i;
                 }
             }
@@ -760,7 +781,8 @@ public:
 protected:
     wxImageList *GetImageList() const
     {
-        int requiredList = m_listCtrl->HasFlag(wxLC_SMALL_ICON) ? wxIMAGE_LIST_SMALL : wxIMAGE_LIST_NORMAL;
+        const int requiredList = m_listCtrl->HasFlag(wxLC_SMALL_ICON) ?
+            wxIMAGE_LIST_SMALL : wxIMAGE_LIST_NORMAL;
         return m_listCtrl->GetImageList(requiredList);
     }
 
@@ -875,7 +897,6 @@ public:
         return m_rowCount;
     }
 
-
     QVariant data(const QModelIndex &index, int role) const wxOVERRIDE
     {
         wxListCtrl *listCtrl = GetListCtrl();
@@ -888,7 +909,6 @@ public:
             wxString text = listCtrl->OnGetItemText(row, col);
             return QVariant::fromValue(wxQtConvertString(text));
         }
-
 
         if ( role == Qt::DecorationRole )
         {
@@ -919,7 +939,6 @@ public:
 private:
     int m_rowCount;
 };
-
 
 wxListCtrl::wxListCtrl()
 {
@@ -1206,10 +1225,13 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int WXUNUSED(code)) const
 
 bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int WXUNUSED(code)) const
 {
-    wxCHECK_MSG( item >= 0 && item < GetItemCount(), false, "invalid row index in GetSubItemRect");
-    wxCHECK_MSG( subItem >= 0 && subItem < GetColumnCount(), false, "invalid column index in GetSubItemRect");
+    wxCHECK_MSG( item >= 0 && item < GetItemCount(),
+        false, "invalid row index in GetSubItemRect");
 
-    QModelIndex index = m_qtTreeWidget->model()->index(item, subItem);
+    wxCHECK_MSG( subItem >= 0 && subItem < GetColumnCount(),
+        false, "invalid column index in GetSubItemRect");
+
+    const QModelIndex index = m_qtTreeWidget->model()->index(item, subItem);
     rect = wxQtConvertRect(m_qtTreeWidget->visualRect(index));
     return true;
 }
@@ -1374,7 +1396,7 @@ void wxListCtrl::SetWindowStyleFlag(long style)
     m_qtTreeWidget->setHeaderHidden((style & wxLC_NO_HEADER) != 0);
     m_qtTreeWidget->setSelectionMode((style & wxLC_SINGLE_SEL) != 0 ? 
         QAbstractItemView::SingleSelection : QAbstractItemView::ExtendedSelection);
-    bool needVirtual = (style & wxLC_VIRTUAL) != 0;
+    const bool needVirtual = (style & wxLC_VIRTUAL) != 0;
     
     if ( needVirtual != m_model->IsVirtual() )
     {
@@ -1391,8 +1413,8 @@ long wxListCtrl::GetNextItem(long item, int WXUNUSED(geometry), int state) const
     wxListItem info;
     long ret = item,
          max = GetItemCount();
-    wxCHECK_MSG( (ret == -1) || (ret < max), -1,
-                 wxT("invalid listctrl index in GetNextItem()") );
+    wxCHECK_MSG((ret == -1) || (ret < max), -1,
+                 "invalid listctrl index in GetNextItem()");
 
     // notice that we start with the next item (or the first one if item == -1)
     // and this is intentional to allow writing a simple loop to iterate over
@@ -1673,7 +1695,7 @@ wxString wxListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) cons
 {
     // this is a pure virtual function, in fact - which is not really pure
     // because the controls which are not virtual don't need to implement it
-    wxFAIL_MSG( wxT("wxListCtrl::OnGetItemText not supposed to be called") );
+    wxFAIL_MSG("wxListCtrl::OnGetItemText not supposed to be called");
 
     return wxEmptyString;
 }
@@ -1682,7 +1704,7 @@ int wxListCtrl::OnGetItemImage(long WXUNUSED(item)) const
 {
     wxCHECK_MSG(!GetImageList(wxIMAGE_LIST_SMALL),
                 -1,
-                wxT("List control has an image list, OnGetItemImage or OnGetItemColumnImage should be overridden."));
+                "List control has an image list, OnGetItemImage or OnGetItemColumnImage should be overridden.");
     return -1;
 }
 
