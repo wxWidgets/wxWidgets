@@ -516,7 +516,7 @@ wxPropertyGrid::~wxPropertyGrid()
     size_t i;
 
 #if wxUSE_THREADS
-    wxCriticalSectionLocker(wxPGGlobalVars->m_critSect);
+    wxCriticalSectionLocker lock(wxPGGlobalVars->m_critSect);
 #endif
 
     //
@@ -6368,7 +6368,7 @@ void wxPropertyGridEvent::OnPropertyGridSet()
         return;
 
 #if wxUSE_THREADS
-    wxCriticalSectionLocker(wxPGGlobalVars->m_critSect);
+    wxCriticalSectionLocker lock(wxPGGlobalVars->m_critSect);
 #endif
     m_pg->m_liveEvents.push_back(this);
 }
@@ -6380,7 +6380,7 @@ wxPropertyGridEvent::~wxPropertyGridEvent()
     if ( m_pg )
     {
     #if wxUSE_THREADS
-        wxCriticalSectionLocker(wxPGGlobalVars->m_critSect);
+        wxCriticalSectionLocker lock(wxPGGlobalVars->m_critSect);
     #endif
 
         // Use iterate from the back since it is more likely that the event
