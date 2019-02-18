@@ -55,23 +55,9 @@ public:
         , m_item(item)
         { }
 
-    wxAcceleratorEntry(const wxAcceleratorEntry& entry)
-        : m_flags(entry.m_flags)
-        , m_keyCode(entry.m_keyCode)
-        , m_command(entry.m_command)
-        , m_item(entry.m_item)
-        { }
-
     // create accelerator corresponding to the specified string, return NULL if
     // string couldn't be parsed or a pointer to be deleted by the caller
     static wxAcceleratorEntry *Create(const wxString& str);
-
-    wxAcceleratorEntry& operator=(const wxAcceleratorEntry& entry)
-    {
-        if (&entry != this)
-            Set(entry.m_flags, entry.m_keyCode, entry.m_command, entry.m_item);
-        return *this;
-    }
 
     void Set(int flags, int keyCode, int cmd, wxMenuItem *item = NULL)
     {
