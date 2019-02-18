@@ -347,7 +347,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
-    <!-- wx/qt/treectrl.h -->
     wx/qt/window.h
     wx/generic/fdrepdlg.h
     wx/generic/filepickerg.h
@@ -362,6 +361,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/dataview.h
     wx/qt/dvrenderers.h
     $(QT_PLATFORM_HDR)
+    wx/qt/treectrl.h
+    wx/qt/private/winevent.h
+    wx/qt/private/converter.h
+    wx/qt/private/treeitemfactory.h
+    wx/qt/private/pointer.h
+    wx/qt/private/timer.h
+    wx/qt/private/utils.h
 </set>
 
 <set var="QT_SRC" hints="files">
@@ -460,6 +466,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/utils.cpp
     src/qt/window.cpp
     $(QT_PLATFORM_SRC)
+    src/qt/treectrl.cpp
 </set>
 
 <set var="MEDIA_QT_SRC" hints="files">
