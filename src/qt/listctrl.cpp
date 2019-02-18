@@ -269,6 +269,8 @@ public:
         const RowItem &rowItem = m_rows[row];
         const ColumnItem &columnItem = rowItem[col];
 
+        const bool isSelected = IsSelected(index);
+
         switch ( role )
         {
             case Qt::DisplayRole:
@@ -299,7 +301,7 @@ public:
 
                 if ( columnItem.m_selectedImage != -1 )
                 {
-                    if ( IsSelected(index) )
+                    if ( isSelected )
                         imageIndex = columnItem.m_selectedImage;
                 }
 
@@ -317,12 +319,12 @@ public:
                 return QVariant::fromValue(columnItem.m_font);
 
             case Qt::BackgroundRole:
-                return columnItem.m_backgroundColour.isValid()
+                return columnItem.m_backgroundColour.isValid() && !isSelected
                     ? QVariant::fromValue(columnItem.m_backgroundColour)
                     : QVariant();
 
             case Qt::ForegroundRole:
-                return columnItem.m_textColour.isValid()
+                return columnItem.m_textColour.isValid() && !isSelected
                     ? QVariant::fromValue(columnItem.m_textColour)
                     : QVariant();
 
@@ -431,7 +433,7 @@ public:
          if ( index.column() == 0 && m_listCtrl->HasCheckBoxes() )
             itemFlags |= Qt::ItemIsUserCheckable;
 
-        return itemFlags;
+         return itemFlags | QAbstractTableModel::flags(index);
     }
 
     bool removeRows(int row, int count, const QModelIndex &parent) wxOVERRIDE
