@@ -294,8 +294,7 @@ public:
 
                 if ( columnItem.m_selectedImage != -1 )
                 {
-                    QModelIndexList selectedIndices = m_view->selectionModel()->selectedIndexes();
-                    if ( selectedIndices.contains(index) )
+                    if ( IsSelected(index) )
                         imageIndex = columnItem.m_selectedImage;
                 }
 
@@ -477,9 +476,7 @@ public:
             }
             if ( info.m_stateMask & wxLIST_STATE_SELECTED )
             {
-                const QModelIndex modelIndex = index(row,col);
-                QModelIndexList selectedIndices = m_view->selectionModel()->selectedIndexes();
-                if ( selectedIndices.contains(modelIndex) )
+                if ( IsSelected(index(row,col)) )
                     info.m_state |= wxLIST_STATE_SELECTED;
             }
         }
@@ -770,6 +767,12 @@ protected:
     wxListCtrl *GetListCtrl() const
     {
         return m_listCtrl;
+    }
+
+    bool IsSelected(const QModelIndex& index) const
+    {
+        QModelIndexList selectedIndices = m_view->selectionModel()->selectedIndexes();
+        return selectedIndices.contains(index);
     }
 
 private:
