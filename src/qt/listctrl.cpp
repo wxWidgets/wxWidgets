@@ -359,7 +359,7 @@ public:
             "Invalid row index"
         );
         wxCHECK_MSG(
-            col > 0 && static_cast<size_t>(col) < m_rows[row].m_columns.size(),
+            col >= 0 && static_cast<size_t>(col) < m_rows[row].m_columns.size(),
             false,
             "Invalid column index"
         );
@@ -383,12 +383,15 @@ public:
     
         if ( role == Qt::CheckStateRole && col == 0)
         {
-            m_rows[row].m_checked = value.toBool();
+            m_rows[row].m_checked = static_cast<Qt::CheckState>(value.toUInt()) == Qt::Checked;
 
             wxListItem listItem;
             listItem.SetId(row);
 
-            wxListEvent event(wxEVT_LIST_ITEM_CHECKED, m_listCtrl->GetId());
+            const wxEventType eventType = m_rows[row].m_checked ?
+                wxEVT_LIST_ITEM_CHECKED : wxEVT_LIST_ITEM_UNCHECKED;
+
+            wxListEvent event(eventType, m_listCtrl->GetId());
             event.SetEventObject(m_listCtrl);
             event.SetItem(listItem);
             m_listCtrl->HandleWindowEvent(event);
