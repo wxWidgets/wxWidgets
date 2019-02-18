@@ -256,7 +256,7 @@ bool wxListCtrl::SetColumnsOrder(const wxArrayInt& WXUNUSED(orders))
 
 int wxListCtrl::GetCountPerPage() const
 {
-    // this may not be exact but should be a good aproximation:
+    // this may not be exact but should be a good approximation:
     int h = m_qtTreeWidget->visualItemRect(m_qtTreeWidget->headerItem()).height();
     if ( h )
         return m_qtTreeWidget->height() / h;
@@ -266,7 +266,7 @@ int wxListCtrl::GetCountPerPage() const
 
 wxRect wxListCtrl::GetViewRect() const
 {
-    // this may not be exact but should be a good aproximation:
+    // this may not be exact but should be a good approximation:
     wxRect rect = wxQtConvertRect(m_qtTreeWidget->rect());
     int h = m_qtTreeWidget->header()->defaultSectionSize();
     rect.SetTop(h);
@@ -903,7 +903,7 @@ void wxListCtrl::SetItemCount(long WXUNUSED(count))
 
 bool wxListCtrl::ScrollList(int dx, int dy)
 {
-    // aproximate, as scrollContentsBy is protected
+    // approximate, as scrollContentsBy is protected
     m_qtTreeWidget->scroll(dx, dy);
     return true;
 }
