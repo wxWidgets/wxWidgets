@@ -476,7 +476,7 @@ public:
         return true;
     }
 
-    bool GetItem(wxListItem& info)
+    virtual bool GetItem(wxListItem& info)
     {
         const int row = static_cast<int>(info.GetId());
         const int col = info.m_col;
@@ -508,20 +508,7 @@ public:
             info.SetData(rowItem.m_data);
         }
 
-        if ( info.m_mask & wxLIST_MASK_STATE )
-        {
-            info.m_state = wxLIST_STATE_DONTCARE;
-            if ( info.m_stateMask & wxLIST_STATE_FOCUSED )
-            {
-                if ( m_view->currentIndex().row() == row )
-                    info.m_state |= wxLIST_STATE_FOCUSED;
-            }
-            if ( info.m_stateMask & wxLIST_STATE_SELECTED )
-            {
-                if ( IsSelected(index(row,col)) )
-                    info.m_state |= wxLIST_STATE_SELECTED;
-            }
-        }
+        CopySelectStatusToItem(info, row, col);
 
         return true;
     }
@@ -834,6 +821,24 @@ protected:
         return indices.contains(index);
     }
 
+    void CopySelectStatusToItem(wxListItem& info, const int row, const int col)
+    {
+        if (info.m_mask & wxLIST_MASK_STATE)
+        {
+            info.m_state = wxLIST_STATE_DONTCARE;
+            if (info.m_stateMask & wxLIST_STATE_FOCUSED)
+            {
+                if (m_view->currentIndex().row() == row)
+                    info.m_state |= wxLIST_STATE_FOCUSED;
+            }
+            if (info.m_stateMask & wxLIST_STATE_SELECTED)
+            {
+                if (IsSelected(index(row, col)))
+                    info.m_state |= wxLIST_STATE_SELECTED;
+            }
+        }
+    }
+
 private:
     template <typename  T>
     static void eraseFromContainer(T &container, int start_index, int count)
@@ -965,6 +970,19 @@ public:
         }
 
         return QVariant();
+    }
+
+    virtual bool GetItem(wxListItem& info) wxOVERRIDE
+    {
+        const int row = static_cast<int>(info.GetId());
+        const int col = info.m_col;
+
+        if (info.m_mask & wxLIST_MASK_TEXT)
+            info.SetText(GetListCtrl()->OnGetItemText(row,col));
+
+        CopySelectStatusToItem(info, row, col);
+
+        return true;
     }
 
     bool IsVirtual() const wxOVERRIDE
