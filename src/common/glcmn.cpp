@@ -45,7 +45,7 @@ void wxGLAttribsBase::AddAttribBits(int searchVal, int combineVal)
     // Search for searchVal
     wxVector<int>::iterator it = m_GLValues.begin();
     while ( it != m_GLValues.end() && *it != searchVal )
-        it++;
+        ++it;
     // Have we searchVal?
     if ( it != m_GLValues.end() )
     {
