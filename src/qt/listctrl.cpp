@@ -662,19 +662,22 @@ void wxListCtrl::SetImageList(wxImageList *imageList, int which)
 {
     if ( which == wxIMAGE_LIST_NORMAL )
     {
-        if (m_ownsImageListNormal) delete m_imageListNormal;
+        if ( m_ownsImageListNormal )
+            delete m_imageListNormal;
         m_imageListNormal = imageList;
         m_ownsImageListNormal = false;
     }
     else if ( which == wxIMAGE_LIST_SMALL )
     {
-        if (m_ownsImageListSmall) delete m_imageListSmall;
+        if ( m_ownsImageListSmall )
+            delete m_imageListSmall;
         m_imageListSmall = imageList;
         m_ownsImageListSmall = false;
     }
     else if ( which == wxIMAGE_LIST_STATE )
     {
-        if (m_ownsImageListState) delete m_imageListState;
+        if ( m_ownsImageListState )
+            delete m_imageListState;
         m_imageListState = imageList;
         m_ownsImageListState = false;
     }
