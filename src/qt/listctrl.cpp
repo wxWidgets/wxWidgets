@@ -381,7 +381,7 @@ public:
             return true;
         }
     
-        if ( role == Qt::CheckStateRole && col == 0)
+        if ( role == Qt::CheckStateRole && col == 0 )
         {
             m_rows[row].m_checked =
                 static_cast<Qt::CheckState>(value.toUInt()) == Qt::Checked;
