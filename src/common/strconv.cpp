@@ -1425,7 +1425,7 @@ size_t wxMBConvUTF8::FromWChar(char *buf, size_t n,
                 len += cnt + 1;
                 if (buf)
                 {
-                    *buf++ = (char) ((-128 >> cnt) | ((cc >> (cnt * 6)) & (0x3f >> cnt)));
+                    *buf++ = (char) ((~0x7fu >> cnt) | ((cc >> (cnt * 6)) & (0x3f >> cnt)));
                     while (cnt--)
                         *buf++ = (char) (0x80 | ((cc >> (cnt * 6)) & 0x3f));
                 }
