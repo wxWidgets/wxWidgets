@@ -20,6 +20,7 @@ public:
 
 private:
     void valueChanged(int value);
+    int oldValue;
 };
 
 wxQtSpinButton::wxQtSpinButton( wxWindow *parent, wxSpinButton *handler )
@@ -27,16 +28,36 @@ wxQtSpinButton::wxQtSpinButton( wxWindow *parent, wxSpinButton *handler )
 {
     connect(this, static_cast<void (QSpinBox::*)(int index)>(&QSpinBox::valueChanged),
             this, &wxQtSpinButton::valueChanged);
+
+    oldValue = value();
 }
 
-void wxQtSpinButton::valueChanged(int value)
+void wxQtSpinButton::valueChanged(int newValue)
 {
     wxSpinButton *handler = GetHandler();
     if ( handler )
     {
-        wxCommandEvent event( wxEVT_SPIN, handler->GetId() );
-        event.SetInt( value );
-        EmitEvent( event );
+        wxEventType spinDirection = newValue > oldValue ?
+            wxEVT_SPIN_UP : wxEVT_SPIN_DOWN;
+
+        wxSpinEvent directionEvent(spinDirection, handler->GetId());
+        directionEvent.SetInt(newValue);
+        directionEvent.SetEventObject(handler);
+
+        if ( handler->HandleWindowEvent(directionEvent) && !directionEvent.IsAllowed() )
+        {
+            blockSignals(true);
+            setValue(oldValue);
+            blockSignals(false);
+            return;
+        }
+    
+        oldValue = newValue;
+
+        wxSpinEvent event(wxEVT_SPIN, handler->GetId());
+        event.SetInt(newValue);
+        event.SetEventObject(handler);
+        EmitEvent(event);
     }
 }
 
