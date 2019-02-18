@@ -1423,7 +1423,6 @@ void wxListCtrl::SetSingleStyle(long WXUNUSED(style), bool WXUNUSED(add))
 
 void wxListCtrl::SetWindowStyleFlag(long style)
 {
-    wxControl::SetWindowStyleFlag(style);
     m_qtTreeWidget->setHeaderHidden((style & wxLC_NO_HEADER) != 0);
     m_qtTreeWidget->setSelectionMode((style & wxLC_SINGLE_SEL) != 0 ? 
         QAbstractItemView::SingleSelection : QAbstractItemView::ExtendedSelection);
