@@ -130,7 +130,10 @@ public:
 
     void EmitListEvent(wxEventType typ, const QModelIndex &index) const;
 
-    void closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint) wxOVERRIDE
+    void closeEditor(
+        QWidget *editor,
+        QAbstractItemDelegate::EndEditHint hint
+    ) wxOVERRIDE
     {
         QTreeView::closeEditor(editor, hint);
         m_editorFactory.ClearEditor();
@@ -141,7 +144,7 @@ public:
         return m_editorFactory.GetEditControl();
     }
 
-    virtual void paintEvent(QPaintEvent *event)
+    virtual void paintEvent(QPaintEvent *event) wxOVERRIDE
     {
         QTreeView::paintEvent(event);
     }
@@ -154,7 +157,6 @@ private:
     void ChangeEditorFactory()
     {
         QItemDelegate *qItemDelegate = static_cast<QItemDelegate*>(itemDelegate());
-        qItemDelegate->itemEditorFactory();
         qItemDelegate->setItemEditorFactory(&m_editorFactory);
     }
 
@@ -210,7 +212,7 @@ void wxQtTreeWidget::itemActivated(const QModelIndex &index)
 
 Qt::AlignmentFlag wxQtConvertTextAlign(wxListColumnFormat align)
 {
-    switch (align)
+    switch ( align )
     {
         case wxLIST_FORMAT_LEFT:
             return Qt::AlignLeft;
@@ -224,7 +226,7 @@ Qt::AlignmentFlag wxQtConvertTextAlign(wxListColumnFormat align)
 
 wxListColumnFormat wxQtConvertAlignFlag(int align)
 {
-    switch (align)
+    switch ( align )
     {
         case Qt::AlignLeft:
             return wxLIST_FORMAT_LEFT;
@@ -259,7 +261,10 @@ public:
         const int row = index.row();
         const int col = index.column();
 
-        wxCHECK_MSG(row >= 0 && static_cast<size_t>(row) < m_rows.size(), QVariant(), "Invalid row index");
+        wxCHECK_MSG(row >= 0 && static_cast<size_t>(row) < m_rows.size(),
+            QVariant(),
+            "Invalid row index"
+        );
 
         const RowItem &rowItem = m_rows[row];
         const ColumnItem &columnItem = rowItem[col];
@@ -279,7 +284,7 @@ public:
                 wxListEvent event(wxEVT_LIST_BEGIN_LABEL_EDIT, m_listCtrl->GetId());
                 event.SetEventObject(m_listCtrl);
                 event.SetItem(listItem); 
-                if ( m_listCtrl->HandleWindowEvent(event) && !event.IsAllowed())
+                if ( m_listCtrl->HandleWindowEvent(event) && !event.IsAllowed() )
                     return QVariant();
 
                 return QVariant::fromValue(columnItem.m_label); 
@@ -287,7 +292,7 @@ public:
             case Qt::DecorationRole:
             {
                 wxImageList *imageList = GetImageList();
-                if ( imageList == NULL)
+                if ( imageList == NULL )
                     return QVariant();
 
                 int imageIndex = -1;
@@ -312,12 +317,14 @@ public:
                 return QVariant::fromValue(columnItem.m_font);
 
             case Qt::BackgroundRole:
-                return columnItem.m_backgroundColour.isValid() ?
-                     QVariant::fromValue(columnItem.m_backgroundColour) : QVariant();
+                return columnItem.m_backgroundColour.isValid()
+                    ? QVariant::fromValue(columnItem.m_backgroundColour)
+                    : QVariant();
 
             case Qt::ForegroundRole:
-                return columnItem.m_textColour.isValid() ?
-                    QVariant::fromValue(columnItem.m_textColour) : QVariant();
+                return columnItem.m_textColour.isValid()
+                    ? QVariant::fromValue(columnItem.m_textColour)
+                    : QVariant();
 
             case Qt::TextAlignmentRole:
                 return columnItem.m_align;
@@ -335,15 +342,25 @@ public:
         }
     }
 
-    bool setData(const QModelIndex &index, const QVariant &value, int role) wxOVERRIDE
+    bool setData(
+        const QModelIndex &index,
+        const QVariant &value,
+        int role
+    ) wxOVERRIDE
     {
         const int row = index.row();
         const int col = index.column();
 
-         wxCHECK_MSG(row >= 0 && static_cast<size_t>(row) < m_rows.size(),
-             false, "Invalid row index");
-         wxCHECK_MSG(col > 0 && static_cast<size_t>(col) < m_rows[row].m_columns.size(),
-             false, "Invalid column index");
+        wxCHECK_MSG(
+            row >= 0 && static_cast<size_t>(row) < m_rows.size(),
+            false,
+            "Invalid row index"
+        );
+        wxCHECK_MSG(
+            col > 0 && static_cast<size_t>(col) < m_rows[row].m_columns.size(),
+            false,
+            "Invalid column index"
+        );
 
         if ( role == Qt::DisplayRole || role == Qt::EditRole )
         { 
@@ -355,7 +372,7 @@ public:
             event.SetEventObject(m_listCtrl);
             event.SetItem(listItem); 
 
-            if ( m_listCtrl->HandleWindowEvent(event) && !event.IsAllowed())
+            if ( m_listCtrl->HandleWindowEvent(event) && !event.IsAllowed() )
                 return false;
 
             m_rows[row][col].m_label = value.toString();
@@ -373,22 +390,27 @@ public:
             event.SetEventObject(m_listCtrl);
             event.SetItem(listItem);
             m_listCtrl->HandleWindowEvent(event);
+            return true;
         }
 
         return false;
     }
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const wxOVERRIDE
+    QVariant headerData(
+        int section,
+        Qt::Orientation orientation,
+        int role
+    ) const wxOVERRIDE
     {
-        if ( orientation == Qt::Vertical)
+        if ( orientation == Qt::Vertical )
             return QVariant();
         
         wxCHECK_MSG(static_cast<size_t>(section) < m_headers.size(),
             QVariant(), "Invalid header index");
 
-        const ColumnItem& header =  m_headers[section];
+        const ColumnItem& header = m_headers[section];
 
-        switch ( role  )
+        switch ( role )
         {
             case Qt::DisplayRole:
                 return header.m_label;
@@ -406,7 +428,7 @@ public:
         if ( m_listCtrl->HasFlag(wxLC_EDIT_LABELS) )
             itemFlags |= Qt::ItemIsEditable;
 
-         if (index.column() == 0 && m_listCtrl->HasCheckBoxes() )
+         if ( index.column() == 0 && m_listCtrl->HasCheckBoxes() )
             itemFlags |= Qt::ItemIsUserCheckable;
 
         return itemFlags;
@@ -453,11 +475,17 @@ public:
         const int row = static_cast<int>(info.GetId());
         const int col = info.m_col;
 
-        wxCHECK_MSG( row >= 0 && static_cast<size_t>(row) < m_rows.size(),
-            false, "Invalid row");
+        wxCHECK_MSG(
+            row >= 0 && static_cast<size_t>(row) < m_rows.size(),
+            false,
+            "Invalid row"
+        );
 
-        wxCHECK_MSG( col >= 0 && static_cast<size_t>(col) < m_rows[col].m_columns.size(),
-            false, "Invalid col");
+        wxCHECK_MSG(
+            col >= 0 && static_cast<size_t>(col) < m_rows[col].m_columns.size(),
+            false,
+            "Invalid col"
+        );
 
         const RowItem &rowItem = m_rows[row];
         const ColumnItem &columnItem = rowItem[col];
@@ -508,7 +536,7 @@ public:
 
         QVector<int> roles;
 
-        if ((info.m_mask & wxLIST_MASK_TEXT) && !info.GetText().IsNull() )
+        if ( (info.m_mask & wxLIST_MASK_TEXT) && !info.GetText().IsNull() )
         {
             columnItem.m_label =  wxQtConvertString(info.GetText());
             roles.push_back(Qt::DisplayRole);
@@ -523,21 +551,23 @@ public:
             roles.push_back(Qt::UserRole);
         }
 
-        if (info.m_mask & wxLIST_MASK_STATE)
+        if ( info.m_mask & wxLIST_MASK_STATE )
         {
-            if ((info.m_stateMask & wxLIST_STATE_FOCUSED) &&
-                (info.m_state & wxLIST_STATE_FOCUSED))
+            if ( (info.m_stateMask & wxLIST_STATE_FOCUSED) &&
+                (info.m_state & wxLIST_STATE_FOCUSED) )
                 m_view->setCurrentIndex(modelIndex);
-            if (info.m_stateMask & wxLIST_STATE_SELECTED)
+            if ( info.m_stateMask & wxLIST_STATE_SELECTED )
             {
                 QItemSelectionModel *selection = m_view->selectionModel();
-                QItemSelectionModel::SelectionFlag flag = info.m_state & wxLIST_STATE_SELECTED ? 
-                    QItemSelectionModel::Select : QItemSelectionModel::Deselect;
-                selection->select(modelIndex,  flag | QItemSelectionModel::Rows);
+                const QItemSelectionModel::SelectionFlag flag =
+                    info.m_state & wxLIST_STATE_SELECTED
+                        ? QItemSelectionModel::Select
+                        : QItemSelectionModel::Deselect;
+                selection->select(modelIndex,  flag|QItemSelectionModel::Rows);
             }
         }
 
-        if (info.m_mask & wxLIST_MASK_IMAGE)
+        if ( info.m_mask & wxLIST_MASK_IMAGE )
         {
             columnItem.m_image = info.m_image;
             roles.push_back(Qt::DecorationRole);
@@ -617,7 +647,7 @@ public:
         {
             for ( long i = start; i < numberOfRows; ++i )
             {
-                for (long j = 0; j < numberOfColumns; ++j )
+                for ( long j = 0; j < numberOfColumns; ++j )
                 {
                     const QString current = m_rows[i][j].m_label.toUpper();
                     if ( current.contains(strUpper) )
@@ -628,11 +658,11 @@ public:
             return -1;
         }
 
-        for ( long i = start; i < numberOfRows; ++i)
+        for ( long i = start; i < numberOfRows; ++i )
         {
-            for (long i = start; i < numberOfRows; ++i)
+            for ( long j = 0; j < numberOfColumns; ++j )
             {
-                if ( m_rows[i][0].m_label.toUpper() == strUpper )
+                if ( m_rows[i][j].m_label.toUpper() == strUpper )
                     return i;
             }
         }
@@ -645,11 +675,11 @@ public:
         if ( start < 0 )
             start = 0;
 
-        long count = m_rows.size();
+        const long count = m_rows.size();
 
         for ( long i = start; i < count; ++i )
         {
-            if ( m_rows[i].m_data == (void*)data)
+            if ( m_rows[i].m_data == reinterpret_cast<void*>(data) )
                 return i;
         }
 
@@ -665,11 +695,12 @@ public:
         {
             beginInsertColumns(QModelIndex(), m_headers.size(), column);
        
+            const ColumnItem emptyColumn;
+
             for ( int c = m_headers.size(); c <= column; ++c )
             {
-                ColumnItem emptyColumn;
                 m_headers.push_back(emptyColumn);
-                for (size_t r = 0; r < m_rows.size(); ++r)
+                for ( size_t r = 0; r < m_rows.size(); ++r )
                 {
                     m_rows[r].m_columns.push_back(emptyColumn);
                 }
@@ -724,8 +755,7 @@ public:
         beginInsertColumns(QModelIndex(), newColumnIndex, newColumnIndex);
 
         std::vector<ColumnItem>::iterator i = m_headers.begin();
-        std::advance(i, col);
-        newColumnIndex = col;
+        std::advance(i, newColumnIndex);
         m_headers.insert(i, newColumn);
 
         const int numberOfRows = m_rows.size();
@@ -734,7 +764,7 @@ public:
         {
             std::vector<ColumnItem>::iterator it = m_rows[i].m_columns.begin();
             std::advance(it, newColumnIndex);
-            m_headers.insert(it, newColumn);
+            m_rows[i].m_columns.insert(it, newColumn);
         }
 
         endInsertColumns();
