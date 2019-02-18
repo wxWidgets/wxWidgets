@@ -270,7 +270,7 @@ int wxJoystick::GetButtonState() const
 bool wxJoystick::GetButtonState(unsigned id) const
 {
     if (m_thread && (id < wxJS_MAX_BUTTONS))
-        return (m_thread->m_buttons & (1 << id)) != 0;
+        return (m_thread->m_buttons & (1u << id)) != 0;
     return false;
 }
 
