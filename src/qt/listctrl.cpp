@@ -142,9 +142,9 @@ public:
     }
 
     virtual void paintEvent(QPaintEvent *event)
-	{
+    {
         QTreeView::paintEvent(event);
-	}
+    }
 
 private:
     void itemClicked(const QModelIndex &index);
@@ -312,7 +312,7 @@ public:
                 return QVariant::fromValue(columnItem.m_font);
 
             case Qt::BackgroundRole:
-				return columnItem.m_backgroundColour.isValid() ?
+                return columnItem.m_backgroundColour.isValid() ?
                      QVariant::fromValue(columnItem.m_backgroundColour) : QVariant();
 
             case Qt::ForegroundRole:
@@ -373,7 +373,7 @@ public:
             m_listCtrl->HandleWindowEvent(event);
         }
 
-		return false;
+        return false;
     }
 
     QVariant headerData(int section, Qt::Orientation orientation, int role) const wxOVERRIDE
@@ -413,7 +413,7 @@ public:
         beginRemoveRows(parent, row, row + count - 1);
         eraseFromContainer(m_rows, row, count);
         endRemoveRows();
-		return true;
+        return true;
     }
 
     bool removeColumns(int column, int count, const QModelIndex &parent) wxOVERRIDE
@@ -429,7 +429,7 @@ public:
         }
 
         endRemoveColumns();
-		return true;
+        return true;
     }
 
     bool GetColumn(int index, wxListItem &info) const
@@ -584,24 +584,24 @@ public:
 
     long FindItem(long start, const QString& str, bool partial) const
     {
-		if ( start < 0 )
-			start = 0;
+        if ( start < 0 )
+            start = 0;
 
-		const QString strUpper = str.toUpper();
+        const QString strUpper = str.toUpper();
 
         const long numberOfRows = m_rows.size();
-		const long numberOfColumns = m_headers.size();
+        const long numberOfColumns = m_headers.size();
 
         if ( partial )
         {
             for ( long i = start; i < numberOfRows; ++i )
             {
-				for (long j = 0; j < numberOfColumns; ++j )
-				{
-					const QString currentUpper = m_rows[i][j].m_label.toUpper();
-					if ( currentUpper.contains(strUpper) )
-						return i;
-				}
+                for (long j = 0; j < numberOfColumns; ++j )
+                {
+                    const QString currentUpper = m_rows[i][j].m_label.toUpper();
+                    if ( currentUpper.contains(strUpper) )
+                        return i;
+                }
             }
 
             return -1;
@@ -621,8 +621,8 @@ public:
 
     long FindItem(long start, wxUIntPtr data) const
     {
-		if ( start < 0 )
-			start = 0;
+        if ( start < 0 )
+            start = 0;
 
         long count = m_rows.size();
 
@@ -718,7 +718,7 @@ public:
 
         endInsertColumns();
 
-		return true;
+        return true;
     }
 
     void SortItems(wxListCtrlCompare fn, wxIntPtr data)
@@ -948,7 +948,7 @@ bool wxListCtrl::Create(wxWindow *parent,
             const wxString& name)
 {
     m_qtTreeWidget = new wxQtTreeWidget( parent, this );
-	m_qtTreeWidget->setModel(m_model);
+    m_qtTreeWidget->setModel(m_model);
 
     if (style & wxLC_NO_HEADER)
         m_qtTreeWidget->setHeaderHidden(true);
@@ -993,7 +993,7 @@ wxListCtrl::~wxListCtrl()
 
 bool wxListCtrl::SetForegroundColour(const wxColour& col)
 {
-	return wxListCtrlBase::SetForegroundColour(col);
+    return wxListCtrlBase::SetForegroundColour(col);
 }
 
 bool wxListCtrl::SetBackgroundColour(const wxColour& col)
@@ -1666,7 +1666,7 @@ bool wxListCtrl::ScrollList(int dx, int dy)
 bool wxListCtrl::SortItems(wxListCtrlCompare fn, wxIntPtr data)
 {
     m_model->SortItems(fn, data);
-	return true;
+    return true;
 }
 
 wxString wxListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) const
