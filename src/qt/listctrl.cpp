@@ -383,7 +383,8 @@ public:
     
         if ( role == Qt::CheckStateRole && col == 0)
         {
-            m_rows[row].m_checked = static_cast<Qt::CheckState>(value.toUInt()) == Qt::Checked;
+            m_rows[row].m_checked =
+                static_cast<Qt::CheckState>(value.toUInt()) == Qt::Checked;
 
             wxListItem listItem;
             listItem.SetId(row);
