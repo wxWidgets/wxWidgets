@@ -957,6 +957,8 @@ public:
                 return QVariant();
 
             const int imageIndex = listCtrl->OnGetItemColumnImage(row, col);
+            if (imageIndex == -1)
+                return QVariant();
             wxBitmap image = imageList->GetBitmap(imageIndex);
             wxCHECK_MSG(image.IsOk(), QVariant(), "Invalid Bitmap");
             return QVariant::fromValue(*image.GetHandle());
@@ -1437,6 +1439,7 @@ void wxListCtrl::SetSingleStyle(long WXUNUSED(style), bool WXUNUSED(add))
 
 void wxListCtrl::SetWindowStyleFlag(long style)
 {
+    m_windowStyle = style;
     m_qtTreeWidget->setHeaderHidden((style & wxLC_NO_HEADER) != 0);
     m_qtTreeWidget->setSelectionMode((style & wxLC_SINGLE_SEL) != 0
         ? QAbstractItemView::SingleSelection
