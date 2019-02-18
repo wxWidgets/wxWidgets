@@ -442,6 +442,9 @@ public:
 
     bool removeRows(int row, int count, const QModelIndex &parent) wxOVERRIDE
     {
+        if ( count == 0 )
+            return true;
+
         beginRemoveRows(parent, row, row + count - 1);
         eraseFromContainer(m_rows, row, count);
         endRemoveRows();
@@ -450,6 +453,9 @@ public:
 
     bool removeColumns(int column, int count, const QModelIndex &parent) wxOVERRIDE
     {
+        if ( count == 0 )
+            return true;
+
         beginRemoveColumns(parent, column, column + count - 1);
 
         eraseFromContainer(m_headers, column, count);
@@ -488,7 +494,7 @@ public:
         );
 
         wxCHECK_MSG(
-            col >= 0 && static_cast<size_t>(col) < m_rows[col].m_columns.size(),
+            col >= 0 && static_cast<size_t>(col) < m_rows[row].m_columns.size(),
             false,
             "Invalid col"
         );
