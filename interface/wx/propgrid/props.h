@@ -711,13 +711,6 @@ public:
 
     void Init();
 
-    wxPGArrayEditorDialog( wxWindow *parent,
-                         const wxString& message,
-                         const wxString& caption,
-                         long style = wxAEDIALOG_STYLE,
-                         const wxPoint& pos = wxDefaultPosition,
-                         const wxSize& sz = wxDefaultSize );
-
     bool Create( wxWindow *parent,
                  const wxString& message,
                  const wxString& caption,

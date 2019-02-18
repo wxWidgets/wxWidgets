@@ -2404,20 +2404,6 @@ void wxPGArrayEditorDialog::Init()
 
 // -----------------------------------------------------------------------
 
-wxPGArrayEditorDialog::wxPGArrayEditorDialog( wxWindow *parent,
-                                          const wxString& message,
-                                          const wxString& caption,
-                                          long style,
-                                          const wxPoint& pos,
-                                          const wxSize& sz )
-    : wxDialog()
-{
-    Init();
-    Create(parent,message,caption,style,pos,sz);
-}
-
-// -----------------------------------------------------------------------
-
 bool wxPGArrayEditorDialog::Create( wxWindow *parent,
                                   const wxString& message,
                                   const wxString& caption,
