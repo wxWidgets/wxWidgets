@@ -498,8 +498,6 @@ protected:
 
 
     // ctors
-        // from an array
-    wxListBase(size_t count, void *elements[]);
         // from a sequence of objects
     wxListBase(void *object, ... /* terminate with NULL */);
 
@@ -688,8 +686,6 @@ private:
             { }                                                             \
         name(const name& list) : wxListBase(list.GetKeyType())              \
             { Assign(list); }                                               \
-        name(size_t count, T *elements[])                                   \
-            : wxListBase(count, (void **)elements) { }                      \
                                                                             \
         name& operator=(const name& list)                                   \
             { if (&list != this) Assign(list); return *this; }              \
