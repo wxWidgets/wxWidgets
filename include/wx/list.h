@@ -496,12 +496,6 @@ protected:
                                    void *data,
                                    const wxListKey& key = wxDefaultListKey) = 0;
 
-
-    // ctors
-        // from a sequence of objects
-    wxListBase(void *object, ... /* terminate with NULL */);
-
-protected:
     void Assign(const wxListBase& list)
         { Clear(); DoCopy(list); }
 
