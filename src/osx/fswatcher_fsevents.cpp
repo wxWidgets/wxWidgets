@@ -420,7 +420,7 @@ bool wxFsEventsFileSystemWatcher::RemoveAll()
         FSEventStreamInvalidate(it->second);
         FSEventStreamRelease(it->second);
         ++it;
-        ret |= true;
+        ret = true;
     }
     m_streams.clear();
     return ret;
