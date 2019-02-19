@@ -1214,6 +1214,7 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
 bool wxWindowQt::QtHandleResizeEvent ( QWidget *WXUNUSED( handler ), QResizeEvent *event )
 {
     wxSizeEvent e( wxQtConvertSize( event->size() ) );
+    e.SetEventObject(this);
 
     return ProcessWindowEvent( e );
 }
@@ -1222,6 +1223,7 @@ bool wxWindowQt::QtHandleWheelEvent ( QWidget *WXUNUSED( handler ), QWheelEvent 
 {
     wxMouseEvent e( wxEVT_MOUSEWHEEL );
     e.SetPosition( wxQtConvertPoint( event->pos() ) );
+    e.SetEventObject(this);
 
     e.m_wheelAxis = ( event->orientation() == Qt::Vertical ) ? wxMOUSE_WHEEL_VERTICAL : wxMOUSE_WHEEL_HORIZONTAL;
     e.m_wheelRotation = event->delta();
@@ -1401,6 +1403,7 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
     // Fill the event
     QPoint mousePos = event->pos();
     wxMouseEvent e( wxType );
+    e.SetEventObject(this);
     e.m_clickCount = -1;
     e.SetPosition( wxQtConvertPoint( mousePos ) );
 
@@ -1447,6 +1450,7 @@ bool wxWindowQt::QtHandleEnterEvent ( QWidget *handler, QEvent *event )
     wxMouseEvent e( event->type() == QEvent::Enter ? wxEVT_ENTER_WINDOW : wxEVT_LEAVE_WINDOW );
     e.m_clickCount = 0;
     e.SetPosition( wxQtConvertPoint( handler->mapFromGlobal( QCursor::pos() ) ) );
+    e.SetEventObject(this);
 
     // Mouse buttons
     wxQtFillMouseButtons( QApplication::mouseButtons(), &e );
@@ -1462,7 +1466,8 @@ bool wxWindowQt::QtHandleMoveEvent ( QWidget *handler, QMoveEvent *event )
     if ( GetHandle() != handler )
         return false;
 
-    wxMoveEvent e( wxQtConvertPoint( event->pos() ) );
+    wxMoveEvent e( wxQtConvertPoint( event->pos() ), GetId() );
+    e.SetEventObject(this);
 
     return ProcessWindowEvent( e );
 }
@@ -1472,8 +1477,8 @@ bool wxWindowQt::QtHandleShowEvent ( QWidget *handler, QEvent *event )
     if ( GetHandle() != handler )
         return false;
 
-    wxShowEvent e;
-    e.SetShow( event->type() == QEvent::Show );
+    wxShowEvent e(GetId(), event->type() == QEvent::Show);
+    e.SetEventObject(this);
 
     return ProcessWindowEvent( e );
 }
@@ -1485,7 +1490,8 @@ bool wxWindowQt::QtHandleChangeEvent ( QWidget *handler, QEvent *event )
 
     if ( event->type() == QEvent::ActivationChange )
     {
-        wxActivateEvent e( wxEVT_ACTIVATE, handler->isActiveWindow() );
+        wxActivateEvent e( wxEVT_ACTIVATE, handler->isActiveWindow(), GetId() );
+        e.SetEventObject(this);
 
         return ProcessWindowEvent( e );
     }
@@ -1503,8 +1509,9 @@ bool wxWindowQt::QtHandleCloseEvent ( QWidget *handler, QCloseEvent *WXUNUSED( e
 
 bool wxWindowQt::QtHandleContextMenuEvent ( QWidget *WXUNUSED( handler ), QContextMenuEvent *event )
 {
-    wxContextMenuEvent e( wxEVT_CONTEXT_MENU );
+    wxContextMenuEvent e( wxEVT_CONTEXT_MENU, GetId() );
     e.SetPosition( wxQtConvertPoint( event->globalPos() ) );
+    e.SetEventObject(this);
 
     return ProcessWindowEvent( e );
 }
@@ -1541,6 +1548,7 @@ void wxWindowQt::QtHandleShortcut ( int command )
             // it as button click (for compatibility with other
             // platforms):
             wxCommandEvent button_event( wxEVT_COMMAND_BUTTON_CLICKED, command );
+            button_event.SetEventObject(this);
             ProcessWindowEvent( button_event );
         }
     }
