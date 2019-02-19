@@ -804,7 +804,6 @@ void wxGenericDirCtrl::OnRightClick(wxTreeEvent& event)
     }
 }
 
-// The following Menu___() functions are bound to right-click popup menu items.
 void wxGenericDirCtrl::MenuRename(wxCommandEvent & evt)
 {
     m_treeCtrl->EditLabel(m_popUpItemId);

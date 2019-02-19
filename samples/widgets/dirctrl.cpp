@@ -186,7 +186,8 @@ DirCtrlWidgetsPage::DirCtrlWidgetsPage(WidgetsBookCtrl *book,
     m_dirCtrl = NULL;
 }
 
-
+// When the user right-clicks on a tree item, a menu is created,
+// and here we have a chance to add any items to it.
 void DirCtrlWidgetsPage::DirMenuPopped(wxCommandEvent &evt)
 {
     wxMenu *menu = m_dirCtrl->GetPopupMenu();
@@ -195,14 +196,14 @@ void DirCtrlWidgetsPage::DirMenuPopped(wxCommandEvent &evt)
     wxDirItemData  *itemData = (wxDirItemData*)(m_dirCtrl->GetTreeCtrl()->GetItemData(itemId));
     wxString        dirName(itemData->m_path);
 
-    if (wxEndsWithPathSeparator(dirName))
+    if (wxEndsWithPathSeparator(dirName))   // Did they click on a directory?
     {
         wxWindowID id = wxNewId();
         menu->AppendSeparator();
         menu->Append(id, wxT("Directory Properties"));
         m_dirCtrl->Bind(wxEVT_MENU, &DirCtrlWidgetsPage::DirProperties, this, id);
     }
-    else
+    else                                    // or a file ?
     {
         wxWindowID id = wxNewId();
         menu->Append(id, wxT("File Properties"));
