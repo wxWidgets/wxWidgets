@@ -35,7 +35,7 @@ void wxQtSpinButton::valueChanged(int value)
     wxSpinButton *handler = GetHandler();
     if ( handler )
     {
-        wxCommandEvent event( wxEVT_SPIN, handler->GetId() );
+        wxSpinEvent event( wxEVT_SPIN, handler->GetId() );
         event.SetInt( value );
         EmitEvent( event );
     }
