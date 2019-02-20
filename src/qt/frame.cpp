@@ -107,13 +107,13 @@ void wxFrame::SetStatusBar( wxStatusBar *statusBar )
 
 void wxFrame::SetToolBar(wxToolBar *toolbar)
 {
-    int area = 0;
+    int area = Qt::TopToolBarArea;
     if ( toolbar != NULL )
     {
-        if      (toolbar->HasFlag(wxTB_LEFT))  { area |= Qt::LeftToolBarArea;  }
-        else if (toolbar->HasFlag(wxTB_RIGHT)) { area |= Qt::RightToolBarArea; }
-        else if (toolbar->HasFlag(wxTB_TOP))   { area |= Qt::TopToolBarArea;   }
-        else if (toolbar->HasFlag(wxTB_BOTTOM)){ area |= Qt::BottomToolBarArea;}
+        if      (toolbar->HasFlag(wxTB_LEFT))  { area = Qt::LeftToolBarArea;  }
+        else if (toolbar->HasFlag(wxTB_RIGHT)) { area = Qt::RightToolBarArea; }
+        else if (toolbar->HasFlag(wxTB_TOP))   { area = Qt::TopToolBarArea;   }
+        else if (toolbar->HasFlag(wxTB_BOTTOM)){ area = Qt::BottomToolBarArea;}
 
         // We keep the current toolbar handle in our own member variable
         // because we can't get it from half-destroyed wxToolBar when it calls
@@ -224,6 +224,19 @@ void wxFrame::DoGetClientSize(int *width, int *height) const
             *height -= qmb->geometry().height();
         }
     }
+}
+
+void wxFrame::DoSetClientSize(int width, int height)
+{
+    wxWindow::DoSetClientSize(width, height);
+
+    int adjustedWidth, adjustedHeight;
+    DoGetClientSize(&adjustedWidth, &adjustedHeight);
+
+    QWidget *centralWidget = GetQMainWindow()->centralWidget();
+    QRect geometry = centralWidget->geometry();
+    geometry.setSize(QSize(adjustedWidth, adjustedHeight));
+    centralWidget->setGeometry(geometry);
 }
 
 QMainWindow *wxFrame::GetQMainWindow() const

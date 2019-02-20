@@ -334,10 +334,11 @@ bool wxWindowQt::Create( wxWindowQt * parent, wxWindowID id, const wxPoint & pos
 
 void wxWindowQt::PostCreation(bool generic)
 {
+    QWidget* widget = GetHandle();
     if ( m_qtWindow == NULL )
     {
         // store pointer to the QWidget subclass (to be used in the destructor)
-        m_qtWindow = GetHandle();
+        m_qtWindow = widget;
     }
     wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::Create %s m_qtWindow=%p"), GetName(), m_qtWindow);
 
@@ -364,15 +365,18 @@ void wxWindowQt::PostCreation(bool generic)
 //
 
     // Set the default color so Paint Event default handler clears the DC:
-    SetBackgroundColour(wxColour(GetHandle()->palette().background().color()));
-    SetForegroundColour(wxColour(GetHandle()->palette().foreground().color()));
+    SetBackgroundColour(wxColour(widget->palette().background().color()));
+    SetForegroundColour(wxColour(widget->palette().foreground().color()));
 
-    GetHandle()->setFont( wxWindowBase::GetFont().GetHandle() );
+    widget->setFont( wxWindowBase::GetFont().GetHandle() );
 
     // The window might have been hidden before Create() and it needs to remain
     // hidden in this case, so do it (unfortunately there doesn't seem to be
     // any way to create the window initially hidden with Qt).
-    GetHandle()->setVisible(m_isShown);
+    widget->setVisible(m_isShown);
+
+    widget->setMinimumSize(QSize(std::max(m_minWidth, 0), std::max(m_minHeight, 0)));
+    widget->setMaximumSize(QSize(m_maxWidth == -1 ? QWIDGETSIZE_MAX : m_maxWidth, m_maxHeight == -1 ? QWIDGETSIZE_MAX : m_maxHeight));
 
     wxWindowCreateEvent event(this);
     HandleWindowEvent(event);
@@ -410,17 +414,25 @@ bool wxWindowQt::Show( bool show )
     return true;
 }
 
-
 void wxWindowQt::SetLabel(const wxString& label)
 {
-    GetHandle()->setWindowTitle( wxQtConvertString( label ));
+    QWidget* widget = GetHandle();
+    QString qtString = wxQtConvertString(label);
+    widget->setWindowTitle(qtString);
+    widget->setAccessibleDescription(qtString);
 }
-
 
 wxString wxWindowQt::GetLabel() const
 {
     return ( wxQtConvertString( GetHandle()->windowTitle() ));
 }
+
+void wxWindowQt::SetName(const wxString &name)
+{
+    wxWindowBase::SetName(name);
+    GetHandle()->setAccessibleName(wxQtConvertString(name));
+}
+
 
 void wxWindowQt::DoEnable(bool enable)
 {
@@ -959,6 +971,7 @@ void wxWindowQt::DoSetClientSize(int width, int height)
 {
     QWidget *qtWidget = GetHandle();
     QRect geometry = qtWidget->geometry();
+    const QRect old_geometry = geometry;
     geometry.setWidth( width );
     geometry.setHeight( height );
     qtWidget->setGeometry( geometry );
@@ -967,17 +980,41 @@ void wxWindowQt::DoSetClientSize(int width, int height)
 void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
 {
     QWidget *qtWidget = GetHandle();
-
-    int w, h;
-    GetSize(&w, &h);
-
     qtWidget->move( x, y );
+    qtWidget->resize( width, height );
+}
 
-    const QSize frameSize = qtWidget->frameSize();
-    const QSize innerSize = qtWidget->geometry().size();
-    const QSize frameSizeDiff = frameSize - innerSize;
-    // QWidget::resize takes the size excluding any decoration
-    qtWidget->resize(width - frameSizeDiff.width(), height - frameSizeDiff.height());
+void wxWindowQt::SetMinSize(const wxSize& minSize)
+{
+    wxWindowBase::SetMinSize(minSize);
+    const int width = minSize.GetWidth();
+    const int height = minSize.GetHeight();
+    QWidget* widget = GetHandle();
+    if ( widget != NULL )
+       widget->setMinimumSize(QSize(width == -1 ? 0 : width, height == -1 ? 0 : height));
+}
+
+void wxWindowQt::SetMaxSize(const wxSize& maxSize)
+{
+    wxWindowBase::SetMaxSize(maxSize);
+    const int width = maxSize.GetWidth();
+    const int height = maxSize.GetHeight();
+    QWidget* widget = GetHandle();
+    if (widget != NULL)
+        widget->setMaximumSize(QSize(width == -1 ? QWIDGETSIZE_MAX : width, height == -1 ? QWIDGETSIZE_MAX : height));
+}
+
+void wxWindowQt::DoSetSizeHints(int minW, int minH,
+    int maxW, int maxH,
+    int incW, int incH)
+{ 
+    wxWindowBase::DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
+    QWidget *widget = GetHandle();
+    if (widget != NULL)
+    {
+        widget->setMinimumSize(QSize(std::max(minW, 0), std::max(minH, 0)));
+        widget->setMaximumSize(QSize(maxW == -1 ? QWIDGETSIZE_MAX : maxW, maxH == -1 ? QWIDGETSIZE_MAX : maxH));
+    }
 }
 
 
@@ -1099,7 +1136,6 @@ bool wxWindowQt::SetTransparent(wxByte alpha)
     GetHandle()->setWindowOpacity(alpha/255.0);
     return true;
 }
-
 
 bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
 {

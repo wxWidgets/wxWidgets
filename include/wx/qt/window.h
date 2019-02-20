@@ -83,6 +83,8 @@ public:
     virtual void SetLabel(const wxString& label) wxOVERRIDE;
     virtual wxString GetLabel() const wxOVERRIDE;
 
+    virtual void SetName(const wxString &name) wxOVERRIDE;
+
     virtual void DoEnable( bool enable ) wxOVERRIDE;
     virtual void SetFocus() wxOVERRIDE;
 
@@ -132,6 +134,10 @@ public:
     virtual bool CanSetTransparent() wxOVERRIDE { return true; }
 
     QWidget *GetHandle() const wxOVERRIDE;
+
+    virtual void SetMinSize(const wxSize& minSize) wxOVERRIDE;
+    virtual void SetMaxSize(const wxSize& maxSize) wxOVERRIDE;
+
 
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget ) wxOVERRIDE;
@@ -203,6 +209,11 @@ protected:
     virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
 
     virtual void DoMoveWindow(int x, int y, int width, int height) wxOVERRIDE;
+
+    virtual void DoSetSizeHints(int minW, int minH,
+        int maxW, int maxH,
+        int incW, int incH) wxOVERRIDE;
+
 
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip ) wxOVERRIDE;
