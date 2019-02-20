@@ -639,7 +639,7 @@ void WidgetsFrame::InitBook()
 #if USE_TREEBOOK
     // for treebook page #0 is empty parent page only so select the first page
     // with some contents
-    if ( !pageSet )
+    if ( !pageSet || !m_book->GetCurrentPage() )
         m_book->SetSelection(1);
 
     // but ensure that the top of the tree is shown nevertheless
@@ -648,7 +648,7 @@ void WidgetsFrame::InitBook()
     wxTreeItemIdValue cookie;
     tree->EnsureVisible(tree->GetFirstChild(tree->GetRootItem(), cookie));
 #else
-    if ( !pageSet )
+    if ( !pageSet || !m_book->GetCurrentPage() )
     {
         // for other books set selection twice to force connected event handler
         // to force lazy creation of initial visible content
