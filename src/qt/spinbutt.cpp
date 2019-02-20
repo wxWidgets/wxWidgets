@@ -18,6 +18,11 @@ class wxQtSpinButton : public wxQtEventSignalHandler< QSpinBox, wxSpinButton  >
 public:
     wxQtSpinButton( wxWindow *parent, wxSpinButton *handler );
 
+	void PreserveOldValue()
+	{
+		oldValue = value();
+	}
+
 private:
     void valueChanged(int value);
     int oldValue;
@@ -29,7 +34,7 @@ wxQtSpinButton::wxQtSpinButton( wxWindow *parent, wxSpinButton *handler )
     connect(this, static_cast<void (QSpinBox::*)(int index)>(&QSpinBox::valueChanged),
             this, &wxQtSpinButton::valueChanged);
 
-    oldValue = value();
+	PreserveOldValue();
 }
 
 void wxQtSpinButton::valueChanged(int newValue)
@@ -101,7 +106,10 @@ int wxSpinButton::GetValue() const
 
 void wxSpinButton::SetValue(int val)
 {
+	m_qtSpinBox->blockSignals(true);
+	m_qtSpinBox->PreserveOldValue();
     m_qtSpinBox->setValue( val );
+	m_qtSpinBox->blockSignals(false);
 }
 
 QWidget *wxSpinButton::GetHandle() const

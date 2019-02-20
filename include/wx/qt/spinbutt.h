@@ -9,7 +9,7 @@
 #define _WX_QT_SPINBUTT_H_
 
 #include "wx/spinbutt.h"
-class QSpinBox;
+class wxQtSpinButton;
 
 class WXDLLIMPEXP_CORE wxSpinButton : public wxSpinButtonBase
 {
@@ -35,7 +35,7 @@ public:
     virtual QWidget *GetHandle() const;
 
 private:
-    QSpinBox *m_qtSpinBox;
+    wxQtSpinButton *m_qtSpinBox;
 
     wxDECLARE_DYNAMIC_CLASS( wxSpinButton );
 };
