@@ -57,14 +57,18 @@ void wxQtPushButton::action()
 
 bool wxQtPushButton::event(QEvent* e)
 {
-    switch ( e->type() )
+    wxAnyButton *handler = GetHandler();
+    if ( handler != NULL )
     {
-    case QEvent::EnabledChange:
-    case QEvent::Enter:
-    case QEvent::Leave:
-    case QEvent::FocusIn:
-    case QEvent::FocusOut:
-        GetHandler()->QtUpdateState();
+        switch ( e->type() )
+        {
+        case QEvent::EnabledChange:
+        case QEvent::Enter:
+        case QEvent::Leave:
+        case QEvent::FocusIn:
+        case QEvent::FocusOut:
+            handler->QtUpdateState();
+        }
     }
 
     return QPushButton::event(e);
