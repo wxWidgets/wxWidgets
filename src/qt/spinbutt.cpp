@@ -53,9 +53,7 @@ void wxQtSpinButton::stepBy(int steps)
     directionEvent.SetInt(value() + steps * singleStep());
     directionEvent.SetEventObject(handler);
 
-    handler->HandleWindowEvent(directionEvent);
-
-    if ( directionEvent.IsAllowed() )
+    if ( !handler->HandleWindowEvent(directionEvent) || directionEvent.IsAllowed() )
     {
         QSpinBox::stepBy(steps);
     }
