@@ -43,17 +43,17 @@ void wxQtSpinButton::valueChanged(int value)
 
 void wxQtSpinButton::stepBy(int steps)
 {
-    wxSpinButton* handler = GetHandler();
+    wxSpinButton* const handler = GetHandler();
     if ( !handler )
         return;
 
-    int eventType = (steps < 0) ? wxEVT_SPIN_DOWN : wxEVT_SPIN_UP;
+    int eventType = steps < 0 ? wxEVT_SPIN_DOWN : wxEVT_SPIN_UP;
     wxSpinEvent directionEvent(eventType, handler->GetId());
     directionEvent.SetPosition(value());
     directionEvent.SetInt(value() + steps * singleStep());
     directionEvent.SetEventObject(handler);
 
-    handler->HandleWindowEvent(directionEvent); // should return value be checked here?
+    handler->HandleWindowEvent(directionEvent);
 
     if ( directionEvent.IsAllowed() )
     {
