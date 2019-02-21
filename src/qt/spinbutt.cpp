@@ -20,6 +20,7 @@ public:
 
 private:
     void valueChanged(int value);
+    virtual void stepBy(int steps) wxOVERRIDE; // see QAbstractSpinBox::stepBy()
 };
 
 wxQtSpinButton::wxQtSpinButton( wxWindow *parent, wxSpinButton *handler )
@@ -34,9 +35,27 @@ void wxQtSpinButton::valueChanged(int value)
     wxSpinButton *handler = GetHandler();
     if ( handler )
     {
-        wxCommandEvent event( wxEVT_SPIN, handler->GetId() );
+        wxSpinEvent event( wxEVT_SPIN, handler->GetId() );
         event.SetInt( value );
         EmitEvent( event );
+    }
+}
+
+void wxQtSpinButton::stepBy(int steps)
+{
+    wxSpinButton* const handler = GetHandler();
+    if ( !handler )
+        return;
+
+    int eventType = steps < 0 ? wxEVT_SPIN_DOWN : wxEVT_SPIN_UP;
+    wxSpinEvent directionEvent(eventType, handler->GetId());
+    directionEvent.SetPosition(value());
+    directionEvent.SetInt(value() + steps * singleStep());
+    directionEvent.SetEventObject(handler);
+
+    if ( !handler->HandleWindowEvent(directionEvent) || directionEvent.IsAllowed() )
+    {
+        QSpinBox::stepBy(steps);
     }
 }
 
