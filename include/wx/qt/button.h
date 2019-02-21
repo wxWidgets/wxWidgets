@@ -31,6 +31,9 @@ public:
 
    virtual wxWindow *SetDefault();
 
+    // implementation only
+    virtual int GetEventType() const wxOVERRIDE { return wxEVT_BUTTON; }
+
 private:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxButton);
 };
