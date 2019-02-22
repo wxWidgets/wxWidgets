@@ -26,6 +26,8 @@ private:
 wxQtSpinButton::wxQtSpinButton( wxWindow *parent, wxSpinButton *handler )
     : wxQtEventSignalHandler< QSpinBox, wxSpinButton >( parent, handler )
 {
+    setFocusPolicy(Qt::NoFocus);
+
     connect(this, static_cast<void (QSpinBox::*)(int index)>(&QSpinBox::valueChanged),
             this, &wxQtSpinButton::valueChanged);
 }
