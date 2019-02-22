@@ -242,4 +242,5 @@ wxQtMainWindow::wxQtMainWindow( wxWindow *parent, wxFrame *handler )
 wxQtCentralWidget::wxQtCentralWidget( wxWindow *parent, wxFrame *handler )
     : wxQtEventSignalHandler< QScrollArea, wxFrame >( parent, handler )
 {
+    setFocusPolicy(Qt::NoFocus);
 }
