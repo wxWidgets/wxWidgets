@@ -84,12 +84,24 @@ bool wxSpinButton::Create(wxWindow *parent,
 {
     m_qtSpinBox = new wxQtSpinButton( parent, this );
 
+    m_qtSpinBox->setRange(wxSpinButtonBase::GetMin(), wxSpinButtonBase::GetMax());
+
     // Modify the size so that the text field is not visible.
     // TODO: Find out the width of the buttons i.e. take the style into account (QStyleOptionSpinBox).
     wxSize newSize( size );
     newSize.SetWidth( 18 );
 
     return QtCreateControl( parent, id, pos, newSize, style, wxDefaultValidator, name );
+}
+
+void wxSpinButton::SetRange(int min, int max)
+{
+    wxSpinButtonBase::SetRange(min, max); // cache the values
+
+    if ( m_qtSpinBox )
+    {
+        m_qtSpinBox->setRange(min, max);
+    }
 }
 
 int wxSpinButton::GetValue() const
