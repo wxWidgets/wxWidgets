@@ -213,8 +213,9 @@ int wxListBox::GetSelection() const
     return m_qtListWidget->row(item);
 }
 
-void wxListBox::DoSetFirstItem(int WXUNUSED(n))
+void wxListBox::DoSetFirstItem(int n)
 {
+    m_qtListWidget->scrollToItem(m_qtListWidget->item(n), QAbstractItemView::PositionAtTop);
 }
 
 void wxListBox::DoSetSelection(int n, bool select)
