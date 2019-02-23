@@ -755,11 +755,11 @@ static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
             gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_ETCHED_IN);
             gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_AUTOMATIC,
                                             GTK_POLICY_AUTOMATIC);
+            gtk_widget_set_size_request(GTK_WIDGET(sw), -1, 180);
             gtk_box_pack_start (GTK_BOX(vbox), sw, TRUE, TRUE, 8);
 
             /* add the treeview to the scrollable window */
             dlg->treeview = gtk_assert_dialog_create_backtrace_list_model ();
-            gtk_widget_set_size_request (GTK_WIDGET(dlg->treeview), -1, 180);
             gtk_container_add (GTK_CONTAINER (sw), dlg->treeview);
 
             /* create button's hbox */
