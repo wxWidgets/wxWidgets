@@ -1854,8 +1854,7 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
 bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
 {
     // wait until we have some tools
-    const int toolsCount = GetToolsCount();
-    if ( toolsCount == 0 )
+    if ( !GetToolsCount() )
         return false;
 
     // calculate our minor dimension ourselves - we're confusing the standard
