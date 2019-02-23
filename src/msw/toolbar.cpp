@@ -94,6 +94,9 @@
     #define TB_GETMAXSIZE           (WM_USER + 83)
 #endif
 
+// Margin between the control and its label.
+static const int MARGIN_CONTROL_LABEL = 3;
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -1227,7 +1230,7 @@ bool wxToolBar::Realize()
         if ( staticText && staticText->IsShown() )
         {
             staticTextSize = staticText->GetSize();
-            staticTextSize.y += 3; // margin between control and its label
+            staticTextSize.y += MARGIN_CONTROL_LABEL;
         }
 
         // position the control itself correctly vertically centering it on the
