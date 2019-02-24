@@ -530,6 +530,31 @@ wxToolBar::~wxToolBar()
     delete m_disabledImgList;
 }
 
+wxSize wxToolBar::MSWGetFittingtSizeForControl(wxToolBarTool* tool) const
+{
+    wxSize size = tool->GetControl()->GetBestSize();
+
+    // Account for the label, if any.
+    if ( wxStaticText * const staticText = tool->GetStaticText() )
+    {
+        if ( AreControlLabelsShown() )
+        {
+            const wxSize sizeLabel = staticText->GetSize();
+
+            if ( size.x < sizeLabel.x )
+                size.x = sizeLabel.x;
+
+            size.y += sizeLabel.y;
+            size.y += MARGIN_CONTROL_LABEL;
+        }
+    }
+
+    // Also account for the tool padding value.
+    size += wxSize(m_toolPacking, m_toolPacking);
+
+    return size;
+}
+
 wxSize wxToolBar::DoGetBestSize() const
 {
     wxSize sizeBest;
@@ -578,10 +603,8 @@ wxSize wxToolBar::DoGetBestSize() const
                 tool = static_cast<wxToolBarTool *>(node->GetData());
             if (tool->IsControl())
             {
-                int y = tool->GetControl()->GetSize().y;
-                // Approximate border size
-                if (y > (sizeBest.y - 4))
-                    sizeBest.y = y + 4;
+                // Ensure we're tall enough for the embedded controls.
+                sizeBest.IncTo(wxSize(-1, MSWGetFittingtSizeForControl(tool).y));
             }
         }
 
@@ -1057,8 +1080,8 @@ bool wxToolBar::Realize()
                 // taking into account tool padding value.
                 // (height is not used but it is set for the sake of consistency).
                 {
-                    const wxSize sizeControl = tool->GetControl()->GetSize();
-                    button.iBitmap = m_toolPacking + (IsVertical() ? sizeControl.y : sizeControl.x);
+                    const wxSize size = MSWGetFittingtSizeForControl(tool);
+                    button.iBitmap = size.x;
                 }
 
                 wxFALLTHROUGH;

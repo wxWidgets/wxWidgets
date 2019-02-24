@@ -183,6 +183,10 @@ private:
         return HasFlag(wxTB_TEXT) && !HasFlag(wxTB_NOICONS);
     }
 
+    // Return the size required to accommodate the given tool which must be of
+    // "control" type.
+    wxSize MSWGetFittingtSizeForControl(class wxToolBarTool* tool) const;
+
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS(wxToolBar);
