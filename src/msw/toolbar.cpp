@@ -1325,29 +1325,6 @@ bool wxToolBar::Realize()
     InvalidateBestSize();
     UpdateSize();
 
-    if ( IsVertical() )
-    {
-        // For vertical toolbar heights of buttons are incorrect
-        // unless TB_AUTOSIZE in invoked.
-        // We need to recalculate fixed elements size again.
-        m_totalFixedSize = 0;
-        toolIndex = 0;
-        for ( node = m_tools.GetFirst(); node; node = node->GetNext(), toolIndex++ )
-        {
-            wxToolBarTool * const tool = (wxToolBarTool*)node->GetData();
-            if ( !tool->IsStretchableSpace() )
-            {
-                const RECT r = wxGetTBItemRect(GetHwnd(), toolIndex);
-                if ( !IsVertical() )
-                    m_totalFixedSize += r.right - r.left;
-                else if ( !tool->IsControl() )
-                    m_totalFixedSize += r.bottom - r.top;
-            }
-        }
-        // Enforce invoking UpdateStretchableSpacersSize() with correct value of fixed elements size.
-        UpdateSize();
-    }
-
     return true;
 }
 
