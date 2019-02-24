@@ -1200,10 +1200,15 @@ bool wxToolBar::Realize()
 
         if ( !tool->IsControl() )
         {
-            if ( IsVertical() )
-                m_totalFixedSize += r.bottom - r.top;
-            else
-                m_totalFixedSize += r.right - r.left;
+            // Stretchable space don't have any fixed size and their current
+            // size shouldn't count at all.
+            if ( !tool->IsStretchableSpace() )
+            {
+                if ( IsVertical() )
+                    m_totalFixedSize += r.bottom - r.top;
+                else
+                    m_totalFixedSize += r.right - r.left;
+            }
 
             continue;
         }
