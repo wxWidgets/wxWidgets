@@ -1312,8 +1312,16 @@ bool wxToolBar::Realize()
     if ( !IsVertical() )
     {
         if ( m_maxRows == 0 )
+        {
             // if not set yet, only one row
             SetRows(1);
+        }
+        else
+        {
+            // In all the other cases, UpdateSize() is called by SetRows(), but
+            // when we don't call it here, call it directly instead.
+            UpdateSize();
+        }
     }
     else if ( m_nButtons > 0 ) // vertical non empty toolbar
     {
@@ -1323,7 +1331,6 @@ bool wxToolBar::Realize()
     }
 
     InvalidateBestSize();
-    UpdateSize();
 
     return true;
 }
