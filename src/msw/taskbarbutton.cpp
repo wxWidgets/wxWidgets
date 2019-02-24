@@ -882,20 +882,7 @@ bool wxTaskBarButtonImpl::InsertThumbBarButton(size_t pos,
 wxThumbBarButton* wxTaskBarButtonImpl::RemoveThumbBarButton(
     wxThumbBarButton *button)
 {
-    for ( wxThumbBarButtons::iterator iter = m_thumbBarButtons.begin();
-          iter != m_thumbBarButtons.end();
-          ++iter )
-    {
-        if ( button == *iter )
-        {
-            m_thumbBarButtons.erase(iter);
-            button->SetParent(NULL);
-            InitOrUpdateThumbBarButtons();
-            return *iter;
-        }
-    }
-
-    return NULL;
+    return RemoveThumbBarButton(button->GetID());
 }
 
 wxThumbBarButton* wxTaskBarButtonImpl::RemoveThumbBarButton(int id)
@@ -904,12 +891,13 @@ wxThumbBarButton* wxTaskBarButtonImpl::RemoveThumbBarButton(int id)
           iter != m_thumbBarButtons.end();
           ++iter )
     {
-        if ( id == (*iter)->GetID() )
+        wxThumbBarButton* button = *iter;
+        if ( id == button->GetID() )
         {
             m_thumbBarButtons.erase(iter);
-            (*iter)->SetParent(NULL);
+            button->SetParent(NULL);
             InitOrUpdateThumbBarButtons();
-            return *iter;
+            return button;
         }
     }
 
@@ -1391,10 +1379,11 @@ wxTaskBarJumpListImpl::RemoveCustomCategory(const wxString& title)
           it != m_customCategories.end();
           ++it )
     {
-        if ( (*it)->GetTitle() == title )
+        wxTaskBarJumpListCategory* tbJlCat = *it;
+        if ( tbJlCat->GetTitle() == title )
         {
             m_customCategories.erase(it);
-            return *it;
+            return tbJlCat;
         }
     }
 
