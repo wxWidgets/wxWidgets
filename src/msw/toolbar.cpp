@@ -1387,31 +1387,20 @@ void wxToolBar::UpdateStretchableSpacersSize()
         const int newSize = --numSpaces ? sizeSpacer : sizeLastSpacer;
         if ( newSize != oldSize)
         {
-            if ( !::SendMessage(GetHwnd(), TB_DELETEBUTTON, toolIndex, 0) )
+            WinStruct<TBBUTTONINFO> tbbi;
+            tbbi.dwMask = TBIF_BYINDEX | TBIF_SIZE;
+            tbbi.cx = newSize;
+            if ( !::SendMessage(GetHwnd(), TB_SETBUTTONINFO,
+                                toolIndex, (LPARAM)&tbbi) )
             {
-                wxLogLastError(wxT("TB_DELETEBUTTON (separator)"));
+                wxLogLastError(wxT("TB_SETBUTTONINFO (separator)"));
             }
             else
             {
-                TBBUTTON button;
-                wxZeroMemory(button);
-
-                button.idCommand = tool->GetId();
-                button.iBitmap = newSize; // set separator width/height
-                button.fsState = TBSTATE_ENABLED;
-                button.fsStyle = TBSTYLE_SEP;
-                if ( IsVertical() )
-                    button.fsState |= TBSTATE_WRAP;
-                if ( !::SendMessage(GetHwnd(), TB_INSERTBUTTON, toolIndex, (LPARAM)&button) )
-                {
-                    wxLogLastError(wxT("TB_INSERTBUTTON (separator)"));
-                }
-                else
-                {
-                    // We successfully replaced this seprator, move all the controls after it
-                    // by the corresponding amount (may be positive or negative)
-                    offset += newSize - oldSize;
-                }
+                // We successfully updated the separator width, move all the
+                // controls appearing after it by the corresponding amount
+                // (which may be positive or negative)
+                offset += newSize - oldSize;
             }
         }
 
