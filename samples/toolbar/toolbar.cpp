@@ -350,7 +350,7 @@ void MyFrame::RecreateToolbar()
             style |= wxTB_RIGHT;
             break;
         case TOOLBAR_BOTTOM:
-        style |= wxTB_BOTTOM;
+            style |= wxTB_BOTTOM;
         break;
     }
 
