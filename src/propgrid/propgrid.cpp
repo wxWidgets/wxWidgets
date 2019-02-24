@@ -1291,7 +1291,7 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
     m_fontHeight = y;
 
 #if wxPG_USE_RENDERER_NATIVE
-    m_iconWidth = wxPG_ICON_WIDTH;
+    m_iconWidth = FromDIP(wxPG_ICON_WIDTH);
 #elif wxPG_ICON_WIDTH
     // scale icon
     m_iconWidth = (m_fontHeight * wxPG_ICON_WIDTH) / 13;
