@@ -1050,11 +1050,7 @@ bool wxToolBar::Realize()
             case wxTOOL_STYLE_CONTROL:
                 if ( wxStaticText *staticText = tool->GetStaticText() )
                 {
-                    // Display control and its label only if buttons have icons
-                    // and texts as otherwise there is not enough room on the
-                    // toolbar to fit the label.
-                    staticText->
-                        Show(HasFlag(wxTB_TEXT) && !HasFlag(wxTB_NOICONS));
+                    staticText->Show(AreControlLabelsShown());
                 }
 
                 // Set separator width/height to fit the control width/height
