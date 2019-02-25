@@ -1363,6 +1363,7 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
                     break;
                 case Qt::XButton2:
                     wxType = wxEVT_AUX2_DOWN;
+                    break;
                 case Qt::NoButton:
                 case Qt::MouseButtonMask: // Not documented ?
                 default:
@@ -1386,6 +1387,7 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
                     break;
                 case Qt::XButton2:
                     wxType = wxEVT_AUX2_UP;
+                    break;
                 case Qt::NoButton:
                 case Qt::MouseButtonMask: // Not documented ?
                 default:
