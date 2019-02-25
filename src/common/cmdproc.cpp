@@ -63,8 +63,6 @@ wxCommandProcessor::wxCommandProcessor(int maxCommands)
 #if wxUSE_MENUS
     m_commandEditMenu = NULL;
 #endif // wxUSE_MENUS
-    m_lastSavedCommand =
-    m_currentCommand = wxList::compatibility_iterator();
 }
 
 wxCommandProcessor::~wxCommandProcessor()

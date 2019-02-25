@@ -714,7 +714,7 @@ void BitmapComboBoxWidgetsPage::LoadWidgetImages( wxArrayString* strings, wxImag
             wxBitmap bmp(image);
             wxASSERT( bmp.IsOk() );
 #else
-            wxBitmap bmp(wxNullBitmap);
+            wxBitmap bmp;
 #endif
             images->Add(bmp);
             (*strings)[i] = name;
