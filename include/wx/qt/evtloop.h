@@ -27,10 +27,6 @@ public:
 
     void ScheduleIdleCheck();
 
-#if wxUSE_EVENTLOOP_SOURCE
-    virtual wxEventLoopSource *AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags);
-#endif // wxUSE_EVENTLOOP_SOURCE
-
 private:
     QEventLoop *m_qtEventLoop;
     wxObjectDataPtr<wxQtIdleTimer> m_qtIdleTimer;

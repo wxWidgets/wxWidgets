@@ -264,16 +264,6 @@ wxEventLoopSourcesManagerBase* wxAppTraits::GetEventLoopSourcesManager()
 
 #endif
 
-wxEventLoopSource *wxQtEventLoopBase::AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags)
-{
-    wxGUIAppTraits *AppTraits = dynamic_cast<wxGUIAppTraits *>(wxApp::GetTraitsIfExists());
-
-    if ( AppTraits )
-        return AppTraits->GetEventLoopSourcesManager()->AddSourceForFD(fd, handler, flags);
-
-    return NULL;
-}
-
 #endif // wxUSE_EVENTLOOP_SOURCE
 
 //#############################################################################
