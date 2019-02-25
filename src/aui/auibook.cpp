@@ -791,11 +791,7 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
     if (offset == 0)
         offset += m_art->GetIndentSize();
 
-    wxRect active_rect;
-
     wxRect rect = m_rect;
-    rect.y = 0;
-    rect.height = m_rect.height;
 
     // See if the given page is visible at the given tab offset (effectively scroll position)
     for (i = tabOffset; i < page_count; ++i)
@@ -803,7 +799,6 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
         wxAuiNotebookPage& page = m_pages.Item(i);
         wxAuiTabContainerButton& tab_button = m_tabCloseButtons.Item(i);
 
-        rect.x = offset;
         rect.width = m_rect.width - right_buttons_width - offset - wnd->FromDIP(2);
 
         if (rect.width <= 0)
