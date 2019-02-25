@@ -351,10 +351,12 @@ wxRegionIterator::~wxRegionIterator()
 
 wxRegionIterator& wxRegionIterator::operator=(const wxRegionIterator& ri)
 {
-    delete m_qtRects;
-
-    m_qtRects = new QVector< QRect >( *ri.m_qtRects );
-    m_pos = ri.m_pos;
+    if (this != &ri)
+    {
+        delete m_qtRects;
+        m_qtRects = new QVector< QRect >( *ri.m_qtRects );
+        m_pos = ri.m_pos;
+    }
     return *this;
 }
 

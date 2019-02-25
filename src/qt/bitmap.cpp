@@ -478,9 +478,12 @@ wxMask::wxMask(const wxMask &mask)
 
 wxMask& wxMask::operator=(const wxMask &mask)
 {
-    delete m_qtBitmap;
-    QBitmap *mask_bmp = mask.GetHandle();
-    m_qtBitmap = mask_bmp ? new QBitmap(*mask_bmp) : NULL;
+    if (this != &mask)
+    {
+        delete m_qtBitmap;
+        QBitmap *mask_bmp = mask.GetHandle();
+        m_qtBitmap = mask_bmp ? new QBitmap(*mask_bmp) : NULL;
+    }
     return *this;
 }
 
