@@ -39,8 +39,8 @@ public:
 
     wxRegionRefData( const wxRegionRefData& data )
         : wxGDIRefData()
+        , m_qtRegion(data.m_qtRegion)
     {
-        m_qtRegion = data.m_qtRegion;
     }
 
     bool operator == (const wxRegionRefData& data) const

@@ -55,10 +55,10 @@ wxPrintPaperType::wxPrintPaperType()
 }
 
 wxPrintPaperType::wxPrintPaperType(wxPaperSize paperId, int platformId, const wxString& name, int w, int h)
+    : m_paperName(name)
 {
     m_paperId = paperId;
     m_platformId = platformId;
-    m_paperName = name;
     m_width = w;
     m_height = h;
 }

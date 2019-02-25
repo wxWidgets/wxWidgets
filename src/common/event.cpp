@@ -373,8 +373,8 @@ wxEventFunctor::~wxEventFunctor()
  */
 
 wxEvent::wxEvent(int theId, wxEventType commandType)
+    : m_eventType(commandType)
 {
-    m_eventType = commandType;
     m_eventObject = NULL;
     m_timeStamp = 0;
     m_id = theId;
@@ -754,12 +754,12 @@ wxPoint wxMouseEvent::GetLogicalPosition(const wxDC& dc) const
 // ----------------------------------------------------------------------------
 
 wxKeyEvent::wxKeyEvent(wxEventType type)
+#if wxUSE_UNICODE
+    : m_uniChar(WXK_NONE)
+#endif
 {
     m_eventType = type;
     m_keyCode = WXK_NONE;
-#if wxUSE_UNICODE
-    m_uniChar = WXK_NONE;
-#endif
 
     m_x =
     m_y = wxDefaultCoord;

@@ -69,10 +69,10 @@ public:
     wxAuiToolBarEvent(wxEventType commandType = wxEVT_NULL,
                       int winId = 0)
           : wxNotifyEvent(commandType, winId)
+        , m_clickPt(-1, -1)
+        , m_rect(-1, -1, 0, 0)
     {
         m_isDropdownClicked = false;
-        m_clickPt = wxPoint(-1, -1);
-        m_rect = wxRect(-1,-1, 0, 0);
         m_toolId = -1;
     }
     wxEvent *Clone() const wxOVERRIDE { return new wxAuiToolBarEvent(*this); }

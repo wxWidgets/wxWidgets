@@ -220,8 +220,8 @@ class wxPenRefData: public wxGDIRefData
 
         wxPenRefData( const wxPenRefData& data )
         : wxGDIRefData()
+            , m_qtPen(data.m_qtPen)
         {
-            m_qtPen = data.m_qtPen;
             defaultPen();
         }
 

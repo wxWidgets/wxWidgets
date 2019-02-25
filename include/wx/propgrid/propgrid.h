@@ -338,8 +338,8 @@ class WXDLLIMPEXP_PROPGRID wxPGCommonValue
 public:
 
     wxPGCommonValue( const wxString& label, wxPGCellRenderer* renderer )
+        : m_label(label)
     {
-        m_label = label;
         m_renderer = renderer;
         renderer->IncRef();
     }

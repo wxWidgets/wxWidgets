@@ -160,7 +160,7 @@ public:
     // The class of wxEvent-derived class carried by the events of this type.
     typedef T EventClass;
 
-    wxEventTypeTag(wxEventType type) { m_type = type; }
+    wxEventTypeTag(wxEventType type) : m_type(type) { }
 
     // Return a wxEventType reference for the initialization of the static
     // event tables. See wxEventTableEntry::m_eventType for a more thorough
@@ -1898,8 +1898,8 @@ public:
     }
 
     wxGestureEvent(const wxGestureEvent& event) : wxEvent(event)
+        , m_pos(event.m_pos)
     {
-        m_pos = event.m_pos;
         m_isStart = event.m_isStart;
         m_isEnd = event.m_isEnd;
     }

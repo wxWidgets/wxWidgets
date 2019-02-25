@@ -251,9 +251,8 @@ wxFontMgrFontRefData::wxFontMgrFontRefData(int size,
 }
 
 wxFontMgrFontRefData::wxFontMgrFontRefData(const wxFontMgrFontRefData& data)
+    : m_info(data.m_info)
 {
-    m_info = data.m_info;
-
     m_fontFace = data.m_fontFace;
     m_fontBundle = data.m_fontBundle;
     m_fontValid = data.m_fontValid;

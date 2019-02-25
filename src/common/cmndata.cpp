@@ -57,6 +57,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxPageSetupDialogData, wxObject);
 // ----------------------------------------------------------------------------
 
 wxPrintData::wxPrintData()
+    : m_paperSize(wxDefaultSize)
 {
     m_bin = wxPRINTBIN_DEFAULT;
     m_media = wxPRINTMEDIA_DEFAULT;
@@ -74,7 +75,6 @@ wxPrintData::wxPrintData()
     // we intentionally don't initialize paper id and size at all, like this
     // the default system settings will be used for them
     m_paperId = wxPAPER_NONE;
-    m_paperSize = wxDefaultSize;
 
     m_privData = NULL;
     m_privDataLen = 0;
@@ -202,6 +202,7 @@ wxPrintDialogData::wxPrintDialogData(const wxPrintDialogData& dialogData)
 }
 
 wxPrintDialogData::wxPrintDialogData(const wxPrintData& printData)
+    : m_printData(printData)
 {
     m_printFromPage = 1;
     m_printToPage = 0;
@@ -221,7 +222,6 @@ wxPrintDialogData::wxPrintDialogData(const wxPrintData& printData)
     m_printEnablePageNumbers = true;
     m_printEnablePrintToFile = true;
     m_printEnableHelp = false;
-    m_printData = printData;
 }
 
 wxPrintDialogData::~wxPrintDialogData()
@@ -257,8 +257,6 @@ void wxPrintDialogData::operator=(const wxPrintData& data)
 
 wxPageSetupDialogData::wxPageSetupDialogData()
 {
-    m_paperSize = wxSize(0,0);
-
     CalculatePaperSizeFromId();
 
     m_minMarginTopLeft =
@@ -283,13 +281,8 @@ wxPageSetupDialogData::wxPageSetupDialogData(const wxPageSetupDialogData& dialog
 }
 
 wxPageSetupDialogData::wxPageSetupDialogData(const wxPrintData& printData)
+    : m_printData(printData)
 {
-    m_paperSize = wxSize(0,0);
-    m_minMarginTopLeft =
-    m_minMarginBottomRight =
-    m_marginTopLeft =
-    m_marginBottomRight = wxPoint(0,0);
-
     // Flags
     m_defaultMinMargins = false;
     m_enableMargins = true;
@@ -298,8 +291,6 @@ wxPageSetupDialogData::wxPageSetupDialogData(const wxPrintData& printData)
     m_enablePrinter = true;
     m_enableHelp = false;
     m_getDefaultInfo = false;
-
-    m_printData = printData;
 
     // The wxPrintData paper size overrides these values, unless the size cannot
     // be found.

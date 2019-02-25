@@ -136,8 +136,8 @@ class wxBitmapRefData: public wxGDIRefData
         }
 
         wxBitmapRefData( QPixmap pix )
+            : m_qtPixmap(pix)
         {
-            m_qtPixmap = pix;
             m_mask = NULL;
         }
 

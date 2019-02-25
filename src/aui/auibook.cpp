@@ -3463,8 +3463,8 @@ public:
     };
 
     wxAuiLayoutObject(const wxSize &size, const wxAuiPaneInfo &pInfo)
+        : m_size(size)
     {
-        m_size = size;
         m_pInfo = &pInfo;
         /*
             To speed up the sorting of the panes, the direction is mapped to a

@@ -35,8 +35,8 @@ class wxAccelRefData : public wxObjectRefData
 
         wxAccelRefData(const wxAccelRefData& data)
         : wxObjectRefData()
+            , m_accels(data.m_accels)
         {
-            m_accels = data.m_accels;
         }
 
         virtual ~wxAccelRefData()

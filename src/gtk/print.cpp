@@ -1210,9 +1210,8 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxGtkPrinterDCImpl, wxDCImpl);
 
 wxGtkPrinterDCImpl::wxGtkPrinterDCImpl(wxPrinterDC *owner, const wxPrintData& data)
                   : wxDCImpl( owner )
+    , m_printData(data)
 {
-    m_printData = data;
-
     wxGtkPrintNativeData *native =
         (wxGtkPrintNativeData*) m_printData.GetNativeData();
 
