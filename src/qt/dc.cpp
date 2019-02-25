@@ -93,7 +93,7 @@ void wxQtDCImpl::QtPreparePainter( )
                 m_qtPainter->setClipRect( r.x, r.y, r.width, r.height,
                                           append ? Qt::IntersectClip : Qt::ReplaceClip );
                 append = true;
-                ri++;
+                ++ri;
             }
         }
     }
