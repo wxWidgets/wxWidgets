@@ -1920,6 +1920,9 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
 
         if(has_ext_button)
             label_rect.SetWidth(label_rect.GetWidth() - 13);
+        bool hasSlideOutPanel = wnd->HasSlideOutPanel();
+        if (hasSlideOutPanel)
+            label_rect.SetWidth(label_rect.GetWidth() - 13);
 
         if(label_size.GetWidth() > label_rect.GetWidth())
         {
@@ -1966,15 +1969,24 @@ void wxRibbonMSWArtProvider::DrawPanelBackground(
 
         if(has_ext_button)
         {
+            int avail_width = label_rect.GetRight() + 13;
             if(wnd->IsExtButtonHovered())
             {
                 dc.SetPen(m_panel_hover_button_border_pen);
                 dc.SetBrush(m_panel_hover_button_background_brush);
-                dc.DrawRoundedRectangle(label_rect.GetRight(), label_rect.GetBottom() - 13, 13, 13, 1.0);
-                dc.DrawBitmap(m_panel_extension_bitmap[1], label_rect.GetRight() + 3, label_rect.GetBottom() - 10, true);
+                dc.DrawRoundedRectangle(avail_width, label_rect.GetBottom() - 13, 13, 13, 1.0);
+                dc.DrawBitmap(m_panel_extension_bitmap[1], avail_width + 3, label_rect.GetBottom() - 10, true);
             }
             else
-                dc.DrawBitmap(m_panel_extension_bitmap[0], label_rect.GetRight() + 3, label_rect.GetBottom() - 10, true);
+                dc.DrawBitmap(m_panel_extension_bitmap[0], avail_width + 3, label_rect.GetBottom() - 10, true);
+        }
+        if (hasSlideOutPanel)
+        {
+            int avail_width = label_size.GetWidth() < label_rect.GetWidth() ?
+                label_rect.GetWidth() / 2 + label_size.GetWidth() / 2 + 8 : label_rect.GetWidth();
+            DrawDropdownArrow(dc, label_rect.x + avail_width,
+                label_rect.y + (label_rect.height / 2) + 2,
+                m_panel_button_face_colour);
         }
     }
 
@@ -2002,6 +2014,24 @@ wxRect wxRibbonMSWArtProvider::GetPanelExtButtonArea(wxDC& WXUNUSED(dc),
     rect = wxRect(rect.GetRight()-13, rect.GetBottom()-13, 13, 13);
     return rect;
 }
+
+// Bricsys change
+wxRect wxRibbonMSWArtProvider::GetLabelArea(wxDC& dc,
+                        const wxRibbonPanel* wnd,
+                        wxRect rect)
+{
+    wxRect label_rect(rect);
+    wxString label = wnd->GetLabel();
+    wxSize label_size(dc.GetTextExtent(label));
+
+    label_rect.SetX(label_rect.GetX() + 1);
+    label_rect.SetWidth(label_rect.GetWidth() - 2);
+    label_rect.SetHeight(label_size.GetHeight() + 2);
+    label_rect.SetY(rect.GetBottom() - label_rect.GetHeight());
+
+    return label_rect;
+}
+// End Bricsys change
 
 void wxRibbonMSWArtProvider::DrawGalleryBackground(
                         wxDC& dc,
