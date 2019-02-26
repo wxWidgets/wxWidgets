@@ -211,14 +211,13 @@ void wxWindowQt::Init()
     m_vertScrollBar = NULL;
 
     m_qtPicture = NULL;
-    m_qtPainter = new QPainter();
+    m_qtPainter.reset(new QPainter());
 
     m_mouseInside = false;
 
 #if wxUSE_ACCEL
-    m_qtShortcutHandler = new wxQtShortcutHandler( this );
+    m_qtShortcutHandler.reset(new wxQtShortcutHandler(this));
     m_processingShortcut = false;
-    m_qtShortcuts = NULL;
 #endif
     m_qtWindow = NULL;
     m_qtContainer = NULL;
@@ -251,11 +250,14 @@ wxWindowQt::~wxWindowQt()
 
     DestroyChildren(); // This also destroys scrollbars
 
-    delete m_qtPainter;
-
 #if wxUSE_ACCEL
-    m_qtShortcutHandler->deleteLater();
-    delete m_qtShortcuts;
+    if ( m_qtShortcuts )
+    {
+        for ( int i = 0; i < m_qtShortcuts->size(); ++i )
+        {
+            delete m_qtShortcuts->at(i);
+        }
+    }
 #endif
 
 #if wxUSE_DRAG_AND_DROP
@@ -266,23 +268,8 @@ wxWindowQt::~wxWindowQt()
     if (m_qtWindow)
     {
         wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow=%p"), GetName(), m_qtWindow);
-        // Avoid sending further signals (i.e. if deleting the current page)
-        m_qtWindow->blockSignals(true);
-        // Reset the pointer to avoid handling pending event and signals
-        QtStoreWindowPointer( GetHandle(), NULL );
-        if ( m_horzScrollBar )
-        {
-            QtStoreWindowPointer( m_horzScrollBar, NULL );
-            m_horzScrollBar->deleteLater();
-        }
-        if ( m_vertScrollBar )
-        {
-            QtStoreWindowPointer( m_vertScrollBar, NULL );
-            m_vertScrollBar->deleteLater();
-        }
-        // Delete QWidget when control return to event loop (safer)
-        m_qtWindow->deleteLater();
-        m_qtWindow = NULL;
+
+        delete m_qtWindow;
     }
     else
     {
@@ -622,6 +609,8 @@ QScrollBar *wxWindowQt::QtSetScrollBar( int orientation, QScrollBar *scrollBar )
 
 void wxWindowQt::SetScrollbar( int orientation, int pos, int thumbvisible, int range, bool WXUNUSED(refresh) )
 {
+    wxCHECK_RET(GetHandle(), "Window has not been created");
+
     //If not exist, create the scrollbar
     QScrollBar *scrollBar = QtGetScrollBar( orientation );
     if ( scrollBar == NULL )
@@ -1013,19 +1002,15 @@ void wxWindowQt::SetAcceleratorTable( const wxAcceleratorTable& accel )
         // Disable previously set accelerators
         while ( !m_qtShortcuts->isEmpty() )
             delete m_qtShortcuts->takeFirst();
-
-        // Create new shortcuts (use GetHandle() so all events inside
-        // the window are handled, not only in the container subwindow)
-        delete m_qtShortcuts;
     }
 
-    m_qtShortcuts = accel.ConvertShortcutTable( GetHandle() );
+    m_qtShortcuts.reset(accel.ConvertShortcutTable(GetHandle()));
 
     // Connect shortcuts to window
     Q_FOREACH( QShortcut *s, *m_qtShortcuts )
     {
-        QObject::connect( s, &QShortcut::activated, m_qtShortcutHandler, &wxQtShortcutHandler::activated );
-        QObject::connect( s, &QShortcut::activatedAmbiguously, m_qtShortcutHandler, &wxQtShortcutHandler::activated );
+        QObject::connect( s, &QShortcut::activated, m_qtShortcutHandler.get(), &wxQtShortcutHandler::activated );
+        QObject::connect( s, &QShortcut::activatedAmbiguously, m_qtShortcutHandler.get(), &wxQtShortcutHandler::activated );
     }
 }
 #endif // wxUSE_ACCEL
@@ -1191,7 +1176,7 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
             else
             {
                 // Data from wxClientDC, paint it
-                m_qtPicture->play( m_qtPainter );
+                m_qtPicture->play( m_qtPainter.get() );
                 // Reset picture
                 m_qtPicture->setData( NULL, 0 );
                 handled = true;
@@ -1572,5 +1557,5 @@ void wxWindowQt::QtSetPicture( QPicture* pict )
 
 QPainter *wxWindowQt::QtGetPainter()
 {
-    return m_qtPainter;
+    return m_qtPainter.get();
 }
