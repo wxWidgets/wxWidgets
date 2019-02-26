@@ -48,7 +48,7 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID WXUNUSED(winid),
                          long style, const wxString& WXUNUSED(name))
 {
     m_qtStatusBar = new wxQtStatusBar( parent, this );
-    m_qtPanes = new QList < QLabel* >;
+    m_qtPanes.reset(new QList<QLabel*>());
 
     if ( style & wxSTB_SIZEGRIP )
         m_qtStatusBar->setSizeGripEnabled(true);
@@ -106,7 +106,6 @@ void wxStatusBar::Refresh( bool eraseBackground, const wxRect *rect )
 void wxStatusBar::Init()
 {
     m_qtStatusBar = NULL;
-    m_qtPanes = NULL;
 }
 
 void wxStatusBar::UpdateFields()
