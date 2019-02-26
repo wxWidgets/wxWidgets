@@ -90,8 +90,6 @@ wxIMPLEMENT_CLASS(wxClientDCImpl,wxWindowDCImpl);
 wxClientDCImpl::wxClientDCImpl( wxDC *owner )
     : wxWindowDCImpl( owner )
 {
-    m_window = NULL;
-    m_qtPainter = NULL;
 }
 
 wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
