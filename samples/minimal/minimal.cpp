@@ -170,6 +170,7 @@ MyFrame::MyFrame(const wxString& title)
     wxButton* aboutBtn = new wxButton(this, wxID_ANY, "About...");
     aboutBtn->Bind(wxEVT_BUTTON, &MyFrame::OnAbout, this);
     sizer->Add(aboutBtn, wxSizerFlags().Center());
+    SetSizer(sizer);
 #endif // wxUSE_MENUS/!wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
