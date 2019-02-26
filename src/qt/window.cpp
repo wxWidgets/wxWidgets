@@ -221,8 +221,6 @@ void wxWindowQt::Init()
 #endif
     m_qtWindow = NULL;
     m_qtContainer = NULL;
-
-    m_dropTarget = NULL;
 }
 
 wxWindowQt::wxWindowQt()
@@ -695,6 +693,7 @@ void wxWindowQt::SetDropTarget( wxDropTarget *dropTarget )
     if ( m_dropTarget != NULL )
     {
         m_dropTarget->Disconnect();
+        delete m_dropTarget;
     }
 
     m_dropTarget = dropTarget;
