@@ -54,7 +54,7 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
     m_qtArgv[argc] = NULL;
     m_qtArgc = argc;
 
-    m_qtApplication.reset(new QApplication(m_qtArgc, m_qtArgv.data()));
+    m_qtApplication.reset(new QApplication(m_qtArgc, m_qtArgv.get()));
 
     // Use the args returned by Qt as it may have deleted (processed) some of them
     // Using QApplication::arguments() forces argument processing

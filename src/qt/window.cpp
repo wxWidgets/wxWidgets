@@ -1001,8 +1001,8 @@ void wxWindowQt::SetAcceleratorTable( const wxAcceleratorTable& accel )
     for ( wxVector<QShortcut*>::const_iterator it = m_qtShortcuts.begin();
           it != m_qtShortcuts.end(); ++it )
     {
-        QObject::connect( *it, &QShortcut::activated, m_qtShortcutHandler.data(), &wxQtShortcutHandler::activated );
-        QObject::connect( *it, &QShortcut::activatedAmbiguously, m_qtShortcutHandler.data(), &wxQtShortcutHandler::activated );
+        QObject::connect( *it, &QShortcut::activated, m_qtShortcutHandler.get(), &wxQtShortcutHandler::activated );
+        QObject::connect( *it, &QShortcut::activatedAmbiguously, m_qtShortcutHandler.get(), &wxQtShortcutHandler::activated );
     }
 }
 #endif // wxUSE_ACCEL
@@ -1168,7 +1168,7 @@ bool wxWindowQt::QtHandlePaintEvent ( QWidget *handler, QPaintEvent *event )
             else
             {
                 // Data from wxClientDC, paint it
-                m_qtPicture->play( m_qtPainter.data() );
+                m_qtPicture->play( m_qtPainter.get() );
                 // Reset picture
                 m_qtPicture->setData( NULL, 0 );
                 handled = true;
@@ -1549,5 +1549,5 @@ void wxWindowQt::QtSetPicture( QPicture* pict )
 
 QPainter *wxWindowQt::QtGetPainter()
 {
-    return m_qtPainter.data();
+    return m_qtPainter.get();
 }

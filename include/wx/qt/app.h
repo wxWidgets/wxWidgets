@@ -9,7 +9,7 @@
 #ifndef _WX_QT_APP_H_
 #define _WX_QT_APP_H_
 
-#include <QtCore/QScopedPointer>
+#include <wx/scopedarray.h>
 
 class QApplication;
 class WXDLLIMPEXP_CORE wxApp : public wxAppBase
@@ -21,9 +21,9 @@ public:
     virtual bool Initialize(int& argc, wxChar **argv);
 
 private:
-    QScopedPointer<QApplication> m_qtApplication;
+    wxScopedPtr<QApplication> m_qtApplication;
     int m_qtArgc;
-    QScopedArrayPointer<char*> m_qtArgv;
+    wxScopedArray<char*> m_qtArgv;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY( wxApp );
 };
