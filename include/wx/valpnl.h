@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/valpnl.h
-// Purpose:     wxDataTransferImpl<> declarations
+// Purpose:     wx{Mono,Multi}ValidatorPanel classes
 // Author:      Ali Kettab
 // Created:     2018-10-07
 // Copyright:   (c) 2018 Ali Kettab
@@ -125,9 +125,9 @@ public:
 
     virtual void SetWindow(wxWindow *win) wxOVERRIDE
     {
-        this->m_validatorWindow = win; 
-
         wxASSERT_MSG(wxDynamicCast(win, wxPanel) != NULL, "Invalid window type!");
+
+        this->m_validatorWindow = win; 
     }
 
     virtual bool Validate(wxWindow* parent) wxOVERRIDE
@@ -163,8 +163,8 @@ private:
 template <std::size_t N, class... Args>
 static inline void wxSetAlternative(std::variant<Args...>* var)
 {
-    var->template emplace<N>(typename wxTypeList::TypeAt<N, 
-                                        wxTypeList::TList<Args...>>::Type{});
+    var->template emplace<N>(
+        typename wxTypeList::TypeAt<N, wxTypeList::TList<Args...>>::Type{});
 }
 
 template <typename DataType, class... Ws>
@@ -256,10 +256,13 @@ protected:
 
     void OnText(wxCommandEvent& event)
     {
-        if ( !this->SelectAlternative(event.GetId()) )
-            event.Skip();
-        else
+        if ( this->SelectAlternative(event.GetId()) )
+        {
             OnAlternativeSelected(event.GetId());
+            return;
+        }
+
+        event.Skip();
     }
 
     // Override this if you want to do something useful
