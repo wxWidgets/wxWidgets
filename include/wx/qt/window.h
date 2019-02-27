@@ -234,7 +234,7 @@ private:
     bool m_mouseInside;
 
 #if wxUSE_ACCEL
-    QScopedPointer< QList<QShortcut*> > m_qtShortcuts;       // always allocated
+    wxVector<QShortcut*> m_qtShortcuts; // owned by whatever GetHandle() returns
     QScopedPointer<wxQtShortcutHandler> m_qtShortcutHandler; // always allocated
     bool m_processingShortcut;
 #endif // wxUSE_ACCEL

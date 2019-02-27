@@ -248,16 +248,6 @@ wxWindowQt::~wxWindowQt()
 
     DestroyChildren(); // This also destroys scrollbars
 
-#if wxUSE_ACCEL
-    if ( m_qtShortcuts )
-    {
-        for ( int i = 0; i < m_qtShortcuts->size(); ++i )
-        {
-            delete m_qtShortcuts->at(i);
-        }
-    }
-#endif
-
 #if wxUSE_DRAG_AND_DROP
     SetDropTarget(NULL);
 #endif
@@ -994,22 +984,25 @@ bool wxWindowQt::DoPopupMenu(wxMenu *menu, int x, int y)
 #if wxUSE_ACCEL
 void wxWindowQt::SetAcceleratorTable( const wxAcceleratorTable& accel )
 {
+    wxCHECK_RET(GetHandle(), "Window has not been created");
+
     wxWindowBase::SetAcceleratorTable( accel );
 
-    if ( m_qtShortcuts )
+    // Disable previously set accelerators
+    for ( wxVector<QShortcut*>::const_iterator it = m_qtShortcuts.begin();
+          it != m_qtShortcuts.end(); ++it )
     {
-        // Disable previously set accelerators
-        while ( !m_qtShortcuts->isEmpty() )
-            delete m_qtShortcuts->takeFirst();
+        delete *it;
     }
 
-    m_qtShortcuts.reset(accel.ConvertShortcutTable(GetHandle()));
+    m_qtShortcuts = accel.ConvertShortcutTable(GetHandle());
 
     // Connect shortcuts to window
-    Q_FOREACH( QShortcut *s, *m_qtShortcuts )
+    for ( wxVector<QShortcut*>::const_iterator it = m_qtShortcuts.begin();
+          it != m_qtShortcuts.end(); ++it )
     {
-        QObject::connect( s, &QShortcut::activated, m_qtShortcutHandler.get(), &wxQtShortcutHandler::activated );
-        QObject::connect( s, &QShortcut::activatedAmbiguously, m_qtShortcutHandler.get(), &wxQtShortcutHandler::activated );
+        QObject::connect( *it, &QShortcut::activated, m_qtShortcutHandler.get(), &wxQtShortcutHandler::activated );
+        QObject::connect( *it, &QShortcut::activatedAmbiguously, m_qtShortcutHandler.get(), &wxQtShortcutHandler::activated );
     }
 }
 #endif // wxUSE_ACCEL
