@@ -10,8 +10,6 @@
 
 #include "wx/statusbr.h"
 
-#include <QtCore/QScopedPointer>
-
 class QLabel;
 class QStatusBar;
 
@@ -47,7 +45,7 @@ private:
     void UpdateFields();
 
     QStatusBar *m_qtStatusBar;
-    QScopedPointer< QList<QLabel*> > m_qtPanes; // should this really be a pointer?
+    wxVector<QLabel*> m_qtPanes;
 
     wxDECLARE_DYNAMIC_CLASS(wxStatusBar);
 };
