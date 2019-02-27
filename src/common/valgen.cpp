@@ -41,6 +41,7 @@
 #include "wx/collpane.h"
 #include "wx/clrpicker.h"
 #include "wx/datectrl.h"
+#include "wx/timectrl.h"
 #include "wx/filepicker.h"
 #include "wx/fontpicker.h"
 #include "wx/spinctrl.h"
@@ -719,18 +720,8 @@ void wxGenericValidator::Initialize()
 wxIMPLEMENT_CLASS(wxGenericValidatorBase, wxValidator);
 
 wxGenericValidatorBase::wxGenericValidatorBase(const wxGenericValidatorBase& val)
-    : wxValidator()
+    : wxValidator(val), m_data(val.m_data)
 {
-    Copy(val);
-}
-
-bool wxGenericValidatorBase::Copy(const wxGenericValidatorBase& val)
-{
-    wxValidator::Copy(val);
-
-    m_data = val.m_data;
-
-    return true;
 }
 
 //=============================================================================
@@ -1358,6 +1349,316 @@ bool wxDataTransferImpl<wxDateTimePickerCtrlBase>::From(wxDateTimePickerCtrlBase
 }
 
 #endif // wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL
+
+//-----------------------------------------------------------------------------
+
+#ifndef wxNO_RTTI
+
+wxGenericValidatorBase* wxGenericValidatorBase::Convert(const std::type_info& tid) const
+{
+    wxCHECK_MSG(m_validatorWindow, NULL, "Validator window is NULL");
+
+#if wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL
+    if ( wxDynamicCast(m_validatorWindow, wxDatePickerCtrl) ||
+            wxDynamicCast(m_validatorWindow, wxTimePickerCtrl) )
+    {
+        if ( tid == typeid(wxDateTime) )
+            return new wxGenericValidatorSimpleType<wxDateTimePickerCtrlBase, wxDateTime>
+                    (static_cast<wxDateTime*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL
+
+#if wxUSE_CALENDARCTRL
+    if ( wxDynamicCast(m_validatorWindow, wxCalendarCtrl) )
+    {
+        if ( tid == typeid(wxDateTime) )
+            return new wxGenericValidatorSimpleType<wxCalendarCtrlBase, wxDateTime>
+                    (static_cast<wxDateTime*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_CALENDARCTRL
+
+#if wxUSE_TOGGLEBTN
+    if ( wxDynamicCast(m_validatorWindow, wxToggleButton) )
+    {
+        if ( tid == typeid(bool) )
+            return new wxGenericValidatorSimpleType<wxToggleButtonBase, bool>
+                    (static_cast<bool*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_TOGGLEBTN
+
+#if wxUSE_TEXTCTRL
+    if ( wxDynamicCast(m_validatorWindow, wxTextCtrl) )
+    {
+        if ( tid == typeid(wxString) )
+            return new wxGenericValidatorSimpleType<wxTextCtrlBase, wxString>
+                    (static_cast<wxString*>(m_data));
+        if ( tid == typeid(int) )
+            return new wxGenericValidatorSimpleType<wxTextCtrlBase, int>
+                    (static_cast<int*>(m_data));
+        if ( tid == typeid(float) )
+            return new wxGenericValidatorSimpleType<wxTextCtrlBase, float>
+                    (static_cast<float*>(m_data));
+        if ( tid == typeid(double) )
+            return new wxGenericValidatorSimpleType<wxTextCtrlBase, double>
+                    (static_cast<double*>(m_data));
+        if ( tid == typeid(wxFileName()) )
+            return new wxGenericValidatorSimpleType<wxTextCtrlBase, wxFileName>
+                    (static_cast<wxFileName*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_TEXTCTRL
+
+#if wxUSE_STATTEXT
+    if ( wxDynamicCast(m_validatorWindow, wxStaticText) )
+    {
+        if ( tid == typeid(wxString) )
+            return new wxGenericValidatorSimpleType<wxStaticTextBase, wxString>
+                    (static_cast<wxString*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_STATTEXT
+
+#if wxUSE_SPLITTER
+    if ( wxDynamicCast(m_validatorWindow, wxSplitterWindow) )
+    {
+        if ( tid == typeid(int) )
+            return new wxGenericValidatorSimpleType<wxSplitterWindow, int>
+                    (static_cast<int*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_SPLITTER
+
+#if wxUSE_SPINBTN
+    if ( wxDynamicCast(m_validatorWindow, wxSpinCtrlDouble) )
+    {
+        if ( tid == typeid(double) )
+            return new wxGenericValidatorSimpleType<wxSpinCtrlDouble, double>
+                    (static_cast<double*>(m_data));
+
+        return NULL;
+    }
+
+    if ( wxDynamicCast(m_validatorWindow, wxSpinCtrl) )
+    {
+        if ( tid == typeid(int) )
+            return new wxGenericValidatorSimpleType<wxSpinCtrl, int>
+                    (static_cast<int*>(m_data));
+
+        return NULL;
+    }
+
+    if ( wxDynamicCast(m_validatorWindow, wxSpinButton) )
+    {
+        if ( tid == typeid(int) )
+            return new wxGenericValidatorSimpleType<wxSpinButtonBase, int>
+                    (static_cast<int*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_SPINBTN
+
+#if wxUSE_SLIDER
+    if ( wxDynamicCast(m_validatorWindow, wxSlider) )
+    {
+        if ( tid == typeid(int) )
+            return new wxGenericValidatorSimpleType<wxSliderBase, int>
+                    (static_cast<int*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_SLIDER
+
+#if wxUSE_SCROLLBAR
+    if ( wxDynamicCast(m_validatorWindow, wxScrollBar) )
+    {
+        if ( tid == typeid(int) )
+            return new wxGenericValidatorSimpleType<wxScrollBarBase, int>
+                    (static_cast<int*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_SCROLLBAR
+
+#if wxUSE_RADIOBOX
+    if ( wxDynamicCast(m_validatorWindow, wxRadioBox) )
+    {
+        if ( tid == typeid(int) )
+            return new wxGenericValidatorSimpleType<wxRadioBox, int>
+                    (static_cast<int*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_RADIOBOX
+
+#if wxUSE_LISTBOX
+    if ( wxDynamicCast(m_validatorWindow, wxListBox) )
+    {
+        if ( tid == typeid(int) )
+            return new wxGenericValidatorSimpleType<wxListBoxBase, int>
+                    (static_cast<int*>(m_data));
+        if ( tid == typeid(wxArrayInt) )
+            return new wxGenericValidatorSimpleType<wxListBoxBase, wxArrayInt>
+                    (static_cast<wxArrayInt*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_LISTBOX
+
+#if wxUSE_GAUGE
+    if ( wxDynamicCast(m_validatorWindow, wxGauge) )
+    {
+        if ( tid == typeid(int) )
+            return new wxGenericValidatorSimpleType<wxGaugeBase, int>
+                    (static_cast<int*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_GAUGE
+
+#if wxUSE_FONTPICKERCTRL
+    if ( wxDynamicCast(m_validatorWindow, wxFontPickerCtrl) )
+    {
+        if ( tid == typeid(wxFont) )
+            return new wxGenericValidatorSimpleType<wxFontPickerCtrl, wxFont>
+                    (static_cast<wxFont*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_FONTPICKERCTRL
+
+#if wxUSE_DIRPICKERCTRL
+    if ( wxDynamicCast(m_validatorWindow, wxDirPickerCtrl) )
+    {
+        if ( tid == typeid(wxString) )
+            return new wxGenericValidatorSimpleType<wxDirPickerCtrl, wxString>
+                    (static_cast<wxString*>(m_data));
+        if ( tid == typeid(wxFileName) )
+            return new wxGenericValidatorSimpleType<wxDirPickerCtrl, wxFileName>
+                    (static_cast<wxFileName*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_DIRPICKERCTRL
+
+#if wxUSE_FILEPICKERCTRL
+    if ( wxDynamicCast(m_validatorWindow, wxFilePickerCtrl) )
+    {
+        if ( tid == typeid(wxString) )
+            return new wxGenericValidatorSimpleType<wxFilePickerCtrl, wxString>
+                    (static_cast<wxString*>(m_data));
+        if ( tid == typeid(wxFileName) )
+            return new wxGenericValidatorSimpleType<wxFilePickerCtrl, wxFileName>
+                    (static_cast<wxFileName*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_FILEPICKERCTRL
+
+#if wxUSE_COMBOBOX
+    if ( wxDynamicCast(m_validatorWindow, wxComboBox) )
+    {
+        if ( tid == typeid(int) )
+            return new wxGenericValidatorSimpleType<wxComboBox, int>
+                    (static_cast<int*>(m_data));
+        if ( tid == typeid(wxString) )
+            return new wxGenericValidatorSimpleType<wxComboBox, wxString>
+                    (static_cast<wxString*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_COMBOBOX
+
+#if wxUSE_COLOURPICKERCTRL
+    if ( wxDynamicCast(m_validatorWindow, wxColourPickerCtrl) )
+    {
+        if ( tid == typeid(wxColour) )
+            return new wxGenericValidatorSimpleType<wxColourPickerCtrl, wxColour>
+                    (static_cast<wxColour*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_COLOURPICKERCTRL
+
+#if wxUSE_COLLPANE
+    if ( wxDynamicCast(m_validatorWindow, wxCollapsiblePane) )
+    {
+        if ( tid == typeid(bool) )
+            return new wxGenericValidatorSimpleType<wxCollapsiblePaneBase, bool>
+                    (static_cast<bool*>(m_data));
+
+        return NULL;
+    }
+
+    if ( wxDynamicCast(m_validatorWindow, wxCollapsibleHeaderCtrl) )
+    {
+        if ( tid == typeid(bool) )
+            return new wxGenericValidatorSimpleType<wxCollapsibleHeaderCtrlBase, bool>
+                    (static_cast<bool*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_COLLPANE
+
+#if wxUSE_CHOICE
+    if ( wxDynamicCast(m_validatorWindow, wxChoice) )
+    {
+        if ( tid == typeid(int) )
+            return new wxGenericValidatorSimpleType<wxChoiceBase, int>
+                    (static_cast<int*>(m_data));
+        if ( tid == typeid(wxString) )
+            return new wxGenericValidatorSimpleType<wxChoiceBase, wxString>
+                    (static_cast<wxString*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_CHOICE
+
+#if wxUSE_CHECKLISTBOX
+    if ( wxDynamicCast(m_validatorWindow, wxCheckListBox) )
+    {
+        if ( tid == typeid(wxArrayInt) )
+            return new wxGenericValidatorSimpleType<wxCheckListBoxBase, wxArrayInt>
+                    (static_cast<wxArrayInt*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_CHECKLISTBOX
+
+#if wxUSE_CHECKBOX
+    if ( wxDynamicCast(m_validatorWindow, wxCheckBox) )
+    {
+        if ( tid == typeid(bool) )
+            return new wxGenericValidatorSimpleType<wxCheckBoxBase, bool>
+                    (static_cast<bool*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_CHECKBOX
+
+#if wxUSE_BUTTON
+    if ( wxDynamicCast(m_validatorWindow, wxButton) )
+    {
+        if ( tid == typeid(wxString) )
+            return new wxGenericValidatorSimpleType<wxButtonBase, wxString>
+                    (static_cast<wxString*>(m_data));
+
+        return NULL;
+    }
+#endif // wxUSE_BUTTON
+
+    return NULL;
+}
+
+#endif // wxNO_RTTI
 
 #endif // !wxUSE_DATATRANSFER
 

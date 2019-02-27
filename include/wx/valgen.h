@@ -87,10 +87,14 @@ public:
         return new wxGenericValidatorBase(*this); 
     }
 
-    bool Copy(const wxGenericValidatorBase& val);
-
 protected:
     explicit wxGenericValidatorBase(void* data) : m_data(data){}
+
+#ifndef wxNO_RTTI
+    // Called by wxGenericValidatorSimpleType<wxWindow, T>::SetWindow() to set
+    // the right validator based on the dynamic type of the m_validatorWindow.
+    wxGenericValidatorBase* Convert(const std::type_info& tid) const;
+#endif // wxNO_RTTI
 
     void* m_data;
 
@@ -126,18 +130,7 @@ public:
         return new wxGenericValidatorSimpleType(*this); 
     }
 
-    virtual void SetWindow(wxWindow *win) wxOVERRIDE
-    {
-        this->m_validatorWindow = win; 
-
-        wxASSERT_MSG((wxTypeId(*win) == wxTypeId(W)), "Invalid window type!");
-    }
-
-    virtual bool Validate(wxWindow* parent) wxOVERRIDE
-    {
-        return wxDataTransfer<W>::DoValidate(
-            static_cast<W*>(this->GetWindow()), parent);
-    }
+    virtual bool Validate(wxWindow* parent) wxOVERRIDE;
 
     virtual bool TransferToWindow() wxOVERRIDE
     {
@@ -147,6 +140,51 @@ public:
     virtual bool TransferFromWindow() wxOVERRIDE
     {
         return wxDataTransfer<W>::template From<T>(this->GetWindow(), this->m_data);
+    }
+};
+
+template<class W, typename T>
+bool wxGenericValidatorSimpleType<W, T>::Validate(wxWindow* parent)
+{
+    return wxDataTransfer<W>::DoValidate(
+        static_cast<W*>(this->GetWindow()), parent);
+}
+
+template<typename T>
+class wxGenericValidatorSimpleType<wxWindow, T> : public wxGenericValidatorBase
+{
+public:
+
+    explicit wxGenericValidatorSimpleType(T* data)
+        : wxGenericValidatorBase(data)
+    {
+    }
+
+    wxGenericValidatorSimpleType(const wxGenericValidatorSimpleType& val)
+        : wxGenericValidatorBase(val)
+    {
+    }
+
+    virtual ~wxGenericValidatorSimpleType(){}
+
+    virtual wxObject *Clone() const wxOVERRIDE
+    {
+        return new wxGenericValidatorSimpleType(*this);
+    }
+
+    virtual void SetWindow(wxWindow *win) wxOVERRIDE
+    {
+        wxGenericValidatorBase::SetWindow(win);
+
+    #ifndef wxNO_RTTI
+        wxScopedPtr<wxGenericValidatorBase> val(
+            wxGenericValidatorBase::Convert(typeid(T)));
+
+        wxCHECK_RET( val, "Validator convertion failed" );
+
+        if ( win )
+            win->SetValidator(*val);
+    #endif // wxNO_RTTI
     }
 };
 
@@ -285,6 +323,12 @@ template<class W, typename T>
 inline wxGenericValidatorSimpleType<W, T> wxGenericValidator(T* value)
 {
     return wxGenericValidatorSimpleType<W, T>(value);
+}
+
+template<typename T>
+inline wxGenericValidatorSimpleType<wxWindow, T> wxGenericValidator(T* value)
+{
+    return wxGenericValidatorSimpleType<wxWindow, T>(value);
 }
 
 template<class W, typename T>
