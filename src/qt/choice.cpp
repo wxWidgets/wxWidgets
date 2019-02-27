@@ -20,7 +20,7 @@ namespace
 class LexicalSortProxyModel : public QSortFilterProxyModel
 {
 public:
-    LexicalSortProxyModel(QObject* owner) : QSortFilterProxyModel(owner) {}
+    explicit LexicalSortProxyModel(QObject* owner) : QSortFilterProxyModel(owner) {}
 
     bool lessThan( const QModelIndex &left, const QModelIndex &right ) const wxOVERRIDE
     {
