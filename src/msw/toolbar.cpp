@@ -97,6 +97,13 @@
 // Margin between the control and its label.
 static const int MARGIN_CONTROL_LABEL = 3;
 
+// We make (flat-only) toolbars smaller by this amount than the value that
+// would be given to them by TB_AUTOSIZE. This is done for cosmetic reasons and
+// also to decrease the vertical space consumed by the toolbar and, finally and
+// perhaps most significantly, for compatibility, as people dislike their
+// toolbars changing height when updating to a new wxWidgets version.
+static const int AUTOSIZE_HEIGHT_ADJUSTMENT = 3;
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -1719,7 +1726,7 @@ void wxToolBar::UpdateSize()
         // at all if this is the right thing to do, but continue doing it now
         // for compatibility.
         if ( HasFlag(wxTB_FLAT) )
-            size.y -= 3;
+            size.y -= AUTOSIZE_HEIGHT_ADJUSTMENT;
     }
 
     SetSize(wxRect(pos, size));
