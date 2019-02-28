@@ -1678,6 +1678,8 @@ void wxToolBar::UpdateSize()
     wxPoint pos = GetPosition();
     ::SendMessage(GetHwnd(), TB_AUTOSIZE, 0, 0);
 
+    wxSize size = GetSize();
+
     // TB_AUTOSIZE doesn't seem to work for vertical toolbars which it resizes
     // to have the same width as a horizontal toolbar would have, even though
     // we do use TBSTATE_WRAP which should make it start a new row after each
@@ -1708,11 +1710,19 @@ void wxToolBar::UpdateSize()
                 maxWidth = width;
         }
 
-        SetSize(maxWidth, GetSize().y);
+        size.x = maxWidth;
+    }
+    else // horizontal
+    {
+        // For (flat) horizontal toolbars we used to make the toolbar 3px less
+        // tall in the previous wx versions, for some reason. It's not obvious
+        // at all if this is the right thing to do, but continue doing it now
+        // for compatibility.
+        if ( HasFlag(wxTB_FLAT) )
+            size.y -= 3;
     }
 
-    if (pos != GetPosition())
-        Move(pos);
+    SetSize(wxRect(pos, size));
 
     // In case Realize is called after the initial display (IOW the programmer
     // may have rebuilt the toolbar) give the frame the option of resizing the
