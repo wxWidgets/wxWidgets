@@ -176,6 +176,10 @@ wx_lib_compile_definitions(stc PRIVATE
     SCI_LEXER
     LINK_LEXERS
 )
+wx_lib_compile_definitions(wxscintilla PRIVATE
+    SCI_LEXER
+    LINK_LEXERS
+)
 wx_lib_link_libraries(stc PRIVATE wxscintilla)
 
 wx_finalize_lib(stc)
