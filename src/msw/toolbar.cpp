@@ -540,7 +540,7 @@ wxSize wxToolBar::MSWGetFittingtSizeForControl(wxToolBarTool* tool) const
     }
 
     // Also account for the tool padding value.
-    size += wxSize(m_toolPacking, m_toolPacking);
+    size.x += m_toolPacking;
 
     return size;
 }
