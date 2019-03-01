@@ -253,9 +253,8 @@ wxWindow *wxButton::SetDefault()
 static wxTopLevelWindow *GetTLWParentIfNotBeingDeleted(wxWindow *win)
 {
     wxWindow* const parent = wxGetTopLevelParent(win);
-    wxASSERT_MSG( parent, wxT("button without top level parent?") );
 
-    if ( parent->IsBeingDeleted() )
+    if (!parent || parent->IsBeingDeleted() )
         return NULL;
 
     // Note that this may still return null for a button inside wxPopupWindow.
