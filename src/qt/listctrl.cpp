@@ -686,7 +686,7 @@ public:
     }
 
 
-    long InsertItem(wxListItem info)
+    long InsertItem(const wxListItem& info)
     {
         const int column = info.GetColumn();
 
