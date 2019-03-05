@@ -333,10 +333,9 @@ public:
 
              case Qt::CheckStateRole:
                 {
-                  if ( !m_listCtrl->HasCheckBoxes() || col > 0 )
-                    return QVariant();
-
-                  return rowItem.m_checked; 
+                  if ( col == 0 && m_listCtrl->HasCheckBoxes() )
+                    return rowItem.m_checked; 
+                  return QVariant();
                 }
 
             default:
