@@ -90,16 +90,12 @@ wxIMPLEMENT_CLASS(wxClientDCImpl,wxWindowDCImpl);
 wxClientDCImpl::wxClientDCImpl( wxDC *owner )
     : wxWindowDCImpl( owner )
 {
-    m_window = NULL;
-    m_qtPainter = NULL;
 }
 
 wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
     : wxWindowDCImpl( owner )
 {
     m_window = win;
-
-    m_qtPainter = new QPainter();
 
     m_pict.reset(new QPicture());
     m_ok = m_qtPainter->begin( m_pict.get() );

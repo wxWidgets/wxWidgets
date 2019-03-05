@@ -45,7 +45,7 @@ private:
     void UpdateFields();
 
     QStatusBar *m_qtStatusBar;
-    QList< QLabel* > *m_qtPanes;
+    wxVector<QLabel*> m_qtPanes;
 
     wxDECLARE_DYNAMIC_CLASS(wxStatusBar);
 };
