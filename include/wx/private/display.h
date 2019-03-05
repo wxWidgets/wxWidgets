@@ -49,7 +49,7 @@ public:
     virtual int GetFromWindow(const wxWindow *window);
 
     // Trigger recreation of wxDisplayImpl when they're needed the next time.
-    void InvalidateCache() { ClearImpls(); }
+    virtual void InvalidateCache() { ClearImpls(); }
 
 protected:
     // create a new display object
