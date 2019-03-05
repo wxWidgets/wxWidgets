@@ -726,8 +726,9 @@ public:
 
         beginInsertRows(QModelIndex(), newRowIndex, newRowIndex);
 
-        info.SetId(newRowIndex);
-        SetItem(info);
+        wxListItem newItem = info;
+        newItem.SetId(newRowIndex);
+        SetItem(newItem);
 
         endInsertRows();
 
