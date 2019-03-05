@@ -983,7 +983,7 @@ public:
         const int row = static_cast<int>(info.GetId());
         const int col = info.m_col;
 
-        if (info.m_mask & wxLIST_MASK_TEXT)
+        if ( info.m_mask & wxLIST_MASK_TEXT )
             info.SetText(GetListCtrl()->OnGetItemText(row,col));
 
         CopySelectStatusToItem(info, row, col);
