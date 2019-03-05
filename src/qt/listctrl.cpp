@@ -829,7 +829,7 @@ protected:
 
     void CopySelectStatusToItem(wxListItem& info, int row, int col)
     {
-        if (info.m_mask & wxLIST_MASK_STATE)
+        if ( info.m_mask & wxLIST_MASK_STATE )
         {
             info.m_state = wxLIST_STATE_DONTCARE;
             if (info.m_stateMask & wxLIST_STATE_FOCUSED)
