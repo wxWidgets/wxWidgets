@@ -688,6 +688,7 @@ public:
     long InsertItem(const wxListItem& info)
     {
         const int column = info.GetColumn();
+        wxCHECK_MSG(column >= 0, -1, "Invalid column index");
 
         if ( static_cast<size_t>(column) >= m_headers.size() )
         {
