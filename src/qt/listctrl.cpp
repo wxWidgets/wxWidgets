@@ -968,7 +968,7 @@ public:
                 return QVariant();
 
             const int imageIndex = listCtrl->OnGetItemColumnImage(row, col);
-            if (imageIndex == -1)
+            if ( imageIndex == -1 )
                 return QVariant();
             wxBitmap image = imageList->GetBitmap(imageIndex);
             wxCHECK_MSG(image.IsOk(), QVariant(), "Invalid Bitmap");
