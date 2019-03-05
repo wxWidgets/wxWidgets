@@ -27,6 +27,7 @@ protected:
         WXUISIM_TEST( ItemClick ); \
         WXUISIM_TEST( KeyDown ); \
         CPPUNIT_TEST( DeleteItems ); \
+        CPPUNIT_TEST( InsertColumn ); \
         CPPUNIT_TEST( InsertItem ); \
         CPPUNIT_TEST( Find ); \
         CPPUNIT_TEST( Visible ); \
@@ -43,6 +44,7 @@ protected:
     void ItemClick();
     void KeyDown();
     void DeleteItems();
+    void InsertColumn();
     void InsertItem();
     void Find();
     void Visible();

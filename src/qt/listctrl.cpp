@@ -745,7 +745,7 @@ public:
 
         if ( col == -1 || static_cast<size_t>(col) >= m_headers.size() )
         {
-            newColumnIndex = m_headers.empty() ? 0 : m_headers.size() - 1;
+            newColumnIndex = m_headers.empty() ? 0 : m_headers.size();
         }
         else
         {
