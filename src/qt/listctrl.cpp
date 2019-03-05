@@ -827,7 +827,7 @@ protected:
         return indices.contains(index);
     }
 
-    void CopySelectStatusToItem(wxListItem& info, const int row, const int col)
+    void CopySelectStatusToItem(wxListItem& info, int row, int col)
     {
         if (info.m_mask & wxLIST_MASK_STATE)
         {
