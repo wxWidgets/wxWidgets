@@ -241,7 +241,7 @@ wxListColumnFormat wxQtConvertAlignFlag(int align)
 class wxQtListModel : public QAbstractTableModel
 {
 public:
-    wxQtListModel(wxListCtrl *listCtrl) :
+    explicit wxQtListModel(wxListCtrl *listCtrl) :
         m_view(NULL),
         m_listCtrl(listCtrl)
     {
