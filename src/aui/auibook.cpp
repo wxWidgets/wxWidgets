@@ -2058,8 +2058,9 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     // if that was the first page added, even if
     // select is false, it must become the "current page"
     // (though no select events will be fired)
-    if (!select && m_tabs.GetPageCount() == 1)
-        select = true;
+// Bricsys change: overrule mandatory activation of first added page
+//    if (!select && m_tabs.GetPageCount() == 1)
+//        select = true;
         //m_curPage = GetPageIndex(page);
 
     wxAuiTabCtrl* active_tabctrl = GetActiveTabCtrl();
@@ -2082,6 +2083,11 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     if (select)
     {
         SetSelectionToWindow(page);
+    }
+// Bricsys change:ensure selected tab remains visible
+    else
+    {
+        active_tabctrl->MakeTabVisible(m_curPage, active_tabctrl);
     }
 
     return true;
