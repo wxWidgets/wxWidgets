@@ -244,6 +244,7 @@ wxWindowQt::~wxWindowQt()
     if ( !m_qtWindow )
     {
         wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow is NULL"), GetName());
+        return;
     }
 
     // Delete only if the qt widget was created or assigned to this base class
