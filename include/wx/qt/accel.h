@@ -33,6 +33,8 @@
  * QShortcut. This handler will finally create and send the appropriate wx
  * event to the window. */
 
+#include <wx/vector.h>
+
 class QShortcut;
 template < class T > class QList;
 
