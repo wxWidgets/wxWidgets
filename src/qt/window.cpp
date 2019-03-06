@@ -241,6 +241,23 @@ wxWindowQt::wxWindowQt(wxWindowQt *parent, wxWindowID id, const wxPoint& pos, co
 
 wxWindowQt::~wxWindowQt()
 {
+    if ( !m_qtWindow )
+    {
+        wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow is NULL"), GetName());
+    }
+
+    // Delete only if the qt widget was created or assigned to this base class
+    wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow=%p"), GetName(), m_qtWindow);
+
+    if ( !IsBeingDeleted() )
+    {
+        // Deallocation was directly attempted, but still avoid processing pending events
+        QCoreApplication::removePostedEvents(m_qtWindow);
+    }
+
+    // Always block signals because the handlers are members of a derived class.
+    m_qtWindow->blockSignals(true);
+
     SendDestroyEvent();
 
     if ( s_capturedWindow == this )
@@ -252,17 +269,7 @@ wxWindowQt::~wxWindowQt()
     SetDropTarget(NULL);
 #endif
 
-    // Delete only if the qt widget was created or assigned to this base class
-    if (m_qtWindow)
-    {
-        wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow=%p"), GetName(), m_qtWindow);
-
-        delete m_qtWindow;
-    }
-    else
-    {
-        wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow is NULL"), GetName());
-    }
+    delete m_qtWindow;
 }
 
 
@@ -351,6 +358,16 @@ void wxWindowQt::PostCreation(bool generic)
 
     wxWindowCreateEvent event(this);
     HandleWindowEvent(event);
+}
+
+bool wxWindowQt::Destroy() // do not execute wxWindowBase version which would immediately delete this
+{
+    if ( GetHandle() )
+    {
+        SendDestroyEvent();
+    }
+
+    return true;
 }
 
 void wxWindowQt::AddChild( wxWindowBase *child )

@@ -76,6 +76,8 @@ public:
     // Used by all window classes in the widget creation process.
     void PostCreation( bool generic = true );
 
+    virtual bool Destroy() wxOVERRIDE;
+
     void AddChild( wxWindowBase *child ) wxOVERRIDE;
 
     virtual bool Show( bool show = true ) wxOVERRIDE;
