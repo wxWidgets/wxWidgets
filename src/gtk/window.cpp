@@ -860,11 +860,14 @@ wxTranslateGTKKeyEventToWx(wxKeyEvent& event,
         // codes of 13.
         event.m_uniChar = event.m_keyCode;
     }
-#endif // wxUSE_UNICODE
 
     // sending unknown key events doesn't really make sense
     if ( !key_code && !event.m_uniChar )
         return false;
+#else
+    if (!key_code)
+        return false;
+#endif // wxUSE_UNICODE
 
     // now fill all the other fields
     wxFillOtherKeyEventFields(event, win, gdk_event);
