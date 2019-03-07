@@ -2199,11 +2199,26 @@ PRectangle Window::GetMonitorRect(Point pt) {
 
 #endif // __WXOSX_COCOA__
 
-wxSTCPopupWindow::wxSTCPopupWindow(wxWindow* parent):wxSTCPopupBase(parent)
+wxSTCPopupWindow::wxSTCPopupWindow(wxWindow* parent)
+                 :wxSTCPopupBase(parent), m_initialPosition(wxDefaultPosition)
 {
     #if !wxSTC_POPUP_IS_CUSTOM
         Bind(wxEVT_SET_FOCUS, &wxSTCPopupWindow::OnFocus, this);
     #endif
+
+    m_tlw = wxDynamicCast(wxGetTopLevelParent(parent), wxTopLevelWindow);
+    if ( m_tlw )
+    {
+        m_tlw->Bind(wxEVT_MOVE, &wxSTCPopupWindow::OnParentMove, this);
+    }
+}
+
+wxSTCPopupWindow::~wxSTCPopupWindow()
+{
+    if ( m_tlw )
+    {
+        m_tlw->Unbind(wxEVT_MOVE, &wxSTCPopupWindow::OnParentMove, this);
+    }
 }
 
 bool wxSTCPopupWindow::Destroy()
@@ -2230,6 +2245,10 @@ bool wxSTCPopupWindow::AcceptsFocus() const
 
 void wxSTCPopupWindow::DoSetSize(int x, int y, int width, int height, int flags)
 {
+    if ( m_initialPosition == wxDefaultPosition
+            && x != wxDefaultCoord && y != wxDefaultCoord )
+        m_initialPosition = wxPoint(x, y);
+
     // convert coords to screen coords since we're a top-level window
     if (x != wxDefaultCoord)
         GetParent()->ClientToScreen(&x, NULL);
@@ -2238,6 +2257,13 @@ void wxSTCPopupWindow::DoSetSize(int x, int y, int width, int height, int flags)
         GetParent()->ClientToScreen(NULL, &y);
 
     wxSTCPopupBase::DoSetSize(x, y, width, height, flags);
+}
+
+void wxSTCPopupWindow::OnParentMove(wxMoveEvent& event)
+{
+    if ( m_initialPosition != wxDefaultPosition )
+        SetPosition(m_initialPosition);
+    event.Skip();
 }
 
 #if !wxSTC_POPUP_IS_CUSTOM

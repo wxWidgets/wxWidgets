@@ -130,15 +130,21 @@ class wxSTCPopupWindow:public wxSTCPopupBase
 {
 public:
     wxSTCPopupWindow(wxWindow*);
+    virtual ~wxSTCPopupWindow();
     virtual bool Destroy() wxOVERRIDE;
     virtual bool AcceptsFocus() const wxOVERRIDE;
 
 protected:
     virtual void DoSetSize(int x, int y, int width, int height,
                            int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+    void OnParentMove(wxMoveEvent& event);
     #if !wxSTC_POPUP_IS_CUSTOM
         void OnFocus(wxFocusEvent& event);
     #endif
+
+private:
+    wxPoint   m_initialPosition;
+    wxWindow* m_tlw;
 };
 
 
