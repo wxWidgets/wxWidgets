@@ -2721,6 +2721,17 @@ if test "$wxUSE_EXPAT" != "no"; then
         fi
     fi
     if test "$wxUSE_EXPAT" = "builtin" ; then
+        dnl Expat requires C99 compiler, so define wxCFLAGS_C99 variable which
+        dnl is used when compiling it in our makefiles.
+        save_CC="$CC"
+        AC_PROG_CC_C99
+        CC="$save_CC"
+
+        dnl Note that we need just the flags, not the full CC value including
+        dnl the compiler too.
+        wxCFLAGS_C99=$ac_cv_prog_cc_c99
+        AC_SUBST(wxCFLAGS_C99)
+
         dnl Expat needs this:
         AC_CONFIG_SUBDIRS([src/expat/expat])
     fi
