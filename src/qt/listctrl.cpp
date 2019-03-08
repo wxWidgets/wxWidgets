@@ -1034,16 +1034,19 @@ bool wxListCtrl::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
+    m_model = (style & wxLC_VIRTUAL)
+        ? new wxQtVirtualListModel(this)
+        : new wxQtListModel(this);
+
     m_qtTreeWidget = new wxQtListTreeWidget(parent, this);
     m_qtTreeWidget->setModel(m_model);
+    m_model->SetView(m_qtTreeWidget);
 
     if ( style & wxLC_NO_HEADER )
         m_qtTreeWidget->setHeaderHidden(true);
 
     m_qtTreeWidget->setRootIsDecorated(false);
     m_qtTreeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
-
-    m_model->SetView(m_qtTreeWidget);
 
     if ( !QtCreateControl(parent, id, pos, size, style, validator, name) )
         return false;
@@ -1055,7 +1058,7 @@ bool wxListCtrl::Create(wxWindow *parent,
 void wxListCtrl::Init()
 {
     m_hasCheckBoxes = false;
-    m_model = new wxQtListModel(this);
+    m_model = NULL;
     m_imageListNormal = NULL;
     m_ownsImageListNormal = false;
     m_imageListSmall = NULL;
