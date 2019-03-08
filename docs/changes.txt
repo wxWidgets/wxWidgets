@@ -585,6 +585,7 @@ Major new features in this release
 
 All:
 
+- Support nullptr in wxPrintf() and other pseudo-vararg functions.
 - Fix problem with wx-config installation and use under NetBSD (wiz).
 - Avoid spurious errors on thread creation under NetBSD.
 
