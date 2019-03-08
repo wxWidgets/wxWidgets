@@ -59,9 +59,9 @@ public:
     wxHtmlWinAutoScrollTimer(wxScrolledWindow *win,
                       wxEventType eventTypeToSend,
                       int pos, int orient)
+        : m_eventType(eventTypeToSend)
     {
         m_win = win;
-        m_eventType = eventTypeToSend;
         m_pos = pos;
         m_orient = orient;
     }
@@ -128,7 +128,7 @@ void wxHtmlWinAutoScrollTimer::Notify()
 class WXDLLIMPEXP_HTML wxHtmlHistoryItem
 {
 public:
-    wxHtmlHistoryItem(const wxString& p, const wxString& a) {m_Page = p, m_Anchor = a, m_Pos = 0;}
+    wxHtmlHistoryItem(const wxString& p, const wxString& a) : m_Page(p), m_Anchor(a), m_Pos(0) { }
     int GetPos() const {return m_Pos;}
     void SetPos(int p) {m_Pos = p;}
     const wxString& GetPage() const {return m_Page;}

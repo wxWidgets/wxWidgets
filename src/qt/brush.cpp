@@ -68,8 +68,8 @@ class wxBrushRefData: public wxGDIRefData
         }
 
         wxBrushRefData( const wxBrushRefData& data )
+            : m_qtBrush(data.m_qtBrush)
         {
-            m_qtBrush = data.m_qtBrush;
             m_style = data.m_style;
         }
 

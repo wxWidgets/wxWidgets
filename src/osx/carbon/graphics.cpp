@@ -830,8 +830,8 @@ private :
 };
 
 wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col) : wxGraphicsObjectRefData( renderer )
+    , m_colour(col)
 {
-    m_colour = col;
     m_underlined = font.GetUnderlined();
     m_strikethrough = font.GetStrikethrough();
 

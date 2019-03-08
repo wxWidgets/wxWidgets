@@ -227,24 +227,24 @@ protected:
 
 private:
     void Init();
-    QScrollArea *m_qtContainer;
+    QScrollArea *m_qtContainer;  // either NULL or the same as m_qtWindow pointer
 
-    QScrollBar *m_horzScrollBar;
-    QScrollBar *m_vertScrollBar;
+    QScrollBar *m_horzScrollBar; // owned by m_qtWindow when allocated
+    QScrollBar *m_vertScrollBar; // owned by m_qtWindow when allocated
 
     QScrollBar *QtGetScrollBar( int orientation ) const;
     QScrollBar *QtSetScrollBar( int orientation, QScrollBar *scrollBar=NULL );
 
     bool QtSetBackgroundStyle();
 
-    QPicture *m_qtPicture;
-    QPainter *m_qtPainter;
+    QPicture *m_qtPicture;                                   // not owned
+    wxScopedPtr<QPainter> m_qtPainter;                       // always allocated
 
     bool m_mouseInside;
 
 #if wxUSE_ACCEL
-    QList< QShortcut* > *m_qtShortcuts;
-    wxQtShortcutHandler *m_qtShortcutHandler;
+    wxVector<QShortcut*> m_qtShortcuts; // owned by whatever GetHandle() returns
+    wxScopedPtr<wxQtShortcutHandler> m_qtShortcutHandler;    // always allocated
     bool m_processingShortcut;
 #endif // wxUSE_ACCEL
 

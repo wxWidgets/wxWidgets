@@ -612,7 +612,6 @@ wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
 {
     m_action = actionNone;
     m_actionWindow = NULL;
-    m_lastMouseMove = wxPoint();
     m_hoverButton = NULL;
     m_art = new wxAuiDefaultDockArt;
     m_hintWnd = NULL;
@@ -1726,17 +1725,14 @@ void wxAuiManager::GetPanePositionsAndSizes(wxAuiDockInfo& dock,
     if (action_pane == -1)
         return;
 
-    offset = 0;
     for (pane_i = action_pane-1; pane_i >= 0; --pane_i)
     {
         int amount = positions[pane_i+1] - (positions[pane_i] + sizes[pane_i]);
 
         if (amount >= 0)
-            offset += amount;
+            ;
         else
             positions[pane_i] -= -amount;
-
-        offset += sizes[pane_i];
     }
 
     // if the dock mode is fixed, make sure none of the panes

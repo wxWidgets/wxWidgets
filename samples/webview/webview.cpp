@@ -322,7 +322,6 @@ WebFrame::WebFrame(const wxString& url) :
 
     // Set find values.
     m_findFlags = wxWEBVIEW_FIND_DEFAULT;
-    m_findText = wxEmptyString;
     m_findCount = 0;
 
     // Create panel for find toolbar.

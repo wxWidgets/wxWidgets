@@ -244,8 +244,8 @@ namespace
 
 wxFontRefData::wxFontRefData(const wxFontRefData& data)
 : wxGDIRefData()
+    , m_info(data.m_info)
 {
-    m_info = data.m_info;
     m_ctFont = data.m_ctFont;
     m_ctFontAttributes = data.m_ctFontAttributes;
     m_cgFont = data.m_cgFont;

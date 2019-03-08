@@ -24,17 +24,17 @@ class wxBrushRefData: public wxGDIRefData
 {
 public:
     wxBrushRefData(const wxColour& colour = wxNullColour, wxBrushStyle style = wxBRUSHSTYLE_SOLID)
+        : m_colour(colour)
     {
         m_style = style;
-        m_colour = colour;
     }
 
     wxBrushRefData( const wxBrushRefData& data )
         : wxGDIRefData()
+        , m_colour(data.m_colour)
+        , m_stipple(data.m_stipple)
     {
         m_style = data.m_style;
-        m_stipple = data.m_stipple;
-        m_colour = data.m_colour;
     }
 
     bool operator == (const wxBrushRefData& data) const

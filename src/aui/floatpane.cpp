@@ -52,8 +52,8 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
                         (pane.HasMaximizeButton()?wxMAXIMIZE_BOX:0) |
                         (pane.IsFixed()?0:wxRESIZE_BORDER)
                         )
+    , m_ownerMgr(owner_mgr)
 {
-    m_ownerMgr = owner_mgr;
     m_moving = false;
     m_mgr.SetManagedWindow(this);
     m_solidDrag = true;

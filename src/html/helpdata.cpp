@@ -803,9 +803,9 @@ wxString wxHtmlHelpData::FindPageById(int id)
 wxHtmlSearchStatus::wxHtmlSearchStatus(wxHtmlHelpData* data, const wxString& keyword,
                                        bool case_sensitive, bool whole_words_only,
                                        const wxString& book)
+    : m_Keyword(keyword)
 {
     m_Data = data;
-    m_Keyword = keyword;
     wxHtmlBookRecord* bookr = NULL;
     if (!book.empty())
     {

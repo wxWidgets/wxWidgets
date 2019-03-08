@@ -34,7 +34,7 @@ void wxMissingImplementation( const char fileName[], unsigned lineNumber,
 {
     // Make it look similar to the assert messages:
 
-    fprintf( stderr, "%s(%d): Missing implementation of \"%s\"\n", fileName, lineNumber, feature );
+    fprintf( stderr, "%s(%u): Missing implementation of \"%s\"\n", fileName, lineNumber, feature );
 }
 
 void wxQtFillMouseButtons( Qt::MouseButtons buttons, wxMouseState *state )

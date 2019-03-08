@@ -20,6 +20,8 @@ namespace
 class LexicalSortProxyModel : public QSortFilterProxyModel
 {
 public:
+    explicit LexicalSortProxyModel(QObject* owner) : QSortFilterProxyModel(owner) {}
+
     bool lessThan( const QModelIndex &left, const QModelIndex &right ) const wxOVERRIDE
     {
         const QVariant leftData = sourceModel()->data( left );
@@ -77,7 +79,7 @@ wxChoice::wxChoice() :
 
 void wxChoice::QtInitSort( QComboBox *combo )
 {
-    QSortFilterProxyModel *proxyModel = new LexicalSortProxyModel();
+    QSortFilterProxyModel *proxyModel = new LexicalSortProxyModel(combo);
     proxyModel->setSourceModel(combo->model());
     combo->model()->setParent(proxyModel);
     combo->setModel(proxyModel);

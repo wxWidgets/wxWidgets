@@ -125,8 +125,6 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
             long style)
     : wxStyledTextCtrl (parent, id, pos, size, style) {
 
-    m_filename = wxEmptyString;
-
     m_LineNrID = 0;
     m_DividerID = 1;
     m_FoldingID = 2;
@@ -760,7 +758,7 @@ EditProperties::EditProperties (Edit *edit,
     text = wxString::Format ("%d", edit->GetLexer());
     textinfo->Add (new wxStaticText (this, wxID_ANY, text),
                    0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT, 4);
-    wxString EOLtype = wxEmptyString;
+    wxString EOLtype;
     switch (edit->GetEOLMode()) {
         case wxSTC_EOL_CR: {EOLtype = "CR (Unix)"; break; }
         case wxSTC_EOL_CRLF: {EOLtype = "CRLF (Windows)"; break; }

@@ -177,9 +177,9 @@ void wxGridCellDateRenderer::SetParameters(const wxString& params)
 
 wxGridCellDateTimeRenderer::wxGridCellDateTimeRenderer(const wxString& outformat, const wxString& informat)
     : wxGridCellDateRenderer(outformat)
+    , m_iformat(informat)
+    , m_dateDef(wxDefaultDateTime)
 {
-    m_iformat = informat;
-    m_dateDef = wxDefaultDateTime;
 }
 
 wxGridCellRenderer *wxGridCellDateTimeRenderer::Clone() const

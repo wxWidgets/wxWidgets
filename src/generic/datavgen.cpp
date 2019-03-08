@@ -1351,8 +1351,8 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressRenderer, wxDataViewRenderer);
 wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
     const wxString &varianttype, wxDataViewCellMode mode, int align ) :
     wxDataViewRenderer( varianttype, mode, align )
+    , m_label(label)
 {
-    m_label = label;
     m_value = 0;
 }
 
@@ -1521,8 +1521,8 @@ class wxBitmapCanvas: public wxWindow
 public:
     wxBitmapCanvas( wxWindow *parent, const wxBitmap &bitmap, const wxSize &size ) :
     wxWindow( parent, wxID_ANY, wxPoint(0,0), size )
+        , m_bitmap(bitmap)
     {
-        m_bitmap = bitmap;
         Bind(wxEVT_PAINT, &wxBitmapCanvas::OnPaint, this);
     }
 

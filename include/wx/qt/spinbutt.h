@@ -31,6 +31,7 @@ public:
 
     virtual int GetValue() const;
     virtual void SetValue(int val);
+    virtual void SetRange(int min, int max) wxOVERRIDE;
 
     virtual QWidget *GetHandle() const;
 

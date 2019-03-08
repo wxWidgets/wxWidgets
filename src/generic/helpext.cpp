@@ -134,7 +134,8 @@ public:
     wxString doc;
 
     wxExtHelpMapEntry(int iid, wxString const &iurl, wxString const &idoc)
-        { entryid = iid; url = iurl; doc = idoc; }
+        : entryid(iid), url(iurl), doc(idoc)
+        { }
 };
 
 void wxExtHelpController::DeleteList()

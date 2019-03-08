@@ -43,7 +43,7 @@ public:
     wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]);
 
     // Implementation
-    QList < QShortcut* > *ConvertShortcutTable( QWidget *parent ) const;
+    wxVector<QShortcut*> ConvertShortcutTable( QWidget *parent ) const;
 
     bool Ok() const { return IsOk(); }
     bool IsOk() const;

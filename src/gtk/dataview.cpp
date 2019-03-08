@@ -320,9 +320,9 @@ class wxGtkTreeModelNode
 public:
     wxGtkTreeModelNode( wxGtkTreeModelNode* parent, const wxDataViewItem &item,
                         wxDataViewCtrlInternal *internal )
+        : m_item(item)
     {
         m_parent = parent;
-        m_item = item;
         m_internal = internal;
     }
 
@@ -2771,8 +2771,8 @@ wxIMPLEMENT_CLASS(wxDataViewProgressRenderer, wxDataViewCustomRenderer);
 wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
     const wxString &varianttype, wxDataViewCellMode mode, int align ) :
     wxDataViewCustomRenderer( varianttype, mode, align, true )
+    , m_label(label)
 {
-    m_label = label;
     m_value = 0;
     m_renderer = (GtkCellRenderer*) gtk_cell_renderer_progress_new();
 
@@ -2870,8 +2870,8 @@ wxSize wxDataViewProgressRenderer::GetSize() const
 wxDataViewChoiceRenderer::wxDataViewChoiceRenderer( const wxArrayString &choices,
                             wxDataViewCellMode mode, int alignment  ) :
     wxDataViewCustomRenderer( "string", mode, alignment, true )
+    , m_choices(choices)
 {
-    m_choices = choices;
     m_renderer = (GtkCellRenderer*) gtk_cell_renderer_combo_new();
     GtkListStore *store = gtk_list_store_new( 1, G_TYPE_STRING );
     for (size_t n = 0; n < m_choices.GetCount(); n++)
