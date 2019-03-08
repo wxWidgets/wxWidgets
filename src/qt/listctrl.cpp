@@ -144,7 +144,7 @@ wxListColumnFormat wxQtConvertAlignFlag(int align)
 class wxQtListModel : public QAbstractTableModel
 {
 public:
-    wxQtListModel(wxListCtrl *listCtrl) :
+    explicit wxQtListModel(wxListCtrl *listCtrl) :
         m_view(NULL),
         m_listCtrl(listCtrl)
     {
@@ -236,10 +236,9 @@ public:
 
              case Qt::CheckStateRole:
                 {
-                  if ( !m_listCtrl->HasCheckBoxes() || col > 0 )
-                    return QVariant();
-
-                  return rowItem.m_checked; 
+                  if ( col == 0 && m_listCtrl->HasCheckBoxes() )
+                    return rowItem.m_checked; 
+                  return QVariant();
                 }
 
             default:
@@ -589,9 +588,10 @@ public:
     }
 
 
-    long InsertItem(wxListItem info)
+    long InsertItem(const wxListItem& info)
     {
         const int column = info.GetColumn();
+        wxCHECK_MSG(column >= 0, -1, "Invalid column index");
 
         if ( static_cast<size_t>(column) >= m_headers.size() )
         {
@@ -629,8 +629,9 @@ public:
 
         beginInsertRows(QModelIndex(), newRowIndex, newRowIndex);
 
-        info.SetId(newRowIndex);
-        SetItem(info);
+        wxListItem newItem = info;
+        newItem.SetId(newRowIndex);
+        SetItem(newItem);
 
         endInsertRows();
 
@@ -647,7 +648,7 @@ public:
 
         if ( col == -1 || static_cast<size_t>(col) >= m_headers.size() )
         {
-            newColumnIndex = m_headers.empty() ? 0 : m_headers.size() - 1;
+            newColumnIndex = m_headers.empty() ? 0 : m_headers.size();
         }
         else
         {
@@ -730,9 +731,9 @@ protected:
         return indices.contains(index);
     }
 
-    void CopySelectStatusToItem(wxListItem& info, const int row, const int col)
+    void CopySelectStatusToItem(wxListItem& info, int row, int col)
     {
-        if (info.m_mask & wxLIST_MASK_STATE)
+        if ( info.m_mask & wxLIST_MASK_STATE )
         {
             info.m_state = wxLIST_STATE_DONTCARE;
             if (info.m_stateMask & wxLIST_STATE_FOCUSED)
@@ -871,7 +872,7 @@ public:
                 return QVariant();
 
             const int imageIndex = listCtrl->OnGetItemColumnImage(row, col);
-            if (imageIndex == -1)
+            if ( imageIndex == -1 )
                 return QVariant();
             wxBitmap image = imageList->GetBitmap(imageIndex);
             wxCHECK_MSG(image.IsOk(), QVariant(), "Invalid Bitmap");
@@ -886,7 +887,7 @@ public:
         const int row = static_cast<int>(info.GetId());
         const int col = info.m_col;
 
-        if (info.m_mask & wxLIST_MASK_TEXT)
+        if ( info.m_mask & wxLIST_MASK_TEXT )
             info.SetText(GetListCtrl()->OnGetItemText(row,col));
 
         CopySelectStatusToItem(info, row, col);
@@ -936,17 +937,19 @@ bool wxListCtrl::Create(wxWindow *parent,
             const wxValidator& validator,
             const wxString& name)
 {
+    m_model = (style & wxLC_VIRTUAL)
+        ? new wxQtVirtualListModel(this)
+        : new wxQtListModel(this);
 
     m_qtTreeWidget = new wxQtListTreeWidget(parent, this);
     m_qtTreeWidget->setModel(m_model);
+    m_model->SetView(m_qtTreeWidget);
 
     if ( style & wxLC_NO_HEADER )
         m_qtTreeWidget->setHeaderHidden(true);
 
     m_qtTreeWidget->setRootIsDecorated(false);
     m_qtTreeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
-
-    m_model->SetView(m_qtTreeWidget);
 
     if ( !QtCreateControl(parent, id, pos, size, style, validator, name) )
         return false;
@@ -958,7 +961,7 @@ bool wxListCtrl::Create(wxWindow *parent,
 void wxListCtrl::Init()
 {
     m_hasCheckBoxes = false;
-    m_model = new wxQtListModel(this);
+    m_model = NULL;
     m_imageListNormal = NULL;
     m_ownsImageListNormal = false;
     m_imageListSmall = NULL;
