@@ -425,6 +425,12 @@ wxFORMAT_STRING_SPECIFIER(int*, wxFormatString::Arg_IntPtr | wxFormatString::Arg
 wxFORMAT_STRING_SPECIFIER(short int*, wxFormatString::Arg_ShortIntPtr | wxFormatString::Arg_Pointer)
 wxFORMAT_STRING_SPECIFIER(long int*, wxFormatString::Arg_LongIntPtr | wxFormatString::Arg_Pointer)
 
+// Support for nullptr is available since MSVS 2010, even though it doesn't
+// define __cplusplus as a C++11 compiler.
+#if __cplusplus >= 201103 || wxCHECK_VISUALC_VERSION(10)
+wxFORMAT_STRING_SPECIFIER(std::nullptr_t, wxFormatString::Arg_Pointer)
+#endif
+
 #undef wxFORMAT_STRING_SPECIFIER
 
 
