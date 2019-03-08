@@ -297,23 +297,6 @@ void ListBaseTestCase::DeleteItems()
 #endif
 }
 
-void ListBaseTestCase::InsertColumn()
-{
-    wxListCtrl* const list = GetList();
-
-    list->InsertColumn(0, "Column 0");
-    list->InsertColumn(1, "Column 1");
-
-    wxListItem item0;
-    list->GetColumn(0, item0);
-
-    wxListItem item1;
-    list->GetColumn(1, item1);
-
-    CPPUNIT_ASSERT_EQUAL("Column 0", item0.GetText());
-    CPPUNIT_ASSERT_EQUAL("Column 1", item1.GetText());
-}
-
 void ListBaseTestCase::InsertItem()
 {
     wxListCtrl* const list = GetList();
