@@ -167,12 +167,20 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 
 bool wxNotebook::DeleteAllPages()
 {
+    // Nothing to do if the notebook was not created yet,
+    // and return true just like other ports do.
+    if ( !m_qtTabWidget )
+        return true;
+
+    // Block signals to not receive selection changed updates
+    // which are sent by Qt after the selected page was deleted.
+    const QSignalBlocker blocker(m_qtTabWidget);
+
+    // Pages will be deleted one by one in the base class.
+    // There's no need to explicitly clear() the Qt control.
     if ( !wxNotebookBase::DeleteAllPages() )
         return false;
 
-    m_qtTabWidget->blockSignals(true);
-    m_qtTabWidget->clear();
-    m_qtTabWidget->blockSignals(false);
     return true;
 }
 
