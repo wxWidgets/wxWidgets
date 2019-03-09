@@ -1247,7 +1247,7 @@ public:
         Called whenever validation has failed with given pending value.
 
         @remarks If you implement this in your custom property class, please
-                 remember to call the baser implementation as well, since they
+                 remember to call the base implementation as well, since they
                  may use it to revert property into pre-change state.
     */
     virtual void OnValidationFailure( wxVariant& pendingValue );
