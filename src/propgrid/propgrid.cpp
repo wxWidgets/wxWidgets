@@ -3271,8 +3271,6 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
             cell.SetBgCol(vfbBg);
         }
 
-        DrawItemAndChildren(property);
-
         if ( property == GetSelection() )
         {
             SetInternalFlag(wxPG_FL_CELL_OVERRIDES_SEL);
@@ -3284,6 +3282,8 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
                 editor->SetBackgroundColour(vfbBg);
             }
         }
+
+        DrawItemAndChildren(property);
     }
 
     if ( vfb & (wxPG_VFB_SHOW_MESSAGE |
