@@ -97,13 +97,6 @@
 // Margin between the control and its label.
 static const int MARGIN_CONTROL_LABEL = 3;
 
-// We make (flat-only) toolbars smaller by this amount than the value that
-// would be given to them by TB_AUTOSIZE. This is done for cosmetic reasons and
-// also to decrease the vertical space consumed by the toolbar and, finally and
-// perhaps most significantly, for compatibility, as people dislike their
-// toolbars changing height when updating to a new wxWidgets version.
-static const int AUTOSIZE_HEIGHT_ADJUSTMENT = 3;
-
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -475,6 +468,14 @@ void wxToolBar::Recreate()
     const wxPoint pos = GetPosition();
     const wxSize size = GetSize();
 
+    // Note that MSWCreateToolbar() will set the current size as the initial
+    // and minimal size of the toolbar, which is unwanted both because it loses
+    // any actual min size set from user code and because even if SetMinSize()
+    // is never called, we're going to be stuck with the bigger than necessary
+    // min size when we're switching from text+icons to text or icons-only
+    // modes, so preserve the current min size here.
+    const wxSize minSizeOrig = GetMinSize();
+
     UnsubclassWin();
 
     if ( !MSWCreateToolbar(pos, size) )
@@ -484,6 +485,8 @@ void wxToolBar::Recreate()
 
         return;
     }
+
+    SetMinSize(minSizeOrig);
 
     // reparent all our children under the new toolbar
     for ( wxWindowList::compatibility_iterator node = m_children.GetFirst();
@@ -531,6 +534,10 @@ wxSize wxToolBar::MSWGetFittingtSizeForControl(wxToolBarTool* tool) const
 {
     wxSize size = tool->GetControl()->GetBestSize();
 
+    // This is arbitrary, but we want to leave at least 1px around the control
+    // vertically, otherwise it really looks too cramped.
+    size.y += 2*1;
+
     // Account for the label, if any.
     if ( wxStaticText * const staticText = tool->GetStaticText() )
     {
@@ -554,56 +561,62 @@ wxSize wxToolBar::MSWGetFittingtSizeForControl(wxToolBarTool* tool) const
 
 wxSize wxToolBar::DoGetBestSize() const
 {
+    const wxSize sizeTool = GetToolSize();
+
     wxSize sizeBest;
-
-    SIZE size;
-    if ( !::SendMessage(GetHwnd(), TB_GETMAXSIZE, 0, (LPARAM)&size) )
+    if ( IsVertical() )
     {
-        // maybe an old (< 0x400) Windows version? try to approximate the
-        // toolbar size ourselves
-        sizeBest = GetToolSize();
-        sizeBest.y += 2 * ::GetSystemMetrics(SM_CYBORDER); // Add borders
-        sizeBest.x *= GetToolsCount();
+        sizeBest.x = sizeTool.x + 2 * ::GetSystemMetrics(SM_CXBORDER);
+    }
+    else
+    {
+        sizeBest.y = sizeTool.y + 2 * ::GetSystemMetrics(SM_CYBORDER);
+    }
 
-        // reverse horz and vertical components if necessary
+    wxToolBarToolsList::compatibility_iterator node;
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+    {
+        wxToolBarTool * const
+            tool = static_cast<wxToolBarTool *>(node->GetData());
+
         if ( IsVertical() )
         {
-            wxSwap(sizeBest.x, sizeBest.y);
-        }
-    }
-    else // TB_GETMAXSIZE succeeded
-    {
-        // but it could still return an incorrect result due to what appears to
-        // be a bug in old comctl32.dll versions which don't handle controls in
-        // the toolbar correctly, so work around it (see SF patch 1902358)
-        if ( !IsVertical() && wxApp::GetComCtl32Version() < 600 )
-        {
-            // calculate the toolbar width in alternative way
-            const RECT rcFirst = wxGetTBItemRect(GetHwnd(), 0);
-            const RECT rcLast = wxGetTBItemRect(GetHwnd(), GetToolsCount() - 1);
-
-            const int widthAlt = rcLast.right - rcFirst.left;
-            if ( widthAlt > size.cx )
-                size.cx = widthAlt;
-        }
-
-        sizeBest.x = size.cx;
-        sizeBest.y = size.cy;
-    }
-
-    if ( !IsVertical() )
-    {
-        wxToolBarToolsList::compatibility_iterator node;
-        for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
-        {
-            wxToolBarTool * const
-                tool = static_cast<wxToolBarTool *>(node->GetData());
-            if (tool->IsControl())
+            if ( !tool->IsControl() )
             {
-                // Ensure we're tall enough for the embedded controls.
-                sizeBest.IncTo(wxSize(-1, MSWGetFittingtSizeForControl(tool).y));
+                sizeBest.y += sizeTool.y + m_toolPacking;
             }
+            //else: Controls are not shown in vertical toolbars at all.
         }
+        else
+        {
+            if ( tool->IsControl() )
+            {
+                const wxSize sizeControl = MSWGetFittingtSizeForControl(tool);
+
+                // Ensure we're tall enough for the embedded controls.
+                sizeBest.IncTo(wxSize(-1, sizeControl.y));
+
+                sizeBest.x += sizeControl.x;
+            }
+            else
+            {
+                sizeBest.x += sizeTool.x;
+            }
+
+            sizeBest.x += m_toolPacking;
+        }
+    }
+
+    // Note that this needs to be done after the loop to account for controls
+    // too high to fit into the toolbar without the border size but that could
+    // fit if we had added the border beforehand.
+    if ( IsVertical() )
+    {
+        sizeBest.x += 2 * ::GetSystemMetrics(SM_CXBORDER);
+    }
+    else
+    {
+        sizeBest.y += 2 * ::GetSystemMetrics(SM_CYBORDER);
     }
 
     return sizeBest;
@@ -749,6 +762,8 @@ bool wxToolBar::Realize()
 {
     if ( !wxToolBarBase::Realize() )
         return false;
+
+    InvalidateBestSize();
 
     const size_t nTools = GetToolsCount();
 
@@ -1046,7 +1061,6 @@ bool wxToolBar::Realize()
     // this array will hold the indices of all controls in the toolbar
     wxArrayInt controlIds;
 
-    int minReqHeight = 0;
     bool lastWasRadio = false;
     int i = 0;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
@@ -1063,10 +1077,7 @@ bool wxToolBar::Realize()
             case wxTOOL_STYLE_CONTROL:
                 if ( !IsVertical() )
                 {
-                    const wxSize size = MSWGetFittingtSizeForControl(tool);
-                    if ( minReqHeight < size.y )
-                        minReqHeight = size.y;
-                    button.iBitmap = size.x;
+                    button.iBitmap = MSWGetFittingtSizeForControl(tool).x;
                 }
 
                 wxFALLTHROUGH;
@@ -1202,26 +1213,13 @@ bool wxToolBar::Realize()
     }
 
 
-    // Make sure the toolbar is tall enough to fit the embedded controls, which
-    // may be taller than the buttons.
-    wxSize toolSize = GetToolSize();
-    if ( toolSize.y < minReqHeight )
-    {
-        toolSize.y = minReqHeight;
-
-        // Surprisingly, we need to send TB_AUTOSIZE before TB_SETBUTTONSIZE
-        // and not after it, as might be expected: otherwise, the button size
-        // remains unchanged (doing TB_AUTOSIZE later doesn't seem to do any
-        // harm but doesn't change the button size neither).
-        ::SendMessage(GetHwnd(), TB_AUTOSIZE, 0, 0);
-
-        ::SendMessage(GetHwnd(), TB_SETBUTTONSIZE,
-                      0, MAKELPARAM(toolSize.x, toolSize.y));
-    }
-
-
     // Adjust controls and stretchable spaces
     // --------------------------------------
+
+    // We don't trust the height returned by wxGetTBItemRect() as it may not
+    // have been updated yet, use the height that the toolbar will actually
+    // have instead. Also, account for 2px toolbar border here.
+    const int height = GetBestSize().y - 2 * ::GetSystemMetrics(SM_CYBORDER);
 
     // adjust the controls size to fit nicely in the toolbar and compute its
     // total size while doing it
@@ -1266,7 +1264,6 @@ bool wxToolBar::Realize()
 
         // Take also into account tool padding value.
         const int x = r.left + m_toolPacking/2;
-        const int height = r.bottom - r.top;
 
         // Greater of control and its label widths.
         int totalWidth = controlSize.x;
@@ -1328,8 +1325,6 @@ bool wxToolBar::Realize()
         m_maxRows = 1;
         SetRows(m_nButtons);
     }
-
-    InvalidateBestSize();
 
     return true;
 }
@@ -1682,54 +1677,13 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 
 void wxToolBar::UpdateSize()
 {
-    wxPoint pos = GetPosition();
-    ::SendMessage(GetHwnd(), TB_AUTOSIZE, 0, 0);
+    // We used to use TB_AUTOSIZE here, but it didn't work at all for vertical
+    // toolbars and was more trouble than it was worth for horizontal one as it
+    // added some unwanted margins that we had to remove later. So now we just
+    // compute our own size and use it.
+    SetSize(GetBestSize());
 
-    wxSize size = GetSize();
-
-    // TB_AUTOSIZE doesn't seem to work for vertical toolbars which it resizes
-    // to have the same width as a horizontal toolbar would have, even though
-    // we do use TBSTATE_WRAP which should make it start a new row after each
-    // tool. So override its width determination explicitly.
-    if ( IsVertical() )
-    {
-        // Find the widest tool in the toolbar.
-        int maxWidth = 0;
-
-        int i = 0;
-        for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
-              node;
-              node = node->GetNext(), ++i )
-        {
-            wxToolBarTool * const tool = (wxToolBarTool*)node->GetData();
-            if ( tool->IsSeparator() )
-            {
-                // Somehow, separators get resized to have huge width, which
-                // probably explains why TB_AUTOSIZE doesn't work correctly for
-                // us in the first place. Because of this, don't take them into
-                // account: they can't be wider than any normal button, anyhow.
-                continue;
-            }
-
-            const RECT rc = wxGetTBItemRect(GetHwnd(), i);
-            const int width = rc.right - rc.left;
-            if ( width > maxWidth )
-                maxWidth = width;
-        }
-
-        size.x = maxWidth;
-    }
-    else // horizontal
-    {
-        // For (flat) horizontal toolbars we used to make the toolbar 3px less
-        // tall in the previous wx versions, for some reason. It's not obvious
-        // at all if this is the right thing to do, but continue doing it now
-        // for compatibility.
-        if ( HasFlag(wxTB_FLAT) )
-            size.y -= AUTOSIZE_HEIGHT_ADJUSTMENT;
-    }
-
-    SetSize(wxRect(pos, size));
+    UpdateStretchableSpacersSize();
 
     // In case Realize is called after the initial display (IOW the programmer
     // may have rebuilt the toolbar) give the frame the option of resizing the
