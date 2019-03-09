@@ -398,8 +398,6 @@ public:
     // this take advantage of it.
     virtual int GetChoiceSelection() const wxOVERRIDE { return m_index; }
 
-    virtual void OnValidationFailure( wxVariant& pendingValue ) wxOVERRIDE;
-
 protected:
 
     int GetIndex() const;

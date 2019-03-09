@@ -361,8 +361,6 @@ public:
     // this take advantage of it.
     virtual int GetChoiceSelection() const;
 
-    virtual void OnValidationFailure( wxVariant& pendingValue );
-
 protected:
 
     int GetIndex() const;
