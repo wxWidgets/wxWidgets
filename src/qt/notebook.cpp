@@ -174,14 +174,15 @@ bool wxNotebook::DeleteAllPages()
 
     // Block signals to not receive selection changed updates
     // which are sent by Qt after the selected page was deleted.
-    const QSignalBlocker blocker(m_qtTabWidget);
+    m_qtTabWidget->blockSignals(true);
 
     // Pages will be deleted one by one in the base class.
     // There's no need to explicitly clear() the Qt control.
-    if ( !wxNotebookBase::DeleteAllPages() )
-        return false;
+    bool deleted = wxNotebookBase::DeleteAllPages();
 
-    return true;
+    m_qtTabWidget->blockSignals(false);
+
+    return deleted;
 }
 
 int wxNotebook::SetSelection(size_t page)
