@@ -54,6 +54,89 @@ public:
     virtual void SetList(const char* list, char separator, char typesep) wxOVERRIDE;
 };
 
+
+//----------------------------------------------------------------------
+// wxSTCPopupWindow
+
+#if defined(__WXOSX_COCOA__) || defined(__WXMSW__) || defined(__WXGTK__)
+    #define wxSTC_POPUP_IS_CUSTOM 1
+#else
+    #define wxSTC_POPUP_IS_CUSTOM 0
+#endif
+
+// Define the base class used for wxSTCPopupWindow.
+#ifdef __WXOSX_COCOA__
+
+    #include "wx/nonownedwnd.h"
+    #define wxSTC_POPUP_IS_FRAME 0
+
+    class wxSTCPopupBase:public wxNonOwnedWindow
+    {
+    public:
+        wxSTCPopupBase(wxWindow*);
+        virtual ~wxSTCPopupBase();
+    };
+
+#elif wxUSE_POPUPWIN
+
+    #include "wx/popupwin.h"
+    #define wxSTC_POPUP_IS_FRAME 0
+
+    class wxSTCPopupBase:public wxPopupWindow
+    {
+    public:
+        wxSTCPopupBase(wxWindow*);
+        #ifdef __WXGTK__
+            virtual ~wxSTCPopupBase();
+        #elif defined(__WXMSW__)
+            virtual bool Show(bool show=true) wxOVERRIDE;
+            virtual bool MSWHandleMessage(WXLRESULT *result, WXUINT message,
+                                          WXWPARAM wParam, WXLPARAM lParam)
+                                          wxOVERRIDE;
+        #endif
+    };
+
+#else
+
+    #include "wx/frame.h"
+    #define wxSTC_POPUP_IS_FRAME 1
+
+    class wxSTCPopupBase:public wxFrame
+    {
+    public:
+        wxSTCPopupBase(wxWindow*);
+        #ifdef __WXMSW__
+            virtual bool Show(bool show=true) wxOVERRIDE;
+            virtual bool MSWHandleMessage(WXLRESULT *result, WXUINT message,
+                                          WXWPARAM wParam, WXLPARAM lParam)
+                                          wxOVERRIDE;
+        #elif !wxSTC_POPUP_IS_CUSTOM
+            virtual bool Show(bool show=true) wxOVERRIDE;
+            void ActivateParent();
+        #endif
+    };
+
+#endif // __WXOSX_COCOA__
+
+class wxSTCPopupWindow:public wxSTCPopupBase
+{
+public:
+    wxSTCPopupWindow(wxWindow*);
+    virtual bool Destroy() wxOVERRIDE;
+    virtual bool AcceptsFocus() const wxOVERRIDE;
+
+protected:
+    virtual void DoSetSize(int x, int y, int width, int height,
+                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+    #if !wxSTC_POPUP_IS_CUSTOM
+        void OnFocus(wxFocusEvent& event);
+    #endif
+};
+
+
+//----------------------------------------------------------------------
+// SurfaceData
+
 class SurfaceData
 {
 public:

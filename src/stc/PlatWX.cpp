@@ -32,6 +32,7 @@
 #include "wx/tokenzr.h"
 #include "wx/dynlib.h"
 #include "wx/scopedarray.h"
+#include "wx/toplevel.h"
 
 #ifdef wxHAS_RAW_BITMAP
 #include "wx/rawbmp.h"
@@ -53,6 +54,12 @@
 #include "ScintillaWX.h"
 #include <float.h>
 #include "wx/dcscreen.h"
+#endif
+
+#if defined(__WXGTK__) && wxSTC_POPUP_IS_FRAME
+    #include "wx/gtk/private/wrapgtk.h"
+#elif defined(__WXMSW__)
+    #include "wx/msw/wrapwin.h"
 #endif
 
 Point Point::FromLong(long lpoint) {
@@ -1982,6 +1989,206 @@ PRectangle Window::GetMonitorRect(Point pt) {
     wxDisplay dpy(n == wxNOT_FOUND ? 0 : n);
     return PRectangleFromwxRect(dpy.GetGeometry());
 }
+
+
+//----------------------------------------------------------------------
+// wxSTCPopupBase and wxSTCPopupWindow
+
+#ifdef __WXOSX_COCOA__
+
+    wxSTCPopupBase::wxSTCPopupBase(wxWindow* parent):wxNonOwnedWindow()
+    {
+    }
+
+    wxSTCPopupBase::~wxSTCPopupBase()
+    {
+    }
+
+#elif wxUSE_POPUPWIN
+
+    wxSTCPopupBase::wxSTCPopupBase(wxWindow* parent)
+                   :wxPopupWindow(parent, wxPU_CONTAINS_CONTROLS)
+    {
+    }
+
+    #ifdef __WXGTK__
+
+        wxSTCPopupBase::~wxSTCPopupBase()
+        {
+            wxRect rect = GetRect();
+            GetParent()->ScreenToClient(&(rect.x), &(rect.y));
+            GetParent()->Refresh(false, &rect);
+        }
+
+    #elif defined(__WXMSW__)
+
+        // Do not activate the window when it is shown.
+        bool wxSTCPopupBase::Show(bool show)
+        {
+            if ( !wxWindowBase::Show(show) )
+                return false;
+
+            if ( show )
+            {
+                HWND hWnd = reinterpret_cast<HWND>(GetHandle());
+                ::ShowWindow(hWnd, SW_SHOWNA );
+
+                ::SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0,
+                               SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+            }
+            else
+                wxPopupWindow::Show(false);
+
+            return true;
+        }
+
+        // Do not activate in response to mouse clicks on this window.
+        bool wxSTCPopupBase::MSWHandleMessage(WXLRESULT *res, WXUINT msg,
+                                              WXWPARAM wParam, WXLPARAM lParam)
+        {
+            if ( msg == WM_MOUSEACTIVATE )
+            {
+                *res = MA_NOACTIVATE;
+                return true;
+            }
+            else
+                return wxPopupWindow::MSWHandleMessage(res, msg, wParam,lParam);
+        }
+
+    #endif // __WXGTK__
+
+#else
+
+    wxSTCPopupBase::wxSTCPopupBase(wxWindow* parent):wxFrame()
+    {
+        // Make sure the frame is initially hidden. However, GTK+ will hide the
+        // frame initially and doesn't like trying to hide it before it's
+        // created, so don't do it there.
+        #if !defined(__WXGTK__)
+            Hide();
+        #endif
+
+        wxFrame::Create(parent, wxID_ANY, wxEmptyString,
+                        wxDefaultPosition, wxDefaultSize,
+                        wxFRAME_FLOAT_ON_PARENT | wxBORDER_NONE);
+
+        #if defined(__WXGTK__)
+            gtk_window_set_accept_focus(GTK_WINDOW(this->GetHandle()), FALSE);
+        #endif
+    }
+
+    #ifdef __WXMSW__
+
+        // Use ShowWithoutActivating instead of show.
+        bool wxSTCPopupBase::Show(bool show)
+        {
+            if ( show )
+            {
+                if ( IsShown() )
+                    return false;
+                else
+                {
+                    ShowWithoutActivating();
+                    return true;
+                }
+            }
+            else
+                return wxFrame::Show(false);
+        }
+
+        // Do not activate in response to mouse clicks on this window.
+        bool wxSTCPopupBase::MSWHandleMessage(WXLRESULT *res, WXUINT msg,
+                                              WXWPARAM wParam, WXLPARAM lParam)
+        {
+            if ( msg == WM_MOUSEACTIVATE )
+            {
+                *res = MA_NOACTIVATE;
+                return true;
+            }
+            else
+                return wxFrame::MSWHandleMessage(res, msg, wParam, lParam);
+        }
+
+    #elif !wxSTC_POPUP_IS_CUSTOM
+
+        void wxSTCPopupBase::ActivateParent()
+        {
+            // Although we're a frame, we always want the parent to be active,
+            // so raise it whenever we get shown, focused, etc.
+            wxTopLevelWindow *frame = wxDynamicCast(
+                wxGetTopLevelParent(GetParent()), wxTopLevelWindow);
+            if (frame)
+                frame->Raise();
+        }
+
+        bool wxSTCPopupBase::Show(bool show)
+        {
+            bool rv = wxFrame::Show(show);
+            if (rv && show)
+                ActivateParent();
+
+            #ifdef __WXMAC__
+                GetParent()->Refresh(false);
+            #endif
+        }
+
+    #endif
+
+#endif // __WXOSX_COCOA__
+
+wxSTCPopupWindow::wxSTCPopupWindow(wxWindow* parent):wxSTCPopupBase(parent)
+{
+    #if !wxSTC_POPUP_IS_CUSTOM
+        Bind(wxEVT_SET_FOCUS, &wxSTCPopupWindow::OnFocus, this);
+    #endif
+}
+
+bool wxSTCPopupWindow::Destroy()
+{
+    #if defined(__WXMAC__) && wxSTC_POPUP_IS_FRAME && !wxSTC_POPUP_IS_CUSTOM
+        // The bottom edge of this window is not getting properly
+        // refreshed upon deletion, so help it out...
+        wxWindow* p = GetParent();
+        wxRect r(GetPosition(), GetSize());
+        r.SetHeight(r.GetHeight()+1);
+        p->Refresh(false, &r);
+    #endif
+
+    if ( !wxPendingDelete.Member(this) )
+        wxPendingDelete.Append(this);
+
+    return true;
+}
+
+bool wxSTCPopupWindow::AcceptsFocus() const
+{
+    return false;
+}
+
+void wxSTCPopupWindow::DoSetSize(int x, int y, int width, int height, int flags)
+{
+    // convert coords to screen coords since we're a top-level window
+    if (x != wxDefaultCoord)
+        GetParent()->ClientToScreen(&x, NULL);
+
+    if (y != wxDefaultCoord)
+        GetParent()->ClientToScreen(NULL, &y);
+
+    wxSTCPopupBase::DoSetSize(x, y, width, height, flags);
+}
+
+#if !wxSTC_POPUP_IS_CUSTOM
+    void wxSTCPopupWindow::OnFocus(wxFocusEvent& event)
+    {
+        #if wxSTC_POPUP_IS_FRAME
+            ActivateParent();
+        #endif
+
+        GetParent()->SetFocus();
+        event.Skip();
+    }
+#endif // !wxSTC_POPUP_IS_CUSTOM
+
 
 //----------------------------------------------------------------------
 // Helper classes for ListBox
