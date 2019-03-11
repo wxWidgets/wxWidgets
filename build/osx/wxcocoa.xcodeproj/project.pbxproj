@@ -962,6 +962,9 @@
 		4CB3626391CE34D4B1F71AA0 /* jdatasrc.c in Sources */ = {isa = PBXBuildFile; fileRef = DECAF5DD80383A2CA76EB383 /* jdatasrc.c */; };
 		4CB3626391CE34D4B1F71AA1 /* jdatasrc.c in Sources */ = {isa = PBXBuildFile; fileRef = DECAF5DD80383A2CA76EB383 /* jdatasrc.c */; };
 		4CB3626391CE34D4B1F71AA2 /* jdatasrc.c in Sources */ = {isa = PBXBuildFile; fileRef = DECAF5DD80383A2CA76EB383 /* jdatasrc.c */; };
+		4CECCB6D2224FAD300FF250C /* PlatWXcocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CECCB6C2224FAD300FF250C /* PlatWXcocoa.mm */; };
+		4CECCB6E2224FADB00FF250C /* PlatWXcocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CECCB6C2224FAD300FF250C /* PlatWXcocoa.mm */; };
+		4CECCB6F2224FAE300FF250C /* PlatWXcocoa.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4CECCB6C2224FAD300FF250C /* PlatWXcocoa.mm */; };
 		4CF9BA40653C3153805D88AB /* arcfind.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C513377E9E303F778BA9D7ED /* arcfind.cpp */; };
 		4CF9BA40653C3153805D88AC /* arcfind.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C513377E9E303F778BA9D7ED /* arcfind.cpp */; };
 		4CF9BA40653C3153805D88AD /* arcfind.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C513377E9E303F778BA9D7ED /* arcfind.cpp */; };
@@ -4131,6 +4134,7 @@
 		4BA819575B5136B09FA8FEB1 /* pen.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pen.cpp; path = ../../src/osx/pen.cpp; sourceTree = "<group>"; };
 		4C4649974D8B3A109D1BF145 /* art_internal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = art_internal.cpp; path = ../../src/ribbon/art_internal.cpp; sourceTree = "<group>"; };
 		4CB467F9898C3952A68D988B /* zutil.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = zutil.c; path = ../../src/zlib/zutil.c; sourceTree = "<group>"; };
+		4CECCB6C2224FAD300FF250C /* PlatWXcocoa.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = PlatWXcocoa.mm; path = ../../src/stc/PlatWXcocoa.mm; sourceTree = "<group>"; };
 		4EB3B255D20F3AE5A95230F6 /* LexCSS.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexCSS.cxx; path = ../../src/stc/scintilla/lexers/LexCSS.cxx; sourceTree = "<group>"; };
 		4F58B88D42A93BD0B74ADF75 /* CallTip.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CallTip.cxx; path = ../../src/stc/scintilla/src/CallTip.cxx; sourceTree = "<group>"; };
 		4F768B23D8B535CE8D0BD343 /* tif_jpeg_12.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = tif_jpeg_12.c; path = ../../src/tiff/libtiff/tif_jpeg_12.c; sourceTree = "<group>"; };
@@ -6152,6 +6156,7 @@
 				D0B9C41A4D12345AAA764CAD /* stc.cpp */,
 				47FF6D792CA234C395692118 /* PlatWX.cpp */,
 				8E6F9D4319F639BE89E5A82F /* ScintillaWX.cpp */,
+				4CECCB6C2224FAD300FF250C /* PlatWXcocoa.mm */,
 			);
 			name = stc;
 			sourceTree = "<group>";
@@ -8066,6 +8071,7 @@
 				E3B3E4F75D503DB89B5C622F /* stc.cpp in Sources */,
 				908957F65B7E36F8BF3858DF /* PlatWX.cpp in Sources */,
 				3E6AA08E72A030D39D867D4D /* ScintillaWX.cpp in Sources */,
+				4CECCB6F2224FAE300FF250C /* PlatWXcocoa.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8916,6 +8922,7 @@
 				D4EC9DB5F8DF319EA0FD26A5 /* LexVB.cxx in Sources */,
 				3C5E1A45A57B3169A4C073DA /* LexVerilog.cxx in Sources */,
 				16021CFD78623B8CBD08FC20 /* LexVHDL.cxx in Sources */,
+				4CECCB6E2224FADB00FF250C /* PlatWXcocoa.mm in Sources */,
 				9CC92BB4B0E233A0A7F8127A /* LexVisualProlog.cxx in Sources */,
 				159E4248CB1333AD841D9F04 /* LexYAML.cxx in Sources */,
 				91364FDD73053139BBAA313C /* Accessor.cxx in Sources */,
@@ -10141,6 +10148,7 @@
 				D4EC9DB5F8DF319EA0FD26A4 /* LexVB.cxx in Sources */,
 				3C5E1A45A57B3169A4C073D9 /* LexVerilog.cxx in Sources */,
 				16021CFD78623B8CBD08FC1F /* LexVHDL.cxx in Sources */,
+				4CECCB6D2224FAD300FF250C /* PlatWXcocoa.mm in Sources */,
 				9CC92BB4B0E233A0A7F81279 /* LexVisualProlog.cxx in Sources */,
 				159E4248CB1333AD841D9F03 /* LexYAML.cxx in Sources */,
 				91364FDD73053139BBAA313B /* Accessor.cxx in Sources */,
