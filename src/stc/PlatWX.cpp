@@ -2094,7 +2094,10 @@ PRectangle Window::GetMonitorRect(Point pt) {
             if ( show )
             {
                 HWND hWnd = reinterpret_cast<HWND>(GetHandle());
-                ::ShowWindow(hWnd, SW_SHOWNA );
+                if ( GetName() == "wxSTCCallTip" )
+                    ::AnimateWindow(hWnd, 25, AW_BLEND);
+                else
+                    ::ShowWindow(hWnd, SW_SHOWNA );
 
                 ::SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0,
                                SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);

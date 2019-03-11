@@ -99,10 +99,36 @@ public:
         wxSTCPopupWindow(parent), m_ct(ct), m_swx(swx)
     {
         Bind(wxEVT_LEFT_DOWN, &wxSTCCallTip::OnLeftDown, this);
+        Bind(wxEVT_SIZE, &wxSTCCallTip::OnSize, this);
         Bind(wxEVT_PAINT, &wxSTCCallTip::OnPaint, this);
 
+#ifdef __WXMSW__
+        Bind(wxEVT_ERASE_BACKGROUND, &wxSTCCallTip::OnEraseBackground, this);
+        SetBackgroundStyle(wxBG_STYLE_ERASE);
+#else
         SetBackgroundStyle(wxBG_STYLE_PAINT);
+#endif
+
         SetName("wxSTCCallTip");
+    }
+
+    void DrawBack(const wxSize& size)
+    {
+        m_back = wxBitmap(size);
+        wxMemoryDC mem(m_back);
+        Surface* surfaceWindow = Surface::Allocate(m_swx->technology);
+        surfaceWindow->Init(&mem, m_ct->wDraw.GetID());
+        m_ct->PaintCT(surfaceWindow);
+        surfaceWindow->Release();
+        delete surfaceWindow;
+    }
+
+    virtual void Refresh(bool eraseBg=true, const wxRect *rect=NULL) wxOVERRIDE
+    {
+        if ( rect == NULL )
+            DrawBack(GetSize());
+
+        wxSTCPopupWindow::Refresh(eraseBg, rect);
     }
 
     void OnLeftDown(wxMouseEvent& event)
@@ -113,19 +139,43 @@ public:
         m_swx->CallTipClick();
     }
 
+    void OnSize(wxSizeEvent& event)
+    {
+        DrawBack(event.GetSize());
+        event.Skip();
+    }
+
+#ifdef __WXMSW__
+
+    void OnPaint(wxPaintEvent& WXUNUSED(evt))
+    {
+        wxRect upd = GetUpdateClientRect();
+        wxMemoryDC mem(m_back);
+        wxPaintDC dc(this);
+
+        dc.Blit(upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight(), &mem,
+                upd.GetX(), upd.GetY());
+    }
+
+    void OnEraseBackground(wxEraseEvent& event)
+    {
+        event.GetDC()->DrawBitmap(m_back, 0, 0);
+    }
+
+#else
+
     void OnPaint(wxPaintEvent& WXUNUSED(evt))
     {
         wxAutoBufferedPaintDC dc(this);
-        Surface* surfaceWindow = Surface::Allocate(m_swx->technology);
-        surfaceWindow->Init(&dc, m_ct->wDraw.GetID());
-        m_ct->PaintCT(surfaceWindow);
-        surfaceWindow->Release();
-        delete surfaceWindow;
+        dc.DrawBitmap(m_back, 0, 0);
     }
+
+#endif // __WXMSW__
 
 private:
     CallTip*      m_ct;
     ScintillaWX*  m_swx;
+    wxBitmap      m_back;
 };
 
 
