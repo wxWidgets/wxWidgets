@@ -35,6 +35,7 @@
 #include "wx/dnd.h"
 #include "wx/image.h"
 #include "wx/scopedarray.h"
+#include "wx/dcbuffer.h"
 
 #if !wxUSE_STD_CONTAINERS && !wxUSE_STD_IOSTREAM && !wxUSE_STD_STRING
     #include "wx/beforestd.h"
@@ -92,47 +93,25 @@ void  wxSTCDropTarget::OnLeave() {
 #endif // wxUSE_DRAG_AND_DROP
 
 
-#if wxUSE_POPUPWIN
-#include "wx/popupwin.h"
-#define wxSTCCallTipBase wxPopupWindow
-#else
-#include "wx/frame.h"
-#define wxSTCCallTipBase wxFrame
-#endif
-
-#include "wx/dcbuffer.h"
-
-class wxSTCCallTip : public wxSTCCallTipBase {
+class wxSTCCallTip : public wxSTCPopupWindow {
 public:
     wxSTCCallTip(wxWindow* parent, CallTip* ct, ScintillaWX* swx) :
-#if wxUSE_POPUPWIN
-        wxSTCCallTipBase(parent, wxBORDER_NONE),
-#else
-        wxSTCCallTipBase(parent, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-                         wxFRAME_NO_TASKBAR
-                         | wxFRAME_FLOAT_ON_PARENT
-                         | wxBORDER_NONE
-#ifdef __WXMAC__
-                         | wxPOPUP_WINDOW
-#endif
-            ),
-#endif
-          m_ct(ct), m_swx(swx), m_cx(wxDefaultCoord), m_cy(wxDefaultCoord)
-        {
-            SetBackgroundStyle(wxBG_STYLE_PAINT);
-            SetName("wxSTCCallTip");
-        }
+        wxSTCPopupWindow(parent), m_ct(ct), m_swx(swx)
+    {
+        Bind(wxEVT_LEFT_DOWN, &wxSTCCallTip::OnLeftDown, this);
+        Bind(wxEVT_PAINT, &wxSTCCallTip::OnPaint, this);
 
-    ~wxSTCCallTip() {
-#if wxUSE_POPUPWIN && defined(__WXGTK__)
-        wxRect rect = GetRect();
-        rect.x = m_cx;
-        rect.y = m_cy;
-        GetParent()->Refresh(false, &rect);
-#endif
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
+        SetName("wxSTCCallTip");
     }
 
-    bool AcceptsFocus() const wxOVERRIDE { return false; }
+    void OnLeftDown(wxMouseEvent& event)
+    {
+        wxPoint pt = event.GetPosition();
+        Point p(pt.x, pt.y);
+        m_ct->MouseClick(p);
+        m_swx->CallTipClick();
+    }
 
     void OnPaint(wxPaintEvent& WXUNUSED(evt))
     {
@@ -144,71 +123,10 @@ public:
         delete surfaceWindow;
     }
 
-    void OnFocus(wxFocusEvent& event)
-    {
-        GetParent()->SetFocus();
-        event.Skip();
-    }
-
-    void OnLeftDown(wxMouseEvent& event)
-    {
-        wxPoint pt = event.GetPosition();
-        Point p(pt.x, pt.y);
-        m_ct->MouseClick(p);
-        m_swx->CallTipClick();
-    }
-
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE
-    {
-        // convert coords to screen coords since we're a top-level window
-        if (x != wxDefaultCoord) {
-            m_cx = x;
-            GetParent()->ClientToScreen(&x, NULL);
-        }
-        if (y != wxDefaultCoord) {
-            m_cy = y;
-            GetParent()->ClientToScreen(NULL, &y);
-        }
-        wxSTCCallTipBase::DoSetSize(x, y, width, height, sizeFlags);
-    }
-
-#if wxUSE_POPUPWIN
-#else
-    virtual bool Show( bool show = true )
-    {
-        // Although we're a frame, we always want the parent to be active, so
-        // raise it whenever we get shown.
-        bool rv = wxSTCCallTipBase::Show(show);
-        if (rv && show)
-        {
-            wxTopLevelWindow *frame = wxDynamicCast(
-                wxGetTopLevelParent(GetParent()), wxTopLevelWindow);
-            if (frame)
-                frame->Raise();
-        }
-        return rv;
-    }
-#endif
-
-    wxPoint GetMyPosition()
-    {
-        return wxPoint(m_cx, m_cy);
-    }
-
 private:
     CallTip*      m_ct;
     ScintillaWX*  m_swx;
-    int           m_cx, m_cy;
-    wxDECLARE_EVENT_TABLE();
 };
-
-wxBEGIN_EVENT_TABLE(wxSTCCallTip, wxSTCCallTipBase)
-    EVT_PAINT(wxSTCCallTip::OnPaint)
-    EVT_SET_FOCUS(wxSTCCallTip::OnFocus)
-    EVT_LEFT_DOWN(wxSTCCallTip::OnLeftDown)
-wxEND_EVENT_TABLE()
 
 
 //----------------------------------------------------------------------
