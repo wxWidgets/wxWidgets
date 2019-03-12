@@ -2796,6 +2796,22 @@ public:
     int GetWheelDelta() const;
 
     /**
+        On Mac, has the user selected "Natural" scrolling in their System
+        Preferences? Currently false on all other OS's.
+
+        "Natural" scrolling means that content scrolling happens in the
+        opposite direction, and if you are indeed scrolling content then
+        you don't need to use this function because macOS has already
+        inverted the scroll direction.
+        But there can be special situations where you want the mouse wheel
+        action to work always in the same direction and in that case you
+        will need this function.
+
+        @since 3.1.3
+    */
+    bool IsWheelInverted() const;
+
+    /**
         Get wheel rotation, positive or negative indicates direction of rotation.
 
         Current devices all send an event when rotation is at least +/-WheelDelta, but
