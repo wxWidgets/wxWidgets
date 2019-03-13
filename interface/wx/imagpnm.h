@@ -10,7 +10,7 @@
 
     This is the image handler for the PNM format.
 
-    @library{core}
+    @library{wxcore}
     @category{gdi}
 
     @see wxImage, wxImageHandler, wxInitAllImageHandlers()
