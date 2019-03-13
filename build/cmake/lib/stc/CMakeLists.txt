@@ -158,6 +158,7 @@ wx_add_builtin_library(wxscintilla
     src/stc/scintilla/src/XPM.cxx
 )
 target_include_directories(wxscintilla PRIVATE
+    ${wxSOURCE_DIR}/include
     ${wxSOURCE_DIR}/src/stc/scintilla/include
     ${wxSOURCE_DIR}/src/stc/scintilla/lexlib
     ${wxSOURCE_DIR}/src/stc/scintilla/src

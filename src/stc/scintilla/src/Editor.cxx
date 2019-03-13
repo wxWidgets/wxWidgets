@@ -1687,7 +1687,16 @@ void Editor::RefreshPixMaps(Surface *surfaceWindow) {
 	}
 }
 
-void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
+// ! Bricsys addition !
+bool Editor::VerifyChangedBraces(const Position prevBraces[2])
+{
+    const bool changedBrace0 = (braces[0] != prevBraces[0]) && (braces[0] != prevBraces[1]); // changed or off
+    const bool changedBrace1 = (braces[1] != prevBraces[0]) && (braces[1] != prevBraces[1]); // changed or off
+    return (changedBrace0 || changedBrace1);
+}
+
+void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea)
+{
 	//Platform::DebugPrintf("Paint:%1d (%3d,%3d) ... (%3d,%3d)\n",
 	//	paintingAllText, rcArea.left, rcArea.top, rcArea.right, rcArea.bottom);
 	AllocateGraphics();
@@ -1700,6 +1709,26 @@ void Editor::Paint(Surface *surfaceWindow, PRectangle rcArea) {
 	paintAbandonedByStyling = false;
 
 	StyleAreaBounded(rcArea, false);
+
+    // keep current braces, can be changed by NotifyUpdateUI() handler
+    const Position prevBraces[2] = { braces[0], braces[1] };
+
+	if (needUpdateUI)
+    {
+		NotifyUpdateUI();
+		needUpdateUI = 0;
+
+        RefreshStyleData();
+		RefreshPixMaps(surfaceWindow);
+
+#if 1 // Bricsys change for proper matching/mismatching brace repaint
+        // repaint previous & current braces
+        if (VerifyChangedBraces(prevBraces) && AbandonPaint())
+            return;
+#endif
+    }
+
+    bool paintAbandonedByStyling = paintState == paintAbandoned;
 
 	PRectangle rcClient = GetClientRectangle();
 	//Platform::DebugPrintf("Client: (%3d,%3d) ... (%3d,%3d)   %d\n",
@@ -5163,13 +5192,17 @@ void Editor::CheckForChangeOutsidePaint(Range r) {
 void Editor::SetBraceHighlight(Position pos0, Position pos1, int matchStyle) {
 	if ((pos0 != braces[0]) || (pos1 != braces[1]) || (matchStyle != bracesMatchStyle)) {
 		if ((braces[0] != pos0) || (matchStyle != bracesMatchStyle)) {
+#if 0 // Bricsys change : do not cancel painting; Paint() correctly respects braces
 			CheckForChangeOutsidePaint(Range(braces[0]));
 			CheckForChangeOutsidePaint(Range(pos0));
+#endif
 			braces[0] = pos0;
 		}
 		if ((braces[1] != pos1) || (matchStyle != bracesMatchStyle)) {
+#if 0 // Bricsys change : do not cancel painting; Paint() correctly respects braces
 			CheckForChangeOutsidePaint(Range(braces[1]));
 			CheckForChangeOutsidePaint(Range(pos1));
+#endif
 			braces[1] = pos1;
 		}
 		bracesMatchStyle = matchStyle;
