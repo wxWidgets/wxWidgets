@@ -11,6 +11,8 @@
 
 #include "wx/defs.h"
 
+#undef wxUSE_WEBVIEW
+#define wxUSE_WEBVIEW 1
 #if wxUSE_WEBVIEW
 
 #include "wx/control.h"
@@ -19,6 +21,12 @@
 #include "wx/sharedptr.h"
 #include "wx/vector.h"
 #include "wx/versioninfo.h"
+
+class wxWebViewHistoryItem;
+
+#ifndef _WIN32
+#include "wx/gtk/webviewhistoryitem_webkit.h"
+#endif
 
 #if defined(__WXOSX__)
     #include "wx/osx/webviewhistoryitem_webkit.h"
