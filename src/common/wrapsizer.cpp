@@ -465,7 +465,11 @@ void wxWrapSizer::CalcMinFromMinor(int totMinor)
 
         // No spill over?
         if ( !tailSize )
+        {
+            // Add minor size of the last line
+            sumMinor += maxMinor;
             break;
+        }
     }
 
     // Now have min size in the opposite direction
