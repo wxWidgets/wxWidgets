@@ -2210,6 +2210,9 @@ wxSTCPopupWindow::wxSTCPopupWindow(wxWindow* parent)
     if ( m_tlw )
     {
         m_tlw->Bind(wxEVT_MOVE, &wxSTCPopupWindow::OnParentMove, this);
+    #if defined(__WXOSX_COCOA__) || (defined(__WXGTK__)&&!wxSTC_POPUP_IS_FRAME)
+        m_tlw->Bind(wxEVT_ICONIZE, &wxSTCPopupWindow::OnIconize, this);
+    #endif
     }
 }
 
@@ -2218,6 +2221,9 @@ wxSTCPopupWindow::~wxSTCPopupWindow()
     if ( m_tlw )
     {
         m_tlw->Unbind(wxEVT_MOVE, &wxSTCPopupWindow::OnParentMove, this);
+    #if defined(__WXOSX_COCOA__) || (defined(__WXGTK__)&&!wxSTC_POPUP_IS_FRAME)
+        m_tlw->Unbind(wxEVT_ICONIZE, &wxSTCPopupWindow::OnIconize, this);
+    #endif
     }
 }
 
@@ -2266,7 +2272,15 @@ void wxSTCPopupWindow::OnParentMove(wxMoveEvent& event)
     event.Skip();
 }
 
-#if !wxSTC_POPUP_IS_CUSTOM
+#if defined(__WXOSX_COCOA__) || (defined(__WXGTK__) && !wxSTC_POPUP_IS_FRAME)
+
+    void wxSTCPopupWindow::OnIconize(wxIconizeEvent& event)
+    {
+        Show(!event.IsIconized());
+    }
+
+#elif !wxSTC_POPUP_IS_CUSTOM
+
     void wxSTCPopupWindow::OnFocus(wxFocusEvent& event)
     {
         #if wxSTC_POPUP_IS_FRAME
@@ -2276,7 +2290,8 @@ void wxSTCPopupWindow::OnParentMove(wxMoveEvent& event)
         GetParent()->SetFocus();
         event.Skip();
     }
-#endif // !wxSTC_POPUP_IS_CUSTOM
+
+#endif // __WXOSX_COCOA__
 
 
 //----------------------------------------------------------------------

@@ -138,7 +138,9 @@ protected:
     virtual void DoSetSize(int x, int y, int width, int height,
                            int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
     void OnParentMove(wxMoveEvent& event);
-    #if !wxSTC_POPUP_IS_CUSTOM
+    #if defined(__WXOSX_COCOA__) || (defined(__WXGTK__)&&!wxSTC_POPUP_IS_FRAME)
+        void OnIconize(wxIconizeEvent& event);
+    #elif !wxSTC_POPUP_IS_CUSTOM
         void OnFocus(wxFocusEvent& event);
     #endif
 
