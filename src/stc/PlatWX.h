@@ -8,6 +8,8 @@
 #include "wx/imaglist.h"
 #include "Platform.h"
 
+class wxStyledTextCtrl;
+
 
 
 
@@ -75,6 +77,17 @@ public:
     public:
         wxSTCPopupBase(wxWindow*);
         virtual ~wxSTCPopupBase();
+        virtual bool Show(bool show=true) wxOVERRIDE;
+
+    protected:
+        virtual void DoSetSize(int, int, int, int, int) wxOVERRIDE;
+        void SetSTCCursor(int);
+        void OnMouseEnter(wxMouseEvent&);
+        void OnMouseLeave(wxMouseEvent&);
+
+    private:
+        WX_NSWindow       m_nativeWin;
+        wxStyledTextCtrl* m_stc;
     };
 
 #elif wxUSE_POPUPWIN

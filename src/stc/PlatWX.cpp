@@ -60,6 +60,8 @@
     #include "wx/gtk/private/wrapgtk.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/wrapwin.h"
+#elif defined(__WXOSX_COCOA__)
+    #include "PlatWXcocoa.h"
 #endif
 
 Point Point::FromLong(long lpoint) {
@@ -1998,10 +2000,67 @@ PRectangle Window::GetMonitorRect(Point pt) {
 
     wxSTCPopupBase::wxSTCPopupBase(wxWindow* parent):wxNonOwnedWindow()
     {
+        m_nativeWin = CreateFloatingWindow(this);
+        wxNonOwnedWindow::Create(parent, m_nativeWin);
+        m_stc = wxDynamicCast(parent, wxStyledTextCtrl);
+        m_isShown = false;
+
+        Bind(wxEVT_ENTER_WINDOW, &wxSTCPopupBase::OnMouseEnter, this);
+        Bind(wxEVT_LEAVE_WINDOW, &wxSTCPopupBase::OnMouseLeave, this);
     }
 
     wxSTCPopupBase::~wxSTCPopupBase()
     {
+        UnsubclassWin();
+        CloseFloatingWindow(m_nativeWin);
+
+        SetSTCCursor(wxSTC_CURSORNORMAL);
+    }
+
+    bool wxSTCPopupBase::Show(bool show)
+    {
+        if ( !wxWindowBase::Show(show) )
+            return false;
+
+        if ( show )
+        {
+            ShowFloatingWindow(m_nativeWin);
+
+            if ( GetRect().Contains(::wxMouseState().GetPosition()) )
+                SetSTCCursor(wxSTC_CURSORARROW);
+        }
+        else
+        {
+            HideFloatingWindow(m_nativeWin);
+            SetSTCCursor(wxSTC_CURSORNORMAL);
+        }
+
+        return true;
+    }
+
+    void wxSTCPopupBase::DoSetSize(int x, int y, int width, int ht, int flags)
+    {
+        wxSize oldSize = GetSize();
+        wxNonOwnedWindow::DoSetSize(x, y, width, ht, flags);
+
+        if ( oldSize != GetSize() )
+            SendSizeEvent();
+    }
+
+    void wxSTCPopupBase::SetSTCCursor(int cursor)
+    {
+        if ( m_stc )
+            m_stc->SetSTCCursor(cursor);
+    }
+
+    void wxSTCPopupBase::OnMouseEnter(wxMouseEvent& WXUNUSED(event))
+    {
+        SetSTCCursor(wxSTC_CURSORARROW);
+    }
+
+    void wxSTCPopupBase::OnMouseLeave(wxMouseEvent& WXUNUSED(event))
+    {
+        SetSTCCursor(wxSTC_CURSORNORMAL);
     }
 
 #elif wxUSE_POPUPWIN
