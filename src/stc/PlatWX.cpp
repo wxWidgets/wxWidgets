@@ -2309,12 +2309,8 @@ wxBEGIN_EVENT_TABLE(wxSTCListBox, wxListView)
 wxEND_EVENT_TABLE()
 
 
-
-#if wxUSE_POPUPWIN //-----------------------------------
-#include "wx/popupwin.h"
-
 // A popup window to place the wxSTCListBox upon
-class wxSTCListBoxWin : public wxPopupWindow
+class wxSTCListBoxWin : public wxSTCPopupWindow
 {
 private:
     wxListView*         lv;
@@ -2322,7 +2318,7 @@ private:
     void*               doubleClickActionData;
 public:
     wxSTCListBoxWin(wxWindow* parent, wxWindowID id, Point WXUNUSED(location)) :
-        wxPopupWindow(parent, wxBORDER_SIMPLE)
+        wxSTCPopupWindow(parent)
     {
 
         lv = new wxSTCListBox(parent, id, wxPoint(-50,-50), wxDefaultSize,
@@ -2349,36 +2345,6 @@ public:
     }
 
 
-    // Set position in client coords
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE {
-        if (x != wxDefaultCoord) {
-            GetParent()->ClientToScreen(&x, NULL);
-        }
-        if (y != wxDefaultCoord) {
-            GetParent()->ClientToScreen(NULL, &y);
-        }
-        wxPopupWindow::DoSetSize(x, y, width, height, sizeFlags);
-    }
-
-    // return position as if it were in client coords
-    virtual void DoGetPosition( int *x, int *y ) const wxOVERRIDE {
-        int sx, sy;
-        wxPopupWindow::DoGetPosition(&sx, &sy);
-        GetParent()->ScreenToClient(&sx, &sy);
-        if (x) *x = sx;
-        if (y) *y = sy;
-    }
-
-
-    bool Destroy() wxOVERRIDE {
-        if ( !wxPendingDelete.Member(this) )
-            wxPendingDelete.Append(this);
-        return true;
-    }
-
-
     int IconWidth() {
         wxImageList* il = lv->GetImageList(wxIMAGE_LIST_SMALL);
         if (il != NULL) {
@@ -2395,11 +2361,6 @@ public:
         doubleClickActionData = data;
     }
 
-
-    void OnFocus(wxFocusEvent& event) {
-        GetParent()->SetFocus();
-        event.Skip();
-    }
 
     void OnSize(wxSizeEvent& event) {
         // resize the child to fill the popup
@@ -2434,164 +2395,9 @@ private:
 };
 
 wxBEGIN_EVENT_TABLE(wxSTCListBoxWin, wxPopupWindow)
-    EVT_SET_FOCUS          (          wxSTCListBoxWin::OnFocus)
     EVT_SIZE               (          wxSTCListBoxWin::OnSize)
     EVT_LIST_ITEM_ACTIVATED(wxID_ANY, wxSTCListBoxWin::OnActivate)
 wxEND_EVENT_TABLE()
-
-
-
-#else // !wxUSE_POPUPWIN -----------------------------------
-#include "wx/frame.h"
-
-// A normal window to place the wxSTCListBox upon, but make it behave as much
-// like a wxPopupWindow as possible
-class wxSTCListBoxWin : public wxFrame {
-private:
-    wxListView*         lv;
-    CallBackAction      doubleClickAction;
-    void*               doubleClickActionData;
-public:
-    wxSTCListBoxWin(wxWindow* parent, wxWindowID id, Point location) :
-        wxFrame(parent, id, wxEmptyString, wxPoint(location.x, location.y), wxSize(0,0),
-                wxFRAME_NO_TASKBAR
-                | wxFRAME_FLOAT_ON_PARENT
-#ifdef __WXMAC__
-                | wxPOPUP_WINDOW
-                | wxNO_BORDER
-#else
-                | wxSIMPLE_BORDER
-#endif
-            )
-    {
-
-        lv = new wxSTCListBox(this, id, wxDefaultPosition, wxDefaultSize,
-                              wxLC_REPORT | wxLC_SINGLE_SEL | wxLC_NO_HEADER | wxNO_BORDER);
-        lv->SetCursor(wxCursor(wxCURSOR_ARROW));
-        lv->InsertColumn(0, wxEmptyString);
-        lv->InsertColumn(1, wxEmptyString);
-
-        // Eventhough we immediately reset the focus to the parent, this helps
-        // things to look right...
-        lv->SetFocus();
-
-        Hide();
-    }
-
-
-    // On OSX and (possibly others) there can still be pending
-    // messages/events for the list control when Scintilla wants to
-    // close it, so do a pending delete of it instead of destroying
-    // immediately.
-    bool Destroy()
-    {
-#ifdef __WXMAC__
-        // The bottom edge of this window is not getting properly
-        // refreshed upon deletion, so help it out...
-        wxWindow* p = GetParent();
-        wxRect r(GetPosition(), GetSize());
-        r.SetHeight(r.GetHeight()+1);
-        p->Refresh(false, &r);
-#endif
-        if ( !wxPendingDelete.Member(this) )
-            wxPendingDelete.Append(this);
-        return true;
-    }
-
-
-    int IconWidth()
-    {
-        wxImageList* il = lv->GetImageList(wxIMAGE_LIST_SMALL);
-        if (il != NULL) {
-            int w, h;
-            il->GetSize(0, w, h);
-            return w;
-        }
-        return 0;
-    }
-
-
-    void SetDoubleClickAction(CallBackAction action, void *data)
-    {
-        doubleClickAction = action;
-        doubleClickActionData = data;
-    }
-
-
-    void OnFocus(wxFocusEvent& event)
-    {
-        ActivateParent();
-        GetParent()->SetFocus();
-        event.Skip();
-    }
-
-    void OnSize(wxSizeEvent& event)
-    {
-        // resize the child
-        wxSize sz = GetClientSize();
-        lv->SetSize(sz);
-        // reset the column widths
-        lv->SetColumnWidth(0, IconWidth()+4);
-        lv->SetColumnWidth(1, sz.x - 2 - lv->GetColumnWidth(0) -
-                           wxSystemSettings::GetMetric(wxSYS_VSCROLL_X));
-        event.Skip();
-    }
-
-    void ActivateParent()
-    {
-        // Although we're a frame, we always want the parent to be active, so
-        // raise it whenever we get shown, focused, etc.
-        wxTopLevelWindow *frame = wxDynamicCast(
-            wxGetTopLevelParent(GetParent()), wxTopLevelWindow);
-        if (frame)
-            frame->Raise();
-    }
-
-
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO)
-    {
-        // convert coords to screen coords since we're a top-level window
-        if (x != wxDefaultCoord) {
-            GetParent()->ClientToScreen(&x, NULL);
-        }
-        if (y != wxDefaultCoord) {
-            GetParent()->ClientToScreen(NULL, &y);
-        }
-        wxFrame::DoSetSize(x, y, width, height, sizeFlags);
-    }
-
-    virtual bool Show(bool show = true)
-    {
-        bool rv = wxFrame::Show(show);
-        if (rv && show)
-            ActivateParent();
-#ifdef __WXMAC__
-        GetParent()->Refresh(false);
-#endif
-        return rv;
-    }
-
-    void OnActivate(wxListEvent& WXUNUSED(event))
-    {
-        doubleClickAction(doubleClickActionData);
-    }
-
-    wxListView* GetLB() { return lv; }
-
-private:
-    wxDECLARE_EVENT_TABLE();
-};
-
-
-wxBEGIN_EVENT_TABLE(wxSTCListBoxWin, wxWindow)
-    EVT_SET_FOCUS          (          wxSTCListBoxWin::OnFocus)
-    EVT_SIZE               (          wxSTCListBoxWin::OnSize)
-    EVT_LIST_ITEM_ACTIVATED(wxID_ANY, wxSTCListBoxWin::OnActivate)
-wxEND_EVENT_TABLE()
-
-#endif // wxUSE_POPUPWIN -----------------------------------
 
 
 inline wxSTCListBoxWin* GETLBW(WindowID win) {
