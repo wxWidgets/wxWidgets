@@ -17,6 +17,7 @@
 #if wxUSE_DRAG_AND_DROP
 
 #include "wx/dnd.h"
+#include "wx/clipbrd.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -28,6 +29,143 @@
 #include "wx/evtloop.h"
 
 #include "wx/osx/private.h"
+
+wxOSXDataSinkItem::~wxOSXDataSinkItem()
+{
+}
+
+void wxOSXDataSinkItem::AddFilename(const char* utf8Dnormpath)
+{
+    CFStringRef path = CFStringCreateWithBytes(NULL,(UInt8*)utf8Dnormpath,strlen(utf8Dnormpath),kCFStringEncodingUTF8,false);
+    CFURLRef url = CFURLCreateWithFileSystemPath(NULL, path , kCFURLPOSIXPathStyle, false);
+    CFRelease(path);
+    CFDataRef data = CFURLCreateData(NULL,url,kCFStringEncodingUTF8,true);
+    CFRelease(url);
+    AddData( kUTTypeFileURL, data);
+    CFRelease( data );
+}
+
+wxOSXDataSourceItem::~wxOSXDataSourceItem()
+{
+}
+
+bool wxOSXDataSource::IsSupported(const wxDataFormat &dataFormat)
+{
+    wxCFMutableArrayRef<CFStringRef> typesarray;
+    dataFormat.AddSupportedTypes(typesarray);
+    return HasData(typesarray);
+}
+
+bool wxOSXDataSource::IsSupported(const wxDataObject &dataobj)
+{
+    wxCFMutableArrayRef<CFStringRef> typesarray;
+    dataobj.AddSupportedTypes(typesarray);
+    return HasData(typesarray);
+}
+
+class WXDLLIMPEXP_CORE wxOSXPasteboardSinkItem : public wxOSXDataSinkItem
+{
+public:
+    wxOSXPasteboardSinkItem(NSPasteboardItem* item): m_item(item)
+    {
+    }
+
+    virtual void AddData(wxDataFormat::NativeFormat format, CFDataRef data)
+    {
+        [m_item setData:(NSData*) data forType:(NSString*) format];
+    }
+
+    NSPasteboardItem* GetNative() { return m_item; };
+private:
+    NSPasteboardItem* m_item;
+};
+
+class WXDLLIMPEXP_CORE wxOSXPasteboardSourceItem : public wxOSXDataSourceItem
+{
+public:
+    wxOSXPasteboardSourceItem(NSPasteboardItem* item): m_item(item)
+    {
+    }
+    
+    virtual wxDataFormat::NativeFormat AvailableType(CFArrayRef types) const
+    {
+        return (wxDataFormat::NativeFormat)[m_item availableTypeFromArray:(NSArray*)types];
+    }
+
+    virtual CFDataRef GetData(wxDataFormat::NativeFormat type) const
+    {
+        return (CFDataRef) [m_item dataForType:(NSString*) type];
+    }
+    
+    NSPasteboardItem* GetNative() { return m_item; };
+private:
+    NSPasteboardItem* m_item;
+};
+
+wxOSXPasteboard::wxOSXPasteboard(OSXPasteboard native)
+{
+    m_pasteboard = native;
+}
+
+// data sink methods
+
+void wxOSXPasteboard::Clear()
+{
+    [m_pasteboard clearContents];
+    m_items.clear();
+}
+
+void wxOSXPasteboard::Flush()
+{
+    NSMutableArray* nsarray = [[NSMutableArray alloc] init];
+    for( auto i : m_items )
+    {
+        wxOSXPasteboardSinkItem* item = dynamic_cast<wxOSXPasteboardSinkItem*>(i);
+        [nsarray addObject:item->GetNative()];
+        delete item;
+    }
+    [m_pasteboard writeObjects:nsarray];
+    [nsarray release];
+}
+
+wxOSXDataSinkItem* wxOSXPasteboard::CreateItem()
+{
+    NSPasteboardItem* nsitem = [[NSPasteboardItem alloc] init];
+    wxOSXPasteboardSinkItem* item = new wxOSXPasteboardSinkItem(nsitem);
+    m_items.push_back(item);
+
+    return item;
+}
+
+bool wxOSXPasteboard::HasData(CFArrayRef types) const
+{
+    // return GetItem(0)->HasData(types);
+    return [m_pasteboard canReadItemWithDataConformingToTypes:(NSArray*) types];
+}
+
+CFDataRef wxOSXPasteboard::GetData(wxDataFormat::NativeFormat type) const
+{
+    return (CFDataRef) [m_pasteboard dataForType:(NSString*) type];
+}
+
+const wxOSXDataSourceItem* wxOSXPasteboard::GetItem(size_t pos) const
+{
+    return new wxOSXPasteboardSourceItem((NSPasteboardItem*)[[m_pasteboard pasteboardItems] objectAtIndex:pos]);
+}
+
+// data source methods
+
+wxOSXPasteboard* wxOSXPasteboard::GetGeneralClipboard()
+{
+    static wxOSXPasteboard clipboard( [NSPasteboard pasteboardWithName:NSGeneralPboard]);
+    return &clipboard;
+}
+
+size_t wxOSXPasteboard::GetItemCount() const
+{
+    return [[m_pasteboard pasteboardItems] count];
+}
+
 
 wxDropSource* gCurrentSource = NULL;
 
@@ -230,24 +368,14 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     NSView* view = m_window->GetPeer()->GetWXWidget();
     if (view)
     {
-        NSPasteboard *pboard;
- 
-        pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
-    
-        OSStatus err = noErr;
-        PasteboardRef pboardRef;
-        PasteboardCreate((CFStringRef)[pboard name], &pboardRef);
-        
-        err = PasteboardClear( pboardRef );
-        if ( err != noErr )
-        {
-            CFRelease( pboardRef );
-            return wxDragNone;
-        }
-        PasteboardSynchronize( pboardRef );
-        
-        m_data->AddToPasteboard( pboardRef, 1 );
-        
+        NSPasteboard *pboard = [NSPasteboard pasteboardWithName:NSDragPboard];
+        wxOSXPasteboard dragPasteboard( pboard );
+        dragPasteboard.Clear();
+
+        m_data->Write( &dragPasteboard);
+
+        dragPasteboard.Flush();
+
         NSEvent* theEvent = (NSEvent*)wxTheApp->MacGetCurrentEvent();
         wxASSERT_MSG(theEvent, "DoDragDrop must be called in response to a mouse down or drag event.");
 
@@ -269,9 +397,8 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         [[NSColor blackColor] set];
         NSFrameRectWithWidthUsingOperation(fillRect,1.0f,NSCompositeDestinationOver);
         
-        [image unlockFocus];        
-        
-        
+        [image unlockFocus];
+
         DropSourceDelegate* delegate = [[DropSourceDelegate alloc] init];
         [delegate setImplementation:this flags:flags];
         [view dragImage:image at:p offset:NSMakeSize(0.0,0.0) 

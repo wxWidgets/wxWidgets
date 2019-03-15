@@ -14,7 +14,7 @@
 class WXDLLIMPEXP_CORE wxDataFormat
 {
 public:
-    typedef unsigned long NativeFormat;
+    typedef CFStringRef NativeFormat;
 
     wxDataFormat();
     wxDataFormat(wxDataFormatId vType);
@@ -45,7 +45,7 @@ public:
     operator NativeFormat() const { return m_format; }
 
     void SetId(NativeFormat format);
-
+    
     // string ids are used for custom types - this SetId() must be used for
     // application-specific formats
     wxString GetId() const;
@@ -58,11 +58,13 @@ public:
     // returns true if the format is one of those defined in wxDataFormatId
     bool IsStandard() const { return m_type > 0 && m_type < wxDF_PRIVATE; }
 
+    // adds all the native formats for this format to an array
+    void AddSupportedTypes(CFMutableArrayRef types) const;
 private:
+    void ClearNativeFormat();
+
     wxDataFormatId   m_type;
     NativeFormat     m_format;
-    // indicates the type in case of wxDF_PRIVATE :
-    wxString         m_id ;
 };
 
 #endif // _WX_MAC_DATAFORM_H

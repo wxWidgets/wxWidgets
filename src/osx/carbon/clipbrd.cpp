@@ -43,18 +43,10 @@ wxClipboard::wxClipboard()
 {
     m_open = false;
     m_data = NULL ;
-    PasteboardRef clipboard = 0;
-    OSStatus err = PasteboardCreate( kPasteboardClipboard, &clipboard );
-    if (err != noErr)
-    {
-        wxLogSysError( wxT("Failed to create the clipboard.") );
-    }
-    m_pasteboard.reset(clipboard);
 }
 
 wxClipboard::~wxClipboard()
 {
-    m_pasteboard.reset((PasteboardRef)0);
     delete m_data;
 }
 
@@ -62,13 +54,7 @@ void wxClipboard::Clear()
 {
     wxDELETE(m_data);
 
-    wxCHECK_RET( m_pasteboard, "Clipboard creation failed." );
-
-    OSStatus err = PasteboardClear( m_pasteboard );
-    if (err != noErr)
-    {
-        wxLogSysError( wxT("Failed to empty the clipboard.") );
-    }
+    wxOSXPasteboard::GetGeneralClipboard()->Clear();
 }
 
 bool wxClipboard::Flush()
@@ -116,13 +102,9 @@ bool wxClipboard::AddData( wxDataObject *data )
     // we can only store one wxDataObject
     Clear();
 
-    PasteboardSyncFlags syncFlags = PasteboardSynchronize( m_pasteboard );
-    wxCHECK_MSG( !(syncFlags&kPasteboardModified), false, wxT("clipboard modified after clear") );
-    wxCHECK_MSG( (syncFlags&kPasteboardClientIsOwner), false, wxT("client couldn't own clipboard") );
+    data->Write(wxOSXPasteboard::GetGeneralClipboard());
 
     m_data = data;
-
-    data->AddToPasteboard( m_pasteboard, 1 );
 
     return true;
 }
@@ -139,14 +121,15 @@ void wxClipboard::Close()
     wxDELETE(m_data);
 }
 
-bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
+bool wxClipboard::IsSupported(const wxDataFormat &dataFormat)
 {
     wxLogTrace(TRACE_CLIPBOARD, wxT("Checking if format %s is available"),
                dataFormat.GetId().c_str());
 
     if ( m_data )
         return m_data->IsSupported( dataFormat );
-    return wxDataObject::IsFormatInPasteboard( m_pasteboard, dataFormat );
+
+    return wxOSXPasteboard::GetGeneralClipboard()->IsSupported(dataFormat);
 }
 
 bool wxClipboard::GetData( wxDataObject& data )
@@ -191,7 +174,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     // get formats from wxDataObjects
     if ( !transferred )
     {
-        transferred = data.GetFromPasteboard( m_pasteboard ) ;
+        transferred = data.Read(wxOSXPasteboard::GetGeneralClipboard());
     }
 
     delete [] array;

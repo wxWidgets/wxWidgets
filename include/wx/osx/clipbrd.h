@@ -19,6 +19,79 @@
 // wxClipboard
 //-----------------------------------------------------------------------------
 
+class WXDLLIMPEXP_CORE wxOSXDataSourceItem
+{
+public:
+    virtual ~wxOSXDataSourceItem();
+    
+    virtual wxDataFormat::NativeFormat AvailableType(CFArrayRef types) const = 0;
+    
+    virtual CFDataRef GetData(wxDataFormat::NativeFormat type) const = 0;
+
+};
+
+class WXDLLIMPEXP_CORE wxOSXDataSource
+{
+public:
+    virtual size_t GetItemCount() const = 0;
+
+    virtual bool IsSupported(const wxDataFormat &dataFormat);
+
+    virtual bool IsSupported(const wxDataObject &dataobj);
+
+    virtual bool HasData(CFArrayRef types) const = 0;
+
+    virtual CFDataRef GetData(wxDataFormat::NativeFormat type) const = 0;
+
+    virtual const wxOSXDataSourceItem* GetItem(size_t pos) const = 0;
+};
+
+class WXDLLIMPEXP_CORE wxOSXDataSinkItem
+{
+public:
+    virtual ~wxOSXDataSinkItem();
+
+    virtual void AddFilename(const char* utf8Dnormpath);
+
+    virtual void AddData(wxDataFormat::NativeFormat format, CFDataRef data) = 0;
+};
+
+
+class WXDLLIMPEXP_CORE wxOSXDataSink
+{
+public:
+    virtual void Clear() = 0;
+
+    virtual wxOSXDataSinkItem* CreateItem() = 0;
+
+    virtual void Flush() = 0 ;
+};
+
+class WXDLLIMPEXP_CORE wxOSXPasteboard : public wxOSXDataSink, public wxOSXDataSource
+{
+public:
+    wxOSXPasteboard(OSXPasteboard native);
+
+    // sink methods
+
+    virtual wxOSXDataSinkItem* CreateItem() wxOVERRIDE;
+    void Clear() wxOVERRIDE;
+    void Flush() wxOVERRIDE;
+
+    // source methods
+
+    virtual size_t GetItemCount() const wxOVERRIDE;
+    virtual bool HasData(CFArrayRef types) const wxOVERRIDE;
+    virtual CFDataRef GetData(wxDataFormat::NativeFormat type) const wxOVERRIDE;
+
+    virtual const wxOSXDataSourceItem* GetItem(size_t pos) const wxOVERRIDE;
+
+    static wxOSXPasteboard* GetGeneralClipboard();
+private:
+    OSXPasteboard m_pasteboard;
+    wxVector<wxOSXDataSinkItem*> m_items;
+};
+
 class WXDLLIMPEXP_CORE wxClipboard : public wxClipboardBase
 {
 public:

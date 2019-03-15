@@ -31,6 +31,7 @@
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
+    #include "wx/clipbrd.h"
 #endif
 
 #if wxUSE_TOOLTIPS
@@ -1005,9 +1006,6 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text);
 
 #if wxUSE_DRAG_AND_DROP
 
-// see http://lists.apple.com/archives/Cocoa-dev/2005/Jul/msg01244.html
-// for details on the NSPasteboard -> PasteboardRef conversion
-
 NSDragOperation wxOSX_draggingEntered( id self, SEL _cmd, id <NSDraggingInfo>sender )
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1282,8 +1280,16 @@ namespace
 unsigned int wxOnDraggingEnteredOrUpdated(wxWidgetCocoaImpl* viewImpl,
     void *s, bool entered)
 {
+    wxWindow* wxpeer = viewImpl->GetWXPeer();
+    if ( wxpeer == NULL )
+        return NSDragOperationNone;
+
+    wxDropTarget* target = wxpeer->GetDropTarget();
+    if ( target == NULL )
+        return NSDragOperationNone;
+
     id <NSDraggingInfo>sender = (id <NSDraggingInfo>) s;
-    NSPasteboard *pboard = [sender draggingPasteboard];
+    wxOSXPasteboard pb([sender draggingPasteboard]);
     /*
     sourceDragMask contains a flag field with drag operations permitted by
     the source:
@@ -1302,14 +1308,6 @@ unsigned int wxOnDraggingEnteredOrUpdated(wxWidgetCocoaImpl* viewImpl,
     The end result can be a mask that's 0 (NSDragOperationNone).
     */
     NSDragOperation sourceDragMask = [sender draggingSourceOperationMask];
-
-    wxWindow* wxpeer = viewImpl->GetWXPeer();
-    if ( wxpeer == NULL )
-        return NSDragOperationNone;
-
-    wxDropTarget* target = wxpeer->GetDropTarget();
-    if ( target == NULL )
-        return NSDragOperationNone;
 
     NSPoint nspoint = [viewImpl->GetWXWidget() convertPoint:[sender draggingLocation] fromView:nil];
     wxPoint pt = wxFromNSPoint( viewImpl->GetWXWidget(), nspoint );
@@ -1337,9 +1335,7 @@ unsigned int wxOnDraggingEnteredOrUpdated(wxWidgetCocoaImpl* viewImpl,
     else if (sourceDragMask & NSDragOperationLink)
         result = wxDragLink;
 
-    PasteboardRef pboardRef;
-    PasteboardCreate((CFStringRef)[pboard name], &pboardRef);
-    target->SetCurrentDragPasteboard(pboardRef);
+    target->SetCurrentDragSource(&pb);
     if (entered)
     {
         // Drag entered
@@ -1350,8 +1346,6 @@ unsigned int wxOnDraggingEnteredOrUpdated(wxWidgetCocoaImpl* viewImpl,
         // Drag updated
         result = target->OnDragOver(pt.x, pt.y, result);
     }
-
-    CFRelease(pboardRef);
 
     NSDragOperation nsresult = NSDragOperationNone;
     switch (result )
@@ -1383,9 +1377,6 @@ unsigned int wxWidgetCocoaImpl::draggingEntered(void* s, WXWidget WXUNUSED(slf),
 
 void wxWidgetCocoaImpl::draggingExited(void* s, WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
 {
-    id <NSDraggingInfo>sender = (id <NSDraggingInfo>) s;
-    NSPasteboard *pboard = [sender draggingPasteboard];
-
     wxWindow* wxpeer = GetWXPeer();
     if ( wxpeer == NULL )
         return;
@@ -1394,11 +1385,11 @@ void wxWidgetCocoaImpl::draggingExited(void* s, WXWidget WXUNUSED(slf), void *WX
     if ( target == NULL )
         return;
 
-    PasteboardRef pboardRef;
-    PasteboardCreate((CFStringRef)[pboard name], &pboardRef);
-    target->SetCurrentDragPasteboard(pboardRef);
+    id <NSDraggingInfo>sender = (id <NSDraggingInfo>) s;
+    wxOSXPasteboard pb([sender draggingPasteboard]);
+
+    target->SetCurrentDragSource(&pb);
     target->OnLeave();
-    CFRelease(pboardRef);
  }
 
 unsigned int wxWidgetCocoaImpl::draggingUpdated(void* s, WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
@@ -1408,13 +1399,17 @@ unsigned int wxWidgetCocoaImpl::draggingUpdated(void* s, WXWidget WXUNUSED(slf),
 
 bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget WXUNUSED(slf), void *WXUNUSED(_cmd))
 {
-    id <NSDraggingInfo>sender = (id <NSDraggingInfo>) s;
+    wxWindow* wxpeer = GetWXPeer();
+    if ( wxpeer == NULL )
+        return false;
+    wxDropTarget* target = wxpeer->GetDropTarget();
+    if ( target == NULL )
+        return false;
 
-    NSPasteboard *pboard = [sender draggingPasteboard];
+    id <NSDraggingInfo>sender = (id <NSDraggingInfo>) s;
+    wxOSXPasteboard pb([sender draggingPasteboard]);
     NSDragOperation sourceDragMask = [sender draggingSourceOperationMask];
 
-    wxWindow* wxpeer = GetWXPeer();
-    wxDropTarget* target = wxpeer->GetDropTarget();
     wxDragResult result = wxDragNone;
     NSPoint nspoint = [m_osxView convertPoint:[sender draggingLocation] fromView:nil];
     wxPoint pt = wxFromNSPoint( m_osxView, nspoint );
@@ -1427,14 +1422,10 @@ bool wxWidgetCocoaImpl::performDragOperation(void* s, WXWidget WXUNUSED(slf), vo
     else if (sourceDragMask & NSDragOperationLink)
         result = wxDragLink;
 
-    PasteboardRef pboardRef;
-    PasteboardCreate((CFStringRef)[pboard name], &pboardRef);
-    target->SetCurrentDragPasteboard(pboardRef);
+    target->SetCurrentDragSource(&pb);
 
     if (target->OnDrop(pt.x, pt.y))
         result = target->OnData(pt.x, pt.y, result);
-
-    CFRelease(pboardRef);
 
     return result != wxDragNone;
 }
@@ -1450,7 +1441,7 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
         if ( hitview == NULL || hitview != slf)
             return;
     }
-    
+
     if ( !DoHandleMouseEvent(event) )
     {
         // for plain NSView mouse events would propagate to parents otherwise
@@ -1459,19 +1450,19 @@ void wxWidgetCocoaImpl::mouseEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
         {
             wxOSX_EventHandlerPtr superimpl = (wxOSX_EventHandlerPtr) [[slf superclass] instanceMethodForSelector:(SEL)_cmd];
             superimpl(slf, (SEL)_cmd, event);
-            
+
             // super of built-ins keeps the mouse up, as wx expects this event, we have to synthesize it
             // only trigger if at this moment the mouse is already up, and the control is still existing after the event has
             // been handled (we do this by looking up the native NSView's peer from the hash map, that way we are sure the info
             // is current - even when the instance memory of ourselves may have been freed ...
-            
+
             wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( slf );
             if ( [ event type]  == NSLeftMouseDown && !wxGetMouseState().LeftIsDown() && impl != NULL )
             {
                 wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
                 SetupMouseEvent(wxevent , event) ;
                 wxevent.SetEventType(wxEVT_LEFT_UP);
-                
+
                 GetWXPeer()->HandleWindowEvent(wxevent);
             }
         }
@@ -3099,22 +3090,21 @@ bool wxWidgetCocoaImpl::SetFocus()
 void wxWidgetCocoaImpl::SetDropTarget(wxDropTarget* target)
 {
     [m_osxView unregisterDraggedTypes];
-    
-    if ( target == NULL )
+
+    if (target == NULL)
         return;
-    
+
     wxDataObject* dobj = target->GetDataObject();
-    
-    if( dobj )
+
+    if (dobj)
     {
-        CFMutableArrayRef typesarray = CFArrayCreateMutable(kCFAllocatorDefault,0,&kCFTypeArrayCallBacks);
+        wxCFMutableArrayRef<CFStringRef> typesarray;
         dobj->AddSupportedTypes(typesarray);
         NSView* targetView = m_osxView;
-        if ( [m_osxView isKindOfClass:[NSScrollView class] ] )
-            targetView = [(NSScrollView*) m_osxView documentView];
+        if ([m_osxView isKindOfClass:[NSScrollView class]])
+            targetView = [(NSScrollView*)m_osxView documentView];
 
-        [targetView registerForDraggedTypes:(NSArray*)typesarray];
-        CFRelease(typesarray);
+        [targetView registerForDraggedTypes:typesarray];
     }
 }
 #endif // wxUSE_DRAG_AND_DROP
