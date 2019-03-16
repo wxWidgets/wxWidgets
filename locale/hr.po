@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: wxWidgets 3.1.x\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-05-21 14:25+0200\n"
-"PO-Revision-Date: 2019-03-10 17:42+0100\n"
+"PO-Revision-Date: 2019-03-16 21:37+0100\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -49,7 +49,7 @@ msgstr " (greška %ld: %s)"
 #: ../src/common/imagtiff.cpp:72
 #, c-format
 msgid " (in module \"%s\")"
-msgstr " (u modulu \"%s\")"
+msgstr " (u modulu „%s”)"
 
 #: ../src/osx/core/secretstore.cpp:138
 msgid " (while overwriting an existing item)"
@@ -169,7 +169,7 @@ msgstr "%s upozorenje"
 #: ../src/common/tarstrm.cpp:1319
 #, c-format
 msgid "%s did not fit the tar header for entry '%s'"
-msgstr "%s ne paše tar zaglavlju za unos '%s'"
+msgstr "%s ne paše tar zaglavlju za unos „%s”"
 
 #: ../src/common/fldlgcmn.cpp:124
 #, c-format
@@ -258,7 +258,7 @@ msgstr "&Okvir"
 #: ../src/richtext/richtextliststylepage.cpp:210
 #: ../src/richtext/richtextbulletspage.cpp:146
 msgid "&Bullet style:"
-msgstr "_Stil&Stil znaka nabrajanja:"
+msgstr "&Stil znaka nabrajanja:"
 
 #: ../src/common/stockitem.cpp:146
 msgid "&CD-Rom"
@@ -318,7 +318,7 @@ msgstr "&Prilagodi …"
 
 #: ../src/generic/dbgrptg.cpp:334
 msgid "&Debug report preview:"
-msgstr "Pregled izvještaja o otklanjanju grešaka:"
+msgstr "Pregled izvještaja o otklanjanju &grešaka:"
 
 #: ../src/richtext/richtexttabspage.cpp:138 ../src/richtext/richtextctrl.cpp:335
 #: ../src/osx/textctrl_osx.cpp:579 ../src/common/stockitem.cpp:152
@@ -433,7 +433,7 @@ msgstr "&Vodoravni odmak:"
 #: ../src/richtext/richtextindentspage.cpp:184
 #: ../src/richtext/richtextliststylepage.cpp:372
 msgid "&Indentation (tenths of a mm)"
-msgstr "Uvlaka (u destinkama mm)"
+msgstr "&Uvlaka (u destinkama mm)"
 
 #: ../src/richtext/richtextindentspage.cpp:167
 #: ../src/richtext/richtextliststylepage.cpp:356
@@ -459,7 +459,7 @@ msgstr "&Prijeđi na"
 #: ../src/richtext/richtextindentspage.cpp:153
 #: ../src/richtext/richtextliststylepage.cpp:342
 msgid "&Justified"
-msgstr "&Poravnato"
+msgstr "&Puni format"
 
 #: ../src/common/stockitem.cpp:174
 msgid "&Last"
@@ -652,7 +652,7 @@ msgstr "&Spremi pod"
 
 #: ../include/wx/richmsgdlg.h:29
 msgid "&See details"
-msgstr "Prikaži detalje"
+msgstr "&Prikaži detalje"
 
 #: ../src/generic/tipdlg.cpp:236
 msgid "&Show tips at startup"
@@ -677,7 +677,7 @@ msgstr "&Spacioniranje (u desetinkama mm)"
 
 #: ../src/common/stockitem.cpp:197
 msgid "&Spell Check"
-msgstr "Provjera pravopisa"
+msgstr "&Provjera pravopisa"
 
 #: ../src/common/stockitem.cpp:198
 msgid "&Stop"
@@ -786,67 +786,67 @@ msgstr "&Da"
 #: ../src/common/valtext.cpp:256
 #, c-format
 msgid "'%s' contains illegal characters"
-msgstr "'%s' sadržava nedozvoljene slovne znakove"
+msgstr "„%s” sadržava nedozvoljene slovne znakove"
 
 #: ../src/common/valtext.cpp:254
 #, c-format
 msgid "'%s' doesn't consist only of valid characters"
-msgstr "'%s' ne sadržava samo dozvoljene slovne znakove"
+msgstr "„%s” ne sadržava samo dozvoljene slovne znakove"
 
 #: ../src/common/config.cpp:519 ../src/msw/regconf.cpp:258
 #, c-format
 msgid "'%s' has extra '..', ignored."
-msgstr "'%s' ima dodatne '..', zanemareno."
+msgstr "„%s” ima dodatne „..”, zanemareno."
 
 #: ../src/common/cmdline.cpp:1113 ../src/common/cmdline.cpp:1131
 #, c-format
 msgid "'%s' is not a correct numeric value for option '%s'."
-msgstr "'%s' nije ispravna numerička vrijednost za opciju '%s'."
+msgstr "„%s” nije ispravna numerička vrijednost za opciju „%s”."
 
 #: ../src/common/translation.cpp:1100
 #, c-format
 msgid "'%s' is not a valid message catalog."
-msgstr "'%s' nije valjani katalog obavijesti."
+msgstr "„%s” nije valjan katalog obavijesti."
 
 #: ../src/common/valtext.cpp:165
 #, c-format
 msgid "'%s' is not one of the valid strings"
-msgstr "'%s' nije jedan od valjanih znakovnih nizova"
+msgstr "„%s” nije jedan od valjanih znakovnih nizova"
 
 #: ../src/common/valtext.cpp:167
 #, c-format
 msgid "'%s' is one of the invalid strings"
-msgstr "'%s' je jedan od valjanih znakovnih nizova"
+msgstr "„%s” je jedan od nevaljanih znakovnih nizova"
 
 #: ../src/common/textbuf.cpp:237
 #, c-format
 msgid "'%s' is probably a binary buffer."
-msgstr "'%s' je vjerojatno jedan binarni međuspremnik."
+msgstr "„%s” je vjerojatno jedan binaran međuspremnik."
 
 #: ../src/common/valtext.cpp:252
 #, c-format
 msgid "'%s' should be numeric."
-msgstr "'%s' treba biti numerički."
+msgstr "„%s” treba biti numerički."
 
 #: ../src/common/valtext.cpp:244
 #, c-format
 msgid "'%s' should only contain ASCII characters."
-msgstr "'%s' treba sadržavati samo ASCII slovne znakove."
+msgstr "„%s” treba sadržavati samo ASCII slovne znakove."
 
 #: ../src/common/valtext.cpp:246
 #, c-format
 msgid "'%s' should only contain alphabetic characters."
-msgstr "'%s' treba sadržavati samo alfabetne slovne znakove."
+msgstr "„%s” treba sadržavati samo slovne znakove."
 
 #: ../src/common/valtext.cpp:248
 #, c-format
 msgid "'%s' should only contain alphabetic or numeric characters."
-msgstr "'%s' treba sadržavati samo alfabetne ili numeričke slovne znakove."
+msgstr "„%s” treba sadržavati samo alfanumeričke znakove."
 
 #: ../src/common/valtext.cpp:250
 #, c-format
 msgid "'%s' should only contain digits."
-msgstr "'%s' treba sadržavati samo brojke."
+msgstr "„%s” treba sadržavati samo brojke."
 
 #: ../src/richtext/richtextliststylepage.cpp:229
 #: ../src/richtext/richtextbulletspage.cpp:166
@@ -908,7 +908,7 @@ msgstr ", 64-bitno izdanje"
 #: ../src/richtext/richtextliststylepage.cpp:493
 #: ../src/richtext/richtextbulletspage.cpp:285
 msgid "-"
-msgstr "–"
+msgstr "-"
 
 #: ../src/generic/filepickerg.cpp:66
 msgid "..."
@@ -1056,7 +1056,7 @@ msgstr "<POVEZNICA>"
 
 #: ../src/html/helpwnd.cpp:1266
 msgid "<b><i>Bold italic face.</i></b><br>"
-msgstr "<b><i>Debeli kurzivni rez.</i></b><br>"
+msgstr "<b><i>Debeli kurzivni font.</i></b><br>"
 
 #: ../src/html/helpwnd.cpp:1270
 msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
@@ -1064,11 +1064,11 @@ msgstr "<b><i>debeli kurziv <u>podcrtano</u></i></b><br>"
 
 #: ../src/html/helpwnd.cpp:1265
 msgid "<b>Bold face.</b> "
-msgstr "<b>Debeli rez.</b> "
+msgstr "<b>Debeli font.</b> "
 
 #: ../src/html/helpwnd.cpp:1264
 msgid "<i>Italic face.</i> "
-msgstr "<i>Kurzivni rez.</i> "
+msgstr "<i>Kurzivni font.</i> "
 
 #: ../src/richtext/richtextliststylepage.cpp:494
 #: ../src/richtext/richtextbulletspage.cpp:286
@@ -1085,7 +1085,7 @@ msgstr "Izvještaj o otklanjanju grešaka je stvoren. Nalazi se u"
 
 #: ../src/common/xtixml.cpp:418
 msgid "A non empty collection must consist of 'element' nodes"
-msgstr "Ne prazna kolekcija mora sadržavati 'element' čvorove"
+msgstr "Ne prazna kolekcija mora sadržavati „element” čvorove"
 
 #: ../src/richtext/richtextliststylepage.cpp:304
 #: ../src/richtext/richtextliststylepage.cpp:306
@@ -1328,7 +1328,7 @@ msgstr "AppWorkspace"
 #: ../src/generic/logg.cpp:1014
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
-msgstr "Pridodaj log-zapis datoteci '%s' (odabirom [Ne] će biti prepisana)?"
+msgstr "Pridodaj log-zapis datoteci „%s” (odabirom [Ne] će biti prepisana)?"
 
 #: ../src/osx/menu_osx.cpp:577 ../src/osx/menu_osx.cpp:585
 msgid "Application"
@@ -1645,7 +1645,7 @@ msgstr ""
 #: ../src/msw/registry.cpp:506
 #, c-format
 msgid "Can't close registry key '%s'"
-msgstr "Nije moguće zatvoriti registarski ključ '%s'"
+msgstr "Nije moguće zatvoriti registarski ključ „%s”"
 
 #: ../src/msw/registry.cpp:584
 #, c-format
@@ -1655,7 +1655,7 @@ msgstr "Nije moguće kopirati vrijednosti nepodržane vrste %d."
 #: ../src/msw/registry.cpp:487
 #, c-format
 msgid "Can't create registry key '%s'"
-msgstr "Nije moguće stvoriti registarski ključ '%s'"
+msgstr "Nije moguće stvoriti registarski ključ „%s”"
 
 #: ../src/msw/thread.cpp:665
 msgid "Can't create thread"
@@ -1669,27 +1669,27 @@ msgstr "Nije moguće stvoriti prozor vrste %s"
 #: ../src/msw/registry.cpp:777
 #, c-format
 msgid "Can't delete key '%s'"
-msgstr "Nije moguće izbrisati ključ '%s'"
+msgstr "Nije moguće izbrisati ključ „%s”"
 
 #: ../src/msw/iniconf.cpp:458
 #, c-format
 msgid "Can't delete the INI file '%s'"
-msgstr "Nije moguće izbrisati INI datoteku '%s'"
+msgstr "Nije moguće izbrisati INI datoteku „%s”"
 
 #: ../src/msw/registry.cpp:805
 #, c-format
 msgid "Can't delete value '%s' from key '%s'"
-msgstr "Nije moguće izbrisati vrijednost '%s' ključa '%s'"
+msgstr "Nije moguće izbrisati vrijednost „%s” ključa „%s”"
 
 #: ../src/msw/registry.cpp:1171
 #, c-format
 msgid "Can't enumerate subkeys of key '%s'"
-msgstr "Nije moguće numeriranje podključeva ključa '%s'"
+msgstr "Nije moguće numeriranje podključeva ključa „%s”"
 
 #: ../src/msw/registry.cpp:1132
 #, c-format
 msgid "Can't enumerate values of key '%s'"
-msgstr "Nije moguće numeriranje vrijednosti ključa '%s'"
+msgstr "Nije moguće numeriranje vrijednosti ključa „%s”"
 
 #: ../src/msw/registry.cpp:1389
 #, c-format
@@ -1699,12 +1699,12 @@ msgstr "Nije moguće izvesti vrijednost nepodržane vrste %d."
 #: ../src/common/ffile.cpp:254
 #, c-format
 msgid "Can't find current position in file '%s'"
-msgstr "Nije moguće naći trenutačnu poziciju u datoteci '%s'"
+msgstr "Nije moguće naći trenutačnu poziciju u datoteci „%s”"
 
 #: ../src/msw/registry.cpp:418
 #, c-format
 msgid "Can't get info about registry key '%s'"
-msgstr "Nije moguće dobiti informacije o ključu '%s'"
+msgstr "Nije moguće dobiti informacije o ključu „%s”"
 
 #: ../src/common/zstream.cpp:346
 msgid "Can't initialize zlib deflate stream."
@@ -1717,12 +1717,12 @@ msgstr "Nije moguće inicijalizirati zlib inflate tijek."
 #: ../src/msw/fswatcher.cpp:476
 #, c-format
 msgid "Can't monitor non-existent directory \"%s\" for changes."
-msgstr "Nije moguće praćenje promjena za nepostojeći direktorij \"%s\"."
+msgstr "Nije moguće praćenje promjena za nepostojeći direktorij „%s”."
 
 #: ../src/msw/registry.cpp:454
 #, c-format
 msgid "Can't open registry key '%s'"
-msgstr "Nije moguće otvoriti registarski ključ '%s'"
+msgstr "Nije moguće otvoriti registarski ključ „%s”"
 
 #: ../src/common/zstream.cpp:252
 #, c-format
@@ -1738,18 +1738,18 @@ msgstr ""
 #: ../src/msw/registry.cpp:1064
 #, c-format
 msgid "Can't read value of '%s'"
-msgstr "Nije moguće čitanje vrijednosti od '%s'"
+msgstr "Nije moguće čitanje vrijednosti od „%s”"
 
 #: ../src/msw/registry.cpp:878 ../src/msw/registry.cpp:910
 #: ../src/msw/registry.cpp:975
 #, c-format
 msgid "Can't read value of key '%s'"
-msgstr "Nije moguće čitanje vrijednosti od ključa '%s'"
+msgstr "Nije moguće čitanje vrijednosti od ključa „%s”"
 
 #: ../src/common/image.cpp:2620
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
-msgstr "Nije moguće spremanje slikovne datoteke '%s': nepoznati sufiks."
+msgstr "Nije moguće spremanje slikovne datoteke „%s”: nepoznati sufiks."
 
 #: ../src/generic/logg.cpp:573 ../src/generic/logg.cpp:976
 msgid "Can't save log contents to file."
@@ -1763,7 +1763,7 @@ msgstr "Nije moguće postaviti prioritet tijeka"
 #: ../src/msw/registry.cpp:1081
 #, c-format
 msgid "Can't set value of '%s'"
-msgstr "Nije moguće postavljanje vrijednosti od '%s'"
+msgstr "Nije moguće postavljanje vrijednosti od „%s”"
 
 #: ../src/unix/utilsunx.cpp:351
 msgid "Can't write to child process's stdin"
@@ -1785,12 +1785,12 @@ msgstr "Cancel"
 #: ../src/common/filefn.cpp:1261
 #, c-format
 msgid "Cannot enumerate files '%s'"
-msgstr "Nije moguće numerirati datoteke '%s'"
+msgstr "Nije moguće numerirati datoteke „%s”"
 
 #: ../src/msw/dir.cpp:263
 #, c-format
 msgid "Cannot enumerate files in directory '%s'"
-msgstr "Nije moguće numerirati datoteke u mapi '%s'"
+msgstr "Nije moguće numerirati datoteke u mapi „%s”"
 
 #: ../src/msw/dialup.cpp:523
 #, c-format
@@ -1804,7 +1804,7 @@ msgstr "Nije moguće naći mjesto datoteke adresara"
 #: ../src/msw/ole/automtn.cpp:562
 #, c-format
 msgid "Cannot get an active instance of \"%s\""
-msgstr "Nije moguće dobiti aktivnu instancu \"%s\""
+msgstr "Nije moguće dobiti aktivnu instancu „%s”"
 
 #: ../src/unix/threadpsx.cpp:1035
 #, c-format
@@ -1834,17 +1834,17 @@ msgstr "Nije moguće inicijalizirati priključke"
 #: ../src/msw/volume.cpp:619
 #, c-format
 msgid "Cannot load icon from '%s'."
-msgstr "Nije moguće učitati ikone iz '%s'."
+msgstr "Nije moguće učitati ikone iz „%s”."
 
 #: ../src/xrc/xmlres.cpp:360
 #, c-format
 msgid "Cannot load resources from '%s'."
-msgstr "Nije moguće učitati resurse iz '%s'."
+msgstr "Nije moguće učitati resurse iz „%s”."
 
 #: ../src/xrc/xmlres.cpp:742
 #, c-format
 msgid "Cannot load resources from file '%s'."
-msgstr "Nije moguće učitati resurse iz datoteke '%s'."
+msgstr "Nije moguće učitati resurse iz datoteke „%s”."
 
 #: ../src/html/htmlfilt.cpp:137
 #, c-format
@@ -1873,7 +1873,7 @@ msgstr "Nije moguće otvoriti datoteku indeksa: %s"
 #: ../src/xrc/xmlres.cpp:724
 #, c-format
 msgid "Cannot open resources file '%s'."
-msgstr "Nije moguće otvoriti datoteku resursa '%s'."
+msgstr "Nije moguće otvoriti datoteku resursa „%s”."
 
 #: ../src/html/helpwnd.cpp:1534
 msgid "Cannot print empty page."
@@ -1882,7 +1882,7 @@ msgstr "Nije moguće ispisati praznu stranicu."
 #: ../src/msw/volume.cpp:507
 #, c-format
 msgid "Cannot read typename from '%s'!"
-msgstr "Nije moguće čitati ime vrste od '%s'!"
+msgstr "Nije moguće čitati ime vrste od „%s”!"
 
 #: ../src/msw/thread.cpp:888
 #, c-format
@@ -1896,7 +1896,7 @@ msgstr "Nije moguće pronaći pravila rasporeda tijeka."
 #: ../src/common/intl.cpp:558
 #, c-format
 msgid "Cannot set locale to language \"%s\"."
-msgstr "Nije moguće postaviti lokalizaciju za \"%s\" jezik."
+msgstr "Nije moguće postaviti lokalizaciju za „%s” jezik."
 
 #: ../src/unix/threadpsx.cpp:831 ../src/msw/thread.cpp:546
 msgid "Cannot start thread: error writing TLS."
@@ -1993,12 +1993,12 @@ msgstr "Promijeni stil"
 msgid "Changes won't be saved to avoid overwriting the existing file \"%s\""
 msgstr ""
 "Promjene neće biti spremljene, kako bi se izbjeglo prepisivanje postojeće "
-"datoteke \"%s\""
+"datoteke „%s”"
 
 #: ../src/gtk/filepicker.cpp:190 ../src/gtk/filedlg.cpp:87
 #, c-format
 msgid "Changing current directory to \"%s\" failed"
-msgstr "Mijenjanje trenutačne mape u \"%s\""
+msgstr "Mijenjanje trenutačne mape u „%s”"
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1757
@@ -2113,7 +2113,7 @@ msgstr "Odaberi font"
 #: ../src/common/module.cpp:74
 #, c-format
 msgid "Circular dependency involving module \"%s\" detected."
-msgstr "Ustanovljena je beskonačna ovisnost u modulu \"%s\"."
+msgstr "Ustanovljena je beskonačna ovisnost u modulu „%s”."
 
 #: ../src/aui/tabmdi.cpp:108 ../src/generic/mdig.cpp:97
 msgid "Cl&ose"
@@ -2319,7 +2319,7 @@ msgstr "Računalo"
 #: ../src/common/fileconf.cpp:934
 #, c-format
 msgid "Config entry name cannot start with '%c'."
-msgstr "Konfiguracijsko ulazno ime ne može početi s '%c'."
+msgstr "Konfiguracijsko ulazno ime ne može početi s „%c”."
 
 #: ../src/generic/filedlgg.cpp:349 ../src/gtk/filedlg.cpp:60
 msgid "Confirm"
@@ -2346,7 +2346,7 @@ msgstr "ControlLight"
 #: ../src/common/strconv.cpp:2262
 #, c-format
 msgid "Conversion to charset '%s' doesn't work."
-msgstr "Konverzija u kodnu stranicu '%s' ne radi."
+msgstr "Konverzija u kodnu stranicu „%s” ne radi."
 
 #: ../src/common/stockitem.cpp:149
 msgid "Convert"
@@ -2355,7 +2355,7 @@ msgstr "Pretvori"
 #: ../src/html/htmlwin.cpp:1079
 #, c-format
 msgid "Copied to clipboard:\"%s\""
-msgstr "Kopirano u međuspremnik:\"%s\""
+msgstr "Kopirano u međuspremnik:„%s”"
 
 #: ../src/generic/prntdlgg.cpp:247
 msgid "Copies:"
@@ -2381,7 +2381,7 @@ msgstr "Polumjer kuta:"
 #: ../src/html/chm.cpp:718
 #, c-format
 msgid "Could not create temporary file '%s'"
-msgstr "Nije bilo moguće stvoriti privremenu datoteku '%s'"
+msgstr "Nije bilo moguće stvoriti privremenu datoteku „%s”"
 
 #: ../src/html/chm.cpp:273
 #, c-format
@@ -2399,7 +2399,7 @@ msgstr "Nije bilo moguće inicijalizirati libnotify."
 #: ../src/html/chm.cpp:444
 #, c-format
 msgid "Could not locate file '%s'."
-msgstr "Nije bilo moguće pronaći datoteku '%s'."
+msgstr "Nije bilo moguće pronaći datoteku „%s”."
 
 #: ../src/common/filefn.cpp:1403
 msgid "Could not set current working directory"
@@ -2444,7 +2444,7 @@ msgstr "Nije bilo moguće numerirati prijevode"
 #: ../src/common/dynlib.cpp:120
 #, c-format
 msgid "Couldn't find symbol '%s' in a dynamic library"
-msgstr "Nije bilo moguće naći simbol '%s' u dinamičkoj biblioteci"
+msgstr "Nije bilo moguće naći simbol „%s” u dinamičkoj biblioteci"
 
 #: ../src/msw/thread.cpp:915
 msgid "Couldn't get the current thread pointer"
@@ -2467,7 +2467,7 @@ msgstr ""
 #: ../src/unix/sound.cpp:470
 #, c-format
 msgid "Couldn't load sound data from '%s'."
-msgstr "Nije bilo moguće učitati zvukovne podatke od '%s'."
+msgstr "Nije bilo moguće učitati zvukovne podatke od „%s”."
 
 #: ../src/msw/dirdlg.cpp:435
 msgid "Couldn't obtain folder name"
@@ -2481,7 +2481,7 @@ msgstr "Nije bilo moguće otvoriti audio: %s"
 #: ../src/msw/ole/dataobj.cpp:377
 #, c-format
 msgid "Couldn't register clipboard format '%s'."
-msgstr "Nije bilo moguće registrirati format međuspremnika '%s'."
+msgstr "Nije bilo moguće registrirati format međuspremnika „%s”."
 
 #: ../src/msw/listctrl.cpp:869
 #, c-format
@@ -2513,7 +2513,7 @@ msgstr "Stvori novu mapu"
 #: ../src/xrc/xmlres.cpp:2460
 #, c-format
 msgid "Creating %s \"%s\" failed."
-msgstr "Stvaranje %s \"%s\"."
+msgstr "Stvaranje %s „%s” nije uspjelo."
 
 #. TRANSLATORS: System cursor name
 #: ../src/propgrid/advprops.cpp:1758
@@ -2598,7 +2598,7 @@ msgstr "Isprekidano"
 #: ../src/generic/dbgrptg.cpp:300
 #, c-format
 msgid "Debug report \"%s\""
-msgstr "Izvještaj o otklanjanju grešaka \"%s\""
+msgstr "Izvještaj o otklanjanju grešaka „%s”"
 
 #: ../src/common/debugrpt.cpp:210
 msgid "Debug report couldn't be created."
@@ -2681,17 +2681,17 @@ msgstr "Izbrisati stil %s?"
 #: ../src/unix/snglinst.cpp:301
 #, c-format
 msgid "Deleted stale lock file '%s'."
-msgstr "Izbrisana je stara datoteka zaključavanja '%s'."
+msgstr "Izbrisana je stara datoteka zaključavanja „%s”."
 
 #: ../src/common/secretstore.cpp:220
 #, c-format
 msgid "Deleting password for \"%s/%s\" failed: %s."
-msgstr "Brisanje lozinke za \"%s/%s\": %s."
+msgstr "Brisanje lozinke za „%s/%s”: %s."
 
 #: ../src/common/module.cpp:124
 #, c-format
 msgid "Dependency \"%s\" of module \"%s\" doesn't exist."
-msgstr "Ovisnost \"%s\" o modulu \"%s\" ne postoji."
+msgstr "Ovisnost „%s” o modulu „%s” ne postoji."
 
 #: ../src/common/stockitem.cpp:196
 msgid "Descending"
@@ -2734,12 +2734,12 @@ msgstr "Mape"
 #: ../src/common/filefn.cpp:1183
 #, c-format
 msgid "Directory '%s' couldn't be created"
-msgstr "Nije bilo moguće stvoriti mapu '%s'"
+msgstr "Nije bilo moguće stvoriti mapu „%s”"
 
 #: ../src/common/filefn.cpp:1197
 #, c-format
 msgid "Directory '%s' couldn't be deleted"
-msgstr "Nije bilo moguće izbrisati mapu '%s'"
+msgstr "Nije bilo moguće izbrisati mapu „%s”"
 
 #: ../src/generic/dirdlgg.cpp:204
 msgid "Directory does not exist"
@@ -2855,62 +2855,62 @@ msgstr "Proteklo vrijeme:"
 #: ../src/richtext/richtextsizepage.cpp:465
 #: ../src/richtext/richtextsizepage.cpp:467
 msgid "Enable the height value."
-msgstr "Omogući vrijednost visine."
+msgstr "Aktiviraj vrijednost visine."
 
 #: ../src/richtext/richtextsizepage.cpp:438
 #: ../src/richtext/richtextsizepage.cpp:440
 msgid "Enable the maximum width value."
-msgstr "Omogući maksimalnu vrijednost širine."
+msgstr "Aktiviraj maksimalnu vrijednost širine."
 
 #: ../src/richtext/richtextsizepage.cpp:411
 #: ../src/richtext/richtextsizepage.cpp:413
 msgid "Enable the minimum height value."
-msgstr "Omogući minimalnu vrijednost visine."
+msgstr "Aktiviraj minimalnu vrijednost visine."
 
 #: ../src/richtext/richtextsizepage.cpp:384
 #: ../src/richtext/richtextsizepage.cpp:386
 msgid "Enable the minimum width value."
-msgstr "Omogući minimalnu vrijednost širine."
+msgstr "Aktiviraj minimalnu vrijednost širine."
 
 #: ../src/richtext/richtextsizepage.cpp:319
 #: ../src/richtext/richtextsizepage.cpp:321
 msgid "Enable the width value."
-msgstr "Omogući vrijednost širine."
+msgstr "Aktiviraj vrijednost širine."
 
 #: ../src/richtext/richtextsizepage.cpp:280
 #: ../src/richtext/richtextsizepage.cpp:282
 msgid "Enable vertical alignment."
-msgstr "Omogući uspravno poravnanje."
+msgstr "Aktiviraj uspravno poravnanje."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:162
 #: ../src/richtext/richtextbackgroundpage.cpp:164
 msgid "Enables a background colour."
-msgstr "Omogućava pozadinsku boju."
+msgstr "Aktivira pozadinsku boju."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:196
 #: ../src/richtext/richtextbackgroundpage.cpp:198
 msgid "Enables a shadow."
-msgstr "Omogućava sjenu."
+msgstr "Aktivira sjenu."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:300
 #: ../src/richtext/richtextbackgroundpage.cpp:302
 msgid "Enables the blur distance."
-msgstr "Omogućava udaljenost mutnoće."
+msgstr "Aktivira udaljenost mutnoće."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:260
 #: ../src/richtext/richtextbackgroundpage.cpp:262
 msgid "Enables the shadow colour."
-msgstr "Omogućava boju sjene."
+msgstr "Aktivira boju sjene."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:327
 #: ../src/richtext/richtextbackgroundpage.cpp:329
 msgid "Enables the shadow opacity."
-msgstr "Omogućava neprozirnost sjene."
+msgstr "Aktivira neprozirnost sjene."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:273
 #: ../src/richtext/richtextbackgroundpage.cpp:275
 msgid "Enables the shadow spread."
-msgstr "Omogućava rasprostiranje sjene."
+msgstr "Aktivira rasprostiranje sjene."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:66
@@ -2945,7 +2945,7 @@ msgstr "Unesi ime stila odlomka"
 #: ../src/generic/dbgrptg.cpp:174
 #, c-format
 msgid "Enter command to open file \"%s\":"
-msgstr "Unesi naredbu za otvaranje datoteke \"%s\":"
+msgstr "Unesi naredbu za otvaranje datoteke „%s”:"
 
 #: ../src/generic/helpext.cpp:459
 msgid "Entries found"
@@ -2959,7 +2959,7 @@ msgstr "Kuverta pozivnice 220 × 220 mm"
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "Proširenje varijable okruženja: nedostaje '%c' na položaju %u u '%s'."
+msgstr "Proširenje varijable okruženja: nedostaje „%c” na položaju %u u „%s”."
 
 #: ../src/generic/filedlgg.cpp:357 ../src/generic/dirctrlg.cpp:570
 #: ../src/generic/dirctrlg.cpp:588 ../src/generic/dirctrlg.cpp:599
@@ -2982,7 +2982,7 @@ msgstr "Greška prilikom zatvaranja kqueue instance"
 #: ../src/common/filefn.cpp:1049
 #, c-format
 msgid "Error copying the file '%s' to '%s'."
-msgstr "Greška prilikom kopiranja datoteke '%s' u '%s'."
+msgstr "Greška prilikom kopiranja datoteke „%s” u „%s”."
 
 #: ../src/generic/dirdlgg.cpp:222
 msgid "Error creating directory"
@@ -2990,12 +2990,12 @@ msgstr "Greška prilikom stvaranja mape"
 
 #: ../src/common/imagbmp.cpp:1181
 msgid "Error in reading image DIB."
-msgstr "Greška prilikom čitanja DIB slike."
+msgstr "Greška u čitanju DIB slike."
 
 #: ../src/propgrid/propgrid.cpp:6696
 #, c-format
 msgid "Error in resource: %s"
-msgstr "Grešk u resursu: %s"
+msgstr "Greška u resursu: %s"
 
 #: ../src/common/fileconf.cpp:422
 msgid "Error reading config options."
@@ -3067,7 +3067,7 @@ msgstr "Proširena Unix kodna strana za japanski (EUC-JP)"
 #: ../src/html/chm.cpp:725
 #, c-format
 msgid "Extraction of '%s' into '%s' failed."
-msgstr "Izvlačenje iz '%s' u '%s'."
+msgstr "Izvlačenje iz „%s” u „%s”."
 
 #: ../src/common/accelcmn.cpp:249 ../src/common/accelcmn.cpp:344
 msgid "F"
@@ -3103,12 +3103,12 @@ msgstr "Neuspjelo mijenjanje video modusa"
 #: ../src/common/image.cpp:3277
 #, c-format
 msgid "Failed to check format of image file \"%s\"."
-msgstr "Neuspjela provjera formata datoteke slike \"%s\"."
+msgstr "Neuspjela provjera formata datoteke slike „%s”."
 
 #: ../src/common/debugrpt.cpp:239
 #, c-format
 msgid "Failed to clean up debug report directory \"%s\""
-msgstr "Neuspjelo sređivanje mape za izještaje o otklanjanju grešaka \"%s\"."
+msgstr "Neuspjelo sređivanje mape za izještaje o otklanjanju grešaka „%s”."
 
 #: ../src/common/filename.cpp:192
 msgid "Failed to close file handle"
@@ -3117,7 +3117,7 @@ msgstr "Neuspjelo zatvaranje upravljača datotekama"
 #: ../src/unix/snglinst.cpp:340
 #, c-format
 msgid "Failed to close lock file '%s'"
-msgstr "Neuspjelo zatvaranje zaključne datoteke '%s'"
+msgstr "Neuspjelo zatvaranje zaključne datoteke „%s”"
 
 #: ../src/msw/clipbrd.cpp:112
 msgid "Failed to close the clipboard."
@@ -3126,7 +3126,7 @@ msgstr "Neuspjelo zatvaranje međuspremnika."
 #: ../src/x11/utils.cpp:208
 #, c-format
 msgid "Failed to close the display \"%s\""
-msgstr "Neuspjelo zatvaranje prikaza \"%s\""
+msgstr "Neuspjelo zatvaranje prikaza „%s”"
 
 #: ../src/msw/dialup.cpp:797
 msgid "Failed to connect: missing username/password."
@@ -3134,12 +3134,12 @@ msgstr "Neuspjelo povezivanje: nedostaje korisničko ime/lozinka."
 
 #: ../src/msw/dialup.cpp:743
 msgid "Failed to connect: no ISP to dial."
-msgstr "Neuspjelo povezivanje: nema ISP za biranje"
+msgstr "Neuspjelo povezivanje: nema ISP za biranje."
 
 #: ../src/common/textfile.cpp:203
 #, c-format
 msgid "Failed to convert file \"%s\" to Unicode."
-msgstr "Neuspjelo konvertiranje datoteke \"%s\" u Unicode."
+msgstr "Neuspjelo konvertiranje datoteke „%s” u Unicode."
 
 #: ../src/generic/logg.cpp:956
 msgid "Failed to copy dialog contents to the clipboard."
@@ -3148,22 +3148,22 @@ msgstr "Neuspjelo kopiranje sadržaja dijaloga u međuspremnik."
 #: ../src/msw/registry.cpp:692
 #, c-format
 msgid "Failed to copy registry value '%s'"
-msgstr "Neuspjelo kopiranje registarske vrijednost '%s'"
+msgstr "Neuspjelo kopiranje registarske vrijednost „%s”"
 
 #: ../src/msw/registry.cpp:701
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
-msgstr "Neuspjelo kopiranje sadržaja registarskog ključa '%s' u '%s'."
+msgstr "Neuspjelo kopiranje sadržaja registarskog ključa „%s” u „%s”."
 
 #: ../src/common/filefn.cpp:1015
 #, c-format
 msgid "Failed to copy the file '%s' to '%s'"
-msgstr "Neuspjelo kopiranje datoteke '%s' u '%s'"
+msgstr "Neuspjelo kopiranje datoteke „%s” u „%s”"
 
 #: ../src/msw/registry.cpp:679
 #, c-format
 msgid "Failed to copy the registry subkey '%s' to '%s'."
-msgstr "Neuspjelo kopiranje registarskog pod-ključa '%s' u '%s'."
+msgstr "Neuspjelo kopiranje registarskog pod-ključa „%s” u „%s”."
 
 #: ../src/msw/dde.cpp:1070
 msgid "Failed to create DDE string"
@@ -3184,12 +3184,12 @@ msgstr "Neuspjelo stvaranje anonimnog cjevovoda"
 #: ../src/msw/ole/automtn.cpp:522
 #, c-format
 msgid "Failed to create an instance of \"%s\""
-msgstr "Neuspjelo stvaranje instance od \"%s\""
+msgstr "Neuspjelo stvaranje instance od „%s”"
 
 #: ../src/msw/dde.cpp:437
 #, c-format
 msgid "Failed to create connection to server '%s' on topic '%s'"
-msgstr "Neuspjelo povezivanje na server '%s' na temu '%s'"
+msgstr "Neuspjelo povezivanje na server „%s” na temu „%s”"
 
 #: ../src/msw/cursor.cpp:204
 msgid "Failed to create cursor."
@@ -3198,7 +3198,7 @@ msgstr "Neuspjelo stvaranje pokazivača."
 #: ../src/common/debugrpt.cpp:209
 #, c-format
 msgid "Failed to create directory \"%s\""
-msgstr "Neuspjelo stvaranje direktorija \"%s\""
+msgstr "Neuspjelo stvaranje direktorija „%s”"
 
 #: ../src/generic/dirdlgg.cpp:220
 #, c-format
@@ -3206,7 +3206,7 @@ msgid ""
 "Failed to create directory '%s'\n"
 "(Do you have the required permissions?)"
 msgstr ""
-"Neuspjela izrada direktorija '%s'\n"
+"Neuspjela izrada direktorija „%s”\n"
 "(Imaš li potrebna korisnička prava?)"
 
 #: ../src/unix/epolldispatcher.cpp:84
@@ -3216,7 +3216,7 @@ msgstr "Neuspjelo stvaranje epoll deskriptora"
 #: ../src/msw/mimetype.cpp:238
 #, c-format
 msgid "Failed to create registry entry for '%s' files."
-msgstr "Neuspjela izrada registarskog unosa za '%s' datoteka."
+msgstr "Neuspjela izrada registarskog unosa za „%s” datoteka."
 
 #: ../src/msw/fdrepdlg.cpp:409
 #, c-format
@@ -3252,7 +3252,7 @@ msgstr "Neuspjelo stvaranje aktivne veze pozivanja: %s"
 #: ../src/unix/utilsunx.cpp:611
 #, c-format
 msgid "Failed to execute '%s'\n"
-msgstr "Neuspjelo izvršavanje '%s'\n"
+msgstr "Neuspjelo izvršavanje „%s”\n"
 
 #: ../src/common/debugrpt.cpp:720
 msgid "Failed to execute curl, please install it in PATH."
@@ -3261,7 +3261,7 @@ msgstr "Neuspjelo izvršavanje curl-a, instaliraj ga u PATH."
 #: ../src/msw/ole/automtn.cpp:505
 #, c-format
 msgid "Failed to find CLSID of \"%s\""
-msgstr "Neuspjelo pronalaženje CLSID-a od \"%s\""
+msgstr "Neuspjelo pronalaženje CLSID-a od „%s”"
 
 #: ../src/common/regex.cpp:431 ../src/common/regex.cpp:479
 #, c-format
@@ -3276,7 +3276,7 @@ msgstr "Neuspjelo dobivanje ISP imena: %s"
 #: ../src/msw/ole/automtn.cpp:574
 #, c-format
 msgid "Failed to get OLE automation interface for \"%s\""
-msgstr "Neuspjelo dobivanje OLE sučelje automatizacije za \"%s\""
+msgstr "Neuspjelo dobivanje OLE sučelje automatizacije za „%s”"
 
 #: ../src/msw/clipbrd.cpp:711
 msgid "Failed to get data from the clipboard"
@@ -3314,7 +3314,7 @@ msgstr "Neuspjelo umetanje teksta u kontrolu."
 #: ../src/unix/snglinst.cpp:241
 #, c-format
 msgid "Failed to inspect the lock file '%s'"
-msgstr "Neuspjelo provjeravanje zaključne datoteke '%s'"
+msgstr "Neuspjelo provjeravanje zaključne datoteke „%s”"
 
 #: ../src/unix/appunix.cpp:182
 msgid "Failed to install signal handler"
@@ -3336,22 +3336,22 @@ msgstr "Neuspjelo nasilno prekidanje procesa %d"
 #: ../src/common/image.cpp:2500
 #, c-format
 msgid "Failed to load bitmap \"%s\" from resources."
-msgstr "Neuspjelo učitavanje bitmapa \"%s\" iz resursa."
+msgstr "Neuspjelo učitavanje bitmapa „%s” iz resursa."
 
 #: ../src/common/image.cpp:2509
 #, c-format
 msgid "Failed to load icon \"%s\" from resources."
-msgstr "Neuspjelo učitavanje ikone \"%s\" iz resursa."
+msgstr "Neuspjelo učitavanje ikone „%s” iz resursa."
 
 #: ../src/common/iconbndl.cpp:225
 #, c-format
 msgid "Failed to load icons from resource '%s'."
-msgstr "Neuspjelo učitavanje ikona iz resursa '%s'."
+msgstr "Neuspjelo učitavanje ikona iz resursa „%s”."
 
 #: ../src/common/iconbndl.cpp:200
 #, c-format
 msgid "Failed to load image %%d from file '%s'."
-msgstr "Neuspjelo učitavanje slike %%d iz datoteke '%s'."
+msgstr "Neuspjelo učitavanje slike %%d iz datoteke „%s”."
 
 #: ../src/common/iconbndl.cpp:208
 #, c-format
@@ -3361,12 +3361,12 @@ msgstr "Neuspjelo učitavanje slike %d iz tijeka."
 #: ../src/common/image.cpp:2587 ../src/common/image.cpp:2606
 #, c-format
 msgid "Failed to load image from file \"%s\"."
-msgstr "Neuspjelo učitavanje slike iz datoteke \"%s\"."
+msgstr "Neuspjelo učitavanje slike iz datoteke „%s”."
 
 #: ../src/msw/enhmeta.cpp:97
 #, c-format
 msgid "Failed to load metafile from file \"%s\"."
-msgstr "Neuspjelo učitavanje metafile iz datoteke \"%s\"."
+msgstr "Neuspjelo učitavanje metafile iz datoteke „%s”."
 
 #: ../src/msw/volume.cpp:327
 msgid "Failed to load mpr.dll."
@@ -3375,27 +3375,27 @@ msgstr "Neuspjelo učitavanje mpr.dll."
 #: ../src/msw/utils.cpp:953
 #, c-format
 msgid "Failed to load resource \"%s\"."
-msgstr "Neuspjelo učitavanje resursa \"%s\"."
+msgstr "Neuspjelo učitavanje resursa „%s”."
 
 #: ../src/common/dynlib.cpp:92
 #, c-format
 msgid "Failed to load shared library '%s'"
-msgstr "Neuspjelo učitavanje dijeljenje biblioteke \"%s\"."
+msgstr "Neuspjelo učitavanje dijeljenje biblioteke „%s”."
 
 #: ../src/osx/core/sound.cpp:145
 #, c-format
 msgid "Failed to load sound from \"%s\" (error %d)."
-msgstr "Neuspjelo učitavanje zvuka iz \"%s\". (greška %d)."
+msgstr "Neuspjelo učitavanje zvuka iz „%s”. (greška %d)."
 
 #: ../src/msw/utils.cpp:960
 #, c-format
 msgid "Failed to lock resource \"%s\"."
-msgstr "Neuspjelo zaključavanje resursa \"%s\"."
+msgstr "Neuspjelo zaključavanje resursa „%s”."
 
 #: ../src/unix/snglinst.cpp:198
 #, c-format
 msgid "Failed to lock the lock file '%s'"
-msgstr "Neuspjelo zaključavanje zaključne datoteke \"%s\"."
+msgstr "Neuspjelo zaključavanje zaključne datoteke „%s”."
 
 #: ../src/unix/epolldispatcher.cpp:136
 #, c-format
@@ -3405,7 +3405,7 @@ msgstr "Neuspjelo mijenjanje deskriptora %d u epoll deskriptoru %d"
 #: ../src/common/filename.cpp:2575
 #, c-format
 msgid "Failed to modify file times for '%s'"
-msgstr "Neuspjelo mijenjanje vremena datoteke za '%s'"
+msgstr "Neuspjelo mijenjanje vremena datoteke za „%s”"
 
 #: ../src/common/selectdispatcher.cpp:258
 msgid "Failed to monitor I/O channels"
@@ -3414,32 +3414,32 @@ msgstr "Neuspjelo praćenje ulaznih/izlaznih kanala"
 #: ../src/common/filename.cpp:175
 #, c-format
 msgid "Failed to open '%s' for reading"
-msgstr "Neuspjelo otvaranje '%s' za čitanje"
+msgstr "Neuspjelo otvaranje „%s” za čitanje"
 
 #: ../src/common/filename.cpp:180
 #, c-format
 msgid "Failed to open '%s' for writing"
-msgstr "Neuspjelo otvaranje '%s' za pisanje"
+msgstr "Neuspjelo otvaranje „%s” za pisanje"
 
 #: ../src/html/chm.cpp:141
 #, c-format
 msgid "Failed to open CHM archive '%s'."
-msgstr "Neuspjelo otvaranje CHM arhive '%s'."
+msgstr "Neuspjelo otvaranje CHM arhive „%s”."
 
 #: ../src/common/utilscmn.cpp:1126
 #, c-format
 msgid "Failed to open URL \"%s\" in default browser."
-msgstr "Neuspjelo otvaranje URL-a \"%s\" u zadanom pregledniku."
+msgstr "Neuspjelo otvaranje URL-a „%s” u zadanom pregledniku."
 
 #: ../include/wx/msw/private/fswatcher.h:92
 #, c-format
 msgid "Failed to open directory \"%s\" for monitoring."
-msgstr "Neuspjelo otvaranje direktorija \"%s\" za praćenje."
+msgstr "Neuspjelo otvaranje direktorija „%s” za praćenje."
 
 #: ../src/x11/utils.cpp:227
 #, c-format
 msgid "Failed to open display \"%s\"."
-msgstr "Neuspjelo otvaranje ekrana \"%s\"."
+msgstr "Neuspjelo otvaranje ekrana „%s”."
 
 #: ../src/common/filename.cpp:1062
 msgid "Failed to open temporary file."
@@ -3452,12 +3452,12 @@ msgstr "Neuspjelo otvaranje međuspremnika."
 #: ../src/common/translation.cpp:1184
 #, c-format
 msgid "Failed to parse Plural-Forms: '%s'"
-msgstr "Neuspjela obrada oblika množine: '%s'"
+msgstr "Neuspjela obrada oblika množine: „%s”"
 
 #: ../src/unix/mediactrl.cpp:1214
 #, c-format
 msgid "Failed to prepare playing \"%s\"."
-msgstr "Neuspjela priprema pokretanja \"%s\"."
+msgstr "Neuspjela priprema pokretanja „%s”."
 
 #: ../src/msw/clipbrd.cpp:600
 msgid "Failed to put data on the clipboard"
@@ -3474,7 +3474,7 @@ msgstr "Neuspjelo čitanje opcija koniguracije."
 #: ../src/common/docview.cpp:681
 #, c-format
 msgid "Failed to read document from the file \"%s\"."
-msgstr "Neuspjelo čitanje dokumenta iz datoteke \"%s\"."
+msgstr "Neuspjelo čitanje dokumenta iz datoteke „%s”."
 
 #: ../src/dfb/evtloop.cpp:98
 msgid "Failed to read event from DirectFB pipe"
@@ -3495,32 +3495,32 @@ msgstr "Neuspjelo preusmjeravanje podređenog procesa ulaza/izlaza"
 #: ../src/msw/dde.cpp:288
 #, c-format
 msgid "Failed to register DDE server '%s'"
-msgstr "Neuspjelo registriranje DDE servera '%s'"
+msgstr "Neuspjelo registriranje DDE servera „%s”"
 
 #: ../src/common/fontmap.cpp:245
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
-msgstr "Neuspjelo pamćenje kodiranja za skupinu znakova '%s'."
+msgstr "Neuspjelo pamćenje kodiranja za skupinu znakova „%s”."
 
 #: ../src/common/debugrpt.cpp:227
 #, c-format
 msgid "Failed to remove debug report file \"%s\""
-msgstr "Neuspjelo uklanjanje datoteke za izvještaj o otklanjanju grešaka \"%s\""
+msgstr "Neuspjelo uklanjanje datoteke za izvještaj o otklanjanju grešaka „%s”"
 
 #: ../src/unix/snglinst.cpp:328
 #, c-format
 msgid "Failed to remove lock file '%s'"
-msgstr "Neuspjelo uklanjanje zaključne datoteke '%s'"
+msgstr "Neuspjelo uklanjanje zaključne datoteke „%s”"
 
 #: ../src/unix/snglinst.cpp:288
 #, c-format
 msgid "Failed to remove stale lock file '%s'."
-msgstr "Neuspjelo uklanjanje stare zaključne datoteke '%s'."
+msgstr "Neuspjelo uklanjanje stare zaključne datoteke „%s”."
 
 #: ../src/msw/registry.cpp:529
 #, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
-msgstr "Neuspjelo preimenovanje registarske vrijednost '%s' u '%s'."
+msgstr "Neuspjelo preimenovanje registarske vrijednost „%s” u „%s”."
 
 #: ../src/common/filefn.cpp:1122
 #, c-format
@@ -3528,18 +3528,18 @@ msgid ""
 "Failed to rename the file '%s' to '%s' because the destination file already "
 "exists."
 msgstr ""
-"Neuspjelo preimenovanje datoteke '%s' u '%s', jer odredišna datoteka već "
+"Neuspjelo preimenovanje datoteke „%s” u „%s”, jer odredišna datoteka već "
 "postoji."
 
 #: ../src/msw/registry.cpp:634
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
-msgstr "Neuspjelo preimenovanje registarskog ključa '%s' u '%s'."
+msgstr "Neuspjelo preimenovanje registarskog ključa „%s” u „%s”."
 
 #: ../src/common/filename.cpp:2671
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
-msgstr "Neuspjelo dohvaćanje vremena datoteke za '%s'"
+msgstr "Neuspjelo dohvaćanje vremena datoteke za „%s”"
 
 #: ../src/msw/dialup.cpp:468
 msgid "Failed to retrieve text of RAS error message"
@@ -3552,12 +3552,12 @@ msgstr "Neuspjelo dohvaćanje podržavajućih formata za međuspremnik"
 #: ../src/common/docview.cpp:652
 #, c-format
 msgid "Failed to save document to the file \"%s\"."
-msgstr "Neuspjelo spremanje dokumenta u datoteku \"%s\"."
+msgstr "Neuspjelo spremanje dokumenta u datoteku „%s”."
 
 #: ../src/msw/dib.cpp:269
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
-msgstr "Neuspjelo spremanje bitmap slike u datoteku \"%s\"."
+msgstr "Neuspjelo spremanje bitmap slike u datoteku „%s”."
 
 #: ../src/msw/dde.cpp:763
 msgid "Failed to send DDE advise notification"
@@ -3570,12 +3570,12 @@ msgstr "Neuspjelo postavljanje modusa za FTP prijenos na %s."
 
 #: ../src/msw/clipbrd.cpp:427
 msgid "Failed to set clipboard data."
-msgstr "Neuspjelo postavljanje podataka međuspremnika"
+msgstr "Neuspjelo postavljanje podataka međuspremnika."
 
 #: ../src/unix/snglinst.cpp:181
 #, c-format
 msgid "Failed to set permissions on lock file '%s'"
-msgstr "Neuspjelo postavljanje korisničkih prava na zaključnu datoteku \"%s\"."
+msgstr "Neuspjelo postavljanje korisničkih prava na zaključnu datoteku „%s”."
 
 #: ../src/unix/utilsunx.cpp:668
 msgid "Failed to set process priority"
@@ -3607,7 +3607,7 @@ msgstr ""
 #: ../src/common/fs_mem.cpp:261
 #, c-format
 msgid "Failed to store image '%s' to memory VFS!"
-msgstr "Neuspjelo spremanje slike '%s' u VFS memoriju!"
+msgstr "Neuspjelo spremanje slike „%s” u VFS memoriju!"
 
 #: ../src/dfb/evtloop.cpp:170
 msgid "Failed to switch DirectFB pipe to non-blocking mode"
@@ -3633,17 +3633,17 @@ msgstr "Neuspjelo prekidanje veze pozivanja: %s"
 #: ../src/common/filename.cpp:2590
 #, c-format
 msgid "Failed to touch the file '%s'"
-msgstr "Neuspjelo dodirivanje datoteke '%s'"
+msgstr "Neuspjelo dodirivanje datoteke „%s”"
 
 #: ../src/unix/snglinst.cpp:334
 #, c-format
 msgid "Failed to unlock lock file '%s'"
-msgstr "Neuspjelo otključavanje zaključne datoteke '%s'"
+msgstr "Neuspjelo otključavanje zaključne datoteke „%s”"
 
 #: ../src/msw/dde.cpp:309
 #, c-format
 msgid "Failed to unregister DDE server '%s'"
-msgstr "Neuspjelo odjavljivanje DDE servera '%s'"
+msgstr "Neuspjelo odjavljivanje DDE servera „%s”"
 
 #: ../src/unix/epolldispatcher.cpp:155
 #, c-format
@@ -3662,7 +3662,7 @@ msgstr "Neuspjeli prijenos izvještaja o ispravljanju grešaka (kôd greške %d)
 #: ../src/unix/snglinst.cpp:168
 #, c-format
 msgid "Failed to write to lock file '%s'"
-msgstr "Neuspjelo pisanje u datoteku za zaključavanje '%s'."
+msgstr "Neuspjelo pisanje u datoteku za zaključavanje „%s”."
 
 #. TRANSLATORS: Name of Boolean false value
 #: ../src/propgrid/propgrid.cpp:209
@@ -3681,27 +3681,27 @@ msgstr "Datoteka"
 #: ../src/common/docview.cpp:669
 #, c-format
 msgid "File \"%s\" could not be opened for reading."
-msgstr "Nije bilo moguće otvoriti datoteku '%s', za čitanje."
+msgstr "Nije bilo moguće otvoriti datoteku „%s”, za čitanje."
 
 #: ../src/common/docview.cpp:646
 #, c-format
 msgid "File \"%s\" could not be opened for writing."
-msgstr "Nije bilo moguće otvoriti datoteku '%s', za zapisivanje."
+msgstr "Nije bilo moguće otvoriti datoteku „%s”, za zapisivanje."
 
 #: ../src/generic/filedlgg.cpp:346 ../src/gtk/filedlg.cpp:57
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
-msgstr "Datoteka '%s'već postoji. Sigurno je želiš prepisati?"
+msgstr "Datoteka „%s”već postoji. Sigurno je želiš prepisati?"
 
 #: ../src/common/filefn.cpp:1156
 #, c-format
 msgid "File '%s' couldn't be removed"
-msgstr "Nije bilo moguće ukloniti datoteku '%s'"
+msgstr "Nije bilo moguće ukloniti datoteku „%s”"
 
 #: ../src/common/filefn.cpp:1139
 #, c-format
 msgid "File '%s' couldn't be renamed '%s'"
-msgstr "Datoteku '%s' nije bilo moguće preimenovati '%s'"
+msgstr "Datoteku „%s” nije bilo moguće preimenovati „%s”"
 
 #: ../src/richtext/richtextctrl.cpp:3081 ../src/common/textcmn.cpp:953
 msgid "File couldn't be loaded."
@@ -3981,12 +3981,12 @@ msgstr "Pomoćne knjige (*.htb)|*.htb|Pomoćne knjige (*.zip)|*.zip|"
 #: ../src/generic/helpext.cpp:267
 #, c-format
 msgid "Help directory \"%s\" not found."
-msgstr "Mapa pomoći \"%s\" nije nađena."
+msgstr "Mapa pomoći „%s” nije nađena."
 
 #: ../src/generic/helpext.cpp:275
 #, c-format
 msgid "Help file \"%s\" not found."
-msgstr "Datoteka pomoći \"%s\" nije nađena."
+msgstr "Datoteka pomoći „%s” nije nađena."
 
 #: ../src/html/helpctrl.cpp:63
 #, c-format
@@ -4102,15 +4102,15 @@ msgid ""
 "but be warned that it may hinder improving the program, so if\n"
 "at all possible please do continue with the report generation.\n"
 msgstr ""
-"Ako ne želiš nastaviti s izvještajem o otklanjanju grešaka, odaberi \"Odustani"
-"\".\n"
+"Ako ne želiš nastaviti s izvještajem o otklanjanju grešaka, odaberi "
+"„Odustani”.\n"
 "Time na žalost onemogućuješ ispravljanje grešaka u budućnosti.\n"
 "Ako možeš, molimo te da nastaviš s izradom izvještaja.\n"
 
 #: ../src/msw/registry.cpp:1405
 #, c-format
 msgid "Ignoring value \"%s\" of the key \"%s\"."
-msgstr "Zanemarivanje vrijednosti \"%s\" tipke \"%s\"."
+msgstr "Zanemarivanje vrijednosti „%s” tipke „%s”."
 
 #: ../src/common/xtistrm.cpp:295
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
@@ -4161,17 +4161,17 @@ msgstr "Nije moguće dobiti unos podređenog procesa"
 #: ../src/common/filefn.cpp:1028
 #, c-format
 msgid "Impossible to get permissions for file '%s'"
-msgstr "Nije moguće dobiti dozvolu za datoteku '%s'"
+msgstr "Nije moguće dobiti dozvolu za datoteku „%s”"
 
 #: ../src/common/filefn.cpp:1042
 #, c-format
 msgid "Impossible to overwrite the file '%s'"
-msgstr "Nije moguće prepisati datoteku '%s'"
+msgstr "Nije moguće prepisati datoteku „%s”"
 
 #: ../src/common/filefn.cpp:1097
 #, c-format
 msgid "Impossible to set permissions for the file '%s'"
-msgstr "Nije moguće postaviti korisnička prava za datoteku '%s'"
+msgstr "Nije moguće postaviti korisnička prava za datoteku „%s”"
 
 #. TRANSLATORS: Keyword of system colour
 #: ../src/propgrid/advprops.cpp:886
@@ -4263,7 +4263,7 @@ msgstr "Sužavanje"
 #: ../src/gtk/app.cpp:425
 #, c-format
 msgid "Invalid GTK+ command line option, use \"%s --help\""
-msgstr "Nevaljana GTK+ opcija naredbenog retka, koristi \"%s --help\""
+msgstr "Nevaljana GTK+ opcija naredbenog retka, koristi „%s --help”"
 
 #: ../src/common/imagtiff.cpp:311
 msgid "Invalid TIFF image index."
@@ -4272,22 +4272,22 @@ msgstr "Nevaljani index TIFF slike."
 #: ../src/common/appcmn.cpp:273
 #, c-format
 msgid "Invalid display mode specification '%s'."
-msgstr "Nevaljana specifikacija modusa prikaza '%s'."
+msgstr "Nevaljana specifikacija modusa prikaza „%s”."
 
 #: ../src/x11/app.cpp:127
 #, c-format
 msgid "Invalid geometry specification '%s'"
-msgstr "Nevaljana specifikacija geometrije '%s'"
+msgstr "Nevaljana specifikacija geometrije „%s”"
 
 #: ../src/unix/fswatcher_inotify.cpp:323
 #, c-format
 msgid "Invalid inotify event for \"%s\""
-msgstr "Nevaljani inotify događaj za \"%s\""
+msgstr "Nevaljani inotify događaj za „%s”"
 
 #: ../src/unix/snglinst.cpp:312
 #, c-format
 msgid "Invalid lock file '%s'."
-msgstr "Nevaljana datoteka za zaključavanje '%s'."
+msgstr "Nevaljana datoteka za zaključavanje „%s”."
 
 #: ../src/common/translation.cpp:1125
 msgid "Invalid message catalog."
@@ -4304,13 +4304,13 @@ msgstr "Nevaljani ili Null ID objekta je proslijeđen na HasObjectClassInfo"
 #: ../src/common/regex.cpp:310
 #, c-format
 msgid "Invalid regular expression '%s': %s"
-msgstr "Nevaljan regularni izraz '%s': %s"
+msgstr "Nevaljan regularni izraz „%s”: %s"
 
 #: ../src/common/config.cpp:226
 #, c-format
 msgid "Invalid value %ld for a boolean key \"%s\" in config file."
 msgstr ""
-"Nevaljana vrijedonst %ld za booleov ključ \"%s\" u konfiguracijskoj datoteci."
+"Nevaljana vrijedonst %ld za booleov ključ „%s” u konfiguracijskoj datoteci."
 
 #: ../src/generic/fontdlgg.cpp:329 ../src/richtext/richtextfontpage.cpp:351
 #: ../src/osx/carbon/fontdlg.cpp:361 ../src/common/stockitem.cpp:168
@@ -4543,9 +4543,9 @@ msgstr "Zadnja stranica"
 #, c-format
 msgid "Last repeated message (\"%s\", %u time) wasn't output"
 msgid_plural "Last repeated message (\"%s\", %u times) wasn't output"
-msgstr[0] "Zadnja ponovljena poruka (\"%s\", %u puta) nije iznešena"
-msgstr[1] "Zadnja ponovljena poruka (\"%s\", %u puta) nije iznešena"
-msgstr[2] "Zadnja ponovljena poruka (\"%s\", %u puta) nije iznešena"
+msgstr[0] "Zadnja ponovljena poruka („%s”, %u puta) nije iznešena"
+msgstr[1] "Zadnja ponovljena poruka („%s”, %u puta) nije iznešena"
+msgstr[2] "Zadnja ponovljena poruka („%s”, %u puta) nije iznešena"
 
 #: ../src/common/paper.cpp:103
 msgid "Ledger, 17 x 11 in"
@@ -4636,7 +4636,7 @@ msgstr "Limun"
 #: ../src/generic/helpext.cpp:294
 #, c-format
 msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
-msgstr "%lu. redak datoteke \"%s\" ima nevaljanu sintaksu, preskočeno."
+msgstr "%lu. redak datoteke „%s” ima nevaljanu sintaksu, preskočeno."
 
 #: ../src/richtext/richtextliststylepage.cpp:444
 msgid "Line spacing:"
@@ -4644,7 +4644,7 @@ msgstr "Prored:"
 
 #: ../src/html/chm.cpp:838
 msgid "Link contained '//', converted to absolute link."
-msgstr "Poveznica je sadržavala '//'; pretvorena je u apsolutnu poveznicu."
+msgstr "Poveznica je sadržavala „//”; pretvorena je u apsolutnu poveznicu."
 
 #: ../src/richtext/richtextformatdlg.cpp:364
 msgid "List Style"
@@ -4676,17 +4676,17 @@ msgstr "Učitavanje : "
 #: ../src/unix/snglinst.cpp:246
 #, c-format
 msgid "Lock file '%s' has incorrect owner."
-msgstr "Datoteka za zaključavanje '%s' ima neipravnog vlasnika."
+msgstr "Datoteka za zaključavanje „%s” ima neipravnog vlasnika."
 
 #: ../src/unix/snglinst.cpp:251
 #, c-format
 msgid "Lock file '%s' has incorrect permissions."
-msgstr "Datoteka za zaključavanje '%s' ima neipravna korisnička prava."
+msgstr "Datoteka za zaključavanje „%s” ima neipravna korisnička prava."
 
 #: ../src/generic/logg.cpp:576
 #, c-format
 msgid "Log saved to the file '%s'."
-msgstr "Log je spremljen u datoteku '%s'."
+msgstr "Log je spremljen u datoteku „%s”."
 
 #: ../src/richtext/richtextliststylepage.cpp:484
 #: ../src/richtext/richtextbulletspage.cpp:276
@@ -4912,7 +4912,7 @@ msgstr "Greška u pokretanju medija: %s"
 #: ../src/common/fs_mem.cpp:175
 #, c-format
 msgid "Memory VFS already contains file '%s'!"
-msgstr "Memorija VFS već sadržava datoteku '%s'!"
+msgstr "Memorija VFS već sadržava datoteku „%s”!"
 
 #. TRANSLATORS: Name of keyboard key
 #. TRANSLATORS: Keyword of system colour
@@ -4930,7 +4930,7 @@ msgstr "Metalna tema"
 
 #: ../src/msw/ole/automtn.cpp:652
 msgid "Method or property not found."
-msgstr "Metoda ili osobina nisu nađeni."
+msgstr "Metoda ili svojstvo nisu nađeni."
 
 #: ../src/univ/themes/win32.cpp:3752
 msgid "Mi&nimize"
@@ -4964,7 +4964,7 @@ msgstr "Izmijenjeno"
 #: ../src/common/module.cpp:133
 #, c-format
 msgid "Module \"%s\" initialization failed"
-msgstr "Inicijalizacija modula \"%s\" nije uspjela"
+msgstr "Inicijalizacija modula „%s” nije uspjela"
 
 #: ../src/common/paper.cpp:131
 msgid "Monarch Envelope, 3 7/8 x 7 1/2 in"
@@ -5090,8 +5090,8 @@ msgid ""
 "Do you want to use this encoding (otherwise you will have to choose another "
 "one)?"
 msgstr ""
-"Nijedan font nije nađen za prikaz teksta, kodiranog u '%s',\n"
-"no dostupno je alternativno kodiranje '%s'.\n"
+"Nijedan font nije nađen za prikaz teksta, kodiranog u „%s”,\n"
+"no dostupno je alternativno kodiranje „%s”.\n"
 "Želiš li koristiti ovo kodiranje (inače ćeš morati odabrati neko drugo)?"
 
 #: ../src/common/fontmap.cpp:426
@@ -5101,7 +5101,7 @@ msgid ""
 "Would you like to select a font to be used for this encoding\n"
 "(otherwise the text in this encoding will not be shown correctly)?"
 msgstr ""
-"Nijedan font nije nađen za prikaz teksta, kodiranog u '%s'.\n"
+"Nijedan font nije nađen za prikaz teksta, kodiranog u „%s”.\n"
 "Želiš li odabrati font za ovo kodiranje (inače se tekst s ovim\n"
 "kodiranjem neće pravilno prikazati)?"
 
@@ -5143,7 +5143,7 @@ msgstr "Nema nekorištenih boja u slici."
 #: ../src/generic/helpext.cpp:302
 #, c-format
 msgid "No valid mappings found in the file \"%s\"."
-msgstr "Nije nađeno valjano mapiranje u datoteci \"%s\"."
+msgstr "Nije nađeno valjano mapiranje u datoteci „%s”."
 
 #: ../src/richtext/richtextborderspage.cpp:610
 #: ../src/richtext/richtextsizepage.cpp:248
@@ -5157,11 +5157,11 @@ msgstr "Nordic (ISO-8859-10)"
 
 #: ../src/generic/fontdlgg.cpp:328 ../src/generic/fontdlgg.cpp:331
 msgid "Normal"
-msgstr "Normalno"
+msgstr "Normalni"
 
 #: ../src/html/helpwnd.cpp:1263
 msgid "Normal face<br>and <u>underlined</u>. "
-msgstr "Normalni rez<br>i <u>podcrtano</u>. "
+msgstr "Normalni font<br>i <u>podcrtano</u>. "
 
 #: ../src/html/helpwnd.cpp:1205
 msgid "Normal font:"
@@ -5321,7 +5321,7 @@ msgstr "Greška OLE automatizacije u %s: %s"
 
 #: ../include/wx/richtext/richtextimagedlg.h:37
 msgid "Object Properties"
-msgstr "Osobine objekta"
+msgstr "Svojstva objekta"
 
 #: ../src/msw/ole/automtn.cpp:660
 msgid "Object implementation does not support named arguments."
@@ -5354,7 +5354,7 @@ msgstr "Otvori HTML datoteku"
 #: ../src/generic/dbgrptg.cpp:163
 #, c-format
 msgid "Open file \"%s\""
-msgstr "Otvori datoteku \"%s\""
+msgstr "Otvori datoteku „%s”"
 
 #: ../src/common/stockitem.cpp:179
 msgid "Open..."
@@ -5372,17 +5372,17 @@ msgstr "Operacija nije dozvoljena."
 #: ../src/common/cmdline.cpp:900
 #, c-format
 msgid "Option '%s' can't be negated"
-msgstr "Nije moguće negirati opciju '%s'"
+msgstr "Nije moguće negirati opciju „%s”"
 
 #: ../src/common/cmdline.cpp:1064
 #, c-format
 msgid "Option '%s' requires a value."
-msgstr "Opcija '%s' zahtijeva vrijednost."
+msgstr "Opcija „%s” zahtijeva vrijednost."
 
 #: ../src/common/cmdline.cpp:1147
 #, c-format
 msgid "Option '%s': '%s' cannot be converted to a date."
-msgstr "Opcija '%s': Nije moguće konvertirati ’%s’ u datum."
+msgstr "Opcija „%s”: Nije moguće konvertirati ’%s’ u datum."
 
 #: ../src/generic/prntdlgg.cpp:618
 msgid "Options"
@@ -5865,7 +5865,7 @@ msgid ""
 "Processing debug report has failed, leaving the files in \"%s\" directory."
 msgstr ""
 "Obrada izvještaja o otklanjanju grešaka nije uspjela. Datoteke ostaju u "
-"direktoriju \"% s\"."
+"direktoriju „%s”."
 
 #: ../src/common/prntbase.cpp:545
 msgid "Progress:"
@@ -5877,12 +5877,12 @@ msgstr "Svojstva"
 
 #: ../src/propgrid/manager.cpp:237
 msgid "Property"
-msgstr "Osobina"
+msgstr "Svojstvo"
 
 #. TRANSLATORS: Caption of message box displaying any property error
 #: ../src/propgrid/propgrid.cpp:3185 ../src/propgrid/propgrid.cpp:3318
 msgid "Property Error"
-msgstr "Greška u osobini"
+msgstr "Greška svojstva"
 
 #: ../src/propgrid/advprops.cpp:1597
 msgid "Purple"
@@ -5921,12 +5921,12 @@ msgstr "RawCtrl+"
 #: ../src/common/ffile.cpp:109 ../src/common/ffile.cpp:133
 #, c-format
 msgid "Read error on file '%s'"
-msgstr "Greška u čitanju datoteke '%s'"
+msgstr "Greška u čitanju datoteke „%s”"
 
 #: ../src/common/secretstore.cpp:199
 #, c-format
 msgid "Reading password for \"%s/%s\" failed: %s."
-msgstr "Čitanje lozinke za \"%s/%s\": %s."
+msgstr "Čitanje lozinke za „%s/%s”: %s."
 
 #: ../src/common/prntbase.cpp:272
 msgid "Ready"
@@ -5955,12 +5955,12 @@ msgstr "Osvježi"
 #: ../src/msw/registry.cpp:626
 #, c-format
 msgid "Registry key '%s' already exists."
-msgstr "Registarski ključ '%s' već postoji."
+msgstr "Registarski ključ „%s” već postoji."
 
 #: ../src/msw/registry.cpp:595
 #, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
-msgstr "Registarski ključ '%s' ne postoji; nije ga moguće preimenovati."
+msgstr "Registarski ključ „%s” ne postoji; nije ga moguće preimenovati."
 
 #: ../src/msw/registry.cpp:727
 #, c-format
@@ -5969,29 +5969,29 @@ msgid ""
 "deleting it will leave your system in unusable state:\n"
 "operation aborted."
 msgstr ""
-"Registarski ključ '%s' je potreban za normalan rad sustava.\n"
+"Registarski ključ „%s” je potreban za normalan rad sustava.\n"
 "Brisanjem će tvoj sustav postati nestabilan:\n"
 "operacija je prekinuta."
 
 #: ../src/msw/registry.cpp:954
 #, c-format
 msgid "Registry value \"%s\" is not binary (but of type %s)"
-msgstr "Registarska vrijednost '%s' nije binarna (ali je vrste %s)"
+msgstr "Registarska vrijednost „%s” nije binarna (ali je vrste %s)"
 
 #: ../src/msw/registry.cpp:917
 #, c-format
 msgid "Registry value \"%s\" is not numeric (but of type %s)"
-msgstr "Registarska vrijednost '%s' nije numerička (ali je vrste %s)"
+msgstr "Registarska vrijednost „%s” nije numerička (ali je vrste %s)"
 
 #: ../src/msw/registry.cpp:1003
 #, c-format
 msgid "Registry value \"%s\" is not text (but of type %s)"
-msgstr "Registarska vrijednost '%s' nije tekst (ali je vrste %s)"
+msgstr "Registarska vrijednost „%s” nije tekst (ali je vrste %s)"
 
 #: ../src/msw/registry.cpp:521
 #, c-format
 msgid "Registry value '%s' already exists."
-msgstr "Registarska vrijednost '%s' već postoji."
+msgstr "Registarska vrijednost „%s” već postoji."
 
 #: ../src/richtext/richtextfontpage.cpp:350
 #: ../src/richtext/richtextfontpage.cpp:354
@@ -6025,8 +6025,7 @@ msgstr "Ukloni trenutačnu stranicu iz knjižnih oznaka"
 #: ../src/common/rendcmn.cpp:194
 #, c-format
 msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
-msgstr ""
-"Iscrtač \"%s\" ima nekompatibilnu verziju %d.%d i nije ga moguće učitati."
+msgstr "Iscrtač „%s” ima nekompatibilnu verziju %d.%d i nije ga moguće učitati."
 
 #: ../src/richtext/richtextbuffer.cpp:4527
 msgid "Renumber List"
@@ -6059,7 +6058,7 @@ msgstr "Obavezan unos informacija je prazan."
 #: ../src/common/translation.cpp:1975
 #, c-format
 msgid "Resource '%s' is not a valid message catalog."
-msgstr "Resurs '%s' nije valjani katalog obavijesti."
+msgstr "Resurs „%s” nije valjani katalog obavijesti."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:56
@@ -6162,7 +6161,7 @@ msgstr "Spremi log-sadržaj u datoteku"
 #: ../src/common/secretstore.cpp:179
 #, c-format
 msgid "Saving password for \"%s/%s\" failed: %s."
-msgstr "Spremanje lozinke za \"%s/%s\": %s."
+msgstr "Spremanje lozinke za „%s/%s”: %s."
 
 #: ../src/generic/fontdlgg.cpp:325
 msgid "Script"
@@ -6219,12 +6218,12 @@ msgstr "Odjeljci"
 #: ../src/common/ffile.cpp:238
 #, c-format
 msgid "Seek error on file '%s'"
-msgstr "Traži grešku u datoteci '%s'"
+msgstr "Traži grešku u datoteci „%s”"
 
 #: ../src/common/ffile.cpp:228
 #, c-format
 msgid "Seek error on file '%s' (large files not supported by stdio)"
-msgstr "Traži grešku u datoteci '%s' (stdio ne podržava velike datoteke)"
+msgstr "Traži grešku u datoteci „%s” (stdio ne podržava velike datoteke)"
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:76
@@ -6280,7 +6279,7 @@ msgstr "Separator"
 #: ../src/common/cmdline.cpp:1083
 #, c-format
 msgid "Separator expected after the option '%s'."
-msgstr "Potreban je razdvojnik nakon opcije '%s'."
+msgstr "Potreban je razdvojnik nakon opcije „%s”."
 
 #: ../src/osx/menu_osx.cpp:572
 msgid "Services"
@@ -6471,7 +6470,7 @@ msgstr "Zvukovni podaci imaju nepodržani format."
 #: ../src/unix/sound.cpp:477
 #, c-format
 msgid "Sound file '%s' is in unsupported format."
-msgstr "Zvukovna datoteka '%s' ima nepodržani format."
+msgstr "Zvukovna datoteka „%s” ima nepodržani format."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/common/accelcmn.cpp:67
@@ -6724,14 +6723,14 @@ msgid ""
 "another charset to replace it with or choose\n"
 "[Cancel] if it cannot be replaced"
 msgstr ""
-"Kodna stranica '%s' nije poznata. Možeš odabrati\n"
+"Kodna stranica „%s” nije poznata. Možeš odabrati\n"
 "neku drugu kodnu stranicu kao zamjenu ili\n"
 "[Odustani] ako izmjena nije moguća"
 
 #: ../src/msw/ole/dataobj.cpp:394
 #, c-format
 msgid "The clipboard format '%d' doesn't exist."
-msgstr "Format međuspremnika '%d' ne postoji."
+msgstr "Format međuspremnika „%d” ne postoji."
 
 #: ../src/richtext/richtextstylepage.cpp:130
 #: ../src/richtext/richtextstylepage.cpp:132
@@ -6744,7 +6743,7 @@ msgid ""
 "The directory '%s' does not exist\n"
 "Create it now?"
 msgstr ""
-"Mapa '%s' ne postoji.\n"
+"Mapa „%s” ne postoji.\n"
 "Želiš li je sada stvoriti?"
 
 #: ../src/html/htmprint.cpp:271
@@ -6755,7 +6754,7 @@ msgid ""
 "\n"
 "Would you like to proceed with printing it nevertheless?"
 msgstr ""
-"Dokument \"%s\" ne paše na stranicu vodoravno, te će biti odrezana u ispisu.\n"
+"Dokument „%s” ne paše na stranicu vodoravno, te će biti odrezana u ispisu.\n"
 "\n"
 "Želiš li ipak nastaviti s ispisom?"
 
@@ -6765,7 +6764,7 @@ msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
 "It has been removed from the most recently used files list."
 msgstr ""
-"Datoteka '%s' ne postoji i ne može se otvoriti.\n"
+"Datoteka „%s” ne postoji i ne može se otvoriti.\n"
 "Uklonjena je iz popisa nedavno otvorenih datoteka."
 
 #: ../src/richtext/richtextindentspage.cpp:208
@@ -6817,7 +6816,7 @@ msgstr "Rez fonta."
 #: ../src/common/docview.cpp:1483
 #, c-format
 msgid "The format of file '%s' couldn't be determined."
-msgstr "Format datoteke '%s' nije bilo moguće ustanoviti."
+msgstr "Format datoteke „%s” nije bilo moguće ustanoviti."
 
 #: ../src/richtext/richtextbackgroundpage.cpp:219
 #: ../src/richtext/richtextbackgroundpage.cpp:221
@@ -6929,7 +6928,7 @@ msgstr ""
 #: ../src/common/cmdline.cpp:1254
 #, c-format
 msgid "The required parameter '%s' was not specified."
-msgstr "Obavezan parametar '%s' nije bio određen."
+msgstr "Obavezan parametar „%s” nije bio određen."
 
 #: ../src/richtext/richtextindentspage.cpp:217
 #: ../src/richtext/richtextindentspage.cpp:219
@@ -7040,7 +7039,7 @@ msgstr "Gornja pozicija."
 #: ../src/common/cmdline.cpp:1232
 #, c-format
 msgid "The value for the option '%s' must be specified."
-msgstr "Vrijednost opcije '%s' mora biti određena."
+msgstr "Vrijednost opcije „%s” mora biti određena."
 
 #: ../src/richtext/richtextborderspage.cpp:585
 #: ../src/richtext/richtextborderspage.cpp:587
@@ -7182,7 +7181,7 @@ msgstr "Točno"
 #: ../src/common/fs_mem.cpp:227
 #, c-format
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
-msgstr "Pokušaj uklanjanja datoteke '%s' iz memorije VFS, ali nije učitana!"
+msgstr "Pokušaj uklanjanja datoteke „%s” iz memorije VFS, ali nije učitana!"
 
 #: ../src/common/fmapbase.cpp:156
 msgid "Turkish (ISO-8859-9)"
@@ -7218,8 +7217,8 @@ msgid ""
 "Type operation \"%s\" failed: Property labeled \"%s\" is of type \"%s\", NOT "
 "\"%s\"."
 msgstr ""
-"Operacija vrste \"%s\" nije uspjela: Osobina s oznakom \"%s\" je vrste \"%s"
-"\", NE \"%s\"."
+"Operacija vrste „%s” nije uspjela: Svojstvo s oznakom „%s” je vrste „%s”, NE "
+"„%s”."
 
 #: ../src/common/paper.cpp:133
 msgid "US Std Fanfold, 14 7/8 x 11 in"
@@ -7252,12 +7251,12 @@ msgstr "Nije moguće zatvoriti inotify instancu"
 #: ../include/wx/unix/private/fswatcher_kqueue.h:74
 #, c-format
 msgid "Unable to close path '%s'"
-msgstr "Nije moguće zatvoriti stazu '%s'"
+msgstr "Nije moguće zatvoriti stazu „%s”"
 
 #: ../include/wx/msw/private/fswatcher.h:48
 #, c-format
 msgid "Unable to close the handle for '%s'"
-msgstr "Nije moguće zatvoriti upravljač za '%s'"
+msgstr "Nije moguće zatvoriti upravljač za „%s”"
 
 #: ../include/wx/msw/private/fswatcher.h:273
 msgid "Unable to create I/O completion port"
@@ -7290,7 +7289,7 @@ msgstr "Nije moguće inicijalizirati GTK+, je li DISPLAY ispravno postavljen?"
 #: ../include/wx/unix/private/fswatcher_kqueue.h:57
 #, c-format
 msgid "Unable to open path '%s'"
-msgstr "Nije moguće otvoriti stazu '%s'"
+msgstr "Nije moguće otvoriti stazu „%s”"
 
 #: ../src/html/htmlwin.cpp:583
 #, c-format
@@ -7321,7 +7320,7 @@ msgstr "Nije moguće ukloniti kqueue nadzor"
 #: ../src/msw/fswatcher.cpp:168
 #, c-format
 msgid "Unable to set up watch for '%s'"
-msgstr "Nije moguće postaviti sat za '%s'"
+msgstr "Nije moguće postaviti sat za „%s”"
 
 #: ../src/msw/fswatcher.cpp:91
 msgid "Unable to start IOCP worker thread"
@@ -7352,17 +7351,17 @@ msgstr "Poništi posljednju radnju"
 #: ../src/common/cmdline.cpp:1029
 #, c-format
 msgid "Unexpected characters following option '%s'."
-msgstr "Neočekivani znakovi slijede opciju '%s'."
+msgstr "Neočekivani znakovi slijede opciju „%s”."
 
 #: ../src/unix/fswatcher_inotify.cpp:274
 #, c-format
 msgid "Unexpected event for \"%s\": no matching watch descriptor."
-msgstr "Neočekivani događaj za \"%s\": nema poklapajućih nadzornih opisnika."
+msgstr "Neočekivani događaj za „%s”: nema poklapajućih nadzornih opisnika."
 
 #: ../src/common/cmdline.cpp:1195
 #, c-format
 msgid "Unexpected parameter '%s'"
-msgstr "Neočekivani parametar '%s'"
+msgstr "Neočekivani parametar „%s”"
 
 #: ../include/wx/msw/private/fswatcher.h:148
 msgid "Unexpectedly new I/O completion port was created"
@@ -7581,7 +7580,7 @@ msgstr "Nepoznata PNG jedinica rezolucije %d"
 #: ../src/common/xtixml.cpp:327
 #, c-format
 msgid "Unknown Property %s"
-msgstr "Nepoznata osobina %s"
+msgstr "Nepoznato svojstvo %s"
 
 #: ../src/common/imagtiff.cpp:529
 #, c-format
@@ -7613,7 +7612,7 @@ msgstr "Nepoznati format slikovnih podataka."
 #: ../src/common/cmdline.cpp:914
 #, c-format
 msgid "Unknown long option '%s'"
-msgstr "Nepoznata dugačka opcija '%s'"
+msgstr "Nepoznata dugačka opcija „%s”"
 
 #: ../src/msw/ole/automtn.cpp:631
 msgid "Unknown name or named argument."
@@ -7622,12 +7621,12 @@ msgstr "Nepoznato ime ili imenovani argument."
 #: ../src/common/cmdline.cpp:929 ../src/common/cmdline.cpp:951
 #, c-format
 msgid "Unknown option '%s'"
-msgstr "Nepoznata opcija '%s'"
+msgstr "Nepoznata opcija „%s”"
 
 #: ../src/common/mimecmn.cpp:225
 #, c-format
 msgid "Unmatched '{' in an entry for mime type %s."
-msgstr "Nezatvorena '{' u jednom unosu za mime vrstu %s."
+msgstr "Nezatvorena „{” u jednom unosu za mime vrstu %s."
 
 #: ../src/common/cmdproc.cpp:262 ../src/common/cmdproc.cpp:288
 #: ../src/common/cmdproc.cpp:308
@@ -7646,7 +7645,7 @@ msgstr "Nepodržani format međuspremnika."
 #: ../src/common/appcmn.cpp:256
 #, c-format
 msgid "Unsupported theme '%s'."
-msgstr "Nepodržana tema '%s'."
+msgstr "Nepodržana tema „%s”."
 
 #. TRANSLATORS: Name of keyboard key
 #: ../src/generic/fdrepdlg.cpp:152 ../src/common/stockitem.cpp:205
@@ -7883,12 +7882,12 @@ msgstr "Windows_Right"
 #: ../src/common/ffile.cpp:150
 #, c-format
 msgid "Write error on file '%s'"
-msgstr "Zapiši grešku za datoteku '%s'"
+msgstr "Zapiši grešku za datoteku „%s”"
 
 #: ../src/xml/xml.cpp:914
 #, c-format
 msgid "XML parsing error: '%s' at line %d"
-msgstr "Greška u XML obradi: '%s' u retku br. %d"
+msgstr "Greška u XML obradi: „%s” u retku br. %d"
 
 #: ../src/common/xpmdecod.cpp:796
 msgid "XPM: Malformed pixel data!"
@@ -7906,7 +7905,7 @@ msgstr "XPM: neispravan format zaglavlja!"
 #: ../src/common/xpmdecod.cpp:716 ../src/common/xpmdecod.cpp:725
 #, c-format
 msgid "XPM: malformed colour definition '%s' at line %d!"
-msgstr "XPM: nepravilna definicija boje '%s' u retku br. %d!"
+msgstr "XPM: nepravilna definicija boje „%s” u retku br. %d!"
 
 #: ../src/common/xpmdecod.cpp:755
 msgid "XPM: no colors left to use for mask!"
@@ -7969,7 +7968,7 @@ msgstr "Prilagodi zumiranje"
 
 #: ../src/msw/dde.cpp:1141
 msgid "a DDEML application has created a prolonged race condition."
-msgstr "DDEML aplikacija je stvorila produljeno stanje."
+msgstr "jedna DDEML aplikacija je stvorila produljeno stanje."
 
 #: ../src/msw/dde.cpp:1129
 msgid ""
@@ -7978,9 +7977,10 @@ msgid ""
 "or an invalid instance identifier\n"
 "was passed to a DDEML function."
 msgstr ""
-"DDEML funkcija je pozvana bez prethodnog pozivanja funkcije DdeInitialize,\n"
-"ili nevažeći identifikator instance\n"
-"je proslijeđen DDEML funkciji."
+"jedna DDEML funkcija je pozvana bez prethodnog pozivanja funkcije "
+"DdeInitialize,\n"
+"ili je jedan nevažeći identifikator instance\n"
+"proslijeđen DDEML funkciji."
 
 #: ../src/msw/dde.cpp:1147
 msgid "a client's attempt to establish a conversation has failed."
@@ -8069,7 +8069,7 @@ msgstr "pod pretpostavkom da se radi o višedjelnom lančanom zipu"
 #: ../src/common/fileconf.cpp:1847
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
-msgstr "pokušaj mijenjanja nepromjenljivog ključa '%s' je zanemaren."
+msgstr "pokušaj mijenjanja nepromjenljivog ključa „%s” je zanemaren."
 
 #: ../src/html/chm.cpp:329
 msgid "bad arguments to library function"
@@ -8099,7 +8099,7 @@ msgstr "gradnja %lu"
 #: ../src/common/ffile.cpp:75
 #, c-format
 msgid "can't close file '%s'"
-msgstr "nije moguće zatvoriti datoteku '%s'"
+msgstr "nije moguće zatvoriti datoteku „%s”"
 
 #: ../src/common/file.cpp:245
 #, c-format
@@ -8109,17 +8109,17 @@ msgstr "nije moguće zatvoriti desriptora datoteka %d"
 #: ../src/common/file.cpp:586
 #, c-format
 msgid "can't commit changes to file '%s'"
-msgstr "nije moguće potvrditi promjene za datoteku '%s'"
+msgstr "nije moguće potvrditi promjene za datoteku „%s”"
 
 #: ../src/common/file.cpp:178
 #, c-format
 msgid "can't create file '%s'"
-msgstr "nije moguće stvoriti datoteku '%s'"
+msgstr "nije moguće stvoriti datoteku „%s”"
 
 #: ../src/common/fileconf.cpp:1141
 #, c-format
 msgid "can't delete user configuration file '%s'"
-msgstr "nije moguće izbrisati datoteku konfiguracije '%s'"
+msgstr "nije moguće izbrisati datoteku konfiguracije „%s”"
 
 #: ../src/common/file.cpp:495
 #, c-format
@@ -8156,17 +8156,17 @@ msgstr "nije moguće učitavanje fontova, prekida se"
 #: ../src/common/file.cpp:231 ../src/common/ffile.cpp:59
 #, c-format
 msgid "can't open file '%s'"
-msgstr "nije moguće otvoriti datoteku '%s'"
+msgstr "nije moguće otvoriti datoteku „%s”"
 
 #: ../src/common/fileconf.cpp:320
 #, c-format
 msgid "can't open global configuration file '%s'."
-msgstr "nije moguće otvoriti datoteku globalne konfiguracije '%s'."
+msgstr "nije moguće otvoriti datoteku globalne konfiguracije „%s”."
 
 #: ../src/common/fileconf.cpp:336
 #, c-format
 msgid "can't open user configuration file '%s'."
-msgstr "nije moguće otvoriti datoteku korisničke konfiguracije '%s'."
+msgstr "nije moguće otvoriti datoteku korisničke konfiguracije „%s”."
 
 #: ../src/common/fileconf.cpp:986
 msgid "can't open user configuration file."
@@ -8188,12 +8188,12 @@ msgstr "nije moguće čitanje iz deskriptora datoteka %d"
 #: ../src/common/file.cpp:581
 #, c-format
 msgid "can't remove file '%s'"
-msgstr "nije moguće ukloniti datoteku '%s'"
+msgstr "nije moguće ukloniti datoteku „%s”"
 
 #: ../src/common/file.cpp:598
 #, c-format
 msgid "can't remove temporary file '%s'"
-msgstr "nije moguće ukloniti privremenu datoteku '%s'"
+msgstr "nije moguće ukloniti privremenu datoteku „%s”"
 
 #: ../src/common/file.cpp:408
 #, c-format
@@ -8203,7 +8203,7 @@ msgstr "nije moguće traženje na deskriptor datoteka %d"
 #: ../src/common/textfile.cpp:273
 #, c-format
 msgid "can't write buffer '%s' to disk."
-msgstr "nije moguće zapisivanje međuspremnika \"%s\" na disk."
+msgstr "nije moguće zapisivanje međuspremnika „%s” na disk."
 
 #: ../src/common/file.cpp:323
 #, c-format
@@ -8308,7 +8308,7 @@ msgstr "jedanaesti"
 #: ../src/common/fileconf.cpp:1833
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
-msgstr "unos '%s' se pojavljuje višestruko u grupi '%s'"
+msgstr "unos „%s” se pojavljuje višestruko u grupi „%s”"
 
 #: ../src/html/chm.cpp:343
 msgid "error in data format"
@@ -8329,7 +8329,7 @@ msgstr "greška prilikom čitanja lokalnog zaglavlja zip-a"
 #: ../src/common/zipstrm.cpp:2531
 #, c-format
 msgid "error writing zip entry '%s': bad crc or length"
-msgstr "greška prilikom zapisivanja zip unosa '%s': krivi izvor ili duljina"
+msgstr "greška prilikom zapisivanja zip unosa „%s”: krivi izvor ili duljina"
 
 #: ../src/common/ffile.cpp:188
 #, c-format
@@ -8352,28 +8352,28 @@ msgstr "peti"
 #: ../src/common/fileconf.cpp:579
 #, c-format
 msgid "file '%s', line %zu: '%s' ignored after group header."
-msgstr "datoteka '%s', redak %zu: '%s' zanemareno nakon zaglavlja grupe."
+msgstr "datoteka „%s”, redak %zu: „%s” zanemareno nakon zaglavlja grupe."
 
 #: ../src/common/fileconf.cpp:608
 #, c-format
 msgid "file '%s', line %zu: '=' expected."
-msgstr "datoteka '%s', redak %zu: '=' očekivano."
+msgstr "datoteka „%s”, redak %zu: „=” očekivano."
 
 #: ../src/common/fileconf.cpp:631
 #, c-format
 msgid "file '%s', line %zu: key '%s' was first found at line %d."
-msgstr "datoteka '%s', redak %zu: ključ '%s' je najprije nađen u %d. retku."
+msgstr "datoteka „%s”, redak %zu: ključ „%s” je najprije nađen u %d. retku."
 
 #: ../src/common/fileconf.cpp:621
 #, c-format
 msgid "file '%s', line %zu: value for immutable key '%s' ignored."
 msgstr ""
-"datoteka '%s', redak %zu: vrijednost nepromijenjivog ključa '%s' je zanemaren."
+"datoteka „%s”, redak %zu: vrijednost nepromijenjivog ključa „%s” je zanemaren."
 
 #: ../src/common/fileconf.cpp:543
 #, c-format
 msgid "file '%s': unexpected character %c at line %zu."
-msgstr "datoteka '%s': neočevani znak %c u %zu. retku."
+msgstr "datoteka „%s”: neočevani znak %c u %zu. retku."
 
 #: ../src/richtext/richtextbuffer.cpp:8738
 msgid "files"
@@ -8439,7 +8439,7 @@ msgstr "svijetli"
 #: ../src/common/intl.cpp:303
 #, c-format
 msgid "locale '%s' cannot be set."
-msgstr "lokalizaciju '%s' nije moguće postaviti."
+msgstr "lokalizaciju „%s” nije moguće postaviti."
 
 #: ../src/common/datetimefmt.cpp:2125
 msgid "midnight"
@@ -8735,7 +8735,7 @@ msgstr "sutra"
 #: ../src/common/fileconf.cpp:1944
 #, c-format
 msgid "trailing backslash ignored in '%s'"
-msgstr "prateća obrnuta kosa crta je zanemarena u '%s'"
+msgstr "prateća obrnuta kosa crta je zanemarena u „%s”"
 
 #: ../src/gtk/aboutdlg.cpp:218
 msgid "translator-credits"
@@ -8771,7 +8771,7 @@ msgstr "neodređeno"
 #: ../src/common/fileconf.cpp:1979
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
-msgstr "neočekivani \" na poziciji %d u '%s'."
+msgstr "neočekivani \" na poziciji %d u „%s”."
 
 #: ../src/common/tarstrm.cpp:1045
 msgid "unexpected end of file"
@@ -8822,7 +8822,7 @@ msgstr "nepodržana metoda Zip kompresije"
 #: ../src/common/translation.cpp:1892
 #, c-format
 msgid "using catalog '%s' from '%s'."
-msgstr "koristi se katalog '%s' od '%s'."
+msgstr "koristi se katalog „%s” od „%s”."
 
 #: ../src/html/chm.cpp:335
 msgid "write error"
@@ -8835,7 +8835,7 @@ msgstr "wxGetTimeOfDay."
 #: ../src/motif/app.cpp:242
 #, c-format
 msgid "wxWidgets could not open display for '%s': exiting."
-msgstr "wxWidgets nisu mogli otvoriti zaslon za '%s': izlaženje."
+msgstr "wxWidgets nisu mogli otvoriti zaslon za „%s”: izlaženje."
 
 #: ../src/x11/app.cpp:170
 msgid "wxWidgets could not open display. Exiting."
