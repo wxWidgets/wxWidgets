@@ -301,6 +301,9 @@ public:
     // Define a marker from a bitmap.
     void MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
 
+    // Register an image for use in autocompletion lists.
+    void RegisterImage(int type, const wxBitmap& bmp);
+
 
 
     // The following methods are nearly equivalent to their similarly named

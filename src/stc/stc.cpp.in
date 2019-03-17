@@ -568,6 +568,11 @@ void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber,
     m_swx->DoMarkerDefineBitmap(markerNumber, bmp);
 }
 
+void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp)
+{
+    m_swx->DoRegisterImage(type, bmp);
+}
+
 
 
 

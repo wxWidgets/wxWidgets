@@ -358,6 +358,11 @@ public:
     */
     void MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
 
+    /**
+       Register an image for use in autocompletion lists.
+    */
+    void RegisterImage(int type, const wxBitmap& bmp);
+
     //@}
 
 

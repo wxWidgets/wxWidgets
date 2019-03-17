@@ -200,6 +200,7 @@ public:
     SurfaceData* GetSurfaceData() const {return m_surfaceData;}
     void SetPaintAbandoned(){paintState = paintAbandoned;}
     void DoMarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
+    void DoRegisterImage(int type, const wxBitmap& bmp);
 
 private:
     bool                capturedMouse;

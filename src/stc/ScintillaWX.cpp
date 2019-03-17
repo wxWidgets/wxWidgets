@@ -1365,6 +1365,10 @@ void ScintillaWX::DoMarkerDefineBitmap(int markerNumber, const wxBitmap& bmp) {
     RedrawSelMargin();
 }
 
+void ScintillaWX::DoRegisterImage(int type, const wxBitmap& bmp) {
+    static_cast<ListBoxImpl*>(ac.lb)->RegisterImageHelper(type, bmp);
+}
+
 sptr_t ScintillaWX::DirectFunction(
     ScintillaWX* swx, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
     return swx->WndProc(iMessage, wParam, lParam);

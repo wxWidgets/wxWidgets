@@ -1,3 +1,12 @@
+#ifndef _SRC_STC_PLATWX_H_
+#define _SRC_STC_PLATWX_H_
+
+#include "wx/defs.h"
+
+#if wxUSE_STC
+
+#include "wx/imaglist.h"
+#include "Platform.h"
 
 
 
@@ -5,6 +14,45 @@
 wxRect wxRectFromPRectangle(PRectangle prc);
 PRectangle PRectangleFromwxRect(wxRect rc);
 wxColour wxColourFromCD(const ColourDesired& ca);
+
+class ListBoxImpl : public ListBox {
+private:
+    int                 lineHeight;
+    bool                unicodeMode;
+    int                 desiredVisibleRows;
+    int                 aveCharWidth;
+    size_t              maxStrWidth;
+    Point               location;       // Caret location at which the list is opened
+    wxImageList*        imgList;
+    wxArrayInt*         imgTypeMap;
+
+public:
+    ListBoxImpl();
+    ~ListBoxImpl();
+    static ListBox *Allocate();
+
+    virtual void SetFont(Font &font) wxOVERRIDE;
+    virtual void Create(Window &parent, int ctrlID, Point location_, int lineHeight_, bool unicodeMode_, int technology_) wxOVERRIDE;
+    virtual void SetAverageCharWidth(int width) wxOVERRIDE;
+    virtual void SetVisibleRows(int rows) wxOVERRIDE;
+    virtual int GetVisibleRows() const wxOVERRIDE;
+    virtual PRectangle GetDesiredRect() wxOVERRIDE;
+    virtual int CaretFromEdge() wxOVERRIDE;
+    virtual void Clear() wxOVERRIDE;
+    virtual void Append(char *s, int type = -1) wxOVERRIDE;
+            void Append(const wxString& text, int type);
+    virtual int Length() wxOVERRIDE;
+    virtual void Select(int n) wxOVERRIDE;
+    virtual int GetSelection() wxOVERRIDE;
+    virtual int Find(const char *prefix) wxOVERRIDE;
+    virtual void GetValue(int n, char *value, int len) wxOVERRIDE;
+    virtual void RegisterImage(int type, const char *xpm_data) wxOVERRIDE;
+            void RegisterImageHelper(int type, const wxBitmap& bmp);
+    virtual void RegisterRGBAImage(int type, int width, int height, const unsigned char *pixelsImage) wxOVERRIDE;
+    virtual void ClearRegisteredImages() wxOVERRIDE;
+    virtual void SetDoubleClickAction(CallBackAction, void *) wxOVERRIDE;
+    virtual void SetList(const char* list, char separator, char typesep) wxOVERRIDE;
+};
 
 class SurfaceData
 {
@@ -72,3 +120,7 @@ private:
 };
 
 #endif // wxUSE_GRAPHICS_DIRECT2D
+
+#endif // wxUSE_STC
+
+#endif // _SRC_STC_PLATWX_H_

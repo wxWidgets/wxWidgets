@@ -43,7 +43,8 @@ categoriesList = [
     ('Markers'                         ,'Markers',
         ('@see MarkerDefineBitmap',)),
     ('Indicators'                      ,'Indicators', 0),
-    ('Autocompletion'                  ,'Autocompletion', 0),
+    ('Autocompletion'                  ,'Autocompletion',
+        ('@see RegisterImage(int, const wxBitmap&)',)),
     ('UserLists'                       ,'User lists', 0),
     ('CallTips'                        ,'Call tips', 0),
     ('KeyboardCommands'                ,'Keyboard commands', 0),
@@ -1409,7 +1410,8 @@ sinceAnnotations= {
     'TargetWholeDocument':'3.1.1',
     'ToggleFoldShowText':'3.1.1',
 
-    'MarkerDefinePixmap':'3.1.3'
+    'MarkerDefinePixmap':'3.1.3',
+    'RegisterImage':'3.1.3'
 }
 
 
