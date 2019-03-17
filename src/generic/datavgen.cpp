@@ -3110,7 +3110,7 @@ void wxDataViewMainWindow::ScrollTo( int rows, int column )
 
     int x, y;
     m_owner->GetScrollPixelsPerUnit( &x, &y );
-    int sy = GetLineStart( rows )/y;
+    int sy = y ? GetLineStart( rows )/y : 0;
     int sx = -1;
     if( column != -1 )
     {
@@ -3133,11 +3133,11 @@ void wxDataViewMainWindow::ScrollTo( int rows, int column )
         xe = xx + rect.width;
         if( x_end > xe )
         {
-            sx = ( xx + x_end - xe )/x;
+            sx = x ? ( xx + x_end - xe )/x : 0;
         }
         if( x_start < xx )
         {
-            sx = x_start/x;
+            sx = x ? x_start/x : 0;
         }
     }
     m_owner->Scroll( sx, sy );
