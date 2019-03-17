@@ -27,6 +27,7 @@
 #include "wx/encconv.h"
 #include "wx/listctrl.h"
 #include "wx/mstream.h"
+#include "wx/xpmdecod.h"
 #include "wx/image.h"
 #include "wx/imaglist.h"
 #include "wx/tokenzr.h"
@@ -2561,10 +2562,23 @@ void ListBoxImpl::RegisterImageHelper(int type, wxBitmap& bmp)
 }
 
 void ListBoxImpl::RegisterImage(int type, const char *xpm_data) {
-    wxMemoryInputStream stream(xpm_data, strlen(xpm_data)+1);
-    wxImage img(stream, wxBITMAP_TYPE_XPM);
+    wxXPMDecoder dec;
+    wxImage img;
+
+    // This check is borrowed from src/stc/scintilla/src/XPM.cpp.
+    // Test done is two parts to avoid possibility of overstepping the memory
+    // if memcmp implemented strangely. Must be 4 bytes at least at destination.
+    if ( (0 == memcmp(xpm_data, "/* X", 4)) &&
+         (0 == memcmp(xpm_data, "/* XPM */", 9)) )
+    {
+        wxMemoryInputStream stream(xpm_data, strlen(xpm_data)+1);
+        img = dec.ReadFile(stream);
+    }
+    else
+        img = dec.ReadData(reinterpret_cast<const char* const*>(xpm_data));
+
     wxBitmap bmp(img);
-    RegisterImageHelper(type, bmp);
+    RegisterImageHelper(type,bmp);
 }
 
 
