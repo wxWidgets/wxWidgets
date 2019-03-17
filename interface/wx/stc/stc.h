@@ -5360,6 +5360,8 @@ public:
 
     /**
         @member_group_name{Markers, Markers}
+
+        @see MarkerDefineBitmap
     */
     //@{
 
@@ -5437,8 +5439,10 @@ public:
 
     /**
         Define a marker from a bitmap
+
+        @since 3.1.3
     */
-    void MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
+    void MarkerDefinePixmap(int markerNumber, const char* const* xpmData);
 
     /**
         Add a set of markers to a line.
@@ -5644,6 +5648,8 @@ public:
 
     /**
         @member_group_name{Autocompletion, Autocompletion}
+
+        @see RegisterImage(int, const wxBitmap&)
     */
     //@{
 
@@ -5756,8 +5762,10 @@ public:
 
     /**
         Register an image for use in autocompletion lists.
+
+        @since 3.1.3
     */
-    void RegisterImage(int type, const wxBitmap& bmp);
+    void RegisterImage(int type, const char* const* xpmData);
 
     /**
         Clear all the registered images.
@@ -7404,6 +7412,16 @@ public:
        Clear annotations from the given line.
     */
     void AnnotationClearLine(int line);
+
+    /**
+       Define a marker with a wxBitmap.
+    */
+    void MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
+
+    /**
+       Register an image for use in autocompletion lists.
+    */
+    void RegisterImage(int type, const wxBitmap& bmp);
 
     //@}
 
