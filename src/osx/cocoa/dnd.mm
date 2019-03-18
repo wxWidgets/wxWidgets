@@ -162,7 +162,7 @@ private:
     NSPasteboard* m_pasteboard;
 };
 
-wxOSXPasteboard::wxOSXPasteboard(WXOSXPasteboard native)
+wxOSXPasteboard::wxOSXPasteboard(OSXPasteboard native)
 {
     m_pasteboard = native;
 }
