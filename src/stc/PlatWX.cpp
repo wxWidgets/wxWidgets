@@ -2537,7 +2537,7 @@ void ListBoxImpl::RegisterImage(int type, const char *xpm_data) {
         img = dec.ReadData(reinterpret_cast<const char* const*>(xpm_data));
 
     wxBitmap bmp(img);
-    RegisterImageHelper(type,bmp);
+    RegisterImageHelper(type, bmp);
 }
 
 
