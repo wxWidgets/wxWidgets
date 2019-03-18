@@ -2769,7 +2769,7 @@ typedef WX_NSImage WXImage;
 typedef WX_NSMenu WXHMENU;
 typedef WX_NSOpenGLPixelFormat WXGLPixelFormat;
 typedef WX_NSOpenGLContext WXGLContext;
-typedef WX_NSPasteboard OSXPasteboard;
+typedef WX_NSPasteboard WXOSXPasteboard;
 
 #elif wxOSX_USE_IPHONE
 
@@ -2790,7 +2790,7 @@ typedef WX_UIImage WXImage;
 typedef WX_EAGLContext WXGLContext;
 typedef WX_NSString WXGLPixelFormat;
 typedef WX_UIWebView OSXWebViewPtr;
-typedef WX_UIPasteboard OSXPasteboard;
+typedef WX_UIPasteboard WXOSXPasteboard;
 
 #endif
 

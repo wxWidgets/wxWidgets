@@ -41,9 +41,6 @@
 #include "wx/osx/core/cfstring.h"
 #include "wx/osx/core/private.h"
 
-// Default path style
-#define kDefaultPathStyle kCFURLPOSIXPathStyle
-
 #if wxUSE_SOCKETS
 // global pointer which lives in the base library, set from the net one (see
 // sockosx.cpp) and used from the GUI code (see utilsexc_cf.cpp) -- ugly but
@@ -95,7 +92,7 @@ bool wxMacLaunch(const char* const* argv)
         CFURLCreateWithFileSystemPath(
             kCFAllocatorDefault,
             wxCFStringRef(path),
-            kDefaultPathStyle,
+            kCFURLPOSIXPathStyle,
             true); //false == not a directory
 
     // Check for error from the CFURL
@@ -163,7 +160,7 @@ bool wxMacLaunch(const char* const* argv)
             cfurlCurrentFile = CFURLCreateWithFileSystemPath(
                                 kCFAllocatorDefault,
                                 wxCFStringRef(*argv),
-                                kDefaultPathStyle,
+                                kCFURLPOSIXPathStyle,
                                 true); //true == directory
         }
         else if(argfn.FileExists())
@@ -173,7 +170,7 @@ bool wxMacLaunch(const char* const* argv)
             cfurlCurrentFile = CFURLCreateWithFileSystemPath(
                                 kCFAllocatorDefault,
                                 wxCFStringRef(*argv),
-                                kDefaultPathStyle,
+                                kCFURLPOSIXPathStyle,
                                 false); //false == regular file
         }
         else

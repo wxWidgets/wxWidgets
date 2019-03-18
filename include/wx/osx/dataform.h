@@ -41,8 +41,8 @@ public:
     // explicit and implicit conversions to NativeFormat which is one of
     // standard data types (implicit conversion is useful for preserving the
     // compatibility with old code)
-    NativeFormat GetFormatId() const { return m_format; }
-    operator NativeFormat() const { return m_format; }
+    const NativeFormat GetFormatId() const { return m_format; }
+    operator const NativeFormat() const { return m_format; }
 
     void SetId(NativeFormat format);
     
@@ -54,6 +54,7 @@ public:
     // implementation
     wxDataFormatId GetType() const { return m_type; }
     void SetType( wxDataFormatId type );
+    static NativeFormat GetFormatForType(wxDataFormatId type);
 
     // returns true if the format is one of those defined in wxDataFormatId
     bool IsStandard() const { return m_type > 0 && m_type < wxDF_PRIVATE; }

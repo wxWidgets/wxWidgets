@@ -65,9 +65,7 @@ bool wxLaunchDefaultApplication(const wxString& document, int flags)
 {
     wxUnusedVar(flags);
 
-    wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(NULL, 0, wxCFStringRef(document)));
-    CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
-    wxCFRef<CFURLRef> curl(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false));
+    wxCFRef<CFURLRef> curl(wxOSXCreateURLFromFileSystemPath(document));
     OSStatus err = LSOpenCFURLRef( curl , NULL );
 
     if (err == noErr)

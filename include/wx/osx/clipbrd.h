@@ -23,27 +23,34 @@ class WXDLLIMPEXP_CORE wxOSXDataSourceItem
 {
 public:
     virtual ~wxOSXDataSourceItem();
-    
-    virtual wxDataFormat::NativeFormat AvailableType(CFArrayRef types) const = 0;
-    
-    virtual CFDataRef GetData(wxDataFormat::NativeFormat type) const = 0;
 
+    virtual wxDataFormat::NativeFormat AvailableType(CFArrayRef types) const = 0;
+
+    virtual bool GetData( const wxDataFormat& dataFormat, wxMemoryBuffer& target) = 0;
+
+    virtual bool GetData( wxDataFormat::NativeFormat type, wxMemoryBuffer& target) = 0;
+
+    virtual CFDataRef DoGetData(wxDataFormat::NativeFormat type) const = 0;
 };
 
 class WXDLLIMPEXP_CORE wxOSXDataSource
 {
 public:
+    // the number of source items
     virtual size_t GetItemCount() const = 0;
 
+    // get source item by index, needs to be deleted after use
+    virtual const wxOSXDataSourceItem* GetItem(size_t pos) const = 0;
+
+    // returns true if there is any data in this source conforming to dataFormat
     virtual bool IsSupported(const wxDataFormat &dataFormat);
 
+    // returns true if there is any data in this source supported by dataobj
     virtual bool IsSupported(const wxDataObject &dataobj);
 
+    // returns true if there is any data in this source of types
     virtual bool HasData(CFArrayRef types) const = 0;
 
-    virtual CFDataRef GetData(wxDataFormat::NativeFormat type) const = 0;
-
-    virtual const wxOSXDataSourceItem* GetItem(size_t pos) const = 0;
 };
 
 class WXDLLIMPEXP_CORE wxOSXDataSinkItem
@@ -51,45 +58,60 @@ class WXDLLIMPEXP_CORE wxOSXDataSinkItem
 public:
     virtual ~wxOSXDataSinkItem();
 
-    virtual void AddFilename(const char* utf8Dnormpath);
+    virtual void SetFilename(const wxString& filename);
 
-    virtual void AddData(wxDataFormat::NativeFormat format, CFDataRef data) = 0;
+    // translating from wx into native representation
+    virtual void SetData(const wxDataFormat& format, const void *buf, size_t size) = 0;
+
+    // translating from wx into native representation
+    virtual void SetData(wxDataFormat::NativeFormat format, const void *buf, size_t size) = 0;
+
+   // native implementation for setting data
+    virtual void DoSetData(wxDataFormat::NativeFormat format, CFDataRef data) = 0;
 };
 
 
 class WXDLLIMPEXP_CORE wxOSXDataSink
 {
 public:
+    // delete all created sink items
     virtual void Clear() = 0;
 
+    // create a new sink item
     virtual wxOSXDataSinkItem* CreateItem() = 0;
 
+    // flush the created sink items into the system sink representation
     virtual void Flush() = 0 ;
 };
 
 class WXDLLIMPEXP_CORE wxOSXPasteboard : public wxOSXDataSink, public wxOSXDataSource
 {
 public:
-    wxOSXPasteboard(OSXPasteboard native);
+    wxOSXPasteboard(WXOSXPasteboard native);
+    ~wxOSXPasteboard();
 
     // sink methods
 
     virtual wxOSXDataSinkItem* CreateItem() wxOVERRIDE;
+
     void Clear() wxOVERRIDE;
+
     void Flush() wxOVERRIDE;
 
     // source methods
 
     virtual size_t GetItemCount() const wxOVERRIDE;
-    virtual bool HasData(CFArrayRef types) const wxOVERRIDE;
-    virtual CFDataRef GetData(wxDataFormat::NativeFormat type) const wxOVERRIDE;
 
     virtual const wxOSXDataSourceItem* GetItem(size_t pos) const wxOVERRIDE;
 
+    virtual bool HasData(CFArrayRef types) const wxOVERRIDE;
+
     static wxOSXPasteboard* GetGeneralClipboard();
 private:
-    OSXPasteboard m_pasteboard;
-    wxVector<wxOSXDataSinkItem*> m_items;
+    void DeleteSinkItems();
+    
+    WXOSXPasteboard m_pasteboard;
+    wxVector<wxOSXDataSinkItem*> m_sinkItems;
 };
 
 class WXDLLIMPEXP_CORE wxClipboard : public wxClipboardBase

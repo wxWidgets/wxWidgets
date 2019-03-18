@@ -134,9 +134,7 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
 {
     wxCHECK_MSG( !isResource, false, "not implemented" );
 
-    wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(NULL, 0, wxCFStringRef(fileName)));
-    CFStringNormalize(cfMutableString,kCFStringNormalizationFormD);
-    wxCFRef<CFURLRef> url(CFURLCreateWithFileSystemPath(kCFAllocatorDefault, cfMutableString , kCFURLPOSIXPathStyle, false));
+    wxCFRef<CFURLRef> url(wxOSXCreateURLFromFileSystemPath(fileName));
 
     SystemSoundID soundID;
     OSStatus err = AudioServicesCreateSystemSoundID(url, &soundID);
