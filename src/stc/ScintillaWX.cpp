@@ -1351,7 +1351,7 @@ void ScintillaWX::DoMarkerDefineBitmap(int markerNumber, const wxBitmap& bmp) {
             rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
             rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
             rgba[curRGBALoc++] =
-                img.HasAlpha()?img.GetAlpha()[curAlphaLoc++]:255;
+                img.HasAlpha() ? img.GetAlpha()[curAlphaLoc++] : wxALPHA_OPAQUE ;
         }
 
         // Now follow the same procedure used for handling the
