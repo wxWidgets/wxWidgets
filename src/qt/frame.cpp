@@ -110,10 +110,10 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
     int area = 0;
     if ( toolbar != NULL )
     {
-        if      (toolbar->HasFlag(wxTB_LEFT))  { area |= Qt::LeftToolBarArea;  }
-        else if (toolbar->HasFlag(wxTB_RIGHT)) { area |= Qt::RightToolBarArea; }
-        else if (toolbar->HasFlag(wxTB_TOP))   { area |= Qt::TopToolBarArea;   }
-        else if (toolbar->HasFlag(wxTB_BOTTOM)){ area |= Qt::BottomToolBarArea;}
+        if      (toolbar->HasFlag(wxTB_LEFT))  { area = Qt::LeftToolBarArea;  }
+        else if (toolbar->HasFlag(wxTB_RIGHT)) { area = Qt::RightToolBarArea; }
+        else if (toolbar->HasFlag(wxTB_BOTTOM)){ area = Qt::BottomToolBarArea;}
+        else { area = Qt::TopToolBarArea;   }
 
         // We keep the current toolbar handle in our own member variable
         // because we can't get it from half-destroyed wxToolBar when it calls
@@ -134,7 +134,9 @@ void wxFrame::SetWindowStyleFlag( long style )
 {
     wxWindow::SetWindowStyleFlag( style );
 
-    Qt::WindowFlags qtFlags = GetQMainWindow()->windowFlags();
+    QMainWindow *qtFrame = GetQMainWindow();
+    Qt::WindowFlags qtFlags = qtFrame->windowFlags();
+    qtFlags |= Qt::CustomizeWindowHint;
 
     if ( HasFlag( wxFRAME_TOOL_WINDOW ) )
     {
@@ -142,7 +144,47 @@ void wxFrame::SetWindowStyleFlag( long style )
         qtFlags |= Qt::Tool;
     }
 
-    GetQMainWindow()->setWindowFlags( qtFlags );
+    if ( HasFlag(wxCAPTION) )
+    {
+        qtFlags |= Qt::WindowTitleHint;
+    }
+
+    if ( HasFlag(wxSYSTEM_MENU) )
+    {
+        qtFlags |= Qt::WindowSystemMenuHint;
+    }
+
+    if ( HasFlag(wxSTAY_ON_TOP) )
+    {
+        qtFlags |= Qt::WindowStaysOnTopHint;
+    }
+
+    if ( HasFlag(wxMINIMIZE_BOX) )
+    {
+        qtFlags |= Qt::WindowMinimizeButtonHint;
+    }
+
+    if ( HasFlag(wxMAXIMIZE_BOX) )
+    {
+        qtFlags |= Qt::WindowMaximizeButtonHint;
+    }
+
+    if ( HasFlag(wxCLOSE_BOX) )
+    {
+        qtFlags |= Qt::WindowCloseButtonHint;
+    }
+
+    if ( HasFlag(wxNO_BORDER) )
+    {
+        // Note any of the other window decoration hints (e.g.
+        // Qt::WindowCloseButtonHint, Qt::WindowTitleHint) override this style.
+        // It doesn't seem possible to create a QMainWindow with a title bar
+        // but without a resize border.
+        qtFlags |= Qt::FramelessWindowHint;
+    }
+
+    qtFrame->setWindowFlags(qtFlags);
+
 }
 
 void wxFrame::AddChild( wxWindowBase *child )
@@ -200,4 +242,5 @@ wxQtMainWindow::wxQtMainWindow( wxWindow *parent, wxFrame *handler )
 wxQtCentralWidget::wxQtCentralWidget( wxWindow *parent, wxFrame *handler )
     : wxQtEventSignalHandler< QScrollArea, wxFrame >( parent, handler )
 {
+    setFocusPolicy(Qt::NoFocus);
 }

@@ -242,7 +242,7 @@ void wxControlContainer::SetLastFocus(wxWindow *win)
 // within the same group. Used by wxSetFocusToChild
 // --------------------------------------------------------------------
 
-#if wxUSE_RADIOBTN 
+#if wxUSE_RADIOBTN
 
 wxRadioButton* wxGetPreviousButtonInGroup(wxRadioButton *btn)
 {

@@ -35,7 +35,7 @@ wxEventType wxEVT_COLOURPICKER_CHANGED;
            Shows the colour in HTML form (AABBCC) as colour button label
            (instead of no label at all).
     @style{wxCLRP_SHOW_ALPHA}
-           Allows to select opacity in the colour-chooser (effective under
+           Allows selecting opacity in the colour-chooser (effective under
            wxGTK and wxOSX).
     @endStyleTable
 
@@ -57,7 +57,7 @@ class wxColourPickerCtrl : public wxPickerBase
 {
 public:
     wxColourPickerCtrl();
-    
+
     /**
         Initializes the object and calls Create() with all the parameters.
     */

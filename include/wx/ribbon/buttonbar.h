@@ -231,13 +231,6 @@ public:
         , m_bar(bar), m_button(button)
     {
     }
-#ifndef SWIG
-    wxRibbonButtonBarEvent(const wxRibbonButtonBarEvent& e) : wxCommandEvent(e)
-    {
-        m_bar = e.m_bar;
-        m_button = e.m_button;
-    }
-#endif
     wxEvent *Clone() const wxOVERRIDE { return new wxRibbonButtonBarEvent(*this); }
 
     wxRibbonButtonBar* GetBar() {return m_bar;}

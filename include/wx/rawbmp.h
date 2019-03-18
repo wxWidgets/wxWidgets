@@ -171,7 +171,7 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
     #define wxPIXEL_FORMAT_ALPHA 3
 #elif defined(__WXQT__)
     typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxNativePixelFormat;
-    
+
     #define wxPIXEL_FORMAT_ALPHA 3
 #endif
 

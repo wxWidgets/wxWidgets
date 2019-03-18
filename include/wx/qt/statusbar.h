@@ -36,7 +36,7 @@ public:
 
     QStatusBar *GetQStatusBar() const { return m_qtStatusBar; }
     QWidget *GetHandle() const;
-    
+
 protected:
     virtual void DoUpdateStatusText(int number);
 
@@ -45,7 +45,7 @@ private:
     void UpdateFields();
 
     QStatusBar *m_qtStatusBar;
-    QList< QLabel* > *m_qtPanes;
+    wxVector<QLabel*> m_qtPanes;
 
     wxDECLARE_DYNAMIC_CLASS(wxStatusBar);
 };

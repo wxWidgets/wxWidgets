@@ -60,14 +60,6 @@ enum
     RadioPage_Radio
 };
 
-// layout direction radiobox selections
-enum
-{
-    RadioDir_Default,
-    RadioDir_LtoR,
-    RadioDir_TtoB
-};
-
 // default values for the number of radiobox items
 static const unsigned int DEFAULT_NUM_ENTRIES = 12;
 static const unsigned int DEFAULT_MAJOR_DIM = 3;
@@ -123,7 +115,6 @@ protected:
     wxCheckBox *m_chkSpecifyRows;
     wxCheckBox *m_chkEnableItem;
     wxCheckBox *m_chkShowItem;
-    wxRadioBox *m_radioDir;
 
     // the gauge itself and the sizer it is in
     wxRadioBox *m_radio;
@@ -155,6 +146,7 @@ wxBEGIN_EVENT_TABLE(RadioWidgetsPage, WidgetsPage)
     EVT_BUTTON(RadioPage_Selection, RadioWidgetsPage::OnButtonSelection)
     EVT_BUTTON(RadioPage_Label, RadioWidgetsPage::OnButtonSetLabel)
 
+    EVT_UPDATE_UI(RadioPage_Reset, RadioWidgetsPage::OnUpdateUIReset)
     EVT_UPDATE_UI(RadioPage_Update, RadioWidgetsPage::OnUpdateUIUpdate)
     EVT_UPDATE_UI(RadioPage_Selection, RadioWidgetsPage::OnUpdateUISelection)
 
@@ -197,8 +189,7 @@ RadioWidgetsPage::RadioWidgetsPage(WidgetsBookCtrl *book,
     m_textLabelBtns =
     m_textLabel = (wxTextCtrl *)NULL;
 
-    m_radio =
-    m_radioDir = (wxRadioBox *)NULL;
+    m_radio = (wxRadioBox *)NULL;
     m_sizerRadio = (wxSizer *)NULL;
 }
 
@@ -217,43 +208,25 @@ void RadioWidgetsPage::CreateContent()
                         "Major specifies &rows count"
                        );
 
-    static const wxString layoutDir[] =
-    {
-        "default",
-        "left to right",
-        "top to bottom"
-    };
-
-    m_radioDir = new wxRadioBox(this, wxID_ANY, "Numbering:",
-                                wxDefaultPosition, wxDefaultSize,
-                                WXSIZEOF(layoutDir), layoutDir,
-                                1, wxRA_SPECIFY_COLS);
-    sizerLeft->Add(m_radioDir, 0, wxGROW | wxALL, 5);
-
-    // if it's not defined, we can't change the radiobox direction
-#ifndef wxRA_LEFTTORIGHT
-    m_radioDir->Disable();
-#endif // wxRA_LEFTTORIGHT
-
     wxSizer *sizerRow;
     sizerRow = CreateSizerWithTextAndLabel("&Major dimension:",
                                            wxID_ANY,
                                            &m_textMajorDim);
-    sizerLeft->Add(sizerRow, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndLabel("&Number of buttons:",
                                            wxID_ANY,
                                            &m_textNumBtns);
-    sizerLeft->Add(sizerRow, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     wxButton *btn;
     btn = new wxButton(this, RadioPage_Update, "&Update");
-    sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 5);
+    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border());
 
-    sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
+    sizerLeft->AddSpacer(5);
 
     btn = new wxButton(this, RadioPage_Reset, "&Reset");
-    sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border(wxALL, 15));
 
     // middle pane
     wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, "&Change parameters");
@@ -262,25 +235,25 @@ void RadioWidgetsPage::CreateContent()
     sizerRow = CreateSizerWithTextAndLabel("Current selection:",
                                            wxID_ANY,
                                            &m_textCurSel);
-    sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(RadioPage_Selection,
                                             "&Change selection:",
                                            wxID_ANY,
                                            &m_textSel);
-    sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(RadioPage_Label,
                                             "&Label for box:",
                                             wxID_ANY,
                                             &m_textLabel);
-    sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(RadioPage_LabelBtn,
                                             "&Label for buttons:",
                                             wxID_ANY,
                                             &m_textLabelBtns);
-    sizerMiddle->Add(sizerRow, 0, wxGROW | wxALL, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     m_chkEnableItem = CreateCheckBoxAndAddToSizer(sizerMiddle,
                                                   "Disable &2nd item",
@@ -291,16 +264,18 @@ void RadioWidgetsPage::CreateContent()
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);
-    sizerRight->SetMinSize(150, 0);
     m_sizerRadio = sizerRight; // save it to modify it later
 
     Reset();
     CreateRadio();
 
     // the 3 panes panes compose the window
-    sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 1, wxGROW | wxALL, 10);
-    sizerTop->Add(sizerRight, 0, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(sizerLeft,
+                  wxSizerFlags(0).Expand().Border((wxALL & ~wxLEFT), 10));
+    sizerTop->Add(sizerMiddle,
+                  wxSizerFlags(1).Expand().Border(wxALL, 10));
+    sizerTop->Add(sizerRight,
+                  wxSizerFlags(0).Expand().Border((wxALL & ~wxRIGHT), 10));
 
     // final initializations
     SetSizer(sizerTop);
@@ -320,7 +295,6 @@ void RadioWidgetsPage::Reset()
     m_chkSpecifyRows->SetValue(false);
     m_chkEnableItem->SetValue(true);
     m_chkShowItem->SetValue(true);
-    m_radioDir->SetSelection(RadioDir_Default);
 }
 
 void RadioWidgetsPage::CreateRadio()
@@ -357,13 +331,13 @@ void RadioWidgetsPage::CreateRadio()
         majorDim = DEFAULT_MAJOR_DIM;
     }
 
-    wxString *items = new wxString[count];
+    wxArrayString items;
 
     wxString labelBtn = m_textLabelBtns->GetValue();
     for ( size_t n = 0; n < count; n++ )
     {
-        items[n] = wxString::Format("%s %lu",
-                                    labelBtn, (unsigned long)n + 1);
+        items.push_back(wxString::Format("%s %lu",
+                                         labelBtn, (unsigned long)n + 1));
     }
 
     int flags = m_chkSpecifyRows->GetValue() ? wxRA_SPECIFY_ROWS
@@ -371,45 +345,29 @@ void RadioWidgetsPage::CreateRadio()
 
     flags |= GetAttrs().m_defaultFlags;
 
-#ifdef wxRA_LEFTTORIGHT
-    switch ( m_radioDir->GetSelection() )
-    {
-        default:
-            wxFAIL_MSG( "unexpected wxRadioBox layout direction" );
-            wxFALLTHROUGH;
-
-        case RadioDir_Default:
-            break;
-
-        case RadioDir_LtoR:
-            flags |= wxRA_LEFTTORIGHT;
-            break;
-
-        case RadioDir_TtoB:
-            flags |= wxRA_TOPTOBOTTOM;
-            break;
-    }
-#endif // wxRA_LEFTTORIGHT
-
     m_radio = new wxRadioBox(this, RadioPage_Radio,
                              m_textLabel->GetValue(),
                              wxDefaultPosition, wxDefaultSize,
-                             count, items,
+                             items,
                              majorDim,
                              flags);
-
-    delete [] items;
 
     if ( sel >= 0 && (size_t)sel < count )
     {
         m_radio->SetSelection(sel);
     }
 
-    m_sizerRadio->Add(m_radio, 1, wxGROW);
-    m_sizerRadio->Layout();
+    if ( count > TEST_BUTTON )
+    {
+        m_radio->Enable(TEST_BUTTON, m_chkEnableItem->IsChecked());
+        m_radio->Show(TEST_BUTTON, m_chkShowItem->IsChecked());
+    }
 
-    m_chkEnableItem->SetValue(true);
-    m_chkEnableItem->SetValue(true);
+    m_sizerRadio->Add(m_radio, wxSizerFlags(1).Expand());
+    Layout();
+
+    m_chkEnableItem->Enable(count > TEST_BUTTON);
+    m_chkShowItem->Enable(count > TEST_BUTTON);
 }
 
 // ----------------------------------------------------------------------------
@@ -516,12 +474,18 @@ void RadioWidgetsPage::OnUpdateUIReset(wxUpdateUIEvent& event)
 
 void RadioWidgetsPage::OnUpdateUIEnableItem(wxUpdateUIEvent& event)
 {
+    if ( m_radio->GetCount() <= TEST_BUTTON )
+        return;
+
     event.SetText(m_radio->IsItemEnabled(TEST_BUTTON) ? "Disable &2nd item"
                                                       : "Enable &2nd item");
 }
 
 void RadioWidgetsPage::OnUpdateUIShowItem(wxUpdateUIEvent& event)
 {
+    if ( m_radio->GetCount() <= TEST_BUTTON )
+        return;
+
     event.SetText(m_radio->IsItemShown(TEST_BUTTON) ? "Hide 2nd &item"
                                                     : "Show 2nd &item");
 }

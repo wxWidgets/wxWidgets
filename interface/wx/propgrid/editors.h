@@ -427,7 +427,7 @@ public:
     class wxSampleMultiButtonEditor : public wxPGTextCtrlEditor
     {
         wxDECLARE_DYNAMIC_CLASS(wxSampleMultiButtonEditor);
-        
+
     public:
         wxSampleMultiButtonEditor() {}
         virtual ~wxSampleMultiButtonEditor() {}

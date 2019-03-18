@@ -190,7 +190,7 @@ wxNumericPropertyValidator::
     }
     else if ( numericType == Float )
     {
-        allowedChars += wxS("eE");
+        allowedChars += wxS("-+eE");
 
         // Use locale-specific decimal point
         allowedChars += wxString::Format(wxS("%g"), 1.1)[1];
@@ -1434,11 +1434,6 @@ bool wxEnumProperty::ValueFromInt_(wxVariant& value, int* pIndex, int intVal, in
     return false;
 }
 
-void
-wxEnumProperty::OnValidationFailure( wxVariant& WXUNUSED(pendingValue) )
-{
-}
-
 void wxEnumProperty::SetIndex( int index )
 {
     m_index = index;
@@ -2404,20 +2399,6 @@ void wxPGArrayEditorDialog::Init()
 
 // -----------------------------------------------------------------------
 
-wxPGArrayEditorDialog::wxPGArrayEditorDialog( wxWindow *parent,
-                                          const wxString& message,
-                                          const wxString& caption,
-                                          long style,
-                                          const wxPoint& pos,
-                                          const wxSize& sz )
-    : wxDialog()
-{
-    Init();
-    Create(parent,message,caption,style,pos,sz);
-}
-
-// -----------------------------------------------------------------------
-
 bool wxPGArrayEditorDialog::Create( wxWindow *parent,
                                   const wxString& message,
                                   const wxString& caption,
@@ -2724,8 +2705,8 @@ wxArrayStringProperty::wxArrayStringProperty( const wxString& label,
                                                         const wxString& name,
                                                         const wxArrayString& array )
     : wxPGProperty(label,name)
+    , m_delimiter(',')
 {
-    m_delimiter = ',';
     SetValue( array );
 }
 

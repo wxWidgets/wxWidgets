@@ -98,7 +98,7 @@ public:
 
     void OutputString(wxOutputStream& stream, const wxString& str);
     void OutputStringEnt(wxOutputStream& stream, const wxString& str);
-    
+
     static void AddString(wxString& str, const int& v) { str << wxString::Format(wxT("%d"), v); }
     static void AddString(wxString& str, const long& v) { str << wxString::Format(wxT("%ld"), v); }
     static void AddString(wxString& str, const double& v) { str << wxString::Format(wxT("%.2f"), (float) v); }
@@ -122,7 +122,7 @@ public:
 
     /// Create a string containing style attributes, plus further object 'attributes' (shown, id)
     static wxString AddAttributes(wxRichTextObject* obj, bool isPara = false);
-    
+
     virtual bool ExportStyleDefinition(wxOutputStream& stream, wxRichTextStyleDefinition* def, int level);
 
     virtual bool WriteProperties(wxOutputStream& stream, const wxRichTextProperties& properties, int level);

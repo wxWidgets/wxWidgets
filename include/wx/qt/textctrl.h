@@ -46,7 +46,7 @@ public:
     virtual bool SetStyle(long start, long end, const wxTextAttr& style);
     virtual bool GetStyle(long position, wxTextAttr& style);
     virtual bool SetDefaultStyle(const wxTextAttr& style);
-    
+
     virtual long XYToPosition(long x, long y) const;
     virtual bool PositionToXY(long pos, long *x, long *y) const;
 

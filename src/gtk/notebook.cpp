@@ -464,7 +464,12 @@ bool wxNotebook::InsertPage( size_t position,
         pageData->m_label, false, false, m_padding);
 
     gtk_widget_show_all(pageData->m_box);
+
+    // Inserting the page may generate selection changing events that are not
+    // expected here: we will send them ourselves below if necessary.
+    g_signal_handlers_block_by_func(m_widget, (void*)switch_page, this);
     gtk_notebook_insert_page(notebook, win->m_widget, pageData->m_box, position);
+    g_signal_handlers_unblock_by_func(m_widget, (void*)switch_page, this);
 
     /* apply current style */
 #ifdef __WXGTK3__
@@ -478,10 +483,7 @@ bool wxNotebook::InsertPage( size_t position,
     }
 #endif
 
-    if (select && GetPageCount() > 1)
-    {
-        SetSelection( position );
-    }
+    DoSetSelectionAfterInsertion(position, select);
 
     InvalidateBestSize();
     return true;

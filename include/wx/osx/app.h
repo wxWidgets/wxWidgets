@@ -82,7 +82,7 @@ public:
     // TODO change semantics to be in line with cocoa (make autrelease NOT increase the count)
     void                  MacAddToAutorelease( void* cfrefobj );
     void                  MacReleaseAutoreleasePool();
-    
+
 public:
     static wxWindow*      s_captureWindow ;
     static long           s_lastModifiers ;
@@ -95,7 +95,7 @@ protected:
     // override for support of custom app controllers
     virtual WX_NSObject   OSXCreateAppController();
 #endif
-    
+
 private:
     virtual bool        DoInitGui();
     virtual void        DoCleanUp();
@@ -155,14 +155,14 @@ private:
     wxArrayString       m_openFiles;
     wxArrayString       m_printFiles;
     wxString            m_getURL;
-    
+
 public:
     bool                OSXInitWasCalled() { return m_inited; }
     void                OSXStoreOpenFiles(const wxArrayString &files ) { m_openFiles = files ; }
     void                OSXStorePrintFiles(const wxArrayString &files ) { m_printFiles = files ; }
     void                OSXStoreOpenURL(const wxString &url ) { m_getURL = url ; }
 #endif
-    
+
     // Hide the application windows the same as the system hide command would do it.
     void MacHideApp();
 

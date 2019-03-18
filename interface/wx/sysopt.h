@@ -34,7 +34,7 @@
         If set to non-zero value, abort the program if an assertion fails. The
         default behaviour in case of assertion failure depends on the build mode
         and can be changed by overriding wxApp::OnAssertFailure() but setting
-        this option allows to change it without modifying the program code and
+        this option allows changing it without modifying the program code and
         also applies to asserts which may happen before the wxApp object
         creation or after its destruction.
     @endFlagTable
@@ -81,8 +81,8 @@
     @flag{gtk.tlw.can-set-transparent}
         wxTopLevelWindow::CanSetTransparent() method normally tries to detect
         automatically whether transparency for top level windows is currently
-        supported, however this may sometimes fail and this option allows to
-        override the automatic detection. Setting it to 1 makes the transparency
+        supported, however this may sometimes fail and this option allows
+        overriding the automatic detection. Setting it to 1 makes the transparency
         be always available (setting it can still fail, of course) and setting it
         to 0 makes it always unavailable.
     @flag{gtk.desktop}
@@ -112,7 +112,7 @@
         If 1 activates the spell checking in wxTextCtrl.
     @flag{osx.openfiledialog.always-show-types}
         Per default a wxFileDialog with wxFD_OPEN does not show a types-popup on OS X but allows
-        the selection of files from any of the supported types. Setting this to 1 shows a wxChoice 
+        the selection of files from any of the supported types. Setting this to 1 shows a wxChoice
         for selection (if there is more than one supported filetype).
     @endFlagTable
 

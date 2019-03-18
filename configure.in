@@ -2721,6 +2721,17 @@ if test "$wxUSE_EXPAT" != "no"; then
         fi
     fi
     if test "$wxUSE_EXPAT" = "builtin" ; then
+        dnl Expat requires C99 compiler, so define wxCFLAGS_C99 variable which
+        dnl is used when compiling it in our makefiles.
+        save_CC="$CC"
+        AC_PROG_CC_C99
+        CC="$save_CC"
+
+        dnl Note that we need just the flags, not the full CC value including
+        dnl the compiler too.
+        wxCFLAGS_C99=$ac_cv_prog_cc_c99
+        AC_SUBST(wxCFLAGS_C99)
+
         dnl Expat needs this:
         AC_CONFIG_SUBDIRS([src/expat/expat])
     fi
@@ -4530,7 +4541,7 @@ AC_CHECK_FUNCS(inet_addr,
                         AC_CHECK_LIB(socket, inet_addr,
                             INET_LINK="socket",
                             [
-				AC_CHECK_LIB(network, inet_addr,
+                                AC_CHECK_LIB(network, inet_addr,
                                    INET_LINK="network"
                                 )
                             ]
@@ -5560,7 +5571,7 @@ fi
 
 WITH_PLUGIN_SDL=0
 if test "$wxUSE_SOUND" = "yes"; then
-  if test "$USE_UNIX" = 1 ; then
+  if test "$USE_UNIX" = 1 -a "$USE_MAC" != 1 ; then
     if test "$wxUSE_LIBSDL" != "no"; then
       PKG_CHECK_MODULES([SDL], [sdl2 >= 2.0.0],
                   [
@@ -5579,7 +5590,7 @@ if test "$wxUSE_SOUND" = "yes"; then
                                   AC_DEFINE(wxUSE_LIBSDL)
                                 ],
                                 [wxUSE_LIBSDL="no"])
-		  ])
+                  ])
       if test "$wxUSE_LIBSDL" = "yes" -a "$wxUSE_PLUGINS" = "yes" ; then
         WITH_PLUGIN_SDL=1
       fi

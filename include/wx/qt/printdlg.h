@@ -15,12 +15,12 @@ class WXDLLIMPEXP_CORE wxQtPrintNativeData: public wxPrintNativeDataBase
 {
 public:
     wxQtPrintNativeData();
-    
+
     virtual bool TransferTo( wxPrintData &data );
     virtual bool TransferFrom( const wxPrintData &data );
 
     virtual bool IsOk() const;
-    
+
 };
 
 class WXDLLIMPEXP_CORE wxQtPrintDialog : public wxPrintDialogBase

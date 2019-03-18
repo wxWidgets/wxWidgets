@@ -621,11 +621,6 @@ void wxWindowMac::SetDropTarget(wxDropTarget *pDropTarget)
     GetPeer()->SetDropTarget(m_dropTarget) ;
 }
 
-// Old-style File Manager Drag & Drop
-void wxWindowMac::DragAcceptFiles(bool WXUNUSED(accept))
-{
-    // TODO:
-}
 #endif
 
 // From a wx position / size calculate the appropriate size of the native control
@@ -2631,7 +2626,7 @@ bool wxWindowMac::OSXHandleKeyEvent( wxKeyEvent& event )
     // moved the ordinary key event sending AFTER the accel evaluation
 
 #if wxUSE_ACCEL
-    if ( !handled && event.GetEventType() == wxEVT_KEY_DOWN)
+    if (event.GetEventType() == wxEVT_KEY_DOWN)
     {
         wxWindow *ancestor = this;
         while (ancestor)

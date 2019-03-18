@@ -45,7 +45,7 @@ static Qt::BrushStyle ConvertBrushStyle(wxBrushStyle style)
 
         case wxBRUSHSTYLE_VERTICAL_HATCH:
             return Qt::VerPattern;
-            
+
         case wxBRUSHSTYLE_STIPPLE:
         case wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE:
         case wxBRUSHSTYLE_STIPPLE_MASK:
@@ -66,21 +66,21 @@ class wxBrushRefData: public wxGDIRefData
             m_style(wxBRUSHSTYLE_INVALID)
         {
         }
-        
+
         wxBrushRefData( const wxBrushRefData& data )
+            : m_qtBrush(data.m_qtBrush)
         {
-            m_qtBrush = data.m_qtBrush;
             m_style = data.m_style;
         }
-        
+
         bool operator == (const wxBrushRefData& data) const
         {
             return m_qtBrush == data.m_qtBrush;
         }
-        
+
         QBrush m_qtBrush;
 
-        // To keep if mask is stippled 
+        // To keep if mask is stippled
         wxBrushStyle m_style;
 };
 
@@ -155,9 +155,9 @@ void wxBrush::SetStipple(const wxBitmap& stipple)
 bool wxBrush::operator==(const wxBrush& brush) const
 {
     if (m_refData == brush.m_refData) return true;
-    
+
     if (!m_refData || !brush.m_refData) return false;
-    
+
     return ( *(wxBrushRefData*)m_refData == *(wxBrushRefData*)brush.m_refData );
 }
 

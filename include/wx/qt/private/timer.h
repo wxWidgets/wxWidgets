@@ -29,7 +29,7 @@ public:
 
 protected:
     virtual void timerEvent( QTimerEvent * event );
-    
+
 private:
     int m_timerId;
 };

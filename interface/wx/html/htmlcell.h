@@ -8,7 +8,7 @@
 
 /**
    @class wxHtmlRenderingStyle
- 
+
    wxHtmlSelection is data holder with information about text selection.
    Selection is defined by two positions (beginning and end of the selection)
    and two leaf(!) cells at these positions.
@@ -476,7 +476,7 @@ public:
     /**
         Detach a child cell.
 
-        Detaching a cell removes it from this container and allows to reattach
+        Detaching a cell removes it from this container and allows reattaching
         it to another one by using InsertCell(). Alternatively, this method can
         be used to selectively remove some elements of the HTML document tree
         by deleting the cell after calling it.

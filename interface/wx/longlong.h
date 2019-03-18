@@ -69,7 +69,7 @@ public:
     //@}
 
     /**
-        This allows to convert a double value to wxLongLong type.
+        This allows converting a double value to wxLongLong type.
 
         Such conversion is not always possible in which case the result will be
         silently truncated in a platform-dependent way.

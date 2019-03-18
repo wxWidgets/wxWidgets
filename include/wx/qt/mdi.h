@@ -75,7 +75,7 @@ class WXDLLIMPEXP_CORE wxMDIClientWindow : public wxMDIClientWindowBase
 {
 public:
     wxMDIClientWindow();
-    
+
     virtual bool CreateClient(wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL);
     wxDECLARE_DYNAMIC_CLASS(wxMDIClientWindow);
 };

@@ -103,7 +103,7 @@ without express or implied warranty.
 @verbinclude "lgpl.txt"
 
 @page page_copyright_xserver The Open Group and DEC License
- 
+
 @verbinclude "xserver.txt"
 
 */

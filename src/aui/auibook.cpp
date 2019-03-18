@@ -791,11 +791,7 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
     if (offset == 0)
         offset += m_art->GetIndentSize();
 
-    wxRect active_rect;
-
     wxRect rect = m_rect;
-    rect.y = 0;
-    rect.height = m_rect.height;
 
     // See if the given page is visible at the given tab offset (effectively scroll position)
     for (i = tabOffset; i < page_count; ++i)
@@ -803,7 +799,6 @@ bool wxAuiTabContainer::IsTabVisible(int tabPage, int tabOffset, wxDC* dc, wxWin
         wxAuiNotebookPage& page = m_pages.Item(i);
         wxAuiTabContainerButton& tab_button = m_tabCloseButtons.Item(i);
 
-        rect.x = offset;
         rect.width = m_rect.width - right_buttons_width - offset - wnd->FromDIP(2);
 
         if (rect.width <= 0)
@@ -3411,10 +3406,10 @@ int wxAuiNotebook::ChangeSelection(size_t n)
     return DoModifySelection(n, false);
 }
 
-bool wxAuiNotebook::AddPage(wxWindow *page, const wxString &text, bool select, 
+bool wxAuiNotebook::AddPage(wxWindow *page, const wxString &text, bool select,
                             int imageId)
 {
-    if(HasImageList()) 
+    if(HasImageList())
     {
         return AddPage(page, text, select, GetImageList()->GetBitmap(imageId));
     }
@@ -3434,13 +3429,13 @@ bool wxAuiNotebook::DeleteAllPages()
     return true;
 }
 
-bool wxAuiNotebook::InsertPage(size_t index, wxWindow *page, 
-                               const wxString &text, bool select, 
+bool wxAuiNotebook::InsertPage(size_t index, wxWindow *page,
+                               const wxString &text, bool select,
                                int imageId)
 {
     if(HasImageList())
     {
-        return InsertPage(index, page, text, select, 
+        return InsertPage(index, page, text, select,
                           GetImageList()->GetBitmap(imageId));
     }
     else
@@ -3468,8 +3463,8 @@ public:
     };
 
     wxAuiLayoutObject(const wxSize &size, const wxAuiPaneInfo &pInfo)
+        : m_size(size)
     {
-        m_size = size;
         m_pInfo = &pInfo;
         /*
             To speed up the sorting of the panes, the direction is mapped to a

@@ -69,10 +69,10 @@ public:
     /**
         Implement to customize matching of value string to an item container
         entry.
-        
+
         @param item
             String entered, usually by user or from SetValue() call.
-            
+
         @param trueItem
             When item matches an entry, but the entry's string representation
             is not exactly the same (case mismatch, for example), then the
@@ -130,7 +130,7 @@ public:
         Useful in conjunction with LazyCreate().
     */
     bool IsCreated() const;
-    
+
     /**
         The derived class may implement this to return @true if it wants to
         delay call to Create() until the popup is shown for the first time. It
@@ -386,7 +386,7 @@ public:
             Window position.
             If ::wxDefaultPosition is specified then a default position is chosen.
         @param size
-            Window size. 
+            Window size.
             If ::wxDefaultSize is specified then the window is sized appropriately.
         @param style
             Window style. See wxComboCtrl.
@@ -450,7 +450,7 @@ public:
     */
     void EnablePopupAnimation(bool enable = true);
 
-    
+
     /**
        Returns true if given key combination should toggle the popup.
     */

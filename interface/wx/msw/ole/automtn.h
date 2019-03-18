@@ -388,7 +388,7 @@ public:
 
     @code
     wxAutomationObject excelObject;
-    
+
     if ( excelObject.GetInstance("Excel.Application") )
         excelObject.PutProperty("ActiveCell.Font.Bold", true);
     @endcode
@@ -450,7 +450,7 @@ public:
         Creates a new object based on the @a progID, returning @true if the object was
         successfully created,
         or @false if not.
-        
+
         @see GetInstance()
     */
     bool CreateInstance(const wxString& progId) const;
@@ -495,7 +495,7 @@ public:
         @param progId COM ProgID, e.g. "Excel.Application"
         @param flags The creation flags (this parameters was added in wxWidgets
             2.9.2)
-            
+
         @see CreateInstance()
     */
     bool GetInstance(const wxString& progId,
@@ -532,11 +532,11 @@ public:
         wxVariant res = obj.GetProperty("Range", wxVariant("A1"));
         wxVariant res = obj.GetProperty("Range", "A1");
         @endcode
-        
+
         Note that @a property can contain dot-separated property names, to save the
         application
         needing to call GetProperty several times using several temporary objects.
-        
+
         @see GetObject(), PutProperty()
     */
     wxVariant GetProperty(const wxString& property, int noArgs,

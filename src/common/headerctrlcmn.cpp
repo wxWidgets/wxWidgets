@@ -386,6 +386,10 @@ bool wxHeaderCtrlBase::ShowCustomizeDialog()
 // wxHeaderCtrlSimple implementation
 // ============================================================================
 
+wxBEGIN_EVENT_TABLE(wxHeaderCtrlSimple, wxHeaderCtrl)
+    EVT_HEADER_RESIZING(wxID_ANY, wxHeaderCtrlSimple::OnHeaderResizing)
+wxEND_EVENT_TABLE()
+
 void wxHeaderCtrlSimple::Init()
 {
     m_sortKey = wxNO_COLUMN;
@@ -464,6 +468,12 @@ wxHeaderCtrlSimple::UpdateColumnWidthToFit(unsigned int idx, int widthTitle)
     m_cols[idx].SetWidth(wxMax(widthContents, widthTitle));
 
     return true;
+}
+
+void wxHeaderCtrlSimple::OnHeaderResizing(wxHeaderCtrlEvent& evt)
+{
+    m_cols[evt.GetColumn()].SetWidth(evt.GetWidth());
+    Refresh();
 }
 
 // ============================================================================

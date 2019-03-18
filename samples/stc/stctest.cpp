@@ -362,7 +362,7 @@ void AppFrame::OnFileSave (wxCommandEvent &WXUNUSED(event)) {
 void AppFrame::OnFileSaveAs (wxCommandEvent &WXUNUSED(event)) {
     if (!m_edit) return;
 #if wxUSE_FILEDLG
-    wxString filename = wxEmptyString;
+    wxString filename;
     wxFileDialog dlg (this, "Save file", wxEmptyString, wxEmptyString, "Any file (*)|*", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
     if (dlg.ShowModal() != wxID_OK) return;
     filename = dlg.GetPath();

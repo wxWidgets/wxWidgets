@@ -206,7 +206,7 @@ public:
        Default ctor.
     */
     wxAnimation();
-    
+
     /**
         Copy ctor.
     */

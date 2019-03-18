@@ -2,7 +2,6 @@
 #define WX_TESTPREC_INCLUDED 1
 
 #include "wx/wxprec.h"
-#include "wx/stopwatch.h"
 #include "wx/evtloop.h"
 
 // This needs to be included before catch.hpp to be taken into account.
@@ -107,27 +106,6 @@ public:
     // wxDEBUG_LEVEL == 0 case, so just don't do anything at all now).
     #define WX_ASSERT_FAILS_WITH_ASSERT(cond)
 #endif
-
-#define WX_ASSERT_EVENT_OCCURS_IN(eventcounter, count, ms) \
-{\
-    wxStopWatch sw; \
-    wxEventLoopBase* loop = wxEventLoopBase::GetActive(); \
-    while(eventcounter.GetCount() < count) \
-    { \
-        if(sw.Time() < ms) \
-            loop->Dispatch(); \
-        else \
-        { \
-            CPPUNIT_FAIL(wxString::Format("timeout reached with %d " \
-                                          "events received, %d expected", \
-                                          eventcounter.GetCount(), count).ToStdString()); \
-            break; \
-        } \
-    } \
-    eventcounter.Clear(); \
-}
-
-#define WX_ASSERT_EVENT_OCCURS(eventcounter,count) WX_ASSERT_EVENT_OCCURS_IN(eventcounter, count, 100)
 
 // these functions can be used to hook into wxApp event processing and are
 // currently used by the events propagation test

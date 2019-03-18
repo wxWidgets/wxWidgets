@@ -253,7 +253,7 @@ protected:
         else
             event->accept();
     }
-    
+
     //wxMoveEvent
     virtual void moveEvent ( QMoveEvent * event )
     {
@@ -265,7 +265,7 @@ protected:
         else
             event->accept();
     }
-    
+
     //wxEraseEvent then wxPaintEvent
     virtual void paintEvent ( QPaintEvent * event )
     {
@@ -301,7 +301,7 @@ protected:
         else
             event->accept();
     }
-    
+
     //wxMouseEvent
     virtual void wheelEvent ( QWheelEvent * event )
     {

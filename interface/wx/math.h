@@ -93,7 +93,7 @@ unsigned int wxCTZ(wxUint32 x);
 */
 int wxRound(double x);
 
-/** 
+/**
    Returns true if both double values are identical. This is
    only reliable if both values have been assigned the same
    value.

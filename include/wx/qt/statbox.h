@@ -14,7 +14,7 @@ class WXDLLIMPEXP_CORE wxStaticBox : public wxStaticBoxBase
 {
 public:
     wxStaticBox();
-    
+
     wxStaticBox(wxWindow *parent, wxWindowID id,
                 const wxString& label,
                 const wxPoint& pos = wxDefaultPosition,
@@ -32,6 +32,9 @@ public:
     virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
 
     virtual QWidget *GetHandle() const;
+
+    virtual void SetLabel(const wxString& label) wxOVERRIDE;
+    virtual wxString GetLabel() const wxOVERRIDE;
 
 protected:
 

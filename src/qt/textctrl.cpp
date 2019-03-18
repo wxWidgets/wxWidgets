@@ -45,10 +45,27 @@ public:
     virtual void SetValue( const wxString &value ) = 0;
     virtual void SetSelection( long from, long to ) = 0;
     virtual void SetInsertionPoint(long pos) = 0;
+    virtual void SetStyleFlags(long flags) = 0;
 };
 
 namespace
 {
+
+// Helper for SetStyleFlags(): takes care of flags that are handled in the same
+// way in both QLineEdit and QTextEdit.
+template <typename Edit>
+void ApplyCommonStyles(Edit* edit, long flags)
+{
+    edit->setReadOnly(flags & wxTE_READONLY);
+
+    if ( flags & wxTE_CENTRE )
+        edit->setAlignment(Qt::AlignHCenter);
+    else if ( flags & wxTE_RIGHT )
+        edit->setAlignment(Qt::AlignRight);
+    else // wxTE_LEFT is 0, so can't test for it, just use it by default
+        edit->setAlignment(Qt::AlignLeft);
+}
+
 
 struct wxQtLineInfo
 {
@@ -248,6 +265,17 @@ public:
         return (QScrollArea *) m_edit;
     }
 
+    virtual void SetStyleFlags(long flags) wxOVERRIDE
+    {
+        ApplyCommonStyles(m_edit, flags);
+
+        if ( flags & wxNO_BORDER )
+            m_edit->setFrameStyle(QFrame::NoFrame);
+
+        if ( flags & wxTE_RICH || flags & wxTE_RICH2 )
+            m_edit->setAcceptRichText(true);
+    }
+
 private:
     wxQtLineInfo GetLineInfo(long lineNo, const wxString &value) const
     {
@@ -401,6 +429,16 @@ public:
         return NULL;
     }
 
+    virtual void SetStyleFlags(long flags) wxOVERRIDE
+    {
+        ApplyCommonStyles(m_edit, flags);
+
+        m_edit->setFrame(!(flags & wxNO_BORDER));
+
+        if ( flags & wxTE_PASSWORD )
+            m_edit->setEchoMode(QLineEdit::Password);
+    }
+
 private:
     QLineEdit *m_edit;
 
@@ -490,12 +528,10 @@ bool wxTextCtrl::Create(wxWindow *parent,
     }
     else
     {
-        wxQtLineEdit *lineEdit = new wxQtLineEdit(parent, this);
-        if ( style & wxTE_PASSWORD )
-            lineEdit->setEchoMode( QLineEdit::Password );
-
-        m_qtEdit = new wxQtSingleLineEdit(lineEdit);
+        m_qtEdit = new wxQtSingleLineEdit(new wxQtLineEdit(parent, this));
     }
+
+    m_qtEdit->SetStyleFlags(style);
 
     if ( QtCreateControl( parent, id, pos, size, style, validator, name ) )
     {

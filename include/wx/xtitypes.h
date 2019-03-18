@@ -126,7 +126,7 @@ private:
 //
 // wxIMPLEMENT_SET_STREAMING( wxCoupe, wxFlavor )
 //
-// implementation note: no partial specialization for streaming, but a delegation 
+// implementation note: no partial specialization for streaming, but a delegation
 //                      to a different class
 //
 // ----------------------------------------------------------------------------
@@ -318,7 +318,7 @@ public:
     wxTypeInfo(wxTypeKind kind,
                wxVariant2StringFnc to, wxString2VariantFnc from,
                const char *name):
-            m_toString(to), m_fromString(from), m_kind(kind), 
+            m_toString(to), m_fromString(from), m_kind(kind),
             m_name(wxString::FromAscii(name))
     {
         Register();
@@ -350,20 +350,20 @@ public:
 
     // convert a wxAny holding data of this type into a string
     void ConvertToString( const wxAny& data, wxString &result ) const
-    { 
-        if ( m_toString ) 
-            (*m_toString)( data, result ); 
-        else 
-            wxLogError( wxGetTranslation(wxT("String conversions not supported")) ); 
+    {
+        if ( m_toString )
+            (*m_toString)( data, result );
+        else
+            wxLogError( wxGetTranslation(wxT("String conversions not supported")) );
     }
 
     // convert a string into a wxAny holding the corresponding data in this type
     void ConvertFromString( const wxString& data, wxAny &result ) const
-    { 
-        if( m_fromString ) 
-            (*m_fromString)( data, result ); 
-        else 
-            wxLogError( wxGetTranslation(wxT("String conversions not supported")) ); 
+    {
+        if( m_fromString )
+            (*m_fromString)( data, result );
+        else
+            wxLogError( wxGetTranslation(wxT("String conversions not supported")) );
     }
 
     // statics:
@@ -387,8 +387,8 @@ private:
 class WXDLLIMPEXP_BASE wxBuiltInTypeInfo : public wxTypeInfo
 {
 public:
-    wxBuiltInTypeInfo( wxTypeKind kind, wxVariant2StringFnc to = NULL, 
-                       wxString2VariantFnc from = NULL, 
+    wxBuiltInTypeInfo( wxTypeKind kind, wxVariant2StringFnc to = NULL,
+                       wxString2VariantFnc from = NULL,
                        const wxString &name = wxEmptyString ) :
             wxTypeInfo( kind, to, from, name )
        { wxASSERT_MSG( GetKind() < wxT_SET, wxT("Illegal Kind for Base Type") ); }
@@ -397,7 +397,7 @@ public:
 class WXDLLIMPEXP_BASE wxCustomTypeInfo : public wxTypeInfo
 {
 public:
-    wxCustomTypeInfo( const wxString &name, wxVariant2StringFnc to, 
+    wxCustomTypeInfo( const wxString &name, wxVariant2StringFnc to,
                       wxString2VariantFnc from ) :
             wxTypeInfo( wxT_CUSTOM, to, from, name )
        {}
@@ -413,30 +413,30 @@ public:
                     wxString2VariantFnc from, converterToLong_t toLong,
                     converterFromLong_t fromLong, const wxString &name  ) :
         wxTypeInfo( kind, to, from, name ), m_toLong( toLong ), m_fromLong( fromLong )
-    { 
+    {
         wxASSERT_MSG( kind == wxT_ENUM || kind == wxT_SET,
-                      wxT("Illegal Kind for Enum Type")); 
-        m_enumInfo = enumInfo; 
+                      wxT("Illegal Kind for Enum Type"));
+        m_enumInfo = enumInfo;
     }
 
     const wxEnumData* GetEnumData() const { return m_enumInfo; }
 
     // convert a wxAny holding data of this type into a long
     void ConvertToLong( const wxAny& data, long &result ) const
-    { 
-        if( m_toLong ) 
-            (*m_toLong)( data, result ); 
-        else 
-            wxLogError( wxGetTranslation(wxT("Long Conversions not supported")) ); 
+    {
+        if( m_toLong )
+            (*m_toLong)( data, result );
+        else
+            wxLogError( wxGetTranslation(wxT("Long Conversions not supported")) );
     }
 
     // convert a long into a wxAny holding the corresponding data in this type
     void ConvertFromLong( long data, wxAny &result ) const
-    { 
-        if( m_fromLong ) 
-            (*m_fromLong)( data, result ); 
-        else 
-            wxLogError( wxGetTranslation(wxT("Long Conversions not supported")) ); 
+    {
+        if( m_fromLong )
+            (*m_fromLong)( data, result );
+        else
+            wxLogError( wxGetTranslation(wxT("Long Conversions not supported")) );
     }
 
 private:
@@ -449,8 +449,8 @@ private:
 class WXDLLIMPEXP_BASE wxClassTypeInfo : public wxTypeInfo
 {
 public:
-    wxClassTypeInfo( wxTypeKind kind, wxClassInfo* classInfo, 
-                     wxVariant2StringFnc to = NULL, wxString2VariantFnc from = NULL, 
+    wxClassTypeInfo( wxTypeKind kind, wxClassInfo* classInfo,
+                     wxVariant2StringFnc to = NULL, wxString2VariantFnc from = NULL,
                      const wxString &name = wxEmptyString);
 
     const wxClassInfo *GetClassInfo() const { return m_classInfo; }
@@ -471,7 +471,7 @@ public:
     {
         if ( m_elementType == NULL )
             m_elementType = wxTypeInfo::FindType( m_elementTypeName );
-        return m_elementType; 
+        return m_elementType;
     }
 
 private:
@@ -482,10 +482,10 @@ private:
 class WXDLLIMPEXP_BASE wxEventSourceTypeInfo : public wxTypeInfo
 {
 public:
-    wxEventSourceTypeInfo( int eventType, wxClassInfo* eventClass, 
-                        wxVariant2StringFnc to = NULL, 
+    wxEventSourceTypeInfo( int eventType, wxClassInfo* eventClass,
+                        wxVariant2StringFnc to = NULL,
                         wxString2VariantFnc from = NULL );
-    wxEventSourceTypeInfo( int eventType, int lastEventType, wxClassInfo* eventClass, 
+    wxEventSourceTypeInfo( int eventType, int lastEventType, wxClassInfo* eventClass,
                         wxVariant2StringFnc to = NULL, wxString2VariantFnc from = NULL );
 
     int GetEventType() const { return m_eventType; }
@@ -498,10 +498,10 @@ private:
     int m_lastEventType;
 };
 
-template<typename T> const wxTypeInfo* wxGetTypeInfo( T * ) 
+template<typename T> const wxTypeInfo* wxGetTypeInfo( T * )
     { return wxTypeInfo::FindType(typeid(T).name()); }
 
-// this macro is for usage with custom, non-object derived classes and structs, 
+// this macro is for usage with custom, non-object derived classes and structs,
 // wxPoint is such a custom type
 
 #if wxUSE_FUNC_TEMPLATE_POINTER
@@ -521,9 +521,9 @@ template<typename T> const wxTypeInfo* wxGetTypeInfo( T * )
     wxCollectionTypeInfo s_typeInfo##collection( typeid(element).name(),   \
                                 NULL, NULL, typeid(collection).name() );
 
-// sometimes a compiler invents specializations that are nowhere called, 
-// use this macro to satisfy the refs, currently we don't have to play 
-// tricks, but if we will have to according to the compiler, we will use 
+// sometimes a compiler invents specializations that are nowhere called,
+// use this macro to satisfy the refs, currently we don't have to play
+// tricks, but if we will have to according to the compiler, we will use
 // that macro for that
 
 #define wxILLEGAL_TYPE_SPECIALIZATION( a )

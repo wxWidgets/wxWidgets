@@ -198,7 +198,6 @@ void wxRibbonPage::CommonInit(const wxString& label, const wxBitmap& icon)
     SetName(label);
 
     SetLabel(label);
-    m_old_size = wxSize(0, 0);
     m_icon = icon;
     m_scroll_left_btn = NULL;
     m_scroll_right_btn = NULL;

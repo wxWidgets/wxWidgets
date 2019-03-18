@@ -27,6 +27,30 @@
 
 //##############################################################################
 
+namespace
+{
+class QtPictureSetter
+{
+public:
+    QtPictureSetter(wxWindow *window, QPicture *pict)
+        : m_window( window )
+    {
+        m_window->QtSetPicture( pict );
+    }
+
+    ~QtPictureSetter()
+    {
+        m_window->QtSetPicture( NULL );
+    }
+
+private:
+    wxWindow* const m_window;
+
+    wxDECLARE_NO_COPY_CLASS(QtPictureSetter);
+};
+}
+
+
 wxIMPLEMENT_CLASS(wxWindowDCImpl,wxQtDCImpl);
 
 wxWindowDCImpl::wxWindowDCImpl( wxDC *owner )
@@ -54,7 +78,7 @@ wxWindowDCImpl::~wxWindowDCImpl()
     }
     if ( m_window )
     {
-        // do not destroy as it is owned by the window
+        // do not destroy in base class as it is owned by the window
         m_qtPainter = NULL;
     }
 }
@@ -66,7 +90,6 @@ wxIMPLEMENT_CLASS(wxClientDCImpl,wxWindowDCImpl);
 wxClientDCImpl::wxClientDCImpl( wxDC *owner )
     : wxWindowDCImpl( owner )
 {
-    m_window = NULL;
 }
 
 wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
@@ -74,8 +97,9 @@ wxClientDCImpl::wxClientDCImpl( wxDC *owner, wxWindow *win )
 {
     m_window = win;
 
-    QPicture *pic = win->QtGetPicture();
-    m_ok = m_qtPainter->begin( pic );
+    m_pict.reset(new QPicture());
+    m_ok = m_qtPainter->begin( m_pict.get() );
+
     QtPreparePainter();
 }
 
@@ -88,10 +112,11 @@ wxClientDCImpl::~wxClientDCImpl()
     {
         m_qtPainter->end();
         m_ok = false;
-        QPicture *pict = m_window->QtGetPicture();
 
         if ( m_window != NULL )
         {
+            QtPictureSetter pictureSetter(m_window, m_pict.get());
+
             // get the inner widget in scroll areas:
             QWidget *widget;
             if ( m_window->QtGetScrollBarsContainer() )
@@ -102,21 +127,24 @@ wxClientDCImpl::~wxClientDCImpl()
             }
             // force paint event if there is something to replay and
             // if not currently inside a paint event (to avoid recursion)
-            QRect rect = pict->boundingRect();
-            if ( !pict->isNull() && !widget->paintingActive() && !rect.isEmpty() )
+            QRect rect = m_pict->boundingRect();
+            if ( !m_pict->isNull() && !widget->paintingActive() && !rect.isEmpty() )
             {
                 // only force the update of the rect affected by the DC
-                widget->repaint( rect );
+                widget->update( rect );
             }
             else
             {
                 // Not drawing anything, reset picture to avoid issues in handler
-                pict->setData( NULL, 0 );
+                m_pict->setData( NULL, 0 );
             }
+
             // let destroy the m_qtPainter (see inherited classes destructors)
             m_window = NULL;
         }
     }
+
+    // Painter will be deleted by base class
 }
 
 //##############################################################################

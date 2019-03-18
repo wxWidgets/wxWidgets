@@ -16,10 +16,10 @@
 
 class wxQtScrollBar : public wxQtEventSignalHandler< QScrollBar, wxScrollBar >
 {
-    
+
     public:
         wxQtScrollBar( wxWindow *parent, wxScrollBar *handler );
-                       
+
     private:
         void actionTriggered( int action );
         void sliderReleased();
@@ -160,7 +160,7 @@ void wxQtScrollBar::actionTriggered( int action )
         default:
             return;
     }
-    
+
     wxScrollBar *handler = GetHandler();
     if ( handler )
     {

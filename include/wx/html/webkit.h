@@ -107,11 +107,11 @@ private:
     wxString m_pageTitle;
 
     OSXWebViewPtr m_webView;
-    
+
     WX_NSObject m_frameLoadMonitor;
     WX_NSObject m_policyDelegate;
     WX_NSObject m_UIDelegate;
-    
+
     // we may use this later to setup our own mouse events,
     // so leave it in for now.
     void* m_webKitCtrlEventHandler;

@@ -155,10 +155,7 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
     // reenable firing qt signals as internal wx initialization was completed
     m_qtTabWidget->blockSignals(false);
 
-    if (bSelect && GetPageCount() > 1)
-    {
-        SetSelection( n );
-    }
+    DoSetSelectionAfterInsertion(n, bSelect);
 
     return true;
 }
@@ -168,27 +165,51 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
     return sizePage;
 }
 
-int wxNotebook::DoSetSelection(size_t page, int flags)
+bool wxNotebook::DeleteAllPages()
+{
+    // Nothing to do if the notebook was not created yet,
+    // and return true just like other ports do.
+    if ( !m_qtTabWidget )
+        return true;
+
+    // Block signals to not receive selection changed updates
+    // which are sent by Qt after the selected page was deleted.
+    m_qtTabWidget->blockSignals(true);
+
+    // Pages will be deleted one by one in the base class.
+    // There's no need to explicitly clear() the Qt control.
+    bool deleted = wxNotebookBase::DeleteAllPages();
+
+    m_qtTabWidget->blockSignals(false);
+
+    return deleted;
+}
+
+int wxNotebook::SetSelection(size_t page)
 {
     wxCHECK_MSG(page < GetPageCount(), wxNOT_FOUND, "invalid notebook index");
 
     int selOld = GetSelection();
 
-    // do not fire signals for certain methods (i.e. ChangeSelection
-    if ( !(flags & SetSelection_SendEvent) )
-    {
-        m_qtTabWidget->blockSignals(true);
-    }
     // change the QTabWidget selected page:
     m_selection = page;
     m_qtTabWidget->setCurrentIndex( page );
-    if ( !(flags & SetSelection_SendEvent) )
-    {
-        m_qtTabWidget->blockSignals(false);
-    }
+
     return selOld;
 }
 
+int wxNotebook::ChangeSelection(size_t nPage)
+{
+    // ChangeSelection() is not supposed to generate events, unlike
+    // SetSelection().
+    m_qtTabWidget->blockSignals(true);
+
+    const int selOld = SetSelection(nPage);
+
+    m_qtTabWidget->blockSignals(false);
+
+    return selOld;
+}
 
 wxWindow *wxNotebook::DoRemovePage(size_t page)
 {

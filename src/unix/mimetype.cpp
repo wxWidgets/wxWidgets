@@ -49,8 +49,8 @@ public:
     }
 
     wxMimeTextFile(const wxString& fname)
+       : m_fname(fname)
     {
-       m_fname = fname;
     }
 
     bool Open()

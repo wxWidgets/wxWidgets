@@ -59,6 +59,7 @@ enum
     SliderPage_Clear,
     SliderPage_SetValue,
     SliderPage_SetMinAndMax,
+    SliderPage_SetRange,
     SliderPage_SetLineSize,
     SliderPage_SetPageSize,
     SliderPage_SetTickFreq,
@@ -67,12 +68,15 @@ enum
     SliderPage_ValueText,
     SliderPage_MinText,
     SliderPage_MaxText,
+    SliderPage_RangeMinText,
+    SliderPage_RangeMaxText,
     SliderPage_LineSizeText,
     SliderPage_PageSizeText,
     SliderPage_TickFreqText,
     SliderPage_ThumbLenText,
     SliderPage_RadioSides,
     SliderPage_BothSides,
+    SliderPage_SelectRange,
     SliderPage_Slider
 };
 
@@ -107,6 +111,7 @@ protected:
     void OnButtonClear(wxCommandEvent& event);
     void OnButtonSetValue(wxCommandEvent& event);
     void OnButtonSetMinAndMax(wxCommandEvent& event);
+    void OnButtonSetRange(wxCommandEvent& event);
     void OnButtonSetLineSize(wxCommandEvent& event);
     void OnButtonSetPageSize(wxCommandEvent& event);
     void OnButtonSetTickFreq(wxCommandEvent& event);
@@ -118,12 +123,14 @@ protected:
 
     void OnUpdateUIValueButton(wxUpdateUIEvent& event);
     void OnUpdateUIMinMaxButton(wxUpdateUIEvent& event);
+    void OnUpdateUIRangeButton(wxUpdateUIEvent& event);
     void OnUpdateUILineSize(wxUpdateUIEvent& event);
     void OnUpdateUIPageSize(wxUpdateUIEvent& event);
     void OnUpdateUITickFreq(wxUpdateUIEvent& event);
     void OnUpdateUIThumbLen(wxUpdateUIEvent& event);
     void OnUpdateUIRadioSides(wxUpdateUIEvent& event);
     void OnUpdateUIBothSides(wxUpdateUIEvent& event);
+    void OnUpdateUISelectRange(wxUpdateUIEvent& event);
 
     void OnUpdateUIResetButton(wxUpdateUIEvent& event);
 
@@ -147,12 +154,18 @@ protected:
     // set the thumb len from the text field value
     void DoSetThumbLen();
 
+    // set the selection range from the text field values
+    void DoSetSelectionRange();
+
     // is this slider value in range?
     bool IsValidValue(int val) const
         { return (val >= m_min) && (val <= m_max); }
 
     // the slider range
     int m_min, m_max;
+
+    // the slider selection range
+    int m_rangeMin, m_rangeMax;
 
     // the controls
     // ------------
@@ -162,7 +175,8 @@ protected:
                *m_chkValueLabel,
                *m_chkInverse,
                *m_chkTicks,
-               *m_chkBothSides;
+               *m_chkBothSides,
+               *m_chkSelectRange;
 
     wxRadioBox *m_radioSides;
 
@@ -174,6 +188,8 @@ protected:
     wxTextCtrl *m_textValue,
                *m_textMin,
                *m_textMax,
+               *m_textRangeMin,
+               *m_textRangeMax,
                *m_textLineSize,
                *m_textPageSize,
                *m_textTickFreq,
@@ -192,6 +208,7 @@ wxBEGIN_EVENT_TABLE(SliderWidgetsPage, WidgetsPage)
     EVT_BUTTON(SliderPage_Reset, SliderWidgetsPage::OnButtonReset)
     EVT_BUTTON(SliderPage_SetValue, SliderWidgetsPage::OnButtonSetValue)
     EVT_BUTTON(SliderPage_SetMinAndMax, SliderWidgetsPage::OnButtonSetMinAndMax)
+    EVT_BUTTON(SliderPage_SetRange, SliderWidgetsPage::OnButtonSetRange)
     EVT_BUTTON(SliderPage_SetLineSize, SliderWidgetsPage::OnButtonSetLineSize)
     EVT_BUTTON(SliderPage_SetPageSize, SliderWidgetsPage::OnButtonSetPageSize)
     EVT_BUTTON(SliderPage_SetTickFreq, SliderWidgetsPage::OnButtonSetTickFreq)
@@ -199,12 +216,14 @@ wxBEGIN_EVENT_TABLE(SliderWidgetsPage, WidgetsPage)
 
     EVT_UPDATE_UI(SliderPage_SetValue, SliderWidgetsPage::OnUpdateUIValueButton)
     EVT_UPDATE_UI(SliderPage_SetMinAndMax, SliderWidgetsPage::OnUpdateUIMinMaxButton)
+    EVT_UPDATE_UI(SliderPage_SetRange, SliderWidgetsPage::OnUpdateUIRangeButton)
     EVT_UPDATE_UI(SliderPage_SetLineSize, SliderWidgetsPage::OnUpdateUILineSize)
     EVT_UPDATE_UI(SliderPage_SetPageSize, SliderWidgetsPage::OnUpdateUIPageSize)
     EVT_UPDATE_UI(SliderPage_SetTickFreq, SliderWidgetsPage::OnUpdateUITickFreq)
     EVT_UPDATE_UI(SliderPage_SetThumbLen, SliderWidgetsPage::OnUpdateUIThumbLen)
     EVT_UPDATE_UI(SliderPage_RadioSides, SliderWidgetsPage::OnUpdateUIRadioSides)
     EVT_UPDATE_UI(SliderPage_BothSides, SliderWidgetsPage::OnUpdateUIBothSides)
+    EVT_UPDATE_UI(SliderPage_SelectRange, SliderWidgetsPage::OnUpdateUISelectRange)
 
     EVT_UPDATE_UI(SliderPage_Reset, SliderWidgetsPage::OnUpdateUIResetButton)
 
@@ -235,12 +254,15 @@ SliderWidgetsPage::SliderWidgetsPage(WidgetsBookCtrl *book,
     // init everything
     m_min = 0;
     m_max = 100;
+    m_rangeMin = 20;
+    m_rangeMax = 80;
 
     m_chkInverse =
     m_chkTicks =
     m_chkMinMaxLabels =
     m_chkValueLabel =
-    m_chkBothSides = (wxCheckBox *)NULL;
+    m_chkBothSides =
+    m_chkSelectRange =(wxCheckBox *)NULL;
 
     m_radioSides = (wxRadioBox *)NULL;
 
@@ -272,17 +294,20 @@ void SliderWidgetsPage::CreateContent()
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(sides), sides,
                                  1, wxRA_SPECIFY_COLS);
-    sizerLeft->Add(m_radioSides, 0, wxGROW | wxALL, 5);
+    sizerLeft->Add(m_radioSides, wxSizerFlags().Expand().Border());
     m_chkBothSides = CreateCheckBoxAndAddToSizer
                      (sizerLeft, "&Both sides", SliderPage_BothSides);
+    m_chkSelectRange = CreateCheckBoxAndAddToSizer
+                     (sizerLeft, "&Selection range", SliderPage_SelectRange);
 #if wxUSE_TOOLTIPS
     m_chkBothSides->SetToolTip("\"Both sides\" is only supported \nin Universal");
+    m_chkSelectRange->SetToolTip("\"Select range\" is only supported \nin wxMSW");
 #endif // wxUSE_TOOLTIPS
 
-    sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
+    sizerLeft->AddSpacer(5);
 
     wxButton *btn = new wxButton(this, SliderPage_Reset, "&Reset");
-    sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+    sizerLeft->Add(btn, wxSizerFlags().CentreHorizontal().Border(wxALL, 15));
 
     // middle pane
     wxStaticBox *box2 = new wxStaticBox(this, wxID_ANY, "&Change slider value");
@@ -294,13 +319,13 @@ void SliderWidgetsPage::CreateContent()
                                                     &text);
     text->SetEditable(false);
 
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetValue,
                                             "Set &value",
                                             SliderPage_ValueText,
                                             &m_textValue);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetMinAndMax,
                                             "&Min and max",
@@ -308,26 +333,39 @@ void SliderWidgetsPage::CreateContent()
                                             &m_textMin);
 
     m_textMax = new wxTextCtrl(this, SliderPage_MaxText, wxEmptyString);
-    sizerRow->Add(m_textMax, 1, wxLEFT | wxALIGN_CENTRE_VERTICAL, 5);
+    sizerRow->Add(m_textMax, wxSizerFlags(1).CentreVertical().Border(wxLEFT));
 
     m_textMin->SetValue( wxString::Format("%d", m_min) );
     m_textMax->SetValue( wxString::Format("%d", m_max) );
 
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
+
+    sizerRow = CreateSizerWithTextAndButton(SliderPage_SetRange,
+                                            "&Selection",
+                                            SliderPage_RangeMinText,
+                                            &m_textRangeMin);
+
+    m_textRangeMax = new wxTextCtrl(this, SliderPage_RangeMaxText, wxEmptyString);
+    sizerRow->Add(m_textRangeMax, wxSizerFlags(1).CentreVertical().Border(wxLEFT));
+
+    m_textRangeMin->SetValue( wxString::Format("%d", m_rangeMin) );
+    m_textRangeMax->SetValue( wxString::Format("%d", m_rangeMax) );
+
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetLineSize,
                                             "Li&ne size",
                                             SliderPage_LineSizeText,
                                             &m_textLineSize);
 
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetPageSize,
                                             "P&age size",
                                             SliderPage_PageSizeText,
                                             &m_textPageSize);
 
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetTickFreq,
                                             "Tick &frequency",
@@ -336,30 +374,29 @@ void SliderWidgetsPage::CreateContent()
 
     m_textTickFreq->SetValue("10");
 
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     sizerRow = CreateSizerWithTextAndButton(SliderPage_SetThumbLen,
                                             "Thumb &length",
                                             SliderPage_ThumbLenText,
                                             &m_textThumbLen);
 
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    sizerMiddle->Add(sizerRow, wxSizerFlags().Expand().Border());
 
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxHORIZONTAL);
-    sizerRight->SetMinSize(150, 40);
     m_sizerSlider = sizerRight; // save it to modify it later
 
     Reset();
     CreateSlider();
 
-    m_textLineSize->SetValue(wxString::Format("%d", m_slider->GetLineSize()));
-    m_textPageSize->SetValue(wxString::Format("%d", m_slider->GetPageSize()));
-
     // the 3 panes panes compose the window
-    sizerTop->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
-    sizerTop->Add(sizerMiddle, 0, wxGROW | wxALL, 10);
-    sizerTop->Add(sizerRight, 1, wxGROW | (wxALL & ~wxRIGHT), 10);
+    sizerTop->Add(sizerLeft,
+                  wxSizerFlags(0).Expand().Border((wxALL & ~wxLEFT), 10));
+    sizerTop->Add(sizerMiddle,
+                  wxSizerFlags(1).Expand().Border(wxALL, 10));
+    sizerTop->Add(sizerRight,
+                  wxSizerFlags(1).Expand().Border((wxALL & ~wxRIGHT), 10));
 
     // final initializations
     SetSizer(sizerTop);
@@ -376,6 +413,7 @@ void SliderWidgetsPage::Reset()
     m_chkValueLabel->SetValue(true);
     m_chkMinMaxLabels->SetValue(true);
     m_chkBothSides->SetValue(false);
+    m_chkSelectRange->SetValue(false);
 
     m_radioSides->SetSelection(SliderTicks_None);
 }
@@ -438,11 +476,16 @@ void SliderWidgetsPage::CreateSlider()
         flags |= wxSL_BOTH;
     }
 
+    if ( m_chkSelectRange->GetValue() )
+    {
+        flags |= wxSL_SELRANGE;
+    }
+
     int val = m_min;
     if ( m_slider )
     {
         int valOld = m_slider->GetValue();
-        if ( !IsValidValue(valOld) )
+        if ( IsValidValue(valOld) )
         {
             val = valOld;
         }
@@ -466,21 +509,30 @@ void SliderWidgetsPage::CreateSlider()
 
     if ( m_slider->HasFlag(wxSL_VERTICAL) )
     {
-        m_sizerSlider->Add(0, 0, 1);
-        m_sizerSlider->Add(m_slider, 0, wxGROW | wxALL, 5);
-        m_sizerSlider->Add(0, 0, 1);
+        m_sizerSlider->AddStretchSpacer(1);
+        m_sizerSlider->Add(m_slider, wxSizerFlags(0).Expand().Border());
+        m_sizerSlider->AddStretchSpacer(1);
     }
     else
     {
-        m_sizerSlider->Add(m_slider, 1, wxCENTRE | wxALL, 5);
+        m_sizerSlider->Add(m_slider, wxSizerFlags(1).Centre().Border());
     }
+
+    m_textLineSize->SetValue(wxString::Format("%d", m_slider->GetLineSize()));
+    m_textPageSize->SetValue(wxString::Format("%d", m_slider->GetPageSize()));
+    m_textThumbLen->SetValue(wxString::Format("%d", m_slider->GetThumbLength()));
 
     if ( m_chkTicks->GetValue() )
     {
         DoSetTickFreq();
     }
 
-    m_sizerSlider->Layout();
+    if ( m_chkSelectRange->GetValue() )
+    {
+        DoSetSelectionRange();
+    }
+
+    Layout();
 }
 
 void SliderWidgetsPage::DoSetLineSize()
@@ -543,6 +595,39 @@ void SliderWidgetsPage::DoSetThumbLen()
     }
 
     m_slider->SetThumbLength(len);
+
+    if ( m_slider->GetThumbLength() != len )
+    {
+        wxLogWarning(wxString::Format("Invalid thumb length in slider: %d",
+                                      m_slider->GetThumbLength()));
+    }
+
+    Layout();
+}
+
+void SliderWidgetsPage::DoSetSelectionRange()
+{
+    long minNew,
+         maxNew = 0; // init to suppress compiler warning
+    if ( !m_textRangeMin->GetValue().ToLong(&minNew) ||
+         !m_textRangeMax->GetValue().ToLong(&maxNew) ||
+         minNew >= maxNew || minNew < m_min || maxNew > m_max )
+    {
+        wxLogWarning("Invalid selection range for the slider.");
+
+        return;
+    }
+
+    m_rangeMin = minNew;
+    m_rangeMax = maxNew;
+
+    m_slider->SetSelection(m_rangeMin, m_rangeMax);
+
+    if ( m_slider->GetSelStart() != m_rangeMin ||
+         m_slider->GetSelEnd() != m_rangeMax )
+    {
+        wxLogWarning("Invalid selection range in slider.");
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -601,6 +686,11 @@ void SliderWidgetsPage::OnButtonSetMinAndMax(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+void SliderWidgetsPage::OnButtonSetRange(wxCommandEvent& WXUNUSED(event))
+{
+    DoSetSelectionRange();
+}
+
 void SliderWidgetsPage::OnButtonSetValue(wxCommandEvent& WXUNUSED(event))
 {
     long val;
@@ -656,6 +746,17 @@ void SliderWidgetsPage::OnUpdateUIMinMaxButton(wxUpdateUIEvent& event)
                   mn < mx);
 }
 
+void SliderWidgetsPage::OnUpdateUIRangeButton(wxUpdateUIEvent& event)
+{
+    long mn, mx;
+    event.Enable( m_chkSelectRange->GetValue() &&
+                  m_textRangeMin->GetValue().ToLong(&mn) &&
+                  m_textRangeMax->GetValue().ToLong(&mx) &&
+                  mn < mx &&
+                  mn >= m_min && mx <= m_max );
+
+}
+
 void SliderWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 {
     event.Enable( m_chkInverse->GetValue() ||
@@ -663,6 +764,7 @@ void SliderWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
                   !m_chkValueLabel->GetValue() ||
                   !m_chkMinMaxLabels->GetValue() ||
                   m_chkBothSides->GetValue() ||
+                  m_chkSelectRange->GetValue() ||
                   m_radioSides->GetSelection() != SliderTicks_None );
 }
 
@@ -684,10 +786,19 @@ void SliderWidgetsPage::OnUpdateUIRadioSides(wxUpdateUIEvent& event)
 void SliderWidgetsPage::OnUpdateUIBothSides(wxUpdateUIEvent& event)
 {
 #if defined(__WXMSW__) || defined(__WXUNIVERSAL__)
-    event.Enable( m_chkTicks->GetValue() );
+    event.Enable( true );
 #else
     event.Enable( false );
 #endif // defined(__WXMSW__) || defined(__WXUNIVERSAL__)
+}
+
+void SliderWidgetsPage::OnUpdateUISelectRange(wxUpdateUIEvent& event)
+{
+#if defined(__WXMSW__)
+    event.Enable( true );
+#else
+    event.Enable( false );
+#endif // defined(__WXMSW__)
 }
 
 void SliderWidgetsPage::OnSlider(wxScrollEvent& event)

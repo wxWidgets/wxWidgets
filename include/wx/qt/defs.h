@@ -12,6 +12,6 @@
 
 typedef class QWidget *WXWidget;
 
-#endif 
+#endif
 
 #endif /* _WX_QT_DEFS_H_ */

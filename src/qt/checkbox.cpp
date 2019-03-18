@@ -118,7 +118,7 @@ wxCheckBoxState wxCheckBox::DoGet3StateValue() const
 
     case Qt::Checked:
         return wxCHK_CHECKED;
-        
+
     case Qt::PartiallyChecked:
         return wxCHK_UNDETERMINED;
     }

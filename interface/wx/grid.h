@@ -901,7 +901,7 @@ public:
 
     /**
         This class is reference counted: it is created with ref count of 1, so
-        calling DecRef() once will delete it. Calling IncRef() allows to lock
+        calling DecRef() once will delete it. Calling IncRef() allows locking
         it until the matching DecRef() is called.
     */
     void DecRef();
@@ -1005,7 +1005,7 @@ public:
 
     /**
         This class is reference counted: it is created with ref count of 1, so
-        calling DecRef() once will delete it. Calling IncRef() allows to lock
+        calling DecRef() once will delete it. Calling IncRef() allows locking
         it until the matching DecRef() is called.
     */
     void IncRef();
@@ -2935,7 +2935,7 @@ public:
         The base class version returns the editor which was associated with the
         specified @a typeName when it was registered RegisterDataType() but
         this function may be overridden to return something different. This
-        allows to override an editor used for one of the standard types.
+        allows overriding an editor used for one of the standard types.
 
         The caller must call DecRef() on the returned pointer.
     */
@@ -3667,7 +3667,7 @@ public:
     /**
         Disable interactive resizing of the specified column.
 
-        This method allows to disable resizing of an individual column in a
+        This method allows one to disable resizing of an individual column in a
         grid where the columns are otherwise resizable (which is the case by
         default).
 
@@ -4625,7 +4625,7 @@ public:
         Sets the extra margins used around the grid area.
 
         A grid may occupy more space than needed for its data display and
-        this function allows to set how big this extra space is
+        this function allows setting how big this extra space is
     */
     void SetMargins(int extraWidth, int extraHeight);
 

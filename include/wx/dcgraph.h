@@ -32,7 +32,7 @@ public:
     wxGCDC( const wxEnhMetaFileDC& dc );
 #endif
     wxGCDC(wxGraphicsContext* context);
-    
+
     wxGCDC();
     virtual ~wxGCDC();
 

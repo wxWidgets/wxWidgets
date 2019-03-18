@@ -19,19 +19,16 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler);
 
 wxApp::wxApp()
 {
-    m_qtApplication = NULL;
     m_qtArgc = 0;
-    m_qtArgv = NULL;
 }
 
 
 wxApp::~wxApp()
 {
-    // Only delete if the app was actually initialized
-    if ( m_qtApplication != NULL )
+    // Delete command line arguments
+    for ( int i = 0; i < m_qtArgc; ++i )
     {
-        m_qtApplication->deleteLater();
-        delete [] m_qtArgv;
+        delete m_qtArgv[i];
     }
 }
 
@@ -49,7 +46,7 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
     // TODO: Check whether new/strdup etc. can be replaced with std::vector<>.
 
     // Clone and store arguments
-    m_qtArgv = new char *[argc + 1];
+    m_qtArgv.reset(new char* [argc + 1]);
     for ( int i = 0; i < argc; i++ )
     {
         m_qtArgv[i] = wxStrdupA(wxConvUTF8.cWX2MB(argv[i]));
@@ -57,7 +54,7 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
     m_qtArgv[argc] = NULL;
     m_qtArgc = argc;
 
-    m_qtApplication = new QApplication( m_qtArgc, m_qtArgv );
+    m_qtApplication.reset(new QApplication(m_qtArgc, m_qtArgv.get()));
 
     // Use the args returned by Qt as it may have deleted (processed) some of them
     // Using QApplication::arguments() forces argument processing
@@ -69,7 +66,7 @@ bool wxApp::Initialize( int &argc, wxChar **argv )
          * deleted as they are internally kept by Qt in a list after calling arguments().
          * However, there isn't any guarantee of that in the docs, so we keep arguments
          * ourselves and only delete then after the QApplication is deleted */
-        
+
         // Qt changed the arguments
         delete [] argv;
         argv = new wxChar *[qtArgs.size() + 1];

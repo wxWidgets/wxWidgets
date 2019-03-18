@@ -66,7 +66,7 @@ protected:
     void SetActive(bool active)
     {
         m_active = active;
-        
+
         // Delete the implementation if the notification is detached
         if (!m_notification && !active)
             delete this;

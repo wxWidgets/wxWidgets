@@ -65,10 +65,10 @@ public:
 
     // accessors for individual modifier keys
     bool ControlDown() const { return m_controlDown; }
-    bool RawControlDown() const 
-    { 
+    bool RawControlDown() const
+    {
 #ifdef __WXOSX__
-        return m_rawControlDown; 
+        return m_rawControlDown;
 #else
         return m_controlDown;
 #endif
@@ -91,12 +91,12 @@ public:
     // ---------------------------------------------------
 
     void SetControlDown(bool down) { m_controlDown = down; }
-    void SetRawControlDown(bool down) 
-    { 
+    void SetRawControlDown(bool down)
+    {
 #ifdef __WXOSX__
-        m_rawControlDown = down; 
+        m_rawControlDown = down;
 #else
-        m_controlDown = down; 
+        m_controlDown = down;
 #endif
     }
     void SetShiftDown(bool down)   { m_shiftDown = down; }

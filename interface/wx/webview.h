@@ -381,14 +381,14 @@ public:
     /**
         Factory function to create a new wxWebView with two-step creation,
         wxWebView::Create should be called on the returned object.
-        @param backend The backend web rendering engine to use. 
+        @param backend The backend web rendering engine to use.
                        @c wxWebViewBackendDefault, @c wxWebViewBackendIE and
                        @c wxWebViewBackendWebKit are predefined where appropriate.
         @return The created wxWebView
         @since 2.9.5
      */
     static wxWebView* New(const wxString& backend = wxWebViewBackendDefault);
-    
+
     /**
         Factory function to create a new wxWebView using a wxWebViewFactory.
         @param parent Parent window for the control
@@ -415,15 +415,15 @@ public:
                           long style = 0,
                           const wxString& name = wxWebViewNameStr);
 
-    /** 
+    /**
         Allows the registering of new backend for wxWebView. @a backend can be
         used as an argument to New().
         @param backend The name for the new backend to be registered under
-        @param factory A shared pointer to the factory which creates the 
+        @param factory A shared pointer to the factory which creates the
                        appropriate backend.
         @since 2.9.5
     */
-    static void RegisterFactory(const wxString& backend, 
+    static void RegisterFactory(const wxString& backend,
                                 wxSharedPtr<wxWebViewFactory> factory);
 
     /**
@@ -583,7 +583,7 @@ public:
             wxString result;
             if ( webview->RunScript
                           (
-                            "document.getElementById('some_id').innderHTML",
+                            "document.getElementById('some_id').innerHTML",
                             &result
                           ) )
             {

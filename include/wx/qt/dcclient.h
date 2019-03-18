@@ -10,6 +10,10 @@
 
 #include "wx/qt/dc.h"
 
+#include "wx/scopedptr.h"
+
+class QPicture;
+
 class WXDLLIMPEXP_CORE wxWindowDCImpl : public wxQtDCImpl
 {
 public:
@@ -35,6 +39,8 @@ public:
 
     ~wxClientDCImpl();
 private:
+    wxScopedPtr<QPicture> m_pict;
+
     wxDECLARE_CLASS(wxClientDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxClientDCImpl);
 };

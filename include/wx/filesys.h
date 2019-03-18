@@ -13,14 +13,6 @@
 
 #if wxUSE_FILESYSTEM
 
-#if !wxUSE_STREAMS
-#error You cannot compile virtual file systems without wxUSE_STREAMS
-#endif
-
-#if wxUSE_HTML && !wxUSE_FILESYSTEM
-#error You cannot compile wxHTML without virtual file systems
-#endif
-
 #include "wx/stream.h"
 #include "wx/datetime.h"
 #include "wx/filename.h"
@@ -46,14 +38,14 @@ public:
              , wxDateTime modif
 #endif // wxUSE_DATETIME
              )
+        : m_Location(loc)
+        , m_MimeType(mimetype.Lower())
+        , m_Anchor(anchor)
+#if wxUSE_DATETIME
+        , m_Modif(modif)
+#endif
     {
         m_Stream = stream;
-        m_Location = loc;
-        m_MimeType = mimetype.Lower();
-        m_Anchor = anchor;
-#if wxUSE_DATETIME
-        m_Modif = modif;
-#endif // wxUSE_DATETIME
     }
 
     virtual ~wxFSFile() { delete m_Stream; }

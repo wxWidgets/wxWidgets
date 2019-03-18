@@ -312,7 +312,7 @@ public:
                     const wxChar* const* labels = NULL,
                     const long* values = NULL,
                     int value = 0 );
-    
+
     wxEnumProperty( const wxString& label,
                     const wxString& name,
                     wxPGChoices& choices,
@@ -360,8 +360,6 @@ public:
     // the true index, and various property classes derived from
     // this take advantage of it.
     virtual int GetChoiceSelection() const;
-
-    virtual void OnValidationFailure( wxVariant& pendingValue );
 
 protected:
 
@@ -710,13 +708,6 @@ public:
     virtual ~wxPGArrayEditorDialog();
 
     void Init();
-
-    wxPGArrayEditorDialog( wxWindow *parent,
-                         const wxString& message,
-                         const wxString& caption,
-                         long style = wxAEDIALOG_STYLE,
-                         const wxPoint& pos = wxDefaultPosition,
-                         const wxSize& sz = wxDefaultSize );
 
     bool Create( wxWindow *parent,
                  const wxString& message,

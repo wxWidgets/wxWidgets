@@ -230,7 +230,7 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
             // format is: "start-end perm offset maj:min inode path", see proc(5)
             void *start,
                  *end;
-            switch ( sscanf(buf, "%p-%p %*4s %*p %*02x:%*02x %*d %1024s\n",
+            switch ( sscanf(buf, "%p-%p %*4s %*p %*02x:%*02x %*d %1023s\n",
                             &start, &end, path) )
             {
                 case 2:

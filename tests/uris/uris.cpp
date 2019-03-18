@@ -96,7 +96,7 @@ URITestCase::URITestCase()
 
 // apply the given accessor to the URI, check that the result is as expected
 #define URI_ASSERT_PART_EQUAL(uri, expected, accessor) \
-    CPPUNIT_ASSERT_EQUAL(expected, wxURI(uri).accessor)
+    CHECK(wxURI(uri).accessor == expected)
 
 #define URI_ASSERT_HOSTTYPE_EQUAL(uri, expected) \
     URI_ASSERT_PART_EQUAL((uri), (expected), GetHostType())
@@ -189,6 +189,13 @@ void URITestCase::Paths()
 
     URI_ASSERT_PART_EQUAL("path/john/../../../joe",
                           "../joe", BuildURI());
+
+    // According to RFC 3986, when the authority is present, the path must
+    // begin with a slash (or be empty) and when there is no authority, the
+    // path cannot begin with two slashes, so check for this.
+    URI_ASSERT_PATH_EQUAL("http://good.com:8042BADPATH", "");
+    URI_ASSERT_PATH_EQUAL("http://good.com:8042/GOODPATH", "/GOODPATH");
+    URI_ASSERT_PATH_EQUAL("//BADPATH", "");
 }
 
 void URITestCase::UserAndPass()

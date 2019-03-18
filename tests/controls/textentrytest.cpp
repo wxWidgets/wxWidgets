@@ -201,6 +201,28 @@ void TextEntryTestCase::Replace()
     CPPUNIT_ASSERT_EQUAL(2, entry->GetInsertionPoint());
 }
 
+void TextEntryTestCase::WriteText()
+{
+    wxTextEntry * const entry = GetTestEntry();
+
+    entry->SetValue("foo");
+    entry->SetInsertionPoint(3);
+    entry->WriteText("bar");
+    CPPUNIT_ASSERT_EQUAL( "foobar", entry->GetValue() );
+
+    entry->SetValue("foo");
+    entry->SetInsertionPoint(0);
+    entry->WriteText("bar");
+    CPPUNIT_ASSERT_EQUAL( "barfoo", entry->GetValue() );
+
+    entry->SetValue("abxxxhi");
+    entry->SetSelection(2, 5);
+    entry->WriteText("cdefg");
+    CPPUNIT_ASSERT_EQUAL( "abcdefghi", entry->GetValue() );
+    CPPUNIT_ASSERT_EQUAL( 7, entry->GetInsertionPoint() );
+    CPPUNIT_ASSERT_EQUAL( false, entry->HasSelection() );
+}
+
 #if wxUSE_UIACTIONSIMULATOR
 
 class TextEventHandler

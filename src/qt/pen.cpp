@@ -37,7 +37,7 @@ static Qt::PenStyle ConvertPenStyle(wxPenStyle style)
 
         case wxPENSTYLE_USER_DASH:
             return Qt::CustomDashLine;
-        
+
         case wxPENSTYLE_STIPPLE:
             wxMISSING_IMPLEMENTATION( "wxPENSTYLE_STIPPLE" );
             break;
@@ -212,24 +212,24 @@ class wxPenRefData: public wxGDIRefData
             m_dashes = NULL;
             m_dashesSize = 0;
         }
-        
+
         wxPenRefData()
         {
             defaultPen();
         }
-        
+
         wxPenRefData( const wxPenRefData& data )
         : wxGDIRefData()
+            , m_qtPen(data.m_qtPen)
         {
-            m_qtPen = data.m_qtPen;
             defaultPen();
         }
-        
+
         bool operator == (const wxPenRefData& data) const
         {
              return m_qtPen == data.m_qtPen;
         }
-        
+
         QPen m_qtPen;
         const wxDash *m_dashes;
         int m_dashesSize;
@@ -264,9 +264,9 @@ wxPen::wxPen(const wxColour& col, int width, int style)
 bool wxPen::operator==(const wxPen& pen) const
 {
     if (m_refData == pen.m_refData) return true;
-    
+
     if (!m_refData || !pen.m_refData) return false;
-    
+
     return ( *(wxPenRefData*)m_refData == *(wxPenRefData*)pen.m_refData );
 }
 
@@ -309,14 +309,14 @@ void wxPen::SetDashes(int nb_dashes, const wxDash *dash)
     AllocExclusive();
     ((wxPenRefData *)m_refData)->m_dashes = dash;
     ((wxPenRefData *)m_refData)->m_dashesSize = nb_dashes;
-    
+
     QVector<qreal> dashes;
     if (dash)
     {
         for (int i = 0; i < nb_dashes; i++)
             dashes << dash[i];
     }
-    
+
     M_PENDATA.setDashPattern(dashes);
 }
 
