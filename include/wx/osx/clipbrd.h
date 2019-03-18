@@ -87,7 +87,7 @@ public:
 class WXDLLIMPEXP_CORE wxOSXPasteboard : public wxOSXDataSink, public wxOSXDataSource
 {
 public:
-    wxOSXPasteboard(WXOSXPasteboard native);
+    wxOSXPasteboard(OSXPasteboard native);
     ~wxOSXPasteboard();
 
     // sink methods
@@ -110,7 +110,7 @@ public:
 private:
     void DeleteSinkItems();
     
-    WXOSXPasteboard m_pasteboard;
+    OSXPasteboard m_pasteboard;
     wxVector<wxOSXDataSinkItem*> m_sinkItems;
 };
 
