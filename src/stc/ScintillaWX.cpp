@@ -1346,6 +1346,15 @@ void ScintillaWX::SetListBoxColours(const wxColour& background,
                                                   highlight, highlightText);
 }
 
+void ScintillaWX::UseListCtrlStyleForLists(bool useListCtrl,
+                                           const wxColour& currentBgColour,
+                                           const wxColour& currentTextColour)
+{
+    static_cast<ListBoxImpl*>(ac.lb)->UseListCtrlStyle(useListCtrl,
+                                                       currentBgColour,
+                                                       currentTextColour);
+}
+
 sptr_t ScintillaWX::DirectFunction(
     ScintillaWX* swx, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
     return swx->WndProc(iMessage, wParam, lParam);

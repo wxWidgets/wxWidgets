@@ -37,6 +37,7 @@
 #include "wx/sizer.h"
 #include "wx/renderer.h"
 #include "wx/hashset.h"
+#include "wx/dcclient.h"
 
 #ifdef wxHAS_RAW_BITMAP
 #include "wx/rawbmp.h"
@@ -2328,6 +2329,12 @@ public:
     const wxColour& GetHighlightBgColour() const;
     const wxColour& GetHighlightTextColour() const;
 
+    // ListCtrl Style
+    void UseListCtrlStyle(bool, const wxColour&, const wxColour&);
+    bool HasListCtrlAppearance() const;
+    const wxColour& GetCurrentBgColour() const;
+    const wxColour& GetCurrentTextColour() const;
+
 private:
     WX_DECLARE_HASH_MAP(int, wxBitmap, wxIntegerHash, wxIntegerEqual, ImgList);
 
@@ -2343,12 +2350,21 @@ private:
     bool     m_textColourIsSet;
     bool     m_highlightBgColourIsSet;
     bool     m_highlightTextColourIsSet;
+
+    bool     m_hasListCtrlAppearance;
+    wxColour m_currentBgColour;
+    wxColour m_currentTextColour;
+    bool     m_currentBgColourIsSet;
+    bool     m_currentTextColourIsSet;
 };
 
 wxSTCListBoxVisualData::wxSTCListBoxVisualData(int d):m_desiredVisibleRows(d),
                         m_bgColourIsSet(false), m_textColourIsSet(false),
                         m_highlightBgColourIsSet(false),
-                        m_highlightTextColourIsSet(false)
+                        m_highlightTextColourIsSet(false),
+                        m_hasListCtrlAppearance(false),
+                        m_currentBgColourIsSet(false),
+                        m_currentTextColourIsSet(false)
 {
     ComputeColours();
 }
@@ -2434,18 +2450,46 @@ void wxSTCListBoxVisualData::ComputeColours()
     if ( !m_textColourIsSet )
         m_textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
 
-#ifdef __WXOSX_COCOA__
-    if ( !m_highlightBgColourIsSet )
-        m_highlightBgColour = GetListHighlightColour();
-#else
-    if ( !m_highlightBgColourIsSet )
-        m_highlightBgColour =
-        wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
-#endif
+    if ( m_hasListCtrlAppearance )
+    {
+        // If m_highlightBgColour and/or m_currentBgColour are not
+        // explicitly set, set them to wxNullColour to indicate that they
+        // should be drawn with wxRendererNative.
+        if ( !m_highlightBgColourIsSet )
+            m_highlightBgColour = wxNullColour;
 
-    if ( !m_highlightTextColourIsSet )
-        m_highlightTextColour =
-            wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
+        if ( !m_currentBgColourIsSet )
+            m_currentBgColour = wxNullColour;
+
+        #ifdef __WXMSW__
+            if ( !m_highlightTextColourIsSet )
+                m_highlightTextColour =
+                    wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
+        #else
+            if ( !m_highlightTextColourIsSet )
+                m_highlightTextColour = wxSystemSettings::GetColour(
+                    wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
+        #endif
+
+        if ( !m_currentTextColour.IsOk() )
+            m_currentTextColour = wxSystemSettings::GetColour(
+                wxSYS_COLOUR_LISTBOXTEXT);
+    }
+    else
+    {
+    #ifdef __WXOSX_COCOA__
+        if ( !m_highlightBgColourIsSet )
+            m_highlightBgColour = GetListHighlightColour();
+    #else
+        if ( !m_highlightBgColourIsSet )
+            m_highlightBgColour =
+            wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+    #endif
+
+        if ( !m_highlightTextColourIsSet )
+            m_highlightTextColour =
+                wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
+    }
 }
 
 void SetColourHelper(bool& isSet, wxColour& itemCol, const wxColour& newColour)
@@ -2491,10 +2535,34 @@ const wxColour& wxSTCListBoxVisualData::GetHighlightTextColour() const
     return m_highlightTextColour;
 }
 
+void wxSTCListBoxVisualData::UseListCtrlStyle(bool useListCtrlStyle,
+                                              const wxColour& curBg,
+                                              const wxColour& curText)
+{
+    m_hasListCtrlAppearance = useListCtrlStyle;
+    SetColourHelper(m_currentBgColourIsSet, m_currentBgColour, curBg);
+    SetColourHelper(m_currentTextColourIsSet, m_currentTextColour, curText);
+    ComputeColours();
+}
+
+bool wxSTCListBoxVisualData::HasListCtrlAppearance() const
+{
+    return m_hasListCtrlAppearance;
+}
+
+const wxColour& wxSTCListBoxVisualData::GetCurrentBgColour() const
+{
+    return m_currentBgColour;
+}
+
+const wxColour& wxSTCListBoxVisualData::GetCurrentTextColour() const
+{
+    return m_currentTextColour;
+}
 
 // The class is intended to look like a standard listbox (with an optional
 // icon). However, it needs to look like it has focus even when it doesn't.
-class wxSTCListBox : public wxVListBox
+class wxSTCListBox : public wxSystemThemedControl<wxVListBox>
 {
 public:
     wxSTCListBox(wxWindow*, wxSTCListBoxVisualData*, int);
@@ -2530,6 +2598,8 @@ protected:
     // Event handlers
     void OnDClick(wxCommandEvent&);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
+    void OnMouseMotion(wxMouseEvent& event);
+    void OnMouseLeaveWindow(wxMouseEvent& event);
 
     // wxVListBox overrides
     virtual wxCoord OnMeasureItem(size_t) const wxOVERRIDE;
@@ -2543,6 +2613,7 @@ private:
     wxVector<wxString>      m_labels;
     wxVector<int>           m_imageNos;
     size_t                  m_maxStrWidth;
+    int                     m_currentRow;
 
     CallBackAction          m_doubleClickAction;
     void*                   m_doubleClickActionData;
@@ -2564,7 +2635,8 @@ private:
 };
 
 wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v, int ht)
-             :wxVListBox(), m_visualData(v), m_maxStrWidth(0),
+             :wxSystemThemedControl<wxVListBox>(),
+              m_visualData(v), m_maxStrWidth(0), m_currentRow(wxNOT_FOUND),
               m_doubleClickAction(NULL), m_doubleClickActionData(NULL),
               m_aveCharWidth(8), m_textHeight(ht), m_itemHeight(ht),
               m_textTopGap(0), m_imageAreaWidth(0), m_imageAreaHeight(0)
@@ -2580,6 +2652,20 @@ wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v, int ht)
 
     Bind(wxEVT_LISTBOX_DCLICK, &wxSTCListBox::OnDClick, this);
     Bind(wxEVT_SYS_COLOUR_CHANGED, &wxSTCListBox::OnSysColourChanged, this);
+
+    if ( m_visualData->HasListCtrlAppearance() )
+    {
+        EnableSystemTheme();
+        Bind(wxEVT_MOTION, &wxSTCListBox::OnMouseMotion, this);
+        Bind(wxEVT_LEAVE_WINDOW, &wxSTCListBox::OnMouseLeaveWindow, this);
+
+        #ifdef __WXMSW__
+            // On MSW when using wxRendererNative to draw items in list control
+            // style, the colours used seem to be based on the parent's
+            // background colour. So set the popup's background.
+            parent->SetOwnBackgroundColour(m_visualData->GetBgColour());
+        #endif
+    }
 }
 
 wxSTCListBox::~wxSTCListBox()
@@ -2771,8 +2857,37 @@ void wxSTCListBox::OnDClick(wxCommandEvent& WXUNUSED(event))
 void wxSTCListBox::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
 {
     m_visualData->ComputeColours();
+    GetParent()->SetOwnBackgroundColour(m_visualData->GetBgColour());
     SetBackgroundColour(m_visualData->GetBgColour());
-    Refresh();
+    GetParent()->Refresh();
+}
+
+void wxSTCListBox::OnMouseLeaveWindow(wxMouseEvent& event)
+{
+    const int old = m_currentRow;
+    m_currentRow = wxNOT_FOUND;
+
+    if ( old != wxNOT_FOUND )
+        RefreshRow(old);
+
+    event.Skip();
+}
+
+void wxSTCListBox::OnMouseMotion(wxMouseEvent& event)
+{
+    const int old = m_currentRow;
+    m_currentRow = VirtualHitTest(event.GetY());
+
+    if ( old != m_currentRow )
+    {
+        if( m_currentRow != wxNOT_FOUND )
+            RefreshRow(m_currentRow);
+
+        if( old != wxNOT_FOUND )
+            RefreshRow(old);
+    }
+
+    event.Skip();
 }
 
 wxCoord wxSTCListBox::OnMeasureItem(size_t WXUNUSED(n)) const
@@ -2821,6 +2936,8 @@ void wxSTCListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
 
     if ( IsSelected(n) )
         tcc.Set(m_visualData->GetHighlightTextColour());
+    else if ( static_cast<int>(n) == m_currentRow )
+        tcc.Set(m_visualData->GetCurrentTextColour());
     else
         tcc.Set(m_visualData->GetTextColour());
 
@@ -2845,19 +2962,50 @@ void wxSTCListBox::OnDrawBackground(wxDC &dc, const wxRect &rect,size_t n) const
         const wxColour& highlightBgColour =m_visualData->GetHighlightBgColour();
 
         #ifdef __WXMSW__
-            // On windows the selection rectangle in Scintilla's
-            // autocompletion list only covers the text and not the icon.
-            const int textBoxFromClientEdge = TextBoxFromClientEdge();
-            selectionRect.SetLeft(rect.GetLeft() + textBoxFromClientEdge);
-            selectionRect.SetWidth(rect.GetWidth() - textBoxFromClientEdge);
+            if ( !m_visualData->HasListCtrlAppearance() )
+            {
+                // On windows the selection rectangle in Scintilla's
+                // autocompletion list only covers the text and not the icon.
+
+                const int textBoxFromClientEdge = TextBoxFromClientEdge();
+                selectionRect.SetLeft(rect.GetLeft() + textBoxFromClientEdge);
+                selectionRect.SetWidth(rect.GetWidth() - textBoxFromClientEdge);
+            }
         #endif // __WXMSW__
 
-        wxDCBrushChanger bc(dc, highlightBgColour);
-        wxDCPenChanger   pc(dc, highlightBgColour);
-        dc.DrawRectangle(selectionRect);
+        if ( highlightBgColour.IsOk() )
+        {
+            wxDCBrushChanger bc(dc, highlightBgColour);
+            wxDCPenChanger   pc(dc, highlightBgColour);
+            dc.DrawRectangle(selectionRect);
+        }
+        else
+        {
+            wxRendererNative::GetDefault().DrawItemSelectionRect(
+                const_cast<wxSTCListBox*>(this), dc, selectionRect,
+                wxCONTROL_SELECTED | wxCONTROL_FOCUSED);
+        }
 
-        wxRendererNative::GetDefault().DrawFocusRect(
-            const_cast<wxSTCListBox*>(this), dc, selectionRect);
+        if ( !m_visualData->HasListCtrlAppearance() )
+            wxRendererNative::GetDefault().DrawFocusRect(
+                const_cast<wxSTCListBox*>(this), dc, selectionRect);
+    }
+    else if ( static_cast<int>(n) == m_currentRow )
+    {
+        const wxColour& currentBgColour = m_visualData->GetCurrentBgColour();
+
+        if ( currentBgColour.IsOk() )
+        {
+            wxDCBrushChanger bc(dc, currentBgColour);
+            wxDCPenChanger   pc(dc, currentBgColour);
+            dc.DrawRectangle(rect);
+        }
+        else
+        {
+            wxRendererNative::GetDefault().DrawItemSelectionRect(
+                const_cast<wxSTCListBox*>(this), dc, rect,
+                wxCONTROL_CURRENT | wxCONTROL_FOCUSED);
+        }
     }
 }
 
@@ -2867,6 +3015,12 @@ class wxSTCListBoxWin : public wxSTCPopupWindow
 {
 public:
     wxSTCListBoxWin(wxWindow*, wxSTCListBox**, wxSTCListBoxVisualData*, int);
+
+protected:
+    void OnPaint(wxPaintEvent&);
+
+private:
+    wxSTCListBoxVisualData* m_visualData;
 };
 
 wxSTCListBoxWin::wxSTCListBoxWin(wxWindow* parent, wxSTCListBox** lb,
@@ -2885,9 +3039,22 @@ wxSTCListBoxWin::wxSTCListBoxWin(wxWindow* parent, wxSTCListBox** lb,
     wxBoxSizer* bSizer = new wxBoxSizer(wxVERTICAL);
     bSizer->Add(*lb, 1, wxEXPAND|wxALL, borderThickness);
     SetSizer(bSizer);
-
     (*lb)->SetContainerBorderSize(borderThickness);
-    SetOwnBackgroundColour(v->GetBorderColour());
+
+    // When drawing highlighting in listctrl style with wxRendererNative on MSW,
+    // the colours used seem to be based on the background of the parent window.
+    // So manually paint this window to give it the border colour instead of
+    // setting the background colour.
+    m_visualData = v;
+    Bind(wxEVT_PAINT, &wxSTCListBoxWin::OnPaint, this);
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
+}
+
+void wxSTCListBoxWin::OnPaint(wxPaintEvent& WXUNUSED(evt))
+{
+    wxPaintDC dc(this);
+    dc.SetBackground(m_visualData->GetBorderColour());
+    dc.Clear();
 }
 
 
@@ -3012,6 +3179,12 @@ void ListBoxImpl::SetColours(const wxColour& background, const wxColour& text,
                              const wxColour& hiliBg, const wxColour& hiliText)
 {
     m_visualData->SetColours(background, text, hiliBg, hiliText);
+}
+
+void ListBoxImpl::UseListCtrlStyle(bool useListCtrl, const wxColour& currentBg,
+                                   const wxColour& currentText)
+{
+    m_visualData->UseListCtrlStyle(useListCtrl, currentBg, currentText);
 }
 
 

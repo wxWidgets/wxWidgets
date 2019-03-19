@@ -581,6 +581,14 @@ void wxStyledTextCtrl::AutoCompSetColours(const wxColour& background,
     m_swx->SetListBoxColours(background, text, highlight, highlightText);
 }
 
+void wxStyledTextCtrl::AutoCompUseListCtrl(bool useListCtrl,
+                                           const wxColour& currentBgColour,
+                                           const wxColour& currentTextColour)
+{
+    m_swx->UseListCtrlStyleForLists(useListCtrl, currentBgColour,
+                                    currentTextColour);
+}
+
 
 
 

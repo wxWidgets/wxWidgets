@@ -203,6 +203,7 @@ public:
     void DoRegisterImage(int type, const wxBitmap& bmp);
     void SetListBoxColours(const wxColour&, const wxColour&,
                            const wxColour&, const wxColour&);
+    void UseListCtrlStyleForLists(bool, const wxColour&, const wxColour&);
 
 private:
     bool                capturedMouse;
