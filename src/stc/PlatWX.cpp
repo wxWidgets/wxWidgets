@@ -33,6 +33,10 @@
 #include "wx/dynlib.h"
 #include "wx/scopedarray.h"
 #include "wx/toplevel.h"
+#include "wx/vlbox.h"
+#include "wx/sizer.h"
+#include "wx/renderer.h"
+#include "wx/hashset.h"
 
 #ifdef wxHAS_RAW_BITMAP
 #include "wx/rawbmp.h"
@@ -2252,347 +2256,79 @@ void wxSTCPopupWindow::DoSetSize(int x, int y, int width, int height, int flags)
 //----------------------------------------------------------------------
 // Helper classes for ListBox
 
-
-// This is a simple subclass of wxListView that just resets focus to the
-// parent when it gets it.
-class wxSTCListBox : public wxListView {
+// The class manages the colours, images, and other data needed for popup lists.
+class wxSTCListBoxVisualData
+{
 public:
-    wxSTCListBox(wxWindow* parent, wxWindowID id,
-                 const wxPoint& pos, const wxSize& size,
-                 long style)
-        : wxListView()
-    {
-#ifdef __WXMSW__
-        Hide(); // don't flicker as we move it around...
-#endif
-        Create(parent, id, pos, size, style);
-    }
+    wxSTCListBoxVisualData(int d);
+    virtual ~wxSTCListBoxVisualData();
 
+    // ListBoxImpl implementation
+    void SetDesiredVisibleRows(int d);
+    int  GetDesiredVisibleRows() const;
+    void RegisterImage(int type, const wxBitmap& bmp);
+    void RegisterImage(int, const char *);
+    void RegisterRGBAImage(int, int, int,const unsigned char *);
+    void ClearRegisteredImages();
 
-    void OnFocus(wxFocusEvent& event) {
-        GetParent()->SetFocus();
-        event.Skip();
-    }
+    // Image data
+    const wxBitmap* GetImage(int i) const;
 
-    void OnKillFocus(wxFocusEvent& WXUNUSED(event)) {
-        // Do nothing.  Prevents base class from resetting the colors...
-    }
-
-#ifdef __WXMAC__
-    // For some reason I don't understand yet the focus doesn't really leave
-    // the listbox like it should, so if we get any events feed them back to
-    // the wxSTC
-    void OnKeyDown(wxKeyEvent& event) {
-        GetGrandParent()->GetEventHandler()->ProcessEvent(event);
-    }
-    void OnChar(wxKeyEvent& event) {
-        GetGrandParent()->GetEventHandler()->ProcessEvent(event);
-    }
-
-    // And we need to force the focus back when being destroyed
-    ~wxSTCListBox() {
-        GetGrandParent()->SetFocus();
-    }
-#endif
+    // Colour data
+    void ComputeColours();
+    const wxColour& GetBorderColour() const;
+    const wxColour& GetBgColour() const;
+    const wxColour& GetTextColour() const;
+    const wxColour& GetHighlightBgColour() const;
+    const wxColour& GetHighlightTextColour() const;
 
 private:
-    wxDECLARE_EVENT_TABLE();
+    WX_DECLARE_HASH_MAP(int, wxBitmap, wxIntegerHash, wxIntegerEqual, ImgList);
+
+    int      m_desiredVisibleRows;
+    ImgList  m_imgList;
+
+    wxColour m_borderColour;
+    wxColour m_bgColour;
+    wxColour m_textColour;
+    wxColour m_highlightBgColour;
+    wxColour m_highlightTextColour;
 };
 
-wxBEGIN_EVENT_TABLE(wxSTCListBox, wxListView)
-    EVT_SET_FOCUS( wxSTCListBox::OnFocus)
-    EVT_KILL_FOCUS(wxSTCListBox::OnKillFocus)
-#ifdef __WXMAC__
-    EVT_KEY_DOWN(  wxSTCListBox::OnKeyDown)
-    EVT_CHAR(      wxSTCListBox::OnChar)
-#endif
-wxEND_EVENT_TABLE()
-
-
-// A popup window to place the wxSTCListBox upon
-class wxSTCListBoxWin : public wxSTCPopupWindow
+wxSTCListBoxVisualData::wxSTCListBoxVisualData(int d):m_desiredVisibleRows(d)
 {
-private:
-    wxListView*         lv;
-    CallBackAction      doubleClickAction;
-    void*               doubleClickActionData;
-public:
-    wxSTCListBoxWin(wxWindow* parent, wxWindowID id, Point WXUNUSED(location)) :
-        wxSTCPopupWindow(parent)
-    {
-
-        lv = new wxSTCListBox(parent, id, wxPoint(-50,-50), wxDefaultSize,
-                              wxLC_REPORT | wxLC_SINGLE_SEL | wxLC_NO_HEADER | wxBORDER_NONE);
-        lv->SetCursor(wxCursor(wxCURSOR_ARROW));
-        lv->InsertColumn(0, wxEmptyString);
-        lv->InsertColumn(1, wxEmptyString);
-
-        // NOTE: We need to fool the wxListView into thinking that it has the
-        // focus so it will use the normal selection colour and will look
-        // "right" to the user.  But since the wxPopupWindow or its children
-        // can't receive focus then we have to pull a fast one and temporarily
-        // parent the listctrl on the STC window and then call SetFocus and
-        // then reparent it back to the popup.
-        lv->SetFocus();
-        lv->Reparent(this);
-#ifdef __WXMSW__
-        lv->Show();
-#endif
-#if defined(__WXOSX_COCOA__) || defined(__WXGTK__)
-        // This color will end up being our border
-        SetBackgroundColour(wxColour(0xC0, 0xC0, 0xC0));
-#endif
-    }
-
-
-    int IconWidth() {
-        wxImageList* il = lv->GetImageList(wxIMAGE_LIST_SMALL);
-        if (il != NULL) {
-            int w, h;
-            il->GetSize(0, w, h);
-            return w;
-        }
-        return 0;
-    }
-
-
-    void SetDoubleClickAction(CallBackAction action, void *data) {
-        doubleClickAction = action;
-        doubleClickActionData = data;
-    }
-
-
-    void OnSize(wxSizeEvent& event) {
-        // resize the child to fill the popup
-        wxSize sz = GetClientSize();
-        int x, y, w, h;
-        x = y = 0;
-        w = sz.x;
-        h = sz.y;
-#if defined(__WXOSX_COCOA__) || defined(__WXGTK__)
-        // make room for the parent's bg color to show, to act as a border
-        x = y = 1;
-        w -= 2;
-        h -= 2;
-#endif
-        lv->SetSize(x, y, w, h);
-        // reset the column widths
-        lv->SetColumnWidth(0, IconWidth()+4);
-        lv->SetColumnWidth(1, w - 2 - lv->GetColumnWidth(0) -
-                           wxSystemSettings::GetMetric(wxSYS_VSCROLL_X));
-        event.Skip();
-    }
-
-    void OnActivate(wxListEvent& WXUNUSED(event)) {
-        doubleClickAction(doubleClickActionData);
-    }
-
-    wxListView* GetLB() { return lv; }
-
-private:
-    wxDECLARE_EVENT_TABLE();
-
-};
-
-wxBEGIN_EVENT_TABLE(wxSTCListBoxWin, wxPopupWindow)
-    EVT_SIZE               (          wxSTCListBoxWin::OnSize)
-    EVT_LIST_ITEM_ACTIVATED(wxID_ANY, wxSTCListBoxWin::OnActivate)
-wxEND_EVENT_TABLE()
-
-
-inline wxSTCListBoxWin* GETLBW(WindowID win) {
-    return ((wxSTCListBoxWin*)win);
+    ComputeColours();
 }
 
-inline wxListView* GETLB(WindowID win) {
-    return GETLBW(win)->GetLB();
-}
-
-//----------------------------------------------------------------------
-
-ListBoxImpl::ListBoxImpl()
-    : lineHeight(10), unicodeMode(false),
-      desiredVisibleRows(5), aveCharWidth(8), maxStrWidth(0),
-      imgList(NULL), imgTypeMap(NULL)
+wxSTCListBoxVisualData::~wxSTCListBoxVisualData()
 {
+    m_imgList.clear();
 }
 
-ListBoxImpl::~ListBoxImpl() {
-    wxDELETE(imgList);
-    wxDELETE(imgTypeMap);
-}
-
-
-void ListBoxImpl::SetFont(Font &font) {
-    GETLB(wid)->SetFont(*((wxFont*)font.GetID()));
-}
-
-
-void ListBoxImpl::Create(Window &parent, int ctrlID, Point location_, int lineHeight_, bool unicodeMode_, int WXUNUSED(technology_)) {
-    location = location_;
-    lineHeight =  lineHeight_;
-    unicodeMode = unicodeMode_;
-    maxStrWidth = 0;
-    wid = new wxSTCListBoxWin(GETWIN(parent.GetID()), ctrlID, location);
-    if (imgList != NULL)
-        GETLB(wid)->SetImageList(imgList, wxIMAGE_LIST_SMALL);
-}
-
-
-void ListBoxImpl::SetAverageCharWidth(int width) {
-    aveCharWidth = width;
-}
-
-
-void ListBoxImpl::SetVisibleRows(int rows) {
-    desiredVisibleRows = rows;
-}
-
-
-int ListBoxImpl::GetVisibleRows() const {
-    return desiredVisibleRows;
-}
-
-PRectangle ListBoxImpl::GetDesiredRect() {
-    // wxListCtrl doesn't have a DoGetBestSize, so instead we kept track of
-    // the max size in Append and calculate it here...
-    int maxw = maxStrWidth * aveCharWidth;
-    int maxh ;
-
-    // give it a default if there are no lines, and/or add a bit more
-    if (maxw == 0) maxw = 100;
-    maxw += aveCharWidth * 3 +
-            GETLBW(wid)->IconWidth() + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
-    if (maxw > 350)
-        maxw = 350;
-
-    // estimate a desired height
-    int count = GETLB(wid)->GetItemCount();
-    if (count) {
-        wxRect rect;
-        GETLB(wid)->GetItemRect(0, rect);
-        maxh = count * rect.GetHeight();
-        if (maxh > 140)  // TODO:  Use desiredVisibleRows??
-            maxh = 140;
-
-        // Try to make the size an exact multiple of some number of lines
-        int lines = maxh / rect.GetHeight();
-        maxh = (lines + 1) * rect.GetHeight() + 2;
-    }
-    else
-        maxh = 100;
-
-    PRectangle rc;
-    rc.top = 0;
-    rc.left = 0;
-    rc.right = maxw;
-    rc.bottom = maxh;
-    return rc;
-}
-
-
-int ListBoxImpl::CaretFromEdge() {
-    return 4 + GETLBW(wid)->IconWidth();
-}
-
-
-void ListBoxImpl::Clear() {
-    GETLB(wid)->DeleteAllItems();
-}
-
-
-void ListBoxImpl::Append(char *s, int type) {
-    Append(stc2wx(s), type);
-}
-
-void ListBoxImpl::Append(const wxString& text, int type) {
-    long count  = GETLB(wid)->GetItemCount();
-    long itemID  = GETLB(wid)->InsertItem(count, wxEmptyString);
-    long idx = -1;
-    GETLB(wid)->SetItem(itemID, 1, text);
-    maxStrWidth = wxMax(maxStrWidth, text.length());
-    if (type != -1) {
-        wxCHECK_RET(imgTypeMap, wxT("Unexpected NULL imgTypeMap"));
-        idx = imgTypeMap->Item(type);
-    }
-    GETLB(wid)->SetItemImage(itemID, idx, idx);
-}
-
-void ListBoxImpl::SetList(const char* list, char separator, char typesep) {
-    GETLB(wid)->Freeze();
-    Clear();
-    wxStringTokenizer tkzr(stc2wx(list), (wxChar)separator);
-    while ( tkzr.HasMoreTokens() ) {
-        wxString token = tkzr.GetNextToken();
-        long type = -1;
-        int pos = token.Find(typesep);
-        if (pos != -1) {
-            token.Mid(pos+1).ToLong(&type);
-            token.Truncate(pos);
-        }
-        Append(token, (int)type);
-    }
-    GETLB(wid)->Thaw();
-}
-
-
-int ListBoxImpl::Length() {
-    return GETLB(wid)->GetItemCount();
-}
-
-
-void ListBoxImpl::Select(int n) {
-    bool select = true;
-    if (n == -1) {
-        n = 0;
-        select = false;
-    }
-    GETLB(wid)->EnsureVisible(n);
-    GETLB(wid)->Select(n, select);
-}
-
-
-int ListBoxImpl::GetSelection() {
-    return GETLB(wid)->GetFirstSelected();
-}
-
-
-int ListBoxImpl::Find(const char *WXUNUSED(prefix)) {
-    // No longer used
-    return wxNOT_FOUND;
-}
-
-
-void ListBoxImpl::GetValue(int n, char *value, int len) {
-    wxListItem item;
-    item.SetId(n);
-    item.SetColumn(1);
-    item.SetMask(wxLIST_MASK_TEXT);
-    GETLB(wid)->GetItem(item);
-    strncpy(value, wx2stc(item.GetText()), len);
-    value[len-1] = '\0';
-}
-
-void ListBoxImpl::RegisterImageHelper(int type, const wxBitmap& bmp)
+void wxSTCListBoxVisualData::SetDesiredVisibleRows(int d)
 {
-    if (! imgList) {
-        // assumes all images are the same size
-        imgList = new wxImageList(bmp.GetWidth(), bmp.GetHeight(), true);
-        imgTypeMap = new wxArrayInt;
-    }
-
-    int idx = imgList->Add(bmp);
-
-    // do we need to extend the mapping array?
-    wxArrayInt& itm = *imgTypeMap;
-    if ( itm.GetCount() < (size_t)type+1)
-        itm.Add(-1, type - itm.GetCount() + 1);
-
-    // Add an item that maps type to the image index
-    itm[type] = idx;
+    m_desiredVisibleRows=d;
 }
 
-void ListBoxImpl::RegisterImage(int type, const char *xpm_data) {
+int wxSTCListBoxVisualData::GetDesiredVisibleRows() const
+{
+    return m_desiredVisibleRows;
+}
+
+void wxSTCListBoxVisualData::RegisterImage(int type, const wxBitmap& bmp)
+{
+    if ( !bmp.IsOk() )
+        return;
+
+    ImgList::iterator it=m_imgList.find(type);
+    if ( it != m_imgList.end() )
+        m_imgList.erase(it);
+
+    m_imgList[type] = bmp;
+}
+
+void wxSTCListBoxVisualData::RegisterImage(int type, const char *xpm_data)
+{
     wxXPMDecoder dec;
     wxImage img;
 
@@ -2609,28 +2345,589 @@ void ListBoxImpl::RegisterImage(int type, const char *xpm_data) {
         img = dec.ReadData(reinterpret_cast<const char* const*>(xpm_data));
 
     wxBitmap bmp(img);
-    RegisterImageHelper(type, bmp);
+    RegisterImage(type, bmp);
+}
+
+void wxSTCListBoxVisualData::RegisterRGBAImage(int type, int width, int height,
+                                    const unsigned char *pixelsImage)
+{
+    wxBitmap bmp = BitmapFromRGBAImage(width, height, pixelsImage);
+    RegisterImage(type, bmp);
+}
+
+void wxSTCListBoxVisualData::ClearRegisteredImages()
+{
+    m_imgList.clear();
+}
+
+const wxBitmap* wxSTCListBoxVisualData::GetImage(int i) const
+{
+    ImgList::const_iterator it = m_imgList.find(i);
+
+    if ( it != m_imgList.end() )
+        return &(it->second);
+    else
+        return NULL;
+}
+
+void wxSTCListBoxVisualData::ComputeColours()
+{
+    // wxSYS_COLOUR_BTNSHADOW seems to be the closest match with most themes.
+    m_borderColour = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW );
+
+    m_bgColour = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
+    m_textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
+
+#ifdef __WXOSX_COCOA__
+    m_highlightBgColour = GetListHighlightColour();
+#else
+    m_highlightBgColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+#endif
+
+    m_highlightTextColour =
+        wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
+}
+
+const wxColour& wxSTCListBoxVisualData::GetBorderColour() const
+{
+    return m_borderColour;
+}
+
+const wxColour& wxSTCListBoxVisualData::GetBgColour() const
+{
+    return m_bgColour;
+}
+
+const wxColour& wxSTCListBoxVisualData::GetTextColour() const
+{
+    return m_textColour;
+}
+
+const wxColour& wxSTCListBoxVisualData::GetHighlightBgColour() const
+{
+    return m_highlightBgColour;
+}
+
+const wxColour& wxSTCListBoxVisualData::GetHighlightTextColour() const
+{
+    return m_highlightTextColour;
+}
+
+
+// The class is intended to look like a standard listbox (with an optional
+// icon). However, it needs to look like it has focus even when it doesn't.
+class wxSTCListBox : public wxVListBox
+{
+public:
+    wxSTCListBox(wxWindow*, wxSTCListBoxVisualData*, int);
+    virtual ~wxSTCListBox();
+
+    // wxWindow overrides
+    virtual bool AcceptsFocus() const wxOVERRIDE;
+    virtual void SetFocus() wxOVERRIDE;
+
+    // Setters
+    void SetContainerBorderSize(int);
+
+    // ListBoxImpl implementation
+    void SetListBoxFont(Font &font);
+    void SetAverageCharWidth(int width);
+    PRectangle GetDesiredRect() const;
+    int CaretFromEdge() const;
+    void Clear();
+    void Append(char *s, int type = -1);
+    int Length() const;
+    void Select(int n);
+    void GetValue(int n, char *value, int len) const;
+    void SetDoubleClickAction(CallBackAction, void *);
+    void SetList(const char* list, char separator, char typesep);
+
+protected:
+    // Helpers
+    void AppendHelper(const wxString& text, int type);
+    void AccountForBitmap(int type, bool recalculateItemHeight);
+    void RecalculateItemHeight();
+    int TextBoxFromClientEdge() const;
+
+    // Event handlers
+    void OnDClick(wxCommandEvent&);
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+
+    // wxVListBox overrides
+    virtual wxCoord OnMeasureItem(size_t) const wxOVERRIDE;
+    virtual void OnDrawItem(wxDC& , const wxRect &, size_t) const wxOVERRIDE;
+    virtual void OnDrawBackground(wxDC&, const wxRect&,size_t) const wxOVERRIDE;
+
+private:
+    WX_DECLARE_HASH_SET(int, wxIntegerHash, wxIntegerEqual, SetOfInts);
+
+    wxSTCListBoxVisualData* m_visualData;
+    wxVector<wxString>      m_labels;
+    wxVector<int>           m_imageNos;
+    size_t                  m_maxStrWidth;
+
+    CallBackAction          m_doubleClickAction;
+    void*                   m_doubleClickActionData;
+    int                     m_aveCharWidth;
+
+    // These drawing parameters are computed or set externally.
+    int m_borderSize;
+    int m_textHeight;
+    int m_itemHeight;
+    int m_textTopGap;
+    int m_imageAreaWidth;
+    int m_imageAreaHeight;
+
+    // These drawing parameters are set internally and can be changed if needed
+    // to better match the appearance of a list box on a specific platform.
+    int m_imagePadding;
+    int m_textBoxToTextGap;
+    int m_textExtraVerticalPadding;
+};
+
+wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v, int ht)
+             :wxVListBox(), m_visualData(v), m_maxStrWidth(0),
+              m_doubleClickAction(NULL), m_doubleClickActionData(NULL),
+              m_aveCharWidth(8), m_textHeight(ht), m_itemHeight(ht),
+              m_textTopGap(0), m_imageAreaWidth(0), m_imageAreaHeight(0)
+{
+    wxVListBox::Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                       wxBORDER_NONE);
+
+    m_imagePadding             = FromDIP(1);
+    m_textBoxToTextGap         = FromDIP(3);
+    m_textExtraVerticalPadding = FromDIP(1);
+
+    SetBackgroundColour(m_visualData->GetBgColour());
+
+    Bind(wxEVT_LISTBOX_DCLICK, &wxSTCListBox::OnDClick, this);
+    Bind(wxEVT_SYS_COLOUR_CHANGED, &wxSTCListBox::OnSysColourChanged, this);
+}
+
+wxSTCListBox::~wxSTCListBox()
+{
+    m_labels.clear();
+    m_imageNos.clear();
+}
+
+bool wxSTCListBox::AcceptsFocus() const
+{
+    return false;
+}
+
+// Do nothing in response to an attempt to set focus.
+void wxSTCListBox::SetFocus()
+{
+}
+
+void wxSTCListBox::SetContainerBorderSize(int s)
+{
+    m_borderSize = s;
+}
+
+void wxSTCListBox::SetListBoxFont(Font &font)
+{
+    SetFont(*((wxFont*)font.GetID()));
+    int w;
+    GetTextExtent(EXTENT_TEST, &w, &m_textHeight);
+    RecalculateItemHeight();
+}
+
+void wxSTCListBox::SetAverageCharWidth(int width)
+{
+    m_aveCharWidth = width;
+}
+
+PRectangle wxSTCListBox::GetDesiredRect() const
+{
+    int maxw = m_maxStrWidth * m_aveCharWidth;
+    int maxh ;
+
+    // give it a default if there are no lines, and/or add a bit more
+    if (maxw == 0) maxw = 100;
+    maxw += TextBoxFromClientEdge() + m_textBoxToTextGap + m_aveCharWidth * 3;
+    if (maxw > 350)
+        maxw = 350;
+
+    // estimate a desired height
+    const int count = Length();
+    const int desiredVisibleRows = m_visualData->GetDesiredVisibleRows();
+    if ( count )
+    {
+        if ( count <= desiredVisibleRows )
+            maxh = count * m_itemHeight;
+        else
+            maxh = desiredVisibleRows * m_itemHeight;
+    }
+    else
+        maxh = 100;
+
+    // Add space for a scrollbar if needed.
+    if ( count > desiredVisibleRows )
+        maxw += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+
+    // Add borders.
+    maxw += 2 * m_borderSize;
+    maxh += 2 * m_borderSize;
+
+    PRectangle rc;
+    rc.top = 0;
+    rc.left = 0;
+    rc.right = maxw;
+    rc.bottom = maxh;
+    return rc;
+}
+
+int wxSTCListBox::CaretFromEdge() const
+{
+    return m_borderSize + TextBoxFromClientEdge() + m_textBoxToTextGap;
+}
+
+void wxSTCListBox::Clear()
+{
+    m_imageAreaWidth = 0;
+    m_imageAreaHeight = 0;
+    m_labels.clear();
+    m_imageNos.clear();
+}
+
+void wxSTCListBox::Append(char *s, int type)
+{
+    AppendHelper(stc2wx(s), type);
+    AccountForBitmap(type, true);
+}
+
+int wxSTCListBox::Length() const
+{
+    return GetItemCount();
+}
+
+void wxSTCListBox::Select(int n)
+{
+    SetSelection(n);
+}
+
+void wxSTCListBox::GetValue(int n, char *value, int len) const
+{
+    strncpy(value, wx2stc(m_labels[n]), len);
+    value[len-1] = '\0';
+}
+
+void wxSTCListBox::SetDoubleClickAction(CallBackAction action, void *data)
+{
+    m_doubleClickAction = action;
+    m_doubleClickActionData = data;
+}
+
+void wxSTCListBox::SetList(const char* list, char separator, char typesep)
+{
+    Freeze();
+    Clear();
+    SetOfInts bitmapNos;
+    wxStringTokenizer tkzr(stc2wx(list), (wxChar)separator);
+    while ( tkzr.HasMoreTokens() ) {
+        wxString token = tkzr.GetNextToken();
+        long type = -1;
+        int pos = token.Find(typesep);
+        if (pos != -1) {
+            token.Mid(pos+1).ToLong(&type);
+            token.Truncate(pos);
+        }
+        AppendHelper(token, (int)type);
+        bitmapNos.insert(static_cast<int>(type));
+    }
+
+    for ( SetOfInts::iterator it=bitmapNos.begin(); it!=bitmapNos.end(); ++it )
+        AccountForBitmap(*it, false);
+
+    if ( m_imageAreaHeight > 0 )
+        RecalculateItemHeight();
+
+    Thaw();
+}
+
+void wxSTCListBox::AppendHelper(const wxString& text, int type)
+{
+    m_maxStrWidth = wxMax(m_maxStrWidth, text.length());
+    m_labels.push_back(text);
+    m_imageNos.push_back(type);
+    SetItemCount(m_labels.size());
+}
+
+void wxSTCListBox::AccountForBitmap(int type, bool recalculateItemHeight)
+{
+    const int oldHeight = m_imageAreaHeight;
+    const wxBitmap* bmp = m_visualData->GetImage(type);
+
+    if ( bmp )
+    {
+        if ( bmp->GetWidth() > m_imageAreaWidth )
+            m_imageAreaWidth = bmp->GetWidth();
+
+        if ( bmp->GetHeight() > m_imageAreaHeight )
+            m_imageAreaHeight = bmp->GetHeight();
+    }
+
+    if ( recalculateItemHeight && m_imageAreaHeight != oldHeight )
+        RecalculateItemHeight();
+}
+
+void wxSTCListBox::RecalculateItemHeight()
+{
+    m_itemHeight = wxMax(m_textHeight + 2 * m_textExtraVerticalPadding,
+                         m_imageAreaHeight + 2 * m_imagePadding);
+    m_textTopGap = (m_itemHeight - m_textHeight)/2;
+}
+
+int wxSTCListBox::TextBoxFromClientEdge() const
+{
+    return (m_imageAreaWidth == 0 ? 0 : m_imageAreaWidth + 2 * m_imagePadding);
+}
+
+void wxSTCListBox::OnDClick(wxCommandEvent& WXUNUSED(event))
+{
+    if ( m_doubleClickAction )
+        m_doubleClickAction(m_doubleClickActionData);
+}
+
+void wxSTCListBox::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
+{
+    m_visualData->ComputeColours();
+    SetBackgroundColour(m_visualData->GetBgColour());
+    Refresh();
+}
+
+wxCoord wxSTCListBox::OnMeasureItem(size_t WXUNUSED(n)) const
+{
+    return static_cast<wxCoord>(m_itemHeight);
+}
+
+// This control will be drawn so that a typical row of pixels looks like:
+//
+//    +++++++++++++++++++++++++   =====ITEM TEXT================
+//  |         |                 |    |
+//  |       m_imageAreaWidth    |    |
+//  |                           |    |
+// m_imagePadding               |   m_textBoxToTextGap
+//                              |
+//                   m_imagePadding
+//
+//
+// m_imagePadding            : Used to give a little extra space between the
+//                             client edge and an item's bitmap.
+// m_imageAreaWidth          : Computed as the width of the largest registered
+//                             bitmap.
+// m_textBoxToTextGap        : Used so that item text does not begin immediately
+//                             at the edge of the highlight box.
+//
+// Images are drawn centered in the image area.
+// If a selection rectangle is drawn, its left edge is at x=0 if there are
+// no bitmaps. Otherwise
+//       x = m_imagePadding + m_imageAreaWidth + m_imagePadding.
+// Text is drawn at x + m_textBoxToTextGap and centered vertically.
+
+void wxSTCListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
+{
+    wxString label;
+    int imageNo = -1;
+    if ( n < m_labels.size() )
+    {
+        label   = m_labels[n];
+        imageNo = m_imageNos[n];
+    }
+
+    int topGap = m_textTopGap;
+    int leftGap = TextBoxFromClientEdge() + m_textBoxToTextGap;
+
+    wxDCTextColourChanger tcc(dc);
+
+    if ( IsSelected(n) )
+        tcc.Set(m_visualData->GetHighlightTextColour());
+    else
+        tcc.Set(m_visualData->GetTextColour());
+
+    label = wxControl::Ellipsize(label, dc, wxELLIPSIZE_END,
+                                 rect.GetWidth() - leftGap);
+    dc.DrawText(label, rect.GetLeft() + leftGap, rect.GetTop() + topGap);
+
+    const wxBitmap* b = m_visualData->GetImage(imageNo);
+    if ( b )
+    {
+        topGap = (m_itemHeight - b->GetHeight())/2;
+        leftGap = m_imagePadding + (m_imageAreaWidth - b->GetWidth())/2;
+        dc.DrawBitmap(*b, rect.GetLeft()+leftGap, rect.GetTop()+topGap, true);
+    }
+}
+
+void wxSTCListBox::OnDrawBackground(wxDC &dc, const wxRect &rect,size_t n) const
+{
+    if ( IsSelected(n) )
+    {
+        wxRect selectionRect(rect);
+        const wxColour& highlightBgColour =m_visualData->GetHighlightBgColour();
+
+        #ifdef __WXMSW__
+            // On windows the selection rectangle in Scintilla's
+            // autocompletion list only covers the text and not the icon.
+            const int textBoxFromClientEdge = TextBoxFromClientEdge();
+            selectionRect.SetLeft(rect.GetLeft() + textBoxFromClientEdge);
+            selectionRect.SetWidth(rect.GetWidth() - textBoxFromClientEdge);
+        #endif // __WXMSW__
+
+        wxDCBrushChanger bc(dc, highlightBgColour);
+        wxDCPenChanger   pc(dc, highlightBgColour);
+        dc.DrawRectangle(selectionRect);
+
+        wxRendererNative::GetDefault().DrawFocusRect(
+            const_cast<wxSTCListBox*>(this), dc, selectionRect);
+    }
+}
+
+
+// A popup window to place the wxSTCListBox upon
+class wxSTCListBoxWin : public wxSTCPopupWindow
+{
+public:
+    wxSTCListBoxWin(wxWindow*, wxSTCListBox**, wxSTCListBoxVisualData*, int);
+};
+
+wxSTCListBoxWin::wxSTCListBoxWin(wxWindow* parent, wxSTCListBox** lb,
+                                 wxSTCListBoxVisualData* v, int h)
+                :wxSTCPopupWindow(parent)
+{
+    *lb = new wxSTCListBox(this, v, h);
+
+    // Use the background of this window to form a frame around the listbox
+    // except on macos where the native Scintilla popup has no frame.
+#ifdef __WXOSX_COCOA__
+    const int borderThickness = 0;
+#else
+    const int borderThickness = FromDIP(1);
+#endif
+    wxBoxSizer* bSizer = new wxBoxSizer(wxVERTICAL);
+    bSizer->Add(*lb, 1, wxEXPAND|wxALL, borderThickness);
+    SetSizer(bSizer);
+
+    (*lb)->SetContainerBorderSize(borderThickness);
+    SetOwnBackgroundColour(v->GetBorderColour());
+}
+
+
+//----------------------------------------------------------------------
+
+ListBoxImpl::ListBoxImpl()
+            :m_listBox(NULL), m_visualData(new wxSTCListBoxVisualData(5))
+{
+}
+
+ListBoxImpl::~ListBoxImpl() {
+    delete m_visualData;
+}
+
+
+void ListBoxImpl::SetFont(Font &font) {
+    m_listBox->SetListBoxFont(font);
+}
+
+
+void ListBoxImpl::Create(Window &parent, int WXUNUSED(ctrlID),
+                         Point WXUNUSED(location_), int lineHeight_,
+                         bool WXUNUSED(unicodeMode_),
+                         int WXUNUSED(technology_)) {
+    wid = new wxSTCListBoxWin(GETWIN(parent.GetID()), &m_listBox, m_visualData,
+                              lineHeight_);
+}
+
+
+void ListBoxImpl::SetAverageCharWidth(int width) {
+    m_listBox->SetAverageCharWidth(width);
+}
+
+
+void ListBoxImpl::SetVisibleRows(int rows) {
+    m_visualData->SetDesiredVisibleRows(rows);
+}
+
+
+int ListBoxImpl::GetVisibleRows() const {
+    return m_visualData->GetDesiredVisibleRows();
+}
+
+PRectangle ListBoxImpl::GetDesiredRect() {
+    return m_listBox->GetDesiredRect();
+}
+
+
+int ListBoxImpl::CaretFromEdge() {
+    return m_listBox->CaretFromEdge();
+}
+
+
+void ListBoxImpl::Clear() {
+    m_listBox->Clear();
+}
+
+
+void ListBoxImpl::Append(char *s, int type) {
+    m_listBox->Append(s, type);
+}
+
+
+void ListBoxImpl::SetList(const char* list, char separator, char typesep) {
+    m_listBox->SetList(list, separator, typesep);
+}
+
+
+int ListBoxImpl::Length() {
+    return m_listBox->Length();
+}
+
+
+void ListBoxImpl::Select(int n) {
+    m_listBox->Select(n);
+}
+
+
+int ListBoxImpl::GetSelection() {
+    return m_listBox->GetSelection();
+}
+
+
+int ListBoxImpl::Find(const char *WXUNUSED(prefix)) {
+    // No longer used
+    return wxNOT_FOUND;
+}
+
+
+void ListBoxImpl::GetValue(int n, char *value, int len) {
+    m_listBox->GetValue(n, value, len);
+}
+
+void ListBoxImpl::RegisterImageHelper(int type, const wxBitmap& bmp)
+{
+    m_visualData->RegisterImage(type, bmp);
+}
+
+
+void ListBoxImpl::RegisterImage(int type, const char *xpm_data) {
+    m_visualData->RegisterImage(type, xpm_data);
 }
 
 
 void ListBoxImpl::RegisterRGBAImage(int type, int width, int height,
                                     const unsigned char *pixelsImage)
 {
-    wxBitmap bmp = BitmapFromRGBAImage(width, height, pixelsImage);
-    RegisterImageHelper(type, bmp);
+    m_visualData->RegisterRGBAImage(type, width, height, pixelsImage);
 }
 
 
 void ListBoxImpl::ClearRegisteredImages() {
-    wxDELETE(imgList);
-    wxDELETE(imgTypeMap);
-    if (wid)
-        GETLB(wid)->SetImageList(NULL, wxIMAGE_LIST_SMALL);
+    m_visualData->ClearRegisteredImages();
 }
 
 
 void ListBoxImpl::SetDoubleClickAction(CallBackAction action, void *data) {
-    GETLBW(wid)->SetDoubleClickAction(action, data);
+    m_listBox->SetDoubleClickAction(action, data);
 }
 
 

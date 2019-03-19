@@ -9,7 +9,8 @@
 #include "Platform.h"
 
 class wxStyledTextCtrl;
-
+class wxSTCListBox;
+class wxSTCListBoxVisualData;
 
 
 
@@ -19,14 +20,8 @@ wxColour wxColourFromCD(const ColourDesired& ca);
 
 class ListBoxImpl : public ListBox {
 private:
-    int                 lineHeight;
-    bool                unicodeMode;
-    int                 desiredVisibleRows;
-    int                 aveCharWidth;
-    size_t              maxStrWidth;
-    Point               location;       // Caret location at which the list is opened
-    wxImageList*        imgList;
-    wxArrayInt*         imgTypeMap;
+    wxSTCListBox*           m_listBox;
+    wxSTCListBoxVisualData* m_visualData;
 
 public:
     ListBoxImpl();
