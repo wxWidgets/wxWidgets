@@ -11,6 +11,8 @@
 #ifndef _WX_MAC_DATAFORM_H
 #define _WX_MAC_DATAFORM_H
 
+#include "wx/osx/core/cfstring.h"
+
 class WXDLLIMPEXP_CORE wxDataFormat
 {
 public:
@@ -64,8 +66,8 @@ public:
 private:
     void ClearNativeFormat();
 
-    wxDataFormatId   m_type;
-    NativeFormat     m_format;
+    wxDataFormatId  m_type;
+    wxCFStringRef   m_format;
 };
 
 #endif // _WX_MAC_DATAFORM_H

@@ -40,33 +40,29 @@ static CFStringRef kUTTypeTraditionalMacText = CFSTR("com.apple.traditional-mac-
 wxDataFormat::wxDataFormat()
 {
     m_type = wxDF_INVALID;
-    m_format = 0;
 }
 
 wxDataFormat::wxDataFormat( wxDataFormatId vType )
 {
-    m_format = 0;
     m_type = wxDF_INVALID;
     SetType( vType );
 }
 
 wxDataFormat::wxDataFormat( const wxChar *zId )
 {
-    m_format = 0;
     m_type = wxDF_INVALID;
     SetId( zId );
 }
 
 wxDataFormat::wxDataFormat( const wxString& rId )
 {
-    m_format = 0;
     m_type = wxDF_INVALID;
     SetId( rId );
 }
 
 wxDataFormat::wxDataFormat(const wxDataFormat& rFormat)
 {
-    m_format = wxCFRetain(rFormat.m_format);
+    m_format = rFormat.m_format;
     m_type = rFormat.m_type;
 }
 
@@ -77,20 +73,11 @@ wxDataFormat::wxDataFormat(NativeFormat format)
 
 wxDataFormat::~wxDataFormat()
 {
-    ClearNativeFormat();
-}
-
-void wxDataFormat::ClearNativeFormat()
-{
-    wxCFRelease(m_format);
-    m_format = 0;
 }
 
 wxDataFormat& wxDataFormat::operator=(const wxDataFormat& rFormat)
 {
-    ClearNativeFormat();
-
-    m_format = wxCFRetain(rFormat.m_format);
+    m_format = rFormat.m_format;
     m_type = rFormat.m_type;
     return *this;
 }
@@ -125,7 +112,7 @@ wxDataFormat::NativeFormat wxDataFormat::GetFormatForType(wxDataFormatId type)
             break;
             
         default:
-            wxFAIL_MSG( wxT("invalid data format") );
+            wxFAIL_MSG( wxS("unsupported data format") );
             break;
     }
     return f;
@@ -133,10 +120,8 @@ wxDataFormat::NativeFormat wxDataFormat::GetFormatForType(wxDataFormatId type)
 
 void wxDataFormat::SetType( wxDataFormatId dataType )
 {
-    ClearNativeFormat();
-
     m_type = dataType;
-    m_format = wxCFRetain(GetFormatForType(dataType));
+    m_format = GetFormatForType(dataType);
 }
 
 void wxDataFormat::AddSupportedTypes(CFMutableArrayRef cfarray) const
@@ -149,17 +134,19 @@ void wxDataFormat::AddSupportedTypes(CFMutableArrayRef cfarray) const
     {
         CFArrayAppendValue(cfarray, GetFormatForType(m_type));
         // add additional accepted types
-        if ( GetType() == wxDF_UNICODETEXT )
+        switch (GetType())
         {
-            CFArrayAppendValue(cfarray, kUTTypeUTF8PlainText);
-        }
-        else if ( GetType() == wxDF_FILENAME )
-        {
-            CFArrayAppendValue(cfarray, kPasteboardTypeFileURLPromise);
-        }
-        else if ( GetType() == wxDF_BITMAP )
-        {
-            CFArrayAppendValue(cfarray, kUTTypePICT);
+            case wxDF_UNICODETEXT:
+                CFArrayAppendValue(cfarray, kUTTypeUTF8PlainText);
+                break;
+            case wxDF_FILENAME:
+                CFArrayAppendValue(cfarray, kPasteboardTypeFileURLPromise);
+                break;
+            case wxDF_BITMAP:
+                CFArrayAppendValue(cfarray, kUTTypePICT);
+                break;
+            default:
+                break;
         }
     }
 }
@@ -171,9 +158,7 @@ wxString wxDataFormat::GetId() const
 
 void wxDataFormat::SetId( NativeFormat format )
 {
-    ClearNativeFormat();
-
-    m_format = wxCFRetain(format);
+    m_format = format;
     if ( UTTypeConformsTo( (CFStringRef)format, kUTTypeHTML ) )
     {
         m_type = wxDF_HTML;
@@ -215,11 +200,9 @@ void wxDataFormat::SetId( NativeFormat format )
 
 void wxDataFormat::SetId( const wxString& zId )
 {
-    ClearNativeFormat();
-
     m_type = wxDF_PRIVATE;
     // since it is private, no need to conform to anything ...
-    m_format = wxCFRetain( (CFStringRef) wxCFStringRef(zId) );
+    m_format = wxCFStringRef(zId);
 }
 
 bool wxDataFormat::operator==(const wxDataFormat& format) const
@@ -267,7 +250,7 @@ bool wxDataObject::IsSupportedFormat( const wxDataFormat& rFormat, Direction vDi
     return found;
 }
 
-void wxDataObject::Write(wxOSXDataSink * datatransfer) const
+void wxDataObject::WriteToSink(wxOSXDataSink * datatransfer) const
 {
    // get formats from wxDataObjects
     wxDataFormat *array = new wxDataFormat[ GetFormatCount() ];
@@ -347,7 +330,7 @@ void wxDataObject::Write(wxOSXDataSink * datatransfer) const
     delete [] array;
 }
 
-bool wxDataObject::Read(wxOSXDataSource * source)
+bool wxDataObject::ReadFromSource(wxOSXDataSource * source)
 {
     bool transferred = false;
 
@@ -390,12 +373,12 @@ bool wxDataObject::Read(wxOSXDataSource * source)
                             // UTF8 data to our UTF16
                             if (dataFormat.GetType() == wxDF_UNICODETEXT && CFStringCompare(nativeFormat, kUTTypeUTF8PlainText, 0) == 0)
                             {
-                                static wxMBConvUTF16 s_UTF16Converter;
+                                wxMBConvUTF16 UTF16Converter;
 
                                 wxString s((char*)buf, wxConvUTF8, flavorDataSize);
                                 free(buf);
 
-                                const wxCharBuffer cb = s.mb_str(s_UTF16Converter);
+                                const wxCharBuffer cb = s.mb_str(UTF16Converter);
                                 flavorDataSize = cb.length();
                                 buf = malloc(cb.length() + 2);
                                 memset(buf, 0, flavorDataSize + 2);
@@ -415,7 +398,7 @@ bool wxDataObject::Read(wxOSXDataSource * source)
                             // cfMutableString is released by the wxCFStringRef
                             wxString path = wxCFStringRef(cfMutableString).AsString();
                             if (!path.empty())
-                                filenamesPassed += path + wxT("\n");
+                                filenamesPassed += path + wxS("\n");
                             
                             // if it's the last item, we set the wx data
                             if ( itemIndex + 1 == itemCount )
@@ -454,7 +437,7 @@ bool wxDataObject::Read(wxOSXDataSource * source)
     return transferred;
 }
 
-bool wxDataObject::CanRead( wxOSXDataSource * source ) const
+bool wxDataObject::CanReadFromSource( wxOSXDataSource * source ) const
 {
     bool hasData = false;
 
