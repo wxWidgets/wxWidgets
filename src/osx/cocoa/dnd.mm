@@ -194,9 +194,11 @@ void wxOSXPasteboard::Clear()
 void wxOSXPasteboard::Flush()
 {
     NSMutableArray* nsarray = [[NSMutableArray alloc] init];
-    for( auto i : m_sinkItems )
+    for ( wxVector<wxOSXDataSinkItem*>::iterator it = m_sinkItems.begin();
+         it != m_sinkItems.end();
+         ++it)
     {
-        wxOSXPasteboardSinkItem* item = dynamic_cast<wxOSXPasteboardSinkItem*>(i);
+        wxOSXPasteboardSinkItem* item = dynamic_cast<wxOSXPasteboardSinkItem*>(*it);
         [nsarray addObject:item->GetNative()];
         delete item;
     }
@@ -445,7 +447,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         wxOSXPasteboard dragPasteboard( pboard );
         dragPasteboard.Clear();
 
-        m_data->Write( &dragPasteboard);
+        m_data->WriteToSink( &dragPasteboard);
 
         dragPasteboard.Flush();
 

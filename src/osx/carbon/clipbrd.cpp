@@ -102,7 +102,7 @@ bool wxClipboard::AddData( wxDataObject *data )
     // we can only store one wxDataObject
     Clear();
 
-    data->Write(wxOSXPasteboard::GetGeneralClipboard());
+    data->WriteToSink(wxOSXPasteboard::GetGeneralClipboard());
 
     m_data = data;
 
@@ -174,7 +174,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     // get formats from wxDataObjects
     if ( !transferred )
     {
-        transferred = data.Read(wxOSXPasteboard::GetGeneralClipboard());
+        transferred = data.ReadFromSource(wxOSXPasteboard::GetGeneralClipboard());
     }
 
     delete [] array;

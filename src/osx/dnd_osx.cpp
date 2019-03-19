@@ -91,7 +91,7 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
 
     if ( !supported )
     {
-        supported = m_dataObject->CanRead( m_currentDragPasteboard );
+        supported = m_dataObject->CanReadFromSource( m_currentDragPasteboard );
     }
 
     return supported;
@@ -142,7 +142,7 @@ bool wxDropTarget::GetData()
 
     if ( !transferred )
     {
-        transferred = m_dataObject->Read(m_currentDragPasteboard);
+        transferred = m_dataObject->ReadFromSource(m_currentDragPasteboard);
     }
 
     return transferred;

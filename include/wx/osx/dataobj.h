@@ -22,16 +22,9 @@ public:
 
     virtual bool IsSupportedFormat( const wxDataFormat& format, Direction dir = Get ) const;
 
-    void Write(wxOSXDataSink *sink) const;
-    bool Read(wxOSXDataSource *source);
-    bool CanRead(wxOSXDataSource *source) const;
-
-    void AddToPasteboard( void * pasteboardRef , wxIntPtr itemID );
-    // returns true if the passed in format is present in the pasteboard
-    // static bool IsFormatInPasteboard( void * pasteboardRef, const wxDataFormat &dataFormat );
-    // returns true if any of the accepted formats of this dataobj is in the pasteboard
-    //bool HasDataInPasteboard( void * pasteboardRef );
-    //bool GetFromPasteboard( void * pasteboardRef );
+    void WriteToSink(wxOSXDataSink *sink) const;
+    bool ReadFromSource(wxOSXDataSource *source);
+    bool CanReadFromSource(wxOSXDataSource *source) const;
 
 #if wxOSX_USE_COCOA
     // adds all the native formats (in descending order of preference) this data object supports
