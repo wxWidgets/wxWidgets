@@ -611,7 +611,11 @@
         Only 4.3 defines __GXX_RTTI by default so its absence is not an
         indication of disabled RTTI with the previous versions.
      */
-#   if wxCHECK_GCC_VERSION(4, 3)
+#   if defined(__clang__)
+#       if !__has_feature(cxx_rtti)
+#           define wxNO_RTTI
+#       endif
+#   elif wxCHECK_GCC_VERSION(4, 3)
 #       ifndef __GXX_RTTI
 #           define wxNO_RTTI
 #       endif
