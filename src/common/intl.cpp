@@ -66,9 +66,10 @@
 
 #if defined(__WXOSX__)
     #include "wx/osx/core/cfref.h"
+    #include "wx/osx/core/cfstring.h"
     #include <CoreFoundation/CFLocale.h>
     #include <CoreFoundation/CFDateFormatter.h>
-    #include "wx/osx/core/cfstring.h"
+    #include <CoreFoundation/CFString.h>
 #endif
 
 // ----------------------------------------------------------------------------
