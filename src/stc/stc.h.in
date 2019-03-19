@@ -304,6 +304,11 @@ public:
     // Register an image for use in autocompletion lists.
     void RegisterImage(int type, const wxBitmap& bmp);
 
+    // Set the colours used to display the items in an autocompletion list.
+    void AutoCompSetColours(const wxColour& background, const wxColour& text,
+                            const wxColour& highlight,
+                            const wxColour& highlightText);
+
 
 
     // The following methods are nearly equivalent to their similarly named

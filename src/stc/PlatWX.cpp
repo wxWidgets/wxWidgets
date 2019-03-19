@@ -2321,6 +2321,8 @@ public:
     // Colour data
     void ComputeColours();
     const wxColour& GetBorderColour() const;
+    void SetColours(const wxColour&, const wxColour&,
+                    const wxColour&,const wxColour&);
     const wxColour& GetBgColour() const;
     const wxColour& GetTextColour() const;
     const wxColour& GetHighlightBgColour() const;
@@ -2337,9 +2339,16 @@ private:
     wxColour m_textColour;
     wxColour m_highlightBgColour;
     wxColour m_highlightTextColour;
+    bool     m_bgColourIsSet;
+    bool     m_textColourIsSet;
+    bool     m_highlightBgColourIsSet;
+    bool     m_highlightTextColourIsSet;
 };
 
-wxSTCListBoxVisualData::wxSTCListBoxVisualData(int d):m_desiredVisibleRows(d)
+wxSTCListBoxVisualData::wxSTCListBoxVisualData(int d):m_desiredVisibleRows(d),
+                        m_bgColourIsSet(false), m_textColourIsSet(false),
+                        m_highlightBgColourIsSet(false),
+                        m_highlightTextColourIsSet(false)
 {
     ComputeColours();
 }
@@ -2419,17 +2428,42 @@ void wxSTCListBoxVisualData::ComputeColours()
     // wxSYS_COLOUR_BTNSHADOW seems to be the closest match with most themes.
     m_borderColour = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW );
 
-    m_bgColour = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
-    m_textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
+    if ( !m_bgColourIsSet )
+        m_bgColour = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
+
+    if ( !m_textColourIsSet )
+        m_textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
 
 #ifdef __WXOSX_COCOA__
-    m_highlightBgColour = GetListHighlightColour();
+    if ( !m_highlightBgColourIsSet )
+        m_highlightBgColour = GetListHighlightColour();
 #else
-    m_highlightBgColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+    if ( !m_highlightBgColourIsSet )
+        m_highlightBgColour =
+        wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
 #endif
 
-    m_highlightTextColour =
-        wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
+    if ( !m_highlightTextColourIsSet )
+        m_highlightTextColour =
+            wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
+}
+
+void SetColourHelper(bool& isSet, wxColour& itemCol, const wxColour& newColour)
+{
+    isSet = newColour.IsOk();
+    itemCol = newColour;
+}
+
+void wxSTCListBoxVisualData::SetColours(const wxColour& bg,
+                                        const wxColour& txt,
+                                        const wxColour& hlbg,
+                                        const wxColour& hltext)
+{
+    SetColourHelper(m_bgColourIsSet, m_bgColour, bg);
+    SetColourHelper(m_textColourIsSet, m_textColour, txt);
+    SetColourHelper(m_highlightBgColourIsSet, m_highlightBgColour, hlbg);
+    SetColourHelper(m_highlightTextColourIsSet, m_highlightTextColour, hltext);
+    ComputeColours();
 }
 
 const wxColour& wxSTCListBoxVisualData::GetBorderColour() const
@@ -2972,6 +3006,12 @@ void ListBoxImpl::ClearRegisteredImages() {
 
 void ListBoxImpl::SetDoubleClickAction(CallBackAction action, void *data) {
     m_listBox->SetDoubleClickAction(action, data);
+}
+
+void ListBoxImpl::SetColours(const wxColour& background, const wxColour& text,
+                             const wxColour& hiliBg, const wxColour& hiliText)
+{
+    m_visualData->SetColours(background, text, hiliBg, hiliText);
 }
 
 

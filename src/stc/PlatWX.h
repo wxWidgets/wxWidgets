@@ -49,6 +49,8 @@ public:
     virtual void ClearRegisteredImages() wxOVERRIDE;
     virtual void SetDoubleClickAction(CallBackAction, void *) wxOVERRIDE;
     virtual void SetList(const char* list, char separator, char typesep) wxOVERRIDE;
+            void SetColours(const wxColour&, const wxColour&,
+                            const wxColour&, const wxColour&);
 };
 
 

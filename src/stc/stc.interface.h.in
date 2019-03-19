@@ -363,6 +363,30 @@ public:
     */
     void RegisterImage(int type, const wxBitmap& bmp);
 
+    /**
+       Set the colours used to display the items in an autocompletion list.
+
+       This method can be used if the default colours make the list hard to
+       read or if specific colours are desired for whatever reason.
+        @param background
+            The colour used for the background of the list.
+        @param text
+            The colour used for all text except for the selected item.
+        @param highlight
+            The colour used to highlight the selected item in the list.
+        @param highlightText
+            The colour used for the text of the selected item.
+        @remarks
+            To reset one or more of the colours to its default,
+            call this method with wxNullColour for the colour or colours
+            to be reset.
+
+        @since 3.1.3
+    */
+    void AutoCompSetColours(const wxColour& background, const wxColour& text,
+                            const wxColour& highlight,
+                            const wxColour& highlightText);
+
     //@}
 
 
