@@ -245,6 +245,15 @@ public:
     void DoShow()
     {
         Popup();
+
+        // Call Popup function in case of an already showing rich tooltip 
+        // lead to closing the previous tooltip because of losing focus
+        // while showing the current one. It's lead to losing focus from
+        // the current rich tooltip. So the focus should be returned back.
+        if ( !HasFocus() )
+        {
+            SetFocus();
+        }
     }
 
     void SetTimeoutAndShow(unsigned timeout, unsigned delay)
