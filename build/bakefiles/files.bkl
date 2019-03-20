@@ -3459,14 +3459,21 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                                wxSTC                                   -->
 <!-- ====================================================================== -->
 
-<set var="STC_SRC" hints="files">
+<set var="STC_CMN_SRC" hints="files">
     src/stc/stc.cpp
     src/stc/PlatWX.cpp
     src/stc/ScintillaWX.cpp
 </set>
 
-<set var="STC_HDR" hints="files">
+<set var="STC_CMN_HDR" hints="files">
     wx/stc/stc.h
+</set>
+
+<set var="STC_OSX_COCOA_SRC" hints="files">
+    src/stc/PlatWXcocoa.mm
+</set>
+
+<set var="STC_OSX_COCOA_HDR" hints="files">
 </set>
 
 <!-- ====================================================================== -->
@@ -3649,6 +3656,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </set>
     <set var="MEDIA_SRC">$(MEDIA_CMN_SRC) $(MEDIA_PLATFORM_SRC)</set>
     <set var="MEDIA_HDR">$(MEDIA_CMN_HDR) $(MEDIA_PLATFORM_HDR)</set>
+
+    <!-- wxSTC files: -->
+    <set var="STC_PLATFORM_SRC" hints="files">
+        <if cond="TOOLKIT=='OSX_COCOA'">$(STC_OSX_COCOA_SRC)</if>
+    </set>
+    <set var="STC_PLATFORM_HDR" hints="files">
+        <if cond="TOOLKIT=='OSX_COCOA'">$(STC_OSX_COCOA_HDR)</if>
+    </set>
+    <set var="STC_SRC">$(STC_CMN_SRC) $(STC_PLATFORM_SRC)</set>
+    <set var="STC_HDR">$(STC_CMN_HDR) $(STC_PLATFORM_HDR)</set>
 
 
     <set var="GUI_CORE_HEADERS" hints="files">
