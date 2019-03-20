@@ -533,7 +533,8 @@ public:
         would return @false immediately after the call to SetValue().
 
         The insertion point is set to the start of the control (i.e. position
-        0) by this function.
+        0) by this function unless the control value doesn't change at all, in
+        which case the insertion point is left at its original position.
 
         Note that, unlike most other functions changing the controls values,
         this function generates a @c wxEVT_TEXT event. To avoid
