@@ -162,10 +162,11 @@ bool wxClipboard::GetData( wxDataObject& data )
                 }
                 else
                 {
-                    char *d = new char[ dataSize ];
-                    m_data->GetDataHere( format, (void*)d );
+                    wxMemoryBuffer mem(dataSize);
+                    void *d = mem.GetWriteBuf(dataSize);
+                    m_data->GetDataHere( format, d );
                     data.SetData( format, dataSize, d );
-                    delete [] d;
+                    mem.UngetWriteBuf(dataSize);
                 }
             }
         }
