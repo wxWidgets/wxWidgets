@@ -289,12 +289,15 @@ void wxDataObject::WriteToSink(wxOSXDataSink * datatransfer) const
         // string including trailing zero
 
         size_t sz = datasize + 4;
-        void* buf = malloc( sz );
+        wxMemoryBuffer databuf( datasize+4 );
+        void* buf = databuf.GetWriteBuf(datasize+4);
         if ( buf != NULL )
         {
             // empty the buffer because in some case GetDataHere does not fill buf
             memset( buf, 0, sz );
-            if ( GetDataHere( thisFormat, buf ) )
+            bool datavalid = GetDataHere( thisFormat, buf );
+            databuf.UngetWriteBuf(datasize);
+            if ( datavalid )
             {
                 if ( !sinkItem )
                     sinkItem = datatransfer->CreateItem();
@@ -320,10 +323,9 @@ void wxDataObject::WriteToSink(wxOSXDataSink * datatransfer) const
                 }
                 else
                 {
-                    sinkItem->SetData(thisFormat.GetFormatId(), (UInt8*)buf, datasize);
+                    sinkItem->SetData(thisFormat.GetFormatId(), databuf.GetData(), databuf.GetDataLen());
                 }
             }
-            free( buf );
         }
     }
 
@@ -360,11 +362,14 @@ bool wxDataObject::ReadFromSource(wxOSXDataSource * source)
                 if (flavorData)
                 {
                     CFIndex flavorDataSize = CFDataGetLength(flavorData);
-                    void* buf = malloc(flavorDataSize + 4);
+                    size_t sz = flavorDataSize + 4;
+                    wxMemoryBuffer databuf( sz );
+                    void* buf = databuf.GetWriteBuf( sz );
                     if (buf)
                     {
-                        memset(buf, 0, flavorDataSize + 4);
+                        memset(buf, 0, sz);
                         memcpy(buf, CFDataGetBytePtr(flavorData), flavorDataSize);
+                        databuf.UngetWriteBuf(flavorDataSize);
 
                         if (nativeFormat != dataFormat.GetFormatId())
                         {
@@ -376,13 +381,14 @@ bool wxDataObject::ReadFromSource(wxOSXDataSource * source)
                                 wxMBConvUTF16 UTF16Converter;
 
                                 wxString s((char*)buf, wxConvUTF8, flavorDataSize);
-                                free(buf);
 
                                 const wxCharBuffer cb = s.mb_str(UTF16Converter);
                                 flavorDataSize = cb.length();
-                                buf = malloc(cb.length() + 2);
-                                memset(buf, 0, flavorDataSize + 2);
-                                memcpy(buf, cb.data(), cb.length());
+                                sz = flavorDataSize + 2;
+                                buf = databuf.GetWriteBuf(sz);
+                                memset(buf, 0, sz);
+                                memcpy(buf, cb.data(), flavorDataSize);
+                                databuf.UngetWriteBuf(flavorDataSize);
                             }
                         }
                         
@@ -428,7 +434,6 @@ bool wxDataObject::ReadFromSource(wxOSXDataSource * source)
                             // multiple items are not supported in wx, set flag to true
                             transferred = true;
                         }
-                        free(buf);
                     }
                 }
             }
