@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/metafile.h"
+#include "wx/scopedarray.h"
 
 #include "wx/osx/private.h"
 
@@ -139,10 +140,9 @@ bool wxClipboard::GetData( wxDataObject& data )
 
     wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
 
-    size_t formatcount = data.GetFormatCount(wxDataObject::Set) + 1;
-    wxDataFormat *array = new wxDataFormat[ formatcount ];
-    array[0] = data.GetPreferredFormat(wxDataObject::Set);
-    data.GetAllFormats( &array[1], wxDataObject::Set );
+    size_t formatcount = data.GetFormatCount(wxDataObject::Set);
+    wxScopedArray<wxDataFormat> array(formatcount);
+    data.GetAllFormats( array.get(), wxDataObject::Set );
 
     bool transferred = false;
 
@@ -176,8 +176,6 @@ bool wxClipboard::GetData( wxDataObject& data )
     {
         transferred = data.ReadFromSource(wxOSXPasteboard::GetGeneralClipboard());
     }
-
-    delete [] array;
 
     return transferred;
 }

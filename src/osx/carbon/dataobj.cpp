@@ -232,19 +232,17 @@ bool wxDataObject::IsSupportedFormat( const wxDataFormat& rFormat, Direction vDi
     }
     else
     {
-        wxDataFormat *pFormats = new wxDataFormat[nFormatCount];
-        GetAllFormats( pFormats, vDir );
+        wxScopedArray<wxDataFormat> array(nFormatCount);
+        GetAllFormats( array.get(), vDir );
 
         for (size_t n = 0; n < nFormatCount; n++)
         {
-            if (pFormats[n] == rFormat)
+            if (array[n] == rFormat)
             {
                 found = true;
                 break;
             }
         }
-
-        delete [] pFormats;
     }
 
     return found;
@@ -253,8 +251,8 @@ bool wxDataObject::IsSupportedFormat( const wxDataFormat& rFormat, Direction vDi
 void wxDataObject::WriteToSink(wxOSXDataSink * datatransfer) const
 {
    // get formats from wxDataObjects
-    wxDataFormat *array = new wxDataFormat[ GetFormatCount() ];
-    GetAllFormats( array );
+    wxScopedArray<wxDataFormat> array(GetFormatCount());
+    GetAllFormats( array.get() );
 
     wxOSXDataSinkItem* sinkItem = NULL;
 
@@ -328,8 +326,6 @@ void wxDataObject::WriteToSink(wxOSXDataSink * datatransfer) const
             }
         }
     }
-
-    delete [] array;
 }
 
 bool wxDataObject::ReadFromSource(wxOSXDataSource * source)
@@ -470,13 +466,12 @@ bool wxDataObject::CanReadFromSource( wxOSXDataSource * source ) const
 void wxDataObject::AddSupportedTypes( CFMutableArrayRef cfarray) const
 {
     size_t nFormats = GetFormatCount(wxDataObject::Set);
-    wxDataFormat *array = new wxDataFormat[nFormats];
-    GetAllFormats(array, wxDataObject::Set);
+    wxScopedArray<wxDataFormat> array(GetFormatCount());
+    GetAllFormats(array.get(), wxDataObject::Set);
 
     for (size_t i = 0; i < nFormats; i++)
         array[i].AddSupportedTypes(cfarray);
 
-    delete[] array;
 }
 
 // ----------------------------------------------------------------------------
