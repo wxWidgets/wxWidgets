@@ -20,7 +20,6 @@
 #if wxUSE_DATATRANSFER
 
 #include "wx/debug.h"
-#include "wx/typeinfo.h"
 
 #if defined(HAVE_TYPE_TRAITS)
     #include <type_traits>
@@ -90,11 +89,18 @@ public:
 protected:
     explicit wxGenericValidatorBase(void* data) : m_data(data){}
 
-#ifndef wxNO_RTTI
     // Called by wxGenericValidatorSimpleType<wxWindow, T>::SetWindow() to set
     // the right validator based on the dynamic type of the m_validatorWindow.
-    wxGenericValidatorBase* Convert(const std::type_info& tid) const;
-#endif // wxNO_RTTI
+    wxGenericValidatorBase* Convert(bool* data) const;
+    wxGenericValidatorBase* Convert(int* data) const;
+    wxGenericValidatorBase* Convert(float* data) const;
+    wxGenericValidatorBase* Convert(double* data) const;
+    wxGenericValidatorBase* Convert(wxString* data) const;
+    wxGenericValidatorBase* Convert(wxArrayInt* data) const;
+    wxGenericValidatorBase* Convert(wxDateTime* data) const;
+    wxGenericValidatorBase* Convert(wxFileName* data) const;
+    wxGenericValidatorBase* Convert(wxColour* data) const;
+    wxGenericValidatorBase* Convert(wxFont* data) const;
 
     void* m_data;
 
@@ -176,15 +182,13 @@ public:
     {
         wxGenericValidatorBase::SetWindow(win);
 
-    #ifndef wxNO_RTTI
         wxScopedPtr<wxGenericValidatorBase> val(
-            wxGenericValidatorBase::Convert(typeid(T)));
+            wxGenericValidatorBase::Convert(static_cast<T*>(this->m_data)));
 
         wxCHECK_RET( val, "Validator convertion failed" );
 
         if ( win )
             win->SetValidator(*val);
-    #endif // wxNO_RTTI
     }
 };
 
@@ -250,13 +254,6 @@ public:
     virtual wxObject *Clone() const wxOVERRIDE 
     {
         return new wxGenericValidatorCompositType(*this);
-    }
-
-    virtual void SetWindow(wxWindow *win) wxOVERRIDE
-    {
-        this->m_validatorWindow = win; 
-
-        wxASSERT_MSG((wxTypeId(*win) == wxTypeId(W)), "Invalid window type!");
     }
 
     virtual bool Validate(wxWindow* parent) wxOVERRIDE

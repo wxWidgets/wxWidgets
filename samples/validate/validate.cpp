@@ -159,8 +159,6 @@ public:
     virtual void SetWindow(wxWindow *win) wxOVERRIDE
     {
         this->m_validatorWindow = win; 
-
-        wxASSERT_MSG((wxTypeId(*win) == wxTypeId(W)), "Invalid window type!");
     }
 
     virtual bool Validate(wxWindow* parent) wxOVERRIDE
