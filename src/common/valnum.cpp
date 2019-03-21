@@ -178,9 +178,21 @@ void wxNumValidatorBase::OnChar(wxKeyEvent& event)
 
 void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
 {
+    event.Skip();
+
     wxTextEntry * const control = GetTextEntry();
     if ( !control )
         return;
+
+    const wxString& valueNorm = NormalizeString(control->GetValue());
+    if ( control->GetValue() == valueNorm )
+    {
+        // Don't do anything at all if the value doesn't really change, even if
+        // the control optimizes away the calls to ChangeValue() which don't
+        // actually change it, it's easier to skip all the complications below
+        // if we don't need to do anything.
+        return;
+    }
 
     // When we change the control value below, its "modified" status is reset
     // so we need to explicitly keep it marked as modified if it was so in the
@@ -191,12 +203,10 @@ void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
     wxTextCtrl * const text = wxDynamicCast(m_validatorWindow, wxTextCtrl);
     const bool wasModified = text ? text->IsModified() : false;
 
-    control->ChangeValue(NormalizeString(control->GetValue()));
+    control->ChangeValue(valueNorm);
 
     if ( wasModified )
         text->MarkDirty();
-
-    event.Skip();
 }
 
 // ============================================================================
