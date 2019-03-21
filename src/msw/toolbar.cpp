@@ -553,8 +553,11 @@ wxSize wxToolBar::MSWGetFittingtSizeForControl(wxToolBarTool* tool) const
         }
     }
 
-    // Also account for the tool padding value.
-    size.x += m_toolPacking;
+    // Also account for the tool padding value: note that we only have to add
+    // half of it to each tool, as the total amount of packing is the sum of
+    // the right margin of the previous tool and the left margin of the next
+    // one.
+    size.x += m_toolPacking / 2;
 
     return size;
 }
@@ -603,7 +606,9 @@ wxSize wxToolBar::DoGetBestSize() const
                 sizeBest.x += sizeTool.x;
             }
 
-            sizeBest.x += m_toolPacking;
+            // As explained in MSWGetFittingtSizeForControl() above, the actual
+            // margin used for a single tool is one half of the total packing.
+            sizeBest.x += m_toolPacking / 2;
         }
     }
 
@@ -1271,8 +1276,10 @@ bool wxToolBar::Realize()
 
         const wxSize controlSize = control->GetSize();
 
-        // Take also into account tool padding value.
-        const int x = r.left + m_toolPacking/2;
+        // Take also into account tool padding value: the amount of padding
+        // used for each tool is half of m_toolPacking, so the margin on each
+        // side is a half of that.
+        const int x = r.left + m_toolPacking / 4;
 
         // Greater of control and its label widths.
         int totalWidth = controlSize.x;
