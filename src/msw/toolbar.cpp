@@ -610,13 +610,16 @@ wxSize wxToolBar::DoGetBestSize() const
     // Note that this needs to be done after the loop to account for controls
     // too high to fit into the toolbar without the border size but that could
     // fit if we had added the border beforehand.
-    if ( IsVertical() )
+    if ( !HasFlag(wxTB_NODIVIDER) )
     {
-        sizeBest.x += 2 * ::GetSystemMetrics(SM_CXBORDER);
-    }
-    else
-    {
-        sizeBest.y += 2 * ::GetSystemMetrics(SM_CYBORDER);
+        if ( IsVertical() )
+        {
+            sizeBest.x += 2 * ::GetSystemMetrics(SM_CXBORDER);
+        }
+        else
+        {
+            sizeBest.y += 2 * ::GetSystemMetrics(SM_CYBORDER);
+        }
     }
 
     return sizeBest;
@@ -1218,8 +1221,14 @@ bool wxToolBar::Realize()
 
     // We don't trust the height returned by wxGetTBItemRect() as it may not
     // have been updated yet, use the height that the toolbar will actually
-    // have instead. Also, account for 2px toolbar border here.
-    const int height = GetBestSize().y - 2 * ::GetSystemMetrics(SM_CYBORDER);
+    // have instead.
+    int height = GetBestSize().y;
+    if ( !HasFlag(wxTB_NODIVIDER) )
+    {
+        // We want just the usable height, so remove the space taken by the
+        // border/divider.
+        height -= 2 * ::GetSystemMetrics(SM_CYBORDER);
+    }
 
     // adjust the controls size to fit nicely in the toolbar and compute its
     // total size while doing it
