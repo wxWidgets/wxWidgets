@@ -348,19 +348,6 @@ inline void wxSetGenericValidator(W* win, TComposite<T, Ts...>& value)
     win->SetValidator( wxGenericValidatorCompositType<W, TComposite, T, Ts...>(value) );
 }
 
-template<class Panel, 
-         template<typename...> class TWindows, 
-         template<typename...> class TComposite,
-         class W, typename T, class... Ws, typename... Ts>
-inline void wxSetGenericValidator(Panel* panel, 
-                                  TWindows<W*, Ws*...>& wins, 
-                                  TComposite<T, Ts...>& value)
-{
-    panel->SetValidator( 
-        wxGenericValidatorCompositType<TWindows<W, Ws...>, 
-                                       TComposite, T, Ts...>{wins, value} );
-}
-
 #else // !defined(HAVE_VARIADIC_TEMPLATES)
 template<class W, template<typename> class TComposite, typename T>
 inline auto wxGenericValidator(TComposite<T>& value)

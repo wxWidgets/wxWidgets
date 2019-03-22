@@ -156,6 +156,18 @@ private:
     WindowsType& m_wins;
 };
 
+template<template<typename...> class TWindows,
+         template<typename...> class TComposite,
+         class W, typename T, class... Ws, typename... Ts>
+inline void wxSetGenericValidator(wxPanel* panel,
+                                  TWindows<W*, Ws*...>& wins,
+                                  TComposite<T, Ts...>& value)
+{
+    panel->SetValidator(
+        wxGenericValidatorCompositType<
+            TWindows<W, Ws...>, TComposite, T, Ts...>{wins, value} );
+}
+
 // ----------------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------------
@@ -269,7 +281,6 @@ protected:
     // at the time an alternative (control) is being selected.
     virtual void OnAlternativeSelected(int WXUNUSED(id)){}
 };
-
 
 #endif // defined(HAVE_STD_VARIANT)
 
