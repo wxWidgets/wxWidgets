@@ -596,7 +596,7 @@ public:
     /**
         Returns true if property is selected.
     */
-    virtual bool IsPropertySelected( wxPGPropArg id ) const;
+    bool IsPropertySelected( wxPGPropArg id ) const;
 
     /**
         Returns @true if property is shown (ie. HideProperty() with @true not
