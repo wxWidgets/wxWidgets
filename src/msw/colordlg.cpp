@@ -160,7 +160,8 @@ wxColourDialogHookProc(HWND hwnd,
     if ( uiMsg == WM_INITDIALOG )
     {
         CHOOSECOLOR *pCC = (CHOOSECOLOR *)lParam;
-        wxColourDialog * const  dialog = (wxColourDialog *)pCC->lCustData;
+        wxColourDialog * const
+            dialog = reinterpret_cast<wxColourDialog *>(pCC->lCustData);
            
         // Init the subclassing data.
         g_subclassingData.originalProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)wxColourDialogSubClassProc);
