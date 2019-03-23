@@ -398,6 +398,15 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::IncompatibleFlags", "[sizer]")
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxEXPAND, wxALIGN_CENTRE_VERTICAL);
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxEXPAND, wxALIGN_BOTTOM);
 
+    // But combining it with these flags and wxSHAPED does make sense and so
+    // shouldn't result in an assert.
+    CHECK_NOTHROW(
+        sizer->Add(10, 10, 0, wxEXPAND | wxSHAPED | wxALIGN_CENTRE_VERTICAL)
+    );
+    CHECK_NOTHROW(
+        sizer->Add(10, 10, 0, wxEXPAND | wxSHAPED | wxALIGN_TOP)
+    );
+
 
     // And now exactly the same thing in the other direction.
     sizer = new wxBoxSizer(wxVERTICAL);
@@ -418,6 +427,13 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::IncompatibleFlags", "[sizer]")
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxALIGN_RIGHT, wxALIGN_CENTRE_HORIZONTAL);
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxEXPAND, wxALIGN_CENTRE_HORIZONTAL);
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxEXPAND, wxALIGN_RIGHT);
+
+    CHECK_NOTHROW(
+        sizer->Add(10, 10, 0, wxEXPAND | wxSHAPED | wxALIGN_CENTRE_HORIZONTAL)
+    );
+    CHECK_NOTHROW(
+        sizer->Add(10, 10, 0, wxEXPAND | wxSHAPED | wxALIGN_RIGHT)
+    );
 
 #undef ASSERT_SIZER_INCOMPATIBLE_FLAGS
 #undef ASSERT_SIZER_INVALID_FLAGS
