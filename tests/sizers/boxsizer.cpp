@@ -62,29 +62,29 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::Size1", "[sizer]")
         child = new wxWindow(m_win, wxID_ANY, wxDefaultPosition, sizeChild);
     m_sizer->Add(child);
     m_win->Layout();
-    CPPUNIT_ASSERT_EQUAL( sizeChild, child->GetSize() );
+    CHECK(child->GetSize() == sizeChild);
 
     m_sizer->Clear();
     m_sizer->Add(child, wxSizerFlags(1));
     m_win->Layout();
-    CPPUNIT_ASSERT_EQUAL( wxSize(sizeTotal.x, sizeChild.y), child->GetSize() );
+    CHECK( child->GetSize() == wxSize(sizeTotal.x, sizeChild.y) );
 
     m_sizer->Clear();
     m_sizer->Add(child, wxSizerFlags(1).Expand());
     m_win->Layout();
-    CPPUNIT_ASSERT_EQUAL( sizeTotal, child->GetSize() );
+    CHECK(child->GetSize() == sizeTotal);
 
     m_sizer->Clear();
     m_sizer->Add(child, wxSizerFlags());
     m_sizer->SetItemMinSize(child, sizeTotal*2);
     m_win->Layout();
-    CPPUNIT_ASSERT_EQUAL( sizeTotal, child->GetSize() );
+    CHECK(child->GetSize() == sizeTotal);
 
     m_sizer->Clear();
     m_sizer->Add(child, wxSizerFlags().Expand());
     m_sizer->SetItemMinSize(child, sizeTotal*2);
     m_win->Layout();
-    CPPUNIT_ASSERT_EQUAL( sizeTotal, child->GetSize() );
+    CHECK(child->GetSize() == sizeTotal);
 }
 
 TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::Size3", "[sizer]")
@@ -281,10 +281,10 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::SetMinSize", "[sizer]")
     // Setting minimal size explicitly must make GetMinSize() return at least
     // this size even if it needs a much smaller one.
     m_sizer->SetMinSize(100, 0);
-    CPPUNIT_ASSERT_EQUAL( 100, m_sizer->GetMinSize().x );
+    CHECK(m_sizer->GetMinSize().x == 100);
 
     m_sizer->Layout();
-    CPPUNIT_ASSERT_EQUAL( 100, m_sizer->GetMinSize().x );
+    CHECK(m_sizer->GetMinSize().x == 100);
 }
 
 TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::BestSizeRespectsMaxSize", "[sizer]")
@@ -302,7 +302,7 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::BestSizeRespectsMaxSize", "[sizer]
     m_sizer->Add(sizer);
     m_win->Layout();
 
-    CPPUNIT_ASSERT_EQUAL(maxWidth, listbox->GetSize().GetWidth());
+    CHECK(listbox->GetSize().GetWidth() == maxWidth);
 }
 
 TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::RecalcSizesRespectsMaxSize1", "[sizer]")
@@ -330,7 +330,7 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::RecalcSizesRespectsMaxSize1", "[si
 
     m_win->Layout();
 
-    CPPUNIT_ASSERT_EQUAL(maxWidth, listbox2->GetSize().GetWidth());
+    CHECK(listbox2->GetSize().GetWidth() == maxWidth);
 }
 
 TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::RecalcSizesRespectsMaxSize2", "[sizer]")
@@ -354,9 +354,9 @@ TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::RecalcSizesRespectsMaxSize2", "[si
 
     m_win->Layout();
 
-    CPPUNIT_ASSERT_EQUAL(125, child1->GetSize().GetHeight());
-    CPPUNIT_ASSERT_EQUAL(50, child2->GetSize().GetHeight());
-    CPPUNIT_ASSERT_EQUAL(125, child3->GetSize().GetHeight());
+    CHECK(child1->GetSize().GetHeight() == 125);
+    CHECK(child2->GetSize().GetHeight() == 50);
+    CHECK(child3->GetSize().GetHeight() == 125);
 }
 
 TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::IncompatibleFlags", "[sizer]")
