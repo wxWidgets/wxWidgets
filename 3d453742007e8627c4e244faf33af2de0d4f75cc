@@ -1,0 +1,1 @@
+All: Fix spurious asserts in wxBoxSizer when wxSHAPED is used.
