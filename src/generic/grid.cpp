@@ -8818,6 +8818,12 @@ wxPen& wxGrid::GetDividerPen() const
 
 void wxGrid::SetCellValue( int row, int col, const wxString& s )
 {
+    if ( s == GetCellValue(row, col) )
+    {
+        // Avoid flicker by not doing anything in this case.
+        return;
+    }
+
     if ( m_table )
     {
         m_table->SetValue( row, col, s );
