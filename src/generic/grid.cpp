@@ -8818,28 +8818,31 @@ wxPen& wxGrid::GetDividerPen() const
 
 void wxGrid::SetCellValue( int row, int col, const wxString& s )
 {
-    if ( m_table )
+    if( GetCellValue( row, col ) != s )
     {
-        m_table->SetValue( row, col, s );
-        if ( !GetBatchCount() )
+        if ( m_table )
         {
-            int dummy;
-            wxRect rect( CellToRect( row, col ) );
-            rect.x = 0;
-            rect.width = m_gridWin->GetClientSize().GetWidth();
-            CalcScrolledPosition(0, rect.y, &dummy, &rect.y);
-            m_gridWin->Refresh( false, &rect );
-        }
+            m_table->SetValue( row, col, s );
+            if ( !GetBatchCount() )
+            {
+                int dummy;
+                wxRect rect( CellToRect( row, col ) );
+                rect.x = 0;
+                rect.width = m_gridWin->GetClientSize().GetWidth();
+                CalcScrolledPosition(0, rect.y, &dummy, &rect.y);
+                m_gridWin->Refresh( false, &rect );
+            }
 
-        if ( m_currentCellCoords.GetRow() == row &&
-             m_currentCellCoords.GetCol() == col &&
-             IsCellEditControlShown())
+            if ( m_currentCellCoords.GetRow() == row &&
+                 m_currentCellCoords.GetCol() == col &&
+                 IsCellEditControlShown())
              // Note: If we are using IsCellEditControlEnabled,
              // this interacts badly with calling SetCellValue from
              // an EVT_GRID_CELL_CHANGE handler.
-        {
-            HideCellEditControl();
-            ShowCellEditControl(); // will reread data from table
+            {
+                HideCellEditControl();
+                ShowCellEditControl(); // will reread data from table
+            }
         }
     }
 }
