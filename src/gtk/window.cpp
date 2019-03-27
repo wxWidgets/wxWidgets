@@ -4786,7 +4786,8 @@ void wxWindowGTK::RealizeTabOrder()
                         }
                     }
                 }
-                else if ( win->GTKWidgetNeedsMnemonic() )
+
+                if ( win->GTKWidgetNeedsMnemonic() )
                 {
                     mnemonicWindow = win;
                 }
