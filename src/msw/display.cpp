@@ -192,7 +192,7 @@ public:
     virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
     virtual int GetFromWindow(const wxWindow *window) wxOVERRIDE;
 
-    void InvalidateCache() override
+    void InvalidateCache() wxOVERRIDE
     {
         wxDisplayFactory::InvalidateCache();
         DoRefreshMonitors();
