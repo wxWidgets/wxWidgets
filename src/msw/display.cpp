@@ -612,15 +612,18 @@ wxDisplayFactoryMSW::GetDpiForMonitorPtr()
 
 void wxDisplayFactoryMSW::DoRefreshMonitors()
 {
-    m_displays.clear();
+    wxVector<wxDisplayInfo> displayInfos;
 
     // We need to pass a valid HDC here in order to get valid hdcMonitor in our
     // callback.
     ScreenHDC dc;
-    if ( !::EnumDisplayMonitors(dc, NULL, MultimonEnumProc, (LPARAM)this) )
+    if ( !::EnumDisplayMonitors(dc, NULL, MultimonEnumProc, (LPARAM)&displayInfos) )
     {
         wxLogLastError(wxT("EnumDisplayMonitors"));
     }
+    
+    if (!displayInfos.empty())
+        m_displays = displayInfos;
 }
 
 /* static */
@@ -631,9 +634,9 @@ wxDisplayFactoryMSW::MultimonEnumProc(
     LPRECT WXUNUSED(lprcMonitor),   // pointer to monitor intersection rectangle
     LPARAM dwData)                  // data passed from EnumDisplayMonitors (this)
 {
-    wxDisplayFactoryMSW *const self = (wxDisplayFactoryMSW *)dwData;
+    wxVector<wxDisplayInfo>& displayInfos = *(wxVector<wxDisplayInfo>*)dwData;
 
-    self->m_displays.push_back(wxDisplayInfo(hMonitor, wxGetHDCDepth(hdcMonitor)));
+    displayInfos.push_back(wxDisplayInfo(hMonitor, wxGetHDCDepth(hdcMonitor)));
 
     // continue the enumeration
     return TRUE;
