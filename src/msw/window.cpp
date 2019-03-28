@@ -4723,8 +4723,6 @@ bool wxWindowMSW::HandleSysColorChange()
 
 bool wxWindowMSW::HandleDisplayChange()
 {
-    wxDisplay::InvalidateCache();
-
     wxDisplayChangedEvent event;
     event.SetEventObject(this);
 

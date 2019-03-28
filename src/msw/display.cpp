@@ -192,9 +192,15 @@ public:
     virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
     virtual int GetFromWindow(const wxWindow *window) wxOVERRIDE;
 
+    void InvalidateCache() wxOVERRIDE
+    {
+        wxDisplayFactory::InvalidateCache();
+        DoRefreshMonitors();
+    }
+
     // Called when we receive WM_SETTINGCHANGE to refresh the list of monitor
     // handles.
-    static void RefreshMonitors() { ms_factory->DoRefreshMonitors(); }
+    static void RefreshMonitors() { ms_factory->InvalidateCache(); }
 
     // Declare the second argument as int to avoid problems with older SDKs not
     // declaring MONITOR_DPI_TYPE enum.
@@ -529,9 +535,9 @@ bool wxDisplayMSW::ChangeMode(const wxVideoMode& mode)
 LRESULT APIENTRY
 wxDisplayWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    if ( msg == WM_SETTINGCHANGE )
+    if ( msg == WM_SETTINGCHANGE || msg == WM_DISPLAYCHANGE )
     {
-        wxDisplayFactoryMSW::RefreshMonitors();
+        wxDisplay::InvalidateCache();
 
         return 0;
     }
