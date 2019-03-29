@@ -519,6 +519,11 @@ void wxToolBar::Recreate()
 
     wxDELETE(m_disabledImgList);
 
+    // Also skip deleting the existing buttons in Realize(): they don't exist
+    // any more, so doing this is unnecessary and just results in errors from
+    // TB_DELETEBUTTON.
+    m_nButtons = 0;
+
     Realize();
 }
 
