@@ -475,6 +475,14 @@ void wxToolBar::Recreate()
     const wxPoint pos = GetPosition();
     const wxSize size = GetSize();
 
+    // Hide the toolbar before recreating it to ensure that wxFrame doesn't try
+    // to account for its size, e.g. to offset the position of the new toolbar
+    // being created by the size of this toolbar itself. This wouldn't work
+    // anyhow, because we can't query for the size of a window without any
+    // valid HWND, but would result in debug warning messages and is just a
+    // wrong thing to do anyhow.
+    Hide();
+
     UnsubclassWin();
 
     if ( !MSWCreateToolbar(pos, size) )
@@ -484,6 +492,9 @@ void wxToolBar::Recreate()
 
         return;
     }
+
+    // Undo the effect of Hide() above.
+    Show();
 
     // reparent all our children under the new toolbar
     for ( wxWindowList::compatibility_iterator node = m_children.GetFirst();
