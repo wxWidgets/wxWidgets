@@ -3291,7 +3291,25 @@ public:
     wxMouseCaptureLostEvent(wxWindowID windowId = 0);
 };
 
+/**
+    @class wxDisplayChangedEvent
 
+    A display changed event is sent to top-level windows when the display resolution has changed.
+    
+    This event is currently emitted under Windows only.
+
+    @beginEventTable{wxDisplayChangedEvent}
+    @event{EVT_DISPLAY_CHANGED(func)}
+        Process a @c wxEVT_DISPLAY_CHANGED event.
+    @endEventTable
+
+    @onlyfor{wxmsw}
+
+    @library{wxcore}
+    @category{events}
+
+    @see wxDisplay
+*/ 
 
 class wxDisplayChangedEvent : public wxEvent
 {
