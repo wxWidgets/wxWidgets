@@ -83,6 +83,7 @@ public:
         return wxCOPY;
     }
 
+#if wxABI_VERSION >= 30005
     virtual void SetLogicalOrigin(wxCoord x, wxCoord y)
     {
         wxDCImpl::SetLogicalOrigin(x, y);
@@ -100,6 +101,7 @@ public:
         wxDCImpl::SetAxisOrientation(xLeftRight, yBottomUp);
         m_graphics_changed = true;
     }
+#endif
 
     virtual void SetBackground( const wxBrush &brush );
     virtual void SetBackgroundMode( int mode );
@@ -149,9 +151,11 @@ private:
                               wxCoord xoffset, wxCoord yoffset,
                               wxPolygonFillMode fillStyle);
 
+#if wxABI_VERSION >= 30005
    virtual void DoDrawPolyPolygon(int n, const int count[], const wxPoint points[],
                                   wxCoord xoffset, wxCoord yoffset,
                                   wxPolygonFillMode fillStyle);
+#endif
 
    virtual void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
 

@@ -21,6 +21,14 @@
 # and once released its version cannot be changed.
 
 
+# public symbols added in 3.0.5 (please keep in alphabetical order):
+@WX_VERSION_TAG@.5 {
+    *wxSVGFileDCImpl*DoDrawPolyPolygon*;
+    *wxSVGFileDCImpl*SetAxisOrientation*;
+    *wxSVGFileDCImpl*SetDeviceOrigin*;
+    *wxSVGFileDCImpl*SetLogicalOrigin*;
+};
+
 # public symbols added in 3.0.4 (please keep in alphabetical order):
 @WX_VERSION_TAG@.4 {
     *wxDirButton*DoApplyWidgetStyle*;
