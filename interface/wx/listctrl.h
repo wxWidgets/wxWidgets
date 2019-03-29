@@ -849,8 +849,8 @@ public:
     /**
         For report view mode (only), inserts a column.
 
-        For more details, see SetItem(). Also see InsertColumn(long, const
-        wxString&, int, int) overload for a usually more convenient
+        For more details, see SetItem(). Also see InsertColumn(long, const wxString&, int, int)
+        overload for a usually more convenient
         alternative to this method and the description of how the item width
         is interpreted by this method.
     */
@@ -863,7 +863,7 @@ public:
         given position specifying its most common attributes.
 
         Notice that to set the image for the column you need to use
-        Insert(long, const wxListItem&) overload and specify ::wxLIST_MASK_IMAGE
+        InsertColumn(long, const wxListItem&) overload and specify ::wxLIST_MASK_IMAGE
         in the item mask.
 
         @param col
