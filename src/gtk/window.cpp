@@ -4768,25 +4768,25 @@ void wxWindowGTK::RealizeTabOrder()
                 {
                     if ( focusableFromKeyboard )
                     {
-                        // wxComboBox et al. needs to focus on on a different
-                        // widget than m_widget, so if the main widget isn't
-                        // focusable try the connect widget
+                        // We may need to focus on the connect widget if the
+                        // main one isn't focusable, but note that we still use
+                        // the main widget if neither it nor connect widget is
+                        // focusable, without this using a wxStaticText before
+                        // wxChoice wouldn't work at all, for example.
                         GtkWidget* w = win->m_widget;
                         if ( !gtk_widget_get_can_focus(w) )
                         {
-                            w = win->GetConnectWidget();
-                            if ( !gtk_widget_get_can_focus(w) )
-                                w = NULL;
+                            GtkWidget* const cw = win->GetConnectWidget();
+                            if ( cw != w && gtk_widget_get_can_focus(cw) )
+                                w = cw;
                         }
 
-                        if ( w )
-                        {
-                            mnemonicWindow->GTKWidgetDoSetMnemonic(w);
-                            mnemonicWindow = NULL;
-                        }
+                        mnemonicWindow->GTKWidgetDoSetMnemonic(w);
+                        mnemonicWindow = NULL;
                     }
                 }
-                else if ( win->GTKWidgetNeedsMnemonic() )
+
+                if ( win->GTKWidgetNeedsMnemonic() )
                 {
                     mnemonicWindow = win;
                 }
