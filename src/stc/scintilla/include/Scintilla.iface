@@ -1164,7 +1164,7 @@ val SC_WRAPVISUALFLAG_MARGIN=0x0004
 # Set the display mode of visual flags for wrapped lines.
 set void SetWrapVisualFlags=2460(int wrapVisualFlags,)
 
-# Retrive the display mode of visual flags for wrapped lines.
+# Retrieve the display mode of visual flags for wrapped lines.
 get int GetWrapVisualFlags=2461(,)
 
 enu WrapVisualLocation=SC_WRAPVISUALFLAGLOC_
@@ -1175,13 +1175,13 @@ val SC_WRAPVISUALFLAGLOC_START_BY_TEXT=0x0002
 # Set the location of visual flags for wrapped lines.
 set void SetWrapVisualFlagsLocation=2462(int wrapVisualFlagsLocation,)
 
-# Retrive the location of visual flags for wrapped lines.
+# Retrieve the location of visual flags for wrapped lines.
 get int GetWrapVisualFlagsLocation=2463(,)
 
 # Set the start indent for wrapped lines.
 set void SetWrapStartIndent=2464(int indent,)
 
-# Retrive the start indent for wrapped lines.
+# Retrieve the start indent for wrapped lines.
 get int GetWrapStartIndent=2465(,)
 
 enu WrapIndentMode=SC_WRAPINDENT_
@@ -1663,7 +1663,7 @@ val CARET_STRICT=0x04
 val CARET_JUMPS=0x10
 # If CARET_EVEN is not set, instead of having symmetrical UZs,
 # the left and bottom UZs are extended up to right and top UZs respectively.
-# This way, we favour the displaying of useful information: the begining of lines,
+# This way, we favour the displaying of useful information: the beginning of lines,
 # where most code reside, and the lines after the caret, eg. the body of a function.
 val CARET_EVEN=0x08
 
