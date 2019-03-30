@@ -1346,12 +1346,32 @@ void ScintillaWX::DoMarkerDefineBitmap(int markerNumber, const wxBitmap& bmp) {
         wxImage img = bmp.ConvertToImage();
         int curRGBALoc = 0, curDataLoc = 0, curAlphaLoc = 0;
 
-        for ( int i = 0; i < totalPixels; ++i ) {
-            rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
-            rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
-            rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
-            rgba[curRGBALoc++] =
-                img.HasAlpha() ? img.GetAlpha()[curAlphaLoc++] : wxALPHA_OPAQUE ;
+        if ( img.HasMask() ) {
+            for ( int y = 0; y < bmp.GetHeight(); ++y ) {
+                for ( int x = 0 ; x < bmp.GetWidth(); ++x ) {
+                    rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                    rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                    rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                    rgba[curRGBALoc++] = img.IsTransparent(x,y)
+                        ? wxALPHA_TRANSPARENT : wxALPHA_OPAQUE ;
+                }
+            }
+        }
+        else if ( img.HasAlpha() ) {
+            for ( int i = 0; i < totalPixels; ++i ) {
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetAlpha()[curAlphaLoc++];
+            }
+        }
+        else {
+            for ( int i = 0; i < totalPixels; ++i ) {
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = wxALPHA_OPAQUE ;
+            }
         }
 
         // Now follow the same procedure used for handling the
