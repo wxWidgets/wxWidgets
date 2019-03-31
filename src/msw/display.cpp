@@ -594,10 +594,10 @@ void wxDisplayFactoryMSW::DoRefreshMonitors()
 {
     m_displays.clear();
 
-    // We need to pass a valid HDC here in order to get valid hdcMonitor in our
-    // callback.
-    ScreenHDC dc;
-    if ( !::EnumDisplayMonitors(dc, NULL, MultimonEnumProc, (LPARAM)this) )
+    // Note that we pass NULL as first parameter here because using screen HDC
+    // doesn't work reliably: notably, it doesn't enumerate any displays if
+    // this code is executed while a UAC prompt is shown or during log-off.
+    if ( !::EnumDisplayMonitors(NULL, NULL, MultimonEnumProc, (LPARAM)this) )
     {
         wxLogLastError(wxT("EnumDisplayMonitors"));
     }
@@ -607,13 +607,24 @@ void wxDisplayFactoryMSW::DoRefreshMonitors()
 BOOL CALLBACK
 wxDisplayFactoryMSW::MultimonEnumProc(
     HMONITOR hMonitor,              // handle to display monitor
-    HDC hdcMonitor,                 // handle to monitor-appropriate device context
+    HDC /* hdcMonitor */,           // handle to monitor-appropriate device context:
+                                    // not set due to our use of EnumDisplayMonitors(NULL, ...)
     LPRECT WXUNUSED(lprcMonitor),   // pointer to monitor intersection rectangle
     LPARAM dwData)                  // data passed from EnumDisplayMonitors (this)
 {
     wxDisplayFactoryMSW *const self = (wxDisplayFactoryMSW *)dwData;
 
-    self->m_displays.push_back(wxDisplayInfo(hMonitor, wxGetHDCDepth(hdcMonitor)));
+    WinStruct<MONITORINFOEX> monInfo;
+    if ( !::GetMonitorInfo(hMonitor, &monInfo) )
+    {
+        wxLogLastError(wxT("GetMonitorInfo"));
+    }
+
+    HDC hdcMonitor = ::CreateDC(NULL, monInfo.szDevice, NULL, NULL);
+    const int hdcDepth = wxGetHDCDepth(hdcMonitor);
+    ::DeleteDC(hdcMonitor);
+
+    self->m_displays.push_back(wxDisplayInfo(hMonitor, hdcDepth));
 
     // continue the enumeration
     return TRUE;
