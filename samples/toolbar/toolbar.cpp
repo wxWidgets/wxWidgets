@@ -443,7 +443,7 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
         wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, wxEmptyString, wxDefaultPosition, wxSize(100,-1) );
         combo->Append("This");
         combo->Append("is a");
-        combo->Append("combobox");
+        combo->Append("combobox with extremely, extremely, extremely, extremely long label");
         combo->Append("in a");
         combo->Append("toolbar");
         toolBar->AddControl(combo, "Combo Label");

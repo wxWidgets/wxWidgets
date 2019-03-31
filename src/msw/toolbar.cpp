@@ -548,7 +548,10 @@ wxToolBar::~wxToolBar()
 
 wxSize wxToolBar::MSWGetFittingtSizeForControl(wxToolBarTool* tool) const
 {
-    wxSize size = tool->GetControl()->GetBestSize();
+    // Note that we intentionally use GetSize() and not GetBestSize() here as
+    // the control could have been added to the toolbar with the size less than
+    // its best size in order to avoid taking too much space.
+    wxSize size = tool->GetControl()->GetSize();
 
     // This is arbitrary, but we want to leave at least 1px around the control
     // vertically, otherwise it really looks too cramped.
