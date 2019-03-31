@@ -524,7 +524,8 @@ bool wxDisplayMSW::ChangeMode(const wxVideoMode& mode)
 LRESULT APIENTRY
 wxDisplayWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    if ( msg == WM_SETTINGCHANGE || msg == WM_DISPLAYCHANGE )
+    if ( (msg == WM_SETTINGCHANGE && wParam == SPI_SETWORKAREA) ||
+            msg == WM_DISPLAYCHANGE )
     {
         wxDisplay::InvalidateCache();
 
