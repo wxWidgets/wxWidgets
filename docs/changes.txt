@@ -593,6 +593,7 @@ All (GUI):
 
 - Improve stock items consistency and aesthetics (dhowland).
 - Implement wxTextCtrl::HitTest() for single line controls.
+- Improve wxSVGFileDC to support more of wxDC API (Maarten Bent).
 
 wxMSW:
 
