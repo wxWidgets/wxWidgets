@@ -198,10 +198,6 @@ public:
         DoRefreshMonitors();
     }
 
-    // Called when we receive WM_SETTINGCHANGE to refresh the list of monitor
-    // handles.
-    static void RefreshMonitors() { ms_factory->InvalidateCache(); }
-
     // Declare the second argument as int to avoid problems with older SDKs not
     // declaring MONITOR_DPI_TYPE enum.
     typedef HRESULT (WINAPI *GetDpiForMonitor_t)(HMONITOR, int, UINT*, UINT*);
@@ -221,14 +217,8 @@ private:
     // return wxNOT_FOUND if not found
     int FindDisplayFromHMONITOR(HMONITOR hmon) const;
 
-    // Update m_displays array, used by RefreshMonitors().
+    // Update m_displays array, used initially and by InvalidateCache().
     void DoRefreshMonitors();
-
-
-    // The unique factory being used (as we don't have direct access to the
-    // global factory pointer in the common code so we just duplicate this
-    // variable (also making it of correct type for us) here).
-    static wxDisplayFactoryMSW* ms_factory;
 
     // The pointer to GetDpiForMonitorPtr(), retrieved on demand, and the
     // related data, including the DLL containing the function that we must
@@ -285,7 +275,6 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxDisplayFactoryMSW);
 };
 
-wxDisplayFactoryMSW* wxDisplayFactoryMSW::ms_factory = NULL;
 wxDisplayFactoryMSW::GetDpiForMonitorData
     wxDisplayFactoryMSW::ms_getDpiForMonitorData;
 
@@ -535,7 +524,8 @@ bool wxDisplayMSW::ChangeMode(const wxVideoMode& mode)
 LRESULT APIENTRY
 wxDisplayWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    if ( msg == WM_SETTINGCHANGE || msg == WM_DISPLAYCHANGE )
+    if ( (msg == WM_SETTINGCHANGE && wParam == SPI_SETWORKAREA) ||
+            msg == WM_DISPLAYCHANGE )
     {
         wxDisplay::InvalidateCache();
 
@@ -547,12 +537,6 @@ wxDisplayWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 wxDisplayFactoryMSW::wxDisplayFactoryMSW()
 {
-    // This is not supposed to happen with the current code, the factory is
-    // implicitly a singleton.
-    wxASSERT_MSG( !ms_factory, wxS("Using more than one factory?") );
-
-    ms_factory = this;
-
     m_hiddenHwnd = NULL;
     m_hiddenClass = NULL;
 
@@ -592,8 +576,6 @@ wxDisplayFactoryMSW::~wxDisplayFactoryMSW()
         ms_getDpiForMonitorData.UnloadIfNecessary();
         ms_getDpiForMonitorData.m_initialized = false;
     }
-
-    ms_factory = NULL;
 }
 
 /* static */
@@ -613,10 +595,10 @@ void wxDisplayFactoryMSW::DoRefreshMonitors()
 {
     m_displays.clear();
 
-    // We need to pass a valid HDC here in order to get valid hdcMonitor in our
-    // callback.
-    ScreenHDC dc;
-    if ( !::EnumDisplayMonitors(dc, NULL, MultimonEnumProc, (LPARAM)this) )
+    // Note that we pass NULL as first parameter here because using screen HDC
+    // doesn't work reliably: notably, it doesn't enumerate any displays if
+    // this code is executed while a UAC prompt is shown or during log-off.
+    if ( !::EnumDisplayMonitors(NULL, NULL, MultimonEnumProc, (LPARAM)this) )
     {
         wxLogLastError(wxT("EnumDisplayMonitors"));
     }
@@ -626,13 +608,24 @@ void wxDisplayFactoryMSW::DoRefreshMonitors()
 BOOL CALLBACK
 wxDisplayFactoryMSW::MultimonEnumProc(
     HMONITOR hMonitor,              // handle to display monitor
-    HDC hdcMonitor,                 // handle to monitor-appropriate device context
+    HDC /* hdcMonitor */,           // handle to monitor-appropriate device context:
+                                    // not set due to our use of EnumDisplayMonitors(NULL, ...)
     LPRECT WXUNUSED(lprcMonitor),   // pointer to monitor intersection rectangle
     LPARAM dwData)                  // data passed from EnumDisplayMonitors (this)
 {
     wxDisplayFactoryMSW *const self = (wxDisplayFactoryMSW *)dwData;
 
-    self->m_displays.push_back(wxDisplayInfo(hMonitor, wxGetHDCDepth(hdcMonitor)));
+    WinStruct<MONITORINFOEX> monInfo;
+    if ( !::GetMonitorInfo(hMonitor, &monInfo) )
+    {
+        wxLogLastError(wxT("GetMonitorInfo"));
+    }
+
+    HDC hdcMonitor = ::CreateDC(NULL, monInfo.szDevice, NULL, NULL);
+    const int hdcDepth = wxGetHDCDepth(hdcMonitor);
+    ::DeleteDC(hdcMonitor);
+
+    self->m_displays.push_back(wxDisplayInfo(hMonitor, hdcDepth));
 
     // continue the enumeration
     return TRUE;
