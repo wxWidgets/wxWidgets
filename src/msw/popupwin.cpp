@@ -192,7 +192,7 @@ void wxPopupTransientWindow::Dismiss()
     Hide();
 }
 
-void wxPopupTransientWindow::DismissOnDeactivate(WXHWND hwndActive)
+void wxPopupTransientWindow::DismissOnDeactivate()
 {
     // Hide the window automatically when it loses activation.
     Dismiss();
@@ -203,7 +203,7 @@ void wxPopupTransientWindow::DismissOnDeactivate(WXHWND hwndActive)
     wxWindow* const owner = MSWGetOwner();
     if ( owner )
     {
-        if ( hwndActive != GetHwndOf(owner) )
+        if ( ::GetActiveWindow() != GetHwndOf(owner) )
         {
             ::SendMessage(GetHwndOf(owner), WM_NCACTIVATE, FALSE, 0);
         }
@@ -218,18 +218,17 @@ wxPopupTransientWindow::MSWHandleMessage(WXLRESULT *result,
 {
     switch ( message )
     {
-        case WM_NCACTIVATE:
-            if ( !wParam )
+        case WM_ACTIVATE:
+            if ( wParam == WA_INACTIVE )
             {
                 // We need to dismiss this window, however doing it directly
                 // from here seems to confuse ::ShowWindow(), which ends up
                 // calling this handler, and may result in losing activation
                 // entirely, so postpone it slightly.
                 //
-                // Note that we do use the currently active window, just in
-                // case it changes between now and the next idle event.
-                CallAfter(&wxPopupTransientWindow::DismissOnDeactivate,
-                          ::GetActiveWindow());
+                // Also note that the active window hasn't changed yet, so we
+                // postpone calling it until DismissOnDeactivate() is executed.
+                CallAfter(&wxPopupTransientWindow::DismissOnDeactivate);
             }
             break;
     }

@@ -152,7 +152,7 @@ public:
                                   WXLPARAM lParam) wxOVERRIDE;
 
 private:
-    void DismissOnDeactivate(WXHWND hwndActive);
+    void DismissOnDeactivate();
 
     wxDECLARE_DYNAMIC_CLASS(wxPopupTransientWindow);
     wxDECLARE_NO_COPY_CLASS(wxPopupTransientWindow);
