@@ -1623,18 +1623,7 @@ bool wxMacCoreGraphicsContext::EnsureIsValid()
         if (m_invisible)
             return false;
 
-#if wxOSX_USE_COCOA
-        if ( wxOSXLockFocus(m_view) )
-        {
-            m_cgContext = wxOSXGetContextFromCurrentContext();
-            wxASSERT_MSG( m_cgContext != NULL, wxT("Unable to retrieve drawing context from View"));
-        }
-        else
-        {
-            m_invisible = true;
-        }
-#endif
-#if wxOSX_USE_IPHONE
+#if wxOSX_USE_COCOA || wxOSX_USE_IPHONE
         m_cgContext = wxOSXGetContextFromCurrentContext();
         if ( m_cgContext == NULL )
         {
