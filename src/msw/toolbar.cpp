@@ -1624,12 +1624,6 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
 
 void wxToolBar::SetToolBitmapSize(const wxSize& size)
 {
-    // Leave the effective size as (0, 0) if we are not showing bitmaps at all.
-    wxSize effectiveSize;
-
-    if ( !HasFlag(wxTB_NOICONS) )
-        effectiveSize = size;
-
     wxToolBarBase::SetToolBitmapSize(size);
 
     ::SendMessage(GetHwnd(), TB_SETBITMAPSIZE, 0, MAKELONG(size.x, size.y));

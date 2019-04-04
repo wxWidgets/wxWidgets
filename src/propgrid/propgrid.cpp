@@ -2062,13 +2062,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 #endif
 {
     const wxPGProperty* firstItem;
-    const wxPGProperty* lastItem;
-
     firstItem = DoGetItemAtY(itemsRect->y);
-    lastItem = DoGetItemAtY(itemsRect->y+itemsRect->height-1);
-
-    if ( !lastItem )
-        lastItem = GetLastItem( wxPG_ITERATE_VISIBLE );
 
     int vx, vy;
     GetViewStart(&vx, &vy);
@@ -4524,7 +4518,6 @@ bool wxPropertyGrid::DoHideProperty( wxPGProperty* p, bool hide, int flags )
         return m_pState->DoHideProperty(p, hide, flags);
 
     wxArrayPGProperty selection = m_pState->m_selection;  // Must use a copy
-    int selRemoveCount = 0;
     for ( unsigned int i=0; i<selection.size(); i++ )
     {
         wxPGProperty* selected = selection[i];
@@ -4532,7 +4525,6 @@ bool wxPropertyGrid::DoHideProperty( wxPGProperty* p, bool hide, int flags )
         {
             if ( !DoRemoveFromSelection(p, flags) )
                 return false;
-            selRemoveCount += 1;
         }
     }
 

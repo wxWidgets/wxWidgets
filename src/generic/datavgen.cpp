@@ -71,8 +71,6 @@ class wxDataViewCtrl;
 // constants
 //-----------------------------------------------------------------------------
 
-static const int SCROLL_UNIT_X = 15;
-
 // the cell padding on the left/right
 static const int PADDING_RIGHTLEFT = 3;
 

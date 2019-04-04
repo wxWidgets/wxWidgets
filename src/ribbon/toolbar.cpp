@@ -869,8 +869,6 @@ void wxRibbonToolBar::OnSize(wxSizeEvent& evt)
     if (sizingFlexibly)
         major_axis = wxHORIZONTAL;
 
-    wxSize bestSize = m_sizes[0];
-
     if(m_nrows_max != m_nrows_min)
     {
         int area = 0;
@@ -881,7 +879,6 @@ void wxRibbonToolBar::OnSize(wxSizeEvent& evt)
             {
                 area = GetSizeInOrientation(m_sizes[i], major_axis);
                 row_count = m_nrows_min + i;
-                bestSize = m_sizes[i];
             }
         }
     }

@@ -1012,7 +1012,6 @@ void MyApp::DoVariantDemo(wxCommandEvent& WXUNUSED(event) )
     textCtrl << "var1 = " << var1.MakeString() << "\n";
 
     // Conversion
-    wxString str = var1.MakeString();
 
     var1 = 123.456;
     textCtrl << "var1 = " << var1.GetReal() << "\n";

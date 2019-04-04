@@ -11523,7 +11523,6 @@ bool wxRichTextTableBlock::ComputeBlockForSelection(wxRichTextTable* table, wxRi
     {
         // Start with an invalid block and increase.
         wxRichTextTableBlock selBlock(-1, -1, -1, -1);
-        wxRichTextRangeArray ranges = selection.GetRanges();
         int row, col;
         for (row = 0; row < table->GetRowCount(); row++)
         {
