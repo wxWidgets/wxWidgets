@@ -793,8 +793,6 @@ void wxNativeFontInfo::InitFromFontDescriptor(CTFontDescriptorRef desc)
     wxCFDictionaryRef traits((CFDictionaryRef)CTFontDescriptorCopyAttribute(desc, kCTFontTraitsAttribute));
     traits.GetValue(kCTFontSymbolicTrait).GetValue((int32_t*)&symbolicTraits, 0);
 
-    m_family = wxFONTFAMILY_DEFAULT;
-
     if (symbolicTraits & kCTFontTraitMonoSpace)
         m_family = wxFONTFAMILY_TELETYPE;
     else

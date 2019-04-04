@@ -1423,7 +1423,6 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
                 e.SetEventType( wxEVT_LEAVE_WINDOW );
 
             ProcessWindowEvent( e );
-            m_mouseInside = mouseInside;
         }
     }
 

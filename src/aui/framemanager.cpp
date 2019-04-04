@@ -1917,7 +1917,7 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
     }
     else
     {
-        sizer_item = cont->Add(horz_pane_sizer, pane_proportion, wxEXPAND);
+        cont->Add(horz_pane_sizer, pane_proportion, wxEXPAND);
     }
 }
 
