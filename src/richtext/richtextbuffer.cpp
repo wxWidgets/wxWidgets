@@ -9302,7 +9302,7 @@ bool wxRichTextStdRenderer::MeasureBullet(wxRichTextParagraph* paragraph, wxDC& 
     if (attr.GetBulletStyle() & wxTEXT_ATTR_BULLET_STYLE_STANDARD)
     {
         sz.x = (int) (((float) dc.GetCharHeight()) * wxRichTextBuffer::GetBulletProportion());
-        sz.y = sz.y;
+        sz.y = sz.x;
     }
     else if (attr.HasBulletText())
     {
