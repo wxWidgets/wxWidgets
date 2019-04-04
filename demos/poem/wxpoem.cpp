@@ -856,6 +856,7 @@ long MainWindow::DoSearch(void)
         previous_poem_start = -1;
     }
 
+    buf[0] = 0;
     if (data_filename)
         wxSprintf(buf, wxT("%s.dat"), data_filename);
 
@@ -942,6 +943,7 @@ bool Compile(void)
     int ch;
     wxChar buf[100];
 
+    buf[0] = 0;
     if (data_filename)
         wxSprintf(buf, wxT("%s.dat"), data_filename);
 
@@ -974,6 +976,7 @@ bool Compile(void)
     } while (ch != EOF);
     fclose(file);
 
+    buf[0] = 0;
     if (index_filename)
       wxSprintf(buf, wxT("%s.idx"), index_filename);
 
