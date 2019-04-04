@@ -866,7 +866,7 @@ bool wxRichTextObject::DrawBorder(wxDC& dc, wxRichTextBuffer* buffer, const wxRi
             wxPen pen(col, borderLeft, penStyle);
             dc.SetPen(pen);
             dc.SetBrush(*wxTRANSPARENT_BRUSH);
-            dc.DrawRoundedRectangle(rect, cornerRadius);
+            dc.DrawRoundedRectangle(rect2, cornerRadius);
             return true;
         }
     }
@@ -9657,13 +9657,13 @@ bool wxRichTextFieldTypeStandard::Draw(wxRichTextField* obj, wxDC& dc, wxRichTex
                 label = wxT("??");
             int w, h, maxDescent;
             dc.SetFont(m_font);
-            dc.GetTextExtent(m_label, & w, &h, & maxDescent);
+            dc.GetTextExtent(label, &w, &h, &maxDescent);
             dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
             dc.SetTextForeground(textColour);
 
             int x = clientArea.x + (clientArea.width - w)/2;
             int y = clientArea.y + (clientArea.height - h)/2;
-            dc.DrawText(m_label, x, y);
+            dc.DrawText(label, x, y);
         }
     }
 
