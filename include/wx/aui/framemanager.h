@@ -368,7 +368,7 @@ public:
         buttonCustom3         = 1 << 28,
 
         savedHiddenState      = 1 << 30, // used internally
-        actionPane            = 1 << 31  // used internally
+        actionPane            = 1u << 31  // used internally
     };
 
 public:
