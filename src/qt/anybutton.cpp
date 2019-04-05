@@ -69,6 +69,9 @@ bool wxQtPushButton::event(QEvent* e)
     case QEvent::FocusIn:
     case QEvent::FocusOut:
         GetHandler()->QtUpdateState();
+        break;
+    default:
+        break;
     }
 
     return QPushButton::event(e);

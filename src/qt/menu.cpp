@@ -115,6 +115,8 @@ static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previous
             }
             break;
         }
+        default:
+            break;
     }
     // Insert the action into the actual menu:
     QAction *successiveItemAction = ( successiveItem != NULL ) ? successiveItem->GetHandle() : NULL;
