@@ -214,7 +214,7 @@ static GtkPaperSize* wxGetGtkPaperSize(wxPaperSize paperId, const wxSize& size)
     // last resort, use a custom GtkPaperSize
     const wxString title = _("Custom size");
     char name[40];
-    g_snprintf(name, sizeof(name), "custom_%ux%u", size.x, size.y);
+    g_snprintf(name, sizeof(name), "custom_%dx%d", size.x, size.y);
     return gtk_paper_size_new_custom(
         name, title.utf8_str(), size.x, size.y, GTK_UNIT_MM);
 }
