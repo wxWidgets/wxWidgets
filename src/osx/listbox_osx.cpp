@@ -282,11 +282,6 @@ wxSize wxListBox::DoGetBestSize() const
     return wxSize( lbWidth, lbHeight );
 }
 
-void wxListBox::Refresh(bool eraseBack, const wxRect *rect)
-{
-    wxControl::Refresh( eraseBack, rect );
-}
-
 // Some custom controls depend on this
 /* static */ wxVisualAttributes
 wxListBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))

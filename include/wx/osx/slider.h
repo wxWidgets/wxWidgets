@@ -81,7 +81,6 @@ protected:
 
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
     virtual void   DoSetSize(int x, int y, int w, int h, int sizeFlags) wxOVERRIDE;
-    virtual void   DoMoveWindow(int x, int y, int w, int h) wxOVERRIDE;
 
     // set min/max size of the slider
     virtual void DoSetSizeHints( int minW, int minH,

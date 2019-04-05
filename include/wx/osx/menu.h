@@ -142,14 +142,10 @@ public:
     }
 
     // implementation from now on
-    void Detach();
-
         // returns TRUE if we're attached to a frame
     bool IsAttached() const { return m_menuBarFrame != NULL; }
         // get the frame we live in
     wxFrame *GetFrame() const { return m_menuBarFrame; }
-        // attach to a frame
-    void Attach(wxFrame *frame);
 
     // if the menubar is modified, the display is not updated automatically,
     // call this function to update it (m_menuBarFrame should be !NULL)

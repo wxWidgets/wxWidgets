@@ -500,11 +500,6 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
     m_minWidth = minWidth;
 }
 
-void wxSlider::DoMoveWindow(int x, int y, int width, int height)
-{
-    wxControl::DoMoveWindow( x, y, width, height );
-}
-
 // Common processing to invert slider values based on wxSL_INVERSE
 int wxSlider::ValueInvertOrNot(int value) const
 {

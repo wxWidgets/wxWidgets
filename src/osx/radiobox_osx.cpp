@@ -193,13 +193,6 @@ bool wxRadioBox::IsItemEnabled(unsigned int item) const
     return current->IsEnabled();
 }
 
-// Returns the radiobox label
-//
-wxString wxRadioBox::GetLabel() const
-{
-    return wxControl::GetLabel();
-}
-
 // Returns the label for the given button
 //
 wxString wxRadioBox::GetString(unsigned int item) const
@@ -236,13 +229,6 @@ int wxRadioBox::GetSelection() const
     }
 
     return i;
-}
-
-// Sets the radiobox label
-//
-void wxRadioBox::SetLabel(const wxString& label)
-{
-    return wxControl::SetLabel( label );
 }
 
 // Sets the label of a given button
