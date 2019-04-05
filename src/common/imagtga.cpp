@@ -233,7 +233,7 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
 
     const short pixelSize = bpp / 8;
 
-    const unsigned long imageSize = width * height * pixelSize;
+    const unsigned long imageSize = static_cast<unsigned long>(width) * height * pixelSize;
 
     wxScopedArray<unsigned char> imageData(imageSize);
 

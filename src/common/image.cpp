@@ -3453,7 +3453,7 @@ unsigned long wxImage::CountColours( unsigned long stopafter ) const
     unsigned long size, nentries, key;
 
     p = GetData();
-    size = GetWidth() * GetHeight();
+    size = static_cast<unsigned long>(GetWidth()) * GetHeight();
     nentries = 0;
 
     for (unsigned long j = 0; (j < size) && (nentries <= stopafter) ; j++)
@@ -3481,7 +3481,7 @@ unsigned long wxImage::ComputeHistogram( wxImageHistogram &h ) const
 
     h.clear();
 
-    const unsigned long size = GetWidth() * GetHeight();
+    const unsigned long size = static_cast<unsigned long>(GetWidth()) * GetHeight();
 
     unsigned char r, g, b;
     for ( unsigned long n = 0; n < size; n++ )
