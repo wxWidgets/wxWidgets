@@ -60,17 +60,17 @@ public:
     ~wxFileDialog();
 #endif
 
-    virtual void GetPaths(wxArrayString& paths) const { paths = m_paths; }
-    virtual void GetFilenames(wxArrayString& files) const { files = m_fileNames ; }
+    virtual void GetPaths(wxArrayString& paths) const wxOVERRIDE { paths = m_paths; }
+    virtual void GetFilenames(wxArrayString& files) const wxOVERRIDE { files = m_fileNames ; }
 
-    virtual int ShowModal();
+    virtual int ShowModal() wxOVERRIDE;
 
 #if wxOSX_USE_COCOA
-    virtual void ShowWindowModal();
-    virtual void ModalFinishedCallback(void* panel, int resultCode);
+    virtual void ShowWindowModal() wxOVERRIDE;
+    virtual void ModalFinishedCallback(void* panel, int resultCode) wxOVERRIDE;
 #endif
 
-    virtual bool SupportsExtraControl() const;
+    virtual bool SupportsExtraControl() const wxOVERRIDE;
 
     // implementation only
 

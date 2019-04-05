@@ -323,7 +323,7 @@ public:
     virtual size_t ToWChar(wchar_t * dst, size_t dstSize, const char * src, size_t srcSize = wxNO_LEN) const;
     virtual size_t FromWChar(char *dst, size_t dstSize, const wchar_t *src, size_t srcSize = wxNO_LEN) const;
 
-    virtual wxMBConv *Clone() const { return new wxMBConv_cf(*this); }
+    virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConv_cf(*this); }
 
     bool IsOk() const
     {

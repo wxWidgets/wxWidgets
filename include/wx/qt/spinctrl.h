@@ -29,12 +29,12 @@ public:
         T min, T max, T initial, T inc,
         const wxString& name );
 
-    virtual void SetValue(const wxString&) {}
+    virtual void SetValue(const wxString&) wxOVERRIDE {}
 
-    virtual void SetSnapToTicks(bool snap_to_ticks);
-    virtual bool GetSnapToTicks() const;
+    virtual void SetSnapToTicks(bool snap_to_ticks) wxOVERRIDE;
+    virtual bool GetSnapToTicks() const wxOVERRIDE;
 
-    virtual void SetSelection(long from, long to);
+    virtual void SetSelection(long from, long to) wxOVERRIDE;
 
     virtual void SetValue(T val);
     void SetRange(T minVal, T maxVal);
@@ -45,7 +45,7 @@ public:
     T GetMax() const;
     T GetIncrement() const;
 
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
 protected:
     Widget *m_qtSpinBox;
@@ -75,8 +75,8 @@ public:
                 const wxString& name = wxT("wxSpinCtrl"));
     virtual int GetBase() const wxOVERRIDE { return m_base; }
     virtual bool SetBase(int base) wxOVERRIDE;
-    virtual void SetValue(const wxString & val);
-    virtual void SetValue(int val) { wxSpinCtrlQt<int,QSpinBox>::SetValue(val); }
+    virtual void SetValue(const wxString & val) wxOVERRIDE;
+    virtual void SetValue(int val) wxOVERRIDE { wxSpinCtrlQt<int,QSpinBox>::SetValue(val); }
 
 private:
     // Common part of all ctors.
@@ -117,8 +117,8 @@ public:
 
     virtual int GetBase() const wxOVERRIDE { return 10; }
     virtual bool SetBase(int WXUNUSED(base)) wxOVERRIDE { return false; }
-    virtual void SetValue(const wxString & val);
-    virtual void SetValue(double val) { wxSpinCtrlQt<double,QDoubleSpinBox>::SetValue(val); }
+    virtual void SetValue(const wxString & val) wxOVERRIDE;
+    virtual void SetValue(double val) wxOVERRIDE { wxSpinCtrlQt<double,QDoubleSpinBox>::SetValue(val); }
 
 private:
     wxDECLARE_DYNAMIC_CLASS( wxSpinCtrlDouble );

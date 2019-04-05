@@ -18,7 +18,7 @@ public:
     wxApp();
     ~wxApp();
 
-    virtual bool Initialize(int& argc, wxChar **argv);
+    virtual bool Initialize(int& argc, wxChar **argv) wxOVERRIDE;
 
 private:
     wxScopedPtr<QApplication> m_qtApplication;

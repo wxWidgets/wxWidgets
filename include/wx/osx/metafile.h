@@ -56,8 +56,8 @@ public:
     WXHMETAFILE GetHMETAFILE() const ;
     void SetHMETAFILE(WXHMETAFILE mf) ;
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxMetafile);
 };
@@ -81,7 +81,7 @@ public:
     void SetMetaFile(wxMetafile *mf) { m_metaFile = mf; }
 
 protected:
-    virtual void DoGetSize(int *width, int *height) const;
+    virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
 
     wxMetafile*   m_metaFile;
 
@@ -149,17 +149,17 @@ public:
         { return m_metafile; }
 
     // implement base class pure virtuals
-    virtual size_t GetDataSize() const;
-    virtual bool GetDataHere(void *buf) const;
-    virtual bool SetData(size_t len, const void *buf);
+    virtual size_t GetDataSize() const wxOVERRIDE;
+    virtual bool GetDataHere(void *buf) const wxOVERRIDE;
+    virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
 
-    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const
+    virtual size_t GetDataSize(const wxDataFormat& WXUNUSED(format)) const wxOVERRIDE
         { return GetDataSize(); }
     virtual bool GetDataHere(const wxDataFormat& WXUNUSED(format),
-                             void *buf) const
+                             void *buf) const wxOVERRIDE
         { return GetDataHere(buf); }
     virtual bool SetData(const wxDataFormat& WXUNUSED(format),
-                         size_t len, const void *buf)
+                         size_t len, const void *buf) wxOVERRIDE
         { return SetData(len, buf); }
 protected:
   wxMetafile   m_metafile;

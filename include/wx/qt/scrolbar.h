@@ -32,18 +32,18 @@ public:
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxScrollBarNameStr );
 
-    virtual int GetThumbPosition() const;
-    virtual int GetThumbSize() const;
-    virtual int GetPageSize() const;
-    virtual int GetRange() const;
+    virtual int GetThumbPosition() const wxOVERRIDE;
+    virtual int GetThumbSize() const wxOVERRIDE;
+    virtual int GetPageSize() const wxOVERRIDE;
+    virtual int GetRange() const wxOVERRIDE;
 
-    virtual void SetThumbPosition(int viewStart);
+    virtual void SetThumbPosition(int viewStart) wxOVERRIDE;
     virtual void SetScrollbar(int position, int thumbSize,
                               int range, int pageSize,
-                              bool refresh = true);
+                              bool refresh = true) wxOVERRIDE;
 
     QScrollBar *GetQScrollBar() const { return m_qtScrollBar; }
-    QWidget *GetHandle() const;
+    QWidget *GetHandle() const wxOVERRIDE;
 
 private:
     QScrollBar *m_qtScrollBar;

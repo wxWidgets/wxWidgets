@@ -32,8 +32,8 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxCheckBoxNameStr);
 
-    virtual void SetValue(bool state);
-    virtual bool GetValue() const;
+    virtual void SetValue(bool state) wxOVERRIDE;
+    virtual bool GetValue() const wxOVERRIDE;
 
     // implementation only
     virtual int GetEventType() const wxOVERRIDE { return wxEVT_TOGGLEBUTTON; }

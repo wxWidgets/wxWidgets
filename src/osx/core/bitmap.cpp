@@ -55,7 +55,7 @@ public:
 
     virtual ~wxBitmapRefData();
 
-    bool IsOk() const;
+    bool IsOk() const wxOVERRIDE;
 
     void Free();
 
