@@ -183,7 +183,7 @@ namespace
 
     int CTWeightToWX(CGFloat weight)
     {
-        for (int i = 0; i < kCTWeightsCount; ++i)
+        for (int i = 0; i < kCTWeightsCount - 1; ++i)
         {
             if ( (weight - gCTWeights[i]) < (gCTWeights[i+1]-weight) )
                 return i * 100;
