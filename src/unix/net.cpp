@@ -64,11 +64,11 @@ class WXDLLEXPORT wxDialUpManagerImpl : public wxDialUpManager
 {
 public:
    wxDialUpManagerImpl()
+        : m_BeaconHost(WXDIALUP_MANAGER_DEFAULT_BEACONHOST)
       {
          m_IsOnline = -1; // unknown
          m_timer = NULL;
          m_CanUseIfconfig = -1; // unknown
-         m_BeaconHost = WXDIALUP_MANAGER_DEFAULT_BEACONHOST;
          m_BeaconPort = 80;
       }
 

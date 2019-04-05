@@ -258,8 +258,8 @@ int wxRichTextFloatCollector::GetWidthFromFloatRect(const wxRichTextFloatRectMap
 }
 
 wxRichTextFloatCollector::wxRichTextFloatCollector(const wxRect& rect) : m_left(wxRichTextFloatRectMapCmp), m_right(wxRichTextFloatRectMapCmp)
+    , m_availableRect(rect)
 {
-    m_availableRect = rect;
     m_para = NULL;
 }
 
@@ -14317,13 +14317,15 @@ void wxTextAttrDimension::CollectCommonAttributes(const wxTextAttrDimension& att
 }
 
 wxTextAttrDimensionConverter::wxTextAttrDimensionConverter(wxDC& dc, double scale, const wxSize& parentSize)
+    : m_parentSize(parentSize)
 {
-    m_ppi = dc.GetPPI().x; m_scale = scale; m_parentSize = parentSize;
+    m_ppi = dc.GetPPI().x; m_scale = scale;
 }
 
 wxTextAttrDimensionConverter::wxTextAttrDimensionConverter(int ppi, double scale, const wxSize& parentSize)
+    : m_parentSize(parentSize)
 {
-    m_ppi = ppi; m_scale = scale; m_parentSize = parentSize;
+    m_ppi = ppi; m_scale = scale;
 }
 
 int wxTextAttrDimensionConverter::ConvertTenthsMMToPixels(int units) const

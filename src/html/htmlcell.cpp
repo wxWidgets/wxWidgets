@@ -292,8 +292,8 @@ bool wxHtmlCell::IsBefore(wxHtmlCell *cell) const
 wxIMPLEMENT_ABSTRACT_CLASS(wxHtmlWordCell, wxHtmlCell);
 
 wxHtmlWordCell::wxHtmlWordCell(const wxString& word, const wxDC& dc) : wxHtmlCell()
+    , m_Word(word)
 {
-    m_Word = word;
     wxCoord w, h, d;
     dc.GetTextExtent(m_Word, &w, &h, &d);
     m_Width = w;
