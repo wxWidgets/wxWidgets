@@ -4099,15 +4099,6 @@ gboolean wxDataViewCtrlInternal::iter_children( GtkTreeIter *iter, GtkTreeIter *
     }
     else
     {
-        if (iter == NULL)
-        {
-            if (m_root->GetChildCount() == 0) return FALSE;
-            iter->stamp = m_gtk_model->stamp;
-            iter->user_data = (gpointer) m_root->GetChildren().Item( 0 );
-            return TRUE;
-        }
-
-
         wxDataViewItem item;
         if (parent)
             item = wxDataViewItem( (void*) parent->user_data );

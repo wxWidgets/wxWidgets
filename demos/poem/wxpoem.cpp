@@ -161,10 +161,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
         y = (*max_y - poem_height)/2;
         width = *max_x;
         height = *max_y;
-    }
 
-    if (DrawIt)
-    {
         dc->SetBrush(*wxLIGHT_GREY_BRUSH);
         dc->SetPen(*wxGREY_PEN);
         dc->DrawRectangle(0, 0, width, height);
