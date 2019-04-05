@@ -887,7 +887,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
         }
     }
 
-    if (m_nFrames <= 0)
+    if (m_nFrames == 0)
     {
         Destroy();
         return wxGIF_INVFORMAT;

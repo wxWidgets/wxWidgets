@@ -108,7 +108,7 @@ wxChar wxTextInputStream::GetChar()
             // actually read the next character
             m_lastBytes[inlen] = m_input.GetC();
 
-            if(m_input.LastRead() <= 0)
+            if (m_input.LastRead() == 0)
                 return 0;
 
             m_validEnd++;
@@ -358,7 +358,7 @@ wxTextInputStream& wxTextInputStream::operator>>(wxString& word)
 wxTextInputStream& wxTextInputStream::operator>>(char& c)
 {
     c = m_input.GetC();
-    if(m_input.LastRead() <= 0) c = 0;
+    if (m_input.LastRead() == 0) c = 0;
 
     if (EatEOL(c))
         c = '\n';
