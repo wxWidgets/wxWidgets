@@ -605,7 +605,7 @@ wxSize wxToolBar::DoGetBestSize() const
         {
             if ( !tool->IsControl() )
             {
-                sizeBest.y += sizeTool.y + m_toolPacking;
+                sizeBest.y += sizeTool.y;
             }
             //else: Controls are not shown in vertical toolbars at all.
         }
@@ -624,10 +624,6 @@ wxSize wxToolBar::DoGetBestSize() const
             {
                 sizeBest.x += sizeTool.x;
             }
-
-            // As explained in MSWGetFittingtSizeForControl() above, the actual
-            // margin used for a single tool is one half of the total packing.
-            sizeBest.x += m_toolPacking / 2;
         }
     }
 
