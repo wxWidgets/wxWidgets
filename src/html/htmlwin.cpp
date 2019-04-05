@@ -454,7 +454,6 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
     if (m_Processors || m_GlobalProcessors)
     {
         wxHtmlProcessorList::compatibility_iterator nodeL, nodeG;
-        int prL, prG;
 
         if ( m_Processors )
             nodeL = m_Processors->GetFirst();
@@ -468,6 +467,7 @@ bool wxHtmlWindow::DoSetPage(const wxString& source)
         //     in every iteration
         while (nodeL || nodeG)
         {
+            int prL, prG;
             prL = (nodeL) ? nodeL->GetData()->GetPriority() : -1;
             prG = (nodeG) ? nodeG->GetData()->GetPriority() : -1;
             if (prL > prG)

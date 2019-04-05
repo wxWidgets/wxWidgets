@@ -1674,7 +1674,7 @@ void wxAuiManager::GetPanePositionsAndSizes(wxAuiDockInfo& dock,
     positions.Empty();
     sizes.Empty();
 
-    int offset, action_pane = -1;
+    int action_pane = -1;
     int pane_i, pane_count = dock.panes.GetCount();
 
     // find the pane marked as our action pane
@@ -1737,7 +1737,7 @@ void wxAuiManager::GetPanePositionsAndSizes(wxAuiDockInfo& dock,
 
     // if the dock mode is fixed, make sure none of the panes
     // overlap; we will bump panes that overlap
-    offset = 0;
+    int offset = 0;
     for (pane_i = action_pane; pane_i < pane_count; ++pane_i)
     {
         int amount = positions[pane_i] - offset;

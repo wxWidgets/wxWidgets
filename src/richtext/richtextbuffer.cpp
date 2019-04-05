@@ -7026,8 +7026,6 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxRichTextAttr& attr,
     else
         tabCount = 0;
 
-    int nextTabPos = -1;
-    int tabPos = -1;
     wxCoord w, h;
 
     if (selected)
@@ -7061,10 +7059,12 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxRichTextAttr& attr,
         wxString stringChunk = str.BeforeFirst(wxT('\t'));
         str = str.AfterFirst(wxT('\t'));
         dc.GetTextExtent(stringChunk, & w, & h);
+        int tabPos;
         tabPos = x + w;
         bool not_found = true;
         for (int i = 0; i < tabCount && not_found; ++i)
         {
+            int nextTabPos;
             nextTabPos = tabArray.Item(i) + x_orig;
 
             // Find the next tab position.
@@ -7253,8 +7253,6 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
             tabArray[i] = pos;
         }
 
-        int nextTabPos = -1;
-
         while (stringChunk.Find(wxT('\t')) >= 0)
         {
             int absoluteWidth = 0;
@@ -7295,6 +7293,7 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
             bool notFound = true;
             for (int i = 0; i < tabCount && notFound; ++i)
             {
+                int nextTabPos;
                 nextTabPos = tabArray.Item(i);
 
                 // Find the next tab position.

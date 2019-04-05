@@ -368,7 +368,6 @@ void wxRadioBox::SetFocus()
 
 void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    int i;
     wxRadioButton *current;
 
     // define the position
@@ -470,6 +469,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     y_offset = y_start;
 
     current = m_radioButtonCycle;
+    int i;
     for (i = 0 ; i < (int)m_noItems; i++)
     {
         // not to do for the zero button!

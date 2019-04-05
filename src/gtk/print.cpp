@@ -1699,7 +1699,7 @@ void wxGtkPrinterDCImpl::DoDrawSpline(const wxPointList *points)
 {
     SetPen (m_pen);
 
-    double c, d, x1, y1, x2, y2, x3, y3;
+    double c, d, x1, y1, x3, y3;
     wxPoint *p, *q;
 
     wxPointList::compatibility_iterator node = points->GetFirst();
@@ -1726,6 +1726,7 @@ void wxGtkPrinterDCImpl::DoDrawSpline(const wxPointList *points)
     node = node->GetNext();
     while (node)
     {
+        double x2, y2;
         q = node->GetData();
 
         x1 = x3;

@@ -911,7 +911,6 @@ bool wxStandardDialogLayoutAdapter::DoFitWithScrolling(wxDialog* dialog, wxWindo
 
     wxSize windowSize, displaySize;
     int scrollFlags = DoMustScroll(dialog, windowSize, displaySize);
-    int scrollBarSize = 20;
 
     if (scrollFlags)
     {
@@ -922,6 +921,7 @@ bool wxStandardDialogLayoutAdapter::DoFitWithScrolling(wxDialog* dialog, wxWindo
         if (windows.GetCount() != 0)
         {
             // Allow extra for a scrollbar, assuming we resizing in one direction only.
+            int scrollBarSize = 20;
             if ((resizeVertically && !resizeHorizontally) && (windowSize.x < (displaySize.x - scrollBarSize)))
                 scrollBarExtraX = scrollBarSize;
             if ((resizeHorizontally && !resizeVertically) && (windowSize.y < (displaySize.y - scrollBarSize)))

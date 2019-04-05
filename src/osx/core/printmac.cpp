@@ -113,11 +113,10 @@ void wxOSXPrintData::UpdateToPMState()
 void wxOSXPrintData::TransferPrinterNameFrom( const wxPrintData &data )
 {
     CFArrayRef printerList;
-    CFIndex index, count;
-    CFStringRef name;
 
     if (PMServerCreatePrinterList(kPMServerLocal, &printerList) == noErr)
     {
+        CFIndex index, count;
         PMPrinter printer = NULL;
         count = CFArrayGetCount(printerList);
         for (index = 0; index < count; index++)
@@ -127,6 +126,7 @@ void wxOSXPrintData::TransferPrinterNameFrom( const wxPrintData &data )
                 break;
             else
             {
+                CFStringRef name;
                 name = PMPrinterGetName(printer);
                 CFRetain(name);
                 if (data.GetPrinterName() == wxCFStringRef(name).AsString())

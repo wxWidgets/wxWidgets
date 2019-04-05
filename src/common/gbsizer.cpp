@@ -546,11 +546,11 @@ void wxGridBagSizer::RepositionChildren(const wxSize& minSize)
     wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
     while (node)
     {
-        int row, col, endrow, endcol;
         wxGBSizerItem* item = (wxGBSizerItem*)node->GetData();
 
         if ( item->IsShown() )
         {
+            int row, col, endrow, endcol;
             item->GetPos(row, col);
             item->GetEndPos(endrow, endcol);
 

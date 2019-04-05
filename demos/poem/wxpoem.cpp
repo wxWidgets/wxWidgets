@@ -148,7 +148,6 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
     int i = pages[current_page];
     int ch = -1;
     int y = 0;
-    int j;
     wxChar *line_ptr;
     int curr_width = 0;
     bool page_break = false;
@@ -204,6 +203,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
 
     while (ch != 0 && !page_break)
     {
+        int j;
         j = 0;
 #if defined(__WXMSW__) || defined(__WXMAC__)
         while (((ch = poem_buffer[i]) != 13) && (ch != 0))
@@ -464,8 +464,6 @@ void MainWindow::PreviousPage(void)
 // Search for a string
 void MainWindow::Search(bool ask)
 {
-    long position;
-
     if (ask || m_searchString.empty())
     {
         wxString s = wxGetTextFromUser( wxT("Enter search string"), wxT("Search"), m_searchString);
@@ -488,6 +486,7 @@ void MainWindow::Search(bool ask)
 
     if (!m_searchString.empty() && search_ok)
     {
+        long position;
         position = DoSearch();
         if (position > -1)
         {

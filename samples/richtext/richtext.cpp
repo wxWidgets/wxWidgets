@@ -1613,11 +1613,11 @@ void MyFrame::OnUpdateFormat(wxUpdateUIEvent& event)
 void MyFrame::OnUpdateImage(wxUpdateUIEvent& event)
 {
     wxRichTextRange range;
-    wxRichTextObject *obj;
 
     range = m_richTextCtrl->GetSelectionRange();
     if (range.ToInternal().GetLength() == 1)
     {
+        wxRichTextObject *obj;
         obj = m_richTextCtrl->GetFocusObject()->GetLeafObjectAtPosition(range.GetStart());
         if (obj && obj->IsKindOf(CLASSINFO(wxRichTextImage)))
         {

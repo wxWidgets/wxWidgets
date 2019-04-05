@@ -1478,9 +1478,9 @@ wxTranslations::~wxTranslations()
     delete m_loader;
 
     // free catalogs memory
-    wxMsgCatalog *pTmpCat;
     while ( m_pMsgCat != NULL )
     {
+        wxMsgCatalog* pTmpCat;
         pTmpCat = m_pMsgCat;
         m_pMsgCat = m_pMsgCat->m_pNext;
         delete pTmpCat;

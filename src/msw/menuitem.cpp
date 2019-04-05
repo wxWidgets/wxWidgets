@@ -787,11 +787,11 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
 
     if ( IsOwnerDrawn() )
     {
-        *width  = data->ItemMargin.GetTotalX();
-        *height = data->ItemMargin.GetTotalY();
-
         if ( IsSeparator() )
         {
+            *width  = data->ItemMargin.GetTotalX();
+            *height = data->ItemMargin.GetTotalY();
+
             *width  += data->SeparatorSize.cx
                      + data->SeparatorMargin.GetTotalX();
             *height += data->SeparatorSize.cy

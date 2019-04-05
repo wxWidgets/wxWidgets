@@ -878,12 +878,12 @@ bool wxListCtrl::EnsureVisible(long item)
 
 long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
 {
-    int ret;
     QList <QTreeWidgetItem *> qitems = m_qtTreeWidget->findItems(
                 wxQtConvertString(str),
                 !partial ? Qt::MatchExactly : Qt::MatchContains );
     for (int i=0; i<qitems.length(); i++)
     {
+        int ret;
         ret = m_qtTreeWidget->indexOfTopLevelItem(qitems.at(i));
         if ( ret >= start )
             return ret;

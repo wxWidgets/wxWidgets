@@ -303,13 +303,12 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
                                   wxWindow* wnd, wxEvent& event ) const
 {
     wxEventType evtType = event.GetEventType();
-    int keycode = -1;
-    int spins = 1;
     bool bigStep = false;
 
     if ( evtType == wxEVT_KEY_DOWN )
     {
         wxKeyEvent& keyEvent = (wxKeyEvent&)event;
+        int keycode;
         keycode = keyEvent.GetKeyCode();
 
         if ( keycode == WXK_UP )
@@ -330,6 +329,7 @@ bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* proper
 
     if ( evtType == wxEVT_SCROLL_LINEUP || evtType == wxEVT_SCROLL_LINEDOWN )
     {
+        int spins = 1;
     #if IS_MOTION_SPIN_SUPPORTED
         if ( property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_MOTION, 0) )
         {

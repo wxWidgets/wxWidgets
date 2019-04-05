@@ -58,12 +58,12 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 {
     wxString ext, mime;
     wxString loc = GetRightLocation(location);
-    wxChar c;
     int l = loc.length(), l2;
 
     l2 = l;
     for (int i = l-1; i >= 0; i--)
     {
+        wxChar c;
         c = loc[(unsigned int) i];
         if ( c == wxT('#') )
             l2 = i + 1;
@@ -234,10 +234,10 @@ wxString wxFileSystemHandler::GetRightLocation(const wxString& location)
 /* static */
 wxString wxFileSystemHandler::GetAnchor(const wxString& location)
 {
-    wxChar c;
     int l = location.length();
 
     for (int i = l-1; i >= 0; i--) {
+        wxChar c;
         c = location[i];
         if (c == wxT('#'))
             return location.Right(l-i-1);
@@ -384,7 +384,6 @@ static wxString MakeCorrectPath(const wxString& path)
 
 void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
 {
-    int i, pathpos = -1;
 
     m_Path = MakeCorrectPath(location);
 
@@ -393,9 +392,9 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
         if (!m_Path.empty() && m_Path.Last() != wxT('/') && m_Path.Last() != wxT(':'))
             m_Path << wxT('/');
     }
-
     else
     {
+        int i, pathpos = -1;
         for (i = m_Path.length()-1; i >= 0; i--)
         {
             if (m_Path[(unsigned int) i] == wxT('/'))
