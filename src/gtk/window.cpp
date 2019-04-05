@@ -3666,6 +3666,7 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
         // priority slightly higher than GDK_PRIORITY_EVENTS
         g_source_set_priority(source, GDK_PRIORITY_EVENTS - 1);
         g_source_attach(source, NULL);
+        g_source_unref(source);
     }
 
     g_signal_connect (widget, "key_press_event",
