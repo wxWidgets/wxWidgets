@@ -596,16 +596,19 @@ wxSize wxToolBar::DoGetBestSize() const
     }
 
     wxToolBarToolsList::compatibility_iterator node;
+    int toolIndex = 0;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
         wxToolBarTool * const
             tool = static_cast<wxToolBarTool *>(node->GetData());
 
+        RECT rcItem = wxGetTBItemRect(GetHwnd(), toolIndex++);
+
         if ( IsVertical() )
         {
             if ( !tool->IsControl() )
             {
-                sizeBest.y += sizeTool.y;
+                sizeBest.y += rcItem.bottom - rcItem.top;
             }
             //else: Controls are not shown in vertical toolbars at all.
         }
@@ -622,7 +625,7 @@ wxSize wxToolBar::DoGetBestSize() const
             }
             else
             {
-                sizeBest.x += sizeTool.x;
+                sizeBest.x += rcItem.right - rcItem.left;
             }
         }
     }
