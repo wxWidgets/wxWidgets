@@ -237,7 +237,7 @@ bool wxButton::DoSetLabelMarkup(const wxString& markup)
     if ( stripped.empty() && !markup.empty() )
         return false;
 
-    wxControl::SetLabel(stripped);
+    SetLabel(stripped);
 
     GtkLabel * const label = GTKGetLabel();
     wxCHECK_MSG( label, false, "no label in this button?" );
