@@ -408,6 +408,7 @@ protected:
     void OnMouseMove(wxMouseEvent& event);
     void OnMouseDown(wxMouseEvent& event);
     void OnMouseUp(wxMouseEvent& event);
+    void OnFocusEvent(wxFocusEvent& event);
 #if wxUSE_CLIPBOARD
     void OnKeyUp(wxKeyEvent& event);
     void OnDoubleClick(wxMouseEvent& event);
