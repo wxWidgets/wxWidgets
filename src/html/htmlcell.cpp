@@ -221,16 +221,21 @@ wxHtmlCell *wxHtmlCell::FindCellByPos(wxCoord x, wxCoord y,
 }
 
 
-wxPoint wxHtmlCell::GetAbsPos(wxHtmlCell *rootCell) const
+wxPoint wxHtmlCell::GetAbsPos(const wxHtmlCell *rootCell) const
 {
     wxPoint p(m_PosX, m_PosY);
-    for (wxHtmlCell *parent = m_Parent; parent && parent != rootCell;
+    for (const wxHtmlCell *parent = m_Parent; parent && parent != rootCell;
          parent = parent->m_Parent)
     {
         p.x += parent->m_PosX;
         p.y += parent->m_PosY;
     }
     return p;
+}
+
+wxRect wxHtmlCell::GetRect(const wxHtmlCell* rootCell) const
+{
+    return wxRect(GetAbsPos(rootCell), wxSize(m_Width, m_Height));
 }
 
 wxHtmlCell *wxHtmlCell::GetRootCell() const

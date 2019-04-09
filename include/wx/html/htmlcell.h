@@ -329,7 +329,12 @@ public:
     // Returns absolute position of the cell on HTML canvas.
     // If rootCell is provided, then it's considered to be the root of the
     // hierarchy and the returned value is relative to it.
-    wxPoint GetAbsPos(wxHtmlCell *rootCell = NULL) const;
+    wxPoint GetAbsPos(const wxHtmlCell *rootCell = NULL) const;
+
+    // Returns minimum bounding rectangle of this cell in coordinates, relative
+    // to the rootCell, if it is provided, or relative to the result of
+    // GetRootCell() if the rootCell is NULL.
+    wxRect GetRect(const wxHtmlCell *rootCell = NULL) const;
 
     // Returns root cell of the hierarchy (i.e. grand-grand-...-parent that
     // doesn't have a parent itself)
