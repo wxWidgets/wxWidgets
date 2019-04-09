@@ -253,7 +253,10 @@ static const int gs_metricsMap[] =
     SM_PENWINDOWS,
     SM_SHOWSOUNDS,
     SM_SWAPBUTTON,
-    -1   // wxSYS_DCLICK_MSEC - not available as system metric
+    -1,   // wxSYS_DCLICK_MSEC - not available as system metric
+    -1,   // wxSYS_CARET_ON_MSEC - not available as system metric
+    -1,   // wxSYS_CARET_OFF_MSEC - not available as system metric
+    -1    // wxSYS_CARET_TIMEOUT_MSEC - not available as system metric
 };
 
 // Get a system metric, e.g. scrollbar size
@@ -266,6 +269,25 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
     {
         // This one is not a Win32 system metric
         return ::GetDoubleClickTime();
+    }
+
+    // return the caret blink time for both
+    // wxSYS_CARET_ON_MSEC and wxSYS_CARET_OFF_MSEC
+    if ( index == wxSYS_CARET_ON_MSEC || index == wxSYS_CARET_OFF_MSEC )
+    {
+        const UINT blinkTime = ::GetCaretBlinkTime();
+
+        if ( blinkTime == 0 ) // error
+        {
+            return -1;
+        }
+        
+        if ( blinkTime == INFINITE ) // caret does not blink
+        {
+            return 0;
+        }
+
+        return blinkTime;
     }
 
     int indexMSW = gs_metricsMap[index];
