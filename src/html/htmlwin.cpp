@@ -1526,14 +1526,12 @@ void wxHtmlWindow::OnMouseLeave(wxMouseEvent& event)
 
 void wxHtmlWindow::OnKeyUp(wxKeyEvent& event)
 {
-    if ( IsSelectionEnabled() &&
-            (event.GetKeyCode() == 'C' && event.CmdDown()) )
+    if ( IsSelectionEnabled() && event.GetModifiers() == wxMOD_CONTROL &&
+         (event.GetKeyCode() == 'C' || event.GetKeyCode() == WXK_INSERT) )
     {
         wxClipboardTextEvent evt(wxEVT_TEXT_COPY, GetId());
-
         evt.SetEventObject(this);
-
-        GetEventHandler()->ProcessEvent(evt);
+        ProcessWindowEvent(evt);
     }
     else
     {
