@@ -602,7 +602,11 @@ wxSize wxToolBar::DoGetBestSize() const
         wxToolBarTool * const
             tool = static_cast<wxToolBarTool *>(node->GetData());
 
-        RECT rcItem = wxGetTBItemRect(GetHwnd(), toolIndex++);
+        // Note that we can't just reuse sizeTool here, even though all normal
+        // items do have this size, this is not true for the separators and it
+        // is both more robust and simpler to just always use TB_GETITEMRECT
+        // rather than handling the separators specially.
+        const RECT rcItem = wxGetTBItemRect(GetHwnd(), toolIndex++);
 
         if ( IsVertical() )
         {
