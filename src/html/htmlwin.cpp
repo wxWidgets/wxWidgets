@@ -1184,6 +1184,90 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
     }
 }
 
+namespace
+{
+
+// Returns true if leftCell is an ancestor of rightCell.
+bool IsAncestor(const wxHtmlCell* leftCell, const wxHtmlCell* rightCell)
+{
+    for ( const wxHtmlCell* parent = rightCell->GetParent();
+          parent; parent = parent->GetParent() )
+    {
+        if ( leftCell == parent )
+            return true;
+    }
+    return false;
+}
+
+// Returns minimum bounding rectangle of all the cells between fromCell
+// and toCell, inclusive.
+wxRect GetBoundingRect(const wxHtmlCell* const fromCell,
+                       const wxHtmlCell* const toCell)
+{
+    wxCHECK_MSG(fromCell || toCell, wxRect(), "At least one cell is required");
+
+    // Check if we have only one cell or the cells are equal.
+    if ( !fromCell )
+        return toCell->GetRect();
+    else if ( !toCell || fromCell == toCell )
+        return fromCell->GetRect();
+
+    // Check if one of the cells is an ancestor of the other.
+    if ( IsAncestor(fromCell, toCell) )
+        return fromCell->GetRect();
+    else if ( IsAncestor(toCell, fromCell) )
+        return toCell->GetRect();
+
+    // Combine MBRs, starting with the fromCell.
+    wxRect boundingRect = fromCell->GetRect();
+
+    // For each subtree toward the lowest common ancestor,
+    // combine MBRs until the (subtree of) toCell is reached.
+    for ( const wxHtmlCell *startCell = fromCell,
+                           *parent = fromCell->GetParent();
+          parent;
+          startCell = parent, parent = parent->GetParent() )
+    {
+        if ( IsAncestor(parent, toCell) )
+        {
+            // Combine all the cells up to the toCell or its subtree.
+            for ( const wxHtmlCell* nextCell = startCell->GetNext();
+                  nextCell;
+                  nextCell = nextCell->GetNext() )
+            {
+                if ( nextCell == toCell )
+                    return boundingRect.Union(toCell->GetRect());
+
+                if ( IsAncestor(nextCell, toCell) )
+                {
+                    return boundingRect.Union(GetBoundingRect(
+                        nextCell->GetFirstTerminal(), toCell));
+                }
+
+                boundingRect.Union(nextCell->GetRect());
+            }
+
+            wxFAIL_MSG("Unexpected: toCell is not reachable from the fromCell");
+            return GetBoundingRect(toCell, fromCell);
+        }
+        else
+        {
+            // Combine rest of current container.
+            for ( const wxHtmlCell* nextCell = startCell->GetNext();
+                  nextCell;
+                  nextCell = nextCell->GetNext() )
+            {
+                boundingRect.Union(nextCell->GetRect());
+            }
+        }
+    }
+
+    wxFAIL_MSG("The cells have no common ancestor");
+    return wxRect();
+}
+
+} // namespace
+
 void wxHtmlWindow::OnFocusEvent(wxFocusEvent& event)
 {
     event.Skip();
@@ -1198,16 +1282,16 @@ void wxHtmlWindow::OnFocusEvent(wxFocusEvent& event)
     const wxHtmlCell* toCell = m_selection->GetToCell();
     wxCHECK_RET(fromCell || toCell,
                 "Unexpected: selection is set but cells are not");
-    if ( !fromCell )
-        fromCell = toCell;
-    if ( !toCell )
-        toCell = fromCell;
 
-    const wxPoint topLeft = fromCell->GetAbsPos();
-    const wxPoint bottomRight = toCell->GetAbsPos() +
-        wxSize(toCell->GetWidth(), toCell->GetHeight());
-    RefreshRect(wxRect(CalcScrolledPosition(topLeft),
-        CalcScrolledPosition(bottomRight)));
+    wxRect boundingRect = GetBoundingRect(fromCell, toCell);
+
+    boundingRect = wxRect
+    (
+        CalcScrolledPosition(boundingRect.GetTopLeft()),
+        CalcScrolledPosition(boundingRect.GetBottomRight())
+    );
+
+    RefreshRect(boundingRect);
 }
 
 
