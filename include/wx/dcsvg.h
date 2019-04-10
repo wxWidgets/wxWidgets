@@ -248,7 +248,6 @@ private:
     void DoStartNewGraphics();
 
     wxString            m_filename;
-    int                 m_sub_images; // number of png format images we have
     bool                m_OK;
     bool                m_graphics_changed;  // set by Set{Brush,Pen}()
     int                 m_width, m_height;

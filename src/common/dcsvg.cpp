@@ -409,7 +409,6 @@ void wxSVGFileDCImpl::Init(const wxString &filename, int Width, int Height,
 
     m_filename = filename;
     m_graphics_changed = true;
-    m_sub_images = 0;
 
     ////////////////////code here
 
