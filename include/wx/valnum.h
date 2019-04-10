@@ -157,9 +157,19 @@ public:
         this->DoSetMin(min);
     }
 
+    ValueType GetMin() const
+    {
+        return static_cast<ValueType>(this->DoGetMin());
+    }
+
     void SetMax(ValueType max)
     {
         this->DoSetMax(max);
+    }
+    
+    ValueType GetMax() const
+    {
+        return static_cast<ValueType>(this->DoGetMax());
     }
 
     void SetRange(ValueType min, ValueType max)
@@ -167,7 +177,13 @@ public:
         SetMin(min);
         SetMax(max);
     }
-
+    
+    void GetRange(ValueType& min, ValueType& max) const
+    {
+        min = GetMin();
+        max = GetMax();
+    }
+    
     virtual bool TransferToWindow()  wxOVERRIDE
     {
         if ( m_value )
@@ -288,7 +304,9 @@ protected:
     static bool FromString(const wxString& s, LongestValueType *value);
 
     void DoSetMin(LongestValueType min) { m_min = min; }
+    LongestValueType DoGetMin() const { return m_min; }
     void DoSetMax(LongestValueType max) { m_max = max; }
+    LongestValueType DoGetMax() const { return m_max; }
 
     bool IsInRange(LongestValueType value) const
     {
