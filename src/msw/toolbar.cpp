@@ -194,39 +194,32 @@ public:
         {
             if ( m_staticText )
             {
-                 if ( !label.empty() )
-                 {
+                if ( !label.empty() )
+                {
                     m_staticText->SetLabel(label);
-                 }
-                 else
-                 {
+                }
+                else
+                {
                     delete m_staticText;
                     m_staticText = NULL;
-                 }
+                }
             }
             else
             {
-                 if ( !label.empty() )
-                 {
-                    // Create a control to render the control's label.
-                    // It has the same witdh as the control.
-                    wxSize size(m_control->GetSize().GetWidth(), wxDefaultCoord);
-                    m_staticText = new wxStaticText(m_tbar, wxID_ANY, label,
-                                        wxDefaultPosition, size,
-                                        wxALIGN_CENTRE | wxST_NO_AUTORESIZE);
-                 }
+                if ( !label.empty() )
+                {
+                    m_staticText = new wxStaticText(m_tbar, wxID_ANY, label);
+                }
             }
         }
-        else if ( IsButton() )
-        {
-            // Because new label can have different length than the old one
-            // so updating button's label with TB_SETBUTTONINFO would require
-            // also manual re-positionining items in the control tools located
-            // to the right in the toolbar and recalculation of stretchable
-            // spacers so it is easier just to recreate the toolbar with
-            // Realize(). Performance penalty should be negligible.
-            m_tbar->Realize();
-        }
+
+        // Because new label can have different length than the old one
+        // so updating button's label with TB_SETBUTTONINFO would require
+        // also manual re-positionining items in the control tools located
+        // to the right in the toolbar and recalculation of stretchable
+        // spacers so it is easier just to recreate the toolbar with
+        // Realize(). Performance penalty should be negligible.
+        m_tbar->Realize();
     }
 
     wxStaticText* GetStaticText()
