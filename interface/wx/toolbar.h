@@ -334,10 +334,6 @@ public:
             Text to be displayed near the control.
 
         @remarks
-            wxMSW: the label is only displayed if there is enough space
-            available below the embedded control.
-
-        @remarks
             wxMac: labels are only displayed if wxWidgets is built with @c
             wxMAC_USE_NATIVE_TOOLBAR set to 1
     */
