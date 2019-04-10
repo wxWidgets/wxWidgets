@@ -335,24 +335,24 @@ wxSVGBitmapFileHandler::ProcessBitmap(const wxBitmap& bmp,
         wxImage::AddHandler(new wxPNGHandler);
 
     // find a suitable file name
-    wxString sPNG;
+    wxFileName sPNG = wxFileName(m_path);
     do
     {
-        sPNG = wxString::Format("image%d.png", sub_images++);
+        sPNG.SetFullName(wxString::Format("%s%simage%d.png",
+                         sPNG.GetName(),
+                         sPNG.GetName().IsEmpty() ? "" : "_",
+                         sub_images++));
     }
-    while (wxFile::Exists(sPNG));
+    while ( sPNG.FileExists() );
 
-    if ( !bmp.SaveFile(sPNG, wxBITMAP_TYPE_PNG) )
+    if ( !bmp.SaveFile(sPNG.GetFullPath(), wxBITMAP_TYPE_PNG) )
         return false;
-
-    // reference the bitmap from the SVG doc using only filename & ext
-    sPNG = sPNG.AfterLast(wxFileName::GetPathSeparator());
 
     // reference the bitmap from the SVG doc
     wxString s;
     s += wxString::Format("  <image x=\"%d\" y=\"%d\" width=\"%dpx\" height=\"%dpx\"",
                           x, y, bmp.GetWidth(), bmp.GetHeight());
-    s += wxString::Format(" xlink:href=\"%s\"/>\n", sPNG);
+    s += wxString::Format(" xlink:href=\"%s\"/>\n", sPNG.GetFullName());
 
     // write to the SVG file
     const wxCharBuffer buf = s.utf8_str();
@@ -1111,7 +1111,7 @@ void wxSVGFileDCImpl::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoor
 
     // If we don't have any bitmap handler yet, use the default one.
     if ( !m_bmp_handler )
-        m_bmp_handler.reset(new wxSVGBitmapFileHandler());
+        m_bmp_handler.reset(new wxSVGBitmapFileHandler(m_filename));
 
     m_bmp_handler->ProcessBitmap(bmp, x, y, *m_outfile);
 }

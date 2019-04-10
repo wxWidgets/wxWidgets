@@ -40,13 +40,26 @@ public:
 };
 
 // Predefined standard bitmap handler: creates a file, stores the bitmap in
-// this file and uses the file URI in the generated SVG.
+// this file and uses the file name in the generated SVG.
 class WXDLLIMPEXP_CORE wxSVGBitmapFileHandler : public wxSVGBitmapHandler
 {
 public:
+    wxSVGBitmapFileHandler()
+        : m_path()
+    {
+    }
+
+    explicit wxSVGBitmapFileHandler(const wxString& path)
+        : m_path(path)
+    {
+    }
+
     virtual bool ProcessBitmap(const wxBitmap& bitmap,
                                wxCoord x, wxCoord y,
                                wxOutputStream& stream) const wxOVERRIDE;
+
+private:
+    wxString m_path; // When set, will be appended with _image#.png
 };
 
 // Predefined handler which embeds the bitmap (base64-encoding it) inside the
