@@ -35,7 +35,8 @@ public:
     wxHtmlSelection()
         : m_fromPos(wxDefaultPosition), m_toPos(wxDefaultPosition),
           m_fromCharacterPos(-1), m_toCharacterPos(-1),
-          m_fromCell(NULL), m_toCell(NULL) {}
+          m_fromCell(NULL), m_toCell(NULL),
+          m_extBeforeSel(0), m_extBeforeSelEnd(0) {}
 
     // this version is used for the user selection defined with the mouse
     void Set(const wxPoint& fromPos, const wxHtmlCell *fromCell,
@@ -58,6 +59,11 @@ public:
     wxCoord GetFromCharacterPos () const { return m_fromCharacterPos; }
     wxCoord GetToCharacterPos () const { return m_toCharacterPos; }
 
+    void SetExtentBeforeSelection(unsigned ext) { m_extBeforeSel = ext; }
+    void SetExtentBeforeSelectionEnd(unsigned ext) { m_extBeforeSelEnd = ext; }
+    unsigned GetExtentBeforeSelection() const { return m_extBeforeSel; }
+    unsigned GetExtentBeforeSelectionEnd() const { return m_extBeforeSelEnd; }
+
     bool IsEmpty() const
         { return m_fromPos == wxDefaultPosition &&
                  m_toPos == wxDefaultPosition; }
@@ -66,6 +72,12 @@ private:
     wxPoint m_fromPos, m_toPos;
     wxCoord m_fromCharacterPos, m_toCharacterPos;
     const wxHtmlCell *m_fromCell, *m_toCell;
+
+    // Extent of the text before selection start.
+    unsigned m_extBeforeSel;
+
+    // Extent of the text from the beginning to the selection end.
+    unsigned m_extBeforeSelEnd;
 };
 
 
@@ -431,7 +443,8 @@ protected:
     void SetSelectionPrivPos(const wxDC& dc, wxHtmlSelection *s) const;
     void Split(const wxDC& dc,
                const wxPoint& selFrom, const wxPoint& selTo,
-               unsigned& pos1, unsigned& pos2) const;
+               unsigned& pos1, unsigned& pos2,
+               unsigned& ext1, unsigned& ext2) const;
 
     wxString m_Word;
     bool     m_allowLinebreak;
