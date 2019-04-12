@@ -2213,6 +2213,7 @@ void wxMacCoreGraphicsContext::Rotate( wxDouble angle )
 void wxMacCoreGraphicsContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
 #if wxOSX_USE_COCOA
+    if (EnsureIsValid())
     {
         CGRect r = CGRectMake( (CGFloat) x , (CGFloat) y , (CGFloat) w , (CGFloat) h );
         wxOSXDrawNSImage( m_cgContext, &r, bmp.GetImage());

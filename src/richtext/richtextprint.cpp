@@ -447,15 +447,14 @@ bool wxRichTextPrintout::SubstituteKeywords(wxString& str, const wxString& title
  */
 
 wxRichTextPrinting::wxRichTextPrinting(const wxString& name, wxWindow *parentWindow)
+    : m_title(name)
+    , m_previewRect(100, 100, 800, 800)
 {
     m_richTextBufferPrinting = NULL;
     m_richTextBufferPreview = NULL;
 
     m_parentWindow = parentWindow;
-    m_title = name;
     m_printData = NULL;
-
-    m_previewRect = wxRect(wxPoint(100, 100), wxSize(800, 800));
 
     m_pageSetupData = new wxPageSetupDialogData;
     m_pageSetupData->EnableMargins(true);

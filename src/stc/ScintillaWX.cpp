@@ -33,6 +33,8 @@
 #include "wx/dataobj.h"
 #include "wx/clipbrd.h"
 #include "wx/dnd.h"
+#include "wx/image.h"
+#include "wx/scopedarray.h"
 
 #if !wxUSE_STD_CONTAINERS && !wxUSE_STD_IOSTREAM && !wxUSE_STD_STRING
     #include "wx/beforestd.h"
@@ -1334,6 +1336,57 @@ void ScintillaWX::SetUseAntiAliasing(bool useAA) {
 
 bool ScintillaWX::GetUseAntiAliasing() {
     return vs.extraFontFlag != 0;
+}
+
+void ScintillaWX::DoMarkerDefineBitmap(int markerNumber, const wxBitmap& bmp) {
+    if ( 0 <= markerNumber && markerNumber <= MARKER_MAX) {
+        // Build an RGBA buffer from bmp.
+        const int totalPixels = bmp.GetWidth() * bmp.GetHeight();
+        wxScopedArray<unsigned char> rgba(4*bmp.GetWidth()*bmp.GetHeight());
+        wxImage img = bmp.ConvertToImage();
+        int curRGBALoc = 0, curDataLoc = 0, curAlphaLoc = 0;
+
+        if ( img.HasMask() ) {
+            for ( int y = 0; y < bmp.GetHeight(); ++y ) {
+                for ( int x = 0 ; x < bmp.GetWidth(); ++x ) {
+                    rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                    rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                    rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                    rgba[curRGBALoc++] = img.IsTransparent(x,y)
+                        ? wxALPHA_TRANSPARENT : wxALPHA_OPAQUE ;
+                }
+            }
+        }
+        else if ( img.HasAlpha() ) {
+            for ( int i = 0; i < totalPixels; ++i ) {
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetAlpha()[curAlphaLoc++];
+            }
+        }
+        else {
+            for ( int i = 0; i < totalPixels; ++i ) {
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = wxALPHA_OPAQUE ;
+            }
+        }
+
+        // Now follow the same procedure used for handling the
+        // SCI_MARKERDEFINERGBAIMAGE message, except use the bitmap's width and
+        // height instead of the values stored in sizeRGBAImage.
+        Point bitmapSize = Point::FromInts(bmp.GetWidth(), bmp.GetHeight());
+        vs.markers[markerNumber].SetRGBAImage(bitmapSize, 1.0f, rgba.get());
+        vs.CalcLargestMarkerHeight();
+    }
+    InvalidateStyleData();
+    RedrawSelMargin();
+}
+
+void ScintillaWX::DoRegisterImage(int type, const wxBitmap& bmp) {
+    static_cast<ListBoxImpl*>(ac.lb)->RegisterImageHelper(type, bmp);
 }
 
 sptr_t ScintillaWX::DirectFunction(

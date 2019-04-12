@@ -88,10 +88,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 {
     DoCreate(parent, style);
 
-    QListWidgetItem* item;
-
     while ( n-- > 0 )
     {
+        QListWidgetItem* item;
         item = new QListWidgetItem();
         item->setText(wxQtConvertString( *choices++ ));
         if ( m_hasCheckBoxes )

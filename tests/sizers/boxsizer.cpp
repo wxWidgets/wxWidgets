@@ -25,76 +25,35 @@
 #include "asserthelper.h"
 
 // ----------------------------------------------------------------------------
-// test class
+// test fixture
 // ----------------------------------------------------------------------------
 
-class BoxSizerTestCase : public CppUnit::TestCase
+class BoxSizerTestCase
 {
 public:
-    BoxSizerTestCase() { }
+    BoxSizerTestCase()
+        : m_win(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY)),
+          m_sizer(new wxBoxSizer(wxHORIZONTAL))
+    {
+        m_win->SetClientSize(127, 35);
+        m_win->SetSizer(m_sizer);
+    }
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+    ~BoxSizerTestCase()
+    {
+        delete m_win;
+    }
 
-private:
-    CPPUNIT_TEST_SUITE( BoxSizerTestCase );
-        CPPUNIT_TEST( Size1 );
-        CPPUNIT_TEST( Size3 );
-        CPPUNIT_TEST( CalcMin );
-        CPPUNIT_TEST( SetMinSize );
-        CPPUNIT_TEST( BestSizeRespectsMaxSize );
-        CPPUNIT_TEST( RecalcSizesRespectsMaxSize1 );
-        CPPUNIT_TEST( RecalcSizesRespectsMaxSize2 );
-        CPPUNIT_TEST( IncompatibleFlags );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Size1();
-    void Size3();
-    void CalcMin();
-    void SetMinSize();
-    void BestSizeRespectsMaxSize();
-    void RecalcSizesRespectsMaxSize1();
-    void RecalcSizesRespectsMaxSize2();
-    void IncompatibleFlags();
-
-    wxWindow *m_win;
-    wxSizer *m_sizer;
-
-    wxDECLARE_NO_COPY_CLASS(BoxSizerTestCase);
+protected:
+    wxWindow* const m_win;
+    wxSizer* const m_sizer;
 };
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( BoxSizerTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( BoxSizerTestCase, "BoxSizerTestCase" );
-
-// ----------------------------------------------------------------------------
-// test initialization
-// ----------------------------------------------------------------------------
-
-void BoxSizerTestCase::setUp()
-{
-    m_win = new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY);
-    m_win->SetClientSize(127, 35);
-
-    m_sizer = new wxBoxSizer(wxHORIZONTAL);
-    m_win->SetSizer(m_sizer);
-}
-
-void BoxSizerTestCase::tearDown()
-{
-    delete m_win;
-    m_win = NULL;
-
-    m_sizer = NULL;
-}
 
 // ----------------------------------------------------------------------------
 // tests themselves
 // ----------------------------------------------------------------------------
 
-void BoxSizerTestCase::Size1()
+TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::Size1", "[sizer]")
 {
     const wxSize sizeTotal = m_win->GetClientSize();
     const wxSize sizeChild = sizeTotal / 2;
@@ -103,32 +62,32 @@ void BoxSizerTestCase::Size1()
         child = new wxWindow(m_win, wxID_ANY, wxDefaultPosition, sizeChild);
     m_sizer->Add(child);
     m_win->Layout();
-    CPPUNIT_ASSERT_EQUAL( sizeChild, child->GetSize() );
+    CHECK(child->GetSize() == sizeChild);
 
     m_sizer->Clear();
     m_sizer->Add(child, wxSizerFlags(1));
     m_win->Layout();
-    CPPUNIT_ASSERT_EQUAL( wxSize(sizeTotal.x, sizeChild.y), child->GetSize() );
+    CHECK( child->GetSize() == wxSize(sizeTotal.x, sizeChild.y) );
 
     m_sizer->Clear();
     m_sizer->Add(child, wxSizerFlags(1).Expand());
     m_win->Layout();
-    CPPUNIT_ASSERT_EQUAL( sizeTotal, child->GetSize() );
+    CHECK(child->GetSize() == sizeTotal);
 
     m_sizer->Clear();
     m_sizer->Add(child, wxSizerFlags());
     m_sizer->SetItemMinSize(child, sizeTotal*2);
     m_win->Layout();
-    CPPUNIT_ASSERT_EQUAL( sizeTotal, child->GetSize() );
+    CHECK(child->GetSize() == sizeTotal);
 
     m_sizer->Clear();
     m_sizer->Add(child, wxSizerFlags().Expand());
     m_sizer->SetItemMinSize(child, sizeTotal*2);
     m_win->Layout();
-    CPPUNIT_ASSERT_EQUAL( sizeTotal, child->GetSize() );
+    CHECK(child->GetSize() == sizeTotal);
 }
 
-void BoxSizerTestCase::Size3()
+TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::Size3", "[sizer]")
 {
     wxGCC_WARNING_SUPPRESS(missing-field-initializers)
 
@@ -262,7 +221,7 @@ void BoxSizerTestCase::Size3()
     }
 }
 
-void BoxSizerTestCase::CalcMin()
+TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::CalcMin", "[sizer]")
 {
     static const unsigned NUM_TEST_ITEM = 3;
 
@@ -313,7 +272,7 @@ void BoxSizerTestCase::CalcMin()
     }
 }
 
-void BoxSizerTestCase::SetMinSize()
+TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::SetMinSize", "[sizer]")
 {
     wxWindow* const child = new wxWindow(m_win, wxID_ANY);
     child->SetInitialSize(wxSize(10, -1));
@@ -322,13 +281,13 @@ void BoxSizerTestCase::SetMinSize()
     // Setting minimal size explicitly must make GetMinSize() return at least
     // this size even if it needs a much smaller one.
     m_sizer->SetMinSize(100, 0);
-    CPPUNIT_ASSERT_EQUAL( 100, m_sizer->GetMinSize().x );
+    CHECK(m_sizer->GetMinSize().x == 100);
 
     m_sizer->Layout();
-    CPPUNIT_ASSERT_EQUAL( 100, m_sizer->GetMinSize().x );
+    CHECK(m_sizer->GetMinSize().x == 100);
 }
 
-void BoxSizerTestCase::BestSizeRespectsMaxSize()
+TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::BestSizeRespectsMaxSize", "[sizer]")
 {
     m_sizer->Clear();
 
@@ -343,10 +302,10 @@ void BoxSizerTestCase::BestSizeRespectsMaxSize()
     m_sizer->Add(sizer);
     m_win->Layout();
 
-    CPPUNIT_ASSERT_EQUAL(maxWidth, listbox->GetSize().GetWidth());
+    CHECK(listbox->GetSize().GetWidth() == maxWidth);
 }
 
-void BoxSizerTestCase::RecalcSizesRespectsMaxSize1()
+TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::RecalcSizesRespectsMaxSize1", "[sizer]")
 {
     m_sizer->Clear();
 
@@ -371,10 +330,10 @@ void BoxSizerTestCase::RecalcSizesRespectsMaxSize1()
 
     m_win->Layout();
 
-    CPPUNIT_ASSERT_EQUAL(maxWidth, listbox2->GetSize().GetWidth());
+    CHECK(listbox2->GetSize().GetWidth() == maxWidth);
 }
 
-void BoxSizerTestCase::RecalcSizesRespectsMaxSize2()
+TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::RecalcSizesRespectsMaxSize2", "[sizer]")
 {
     m_sizer->Clear();
 
@@ -395,23 +354,27 @@ void BoxSizerTestCase::RecalcSizesRespectsMaxSize2()
 
     m_win->Layout();
 
-    CPPUNIT_ASSERT_EQUAL(125, child1->GetSize().GetHeight());
-    CPPUNIT_ASSERT_EQUAL(50, child2->GetSize().GetHeight());
-    CPPUNIT_ASSERT_EQUAL(125, child3->GetSize().GetHeight());
+    CHECK(child1->GetSize().GetHeight() == 125);
+    CHECK(child2->GetSize().GetHeight() == 50);
+    CHECK(child3->GetSize().GetHeight() == 125);
 }
 
-void BoxSizerTestCase::IncompatibleFlags()
+TEST_CASE_METHOD(BoxSizerTestCase, "BoxSizer::IncompatibleFlags", "[sizer]")
 {
+    // This unhygienic macro relies on having a local variable called "sizer".
 #define ASSERT_SIZER_INVALID_FLAGS(f, msg) \
     WX_ASSERT_FAILS_WITH_ASSERT_MESSAGE( \
             "Expected assertion not generated for " msg, \
-            m_sizer->Add(10, 10, 0, f) \
+            sizer->Add(10, 10, 0, f) \
         )
 
 #define ASSERT_SIZER_INCOMPATIBLE_FLAGS(f1, f2) \
     ASSERT_SIZER_INVALID_FLAGS(f1 | f2, \
         "using incompatible flags " #f1 " and " #f2 \
     )
+
+    // First check with the horizontal sizer, which is what we use by default.
+    wxSizer* sizer = m_sizer;
 
     // In horizontal sizers alignment is only used in vertical direction.
     ASSERT_SIZER_INVALID_FLAGS(
@@ -426,7 +389,7 @@ void BoxSizerTestCase::IncompatibleFlags()
 
     // However using wxALIGN_CENTRE_HORIZONTAL together with
     // wxALIGN_CENTRE_VERTICAL as done by wxSizerFlags::Centre() should work.
-    m_sizer->Add(10, 10, wxSizerFlags().Centre());
+    sizer->Add(10, 10, wxSizerFlags().Centre());
 
     // Combining two vertical alignment flags doesn't make sense.
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxALIGN_BOTTOM, wxALIGN_CENTRE_VERTICAL);
@@ -435,10 +398,19 @@ void BoxSizerTestCase::IncompatibleFlags()
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxEXPAND, wxALIGN_CENTRE_VERTICAL);
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxEXPAND, wxALIGN_BOTTOM);
 
+    // But combining it with these flags and wxSHAPED does make sense and so
+    // shouldn't result in an assert.
+    CHECK_NOTHROW(
+        sizer->Add(10, 10, 0, wxEXPAND | wxSHAPED | wxALIGN_CENTRE_VERTICAL)
+    );
+    CHECK_NOTHROW(
+        sizer->Add(10, 10, 0, wxEXPAND | wxSHAPED | wxALIGN_TOP)
+    );
+
 
     // And now exactly the same thing in the other direction.
-    m_sizer = new wxBoxSizer(wxVERTICAL);
-    m_win->SetSizer(m_sizer);
+    sizer = new wxBoxSizer(wxVERTICAL);
+    m_win->SetSizer(sizer);
 
     ASSERT_SIZER_INVALID_FLAGS(
         wxALIGN_BOTTOM,
@@ -450,11 +422,18 @@ void BoxSizerTestCase::IncompatibleFlags()
         "using wxALIGN_CENTRE_VERTICAL in a vertical sizer"
     );
 
-    m_sizer->Add(10, 10, wxSizerFlags().Centre());
+    sizer->Add(10, 10, wxSizerFlags().Centre());
 
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxALIGN_RIGHT, wxALIGN_CENTRE_HORIZONTAL);
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxEXPAND, wxALIGN_CENTRE_HORIZONTAL);
     ASSERT_SIZER_INCOMPATIBLE_FLAGS(wxEXPAND, wxALIGN_RIGHT);
+
+    CHECK_NOTHROW(
+        sizer->Add(10, 10, 0, wxEXPAND | wxSHAPED | wxALIGN_CENTRE_HORIZONTAL)
+    );
+    CHECK_NOTHROW(
+        sizer->Add(10, 10, 0, wxEXPAND | wxSHAPED | wxALIGN_RIGHT)
+    );
 
 #undef ASSERT_SIZER_INCOMPATIBLE_FLAGS
 #undef ASSERT_SIZER_INVALID_FLAGS

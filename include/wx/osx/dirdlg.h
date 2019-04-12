@@ -45,11 +45,11 @@ public:
     ~wxDirDialog();
 #endif
 
-    virtual int ShowModal();
+    virtual int ShowModal() wxOVERRIDE;
 
 #if wxOSX_USE_COCOA
-    virtual void ShowWindowModal();
-    virtual void ModalFinishedCallback(void* panel, int returnCode);
+    virtual void ShowWindowModal() wxOVERRIDE;
+    virtual void ModalFinishedCallback(void* panel, int returnCode) wxOVERRIDE;
 #endif
 
 private:

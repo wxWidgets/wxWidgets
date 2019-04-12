@@ -40,9 +40,11 @@ categoriesList = [
     ('OtherSettings'                   ,'Other settings', 0),
     ('BraceHighlighting'               ,'Brace highlighting', 0),
     ('TabsAndIndentationGuides'        ,'Tabs and Indentation Guides', 0),
-    ('Markers'                         ,'Markers', 0),
+    ('Markers'                         ,'Markers',
+        ('@see MarkerDefineBitmap',)),
     ('Indicators'                      ,'Indicators', 0),
-    ('Autocompletion'                  ,'Autocompletion', 0),
+    ('Autocompletion'                  ,'Autocompletion',
+        ('@see RegisterImage(int, const wxBitmap&)',)),
     ('UserLists'                       ,'User lists', 0),
     ('CallTips'                        ,'Call tips', 0),
     ('KeyboardCommands'                ,'Keyboard commands', 0),
@@ -844,7 +846,13 @@ docSubstitutions = {
         'SC_SEL_RECTANGLE':'wxSTC_SEL_RECTANGLE','SC_SEL_THIN':'wxSTC_SEL_THIN',
         'SC_SEL_LINES':'wxSTC_SEL_LINES'},
 
-    'SetFontQuality':{' from the FontQuality enumeration':''}
+    'SetFontQuality':{' from the FontQuality enumeration':''},
+
+    'GetWrapVisualFlags':{'Retrive':'Retrieve'},
+
+    'GetWrapVisualFlagsLocation':{'Retrive':'Retrieve'},
+
+    'GetWrapStartIndent':{'Retrive':'Retrieve'}
 }
 
 
@@ -1400,7 +1408,10 @@ sinceAnnotations= {
     'SetMouseWheelCaptures':'3.1.1',
     'SetTabDrawMode':'3.1.1',
     'TargetWholeDocument':'3.1.1',
-    'ToggleFoldShowText':'3.1.1'
+    'ToggleFoldShowText':'3.1.1',
+
+    'MarkerDefinePixmap':'3.1.3',
+    'RegisterImage':'3.1.3'
 }
 
 

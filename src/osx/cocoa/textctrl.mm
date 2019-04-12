@@ -759,6 +759,7 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long s
     if ( !wxPeer->HasFlag(wxTE_RICH | wxTE_RICH2) )
     {
         [tv setRichText:NO];
+        [tv setUsesFontPanel:NO];
     }
 
     if ( wxPeer->HasFlag(wxTE_AUTO_URL) )

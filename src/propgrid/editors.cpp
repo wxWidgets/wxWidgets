@@ -781,7 +781,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 
     const wxBitmap* itemBitmap = NULL;
 
-    if ( item >= 0 && choices.IsOk() && choices.Item(item).GetBitmap().IsOk() && comValIndex == -1 )
+    if ( choices.IsOk() && choices.Item(item).GetBitmap().IsOk() && comValIndex == -1 )
         itemBitmap = &choices.Item(item).GetBitmap();
 
     //
@@ -853,7 +853,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         // image will not appear on the control row (it may be too
         // large to fit, for instance). Also do not draw custom image
         // if no choice was selected.
-        if ( !p->HasFlag(wxPG_PROP_CUSTOMIMAGE) || item < 0 )
+        if ( !p->HasFlag(wxPG_PROP_CUSTOMIMAGE) )
             useCustomPaintProcedure = false;
     }
     else
@@ -897,13 +897,9 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
             renderer->Render( dc, r, this, p, m_selColumn, comValIndex, renderFlags );
             return;
         }
-        else if ( item >= 0 )
-        {
-            p->OnCustomPaint( dc, r, paintdata );
-        }
         else
         {
-            dc.DrawRectangle( r );
+            p->OnCustomPaint( dc, r, paintdata );
         }
 
         pt.x += paintdata.m_drawnWidth + wxCC_CUSTOM_IMAGE_MARGIN2 - 1;
@@ -915,10 +911,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         //       sure if it is needed, but seems to not cause any harm.
         pt.x -= 1;
 
-        if ( item < 0 && (flags & wxODCB_PAINTING_CONTROL) )
-            item = pCb->GetSelection();
-
-        if ( choices.IsOk() && item >= 0 && comValIndex < 0 )
+        if ( choices.IsOk() && comValIndex < 0 )
         {
             // This aligns bitmap horizontally so that it is
             // on the same position as bitmap drawn for static content

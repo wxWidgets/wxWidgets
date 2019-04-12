@@ -699,16 +699,6 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
     return true;
 }
 
-void wxMenuBar::Detach()
-{
-    wxMenuBarBase::Detach() ;
-}
-
-void wxMenuBar::Attach(wxFrame *frame)
-{
-    wxMenuBarBase::Attach( frame ) ;
-}
-
 void wxMenuBar::DoGetPosition(int *x, int *y) const
 {
     int _x,_y,_width,_height;

@@ -1434,11 +1434,6 @@ bool wxEnumProperty::ValueFromInt_(wxVariant& value, int* pIndex, int intVal, in
     return false;
 }
 
-void
-wxEnumProperty::OnValidationFailure( wxVariant& WXUNUSED(pendingValue) )
-{
-}
-
 void wxEnumProperty::SetIndex( int index )
 {
     m_index = index;

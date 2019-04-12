@@ -25,11 +25,11 @@ public:
     ~wxMessageDialog();
 #endif
 
-    virtual int ShowModal();
+    virtual int ShowModal() wxOVERRIDE;
 
 #if wxOSX_USE_COCOA
-    virtual void ShowWindowModal();
-    virtual void ModalFinishedCallback(void* panel, int resultCode);
+    virtual void ShowWindowModal() wxOVERRIDE;
+    virtual void ModalFinishedCallback(void* panel, int resultCode) wxOVERRIDE;
 #endif
 
 protected:

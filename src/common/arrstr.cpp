@@ -370,13 +370,14 @@ int wxArrayString::Index(const wxString& str, bool bCase, bool bFromEnd) const
     wxASSERT_MSG( bCase && !bFromEnd,
                   wxT("search parameters ignored for auto sorted array") );
 
-    size_t i,
+    size_t
            lo = 0,
            hi = m_nCount;
-    int res;
     while ( lo < hi ) {
+      size_t i;
       i = (lo + hi)/2;
 
+      int res;
       res = str.compare(m_pItems[i]);
       if ( res < 0 )
         hi = i;
@@ -416,13 +417,14 @@ size_t wxArrayString::Add(const wxString& str, size_t nInsert)
 {
   if ( m_autoSort ) {
     // insert the string at the correct position to keep the array sorted
-    size_t i,
+    size_t
            lo = 0,
            hi = m_nCount;
-    int res;
     while ( lo < hi ) {
+      size_t i;
       i = (lo + hi)/2;
 
+      int res;
       res = m_compareFunction ? m_compareFunction(str, m_pItems[i]) : str.Cmp(m_pItems[i]);
       if ( res < 0 )
         hi = i;

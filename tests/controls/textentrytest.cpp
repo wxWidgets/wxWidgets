@@ -165,6 +165,12 @@ void TextEntryTestCase::InsertionPoint()
     CPPUNIT_ASSERT_EQUAL( 3, entry->GetLastPosition() );
     CPPUNIT_ASSERT_EQUAL( 1, entry->GetInsertionPoint() );
 
+    entry->SetValue("012"); // shouldn't change the position if no real change
+    CPPUNIT_ASSERT_EQUAL( 1, entry->GetInsertionPoint() );
+
+    entry->ChangeValue("012"); // same as for SetValue()
+    CPPUNIT_ASSERT_EQUAL( 1, entry->GetInsertionPoint() );
+
     entry->SetInsertionPointEnd();
     CPPUNIT_ASSERT_EQUAL( 3, entry->GetInsertionPoint() );
 

@@ -40,14 +40,14 @@ public:
 
     // implementation
 
-    void Command(wxCommandEvent& event);
+    void Command(wxCommandEvent& event) wxOVERRIDE;
     wxRadioButton *AddInCycle(wxRadioButton *cycle);
     void RemoveFromCycle();
     wxRadioButton *NextInCycle() {return m_cycle;}
 
     // osx specific event handling common for all osx-ports
 
-    virtual bool        OSXHandleClicked( double timestampsec );
+    virtual bool OSXHandleClicked(double timestampsec) wxOVERRIDE;
   protected:
 
     wxRadioButton *m_cycle;

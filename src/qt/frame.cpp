@@ -107,9 +107,10 @@ void wxFrame::SetStatusBar( wxStatusBar *statusBar )
 
 void wxFrame::SetToolBar(wxToolBar *toolbar)
 {
-    int area = Qt::TopToolBarArea;
+    int area = 0;
     if ( toolbar != NULL )
     {
+        int area = Qt::TopToolBarArea;
         if      (toolbar->HasFlag(wxTB_LEFT))  { area = Qt::LeftToolBarArea;  }
         else if (toolbar->HasFlag(wxTB_RIGHT)) { area = Qt::RightToolBarArea; }
         else if (toolbar->HasFlag(wxTB_BOTTOM)){ area = Qt::BottomToolBarArea;}

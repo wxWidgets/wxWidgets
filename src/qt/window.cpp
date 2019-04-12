@@ -241,7 +241,25 @@ wxWindowQt::wxWindowQt(wxWindowQt *parent, wxWindowID id, const wxPoint& pos, co
 
 wxWindowQt::~wxWindowQt()
 {
-    SendDestroyEvent();
+    if ( !m_qtWindow )
+    {
+        wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow is NULL"), GetName());
+        return;
+    }
+
+    // Delete only if the qt widget was created or assigned to this base class
+    wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow=%p"), GetName(), m_qtWindow);
+
+    if ( !IsBeingDeleted() )
+    {
+        SendDestroyEvent();
+    }
+
+    // Avoid processing pending events which quite often would lead to crashes after this.
+    QCoreApplication::removePostedEvents(m_qtWindow);
+
+    // Block signals because the handlers access members of a derived class.
+    m_qtWindow->blockSignals(true);
 
     if ( s_capturedWindow == this )
         s_capturedWindow = NULL;
@@ -252,17 +270,7 @@ wxWindowQt::~wxWindowQt()
     SetDropTarget(NULL);
 #endif
 
-    // Delete only if the qt widget was created or assigned to this base class
-    if (m_qtWindow)
-    {
-        wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow=%p"), GetName(), m_qtWindow);
-
-        delete m_qtWindow;
-    }
-    else
-    {
-        wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::~wxWindow %s m_qtWindow is NULL"), GetName());
-    }
+    delete m_qtWindow;
 }
 
 
@@ -1459,7 +1467,6 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
                 e.SetEventType( wxEVT_LEAVE_WINDOW );
 
             ProcessWindowEvent( e );
-            m_mouseInside = mouseInside;
         }
     }
 

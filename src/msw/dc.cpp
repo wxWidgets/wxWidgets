@@ -1104,7 +1104,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     const size_t n_bezier_points = n_points * 3 + 1;
     POINT *lppt = new POINT[n_bezier_points];
     size_t bezier_pos = 0;
-    wxCoord x1, y1, x2, y2, cx1, cy1, cx4, cy4;
+    wxCoord x1, y1, x2, y2, cx1, cy1;
 
     wxPointList::compatibility_iterator node = points->GetFirst();
     wxPoint *p = node->GetData();
@@ -1135,6 +1135,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     while ((node = node->GetNext()))
 #endif // !wxUSE_STD_CONTAINERS
     {
+        int cx4, cy4;
         p = (wxPoint *)node->GetData();
         x1 = x2;
         y1 = y2;

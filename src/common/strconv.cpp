@@ -1195,7 +1195,6 @@ size_t wxMBConvUTF8::ToWChar(wchar_t *buf, size_t n,
     while ((isNulTerminated ? *psz : srcLen--) && ((!buf) || (len < n)))
     {
         const char *opsz = psz;
-        bool invalid = false;
         unsigned char cc = *psz++, fc = cc;
         unsigned cnt;
         for (cnt = 0; fc & 0x80; cnt++)
@@ -1219,6 +1218,7 @@ size_t wxMBConvUTF8::ToWChar(wchar_t *buf, size_t n,
         }
         else
         {
+            bool invalid = false;
             cnt--;
             if (!cnt)
             {

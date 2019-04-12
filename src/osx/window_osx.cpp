@@ -1701,10 +1701,9 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         GetPeer()->ScrollRect( &scrollrect, dx, dy );
     }
 
-    wxWindowMac *child;
-    int x, y, w, h;
     for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst(); node; node = node->GetNext())
     {
+        wxWindowMac* child;
         child = node->GetData();
         if (child == NULL)
             continue;
@@ -1715,6 +1714,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         if ( !IsClientAreaChild(child) )
             continue;
 
+        int x, y, w, h;
         child->GetPosition( &x, &y );
         child->GetSize( &w, &h );
         if (rect)
@@ -2003,10 +2003,10 @@ void wxWindowMac::MacPaintChildrenBorders()
     // in Composited windowing
     wxPoint clientOrigin = GetClientAreaOrigin() ;
 
-    wxWindowMac *child;
     int x, y, w, h;
     for (wxWindowList::compatibility_iterator node = GetChildren().GetFirst(); node; node = node->GetNext())
     {
+        wxWindowMac* child;
         child = node->GetData();
         if (child == NULL)
             continue;
@@ -2230,10 +2230,10 @@ void wxWindowMac::MacSuperChangedPosition()
 
     m_cachedClippedRectValid = false ;
 
-    wxWindowMac *child;
     wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
+        wxWindowMac* child;
         child = node->GetData();
         child->MacSuperChangedPosition() ;
 
@@ -2245,10 +2245,10 @@ void wxWindowMac::MacTopLevelWindowChangedPosition()
 {
     // only screen-absolute structures have to be moved i.e. glcanvas
 
-    wxWindowMac *child;
     wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
+        wxWindowMac* child;
         child = node->GetData();
         child->MacTopLevelWindowChangedPosition() ;
 

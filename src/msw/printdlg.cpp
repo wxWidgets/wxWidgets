@@ -796,24 +796,6 @@ bool wxWindowsPrintDialog::ConvertToNative( wxPrintDialogData &data )
     memset( pd, 0, sizeof(PRINTDLG) );
     m_printDlg = (void*) pd;
 
-    pd->lStructSize    = sizeof(PRINTDLG);
-    pd->hwndOwner      = NULL;
-    pd->hDevMode       = NULL; // Will be created by PrintDlg
-    pd->hDevNames      = NULL; // Ditto
-
-    pd->Flags          = PD_RETURNDEFAULT;
-    pd->nCopies        = 1;
-
-    // Pass the devmode data to the PRINTDLG structure, since it'll
-    // be needed when PrintDlg is called.
-    if (pd->hDevMode)
-        GlobalFree(pd->hDevMode);
-
-    // Pass the devnames data to the PRINTDLG structure, since it'll
-    // be needed when PrintDlg is called.
-    if (pd->hDevNames)
-        GlobalFree(pd->hDevNames);
-
     pd->hDevMode = static_cast<HGLOBAL>(native_data->GetDevMode());
     native_data->SetDevMode(NULL);
 

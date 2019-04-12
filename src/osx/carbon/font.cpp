@@ -183,7 +183,7 @@ namespace
 
     int CTWeightToWX(CGFloat weight)
     {
-        for (int i = 0; i < kCTWeightsCount; ++i)
+        for (int i = 0; i < kCTWeightsCount - 1; ++i)
         {
             if ( (weight - gCTWeights[i]) < (gCTWeights[i+1]-weight) )
                 return i * 100;
@@ -792,8 +792,6 @@ void wxNativeFontInfo::InitFromFontDescriptor(CTFontDescriptorRef desc)
     CTFontSymbolicTraits symbolicTraits;
     wxCFDictionaryRef traits((CFDictionaryRef)CTFontDescriptorCopyAttribute(desc, kCTFontTraitsAttribute));
     traits.GetValue(kCTFontSymbolicTrait).GetValue((int32_t*)&symbolicTraits, 0);
-
-    m_family = wxFONTFAMILY_DEFAULT;
 
     if (symbolicTraits & kCTFontTraitMonoSpace)
         m_family = wxFONTFAMILY_TELETYPE;

@@ -1004,7 +1004,6 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
 {
     wxUint16        aWord;
     wxInt32         dbuf[4];
-    wxInt8          bbuf[4];
 
     // offset to bitmap data
     wxFileOffset offset;
@@ -1012,6 +1011,7 @@ bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
     wxInt32 hdrSize;
     if ( IsBmp )
     {
+        wxInt8 bbuf[4];
         // read the header off the .BMP format file
         if ( !stream.ReadAll(bbuf, 2) ||
              !stream.ReadAll(dbuf, 16) )

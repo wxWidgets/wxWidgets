@@ -563,6 +563,16 @@ void wxStyledTextCtrl::AnnotationClearLine(int line) {
     SendMsg(SCI_ANNOTATIONSETTEXT, line, (sptr_t)NULL);
 }
 
+void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber,
+                                          const wxBitmap& bmp) {
+    m_swx->DoMarkerDefineBitmap(markerNumber, bmp);
+}
+
+void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp)
+{
+    m_swx->DoRegisterImage(type, bmp);
+}
+
 
 
 

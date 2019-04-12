@@ -527,7 +527,7 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
     }
 
 
-    int text_offset = tab_x + 8;
+    int text_offset;
     int close_button_width = 0;
     if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
     {

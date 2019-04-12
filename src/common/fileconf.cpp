@@ -1535,16 +1535,17 @@ wxString wxFileConfigGroup::GetFullName() const
 wxFileConfigEntry *
 wxFileConfigGroup::FindEntry(const wxString& name) const
 {
-  size_t i,
+  size_t
        lo = 0,
        hi = m_aEntries.GetCount();
-  int res;
   wxFileConfigEntry *pEntry;
 
   while ( lo < hi ) {
+    size_t i;
     i = (lo + hi)/2;
     pEntry = m_aEntries[i];
 
+    int res;
     #if wxCONFIG_CASE_SENSITIVE
       res = pEntry->Name().compare(name);
     #else
@@ -1565,16 +1566,17 @@ wxFileConfigGroup::FindEntry(const wxString& name) const
 wxFileConfigGroup *
 wxFileConfigGroup::FindSubgroup(const wxString& name) const
 {
-  size_t i,
+  size_t
        lo = 0,
        hi = m_aSubgroups.GetCount();
-  int res;
   wxFileConfigGroup *pGroup;
 
   while ( lo < hi ) {
+    size_t i;
     i = (lo + hi)/2;
     pGroup = m_aSubgroups[i];
 
+    int res;
     #if wxCONFIG_CASE_SENSITIVE
       res = pGroup->Name().compare(name);
     #else

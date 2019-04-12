@@ -576,6 +576,14 @@ public:
     // Return true if the button was clicked, false otherwise.
     static bool MSWClickButtonIfPossible(wxButton* btn);
 
+    // This method is used for handling wxRadioButton-related complications,
+    // see wxRadioButton::SetValue(). It calls WXDoUpdatePendingFocus() for
+    // this window and all its parents up to the enclosing TLW, recursively.
+    void WXSetPendingFocus(wxWindow* win);
+
+    // Should be overridden by all classes storing the "last focused" window.
+    virtual void WXDoUpdatePendingFocus(wxWindow* WXUNUSED(win)) {}
+
 protected:
     // this allows you to implement standard control borders without
     // repeating the code in different classes that are not derived from

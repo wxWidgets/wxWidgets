@@ -708,9 +708,10 @@ void MyCanvas::OnMouseWheel( wxMouseEvent &event )
     int x,y;
     CalcUnscrolledPosition( pt.x, pt.y, &x, &y );
     wxLogMessage( "Mouse wheel event at: %d %d, scrolled: %d %d\n"
-                  "Rotation: %d, delta = %d",
+                  "Rotation: %d, delta: %d, inverted: %d",
                   pt.x, pt.y, x, y,
-                  event.GetWheelRotation(), event.GetWheelDelta() );
+                  event.GetWheelRotation(), event.GetWheelDelta(),
+                  event.IsWheelInverted() );
 
     event.Skip();
 }

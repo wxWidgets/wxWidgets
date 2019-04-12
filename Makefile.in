@@ -68,6 +68,7 @@ HOST_SUFFIX = @HOST_SUFFIX@
 DYLIB_RPATH_INSTALL = @DYLIB_RPATH_INSTALL@
 DYLIB_RPATH_POSTLINK = @DYLIB_RPATH_POSTLINK@
 wx_top_builddir = @wx_top_builddir@
+wxCFLAGS_C99 = @wxCFLAGS_C99@
 
 ### Variables: ###
 
@@ -211,7 +212,7 @@ WXTIFF_OBJECTS =  \
 	wxtiff_tif_zip.o \
 	wxtiff_tif_zstd.o
 WXEXPAT_CFLAGS = -DNDEBUG -I./src/expat/expat -DHAVE_EXPAT_CONFIG_H \
-	$(____SHARED) $(CPPFLAGS) $(CFLAGS)
+	$(____SHARED) $(wxCFLAGS_C99) $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	wxexpat_xmlparse.o \
 	wxexpat_xmlrole.o \

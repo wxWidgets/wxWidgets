@@ -42,17 +42,17 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    virtual void SetMenuBar(wxMenuBar *menubar);
-    virtual void SetStatusBar(wxStatusBar *statusBar );
-    virtual void SetToolBar(wxToolBar *toolbar);
+    virtual void SetMenuBar(wxMenuBar *menubar) wxOVERRIDE;
+    virtual void SetStatusBar(wxStatusBar *statusBar ) wxOVERRIDE;
+    virtual void SetToolBar(wxToolBar *toolbar) wxOVERRIDE;
 
-    virtual void SetWindowStyleFlag( long style );
+    virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
 
-    virtual void AddChild( wxWindowBase *child );
-    virtual void RemoveChild( wxWindowBase *child );
+    virtual void AddChild( wxWindowBase *child ) wxOVERRIDE;
+    virtual void RemoveChild( wxWindowBase *child ) wxOVERRIDE;
 
     QMainWindow *GetQMainWindow() const;
-    virtual QScrollArea *QtGetScrollBarsContainer() const;
+    virtual QScrollArea *QtGetScrollBarsContainer() const wxOVERRIDE;
 
 protected:
     virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;

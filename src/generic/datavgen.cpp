@@ -71,8 +71,6 @@ class wxDataViewCtrl;
 // constants
 //-----------------------------------------------------------------------------
 
-static const int SCROLL_UNIT_X = 15;
-
 // the cell padding on the left/right
 static const int PADDING_RIGHTLEFT = 3;
 
@@ -1298,7 +1296,7 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     if (m_toggle)
         flags |= wxCONTROL_CHECKED;
     if (GetMode() != wxDATAVIEW_CELL_ACTIVATABLE ||
-        GetEnabled() == false)
+        !(GetOwner()->GetOwner()->IsEnabled() && GetEnabled()))
         flags |= wxCONTROL_DISABLED;
 
     // Ensure that the check boxes always have at least the minimal required
@@ -3110,9 +3108,12 @@ void wxDataViewMainWindow::ScrollTo( int rows, int column )
 
     int x, y;
     m_owner->GetScrollPixelsPerUnit( &x, &y );
-    int sy = GetLineStart( rows )/y;
+
+    // Take care to not divide by 0 if we're somehow called before scrolling
+    // parameters are initialized.
+    int sy = y ? GetLineStart( rows )/y : -1;
     int sx = -1;
-    if( column != -1 )
+    if( column != -1 && x )
     {
         wxRect rect = GetClientRect();
         int colnum = 0;
