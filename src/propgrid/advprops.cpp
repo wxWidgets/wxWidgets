@@ -263,9 +263,6 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
                                                    const wxPoint& pos, const wxSize& sz ) const
 {
     const int margin = 1;
-    wxSize butSz(18, sz.y);
-    wxSize tcSz(sz.x - butSz.x - margin, sz.y);
-    wxPoint butPos(pos.x + tcSz.x + margin, pos.y);
 
     wxSpinButton* wnd2;
 
@@ -283,8 +280,18 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
 #ifdef __WXMSW__
     wnd2->Hide();
 #endif
-    wnd2->Create( propgrid->GetPanel(), wxID_ANY, butPos, butSz, wxSP_VERTICAL );
-
+    wnd2->Create( propgrid->GetPanel(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_VERTICAL );
+    // Scale spin button to the required height (row height)
+    wxSize butSz = wnd2->GetBestSize();
+#ifdef __WXGTK3__
+    // Under GTK+ 3 spin button is always horizontal and cannot be downscaled
+    int butWidth = butSz.x;
+#else
+    double sc = (double)sz.y / butSz.y;
+    int butWidth = wxMax(18, wxRound(sc*butSz.x));
+#endif
+    wxSize tcSz(sz.x - butWidth - margin, sz.y);
+    wnd2->SetSize(pos.x + tcSz.x + margin, pos.y, butWidth, sz.y);
     wnd2->SetRange( INT_MIN, INT_MAX );
     wnd2->SetValue( 0 );
 
