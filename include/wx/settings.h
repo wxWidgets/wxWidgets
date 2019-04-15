@@ -163,6 +163,39 @@ enum wxSystemScreenType
 };
 
 // ----------------------------------------------------------------------------
+// wxSystemAppearance: describes the global appearance used for the UI
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxSystemAppearance
+{
+public:
+    // Return the name if available or empty string otherwise.
+    wxString GetName() const;
+
+    // Return true if the current system there is explicitly recognized as
+    // being a dark theme or if the default window background is dark.
+    bool IsDark() const;
+
+    // Return true if the background is darker than foreground. This is used by
+    // IsDark() if there is no platform-specific way to determine whether a
+    // dark mode is being used.
+    bool IsUsingDarkBackground() const;
+
+private:
+    friend class wxSystemSettingsNative;
+
+    // Ctor is private, even though it's trivial, because objects of this type
+    // are only supposed to be created by wxSystemSettingsNative.
+    wxSystemAppearance() { }
+
+    // Currently this class doesn't have any internal state because the only
+    // available implementation doesn't need it. If we do need it later, we
+    // could add some "wxSystemAppearanceImpl* const m_impl" here, which we'd
+    // forward our public functions to (we'd also need to add the copy ctor and
+    // dtor to clone/free it).
+};
+
+// ----------------------------------------------------------------------------
 // wxSystemSettingsNative: defines the API for wxSystemSettings class
 // ----------------------------------------------------------------------------
 
@@ -184,6 +217,9 @@ public:
 
     // get a system-dependent metric
     static int GetMetric(wxSystemMetric index, wxWindow * win = NULL);
+
+    // get the object describing the current system appearance
+    static wxSystemAppearance GetAppearance();
 
     // return true if the port has certain feature
     static bool HasFeature(wxSystemFeature index);

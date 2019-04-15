@@ -1623,6 +1623,22 @@ void MyCanvas::DrawSystemColours(wxDC& dc)
     int lineHeight = textSize.GetHeight();
     wxRect r(textSize.GetWidth() + 10, 10, 100, lineHeight);
 
+    wxString title = "System colours";
+
+    const wxSystemAppearance appearance = wxSystemSettings::GetAppearance();
+    const wxString appearanceName = appearance.GetName();
+    if ( !appearanceName.empty() )
+        title += wxString::Format(" for \"%s\"", appearanceName);
+    if ( appearance.IsDark() )
+        title += " (using dark system theme)";
+    dc.DrawText(title, 10, r.y);
+    r.y += 2*lineHeight;
+    dc.DrawText(wxString::Format("Window background is %s",
+                                 appearance.IsUsingDarkBackground() ? "dark"
+                                                                    : "light"),
+                10, r.y);
+    r.y += 3*lineHeight;
+
     dc.SetPen(*wxTRANSPARENT_PEN);
 
     static const struct {
