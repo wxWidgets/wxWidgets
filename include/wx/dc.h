@@ -1370,38 +1370,62 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// helper class: you can use it to temporarily change the DC text colour and
-// restore it automatically when the object goes out of scope
+// helper class: you can use it to create state snapshot | temporarily change 
+// the DC text foreground, background colours, and text background mode, and
+// restore it automatically, when the object goes out of scope
 // ----------------------------------------------------------------------------
 
 class WXDLLIMPEXP_CORE wxDCTextColourChanger
 {
 public:
-    wxDCTextColourChanger(wxDC& dc) : m_dc(dc), m_colFgOld() { }
-
-    wxDCTextColourChanger(wxDC& dc, const wxColour& col) : m_dc(dc)
+    wxDCTextColourChanger(wxDC& dc) : m_dc(dc) { Initialize(); }
+ 
+    wxDCTextColourChanger(wxDC& dc, const wxColour& fg, const wxColour& bg = wxNullColour, int bgMode = wxPENSTYLE_INVALID ) : m_dc(dc)
     {
-        Set(col);
+        Initialize();
+        Set(
+            fg,
+            bg,
+            bgMode
+        );
     }
-
+ 
     ~wxDCTextColourChanger()
     {
         if ( m_colFgOld.IsOk() )
-            m_dc.SetTextForeground(m_colFgOld);
+             m_dc.SetTextForeground(m_colFgOld);
+        if ( m_colBgOld.IsOk() )
+            m_dc.SetTextBackground(m_colBgOld);
+        if ( m_bgModeOld != wxPENSTYLE_INVALID )
+            m_dc.SetBackgroundMode( m_bgModeOld );
     }
-
-    void Set(const wxColour& col)
+ 
+    void Set(const wxColour& fg, const wxColour& bg = wxNullColour, int bgMode = wxPENSTYLE_INVALID)
     {
-        if ( !m_colFgOld.IsOk() )
-            m_colFgOld = m_dc.GetTextForeground();
-        m_dc.SetTextForeground(col);
+        if ( fg.IsOk() )
+            m_dc.SetTextForeground(fg);
+        if ( bg.IsOk() )
+            m_dc.SetTextBackground(bg);
+        if ( wxPENSTYLE_INVALID != bgMode )
+            m_dc.SetBackgroundMode(bgMode);
     }
 
 private:
+    void Initialize()
+    {
+        wxASSERT( m_dc.IsOk() );
+        m_colFgOld = m_dc.GetTextForeground();
+        m_colBgOld = m_dc.GetTextBackground();
+        m_bgModeOld = m_dc.GetBackgroundMode();
+    }
+ 
+private:
     wxDC& m_dc;
-
+ 
     wxColour m_colFgOld;
-
+    wxColour m_colBgOld;
+    int m_bgModeOld;
+ 
     wxDECLARE_NO_COPY_CLASS(wxDCTextColourChanger);
 };
 
