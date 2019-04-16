@@ -1542,5 +1542,41 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxDCFontChanger);
 };
 
+// ----------------------------------------------------------------------------
+// helper class: you can use it to save|temporarily change the DC background mode,
+// and restore it automatically, when the object goes out of scope
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxDCBgModeChanger
+{
+public:
+  wxDCBgModeChanger(wxDC& dc)
+    : m_dc(dc), m_bgmOld(dc.GetBackgroundMode())
+  {
+  }
+
+  wxDCBgModeChanger(wxDC& dc, int bgMode)
+    : m_dc(dc), m_bgmOld(dc.GetBackgroundMode())
+  {
+    m_dc.SetBackgroundMode(bgMode);
+  }
+
+  void Set(int bgMode)
+  {
+    m_dc.SetBackgroundMode(bgMode);
+  }
+
+  ~wxDCBgModeChanger()
+  {
+    m_dc.SetBackgroundMode(m_bgmOld);
+  }
+
+private:
+  wxDC& m_dc;
+
+  int m_bgmOld;
+
+  wxDECLARE_NO_COPY_CLASS(wxDCBgModeChanger);
+};
 
 #endif // _WX_DC_H_BASE_
