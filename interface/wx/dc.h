@@ -1791,52 +1791,48 @@ public:
 /**
     @class wxDCTextColourChanger
 
-    wxDCTextColourChanger is a small helper class for setting a foreground
-    text colour on a wxDC and unsetting it automatically in the destructor,
-    restoring the previous one.
+    wxDCTextColourChanger is a small helper class for setting a foreground,
+    background text colours, and background text mode on a wxDC,
+    and unsetting these parameters automatically in the destructor,
+    restoring the previous ones.
 
     @library{wxcore}
     @category{gdi}
 
-    @see wxDC::SetTextForeground(), wxDCFontChanger, wxDCPenChanger, wxDCBrushChanger,
-         wxDCClipper
+    @see wxDC::SetTextForeground(), wxDC::SetTextBackground(), wxDC::SetBackgroundMode(), 
+         wxDCFontChanger, wxDCPenChanger, wxDCBrushChanger, wxDCClipper
 */
 class wxDCTextColourChanger
 {
 public:
     /**
-        Trivial constructor not changing anything.
+        Trivial constructor not changing anything, creating snapshot of the current text colour and mode state.
 
         This constructor is useful if you don't know beforehand if the colour
-        needs to be changed or not. It simply creates the object which won't do
-        anything in its destructor unless Set() is called -- in which case it
-        would reset the previous colour.
+        needs to be changed or not. If any changes, direct or implicit, would be made to dc while this object is in scope,
+        they would be rolled back automatically upon object destruction.
      */
     wxDCTextColourChanger(wxDC& dc);
-
+ 
     /**
-        Sets @a col on the given @a dc, storing the old one.
+        This constructor not only creates a snapshot of the current text colour and mode state, but also 
+        applies new values to dc. If colour passed to argument is Null, or background mode is invalid,
+        this argument's value is not applied to dc.
 
-        @param dc
-            The DC where the colour must be temporary set.
-        @param col
-            The colour to set.
-    */
-    wxDCTextColourChanger(wxDC& dc, const wxColour& col);
-
-    /**
-        Set the colour to use.
-
-        This method is meant to be called once only and only on the objects
-        created with the constructor overload not taking wxColour argument and
-        has the same effect as the other constructor, i.e. sets the colour to
-        the given @a col and ensures that the old value is restored when this
-        object is destroyed.
+        All changes made to dc by this constructor, would be rolled back automatically upon object destruction.
      */
-    void Set(const wxColour& col);
+    wxDCTextColourChanger(wxDC& dc, const wxColour& fg, const wxColour& bg = wxNullColour, int bgMode = wxPENSTYLE_INVALID );
+ 
+    /**
+        Set text colours and background mode to use.
+
+        This method allows directly change text colours and background mode, preserving the values, saved upon object construction.
+        If Null colour | wxPENSTYLE_INVALID is passed, no changes is made to corresponding dc parameter.
+     */
+     void Set(const wxColour& fg, const wxColour& bg = wxNullColour, int bgMode = wxPENSTYLE_INVALID)
 
     /**
-        Restores the colour originally selected in the DC passed to the ctor.
+        Restores the dc text colour and mode parameters to original values, saved upon object construction.
     */
     ~wxDCTextColourChanger();
 };
