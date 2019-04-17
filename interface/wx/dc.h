@@ -1867,8 +1867,6 @@ public:
         needs to be changed or not. It simply creates the object which won't do
         anything in its destructor unless Set() is called -- in which case it
         would reset the previous colour.
-        
-        @since 3.1.3        
      */
     wxDCTextBgColourChanger(wxDC& dc);
 
@@ -1879,8 +1877,6 @@ public:
             The DC where the colour must be temporary set.
         @param col
             The text background colour to set.
-            
-        @since 3.1.3
     */
     wxDCTextBgColourChanger(wxDC& dc, const wxColour& col);
 
@@ -1892,15 +1888,11 @@ public:
         has the same effect as the other constructor, i.e. sets the background colour to
         the given @a col and ensures that the old value is restored when this
         object is destroyed.
-        
-        @since 3.1.3        
      */
     void Set(const wxColour& col);
 
     /**
         Restores the background colour originally selected in the DC passed to the ctor.
-        
-        @since 3.1.3        
     */
     ~wxDCTextBgColourChanger();
 };
@@ -1931,8 +1923,6 @@ public:
         needs to be changed or not. It simply creates the object which won't do
         anything in its destructor unless Set() is called -- in which case it
         would reset the previous mode.
-        
-        @since 3.1.3
      */
     wxDCBgModeChanger(wxDC& dc);
 
@@ -1943,8 +1933,6 @@ public:
             The DC where the mode must be temporary set.
         @param mode
             The background mode to set.
-            
-        @since 3.1.3
     */
     wxDCBgModeChanger(wxDC& dc, int mode);
 
@@ -1956,15 +1944,11 @@ public:
         has the same effect as the other constructor, i.e. sets the background mode to
         the given @a one, and ensures that the old value is restored when this
         object is destroyed.
-
-        @since 3.1.3        
      */
     void Set(int mode);
 
     /**
         Restores the text background mode originally selected in the DC passed to the ctor.
-        
-        @since 3.1.3
     */
     ~wxDCBgModeChanger();
 };
