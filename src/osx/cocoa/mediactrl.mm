@@ -162,7 +162,7 @@ private:
         id val = [change objectForKey:NSKeyValueChangeNewKey];
         if ( val != [NSNull null ] )
         {
-            AVPlayerStatus status = (AVPlayerStatus) [ val integerValue];
+            AVPlayerItemStatus status = (AVPlayerItemStatus) [ val integerValue];
 
             switch (status)
             {
