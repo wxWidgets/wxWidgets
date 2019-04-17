@@ -1842,6 +1842,133 @@ public:
 };
 
 
+/**
+    @class wxDCTextBgColourChanger
+
+    wxDCTextBgColourChanger is a small helper class for setting a background
+    text colour on a wxDC and unsetting it automatically in the destructor,
+    restoring the previous one.
+
+    @library{wxcore}
+    @category{gdi}
+
+    @see wxDC::SetTextBackground(), wxDCFontChanger, wxDCPenChanger, wxDCBrushChanger,
+         wxDCClipper
+         
+    @since 3.1.3
+*/
+class wxDCTextBgColourChanger
+{
+public:
+    /**
+        Trivial constructor not changing anything.
+
+        This constructor is useful if you don't know beforehand if the colour
+        needs to be changed or not. It simply creates the object which won't do
+        anything in its destructor unless Set() is called -- in which case it
+        would reset the previous colour.
+        
+        @since 3.1.3        
+     */
+    wxDCTextBgColourChanger(wxDC& dc);
+
+    /**
+        Sets @a col on the given @a dc, storing the old one.
+
+        @param dc
+            The DC where the colour must be temporary set.
+        @param col
+            The text background colour to set.
+            
+        @since 3.1.3
+    */
+    wxDCTextBgColourChanger(wxDC& dc, const wxColour& col);
+
+    /**
+        Set the background colour to use.
+
+        This method is meant to be called once only and only on the objects
+        created with the constructor overload not taking wxColour argument and
+        has the same effect as the other constructor, i.e. sets the background colour to
+        the given @a col and ensures that the old value is restored when this
+        object is destroyed.
+        
+        @since 3.1.3        
+     */
+    void Set(const wxColour& col);
+
+    /**
+        Restores the background colour originally selected in the DC passed to the ctor.
+        
+        @since 3.1.3        
+    */
+    ~wxDCTextBgColourChanger();
+};
+
+
+/**
+    @class wxDCTextBgModeChanger
+
+    wxDCTextBgModeChanger is a small helper class for setting a background
+    text mode on a wxDC and unsetting it automatically in the destructor,
+    restoring the previous one.
+
+    @library{wxcore}
+    @category{gdi}
+
+    @see wxDC::SetBackgroundMode(), wxDCFontChanger, wxDCPenChanger, wxDCBrushChanger,
+         wxDCClipper
+         
+    @since 3.1.3
+*/
+class wxDCBgModeChanger
+{
+public:
+    /**
+        Trivial constructor not changing anything.
+
+        This constructor is useful if you don't know beforehand if the background mode
+        needs to be changed or not. It simply creates the object which won't do
+        anything in its destructor unless Set() is called -- in which case it
+        would reset the previous mode.
+        
+        @since 3.1.3
+     */
+    wxDCBgModeChanger(wxDC& dc);
+
+    /**
+        Sets @a mode on the given @a dc, storing the old one.
+
+        @param dc
+            The DC where the colour must be temporary set.
+        @param mode
+            The background mode to set.
+            
+        @since 3.1.3
+    */
+    wxDCBgModeChanger(wxDC& dc, int mode);
+
+    /**
+        Set the text background mode to use.
+
+        This method is meant to be called once only and only on the objects
+        created with the constructor overload not taking mode argument and
+        has the same effect as the other constructor, i.e. sets the background mode to
+        the given @a one, and ensures that the old value is restored when this
+        object is destroyed.
+
+        @since 3.1.3        
+     */
+    void Set(int mode);
+
+    /**
+        Restores the text background mode originally selected in the DC passed to the ctor.
+        
+        @since 3.1.3
+    */
+    ~wxDCBgModeChanger();
+};
+
 
 /**
     @class wxDCFontChanger
