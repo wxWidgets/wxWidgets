@@ -1085,7 +1085,7 @@ bool wxPropertyGridInterface::RestoreEditableState( const wxString& src, int res
                 {
                     if ( restoreStates & SplitterPosState )
                     {
-                        for ( size_t n=1; n<values.size(); n++ )
+                        for ( size_t n=0; n<values.size(); n++ )
                         {
                             long pos = 0;
                             values[n].ToLong(&pos);
