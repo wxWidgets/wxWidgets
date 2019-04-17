@@ -1799,7 +1799,7 @@ public:
     @category{gdi}
 
     @see wxDC::SetTextForeground(), wxDCFontChanger, wxDCPenChanger, wxDCBrushChanger,
-         wxDCClipper
+         wxDCClipper, wxDCTextBgColourChanger, wxDCBgModeChanger
 */
 class wxDCTextColourChanger
 {
@@ -1853,7 +1853,7 @@ public:
     @category{gdi}
 
     @see wxDC::SetTextBackground(), wxDCFontChanger, wxDCPenChanger, wxDCBrushChanger,
-         wxDCClipper
+         wxDCClipper, wxDCTextColourChanger, wxDCBgModeChanger
          
     @since 3.1.3
 */
@@ -1917,7 +1917,7 @@ public:
     @category{gdi}
 
     @see wxDC::SetBackgroundMode(), wxDCFontChanger, wxDCPenChanger, wxDCBrushChanger,
-         wxDCClipper
+         wxDCClipper, wxDCTextColourChanger, wxDCTextBgColourChanger
          
     @since 3.1.3
 */
@@ -1940,7 +1940,7 @@ public:
         Sets @a mode on the given @a dc, storing the old one.
 
         @param dc
-            The DC where the colour must be temporary set.
+            The DC where the mode must be temporary set.
         @param mode
             The background mode to set.
             
