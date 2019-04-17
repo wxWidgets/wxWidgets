@@ -167,6 +167,28 @@ public:
     void SetHtmlText(const wxString& html,
                      const wxString& basepath = wxEmptyString,
                      bool isdir = true);
+                     
+    /**
+        Assign text to the renderer, using specified wxHtmlRenderingState
+        to override default parced cell colours. Render() then draws the text onto DC.
+
+        @param html
+            HTML text. This is not a filename.
+        @param initialState
+            wxHtmlRenderingState instance to be used to override cells base colours
+        @param basepath
+            base directory (html string would be stored there if it was in file).
+            It is used to determine path for loading images, for example.
+        @param isdir
+            @false if basepath is filename, @true if it is directory name
+            (see wxFileSystem for detailed explanation).
+
+            @since 3.1.3
+    */
+    void SetHtmlText(const wxString& html,
+                     const wxHtmlRenderingState& initialState,
+                     const wxString& basepath = wxEmptyString,
+                     bool isdir = true);
 
     /**
         Associate the given HTML contents to the renderer.

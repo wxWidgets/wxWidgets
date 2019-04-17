@@ -56,6 +56,11 @@ wxHtmlWinParser::wxHtmlWinParser(wxHtmlWindowInterface *wndIface)
     m_lastWordCell = NULL;
     m_posColumn = 0;
 
+    m_LinkColorDefault.Set(0, 0, 0xFF);
+    m_ColorDefault.Set(0, 0, 0);
+    m_BackgroundColorDefault = wxNullColour;
+    m_BackgroundModeDefault = wxBRUSHSTYLE_INVALID;    
+    
     {
         int i, j, k, l, m;
         for (i = 0; i < 2; i++)
@@ -211,13 +216,26 @@ void wxHtmlWinParser::InitParser(const wxString& source)
 
     m_UseLink = false;
     m_Link = wxHtmlLinkInfo( wxEmptyString );
-    m_LinkColor.Set(0, 0, 0xFF);
-    m_ActualColor.Set(0, 0, 0);
-    const wxColour windowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) ;
-    m_ActualBackgroundColor = m_windowInterface
-                            ? m_windowInterface->GetHTMLBackgroundColour()
-                            : windowColour;
-    m_ActualBackgroundMode = wxBRUSHSTYLE_TRANSPARENT;
+    
+    m_LinkColor = m_LinkColorDefault;
+    m_ActualColor = m_ColorDefault;
+
+    if( m_BackgroundColorDefault.IsOk() )
+        m_ActualBackgroundColor = m_BackgroundColorDefault;
+    else
+    {
+        const wxColour windowColour = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW) ;
+        m_ActualBackgroundColor = m_windowInterface
+                                ? m_windowInterface->GetHTMLBackgroundColour()
+                                : windowColour;
+    }
+
+    if(m_BackgroundModeDefault != wxPENSTYLE_INVALID)
+        m_ActualBackgroundMode = m_BackgroundModeDefault;
+    else
+        m_ActualBackgroundMode = wxBRUSHSTYLE_TRANSPARENT;
+   
+    
     m_Align = wxHTML_ALIGN_LEFT;
     m_ScriptMode = wxHTML_SCRIPT_NORMAL;
     m_ScriptBaseline = 0;

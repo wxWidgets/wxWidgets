@@ -316,5 +316,61 @@ public:
         Sets colour of hypertext link.
     */
     void SetLinkColor(const wxColour& clr);
+    
+    /**
+        Return default colour of hypertext link.
+        
+        @since 3.1.3
+    */
+    const wxColour& GetLinkColorDefault() const;
+    
+    /**
+        Sets default colour of hypertext link.
+        
+        @since 3.1.3
+    */
+    void SetLinkColorDefault(const wxColour& clr);
+    
+    /**
+        Return default base colour of hypertext.
+        
+        @since 3.1.3
+    */
+    const wxColour& GetColorDefault() const;
+    
+    /**
+        Sets default base colour of hypertext.
+        
+        @since 3.1.3
+    */
+    void SetColorDefault(const wxColour& clr);
+    
+    /**
+        Return default background colour of hypertext.
+        
+        @since 3.1.3
+    */
+    const wxColour& GetBackgroundColorDefault() const;
+    
+    /**
+        Sets default background colour of hypertext.
+        
+        @since 3.1.3
+    */
+    void SetBackgroundColorDefault(const wxColour& clr);
+    
+    /**
+        Return default hypertext background mode.
+        
+        @since 3.1.3
+    */
+    int GetBackgroundModeDefault() const;
+    
+    /**
+        Sets default hypertext background mode.
+        
+        @since 3.1.3
+    */
+    void SetBackgroundModeDefault(int mode);
 };
 

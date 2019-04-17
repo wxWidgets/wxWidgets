@@ -53,6 +53,16 @@ public:
     // isdir is false if basepath is filename, true if it is directory name
     // (see wxFileSystem for detailed explanation)
     void SetHtmlText(const wxString& html, const wxString& basepath = wxEmptyString, bool isdir = true);
+    
+    // Sets the text to be displayed, use initialState to override default cell colours.
+    // Basepath is base directory (html string would be stored there if it was in
+    // file). It is used to determine path for loading images, for example.
+    // isdir is false if basepath is filename, true if it is directory name
+    // (see wxFileSystem for detailed explanation)
+    void SetHtmlText(const wxString& html,
+                     const wxHtmlRenderingState& initialState,
+                     const wxString& basepath = wxEmptyString,
+                     bool isdir = true);    
 
     // Sets the HTML cell that will be rendered: this is more efficient than
     // using text as it allows to parse it only once. Note that the cell will

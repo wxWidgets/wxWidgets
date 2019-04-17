@@ -118,6 +118,25 @@ void wxHtmlDCRenderer::SetHtmlText(const wxString& html, const wxString& basepat
     m_ownsCells = true;
 }
 
+void wxHtmlDCRenderer::SetHtmlText( const wxString& html, const wxHtmlRenderingState& initialState, const wxString& basepath, bool isdir)
+{
+    wxCHECK_RET( m_DC, "SetDC() must be called before SetHtmlText()" );
+    wxCHECK_RET( m_Width, "SetSize() must be called before SetHtmlText()" );
+
+    m_FS.ChangePathTo(basepath, isdir);
+
+    m_Parser.SetColorDefault(initialState.GetFgColour());
+    m_Parser.SetBackgroundColorDefault(initialState.GetBgColour());
+    m_Parser.SetBackgroundModeDefault(initialState.GetBgMode());
+    
+    wxHtmlContainerCell* const cell = (wxHtmlContainerCell*) m_Parser.Parse(html);
+    wxCHECK_RET( cell, "Failed to parse HTML" );
+
+    DoSetHtmlCell(cell);
+
+    m_ownsCells = true;
+}
+
 void wxHtmlDCRenderer::DoSetHtmlCell(wxHtmlContainerCell* cell)
 {
     if ( m_ownsCells )

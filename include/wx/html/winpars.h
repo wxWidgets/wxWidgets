@@ -123,6 +123,17 @@ public:
     long GetScriptBaseline() const { return m_ScriptBaseline; }
     void SetScriptBaseline(long base) { m_ScriptBaseline = base; }
 
+    // Access default colours, allowing pre-parsing cell color customization
+    const wxColour& GetLinkColorDefault() const { return m_LinkColorDefault; }
+    void SetLinkColorDefault(const wxColour& clr) { m_LinkColorDefault = clr; }
+    const wxColour& GetColorDefault() const { return m_ColorDefault; }
+    void SetColorDefault(const wxColour& clr) { m_ColorDefault = clr ;}
+    const wxColour& GetBackgroundColorDefault() const { return m_BackgroundColorDefault; }
+    void SetBackgroundColorDefault(const wxColour& clr) { m_BackgroundColorDefault = clr;}
+    int GetBackgroundModeDefault() const { return m_BackgroundModeDefault; }
+    void SetBackgroundModeDefault(int mode) { m_BackgroundModeDefault = mode;}    
+    
+    // Access currently used colours
     const wxColour& GetLinkColor() const { return m_LinkColor; }
     void SetLinkColor(const wxColour& clr) { m_LinkColor = clr; }
     const wxColour& GetActualColor() const { return m_ActualColor; }
@@ -190,6 +201,12 @@ private:
 
     int m_FontBold, m_FontItalic, m_FontUnderlined, m_FontFixed; // this is not true,false but 1,0, we need it for indexing
     int m_FontSize; // From 1 (smallest) to 7, default is 3.
+
+    wxColour m_LinkColorDefault;
+    wxColour m_ColorDefault;
+    wxColour m_BackgroundColorDefault;
+    int m_BackgroundModeDefault;
+    
     wxColour m_LinkColor;
     wxColour m_ActualColor;
     wxColour m_ActualBackgroundColor;
