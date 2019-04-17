@@ -26,6 +26,7 @@
 #include "wx/apptrait.h"
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 #if wxUSE_GUI
 #if wxOSX_USE_COCOA_OR_CARBON
@@ -349,7 +350,7 @@ void wxBell()
     ProcessSerialNumber psn = { 0, kCurrentProcess };
     TransformProcessType(&psn, kProcessTransformToForegroundApplication);
     
-    if ( wxPlatformInfo::Get().CheckOSVersion(10, 9) )
+    if ( WX_IS_MACOS_AVAILABLE(10, 9) )
     {
         [[NSRunningApplication currentApplication] activateWithOptions:
          (NSApplicationActivateAllWindows | NSApplicationActivateIgnoringOtherApps)];

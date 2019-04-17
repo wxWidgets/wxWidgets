@@ -148,13 +148,21 @@ public :
     virtual bool        SetupCursor(NSEvent* event);
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-    virtual void        PanGestureEvent(NSPanGestureRecognizer *panGestureRecognizer);
-    virtual void        ZoomGestureEvent(NSMagnificationGestureRecognizer *magnificationGestureRecognizer);
-    virtual void        RotateGestureEvent(NSRotationGestureRecognizer *rotationGestureRecognizer);
-    virtual void        LongPressEvent(NSPressGestureRecognizer *pressGestureRecognizer);
-    virtual void        TouchesBegan(NSEvent *event);
-    virtual void        TouchesMoved(NSEvent *event);
-    virtual void        TouchesEnded(NSEvent *event);
+    #ifdef API_AVAILABLE
+        #define WX_AVAILABLE_10_10 API_AVAILABLE(macos(10.10))
+    #else
+        #define WX_AVAILABLE_10_10
+    #endif
+
+    WX_AVAILABLE_10_10 virtual void        PanGestureEvent(NSPanGestureRecognizer *panGestureRecognizer);
+    WX_AVAILABLE_10_10 virtual void        ZoomGestureEvent(NSMagnificationGestureRecognizer *magnificationGestureRecognizer);
+    WX_AVAILABLE_10_10 virtual void        RotateGestureEvent(NSRotationGestureRecognizer *rotationGestureRecognizer);
+    WX_AVAILABLE_10_10 virtual void        LongPressEvent(NSPressGestureRecognizer *pressGestureRecognizer);
+    WX_AVAILABLE_10_10 virtual void        TouchesBegan(NSEvent *event);
+    WX_AVAILABLE_10_10 virtual void        TouchesMoved(NSEvent *event);
+    WX_AVAILABLE_10_10 virtual void        TouchesEnded(NSEvent *event);
+
+    #undef WX_AVAILABLE_10_10
 #endif // MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
 #if !wxOSX_USE_NATIVE_FLIPPED

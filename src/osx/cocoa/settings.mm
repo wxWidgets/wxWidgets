@@ -19,6 +19,7 @@
 
 #include "wx/osx/core/private.h"
 #include "wx/osx/cocoa/private.h"
+#include "wx/osx/private/available.h"
 
 #import <AppKit/NSColor.h>
 #import <Foundation/Foundation.h>
@@ -79,7 +80,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
         sysColor = [NSColor controlBackgroundColor];
         break;
     case wxSYS_COLOUR_BTNFACE:
-        if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+        if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
             sysColor = [NSColor windowBackgroundColor];
         else
             sysColor = [NSColor controlColor];
