@@ -83,7 +83,7 @@ protected:
     // not supported for file dialog, RR
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                            int WXUNUSED(width), int WXUNUSED(height),
-                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
+                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) wxOVERRIDE {}
 
     void SetupExtraControls(WXWindow nativeWindow);
 

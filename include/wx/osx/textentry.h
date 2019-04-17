@@ -76,7 +76,7 @@ public:
     virtual void SetInsertionPoint(long pos) wxOVERRIDE;
     virtual void SetInsertionPointEnd() wxOVERRIDE;
     virtual long GetInsertionPoint() const wxOVERRIDE;
-    virtual wxTextPos GetLastPosition() const;
+    virtual wxTextPos GetLastPosition() const wxOVERRIDE;
 
     virtual void SetSelection(long from, long to) wxOVERRIDE;
     virtual void SetEditable(bool editable) wxOVERRIDE;

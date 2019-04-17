@@ -149,8 +149,8 @@ public:
     bool CreateScaled(int logwidth, int logheight, int depth, double logicalScale) wxOVERRIDE;
 
     // virtual bool Create( WXHICON icon) ;
-    virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
-    virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
+    virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE) wxOVERRIDE;
+    virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const wxOVERRIDE;
 
     const wxBitmapRefData *GetBitmapData() const
         { return (const wxBitmapRefData *)m_refData; }
