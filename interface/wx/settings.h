@@ -196,8 +196,10 @@ enum wxSystemMetric
     /**
         Time, in milliseconds, for how long a blinking caret should
         stay visible during a single blink cycle before it disappears.
-        If this value is negative, the platform does not support the
-        user setting.
+
+        If this value is zero, caret should be visible all the time
+        instead of blinking.  If the value is negative, the platform
+        does not support the user setting.
 
         @since 3.1.1
     */
@@ -206,7 +208,8 @@ enum wxSystemMetric
     /**
         Time, in milliseconds, for how long a blinking caret should
         stay invisible during a single blink cycle before it reappears.
-        If this value is zero, carets should be visible all the time
+
+        If this value is zero, caret should be visible all the time
         instead of blinking.  If the value is negative, the platform
         does not support the user setting.
 
