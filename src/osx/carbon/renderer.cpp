@@ -173,11 +173,9 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     wxHeaderSortIconType sortArrow,
     wxHeaderButtonParams* params )
 {
-    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
-    {
-        if ( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).Red() < 128 )
-            return wxRendererNative::GetGeneric().DrawHeaderButton(win, dc,  rect, flags, sortArrow, params);
-    }
+    if ( wxSystemSettings::GetAppearance().IsDark() )
+        return wxRendererNative::GetGeneric().DrawHeaderButton(win, dc,  rect, flags, sortArrow, params);
+
     const wxCoord x = rect.x;
     const wxCoord y = rect.y;
     const wxCoord w = rect.width;
@@ -391,13 +389,7 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
 
         if ( win->HasFlag(wxSP_3DSASH) )
         {
-            bool doDraw;
-            if ( WX_IS_MACOS_AVAILABLE(10, 14) )
-                doDraw = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).Red() > 128;
-            else
-                doDraw = true;
-
-            if ( doDraw )
+            if ( !wxSystemSettings::GetAppearance().IsDark() )
             {
                 HIThemeSplitterDrawInfo drawInfo;
                 drawInfo.version = 0;
