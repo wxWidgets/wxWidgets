@@ -115,3 +115,10 @@ void ColourTestCase::FromString()
     CPPUNIT_ASSERT( !wxFromString("rgba(1, 2, 3.456, foo)", &col) );
 }
 
+TEST_CASE("wxColour::GetLuminance", "[colour][luminance]")
+{
+    CHECK( wxBLACK->GetLuminance() == 0 );
+    CHECK( wxWHITE->GetLuminance() == 1 );
+    CHECK( wxRED->GetLuminance() > 0 );
+    CHECK( wxRED->GetLuminance() < 1 );
+}
