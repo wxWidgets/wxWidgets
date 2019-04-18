@@ -21,6 +21,7 @@
 
 #ifdef __WXMAC__
     #include "wx/osx/private.h"
+    #include "wx/osx/private/available.h"
 #endif
 
 #include "wx/evtloop.h"
@@ -1092,6 +1093,7 @@ void wxOSX_insertText(NSView* self, SEL _cmd, NSString* text)
 }
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
+WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_panGestureEvent(NSView* self, SEL _cmd, NSPanGestureRecognizer* panGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1101,6 +1103,7 @@ void wxOSX_panGestureEvent(NSView* self, SEL _cmd, NSPanGestureRecognizer* panGe
     impl->PanGestureEvent(panGestureRecognizer);
 }
 
+WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_zoomGestureEvent(NSView* self, SEL _cmd, NSMagnificationGestureRecognizer* magnificationGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1110,6 +1113,7 @@ void wxOSX_zoomGestureEvent(NSView* self, SEL _cmd, NSMagnificationGestureRecogn
     impl->ZoomGestureEvent(magnificationGestureRecognizer);
 }
 
+WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_rotateGestureEvent(NSView* self, SEL _cmd, NSRotationGestureRecognizer* rotationGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1119,6 +1123,7 @@ void wxOSX_rotateGestureEvent(NSView* self, SEL _cmd, NSRotationGestureRecognize
     impl->RotateGestureEvent(rotationGestureRecognizer);
 }
 
+WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_longPressEvent(NSView* self, SEL _cmd, NSPressGestureRecognizer* pressGestureRecognizer)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1128,6 +1133,7 @@ void wxOSX_longPressEvent(NSView* self, SEL _cmd, NSPressGestureRecognizer* pres
     impl->LongPressEvent(pressGestureRecognizer);
 }
 
+WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_touchesBegan(NSView* self, SEL _cmd, NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1137,6 +1143,7 @@ void wxOSX_touchesBegan(NSView* self, SEL _cmd, NSEvent *event)
     impl->TouchesBegan(event);
 }
 
+WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_touchesMoved(NSView* self, SEL _cmd, NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1146,6 +1153,7 @@ void wxOSX_touchesMoved(NSView* self, SEL _cmd, NSEvent *event)
     impl->TouchesMoved(event);
 }
 
+WX_API_AVAILABLE_MACOS(10, 10)
 void wxOSX_touchesEnded(NSView* self, SEL _cmd, NSEvent *event)
 {
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
@@ -1545,7 +1553,7 @@ void wxWidgetCocoaImpl::keyEvent(WX_NSEvent event, WXWidget slf, void *_cmd)
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
 
 // Class containing data used for gestures support.
-class wxCocoaGesturesImpl
+class WX_API_AVAILABLE_MACOS(10, 10) wxCocoaGesturesImpl
 {
 public:
     wxCocoaGesturesImpl(wxWidgetCocoaImpl* impl, NSView* view, int eventsMask)
@@ -1669,6 +1677,12 @@ private:
 // itself because most windows don't need it and it seems wasteful to
 // always increase their size unnecessarily.
 
+// wxCocoaGesturesImpl is only used under 10.10+ and so clang warns about
+// wxCocoaGesturesImplMap not having 10.10 availability attribute, but there is
+// no simple way to make it pass through the macro, so just suppress the
+// warning instead.
+wxCLANG_WARNING_SUPPRESS(unguarded-availability)
+
 #include "wx/hashmap.h"
 WX_DECLARE_HASH_MAP(wxWidgetCocoaImpl*, wxCocoaGesturesImpl*,
                     wxPointerHash, wxPointerEqual,
@@ -1678,6 +1692,8 @@ WX_DECLARE_HASH_MAP(wxWidgetCocoaImpl*, wxCocoaGesturesImpl*,
 typedef wxExternalField<wxWidgetCocoaImpl,
                         wxCocoaGesturesImpl,
                         wxCocoaGesturesImplMap> wxCocoaGestures;
+
+wxCLANG_WARNING_RESTORE(unguarded-availability)
 
 void wxWidgetCocoaImpl::PanGestureEvent(NSPanGestureRecognizer* panGestureRecognizer)
 {
@@ -2578,7 +2594,7 @@ void wxWidgetCocoaImpl::SetVisibility( bool visible )
     
     // trigger redraw upon shown for layer-backed views
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
-    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+    if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
         if( !m_osxView.isHiddenOrHasHiddenAncestor )
             SetNeedsDisplay(NULL);
 #endif
@@ -3056,7 +3072,7 @@ void wxWidgetCocoaImpl::SetNeedsDisplay( const wxRect* where )
     // their children implicitly redrawn with the parent. For compatibility,
     // do it manually here:
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
-    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+    if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
         SetSubviewsNeedDisplay(m_osxView);
 #endif
 }
@@ -3525,7 +3541,7 @@ void wxWidgetCocoaImpl::InstallEventHandler( WXWidget control )
 bool wxWidgetCocoaImpl::EnableTouchEvents(int eventsMask)
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-    if ( wxPlatformInfo::Get().CheckOSVersion(10, 10) )
+    if ( WX_IS_MACOS_AVAILABLE(10, 10) )
     {
         if ( HasUserMouseHandling() )
         {

@@ -23,6 +23,7 @@
 
 #ifdef __WXMAC__
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 #endif
 
 #include "wx/fontutil.h"
@@ -624,7 +625,7 @@ NSString* wxNSStringWithWxString(const wxString &wxstring)
 wxOSXEffectiveAppearanceSetter::wxOSXEffectiveAppearanceSetter()
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
-    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+    if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
     {
         formerAppearance = NSAppearance.currentAppearance;
         NSAppearance.currentAppearance = NSApp.effectiveAppearance;
@@ -637,7 +638,7 @@ wxOSXEffectiveAppearanceSetter::wxOSXEffectiveAppearanceSetter()
 wxOSXEffectiveAppearanceSetter::~wxOSXEffectiveAppearanceSetter()
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
-    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+    if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
         NSAppearance.currentAppearance = (NSAppearance*) formerAppearance;
 #endif
 }

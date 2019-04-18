@@ -39,8 +39,8 @@ public:
     // override base class virtuals
     virtual void SetItemLabel(const wxString& strName) wxOVERRIDE;
 
-    virtual void Enable(bool bDoEnable = true);
-    virtual void Check(bool bDoCheck = true);
+    virtual void Enable(bool bDoEnable = true) wxOVERRIDE;
+    virtual void Check(bool bDoCheck = true) wxOVERRIDE;
 
     virtual void SetBitmap(const wxBitmap& bitmap) ;
     virtual const wxBitmap& GetBitmap() const { return m_bitmap; }
