@@ -1175,7 +1175,9 @@ bool wxPropertyGridInterface::RestoreEditableState( const wxString& src, int res
 
     if ( selectedPage != -1 )
     {
-        if ( DoSelectPage(selectedPage) )
+        wxPropertyGridPageState* curPageState = GetPageState(-1);
+        DoSelectPage(selectedPage);
+        if ( GetPageState(-1) != curPageState )
         {
             pg->SendEvent(wxEVT_PG_SELECTED, pg->GetSelectedProperty());
         }
