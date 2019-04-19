@@ -2147,7 +2147,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
     #ifdef __WXMSW__
 
         // Use ShowWithoutActivating instead of show.
-        bool wxSTCPopupBase::Show(bool show)
+        bool wxSTCPopupBase::Show(bool show) wxOVERRIDE
         {
             if ( show )
             {
@@ -2165,7 +2165,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
 
         // Do not activate in response to mouse clicks on this window.
         bool wxSTCPopupBase::MSWHandleMessage(WXLRESULT *res, WXUINT msg,
-                                              WXWPARAM wParam, WXLPARAM lParam)
+                                              WXWPARAM wParam, WXLPARAM lParam) wxOVERRIDE
         {
             if ( msg == WM_MOUSEACTIVATE )
             {
@@ -2492,7 +2492,7 @@ void wxSTCListBoxVisualData::ComputeColours()
     }
 }
 
-void SetColourHelper(bool& isSet, wxColour& itemCol, const wxColour& newColour)
+static void SetColourHelper(bool& isSet, wxColour& itemCol, const wxColour& newColour)
 {
     isSet = newColour.IsOk();
     itemCol = newColour;
