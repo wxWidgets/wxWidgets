@@ -3049,7 +3049,11 @@ void wxWidgetCocoaImpl::GetContentArea( int&left, int &top, int &width, int &hei
     }
 }
 
-static void SetSubviewsNeedDisplay( NSView *view )
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+namespace
+{
+    
+void SetSubviewsNeedDisplay( NSView *view )
 {
     for ( NSView *sub in view.subviews )
     {
@@ -3060,6 +3064,10 @@ static void SetSubviewsNeedDisplay( NSView *view )
         SetSubviewsNeedDisplay(sub);
     }
 }
+    
+}
+#endif
+
 
 void wxWidgetCocoaImpl::SetNeedsDisplay( const wxRect* where )
 {
