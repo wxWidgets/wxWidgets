@@ -23,7 +23,7 @@
     wxWindow*        m_wxWin;
 }
 
-- (id)initWithwxWin:(wxWindow*) wxwin;
+- (id)initWithwxWin:(wxWindow*) wxWin;
 
 @end
 

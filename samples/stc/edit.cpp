@@ -190,7 +190,7 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     wxBitmap bmp(hashtag_xpm);
     RegisterImage(0, bmp);
 
-    //call tips
+    // call tips
     CallTipSetBackground(*wxYELLOW);
     m_calltipNo = 1;
 
