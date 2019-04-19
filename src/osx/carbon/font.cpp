@@ -793,11 +793,11 @@ void wxNativeFontInfo::InitFromFontDescriptor(CTFontDescriptorRef desc)
     wxCFDictionaryRef traits((CFDictionaryRef)CTFontDescriptorCopyAttribute(desc, kCTFontTraitsAttribute));
     traits.GetValue(kCTFontSymbolicTrait).GetValue((int32_t*)&symbolicTraits, 0);
 
-    if (symbolicTraits & kCTFontTraitMonoSpace)
+    if (symbolicTraits & kCTFontMonoSpaceTrait)
         m_family = wxFONTFAMILY_TELETYPE;
     else
     {
-        uint32_t stylisticClass = symbolicTraits & kCTFontTraitClassMask;
+        uint32_t stylisticClass = symbolicTraits & kCTFontClassMaskTrait;
 
         if (stylisticClass == kCTFontSansSerifClass)
             m_family = wxFONTFAMILY_SWISS;
