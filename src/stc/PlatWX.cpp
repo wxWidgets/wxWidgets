@@ -38,6 +38,7 @@
 #include "wx/renderer.h"
 #include "wx/hashset.h"
 #include "wx/dcclient.h"
+#include "wx/wupdlock.h"
 
 #ifdef wxHAS_RAW_BITMAP
 #include "wx/rawbmp.h"
@@ -2126,19 +2127,11 @@ PRectangle Window::GetMonitorRect(Point pt) {
 
 #else
 
-    wxSTCPopupBase::wxSTCPopupBase(wxWindow* parent):wxFrame()
+    wxSTCPopupBase::wxSTCPopupBase(wxWindow* parent)
+                   :wxFrame(parent, wxID_ANY, wxEmptyString,
+                            wxDefaultPosition, wxDefaultSize,
+                            wxFRAME_FLOAT_ON_PARENT | wxBORDER_NONE)
     {
-        // Make sure the frame is initially hidden. However, GTK+ will hide the
-        // frame initially and doesn't like trying to hide it before it's
-        // created, so don't do it there.
-        #if !defined(__WXGTK__)
-            Hide();
-        #endif
-
-        wxFrame::Create(parent, wxID_ANY, wxEmptyString,
-                        wxDefaultPosition, wxDefaultSize,
-                        wxFRAME_FLOAT_ON_PARENT | wxBORDER_NONE);
-
         #if defined(__WXGTK__)
             gtk_window_set_accept_focus(GTK_WINDOW(this->GetHandle()), FALSE);
         #endif
@@ -2566,7 +2559,6 @@ class wxSTCListBox : public wxSystemThemedControl<wxVListBox>
 {
 public:
     wxSTCListBox(wxWindow*, wxSTCListBoxVisualData*, int);
-    virtual ~wxSTCListBox();
 
     // wxWindow overrides
     virtual bool AcceptsFocus() const wxOVERRIDE;
@@ -2666,12 +2658,6 @@ wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v, int ht)
             parent->SetOwnBackgroundColour(m_visualData->GetBgColour());
         #endif
     }
-}
-
-wxSTCListBox::~wxSTCListBox()
-{
-    m_labels.clear();
-    m_imageNos.clear();
 }
 
 bool wxSTCListBox::AcceptsFocus() const
@@ -2785,7 +2771,7 @@ void wxSTCListBox::SetDoubleClickAction(CallBackAction action, void *data)
 
 void wxSTCListBox::SetList(const char* list, char separator, char typesep)
 {
-    Freeze();
+    wxWindowUpdateLocker noUpdates(this);
     Clear();
     SetOfInts bitmapNos;
     wxStringTokenizer tkzr(stc2wx(list), (wxChar)separator);
@@ -2806,8 +2792,6 @@ void wxSTCListBox::SetList(const char* list, char separator, char typesep)
 
     if ( m_imageAreaHeight > 0 )
         RecalculateItemHeight();
-
-    Thaw();
 }
 
 void wxSTCListBox::AppendHelper(const wxString& text, int type)
