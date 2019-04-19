@@ -452,13 +452,7 @@ void wxPropertyGridInterface::DoSetPropertyAttribute( wxPGPropArg id, const wxSt
 {
     wxPG_PROP_ARG_CALL_PROLOG()
 
-    p->SetAttribute( name, value );
-    // If property is attached to the property grid
-    // then refresh the view.
-    if( p->GetParentState() )
-    {
-        RefreshProperty( p );
-    }
+    p->SetAttribute( name, value ); // property is also refreshed here
 
     if ( argFlags & wxPG_RECURSE )
     {
