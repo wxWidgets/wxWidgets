@@ -280,7 +280,6 @@ public:
                                 const wxString& text,
                                 int argFlags = 0 ) const wxOVERRIDE;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
-    virtual wxVariant DoGetAttribute( const wxString& name ) const wxOVERRIDE;
 
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const wxOVERRIDE;

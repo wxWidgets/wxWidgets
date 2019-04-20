@@ -94,9 +94,9 @@ struct wxPGPaintData
 */
 #define wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING  wxS("UseDClickCycling")
 
-/** wxFloatProperty (and similar) specific, int, default -1. Sets the (max) precision
-    used when floating point value is rendered as text. The default -1 means infinite
-    precision.
+/** wxFloatProperty (and similar) specific built-in attribute of type @c int.
+    Default value is -1. Sets the (max) precision used when floating point
+    value is rendered as text. The default -1 means infinite precision.
 */
 #define wxPG_FLOAT_PRECISION                wxS("Precision")
 
