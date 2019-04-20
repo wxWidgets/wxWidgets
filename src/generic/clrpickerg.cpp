@@ -91,9 +91,13 @@ void wxGenericColourButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
         ms_data = dlg.GetColourData();
         SetColour(ms_data.GetColour());
 
-        // fire an event
-        wxColourPickerEvent event(this, GetId(), m_colour);
-        GetEventHandler()->ProcessEvent(event);
+        // Fire the corresponding event: note that we want it to appear as
+        // originating from our parent, which is the user-visible window, and not
+        // this button itself, which is just an implementation detail.
+        wxWindow* const parent = GetParent();
+        wxColourPickerEvent event(parent, parent->GetId(), m_colour);
+
+        ProcessWindowEvent(event);
     }
 }
 

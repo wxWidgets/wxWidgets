@@ -129,10 +129,7 @@ void wxColourPickerCtrl::OnColourChange(wxColourPickerEvent &ev)
 {
     UpdateTextCtrlFromPicker();
 
-    // the wxColourPickerWidget sent us a colour-change notification.
-    // forward this event to our parent
-    wxColourPickerEvent event(this, GetId(), ev.GetColour());
-    GetEventHandler()->ProcessEvent(event);
+    ev.Skip();
 }
 
 #endif  // wxUSE_COLOURPICKERCTRL
