@@ -201,7 +201,8 @@ struct wxPGPaintData
 #define wxPG_COLOUR_ALLOW_CUSTOM            wxS("AllowCustom")
 
 /**
-    wxColourProperty and its kind: Set to True in order to support editing
+    Built-in attribute of wxColourProperty and its kind, @bool type. Default
+    value is @false. Set this attribute to @true in order to support editing
     alpha colour component.
 */
 #define wxPG_COLOUR_HAS_ALPHA               wxS("HasAlpha")

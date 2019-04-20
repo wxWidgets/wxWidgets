@@ -873,6 +873,7 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
 
 // wxEnumProperty based classes cannot use wxPG_PROP_CLASS_SPECIFIC_1
 #define wxPG_PROP_HIDE_CUSTOM_COLOUR        wxPG_PROP_CLASS_SPECIFIC_2
+#define wxPG_PROP_COLOUR_HAS_ALPHA          wxPG_PROP_CLASS_SPECIFIC_3
 
 #include "wx/colordlg.h"
 
@@ -1182,8 +1183,7 @@ wxString wxSystemColourProperty::ColourToString( const wxColour& col,
     if ( index == wxNOT_FOUND )
     {
 
-        if ( (argFlags & wxPG_FULL_VALUE) ||
-             GetAttributeAsLong(wxPG_COLOUR_HAS_ALPHA, 0) )
+        if ( (argFlags & wxPG_FULL_VALUE) || (m_flags & wxPG_PROP_COLOUR_HAS_ALPHA) )
         {
             return wxString::Format(wxS("(%i,%i,%i,%i)"),
                                     (int)col.Red(),
@@ -1263,7 +1263,7 @@ bool wxSystemColourProperty::QueryColourFromUser( wxVariant& variant ) const
 
     wxColourData data;
     data.SetChooseFull(true);
-    data.SetChooseAlpha(GetAttributeAsLong(wxPG_COLOUR_HAS_ALPHA, 0) != 0);
+    data.SetChooseAlpha((m_flags & wxPG_PROP_COLOUR_HAS_ALPHA) != 0);
     data.SetColour(val.m_colour);
     for ( int i = 0; i < wxColourData::NUM_CUSTOM; i++ )
     {
@@ -1591,6 +1591,16 @@ bool wxSystemColourProperty::DoSetAttribute( const wxString& name, wxVariant& va
         }
         return true;
     }
+    else if ( name == wxPG_COLOUR_HAS_ALPHA )
+    {
+        if ( value.GetBool() )
+            m_flags |= wxPG_PROP_COLOUR_HAS_ALPHA;
+        else
+            m_flags &= ~(wxPG_PROP_COLOUR_HAS_ALPHA);
+
+        return true;
+    }
+
     return false;
 }
 
