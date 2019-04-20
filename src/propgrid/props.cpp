@@ -1966,8 +1966,8 @@ bool wxPGFileDialogAdapter::DoShowDialog( wxPropertyGrid* propGrid, wxPGProperty
     }
 
     wxFileDialog dlg( propGrid->GetPanel(),
-                      property->GetAttribute(wxS("DialogTitle"), _("Choose a file")),
-                      property->GetAttribute(wxS("InitialPath"), path),
+                      property->GetAttribute(wxPG_FILE_DIALOG_TITLE, _("Choose a file")),
+                      property->GetAttribute(wxPG_FILE_INITIAL_PATH, path),
                       wxEmptyString,
                       property->GetAttribute(wxPG_FILE_WILDCARD, wxALL_FILES),
                       property->GetAttributeAsLong(wxPG_FILE_DIALOG_STYLE, 0),

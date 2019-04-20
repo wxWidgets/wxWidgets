@@ -2170,7 +2170,7 @@ bool wxMultiChoiceProperty::OnEvent( wxPropertyGrid* propgrid,
 
         if ( dlg.ShowModal() == wxID_OK && choiceCount )
         {
-            int userStringMode = GetAttributeAsLong(wxS("UserStringMode"), 0);
+            int userStringMode = GetAttributeAsLong(wxPG_ATTR_MULTICHOICE_USERSTRINGMODE, 0);
 
             wxArrayInt arrInt = dlg.GetSelections();
 
@@ -2211,7 +2211,7 @@ bool wxMultiChoiceProperty::StringToValue( wxVariant& variant, const wxString& t
 {
     wxArrayString arr;
 
-    int userStringMode = GetAttributeAsLong(wxS("UserStringMode"), 0);
+    int userStringMode = GetAttributeAsLong(wxPG_ATTR_MULTICHOICE_USERSTRINGMODE, 0);
 
     WX_PG_TOKENIZER2_BEGIN(text,wxT('"'))
         if ( userStringMode > 0 || (m_choices.IsOk() && m_choices.Index( token ) != wxNOT_FOUND) )
