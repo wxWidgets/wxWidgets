@@ -142,7 +142,7 @@ bool wxStringProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 {
     if ( name == wxPG_STRING_PASSWORD )
     {
-        if ( value.GetLong() )
+        if ( value.GetBool() )
             m_flags |= wxPG_PROP_PASSWORD;
         else
             m_flags &= ~(wxPG_PROP_PASSWORD);
@@ -1181,7 +1181,7 @@ bool wxBoolProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 #if wxPG_INCLUDE_CHECKBOX
     if ( name == wxPG_BOOL_USE_CHECKBOX )
     {
-        if ( value.GetLong() )
+        if ( value.GetBool() )
             m_flags |= wxPG_PROP_USE_CHECKBOX;
         else
             m_flags &= ~(wxPG_PROP_USE_CHECKBOX);
@@ -1190,7 +1190,7 @@ bool wxBoolProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 #endif
     if ( name == wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING )
     {
-        if ( value.GetLong() )
+        if ( value.GetBool() )
             m_flags |= wxPG_PROP_USE_DCC;
         else
             m_flags &= ~(wxPG_PROP_USE_DCC);
@@ -2156,7 +2156,7 @@ bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
     // stored in m_attributes.
     if ( name == wxPG_FILE_SHOW_FULL_PATH )
     {
-        if ( value.GetLong() )
+        if ( value.GetBool() )
             m_flags |= wxPG_PROP_SHOW_FULL_FILENAME;
         else
             m_flags &= ~(wxPG_PROP_SHOW_FULL_FILENAME);
