@@ -2339,25 +2339,26 @@ private:
     wxColour m_textColour;
     wxColour m_highlightBgColour;
     wxColour m_highlightTextColour;
-    bool     m_bgColourIsSet;
-    bool     m_textColourIsSet;
-    bool     m_highlightBgColourIsSet;
-    bool     m_highlightTextColourIsSet;
+    bool     m_useDefaultBgColour;
+    bool     m_useDefaultTextColour;
+    bool     m_useDefaultHighlightBgColour;
+    bool     m_useDefaultHighlightTextColour;
 
     bool     m_hasListCtrlAppearance;
     wxColour m_currentBgColour;
     wxColour m_currentTextColour;
-    bool     m_currentBgColourIsSet;
-    bool     m_currentTextColourIsSet;
+    bool     m_UseDefaultCurrentBgColour;
+    bool     m_UseDefaultCurrentTextColour;
 };
 
 wxSTCListBoxVisualData::wxSTCListBoxVisualData(int d):m_desiredVisibleRows(d),
-                        m_bgColourIsSet(false), m_textColourIsSet(false),
-                        m_highlightBgColourIsSet(false),
-                        m_highlightTextColourIsSet(false),
+                        m_useDefaultBgColour(true),
+                        m_useDefaultTextColour(true),
+                        m_useDefaultHighlightBgColour(true),
+                        m_useDefaultHighlightTextColour(true),
                         m_hasListCtrlAppearance(false),
-                        m_currentBgColourIsSet(false),
-                        m_currentTextColourIsSet(false)
+                        m_UseDefaultCurrentBgColour(true),
+                        m_UseDefaultCurrentTextColour(true)
 {
     ComputeColours();
 }
@@ -2437,10 +2438,10 @@ void wxSTCListBoxVisualData::ComputeColours()
     // wxSYS_COLOUR_BTNSHADOW seems to be the closest match with most themes.
     m_borderColour = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW );
 
-    if ( !m_bgColourIsSet )
+    if ( m_useDefaultBgColour )
         m_bgColour = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
 
-    if ( !m_textColourIsSet )
+    if ( m_useDefaultTextColour )
         m_textColour = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
 
     if ( m_hasListCtrlAppearance )
@@ -2448,47 +2449,48 @@ void wxSTCListBoxVisualData::ComputeColours()
         // If m_highlightBgColour and/or m_currentBgColour are not
         // explicitly set, set them to wxNullColour to indicate that they
         // should be drawn with wxRendererNative.
-        if ( !m_highlightBgColourIsSet )
+        if ( m_useDefaultHighlightBgColour )
             m_highlightBgColour = wxNullColour;
 
-        if ( !m_currentBgColourIsSet )
+        if ( m_UseDefaultCurrentBgColour )
             m_currentBgColour = wxNullColour;
 
         #ifdef __WXMSW__
-            if ( !m_highlightTextColourIsSet )
+            if ( m_useDefaultHighlightTextColour )
                 m_highlightTextColour =
                     wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXTEXT);
         #else
-            if ( !m_highlightTextColourIsSet )
+            if ( m_useDefaultHighlightTextColour )
                 m_highlightTextColour = wxSystemSettings::GetColour(
                     wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
         #endif
 
-        if ( !m_currentTextColour.IsOk() )
+        if ( m_UseDefaultCurrentTextColour )
             m_currentTextColour = wxSystemSettings::GetColour(
                 wxSYS_COLOUR_LISTBOXTEXT);
     }
     else
     {
     #ifdef __WXOSX_COCOA__
-        if ( !m_highlightBgColourIsSet )
+        if ( m_useDefaultHighlightBgColour )
             m_highlightBgColour = GetListHighlightColour();
     #else
-        if ( !m_highlightBgColourIsSet )
+        if ( m_useDefaultHighlightBgColour )
             m_highlightBgColour =
-            wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+                wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
     #endif
 
-        if ( !m_highlightTextColourIsSet )
+        if ( m_useDefaultHighlightTextColour )
             m_highlightTextColour =
                 wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
     }
 }
 
-static void SetColourHelper(bool& isSet, wxColour& itemCol, const wxColour& newColour)
+static void SetColourHelper(bool& isDefault, wxColour& itemColour,
+                            const wxColour& newColour)
 {
-    isSet = newColour.IsOk();
-    itemCol = newColour;
+    isDefault = !newColour.IsOk();
+    itemColour = newColour;
 }
 
 void wxSTCListBoxVisualData::SetColours(const wxColour& bg,
@@ -2496,10 +2498,11 @@ void wxSTCListBoxVisualData::SetColours(const wxColour& bg,
                                         const wxColour& hlbg,
                                         const wxColour& hltext)
 {
-    SetColourHelper(m_bgColourIsSet, m_bgColour, bg);
-    SetColourHelper(m_textColourIsSet, m_textColour, txt);
-    SetColourHelper(m_highlightBgColourIsSet, m_highlightBgColour, hlbg);
-    SetColourHelper(m_highlightTextColourIsSet, m_highlightTextColour, hltext);
+    SetColourHelper(m_useDefaultBgColour, m_bgColour, bg);
+    SetColourHelper(m_useDefaultTextColour, m_textColour, txt);
+    SetColourHelper(m_useDefaultHighlightBgColour, m_highlightBgColour, hlbg);
+    SetColourHelper(m_useDefaultHighlightTextColour, m_highlightTextColour,
+                    hltext);
     ComputeColours();
 }
 
@@ -2533,8 +2536,9 @@ void wxSTCListBoxVisualData::UseListCtrlStyle(bool useListCtrlStyle,
                                               const wxColour& curText)
 {
     m_hasListCtrlAppearance = useListCtrlStyle;
-    SetColourHelper(m_currentBgColourIsSet, m_currentBgColour, curBg);
-    SetColourHelper(m_currentTextColourIsSet, m_currentTextColour, curText);
+    SetColourHelper(m_UseDefaultCurrentBgColour, m_currentBgColour, curBg);
+    SetColourHelper(m_UseDefaultCurrentTextColour, m_currentTextColour,
+                    curText);
     ComputeColours();
 }
 
