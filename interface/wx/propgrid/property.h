@@ -100,8 +100,9 @@ struct wxPGPaintData
 */
 #define wxPG_FLOAT_PRECISION                wxS("Precision")
 
-/** The text will be echoed as asterisks (wxTE_PASSWORD will be passed
-    to textctrl etc.).
+/** Built-in attribute of type @c bool. Default value is @false,
+    When set tu @true, the text will be echoed as asterisks (wxTE_PASSWORD
+    will be passed to textctrl etc.).
 */
 #define wxPG_STRING_PASSWORD                wxS("Password")
 

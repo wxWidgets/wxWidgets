@@ -145,9 +145,9 @@ bool wxStringProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         m_flags &= ~(wxPG_PROP_PASSWORD);
         if ( value.GetLong() ) m_flags |= wxPG_PROP_PASSWORD;
         RecreateEditor();
-        return false;
+        return true;
     }
-    return true;
+    return false;
 }
 
 // -----------------------------------------------------------------------
