@@ -1947,13 +1947,12 @@ bool wxDirProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 
 bool wxPGFileDialogAdapter::DoShowDialog( wxPropertyGrid* propGrid, wxPGProperty* property )
 {
-    wxFileProperty* fileProp = NULL;
     wxString path;
     int indFilter = -1;
 
-    if ( wxDynamicCast(property, wxFileProperty) )
+    wxFileProperty* fileProp = wxDynamicCast(property, wxFileProperty);
+    if ( fileProp )
     {
-        fileProp = ((wxFileProperty*)property);
         wxFileName filename = fileProp->GetValue().GetString();
         path = filename.GetPath();
         indFilter = fileProp->m_indFilter;
