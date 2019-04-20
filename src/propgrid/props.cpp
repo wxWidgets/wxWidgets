@@ -465,24 +465,19 @@ bool NumericValidation( const wxPGProperty* property,
 
     if ( minOk || maxOk )
     {
-        // Get required precision.
-        int precision = -1;
-        variant = property->GetAttribute(wxPG_FLOAT_PRECISION);
-        if ( !variant.IsNull() )
-        {
-            precision = variant.GetInteger();
-        }
-
         // Round current value to the required precision.
-        wxString strVal = wxNumberFormatter::ToString(value, precision, wxNumberFormatter::Style_None);
+        variant = value;
+        wxString strVal = property->ValueToString(variant, wxPG_FULL_VALUE);
         strVal.ToDouble(&value);
 
         // Round minimal value to the required precision.
-        strVal = wxNumberFormatter::ToString(min, precision, wxNumberFormatter::Style_None);
+        variant = min;
+        strVal = property->ValueToString(variant, wxPG_FULL_VALUE);
         strVal.ToDouble(&min);
 
         // Round maximal value to the required precision.
-        strVal = wxNumberFormatter::ToString(max, precision, wxNumberFormatter::Style_None);
+        variant = max;
+        strVal = property->ValueToString(variant, wxPG_FULL_VALUE);
         strVal.ToDouble(&max);
     }
 
