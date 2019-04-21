@@ -1572,10 +1572,12 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(wxFont* data) const
     return NULL;
 }
 
+#if defined(HAVE_STD_VARIANT)
 wxIMPLEMENT_DYNAMIC_CLASS(wxMonoValidationEvent, wxEvent);
 
 wxDEFINE_EVENT( wxEVT_SET_ALTERNATIVE, wxMonoValidationEvent );
 wxDEFINE_EVENT( wxEVT_UNSET_ALTERNATIVE, wxMonoValidationEvent );
+#endif // HAVE_STD_VARIANT
 
 void wxSetGenericValidator(wxPanel* panel, const wxValidator& val)
 {
