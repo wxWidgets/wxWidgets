@@ -120,7 +120,7 @@ void FormMain::AddTestProperties( wxPropertyGridPage* pg )
 void FormMain::OnDumpList( wxCommandEvent& WXUNUSED(event) )
 {
     wxVariant values = m_pPropGridManager->GetPropertyValues("list", wxNullProperty, wxPG_INC_ATTRIBUTES);
-    wxString text = "This only tests that wxVariant related routines do not crash.";
+    wxString text = "This only tests that wxVariant related routines do not crash.\n";
     wxString t;
 
     wxDialog* dlg = new wxDialog(this,wxID_ANY,"wxVariant Test",
