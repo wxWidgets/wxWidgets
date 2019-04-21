@@ -186,12 +186,6 @@ bool wxTextCtrl::IsModified() const
     return m_dirty;
 }
 
-bool wxTextCtrl::AcceptsFocus() const
-{
-    // we don't want focus if we can't be edited
-    return /*IsEditable() && */ wxControl::AcceptsFocus();
-}
-
 wxSize wxTextCtrl::DoGetBestSize() const
 {
     int wText = -1;

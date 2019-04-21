@@ -3129,10 +3129,13 @@ void wxListMainWindow::SetImageList( wxImageList *imageList, int which )
     m_dirty = true;
 
     // calc the spacing from the icon size
-    int width = 0, height = 0;
+    int width = 0;
 
     if ((imageList) && (imageList->GetImageCount()) )
+    {
+        int height;
         imageList->GetSize(0, width, height);
+    }
 
     if (which == wxIMAGE_LIST_NORMAL)
     {
@@ -4052,16 +4055,16 @@ void wxListMainWindow::DeleteItem( long lindex )
         //  we're deleting contain the Max Column Width
         wxListLineData * const line = GetLine(index);
         wxListItemDataList::compatibility_iterator n;
-        wxListItemData *itemData;
         wxListItem      item;
-        int             itemWidth;
 
         for (size_t i = 0; i < m_columns.GetCount(); i++)
         {
             n = line->m_items.Item( i );
+            wxListItemData* itemData;
             itemData = n->GetData();
             itemData->GetItem(item);
 
+            int itemWidth;
             itemWidth = GetItemWidthWithImage(&item);
 
             wxColWidthInfo *pWidthInfo = m_aColWidths.Item(i);

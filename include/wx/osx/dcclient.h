@@ -28,8 +28,8 @@ public:
     wxWindowDCImpl( wxDC *owner, wxWindow *window );
     virtual ~wxWindowDCImpl();
 
-    virtual void DoGetSize( int *width, int *height ) const;
-    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const;
+    virtual void DoGetSize( int *width, int *height ) const wxOVERRIDE;
+    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const wxOVERRIDE;
 
 protected:
     bool m_release;

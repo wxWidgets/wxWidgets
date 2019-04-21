@@ -5360,6 +5360,8 @@ public:
 
     /**
         @member_group_name{Markers, Markers}
+
+        @see MarkerDefineBitmap
     */
     //@{
 
@@ -5437,8 +5439,10 @@ public:
 
     /**
         Define a marker from a bitmap
+
+        @since 3.1.3
     */
-    void MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
+    void MarkerDefinePixmap(int markerNumber, const char* const* xpmData);
 
     /**
         Add a set of markers to a line.
@@ -5644,6 +5648,8 @@ public:
 
     /**
         @member_group_name{Autocompletion, Autocompletion}
+
+        @see RegisterImage(int, const wxBitmap&)
     */
     //@{
 
@@ -5756,8 +5762,10 @@ public:
 
     /**
         Register an image for use in autocompletion lists.
+
+        @since 3.1.3
     */
-    void RegisterImage(int type, const wxBitmap& bmp);
+    void RegisterImage(int type, const char* const* xpmData);
 
     /**
         Clear all the registered images.
@@ -7404,6 +7412,64 @@ public:
        Clear annotations from the given line.
     */
     void AnnotationClearLine(int line);
+
+    /**
+       Define a marker with a wxBitmap.
+    */
+    void MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
+
+    /**
+       Register an image for use in autocompletion lists.
+    */
+    void RegisterImage(int type, const wxBitmap& bmp);
+
+    /**
+       Set the colours used to display the items in an autocompletion list.
+
+       This method can be used if the default colours make the list hard to
+       read or if specific colours are desired for whatever reason.
+        @param background
+            The colour used for the background of the list.
+        @param text
+            The colour used for all text except for the selected item.
+        @param highlight
+            The colour used to highlight the selected item in the list.
+        @param highlightText
+            The colour used for the text of the selected item.
+        @remarks
+            To reset one or more of the colours to its default,
+            call this method with wxNullColour for the colour or colours
+            to be reset.
+
+        @since 3.1.3
+    */
+    void AutoCompSetColours(const wxColour& background, const wxColour& text,
+                            const wxColour& highlight,
+                            const wxColour& highlightText);
+                            
+    /**
+       Use a wxListCtrl to display autocompletion and user lists.
+
+       By default lists will be displayed in a wxListBox. Use this method to
+       display them in a wxListCtrl instead. The primary difference is that
+       wxListCtrl has hot tracking to highlight the item under the mouse cursor.
+        @param useListCtrl
+            Set this to true to use a wxListCtrl and to false to use a
+            wxListBox.
+        @param currentBgColour
+            The colour used to highlight the item under the mouse cursor.
+        @param currentTextColour
+            The colour used for the text of the item under the mouse cursor.
+        @remarks
+            To reset one or more of the colours to its default,
+            call this method with wxNullColour for the colour or colours
+            to be reset.
+
+        @since 3.1.3
+    */
+    void AutoCompUseListCtrl(bool useListCtrl = true,
+                             const wxColour& currentBgColour = wxNullColour,
+                             const wxColour& currentTextColour = wxNullColour);
 
     //@}
 

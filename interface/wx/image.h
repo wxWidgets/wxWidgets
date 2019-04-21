@@ -227,7 +227,7 @@ public:
                 for which this function returns the number of frames in the
                 animation).
     */
-    virtual int GetImageCount(wxInputStream& stream);
+    int GetImageCount(wxInputStream& stream);
 
     /**
         Gets the MIME type associated with this handler.

@@ -27,7 +27,7 @@ public:
 
     bool Create(wxWindow *parent, wxColourData *data = NULL);
 
-    int ShowModal();
+    int ShowModal() wxOVERRIDE;
     wxColourData& GetColourData() { return m_colourData; }
 
 protected:

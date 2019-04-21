@@ -3444,7 +3444,7 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
 
 #if wxUSE_SPINCTRL
     wxSpinCtrl* spinCtrl12 = new wxSpinCtrl(panel, ID_AUTO_SAVE_MINS, wxEmptyString,
-        wxDefaultPosition, wxSize(40, wxDefaultCoord), wxSP_ARROW_KEYS, 1, 60, 1);
+        wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 60, 1);
     wxSetGenericValidator(spinCtrl12, &m_settingsData.m_autoSaveInterval);
 #endif
 
@@ -3515,8 +3515,7 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
     wxStaticBox* staticBox1 = new wxStaticBox(panel, wxID_ANY, "Tile font size:");
     wxBoxSizer* itemSizer5 = new wxStaticBoxSizer( staticBox1, wxHORIZONTAL );
 
-    wxSpinCtrl* spinCtrl = new wxSpinCtrl(panel, ID_FONT_SIZE, wxEmptyString, wxDefaultPosition,
-        wxSize(80, wxDefaultCoord));
+    wxSpinCtrl* spinCtrl = new wxSpinCtrl(panel, ID_FONT_SIZE, wxEmptyString);
     wxSetGenericValidator(spinCtrl, &m_settingsData.m_titleFontSize);
     itemSizer5->Add(spinCtrl, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 

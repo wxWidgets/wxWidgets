@@ -210,6 +210,7 @@ TEST_GUI_OBJECTS =  \
 	$(OBJS)\test_gui_slidertest.obj \
 	$(OBJS)\test_gui_spinctrldbltest.obj \
 	$(OBJS)\test_gui_spinctrltest.obj \
+	$(OBJS)\test_gui_styledtextctrltest.obj \
 	$(OBJS)\test_gui_textctrltest.obj \
 	$(OBJS)\test_gui_textentrytest.obj \
 	$(OBJS)\test_gui_togglebuttontest.obj \
@@ -333,6 +334,10 @@ __DLLFLAG_p_7 = -dWXUSINGDLL
 !if "$(MONOLITHIC)" == "0" && "$(USE_WEBVIEW)" == "1"
 __WXLIB_WEBVIEW_p = \
 	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_webview.lib
+!endif
+!if "$(MONOLITHIC)" == "0" && "$(USE_STC)" == "1"
+__WXLIB_STC_p = \
+	wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc.lib
 !endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_AUI_p = \
@@ -525,7 +530,7 @@ $(OBJS)\test_drawingplugin.dll: $(TEST_DRAWINGPLUGIN_OBJECTS)
 !if "$(USE_GUI)" == "1"
 $(OBJS)\test_gui.exe: $(OBJS)\test_gui_dummy.obj  $(TEST_GUI_OBJECTS)  $(OBJS)\test_gui_sample.res
 	ilink32 -Tpe -q  -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(____CAIRO_LIBDIR_FILENAMES) $(LDFLAGS) @&&|
-	c0x32.obj $(TEST_GUI_OBJECTS),$@,, $(__WXLIB_WEBVIEW_p) $(__WXLIB_AUI_p)  $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,, $(OBJS)\test_gui_sample.res
+	c0x32.obj $(TEST_GUI_OBJECTS),$@,, $(__WXLIB_WEBVIEW_p) $(__WXLIB_STC_p) $(__WXLIB_AUI_p)  $(__WXLIB_RICHTEXT_p)  $(__WXLIB_MEDIA_p)  $(__WXLIB_XRC_p)  $(__WXLIB_XML_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_SCINTILLA_IF_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)   wxzlib$(WXDEBUGFLAG).lib wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__CAIRO_LIB_p) ole2w32.lib oleacc.lib uxtheme.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_2).lib,, $(OBJS)\test_gui_sample.res
 |
 !endif
 
@@ -997,6 +1002,9 @@ $(OBJS)\test_gui_spinctrldbltest.obj: .\controls\spinctrldbltest.cpp
 
 $(OBJS)\test_gui_spinctrltest.obj: .\controls\spinctrltest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\spinctrltest.cpp
+
+$(OBJS)\test_gui_styledtextctrltest.obj: .\controls\styledtextctrltest.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\styledtextctrltest.cpp
 
 $(OBJS)\test_gui_textctrltest.obj: .\controls\textctrltest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_GUI_CXXFLAGS) .\controls\textctrltest.cpp

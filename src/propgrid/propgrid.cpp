@@ -516,7 +516,7 @@ wxPropertyGrid::~wxPropertyGrid()
     size_t i;
 
 #if wxUSE_THREADS
-    wxCriticalSectionLocker(wxPGGlobalVars->m_critSect);
+    wxCriticalSectionLocker lock(wxPGGlobalVars->m_critSect);
 #endif
 
     //
@@ -2062,13 +2062,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 #endif
 {
     const wxPGProperty* firstItem;
-    const wxPGProperty* lastItem;
-
     firstItem = DoGetItemAtY(itemsRect->y);
-    lastItem = DoGetItemAtY(itemsRect->y+itemsRect->height-1);
-
-    if ( !lastItem )
-        lastItem = GetLastItem( wxPG_ITERATE_VISIBLE );
 
     int vx, vy;
     GetViewStart(&vx, &vy);
@@ -3271,8 +3265,6 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
             cell.SetBgCol(vfbBg);
         }
 
-        DrawItemAndChildren(property);
-
         if ( property == GetSelection() )
         {
             SetInternalFlag(wxPG_FL_CELL_OVERRIDES_SEL);
@@ -3284,6 +3276,8 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
                 editor->SetBackgroundColour(vfbBg);
             }
         }
+
+        DrawItemAndChildren(property);
     }
 
     if ( vfb & (wxPG_VFB_SHOW_MESSAGE |
@@ -4524,7 +4518,6 @@ bool wxPropertyGrid::DoHideProperty( wxPGProperty* p, bool hide, int flags )
         return m_pState->DoHideProperty(p, hide, flags);
 
     wxArrayPGProperty selection = m_pState->m_selection;  // Must use a copy
-    int selRemoveCount = 0;
     for ( unsigned int i=0; i<selection.size(); i++ )
     {
         wxPGProperty* selected = selection[i];
@@ -4532,7 +4525,6 @@ bool wxPropertyGrid::DoHideProperty( wxPGProperty* p, bool hide, int flags )
         {
             if ( !DoRemoveFromSelection(p, flags) )
                 return false;
-            selRemoveCount += 1;
         }
     }
 
@@ -6368,7 +6360,7 @@ void wxPropertyGridEvent::OnPropertyGridSet()
         return;
 
 #if wxUSE_THREADS
-    wxCriticalSectionLocker(wxPGGlobalVars->m_critSect);
+    wxCriticalSectionLocker lock(wxPGGlobalVars->m_critSect);
 #endif
     m_pg->m_liveEvents.push_back(this);
 }
@@ -6380,7 +6372,7 @@ wxPropertyGridEvent::~wxPropertyGridEvent()
     if ( m_pg )
     {
     #if wxUSE_THREADS
-        wxCriticalSectionLocker(wxPGGlobalVars->m_critSect);
+        wxCriticalSectionLocker lock(wxPGGlobalVars->m_critSect);
     #endif
 
         // Use iterate from the back since it is more likely that the event

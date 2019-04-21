@@ -876,6 +876,8 @@ public:
 #endif
 #endif
 
+    wxGraphicsContext* CreateContextFromUnknownDC(const wxDC& dc);
+
     virtual wxGraphicsContext * CreateContextFromNativeContext( void * context ) = 0;
 
     virtual wxGraphicsContext * CreateContextFromNativeWindow( void * window ) = 0;

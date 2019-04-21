@@ -112,7 +112,7 @@ public:
 
     virtual bool GetBoundingRect(const wxTreeItemId& item, wxRect& rect, bool textOnly = false) const;
 
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
 protected:
     virtual int DoGetItemState(const wxTreeItemId& item) const;

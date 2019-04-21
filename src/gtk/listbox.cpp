@@ -677,12 +677,12 @@ int wxListBox::GetSelections( wxArrayInt& aSelections ) const
 
     aSelections.Empty();
 
-    int i = 0;
     GtkTreeIter iter;
     GtkTreeSelection* selection = gtk_tree_view_get_selection(m_treeview);
 
     if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(m_liststore), &iter))
     { //gtk_tree_selection_get_selected_rows is GTK 2.2+ so iter instead
+        int i = 0;
         do
         {
             if (gtk_tree_selection_iter_is_selected(selection, &iter))

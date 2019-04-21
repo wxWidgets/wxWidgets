@@ -214,6 +214,12 @@ enum wxLocaleInfo
 
     @see @ref overview_i18n, @ref page_samples_internat, wxXLocale, wxTranslations
 */
+enum wxLocaleInitFlags
+{
+    wxLOCALE_DONT_LOAD_DEFAULT = 0x0000,     ///< Don't load wxstd.mo catalog.
+    wxLOCALE_LOAD_DEFAULT      = 0x0001      ///< Load wxstd.mo (done by default).
+};
+
 class wxLocale
 {
 public:
@@ -361,15 +367,15 @@ public:
     /**
         Calls wxGetTranslation(const wxString&, const wxString&).
     */
-    virtual const wxString& GetString(const wxString& origString,
-                                      const wxString& domain = wxEmptyString) const;
+    const wxString& GetString(const wxString& origString,
+                              const wxString& domain = wxEmptyString) const;
 
     /**
         Calls wxGetTranslation(const wxString&, const wxString&, unsigned, const wxString&).
     */
-    virtual const wxString& GetString(const wxString& origString,
-                                      const wxString& origString2, unsigned n,
-                                      const wxString& domain = wxEmptyString) const;
+    const wxString& GetString(const wxString& origString,
+                              const wxString& origString2, unsigned n,
+                              const wxString& domain = wxEmptyString) const;
 
     /**
         Returns current platform-specific locale name as passed to setlocale().

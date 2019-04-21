@@ -532,6 +532,21 @@ const char* wxURI::ParsePath(const char* uri)
         return uri;
 
     const bool isAbs = *uri == '/';
+
+    // From RFC 3986: when authority is present, the path must either be empty
+    // or begin with a slash ("/") character. When authority is not present,
+    // the path cannot begin with two slashes.
+    if ( m_userinfo.empty() && m_server.empty() && m_port.empty() )
+    {
+        if ( isAbs && uri[1] == '/' )
+            return uri;
+    }
+    else
+    {
+        if ( !isAbs )
+            return uri;
+    }
+
     if ( isAbs )
         m_path += *uri++;
 

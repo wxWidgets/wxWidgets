@@ -376,7 +376,7 @@ wxGLAttributes& wxGLAttributes::Level(int val)
         AddAttribute(WGL_NUMBER_OVERLAYS_ARB);
         AddAttribute(val);
     }
-    else if ( val < 0 )
+    else
     {
         AddAttribute(WGL_NUMBER_UNDERLAYS_ARB);
         AddAttribute(-val);

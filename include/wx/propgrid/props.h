@@ -398,8 +398,6 @@ public:
     // this take advantage of it.
     virtual int GetChoiceSelection() const wxOVERRIDE { return m_index; }
 
-    virtual void OnValidationFailure( wxVariant& pendingValue ) wxOVERRIDE;
-
 protected:
 
     int GetIndex() const;
@@ -809,13 +807,6 @@ public:
     virtual ~wxPGArrayEditorDialog() { }
 
     void Init();
-
-    wxPGArrayEditorDialog( wxWindow *parent,
-                         const wxString& message,
-                         const wxString& caption,
-                         long style = wxAEDIALOG_STYLE,
-                         const wxPoint& pos = wxDefaultPosition,
-                         const wxSize& sz = wxDefaultSize );
 
     bool Create( wxWindow *parent,
                  const wxString& message,

@@ -43,8 +43,8 @@ class wxGtkCollatableString
 {
 public:
     wxGtkCollatableString( const wxString &label, gchar *key )
+        : m_label(label)
     {
-        m_label = label;
         m_key = key;
     }
 

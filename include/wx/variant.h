@@ -485,7 +485,7 @@ class classname##VariantData: public wxVariantData \
 { \
 public:\
     classname##VariantData() {} \
-    classname##VariantData( const classname &value ) { m_value = value; } \
+    classname##VariantData( const classname &value ) : m_value(value) { } \
 \
     classname &GetValue() { return m_value; } \
 \

@@ -231,8 +231,8 @@ public:
     {
     public:
         DataHolder(const T2& value)
+            : m_value(value)
         {
-            m_value = value;
         }
         virtual ~DataHolder() { }
 

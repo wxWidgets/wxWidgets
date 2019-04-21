@@ -1089,7 +1089,7 @@ bool wxIsPlatform64Bit()
 #ifdef __LINUX__
 
 static bool
-wxGetValueFromLSBRelease(wxString arg, const wxString& lhs, wxString* rhs)
+wxGetValueFromLSBRelease(const wxString& arg, const wxString& lhs, wxString* rhs)
 {
     // lsb_release seems to just read a global file which is always in UTF-8
     // and hence its output is always in UTF-8 as well, regardless of the

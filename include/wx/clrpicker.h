@@ -40,7 +40,7 @@ extern WXDLLIMPEXP_DATA_CORE(const char) wxColourPickerCtrlNameStr[];
 class WXDLLIMPEXP_CORE wxColourPickerWidgetBase
 {
 public:
-    wxColourPickerWidgetBase() { m_colour = *wxBLACK; }
+    wxColourPickerWidgetBase() : m_colour(*wxBLACK) { }
     virtual ~wxColourPickerWidgetBase() {}
 
     wxColour GetColour() const

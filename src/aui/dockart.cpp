@@ -751,10 +751,7 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc,
 
     wxRect rect = _rect;
 
-    int old_y = rect.y;
     rect.y = rect.y + (rect.height/2) - (bmp.GetScaledHeight()/2);
-    rect.height = old_y + rect.height - rect.y - 1;
-
 
     if (button_state == wxAUI_BUTTON_STATE_PRESSED)
     {

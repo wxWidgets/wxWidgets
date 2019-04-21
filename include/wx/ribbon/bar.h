@@ -59,12 +59,6 @@ public:
         , m_page(page)
     {
     }
-#ifndef SWIG
-    wxRibbonBarEvent(const wxRibbonBarEvent& c) : wxNotifyEvent(c)
-    {
-        m_page = c.m_page;
-    }
-#endif
     wxEvent *Clone() const wxOVERRIDE { return new wxRibbonBarEvent(*this); }
 
     wxRibbonPage* GetPage() {return m_page;}

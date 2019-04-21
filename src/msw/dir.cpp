@@ -204,9 +204,9 @@ private:
 // ----------------------------------------------------------------------------
 
 wxDirData::wxDirData(const wxString& dirname)
-         : m_dirname(dirname)
+    : m_finddata(InitFindData())
+    , m_dirname(dirname)
 {
-    m_finddata = InitFindData();
 }
 
 wxDirData::~wxDirData()

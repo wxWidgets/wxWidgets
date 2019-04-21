@@ -1026,6 +1026,17 @@ void wxWindowMSW::MSWUpdateUIState(int action, int state)
     ::SendMessage(GetHwnd(), WM_CHANGEUISTATE, MAKEWPARAM(action, state), 0);
 }
 
+void wxWindowMSW::WXSetPendingFocus(wxWindow* win)
+{
+    for ( wxWindow* parent = this; parent; parent = parent->GetParent() )
+    {
+        parent->WXDoUpdatePendingFocus(win);
+
+        if ( parent->IsTopLevel() )
+            break;
+    }
+}
+
 // ---------------------------------------------------------------------------
 // scrolling stuff
 // ---------------------------------------------------------------------------
@@ -4712,8 +4723,6 @@ bool wxWindowMSW::HandleSysColorChange()
 
 bool wxWindowMSW::HandleDisplayChange()
 {
-    wxDisplay::InvalidateCache();
-
     wxDisplayChangedEvent event;
     event.SetEventObject(this);
 

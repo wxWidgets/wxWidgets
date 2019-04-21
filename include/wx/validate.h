@@ -97,8 +97,6 @@ private:
     wxDECLARE_NO_ASSIGN_CLASS(wxValidator);
 };
 
-extern WXDLLIMPEXP_DATA_CORE(const wxValidator) wxDefaultValidator;
-
 #define wxVALIDATOR_PARAM(val) val
 
 #else // !wxUSE_VALIDATORS
@@ -107,13 +105,13 @@ extern WXDLLIMPEXP_DATA_CORE(const wxValidator) wxDefaultValidator;
     // a wxValidator parameter to avoid using "#if wxUSE_VALIDATORS"
     // everywhere
     class WXDLLIMPEXP_FWD_CORE wxValidator;
-    static const wxValidator* const wxDefaultValidatorPtr = NULL;
-    #define wxDefaultValidator (*wxDefaultValidatorPtr)
 
     // this macro allows to avoid warnings about unused parameters when
     // wxUSE_VALIDATORS == 0
     #define wxVALIDATOR_PARAM(val)
 #endif // wxUSE_VALIDATORS/!wxUSE_VALIDATORS
+
+extern WXDLLIMPEXP_DATA_CORE(const wxValidator) wxDefaultValidator;
 
 #endif // _WX_VALIDATE_H_
 

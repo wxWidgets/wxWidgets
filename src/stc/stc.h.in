@@ -298,6 +298,22 @@ public:
     // Clear annotations from the given line.
     void AnnotationClearLine(int line);
 
+    // Define a marker from a bitmap.
+    void MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
+
+    // Register an image for use in autocompletion lists.
+    void RegisterImage(int type, const wxBitmap& bmp);
+
+    // Set the colours used to display the items in an autocompletion list.
+    void AutoCompSetColours(const wxColour& background, const wxColour& text,
+                            const wxColour& highlight,
+                            const wxColour& highlightText);
+
+    // Use a wxListCtrl to display autocompletion lists.
+    void AutoCompUseListCtrl(bool useListCtrl = true,
+                             const wxColour& currentBgColour = wxNullColour,
+                             const wxColour& currentTextColour = wxNullColour);
+
 
 
     // The following methods are nearly equivalent to their similarly named

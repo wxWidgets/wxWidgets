@@ -9,7 +9,11 @@
 
 include(../../source_groups.cmake)
 
-wx_append_sources(STC_FILES STC)
+wx_append_sources(STC_FILES STC_CMN)
+
+if(WXOSX_COCOA)
+    wx_append_sources(STC_FILES STC_OSX_COCOA)
+endif()
 
 wx_add_builtin_library(wxscintilla
     src/stc/scintilla/lexers/LexA68k.cxx

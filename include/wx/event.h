@@ -160,7 +160,7 @@ public:
     // The class of wxEvent-derived class carried by the events of this type.
     typedef T EventClass;
 
-    wxEventTypeTag(wxEventType type) { m_type = type; }
+    wxEventTypeTag(wxEventType type) : m_type(type) { }
 
     // Return a wxEventType reference for the initialization of the static
     // event tables. See wxEventTableEntry::m_eventType for a more thorough
@@ -1801,6 +1801,10 @@ public:
     // should occur for each delta.
     int GetWheelDelta() const { return m_wheelDelta; }
 
+    // On Mac, has the user selected "Natural" scrolling in their System
+    // Preferences? Currently false on all other OS's.
+    bool IsWheelInverted() const { return m_wheelInverted; }
+
     // Gets the axis the wheel operation concerns; wxMOUSE_WHEEL_VERTICAL
     // (most common case) or wxMOUSE_WHEEL_HORIZONTAL (for horizontal scrolling
     // using e.g. a trackpad).
@@ -1834,6 +1838,7 @@ public:
     wxMouseWheelAxis m_wheelAxis;
     int           m_wheelRotation;
     int           m_wheelDelta;
+    bool          m_wheelInverted;
     int           m_linesPerAction;
     int           m_columnsPerAction;
     float         m_magnification;
@@ -1898,8 +1903,8 @@ public:
     }
 
     wxGestureEvent(const wxGestureEvent& event) : wxEvent(event)
+        , m_pos(event.m_pos)
     {
-        m_pos = event.m_pos;
         m_isStart = event.m_isStart;
         m_isEnd = event.m_isEnd;
     }

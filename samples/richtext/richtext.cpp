@@ -929,10 +929,6 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     wxSplitterWindow* splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE);
     sizer->Add(splitter, 1, wxEXPAND);
 
-    wxFont textFont = wxFont(wxFontInfo(12).Family(wxFONTFAMILY_ROMAN));
-    wxFont boldFont = wxFont(wxFontInfo(12).Family(wxFONTFAMILY_ROMAN));
-    wxFont italicFont = wxFont(wxFontInfo(12).Family(wxFONTFAMILY_ROMAN).Italic());
-
     m_richTextCtrl = new MyRichTextCtrl(splitter, ID_RICHTEXT_CTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxVSCROLL|wxHSCROLL/*|wxWANTS_CHARS*/);
     wxASSERT(!m_richTextCtrl->GetBuffer().GetAttributes().HasFontPixelSize());
 
@@ -1617,11 +1613,11 @@ void MyFrame::OnUpdateFormat(wxUpdateUIEvent& event)
 void MyFrame::OnUpdateImage(wxUpdateUIEvent& event)
 {
     wxRichTextRange range;
-    wxRichTextObject *obj;
 
     range = m_richTextCtrl->GetSelectionRange();
     if (range.ToInternal().GetLength() == 1)
     {
+        wxRichTextObject *obj;
         obj = m_richTextCtrl->GetFocusObject()->GetLeafObjectAtPosition(range.GetStart());
         if (obj && obj->IsKindOf(CLASSINFO(wxRichTextImage)))
         {

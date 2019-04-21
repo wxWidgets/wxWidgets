@@ -20,8 +20,8 @@ public:
     int GetPixel(unsigned char red, unsigned char green, unsigned char blue) const;
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxPalette);

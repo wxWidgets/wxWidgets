@@ -207,12 +207,6 @@ public:
         , m_bar(bar)
     {
     }
-#ifndef SWIG
-    wxRibbonToolBarEvent(const wxRibbonToolBarEvent& e) : wxCommandEvent(e)
-    {
-        m_bar = e.m_bar;
-    }
-#endif
     wxEvent *Clone() const wxOVERRIDE { return new wxRibbonToolBarEvent(*this); }
 
     wxRibbonToolBar* GetBar() {return m_bar;}

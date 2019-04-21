@@ -142,7 +142,7 @@ void wxCursor::InitFromStock( wxStockCursor cursorId )
 */
     default:
         wxFAIL_MSG(wxT("unsupported cursor type"));
-        // will use the standard one
+        qt_cur = Qt::ArrowCursor;
         break;
     }
 

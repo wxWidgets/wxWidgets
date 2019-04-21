@@ -975,16 +975,6 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
             return dclick;
 
         case wxSYS_CARET_ON_MSEC:
-            {
-                gint blink_time = -1;
-                g_object_get(GetSettingsForWindowScreen(window),
-                                "gtk-cursor-blink-time", &blink_time, NULL);
-                if (blink_time > 0)
-                    return blink_time / 2;
-
-                return -1;
-            }
-
         case wxSYS_CARET_OFF_MSEC:
             {
                 gboolean should_blink = true;

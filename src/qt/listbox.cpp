@@ -88,10 +88,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 {
     DoCreate(parent, style);
 
-    QListWidgetItem* item;
-
     while ( n-- > 0 )
     {
+        QListWidgetItem* item;
         item = new QListWidgetItem();
         item->setText(wxQtConvertString( *choices++ ));
         if ( m_hasCheckBoxes )
@@ -213,8 +212,9 @@ int wxListBox::GetSelection() const
     return m_qtListWidget->row(item);
 }
 
-void wxListBox::DoSetFirstItem(int WXUNUSED(n))
+void wxListBox::DoSetFirstItem(int n)
 {
+    m_qtListWidget->scrollToItem(m_qtListWidget->item(n), QAbstractItemView::PositionAtTop);
 }
 
 void wxListBox::DoSetSelection(int n, bool select)

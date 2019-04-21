@@ -338,8 +338,8 @@ class WXDLLIMPEXP_PROPGRID wxPGCommonValue
 public:
 
     wxPGCommonValue( const wxString& label, wxPGCellRenderer* renderer )
+        : m_label(label)
     {
-        m_label = label;
         m_renderer = renderer;
         renderer->IncRef();
     }
@@ -1299,7 +1299,7 @@ public:
     // changed after the function returns (with true as return value).
     // ValueChangeInEvent() must be used if you wish the application to be
     // able to use wxEVT_PG_CHANGING to potentially veto the given value.
-    void ValueChangeInEvent( wxVariant variant )
+    void ValueChangeInEvent( const wxVariant& variant )
     {
         m_changeInEventValue = variant;
         m_iFlags |= wxPG_FL_VALUE_CHANGE_IN_EVENT;
@@ -2203,7 +2203,7 @@ public:
             m_propertyName = p->GetName();
     }
 
-    void SetPropertyValue( wxVariant value )
+    void SetPropertyValue( const wxVariant& value )
     {
         m_value = value;
     }

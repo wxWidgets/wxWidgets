@@ -662,19 +662,8 @@ int wxStyledTextCtrl::MarkerPrevious(int lineStart, int markerMask)
 }
 
 // Define a marker from a bitmap
-void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp) {
-        // convert bmp to a xpm in a string
-        wxMemoryOutputStream strm;
-        wxImage img = bmp.ConvertToImage();
-        if (img.HasAlpha())
-            img.ConvertAlphaToMask();
-        img.SaveFile(strm, wxBITMAP_TYPE_XPM);
-        size_t len = strm.GetSize();
-        char* buff = new char[len+1];
-        strm.CopyTo(buff, len);
-        buff[len] = 0;
-        SendMsg(SCI_MARKERDEFINEPIXMAP, markerNumber, (sptr_t)buff);
-        delete [] buff;
+void wxStyledTextCtrl::MarkerDefinePixmap(int markerNumber, const char* const* xpmData) {
+        SendMsg(SCI_MARKERDEFINEPIXMAP, markerNumber, (sptr_t)xpmData);
 }
 
 // Add a set of markers to a line.
@@ -1464,19 +1453,8 @@ bool wxStyledTextCtrl::AutoCompGetDropRestOfWord() const
 }
 
 // Register an image for use in autocompletion lists.
-void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp) {
-        // convert bmp to a xpm in a string
-        wxMemoryOutputStream strm;
-        wxImage img = bmp.ConvertToImage();
-        if (img.HasAlpha())
-            img.ConvertAlphaToMask();
-        img.SaveFile(strm, wxBITMAP_TYPE_XPM);
-        size_t len = strm.GetSize();
-        char* buff = new char[len+1];
-        strm.CopyTo(buff, len);
-        buff[len] = 0;
-        SendMsg(SCI_REGISTERIMAGE, type, (sptr_t)buff);
-        delete [] buff;
+void wxStyledTextCtrl::RegisterImage(int type, const char* const* xpmData) {
+        SendMsg(SCI_REGISTERIMAGE, type, (sptr_t)xpmData);
 }
 
 // Clear all the registered images.
@@ -2384,7 +2362,7 @@ void wxStyledTextCtrl::SetWrapVisualFlags(int wrapVisualFlags)
     SendMsg(SCI_SETWRAPVISUALFLAGS, wrapVisualFlags, 0);
 }
 
-// Retrive the display mode of visual flags for wrapped lines.
+// Retrieve the display mode of visual flags for wrapped lines.
 int wxStyledTextCtrl::GetWrapVisualFlags() const
 {
     return SendMsg(SCI_GETWRAPVISUALFLAGS, 0, 0);
@@ -2396,7 +2374,7 @@ void wxStyledTextCtrl::SetWrapVisualFlagsLocation(int wrapVisualFlagsLocation)
     SendMsg(SCI_SETWRAPVISUALFLAGSLOCATION, wrapVisualFlagsLocation, 0);
 }
 
-// Retrive the location of visual flags for wrapped lines.
+// Retrieve the location of visual flags for wrapped lines.
 int wxStyledTextCtrl::GetWrapVisualFlagsLocation() const
 {
     return SendMsg(SCI_GETWRAPVISUALFLAGSLOCATION, 0, 0);
@@ -2408,7 +2386,7 @@ void wxStyledTextCtrl::SetWrapStartIndent(int indent)
     SendMsg(SCI_SETWRAPSTARTINDENT, indent, 0);
 }
 
-// Retrive the start indent for wrapped lines.
+// Retrieve the start indent for wrapped lines.
 int wxStyledTextCtrl::GetWrapStartIndent() const
 {
     return SendMsg(SCI_GETWRAPSTARTINDENT, 0, 0);
@@ -5056,6 +5034,32 @@ bool wxStyledTextCtrl::GetUseAntiAliasing() {
 
 void wxStyledTextCtrl::AnnotationClearLine(int line) {
     SendMsg(SCI_ANNOTATIONSETTEXT, line, (sptr_t)NULL);
+}
+
+void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber,
+                                          const wxBitmap& bmp) {
+    m_swx->DoMarkerDefineBitmap(markerNumber, bmp);
+}
+
+void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp)
+{
+    m_swx->DoRegisterImage(type, bmp);
+}
+
+void wxStyledTextCtrl::AutoCompSetColours(const wxColour& background,
+                                          const wxColour& text,
+                                          const wxColour& highlight,
+                                          const wxColour& highlightText)
+{
+    m_swx->SetListBoxColours(background, text, highlight, highlightText);
+}
+
+void wxStyledTextCtrl::AutoCompUseListCtrl(bool useListCtrl,
+                                           const wxColour& currentBgColour,
+                                           const wxColour& currentTextColour)
+{
+    m_swx->UseListCtrlStyleForLists(useListCtrl, currentBgColour,
+                                    currentTextColour);
 }
 
 

@@ -301,11 +301,8 @@ private:
     {
         wxPropertyGrid* pg = m_manager->GetGrid();
 
-        int sbWidth = pg->HasScrollbar(wxSB_VERTICAL)
-                        ? wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, pg)
-                        : 0;
         // Internal border width
-        int borderWidth = (pg->GetSize().x - pg->GetClientSize().x - sbWidth) / 2;
+        int borderWidth = pg->DoGetBorderSize().x / 2;
 
         const unsigned int colCount = m_page->GetColumnCount();
         for ( unsigned int i = 0; i < colCount; i++ )
@@ -340,11 +337,8 @@ private:
     {
         wxPropertyGrid* pg = m_manager->GetGrid();
 
-        int sbWidth = pg->HasScrollbar(wxSB_VERTICAL)
-                        ? wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, pg)
-                        : 0;
         // Internal border width
-        int borderWidth = (pg->GetSize().x - pg->GetClientSize().x - sbWidth) / 2;
+        int borderWidth = pg->DoGetBorderSize().x / 2;
 
         // Compensate for the internal border
         int x = -borderWidth;

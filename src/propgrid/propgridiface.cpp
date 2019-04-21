@@ -452,13 +452,7 @@ void wxPropertyGridInterface::DoSetPropertyAttribute( wxPGPropArg id, const wxSt
 {
     wxPG_PROP_ARG_CALL_PROLOG()
 
-    p->SetAttribute( name, value );
-    // If property is attached to the property grid
-    // then refresh the view.
-    if( p->GetParentState() )
-    {
-        RefreshProperty( p );
-    }
+    p->SetAttribute( name, value ); // property is also refreshed here
 
     if ( argFlags & wxPG_RECURSE )
     {
@@ -1085,7 +1079,7 @@ bool wxPropertyGridInterface::RestoreEditableState( const wxString& src, int res
                 {
                     if ( restoreStates & SplitterPosState )
                     {
-                        for ( size_t n=1; n<values.size(); n++ )
+                        for ( size_t n=0; n<values.size(); n++ )
                         {
                             long pos = 0;
                             values[n].ToLong(&pos);
@@ -1181,7 +1175,12 @@ bool wxPropertyGridInterface::RestoreEditableState( const wxString& src, int res
 
     if ( selectedPage != -1 )
     {
+        wxPropertyGridPageState* curPageState = GetPageState(-1);
         DoSelectPage(selectedPage);
+        if ( GetPageState(-1) != curPageState )
+        {
+            pg->SendEvent(wxEVT_PG_SELECTED, pg->GetSelectedProperty());
+        }
     }
 
     if ( vx >= 0 )

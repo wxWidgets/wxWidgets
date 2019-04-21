@@ -52,13 +52,13 @@ public:
     virtual bool IsSelected(int n) const wxOVERRIDE;
     virtual int GetSelections(wxArrayInt& aSelections) const wxOVERRIDE;
 
-    virtual unsigned int GetCount() const;
-    virtual wxString GetString(unsigned int n) const;
-    virtual void SetString(unsigned int n, const wxString& s);
+    virtual unsigned int GetCount() const wxOVERRIDE;
+    virtual wxString GetString(unsigned int n) const wxOVERRIDE;
+    virtual void SetString(unsigned int n, const wxString& s) wxOVERRIDE;
 
-    virtual int GetSelection() const;
+    virtual int GetSelection() const wxOVERRIDE;
 
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
     void QtSendEvent(wxEventType evtType, const QModelIndex &index, bool selected);
 
@@ -70,16 +70,16 @@ protected:
     virtual int DoInsertItems(const wxArrayStringsAdapter & items,
                               unsigned int pos,
                               void **clientData,
-                              wxClientDataType type);
-    virtual int DoInsertOneItem(const wxString& item, unsigned int pos);
+                              wxClientDataType type) wxOVERRIDE;
+    virtual int DoInsertOneItem(const wxString& item, unsigned int pos) wxOVERRIDE;
 
-    virtual void DoSetItemClientData(unsigned int n, void *clientData);
-    virtual void *DoGetItemClientData(unsigned int n) const;
+    virtual void DoSetItemClientData(unsigned int n, void *clientData) wxOVERRIDE;
+    virtual void *DoGetItemClientData(unsigned int n) const wxOVERRIDE;
 
-    virtual void DoClear();
-    virtual void DoDeleteOneItem(unsigned int pos);
+    virtual void DoClear() wxOVERRIDE;
+    virtual void DoDeleteOneItem(unsigned int pos) wxOVERRIDE;
 
-    virtual QScrollArea *QtGetScrollBarsContainer() const;
+    virtual QScrollArea *QtGetScrollBarsContainer() const wxOVERRIDE;
 
 #if wxUSE_CHECKLISTBOX
     bool       m_hasCheckBoxes;

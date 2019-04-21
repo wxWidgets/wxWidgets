@@ -4,7 +4,7 @@ sys$library:libpixman.olb/lib
 sys$library:libjpeg.olb/lib
 sys$library:libpng.olb/lib
 sys$library:libz.olb/lib
-sys$library:tiff.olb/lib
+sys$share:tiff$shr/share
 X11:libxpm.olb/lib
 sys$library:expat.olb/lib
 sys$share:libgtk2.exe/share

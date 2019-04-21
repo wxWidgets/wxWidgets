@@ -317,35 +317,28 @@ void wxHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
         if ( HasFlag(wxHD_BITMAP_ON_RIGHT) )
             hdi.fmt |= HDF_BITMAP_ON_RIGHT;
 
-        if ( bmp.IsOk() )
+        const int bmpWidth = bmp.GetWidth(),
+                  bmpHeight = bmp.GetHeight();
+
+        if ( !m_imageList )
         {
-            const int bmpWidth = bmp.GetWidth(),
-                      bmpHeight = bmp.GetHeight();
-
-            if ( !m_imageList )
-            {
-                m_imageList = new wxImageList(bmpWidth, bmpHeight);
-                (void) // suppress mingw32 warning about unused computed value
-                Header_SetImageList(GetHwnd(), GetHimagelistOf(m_imageList));
-            }
-            else // already have an image list
-            {
-                // check that all bitmaps we use have the same size
-                int imageWidth,
-                    imageHeight;
-                m_imageList->GetSize(0, imageWidth, imageHeight);
-
-                wxASSERT_MSG( imageWidth == bmpWidth && imageHeight == bmpHeight,
-                              "all column bitmaps must have the same size" );
-            }
-
-            m_imageList->Add(bmp);
-            hdi.iImage = m_imageList->GetImageCount() - 1;
+            m_imageList = new wxImageList(bmpWidth, bmpHeight);
+            (void) // suppress mingw32 warning about unused computed value
+            Header_SetImageList(GetHwnd(), GetHimagelistOf(m_imageList));
         }
-        else // no bitmap but we still need to update the item
+        else // already have an image list
         {
-            hdi.iImage = I_IMAGENONE;
+            // check that all bitmaps we use have the same size
+            int imageWidth,
+                imageHeight;
+            m_imageList->GetSize(0, imageWidth, imageHeight);
+
+            wxASSERT_MSG( imageWidth == bmpWidth && imageHeight == bmpHeight,
+                          "all column bitmaps must have the same size" );
         }
+
+        m_imageList->Add(bmp);
+        hdi.iImage = m_imageList->GetImageCount() - 1;
     }
 
     if ( col.GetAlignment() != wxALIGN_NOT )
