@@ -1581,7 +1581,7 @@ void FormMain::PopulateWithExamples ()
 
     pid->AppendChild( new wxStringProperty("Latest Release",
                                            wxPG_LABEL,
-                                           "3.0.2"));
+                                           "3.1.2"));
     pid->AppendChild( new wxBoolProperty("Win API",
                                          wxPG_LABEL,
                                          true) );
@@ -1590,10 +1590,9 @@ void FormMain::PopulateWithExamples ()
 
     pg->AppendIn(pid, new wxBoolProperty("QT", wxPG_LABEL, true) );
     pg->AppendIn(pid, new wxBoolProperty("Cocoa", wxPG_LABEL, true) );
-    pg->AppendIn(pid, new wxBoolProperty("BeOS", wxPG_LABEL, false) );
-    pg->AppendIn(pid, new wxStringProperty("Trunk Version", wxPG_LABEL, "3.1.0") );
+    pg->AppendIn(pid, new wxBoolProperty("Haiku", wxPG_LABEL, false) );
+    pg->AppendIn(pid, new wxStringProperty("Trunk Version", wxPG_LABEL, wxVERSION_NUM_DOT_STRING));
     pg->AppendIn(pid, new wxBoolProperty("GTK+", wxPG_LABEL, true) );
-    pg->AppendIn(pid, new wxBoolProperty("Sky OS", wxPG_LABEL, false) );
     pg->AppendIn(pid, new wxBoolProperty("Android", wxPG_LABEL, false) );
 
     AddTestProperties(pg);
