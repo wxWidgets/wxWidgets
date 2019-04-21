@@ -3196,13 +3196,20 @@ set(RICHTEXT_HDR
     wx/xrc/xh_richtext.h
 )
 
-set(STC_SRC
+set(STC_CMN_SRC
     src/stc/stc.cpp
     src/stc/PlatWX.cpp
     src/stc/ScintillaWX.cpp
 )
 
-set(STC_HDR
+set(STC_CMN_HDR
     wx/stc/stc.h
+)
+
+set(STC_OSX_COCOA_SRC
+    src/stc/PlatWXcocoa.mm
+)
+
+set(STC_OSX_COCOA_HDR
 )
 

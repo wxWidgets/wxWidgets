@@ -8,6 +8,9 @@
 #include "wx/imaglist.h"
 #include "Platform.h"
 
+class wxStyledTextCtrl;
+class wxSTCListBox;
+class wxSTCListBoxVisualData;
 
 
 
@@ -17,14 +20,8 @@ wxColour wxColourFromCD(const ColourDesired& ca);
 
 class ListBoxImpl : public ListBox {
 private:
-    int                 lineHeight;
-    bool                unicodeMode;
-    int                 desiredVisibleRows;
-    int                 aveCharWidth;
-    size_t              maxStrWidth;
-    Point               location;       // Caret location at which the list is opened
-    wxImageList*        imgList;
-    wxArrayInt*         imgTypeMap;
+    wxSTCListBox*           m_listBox;
+    wxSTCListBoxVisualData* m_visualData;
 
 public:
     ListBoxImpl();
@@ -52,7 +49,112 @@ public:
     virtual void ClearRegisteredImages() wxOVERRIDE;
     virtual void SetDoubleClickAction(CallBackAction, void *) wxOVERRIDE;
     virtual void SetList(const char* list, char separator, char typesep) wxOVERRIDE;
+            void SetColours(const wxColour&, const wxColour&,
+                            const wxColour&, const wxColour&);
+            void UseListCtrlStyle(bool, const wxColour&, const wxColour&);
 };
+
+
+//----------------------------------------------------------------------
+// wxSTCPopupWindow
+
+#if defined(__WXOSX_COCOA__) || defined(__WXMSW__) || defined(__WXGTK__)
+    #define wxSTC_POPUP_IS_CUSTOM 1
+#else
+    #define wxSTC_POPUP_IS_CUSTOM 0
+#endif
+
+// Define the base class used for wxSTCPopupWindow.
+#ifdef __WXOSX_COCOA__
+
+    #include "wx/nonownedwnd.h"
+    #define wxSTC_POPUP_IS_FRAME 0
+
+    class wxSTCPopupBase:public wxNonOwnedWindow
+    {
+    public:
+        wxSTCPopupBase(wxWindow*);
+        virtual ~wxSTCPopupBase();
+        virtual bool Show(bool show=true) wxOVERRIDE;
+
+    protected:
+        virtual void DoSetSize(int, int, int, int, int) wxOVERRIDE;
+        void SetSTCCursor(int);
+        void OnMouseEnter(wxMouseEvent&);
+        void OnMouseLeave(wxMouseEvent&);
+
+    private:
+        WX_NSWindow       m_nativeWin;
+        wxStyledTextCtrl* m_stc;
+    };
+
+#elif wxUSE_POPUPWIN
+
+    #include "wx/popupwin.h"
+    #define wxSTC_POPUP_IS_FRAME 0
+
+    class wxSTCPopupBase:public wxPopupWindow
+    {
+    public:
+        wxSTCPopupBase(wxWindow*);
+        #ifdef __WXGTK__
+            virtual ~wxSTCPopupBase();
+        #elif defined(__WXMSW__)
+            virtual bool Show(bool show=true) wxOVERRIDE;
+            virtual bool MSWHandleMessage(WXLRESULT *result, WXUINT message,
+                                          WXWPARAM wParam, WXLPARAM lParam)
+                                          wxOVERRIDE;
+        #endif
+    };
+
+#else
+
+    #include "wx/frame.h"
+    #define wxSTC_POPUP_IS_FRAME 1
+
+    class wxSTCPopupBase:public wxFrame
+    {
+    public:
+        wxSTCPopupBase(wxWindow*);
+        #ifdef __WXMSW__
+            virtual bool Show(bool show=true) wxOVERRIDE;
+            virtual bool MSWHandleMessage(WXLRESULT *result, WXUINT message,
+                                          WXWPARAM wParam, WXLPARAM lParam)
+                                          wxOVERRIDE;
+        #elif !wxSTC_POPUP_IS_CUSTOM
+            virtual bool Show(bool show=true) wxOVERRIDE;
+            void ActivateParent();
+        #endif
+    };
+
+#endif // __WXOSX_COCOA__
+
+class wxSTCPopupWindow:public wxSTCPopupBase
+{
+public:
+    wxSTCPopupWindow(wxWindow*);
+    virtual ~wxSTCPopupWindow();
+    virtual bool Destroy() wxOVERRIDE;
+    virtual bool AcceptsFocus() const wxOVERRIDE;
+
+protected:
+    virtual void DoSetSize(int x, int y, int width, int height,
+                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+    void OnParentMove(wxMoveEvent& event);
+    #if defined(__WXOSX_COCOA__) || (defined(__WXGTK__)&&!wxSTC_POPUP_IS_FRAME)
+        void OnIconize(wxIconizeEvent& event);
+    #elif !wxSTC_POPUP_IS_CUSTOM
+        void OnFocus(wxFocusEvent& event);
+    #endif
+
+private:
+    wxPoint   m_initialPosition;
+    wxWindow* m_tlw;
+};
+
+
+//----------------------------------------------------------------------
+// SurfaceData
 
 class SurfaceData
 {

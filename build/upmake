@@ -1441,7 +1441,7 @@ if (!$only_bkl) {
             qa       => [qw(QA)],
             ribbon   => [qw(RIBBON)],
             richtext => [qw(RICHTEXT)],
-            stc      => [qw(STC)],
+            stc      => [qw(STC_CMN)],
             webview  => [qw(WEBVIEW_CMN WEBVIEW_MSW)],
             xml      => [qw(XML)],
             xrc      => [qw(XRC)],

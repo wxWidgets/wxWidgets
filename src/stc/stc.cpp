@@ -5046,6 +5046,22 @@ void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp)
     m_swx->DoRegisterImage(type, bmp);
 }
 
+void wxStyledTextCtrl::AutoCompSetColours(const wxColour& background,
+                                          const wxColour& text,
+                                          const wxColour& highlight,
+                                          const wxColour& highlightText)
+{
+    m_swx->SetListBoxColours(background, text, highlight, highlightText);
+}
+
+void wxStyledTextCtrl::AutoCompUseListCtrl(bool useListCtrl,
+                                           const wxColour& currentBgColour,
+                                           const wxColour& currentTextColour)
+{
+    m_swx->UseListCtrlStyleForLists(useListCtrl, currentBgColour,
+                                    currentTextColour);
+}
+
 
 
 
