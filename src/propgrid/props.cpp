@@ -1184,23 +1184,6 @@ bool wxBoolProperty::DoSetAttribute( const wxString& name, wxVariant& value )
     return false;
 }
 
-wxVariant wxBoolProperty::DoGetAttribute( const wxString& name ) const
-{
-    wxVariant value;
-#if wxPG_INCLUDE_CHECKBOX
-    if ( name == wxPG_BOOL_USE_CHECKBOX )
-    {
-        value = (bool)((m_flags & wxPG_PROP_USE_CHECKBOX) != 0);
-    }
-    else
-#endif
-    if ( name == wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING )
-    {
-        value = (bool)((m_flags & wxPG_PROP_USE_DCC) != 0);
-    }
-    return value;
-}
-
 // -----------------------------------------------------------------------
 // wxEnumProperty
 // -----------------------------------------------------------------------
@@ -1569,9 +1552,8 @@ void wxFlagsProperty::Init()
 
     // Relay wxPG_BOOL_USE_CHECKBOX and wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING
     // to child bool property controls.
-    long attrUseCheckBox = GetAttributeAsLong(wxPG_BOOL_USE_CHECKBOX, 0);
-    long attrUseDCC = GetAttributeAsLong(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING,
-                                         0);
+    bool attrUseCheckBox = (m_flags & wxPG_PROP_USE_CHECKBOX) != 0;
+    bool attrUseDCC = (m_flags & wxPG_PROP_USE_DCC) != 0;
 
     if ( m_choices.IsOk() )
     {
@@ -1595,12 +1577,8 @@ void wxFlagsProperty::Init()
             {
                 boolProp = new wxBoolProperty( label, label, child_val );
             }
-            if ( attrUseCheckBox )
-                boolProp->SetAttribute(wxPG_BOOL_USE_CHECKBOX,
-                                       true);
-            if ( attrUseDCC )
-                boolProp->SetAttribute(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING,
-                                       true);
+            boolProp->SetAttribute(wxPG_BOOL_USE_CHECKBOX, attrUseCheckBox);
+            boolProp->SetAttribute(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING, attrUseDCC);
             AddPrivateChild(boolProp);
         }
 
@@ -1617,6 +1595,7 @@ wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
     const wxChar* const* labels, const long* values, long value ) : wxPGProperty(label,name)
 {
     m_oldChoicesData = NULL;
+    m_flags |= wxPG_PROP_USE_DCC; // same default like wxBoolProperty
 
     if ( labels )
     {
@@ -1637,6 +1616,7 @@ wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
     : wxPGProperty(label,name)
 {
     m_oldChoicesData = NULL;
+    m_flags |= wxPG_PROP_USE_DCC; // same default like wxBoolProperty
 
     if ( !labels.empty() )
     {
@@ -1657,6 +1637,7 @@ wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
     : wxPGProperty(label,name)
 {
     m_oldChoicesData = NULL;
+    m_flags |= wxPG_PROP_USE_DCC; // same default like wxBoolProperty
 
     if ( choices.IsOk() )
     {
@@ -1847,16 +1828,31 @@ wxVariant wxFlagsProperty::ChildChanged( wxVariant& thisValue,
 
 bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 {
-    if ( name == wxPG_BOOL_USE_CHECKBOX ||
-         name == wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING )
+    if ( name == wxPG_BOOL_USE_CHECKBOX )
     {
-        for ( size_t i=0; i<GetChildCount(); i++ )
+        if ( value.GetBool() )
+            m_flags |= wxPG_PROP_USE_CHECKBOX;
+        else
+            m_flags &= ~(wxPG_PROP_USE_CHECKBOX);
+
+        for ( size_t i = 0; i < GetChildCount(); i++ )
         {
             Item(i)->SetAttribute(name, value);
         }
-        // Must return false so that the attribute is stored in
-        // flag property's actual property storage
-        return false;
+        return true;
+    }
+    else if ( name == wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING )
+    {
+        if ( value.GetBool() )
+            m_flags |= wxPG_PROP_USE_DCC;
+        else
+            m_flags &= ~(wxPG_PROP_USE_DCC);
+
+        for ( size_t i = 0; i < GetChildCount(); i++ )
+        {
+            Item(i)->SetAttribute(name, value);
+        }
+        return true;
     }
     return false;
 }

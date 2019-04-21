@@ -316,7 +316,6 @@ public:
     virtual bool IntToValue( wxVariant& variant,
                              int number, int argFlags = 0 ) const wxOVERRIDE;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
-    virtual wxVariant DoGetAttribute( const wxString& name ) const wxOVERRIDE;
 };
 
 // -----------------------------------------------------------------------
@@ -664,7 +663,7 @@ protected:
 
 // -----------------------------------------------------------------------
 
-// wxBoolProperty specific flags
+// wxBoolProperty, wxFlagsProperty specific flags
 #define wxPG_PROP_USE_CHECKBOX      wxPG_PROP_CLASS_SPECIFIC_1
 // DCC = Double Click Cycles
 #define wxPG_PROP_USE_DCC           wxPG_PROP_CLASS_SPECIFIC_2

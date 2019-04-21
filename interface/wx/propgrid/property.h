@@ -74,20 +74,20 @@ struct wxPGPaintData
 */
 #define wxPG_ATTR_AUTOCOMPLETE              wxS("AutoComplete")
 
-/** wxBoolProperty and wxFlagsProperty specific. Value type is bool.
-    Default value is False.
+/** wxBoolProperty and wxFlagsProperty specific built-in attribute.
+    Value type is @c bool. Default value is @false.
 
-    When set to True, bool property will use check box instead of a
+    When set to @true, bool property will use check box instead of a
     combo box as its editor control. If you set this attribute
     for a wxFlagsProperty, it is automatically applied to child
     bool properties.
 */
 #define wxPG_BOOL_USE_CHECKBOX              wxS("UseCheckbox")
 
-/** wxBoolProperty and wxFlagsProperty specific. Value type is bool.
-    Default value is False.
+/** wxBoolProperty and wxFlagsProperty specific built-in attribute.
+    Value type is @c bool. Default value is @true.
 
-    Set to True for the bool property to cycle value on double click
+    Set to @true for the bool property to cycle value on double click
     (instead of showing the popup listbox). If you set this attribute
     for a wxFlagsProperty, it is automatically applied to child
     bool properties.
