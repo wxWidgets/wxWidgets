@@ -31,10 +31,12 @@
     #endif
 #endif
 
-#ifdef HAVE_STD_VARIANT
+#if defined(HAVE_STD_VARIANT)
     #include <variant>
     #include "wx/meta/typelist.h"
 #endif // HAVE_STD_VARIANT
+
+class WXDLLIMPEXP_FWD_CORE wxPanel;
 
 template<class W>
 struct wxDataTransfer
@@ -216,6 +218,10 @@ class wxGenericValidatorCompositType : public wxGenericValidatorBase
 {
     typedef COMPOSIT_TYPE CompositeType;
 
+    // Helper
+    CompositeType& GetData() const
+        { return *static_cast<CompositeType*>(this->m_data); }
+
     // Assigning (or re-assigning) new value to pointer-like types is different than
     // assigning (or re-assigning) new value to value-like types. so we need to resort
     // to the SFINAE mechanism to know what CompositeType represents at compile-time.
@@ -264,7 +270,7 @@ public:
 
     virtual bool TransferToWindow() wxOVERRIDE
     {
-        CompositeType& data = *static_cast<CompositeType*>(this->m_data);
+        CompositeType& data = this->GetData();
         
         if ( !data )
             return true;
@@ -279,7 +285,7 @@ public:
         if ( !wxDataTransfer<W>::template From<T>(this->GetWindow(), &value) )
             return false;
 
-        CompositeType& data = *static_cast<CompositeType*>(this->m_data);
+        CompositeType& data = this->GetData();
 
         if ( data )
         {
@@ -306,6 +312,305 @@ public:
 template<class... Ls> struct wxVisitor : Ls... { using Ls::operator()...; };
 template<class... Ls> wxVisitor(Ls...) -> wxVisitor<Ls...>;
 
+// ----------------------------------------------------------------------------
+// wxMonoValidationEvent
+// ----------------------------------------------------------------------------
+/*
+    wxEVT_SET_ALTERNATIVE
+    wxEVT_UNSET_ALTERNATIVE
+ */
+
+class WXDLLIMPEXP_CORE wxMonoValidationEvent : public wxEvent
+{
+public:
+    wxMonoValidationEvent(wxEventType type = wxEVT_NULL, int winid = 0)
+        : wxEvent(winid, type)
+        { m_win = NULL; }
+
+    wxMonoValidationEvent(const wxMonoValidationEvent& event)
+        : wxEvent(event)
+        { m_win = event.m_win; }
+
+    // The window associated with this event is the window which becomes the
+    // active window for SET event and the window which was the active one for
+    // the UNSET event.
+    wxWindow *GetWindow() const { return m_win; }
+    void SetWindow(wxWindow *win) { m_win = win; }
+
+    virtual wxEvent *Clone() const wxOVERRIDE
+        { return new wxMonoValidationEvent(*this); }
+
+private:
+    wxWindow *m_win;
+
+private:
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxMonoValidationEvent);
+};
+
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_SET_ALTERNATIVE, wxMonoValidationEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_UNSET_ALTERNATIVE, wxMonoValidationEvent);
+
+typedef void (wxEvtHandler::*wxMonoValidationFunction)(wxMonoValidationEvent&);
+
+#define wxMonoValidationEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxMonoValidationFunction, func)
+
+#define EVT_SET_ALTERNATIVE(func) \
+    wx__DECLARE_EVT0(wxEVT_SET_ALTERNATIVE, wxMonoValidationEventHandler(func))
+#define EVT_UNSET_ALTERNATIVE(func) \
+    wx__DECLARE_EVT0(wxEVT_UNSET_ALTERNATIVE, wxMonoValidationEventHandler(func))
+
+// ----------------------------------------------------------------------------
+// Specialisation to implement a mono validator class
+// ----------------------------------------------------------------------------
+
+template<class W, typename T, class... Ws, typename... Ts>
+class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts...>
+    : public wxGenericValidatorBase
+{
+    typedef std::variant<T, Ts...> CompositeType;
+
+    // To make sure that each wxVisitor will be instantiated with a list of
+    // unique types only, we extract a list of unique pairs {Y, U} from the
+    // parallel lists {W, Ws...} and {T, Ts...} and create our wxVisitors
+    // based on the resulting list.
+
+    using WinDataTypes_ =
+        typename wxTypeList::TList<wxTypeList::TList<W, T>,
+                                   wxTypeList::TList<Ws, Ts>...>::Type;
+    using WinDataTypes  = typename wxTypeList::EraseDuplType<WinDataTypes_>::Type;
+
+    // Helper
+    CompositeType& GetData() const
+        { return *static_cast<CompositeType*>(this->m_data); }
+
+    // N.B. The CreateVisitorXXX() below have WXUNUSED(tag) as parameter just
+    //      to help the compiler deduce the template parameter types.
+
+    template<class Y, typename U>
+    inline auto CreateLambdaTo()
+    {
+        return [](Y* win, U& value)
+                {
+                    return wxDataTransfer<Y>::template To<U>(win, &value);
+                };
+    }
+
+    template<typename... Pairs>
+    inline auto CreateVisitorTo(wxTypeList::TList<Pairs...> WXUNUSED(tag))
+    {
+        return wxVisitor{
+                    [](auto*, auto&){ return false; },
+                    CreateLambdaTo<typename wxTypeList::FirstType<Pairs>::Type,
+                                   typename wxTypeList::LastType<Pairs>::Type>()...
+                };
+    }
+
+    template<class Y, typename U>
+    inline auto CreateLambdaFrom()
+    {
+        return [](Y* win, U& value)
+                {
+                    return wxDataTransfer<Y>::template From<U>(win, &value);
+                };
+    }
+
+    template<typename... Pairs>
+    inline auto CreateVisitorFrom(wxTypeList::TList<Pairs...> WXUNUSED(tag))
+    {
+        return wxVisitor{
+                    [](auto*, auto&){ return false; },
+                    CreateLambdaFrom<typename wxTypeList::FirstType<Pairs>::Type,
+                                     typename wxTypeList::LastType<Pairs>::Type>()...
+                };
+    }
+
+    template<class Y>
+    inline auto CreateLambdaValidate(wxWindow* parent)
+    {
+        return [=](Y* win)
+                {
+                    return wxDataTransfer<Y>::DoValidate(win, parent);
+                };
+    }
+
+    template<class... Ys>
+    inline auto CreateVisitorValidate(wxWindow* parent,
+                                      wxTypeList::TList<Ys...> WXUNUSED(tag))
+    {
+        return wxVisitor{ CreateLambdaValidate<Ys>(parent)... };
+    }
+
+    template<class Y>
+    inline auto CreateLambdaAlternative()
+    {
+        return [](Y* win) { return static_cast<wxWindow*>(win); };
+    }
+
+    template<class... Ys>
+    inline auto CreateVisitorAlternative(wxTypeList::TList<Ys*...> WXUNUSED(tag))
+    {
+        return wxVisitor{ CreateLambdaAlternative<Ys>()... };
+    }
+
+public:
+
+    wxGenericValidatorCompositType(CompositeType& data, const std::tuple<W*, Ws*...>& ctrls)
+        : wxGenericValidatorBase(std::addressof(data))
+        , m_ctrls(ctrls)
+    {
+        static_assert((sizeof...(Ws)==sizeof...(Ts)), "Parameter packs don't match!");
+    }
+
+    wxGenericValidatorCompositType(const wxGenericValidatorCompositType& val)
+        : wxGenericValidatorBase(val)
+        , m_ctrls(val.m_ctrls)
+        , m_wins(val.m_wins)
+    {
+    }
+
+    virtual ~wxGenericValidatorCompositType(){}
+
+    virtual wxObject *Clone() const wxOVERRIDE
+    {
+        return new wxGenericValidatorCompositType(*this);
+    }
+
+    virtual void SetWindow(wxWindow *win) wxOVERRIDE
+    {
+        wxCHECK_RET(wxDynamicCast(win, wxPanel) != NULL, "Invalid window type!");
+
+        wxGenericValidatorBase::SetWindow(win);
+
+        win->Bind(wxEVT_TEXT, &wxGenericValidatorCompositType::OnText, this);
+
+        win->Bind(wxEVT_SET_ALTERNATIVE,
+            &wxGenericValidatorCompositType::OnAlternativeChanged, this);
+        win->Bind(wxEVT_UNSET_ALTERNATIVE,
+            &wxGenericValidatorCompositType::OnAlternativeChanged, this);
+
+        InitAlternatives();
+    }
+
+    virtual bool Validate(wxWindow* parent) wxOVERRIDE
+    {
+        using WinTypes_ = typename wxTypeList::TList<W, Ws...>::Type;
+        using WinTypes  = typename wxTypeList::EraseDuplType<WinTypes_>::Type;
+
+        return std::visit(CreateVisitorValidate(parent, WinTypes{}), m_wins);
+    }
+
+    virtual bool TransferToWindow() wxOVERRIDE
+    {
+        return std::visit(CreateVisitorTo(WinDataTypes{}), m_wins, this->GetData());
+    }
+
+    virtual bool TransferFromWindow() wxOVERRIDE
+    {
+        return std::visit(CreateVisitorFrom(WinDataTypes{}), m_wins, this->GetData());
+    }
+
+private:
+    void InitAlternatives()
+    {
+        // By default, set the first control as the active alternative.
+        auto ctrl = std::get<0>(m_ctrls);
+        m_wins.template emplace<0>(ctrl);
+
+        DoSetAlternative<0>(&this->GetData());
+
+        wxMonoValidationEvent event(wxEVT_SET_ALTERNATIVE, ctrl->GetId());
+        event.SetEventObject(this->GetWindow());
+        event.SetWindow(ctrl);
+
+        // I expected that calling this->GetWindow()->HandleWindowEvent(event);
+        // would work correctly, but it doesn't! i.e. the event will be processed
+        // by the event handler defined here instead of the event handler defined
+        // in the user code (if any). So we resort to wxQueueEvent().
+
+        wxQueueEvent(this->GetWindow(), event.Clone());
+    }
+
+    template <std::size_t N>
+    void DoSetAlternative(std::variant<T, Ts...>* var)
+    {
+        var->template emplace<N>(
+            typename wxTypeList::TypeAt<N, wxTypeList::TList<T, Ts...>>::Type{});
+    }
+
+    template <std::size_t N>
+    wxWindow* DoSetAlternative(int id)
+    {
+        if constexpr ( N == 0 )
+        {
+            return nullptr;
+        }
+        else
+        {
+            auto ctrl = std::get<N-1>(this->m_ctrls);
+            if ( ctrl->GetId() == id )
+            {
+                m_wins.template emplace<N-1>(ctrl);
+                DoSetAlternative<N-1>(&this->GetData());
+                return ctrl;
+            }
+
+            return DoSetAlternative<N-1>(id);
+        }
+    }
+
+    void OnText(wxCommandEvent& event)
+    {
+        using WinTypes_ = typename wxTypeList::TList<W*, Ws*...>::Type;
+        using WinTypes  = typename wxTypeList::EraseDuplType<WinTypes_>::Type;
+
+        wxWindow* const win = wxDynamicCast(event.GetEventObject(), wxWindow);
+
+        if ( !win ) /* should not happen */
+            return;
+
+        wxWindow* altWin = std::visit(CreateVisitorAlternative(WinTypes{}), m_wins);
+
+        if ( altWin == win )
+            return;
+
+        wxMonoValidationEvent evt(wxEVT_UNSET_ALTERNATIVE, altWin->GetId());
+        evt.SetEventObject(this->GetWindow());
+        evt.SetWindow(altWin);
+        this->GetWindow()->HandleWindowEvent(evt);
+
+        altWin = DoSetAlternative<(1+sizeof... (Ws))>(win->GetId());
+
+        evt.SetEventType(wxEVT_SET_ALTERNATIVE);
+        evt.SetWindow(altWin);
+        evt.SetId(altWin ? altWin->GetId() : 0);
+        this->GetWindow()->HandleWindowEvent(evt);
+    }
+
+    void OnAlternativeChanged(wxMonoValidationEvent& event)
+    {
+        wxWindow* const win = event.GetWindow();
+
+        if ( !win )
+            return;
+
+        if ( event.GetEventType() == wxEVT_SET_ALTERNATIVE )
+        {
+            win->SetBackgroundColour(wxColour("#f2bdcd")); // Orchid pink
+        }
+        else
+        {
+            win->SetValidator(wxDefaultValidator);
+            win->SetBackgroundColour(wxNullColour);
+        }
+    }
+
+private:
+    const std::tuple<W*, Ws*...> m_ctrls;
+
+    std::variant<W*, Ws*...> m_wins;
+};
+
 #endif // defined(HAVE_STD_VARIANT)
 
 //-----------------------------------------------------------------------------
@@ -315,7 +620,7 @@ template<class... Ls> wxVisitor(Ls...) -> wxVisitor<Ls...>;
 // Notice that using wxSetGenericValidator() is more convenient than calling
 // wxGenericValidator<>() to set generic validators, as the latter can only deduce
 // the passed value type.
-    
+
 template<class W, typename T>
 inline wxGenericValidatorSimpleType<W, T> wxGenericValidator(T* value)
 {
@@ -362,6 +667,20 @@ inline void wxSetGenericValidator(W* win, TComposite<T>& value)
     win->SetValidator( wxGenericValidatorCompositType<W, TComposite, T>(value) );
 }
 #endif // defined(HAVE_VARIADIC_TEMPLATES)
+
+WXDLLIMPEXP_CORE void wxSetGenericValidator(wxPanel* panel, const wxValidator& val);
+
+#if defined(HAVE_STD_VARIANT)
+template<typename T, typename... Ts, class... Ws>
+inline void wxSetGenericValidator(wxPanel* panel,
+                                  std::variant<T, Ts...>& value,
+                                  const std::tuple<Ws*...>& ctrls)
+{
+    wxSetGenericValidator(panel,
+        wxGenericValidatorCompositType<
+            std::variant<Ws...>, std::variant, T, Ts...>{value, ctrls});
+}
+#endif // HAVE_STD_VARIANT
 
 #else // !wxUSE_DATATRANSFER
 

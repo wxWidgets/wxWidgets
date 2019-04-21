@@ -32,6 +32,7 @@
     #include "wx/textctrl.h"
     #include "wx/button.h"
     #include "wx/listbox.h"
+    #include "wx/panel.h"
     #include "wx/slider.h"
     #include "wx/checklst.h"
 #endif
@@ -51,7 +52,6 @@
 #include "wx/filename.h"
 
 #include "wx/valgen.h"
-
 
 #if !wxUSE_DATATRANSFER
 
@@ -1570,6 +1570,16 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(wxFont* data) const
 #endif // wxUSE_FONTPICKERCTRL
 
     return NULL;
+}
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxMonoValidationEvent, wxEvent);
+
+wxDEFINE_EVENT( wxEVT_SET_ALTERNATIVE, wxMonoValidationEvent );
+wxDEFINE_EVENT( wxEVT_UNSET_ALTERNATIVE, wxMonoValidationEvent );
+
+void wxSetGenericValidator(wxPanel* panel, const wxValidator& val)
+{
+    panel->SetValidator(val);
 }
 
 #endif // !wxUSE_DATATRANSFER
