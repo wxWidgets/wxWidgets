@@ -31,7 +31,6 @@
 #include "wx/valgen.h"
 #include "wx/valtext.h"
 #include "wx/valnum.h"
-#include "wx/valpnl.h"
 #include "wx/spinctrl.h"
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
