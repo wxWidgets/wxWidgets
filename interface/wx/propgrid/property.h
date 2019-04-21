@@ -43,6 +43,10 @@ struct wxPGPaintData
     However, some of these constants are redefined to use cached strings which
     may reduce your binary size by some amount.
 
+    If @c wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES style is applied to
+    wxPropertyGrid, attributes denoted as built-in are not stored into
+    property's attribute storage (thus they are write-only) .
+
     @{
 */
 
@@ -106,16 +110,18 @@ struct wxPGPaintData
 */
 #define wxPG_STRING_PASSWORD                wxS("Password")
 
-/** Define base used by a wxUIntProperty. Valid constants are
-    wxPG_BASE_OCT, wxPG_BASE_DEC, wxPG_BASE_HEX and wxPG_BASE_HEXL
-    (lowercase characters).
+/** Built-in attribute to define base used by a wxUIntProperty. Valid constants
+    are @c wxPG_BASE_OCT, @c wxPG_BASE_DEC, @c wxPG_BASE_HEX and
+    @c wxPG_BASE_HEXL (lowercase characters).
 */
 #define wxPG_UINT_BASE                      wxS("Base")
 
-/** Define prefix rendered to wxUIntProperty. Accepted constants
-    wxPG_PREFIX_NONE, wxPG_PREFIX_0x, and wxPG_PREFIX_DOLLAR_SIGN.
-    <b>Note:</b> Only wxPG_PREFIX_NONE works with Decimal and Octal
-    numbers.
+/** Built-in attribute to define prefix rendered to wxUIntProperty. Accepted
+    constants @c wxPG_PREFIX_NONE, @c wxPG_PREFIX_0x
+    and @c wxPG_PREFIX_DOLLAR_SIGN.
+
+    @remarks
+    Only @c wxPG_PREFIX_NONE works with decimal and octal numbers.
 */
 #define wxPG_UINT_PREFIX                    wxS("Prefix")
 
@@ -152,7 +158,7 @@ struct wxPGPaintData
 */
 #define wxPG_FILE_DIALOG_STYLE              wxS("DialogStyle")
 
-/** Specific to wxDirProperty, wxString, default is empty.
+/** Built-in attribute specific to wxDirProperty, wxString, default is empty.
     Sets a specific message for the dir dialog.
 */
 #define wxPG_DIR_DIALOG_MESSAGE             wxS("DialogMessage")
@@ -166,13 +172,14 @@ struct wxPGPaintData
 */
 #define wxPG_ARRAY_DELIMITER                wxS("Delimiter")
 
-/** Sets displayed date format for wxDateProperty.
+/** Built-in attribute to set displayed date format for wxDateProperty.
 */
 #define wxPG_DATE_FORMAT                    wxS("DateFormat")
 
-/** Sets wxDatePickerCtrl window style used with wxDateProperty. Default
-    is wxDP_DEFAULT | wxDP_SHOWCENTURY. Using wxDP_ALLOWNONE will enable
-    better unspecified value support in the editor.
+/** Built-in attribute to set wxDatePickerCtrl window style used with
+    wxDateProperty. Default is @c wxDP_DEFAULT | @c wxDP_SHOWCENTURY. Using
+    @c wxDP_ALLOWNONE will enable better unspecified value support
+    in the editor.
 */
 #define wxPG_DATE_PICKER_STYLE              wxS("PickerStyle")
 
@@ -195,8 +202,9 @@ struct wxPGPaintData
 */
 #define wxPG_ATTR_MULTICHOICE_USERSTRINGMODE    wxS("UserStringMode")
 
-/** wxColourProperty and its kind, int, default 1. Setting this attribute to 0 hides custom
-    colour from property's list of choices.
+/** Built-in attribute of wxColourProperty and its kind, type of @int,
+    default value is 1. Setting this attribute to 0 hides custom colour
+    from property's list of choices.
 */
 #define wxPG_COLOUR_ALLOW_CUSTOM            wxS("AllowCustom")
 
