@@ -111,6 +111,7 @@ WX_NSWindow CreateFloatingWindow(wxWindow* wxWin)
 
 void CloseFloatingWindow(WX_NSWindow nsWin)
 {
+    [nsWin setReleasedWhenClosed:YES];
     [nsWin close];
 }
 

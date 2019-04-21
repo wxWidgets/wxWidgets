@@ -137,17 +137,23 @@ bool wxWebViewWebKit::Create(wxWindow *parent,
             [[WebViewLoadDelegate alloc] initWithWxWindow: this];
 
     [m_webView setFrameLoadDelegate:loadDelegate];
+    
+    m_loadDelegate = loadDelegate;
 
     // this is used to veto page loads, etc.
     WebViewPolicyDelegate* policyDelegate =
             [[WebViewPolicyDelegate alloc] initWithWxWindow: this];
 
     [m_webView setPolicyDelegate:policyDelegate];
+    
+    m_policyDelegate = policyDelegate;
 
     WebViewUIDelegate* uiDelegate =
             [[WebViewUIDelegate alloc] initWithWxWindow: this];
 
     [m_webView setUIDelegate:uiDelegate];
+    
+    m_UIDelegate = uiDelegate;
 #endif
     //Register our own class for custom scheme handling
     [NSURLProtocol registerClass:[WebViewCustomProtocol class]];
@@ -160,21 +166,13 @@ wxWebViewWebKit::~wxWebViewWebKit()
 {
 #if wxOSX_USE_IPHONE
 #else
-    WebViewLoadDelegate* loadDelegate = [m_webView frameLoadDelegate];
-    WebViewPolicyDelegate* policyDelegate = [m_webView policyDelegate];
-    WebViewUIDelegate* uiDelegate = [m_webView UIDelegate];
     [m_webView setFrameLoadDelegate: nil];
     [m_webView setPolicyDelegate: nil];
     [m_webView setUIDelegate: nil];
 
-    if (loadDelegate)
-        [loadDelegate release];
-
-    if (policyDelegate)
-        [policyDelegate release];
-
-    if (uiDelegate)
-        [uiDelegate release];
+    [m_loadDelegate release];
+    [m_policyDelegate release];
+    [m_UIDelegate release];
 #endif
 }
 
@@ -1033,8 +1031,16 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
 
     wxString wxpath = wxCFStringRef::AsString(path);
     wxString scheme = wxCFStringRef::AsString([[request URL] scheme]);
+    
+    // since canInitRequest has already checked whether this scheme is supported
+    // the hash map contains this entry, but to satisfy static code analysis
+    // suspecting nullptr dereference ...
+#ifndef __clang_analyzer__
     wxFSFile* file = g_stringHandlerMap[scheme]->GetFile(wxpath);
-
+#else
+    wxFSFile* file = NULL;
+#endif
+    
     if (!file)
     {
         NSError *error = [[NSError alloc] initWithDomain:NSURLErrorDomain
@@ -1042,6 +1048,8 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
                             userInfo:nil];
 
         [client URLProtocol:self didFailWithError:error];
+        
+        [error release];
 
         return;
     }
@@ -1069,6 +1077,8 @@ wxString nsErrorToWxHtmlError(NSError* error, wxWebViewNavigationError* out)
     //Notify that we have finished
     [client URLProtocolDidFinishLoading:self];
 
+    [data release];
+    
     [response release];
 }
 

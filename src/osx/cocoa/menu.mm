@@ -254,6 +254,7 @@ public :
             [windowMenuItem setSubmenu:windowMenu];
             [windowMenu release];
             [m_osxMenu addItem:windowMenuItem];
+            [windowMenuItem release];
         }
         return windowMenu;
     }

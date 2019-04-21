@@ -3563,12 +3563,15 @@ bool wxWidgetCocoaImpl::EnableTouchEvents(int eventsMask)
             }
             else // We do want to have gesture events.
             {
+                // clang does not see that the owning object always destroys its extra field
+#ifndef __clang_analyzer__
                 wxCocoaGestures::StoreForObject
                 (
                     this,
                     new wxCocoaGesturesImpl(this, m_osxView, eventsMask)
                 );
-
+#endif
+                
                 [m_osxView setAcceptsTouchEvents:YES];
             }
 
