@@ -1,0 +1,1 @@
+All: Add wxSystemAppearance, notably useful for macOS dark mode checks.
