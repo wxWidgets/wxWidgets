@@ -2347,8 +2347,8 @@ private:
     bool     m_hasListCtrlAppearance;
     wxColour m_currentBgColour;
     wxColour m_currentTextColour;
-    bool     m_UseDefaultCurrentBgColour;
-    bool     m_UseDefaultCurrentTextColour;
+    bool     m_useDefaultCurrentBgColour;
+    bool     m_useDefaultCurrentTextColour;
 };
 
 wxSTCListBoxVisualData::wxSTCListBoxVisualData(int d):m_desiredVisibleRows(d),
@@ -2357,8 +2357,8 @@ wxSTCListBoxVisualData::wxSTCListBoxVisualData(int d):m_desiredVisibleRows(d),
                         m_useDefaultHighlightBgColour(true),
                         m_useDefaultHighlightTextColour(true),
                         m_hasListCtrlAppearance(false),
-                        m_UseDefaultCurrentBgColour(true),
-                        m_UseDefaultCurrentTextColour(true)
+                        m_useDefaultCurrentBgColour(true),
+                        m_useDefaultCurrentTextColour(true)
 {
     ComputeColours();
 }
@@ -2452,7 +2452,7 @@ void wxSTCListBoxVisualData::ComputeColours()
         if ( m_useDefaultHighlightBgColour )
             m_highlightBgColour = wxNullColour;
 
-        if ( m_UseDefaultCurrentBgColour )
+        if ( m_useDefaultCurrentBgColour )
             m_currentBgColour = wxNullColour;
 
         #ifdef __WXMSW__
@@ -2465,7 +2465,7 @@ void wxSTCListBoxVisualData::ComputeColours()
                     wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT);
         #endif
 
-        if ( m_UseDefaultCurrentTextColour )
+        if ( m_useDefaultCurrentTextColour )
             m_currentTextColour = wxSystemSettings::GetColour(
                 wxSYS_COLOUR_LISTBOXTEXT);
     }
@@ -2536,8 +2536,8 @@ void wxSTCListBoxVisualData::UseListCtrlStyle(bool useListCtrlStyle,
                                               const wxColour& curText)
 {
     m_hasListCtrlAppearance = useListCtrlStyle;
-    SetColourHelper(m_UseDefaultCurrentBgColour, m_currentBgColour, curBg);
-    SetColourHelper(m_UseDefaultCurrentTextColour, m_currentTextColour,
+    SetColourHelper(m_useDefaultCurrentBgColour, m_currentBgColour, curBg);
+    SetColourHelper(m_useDefaultCurrentTextColour, m_currentTextColour,
                     curText);
     ComputeColours();
 }
