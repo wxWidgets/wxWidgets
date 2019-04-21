@@ -133,11 +133,7 @@ void FormMain::OnDumpList( wxCommandEvent& WXUNUSED(event) )
 
         wxString strValue = v.GetString();
 
-#if wxCHECK_VERSION(2,8,0)
         if ( v.GetName().EndsWith("@attr") )
-#else
-        if ( v.GetName().Right(5) == "@attr" )
-#endif
         {
             text += wxString::Format("Attributes:\n");
 
