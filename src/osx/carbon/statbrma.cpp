@@ -88,7 +88,7 @@ void wxStatusBarMac::InitColours()
             m_textActive = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNTEXT);
             m_textInactive = wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT);
 
-            if ( bg.Red() < 128 )
+            if ( wxSystemSettings::GetAppearance().IsDark() )
             {
                 // dark mode appearance
                 m_textActive = wxColour(0xB0, 0xB0, 0xB0);

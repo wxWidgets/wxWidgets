@@ -42,6 +42,39 @@ static int wxOSXGetUserDefault(NSString* key, int defaultValue)
     return [setting intValue];
 }
 
+// ----------------------------------------------------------------------------
+// wxSystemAppearance
+// ----------------------------------------------------------------------------
+
+wxString wxSystemAppearance::GetName() const
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_9
+    if ( WX_IS_MACOS_AVAILABLE(10, 9) )
+    {
+        return wxStringWithNSString([[NSApp effectiveAppearance] name]);
+    }
+#endif
+
+    return wxString();
+}
+
+bool wxSystemAppearance::IsDark() const
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
+    if ( WX_IS_MACOS_AVAILABLE(10, 14) )
+    {
+        const NSAppearanceName
+            appearanceName = [[NSApp effectiveAppearance]
+                                bestMatchFromAppearancesWithNames:
+                                @[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
+
+        return [appearanceName isEqualToString:NSAppearanceNameDarkAqua];
+    }
+#endif
+
+    // Fall back on the generic method when not running under 10.14.
+    return IsUsingDarkBackground();
+}
 
 // ----------------------------------------------------------------------------
 // wxSystemSettingsNative
