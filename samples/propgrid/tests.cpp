@@ -121,14 +121,13 @@ void FormMain::OnDumpList( wxCommandEvent& WXUNUSED(event) )
 {
     wxVariant values = m_pPropGridManager->GetPropertyValues("list", wxNullProperty, wxPG_INC_ATTRIBUTES);
     wxString text = "This only tests that wxVariant related routines do not crash.\n";
-    wxString t;
 
     wxDialog* dlg = new wxDialog(this,wxID_ANY,"wxVariant Test",
         wxDefaultPosition,wxDefaultSize,wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER);
 
-    unsigned int i;
-    for ( i = 0; i < (unsigned int)values.GetCount(); i++ )
+    for ( size_t i = 0; i < values.GetCount(); i++ )
     {
+        wxString t;
         wxVariant& v = values[i];
 
         wxString strValue = v.GetString();
@@ -137,8 +136,7 @@ void FormMain::OnDumpList( wxCommandEvent& WXUNUSED(event) )
         {
             text += wxString::Format("Attributes:\n");
 
-            unsigned int n;
-            for ( n = 0; n < (unsigned int)v.GetCount(); n++ )
+            for ( size_t n = 0; n < v.GetCount(); n++ )
             {
                 wxVariant& a = v[n];
 
