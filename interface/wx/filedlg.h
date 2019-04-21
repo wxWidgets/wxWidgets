@@ -399,7 +399,9 @@ wxString wxFileSelector(const wxString& message,
                         int y = wxDefaultCoord);
 
 /**
-    An extended version of wxFileSelector
+    An extended version of wxFileSelector()
+
+    @header{wx/filedlg.h}
 */
 wxString wxFileSelectorEx(const wxString& message = wxFileSelectorPromptStr,
                           const wxString& default_path = wxEmptyString,
@@ -412,7 +414,11 @@ wxString wxFileSelectorEx(const wxString& message = wxFileSelectorPromptStr,
                           int y = wxDefaultCoord);
 
 /**
-    Ask for filename to load
+    Shows a file dialog asking the user for a file name for opening a file.
+
+    @see wxFileSelector(), wxFileDialog
+
+    @header{wx/filedlg.h}
 */
 wxString wxLoadFileSelector(const wxString& what,
                             const wxString& extension,
@@ -420,7 +426,11 @@ wxString wxLoadFileSelector(const wxString& what,
                             wxWindow *parent = NULL);
 
 /**
-    Ask for filename to save
+    Shows a file dialog asking the user for a file name for saving a file.
+
+    @see wxFileSelector(), wxFileDialog
+
+    @header{wx/filedlg.h}
 */
 wxString wxSaveFileSelector(const wxString& what,
                             const wxString& extension,
