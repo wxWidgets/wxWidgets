@@ -40,12 +40,12 @@
 class WXDLLIMPEXP_FWD_CORE wxPanel;
 
 template<class W>
-struct wxDataTransfer
+struct wxValidatorDataTransfer
 {
       // decltype will give us the window type (a pointer type) which
-      // implements (specializes) wxDataTransferImpl<> interface. or
-      // void* if no such specialization exists for W type.
-    typedef decltype(wxDATA_TRANSFER_IMPLEMENTOR(W)) Type;
+      // implements (specializes) wxValidatorDataTransferImpl<> interface.
+      // or void* if no such specialization exists for W type.
+    typedef decltype(wxGET_VALIDATOR_DATATRANSFER_IMPLEMENTOR(W)) Type;
     typedef typename std::remove_pointer<Type>::type Window;
 
       // always cast @win to the parameter @W and not to @Window type
@@ -54,14 +54,14 @@ struct wxDataTransfer
     template<typename T>
     static bool To(wxWindow* win, void* data)
     {
-        return wxDataTransferImpl<Window>::To(
+        return wxValidatorDataTransferImpl<Window>::To(
             static_cast<W*>(win), static_cast<T*>(data));
     }
 
     template<typename T>
     static bool From(wxWindow* win, void* data)
     {
-        return wxDataTransferImpl<Window>::From(
+        return wxValidatorDataTransferImpl<Window>::From(
             static_cast<W*>(win), static_cast<T*>(data));
     }
 
@@ -134,19 +134,19 @@ public:
 
     virtual bool TransferToWindow() wxOVERRIDE
     {
-        return wxDataTransfer<W>::template To<T>(this->GetWindow(), this->m_data);
+        return wxValidatorDataTransfer<W>::template To<T>(this->GetWindow(), this->m_data);
     }
 
     virtual bool TransferFromWindow() wxOVERRIDE
     {
-        return wxDataTransfer<W>::template From<T>(this->GetWindow(), this->m_data);
+        return wxValidatorDataTransfer<W>::template From<T>(this->GetWindow(), this->m_data);
     }
 };
 
 template<class W, typename T>
 bool wxGenValidatorSimpleType<W, T>::Validate(wxWindow* parent)
 {
-    return wxDataTransfer<W>::DoValidate(
+    return wxValidatorDataTransfer<W>::DoValidate(
         static_cast<W*>(this->GetWindow()), parent);
 }
 
@@ -257,7 +257,7 @@ public:
 
     virtual bool Validate(wxWindow* parent) wxOVERRIDE
     {
-        return wxDataTransfer<W>::DoValidate(
+        return wxValidatorDataTransfer<W>::DoValidate(
             static_cast<W*>(this->GetWindow()), parent);
     }
 
@@ -268,14 +268,14 @@ public:
         if ( !data )
             return true;
 
-        return wxDataTransfer<W>::template To<T>(this->GetWindow(), &*data);
+        return wxValidatorDataTransfer<W>::template To<T>(this->GetWindow(), &*data);
     }
 
     virtual bool TransferFromWindow() wxOVERRIDE
     {
         T value;
 
-        if ( !wxDataTransfer<W>::template From<T>(this->GetWindow(), &value) )
+        if ( !wxValidatorDataTransfer<W>::template From<T>(this->GetWindow(), &value) )
             return false;
 
         CompositeType& data = this->GetData();
@@ -385,7 +385,7 @@ class wxGenValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts...>
     {
         return [](Y* win, U& value)
                 {
-                    return wxDataTransfer<Y>::template To<U>(win, &value);
+                    return wxValidatorDataTransfer<Y>::template To<U>(win, &value);
                 };
     }
 
@@ -404,7 +404,7 @@ class wxGenValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts...>
     {
         return [](Y* win, U& value)
                 {
-                    return wxDataTransfer<Y>::template From<U>(win, &value);
+                    return wxValidatorDataTransfer<Y>::template From<U>(win, &value);
                 };
     }
 
@@ -423,7 +423,7 @@ class wxGenValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts...>
     {
         return [=](Y* win)
                 {
-                    return wxDataTransfer<Y>::DoValidate(win, parent);
+                    return wxValidatorDataTransfer<Y>::DoValidate(win, parent);
                 };
     }
 

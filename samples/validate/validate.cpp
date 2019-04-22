@@ -86,9 +86,9 @@ static inline wxString GetString(const wxString& var){ return var; }
 
 // we don't have to derive a whole new class from wxValidator
 // just to customize validation behaviour. All we have to do 
-// is specialize wxDataTransfer<W>::DoValidate() for this matter.
+// is specialize wxValidatorDataTransfer<W>::DoValidate() for this matter.
 template<>
-bool wxDataTransfer<wxComboBox>::DoValidate(wxComboBox* cb, wxWindow* parent)
+bool wxValidatorDataTransfer<wxComboBox>::DoValidate(wxComboBox* cb, wxWindow* parent)
 {
     wxUnusedVar(parent);
 
@@ -121,7 +121,7 @@ class wxGenValidatorCompositType<W, std::variant, T, Ts...>
     {
         return [&](U& value)
                 {
-                    return wxDataTransfer<W>::template To<U>
+                    return wxValidatorDataTransfer<W>::template To<U>
                             (this->GetWindow(), &value);
                 };
     }
@@ -131,7 +131,7 @@ class wxGenValidatorCompositType<W, std::variant, T, Ts...>
     {
         return [&](U& value)
                 {
-                    return wxDataTransfer<W>::template From<U>
+                    return wxValidatorDataTransfer<W>::template From<U>
                             (this->GetWindow(), &value);
                 };
     }
@@ -162,7 +162,7 @@ public:
 
     virtual bool Validate(wxWindow* parent) wxOVERRIDE
     {
-        return wxDataTransfer<W>::DoValidate(
+        return wxValidatorDataTransfer<W>::DoValidate(
             static_cast<W*>(this->GetWindow()), parent);
     }
 
