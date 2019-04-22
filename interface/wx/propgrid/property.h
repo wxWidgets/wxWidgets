@@ -1386,28 +1386,52 @@ public:
 
     /**
         Returns property attribute value, null variant if not found.
+
+        @remarks
+        For built-in atrribute returns null variant if extra style
+        ::wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES is set.
     */
     wxVariant GetAttribute( const wxString& name ) const;
 
-    /** Returns named attribute, as string, if found. Otherwise defVal is returned.
+    /** Returns named attribute, as string, if found. Otherwise @a defVal is returned.
+
+        @remarks
+        For built-in atrribute returns @a defVal if extra style
+        ::wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES is set.
     */
     wxString GetAttribute( const wxString& name, const wxString& defVal ) const;
 
-    /** Returns named attribute, as long, if found. Otherwise defVal is returned.
+    /** Returns named attribute, as long, if found. Otherwise @a defVal is returned.
+
+        @remarks
+        For built-in atrribute returns @a defVal if extra style
+        ::wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES is set.
     */
     long GetAttributeAsLong( const wxString& name, long defVal ) const;
 
-    /** Returns named attribute, as double, if found. Otherwise defVal is returned.
+    /** Returns named attribute, as double, if found. Otherwise @a defVal is returned.
+
+        @remarks
+        For built-in atrribute returns @a defVal if extra style
+        ::wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES is set.
     */
     double GetAttributeAsDouble( const wxString& name, double defVal ) const;
 
     /**
-        Returns comma-delimited string of property attributes.
+        Returns map-like storage of property's attributes.
+
+        @remarks
+        If extra style wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES is set,
+        then builtin-attributes are not included in the storage.
     */
     const wxPGAttributeStorage& GetAttributes() const;
 
     /**
         Returns attributes as list wxVariant.
+
+        @remarks
+        If extra style ::wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES is set,
+        then builtin-attributes are not included in the list.
     */
     wxVariant GetAttributesAsList() const;
 
