@@ -3,7 +3,7 @@
 // Purpose:     common wxEventLoop-related stuff
 // Author:      Vadim Zeitlin
 // Created:     2006-01-12
-// Copyright:   (c) 2006, 2013 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2006, 2013 Vadim Zeitlin <vadim@wxwidgets.org>
 //              (c) 2013 Rob Bresalier
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////

@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     13.07.01
 // Copyright:   (c) 2000 Karsten Ballueder <ballueder@gmx.net>
-//                  2001 Vadim Zeitlin <vadim@wxwindows.org>
+//                  2001 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -3,7 +3,7 @@
 # Name:       misc/scripts/inc_year
 # Purpose:    increments the year in various copyright notices
 # Created:    2019-04-21
-# Copyright:  (c) 2019 Vadim Zeitlin <vadim@wxwindows.org>
+# Copyright:  (c) 2019 Vadim Zeitlin <vadim@wxwidgets.org>
 # Licence:    wxWindows licence
 ##############################################################################
 

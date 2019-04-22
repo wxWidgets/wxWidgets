@@ -4,7 +4,7 @@
 # Purpose:    increments the release version number in all files mentioned in
 #             docs/contributing/about-version-numbers.md
 # Created:    2007-01-07
-# Copyright:  (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+# Copyright:  (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 # Licence:    wxWindows licence
 ##############################################################################
 

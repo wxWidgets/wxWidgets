@@ -3,7 +3,7 @@
 // Purpose:     interface of wxTextEntry
 // Author:      Vadim Zeitlin
 // Created:     2009-03-01 (extracted from wx/textctrl.h)
-// Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2009 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

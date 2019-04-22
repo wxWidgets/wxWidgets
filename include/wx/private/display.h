@@ -3,7 +3,7 @@
 // Purpose:     wxDisplayImpl class declaration
 // Author:      Vadim Zeitlin
 // Created:     2006-03-15
-// Copyright:   (c) 2002-2006 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2002-2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

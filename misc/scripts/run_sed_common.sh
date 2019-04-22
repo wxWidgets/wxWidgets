@@ -2,7 +2,7 @@
 # Name:       misc/scripts/run_sed_common.sh
 # Purpose:    Common helpers for scripts using sed for automatic updates
 # Created:    2019-04-21 (extracted from misc/scripts/inc_release)
-# Copyright:  (c) 2007,2019 Vadim Zeitlin <vadim@wxwindows.org>
+# Copyright:  (c) 2007,2019 Vadim Zeitlin <vadim@wxwidgets.org>
 # Licence:    wxWindows licence
 ##############################################################################
 
