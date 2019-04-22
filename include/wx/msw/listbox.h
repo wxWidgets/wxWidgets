@@ -174,6 +174,13 @@ protected:
     // this can't be called DoHitTest() because wxWindow already has this method
     virtual int DoHitTestList(const wxPoint& point) const;
 
+    // This is a hook for wxCheckListBox, which uses it to add the checkbox
+    // width to the item width and to make it at least as tall as the checkbox.
+    virtual wxSize MSWGetFullItemSize(int w, int h) const
+    {
+        return wxSize(w, h);
+    }
+
     // free memory (common part of Clear() and dtor)
     void Free();
 
