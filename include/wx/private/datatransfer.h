@@ -16,10 +16,13 @@
   #error "Variadic macros support required."
 #endif // HAVE_VARIADIC_MACROS
 
+#undef wxUSE_DATATRANSFER
+
 #if !defined(HAVE_DECLTYPE) || (!defined(HAVE_TYPE_TRAITS) && \
                                 !defined(HAVE_TR1_TYPE_TRAITS))
-    #undef wxUSE_DATATRANSFER
     #define wxUSE_DATATRANSFER 0
+#else
+    #define wxUSE_DATATRANSFER wxUSE_ANY
 #endif
 
 class WXDLLIMPEXP_FWD_BASE wxFileName;
