@@ -344,6 +344,7 @@ public:
                                int argFlags = 0) const wxOVERRIDE;
     virtual bool OnEvent( wxPropertyGrid* propgrid,
                           wxWindow* primary, wxEvent& event ) wxOVERRIDE;
+    virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
 
     wxArrayInt GetValueAsArrayInt() const
     {
@@ -361,6 +362,8 @@ protected:
 
     // Cache displayed text since generating it is relatively complicated.
     wxString            m_display;
+    // How to handle user strings
+    int                 m_userStringMode;
 };
 
 #endif // wxUSE_CHOICEDLG

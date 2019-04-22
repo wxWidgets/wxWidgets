@@ -197,9 +197,9 @@ struct wxPGPaintData
 */
 #define wxPG_ATTR_SPINCTRL_MOTION           wxS("MotionSpin")
 
-/** wxMultiChoiceProperty, @c int. If 0, no user strings allowed. If 1, user
-    strings appear before list strings. If 2, user strings appear after list
-    string.
+/** Built-in attribute of wxMultiChoiceProperty, @c int type. Default value
+    is 0. If set to 0, no user strings allowed. If 1, user strings appear
+    before list strings. If 2, user strings appear after list string.
 */
 #define wxPG_ATTR_MULTICHOICE_USERSTRINGMODE    wxS("UserStringMode")
 

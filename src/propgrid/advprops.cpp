@@ -2042,6 +2042,7 @@ wxMultiChoiceProperty::wxMultiChoiceProperty( const wxString& label,
                                               const wxArrayString& value)
                                                 : wxPGProperty(label,name)
 {
+    m_userStringMode = 0;
     m_choices.Assign(choices);
     SetValue(value);
 }
@@ -2052,6 +2053,7 @@ wxMultiChoiceProperty::wxMultiChoiceProperty( const wxString& label,
                                               const wxArrayString& value)
                                                 : wxPGProperty(label,name)
 {
+    m_userStringMode = 0;
     m_choices.Set(strings);
     SetValue(value);
 }
@@ -2061,6 +2063,7 @@ wxMultiChoiceProperty::wxMultiChoiceProperty( const wxString& label,
                                               const wxArrayString& value)
                                                 : wxPGProperty(label,name)
 {
+    m_userStringMode = 0;
     wxArrayString strings;
     m_choices.Set(strings);
     SetValue(value);
@@ -2174,8 +2177,6 @@ bool wxMultiChoiceProperty::OnEvent( wxPropertyGrid* propgrid,
 
         if ( dlg.ShowModal() == wxID_OK && choiceCount )
         {
-            int userStringMode = GetAttributeAsLong(wxPG_ATTR_MULTICHOICE_USERSTRINGMODE, 0);
-
             wxArrayInt arrInt = dlg.GetSelections();
 
             wxVariant variant;
@@ -2186,7 +2187,7 @@ bool wxMultiChoiceProperty::OnEvent( wxPropertyGrid* propgrid,
             // Translate string indices to strings
 
             unsigned int n;
-            if ( userStringMode == 1 )
+            if ( m_userStringMode == 1 )
             {
                 for (n=0;n<extraStrings.size();n++)
                     value.push_back(extraStrings[n]);
@@ -2195,7 +2196,7 @@ bool wxMultiChoiceProperty::OnEvent( wxPropertyGrid* propgrid,
             for ( size_t i = 0; i < arrInt.size(); i++ )
                 value.Add(m_choices.GetLabel(arrInt.Item(i)));
 
-            if ( userStringMode == 2 )
+            if ( m_userStringMode == 2 )
             {
                 for (n=0;n<extraStrings.size();n++)
                     value.push_back(extraStrings[n]);
@@ -2215,10 +2216,8 @@ bool wxMultiChoiceProperty::StringToValue( wxVariant& variant, const wxString& t
 {
     wxArrayString arr;
 
-    int userStringMode = GetAttributeAsLong(wxPG_ATTR_MULTICHOICE_USERSTRINGMODE, 0);
-
     WX_PG_TOKENIZER2_BEGIN(text,wxT('"'))
-        if ( userStringMode > 0 || (m_choices.IsOk() && m_choices.Index( token ) != wxNOT_FOUND) )
+        if ( m_userStringMode > 0 || (m_choices.IsOk() && m_choices.Index( token ) != wxNOT_FOUND) )
             arr.Add(token);
     WX_PG_TOKENIZER2_END()
 
@@ -2226,6 +2225,16 @@ bool wxMultiChoiceProperty::StringToValue( wxVariant& variant, const wxString& t
     variant = v;
 
     return true;
+}
+
+bool wxMultiChoiceProperty::DoSetAttribute( const wxString& name, wxVariant& value )
+{
+    if ( name == wxPG_ATTR_MULTICHOICE_USERSTRINGMODE )
+    {
+        m_userStringMode = (int)value.GetLong();
+        return true;
+    }
+    return false;
 }
 
 #endif // wxUSE_CHOICEDLG
