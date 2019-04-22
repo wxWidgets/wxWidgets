@@ -1094,6 +1094,37 @@ void ScintillaWX::DoAddChar(int key) {
 int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
 {
     int key = evt.GetKeyCode();
+
+    if (evt.RawControlDown() && key != WXK_BACK) {
+    // If we are on GTK, try to retrieve the scan code. Otherwise, fall back
+    // to the virtual key code. In general, virtual key codes are not suited
+    // to handle shortcuts, for US-Latin is not the only layout in the world.
+    #if defined(__WXGTK__) and defined(wxHAS_RAW_KEY_CODES)
+        static const short keys[64] = {
+            WXK_NONE   , WXK_NONE    , WXK_NONE  , WXK_NONE ,
+            WXK_NONE   , WXK_NONE    , WXK_NONE  , WXK_NONE ,
+            WXK_NONE   , WXK_ESCAPE  , '1'       , '2'      ,
+            '3'        , '4'         , '5'       , '6'      ,
+            '7'        , '8'         , '9'       , '0'      ,
+            '-'        , '='         , WXK_BACK  , WXK_TAB  ,
+            'Q'        , 'W'         , 'E'       , 'R'      ,
+            'T'        , 'Y'         , 'U'       , 'I'      ,
+            'O'        , 'P'         , '['       , ']'      ,
+            WXK_RETURN , WXK_CONTROL , 'A'       , 'S'      ,
+            'D'        , 'F'         , 'G'       , 'H'      ,
+            'J'        , 'K'         , 'L'       , ';'      ,
+            '\''       , '~'         , WXK_SHIFT , '|'      ,
+            'Z'        , 'X'         , 'C'       , 'V'      ,
+            'B'        , 'N'         , 'M'       , '<'      ,
+            '>'        , '/'         , WXK_NONE  , WXK_NONE
+        };
+        // SIC: wxGTK puts scan codes to m_rawFlags instead of m_rawCode
+        key = keys[(evt.GetRawKeyFlags() < 64)? evt.GetRawKeyFlags() : 0];
+    #else
+        if (key >= 1 && key <= 26)
+            key += 'A' - 1;
+    #endif
+    }
     if (key == WXK_NONE) {
         // This is a Unicode character not representable in Latin-1 or some key
         // without key code at all (e.g. dead key or VK_PROCESSKEY under MSW).
@@ -1101,10 +1132,6 @@ int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
             *consumed = false;
         return 0;
     }
-
-    if (evt.RawControlDown() && key >= 1 && key <= 26 && key != WXK_BACK)
-        key += 'A' - 1;
-
     switch (key) {
     case WXK_DOWN:              key = SCK_DOWN;     break;
     case WXK_UP:                key = SCK_UP;       break;
