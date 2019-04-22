@@ -1119,7 +1119,7 @@ int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
             '>'        , '/'         , WXK_NONE  , WXK_NONE
         };
         // SIC: wxGTK puts scan codes to m_rawFlags instead of m_rawCode
-        key = keys[(evt.GetRawKeyFlags() < 64)? evt.GetRawKeyFlags() : 0];
+        key = (evt.GetRawKeyFlags() < 64)? keys[evt.GetRawKeyFlags()] : key;
     #else
         if (key >= 1 && key <= 26)
             key += 'A' - 1;
