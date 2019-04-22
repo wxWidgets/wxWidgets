@@ -1429,7 +1429,7 @@ void FormMain::PopulateWithExamples ()
 
     pg->Append( new wxMultiChoiceProperty( "MultiChoiceProperty", wxPG_LABEL,
                                            tchoices, tchoicesValues ) );
-    pg->SetPropertyAttribute( "MultiChoiceProperty", wxPG_ATTR_MULTICHOICE_USERSTRINGMODE, true );
+    pg->SetPropertyAttribute("MultiChoiceProperty", wxPG_ATTR_MULTICHOICE_USERSTRINGMODE, 1);
 
     pg->Append( new wxSizeProperty( "SizeProperty", "Size", GetSize() ) );
     pg->Append( new wxPointProperty( "PointProperty", "Position", GetPosition() ) );
