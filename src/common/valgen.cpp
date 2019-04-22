@@ -1354,8 +1354,6 @@ bool wxDataTransferImpl<wxDateTimePickerCtrlBase>::From(wxDateTimePickerCtrlBase
 
 wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 {
-    wxCHECK_MSG(m_validatorWindow, NULL, "Validator window is NULL");
-
 #if wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL
     if ( wxDynamicCast(m_validatorWindow, wxDatePickerCtrl) ||
             wxDynamicCast(m_validatorWindow, wxTimePickerCtrl) )
