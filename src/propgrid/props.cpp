@@ -149,7 +149,7 @@ bool wxStringProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         RecreateEditor();
         return true;
     }
-    return false;
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------
@@ -875,7 +875,7 @@ bool wxUIntProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         m_prefix = (wxByte) value.GetLong();
         return true;
     }
-    return false;
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------
@@ -1035,7 +1035,7 @@ bool wxFloatProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         m_precision = value.GetLong();
         return true;
     }
-    return false;
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 wxValidator*
@@ -1181,7 +1181,7 @@ bool wxBoolProperty::DoSetAttribute( const wxString& name, wxVariant& value )
             m_flags &= ~(wxPG_PROP_USE_DCC);
         return true;
     }
-    return false;
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------
@@ -1854,7 +1854,7 @@ bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         }
         return true;
     }
-    return false;
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------
@@ -1919,7 +1919,7 @@ bool wxDirProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         m_dlgMessage = value.GetString();
         return true;
     }
-    return false;
+    return wxLongStringProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------
@@ -2145,6 +2145,7 @@ bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
     else if ( name == wxPG_FILE_WILDCARD )
     {
         m_wildcard = value.GetString();
+        return false;
     }
     else if ( name == wxPG_FILE_SHOW_RELATIVE_PATH )
     {
@@ -2152,6 +2153,7 @@ bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 
         // Make sure wxPG_FILE_SHOW_FULL_PATH is also set
         m_flags |= wxPG_PROP_SHOW_FULL_FILENAME;
+        return false;
     }
     else if ( name == wxPG_FILE_INITIAL_PATH )
     {
@@ -2163,7 +2165,7 @@ bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         m_dlgTitle = value.GetString();
         return true;
     }
-    return false;
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------
@@ -2925,7 +2927,7 @@ bool wxArrayStringProperty::DoSetAttribute( const wxString& name, wxVariant& val
         GenerateValueAsString();
         return true;
     }
-    return false;
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------

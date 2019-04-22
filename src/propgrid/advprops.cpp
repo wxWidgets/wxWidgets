@@ -1600,8 +1600,7 @@ bool wxSystemColourProperty::DoSetAttribute( const wxString& name, wxVariant& va
 
         return true;
     }
-
-    return false;
+    return wxEnumProperty::DoSetAttribute(name, value);
 }
 
 
@@ -2234,7 +2233,7 @@ bool wxMultiChoiceProperty::DoSetAttribute( const wxString& name, wxVariant& val
         m_userStringMode = (int)value.GetLong();
         return true;
     }
-    return false;
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 #endif // wxUSE_CHOICEDLG
@@ -2370,7 +2369,7 @@ bool wxDateProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         ms_defaultDateFormat.clear();  // This may need recalculation
         return true;
     }
-    return false;
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 #endif  // wxUSE_DATETIME
