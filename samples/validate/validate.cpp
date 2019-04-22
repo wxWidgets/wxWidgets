@@ -111,7 +111,7 @@ bool wxDataTransfer<wxComboBox>::DoValidate(wxComboBox* cb, wxWindow* parent)
 // ----------------------------------------------------------------------------
 
 template<class W, typename T, typename... Ts>
-class wxGenericValidatorCompositType<W, std::variant, T, Ts...> 
+class wxGenValidatorCompositType<W, std::variant, T, Ts...> 
     : public wxGenericValidatorBase
 {
     typedef std::variant<T, Ts...> CompositeType;
@@ -138,21 +138,21 @@ class wxGenericValidatorCompositType<W, std::variant, T, Ts...>
 
 public:
 
-    explicit wxGenericValidatorCompositType(CompositeType& data)
+    explicit wxGenValidatorCompositType(CompositeType& data)
         : wxGenericValidatorBase(std::addressof(data))
     {
     }
 
-    wxGenericValidatorCompositType(const wxGenericValidatorCompositType& val)
+    wxGenValidatorCompositType(const wxGenValidatorCompositType& val)
         : wxGenericValidatorBase(val)
     {
     }
 
-    virtual ~wxGenericValidatorCompositType(){}
+    virtual ~wxGenValidatorCompositType(){}
 
     virtual wxObject *Clone() const wxOVERRIDE 
     {
-        return new wxGenericValidatorCompositType(*this); 
+        return new wxGenValidatorCompositType(*this); 
     }
 
     virtual void SetWindow(wxWindow *win) wxOVERRIDE

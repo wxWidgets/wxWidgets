@@ -92,7 +92,7 @@ public:
 protected:
     explicit wxGenericValidatorBase(void* data) : m_data(data){}
 
-    // Called by wxGenericValidatorSimpleType<wxWindow, T>::SetWindow() to set
+    // Called by wxGenValidatorSimpleType<wxWindow, T>::SetWindow() to set
     // the right validator based on the dynamic type of the m_validatorWindow.
     wxGenericValidatorBase* Convert(const wxAny& any) const;
 
@@ -109,25 +109,25 @@ private:
 // ----------------------------------------------------------------------------
 
 template<class W, typename T>
-class wxGenericValidatorSimpleType : public wxGenericValidatorBase
+class wxGenValidatorSimpleType : public wxGenericValidatorBase
 {
 public:
 
-    explicit wxGenericValidatorSimpleType(T* data)
+    explicit wxGenValidatorSimpleType(T* data)
         : wxGenericValidatorBase(data)
     {
     }
 
-    wxGenericValidatorSimpleType(const wxGenericValidatorSimpleType& val)
+    wxGenValidatorSimpleType(const wxGenValidatorSimpleType& val)
         : wxGenericValidatorBase(val)
     {
     }
 
-    virtual ~wxGenericValidatorSimpleType(){}
+    virtual ~wxGenValidatorSimpleType(){}
 
     virtual wxObject *Clone() const wxOVERRIDE 
     {
-        return new wxGenericValidatorSimpleType(*this); 
+        return new wxGenValidatorSimpleType(*this); 
     }
 
     virtual bool Validate(wxWindow* parent) wxOVERRIDE;
@@ -144,32 +144,32 @@ public:
 };
 
 template<class W, typename T>
-bool wxGenericValidatorSimpleType<W, T>::Validate(wxWindow* parent)
+bool wxGenValidatorSimpleType<W, T>::Validate(wxWindow* parent)
 {
     return wxDataTransfer<W>::DoValidate(
         static_cast<W*>(this->GetWindow()), parent);
 }
 
 template<typename T>
-class wxGenericValidatorSimpleType<wxWindow, T> : public wxGenericValidatorBase
+class wxGenValidatorSimpleType<wxWindow, T> : public wxGenericValidatorBase
 {
 public:
 
-    explicit wxGenericValidatorSimpleType(T* data)
+    explicit wxGenValidatorSimpleType(T* data)
         : wxGenericValidatorBase(data)
     {
     }
 
-    wxGenericValidatorSimpleType(const wxGenericValidatorSimpleType& val)
+    wxGenValidatorSimpleType(const wxGenValidatorSimpleType& val)
         : wxGenericValidatorBase(val)
     {
     }
 
-    virtual ~wxGenericValidatorSimpleType(){}
+    virtual ~wxGenValidatorSimpleType(){}
 
     virtual wxObject *Clone() const wxOVERRIDE
     {
-        return new wxGenericValidatorSimpleType(*this);
+        return new wxGenValidatorSimpleType(*this);
     }
 
     virtual void SetWindow(wxWindow *win) wxOVERRIDE
@@ -207,7 +207,7 @@ public:
     template<class W, template<typename> class TComposite, typename T>
     #define COMPOSIT_TYPE TComposite<T>
 #endif // defined(HAVE_VARIADIC_TEMPLATES)
-class wxGenericValidatorCompositType : public wxGenericValidatorBase
+class wxGenValidatorCompositType : public wxGenericValidatorBase
 {
     typedef COMPOSIT_TYPE CompositeType;
 
@@ -238,21 +238,21 @@ class wxGenericValidatorCompositType : public wxGenericValidatorBase
 
 public:
 
-    explicit wxGenericValidatorCompositType(CompositeType& data)
+    explicit wxGenValidatorCompositType(CompositeType& data)
         : wxGenericValidatorBase(std::addressof(data))
     {
     }
 
-    wxGenericValidatorCompositType(const wxGenericValidatorCompositType& val)
+    wxGenValidatorCompositType(const wxGenValidatorCompositType& val)
         : wxGenericValidatorBase(val)
     {
     }
 
-    virtual ~wxGenericValidatorCompositType(){}
+    virtual ~wxGenValidatorCompositType(){}
 
     virtual wxObject *Clone() const wxOVERRIDE 
     {
-        return new wxGenericValidatorCompositType(*this);
+        return new wxGenValidatorCompositType(*this);
     }
 
     virtual bool Validate(wxWindow* parent) wxOVERRIDE
@@ -358,7 +358,7 @@ typedef void (wxEvtHandler::*wxMonoValidationFunction)(wxMonoValidationEvent&);
 // ----------------------------------------------------------------------------
 
 template<class W, typename T, class... Ws, typename... Ts>
-class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts...>
+class wxGenValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts...>
     : public wxGenericValidatorBase
 {
     typedef std::variant<T, Ts...> CompositeType;
@@ -448,25 +448,25 @@ class wxGenericValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts
 
 public:
 
-    wxGenericValidatorCompositType(CompositeType& data, const std::tuple<W*, Ws*...>& ctrls)
+    wxGenValidatorCompositType(CompositeType& data, const std::tuple<W*, Ws*...>& ctrls)
         : wxGenericValidatorBase(std::addressof(data))
         , m_ctrls(ctrls)
     {
         static_assert((sizeof...(Ws)==sizeof...(Ts)), "Parameter packs don't match!");
     }
 
-    wxGenericValidatorCompositType(const wxGenericValidatorCompositType& val)
+    wxGenValidatorCompositType(const wxGenValidatorCompositType& val)
         : wxGenericValidatorBase(val)
         , m_ctrls(val.m_ctrls)
         , m_wins(val.m_wins)
     {
     }
 
-    virtual ~wxGenericValidatorCompositType(){}
+    virtual ~wxGenValidatorCompositType(){}
 
     virtual wxObject *Clone() const wxOVERRIDE
     {
-        return new wxGenericValidatorCompositType(*this);
+        return new wxGenValidatorCompositType(*this);
     }
 
     virtual void SetWindow(wxWindow *win) wxOVERRIDE
@@ -475,12 +475,12 @@ public:
 
         wxGenericValidatorBase::SetWindow(win);
 
-        win->Bind(wxEVT_TEXT, &wxGenericValidatorCompositType::OnText, this);
+        win->Bind(wxEVT_TEXT, &wxGenValidatorCompositType::OnText, this);
 
         win->Bind(wxEVT_SET_ALTERNATIVE,
-            &wxGenericValidatorCompositType::OnAlternativeChanged, this);
+            &wxGenValidatorCompositType::OnAlternativeChanged, this);
         win->Bind(wxEVT_UNSET_ALTERNATIVE,
-            &wxGenericValidatorCompositType::OnAlternativeChanged, this);
+            &wxGenValidatorCompositType::OnAlternativeChanged, this);
 
         InitAlternatives();
     }
@@ -615,49 +615,49 @@ private:
 // the passed value type.
 
 template<class W, typename T>
-inline wxGenericValidatorSimpleType<W, T> wxGenericValidator(T* value)
+inline wxGenValidatorSimpleType<W, T> wxGenericValidator(T* value)
 {
-    return wxGenericValidatorSimpleType<W, T>(value);
+    return wxGenValidatorSimpleType<W, T>(value);
 }
 
 template<typename T>
-inline wxGenericValidatorSimpleType<wxWindow, T> wxGenericValidator(T* value)
+inline wxGenValidatorSimpleType<wxWindow, T> wxGenericValidator(T* value)
 {
-    return wxGenericValidatorSimpleType<wxWindow, T>(value);
+    return wxGenValidatorSimpleType<wxWindow, T>(value);
 }
 
 template<class W, typename T>
 inline void wxSetGenericValidator(W* win, T* value)
 {
-    win->SetValidator( wxGenericValidatorSimpleType<W, T>(value) );
+    win->SetValidator( wxGenValidatorSimpleType<W, T>(value) );
 }
 
 #if defined(HAVE_VARIADIC_TEMPLATES)
 template<class W, template<typename...> class TComposite, typename T, typename... Ts>
 inline auto wxGenericValidator(TComposite<T, Ts...>& value)
--> decltype(wxGenericValidatorCompositType<W, TComposite, T, Ts...>(value))
+-> decltype(wxGenValidatorCompositType<W, TComposite, T, Ts...>(value))
 {
-    return wxGenericValidatorCompositType<W, TComposite, T, Ts...>(value);
+    return wxGenValidatorCompositType<W, TComposite, T, Ts...>(value);
 }
 
 template<class W, template<typename...> class TComposite, typename T, typename... Ts>
 inline void wxSetGenericValidator(W* win, TComposite<T, Ts...>& value)
 {
-    win->SetValidator( wxGenericValidatorCompositType<W, TComposite, T, Ts...>(value) );
+    win->SetValidator( wxGenValidatorCompositType<W, TComposite, T, Ts...>(value) );
 }
 
 #else // !defined(HAVE_VARIADIC_TEMPLATES)
 template<class W, template<typename> class TComposite, typename T>
 inline auto wxGenericValidator(TComposite<T>& value)
--> decltype(wxGenericValidatorCompositType<W, TComposite, T>(value))
+-> decltype(wxGenValidatorCompositType<W, TComposite, T>(value))
 {
-    return wxGenericValidatorCompositType<W, TComposite, T>(value);
+    return wxGenValidatorCompositType<W, TComposite, T>(value);
 }
 
 template<class W, template<typename> class TComposite, typename T>
 inline void wxSetGenericValidator(W* win, TComposite<T>& value)
 {
-    win->SetValidator( wxGenericValidatorCompositType<W, TComposite, T>(value) );
+    win->SetValidator( wxGenValidatorCompositType<W, TComposite, T>(value) );
 }
 #endif // defined(HAVE_VARIADIC_TEMPLATES)
 
@@ -670,7 +670,7 @@ inline void wxSetGenericValidator(wxPanel* panel,
                                   const std::tuple<Ws*...>& ctrls)
 {
     wxSetGenericValidator(panel,
-        wxGenericValidatorCompositType<
+        wxGenValidatorCompositType<
             std::variant<Ws...>, std::variant, T, Ts...>{value, ctrls});
 }
 #endif // HAVE_STD_VARIANT
