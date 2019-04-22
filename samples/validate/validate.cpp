@@ -490,17 +490,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     combosizer->Add(panel, wxSizerFlags().Expand());
     combosizer->AddSpacer(10);
 
-    panel->Bind(wxEVT_SET_ALTERNATIVE, [](wxMonoValidationEvent& event) {
-            wxWindow* const win = event.GetWindow();
-
-            if ( win )
-            {
-                win->SetBackgroundColour(wxColour("#f2cc6d"));
-
-                if ( event.GetId() == VALIDATE_NAME )
-                    win->SetValidator(wxTextValidator(wxFILTER_ALPHANUMERIC));
-            }
-        });
+    panel->Bind(wxEVT_SET_ALTERNATIVE, &MyDialog::OnAlternativeChanged, this);
 
     #else
     m_combobox3->Disable();
@@ -641,6 +631,21 @@ void MyDialog::OnChangeValidator(wxCommandEvent& WXUNUSED(event))
         dialog.ApplyValidator();
     }
 }
+
+#if defined(HAVE_STD_VARIANT)
+void MyDialog::OnAlternativeChanged(wxMonoValidationEvent& event)
+{
+    wxWindow* const win = event.GetWindow();
+
+    if ( !win )
+        return;
+
+    win->SetBackgroundColour(wxColour("#f2cc6d"));
+
+    if ( event.GetId() == VALIDATE_NAME )
+        win->SetValidator(wxTextValidator(wxFILTER_ALPHANUMERIC));
+}
+#endif // HAVE_STD_VARIANT
 
 // ----------------------------------------------------------------------------
 // TextValidatorDialog

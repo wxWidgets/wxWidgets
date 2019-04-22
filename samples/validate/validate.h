@@ -18,6 +18,7 @@
 #include "wx/scopedptr.h"
 #if defined(HAVE_STD_VARIANT)
     #include <variant>
+    class WXDLLIMPEXP_FWD_CORE wxMonoValidationEvent;
 #endif // defined(HAVE_STD_VARIANT)
 
 // Define a new application type
@@ -53,6 +54,9 @@ public:
             const long style = wxDEFAULT_DIALOG_STYLE);
 
     void OnChangeValidator(wxCommandEvent& event);
+#if defined(HAVE_STD_VARIANT)
+    void OnAlternativeChanged(wxMonoValidationEvent& event);
+#endif
 
     wxTextCtrl *m_text;
     wxComboBox *m_combobox;
