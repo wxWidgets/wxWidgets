@@ -2923,9 +2923,9 @@ bool wxArrayStringProperty::DoSetAttribute( const wxString& name, wxVariant& val
     {
         m_delimiter = value.GetChar();
         GenerateValueAsString();
-        return false;
+        return true;
     }
-    return true;
+    return false;
 }
 
 // -----------------------------------------------------------------------

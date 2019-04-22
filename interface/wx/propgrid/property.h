@@ -164,9 +164,9 @@ struct wxPGPaintData
 #define wxPG_DIR_DIALOG_MESSAGE             wxS("DialogMessage")
 
 /**
-    wxArrayStringProperty's string delimiter character. If this is a quotation
-    mark or hyphen, then strings will be quoted instead (with given
-    character).
+    Built-in attribute to set wxArrayStringProperty's string delimiter
+    character. If this is a quotation mark or hyphen, then strings
+    will be quoted instead (with given character).
 
     Default delimiter is quotation mark.
 */
