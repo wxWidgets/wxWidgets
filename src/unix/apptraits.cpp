@@ -40,7 +40,7 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
     // prepare to wait for the child termination: show to the user that we're
     // busy and refuse all input unless explicitly told otherwise
     wxBusyCursor bc;
-    wxWindowDisabler wd(!(execData.flags & wxEXEC_NODISABLE));
+    wxWindowDisabler wd(!(execData.m_flags & wxEXEC_NODISABLE));
 
     // Allocate an event loop that will be used to wait for the process
     // to terminate, will handle stdout, stderr, and any other events and pass
