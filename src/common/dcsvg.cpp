@@ -335,7 +335,7 @@ wxSVGBitmapFileHandler::ProcessBitmap(const wxBitmap& bmp,
         wxImage::AddHandler(new wxPNGHandler);
 
     // find a suitable file name
-    wxFileName sPNG = wxFileName(m_path);
+    wxFileName sPNG = m_path;
     do
     {
         sPNG.SetFullName(wxString::Format("%s%simage%d.png",

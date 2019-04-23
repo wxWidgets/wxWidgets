@@ -12,6 +12,7 @@
 #define _WX_DCSVG_H_
 
 #include "wx/string.h"
+#include "wx/filename.h"
 #include "wx/dc.h"
 
 #if wxUSE_SVG
@@ -49,7 +50,7 @@ public:
     {
     }
 
-    explicit wxSVGBitmapFileHandler(const wxString& path)
+    explicit wxSVGBitmapFileHandler(const wxFileName& path)
         : m_path(path)
     {
     }
@@ -59,7 +60,7 @@ public:
                                wxOutputStream& stream) const wxOVERRIDE;
 
 private:
-    wxString m_path; // When set, will be appended with _image#.png
+    wxFileName m_path; // When set, name will be appended with _image#.png
 };
 
 // Predefined handler which embeds the bitmap (base64-encoding it) inside the
