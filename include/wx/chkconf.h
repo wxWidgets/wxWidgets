@@ -641,14 +641,6 @@
 #   endif
 #endif /* !defined(wxUSE_DATAOBJ) */
 
-#ifndef wxUSE_DATATRANSFER
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_DATATRANSFER must be defined, please read comment near the top of this file."
-#   else
-#       define wxUSE_DATATRANSFER 0
-#   endif
-#endif /* !defined(wxUSE_DATATRANSFER) */
-
 #ifndef wxUSE_DATAVIEWCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_DATAVIEWCTRL must be defined, please read comment near the top of this file."
