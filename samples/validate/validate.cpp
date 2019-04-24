@@ -71,7 +71,6 @@ MyData::MyData()
     m_percentValue = 0.25;
 }
 
-// define these overloads unconditionally to prevent compilation errors.
 static inline wxString GetString(const wxScopedPtr<wxString>& ptr)
 {
     if (ptr)
@@ -80,9 +79,17 @@ static inline wxString GetString(const wxScopedPtr<wxString>& ptr)
     return wxString();
 }
 
-static inline wxString GetString(const wxString& var){ return var; }
-
 #if wxUSE_VALIDATOR_DATATRANSFER
+
+#if defined(HAVE_STD_VARIANT)
+static auto GetString(const MyData::IntStrVariant& var)
+{
+    return std::visit(wxVisitor{
+                [](int i){ return wxString::Format("item(%d)", i); },
+                [](const wxString& str){ return str; }
+           }, var);
+}
+#endif // defined(HAVE_STD_VARIANT)
 
 // we don't have to derive a whole new class from wxValidator
 // just to customize validation behaviour. All we have to do 
@@ -103,108 +110,6 @@ bool wxValidatorDataTransfer<wxComboBox>::DoValidate(wxComboBox* cb, wxWindow* p
 
     return true;
 }
-
-#if defined(HAVE_STD_VARIANT)
-
-// ----------------------------------------------------------------------------
-//
-// ----------------------------------------------------------------------------
-
-template<class W, typename T, typename... Ts>
-class wxGenValidatorCompositType<W, std::variant, T, Ts...> 
-    : public wxGenericValidatorBase
-{
-    typedef std::variant<T, Ts...> CompositeType;
-
-    template<typename U>
-    inline auto CreateLambdaTo()
-    {
-        return [&](U& value)
-                {
-                    return wxValidatorDataTransfer<W>::template To<U>
-                            (this->GetWindow(), &value);
-                };
-    }
-
-    template<typename U>
-    inline auto CreateLambdaFrom()
-    {
-        return [&](U& value)
-                {
-                    return wxValidatorDataTransfer<W>::template From<U>
-                            (this->GetWindow(), &value);
-                };
-    }
-
-public:
-
-    explicit wxGenValidatorCompositType(CompositeType& data)
-        : wxGenericValidatorBase(std::addressof(data))
-    {
-    }
-
-    wxGenValidatorCompositType(const wxGenValidatorCompositType& val)
-        : wxGenericValidatorBase(val)
-    {
-    }
-
-    virtual ~wxGenValidatorCompositType(){}
-
-    virtual wxObject *Clone() const wxOVERRIDE 
-    {
-        return new wxGenValidatorCompositType(*this); 
-    }
-
-    virtual void SetWindow(wxWindow *win) wxOVERRIDE
-    {
-        this->m_validatorWindow = win; 
-    }
-
-    virtual bool Validate(wxWindow* parent) wxOVERRIDE
-    {
-        return wxValidatorDataTransfer<W>::DoValidate(
-            static_cast<W*>(this->GetWindow()), parent);
-    }
-
-    virtual bool TransferToWindow() wxOVERRIDE
-    {
-        CompositeType& data = *static_cast<CompositeType*>(this->m_data);
-
-        return std::visit(
-            wxVisitor{CreateLambdaTo<T>(), CreateLambdaFrom<Ts>()...}, data);
-    }
-
-    virtual bool TransferFromWindow() wxOVERRIDE
-    {
-        CompositeType& data = *static_cast<CompositeType*>(this->m_data);
-
-        return std::visit(
-            wxVisitor{CreateLambdaFrom<T>(), CreateLambdaFrom<Ts>()...}, data);
-    }
-};
-
-// ----------------------------------------------------------------------------
-//
-// ----------------------------------------------------------------------------
-
-static auto GetString(const MyData::VariantType& var)
-{
-    return std::visit(wxVisitor{
-                [](int i){ return wxString::Format("item(%d)", i); },
-                [](const wxString& str){ return str; }
-           }, var);
-}
-
-static auto GetString(const MyData::VariantType2& var)
-{
-    return std::visit(wxVisitor{
-                [](int i){ return wxString::Format("item(%d)", i); },
-                [](bool b){ return wxString::Format("%s", (b ? "Selected" : "Unselected")); },
-                [](const wxString& str){ return str; }
-           }, var);
-}
-
-#endif // defined(HAVE_STD_VARIANT)
 
 #else // wxUSE_VALIDATOR_DATATRANSFER
 
@@ -378,8 +283,9 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event))
         m_listbox->Append(wxString("checkbox: ") + checkbox_state);
         m_listbox->Append(wxString("combobox: ") + g_data.m_combobox_choice);
         m_listbox->Append(wxString("combobox2: ") + GetString(g_data.m_combobox2_choice));
-        m_listbox->Append(wxString("combobox3: ") + GetString(g_data.m_combobox3_choice));
+        #if defined(HAVE_STD_VARIANT)
         m_listbox->Append(wxString("Int or Str: ") + GetString(g_data.m_int_or_str));
+        #endif
         m_listbox->Append(wxString("radiobox: ") + g_radiobox_choices[g_data.m_radiobox_choice]);
 
         m_listbox->Append(wxString::Format("integer value: %d", g_data.m_intValue));
@@ -439,10 +345,6 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
                                  wxDefaultPosition, wxDefaultSize,
                                  WXSIZEOF(g_combobox_choices), g_combobox_choices, 0L);
 
-    m_combobox3 = new wxComboBox(this, VALIDATE_COMBO3, wxEmptyString,
-                                 wxDefaultPosition, wxDefaultSize,
-                                 WXSIZEOF(g_combobox_choices), g_combobox_choices, 0L);
-
 #if wxUSE_VALIDATOR_DATATRANSFER
     wxSetGenericValidator(m_combobox, &g_data.m_combobox_choice);
     m_combobox->SetToolTip("uses generic validator (with validation)");
@@ -451,9 +353,6 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     m_combobox2->SetToolTip("uses generic validator (with validation, wxScopedPtr)");
 
     #if defined(HAVE_STD_VARIANT)
-    wxSetGenericValidator(m_combobox3, g_data.m_combobox3_choice);
-    m_combobox3->SetToolTip("uses generic validator (with validation, std::variant)");
-
     wxPanel* const panel = new wxPanel(this, wxID_ANY);
 
     wxSizer* const sizer = new wxFlexGridSizer(2, wxSize(5, 5));
@@ -491,9 +390,6 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     combosizer->AddSpacer(10);
 
     panel->Bind(wxEVT_SET_ALTERNATIVE, &MyDialog::OnAlternativeChanged, this);
-
-    #else
-    m_combobox3->Disable();
     #endif // defined(HAVE_STD_VARIANT)
 
 #else
@@ -506,8 +402,6 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     combosizer->Add(m_combobox, wxSizerFlags().CenterHorizontal());
     combosizer->AddSpacer(10);
     combosizer->Add(m_combobox2, wxSizerFlags().CenterHorizontal());
-    combosizer->AddSpacer(10);
-    combosizer->Add(m_combobox3, wxSizerFlags().CenterHorizontal());
 
     flexgridsizer->Add(combosizer, wxSizerFlags(1).Expand().Border(wxALL, 5));
 
