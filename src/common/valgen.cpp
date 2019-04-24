@@ -53,7 +53,7 @@
 
 #include "wx/valgen.h"
 
-#if !wxUSE_DATATRANSFER
+#if !wxUSE_VALIDATOR_DATATRANSFER
 
 
 wxIMPLEMENT_CLASS(wxGenericValidator, wxValidator);
@@ -715,7 +715,7 @@ void wxGenericValidator::Initialize()
     m_pDouble = NULL;
 }
 
-#else // wxUSE_DATATRANSFER
+#else // wxUSE_VALIDATOR_DATATRANSFER
 
 wxIMPLEMENT_CLASS(wxGenericValidatorBase, wxValidator);
 
@@ -1666,6 +1666,6 @@ void wxSetGenericValidator(wxPanel* panel, const wxValidator& val)
     panel->SetValidator(val);
 }
 
-#endif // !wxUSE_DATATRANSFER
+#endif // !wxUSE_VALIDATOR_DATATRANSFER
 
 #endif // wxUSE_VALIDATORS

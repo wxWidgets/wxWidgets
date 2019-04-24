@@ -17,7 +17,7 @@
 
 #include "wx/private/datatransfer.h"
 
-#if wxUSE_DATATRANSFER
+#if wxUSE_VALIDATOR_DATATRANSFER
 
 #include "wx/debug.h"
 #include "wx/any.h"
@@ -66,10 +66,9 @@ struct wxValidatorDataTransfer
     }
 
       // No validation by default.
-      // specialize this function in your own code if you want 
-      // to do any validation or filtering.
+      // Client code may specialize this function to do any validation or filtering.
     static bool DoValidate(W* WXUNUSED(win), wxWindow* WXUNUSED(parent))
-    { return true; }
+        { return true; }
 };
 
 // ----------------------------------------------------------------------------
@@ -79,15 +78,12 @@ struct wxValidatorDataTransfer
 class WXDLLIMPEXP_CORE wxGenericValidatorBase : public wxValidator
 {
 public:
-
     wxGenericValidatorBase(const wxGenericValidatorBase& val);
 
-    virtual ~wxGenericValidatorBase(){}
+    virtual ~wxGenericValidatorBase() {}
 
     virtual wxObject *Clone() const wxOVERRIDE 
-    {
-        return new wxGenericValidatorBase(*this); 
-    }
+        { return new wxGenericValidatorBase(*this); }
 
 protected:
     explicit wxGenericValidatorBase(void* data) : m_data(data){}
@@ -112,7 +108,6 @@ template<class W, typename T>
 class wxGenValidatorSimpleType : public wxGenericValidatorBase
 {
 public:
-
     explicit wxGenValidatorSimpleType(T* data)
         : wxGenericValidatorBase(data)
     {
@@ -123,26 +118,29 @@ public:
     {
     }
 
-    virtual ~wxGenValidatorSimpleType(){}
+    virtual ~wxGenValidatorSimpleType() {}
 
     virtual wxObject *Clone() const wxOVERRIDE 
-    {
-        return new wxGenValidatorSimpleType(*this); 
-    }
+        { return new wxGenValidatorSimpleType(*this); }
 
     virtual bool Validate(wxWindow* parent) wxOVERRIDE;
 
     virtual bool TransferToWindow() wxOVERRIDE
     {
-        return wxValidatorDataTransfer<W>::template To<T>(this->GetWindow(), this->m_data);
+        return wxValidatorDataTransfer<W>::template
+                    To<T>(this->GetWindow(), this->m_data);
     }
 
     virtual bool TransferFromWindow() wxOVERRIDE
     {
-        return wxValidatorDataTransfer<W>::template From<T>(this->GetWindow(), this->m_data);
+        return wxValidatorDataTransfer<W>::template
+                    From<T>(this->GetWindow(), this->m_data);
     }
 };
 
+// This method will be instantiated in user code, and by making it a non-inline
+// function, we ensure that the right specialisation ( of DoValidate() if any )
+// will be used.
 template<class W, typename T>
 bool wxGenValidatorSimpleType<W, T>::Validate(wxWindow* parent)
 {
@@ -150,11 +148,16 @@ bool wxGenValidatorSimpleType<W, T>::Validate(wxWindow* parent)
         static_cast<W*>(this->GetWindow()), parent);
 }
 
+// ----------------------------------------------------------------------------
+// A non-functional intermediary validator that can be converted to the
+// appropriate validator at runtime based on the dynamic type of the validator
+// window and T.
+// ----------------------------------------------------------------------------
+
 template<typename T>
 class wxGenValidatorSimpleType<wxWindow, T> : public wxGenericValidatorBase
 {
 public:
-
     explicit wxGenValidatorSimpleType(T* data)
         : wxGenericValidatorBase(data)
     {
@@ -165,12 +168,10 @@ public:
     {
     }
 
-    virtual ~wxGenValidatorSimpleType(){}
+    virtual ~wxGenValidatorSimpleType() {}
 
     virtual wxObject *Clone() const wxOVERRIDE
-    {
-        return new wxGenValidatorSimpleType(*this);
-    }
+        { return new wxGenValidatorSimpleType(*this); }
 
     virtual void SetWindow(wxWindow *win) wxOVERRIDE
     {
@@ -211,7 +212,7 @@ class wxGenValidatorCompositType : public wxGenericValidatorBase
 {
     typedef COMPOSIT_TYPE CompositeType;
 
-    // Helper
+    // Helper function
     CompositeType& GetData() const
         { return *static_cast<CompositeType*>(this->m_data); }
 
@@ -237,7 +238,6 @@ class wxGenValidatorCompositType : public wxGenericValidatorBase
     -> decltype(value){ return value; }
 
 public:
-
     explicit wxGenValidatorCompositType(CompositeType& data)
         : wxGenericValidatorBase(std::addressof(data))
     {
@@ -248,12 +248,10 @@ public:
     {
     }
 
-    virtual ~wxGenValidatorCompositType(){}
+    virtual ~wxGenValidatorCompositType() {}
 
     virtual wxObject *Clone() const wxOVERRIDE 
-    {
-        return new wxGenValidatorCompositType(*this);
-    }
+        { return new wxGenValidatorCompositType(*this); }
 
     virtual bool Validate(wxWindow* parent) wxOVERRIDE
     {
@@ -373,12 +371,15 @@ class wxGenValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts...>
                                    wxTypeList::TList<Ws, Ts>...>::Type;
     using WinDataTypes  = typename wxTypeList::EraseDuplType<WinDataTypes_>::Type;
 
-    // Helper
+    // Helper function
     CompositeType& GetData() const
         { return *static_cast<CompositeType*>(this->m_data); }
 
     // N.B. The CreateVisitorXXX() below have WXUNUSED(tag) as parameter just
     //      to help the compiler deduce the template parameter types.
+
+    // Create a visitor to transfer data _To_ the active window:
+    // ---------------------------------------------------------
 
     template<class Y, typename U>
     inline auto CreateLambdaTo()
@@ -399,6 +400,9 @@ class wxGenValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts...>
                 };
     }
 
+    // Create a visitor to transfer data _From_ the active window:
+    // -----------------------------------------------------------
+
     template<class Y, typename U>
     inline auto CreateLambdaFrom()
     {
@@ -418,6 +422,9 @@ class wxGenValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts...>
                 };
     }
 
+    // Create a visitor to validate the active window:
+    // -----------------------------------------------
+
     template<class Y>
     inline auto CreateLambdaValidate(wxWindow* parent)
     {
@@ -434,6 +441,9 @@ class wxGenValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts...>
         return wxVisitor{ CreateLambdaValidate<Ys>(parent)... };
     }
 
+    // Create a visitor which returns the active window:
+    // -------------------------------------------------
+
     template<class Y>
     inline auto CreateLambdaAlternative()
     {
@@ -447,27 +457,24 @@ class wxGenValidatorCompositType<std::variant<W, Ws...>, std::variant, T, Ts...>
     }
 
 public:
-
-    wxGenValidatorCompositType(CompositeType& data, const std::tuple<W*, Ws*...>& ctrls)
+    wxGenValidatorCompositType(CompositeType& data, const std::tuple<W*, Ws*...>& alts)
         : wxGenericValidatorBase(std::addressof(data))
-        , m_ctrls(ctrls)
+        , m_alternatives(alts)
     {
         static_assert((sizeof...(Ws)==sizeof...(Ts)), "Parameter packs don't match!");
     }
 
     wxGenValidatorCompositType(const wxGenValidatorCompositType& val)
         : wxGenericValidatorBase(val)
-        , m_ctrls(val.m_ctrls)
-        , m_wins(val.m_wins)
+        , m_alternatives(val.m_alternatives)
+        , m_activeCtrl(val.m_activeCtrl)
     {
     }
 
-    virtual ~wxGenValidatorCompositType(){}
+    virtual ~wxGenValidatorCompositType() {}
 
     virtual wxObject *Clone() const wxOVERRIDE
-    {
-        return new wxGenValidatorCompositType(*this);
-    }
+        { return new wxGenValidatorCompositType(*this); }
 
     virtual void SetWindow(wxWindow *win) wxOVERRIDE
     {
@@ -490,25 +497,25 @@ public:
         using WinTypes_ = typename wxTypeList::TList<W, Ws...>::Type;
         using WinTypes  = typename wxTypeList::EraseDuplType<WinTypes_>::Type;
 
-        return std::visit(CreateVisitorValidate(parent, WinTypes{}), m_wins);
+        return std::visit(CreateVisitorValidate(parent, WinTypes{}), m_activeCtrl);
     }
 
     virtual bool TransferToWindow() wxOVERRIDE
     {
-        return std::visit(CreateVisitorTo(WinDataTypes{}), m_wins, this->GetData());
+        return std::visit(CreateVisitorTo(WinDataTypes{}), m_activeCtrl, this->GetData());
     }
 
     virtual bool TransferFromWindow() wxOVERRIDE
     {
-        return std::visit(CreateVisitorFrom(WinDataTypes{}), m_wins, this->GetData());
+        return std::visit(CreateVisitorFrom(WinDataTypes{}), m_activeCtrl, this->GetData());
     }
 
 private:
     void InitAlternatives()
     {
         // By default, set the first control as the active alternative.
-        auto ctrl = std::get<0>(m_ctrls);
-        m_wins.template emplace<0>(ctrl);
+        auto ctrl = std::get<0>(m_alternatives);
+        m_activeCtrl.template emplace<0>(ctrl);
 
         DoSetAlternative<0>(&this->GetData());
 
@@ -520,7 +527,6 @@ private:
         // would work correctly, but it doesn't! i.e. the event will be processed
         // by the event handler defined here instead of the event handler defined
         // in the user code (if any). So we resort to wxQueueEvent().
-
         wxQueueEvent(this->GetWindow(), event.Clone());
     }
 
@@ -540,10 +546,10 @@ private:
         }
         else
         {
-            auto ctrl = std::get<N-1>(this->m_ctrls);
+            auto ctrl = std::get<N-1>(this->m_alternatives);
             if ( ctrl->GetId() == id )
             {
-                m_wins.template emplace<N-1>(ctrl);
+                m_activeCtrl.template emplace<N-1>(ctrl);
                 DoSetAlternative<N-1>(&this->GetData());
                 return ctrl;
             }
@@ -551,6 +557,9 @@ private:
             return DoSetAlternative<N-1>(id);
         }
     }
+
+    // Event handlers:
+    // ---------------
 
     void OnText(wxCommandEvent& event)
     {
@@ -562,7 +571,7 @@ private:
         if ( !win ) /* should not happen */
             return;
 
-        wxWindow* altWin = std::visit(CreateVisitorAlternative(WinTypes{}), m_wins);
+        wxWindow* altWin = std::visit(CreateVisitorAlternative(WinTypes{}), m_activeCtrl);
 
         if ( altWin == win )
             return;
@@ -589,19 +598,20 @@ private:
 
         if ( event.GetEventType() == wxEVT_SET_ALTERNATIVE )
         {
+            // A very basic way to highlight the active control.
             win->SetBackgroundColour(wxColour("#f2bdcd")); // Orchid pink
         }
         else
         {
+            // Only the active control may have a validator associated with it.
             win->SetValidator(wxDefaultValidator);
             win->SetBackgroundColour(wxNullColour);
         }
     }
 
 private:
-    const std::tuple<W*, Ws*...> m_ctrls;
-
-    std::variant<W*, Ws*...> m_wins;
+    const std::tuple<W*, Ws*...> m_alternatives;
+    std::variant<W*, Ws*...> m_activeCtrl;
 };
 
 #endif // defined(HAVE_STD_VARIANT)
@@ -620,6 +630,10 @@ inline wxGenValidatorSimpleType<W, T> wxGenericValidator(T* value)
     return wxGenValidatorSimpleType<W, T>(value);
 }
 
+// This function returns an intermediary (non-functional) validator that will be
+// converted to a concrete one (upon the call to SetWindow()) constructed from
+// the dynamic type of the associated window and T. And by this, the old code
+// continue to work perfectly.
 template<typename T>
 inline wxGenValidatorSimpleType<wxWindow, T> wxGenericValidator(T* value)
 {
@@ -667,15 +681,15 @@ WXDLLIMPEXP_CORE void wxSetGenericValidator(wxPanel* panel, const wxValidator& v
 template<typename T, typename... Ts, class... Ws>
 inline void wxSetGenericValidator(wxPanel* panel,
                                   std::variant<T, Ts...>& value,
-                                  const std::tuple<Ws*...>& ctrls)
+                                  const std::tuple<Ws*...>& alts)
 {
     wxSetGenericValidator(panel,
         wxGenValidatorCompositType<
-            std::variant<Ws...>, std::variant, T, Ts...>{value, ctrls});
+            std::variant<Ws...>, std::variant, T, Ts...>{value, alts});
 }
 #endif // HAVE_STD_VARIANT
 
-#else // !wxUSE_DATATRANSFER
+#else // !wxUSE_VALIDATOR_DATATRANSFER
 
 // ----------------------------------------------------------------------------
 // wxGenericValidator performs data transfer between many standard controls and
@@ -759,7 +773,7 @@ inline void wxSetGenericValidator(W* win, T* value)
     win->SetValidator( wxGenericValidator(static_cast<T*>(value)) );
 }
 
-#endif // wxUSE_DATATRANSFER
+#endif // wxUSE_VALIDATOR_DATATRANSFER
 
 #endif // wxUSE_VALIDATORS
 
