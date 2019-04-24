@@ -80,8 +80,6 @@ class WXDLLIMPEXP_CORE wxGenericValidatorBase : public wxValidator
 public:
     wxGenericValidatorBase(const wxGenericValidatorBase& val);
 
-    virtual ~wxGenericValidatorBase() {}
-
     virtual wxObject *Clone() const wxOVERRIDE 
         { return new wxGenericValidatorBase(*this); }
 
@@ -117,8 +115,6 @@ public:
         : wxGenericValidatorBase(val)
     {
     }
-
-    virtual ~wxGenValidatorSimpleType() {}
 
     virtual wxObject *Clone() const wxOVERRIDE 
         { return new wxGenValidatorSimpleType(*this); }
@@ -167,8 +163,6 @@ public:
         : wxGenericValidatorBase(val)
     {
     }
-
-    virtual ~wxGenValidatorSimpleType() {}
 
     virtual wxObject *Clone() const wxOVERRIDE
         { return new wxGenValidatorSimpleType(*this); }
@@ -247,8 +241,6 @@ public:
         : wxGenericValidatorBase(val)
     {
     }
-
-    virtual ~wxGenValidatorCompositType() {}
 
     virtual wxObject *Clone() const wxOVERRIDE 
         { return new wxGenValidatorCompositType(*this); }
@@ -470,8 +462,6 @@ public:
         , m_activeCtrl(val.m_activeCtrl)
     {
     }
-
-    virtual ~wxGenValidatorCompositType() {}
 
     virtual wxObject *Clone() const wxOVERRIDE
         { return new wxGenValidatorCompositType(*this); }
