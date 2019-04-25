@@ -434,9 +434,6 @@ public:
     virtual void setUp() wxOVERRIDE;
     virtual void tearDown() wxOVERRIDE;
 
-protected:
-    wxEventLoopBase* m_loop;
-
 private:
     CPPUNIT_TEST_SUITE( FileSystemWatcherTestCase );
         CPPUNIT_TEST( TestEventCreate );
