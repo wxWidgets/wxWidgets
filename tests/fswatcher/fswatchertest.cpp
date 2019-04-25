@@ -211,12 +211,12 @@ public:
         , m_loopActivator(&m_loop)
 #endif
     {
+        Bind(wxEVT_FSWATCHER, &FSWTesterBase::OnFileSystemEvent, this);
+
         // wxFileSystemWatcher can be created only once the event loop is
         // running, so we can't do it from here and will do it from inside the
         // loop when this event handler is invoked.
-        Bind(wxEVT_IDLE, &FSWTesterBase::OnIdleInit, this);
-
-        Bind(wxEVT_FSWATCHER, &FSWTesterBase::OnFileSystemEvent, this);
+        CallAfter(&FSWTesterBase::OnIdleInit);
     }
 
     virtual ~FSWTesterBase()
@@ -246,20 +246,23 @@ public:
 
     void Run()
     {
-        SendIdle();
         m_loop.Run();
     }
 
-    void OnIdleInit(wxIdleEvent& WXUNUSED(event))
+    void OnIdleInit()
     {
-        // We shouldn't be called again.
-        Unbind(wxEVT_IDLE, &FSWTesterBase::OnIdleInit, this);
-
         CPPUNIT_ASSERT(Init());
 
         GenerateEvent();
 
-        // Check the result when the next idle event comes.
+        // Check the result when the next idle event comes: note that we can't
+        // use CallAfter() here, unfortunately, because OnIdleCheckResult()
+        // would then be called immediately, from the same event loop iteration
+        // as we're called from, because the idle/pending events are processed
+        // for as long as there any. Instead, we need to return to the event
+        // loop itself to give it a chance to dispatch wxFileSystemWatcherEvent
+        // and wait until our handler for it calls SendIdle() which will then
+        // end up calling OnIdleCheckResult() afterwards.
         Bind(wxEVT_IDLE, &FSWTesterBase::OnIdleCheckResult, this);
     }
 
