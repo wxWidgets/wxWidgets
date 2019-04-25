@@ -206,12 +206,16 @@ public:
 
     FSWTesterBase(int types = wxFSW_EVENT_ALL) :
         eg(EventGenerator::Get()),
-        m_count(0), m_eventTypes(types)
+        m_eventTypes(types)
 #ifdef OSX_EVENT_LOOP_WORKAROUND
         , m_loopActivator(&m_loop)
 #endif
     {
-        Bind(wxEVT_IDLE, &FSWTesterBase::OnIdle, this);
+        // wxFileSystemWatcher can be created only once the event loop is
+        // running, so we can't do it from here and will do it from inside the
+        // loop when this event handler is invoked.
+        Bind(wxEVT_IDLE, &FSWTesterBase::OnIdleInit, this);
+
         Bind(wxEVT_FSWATCHER, &FSWTesterBase::OnFileSystemEvent, this);
     }
 
@@ -246,53 +250,25 @@ public:
         m_loop.Run();
     }
 
-    void OnIdle(wxIdleEvent& /*evt*/)
+    void OnIdleInit(wxIdleEvent& WXUNUSED(event))
     {
-        bool more = Action();
-        m_count++;
+        // We shouldn't be called again.
+        Unbind(wxEVT_IDLE, &FSWTesterBase::OnIdleInit, this);
 
-        if (more)
-        {
-            SendIdle();
-        }
+        CPPUNIT_ASSERT(Init());
+
+        GenerateEvent();
+
+        // Check the result when the next idle event comes.
+        Bind(wxEVT_IDLE, &FSWTesterBase::OnIdleCheckResult, this);
     }
 
-    // returns whether we should produce more idle events
-    virtual bool Action()
+    void OnIdleCheckResult(wxIdleEvent& WXUNUSED(event))
     {
-        switch (m_count)
-        {
-        case 0:
-            CPPUNIT_ASSERT(Init());
-            break;
-        case 1:
-            GenerateEvent();
-            break;
-        case 2:
-            // actual test
-            CheckResult();
-            Exit();
-            break;
+        Unbind(wxEVT_IDLE, &FSWTesterBase::OnIdleCheckResult, this);
 
-        // TODO a mechanism that will break the loop in case we
-        // don't receive a file system event
-        // this below doesn't quite work, so all tests must pass :-)
-#if 0
-        case 2:
-            m_loop.Yield();
-            m_loop.WakeUp();
-            CPPUNIT_ASSERT(KeepWaiting());
-            m_loop.Yield();
-            break;
-        case 3:
-            break;
-        case 4:
-            CPPUNIT_ASSERT(AfterWait());
-            break;
-#endif
-        } // switch (m_count)
-
-        return m_count <= 0;
+        CheckResult();
+        Exit();
     }
 
     virtual bool Init()
@@ -407,7 +383,6 @@ protected:
 #ifdef OSX_EVENT_LOOP_WORKAROUND
     wxEventLoopActivator m_loopActivator;
 #endif
-    int m_count;                // idle events count
 
     wxScopedPtr<wxFileSystemWatcher> m_watcher;
 
