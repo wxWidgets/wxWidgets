@@ -2080,7 +2080,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             {
                 if ( ::GetFocus() == GetHwnd() )
                 {
-                    int flags = 0;
+                    int flags = wxNavigationKeyEvent::FromTab;
                     if (!event.ShiftDown())
                         flags |= wxNavigationKeyEvent::IsForward ;
                     if (event.ControlDown())
