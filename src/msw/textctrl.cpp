@@ -2018,7 +2018,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             {
                 if ( FindFocus() == this )
                 {
-                    int flags = 0;
+                    int flags = wxNavigationKeyEvent::FromTab;
                     if (!event.ShiftDown())
                         flags |= wxNavigationKeyEvent::IsForward ;
                     if (event.ControlDown())
