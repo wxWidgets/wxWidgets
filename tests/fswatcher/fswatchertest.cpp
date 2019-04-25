@@ -25,9 +25,10 @@
 #include "wx/evtloop.h"
 #include "wx/filename.h"
 #include "wx/filefn.h"
+#include "wx/fswatcher.h"
 #include "wx/scopedptr.h"
 #include "wx/stdpaths.h"
-#include "wx/fswatcher.h"
+#include "wx/vector.h"
 
 #include "testfile.h"
 
@@ -339,8 +340,7 @@ public:
     virtual void OnFileSystemEvent(wxFileSystemWatcherEvent& evt)
     {
         wxLogDebug("--- %s ---", evt.ToString());
-        m_lastEvent = wxDynamicCast(evt.Clone(), wxFileSystemWatcherEvent);
-        m_events.Add(m_lastEvent);
+        m_events.push_back(wxDynamicCast(evt.Clone(), wxFileSystemWatcherEvent));
 
         // test finished
         SendIdle();
@@ -415,10 +415,7 @@ protected:
     int m_eventTypes;  // Which event-types to watch. Normally all of them
     bool tested;  // indicates, whether we have already passed the test
 
-    #include "wx/arrimpl.cpp"
-    WX_DEFINE_ARRAY_PTR(wxFileSystemWatcherEvent*, wxArrayEvent);
-    wxArrayEvent m_events;
-    wxFileSystemWatcherEvent* m_lastEvent;
+    wxVector<wxFileSystemWatcherEvent*> m_events;
 };
 
 
