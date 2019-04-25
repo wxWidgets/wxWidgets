@@ -25,6 +25,7 @@
 #include "wx/evtloop.h"
 #include "wx/filename.h"
 #include "wx/filefn.h"
+#include "wx/scopedptr.h"
 #include "wx/stdpaths.h"
 #include "wx/fswatcher.h"
 
@@ -203,16 +204,12 @@ public:
     enum { WAIT_DURATION = 3 };
 
     FSWTesterBase(int types = wxFSW_EVENT_ALL) :
-        eg(EventGenerator::Get()), m_loop(0),
+        eg(EventGenerator::Get()),
+        m_count(0), m_eventTypes(types)
 #ifdef OSX_EVENT_LOOP_WORKAROUND
-        m_loopActivator(NULL),
+        , m_loopActivator(&m_loop)
 #endif
-        m_count(0), m_watcher(0), m_eventTypes(types)
     {
-        m_loop = new wxEventLoop();
-#ifdef OSX_EVENT_LOOP_WORKAROUND
-        m_loopActivator = new wxEventLoopActivator(m_loop);
-#endif
         Connect(wxEVT_IDLE, wxIdleEventHandler(FSWTesterBase::OnIdle));
         Connect(wxEVT_FSWATCHER, wxFileSystemWatcherEventHandler(
                                             FSWTesterBase::OnFileSystemEvent));
@@ -220,21 +217,13 @@ public:
 
     virtual ~FSWTesterBase()
     {
-        delete m_watcher;
-#ifdef OSX_EVENT_LOOP_WORKAROUND
-        delete m_loopActivator;
-#endif
-        if (m_loop)
-        {
-            if (m_loop->IsRunning())
-                m_loop->Exit();
-            delete m_loop;
-        }
+        if (m_loop.IsRunning())
+            m_loop.Exit();
     }
 
     void Exit()
     {
-        m_loop->Exit();
+        m_loop.Exit();
     }
 
     // sends idle event, so we get called in a moment
@@ -247,14 +236,14 @@ public:
         // The fs watcher test cases will hang on OS X if Yield() is not called.
         // It seems that the OS X event loop and / or queueing behaves
         // differently than on MSW and Linux.
-        m_loop->Yield(true);
+        m_loop.Yield(true);
 #endif
     }
 
     void Run()
     {
         SendIdle();
-        m_loop->Run();
+        m_loop.Run();
     }
 
     void OnIdle(wxIdleEvent& /*evt*/)
@@ -313,7 +302,7 @@ public:
 
         // XXX only now can we construct Watcher, because we need
         // active loop here
-        m_watcher = new wxFileSystemWatcher();
+        m_watcher.reset(new wxFileSystemWatcher());
         m_watcher->SetOwner(this);
 
         // add dir to be watched
@@ -415,13 +404,14 @@ public:
 
 protected:
     EventGenerator& eg;
-    wxEventLoopBase* m_loop;    // loop reference
+    wxEventLoop m_loop;    // loop reference
 #ifdef OSX_EVENT_LOOP_WORKAROUND
-    wxEventLoopActivator* m_loopActivator;
+    wxEventLoopActivator m_loopActivator;
 #endif
     int m_count;                // idle events count
 
-    wxFileSystemWatcher* m_watcher;
+    wxScopedPtr<wxFileSystemWatcher> m_watcher;
+
     int m_eventTypes;  // Which event-types to watch. Normally all of them
     bool tested;  // indicates, whether we have already passed the test
 
