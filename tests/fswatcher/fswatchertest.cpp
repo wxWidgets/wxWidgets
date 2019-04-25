@@ -202,8 +202,6 @@ EventGenerator* EventGenerator::ms_instance = 0;
 class FSWTesterBase : public wxEvtHandler
 {
 public:
-    enum { WAIT_DURATION = 3 };
-
     FSWTesterBase(int types = wxFSW_EVENT_ALL) :
         eg(EventGenerator::Get()),
         m_eventTypes(types)
@@ -291,30 +289,6 @@ public:
         return true;
     }
 
-    virtual bool KeepWaiting()
-    {
-        // did we receive event already?
-        if (!tested)
-        {
-            // well, let's wait a bit more
-            wxSleep(WAIT_DURATION);
-        }
-
-        return true;
-    }
-
-    virtual bool AfterWait()
-    {
-        // fail if still no events
-        WX_ASSERT_MESSAGE
-        (
-             ("No events during %d seconds!", static_cast<int>(WAIT_DURATION)),
-             tested
-        );
-
-        return true;
-    }
-
     virtual void OnFileSystemEvent(wxFileSystemWatcherEvent& evt)
     {
         wxLogDebug("--- %s ---", evt.ToString());
@@ -322,7 +296,6 @@ public:
 
         // test finished
         SendIdle();
-        tested = true;
     }
 
     virtual void CheckResult()
@@ -390,7 +363,6 @@ protected:
     wxScopedPtr<wxFileSystemWatcher> m_watcher;
 
     int m_eventTypes;  // Which event-types to watch. Normally all of them
-    bool tested;  // indicates, whether we have already passed the test
 
     wxVector<wxFileSystemWatcherEvent*> m_events;
 };
