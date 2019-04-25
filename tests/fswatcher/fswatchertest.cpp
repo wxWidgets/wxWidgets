@@ -193,13 +193,16 @@ protected:
 EventGenerator* EventGenerator::ms_instance = 0;
 
 
-// custom event handler
-class EventHandler : public wxEvtHandler
+// Abstract base class from which concrete event tests inherit.
+//
+// This class provides the common test skeleton which various virtual hooks
+// that should or can be reimplemented by the derived classes.
+class FSWTesterBase : public wxEvtHandler
 {
 public:
     enum { WAIT_DURATION = 3 };
 
-    EventHandler(int types = wxFSW_EVENT_ALL) :
+    FSWTesterBase(int types = wxFSW_EVENT_ALL) :
         eg(EventGenerator::Get()), m_loop(0),
 #ifdef OSX_EVENT_LOOP_WORKAROUND
         m_loopActivator(NULL),
@@ -210,12 +213,12 @@ public:
 #ifdef OSX_EVENT_LOOP_WORKAROUND
         m_loopActivator = new wxEventLoopActivator(m_loop);
 #endif
-        Connect(wxEVT_IDLE, wxIdleEventHandler(EventHandler::OnIdle));
+        Connect(wxEVT_IDLE, wxIdleEventHandler(FSWTesterBase::OnIdle));
         Connect(wxEVT_FSWATCHER, wxFileSystemWatcherEventHandler(
-                                            EventHandler::OnFileSystemEvent));
+                                            FSWTesterBase::OnFileSystemEvent));
     }
 
-    virtual ~EventHandler()
+    virtual ~FSWTesterBase()
     {
         delete m_watcher;
 #ifdef OSX_EVENT_LOOP_WORKAROUND
@@ -521,7 +524,7 @@ void FileSystemWatcherTestCase::TestEventCreate()
 {
     wxLogDebug("TestEventCreate()");
 
-    class EventTester : public EventHandler
+    class EventTester : public FSWTesterBase
     {
     public:
         virtual void GenerateEvent() wxOVERRIDE
@@ -552,7 +555,7 @@ void FileSystemWatcherTestCase::TestEventDelete()
 {
     wxLogDebug("TestEventDelete()");
 
-    class EventTester : public EventHandler
+    class EventTester : public FSWTesterBase
     {
     public:
         virtual void GenerateEvent() wxOVERRIDE
@@ -585,7 +588,7 @@ void FileSystemWatcherTestCase::TestEventRename()
 {
     wxLogDebug("TestEventRename()");
 
-    class EventTester : public EventHandler
+    class EventTester : public FSWTesterBase
     {
     public:
         virtual void GenerateEvent() wxOVERRIDE
@@ -616,7 +619,7 @@ void FileSystemWatcherTestCase::TestEventModify()
 {
     wxLogDebug("TestEventModify()");
 
-    class EventTester : public EventHandler
+    class EventTester : public FSWTesterBase
     {
     public:
         virtual void GenerateEvent() wxOVERRIDE
@@ -647,7 +650,7 @@ void FileSystemWatcherTestCase::TestEventAccess()
 {
     wxLogDebug("TestEventAccess()");
 
-    class EventTester : public EventHandler
+    class EventTester : public FSWTesterBase
     {
     public:
         virtual void GenerateEvent() wxOVERRIDE
@@ -680,7 +683,7 @@ void FileSystemWatcherTestCase::TestEventAttribute()
 {
     wxLogDebug("TestEventAttribute()");
 
-    class EventTester : public EventHandler
+    class EventTester : public FSWTesterBase
     {
     public:
         virtual void GenerateEvent() wxOVERRIDE
@@ -711,12 +714,12 @@ void FileSystemWatcherTestCase::TestSingleWatchtypeEvent()
 {
     wxLogDebug("TestSingleWatchtypeEvent()");
 
-    class EventTester : public EventHandler
+    class EventTester : public FSWTesterBase
     {
     public:
         // We could pass wxFSW_EVENT_CREATE or MODIFY instead, but not RENAME or
         // DELETE as the event path fields would be wrong in CheckResult()
-        EventTester() : EventHandler(wxFSW_EVENT_ACCESS) {}
+        EventTester() : FSWTesterBase(wxFSW_EVENT_ACCESS) {}
 
         virtual void GenerateEvent() wxOVERRIDE
         {
@@ -747,7 +750,7 @@ void FileSystemWatcherTestCase::TestSingleWatchtypeEvent()
 
 void FileSystemWatcherTestCase::TestTrees()
 {
-    class TreeTester : public EventHandler
+    class TreeTester : public FSWTesterBase
     {
         const size_t subdirs;
         const size_t files;
@@ -1003,7 +1006,7 @@ namespace
 // can't be a weak_definition
 //
 // So define this class outside the function instead.
-class NoEventsAfterRemoveEventTester : public EventHandler,
+class NoEventsAfterRemoveEventTester : public FSWTesterBase,
                                        public wxTimer
 {
 public:
