@@ -211,9 +211,8 @@ public:
         , m_loopActivator(&m_loop)
 #endif
     {
-        Connect(wxEVT_IDLE, wxIdleEventHandler(FSWTesterBase::OnIdle));
-        Connect(wxEVT_FSWATCHER, wxFileSystemWatcherEventHandler(
-                                            FSWTesterBase::OnFileSystemEvent));
+        Bind(wxEVT_IDLE, &FSWTesterBase::OnIdle, this);
+        Bind(wxEVT_FSWATCHER, &FSWTesterBase::OnFileSystemEvent, this);
     }
 
     virtual ~FSWTesterBase()
