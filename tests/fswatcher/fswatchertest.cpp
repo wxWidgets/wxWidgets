@@ -289,15 +289,6 @@ public:
         return true;
     }
 
-    virtual void OnFileSystemEvent(wxFileSystemWatcherEvent& evt)
-    {
-        wxLogDebug("--- %s ---", evt.ToString());
-        m_events.push_back(wxDynamicCast(evt.Clone(), wxFileSystemWatcherEvent));
-
-        // test finished
-        SendIdle();
-    }
-
     virtual void CheckResult()
     {
         CPPUNIT_ASSERT_MESSAGE( "No events received", !m_events.empty() );
@@ -365,6 +356,16 @@ protected:
     int m_eventTypes;  // Which event-types to watch. Normally all of them
 
     wxVector<wxFileSystemWatcherEvent*> m_events;
+
+private:
+    void OnFileSystemEvent(wxFileSystemWatcherEvent& evt)
+    {
+        wxLogDebug("--- %s ---", evt.ToString());
+        m_events.push_back(wxDynamicCast(evt.Clone(), wxFileSystemWatcherEvent));
+
+        // test finished
+        SendIdle();
+    }
 };
 
 
