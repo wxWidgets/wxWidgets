@@ -374,6 +374,29 @@ inline RECT wxGetClientRect(HWND hwnd)
 // small helper classes
 // ---------------------------------------------------------------------------
 
+// Temporarily assign the given HWND to the window in ctor and unset it back to
+// the original value (usually 0) in dtor.
+class TempHWNDSetter
+{
+public:
+    TempHWNDSetter(wxWindow* win, WXHWND hWnd)
+        : m_win(win), m_hWndOrig(m_win->GetHWND())
+    {
+        m_win->SetHWND(hWnd);
+    }
+
+    ~TempHWNDSetter()
+    {
+        m_win->SetHWND(m_hWndOrig);
+    }
+
+private:
+    wxWindow* const m_win;
+    WXHWND const m_hWndOrig;
+
+    wxDECLARE_NO_COPY_CLASS(TempHWNDSetter);
+};
+
 // create an instance of this class and use it as the HDC for screen, will
 // automatically release the DC going out of scope
 class ScreenHDC
