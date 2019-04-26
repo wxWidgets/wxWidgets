@@ -32,15 +32,6 @@
 
 #include "testfile.h"
 
-/*
-This test used to be disabled on OS X as it hung. Work around the apparent
-wxOSX differences between a non-GUI event loop and a GUI event loop (where
-the tests do run fine) until this gets resolved.
-*/
-#ifdef __WXOSX__
-    #define OSX_EVENT_LOOP_WORKAROUND
-#endif
-
 // ----------------------------------------------------------------------------
 // local functions
 // ----------------------------------------------------------------------------
@@ -205,9 +196,6 @@ public:
     FSWTesterBase(int types = wxFSW_EVENT_ALL) :
         eg(EventGenerator::Get()),
         m_eventTypes(types)
-#ifdef OSX_EVENT_LOOP_WORKAROUND
-        , m_loopActivator(&m_loop)
-#endif
     {
         Bind(wxEVT_FSWATCHER, &FSWTesterBase::OnFileSystemEvent, this);
 
@@ -233,13 +221,6 @@ public:
     {
         wxIdleEvent* e = new wxIdleEvent();
         QueueEvent(e);
-
-#ifdef OSX_EVENT_LOOP_WORKAROUND
-        // The fs watcher test cases will hang on OS X if Yield() is not called.
-        // It seems that the OS X event loop and / or queueing behaves
-        // differently than on MSW and Linux.
-        m_loop.Yield(true);
-#endif
     }
 
     void Run()
@@ -347,9 +328,6 @@ public:
 protected:
     EventGenerator& eg;
     wxEventLoop m_loop;    // loop reference
-#ifdef OSX_EVENT_LOOP_WORKAROUND
-    wxEventLoopActivator m_loopActivator;
-#endif
 
     wxScopedPtr<wxFileSystemWatcher> m_watcher;
 
@@ -873,15 +851,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
 
     TreeTester tester;
 
-// The fs watcher test cases will hang on OS X if we call Run().
-// This is likely due to differences between the event loop
-// between OS X and the other ports.
-#ifdef OSX_EVENT_LOOP_WORKAROUND
-    tester.Init();
-    tester.GenerateEvent();
-#else
     tester.Run();
-#endif
 }
 
 
