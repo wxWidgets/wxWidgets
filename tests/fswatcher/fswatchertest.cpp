@@ -370,91 +370,38 @@ private:
 
 
 // ----------------------------------------------------------------------------
-// test class
+// test fixture
 // ----------------------------------------------------------------------------
 
-class FileSystemWatcherTestCase : public CppUnit::TestCase
+class FileSystemWatcherTestCase
 {
 public:
-    FileSystemWatcherTestCase() { }
+    FileSystemWatcherTestCase()
+    {
+        wxLog::AddTraceMask(wxTRACE_FSWATCHER);
 
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
+        // Before each test, remove the dir if it exists.
+        // It would exist if the previous test run was aborted.
+        wxString tmp = wxStandardPaths::Get().GetTempDir();
+        wxFileName dir;
+        dir.AssignDir(tmp);
+        dir.AppendDir("fswatcher_test");
+        dir.Rmdir(wxPATH_RMDIR_RECURSIVE);
+        EventGenerator::Get().GetWatchDir();
+    }
 
-private:
-    CPPUNIT_TEST_SUITE( FileSystemWatcherTestCase );
-        CPPUNIT_TEST( TestEventCreate );
-        CPPUNIT_TEST( TestEventDelete );
-        CPPUNIT_TEST( TestTrees );
-
-        // kqueue-based implementation doesn't collapse create/delete pairs in
-        // renames and doesn't detect neither modifications nor access to the
-        // files reliably currently so disable these tests
-        //
-        // FIXME: fix the code and reenable them
-#ifndef wxHAS_KQUEUE
-        CPPUNIT_TEST( TestEventRename );
-        CPPUNIT_TEST( TestEventModify );
-
-        // MSW implementation doesn't detect file access events currently
-#ifndef __WINDOWS__
-        CPPUNIT_TEST( TestEventAccess );
-#endif // __WINDOWS__
-#endif // !wxHAS_KQUEUE
-
-#ifdef wxHAS_INOTIFY
-        CPPUNIT_TEST( TestEventAttribute );
-        CPPUNIT_TEST( TestSingleWatchtypeEvent );
-#endif // wxHAS_INOTIFY
-
-        CPPUNIT_TEST( TestNoEventsAfterRemove );
-    CPPUNIT_TEST_SUITE_END();
-
-    void TestEventCreate();
-    void TestEventDelete();
-    void TestEventRename();
-    void TestEventModify();
-    void TestEventAccess();
-#ifdef wxHAS_INOTIFY
-    void TestEventAttribute();
-    void TestSingleWatchtypeEvent();
-#endif // wxHAS_INOTIFY
-    void TestTrees();
-    void TestNoEventsAfterRemove();
-
-    wxDECLARE_NO_COPY_CLASS(FileSystemWatcherTestCase);
+    ~FileSystemWatcherTestCase()
+    {
+        EventGenerator::Get().RemoveWatchDir();
+    }
 };
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( FileSystemWatcherTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( FileSystemWatcherTestCase,
-                                        "FileSystemWatcherTestCase" );
-
-void FileSystemWatcherTestCase::setUp()
-{
-    wxLog::AddTraceMask(wxTRACE_FSWATCHER);
-
-    // Before each test, remove the dir if it exists.
-    // It would exist if the previous test run was aborted.
-    wxString tmp = wxStandardPaths::Get().GetTempDir();
-    wxFileName dir;
-    dir.AssignDir(tmp);
-    dir.AppendDir("fswatcher_test");
-    dir.Rmdir(wxPATH_RMDIR_RECURSIVE);
-    EventGenerator::Get().GetWatchDir();
-}
-
-void FileSystemWatcherTestCase::tearDown()
-{
-    EventGenerator::Get().RemoveWatchDir();
-}
 
 // ----------------------------------------------------------------------------
 // TestEventCreate
 // ----------------------------------------------------------------------------
-void FileSystemWatcherTestCase::TestEventCreate()
+
+TEST_CASE_METHOD(FileSystemWatcherTestCase,
+                 "wxFileSystemWatcher::EventCreate", "[fsw]")
 {
     wxLogDebug("TestEventCreate()");
 
@@ -485,7 +432,9 @@ void FileSystemWatcherTestCase::TestEventCreate()
 // ----------------------------------------------------------------------------
 // TestEventDelete
 // ----------------------------------------------------------------------------
-void FileSystemWatcherTestCase::TestEventDelete()
+
+TEST_CASE_METHOD(FileSystemWatcherTestCase,
+                 "wxFileSystemWatcher::EventDelete", "[fsw]")
 {
     wxLogDebug("TestEventDelete()");
 
@@ -515,10 +464,19 @@ void FileSystemWatcherTestCase::TestEventDelete()
     tester.Run();
 }
 
+// kqueue-based implementation doesn't collapse create/delete pairs in
+// renames and doesn't detect neither modifications nor access to the
+// files reliably currently so disable these tests
+//
+// FIXME: fix the code and reenable them
+#ifndef wxHAS_KQUEUE
+
 // ----------------------------------------------------------------------------
 // TestEventRename
 // ----------------------------------------------------------------------------
-void FileSystemWatcherTestCase::TestEventRename()
+
+TEST_CASE_METHOD(FileSystemWatcherTestCase,
+                 "wxFileSystemWatcher::EventRename", "[fsw]")
 {
     wxLogDebug("TestEventRename()");
 
@@ -549,7 +507,9 @@ void FileSystemWatcherTestCase::TestEventRename()
 // ----------------------------------------------------------------------------
 // TestEventModify
 // ----------------------------------------------------------------------------
-void FileSystemWatcherTestCase::TestEventModify()
+
+TEST_CASE_METHOD(FileSystemWatcherTestCase,
+                 "wxFileSystemWatcher::EventModify", "[fsw]")
 {
     wxLogDebug("TestEventModify()");
 
@@ -577,10 +537,15 @@ void FileSystemWatcherTestCase::TestEventModify()
     tester.Run();
 }
 
+// MSW implementation doesn't detect file access events currently
+#ifndef __WINDOWS__
+
 // ----------------------------------------------------------------------------
 // TestEventAccess
 // ----------------------------------------------------------------------------
-void FileSystemWatcherTestCase::TestEventAccess()
+
+TEST_CASE_METHOD(FileSystemWatcherTestCase,
+                 "wxFileSystemWatcher::EventAccess", "[fsw]")
 {
     wxLogDebug("TestEventAccess()");
 
@@ -609,11 +574,16 @@ void FileSystemWatcherTestCase::TestEventAccess()
     tester.Run();
 }
 
+#endif // __WINDOWS__
+
+#endif // !wxHAS_KQUEUE
+
 #ifdef wxHAS_INOTIFY
 // ----------------------------------------------------------------------------
 // TestEventAttribute
 // ----------------------------------------------------------------------------
-void FileSystemWatcherTestCase::TestEventAttribute()
+TEST_CASE_METHOD(FileSystemWatcherTestCase,
+                 "wxFileSystemWatcher::EventAttribute", "[fsw]")
 {
     wxLogDebug("TestEventAttribute()");
 
@@ -644,7 +614,9 @@ void FileSystemWatcherTestCase::TestEventAttribute()
 // ----------------------------------------------------------------------------
 // TestSingleWatchtypeEvent: Watch only wxFSW_EVENT_ACCESS
 // ----------------------------------------------------------------------------
-void FileSystemWatcherTestCase::TestSingleWatchtypeEvent()
+
+TEST_CASE_METHOD(FileSystemWatcherTestCase,
+                 "wxFileSystemWatcher::SingleWatchtypeEvent", "[fsw]")
 {
     wxLogDebug("TestSingleWatchtypeEvent()");
 
@@ -682,7 +654,8 @@ void FileSystemWatcherTestCase::TestSingleWatchtypeEvent()
 // TestTrees
 // ----------------------------------------------------------------------------
 
-void FileSystemWatcherTestCase::TestTrees()
+TEST_CASE_METHOD(FileSystemWatcherTestCase,
+                 "wxFileSystemWatcher::Trees", "[fsw]")
 {
     class TreeTester : public FSWTesterBase
     {
@@ -979,7 +952,8 @@ public:
 
 } // anonymous namespace
 
-void FileSystemWatcherTestCase::TestNoEventsAfterRemove()
+TEST_CASE_METHOD(FileSystemWatcherTestCase,
+                 "wxFileSystemWatcher::NoEventsAfterRemove", "[fsw]")
 {
     NoEventsAfterRemoveEventTester tester;
     tester.Run();
