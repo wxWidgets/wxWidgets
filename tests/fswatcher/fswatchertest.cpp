@@ -378,8 +378,6 @@ class FileSystemWatcherTestCase
 public:
     FileSystemWatcherTestCase()
     {
-        wxLog::AddTraceMask(wxTRACE_FSWATCHER);
-
         // Before each test, remove the dir if it exists.
         // It would exist if the previous test run was aborted.
         wxString tmp = wxStandardPaths::Get().GetTempDir();
@@ -421,8 +419,6 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     };
 
     EventTester tester;
-
-    wxLogTrace(wxTRACE_FSWATCHER, "TestEventCreate tester created()");
 
     tester.Run();
 }
