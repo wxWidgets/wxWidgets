@@ -73,7 +73,7 @@ public:
 
     bool RenameFile()
     {
-        CPPUNIT_ASSERT(m_file.FileExists());
+        REQUIRE(m_file.FileExists());
 
         wxLogDebug("Renaming %s=>%s", m_file.GetFullPath(), m_new.GetFullPath());
 
@@ -90,7 +90,7 @@ public:
 
     bool DeleteFile()
     {
-        CPPUNIT_ASSERT(m_file.FileExists());
+        REQUIRE(m_file.FileExists());
 
         bool ret =  wxRemoveFile(m_file.GetFullPath());
         if (ret)
@@ -111,23 +111,23 @@ public:
     bool ReadFile()
     {
         wxFile f(m_file.GetFullPath());
-        CPPUNIT_ASSERT(f.IsOpened());
+        REQUIRE(f.IsOpened());
 
         char buf[1];
         ssize_t count = f.Read(buf, sizeof(buf));
-        CPPUNIT_ASSERT(count > 0);
+        CHECK(count > 0);
 
         return true;
     }
 
     bool ModifyFile()
     {
-        CPPUNIT_ASSERT(m_file.FileExists());
+        REQUIRE(m_file.FileExists());
 
         wxFile file(m_file.GetFullPath(), wxFile::write_append);
-        CPPUNIT_ASSERT(file.IsOpened());
+        REQUIRE(file.IsOpened());
 
-        CPPUNIT_ASSERT(file.Write("Words of Wisdom, Lloyd. Words of wisdom\n"));
+        CHECK(file.Write("Words of Wisdom, Lloyd. Words of wisdom\n"));
         return file.Close();
     }
 
@@ -151,8 +151,8 @@ public:
         // XXX look for more unique name? there is no function to generate
         // unique filename, the file always get created...
         dir.AppendDir("fswatcher_test");
-        CPPUNIT_ASSERT(!dir.DirExists());
-        CPPUNIT_ASSERT(dir.Mkdir());
+        REQUIRE(!dir.DirExists());
+        REQUIRE(dir.Mkdir());
 
         return dir;
     }
@@ -160,12 +160,12 @@ public:
     static void RemoveWatchDir()
     {
         wxFileName dir = GetWatchDir();
-        CPPUNIT_ASSERT(dir.DirExists());
+        REQUIRE(dir.DirExists());
 
         // just to be really sure we know what we remove
-        CPPUNIT_ASSERT_EQUAL( "fswatcher_test", dir.GetDirs().Last() );
+        REQUIRE( dir.GetDirs().Last() == "fswatcher_test" );
 
-        CPPUNIT_ASSERT( dir.Rmdir(wxPATH_RMDIR_RECURSIVE) );
+        CHECK( dir.Rmdir(wxPATH_RMDIR_RECURSIVE) );
     }
 
     static wxFileName RandomName(const wxFileName& base, int length = 10)
@@ -249,7 +249,7 @@ public:
 
     void OnIdleInit()
     {
-        CPPUNIT_ASSERT(Init());
+        REQUIRE(Init());
 
         GenerateEvent();
 
@@ -275,7 +275,7 @@ public:
     virtual bool Init()
     {
         // test we're good to go
-        CPPUNIT_ASSERT(wxEventLoopBase::GetActive());
+        CHECK(wxEventLoopBase::GetActive());
 
         // XXX only now can we construct Watcher, because we need
         // active loop here
@@ -284,29 +284,29 @@ public:
 
         // add dir to be watched
         wxFileName dir = EventGenerator::GetWatchDir();
-        CPPUNIT_ASSERT(m_watcher->Add(dir, m_eventTypes));
+        CHECK(m_watcher->Add(dir, m_eventTypes));
 
         return true;
     }
 
     virtual void CheckResult()
     {
-        CPPUNIT_ASSERT_MESSAGE( "No events received", !m_events.empty() );
+        REQUIRE( !m_events.empty() );
 
         const wxFileSystemWatcherEvent * const e = m_events.front();
 
         // this is our "reference event"
         const wxFileSystemWatcherEvent expected = ExpectedEvent();
 
-        CPPUNIT_ASSERT_EQUAL( expected.GetChangeType(), e->GetChangeType() );
+        CHECK( e->GetChangeType() == expected.GetChangeType() );
 
-        CPPUNIT_ASSERT_EQUAL((int)wxEVT_FSWATCHER, e->GetEventType());
+        CHECK( e->GetEventType() == wxEVT_FSWATCHER );
 
         // XXX this needs change
-        CPPUNIT_ASSERT_EQUAL(wxEVT_CATEGORY_UNKNOWN, e->GetEventCategory());
+        CHECK( e->GetEventCategory() == wxEVT_CATEGORY_UNKNOWN );
 
-        CPPUNIT_ASSERT_EQUAL(expected.GetPath(), e->GetPath());
-        CPPUNIT_ASSERT_EQUAL(expected.GetNewPath(), e->GetNewPath());
+        CHECK( e->GetPath() == expected.GetPath() );
+        CHECK( e->GetNewPath() == expected.GetNewPath() );
 
         // Under MSW extra modification events are sometimes reported after a
         // rename and we just can't get rid of them, so ignore them in this
@@ -408,7 +408,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     public:
         virtual void GenerateEvent() wxOVERRIDE
         {
-            CPPUNIT_ASSERT(eg.CreateFile());
+            CHECK(eg.CreateFile());
         }
 
         virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
@@ -439,7 +439,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     public:
         virtual void GenerateEvent() wxOVERRIDE
         {
-            CPPUNIT_ASSERT(eg.DeleteFile());
+            CHECK(eg.DeleteFile());
         }
 
         virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
@@ -479,7 +479,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     public:
         virtual void GenerateEvent() wxOVERRIDE
         {
-            CPPUNIT_ASSERT(eg.RenameFile());
+            CHECK(eg.RenameFile());
         }
 
         virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
@@ -510,7 +510,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     public:
         virtual void GenerateEvent() wxOVERRIDE
         {
-            CPPUNIT_ASSERT(eg.ModifyFile());
+            CHECK(eg.ModifyFile());
         }
 
         virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
@@ -544,7 +544,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     public:
         virtual void GenerateEvent() wxOVERRIDE
         {
-            CPPUNIT_ASSERT(eg.ReadFile());
+            CHECK(eg.ReadFile());
         }
 
         virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
@@ -580,7 +580,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
     public:
         virtual void GenerateEvent() wxOVERRIDE
         {
-            CPPUNIT_ASSERT(eg.TouchFile());
+            CHECK(eg.TouchFile());
         }
 
         virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
@@ -617,9 +617,9 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
         {
             // As wxFSW_EVENT_ACCESS is passed to the ctor only ReadFile() will
             // generate an event. Without it they all will, and the test fails
-            CPPUNIT_ASSERT(eg.CreateFile());
-            CPPUNIT_ASSERT(eg.ModifyFile());
-            CPPUNIT_ASSERT(eg.ReadFile());
+            CHECK(eg.CreateFile());
+            CHECK(eg.ModifyFile());
+            CHECK(eg.ReadFile());
         }
 
         virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
@@ -657,10 +657,10 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
 #endif
                       )
         {
-            CPPUNIT_ASSERT(dir.Mkdir());
+            REQUIRE(dir.Mkdir());
             // Now add a subdir with an easy name to remember in WatchTree()
             dir.AppendDir("child");
-            CPPUNIT_ASSERT(dir.Mkdir());
+            REQUIRE(dir.Mkdir());
             wxFileName child(dir);  // Create a copy to which to symlink
 
             // Create a branch of 5 numbered subdirs, each containing 3
@@ -668,7 +668,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
             for ( unsigned d = 0; d < subdirs; ++d )
             {
                 dir.AppendDir(wxString::Format("subdir%u", d+1));
-                CPPUNIT_ASSERT(dir.Mkdir());
+                REQUIRE(dir.Mkdir());
 
                 const wxString prefix = dir.GetPathWithSep();
                 const wxString ext[] = { ".txt", ".log", "" };
@@ -682,12 +682,17 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
                 if ( withSymlinks )
                 {
                     // Create a symlink to a files, and another to 'child'
-                    CPPUNIT_ASSERT_EQUAL(0,
+                    CHECK
+                    (
                         symlink(wxString(prefix + "file1").c_str(),
-                        wxString(prefix + "file.lnk").c_str()));
-                    CPPUNIT_ASSERT_EQUAL(0,
+                                wxString(prefix + "file.lnk").c_str()) == 0
+                    );
+
+                    CHECK
+                    (
                         symlink(child.GetFullPath().c_str(),
-                        wxString(prefix + "dir.lnk").c_str()));
+                                wxString(prefix + "dir.lnk").c_str()) == 0
+                    );
                 }
 #endif // __UNIX__
             }
@@ -695,37 +700,35 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
 
         void RmDir(wxFileName dir)
         {
-            CPPUNIT_ASSERT(dir.DirExists());
+            REQUIRE(dir.DirExists());
 
-            CPPUNIT_ASSERT(dir.Rmdir(wxPATH_RMDIR_RECURSIVE));
+            CHECK(dir.Rmdir(wxPATH_RMDIR_RECURSIVE));
         }
 
         void WatchDir(wxFileName dir)
         {
-            CPPUNIT_ASSERT(m_watcher);
+            REQUIRE(m_watcher);
 
             // Store the initial count; there may already be some watches
             const int initial = m_watcher->GetWatchedPathsCount();
 
             m_watcher->Add(dir);
-            CPPUNIT_ASSERT_EQUAL(initial + 1,
-                                 m_watcher->GetWatchedPathsCount());
+            CHECK( m_watcher->GetWatchedPathsCount() == initial + 1 );
         }
 
         void RemoveSingleWatch(wxFileName dir)
         {
-            CPPUNIT_ASSERT(m_watcher);
+            REQUIRE(m_watcher);
 
             const int initial = m_watcher->GetWatchedPathsCount();
 
             m_watcher->Remove(dir);
-            CPPUNIT_ASSERT_EQUAL(initial - 1,
-                                 m_watcher->GetWatchedPathsCount());
+            CHECK( m_watcher->GetWatchedPathsCount() == initial - 1 );
         }
 
         void WatchTree(const wxFileName& dir)
         {
-            CPPUNIT_ASSERT(m_watcher);
+            REQUIRE(m_watcher);
 
             int treeitems = 1; // the trunk
 #if !defined(__WINDOWS__) && !defined(wxHAVE_FSEVENTS_FILE_NOTIFICATIONS)
@@ -743,17 +746,17 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
             m_watcher->AddTree(dir);
             const int plustree = m_watcher->GetWatchedPathsCount();
 
-            CPPUNIT_ASSERT_EQUAL(initial + treeitems, plustree);
+            CHECK( plustree == initial + treeitems );
 
             m_watcher->RemoveTree(dir);
-            CPPUNIT_ASSERT_EQUAL(initial, m_watcher->GetWatchedPathsCount());
+            CHECK( m_watcher->GetWatchedPathsCount() == initial );
 
             // Now test the refcount mechanism by watching items more than once
             wxFileName child(dir);
             child.AppendDir("child");
             m_watcher->AddTree(child);
             // Check some watches were added; we don't care about the number
-            CPPUNIT_ASSERT(initial < m_watcher->GetWatchedPathsCount());
+            CHECK(initial < m_watcher->GetWatchedPathsCount());
             // Now watch the whole tree and check that the count is the same
             // as it was the first time, despite also adding 'child' separately
             // Except that in wxMSW this isn't true: each watch will be a
@@ -763,11 +766,11 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
             fudge = 1;
 #endif // __WINDOWS__ || wxHAVE_FSEVENTS_FILE_NOTIFICATIONS
             m_watcher->AddTree(dir);
-            CPPUNIT_ASSERT_EQUAL(plustree + fudge, m_watcher->GetWatchedPathsCount());
+            CHECK( m_watcher->GetWatchedPathsCount() == plustree + fudge );
             m_watcher->RemoveTree(child);
-            CPPUNIT_ASSERT(initial < m_watcher->GetWatchedPathsCount());
+            CHECK(initial < m_watcher->GetWatchedPathsCount());
             m_watcher->RemoveTree(dir);
-            CPPUNIT_ASSERT_EQUAL(initial, m_watcher->GetWatchedPathsCount());
+            CHECK( m_watcher->GetWatchedPathsCount() == initial );
 #if defined(__UNIX__)
             // Finally, test a tree containing internal symlinks
             RmDir(dir);
@@ -777,8 +780,8 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
             // (and without the assert, it would infinitely loop)
             wxFileName fn = dir;
             fn.DontFollowLink();
-            CPPUNIT_ASSERT(m_watcher->AddTree(fn));
-            CPPUNIT_ASSERT(m_watcher->RemoveTree(fn));
+            CHECK(m_watcher->AddTree(fn));
+            CHECK(m_watcher->RemoveTree(fn));
 
             // Regrow the tree without symlinks, ready for the next test
             RmDir(dir);
@@ -788,8 +791,8 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
 
         void WatchTreeWithFilespec(const wxFileName& dir)
         {
-            CPPUNIT_ASSERT(m_watcher);
-            CPPUNIT_ASSERT(dir.DirExists()); // Was built in WatchTree()
+            REQUIRE(m_watcher);
+            REQUIRE(dir.DirExists()); // Was built in WatchTree()
 
             // Store the initial count; there may already be some watches
             const int initial = m_watcher->GetWatchedPathsCount();
@@ -805,20 +808,19 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
 #endif
             m_watcher->AddTree(dir, wxFSW_EVENT_ALL, "*.txt");
 
-            const int plustree = m_watcher->GetWatchedPathsCount();
-            CPPUNIT_ASSERT_EQUAL(initial + treeitems, plustree);
+            CHECK( m_watcher->GetWatchedPathsCount() == initial + treeitems );
 
             // RemoveTree should try to remove only those files that were added
             m_watcher->RemoveTree(dir);
-            CPPUNIT_ASSERT_EQUAL(initial, m_watcher->GetWatchedPathsCount());
+            CHECK( m_watcher->GetWatchedPathsCount() == initial );
         }
 
         void RemoveAllWatches()
         {
-            CPPUNIT_ASSERT(m_watcher);
+            REQUIRE(m_watcher);
 
             m_watcher->RemoveAll();
-            CPPUNIT_ASSERT_EQUAL(0, m_watcher->GetWatchedPathsCount());
+            CHECK( m_watcher->GetWatchedPathsCount() == 0 );
         }
 
         virtual void GenerateEvent() wxOVERRIDE
@@ -826,16 +828,16 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
             // We don't use this function for events. Just run the tests
 
             wxFileName watchdir = EventGenerator::GetWatchDir();
-            CPPUNIT_ASSERT(watchdir.DirExists());
+            REQUIRE(watchdir.DirExists());
 
             wxFileName treedir(watchdir);
             treedir.AppendDir("treetrunk");
-            CPPUNIT_ASSERT(!treedir.DirExists());
+            CHECK(!treedir.DirExists());
 
             wxFileName singledir(watchdir);
             singledir.AppendDir("single");
-            CPPUNIT_ASSERT(!singledir.DirExists());
-            CPPUNIT_ASSERT(singledir.Mkdir());
+            CHECK(!singledir.DirExists());
+            CHECK(singledir.Mkdir());
 
             WatchDir(singledir);
             WatchTree(treedir);
@@ -861,7 +863,7 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
 
         virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
         {
-            CPPUNIT_FAIL("Shouldn't be called");
+            FAIL("Shouldn't be called");
 
             return wxFileSystemWatcherEvent(wxFSW_EVENT_ERROR);
         }
@@ -915,17 +917,17 @@ public:
     virtual void GenerateEvent() wxOVERRIDE
     {
         m_watcher->Remove(EventGenerator::GetWatchDir());
-        CPPUNIT_ASSERT(eg.CreateFile());
+        CHECK(eg.CreateFile());
     }
 
     virtual void CheckResult() wxOVERRIDE
     {
-        CPPUNIT_ASSERT( m_events.empty() );
+        REQUIRE( m_events.empty() );
     }
 
     virtual wxFileSystemWatcherEvent ExpectedEvent() wxOVERRIDE
     {
-        CPPUNIT_FAIL( "Shouldn't be called" );
+        FAIL( "Shouldn't be called" );
 
         return wxFileSystemWatcherEvent(wxFSW_EVENT_ERROR);
     }
