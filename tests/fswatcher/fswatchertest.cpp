@@ -230,7 +230,11 @@ public:
 
     void OnIdleInit()
     {
-        REQUIRE(Init());
+        // Now that the event loop is running, we can construct the watcher.
+        m_watcher.reset(new wxFileSystemWatcher());
+        m_watcher->SetOwner(this);
+
+        Init();
 
         GenerateEvent();
 
@@ -253,21 +257,10 @@ public:
         Exit();
     }
 
-    virtual bool Init()
+    virtual void Init()
     {
-        // test we're good to go
-        CHECK(wxEventLoopBase::GetActive());
-
-        // XXX only now can we construct Watcher, because we need
-        // active loop here
-        m_watcher.reset(new wxFileSystemWatcher());
-        m_watcher->SetOwner(this);
-
-        // add dir to be watched
         wxFileName dir = EventGenerator::GetWatchDir();
-        CHECK(m_watcher->Add(dir, m_eventTypes));
-
-        return true;
+        REQUIRE( m_watcher->Add(dir, m_eventTypes) );
     }
 
     virtual void CheckResult()
