@@ -403,8 +403,6 @@ public:
 TEST_CASE_METHOD(FileSystemWatcherTestCase,
                  "wxFileSystemWatcher::EventCreate", "[fsw]")
 {
-    wxLogDebug("TestEventCreate()");
-
     class EventTester : public FSWTesterBase
     {
     public:
@@ -436,8 +434,6 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
 TEST_CASE_METHOD(FileSystemWatcherTestCase,
                  "wxFileSystemWatcher::EventDelete", "[fsw]")
 {
-    wxLogDebug("TestEventDelete()");
-
     class EventTester : public FSWTesterBase
     {
     public:
@@ -478,8 +474,6 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
 TEST_CASE_METHOD(FileSystemWatcherTestCase,
                  "wxFileSystemWatcher::EventRename", "[fsw]")
 {
-    wxLogDebug("TestEventRename()");
-
     class EventTester : public FSWTesterBase
     {
     public:
@@ -511,8 +505,6 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
 TEST_CASE_METHOD(FileSystemWatcherTestCase,
                  "wxFileSystemWatcher::EventModify", "[fsw]")
 {
-    wxLogDebug("TestEventModify()");
-
     class EventTester : public FSWTesterBase
     {
     public:
@@ -547,8 +539,6 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
 TEST_CASE_METHOD(FileSystemWatcherTestCase,
                  "wxFileSystemWatcher::EventAccess", "[fsw]")
 {
-    wxLogDebug("TestEventAccess()");
-
     class EventTester : public FSWTesterBase
     {
     public:
@@ -585,8 +575,6 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
 TEST_CASE_METHOD(FileSystemWatcherTestCase,
                  "wxFileSystemWatcher::EventAttribute", "[fsw]")
 {
-    wxLogDebug("TestEventAttribute()");
-
     class EventTester : public FSWTesterBase
     {
     public:
@@ -618,8 +606,6 @@ TEST_CASE_METHOD(FileSystemWatcherTestCase,
 TEST_CASE_METHOD(FileSystemWatcherTestCase,
                  "wxFileSystemWatcher::SingleWatchtypeEvent", "[fsw]")
 {
-    wxLogDebug("TestSingleWatchtypeEvent()");
-
     class EventTester : public FSWTesterBase
     {
     public:
