@@ -197,7 +197,7 @@ public:
     */
     void SetSheetStyle(long style);
 
-    
+
     /**
        Set the border around the whole dialog
     */
@@ -208,18 +208,18 @@ public:
     */
     int GetSheetOuterBorder() const;
 
-    
+
     /**
        Set the border around the book control only.
     */
     void SetSheetInnerBorder(int border);
-    
+
     /**
        Returns the border around the book control only.
     */
     int GetSheetInnerBorder() const;
 
-    
+
     virtual wxWindow* GetContentWindow() const;
 
 };

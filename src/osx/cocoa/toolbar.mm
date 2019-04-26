@@ -19,6 +19,7 @@
 #include "wx/toolbar.h"
 #include "wx/app.h"
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 #include "wx/geometry.h"
 #include "wx/sysopt.h"
 
@@ -1674,8 +1675,14 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
         wxRect rect(0,0,w,h);
         
         //  TODO determine whether to use flat appearance in earlier system
-        if ( !wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+        if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
+        {
+            // No gradient.
+        }
+        else
+        {
             dc.GradientFillLinear( rect , wxColour( 0xCC,0xCC,0xCC ), wxColour( 0xA8,0xA8,0xA8 ) , wxSOUTH );
+        }
         
         dc.SetPen( wxPen( wxColour( 0x51,0x51,0x51 ) ) );
         if ( HasFlag(wxTB_LEFT) )

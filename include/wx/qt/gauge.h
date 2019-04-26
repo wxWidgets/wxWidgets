@@ -33,14 +33,14 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxGaugeNameStr);
 
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
     // set/get the control range
-    virtual void SetRange(int range);
-    virtual int GetRange() const;
+    virtual void SetRange(int range) wxOVERRIDE;
+    virtual int GetRange() const wxOVERRIDE;
 
-    virtual void SetValue(int pos);
-    virtual int GetValue() const;
+    virtual void SetValue(int pos) wxOVERRIDE;
+    virtual int GetValue() const wxOVERRIDE;
 
 private:
     QProgressBar *m_qtProgressBar;

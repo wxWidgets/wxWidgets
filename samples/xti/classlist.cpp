@@ -2,7 +2,7 @@
 // Name:        classlist.cpp
 // Purpose:     ClassListDialog implementation
 // Author:      Francesco Montorsi
-// Modified by: 
+// Modified by:
 // Created:     03/06/2007 14:49:55
 // Copyright:   (c) 2007 Francesco Montorsi
 // Licence:     wxWindows licence
@@ -12,7 +12,7 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
- 
+
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -53,15 +53,15 @@ ClassListDialog::ClassListDialog()
     Init();
 }
 
-ClassListDialog::ClassListDialog( wxWindow* parent, wxWindowID id, 
-                                      const wxString& caption, const wxPoint& pos, 
+ClassListDialog::ClassListDialog( wxWindow* parent, wxWindowID id,
+                                      const wxString& caption, const wxPoint& pos,
                                       const wxSize& size, long style )
 {
     Init();
     Create(parent, id, caption, pos, size, style);
 }
 
-bool ClassListDialog::Create( wxWindow* parent, wxWindowID id, const wxString& caption, 
+bool ClassListDialog::Create( wxWindow* parent, wxWindowID id, const wxString& caption,
                                 const wxPoint& pos, const wxSize& size, long style )
 {
     SetExtraStyle(wxWS_EX_BLOCK_EVENTS);
@@ -101,14 +101,14 @@ void ClassListDialog::CreateControls()
     // filters
     wxBoxSizer* filters = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer2->Add(filters, 0, wxGROW|wxLEFT|wxRIGHT|wxBOTTOM, 5);
-    filters->Add(new wxCheckBox(this, ID_SHOW_ONLY_XTI, 
+    filters->Add(new wxCheckBox(this, ID_SHOW_ONLY_XTI,
                                 "Show only classes with eXtended infos"));
     filters->AddSpacer(10);
     filters->Add(new wxCheckBox(this, ID_SHOW_PROPERTIES_RECURSIVELY,
                                 "Show properties of parent classes"));
 
     // show how many have we filtered out
-    m_pClassCountText = new wxStaticText( this, wxID_STATIC, 
+    m_pClassCountText = new wxStaticText( this, wxID_STATIC,
                 "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
                 wxDefaultPosition, wxDefaultSize, 0 );
     m_pClassCountText->SetFont(wxFontInfo(8).Family(wxFONTFAMILY_SWISS).Bold());
@@ -182,7 +182,7 @@ int ClassListDialog::AddClassesWithParent(const wxClassInfo *parent, const wxTre
             wxString(ci->GetBaseClassName2()) == parent->GetClassName())
         {
             wxTreeItemId child = m_pParentTreeCtrl->AppendItem(id, ci->GetClassName());
-            
+
             // update the name of this child with the count of the children classes
             int ret = AddClassesWithParent(ci, child);
             m_pParentTreeCtrl->SetItemText(child,
@@ -190,7 +190,7 @@ int ClassListDialog::AddClassesWithParent(const wxClassInfo *parent, const wxTre
                                      wxString::Format(" [%d]", ret));
             count += ret+1;
         }
-        
+
         ci = ci->GetNext();
     }
 
@@ -281,7 +281,7 @@ void ClassListDialog::UpdateFilterText()
     // how many are we showing
     m_pClassCountText->SetLabel(
         wxString::Format(
-            "Showing %d classes on a total of %d registered classes in wxXTI.", 
+            "Showing %d classes on a total of %d registered classes in wxXTI.",
             m_nCount, m_nTotalCount));
 }
 
@@ -386,7 +386,7 @@ wxString DumpPropertyAccessor(const wxPropertyAccessor *acc, int indent)
 
     if (!acc)
         return ind + "no property accessors";
-    
+
     if (acc->HasSetter())
         infostr << ind << "setter name: " << acc->GetSetterName();
     if (acc->HasCollectionGetter())
@@ -442,7 +442,7 @@ wxString DumpHandlerInfo(const wxHandlerInfo *phdlr, int indent)
     if (!phdlr)
         return ind + "none";
 
-    infostr << ind << "event class: " << 
+    infostr << ind << "event class: " <<
         (phdlr->GetEventClassInfo() ? phdlr->GetEventClassInfo()->GetClassName() : "none");
 
     return infostr;

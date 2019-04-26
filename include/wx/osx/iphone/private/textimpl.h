@@ -34,10 +34,10 @@ public :
     virtual void WriteText(const wxString& str) ;
     virtual bool HasOwnContextMenu() const { return true; }
 
-    virtual wxSize GetBestSize() const;    
-    
+    virtual wxSize GetBestSize() const;
+
     virtual bool SetHint(const wxString& hint);
-    
+
     virtual void controlAction(WXWidget slf, void* _cmd, void *sender);
 protected :
     UITextField* m_textField;

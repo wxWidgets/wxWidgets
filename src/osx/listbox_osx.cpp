@@ -248,7 +248,6 @@ wxSize wxListBox::DoGetBestSize() const
 {
     int lbWidth = 100;  // some defaults
     int lbHeight;
-    int wLine;
 
     {
         wxClientDC dc(const_cast<wxListBox*>(this));
@@ -261,8 +260,7 @@ wxSize wxListBox::DoGetBestSize() const
 
             wxCoord width, height ;
             dc.GetTextExtent( str , &width, &height);
-            wLine = width ;
-            lbWidth = wxMax( lbWidth, wLine );
+            lbWidth = wxMax( lbWidth, width );
         }
 
         // Add room for the scrollbar
@@ -282,11 +280,6 @@ wxSize wxListBox::DoGetBestSize() const
     }
 
     return wxSize( lbWidth, lbHeight );
-}
-
-void wxListBox::Refresh(bool eraseBack, const wxRect *rect)
-{
-    wxControl::Refresh( eraseBack, rect );
 }
 
 // Some custom controls depend on this

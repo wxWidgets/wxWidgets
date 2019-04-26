@@ -172,7 +172,7 @@ public:
     class (either wxNativePixelData for RGB bitmaps or wxAlphaPixelData
     for bitmaps with an additionally alpha channel).
 
-    Note that many wxBitmap functions take a @e type parameter, which is a 
+    Note that many wxBitmap functions take a @e type parameter, which is a
     value of the ::wxBitmapType enumeration.
     The validity of those values depends however on the platform where your program
     is running and from the wxWidgets configuration.
@@ -183,9 +183,9 @@ public:
     - wxX11 supports XPM files, XPM data, XBM data;
 
     In addition, wxBitmap can load and save all formats that wxImage can; see wxImage
-    for more info. Of course, you must have loaded the wxImage handlers 
+    for more info. Of course, you must have loaded the wxImage handlers
     (see ::wxInitAllImageHandlers() and wxImage::AddHandler).
-    Note that all available wxBitmapHandlers for a given wxWidgets port are 
+    Note that all available wxBitmapHandlers for a given wxWidgets port are
     automatically loaded at startup so you won't need to use wxBitmap::AddHandler.
 
     More on the difference between wxImage and wxBitmap: wxImage is just a
@@ -386,12 +386,12 @@ public:
         @param handler
             A new bitmap format handler object. There is usually only one instance
             of a given handler class in an application session.
-            
+
         Note that unlike wxImage::AddHandler, there's no documented list of
         the wxBitmapHandlers available in wxWidgets.
-        This is because they are platform-specific and most important, they are 
+        This is because they are platform-specific and most important, they are
         all automatically loaded at startup.
-        
+
         If you want to be sure that wxBitmap can load a certain type of image,
         you'd better use wxImage::AddHandler.
 

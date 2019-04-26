@@ -36,7 +36,7 @@ struct wxMatrix2D
 
 /**
    @class wxAffineMatrix2DBase
-   
+
    A 2x3 matrix representing an affine 2D transformation.
 
    This is an abstract base class implemented by wxAffineMatrix2D only so far,
@@ -160,7 +160,7 @@ public:
 
         @param cRadians
             Rotation angle in radians, clockwise.
-    */    
+    */
     virtual void Rotate(wxDouble cRadians) = 0;
 
     /**

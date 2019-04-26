@@ -23,6 +23,7 @@
 
 #ifdef __WXMAC__
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 #endif
 
 #include "wx/fontutil.h"
@@ -373,17 +374,17 @@ CGImageRef wxOSXCreateCGImageFromImage( WXImage nsimage, double *scaleptr )
 
 #if wxOSX_USE_COCOA
 
-static NSCursor* wxGetStockCursor( short sIndex )
+static NSCursor* wxCreateStockCursor( short sIndex )
 {
-    ClassicCursor* pCursor = &gMacCursors[sIndex];
-
     //Classic mac cursors are 1bps 16x16 black and white with a
     //identical mask that is 1 for on and 0 for off
-    NSImage *theImage = [[NSImage alloc] initWithSize:NSMakeSize(16.0,16.0)];
+    ClassicCursor* pCursor = &gMacCursors[sIndex];
+
+    wxNSObjRef<NSImage*> theImage( [[NSImage alloc] initWithSize:NSMakeSize(16.0,16.0)] );
 
     //NSCursor takes an NSImage takes a number of Representations - here
     //we need only one for the raw data
-    NSBitmapImageRep *theRep = [[NSBitmapImageRep alloc]
+    wxNSObjRef<NSBitmapImageRep*> theRep( [[NSBitmapImageRep alloc]
         initWithBitmapDataPlanes: NULL  // Tell Cocoa to allocate the planes for us.
         pixelsWide: 16      // All classic cursors are 16x16
         pixelsHigh: 16
@@ -393,16 +394,16 @@ static NSCursor* wxGetStockCursor( short sIndex )
         isPlanar: YES       // Use a separate array for each sample
         colorSpaceName: NSCalibratedWhiteColorSpace // 0.0=black 1.0=white
         bytesPerRow: 2      // Rows in each plane are on 2-byte boundaries (no pad)
-        bitsPerPixel: 1];   // same as bitsPerSample since data is planar
+        bitsPerPixel: 1] );   // same as bitsPerSample since data is planar
 
     // Ensure that Cocoa allocated 2 and only 2 of the 5 possible planes
     unsigned char *planes[5];
     [theRep getBitmapDataPlanes:planes];
-    wxASSERT(planes[0] != NULL);
-    wxASSERT(planes[1] != NULL);
-    wxASSERT(planes[2] == NULL);
-    wxASSERT(planes[3] == NULL);
-    wxASSERT(planes[4] == NULL);
+    wxCHECK(planes[0] != NULL, nil);
+    wxCHECK(planes[1] != NULL, nil);
+    wxCHECK(planes[2] == NULL, nil);
+    wxCHECK(planes[3] == NULL, nil);
+    wxCHECK(planes[4] == NULL, nil);
 
     // NOTE1: The Cursor's bits field is white=0 black=1.. thus the bitwise-not
     // Why not use NSCalibratedBlackColorSpace?  Because that reverses the
@@ -436,10 +437,6 @@ static NSCursor* wxGetStockCursor( short sIndex )
                                     hotSpot:NSMakePoint(pCursor->hotspot[1], pCursor->hotspot[0])
                             ];
 
-    //do the usual cleanups
-    [theRep release];
-    [theImage release];
-
     //return the new cursor
     return theCursor;
 }
@@ -459,7 +456,7 @@ WX_NSCursor wxMacCocoaCreateStockCursor( int cursor_type )
         // according to the HIG
         // cursor = [[NSCursor arrowCursor] retain];
         // but for crossplatform compatibility we display a watch cursor
-        cursor = wxGetStockCursor(kwxCursorWatch);
+        cursor = wxCreateStockCursor(kwxCursorWatch);
         break;
 
     case wxCURSOR_IBEAM:
@@ -471,11 +468,11 @@ WX_NSCursor wxMacCocoaCreateStockCursor( int cursor_type )
         break;
 
     case wxCURSOR_SIZENWSE:
-        cursor = wxGetStockCursor(kwxCursorSizeNWSE);
+        cursor = wxCreateStockCursor(kwxCursorSizeNWSE);
         break;
 
     case wxCURSOR_SIZENESW:
-        cursor = wxGetStockCursor(kwxCursorSizeNESW);
+        cursor = wxCreateStockCursor(kwxCursorSizeNESW);
         break;
 
     case wxCURSOR_SIZEWE:
@@ -487,7 +484,7 @@ WX_NSCursor wxMacCocoaCreateStockCursor( int cursor_type )
         break;
 
     case wxCURSOR_SIZING:
-        cursor = wxGetStockCursor(kwxCursorSize);
+        cursor = wxCreateStockCursor(kwxCursorSize);
         break;
 
     case wxCURSOR_HAND:
@@ -495,47 +492,47 @@ WX_NSCursor wxMacCocoaCreateStockCursor( int cursor_type )
         break;
 
     case wxCURSOR_BULLSEYE:
-        cursor = wxGetStockCursor(kwxCursorBullseye);
+        cursor = wxCreateStockCursor(kwxCursorBullseye);
         break;
 
     case wxCURSOR_PENCIL:
-        cursor = wxGetStockCursor(kwxCursorPencil);
+        cursor = wxCreateStockCursor(kwxCursorPencil);
         break;
 
     case wxCURSOR_MAGNIFIER:
-        cursor = wxGetStockCursor(kwxCursorMagnifier);
+        cursor = wxCreateStockCursor(kwxCursorMagnifier);
         break;
 
     case wxCURSOR_NO_ENTRY:
-        cursor = wxGetStockCursor(kwxCursorNoEntry);
+        cursor = wxCreateStockCursor(kwxCursorNoEntry);
         break;
 
     case wxCURSOR_PAINT_BRUSH:
-        cursor = wxGetStockCursor(kwxCursorPaintBrush);
+        cursor = wxCreateStockCursor(kwxCursorPaintBrush);
         break;
 
     case wxCURSOR_POINT_LEFT:
-        cursor = wxGetStockCursor(kwxCursorPointLeft);
+        cursor = wxCreateStockCursor(kwxCursorPointLeft);
         break;
 
     case wxCURSOR_POINT_RIGHT:
-        cursor = wxGetStockCursor(kwxCursorPointRight);
+        cursor = wxCreateStockCursor(kwxCursorPointRight);
         break;
 
     case wxCURSOR_QUESTION_ARROW:
-        cursor = wxGetStockCursor(kwxCursorQuestionArrow);
+        cursor = wxCreateStockCursor(kwxCursorQuestionArrow);
         break;
 
     case wxCURSOR_BLANK:
-        cursor = wxGetStockCursor(kwxCursorBlank);
+        cursor = wxCreateStockCursor(kwxCursorBlank);
         break;
 
     case wxCURSOR_RIGHT_ARROW:
-        cursor = wxGetStockCursor(kwxCursorRightArrow);
+        cursor = wxCreateStockCursor(kwxCursorRightArrow);
         break;
 
     case wxCURSOR_SPRAYCAN:
-        cursor = wxGetStockCursor(kwxCursorRoller);
+        cursor = wxCreateStockCursor(kwxCursorRoller);
         break;
 
     case wxCURSOR_OPEN_HAND:
@@ -546,15 +543,21 @@ WX_NSCursor wxMacCocoaCreateStockCursor( int cursor_type )
         cursor = [[NSCursor closedHandCursor] retain];
         break;
 
-    case wxCURSOR_CHAR:
     case wxCURSOR_ARROW:
+        cursor = [[NSCursor arrowCursor] retain];
+        break;
+
+    case wxCURSOR_CHAR:
     case wxCURSOR_LEFT_BUTTON:
     case wxCURSOR_RIGHT_BUTTON:
     case wxCURSOR_MIDDLE_BUTTON:
     default:
-        cursor = [[NSCursor arrowCursor] retain];
         break;
     }
+    
+    if ( cursor == nil )
+        cursor = [[NSCursor arrowCursor] retain];
+    
     return cursor;
 }
 
@@ -624,7 +627,7 @@ NSString* wxNSStringWithWxString(const wxString &wxstring)
 wxOSXEffectiveAppearanceSetter::wxOSXEffectiveAppearanceSetter()
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
-    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+    if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
     {
         formerAppearance = NSAppearance.currentAppearance;
         NSAppearance.currentAppearance = NSApp.effectiveAppearance;
@@ -637,7 +640,7 @@ wxOSXEffectiveAppearanceSetter::wxOSXEffectiveAppearanceSetter()
 wxOSXEffectiveAppearanceSetter::~wxOSXEffectiveAppearanceSetter()
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_14
-    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14 ) )
+    if ( WX_IS_MACOS_AVAILABLE(10, 14 ) )
         NSAppearance.currentAppearance = (NSAppearance*) formerAppearance;
 #endif
 }

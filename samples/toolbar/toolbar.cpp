@@ -350,7 +350,7 @@ void MyFrame::RecreateToolbar()
             style |= wxTB_RIGHT;
             break;
         case TOOLBAR_BOTTOM:
-        style |= wxTB_BOTTOM;
+            style |= wxTB_BOTTOM;
         break;
     }
 
@@ -443,7 +443,7 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
         wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, wxEmptyString, wxDefaultPosition, wxSize(100,-1) );
         combo->Append("This");
         combo->Append("is a");
-        combo->Append("combobox");
+        combo->Append("combobox with extremely, extremely, extremely, extremely long label");
         combo->Append("in a");
         combo->Append("toolbar");
         toolBar->AddControl(combo, "Combo Label");
@@ -574,16 +574,16 @@ MyFrame::MyFrame(wxFrame* parent,
 
     tbarMenu->AppendSeparator();
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_TOP_ORIENTATION,
-                              "Set toolbar at the top of the window",
+                              "Set toolbar at the top of the window\tCtrl-Up",
                               "Set toolbar at the top of the window");
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_LEFT_ORIENTATION,
-                              "Set toolbar at the left of the window",
+                              "Set toolbar at the left of the window\tCtrl-Left",
                               "Set toolbar at the left of the window");
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_BOTTOM_ORIENTATION,
-                              "Set toolbar at the bottom of the window",
+                              "Set toolbar at the bottom of the window\tCtrl-Down",
                               "Set toolbar at the bottom of the window");
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_RIGHT_ORIENTATION,
-                              "Set toolbar at the right edge of the window",
+                              "Set toolbar at the right edge of the window\tCtrl-Right",
                               "Set toolbar at the right edge of the window");
     tbarMenu->AppendSeparator();
 

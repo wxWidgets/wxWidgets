@@ -196,8 +196,10 @@ enum wxSystemMetric
     /**
         Time, in milliseconds, for how long a blinking caret should
         stay visible during a single blink cycle before it disappears.
-        If this value is negative, the platform does not support the
-        user setting.  Implemented only on GTK+ and MacOS X.
+
+        If this value is zero, caret should be visible all the time
+        instead of blinking.  If the value is negative, the platform
+        does not support the user setting.
 
         @since 3.1.1
     */
@@ -206,10 +208,10 @@ enum wxSystemMetric
     /**
         Time, in milliseconds, for how long a blinking caret should
         stay invisible during a single blink cycle before it reappears.
-        If this value is zero, carets should be visible all the time
+
+        If this value is zero, caret should be visible all the time
         instead of blinking.  If the value is negative, the platform
-        does not support the user setting.  Implemented only on GTK+
-        and MacOS X.
+        does not support the user setting.
 
         @since 3.1.1
     */
@@ -253,11 +255,60 @@ enum wxSystemScreenType
 
 
 /**
+    Provides information about the current system appearance.
+
+    An object of this class can be retrieved using
+    wxSystemSettings::GetAppearance() and can then be queried for some aspects
+    of the current system appearance, notably whether the system is using a
+    dark theme, i.e. a theme with predominantly dark background.
+
+    This is useful for custom controls that don't use the standard system
+    colours, as they need to adjust the colours used for drawing them to fit in
+    the system look.
+
+    @since 3.1.3
+ */
+class wxSystemAppearance
+{
+public:
+    /**
+        Return the name if available or empty string otherwise.
+
+        This is currently only implemented for macOS 10.9 or later and returns
+        a not necessarily user-readable string such as "NSAppearanceNameAqua"
+        there and an empty string under all the other platforms.
+     */
+    wxString GetName() const;
+
+    /**
+        Return true if the current system there is explicitly recognized as
+        being a dark theme or if the default window background is dark.
+
+        This method should be used to check whether custom colours more
+        appropriate for the default (light) or dark appearance should be used.
+     */
+    bool IsDark() const;
+
+    /**
+        Return true if the default window background is significantly darker
+        than foreground.
+
+        This is used by IsDark() if there is no platform-specific way to
+        determine whether a dark mode is being used and is generally not very
+        useful to call directly.
+
+        @see wxColour::GetLuminance()
+     */
+    bool IsUsingDarkBackground() const;
+};
+
+
+/**
     @class wxSystemSettings
 
     wxSystemSettings allows the application to ask for details about the system.
 
-    This can include settings such as standard colours, fonts, and user interface 
+    This can include settings such as standard colours, fonts, and user interface
     element sizes.
 
     @library{wxcore}
@@ -279,9 +330,9 @@ public:
     /**
         Returns a system colour.
 
-        @param index 
+        @param index
             Can be one of the ::wxSystemColour enum values.
-            
+
         @return
             The returned colour is always valid.
     */
@@ -290,9 +341,9 @@ public:
     /**
         Returns a system font.
 
-        @param index 
+        @param index
             Can be one of the ::wxSystemFont enum values.
-            
+
         @return
             The returned font is always valid.
     */
@@ -324,6 +375,13 @@ public:
         The return value is one of the ::wxSystemScreenType enum values.
     */
     static wxSystemScreenType GetScreenType();
+
+    /**
+        Returns the object describing the current system appearance.
+
+        @since 3.1.3
+     */
+    static wxSystemAppearance GetAppearance();
 
     /**
         Returns @true if the port has certain feature.

@@ -526,9 +526,6 @@ static unsigned char ParseHexadecimal(char digit1, char digit2)
 static bool GetRGBFromName(const char *inname, bool *isNone,
                            unsigned char *r, unsigned char*g, unsigned char *b)
 {
-    int left, right, middle;
-    int cmp;
-    wxUint32 rgbVal;
     char *name;
     char *grey, *p;
 
@@ -583,14 +580,18 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
         found = false;
 
         // binary search:
+        int left, right;
         left = 0;
         right = numTheRGBRecords - 1;
         do
         {
+            int middle;
             middle = (left + right) / 2;
+            int cmp;
             cmp = strcmp(name, theRGBRecords[middle].name);
             if ( cmp == 0 )
             {
+                wxUint32 rgbVal;
                 rgbVal = theRGBRecords[middle].rgb;
                 *r = (unsigned char)((rgbVal >> 16) & 0xFF);
                 *g = (unsigned char)((rgbVal >> 8) & 0xFF);
@@ -663,7 +664,6 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
     unsigned width, height, colors_cnt, chars_per_pixel;
     size_t i, j, i_key;
     char key[64];
-    const char *clr_def;
     wxXPMColourMap clr_tbl;
     wxXPMColourMap::iterator it;
     wxString maskKey;
@@ -709,6 +709,7 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
 
         for (i_key = 0; i_key < chars_per_pixel; i_key++)
             key[i_key] = xmpColLine[i_key];
+        const char *clr_def;
         clr_def = ParseColor(xmpColLine + chars_per_pixel);
 
         if ( clr_def == NULL )
@@ -812,7 +813,7 @@ wxImage wxXPMDecoder::ReadData(const char* const* xpm_data)
     unsigned char* g = new unsigned char[colors_cnt];
     unsigned char* b = new unsigned char[colors_cnt];
 
-    for (it = clr_tbl.begin(), i = 0; it != clr_tbl.end(); it++, i++)
+    for (it = clr_tbl.begin(), i = 0; it != clr_tbl.end(); ++it, ++i)
     {
         r[i] = it->second.R;
         g[i] = it->second.G;

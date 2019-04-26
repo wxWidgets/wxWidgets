@@ -539,7 +539,7 @@ public:
     void SetTargetWindow(wxWindow *window);
     wxWindow *GetTargetWindow() const;
 
-    
+
     void SetTargetRect(const wxRect& rect);
     wxRect GetTargetRect() const;
 
@@ -562,13 +562,13 @@ public:
        window.
      */
     void StopAutoScrolling();
-    
+
     /**
        This method can be overridden in a derived class to forbid sending the
        auto scroll events - note that unlike StopAutoScrolling() it doesn't
        stop the timer, so it will be called repeatedly and will typically
        return different values depending on the current mouse position
-    
+
        The base class version just returns true.
     */
     virtual bool SendAutoScrollEvents(wxScrollWinEvent& event) const;

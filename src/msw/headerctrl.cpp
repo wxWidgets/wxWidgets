@@ -317,35 +317,28 @@ void wxHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
         if ( HasFlag(wxHD_BITMAP_ON_RIGHT) )
             hdi.fmt |= HDF_BITMAP_ON_RIGHT;
 
-        if ( bmp.IsOk() )
+        const int bmpWidth = bmp.GetWidth(),
+                  bmpHeight = bmp.GetHeight();
+
+        if ( !m_imageList )
         {
-            const int bmpWidth = bmp.GetWidth(),
-                      bmpHeight = bmp.GetHeight();
-
-            if ( !m_imageList )
-            {
-                m_imageList = new wxImageList(bmpWidth, bmpHeight);
-                (void) // suppress mingw32 warning about unused computed value
-                Header_SetImageList(GetHwnd(), GetHimagelistOf(m_imageList));
-            }
-            else // already have an image list
-            {
-                // check that all bitmaps we use have the same size
-                int imageWidth,
-                    imageHeight;
-                m_imageList->GetSize(0, imageWidth, imageHeight);
-
-                wxASSERT_MSG( imageWidth == bmpWidth && imageHeight == bmpHeight,
-                              "all column bitmaps must have the same size" );
-            }
-
-            m_imageList->Add(bmp);
-            hdi.iImage = m_imageList->GetImageCount() - 1;
+            m_imageList = new wxImageList(bmpWidth, bmpHeight);
+            (void) // suppress mingw32 warning about unused computed value
+            Header_SetImageList(GetHwnd(), GetHimagelistOf(m_imageList));
         }
-        else // no bitmap but we still need to update the item
+        else // already have an image list
         {
-            hdi.iImage = I_IMAGENONE;
+            // check that all bitmaps we use have the same size
+            int imageWidth,
+                imageHeight;
+            m_imageList->GetSize(0, imageWidth, imageHeight);
+
+            wxASSERT_MSG( imageWidth == bmpWidth && imageHeight == bmpHeight,
+                          "all column bitmaps must have the same size" );
         }
+
+        m_imageList->Add(bmp);
+        hdi.iImage = m_imageList->GetImageCount() - 1;
     }
 
     if ( col.GetAlignment() != wxALIGN_NOT )
@@ -747,7 +740,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             //   HDN_ITEMCHANGED
             // In both cases last HDN_ITEMCHANGING notification is sent
             // after HDN_ENDTRACK so we have to skip it.
-            if ( nmhdr->pitem && (nmhdr->pitem->mask & HDI_WIDTH) && m_isColBeingResized )
+            if ( nmhdr->pitem && (nmhdr->pitem->mask & HDI_WIDTH) )
             {
                 // prevent the column from being shrunk beneath its min width
                 width = nmhdr->pitem->cxy;
@@ -757,13 +750,19 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     // happening
                     veto = true;
                 }
-                else // width is acceptable
+                // width is acceptable and notification arrived before HDN_ENDTRACK
+                else if ( m_isColBeingResized )
                 {
                     // generate the resizing event from here as we don't seem
                     // to be getting HDN_TRACK events at all, at least with
                     // comctl32.dll v6
                     evtType = wxEVT_HEADER_RESIZING;
                 }
+                // else
+                // Nnotification arriving after HDN_ENDTRACK is handled normally
+                // by the control but EVT_HEADER_RESIZING event cannot be generated
+                // because EVT_HEADER_END_RESIZE finalizing the resizing has been
+                // already emitted.
             }
             break;
 

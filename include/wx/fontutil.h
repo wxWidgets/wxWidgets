@@ -143,7 +143,7 @@ public:
 #elif defined(__WXOSX__)
 public:
     wxNativeFontInfo(const wxNativeFontInfo& info) { Init(info); }
- 
+
     ~wxNativeFontInfo() { Free(); }
 
     wxNativeFontInfo& operator=(const wxNativeFontInfo& info)
@@ -161,7 +161,7 @@ public:
     void Init(const wxNativeFontInfo& info);
 
     void Free();
-    
+
     wxString GetFamilyName() const;
     wxString GetStyleName() const;
 
@@ -171,8 +171,8 @@ public:
     static CGFloat GetCTWeight( CTFontRef font );
     static CGFloat GetCTWeight( CTFontDescriptorRef font );
     static CGFloat GetCTSlant( CTFontDescriptorRef font );
-    
-    
+
+
     CTFontDescriptorRef GetCTFontDescriptor() const;
 private:
     // attributes for regenerating a CTFontDescriptor, stay close to native values
@@ -181,7 +181,7 @@ private:
     wxFontStyle   m_style;
     CGFloat       m_ctSize;
     wxFontFamily  m_family;
-    
+
     wxString      m_styleName;
     wxString      m_familyName;
 

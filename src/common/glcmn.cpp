@@ -3,7 +3,7 @@
 // Purpose:     wxGLCanvasBase implementation
 // Author:      Vadim Zeitlin
 // Created:     2007-04-09
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -45,7 +45,7 @@ void wxGLAttribsBase::AddAttribBits(int searchVal, int combineVal)
     // Search for searchVal
     wxVector<int>::iterator it = m_GLValues.begin();
     while ( it != m_GLValues.end() && *it != searchVal )
-        it++;
+        ++it;
     // Have we searchVal?
     if ( it != m_GLValues.end() )
     {

@@ -88,6 +88,12 @@ static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previous
             break;
         case wxITEM_NORMAL:
         {
+            // If the inserted action is a submenu, set the owner for the submenu.
+            if ( item->IsSubMenu() )
+            {
+                item->GetSubMenu()->GetHandle()->setParent(qtMenu, Qt::Popup);
+            }
+
             wxWindowID id = item->GetId();
             if ( wxIsStockID( id ) )
             {
@@ -109,10 +115,15 @@ static void InsertMenuItemAction( const wxMenu *menu, const wxMenuItem *previous
             }
             break;
         }
+        default:
+            break;
     }
     // Insert the action into the actual menu:
     QAction *successiveItemAction = ( successiveItem != NULL ) ? successiveItem->GetHandle() : NULL;
     qtMenu->insertAction( successiveItemAction, itemAction );
+    // Menu items in Qt can be part of multiple menus, so a menu will not take ownership
+    // when one is added to it. Take it explicitly, otherwise it will create a memory leak.
+    itemAction->setParent(qtMenu);
 }
 
 wxMenuItem *wxMenu::DoAppend(wxMenuItem *item)
@@ -211,7 +222,10 @@ bool wxMenuBar::Append( wxMenu *menu, const wxString& title )
 
     QMenu *qtMenu = SetTitle( menu, title );
     m_qtMenuBar->addMenu( qtMenu );
-    
+    // Menus in Qt can be reused as popups, so a menu bar will not take ownership when
+    // one is added to it. Take it explicitly, otherwise there will be a memory leak.
+    qtMenu->setParent(m_qtMenuBar, Qt::Popup); // must specify window type for correct display!
+
     return true;
 }
 
@@ -233,6 +247,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     QMenu *qtMenu = SetTitle( menu, title );
     QAction *qtAction = GetActionAt( m_qtMenuBar, pos );
     m_qtMenuBar->insertMenu( qtAction, qtMenu );
+    qtMenu->setParent(m_qtMenuBar, Qt::Popup); // must specify window type for correct display!
 
     return true;
 }

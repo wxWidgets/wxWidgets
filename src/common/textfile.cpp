@@ -105,7 +105,7 @@ bool wxTextFile::OnRead(const wxMBConv& conv)
     // the beginning of the current line, changes inside the loop
     wxString::const_iterator lineStart = str.begin();
     const wxString::const_iterator end = str.end();
-    for ( wxString::const_iterator p = lineStart; p != end; p++ )
+    for ( wxString::const_iterator p = lineStart; p != end; ++p )
     {
         const wxChar ch = *p;
         if ( ch == '\r' || ch == '\n' )
@@ -129,7 +129,7 @@ bool wxTextFile::OnRead(const wxMBConv& conv)
 
             // DOS EOL is the only one consisting of two chars, not one.
             if ( lineType == wxTextFileType_Dos )
-                p++;
+                ++p;
 
             lineStart = p + 1;
         }

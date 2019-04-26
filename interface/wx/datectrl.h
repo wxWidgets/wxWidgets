@@ -87,7 +87,7 @@ public:
        Default constructor.
     */
     wxDatePickerCtrl();
-    
+
     /**
         Initializes the object and calls Create() with all the parameters.
     */

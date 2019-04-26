@@ -150,7 +150,6 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
     if (end_pos <= begin_pos)
         return;
 
-    wxChar c;
     wxString::const_iterator i = begin_pos;
     wxString::const_iterator textBeginning = begin_pos;
 
@@ -165,6 +164,7 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
 
     while (i < end_pos)
     {
+        wxChar c;
         c = *i;
 
         if (c == wxT('<'))

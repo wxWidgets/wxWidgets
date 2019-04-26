@@ -68,11 +68,8 @@ private:
     wxDECLARE_NO_COPY_CLASS(ListBoxTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( ListBoxTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( ListBoxTestCase, "ListBoxTestCase" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(ListBoxTestCase,
+                               "[ListBoxTestCase][item-container]");
 
 //initialise the static variable
 bool ListBoxTestCase::ms_ownerdrawn = false;

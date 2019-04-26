@@ -100,9 +100,12 @@ public:
     // event handlers
     void OnActivate(wxActivateEvent& event);
 
-    // called by wxWindow whenever it gets focus
-    void SetLastFocus(wxWindow *win) { m_winLastFocused = win; }
-    wxWindow *GetLastFocus() const { return m_winLastFocused; }
+    // called from wxWidgets code itself only when the pending focus, i.e. the
+    // element which should get focus when this TLW is activated again, changes
+    virtual void WXDoUpdatePendingFocus(wxWindow* win) wxOVERRIDE
+    {
+        m_winLastFocused = win;
+    }
 
     // translate wxWidgets flags to Windows ones
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const wxOVERRIDE;

@@ -77,12 +77,8 @@ private:
     wxDECLARE_NO_COPY_CLASS(BitmapComboBoxTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( BitmapComboBoxTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( BitmapComboBoxTestCase,
-                                      "BitmapComboBoxTestCase" );
+wxREGISTER_UNIT_TEST_WITH_TAGS(BitmapComboBoxTestCase,
+                               "[BitmapComboBoxTestCase][item-container]");
 
 void BitmapComboBoxTestCase::setUp()
 {

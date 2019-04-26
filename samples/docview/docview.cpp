@@ -287,7 +287,10 @@ bool MyApp::OnInit()
 
     if ( m_filesFromCmdLine.empty() )
     {
+        // on macOS the dialog will be shown by MacNewFile
+#ifndef __WXMAC__
         docManager->CreateNewDocument();
+#endif
     }
     else // we have files to open on command line
     {

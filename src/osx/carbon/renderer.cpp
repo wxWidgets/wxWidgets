@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.07.2003
-// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -33,6 +33,7 @@
 #include "wx/splitter.h"
 #include "wx/time.h"
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 #ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
     #include "wx/image.h"
@@ -172,11 +173,9 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
     wxHeaderSortIconType sortArrow,
     wxHeaderButtonParams* params )
 {
-    if ( wxPlatformInfo::Get().CheckOSVersion(10, 14) )
-    {
-        if ( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).Red() < 128 )
-            return wxRendererNative::GetGeneric().DrawHeaderButton(win, dc,  rect, flags, sortArrow, params);
-    }
+    if ( wxSystemSettings::GetAppearance().IsDark() )
+        return wxRendererNative::GetGeneric().DrawHeaderButton(win, dc,  rect, flags, sortArrow, params);
+
     const wxCoord x = rect.x;
     const wxCoord y = rect.y;
     const wxCoord w = rect.width;
@@ -339,7 +338,15 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
     wxOrientation orient,
     int WXUNUSED(flags) )
 {
-    bool hasMetal = win->MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL && !wxPlatformInfo::Get().CheckOSVersion(10, 14);
+    // Note that we can't use ternary ?: operator or any other construct with
+    // logical operators here, WX_IS_MACOS_AVAILABLE() must appear inside an
+    // "if" statement to avoid -Wunsupported-availability-guard with Xcode 10.
+    bool hasMetal;
+    if (WX_IS_MACOS_AVAILABLE(10, 14))
+        hasMetal = false;
+    else
+        hasMetal = win->MacGetTopLevelWindow()->GetExtraStyle() & wxFRAME_EX_METAL;
+
     SInt32 height;
 
     height = wxRendererNative::Get().GetSplitterParams(win).widthSash;
@@ -382,7 +389,7 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
 
         if ( win->HasFlag(wxSP_3DSASH) )
         {
-            if ( !wxPlatformInfo::Get().CheckOSVersion(10, 14) || wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW).Red() > 128  )
+            if ( !wxSystemSettings::GetAppearance().IsDark() )
             {
                 HIThemeSplitterDrawInfo drawInfo;
                 drawInfo.version = 0;

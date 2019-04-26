@@ -23,9 +23,13 @@ public:
     // implementation
     // --------------
 
-    virtual void SetLabel( const wxString &label );
+    virtual void SetLabel( const wxString &label ) wxOVERRIDE;
 
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
+
+    // implementation only
+    void QtUpdateState();
+    virtual int GetEventType() const = 0;
 
 protected:
     virtual wxBitmap DoGetBitmap(State state) const wxOVERRIDE;
@@ -37,8 +41,10 @@ protected:
     void QtSetBitmap( const wxBitmap &bitmap );
 
 private:
+    State QtGetCurrentState() const;
+
     typedef wxAnyButtonBase base_type;
-    wxBitmap  m_bitmap;
+    wxBitmap  m_bitmaps[State_Max];
 
     wxDECLARE_NO_COPY_CLASS(wxAnyButton);
 };

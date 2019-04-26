@@ -25,7 +25,7 @@ public:
               const wxString& name = wxFrameNameStr)
   {
       return wxFrame::Create(parent, id, title, pos, size,
-                             style | wxFRAME_TOOL_WINDOW | wxFRAME_NO_TASKBAR, 
+                             style | wxFRAME_TOOL_WINDOW | wxFRAME_NO_TASKBAR,
                              name);
   }
 

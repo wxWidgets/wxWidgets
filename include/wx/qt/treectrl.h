@@ -29,7 +29,7 @@ public:
                 const wxString& name = wxTreeCtrlNameStr);
 
     virtual unsigned int GetCount() const;
-    
+
     virtual unsigned int GetIndent() const;
     virtual void SetIndent(unsigned int indent);
 
@@ -55,15 +55,15 @@ public:
     virtual void SetItemTextColour(const wxTreeItemId& item, const wxColour& col);
     virtual void SetItemBackgroundColour(const wxTreeItemId& item, const wxColour& col);
     virtual void SetItemFont(const wxTreeItemId& item, const wxFont& font);
-    
+
     virtual bool IsVisible(const wxTreeItemId& item) const;
     virtual bool ItemHasChildren(const wxTreeItemId& item) const;
     virtual bool IsExpanded(const wxTreeItemId& item) const;
     virtual bool IsSelected(const wxTreeItemId& item) const;
     virtual bool IsBold(const wxTreeItemId& item) const;
-    
+
     virtual size_t GetChildrenCount(const wxTreeItemId& item, bool recursively = true) const;
-    
+
     virtual wxTreeItemId GetRootItem() const;
     virtual wxTreeItemId GetSelection() const;
     virtual size_t GetSelections(wxArrayTreeItemIds& selections) const;
@@ -73,7 +73,7 @@ public:
     virtual wxTreeItemId GetFocusedItem() const;
 
     virtual wxTreeItemId GetItemParent(const wxTreeItemId& item) const;
-    
+
     virtual wxTreeItemId GetFirstChild(const wxTreeItemId& item, wxTreeItemIdValue& cookie) const;
     virtual wxTreeItemId GetNextChild(const wxTreeItemId& item, wxTreeItemIdValue& cookie) const;
     virtual wxTreeItemId GetLastChild(const wxTreeItemId& item) const;
@@ -112,7 +112,7 @@ public:
 
     virtual bool GetBoundingRect(const wxTreeItemId& item, wxRect& rect, bool textOnly = false) const;
 
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
 protected:
     virtual int DoGetItemState(const wxTreeItemId& item) const;

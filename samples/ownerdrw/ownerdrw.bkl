@@ -9,7 +9,7 @@
         <wx-lib>base</wx-lib>
         <win32-res>ownerdrw.rc</win32-res>
     </exe>
-    
+
     <wx-data id="data">
         <files>sound.png nosound.png</files>
     </wx-data>

@@ -59,6 +59,24 @@ wxArrayString::wxArrayString(size_t sz, const wxString* a)
 
 #include "wx/arrstr.h"
 
+#if __cplusplus >= 201103L
+
+int wxArrayString::Index(const wxString& str, bool bCase, bool WXUNUSED(bFromEnd)) const
+{
+    int n = 0;
+    for ( const auto& s: *this )
+    {
+        if ( s.IsSameAs(str, bCase) )
+            return n;
+
+        ++n;
+    }
+
+    return wxNOT_FOUND;
+}
+
+#else // C++98 version
+
 #include "wx/beforestd.h"
 #include <functional>
 #include "wx/afterstd.h"
@@ -130,9 +148,20 @@ wxStringCompareLess<F> wxStringCompare(F f)
     return wxStringCompareLess<F>(f);
 }
 
+#endif // C++11/C++98
+
 void wxArrayString::Sort(CompareFunction function)
 {
-    std::sort(begin(), end(), wxStringCompare(function));
+    std::sort(begin(), end(),
+#if __cplusplus >= 201103L
+              [function](const wxString& s1, const wxString& s2)
+              {
+                  return function(s1, s2) < 0;
+              }
+#else // C++98 version
+              wxStringCompare(function)
+#endif // C++11/C++98
+             );
 }
 
 void wxArrayString::Sort(bool reverseOrder)
@@ -155,7 +184,16 @@ int wxSortedArrayString::Index(const wxString& str,
                   "search parameters ignored for sorted array" );
 
     wxSortedArrayString::const_iterator
-        it = std::lower_bound(begin(), end(), str, wxStringCompare(wxStringCmp()));
+        it = std::lower_bound(begin(), end(), str,
+#if __cplusplus >= 201103L
+                              [](const wxString& s1, const wxString& s2)
+                              {
+                                  return s1 < s2;
+                              }
+#else // C++98 version
+                              wxStringCompare(wxStringCmp())
+#endif // C++11/C++98
+                              );
 
     if ( it == end() || str.Cmp(*it) != 0 )
         return wxNOT_FOUND;
@@ -332,13 +370,14 @@ int wxArrayString::Index(const wxString& str, bool bCase, bool bFromEnd) const
     wxASSERT_MSG( bCase && !bFromEnd,
                   wxT("search parameters ignored for auto sorted array") );
 
-    size_t i,
+    size_t
            lo = 0,
            hi = m_nCount;
-    int res;
     while ( lo < hi ) {
+      size_t i;
       i = (lo + hi)/2;
 
+      int res;
       res = str.compare(m_pItems[i]);
       if ( res < 0 )
         hi = i;
@@ -378,13 +417,14 @@ size_t wxArrayString::Add(const wxString& str, size_t nInsert)
 {
   if ( m_autoSort ) {
     // insert the string at the correct position to keep the array sorted
-    size_t i,
+    size_t
            lo = 0,
            hi = m_nCount;
-    int res;
     while ( lo < hi ) {
+      size_t i;
       i = (lo + hi)/2;
 
+      int res;
       res = m_compareFunction ? m_compareFunction(str, m_pItems[i]) : str.Cmp(m_pItems[i]);
       if ( res < 0 )
         hi = i;

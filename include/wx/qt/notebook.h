@@ -20,7 +20,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxString& name = wxNotebookNameStr);
-    
+
     bool Create(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
@@ -28,28 +28,29 @@ public:
               long style = 0,
               const wxString& name = wxNotebookNameStr);
 
-    virtual void SetPadding(const wxSize& padding);
-    virtual void SetTabSize(const wxSize& sz);
+    virtual void SetPadding(const wxSize& padding) wxOVERRIDE;
+    virtual void SetTabSize(const wxSize& sz) wxOVERRIDE;
 
-    virtual bool SetPageText(size_t n, const wxString& strText);
-    virtual wxString GetPageText(size_t n) const;
+    virtual bool SetPageText(size_t n, const wxString& strText) wxOVERRIDE;
+    virtual wxString GetPageText(size_t n) const wxOVERRIDE;
 
-    virtual int GetPageImage(size_t n) const;
-    virtual bool SetPageImage(size_t n, int imageId);
+    virtual int GetPageImage(size_t n) const wxOVERRIDE;
+    virtual bool SetPageImage(size_t n, int imageId) wxOVERRIDE;
 
     virtual bool InsertPage(size_t n, wxWindow *page, const wxString& text,
-        bool bSelect = false, int imageId = -1);
+        bool bSelect = false, int imageId = -1) wxOVERRIDE;
 
-    virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
+    virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const wxOVERRIDE;
 
-    int SetSelection(size_t nPage) { return DoSetSelection(nPage, SetSelection_SendEvent); }
-    int ChangeSelection(size_t nPage) { return DoSetSelection(nPage); }
+    int SetSelection(size_t nPage) wxOVERRIDE;
+    int ChangeSelection(size_t nPage) wxOVERRIDE;
 
-    virtual QWidget *GetHandle() const;
+    virtual bool DeleteAllPages() wxOVERRIDE;
+
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
 protected:
-    virtual wxWindow *DoRemovePage(size_t page);
-    int DoSetSelection(size_t nPage, int flags = 0);
+    virtual wxWindow *DoRemovePage(size_t page) wxOVERRIDE;
 
 private:
     QTabWidget *m_qtTabWidget;

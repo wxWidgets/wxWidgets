@@ -21,6 +21,7 @@
 // Suppress some warnings in catch_impl.hpp.
 wxCLANG_WARNING_SUPPRESS(missing-braces)
 wxCLANG_WARNING_SUPPRESS(logical-op-parentheses)
+wxCLANG_WARNING_SUPPRESS(inconsistent-missing-override)
 
 // This file needs to get the CATCH definitions in addition to the usual
 // assertion macros declarations from catch.hpp included by testprec.h.
@@ -30,6 +31,7 @@ wxCLANG_WARNING_SUPPRESS(logical-op-parentheses)
 
 wxCLANG_WARNING_RESTORE(missing-braces)
 wxCLANG_WARNING_RESTORE(logical-op-parentheses)
+wxCLANG_WARNING_RESTORE(inconsistent-missing-override)
 
 // This probably could be done by predefining CLARA_CONFIG_MAIN, but at the
 // point where we are, just define this global variable manually.

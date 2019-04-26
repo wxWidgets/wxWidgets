@@ -229,8 +229,9 @@ void wxPropertyGridPage::DoSetSplitterPosition( int pos,
 class wxPGHeaderCtrl : public wxHeaderCtrl
 {
 public:
-    wxPGHeaderCtrl(wxPropertyGridManager* manager) :
-        wxHeaderCtrl()
+    wxPGHeaderCtrl(wxPropertyGridManager* manager, wxWindowID id, const wxPoint& pos,
+                   const wxSize& size, long style) :
+        wxHeaderCtrl(manager, id, pos, size, style)
     {
         m_manager = manager;
         EnsureColumnCount(2);
@@ -242,8 +243,11 @@ public:
 
     virtual ~wxPGHeaderCtrl()
     {
-        for (size_t i = 0; i < m_columns.size(); i++ )
-            delete m_columns[i];
+        for (wxVector<wxHeaderColumnSimple*>::const_iterator it = m_columns.begin();
+             it != m_columns.end(); ++it)
+        {
+            delete *it;
+        }
     }
 
     void OnPageChanged(const wxPropertyGridPage* page)
@@ -297,11 +301,8 @@ private:
     {
         wxPropertyGrid* pg = m_manager->GetGrid();
 
-        int sbWidth = pg->HasScrollbar(wxSB_VERTICAL)
-                        ? wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, pg)
-                        : 0;
         // Internal border width
-        int borderWidth = (pg->GetSize().x - pg->GetClientSize().x - sbWidth) / 2;
+        int borderWidth = pg->DoGetBorderSize().x / 2;
 
         const unsigned int colCount = m_page->GetColumnCount();
         for ( unsigned int i = 0; i < colCount; i++ )
@@ -321,7 +322,7 @@ private:
             else if ( i == colCount-1 )
             {
                 // Compensate for the internal border and scrollbar
-                int margin = pg->GetMarginWidth() + borderWidth + sbWidth;
+                int margin = borderWidth;
 
                 colWidth += margin;
                 colMinWidth += margin;
@@ -336,11 +337,8 @@ private:
     {
         wxPropertyGrid* pg = m_manager->GetGrid();
 
-        int sbWidth = pg->HasScrollbar(wxSB_VERTICAL)
-                        ? wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, pg)
-                        : 0;
         // Internal border width
-        int borderWidth = (pg->GetSize().x - pg->GetClientSize().x - sbWidth) / 2;
+        int borderWidth = pg->DoGetBorderSize().x / 2;
 
         // Compensate for the internal border
         int x = -borderWidth;
@@ -378,8 +376,12 @@ private:
             }
             else if ( evtType == wxEVT_HEADER_BEGIN_RESIZE )
             {
+                // Don't allow resizing the rightmost column
+                // (like it's not allowed for the rightmost wxPropertyGrid splitter)
+                if ( col == (int)m_page->GetColumnCount() - 1 )
+                    hcEvent->Veto();
                 // Never allow column resize if layout is static
-                if ( m_manager->HasFlag(wxPG_STATIC_SPLITTER) )
+                else if ( m_manager->HasFlag(wxPG_STATIC_SPLITTER) )
                     hcEvent->Veto();
                 // Allow application to veto dragging
                 else if ( pg->SendEvent(wxEVT_PG_COL_BEGIN_DRAG,
@@ -513,7 +515,7 @@ void wxPropertyGridManager::Init1()
 
     m_extraHeight = 0;
     m_dragStatus = 0;
-    m_onSplitter = 0;
+    m_onSplitter = false;
     m_iFlags = 0;
 }
 
@@ -1630,12 +1632,9 @@ void wxPropertyGridManager::RecreateControls()
 #if wxUSE_HEADERCTRL
     if ( m_showHeader )
     {
-
         if ( !m_pHeaderCtrl )
         {
-            wxPGHeaderCtrl* hc = new wxPGHeaderCtrl(this);
-            hc->Create(this, wxID_ANY);
-            m_pHeaderCtrl = hc;
+            m_pHeaderCtrl = new wxPGHeaderCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0);
         }
         else
         {
@@ -1790,7 +1789,7 @@ void wxPropertyGridManager::OnToolbarClick( wxCommandEvent &event )
         if ( DoSelectPage(index) )
         {
             // Event dispatching must be last.
-            m_pPropGrid->SendEvent( wxEVT_PG_PAGE_CHANGED, NULL );
+            m_pPropGrid->SendEvent( wxEVT_PG_PAGE_CHANGED, (wxPGProperty*)NULL );
         }
         else
         {
@@ -1936,6 +1935,7 @@ void wxPropertyGridManager::ReconnectEventHandlers(wxWindowID oldId, wxWindowID 
                oldId);
         Unbind(wxEVT_PG_COL_DRAGGING, &wxPropertyGridManager::OnPGColDrag, this,
                oldId);
+        Unbind(wxEVT_PG_HSCROLL, &wxPropertyGridManager::OnPGScrollH, this, oldId);
     }
 
     if (newId != wxID_NONE)
@@ -1944,6 +1944,7 @@ void wxPropertyGridManager::ReconnectEventHandlers(wxWindowID oldId, wxWindowID 
              newId);
         Bind(wxEVT_PG_COL_DRAGGING, &wxPropertyGridManager::OnPGColDrag, this,
              newId);
+        Bind(wxEVT_PG_HSCROLL, &wxPropertyGridManager::OnPGScrollH, this, newId);
     }
 }
 
@@ -1968,6 +1969,16 @@ wxPropertyGridManager::OnPGColDrag( wxPropertyGridEvent& WXUNUSED(event) )
     if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
         m_pHeaderCtrl->OnColumWidthsChanged();
 #endif
+}
+
+void wxPropertyGridManager::OnPGScrollH(wxPropertyGridEvent& evt)
+{
+#if wxUSE_HEADERCTRL
+    if ( m_pHeaderCtrl )
+    {
+        m_pHeaderCtrl->ScrollWindow(evt.GetInt(), 0);
+    }
+#endif // wxUSE_HEADERCTRL
 }
 
 // -----------------------------------------------------------------------
@@ -2014,7 +2025,7 @@ void wxPropertyGridManager::OnMouseEntry( wxMouseEvent& WXUNUSED(event) )
     // Correct cursor. This is required at least for wxGTK, for which
     // setting button's cursor to *wxSTANDARD_CURSOR does not work.
     SetCursor( wxNullCursor );
-    m_onSplitter = 0;
+    m_onSplitter = false;
 }
 
 // -----------------------------------------------------------------------
@@ -2060,7 +2071,7 @@ void wxPropertyGridManager::OnMouseMove( wxMouseEvent &event )
         if ( y >= m_splitterY && y < (m_splitterY+m_splitterHeight+2) )
         {
             SetCursor ( m_cursorSizeNS );
-            m_onSplitter = 1;
+            m_onSplitter = true;
         }
         else
         {
@@ -2068,7 +2079,7 @@ void wxPropertyGridManager::OnMouseMove( wxMouseEvent &event )
             {
                 SetCursor ( wxNullCursor );
             }
-            m_onSplitter = 0;
+            m_onSplitter = false;
         }
     }
 }

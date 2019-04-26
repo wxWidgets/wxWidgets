@@ -222,6 +222,12 @@ protected:
     void OnPaint(wxPaintEvent&)
     {
         wxPaintDC dc(this);
+
+        // Clear the background in case of a user bitmap with alpha channel
+        dc.SetBrush(m_search->GetBackgroundColour());
+        dc.Clear();
+
+        // Draw the bitmap
         dc.DrawBitmap(m_bmp, 0,0, true);
     }
 
@@ -481,9 +487,8 @@ void wxSearchCtrl::LayoutControls()
     wxSize sizeText = m_text->GetBestSize();
     // make room for the search menu & clear button
     int horizontalBorder = FromDIP(1) + ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
-    int x = horizontalBorder;
-    width -= horizontalBorder*2;
-    if (width < 0) width = 0;
+    int x = 0;
+    int textWidth = width;
 
     wxSize sizeSearch(0,0);
     wxSize sizeCancel(0,0);
@@ -493,11 +498,14 @@ void wxSearchCtrl::LayoutControls()
     {
         sizeSearch = m_searchButton->GetBestSize();
         searchMargin = FromDIP(MARGIN);
+        x += horizontalBorder;
+        textWidth -= horizontalBorder;
     }
     if ( IsCancelButtonVisible() )
     {
         sizeCancel = m_cancelButton->GetBestSize();
         cancelMargin = FromDIP(MARGIN);
+        textWidth -= horizontalBorder;
     }
 
     if ( sizeSearch.x + sizeCancel.x > width )
@@ -507,15 +515,18 @@ void wxSearchCtrl::LayoutControls()
         searchMargin = 0;
         cancelMargin = 0;
     }
-    wxCoord textWidth = width - sizeSearch.x - sizeCancel.x - searchMargin - cancelMargin - FromDIP(1);
+    textWidth -= sizeSearch.x + sizeCancel.x + searchMargin + cancelMargin + FromDIP(1);
     if (textWidth < 0) textWidth = 0;
 
     // position the subcontrols inside the client area
 
-    m_searchButton->SetSize(x, (height - sizeSearch.y) / 2,
-                            sizeSearch.x, sizeSearch.y);
-    x += sizeSearch.x;
-    x += searchMargin;
+    if ( IsSearchButtonVisible() )
+    {
+        m_searchButton->SetSize(x, (height - sizeSearch.y) / 2,
+                                sizeSearch.x, sizeSearch.y);
+        x += sizeSearch.x;
+        x += searchMargin;
+    }
 
 #ifdef __WXMSW__
     // The text control is too high up on Windows; normally a text control looks OK because
@@ -529,12 +540,12 @@ void wxSearchCtrl::LayoutControls()
 
     m_text->SetSize(x, textY, textWidth, height-textY);
     x += textWidth;
-    x += cancelMargin;
 
-    if ( m_cancelButton )
+    if ( IsCancelButtonVisible() )
     {
+        x += cancelMargin;
         m_cancelButton->SetSize(x, (height - sizeCancel.y) / 2,
-                                sizeCancel.x, height);
+                                sizeCancel.x, sizeCancel.y);
     }
 }
 
@@ -1135,6 +1146,10 @@ wxBitmap wxSearchCtrl::RenderCancelBitmap( int x, int y )
     };
     mem.DrawPolygon(WXSIZEOF(handlePolygon2),handlePolygon2,multiplier*lineStartBase,multiplier*(x-lineStartBase));
 
+    // Stop drawing on the bitmap before possibly calling RescaleBitmap()
+    // below.
+    mem.SelectObject(wxNullBitmap);
+
     //===============================================================================
     // end drawing code
     //===============================================================================
@@ -1199,10 +1214,10 @@ void wxSearchCtrl::RecalcBitmaps()
         if (
             !m_cancelBitmap.IsOk() ||
             m_cancelBitmap.GetHeight() != bitmapHeight ||
-            m_cancelBitmap.GetWidth() != bitmapHeight
+            m_cancelBitmap.GetWidth() != bitmapWidth
             )
         {
-            m_cancelBitmap = RenderCancelBitmap(bitmapHeight,bitmapHeight); // square
+            m_cancelBitmap = RenderCancelBitmap(bitmapWidth,bitmapHeight);
             m_cancelButton->SetBitmapLabel(m_cancelBitmap);
         }
         // else this bitmap was set by user, don't alter

@@ -106,7 +106,6 @@ int DecodeRLE(unsigned char* imageData, unsigned long imageSize,
                short pixelSize, wxInputStream& stream)
 {
     unsigned long outputLength = 0;
-    unsigned char current;
     unsigned int length;
     unsigned char buf[4];
 
@@ -116,6 +115,7 @@ int DecodeRLE(unsigned char* imageData, unsigned long imageSize,
         if ( ch == wxEOF )
             return wxTGA_IOERR;
 
+        unsigned char current;
         current = ch;
 
         // RLE packet.
@@ -233,7 +233,7 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
 
     const short pixelSize = bpp / 8;
 
-    const unsigned long imageSize = width * height * pixelSize;
+    const unsigned long imageSize = static_cast<unsigned long>(width) * height * pixelSize;
 
     wxScopedArray<unsigned char> imageData(imageSize);
 
@@ -373,10 +373,9 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
 
                 case 16:
                 {
-                    unsigned char temp;
-
                     for (unsigned long index = 0; index < imageSize; index += pixelSize)
                     {
+                        unsigned char temp;
                         temp = (imageData[index + 1] & 0x7c) << 1;
                         temp |= temp >> 5;
                         *(dst++) = temp;
@@ -571,10 +570,9 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
 
                 case 16:
                 {
-                    unsigned char temp;
-
                     for (unsigned long index = 0; index < imageSize; index += pixelSize)
                     {
+                        unsigned char temp;
                         temp = (imageData[index + 1] & 0x7c) << 1;
                         temp |= temp >> 5;
                         *(dst++) = temp;

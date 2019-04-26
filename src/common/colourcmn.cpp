@@ -268,6 +268,11 @@ wxString wxColourBase::GetAsString(long flags) const
     return colName;
 }
 
+double wxColourBase::GetLuminance() const
+{
+    return (0.299*Red() + 0.587*Green() + 0.114*Blue()) / 255.0;
+}
+
 // static
 void wxColourBase::MakeMono(unsigned char* r, unsigned char* g, unsigned char* b,
                             bool on)

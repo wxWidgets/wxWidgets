@@ -25,10 +25,14 @@ public:
 
     bool Create(wxWindow *parent, int flags = wxBORDER_NONE);
 
+    virtual void SetFocus() wxOVERRIDE;
     virtual bool Show(bool show = true) wxOVERRIDE;
 
     // return the style to be used for the popup windows
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const wxOVERRIDE;
+
+    // get the HWND to be used as parent of this window with CreateWindow()
+    virtual WXHWND MSWGetParent() const wxOVERRIDE;
 
 
     // Implementation only from now on.

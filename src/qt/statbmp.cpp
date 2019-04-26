@@ -21,7 +21,8 @@ public:
 };
 
 
-wxStaticBitmap::wxStaticBitmap()
+wxStaticBitmap::wxStaticBitmap() :
+    m_qtLabel(NULL)
 {
 }
 

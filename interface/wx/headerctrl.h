@@ -692,7 +692,7 @@ public:
      */
     int GetColumn() const;
     void SetColumn(int col);
-    
+
     /**
         Return the current width of the column.
 
@@ -700,7 +700,7 @@ public:
      */
     int GetWidth() const;
     void SetWidth(int width);
-    
+
     /**
         Return the new order of the column.
 

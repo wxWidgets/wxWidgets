@@ -578,6 +578,14 @@ public:
     // Return true if the button was clicked, false otherwise.
     static bool MSWClickButtonIfPossible(wxButton* btn);
 
+    // This method is used for handling wxRadioButton-related complications,
+    // see wxRadioButton::SetValue(). It calls WXDoUpdatePendingFocus() for
+    // this window and all its parents up to the enclosing TLW, recursively.
+    void WXSetPendingFocus(wxWindow* win);
+
+    // Should be overridden by all classes storing the "last focused" window.
+    virtual void WXDoUpdatePendingFocus(wxWindow* WXUNUSED(win)) {}
+
     // Return the per-window DPI if possible, i.e. when running under Windows
     // 10 v1607 or later, or wxSize(0, 0) if it's not available.
     wxSize MSWTryGetWindowDPI() const;

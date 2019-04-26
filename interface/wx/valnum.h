@@ -90,11 +90,25 @@ public:
     void SetMin(ValueType min);
 
     /**
+        Gets the minimal value accepted by the validator.
+
+        @since 3.1.3
+     */
+    ValueType GetMin() const;
+
+    /**
         Sets the maximal value accepted by the validator.
 
         This value is inclusive, i.e. the value equal to @a max is accepted.
      */
     void SetMax(ValueType max);
+
+    /**
+        Gets the maximum value accepted by the validator.
+
+        @since 3.1.3
+     */
+    ValueType GetMax() const;
 
     /**
         Sets both minimal and maximal values accepted by the validator.
@@ -103,6 +117,12 @@ public:
      */
     void SetRange(ValueType min, ValueType max);
 
+    /**
+        Gets both minimal and maximal values accepted by the validator.
+
+        @since 3.1.3
+     */
+    void GetRange(ValueType& min, ValueType& max) const;
 
     /**
         Change the validator style.
@@ -364,7 +384,7 @@ public:
 /**
     Creates a wxFloatingPointValidator object with automatic type deduction.
 
-    Similarly to wxMakeIntegerValidator(), this function allows to avoid
+    Similarly to wxMakeIntegerValidator(), this function allows avoiding
     explicitly specifying the validator type.
 
     @since 2.9.2

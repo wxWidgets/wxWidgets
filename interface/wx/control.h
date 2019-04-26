@@ -50,7 +50,7 @@ public:
         @param style
             Control style. For generic window styles, please see wxWindow.
         @param validator
-            Control validator. 
+            Control validator.
         @param name
             Control name.
     */
@@ -64,7 +64,7 @@ public:
        Default constructor to allow 2-phase creation.
     */
     wxControl();
-    
+
     bool Create(wxWindow *parent, wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize, long style = 0,
@@ -332,7 +332,7 @@ public:
 
 
 public:     // static functions
-    
+
     /**
         Returns the given @a label string without mnemonics ("&" characters).
     */
@@ -340,7 +340,7 @@ public:     // static functions
 
     /**
         Returns the given @a str string without mnemonics ("&" characters).
-        
+
         @note This function is identical to GetLabelText() and is provided
               mostly for symmetry with EscapeMnemonics().
     */

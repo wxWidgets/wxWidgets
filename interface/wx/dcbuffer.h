@@ -36,7 +36,7 @@
     Otherwise, wxBufferedDC can be used in the same way as any other device
     context.
 
-    There is another possible use for wxBufferedDC is to use it to maintain a
+    Another possible use for wxBufferedDC is to use it to maintain a
     backing store for the window contents. In this case, the associated @e DC
     may be @NULL but a valid backing store bitmap should be specified.
 
@@ -122,7 +122,7 @@ public:
     /**
        Blits the buffer to the dc, and detaches the dc from the buffer (so it
        can be effectively used once only).
-    
+
        Usually only called in the destructor or by the destructor of derived
        classes if the BufferedDC must blit before the derived class (which may
        own the dc it's blitting to) is destroyed.

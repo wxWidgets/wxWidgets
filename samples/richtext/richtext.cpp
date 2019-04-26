@@ -763,7 +763,7 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
 #ifdef __WXMAC__
     SetWindowVariant(wxWINDOW_VARIANT_SMALL);
 #endif
-    
+
     // set the frame icon
     SetIcon(wxICON(sample));
 
@@ -928,10 +928,6 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
 
     wxSplitterWindow* splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE);
     sizer->Add(splitter, 1, wxEXPAND);
-
-    wxFont textFont = wxFont(wxFontInfo(12).Family(wxFONTFAMILY_ROMAN));
-    wxFont boldFont = wxFont(wxFontInfo(12).Family(wxFONTFAMILY_ROMAN));
-    wxFont italicFont = wxFont(wxFontInfo(12).Family(wxFONTFAMILY_ROMAN).Italic());
 
     m_richTextCtrl = new MyRichTextCtrl(splitter, ID_RICHTEXT_CTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxVSCROLL|wxHSCROLL/*|wxWANTS_CHARS*/);
     wxASSERT(!m_richTextCtrl->GetBuffer().GetAttributes().HasFontPixelSize());
@@ -1247,14 +1243,14 @@ void MyFrame::WriteInitialText()
                 r.WriteText(msg);
             }
         }
-        
+
         // Demonstrate colspan and rowspan
         wxRichTextCell* cell = table->GetCell(1, 0);
         cell->SetColSpan(2);
         r.SetFocusObject(cell);
         cell->Clear();
         r.WriteText("This cell spans 2 columns");
-        
+
         cell = table->GetCell(1, 3);
         cell->SetRowSpan(2);
         r.SetFocusObject(cell);
@@ -1617,11 +1613,11 @@ void MyFrame::OnUpdateFormat(wxUpdateUIEvent& event)
 void MyFrame::OnUpdateImage(wxUpdateUIEvent& event)
 {
     wxRichTextRange range;
-    wxRichTextObject *obj;
 
     range = m_richTextCtrl->GetSelectionRange();
     if (range.ToInternal().GetLength() == 1)
     {
+        wxRichTextObject *obj;
         obj = m_richTextCtrl->GetFocusObject()->GetLeafObjectAtPosition(range.GetStart());
         if (obj && obj->IsKindOf(CLASSINFO(wxRichTextImage)))
         {
@@ -2010,7 +2006,7 @@ void MyFrame::OnTableDeleteColumn(wxCommandEvent& WXUNUSED(event))
         {
             col = table->GetColumnCount() - 1;
         }
-            
+
         table->DeleteColumns(col, 1);
     }
 }
@@ -2025,7 +2021,7 @@ void MyFrame::OnTableDeleteRow(wxCommandEvent& WXUNUSED(event))
         {
             row = table->GetRowCount() - 1;
         }
-            
+
         table->DeleteRows(row, 1);
     }
 }

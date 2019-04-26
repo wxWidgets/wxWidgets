@@ -24,7 +24,7 @@ enum
         Don't show the column headers.
 
         By default this control shows the column headers, using this class
-        allows to avoid this and show only the data.
+        allows avoiding this and showing only the data.
 
         @since 2.9.5
      */
@@ -41,7 +41,7 @@ enum
 
 /**
     @class wxTreeListItem
-   
+
     Unique identifier of an item in wxTreeListCtrl.
 
     This is an opaque class which can't be used by the application in any other
@@ -74,7 +74,7 @@ public:
 
 /**
     @class wxTreeListItemComparator
-   
+
     Class defining sort order for the items in wxTreeListCtrl.
 
     @see wxTreeListCtrl

@@ -604,7 +604,10 @@ void wxListBox::SetHorizontalExtent(const wxString& s)
     }
 
     if ( largestExtent )
+    {
+        largestExtent = MSWGetFullItemSize(largestExtent, 0 /* height */).x;
         SendMessage(GetHwnd(), LB_SETHORIZONTALEXTENT, LOWORD(largestExtent), 0L);
+    }
     //else: it shouldn't change
 }
 

@@ -61,9 +61,9 @@
         list is selected or the selection changes.
     @event{EVT_LISTBOX_DCLICK(id, func)}
         Process a @c wxEVT_LISTBOX_DCLICK event, when the listbox
-        is double-clicked. On some platforms (notably wxGTK2) 
-	pressing the enter key is handled as an equivalent of a 
-	double-click.
+        is double-clicked. On some platforms (notably wxGTK2)
+        pressing the enter key is handled as an equivalent of a
+        double-click.
     @endEventTable
 
     @library{wxcore}
@@ -176,9 +176,9 @@ public:
     void Deselect(int n);
 
     virtual void SetSelection(int n);
-    
+
     virtual int GetSelection() const;
-    
+
     virtual bool SetStringSelection(const wxString& s, bool select);
     virtual bool SetStringSelection(const wxString& s);
 
@@ -324,8 +324,8 @@ public:
     // NOTE: Phoenix needs to see the implementation of pure virtuals so it
     // knows that this class is not abstract.
     virtual unsigned int GetCount() const;
-    virtual wxString GetString(unsigned int n) const; 
-    virtual void SetString(unsigned int n, const wxString& s); 
-    virtual int FindString(const wxString& s, bool bCase = false) const;     
+    virtual wxString GetString(unsigned int n) const;
+    virtual void SetString(unsigned int n, const wxString& s);
+    virtual int FindString(const wxString& s, bool bCase = false) const;
 };
 

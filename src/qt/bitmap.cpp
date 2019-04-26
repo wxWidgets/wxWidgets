@@ -32,33 +32,33 @@
 static wxImage ConvertImage( QImage qtImage )
 {
     bool hasAlpha = qtImage.hasAlphaChannel();
-    
+
     int numPixels = qtImage.height() * qtImage.width();
 
     //Convert to ARGB32 for scanLine
     qtImage = qtImage.convertToFormat(QImage::Format_ARGB32);
-    
+
     unsigned char *data = (unsigned char *)malloc(sizeof(char) * 3 * numPixels);
     unsigned char *startData = data;
-    
+
     unsigned char *alpha = NULL;
     if (hasAlpha)
         alpha = (unsigned char *)malloc(sizeof(char) * numPixels);
 
     unsigned char *startAlpha = alpha;
-    
+
     for (int y = 0; y < qtImage.height(); y++)
     {
         QRgb *line = (QRgb*)qtImage.scanLine(y);
-        
+
         for (int x = 0; x < qtImage.width(); x++)
         {
             QRgb colour = line[x];
-            
+
             data[0] = qRed(colour);
             data[1] = qGreen(colour);
             data[2] = qBlue(colour);
-            
+
             if (hasAlpha)
             {
                 alpha[0] = qAlpha(colour);
@@ -79,7 +79,7 @@ static QImage ConvertImage( const wxImage &image )
     bool hasMask = image.HasMask();
     QImage qtImage( wxQtConvertSize( image.GetSize() ),
                    ( (hasAlpha || hasMask ) ? QImage::Format_ARGB32 : QImage::Format_RGB32 ) );
-    
+
     unsigned char *data = image.GetData();
     unsigned char *alpha = hasAlpha ? image.GetAlpha() : NULL;
     QRgb colour;
@@ -91,7 +91,7 @@ static QImage ConvertImage( const wxImage &image )
         image.GetOrFindMaskColour( &r, &g, &b );
         maskedColour = ( r << 16 ) + ( g << 8 ) + b;
     }
-    
+
     for (int y = 0; y < image.GetHeight(); y++)
     {
         for (int x = 0; x < image.GetWidth(); x++)
@@ -103,14 +103,14 @@ static QImage ConvertImage( const wxImage &image )
             }
             else
                 colour = 0;
-            
+
             colour += (data[0] << 16) + (data[1] << 8) + data[2];
 
             if ( hasMask && colour != maskedColour )
                 colour += 0xFF000000; // 255 << 24
-            
+
             qtImage.setPixel(x, y, colour);
-            
+
             data += 3;
         }
     }
@@ -125,7 +125,7 @@ class wxBitmapRefData: public wxGDIRefData
 {
     public:
         wxBitmapRefData() { m_mask = NULL; }
-        
+
         wxBitmapRefData( int width, int height, int depth )
         {
             if (depth == 1)
@@ -134,10 +134,10 @@ class wxBitmapRefData: public wxGDIRefData
                 m_qtPixmap = QPixmap( width, height );
             m_mask = NULL;
         }
-        
+
         wxBitmapRefData( QPixmap pix )
+            : m_qtPixmap(pix)
         {
-            m_qtPixmap = pix;
             m_mask = NULL;
         }
 
@@ -231,7 +231,7 @@ bool wxBitmap::Create(int width, int height, int depth )
 {
     UnRef();
     m_refData = new wxBitmapRefData(width, height, depth);
-    
+
     return true;
 }
 
@@ -292,14 +292,14 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect& rect) const
 
 bool wxBitmap::SaveFile(const wxString &name, wxBitmapType type,
               const wxPalette *WXUNUSED(palette) ) const
-{   
+{
     #if wxUSE_IMAGE
     //Try to save using wx
     wxImage image = ConvertToImage();
     if (image.IsOk() && image.SaveFile(name, type))
         return true;
     #endif
-    
+
     //Try to save using Qt
     const char* type_name = NULL;
     switch (type)
@@ -359,7 +359,7 @@ bool wxBitmap::LoadFile(const wxString &name, wxBitmapType type)
     {
         //Try to load using Qt
         AllocExclusive();
-        
+
         //TODO: Use passed image type instead of auto-detection
         return M_PIXDATA.load(wxQtConvertString(name));
     }
@@ -478,11 +478,14 @@ wxMask::wxMask(const wxMask &mask)
 
 wxMask& wxMask::operator=(const wxMask &mask)
 {
-    delete m_qtBitmap;
-    QBitmap *mask_bmp = mask.GetHandle();
-    m_qtBitmap = mask_bmp ? new QBitmap(*mask_bmp) : NULL;
+    if (this != &mask)
+    {
+        delete m_qtBitmap;
+        QBitmap *mask_bmp = mask.GetHandle();
+        m_qtBitmap = mask_bmp ? new QBitmap(*mask_bmp) : NULL;
+    }
     return *this;
-}    
+}
 
 wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
 {

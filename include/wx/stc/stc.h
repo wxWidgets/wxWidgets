@@ -3090,7 +3090,7 @@ public:
     int MarkerPrevious(int lineStart, int markerMask);
 
     // Define a marker from a bitmap
-    void MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
+    void MarkerDefinePixmap(int markerNumber, const char* const* xpmData);
 
     // Add a set of markers to a line.
     void MarkerAddSet(int line, int markerSet);
@@ -3441,7 +3441,7 @@ public:
     bool AutoCompGetDropRestOfWord() const;
 
     // Register an image for use in autocompletion lists.
-    void RegisterImage(int type, const wxBitmap& bmp);
+    void RegisterImage(int type, const char* const* xpmData);
 
     // Clear all the registered images.
     void ClearRegisteredImages();
@@ -3883,19 +3883,19 @@ public:
     // Set the display mode of visual flags for wrapped lines.
     void SetWrapVisualFlags(int wrapVisualFlags);
 
-    // Retrive the display mode of visual flags for wrapped lines.
+    // Retrieve the display mode of visual flags for wrapped lines.
     int GetWrapVisualFlags() const;
 
     // Set the location of visual flags for wrapped lines.
     void SetWrapVisualFlagsLocation(int wrapVisualFlagsLocation);
 
-    // Retrive the location of visual flags for wrapped lines.
+    // Retrieve the location of visual flags for wrapped lines.
     int GetWrapVisualFlagsLocation() const;
 
     // Set the start indent for wrapped lines.
     void SetWrapStartIndent(int indent);
 
-    // Retrive the start indent for wrapped lines.
+    // Retrieve the start indent for wrapped lines.
     int GetWrapStartIndent() const;
 
     // Sets how wrapped sublines are placed. Default is wxSTC_WRAPINDENT_FIXED.
@@ -5180,6 +5180,22 @@ public:
 
     // Clear annotations from the given line.
     void AnnotationClearLine(int line);
+
+    // Define a marker from a bitmap.
+    void MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
+
+    // Register an image for use in autocompletion lists.
+    void RegisterImage(int type, const wxBitmap& bmp);
+
+    // Set the colours used to display the items in an autocompletion list.
+    void AutoCompSetColours(const wxColour& background, const wxColour& text,
+                            const wxColour& highlight,
+                            const wxColour& highlightText);
+
+    // Use a wxListCtrl to display autocompletion lists.
+    void AutoCompUseListCtrl(bool useListCtrl = true,
+                             const wxColour& currentBgColour = wxNullColour,
+                             const wxColour& currentTextColour = wxNullColour);
 
 
 

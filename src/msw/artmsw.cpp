@@ -137,6 +137,21 @@ MSWGetBitmapFromIconLocation(const TCHAR* path, int index, const wxSize& size)
     return wxBitmap(icon);
 }
 
+#if !wxUSE_UNICODE
+
+// SHSTOCKICONINFO always uses WCHAR, even in ANSI build, so we need to convert
+// it to TCHAR, which is just CHAR in this case, used by the other functions.
+// Provide an overload doing it as this keeps the code in the main function
+// clean and this entire block (inside !wxUSE_UNICODE check) can be just
+// removed when support for ANSI build is finally dropped.
+wxBitmap
+MSWGetBitmapFromIconLocation(const WCHAR* path, int index, const wxSize& size)
+{
+    return MSWGetBitmapFromIconLocation(wxString(path).mb_str(), index, size);
+}
+
+#endif // !wxUSE_UNICODE
+
 wxBitmap
 MSWGetBitmapForPath(const wxString& path, const wxSize& size, DWORD uFlags = 0)
 {

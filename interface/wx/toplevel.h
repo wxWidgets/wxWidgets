@@ -445,11 +445,11 @@ public:
     */
     wxWindow* SetDefaultItem(wxWindow* win);
 
-    
+
     wxWindow*  SetTmpDefaultItem(wxWindow * win);
     wxWindow* GetTmpDefaultItem() const;
 
-    
+
     /**
         Sets the icon for this window.
 
@@ -467,8 +467,8 @@ public:
     void SetIcon(const wxIcon& icon);
 
     /**
-        Sets several icons of different sizes for this window: this allows to
-        use different icons for different situations (e.g. task switching bar,
+        Sets several icons of different sizes for this window: this allows
+        using different icons for different situations (e.g. task switching bar,
         taskbar, window title bar) instead of scaling, with possibly bad looking
         results, the only icon set by SetIcon().
 
@@ -571,20 +571,20 @@ public:
         there are any open top level windows.
     */
     virtual bool ShouldPreventAppExit() const;
-    
+
     /**
         This function sets the wxTopLevelWindow's modified state on OS X,
         which currently draws a black dot in the wxTopLevelWindow's close button.
         On other platforms, this method does nothing.
-        
+
         @see OSXIsModified()
     */
     virtual void OSXSetModified(bool modified);
-    
+
     /**
         Returns the current modified state of the wxTopLevelWindow on OS X.
         On other platforms, this method does nothing.
-        
+
         @see OSXSetModified()
     */
     virtual bool OSXIsModified() const;
@@ -611,7 +611,7 @@ public:
     virtual void ShowWithoutActivating();
 
     /**
-        Enables the maximize button to toggle full screen mode. Prior to 
+        Enables the maximize button to toggle full screen mode. Prior to
         OS X 10.10 a full screen button is added to the right upper corner
         of a window's title bar.
 

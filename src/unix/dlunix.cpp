@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2005-01-16 (extracted from common/dynlib.cpp)
-// Copyright:   (c) 2000-2005 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2000-2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -230,7 +230,7 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
             // format is: "start-end perm offset maj:min inode path", see proc(5)
             void *start,
                  *end;
-            switch ( sscanf(buf, "%p-%p %*4s %*p %*02x:%*02x %*d %1024s\n",
+            switch ( sscanf(buf, "%p-%p %*4s %*p %*02x:%*02x %*d %1023s\n",
                             &start, &end, path) )
             {
                 case 2:

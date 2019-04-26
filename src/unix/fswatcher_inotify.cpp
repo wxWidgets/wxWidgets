@@ -75,7 +75,7 @@ public:
             return false;
         }
 
-        m_source = loop->AddSourceForFD
+        m_source = wxEventLoopBase::AddSourceForFD
                          (
                           m_ifd,
                           m_handler,

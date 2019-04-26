@@ -35,41 +35,41 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString &name = wxTextCtrlNameStr);
 
-    virtual int GetLineLength(long lineNo) const;
-    virtual wxString GetLineText(long lineNo) const;
-    virtual int GetNumberOfLines() const;
+    virtual int GetLineLength(long lineNo) const wxOVERRIDE;
+    virtual wxString GetLineText(long lineNo) const wxOVERRIDE;
+    virtual int GetNumberOfLines() const wxOVERRIDE;
 
-    virtual bool IsModified() const;
-    virtual void MarkDirty();
-    virtual void DiscardEdits();
+    virtual bool IsModified() const wxOVERRIDE;
+    virtual void MarkDirty() wxOVERRIDE;
+    virtual void DiscardEdits() wxOVERRIDE;
 
-    virtual bool SetStyle(long start, long end, const wxTextAttr& style);
-    virtual bool GetStyle(long position, wxTextAttr& style);
-    virtual bool SetDefaultStyle(const wxTextAttr& style);
-    
-    virtual long XYToPosition(long x, long y) const;
-    virtual bool PositionToXY(long pos, long *x, long *y) const;
+    virtual bool SetStyle(long start, long end, const wxTextAttr& style) wxOVERRIDE;
+    virtual bool GetStyle(long position, wxTextAttr& style) wxOVERRIDE;
+    virtual bool SetDefaultStyle(const wxTextAttr& style) wxOVERRIDE;
 
-    virtual void ShowPosition(long pos);
+    virtual long XYToPosition(long x, long y) const wxOVERRIDE;
+    virtual bool PositionToXY(long pos, long *x, long *y) const wxOVERRIDE;
 
-    virtual void SetInsertionPoint(long pos);
-    virtual long GetInsertionPoint() const;
-    virtual void SetSelection( long from, long to );
-    virtual void GetSelection(long *from, long *to) const;
+    virtual void ShowPosition(long pos) wxOVERRIDE;
 
-    virtual wxString DoGetValue() const;
-    virtual void DoSetValue(const wxString &text, int flags = 0);
-    virtual void WriteText(const wxString& text);
+    virtual void SetInsertionPoint(long pos) wxOVERRIDE;
+    virtual long GetInsertionPoint() const wxOVERRIDE;
+    virtual void SetSelection( long from, long to ) wxOVERRIDE;
+    virtual void GetSelection(long *from, long *to) const wxOVERRIDE;
 
-    virtual QWidget *GetHandle() const;
+    virtual wxString DoGetValue() const wxOVERRIDE;
+    virtual void DoSetValue(const wxString &text, int flags = 0) wxOVERRIDE;
+    virtual void WriteText(const wxString& text) wxOVERRIDE;
+
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
 protected:
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
-    virtual bool DoLoadFile(const wxString& file, int fileType);
-    virtual bool DoSaveFile(const wxString& file, int fileType);
+    virtual bool DoLoadFile(const wxString& file, int fileType) wxOVERRIDE;
+    virtual bool DoSaveFile(const wxString& file, int fileType) wxOVERRIDE;
 
-    virtual QScrollArea *QtGetScrollBarsContainer() const;
+    virtual QScrollArea *QtGetScrollBarsContainer() const wxOVERRIDE;
 
 private:
     wxQtEdit *m_qtEdit;

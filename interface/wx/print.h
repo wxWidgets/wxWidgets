@@ -262,7 +262,7 @@ public:
 
         @since 2.9.2
     */
-    virtual void InitializeWithModality(wxPreviewFrameModalityKind kind);
+    void InitializeWithModality(wxPreviewFrameModalityKind kind);
 
     /**
         Enables any disabled frames in the application, and deletes the print preview

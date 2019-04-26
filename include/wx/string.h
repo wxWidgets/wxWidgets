@@ -3980,32 +3980,6 @@ namespace std
 
 #endif // C++11
 
-// Specialize std::iter_swap in C++11 to make std::reverse() work with wxString
-// iterators: unlike in C++98, where iter_swap() is required to deal with the
-// iterator::reference being different from "iterator::value_type&", in C++11
-// iter_swap() just calls swap() by default and this doesn't work for us as
-// wxUniCharRef is not the same as "wxUniChar&".
-//
-// Unfortunately currently iter_swap() can't be specialized when using libc++,
-// see https://llvm.org/bugs/show_bug.cgi?id=28559
-#if (__cplusplus >= 201103L) && !defined(_LIBCPP_VERSION)
-
-namespace std
-{
-    template <>
-    inline void
-    iter_swap<wxString::iterator>(wxString::iterator i1, wxString::iterator i2)
-    {
-        // We don't check for i1 == i2, this won't happen in normal use, so
-        // don't pessimize the common code to account for it.
-        wxUniChar tmp = *i1;
-        *i1 = *i2;
-        *i2 = tmp;
-    }
-} // namespace std
-
-#endif // C++11
-
 // ---------------------------------------------------------------------------
 // Implementation only from here until the end of file
 // ---------------------------------------------------------------------------

@@ -24,19 +24,19 @@ public:
 #if wxOSX_USE_COCOA
     ~wxMessageDialog();
 #endif
-    
-    virtual int ShowModal();
+
+    virtual int ShowModal() wxOVERRIDE;
 
 #if wxOSX_USE_COCOA
-    virtual void ShowWindowModal();
-    virtual void ModalFinishedCallback(void* panel, int resultCode);
+    virtual void ShowWindowModal() wxOVERRIDE;
+    virtual void ModalFinishedCallback(void* panel, int resultCode) wxOVERRIDE;
 #endif
 
 protected:
     // not supported for message dialog
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                            int WXUNUSED(width), int WXUNUSED(height),
-                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
+                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) wxOVERRIDE {}
 
 #if wxOSX_USE_COCOA
     void* ConstructNSAlert();

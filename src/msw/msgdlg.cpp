@@ -136,7 +136,7 @@ wxMessageDialog::HookFunction(int code, WXWPARAM wParam, WXLPARAM lParam)
         wnd->m_hook = NULL;
         HookMap().erase(tid);
 
-        wnd->SetHWND((HWND)wParam);
+        TempHWNDSetter set(wnd, (WXHWND)wParam);
 
         // replace the static text with an edit control if the message box is
         // too big to fit the display
@@ -151,9 +151,6 @@ wxMessageDialog::HookFunction(int code, WXWPARAM wParam, WXLPARAM lParam)
         if ( wnd->GetMessageDialogStyle() & wxCENTER )
             wnd->Center(); // center on parent
         //else: default behaviour, center on screen
-
-        // there seems to be no reason to leave it set
-        wnd->SetHWND(NULL);
     }
 
     return rc;

@@ -452,13 +452,7 @@ void wxPropertyGridInterface::DoSetPropertyAttribute( wxPGPropArg id, const wxSt
 {
     wxPG_PROP_ARG_CALL_PROLOG()
 
-    p->SetAttribute( name, value );
-    // If property is attached to the property grid
-    // then refresh the view.
-    if( p->GetParentState() )
-    {
-        RefreshProperty( p );
-    }
+    p->SetAttribute( name, value ); // property is also refreshed here
 
     if ( argFlags & wxPG_RECURSE )
     {
@@ -915,22 +909,19 @@ wxString wxPropertyGridInterface::SaveEditableState( int includedStates ) const
 
     //
     // Save state on page basis
-    unsigned int pageIndex = 0;
-    wxArrayPtrVoid pageStates;
-
-    for (;;)
+    wxVector<wxPropertyGridPageState*> pageStates;
+    for (int pageIndex = 0; ; pageIndex++)
     {
         wxPropertyGridPageState* page = GetPageState(pageIndex);
         if ( !page ) break;
 
-        pageStates.Add(page);
-
-        pageIndex++;
+        pageStates.push_back(page);
     }
 
-    for ( pageIndex=0; pageIndex < pageStates.size(); pageIndex++ )
+    for (wxVector<wxPropertyGridPageState*>::const_iterator it_ps = pageStates.begin();
+         it_ps != pageStates.end(); ++it_ps)
     {
-        wxPropertyGridPageState* pageState = (wxPropertyGridPageState*) pageStates[pageIndex];
+        wxPropertyGridPageState* pageState = *it_ps;
 
         if ( includedStates & SelectionState )
         {
@@ -1088,7 +1079,7 @@ bool wxPropertyGridInterface::RestoreEditableState( const wxString& src, int res
                 {
                     if ( restoreStates & SplitterPosState )
                     {
-                        for ( size_t n=1; n<values.size(); n++ )
+                        for ( size_t n=0; n<values.size(); n++ )
                         {
                             long pos = 0;
                             values[n].ToLong(&pos);
@@ -1184,7 +1175,12 @@ bool wxPropertyGridInterface::RestoreEditableState( const wxString& src, int res
 
     if ( selectedPage != -1 )
     {
+        wxPropertyGridPageState* curPageState = GetPageState(-1);
         DoSelectPage(selectedPage);
+        if ( GetPageState(-1) != curPageState )
+        {
+            pg->SendEvent(wxEVT_PG_SELECTED, pg->GetSelectedProperty());
+        }
     }
 
     if ( vx >= 0 )

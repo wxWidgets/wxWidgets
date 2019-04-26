@@ -77,18 +77,17 @@ void wxVariant::Clear()
 
 wxVariant::wxVariant(const wxVariant& variant)
     : wxObject()
+    , m_name(variant.m_name)
 {
     if (!variant.IsNull())
         Ref(variant);
-
-    m_name = variant.m_name;
 }
 
 wxVariant::wxVariant(wxVariantData* data, const wxString& name) // User-defined data
     : wxObject()
+    , m_name(name)
 {
     m_refData = data;
-    m_name = name;
 }
 
 wxVariant::~wxVariant()
@@ -679,7 +678,7 @@ bool wxVariant::GetBool() const
     else
     {
         wxFAIL_MSG(wxT("Could not convert to a bool"));
-        return 0;
+        return false;
     }
 }
 
@@ -690,8 +689,8 @@ bool wxVariant::GetBool() const
 class WXDLLIMPEXP_BASE wxVariantDataChar: public wxVariantData
 {
 public:
-    wxVariantDataChar() { m_value = 0; }
-    wxVariantDataChar(const wxUniChar& value) { m_value = value; }
+    wxVariantDataChar() : m_value(0) { }
+    wxVariantDataChar(const wxUniChar& value) : m_value(value) { }
 
     inline wxUniChar GetValue() const { return m_value; }
     inline void SetValue(const wxUniChar& value) { m_value = value; }
@@ -844,7 +843,7 @@ class WXDLLIMPEXP_BASE wxVariantDataString: public wxVariantData
 {
 public:
     wxVariantDataString() { }
-    wxVariantDataString(const wxString& value) { m_value = value; }
+    wxVariantDataString(const wxString& value) : m_value(value) { }
 
     inline wxString GetValue() const { return m_value; }
     inline void SetValue(const wxString& value) { m_value = value; }
@@ -1278,7 +1277,7 @@ class wxVariantDataDateTime: public wxVariantData
 {
 public:
     wxVariantDataDateTime() { }
-    wxVariantDataDateTime(const wxDateTime& value) { m_value = value; }
+    wxVariantDataDateTime(const wxDateTime& value) : m_value(value) { }
 
     inline wxDateTime GetValue() const { return m_value; }
     inline void SetValue(const wxDateTime& value) { m_value = value; }
@@ -1411,7 +1410,7 @@ class wxVariantDataArrayString: public wxVariantData
 {
 public:
     wxVariantDataArrayString() { }
-    wxVariantDataArrayString(const wxArrayString& value) { m_value = value; }
+    wxVariantDataArrayString(const wxArrayString& value) : m_value(value) { }
 
     wxArrayString GetValue() const { return m_value; }
     void SetValue(const wxArrayString& value) { m_value = value; }
@@ -1538,8 +1537,8 @@ wxArrayString wxVariant::GetArrayString() const
 class WXDLLIMPEXP_BASE wxVariantDataLongLong : public wxVariantData
 {
 public:
-    wxVariantDataLongLong() { m_value = 0; }
-    wxVariantDataLongLong(wxLongLong value) { m_value = value; }
+    wxVariantDataLongLong() : m_value(0) { }
+    wxVariantDataLongLong(wxLongLong value) : m_value(value) { }
 
     wxLongLong GetValue() const { return m_value; }
     void SetValue(wxLongLong value) { m_value = value; }
@@ -1737,8 +1736,8 @@ wxLongLong wxVariant::GetLongLong() const
 class WXDLLIMPEXP_BASE wxVariantDataULongLong : public wxVariantData
 {
 public:
-    wxVariantDataULongLong() { m_value = 0; }
-    wxVariantDataULongLong(wxULongLong value) { m_value = value; }
+    wxVariantDataULongLong() : m_value(0) { }
+    wxVariantDataULongLong(wxULongLong value) : m_value(value) { }
 
     wxULongLong GetValue() const { return m_value; }
     void SetValue(wxULongLong value) { m_value = value; }

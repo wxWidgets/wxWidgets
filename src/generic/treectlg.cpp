@@ -709,21 +709,21 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest(const wxPoint& point,
             if ((point.x >= m_x) && (point.x <= m_x+m_width))
             {
                 int image_w = -1;
-                int image_h;
 
                 // assuming every image (normal and selected) has the same size!
                 if ( (GetImage() != NO_IMAGE) && theCtrl->m_imageListNormal )
                 {
+                    int image_h;
                     theCtrl->m_imageListNormal->GetSize(GetImage(),
                                                         image_w, image_h);
                 }
 
                 int state_w = -1;
-                int state_h;
 
                 if ( (GetState() != wxTREE_ITEMSTATE_NONE) &&
                         theCtrl->m_imageListState )
                 {
+                    int state_h;
                     theCtrl->m_imageListState->GetSize(GetState(),
                                                        state_w, state_h);
                 }
@@ -3419,18 +3419,20 @@ bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
 
     if ( textOnly )
     {
-        int image_h = 0, image_w = 0;
+        int image_w = 0;
         int image = ((wxGenericTreeItem*) item.m_pItem)->GetCurrentImage();
         if ( image != NO_IMAGE && m_imageListNormal )
         {
+            int image_h;
             m_imageListNormal->GetSize( image, image_w, image_h );
             image_w += MARGIN_BETWEEN_IMAGE_AND_TEXT;
         }
 
-        int state_h = 0, state_w = 0;
+        int state_w = 0;
         int state = ((wxGenericTreeItem*) item.m_pItem)->GetState();
         if ( state != wxTREE_ITEMSTATE_NONE && m_imageListState )
         {
+            int state_h;
             m_imageListState->GetSize( state, state_w, state_h );
             if ( image_w != 0 )
                 state_w += MARGIN_BETWEEN_STATE_AND_IMAGE;

@@ -338,8 +338,8 @@ class WXDLLIMPEXP_PROPGRID wxPGCommonValue
 public:
 
     wxPGCommonValue( const wxString& label, wxPGCellRenderer* renderer )
+        : m_label(label)
     {
-        m_label = label;
         m_renderer = renderer;
         renderer->IncRef();
     }
@@ -1299,7 +1299,7 @@ public:
     // changed after the function returns (with true as return value).
     // ValueChangeInEvent() must be used if you wish the application to be
     // able to use wxEVT_PG_CHANGING to potentially veto the given value.
-    void ValueChangeInEvent( wxVariant variant )
+    void ValueChangeInEvent( const wxVariant& variant )
     {
         m_changeInEventValue = variant;
         m_iFlags |= wxPG_FL_VALUE_CHANGE_IN_EVENT;
@@ -1456,7 +1456,10 @@ public:
     virtual bool SetFont( const wxFont& font ) wxOVERRIDE;
     virtual void SetExtraStyle( long exStyle ) wxOVERRIDE;
     virtual bool Reparent( wxWindowBase *newParent ) wxOVERRIDE;
-
+    virtual void ScrollWindow(int dx, int dy, const wxRect* rect) wxOVERRIDE;
+    virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
+                               int noUnitsX, int noUnitsY,
+                               int xPos, int yPos, bool noRefresh) wxOVERRIDE;
 protected:
     virtual void DoThaw() wxOVERRIDE;
 
@@ -1577,7 +1580,7 @@ protected:
 
 #if !WXWIN_COMPATIBILITY_3_0
     // List of editors and their event handlers to be deleted in idle event handler.
-    wxArrayPGObject     m_deletedEditorObjects;
+    wxVector<wxObject*> m_deletedEditorObjects;
 #endif
 
     // List of key codes that will not be handed over to editor controls.
@@ -1687,10 +1690,8 @@ protected:
 
     // Which column's editor is selected (usually 1)?
     unsigned int        m_selColumn;
-#if WXWIN_COMPATIBILITY_3_0
     // x relative to splitter (needed for resize).
     int                 m_ctrlXAdjust;
-#endif // WXWIN_COMPATIBILITY_3_0
     // lines between cells
     wxColour            m_colLine;
     // property labels and values are written in this colour
@@ -1805,11 +1806,7 @@ protected:
 
     wxRect GetEditorWidgetRect( wxPGProperty* p, int column ) const;
 
-#if WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED_MSG("Don't use this function. It works only if horizontal scrolling is not active")
     void CorrectEditorWidgetSizeX();
-#endif // WXWIN_COMPATIBILITY_3_0
-    void CorrectEditorWidgetSizeX(int xPosChange, int widthChange);
 
     // Called in RecalculateVirtualSize() to reposition control
     // on virtual height changes.
@@ -1931,10 +1928,12 @@ protected:
 
     // Send event from the property grid.
     // Omit the wxPG_SEL_NOVALIDATE flag to allow vetoing the event
-    bool SendEvent( int eventType, wxPGProperty* p,
+    bool SendEvent( wxEventType eventType, wxPGProperty* p,
                     wxVariant* pValue = NULL,
                     unsigned int selFlags = wxPG_SEL_NOVALIDATE,
                     unsigned int column = 1 );
+
+    void SendEvent(wxEventType eventType, int intVal);
 
     // This function only moves focus to the wxPropertyGrid if it already
     // was on one of its child controls.
@@ -2033,6 +2032,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
                           wxEVT_PG_COL_DRAGGING, wxPropertyGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
                           wxEVT_PG_COL_END_DRAG, wxPropertyGridEvent );
+wxDECLARE_EVENT(wxEVT_PG_HSCROLL, wxPropertyGridEvent);
 
 #else
     enum {
@@ -2205,7 +2205,7 @@ public:
             m_propertyName = p->GetName();
     }
 
-    void SetPropertyValue( wxVariant value )
+    void SetPropertyValue( const wxVariant& value )
     {
         m_value = value;
     }

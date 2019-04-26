@@ -28,7 +28,7 @@
     don't support URLs, licence text nor custom icons in the about dialog and if
     either of those is used, wxAboutBox() will automatically use the generic version
     so you should avoid specifying these fields to achieve more native look and feel.
-    
+
     Example of usage:
     @code
     void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -37,7 +37,7 @@
         aboutInfo.SetName("MyApp");
         aboutInfo.SetVersion(MY_APP_VERSION_STRING);
         aboutInfo.SetDescription(_("My wxWidgets-based application!"));
-        aboutInfo.SetCopyright("(C) 1992-2018");
+        aboutInfo.SetCopyright("(C) 1992-2019");
         aboutInfo.SetWebSite("http://myapp.org");
         aboutInfo.AddDeveloper("My Self");
 
@@ -170,7 +170,7 @@ public:
        Returns the icon set by SetIcon().
     */
     wxIcon GetIcon() const;
-    
+
     /**
         Set the icon to be shown in the dialog. By default the icon of the main frame
         will be shown if the native about dialog supports custom icons. If it doesn't
@@ -241,7 +241,7 @@ public:
        @see SetVersion()
     */
     const wxString& GetVersion() const;
-    
+
     /**
        Return the long version string if set.
 
@@ -263,7 +263,7 @@ public:
        Returns the description of the website URL set for the dialog.
      */
     const wxString& GetWebSiteDescription() const;
-    
+
     /**
         Set the web site for the program and its description (which defaults to @a url
         itself if empty).
@@ -275,7 +275,7 @@ public:
     void SetWebSite(const wxString& url,
                     const wxString& desc = wxEmptyString);
 
-    
+
     /**
        Returns @true if developers have been set in the dialog info.
     */
@@ -316,7 +316,7 @@ public:
     */
     const wxArrayString& GetTranslators() const;
 
-    
+
 };
 
 

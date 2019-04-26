@@ -517,7 +517,7 @@ wxPropertyGrid::~wxPropertyGrid()
     size_t i;
 
 #if wxUSE_THREADS
-    wxCriticalSectionLocker(wxPGGlobalVars->m_critSect);
+    wxCriticalSectionLocker lock(wxPGGlobalVars->m_critSect);
 #endif
 
     //
@@ -1274,6 +1274,38 @@ bool wxPropertyGrid::Reparent( wxWindowBase *newParent )
     bool res = wxControl::Reparent(newParent);
 
     return res;
+}
+
+// -----------------------------------------------------------------------
+
+void wxPropertyGrid::ScrollWindow(int dx, int dy, const wxRect* rect)
+{
+    wxControl::ScrollWindow(dx, dy, rect);
+    if ( dx != 0 )
+    {
+        // Notify wxPropertyGridManager about the grid being scrolled horizontally
+        // to scroll the column header, if present.
+        SendEvent(wxEVT_PG_HSCROLL, dx);
+    }
+}
+// -----------------------------------------------------------------------
+
+void wxPropertyGrid::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
+                                   int noUnitsX, int noUnitsY,
+                                   int xPos, int yPos, bool noRefresh)
+{
+    int oldX;
+    CalcUnscrolledPosition(0, 0, &oldX, NULL);
+    wxScrollHelper::SetScrollbars(pixelsPerUnitX, pixelsPerUnitY,
+                                  noUnitsX, noUnitsY, xPos, yPos, noRefresh);
+    int newX;
+    CalcUnscrolledPosition(0, 0, &newX, NULL);
+    if ( newX != oldX )
+    {
+        // Notify wxPropertyGridManager about the grid being scrolled horizontally
+        // to scroll the column header, if present.
+        SendEvent(wxEVT_PG_HSCROLL, oldX - newX);
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -2037,13 +2069,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 #endif
 {
     const wxPGProperty* firstItem;
-    const wxPGProperty* lastItem;
-
     firstItem = DoGetItemAtY(itemsRect->y);
-    lastItem = DoGetItemAtY(itemsRect->y+itemsRect->height-1);
-
-    if ( !lastItem )
-        lastItem = GetLastItem( wxPG_ITERATE_VISIBLE );
 
     int vx, vy;
     GetViewStart(&vx, &vy);
@@ -2798,19 +2824,13 @@ void wxPropertyGrid::DoSetSplitterPosition( int newxpos,
     if ( flags & wxPG_SPLITTER_FROM_EVENT )
         m_pState->m_dontCenterSplitter = true;
 
-    // Save position and size of column 1 used for main editor widgets
-    int xPosEditorCol = m_pState->DoGetSplitterPosition(0);
-    int widthEditorCol = m_pState->GetColumnWidth(1);
-
     m_pState->DoSetSplitterPosition(newxpos, splitterIndex, flags);
 
     if ( flags & wxPG_SPLITTER_REFRESH )
     {
         if ( GetSelection() )
         {
-            int xPosChange = m_pState->DoGetSplitterPosition(0) - xPosEditorCol;
-            int widthColChange = m_pState->GetColumnWidth(1) - widthEditorCol;
-            CorrectEditorWidgetSizeX(xPosChange, widthColChange);
+            CorrectEditorWidgetSizeX();
         }
 
         Refresh();
@@ -2825,16 +2845,10 @@ void wxPropertyGrid::ResetColumnSizes( bool enableAutoResizing )
 {
     if ( m_pState )
     {
-        // Save position and size of column 1 used for main editor widgets
-        int xPosEditorCol = m_pState->DoGetSplitterPosition(0);
-        int widthEditorCol = m_pState->GetColumnWidth(1);
-
         m_pState->ResetColumnSizes(0);
         if ( GetSelection() )
         {
-            int xPosChange = m_pState->DoGetSplitterPosition(0) - xPosEditorCol;
-            int widthColChange = m_pState->GetColumnWidth(1) - widthEditorCol;
-            CorrectEditorWidgetSizeX(xPosChange, widthColChange);
+            CorrectEditorWidgetSizeX();
         }
         Refresh();
 
@@ -3258,8 +3272,6 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
             cell.SetBgCol(vfbBg);
         }
 
-        DrawItemAndChildren(property);
-
         if ( property == GetSelection() )
         {
             SetInternalFlag(wxPG_FL_CELL_OVERRIDES_SEL);
@@ -3271,6 +3283,8 @@ bool wxPropertyGrid::DoOnValidationFailure( wxPGProperty* property, wxVariant& W
                 editor->SetBackgroundColour(vfbBg);
             }
         }
+
+        DrawItemAndChildren(property);
     }
 
     if ( vfb & (wxPG_VFB_SHOW_MESSAGE |
@@ -3829,12 +3843,8 @@ wxSize wxPropertyGrid::GetImageSize( wxPGProperty* p, int item ) const
 // takes scrolling into account
 void wxPropertyGrid::ImprovedClientToScreen( int* px, int* py )
 {
-    int vx, vy;
-    GetViewStart(&vx,&vy);
-    vy*=wxPG_PIXELS_PER_UNIT;
-    vx*=wxPG_PIXELS_PER_UNIT;
-    *px -= vx;
-    *py -= vy;
+    wxASSERT(px && py);
+    CalcScrolledPosition(*px, *py, px, py);
     ClientToScreen( px, py );
 }
 
@@ -3842,14 +3852,7 @@ void wxPropertyGrid::ImprovedClientToScreen( int* px, int* py )
 
 wxPropertyGridHitTestResult wxPropertyGrid::HitTest( const wxPoint& pt ) const
 {
-    wxPoint pt2;
-    GetViewStart(&pt2.x,&pt2.y);
-    pt2.x *= wxPG_PIXELS_PER_UNIT;
-    pt2.y *= wxPG_PIXELS_PER_UNIT;
-    pt2.x += pt.x;
-    pt2.y += pt.y;
-
-    return m_pState->HitTest(pt2);
+    return m_pState->HitTest(CalcUnscrolledPosition(pt));
 }
 
 // -----------------------------------------------------------------------
@@ -4149,7 +4152,9 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
         {
             int propY = p->GetY2(m_lineHeight);
 
-            int splitterX = GetSplitterPosition();
+            int splitterX;
+            CalcScrolledPosition(GetSplitterPosition(), 0, &splitterX, NULL);
+
             m_editorFocused = false;
             m_iFlags |= wxPG_FL_PRIMARY_FILLS_ENTIRE;
 
@@ -4234,10 +4239,8 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
                     if ( p->HasFlag(wxPG_PROP_MODIFIED) &&
                          (m_windowStyle & wxPG_BOLD_MODIFIED) )
                         SetCurControlBoldFont();
-#if WXWIN_COMPATIBILITY_3_0
                     // Store x relative to splitter (we'll need it).
                     m_ctrlXAdjust = m_wndEditor->GetPosition().x - splitterX;
-#endif // WXWIN_COMPATIBILITY_3_0
 
                     // Check if background clear is not necessary
                     wxPoint pos = m_wndEditor->GetPosition();
@@ -4522,7 +4525,6 @@ bool wxPropertyGrid::DoHideProperty( wxPGProperty* p, bool hide, int flags )
         return m_pState->DoHideProperty(p, hide, flags);
 
     wxArrayPGProperty selection = m_pState->m_selection;  // Must use a copy
-    int selRemoveCount = 0;
     for ( unsigned int i=0; i<selection.size(); i++ )
     {
         wxPGProperty* selected = selection[i];
@@ -4530,7 +4532,6 @@ bool wxPropertyGrid::DoHideProperty( wxPGProperty* p, bool hide, int flags )
         {
             if ( !DoRemoveFromSelection(p, flags) )
                 return false;
-            selRemoveCount += 1;
         }
     }
 
@@ -4569,13 +4570,6 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
     );
 
     m_iFlags |= wxPG_FL_RECALCULATING_VIRTUAL_SIZE;
-
-    // Save position and size of column 1 used for main editor widgets
-    int vx;
-    GetViewStart(&vx, NULL);
-    vx *= wxPG_PIXELS_PER_UNIT;
-    int xPosEditorCol = m_pState->DoGetSplitterPosition(0) - vx;
-    int widthEditorCol = m_pState->GetColumnWidth(1);
 
     int x = m_pState->GetVirtualWidth();
     int y = m_pState->m_virtualHeight;
@@ -4629,11 +4623,7 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
 
     if ( GetSelection() )
     {
-        GetViewStart(&vx, NULL);
-        vx *= wxPG_PIXELS_PER_UNIT;
-        int xPosChange = m_pState->DoGetSplitterPosition(0) - vx - xPosEditorCol;
-        int widthColChange = m_pState->GetColumnWidth(1) - widthEditorCol;
-        CorrectEditorWidgetSizeX(xPosChange, widthColChange);
+        CorrectEditorWidgetSizeX();
     }
 
     m_iFlags &= ~wxPG_FL_RECALCULATING_VIRTUAL_SIZE;
@@ -4755,7 +4745,7 @@ void wxPropertyGrid::SetFocusOnCanvas()
 
 // selFlags uses same values DoSelectProperty's flags
 // Returns true if event was vetoed.
-bool wxPropertyGrid::SendEvent( int eventType, wxPGProperty* p,
+bool wxPropertyGrid::SendEvent( wxEventType eventType, wxPGProperty* p,
                                 wxVariant* pValue,
                                 unsigned int selFlags,
                                 unsigned int column )
@@ -4791,6 +4781,21 @@ bool wxPropertyGrid::SendEvent( int eventType, wxPGProperty* p,
     m_processedEvent = prevProcessedEvent;
 
     return evt.WasVetoed();
+}
+
+void wxPropertyGrid::SendEvent(wxEventType eventType, int intVal)
+{
+    wxPropertyGridEvent evt(eventType, m_eventObject->GetId());
+    evt.SetPropertyGrid(this);
+    evt.SetEventObject(m_eventObject);
+    evt.SetProperty(NULL);
+    evt.SetColumn(0);
+    evt.SetInt(intVal);
+
+    wxPropertyGridEvent* prevProcessedEvent = m_processedEvent;
+    m_processedEvent = &evt;
+    m_eventObject->HandleWindowEvent(evt);
+    m_processedEvent = prevProcessedEvent;
 }
 
 // -----------------------------------------------------------------------
@@ -5478,9 +5483,12 @@ bool wxPropertyGrid::OnMouseChildCommon( wxMouseEvent &event, int* px, int *py )
     int splitterX = GetSplitterPosition();
 
     wxRect r = topCtrlWnd->GetRect();
+    int ux, uy;
+    CalcUnscrolledPosition(r.x + x, r.y + y, &ux, &uy);
+
     if ( !m_dragStatus &&
-         x > (splitterX-r.x+wxPG_SPLITTERX_DETECTMARGIN2) &&
-         y >= 0 && y < r.height \
+         ux > (splitterX + wxPG_SPLITTERX_DETECTMARGIN2) &&
+         y >= 0 && y < r.height
        )
     {
         if ( m_curcursor != wxCURSOR_ARROW ) CustomSetCursor ( wxCURSOR_ARROW );
@@ -5488,8 +5496,14 @@ bool wxPropertyGrid::OnMouseChildCommon( wxMouseEvent &event, int* px, int *py )
     }
     else
     {
-        CalcUnscrolledPosition( event.m_x + r.x, event.m_y + r.y, \
-            px, py );
+        if ( px )
+        {
+            *px = ux;
+        }
+        if ( py )
+        {
+            *py = uy;
+        }
         return true;
     }
     return false;
@@ -6308,6 +6322,7 @@ wxDEFINE_EVENT( wxEVT_PG_LABEL_EDIT_ENDING, wxPropertyGridEvent );
 wxDEFINE_EVENT( wxEVT_PG_COL_BEGIN_DRAG, wxPropertyGridEvent );
 wxDEFINE_EVENT( wxEVT_PG_COL_DRAGGING, wxPropertyGridEvent );
 wxDEFINE_EVENT( wxEVT_PG_COL_END_DRAG, wxPropertyGridEvent );
+wxDEFINE_EVENT( wxEVT_PG_HSCROLL, wxPropertyGridEvent);
 
 // -----------------------------------------------------------------------
 
@@ -6352,7 +6367,7 @@ void wxPropertyGridEvent::OnPropertyGridSet()
         return;
 
 #if wxUSE_THREADS
-    wxCriticalSectionLocker(wxPGGlobalVars->m_critSect);
+    wxCriticalSectionLocker lock(wxPGGlobalVars->m_critSect);
 #endif
     m_pg->m_liveEvents.push_back(this);
 }
@@ -6364,7 +6379,7 @@ wxPropertyGridEvent::~wxPropertyGridEvent()
     if ( m_pg )
     {
     #if wxUSE_THREADS
-        wxCriticalSectionLocker(wxPGGlobalVars->m_critSect);
+        wxCriticalSectionLocker lock(wxPGGlobalVars->m_critSect);
     #endif
 
         // Use iterate from the back since it is more likely that the event

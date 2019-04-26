@@ -27,6 +27,8 @@ public:
     wxQtPushButton( wxWindow *parent, wxAnyButton *handler);
 
 private:
+    virtual bool event(QEvent* e) wxOVERRIDE;
+    void action(); // press, release
     void clicked(bool);
 };
 
@@ -34,16 +36,45 @@ wxQtPushButton::wxQtPushButton(wxWindow *parent, wxAnyButton *handler)
     : wxQtEventSignalHandler< QPushButton, wxAnyButton >( parent, handler )
 {
     connect(this, &QPushButton::clicked, this, &wxQtPushButton::clicked);
+    connect(this, &QPushButton::pressed, this, &wxQtPushButton::action);
+    connect(this, &QPushButton::released, this, &wxQtPushButton::action);
 }
 
-void wxQtPushButton::clicked( bool WXUNUSED(checked) )
+void wxQtPushButton::clicked(bool checked)
 {
     wxAnyButton *handler = GetHandler();
     if ( handler )
     {
-        wxCommandEvent event( wxEVT_BUTTON, handler->GetId() );
+        wxCommandEvent event( handler->GetEventType(), handler->GetId() );
+        if ( isCheckable() ) // toggle buttons
+        {
+            event.SetInt(checked);
+        }
         EmitEvent( event );
     }
+}
+
+void wxQtPushButton::action()
+{
+    GetHandler()->QtUpdateState();
+}
+
+bool wxQtPushButton::event(QEvent* e)
+{
+    switch ( e->type() )
+    {
+    case QEvent::EnabledChange:
+    case QEvent::Enter:
+    case QEvent::Leave:
+    case QEvent::FocusIn:
+    case QEvent::FocusOut:
+        GetHandler()->QtUpdateState();
+        break;
+    default:
+        break;
+    }
+
+    return QPushButton::event(e);
 }
 
 wxAnyButton::wxAnyButton() :
@@ -60,15 +91,17 @@ void wxAnyButton::QtCreate(wxWindow *parent)
 
 void wxAnyButton::QtSetBitmap( const wxBitmap &bitmap )
 {
+    wxCHECK_RET(m_qtPushButton, "Invalid button.");
+
     // load the bitmap and resize the button:
     QPixmap *pixmap = bitmap.GetHandle();
     if ( pixmap != NULL )
     {
         m_qtPushButton->setIcon(QIcon(*pixmap));
         m_qtPushButton->setIconSize(pixmap->rect().size());
-    }
 
-    m_bitmap = bitmap;
+        InvalidateBestSize();
+    }
 }
 
 void wxAnyButton::SetLabel( const wxString &label )
@@ -83,38 +116,57 @@ QWidget *wxAnyButton::GetHandle() const
 
 wxBitmap wxAnyButton::DoGetBitmap(State state) const
 {
-    return state == State_Normal ? m_bitmap : wxNullBitmap;
+    return state < State_Max ? m_bitmaps[state] : wxNullBitmap;
 }
 
 void wxAnyButton::DoSetBitmap(const wxBitmap& bitmap, State which)
 {
-    switch ( which )
+    wxCHECK_RET(which < State_Max, "Invalid state");
+
+    // Cache the bitmap.
+    m_bitmaps[which] = bitmap;
+
+    // Replace current bitmap only if the button is in the same state.
+    if ( which == QtGetCurrentState() )
     {
-        case State_Normal:
-            QtSetBitmap(bitmap);
-            InvalidateBestSize();
-            break;
-
-        case State_Pressed:
-            wxMISSING_IMPLEMENTATION( wxSTRINGIZE( State_Pressed ));
-            break;
-
-        case State_Current:
-            wxMISSING_IMPLEMENTATION( wxSTRINGIZE( State_Current ));
-            break;
-
-        case State_Focused:
-            wxMISSING_IMPLEMENTATION( wxSTRINGIZE( State_Focused ));
-            break;
-
-        case State_Disabled:
-            wxMISSING_IMPLEMENTATION( wxSTRINGIZE( State_Disabled ));
-            break;
-
-        case State_Max:
-            wxMISSING_IMPLEMENTATION( wxSTRINGIZE( State_Max ));
-
+        QtUpdateState();
     }
+}
+
+wxAnyButton::State wxAnyButton::QtGetCurrentState() const
+{
+    wxCHECK_MSG(m_qtPushButton, State_Normal, "Invalid button.");
+
+    if ( !m_qtPushButton->isEnabled() )
+    {
+        return State_Disabled;
+    }
+
+    if ( m_qtPushButton->isChecked() || m_qtPushButton->isDown() )
+    {
+        return State_Pressed;
+    }
+
+    if ( HasCapture() || m_qtPushButton->hasMouseTracking() || m_qtPushButton->underMouse() )
+    {
+        return State_Current;
+    }
+
+    if ( m_qtPushButton->hasFocus() )
+    {
+        return State_Focused;
+    }
+
+    return State_Normal;
+}
+
+void wxAnyButton::QtUpdateState()
+{
+    State state = QtGetCurrentState();
+
+    // Update the bitmap
+    const wxBitmap& bmp = m_bitmaps[state];
+    QtSetBitmap(bmp.IsOk() ? bmp : m_bitmaps[State_Normal]);
 }
 
 #endif // wxHAS_ANY_BUTTON

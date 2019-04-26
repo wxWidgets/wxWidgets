@@ -235,7 +235,7 @@ int wxJoystick::GetButtonState() const
 
 bool wxJoystick::GetButtonState(unsigned int id) const
 {
-    if (id > sizeof(int) * 8)
+    if (id >= sizeof(int) * 8)
         return false;
 
     return (GetButtonState() & (1 << id)) != 0;
@@ -859,20 +859,20 @@ void* wxJoystickThread::Entry()
 #endif
 
         //is the cookie a button?
-        if (nIndex < 40)
+        if (nIndex < 32)
         {
             if (hidevent.value)
             {
-                pThis->m_buttons |= (1 << nIndex);
+                pThis->m_buttons |= (1u << nIndex);
                 wxevent.SetEventType(wxEVT_JOY_BUTTON_DOWN);
             }
             else
             {
-                pThis->m_buttons &= ~(1 << nIndex);
+                pThis->m_buttons &= ~(1u << nIndex);
                 wxevent.SetEventType(wxEVT_JOY_BUTTON_UP);
             }
 
-            wxevent.SetButtonChange(1 << nIndex);
+            wxevent.SetButtonChange(1u << nIndex);
         }
         else if (nIndex == wxJS_AXIS_X)
         {

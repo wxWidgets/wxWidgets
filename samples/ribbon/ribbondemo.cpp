@@ -299,8 +299,8 @@ MyFrame::MyFrame()
 
     {
         wxRibbonPage* home = new wxRibbonPage(m_ribbon, wxID_ANY, "Examples", ribbon_xpm);
-        wxRibbonPanel *toolbar_panel = new wxRibbonPanel(home, wxID_ANY, "Toolbar", 
-                                            wxNullBitmap, wxDefaultPosition, wxDefaultSize, 
+        wxRibbonPanel *toolbar_panel = new wxRibbonPanel(home, wxID_ANY, "Toolbar",
+                                            wxNullBitmap, wxDefaultPosition, wxDefaultSize,
                                             wxRIBBON_PANEL_NO_AUTO_MINIMISE |
                                             wxRIBBON_PANEL_EXT_BUTTON);
         wxRibbonToolBar *toolbar = new wxRibbonToolBar(toolbar_panel, ID_MAIN_TOOLBAR);
@@ -322,9 +322,9 @@ MyFrame::MyFrame()
         toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_REPORT_VIEW, wxART_OTHER, wxSize(16, 15)));
         toolbar->AddTool(wxID_ANY, wxArtProvider::GetBitmap(wxART_LIST_VIEW, wxART_OTHER, wxSize(16, 15)));
         toolbar->AddSeparator();
-        toolbar->AddHybridTool(ID_POSITION_LEFT, position_left_xpm, 
+        toolbar->AddHybridTool(ID_POSITION_LEFT, position_left_xpm,
                                 "Align ribbonbar vertically\non the left\nfor demonstration purposes");
-        toolbar->AddHybridTool(ID_POSITION_TOP, position_top_xpm, 
+        toolbar->AddHybridTool(ID_POSITION_TOP, position_top_xpm,
                                 "Align the ribbonbar horizontally\nat the top\nfor demonstration purposes");
         toolbar->AddSeparator();
         toolbar->AddHybridTool(wxID_PRINT, wxArtProvider::GetBitmap(wxART_PRINT, wxART_OTHER, wxSize(16, 15)),
@@ -340,7 +340,7 @@ MyFrame::MyFrame()
 
         wxRibbonPanel *shapes_panel = new wxRibbonPanel(home, wxID_ANY, "Shapes", wxBitmap(circle_small_xpm));
         wxRibbonButtonBar *shapes = new wxRibbonButtonBar(shapes_panel);
-        shapes->AddButton(ID_CIRCLE, "Circle", wxBitmap(circle_xpm), wxBitmap(circle_small_xpm), 
+        shapes->AddButton(ID_CIRCLE, "Circle", wxBitmap(circle_xpm), wxBitmap(circle_small_xpm),
                             wxNullBitmap, wxNullBitmap, wxRIBBON_BUTTON_NORMAL,
                             "This is a tooltip for the circle button\ndemonstrating another tooltip");
         shapes->AddButton(ID_CROSS, "Cross", wxBitmap(cross_xpm), wxEmptyString);
@@ -348,21 +348,21 @@ MyFrame::MyFrame()
         shapes->AddButton(ID_SQUARE, "Square", wxBitmap(square_xpm), wxEmptyString);
         shapes->AddDropdownButton(ID_POLYGON, "Other Polygon", wxBitmap(hexagon_xpm), wxEmptyString);
 
-        wxRibbonPanel *sizer_panel = new wxRibbonPanel(home, wxID_ANY, "Panel with Sizer", 
-                                                    wxNullBitmap, wxDefaultPosition, wxDefaultSize, 
+        wxRibbonPanel *sizer_panel = new wxRibbonPanel(home, wxID_ANY, "Panel with Sizer",
+                                                    wxNullBitmap, wxDefaultPosition, wxDefaultSize,
                                                     wxRIBBON_PANEL_DEFAULT_STYLE);
 
         wxArrayString as;
         as.Add("Item 1 using a box sizer now");
         as.Add("Item 2 using a box sizer now");
-        wxComboBox* sizer_panelcombo = new wxComboBox(sizer_panel, wxID_ANY, 
-                                                    wxEmptyString, 
-                                                    wxDefaultPosition, wxDefaultSize, 
+        wxComboBox* sizer_panelcombo = new wxComboBox(sizer_panel, wxID_ANY,
+                                                    wxEmptyString,
+                                                    wxDefaultPosition, wxDefaultSize,
                                                     as, wxCB_READONLY);
 
-        wxComboBox* sizer_panelcombo2 = new wxComboBox(sizer_panel, wxID_ANY, 
-                                                    wxEmptyString, 
-                                                    wxDefaultPosition, wxDefaultSize, 
+        wxComboBox* sizer_panelcombo2 = new wxComboBox(sizer_panel, wxID_ANY,
+                                                    wxEmptyString,
+                                                    wxDefaultPosition, wxDefaultSize,
                                                     as, wxCB_READONLY);
 
         sizer_panelcombo->Select(0);

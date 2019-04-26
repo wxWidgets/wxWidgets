@@ -100,7 +100,7 @@ public:
     */
     virtual ~wxSearchCtrl();
 
-    
+
     bool Create(wxWindow* parent, wxWindowID id,
                  const wxString& value = wxEmptyString,
                  const wxPoint& pos = wxDefaultPosition,
@@ -126,7 +126,7 @@ public:
        Returns the cancel button's visibility state.
     */
     virtual bool IsCancelButtonVisible() const;
-    
+
     /**
         Sets the search control's menu object.
         If there is already a menu associated with the search control it is deleted.

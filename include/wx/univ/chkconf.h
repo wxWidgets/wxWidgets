@@ -3,7 +3,7 @@
 // Purpose:     wxUniversal-specific configuration options checks
 // Author:      Vadim Zeitlin
 // Created:     2006-09-28 (extracted from wx/chkconf.h)
-// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -313,7 +313,7 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
     HWND hFileDlg = ::GetParent((HWND)hDlg);
 
     // set HWND so that our DoMoveWindow() works correctly
-    SetHWND((WXHWND)hFileDlg);
+    TempHWNDSetter set(this, (WXHWND)hFileDlg);
 
     if ( m_centreDir )
     {
@@ -334,9 +334,6 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
     // Call selection change handler so that update handler will be
     // called once with no selection.
     MSWOnSelChange(hDlg);
-
-    // we shouldn't destroy this HWND
-    SetHWND(NULL);
 }
 
 void wxFileDialog::MSWOnSelChange(WXHWND hDlg)
@@ -409,11 +406,9 @@ static bool ShowCommFileDialog(OPENFILENAME *of, long style)
 
 void wxFileDialog::MSWOnInitDialogHook(WXHWND hwnd)
 {
-   SetHWND(hwnd);
+    TempHWNDSetter set(this, hwnd);
 
-   CreateExtraControl();
-
-   SetHWND(NULL);
+    CreateExtraControl();
 }
 
 int wxFileDialog::ShowModal()
@@ -663,8 +658,7 @@ int wxFileDialog::ShowModal()
 
         m_filterIndex = (int)of.nFilterIndex - 1;
 
-        if ( !of.nFileExtension ||
-             (of.nFileExtension && fileNameBuffer[of.nFileExtension] == wxT('\0')) )
+        if ( !of.nFileExtension || fileNameBuffer[of.nFileExtension] == wxT('\0') )
         {
             // User has typed a filename without an extension:
             const wxChar* extension = filterBuffer.t_str();

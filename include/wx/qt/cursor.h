@@ -27,9 +27,9 @@ public:
              int hotSpotX = 0, int hotSpotY = 0);
 #endif
 
-    virtual wxPoint GetHotSpot() const;
+    virtual wxPoint GetHotSpot() const wxOVERRIDE;
     QCursor &GetHandle() const;
-    
+
 protected:
     void InitFromStock( wxStockCursor cursorId );
 #if wxUSE_IMAGE
@@ -38,8 +38,8 @@ protected:
 
 private:
     void Init();
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxCursor);
 };

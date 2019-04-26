@@ -38,6 +38,7 @@
 #include "wx/tokenzr.h"
 #include "wx/renderer.h"
 #include "wx/headerctrl.h"
+#include "wx/datectrl.h"
 
 #include "wx/generic/gridsel.h"
 #include "wx/generic/grideditors.h"
@@ -1710,5 +1711,171 @@ wxGridCellAutoWrapStringEditor::Create(wxWindow* parent,
                                     wxTE_MULTILINE | wxTE_RICH);
 }
 
+#if wxUSE_DATEPICKCTRL
+
+// ----------------------------------------------------------------------------
+// wxGridCellDateEditor
+// ----------------------------------------------------------------------------
+
+#if defined ( __WXGTK__ )
+// Desired behavior is to close the editor control on ESC without updating the
+// table, and to close with update on ENTER. On wxMSW wxWANTS_CHARS is enough
+// for that, but on wxGTK a bit of special processing is required to forward
+// some of the key events from wxDatePickerCtrl to the generic cell editor
+// event handler.
+struct wxGridCellDateEditorKeyHandler
+{
+    explicit wxGridCellDateEditorKeyHandler(wxGridCellEditorEvtHandler* handler)
+        : m_handler(handler)
+    {}
+
+    void operator()(wxKeyEvent& event) const
+    {
+        switch ( event.GetKeyCode() )
+        {
+            case WXK_ESCAPE:
+                m_handler->OnKeyDown(event);
+                break;
+
+            case WXK_RETURN:
+            case WXK_NUMPAD_ENTER:
+                wxPostEvent(m_handler, wxCommandEvent(wxEVT_GRID_HIDE_EDITOR));
+                event.Skip();
+                break;
+
+            default:
+                event.Skip();
+                break;
+        }
+    }
+
+    wxGridCellEditorEvtHandler* m_handler;
+
+#ifdef wxNO_RTTI
+    // wxEventFunctorFunction used when an object of this class is passed to
+    // Bind() must have a default ctor when using wx RTTI implementation (see
+    // see the comment before WX_DECLARE_TYPEINFO_INLINE() in wx/typeinfo.h)
+    // and this, in turn, requires a default ctor of this class -- which will
+    // never be actually used, but must nevertheless exist.
+    wxGridCellDateEditorKeyHandler() : m_handler(NULL) { }
+#endif // wxNO_RTTI
+};
+#endif // __WXGTK__
+
+void wxGridCellDateEditor::Create(wxWindow* parent, wxWindowID id,
+                                  wxEvtHandler* evtHandler)
+{
+    m_control = new wxDatePickerCtrl(parent, id,
+                                     wxDefaultDateTime,
+                                     wxDefaultPosition,
+                                     wxDefaultSize,
+                                     wxDP_DEFAULT |
+                                     wxDP_SHOWCENTURY |
+                                     wxWANTS_CHARS);
+
+    wxGridCellEditor::Create(parent, id, evtHandler);
+
+#if defined ( __WXGTK__ )
+    // Install a handler for ESC and ENTER keys.
+    wxGridCellEditorEvtHandler* handler =
+        wxDynamicCast(evtHandler, wxGridCellEditorEvtHandler);
+    if ( handler )
+    {
+        handler->Bind(wxEVT_CHAR, wxGridCellDateEditorKeyHandler(handler));
+    }
+#endif // __WXGTK__
+}
+
+void wxGridCellDateEditor::SetSize(const wxRect& r)
+{
+    wxASSERT_MSG(m_control, "The wxGridCellDateEditor must be created first!");
+
+    const wxSize bestSize = DatePicker()->GetBestSize();
+
+    wxRect rect(r.GetPosition(), bestSize);
+
+    // Allow edit picker to become a bit wider, if necessary, but no more than
+    // twice as wide as the best width, otherwise they just look ugly.
+    if ( r.GetWidth() > bestSize.GetWidth() )
+    {
+        rect.SetWidth(wxMin(r.GetWidth(), 2*bestSize.GetWidth()));
+    }
+
+    wxGridCellEditor::SetSize(rect);
+}
+
+void wxGridCellDateEditor::BeginEdit(int row, int col, wxGrid* grid)
+{
+    wxASSERT_MSG(m_control, "The wxGridCellDateEditor must be created first!");
+
+    const wxString dateStr = grid->GetTable()->GetValue(row, col);
+    if ( !m_value.ParseDate(dateStr) )
+    {
+        // Invalidate m_value, so that it always compares different
+        // to any value returned from DatePicker()->GetValue().
+        m_value = wxDefaultDateTime;
+    }
+    else
+    {
+        DatePicker()->SetValue(m_value);
+    }
+
+    DatePicker()->SetFocus();
+}
+
+bool wxGridCellDateEditor::EndEdit(int WXUNUSED(row), int WXUNUSED(col),
+                                   const wxGrid* WXUNUSED(grid),
+                                   const wxString& WXUNUSED(oldval),
+                                   wxString *newval)
+{
+    wxASSERT_MSG(m_control, "The wxGridCellDateEditor must be created first!");
+
+    const wxDateTime date = DatePicker()->GetValue();
+
+    if ( m_value == date )
+    {
+        return false;
+    }
+
+    m_value = date;
+
+    if ( newval )
+    {
+        *newval = m_value.FormatISODate();
+    }
+
+    return true;
+}
+
+void wxGridCellDateEditor::ApplyEdit(int row, int col, wxGrid* grid)
+{
+    grid->GetTable()->SetValue(row, col, m_value.FormatISODate());
+}
+
+void wxGridCellDateEditor::Reset()
+{
+    wxASSERT_MSG(m_control, "The wxGridCellDateEditor must be created first!");
+
+    m_value = DatePicker()->GetValue();
+}
+
+wxGridCellEditor *wxGridCellDateEditor::Clone() const
+{
+    return new wxGridCellDateEditor();
+}
+
+wxString wxGridCellDateEditor::GetValue() const
+{
+    wxASSERT_MSG(m_control, "The wxGridCellDateEditor must be created first!");
+
+    return DatePicker()->GetValue().FormatISODate();
+}
+
+wxDatePickerCtrl* wxGridCellDateEditor::DatePicker() const
+{
+    return static_cast<wxDatePickerCtrl*>(m_control);
+}
+
+#endif // wxUSE_DATEPICKCTRL
 
 #endif // wxUSE_GRID

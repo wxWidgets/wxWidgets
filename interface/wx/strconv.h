@@ -86,7 +86,7 @@ public:
 
         This is the most general function for converting a multibyte string to
         a wide string, cMB2WC() may be often more convenient, however this
-        function is the most efficient one as it allows to avoid any
+        function is the most efficient one as it allows avoiding any
         unnecessary copying.
 
         The main case is when @a dst is not @NULL and @a srcLen is not

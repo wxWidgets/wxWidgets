@@ -3,7 +3,7 @@
 // Purpose:     wxTextEntry implementation for wxGTK
 // Author:      Vadim Zeitlin
 // Created:     2007-09-24
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -570,12 +570,16 @@ void wxTextEntry::DoSetValue(const wxString& value, int flags)
             EventsSuppressor noevents(this);
             WriteText(value);
         }
+
+        // Changing the value is supposed to reset the insertion point. Note,
+        // however, that this does not happen if the text doesn't really change.
+        SetInsertionPoint(0);
     }
 
+    // OTOH we must send the event even if the text didn't really change for
+    // consistency.
     if ( flags & SetValue_SendEvent )
         SendTextUpdatedEvent(GetEditableWindow());
-
-    SetInsertionPoint(0);
 }
 
 wxString wxTextEntry::DoGetValue() const

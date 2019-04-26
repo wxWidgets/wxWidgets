@@ -322,7 +322,7 @@ private:
 // ----------------------------------------------------------------------------
 
 #if wxUSE_UNICODE
-    #if defined(__WXGTK20__) || defined(__WXX11__)
+    #if defined(__WXGTK20__) || defined(__WXX11__) || defined(__WXQT__)
         #define wxNEEDS_UTF8_FOR_TEXT_DATAOBJ
     #elif defined(__WXMAC__)
         #define wxNEEDS_UTF16_FOR_TEXT_DATAOBJ
@@ -345,11 +345,11 @@ public:
     virtual size_t GetLength() const { return m_html.Len() + 1; }
     virtual wxString GetHTML() const { return m_html; }
     virtual void SetHTML(const wxString& html) { m_html = html; }
-    
+
     virtual size_t GetDataSize() const wxOVERRIDE;
     virtual bool GetDataHere(void *buf) const wxOVERRIDE;
     virtual bool SetData(size_t len, const void *buf) wxOVERRIDE;
-    
+
     // Must provide overloads to avoid hiding them (and warnings about it)
     virtual size_t GetDataSize(const wxDataFormat&) const wxOVERRIDE
     {

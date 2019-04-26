@@ -162,7 +162,7 @@ wxQtAction::wxQtAction( wxMenu *parent, int id, const wxString &text, const wxSt
 
     connect( this, &QAction::triggered, this, &wxQtAction::onActionTriggered );
 }
- 
+
 
 void wxQtAction::onActionTriggered( bool checked )
 {

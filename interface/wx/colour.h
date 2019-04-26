@@ -86,7 +86,7 @@ public:
             A packed RGB value.
     */
     wxColour(unsigned long colRGB);
-    
+
     /**
         Copy constructor.
     */
@@ -159,6 +159,19 @@ public:
     //@}
 
     /**
+        Return the perceived brightness of the colour.
+
+        This value is computed using the simple @code 0.299*R + 0.587*G +
+        0.114*B @endcode formula with the coefficients taken from the RGB to
+        YIQ conversion formula and @c R, @c G and @c B being the values of the
+        corresponding colour channels normalized to 0..1 range, so that the
+        return value is 0 for black and 1 for white.
+
+        @since 3.1.3
+     */
+    double GetLuminance() const;
+
+    /**
         Returns a pixel value which is platform-dependent.
         On Windows, a COLORREF is returned.
         On X, an allocated pixel value is returned.
@@ -194,8 +207,8 @@ public:
         string (third overload).
 
         When using third form, Set() accepts: colour names (those listed in
-        wxColourDatabase), the CSS-like @c "rgb(r,g,b)" or @c "rgba(r,g,b,a)" syntax 
-        (case insensitive) and the HTML-like syntax: @c "#" followed by 6 hexadecimal 
+        wxColourDatabase), the CSS-like @c "rgb(r,g,b)" or @c "rgba(r,g,b,a)" syntax
+        (case insensitive) and the HTML-like syntax: @c "#" followed by 6 hexadecimal
         digits for red, green, blue components.
 
         Returns @true if the conversion was successful, @false otherwise.
@@ -233,7 +246,7 @@ public:
         @since 2.9.0
     */
     static void MakeMono(unsigned char* r, unsigned char* g, unsigned char* b, bool on);
-    
+
     /**
         Create a disabled (dimmed) colour from (in/out) rgb parameters.
         @since 2.9.0
@@ -254,7 +267,7 @@ public:
         @since 2.9.0
     */
     static void MakeGrey(unsigned char* r, unsigned char* g, unsigned char* b);
-    
+
     /**
         Create a grey colour from (in/out) rgb parameters using floating point arithmetic.
         Defaults to using the standard ITU-T BT.601 when converting to YUV, where every pixel equals
@@ -269,7 +282,7 @@ public:
         @since 2.9.0
     */
     static unsigned char AlphaBlend(unsigned char fg, unsigned char bg, double alpha);
-    
+
     /**
         ChangeLightness() is a utility function that simply darkens
         or lightens a color, based on the specified percentage

@@ -886,7 +886,7 @@ public:
     void SetEncoding(const wxString& enc);
 
     /**
-        Sets the enconding of the file which will be used to save the document.
+        Sets the encoding of the file which will be used to save the document.
     */
     void SetFileEncoding(const wxString& encoding);
 

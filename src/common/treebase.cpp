@@ -153,12 +153,12 @@ wxTreeEvent::wxTreeEvent(wxEventType commandType, int id)
 
 wxTreeEvent::wxTreeEvent(const wxTreeEvent & event)
            : wxNotifyEvent(event)
+    , m_evtKey(event.m_evtKey)
+    , m_item(event.m_item)
+    , m_itemOld(event.m_itemOld)
+    , m_pointDrag(event.m_pointDrag)
+    , m_label(event.m_label)
 {
-    m_evtKey = event.m_evtKey;
-    m_item = event.m_item;
-    m_itemOld = event.m_itemOld;
-    m_pointDrag = event.m_pointDrag;
-    m_label = event.m_label;
     m_editCancelled = event.m_editCancelled;
 }
 

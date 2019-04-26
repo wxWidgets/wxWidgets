@@ -36,23 +36,23 @@ public:
 
     wxPenRefData( const wxPenRefData& data )
         : wxGDIRefData()
+        , m_colour(data.m_colour)
     {
         m_style = data.m_style;
         m_width = data.m_width;
         m_joinStyle = data.m_joinStyle;
         m_capStyle = data.m_capStyle;
-        m_colour = data.m_colour;
         m_countDashes = data.m_countDashes;
         m_dash = data.m_dash;
     }
 
     wxPenRefData( const wxPenInfo& info )
+        : m_colour(info.GetColour())
     {
         m_width = info.GetWidth();
         m_style = info.GetStyle();
         m_joinStyle = info.GetJoin();
         m_capStyle = info.GetCap();
-        m_colour = info.GetColour();
         m_countDashes = info.GetDashes(const_cast<wxDash**>(&m_dash));
     }
 

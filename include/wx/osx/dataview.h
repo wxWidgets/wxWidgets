@@ -42,29 +42,29 @@ public:
     virtual ~wxDataViewColumn();
 
     // implement wxHeaderColumnBase pure virtual methods
-    virtual wxAlignment GetAlignment() const { return m_alignment; }
-    virtual int GetFlags() const { return m_flags; }
+    virtual wxAlignment GetAlignment() const wxOVERRIDE { return m_alignment; }
+    virtual int GetFlags() const wxOVERRIDE { return m_flags; }
     virtual int GetMaxWidth() const { return m_maxWidth; }
-    virtual int GetMinWidth() const { return m_minWidth; }
-    virtual wxString GetTitle() const { return m_title; }
-    virtual int GetWidth() const;
-    virtual bool IsSortOrderAscending() const { return m_ascending; }
-    virtual bool IsSortKey() const;
-    virtual bool IsHidden() const;
+    virtual int GetMinWidth() const wxOVERRIDE { return m_minWidth; }
+    virtual wxString GetTitle() const wxOVERRIDE { return m_title; }
+    virtual int GetWidth() const wxOVERRIDE;
+    virtual bool IsSortOrderAscending() const wxOVERRIDE { return m_ascending; }
+    virtual bool IsSortKey() const wxOVERRIDE;
+    virtual bool IsHidden() const wxOVERRIDE;
 
-    virtual void SetAlignment  (wxAlignment align);
-    virtual void SetBitmap     (wxBitmap const& bitmap);
-    virtual void SetFlags      (int flags) { m_flags = flags; /*SetIndividualFlags(flags); */ }
-    virtual void SetHidden     (bool hidden);
+    virtual void SetAlignment  (wxAlignment align) wxOVERRIDE;
+    virtual void SetBitmap     (wxBitmap const& bitmap) wxOVERRIDE;
+    virtual void SetFlags      (int flags) wxOVERRIDE { m_flags = flags; /*SetIndividualFlags(flags); */ }
+    virtual void SetHidden     (bool hidden) wxOVERRIDE;
     virtual void SetMaxWidth   (int maxWidth);
-    virtual void SetMinWidth   (int minWidth);
-    virtual void SetReorderable(bool reorderable);
-    virtual void SetResizeable (bool resizable);
-    virtual void UnsetAsSortKey();
-    virtual void SetSortable   (bool sortable);
-    virtual void SetSortOrder  (bool ascending);
-    virtual void SetTitle      (wxString const& title);
-    virtual void SetWidth      (int  width);
+    virtual void SetMinWidth   (int minWidth) wxOVERRIDE;
+    virtual void SetReorderable(bool reorderable) wxOVERRIDE;
+    virtual void SetResizeable (bool resizable) wxOVERRIDE;
+    virtual void UnsetAsSortKey() wxOVERRIDE;
+    virtual void SetSortable   (bool sortable) wxOVERRIDE;
+    virtual void SetSortOrder  (bool ascending) wxOVERRIDE;
+    virtual void SetTitle      (wxString const& title) wxOVERRIDE;
+    virtual void SetWidth      (int  width) wxOVERRIDE;
 
    // implementation only
     wxDataViewColumnNativeData* GetNativeData() const
@@ -205,7 +205,7 @@ public:
 
  // finishes editing of custom items; if no custom item is currently edited the method does nothing
   void FinishCustomItemEditing();
-  
+
   virtual void EditItem(const wxDataViewItem& item, const wxDataViewColumn *column) wxOVERRIDE;
 
  // returns the n-th pointer to a column;

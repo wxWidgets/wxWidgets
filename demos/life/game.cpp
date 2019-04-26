@@ -584,7 +584,7 @@ extern int g_tab2[];
 bool Life::NextTic()
 {
     LifeCellBox  *c, *up, *dn, *lf, *rt;
-    wxUint32 t1, t2, t3, t4;
+    wxUint32 t1, t2;
     bool     changed = false;
 
     m_numcells = 0;
@@ -833,6 +833,7 @@ bool Life::NextTic()
         t1 = 0;
         t2 = 0;
 
+        wxUint32 t3, t4;
         t3 = c->m_live1;
         c->m_old1 = t3;
 
