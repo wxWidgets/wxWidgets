@@ -1958,6 +1958,13 @@ void FormMain::CreateGrid( int style, int extraStyle )
 
     PopulateGrid();
 
+    m_propGrid->MakeColumnEditable(0, m_labelEditingEnabled);
+    m_pPropGridManager->ShowHeader(m_hasHeader);
+    if ( m_hasHeader )
+    {
+        m_pPropGridManager->SetColumnTitle(2, "Units");
+    }
+
     // Change some attributes in all properties
     //pgman->SetPropertyAttributeAll(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING,true);
 
@@ -1980,6 +1987,8 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
 
     m_propGrid = NULL;
     m_panel = NULL;
+    m_hasHeader = false;
+    m_labelEditingEnabled = false;
 
 #ifdef __WXMAC__
     // we need this in order to allow the about menu relocation, since ABOUT is
@@ -2102,10 +2111,12 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
         "Select window style flags used by the grid.");
     menuTry->AppendCheckItem(ID_ENABLELABELEDITING, "Enable label editing",
         "This calls wxPropertyGrid::MakeColumnEditable(0)");
+    menuTry->Check(ID_ENABLELABELEDITING, m_labelEditingEnabled);
 #if wxUSE_HEADERCTRL
     menuTry->AppendCheckItem(ID_SHOWHEADER,
         "Enable header",
         "This calls wxPropertyGridManager::ShowHeader()");
+    menuTry->Check(ID_SHOWHEADER, m_hasHeader);
 #endif // wxUSE_HEADERCTRL
     menuTry->AppendSeparator();
     menuTry->AppendRadioItem( ID_COLOURSCHEME1, "Standard Colour Scheme" );
@@ -2692,7 +2703,8 @@ void FormMain::OnFreezeClick( wxCommandEvent& event )
 
 void FormMain::OnEnableLabelEditing(wxCommandEvent& event)
 {
-    m_propGrid->MakeColumnEditable(0, event.IsChecked());
+    m_labelEditingEnabled = event.IsChecked();
+    m_propGrid->MakeColumnEditable(0, m_labelEditingEnabled);
 }
 
 // -----------------------------------------------------------------------
@@ -2700,9 +2712,9 @@ void FormMain::OnEnableLabelEditing(wxCommandEvent& event)
 #if wxUSE_HEADERCTRL
 void FormMain::OnShowHeader( wxCommandEvent& event )
 {
-    bool show = event.IsChecked();
-    m_pPropGridManager->ShowHeader(show);
-    if ( show )
+    m_hasHeader = event.IsChecked();
+    m_pPropGridManager->ShowHeader(m_hasHeader);
+    if ( m_hasHeader )
     {
         m_pPropGridManager->SetColumnTitle(2, "Units");
     }

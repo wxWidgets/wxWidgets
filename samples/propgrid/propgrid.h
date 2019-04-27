@@ -153,6 +153,8 @@ public:
     wxVariant       m_storedValues;
 
     wxString        m_savedState;
+    bool            m_hasHeader;
+    bool            m_labelEditingEnabled;
 
 
     void CreateGrid( int style, int extraStyle );
