@@ -85,8 +85,15 @@ enum
     // it is important for the id corresponding to the "About" command to have
     // this standard value as otherwise it won't be handled properly under Mac
     // (where it is special and put into the "Apple" menu)
-    Minimal_About = wxID_ABOUT
+    Minimal_About = wxID_ABOUT,
 };
+
+namespace {
+    int idTextCtrl1 = wxNewId();
+    int idTextCtrl2 = wxNewId();
+    int idComboCtrl1 = wxNewId();
+    int idComboCtrl2 = wxNewId();
+}
 
 // ----------------------------------------------------------------------------
 // event tables and other macros for wxWidgets
@@ -140,6 +147,56 @@ bool MyApp::OnInit()
 // main frame
 // ----------------------------------------------------------------------------
 
+class TestDialog : public wxDialog
+{
+public:
+    TestDialog(wxWindow* parent) : wxDialog(parent, wxID_ANY, "Test")
+    {
+        wxTextCtrl* tc1 = new wxTextCtrl(this, idTextCtrl1, "12345678", wxDefaultPosition, wxDefaultSize, 0);
+        wxTextCtrl* tc2 = new wxTextCtrl(this, idTextCtrl2, "ABCDEFGH", wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+        wxComboBox* cb1 = new wxComboBox(this, idComboCtrl1, "12345678", wxDefaultPosition, wxDefaultSize, 0);
+        wxComboBox* cb2 = new wxComboBox(this, idComboCtrl2, "12345678", wxDefaultPosition, wxDefaultSize, 0, NULL, wxTE_PROCESS_ENTER);
+        wxButton* btn1 = new wxButton(this, wxID_OK, "OK");
+        btn1->SetDefault();
+        wxButton* btn2 = new wxButton(this, wxID_CANCEL, "Cancel");
+
+        wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+        sizer->Add(tc1, 1, wxEXPAND | wxALL, 10);
+        sizer->Add(tc2, 1, wxEXPAND | wxALL, 10);
+        sizer->Add(cb1, 1, wxEXPAND | wxALL, 10);
+        sizer->Add(cb2, 1, wxEXPAND | wxALL, 10);
+        sizer->Add(btn1, 1, wxEXPAND | wxALL, 10);
+        sizer->Add(btn2, 1, wxEXPAND | wxALL, 10);
+        SetSizerAndFit(sizer);
+
+        Connect(idTextCtrl2, wxEVT_TEXT_ENTER, wxTextEventHandler(TestDialog::OnTextEnter));
+        Connect(idComboCtrl2, wxEVT_TEXT_ENTER, wxTextEventHandler(TestDialog::OnTextEnter));
+
+        Connect(idTextCtrl1, wxEVT_CHAR, wxKeyEventHandler(TestDialog::OnChar));
+        Connect(idTextCtrl2, wxEVT_CHAR, wxKeyEventHandler(TestDialog::OnChar));
+        Connect(idComboCtrl1, wxEVT_CHAR, wxKeyEventHandler(TestDialog::OnChar));
+        Connect(idComboCtrl2, wxEVT_CHAR, wxKeyEventHandler(TestDialog::OnChar));
+    }
+
+    virtual ~TestDialog() {}
+    
+    void OnTextEnter(wxCommandEvent &event)
+    {
+        wxMessageBox("This is text Enter");
+    }
+    
+    void OnChar(wxKeyEvent &event)
+    {
+        printf("TestDialog::OnChar: %d\n", event.GetKeyCode());
+    }
+    
+    void EndModal(int retCode) wxOVERRIDE
+    {
+        wxDialog::EndModal(retCode);
+    }
+
+};
+
 // frame constructor
 MyFrame::MyFrame(const wxString& title)
        : wxFrame(NULL, wxID_ANY, title)
@@ -178,6 +235,9 @@ MyFrame::MyFrame(const wxString& title)
     CreateStatusBar(2);
     SetStatusText("Welcome to wxWidgets!");
 #endif // wxUSE_STATUSBAR
+
+    TestDialog dlg(this);
+    dlg.ShowModal();
 }
 
 
@@ -191,6 +251,10 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
+    TestDialog dlg(this);
+    dlg.ShowModal();
+    return;
+
     wxMessageBox(wxString::Format
                  (
                     "Welcome to %s!\n"
