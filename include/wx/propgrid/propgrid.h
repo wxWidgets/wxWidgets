@@ -2030,7 +2030,9 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
                           wxEVT_PG_COL_DRAGGING, wxPropertyGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
                           wxEVT_PG_COL_END_DRAG, wxPropertyGridEvent );
+// Events used only internally
 wxDECLARE_EVENT(wxEVT_PG_HSCROLL, wxPropertyGridEvent);
+wxDECLARE_EVENT(wxEVT_PG_COLS_RESIZED, wxPropertyGridEvent);
 
 #else
     enum {

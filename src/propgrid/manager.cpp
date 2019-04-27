@@ -368,6 +368,7 @@ private:
 
                 OnSetColumnWidth(col, colWidth);
 
+                pg->SendEvent(wxEVT_PG_COLS_RESIZED, NULL);
                 pg->SendEvent(wxEVT_PG_COL_DRAGGING,
                               NULL, NULL, 0,
                               (unsigned int)col);
@@ -1933,18 +1934,16 @@ void wxPropertyGridManager::ReconnectEventHandlers(wxWindowID oldId, wxWindowID 
     {
         Unbind(wxEVT_PG_SELECTED, &wxPropertyGridManager::OnPropertyGridSelect, this,
                oldId);
-        Unbind(wxEVT_PG_COL_DRAGGING, &wxPropertyGridManager::OnPGColDrag, this,
-               oldId);
         Unbind(wxEVT_PG_HSCROLL, &wxPropertyGridManager::OnPGScrollH, this, oldId);
+        Unbind(wxEVT_PG_COLS_RESIZED, &wxPropertyGridManager::OnColWidthsChanged, this, oldId);
     }
 
     if (newId != wxID_NONE)
     {
         Bind(wxEVT_PG_SELECTED, &wxPropertyGridManager::OnPropertyGridSelect, this,
              newId);
-        Bind(wxEVT_PG_COL_DRAGGING, &wxPropertyGridManager::OnPGColDrag, this,
-             newId);
         Bind(wxEVT_PG_HSCROLL, &wxPropertyGridManager::OnPGScrollH, this, newId);
+        Bind(wxEVT_PG_COLS_RESIZED, &wxPropertyGridManager::OnColWidthsChanged, this, newId);
     }
 }
 
@@ -1962,15 +1961,6 @@ void wxPropertyGridManager::OnPropertyGridSelect( wxPropertyGridEvent& event )
 
 // -----------------------------------------------------------------------
 
-void
-wxPropertyGridManager::OnPGColDrag( wxPropertyGridEvent& WXUNUSED(event) )
-{
-#if wxUSE_HEADERCTRL
-    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
-        m_pHeaderCtrl->OnColumWidthsChanged();
-#endif
-}
-
 void wxPropertyGridManager::OnPGScrollH(wxPropertyGridEvent& evt)
 {
 #if wxUSE_HEADERCTRL
@@ -1979,6 +1969,14 @@ void wxPropertyGridManager::OnPGScrollH(wxPropertyGridEvent& evt)
         m_pHeaderCtrl->ScrollWindow(evt.GetInt(), 0);
     }
 #endif // wxUSE_HEADERCTRL
+}
+
+void wxPropertyGridManager::OnColWidthsChanged(wxPropertyGridEvent& WXUNUSED(evt))
+{
+#if wxUSE_HEADERCTRL
+    if ( m_pHeaderCtrl )
+        m_pHeaderCtrl->OnColumWidthsChanged();
+#endif
 }
 
 // -----------------------------------------------------------------------

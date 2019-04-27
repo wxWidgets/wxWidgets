@@ -4892,6 +4892,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                         {
                             ResetColumnSizes( true );
 
+                            SendEvent(wxEVT_PG_COLS_RESIZED, NULL);
                             SendEvent(wxEVT_PG_COL_DRAGGING,
                                       m_propHover,
                                       NULL,
@@ -5050,6 +5051,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                                       wxPG_SPLITTER_REFRESH |
                                       wxPG_SPLITTER_FROM_EVENT);
 
+                SendEvent(wxEVT_PG_COLS_RESIZED, NULL);
                 SendEvent(wxEVT_PG_COL_DRAGGING,
                           m_propHover,
                           NULL,
@@ -6315,7 +6317,9 @@ wxDEFINE_EVENT( wxEVT_PG_LABEL_EDIT_ENDING, wxPropertyGridEvent );
 wxDEFINE_EVENT( wxEVT_PG_COL_BEGIN_DRAG, wxPropertyGridEvent );
 wxDEFINE_EVENT( wxEVT_PG_COL_DRAGGING, wxPropertyGridEvent );
 wxDEFINE_EVENT( wxEVT_PG_COL_END_DRAG, wxPropertyGridEvent );
+// Events used only internally
 wxDEFINE_EVENT( wxEVT_PG_HSCROLL, wxPropertyGridEvent);
+wxDEFINE_EVENT( wxEVT_PG_COLS_RESIZED, wxPropertyGridEvent);
 
 // -----------------------------------------------------------------------
 

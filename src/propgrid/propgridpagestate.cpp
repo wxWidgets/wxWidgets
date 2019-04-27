@@ -398,6 +398,11 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
             }
         }
     }
+
+    if ( pg->GetState() == this )
+    {
+        pg->SendEvent(wxEVT_PG_COLS_RESIZED, NULL);
+    }
 }
 
 // -----------------------------------------------------------------------
