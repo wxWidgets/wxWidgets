@@ -131,6 +131,7 @@ protected:
     virtual void EnableTextChangedEvents(bool enable) wxOVERRIDE;
 
     // callbacks
+    void OnChar(wxKeyEvent& event); // Process 'enter' if required
     void OnKeyDown(wxKeyEvent& event); // Process clipboard shortcuts
 
     // the subcontrols
