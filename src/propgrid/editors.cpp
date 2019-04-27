@@ -610,7 +610,6 @@ public:
         : wxOwnerDrawnComboBox()
     {
         m_dclickProcessor = NULL;
-        m_sizeEventCalled = false;
     }
 
     ~wxPGComboBox()
@@ -734,7 +733,6 @@ public:
 
 private:
     wxPGDoubleClickProcessor*   m_dclickProcessor;
-    bool                        m_sizeEventCalled;
     wxPGProperty*               m_selProp;
 };
 
