@@ -38,6 +38,7 @@
     #include "wx/region.h"
     #include "wx/dcmemory.h"
     #include "wx/control.h"
+    #include "wx/choice.h"
     #include "wx/app.h"         // for GetComCtl32Version
     #include "wx/image.h"
     #include "wx/stattext.h"
@@ -126,6 +127,7 @@ wxBEGIN_EVENT_TABLE(wxToolBar, wxToolBarBase)
     EVT_MOUSE_EVENTS(wxToolBar::OnMouseEvent)
     EVT_SYS_COLOUR_CHANGED(wxToolBar::OnSysColourChanged)
     EVT_ERASE_BACKGROUND(wxToolBar::OnEraseBackground)
+    EVT_DPI_CHANGED(wxToolBar::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -581,11 +583,11 @@ wxSize wxToolBar::DoGetBestSize() const
     wxSize sizeBest;
     if ( IsVertical() )
     {
-        sizeBest.x = sizeTool.x + 2 * ::GetSystemMetrics(SM_CXBORDER);
+        sizeBest.x = sizeTool.x + 2 * wxGetSystemMetrics(SM_CXBORDER, m_parent);
     }
     else
     {
-        sizeBest.y = sizeTool.y + 2 * ::GetSystemMetrics(SM_CYBORDER);
+        sizeBest.y = sizeTool.y + 2 * wxGetSystemMetrics(SM_CYBORDER, m_parent);
     }
 
     wxToolBarToolsList::compatibility_iterator node;
@@ -634,11 +636,11 @@ wxSize wxToolBar::DoGetBestSize() const
     {
         if ( IsVertical() )
         {
-            sizeBest.x += 2 * ::GetSystemMetrics(SM_CXBORDER);
+            sizeBest.x += 2 * wxGetSystemMetrics(SM_CXBORDER, m_parent);
         }
         else
         {
-            sizeBest.y += 2 * ::GetSystemMetrics(SM_CYBORDER);
+            sizeBest.y += 2 * wxGetSystemMetrics(SM_CYBORDER, m_parent);
         }
     }
 
@@ -1247,7 +1249,7 @@ bool wxToolBar::Realize()
     {
         // We want just the usable height, so remove the space taken by the
         // border/divider.
-        height -= 2 * ::GetSystemMetrics(SM_CYBORDER);
+        height -= 2 * wxGetSystemMetrics(SM_CYBORDER, m_parent);
     }
 
     // adjust the controls size to fit nicely in the toolbar and compute its
@@ -1891,11 +1893,46 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
 #endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
 }
 
-void wxToolBar::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+void wxToolBar::OnDPIChanged(wxDPIChangedEvent& event)
 {
-    wxToolBarBase::MSWUpdateFontOnDPIChange(newDPI);
+    // Manually scale the size of the controls. Even though the font has been
+    // updated, the internal size of the controls does not.
+    const float scaleFactor = (float)event.GetNewDPI().y / event.GetOldDPI().y;
 
-    Realize();
+    wxToolBarToolsList::compatibility_iterator node;
+    for (node = m_tools.GetFirst(); node; node = node->GetNext())
+    {
+        wxToolBarTool* const tool = static_cast<wxToolBarTool*>(node->GetData());
+        if ( !tool->IsControl() )
+            continue;
+
+        if ( wxControl* const control = tool->GetControl() )
+        {
+            const wxSize oldSize = control->GetSize();
+            wxSize newSize = oldSize * scaleFactor;
+
+            // choice based controls seem to manage their height by themselves
+            if ( dynamic_cast<wxChoiceBase*>(control) )
+                newSize.y = oldSize.y;
+
+            control->SetSize(newSize);
+        }
+
+        if ( wxStaticText* const staticText = tool->GetStaticText() )
+        {
+            // Use the best size for the label
+            staticText->SetSize(staticText->GetBestSize());
+        }
+    }
+
+    // Use CallAfter because creating the toolbar directly does sometimes not
+    // work. E.g. when switching from 125% to 150%. All the sizes are set
+    // correctly, but after all dpi events are handled, 5px of the toolbar are
+    // gone and a dark-gray bar appears. After resizing the window, the gray
+    // bar disapears as well.
+    // Use Recreate instead of Realize because CallAfter does not support
+    // return values.
+    CallAfter(&wxToolBar::Recreate);
 }
 
 bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM WXUNUSED(lParam))
