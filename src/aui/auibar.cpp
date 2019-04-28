@@ -162,10 +162,7 @@ void wxAuiGenericToolBarArt::UpdateColoursFromSystem()
 {
     m_baseColour = GetBaseColor();
     m_highlightColour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
-    wxColor darker1Colour = m_baseColour.ChangeLightness(85);
-    wxColor darker2Colour = m_baseColour.ChangeLightness(75);
     wxColor darker3Colour = m_baseColour.ChangeLightness(60);
-    wxColor darker4Colour = m_baseColour.ChangeLightness(50);
     wxColor darker5Colour = m_baseColour.ChangeLightness(40);
 
     int pen_width = wxWindow::FromDIP(1, NULL);
@@ -1574,12 +1571,13 @@ void wxAuiToolBar::ToggleTool(int tool_id, bool state)
     {
         if (tool->m_kind == wxITEM_RADIO)
         {
-            int i, idx, count;
+            int idx, count;
             idx = GetToolIndex(tool_id);
             count = (int)m_items.GetCount();
 
             if (idx >= 0 && idx < count)
             {
+                int i;
                 for (i = idx + 1; i < count; ++i)
                 {
                     if (m_items[i].m_kind != wxITEM_RADIO)

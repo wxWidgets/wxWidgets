@@ -32,18 +32,18 @@ class wxAccelRefData : public wxObjectRefData
         wxAccelRefData()
         {
         }
-        
+
         wxAccelRefData(const wxAccelRefData& data)
         : wxObjectRefData()
+            , m_accels(data.m_accels)
         {
-            m_accels = data.m_accels;
         }
-        
+
         virtual ~wxAccelRefData()
         {
             WX_CLEAR_LIST(wxAccelList, m_accels);
         }
-        
+
         wxAccelList m_accels;
 };
 
@@ -61,7 +61,7 @@ QShortcut *ConvertAccelerator( wxAcceleratorEntry *e, QWidget *parent )
 {
     // TODO: Not all keys have the same string representation in wx and qt
     QShortcut *s = new QShortcut( wxQtConvertString( e->ToString() ), parent );
-    
+
     // Set a property to save wx Command to send when activated
     s->setProperty( "wxQt_Command", e->GetCommand() );
 
@@ -75,23 +75,24 @@ wxAcceleratorTable::wxAcceleratorTable()
 wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[])
 {
     m_refData = new wxAccelRefData;
-    
+
     for ( int i = 0; i < n; i++ )
     {
         M_ACCELDATA->m_accels.Append( new wxAcceleratorEntry( entries[i] ) );
     }
 }
 
-QList< QShortcut* > *wxAcceleratorTable::ConvertShortcutTable( QWidget *parent ) const
-{   
-    QList< QShortcut* > *qtList = new QList< QShortcut* >;
-    
-    for ( wxAccelList::compatibility_iterator node = M_ACCELDATA->m_accels.GetFirst(); node; node = node->GetNext() )
+wxVector<QShortcut*> wxAcceleratorTable::ConvertShortcutTable( QWidget *parent ) const
+{
+    wxVector<QShortcut*> shortcuts;
+
+    for ( wxAccelList::compatibility_iterator node = M_ACCELDATA->m_accels.GetFirst();
+          node; node = node->GetNext() )
     {
-        qtList->push_back(ConvertAccelerator( node->GetData(), parent ));
+        shortcuts.push_back(ConvertAccelerator(node->GetData(), parent));
     }
-    
-    return qtList;
+
+    return shortcuts;
 }
 
 wxObjectRefData *wxAcceleratorTable::CreateRefData() const

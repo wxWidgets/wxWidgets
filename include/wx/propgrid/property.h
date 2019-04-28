@@ -1736,7 +1736,7 @@ public:
 
     // Helper function (for wxPython bindings and such) for settings protected
     // m_value.
-    void SetValuePlain( wxVariant value )
+    void SetValuePlain( const wxVariant& value )
     {
         m_value = value;
     }

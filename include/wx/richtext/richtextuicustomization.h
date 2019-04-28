@@ -26,7 +26,7 @@
     wxRichTextFormattingDialog::GetHelpInfo().SetHelpId(ID_HELP_FORMATTINGDIALOG);
     wxRichTextFormattingDialog::GetHelpInfo().SetUICustomization(& wxGetApp().GetRichTextUICustomization());
     wxRichTextBordersPage::GetHelpInfo().SetHelpId(ID_HELP_BORDERSPAGE);
-    
+
     Only the wxRichTextFormattingDialog class needs to have its customization object and help id set,
     though the application set them for individual pages if it wants.
  **/
@@ -46,17 +46,17 @@ public:
     This class is used as a static member of dialogs, to store the help topic for the dialog
     and also the customization object that will allow help to be shown appropriately for the application.
  **/
-  
+
 class WXDLLIMPEXP_RICHTEXT wxRichTextHelpInfo
 {
 public:
     wxRichTextHelpInfo()
     {
         m_helpTopic = -1;
-        m_uiCustomization = NULL;        
+        m_uiCustomization = NULL;
     }
     virtual ~wxRichTextHelpInfo() {}
-        
+
     virtual bool ShowHelp(wxWindow* win)
     {
         if ( !m_uiCustomization || m_helpTopic == -1 )

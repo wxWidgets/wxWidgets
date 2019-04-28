@@ -489,9 +489,9 @@ static void gtk_assert_dialog_class_init(gpointer g_class, void*)
                                     "<property name='visible'>True</property>"
                                     "<property name='can_focus'>True</property>"
                                     "<property name='shadow_type'>etched-in</property>"
+                                    "<property name='min-content-height'>180</property>"
                                     "<child>"
                                       "<object class='GtkTreeView' id='treeview'>"
-                                        "<property name='height_request'>180</property>"
                                         "<property name='visible'>True</property>"
                                         "<property name='can_focus'>True</property>"
                                         "<property name='model'>backtrace_list_store</property>"
@@ -755,11 +755,11 @@ static void gtk_assert_dialog_init(GTypeInstance* instance, void*)
             gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_ETCHED_IN);
             gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_AUTOMATIC,
                                             GTK_POLICY_AUTOMATIC);
+            gtk_widget_set_size_request(GTK_WIDGET(sw), -1, 180);
             gtk_box_pack_start (GTK_BOX(vbox), sw, TRUE, TRUE, 8);
 
             /* add the treeview to the scrollable window */
             dlg->treeview = gtk_assert_dialog_create_backtrace_list_model ();
-            gtk_widget_set_size_request (GTK_WIDGET(dlg->treeview), -1, 180);
             gtk_container_add (GTK_CONTAINER (sw), dlg->treeview);
 
             /* create button's hbox */
@@ -841,12 +841,12 @@ gchar *gtk_assert_dialog_get_backtrace (GtkAssertDialog *dlg)
 
     g_return_val_if_fail (GTK_IS_ASSERT_DIALOG (dlg), NULL);
     model = gtk_tree_view_get_model (GTK_TREE_VIEW(dlg->treeview));
-    string = g_string_new("");
 
     /* iterate over the list */
     if (!gtk_tree_model_get_iter_first (model, &iter))
         return NULL;
 
+    string = g_string_new("");
     do
     {
         /* append this stack frame's info to the string */
@@ -879,13 +879,13 @@ gchar *gtk_assert_dialog_get_backtrace (GtkAssertDialog *dlg)
 
 void gtk_assert_dialog_set_message(GtkAssertDialog *dlg, const gchar *msg)
 {
+    g_return_if_fail (GTK_IS_ASSERT_DIALOG (dlg));
     /* prepend and append the <b> tag
        NOTE: g_markup_printf_escaped() is not used because it's available
              only for glib >= 2.4 */
     gchar *escaped_msg = g_markup_escape_text (msg, -1);
     gchar *decorated_msg = g_strdup_printf ("<b>%s</b>", escaped_msg);
 
-    g_return_if_fail (GTK_IS_ASSERT_DIALOG (dlg));
     gtk_label_set_markup (GTK_LABEL(dlg->message), decorated_msg);
 
     g_free (decorated_msg);

@@ -1,16 +1,16 @@
-///////////////////////////////////////////////////////////////////////////// 
-// Name:        imagiff.h 
-// Purpose:     interface of wxIFFHandler 
-// Author:      Samuel Dunn 
-// Licence:     wxWindows licence 
-//////////////////////////////////////////////////////////////////////////// 
+/////////////////////////////////////////////////////////////////////////////
+// Name:        imagiff.h
+// Purpose:     interface of wxIFFHandler
+// Author:      Samuel Dunn
+// Licence:     wxWindows licence
+////////////////////////////////////////////////////////////////////////////
 
-/** 
+/**
     @class wxIFFHandler
 
     This is the image handler for the IFF format.
 
-    @library{core}
+    @library{wxcore}
     @category{gdi}
 
     @see wxImage, wxImageHandler, wxInitAllImageHandlers()

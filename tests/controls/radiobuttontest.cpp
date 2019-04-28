@@ -16,7 +16,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/button.h"
+    #include "wx/panel.h"
     #include "wx/radiobut.h"
+    #include "wx/sizer.h"
+    #include "wx/stattext.h"
 #endif // WX_PRECOMP
 
 #include "wx/uiaction.h"
@@ -105,22 +109,25 @@ void RadioButtonTestCase::Value()
 
 void RadioButtonTestCase::Group()
 {
-    //Add another button to the first group and create another of two buttons
-    wxRadioButton* g1radio0 = new wxRadioButton(wxTheApp->GetTopWindow(),
-                                                wxID_ANY, "wxRadioButton",
-                                                wxDefaultPosition,
-                                                wxDefaultSize, wxRB_GROUP);
+    wxWindow* const parent = wxTheApp->GetTopWindow();
 
-    wxRadioButton* g1radio1 = new wxRadioButton(wxTheApp->GetTopWindow(),
-                                                wxID_ANY, "wxRadioButton");
+    // Create two different radio groups.
+    wxRadioButton* g1radio0 = new wxRadioButton(parent, wxID_ANY, "radio 1.0",
+                                                wxDefaultPosition, wxDefaultSize,
+                                                wxRB_GROUP);
 
-    wxRadioButton* g2radio0 = new wxRadioButton(wxTheApp->GetTopWindow(),
-                                                wxID_ANY, "wxRadioButton",
-                                                wxDefaultPosition,
-                                                wxDefaultSize, wxRB_GROUP);
+    wxRadioButton* g1radio1 = new wxRadioButton(parent, wxID_ANY, "radio 1.1");
 
-    wxRadioButton* g2radio1 = new wxRadioButton(wxTheApp->GetTopWindow(),
-                                                wxID_ANY, "wxRadioButton");
+    wxRadioButton* g2radio0 = new wxRadioButton(parent, wxID_ANY, "radio 2.0",
+                                                wxDefaultPosition, wxDefaultSize,
+                                                wxRB_GROUP);
+
+    wxRadioButton* g2radio1 = new wxRadioButton(parent, wxID_ANY, "radio 2.1");
+
+    // Check that having another control between radio buttons doesn't break
+    // grouping.
+    wxStaticText* text = new wxStaticText(parent, wxID_ANY, "Label");
+    wxRadioButton* g2radio2 = new wxRadioButton(parent, wxID_ANY, "radio 2.1");
 
     g1radio0->SetValue(true);
     g2radio0->SetValue(true);
@@ -138,6 +145,11 @@ void RadioButtonTestCase::Group()
     CPPUNIT_ASSERT(!g2radio0->GetValue());
     CPPUNIT_ASSERT(g2radio1->GetValue());
 
+    g2radio2->SetValue(true);
+    CPPUNIT_ASSERT(!g2radio0->GetValue());
+    CPPUNIT_ASSERT(!g2radio1->GetValue());
+    CPPUNIT_ASSERT(g2radio2->GetValue());
+
     g1radio0->SetValue(true);
     g2radio0->SetValue(true);
 
@@ -150,6 +162,8 @@ void RadioButtonTestCase::Group()
     wxDELETE(g1radio1);
     wxDELETE(g2radio0);
     wxDELETE(g2radio1);
+    wxDELETE(g2radio2);
+    wxDELETE(text);
 }
 
 void RadioButtonTestCase::Single()
@@ -182,6 +196,60 @@ void RadioButtonTestCase::Single()
 
     CHECK(gradio1->GetValue());
     CHECK(ngradio->GetValue());
+}
+
+TEST_CASE("wxRadioButton::Focus", "[radiobutton][focus]")
+{
+    // Create a container panel just to be able to destroy all the windows
+    // created here at once by simply destroying it.
+    wxWindow* const tlw = wxTheApp->GetTopWindow();
+    wxScopedPtr<wxPanel> parentPanel(new wxPanel(tlw));
+
+    // Create a panel containing 2 radio buttons and another control outside
+    // this panel, so that we could give focus to something different and then
+    // return it back to the panel.
+    wxPanel* const radioPanel = new wxPanel(parentPanel.get());
+    wxRadioButton* const radio1 = new wxRadioButton(radioPanel, wxID_ANY, "1");
+    wxRadioButton* const radio2 = new wxRadioButton(radioPanel, wxID_ANY, "2");
+    wxSizer* const radioSizer = new wxBoxSizer(wxHORIZONTAL);
+    radioSizer->Add(radio1);
+    radioSizer->Add(radio2);
+    radioPanel->SetSizer(radioSizer);
+
+    wxButton* const dummyButton = new wxButton(parentPanel.get(), wxID_OK);
+
+    wxSizer* const sizer = new wxBoxSizer(wxVERTICAL);
+    sizer->Add(radioPanel, wxSizerFlags(1).Expand());
+    sizer->Add(dummyButton, wxSizerFlags().Expand());
+    parentPanel->SetSizer(sizer);
+
+    parentPanel->SetSize(tlw->GetClientSize());
+    parentPanel->Layout();
+
+    // Initially the first radio button should be checked.
+    radio1->SetFocus();
+    CHECK(radio1->GetValue());
+    CHECK(wxWindow::FindFocus() == radio1);
+
+    // Switching focus from it shouldn't change this.
+    dummyButton->SetFocus();
+    CHECK(radio1->GetValue());
+
+    // Checking another radio button should make it checked and uncheck the
+    // first one.
+    radio2->SetValue(true);
+    CHECK(!radio1->GetValue());
+    CHECK(radio2->GetValue());
+
+    // While not changing focus.
+    CHECK(wxWindow::FindFocus() == dummyButton);
+
+    // And giving the focus to the panel shouldn't change radio button
+    // selection.
+    radioPanel->SetFocus();
+    CHECK(wxWindow::FindFocus() == radio2);
+    CHECK(!radio1->GetValue());
+    CHECK(radio2->GetValue());
 }
 
 #endif //wxUSE_RADIOBTN

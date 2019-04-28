@@ -127,7 +127,7 @@ enum
     A special case of report view quite different from the other modes of the list
     control is a virtual control in which the items data (including text, images
     and attributes) is managed by the main program and is requested by the control
-    itself only when needed which allows to have controls with millions of items
+    itself only when needed which allows having controls with millions of items
     without consuming much memory. To use virtual list control you must use
     wxListCtrl::SetItemCount first and override at least wxListCtrl::OnGetItemText
     (and optionally wxListCtrl::OnGetItemImage or wxListCtrl::OnGetItemColumnImage and
@@ -374,7 +374,7 @@ public:
        @return @true if all columns were successfully deleted, @false otherwise.
     */
     bool DeleteAllColumns();
-    
+
     /**
         Deletes all items in the list control.
 
@@ -453,7 +453,7 @@ public:
     /**
         Finish editing the label.
 
-        This method allows to programmatically end editing a list control item
+        This method allows one to programmatically end editing a list control item
         in place. Usually it will only be called when editing is in progress,
         i.e. if GetEditControl() returns non-NULL. In particular, do not call
         it from EVT_LIST_BEGIN_LABEL_EDIT handler as the edit control is not
@@ -849,8 +849,8 @@ public:
     /**
         For report view mode (only), inserts a column.
 
-        For more details, see SetItem(). Also see InsertColumn(long, const
-        wxString&, int, int) overload for a usually more convenient
+        For more details, see SetItem(). Also see InsertColumn(long, const wxString&, int, int)
+        overload for a usually more convenient
         alternative to this method and the description of how the item width
         is interpreted by this method.
     */
@@ -863,7 +863,7 @@ public:
         given position specifying its most common attributes.
 
         Notice that to set the image for the column you need to use
-        Insert(long, const wxListItem&) overload and specify ::wxLIST_MASK_IMAGE
+        InsertColumn(long, const wxListItem&) overload and specify ::wxLIST_MASK_IMAGE
         in the item mask.
 
         @param col
@@ -1405,7 +1405,7 @@ protected:
     @event{EVT_LIST_ITEM_RIGHT_CLICK(id, func)}
         The right mouse button has been clicked on an item.
     @event{EVT_LIST_KEY_DOWN(id, func)}
-        A key has been pressed. GetIndex() may be -1 if no item is selected. 
+        A key has been pressed. GetIndex() may be -1 if no item is selected.
     @event{EVT_LIST_INSERT_ITEM(id, func)}
         An item has been inserted.
     @event{EVT_LIST_COL_CLICK(id, func)}
@@ -1516,7 +1516,7 @@ public:
     */
     bool IsEditCancelled() const;
 
-    
+
     /**
        @see GetKeyCode()
     */

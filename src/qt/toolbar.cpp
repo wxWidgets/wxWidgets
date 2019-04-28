@@ -16,6 +16,7 @@
 
 #include <QtWidgets/QActionGroup>
 #include <QtWidgets/QToolButton>
+#include <QtWidgets/QToolBar>
 
 #ifndef WX_PRECOMP
     #include "wx/menu.h"
@@ -25,7 +26,6 @@
 #include "wx/qt/private/winevent.h"
 #include "wx/qt/private/converter.h"
 
-#include <QtWidgets/QToolBar>
 
 class wxQtToolButton;
 class wxToolBarTool : public wxToolBarToolBase
@@ -46,8 +46,8 @@ public:
         m_qtToolButton = NULL;
     }
 
-    virtual void SetLabel( const wxString &label );
-    virtual void SetDropdownMenu(wxMenu* menu);
+    virtual void SetLabel( const wxString &label ) wxOVERRIDE;
+    virtual void SetDropdownMenu(wxMenu* menu) wxOVERRIDE;
 
     void SetIcon();
     void ClearToolTip();
@@ -67,9 +67,9 @@ public:
     }
 
 private:
-    void mouseReleaseEvent( QMouseEvent *event );
-    void mousePressEvent( QMouseEvent *event );
-    void enterEvent( QEvent *event );
+    void mouseReleaseEvent( QMouseEvent *event ) wxOVERRIDE;
+    void mousePressEvent( QMouseEvent *event ) wxOVERRIDE;
+    void enterEvent( QEvent *event ) wxOVERRIDE;
 };
 
 void wxQtToolButton::mouseReleaseEvent( QMouseEvent *event )

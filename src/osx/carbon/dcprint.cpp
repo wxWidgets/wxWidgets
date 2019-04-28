@@ -260,9 +260,9 @@ wxSize wxMacCarbonPrinterDC::GetPPI() const
 
 wxPrinterDCImpl::wxPrinterDCImpl( wxPrinterDC *owner, const wxPrintData& printdata )
    : wxGCDCImpl( owner )
+    , m_printData(printdata)
 {
     m_ok = false ;
-    m_printData = printdata ;
     m_printData.ConvertToNative() ;
     m_nativePrinterDC = wxNativePrinterDC::Create( &m_printData ) ;
     if ( m_nativePrinterDC )

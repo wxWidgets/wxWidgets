@@ -146,7 +146,7 @@ struct wxFontMetrics
     stated. Logical units are arbitrary units mapped to device units using
     the current mapping mode (see wxDC::SetMapMode).
 
-    This mechanism allows to reuse the same code which prints on e.g. a window
+    This mechanism allows reusing the same code which prints on e.g. a window
     on the screen to print on e.g. a paper.
 
 
@@ -550,7 +550,7 @@ public:
     void DrawRectangle(const wxRect& rect);
 
     /**
-        Draws the text rotated by @a angle degrees 
+        Draws the text rotated by @a angle degrees
         (positive angles are counterclockwise; the full angle is 360 degrees).
 
         Notice that, as with DrawText(), the @a text can contain multiple lines
@@ -853,7 +853,7 @@ public:
     /**
         Returns the various font characteristics.
 
-        This method allows to retrieve some of the font characteristics not
+        This method allows retrieving some of the font characteristics not
         returned by GetTextExtent(), notably internal leading and average
         character width.
 
@@ -980,10 +980,10 @@ public:
     int GetBackgroundMode() const;
 
     /**
-        Gets the current font. 
-        
-        Notice that even although each device context object has some default font 
-        after creation, this method would return a ::wxNullFont initially and only 
+        Gets the current font.
+
+        Notice that even although each device context object has some default font
+        after creation, this method would return a ::wxNullFont initially and only
         after calling SetFont() a valid font is returned.
     */
     const wxFont& GetFont() const;
@@ -1014,17 +1014,17 @@ public:
 
     /**
         @a mode may be one of @c wxPENSTYLE_SOLID and @c wxPENSTYLE_TRANSPARENT.
-        
-        This setting determines whether text will be drawn with a background 
+
+        This setting determines whether text will be drawn with a background
         colour or not.
     */
     void SetBackgroundMode(int mode);
 
     /**
-        Sets the current font for the DC. 
+        Sets the current font for the DC.
 
-        If the argument is ::wxNullFont (or another invalid font; see wxFont::IsOk), 
-        the current font is selected out of the device context (leaving wxDC without 
+        If the argument is ::wxNullFont (or another invalid font; see wxFont::IsOk),
+        the current font is selected out of the device context (leaving wxDC without
         any valid font), allowing the current font to be destroyed safely.
 
         @see wxFont
@@ -1045,9 +1045,9 @@ public:
     void SetTextForeground(const wxColour& colour);
 
     /**
-        Sets the current layout direction for the device context. 
-        
-        @param dir 
+        Sets the current layout direction for the device context.
+
+        @param dir
            May be either @c wxLayout_Default, @c wxLayout_LeftToRight or
            @c wxLayout_RightToLeft.
 
@@ -1213,7 +1213,7 @@ public:
     /**
         Copy from a source DC to this DC possibly changing the scale.
 
-        Unlike Blit(), this method allows to specify different source and
+        Unlike Blit(), this method allows specifying different source and
         destination region sizes, meaning that it can stretch or shrink it
         while copying. The same can be achieved by changing the scale of the
         source or target DC but calling this method is simpler and can also be
@@ -1333,8 +1333,8 @@ public:
     /**
         Sets the current brush for the DC.
 
-        If the argument is ::wxNullBrush (or another invalid brush; see wxBrush::IsOk), 
-        the current brush is selected out of the device context (leaving wxDC without 
+        If the argument is ::wxNullBrush (or another invalid brush; see wxBrush::IsOk),
+        the current brush is selected out of the device context (leaving wxDC without
         any valid brush), allowing the current brush to be destroyed safely.
 
         @see wxBrush, wxMemoryDC (for the interpretation of colours when
@@ -1343,10 +1343,10 @@ public:
     void SetBrush(const wxBrush& brush);
 
     /**
-        Sets the current pen for the DC. 
+        Sets the current pen for the DC.
 
-        If the argument is ::wxNullPen (or another invalid pen; see wxPen::IsOk), 
-        the current pen is selected out of the device context (leaving wxDC without any 
+        If the argument is ::wxNullPen (or another invalid pen; see wxPen::IsOk),
+        the current pen is selected out of the device context (leaving wxDC without any
         valid pen), allowing the current pen to be destroyed safely.
 
         @see wxMemoryDC for the interpretation of colours when drawing into a
@@ -1592,7 +1592,7 @@ public:
 
     //@}
 
-    
+
     /**
         @name query capabilities
     */
@@ -1607,7 +1607,7 @@ public:
        Does the DC support calculating the size required to draw text?
     */
     bool CanGetTextExtent() const;
-    
+
     //@}
 
     /**
@@ -1620,12 +1620,12 @@ public:
        wxGCDC then the return value will be the value returned from
        wxGraphicsContext::GetNativeContext.  A value of NULL is returned if
        the DC does not have anything that fits the handle concept.
-       
+
        @since 2.9.5
      */
     void* GetHandle() const;
 
-    
+
     /**
        If supported by the platform and the type of DC, fetch the contents of the DC, or a subset of it, as a bitmap.
     */
@@ -1799,7 +1799,7 @@ public:
     @category{gdi}
 
     @see wxDC::SetTextForeground(), wxDCFontChanger, wxDCPenChanger, wxDCBrushChanger,
-         wxDCClipper
+         wxDCClipper, wxDCTextBgColourChanger, wxDCBgModeChanger
 */
 class wxDCTextColourChanger
 {
@@ -1841,6 +1841,117 @@ public:
     ~wxDCTextColourChanger();
 };
 
+
+/**
+    @class wxDCTextBgColourChanger
+
+    wxDCTextBgColourChanger is a small helper class for setting a background
+    text colour on a wxDC and unsetting it automatically in the destructor,
+    restoring the previous one.
+
+    @library{wxcore}
+    @category{gdi}
+
+    @see wxDC::SetTextBackground(), wxDCFontChanger, wxDCPenChanger, wxDCBrushChanger,
+         wxDCClipper, wxDCTextColourChanger, wxDCBgModeChanger
+
+    @since 3.1.3
+*/
+class wxDCTextBgColourChanger
+{
+public:
+    /**
+        Trivial constructor not changing anything.
+
+        This constructor is useful if you don't know beforehand if the colour
+        needs to be changed or not. It simply creates the object which won't do
+        anything in its destructor unless Set() is called -- in which case it
+        would reset the previous colour.
+     */
+    wxDCTextBgColourChanger(wxDC& dc);
+
+    /**
+        Sets @a col on the given @a dc, storing the old one.
+
+        @param dc
+            The DC where the colour must be temporary set.
+        @param col
+            The text background colour to set.
+    */
+    wxDCTextBgColourChanger(wxDC& dc, const wxColour& col);
+
+    /**
+        Set the background colour to use.
+
+        This method is meant to be called once only and only on the objects
+        created with the constructor overload not taking wxColour argument and
+        has the same effect as the other constructor, i.e. sets the background colour to
+        the given @a col and ensures that the old value is restored when this
+        object is destroyed.
+     */
+    void Set(const wxColour& col);
+
+    /**
+        Restores the background colour originally selected in the DC passed to the ctor.
+    */
+    ~wxDCTextBgColourChanger();
+};
+
+
+/**
+    @class wxDCTextBgModeChanger
+
+    wxDCTextBgModeChanger is a small helper class for setting a background
+    text mode on a wxDC and unsetting it automatically in the destructor,
+    restoring the previous one.
+
+    @library{wxcore}
+    @category{gdi}
+
+    @see wxDC::SetBackgroundMode(), wxDCFontChanger, wxDCPenChanger, wxDCBrushChanger,
+         wxDCClipper, wxDCTextColourChanger, wxDCTextBgColourChanger
+
+    @since 3.1.3
+*/
+class wxDCBgModeChanger
+{
+public:
+    /**
+        Trivial constructor not changing anything.
+
+        This constructor is useful if you don't know beforehand if the background mode
+        needs to be changed or not. It simply creates the object which won't do
+        anything in its destructor unless Set() is called -- in which case it
+        would reset the previous mode.
+     */
+    wxDCBgModeChanger(wxDC& dc);
+
+    /**
+        Sets @a mode on the given @a dc, storing the old one.
+
+        @param dc
+            The DC where the mode must be temporary set.
+        @param mode
+            The background mode to set.
+    */
+    wxDCBgModeChanger(wxDC& dc, int mode);
+
+    /**
+        Set the text background mode to use.
+
+        This method is meant to be called once only and only on the objects
+        created with the constructor overload not taking mode argument and
+        has the same effect as the other constructor, i.e. sets the background mode to
+        the given @a one, and ensures that the old value is restored when this
+        object is destroyed.
+     */
+    void Set(int mode);
+
+    /**
+        Restores the text background mode originally selected in the DC passed to the ctor.
+    */
+    ~wxDCBgModeChanger();
+};
 
 
 /**

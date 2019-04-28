@@ -16,7 +16,7 @@
 #include <QtWidgets/QApplication>
 #include <QtGui/QPixmap>
 
-wxIMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxWindowDCImpl);
+wxIMPLEMENT_ABSTRACT_CLASS(wxScreenDCImpl, wxQtDCImpl);
 
 wxScreenDCImpl::wxScreenDCImpl( wxScreenDC *owner )
     : wxWindowDCImpl( owner )

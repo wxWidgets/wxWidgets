@@ -734,21 +734,14 @@ wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
 {
     wxSize sizeBtn = wxSpinButton::DoGetBestSize();
 
-    int y;
-    wxGetCharSize(GetHWND(), NULL, &y, GetFont());
-    // JACS: we should always use the height calculated
-    // from above, because otherwise we'll get a spin control
-    // that's too big. So never use the height calculated
-    // from wxSpinButton::DoGetBestSize().
+    // Create a temporary wxTextCtrl wrapping our existing HWND in order to be
+    // able to reuse its GetSizeFromTextSize() implementation.
+    wxTextCtrl text;
+    TempHWNDSetter set(&text, m_hwndBuddy);
 
-    wxSize tsize(xlen + sizeBtn.x - GetOverlap(),
-                 EDIT_HEIGHT_FROM_CHAR_HEIGHT(y));
-
-    // Check if the user requested a non-standard height.
-    if ( ylen > 0 )
-        tsize.IncBy(0, ylen - y);
-
-    return tsize;
+    // Increase the width to accommodate the button, which should fit inside
+    // the text control while taking account of the overlap.
+    return text.GetSizeFromTextSize(xlen + sizeBtn.x - GetOverlap(), ylen);
 }
 
 void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)

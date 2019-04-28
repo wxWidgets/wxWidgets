@@ -156,7 +156,7 @@ public:
     /**
         If the help viewer is not running, runs it, and searches for sections matching
         the given keyword. If one match is found, the file is displayed at this section.
-        The optional parameter allows to search the index (wxHELP_SEARCH_INDEX)
+        The optional parameter allows searching the index (wxHELP_SEARCH_INDEX)
         but this currently is only supported by the wxHtmlHelpController.
 
         - @e WinHelp, MS HTML Help:
@@ -247,7 +247,7 @@ public:
 
     This is an alias for one of a family of help controller classes which is
     most appropriate for the current platform.
-    
+
     A help controller allows an application to display help, at the contents
     or at a particular topic, and shut the help program down on termination.
     This avoids proliferation of many instances of the help viewer whenever the

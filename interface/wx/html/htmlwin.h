@@ -622,6 +622,11 @@ public:
     wxPoint GetPoint() const;
 
     /**
+        Returns the wxMouseEvent associated with the event.
+    */
+    wxMouseEvent GetMouseEvent() const;
+
+    /**
         Call this function with @a linkclicked set to @true if the cell which has
         been clicked contained a link or @false otherwise (which is the default).
 

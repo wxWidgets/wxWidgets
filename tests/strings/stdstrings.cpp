@@ -626,13 +626,7 @@ void StdStringTestCase::StdConversion()
 
 void StdStringTestCase::StdAlgo()
 {
-    // Unfortunately this currently doesn't work with libc++ in C++11 mode, see
-    // comment near iter_swap() definition in wx/string.h.
-#if __cplusplus < 201103L || !defined(_LIBCPP_VERSION)
     wxString s("AB");
     std::reverse(s.begin(), s.end());
     CPPUNIT_ASSERT_EQUAL( "BA", s );
-#else
-    wxLogWarning("Skipping std::reverse() test broken with C++11/libc++");
-#endif
 }

@@ -283,7 +283,7 @@ public:
     }
 
     virtual void* GetHandle() const { return NULL; }
-    
+
     // query dimension, colour deps, resolution
 
     virtual void DoGetSize(int *width, int *height) const = 0;
@@ -528,7 +528,7 @@ public:
 
     // this needs to overidden if the axis is inverted
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
-    
+
     virtual double GetContentScaleFactor() const { return m_contentScaleFactor; }
 
 #ifdef __WXMSW__
@@ -722,7 +722,7 @@ protected:
     double m_scaleX, m_scaleY;  // calculated from logical scale and user scale
 
     int m_signX, m_signY;  // Used by SetAxisOrientation() to invert the axes
-    
+
     double m_contentScaleFactor; // used by high resolution displays (retina)
 
     // Pixel per mm in horizontal and vertical directions.
@@ -1403,6 +1403,78 @@ private:
     wxColour m_colFgOld;
 
     wxDECLARE_NO_COPY_CLASS(wxDCTextColourChanger);
+};
+
+// ----------------------------------------------------------------------------
+// helper class: you can use it to temporarily change the DC text background colour and
+// restore it automatically when the object goes out of scope
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxDCTextBgColourChanger
+{
+public:
+    wxDCTextBgColourChanger(wxDC& dc) : m_dc(dc) { }
+
+    wxDCTextBgColourChanger(wxDC& dc, const wxColour& col) : m_dc(dc)
+    {
+        Set(col);
+    }
+
+    ~wxDCTextBgColourChanger()
+    {
+        if ( m_colBgOld.IsOk() )
+            m_dc.SetTextBackground(m_colBgOld);
+    }
+
+    void Set(const wxColour& col)
+    {
+        if ( !m_colBgOld.IsOk() )
+            m_colBgOld = m_dc.GetTextBackground();
+        m_dc.SetTextBackground(col);
+    }
+
+private:
+    wxDC& m_dc;
+
+    wxColour m_colBgOld;
+
+    wxDECLARE_NO_COPY_CLASS(wxDCTextBgColourChanger);
+};
+
+// ----------------------------------------------------------------------------
+// helper class: you can use it to temporarily change the DC text background mode and
+// restore it automatically when the object goes out of scope
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxDCTextBgModeChanger
+{
+public:
+    wxDCTextBgModeChanger(wxDC& dc) : m_dc(dc), m_modeOld(wxBRUSHSTYLE_INVALID) { }
+
+    wxDCTextBgModeChanger(wxDC& dc, int mode) : m_dc(dc)
+    {
+        Set(mode);
+    }
+
+    ~wxDCTextBgModeChanger()
+    {
+        if ( m_modeOld != wxBRUSHSTYLE_INVALID )
+            m_dc.SetBackgroundMode(m_modeOld);
+    }
+
+    void Set(int mode)
+    {
+        if ( m_modeOld == wxBRUSHSTYLE_INVALID )
+            m_modeOld = m_dc.GetBackgroundMode();
+        m_dc.SetBackgroundMode(mode);
+    }
+
+private:
+    wxDC& m_dc;
+
+    int m_modeOld;
+
+    wxDECLARE_NO_COPY_CLASS(wxDCTextBgModeChanger);
 };
 
 // ----------------------------------------------------------------------------

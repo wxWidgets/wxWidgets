@@ -3,7 +3,7 @@
 // Purpose:     wrapper around <gdiplus.h> header
 // Author:      Vadim Zeitlin
 // Created:     2007-03-15
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

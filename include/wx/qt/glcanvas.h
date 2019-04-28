@@ -75,7 +75,7 @@ public:
                 const int *attribList = NULL,
                 const wxPalette& palette = wxNullPalette);
 
-    virtual bool SwapBuffers();
+    virtual bool SwapBuffers() wxOVERRIDE;
 
     static bool ConvertWXAttrsToQtGL(const int *wxattrs, QGLFormat &format);
 

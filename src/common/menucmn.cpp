@@ -59,7 +59,7 @@ wxEND_FLAGS( wxMenuStyle )
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenu, wxEvtHandler, "wx/menu.h");
 wxCOLLECTION_TYPE_INFO( wxMenuItem *, wxMenuItemList ) ;
 
-#if wxUSE_EXTENDED_RTTI    
+#if wxUSE_EXTENDED_RTTI
 template<> void wxCollectionToVariantArray( wxMenuItemList const &theList,
                                            wxAnyList &value)
 {
@@ -91,7 +91,7 @@ wxBEGIN_FLAGS( wxMenuBarStyle )
 wxFLAGS_MEMBER(wxMB_DOCKABLE)
 wxEND_FLAGS( wxMenuBarStyle )
 
-#if wxUSE_EXTENDED_RTTI    
+#if wxUSE_EXTENDED_RTTI
 // the negative id would lead the window (its superclass !) to
 // vetoe streaming out otherwise
 bool wxMenuBarStreamingCallback( const wxObject *WXUNUSED(object), wxObjectWriter *,
@@ -105,7 +105,7 @@ wxIMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxMenuBar, wxWindow, "wx/menu.h", \
                                        wxMenuBarStreamingCallback)
 
 
-#if wxUSE_EXTENDED_RTTI    
+#if wxUSE_EXTENDED_RTTI
 WX_DEFINE_LIST( wxMenuInfoHelperList )
 
 wxIMPLEMENT_DYNAMIC_CLASS_XTI(wxMenuInfoHelper, wxObject, "wx/menu.h");
@@ -124,7 +124,7 @@ wxCONSTRUCTOR_2( wxMenuInfoHelper, wxMenu*, Menu, wxString, Title )
 
 wxCOLLECTION_TYPE_INFO( wxMenuInfoHelper *, wxMenuInfoHelperList ) ;
 
-template<> void wxCollectionToVariantArray( wxMenuInfoHelperList const &theList, 
+template<> void wxCollectionToVariantArray( wxMenuInfoHelperList const &theList,
                                            wxAnyList &value)
 {
     wxListCollectionToAnyList<wxMenuInfoHelperList::compatibility_iterator>( theList, value ) ;
@@ -141,7 +141,7 @@ wxEMPTY_HANDLERS_TABLE(wxMenuBar)
 
 wxCONSTRUCTOR_DUMMY( wxMenuBar )
 
-#if wxUSE_EXTENDED_RTTI    
+#if wxUSE_EXTENDED_RTTI
 
 const wxMenuInfoHelperList& wxMenuBarBase::GetMenuInfos() const
 {
@@ -1087,10 +1087,10 @@ wxString wxMenuBarBase::GetHelpString(int itemid) const
 
 void wxMenuBarBase::UpdateMenus()
 {
-    wxMenu* menu;
     int nCount = GetMenuCount();
     for (int n = 0; n < nCount; n++)
     {
+        wxMenu* menu;
         menu = GetMenu( n );
         if (menu != NULL)
             menu->UpdateUI();

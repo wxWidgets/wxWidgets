@@ -197,7 +197,16 @@ TEST_CASE("wxFont::Weight", "[font][weight]")
 {
     wxFont font;
     font.SetNumericWeight(123);
+
+    // WX to QT font weight conversions do not map directly which is why we
+    // check if the numeric weight is within a range rather than checking for
+    // an exact match.
+#ifdef __WXQT__
+    CHECK( ( font.GetNumericWeight() > 113 && font.GetNumericWeight() < 133 ) );
+#else
     CHECK( font.GetNumericWeight() == 123 );
+#endif
+
     CHECK( font.GetWeight() == wxFONTWEIGHT_THIN );
 
     font.SetNumericWeight(wxFONTWEIGHT_SEMIBOLD);
@@ -244,8 +253,10 @@ TEST_CASE("wxFont::GetSet", "[font][getters]")
 
 
         // test Get/SetFaceName()
+#ifndef __WXQT__
         CHECK( !test.SetFaceName("a dummy face name") );
         CHECK( !test.IsOk() );
+#endif
 
         // if the call to SetFaceName() below fails on your system/port,
         // consider adding another branch to this #if
@@ -370,7 +381,7 @@ TEST_CASE("wxFont::NativeFontInfo", "[font][fontinfo]")
     // never returns an error at all so this assertion fails there -- and as it
     // doesn't seem to be possible to do anything about it maybe we should
     // change wxMSW and other ports to also accept any strings?
-#if !defined(__WXGTK__) && !defined(__WXX11__)
+#if !defined(__WXGTK__) && !defined(__WXX11__) && !defined(__WXQT__)
     CHECK( !font.SetNativeFontInfo("bloordyblop") );
 #endif
 

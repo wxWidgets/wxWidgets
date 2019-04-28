@@ -2,7 +2,7 @@
 # Name:       misc/scripts/makeunixtags.sh
 # Purpose:    create tags file for a wxWidgets port under a Unix system
 # Created:    2007-05-05
-# Copyright:  (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+# Copyright:  (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 # Licence:    wxWindows licence
 ##############################################################################
 

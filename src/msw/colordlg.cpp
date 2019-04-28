@@ -255,7 +255,7 @@ void wxColourDialog::DoGetClientSize(int *width, int *height) const
 void wxColourDialog::MSWOnInitDone(WXHWND hDlg)
 {
     // set HWND so that our DoMoveWindow() works correctly
-    SetHWND(hDlg);
+    TempHWNDSetter set(this, hDlg);
 
     if ( m_centreDir )
     {
@@ -272,9 +272,6 @@ void wxColourDialog::MSWOnInitDone(WXHWND hDlg)
     {
         SetPosition(GetPosition());
     }
-
-    // we shouldn't destroy hDlg, so disassociate from it
-    SetHWND(NULL);
 }
 
 #endif // wxUSE_COLOURDLG

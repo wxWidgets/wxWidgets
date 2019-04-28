@@ -174,6 +174,20 @@ private:
     WXHBRUSH MSWGetToolbarBgBrush();
 #endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
 
+    // Return true if we're showing the labels for the embedded controls: we
+    // only do it if text is enabled and, somewhat less expectedly, if icons
+    // are enabled too because showing both the control and its label when only
+    // text is shown for the other buttons is too inconsistent to be useful.
+    bool AreControlLabelsShown() const
+    {
+        return HasFlag(wxTB_TEXT) && !HasFlag(wxTB_NOICONS);
+    }
+
+    // Return the size required to accommodate the given tool which must be of
+    // "control" type.
+    wxSize MSWGetFittingtSizeForControl(class wxToolBarTool* tool) const;
+
+
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_DYNAMIC_CLASS(wxToolBar);
     wxDECLARE_NO_COPY_CLASS(wxToolBar);

@@ -544,6 +544,7 @@ protected:
     void OnResize( wxSizeEvent& event );
     void OnPropertyGridSelect( wxPropertyGridEvent& event );
     void OnPGColDrag( wxPropertyGridEvent& event );
+    void OnPGScrollH(wxPropertyGridEvent& evt);
 
 
     wxPropertyGrid* m_pPropGrid;
@@ -560,8 +561,6 @@ protected:
     wxStaticText*   m_pTxtHelpContent;
 
     wxPropertyGridPage*     m_emptyPage;
-
-    wxArrayString   m_columnLabels;
 
     long            m_iFlags;
 
@@ -590,7 +589,7 @@ protected:
 
     unsigned char   m_dragStatus;
 
-    unsigned char   m_onSplitter;
+    bool            m_onSplitter;
 
     bool            m_showHeader;
 

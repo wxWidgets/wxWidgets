@@ -27,6 +27,8 @@ private:
     QColorDialog *GetQColorDialog() const;
 
     wxColourData m_data;
+
+    wxDECLARE_DYNAMIC_CLASS(wxColourDialog);
 };
 
 #endif // _WX_QT_COLORDLG_H_

@@ -28,9 +28,10 @@
 #endif // NOMINMAX
 
 
-// For IPv6 support, we must include winsock2.h before winsock.h, and
-// windows.h include winsock.h so do it before including it
-#if wxUSE_IPV6
+// When the application wants to use <winsock2.h> (this is required for IPv6
+// support, for example), we must include it before winsock.h, and as windows.h
+// includes winsock.h, we have to do it before including it.
+#if wxUSE_WINSOCK2
     #include <winsock2.h>
 #endif
 

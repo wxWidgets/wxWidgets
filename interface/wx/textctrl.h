@@ -960,7 +960,7 @@ public:
     @style{wxTE_READONLY}
            The text will not be user-editable.
     @style{wxTE_RICH}
-           Use rich text control under MSW, this allows to have more than 64KB
+           Use rich text control under MSW, this allows having more than 64KB
            of text in the control. This style is ignored under other platforms.
     @style{wxTE_RICH2}
            Use rich text control version 2.0 or higher under MSW, this style is
@@ -1469,7 +1469,7 @@ public:
     /**
         Converts given text position to client coordinates in pixels.
 
-        This function allows to find where is the character at the given
+        This function allows finding where is the character at the given
         position displayed in the text control.
 
         @onlyfor{wxmsw,wxgtk}. Additionally, wxGTK only implements this method

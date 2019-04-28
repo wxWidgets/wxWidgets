@@ -15,12 +15,12 @@ class WXDLLIMPEXP_CORE wxQtPrintNativeData: public wxPrintNativeDataBase
 {
 public:
     wxQtPrintNativeData();
-    
-    virtual bool TransferTo( wxPrintData &data );
-    virtual bool TransferFrom( const wxPrintData &data );
 
-    virtual bool IsOk() const;
-    
+    virtual bool TransferTo( wxPrintData &data ) wxOVERRIDE;
+    virtual bool TransferFrom( const wxPrintData &data ) wxOVERRIDE;
+
+    virtual bool IsOk() const wxOVERRIDE;
+
 };
 
 class WXDLLIMPEXP_CORE wxQtPrintDialog : public wxPrintDialogBase
@@ -29,9 +29,9 @@ public:
     wxQtPrintDialog(wxWindow *parent, wxPrintDialogData *data);
     wxQtPrintDialog(wxWindow *parent, wxPrintData *data);
 
-    virtual wxPrintDialogData& GetPrintDialogData();
-    virtual wxPrintData& GetPrintData();
-    virtual wxDC *GetPrintDC();
+    virtual wxPrintDialogData& GetPrintDialogData() wxOVERRIDE;
+    virtual wxPrintData& GetPrintData() wxOVERRIDE;
+    virtual wxDC *GetPrintDC() wxOVERRIDE;
 
 protected:
 
@@ -48,7 +48,7 @@ public:
 
     bool Create(wxWindow *parent, wxPageSetupDialogData *data = NULL);
 
-    virtual wxPageSetupDialogData& GetPageSetupDialogData();
+    virtual wxPageSetupDialogData& GetPageSetupDialogData() wxOVERRIDE;
 
 private:
 };

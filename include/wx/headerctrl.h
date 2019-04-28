@@ -345,6 +345,8 @@ protected:
         return -1;
     }
 
+    void OnHeaderResizing(wxHeaderCtrlEvent& evt);
+
 private:
     // functions implementing our public API
     void DoInsert(const wxHeaderColumnSimple& col, unsigned int idx);
@@ -371,6 +373,7 @@ private:
 
 
     wxDECLARE_NO_COPY_CLASS(wxHeaderCtrlSimple);
+    wxDECLARE_EVENT_TABLE();
 };
 
 // ----------------------------------------------------------------------------

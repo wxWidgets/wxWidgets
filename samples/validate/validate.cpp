@@ -650,7 +650,7 @@ bool TextValidatorDialog::StyleValidator::TransferToWindow()
         if ( !cb )
             return false;
 
-        const long style = 1 << (cb->GetId()-wxID_HIGHEST-1);
+        const long style = 1L << (cb->GetId()-wxID_HIGHEST-1);
 
         cb->SetValue((*m_style & style) != 0);
     }
@@ -668,7 +668,7 @@ bool TextValidatorDialog::StyleValidator::TransferFromWindow()
         if ( !cb )
             return false;
 
-        const long style = 1 << (cb->GetId()-wxID_HIGHEST-1);
+        const long style = 1L << (cb->GetId()-wxID_HIGHEST-1);
 
         if ( cb->IsChecked() )
             *m_style |= style;

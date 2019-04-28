@@ -44,16 +44,6 @@ class wxQtCentralWidget : public wxQtEventSignalHandler< QScrollArea, wxFrame >
 };
 
 
-wxFrame::wxFrame()
-{
-}
-
-wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString& title,
-        const wxPoint& pos, const wxSize& size, long style, const wxString& name )
-{
-    Create( parent, id, title, pos, size, style, name );
-}
-
 wxFrame::~wxFrame()
 {
     // central widget should be deleted by qt when the main window is destroyed
@@ -70,9 +60,11 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     GetQMainWindow()->setCentralWidget( new wxQtCentralWidget( parent, this ) );
 
-    PostCreation();
+    if ( !wxFrameBase::Create( parent, id, title, pos, size, style, name ) )
+        return false;
 
-    return wxFrameBase::Create( parent, id, title, pos, size, style, name );
+    PostCreation();
+    return true;
 }
 
 void wxFrame::SetMenuBar( wxMenuBar *menuBar )
@@ -115,19 +107,25 @@ void wxFrame::SetStatusBar( wxStatusBar *statusBar )
 
 void wxFrame::SetToolBar(wxToolBar *toolbar)
 {
-    int area = 0;
     if ( toolbar != NULL )
     {
-        if (toolbar->HasFlag(wxTB_LEFT))   area |= Qt::LeftToolBarArea;
-        if (toolbar->HasFlag(wxTB_RIGHT))  area |= Qt::RightToolBarArea;
-        if (toolbar->HasFlag(wxTB_TOP))    area |= Qt::TopToolBarArea;
-        if (toolbar->HasFlag(wxTB_BOTTOM)) area |= Qt::BottomToolBarArea;
+        int area = 0;
+        if      (toolbar->HasFlag(wxTB_LEFT))  { area = Qt::LeftToolBarArea;  }
+        else if (toolbar->HasFlag(wxTB_RIGHT)) { area = Qt::RightToolBarArea; }
+        else if (toolbar->HasFlag(wxTB_BOTTOM)){ area = Qt::BottomToolBarArea;}
+        else { area = Qt::TopToolBarArea;   }
 
-        GetQMainWindow()->addToolBar((Qt::ToolBarArea)area, toolbar->GetQToolBar());
+        // We keep the current toolbar handle in our own member variable
+        // because we can't get it from half-destroyed wxToolBar when it calls
+        // this function from wxToolBarBase dtor.
+        m_qtToolBar = toolbar->GetQToolBar();
+
+        GetQMainWindow()->addToolBar((Qt::ToolBarArea)area, m_qtToolBar);
     }
     else if ( m_frameToolBar != NULL )
     {
-        GetQMainWindow()->removeToolBar(m_frameToolBar->GetQToolBar());
+        GetQMainWindow()->removeToolBar(m_qtToolBar);
+        m_qtToolBar = NULL;
     }
     wxFrameBase::SetToolBar( toolbar );
 }
@@ -136,7 +134,9 @@ void wxFrame::SetWindowStyleFlag( long style )
 {
     wxWindow::SetWindowStyleFlag( style );
 
-    Qt::WindowFlags qtFlags = GetQMainWindow()->windowFlags();
+    QMainWindow *qtFrame = GetQMainWindow();
+    Qt::WindowFlags qtFlags = qtFrame->windowFlags();
+    qtFlags |= Qt::CustomizeWindowHint;
 
     if ( HasFlag( wxFRAME_TOOL_WINDOW ) )
     {
@@ -144,7 +144,47 @@ void wxFrame::SetWindowStyleFlag( long style )
         qtFlags |= Qt::Tool;
     }
 
-    GetQMainWindow()->setWindowFlags( qtFlags );
+    if ( HasFlag(wxCAPTION) )
+    {
+        qtFlags |= Qt::WindowTitleHint;
+    }
+
+    if ( HasFlag(wxSYSTEM_MENU) )
+    {
+        qtFlags |= Qt::WindowSystemMenuHint;
+    }
+
+    if ( HasFlag(wxSTAY_ON_TOP) )
+    {
+        qtFlags |= Qt::WindowStaysOnTopHint;
+    }
+
+    if ( HasFlag(wxMINIMIZE_BOX) )
+    {
+        qtFlags |= Qt::WindowMinimizeButtonHint;
+    }
+
+    if ( HasFlag(wxMAXIMIZE_BOX) )
+    {
+        qtFlags |= Qt::WindowMaximizeButtonHint;
+    }
+
+    if ( HasFlag(wxCLOSE_BOX) )
+    {
+        qtFlags |= Qt::WindowCloseButtonHint;
+    }
+
+    if ( HasFlag(wxNO_BORDER) )
+    {
+        // Note any of the other window decoration hints (e.g.
+        // Qt::WindowCloseButtonHint, Qt::WindowTitleHint) override this style.
+        // It doesn't seem possible to create a QMainWindow with a title bar
+        // but without a resize border.
+        qtFlags |= Qt::FramelessWindowHint;
+    }
+
+    qtFrame->setWindowFlags(qtFlags);
+
 }
 
 void wxFrame::AddChild( wxWindowBase *child )
@@ -179,7 +219,7 @@ void wxFrame::DoGetClientSize(int *width, int *height) const
         }
 
 
-        if ( QMenuBar *qmb = GetQMainWindow()->menuBar() )
+        if ( QWidget *qmb = GetQMainWindow()->menuWidget() )
         {
             *height -= qmb->geometry().height();
         }
@@ -202,4 +242,5 @@ wxQtMainWindow::wxQtMainWindow( wxWindow *parent, wxFrame *handler )
 wxQtCentralWidget::wxQtCentralWidget( wxWindow *parent, wxFrame *handler )
     : wxQtEventSignalHandler< QScrollArea, wxFrame >( parent, handler )
 {
+    setFocusPolicy(Qt::NoFocus);
 }

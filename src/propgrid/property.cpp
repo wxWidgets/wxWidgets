@@ -1855,14 +1855,19 @@ bool wxPGProperty::DoSetAttribute( const wxString& WXUNUSED(name), wxVariant& WX
 
 void wxPGProperty::SetAttribute( const wxString& name, wxVariant value )
 {
-    if ( DoSetAttribute( name, value ) )
+    if ( !DoSetAttribute(name, value) || !wxPGGlobalVars->HasExtraStyle(wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES) )
     {
-        // Support working without grid, when possible
-        if ( wxPGGlobalVars->HasExtraStyle( wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES ) )
-            return;
+        m_attributes.Set(name, value);
     }
-
-    m_attributes.Set( name, value );
+    // Because changing some attributes (like wxPG_FLOAT_PRECISION, wxPG_UINT_BASE,
+    // wxPG_UINT_PREFIX, wxPG_ATTR_UNITS) affect displayed form of the property value
+    // so we have to redraw property to be sure that displayed value is in sync
+    // with current attributes.
+    wxPropertyGrid* pg = GetGridIfDisplayed();
+    if ( pg )
+    {
+        pg->RefreshProperty(this);
+    }
 }
 
 void wxPGProperty::SetAttributes( const wxPGAttributeStorage& attributes )

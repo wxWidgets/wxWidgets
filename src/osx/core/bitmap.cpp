@@ -55,7 +55,7 @@ public:
 
     virtual ~wxBitmapRefData();
 
-    bool IsOk() const;
+    bool IsOk() const wxOVERRIDE;
 
     void Free();
 
@@ -857,10 +857,10 @@ wxBitmap::wxBitmap(const char bits[], int the_width, int the_height, int no_bits
             for ( int y = 0 ; y < the_height ; ++y , linestart += linesize, destptr += GetBitmapData()->GetBytesPerRow() )
             {
                 unsigned char* destination = destptr;
-                int index, bit, mask;
 
                 for ( int x = 0 ; x < the_width ; ++x )
                 {
+                    int index, bit, mask;
                     index = x / 8 ;
                     bit = x % 8 ;
                     mask = 1 << bit ;
@@ -1026,8 +1026,8 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
         {
             int sourcelinesize = GetBitmapData()->GetBytesPerRow() ;
             int destlinesize = ret.GetBitmapData()->GetBytesPerRow() ;
-            unsigned char *source = sourcedata + int(rect.x * scale * 4 + rect.y *scale * sourcelinesize) ;
-            unsigned char *dest = destdata ;
+            unsigned char* source = sourcedata + size_t(rect.x * scale) * 4 + size_t(rect.y * scale) * sourcelinesize;
+            unsigned char* dest = destdata;
 
             for (int yy = 0; yy < destheight; ++yy, source += sourcelinesize , dest += destlinesize)
             {
@@ -1311,11 +1311,11 @@ wxImage wxBitmap::ConvertToImage() const
     {
         unsigned char * maskp = mask ;
         const wxUint32 * source = (wxUint32*)sourcestart;
-        unsigned char a, r, g, b;
 
         for (int xx = 0; xx < width; xx++)
         {
             const wxUint32 color = *source++;
+            unsigned char a, r, g, b;
 #ifdef WORDS_BIGENDIAN
             a = ((color&0xFF000000) >> 24) ;
             r = ((color&0x00FF0000) >> 16) ;

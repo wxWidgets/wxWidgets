@@ -13,7 +13,6 @@
 
 class QAction;
 
-class WXDLLIMPEXP_FWD_CORE wxBitmap;
 class WXDLLIMPEXP_FWD_CORE wxMenu;
 
 class WXDLLIMPEXP_CORE wxMenuItem : public wxMenuItemBase
@@ -26,14 +25,14 @@ public:
                wxItemKind kind = wxITEM_NORMAL,
                wxMenu *subMenu = NULL);
 
-    virtual void SetItemLabel(const wxString& str);
-    virtual void SetCheckable(bool checkable);
+    virtual void SetItemLabel(const wxString& str) wxOVERRIDE;
+    virtual void SetCheckable(bool checkable) wxOVERRIDE;
 
-    virtual void Enable(bool enable = true);
-    virtual bool IsEnabled() const;
+    virtual void Enable(bool enable = true) wxOVERRIDE;
+    virtual bool IsEnabled() const wxOVERRIDE;
 
-    virtual void Check(bool check = true);
-    virtual bool IsChecked() const;
+    virtual void Check(bool check = true) wxOVERRIDE;
+    virtual bool IsChecked() const wxOVERRIDE;
 
     virtual void SetBitmap(const wxBitmap& bitmap);
     virtual const wxBitmap& GetBitmap() const { return m_bitmap; };

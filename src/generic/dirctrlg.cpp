@@ -283,9 +283,9 @@ static int wxCMPFUNC_CONV wxDirCtrlStringCompareFunction(const wxString& strFirs
 
 wxDirItemData::wxDirItemData(const wxString& path, const wxString& name,
                              bool isDir)
+    : m_path(path)
+    , m_name(name)
 {
-    m_path = path;
-    m_name = name;
     /* Insert logic to detect hidden files here
      * In UnixLand we just check whether the first char is a dot
      * For FileNameFromPath read LastDirNameInThisPath ;-) */
@@ -1441,10 +1441,10 @@ public:
 };
 
 wxFileIconsTable::wxFileIconsTable()
+    : m_size(16, 16)
 {
     m_HashTable = NULL;
     m_smallImageList = NULL;
-    m_size = wxSize(16, 16);
 }
 
 wxFileIconsTable::~wxFileIconsTable()

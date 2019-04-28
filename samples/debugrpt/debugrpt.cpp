@@ -100,7 +100,7 @@ public:
         if ( !wxDebugReportCompress::DoProcess() )
             return false;
         wxMailMessage msg(GetReportName() + " crash report",
-                          "vadim@wxwindows.org",
+                          "vadim@wxwidgets.org",
                           wxEmptyString, // mail body
                           wxEmptyString, // from address
                           GetCompressedFileName(),
@@ -371,7 +371,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox
     (
-        "wxDebugReport sample\n(c) 2005 Vadim Zeitlin <vadim@wxwindows.org>",
+        "wxDebugReport sample\n(c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>",
         "wxWidgets Debug Report Sample",
         wxOK | wxICON_INFORMATION,
         this

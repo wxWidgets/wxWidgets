@@ -168,7 +168,7 @@ public :
                        const wxString& strHelp,
                        wxItemKind kind,
                        wxMenu *pSubMenu );
-    
+
     // handle OS specific menu items if they weren't handled during normal processing
     virtual bool DoDefault() { return false; }
 protected :
@@ -197,7 +197,7 @@ public :
     wxMenu* GetWXPeer() { return m_peer ; }
 
     virtual void PopUp( wxWindow *win, int x, int y ) = 0;
-    
+
     virtual void GetMenuBarDimensions(int &x, int &y, int &width, int &height) const
     {
         x = y = width = height = -1;
@@ -232,13 +232,13 @@ public :
     void Init();
 
     bool                IsRootControl() const { return m_isRootControl; }
-    
+
     // is a custom control that has all events handled in wx code, no built-ins
     bool                IsUserPane() const { return m_isUserPane; }
 
     // we are doing keyboard handling in wx code, other events might be handled natively
     virtual bool        HasUserKeyHandling() const { return m_wantsUserKey; }
-    
+
     // we are doing mouse handling in wx code, other events might be handled natively
     virtual bool        HasUserMouseHandling() const { return m_wantsUserMouse; }
 
@@ -280,7 +280,7 @@ public :
     {
         return 1.0;
     }
-    
+
     // the native coordinates may have an 'aura' for shadows etc, if this is the case the layout
     // inset indicates on which insets the real control is drawn
     virtual void        GetLayoutInset(int &left , int &top , int &right, int &bottom) const
@@ -299,7 +299,7 @@ public :
 
     virtual bool        NeedsFrame() const;
     virtual void        SetNeedsFrame( bool needs );
-    
+
     virtual void        SetDrawingEnabled(bool enabled);
 
     virtual bool        CanFocus() const = 0;
@@ -322,7 +322,7 @@ public :
     virtual void        SetCursor( const wxCursor & cursor ) = 0;
     virtual void        CaptureMouse() = 0;
     virtual void        ReleaseMouse() = 0;
-    
+
     virtual void        SetDropTarget( wxDropTarget * WXUNUSED(dropTarget) ) {}
 
     virtual wxInt32     GetValue() const = 0;
@@ -371,7 +371,7 @@ public :
     // of a known control
     static wxWidgetImpl*
                         FindBestFromWXWidget(WXWidget control);
-    
+
     static void         RemoveAssociations( wxWidgetImpl* impl);
     static void         RemoveAssociation(WXWidget control);
 
@@ -955,7 +955,7 @@ public :
     virtual void ScreenToWindow( int *x, int *y ) = 0;
 
     virtual void WindowToScreen( int *x, int *y ) = 0;
-    
+
     virtual bool IsActive() = 0;
 
     wxNonOwnedWindow*   GetWXPeer() { return m_wxPeer; }
@@ -1013,6 +1013,83 @@ void wxMacCocoaRelease( void* obj );
 void wxMacCocoaAutorelease( void* obj );
 void* wxMacCocoaRetain( void* obj );
 
+// shared_ptr like API for NSObject and subclasses
+template <class T>
+class wxNSObjRef
+{
+public:
+    typedef T element_type;
+
+    wxNSObjRef()
+        : m_ptr(NULL)
+    {
+    }
+
+    wxNSObjRef( T p )
+        : m_ptr(p)
+    {
+    }
+
+    wxNSObjRef( const wxNSObjRef& otherRef )
+        : m_ptr(wxMacCocoaRetain(otherRef.m_ptr))
+    {
+    }
+
+    wxNSObjRef& operator=( const wxNSObjRef& otherRef )
+    {
+        if (this != &otherRef)
+        {
+            wxMacCocoaRetain(otherRef.m_ptr);
+            wxMacCocoaRelease(m_ptr);
+            m_ptr = otherRef.m_ptr;
+        }
+        return *this;
+    }
+    
+    wxNSObjRef& operator=( T ptr )
+    {
+        if (get() != ptr)
+        {
+            wxMacCocoaRetain(ptr);
+            wxMacCocoaRelease(m_ptr);
+            m_ptr = ptr;
+        }
+        return *this;
+    }
+
+
+    T get() const
+    {
+        return m_ptr;
+    }
+
+    operator T() const
+    {
+        return m_ptr;
+    }
+
+    T operator->() const
+    {
+        return m_ptr;
+    }
+
+    void reset( T p = NULL )
+    {
+        wxMacCocoaRelease(m_ptr);
+        m_ptr = p; // Automatic conversion should occur
+    }
+
+    // Release the pointer, i.e. give up its ownership.
+    T release()
+    {
+        T p = m_ptr;
+        m_ptr = NULL;
+        return p;
+    }
+
+protected:
+    T m_ptr;
+};
 
 #endif
     // _WX_PRIVATE_CORE_H_

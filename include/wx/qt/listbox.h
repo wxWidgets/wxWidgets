@@ -49,37 +49,37 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxListBoxNameStr);
 
-    virtual bool IsSelected(int n) const;
-    virtual int GetSelections(wxArrayInt& aSelections) const;
-    
-    virtual unsigned int GetCount() const;
-    virtual wxString GetString(unsigned int n) const;
-    virtual void SetString(unsigned int n, const wxString& s);
-    
-    virtual int GetSelection() const;
+    virtual bool IsSelected(int n) const wxOVERRIDE;
+    virtual int GetSelections(wxArrayInt& aSelections) const wxOVERRIDE;
 
-    virtual QWidget *GetHandle() const;
+    virtual unsigned int GetCount() const wxOVERRIDE;
+    virtual wxString GetString(unsigned int n) const wxOVERRIDE;
+    virtual void SetString(unsigned int n, const wxString& s) wxOVERRIDE;
+
+    virtual int GetSelection() const wxOVERRIDE;
+
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
     void QtSendEvent(wxEventType evtType, const QModelIndex &index, bool selected);
 
 protected:
-    virtual void DoSetFirstItem(int n);
+    virtual void DoSetFirstItem(int n) wxOVERRIDE;
 
-    virtual void DoSetSelection(int n, bool select);
-    
+    virtual void DoSetSelection(int n, bool select) wxOVERRIDE;
+
     virtual int DoInsertItems(const wxArrayStringsAdapter & items,
                               unsigned int pos,
                               void **clientData,
-                              wxClientDataType type);
-    virtual int DoInsertOneItem(const wxString& item, unsigned int pos);
-    
-    virtual void DoSetItemClientData(unsigned int n, void *clientData);
-    virtual void *DoGetItemClientData(unsigned int n) const;
-    
-    virtual void DoClear();
-    virtual void DoDeleteOneItem(unsigned int pos);
+                              wxClientDataType type) wxOVERRIDE;
+    virtual int DoInsertOneItem(const wxString& item, unsigned int pos) wxOVERRIDE;
 
-    virtual QScrollArea *QtGetScrollBarsContainer() const;
+    virtual void DoSetItemClientData(unsigned int n, void *clientData) wxOVERRIDE;
+    virtual void *DoGetItemClientData(unsigned int n) const wxOVERRIDE;
+
+    virtual void DoClear() wxOVERRIDE;
+    virtual void DoDeleteOneItem(unsigned int pos) wxOVERRIDE;
+
+    virtual QScrollArea *QtGetScrollBarsContainer() const wxOVERRIDE;
 
 #if wxUSE_CHECKLISTBOX
     bool       m_hasCheckBoxes;
@@ -89,6 +89,9 @@ protected:
 
 private:
     virtual void Init(); //common construction
+
+    // Common part of both Create() overloads.
+    void DoCreate(wxWindow* parent, long style);
 
     void UnSelectAll();
 

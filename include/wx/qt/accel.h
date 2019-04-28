@@ -33,6 +33,8 @@
  * QShortcut. This handler will finally create and send the appropriate wx
  * event to the window. */
 
+#include "wx/vector.h"
+
 class QShortcut;
 template < class T > class QList;
 
@@ -43,17 +45,17 @@ public:
     wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]);
 
     // Implementation
-    QList < QShortcut* > *ConvertShortcutTable( QWidget *parent ) const;
+    wxVector<QShortcut*> ConvertShortcutTable( QWidget *parent ) const;
 
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
 
 protected:
     // ref counting code
-    virtual wxObjectRefData *CreateRefData() const;
-    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
-    
-private:  
+    virtual wxObjectRefData *CreateRefData() const wxOVERRIDE;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const wxOVERRIDE;
+
+private:
     wxDECLARE_DYNAMIC_CLASS(wxAcceleratorTable);
 };
 

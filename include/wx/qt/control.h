@@ -24,7 +24,7 @@ public:
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = wxControlNameStr);
 
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
 protected:
     bool QtCreateControl( wxWindow *parent, wxWindowID id, const wxPoint &pos,

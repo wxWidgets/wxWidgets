@@ -33,6 +33,9 @@
 #include "wx/dataobj.h"
 #include "wx/clipbrd.h"
 #include "wx/dnd.h"
+#include "wx/image.h"
+#include "wx/scopedarray.h"
+#include "wx/dcbuffer.h"
 
 #if !wxUSE_STD_CONTAINERS && !wxUSE_STD_IOSTREAM && !wxUSE_STD_STRING
     #include "wx/beforestd.h"
@@ -90,62 +93,42 @@ void  wxSTCDropTarget::OnLeave() {
 #endif // wxUSE_DRAG_AND_DROP
 
 
-#if wxUSE_POPUPWIN
-#include "wx/popupwin.h"
-#define wxSTCCallTipBase wxPopupWindow
-#else
-#include "wx/frame.h"
-#define wxSTCCallTipBase wxFrame
-#endif
-
-#include "wx/dcbuffer.h"
-
-class wxSTCCallTip : public wxSTCCallTipBase {
+class wxSTCCallTip : public wxSTCPopupWindow {
 public:
     wxSTCCallTip(wxWindow* parent, CallTip* ct, ScintillaWX* swx) :
-#if wxUSE_POPUPWIN
-        wxSTCCallTipBase(parent, wxBORDER_NONE),
-#else
-        wxSTCCallTipBase(parent, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-                         wxFRAME_NO_TASKBAR
-                         | wxFRAME_FLOAT_ON_PARENT
-                         | wxBORDER_NONE
-#ifdef __WXMAC__
-                         | wxPOPUP_WINDOW
-#endif
-            ),
-#endif
-          m_ct(ct), m_swx(swx), m_cx(wxDefaultCoord), m_cy(wxDefaultCoord)
-        {
-            SetBackgroundStyle(wxBG_STYLE_PAINT);
-            SetName("wxSTCCallTip");
-        }
+        wxSTCPopupWindow(parent), m_ct(ct), m_swx(swx)
+    {
+        Bind(wxEVT_LEFT_DOWN, &wxSTCCallTip::OnLeftDown, this);
+        Bind(wxEVT_SIZE, &wxSTCCallTip::OnSize, this);
+        Bind(wxEVT_PAINT, &wxSTCCallTip::OnPaint, this);
 
-    ~wxSTCCallTip() {
-#if wxUSE_POPUPWIN && defined(__WXGTK__)
-        wxRect rect = GetRect();
-        rect.x = m_cx;
-        rect.y = m_cy;
-        GetParent()->Refresh(false, &rect);
+#ifdef __WXMSW__
+        Bind(wxEVT_ERASE_BACKGROUND, &wxSTCCallTip::OnEraseBackground, this);
+        SetBackgroundStyle(wxBG_STYLE_ERASE);
+#else
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
 #endif
+
+        SetName("wxSTCCallTip");
     }
 
-    bool AcceptsFocus() const wxOVERRIDE { return false; }
-
-    void OnPaint(wxPaintEvent& WXUNUSED(evt))
+    void DrawBack(const wxSize& size)
     {
-        wxAutoBufferedPaintDC dc(this);
+        m_back = wxBitmap(size);
+        wxMemoryDC mem(m_back);
         Surface* surfaceWindow = Surface::Allocate(m_swx->technology);
-        surfaceWindow->Init(&dc, m_ct->wDraw.GetID());
+        surfaceWindow->Init(&mem, m_ct->wDraw.GetID());
         m_ct->PaintCT(surfaceWindow);
         surfaceWindow->Release();
         delete surfaceWindow;
     }
 
-    void OnFocus(wxFocusEvent& event)
+    virtual void Refresh(bool eraseBg=true, const wxRect *rect=NULL) wxOVERRIDE
     {
-        GetParent()->SetFocus();
-        event.Skip();
+        if ( rect == NULL )
+            DrawBack(GetSize());
+
+        wxSTCPopupWindow::Refresh(eraseBg, rect);
     }
 
     void OnLeftDown(wxMouseEvent& event)
@@ -156,57 +139,44 @@ public:
         m_swx->CallTipClick();
     }
 
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE
+    void OnSize(wxSizeEvent& event)
     {
-        // convert coords to screen coords since we're a top-level window
-        if (x != wxDefaultCoord) {
-            m_cx = x;
-            GetParent()->ClientToScreen(&x, NULL);
-        }
-        if (y != wxDefaultCoord) {
-            m_cy = y;
-            GetParent()->ClientToScreen(NULL, &y);
-        }
-        wxSTCCallTipBase::DoSetSize(x, y, width, height, sizeFlags);
+        DrawBack(event.GetSize());
+        event.Skip();
     }
 
-#if wxUSE_POPUPWIN
+#ifdef __WXMSW__
+
+    void OnPaint(wxPaintEvent& WXUNUSED(evt))
+    {
+        wxRect upd = GetUpdateClientRect();
+        wxMemoryDC mem(m_back);
+        wxPaintDC dc(this);
+
+        dc.Blit(upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight(), &mem,
+                upd.GetX(), upd.GetY());
+    }
+
+    void OnEraseBackground(wxEraseEvent& event)
+    {
+        event.GetDC()->DrawBitmap(m_back, 0, 0);
+    }
+
 #else
-    virtual bool Show( bool show = true )
-    {
-        // Although we're a frame, we always want the parent to be active, so
-        // raise it whenever we get shown.
-        bool rv = wxSTCCallTipBase::Show(show);
-        if (rv && show)
-        {
-            wxTopLevelWindow *frame = wxDynamicCast(
-                wxGetTopLevelParent(GetParent()), wxTopLevelWindow);
-            if (frame)
-                frame->Raise();
-        }
-        return rv;
-    }
-#endif
 
-    wxPoint GetMyPosition()
+    void OnPaint(wxPaintEvent& WXUNUSED(evt))
     {
-        return wxPoint(m_cx, m_cy);
+        wxAutoBufferedPaintDC dc(this);
+        dc.DrawBitmap(m_back, 0, 0);
     }
+
+#endif // __WXMSW__
 
 private:
     CallTip*      m_ct;
     ScintillaWX*  m_swx;
-    int           m_cx, m_cy;
-    wxDECLARE_EVENT_TABLE();
+    wxBitmap      m_back;
 };
-
-wxBEGIN_EVENT_TABLE(wxSTCCallTip, wxSTCCallTipBase)
-    EVT_PAINT(wxSTCCallTip::OnPaint)
-    EVT_SET_FOCUS(wxSTCCallTip::OnFocus)
-    EVT_LEFT_DOWN(wxSTCCallTip::OnLeftDown)
-wxEND_EVENT_TABLE()
 
 
 //----------------------------------------------------------------------
@@ -520,7 +490,7 @@ void ScintillaWX::Paste() {
     pdoc->BeginUndoAction();
     ClearSelection(multiPasteMode == SC_MULTIPASTE_EACH);
 
-#if wxUSE_DATAOBJ
+#if wxUSE_CLIPBOARD
     wxTextDataObject data;
     bool gotData = false;
     bool isRectangularClipboard = false;
@@ -568,7 +538,7 @@ void ScintillaWX::Paste() {
             InsertPaste(buf, len);
         }
     }
-#endif // wxUSE_DATAOBJ
+#endif // wxUSE_CLIPBOARD
 
     pdoc->EndUndoAction();
     NotifyChange();
@@ -660,6 +630,7 @@ void ScintillaWX::AddToPopUp(const char *label, int cmd, bool enabled) {
 // can paste with the middle button.
 void ScintillaWX::ClaimSelection() {
 #ifdef __WXGTK__
+#if wxUSE_CLIPBOARD
     // Put the selected text in the PRIMARY selection
     if (!sel.Empty()) {
         SelectionText st;
@@ -672,6 +643,7 @@ void ScintillaWX::ClaimSelection() {
         }
         wxTheClipboard->UsePrimarySelection(false);
     }
+#endif // wxUSE_CLIPBOARD
 #endif
 }
 
@@ -1073,6 +1045,7 @@ void ScintillaWX::DoMiddleButtonUp(Point pt) {
     int newPos = PositionFromLocation(pt);
     MovePositionTo(newPos, Selection::noSel, true);
 
+#if wxUSE_CLIPBOARD
     pdoc->BeginUndoAction();
     wxTextDataObject data;
     bool gotData = false;
@@ -1094,6 +1067,7 @@ void ScintillaWX::DoMiddleButtonUp(Point pt) {
     pdoc->EndUndoAction();
     NotifyChange();
     Redraw();
+#endif // wxUSE_CLIPBOARD
 
     ShowCaretAtCurrentPosition();
     EnsureCaretVisible();
@@ -1330,6 +1304,75 @@ void ScintillaWX::SetUseAntiAliasing(bool useAA) {
 
 bool ScintillaWX::GetUseAntiAliasing() {
     return vs.extraFontFlag != 0;
+}
+
+void ScintillaWX::DoMarkerDefineBitmap(int markerNumber, const wxBitmap& bmp) {
+    if ( 0 <= markerNumber && markerNumber <= MARKER_MAX) {
+        // Build an RGBA buffer from bmp.
+        const int totalPixels = bmp.GetWidth() * bmp.GetHeight();
+        wxScopedArray<unsigned char> rgba(4*bmp.GetWidth()*bmp.GetHeight());
+        wxImage img = bmp.ConvertToImage();
+        int curRGBALoc = 0, curDataLoc = 0, curAlphaLoc = 0;
+
+        if ( img.HasMask() ) {
+            for ( int y = 0; y < bmp.GetHeight(); ++y ) {
+                for ( int x = 0 ; x < bmp.GetWidth(); ++x ) {
+                    rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                    rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                    rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                    rgba[curRGBALoc++] = img.IsTransparent(x,y)
+                        ? wxALPHA_TRANSPARENT : wxALPHA_OPAQUE ;
+                }
+            }
+        }
+        else if ( img.HasAlpha() ) {
+            for ( int i = 0; i < totalPixels; ++i ) {
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetAlpha()[curAlphaLoc++];
+            }
+        }
+        else {
+            for ( int i = 0; i < totalPixels; ++i ) {
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = wxALPHA_OPAQUE ;
+            }
+        }
+
+        // Now follow the same procedure used for handling the
+        // SCI_MARKERDEFINERGBAIMAGE message, except use the bitmap's width and
+        // height instead of the values stored in sizeRGBAImage.
+        Point bitmapSize = Point::FromInts(bmp.GetWidth(), bmp.GetHeight());
+        vs.markers[markerNumber].SetRGBAImage(bitmapSize, 1.0f, rgba.get());
+        vs.CalcLargestMarkerHeight();
+    }
+    InvalidateStyleData();
+    RedrawSelMargin();
+}
+
+void ScintillaWX::DoRegisterImage(int type, const wxBitmap& bmp) {
+    static_cast<ListBoxImpl*>(ac.lb)->RegisterImageHelper(type, bmp);
+}
+
+void ScintillaWX::SetListBoxColours(const wxColour& background,
+                                          const wxColour& text,
+                                          const wxColour& highlight,
+                                          const wxColour& highlightText)
+{
+    static_cast<ListBoxImpl*>(ac.lb)->SetColours(background, text,
+                                                  highlight, highlightText);
+}
+
+void ScintillaWX::UseListCtrlStyleForLists(bool useListCtrl,
+                                           const wxColour& currentBgColour,
+                                           const wxColour& currentTextColour)
+{
+    static_cast<ListBoxImpl*>(ac.lb)->UseListCtrlStyle(useListCtrl,
+                                                       currentBgColour,
+                                                       currentTextColour);
 }
 
 sptr_t ScintillaWX::DirectFunction(

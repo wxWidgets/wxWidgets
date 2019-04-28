@@ -348,6 +348,9 @@ compilers. See also wxUSE_NO_MANIFEST.}
 @itemdef{wxUSE_WIN_METAFILES_ALWAYS, Use wxMetaFile even when wxUSE_ENH_METAFILE=1.}
 @itemdef{wxUSE_WINRT, Enable WinRT support.}
 @itemdef{wxUSE_WXDIB, Use wxDIB class.}
+@itemdef{wxUSE_WINSOCK2, Include @c <winsock2.h> instead of @c <winsock.h>.
+Turned on automatically if ::wxUSE_IPV6 is on (this option is new since
+wxWidgets 3.1.3).}
 @endDefList
 
 

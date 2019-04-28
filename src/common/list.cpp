@@ -147,16 +147,6 @@ void wxListBase::Init(wxKeyType keyType)
   m_keyType = keyType;
 }
 
-wxListBase::wxListBase(size_t count, void *elements[])
-{
-  Init();
-
-  for ( size_t n = 0; n < count; n++ )
-  {
-      Append(elements[n]);
-  }
-}
-
 void wxListBase::DoCopy(const wxListBase& list)
 {
     wxASSERT_MSG( !list.m_destroy,

@@ -642,7 +642,7 @@ bool wxArrayDoubleProperty::DoSetAttribute( const wxString& name, wxVariant& val
         GenerateValueAsString( m_display, m_precision, true );
         return true;
     }
-    return false;
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 wxValidator* wxArrayDoubleProperty::DoGetValidator() const

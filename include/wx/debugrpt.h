@@ -3,7 +3,7 @@
 // Purpose:     declaration of wxDebugReport class
 // Author:      Vadim Zeitlin
 // Created:     2005-01-17
-// Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

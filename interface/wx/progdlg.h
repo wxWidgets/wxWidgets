@@ -167,7 +167,7 @@ public:
 
     /**
         Changes the maximum value of the progress meter given in the constructor.
-        This function can only be called (with a positive value) if the value passed 
+        This function can only be called (with a positive value) if the value passed
         in the constructor was positive.
 
         @since 2.9.1
@@ -180,8 +180,8 @@ public:
 
          Normally a Cancel button press is indicated by Update() returning
          @false but sometimes it may be more convenient to check if the dialog
-         was cancelled from elsewhere in the code and this function allows to
-         do it.
+         was cancelled from elsewhere in the code and this function allows
+         doing it.
 
          It always returns @false if the Cancel button is not shown at all.
 

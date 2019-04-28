@@ -68,6 +68,7 @@ HOST_SUFFIX = @HOST_SUFFIX@
 DYLIB_RPATH_INSTALL = @DYLIB_RPATH_INSTALL@
 DYLIB_RPATH_POSTLINK = @DYLIB_RPATH_POSTLINK@
 wx_top_builddir = @wx_top_builddir@
+wxCFLAGS_C99 = @wxCFLAGS_C99@
 
 ### Variables: ###
 
@@ -211,7 +212,7 @@ WXTIFF_OBJECTS =  \
 	wxtiff_tif_zip.o \
 	wxtiff_tif_zstd.o
 WXEXPAT_CFLAGS = -DNDEBUG -I./src/expat/expat -DHAVE_EXPAT_CONFIG_H \
-	$(____SHARED) $(CPPFLAGS) $(CFLAGS)
+	$(____SHARED) $(wxCFLAGS_C99) $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	wxexpat_xmlparse.o \
 	wxexpat_xmlrole.o \
@@ -2026,11 +2027,22 @@ STCDLL_CXXFLAGS = $(__stcdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX \
 	-DLINK_LEXERS -DWXUSINGDLL -DWXMAKINGDLL_STC $(PIC_FLAG) $(CXXWARNINGS) \
 	$(CPPFLAGS) $(CXXFLAGS)
+STCDLL_OBJCXXFLAGS = $(__stcdll_PCH_INC) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -DWXBUILDING $(__INC_TIFF_BUILD_p) \
+	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-I$(top_srcdir)/src/stc/scintilla/include \
+	-I$(top_srcdir)/src/stc/scintilla/lexlib \
+	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX \
+	-DLINK_LEXERS -DWXUSINGDLL -DWXMAKINGDLL_STC $(PIC_FLAG) $(CPPFLAGS) \
+	$(OBJCXXFLAGS)
 STCDLL_OBJECTS =  \
 	$(__stcdll___win32rc) \
 	stcdll_stc.o \
 	stcdll_PlatWX.o \
-	stcdll_ScintillaWX.o
+	stcdll_ScintillaWX.o \
+	$(__STC_PLATFORM_SRC_OBJECTS_2)
 STCDLL_ODEP =  $(_____pch_wxprec_stcdll_wx_wxprec_h_gch___depname)
 STCLIB_CXXFLAGS = $(__stclib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -2040,10 +2052,20 @@ STCLIB_CXXFLAGS = $(__stclib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/src/stc/scintilla/lexlib \
 	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX \
 	-DLINK_LEXERS $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
+STCLIB_OBJCXXFLAGS = $(__stclib_PCH_INC) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -DWXBUILDING $(__INC_TIFF_BUILD_p) \
+	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-I$(top_srcdir)/src/stc/scintilla/include \
+	-I$(top_srcdir)/src/stc/scintilla/lexlib \
+	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX \
+	-DLINK_LEXERS $(CPPFLAGS) $(OBJCXXFLAGS)
 STCLIB_OBJECTS =  \
 	stclib_stc.o \
 	stclib_PlatWX.o \
-	stclib_ScintillaWX.o
+	stclib_ScintillaWX.o \
+	$(__STC_PLATFORM_SRC_OBJECTS_3)
 STCLIB_ODEP =  $(_____pch_wxprec_stclib_wx_wxprec_h_gch___depname)
 GLDLL_CXXFLAGS = $(__gldll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -4581,7 +4603,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_datavgen.o \
 	monodll_editlbox.o \
 	monodll_laywin.o \
-	monodll_calctrlg.o
+	monodll_calctrlg.o \
+	monodll_rowheightcache.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS_1) \
@@ -4841,7 +4864,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_datavgen.o \
 	monodll_editlbox.o \
 	monodll_laywin.o \
-	monodll_calctrlg.o
+	monodll_calctrlg.o \
+	monodll_rowheightcache.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_fontmgrcmn.o \
@@ -5745,7 +5769,8 @@ COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS =  \
 	monodll_uuid.o \
 	monodll_safearray.o \
 	monodll_msw_sound.o \
-	monodll_automtn.o
+	monodll_automtn.o \
+	monodll_qt_graphics.o
 @COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_fontmgrcmn.o \
@@ -6108,8 +6133,13 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monodll_tabartgtk.o
 @COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_MSW@	monodll_tabartmsw.o monodll_barartmsw.o
-@COND_USE_STC_1@__MONOLIB_STC_SRC_OBJECTS = monodll_stc.o \
-@COND_USE_STC_1@	monodll_PlatWX.o monodll_ScintillaWX.o
+COND_USE_STC_1___MONOLIB_STC_SRC_OBJECTS =  \
+	monodll_stc.o \
+	monodll_PlatWX.o \
+	monodll_ScintillaWX.o \
+	$(__STC_PLATFORM_SRC_OBJECTS)
+@COND_USE_STC_1@__MONOLIB_STC_SRC_OBJECTS = $(COND_USE_STC_1___MONOLIB_STC_SRC_OBJECTS)
+@COND_TOOLKIT_OSX_COCOA@__STC_PLATFORM_SRC_OBJECTS = monodll_PlatWXcocoa.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_SRC_OBJECTS \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= monodll_sound_sdl.o
 @COND_PLATFORM_WIN32_1@__monodll___win32rc = monodll_version_rc.o
@@ -6557,7 +6587,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_datavgen.o \
 	monolib_editlbox.o \
 	monolib_laywin.o \
-	monolib_calctrlg.o
+	monolib_calctrlg.o \
+	monolib_rowheightcache.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_3) \
@@ -6817,7 +6848,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_datavgen.o \
 	monolib_editlbox.o \
 	monolib_laywin.o \
-	monolib_calctrlg.o
+	monolib_calctrlg.o \
+	monolib_rowheightcache.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_fontmgrcmn.o \
@@ -7721,7 +7753,8 @@ COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_uuid.o \
 	monolib_safearray.o \
 	monolib_msw_sound.o \
-	monolib_automtn.o
+	monolib_automtn.o \
+	monolib_qt_graphics.o
 @COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_1)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_fontmgrcmn.o \
@@ -8084,8 +8117,14 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monolib_tabartgtk.o
 @COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_MSW@	monolib_tabartmsw.o monolib_barartmsw.o
-@COND_USE_STC_1@__MONOLIB_STC_SRC_OBJECTS_1 = monolib_stc.o \
-@COND_USE_STC_1@	monolib_PlatWX.o monolib_ScintillaWX.o
+COND_USE_STC_1___MONOLIB_STC_SRC_OBJECTS_1 =  \
+	monolib_stc.o \
+	monolib_PlatWX.o \
+	monolib_ScintillaWX.o \
+	$(__STC_PLATFORM_SRC_OBJECTS_1)
+@COND_USE_STC_1@__MONOLIB_STC_SRC_OBJECTS_1 = $(COND_USE_STC_1___MONOLIB_STC_SRC_OBJECTS_1)
+@COND_TOOLKIT_OSX_COCOA@__STC_PLATFORM_SRC_OBJECTS_1 \
+@COND_TOOLKIT_OSX_COCOA@	= monolib_PlatWXcocoa.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_SRC_OBJECTS_1 \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= monolib_sound_sdl.o
 COND_MONOLITHIC_0_SHARED_1___basedll___depname = \
@@ -8680,7 +8719,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_datavgen.o \
 	coredll_editlbox.o \
 	coredll_laywin.o \
-	coredll_calctrlg.o
+	coredll_calctrlg.o \
+	coredll_rowheightcache.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_5) \
@@ -8940,7 +8980,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_datavgen.o \
 	coredll_editlbox.o \
 	coredll_laywin.o \
-	coredll_calctrlg.o
+	coredll_calctrlg.o \
+	coredll_rowheightcache.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_fontmgrcmn.o \
@@ -9844,7 +9885,8 @@ COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_2 =  \
 	coredll_uuid.o \
 	coredll_safearray.o \
 	coredll_msw_sound.o \
-	coredll_automtn.o
+	coredll_automtn.o \
+	coredll_qt_graphics.o
 @COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_2)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_fontmgrcmn.o \
@@ -10398,7 +10440,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_datavgen.o \
 	corelib_editlbox.o \
 	corelib_laywin.o \
-	corelib_calctrlg.o
+	corelib_calctrlg.o \
+	corelib_rowheightcache.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_7) \
@@ -10658,7 +10701,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_datavgen.o \
 	corelib_editlbox.o \
 	corelib_laywin.o \
-	corelib_calctrlg.o
+	corelib_calctrlg.o \
+	corelib_rowheightcache.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_fontmgrcmn.o \
@@ -11562,7 +11606,8 @@ COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_3 =  \
 	corelib_uuid.o \
 	corelib_safearray.o \
 	corelib_msw_sound.o \
-	corelib_automtn.o
+	corelib_automtn.o \
+	corelib_qt_graphics.o
 @COND_PLATFORM_WIN32_1@__QT_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_3)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_fontmgrcmn.o \
@@ -12942,6 +12987,7 @@ COND_USE_SOVERSOLARIS_1___stcdll___so_symlinks_uninst_cmd = rm -f \
 	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOVERSOLARIS_1@__stcdll___so_symlinks_uninst_cmd = $(COND_USE_SOVERSOLARIS_1___stcdll___so_symlinks_uninst_cmd)
 @COND_PLATFORM_WIN32_1@__stcdll___win32rc = stcdll_version_rc.o
+@COND_TOOLKIT_OSX_COCOA@__STC_PLATFORM_SRC_OBJECTS_2 = stcdll_PlatWXcocoa.o
 COND_MONOLITHIC_0_SHARED_0_USE_STC_1___stclib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_MONOLITHIC_0_SHARED_0_USE_STC_1@__stclib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_STC_1___stclib___depname)
@@ -12954,6 +13000,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_STC_1___stclib___depname = \
 @COND_ICC_PCH_1@	./.pch/wxprec_stclib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_stclib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_stclib/wx/wxprec.h.gch
+@COND_TOOLKIT_OSX_COCOA@__STC_PLATFORM_SRC_OBJECTS_3 = stclib_PlatWXcocoa.o
 @COND_SHARED_1@____wxstc_namedll_DEP = $(__stcdll___depname)
 @COND_SHARED_0@____wxstc_namelib_DEP = $(__stclib___depname)
 COND_SHARED_1_USE_GUI_1_USE_OPENGL_1___gldll___depname = \
@@ -16818,6 +16865,9 @@ monodll_qt_utils.o: $(srcdir)/src/qt/utils.cpp $(MONODLL_ODEP)
 monodll_qt_window.o: $(srcdir)/src/qt/window.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/window.cpp
 
+monodll_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
+
 monodll_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
 
@@ -17399,6 +17449,9 @@ monodll_PlatWX.o: $(srcdir)/src/stc/PlatWX.cpp $(MONODLL_ODEP)
 
 monodll_ScintillaWX.o: $(srcdir)/src/stc/ScintillaWX.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/stc/ScintillaWX.cpp
+
+monodll_PlatWXcocoa.o: $(srcdir)/src/stc/PlatWXcocoa.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/stc/PlatWXcocoa.mm
 
 monodll_xml.o: $(srcdir)/src/xml/xml.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xml/xml.cpp
@@ -20700,6 +20753,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_calctrlg.o: $(srcdir)/src/generic/calctrlg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/calctrlg.cpp
 
+@COND_USE_GUI_1@monodll_rowheightcache.o: $(srcdir)/src/generic/rowheightcache.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/rowheightcache.cpp
+
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
 
@@ -22071,6 +22127,9 @@ monolib_qt_utils.o: $(srcdir)/src/qt/utils.cpp $(MONOLIB_ODEP)
 monolib_qt_window.o: $(srcdir)/src/qt/window.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/window.cpp
 
+monolib_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
+
 monolib_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
 
@@ -22652,6 +22711,9 @@ monolib_PlatWX.o: $(srcdir)/src/stc/PlatWX.cpp $(MONOLIB_ODEP)
 
 monolib_ScintillaWX.o: $(srcdir)/src/stc/ScintillaWX.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/stc/ScintillaWX.cpp
+
+monolib_PlatWXcocoa.o: $(srcdir)/src/stc/PlatWXcocoa.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/stc/PlatWXcocoa.mm
 
 monolib_xml.o: $(srcdir)/src/xml/xml.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xml/xml.cpp
@@ -25953,6 +26015,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_calctrlg.o: $(srcdir)/src/generic/calctrlg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/calctrlg.cpp
 
+@COND_USE_GUI_1@monolib_rowheightcache.o: $(srcdir)/src/generic/rowheightcache.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/rowheightcache.cpp
+
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
 
@@ -27983,6 +28048,9 @@ coredll_qt_utils.o: $(srcdir)/src/qt/utils.cpp $(COREDLL_ODEP)
 
 coredll_qt_window.o: $(srcdir)/src/qt/window.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/window.cpp
+
+coredll_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
 
 coredll_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
@@ -31299,6 +31367,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_calctrlg.o: $(srcdir)/src/generic/calctrlg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/calctrlg.cpp
 
+@COND_USE_GUI_1@coredll_rowheightcache.o: $(srcdir)/src/generic/rowheightcache.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/rowheightcache.cpp
+
 corelib_event.o: $(srcdir)/src/common/event.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/event.cpp
 
@@ -32231,6 +32302,9 @@ corelib_qt_utils.o: $(srcdir)/src/qt/utils.cpp $(CORELIB_ODEP)
 
 corelib_qt_window.o: $(srcdir)/src/qt/window.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/window.cpp
+
+corelib_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
 
 corelib_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
@@ -35547,6 +35621,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_calctrlg.o: $(srcdir)/src/generic/calctrlg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/calctrlg.cpp
 
+@COND_USE_GUI_1@corelib_rowheightcache.o: $(srcdir)/src/generic/rowheightcache.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/rowheightcache.cpp
+
 advdll_version_rc.o: $(srcdir)/src/msw/version.rc $(ADVDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)  --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_ADV
 
@@ -36576,6 +36653,9 @@ stcdll_PlatWX.o: $(srcdir)/src/stc/PlatWX.cpp $(STCDLL_ODEP)
 stcdll_ScintillaWX.o: $(srcdir)/src/stc/ScintillaWX.cpp $(STCDLL_ODEP)
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/src/stc/ScintillaWX.cpp
 
+stcdll_PlatWXcocoa.o: $(srcdir)/src/stc/PlatWXcocoa.mm $(STCDLL_ODEP)
+	$(CXXC) -c -o $@ $(STCDLL_OBJCXXFLAGS) $(srcdir)/src/stc/PlatWXcocoa.mm
+
 stclib_stc.o: $(srcdir)/src/stc/stc.cpp $(STCLIB_ODEP)
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/src/stc/stc.cpp
 
@@ -36584,6 +36664,9 @@ stclib_PlatWX.o: $(srcdir)/src/stc/PlatWX.cpp $(STCLIB_ODEP)
 
 stclib_ScintillaWX.o: $(srcdir)/src/stc/ScintillaWX.cpp $(STCLIB_ODEP)
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/src/stc/ScintillaWX.cpp
+
+stclib_PlatWXcocoa.o: $(srcdir)/src/stc/PlatWXcocoa.mm $(STCLIB_ODEP)
+	$(CXXC) -c -o $@ $(STCLIB_OBJCXXFLAGS) $(srcdir)/src/stc/PlatWXcocoa.mm
 
 gldll_version_rc.o: $(srcdir)/src/msw/version.rc $(GLDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)  --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_GL

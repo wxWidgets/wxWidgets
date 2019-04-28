@@ -29,41 +29,41 @@ public:
     wxBitmap(const char* const* bits);
     wxBitmap(const wxString &filename, wxBitmapType type = wxBITMAP_TYPE_XPM);
     wxBitmap(const wxImage& image, int depth = wxBITMAP_SCREEN_DEPTH, double scale = 1.0);
-    
+
     // Convert from wxIcon / wxCursor
     wxBitmap(const wxIcon& icon) { CopyFromIcon(icon); }
     explicit wxBitmap(const wxCursor& cursor);
 
     static void InitStandardHandlers();
 
-    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
-    virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH);
+    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE;
+    virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE;
     virtual bool Create(int width, int height, const wxDC& WXUNUSED(dc));
 
-    virtual int GetHeight() const;
-    virtual int GetWidth() const;
-    virtual int GetDepth() const;
+    virtual int GetHeight() const wxOVERRIDE;
+    virtual int GetWidth() const wxOVERRIDE;
+    virtual int GetDepth() const wxOVERRIDE;
 
 #if wxUSE_IMAGE
-    virtual wxImage ConvertToImage() const;
+    virtual wxImage ConvertToImage() const wxOVERRIDE;
 #endif // wxUSE_IMAGE
 
-    virtual wxMask *GetMask() const;
-    virtual void SetMask(wxMask *mask);
+    virtual wxMask *GetMask() const wxOVERRIDE;
+    virtual void SetMask(wxMask *mask) wxOVERRIDE;
 
-    virtual wxBitmap GetSubBitmap(const wxRect& rect) const;
+    virtual wxBitmap GetSubBitmap(const wxRect& rect) const wxOVERRIDE;
 
     virtual bool SaveFile(const wxString &name, wxBitmapType type,
-                          const wxPalette *palette = NULL) const;
-    virtual bool LoadFile(const wxString &name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
+                          const wxPalette *palette = NULL) const wxOVERRIDE;
+    virtual bool LoadFile(const wxString &name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE) wxOVERRIDE;
 
 #if wxUSE_PALETTE
-    virtual wxPalette *GetPalette() const;
-    virtual void SetPalette(const wxPalette& palette);
+    virtual wxPalette *GetPalette() const wxOVERRIDE;
+    virtual void SetPalette(const wxPalette& palette) wxOVERRIDE;
 #endif // wxUSE_PALETTE
 
     // copies the contents and mask of the given (colour) icon to the bitmap
-    virtual bool CopyFromIcon(const wxIcon& icon);
+    virtual bool CopyFromIcon(const wxIcon& icon) wxOVERRIDE;
 
     // implementation:
 #if WXWIN_COMPATIBILITY_3_0
@@ -82,8 +82,8 @@ public:
     QPixmap *GetHandle() const;
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxBitmap);
 };
@@ -114,10 +114,10 @@ public:
 
 protected:
     // this function is called from Create() to free the existing mask data
-    void FreeData();
+    void FreeData() wxOVERRIDE;
     // by the public wrappers
-    bool InitFromColour(const wxBitmap& bitmap, const wxColour& colour);
-    bool InitFromMonoBitmap(const wxBitmap& bitmap);
+    bool InitFromColour(const wxBitmap& bitmap, const wxColour& colour) wxOVERRIDE;
+    bool InitFromMonoBitmap(const wxBitmap& bitmap) wxOVERRIDE;
 
     wxBitmap GetBitmap() const;
 

@@ -24,11 +24,15 @@
 #endif // WX_PRECOMP
 
 #include "wx/scopeguard.h"
+#include "wx/uiaction.h"
+
+#ifdef __WXGTK__
+    #include "wx/stopwatch.h"
+#endif
 
 #include "textentrytest.h"
 #include "testableframe.h"
 #include "asserthelper.h"
-#include "wx/uiaction.h"
 
 static const int TEXT_HEIGHT = 200;
 
@@ -496,7 +500,6 @@ void TextCtrlTestCase::Style()
 
 void TextCtrlTestCase::FontStyle()
 {
-#if !defined(__WXQT__)
     // We need wxTE_RICH under MSW and wxTE_MULTILINE under GTK for style
     // support so recreate the control with these styles.
     delete m_text;
@@ -547,9 +550,6 @@ void TextCtrlTestCase::FontStyle()
     fontOut.SetEncoding(fontIn.GetEncoding());
 #endif
     CPPUNIT_ASSERT_EQUAL( fontIn, fontOut );
-#else
-	WARN("Does not work under WxQt");
-#endif
 }
 
 void TextCtrlTestCase::Lines()

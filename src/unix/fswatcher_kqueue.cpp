@@ -114,7 +114,7 @@ public:
         }
 
         // create source
-        m_source = loop->AddSourceForFD(m_kfd, m_handler, wxEVENT_SOURCE_INPUT);
+        m_source = wxEventLoopBase::AddSourceForFD(m_kfd, m_handler, wxEVENT_SOURCE_INPUT);
 
         return m_source != NULL;
     }

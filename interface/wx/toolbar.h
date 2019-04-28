@@ -334,10 +334,6 @@ public:
             Text to be displayed near the control.
 
         @remarks
-            wxMSW: the label is only displayed if there is enough space
-            available below the embedded control.
-
-        @remarks
             wxMac: labels are only displayed if wxWidgets is built with @c
             wxMAC_USE_NATIVE_TOOLBAR set to 1
     */
@@ -809,7 +805,7 @@ public:
 
     /**
         Removes the given tool from the toolbar but doesn't delete it. This
-        allows to insert/add this tool back to this (or another) toolbar later.
+        allows inserting/adding this tool back to this (or another) toolbar later.
 
         @note It is unnecessary to call Realize() for the change to take place,
             it will happen immediately.

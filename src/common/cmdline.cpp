@@ -156,9 +156,8 @@ struct wxCmdLineOption: public wxCmdLineArgImpl
                     wxCmdLineParamType typ,
                     int fl)
                     : wxCmdLineArgImpl(k, shrt, lng, typ)
+        , description(desc)
     {
-        description = desc;
-
         flags = fl;
     }
 
@@ -395,13 +394,13 @@ wxCmdLineArgs::const_iterator wxCmdLineArgs::const_iterator::operator -- (int)
 // ----------------------------------------------------------------------------
 
 wxCmdLineParserData::wxCmdLineParserData()
+#ifdef __UNIX_LIKE__
+    : m_switchChars("-")
+#else // !Unix
+    : m_switchChars("/-")
+#endif
 {
     m_enableLongOptions = true;
-#ifdef __UNIX_LIKE__
-    m_switchChars = wxT("-");
-#else // !Unix
-    m_switchChars = wxT("/-");
-#endif
 }
 
 namespace

@@ -183,7 +183,7 @@ namespace
 
     int CTWeightToWX(CGFloat weight)
     {
-        for (int i = 0; i < kCTWeightsCount; ++i)
+        for (int i = 0; i < kCTWeightsCount - 1; ++i)
         {
             if ( (weight - gCTWeights[i]) < (gCTWeights[i+1]-weight) )
                 return i * 100;
@@ -244,8 +244,8 @@ namespace
 
 wxFontRefData::wxFontRefData(const wxFontRefData& data)
 : wxGDIRefData()
+    , m_info(data.m_info)
 {
-    m_info = data.m_info;
     m_ctFont = data.m_ctFont;
     m_ctFontAttributes = data.m_ctFontAttributes;
     m_cgFont = data.m_cgFont;
@@ -793,13 +793,11 @@ void wxNativeFontInfo::InitFromFontDescriptor(CTFontDescriptorRef desc)
     wxCFDictionaryRef traits((CFDictionaryRef)CTFontDescriptorCopyAttribute(desc, kCTFontTraitsAttribute));
     traits.GetValue(kCTFontSymbolicTrait).GetValue((int32_t*)&symbolicTraits, 0);
 
-    m_family = wxFONTFAMILY_DEFAULT;
-
-    if (symbolicTraits & kCTFontTraitMonoSpace)
+    if (symbolicTraits & kCTFontMonoSpaceTrait)
         m_family = wxFONTFAMILY_TELETYPE;
     else
     {
-        uint32_t stylisticClass = symbolicTraits & kCTFontTraitClassMask;
+        uint32_t stylisticClass = symbolicTraits & kCTFontClassMaskTrait;
 
         if (stylisticClass == kCTFontSansSerifClass)
             m_family = wxFONTFAMILY_SWISS;

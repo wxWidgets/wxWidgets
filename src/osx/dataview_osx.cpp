@@ -667,13 +667,10 @@ wxDataViewWidgetImpl* wxDataViewCtrl::GetDataViewPeer() const
 
 void wxDataViewCtrl::AddChildren(wxDataViewItem const& parentItem)
 {
-  int noOfChildren;
-
   wxDataViewItemArray items;
 
-
   wxCHECK_RET(GetModel() != NULL,"Model pointer not initialized.");
-  noOfChildren = GetModel()->GetChildren(parentItem,items);
+  GetModel()->GetChildren(parentItem,items);
   (void) GetModel()->ItemsAdded(parentItem,items);
 }
 

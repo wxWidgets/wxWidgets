@@ -175,6 +175,7 @@ set(QT_WIN32_SRC
     src/msw/dialup.cpp
     src/msw/dib.cpp
     src/msw/joystick.cpp
+    src/qt/graphics.cpp
 )
 
 set(QT_WIN32_HDR
@@ -908,6 +909,7 @@ set(GUI_CMN_SRC
     src/generic/wizard.cpp
     src/generic/editlbox.cpp
     src/generic/datavgen.cpp
+    src/generic/rowheightcache.cpp
 )
 
 set(GUI_CMN_HDR
@@ -3194,13 +3196,20 @@ set(RICHTEXT_HDR
     wx/xrc/xh_richtext.h
 )
 
-set(STC_SRC
+set(STC_CMN_SRC
     src/stc/stc.cpp
     src/stc/PlatWX.cpp
     src/stc/ScintillaWX.cpp
 )
 
-set(STC_HDR
+set(STC_CMN_HDR
     wx/stc/stc.h
+)
+
+set(STC_OSX_COCOA_SRC
+    src/stc/PlatWXcocoa.mm
+)
+
+set(STC_OSX_COCOA_HDR
 )
 

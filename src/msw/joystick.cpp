@@ -261,7 +261,7 @@ int wxJoystick::GetButtonState() const
 
 bool wxJoystick::GetButtonState(unsigned id) const
 {
-    if (id > sizeof(int) * 8)
+    if (id >= sizeof(int) * 8)
         return false;
 
     return (GetButtonState() & (1 << id)) != 0;

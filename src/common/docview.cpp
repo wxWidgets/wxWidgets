@@ -824,15 +824,15 @@ wxDocTemplate::wxDocTemplate(wxDocManager *manager,
                              wxClassInfo *docClassInfo,
                              wxClassInfo *viewClassInfo,
                              long flags)
+    : m_fileFilter(filter)
+    , m_directory(dir)
+    , m_description(descr)
+    , m_defaultExt(ext)
+    , m_docTypeName(docTypeName)
+    , m_viewTypeName(viewTypeName)
 {
     m_documentManager = manager;
-    m_description = descr;
-    m_directory = dir;
-    m_defaultExt = ext;
-    m_fileFilter = filter;
     m_flags = flags;
-    m_docTypeName = docTypeName;
-    m_viewTypeName = viewTypeName;
     m_documentManager->AssociateTemplate(this);
 
     m_docClassInfo = docClassInfo;
@@ -2235,11 +2235,10 @@ bool wxTransferFileToStream(const wxString& filename, wxSTD ostream& stream)
     if ( !file.IsOpened() )
         return false;
 
-    char buf[4096];
-
-    size_t nRead;
     do
     {
+        char buf[4096];
+        size_t nRead;
         nRead = file.Read(buf, WXSIZEOF(buf));
         if ( file.Error() )
             return false;

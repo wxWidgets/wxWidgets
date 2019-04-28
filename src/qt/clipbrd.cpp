@@ -96,7 +96,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 
     // how to add timestamp?
 
-    // Unfortunately I cannot find a way to use the qt clipboard with 
+    // Unfortunately I cannot find a way to use the qt clipboard with
     // a callback to select the data type, so I must copy it all here
 
     for ( size_t i = 0; i < count; i++ )
@@ -109,7 +109,7 @@ bool wxClipboard::AddData( wxDataObject *data )
 
         QByteArray bytearray(size, 0);
         data->GetDataHere(format, bytearray.data());
-        MimeData->setData(wxQtConvertString(format.m_MimeType), bytearray);
+        MimeData->setData(wxQtConvertString(format.GetMimeType()), bytearray);
     }
 
     delete data;
@@ -142,9 +142,9 @@ bool wxClipboard::GetData( wxDataObject& data )
     for ( size_t i = 0; i < count; i++ )
     {
         const wxDataFormat format(formats[i]);
-        
+
         // is this format supported by clipboard ?
-        if( !MimeData->hasFormat(wxQtConvertString(format.m_MimeType)) )
+        if( !MimeData->hasFormat(wxQtConvertString(format.GetMimeType())) )
             continue;
 
         wxTextDataObject *textdata = dynamic_cast<wxTextDataObject*>(&data);
@@ -152,7 +152,7 @@ bool wxClipboard::GetData( wxDataObject& data )
             textdata->SetText(wxQtConvertString(MimeData->text()));
         else
         {
-            QByteArray bytearray = MimeData->data( wxQtConvertString(format.m_MimeType) ).data();
+            QByteArray bytearray = MimeData->data( wxQtConvertString(format.GetMimeType()) ).data();
             data.SetData(format, bytearray.size(), bytearray.constData());
         }
 
@@ -170,7 +170,7 @@ void wxClipboard::Clear()
 bool wxClipboard::IsSupported( const wxDataFormat& format )
 {
     const QMimeData *data = QtClipboard->mimeData( (QClipboard::Mode)Mode() );
-    return data->hasFormat(wxQtConvertString(format.m_MimeType));
+    return data->hasFormat(wxQtConvertString(format.GetMimeType()));
 }
 
 bool wxClipboard::IsSupportedAsync(wxEvtHandler *sink)

@@ -22,7 +22,8 @@ public:
 };
 
 
-wxStaticText::wxStaticText()
+wxStaticText::wxStaticText() :
+    m_qtLabel(NULL)
 {
 }
 

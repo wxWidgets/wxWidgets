@@ -10,7 +10,7 @@
 
 #include "wx/textctrl.h"
 
-class QTreeWidget;
+class wxQtTreeWidget;
 class QTreeWidgetItem;
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
@@ -42,20 +42,20 @@ public:
     ////////////////////////////////////////////////////////////////////////////
 
     // Set the control colours
-    bool SetForegroundColour(const wxColour& col);
-    bool SetBackgroundColour(const wxColour& col);
+    bool SetForegroundColour(const wxColour& col) wxOVERRIDE;
+    bool SetBackgroundColour(const wxColour& col) wxOVERRIDE;
 
     // Gets information about this column
-    bool GetColumn(int col, wxListItem& info) const;
+    bool GetColumn(int col, wxListItem& info) const wxOVERRIDE;
 
     // Sets information about this column
-    bool SetColumn(int col, const wxListItem& info);
+    bool SetColumn(int col, const wxListItem& info) wxOVERRIDE;
 
     // Gets the column width
-    int GetColumnWidth(int col) const;
+    int GetColumnWidth(int col) const wxOVERRIDE;
 
     // Sets the column width
-    bool SetColumnWidth(int col, int width);
+    bool SetColumnWidth(int col, int width) wxOVERRIDE;
 
 
     // Gets the column order from its index or index from its order
@@ -129,7 +129,7 @@ public:
     int GetItemCount() const;
 
     // Gets the number of columns in the list control
-    int GetColumnCount() const;
+    int GetColumnCount() const wxOVERRIDE;
 
     // get the horizontal and vertical components of the item spacing
     wxSize GetItemSpacing() const;
@@ -163,7 +163,7 @@ public:
     void SetSingleStyle(long style, bool add = true);
 
     // Set the whole window style
-    void SetWindowStyleFlag(long style);
+    void SetWindowStyleFlag(long style) wxOVERRIDE;
 
     // Searches for an item, starting from 'item'.
     // item can be -1 to find the first item that matches the
@@ -172,11 +172,11 @@ public:
     long GetNextItem(long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE) const;
 
     // Gets one of the three image lists
-    wxImageList *GetImageList(int which) const;
+    wxImageList *GetImageList(int which) const wxOVERRIDE;
 
     // Sets the image list
-    void SetImageList(wxImageList *imageList, int which);
-    void AssignImageList(wxImageList *imageList, int which);
+    void SetImageList(wxImageList *imageList, int which) wxOVERRIDE;
+    void AssignImageList(wxImageList *imageList, int which) wxOVERRIDE;
 
     // refresh items selectively (only useful for virtual list controls)
     void RefreshItem(long item);
@@ -195,10 +195,10 @@ public:
     bool DeleteAllItems();
 
     // Deletes a column
-    bool DeleteColumn(int col);
+    bool DeleteColumn(int col) wxOVERRIDE;
 
     // Deletes all columns
-    bool DeleteAllColumns();
+    bool DeleteAllColumns() wxOVERRIDE;
 
     // Clears items, and columns if there are any.
     void ClearAll();
@@ -286,13 +286,13 @@ public:
         return OnGetItemAttr(item);
     }
 
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
 protected:
     void Init();
 
     // Implement base class pure virtual methods.
-    long DoInsertColumn(long col, const wxListItem& info);
+    virtual long DoInsertColumn(long col, const wxListItem& info) wxOVERRIDE;
 
     QTreeWidgetItem *QtGetItem(int id) const;
 
@@ -303,7 +303,7 @@ protected:
                       m_ownsImageListSmall,
                       m_ownsImageListState;
 private:
-    QTreeWidget *m_qtTreeWidget;
+    wxQtTreeWidget *m_qtTreeWidget;
 
     wxDECLARE_DYNAMIC_CLASS( wxListCtrl );
 };

@@ -832,9 +832,6 @@ void wxGCDCImpl::DoDrawSpline(const wxPointList *points)
         wxCoord cy4 = (y1 + y2) / 2;
 
         path.AddQuadCurveToPoint(x1 , y1 ,cx4 , cy4 );
-
-        cx1 = cx4;
-        cy1 = cy4;
     }
 
     path.AddLineToPoint( x2 , y2 );

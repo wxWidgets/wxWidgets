@@ -3,7 +3,7 @@
 // Purpose:     wxDateTime unit test
 // Author:      Vadim Zeitlin
 // Created:     2004-06-23 (extracted from samples/console/console.cpp)
-// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -699,6 +699,8 @@ void DateTimeTestCase::TestTimeFormat()
         3*3600 + 30*60
     };
 
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const Date formatTestDates[] =
     {
         { 29, wxDateTime::May, 1976, 18, 30, 00, 0.0, wxDateTime::Inv_WeekDay },
@@ -716,6 +718,8 @@ void DateTimeTestCase::TestTimeFormat()
         { 01, wxDateTime::Jan,  -52, 03, 16, 47, 0.0, wxDateTime::Inv_WeekDay },
 #endif
     };
+
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     for ( unsigned idxtz = 0; idxtz < WXSIZEOF(timeZonesOffsets); ++idxtz )
     {
@@ -917,6 +921,8 @@ void DateTimeTestCase::TestTimeParse()
 
 void DateTimeTestCase::TestTimeZoneParse()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const struct
     {
         const char *str;
@@ -964,6 +970,8 @@ void DateTimeTestCase::TestTimeZoneParse()
         { "17:37+04:0" },
     };
 
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
+
     for ( size_t n = 0; n < WXSIZEOF(parseTestTimeZones); ++n )
     {
         wxDateTime dt;
@@ -986,6 +994,8 @@ void DateTimeTestCase::TestTimeZoneParse()
 
 void DateTimeTestCase::TestTimeSpanFormat()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const struct TimeSpanFormatTestData
     {
         long h, min, sec, msec;
@@ -1008,6 +1018,8 @@ void DateTimeTestCase::TestTimeSpanFormat()
         {    0, -1,  0,   0, "%H:%M:%S",      "-00:01:00"             },
         {    0,  0, -1,   0, "%H:%M:%S",      "-00:00:01"             },
     };
+
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     for ( size_t n = 0; n < WXSIZEOF(testSpans); n++ )
     {
@@ -1037,6 +1049,8 @@ void DateTimeTestCase::TestTimeTicks()
 // test parsing dates in RFC822 format
 void DateTimeTestCase::TestParseRFC822()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const struct ParseTestData
     {
         const char *rfc822;
@@ -1081,6 +1095,8 @@ void DateTimeTestCase::TestParseRFC822()
         },
     };
 
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
+
     for ( unsigned n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
         const char * const datestr = parseTestDates[n].rfc822;
@@ -1109,6 +1125,8 @@ void DateTimeTestCase::TestParseRFC822()
 // test parsing dates in free format
 void DateTimeTestCase::TestDateParse()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const struct ParseTestData
     {
         const char *str;
@@ -1128,6 +1146,8 @@ void DateTimeTestCase::TestDateParse()
         { "bloordyblop" },
         { "2 .  .    " },
     };
+
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     // special cases
     wxDateTime dt;
@@ -1164,6 +1184,8 @@ void DateTimeTestCase::TestDateParse()
 
 void DateTimeTestCase::TestDateParseISO()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const struct
     {
         const char *str;
@@ -1198,6 +1220,8 @@ void DateTimeTestCase::TestDateParseISO()
         { "bloordyblop" },
         { "" },
     };
+
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
     {
@@ -1238,6 +1262,8 @@ void DateTimeTestCase::TestDateParseISO()
 
 void DateTimeTestCase::TestDateTimeParse()
 {
+    wxGCC_WARNING_SUPPRESS(missing-field-initializers)
+
     static const struct ParseTestData
     {
         const char *str;
@@ -1269,6 +1295,8 @@ void DateTimeTestCase::TestDateTimeParse()
             false // ParseDateTime does know yet +0100
         },
     };
+
+    wxGCC_WARNING_RESTORE(missing-field-initializers)
 
     // the test strings here use "PM" which is not available in all locales so
     // we need to use "C" locale for them

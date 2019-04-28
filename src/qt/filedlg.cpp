@@ -38,7 +38,7 @@ public:
 
         if (style & wxFD_SAVE)
             setAcceptMode(AcceptSave);
-            
+
         if (style & wxFD_CHANGE_DIR)
             connect(this, &QDialog::accepted, this, &wxQtFileDialog::changeDirectory);
     }

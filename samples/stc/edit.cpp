@@ -52,6 +52,22 @@
 // The (uniform) style used for the annotations.
 const int ANNOTATION_STYLE = wxSTC_STYLE_LASTPREDEFINED + 1;
 
+// A small image of a hashtag symbol used in the autocompletion window.
+const char* hashtag_xpm[] = {
+"10 10 2 1",
+" 	c None",
+".	c #BD08F9",
+"  ..  ..  ",
+"  ..  ..  ",
+"..........",
+"..........",
+"  ..  ..  ",
+"  ..  ..  ",
+"..........",
+"..........",
+"  ..  ..  ",
+"  ..  ..  "};
+
 //============================================================================
 // implementation
 //============================================================================
@@ -115,6 +131,7 @@ wxBEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
     // stc
     EVT_STC_MARGINCLICK (wxID_ANY,     Edit::OnMarginClick)
     EVT_STC_CHARADDED (wxID_ANY,       Edit::OnCharAdded)
+    EVT_STC_CALLTIP_CLICK(wxID_ANY,    Edit::OnCallTipClick)
 
     EVT_KEY_DOWN( Edit::OnKeyDown )
 wxEND_EVENT_TABLE()
@@ -124,8 +141,6 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
             const wxSize &size,
             long style)
     : wxStyledTextCtrl (parent, id, pos, size, style) {
-
-    m_filename = wxEmptyString;
 
     m_LineNrID = 0;
     m_DividerID = 1;
@@ -171,6 +186,14 @@ Edit::Edit (wxWindow *parent, wxWindowID id,
     // annotations
     AnnotationSetVisible(wxSTC_ANNOTATION_BOXED);
 
+    // autocompletion
+    wxBitmap bmp(hashtag_xpm);
+    RegisterImage(0, bmp);
+
+    // call tips
+    CallTipSetBackground(*wxYELLOW);
+    m_calltipNo = 1;
+
     // miscellaneous
     m_LineNrMargin = TextWidth (wxSTC_STYLE_LINENUMBER, "_999999");
     m_FoldingMargin = 16;
@@ -213,11 +236,9 @@ void Edit::OnKeyDown (wxKeyEvent &event)
         CallTipCancel();
     if (event.GetKeyCode() == WXK_SPACE && event.ControlDown() && event.ShiftDown())
     {
-        int pos = GetCurrentPos();
-        CallTipSetBackground(*wxYELLOW);
-        CallTipShow(pos,
-                    "This is a CallTip with multiple lines.\n"
-                    "It is meant to be a context sensitive popup helper for the user.");
+        // Show our first call tip at the current position of the caret.
+        m_calltipNo = 1;
+        ShowCallTipAt(GetCurrentPos());
         return;
     }
     event.Skip();
@@ -483,11 +504,50 @@ void Edit::OnCharAdded (wxStyledTextEvent &event) {
         SetLineIndentation (currentLine, lineInd);
         GotoPos(PositionFromLine (currentLine) + lineInd);
     }
+    else if (chr == '#') {
+        wxString s = "define?0 elif?0 else?0 endif?0 error?0 if?0 ifdef?0 "
+                     "ifndef?0 include?0 line?0 pragma?0 undef?0";
+        AutoCompShow(0,s);
+    }
+}
+
+void Edit::OnCallTipClick(wxStyledTextEvent &event)
+{
+    if ( event.GetPosition() == 1 ) {
+        // If position=1, the up arrow has been clicked. Show the next tip.
+        m_calltipNo = m_calltipNo==3?1:(m_calltipNo+1);
+        ShowCallTipAt(CallTipPosAtStart());
+    }
+    else if ( event.GetPosition() == 2 ) {
+        // If position=2, the down arrow has been clicked. Show previous tip.
+        m_calltipNo = m_calltipNo==1?3:(m_calltipNo-1);
+        ShowCallTipAt(CallTipPosAtStart());
+    }
 }
 
 
 //----------------------------------------------------------------------------
 // private functions
+void Edit::ShowCallTipAt(int position)
+{
+    // In a call tip string, the character '\001' will become a clickable
+    // up arrow and '\002' will become a clickable down arrow.
+    wxString ctString = wxString::Format("\001 %d of 3 \002 ", m_calltipNo);
+    if ( m_calltipNo == 1 )
+        ctString += "This is a call tip. Try clicking the up or down buttons.";
+    else if ( m_calltipNo == 2 )
+        ctString += "It is meant to be a context sensitive popup helper for "
+                    "the user.";
+    else
+        ctString += "This is a call tip with multiple lines.\n"
+                    "You can provide slightly longer help with "
+                    "call tips like these.";
+
+    if ( CallTipActive() )
+        CallTipCancel();
+    CallTipShow(position, ctString);
+}
+
 wxString Edit::DeterminePrefs (const wxString &filename) {
 
     LanguageInfo const* curInfo;
@@ -760,7 +820,7 @@ EditProperties::EditProperties (Edit *edit,
     text = wxString::Format ("%d", edit->GetLexer());
     textinfo->Add (new wxStaticText (this, wxID_ANY, text),
                    0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxRIGHT, 4);
-    wxString EOLtype = wxEmptyString;
+    wxString EOLtype;
     switch (edit->GetEOLMode()) {
         case wxSTC_EOL_CR: {EOLtype = "CR (Unix)"; break; }
         case wxSTC_EOL_CRLF: {EOLtype = "CRLF (Windows)"; break; }

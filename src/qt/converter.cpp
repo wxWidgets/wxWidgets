@@ -13,61 +13,14 @@
     #pragma hdrstop
 #endif
 
-#include <QtCore/QRect>
-#include <QtCore/QString>
 #include <QtGui/QFont>
-#include <QtCore/QSize>
 
 #if wxUSE_DATETIME
     #include "wx/datetime.h"
     #include <QtCore/QDate>
 #endif // wxUSE_DATETIME
 
-#include "wx/kbdstate.h"
-#include "wx/gdicmn.h"
-#include "wx/gdicmn.h"
-
-
-wxPoint wxQtConvertPoint( const QPoint &point )
-{
-    if (point.isNull())
-        return wxDefaultPosition;
-
-    return wxPoint( point.x(), point.y() );
-}
-
-QPoint wxQtConvertPoint( const wxPoint &point )
-{
-    if (point == wxDefaultPosition)
-        return QPoint();
-
-    return QPoint( point.x, point.y );
-}
-
-
-QRect wxQtConvertRect( const wxRect &rect )
-{
-    return QRect( rect.GetX(), rect.GetY(), rect.GetWidth(), rect.GetHeight() );
-}
-
-wxRect wxQtConvertRect( const QRect &rect )
-{
-    return wxRect( rect.x(), rect.y(), rect.width(), rect.height() );
-}
-
-// TODO: Check whether QString::toStdString/QString::toStdWString might be faster
-
-wxString wxQtConvertString( const QString &str )
-{
-    return wxString( str.toUtf8().data(), wxConvUTF8 );
-}
-
-QString  wxQtConvertString( const wxString &str )
-{
-    return QString( str.utf8_str() );
-}
-
-
+#include "wx/qt/private/converter.h"
 
 
 #if wxUSE_DATETIME
@@ -91,22 +44,6 @@ QDate wxQtConvertDate(const wxDateTime& date)
 }
 
 #endif // wxUSE_DATETIME
-
-wxSize wxQtConvertSize( const QSize  &size )
-{
-    if (size.isNull())
-        return wxDefaultSize;
-
-    return wxSize(size.width(), size.height());
-}
-
-QSize  wxQtConvertSize( const wxSize &size )
-{
-    if (size == wxDefaultSize)
-        return QSize();
-
-    return QSize(size.GetWidth(), size.GetHeight());
-}
 
 Qt::Orientation wxQtConvertOrientation( long style, wxOrientation defaultOrientation )
 {

@@ -456,6 +456,8 @@ public:
         with wxDC and doesn't known its exact type. Use Create() instead if
         you know that the DC is e.g. wxWindowDC.
 
+        @see wxGraphicsRenderer::CreateContextFromUnknownDC()
+
         @since 3.1.1
      */
     static wxGraphicsContext* CreateFromUnknownDC(wxDC& dc);
@@ -1342,6 +1344,24 @@ public:
     virtual wxGraphicsContext* CreateContext(const wxEnhMetaFileDC& metaFileDC) = 0;
 
     /**
+        Creates a wxGraphicsContext from a DC of unknown specific type.
+
+        Creates a wxGraphicsContext if @a dc is a supported type (i.e. has a
+        corresponding CreateContext() method, e.g. wxWindowDC or wxMemoryDC).
+        Returns @NULL if the DC is unsupported.
+
+        This method is only useful as a helper in generic code that operates
+        with wxDC and doesn't known its exact type. Use the appropriate
+        CreateContext() overload instead if you know that the DC is e.g.
+        wxWindowDC.
+
+        @see wxGraphicsContext::CreateFromUnknownDC()
+
+        @since 3.1.3
+     */
+    static wxGraphicsContext* CreateContextFromUnknownDC(wxDC& dc);
+
+    /**
         Creates a wxGraphicsContext associated with a wxImage.
 
         This function is used by wxContext::CreateFromImage() and is not
@@ -1565,7 +1585,7 @@ public:
     @class wxGraphicsPenInfo
 
     This class is a helper used for wxGraphicsPen creation using named parameter
-    idiom: it allows to specify various wxGraphicsPen attributes using the chained
+    idiom: it allows specifying various wxGraphicsPen attributes using the chained
     calls to its clearly named methods instead of passing them in the fixed
     order to wxGraphicsPen constructors.
 

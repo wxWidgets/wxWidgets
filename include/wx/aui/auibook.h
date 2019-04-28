@@ -69,12 +69,6 @@ public:
     {
         m_dragSource = NULL;
     }
-#ifndef SWIG
-    wxAuiNotebookEvent(const wxAuiNotebookEvent& c) : wxBookCtrlEvent(c)
-    {
-        m_dragSource = c.m_dragSource;
-    }
-#endif
     wxEvent *Clone() const wxOVERRIDE { return new wxAuiNotebookEvent(*this); }
 
     void SetDragSource(wxAuiNotebook* s) { m_dragSource = s; }
@@ -350,7 +344,7 @@ public:
 
     virtual int ChangeSelection(size_t n) wxOVERRIDE;
 
-    virtual bool AddPage(wxWindow *page, const wxString &text, bool select, 
+    virtual bool AddPage(wxWindow *page, const wxString &text, bool select,
                          int imageId) wxOVERRIDE;
     virtual bool DeleteAllPages() wxOVERRIDE;
     virtual bool InsertPage(size_t index, wxWindow *page, const wxString &text,

@@ -20,9 +20,11 @@ void wxTextEntry::WriteText(const wxString& WXUNUSED(text))
 
 void wxTextEntry::Remove(long from, long to)
 {
+    const long insertionPoint = GetInsertionPoint();
     wxString string = GetValue();
     string.erase(from, to - from);
     SetValue(string);
+    SetInsertionPoint( std::min(insertionPoint, static_cast<long>(string.length())) );
 }
 
 void wxTextEntry::Copy()

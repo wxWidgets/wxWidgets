@@ -8,7 +8,8 @@
 #ifndef _WX_QT_EVTLOOP_H_
 #define _WX_QT_EVTLOOP_H_
 
-class QTimer;
+class wxQtIdleTimer;
+class QEventLoop;
 
 class WXDLLIMPEXP_CORE wxQtEventLoopBase : public wxEventLoopBase
 {
@@ -16,22 +17,20 @@ public:
     wxQtEventLoopBase();
     ~wxQtEventLoopBase();
 
-    virtual int DoRun();
-    virtual void ScheduleExit(int rc = 0);
-    virtual bool Pending() const;
-    virtual bool Dispatch();
-    virtual int DispatchTimeout(unsigned long timeout);
-    virtual void WakeUp();
-    virtual void DoYieldFor(long eventsToProcess);
+    virtual int DoRun() wxOVERRIDE;
+    virtual void ScheduleExit(int rc = 0) wxOVERRIDE;
+    virtual bool Pending() const wxOVERRIDE;
+    virtual bool Dispatch() wxOVERRIDE;
+    virtual int DispatchTimeout(unsigned long timeout) wxOVERRIDE;
+    virtual void WakeUp() wxOVERRIDE;
+    virtual void DoYieldFor(long eventsToProcess) wxOVERRIDE;
 
-#if wxUSE_EVENTLOOP_SOURCE
-    virtual wxEventLoopSource *AddSourceForFD(int fd, wxEventLoopSourceHandler *handler, int flags);
-#endif // wxUSE_EVENTLOOP_SOURCE
-protected:
+    void ScheduleIdleCheck();
 
 private:
-    QTimer *m_qtIdleTimer;
-    
+    QEventLoop *m_qtEventLoop;
+    wxObjectDataPtr<wxQtIdleTimer> m_qtIdleTimer;
+
     wxDECLARE_NO_COPY_CLASS(wxQtEventLoopBase);
 };
 

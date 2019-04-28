@@ -781,7 +781,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 
     const wxBitmap* itemBitmap = NULL;
 
-    if ( item >= 0 && choices.IsOk() && choices.Item(item).GetBitmap().IsOk() && comValIndex == -1 )
+    if ( choices.IsOk() && choices.Item(item).GetBitmap().IsOk() && comValIndex == -1 )
         itemBitmap = &choices.Item(item).GetBitmap();
 
     //
@@ -853,7 +853,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         // image will not appear on the control row (it may be too
         // large to fit, for instance). Also do not draw custom image
         // if no choice was selected.
-        if ( !p->HasFlag(wxPG_PROP_CUSTOMIMAGE) || item < 0 )
+        if ( !p->HasFlag(wxPG_PROP_CUSTOMIMAGE) )
             useCustomPaintProcedure = false;
     }
     else
@@ -897,13 +897,9 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
             renderer->Render( dc, r, this, p, m_selColumn, comValIndex, renderFlags );
             return;
         }
-        else if ( item >= 0 )
-        {
-            p->OnCustomPaint( dc, r, paintdata );
-        }
         else
         {
-            dc.DrawRectangle( r );
+            p->OnCustomPaint( dc, r, paintdata );
         }
 
         pt.x += paintdata.m_drawnWidth + wxCC_CUSTOM_IMAGE_MARGIN2 - 1;
@@ -915,10 +911,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         //       sure if it is needed, but seems to not cause any harm.
         pt.x -= 1;
 
-        if ( item < 0 && (flags & wxODCB_PAINTING_CONTROL) )
-            item = pCb->GetSelection();
-
-        if ( choices.IsOk() && item >= 0 && comValIndex < 0 )
+        if ( choices.IsOk() && comValIndex < 0 )
         {
             // This aligns bitmap horizontally so that it is
             // on the same position as bitmap drawn for static content
@@ -1424,13 +1417,9 @@ enum
 
 const int wxSCB_SETVALUE_CYCLE = 2;
 
-static void DrawSimpleCheckBox( wxWindow* win, wxDC& dc, const wxRect& rect,
-                                int box_h, int state )
+static void DrawSimpleCheckBox(wxWindow* win, wxDC& dc, const wxRect& rect, int state)
 {
 #if wxPG_USE_RENDERER_NATIVE
-    // Box rectangle
-    wxRect r(rect.x+wxPG_XBEFORETEXT, rect.y+((rect.height-box_h)/2),
-             box_h, box_h);
 
     int cbFlags = 0;
     if ( state & wxSCB_STATE_UNSPECIFIED )
@@ -1454,13 +1443,10 @@ static void DrawSimpleCheckBox( wxWindow* win, wxDC& dc, const wxRect& rect,
 #endif
     }
 
-    wxRendererNative::Get().DrawCheckBox(win, dc, r, cbFlags);
+    wxRendererNative::Get().DrawCheckBox(win, dc, rect, cbFlags);
 #else
     wxUnusedVar(win);
 
-    // Box rectangle
-    wxRect r(rect.x+wxPG_XBEFORETEXT, rect.y+((rect.height-box_h)/2),
-             box_h, box_h);
     wxColour useCol = dc.GetTextForeground();
 
     if ( state & wxSCB_STATE_UNSPECIFIED )
@@ -1468,6 +1454,7 @@ static void DrawSimpleCheckBox( wxWindow* win, wxDC& dc, const wxRect& rect,
         useCol = wxColour(220, 220, 220);
     }
 
+    wxRect r(rect);
     // Draw check mark first because it is likely to overdraw the
     // surrounding rectangle.
     if ( state & wxSCB_STATE_CHECKED )
@@ -1529,15 +1516,29 @@ public:
         SetFont( parent->GetFont() );
 
         m_state = 0;
-        m_boxHeight = 12;
-
+        SetBoxHeight(12);
         SetBackgroundStyle( wxBG_STYLE_PAINT );
     }
 
     virtual ~wxSimpleCheckBox();
 
+
+    void SetBoxHeight(int height)
+    {
+        m_boxHeight = height;
+        // Box rectangle
+        wxRect rect(GetClientSize());
+        rect.y += 1;
+        rect.width += 1;
+        m_boxRect = GetBoxRect(rect, m_boxHeight);
+    }
+
+    static wxRect GetBoxRect(const wxRect& r, int box_h)
+    {
+        return wxRect(r.x + wxPG_XBEFORETEXT, r.y + ((r.height - box_h) / 2), box_h, box_h);
+    }
+
     int m_state;
-    int m_boxHeight;
 
 private:
     void OnPaint( wxPaintEvent& event );
@@ -1546,10 +1547,14 @@ private:
 
     void OnResize( wxSizeEvent& event )
     {
+        SetBoxHeight(m_boxHeight); // Recalculate box rectangle
         Refresh();
         event.Skip();
     }
     void OnLeftClickActivate( wxCommandEvent& evt );
+
+    int m_boxHeight;
+    wxRect m_boxRect;
 
     wxDECLARE_EVENT_TABLE();
 };
@@ -1571,17 +1576,13 @@ wxSimpleCheckBox::~wxSimpleCheckBox()
 
 void wxSimpleCheckBox::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
-    wxRect rect(GetClientSize());
     wxAutoBufferedPaintDC dc(this);
-    dc.Clear();
-
-    rect.y += 1;
-    rect.width += 1;
 
     wxColour bgcol = GetBackgroundColour();
+    dc.SetBackground(wxBrush(bgcol));
+    dc.Clear();
     dc.SetBrush( bgcol );
     dc.SetPen( bgcol );
-    dc.DrawRectangle( rect );
 
     dc.SetTextForeground(GetForegroundColour());
 
@@ -1590,13 +1591,12 @@ void wxSimpleCheckBox::OnPaint( wxPaintEvent& WXUNUSED(event) )
          GetFont().GetWeight() == wxFONTWEIGHT_BOLD )
         state |= wxSCB_STATE_BOLD;
 
-    DrawSimpleCheckBox(this, dc, rect, m_boxHeight, state);
+    DrawSimpleCheckBox(this, dc, m_boxRect, state);
 }
 
 void wxSimpleCheckBox::OnLeftClick( wxMouseEvent& event )
 {
-    if ( (event.m_x > (wxPG_XBEFORETEXT-2)) &&
-         (event.m_x <= (wxPG_XBEFORETEXT-2+m_boxHeight)) )
+    if ( m_boxRect.Contains(event.GetPosition()) )
     {
         SetValue(wxSCB_SETVALUE_CYCLE);
     }
@@ -1631,11 +1631,11 @@ void wxSimpleCheckBox::SetValue( int value )
 
 void wxSimpleCheckBox::OnLeftClickActivate( wxCommandEvent& evt )
 {
-    // Construct mouse pseudo-event for initial mouse click
-    wxMouseEvent mouseEvt(wxEVT_LEFT_DOWN);
-    mouseEvt.m_x = evt.GetInt();
-    mouseEvt.m_y = evt.GetExtraLong();
-    OnLeftClick(mouseEvt);
+    wxPoint pt(evt.GetInt(), evt.GetExtraLong());
+    if ( m_boxRect.Contains(pt) )
+    {
+        SetValue(wxSCB_SETVALUE_CYCLE);
+    }
 }
 
 wxPGWindowList wxPGCheckBoxEditor::CreateControls( wxPropertyGrid* propGrid,
@@ -1694,7 +1694,9 @@ void wxPGCheckBoxEditor::DrawValue( wxDC& dc, const wxRect& rect,
         state |= wxSCB_STATE_UNSPECIFIED;
     }
 
-    DrawSimpleCheckBox(property->GetGrid(), dc, rect, dc.GetCharHeight(), state);
+    // Box rectangle
+    wxRect r = wxSimpleCheckBox::GetBoxRect(rect, dc.GetCharHeight());
+    DrawSimpleCheckBox(property->GetGrid(), dc, r, state);
 }
 
 void wxPGCheckBoxEditor::UpdateControl( wxPGProperty* property,
@@ -1709,7 +1711,7 @@ void wxPGCheckBoxEditor::UpdateControl( wxPGProperty* property,
         cb->m_state = wxSCB_STATE_UNSPECIFIED;
 
     wxPropertyGrid* propGrid = property->GetGrid();
-    cb->m_boxHeight = propGrid->GetFontHeight();
+    cb->SetBoxHeight(propGrid->GetFontHeight());
 
     cb->Refresh();
 }

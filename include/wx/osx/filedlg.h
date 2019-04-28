@@ -17,7 +17,7 @@ class WXDLLIMPEXP_FWD_CORE wxChoice;
 // wxFileDialog
 //-------------------------------------------------------------------------
 
-// set this system option to 1 in order to always show the filetypes popup in 
+// set this system option to 1 in order to always show the filetypes popup in
 // file open dialogs if possible
 
 #define wxOSX_FILEDIALOG_ALWAYS_SHOW_TYPES wxT("osx.openfiledialog.always-show-types")
@@ -59,21 +59,21 @@ public:
 #if wxOSX_USE_COCOA
     ~wxFileDialog();
 #endif
-    
-    virtual void GetPaths(wxArrayString& paths) const { paths = m_paths; }
-    virtual void GetFilenames(wxArrayString& files) const { files = m_fileNames ; }
 
-    virtual int ShowModal();
+    virtual void GetPaths(wxArrayString& paths) const wxOVERRIDE { paths = m_paths; }
+    virtual void GetFilenames(wxArrayString& files) const wxOVERRIDE { files = m_fileNames ; }
+
+    virtual int ShowModal() wxOVERRIDE;
 
 #if wxOSX_USE_COCOA
-    virtual void ShowWindowModal();
-    virtual void ModalFinishedCallback(void* panel, int resultCode);
+    virtual void ShowWindowModal() wxOVERRIDE;
+    virtual void ModalFinishedCallback(void* panel, int resultCode) wxOVERRIDE;
 #endif
 
-    virtual bool SupportsExtraControl() const;
-    
+    virtual bool SupportsExtraControl() const wxOVERRIDE;
+
     // implementation only
-    
+
 #if wxOSX_USE_COCOA
     // returns true if the file can be shown as active
     bool CheckFile( const wxString& filename );
@@ -83,10 +83,10 @@ protected:
     // not supported for file dialog, RR
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
                            int WXUNUSED(width), int WXUNUSED(height),
-                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
+                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) wxOVERRIDE {}
 
     void SetupExtraControls(WXWindow nativeWindow);
-    
+
 #if wxOSX_USE_COCOA
     virtual wxWindow* CreateFilterPanel(wxWindow *extracontrol);
     void DoOnFilterSelected(int index);

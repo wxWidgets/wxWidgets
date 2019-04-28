@@ -614,7 +614,7 @@ custom event types.
 Finally, you will need to generate and post your custom events.
 Generation is as simple as instancing your custom event class and initializing
 its internal fields.
-For posting events to a certain event handler there are two possibilities: 
+For posting events to a certain event handler there are two possibilities:
 using wxEvtHandler::AddPendingEvent or using wxEvtHandler::QueueEvent.
 Basically you will need to use the latter when doing inter-thread communication;
 when you use only the main thread you can also safely use the former.

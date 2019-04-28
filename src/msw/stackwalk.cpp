@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by: Artur Bac 2010-10-01 AMD64 Port
 // Created:     2005-01-08
-// Copyright:   (c) 2003-2005 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003-2005 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

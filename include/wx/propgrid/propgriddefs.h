@@ -312,9 +312,11 @@ WX_DECLARE_HASH_SET_WITH_DECL(int,
                               wxPGHashSetInt,
                               class WXDLLIMPEXP_PROPGRID);
 
+#if WXWIN_COMPATIBILITY_3_0
 WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(wxObject*, wxArrayPGObject,
                                   wxBaseArrayPtrVoid,
                                   class WXDLLIMPEXP_PROPGRID);
+#endif // WXWIN_COMPATIBILITY_3_0
 
 // -----------------------------------------------------------------------
 
@@ -515,7 +517,7 @@ class classname##VariantData: public wxVariantData \
 { \
 public:\
     classname##VariantData() {} \
-    classname##VariantData( const classname &value ) { m_value = value; } \
+    classname##VariantData( const classname &value ) : m_value(value) { } \
 \
     classname &GetValue() { return m_value; } \
 \

@@ -492,7 +492,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
         wxVERTICAL);
 
     m_lboxLog = new wxListBox(m_panel, wxID_ANY);
-    sizerDown->Add(m_lboxLog, 1, wxGROW | wxALL, 5);
+    sizerDown->Add(m_lboxLog, wxSizerFlags(1).Expand().Border());
     sizerDown->SetMinSize(100, 150);
 #else
     wxSizer *sizerDown = new wxBoxSizer(wxVERTICAL);
@@ -503,16 +503,16 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 #if USE_LOG
     btn = new wxButton(m_panel, Widgets_ClearLog, "Clear &log");
     sizerBtns->Add(btn);
-    sizerBtns->Add(10, 0); // spacer
+    sizerBtns->AddSpacer(10);
 #endif // USE_LOG
     btn = new wxButton(m_panel, Widgets_Quit, "E&xit");
     sizerBtns->Add(btn);
-    sizerDown->Add(sizerBtns, 0, wxALL | wxALIGN_RIGHT, 5);
+    sizerDown->Add(sizerBtns, wxSizerFlags().Border().Right());
 
     // put everything together
-    sizerTop->Add(m_book, 1, wxGROW | (wxALL & ~(wxTOP | wxBOTTOM)), 10);
-    sizerTop->Add(0, 5, 0, wxGROW); // spacer in between
-    sizerTop->Add(sizerDown, 0,  wxGROW | (wxALL & ~wxTOP), 10);
+    sizerTop->Add(m_book, wxSizerFlags(1).Expand().DoubleBorder(wxALL & ~(wxTOP | wxBOTTOM)));
+    sizerTop->AddSpacer(5);
+    sizerTop->Add(sizerDown, wxSizerFlags(0).Expand().DoubleBorder(wxALL & ~wxTOP));
 
     m_panel->SetSizer(sizerTop);
 
@@ -639,7 +639,7 @@ void WidgetsFrame::InitBook()
 #if USE_TREEBOOK
     // for treebook page #0 is empty parent page only so select the first page
     // with some contents
-    if ( !pageSet )
+    if ( !pageSet || !m_book->GetCurrentPage() )
         m_book->SetSelection(1);
 
     // but ensure that the top of the tree is shown nevertheless
@@ -648,7 +648,7 @@ void WidgetsFrame::InitBook()
     wxTreeItemIdValue cookie;
     tree->EnsureVisible(tree->GetFirstChild(tree->GetRootItem(), cookie));
 #else
-    if ( !pageSet )
+    if ( !pageSet || !m_book->GetCurrentPage() )
     {
         // for other books set selection twice to force connected event handler
         // to force lazy creation of initial visible content
@@ -1347,8 +1347,8 @@ wxSizer *WidgetsPage::CreateSizerWithText(wxControl *control,
     wxTextCtrl *text = new wxTextCtrl(this, id, wxEmptyString,
         wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
 
-    sizerRow->Add(control, 0, wxRIGHT | wxALIGN_CENTRE_VERTICAL, 5);
-    sizerRow->Add(text, 1, wxLEFT | wxALIGN_CENTRE_VERTICAL, 5);
+    sizerRow->Add(control, wxSizerFlags(0).Border(wxRIGHT).CentreVertical());
+    sizerRow->Add(text, wxSizerFlags(1).Border(wxLEFT).CentreVertical());
 
     if ( ppText )
         *ppText = text;
@@ -1379,8 +1379,8 @@ wxCheckBox *WidgetsPage::CreateCheckBoxAndAddToSizer(wxSizer *sizer,
                                                      wxWindowID id)
 {
     wxCheckBox *checkbox = new wxCheckBox(this, id, label);
-    sizer->Add(checkbox, 0, wxLEFT | wxRIGHT, 5);
-    sizer->Add(0, 2, 0, wxGROW); // spacer
+    sizer->Add(checkbox, wxSizerFlags().HorzBorder());
+    sizer->AddSpacer(2);
 
     return checkbox;
 }

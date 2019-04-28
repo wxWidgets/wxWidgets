@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     31.05.03
-// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

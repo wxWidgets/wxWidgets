@@ -50,7 +50,7 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
-    
+
 private:
     // implement base class pure virtuals
     virtual void DoSetCount(unsigned int count) wxOVERRIDE;

@@ -74,9 +74,6 @@ public:
     virtual wxString GetString(unsigned int item) const wxOVERRIDE;
     virtual void SetString(unsigned int item, const wxString& label) wxOVERRIDE;
 
-    virtual wxString GetLabel() const wxOVERRIDE;
-    virtual void SetLabel(const wxString& label) wxOVERRIDE;
-
     // protect native font of box
     virtual bool SetFont( const wxFont &font ) wxOVERRIDE;
 // Other external functions

@@ -118,7 +118,7 @@ public:
     virtual ChannelType Blue() const = 0;
     virtual ChannelType Alpha() const
         { return wxALPHA_OPAQUE ; }
-    
+
     virtual bool IsSolid() const
         { return true; }
 
@@ -153,6 +153,10 @@ public:
     // because it's still widely used)
     bool Ok() const { return IsOk(); }
 #endif
+
+    // Return the perceived brightness of the colour, with 0 for black and 1
+    // for white.
+    double GetLuminance() const;
 
     // manipulation
     // ------------

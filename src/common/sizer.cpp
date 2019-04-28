@@ -2071,7 +2071,10 @@ wxSizerItem *wxBoxSizer::DoInsert(size_t index, wxSizerItem *item)
             );
         }
 
-        if ( flags & wxEXPAND )
+        // Note that using alignment with wxEXPAND can make sense if wxSHAPED
+        // is also used, as the item doesn't necessarily fully expand in the
+        // other direction in this case.
+        if ( (flags & wxEXPAND) && !(flags & wxSHAPED) )
         {
             wxASSERT_MSG
             (
@@ -2097,7 +2100,7 @@ wxSizerItem *wxBoxSizer::DoInsert(size_t index, wxSizerItem *item)
             );
         }
 
-        if ( flags & wxEXPAND )
+        if ( (flags & wxEXPAND) && !(flags & wxSHAPED) )
         {
             wxASSERT_MSG(
                 !(flags & (wxALIGN_BOTTOM | wxALIGN_CENTRE_VERTICAL)),

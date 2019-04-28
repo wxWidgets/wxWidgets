@@ -39,7 +39,7 @@ public:
     virtual void DoGetSize( int *width, int *height ) const wxOVERRIDE;
     virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const wxOVERRIDE;
     virtual void* GetHandle() const wxOVERRIDE;
-    
+
     // overridden for wxMemoryDC Impl
     virtual void DoSelect(const wxBitmap& bitmap) wxOVERRIDE;
 

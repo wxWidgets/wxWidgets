@@ -18,7 +18,8 @@
 #include <QtWidgets/QSpinBox>
 
 template< typename T, typename Widget >
-wxSpinCtrlQt< T, Widget >::wxSpinCtrlQt()
+wxSpinCtrlQt< T, Widget >::wxSpinCtrlQt() :
+    m_qtSpinBox(NULL)
 {
 }
 
@@ -153,7 +154,15 @@ public:
                 this, &wxQtSpinBox::valueChanged);
     }
 private:
-    void valueChanged(int value);
+    void valueChanged(int value)
+    {
+        if ( wxControl *handler = GetHandler() )
+        {
+            wxSpinEvent event( wxEVT_SPINCTRL, handler->GetId() );
+            event.SetInt( value );
+            EmitEvent( event );
+        }
+    }
 };
 
 class wxQtDoubleSpinBox : public wxQtSpinBoxBase< QDoubleSpinBox >
@@ -161,7 +170,20 @@ class wxQtDoubleSpinBox : public wxQtSpinBoxBase< QDoubleSpinBox >
 public:
     wxQtDoubleSpinBox( wxWindow *parent, wxControl *handler )
         : wxQtSpinBoxBase< QDoubleSpinBox >( parent, handler )
-    { }
+    {
+        connect(this, static_cast<void (QDoubleSpinBox::*)(double value)>(&QDoubleSpinBox::valueChanged),
+                this, &wxQtDoubleSpinBox::valueChanged);
+    }
+private:
+    void valueChanged(double value)
+    {
+        if ( wxControl *handler = GetHandler() )
+        {
+            wxSpinDoubleEvent event( wxEVT_SPINCTRLDOUBLE, handler->GetId() );
+            event.SetValue(value);
+            EmitEvent( event );
+        }
+    }
 };
 
 
@@ -171,7 +193,7 @@ template class wxSpinCtrlQt< int, QSpinBox >;
 
 wxSpinCtrl::wxSpinCtrl()
 {
-    Init(); 
+    Init();
 }
 
 wxSpinCtrl::wxSpinCtrl(wxWindow *parent, wxWindowID id, const wxString& value,
@@ -217,17 +239,6 @@ void wxSpinCtrl::SetValue( const wxString &value )
     wxQtSpinBox * qtSpinBox = dynamic_cast<wxQtSpinBox *> ((QSpinBox *) m_qtSpinBox);
     if (qtSpinBox != NULL)
         qtSpinBox->setValue( qtSpinBox->valueFromText( wxQtConvertString( value )));
-}
-
-void wxQtSpinBox::valueChanged(int value)
-{
-    wxControl *handler = GetHandler();
-    if ( handler )
-    {
-        wxSpinEvent event( wxEVT_SPINCTRL, handler->GetId() );
-        event.SetInt( value );
-        EmitEvent( event );
-    }
 }
 
 //##############################################################################

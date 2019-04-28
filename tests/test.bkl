@@ -223,6 +223,7 @@
             controls/slidertest.cpp
             controls/spinctrldbltest.cpp
             controls/spinctrltest.cpp
+            controls/styledtextctrltest.cpp
             controls/textctrltest.cpp
             controls/textentrytest.cpp
             controls/togglebuttontest.cpp
@@ -267,6 +268,7 @@
             net/socket.cpp
             persistence/tlw.cpp
             persistence/dataview.cpp
+            rowheightcache/rowheightcachetest.cpp
             sizers/boxsizer.cpp
             sizers/gridsizer.cpp
             sizers/wrapsizer.cpp
@@ -281,9 +283,10 @@
             Can't use <wx-lib> here as it doesn't work with conditionally
             defined variables, so fall back <sys-lib> as we must not link with
             inexisting webview library to be able to run tests even if
-            wxWebView is not available.
+            wxWebView or wxSTC is not available.
          -->
         <sys-lib>$(WXLIB_WEBVIEW)</sys-lib>
+        <sys-lib>$(WXLIB_STC)</sys-lib>
         <wx-lib>aui</wx-lib>
         <wx-lib>richtext</wx-lib>
         <wx-lib>media</wx-lib>
@@ -298,9 +301,9 @@
 
     <wx-data id="data">
         <files>testdata.fc</files>
-        
+
         <!-- test data for image/image.cpp test unit: -->
-        <files>horse.ani  horse.bmp  horse.cur  horse.gif  horse.ico  horse.jpg  
+        <files>horse.ani  horse.bmp  horse.cur  horse.gif  horse.ico  horse.jpg
                horse.pcx  horse.png  horse.pnm  horse.tga  horse.tif  horse.xpm</files>
     </wx-data>
 

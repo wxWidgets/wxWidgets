@@ -866,10 +866,10 @@ bool wxGetUserName(char* buf, int sz);
 wxString wxGetOsDescription();
 
 /**
-    Gets the version and the operating system ID for currently running OS. 
+    Gets the version and the operating system ID for currently running OS.
     The returned wxOperatingSystemId value can be used for a basic categorization
-    of the OS family; the major, minor, and micro version numbers allows to
-    detect a specific system.
+    of the OS family; the major, minor, and micro version numbers allows
+    detecting a specific system.
 
     If on Unix-like systems the version can't be detected all three version
     numbers will have a value of -1.
@@ -885,8 +885,8 @@ wxString wxGetOsDescription();
     For OS X systems (@c wxOS_MAC) the major and minor version integers are the
     natural version numbers associated with the OS; e.g. "10", "11" and "2" if
     the machine is using OS X El Capitan 10.11.2.
-    
-    For Windows-like systems (@c wxOS_WINDOWS) the major and minor version integers will 
+
+    For Windows-like systems (@c wxOS_WINDOWS) the major and minor version integers will
     contain the following values:
     @beginTable
     @row3col{<b>Windows OS name</b>, <b>Major version</b>, <b>Minor version</b>}
@@ -954,15 +954,15 @@ bool wxIsPlatformLittleEndian();
 /**
     Returns a structure containing information about the currently running
     Linux distribution.
-    
-    This function uses the @c lsb_release utility which is part of the 
-    <tt>Linux Standard Base Core</tt> specification 
-    (see http://refspecs.linux-foundation.org/lsb.shtml) since the very first LSB 
+
+    This function uses the @c lsb_release utility which is part of the
+    <tt>Linux Standard Base Core</tt> specification
+    (see http://refspecs.linux-foundation.org/lsb.shtml) since the very first LSB
     release 1.0 (released in 2001).
     The @c lsb_release utility is very common on modern Linux distributions but in
     case it's not available, then this function will return a ::wxLinuxDistributionInfo
     structure containing empty strings.
-    
+
     This function is Linux-specific and is only available when the @c __LINUX__
     symbol is defined.
 */
@@ -1026,7 +1026,7 @@ enum
         Always show the child process console under MSW.
 
         The child console is hidden by default if the child IO is redirected,
-        this flag allows to change this and show it nevertheless.
+        this flag allows changing this and showing it nevertheless.
 
         This flag is ignored under the other platforms.
      */

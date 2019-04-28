@@ -3,7 +3,7 @@
 // Purpose:     code common to all X11-based wxGLCanvas implementations
 // Author:      Vadim Zeitlin
 // Created:     2007-04-15
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

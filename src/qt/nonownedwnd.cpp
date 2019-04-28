@@ -60,7 +60,7 @@ bool wxNonOwnedWindow::DoSetRegionShape(const wxRegion& region)
 }
 
 #if wxUSE_GRAPHICS_CONTEXT
-bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& path)
+bool wxNonOwnedWindow::DoSetPathShape(const wxGraphicsPath& WXUNUSED(path))
 {
     wxMISSING_IMPLEMENTATION( __FUNCTION__ );
     return true;

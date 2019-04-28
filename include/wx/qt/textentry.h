@@ -13,36 +13,34 @@ class WXDLLIMPEXP_CORE wxTextEntry : public wxTextEntryBase
 public:
     wxTextEntry();
 
-    virtual void WriteText(const wxString& text);
+    virtual void WriteText(const wxString& text) wxOVERRIDE;
 
-    virtual void Remove(long from, long to);
+    virtual void Remove(long from, long to) wxOVERRIDE;
 
-    virtual void Copy();
-    virtual void Cut();
-    virtual void Paste();
-    
-    virtual void Undo();
-    virtual void Redo();
-    virtual bool CanUndo() const;
-    virtual bool CanRedo() const;
+    virtual void Copy() wxOVERRIDE;
+    virtual void Cut() wxOVERRIDE;
+    virtual void Paste() wxOVERRIDE;
 
-    virtual void SetInsertionPoint(long pos);
-    virtual long GetInsertionPoint() const;
-    virtual long GetLastPosition() const;
+    virtual void Undo() wxOVERRIDE;
+    virtual void Redo() wxOVERRIDE;
+    virtual bool CanUndo() const wxOVERRIDE;
+    virtual bool CanRedo() const wxOVERRIDE;
 
-    virtual void SetSelection(long from, long to);
-    virtual void GetSelection(long *from, long *to) const;
-    
-    virtual bool IsEditable() const;
-    virtual void SetEditable(bool editable);
-    
+    virtual void SetInsertionPoint(long pos) wxOVERRIDE;
+    virtual long GetInsertionPoint() const wxOVERRIDE;
+    virtual long GetLastPosition() const wxOVERRIDE;
+
+    virtual void SetSelection(long from, long to) wxOVERRIDE;
+    virtual void GetSelection(long *from, long *to) const wxOVERRIDE;
+
+    virtual bool IsEditable() const wxOVERRIDE;
+    virtual void SetEditable(bool editable) wxOVERRIDE;
+
 protected:
-    virtual wxString DoGetValue() const;
-    virtual void DoSetValue(const wxString& value, int flags=0);
+    virtual wxString DoGetValue() const wxOVERRIDE;
+    virtual void DoSetValue(const wxString& value, int flags=0) wxOVERRIDE;
 
-    virtual wxWindow *GetEditableWindow();
-
-private:
+    virtual wxWindow *GetEditableWindow() wxOVERRIDE;
 };
 
 #endif // _WX_QT_TEXTENTRY_H_

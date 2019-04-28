@@ -214,7 +214,7 @@ static GtkPaperSize* wxGetGtkPaperSize(wxPaperSize paperId, const wxSize& size)
     // last resort, use a custom GtkPaperSize
     const wxString title = _("Custom size");
     char name[40];
-    g_snprintf(name, sizeof(name), "custom_%ux%u", size.x, size.y);
+    g_snprintf(name, sizeof(name), "custom_%dx%d", size.x, size.y);
     return gtk_paper_size_new_custom(
         name, title.utf8_str(), size.x, size.y, GTK_UNIT_MM);
 }
@@ -1210,9 +1210,8 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxGtkPrinterDCImpl, wxDCImpl);
 
 wxGtkPrinterDCImpl::wxGtkPrinterDCImpl(wxPrinterDC *owner, const wxPrintData& data)
                   : wxDCImpl( owner )
+    , m_printData(data)
 {
-    m_printData = data;
-
     wxGtkPrintNativeData *native =
         (wxGtkPrintNativeData*) m_printData.GetNativeData();
 
@@ -1700,7 +1699,7 @@ void wxGtkPrinterDCImpl::DoDrawSpline(const wxPointList *points)
 {
     SetPen (m_pen);
 
-    double c, d, x1, y1, x2, y2, x3, y3;
+    double c, d, x1, y1, x3, y3;
     wxPoint *p, *q;
 
     wxPointList::compatibility_iterator node = points->GetFirst();
@@ -1727,6 +1726,7 @@ void wxGtkPrinterDCImpl::DoDrawSpline(const wxPointList *points)
     node = node->GetNext();
     while (node)
     {
+        double x2, y2;
         q = node->GetData();
 
         x1 = x3;
