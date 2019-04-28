@@ -2548,7 +2548,6 @@ int wxPGProperty::GetChildrenHeight( int lh, int iMax_ ) const
     //
     // iMax is used when finding property y-positions.
     //
-    unsigned int i = 0;
     int h = 0;
 
     if ( iMax_ == -1 )
@@ -2561,7 +2560,7 @@ int wxPGProperty::GetChildrenHeight( int lh, int iMax_ ) const
     if ( !IsExpanded() && GetParent() )
         return 0;
 
-    while ( i < iMax )
+    for ( unsigned int i = 0; i < iMax; i++ )
     {
         wxPGProperty* pwc = (wxPGProperty*) Item(i);
 
@@ -2573,8 +2572,6 @@ int wxPGProperty::GetChildrenHeight( int lh, int iMax_ ) const
             else
                 h += pwc->GetChildrenHeight(lh) + lh;
         }
-
-        i++;
     }
 
     return h;
@@ -2592,10 +2589,8 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
     wxPGProperty* result = NULL;
     wxPGProperty* current = NULL;
     unsigned int iy = *nextItemY;
-    unsigned int i = 0;
-    unsigned int iMax = GetChildCount();
 
-    while ( i < iMax )
+    for ( unsigned int i = 0; i < GetChildCount(); i++ )
     {
         wxPGProperty* pwc = Item(i);
 
@@ -2620,8 +2615,6 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
 
             current = pwc;
         }
-
-        i++;
     }
 
     // Found?
