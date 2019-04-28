@@ -103,8 +103,7 @@ wxPGProperty* wxPropertyGridInterface::Append( wxPGProperty* property )
 wxPGProperty* wxPropertyGridInterface::AppendIn( wxPGPropArg id, wxPGProperty* newproperty )
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxNullProperty)
-    wxPGProperty* pwc = (wxPGProperty*) p;
-    wxPGProperty* retp = m_pState->DoInsert(pwc, pwc->GetChildCount(), newproperty);
+    wxPGProperty* retp = m_pState->DoInsert(p, p->GetChildCount(), newproperty);
     return retp;
 }
 
