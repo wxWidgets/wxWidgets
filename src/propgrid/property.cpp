@@ -2562,7 +2562,7 @@ int wxPGProperty::GetChildrenHeight( int lh, int iMax_ ) const
 
     for ( unsigned int i = 0; i < iMax; i++ )
     {
-        wxPGProperty* pwc = (wxPGProperty*) Item(i);
+        wxPGProperty* pwc = Item(i);
 
         if ( !pwc->HasFlag(wxPG_PROP_HIDDEN) )
         {
@@ -2608,7 +2608,7 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
             if ( pwc->IsExpanded() &&
                  pwc->GetChildCount() > 0 )
             {
-                result = (wxPGProperty*) pwc->GetItemAtY( y, lh, &iy );
+                result = pwc->GetItemAtY( y, lh, &iy );
                 if ( result )
                     break;
             }
@@ -2634,7 +2634,7 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
     }
     */
 
-    return (wxPGProperty*) result;
+    return result;
 }
 
 void wxPGProperty::Empty()

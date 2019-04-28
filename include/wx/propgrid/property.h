@@ -1477,7 +1477,7 @@ public:
     // Returns true if this is a sub-property.
     bool IsSubProperty() const
     {
-        wxPGProperty* parent = (wxPGProperty*)m_parent;
+        wxPGProperty* parent = m_parent;
         if ( parent && !parent->IsCategory() )
             return true;
         return false;

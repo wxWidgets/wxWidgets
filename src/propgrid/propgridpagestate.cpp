@@ -417,10 +417,10 @@ wxPGProperty* wxPropertyGridPageState::GetLastItem( int flags )
     wxPG_ITERATOR_CREATE_MASKS(flags, wxPGProperty::FlagType itemExMask, wxPGProperty::FlagType parentExMask)
 
     // First, get last child of last parent
-    wxPGProperty* pwc = (wxPGProperty*)m_properties->Last();
+    wxPGProperty* pwc = m_properties->Last();
     while ( pwc->GetChildCount() &&
             wxPG_ITERATOR_PARENTEXMASK_TEST(pwc, parentExMask) )
-        pwc = (wxPGProperty*) pwc->Last();
+        pwc = pwc->Last();
 
     // Then, if it doesn't fit our criteria, back up until we find something that does
     if ( pwc->HasFlag(itemExMask) )
@@ -428,7 +428,7 @@ wxPGProperty* wxPropertyGridPageState::GetLastItem( int flags )
         wxPropertyGridIterator it( this, flags, pwc );
         for ( ; !it.AtEnd(); it.Prev() )
             ;
-        pwc = (wxPGProperty*) it.GetProperty();
+        pwc = it.GetProperty();
     }
 
     return pwc;
@@ -436,12 +436,12 @@ wxPGProperty* wxPropertyGridPageState::GetLastItem( int flags )
 
 wxPropertyCategory* wxPropertyGridPageState::GetPropertyCategory( const wxPGProperty* p ) const
 {
-    const wxPGProperty* parent = (const wxPGProperty*)p;
-    const wxPGProperty* grandparent = (const wxPGProperty*)parent->GetParent();
+    const wxPGProperty* parent = p;
+    const wxPGProperty* grandparent = parent->GetParent();
     do
     {
         parent = grandparent;
-        grandparent = (wxPGProperty*)parent->GetParent();
+        grandparent = parent->GetParent();
         if ( parent->IsCategory() && grandparent )
             return (wxPropertyCategory*)parent;
     } while ( grandparent );
@@ -1427,7 +1427,7 @@ wxVariant wxPropertyGridPageState::DoGetPropertyValues( const wxString& listname
                                                     wxPGProperty* baseparent,
                                                     long flags ) const
 {
-    wxPGProperty* pwc = (wxPGProperty*) baseparent;
+    wxPGProperty* pwc = baseparent;
 
     // Root is the default base-parent.
     if ( !pwc )
@@ -2046,10 +2046,10 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
             if ( p == item ) { cat_index = i; break; }
             if ( p->IsCategory() )
             {
-                int subind = ((wxPGProperty*)p)->Index(item);
+                int subind = p->Index(item);
                 if ( subind != wxNOT_FOUND )
                 {
-                    cat_parent = ((wxPGProperty*)p);
+                    cat_parent = p;
                     cat_index = subind;
                     break;
                 }

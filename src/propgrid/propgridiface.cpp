@@ -123,7 +123,7 @@ wxPGProperty* wxPropertyGridInterface::Insert( wxPGPropArg id, wxPGProperty* pro
 wxPGProperty* wxPropertyGridInterface::Insert( wxPGPropArg id, int index, wxPGProperty* newproperty )
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxNullProperty)
-    wxPGProperty* retp = m_pState->DoInsert((wxPGProperty*)p,index,newproperty);
+    wxPGProperty* retp = m_pState->DoInsert(p,index,newproperty);
     RefreshGrid();
     return retp;
 }
@@ -323,7 +323,7 @@ bool wxPropertyGridInterface::ExpandAll( bool doExpand )
 
     for ( it = GetVIterator( wxPG_ITERATE_ALL ); !it.AtEnd(); it.Next() )
     {
-        wxPGProperty* p = (wxPGProperty*) it.GetProperty();
+        wxPGProperty* p = it.GetProperty();
         if ( p->GetChildCount() )
         {
             if ( doExpand )
@@ -493,17 +493,17 @@ void wxPropertyGridInterface::GetPropertiesWithFlag( wxArrayPGProperty* targetAr
           !it.AtEnd();
           it.Next() )
     {
-        const wxPGProperty* property = it.GetProperty();
+        wxPGProperty* property = it.GetProperty();
 
         if ( !inverse )
         {
             if ( property->HasFlagsExact(flags) )
-                targetArr->push_back((wxPGProperty*)property);
+                targetArr->push_back(property);
         }
         else
         {
             if ( !property->HasFlagsExact(flags) )
-                targetArr->push_back((wxPGProperty*)property);
+                targetArr->push_back(property);
         }
     }
 }

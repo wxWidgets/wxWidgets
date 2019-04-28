@@ -4488,7 +4488,7 @@ bool wxPropertyGrid::DoExpand( wxPGProperty* p, bool sendEvents )
 {
     wxCHECK_MSG( p, false, wxS("invalid property id") );
 
-    wxPGProperty* pwc = (wxPGProperty*)p;
+    wxPGProperty* pwc = p;
 
     // Store dont-center-splitter flag 'cause we need to temporarily set it
     bool prevDontCenterSplitter = m_pState->m_dontCenterSplitter;
@@ -4870,7 +4870,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                     // On double-click, expand/collapse.
                     if ( event.ButtonDClick() && !(m_windowStyle & wxPG_HIDE_MARGIN) )
                     {
-                        wxPGProperty* pwc = (wxPGProperty*)p;
+                        wxPGProperty* pwc = p;
                         if ( pwc->IsExpanded() ) DoCollapse( p, true );
                         else DoExpand( p, true );
                     }
@@ -4962,7 +4962,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                     if ( (y2 >= m_buttonSpacingY && y2 < (m_buttonSpacingY+m_iconHeight)) )
                     {
                         // On click on expander button, expand/collapse
-                        if ( ((wxPGProperty*)p)->IsExpanded() )
+                        if ( p->IsExpanded() )
                             DoCollapse( p, true );
                         else
                             DoExpand( p, true );
