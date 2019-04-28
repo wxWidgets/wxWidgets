@@ -3208,19 +3208,48 @@ void wxPGChoices::Free()
 // wxPGAttributeStorage
 // -----------------------------------------------------------------------
 
+static inline void IncDataRef(wxPGHashMapS2P& map)
+{
+    wxPGHashMapS2P::iterator it;
+    for ( it = map.begin(); it != map.end(); ++it )
+    {
+        static_cast<wxVariantData*>(it->second)->IncRef();
+    }
+}
+
+static inline void DecDataRef(wxPGHashMapS2P& map)
+{
+    wxPGHashMapS2P::iterator it;
+    for ( it = map.begin(); it != map.end(); ++it )
+    {
+        static_cast<wxVariantData*>(it->second)->DecRef();
+    }
+}
+
 wxPGAttributeStorage::wxPGAttributeStorage()
 {
 }
 
+wxPGAttributeStorage::wxPGAttributeStorage(const wxPGAttributeStorage& other)
+{
+    m_map = other.m_map;
+    IncDataRef(m_map);
+}
+
 wxPGAttributeStorage::~wxPGAttributeStorage()
 {
-    wxPGHashMapS2P::iterator it;
+    DecDataRef(m_map);
+}
 
-    for ( it = m_map.begin(); it != m_map.end(); ++it )
+wxPGAttributeStorage& wxPGAttributeStorage::operator=(const wxPGAttributeStorage& rhs)
+{
+    if ( this != &rhs )
     {
-        wxVariantData* data = (wxVariantData*) it->second;
-        data->DecRef();
+        DecDataRef(m_map);
+        m_map = rhs.m_map;
+        IncDataRef(m_map);
     }
+    return *this;
 }
 
 void wxPGAttributeStorage::Set( const wxString& name, const wxVariant& value )

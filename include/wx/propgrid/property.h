@@ -291,7 +291,10 @@ class WXDLLIMPEXP_PROPGRID wxPGAttributeStorage
 {
 public:
     wxPGAttributeStorage();
+    wxPGAttributeStorage(const wxPGAttributeStorage& other);
     ~wxPGAttributeStorage();
+
+    wxPGAttributeStorage& operator=(const wxPGAttributeStorage& rhs);
 
     void Set( const wxString& name, const wxVariant& value );
     unsigned int GetCount() const { return (unsigned int) m_map.size(); }
