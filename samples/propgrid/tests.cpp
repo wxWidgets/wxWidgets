@@ -961,6 +961,19 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             RT_FAILURE();
     }
 
+    {
+        RT_START_TEST(Attributes with PGManager)
+
+        const long val = 25;
+        pgman->SetPropertyAttribute("IntProperty", "Dummy Attribute", val);
+        if ( pgman->GetPropertyAttribute("IntProperty", "Dummy Attribute").GetLong() != val )
+            RT_FAILURE();
+
+        pgman->SetPropertyAttribute("IntProperty", "Dummy Attribute", wxVariant());
+        if ( !pgman->GetPropertyAttribute("IntProperty", "Dummy Attribute").IsNull() )
+            RT_FAILURE();
+    }
+
 #if WXWIN_COMPATIBILITY_3_0
     {
         RT_START_TEST(DoubleToString)
