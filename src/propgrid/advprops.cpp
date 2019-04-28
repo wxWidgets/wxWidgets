@@ -948,10 +948,7 @@ void wxSystemColourProperty::Init( int type, const wxColour& colour )
 {
     wxColourPropertyValue cpv;
 
-    if ( colour.IsOk() )
-        cpv.Init( type, colour );
-    else
-        cpv.Init( type, *wxWHITE );
+    cpv.Init(type, colour.IsOk() ? colour : *wxWHITE);
 
     m_flags |= wxPG_PROP_STATIC_CHOICES; // Colour selection cannot be changed.
 
