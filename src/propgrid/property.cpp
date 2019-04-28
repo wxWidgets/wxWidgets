@@ -1627,10 +1627,7 @@ void wxPGProperty::Enable( bool enable )
 
 void wxPGProperty::DoEnable( bool enable )
 {
-    if ( enable )
-        ClearFlag(wxPG_PROP_DISABLED);
-    else
-        SetFlag(wxPG_PROP_DISABLED);
+    ChangeFlag(wxPG_PROP_DISABLED, !enable);
 
     // Apply same to sub-properties as well
     for ( unsigned int i = 0; i < GetChildCount(); i++ )
@@ -2154,10 +2151,7 @@ bool wxPGProperty::Hide( bool hide, int flags )
 
 bool wxPGProperty::DoHide( bool hide, int flags )
 {
-    if ( !hide )
-        ClearFlag( wxPG_PROP_HIDDEN );
-    else
-        SetFlag( wxPG_PROP_HIDDEN );
+    ChangeFlag(wxPG_PROP_HIDDEN, hide);
 
     if ( flags & wxPG_RECURSE )
     {

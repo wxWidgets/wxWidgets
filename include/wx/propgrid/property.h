@@ -1255,8 +1255,7 @@ public:
     // Common values are disabled by the default for all properties.
     void EnableCommonValue( bool enable = true )
     {
-        if ( enable ) SetFlag( wxPG_PROP_USES_COMMON_VALUE );
-        else ClearFlag( wxPG_PROP_USES_COMMON_VALUE );
+        ChangeFlag(wxPG_PROP_USES_COMMON_VALUE, enable);
     }
 
     // Composes text from values of child properties.
@@ -1682,8 +1681,7 @@ public:
 
     void SetExpanded( bool expanded )
     {
-        if ( !expanded ) m_flags |= wxPG_PROP_COLLAPSED;
-        else m_flags &= ~wxPG_PROP_COLLAPSED;
+        ChangeFlag(wxPG_PROP_COLLAPSED, !expanded);
     }
 
     // Sets or clears given property flag. Mainly for internal use.

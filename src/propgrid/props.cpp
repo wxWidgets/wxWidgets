@@ -142,10 +142,7 @@ bool wxStringProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 {
     if ( name == wxPG_STRING_PASSWORD )
     {
-        if ( value.GetBool() )
-            m_flags |= wxPG_PROP_PASSWORD;
-        else
-            m_flags &= ~(wxPG_PROP_PASSWORD);
+        ChangeFlag(wxPG_PROP_PASSWORD, value.GetBool());
         RecreateEditor();
         return true;
     }
@@ -1166,19 +1163,13 @@ bool wxBoolProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 #if wxPG_INCLUDE_CHECKBOX
     if ( name == wxPG_BOOL_USE_CHECKBOX )
     {
-        if ( value.GetBool() )
-            m_flags |= wxPG_PROP_USE_CHECKBOX;
-        else
-            m_flags &= ~(wxPG_PROP_USE_CHECKBOX);
+        ChangeFlag(wxPG_PROP_USE_CHECKBOX, value.GetBool());
         return true;
     }
 #endif
     if ( name == wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING )
     {
-        if ( value.GetBool() )
-            m_flags |= wxPG_PROP_USE_DCC;
-        else
-            m_flags &= ~(wxPG_PROP_USE_DCC);
+        ChangeFlag(wxPG_PROP_USE_DCC, value.GetBool());
         return true;
     }
     return wxPGProperty::DoSetAttribute(name, value);
@@ -1830,10 +1821,7 @@ bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 {
     if ( name == wxPG_BOOL_USE_CHECKBOX )
     {
-        if ( value.GetBool() )
-            m_flags |= wxPG_PROP_USE_CHECKBOX;
-        else
-            m_flags &= ~(wxPG_PROP_USE_CHECKBOX);
+        ChangeFlag(wxPG_PROP_USE_CHECKBOX, value.GetBool());
 
         for ( size_t i = 0; i < GetChildCount(); i++ )
         {
@@ -1843,10 +1831,7 @@ bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )
     }
     else if ( name == wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING )
     {
-        if ( value.GetBool() )
-            m_flags |= wxPG_PROP_USE_DCC;
-        else
-            m_flags &= ~(wxPG_PROP_USE_DCC);
+        ChangeFlag(wxPG_PROP_USE_DCC, value.GetBool());
 
         for ( size_t i = 0; i < GetChildCount(); i++ )
         {
@@ -2136,10 +2121,7 @@ bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
     // stored in m_attributes.
     if ( name == wxPG_FILE_SHOW_FULL_PATH )
     {
-        if ( value.GetBool() )
-            m_flags |= wxPG_PROP_SHOW_FULL_FILENAME;
-        else
-            m_flags &= ~(wxPG_PROP_SHOW_FULL_FILENAME);
+        ChangeFlag(wxPG_PROP_SHOW_FULL_FILENAME, value.GetBool());
         return true;
     }
     else if ( name == wxPG_FILE_WILDCARD )
