@@ -974,6 +974,54 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
             RT_FAILURE();
     }
 
+    {
+        RT_START_TEST(Getting list of attributes)
+
+        wxPGProperty* prop = pgman->GetProperty("Height");
+        const wxPGAttributeStorage& attrs1 = prop->GetAttributes();
+        if ( attrs1.GetCount() < 1 )
+            RT_FAILURE();
+
+        const wxPGAttributeStorage& attrs2 = pgman->GetPropertyAttributes("Height");
+        if ( attrs2.GetCount() != attrs1.GetCount() )
+            RT_FAILURE();
+
+        // Compare both lists
+        wxVariant val1;
+        wxVariant val2;
+        wxPGAttributeStorage::const_iterator it = attrs1.StartIteration();
+        while ( attrs1.GetNext(it, val1) )
+        {
+            val2 = attrs2.FindValue(val1.GetName());
+            if ( val1 != val2 )
+                RT_FAILURE();
+        }
+    }
+
+    {
+        RT_START_TEST(Copying list of attributes)
+
+        wxPGAttributeStorage attrs1(pgman->GetPropertyAttributes("Height"));
+        if ( attrs1.GetCount() < 1 )
+            RT_FAILURE();
+
+        wxPGAttributeStorage attrs2;
+        attrs2 = attrs1;
+        if ( attrs2.GetCount() != attrs1.GetCount() )
+            RT_FAILURE();
+
+        // Compare both lists
+        wxVariant val1;
+        wxVariant val2;
+        wxPGAttributeStorage::const_iterator it = attrs1.StartIteration();
+        while ( attrs1.GetNext(it, val1) )
+        {
+            val2 = attrs2.FindValue(val1.GetName());
+            if ( val1 != val2 )
+                RT_FAILURE();
+        }
+    }
+
 #if WXWIN_COMPATIBILITY_3_0
     {
         RT_START_TEST(DoubleToString)
