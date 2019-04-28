@@ -4889,7 +4889,7 @@ bool wxPropertyGrid::HandleMouseClick( int x, unsigned int y, wxMouseEvent &even
                         {
                             ResetColumnSizes( true );
 
-                            SendEvent(wxEVT_PG_COLS_RESIZED, NULL);
+                            SendEvent(wxEVT_PG_COLS_RESIZED, (wxPGProperty*)NULL);
                             SendEvent(wxEVT_PG_COL_DRAGGING,
                                       m_propHover,
                                       NULL,
@@ -5048,7 +5048,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                                       wxPG_SPLITTER_REFRESH |
                                       wxPG_SPLITTER_FROM_EVENT);
 
-                SendEvent(wxEVT_PG_COLS_RESIZED, NULL);
+                SendEvent(wxEVT_PG_COLS_RESIZED, (wxPGProperty*)NULL);
                 SendEvent(wxEVT_PG_COL_DRAGGING,
                           m_propHover,
                           NULL,

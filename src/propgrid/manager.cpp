@@ -368,7 +368,7 @@ private:
 
                 OnSetColumnWidth(col, colWidth);
 
-                pg->SendEvent(wxEVT_PG_COLS_RESIZED, NULL);
+                pg->SendEvent(wxEVT_PG_COLS_RESIZED, (wxPGProperty*)NULL);
                 pg->SendEvent(wxEVT_PG_COL_DRAGGING,
                               NULL, NULL, 0,
                               (unsigned int)col);
