@@ -211,6 +211,28 @@ public:
     virtual wxString GetCurrentlySelectedFilename() const;
 
     /**
+        Returns the file type filter index currently selected in dialog.
+
+        Notice that this file type filter is not necessarily going to be the one finally accepted by the
+        user, so calling this function mostly makes sense from an update UI
+        event handler of a custom file dialog extra control to update its state
+        depending on the currently selected file type filter.
+
+        Currently this function is fully implemented under MSW only and
+        returns an undefined value elsewhere.
+
+        @since 3.1.3
+
+        @return The 0-based index of the currently selected file type filter or wxNOT_FOUND if
+            nothing is selected.
+
+        @see SetExtraControlCreator()
+        @see GetFilterIndex()
+        @see SetFilterIndex()
+    */
+    virtual int GetCurrentlySelectedFilterIndex () const;
+
+    /**
         Returns the default directory.
     */
     virtual wxString GetDirectory() const;

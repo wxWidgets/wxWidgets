@@ -47,6 +47,7 @@
 #include "wx/scopeguard.h"
 #include "wx/tokenzr.h"
 #include "wx/modalhook.h"
+#include <wx/scopeguard.h>
 
 // ----------------------------------------------------------------------------
 // constants
@@ -184,6 +185,10 @@ wxFileDialogHookFunction(HWND      hDlg,
 
                         case CDN_SELCHANGE:
                             dialog->MSWOnSelChange((WXHWND)hDlg);
+                            break;
+
+                        case CDN_TYPECHANGE:
+                            dialog->MSWOnTypeChange((WXHWND)hDlg, pNotifyCode->lpOFN->nFilterIndex -1);
                             break;
                     }
                 }
@@ -330,7 +335,7 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
         SetPosition(gs_rectDialog.GetPosition());
     }
 
-    // Call selection change handler so that update handler will be
+    // Call selection change handlers so that update handlers will be
     // called once with no selection.
     MSWOnSelChange(hDlg);
 
@@ -348,6 +353,14 @@ void wxFileDialog::MSWOnSelChange(WXHWND hDlg)
         m_currentlySelectedFilename = buf;
     else
         m_currentlySelectedFilename.clear();
+
+    if ( m_extraControl )
+        m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
+}
+
+void wxFileDialog::MSWOnTypeChange(WXHWND hDlg, int nFilterIndex)
+{
+        m_currentlySelectedFilterIndex = nFilterIndex;
 
     if ( m_extraControl )
         m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
@@ -571,6 +584,7 @@ int wxFileDialog::ShowModal()
 
     of.lpstrFilter  = filterBuffer.t_str();
     of.nFilterIndex = m_filterIndex + 1;
+    m_currentlySelectedFilterIndex = m_filterIndex;
 
     //=== Setting defaultFileName >>=========================================
 
@@ -624,7 +638,7 @@ int wxFileDialog::ShowModal()
 
     if ( !ShowCommFileDialog(&of, m_windowStyle) )
         return wxID_CANCEL;
-
+    
     m_fileNames.Empty();
 
     if ( ( HasFdFlag(wxFD_MULTIPLE) ) &&
