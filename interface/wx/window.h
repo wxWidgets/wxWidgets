@@ -3758,7 +3758,8 @@ public:
             or wxMOD_WIN specifying the modifier keys that have to be pressed along
             with the key.
         @param virtualKeyCode
-            The virtual key code of the hotkey.
+            The key code of the hotkey, e.g. an ASCII character such as @c 'K'
+            or one of elements of wxKeyCode enum.
 
         @return @true if the hotkey was registered successfully. @false if some
                  other application already registered a hotkey with this
