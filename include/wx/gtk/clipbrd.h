@@ -56,7 +56,10 @@ public:
     // clears wxTheClipboard and the system's clipboard if possible
     virtual void Clear() wxOVERRIDE;
 
-
+    // flushes the clipboard; that means that the data which is currently on
+    // clipboard will stay available even after the application exits (possibly
+    // eating memory), otherwise the clipboard will be emptied on exit
+    virtual bool Flush() wxOVERRIDE;
 
     // implementation from now on
     // --------------------------

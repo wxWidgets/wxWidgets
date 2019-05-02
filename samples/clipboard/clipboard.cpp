@@ -192,6 +192,7 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent&event)
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     // true is to force the frame to close
+    wxTheClipboard->Flush();
     Close(true);
 }
 
