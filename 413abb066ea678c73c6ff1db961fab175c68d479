@@ -1,0 +1,1 @@
+wxMSW: Add wxFileDialog::GetCurrentlySelectedFilterIndex() (QuentinC).
