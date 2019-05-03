@@ -466,6 +466,12 @@ function(wx_set_builtin_target_properties target_name)
         )
     endif()
 
+    target_include_directories(${target_name}
+        BEFORE
+        PUBLIC
+            ${wxSETUP_HEADER_PATH}
+        )
+
     set_target_properties(${target_name} PROPERTIES FOLDER "Third Party Libraries")
 
     wx_set_common_target_properties(${target_name} DEFAULT_WARNINGS)
