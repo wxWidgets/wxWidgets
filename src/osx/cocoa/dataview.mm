@@ -2564,8 +2564,7 @@ void wxCocoaDataViewControl::SetRowHeight(const wxDataViewItem& WXUNUSED(item), 
 
 void wxCocoaDataViewControl::OnSize()
 {
-    if ([m_OutlineView numberOfColumns] == 1)
-        [m_OutlineView sizeLastColumnToFit];
+    [m_OutlineView sizeLastColumnToFit];
 }
 
 //
