@@ -114,6 +114,9 @@ public:
     virtual wxString GetCurrentlySelectedFilename() const
         { return m_currentlySelectedFilename; }
 
+    virtual int GetCurrentlySelectedFilterIndex () const
+        { return m_currentlySelectedFilterIndex; }
+
     // this function is called with wxFileDialog as parameter and should
     // create the window containing the extra controls we want to show in it
     typedef wxWindow *(*ExtraControlCreatorFunction)(wxWindow*);
@@ -152,6 +155,12 @@ protected:
     // the platform-specific code to provide a useful implementation of
     // GetCurrentlySelectedFilename().
     wxString      m_currentlySelectedFilename;
+
+    // Currently selected, but not yet necessarily accepted by the user, file
+    // type (a.k.a. filter) index. This should be updated whenever the
+    // selection in the control changes by the platform-specific code to
+    // provide a useful implementation of GetCurrentlySelectedFilterIndex().
+    int           m_currentlySelectedFilterIndex;
 
     wxWindow*     m_extraControl;
 
