@@ -593,6 +593,12 @@ void wxClipboard::Clear()
     m_formatSupported = false;
 }
 
+bool wxClipboard::Flush()
+{
+    gtk_clipboard_store( gtk_clipboard_get( GTKGetClipboardAtom() ) );
+    return true;
+}
+
 bool wxClipboard::Open()
 {
     wxCHECK_MSG( !m_open, false, wxT("clipboard already open") );

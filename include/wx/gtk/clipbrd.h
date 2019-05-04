@@ -53,6 +53,11 @@ public:
     // fill data with data on the clipboard (if available)
     virtual bool GetData( wxDataObject& data ) wxOVERRIDE;
 
+    // flushes the clipboard; that means that the data which is currently on
+    // clipboard will stay available even after the application exits (possibly
+    // eating memory), otherwise the clipboard will be emptied on exit
+    virtual bool Flush() wxOVERRIDE;
+
     // clears wxTheClipboard and the system's clipboard if possible
     virtual void Clear() wxOVERRIDE;
 
