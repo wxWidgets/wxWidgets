@@ -2480,6 +2480,33 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 event.m_item.m_data = GetItemData(iItem);
                 break;
 
+            case NM_CLICK:
+                processed = false;
+
+                // In virtual mode, check if user clicks on a checkbox.
+                if ( IsVirtual() && HasCheckBoxes() )
+                {
+                    LV_HITTESTINFO lvhti;
+                    wxZeroMemory(lvhti);
+
+                    wxGetCursorPosMSW(&(lvhti.pt));
+                    ::ScreenToClient(GetHwnd(), &lvhti.pt);
+
+                    if ( ListView_SubItemHitTest(GetHwnd(), &lvhti) != -1 )
+                    {
+                        if ( (lvhti.flags & LVHT_ONITEMSTATEICON) && (lvhti.iSubItem == 0) )
+                        {
+                            event.m_itemIndex = lvhti.iItem;
+                            if ( OnGetItemIsChecked(event.m_itemIndex) )
+                                eventType = wxEVT_LIST_ITEM_UNCHECKED;
+                            else
+                                eventType = wxEVT_LIST_ITEM_CHECKED;
+                            processed = true;
+                        }
+                    }
+                }
+                break;
+
             case NM_RCLICK:
                 // if the user processes it in wxEVT_COMMAND_RIGHT_CLICK(),
                 // don't do anything else
@@ -2669,8 +2696,14 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     // can get messages with LVIF_STATE in lvi.mask under Vista
                     if ( lvi.mask & LVIF_STATE )
                     {
-                        // we don't have anything to return from here...
                         lvi.stateMask = 0;
+
+                        if ( HasCheckBoxes() && (lvi.iSubItem == 0) )
+                        {
+                            const bool checked = OnGetItemIsChecked(item);
+                            lvi.state = INDEXTOSTATEIMAGEMASK(checked ? 2 : 1);
+                            lvi.stateMask = LVIS_STATEIMAGEMASK;
+                        }
                     }
 
                     return true;

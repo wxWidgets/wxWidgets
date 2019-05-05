@@ -1681,6 +1681,7 @@ void wxListMainWindow::CacheLineData(size_t line)
         ld->SetImage(col, listctrl->OnGetItemColumnImage(line, col));
     }
 
+    ld->Check(listctrl->OnGetItemIsChecked(line));
     ld->SetAttr(listctrl->OnGetItemAttr(line));
 }
 
