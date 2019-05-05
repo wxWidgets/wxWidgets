@@ -433,6 +433,9 @@ protected:
     // return the text for the given column of the given item
     virtual wxString OnGetItemText(long item, long column) const;
 
+    // return whether the given item is checked
+    virtual bool OnGetItemIsChecked(long item) const;
+
     // return the icon for the given item. In report view, OnGetItemImage will
     // only be called for the first column. See OnGetItemColumnImage for
     // details.

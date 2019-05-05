@@ -261,6 +261,15 @@ wxString wxListCtrlBase::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) 
     return wxEmptyString;
 }
 
+bool wxListCtrlBase::OnGetItemIsChecked(long WXUNUSED(item)) const
+{
+    // this is a pure virtual function, in fact - which is not really pure
+    // because the controls which are not virtual don't need to implement it
+    wxFAIL_MSG("wxListCtrl::OnGetItemIsChecked not supposed to be called");
+
+    return false;
+}
+
 int wxListCtrlBase::OnGetItemImage(long WXUNUSED(item)) const
 {
     wxCHECK_MSG(!GetImageList(wxIMAGE_LIST_SMALL),
