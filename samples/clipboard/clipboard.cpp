@@ -50,6 +50,7 @@ public:
 
     void OnQuit(wxCommandEvent&event);
     void OnAbout(wxCommandEvent&event);
+    void OnFlush(wxCommandEvent &event);
     void OnWriteClipboardContents(wxCommandEvent&event);
     void OnUpdateUI(wxUpdateUIEvent&event);
 #if USE_ASYNCHRONOUS_CLIPBOARD_REQUEST
@@ -71,12 +72,14 @@ enum
     ID_Quit   = wxID_EXIT,
     ID_About  = wxID_ABOUT,
     ID_Write  = 100,
-    ID_Text   = 101
+    ID_Text   = 101,
+    ID_Flush  = 102
 };
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Quit,  MyFrame::OnQuit)
     EVT_MENU(ID_About, MyFrame::OnAbout)
+    EVT_MENU(ID_Flush, MyFrame::OnFlush)
     EVT_BUTTON(ID_Write, MyFrame::OnWriteClipboardContents)
     EVT_UPDATE_UI(ID_Write, MyFrame::OnUpdateUI)
 #if USE_ASYNCHRONOUS_CLIPBOARD_REQUEST
@@ -116,6 +119,7 @@ MyFrame::MyFrame(const wxString& title)
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(ID_About, "&About\tF1", "Show about dialog");
 
+    fileMenu->Append(ID_Flush, "Flush the clipboard" );
     fileMenu->Append(ID_Quit, "E&xit\tAlt-X", "Quit this program");
 
     // now append the freshly created menu to the menu bar...
@@ -135,6 +139,15 @@ MyFrame::MyFrame(const wxString& title)
       wxDefaultSize, wxTE_MULTILINE );
     main_sizer->Add( m_textctrl, 1, wxGROW );
     panel->SetSizer( main_sizer );
+}
+
+void MyFrame::OnFlush(wxCommandEvent &WXUNUSED(event))
+{
+    bool result = wxTheClipboard->Flush();
+    if( result )
+        m_textctrl->SetValue( "Clipboard flushed successfully!!\n\r" );
+    else
+        m_textctrl->SetValue( "Flushing clipboard failed!!\n\r" );
 }
 
 void MyFrame::OnWriteClipboardContents(wxCommandEvent& WXUNUSED(event))
@@ -191,7 +204,6 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent&event)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    wxTheClipboard->Flush();
     // true is to force the frame to close
     Close(true);
 }
