@@ -143,10 +143,28 @@ MyFrame::MyFrame(const wxString& title)
 
 void MyFrame::OnFlush(wxCommandEvent &WXUNUSED(event))
 {
-    if ( wxTheClipboard->Flush() )
-        m_textctrl->SetValue( "Clipboard flushed successfully!!\n" );
-    else
-        m_textctrl->SetValue( "Flushing clipboard failed!!\n" );
+    wxClipboardLocker clipLock;
+
+    if ( !clipLock )
+    {
+        m_textctrl->AppendText("Failed to lock clipboard.\n");
+        return;
+    }
+
+    if ( !wxTheClipboard->AddData(new wxTextDataObject("Text from wx clipboard sample")) )
+    {
+        m_textctrl->AppendText("Failed to put text on clipboard.\n");
+        return;
+    }
+
+    if ( !wxTheClipboard->Flush() )
+    {
+        m_textctrl->AppendText("Failed to flush clipboard.\n");
+        return;
+    }
+
+    m_textctrl->AppendText("Clipboard flushed successfully, you should now "
+                           "be able to paste text even after closing the sample.");
 }
 
 void MyFrame::OnWriteClipboardContents(wxCommandEvent& WXUNUSED(event))
