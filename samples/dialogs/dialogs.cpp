@@ -734,20 +734,35 @@ MyFrame::~MyFrame()
 
 #if wxUSE_COLOURDLG
 
+void MyFrame::DoApplyColour(const wxColour& colour)
+{
+    if ( colour == m_canvas->GetBackgroundColour() )
+        return;
+
+    m_canvas->SetBackgroundColour(colour);
+    m_canvas->ClearBackground();
+    m_canvas->Refresh();
+}
+
+void MyFrame::OnColourChanged(wxColourDialogEvent& event)
+{
+    DoApplyColour(event.GetColour());
+}
+
 void MyFrame::ChooseColour(wxCommandEvent& event)
 {
     m_clrData.SetColour(m_canvas->GetBackgroundColour());
     m_clrData.SetChooseAlpha(event.GetId() == DIALOGS_CHOOSE_COLOUR_ALPHA);
 
     wxColourDialog dialog(this, &m_clrData);
+    dialog.Bind(wxEVT_COLOUR_CHANGED, &MyFrame::OnColourChanged, this);
     dialog.SetTitle("Please choose the background colour");
     if ( dialog.ShowModal() == wxID_OK )
     {
         m_clrData = dialog.GetColourData();
-        m_canvas->SetBackgroundColour(m_clrData.GetColour());
-        m_canvas->ClearBackground();
-        m_canvas->Refresh();
     }
+
+    DoApplyColour(m_clrData.GetColour());
 }
 
 void MyFrame::GetColour(wxCommandEvent& WXUNUSED(event))

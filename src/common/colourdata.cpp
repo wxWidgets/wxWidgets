@@ -129,6 +129,10 @@ bool wxColourData::FromString(const wxString& str)
 
 #include "wx/colordlg.h"
 
+wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialogEvent, wxCommandEvent);
+
+wxDEFINE_EVENT(wxEVT_COLOUR_CHANGED, wxColourDialogEvent);
+
 wxColour wxGetColourFromUser(wxWindow *parent,
                              const wxColour& colInit,
                              const wxString& caption,
