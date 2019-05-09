@@ -393,9 +393,6 @@ public:
     virtual int GetColumnWidth(int col) const = 0;
     virtual bool SetColumnWidth(int col, int width) = 0;
 
-    // return the attribute for the item (may return NULL if none)
-    virtual wxItemAttr *OnGetItemAttr(long item) const;
-
     // Other miscellaneous accessors.
     // ------------------------------
 
@@ -426,6 +423,29 @@ protected:
 
     // Overridden methods of the base class.
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
+
+    // these functions are only used for virtual list view controls, i.e. the
+    // ones with wxLC_VIRTUAL style
+
+    // return the attribute for the item (may return NULL if none)
+    virtual wxItemAttr* OnGetItemAttr(long item) const;
+
+    // return the text for the given column of the given item
+    virtual wxString OnGetItemText(long item, long column) const;
+
+    // return whether the given item is checked
+    virtual bool OnGetItemIsChecked(long item) const;
+
+    // return the icon for the given item. In report view, OnGetItemImage will
+    // only be called for the first column. See OnGetItemColumnImage for
+    // details.
+    virtual int OnGetItemImage(long item) const;
+
+    // return the icon for the given item and column.
+    virtual int OnGetItemColumnImage(long item, long column) const;
+
+    // return the attribute for the given item and column (may return NULL if none)
+    virtual wxItemAttr* OnGetItemColumnAttr(long item, long column) const;
 
 private:
     // user defined color to draw row lines, may be invalid
