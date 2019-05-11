@@ -86,15 +86,36 @@ void wxGenericColourButton::OnButtonClick(wxCommandEvent& WXUNUSED(ev))
 
     // create the colour dialog and display it
     wxColourDialog dlg(this, &ms_data);
+    dlg.Bind(wxEVT_COLOUR_CHANGED, &wxGenericColourButton::OnColourChanged, this);
+
+    wxEventType eventType;
     if (dlg.ShowModal() == wxID_OK)
     {
         ms_data = dlg.GetColourData();
         SetColour(ms_data.GetColour());
 
-        // fire an event
-        wxColourPickerEvent event(this, GetId(), m_colour);
-        GetEventHandler()->ProcessEvent(event);
+        eventType = wxEVT_COLOURPICKER_CHANGED;
     }
+    else
+    {
+        eventType = wxEVT_COLOURPICKER_DIALOG_CANCELLED;
+    }
+
+    // Fire the corresponding event: note that we want it to appear as
+    // originating from our parent, which is the user-visible window, and not
+    // this button itself, which is just an implementation detail.
+    wxWindow* const parent = GetParent();
+    wxColourPickerEvent event(parent, parent->GetId(), m_colour, eventType);
+
+    ProcessWindowEvent(event);
+}
+
+void wxGenericColourButton::OnColourChanged(wxColourDialogEvent& ev)
+{
+    wxWindow* const parent = GetParent();
+    wxColourPickerEvent event(parent, parent->GetId(), ev.GetColour(),
+                              wxEVT_COLOURPICKER_CURRENT_CHANGED);
+    parent->ProcessWindowEvent(event);
 }
 
 void wxGenericColourButton::UpdateColour()

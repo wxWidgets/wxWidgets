@@ -3341,7 +3341,6 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/frame.h \
 	wx/osx/gauge.h \
 	wx/osx/listbox.h \
-	wx/osx/listctrl.h \
 	wx/osx/mdi.h \
 	wx/osx/menu.h \
 	wx/osx/menuitem.h \
@@ -3451,7 +3450,6 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/osx/frame.h \
 	wx/osx/gauge.h \
 	wx/osx/listbox.h \
-	wx/osx/listctrl.h \
 	wx/osx/mdi.h \
 	wx/osx/menu.h \
 	wx/osx/menuitem.h \

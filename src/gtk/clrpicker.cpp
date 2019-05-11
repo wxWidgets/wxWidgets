@@ -50,8 +50,11 @@ static void gtk_clrbutton_setcolor_callback(GtkColorButton *widget,
 #endif
     p->GTKSetColour(gdkColor);
 
-    // fire the colour-changed event
-    wxColourPickerEvent event(p, p->GetId(), p->GetColour());
+    // Fire the corresponding event: note that we want it to appear as
+    // originating from our parent, which is the user-visible window, and not
+    // this button itself, which is just an implementation detail.
+    wxWindow* const parent = p->GetParent();
+    wxColourPickerEvent event(parent, parent->GetId(), p->GetColour());
     p->HandleWindowEvent(event);
 }
 }
