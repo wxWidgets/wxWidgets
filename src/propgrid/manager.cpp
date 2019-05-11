@@ -1354,6 +1354,10 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
     if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
     {
         m_pHeaderCtrl->SetSize(0, propgridY, width, wxDefaultCoord);
+        // Sync horizontal scroll position with grid
+        int x;
+        m_pPropGrid->CalcScrolledPosition(0, 0, &x, NULL);
+        m_pHeaderCtrl->ScrollWindow(x, 0);
         propgridY += m_pHeaderCtrl->GetSize().y;
     }
 #endif
