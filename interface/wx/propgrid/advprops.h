@@ -95,6 +95,9 @@ public:
     @ingroup classes
     Has dropdown list of wxWidgets system colours. Value used is
     of wxColourPropertyValue type.
+
+    <b>Supported special attributes:</b>
+    ::wxPG_COLOUR_ALLOW_CUSTOM, ::wxPG_COLOUR_HAS_ALPHA
 */
 class wxSystemColourProperty : public wxEnumProperty
 {
@@ -168,6 +171,14 @@ protected:
 
 
 
+/** @class wxColourProperty
+    @ingroup classes
+    Allows to select a colour from the list or with colour dialog. Value used
+    is of wxColourPropertyValue type.
+
+    <b>Supported special attributes:</b>
+    ::wxPG_COLOUR_ALLOW_CUSTOM, ::wxPG_COLOUR_HAS_ALPHA
+*/
 class wxColourProperty : public wxSystemColourProperty
 {
 public:

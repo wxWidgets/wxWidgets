@@ -206,9 +206,9 @@ struct wxPGPaintData
 */
 #define wxPG_ATTR_MULTICHOICE_USERSTRINGMODE    wxS("UserStringMode")
 
-/** Built-in attribute of wxColourProperty and its kind, type of @c int,
-    default value is 1. Setting this attribute to 0 hides custom colour
-    from property's list of choices.
+/** Built-in attribute of wxColourProperty and its kind, type of @c bool,
+    default value is @true. Setting this attribute to @false hides custom
+    colour from property's list of choices.
 */
 #define wxPG_COLOUR_ALLOW_CUSTOM            wxS("AllowCustom")
 
