@@ -1964,6 +1964,7 @@ wxFileProperty::wxFileProperty( const wxString& label, const wxString& name,
 {
     m_flags |= wxPG_PROP_SHOW_FULL_FILENAME;
     m_indFilter = -1;
+    m_dlgStyle = 0;
     SetAttribute( wxPG_FILE_WILDCARD, wxALL_FILES);
 
     SetValue(value);
@@ -2145,6 +2146,11 @@ bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
     else if ( name == wxPG_FILE_DIALOG_TITLE )
     {
         m_dlgTitle = value.GetString();
+        return true;
+    }
+    else if ( name == wxPG_FILE_DIALOG_STYLE )
+    {
+        m_dlgStyle = value.GetLong();
         return true;
     }
     return wxPGProperty::DoSetAttribute(name, value);

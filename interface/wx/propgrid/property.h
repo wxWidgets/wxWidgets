@@ -151,8 +151,9 @@ struct wxPGPaintData
 */
 #define wxPG_FILE_DIALOG_TITLE              wxS("DialogTitle")
 
-/** Specific to wxFileProperty and derivatives, @c long, default is 0.
-    Sets a specific wxFileDialog style for the file dialog, e.g. ::wxFD_SAVE.
+/** Built-in attribute specific to wxFileProperty and derivatives, @c long,
+    default is 0. Sets a specific wxFileDialog style for the file dialog,
+    e.g. ::wxFD_SAVE.
 
     @since 2.9.4
 */
@@ -617,6 +618,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     given path string.
     - ::wxPG_FILE_INITIAL_PATH: Sets the initial path of where to look for files.
     - ::wxPG_FILE_DIALOG_TITLE: Sets a specific title for the dir dialog.
+    - ::wxPG_FILE_DIALOG_STYLE: Sets a specific wxFileDialog style for the file dialog.
     @see @ref propgrid_property_attributes
 
     @subsection wxEnumProperty

@@ -516,6 +516,8 @@ public:
     given path string.
     - "InitialPath": Sets the initial path of where to look for files.
     - "DialogTitle": Sets a specific title for the dir dialog.
+    - ::wxPG_FILE_DIALOG_STYLE: Sets a specific wxFileDialog style for the file
+    dialog (since 2.9.4).
 */
 class wxFileProperty : public wxPGProperty
 {
@@ -544,10 +546,11 @@ public:
 
 protected:
     wxString    m_wildcard;
-    wxString    m_basePath; // If set, then show path relative to it
-    wxString    m_initialPath; // If set, start the file dialog here
-    wxString    m_dlgTitle; // If set, used as title for file dialog
-    int         m_indFilter; // index to the selected filter
+    wxString    m_basePath;
+    wxString    m_initialPath;
+    wxString    m_dlgTitle;
+    int         m_indFilter;
+    long        m_dlgStyle;
 };
 
 
