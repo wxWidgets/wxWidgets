@@ -2761,10 +2761,9 @@ void wxPropertyGrid::SwitchState( wxPropertyGridPageState* pNewState )
     int pgWidth = GetClientSize().x;
     if ( HasVirtualWidth() )
     {
-        int minWidth = pgWidth;
-        if ( pNewState->GetVirtualWidth() < minWidth )
+        if ( pNewState->GetVirtualWidth() < pgWidth )
         {
-            pNewState->m_width = minWidth;
+            pNewState->m_width = pgWidth;
             pNewState->CheckColumnWidths();
         }
     }
