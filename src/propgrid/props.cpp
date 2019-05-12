@@ -1938,7 +1938,7 @@ wxFileProperty::wxFileProperty( const wxString& label, const wxString& name,
     m_flags |= wxPG_PROP_SHOW_FULL_FILENAME;
     m_indFilter = -1;
     m_dlgStyle = 0;
-    SetAttribute( wxPG_FILE_WILDCARD, wxALL_FILES);
+    m_wildcard = wxALL_FILES;
 
     SetValue(value);
 }
@@ -2091,8 +2091,6 @@ bool wxFileProperty::StringToValue( wxVariant& variant, const wxString& text, in
 
 bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 {
-    // Return false on some occasions to make sure those attributes will get
-    // stored in m_attributes.
     if ( name == wxPG_FILE_SHOW_FULL_PATH )
     {
         ChangeFlag(wxPG_PROP_SHOW_FULL_FILENAME, value.GetBool());
@@ -2101,7 +2099,7 @@ bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
     else if ( name == wxPG_FILE_WILDCARD )
     {
         m_wildcard = value.GetString();
-        return false;
+        return true;
     }
     else if ( name == wxPG_FILE_SHOW_RELATIVE_PATH )
     {
@@ -2109,7 +2107,7 @@ bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 
         // Make sure wxPG_FILE_SHOW_FULL_PATH is also set
         m_flags |= wxPG_PROP_SHOW_FULL_FILENAME;
-        return false;
+        return true;
     }
     else if ( name == wxPG_FILE_INITIAL_PATH )
     {

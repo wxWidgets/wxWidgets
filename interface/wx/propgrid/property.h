@@ -125,29 +125,31 @@ struct wxPGPaintData
 */
 #define wxPG_UINT_PREFIX                    wxS("Prefix")
 
-/** wxFileProperty/wxImageFileProperty specific, @c wxChar*, default is detected/varies.
-    Sets the wildcard used in the triggered wxFileDialog. Format is the
-    same.
+/** wxFileProperty and wxImageFileProperty specific built-in attribute,
+    @c wxChar*, default is detected/varies. Sets the wildcard used in
+    the triggered wxFileDialog. Format is the same.
 */
 #define wxPG_FILE_WILDCARD                  wxS("Wildcard")
 
-/** wxFileProperty and wxImageFileProperty specific, @c int, default 1.
-    When 0, only the file name is shown (i.e. drive and directory are hidden).
+/** wxFileProperty and wxImageFileProperty specific built-in attribute, @c bool,
+    default @true. When @false, only the file name is shown (i.e. drive and
+    directory are hidden).
 */
 #define wxPG_FILE_SHOW_FULL_PATH            wxS("ShowFullPath")
 
-/** Specific to wxFileProperty and derived properties, wxString, default empty.
-    If set, then the filename is shown relative to the given path string.
+/** Built-in attribute specific to wxFileProperty and derived properties,
+    wxString, default empty. If set, then the filename is shown relative
+    to the given path string.
 */
 #define wxPG_FILE_SHOW_RELATIVE_PATH        wxS("ShowRelativePath")
 
-/** Specific to wxFileProperty and derived properties, wxString, default is empty.
-    Sets the initial path of where to look for files.
+/** Built-in attribute specific to wxFileProperty and derived properties,
+    wxString, default is empty. Sets the initial path of where to look for files.
 */
 #define wxPG_FILE_INITIAL_PATH              wxS("InitialPath")
 
-/** Specific to wxFileProperty and derivatives, wxString, default is empty.
-    Sets a specific title for the dir dialog.
+/** Built-in attribute specific to wxFileProperty and derivatives, wxString,
+    default is empty. Sets a specific title for the dir dialog.
 */
 #define wxPG_FILE_DIALOG_TITLE              wxS("DialogTitle")
 

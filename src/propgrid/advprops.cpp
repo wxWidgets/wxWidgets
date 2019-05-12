@@ -1946,7 +1946,7 @@ wxImageFileProperty::wxImageFileProperty( const wxString& label, const wxString&
     const wxString& value )
     : wxFileProperty(label,name,value)
 {
-    SetAttribute( wxPG_FILE_WILDCARD, wxPGGetDefaultImageWildcard() );
+    m_wildcard = wxPGGetDefaultImageWildcard();
 
     m_pImage = NULL;
     m_pBitmap = NULL;

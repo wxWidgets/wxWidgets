@@ -513,8 +513,8 @@ public:
     <b>Supported special attributes:</b>
     - ::wxPG_FILE_WILDCARD: Sets wildcard (see wxFileDialog for format details),
     "All files..." is default.
-    - ::wxPG_FILE_SHOW_FULL_PATH: Default 1. When 0, only the file name is shown
-    (i.e. drive and directory are hidden).
+    - ::wxPG_FILE_SHOW_FULL_PATH: Default @true. When @false, only the file name is
+    shown (i.e. drive and directory are hidden).
     - ::wxPG_FILE_SHOW_RELATIVE_PATH: If set, then the filename is shown relative
     to the given path string.
     - ::wxPG_FILE_INITIAL_PATH: Sets the initial path of where to look for files.
