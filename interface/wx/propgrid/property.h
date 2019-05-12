@@ -1423,7 +1423,7 @@ public:
         Returns map-like storage of property's attributes.
 
         @remarks
-        If extra style wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES is set,
+        If extra style ::wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES is set,
         then builtin-attributes are not included in the storage.
     */
     const wxPGAttributeStorage& GetAttributes() const;
