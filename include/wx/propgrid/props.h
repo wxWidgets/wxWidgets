@@ -584,6 +584,8 @@ public:
     wxFileName GetFileName() const;
 
 protected:
+    bool DisplayEditorDialog(wxPropertyGrid* propGrid, wxString& value);
+
     wxString    m_wildcard;
     wxString    m_basePath; // If set, then show path relative to it
     wxString    m_initialPath; // If set, start the file dialog here

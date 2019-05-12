@@ -548,6 +548,8 @@ public:
     wxFileName GetFileName() const;
 
 protected:
+    bool DisplayEditorDialog(wxPropertyGrid* propGrid, wxString& value);
+
     wxString    m_wildcard;
     wxString    m_basePath;
     wxString    m_initialPath;
