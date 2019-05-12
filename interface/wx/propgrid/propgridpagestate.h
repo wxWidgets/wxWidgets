@@ -298,9 +298,7 @@ public:
     wxPropertyGridManager.
 
     @remarks
-    - In separate wxPropertyGrid component this class was known as
-    wxPropertyGridState.
-    - Currently this class is not implemented in wxPython.
+    Currently this class is not implemented in wxPython.
 
     @library{wxpropgrid}
     @category{propgrid}
@@ -309,7 +307,6 @@ class wxPropertyGridPageState
 {
     friend class wxPGProperty;
     friend class wxPropertyGrid;
-    friend class wxPGCanvas;
     friend class wxPropertyGridInterface;
     friend class wxPropertyGridPage;
     friend class wxPropertyGridManager;

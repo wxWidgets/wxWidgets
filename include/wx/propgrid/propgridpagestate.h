@@ -354,14 +354,11 @@ protected:
 // should not use this class directly, but instead member functions in
 // wxPropertyGridInterface, wxPropertyGrid, wxPropertyGridPage, and
 // wxPropertyGridManager.
-// - In separate wxPropertyGrid component this class was known as
-// wxPropertyGridState.
 // - Currently this class is not implemented in wxPython.
 class WXDLLIMPEXP_PROPGRID wxPropertyGridPageState
 {
     friend class wxPGProperty;
     friend class wxPropertyGrid;
-    friend class wxPGCanvas;
     friend class wxPropertyGridInterface;
     friend class wxPropertyGridPage;
     friend class wxPropertyGridManager;
