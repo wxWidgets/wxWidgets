@@ -974,7 +974,6 @@ class WXDLLIMPEXP_PROPGRID wxPGProperty : public wxObject
     friend class wxPropertyGridInterface;
     friend class wxPropertyGridPageState;
     friend class wxPropertyGridPopulator;
-    friend class wxStringProperty;  // Proper "<composed>" support requires this
 
     wxDECLARE_ABSTRACT_CLASS(wxPGProperty);
 public:

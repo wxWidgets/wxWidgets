@@ -305,7 +305,6 @@ public:
 */
 class wxPropertyGridPageState
 {
-    friend class wxPGProperty;
     friend class wxPropertyGrid;
     friend class wxPropertyGridInterface;
     friend class wxPropertyGridPage;

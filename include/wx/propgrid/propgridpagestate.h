@@ -357,7 +357,6 @@ protected:
 // - Currently this class is not implemented in wxPython.
 class WXDLLIMPEXP_PROPGRID wxPropertyGridPageState
 {
-    friend class wxPGProperty;
     friend class wxPropertyGrid;
     friend class wxPropertyGridInterface;
     friend class wxPropertyGridPage;
