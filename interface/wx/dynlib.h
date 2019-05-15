@@ -247,6 +247,15 @@ public:
         @param flags The optional flag @c wxDL_QUIET suppresses logging errors.
     */
     static void Unload(wxDllType handle, int flags = 0);
+    /**
+        Returns an error string describing the latest error that occurred.
+
+        Note that this is the latest error from any wxDynamicLibrary object,
+        and gets overwritten by subsequent errors.
+
+        @since 3.1.3
+    */
+    static wxString GetErrorStr();
 };
 
 

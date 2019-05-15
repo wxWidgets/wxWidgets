@@ -86,12 +86,17 @@ bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
 
     m_handle = RawLoad(libname, flags);
 
-    if ( m_handle == 0 && !(flags & wxDL_QUIET) )
+    if ( m_handle == 0 )
     {
 #ifdef wxHAVE_DYNLIB_ERROR
-        Error();
+        Error(&sm_lastError);
+        if ( !(flags & wxDL_QUIET) )
+            wxLogError(wxT("%s"), sm_lastError);
 #else
-        wxLogSysError(_("Failed to load shared library '%s'"), libname.c_str());
+        sm_lastError = wxSysErrorMsgStr();
+        if ( !(flags & wxDL_QUIET) )
+            wxLogSysError(_("Failed to load shared library '%s'"),
+                          libname.c_str());
 #endif
     }
 
@@ -117,9 +122,11 @@ void *wxDynamicLibrary::GetSymbol(const wxString& name, bool *success) const
     if ( !symbol )
     {
 #ifdef wxHAVE_DYNLIB_ERROR
+        Error(&sm_lastError);
         if ( !(m_flags & wxDL_QUIET) )
-            Error();
+            wxLogError(wxT("%s"), sm_lastError);
 #else
+        sm_lastError = wxSysErrorMsgStr();
         if ( !(m_flags & wxDL_QUIET) )
             wxLogSysError(_("Couldn't find symbol '%s' in a dynamic library"),
                           name.c_str());
@@ -259,5 +266,7 @@ wxString wxDynamicLibrary::GetPluginsDirectory()
 #endif
 }
 
+/*static*/
+wxString wxDynamicLibrary::sm_lastError;
 
 #endif // wxUSE_DYNLIB_CLASS

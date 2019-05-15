@@ -128,8 +128,9 @@ void wxDynamicLibrary::Unload(wxDllType handle, int flags)
 #if defined(USE_POSIX_DL_FUNCS) && defined(wxHAVE_DYNLIB_ERROR)
     if ( rc != 0 )
     {
+        Error(&sm_lastError);
         if ( !(flags & wxDL_QUIET) )
-            Error();
+            wxLogError(wxT("%s"), sm_lastError);
     }
 #endif
 }
@@ -158,14 +159,17 @@ void *wxDynamicLibrary::RawGetSymbol(wxDllType handle, const wxString& name)
 #ifdef wxHAVE_DYNLIB_ERROR
 
 /* static */
-void wxDynamicLibrary::Error()
+void wxDynamicLibrary::Error(wxString *ret)
 {
     wxString err(dlerror());
 
     if ( err.empty() )
         err = _("Unknown dynamic library error");
 
-    wxLogError(wxT("%s"), err);
+    if ( ret == NULL )
+        wxLogError(wxT("%s"), err);
+    else
+        *ret = err;
 }
 
 #endif // wxHAVE_DYNLIB_ERROR

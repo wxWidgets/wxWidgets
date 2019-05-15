@@ -271,6 +271,9 @@ public:
         }
     }
 
+    // return error message from failure
+    static wxString GetErrorStr() { return sm_lastError; }
+
     // Return the raw handle from dlopen and friends.
     wxDllType GetLibHandle() const { return m_handle; }
 
@@ -373,8 +376,9 @@ protected:
     void *DoGetSymbol(const wxString& name, bool *success = 0) const;
 
 #ifdef wxHAVE_DYNLIB_ERROR
-    // log the error after a dlxxx() function failure
-    static void Error();
+    // if errStr is NULL, log the error after a dlxxx() function failure
+    // if errStr is non-NULL, assign the error message to *errStr
+    static void Error(wxString *errStr = NULL);
 #endif // wxHAVE_DYNLIB_ERROR
 
 
@@ -383,6 +387,9 @@ protected:
 
     // flags given to the constructor
     int m_flags;
+
+    // system error after failing to load a library
+    static wxString sm_lastError;
 
     // no copy ctor/assignment operators (or we'd try to unload the library
     // twice)
