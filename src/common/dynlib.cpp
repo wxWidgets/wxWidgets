@@ -85,6 +85,7 @@ bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
     {
         ReportError(_("Failed to load shared library '%s'"), libname);
     }
+    // TODO: GetErrorStr() is not updated if wxDL_QUIET was given
 
     return IsLoaded();
 }
@@ -93,7 +94,7 @@ void wxDynamicLibrary::Unload()
 {
     if ( IsLoaded() )
     {
-        Unload(m_handle);
+        Unload(m_handle, &m_lastError);
         m_handle = NULL;
     }
 }
@@ -252,5 +253,14 @@ wxString wxDynamicLibrary::GetPluginsDirectory()
 #endif
 }
 
+// ----------------------------------------------------------------------------
+// error handling
+// ----------------------------------------------------------------------------
+
+void wxDynamicLibrary::ReportError(const wxString& message,
+                                   const wxString& name) const
+{
+    ReportError(&m_lastError, message, name);
+}
 
 #endif // wxUSE_DYNLIB_CLASS

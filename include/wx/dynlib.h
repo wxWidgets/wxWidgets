@@ -251,10 +251,13 @@ public:
     wxDllType Detach() { wxDllType h = m_handle; m_handle = NULL; return h; }
 
     // unload the given library handle (presumably returned by Detach() before)
-    static void Unload(wxDllType handle);
+    static void Unload(wxDllType handle, wxString* errorDest = NULL);
 
     // unload the library, also done automatically in dtor
     void Unload();
+
+    // return error message related to the latest failure
+    wxString GetErrorStr() const { return m_lastError; }
 
     // Return the raw handle from dlopen and friends.
     wxDllType GetLibHandle() const { return m_handle; }
@@ -358,11 +361,21 @@ protected:
     void* DoGetSymbol(const wxString& name, bool* success = NULL) const;
 
     // log the error after an OS dynamic library function failure
-    static void ReportError(const wxString& msg,
+    // also updates GetErrorStr()
+    void ReportError(const wxString& msg,
+                     const wxString& name = wxString()) const;
+
+    // log the error after an OS dynamic library function failure
+    // the error message is written to errorDest
+    static void ReportError(wxString* errorDest,
+                            const wxString& msg,
                             const wxString& name = wxString());
 
     // the handle to DLL or NULL
     wxDllType m_handle;
+
+    // system error after failing to (un)load a library or a symbol
+    mutable wxString m_lastError;
 
     // no copy ctor/assignment operators (or we'd try to unload the library
     // twice)

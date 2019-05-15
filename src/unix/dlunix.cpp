@@ -82,12 +82,12 @@ wxDllType wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 }
 
 /* static */
-void wxDynamicLibrary::Unload(wxDllType handle)
+void wxDynamicLibrary::Unload(wxDllType handle, wxString* errorDest)
 {
     int rc = dlclose(handle);
 
     if ( rc != 0 )
-        ReportError(_("Failed to unload shared library"));
+        ReportError(errorDest, _("Failed to unload shared library"));
 }
 
 /* static */
@@ -103,7 +103,8 @@ void *wxDynamicLibrary::RawGetSymbol(wxDllType handle, const wxString& name)
 // ----------------------------------------------------------------------------
 
 /* static */
-void wxDynamicLibrary::ReportError(const wxString& message,
+void wxDynamicLibrary::ReportError(wxString* errorDest,
+                                   const wxString& message,
                                    const wxString& name)
 {
     wxString msg(message);
@@ -119,6 +120,9 @@ void wxDynamicLibrary::ReportError(const wxString& message,
         err = _("Unknown dynamic library error");
 
     wxLogError(msg + wxT(": %s"), name, err);
+
+    if ( errorDest )
+        *errorDest = err;
 }
 
 

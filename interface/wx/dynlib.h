@@ -257,8 +257,21 @@ public:
         in memory during a longer period of time than the scope of the
         wxDynamicLibrary object. In this case you may call Detach() and store
         the handle somewhere and call this static method later to unload it.
+
+        @param errorDest In case of an error, the error message is optionally
+               written to @c errorDest.
     */
-    static void Unload(wxDllType handle);
+    static void Unload(wxDllType handle, wxString *errorDest = NULL);
+    /**
+        Returns an error string describing the latest error that occurred.
+
+        The purpose of this function is similar to that of wxSysErrorMsg(), but
+        on most platforms errors related to dynamic library loading are not
+        available as system errors.
+
+        @since 3.1.6
+    */
+    wxString GetErrorStr() const;
 };
 
 

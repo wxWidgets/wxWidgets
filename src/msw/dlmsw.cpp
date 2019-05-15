@@ -147,7 +147,9 @@ wxDllType wxDynamicLibrary::GetProgramHandle()
 // ----------------------------------------------------------------------------
 
 /* static */
-void wxDynamicLibrary::ReportError(const wxString& message, const wxString& name)
+void wxDynamicLibrary::ReportError(wxString* errorDest,
+                                   const wxString& message,
+                                   const wxString& name)
 {
     wxString msg(message);
     if ( name.IsEmpty() && msg.Find("%s") == wxNOT_FOUND )
@@ -165,6 +167,9 @@ void wxDynamicLibrary::ReportError(const wxString& message, const wxString& name
     // Mimic the output of wxLogSysError(), but use our pre-processed
     // errMsg.
     wxLogError(msg + " " + _("(error %d: %s)"), name, code, errMsg);
+
+    if ( errorDest )
+        *errorDest = errMsg;
 }
 
 // ----------------------------------------------------------------------------
@@ -186,11 +191,12 @@ wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 }
 
 /* static */
-void wxDynamicLibrary::Unload(wxDllType handle)
+void wxDynamicLibrary::Unload(wxDllType handle, wxString *errorDest)
 {
     if ( !::FreeLibrary(handle) )
     {
         wxLogLastError(wxT("FreeLibrary"));
+        ReportError(errorDest, _("Failed to unload shared library"));
     }
 }
 
