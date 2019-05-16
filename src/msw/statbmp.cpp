@@ -287,7 +287,9 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
         sizeNew = image->GetSize();
 
     Free();
-    InvalidateBestSize();
+
+    if ( sizeNew != sizeOld )
+        InvalidateBestSize();
 
     m_isIcon = image->IsKindOf( wxCLASSINFO(wxIcon) );
     // the image has already been copied
