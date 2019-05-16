@@ -104,8 +104,6 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     // we may have either bitmap or icon: if a bitmap with mask is passed, we
     // will transform it to an icon ourselves because otherwise the mask will
     // be ignored by Windows
-    m_isIcon = bitmap.IsKindOf(wxCLASSINFO(wxIcon));
-
     wxGDIImage *image = ConvertImage( bitmap );
     m_isIcon = image->IsKindOf( wxCLASSINFO(wxIcon) );
 
