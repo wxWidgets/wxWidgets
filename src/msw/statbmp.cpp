@@ -289,6 +289,8 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
     if ( image )
         sizeNew = image->GetSize();
 
+    const bool wasIcon = m_isIcon;
+
     Free();
 
     if ( sizeNew != sizeOld )
@@ -326,9 +328,13 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
         }
     }
 #endif // wxUSE_WXDIB
-    wxMSWWinStyleUpdater(GetHwnd())
-        .TurnOff(SS_BITMAP | SS_ICON)
-        .TurnOn(m_isIcon ? SS_ICON : SS_BITMAP);
+
+    if ( m_isIcon != wasIcon )
+    {
+        wxMSWWinStyleUpdater(GetHwnd())
+            .TurnOff(SS_BITMAP | SS_ICON)
+            .TurnOn(m_isIcon ? SS_ICON : SS_BITMAP);
+    }
 
     MSWReplaceImageHandle((WXLPARAM)handle);
 
