@@ -105,6 +105,11 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     // will transform it to an icon ourselves because otherwise the mask will
     // be ignored by Windows
     wxGDIImage *image = ConvertImage( bitmap );
+
+    // Note that m_isIcon must be set before calling MSWCreateControl() so that
+    // it creates the control with the correct style, as returned by
+    // MSWGetStyle(), which uses m_isIcon to determine whether to use SS_ICON
+    // or SS_BITMAP.
     m_isIcon = image->IsKindOf( wxCLASSINFO(wxIcon) );
 
     // create the native control
