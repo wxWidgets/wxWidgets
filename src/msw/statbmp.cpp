@@ -278,6 +278,14 @@ void wxStaticBitmap::MSWReplaceImageHandle(WXLPARAM handle)
 
 void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
 {
+    wxSize sizeOld;
+    if ( m_image )
+        sizeOld = m_image->GetSize();
+
+    wxSize sizeNew;
+    if ( image )
+        sizeNew = image->GetSize();
+
     Free();
     InvalidateBestSize();
 
@@ -324,17 +332,12 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
     m_currentHandle = (WXHANDLE)handle;
     m_ownsCurrentHandle = handle != handleOrig;
 
-    if ( ImageIsOk() )
+    if ( sizeNew != sizeOld )
     {
-        int width = image->GetWidth(),
-            height = image->GetHeight();
-        if ( width && height )
-        {
-            w = width;
-            h = height;
+        w += sizeNew.x - sizeOld.x;
+        h += sizeNew.y - sizeOld.y;
 
-            MSWMoveWindowToAnyPosition(GetHwnd(), x, y, width, height, false);
-        }
+        MSWMoveWindowToAnyPosition(GetHwnd(), x, y, w, h, false);
     }
 
     RECT rect;
