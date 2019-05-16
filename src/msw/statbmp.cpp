@@ -329,8 +329,6 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
 
     MSWReplaceImageHandle((WXLPARAM)handle);
 
-    DeleteCurrentHandleIfNeeded();
-
     m_currentHandle = (WXHANDLE)handle;
     m_ownsCurrentHandle = handle != handleOrig;
 
