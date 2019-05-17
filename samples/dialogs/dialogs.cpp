@@ -3380,7 +3380,6 @@ SettingsDialog::SettingsDialog(wxWindow* win, SettingsData& settingsData, int di
     int tabImage2 = -1;
 
     bool useToolBook = (dialogType == DIALOGS_PROPERTY_SHEET_TOOLBOOK || dialogType == DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK);
-    int resizeBorder = wxRESIZE_BORDER;
 
     if (useToolBook)
     {
@@ -3415,13 +3414,11 @@ SettingsDialog::SettingsDialog(wxWindow* win, SettingsData& settingsData, int di
         m_imageList = NULL;
 
     Create(win, wxID_ANY, "Preferences", wxDefaultPosition, wxDefaultSize,
-        wxDEFAULT_DIALOG_STYLE| (int)wxPlatform::IfNot(wxOS_WINDOWS_CE, resizeBorder)
-    );
+        wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER);
 
     // If using a toolbook, also follow Mac style and don't create buttons
     if (!useToolBook)
-        CreateButtons(wxOK | wxCANCEL |
-                        (int)wxPlatform::IfNot(wxOS_WINDOWS_CE, wxHELP)
+        CreateButtons(wxOK | wxCANCEL | wxHELP);
     );
 
     wxBookCtrlBase* notebook = GetBookCtrl();
