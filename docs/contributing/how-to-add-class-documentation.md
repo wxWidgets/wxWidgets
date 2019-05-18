@@ -63,7 +63,7 @@ DO:
 
 - strive to use dedicated Doxygen commands for e.g. notes, lists,
   sections, etc. The "Special commands" page:
-    http://www.stack.nl/~dimitri/doxygen/commands.html
+    http://www.doxygen.org/manual/commands.html
   is your friend!
   It's also very important to make a consistent use of the ALIASES
   defined by wxWidgets' Doxyfile. Open that file for more info.
