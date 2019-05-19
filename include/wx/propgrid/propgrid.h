@@ -654,8 +654,7 @@ enum wxPG_INTERNAL_FLAGS
 // Use Freeze() and Thaw() respectively to disable and enable drawing. This
 // will also delay sorting etc. miscellaneous calculations to the last
 // possible moment.
-class WXDLLIMPEXP_PROPGRID wxPropertyGrid : public wxControl,
-                                            public wxScrollHelper,
+class WXDLLIMPEXP_PROPGRID wxPropertyGrid : public wxScrolled<wxControl>,
                                             public wxPropertyGridInterface
 {
     friend class wxPropertyGridEvent;

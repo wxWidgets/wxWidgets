@@ -534,8 +534,7 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
     @category{propgrid}
     @appearance{propertygrid}
 */
-class wxPropertyGrid : public wxControl,
-                       public wxScrollHelper,
+class wxPropertyGrid : public wxScrolled<wxControl>,
                        public wxPropertyGridInterface
 {
 public:

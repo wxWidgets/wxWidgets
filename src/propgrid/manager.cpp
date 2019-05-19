@@ -250,19 +250,18 @@ public:
         }
     }
 
+    virtual void OnColumnCountChanging(unsigned int count) wxOVERRIDE
+    {
+        EnsureColumnCount(count);
+    }
+
     void OnPageChanged(const wxPropertyGridPage* page)
     {
         m_page = page;
-        OnPageUpdated();
-    }
-
-    void OnPageUpdated()
-    {
         // Get column info from the page
         unsigned int colCount = m_page->GetColumnCount();
-        EnsureColumnCount(colCount);
-        DetermineAllColumnWidths();
         SetColumnCount(colCount);
+        DetermineAllColumnWidths();
     }
 
     void OnColumWidthsChanged()
@@ -367,8 +366,8 @@ private:
                 int colWidth = hcEvent->GetWidth();
 
                 OnSetColumnWidth(col, colWidth);
+                OnColumWidthsChanged();
 
-                pg->SendEvent(wxEVT_PG_COLS_RESIZED, (wxPGProperty*)NULL);
                 pg->SendEvent(wxEVT_PG_COL_DRAGGING,
                               NULL, NULL, 0,
                               (unsigned int)col);
@@ -928,13 +927,23 @@ void wxPropertyGridManager::SetColumnCount( int colCount, int page )
     wxASSERT( page >= -1 );
     wxASSERT( page < (int)GetPageCount() );
 
-    GetPageState(page)->SetColumnCount( colCount );
-    GetGrid()->Refresh();
-
+    wxPropertyGridPageState* state = GetPageState(page);
 #if wxUSE_HEADERCTRL
-    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
-        m_pHeaderCtrl->OnPageUpdated();
-#endif
+    // Update header only if column count is set for the currently visible page
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() && state == m_pState )
+    {
+        m_pHeaderCtrl->SetColumnCount(colCount);
+    }
+#endif // wxUSE_HEADERCTRL
+    state->SetColumnCount( colCount );
+    GetGrid()->Refresh();
+#if wxUSE_HEADERCTRL
+    // Update header only if column count is set for the currently visible page
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() && state == m_pState )
+    {
+        m_pHeaderCtrl->OnColumWidthsChanged();
+    }
+#endif // wxUSE_HEADERCTRL
 }
 // -----------------------------------------------------------------------
 

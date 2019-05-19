@@ -287,7 +287,7 @@ wxEND_EVENT_TABLE()
 // -----------------------------------------------------------------------
 
 wxPropertyGrid::wxPropertyGrid()
-    : wxControl(), wxScrollHelper(this)
+    : wxScrolled<wxControl>()
 {
     Init1();
 }
@@ -300,7 +300,7 @@ wxPropertyGrid::wxPropertyGrid( wxWindow *parent,
                                 const wxSize& size,
                                 long style,
                                 const wxString& name )
-    : wxControl(), wxScrollHelper(this)
+    : wxScrolled<wxControl>()
 {
     Init1();
     Create(parent,id,pos,size,style,name);
@@ -494,13 +494,14 @@ void wxPropertyGrid::Init2()
     m_tlpClosedTime = 0;
 
     // set virtual size to this window size
-    wxSize wndsize = GetSize();
-    SetVirtualSize(wndsize.GetWidth(), wndsize.GetWidth());
+    wxSize clientSize = GetClientSize();
+    SetVirtualSize(clientSize);
 
     m_timeCreated = ::wxGetLocalTimeMillis();
 
     m_iFlags |= wxPG_FL_INITIALIZED;
 
+    wxSize wndsize = GetSize();
     m_ncWidth = wndsize.GetWidth();
 
     // Need to call OnResize handler or size given in constructor/Create
@@ -1295,7 +1296,7 @@ void wxPropertyGrid::SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
 {
     int oldX;
     CalcUnscrolledPosition(0, 0, &oldX, NULL);
-    wxScrollHelper::SetScrollbars(pixelsPerUnitX, pixelsPerUnitY,
+    wxScrolled<wxControl>::SetScrollbars(pixelsPerUnitX, pixelsPerUnitY,
                                   noUnitsX, noUnitsY, xPos, yPos, noRefresh);
     int newX;
     CalcUnscrolledPosition(0, 0, &newX, NULL);
@@ -1358,6 +1359,8 @@ void wxPropertyGrid::CalculateFontAndBitmapStuff( int vspacing )
 
     if ( m_pState )
         m_pState->CalculateFontAndBitmapStuff(vspacing);
+
+    SetScrollRate(wxPG_PIXELS_PER_UNIT, wxPG_PIXELS_PER_UNIT);
 
     if ( m_iFlags & wxPG_FL_INITIALIZED )
         RecalculateVirtualSize();
@@ -2013,18 +2016,13 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
         itemsRect = &tempItemsRect;
     }
 
-    int vx, vy;
-    GetViewStart(&vx, &vy);
-    vx *= wxPG_PIXELS_PER_UNIT;
-    vy *= wxPG_PIXELS_PER_UNIT;
-
     // items added check
     if ( m_pState->m_itemsAdded ) PrepareAfterItemsAdded();
 
     if ( m_pState->DoGetRoot()->GetChildCount() > 0 )
     {
-        int paintFinishY = DoDrawItems(dc, itemsRect) + 1 - vy;
-        int drawBottomY = itemsRect->y + itemsRect->height - 1 - vy;
+        int paintFinishY = DoDrawItems(dc, itemsRect) + 1;
+        int drawBottomY = itemsRect->GetBottom();
 
         // Clear area beyond last painted property
         if ( paintFinishY < drawBottomY )
@@ -2038,15 +2036,10 @@ void wxPropertyGrid::DrawItems( wxDC& dc,
     }
     else
     {
-        // itemRect is in virtual grid space
-        wxRect drawRect(itemsRect->x - vx,
-                        itemsRect->y - vy,
-                        itemsRect->width,
-                        itemsRect->height);
         // Just clear the area
         dc.SetPen(m_colEmptySpace);
         dc.SetBrush(m_colEmptySpace);
-        dc.DrawRectangle(drawRect);
+        dc.DrawRectangle(*itemsRect);
     }
 }
 
@@ -2064,25 +2057,16 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     const wxPGProperty* firstItem;
     firstItem = DoGetItemAtY(itemsRect->y);
 
-    int vx, vy;
-    GetViewStart(&vx, &vy);
-    vx *= wxPG_PIXELS_PER_UNIT;
-    vy *= wxPG_PIXELS_PER_UNIT;
-
     if ( IsFrozen() || m_height < 1 || firstItem == NULL )
-        return vy - 1;
+        return itemsRect->GetBottom();
 
-    wxCHECK_MSG( !m_pState->m_itemsAdded, vy - 1,
+    wxCHECK_MSG( !m_pState->m_itemsAdded, itemsRect->GetBottom(),
                  wxS("no items added") );
     wxASSERT( m_pState->DoGetRoot()->GetChildCount() );
 
     int lh = m_lineHeight;
-
-    int firstItemTopY;
-    int lastItemBottomY;
-
-    firstItemTopY = itemsRect->y;
-    lastItemBottomY = itemsRect->y + itemsRect->height - 1;
+    int firstItemTopY = itemsRect->y;
+    int lastItemBottomY = itemsRect->GetBottom();
 
     // Align y coordinates to item boundaries
     firstItemTopY -= firstItemTopY % lh;
@@ -2092,10 +2076,10 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     // Entire range outside scrolled, visible area?
     if ( firstItemTopY >= (int)m_pState->GetVirtualHeight() ||
          lastItemBottomY <= 0 )
-        return itemsRect->y;
+        return itemsRect->GetBottom();
 
     wxCHECK_MSG( firstItemTopY < lastItemBottomY,
-                 itemsRect->y,
+                 itemsRect->GetBottom(),
                  wxS("invalid y values") );
 
     /*
@@ -2112,12 +2096,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
     long windowStyle = m_windowStyle;
 
-    int xRelMod = vx;
-    // itemsRect conversion
-    firstItemTopY -= vy;
-    lastItemBottomY -= vy;
-
-    int x = m_marginWidth - xRelMod;
+    int x = m_marginWidth;
 
     wxFont normalFont = GetFont();
 
@@ -2146,7 +2125,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     if ( !(windowStyle & wxPG_HIDE_MARGIN) )
     {
         dc.SetPen( *wxTRANSPARENT_PEN );
-        dc.DrawRectangle(-1-xRelMod,firstItemTopY-1,x+2,lastItemBottomY-firstItemTopY+2);
+        dc.DrawRectangle(-1,firstItemTopY-1,x+2,lastItemBottomY-firstItemTopY+2);
     }
 
     const wxPGProperty* firstSelected = GetSelection();
@@ -2194,7 +2173,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         splitterPos.push_back(sx);
     }
 
-    int viewLeftEdge = itemsRect->x - vx;
+    int viewLeftEdge = itemsRect->x;
     int viewRightEdge = viewLeftEdge + itemsRect->width - 1;
     // Determine columns range to be drawn
     unsigned int firstCol = 0;
@@ -2219,9 +2198,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
         int greyDepth = m_marginWidth;
         if ( !(windowStyle & wxPG_HIDE_CATEGORIES) )
-            greyDepth = (((int)p->m_depthBgCol)-1) * m_subgroup_extramargin + m_marginWidth;
-
-        int greyDepthX = greyDepth - xRelMod;
+            greyDepth += (((int)p->m_depthBgCol)-1) * m_subgroup_extramargin;
 
         // Use basic depth if in non-categoric mode and parent is base array.
         if ( !(windowStyle & wxPG_HIDE_CATEGORIES) || p->GetParent() != m_pState->DoGetRoot() )
@@ -2232,7 +2209,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         // Paint margin area
         dc.SetBrush(marginBrush);
         dc.SetPen(marginPen);
-        dc.DrawRectangle( -xRelMod, y, greyDepth, lh );
+        dc.DrawRectangle( 0, y, greyDepth, lh );
 
         dc.SetPen( linepen );
 
@@ -2252,12 +2229,12 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         bool suppressMarginEdge = false;
 #endif
         if (!suppressMarginEdge)
-            dc.DrawLine( greyDepthX, y, greyDepthX, y2 );
+            dc.DrawLine( greyDepth, y, greyDepth, y2 );
         else
         {
             // Blank out the margin edge
             dc.SetPen(wxPen(GetBackgroundColour()));
-            dc.DrawLine( greyDepthX, y, greyDepthX, y2 );
+            dc.DrawLine( greyDepth, y, greyDepth, y2 );
             dc.SetPen( linepen );
         }
 
@@ -2273,7 +2250,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
              nextP && nextP->IsCategory() )
             dc.SetPen(m_colCapBack);
 
-        dc.DrawLine(greyDepthX, y2 - 1, cellX, y2 - 1);
+        dc.DrawLine(greyDepth, y2 - 1, cellX, y2 - 1);
 
         //
         // Need to override row colours?
@@ -2329,7 +2306,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
         //
         // Fill additional margin area with background colour of first cell
-        if ( greyDepthX < textMarginHere )
+        if ( greyDepth < textMarginHere )
         {
             if ( !(renderFlags & wxPGCellRenderer::DontUseCellBgCol) )
             {
@@ -2339,20 +2316,20 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
             }
             dc.SetBrush(rowBgBrush);
             dc.SetPen(rowBgCol);
-            dc.DrawRectangle(greyDepthX+1, y,
-                             textMarginHere-greyDepthX, lh-1);
+            dc.DrawRectangle(greyDepth+1, y,
+                             textMarginHere-greyDepth, lh-1);
         }
 
         bool fontChanged = false;
 
         // Expander button rectangle
-        wxRect butRect( ((p->GetDepth() - 1) * m_subgroup_extramargin) - xRelMod,
+        wxRect butRect( ((p->GetDepth() - 1) * m_subgroup_extramargin),
                         y,
                         m_marginWidth,
                         lh );
 
         // Default cell rect fill the entire row
-        wxRect cellRect(greyDepthX, y, cellX - greyDepthX, lh-1);
+        wxRect cellRect(greyDepth, y, cellX - greyDepth, lh-1);
 
         bool isCategory = p->IsCategory();
 
@@ -2407,7 +2384,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
             if ( ci == 0 )
             {
-                textXAdd = textMarginHere - greyDepthX;
+                textXAdd = textMarginHere - greyDepth;
                 cellRect.width = firstCellWidth;
                 cellRect.x = firstCellX;
             }
@@ -2524,7 +2501,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
     dc.SetBrush(wxBrush(m_colEmptySpace));
     dc.DrawRectangle(cellX, firstItemTopY, viewRightEdge - cellX + 1, lastItemBottomY - firstItemTopY);
 
-    return y - 1  + vy;
+    return y - 1;
 }
 
 // -----------------------------------------------------------------------
@@ -4561,54 +4538,22 @@ void wxPropertyGrid::RecalculateVirtualSize( int forceXPos )
 
     m_iFlags |= wxPG_FL_RECALCULATING_VIRTUAL_SIZE;
 
-    int x = m_pState->GetVirtualWidth();
-    int y = m_pState->m_virtualHeight;
-
-    int width, height;
-    GetClientSize(&width,&height);
-
+    int w = m_pState->GetVirtualWidth();
+    int h = m_pState->m_virtualHeight;
     // Now adjust virtual size.
-    SetVirtualSize(x, y);
-
-    int xAmount = 0;
-    int xPos = 0;
-
-    //
-    // Adjust scrollbars
-    if ( HasVirtualWidth() )
+    SetVirtualSize(w, h);
+    if ( forceXPos != -1 )
     {
-        xAmount = x/wxPG_PIXELS_PER_UNIT;
-        xPos = GetScrollPos( wxHORIZONTAL );
+        Scroll(forceXPos, wxDefaultCoord);
     }
 
-    if ( forceXPos != -1 )
-        xPos = forceXPos;
-    // xPos too high?
-    else if ( xPos > (xAmount-(width/wxPG_PIXELS_PER_UNIT)) )
-        xPos = 0;
-
-    int yAmount = y / wxPG_PIXELS_PER_UNIT;
-    int yPos = GetScrollPos( wxVERTICAL );
-
-    SetScrollbars( wxPG_PIXELS_PER_UNIT, wxPG_PIXELS_PER_UNIT,
-                   xAmount, yAmount, xPos, yPos, true );
-
-    // This may be needed in addition to calling SetScrollbars()
-    // when class inherits from wxScrollHelper instead of
-    // actual wxScrolled<T>.
-    AdjustScrollbars();
-
     // Must re-get size now
-    GetClientSize(&width,&height);
+    GetClientSize(&m_width, &m_height);
 
     if ( !HasVirtualWidth() )
     {
-        m_pState->SetVirtualWidth(width);
+        m_pState->SetVirtualWidth(m_width);
     }
-
-    m_width = width;
-    m_height = height;
-
     m_pState->CheckColumnWidths();
 
     if ( GetSelection() )
