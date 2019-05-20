@@ -1065,13 +1065,11 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
     }
     else
     {
-        // Only check colsWidth against clientWidth
-        if ( colsWidth < clientWidth )
+        // Only adapt colsWidth to width
+        if ( colsWidth < m_width )
         {
-            m_colWidths.back() += (clientWidth-colsWidth);
+            m_colWidths.back() += (m_width-colsWidth);
         }
-
-        m_width = colsWidth;
 
         // If width changed, recalculate virtual size
         if ( IsDisplayed() )
