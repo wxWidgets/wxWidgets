@@ -1029,6 +1029,8 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
     // Then mode-based requirement
     if ( !pg->HasVirtualWidth() )
     {
+        m_width = clientWidth;
+
         int widthHigher = m_width - colsWidth;
 
         // Adapt colsWidth to width
@@ -1167,10 +1169,9 @@ void wxPropertyGridPageState::SetColumnCount( int colCount )
     m_colWidths.resize(colCount, wxPG_DRAG_MARGIN);
     m_columnProportions.resize(colCount, 1);
 
+    CheckColumnWidths();
     if ( IsDisplayed() )
         m_pPropGrid->RecalculateVirtualSize();
-    else
-        CheckColumnWidths();
 }
 
 void wxPropertyGridPageState::DoSetColumnProportion( unsigned int column,
