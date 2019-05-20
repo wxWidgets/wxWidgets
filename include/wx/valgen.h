@@ -86,6 +86,20 @@ public:
 protected:
     explicit wxGenericValidatorBase(void* data) : m_data(data){}
 
+#ifdef wxNO_RTTI
+    // This is a hack to make Convert() work reliably when not using RTTI.
+    static wxAny ToAny(bool* data);
+    static wxAny ToAny(int* data);
+    static wxAny ToAny(float* data);
+    static wxAny ToAny(double* data);
+    static wxAny ToAny(wxString* data);
+    static wxAny ToAny(wxArrayInt* data);
+    static wxAny ToAny(wxDateTime* data);
+    static wxAny ToAny(wxFileName* data);
+    static wxAny ToAny(wxColour* data);
+    static wxAny ToAny(wxFont* data);
+#endif // wxNO_RTTI
+
     // Called by wxGenValidatorSimpleType<wxWindow, T>::SetWindow() to set
     // the right validator based on the dynamic type of the m_validatorWindow.
     wxGenericValidatorBase* Convert(const wxAny& any) const;
@@ -173,8 +187,13 @@ public:
 
         wxGenericValidatorBase::SetWindow(win);
 
-        wxScopedPtr<wxGenericValidatorBase> val(
-            wxGenericValidatorBase::Convert(wxAny(T())));
+        const wxAny anyData
+        #ifdef wxNO_RTTI
+            = wxGenericValidatorBase::ToAny
+        #endif
+            (static_cast<T*>(this->m_data));
+
+        wxScopedPtr<wxGenericValidatorBase> val(wxGenericValidatorBase::Convert(anyData));
 
         wxCHECK_RET( val, "Validator convertion failed" );
 

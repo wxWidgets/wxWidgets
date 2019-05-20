@@ -1351,6 +1351,18 @@ bool wxValidatorDataTransferImpl<wxDateTimePickerCtrlBase>::From(wxDateTimePicke
 #endif // wxUSE_DATEPICKCTRL || wxUSE_TIMEPICKCTRL
 
 //-----------------------------------------------------------------------------
+#ifdef wxNO_RTTI
+wxAny wxGenericValidatorBase::ToAny(bool* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(int* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(float* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(double* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(wxString* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(wxArrayInt* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(wxDateTime* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(wxFileName* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(wxColour* data) { return wxAny(data); }
+wxAny wxGenericValidatorBase::ToAny(wxFont* data) { return wxAny(data); }
+#endif // wxNO_RTTI
 
 wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 {
@@ -1358,9 +1370,9 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
     if ( wxDynamicCast(m_validatorWindow, wxDatePickerCtrl) ||
             wxDynamicCast(m_validatorWindow, wxTimePickerCtrl) )
     {
-        if ( any.CheckType<wxDateTime>() )
+        if ( any.CheckType<wxDateTime*>() )
             return new wxGenValidatorSimpleType<wxDateTimePickerCtrlBase, wxDateTime>
-                    (static_cast<wxDateTime*>(m_data));
+                    (any.As<wxDateTime*>());
 
         return NULL;
     }
@@ -1369,9 +1381,9 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_CALENDARCTRL
     if ( wxDynamicCast(m_validatorWindow, wxCalendarCtrl) )
     {
-        if ( any.CheckType<wxDateTime>() )
+        if ( any.CheckType<wxDateTime*>() )
             return new wxGenValidatorSimpleType<wxCalendarCtrlBase, wxDateTime>
-                    (static_cast<wxDateTime*>(m_data));
+                    (any.As<wxDateTime*>());
 
         return NULL;
     }
@@ -1380,9 +1392,9 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_TOGGLEBTN
     if ( wxDynamicCast(m_validatorWindow, wxToggleButton) )
     {
-        if ( any.CheckType<bool>() )
+        if ( any.CheckType<bool*>() )
             return new wxGenValidatorSimpleType<wxToggleButtonBase, bool>
-                    (static_cast<bool*>(m_data));
+                    (any.As<bool*>());
 
         return NULL;
     }
@@ -1391,21 +1403,21 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_TEXTCTRL
     if ( wxDynamicCast(m_validatorWindow, wxTextCtrl) )
     {
-        if ( any.CheckType<wxString>() )
+        if ( any.CheckType<wxString*>() )
             return new wxGenValidatorSimpleType<wxTextCtrlBase, wxString>
-                    (static_cast<wxString*>(m_data));
-        if ( any.CheckType<int>() )
+                    (any.As<wxString*>());
+        if ( any.CheckType<int*>() )
             return new wxGenValidatorSimpleType<wxTextCtrlBase, int>
-                    (static_cast<int*>(m_data));
-        if ( any.CheckType<float>() )
+                    (any.As<int*>());
+        if ( any.CheckType<float*>() )
             return new wxGenValidatorSimpleType<wxTextCtrlBase, float>
-                    (static_cast<float*>(m_data));
-        if ( any.CheckType<double>() )
+                    (any.As<float*>());
+        if ( any.CheckType<double*>() )
             return new wxGenValidatorSimpleType<wxTextCtrlBase, double>
-                    (static_cast<double*>(m_data));
-        if ( any.CheckType<wxFileName>() )
+                    (any.As<double*>());
+        if ( any.CheckType<wxFileName*>() )
             return new wxGenValidatorSimpleType<wxTextCtrlBase, wxFileName>
-                    (static_cast<wxFileName*>(m_data));
+                    (any.As<wxFileName*>());
 
         return NULL;
     }
@@ -1414,9 +1426,9 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_STATTEXT
     if ( wxDynamicCast(m_validatorWindow, wxStaticText) )
     {
-        if ( any.CheckType<wxString>() )
+        if ( any.CheckType<wxString*>() )
             return new wxGenValidatorSimpleType<wxStaticTextBase, wxString>
-                    (static_cast<wxString*>(m_data));
+                    (any.As<wxString*>());
 
         return NULL;
     }
@@ -1425,9 +1437,9 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_SPLITTER
     if ( wxDynamicCast(m_validatorWindow, wxSplitterWindow) )
     {
-        if ( any.CheckType<int>() )
+        if ( any.CheckType<int*>() )
             return new wxGenValidatorSimpleType<wxSplitterWindow, int>
-                    (static_cast<int*>(m_data));
+                    (any.As<int*>());
 
         return NULL;
     }
@@ -1436,27 +1448,27 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_SPINBTN
     if ( wxDynamicCast(m_validatorWindow, wxSpinCtrlDouble) )
     {
-        if ( any.CheckType<double>() )
+        if ( any.CheckType<double*>() )
             return new wxGenValidatorSimpleType<wxSpinCtrlDouble, double>
-                    (static_cast<double*>(m_data));
+                    (any.As<double*>());
 
         return NULL;
     }
 
     if ( wxDynamicCast(m_validatorWindow, wxSpinCtrl) )
     {
-        if ( any.CheckType<int>() )
+        if ( any.CheckType<int*>() )
             return new wxGenValidatorSimpleType<wxSpinCtrl, int>
-                    (static_cast<int*>(m_data));
+                    (any.As<int*>());
 
         return NULL;
     }
 
     if ( wxDynamicCast(m_validatorWindow, wxSpinButton) )
     {
-        if ( any.CheckType<int>() )
+        if ( any.CheckType<int*>() )
             return new wxGenValidatorSimpleType<wxSpinButtonBase, int>
-                    (static_cast<int*>(m_data));
+                    (any.As<int*>());
 
         return NULL;
     }
@@ -1465,9 +1477,9 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_SLIDER
     if ( wxDynamicCast(m_validatorWindow, wxSlider) )
     {
-        if ( any.CheckType<int>() )
+        if ( any.CheckType<int*>() )
             return new wxGenValidatorSimpleType<wxSliderBase, int>
-                    (static_cast<int*>(m_data));
+                    (any.As<int*>());
 
         return NULL;
     }
@@ -1476,9 +1488,9 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_SCROLLBAR
     if ( wxDynamicCast(m_validatorWindow, wxScrollBar) )
     {
-        if ( any.CheckType<int>() )
+        if ( any.CheckType<int*>() )
             return new wxGenValidatorSimpleType<wxScrollBarBase, int>
-                    (static_cast<int*>(m_data));
+                    (any.As<int*>());
 
         return NULL;
     }
@@ -1487,9 +1499,9 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_RADIOBOX
     if ( wxDynamicCast(m_validatorWindow, wxRadioBox) )
     {
-        if ( any.CheckType<int>() )
+        if ( any.CheckType<int*>() )
             return new wxGenValidatorSimpleType<wxRadioBox, int>
-                    (static_cast<int*>(m_data));
+                    (any.As<int*>());
 
         return NULL;
     }
@@ -1498,12 +1510,12 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_LISTBOX
     if ( wxDynamicCast(m_validatorWindow, wxListBox) )
     {
-        if ( any.CheckType<int>() )
+        if ( any.CheckType<int*>() )
             return new wxGenValidatorSimpleType<wxListBoxBase, int>
-                    (static_cast<int*>(m_data));
-        if ( any.CheckType<wxArrayInt>() )
+                    (any.As<int*>());
+        if ( any.CheckType<wxArrayInt*>() )
             return new wxGenValidatorSimpleType<wxListBoxBase, wxArrayInt>
-                    (static_cast<wxArrayInt*>(m_data));
+                    (any.As<wxArrayInt*>());
 
         return NULL;
     }
@@ -1512,9 +1524,9 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_GAUGE
     if ( wxDynamicCast(m_validatorWindow, wxGauge) )
     {
-        if ( any.CheckType<int>() )
+        if ( any.CheckType<int*>() )
             return new wxGenValidatorSimpleType<wxGaugeBase, int>
-                    (static_cast<int*>(m_data));
+                    (any.As<int*>());
 
         return NULL;
     }
@@ -1523,9 +1535,9 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_FONTPICKERCTRL
     if ( wxDynamicCast(m_validatorWindow, wxFontPickerCtrl) )
     {
-        if ( any.CheckType<wxFont>() )
+        if ( any.CheckType<wxFont*>() )
             return new wxGenValidatorSimpleType<wxFontPickerCtrl, wxFont>
-                    (static_cast<wxFont*>(m_data));
+                    (any.As<wxFont*>());
 
         return NULL;
     }
@@ -1534,12 +1546,12 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_DIRPICKERCTRL
     if ( wxDynamicCast(m_validatorWindow, wxDirPickerCtrl) )
     {
-        if ( any.CheckType<wxString>() )
+        if ( any.CheckType<wxString*>() )
             return new wxGenValidatorSimpleType<wxDirPickerCtrl, wxString>
-                    (static_cast<wxString*>(m_data));
-        if ( any.CheckType<wxFileName>() )
+                    (any.As<wxString*>());
+        if ( any.CheckType<wxFileName*>() )
             return new wxGenValidatorSimpleType<wxDirPickerCtrl, wxFileName>
-                    (static_cast<wxFileName*>(m_data));
+                    (any.As<wxFileName*>());
 
         return NULL;
     }
@@ -1548,12 +1560,12 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_FILEPICKERCTRL
     if ( wxDynamicCast(m_validatorWindow, wxFilePickerCtrl) )
     {
-        if ( any.CheckType<wxString>() )
+        if ( any.CheckType<wxString*>() )
             return new wxGenValidatorSimpleType<wxFilePickerCtrl, wxString>
-                    (static_cast<wxString*>(m_data));
-        if ( any.CheckType<wxFileName>() )
+                    (any.As<wxString*>());
+        if ( any.CheckType<wxFileName*>() )
             return new wxGenValidatorSimpleType<wxFilePickerCtrl, wxFileName>
-                    (static_cast<wxFileName*>(m_data));
+                    (any.As<wxFileName*>());
 
         return NULL;
     }
@@ -1562,12 +1574,12 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_COMBOBOX
     if ( wxDynamicCast(m_validatorWindow, wxComboBox) )
     {
-        if ( any.CheckType<int>() )
+        if ( any.CheckType<int*>() )
             return new wxGenValidatorSimpleType<wxComboBox, int>
-                    (static_cast<int*>(m_data));
-        if ( any.CheckType<wxString>() )
+                    (any.As<int*>());
+        if ( any.CheckType<wxString*>() )
             return new wxGenValidatorSimpleType<wxComboBox, wxString>
-                    (static_cast<wxString*>(m_data));
+                    (any.As<wxString*>());
 
         return NULL;
     }
@@ -1576,9 +1588,9 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_COLOURPICKERCTRL
     if ( wxDynamicCast(m_validatorWindow, wxColourPickerCtrl) )
     {
-        if ( any.CheckType<wxColour>() )
+        if ( any.CheckType<wxColour*>() )
             return new wxGenValidatorSimpleType<wxColourPickerCtrl, wxColour>
-                    (static_cast<wxColour*>(m_data));
+                    (any.As<wxColour*>());
 
         return NULL;
     }
@@ -1587,18 +1599,18 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_COLLPANE
     if ( wxDynamicCast(m_validatorWindow, wxCollapsiblePane) )
     {
-        if ( any.CheckType<bool>() )
+        if ( any.CheckType<bool*>() )
             return new wxGenValidatorSimpleType<wxCollapsiblePaneBase, bool>
-                    (static_cast<bool*>(m_data));
+                    (any.As<bool*>());
 
         return NULL;
     }
 
     if ( wxDynamicCast(m_validatorWindow, wxCollapsibleHeaderCtrl) )
     {
-        if ( any.CheckType<bool>() )
+        if ( any.CheckType<bool*>() )
             return new wxGenValidatorSimpleType<wxCollapsibleHeaderCtrlBase, bool>
-                    (static_cast<bool*>(m_data));
+                    (any.As<bool*>());
 
         return NULL;
     }
@@ -1607,12 +1619,12 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_CHOICE
     if ( wxDynamicCast(m_validatorWindow, wxChoice) )
     {
-        if ( any.CheckType<int>() )
+        if ( any.CheckType<int*>() )
             return new wxGenValidatorSimpleType<wxChoiceBase, int>
-                    (static_cast<int*>(m_data));
-        if ( any.CheckType<wxString>() )
+                    (any.As<int*>());
+        if ( any.CheckType<wxString*>() )
             return new wxGenValidatorSimpleType<wxChoiceBase, wxString>
-                    (static_cast<wxString*>(m_data));
+                    (any.As<wxString*>());
 
         return NULL;
     }
@@ -1621,9 +1633,9 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_CHECKLISTBOX
     if ( wxDynamicCast(m_validatorWindow, wxCheckListBox) )
     {
-        if ( any.CheckType<wxArrayInt>() )
+        if ( any.CheckType<wxArrayInt*>() )
             return new wxGenValidatorSimpleType<wxCheckListBoxBase, wxArrayInt>
-                    (static_cast<wxArrayInt*>(m_data));
+                    (any.As<wxArrayInt*>());
 
         return NULL;
     }
@@ -1632,9 +1644,9 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_CHECKBOX
     if ( wxDynamicCast(m_validatorWindow, wxCheckBox) )
     {
-        if ( any.CheckType<bool>() )
+        if ( any.CheckType<bool*>() )
             return new wxGenValidatorSimpleType<wxCheckBoxBase, bool>
-                    (static_cast<bool*>(m_data));
+                    (any.As<bool*>());
 
         return NULL;
     }
@@ -1643,9 +1655,9 @@ wxGenericValidatorBase* wxGenericValidatorBase::Convert(const wxAny& any) const
 #if wxUSE_BUTTON
     if ( wxDynamicCast(m_validatorWindow, wxButton) )
     {
-        if ( any.CheckType<wxString>() )
+        if ( any.CheckType<wxString*>() )
             return new wxGenValidatorSimpleType<wxButtonBase, wxString>
-                    (static_cast<wxString*>(m_data));
+                    (any.As<wxString*>());
 
         return NULL;
     }

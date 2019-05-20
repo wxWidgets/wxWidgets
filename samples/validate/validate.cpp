@@ -329,11 +329,11 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     button->Bind(wxEVT_BUTTON, &MyDialog::OnChangeValidator, this);
     flexgridsizer->Add(button, wxSizerFlags().Center());
 
-    wxListBox* const lstbox = new wxListBox((wxWindow*)this, VALIDATE_LIST, wxDefaultPosition, wxDefaultSize,
-                                            WXSIZEOF(g_listbox_choices), g_listbox_choices, wxLB_MULTIPLE);
-    wxSetGenericValidator(lstbox, &g_data.m_listbox_choices);
-
-    flexgridsizer->Add(lstbox, 1, wxGROW);
+    flexgridsizer->Add(new wxListBox((wxWindow*)this, VALIDATE_LIST,
+                        wxDefaultPosition, wxDefaultSize,
+                        WXSIZEOF(g_listbox_choices), g_listbox_choices, wxLB_MULTIPLE,
+                        wxGenericValidator(&g_data.m_listbox_choices)),
+                       1, wxGROW);
 
     wxBoxSizer *combosizer = new wxBoxSizer( wxVERTICAL );
 
@@ -346,7 +346,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
                                  WXSIZEOF(g_combobox_choices), g_combobox_choices, 0L);
 
 #if wxUSE_VALIDATOR_DATATRANSFER
-    wxSetGenericValidator(m_combobox, &g_data.m_combobox_choice);
+    m_combobox->SetValidator(wxGenericValidator(&g_data.m_combobox_choice));
     m_combobox->SetToolTip("uses generic validator (with validation)");
 
     wxSetGenericValidator(m_combobox2, g_data.m_combobox2_choice);
@@ -405,10 +405,14 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     flexgridsizer->Add(combosizer, wxSizerFlags(1).Expand().Border(wxALL, 5));
 
-    wxCheckBox* const checkbox = new wxCheckBox(this, VALIDATE_CHECK, "Sample checkbox");
-    wxSetGenericValidator(checkbox, &g_data.m_checkbox_state);
-
-    flexgridsizer->Add(checkbox, 1, wxALIGN_CENTER|wxALL, 15);
+    // This wxCheckBox* doesn't need to be assigned to any pointer
+    // because we don't use it elsewhere--it can be anonymous.
+    // We don't need any such pointer to query its state, which
+    // can be gotten directly from g_data.
+    flexgridsizer->Add(new wxCheckBox(this, VALIDATE_CHECK, "Sample checkbox",
+                        wxDefaultPosition, wxDefaultSize, 0,
+                        wxGenericValidator(&g_data.m_checkbox_state)),
+                       1, wxALIGN_CENTER|wxALL, 15);
 
     flexgridsizer->AddGrowableCol(0);
     flexgridsizer->AddGrowableCol(1);
@@ -493,13 +497,12 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
 
     mainsizer->Add(flexgridsizer, 1, wxGROW | wxALL, 10);
 
-    wxRadioBox* const radiobox = new wxRadioBox((wxWindow*)this, VALIDATE_RADIO, "Pick a color",
-                                                wxDefaultPosition, wxDefaultSize,
-                                                WXSIZEOF(g_radiobox_choices), g_radiobox_choices,
-                                                1, wxRA_SPECIFY_ROWS);
-    wxSetGenericValidator(radiobox, &g_data.m_radiobox_choice);
-
-    mainsizer->Add(radiobox, 0, wxGROW | wxLEFT|wxBOTTOM|wxRIGHT, 10);
+    mainsizer->Add(new wxRadioBox((wxWindow*)this, VALIDATE_RADIO, "Pick a color",
+                                    wxDefaultPosition, wxDefaultSize,
+                                    WXSIZEOF(g_radiobox_choices), g_radiobox_choices,
+                                    1, wxRA_SPECIFY_ROWS,
+                                    wxGenericValidator(&g_data.m_radiobox_choice)),
+                   0, wxGROW | wxLEFT|wxBOTTOM|wxRIGHT, 10);
 
     mainsizer->Add( numSizer, wxSizerFlags().Expand().DoubleBorder() );
 
