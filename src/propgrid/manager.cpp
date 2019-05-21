@@ -239,6 +239,10 @@ public:
         // Seed titles with defaults
         m_columns[0]->SetTitle(_("Property"));
         m_columns[1]->SetTitle(_("Value"));
+
+        Bind(wxEVT_HEADER_RESIZING, &wxPGHeaderCtrl::OnResizing, this);
+        Bind(wxEVT_HEADER_BEGIN_RESIZE, &wxPGHeaderCtrl::OnBeginResize, this);
+        Bind(wxEVT_HEADER_END_RESIZE, &wxPGHeaderCtrl::OnEndResize, this);
     }
 
     virtual ~wxPGHeaderCtrl()
@@ -352,56 +356,45 @@ private:
                                   wxPG_SPLITTER_FROM_EVENT);
     }
 
-    virtual bool ProcessEvent( wxEvent& event ) wxOVERRIDE
+    void OnResizing(wxHeaderCtrlEvent& evt)
     {
-        wxHeaderCtrlEvent* hcEvent = wxDynamicCast(&event, wxHeaderCtrlEvent);
-        if ( hcEvent )
-        {
-            wxPropertyGrid* pg = m_manager->GetGrid();
-            int col = hcEvent->GetColumn();
-            wxEventType evtType = event.GetEventType();
+        int col = evt.GetColumn();
+        int colWidth = evt.GetWidth();
 
-            if ( evtType == wxEVT_HEADER_RESIZING )
-            {
-                int colWidth = hcEvent->GetWidth();
+        OnSetColumnWidth(col, colWidth);
+        OnColumWidthsChanged();
 
-                OnSetColumnWidth(col, colWidth);
-                OnColumWidthsChanged();
+        wxPropertyGrid* pg = m_manager->GetGrid();
+        pg->SendEvent(wxEVT_PG_COL_DRAGGING, NULL, NULL, 0,
+                      (unsigned int)col);
+    }
 
-                pg->SendEvent(wxEVT_PG_COL_DRAGGING,
-                              NULL, NULL, 0,
-                              (unsigned int)col);
+    void OnBeginResize(wxHeaderCtrlEvent& evt)
+    {
+        int col = evt.GetColumn();
+        wxPropertyGrid* pg = m_manager->GetGrid();
 
-                return true;
-            }
-            else if ( evtType == wxEVT_HEADER_BEGIN_RESIZE )
-            {
-                // Don't allow resizing the rightmost column
-                // (like it's not allowed for the rightmost wxPropertyGrid splitter)
-                if ( col == (int)m_page->GetColumnCount() - 1 )
-                    hcEvent->Veto();
-                // Never allow column resize if layout is static
-                else if ( m_manager->HasFlag(wxPG_STATIC_SPLITTER) )
-                    hcEvent->Veto();
-                // Allow application to veto dragging
-                else if ( pg->SendEvent(wxEVT_PG_COL_BEGIN_DRAG,
-                                        NULL, NULL, 0,
-                                        (unsigned int)col) )
-                    hcEvent->Veto();
+        // Don't allow resizing the rightmost column
+        // (like it's not allowed for the rightmost wxPropertyGrid splitter)
+        if ( col == (int)m_page->GetColumnCount() - 1 )
+            evt.Veto();
+        // Never allow column resize if layout is static
+        else if ( m_manager->HasFlag(wxPG_STATIC_SPLITTER) )
+            evt.Veto();
+        // Allow application to veto dragging
+        else if ( pg->SendEvent(wxEVT_PG_COL_BEGIN_DRAG,
+                                NULL, NULL, 0,
+                                (unsigned int)col) )
+            evt.Veto();
+    }
 
-                return true;
-            }
-            else if ( evtType == wxEVT_HEADER_END_RESIZE )
-            {
-                pg->SendEvent(wxEVT_PG_COL_END_DRAG,
-                              NULL, NULL, 0,
-                              (unsigned int)col);
-
-                return true;
-            }
-        }
-
-        return wxHeaderCtrl::ProcessEvent(event);
+    void OnEndResize(wxHeaderCtrlEvent& evt)
+    {
+        int col = evt.GetColumn();
+        wxPropertyGrid* pg = m_manager->GetGrid();
+        pg->SendEvent(wxEVT_PG_COL_END_DRAG,
+                      NULL, NULL, 0,
+                      (unsigned int)col);
     }
 
     wxPropertyGridManager*          m_manager;
