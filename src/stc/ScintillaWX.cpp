@@ -53,6 +53,9 @@
     // GetHwndOf()
     #include "wx/msw/private.h"
 #endif
+#ifdef __WXGTK20__
+    #include <gdk/gdk.h>
+#endif
 
 //----------------------------------------------------------------------
 // Helper classes
@@ -1094,13 +1097,6 @@ void ScintillaWX::DoAddChar(int key) {
 int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
 {
     int key = evt.GetKeyCode();
-    if (key == WXK_NONE) {
-        // This is a Unicode character not representable in Latin-1 or some key
-        // without key code at all (e.g. dead key or VK_PROCESSKEY under MSW).
-        if ( consumed )
-            *consumed = false;
-        return 0;
-    }
 
     if (evt.RawControlDown() && key >= 1 && key <= 26 && key != WXK_BACK)
         key += 'A' - 1;
@@ -1141,6 +1137,52 @@ int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
     case WXK_ALT:               key = 0; break;
     case WXK_SHIFT:             key = 0; break;
     case WXK_MENU:              key = SCK_MENU; break;
+    case WXK_NONE:
+#ifdef __WXGTK20__
+        if (evt.RawControlDown())
+        {
+            // To allow Ctrl-key shortcuts to work with non-Latin keyboard layouts,
+            // look for any available layout that would produce an ASCII letter for
+            // the given hardware keycode
+            const unsigned keycode = evt.GetRawKeyFlags();
+            GdkKeymap* keymap = gdk_keymap_get_for_display(gdk_display_get_default());
+            GdkKeymapKey keymapKey = { keycode, 0, 1 };
+            do {
+                const unsigned keyval = gdk_keymap_lookup_key(keymap, &keymapKey);
+                if (keyval >= 'A' && keyval <= 'Z')
+                {
+                    key = keyval;
+                    break;
+                }
+                keymapKey.group++;
+            } while (keymapKey.group < 4);
+            if (key == WXK_NONE)
+            {
+                // There may be no keyboard layouts with Latin keys available,
+                // fall back to a hard-coded mapping for the common pc105
+                static const char keycodeToKeyval[] = {
+                      0,   0,   0,   0,   0,   0,   0,   0,
+                      0,   0,   0,   0,   0,   0,   0,   0,
+                      0,   0,   0,   0,   0,   0,   0,   0,
+                    'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I',
+                    'O', 'P',   0,   0,   0,   0, 'A', 'S',
+                    'D', 'F', 'G', 'H', 'J', 'K', 'L',   0,
+                      0,   0,   0,   0, 'Z', 'X', 'C', 'V',
+                    'B', 'N', 'M'
+                };
+                if (keycode < sizeof(keycodeToKeyval))
+                    key = keycodeToKeyval[keycode];
+            }
+        }
+        if (key == WXK_NONE)
+#endif
+        {
+            // This is a Unicode character not representable in Latin-1 or some key
+            // without key code at all (e.g. dead key or VK_PROCESSKEY under MSW).
+            if (consumed)
+                *consumed = false;
+            return 0;
+        }
     }
 
     int rv = KeyDownWithModifiers
