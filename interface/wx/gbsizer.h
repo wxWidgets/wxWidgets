@@ -187,7 +187,7 @@ public:
         Called when the managed size of the sizer is needed or when layout
         needs done.
     */
-    void RecalcSizes();
+    virtual void RepositionChildren(const wxSize& minSize);
 
     /**
         Set the size used for cells in the grid with no item.

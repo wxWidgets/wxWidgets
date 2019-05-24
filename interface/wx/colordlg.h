@@ -109,11 +109,29 @@ public:
 class wxColourDialogEvent : public wxCommandEvent
 {
 public:
+    wxColourDialogEvent();
+
+    /**
+        The constructor is not normally used by the user code.
+    */
+    wxColourDialogEvent(wxEventType evtType,
+                        wxColourDialog* dialog,
+                        const wxColour& colour);
+    
     /**
         Retrieve the colour the user has just selected.
     */
     wxColour GetColour() const;
+
+    /**
+       Set the colour to be sent with the event.
+    */
+    void SetColour(const wxColour& colour);
 };
+
+
+wxEventType wxEVT_COLOUR_CHANGED;
+
 
 // ============================================================================
 // Global functions/macros
