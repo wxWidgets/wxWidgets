@@ -1948,69 +1948,6 @@ private:
 };
 
 // -----------------------------------------------------------------------
-//
-// Bunch of inlines that need to resolved after all classes have been defined.
-//
-
-inline bool wxPropertyGridPageState::IsDisplayed() const
-{
-    return ( this == m_pPropGrid->GetState() );
-}
-
-inline unsigned int wxPropertyGridPageState::GetActualVirtualHeight() const
-{
-    return DoGetRoot()->GetChildrenHeight(GetGrid()->GetRowHeight());
-}
-
-inline wxString wxPGProperty::GetHintText() const
-{
-    wxVariant vHintText = GetAttribute(wxPG_ATTR_HINT);
-
-#if wxPG_COMPATIBILITY_1_4
-    // Try the old, deprecated "InlineHelp"
-    if ( vHintText.IsNull() )
-        vHintText = GetAttribute(wxPG_ATTR_INLINE_HELP);
-#endif
-
-    if ( !vHintText.IsNull() )
-        return vHintText.GetString();
-
-    return wxEmptyString;
-}
-
-inline int wxPGProperty::GetDisplayedCommonValueCount() const
-{
-    if ( HasFlag(wxPG_PROP_USES_COMMON_VALUE) )
-    {
-        wxPropertyGrid* pg = GetGrid();
-        if ( pg )
-            return (int) pg->GetCommonValueCount();
-    }
-    return 0;
-}
-
-inline void wxPGProperty::SetDefaultValue( wxVariant& value )
-{
-    SetAttribute(wxPG_ATTR_DEFAULT_VALUE, value);
-}
-
-inline void wxPGProperty::SetEditor( const wxString& editorName )
-{
-    m_customEditor = wxPropertyGridInterface::GetEditorByName(editorName);
-}
-
-inline bool wxPGProperty::SetMaxLength( int maxLen )
-{
-    const wxPGEditor* editorClass = GetEditorClass();
-    if ( editorClass != wxPGEditor_TextCtrl &&
-         editorClass != wxPGEditor_TextCtrlAndButton )
-        return false;
-
-    m_maxLen = wxMax(maxLen, 0); // shouldn't be a nagative value
-    return true;
-}
-
-// -----------------------------------------------------------------------
 
 #define wxPG_BASE_EVT_PRE_ID     1775
 

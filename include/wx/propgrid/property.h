@@ -1355,7 +1355,7 @@ public:
     }
 
     // Returns property's hint text (shown in empty value cell).
-    inline wxString GetHintText() const;
+    wxString GetHintText() const;
 
     // Returns property grid where property lies.
     wxPropertyGrid* GetGrid() const;
@@ -1629,7 +1629,7 @@ public:
     }
 
     // Sets editor for a property, , by editor name.
-    inline void SetEditor( const wxString& editorName );
+    void SetEditor( const wxString& editorName );
 
     // Sets cell information for given column.
     void SetCell( int column, const wxPGCell& cell );
@@ -1787,7 +1787,7 @@ public:
     bool SetChoices( const wxPGChoices& choices );
 
     // Set max length of text in text editor.
-    inline bool SetMaxLength( int maxLen );
+    bool SetMaxLength( int maxLen );
 
     // Call with 'false' in OnSetValue to cancel value changes after all
     // (i.e. cancel 'true' returned by StringToValue() or IntToValue()).

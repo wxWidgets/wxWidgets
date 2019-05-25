@@ -2105,6 +2105,16 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     VirtualHeightChanged();
 }
 
+bool wxPropertyGridPageState::IsDisplayed() const
+{
+    return (this == m_pPropGrid->GetState());
+}
+
+unsigned int wxPropertyGridPageState::GetActualVirtualHeight() const
+{
+    return DoGetRoot()->GetChildrenHeight(GetGrid()->GetRowHeight());
+}
+
 // -----------------------------------------------------------------------
 
 #endif  // wxUSE_PROPGRID

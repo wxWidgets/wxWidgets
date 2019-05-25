@@ -420,7 +420,7 @@ public:
 
     // Returns actual height of contained visible properties.
     // Mostly used for internal diagnostic purposes.
-    inline unsigned int GetActualVirtualHeight() const;
+    unsigned int GetActualVirtualHeight() const;
 
     unsigned int GetColumnCount() const
     {
@@ -512,7 +512,7 @@ public:
     wxPropertyGridHitTestResult HitTest( const wxPoint& pt ) const;
 
     // Returns true if page is visibly displayed.
-    inline bool IsDisplayed() const;
+    bool IsDisplayed() const;
 
     bool IsInNonCatMode() const { return (bool)(m_properties == m_abcArray); }
 
