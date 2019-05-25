@@ -1577,7 +1577,14 @@ public:
     */
     wxPGProperty* GetMainParent() const;
 
-    /** Returns maximum allowed length of property's text value.
+    /**
+        Returns maximum allowed length of the text the user can enter in
+        the property text editor.
+
+        @remarks
+        0 is returned if length is not explicitly limited and the text can be
+        as long as it is supported by the underlying native text control
+        widget.
     */
     int GetMaxLength() const;
 
@@ -1932,7 +1939,12 @@ public:
     void SetLabel( const wxString& label );
 
     /**
-        Set max length of text in text editor.
+        Set maximum length of the text the user can enter in the text editor.
+        If it is 0, the length is not limited and the text can be as long as
+        it is supported by the underlying native text control widget.
+
+        @return
+        Returns @true if maximum length was set.
     */
     bool SetMaxLength( int maxLen );
 

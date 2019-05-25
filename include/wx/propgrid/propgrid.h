@@ -2001,7 +2001,13 @@ inline void wxPGProperty::SetEditor( const wxString& editorName )
 
 inline bool wxPGProperty::SetMaxLength( int maxLen )
 {
-    return GetGrid()->SetPropertyMaxLength(this,maxLen);
+    const wxPGEditor* editorClass = GetEditorClass();
+    if ( editorClass != wxPGEditor_TextCtrl &&
+         editorClass != wxPGEditor_TextCtrlAndButton )
+        return false;
+
+    m_maxLen = wxMax(maxLen, 0); // shouldn't be a nagative value
+    return true;
 }
 
 // -----------------------------------------------------------------------

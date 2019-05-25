@@ -1490,10 +1490,11 @@ public:
     // this function usually returns Null variant.
     wxVariant GetDefaultValue() const;
 
-    // Returns maximum allowed length of property's text value.
+    // Returns maximum allowed length of the text the user can enter in
+    // the property text editor.
     int GetMaxLength() const
     {
-        return (int) m_maxLen;
+        return m_maxLen;
     }
 
     // Determines, recursively, if all children are not unspecified.
@@ -2038,11 +2039,10 @@ protected:
 
     FlagType                    m_flags;
 
-    // Maximum length (mainly for string properties). Could be in some sort of
+    // Maximum length (for string properties). Could be in some sort of
     // wxBaseStringProperty, but currently, for maximum flexibility and
-    // compatibility, we'll stick it here. Anyway, we had 3 excess bytes to use
-    // so short int will fit in just fine.
-    short                       m_maxLen;
+    // compatibility, we'll stick it here.
+    int                         m_maxLen;
 
     // Root has 0, categories etc. at that level 1, etc.
     unsigned char               m_depth;
