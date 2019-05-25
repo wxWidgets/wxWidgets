@@ -714,6 +714,11 @@ public:
               find colour borders if the pixels do not match the colour
               exactly. However the function will still return @true.
 
+        @note This function will fail on OSX when using CoreGraphics as the OS
+              does not support this functionality. You will need to either to
+              turn CoreGraphics off, use wxBitmap to draw on and examine bitmap
+              content or use GetAsBitmap() on the dc.
+
         @note This method shouldn't be used with wxPaintDC under non-Windows
               platforms as it uses GetPixel() internally and this may give
               wrong results, notably in wxGTK. If you need to flood fill
