@@ -2266,6 +2266,9 @@ bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGr
         edStyle |= wxTE_READONLY;
     wxTextCtrl* ed = new wxTextCtrl(dlg,wxID_ANY,value,
         wxDefaultPosition,wxDefaultSize,edStyle);
+    int maxLen = prop->GetMaxLength();
+    if ( maxLen > 0 )
+        ed->SetMaxLength(maxLen);
 
     rowsizer->Add(ed, wxSizerFlags(1).Expand().Border(wxALL, spacing));
     topsizer->Add(rowsizer, wxSizerFlags(1).Expand());
