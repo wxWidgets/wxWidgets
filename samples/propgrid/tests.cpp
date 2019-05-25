@@ -1022,6 +1022,82 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         }
     }
 
+    {
+        RT_START_TEST(MaxLength)
+
+        wxPGProperty* prop1 = pgman->GetProperty("StringProperty");
+        if ( !prop1->SetMaxLength(10) )
+            RT_FAILURE();
+        if ( prop1->GetMaxLength() != 10 )
+            RT_FAILURE();
+
+        if ( !prop1->SetMaxLength(-1) )
+            RT_FAILURE();
+        if ( prop1->GetMaxLength() != 0 )
+            RT_FAILURE();
+
+        wxPGProperty* prop2 = pgman->GetProperty("LongStringProp");
+        if ( !prop2->SetMaxLength(20) )
+            RT_FAILURE();
+        if ( prop2->GetMaxLength() != 20 )
+            RT_FAILURE();
+
+        wxPGProperty* prop3 = pgman->GetProperty("IntProperty");
+        if ( !prop3->SetMaxLength(30) )
+            RT_FAILURE();
+        if ( prop3->GetMaxLength() != 30 )
+            RT_FAILURE();
+
+        wxPGProperty* prop4 = pgman->GetProperty("ArrayStringProperty");
+        if ( !prop4->SetMaxLength(40) )
+            RT_FAILURE();
+        if ( prop4->GetMaxLength() != 40 )
+            RT_FAILURE();
+
+        wxPGProperty* prop5 = pgman->GetProperty("EnumProperty");
+        if ( prop5->SetMaxLength(50) )
+            RT_FAILURE();
+
+        wxPGProperty* prop6 = pgman->GetProperty("BoolProperty");
+        if ( prop6->SetMaxLength(60) )
+            RT_FAILURE();
+    }
+
+    {
+        RT_START_TEST(MaxLength with PG)
+        pgman->SelectPage(2);
+        pg = pgman->GetGrid();
+
+        wxPGProperty* prop1 = pgman->GetProperty("StringProperty");
+        if ( !pg->SetPropertyMaxLength("StringProperty", 110) )
+            RT_FAILURE();
+        if ( prop1->GetMaxLength() != 110 )
+            RT_FAILURE();
+
+        if ( !pg->SetPropertyMaxLength("StringProperty", -1) )
+            RT_FAILURE();
+        if ( prop1->GetMaxLength() != 0 )
+            RT_FAILURE();
+
+        wxPGProperty* prop2 = pgman->GetProperty("LongStringProp");
+        if ( !pg->SetPropertyMaxLength("LongStringProp", 120) )
+            RT_FAILURE();
+        if ( prop2->GetMaxLength() != 120 )
+            RT_FAILURE();
+
+        wxPGProperty* prop3 = pgman->GetProperty("FloatProperty");
+        if ( !pg->SetPropertyMaxLength("FloatProperty", 130) )
+            RT_FAILURE();
+        if ( prop3->GetMaxLength() != 130 )
+            RT_FAILURE();
+
+        if ( pg->SetPropertyMaxLength("ColourProperty", 140) )
+            RT_FAILURE();
+
+        if ( pg->SetPropertyMaxLength("BoolProperty", 150) )
+            RT_FAILURE();
+    }
+
 #if WXWIN_COMPATIBILITY_3_0
     {
         RT_START_TEST(DoubleToString)
