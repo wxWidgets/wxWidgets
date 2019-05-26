@@ -8,12 +8,6 @@
 
 // -----------------------------------------------------------------------
 
-/** @section propgrid_misc wxPropertyGrid Miscellanous
-
-    This section describes some miscellanous values, types and macros.
-    @{
-*/
-
 // Used to tell wxPGProperty to use label as name as well
 #define wxPG_LABEL              (*wxPGProperty::sm_wxPG_LABEL)
 
@@ -57,9 +51,6 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
 
 
 typedef wxString wxPGCachedString;
-
-/** @}
-*/
 
 // -----------------------------------------------------------------------
 
