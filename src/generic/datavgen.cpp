@@ -5177,7 +5177,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     sizer->Add( m_clientArea, 1, wxGROW );
     SetSizer( sizer );
 
-    EnableSystemTheme();
+    EnableSystemThemeByDefault();
 
 #if wxUSE_ACCESSIBILITY
     wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_CREATE, this, wxOBJID_CLIENT, wxACC_SELF);
