@@ -8,10 +8,12 @@
 
 // -----------------------------------------------------------------------
 
-// Used to tell wxPGProperty to use label as name as well
+/** Used to tell wxPGProperty to use label as name as well
+*/
 #define wxPG_LABEL              (*wxPGProperty::sm_wxPG_LABEL)
 
-// This is the value placed in wxPGProperty::sm_wxPG_LABEL
+/** This is the value placed in wxPGProperty::sm_wxPG_LABEL
+*/
 #define wxPG_LABEL_STRING       wxS("@!")
 #define wxPG_NULL_BITMAP        wxNullBitmap
 #define wxPG_COLOUR_BLACK       (*wxBLACK)
@@ -58,72 +60,122 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
 
 enum wxPG_GETPROPERTYVALUES_FLAGS
 {
+/** Flag for wxPropertyGridInterface::SetProperty* functions,
+    wxPropertyGridInterface::HideProperty(), etc.
+    Apply changes only for the property in question.
+    @hideinitializer
+*/
+wxPG_DONT_RECURSE                 = 0x00000000,
 
-/** Flags for wxPropertyGridInterface::GetPropertyValues */
+/** Flag for wxPropertyGridInterface::GetPropertyValues().
+    Use this flag to retain category structure; each sub-category
+    will be its own wxVariantList of wxVariant.
+    @hideinitializer
+*/
 wxPG_KEEP_STRUCTURE               = 0x00000010,
 
-/** Flags for wxPropertyGrid::SetPropertyAttribute() etc */
+/** Flag for wxPropertyGridInterface::SetProperty* functions,
+    wxPropertyGridInterface::HideProperty(), etc.
+    Apply changes recursively for the property and all its children.
+    @hideinitializer
+*/
 wxPG_RECURSE                      = 0x00000020,
 
-/** Include attributes for GetPropertyValues. */
+/** Flag for wxPropertyGridInterface::GetPropertyValues().
+    Use this flag to include property attributes as well.
+    @hideinitializer
+*/
 wxPG_INC_ATTRIBUTES               = 0x00000040,
 
-/** Used when first starting recursion. */
+/** Used when first starting recursion.
+    @hideinitializer
+*/
 wxPG_RECURSE_STARTS               = 0x00000080,
 
-/** Force value change. */
+/** Force value change.
+    @hideinitializer
+*/
 wxPG_FORCE                        = 0x00000100,
 
 /** Only sort categories and their immediate children.
-    Sorting done by wxPG_AUTO_SORT option uses this.
+    Sorting done by ::wxPG_AUTO_SORT option uses this.
+    @hideinitializer
 */
 wxPG_SORT_TOP_LEVEL_ONLY          = 0x00000200
-
 };
-
-/** Flags for wxPropertyGrid::SetPropertyAttribute() etc */
-#define wxPG_DONT_RECURSE         0x00000000
 
 // -----------------------------------------------------------------------
 
-// Misc argument flags.
+/** Misc argument flags.
+*/
 enum wxPG_MISC_ARG_FLAGS
 {
-    // Get/Store full value instead of displayed value.
+    /** Get/Store full value instead of displayed value.
+        @hideinitializer
+    */
     wxPG_FULL_VALUE                     = 0x00000001,
 
+    /** Perform special action in case of unsuccessful conversion.
+        @hideinitializer
+    */
     wxPG_REPORT_ERROR                   = 0x00000002,
 
+    /**
+        @hideinitializer
+    */
     wxPG_PROPERTY_SPECIFIC              = 0x00000004,
 
-    // Get/Store editable value instead of displayed one (should only be
-    // different in the case of common values)
+    /** Get/Store editable value instead of displayed one (should only be
+        different in the case of common values).
+        @hideinitializer
+    */
     wxPG_EDITABLE_VALUE                 = 0x00000008,
 
-    // Used when dealing with fragments of composite string value
+    /** Used when dealing with fragments of composite string value
+        @hideinitializer
+    */
     wxPG_COMPOSITE_FRAGMENT             = 0x00000010,
 
-    // Means property for which final string value is for cannot really be
-    // edited.
+    /** Means property for which final string value is for cannot really be
+        edited.
+        @hideinitializer
+    */
     wxPG_UNEDITABLE_COMPOSITE_FRAGMENT  = 0x00000020,
 
-    // ValueToString() called from GetValueAsString()
-    // (guarantees that input wxVariant value is current own value)
+    /** wxPGProperty::ValueToString() called from wxPGProperty::GetValueAsString()
+        (guarantees that input wxVariant value is current own value)
+        @hideinitializer
+    */
     wxPG_VALUE_IS_CURRENT               = 0x00000040,
 
-    // Value is being set programmatically (ie. not by user)
+    /** Value is being set programmatically (i.e. not by user)
+        @hideinitializer
+    */
     wxPG_PROGRAMMATIC_VALUE             = 0x00000080
 };
 
 // -----------------------------------------------------------------------
 
-// wxPGProperty::SetValue() flags
+/** wxPGProperty::SetValue() flags
+*/
 enum wxPG_SETVALUE_FLAGS
 {
+    /**
+        @hideinitializer
+    */
     wxPG_SETVAL_REFRESH_EDITOR      = 0x0001,
+    /**
+        @hideinitializer
+    */
     wxPG_SETVAL_AGGREGATED          = 0x0002,
+    /**
+        @hideinitializer
+    */
     wxPG_SETVAL_FROM_PARENT         = 0x0004,
-    wxPG_SETVAL_BY_USER             = 0x0008  // Set if value changed by user
+    /** Set if value changed by user
+        @hideinitializer
+    */
+    wxPG_SETVAL_BY_USER             = 0x0008
 };
 
 // -----------------------------------------------------------------------
