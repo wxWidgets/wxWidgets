@@ -2835,8 +2835,9 @@ bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
     const int col = pLVCD->iSubItem;
     const DWORD item = nmcd.dwItemSpec;
 
-    // the font must be valid, otherwise we wouldn't be painting the item at all
-    SelectInHDC selFont(hdc, hfont);
+    SelectInHDC selFont;
+    if ( hfont )
+        selFont.Init(hdc, hfont);
 
     // get the rectangle to paint
     RECT rc;
@@ -3051,6 +3052,22 @@ static WXLPARAM HandleItemPrepaint(wxListCtrl *listctrl,
         ::SelectObject(pLVCD->nmcd.hdc, GetHfontOf(font));
 
         return CDRF_NEWFONT;
+    }
+
+    // For some unknown reason, native control incorrectly uses the active
+    // selection colour for the background of the items using COLOR_BTNFACE as
+    // their custom background even when the control doesn't have focus (see
+    // #17988). To work around this, draw the item ourselves in this case.
+    //
+    // Note that the problem doesn't arise when using system theme, which is
+    // lucky as HandleItemPaint() doesn't result in the same appearance as with
+    // the system theme, so we should avoid using it in this case to ensure
+    // that all items appear consistently.
+    if ( listctrl->IsSystemThemeDisabled() &&
+            pLVCD->clrTextBk == ::GetSysColor(COLOR_BTNFACE) )
+    {
+        HandleItemPaint(pLVCD, NULL);
+        return CDRF_SKIPDEFAULT;
     }
 
     return CDRF_DODEFAULT;
