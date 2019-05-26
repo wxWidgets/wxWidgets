@@ -24,17 +24,17 @@
 
 
 /** If property is supposed to have custom-painted image, then returning
-    this in OnMeasureImage() will usually be enough.
+    this in wxPGProperty::OnMeasureImage() will usually be enough.
 */
-#define wxPG_DEFAULT_IMAGE_SIZE             wxSize(-1, -1)
+#define wxPG_DEFAULT_IMAGE_SIZE             wxDefaultSize
 
 
 /** This callback function is used for sorting properties.
 
     Call wxPropertyGrid::SetSortFunction() to set it.
 
-    Sort function should return a value greater than 0 if position of p1 is
-    after p2. So, for instance, when comparing property names, you can use
+    Sort function should return a value greater than 0 if position of @a p1 is
+    after @a p2. So, for instance, when comparing property names, you can use
     following implementation:
 
         @code
@@ -52,8 +52,9 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
 
 // -----------------------------------------------------------------------
 
-// Used to indicate wxPGChoices::Add etc that the value is actually not given
-// by the caller.
+/** Used to indicate wxPGChoices::Add() etc that the value is actually not given
+    by the caller.
+*/
 #define wxPG_INVALID_VALUE      INT_MAX
 
 // -----------------------------------------------------------------------

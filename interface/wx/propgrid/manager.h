@@ -27,7 +27,7 @@
 
     wxPropertyGridPage receives events emitted by its wxPropertyGridManager, but
     only those events that are specific to that page. If wxPropertyGridPage::
-    IsHandlingAllEvents returns false, then unhandled events are sent to the
+    IsHandlingAllEvents returns @false, then unhandled events are sent to the
     manager's parent, as usual.
 
     See @ref propgrid_event_handling "wxPropertyGrid Event Handling"
@@ -223,7 +223,7 @@ public:
     /**
        The default constructor. The styles to be used are styles valid for
        the wxWindow.
-       @see @link wndflags Additional Window Styles @endlink
+       @see @ref propgrid_window_styles
     */
     wxPropertyGridManager( wxWindow *parent, wxWindowID id = wxID_ANY,
                            const wxPoint& pos = wxDefaultPosition,
@@ -249,7 +249,7 @@ public:
 
         @param pageObj
             wxPropertyGridPage instance. Manager will take ownership of this
-            object. NULL indicates that a default page instance should be created.
+            object. @NULL indicates that a default page instance should be created.
 
         @return Returns pointer to created property grid page.
 
@@ -431,7 +431,7 @@ public:
     bool IsPageModified( size_t index ) const;
 
     /**
-        Returns true if property is selected. Since selection is page
+        Returns @true if property is selected. Since selection is page
         based, this function checks every page in the manager.
     */
     virtual bool IsPropertySelected( wxPGPropArg id ) const;
@@ -538,7 +538,7 @@ public:
         Show or hide the property grid header control. It is hidden
         by the default.
 
-        @remarks Grid may look better if you use wxPG_NO_INTERNAL_BORDER
+        @remarks Grid may look better if you use ::wxPG_NO_INTERNAL_BORDER
                  window style when showing a header.
     */
     void ShowHeader(bool show = true);
