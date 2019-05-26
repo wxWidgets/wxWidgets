@@ -182,17 +182,18 @@ enum wxPG_SETVALUE_FLAGS
 // -----------------------------------------------------------------------
 
 //
-// Valid constants for wxPG_UINT_BASE attribute
-// (long because of wxVariant constructor)
-#define wxPG_BASE_OCT                       (long)8
-#define wxPG_BASE_DEC                       (long)10
-#define wxPG_BASE_HEX                       (long)16
-#define wxPG_BASE_HEXL                      (long)32
+/** Valid constants for ::wxPG_UINT_BASE attribute
+    (@c long because of wxVariant constructor)
+*/
+#define wxPG_BASE_OCT                       8L
+#define wxPG_BASE_DEC                       10L
+#define wxPG_BASE_HEX                       16L
+#define wxPG_BASE_HEXL                      32L
 
-//
-// Valid constants for wxPG_UINT_PREFIX attribute
-#define wxPG_PREFIX_NONE                    (long)0
-#define wxPG_PREFIX_0x                      (long)1
-#define wxPG_PREFIX_DOLLAR_SIGN             (long)2
+/** Valid constants for ::wxPG_UINT_PREFIX attribute
+*/
+#define wxPG_PREFIX_NONE                    0L
+#define wxPG_PREFIX_0x                      1L
+#define wxPG_PREFIX_DOLLAR_SIGN             2L
 
 // -----------------------------------------------------------------------

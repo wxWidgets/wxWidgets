@@ -185,8 +185,8 @@ wxPGGlobalVarsClass* wxPGGlobalVars = NULL;
 wxPGGlobalVarsClass::wxPGGlobalVarsClass()
     // Prepare some shared variants
     : m_vEmptyString(wxString())
-    , m_vZero((long)0)
-    , m_vMinusOne((long)-1)
+    , m_vZero(0L)
+    , m_vMinusOne(-1L)
     , m_vTrue(true)
     , m_vFalse(false)
     // Prepare cached string constants
