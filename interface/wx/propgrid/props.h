@@ -517,7 +517,7 @@ public:
     - ::wxPG_FILE_SHOW_RELATIVE_PATH: If set, then the filename is shown relative
     to the given path string.
     - ::wxPG_FILE_INITIAL_PATH: Sets the initial path of where to look for files.
-    - ::wxPG_FILE_DIALOG_TITL: Sets a specific title for the dir dialog.
+    - ::wxPG_FILE_DIALOG_TITLE: Sets a specific title for the dir dialog.
     - ::wxPG_FILE_DIALOG_STYLE: Sets a specific wxFileDialog style for the file
     dialog (since 2.9.4).
 */
