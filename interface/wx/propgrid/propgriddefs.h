@@ -48,10 +48,6 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
                                 wxPGProperty* p1,
                                 wxPGProperty* p2);
 
-
-
-typedef wxString wxPGCachedString;
-
 // -----------------------------------------------------------------------
 
 // Used to indicate wxPGChoices::Add etc that the value is actually not given
