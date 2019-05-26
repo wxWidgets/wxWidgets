@@ -621,7 +621,7 @@ bool wxArrayDoubleProperty::StringToValue( wxVariant& variant, const wxString& t
     // by returning pending value of non-wxArrayDouble type.
     if ( !ok )
     {
-        variant = (long)0;
+        variant = 0L;
         return true;
     }
 

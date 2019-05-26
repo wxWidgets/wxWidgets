@@ -950,9 +950,9 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         RT_START_TEST(Attributes)
 
         wxPGProperty* prop = pgman->GetProperty("StringProperty");
-        prop->SetAttribute("Dummy Attribute", (long)15);
+        prop->SetAttribute("Dummy Attribute", 15L);
 
-        if ( prop->GetAttribute("Dummy Attribute").GetLong() != 15 )
+        if ( prop->GetAttribute("Dummy Attribute").GetLong() != 15L )
             RT_FAILURE();
 
         prop->SetAttribute("Dummy Attribute", wxVariant());
