@@ -389,8 +389,9 @@ public:
 
         If the value could not be determined the users home directory is returned.
 
-        @note On Unix this method respects the XDG base directory specification
-        only if SetFileLayout() with @c FileLayout_XDG had been called.
+        @note On Unix this (newer) method always respects the XDG base
+        directory specification, even if SetFileLayout() with @c FileLayout_XDG
+        hadn't been called.
 
         @since 3.1.0
     */
