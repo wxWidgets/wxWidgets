@@ -1405,6 +1405,11 @@ public:
 
         @note Setting a pixel can be done using DrawPoint().
 
+        @note This function will fail on OSX when using CoreGraphics as the OS
+              does not support this functionality. You will need to either to
+              turn CoreGraphics off, use wxBitmap to draw on and examine bitmap
+              content or use GetAsBitmap() on the dc.
+
         @note This method shouldn't be used with wxPaintDC as accessing the DC
         while drawing can result in unexpected results, notably in wxGTK.
     */
