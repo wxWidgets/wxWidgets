@@ -790,7 +790,7 @@ bool wxTreeCtrl::Create(wxWindow *parent,
     {
         // The Vista+ system theme uses rotating ("twist") buttons, so we map
         // this style to it.
-        EnableSystemTheme();
+        EnableSystemThemeByDefault();
     }
 
     return true;
