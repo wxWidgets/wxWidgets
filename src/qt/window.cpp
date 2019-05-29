@@ -966,8 +966,27 @@ void wxWindowQt::DoSetClientSize(int width, int height)
 void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
 {
     QWidget *qtWidget = GetHandle();
-    qtWidget->move( x, y );
-    qtWidget->resize( width, height );
+    int w, h;
+    qtWidget->resize( width, height );	    
+    GetSize(&w, &h);
+
+     if ( width == -1 )
+    {
+        width = w;
+    }
+
+     if ( height == -1 )
+    {
+        height = h;
+    }
+
+    const QSize frameSize = qtWidget->frameSize();
+    const QSize innerSize = qtWidget->geometry().size();
+    const QSize frameSizeDiff = frameSize - innerSize;
+
+    int client_width = width - frameSizeDiff.width();
+    int client_height = height - frameSizeDiff.height();
+    qtWidget->setGeometry(QRect(x,y, client_width, client_height));
 }
 
 void wxWindowQt::SetMinSize(const wxSize& minSize)
