@@ -36,10 +36,8 @@
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
-<<<<<<< HEAD
-=======
+
 #include <algorithm>
->>>>>>> qt_aui_wip
 
 #define VERT_SCROLLBAR_POSITION 0, 1
 #define HORZ_SCROLLBAR_POSITION 1, 0
