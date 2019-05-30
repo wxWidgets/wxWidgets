@@ -371,7 +371,7 @@ private:
             GetHandler(),
             wxQtConvertTreeItem(itemFromIndex(current_index))
         );
-        if (hint == QAbstractItemDelegate::EndEditHint::RevertModelCache)
+        if (hint == QAbstractItemDelegate::RevertModelCache)
         {
             event.SetEditCanceled(true);
             EmitEvent(event);

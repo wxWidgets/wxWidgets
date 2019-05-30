@@ -40,7 +40,7 @@ public:
         m_textCtrl = NULL;
     }
 
-    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const wxOVERRIDE
+        void setModelData(QWidget *WXUNUSED(editor), QAbstractItemModel *WXUNUSED(model), const QModelIndex &WXUNUSED(index)) const wxOVERRIDE
     {
         // Don't set model data until wx has had a chance to send out events
     }
