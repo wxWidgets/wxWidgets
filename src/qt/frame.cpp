@@ -173,6 +173,10 @@ void wxFrame::SetWindowStyleFlag( long style )
     {
         qtFlags |= Qt::WindowCloseButtonHint;
     }
+    else
+    {
+        qtFlags &= ~Qt::WindowCloseButtonHint;
+    }
 
     if ( HasFlag(wxNO_BORDER) )
     {
