@@ -17,7 +17,7 @@
 #include "wx/settings.h"
 
 #include "wx/qt/private/winevent.h"
-#include "wx/qt/private/treeitemfactory.h"
+#include "wx/qt/private/treeitemdelegate.h"
 
 #include <QtWidgets/QTreeWidget>
 #include <QtWidgets/QHeaderView>
@@ -27,7 +27,7 @@ namespace
 {
 struct TreeItemDataQt
 {
-    TreeItemDataQt() : data(NULL)
+    TreeItemDataQt()
     {
     }
 
@@ -40,9 +40,13 @@ struct TreeItemDataQt
         }
     }
 
-    wxTreeItemData *data;
+    wxTreeItemData *getData() const
+    {
+        return data.get();
+    }
 
     private:
+    wxSharedPtr<wxTreeItemData> data;
     static bool registered;
 };
 
@@ -126,7 +130,8 @@ class wxQTreeWidget : public wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>
 public:
     wxQTreeWidget(wxWindow *parent, wxTreeCtrl *handler) :
         wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>(parent, handler),
-        m_editorFactory(handler)
+        m_item_delegate(handler),
+        m_closing_editor(0)
     {
         connect(this, &QTreeWidget::currentItemChanged,
                 this, &wxQTreeWidget::OnCurrentItemChanged);
@@ -138,13 +143,12 @@ public:
                 this, &wxQTreeWidget::OnItemCollapsed);
         connect(this, &QTreeWidget::itemExpanded,
                 this, &wxQTreeWidget::OnItemExpanded);
-        connect(this, &QTreeWidget::itemChanged,
-                this, &wxQTreeWidget::OnItemChanged);
 
-        m_editorFactory.AttachTo(this);
+        setItemDelegate(&m_item_delegate);
         setDragEnabled(true);
         viewport()->setAcceptDrops(true);
         setDropIndicatorShown(true);
+        setEditTriggers(QAbstractItemView::SelectedClicked);
     }
 
     virtual void paintEvent (QPaintEvent * event)
@@ -157,7 +161,7 @@ public:
 
     wxTextCtrl *GetEditControl()
     {
-        return m_editorFactory.GetEditControl();
+        return m_item_delegate.GetEditControl();
     }
 
     void SetItemImage(QTreeWidgetItem *item, int image, wxTreeItemIcon which)
@@ -219,6 +223,62 @@ protected:
             const QRect rect = visualRect(index);
             painter->drawPixmap(rect.topLeft(), *bitmap.GetHandle());
         }
+    }
+
+    bool edit(const QModelIndex &index, EditTrigger trigger, QEvent *event) wxOVERRIDE
+    {
+        // AllEditTriggers means that editor is about to open, not waiting for double click
+        if (trigger == AllEditTriggers)
+        {
+            // Allow event handlers to veto opening the editor
+            wxTreeEvent wx_event(
+                wxEVT_TREE_BEGIN_LABEL_EDIT,
+                GetHandler(),
+                wxQtConvertTreeItem(itemFromIndex(index))
+                );
+            if (GetHandler()->HandleWindowEvent(wx_event) && !wx_event.IsAllowed())
+                return false;
+        }
+        return QTreeWidget::edit(index, trigger, event);
+    }
+
+    void closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint) wxOVERRIDE
+    {
+        // Close process can re-signal closeEditor so we need to guard against
+        // reentrant calls.
+        wxRecursionGuard guard(m_closing_editor);
+
+        if (guard.IsInside())
+            return;
+
+        // There can be multiple calls to close editor when the item loses focus
+        const QModelIndex current_index = m_item_delegate.GetCurrentModelIndex();
+        if (!current_index.isValid())
+            return;
+
+        wxTreeEvent event(
+            wxEVT_TREE_END_LABEL_EDIT,
+            GetHandler(),
+            wxQtConvertTreeItem(itemFromIndex(current_index))
+            );
+        if (hint == QAbstractItemDelegate::RevertModelCache)
+        {
+            event.SetEditCanceled(true);
+            EmitEvent(event);
+        }
+        else
+        {
+            // Allow event handlers to decide whether to accept edited text
+            const wxString editor_text = m_item_delegate.GetEditControl()->GetLineText(0);
+            event.SetLabel(editor_text);
+            if (!GetHandler()->HandleWindowEvent(event) || event.IsAllowed())
+                m_item_delegate.AcceptModelData(editor, model(), current_index);
+        }
+        // wx doesn't have hints to edit next/previous item
+        if (hint == QAbstractItemDelegate::EditNextItem || hint == QAbstractItemDelegate::EditPreviousItem)
+            hint = QAbstractItemDelegate::SubmitModelCache;
+
+        QTreeWidget::closeEditor(editor, hint);
     }
 
 private:
@@ -346,16 +406,6 @@ private:
         EmitEvent(expandedEvent);
     }
 
-    void OnItemChanged(QTreeWidgetItem *item, int WXUNUSED(column))
-    {
-        wxTreeEvent event(
-            wxEVT_TREE_END_LABEL_EDIT,
-            GetHandler(),
-            wxQtConvertTreeItem(item)
-        );
-        EmitEvent(event);
-    }
-
     void tryStartDrag(const QMouseEvent *event)
     {
         wxEventType command = event->buttons() & Qt::RightButton
@@ -451,7 +501,8 @@ private:
         return imageIndex;
     }
 
-    wxQtTreeItemEditorFactory m_editorFactory;
+    wxQTTreeItemDelegate m_item_delegate;
+    wxRecursionGuardFlag m_closing_editor;
 
     typedef std::map<QTreeWidgetItem*,ImageState> ImageStateMap;
     ImageStateMap m_imageStates;
@@ -557,7 +608,7 @@ wxTreeItemData *wxTreeCtrl::GetItemData(const wxTreeItemId& item) const
     const QTreeWidgetItem* qTreeItem = wxQtConvertTreeItem(item);
     const QVariant itemData = qTreeItem->data(0, Qt::UserRole);
     const TreeItemDataQt value = itemData.value<TreeItemDataQt>();
-    return value.data;
+    return value.getData();
 }
 
 wxColour wxTreeCtrl::GetItemTextColour(const wxTreeItemId& item) const
@@ -1142,13 +1193,7 @@ wxTextCtrl *wxTreeCtrl::EditLabel(
 )
 {
     wxCHECK_MSG(item.IsOk(), NULL, "invalid tree item");
-
-    wxTreeEvent event(wxEVT_TREE_BEGIN_LABEL_EDIT, this, item);
-    if ( HandleWindowEvent(event) && !event.IsAllowed() )
-        return NULL;
-
-    QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-    m_qtTreeWidget->openPersistentEditor(qTreeItem);
+    m_qtTreeWidget->editItem(wxQtConvertTreeItem(item));
     return m_qtTreeWidget->GetEditControl();
 }
 
@@ -1227,6 +1272,7 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
 
     QTreeWidgetItem *newItem = new QTreeWidgetItem;
     newItem->setText(0, wxQtConvertString(text));
+    newItem->setFlags(newItem->flags() | Qt::ItemIsEditable);
 
     TreeItemDataQt treeItemData(data);
     newItem->setData(0, Qt::UserRole, QVariant::fromValue(treeItemData));

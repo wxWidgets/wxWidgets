@@ -3580,6 +3580,7 @@ COND_TOOLKIT_QT_GUI_HDR =  \
 	wx/qt/treectrl.h \
 	wx/qt/private/winevent.h \
 	wx/qt/private/converter.h \
+	wx/qt/private/treeitemdelegate.h \
 	wx/qt/private/treeitemfactory.h \
 	wx/qt/private/pointer.h \
 	wx/qt/private/timer.h \
