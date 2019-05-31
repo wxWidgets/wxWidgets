@@ -144,13 +144,11 @@ public:
         connect(this, &QTreeWidget::itemExpanded,
                 this, &wxQTreeWidget::OnItemExpanded);
 
-        connect(&m_item_delegate, &QAbstractItemDelegate::closeEditor,
-                this, &wxQTreeWidget::OnCloseEditor);
-
         setItemDelegate(&m_item_delegate);
         setDragEnabled(true);
         viewport()->setAcceptDrops(true);
         setDropIndicatorShown(true);
+        setEditTriggers(QAbstractItemView::SelectedClicked);
     }
 
     virtual void paintEvent (QPaintEvent * event)
@@ -225,6 +223,62 @@ protected:
             const QRect rect = visualRect(index);
             painter->drawPixmap(rect.topLeft(), *bitmap.GetHandle());
         }
+    }
+
+    bool edit(const QModelIndex &index, EditTrigger trigger, QEvent *event) wxOVERRIDE
+    {
+        // AllEditTriggers means that editor is about to open, not waiting for double click
+        if (trigger == AllEditTriggers)
+        {
+            // Allow event handlers to veto opening the editor
+            wxTreeEvent wx_event(
+                wxEVT_TREE_BEGIN_LABEL_EDIT,
+                GetHandler(),
+                wxQtConvertTreeItem(itemFromIndex(index))
+                );
+            if (GetHandler()->HandleWindowEvent(wx_event) && !wx_event.IsAllowed())
+                return false;
+        }
+        return QTreeWidget::edit(index, trigger, event);
+    }
+
+    void closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint) wxOVERRIDE
+    {
+        // Close process can re-signal closeEditor so we need to guard against
+        // reentrant calls.
+        wxRecursionGuard guard(m_closing_editor);
+
+        if (guard.IsInside())
+            return;
+
+        // There can be multiple calls to close editor when the item loses focus
+        const QModelIndex current_index = m_item_delegate.GetCurrentModelIndex();
+        if (!current_index.isValid())
+            return;
+
+        wxTreeEvent event(
+            wxEVT_TREE_END_LABEL_EDIT,
+            GetHandler(),
+            wxQtConvertTreeItem(itemFromIndex(current_index))
+            );
+        if (hint == QAbstractItemDelegate::RevertModelCache)
+        {
+            event.SetEditCanceled(true);
+            EmitEvent(event);
+        }
+        else
+        {
+            // Allow event handlers to decide whether to accept edited text
+            const wxString editor_text = m_item_delegate.GetEditControl()->GetLineText(0);
+            event.SetLabel(editor_text);
+            if (!GetHandler()->HandleWindowEvent(event) || event.IsAllowed())
+                m_item_delegate.AcceptModelData(editor, model(), current_index);
+        }
+        // wx doesn't have hints to edit next/previous item
+        if (hint == QAbstractItemDelegate::EditNextItem || hint == QAbstractItemDelegate::EditPreviousItem)
+            hint = QAbstractItemDelegate::SubmitModelCache;
+
+        QTreeWidget::closeEditor(editor, hint);
     }
 
 private:
@@ -350,42 +404,6 @@ private:
             wxQtConvertTreeItem(item)
         );
         EmitEvent(expandedEvent);
-    }
-
-    void OnCloseEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint)
-    {
-        // Close process can re-signal closeEditor so we need to guard against
-        // reentrant calls.
-        wxRecursionGuard guard(m_closing_editor);
-
-        if (guard.IsInside())
-            return;
-
-        // There can be multiple calls to close editor when the item loses focus
-        const QModelIndex current_index = m_item_delegate.GetCurrentModelIndex();
-        if (!current_index.isValid())
-            return;
-
-        wxTreeEvent event(
-            wxEVT_TREE_END_LABEL_EDIT,
-            GetHandler(),
-            wxQtConvertTreeItem(itemFromIndex(current_index))
-        );
-        if (hint == QAbstractItemDelegate::RevertModelCache)
-        {
-            event.SetEditCanceled(true);
-            EmitEvent(event);
-        }
-        else
-        {
-            // Allow event handlers to decide whether to accept edited text
-            const wxString editor_text = m_item_delegate.GetEditControl()->GetLineText(0);
-            event.SetLabel(editor_text);
-            if (!GetHandler()->HandleWindowEvent(event) || event.IsAllowed())
-                m_item_delegate.AcceptModelData(editor, model(), current_index);
-        }
-
-        QAbstractItemView::closePersistentEditor(current_index);
     }
 
     void tryStartDrag(const QMouseEvent *event)
@@ -1175,13 +1193,7 @@ wxTextCtrl *wxTreeCtrl::EditLabel(
 )
 {
     wxCHECK_MSG(item.IsOk(), NULL, "invalid tree item");
-
-    wxTreeEvent event(wxEVT_TREE_BEGIN_LABEL_EDIT, this, item);
-    if ( HandleWindowEvent(event) && !event.IsAllowed() )
-        return NULL;
-
-    QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-    m_qtTreeWidget->openPersistentEditor(qTreeItem);
+    m_qtTreeWidget->editItem(wxQtConvertTreeItem(item));
     return m_qtTreeWidget->GetEditControl();
 }
 
@@ -1260,6 +1272,7 @@ wxTreeItemId wxTreeCtrl::DoInsertItem(const wxTreeItemId& parent,
 
     QTreeWidgetItem *newItem = new QTreeWidgetItem;
     newItem->setText(0, wxQtConvertString(text));
+    newItem->setFlags(newItem->flags() | Qt::ItemIsEditable);
 
     TreeItemDataQt treeItemData(data);
     newItem->setData(0, Qt::UserRole, QVariant::fromValue(treeItemData));
