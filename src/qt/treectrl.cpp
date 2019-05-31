@@ -15,6 +15,7 @@
 #include "wx/treectrl.h"
 #include "wx/imaglist.h"
 #include "wx/settings.h"
+#include "wx/sharedptr.h"
 
 #include "wx/qt/private/winevent.h"
 #include "wx/qt/private/treeitemdelegate.h"
