@@ -27,6 +27,7 @@
 
 #include "wx/url.h"
 #include "wx/log.h"
+#include "wx/convauto.h"
 
 #include <stdlib.h>
 
@@ -168,7 +169,8 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
             return wxPROTO_NETERR;
 
         pBuf[nRead] = '\0';
-        result += wxString::FromAscii(pBuf);
+        wxWCharBuffer temp = wxConvAuto().cMB2WC( pBuf, strlen( pBuf ), NULL );
+        result += temp;
 
         if ( eol )
         {
