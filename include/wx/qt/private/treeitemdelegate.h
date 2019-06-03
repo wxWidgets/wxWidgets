@@ -12,6 +12,7 @@
 
 #include <QtWidgets/QStyledItemDelegate>
 
+#include "wx/app.h"
 #include "wx/textctrl.h"
 
 #include "treeitemfactory.h"
@@ -35,9 +36,12 @@ public:
 
     void destroyEditor(QWidget *WXUNUSED(editor), const QModelIndex &WXUNUSED(index)) const wxOVERRIDE
     {
-        m_current_model_index = QModelIndex();
-        delete m_textCtrl;
-        m_textCtrl = NULL;
+        if (!wxTheApp->IsScheduledForDestruction(m_textCtrl))
+        {
+            m_current_model_index = QModelIndex();
+            wxTheApp->ScheduleForDestruction(m_textCtrl);
+            m_textCtrl = NULL;
+        }
     }
 
     void setModelData(QWidget *WXUNUSED(editor), QAbstractItemModel *WXUNUSED(model), const QModelIndex &WXUNUSED(index)) const wxOVERRIDE
