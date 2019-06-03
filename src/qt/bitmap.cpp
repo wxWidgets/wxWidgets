@@ -91,6 +91,10 @@ static QImage ConvertImage( const wxImage &image )
         image.GetOrFindMaskColour( &r, &g, &b );
         maskedColour = ( r << 16 ) + ( g << 8 ) + b;
     }
+    else
+    {
+        maskedColour = 0;
+    }
 
     for (int y = 0; y < image.GetHeight(); y++)
     {
