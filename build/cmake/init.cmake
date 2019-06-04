@@ -8,7 +8,14 @@
 # Licence:     wxWindows licence
 #############################################################################
 
-if(DEFINED wxBUILD_USE_STATIC_RUNTIME AND wxBUILD_USE_STATIC_RUNTIME)
+if(MSVC)
+    # Determine MSVC runtime library flag
+    set(MSVC_LIB_USE "/MD")
+    set(MSVC_LIB_REPLACE "/MT")
+    if(wxBUILD_USE_STATIC_RUNTIME)
+        set(MSVC_LIB_USE "/MT")
+        set(MSVC_LIB_REPLACE "/MD")
+    endif()
     # Set MSVC runtime flags for all configurations
     foreach(cfg "" ${CMAKE_CONFIGURATION_TYPES})
         set(c_flag_var CMAKE_C_FLAGS)
@@ -18,13 +25,13 @@ if(DEFINED wxBUILD_USE_STATIC_RUNTIME AND wxBUILD_USE_STATIC_RUNTIME)
             wx_string_append(c_flag_var "_${cfg_upper}")
             wx_string_append(cxx_flag_var "_${cfg_upper}")
         endif()
-        if(${c_flag_var} MATCHES "/MD")
-            string(REPLACE "/MD" "/MT" ${c_flag_var} "${${c_flag_var}}")
+        if(${c_flag_var} MATCHES ${MSVC_LIB_REPLACE})
+            string(REPLACE ${MSVC_LIB_REPLACE} ${MSVC_LIB_USE} ${c_flag_var} "${${c_flag_var}}")
             set(${c_flag_var} ${${c_flag_var}} CACHE STRING
               "Flags used by the C compiler during ${cfg_upper} builds." FORCE)
         endif()
-        if(${cxx_flag_var} MATCHES "/MD")
-            string(REPLACE "/MD" "/MT" ${cxx_flag_var} "${${cxx_flag_var}}")
+        if(${cxx_flag_var} MATCHES ${MSVC_LIB_REPLACE})
+            string(REPLACE ${MSVC_LIB_REPLACE} ${MSVC_LIB_USE} ${cxx_flag_var} "${${cxx_flag_var}}")
             set(${cxx_flag_var} ${${cxx_flag_var}} CACHE STRING
               "Flags used by the CXX compiler during ${cfg_upper} builds." FORCE)
         endif()
