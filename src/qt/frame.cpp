@@ -231,6 +231,19 @@ void wxFrame::DoGetClientSize(int *width, int *height) const
     }
 }
 
+void wxFrame::DoSetClientSize(int width, int height)
+{
+    wxWindow::DoSetClientSize(width, height);
+
+    int adjustedWidth, adjustedHeight;
+    DoGetClientSize(&adjustedWidth, &adjustedHeight);
+
+    QWidget *centralWidget = GetQMainWindow()->centralWidget();
+    QRect geometry = centralWidget->geometry();
+    geometry.setSize(QSize(adjustedWidth, adjustedHeight));
+    centralWidget->setGeometry(geometry);
+}
+
 QMainWindow *wxFrame::GetQMainWindow() const
 {
     return static_cast<QMainWindow*>(m_qtWindow);

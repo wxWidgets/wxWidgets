@@ -56,6 +56,7 @@ public:
 
 protected:
     virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoSetClientSize(int width, int height) wxOVERRIDE;
 
     virtual QWidget* QtGetParentWidget() const wxOVERRIDE;
 
