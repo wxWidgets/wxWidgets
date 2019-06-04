@@ -848,7 +848,7 @@ void wxAuiManager::UpdateHintWindowConfig()
     if ((m_flags & wxAUI_MGR_TRANSPARENT_HINT) && can_do_transparent)
     {
         // Make a window to use for a transparent hint
-        #if defined(__WXMSW__) || defined(__WXGTK__)
+        #if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXQT__)
             m_hintWnd = new wxFrame(m_frame, wxID_ANY, wxEmptyString,
                                      wxDefaultPosition, wxSize(1,1),
                                          wxFRAME_TOOL_WINDOW |
