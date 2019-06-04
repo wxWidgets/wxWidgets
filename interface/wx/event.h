@@ -4799,7 +4799,7 @@ wxEventType wxNewEventType();
 
     This is mostly used by wxWidgets internally, e.g.
     @code
-    wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_BUTTON, wxCommandEvent)
+    wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_BUTTON, wxCommandEvent);
     @endcode
  */
 #define wxDECLARE_EXPORTED_EVENT( expdecl, name, cls ) \

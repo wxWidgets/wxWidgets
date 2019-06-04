@@ -98,10 +98,11 @@ First define one or more <em>event handlers</em>. They
 are just simple methods of the class that take as a parameter a
 reference to an object of a wxEvent-derived class and have no return value (any
 return information is passed via the argument, which is why it is non-const).
-You also need to insert a macro
+You also need to insert a line with the macro indicating that the class uses an
+event table, like this:
 
 @code
-wxDECLARE_EVENT_TABLE()
+wxDECLARE_EVENT_TABLE();
 @endcode
 
 somewhere in the class declaration. It doesn't matter where it appears but
@@ -132,7 +133,7 @@ private:
     // obligation to do that; this one is an event handler too:
     void DoTest(wxCommandEvent& event);
 
-    wxDECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 @endcode
 
