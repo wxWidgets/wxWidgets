@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TREEITEM_DELEGATE_H
-#define _WX_TREEITEM_DELEGATE_H
+#ifndef _WX_QT_PRIVATE_TREEITEM_DELEGATE_H
+#define _WX_QT_PRIVATE_TREEITEM_DELEGATE_H
 
 #include <QtWidgets/QStyledItemDelegate>
 
@@ -28,7 +28,10 @@ public:
 
     QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem &WXUNUSED(option), const QModelIndex &index) const wxOVERRIDE
     {
-        m_current_model_index = index;
+        if ( m_textCtrl != NULL )
+            destroyEditor(m_textCtrl->GetHandle(), m_currentModelIndex);
+
+        m_currentModelIndex = index;
         m_textCtrl = new wxQtListTextCtrl(m_parent, parent);
         m_textCtrl->SetFocus();
         return m_textCtrl->GetHandle();
@@ -36,9 +39,9 @@ public:
 
     void destroyEditor(QWidget *WXUNUSED(editor), const QModelIndex &WXUNUSED(index)) const wxOVERRIDE
     {
-        if (!wxTheApp->IsScheduledForDestruction(m_textCtrl))
+        if ( m_textCtrl != NULL )
         {
-            m_current_model_index = QModelIndex();
+            m_currentModelIndex = QModelIndex(); // invalidate the index
             wxTheApp->ScheduleForDestruction(m_textCtrl);
             m_textCtrl = NULL;
         }
@@ -56,7 +59,7 @@ public:
 
     QModelIndex GetCurrentModelIndex() const
     {
-        return m_current_model_index;
+        return m_currentModelIndex;
     }
 
     void AcceptModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
@@ -67,7 +70,7 @@ public:
 private:
     wxWindow* m_parent;
     mutable wxTextCtrl* m_textCtrl;
-    mutable QModelIndex m_current_model_index;
+    mutable QModelIndex m_currentModelIndex;
 };
 
-#endif // _WX_TREEITEM_DELEGATE_H
+#endif // _WX_QT_PRIVATE_TREEITEM_DELEGATE_H

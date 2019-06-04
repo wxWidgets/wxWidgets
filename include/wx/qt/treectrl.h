@@ -75,7 +75,6 @@ public:
     virtual wxTreeItemId GetFocusedItem() const wxOVERRIDE;
 
     virtual wxTreeItemId GetItemParent(const wxTreeItemId& item) const wxOVERRIDE;
-     
     virtual wxTreeItemId GetFirstChild(const wxTreeItemId& item, wxTreeItemIdValue& cookie) const wxOVERRIDE;
     virtual wxTreeItemId GetNextChild(const wxTreeItemId& item, wxTreeItemIdValue& cookie) const wxOVERRIDE;
     virtual wxTreeItemId GetLastChild(const wxTreeItemId& item) const wxOVERRIDE;

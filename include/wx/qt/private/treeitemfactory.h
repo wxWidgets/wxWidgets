@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TREEITEM_FACTORY_H_
-#define _WX_TREEITEM_FACTORY_H_
+#ifndef _WX_QT_PRIVATE_TREEITEM_FACTORY_H_
+#define _WX_QT_PRIVATE_TREEITEM_FACTORY_H_
 
 #include <QtWidgets/QItemEditorFactory>
 #include <QtWidgets/QTreeWidget>
@@ -91,11 +91,11 @@ public:
         qItemDelegate->setItemEditorFactory(this);
     }
 
-    virtual QWidget* createEditor(
-        int WXUNUSED(userType),
-        QWidget* parent
-    ) const wxOVERRIDE
+    QWidget* createEditor(int WXUNUSED(userType), QWidget* parent) const wxOVERRIDE
     {
+        if (m_textCtrl != NULL)
+            ClearEditor();
+
         m_textCtrl = new wxQtListTextCtrl(m_parent, parent);
         m_textCtrl->SetFocus();
         return m_textCtrl->GetHandle();
@@ -106,7 +106,7 @@ public:
         return m_textCtrl;
     }
 
-    void ClearEditor()
+    void ClearEditor() const
     {
         delete m_textCtrl;
         m_textCtrl = NULL;
@@ -119,4 +119,4 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxQtTreeItemEditorFactory);
 };
 
-#endif //_WX_TREEITEM_FACTORY_H_
+#endif //_WX_QT_PRIVATE_TREEITEM_FACTORY_H_

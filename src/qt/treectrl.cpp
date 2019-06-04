@@ -16,6 +16,7 @@
 #include "wx/imaglist.h"
 #include "wx/settings.h"
 #include "wx/sharedptr.h"
+#include "wx/withimages.h"
 
 #include "wx/qt/private/winevent.h"
 #include "wx/qt/private/treeitemdelegate.h"
@@ -32,12 +33,13 @@ struct TreeItemDataQt
     {
     }
 
-    TreeItemDataQt(wxTreeItemData* data) : data(data)
+    explicit TreeItemDataQt(wxTreeItemData* data) : data(data)
     {
-        if ( !registered )
+        static bool s_registered = false;
+        if ( !s_registered )
         {
             qRegisterMetaTypeStreamOperators<TreeItemDataQt>("TreeItemDataQt");
-            registered = true;
+            s_registered = true;
         }
     }
 
@@ -46,12 +48,9 @@ struct TreeItemDataQt
         return data.get();
     }
 
-    private:
+private:
     wxSharedPtr<wxTreeItemData> data;
-    static bool registered;
 };
-
-bool TreeItemDataQt::registered = false;
 
 QDataStream &operator<<(QDataStream &out, const TreeItemDataQt &WXUNUSED(obj))
 {
@@ -84,6 +83,7 @@ size_t CountChildren(QTreeWidgetItem *item)
 
     return totalCount;
 }
+
 class ImageState
 {
 public:
@@ -91,7 +91,7 @@ public:
     {
         for ( int i = wxTreeItemIcon_Normal; i < wxTreeItemIcon_Max; ++i )
         {
-            m_imageStates[i] = -1;
+            m_imageStates[i] = wxWithImages::NO_IMAGE;
         }
     }
 
@@ -101,7 +101,7 @@ public:
         return m_imageStates[index];
     }
 
-    const int &operator[](size_t index) const
+    int operator[](size_t index) const
     {
         wxASSERT(index < wxTreeItemIcon_Max);
         return m_imageStates[index];
@@ -523,7 +523,7 @@ wxTreeCtrl::wxTreeCtrl(wxWindow *parent, wxWindowID id,
            const wxSize& size,
            long style,
            const wxValidator& validator,
-           const wxString& name) 
+           const wxString& name)
 {
     Create(parent, id, pos, size, style, validator, name);
 }
@@ -587,7 +587,7 @@ void wxTreeCtrl::SetStateImageList(wxImageList *imageList)
 wxString wxTreeCtrl::GetItemText(const wxTreeItemId& item) const
 {
     if ( !item.IsOk() )
-        return "";
+        return wxString();
 
     const QTreeWidgetItem* qTreeItem = wxQtConvertTreeItem(item);
     return wxQtConvertString(qTreeItem->text(0));
@@ -816,10 +816,11 @@ size_t wxTreeCtrl::GetSelections(wxArrayTreeItemIds& selections) const
     QList<QTreeWidgetItem*> qtSelections = m_qtTreeWidget->selectedItems();
 
     const size_t numberOfSelections = qtSelections.size();
+    selections.reserve(numberOfSelections);
     for ( size_t i = 0; i < numberOfSelections; ++i )
     {
         QTreeWidgetItem *item = qtSelections[i];
-        selections.Add(wxQtConvertTreeItem(item));
+        selections.push_back(wxQtConvertTreeItem(item));
     }
 
     return numberOfSelections;
