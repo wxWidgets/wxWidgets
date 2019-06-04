@@ -178,6 +178,7 @@ public:
 #endif // wxUSE_TOOLTIPS
 
 protected:
+    virtual void Adopt(wxWindow *child);
     virtual void DoGetTextExtent(const wxString& string,
                                  int *x, int *y,
                                  int *descent = NULL,

@@ -55,7 +55,9 @@ public:
     virtual QScrollArea *QtGetScrollBarsContainer() const wxOVERRIDE;
 
 protected:
+    virtual void Adopt(wxWindow *child) wxOVERRIDE;
     virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
+    virtual void DoSetClientSize(int width, int height) wxOVERRIDE;
 
 private:
     // Common part of all ctors.

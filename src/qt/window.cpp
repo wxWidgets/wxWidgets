@@ -436,10 +436,13 @@ bool wxWindowQt::Reparent( wxWindowBase *parent )
 {
     if ( !wxWindowBase::Reparent( parent ))
         return false;
-
-    QtReparent( GetHandle(), parent->GetHandle() );
-
+    wxDynamicCast(parent, wxWindow)->Adopt(this);
     return true;
+}
+
+void wxWindowQt::Adopt(wxWindow *child)
+{
+    QtReparent(child->GetHandle(), GetHandle());
 }
 
 
