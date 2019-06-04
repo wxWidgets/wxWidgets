@@ -101,7 +101,7 @@ return information is passed via the argument, which is why it is non-const).
 You also need to insert a macro
 
 @code
-wxDECLARE_EVENT_TABLE()
+wxDECLARE_EVENT_TABLE();
 @endcode
 
 somewhere in the class declaration. It doesn't matter where it appears but
@@ -132,7 +132,7 @@ private:
     // obligation to do that; this one is an event handler too:
     void DoTest(wxCommandEvent& event);
 
-    wxDECLARE_EVENT_TABLE()
+    wxDECLARE_EVENT_TABLE();
 };
 @endcode
 
