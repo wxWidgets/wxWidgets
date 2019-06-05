@@ -1075,15 +1075,19 @@ void wxListCtrl::Init()
 
 wxListCtrl::~wxListCtrl()
 {
-    m_qtTreeWidget->setModel(NULL);
-    delete m_model;
-
     if ( m_ownsImageListNormal )
         delete m_imageListNormal;
     if ( m_ownsImageListSmall )
         delete m_imageListSmall;
     if ( m_ownsImageListState )
         delete m_imageListState;
+
+    m_imageListNormal = NULL;
+    m_imageListSmall = NULL;
+    m_imageListState = NULL;
+
+    m_qtTreeWidget->setModel(NULL);
+    delete m_model;
 }
 
 bool wxListCtrl::SetForegroundColour(const wxColour& col)
