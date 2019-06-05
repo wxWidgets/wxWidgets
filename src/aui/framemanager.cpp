@@ -4160,14 +4160,14 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
                                       event.m_y - part->rect.y);
             m_frame->CaptureMouse();
         }
-#ifdef __WXMAC__
+#if defined __WXMAC__ || defined __WXQT__
         else
         {
             event.Skip();
         }
 #endif
     }
-#ifdef __WXMAC__
+#if defined __WXMAC__ || defined __WXQT__
     else
     {
         event.Skip();
