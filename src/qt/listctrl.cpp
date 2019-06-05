@@ -172,6 +172,7 @@ wxQtListTreeWidget::wxQtListTreeWidget( wxWindow *parent, wxListCtrl *handler )
     connect(this, &QTreeView::activated, this, &wxQtListTreeWidget::itemActivated);
 
     ChangeEditorFactory();
+    setEditTriggers(NoEditTriggers);
 }
 
 void wxQtListTreeWidget::EmitListEvent(wxEventType typ, const QModelIndex &index) const
@@ -282,6 +283,7 @@ public:
                 wxListItem listItem;
                 listItem.SetId(row);
                 listItem.SetColumn(col);
+                listItem.SetText(wxQtConvertString(columnItem.m_label));
 
                 wxListEvent event(wxEVT_LIST_BEGIN_LABEL_EDIT, m_listCtrl->GetId());
                 event.SetEventObject(m_listCtrl);
@@ -364,19 +366,22 @@ public:
         );
 
         if ( role == Qt::DisplayRole || role == Qt::EditRole )
-        { 
+        {
+            const QString edited_text = value.toString();
             wxListItem listItem;
             listItem.SetId(row);
             listItem.SetColumn(col);
+            listItem.SetText(wxQtConvertString(edited_text));
 
             wxListEvent event(wxEVT_LIST_END_LABEL_EDIT, m_listCtrl->GetId());
             event.SetEventObject(m_listCtrl);
-            event.SetItem(listItem); 
+            event.SetItem(listItem);
+            event.SetIndex(listItem.GetId());
 
             if ( m_listCtrl->HandleWindowEvent(event) && !event.IsAllowed() )
                 return false;
 
-            m_rows[row][col].m_label = value.toString();
+            m_rows[row][col].m_label = edited_text;
             return true;
         }
     
