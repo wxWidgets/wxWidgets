@@ -73,6 +73,8 @@ enum wxRibbonArtSetting
     wxRIBBON_ART_GALLERY_BUTTON_DISABLED_FACE_COLOUR,
     wxRIBBON_ART_GALLERY_ITEM_BORDER_COLOUR,
     wxRIBBON_ART_TAB_LABEL_COLOUR,
+    wxRIBBON_ART_TAB_ACTIVE_LABEL_COLOUR,
+    wxRIBBON_ART_TAB_HOVER_LABEL_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_COLOUR,
     wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR,
     wxRIBBON_ART_TAB_CTRL_BACKGROUND_COLOUR,
@@ -668,6 +670,8 @@ protected:
     wxColour m_button_bar_label_colour;
     wxColour m_button_bar_label_disabled_colour;
     wxColour m_tab_label_colour;
+    wxColour m_tab_active_label_colour;
+    wxColour m_tab_hover_label_colour;
     wxColour m_tab_separator_colour;
     wxColour m_tab_separator_gradient_colour;
     wxColour m_tab_active_background_colour;

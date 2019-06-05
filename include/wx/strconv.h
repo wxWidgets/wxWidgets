@@ -32,6 +32,8 @@ class WXDLLIMPEXP_FWD_BASE wxString;
 // don't let the fact that the existing classes implement MB2WC/WC2MB() instead
 // confuse you.
 //
+// For many encodings you must override GetMaxCharLen().
+//
 // You also have to implement Clone() to allow copying the conversions
 // polymorphically.
 //
@@ -117,6 +119,10 @@ public:
     wxCharBuffer cWC2WX(const wchar_t *psz) const { return cWC2MB(psz); }
     wxWCharBuffer cWX2WC(const char *psz) const { return cMB2WC(psz); }
 #endif // Unicode/ANSI
+
+    // return the maximum number of bytes that can be required to encode a
+    // single character in this encoding, e.g. 4 for UTF-8
+    virtual size_t GetMaxCharLen() const { return 1; }
 
     // this function is used in the implementation of cMB2WC() to distinguish
     // between the following cases:
@@ -254,6 +260,8 @@ public:
     virtual size_t FromWChar(char *dst, size_t dstLen,
                              const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
 
+    virtual size_t GetMaxCharLen() const wxOVERRIDE { return 4; }
+
     virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvUTF7; }
 
 private:
@@ -341,6 +349,8 @@ public:
     virtual size_t FromWChar(char *dst, size_t dstLen,
                              const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
 
+    virtual size_t GetMaxCharLen() const wxOVERRIDE { return 4; }
+
     virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvStrictUTF8(); }
 
     // NB: other mapping modes are not, strictly speaking, UTF-8, so we can't
@@ -364,6 +374,8 @@ public:
                            const char *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
     virtual size_t FromWChar(char *dst, size_t dstLen,
                              const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+
+    virtual size_t GetMaxCharLen() const wxOVERRIDE { return 4; }
 
     virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvUTF8(m_options); }
 
@@ -405,6 +417,7 @@ public:
                            const char *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
     virtual size_t FromWChar(char *dst, size_t dstLen,
                              const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+    virtual size_t GetMaxCharLen() const wxOVERRIDE { return 4; }
     virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvUTF16LE; }
 };
 
@@ -419,6 +432,7 @@ public:
                            const char *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
     virtual size_t FromWChar(char *dst, size_t dstLen,
                              const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+    virtual size_t GetMaxCharLen() const wxOVERRIDE { return 4; }
     virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvUTF16BE; }
 };
 
@@ -451,6 +465,7 @@ public:
                            const char *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
     virtual size_t FromWChar(char *dst, size_t dstLen,
                              const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+    virtual size_t GetMaxCharLen() const wxOVERRIDE { return 4; }
     virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvUTF32LE; }
 };
 
@@ -465,6 +480,7 @@ public:
                            const char *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
     virtual size_t FromWChar(char *dst, size_t dstLen,
                              const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+    virtual size_t GetMaxCharLen() const wxOVERRIDE { return 4; }
     virtual wxMBConv *Clone() const wxOVERRIDE { return new wxMBConvUTF32BE; }
 };
 
@@ -565,6 +581,10 @@ public:
     virtual size_t
     FromWChar(char *dst, size_t dstLen,
               const wchar_t *src, size_t srcLen = wxNO_LEN) const wxOVERRIDE;
+
+    // Use the value for UTF-8 here to make sure we try to decode up to 4 bytes
+    // as UTF-8 before giving up.
+    virtual size_t GetMaxCharLen() const wxOVERRIDE { return 4; }
 
     virtual wxMBConv *Clone() const wxOVERRIDE
     {

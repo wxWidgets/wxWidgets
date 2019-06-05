@@ -613,14 +613,7 @@ static bool ReadAll(wxInputStream *is, wxArrayString& output)
     // the stream could be already at EOF or in wxSTREAM_BROKEN_PIPE state
     is->Reset();
 
-    // Notice that wxTextInputStream doesn't work correctly with wxConvAuto
-    // currently, see #14720, so use the current locale conversion explicitly
-    // under assumption that any external program should be using it too.
-    wxTextInputStream tis(*is, " \t"
-#if wxUSE_UNICODE
-                                    , wxConvLibc
-#endif
-                                                );
+    wxTextInputStream tis(*is);
 
     for ( ;; )
     {

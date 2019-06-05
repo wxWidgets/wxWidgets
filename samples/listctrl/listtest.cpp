@@ -44,6 +44,7 @@
 #include "wx/sizer.h"
 #include "wx/sysopt.h"
 #include "wx/numdlg.h"
+#include "wx/selstore.h"
 
 #include "listtest.h"
 
@@ -1204,12 +1205,22 @@ void MyListCtrl::OnChecked(wxListEvent& event)
 {
     LogEvent(event, "OnChecked");
 
+    if ( IsVirtual() )
+    {
+        CheckItem(event.GetIndex(), true);
+    }
+
     event.Skip();
 }
 
 void MyListCtrl::OnUnChecked(wxListEvent& event)
 {
     LogEvent(event, "OnUnChecked");
+
+    if ( IsVirtual() )
+    {
+        CheckItem(event.GetIndex(), false);
+    }
 
     event.Skip();
 }
@@ -1417,6 +1428,36 @@ wxString MyListCtrl::OnGetItemText(long item, long column) const
     {
         return wxString::Format("Column %ld of item %ld", column, item);
     }
+}
+
+void MyListCtrl::CheckItem(long item, bool check)
+{
+    if ( IsVirtual() )
+    {
+        m_checked.SelectItem(item, check);
+        RefreshItem(item);
+    }
+    else
+    {
+        wxListCtrl::CheckItem(item, check);
+    }
+}
+
+bool MyListCtrl::IsItemChecked(long item) const
+{
+    if ( IsVirtual() )
+    {
+        return m_checked.IsSelected(item);
+    }
+    else
+    {
+        return wxListCtrl::IsItemChecked(item);
+    }
+}
+
+bool MyListCtrl::OnGetItemIsChecked(long item) const
+{
+    return IsItemChecked(item);
 }
 
 int MyListCtrl::OnGetItemColumnImage(long item, long column) const

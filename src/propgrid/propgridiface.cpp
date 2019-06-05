@@ -103,8 +103,7 @@ wxPGProperty* wxPropertyGridInterface::Append( wxPGProperty* property )
 wxPGProperty* wxPropertyGridInterface::AppendIn( wxPGPropArg id, wxPGProperty* newproperty )
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxNullProperty)
-    wxPGProperty* pwc = (wxPGProperty*) p;
-    wxPGProperty* retp = m_pState->DoInsert(pwc, pwc->GetChildCount(), newproperty);
+    wxPGProperty* retp = m_pState->DoInsert(p, p->GetChildCount(), newproperty);
     return retp;
 }
 
@@ -123,7 +122,7 @@ wxPGProperty* wxPropertyGridInterface::Insert( wxPGPropArg id, wxPGProperty* pro
 wxPGProperty* wxPropertyGridInterface::Insert( wxPGPropArg id, int index, wxPGProperty* newproperty )
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(wxNullProperty)
-    wxPGProperty* retp = m_pState->DoInsert((wxPGProperty*)p,index,newproperty);
+    wxPGProperty* retp = m_pState->DoInsert(p,index,newproperty);
     RefreshGrid();
     return retp;
 }
@@ -323,7 +322,7 @@ bool wxPropertyGridInterface::ExpandAll( bool doExpand )
 
     for ( it = GetVIterator( wxPG_ITERATE_ALL ); !it.AtEnd(); it.Next() )
     {
-        wxPGProperty* p = (wxPGProperty*) it.GetProperty();
+        wxPGProperty* p = it.GetProperty();
         if ( p->GetChildCount() )
         {
             if ( doExpand )
@@ -493,17 +492,17 @@ void wxPropertyGridInterface::GetPropertiesWithFlag( wxArrayPGProperty* targetAr
           !it.AtEnd();
           it.Next() )
     {
-        const wxPGProperty* property = it.GetProperty();
+        wxPGProperty* property = it.GetProperty();
 
         if ( !inverse )
         {
             if ( property->HasFlagsExact(flags) )
-                targetArr->push_back((wxPGProperty*)property);
+                targetArr->push_back(property);
         }
         else
         {
             if ( !property->HasFlagsExact(flags) )
-                targetArr->push_back((wxPGProperty*)property);
+                targetArr->push_back(property);
         }
     }
 }
@@ -667,20 +666,18 @@ bool wxPropertyGridInterface::SetPropertyMaxLength( wxPGPropArg id, int maxLen )
 {
     wxPG_PROP_ARG_CALL_PROLOG_RETVAL(false)
 
-    wxPropertyGrid* pg = m_pState->GetGrid();
+    if ( !p->SetMaxLength(maxLen) )
+        return false;
 
-    p->m_maxLen = (short) maxLen;
+    wxPropertyGrid* pg = m_pState->GetGrid();
 
     // Adjust control if selected currently
     if ( pg == p->GetGrid() && p == m_pState->GetSelection() )
     {
         wxWindow* wnd = pg->GetEditorControl();
-        wxTextCtrl* tc = wxDynamicCast(wnd,wxTextCtrl);
-        if ( tc )
-            tc->SetMaxLength( maxLen );
-        else
-        // Not a text ctrl
-            return false;
+        wxTextCtrl* tc = wxDynamicCast(wnd, wxTextCtrl);
+        wxCHECK_MSG(tc, false, "Text ctrl is expected here");
+        tc->SetMaxLength(maxLen);
     }
 
     return true;

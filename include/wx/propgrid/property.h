@@ -291,7 +291,10 @@ class WXDLLIMPEXP_PROPGRID wxPGAttributeStorage
 {
 public:
     wxPGAttributeStorage();
+    wxPGAttributeStorage(const wxPGAttributeStorage& other);
     ~wxPGAttributeStorage();
+
+    wxPGAttributeStorage& operator=(const wxPGAttributeStorage& rhs);
 
     void Set( const wxString& name, const wxVariant& value );
     unsigned int GetCount() const { return (unsigned int) m_map.size(); }
@@ -971,7 +974,6 @@ class WXDLLIMPEXP_PROPGRID wxPGProperty : public wxObject
     friend class wxPropertyGridInterface;
     friend class wxPropertyGridPageState;
     friend class wxPropertyGridPopulator;
-    friend class wxStringProperty;  // Proper "<composed>" support requires this
 
     wxDECLARE_ABSTRACT_CLASS(wxPGProperty);
 public:
@@ -1252,8 +1254,7 @@ public:
     // Common values are disabled by the default for all properties.
     void EnableCommonValue( bool enable = true )
     {
-        if ( enable ) SetFlag( wxPG_PROP_USES_COMMON_VALUE );
-        else ClearFlag( wxPG_PROP_USES_COMMON_VALUE );
+        ChangeFlag(wxPG_PROP_USES_COMMON_VALUE, enable);
     }
 
     // Composes text from values of child properties.
@@ -1354,7 +1355,7 @@ public:
     }
 
     // Returns property's hint text (shown in empty value cell).
-    inline wxString GetHintText() const;
+    wxString GetHintText() const;
 
     // Returns property grid where property lies.
     wxPropertyGrid* GetGrid() const;
@@ -1475,7 +1476,7 @@ public:
     // Returns true if this is a sub-property.
     bool IsSubProperty() const
     {
-        wxPGProperty* parent = (wxPGProperty*)m_parent;
+        wxPGProperty* parent = m_parent;
         if ( parent && !parent->IsCategory() )
             return true;
         return false;
@@ -1489,10 +1490,11 @@ public:
     // this function usually returns Null variant.
     wxVariant GetDefaultValue() const;
 
-    // Returns maximum allowed length of property's text value.
+    // Returns maximum allowed length of the text the user can enter in
+    // the property text editor.
     int GetMaxLength() const
     {
-        return (int) m_maxLen;
+        return m_maxLen;
     }
 
     // Determines, recursively, if all children are not unspecified.
@@ -1627,7 +1629,7 @@ public:
     }
 
     // Sets editor for a property, , by editor name.
-    inline void SetEditor( const wxString& editorName );
+    void SetEditor( const wxString& editorName );
 
     // Sets cell information for given column.
     void SetCell( int column, const wxPGCell& cell );
@@ -1679,8 +1681,7 @@ public:
 
     void SetExpanded( bool expanded )
     {
-        if ( !expanded ) m_flags |= wxPG_PROP_COLLAPSED;
-        else m_flags &= ~wxPG_PROP_COLLAPSED;
+        ChangeFlag(wxPG_PROP_COLLAPSED, !expanded);
     }
 
     // Sets or clears given property flag. Mainly for internal use.
@@ -1786,7 +1787,7 @@ public:
     bool SetChoices( const wxPGChoices& choices );
 
     // Set max length of text in text editor.
-    inline bool SetMaxLength( int maxLen );
+    bool SetMaxLength( int maxLen );
 
     // Call with 'false' in OnSetValue to cancel value changes after all
     // (i.e. cancel 'true' returned by StringToValue() or IntToValue()).
@@ -2038,11 +2039,10 @@ protected:
 
     FlagType                    m_flags;
 
-    // Maximum length (mainly for string properties). Could be in some sort of
+    // Maximum length (for string properties). Could be in some sort of
     // wxBaseStringProperty, but currently, for maximum flexibility and
-    // compatibility, we'll stick it here. Anyway, we had 3 excess bytes to use
-    // so short int will fit in just fine.
-    short                       m_maxLen;
+    // compatibility, we'll stick it here.
+    int                         m_maxLen;
 
     // Root has 0, categories etc. at that level 1, etc.
     unsigned char               m_depth;

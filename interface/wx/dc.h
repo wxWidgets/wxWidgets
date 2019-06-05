@@ -1400,8 +1400,10 @@ public:
     wxMappingMode GetMapMode() const;
 
     /**
-        Gets in @a colour the colour at the specified location. Not available
-        for wxPostScriptDC or wxMetafileDC.
+        Gets in @a colour the colour at the specified location.
+
+        This method isn't available for wxPostScriptDC or wxMetafileDC nor for
+        any DC in wxOSX port and simply returns @false there.
 
         @note Setting a pixel can be done using DrawPoint().
 

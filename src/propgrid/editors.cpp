@@ -520,12 +520,9 @@ class wxPGDoubleClickProcessor : public wxEvtHandler
 {
 public:
 
-    wxPGDoubleClickProcessor( wxOwnerDrawnComboBox* combo, wxPGProperty* property )
+    wxPGDoubleClickProcessor( wxOwnerDrawnComboBox* combo, wxBoolProperty* property )
         : wxEvtHandler()
     {
-        wxASSERT_MSG( wxDynamicCast(property, wxBoolProperty),
-           wxS("Double-click processor should be used only with wxBoolProperty") );
-
         m_timeLastMouseUp = 0;
         m_combo = combo;
         m_property = property;
@@ -589,7 +586,7 @@ protected:
 private:
     wxMilliClock_t              m_timeLastMouseUp;
     wxOwnerDrawnComboBox*       m_combo;
-    wxPGProperty*               m_property;  // Selected property
+    wxBoolProperty*             m_property;  // Selected property
     bool                        m_downReceived;
 
     wxDECLARE_EVENT_TABLE();
@@ -610,7 +607,6 @@ public:
         : wxOwnerDrawnComboBox()
     {
         m_dclickProcessor = NULL;
-        m_sizeEventCalled = false;
     }
 
     ~wxPGComboBox()
@@ -647,9 +643,10 @@ public:
         // only for wxBoolProperty.
         m_selProp = GetGrid()->GetSelection();
         wxASSERT(m_selProp);
-        if (wxDynamicCast(m_selProp, wxBoolProperty))
+        wxBoolProperty* boolProp = wxDynamicCast(m_selProp, wxBoolProperty);
+        if ( boolProp )
         {
-            m_dclickProcessor = new wxPGDoubleClickProcessor(this, m_selProp);
+            m_dclickProcessor = new wxPGDoubleClickProcessor(this, boolProp);
             PushEventHandler(m_dclickProcessor);
         }
 
@@ -734,7 +731,6 @@ public:
 
 private:
     wxPGDoubleClickProcessor*   m_dclickProcessor;
-    bool                        m_sizeEventCalled;
     wxPGProperty*               m_selProp;
 };
 

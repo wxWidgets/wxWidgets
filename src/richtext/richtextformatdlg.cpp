@@ -120,13 +120,9 @@ bool wxRichTextFormattingDialog::Create(long flags, wxWindow* parent, const wxSt
     SetWindowVariant(wxWINDOW_VARIANT_SMALL);
 #endif
 
-    int resizeBorder = wxRESIZE_BORDER;
-
     GetFormattingDialogFactory()->SetSheetStyle(this);
 
-    wxPropertySheetDialog::Create(parent, id, title, pos, sz,
-        style | (int)wxPlatform::IfNot(wxOS_WINDOWS_CE, resizeBorder)
-    );
+    wxPropertySheetDialog::Create(parent, id, title, pos, sz, style | wxRESIZE_BORDER);
 
     GetFormattingDialogFactory()->CreateButtons(this);
     GetFormattingDialogFactory()->CreatePages(flags, this);

@@ -1681,6 +1681,11 @@ void wxListMainWindow::CacheLineData(size_t line)
         ld->SetImage(col, listctrl->OnGetItemColumnImage(line, col));
     }
 
+    if ( HasCheckBoxes() )
+    {
+        ld->Check(listctrl->OnGetItemIsChecked(line));
+    }
+
     ld->SetAttr(listctrl->OnGetItemAttr(line));
 }
 
@@ -5532,31 +5537,6 @@ wxSize wxGenericListCtrl::DoGetBestClientSize() const
 // ----------------------------------------------------------------------------
 // virtual list control support
 // ----------------------------------------------------------------------------
-
-wxString wxGenericListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) const
-{
-    // this is a pure virtual function, in fact - which is not really pure
-    // because the controls which are not virtual don't need to implement it
-    wxFAIL_MSG( wxT("wxGenericListCtrl::OnGetItemText not supposed to be called") );
-
-    return wxEmptyString;
-}
-
-int wxGenericListCtrl::OnGetItemImage(long WXUNUSED(item)) const
-{
-    wxCHECK_MSG(!GetImageList(wxIMAGE_LIST_SMALL),
-                -1,
-                wxT("List control has an image list, OnGetItemImage or OnGetItemColumnImage should be overridden."));
-    return -1;
-}
-
-int wxGenericListCtrl::OnGetItemColumnImage(long item, long column) const
-{
-    if (!column)
-        return OnGetItemImage(item);
-
-   return -1;
-}
 
 void wxGenericListCtrl::SetItemCount(long count)
 {

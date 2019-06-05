@@ -239,6 +239,10 @@ public:
         // Seed titles with defaults
         m_columns[0]->SetTitle(_("Property"));
         m_columns[1]->SetTitle(_("Value"));
+
+        Bind(wxEVT_HEADER_RESIZING, &wxPGHeaderCtrl::OnResizing, this);
+        Bind(wxEVT_HEADER_BEGIN_RESIZE, &wxPGHeaderCtrl::OnBeginResize, this);
+        Bind(wxEVT_HEADER_END_RESIZE, &wxPGHeaderCtrl::OnEndResize, this);
     }
 
     virtual ~wxPGHeaderCtrl()
@@ -250,19 +254,18 @@ public:
         }
     }
 
+    virtual void OnColumnCountChanging(unsigned int count) wxOVERRIDE
+    {
+        EnsureColumnCount(count);
+    }
+
     void OnPageChanged(const wxPropertyGridPage* page)
     {
         m_page = page;
-        OnPageUpdated();
-    }
-
-    void OnPageUpdated()
-    {
         // Get column info from the page
         unsigned int colCount = m_page->GetColumnCount();
-        EnsureColumnCount(colCount);
-        DetermineAllColumnWidths();
         SetColumnCount(colCount);
+        DetermineAllColumnWidths();
     }
 
     void OnColumWidthsChanged()
@@ -353,55 +356,45 @@ private:
                                   wxPG_SPLITTER_FROM_EVENT);
     }
 
-    virtual bool ProcessEvent( wxEvent& event ) wxOVERRIDE
+    void OnResizing(wxHeaderCtrlEvent& evt)
     {
-        wxHeaderCtrlEvent* hcEvent = wxDynamicCast(&event, wxHeaderCtrlEvent);
-        if ( hcEvent )
-        {
-            wxPropertyGrid* pg = m_manager->GetGrid();
-            int col = hcEvent->GetColumn();
-            wxEventType evtType = event.GetEventType();
+        int col = evt.GetColumn();
+        int colWidth = evt.GetWidth();
 
-            if ( evtType == wxEVT_HEADER_RESIZING )
-            {
-                int colWidth = hcEvent->GetWidth();
+        OnSetColumnWidth(col, colWidth);
+        OnColumWidthsChanged();
 
-                OnSetColumnWidth(col, colWidth);
+        wxPropertyGrid* pg = m_manager->GetGrid();
+        pg->SendEvent(wxEVT_PG_COL_DRAGGING, NULL, NULL, 0,
+                      (unsigned int)col);
+    }
 
-                pg->SendEvent(wxEVT_PG_COL_DRAGGING,
-                              NULL, NULL, 0,
-                              (unsigned int)col);
+    void OnBeginResize(wxHeaderCtrlEvent& evt)
+    {
+        int col = evt.GetColumn();
+        wxPropertyGrid* pg = m_manager->GetGrid();
 
-                return true;
-            }
-            else if ( evtType == wxEVT_HEADER_BEGIN_RESIZE )
-            {
-                // Don't allow resizing the rightmost column
-                // (like it's not allowed for the rightmost wxPropertyGrid splitter)
-                if ( col == (int)m_page->GetColumnCount() - 1 )
-                    hcEvent->Veto();
-                // Never allow column resize if layout is static
-                else if ( m_manager->HasFlag(wxPG_STATIC_SPLITTER) )
-                    hcEvent->Veto();
-                // Allow application to veto dragging
-                else if ( pg->SendEvent(wxEVT_PG_COL_BEGIN_DRAG,
-                                        NULL, NULL, 0,
-                                        (unsigned int)col) )
-                    hcEvent->Veto();
+        // Don't allow resizing the rightmost column
+        // (like it's not allowed for the rightmost wxPropertyGrid splitter)
+        if ( col == (int)m_page->GetColumnCount() - 1 )
+            evt.Veto();
+        // Never allow column resize if layout is static
+        else if ( m_manager->HasFlag(wxPG_STATIC_SPLITTER) )
+            evt.Veto();
+        // Allow application to veto dragging
+        else if ( pg->SendEvent(wxEVT_PG_COL_BEGIN_DRAG,
+                                NULL, NULL, 0,
+                                (unsigned int)col) )
+            evt.Veto();
+    }
 
-                return true;
-            }
-            else if ( evtType == wxEVT_HEADER_END_RESIZE )
-            {
-                pg->SendEvent(wxEVT_PG_COL_END_DRAG,
-                              NULL, NULL, 0,
-                              (unsigned int)col);
-
-                return true;
-            }
-        }
-
-        return wxHeaderCtrl::ProcessEvent(event);
+    void OnEndResize(wxHeaderCtrlEvent& evt)
+    {
+        int col = evt.GetColumn();
+        wxPropertyGrid* pg = m_manager->GetGrid();
+        pg->SendEvent(wxEVT_PG_COL_END_DRAG,
+                      NULL, NULL, 0,
+                      (unsigned int)col);
     }
 
     wxPropertyGridManager*          m_manager;
@@ -927,13 +920,23 @@ void wxPropertyGridManager::SetColumnCount( int colCount, int page )
     wxASSERT( page >= -1 );
     wxASSERT( page < (int)GetPageCount() );
 
-    GetPageState(page)->SetColumnCount( colCount );
-    GetGrid()->Refresh();
-
+    wxPropertyGridPageState* state = GetPageState(page);
 #if wxUSE_HEADERCTRL
-    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
-        m_pHeaderCtrl->OnPageUpdated();
-#endif
+    // Update header only if column count is set for the currently visible page
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() && state == m_pState )
+    {
+        m_pHeaderCtrl->SetColumnCount(colCount);
+    }
+#endif // wxUSE_HEADERCTRL
+    state->SetColumnCount( colCount );
+    GetGrid()->Refresh();
+#if wxUSE_HEADERCTRL
+    // Update header only if column count is set for the currently visible page
+    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() && state == m_pState )
+    {
+        m_pHeaderCtrl->OnColumWidthsChanged();
+    }
+#endif // wxUSE_HEADERCTRL
 }
 // -----------------------------------------------------------------------
 
@@ -1353,6 +1356,10 @@ void wxPropertyGridManager::RecalculatePositions( int width, int height )
     if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
     {
         m_pHeaderCtrl->SetSize(0, propgridY, width, wxDefaultCoord);
+        // Sync horizontal scroll position with grid
+        int x;
+        m_pPropGrid->CalcScrolledPosition(0, 0, &x, NULL);
+        m_pHeaderCtrl->ScrollWindow(x, 0);
         propgridY += m_pHeaderCtrl->GetSize().y;
     }
 #endif
@@ -1933,18 +1940,16 @@ void wxPropertyGridManager::ReconnectEventHandlers(wxWindowID oldId, wxWindowID 
     {
         Unbind(wxEVT_PG_SELECTED, &wxPropertyGridManager::OnPropertyGridSelect, this,
                oldId);
-        Unbind(wxEVT_PG_COL_DRAGGING, &wxPropertyGridManager::OnPGColDrag, this,
-               oldId);
         Unbind(wxEVT_PG_HSCROLL, &wxPropertyGridManager::OnPGScrollH, this, oldId);
+        Unbind(wxEVT_PG_COLS_RESIZED, &wxPropertyGridManager::OnColWidthsChanged, this, oldId);
     }
 
     if (newId != wxID_NONE)
     {
         Bind(wxEVT_PG_SELECTED, &wxPropertyGridManager::OnPropertyGridSelect, this,
              newId);
-        Bind(wxEVT_PG_COL_DRAGGING, &wxPropertyGridManager::OnPGColDrag, this,
-             newId);
         Bind(wxEVT_PG_HSCROLL, &wxPropertyGridManager::OnPGScrollH, this, newId);
+        Bind(wxEVT_PG_COLS_RESIZED, &wxPropertyGridManager::OnColWidthsChanged, this, newId);
     }
 }
 
@@ -1962,15 +1967,6 @@ void wxPropertyGridManager::OnPropertyGridSelect( wxPropertyGridEvent& event )
 
 // -----------------------------------------------------------------------
 
-void
-wxPropertyGridManager::OnPGColDrag( wxPropertyGridEvent& WXUNUSED(event) )
-{
-#if wxUSE_HEADERCTRL
-    if ( m_pHeaderCtrl && m_pHeaderCtrl->IsShown() )
-        m_pHeaderCtrl->OnColumWidthsChanged();
-#endif
-}
-
 void wxPropertyGridManager::OnPGScrollH(wxPropertyGridEvent& evt)
 {
 #if wxUSE_HEADERCTRL
@@ -1979,6 +1975,14 @@ void wxPropertyGridManager::OnPGScrollH(wxPropertyGridEvent& evt)
         m_pHeaderCtrl->ScrollWindow(evt.GetInt(), 0);
     }
 #endif // wxUSE_HEADERCTRL
+}
+
+void wxPropertyGridManager::OnColWidthsChanged(wxPropertyGridEvent& WXUNUSED(evt))
+{
+#if wxUSE_HEADERCTRL
+    if ( m_pHeaderCtrl )
+        m_pHeaderCtrl->OnColumWidthsChanged();
+#endif
 }
 
 // -----------------------------------------------------------------------

@@ -734,20 +734,35 @@ MyFrame::~MyFrame()
 
 #if wxUSE_COLOURDLG
 
+void MyFrame::DoApplyColour(const wxColour& colour)
+{
+    if ( colour == m_canvas->GetBackgroundColour() )
+        return;
+
+    m_canvas->SetBackgroundColour(colour);
+    m_canvas->ClearBackground();
+    m_canvas->Refresh();
+}
+
+void MyFrame::OnColourChanged(wxColourDialogEvent& event)
+{
+    DoApplyColour(event.GetColour());
+}
+
 void MyFrame::ChooseColour(wxCommandEvent& event)
 {
     m_clrData.SetColour(m_canvas->GetBackgroundColour());
     m_clrData.SetChooseAlpha(event.GetId() == DIALOGS_CHOOSE_COLOUR_ALPHA);
 
     wxColourDialog dialog(this, &m_clrData);
+    dialog.Bind(wxEVT_COLOUR_CHANGED, &MyFrame::OnColourChanged, this);
     dialog.SetTitle("Please choose the background colour");
     if ( dialog.ShowModal() == wxID_OK )
     {
         m_clrData = dialog.GetColourData();
-        m_canvas->SetBackgroundColour(m_clrData.GetColour());
-        m_canvas->ClearBackground();
-        m_canvas->Refresh();
     }
+
+    DoApplyColour(m_clrData.GetColour());
 }
 
 void MyFrame::GetColour(wxCommandEvent& WXUNUSED(event))
@@ -1493,7 +1508,13 @@ private:
         else
             msg = "Something else";
 
-        event.SetText(msg + " selected");
+        msg += " selected";
+
+        const int filter = dialog->GetCurrentlySelectedFilterIndex();
+        if ( filter != wxNOT_FOUND )
+            msg += wxString::Format(" (filter=%d)", filter);
+
+        event.SetText(msg);
     }
 
     wxString m_str;
@@ -1530,7 +1551,7 @@ MyExtraPanel::MyExtraPanel(wxWindow *parent)
     sizerTop->AddSpacer(5);
     sizerTop->Add(m_btn, wxSizerFlags().Centre().Border());
     sizerTop->AddSpacer(5);
-    sizerTop->Add(m_label, wxSizerFlags().Centre().Border());
+    sizerTop->Add(m_label, wxSizerFlags(1).Centre().Border());
 
     SetSizerAndFit(sizerTop);
 }
@@ -1549,11 +1570,12 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
                     "Testing open file dialog",
                     wxEmptyString,
                     wxEmptyString,
-#ifdef __WXMOTIF__
-                    "C++ files (*.cpp)|*.cpp"
-#else
-                    "C++ files (*.cpp;*.h)|*.cpp;*.h"
-#endif
+                    wxString::Format
+                    (
+                        "All files (%s)|%s|C++ files (*.cpp;*.h)|*.cpp;*.h",
+                        wxFileSelectorDefaultWildcardStr,
+                        wxFileSelectorDefaultWildcardStr
+                    )
                  );
 
     dialog.SetExtraControlCreator(&createMyExtraPanel);
@@ -3393,14 +3415,11 @@ SettingsDialog::SettingsDialog(wxWindow* win, SettingsData& settingsData, int di
         m_imageList = NULL;
 
     Create(win, wxID_ANY, "Preferences", wxDefaultPosition, wxDefaultSize,
-        wxDEFAULT_DIALOG_STYLE| (int)wxPlatform::IfNot(wxOS_WINDOWS_CE, resizeBorder)
-    );
+           wxDEFAULT_DIALOG_STYLE | resizeBorder);
 
     // If using a toolbook, also follow Mac style and don't create buttons
     if (!useToolBook)
-        CreateButtons(wxOK | wxCANCEL |
-                        (int)wxPlatform::IfNot(wxOS_WINDOWS_CE, wxHELP)
-    );
+        CreateButtons(wxOK | wxCANCEL | wxHELP);
 
     wxBookCtrlBase* notebook = GetBookCtrl();
     notebook->SetImageList(m_imageList);

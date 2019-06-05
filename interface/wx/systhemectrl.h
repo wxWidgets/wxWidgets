@@ -45,6 +45,27 @@
         };
    @endcode
 
+   Please also note that if you want to disable the system theme use in the
+   control that use it by default, it's best to do it before actually creating
+   the control as enabling the system theme can't always be completely undone
+   later. I.e. instead of
+   @code
+        // THIS CODE IS WRONG, DO NOT DO IT LIKE THIS
+        wxTreeCtrl* tree = new wxTreeCtrl(parent, wxID_ANY);
+        tree->EnableSystemTheme(false);
+   @endcode
+   prefer the following version:
+   @code
+        // Use default ctor to create the object, avoiding creating the window.
+        wxTreeCtrl* tree = new wxTreeCtrl();
+
+        // Then disable the system theme used by default.
+        tree->EnableSystemTheme(false);
+
+        // And only then actually create the window.
+        tree->Create(parent, wxID_ANY);
+   @endcode
+
    On non-MSW platforms this class currently does nothing but is still
    available, so that it can be used in portable code without any conditional
    compilation directives.

@@ -153,6 +153,8 @@ protected:
     virtual void DoFreeze() wxOVERRIDE;
     virtual void DoThaw() wxOVERRIDE;
 
+    virtual void DoEnable(bool enable) wxOVERRIDE;
+
     // Widgets that use the style->base colour for the BG colour should
     // override this and return true.
     virtual bool UseGTKStyleBase() const wxOVERRIDE { return true; }
@@ -176,8 +178,6 @@ protected:
 
 private:
     void Init();
-
-    virtual void DoEnable(bool enable) wxOVERRIDE;
 
     // overridden wxTextEntry virtual methods
     virtual GtkEditable *GetEditable() const wxOVERRIDE;

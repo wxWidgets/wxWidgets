@@ -386,6 +386,8 @@ void wxRibbonMSWArtProvider::SetColourScheme(
     m_tab_separator_gradient_colour = LikePrimary(1.7, -0.15, -0.18);
     m_tab_hover_background_top_gradient_colour = LikePrimary(1.8, 0.34, 0.13);
     m_tab_label_colour = LikePrimary(4.3, 0.13, -0.49);
+    m_tab_active_label_colour = m_tab_label_colour;
+    m_tab_hover_label_colour = m_tab_label_colour;
     m_tab_hover_background_gradient_colour = LikeSecondary(-1.5, -0.34, 0.01);
 
     m_panel_minimised_border_gradient_pen = LikePrimary(-6.9, -0.17, -0.09);
@@ -528,6 +530,8 @@ void wxRibbonMSWArtProvider::CloneTo(wxRibbonMSWArtProvider* copy) const
     copy->m_button_bar_label_colour = m_button_bar_label_colour;
     copy->m_button_bar_label_disabled_colour = m_button_bar_label_disabled_colour;
     copy->m_tab_label_colour = m_tab_label_colour;
+    copy->m_tab_active_label_colour = m_tab_active_label_colour;
+    copy->m_tab_hover_label_colour = m_tab_hover_label_colour;
     copy->m_tab_separator_colour = m_tab_separator_colour;
     copy->m_tab_separator_gradient_colour = m_tab_separator_gradient_colour;
     copy->m_tab_active_background_colour = m_tab_hover_background_colour;
@@ -849,6 +853,10 @@ wxColour wxRibbonMSWArtProvider::GetColour(int id) const
             return m_tab_ctrl_background_brush.GetColour();
         case wxRIBBON_ART_TAB_LABEL_COLOUR:
             return m_tab_label_colour;
+        case wxRIBBON_ART_TAB_ACTIVE_LABEL_COLOUR:
+            return m_tab_active_label_colour;
+        case wxRIBBON_ART_TAB_HOVER_LABEL_COLOUR:
+            return m_tab_hover_label_colour;
         case wxRIBBON_ART_TAB_SEPARATOR_COLOUR:
             return m_tab_separator_colour;
         case wxRIBBON_ART_TAB_SEPARATOR_GRADIENT_COLOUR:
@@ -1093,6 +1101,12 @@ void wxRibbonMSWArtProvider::SetColour(int id, const wxColor& colour)
             break;
         case wxRIBBON_ART_TAB_LABEL_COLOUR:
             m_tab_label_colour = colour;
+            break;
+        case wxRIBBON_ART_TAB_ACTIVE_LABEL_COLOUR:
+            m_tab_active_label_colour = colour;
+            break;
+        case wxRIBBON_ART_TAB_HOVER_LABEL_COLOUR:
+            m_tab_hover_label_colour = colour;
             break;
         case wxRIBBON_ART_TAB_SEPARATOR_COLOUR:
             m_tab_separator_colour = colour;
@@ -1372,7 +1386,20 @@ void wxRibbonMSWArtProvider::DrawTab(
         if(!label.IsEmpty())
         {
             dc.SetFont(m_tab_label_font);
-            dc.SetTextForeground(m_tab_label_colour);
+
+            if (tab.active)
+            {
+                dc.SetTextForeground(m_tab_active_label_colour);
+            }
+            else if (tab.hovered)
+            {
+                dc.SetTextForeground(m_tab_hover_label_colour);
+            }
+            else
+            {
+                dc.SetTextForeground(m_tab_label_colour);
+            }
+
             dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
             int text_height;

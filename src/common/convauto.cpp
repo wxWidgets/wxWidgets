@@ -309,6 +309,13 @@ wxConvAuto::ToWChar(wchar_t *dst, size_t dstLen,
     size_t rc = m_conv->ToWChar(dst, dstLen, src, srcLen);
     if ( rc == wxCONV_FAILED && m_bomType == wxBOM_None )
     {
+        // we may need more bytes before we can decode the input, don't switch
+        // to the fall-back conversion in this case as it would prevent us from
+        // decoding UTF-8 input when fed it byte by byte, as done by
+        // wxTextInputStream, for example
+        if ( srcLen < m_conv->GetMaxCharLen() )
+            return wxCONV_FAILED;
+
         // if the conversion failed but we didn't really detect anything and
         // simply tried UTF-8 by default, retry it using the fall-back
         if ( m_encDefault != wxFONTENCODING_MAX )

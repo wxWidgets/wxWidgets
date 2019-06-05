@@ -2601,6 +2601,12 @@ public:
         m_image = m_bitmap.ConvertToImage();
     }
 
+    virtual void Flush() wxOVERRIDE
+    {
+      wxMacCoreGraphicsContext::Flush();
+      m_image = m_bitmap.ConvertToImage();
+    }
+
 private:
     wxImage& m_image;
     wxBitmap m_bitmap;

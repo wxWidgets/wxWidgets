@@ -153,6 +153,7 @@ private:
     void OnAllowNotebookDnD(wxAuiNotebookEvent& evt);
     void OnNotebookPageClose(wxAuiNotebookEvent& evt);
     void OnNotebookPageClosed(wxAuiNotebookEvent& evt);
+    void OnNotebookPageChanging(wxAuiNotebookEvent &evt);
     void OnExit(wxCommandEvent& evt);
     void OnAbout(wxCommandEvent& evt);
     void OnTabAlignment(wxCommandEvent &evt);
@@ -654,6 +655,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_AUINOTEBOOK_ALLOW_DND(wxID_ANY, MyFrame::OnAllowNotebookDnD)
     EVT_AUINOTEBOOK_PAGE_CLOSE(wxID_ANY, MyFrame::OnNotebookPageClose)
     EVT_AUINOTEBOOK_PAGE_CLOSED(wxID_ANY, MyFrame::OnNotebookPageClosed)
+    EVT_AUINOTEBOOK_PAGE_CHANGING(wxID_ANY, MyFrame::OnNotebookPageChanging)
 wxEND_EVENT_TABLE()
 
 
@@ -1385,6 +1387,21 @@ void MyFrame::OnNotebookPageClosed(wxAuiNotebookEvent& evt)
                                    (int)ctrl->GetPageCount()) );
 
     evt.Skip();
+}
+
+void MyFrame::OnNotebookPageChanging(wxAuiNotebookEvent& evt)
+{
+    if ( evt.GetOldSelection() == 3 )
+    {
+        if ( wxMessageBox( "Are you sure you want to leave this page?\n"
+                           "(This demonstrates veto-ing)",
+                           "wxAUI",
+                           wxICON_QUESTION | wxYES_NO,
+                           this ) != wxYES )
+        {
+            evt.Veto();
+        }
+    }
 }
 
 void MyFrame::OnAllowNotebookDnD(wxAuiNotebookEvent& evt)

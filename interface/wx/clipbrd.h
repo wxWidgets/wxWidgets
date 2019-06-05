@@ -96,8 +96,8 @@ public:
         (possibly eating memory), otherwise the clipboard will be emptied on
         exit.
 
-        Currently this method is not implemented in X11-based ports, i.e.
-        wxGTK, wxX11 and wxMotif and always returns @false there.
+        Currently this method is implemented in MSW and GTK and always returns @false
+        otherwise.
 
         @return @false if the operation is unsuccessful for any reason.
     */
