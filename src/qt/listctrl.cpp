@@ -481,6 +481,20 @@ public:
         return true;
     }
 
+    bool SetColumn(int index, const wxListItem& info)
+    {
+        wxCHECK_MSG(static_cast<size_t>(index) < m_headers.size(),
+            false, "Invalid column");
+
+        ColumnItem &column = m_headers[index];
+        column.m_label = wxQtConvertString(info.GetText());
+        column.m_align = wxQtConvertTextAlign(info.GetAlign());
+
+        headerDataChanged(Qt::Horizontal, index, index);
+        return true;
+        
+    }
+
     virtual bool GetItem(wxListItem& info)
     {
         const int row = static_cast<int>(info.GetId());
@@ -1098,9 +1112,12 @@ bool wxListCtrl::GetColumn(int col, wxListItem& info) const
 
 bool wxListCtrl::SetColumn(int col, const wxListItem& info)
 {
-    DoInsertColumn(col, info);
+    if (!m_model->SetColumn(col, info))
+        return false;
+    
     if ( info.GetMask() & wxLIST_MASK_WIDTH )
         SetColumnWidth(col, info.GetWidth());
+
     return true;
 }
 
