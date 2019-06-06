@@ -554,8 +554,11 @@ public:
             roles.push_back(Qt::DisplayRole);
         }
 
-        columnItem.m_align = wxQtConvertTextAlign(info.GetAlign());
-        roles.push_back(Qt::TextAlignmentRole);
+        if ( info.m_mask & wxLIST_MASK_FORMAT )
+        {
+            columnItem.m_align = wxQtConvertTextAlign(info.GetAlign());
+            roles.push_back(Qt::TextAlignmentRole);
+        }
 
         if ( info.m_mask & wxLIST_MASK_DATA )
         {
@@ -754,7 +757,10 @@ public:
         long newColumnIndex;
 
         ColumnItem newColumn;
-        newColumn.m_align = wxQtConvertTextAlign(info.GetAlign());
+        if ( info.m_mask & wxLIST_MASK_FORMAT )
+        {
+            newColumn.m_align = wxQtConvertTextAlign(info.GetAlign());
+        }
         newColumn.m_label = wxQtConvertString(info.GetText());
 
         if ( col == -1 || static_cast<size_t>(col) >= m_headers.size() )
