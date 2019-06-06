@@ -391,6 +391,8 @@ public:
     results visible you need to update the content of the context
     by calling wxGraphicsContext::Flush() or by destroying the context.
 
+    @remarks Logical functions does not work with wxGraphicsContext.
+
     @library{wxcore}
     @category{gdi,dc}
 
