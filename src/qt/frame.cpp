@@ -196,9 +196,9 @@ void wxFrame::AddChild( wxWindowBase *child )
     wxFrameBase::AddChild( child );
 }
 
-void wxFrame::Adopt(wxWindow *child)
+void wxFrame::Adopt( wxWindow *child )
 {
-    QtReparent(child->GetHandle(), GetQMainWindow()->centralWidget());
+    QtReparent( child->GetHandle(), GetQMainWindow()->centralWidget() );
 }
 
 void wxFrame::RemoveChild( wxWindowBase *child )
@@ -231,16 +231,16 @@ void wxFrame::DoGetClientSize(int *width, int *height) const
     }
 }
 
-void wxFrame::DoSetClientSize(int width, int height)
+void wxFrame::DoSetClientSize( int width, int height )
 {
-    wxWindow::DoSetClientSize(width, height);
+    wxWindow::DoSetClientSize( width, height );
 
     int adjustedWidth, adjustedHeight;
-    DoGetClientSize(&adjustedWidth, &adjustedHeight);
+    DoGetClientSize( &adjustedWidth, &adjustedHeight );
 
     QWidget *centralWidget = GetQMainWindow()->centralWidget();
     QRect geometry = centralWidget->geometry();
-    geometry.setSize(QSize(adjustedWidth, adjustedHeight));
+    geometry.setSize( QSize(adjustedWidth, adjustedHeight) );
     centralWidget->setGeometry(geometry);
 }
 
