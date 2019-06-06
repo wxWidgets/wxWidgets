@@ -289,10 +289,8 @@ void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)
     m_last2Rect = m_lastRect;
     m_lastRect = winRect;
 
-#ifndef __WXQT__
     if (!isMouseDown())
         return;
-#endif
 
     if (!m_moving)
     {
