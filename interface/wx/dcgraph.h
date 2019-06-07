@@ -21,7 +21,7 @@
       functionality relies on reading the pixels from wxGraphicsContext too.
 
     - SetLogicalFunction() method only works with @c wxCOPY, @c wxOR,
-      @c wxNO_OP, @c wxNO_OP and @c wxXOR functions, attempts to use any other
+      @c wxNO_OP, @c wxCLEAR and @c wxXOR functions, attempts to use any other
       function (including @c wxINVERT) don't do anything.
 
     - Similarly, ::wxRasterOperationMode parameter of Blit() and StretchBlit()
