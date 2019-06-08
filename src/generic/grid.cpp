@@ -228,8 +228,35 @@ void wxGridHeaderLabelsRenderer::DrawLabel(const wxGrid& grid,
                                          int textOrientation) const
 {
     dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
-    dc.SetTextForeground(grid.GetLabelTextColour());
     dc.SetFont(grid.GetLabelFont());
+
+    // Draw text in a different colour and with a shadow when the control
+    // is disabled.
+    //
+    // Note that the colours used here are consistent with wxGenericStaticText
+    // rather than our own wxGridCellStringRenderer::SetTextColoursAndFont()
+    // because this results in a better disabled appearance for the default
+    // bold font used for the labels.
+    wxColour colText;
+    if ( !grid.IsThisEnabled() )
+    {
+        colText = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNHIGHLIGHT);
+        dc.SetTextForeground(colText);
+
+        wxRect rectShadow = rect;
+        rectShadow.Offset(1, 1);
+        grid.DrawTextRectangle(dc, value, rectShadow,
+                               horizAlign, vertAlign, textOrientation);
+
+        colText = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW);
+    }
+    else
+    {
+        colText = grid.GetLabelTextColour();
+    }
+
+    dc.SetTextForeground(colText);
+
     grid.DrawTextRectangle(dc, value, rect, horizAlign, vertAlign, textOrientation);
 }
 
