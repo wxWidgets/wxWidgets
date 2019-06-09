@@ -261,49 +261,68 @@ void wxGridHeaderLabelsRenderer::DrawLabel(const wxGrid& grid,
 }
 
 
-void wxGridRowHeaderRendererDefault::DrawBorder(const wxGrid& WXUNUSED(grid),
+void wxGridRowHeaderRendererDefault::DrawBorder(const wxGrid& grid,
                                                 wxDC& dc,
                                                 wxRect& rect) const
 {
     dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
     dc.DrawLine(rect.GetRight(), rect.GetTop(),
                 rect.GetRight(), rect.GetBottom());
-    dc.DrawLine(rect.GetLeft(), rect.GetTop(),
-                rect.GetLeft(), rect.GetBottom());
+
     dc.DrawLine(rect.GetLeft(), rect.GetBottom(),
                 rect.GetRight() + 1, rect.GetBottom());
 
+    // Only draw the external borders when the containing control doesn't have
+    // any border, otherwise they would compound with the outer border which
+    // looks bad.
+    int ofs = 0;
+    if ( grid.GetBorder() == wxBORDER_NONE )
+    {
+        dc.DrawLine(rect.GetLeft(), rect.GetTop(),
+                    rect.GetLeft(), rect.GetBottom());
+
+        ofs = 1;
+    }
+
     dc.SetPen(*wxWHITE_PEN);
-    dc.DrawLine(rect.GetLeft() + 1, rect.GetTop(),
-                rect.GetLeft() + 1, rect.GetBottom());
-    dc.DrawLine(rect.GetLeft() + 1, rect.GetTop(),
+    dc.DrawLine(rect.GetLeft() + ofs, rect.GetTop(),
+                rect.GetLeft() + ofs, rect.GetBottom());
+    dc.DrawLine(rect.GetLeft() + ofs, rect.GetTop(),
                 rect.GetRight(), rect.GetTop());
 
-    rect.Deflate(2);
+    rect.Deflate(1 + ofs);
 }
 
-void wxGridColumnHeaderRendererDefault::DrawBorder(const wxGrid& WXUNUSED(grid),
+void wxGridColumnHeaderRendererDefault::DrawBorder(const wxGrid& grid,
                                                    wxDC& dc,
                                                    wxRect& rect) const
 {
     dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW)));
     dc.DrawLine(rect.GetRight(), rect.GetTop(),
                 rect.GetRight(), rect.GetBottom());
-    dc.DrawLine(rect.GetLeft(), rect.GetTop(),
-                rect.GetRight(), rect.GetTop());
     dc.DrawLine(rect.GetLeft(), rect.GetBottom(),
                 rect.GetRight() + 1, rect.GetBottom());
 
-    dc.SetPen(*wxWHITE_PEN);
-    dc.DrawLine(rect.GetLeft(), rect.GetTop() + 1,
-                rect.GetLeft(), rect.GetBottom());
-    dc.DrawLine(rect.GetLeft(), rect.GetTop() + 1,
-                rect.GetRight(), rect.GetTop() + 1);
+    // As above, don't draw the outer border if the control has its own one.
+    int ofs = 0;
+    if ( grid.GetBorder() == wxBORDER_NONE )
+    {
+        dc.DrawLine(rect.GetLeft(), rect.GetTop(),
+                    rect.GetRight(), rect.GetTop());
 
-    rect.Deflate(2);
+        ofs = 1;
+    }
+
+    dc.SetPen(*wxWHITE_PEN);
+    dc.DrawLine(rect.GetLeft(), rect.GetTop() + ofs,
+                rect.GetLeft(), rect.GetBottom());
+    dc.DrawLine(rect.GetLeft(), rect.GetTop() + ofs,
+                rect.GetRight(), rect.GetTop() + ofs);
+
+    rect.Deflate(1 + ofs);
 }
 
-void wxGridCornerHeaderRendererDefault::DrawBorder(const wxGrid& WXUNUSED(grid),
+void wxGridCornerHeaderRendererDefault::DrawBorder(const wxGrid& grid,
                                                    wxDC& dc,
                                                    wxRect& rect) const
 {
@@ -312,18 +331,27 @@ void wxGridCornerHeaderRendererDefault::DrawBorder(const wxGrid& WXUNUSED(grid),
                 rect.GetRight() - 1, rect.GetTop());
     dc.DrawLine(rect.GetRight() - 1, rect.GetBottom() - 1,
                 rect.GetLeft(), rect.GetBottom() - 1);
-    dc.DrawLine(rect.GetLeft(), rect.GetTop(),
-                rect.GetRight(), rect.GetTop());
-    dc.DrawLine(rect.GetLeft(), rect.GetTop(),
-                rect.GetLeft(), rect.GetBottom());
+
+    // As above, don't draw either of outer border if there is already a border
+    // around the entire window.
+    int ofs = 0;
+    if ( grid.GetBorder() == wxBORDER_NONE )
+    {
+        dc.DrawLine(rect.GetLeft(), rect.GetTop(),
+                    rect.GetRight(), rect.GetTop());
+        dc.DrawLine(rect.GetLeft(), rect.GetTop(),
+                    rect.GetLeft(), rect.GetBottom());
+
+        ofs = 1;
+    }
 
     dc.SetPen(*wxWHITE_PEN);
-    dc.DrawLine(rect.GetLeft() + 1, rect.GetTop() + 1,
-                rect.GetRight() - 1, rect.GetTop() + 1);
-    dc.DrawLine(rect.GetLeft() + 1, rect.GetTop() + 1,
-                rect.GetLeft() + 1, rect.GetBottom() - 1);
+    dc.DrawLine(rect.GetLeft() + 1, rect.GetTop() + ofs,
+                rect.GetRight() - 1, rect.GetTop() + ofs);
+    dc.DrawLine(rect.GetLeft() + ofs, rect.GetTop() + ofs,
+                rect.GetLeft() + ofs, rect.GetBottom() - 1);
 
-    rect.Deflate(2);
+    rect.Deflate(1 + ofs);
 }
 
 // ----------------------------------------------------------------------------
