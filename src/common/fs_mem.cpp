@@ -147,22 +147,16 @@ wxString wxMemoryFSHandlerBase::FindFirst(const wxString& url, int flags)
 
 wxString wxMemoryFSHandlerBase::FindNext()
 {
-    // m_findArgument is used to indicate that search is in progress, we reset
-    // it to empty string after iterating over all elements
-    while ( !m_findArgument.empty() )
+    while ( m_findIter != m_Hash.end() )
     {
-        // test for the match before (possibly) clearing m_findArgument below
-        const bool found = m_findIter->first.Matches(m_findArgument);
+        const wxString& path = m_findIter->first;
 
         // advance m_findIter first as we need to do it anyhow, whether it
         // matches or not
-        const wxMemoryFSHash::const_iterator current = m_findIter;
+        ++m_findIter;
 
-        if ( ++m_findIter == m_Hash.end() )
-            m_findArgument.clear();
-
-        if ( found )
-            return "memory:" + current->first;
+        if ( path.Matches(m_findArgument) )
+            return "memory:" + path;
     }
 
     return wxString();
