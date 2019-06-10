@@ -107,13 +107,13 @@ void wxFrame::SetStatusBar( wxStatusBar *statusBar )
 
 void wxFrame::SetToolBar(wxToolBar *toolbar)
 {
-    int area = 0;
     if ( toolbar != NULL )
     {
-        if      (toolbar->HasFlag(wxTB_LEFT))  { area |= Qt::LeftToolBarArea;  }
-        else if (toolbar->HasFlag(wxTB_RIGHT)) { area |= Qt::RightToolBarArea; }
-        else if (toolbar->HasFlag(wxTB_TOP))   { area |= Qt::TopToolBarArea;   }
-        else if (toolbar->HasFlag(wxTB_BOTTOM)){ area |= Qt::BottomToolBarArea;}
+        int area = 0;
+        if      (toolbar->HasFlag(wxTB_LEFT))  { area = Qt::LeftToolBarArea;  }
+        else if (toolbar->HasFlag(wxTB_RIGHT)) { area = Qt::RightToolBarArea; }
+        else if (toolbar->HasFlag(wxTB_BOTTOM)){ area = Qt::BottomToolBarArea;}
+        else { area = Qt::TopToolBarArea;   }
 
         // We keep the current toolbar handle in our own member variable
         // because we can't get it from half-destroyed wxToolBar when it calls
@@ -242,4 +242,5 @@ wxQtMainWindow::wxQtMainWindow( wxWindow *parent, wxFrame *handler )
 wxQtCentralWidget::wxQtCentralWidget( wxWindow *parent, wxFrame *handler )
     : wxQtEventSignalHandler< QScrollArea, wxFrame >( parent, handler )
 {
+    setFocusPolicy(Qt::NoFocus);
 }

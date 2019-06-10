@@ -428,7 +428,7 @@ public:
     virtual bool DoShowDialog( wxPropertyGrid* propGrid,
                                wxPGProperty* property ) = 0;
 
-    void SetValue( wxVariant value )
+    void SetValue( const wxVariant& value )
     {
         m_value = value;
     }

@@ -37,6 +37,8 @@ wxDragResult DropActionToDragResult(Qt::DropAction action)
             return wxDragMove;
         case Qt::LinkAction:
             return wxDragLink;
+        default:
+            break;
     }
 
     wxFAIL_MSG("Illegal drop action");

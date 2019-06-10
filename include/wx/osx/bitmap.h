@@ -128,13 +128,13 @@ public:
 
     virtual ~wxBitmap() {}
 
-    wxImage ConvertToImage() const;
+    wxImage ConvertToImage() const wxOVERRIDE;
 
     // get the given part of bitmap
-    wxBitmap GetSubBitmap( const wxRect& rect ) const;
+    wxBitmap GetSubBitmap( const wxRect& rect ) const wxOVERRIDE;
 
-    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH);
-    virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH)
+    virtual bool Create(int width, int height, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE;
+    virtual bool Create(const wxSize& sz, int depth = wxBITMAP_SCREEN_DEPTH) wxOVERRIDE
         { return Create(sz.GetWidth(), sz.GetHeight(), depth); }
 
     virtual bool Create(const void* data, wxBitmapType type, int width, int height, int depth = 1);
@@ -146,11 +146,11 @@ public:
     bool Create(int width, int height, const wxDC& dc);
 
     // Create a bitmap with a scale factor, width and height are multiplied with that factor
-    bool CreateScaled(int logwidth, int logheight, int depth, double logicalScale);
+    bool CreateScaled(int logwidth, int logheight, int depth, double logicalScale) wxOVERRIDE;
 
     // virtual bool Create( WXHICON icon) ;
-    virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE);
-    virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const;
+    virtual bool LoadFile(const wxString& name, wxBitmapType type = wxBITMAP_DEFAULT_TYPE) wxOVERRIDE;
+    virtual bool SaveFile(const wxString& name, wxBitmapType type, const wxPalette *cmap = NULL) const wxOVERRIDE;
 
     const wxBitmapRefData *GetBitmapData() const
         { return (const wxBitmapRefData *)m_refData; }
@@ -159,28 +159,28 @@ public:
         { return (wxBitmapRefData *)m_refData; }
 
     // copies the contents and mask of the given (colour) icon to the bitmap
-    virtual bool CopyFromIcon(const wxIcon& icon);
+    virtual bool CopyFromIcon(const wxIcon& icon) wxOVERRIDE;
 
-    int GetWidth() const;
-    int GetHeight() const;
-    int GetDepth() const;
+    int GetWidth() const wxOVERRIDE;
+    int GetHeight() const wxOVERRIDE;
+    int GetDepth() const wxOVERRIDE;
 
 #if WXWIN_COMPATIBILITY_3_0
     wxDEPRECATED_MSG("this value is determined during creation, this method could lead to inconsistencies")
-    void SetWidth(int width);
+    void SetWidth(int width) wxOVERRIDE;
     wxDEPRECATED_MSG("this value is determined during creation, this method could lead to inconsistencies")
-    void SetHeight(int height);
+    void SetHeight(int height) wxOVERRIDE;
     wxDEPRECATED_MSG("this value is determined during creation, this method could lead to inconsistencies")
-    void SetDepth(int depth);
+    void SetDepth(int depth) wxOVERRIDE;
 #endif
 
 #if wxUSE_PALETTE
-    wxPalette* GetPalette() const;
-    void SetPalette(const wxPalette& palette);
+    wxPalette* GetPalette() const wxOVERRIDE;
+    void SetPalette(const wxPalette& palette) wxOVERRIDE;
 #endif // wxUSE_PALETTE
 
-    wxMask *GetMask() const;
-    void SetMask(wxMask *mask) ;
+    wxMask *GetMask() const wxOVERRIDE;
+    void SetMask(wxMask *mask) wxOVERRIDE;
 
     static void InitStandardHandlers();
 
@@ -233,14 +233,14 @@ public:
     void EndRawAccess();
 #endif
 
-    double GetScaleFactor() const;
+    double GetScaleFactor() const wxOVERRIDE;
 
     void SetSelectedInto(wxDC *dc);
     wxDC *GetSelectedInto() const;
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
 };
 
 #endif // _WX_BITMAP_H_

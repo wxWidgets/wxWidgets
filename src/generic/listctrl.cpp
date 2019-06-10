@@ -1681,6 +1681,11 @@ void wxListMainWindow::CacheLineData(size_t line)
         ld->SetImage(col, listctrl->OnGetItemColumnImage(line, col));
     }
 
+    if ( HasCheckBoxes() )
+    {
+        ld->Check(listctrl->OnGetItemIsChecked(line));
+    }
+
     ld->SetAttr(listctrl->OnGetItemAttr(line));
 }
 
@@ -3129,10 +3134,13 @@ void wxListMainWindow::SetImageList( wxImageList *imageList, int which )
     m_dirty = true;
 
     // calc the spacing from the icon size
-    int width = 0, height = 0;
+    int width = 0;
 
     if ((imageList) && (imageList->GetImageCount()) )
+    {
+        int height;
         imageList->GetSize(0, width, height);
+    }
 
     if (which == wxIMAGE_LIST_NORMAL)
     {
@@ -4052,16 +4060,16 @@ void wxListMainWindow::DeleteItem( long lindex )
         //  we're deleting contain the Max Column Width
         wxListLineData * const line = GetLine(index);
         wxListItemDataList::compatibility_iterator n;
-        wxListItemData *itemData;
         wxListItem      item;
-        int             itemWidth;
 
         for (size_t i = 0; i < m_columns.GetCount(); i++)
         {
             n = line->m_items.Item( i );
+            wxListItemData* itemData;
             itemData = n->GetData();
             itemData->GetItem(item);
 
+            int itemWidth;
             itemWidth = GetItemWidthWithImage(&item);
 
             wxColWidthInfo *pWidthInfo = m_aColWidths.Item(i);
@@ -5529,31 +5537,6 @@ wxSize wxGenericListCtrl::DoGetBestClientSize() const
 // ----------------------------------------------------------------------------
 // virtual list control support
 // ----------------------------------------------------------------------------
-
-wxString wxGenericListCtrl::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) const
-{
-    // this is a pure virtual function, in fact - which is not really pure
-    // because the controls which are not virtual don't need to implement it
-    wxFAIL_MSG( wxT("wxGenericListCtrl::OnGetItemText not supposed to be called") );
-
-    return wxEmptyString;
-}
-
-int wxGenericListCtrl::OnGetItemImage(long WXUNUSED(item)) const
-{
-    wxCHECK_MSG(!GetImageList(wxIMAGE_LIST_SMALL),
-                -1,
-                wxT("List control has an image list, OnGetItemImage or OnGetItemColumnImage should be overridden."));
-    return -1;
-}
-
-int wxGenericListCtrl::OnGetItemColumnImage(long item, long column) const
-{
-    if (!column)
-        return OnGetItemImage(item);
-
-   return -1;
-}
 
 void wxGenericListCtrl::SetItemCount(long count)
 {

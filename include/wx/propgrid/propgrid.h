@@ -338,8 +338,8 @@ class WXDLLIMPEXP_PROPGRID wxPGCommonValue
 public:
 
     wxPGCommonValue( const wxString& label, wxPGCellRenderer* renderer )
+        : m_label(label)
     {
-        m_label = label;
         m_renderer = renderer;
         renderer->IncRef();
     }
@@ -654,8 +654,7 @@ enum wxPG_INTERNAL_FLAGS
 // Use Freeze() and Thaw() respectively to disable and enable drawing. This
 // will also delay sorting etc. miscellaneous calculations to the last
 // possible moment.
-class WXDLLIMPEXP_PROPGRID wxPropertyGrid : public wxControl,
-                                            public wxScrollHelper,
+class WXDLLIMPEXP_PROPGRID wxPropertyGrid : public wxScrolled<wxControl>,
                                             public wxPropertyGridInterface
 {
     friend class wxPropertyGridEvent;
@@ -1299,7 +1298,7 @@ public:
     // changed after the function returns (with true as return value).
     // ValueChangeInEvent() must be used if you wish the application to be
     // able to use wxEVT_PG_CHANGING to potentially veto the given value.
-    void ValueChangeInEvent( wxVariant variant )
+    void ValueChangeInEvent( const wxVariant& variant )
     {
         m_changeInEventValue = variant;
         m_iFlags |= wxPG_FL_VALUE_CHANGE_IN_EVENT;
@@ -1949,63 +1948,6 @@ private:
 };
 
 // -----------------------------------------------------------------------
-//
-// Bunch of inlines that need to resolved after all classes have been defined.
-//
-
-inline bool wxPropertyGridPageState::IsDisplayed() const
-{
-    return ( this == m_pPropGrid->GetState() );
-}
-
-inline unsigned int wxPropertyGridPageState::GetActualVirtualHeight() const
-{
-    return DoGetRoot()->GetChildrenHeight(GetGrid()->GetRowHeight());
-}
-
-inline wxString wxPGProperty::GetHintText() const
-{
-    wxVariant vHintText = GetAttribute(wxPG_ATTR_HINT);
-
-#if wxPG_COMPATIBILITY_1_4
-    // Try the old, deprecated "InlineHelp"
-    if ( vHintText.IsNull() )
-        vHintText = GetAttribute(wxPG_ATTR_INLINE_HELP);
-#endif
-
-    if ( !vHintText.IsNull() )
-        return vHintText.GetString();
-
-    return wxEmptyString;
-}
-
-inline int wxPGProperty::GetDisplayedCommonValueCount() const
-{
-    if ( HasFlag(wxPG_PROP_USES_COMMON_VALUE) )
-    {
-        wxPropertyGrid* pg = GetGrid();
-        if ( pg )
-            return (int) pg->GetCommonValueCount();
-    }
-    return 0;
-}
-
-inline void wxPGProperty::SetDefaultValue( wxVariant& value )
-{
-    SetAttribute(wxPG_ATTR_DEFAULT_VALUE, value);
-}
-
-inline void wxPGProperty::SetEditor( const wxString& editorName )
-{
-    m_customEditor = wxPropertyGridInterface::GetEditorByName(editorName);
-}
-
-inline bool wxPGProperty::SetMaxLength( int maxLen )
-{
-    return GetGrid()->SetPropertyMaxLength(this,maxLen);
-}
-
-// -----------------------------------------------------------------------
 
 #define wxPG_BASE_EVT_PRE_ID     1775
 
@@ -2030,7 +1972,9 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
                           wxEVT_PG_COL_DRAGGING, wxPropertyGridEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_PROPGRID,
                           wxEVT_PG_COL_END_DRAG, wxPropertyGridEvent );
+// Events used only internally
 wxDECLARE_EVENT(wxEVT_PG_HSCROLL, wxPropertyGridEvent);
+wxDECLARE_EVENT(wxEVT_PG_COLS_RESIZED, wxPropertyGridEvent);
 
 #else
     enum {
@@ -2203,7 +2147,7 @@ public:
             m_propertyName = p->GetName();
     }
 
-    void SetPropertyValue( wxVariant value )
+    void SetPropertyValue( const wxVariant& value )
     {
         m_value = value;
     }

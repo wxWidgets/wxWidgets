@@ -155,30 +155,25 @@ static const unsigned char list_bits[] = {
 // -- wxAuiGenericTabArt class implementation --
 
 wxAuiGenericTabArt::wxAuiGenericTabArt()
+    : m_normalFont(*wxNORMAL_FONT)
+    , m_selectedFont(m_normalFont)
+    , m_activeCloseBmp(wxAuiBitmapFromBits(close_bits, 16, 16, *wxBLACK))
+    , m_disabledCloseBmp(wxAuiBitmapFromBits(close_bits, 16, 16, wxColour(128,128,128)))
+    , m_activeLeftBmp(wxAuiBitmapFromBits(left_bits, 16, 16, *wxBLACK))
+    , m_disabledLeftBmp(wxAuiBitmapFromBits(left_bits, 16, 16, wxColour(128,128,128)))
+    , m_activeRightBmp(wxAuiBitmapFromBits(right_bits, 16, 16, *wxBLACK))
+    , m_disabledRightBmp(wxAuiBitmapFromBits(right_bits, 16, 16, wxColour(128,128,128)))
+    , m_activeWindowListBmp(wxAuiBitmapFromBits(list_bits, 16, 16, *wxBLACK))
+    , m_disabledWindowListBmp(wxAuiBitmapFromBits(list_bits, 16, 16, wxColour(128,128,128)))
 {
-    m_normalFont = *wxNORMAL_FONT;
-    m_selectedFont = *wxNORMAL_FONT;
     m_selectedFont.SetWeight(wxFONTWEIGHT_BOLD);
     m_measuringFont = m_selectedFont;
 
     m_fixedTabWidth = wxWindow::FromDIP(100, NULL);
     m_tabCtrlHeight = 0;
+    m_flags = 0;
 
     UpdateColoursFromSystem();
-
-    m_activeCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, *wxBLACK);
-    m_disabledCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxColour(128,128,128));
-
-    m_activeLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, *wxBLACK);
-    m_disabledLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxColour(128,128,128));
-
-    m_activeRightBmp = wxAuiBitmapFromBits(right_bits, 16, 16, *wxBLACK);
-    m_disabledRightBmp = wxAuiBitmapFromBits(right_bits, 16, 16, wxColour(128,128,128));
-
-    m_activeWindowListBmp = wxAuiBitmapFromBits(list_bits, 16, 16, *wxBLACK);
-    m_disabledWindowListBmp = wxAuiBitmapFromBits(list_bits, 16, 16, wxColour(128,128,128));
-
-    m_flags = 0;
 }
 
 wxAuiGenericTabArt::~wxAuiGenericTabArt()
@@ -532,7 +527,7 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
     }
 
 
-    int text_offset = tab_x + 8;
+    int text_offset;
     int close_button_width = 0;
     if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
     {
@@ -892,9 +887,17 @@ void wxAuiGenericTabArt::SetActiveColour(const wxColour& colour)
 // -- wxAuiSimpleTabArt class implementation --
 
 wxAuiSimpleTabArt::wxAuiSimpleTabArt()
+    : m_normalFont(*wxNORMAL_FONT)
+    , m_selectedFont(m_normalFont)
+    , m_activeCloseBmp(wxAuiBitmapFromBits(close_bits, 16, 16, *wxBLACK))
+    , m_disabledCloseBmp(wxAuiBitmapFromBits(close_bits, 16, 16, wxColour(128,128,128)))
+    , m_activeLeftBmp(wxAuiBitmapFromBits(left_bits, 16, 16, *wxBLACK))
+    , m_disabledLeftBmp(wxAuiBitmapFromBits(left_bits, 16, 16, wxColour(128,128,128)))
+    , m_activeRightBmp(wxAuiBitmapFromBits(right_bits, 16, 16, *wxBLACK))
+    , m_disabledRightBmp(wxAuiBitmapFromBits(right_bits, 16, 16, wxColour(128,128,128)))
+    , m_activeWindowListBmp(wxAuiBitmapFromBits(list_bits, 16, 16, *wxBLACK))
+    , m_disabledWindowListBmp(wxAuiBitmapFromBits(list_bits, 16, 16, wxColour(128,128,128)))
 {
-    m_normalFont = *wxNORMAL_FONT;
-    m_selectedFont = *wxNORMAL_FONT;
     m_selectedFont.SetWeight(wxFONTWEIGHT_BOLD);
     m_measuringFont = m_selectedFont;
 
@@ -913,17 +916,6 @@ wxAuiSimpleTabArt::wxAuiSimpleTabArt()
     m_selectedBkBrush = wxBrush(selectedtabColour);
     m_selectedBkPen = wxPen(selectedtabColour);
 
-    m_activeCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, *wxBLACK);
-    m_disabledCloseBmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxColour(128,128,128));
-
-    m_activeLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, *wxBLACK);
-    m_disabledLeftBmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxColour(128,128,128));
-
-    m_activeRightBmp = wxAuiBitmapFromBits(right_bits, 16, 16, *wxBLACK);
-    m_disabledRightBmp = wxAuiBitmapFromBits(right_bits, 16, 16, wxColour(128,128,128));
-
-    m_activeWindowListBmp = wxAuiBitmapFromBits(list_bits, 16, 16, *wxBLACK);
-    m_disabledWindowListBmp = wxAuiBitmapFromBits(list_bits, 16, 16, wxColour(128,128,128));
 }
 
 wxAuiSimpleTabArt::~wxAuiSimpleTabArt()

@@ -1359,7 +1359,7 @@ public:
 
         @since 3.1.3
      */
-    static wxGraphicsContext* CreateContextFromUnknownDC(wxDC& dc);
+     wxGraphicsContext* CreateContextFromUnknownDC(wxDC& dc);
 
     /**
         Creates a wxGraphicsContext associated with a wxImage.

@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 #include "wx/osx/cocoa/dataview.h"
 #include "wx/renderer.h"
 #include "wx/stopwatch.h"
@@ -2956,14 +2957,14 @@ bool wxDataViewTextRenderer::MacRender()
             // Tightening looks very ugly when combined with non-tightened rows,
             // so disabled it on OS X version where it's used:
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11
-            if (floor(NSAppKitVersionNumber) >= NSAppKitVersionNumber10_11)
+            if ( WX_IS_MACOS_AVAILABLE(10, 11) )
             {
                 [par setAllowsDefaultTighteningForTruncation:NO];
             }
             else
 #endif
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_10
-            if (floor(NSAppKitVersionNumber) >= NSAppKitVersionNumber10_10)
+            if ( WX_IS_MACOS_AVAILABLE(10, 10) )
             {
                 [par setTighteningFactorForTruncation:0.0];
             }

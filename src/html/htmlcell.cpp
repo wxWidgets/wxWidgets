@@ -292,8 +292,8 @@ bool wxHtmlCell::IsBefore(wxHtmlCell *cell) const
 wxIMPLEMENT_ABSTRACT_CLASS(wxHtmlWordCell, wxHtmlCell);
 
 wxHtmlWordCell::wxHtmlWordCell(const wxString& word, const wxDC& dc) : wxHtmlCell()
+    , m_Word(word)
 {
-    m_Word = word;
     wxCoord w, h, d;
     dc.GetTextExtent(m_Word, &w, &h, &d);
     m_Width = w;
@@ -730,8 +730,8 @@ void wxHtmlContainerCell::Layout(int w)
 
     wxHtmlCell *nextCell;
     long xpos = 0, ypos = m_IndentTop;
-    int xdelta = 0, ybasicpos = 0, ydiff;
-    int s_width, nextWordWidth, s_indent;
+    int xdelta = 0, ybasicpos = 0;
+    int s_width, s_indent;
     int ysizeup = 0, ysizedown = 0;
     int MaxLineWidth = 0;
     int curLineWidth = 0;
@@ -784,6 +784,7 @@ void wxHtmlContainerCell::Layout(int w)
             case wxHTML_ALIGN_BOTTOM :   ybasicpos = - cell->GetHeight(); break;
             case wxHTML_ALIGN_CENTER :   ybasicpos = - cell->GetHeight() / 2; break;
         }
+        int ydiff;
         ydiff = cell->GetHeight() + ybasicpos;
 
         if (cell->GetDescent() + ydiff > ysizedown) ysizedown = cell->GetDescent() + ydiff;
@@ -809,6 +810,7 @@ void wxHtmlContainerCell::Layout(int w)
         cell = cell->GetNext();
 
         // compute length of the next word that would be added:
+        int nextWordWidth;
         nextWordWidth = 0;
         if (cell)
         {
@@ -1322,9 +1324,9 @@ wxHtmlCell *wxHtmlContainerCell::GetFirstTerminal() const
 {
     if ( m_Cells )
     {
-        wxHtmlCell *c2;
         for (wxHtmlCell *c = m_Cells; c; c = c->GetNext())
         {
+            wxHtmlCell *c2;
             c2 = c->GetFirstTerminal();
             if ( c2 )
                 return c2;

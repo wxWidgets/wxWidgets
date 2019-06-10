@@ -24,8 +24,15 @@ void wxSystemThemedControlBase::DoEnableSystemTheme(bool enable, wxWindow* windo
 {
     if ( wxGetWinVersion() >= wxWinVersion_Vista && wxUxThemeIsActive() )
     {
-         const wchar_t* const sysThemeId = enable ? L"EXPLORER" : NULL;
-         ::SetWindowTheme(GetHwndOf(window), sysThemeId, NULL);
+        // It's possible to call EnableSystemTheme(false) before creating the
+        // window, just don't do anything in this case.
+        if ( window->GetHandle() )
+        {
+            const wchar_t* const sysThemeId = enable ? L"EXPLORER" : NULL;
+            ::SetWindowTheme(GetHwndOf(window), sysThemeId, NULL);
+        }
+
+        m_systemThemeDisabled = !enable;
     }
 }
 

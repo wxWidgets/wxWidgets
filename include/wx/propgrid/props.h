@@ -280,7 +280,6 @@ public:
                                 const wxString& text,
                                 int argFlags = 0 ) const wxOVERRIDE;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
-    virtual wxVariant DoGetAttribute( const wxString& name ) const wxOVERRIDE;
 
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const wxOVERRIDE;
@@ -317,7 +316,6 @@ public:
     virtual bool IntToValue( wxVariant& variant,
                              int number, int argFlags = 0 ) const wxOVERRIDE;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
-    virtual wxVariant DoGetAttribute( const wxString& name ) const wxOVERRIDE;
 };
 
 // -----------------------------------------------------------------------
@@ -397,8 +395,6 @@ public:
     // the true index, and various property classes derived from
     // this take advantage of it.
     virtual int GetChoiceSelection() const wxOVERRIDE { return m_index; }
-
-    virtual void OnValidationFailure( wxVariant& pendingValue ) wxOVERRIDE;
 
 protected:
 
@@ -588,11 +584,14 @@ public:
     wxFileName GetFileName() const;
 
 protected:
+    bool DisplayEditorDialog(wxPropertyGrid* propGrid, wxString& value);
+
     wxString    m_wildcard;
     wxString    m_basePath; // If set, then show path relative to it
     wxString    m_initialPath; // If set, start the file dialog here
     wxString    m_dlgTitle; // If set, used as title for file dialog
     int         m_indFilter; // index to the selected filter
+    long        m_dlgStyle;  // File dialog style
 };
 
 // -----------------------------------------------------------------------
@@ -667,7 +666,7 @@ protected:
 
 // -----------------------------------------------------------------------
 
-// wxBoolProperty specific flags
+// wxBoolProperty, wxFlagsProperty specific flags
 #define wxPG_PROP_USE_CHECKBOX      wxPG_PROP_CLASS_SPECIFIC_1
 // DCC = Double Click Cycles
 #define wxPG_PROP_USE_DCC           wxPG_PROP_CLASS_SPECIFIC_2

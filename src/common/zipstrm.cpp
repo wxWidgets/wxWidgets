@@ -1073,7 +1073,6 @@ bool wxZipEntry::LoadExtraInfo(const char* extraData, wxUint16 extraLen, bool lo
         // promoted to int, which has range large enough to deal with any value
         // of the field length.
         extraData += fieldLen + 4;
-        extraLen -= fieldLen + 4;
     }
 
     // extraInfo had unknown format

@@ -3,7 +3,7 @@
 // Purpose:     MSW-specific setup.h options
 // Author:      Vadim Zeitlin
 // Created:     2007-07-21 (extracted from wx/msw/setup0.h)
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -185,6 +185,14 @@ wxFileDialogHookFunction(HWND      hDlg,
                         case CDN_SELCHANGE:
                             dialog->MSWOnSelChange((WXHWND)hDlg);
                             break;
+
+                        case CDN_TYPECHANGE:
+                            dialog->MSWOnTypeChange
+                                    (
+                                        (WXHWND)hDlg,
+                                        pNotifyCode->lpOFN->nFilterIndex
+                                    );
+                            break;
                     }
                 }
             }
@@ -312,7 +320,7 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
     HWND hFileDlg = ::GetParent((HWND)hDlg);
 
     // set HWND so that our DoMoveWindow() works correctly
-    SetHWND((WXHWND)hFileDlg);
+    TempHWNDSetter set(this, (WXHWND)hFileDlg);
 
     if ( m_centreDir )
     {
@@ -333,9 +341,6 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
     // Call selection change handler so that update handler will be
     // called once with no selection.
     MSWOnSelChange(hDlg);
-
-    // we shouldn't destroy this HWND
-    SetHWND(NULL);
 }
 
 void wxFileDialog::MSWOnSelChange(WXHWND hDlg)
@@ -348,6 +353,17 @@ void wxFileDialog::MSWOnSelChange(WXHWND hDlg)
         m_currentlySelectedFilename = buf;
     else
         m_currentlySelectedFilename.clear();
+
+    if ( m_extraControl )
+        m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
+}
+
+void wxFileDialog::MSWOnTypeChange(WXHWND WXUNUSED(hDlg), int nFilterIndex)
+{
+    // Filter indices are 1-based, while we want to use 0-based index, as
+    // usual. However the input index can apparently also be 0 in some
+    // circumstances, so take care before decrementing it.
+    m_currentlySelectedFilterIndex = nFilterIndex ? nFilterIndex - 1 : 0;
 
     if ( m_extraControl )
         m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
@@ -402,11 +418,9 @@ static bool ShowCommFileDialog(OPENFILENAME *of, long style)
 
 void wxFileDialog::MSWOnInitDialogHook(WXHWND hwnd)
 {
-   SetHWND(hwnd);
+    TempHWNDSetter set(this, hwnd);
 
-   CreateExtraControl();
-
-   SetHWND(NULL);
+    CreateExtraControl();
 }
 
 int wxFileDialog::ShowModal()
@@ -571,6 +585,7 @@ int wxFileDialog::ShowModal()
 
     of.lpstrFilter  = filterBuffer.t_str();
     of.nFilterIndex = m_filterIndex + 1;
+    m_currentlySelectedFilterIndex = m_filterIndex;
 
     //=== Setting defaultFileName >>=========================================
 

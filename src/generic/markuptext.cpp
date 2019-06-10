@@ -123,8 +123,6 @@ public:
           m_dc(dc),
           m_rect(rect),
           m_flags(flags)
-    {
-        m_pos = m_rect.x;
 
         // We don't initialize the base class initial text background colour to
         // the valid value because we want to be able to detect when we revert
@@ -134,7 +132,9 @@ public:
         // background isn't used anyhow when the background mode is transparent
         // but it might affect the caller if it sets the background mode to
         // opaque and draws some text after using us.
-        m_origTextBackground = dc.GetTextBackground();
+        , m_origTextBackground(dc.GetTextBackground())
+        , m_pos(m_rect.x)
+    {
     }
 
     virtual void OnAttrStart(const Attr& attr) wxOVERRIDE

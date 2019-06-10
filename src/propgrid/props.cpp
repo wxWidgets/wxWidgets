@@ -142,12 +142,11 @@ bool wxStringProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 {
     if ( name == wxPG_STRING_PASSWORD )
     {
-        m_flags &= ~(wxPG_PROP_PASSWORD);
-        if ( value.GetLong() ) m_flags |= wxPG_PROP_PASSWORD;
+        ChangeFlag(wxPG_PROP_PASSWORD, value.GetBool());
         RecreateEditor();
-        return false;
+        return true;
     }
-    return true;
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------
@@ -463,24 +462,19 @@ bool NumericValidation( const wxPGProperty* property,
 
     if ( minOk || maxOk )
     {
-        // Get required precision.
-        int precision = -1;
-        variant = property->GetAttribute(wxPG_FLOAT_PRECISION);
-        if ( !variant.IsNull() )
-        {
-            precision = variant.GetInteger();
-        }
-
         // Round current value to the required precision.
-        wxString strVal = wxNumberFormatter::ToString(value, precision, wxNumberFormatter::Style_None);
+        variant = value;
+        wxString strVal = property->ValueToString(variant, wxPG_FULL_VALUE);
         strVal.ToDouble(&value);
 
         // Round minimal value to the required precision.
-        strVal = wxNumberFormatter::ToString(min, precision, wxNumberFormatter::Style_None);
+        variant = min;
+        strVal = property->ValueToString(variant, wxPG_FULL_VALUE);
         strVal.ToDouble(&min);
 
         // Round maximal value to the required precision.
-        strVal = wxNumberFormatter::ToString(max, precision, wxNumberFormatter::Style_None);
+        variant = max;
+        strVal = property->ValueToString(variant, wxPG_FULL_VALUE);
         strVal.ToDouble(&max);
     }
 
@@ -878,7 +872,7 @@ bool wxUIntProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         m_prefix = (wxByte) value.GetLong();
         return true;
     }
-    return false;
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------
@@ -1038,17 +1032,7 @@ bool wxFloatProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         m_precision = value.GetLong();
         return true;
     }
-    return false;
-}
-
-wxVariant wxFloatProperty::DoGetAttribute( const wxString& name ) const
-{
-    wxVariant value;
-    if ( name == wxPG_FLOAT_PRECISION )
-    {
-        value = (long)m_precision;
-    }
-    return value;
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 wxValidator*
@@ -1179,39 +1163,16 @@ bool wxBoolProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 #if wxPG_INCLUDE_CHECKBOX
     if ( name == wxPG_BOOL_USE_CHECKBOX )
     {
-        if ( value.GetLong() )
-            m_flags |= wxPG_PROP_USE_CHECKBOX;
-        else
-            m_flags &= ~(wxPG_PROP_USE_CHECKBOX);
+        ChangeFlag(wxPG_PROP_USE_CHECKBOX, value.GetBool());
         return true;
     }
 #endif
     if ( name == wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING )
     {
-        if ( value.GetLong() )
-            m_flags |= wxPG_PROP_USE_DCC;
-        else
-            m_flags &= ~(wxPG_PROP_USE_DCC);
+        ChangeFlag(wxPG_PROP_USE_DCC, value.GetBool());
         return true;
     }
-    return false;
-}
-
-wxVariant wxBoolProperty::DoGetAttribute( const wxString& name ) const
-{
-    wxVariant value;
-#if wxPG_INCLUDE_CHECKBOX
-    if ( name == wxPG_BOOL_USE_CHECKBOX )
-    {
-        value = (bool)((m_flags & wxPG_PROP_USE_CHECKBOX) != 0);
-    }
-    else
-#endif
-    if ( name == wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING )
-    {
-        value = (bool)((m_flags & wxPG_PROP_USE_DCC) != 0);
-    }
-    return value;
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------
@@ -1434,11 +1395,6 @@ bool wxEnumProperty::ValueFromInt_(wxVariant& value, int* pIndex, int intVal, in
     return false;
 }
 
-void
-wxEnumProperty::OnValidationFailure( wxVariant& WXUNUSED(pendingValue) )
-{
-}
-
 void wxEnumProperty::SetIndex( int index )
 {
     m_index = index;
@@ -1587,9 +1543,8 @@ void wxFlagsProperty::Init()
 
     // Relay wxPG_BOOL_USE_CHECKBOX and wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING
     // to child bool property controls.
-    long attrUseCheckBox = GetAttributeAsLong(wxPG_BOOL_USE_CHECKBOX, 0);
-    long attrUseDCC = GetAttributeAsLong(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING,
-                                         0);
+    bool attrUseCheckBox = (m_flags & wxPG_PROP_USE_CHECKBOX) != 0;
+    bool attrUseDCC = (m_flags & wxPG_PROP_USE_DCC) != 0;
 
     if ( m_choices.IsOk() )
     {
@@ -1613,12 +1568,8 @@ void wxFlagsProperty::Init()
             {
                 boolProp = new wxBoolProperty( label, label, child_val );
             }
-            if ( attrUseCheckBox )
-                boolProp->SetAttribute(wxPG_BOOL_USE_CHECKBOX,
-                                       true);
-            if ( attrUseDCC )
-                boolProp->SetAttribute(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING,
-                                       true);
+            boolProp->SetAttribute(wxPG_BOOL_USE_CHECKBOX, attrUseCheckBox);
+            boolProp->SetAttribute(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING, attrUseDCC);
             AddPrivateChild(boolProp);
         }
 
@@ -1635,6 +1586,7 @@ wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
     const wxChar* const* labels, const long* values, long value ) : wxPGProperty(label,name)
 {
     m_oldChoicesData = NULL;
+    m_flags |= wxPG_PROP_USE_DCC; // same default like wxBoolProperty
 
     if ( labels )
     {
@@ -1655,6 +1607,7 @@ wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
     : wxPGProperty(label,name)
 {
     m_oldChoicesData = NULL;
+    m_flags |= wxPG_PROP_USE_DCC; // same default like wxBoolProperty
 
     if ( !labels.empty() )
     {
@@ -1675,6 +1628,7 @@ wxFlagsProperty::wxFlagsProperty( const wxString& label, const wxString& name,
     : wxPGProperty(label,name)
 {
     m_oldChoicesData = NULL;
+    m_flags |= wxPG_PROP_USE_DCC; // same default like wxBoolProperty
 
     if ( choices.IsOk() )
     {
@@ -1865,18 +1819,27 @@ wxVariant wxFlagsProperty::ChildChanged( wxVariant& thisValue,
 
 bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 {
-    if ( name == wxPG_BOOL_USE_CHECKBOX ||
-         name == wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING )
+    if ( name == wxPG_BOOL_USE_CHECKBOX )
     {
-        for ( size_t i=0; i<GetChildCount(); i++ )
+        ChangeFlag(wxPG_PROP_USE_CHECKBOX, value.GetBool());
+
+        for ( size_t i = 0; i < GetChildCount(); i++ )
         {
             Item(i)->SetAttribute(name, value);
         }
-        // Must return false so that the attribute is stored in
-        // flag property's actual property storage
-        return false;
+        return true;
     }
-    return false;
+    else if ( name == wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING )
+    {
+        ChangeFlag(wxPG_PROP_USE_DCC, value.GetBool());
+
+        for ( size_t i = 0; i < GetChildCount(); i++ )
+        {
+            Item(i)->SetAttribute(name, value);
+        }
+        return true;
+    }
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------
@@ -1941,7 +1904,7 @@ bool wxDirProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         m_dlgMessage = value.GetString();
         return true;
     }
-    return false;
+    return wxLongStringProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------
@@ -1950,44 +1913,16 @@ bool wxDirProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 
 bool wxPGFileDialogAdapter::DoShowDialog( wxPropertyGrid* propGrid, wxPGProperty* property )
 {
-    wxFileProperty* fileProp = NULL;
-    wxString path;
-    int indFilter = -1;
+    wxFileProperty* prop = wxDynamicCast(property, wxFileProperty);
+    wxCHECK_MSG( prop, false, "Function called for incompatible property" );
 
-    if ( wxDynamicCast(property, wxFileProperty) )
+    wxString value = prop->GetValueAsString(0);
+    if ( prop->DisplayEditorDialog(propGrid, value) )
     {
-        fileProp = ((wxFileProperty*)property);
-        wxFileName filename = fileProp->GetValue().GetString();
-        path = filename.GetPath();
-        indFilter = fileProp->m_indFilter;
-
-        if ( path.empty() && !fileProp->m_basePath.empty() )
-            path = fileProp->m_basePath;
-    }
-    else
-    {
-        wxFileName fn(property->GetValue().GetString());
-        path = fn.GetPath();
-    }
-
-    wxFileDialog dlg( propGrid->GetPanel(),
-                      property->GetAttribute(wxS("DialogTitle"), _("Choose a file")),
-                      property->GetAttribute(wxS("InitialPath"), path),
-                      wxEmptyString,
-                      property->GetAttribute(wxPG_FILE_WILDCARD, wxALL_FILES),
-                      property->GetAttributeAsLong(wxPG_FILE_DIALOG_STYLE, 0),
-                      wxDefaultPosition );
-
-    if ( indFilter >= 0 )
-        dlg.SetFilterIndex( indFilter );
-
-    if ( dlg.ShowModal() == wxID_OK )
-    {
-        if ( fileProp )
-            fileProp->m_indFilter = dlg.GetFilterIndex();
-        SetValue( dlg.GetPath() );
+        SetValue(value);
         return true;
     }
+
     return false;
 }
 
@@ -2002,7 +1937,8 @@ wxFileProperty::wxFileProperty( const wxString& label, const wxString& name,
 {
     m_flags |= wxPG_PROP_SHOW_FULL_FILENAME;
     m_indFilter = -1;
-    SetAttribute( wxPG_FILE_WILDCARD, wxALL_FILES);
+    m_dlgStyle = 0;
+    m_wildcard = wxALL_FILES;
 
     SetValue(value);
 }
@@ -2155,19 +2091,15 @@ bool wxFileProperty::StringToValue( wxVariant& variant, const wxString& text, in
 
 bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 {
-    // Return false on some occasions to make sure those attributes will get
-    // stored in m_attributes.
     if ( name == wxPG_FILE_SHOW_FULL_PATH )
     {
-        if ( value.GetLong() )
-            m_flags |= wxPG_PROP_SHOW_FULL_FILENAME;
-        else
-            m_flags &= ~(wxPG_PROP_SHOW_FULL_FILENAME);
+        ChangeFlag(wxPG_PROP_SHOW_FULL_FILENAME, value.GetBool());
         return true;
     }
     else if ( name == wxPG_FILE_WILDCARD )
     {
         m_wildcard = value.GetString();
+        return true;
     }
     else if ( name == wxPG_FILE_SHOW_RELATIVE_PATH )
     {
@@ -2175,6 +2107,7 @@ bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 
         // Make sure wxPG_FILE_SHOW_FULL_PATH is also set
         m_flags |= wxPG_PROP_SHOW_FULL_FILENAME;
+        return true;
     }
     else if ( name == wxPG_FILE_INITIAL_PATH )
     {
@@ -2184,6 +2117,39 @@ bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
     else if ( name == wxPG_FILE_DIALOG_TITLE )
     {
         m_dlgTitle = value.GetString();
+        return true;
+    }
+    else if ( name == wxPG_FILE_DIALOG_STYLE )
+    {
+        m_dlgStyle = value.GetLong();
+        return true;
+    }
+    return wxPGProperty::DoSetAttribute(name, value);
+}
+
+bool wxFileProperty::DisplayEditorDialog(wxPropertyGrid* propGrid, wxString& value)
+{
+    wxFileName filename = value;
+    wxString path = filename.GetPath();
+
+    if ( path.empty() && !m_basePath.empty() )
+        path = m_basePath;
+
+    wxFileDialog dlg(propGrid->GetPanel(),
+        m_dlgTitle.empty() ? _("Choose a file") : m_dlgTitle,
+        m_initialPath.empty() ? path : m_initialPath,
+        value,
+        m_wildcard.empty() ? wxALL_FILES : m_wildcard,
+        m_dlgStyle,
+        wxDefaultPosition);
+
+    if ( m_indFilter >= 0 )
+        dlg.SetFilterIndex(m_indFilter);
+
+    if ( dlg.ShowModal() == wxID_OK )
+    {
+        m_indFilter = dlg.GetFilterIndex();
+        value = dlg.GetPath();
         return true;
     }
     return false;
@@ -2300,6 +2266,9 @@ bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGr
         edStyle |= wxTE_READONLY;
     wxTextCtrl* ed = new wxTextCtrl(dlg,wxID_ANY,value,
         wxDefaultPosition,wxDefaultSize,edStyle);
+    int maxLen = prop->GetMaxLength();
+    if ( maxLen > 0 )
+        ed->SetMaxLength(maxLen);
 
     rowsizer->Add(ed, wxSizerFlags(1).Expand().Border(wxALL, spacing));
     topsizer->Add(rowsizer, wxSizerFlags(1).Expand());
@@ -2710,8 +2679,8 @@ wxArrayStringProperty::wxArrayStringProperty( const wxString& label,
                                                         const wxString& name,
                                                         const wxArrayString& array )
     : wxPGProperty(label,name)
+    , m_delimiter(',')
 {
-    m_delimiter = ',';
     SetValue( array );
 }
 
@@ -2946,9 +2915,9 @@ bool wxArrayStringProperty::DoSetAttribute( const wxString& name, wxVariant& val
     {
         m_delimiter = value.GetChar();
         GenerateValueAsString();
-        return false;
+        return true;
     }
-    return true;
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------

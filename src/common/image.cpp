@@ -1339,7 +1339,6 @@ wxImage wxImage::Rotate90( bool clockwise ) const
     if ( source_alpha )
     {
         unsigned char *alpha_data = image.GetAlpha();
-        unsigned char *target_alpha = 0 ;
 
         for (long ii = 0; ii < width; )
         {
@@ -1351,6 +1350,7 @@ wxImage wxImage::Rotate90( bool clockwise ) const
 
                 for (long i = ii; i < next_ii; i++)
                 {
+                    unsigned char* target_alpha;
                     if ( clockwise )
                     {
                         target_alpha = alpha_data + (i+1)*height - j - 1;
@@ -1929,10 +1929,10 @@ void wxImage::SetRGB( const wxRect& rect_, unsigned char r, unsigned char g, uns
         x2 = rect.GetRight() + 1,
         y2 = rect.GetBottom() + 1;
 
-    unsigned char *data wxDUMMY_INITIALIZE(NULL);
     int x, y, width = GetWidth();
     for (y = y1; y < y2; y++)
     {
+        unsigned char* data;
         data = M_IMGDATA->m_data + (y*width + x1)*3;
         for (x = x1; x < x2; x++)
         {
@@ -3236,8 +3236,6 @@ void wxImage::RotateHue(double angle)
 {
     AllocExclusive();
 
-    unsigned char *srcBytePtr;
-    unsigned char *dstBytePtr;
     unsigned long count;
     wxImage::HSVValue hsv;
     wxImage::RGBValue rgb;
@@ -3246,6 +3244,8 @@ void wxImage::RotateHue(double angle)
     count = M_IMGDATA->m_width * M_IMGDATA->m_height;
     if ( count > 0 && !wxIsNullDouble(angle) )
     {
+        unsigned char* srcBytePtr;
+        unsigned char* dstBytePtr;
         srcBytePtr = M_IMGDATA->m_data;
         dstBytePtr = srcBytePtr;
         do
@@ -3448,16 +3448,17 @@ unsigned long wxImage::CountColours( unsigned long stopafter ) const
 {
     wxHashTable h;
     wxObject dummy;
-    unsigned char r, g, b;
     unsigned char *p;
-    unsigned long size, nentries, key;
+    unsigned long size, nentries;
 
     p = GetData();
-    size = GetWidth() * GetHeight();
+    size = static_cast<unsigned long>(GetWidth()) * GetHeight();
     nentries = 0;
 
     for (unsigned long j = 0; (j < size) && (nentries <= stopafter) ; j++)
     {
+        unsigned char r, g, b;
+        unsigned long key;
         r = *(p++);
         g = *(p++);
         b = *(p++);
@@ -3481,11 +3482,11 @@ unsigned long wxImage::ComputeHistogram( wxImageHistogram &h ) const
 
     h.clear();
 
-    const unsigned long size = GetWidth() * GetHeight();
+    const unsigned long size = static_cast<unsigned long>(GetWidth()) * GetHeight();
 
-    unsigned char r, g, b;
     for ( unsigned long n = 0; n < size; n++ )
     {
+        unsigned char r, g, b;
         r = *p++;
         g = *p++;
         b = *p++;

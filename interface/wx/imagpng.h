@@ -30,7 +30,7 @@ enum
 
     This is the image handler for the PNG format.
 
-    @library{core}
+    @library{wxcore}
     @category{gdi}
 
     @see wxImage, wxImageHandler, wxInitAllImageHandlers()

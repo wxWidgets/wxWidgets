@@ -861,9 +861,9 @@ bool wxHtmlHelpWindow::KeywordSearch(const wxString& keyword,
                                   wxPD_APP_MODAL | wxPD_CAN_ABORT | wxPD_AUTO_HIDE);
 #endif
 
-        int curi;
         while (status.IsActive())
         {
+            int curi;
             curi = status.GetCurIndex();
             if (curi % 32 == 0
 #if wxUSE_PROGRESSDLG
@@ -1092,13 +1092,13 @@ void wxHtmlHelpWindow::ReadCustomization(wxConfigBase *cfg, const wxString& path
     m_FontSize = cfg->Read(wxT("hcBaseFontSize"), m_FontSize);
 
     {
-        int i;
         int cnt;
         wxString val, s;
 
         cnt = cfg->Read(wxT("hcBookmarksCnt"), 0L);
         if (cnt != 0)
         {
+            int i;
             m_BookmarksNames.Clear();
             m_BookmarksPages.Clear();
             if (m_Bookmarks)
@@ -1296,7 +1296,6 @@ wxEND_EVENT_TABLE()
 void wxHtmlHelpWindow::OptionsDialog()
 {
     wxHtmlHelpWindowOptionsDialog dlg(this);
-    unsigned i;
 
     if (m_NormalFonts == NULL)
     {
@@ -1331,6 +1330,7 @@ void wxHtmlHelpWindow::OptionsDialog()
     // Lock updates to the choice controls before inserting potentially many
     // items into them until the end of this block.
     {
+        unsigned i;
         wxWindowUpdateLocker lockNormalFont(dlg.NormalFont);
         wxWindowUpdateLocker lockFixedFont(dlg.FixedFont);
 

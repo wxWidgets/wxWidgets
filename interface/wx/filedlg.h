@@ -211,6 +211,29 @@ public:
     virtual wxString GetCurrentlySelectedFilename() const;
 
     /**
+        Returns the file type filter index currently selected in dialog.
+
+        Notice that this file type filter is not necessarily going to be the
+        one finally accepted by the user, so calling this function mostly makes
+        sense from an update UI event handler of a custom file dialog extra
+        control to update its state depending on the currently selected file
+        type filter.
+
+        Currently this function is fully implemented only under MSW and
+        always returns @c wxNOT_FOUND elsewhere.
+
+        @since 3.1.3
+
+        @return The 0-based index of the currently selected file type filter or
+            wxNOT_FOUND if nothing is selected.
+
+        @see SetExtraControlCreator()
+        @see GetFilterIndex()
+        @see SetFilterIndex()
+    */
+    virtual int GetCurrentlySelectedFilterIndex () const;
+
+    /**
         Returns the default directory.
     */
     virtual wxString GetDirectory() const;
@@ -399,7 +422,9 @@ wxString wxFileSelector(const wxString& message,
                         int y = wxDefaultCoord);
 
 /**
-    An extended version of wxFileSelector
+    An extended version of wxFileSelector()
+
+    @header{wx/filedlg.h}
 */
 wxString wxFileSelectorEx(const wxString& message = wxFileSelectorPromptStr,
                           const wxString& default_path = wxEmptyString,
@@ -412,7 +437,11 @@ wxString wxFileSelectorEx(const wxString& message = wxFileSelectorPromptStr,
                           int y = wxDefaultCoord);
 
 /**
-    Ask for filename to load
+    Shows a file dialog asking the user for a file name for opening a file.
+
+    @see wxFileSelector(), wxFileDialog
+
+    @header{wx/filedlg.h}
 */
 wxString wxLoadFileSelector(const wxString& what,
                             const wxString& extension,
@@ -420,7 +449,11 @@ wxString wxLoadFileSelector(const wxString& what,
                             wxWindow *parent = NULL);
 
 /**
-    Ask for filename to save
+    Shows a file dialog asking the user for a file name for saving a file.
+
+    @see wxFileSelector(), wxFileDialog
+
+    @header{wx/filedlg.h}
 */
 wxString wxSaveFileSelector(const wxString& what,
                             const wxString& extension,

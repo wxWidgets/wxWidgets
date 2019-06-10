@@ -20,8 +20,8 @@ class WXDLLIMPEXP_ADV wxDateTimePickerCtrl : public wxDateTimePickerCtrlBase
 {
 public:
     // Implement the base class pure virtuals.
-    virtual void SetValue(const wxDateTime& dt);
-    virtual wxDateTime GetValue() const;
+    virtual void SetValue(const wxDateTime& dt) wxOVERRIDE;
+    virtual wxDateTime GetValue() const wxOVERRIDE;
 
     // Implementation only.
     virtual void OSXGenerateEvent(const wxDateTime& dt) = 0;

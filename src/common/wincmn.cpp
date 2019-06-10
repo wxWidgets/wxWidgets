@@ -269,6 +269,8 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase);
 
 // the default initialization
 wxWindowBase::wxWindowBase()
+    : m_virtualSize(wxDefaultSize)
+    , m_bestSizeCache(wxDefaultSize)
 {
     // no window yet, no parent nor children
     m_parent = NULL;
@@ -279,9 +281,6 @@ wxWindowBase::wxWindowBase()
     m_maxWidth = wxDefaultCoord;
     m_minHeight =
     m_maxHeight = wxDefaultCoord;
-
-    // invalidiated cache value
-    m_bestSizeCache = wxDefaultSize;
 
     // window are created enabled and visible by default
     m_isShown =
@@ -339,8 +338,6 @@ wxWindowBase::wxWindowBase()
 #if wxUSE_ACCESSIBILITY
     m_accessible = NULL;
 #endif
-
-    m_virtualSize = wxDefaultSize;
 
     m_scrollHelper = NULL;
 

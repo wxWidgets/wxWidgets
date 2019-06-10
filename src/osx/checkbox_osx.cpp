@@ -171,11 +171,6 @@ void wxBitmapCheckBox::SetLabel(const wxBitmap *WXUNUSED(bitmap))
     wxFAIL_MSG(wxT("wxBitmapCheckBox::SetLabel() not yet implemented"));
 }
 
-void wxBitmapCheckBox::SetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    wxControl::SetSize( x , y , width , height , sizeFlags ) ;
-}
-
 void wxBitmapCheckBox::SetValue(bool WXUNUSED(val))
 {
     // TODO

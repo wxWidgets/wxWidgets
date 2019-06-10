@@ -23,12 +23,13 @@ public:
     // implementation
     // --------------
 
-    virtual void SetLabel( const wxString &label );
+    virtual void SetLabel( const wxString &label ) wxOVERRIDE;
 
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
     // implementation only
     void QtUpdateState();
+    virtual int GetEventType() const = 0;
 
 protected:
     virtual wxBitmap DoGetBitmap(State state) const wxOVERRIDE;

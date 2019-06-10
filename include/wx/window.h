@@ -1019,7 +1019,7 @@ public:
 
         // start or end mouse capture, these functions maintain the stack of
         // windows having captured the mouse and after calling ReleaseMouse()
-        // the mouse is not released but returns to the window which had had
+        // the mouse is not released but returns to the window which had
         // captured it previously (if any)
     void CaptureMouse();
     void ReleaseMouse();

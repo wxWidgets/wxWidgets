@@ -276,7 +276,7 @@ void wxPropertyGridPageState::InitNonCatMode()
 
 void wxPropertyGridPageState::DoClear()
 {
-    if ( m_pPropGrid && m_pPropGrid->GetState() == this )
+    if ( m_pPropGrid && IsDisplayed() )
     {
         m_pPropGrid->ClearSelection(false);
     }
@@ -398,6 +398,11 @@ void wxPropertyGridPageState::OnClientWidthChange( int newWidth, int widthChange
             }
         }
     }
+
+    if ( IsDisplayed() )
+    {
+        pg->SendEvent(wxEVT_PG_COLS_RESIZED, (wxPGProperty*)NULL);
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -412,10 +417,10 @@ wxPGProperty* wxPropertyGridPageState::GetLastItem( int flags )
     wxPG_ITERATOR_CREATE_MASKS(flags, wxPGProperty::FlagType itemExMask, wxPGProperty::FlagType parentExMask)
 
     // First, get last child of last parent
-    wxPGProperty* pwc = (wxPGProperty*)m_properties->Last();
+    wxPGProperty* pwc = m_properties->Last();
     while ( pwc->GetChildCount() &&
             wxPG_ITERATOR_PARENTEXMASK_TEST(pwc, parentExMask) )
-        pwc = (wxPGProperty*) pwc->Last();
+        pwc = pwc->Last();
 
     // Then, if it doesn't fit our criteria, back up until we find something that does
     if ( pwc->HasFlag(itemExMask) )
@@ -423,7 +428,7 @@ wxPGProperty* wxPropertyGridPageState::GetLastItem( int flags )
         wxPropertyGridIterator it( this, flags, pwc );
         for ( ; !it.AtEnd(); it.Prev() )
             ;
-        pwc = (wxPGProperty*) it.GetProperty();
+        pwc = it.GetProperty();
     }
 
     return pwc;
@@ -431,12 +436,12 @@ wxPGProperty* wxPropertyGridPageState::GetLastItem( int flags )
 
 wxPropertyCategory* wxPropertyGridPageState::GetPropertyCategory( const wxPGProperty* p ) const
 {
-    const wxPGProperty* parent = (const wxPGProperty*)p;
-    const wxPGProperty* grandparent = (const wxPGProperty*)parent->GetParent();
+    const wxPGProperty* parent = p;
+    const wxPGProperty* grandparent = parent->GetParent();
     do
     {
         parent = grandparent;
-        grandparent = (wxPGProperty*)parent->GetParent();
+        grandparent = parent->GetParent();
         if ( parent->IsCategory() && grandparent )
             return (wxPropertyCategory*)parent;
     } while ( grandparent );
@@ -637,7 +642,7 @@ bool wxPropertyGridPageState::EnableCategories( bool enable )
 
     VirtualHeightChanged();
 
-    if ( m_pPropGrid->GetState() == this )
+    if ( IsDisplayed() )
         m_pPropGrid->RecalculateVirtualSize();
 
     return true;
@@ -989,7 +994,7 @@ wxSize wxPropertyGridPageState::DoFitColumns( bool WXUNUSED(allowGridResize) )
     m_fSplitterX = (double) firstSplitterX;
 
     // Don't allow initial splitter auto-positioning after this.
-    if ( pg->GetState() == this )
+    if ( IsDisplayed() )
     {
         pg->SetSplitterPosition(firstSplitterX, false);
         pg->Refresh();
@@ -1024,6 +1029,8 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
     // Then mode-based requirement
     if ( !pg->HasVirtualWidth() )
     {
+        m_width = clientWidth;
+
         int widthHigher = m_width - colsWidth;
 
         // Adapt colsWidth to width
@@ -1058,16 +1065,14 @@ void wxPropertyGridPageState::CheckColumnWidths( int widthChange )
     }
     else
     {
-        // Only check colsWidth against clientWidth
-        if ( colsWidth < clientWidth )
+        // Only adapt colsWidth to width
+        if ( colsWidth < m_width )
         {
-            m_colWidths.back() += (clientWidth-colsWidth);
+            m_colWidths.back() += (m_width-colsWidth);
         }
 
-        m_width = colsWidth;
-
         // If width changed, recalculate virtual size
-        if ( pg->GetState() == this )
+        if ( IsDisplayed() )
             pg->RecalculateVirtualSize();
     }
 
@@ -1162,10 +1167,9 @@ void wxPropertyGridPageState::SetColumnCount( int colCount )
     m_colWidths.resize(colCount, wxPG_DRAG_MARGIN);
     m_columnProportions.resize(colCount, 1);
 
-    if ( m_pPropGrid->GetState() == this )
+    CheckColumnWidths();
+    if ( IsDisplayed() )
         m_pPropGrid->RecalculateVirtualSize();
-    else
-        CheckColumnWidths();
 }
 
 void wxPropertyGridPageState::DoSetColumnProportion( unsigned int column,
@@ -1275,8 +1279,7 @@ bool wxPropertyGridPageState::DoSetPropertyValueString( wxPGProperty* p, const w
         if ( res )
         {
             p->SetValue(variant);
-            if ( p == m_pPropGrid->GetSelection() &&
-                 this == m_pPropGrid->GetState() )
+            if ( p == m_pPropGrid->GetSelection() && IsDisplayed() )
                 m_pPropGrid->RefreshEditor();
         }
 
@@ -1292,8 +1295,7 @@ bool wxPropertyGridPageState::DoSetPropertyValue( wxPGProperty* p, wxVariant& va
     if ( p )
     {
         p->SetValue(value);
-        if ( p == m_pPropGrid->GetSelection() &&
-             this == m_pPropGrid->GetState() )
+        if ( p == m_pPropGrid->GetSelection() && IsDisplayed() )
             m_pPropGrid->RefreshEditor();
 
         return true;
@@ -1333,7 +1335,7 @@ void wxPropertyGridPageState::DoRemoveFromSelection( wxPGProperty* prop )
         if ( m_selection[i] == prop )
         {
             wxPropertyGrid* pg = m_pPropGrid;
-            if ( i == 0 && pg->GetState() == this )
+            if ( i == 0 && IsDisplayed() )
             {
                 // If first item (i.e. one with the active editor) was
                 // deselected, then we need to take some extra measures.
@@ -1395,7 +1397,7 @@ bool wxPropertyGridPageState::DoExpand( wxPGProperty* p )
 
 bool wxPropertyGridPageState::DoSelectProperty( wxPGProperty* p, unsigned int flags )
 {
-    if ( this == m_pPropGrid->GetState() )
+    if ( IsDisplayed() )
         return m_pPropGrid->DoSelectProperty( p, flags );
 
     DoSetSelection(p);
@@ -1422,7 +1424,7 @@ wxVariant wxPropertyGridPageState::DoGetPropertyValues( const wxString& listname
                                                     wxPGProperty* baseparent,
                                                     long flags ) const
 {
-    wxPGProperty* pwc = (wxPGProperty*) baseparent;
+    wxPGProperty* pwc = baseparent;
 
     // Root is the default base-parent.
     if ( !pwc )
@@ -1485,7 +1487,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
 {
     bool origFrozen = true;
 
-    if ( m_pPropGrid->GetState() == this )
+    if ( IsDisplayed() )
     {
         origFrozen = m_pPropGrid->IsFrozen();
         if ( !origFrozen ) m_pPropGrid->Freeze();
@@ -1624,7 +1626,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
     {
         m_pPropGrid->Thaw();
 
-        if ( this == m_pPropGrid->GetState() )
+        if ( IsDisplayed() )
             m_pPropGrid->RefreshEditor();
     }
 
@@ -1830,7 +1832,7 @@ void wxPropertyGridPageState::DoRemoveChildrenFromSelection(wxPGProperty* p,
         wxPGProperty* child = p->Item(i);
         if ( DoIsPropertySelected(child) )
         {
-            if ( pg && pg->GetState() == this )
+            if ( pg && IsDisplayed() )
             {
                 pg->DoRemoveFromSelection(child, selFlags);
             }
@@ -1937,7 +1939,7 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     // Try to unselect property and its sub-properties.
     if ( DoIsPropertySelected(item) )
     {
-        if ( pg && pg->GetState() == this )
+        if ( pg && IsDisplayed() )
         {
             pg->DoRemoveFromSelection(item,
                 wxPG_SEL_DELETING|wxPG_SEL_NOVALIDATE);
@@ -2041,10 +2043,10 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
             if ( p == item ) { cat_index = i; break; }
             if ( p->IsCategory() )
             {
-                int subind = ((wxPGProperty*)p)->Index(item);
+                int subind = p->Index(item);
                 if ( subind != wxNOT_FOUND )
                 {
-                    cat_parent = ((wxPGProperty*)p);
+                    cat_parent = p;
                     cat_index = subind;
                     break;
                 }
@@ -2101,6 +2103,16 @@ void wxPropertyGridPageState::DoDelete( wxPGProperty* item, bool doDelete )
     m_itemsAdded = true; // Not a logical assignment (but required nonetheless).
 
     VirtualHeightChanged();
+}
+
+bool wxPropertyGridPageState::IsDisplayed() const
+{
+    return (this == m_pPropGrid->GetState());
+}
+
+unsigned int wxPropertyGridPageState::GetActualVirtualHeight() const
+{
+    return DoGetRoot()->GetChildrenHeight(GetGrid()->GetRowHeight());
 }
 
 // -----------------------------------------------------------------------

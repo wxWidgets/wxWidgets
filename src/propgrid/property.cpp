@@ -1627,10 +1627,7 @@ void wxPGProperty::Enable( bool enable )
 
 void wxPGProperty::DoEnable( bool enable )
 {
-    if ( enable )
-        ClearFlag(wxPG_PROP_DISABLED);
-    else
-        SetFlag(wxPG_PROP_DISABLED);
+    ChangeFlag(wxPG_PROP_DISABLED, !enable);
 
     // Apply same to sub-properties as well
     for ( unsigned int i = 0; i < GetChildCount(); i++ )
@@ -1855,14 +1852,19 @@ bool wxPGProperty::DoSetAttribute( const wxString& WXUNUSED(name), wxVariant& WX
 
 void wxPGProperty::SetAttribute( const wxString& name, wxVariant value )
 {
-    if ( DoSetAttribute( name, value ) )
+    if ( !DoSetAttribute(name, value) || !wxPGGlobalVars->HasExtraStyle(wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES) )
     {
-        // Support working without grid, when possible
-        if ( wxPGGlobalVars->HasExtraStyle( wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES ) )
-            return;
+        m_attributes.Set(name, value);
     }
-
-    m_attributes.Set( name, value );
+    // Because changing some attributes (like wxPG_FLOAT_PRECISION, wxPG_UINT_BASE,
+    // wxPG_UINT_PREFIX, wxPG_ATTR_UNITS) affect displayed form of the property value
+    // so we have to redraw property to be sure that displayed value is in sync
+    // with current attributes.
+    wxPropertyGrid* pg = GetGridIfDisplayed();
+    if ( pg )
+    {
+        pg->RefreshProperty(this);
+    }
 }
 
 void wxPGProperty::SetAttributes( const wxPGAttributeStorage& attributes )
@@ -2149,10 +2151,7 @@ bool wxPGProperty::Hide( bool hide, int flags )
 
 bool wxPGProperty::DoHide( bool hide, int flags )
 {
-    if ( !hide )
-        ClearFlag( wxPG_PROP_HIDDEN );
-    else
-        SetFlag( wxPG_PROP_HIDDEN );
+    ChangeFlag(wxPG_PROP_HIDDEN, hide);
 
     if ( flags & wxPG_RECURSE )
     {
@@ -2549,7 +2548,6 @@ int wxPGProperty::GetChildrenHeight( int lh, int iMax_ ) const
     //
     // iMax is used when finding property y-positions.
     //
-    unsigned int i = 0;
     int h = 0;
 
     if ( iMax_ == -1 )
@@ -2562,9 +2560,9 @@ int wxPGProperty::GetChildrenHeight( int lh, int iMax_ ) const
     if ( !IsExpanded() && GetParent() )
         return 0;
 
-    while ( i < iMax )
+    for ( unsigned int i = 0; i < iMax; i++ )
     {
-        wxPGProperty* pwc = (wxPGProperty*) Item(i);
+        wxPGProperty* pwc = Item(i);
 
         if ( !pwc->HasFlag(wxPG_PROP_HIDDEN) )
         {
@@ -2574,8 +2572,6 @@ int wxPGProperty::GetChildrenHeight( int lh, int iMax_ ) const
             else
                 h += pwc->GetChildrenHeight(lh) + lh;
         }
-
-        i++;
     }
 
     return h;
@@ -2593,10 +2589,8 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
     wxPGProperty* result = NULL;
     wxPGProperty* current = NULL;
     unsigned int iy = *nextItemY;
-    unsigned int i = 0;
-    unsigned int iMax = GetChildCount();
 
-    while ( i < iMax )
+    for ( unsigned int i = 0; i < GetChildCount(); i++ )
     {
         wxPGProperty* pwc = Item(i);
 
@@ -2614,15 +2608,13 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
             if ( pwc->IsExpanded() &&
                  pwc->GetChildCount() > 0 )
             {
-                result = (wxPGProperty*) pwc->GetItemAtY( y, lh, &iy );
+                result = pwc->GetItemAtY( y, lh, &iy );
                 if ( result )
                     break;
             }
 
             current = pwc;
         }
-
-        i++;
     }
 
     // Found?
@@ -2642,7 +2634,7 @@ wxPGProperty* wxPGProperty::GetItemAtY( unsigned int y,
     }
     */
 
-    return (wxPGProperty*) result;
+    return result;
 }
 
 void wxPGProperty::Empty()
@@ -2830,6 +2822,54 @@ void wxPGProperty::SubPropsChanged( int oldSelInd )
     {
         grid->GetPanel()->Refresh();
     }
+}
+
+wxString wxPGProperty::GetHintText() const
+{
+    wxVariant vHintText = GetAttribute(wxPG_ATTR_HINT);
+
+#if wxPG_COMPATIBILITY_1_4
+    // Try the old, deprecated "InlineHelp"
+    if ( vHintText.IsNull() )
+        vHintText = GetAttribute(wxPG_ATTR_INLINE_HELP);
+#endif
+
+    if ( !vHintText.IsNull() )
+        return vHintText.GetString();
+
+    return wxEmptyString;
+}
+
+int wxPGProperty::GetDisplayedCommonValueCount() const
+{
+    if ( HasFlag(wxPG_PROP_USES_COMMON_VALUE) )
+    {
+        wxPropertyGrid* pg = GetGrid();
+        if ( pg )
+            return (int)pg->GetCommonValueCount();
+    }
+    return 0;
+}
+
+void wxPGProperty::SetDefaultValue(wxVariant& value)
+{
+    SetAttribute(wxPG_ATTR_DEFAULT_VALUE, value);
+}
+
+void wxPGProperty::SetEditor(const wxString& editorName)
+{
+    m_customEditor = wxPropertyGridInterface::GetEditorByName(editorName);
+}
+
+bool wxPGProperty::SetMaxLength(int maxLen)
+{
+    const wxPGEditor* editorClass = GetEditorClass();
+    if ( editorClass != wxPGEditor_TextCtrl &&
+         editorClass != wxPGEditor_TextCtrlAndButton )
+        return false;
+
+    m_maxLen = wxMax(maxLen, 0); // shouldn't be a nagative value
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -3203,19 +3243,48 @@ void wxPGChoices::Free()
 // wxPGAttributeStorage
 // -----------------------------------------------------------------------
 
+static inline void IncDataRef(wxPGHashMapS2P& map)
+{
+    wxPGHashMapS2P::iterator it;
+    for ( it = map.begin(); it != map.end(); ++it )
+    {
+        static_cast<wxVariantData*>(it->second)->IncRef();
+    }
+}
+
+static inline void DecDataRef(wxPGHashMapS2P& map)
+{
+    wxPGHashMapS2P::iterator it;
+    for ( it = map.begin(); it != map.end(); ++it )
+    {
+        static_cast<wxVariantData*>(it->second)->DecRef();
+    }
+}
+
 wxPGAttributeStorage::wxPGAttributeStorage()
 {
 }
 
+wxPGAttributeStorage::wxPGAttributeStorage(const wxPGAttributeStorage& other)
+{
+    m_map = other.m_map;
+    IncDataRef(m_map);
+}
+
 wxPGAttributeStorage::~wxPGAttributeStorage()
 {
-    wxPGHashMapS2P::iterator it;
+    DecDataRef(m_map);
+}
 
-    for ( it = m_map.begin(); it != m_map.end(); ++it )
+wxPGAttributeStorage& wxPGAttributeStorage::operator=(const wxPGAttributeStorage& rhs)
+{
+    if ( this != &rhs )
     {
-        wxVariantData* data = (wxVariantData*) it->second;
-        data->DecRef();
+        DecDataRef(m_map);
+        m_map = rhs.m_map;
+        IncDataRef(m_map);
     }
+    return *this;
 }
 
 void wxPGAttributeStorage::Set( const wxString& name, const wxVariant& value )

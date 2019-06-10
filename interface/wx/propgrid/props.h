@@ -35,7 +35,8 @@ public:
     Basic property with string value.
 
     <b>Supported special attributes:</b>
-    - "Password": set to 1 in order to enable wxTE_PASSWORD on the editor.
+    - ::wxPG_STRING_PASSWORD: set to @true in order to enable ::wxTE_PASSWORD
+    on the editor.
 
     @remarks
     - If value "<composed>" is set, then actual value is formed (or composed)
@@ -140,7 +141,7 @@ public:
 
 
     <b>Supported special attributes:</b>
-    - "Min", "Max": Specify acceptable value range.
+    - ::wxPG_ATTR_MIN, ::wxPG_ATTR_MAX: Specify acceptable value range.
 */
 class wxIntProperty : public wxPGProperty
 {
@@ -181,13 +182,13 @@ public:
     Seamlessly supports 64-bit integer (wxULongLong) on overflow.
 
     <b>Supported special attributes:</b>
-    - "Min", "Max": Specify acceptable value range.
-    - "Base": Define base. Valid constants are wxPG_BASE_OCT, wxPG_BASE_DEC,
-    wxPG_BASE_HEX and wxPG_BASE_HEXL (lowercase characters). Arbitrary bases
-    are <b>not</b> supported.
-    - "Prefix": Possible values are wxPG_PREFIX_NONE, wxPG_PREFIX_0x, and
-    wxPG_PREFIX_DOLLAR_SIGN. Only wxPG_PREFIX_NONE works with Decimal and Octal
-    numbers.
+    - ::wxPG_ATTR_MIN, ::wxPG_ATTR_MAX: Specify acceptable value range.
+    - ::wxPG_UINT_BASE: Define base. Valid constants are ::wxPG_BASE_OCT,
+    ::wxPG_BASE_DEC, ::wxPG_BASE_HEX and ::wxPG_BASE_HEXL (lowercase characters).
+    Arbitrary bases are <b>not</b> supported.
+    - ::wxPG_UINT_PREFIX: Possible values are ::wxPG_PREFIX_NONE, ::wxPG_PREFIX_0x,
+    and ::wxPG_PREFIX_DOLLAR_SIGN. Only ::wxPG_PREFIX_NONE works with Decimal
+    and Octal numbers.
 
     @remarks
     - For example how to use seamless 64-bit integer support, see wxIntProperty
@@ -226,8 +227,8 @@ protected:
     Basic property with double-precision floating point value.
 
     <b>Supported special attributes:</b>
-    - "Precision": Sets the (max) precision used when floating point value is
-    rendered as text. The default -1 means infinite precision.
+    - ::wxPG_FLOAT_PRECISION: Sets the (max) precision used when floating point
+    value is rendered as text. The default -1 means infinite precision.
 */
 class wxFloatProperty : public wxPGProperty
 {
@@ -242,7 +243,6 @@ public:
                                 const wxString& text,
                                 int argFlags = 0 ) const;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
-    virtual wxVariant DoGetAttribute( const wxString& name ) const;
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const;
 
@@ -267,8 +267,10 @@ protected:
     Basic property with boolean value.
 
     <b>Supported special attributes:</b>
-    - "UseCheckbox": Set to 1 to use check box editor instead of combo box.
-    - "UseDClickCycling": Set to 1 to cycle combo box instead showing the list.
+    - ::wxPG_BOOL_USE_CHECKBOX: Set to @true to use check box editor instead
+    of combo box.
+    - ::wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING: Set to @true to cycle combo box
+    instead showing the list.
 */
 class wxBoolProperty : public wxPGProperty
 {
@@ -360,8 +362,6 @@ public:
     // the true index, and various property classes derived from
     // this take advantage of it.
     virtual int GetChoiceSelection() const;
-
-    virtual void OnValidationFailure( wxVariant& pendingValue );
 
 protected:
 
@@ -510,14 +510,16 @@ public:
     Like wxLongStringProperty, but the button triggers file selector instead.
 
     <b>Supported special attributes:</b>
-    - "Wildcard": Sets wildcard (see wxFileDialog for format details), "All
-    files..." is default.
-    - "ShowFullPath": Default 1. When 0, only the file name is shown (i.e. drive
-      and directory are hidden).
-    - "ShowRelativePath": If set, then the filename is shown relative to the
-    given path string.
-    - "InitialPath": Sets the initial path of where to look for files.
-    - "DialogTitle": Sets a specific title for the dir dialog.
+    - ::wxPG_FILE_WILDCARD: Sets wildcard (see wxFileDialog for format details),
+    "All files..." is default.
+    - ::wxPG_FILE_SHOW_FULL_PATH: Default @true. When @false, only the file name is
+    shown (i.e. drive and directory are hidden).
+    - ::wxPG_FILE_SHOW_RELATIVE_PATH: If set, then the filename is shown relative
+    to the given path string.
+    - ::wxPG_FILE_INITIAL_PATH: Sets the initial path of where to look for files.
+    - ::wxPG_FILE_DIALOG_TITLE: Sets a specific title for the dir dialog.
+    - ::wxPG_FILE_DIALOG_STYLE: Sets a specific wxFileDialog style for the file
+    dialog (since 2.9.4).
 */
 class wxFileProperty : public wxPGProperty
 {
@@ -545,11 +547,14 @@ public:
     wxFileName GetFileName() const;
 
 protected:
+    bool DisplayEditorDialog(wxPropertyGrid* propGrid, wxString& value);
+
     wxString    m_wildcard;
-    wxString    m_basePath; // If set, then show path relative to it
-    wxString    m_initialPath; // If set, start the file dialog here
-    wxString    m_dlgTitle; // If set, used as title for file dialog
-    int         m_indFilter; // index to the selected filter
+    wxString    m_basePath;
+    wxString    m_initialPath;
+    wxString    m_dlgTitle;
+    int         m_indFilter;
+    long        m_dlgStyle;
 };
 
 
@@ -606,7 +611,7 @@ public:
     Like wxLongStringProperty, but the button triggers dir selector instead.
 
     <b>Supported special attributes:</b>
-    - "DialogMessage": Sets specific message in the dir selector.
+    - ::wxPG_DIR_DIALOG_MESSAGE: Sets specific message in the dir selector.
 */
 class wxDirProperty : public wxLongStringProperty
 {

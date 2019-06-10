@@ -177,9 +177,9 @@ void wxGridCellDateRenderer::SetParameters(const wxString& params)
 
 wxGridCellDateTimeRenderer::wxGridCellDateTimeRenderer(const wxString& outformat, const wxString& informat)
     : wxGridCellDateRenderer(outformat)
+    , m_iformat(informat)
+    , m_dateDef(wxDefaultDateTime)
 {
-    m_iformat = informat;
-    m_dateDef = wxDefaultDateTime;
 }
 
 wxGridCellRenderer *wxGridCellDateTimeRenderer::Clone() const
@@ -597,10 +597,9 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
     int hAlign, vAlign;
     attr.GetAlignment(&hAlign, &vAlign);
 
-    int overflowCols = 0;
-
     if (attr.GetOverflow())
     {
+        int overflowCols = 0;
         int cols = grid.GetNumberCols();
         int best_width = GetBestSize(grid,attr,dc,row,col).GetWidth();
         int cell_rows, cell_cols;

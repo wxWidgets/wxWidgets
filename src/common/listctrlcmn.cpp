@@ -25,6 +25,7 @@
 #if wxUSE_LISTCTRL
 
 #include "wx/listctrl.h"
+#include "wx/imaglist.h"
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
@@ -249,6 +250,45 @@ wxItemAttr *wxListCtrlBase::OnGetItemAttr(long item) const
     return (m_alternateRowColour.GetBackgroundColour().IsOk() && (item % 2))
         ? wxConstCast(&m_alternateRowColour, wxItemAttr)
         : NULL; // no attributes by default
+}
+
+wxString wxListCtrlBase::OnGetItemText(long WXUNUSED(item), long WXUNUSED(col)) const
+{
+    // this is a pure virtual function, in fact - which is not really pure
+    // because the controls which are not virtual don't need to implement it
+    wxFAIL_MSG("wxListCtrl::OnGetItemText not supposed to be called");
+
+    return wxEmptyString;
+}
+
+bool wxListCtrlBase::OnGetItemIsChecked(long WXUNUSED(item)) const
+{
+    // this is a pure virtual function, in fact - which is not really pure
+    // because the controls which are not virtual don't need to implement it
+    wxFAIL_MSG("wxListCtrl::OnGetItemIsChecked not supposed to be called");
+
+    return false;
+}
+
+int wxListCtrlBase::OnGetItemImage(long WXUNUSED(item)) const
+{
+    wxCHECK_MSG(!GetImageList(wxIMAGE_LIST_SMALL),
+                -1,
+                "List control has an image list, OnGetItemImage or OnGetItemColumnImage should be overridden.");
+    return -1;
+}
+
+int wxListCtrlBase::OnGetItemColumnImage(long item, long column) const
+{
+    if ( !column )
+        return OnGetItemImage(item);
+
+    return -1;
+}
+
+wxItemAttr* wxListCtrlBase::OnGetItemColumnAttr(long item, long WXUNUSED(column)) const
+{
+    return OnGetItemAttr(item);
 }
 
 #endif // wxUSE_LISTCTRL

@@ -120,29 +120,23 @@ void FormMain::AddTestProperties( wxPropertyGridPage* pg )
 void FormMain::OnDumpList( wxCommandEvent& WXUNUSED(event) )
 {
     wxVariant values = m_pPropGridManager->GetPropertyValues("list", wxNullProperty, wxPG_INC_ATTRIBUTES);
-    wxString text = "This only tests that wxVariant related routines do not crash.";
-    wxString t;
+    wxString text = "This only tests that wxVariant related routines do not crash.\n";
 
     wxDialog* dlg = new wxDialog(this,wxID_ANY,"wxVariant Test",
         wxDefaultPosition,wxDefaultSize,wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER);
 
-    unsigned int i;
-    for ( i = 0; i < (unsigned int)values.GetCount(); i++ )
+    for ( size_t i = 0; i < values.GetCount(); i++ )
     {
+        wxString t;
         wxVariant& v = values[i];
 
         wxString strValue = v.GetString();
 
-#if wxCHECK_VERSION(2,8,0)
         if ( v.GetName().EndsWith("@attr") )
-#else
-        if ( v.GetName().Right(5) == "@attr" )
-#endif
         {
             text += wxString::Format("Attributes:\n");
 
-            unsigned int n;
-            for ( n = 0; n < (unsigned int)v.GetCount(); n++ )
+            for ( size_t n = 0; n < v.GetCount(); n++ )
             {
                 wxVariant& a = v[n];
 
@@ -956,14 +950,151 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         RT_START_TEST(Attributes)
 
         wxPGProperty* prop = pgman->GetProperty("StringProperty");
-        prop->SetAttribute("Dummy Attribute", (long)15);
+        prop->SetAttribute("Dummy Attribute", 15L);
 
-        if ( prop->GetAttribute("Dummy Attribute").GetLong() != 15 )
+        if ( prop->GetAttribute("Dummy Attribute").GetLong() != 15L )
             RT_FAILURE();
 
         prop->SetAttribute("Dummy Attribute", wxVariant());
 
         if ( !prop->GetAttribute("Dummy Attribute").IsNull() )
+            RT_FAILURE();
+    }
+
+    {
+        RT_START_TEST(Attributes with PGManager)
+
+        const long val = 25;
+        pgman->SetPropertyAttribute("IntProperty", "Dummy Attribute", val);
+        if ( pgman->GetPropertyAttribute("IntProperty", "Dummy Attribute").GetLong() != val )
+            RT_FAILURE();
+
+        pgman->SetPropertyAttribute("IntProperty", "Dummy Attribute", wxVariant());
+        if ( !pgman->GetPropertyAttribute("IntProperty", "Dummy Attribute").IsNull() )
+            RT_FAILURE();
+    }
+
+    {
+        RT_START_TEST(Getting list of attributes)
+
+        wxPGProperty* prop = pgman->GetProperty("Height");
+        const wxPGAttributeStorage& attrs1 = prop->GetAttributes();
+        if ( attrs1.GetCount() < 1 )
+            RT_FAILURE();
+
+        const wxPGAttributeStorage& attrs2 = pgman->GetPropertyAttributes("Height");
+        if ( attrs2.GetCount() != attrs1.GetCount() )
+            RT_FAILURE();
+
+        // Compare both lists
+        wxVariant val1;
+        wxVariant val2;
+        wxPGAttributeStorage::const_iterator it = attrs1.StartIteration();
+        while ( attrs1.GetNext(it, val1) )
+        {
+            val2 = attrs2.FindValue(val1.GetName());
+            if ( val1 != val2 )
+                RT_FAILURE();
+        }
+    }
+
+    {
+        RT_START_TEST(Copying list of attributes)
+
+        wxPGAttributeStorage attrs1(pgman->GetPropertyAttributes("Height"));
+        if ( attrs1.GetCount() < 1 )
+            RT_FAILURE();
+
+        wxPGAttributeStorage attrs2;
+        attrs2 = attrs1;
+        if ( attrs2.GetCount() != attrs1.GetCount() )
+            RT_FAILURE();
+
+        // Compare both lists
+        wxVariant val1;
+        wxVariant val2;
+        wxPGAttributeStorage::const_iterator it = attrs1.StartIteration();
+        while ( attrs1.GetNext(it, val1) )
+        {
+            val2 = attrs2.FindValue(val1.GetName());
+            if ( val1 != val2 )
+                RT_FAILURE();
+        }
+    }
+
+    {
+        RT_START_TEST(MaxLength)
+
+        wxPGProperty* prop1 = pgman->GetProperty("StringProperty");
+        if ( !prop1->SetMaxLength(10) )
+            RT_FAILURE();
+        if ( prop1->GetMaxLength() != 10 )
+            RT_FAILURE();
+
+        if ( !prop1->SetMaxLength(-1) )
+            RT_FAILURE();
+        if ( prop1->GetMaxLength() != 0 )
+            RT_FAILURE();
+
+        wxPGProperty* prop2 = pgman->GetProperty("LongStringProp");
+        if ( !prop2->SetMaxLength(20) )
+            RT_FAILURE();
+        if ( prop2->GetMaxLength() != 20 )
+            RT_FAILURE();
+
+        wxPGProperty* prop3 = pgman->GetProperty("IntProperty");
+        if ( !prop3->SetMaxLength(30) )
+            RT_FAILURE();
+        if ( prop3->GetMaxLength() != 30 )
+            RT_FAILURE();
+
+        wxPGProperty* prop4 = pgman->GetProperty("ArrayStringProperty");
+        if ( !prop4->SetMaxLength(40) )
+            RT_FAILURE();
+        if ( prop4->GetMaxLength() != 40 )
+            RT_FAILURE();
+
+        wxPGProperty* prop5 = pgman->GetProperty("EnumProperty");
+        if ( prop5->SetMaxLength(50) )
+            RT_FAILURE();
+
+        wxPGProperty* prop6 = pgman->GetProperty("BoolProperty");
+        if ( prop6->SetMaxLength(60) )
+            RT_FAILURE();
+    }
+
+    {
+        RT_START_TEST(MaxLength with PG)
+        pgman->SelectPage(2);
+        pg = pgman->GetGrid();
+
+        wxPGProperty* prop1 = pgman->GetProperty("StringProperty");
+        if ( !pg->SetPropertyMaxLength("StringProperty", 110) )
+            RT_FAILURE();
+        if ( prop1->GetMaxLength() != 110 )
+            RT_FAILURE();
+
+        if ( !pg->SetPropertyMaxLength("StringProperty", -1) )
+            RT_FAILURE();
+        if ( prop1->GetMaxLength() != 0 )
+            RT_FAILURE();
+
+        wxPGProperty* prop2 = pgman->GetProperty("LongStringProp");
+        if ( !pg->SetPropertyMaxLength("LongStringProp", 120) )
+            RT_FAILURE();
+        if ( prop2->GetMaxLength() != 120 )
+            RT_FAILURE();
+
+        wxPGProperty* prop3 = pgman->GetProperty("FloatProperty");
+        if ( !pg->SetPropertyMaxLength("FloatProperty", 130) )
+            RT_FAILURE();
+        if ( prop3->GetMaxLength() != 130 )
+            RT_FAILURE();
+
+        if ( pg->SetPropertyMaxLength("ColourProperty", 140) )
+            RT_FAILURE();
+
+        if ( pg->SetPropertyMaxLength("BoolProperty", 150) )
             RT_FAILURE();
     }
 

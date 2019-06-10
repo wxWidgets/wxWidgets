@@ -1063,9 +1063,9 @@ void FormMain::PopulateWithStandardItems ()
     // (for instance, wxPG_ATTR_MIN, instead of "min").
     // Using constant may reduce binary size.
 
-    pg->Append( new wxIntProperty("Height",wxPG_LABEL,480) );
-    pg->SetPropertyAttribute("Height", wxPG_ATTR_MIN, (long)10 );
-    pg->SetPropertyAttribute("Height", wxPG_ATTR_MAX, (long)2048 );
+    pg->Append( new wxIntProperty("Height",wxPG_LABEL,480L) );
+    pg->SetPropertyAttribute("Height", wxPG_ATTR_MIN, 10L );
+    pg->SetPropertyAttribute("Height", wxPG_ATTR_MAX, 2048L );
     pg->SetPropertyAttribute("Height", wxPG_ATTR_UNITS, "Pixels" );
 
     // Set value to unspecified so that Hint attribute will be demonstrated
@@ -1079,9 +1079,9 @@ void FormMain::PopulateWithStandardItems ()
     pg->SetPropertyHelpString("Height",
         "This property uses attributes \"Units\" and \"Hint\".");
 
-    pg->Append( new wxIntProperty("Width",wxPG_LABEL,640) );
-    pg->SetPropertyAttribute("Width", wxPG_ATTR_MIN, (long)10 );
-    pg->SetPropertyAttribute("Width", wxPG_ATTR_MAX, (long)2048 );
+    pg->Append( new wxIntProperty("Width",wxPG_LABEL,640L) );
+    pg->SetPropertyAttribute("Width", wxPG_ATTR_MIN, 10L );
+    pg->SetPropertyAttribute("Width", wxPG_ATTR_MAX, 2048L );
     pg->SetPropertyAttribute("Width", wxPG_ATTR_UNITS, "Pixels" );
 
     pg->SetPropertyValueUnspecified("Width");
@@ -1090,11 +1090,11 @@ void FormMain::PopulateWithStandardItems ()
     pg->SetPropertyHelpString("Width",
         "This property uses attributes \"Units\" and \"Hint\".");
 
-    pg->Append( new wxIntProperty("X",wxPG_LABEL,10) );
+    pg->Append( new wxIntProperty("X",wxPG_LABEL,10L) );
     pg->SetPropertyAttribute("X", wxPG_ATTR_UNITS, "Pixels" );
     pg->SetPropertyHelpString("X", "This property uses \"Units\" attribute.");
 
-    pg->Append( new wxIntProperty("Y",wxPG_LABEL,10) );
+    pg->Append( new wxIntProperty("Y",wxPG_LABEL,10L) );
     pg->SetPropertyAttribute("Y", wxPG_ATTR_UNITS, "Pixels" );
     pg->SetPropertyHelpString("Y", "This property uses \"Units\" attribute.");
 
@@ -1140,7 +1140,7 @@ void FormMain::PopulateWithStandardItems ()
     arrdbl.Add(1.0);
 
     pg->Append( new wxArrayDoubleProperty("ArrayDoubleProperty",wxPG_LABEL,arrdbl) );
-    //pg->SetPropertyAttribute("ArrayDoubleProperty",wxPG_FLOAT_PRECISION,(long)2);
+    //pg->SetPropertyAttribute("ArrayDoubleProperty",wxPG_FLOAT_PRECISION,2L);
     pg->SetPropertyHelpString( "ArrayDoubleProperty",
         "This demonstrates wxArrayDoubleProperty class defined in this sample app. "
         "It is an example of a custom list editor property."
@@ -1188,12 +1188,12 @@ void FormMain::PopulateWithExamples ()
     //pg->SetPropertyHelpString ( "Examples", "This category has example of (almost) every built-in property class." );
 
 #if wxUSE_SPINBTN
-    pg->Append( new wxIntProperty ( "SpinCtrl", wxPG_LABEL, 0 ) );
+    pg->Append( new wxIntProperty ( "SpinCtrl", wxPG_LABEL, 0L ) );
 
     pg->SetPropertyEditor( "SpinCtrl", wxPGEditor_SpinCtrl );
-    pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_MIN, (long)-10 );  // Use constants instead of string
-    pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_MAX, (long)16384 );   // for reduced binary size.
-    pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_SPINCTRL_STEP, (long)2 );
+    pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_MIN, -10L );  // Use constants instead of string
+    pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_MAX, 16384L );   // for reduced binary size.
+    pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_SPINCTRL_STEP, 2L );
     pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_SPINCTRL_MOTION, true );
     //pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_SPINCTRL_WRAP, true );
 
@@ -1429,7 +1429,7 @@ void FormMain::PopulateWithExamples ()
 
     pg->Append( new wxMultiChoiceProperty( "MultiChoiceProperty", wxPG_LABEL,
                                            tchoices, tchoicesValues ) );
-    pg->SetPropertyAttribute( "MultiChoiceProperty", wxPG_ATTR_MULTICHOICE_USERSTRINGMODE, true );
+    pg->SetPropertyAttribute("MultiChoiceProperty", wxPG_ATTR_MULTICHOICE_USERSTRINGMODE, 1);
 
     pg->Append( new wxSizeProperty( "SizeProperty", "Size", GetSize() ) );
     pg->Append( new wxPointProperty( "PointProperty", "Position", GetPosition() ) );
@@ -1518,7 +1518,7 @@ void FormMain::PopulateWithExamples ()
 
     pg->AppendIn(carProp, new wxIntProperty("Engine Size (cc)",
                                             wxPG_LABEL,
-                                            5707) );
+                                            5707L) );
 
     wxPGProperty* speedsProp = pg->AppendIn(carProp,
                                             new wxStringProperty("Speeds",
@@ -1526,7 +1526,7 @@ void FormMain::PopulateWithExamples ()
                                               "<composed>"));
 
     pg->AppendIn( speedsProp, new wxIntProperty("Max. Speed (mph)",
-                                                wxPG_LABEL,290) );
+                                                wxPG_LABEL,290L) );
     pg->AppendIn( speedsProp, new wxFloatProperty("0-100 mph (sec)",
                                                   wxPG_LABEL,3.9) );
     pg->AppendIn( speedsProp, new wxFloatProperty("1/4 mile (sec)",
@@ -1537,7 +1537,7 @@ void FormMain::PopulateWithExamples ()
 
     pg->AppendIn(carProp, new wxIntProperty("Price ($)",
                                             wxPG_LABEL,
-                                            300000) );
+                                            300000L) );
 
     pg->AppendIn(carProp, new wxBoolProperty("Convertible",
                                              wxPG_LABEL,
@@ -1581,7 +1581,7 @@ void FormMain::PopulateWithExamples ()
 
     pid->AppendChild( new wxStringProperty("Latest Release",
                                            wxPG_LABEL,
-                                           "3.0.2"));
+                                           "3.1.2"));
     pid->AppendChild( new wxBoolProperty("Win API",
                                          wxPG_LABEL,
                                          true) );
@@ -1590,10 +1590,9 @@ void FormMain::PopulateWithExamples ()
 
     pg->AppendIn(pid, new wxBoolProperty("QT", wxPG_LABEL, true) );
     pg->AppendIn(pid, new wxBoolProperty("Cocoa", wxPG_LABEL, true) );
-    pg->AppendIn(pid, new wxBoolProperty("BeOS", wxPG_LABEL, false) );
-    pg->AppendIn(pid, new wxStringProperty("Trunk Version", wxPG_LABEL, "3.1.0") );
+    pg->AppendIn(pid, new wxBoolProperty("Haiku", wxPG_LABEL, false) );
+    pg->AppendIn(pid, new wxStringProperty("Trunk Version", wxPG_LABEL, wxVERSION_NUM_DOT_STRING));
     pg->AppendIn(pid, new wxBoolProperty("GTK+", wxPG_LABEL, true) );
-    pg->AppendIn(pid, new wxBoolProperty("Sky OS", wxPG_LABEL, false) );
     pg->AppendIn(pid, new wxBoolProperty("Android", wxPG_LABEL, false) );
 
     AddTestProperties(pg);
@@ -1884,7 +1883,7 @@ void FormMain::PopulateGrid()
     PopulateWithLibraryConfig();
 
     wxPropertyGridPage* myPage = new wxMyPropertyGridPage();
-    myPage->Append( new wxIntProperty ( "IntProperty", wxPG_LABEL, 12345678 ) );
+    myPage->Append( new wxIntProperty ( "IntProperty", wxPG_LABEL, 12345678L ) );
 
     // Use wxMyPropertyGridPage (see above) to test the
     // custom wxPropertyGridPage feature.
@@ -1959,6 +1958,13 @@ void FormMain::CreateGrid( int style, int extraStyle )
 
     PopulateGrid();
 
+    m_propGrid->MakeColumnEditable(0, m_labelEditingEnabled);
+    m_pPropGridManager->ShowHeader(m_hasHeader);
+    if ( m_hasHeader )
+    {
+        m_pPropGridManager->SetColumnTitle(2, "Units");
+    }
+
     // Change some attributes in all properties
     //pgman->SetPropertyAttributeAll(wxPG_BOOL_USE_DOUBLE_CLICK_CYCLING,true);
 
@@ -1981,6 +1987,8 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
 
     m_propGrid = NULL;
     m_panel = NULL;
+    m_hasHeader = false;
+    m_labelEditingEnabled = false;
 
 #ifdef __WXMAC__
     // we need this in order to allow the about menu relocation, since ABOUT is
@@ -2103,10 +2111,12 @@ FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size
         "Select window style flags used by the grid.");
     menuTry->AppendCheckItem(ID_ENABLELABELEDITING, "Enable label editing",
         "This calls wxPropertyGrid::MakeColumnEditable(0)");
+    menuTry->Check(ID_ENABLELABELEDITING, m_labelEditingEnabled);
 #if wxUSE_HEADERCTRL
     menuTry->AppendCheckItem(ID_SHOWHEADER,
         "Enable header",
         "This calls wxPropertyGridManager::ShowHeader()");
+    menuTry->Check(ID_SHOWHEADER, m_hasHeader);
 #endif // wxUSE_HEADERCTRL
     menuTry->AppendSeparator();
     menuTry->AppendRadioItem( ID_COLOURSCHEME1, "Standard Colour Scheme" );
@@ -2693,7 +2703,8 @@ void FormMain::OnFreezeClick( wxCommandEvent& event )
 
 void FormMain::OnEnableLabelEditing(wxCommandEvent& event)
 {
-    m_propGrid->MakeColumnEditable(0, event.IsChecked());
+    m_labelEditingEnabled = event.IsChecked();
+    m_propGrid->MakeColumnEditable(0, m_labelEditingEnabled);
 }
 
 // -----------------------------------------------------------------------
@@ -2701,9 +2712,9 @@ void FormMain::OnEnableLabelEditing(wxCommandEvent& event)
 #if wxUSE_HEADERCTRL
 void FormMain::OnShowHeader( wxCommandEvent& event )
 {
-    bool show = event.IsChecked();
-    m_pPropGridManager->ShowHeader(show);
-    if ( show )
+    m_hasHeader = event.IsChecked();
+    m_pPropGridManager->ShowHeader(m_hasHeader);
+    if ( m_hasHeader )
     {
         m_pPropGridManager->SetColumnTitle(2, "Units");
     }
@@ -3064,7 +3075,7 @@ void FormMain::OnMisc ( wxCommandEvent& event )
     {
         wxVariant list;
         list.NullList();
-        list.Append( wxVariant((long)1234,"VariantLong") );
+        list.Append( wxVariant(1234L,"VariantLong") );
         list.Append( wxVariant(true,"VariantBool") );
         list.Append( wxVariant("Test Text","VariantString") );
         m_pPropGridManager->GetGrid()->SetPropertyValues(list);

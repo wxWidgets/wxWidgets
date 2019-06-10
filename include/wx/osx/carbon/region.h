@@ -37,24 +37,24 @@ public:
     virtual ~wxRegion();
 
     // wxRegionBase methods
-    virtual void Clear();
-    virtual bool IsEmpty() const;
+    virtual void Clear() wxOVERRIDE;
+    virtual bool IsEmpty() const wxOVERRIDE;
 
     // Internal
     WXHRGN GetWXHRGN() const ;
 
 protected:
-    virtual wxGDIRefData *CreateGDIRefData() const;
-    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const;
+    virtual wxGDIRefData *CreateGDIRefData() const wxOVERRIDE;
+    virtual wxGDIRefData *CloneGDIRefData(const wxGDIRefData *data) const wxOVERRIDE;
 
-    virtual bool DoIsEqual(const wxRegion& region) const;
-    virtual bool DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const;
-    virtual wxRegionContain DoContainsPoint(wxCoord x, wxCoord y) const;
-    virtual wxRegionContain DoContainsRect(const wxRect& rect) const;
+    virtual bool DoIsEqual(const wxRegion& region) const wxOVERRIDE;
+    virtual bool DoGetBox(wxCoord& x, wxCoord& y, wxCoord& w, wxCoord& h) const wxOVERRIDE;
+    virtual wxRegionContain DoContainsPoint(wxCoord x, wxCoord y) const wxOVERRIDE;
+    virtual wxRegionContain DoContainsRect(const wxRect& rect) const wxOVERRIDE;
 
-    virtual bool DoOffset(wxCoord x, wxCoord y);
-    virtual bool DoCombine(const wxRegion& region, wxRegionOp op);
-    virtual bool DoUnionWithRect(const wxRect& rect);
+    virtual bool DoOffset(wxCoord x, wxCoord y) wxOVERRIDE;
+    virtual bool DoCombine(const wxRegion& region, wxRegionOp op) wxOVERRIDE;
+    virtual bool DoUnionWithRect(const wxRect& rect) wxOVERRIDE;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxRegion);

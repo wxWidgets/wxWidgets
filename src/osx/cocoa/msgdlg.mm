@@ -31,7 +31,7 @@ namespace
 {
     NSAlertStyle GetAlertStyleFromWXStyle( long style )
     {
-        if (style & wxICON_WARNING)
+        if (style & (wxICON_WARNING | wxICON_ERROR))
         {
             // NSCriticalAlertStyle should only be used for questions where
             // caution is needed per the OS X HIG. wxICON_WARNING alone doesn't
@@ -42,8 +42,6 @@ namespace
             else
                 return NSWarningAlertStyle;
         }
-        else if (style & wxICON_ERROR)
-            return NSWarningAlertStyle;
         else
             return NSInformationalAlertStyle;
     }

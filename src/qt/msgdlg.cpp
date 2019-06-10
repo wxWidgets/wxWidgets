@@ -78,7 +78,7 @@ wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
         dlg->setIcon( QMessageBox::Warning );
     }
 
-    if ( style & wxICON_ERROR || style & wxICON_HAND )
+    if ( style & wxICON_ERROR )
     {
         numIcons++;
         dlg->setIcon( QMessageBox::Critical );

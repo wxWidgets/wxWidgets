@@ -578,10 +578,10 @@ public:
                     wxHtmlCell *cell, const wxPoint &pt,
                     const wxMouseEvent &ev)
         : wxCommandEvent(commandType, id)
+        , m_mouseEvent(ev)
+        , m_pt(pt)
     {
         m_cell = cell;
-        m_pt = pt;
-        m_mouseEvent = ev;
         m_bLinkWasClicked = false;
     }
 

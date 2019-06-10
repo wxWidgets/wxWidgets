@@ -394,9 +394,7 @@ bool wxGIFHandler::SetupCompress(wxOutputStream *stream, int bpp)
 bool wxGIFHandler::CompressLine(wxOutputStream *stream,
     const wxUint8 *line, int lineLen)
 {
-    int i = 0, crntCode, newCode;
-    unsigned long newKey;
-    wxUint8 pixel;
+    int i = 0, crntCode;
     if (m_crntCode == FIRST_CODE)                  // It's first time!
         crntCode = line[i++];
     else
@@ -405,10 +403,13 @@ bool wxGIFHandler::CompressLine(wxOutputStream *stream,
     while (i < lineLen)
     {
         // Decode lineLen items.
+        wxUint8 pixel;
         pixel = line[i++];                    // Get next pixel from stream.
         // Form a new unique key to search hash table for the code combines
         // crntCode as Prefix string with Pixel as postfix char.
+        unsigned long newKey;
         newKey = (((unsigned long) crntCode) << 8) + pixel;
+        int newCode;
         if ((newCode = ExistsHashTable(newKey)) >= 0)
         {
             // This Key is already there, or the string is old one, so

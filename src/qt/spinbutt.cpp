@@ -20,6 +20,7 @@ public:
 
 private:
     void valueChanged(int value);
+    virtual void stepBy(int steps) wxOVERRIDE; // see QAbstractSpinBox::stepBy()
 };
 
 wxQtSpinButton::wxQtSpinButton( wxWindow *parent, wxSpinButton *handler )
@@ -34,9 +35,27 @@ void wxQtSpinButton::valueChanged(int value)
     wxSpinButton *handler = GetHandler();
     if ( handler )
     {
-        wxCommandEvent event( wxEVT_SPIN, handler->GetId() );
+        wxSpinEvent event( wxEVT_SPIN, handler->GetId() );
         event.SetInt( value );
         EmitEvent( event );
+    }
+}
+
+void wxQtSpinButton::stepBy(int steps)
+{
+    wxSpinButton* const handler = GetHandler();
+    if ( !handler )
+        return;
+
+    int eventType = steps < 0 ? wxEVT_SPIN_DOWN : wxEVT_SPIN_UP;
+    wxSpinEvent directionEvent(eventType, handler->GetId());
+    directionEvent.SetPosition(value());
+    directionEvent.SetInt(value() + steps * singleStep());
+    directionEvent.SetEventObject(handler);
+
+    if ( !handler->HandleWindowEvent(directionEvent) || directionEvent.IsAllowed() )
+    {
+        QSpinBox::stepBy(steps);
     }
 }
 
@@ -65,12 +84,24 @@ bool wxSpinButton::Create(wxWindow *parent,
 {
     m_qtSpinBox = new wxQtSpinButton( parent, this );
 
+    m_qtSpinBox->setRange(wxSpinButtonBase::GetMin(), wxSpinButtonBase::GetMax());
+
     // Modify the size so that the text field is not visible.
     // TODO: Find out the width of the buttons i.e. take the style into account (QStyleOptionSpinBox).
     wxSize newSize( size );
     newSize.SetWidth( 18 );
 
     return QtCreateControl( parent, id, pos, newSize, style, wxDefaultValidator, name );
+}
+
+void wxSpinButton::SetRange(int min, int max)
+{
+    wxSpinButtonBase::SetRange(min, max); // cache the values
+
+    if ( m_qtSpinBox )
+    {
+        m_qtSpinBox->setRange(min, max);
+    }
 }
 
 int wxSpinButton::GetValue() const

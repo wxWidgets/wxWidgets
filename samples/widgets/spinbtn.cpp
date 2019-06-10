@@ -557,12 +557,31 @@ void SpinBtnWidgetsPage::OnSpinBtn(wxSpinEvent& event)
 
 void SpinBtnWidgetsPage::OnSpinBtnUp(wxSpinEvent& event)
 {
+    // Demonstrate that these events can be vetoed to prevent the control value
+    // from changing.
+    if ( event.GetInt() == 11 )
+    {
+        wxLogMessage("Spin button prevented from going up to 11 (still %d)",
+                     m_spinbtn->GetValue());
+        event.Veto();
+        return;
+    }
+
     wxLogMessage( "Spin button value incremented, will be %d (was %d)",
                   event.GetInt(), m_spinbtn->GetValue() );
 }
 
 void SpinBtnWidgetsPage::OnSpinBtnDown(wxSpinEvent& event)
 {
+    // Also demonstrate that vetoing the event but then skipping the handler
+    // doesn't actually apply the veto.
+    if ( event.GetInt() == 0 )
+    {
+        wxLogMessage("Spin button change not effectively vetoed, will become 0");
+        event.Veto();
+        event.Skip();
+    }
+
     wxLogMessage( "Spin button value decremented, will be %d (was %d)",
                   event.GetInt(), m_spinbtn->GetValue() );
 }

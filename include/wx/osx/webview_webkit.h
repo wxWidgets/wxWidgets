@@ -160,11 +160,13 @@ private:
 
     OSXWebViewPtr m_webView;
 
+    WX_NSObject m_loadDelegate;
+    WX_NSObject m_policyDelegate;
+    WX_NSObject m_UIDelegate;
+
     // we may use this later to setup our own mouse events,
     // so leave it in for now.
     void* m_webKitCtrlEventHandler;
-    //It should be WebView*, but WebView is an Objective-C class
-    //TODO: look into using DECLARE_WXCOCOA_OBJC_CLASS rather than this.
 };
 
 class WXDLLIMPEXP_WEBVIEW wxWebViewFactoryWebKit : public wxWebViewFactory

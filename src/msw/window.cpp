@@ -1026,6 +1026,17 @@ void wxWindowMSW::MSWUpdateUIState(int action, int state)
     ::SendMessage(GetHwnd(), WM_CHANGEUISTATE, MAKEWPARAM(action, state), 0);
 }
 
+void wxWindowMSW::WXSetPendingFocus(wxWindow* win)
+{
+    for ( wxWindow* parent = this; parent; parent = parent->GetParent() )
+    {
+        parent->WXDoUpdatePendingFocus(win);
+
+        if ( parent->IsTopLevel() )
+            break;
+    }
+}
+
 // ---------------------------------------------------------------------------
 // scrolling stuff
 // ---------------------------------------------------------------------------
@@ -4712,8 +4723,6 @@ bool wxWindowMSW::HandleSysColorChange()
 
 bool wxWindowMSW::HandleDisplayChange()
 {
-    wxDisplay::InvalidateCache();
-
     wxDisplayChangedEvent event;
     event.SetEventObject(this);
 
@@ -7500,6 +7509,21 @@ bool wxWindowMSW::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
         win_modifiers |= MOD_CONTROL;
     if ( modifiers & wxMOD_WIN )
         win_modifiers |= MOD_WIN;
+
+    // Special compatibility hack: the initial version of this function didn't
+    // use wxMSWKeyboard::WXToVK() at all, which was wrong as the user code is
+    // expected to use WXK_XXX constants and not VK_XXX ones, but as people had
+    // no choice but to use the latter with the previous version of wxWidgets,
+    // now we have to continue accepting VK_XXX here too. So we assume that the
+    // argument is a VK constant and not a WXK one if it looks like this should
+    // be the case based on its value. It helps that all of WXK constants
+    // before WXK_START have the same value as the corresponding VK constants,
+    // with the only exception of WXK_DELETE which is equal to VK_F16 -- and we
+    // consider that the latter is unlikely to be used.
+    if ( keycode >= WXK_START || keycode == WXK_DELETE )
+        keycode = wxMSWKeyboard::WXToVK(keycode);
+    //else: leave it unchanged because it looks like it's a VK constant (which
+    //      includes ASCII digits and upper case letters)
 
     if ( !::RegisterHotKey(GetHwnd(), hotkeyId, win_modifiers, keycode) )
     {

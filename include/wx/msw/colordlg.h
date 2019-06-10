@@ -44,6 +44,9 @@ public:
     // called from the hook procedure on WM_INITDIALOG reception
     virtual void MSWOnInitDone(WXHWND hDlg);
 
+    // called from the hook procedure
+    void MSWCheckIfCurrentChanged(WXCOLORREF currentCol);
+
 protected:
     // common part of all ctors
     void Init();
@@ -56,6 +59,9 @@ protected:
 
     wxColourData        m_colourData;
     wxString            m_title;
+
+    // Currently selected colour, used while the dialog is being shown.
+    WXCOLORREF m_currentCol;
 
     // indicates that the dialog should be centered in this direction if non 0
     // (set by DoCentre(), used by MSWOnInitDone())

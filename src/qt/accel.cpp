@@ -35,8 +35,8 @@ class wxAccelRefData : public wxObjectRefData
 
         wxAccelRefData(const wxAccelRefData& data)
         : wxObjectRefData()
+            , m_accels(data.m_accels)
         {
-            m_accels = data.m_accels;
         }
 
         virtual ~wxAccelRefData()
@@ -82,16 +82,17 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
     }
 }
 
-QList< QShortcut* > *wxAcceleratorTable::ConvertShortcutTable( QWidget *parent ) const
+wxVector<QShortcut*> wxAcceleratorTable::ConvertShortcutTable( QWidget *parent ) const
 {
-    QList< QShortcut* > *qtList = new QList< QShortcut* >;
+    wxVector<QShortcut*> shortcuts;
 
-    for ( wxAccelList::compatibility_iterator node = M_ACCELDATA->m_accels.GetFirst(); node; node = node->GetNext() )
+    for ( wxAccelList::compatibility_iterator node = M_ACCELDATA->m_accels.GetFirst();
+          node; node = node->GetNext() )
     {
-        qtList->push_back(ConvertAccelerator( node->GetData(), parent ));
+        shortcuts.push_back(ConvertAccelerator(node->GetData(), parent));
     }
 
-    return qtList;
+    return shortcuts;
 }
 
 wxObjectRefData *wxAcceleratorTable::CreateRefData() const

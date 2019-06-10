@@ -6,7 +6,7 @@
 // Author:      Vadim Zeitlin
 // Modified by: Rob Bresalier
 // Created:     2013-05-04
-// Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2002 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -10,9 +10,27 @@
 
     wxGCDC is a device context that draws on a wxGraphicsContext.
 
-    @remarks
-    If Direct2D is a renderer of underlying graphics context, only wxFont objects
-    representing TrueType fonts can be used in the font-related functions.
+    wxGCDC does its best to implement wxDC API, but the following features are
+    not (fully) implemented because wxGraphicsContext doesn't support them:
+
+    - GetPixel() method is not implemented and always returns @false because
+      modern graphics layers don't support retrieving the contents of the drawn
+      pixels.
+
+    - FloodFill() method is not, and can't be, implemented, as its
+      functionality relies on reading the pixels from wxGraphicsContext too.
+
+    - SetLogicalFunction() method only works with @c wxCOPY, @c wxOR,
+      @c wxNO_OP, @c wxCLEAR and @c wxXOR functions, attempts to use any other
+      function (including @c wxINVERT) don't do anything.
+
+    - Similarly, ::wxRasterOperationMode parameter of Blit() and StretchBlit()
+      can only be one of the supported logical functions listed above, using
+      any other function will result in an assertion failure and not drawing
+      anything.
+
+    - For Direct2D-based wxGraphicsContext, only true-type fonts can be used
+      in the font-related functions.
 
     @library{wxcore}
     @category{dc}

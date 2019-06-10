@@ -95,6 +95,9 @@ public:
     @ingroup classes
     Has dropdown list of wxWidgets system colours. Value used is
     of wxColourPropertyValue type.
+
+    <b>Supported special attributes:</b>
+    ::wxPG_COLOUR_ALLOW_CUSTOM, ::wxPG_COLOUR_HAS_ALPHA
 */
 class wxSystemColourProperty : public wxEnumProperty
 {
@@ -168,6 +171,14 @@ protected:
 
 
 
+/** @class wxColourProperty
+    @ingroup classes
+    Allows to select a colour from the list or with colour dialog. Value used
+    is of wxColourPropertyValue type.
+
+    <b>Supported special attributes:</b>
+    ::wxPG_COLOUR_ALLOW_CUSTOM, ::wxPG_COLOUR_HAS_ALPHA
+*/
 class wxColourProperty : public wxSystemColourProperty
 {
 public:
@@ -238,10 +249,10 @@ protected:
     calling wxMultiChoiceProperty::GetValueAsArrayInt().
 
     <b>Supported special attributes:</b>
-    - "UserStringMode": If > 0, allow user to manually enter strings that are
-      not in the list of choices. If this value is 1, user strings are
-      preferably placed in front of valid choices. If value is 2, then those
-      strings will placed behind valid choices.
+    - ::wxPG_ATTR_MULTICHOICE_USERSTRINGMODE: If > 0, allow user to manually
+      enter strings that are not in the list of choices. If this value is 1,
+      user strings are preferably placed in front of valid choices. If value is
+      2, then those strings will placed behind valid choices.
 */
 class wxMultiChoiceProperty : public wxPGProperty
 {
@@ -292,9 +303,9 @@ protected:
     Property representing wxDateTime.
 
     <b>Supported special attributes:</b>
-    - "DateFormat": Determines displayed date format.
-    - "PickerStyle": Determines window style used with wxDatePickerCtrl.
-       Default is wxDP_DEFAULT | wxDP_SHOWCENTURY. Using wxDP_ALLOWNONE
+    - ::wxPG_DATE_FORMAT: Determines displayed date format.
+    - ::wxPG_DATE_PICKER_STYLE: Determines window style used with wxDatePickerCtrl.
+       Default is ::wxDP_DEFAULT | ::wxDP_SHOWCENTURY. Using ::wxDP_ALLOWNONE
        enables additional support for unspecified property value.
 */
 class wxDateProperty : public wxPGProperty

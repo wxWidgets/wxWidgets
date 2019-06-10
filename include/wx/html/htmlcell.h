@@ -571,7 +571,7 @@ protected:
 class WXDLLIMPEXP_HTML wxHtmlColourCell : public wxHtmlCell
 {
 public:
-    wxHtmlColourCell(const wxColour& clr, int flags = wxHTML_CLR_FOREGROUND) : wxHtmlCell() {m_Colour = clr; m_Flags = flags;}
+    wxHtmlColourCell(const wxColour& clr, int flags = wxHTML_CLR_FOREGROUND) : wxHtmlCell(), m_Colour(clr) { m_Flags = flags;}
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
                       wxHtmlRenderingInfo& info) wxOVERRIDE;
     virtual void DrawInvisible(wxDC& dc, int x, int y,
@@ -596,7 +596,7 @@ protected:
 class WXDLLIMPEXP_HTML wxHtmlFontCell : public wxHtmlCell
 {
 public:
-    wxHtmlFontCell(wxFont *font) : wxHtmlCell() { m_Font = (*font); }
+    wxHtmlFontCell(wxFont *font) : wxHtmlCell(), m_Font(*font) { }
     virtual void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2,
                       wxHtmlRenderingInfo& info) wxOVERRIDE;
     virtual void DrawInvisible(wxDC& dc, int x, int y,

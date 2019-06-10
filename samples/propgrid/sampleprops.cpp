@@ -621,7 +621,7 @@ bool wxArrayDoubleProperty::StringToValue( wxVariant& variant, const wxString& t
     // by returning pending value of non-wxArrayDouble type.
     if ( !ok )
     {
-        variant = (long)0;
+        variant = 0L;
         return true;
     }
 
@@ -642,7 +642,7 @@ bool wxArrayDoubleProperty::DoSetAttribute( const wxString& name, wxVariant& val
         GenerateValueAsString( m_display, m_precision, true );
         return true;
     }
-    return false;
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 wxValidator* wxArrayDoubleProperty::DoGetValidator() const

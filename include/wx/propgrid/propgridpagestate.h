@@ -354,14 +354,10 @@ protected:
 // should not use this class directly, but instead member functions in
 // wxPropertyGridInterface, wxPropertyGrid, wxPropertyGridPage, and
 // wxPropertyGridManager.
-// - In separate wxPropertyGrid component this class was known as
-// wxPropertyGridState.
 // - Currently this class is not implemented in wxPython.
 class WXDLLIMPEXP_PROPGRID wxPropertyGridPageState
 {
-    friend class wxPGProperty;
     friend class wxPropertyGrid;
-    friend class wxPGCanvas;
     friend class wxPropertyGridInterface;
     friend class wxPropertyGridPage;
     friend class wxPropertyGridManager;
@@ -424,7 +420,7 @@ public:
 
     // Returns actual height of contained visible properties.
     // Mostly used for internal diagnostic purposes.
-    inline unsigned int GetActualVirtualHeight() const;
+    unsigned int GetActualVirtualHeight() const;
 
     unsigned int GetColumnCount() const
     {
@@ -516,7 +512,7 @@ public:
     wxPropertyGridHitTestResult HitTest( const wxPoint& pt ) const;
 
     // Returns true if page is visibly displayed.
-    inline bool IsDisplayed() const;
+    bool IsDisplayed() const;
 
     bool IsInNonCatMode() const { return (bool)(m_properties == m_abcArray); }
 

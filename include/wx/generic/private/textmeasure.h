@@ -27,11 +27,11 @@ protected:
                                wxCoord *width,
                                wxCoord *height,
                                wxCoord *descent = NULL,
-                               wxCoord *externalLeading = NULL);
+                               wxCoord *externalLeading = NULL) wxOVERRIDE;
 
     virtual bool DoGetPartialTextExtents(const wxString& text,
                                          wxArrayInt& widths,
-                                         double scaleX);
+                                         double scaleX) wxOVERRIDE;
 
     wxDECLARE_NO_COPY_CLASS(wxTextMeasure);
 };

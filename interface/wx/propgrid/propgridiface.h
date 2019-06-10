@@ -411,7 +411,7 @@ public:
         Returns map-like storage of property's attributes.
 
         @remarks
-        Note that if extra style wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES is set,
+        Note that if extra style ::wxPG_EX_WRITEONLY_BUILTIN_ATTRIBUTES is set,
         then builtin-attributes are not included in the storage.
     */
     const wxPGAttributeStorage& GetPropertyAttributes( wxPGPropArg id ) const;
@@ -691,7 +691,7 @@ public:
     /**
         Returns @true if property is selected.
     */
-    virtual bool IsPropertySelected( wxPGPropArg id ) const;
+    bool IsPropertySelected( wxPGPropArg id ) const;
 
     /**
         Returns @true if property is shown (i.e. HideProperty() with @true not
@@ -1053,7 +1053,19 @@ public:
     void SetPropertyImage( wxPGPropArg id, wxBitmap& bmp );
 
     /**
-        Sets max length of property's text.
+        Sets maximum length of text in property text editor.
+
+        @param id
+            Property name or pointer.
+        @param maxLen
+            Maximum number of characters of the text the user can enter in
+            the text editor. If it is 0, the length is not limited and the text
+            can be as long as it is supported by the the underlying native text
+            control widget.
+        @return
+            Returns @true if maximum length was set.
+        @see
+            wxPGProperty::SetMaxLength.
     */
     bool SetPropertyMaxLength( wxPGPropArg id, int maxLen );
 

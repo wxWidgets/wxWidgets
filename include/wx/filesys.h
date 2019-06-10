@@ -38,14 +38,14 @@ public:
              , wxDateTime modif
 #endif // wxUSE_DATETIME
              )
+        : m_Location(loc)
+        , m_MimeType(mimetype.Lower())
+        , m_Anchor(anchor)
+#if wxUSE_DATETIME
+        , m_Modif(modif)
+#endif
     {
         m_Stream = stream;
-        m_Location = loc;
-        m_MimeType = mimetype.Lower();
-        m_Anchor = anchor;
-#if wxUSE_DATETIME
-        m_Modif = modif;
-#endif // wxUSE_DATETIME
     }
 
     virtual ~wxFSFile() { delete m_Stream; }

@@ -1087,10 +1087,10 @@ wxString wxMenuBarBase::GetHelpString(int itemid) const
 
 void wxMenuBarBase::UpdateMenus()
 {
-    wxMenu* menu;
     int nCount = GetMenuCount();
     for (int n = 0; n < nCount; n++)
     {
+        wxMenu* menu;
         menu = GetMenu( n );
         if (menu != NULL)
             menu->UpdateUI();

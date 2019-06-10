@@ -1304,16 +1304,17 @@ void wxGridStringTable::SetValue( int row, int col, const wxString& value )
 
 void wxGridStringTable::Clear()
 {
-    int row, col;
-    int numRows, numCols;
-
+    int numRows;
     numRows = m_data.GetCount();
     if ( numRows > 0 )
     {
+        int numCols;
         numCols = m_data[0].GetCount();
 
+        int row;
         for ( row = 0; row < numRows; row++ )
         {
+            int col;
             for ( col = 0; col < numCols; col++ )
             {
                 m_data[row][col].clear();
@@ -3167,10 +3168,10 @@ wxArrayInt wxGrid::CalcColLabelsExposed( const wxRegion& reg ) const
 
         // find the cells within these bounds
         //
-        int col;
         int colPos;
         for ( colPos = GetColPos( internalXToCol(left) ); colPos < m_numCols; colPos++ )
         {
+            int col;
             col = GetColAt( colPos );
 
             if ( GetColRight(col) < left )
@@ -5355,11 +5356,11 @@ void wxGrid::DrawGridCellArea( wxDC& dc, const wxGridCellCoordsArray& cells )
         return;
 
     int i, numCells = cells.GetCount();
-    int row, col, cell_rows, cell_cols;
     wxGridCellCoordsArray redrawCells;
 
     for ( i = numCells - 1; i >= 0; i-- )
     {
+        int row, col, cell_rows, cell_cols;
         row = cells[i].GetRow();
         col = cells[i].GetCol();
         GetCellSize( row, col, &cell_rows, &cell_cols );
@@ -6141,12 +6142,12 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
 void wxGrid::StringToLines( const wxString& value, wxArrayString& lines ) const
 {
     int startPos = 0;
-    int pos;
     wxString eol = wxTextFile::GetEOL( wxTextFileType_Unix );
     wxString tVal = wxTextFile::Translate( value, wxTextFileType_Unix );
 
     while ( startPos < (int)tVal.length() )
     {
+        int pos;
         pos = tVal.Mid(startPos).Find( eol );
         if ( pos < 0 )
         {
@@ -6774,7 +6775,6 @@ bool wxGrid::IsVisible( int row, int col, bool wholeCellVisible ) const
 //
 void wxGrid::MakeCellVisible( int row, int col )
 {
-    int i;
     int xpos = -1, ypos = -1;
 
     if ( row >= 0 && row < m_numRows &&
@@ -6799,6 +6799,7 @@ void wxGrid::MakeCellVisible( int row, int col )
         {
             int h = r.GetHeight();
             ypos = r.GetTop();
+            int i;
             for ( i = row - 1; i >= 0; i-- )
             {
                 int rowHeight = GetRowHeight(i);
@@ -8818,6 +8819,12 @@ wxPen& wxGrid::GetDividerPen() const
 
 void wxGrid::SetCellValue( int row, int col, const wxString& s )
 {
+    if ( s == GetCellValue(row, col) )
+    {
+        // Avoid flicker by not doing anything in this case.
+        return;
+    }
+
     if ( m_table )
     {
         m_table->SetValue( row, col, s );

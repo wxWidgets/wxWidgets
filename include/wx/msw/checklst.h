@@ -65,6 +65,8 @@ public:
     virtual bool MSWOnMeasure(WXMEASUREITEMSTRUCT *item) wxOVERRIDE;
 
 protected:
+    virtual wxSize MSWGetFullItemSize(int w, int h) const wxOVERRIDE;
+
     // pressing space or clicking the check box toggles the item
     void OnKeyDown(wxKeyEvent& event);
     void OnLeftClick(wxMouseEvent& event);

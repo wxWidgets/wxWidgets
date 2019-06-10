@@ -506,6 +506,11 @@ public:
     void OnExit(wxCommandEvent& event);
 
 private:
+#if wxUSE_COLOURDLG
+    void OnColourChanged(wxColourDialogEvent& event);
+    void DoApplyColour(const wxColour& colour);
+#endif // wxUSE_COLOURDLG
+
 #if wxUSE_DIRDLG
     void DoDirChoose(int style);
 #endif // wxUSE_DIRDLG

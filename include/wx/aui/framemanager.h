@@ -148,6 +148,11 @@ class WXDLLIMPEXP_AUI wxAuiPaneInfo
 public:
 
     wxAuiPaneInfo()
+        : best_size(wxDefaultSize)
+        , min_size(wxDefaultSize)
+        , max_size(wxDefaultSize)
+        , floating_pos(wxDefaultPosition)
+        , floating_size(wxDefaultSize)
     {
         window = NULL;
         frame = NULL;
@@ -156,11 +161,6 @@ public:
         dock_layer = 0;
         dock_row = 0;
         dock_pos = 0;
-        floating_pos = wxDefaultPosition;
-        floating_size = wxDefaultSize;
-        best_size = wxDefaultSize;
-        min_size = wxDefaultSize;
-        max_size = wxDefaultSize;
         dock_proportion = 0;
 
         DefaultPane();
@@ -368,7 +368,7 @@ public:
         buttonCustom3         = 1 << 28,
 
         savedHiddenState      = 1 << 30, // used internally
-        actionPane            = 1 << 31  // used internally
+        actionPane            = 1u << 31  // used internally
     };
 
 public:

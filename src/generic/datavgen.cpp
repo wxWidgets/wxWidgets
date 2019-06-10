@@ -71,8 +71,6 @@ class wxDataViewCtrl;
 // constants
 //-----------------------------------------------------------------------------
 
-static const int SCROLL_UNIT_X = 15;
-
 // the cell padding on the left/right
 static const int PADDING_RIGHTLEFT = 3;
 
@@ -1298,7 +1296,7 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     if (m_toggle)
         flags |= wxCONTROL_CHECKED;
     if (GetMode() != wxDATAVIEW_CELL_ACTIVATABLE ||
-        GetEnabled() == false)
+        !(GetOwner()->GetOwner()->IsEnabled() && GetEnabled()))
         flags |= wxCONTROL_DISABLED;
 
     // Ensure that the check boxes always have at least the minimal required
@@ -1351,8 +1349,8 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxDataViewProgressRenderer, wxDataViewRenderer);
 wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
     const wxString &varianttype, wxDataViewCellMode mode, int align ) :
     wxDataViewRenderer( varianttype, mode, align )
+    , m_label(label)
 {
-    m_label = label;
     m_value = 0;
 }
 
@@ -1521,8 +1519,8 @@ class wxBitmapCanvas: public wxWindow
 public:
     wxBitmapCanvas( wxWindow *parent, const wxBitmap &bitmap, const wxSize &size ) :
     wxWindow( parent, wxID_ANY, wxPoint(0,0), size )
+        , m_bitmap(bitmap)
     {
-        m_bitmap = bitmap;
         Bind(wxEVT_PAINT, &wxBitmapCanvas::OnPaint, this);
     }
 
@@ -2510,11 +2508,13 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     for (unsigned int i = col_start; i < col_last; i++)
     {
         wxDataViewColumn *col = GetOwner()->GetColumnAt( i );
+        if ( col->IsHidden() )
+            continue;       // skip it!
+
         wxDataViewRenderer *cell = col->GetRenderer();
         cell_rect.width = col->GetWidth();
-
-        if ( col->IsHidden() || cell_rect.width <= 0 )
-            continue;       // skip it!
+        if ( cell_rect.width <= 0 )
+            continue;
 
         cell_rect.y = first_line_start;
         for (unsigned int item = item_start; item < item_last; item++)
@@ -3110,9 +3110,12 @@ void wxDataViewMainWindow::ScrollTo( int rows, int column )
 
     int x, y;
     m_owner->GetScrollPixelsPerUnit( &x, &y );
-    int sy = GetLineStart( rows )/y;
+
+    // Take care to not divide by 0 if we're somehow called before scrolling
+    // parameters are initialized.
+    int sy = y ? GetLineStart( rows )/y : -1;
     int sx = -1;
-    if( column != -1 )
+    if( column != -1 && x )
     {
         wxRect rect = GetClientRect();
         int colnum = 0;
@@ -5174,7 +5177,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     sizer->Add( m_clientArea, 1, wxGROW );
     SetSizer( sizer );
 
-    EnableSystemTheme();
+    EnableSystemThemeByDefault();
 
 #if wxUSE_ACCESSIBILITY
     wxAccessible::NotifyEvent(wxACC_EVENT_OBJECT_CREATE, this, wxOBJID_CLIENT, wxACC_SELF);

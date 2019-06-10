@@ -65,6 +65,11 @@ Changes in behaviour not resulting in compilation errors
 - wxGTK wxNotebook::AddPage() doesn't generate any events any more for the
   first page being added, for consistency with the other ports.
 
+- wxMSW wxToolBar height now adapts to the height of embedded controls, making
+  the toolbar taller if necessary, rather than making the controls smaller. To
+  return to the previous behaviour, you need to explicitly create controls of
+  smaller size.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------

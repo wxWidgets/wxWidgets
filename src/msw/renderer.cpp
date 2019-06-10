@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     20.07.2003
-// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -857,21 +857,18 @@ wxRendererXP::DrawCollapseButton(wxWindow *win,
 {
     wxUxThemeHandle hTheme(win, L"TASKDIALOG");
 
-    int state;
-    if (flags & wxCONTROL_PRESSED)
-        state = TDLGEBS_PRESSED;
-    else if (flags & wxCONTROL_CURRENT)
-        state = TDLGEBS_HOVER;
-    else
-        state = TDLGEBS_NORMAL;
-
-    if ( flags & wxCONTROL_EXPANDED )
-        state += 3;
-
     if ( ::IsThemePartDefined(hTheme, TDLG_EXPANDOBUTTON, 0) )
     {
-        if (flags & wxCONTROL_EXPANDED)
-            flags |= wxCONTROL_CHECKED;
+        int state;
+        if (flags & wxCONTROL_PRESSED)
+            state = TDLGEBS_PRESSED;
+        else if (flags & wxCONTROL_CURRENT)
+            state = TDLGEBS_HOVER;
+        else
+            state = TDLGEBS_NORMAL;
+
+        if ( flags & wxCONTROL_EXPANDED )
+            state += 3;
 
         RECT r = ConvertToRECT(dc, rect);
 

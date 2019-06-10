@@ -33,8 +33,9 @@ which are implementation details.
 Running Doxygen
 ---------------
 
-First, make sure you have a recent version of Doxygen installed in your system
-(currently Doxygen 1.8.8 is used).
+First, make sure you have a recent version of Doxygen (currently Doxygen 1.8.8
+is used) and Graphviz installed in your system (under Windows Graphviz
+location should be in %PATH%).
 
 On Unix:
 
@@ -63,7 +64,7 @@ DO:
 
 - strive to use dedicated Doxygen commands for e.g. notes, lists,
   sections, etc. The "Special commands" page:
-    http://www.stack.nl/~dimitri/doxygen/commands.html
+    http://www.doxygen.org/manual/commands.html
   is your friend!
   It's also very important to make a consistent use of the ALIASES
   defined by wxWidgets' Doxyfile. Open that file for more info.

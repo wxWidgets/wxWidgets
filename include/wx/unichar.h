@@ -360,6 +360,23 @@ void swap<wxUniCharRef>(wxUniCharRef& lhs, wxUniCharRef& rhs)
 
 } // namespace std
 
+#if __cplusplus >= 201103L || wxCHECK_VISUALC_VERSION(10)
+
+// For std::iter_swap() to work with wxString::iterator, which uses
+// wxUniCharRef as its reference type, we need to ensure that swap() works with
+// wxUniCharRef objects by defining this overload.
+//
+// See https://bugs.llvm.org/show_bug.cgi?id=28559#c9
+inline
+void swap(wxUniCharRef&& lhs, wxUniCharRef&& rhs)
+{
+    wxUniChar tmp = lhs;
+    lhs = rhs;
+    rhs = tmp;
+}
+
+#endif // C++11
+
 
 // Comparison operators for the case when wxUniChar(Ref) is the second operand
 // implemented in terms of member comparison functions

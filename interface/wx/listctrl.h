@@ -849,8 +849,8 @@ public:
     /**
         For report view mode (only), inserts a column.
 
-        For more details, see SetItem(). Also see InsertColumn(long, const
-        wxString&, int, int) overload for a usually more convenient
+        For more details, see SetItem(). Also see InsertColumn(long, const wxString&, int, int)
+        overload for a usually more convenient
         alternative to this method and the description of how the item width
         is interpreted by this method.
     */
@@ -863,7 +863,7 @@ public:
         given position specifying its most common attributes.
 
         Notice that to set the image for the column you need to use
-        Insert(long, const wxListItem&) overload and specify ::wxLIST_MASK_IMAGE
+        InsertColumn(long, const wxListItem&) overload and specify ::wxLIST_MASK_IMAGE
         in the item mask.
 
         @param col
@@ -1271,6 +1271,13 @@ public:
         @param enable If @true, enable checkboxes, otherwise disable checkboxes.
         @return @true if checkboxes are supported, @false otherwise.
 
+        In a list control with wxLC_VIRTUAL style you have to keep track of the
+        checkbox state. When a checkbox is clicked (EVT_LIST_ITEM_CHECKED
+        or EVT_LIST_ITEM_UNCHECKED) you have to update the state and refresh
+        the item yourself.
+
+        @see OnGetItemIsChecked() RefreshItem()
+
         @since 3.1.0
     */
     bool EnableCheckBoxes(bool enable = true);
@@ -1312,7 +1319,7 @@ protected:
         The base class version always returns @NULL.
 
         @see OnGetItemImage(), OnGetItemColumnImage(), OnGetItemText(),
-             OnGetItemColumnAttr()
+             OnGetItemColumnAttr(), OnGetItemIsChecked()
     */
     virtual wxItemAttr* OnGetItemAttr(long item) const;
 
@@ -1370,6 +1377,17 @@ protected:
         @see SetItemCount(), OnGetItemImage(), OnGetItemColumnImage(), OnGetItemAttr()
     */
     virtual wxString OnGetItemText(long item, long column) const;
+
+    /**
+        This function @b must be overridden in the derived class for a control with
+        @c wxLC_VIRTUAL style that uses checkboxes. It should return whether the
+        checkbox of the specified @c item is checked.
+
+        @see EnableCheckBoxes(), OnGetItemText()
+
+        @since 3.1.2
+    */
+    virtual bool OnGetItemIsChecked(long item) const;
 };
 
 

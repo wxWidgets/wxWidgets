@@ -49,6 +49,7 @@ wxQtDCImpl::wxQtDCImpl( wxDC *owner )
     : wxDCImpl( owner )
 {
     m_qtPixmap = NULL;
+    m_qtPainter = NULL;
     m_rasterColourOp = wxQtNONE;
     m_qtPenColor = new QColor;
     m_qtBrushColor = new QColor;
@@ -93,7 +94,7 @@ void wxQtDCImpl::QtPreparePainter( )
                 m_qtPainter->setClipRect( r.x, r.y, r.width, r.height,
                                           append ? Qt::IntersectClip : Qt::ReplaceClip );
                 append = true;
-                ri++;
+                ++ri;
             }
         }
     }

@@ -94,6 +94,9 @@
     #define TB_GETMAXSIZE           (WM_USER + 83)
 #endif
 
+// Margin between the control and its label.
+static const int MARGIN_CONTROL_LABEL = 3;
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -162,17 +165,7 @@ public:
         if ( IsControl() && !m_label.empty() )
         {
             // Create a control to render the control's label.
-            // It has the same witdh as the control.
-            wxSize size(control->GetSize().GetWidth(), wxDefaultCoord);
-            m_staticText = new wxStaticText
-                               (
-                                 m_tbar,
-                                 wxID_ANY,
-                                 m_label,
-                                 wxDefaultPosition,
-                                 size,
-                                 wxALIGN_CENTRE | wxST_NO_AUTORESIZE
-                               );
+            m_staticText = new wxStaticText(m_tbar, wxID_ANY, m_label);
         }
         else // no label
         {
@@ -201,39 +194,32 @@ public:
         {
             if ( m_staticText )
             {
-                 if ( !label.empty() )
-                 {
+                if ( !label.empty() )
+                {
                     m_staticText->SetLabel(label);
-                 }
-                 else
-                 {
+                }
+                else
+                {
                     delete m_staticText;
                     m_staticText = NULL;
-                 }
+                }
             }
             else
             {
-                 if ( !label.empty() )
-                 {
-                    // Create a control to render the control's label.
-                    // It has the same witdh as the control.
-                    wxSize size(m_control->GetSize().GetWidth(), wxDefaultCoord);
-                    m_staticText = new wxStaticText(m_tbar, wxID_ANY, label,
-                                        wxDefaultPosition, size,
-                                        wxALIGN_CENTRE | wxST_NO_AUTORESIZE);
-                 }
+                if ( !label.empty() )
+                {
+                    m_staticText = new wxStaticText(m_tbar, wxID_ANY, label);
+                }
             }
         }
-        else if ( IsButton() )
-        {
-            // Because new label can have different length than the old one
-            // so updating button's label with TB_SETBUTTONINFO would require
-            // also manual re-positionining items in the control tools located
-            // to the right in the toolbar and recalculation of stretchable
-            // spacers so it is easier just to recreate the toolbar with
-            // Realize(). Performance penalty should be negligible.
-            m_tbar->Realize();
-        }
+
+        // Because new label can have different length than the old one
+        // so updating button's label with TB_SETBUTTONINFO would require
+        // also manual re-positionining items in the control tools located
+        // to the right in the toolbar and recalculation of stretchable
+        // spacers so it is easier just to recreate the toolbar with
+        // Realize(). Performance penalty should be negligible.
+        m_tbar->Realize();
     }
 
     wxStaticText* GetStaticText()
@@ -475,6 +461,22 @@ void wxToolBar::Recreate()
     const wxPoint pos = GetPosition();
     const wxSize size = GetSize();
 
+    // Note that MSWCreateToolbar() will set the current size as the initial
+    // and minimal size of the toolbar, which is unwanted both because it loses
+    // any actual min size set from user code and because even if SetMinSize()
+    // is never called, we're going to be stuck with the bigger than necessary
+    // min size when we're switching from text+icons to text or icons-only
+    // modes, so preserve the current min size here.
+    const wxSize minSizeOrig = GetMinSize();
+
+    // Hide the toolbar before recreating it to ensure that wxFrame doesn't try
+    // to account for its size, e.g. to offset the position of the new toolbar
+    // being created by the size of this toolbar itself. This wouldn't work
+    // anyhow, because we can't query for the size of a window without any
+    // valid HWND, but would result in debug warning messages and is just a
+    // wrong thing to do anyhow.
+    Hide();
+
     UnsubclassWin();
 
     if ( !MSWCreateToolbar(pos, size) )
@@ -484,6 +486,11 @@ void wxToolBar::Recreate()
 
         return;
     }
+
+    SetMinSize(minSizeOrig);
+
+    // Undo the effect of Hide() above.
+    Show();
 
     // reparent all our children under the new toolbar
     for ( wxWindowList::compatibility_iterator node = m_children.GetFirst();
@@ -508,6 +515,11 @@ void wxToolBar::Recreate()
 
     wxDELETE(m_disabledImgList);
 
+    // Also skip deleting the existing buttons in Realize(): they don't exist
+    // any more, so doing this is unnecessary and just results in errors from
+    // TB_DELETEBUTTON.
+    m_nButtons = 0;
+
     Realize();
 }
 
@@ -527,68 +539,107 @@ wxToolBar::~wxToolBar()
     delete m_disabledImgList;
 }
 
+wxSize wxToolBar::MSWGetFittingtSizeForControl(wxToolBarTool* tool) const
+{
+    // Note that we intentionally use GetSize() and not GetBestSize() here as
+    // the control could have been added to the toolbar with the size less than
+    // its best size in order to avoid taking too much space.
+    wxSize size = tool->GetControl()->GetSize();
+
+    // This is arbitrary, but we want to leave at least 1px around the control
+    // vertically, otherwise it really looks too cramped.
+    size.y += 2*1;
+
+    // Account for the label, if any.
+    if ( wxStaticText * const staticText = tool->GetStaticText() )
+    {
+        if ( AreControlLabelsShown() )
+        {
+            const wxSize sizeLabel = staticText->GetSize();
+
+            if ( size.x < sizeLabel.x )
+                size.x = sizeLabel.x;
+
+            size.y += sizeLabel.y;
+            size.y += MARGIN_CONTROL_LABEL;
+        }
+    }
+
+    // Also account for the tool padding value: note that we only have to add
+    // half of it to each tool, as the total amount of packing is the sum of
+    // the right margin of the previous tool and the left margin of the next
+    // one.
+    size.x += m_toolPacking / 2;
+
+    return size;
+}
+
 wxSize wxToolBar::DoGetBestSize() const
 {
+    const wxSize sizeTool = GetToolSize();
+
     wxSize sizeBest;
-
-    SIZE size;
-    if ( !::SendMessage(GetHwnd(), TB_GETMAXSIZE, 0, (LPARAM)&size) )
+    if ( IsVertical() )
     {
-        // maybe an old (< 0x400) Windows version? try to approximate the
-        // toolbar size ourselves
-        sizeBest = GetToolSize();
-        sizeBest.y += 2 * ::GetSystemMetrics(SM_CYBORDER); // Add borders
-        sizeBest.x *= GetToolsCount();
+        sizeBest.x = sizeTool.x + 2 * ::GetSystemMetrics(SM_CXBORDER);
+    }
+    else
+    {
+        sizeBest.y = sizeTool.y + 2 * ::GetSystemMetrics(SM_CYBORDER);
+    }
 
-        // reverse horz and vertical components if necessary
+    wxToolBarToolsList::compatibility_iterator node;
+    int toolIndex = 0;
+    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
+    {
+        wxToolBarTool * const
+            tool = static_cast<wxToolBarTool *>(node->GetData());
+
+        // Note that we can't just reuse sizeTool here, even though all normal
+        // items do have this size, this is not true for the separators and it
+        // is both more robust and simpler to just always use TB_GETITEMRECT
+        // rather than handling the separators specially.
+        const RECT rcItem = wxGetTBItemRect(GetHwnd(), toolIndex++);
+
         if ( IsVertical() )
         {
-            wxSwap(sizeBest.x, sizeBest.y);
-        }
-    }
-    else // TB_GETMAXSIZE succeeded
-    {
-        // but it could still return an incorrect result due to what appears to
-        // be a bug in old comctl32.dll versions which don't handle controls in
-        // the toolbar correctly, so work around it (see SF patch 1902358)
-        if ( !IsVertical() && wxApp::GetComCtl32Version() < 600 )
-        {
-            // calculate the toolbar width in alternative way
-            const RECT rcFirst = wxGetTBItemRect(GetHwnd(), 0);
-            const RECT rcLast = wxGetTBItemRect(GetHwnd(), GetToolsCount() - 1);
-
-            const int widthAlt = rcLast.right - rcFirst.left;
-            if ( widthAlt > size.cx )
-                size.cx = widthAlt;
-        }
-
-        sizeBest.x = size.cx;
-        sizeBest.y = size.cy;
-    }
-
-    if ( !IsVertical() )
-    {
-        wxToolBarToolsList::compatibility_iterator node;
-        for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
-        {
-            wxToolBarTool * const
-                tool = static_cast<wxToolBarTool *>(node->GetData());
-            if (tool->IsControl())
+            if ( !tool->IsControl() )
             {
-                int y = tool->GetControl()->GetSize().y;
-                // Approximate border size
-                if (y > (sizeBest.y - 4))
-                    sizeBest.y = y + 4;
+                sizeBest.y += rcItem.bottom - rcItem.top;
+            }
+            //else: Controls are not shown in vertical toolbars at all.
+        }
+        else
+        {
+            if ( tool->IsControl() )
+            {
+                const wxSize sizeControl = MSWGetFittingtSizeForControl(tool);
+
+                // Ensure we're tall enough for the embedded controls.
+                sizeBest.IncTo(wxSize(-1, sizeControl.y));
+
+                sizeBest.x += sizeControl.x;
+            }
+            else
+            {
+                sizeBest.x += rcItem.right - rcItem.left;
             }
         }
+    }
 
-        // Without the extra height, DoGetBestSize can report a size that's
-        // smaller than the actual window, causing windows to overlap slightly
-        // in some circumstances, leading to missing borders (especially noticeable
-        // in AUI layouts).
-        if (!(GetWindowStyle() & wxTB_NODIVIDER))
-            sizeBest.y += 2;
-        sizeBest.y ++;
+    // Note that this needs to be done after the loop to account for controls
+    // too high to fit into the toolbar without the border size but that could
+    // fit if we had added the border beforehand.
+    if ( !HasFlag(wxTB_NODIVIDER) )
+    {
+        if ( IsVertical() )
+        {
+            sizeBest.x += 2 * ::GetSystemMetrics(SM_CXBORDER);
+        }
+        else
+        {
+            sizeBest.y += 2 * ::GetSystemMetrics(SM_CYBORDER);
+        }
     }
 
     return sizeBest;
@@ -734,6 +785,8 @@ bool wxToolBar::Realize()
 {
     if ( !wxToolBarBase::Realize() )
         return false;
+
+    InvalidateBestSize();
 
     const size_t nTools = GetToolsCount();
 
@@ -1045,21 +1098,9 @@ bool wxToolBar::Realize()
         switch ( tool->GetStyle() )
         {
             case wxTOOL_STYLE_CONTROL:
-                if ( wxStaticText *staticText = tool->GetStaticText() )
+                if ( !IsVertical() )
                 {
-                    // Display control and its label only if buttons have icons
-                    // and texts as otherwise there is not enough room on the
-                    // toolbar to fit the label.
-                    staticText->
-                        Show(HasFlag(wxTB_TEXT) && !HasFlag(wxTB_NOICONS));
-                }
-
-                // Set separator width/height to fit the control width/height
-                // taking into account tool padding value.
-                // (height is not used but it is set for the sake of consistency).
-                {
-                    const wxSize sizeControl = tool->GetControl()->GetSize();
-                    button.iBitmap = m_toolPacking + (IsVertical() ? sizeControl.y : sizeControl.x);
+                    button.iBitmap = MSWGetFittingtSizeForControl(tool).x;
                 }
 
                 wxFALLTHROUGH;
@@ -1175,6 +1216,15 @@ bool wxToolBar::Realize()
                 break;
         }
 
+        if ( IsVertical() )
+        {
+            // MSDN says that TBSTATE_WRAP should be used for all buttons in
+            // vertical toolbars, so do it even if it doesn't seem to actually
+            // change anything in practice (including the problem with
+            // TB_AUTOSIZE mentioned in UpdateSize()).
+            button.fsState |= TBSTATE_WRAP;
+        }
+
         lastWasRadio = isRadio;
 
         i++;
@@ -1189,6 +1239,17 @@ bool wxToolBar::Realize()
     // Adjust controls and stretchable spaces
     // --------------------------------------
 
+    // We don't trust the height returned by wxGetTBItemRect() as it may not
+    // have been updated yet, use the height that the toolbar will actually
+    // have instead.
+    int height = GetBestSize().y;
+    if ( !HasFlag(wxTB_NODIVIDER) )
+    {
+        // We want just the usable height, so remove the space taken by the
+        // border/divider.
+        height -= 2 * ::GetSystemMetrics(SM_CYBORDER);
+    }
+
     // adjust the controls size to fit nicely in the toolbar and compute its
     // total size while doing it
     m_totalFixedSize = 0;
@@ -1201,10 +1262,15 @@ bool wxToolBar::Realize()
 
         if ( !tool->IsControl() )
         {
-            if ( IsVertical() )
-                m_totalFixedSize += r.bottom - r.top;
-            else
-                m_totalFixedSize += r.right - r.left;
+            // Stretchable space don't have any fixed size and their current
+            // size shouldn't count at all.
+            if ( !tool->IsStretchableSpace() )
+            {
+                if ( IsVertical() )
+                    m_totalFixedSize += r.bottom - r.top;
+                else
+                    m_totalFixedSize += r.right - r.left;
+            }
 
             continue;
         }
@@ -1216,57 +1282,52 @@ bool wxToolBar::Realize()
             // good and wxGTK doesn't do it neither (and the code below can't
             // deal with this case)
             control->Hide();
+            if ( wxStaticText * const staticText = tool->GetStaticText() )
+                staticText->Hide();
             continue;
         }
 
         control->Show();
-        wxStaticText * const staticText = tool->GetStaticText();
 
-        wxSize size = control->GetSize();
-        wxSize staticTextSize;
-        if ( staticText && staticText->IsShown() )
+        const wxSize controlSize = control->GetSize();
+
+        // Take also into account tool padding value: the amount of padding
+        // used for each tool is half of m_toolPacking, so the margin on each
+        // side is a half of that.
+        const int x = r.left + m_toolPacking / 4;
+
+        // Greater of control and its label widths.
+        int totalWidth = controlSize.x;
+
+        // Height of control and its label, if any, including the margin
+        // between them.
+        int totalHeight = controlSize.y;
+
+        if ( wxStaticText * const staticText = tool->GetStaticText() )
         {
-            staticTextSize = staticText->GetSize();
-            staticTextSize.y += 3; // margin between control and its label
-        }
+            const bool shown = AreControlLabelsShown();
+            staticText->Show(shown);
 
-        // position the control itself correctly vertically centering it on the
-        // icon area of the toolbar
-        int height = r.bottom - r.top - staticTextSize.y;
-
-        int diff = height - size.y;
-        if ( diff < 0 || !HasFlag(wxTB_TEXT) )
-        {
-            // not enough room for the static text
-            if ( staticText )
-                staticText->Hide();
-
-            // recalculate height & diff without the staticText control
-            height = r.bottom - r.top;
-            diff = height - size.y;
-            if ( diff < 0 )
+            if ( shown )
             {
-                // the control is too high, resize to fit
-                // Actually don't set the size, otherwise we can never fit
-                // the toolbar around the controls.
-                // control->SetSize(wxDefaultCoord, height - 2);
+                const wxSize staticTextSize = staticText->GetSize();
 
-                diff = 2;
+                if ( staticTextSize.x > totalWidth )
+                    totalWidth = staticTextSize.x;
+
+                // Center the static text horizontally for consistency with the
+                // button labels and position it below the control vertically.
+                staticText->Move(x + (totalWidth - staticTextSize.x)/2,
+                                 r.top + (height + controlSize.y
+                                                 - staticTextSize.y
+                                                 + MARGIN_CONTROL_LABEL)/2);
+
+                totalHeight += staticTextSize.y + MARGIN_CONTROL_LABEL;
             }
         }
-        else // enough space for both the control and the label
-        {
-            if ( staticText )
-                staticText->Show();
-        }
 
-        // Take also into account tool padding value.
-        control->Move(r.left + m_toolPacking/2, r.top + (diff + 1) / 2);
-        if ( staticText )
-        {
-            staticText->Move(r.left + m_toolPacking/2 + (size.x - staticTextSize.x)/2,
-                             r.bottom - staticTextSize.y);
-        }
+        control->Move(x + (totalWidth - controlSize.x)/2,
+                      r.top + (height - totalHeight)/2);
 
         m_totalFixedSize += r.right - r.left;
     }
@@ -1278,40 +1339,22 @@ bool wxToolBar::Realize()
     if ( !IsVertical() )
     {
         if ( m_maxRows == 0 )
+        {
             // if not set yet, only one row
             SetRows(1);
+        }
+        else
+        {
+            // In all the other cases, UpdateSize() is called by SetRows(), but
+            // when we don't call it here, call it directly instead.
+            UpdateSize();
+        }
     }
     else if ( m_nButtons > 0 ) // vertical non empty toolbar
     {
         // if not set yet, have one column
         m_maxRows = 1;
         SetRows(m_nButtons);
-    }
-
-    InvalidateBestSize();
-    UpdateSize();
-
-    if ( IsVertical() )
-    {
-        // For vertical toolbar heights of buttons are incorrect
-        // unless TB_AUTOSIZE in invoked.
-        // We need to recalculate fixed elements size again.
-        m_totalFixedSize = 0;
-        toolIndex = 0;
-        for ( node = m_tools.GetFirst(); node; node = node->GetNext(), toolIndex++ )
-        {
-            wxToolBarTool * const tool = (wxToolBarTool*)node->GetData();
-            if ( !tool->IsStretchableSpace() )
-            {
-                const RECT r = wxGetTBItemRect(GetHwnd(), toolIndex);
-                if ( !IsVertical() )
-                    m_totalFixedSize += r.right - r.left;
-                else if ( !tool->IsControl() )
-                    m_totalFixedSize += r.bottom - r.top;
-            }
-        }
-        // Enforce invoking UpdateStretchableSpacersSize() with correct value of fixed elements size.
-        UpdateSize();
     }
 
     return true;
@@ -1388,31 +1431,20 @@ void wxToolBar::UpdateStretchableSpacersSize()
         const int newSize = --numSpaces ? sizeSpacer : sizeLastSpacer;
         if ( newSize != oldSize)
         {
-            if ( !::SendMessage(GetHwnd(), TB_DELETEBUTTON, toolIndex, 0) )
+            WinStruct<TBBUTTONINFO> tbbi;
+            tbbi.dwMask = TBIF_BYINDEX | TBIF_SIZE;
+            tbbi.cx = newSize;
+            if ( !::SendMessage(GetHwnd(), TB_SETBUTTONINFO,
+                                toolIndex, (LPARAM)&tbbi) )
             {
-                wxLogLastError(wxT("TB_DELETEBUTTON (separator)"));
+                wxLogLastError(wxT("TB_SETBUTTONINFO (separator)"));
             }
             else
             {
-                TBBUTTON button;
-                wxZeroMemory(button);
-
-                button.idCommand = tool->GetId();
-                button.iBitmap = newSize; // set separator width/height
-                button.fsState = TBSTATE_ENABLED;
-                button.fsStyle = TBSTYLE_SEP;
-                if ( IsVertical() )
-                    button.fsState |= TBSTATE_WRAP;
-                if ( !::SendMessage(GetHwnd(), TB_INSERTBUTTON, toolIndex, (LPARAM)&button) )
-                {
-                    wxLogLastError(wxT("TB_INSERTBUTTON (separator)"));
-                }
-                else
-                {
-                    // We successfully replaced this seprator, move all the controls after it
-                    // by the corresponding amount (may be positive or negative)
-                    offset += newSize - oldSize;
-                }
+                // We successfully updated the separator width, move all the
+                // controls appearing after it by the corresponding amount
+                // (which may be positive or negative)
+                offset += newSize - oldSize;
             }
         }
 
@@ -1588,12 +1620,6 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
 
 void wxToolBar::SetToolBitmapSize(const wxSize& size)
 {
-    // Leave the effective size as (0, 0) if we are not showing bitmaps at all.
-    wxSize effectiveSize;
-
-    if ( !HasFlag(wxTB_NOICONS) )
-        effectiveSize = size;
-
     wxToolBarBase::SetToolBitmapSize(size);
 
     ::SendMessage(GetHwnd(), TB_SETBITMAPSIZE, 0, MAKELONG(size.x, size.y));
@@ -1622,14 +1648,25 @@ void wxToolBar::SetRows(int nRows)
     const bool enable = (!IsVertical() && m_maxRows == 1) ||
                            (IsVertical() && (size_t)m_maxRows == m_nButtons);
 
-    const LPARAM state = MAKELONG(enable ? TBSTATE_ENABLED : TBSTATE_HIDDEN, 0);
+    LPARAM state = enable ? TBSTATE_ENABLED : TBSTATE_HIDDEN;
+
+    if ( IsVertical() )
+    {
+        // As in Realize(), ensure that TBSTATE_WRAP is used for all the
+        // tools, including separators, in vertical toolbar, and here it does
+        // make a difference: without it, the following tools wouldn't be
+        // visible because they would be on the same row as the separator.
+        state |= TBSTATE_WRAP;
+    }
+
     wxToolBarToolsList::compatibility_iterator node;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
         wxToolBarTool * const tool = (wxToolBarTool*)node->GetData();
         if ( tool->IsStretchableSpace() )
         {
-            if ( !::SendMessage(GetHwnd(), TB_SETSTATE, tool->GetId(), state) )
+            if ( !::SendMessage(GetHwnd(), TB_SETSTATE,
+                                tool->GetId(), MAKELONG(state, 0)) )
             {
                 wxLogLastError(wxT("TB_SETSTATE (stretchable spacer)"));
             }
@@ -1665,10 +1702,13 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 
 void wxToolBar::UpdateSize()
 {
-    wxPoint pos = GetPosition();
-    ::SendMessage(GetHwnd(), TB_AUTOSIZE, 0, 0);
-    if (pos != GetPosition())
-        Move(pos);
+    // We used to use TB_AUTOSIZE here, but it didn't work at all for vertical
+    // toolbars and was more trouble than it was worth for horizontal one as it
+    // added some unwanted margins that we had to remove later. So now we just
+    // compute our own size and use it.
+    SetSize(GetBestSize());
+
+    UpdateStretchableSpacersSize();
 
     // In case Realize is called after the initial display (IOW the programmer
     // may have rebuilt the toolbar) give the frame the option of resizing the
@@ -1851,115 +1891,11 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
 #endif // wxHAS_MSW_BACKGROUND_ERASE_HOOK
 }
 
-bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
+bool wxToolBar::HandleSize(WXWPARAM WXUNUSED(wParam), WXLPARAM WXUNUSED(lParam))
 {
     // wait until we have some tools
-    const int toolsCount = GetToolsCount();
-    if ( toolsCount == 0 )
+    if ( !GetToolsCount() )
         return false;
-
-    // calculate our minor dimension ourselves - we're confusing the standard
-    // logic (TB_AUTOSIZE) with our horizontal toolbars and other hacks
-    // Find bounding box for all rows.
-    RECT r;
-    ::SetRectEmpty(&r);
-    // Bounding box for single (current) row
-    RECT rcRow;
-    ::SetRectEmpty(&rcRow);
-    int rowPosX = INT_MIN;
-    wxToolBarToolsList::compatibility_iterator node;
-    int i = 0;
-    for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
-    {
-        wxToolBarTool * const
-            tool = static_cast<wxToolBarTool *>(node->GetData());
-        if ( tool->IsToBeDeleted() )
-            continue;
-
-        // Skip hidden buttons
-        const RECT rcItem = wxGetTBItemRect(GetHwnd(), i);
-        if ( ::IsRectEmpty(&rcItem) )
-        {
-            i++;
-            continue;
-        }
-
-        if ( rcItem.top > rowPosX )
-        {
-            // We have the next row.
-            rowPosX = rcItem.top;
-
-            // Shift origin to (0, 0) to make it the same as for the total rect.
-            ::OffsetRect(&rcRow, -rcRow.left, -rcRow.top);
-
-            // And update the bounding box for all rows.
-            ::UnionRect(&r, &r, &rcRow);
-
-            // Reset the current row bounding box for the next row.
-            ::SetRectEmpty(&rcRow);
-        }
-
-        // Separators shouldn't be taken into account as they are sometimes
-        // reported to have the width of the entire client area by the toolbar.
-        // And we know that they are not the biggest items in the toolbar in
-        // any case, so just skip them.
-        if( !tool->IsSeparator() )
-        {
-            // Update bounding box of current row
-            ::UnionRect(&rcRow, &rcRow, &rcItem);
-        }
-
-        i++;
-    }
-
-    // Take into account the last row rectangle too.
-    ::OffsetRect(&rcRow, -rcRow.left, -rcRow.top);
-    ::UnionRect(&r, &r, &rcRow);
-
-    if ( !r.right )
-        return false;
-
-    int w, h;
-
-    if ( IsVertical() )
-    {
-        w = r.right - r.left;
-        h = HIWORD(lParam);
-    }
-    else
-    {
-        w = LOWORD(lParam);
-        if (HasFlag( wxTB_FLAT ))
-            h = r.bottom - r.top - 3;
-        else
-            h = r.bottom - r.top;
-
-        // Take control height into account
-        for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
-        {
-            wxToolBarTool * const
-                tool = static_cast<wxToolBarTool *>(node->GetData());
-            if (tool->IsControl())
-            {
-                int y = (tool->GetControl()->GetSize().y - 2); // -2 since otherwise control height + 4 (below) is too much
-                if (y > h)
-                    h = y;
-            }
-        }
-
-        if ( m_maxRows )
-        {
-            // FIXME: hardcoded separator line height...
-            h += HasFlag(wxTB_NODIVIDER) ? 4 : 6;
-            h *= m_maxRows;
-        }
-    }
-
-    if ( MAKELPARAM(w, h) != lParam )
-    {
-        // size really changed
-        SetSize(w, h);
-    }
 
     UpdateStretchableSpacersSize();
 

@@ -2396,7 +2396,6 @@ OSX_SHARED_HDR =
     wx/osx/frame.h
     wx/osx/gauge.h
     wx/osx/listbox.h
-    wx/osx/listctrl.h
     wx/osx/mdi.h
     wx/osx/menu.h
     wx/osx/menuitem.h
@@ -3129,10 +3128,15 @@ RICHTEXT_HDR =
 
 # wxSTC
 
-STC_SRC =
+STC_CMN_SRC =
     src/stc/stc.cpp
     src/stc/PlatWX.cpp
     src/stc/ScintillaWX.cpp
 
-STC_HDR =
+STC_CMN_HDR =
     wx/stc/stc.h
+
+STC_OSX_COCOA_SRC =
+    src/stc/PlatWXcocoa.mm
+STC_OSX_COCOA_HDR =
+

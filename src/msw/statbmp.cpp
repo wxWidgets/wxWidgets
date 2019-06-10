@@ -104,9 +104,12 @@ bool wxStaticBitmap::Create(wxWindow *parent,
     // we may have either bitmap or icon: if a bitmap with mask is passed, we
     // will transform it to an icon ourselves because otherwise the mask will
     // be ignored by Windows
-    m_isIcon = bitmap.IsKindOf(wxCLASSINFO(wxIcon));
-
     wxGDIImage *image = ConvertImage( bitmap );
+
+    // Note that m_isIcon must be set before calling MSWCreateControl() so that
+    // it creates the control with the correct style, as returned by
+    // MSWGetStyle(), which uses m_isIcon to determine whether to use SS_ICON
+    // or SS_BITMAP.
     m_isIcon = image->IsKindOf( wxCLASSINFO(wxIcon) );
 
     // create the native control
@@ -278,8 +281,20 @@ void wxStaticBitmap::MSWReplaceImageHandle(WXLPARAM handle)
 
 void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
 {
+    wxSize sizeOld;
+    if ( m_image )
+        sizeOld = m_image->GetSize();
+
+    wxSize sizeNew;
+    if ( image )
+        sizeNew = image->GetSize();
+
+    const bool wasIcon = m_isIcon;
+
     Free();
-    InvalidateBestSize();
+
+    if ( sizeNew != sizeOld )
+        InvalidateBestSize();
 
     m_isIcon = image->IsKindOf( wxCLASSINFO(wxIcon) );
     // the image has already been copied
@@ -313,28 +328,25 @@ void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)
         }
     }
 #endif // wxUSE_WXDIB
-    wxMSWWinStyleUpdater(GetHwnd())
-        .TurnOff(SS_BITMAP | SS_ICON)
-        .TurnOn(m_isIcon ? SS_ICON : SS_BITMAP);
+
+    if ( m_isIcon != wasIcon )
+    {
+        wxMSWWinStyleUpdater(GetHwnd())
+            .TurnOff(SS_BITMAP | SS_ICON)
+            .TurnOn(m_isIcon ? SS_ICON : SS_BITMAP);
+    }
 
     MSWReplaceImageHandle((WXLPARAM)handle);
-
-    DeleteCurrentHandleIfNeeded();
 
     m_currentHandle = (WXHANDLE)handle;
     m_ownsCurrentHandle = handle != handleOrig;
 
-    if ( ImageIsOk() )
+    if ( sizeNew != sizeOld )
     {
-        int width = image->GetWidth(),
-            height = image->GetHeight();
-        if ( width && height )
-        {
-            w = width;
-            h = height;
+        w += sizeNew.x - sizeOld.x;
+        h += sizeNew.y - sizeOld.y;
 
-            MSWMoveWindowToAnyPosition(GetHwnd(), x, y, width, height, false);
-        }
+        MSWMoveWindowToAnyPosition(GetHwnd(), x, y, w, h, false);
     }
 
     RECT rect;
