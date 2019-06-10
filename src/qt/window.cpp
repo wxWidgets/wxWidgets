@@ -59,14 +59,35 @@ wxQtWidget::wxQtWidget( wxWindowQt *parent, wxWindowQt *handler )
 
 class wxQtScrollArea : public wxQtEventSignalHandler< QScrollArea, wxWindowQt >
 {
-
-    public:
-        wxQtScrollArea( wxWindowQt *parent, wxWindowQt *handler );
-};
+public:
+    wxQtScrollArea(wxWindowQt *parent, wxWindowQt *handler);
+    bool event(QEvent *e) wxOVERRIDE;
+}; 
 
 wxQtScrollArea::wxQtScrollArea( wxWindowQt *parent, wxWindowQt *handler )
     : wxQtEventSignalHandler< QScrollArea, wxWindowQt >( parent, handler )
 {
+}
+
+bool wxQtScrollArea::event(QEvent *e)
+{
+    wxWindowQt* handler = GetHandler();
+    if (handler && handler->HasCapture())
+    {
+        switch (e->type())
+        {
+            case QEvent::MouseButtonRelease:
+            case QEvent::MouseButtonDblClick:
+            case QEvent::MouseMove:
+            case QEvent::Wheel:
+            case QEvent::TouchUpdate:
+            case QEvent::TouchEnd:
+                return viewportEvent(e);
+            default:
+                break;
+        }
+    }
+    return QScrollArea::event(e);
 }
 
 class wxQtInternalScrollBar : public wxQtEventSignalHandler< QScrollBar, wxWindowQt >
