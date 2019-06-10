@@ -72,9 +72,9 @@ wxQtScrollArea::wxQtScrollArea( wxWindowQt *parent, wxWindowQt *handler )
 bool wxQtScrollArea::event(QEvent *e)
 {
     wxWindowQt* handler = GetHandler();
-    if (handler && handler->HasCapture())
+    if ( handler && handler->HasCapture() )
     {
-        switch (e->type())
+        switch ( e->type() )
         {
             case QEvent::MouseButtonRelease:
             case QEvent::MouseButtonDblClick:
