@@ -17,12 +17,18 @@ key = sys.argv[2]
 # The thrid argument is the value of the key
 val = sys.argv[3]
 
+# Handle boolean values
+if val.lower() == "true":
+  val = True
+elif val.lower() == "false":
+  val = False
+
 
 if sys.version_info >= (3, 4, 0):
   # Use the new API if python 3.4 is used
   with open( fname, 'rb' ) as plist_file:
     pl = plistlib.load( plist_file )
-  
+
   pl[key] = val
 
   with open( fname, 'wb' ) as plist_file:
