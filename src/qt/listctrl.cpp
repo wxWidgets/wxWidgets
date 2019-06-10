@@ -1049,7 +1049,7 @@ public:
 
         if ( role == Qt::DisplayRole || role == Qt::EditRole )
         {
-            const wxString text = listCtrl->OnGetItemText(row, col);
+            const wxString text = listCtrl->GetVirtualItemText(row, col);
             return QVariant::fromValue(wxQtConvertString(text));
         }
 
@@ -1059,7 +1059,7 @@ public:
             if ( imageList == NULL )
                 return QVariant();
 
-            const int imageIndex = listCtrl->OnGetItemColumnImage(row, col);
+            const int imageIndex = listCtrl->GetVirtualItemColumnImage(row, col);
             if ( imageIndex == -1 )
                 return QVariant();
             wxBitmap image = imageList->GetBitmap(imageIndex);
@@ -1070,13 +1070,13 @@ public:
         return QVariant();
     }
 
-    virtual bool GetItem(wxListItem& info) wxOVERRIDE
+    bool GetItem(wxListItem& info) wxOVERRIDE
     {
         const int row = static_cast<int>(info.GetId());
         const int col = info.m_col;
 
         if ( info.m_mask & wxLIST_MASK_TEXT )
-            info.SetText(GetListCtrl()->OnGetItemText(row,col));
+            info.SetText(GetListCtrl()->GetVirtualItemText(row,col));
 
         CopySelectStatusToItem(info, row, col);
 
@@ -1889,36 +1889,18 @@ bool wxListCtrl::SortItems(wxListCtrlCompare fn, wxIntPtr data)
     return true;
 }
 
-wxString wxListCtrl::OnGetItemText(
-    long WXUNUSED(item),
-    long WXUNUSED(col)
-) const
-{
-    // this is a pure virtual function, in fact - which is not really pure
-    // because the controls which are not virtual don't need to implement it
-    wxFAIL_MSG("wxListCtrl::OnGetItemText not supposed to be called");
-
-    return wxEmptyString;
-}
-
-int wxListCtrl::OnGetItemImage(long WXUNUSED(item)) const
-{
-    wxCHECK_MSG(!GetImageList(wxIMAGE_LIST_SMALL),
-                -1,
-                "List control has an image list, "
-                "OnGetItemImage or OnGetItemColumnImage should be overridden.");
-    return -1;
-}
-
-int wxListCtrl::OnGetItemColumnImage(long item, long column) const
-{
-    if ( column == 0 )
-        return OnGetItemImage(item);
-
-    return -1;
-}
-
 QWidget *wxListCtrl::GetHandle() const
 {
     return m_qtTreeWidget;
 }
+
+wxString wxListCtrl::GetVirtualItemText(long item, long column) const
+{
+    return OnGetItemText(item, column);
+}
+
+int wxListCtrl::GetVirtualItemColumnImage(long item, long column) const
+{
+    return OnGetItemColumnImage(item, column);
+}
+

@@ -12,6 +12,7 @@
 
 class wxQtListTreeWidget;
 class wxQtListModel;
+class wxQtVirtualListModel;
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
@@ -286,6 +287,11 @@ protected:
                       m_ownsImageListState;
     bool              m_hasCheckBoxes;
 private:
+    // Allow access to virtual list functions in the virtual model class
+    friend class wxQtVirtualListModel;
+    wxString GetVirtualItemText(long item, long column) const;
+    int GetVirtualItemColumnImage(long item, long column) const;
+
     wxQtListTreeWidget *m_qtTreeWidget;
     wxQtListModel *m_model;
 
