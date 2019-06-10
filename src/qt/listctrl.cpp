@@ -366,13 +366,11 @@ public:
         switch ( role )
         {
             case Qt::DisplayRole:
-            {
                 return QVariant::fromValue(columnItem.m_label);
-            }
+
             case Qt::EditRole:
-            {
-                return QVariant::fromValue(columnItem.m_label); 
-            }
+                return QVariant::fromValue(columnItem.m_label);
+
             case Qt::DecorationRole:
             {
                 wxImageList *imageList = GetImageList();
@@ -413,12 +411,10 @@ public:
             case Qt::TextAlignmentRole:
                 return columnItem.m_align;
 
-             case Qt::CheckStateRole:
-                {
-                  if ( col == 0 && m_listCtrl->HasCheckBoxes() )
-                    return rowItem.m_checked; 
-                  return QVariant();
-                }
+            case Qt::CheckStateRole:
+                return col == 0 && m_listCtrl->HasCheckBoxes()
+                    ? rowItem.m_checked
+                    : QVariant();
 
             default:
                 return QVariant();
