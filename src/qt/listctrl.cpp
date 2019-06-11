@@ -25,6 +25,7 @@
 #include "wx/listctrl.h"
 #include "wx/imaglist.h"
 #include "wx/recguard.h"
+#include "wx/app.h"
 
 #include "wx/qt/private/winevent.h"
 
