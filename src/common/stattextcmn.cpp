@@ -232,7 +232,7 @@ void wxStaticTextBase::UpdateLabel()
     if (!IsEllipsized())
         return;
 
-    wxString newlabel = GetEllipsizedLabel();
+    const wxString& newlabel = GetEllipsizedLabel();
 
     // we need to touch the "real" label (i.e. the text set inside the control,
     // using port-specific functions) instead of the string returned by GetLabel().
