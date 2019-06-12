@@ -977,9 +977,19 @@ void wxWindowQt::DoMoveWindow(int x, int y, int width, int height)
     QWidget *qtWidget = GetHandle();
 
     qtWidget->move( x, y );
-    qtWidget->resize( width, height );
-}
 
+    // There doesn't seem to be any way to change Qt frame size directly, so
+    // change the widget size, but take into account the extra margins
+    // corresponding to the frame decorations.
+    const QSize frameSize = qtWidget->frameSize();
+    const QSize innerSize = qtWidget->geometry().size();
+    const QSize frameSizeDiff = frameSize - innerSize;
+
+    const int clientWidth = std::max(width - frameSizeDiff.width(), 0);
+    const int clientHeight = std::max(height - frameSizeDiff.height(), 0);
+
+    qtWidget->resize(clientWidth, clientHeight);
+}
 
 #if wxUSE_TOOLTIPS
 void wxWindowQt::QtApplyToolTip(const wxString& text)
