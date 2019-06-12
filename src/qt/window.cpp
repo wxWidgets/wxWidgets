@@ -1496,7 +1496,11 @@ bool wxWindowQt::QtHandleCloseEvent ( QWidget *handler, QCloseEvent *WXUNUSED( e
 bool wxWindowQt::QtHandleContextMenuEvent ( QWidget *WXUNUSED( handler ), QContextMenuEvent *event )
 {
     wxContextMenuEvent e( wxEVT_CONTEXT_MENU, GetId() );
-    e.SetPosition( wxQtConvertPoint( event->globalPos() ) );
+    e.SetPosition(
+        event->reason() != QContextMenuEvent::Keyboard ?
+        wxQtConvertPoint( event->globalPos() ) :
+        wxDefaultPosition
+    );
     e.SetEventObject(this);
 
     return ProcessWindowEvent( e );
