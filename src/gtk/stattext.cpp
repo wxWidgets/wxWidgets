@@ -272,13 +272,13 @@ void wxStaticText::GTKWidgetDoSetMnemonic(GtkWidget* w)
 
 // These functions should be used only when GTK+ < 2.6 by wxStaticTextBase::UpdateLabel()
 
-wxString wxStaticText::DoGetLabel() const
+wxString wxStaticText::WXGetVisibleLabel() const
 {
     GtkLabel *label = GTK_LABEL(m_widget);
     return wxGTK_CONV_BACK( gtk_label_get_text( label ) );
 }
 
-void wxStaticText::DoSetLabel(const wxString& str)
+void wxStaticText::WXSetVisibleLabel(const wxString& str)
 {
     GTKSetLabelForLabel(GTK_LABEL(m_widget), str);
 }
