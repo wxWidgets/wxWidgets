@@ -149,6 +149,10 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
         impl->doCommandBySelector(aSelector, self, _cmd);
 }
 
+- (void) update
+{
+}
+
 @end
 
 bool wxGLCanvas::DoCreate(wxWindow *parent,
