@@ -1387,12 +1387,12 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
             wxFAIL_MSG( "Unknown mouse event type" );
     }
 
-    // Fill the event
-    QPoint mousePos = event->pos();
+    // Fill the event - convert screen position to the window's coordinates
+    const wxPoint mousePos = ScreenToClient(wxQtConvertPoint(event->globalPos()));
     wxMouseEvent e( wxType );
     e.SetEventObject(this);
     e.m_clickCount = -1;
-    e.SetPosition( wxQtConvertPoint( mousePos ) );
+    e.SetPosition(mousePos);
 
     // Mouse buttons
     wxQtFillMouseButtons( event->buttons(), &e );
@@ -1404,8 +1404,8 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
 
     // Determine if mouse is inside the widget
     bool mouseInside = true;
-    if ( mousePos.x() < 0 || mousePos.x() > handler->width() ||
-        mousePos.y() < 0 || mousePos.y() > handler->height() )
+    if ( mousePos.x < 0 || mousePos.x > handler->width() ||
+        mousePos.y < 0 || mousePos.y > handler->height() )
         mouseInside = false;
 
     if ( e.GetEventType() == wxEVT_MOTION )
