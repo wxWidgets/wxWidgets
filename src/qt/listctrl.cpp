@@ -910,7 +910,11 @@ long wxListCtrl::FindItem(long WXUNUSED(start), const wxPoint& WXUNUSED(pt), int
 
 long wxListCtrl::HitTest(const wxPoint& point, int &flags, long* ptrSubItem) const
 {
-    QModelIndex index = m_qtTreeWidget->indexAt(wxQtConvertPoint(point));
+    // Remove the header height as qt expects point relative to the table sub widget
+    QPoint qPoint = wxQtConvertPoint(point);
+    qPoint.setY(qPoint.y() - m_qtTreeWidget->header()->height());
+
+    QModelIndex index = m_qtTreeWidget->indexAt(qPoint);
     if ( index.isValid() )
     {
         flags = wxLIST_HITTEST_ONITEM;
