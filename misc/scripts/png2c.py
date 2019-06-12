@@ -20,7 +20,7 @@ in C code (like XPM but with full alpha channel support).
   -s    embed the image size in the image names in generated code."""
 
 if len(sys.argv) < 2:
-        print USAGE
+        print(USAGE)
         sys.exit(1)
 
 r = re.compile("^([a-zA-Z._][a-zA-Z._0-9]*)[.][pP][nN][gG]$")
@@ -37,7 +37,7 @@ for path in sys.argv[1:]:
 
         # Allow only filenames that make sense as C variable names
         if not(m):
-                print "Skipped file (unsuitable filename): " + filename
+                print("Skipped file (unsuitable filename): " + filename)
                 continue
 
         # Read PNG file as character array
@@ -50,8 +50,8 @@ for path in sys.argv[1:]:
         # Each PNG file starts with a 8 byte signature that should be followed
         # by IHDR chunk which is always 13 bytes in length so the first 16
         # bytes are fixed (or at least we expect them to be).
-        if bytes[0:16].tostring() != '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR':
-                print '"%s" doesn\'t seem to be a valid PNG file.' % filename
+        if bytes[0:16].tostring() != b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR':
+                print('"%s" doesn\'t seem to be a valid PNG file.' % filename)
                 continue
 
         # Try to naively get its size if necessary
@@ -91,4 +91,4 @@ for path in sys.argv[1:]:
         # Now conclude the C source
         text += "};\n\n"
 
-        print text
+        print(text)
