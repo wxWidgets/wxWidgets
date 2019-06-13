@@ -110,13 +110,7 @@ public:
 #endif // WXWIN_COMPATIBILITY_2_8
 
     // implementation from now on
-    void OnInternalIdle() wxOVERRIDE;
     virtual void GTKHandleRealized() wxOVERRIDE;
-
-    bool              m_exposed;
-#ifdef __WXGTK3__
-    cairo_t* m_cairoPaintContext;
-#endif
 
 #if WXWIN_COMPATIBILITY_2_8
     wxGLContext      *m_sharedContext;
