@@ -149,6 +149,18 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
         impl->doCommandBySelector(aSelector, self, _cmd);
 }
 
+// We intentionally don't call [super update], so suppress the warning about it.
+wxCLANG_WARNING_SUPPRESS(objc-missing-super-calls)
+
+- (void) update
+{
+    // Prevent the base class code from breaking resizing on macOS 10.14.5
+    // (this is not necessary on the older versions, but doesn't seem to do any
+    // harm there neither).
+}
+
+wxCLANG_WARNING_RESTORE(objc-missing-super-calls)
+
 @end
 
 bool wxGLCanvas::DoCreate(wxWindow *parent,
