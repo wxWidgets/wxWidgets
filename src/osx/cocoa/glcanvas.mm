@@ -151,6 +151,7 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
 
 - (void) update
 {
+    // Empty impl fixes wrong resize on macOS 10.14.5
 }
 
 @end
