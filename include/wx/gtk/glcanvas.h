@@ -19,6 +19,7 @@
 
 class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasX11
 {
+    typedef wxGLCanvasX11 BaseType;
 public:
     wxGLCanvas(wxWindow *parent,
                const wxGLAttributes& dispAttrs,
@@ -110,6 +111,7 @@ public:
 
     // implementation from now on
     void OnInternalIdle() wxOVERRIDE;
+    virtual void GTKHandleRealized() wxOVERRIDE;
 
     bool              m_exposed;
 #ifdef __WXGTK3__

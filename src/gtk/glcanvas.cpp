@@ -332,6 +332,13 @@ Window wxGLCanvas::GetXWindow() const
     return window ? GDK_WINDOW_XID(window) : 0;
 }
 
+void wxGLCanvas::GTKHandleRealized()
+{
+    BaseType::GTKHandleRealized();
+
+    SendSizeEvent();
+}
+
 void wxGLCanvas::OnInternalIdle()
 {
     if (m_exposed)
