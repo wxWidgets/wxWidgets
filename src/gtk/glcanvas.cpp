@@ -19,22 +19,6 @@
 #include <gdk/gdkx.h>
 
 //-----------------------------------------------------------------------------
-// "size_allocate" of m_wxwindow
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static void
-gtk_glcanvas_size_callback(GtkWidget *WXUNUSED(widget),
-                           GtkAllocation * WXUNUSED(alloc),
-                           wxGLCanvas *win)
-{
-    wxSizeEvent event( wxSize(win->m_width,win->m_height), win->GetId() );
-    event.SetEventObject( win );
-    win->HandleWindowEvent( event );
-}
-}
-
-//-----------------------------------------------------------------------------
 // emission hook for "parent-set"
 //-----------------------------------------------------------------------------
 
@@ -221,8 +205,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
     wxWindow::Create( parent, id, pos, size, style, name );
 
     gtk_widget_set_double_buffered(m_wxwindow, false);
-
-    g_signal_connect(m_widget,   "size_allocate", G_CALLBACK(gtk_glcanvas_size_callback),     this);
 
     return true;
 }
