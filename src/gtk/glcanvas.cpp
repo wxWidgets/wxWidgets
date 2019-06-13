@@ -18,22 +18,6 @@
 #include "wx/gtk/private/wrapgtk.h"
 #include <gdk/gdkx.h>
 
-#if WXWIN_COMPATIBILITY_2_8
-
-//-----------------------------------------------------------------------------
-// "realize" from m_wxwindow: used to create m_glContext implicitly
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static void
-gtk_glwindow_realized_callback( GtkWidget *WXUNUSED(widget), wxGLCanvas *win )
-{
-    win->GTKInitImplicitContext();
-}
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
-
 //-----------------------------------------------------------------------------
 // "map" from m_wxwindow
 //-----------------------------------------------------------------------------
@@ -294,9 +278,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
 
     gtk_widget_set_double_buffered(m_wxwindow, false);
 
-#if WXWIN_COMPATIBILITY_2_8
-    g_signal_connect(m_wxwindow, "realize",       G_CALLBACK(gtk_glwindow_realized_callback), this);
-#endif // WXWIN_COMPATIBILITY_2_8
 #ifdef __WXGTK3__
     g_signal_connect(m_wxwindow, "draw", G_CALLBACK(draw), this);
 #else
@@ -304,14 +285,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
     g_signal_connect(m_wxwindow, "expose_event",  G_CALLBACK(gtk_glwindow_expose_callback),   this);
 #endif
     g_signal_connect(m_widget,   "size_allocate", G_CALLBACK(gtk_glcanvas_size_callback),     this);
-
-#if WXWIN_COMPATIBILITY_2_8
-    // if our parent window is already visible, we had been realized before we
-    // connected to the "realize" signal and hence our m_glContext hasn't been
-    // initialized yet and we have to do it now
-    if (gtk_widget_get_realized(m_wxwindow))
-        gtk_glwindow_realized_callback( m_wxwindow, this );
-#endif // WXWIN_COMPATIBILITY_2_8
 
 #ifndef __WXGTK3__
     if (gtk_widget_get_mapped(m_wxwindow))
@@ -336,6 +309,9 @@ void wxGLCanvas::GTKHandleRealized()
 {
     BaseType::GTKHandleRealized();
 
+#if WXWIN_COMPATIBILITY_2_8
+    GTKInitImplicitContext();
+#endif
     SendSizeEvent();
 }
 
