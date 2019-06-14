@@ -87,28 +87,12 @@
 #endif
 
 
-//#define wxPG_TEXT_INDENT                4 // For the wxComboControl
-//#define wxPG_ALLOW_CLIPPING             1 // If 1, GetUpdateRegion() in OnPaint event handler is not ignored
 #define wxPG_GUTTER_DIV                 3 // gutter is max(iconwidth/gutter_div,gutter_min)
 #define wxPG_GUTTER_MIN                 3 // gutter before and after image of [+] or [-]
 #define wxPG_YSPACING_MIN               1
 #define wxPG_DEFAULT_VSPACING           2 // This matches .NET propertygrid's value,
                                           // but causes normal combobox to spill out under MSW
-
-//#define wxPG_OPTIMAL_WIDTH              200 // Arbitrary
-
-//#define wxPG_MIN_SCROLLBAR_WIDTH        10 // Smallest scrollbar width on any platform
-                                           // Must be larger than largest control border
-                                           // width * 2.
-
-
 #define wxPG_DEFAULT_CURSOR             wxNullCursor
-
-
-//#define wxPG_NAT_CHOICE_BORDER_ANY   0
-
-//#define wxPG_HIDER_BUTTON_HEIGHT        25
-
 #define wxPG_PIXELS_PER_UNIT            m_lineHeight
 
 #ifdef wxPG_ICON_WIDTH

@@ -877,7 +877,6 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
 
 #include "wx/colordlg.h"
 
-//#define wx_cp_es_syscolours_len 25
 static const char* const gs_cp_es_syscolour_labels[] = {
     /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("AppWorkspace"),
     /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ActiveBorder"),
@@ -1758,7 +1757,6 @@ wxVariant wxColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 
 #define NUM_CURSORS 28
 
-//#define wx_cp_es_syscursors_len 28
 static const char* const gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
     /* TRANSLATORS: System cursor name */ wxTRANSLATE("Default"),
     /* TRANSLATORS: System cursor name */ wxTRANSLATE("Arrow"),
