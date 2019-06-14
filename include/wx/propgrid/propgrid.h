@@ -2276,7 +2276,6 @@ protected:
     #undef wxPG_FL_MOUSE_CAPTURED
     #undef wxPG_FL_INITIALIZED
     #undef wxPG_FL_ACTIVATION_BY_CLICK
-    #undef wxPG_SUPPORT_TOOLTIPS
     #undef wxPG_ICON_WIDTH
     #undef wxPG_USE_RENDERER_NATIVE
 // Following are needed by the manager headers

@@ -649,26 +649,22 @@ void wxPropertyGrid::SetWindowStyleFlag( long style )
             else
                 m_pState->m_itemsAdded = true;
         }
-    #if wxPG_SUPPORT_TOOLTIPS
+#if wxUSE_TOOLTIPS
         if ( !(old_style & wxPG_TOOLTIPS) && (style & wxPG_TOOLTIPS) )
         {
             //
             // Tooltips enabled
             //
-            /*
-            wxToolTip* tooltip = new wxToolTip ( wxEmptyString );
-            SetToolTip ( tooltip );
-            tooltip->SetDelay ( wxPG_TOOLTIP_DELAY );
-            */
+            //wxToolTip::SetDelay(wxPG_TOOLTIP_DELAY);
         }
         else if ( (old_style & wxPG_TOOLTIPS) && !(style & wxPG_TOOLTIPS) )
         {
             //
             // Tooltips disabled
             //
-            SetToolTip( NULL );
+            UnsetToolTip();
         }
-    #endif
+#endif // wxUSE_TOOLTIPS
     }
 
     wxControl::SetWindowStyleFlag ( style );
@@ -4317,7 +4313,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
     }
     else
     {
-#if wxPG_SUPPORT_TOOLTIPS
+#if wxUSE_TOOLTIPS
         //
         // Show help as a tool tip on the editor control.
         //
@@ -4991,7 +4987,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
         int ih = m_lineHeight;
         int sy = y;
 
-    #if wxPG_SUPPORT_TOOLTIPS
+    #if wxUSE_TOOLTIPS
         wxPGProperty* prevHover = m_propHover;
         unsigned char prevSide = m_mouseSide;
     #endif
@@ -5012,7 +5008,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
             SendEvent( wxEVT_PG_HIGHLIGHTED, m_propHover );
         }
 
-    #if wxPG_SUPPORT_TOOLTIPS
+#if wxUSE_TOOLTIPS
         // Store which side we are on
         m_mouseSide = 0;
         if ( columnHit == 1 )
@@ -5080,7 +5076,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                 }
             }
         }
-    #endif
+#endif // wxUSE_TOOLTIPS
 
         if ( splitterHit == -1 ||
              !m_propHover ||
