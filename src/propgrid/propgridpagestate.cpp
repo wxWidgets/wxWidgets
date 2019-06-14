@@ -897,34 +897,19 @@ void wxPropertyGridPageState::DoSetSplitterPosition( int newXPos,
                                                      int splitterColumn,
                                                      int flags )
 {
-    wxPropertyGrid* pg = GetGrid();
-
     int adjust = newXPos - DoGetSplitterPosition(splitterColumn);
-
-    if ( !pg->HasVirtualWidth() )
-    {
-        // No virtual width
-        int otherColumn;
-        if ( adjust > 0 )
-        {
-            otherColumn = splitterColumn + 1;
-            if ( otherColumn == (int)m_colWidths.size() )
-                otherColumn = 0;
-            m_colWidths[splitterColumn] += adjust;
-            PropagateColSizeDec( otherColumn, adjust, 1 );
-        }
-        else if ( adjust < 0 )
-        {
-            otherColumn = splitterColumn + 1;
-            if ( otherColumn == (int)m_colWidths.size() )
-                otherColumn = 0;
-            m_colWidths[otherColumn] -= adjust;
-            PropagateColSizeDec( splitterColumn, -adjust, -1 );
-        }
-    }
-    else
+    int otherColumn = splitterColumn + 1;
+    if ( otherColumn == (int)m_colWidths.size() )
+        otherColumn = 0;
+    if ( adjust > 0 )
     {
         m_colWidths[splitterColumn] += adjust;
+        PropagateColSizeDec( otherColumn, adjust, 1 );
+    }
+    else if ( adjust < 0 )
+    {
+        m_colWidths[otherColumn] -= adjust;
+        PropagateColSizeDec( splitterColumn, -adjust, -1 );
     }
     // Actual adjustment can be different from demanded.
     newXPos = DoGetSplitterPosition(splitterColumn);
