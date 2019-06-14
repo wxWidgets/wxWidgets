@@ -519,56 +519,6 @@ void wxPropertyGridPageState::DoSetPropertyName( wxPGProperty* p,
 // wxPropertyGridPageState global operations
 // -----------------------------------------------------------------------
 
-// -----------------------------------------------------------------------
-// Item iteration macros
-//   NB: Nowadays only needed for alphabetic/categoric mode switching.
-// -----------------------------------------------------------------------
-
-//#define II_INVALID_I    0x00FFFFFF
-
-#define ITEM_ITERATION_VARIABLES \
-    wxPGProperty* parent; \
-    unsigned int i; \
-    unsigned int iMax;
-
-#define ITEM_ITERATION_INIT_FROM_THE_TOP \
-    parent = m_properties; \
-    i = 0;
-
-#if 0
-#define ITEM_ITERATION_INIT(startparent, startindex, state) \
-    parent = startparent; \
-    i = (unsigned int)startindex; \
-    if ( parent == NULL ) \
-    { \
-        parent = state->m_properties; \
-        i = 0; \
-    }
-#endif
-
-#define ITEM_ITERATION_LOOP_BEGIN \
-    do \
-    { \
-        iMax = parent->GetChildCount(); \
-        while ( i < iMax ) \
-        {  \
-            wxPGProperty* p = parent->Item(i);
-
-#define ITEM_ITERATION_LOOP_END \
-            if ( p->GetChildCount() ) \
-            { \
-                i = 0; \
-                parent = (wxPGProperty*)p; \
-                iMax = parent->GetChildCount(); \
-            } \
-            else \
-                i++; \
-        } \
-        i = parent->m_arrIndex + 1; \
-        parent = parent->m_parent; \
-    } \
-    while ( parent != NULL );
-
 bool wxPropertyGridPageState::EnableCategories( bool enable )
 {
     //
@@ -576,45 +526,18 @@ bool wxPropertyGridPageState::EnableCategories( bool enable )
     //     function, since it depends on m_arrIndexes,
     //     which, among other things, is being fixed here.
     //
-    ITEM_ITERATION_VARIABLES
 
     if ( enable )
     {
-        //
         // Enable categories
-        //
-
         if ( !IsInNonCatMode() )
             return false;
 
         m_properties = &m_regularArray;
-
-        // fix parents, indexes, and depths
-        ITEM_ITERATION_INIT_FROM_THE_TOP
-
-        ITEM_ITERATION_LOOP_BEGIN
-
-            p->m_arrIndex = i;
-
-            p->m_parent = parent;
-
-            // If parent was category, and this is not,
-            // then the depth stays the same.
-            if ( parent->IsCategory() &&
-                 !p->IsCategory() )
-                p->m_depth = parent->GetDepth();
-            else
-                p->m_depth = parent->GetDepth() + 1;
-
-        ITEM_ITERATION_LOOP_END
-
     }
     else
     {
-        //
         // Disable categories
-        //
-
         if ( IsInNonCatMode() )
             return false;
 
@@ -623,20 +546,50 @@ bool wxPropertyGridPageState::EnableCategories( bool enable )
             InitNonCatMode();
 
         m_properties = m_abcArray;
+    }
 
-        // fix parents, indexes, and depths
-        ITEM_ITERATION_INIT_FROM_THE_TOP
-
-        ITEM_ITERATION_LOOP_BEGIN
+    // fix parents, indexes, and depths
+    wxPGProperty* parent = m_properties;
+    unsigned int i = 0;
+    do
+    {
+        unsigned int iMax = parent->GetChildCount();
+        while ( i < iMax )
+        {
+            wxPGProperty* p = parent->Item(i);
 
             p->m_arrIndex = i;
-
             p->m_parent = parent;
+            if ( enable )
+            {
+                // If parent was category, and this is not,
+                // then the depth stays the same.
+                if ( parent->IsCategory() &&
+                    !p->IsCategory() )
+                    p->m_depth = parent->GetDepth();
+                else
+                    p->m_depth = parent->GetDepth() + 1;
+            }
+            else
+            {
+                p->m_depth = parent->GetDepth() + 1;
+            }
 
-            p->m_depth = parent->GetDepth() + 1;
+            if ( p->GetChildCount() > 0 )
+            {
+                i = 0;
+                parent = p;
+                iMax = parent->GetChildCount();
+            }
+            else
+            {
+                i++;
+            }
+        }
 
-        ITEM_ITERATION_LOOP_END
-    }
+        i = parent->GetIndexInParent() + 1;
+        parent = parent->GetParent();
+    } while ( parent != NULL );
 
     VirtualHeightChanged();
 
