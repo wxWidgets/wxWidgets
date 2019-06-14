@@ -400,8 +400,6 @@ void wxPropertyGrid::Init1()
     m_iconWidth = wxPG_ICON_WIDTH;
 #endif
 
-    m_prevVY = -1;
-
     m_gutterWidth = wxPG_GUTTER_MIN;
     m_subgroup_extramargin = 10;
 
@@ -2657,8 +2655,6 @@ void wxPropertyGrid::Clear()
     m_pState->DoClear();
 
     m_propHover = NULL;
-
-    m_prevVY = 0;
 
     RecalculateVirtualSize();
 

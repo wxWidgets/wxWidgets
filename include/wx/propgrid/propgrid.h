@@ -1500,12 +1500,6 @@ protected:
     // Current non-client width (needed when auto-centering).
     int                 m_ncWidth;
 
-    // Non-client width (auto-centering helper).
-    //int                 m_fWidth;
-
-    // Previously recorded scroll start position.
-    int                 m_prevVY;
-
     // The gutter spacing in front and back of the image.
     // This determines the amount of spacing in front of each item
     int                 m_gutterWidth;
@@ -1612,9 +1606,6 @@ protected:
 #else
     bool                m_editorFocused;
 #endif
-
-    // 1 if m_latsCaption is also the bottommost caption.
-    //unsigned char       m_lastCaptionBottomnest;
 
     unsigned char       m_vspacing;
 

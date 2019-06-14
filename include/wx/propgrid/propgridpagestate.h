@@ -661,9 +661,6 @@ protected:
     unsigned int                m_virtualHeight;
 
 #if WXWIN_COMPATIBILITY_3_0
-    // 1 if m_lastCaption is also the bottommost caption.
-    unsigned char               m_lastCaptionBottomnest;
-
     // 1 items appended/inserted, so stuff needs to be done before drawing;
     // If m_virtualHeight == 0, then calcylatey's must be done.
     // Otherwise just sort.
@@ -674,9 +671,6 @@ protected:
 
     unsigned char               m_vhCalcPending;
 #else
-    // True if m_lastCaption is also the bottommost caption.
-    bool                        m_lastCaptionBottomnest;
-
     // True: items appended/inserted, so stuff needs to be done before drawing;
     // If m_virtualHeight == 0, then calcylatey's must be done.
     // Otherwise just sort.

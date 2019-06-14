@@ -208,7 +208,6 @@ wxPropertyGridPageState::wxPropertyGridPageState()
     m_currentCategory = NULL;
     m_width = 0;
     m_virtualHeight = 0;
-    m_lastCaptionBottomnest = true;
     m_itemsAdded = false;
     m_anyModified = false;
     m_vhCalcPending = false;
@@ -313,7 +312,6 @@ void wxPropertyGridPageState::DoClear()
         m_dictName.clear();
 
         m_currentCategory = NULL;
-        m_lastCaptionBottomnest = true;
         m_itemsAdded = false;
 
         m_virtualHeight = 0;
@@ -1770,15 +1768,6 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
         // Add to current mode
         if ( !property->IsCategory() )
             m_abcArray->DoAddChild( property, index, true );
-    }
-
-    // category stuff
-    if ( property->IsCategory() )
-    {
-        // This is a category caption item.
-
-        // Last caption is not the bottom one (this info required by append)
-        m_lastCaptionBottomnest = false;
     }
 
     // Only add name to hashmap if parent is root or category
