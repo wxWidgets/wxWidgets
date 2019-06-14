@@ -33,6 +33,7 @@
 #include "wx/window.h"
 #include "wx/dnd.h"
 #include "wx/tooltip.h"
+#include "wx/settings.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
