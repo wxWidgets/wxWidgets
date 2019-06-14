@@ -1388,7 +1388,14 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
     }
 
     // Fill the event - convert screen position to the window's coordinates
-    const wxPoint mousePos = ScreenToClient(wxQtConvertPoint(event->globalPos()));
+    wxPoint mousePos = ScreenToClient(wxQtConvertPoint(event->globalPos()));
+
+    // Correct the mouse position if we have a caption
+    if (HasFlag(wxCAPTION))
+    {
+        mousePos.y -= wxSystemSettingsNative::GetMetric(wxSYS_CAPTION_Y);
+    }
+
     wxMouseEvent e( wxType );
     e.SetEventObject(this);
     e.m_clickCount = -1;
