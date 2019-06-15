@@ -1013,28 +1013,28 @@ public:
     // Sets value (native 64-bit int) of a property.
     void SetPropertyValue(wxPGPropArg id, wxLongLong_t value)
     {
-        wxVariant v = WXVARIANT(wxLongLong(value));
+        wxVariant v = wxLongLong(value);
         SetPropVal(id, v);
     }
 #endif
     // Sets value (wxLongLong) of a property.
     void SetPropertyValue( wxPGPropArg id, wxLongLong value )
     {
-        wxVariant v = WXVARIANT(value);
+        wxVariant v(value);
         SetPropVal( id, v );
     }
 #ifdef wxULongLong_t
     // Sets value (native 64-bit unsigned int) of a property.
     void SetPropertyValue(wxPGPropArg id, wxULongLong_t value)
     {
-        wxVariant v = WXVARIANT(wxULongLong(value));
+        wxVariant v = wxULongLong(value);
         SetPropVal(id, v);
     }
 #endif
     // Sets value (wxULongLong) of a property.
     void SetPropertyValue( wxPGPropArg id, wxULongLong value )
     {
-        wxVariant v = WXVARIANT(value);
+        wxVariant v(value);
         SetPropVal( id, v );
     }
 #endif

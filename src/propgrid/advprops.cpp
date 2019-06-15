@@ -2169,8 +2169,6 @@ bool wxMultiChoiceProperty::OnEvent( wxPropertyGrid* propgrid,
         {
             wxArrayInt arrInt = dlg.GetSelections();
 
-            wxVariant variant;
-
             // Strings that were not in list of choices
             wxArrayString value;
 
@@ -2192,9 +2190,7 @@ bool wxMultiChoiceProperty::OnEvent( wxPropertyGrid* propgrid,
                     value.push_back(extraStrings[n]);
             }
 
-            variant = WXVARIANT(value);
-
-            SetValueInEvent(variant);
+            SetValueInEvent(wxVariant(value));
 
             return true;
         }
@@ -2211,7 +2207,7 @@ bool wxMultiChoiceProperty::StringToValue( wxVariant& variant, const wxString& t
             arr.Add(token);
     WX_PG_TOKENIZER2_END()
 
-    wxVariant v( WXVARIANT(arr) );
+    wxVariant v(arr);
     variant = v;
 
     return true;

@@ -1592,9 +1592,9 @@ wxVariant wxPGProperty::GetDefaultValue() const
             return wxVariant(wxArrayString());
 #if wxUSE_LONGLONG
         if ( valueType == wxPG_VARIANT_TYPE_LONGLONG )
-            return WXVARIANT(wxLongLong(0));
+            return wxVariant(wxLongLong(0));
         if ( valueType == wxPG_VARIANT_TYPE_ULONGLONG )
-            return WXVARIANT(wxULongLong(0));
+            return wxVariant(wxULongLong(0));
 #endif
         if ( valueType == wxS("wxColour") )
             return WXVARIANT(*wxBLACK);

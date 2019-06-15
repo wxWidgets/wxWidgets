@@ -230,7 +230,7 @@ wxIntProperty::wxIntProperty( const wxString& label, const wxString& name,
 wxIntProperty::wxIntProperty( const wxString& label, const wxString& name,
     const wxLongLong& value ) : wxPGProperty(label,name)
 {
-    SetValue(WXVARIANT(value));
+    SetValue(wxVariant(value));
 }
 #endif
 
@@ -485,7 +485,7 @@ bool NumericValidation( const wxPGProperty* property,
             if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
             {
                 wxString msg;
-                wxVariant vmin = WXVARIANT(min);
+                wxVariant vmin = min;
                 wxString smin = property->ValueToString(vmin);
                 if ( !maxOk )
                     msg = wxString::Format(
@@ -493,7 +493,7 @@ bool NumericValidation( const wxPGProperty* property,
                                 smin);
                 else
                 {
-                    wxVariant vmax = WXVARIANT(max);
+                    wxVariant vmax = max;
                     wxString smax = property->ValueToString(vmax);
                     msg = wxString::Format(
                                 _("Value must be between %s and %s."),
@@ -516,7 +516,7 @@ bool NumericValidation( const wxPGProperty* property,
             if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
             {
                 wxString msg;
-                wxVariant vmax = WXVARIANT(max);
+                wxVariant vmax = max;
                 wxString smax = property->ValueToString(vmax);
                 if ( !minOk )
                     msg = wxString::Format(
@@ -524,7 +524,7 @@ bool NumericValidation( const wxPGProperty* property,
                                 smax);
                 else
                 {
-                    wxVariant vmin = WXVARIANT(min);
+                    wxVariant vmin = min;
                     wxString smin = property->ValueToString(vmin);
                     msg = wxString::Format(
                                 _("Value must be between %s and %s."),
@@ -645,7 +645,7 @@ wxUIntProperty::wxUIntProperty( const wxString& label, const wxString& name,
     const wxULongLong& value ) : wxPGProperty(label,name)
 {
     Init();
-    SetValue(WXVARIANT(value));
+    SetValue(wxVariant(value));
 }
 #endif
 
