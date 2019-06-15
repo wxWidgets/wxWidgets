@@ -209,95 +209,66 @@ private:
     wxPGProperty::FlagType      m_parentExMask;
 };
 
-
-#define wxPG_IMPLEMENT_ITERATOR(CLASS, PROPERTY, STATE) \
-    CLASS( STATE* state, int flags = wxPG_ITERATE_DEFAULT, \
-           PROPERTY* property = NULL, int dir = 1 ) \
-        : wxPropertyGridIteratorBase() \
-        { Init( (wxPropertyGridPageState*)state, flags, \
-                (wxPGProperty*)property, dir ); } \
-    CLASS( STATE* state, int flags, int startPos, int dir = 0 ) \
-        : wxPropertyGridIteratorBase() \
-        { Init( (wxPropertyGridPageState*)state, flags, startPos, dir ); } \
-    CLASS() \
-        : wxPropertyGridIteratorBase() \
-    { \
-        m_property = NULL; \
-    } \
-    CLASS( const CLASS& it ) \
-        : wxPropertyGridIteratorBase( ) \
-    { \
-        Assign(it); \
-    } \
-    ~CLASS() \
-    { \
-    } \
-    const CLASS& operator=( const CLASS& it ) \
-    { \
-        if (this != &it) \
-            Assign(it); \
-        return *this; \
-    } \
-    CLASS& operator++() { Next(); return *this; } \
-    CLASS operator++(int) { CLASS it=*this;Next();return it; } \
-    CLASS& operator--() { Prev(); return *this; } \
-    CLASS operator--(int) { CLASS it=*this;Prev();return it; } \
-    PROPERTY* operator *() const { return (PROPERTY*)m_property; } \
-    static PROPERTY* OneStep( STATE* state, \
-                              int flags = wxPG_ITERATE_DEFAULT, \
-                              PROPERTY* property = NULL, \
-                              int dir = 1 ) \
-    { \
-        CLASS it( state, flags, property, dir ); \
-        if ( property ) \
-        { \
-            if ( dir == 1 ) it.Next(); \
-            else it.Prev(); \
-        } \
-        return *it; \
+template <typename PROPERTY, typename STATE>
+class WXDLLIMPEXP_PROPGRID wxPGIterator : public wxPropertyGridIteratorBase
+{
+public:
+    wxPGIterator(STATE* state, int flags = wxPG_ITERATE_DEFAULT,
+                 PROPERTY* property = NULL, int dir = 1)
+        : wxPropertyGridIteratorBase()
+    {
+        Init((wxPropertyGridPageState*)state, flags, (wxPGProperty*)property, dir);
+    }
+    wxPGIterator(STATE* state, int flags, int startPos, int dir = 0)
+        : wxPropertyGridIteratorBase()
+    {
+        Init((wxPropertyGridPageState*)state, flags, startPos, dir);
+    }
+    wxPGIterator()
+        : wxPropertyGridIteratorBase()
+    {
+        m_property = NULL;
+    }
+    wxPGIterator(const wxPGIterator& it)
+        : wxPropertyGridIteratorBase()
+    {
+        Assign(it);
+    }
+    ~wxPGIterator()
+    {
+    }
+    wxPGIterator& operator=(const wxPGIterator& it)
+    {
+        if ( this != &it )
+            Assign(it);
+        return *this;
     }
 
+    wxPGIterator& operator++() { Next(); return *this; }
+    wxPGIterator operator++(int) { wxPGIterator it = *this; Next(); return it; }
+    wxPGIterator& operator--() { Prev(); return *this; }
+    wxPGIterator operator--(int) { wxPGIterator it = *this; Prev(); return it; }
+    PROPERTY* operator *() const { return (PROPERTY*)m_property; }
+    static PROPERTY* OneStep(STATE* state, int flags = wxPG_ITERATE_DEFAULT,
+                             PROPERTY* property = NULL, int dir = 1)
+    {
+        wxPGIterator it(state, flags, property, dir);
+        if ( property )
+        {
+            if ( dir == 1 )
+                it.Next();
+            else
+                it.Prev();
+        }
+        return *it;
+    }
+};
 
 // Preferable way to iterate through contents of wxPropertyGrid,
 // wxPropertyGridManager, and wxPropertyGridPage.
 // See wxPropertyGridInterface::GetIterator() for more information about usage.
-class WXDLLIMPEXP_PROPGRID
-    wxPropertyGridIterator : public wxPropertyGridIteratorBase
-{
-public:
-
-    wxPG_IMPLEMENT_ITERATOR(wxPropertyGridIterator,
-                            wxPGProperty,
-                            wxPropertyGridPageState)
-
-protected:
-};
-
-
-// Const version of wxPropertyGridIterator.
-class WXDLLIMPEXP_PROPGRID
-    wxPropertyGridConstIterator : public wxPropertyGridIteratorBase
-{
-public:
-    wxPG_IMPLEMENT_ITERATOR(wxPropertyGridConstIterator,
-                            const wxPGProperty,
-                            const wxPropertyGridPageState)
-
-    // Additional copy constructor.
-    wxPropertyGridConstIterator( const wxPropertyGridIterator& other )
-    {
-        Assign(other);
-    }
-
-    // Additional assignment operator.
-    const wxPropertyGridConstIterator& operator=( const wxPropertyGridIterator& it )
-    {
-        Assign(it);
-        return *this;
-    }
-
-protected:
-};
+typedef wxPGIterator<wxPGProperty, wxPropertyGridPageState> wxPropertyGridIterator;
+typedef wxPGIterator<const wxPGProperty, const wxPropertyGridPageState> wxPropertyGridConstIterator;
 
 // -----------------------------------------------------------------------
 
