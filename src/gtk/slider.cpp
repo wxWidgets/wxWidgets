@@ -18,7 +18,6 @@
     #include "wx/math.h"
 #endif
 
-#include "wx/gtk/private/wrapgtk.h"
 #include "wx/gtk/private/eventsdisabler.h"
 
 //-----------------------------------------------------------------------------
@@ -297,6 +296,7 @@ bool wxSlider::Create(wxWindow *parent,
     m_scrollEventType = GTK_SCROLL_NONE;
     m_needThumbRelease = false;
     m_blockScrollEvent = false;
+    m_tickFreq = 0;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
@@ -344,23 +344,36 @@ bool wxSlider::Create(wxWindow *parent,
     gtk_scale_set_draw_value(GTK_SCALE (m_scale), showValueLabel );
     if ( showValueLabel )
     {
-        // position the label appropriately: notice that wxSL_DIRECTION flags
-        // specify the position of the ticks, not label, under MSW and so the
-        // label is on the opposite side
+        // Position the label appropriately: notice that wxSL_DIRECTION flags
+        // specify the position of the ticks, not label, and so the
+        // label is on the opposite side. Also note that m_posTicks is not
+        // used in GTK+2 < 2.16 as ticks are not implemented.
         GtkPositionType posLabel;
         if ( style & wxSL_VERTICAL )
         {
             if ( style & wxSL_LEFT )
+            {
                 posLabel = GTK_POS_RIGHT;
+                m_posTicks = GTK_POS_LEFT;
+            }
             else // if ( style & wxSL_RIGHT ) -- this is also the default
+            {
                 posLabel = GTK_POS_LEFT;
+                m_posTicks = GTK_POS_RIGHT;
+            }
         }
         else // horizontal slider
         {
             if ( style & wxSL_TOP )
+            {
                 posLabel = GTK_POS_BOTTOM;
+                m_posTicks = GTK_POS_TOP;
+            }
             else // if ( style & wxSL_BOTTOM) -- this is again the default
+            {
                 posLabel = GTK_POS_TOP;
+                m_posTicks = GTK_POS_BOTTOM;
+            }
         }
 
         gtk_scale_set_value_pos( GTK_SCALE(m_scale), posLabel );
@@ -500,6 +513,32 @@ int wxSlider::GetLineSize() const
     GtkAdjustment* adj = gtk_range_get_adjustment(GTK_RANGE(m_scale));
     return int(gtk_adjustment_get_step_increment(adj));
 }
+
+#if GTK_CHECK_VERSION(2,16,0)
+void wxSlider::ClearTicks()
+{
+    if (wx_is_at_least_gtk2(16))
+        gtk_scale_clear_marks(GTK_SCALE (m_scale));
+}
+
+void wxSlider::SetTick(int tickPos)
+{
+    if (wx_is_at_least_gtk2(16))
+        gtk_scale_add_mark(GTK_SCALE (m_scale), (double)tickPos, m_posTicks, NULL);
+}
+
+void wxSlider::DoSetTickFreq(int freq)
+{
+    if (wx_is_at_least_gtk2(16))
+    {
+        m_tickFreq = freq;
+        gtk_scale_clear_marks(GTK_SCALE (m_scale));
+
+        for (int i = GetMin() + freq; i < GetMax(); i += freq)
+            SetTick(i);
+    }
+}
+#endif
 
 GdkWindow *wxSlider::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
