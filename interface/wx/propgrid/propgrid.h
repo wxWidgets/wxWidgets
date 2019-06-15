@@ -1022,9 +1022,8 @@ public:
         @return returns @true if selection finished successfully. Usually only
         fails if current value in editor is not valid.
 
-        @remarks In wxPropertyGrid 1.4, this member function used to generate
-                 @c wxEVT_PG_SELECTED. In wxWidgets 2.9 and later, it no longer
-                 does that.
+        @remarks In wxWidgets 2.9 and later, this function no longer
+        sends @c wxEVT_PG_SELECTED.
 
         @remarks This clears any previous selection.
 

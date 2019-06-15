@@ -957,9 +957,6 @@ public:
     // Returns true if selection finished successfully. Usually only fails if
     // current value in editor is not valid.
     // This function clears any previous selection.
-    // In wxPropertyGrid 1.4, this member function used to generate
-    // wxEVT_PG_SELECTED. In wxWidgets 2.9 and later, it no longer
-    // does that.
     bool SelectProperty( wxPGPropArg id, bool focus = false );
 
     // Set entire new selection from given list of properties.

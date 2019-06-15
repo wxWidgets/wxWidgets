@@ -187,9 +187,8 @@ public:
                fail if validation was enabled and active editor had invalid
                value.
 
-        @remarks In wxPropertyGrid 1.4, this member function used to send
-                 wxPG_EVT_SELECTED. In wxWidgets 2.9 and later, it no longer
-                 does that.
+        @remarks In wxWidgets 2.9 and later, this function no longer
+        sends @c wxPG_EVT_SELECTED.
 
         @see wxPropertyGrid::SelectProperty()
     */
