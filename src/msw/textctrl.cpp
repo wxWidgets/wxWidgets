@@ -80,6 +80,23 @@
     #define CFE_AUTOBACKCOLOR 0x04000000
 #endif
 
+// missing defines for MinGW build
+#ifndef CFM_UNDERLINETYPE
+#define CFM_UNDERLINETYPE               0x00800000
+#endif
+
+#ifndef CFU_UNDERLINE
+#define CFU_UNDERLINE                   1
+#endif
+
+#ifndef CFU_UNDERLINEDOUBLE
+#define CFU_UNDERLINEDOUBLE             3
+#endif
+
+#ifndef CFU_UNDERLINEWAVE
+#define CFU_UNDERLINEWAVE               8
+#endif
+
 #if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
 
 // dummy value used for m_dropTarget, different from any valid pointer value
@@ -2862,6 +2879,65 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         }
     }
 
+    if ( style.HasFontUnderline() )
+    {
+        cf.dwMask |= CFM_UNDERLINETYPE;
+        wxTextAttrUnderlineType underlineType = style.GetUnderlineType();
+        switch ( underlineType )
+        {
+            case wxTEXT_ATTR_UNDERLINE_SOLID:
+                cf.bUnderlineType = CFU_UNDERLINE;
+                break;
+            case wxTEXT_ATTR_UNDERLINE_DOUBLE:
+                cf.bUnderlineType = CFU_UNDERLINEDOUBLE;
+                break;
+            case wxTEXT_ATTR_UNDERLINE_WAVE:
+                cf.bUnderlineType = CFU_UNDERLINEWAVE;
+                break;
+        }
+
+#if _RICHEDIT_VER >= 0x0800
+        // The colours are coming from https://docs.microsoft.com/en-us/windows/desktop/api/tom/nf-tom-itextdocument2-geteffectcolor.
+        // Not all values from wxTheColourDatabase are supported as can be seen from the code
+        // Those are commented out currently
+        BYTE colour = 0;
+        wxColour col = style.GetUnderlineColour();
+        if ( col == wxTheColourDatabase->Find( "BLACK" ) )
+            colour = 0x01;
+        else if ( col == wxTheColourDatabase->Find( "BLUE" ) )
+            colour = 0x02;
+        else if ( col == wxTheColourDatabase->Find( "CYAN" ) )
+            colour = 0x03;
+        else if ( col == wxTheColourDatabase->Find( "GREEN" ) )
+            colour = 0x04;
+        else if ( col == wxTheColourDatabase->Find( "MAGENTA" ) )
+            colour = 0x05;
+        else if ( col == wxTheColourDatabase->Find( "RED" ) )
+            colour = 0x06;
+        else if ( col == wxTheColourDatabase->Find( "YELLOW" ) )
+            colour = 0x07;
+        else if ( col == wxTheColourDatabase->Find( "WHITE" ) )
+            colour = 0x08;
+        else if ( col == wxTheColourDatabase->Find( "WXNAVY" ) )
+            colour = 0x09;
+        else if ( col == wxTheColourDatabase->Find( "WXTEAL" ) )
+            colour = 0x0A;
+        else if ( col == wxTheColourDatabase->Find( "WXLIGHT GREEN" ) )
+            colour = 0x0B;
+        else if ( col == wxTheColourDatabase->Find( "WXPURPLE" ) )
+            colour = 0x0C;
+        else if ( col == wxTheColourDatabase->Find( "WXMAROON" ) )
+            colour = 0x0D;
+        else if ( col == wxTheColourDatabase->Find( "OLIVE" ) )
+            colour = 0x0E;
+        else if ( col == wxTheColourDatabase->Find( "wxDARK GREY" ) )
+            colour = 0x0F;
+        else if ( col == wxTheColourDatabase->Find( "LIGHT GREY" ) )
+            colour = 0x10;
+        cf.bUnderlineColor = colour;
+#endif
+    }
+
     if ( style.HasTextColour() )
     {
         cf.dwMask |= CFM_COLOR;
@@ -3025,7 +3101,7 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
     // even try to do anything if it's the only thing we want to change
     if ( m_verRichEdit == 1 && !style.HasFont() && !style.HasTextColour() &&
         !style.HasLeftIndent() && !style.HasRightIndent() && !style.HasAlignment() &&
-        !style.HasTabs() )
+        !style.HasTabs() && !style.GetFontUnderlined() )
     {
         // nothing to do: return true if there was really nothing to do and
         // false if we failed to set bg colour

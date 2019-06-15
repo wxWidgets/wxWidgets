@@ -270,6 +270,14 @@ enum wxTextAttrLineSpacing
     wxTEXT_ATTR_LINE_SPACING_TWICE          = 20
 };
 
+enum wxTextAttrUnderlineType
+ {
+     wxTEXT_ATTR_UNDERLINE_NONE,
+     wxTEXT_ATTR_UNDERLINE_SOLID,
+     wxTEXT_ATTR_UNDERLINE_DOUBLE,
+     wxTEXT_ATTR_UNDERLINE_WAVE
+};
+
 // ----------------------------------------------------------------------------
 // wxTextAttr: a structure containing the visual attributes of a text
 // ----------------------------------------------------------------------------
@@ -321,6 +329,14 @@ public:
     void SetFontWeight(wxFontWeight fontWeight) { m_fontWeight = fontWeight; m_flags |= wxTEXT_ATTR_FONT_WEIGHT; }
     void SetFontFaceName(const wxString& faceName) { m_fontFaceName = faceName; m_flags |= wxTEXT_ATTR_FONT_FACE; }
     void SetFontUnderlined(bool underlined) { m_fontUnderlined = underlined; m_flags |= wxTEXT_ATTR_FONT_UNDERLINE; }
+    void SetFontUnderline(/*bool underlined, */wxTextAttrUnderlineType type = wxTEXT_ATTR_UNDERLINE_NONE, const wxColour& colour = wxNullColour)
+    {
+        if( type != wxTEXT_ATTR_UNDERLINE_NONE )
+            m_flags |= wxTEXT_ATTR_FONT_UNDERLINE;
+//        m_fontUnderlined = underlined;
+        m_fontUnderlineType = type;
+        m_colUnderline = colour;
+    }
     void SetFontStrikethrough(bool strikethrough) { m_fontStrikethrough = strikethrough; m_flags |= wxTEXT_ATTR_FONT_STRIKETHROUGH; }
     void SetFontEncoding(wxFontEncoding encoding) { m_fontEncoding = encoding; m_flags |= wxTEXT_ATTR_FONT_ENCODING; }
     void SetFontFamily(wxFontFamily family) { m_fontFamily = family; m_flags |= wxTEXT_ATTR_FONT_FAMILY; }
@@ -360,6 +376,8 @@ public:
     wxFontStyle GetFontStyle() const { return m_fontStyle; }
     wxFontWeight GetFontWeight() const { return m_fontWeight; }
     bool GetFontUnderlined() const { return m_fontUnderlined; }
+    wxTextAttrUnderlineType GetUnderlineType() const { return m_fontUnderlineType; }
+    const wxColour& GetUnderlineColour() const { return m_colUnderline; }
     bool GetFontStrikethrough() const { return m_fontStrikethrough; }
     const wxString& GetFontFaceName() const { return m_fontFaceName; }
     wxFontEncoding GetFontEncoding() const { return m_fontEncoding; }
@@ -396,7 +414,8 @@ public:
     bool HasFontPointSize() const { return HasFlag(wxTEXT_ATTR_FONT_POINT_SIZE); }
     bool HasFontPixelSize() const { return HasFlag(wxTEXT_ATTR_FONT_PIXEL_SIZE); }
     bool HasFontItalic() const { return HasFlag(wxTEXT_ATTR_FONT_ITALIC); }
-    bool HasFontUnderlined() const { return HasFlag(wxTEXT_ATTR_FONT_UNDERLINE); }
+    bool HasFontUnderlined() const { return m_fontUnderlined; }
+    bool HasFontUnderline() const { return HasFlag(wxTEXT_ATTR_FONT_UNDERLINE); }
     bool HasFontStrikethrough() const { return HasFlag(wxTEXT_ATTR_FONT_STRIKETHROUGH); }
     bool HasFontFaceName() const { return HasFlag(wxTEXT_ATTR_FONT_FACE); }
     bool HasFontEncoding() const { return HasFlag(wxTEXT_ATTR_FONT_ENCODING); }
@@ -509,6 +528,8 @@ private:
     wxFontWeight        m_fontWeight;
     wxFontFamily        m_fontFamily;
     bool                m_fontUnderlined;
+    wxTextAttrUnderlineType m_fontUnderlineType;
+    wxColour            m_colUnderline;
     bool                m_fontStrikethrough;
     wxString            m_fontFaceName;
 

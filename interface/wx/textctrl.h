@@ -220,6 +220,19 @@ enum wxTextAttrLineSpacing
 
 
 /**
+    The values that can be used with SetFontUnderline
+
+    @since 3.1.3
+*/
+enum wxTextAttrUnderlineType
+{
+     wxTEXT_ATTR_UNDERLINE_NONE,
+     wxTEXT_ATTR_UNDERLINE_SOLID,
+     wxTEXT_ATTR_UNDERLINE_DOUBLE,
+     wxTEXT_ATTR_UNDERLINE_WAVE
+};
+
+/**
     Describes the possible return values of wxTextCtrl::HitTest().
 
     The element names correspond to the relationship between the point asked
@@ -423,6 +436,20 @@ public:
     bool GetFontUnderlined() const;
 
     /**
+        Returns the underline type, which is one of the @wxTextAttrUnderlineType values
+
+        @since 3.1.3
+    */
+    wxTextAttrUnderlineType GetUnderlinedType() const;
+
+    /**
+        Returns the underline color used
+
+        @since 3.1.3
+    */
+    const wxColour& GetUnderlineColour() const;
+
+    /**
         Returns the font weight.
     */
     wxFontWeight GetFontWeight() const;
@@ -603,6 +630,14 @@ public:
         underlining.
     */
     bool HasFontUnderlined() const;
+
+    /**
+        Returns @true if the attribute object specifies different underline types
+        and color
+
+        @since 3.1.3
+    */
+    bool HasFontUnderline() const;
 
     /**
         Returns @true if the attribute object specifies font weight (bold, light or
@@ -806,6 +841,13 @@ public:
         Sets the font underlining.
     */
     void SetFontUnderlined(bool underlined);
+
+    /**
+        Set the different underline type and the underline color
+
+        @since 3.1.3
+    */
+    void SetFontUnderline(wxTextAttrUnderlineType type = wxTEXT_ATTR_UNDERLINE_SOLID, wxColour colour = *wxBLACK);
 
     /**
         Sets the font weight.
