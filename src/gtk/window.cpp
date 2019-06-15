@@ -2271,7 +2271,6 @@ size_allocate(GtkWidget* WXUNUSED_IN_GTK2(widget), GtkAllocation* alloc, wxWindo
         // so always get size from m_widget->allocation
         win->m_width  = a.width;
         win->m_height = a.height;
-        if (!win->m_nativeSizeEvent)
         {
             wxSizeEvent event(win->GetSize(), win->GetId());
             event.SetEventObject(win);
