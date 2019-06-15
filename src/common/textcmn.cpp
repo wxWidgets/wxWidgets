@@ -163,6 +163,8 @@ void wxTextAttr::Init()
     m_fontStyle = wxFONTSTYLE_NORMAL;
     m_fontWeight = wxFONTWEIGHT_NORMAL;
     m_fontUnderlined = false;
+    m_fontUnderlinedType = wxTEXT_ATTR_UNDERLINE_NONE;
+    m_fontUnderlineColor = *wxWHITE;
     m_fontStrikethrough = false;
     m_fontEncoding = wxFONTENCODING_DEFAULT;
     m_fontFamily = wxFONTFAMILY_DEFAULT;
@@ -193,6 +195,8 @@ void wxTextAttr::Copy(const wxTextAttr& attr)
     m_fontStyle = attr.m_fontStyle;
     m_fontWeight = attr.m_fontWeight;
     m_fontUnderlined = attr.m_fontUnderlined;
+    m_fontUnderlinedType = attr.m_fontUnderlinedType;
+    m_fontUnderlineColor = attr.m_fontUnderlineColor;
     m_fontStrikethrough = attr.m_fontStrikethrough;
     m_fontFaceName = attr.m_fontFaceName;
     m_fontEncoding = attr.m_fontEncoding;
@@ -258,6 +262,7 @@ bool wxTextAttr::operator== (const wxTextAttr& attr) const
             (!HasFontItalic() || (GetFontStyle() == attr.GetFontStyle())) &&
             (!HasFontWeight() || (GetFontWeight() == attr.GetFontWeight())) &&
             (!HasFontUnderlined() || (GetFontUnderlined() == attr.GetFontUnderlined())) &&
+            (!HasFontUnderlinedWithEffect() || (GetUnderlinedType() == attr.GetUnderlinedType() && GetUnderlineColour() == attr.GetUnderlineColour())) &&
             (!HasFontStrikethrough() || (GetFontStrikethrough() == attr.GetFontStrikethrough())) &&
             (!HasFontFaceName() || (GetFontFaceName() == attr.GetFontFaceName())) &&
             (!HasFontEncoding() || (GetFontEncoding() == attr.GetFontEncoding())) &&
@@ -791,6 +796,7 @@ wxTextAttr wxTextAttr::Combine(const wxTextAttr& attr,
     }
 
     wxTextAttr newAttr(colFg, colBg, font);
+    newAttr.SetFontUnderlinedWithEffects( attr.GetFontUnderlined(), attr.GetUnderlinedType(), attr.GetUnderlineColour() );
 
     if (attr.HasAlignment())
         newAttr.SetAlignment(attr.GetAlignment());

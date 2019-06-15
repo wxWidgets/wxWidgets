@@ -1229,7 +1229,16 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_textrich->SetDefaultStyle(wxTextAttr(*wxBLUE, *wxWHITE));
     m_textrich->AppendText("And this should be in blue and the text you "
                            "type should be in blue as well");
-
+    m_textrich->AppendText(wxT("And there is a "));
+    wxTextAttr attr = m_textrich->GetDefaultStyle();
+    attr.SetFontUnderlinedWithEffects( TRUE, wxTEXT_ATTR_UNDERLINE_WAVE, *wxRED );
+    m_textrich->SetDefaultStyle( attr );
+    m_textrich->AppendText(wxT("mispeled "));
+    attr.SetFontUnderlinedWithEffects( false, wxTEXT_ATTR_UNDERLINE_NONE );
+    m_textrich->SetDefaultStyle( attr );
+    m_textrich->AppendText(wxT("word"));
+    m_textrich->SetDefaultStyle(wxTextAttr(*wxBLUE, *wxWHITE));
+	
 
     // lay out the controls
     wxBoxSizer *column1 = new wxBoxSizer(wxVERTICAL);

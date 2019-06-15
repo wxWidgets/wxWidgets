@@ -2823,7 +2823,7 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         //     but using it doesn't seem to hurt neither so leaving it for now
 
         cf.dwMask |= CFM_FACE | CFM_SIZE | CFM_CHARSET |
-                     CFM_ITALIC | CFM_BOLD | CFM_UNDERLINE | CFM_STRIKEOUT;
+                     CFM_ITALIC | CFM_BOLD | CFM_UNDERLINE | CFM_STRIKEOUT | CFM_UNDERLINETYPE;
 
         // fill in data from LOGFONT but recalculate lfHeight because we need
         // the real height in twips and not the negative number which
@@ -2860,6 +2860,18 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         {
             cf.dwEffects |= CFE_STRIKEOUT;
         }
+    }
+
+    if( !(style.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_NONE || style.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_SOLID ) )
+    {
+        if( style.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_NONE )
+            cf.bUnderlineType = CFU_UNDERLINENONE;
+        if( style.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_SOLID )
+            cf.bUnderlineType = CFU_UNDERLINE;
+        if( style.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_DOUBLE )
+            cf.bUnderlineType = CFU_UNDERLINEDOUBLE;
+        if( style.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_WAVE )
+            cf.bUnderlineType = CFU_UNDERLINEWAVE;
     }
 
     if ( style.HasTextColour() )
