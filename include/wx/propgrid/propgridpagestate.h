@@ -217,12 +217,12 @@ public:
                  PROPERTY* property = NULL, int dir = 1)
         : wxPropertyGridIteratorBase()
     {
-        Init((wxPropertyGridPageState*)state, flags, (wxPGProperty*)property, dir);
+        Init(const_cast<wxPropertyGridPageState*>(state), flags, const_cast<wxPGProperty*>(property), dir);
     }
     wxPGIterator(STATE* state, int flags, int startPos, int dir = 0)
         : wxPropertyGridIteratorBase()
     {
-        Init((wxPropertyGridPageState*)state, flags, startPos, dir);
+        Init(const_cast<wxPropertyGridPageState*>(state), flags, startPos, dir);
     }
     wxPGIterator()
         : wxPropertyGridIteratorBase()
@@ -248,7 +248,7 @@ public:
     wxPGIterator operator++(int) { wxPGIterator it = *this; Next(); return it; }
     wxPGIterator& operator--() { Prev(); return *this; }
     wxPGIterator operator--(int) { wxPGIterator it = *this; Prev(); return it; }
-    PROPERTY* operator *() const { return (PROPERTY*)m_property; }
+    PROPERTY* operator *() const { return const_cast<PROPERTY*>(m_property); }
     static PROPERTY* OneStep(STATE* state, int flags = wxPG_ITERATE_DEFAULT,
                              PROPERTY* property = NULL, int dir = 1)
     {
@@ -412,7 +412,7 @@ public:
 
     const wxPGProperty* GetLastItem( int flags = wxPG_ITERATE_DEFAULT ) const
     {
-        return ((wxPropertyGridPageState*)this)->GetLastItem(flags);
+        return const_cast<const wxPGProperty*>(GetLastItem(flags));
     }
 
     // Returns currently selected property.

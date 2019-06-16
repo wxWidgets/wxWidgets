@@ -270,7 +270,7 @@ public:
     const wxPropertyGrid* GetGrid() const
     {
         wxASSERT(m_pPropGrid);
-        return (const wxPropertyGrid*)m_pPropGrid;
+        return const_cast<const wxPropertyGrid*>(m_pPropGrid);
     }
 
     // Returns iterator class instance.

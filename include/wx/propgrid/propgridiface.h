@@ -75,7 +75,7 @@ public:
     wxPGProperty* GetPtr( wxPropertyGridInterface* iface ) const;
     wxPGProperty* GetPtr( const wxPropertyGridInterface* iface ) const
     {
-        return GetPtr((wxPropertyGridInterface*)iface);
+        return GetPtr(const_cast<wxPropertyGridInterface*>(iface));
     }
     wxPGProperty* GetPtr0() const { return m_ptr.property; }
     bool HasName() const { return (m_flags != IsProperty); }
@@ -305,7 +305,7 @@ public:
 
     const wxPGProperty* GetFirst( int flags = wxPG_ITERATE_ALL ) const
     {
-        return ((wxPropertyGridInterface*)this)->GetFirst(flags);
+        return const_cast<const wxPGProperty*>(GetFirst(flags));
     }
 
     // Returns pointer to a property with given name (case-sensitive).

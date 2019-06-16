@@ -771,7 +771,7 @@ bool PROPNAME::OnEvent( wxPropertyGrid* propgrid, \
                         wxWindow* primary, wxEvent& event ) \
 { \
     if ( event.GetEventType() == wxEVT_BUTTON ) \
-        return OnButtonClick(propgrid,primary,(const wxChar*) CUSTBUTTXT); \
+        return OnButtonClick(propgrid,primary, const_cast<const wxChar*>(CUSTBUTTXT)); \
     return false; \
 }
 

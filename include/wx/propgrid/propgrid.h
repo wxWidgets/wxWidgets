@@ -1162,7 +1162,7 @@ public:
 
     const wxPGCommonValue* GetCommonValue( unsigned int i ) const
     {
-        return (wxPGCommonValue*) m_commonValues[i];
+        return const_cast<const wxPGCommonValue*>(m_commonValues[i]);
     }
 
     // Returns number of common values.

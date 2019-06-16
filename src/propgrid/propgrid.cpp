@@ -2128,7 +2128,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
         if ( !p->HasFlag(wxPG_PROP_HIDDEN) )
         {
-            visPropArray.push_back((wxPGProperty*)p);
+            visPropArray.push_back(const_cast<wxPGProperty*>(p));
 
             if ( y > endScanBottomY )
                 break;
