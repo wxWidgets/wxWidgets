@@ -124,6 +124,32 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
         }
     }
 
+    if( attr.HasFontUnderlinedWithEffect() )
+    {
+        PangoUnderline pg_style;
+        if( !(attr.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_NONE || attr.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_SOLID ) )
+        {
+            if( attr.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_NONE )
+                pg_style = PANGO_UNDERLINE_NONE;
+            if( attr.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_SOLID )
+                pg_style = PANGO_UNDERLINE_SINGLE;
+            if( attr.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_DOUBLE )
+                pg_style = PANGO_UNDERLINE_DOUBLE;
+            if( attr.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_WAVE )
+                pg_style = PANGO_UNDERLINE_ERROR;
+        }
+
+        g_snprintf(buf, sizeof(buf), "WXFONTUNDERLINEWITHEFFECT");
+        tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
+                                         buf );
+        if (!tag)
+            tag = gtk_text_buffer_create_tag( text_buffer, buf,
+                                              "underline-set", TRUE,
+                                              "underline", pg_style,
+                                              NULL );
+        gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
+    }
+
     if (attr.HasTextColour())
     {
         wxGtkTextRemoveTagsWithPrefix(text_buffer, "WXFORECOLOR", start, end);
