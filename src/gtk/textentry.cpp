@@ -856,17 +856,7 @@ void wxTextEntry::ForceUpper()
 
 int wxTextEntry::GTKIMFilterKeypress(GdkEventKey* event) const
 {
-    int result = false;
-#if GTK_CHECK_VERSION(2, 22, 0)
-    if (wx_is_at_least_gtk2(22))
-    {
-        result = gtk_entry_im_context_filter_keypress(GetEntry(), event);
-    }
-#else // GTK+ < 2.22
-    wxUnusedVar(event);
-#endif // GTK+ 2.22+
-
-    return result;
+    return false;
 }
 
 void wxTextEntry::GTKConnectInsertTextSignal(GtkEntry* entry)

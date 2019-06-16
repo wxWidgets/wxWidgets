@@ -884,20 +884,7 @@ GtkEntry *wxTextCtrl::GetEntry() const
 
 int wxTextCtrl::GTKIMFilterKeypress(GdkEventKey* event) const
 {
-    if (IsSingleLine())
-        return wxTextEntry::GTKIMFilterKeypress(event);
-
-    int result = false;
-#if GTK_CHECK_VERSION(2, 22, 0)
-    if (wx_is_at_least_gtk2(22))
-    {
-        result = gtk_text_view_im_context_filter_keypress(GTK_TEXT_VIEW(m_text), event);
-    }
-#else // GTK+ < 2.22
-    wxUnusedVar(event);
-#endif // GTK+ 2.22+
-
-    return result;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
