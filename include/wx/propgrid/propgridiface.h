@@ -305,7 +305,7 @@ public:
 
     const wxPGProperty* GetFirst( int flags = wxPG_ITERATE_ALL ) const
     {
-        return const_cast<const wxPGProperty*>(GetFirst(flags));
+        return GetFirst(flags);
     }
 
     // Returns pointer to a property with given name (case-sensitive).

@@ -412,7 +412,7 @@ public:
 
     const wxPGProperty* GetLastItem( int flags = wxPG_ITERATE_DEFAULT ) const
     {
-        return const_cast<const wxPGProperty*>(GetLastItem(flags));
+        return GetLastItem(flags);
     }
 
     // Returns currently selected property.

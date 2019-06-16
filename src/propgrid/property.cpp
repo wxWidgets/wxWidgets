@@ -2729,7 +2729,7 @@ bool wxPGProperty::AreAllChildrenSpecified( wxVariant* pendingList ) const
 
             for ( ; node != pList->end(); ++node )
             {
-                const wxVariant& item = *const_cast<const wxVariant*>(*node);
+                const wxVariant& item = **node;
                 if ( item.GetName() == childName )
                 {
                     listValue = &item;
