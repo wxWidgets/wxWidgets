@@ -181,7 +181,7 @@ class TestRunner
 {
 public:
 
-    TestRunner( const wxString& name, wxPropertyGridManager* man, wxTextCtrl* ed, wxArrayString* errorMessages )
+    TestRunner( const wxString& name, wxPropertyGridManager* man, wxTextCtrl* ed, wxVector<wxString>* errorMessages )
     {
         m_name = name;
         m_man = man;
@@ -221,7 +221,7 @@ public:
 protected:
     wxPropertyGridManager* m_man;
     wxTextCtrl* m_ed;
-    wxArrayString* m_errorMessages;
+    wxVector<wxString>* m_errorMessages;
     wxString m_name;
 #ifdef __WXDEBUG__
     int m_preWarnings;
@@ -287,9 +287,9 @@ int gpiro_cmpfunc(const void* a, const void* b)
     return (int) (((size_t)p1->GetClientData()) - ((size_t)p2->GetClientData()));
 }
 
-wxArrayPGProperty GetPropertiesInRandomOrder( wxPropertyGridInterface* props, int iterationFlags = wxPG_ITERATE_ALL )
+wxVector<wxPGProperty*> GetPropertiesInRandomOrder( wxPropertyGridInterface* props, int iterationFlags = wxPG_ITERATE_ALL )
 {
-    wxArrayPGProperty arr;
+    wxVector<wxPGProperty*> arr;
 
     wxPropertyGridIterator it;
 
@@ -333,7 +333,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
     int failures = 0;
     bool _failed_ = false;
-    wxArrayString errorMessages;
+    wxVector<wxString> errorMessages;
     wxDialog* dlg = NULL;
 
     dlg = new wxDialog(this,wxID_ANY,"wxPropertyGrid Regression Tests",
@@ -458,18 +458,18 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
         RT_START_TEST(DeleteProperty)
 
         wxPGVIterator it;
-        wxArrayPGProperty array;
+        wxVector<wxPGProperty*> array;
 
         for ( it = pgman->GetVIterator(wxPG_ITERATE_ALL&~(wxPG_IT_CHILDREN(wxPG_PROP_AGGREGATE)));
               !it.AtEnd();
               it.Next() )
             array.push_back(it.GetProperty());
 
-        wxArrayPGProperty::reverse_iterator it2;
+        wxVector<wxPGProperty*>::reverse_iterator it2;
 
         for ( it2 = array.rbegin(); it2 != array.rend(); ++it2 )
         {
-            wxPGProperty* p = (wxPGProperty*)*it2;
+            wxPGProperty* p = *it2;
             RT_MSG(wxString::Format("Deleting '%s' ('%s')",p->GetLabel(),p->GetName()));
             pgman->DeleteProperty(p);
         }
@@ -1244,7 +1244,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
         for ( i=0; i<3; i++ )
         {
-            wxArrayPtrVoid arr;
+            wxVector<wxPGProperty*> arr;
 
             wxPropertyGridPage* page = pgman->GetPage(i);
 
@@ -1254,18 +1254,16 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
                   !it.AtEnd();
                   ++it )
             {
-                arr.Add((void*)*it);
+                arr.push_back(*it);
             }
 
             if ( !arr.empty() )
             {
-                size_t n;
+                pgman->Collapse( arr[0] );
 
-                pgman->Collapse( (wxPGProperty*)arr.Item(0) );
-
-                for ( n=arr.GetCount()-1; n>0; n-- )
+                for ( size_t n=arr.size()-1; n>0; n-- )
                 {
-                    pgman->Collapse( (wxPGProperty*)arr.Item(n) );
+                    pgman->Collapse( arr[n] );
                 }
             }
 
@@ -1425,9 +1423,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
         wxPropertyGridPage* page = pgman->GetPage(0);
 
-        wxArrayPGProperty arr1;
-
-        arr1 = GetPropertiesInRandomOrder(page);
+        wxVector<wxPGProperty*> arr1 = GetPropertiesInRandomOrder(page);
 
         if ( !_failed_ )
         {
@@ -1445,7 +1441,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
         if ( !_failed_ )
         {
-            wxArrayPGProperty arr2 = GetPropertiesInRandomOrder(page);
+            wxVector<wxPGProperty*> arr2 = GetPropertiesInRandomOrder(page);
 
             for ( i=0; i<arr2.size(); i++ )
             {
@@ -1479,7 +1475,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
         if ( !_failed_ )
         {
-            wxArrayPGProperty arr2 = GetPropertiesInRandomOrder(page);
+            wxVector<wxPGProperty*> arr2 = GetPropertiesInRandomOrder(page);
 
             for ( i=0; i<arr2.size(); i++ )
             {
@@ -1514,7 +1510,7 @@ bool FormMain::RunTests( bool fullTest, bool interactive )
 
         if ( !_failed_ )
         {
-            wxArrayPGProperty arr2 = GetPropertiesInRandomOrder(page);
+            wxVector<wxPGProperty*> arr2 = GetPropertiesInRandomOrder(page);
 
             for ( i=0; i<arr2.size(); i++ )
             {
