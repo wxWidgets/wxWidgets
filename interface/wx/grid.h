@@ -2514,6 +2514,14 @@ public:
 
         The labels can be shown again by calling SetColLabelSize() with a
         height greater than 0.
+
+        Note that when the column labels are hidden, the grid won't have any
+        visible border on the top side, which may result in a less than ideal
+        appearance. Because of this, you may want to create the grid window
+        with a border style, such as @c wxBORDER_SIMPLE, when you don't plan to
+        show the column labels for it.
+
+        @see HideRowLabels()
     */
     void HideColLabels();
 
@@ -2522,6 +2530,9 @@ public:
 
         The labels can be shown again by calling SetRowLabelSize() with a width
         greater than 0.
+
+        See HideColLabels() for a note explaining why you may want to use a
+        border with a grid without the row labels.
     */
     void HideRowLabels();
 
