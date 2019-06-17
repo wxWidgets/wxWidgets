@@ -2511,7 +2511,9 @@ public:
 
     /**
         Hides the column labels by calling SetColLabelSize() with a size of 0.
-        Show labels again by calling that method with a width greater than 0.
+
+        The labels can be shown again by calling SetColLabelSize() with a
+        height greater than 0.
     */
     void HideColLabels();
 
