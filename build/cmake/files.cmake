@@ -3196,6 +3196,7 @@ set(RICHTEXT_HDR
 )
 
 set(STC_CMN_SRC
+    src/stc/completionitem.cpp
     src/stc/stc.cpp
     src/stc/PlatWX.cpp
     src/stc/ScintillaWX.cpp

@@ -39,6 +39,9 @@
 #include "wx/stopwatch.h"
 #include "wx/versioninfo.h"
 
+#include <vector>
+#include "completionitem.h"
+
 #include "wx/textentry.h"
 #if wxUSE_TEXTCTRL
     #include "wx/textctrl.h"
@@ -5197,7 +5200,8 @@ public:
                              const wxColour& currentBgColour = wxNullColour,
                              const wxColour& currentTextColour = wxNullColour);
 
-
+    //Show autocompletion with a more intelligent way
+    void AutoCompShow(int lenEntered, const std::vector<wxCompletionItem>& list);
 
     // The following methods are nearly equivalent to their similarly named
     // cousins above.  The difference is that these methods bypass wxString
@@ -5481,6 +5485,8 @@ protected:
     wxScrollBar*        m_hScrollBar;
 
     bool                m_lastKeyDownConsumed;
+
+    std::vector<wxCompletionItem> m_autocompList;
 
     friend class ScintillaWX;
     friend class Platform;

@@ -589,7 +589,19 @@ void wxStyledTextCtrl::AutoCompUseListCtrl(bool useListCtrl,
                                     currentTextColour);
 }
 
-
+void wxStyledTextCtrl::AutoCompShow(int lenEntered, const std::vector<wxCompletionItem>& list)
+{
+    m_autocompList.clear();
+    m_autocompList = list;
+    //Create correct format for Scintilla
+    wxString itemListString;
+    for(int i=0; i<m_autocompList.size(); i++)
+    {
+        wxCompletionItem cItem = m_autocompList[i];
+        itemListString.Append(wxString::Format("%%s?%%d%%c", cItem.GetName(), cItem.GetIcon(), AutoCompGetSeparator()));
+    }
+    SendMsg(SCI_AUTOCSHOW, lenEntered, (sptr_t)(const char*)wx2stc(itemListString));
+}
 
 
 void wxStyledTextCtrl::AddTextRaw(const char* text, int length)
