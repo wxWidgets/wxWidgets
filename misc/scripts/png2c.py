@@ -50,7 +50,7 @@ for path in sys.argv[1:]:
         # Each PNG file starts with a 8 byte signature that should be followed
         # by IHDR chunk which is always 13 bytes in length so the first 16
         # bytes are fixed (or at least we expect them to be).
-        if bytes[0:16].tostring() != '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR':
+        if bytes[0:16].tostring() != b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR':
                 print('"%s" doesn\'t seem to be a valid PNG file.' % filename)
                 continue
 
