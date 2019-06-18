@@ -112,6 +112,9 @@ public:
     // implementation from now on
     virtual void GTKHandleRealized() wxOVERRIDE;
 
+#ifdef __WXGTK3__
+    wxSize m_size;
+#endif
 #if WXWIN_COMPATIBILITY_2_8
     wxGLContext      *m_sharedContext;
     wxGLCanvas       *m_sharedContextOf;
