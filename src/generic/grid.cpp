@@ -96,12 +96,6 @@ struct DefaultHeaderRenderers
 wxGridCellCoords wxGridNoCellCoords( -1, -1 );
 wxRect wxGridNoCellRect( -1, -1, -1, -1 );
 
-// ----------------------------------------------------------------------------
-// static members definitions
-// ----------------------------------------------------------------------------
-
-wxVector<wxGridHeaderColumn> wxGridHeaderCtrl::ms_columns;
-
 namespace
 {
 
@@ -4818,7 +4812,7 @@ void wxGrid::InitializeFrozenWindows()
         m_frozenColGridWin = new wxGridWindow(this, wxGridWindow::wxGridWindowFrozenCol);
         
         if ( m_useNativeHeader )
-            m_colFrozenLabelWin = new wxGridHeaderCtrl(this, true);
+            m_colFrozenLabelWin = new wxGridFrozenHeaderCtrl(this, static_cast<wxGridHeaderCtrl*>(m_colLabelWin));
         else
             m_colFrozenLabelWin = new wxGridColLabelWindow(this, true);
         
@@ -6427,7 +6421,7 @@ void wxGrid::UseNativeColHeader(bool native)
         delete m_colFrozenLabelWin;
         
         if ( m_useNativeHeader )
-            m_colFrozenLabelWin = new wxGridHeaderCtrl(this, true);
+            m_colFrozenLabelWin = new wxGridFrozenHeaderCtrl(this, static_cast<wxGridHeaderCtrl*>(m_colLabelWin));
         else
             m_colFrozenLabelWin = new wxGridColLabelWindow(this, true);
     }

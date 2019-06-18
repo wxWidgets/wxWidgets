@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 // Name:        wx/generic/private/grid.h
 // Purpose:     Private wxGrid structures
 // Author:      Michael Bedward (based on code by Julian Smart, Robin Dunn)
@@ -142,32 +142,27 @@ private:
 class wxGridHeaderCtrl : public wxHeaderCtrl
 {
 public:
-    wxGridHeaderCtrl(wxGrid *owner, bool isFrozen = false)
+    wxGridHeaderCtrl(wxGrid *owner)
         : wxHeaderCtrl(owner,
                        wxID_ANY,
                        wxDefaultPosition,
                        wxDefaultSize,
                        wxHD_ALLOW_HIDE |
-                       (owner->CanDragColMove() ? wxHD_ALLOW_REORDER : 0)),
-          m_isFrozen(isFrozen)
+                       (owner->CanDragColMove() ? wxHD_ALLOW_REORDER : 0))
     {
     }
-    
-    virtual ~wxGridHeaderCtrl()
-    {
-        if ( !m_isFrozen )
-            ms_columns.clear();
-    }
+
+    size_t GetColumnsNo() const { return m_columns.size(); }
 
 protected:
     virtual const wxHeaderColumn& GetColumn(unsigned int idx) const wxOVERRIDE
     {
-        return ms_columns[idx];
+        return m_columns[idx];
     }
 
-private:
     wxGrid *GetOwner() const { return static_cast<wxGrid *>(GetParent()); }
 
+private:
     static wxMouseEvent GetDummyMouseEvent()
     {
         // make up a dummy event for the grid event to use -- unfortunately we
@@ -179,16 +174,13 @@ private:
 
     virtual int GetColumnIdOffset() const wxOVERRIDE
     { 
-        return m_isFrozen ? 0 : GetOwner()->GetNumberFrozenCols();
+        return GetOwner()->GetNumberFrozenCols();
     }
 
     // override the base class method to update our m_columns array
     virtual void OnColumnCountChanging(unsigned int count) wxOVERRIDE
     {
-        if ( m_isFrozen )
-            return;
-        
-        const unsigned countOld = ms_columns.size();
+        const unsigned countOld = m_columns.size();
         const unsigned offset = GetColumnIdOffset();
         count += offset;
         if ( count < countOld )
@@ -197,19 +189,19 @@ private:
             // we can't use resize() here as it would require the vector
             // value_type, i.e. wxGridHeaderColumn to be default constructible,
             // which it is not)
-            ms_columns.erase(ms_columns.begin() + count, ms_columns.end());
+            m_columns.erase(m_columns.begin() + count, m_columns.end());
         }
         else // new columns added
         {
             // add columns for the new elements
             for ( unsigned n = countOld; n < count; n++ )
-                ms_columns.push_back(wxGridHeaderColumn(GetOwner(), n));
+                m_columns.push_back(wxGridHeaderColumn(GetOwner(), n));
         }
     }
   
     virtual void SetColumnsOrder(const wxArrayInt& order) wxOVERRIDE
     {
-        wxASSERT_MSG( order.size() <= ms_columns.size(), "wrong number of columns" );
+        wxASSERT_MSG( order.size() <= m_columns.size(), "wrong number of columns" );
         
         DoSetColumnsOrder(order);
     }
@@ -228,7 +220,7 @@ private:
     
     virtual void UpdateColumn(unsigned int idx) wxOVERRIDE
     {
-        wxCHECK_RET( idx < ms_columns.size(), "invalid column index" );
+        wxCHECK_RET( idx < m_columns.size(), "invalid column index" );
         
         DoUpdate(idx);
     }
@@ -294,14 +286,14 @@ private:
 
     void OnBeginResize(wxHeaderCtrlEvent& event)
     {
-        GetOwner()->DoStartResizeCol(event.GetColumn(), m_isFrozen);
+        GetOwner()->DoStartResizeCol(event.GetColumn());
 
         event.Skip();
     }
 
     void OnResizing(wxHeaderCtrlEvent& event)
     {
-        GetOwner()->DoUpdateResizeColWidth(event.GetWidth(), m_isFrozen);
+        GetOwner()->DoUpdateResizeColWidth(event.GetWidth());
     }
 
     void OnEndResize(wxHeaderCtrlEvent& event)
@@ -311,8 +303,7 @@ private:
         // UpdateColumnVisibility()
         wxMouseEvent e;
         e.SetState(wxGetMouseState());
-        wxWindow *gridWindow = m_isFrozen ? 
-            GetOwner()->GetFrozenColGridWindow() : GetOwner()->GetGridWindow();
+        wxWindow *gridWindow = GetOwner()->GetGridWindow();
         GetOwner()->DoEndDragResizeCol(e, reinterpret_cast<wxGridWindow*>(gridWindow));
 
         event.Skip();
@@ -328,11 +319,72 @@ private:
         GetOwner()->DoEndMoveCol(event.GetNewOrder());
     }
 
-    static wxVector<wxGridHeaderColumn> ms_columns;
-    bool m_isFrozen;
+    wxVector<wxGridHeaderColumn> m_columns;
     
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxGridHeaderCtrl);
+};
+
+class wxGridFrozenHeaderCtrl : public wxGridHeaderCtrl
+{
+public:
+    wxGridFrozenHeaderCtrl(wxGrid *owner, wxGridHeaderCtrl *mainHeaderCtrl) 
+        : wxGridHeaderCtrl(owner),
+          m_mainHeaderCtrl(mainHeaderCtrl)
+    {
+    }
+
+private:
+    wxGridHeaderCtrl *m_mainHeaderCtrl;
+
+    virtual int GetColumnIdOffset() const wxOVERRIDE
+    {
+        return 0;
+    }
+
+    virtual void OnColumnCountChanging(unsigned int WXUNUSED(count)) wxOVERRIDE
+    {
+        // count is changed in main header
+    }
+
+    virtual void SetColumnsOrder(const wxArrayInt& order) wxOVERRIDE
+    {
+        wxASSERT_MSG(order.size() <= m_mainHeaderCtrl->GetColumnsNo(), "wrong number of columns");
+
+        DoSetColumnsOrder(order);
+    }
+
+    virtual void UpdateColumn(unsigned int idx) wxOVERRIDE
+    {
+        wxCHECK_RET(idx < m_mainHeaderCtrl->GetColumnsNo(), "invalid column index");
+
+        DoUpdate(idx);
+    }
+
+    void OnBeginResize(wxHeaderCtrlEvent& event)
+    {
+        GetOwner()->DoStartResizeCol(event.GetColumn(), true);
+
+        event.Skip();
+    }
+
+    void OnResizing(wxHeaderCtrlEvent& event)
+    {
+        GetOwner()->DoUpdateResizeColWidth(event.GetWidth(), true);
+    }
+
+    void OnEndResize(wxHeaderCtrlEvent& event)
+    {
+        // we again need to pass a mouse event to be used for the grid event
+        // generation but we don't have it here so use a dummy one as in
+        // UpdateColumnVisibility()
+        wxMouseEvent e;
+        e.SetState(wxGetMouseState());
+        wxWindow *gridWindow = GetOwner()->GetFrozenColGridWindow();
+        GetOwner()->DoEndDragResizeCol(e, reinterpret_cast<wxGridWindow*>(gridWindow));
+
+        event.Skip();
+    }
 };
 
 // common base class for various grid subwindows

@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 // Name:        wx/generic/grid.h
 // Purpose:     wxGrid and related classes
 // Author:      Michael Bedward (based on code by Julian Smart, Robin Dunn)
@@ -2266,6 +2266,7 @@ protected:
     friend class wxGridHeaderRenderer;
 
     friend class wxGridHeaderCtrl;
+    friend class wxGridFrozenHeaderCtrl;
 
 private:
 
@@ -2385,8 +2386,8 @@ private:
 
     void DoColHeaderClick(int col);
 
-    void DoStartResizeCol(int col, bool isFrozen);
-    void DoUpdateResizeColWidth(int w, bool isFrozen);
+    void DoStartResizeCol(int col, bool isFrozen = false);
+    void DoUpdateResizeColWidth(int w, bool isFrozen = false);
     void DoStartMoveCol(int col);
 
     void DoEndDragResizeRow(const wxMouseEvent& event, wxGridWindow *gridWindow);
