@@ -192,8 +192,8 @@ int wxNotebook::SetSelection(size_t page)
     int selOld = GetSelection();
 
     // change the QTabWidget selected page:
-    m_selection = page;
     m_qtTabWidget->setCurrentIndex( page );
+    m_selection = page;
 
     return selOld;
 }
