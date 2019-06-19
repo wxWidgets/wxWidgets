@@ -98,6 +98,15 @@ TEST_CASE("wxControl::Label", "[wxControl][label]")
         DoTestLabel(st.get());
     }
 
+    SECTION("wxStaticText/ellipsized")
+    {
+        const wxScopedPtr<wxStaticText>
+            st(new wxStaticText(wxTheApp->GetTopWindow(), wxID_ANY, ORIGINAL_LABEL,
+                                wxDefaultPosition, wxDefaultSize,
+                                wxST_ELLIPSIZE_START));
+        DoTestLabel(st.get());
+    }
+
     SECTION("wxGenericStaticText")
     {
         const wxScopedPtr<wxGenericStaticText>
