@@ -53,43 +53,16 @@ void DoTestLabel(wxControl* c)
         c->SetLabel(l);
         CHECK( c->GetLabel() == l );
 
+        // GetLabelText() should always return unescaped version of the label
+        CHECK( c->GetLabelText() == wxControl::RemoveMnemonics(l) );
+
         // GetLabelText() should always return the string passed to SetLabelText()
         c->SetLabelText(l);
         CHECK( c->GetLabelText() == l );
+
+        // And GetLabel() should be the escaped version of the text
+        CHECK( l == wxControl::RemoveMnemonics(c->GetLabel()) );
     }
-
-
-    // test calls to SetLabelText() and then to GetLabel()
-
-    wxString testLabel = "label without mnemonics and markup";
-    c->SetLabelText(testLabel);
-    CHECK( c->GetLabel() == testLabel );
-
-    c->SetLabelText("label with &mnemonic");
-    CHECK( c->GetLabel() == "label with &&mnemonic" );
-
-    testLabel = "label with <span foreground='blue'>some</span> <b>markup</b>";
-    c->SetLabelText(testLabel);
-    CHECK( c->GetLabel() == testLabel );
-
-    c->SetLabelText("label with <span foreground='blue'>some</span> <b>markup</b> and &mnemonic");
-    CHECK( c->GetLabel() == "label with <span foreground='blue'>some</span> <b>markup</b> and &&mnemonic" );
-
-    // test calls to SetLabel() and then to GetLabelText()
-
-    testLabel = "label without mnemonics and markup";
-    c->SetLabel(testLabel);
-    CHECK( c->GetLabelText() == testLabel );
-
-    c->SetLabel("label with &mnemonic");
-    CHECK( c->GetLabelText() == "label with mnemonic" );
-
-    testLabel = "label with <span foreground='blue'>some</span> <b>markup</b>";
-    c->SetLabel(testLabel);
-    CHECK( c->GetLabelText() == testLabel );
-
-    c->SetLabel("label with <span foreground='blue'>some</span> <b>markup</b> and &mnemonic");
-    CHECK( c->GetLabelText() == "label with <span foreground='blue'>some</span> <b>markup</b> and mnemonic");
 }
 
 } // anonymous namespace
