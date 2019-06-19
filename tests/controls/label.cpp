@@ -67,12 +67,21 @@ void DoTestLabel(wxControl* c)
         CHECK( l == wxControl::RemoveMnemonics(c->GetLabel()) );
     }
 
+    // Check that both "&" and "&amp;" work in markup.
 #if wxUSE_MARKUP
     c->SetLabelMarkup("mnemonic in &amp;markup");
     CHECK( c->GetLabel() == "mnemonic in &markup" );
     CHECK( c->GetLabelText() == "mnemonic in markup" );
 
+    c->SetLabelMarkup("mnemonic in &markup");
+    CHECK( c->GetLabel() == "mnemonic in &markup" );
+    CHECK( c->GetLabelText() == "mnemonic in markup" );
+
     c->SetLabelMarkup("&amp;&amp; finally");
+    CHECK( c->GetLabel() == "&& finally" );
+    CHECK( c->GetLabelText() == "& finally" );
+
+    c->SetLabelMarkup("&& finally");
     CHECK( c->GetLabel() == "&& finally" );
     CHECK( c->GetLabelText() == "& finally" );
 #endif // wxUSE_MARKUP
@@ -109,4 +118,13 @@ TEST_CASE("wxControl::RemoveMnemonics", "[wxControl][label][mnemonics]")
     CHECK( "mnemonic"  == wxControl::RemoveMnemonics("&mnemonic") );
     CHECK( "&mnemonic" == wxControl::RemoveMnemonics("&&mnemonic") );
     CHECK( "&mnemonic" == wxControl::RemoveMnemonics("&&&mnemonic") );
+}
+
+TEST_CASE("wxControl::FindAccelIndex", "[wxControl][label][mnemonics]")
+{
+    CHECK( wxControl::FindAccelIndex("foo") == wxNOT_FOUND );
+    CHECK( wxControl::FindAccelIndex("&foo") == 0 );
+    CHECK( wxControl::FindAccelIndex("f&oo") == 1 );
+    CHECK( wxControl::FindAccelIndex("foo && bar") == wxNOT_FOUND );
+    CHECK( wxControl::FindAccelIndex("foo && &bar") == 6 );
 }

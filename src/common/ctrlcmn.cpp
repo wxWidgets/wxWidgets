@@ -194,20 +194,24 @@ int wxControlBase::FindAccelIndex(const wxString& label, wxString *labelOnly)
         labelOnly->Alloc(label.length());
     }
 
+    // When computing the offset below, we need to ignore the characters that
+    // are not actually displayed, i.e. the ampersands themselves.
+    int numSkipped = 0;
     int indexAccel = -1;
     for ( wxString::const_iterator pc = label.begin(); pc != label.end(); ++pc )
     {
         if ( *pc == MNEMONIC_PREFIX )
         {
             ++pc; // skip it
+            ++numSkipped;
+
             if ( pc == label.end() )
                 break;
             else if ( *pc != MNEMONIC_PREFIX )
             {
                 if ( indexAccel == -1 )
                 {
-                    // remember it (-1 is for MNEMONIC_PREFIX itself
-                    indexAccel = pc - label.begin() - 1;
+                    indexAccel = pc - label.begin() - numSkipped;
                 }
                 else
                 {
