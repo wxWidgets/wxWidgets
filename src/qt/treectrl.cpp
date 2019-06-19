@@ -1067,11 +1067,31 @@ void wxTreeCtrl::Delete(const wxTreeItemId& item)
     delete qTreeItem;
 }
 
+class wxQtEnsureSignalsBlocked
+{
+public:
+    wxQtEnsureSignalsBlocked(QWidget *widget) :
+        m_widget(widget)
+    {
+        m_restore = m_widget->blockSignals(true);
+    }
+
+    ~wxQtEnsureSignalsBlocked()
+    {
+        m_widget->blockSignals(m_restore);
+    }
+
+private:
+    QWidget *m_widget;
+    bool m_restore;
+};
+
 void wxTreeCtrl::DeleteChildren(const wxTreeItemId& item)
 {
     wxCHECK_RET(item.IsOk(), "invalid tree item");
 
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
+    wxQtEnsureSignalsBlocked ensureSignalsBlock(m_qtTreeWidget);
     while ( qTreeItem->childCount() > 0 )
     {
         QTreeWidgetItem *child = qTreeItem->child(0);
