@@ -346,8 +346,8 @@ void StaticWidgetsPage::CreateContent()
 #if wxUSE_MARKUP
     m_textLabelWithMarkup->SetValue("Another label, this time <b>decorated</b> "
                                     "with <u>markup</u>; here you need entities "
-                                    "for the symbols: &lt; &gt; &amp; &apos; &quot; "
-                                    " but you can still place &mnemonics...");
+                                    "for the symbols: &lt; &gt; &amp;&amp; &apos; &quot; "
+                                    " but you can still use &mnemonics too");
 #endif // wxUSE_MARKUP
 
     // right pane
