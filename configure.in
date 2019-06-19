@@ -3407,29 +3407,54 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
         if test -n "$QT5_CUSTOM_DIR" ; then
             dnl the name of the directory where the files for this toolkit live
             TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} -I${QT5_CUSTOM_DIR}/include"
-            GUI_TK_LIBRARY="${GUI_TK_LIBRARY} -L${QT5_CUSTOM_DIR}/lib \
+
+            if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1; then
+                GUI_TK_LIBRARY="${GUI_TK_LIBRARY} -L${QT5_CUSTOM_DIR}/lib \
+                            -lQt5Core -lQt5Widgets -lQt5Gui -lQt5OpenGL -lQt5Test -lQt5X11Extras \
+                            -Wl,-rpath,${QT5_CUSTOM_DIR}/lib"
+            else
+                GUI_TK_LIBRARY="${GUI_TK_LIBRARY} -L${QT5_CUSTOM_DIR}/lib \
                             -lQt5Core -lQt5Widgets -lQt5Gui -lQt5OpenGL -lQt5Test \
                             -Wl,-rpath,${QT5_CUSTOM_DIR}/lib"
+            fi
 
         elif test -z "$PKG_CONFIG" ; then
             AC_MSG_ERROR([specify QT5_CUSTOM_DIR or make sure pkg-config is available to search for Qt5 libraries])
 
         else
-            PKG_CHECK_MODULES(QT5,
+            if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_MAC" != 1; then
+                PKG_CHECK_MODULES(QT5,
+                          [Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test Qt5X11Extras],
+                    [
+                    TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} ${QT5_CFLAGS}"
+                    GUI_TK_LIBRARY="${GUI_TK_LIBRARY} ${QT5_LIBS}"
+                    if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
+                        dnl build with position independent code if Qt needs it
+                        SAMPLES_CXXFLAGS="-fPIC $SAMPLES_CXXFLAGS"
+                        WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS"
+                    fi
+                    ],
+                    [
+                        AC_MSG_ERROR([Qt5 libraries are not available])
+                    ]
+                )
+            else
+                PKG_CHECK_MODULES(QT5,
                           [Qt5Core Qt5Widgets Qt5Gui Qt5OpenGL Qt5Test],
-                [
-                TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} ${QT5_CFLAGS}"
-                GUI_TK_LIBRARY="${GUI_TK_LIBRARY} ${QT5_LIBS}"
-                if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
-                    dnl build with position independent code if Qt needs it
-                    SAMPLES_CXXFLAGS="-fPIC $SAMPLES_CXXFLAGS"
-                    WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS"
-                fi
-                ],
-                [
-                    AC_MSG_ERROR([Qt5 libraries are not available])
-                ]
-            )
+                    [
+                    TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE} ${QT5_CFLAGS}"
+                    GUI_TK_LIBRARY="${GUI_TK_LIBRARY} ${QT5_LIBS}"
+                    if `pkg-config --variable qt_config Qt5Core | grep "reduce_relocations" >/dev/null`; then
+                        dnl build with position independent code if Qt needs it
+                        SAMPLES_CXXFLAGS="-fPIC $SAMPLES_CXXFLAGS"
+                        WXCONFIG_CXXFLAGS="-fPIC $WXCONFIG_CXXFLAGS"
+                    fi
+                    ],
+                    [
+                        AC_MSG_ERROR([Qt5 libraries are not available])
+                    ]
+                )
+            fi
         fi
     fi
     dnl the name of the directory where the files for this toolkit live

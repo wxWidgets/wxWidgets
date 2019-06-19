@@ -117,6 +117,12 @@ endif()
 
 if(WXQT)
     set(QT_COMPONENTS Core Widgets Gui OpenGL Test)
+
+    # add in the Qt5X11Extras lib when using wxqt on X11
+    if(UNIX AND NOT APPLE AND NOT WIN32)
+        set(QT_COMPONENTS ${QT_COMPONENTS} X11Extras)
+    endif()
+
     foreach(QT_COMPONENT ${QT_COMPONENTS})
         find_package(Qt5 COMPONENTS ${QT_COMPONENT} REQUIRED)
         list(APPEND wxTOOLKIT_INCLUDE_DIRS ${Qt5${QT_COMPONENT}_INCLUDE_DIRS})

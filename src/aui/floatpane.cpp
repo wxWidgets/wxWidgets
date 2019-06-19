@@ -35,6 +35,11 @@
 #include "wx/msw/private.h"
 #endif
 
+#ifdef __LINUX__
+#include <QtX11Extras/qx11info_x11.h>
+#include <X11/Xlib.h>
+#endif
+
 wxIMPLEMENT_CLASS(wxAuiFloatingFrame, wxAuiFloatingFrameBaseClass);
 
 wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
@@ -365,6 +370,19 @@ void wxAuiFloatingFrame::OnActivate(wxActivateEvent& event)
 // functionality to wxWidgets itself)
 bool wxAuiFloatingFrame::isMouseDown()
 {
+#ifdef __LINUX__
+    Window root;
+    Window child;
+    int root_x, root_y;
+    int win_x, win_y;
+    unsigned int key_state;
+
+    XQueryPointer(QX11Info::display(), QX11Info::appRootWindow(), &root, &child,
+        &root_x, &root_y, &win_x, &win_y, &key_state);
+
+    return key_state == Button1Mask;
+#endif
+
     return wxGetMouseState().LeftIsDown();
 }
 
