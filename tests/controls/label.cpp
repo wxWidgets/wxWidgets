@@ -25,6 +25,8 @@
 #include "wx/scopedptr.h"
 #include "wx/stattext.h"
 
+#include "wx/generic/stattextg.h"
+
 namespace
 {
 
@@ -99,6 +101,13 @@ TEST_CASE("wxControl::Label", "[wxControl][label]")
         const wxScopedPtr<wxStaticText>
             st(new wxStaticText(wxTheApp->GetTopWindow(), wxID_ANY, ORIGINAL_LABEL));
         DoTestLabel(st.get());
+    }
+
+    SECTION("wxGenericStaticText")
+    {
+        const wxScopedPtr<wxGenericStaticText>
+            gst(new wxGenericStaticText(wxTheApp->GetTopWindow(), wxID_ANY, ORIGINAL_LABEL));
+        DoTestLabel(gst.get());
     }
 
     SECTION("wxCheckBox")
