@@ -403,12 +403,9 @@ struct EllipsizeCalculator
     bool m_isOk;
 };
 
-} // anonymous namespace
-
-/* static and protected */
-wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxDC& dc,
-                                              wxEllipsizeMode mode, int maxFinalWidthPx,
-                                              int replacementWidthPx)
+wxString DoEllipsizeSingleLine(const wxString& curLine, const wxDC& dc,
+                               wxEllipsizeMode mode, int maxFinalWidthPx,
+                               int replacementWidthPx)
 {
     wxASSERT_MSG(replacementWidthPx > 0, "Invalid parameters");
     wxASSERT_LEVEL_2_MSG(!curLine.Contains('\n'),
@@ -522,6 +519,9 @@ wxString wxControlBase::DoEllipsizeSingleLine(const wxString& curLine, const wxD
 
     return calc.GetEllipsizedText();
 }
+
+} // anonymous namespace
+
 
 /* static */
 wxString wxControlBase::Ellipsize(const wxString& label, const wxDC& dc,

@@ -178,11 +178,6 @@ protected:
     // initialize the common fields of wxCommandEvent
     void InitCommandEvent(wxCommandEvent& event) const;
 
-    // Ellipsize() helper:
-    static wxString DoEllipsizeSingleLine(const wxString& label, const wxDC& dc,
-                                          wxEllipsizeMode mode, int maxWidth,
-                                          int replacementWidth);
-
 #if wxUSE_MARKUP
     // Remove markup from the given string, returns empty string on error i.e.
     // if markup was syntactically invalid.
