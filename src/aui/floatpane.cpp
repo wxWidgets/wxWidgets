@@ -381,9 +381,9 @@ bool wxAuiFloatingFrame::isMouseDown()
         &root_x, &root_y, &win_x, &win_y, &key_state);
 
     return key_state == Button1Mask;
-#endif
-
+#else
     return wxGetMouseState().LeftIsDown();
+#endif
 }
 
 
