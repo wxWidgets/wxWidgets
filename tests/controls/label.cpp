@@ -66,6 +66,16 @@ void DoTestLabel(wxControl* c)
         // And GetLabel() should be the escaped version of the text
         CHECK( l == wxControl::RemoveMnemonics(c->GetLabel()) );
     }
+
+#if wxUSE_MARKUP
+    c->SetLabelMarkup("mnemonic in &amp;markup");
+    CHECK( c->GetLabel() == "mnemonic in &markup" );
+    CHECK( c->GetLabelText() == "mnemonic in markup" );
+
+    c->SetLabelMarkup("&amp;&amp; finally");
+    CHECK( c->GetLabel() == "&& finally" );
+    CHECK( c->GetLabelText() == "& finally" );
+#endif // wxUSE_MARKUP
 }
 
 } // anonymous namespace
