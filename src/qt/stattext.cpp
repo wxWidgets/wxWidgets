@@ -61,7 +61,7 @@ bool wxStaticText::Create(wxWindow *parent,
 void wxStaticText::SetLabel(const wxString& label)
 {
     m_qtLabel->setText( wxQtConvertString( label ) );
-    m_qtLabel->adjustSize();
+    AutoResizeIfNecessary();
 }
 
 wxString wxStaticText::GetLabel() const
