@@ -5062,7 +5062,7 @@ void wxStyledTextCtrl::AutoCompUseListCtrl(bool useListCtrl,
                                     currentTextColour);
 }
 
-void wxStyledTextCtrl::AutoCompShow(int lenEntered, const std::vector<wxCompletionItem>& list)
+void wxStyledTextCtrl::AutoCompShow(int lenEntered, const wxVector<wxCompletionItem>& list)
 {
     m_autocompList.clear();
     m_autocompList = list;
