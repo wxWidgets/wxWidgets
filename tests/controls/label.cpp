@@ -43,6 +43,9 @@ void DoTestLabel(wxControl* c)
         "label with &mnemonic",
         "label with <span foreground='blue'>some</span> <b>markup</b>",
         "label with <span foreground='blue'>some</span> <b>markup</b> and &mnemonic",
+        "label with an && (ampersand)",
+        "label with an && (&ampersand)",
+        "", // empty label should work too
     };
 
     for ( unsigned int s = 0; s < WXSIZEOF(testLabelArray); s++ )
