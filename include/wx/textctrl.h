@@ -272,10 +272,10 @@ enum wxTextAttrLineSpacing
 
 enum wxTextAttrUnderlineType
  {
-     wxTEXT_ATTR_UNDERLINE_NONE              = 0,
-     wxTEXT_ATTR_UNDERLINE_SOLID             = 1,
-     wxTEXT_ATTR_UNDERLINE_DOUBLE            = 20,
-     wxTEXT_ATTR_UNDERLINE_WAVE              = 25
+     wxTEXT_ATTR_UNDERLINE_NONE,
+     wxTEXT_ATTR_UNDERLINE_SOLID,
+     wxTEXT_ATTR_UNDERLINE_DOUBLE,
+     wxTEXT_ATTR_UNDERLINE_WAVE
 };
 	
 // ----------------------------------------------------------------------------
