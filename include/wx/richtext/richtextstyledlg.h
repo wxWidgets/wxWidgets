@@ -15,6 +15,8 @@
  * Includes
  */
 
+#include "wx/dialog.h"
+
 #include "wx/richtext/richtextuicustomization.h"
 
 ////@begin includes
