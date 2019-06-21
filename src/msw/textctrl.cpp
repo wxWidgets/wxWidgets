@@ -2872,7 +2872,7 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
             cf.bUnderlineType = CFU_UNDERLINEDOUBLE;
         if( style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_WAVE )
             cf.bUnderlineType = CFU_UNDERLINEWAVE;
-#if( _RICHEDIT_VER >= 0x0800 )
+#if _RICHEDIT_VER >= 0x0800
 		cf.bUnderlineColor = style.GetUnderlineColour();
 #endif
     }
