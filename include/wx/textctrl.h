@@ -329,11 +329,11 @@ public:
     void SetFontWeight(wxFontWeight fontWeight) { m_fontWeight = fontWeight; m_flags |= wxTEXT_ATTR_FONT_WEIGHT; }
     void SetFontFaceName(const wxString& faceName) { m_fontFaceName = faceName; m_flags |= wxTEXT_ATTR_FONT_FACE; }
     void SetFontUnderlined(bool underlined) { m_fontUnderlined = underlined; m_flags |= wxTEXT_ATTR_FONT_UNDERLINE; }
-    void SetFontUnderlinedWithEffects(bool underlined, wxTextAttrUnderlineType type = wxTEXT_ATTR_UNDERLINE_SOLID, wxColour colour = *wxBLACK)
+    void SetFontUnderline(bool underlined, wxTextAttrUnderlineType type = wxTEXT_ATTR_UNDERLINE_SOLID, wxColour colour = *wxBLACK)
     {
         m_fontUnderlined = underlined;
         m_fontUnderlinedType = type;
-        m_fontUnderlineColor = colour;
+        m_colUnderline = colour;
     }
     void SetFontStrikethrough(bool strikethrough) { m_fontStrikethrough = strikethrough; m_flags |= wxTEXT_ATTR_FONT_STRIKETHROUGH; }
     void SetFontEncoding(wxFontEncoding encoding) { m_fontEncoding = encoding; m_flags |= wxTEXT_ATTR_FONT_ENCODING; }
@@ -374,8 +374,8 @@ public:
     wxFontStyle GetFontStyle() const { return m_fontStyle; }
     wxFontWeight GetFontWeight() const { return m_fontWeight; }
     bool GetFontUnderlined() const { return m_fontUnderlined; }
-    wxTextAttrUnderlineType GetUnderlinedType() const { return m_fontUnderlinedType; }
-    const wxColour &GetUnderlineColour() const { return m_fontUnderlineColor; }
+    wxTextAttrUnderlineType GetUnderlineType() const { return m_fontUnderlinedType; }
+    const wxColour &GetUnderlineColour() const { return m_colUnderline; }
     bool GetFontStrikethrough() const { return m_fontStrikethrough; }
     const wxString& GetFontFaceName() const { return m_fontFaceName; }
     wxFontEncoding GetFontEncoding() const { return m_fontEncoding; }
@@ -527,7 +527,7 @@ private:
     wxFontFamily        m_fontFamily;
     bool                m_fontUnderlined;
     wxTextAttrUnderlineType m_fontUnderlinedType;
-    wxColour            m_fontUnderlineColor;
+    wxColour            m_colUnderline;
     bool                m_fontStrikethrough;
     wxString            m_fontFaceName;
 

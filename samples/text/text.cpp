@@ -1231,10 +1231,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                            "type should be in blue as well");
     m_textrich->AppendText(wxT("And there is a "));
     wxTextAttr attr = m_textrich->GetDefaultStyle();
-    attr.SetFontUnderlinedWithEffects( TRUE, wxTEXT_ATTR_UNDERLINE_WAVE, *wxRED );
+    attr.SetFontUnderline( TRUE, wxTEXT_ATTR_UNDERLINE_WAVE, *wxRED );
     m_textrich->SetDefaultStyle( attr );
     m_textrich->AppendText(wxT("mispeled "));
-    attr.SetFontUnderlinedWithEffects( false, wxTEXT_ATTR_UNDERLINE_NONE );
+    attr.SetFontUnderline( false, wxTEXT_ATTR_UNDERLINE_NONE );
     m_textrich->SetDefaultStyle( attr );
     m_textrich->AppendText(wxT("word"));
     m_textrich->SetDefaultStyle(wxTextAttr(*wxBLUE, *wxWHITE));

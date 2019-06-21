@@ -2862,15 +2862,15 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         }
     }
 
-    if( !(style.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_NONE || style.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_SOLID ) )
+    if( !(style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_NONE || style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_SOLID ) )
     {
-        if( style.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_NONE )
+        if( style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_NONE )
             cf.bUnderlineType = CFU_UNDERLINENONE;
-        if( style.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_SOLID )
+        if( style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_SOLID )
             cf.bUnderlineType = CFU_UNDERLINE;
-        if( style.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_DOUBLE )
+        if( style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_DOUBLE )
             cf.bUnderlineType = CFU_UNDERLINEDOUBLE;
-        if( style.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_WAVE )
+        if( style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_WAVE )
             cf.bUnderlineType = CFU_UNDERLINEWAVE;
 #if( _RICHEDIT_VER >= 0x0800 )
 		cf.bUnderlineColor = style.GetUnderlineColour();

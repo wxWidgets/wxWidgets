@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="text_vc9">
+</Property><Property Name="Solution File" Value="C:\wxFork\samples\text\text_vc9.sln">
+</Property><Property Name="Date" Value="Friday, June 21, 2019">
+</Property><Property Name="Time" Value="0:55:29 AM">
+</Property></Properties><Event ErrorLevel="0" Project="text_vc9" Source="text_vc9.vcproj" Description="Converting project file 'C:\wxFork\samples\text\text_vc9.vcproj'.">
+</Event><Event ErrorLevel="1" Project="text_vc9" Source="text_vc9.vcproj" Description="VCWebServiceProxyGeneratorTool is no longer supported. The tool has been removed from your project settings.">
+</Event><Event ErrorLevel="0" Project="text_vc9" Source="text_vc9.vcproj" Description="Done converting to new project file 'C:\wxFork\samples\text\text_vc9.vcxproj'.">
+</Event><Event ErrorLevel="3" Project="text_vc9" Source="text_vc9.vcproj" Description="Converted">
+</Event></UpgradeLog>
