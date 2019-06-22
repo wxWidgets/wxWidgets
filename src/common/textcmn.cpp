@@ -261,7 +261,7 @@ bool wxTextAttr::operator== (const wxTextAttr& attr) const
             (!HasFontItalic() || (GetFontStyle() == attr.GetFontStyle())) &&
             (!HasFontWeight() || (GetFontWeight() == attr.GetFontWeight())) &&
             (!HasFontUnderlined() || (GetFontUnderlined() == attr.GetFontUnderlined())) &&
-            (!HasFontUnderlinedWithEffect() || (GetUnderlineType() == attr.GetUnderlineType() && GetUnderlineColour() == attr.GetUnderlineColour())) &&
+            ( ( GetUnderlineType() == attr.GetUnderlineType() ) && ( GetUnderlineColour() == attr.GetUnderlineColour() ) ) &&
             (!HasFontStrikethrough() || (GetFontStrikethrough() == attr.GetFontStrikethrough())) &&
             (!HasFontFaceName() || (GetFontFaceName() == attr.GetFontFaceName())) &&
             (!HasFontEncoding() || (GetFontEncoding() == attr.GetFontEncoding())) &&

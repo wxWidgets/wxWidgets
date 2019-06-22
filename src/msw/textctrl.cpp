@@ -2816,14 +2816,14 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         // CHARFORMAT or CHARFORMAT2
         cf.cbSize = sizeof(cf);
     }
-
+    cf.dwMask |= CFM_UNDERLINETYPE;
     if ( style.HasFont() )
     {
         // VZ: CFM_CHARSET doesn't seem to do anything at all in RichEdit 2.0
         //     but using it doesn't seem to hurt neither so leaving it for now
 
         cf.dwMask |= CFM_FACE | CFM_SIZE | CFM_CHARSET |
-                     CFM_ITALIC | CFM_BOLD | CFM_UNDERLINE | CFM_STRIKEOUT | CFM_UNDERLINETYPE;
+                     CFM_ITALIC | CFM_BOLD | CFM_UNDERLINE | CFM_STRIKEOUT;
 
         // fill in data from LOGFONT but recalculate lfHeight because we need
         // the real height in twips and not the negative number which
@@ -2861,21 +2861,25 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
             cf.dwEffects |= CFE_STRIKEOUT;
         }
     }
-
-    if( !(style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_NONE || style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_SOLID ) )
+    wxTextAttrUnderlineType underlineType = style.GetUnderlineType();
+    switch( underlineType )
     {
-        if( style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_NONE )
+        case wxTEXT_ATTR_UNDERLINE_NONE:
             cf.bUnderlineType = CFU_UNDERLINENONE;
-        if( style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_SOLID )
+            break;
+		case wxTEXT_ATTR_UNDERLINE_SOLID:
             cf.bUnderlineType = CFU_UNDERLINE;
-        if( style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_DOUBLE )
+            break;
+		case wxTEXT_ATTR_UNDERLINE_DOUBLE:
             cf.bUnderlineType = CFU_UNDERLINEDOUBLE;
-        if( style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_WAVE )
+            break;
+		case wxTEXT_ATTR_UNDERLINE_WAVE:
             cf.bUnderlineType = CFU_UNDERLINEWAVE;
+            break;
+    }
 #if _RICHEDIT_VER >= 0x0800
 		cf.bUnderlineColor = style.GetUnderlineColour();
 #endif
-    }
 
     if ( style.HasTextColour() )
     {
