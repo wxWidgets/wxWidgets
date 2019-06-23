@@ -3044,7 +3044,7 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
     // even try to do anything if it's the only thing we want to change
     if ( m_verRichEdit == 1 && !style.HasFont() && !style.HasTextColour() &&
         !style.HasLeftIndent() && !style.HasRightIndent() && !style.HasAlignment() &&
-        !style.HasTabs() )
+        !style.HasTabs() && !style.GetFontUnderlined())
     {
         // nothing to do: return true if there was really nothing to do and
         // false if we failed to set bg colour
