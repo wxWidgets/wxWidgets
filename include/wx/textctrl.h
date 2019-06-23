@@ -413,7 +413,6 @@ public:
     bool HasFontPixelSize() const { return HasFlag(wxTEXT_ATTR_FONT_PIXEL_SIZE); }
     bool HasFontItalic() const { return HasFlag(wxTEXT_ATTR_FONT_ITALIC); }
     bool HasFontUnderlined() const { return HasFlag(wxTEXT_ATTR_FONT_UNDERLINE); }
-    bool HasFontUnderlinedWithEffect() const { return !( m_fontUnderlinedType == wxTEXT_ATTR_UNDERLINE_NONE || m_fontUnderlinedType == wxTEXT_ATTR_UNDERLINE_SOLID ); }
     bool HasFontStrikethrough() const { return HasFlag(wxTEXT_ATTR_FONT_STRIKETHROUGH); }
     bool HasFontFaceName() const { return HasFlag(wxTEXT_ATTR_FONT_FACE); }
     bool HasFontEncoding() const { return HasFlag(wxTEXT_ATTR_FONT_ENCODING); }
