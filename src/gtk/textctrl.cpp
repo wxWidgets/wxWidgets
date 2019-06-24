@@ -126,18 +126,22 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
 
     if( attr.HasFontUnderlined() )
     {
-        GtkTextTag *tag1;
-        PangoUnderline pg_style;
-        if( !(attr.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_NONE || attr.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_SOLID ) )
+        GtkTextTag *underlineColorTag;
+        PangoUnderline pangoUnderlineStyle;
+        switch( attr.GetUnderlineType() )
         {
-            if( attr.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_NONE )
-                pg_style = PANGO_UNDERLINE_NONE;
-            if( attr.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_SOLID )
-                pg_style = PANGO_UNDERLINE_SINGLE;
-            if( attr.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_DOUBLE )
-                pg_style = PANGO_UNDERLINE_DOUBLE;
-            if( attr.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_WAVE )
-                pg_style = PANGO_UNDERLINE_ERROR;
+            case wxTEXT_ATTR_UNDERLINE_NONE:
+                pangoUnderlineStyle = PANGO_UNDERLINE_NONE;
+                break;
+            case wxTEXT_ATTR_UNDERLINE_SOLID:
+                pangoUnderlineStyle = PANGO_UNDERLINE_SINGLE;
+                break;
+            case wxTEXT_ATTR_UNDERLINE_DOUBLE:
+                pangoUnderlineStyle = PANGO_UNDERLINE_DOUBLE;
+                break;
+            case wxTEXT_ATTR_UNDERLINE_WAVE:
+                pangoUnderlineStyle = PANGO_UNDERLINE_ERROR;
+                break;
         }
 
         g_snprintf(buf, sizeof(buf), "WXFONTUNDERLINEWITHEFFECT");
@@ -147,7 +151,7 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
         {
             tag = gtk_text_buffer_create_tag( text_buffer, buf,
                                               "underline-set", TRUE,
-                                              "underline", pg_style,
+                                              "underline", pangoUnderlineStyle,
                                               NULL );
         }
         gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
@@ -161,11 +165,11 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
                 .blue  = CLAMP ((double) gdkColor->blue / 65535.0,  0.0, 1.0 ),
                 .alpha = 1.0,
             };
-            tag1 = gtk_text_buffer_create_tag( text_buffer, buf,
+            underlineColorTag = gtk_text_buffer_create_tag( text_buffer, buf,
                                                "underline-rgba-set", TRUE,
                                                "underline-rgba", color_rgba,
                                                NULL );
-            gtk_text_buffer_apply_tag (text_buffer, tag1, start, end);
+            gtk_text_buffer_apply_tag (text_buffer, underlineColorTag, start, end);
         }
 #endif
     }
