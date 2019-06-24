@@ -401,8 +401,9 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 /**
     @class wxPGProperty
 
-    wxPGProperty is base class for all wxPropertyGrid properties. In
-    sections below we cover few related topics.
+    wxPGProperty is base class for all wxPropertyGrid properties and as such
+    it is not intended to be instantiated directly.
+    In sections below we cover few related topics.
 
     @li @ref pgproperty_properties
     @li @ref pgproperty_creating
@@ -847,37 +848,6 @@ class wxPGProperty : public wxObject
 {
 public:
     typedef wxUint32 FlagType;
-
-    /**
-        Default constructor.
-    */
-    wxPGProperty();
-
-    /**
-        Constructor.
-        Non-abstract property classes should have constructor of this style:
-
-        @code
-
-        MyProperty( const wxString& label, const wxString& name, const T& value )
-            : wxPGProperty(label, name)
-        {
-            // Generally recommended way to set the initial value
-            // (as it should work in pretty much 100% of cases).
-            wxVariant variant;
-            variant << value;
-            SetValue(variant);
-
-            // If has private child properties then create them here.
-            // For example:
-            //     AddPrivateChild( new wxStringProperty("Subprop 1",
-            //                                           wxPG_LABEL,
-            //                                           value.GetSubProp1()));
-        }
-
-        @endcode
-    */
-    wxPGProperty( const wxString& label, const wxString& name );
 
     /**
         Virtual destructor. It is customary for derived properties to implement this.
@@ -2080,6 +2050,40 @@ public:
     void*                       m_clientData;
 
 protected:
+
+    /**
+        Default constructor. It is protected because wxPGProperty is only
+        a base class for other property classes.
+    */
+    wxPGProperty();
+
+    /**
+        Constructor. It is protected because wxPGProperty is only a base
+        class for other property classes.
+        Non-abstract property classes should have constructor of this style:
+
+        @code
+
+        MyProperty( const wxString& label, const wxString& name, const T& value )
+            : wxPGProperty(label, name)
+        {
+            // Generally recommended way to set the initial value
+            // (as it should work in pretty much 100% of cases).
+            wxVariant variant;
+            variant << value;
+            SetValue(variant);
+
+            // If has private child properties then create them here.
+            // For example:
+            //     AddPrivateChild( new wxStringProperty("Subprop 1",
+            //                                           wxPG_LABEL,
+            //                                           value.GetSubProp1()));
+        }
+
+        @endcode
+    */
+    wxPGProperty( const wxString& label, const wxString& name );
+
     /**
         Sets property cell in fashion that reduces number of exclusive
         copies of cell data. Used when setting, for instance, same

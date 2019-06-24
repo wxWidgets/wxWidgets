@@ -979,14 +979,6 @@ class WXDLLIMPEXP_PROPGRID wxPGProperty : public wxObject
 public:
     typedef wxUint32 FlagType;
 
-    // Default constructor.
-    wxPGProperty();
-
-    // Constructor.
-    // All non-abstract property classes should have a constructor with
-    // the same first two arguments as this one.
-    wxPGProperty( const wxString& label, const wxString& name );
-
     // Virtual destructor.
     // It is customary for derived properties to implement this.
     virtual ~wxPGProperty();
@@ -1896,6 +1888,13 @@ public:
     void*                       m_clientData;
 
 protected:
+
+    // Ctors are ptotected because wxPGProperty is only a base class
+    // for all property classes and shouldn't be instantiated directly.
+    wxPGProperty();
+    // All non-abstract property classes should have a constructor with
+    // the same first two arguments as this one.
+    wxPGProperty(const wxString& label, const wxString& name);
 
     // Sets property cell in fashion that reduces number of exclusive
     // copies of cell data. Used when setting, for instance, same
