@@ -142,7 +142,6 @@ class wxPGSpinButton : public wxSpinButton
 public:
     wxPGSpinButton() : wxSpinButton()
     {
-        m_bLeftDown = false;
         m_hasCapture = false;
         m_spins = 1;
 
@@ -167,8 +166,6 @@ private:
     // isn't anything there that can be reliably reused.
     int     m_spins;
 
-    bool    m_bLeftDown;
-
     // SpinButton seems to be a special for mouse capture, so we may need track
     // privately whether mouse is actually captured.
     bool    m_hasCapture;
@@ -185,8 +182,6 @@ private:
     }
     void Release()
     {
-        m_bLeftDown = false;
-
         if ( m_hasCapture )
         {
             ReleaseMouse();
@@ -202,7 +197,6 @@ private:
 
     void OnMouseLeftDown(wxMouseEvent& evt)
     {
-        m_bLeftDown = true;
         m_ptPosition = evt.GetPosition();
         evt.Skip();
     }
@@ -210,13 +204,12 @@ private:
     void OnMouseLeftUp(wxMouseEvent& evt)
     {
         Release();
-        m_bLeftDown = false;
         evt.Skip();
     }
 
     void OnMouseMove(wxMouseEvent& evt)
     {
-        if ( m_bLeftDown )
+        if ( evt.LeftIsDown() )
         {
             int dy = m_ptPosition.y - evt.GetPosition().y;
             if ( dy )
