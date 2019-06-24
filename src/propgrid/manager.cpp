@@ -262,21 +262,15 @@ public:
     void OnPageChanged(const wxPropertyGridPage* page)
     {
         m_page = page;
-        // Get column info from the page
-        unsigned int colCount = m_page->GetColumnCount();
-        SetColumnCount(colCount);
+        SetColumnCount(m_page->GetColumnCount());
         DetermineAllColumnWidths();
+        UpdateAllColumns();
     }
 
     void OnColumWidthsChanged()
     {
-        unsigned int colCount = m_page->GetColumnCount();
-
         DetermineAllColumnWidths();
-        for ( unsigned int i=0; i<colCount; i++ )
-        {
-            UpdateColumn(i);
-        }
+        UpdateAllColumns();
     }
 
     virtual const wxHeaderColumn& GetColumn(unsigned int idx) const wxOVERRIDE
@@ -291,6 +285,15 @@ public:
     }
 
 private:
+    void UpdateAllColumns()
+    {
+        unsigned int colCount = GetColumnCount();
+        for ( unsigned int i = 0; i < colCount; i++ )
+        {
+            UpdateColumn(i);
+        }
+    }
+
     void EnsureColumnCount(unsigned int count)
     {
         while ( m_columns.size() < count )
