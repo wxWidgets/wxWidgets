@@ -10,6 +10,11 @@
 #ifndef _WX_GTK_TEXTCTRL_H_
 #define _WX_GTK_TEXTCTRL_H_
 
+#include <gtk/gtk.h>
+#if GTK_CHECK_VERSION(3, 24, 0)
+#include <gtk/gtkunixprint.h>
+#endif
+
 typedef struct _GtkTextMark GtkTextMark;
 
 //-----------------------------------------------------------------------------
@@ -205,6 +210,11 @@ private:
 
     // the widget used for single line controls
     GtkWidget  *m_text;
+
+#if GTK_CHECK_VERSION(3, 24, 0)
+    // event controller to feed events into GtkEntry or GtkTextView
+    GtkEventController *m_key_event_controller;
+#endif
 
     bool m_modified;
     bool m_dontMarkDirty;

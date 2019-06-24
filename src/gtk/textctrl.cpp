@@ -653,10 +653,17 @@ void wxTextCtrl::Init()
     m_buffer = NULL;
     m_showPositionOnThaw = NULL;
     m_anonymousMarkList = NULL;
+#if GTK_CHECK_VERSION(3, 24, 0)
+    m_key_event_controller = NULL;
+#endif
 }
 
 wxTextCtrl::~wxTextCtrl()
 {
+#if GTK_CHECK_VERSION(3, 24, 0)
+    if (m_key_event_controller)
+        g_object_unref (m_key_event_controller);
+#endif
     if (m_text)
         GTKDisconnect(m_text);
     if (m_buffer)
@@ -765,6 +772,10 @@ bool wxTextCtrl::Create( wxWindow *parent,
     m_parent->DoAddChild( this );
 
     m_focusWidget = m_text;
+
+#if GTK_CHECK_VERSION(3, 24, 0)
+    m_key_event_controller = gtk_event_controller_key_new (m_text);
+#endif
 
     PostCreation(size);
 
@@ -884,6 +895,11 @@ GtkEntry *wxTextCtrl::GetEntry() const
 
 int wxTextCtrl::GTKIMFilterKeypress(GdkEventKey* event) const
 {
+#if GTK_CHECK_VERSION(3, 24, 0)
+    if (wx_is_at_least_gtk3(24))
+        return gtk_event_controller_handle_event(m_key_event_controller, (GdkEvent*) event);
+#endif
+
     if (IsSingleLine())
         return wxTextEntry::GTKIMFilterKeypress(event);
 
