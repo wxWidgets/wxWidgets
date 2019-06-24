@@ -190,7 +190,7 @@ either MSYS or Cygwin.
 0. Open MSYS or Cygwin shell prompt.
 
 1. Create a build directory: it is is strongly recommended to not
-   build the library in the directory containing the sources ($WXWIN)
+   build the library in the directory containing the sources (`$WXWIN`)
    but to create a separate build directory instead. The build
    directory can be placed anywhere (using the fastest available disk
    may be a good idea), but in this example we create it as a
@@ -353,17 +353,17 @@ When building using makefiles, you can specify many build settings
 (unlike when using the project files where you are limited to choosing
 just the configuration and platform). This can be done either by
 passing the values as arguments when invoking make or by editing
-build\msw\config.$(compiler) file where $(compiler) is same extension
+`build\msw\config.$compiler` file where `$compiler` is the same extension
 as the makefile you use has (see below). The latter is good for
 setting options that never change in your development process (e.g.
-GCC_VERSION or VENDOR). If you want to build several versions of
+`GCC_VERSION` or `VENDOR`). If you want to build several versions of
 wxWidgets and use them side by side, the former method is better.
-Settings in config.* files are shared by all makefiles (including the
-samples), but if you pass the options as arguments, you must use same
+Settings in `config.*` files are shared by all makefiles (including the
+samples), but if you pass the options as arguments, you must use the same
 arguments you used for the library when building samples!
 
 For example, to build the library in release mode you can either
-change the "BUILD" variable definition in build\msw\config.$(compiler)
+change the "BUILD" variable definition in `build\msw\config.$compiler`
 or use
 
         > nmake -f makefile.vc BUILD=debug
@@ -412,7 +412,7 @@ The full list of the build settings follows:
   by console applications. Note that if you leave USE_GUI=1 then both wxBase
   and GUI libraries are built.
 
-* USE_$(LIBRARY)=0
+* USE_$LIBRARY=0
 
   Do not build the corresponding library (all libraries are built by
   default). Library which can be disabled in this way are: AUI, HTML,
@@ -514,11 +514,11 @@ If you want to use CMake for building your project, please see
 
 Otherwise follow the instructions below for "manual" setup of your project.
 
-We suppose that wxWidgets sources are under the directory $WXWIN (notice that
+We suppose that wxWidgets sources are under the directory `$WXWIN` (notice that
 different tool chains refer to environment variables such as WXWIN in
-different ways, e.g. MSVC users should use $(WXWIN) instead of just
-$WXWIN). And we will use \<wx-lib-dir\> as a shortcut for the subdirectory of
-$WXWIN\lib which is composed from several parts separated by underscore:
+different ways, e.g. MSVC users should use `$``(WXWIN)` instead of just
+`$WXWIN`). And we will use \<wx-lib-dir\> as a shortcut for the subdirectory of
+`$WXWIN\lib` which is composed from several parts separated by underscore:
 first, a compiler-specific prefix (e.g. "vc" for MSVC, "gcc" for g++ or the
 value of COMPILER_PREFIX if you set it explicitly), then optional "x64" if
 building in 64 bits and finally either "lib" or "dll" depending on whether
@@ -530,11 +530,11 @@ MSVC.
 
 Here is what you need to do:
 
-* Add $WXWIN\\include to the
+* Add `$WXWIN\include` to the
   - compiler
   - resource compiler
   include paths.
-* If using MSVC, prepend $WXWIN\include\msvc to the include paths too.
+* If using MSVC, prepend `$WXWIN\include\msvc` to the include paths too.
   Otherwise, append \<wx-lib-dir\>\mswu[d] to the include paths, where "d" should
   be used for debug builds only.
 * Define the following symbols for the preprocessor:
@@ -563,7 +563,7 @@ Finally, please notice that the makefiles and project files provided with
 wxWidgets samples show which flags should be used when building applications
 using wxWidgets and always work, so in case of a problem, e.g. if the
 instructions here are out of date, you can always simply copy a makefile or
-project file from $WXWIN\samples\minimal or some other sample and adapt it to
+project file from `$WXWIN\samples\minimal` or some other sample and adapt it to
 your application.
 
 If you are not using Visual Studio 2010 or newer please see
