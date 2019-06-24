@@ -55,7 +55,7 @@ Next step is to set up your project to use these files. You need to do the
 following:
 
 *   In the compiler options, i.e. "C/C++" properties:
-    *   Add `$(wxwin)/include/msvc;$(wxwin)/include` to the "Additional Include
+    *   Add `$wxwin/include/msvc;$wxwin/include` to the "Additional Include
         Directories". Notice that the order is important here, putting the
         MSVC-specific directory first ensures that you use `wx/setup.h`
         automatically linking in wxWidgets libraries.
@@ -71,7 +71,7 @@ following:
     *   Check that you use "Multi-threaded \[Debug\] DLL" in the "Run-time
         library" option under "Code Generation" to ensure that your build uses
         the same CRT version as our binaries.
-*   In the linker options you only need to add `$(wxwin)\lib\vc141_dll` (with
+*   In the linker options you only need to add `$wxwin\lib\vc141_dll` (with
     the compiler-version-dependent suffix, of course) to "Additional Library
     Directories" under "Linker\\General" in the options. Thanks to the use of
     MSVC-specific `setup.h` you don't need to list wxWidgets libraries manually,
