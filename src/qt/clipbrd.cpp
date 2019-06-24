@@ -152,7 +152,7 @@ bool wxClipboard::GetData( wxDataObject& data )
             textdata->SetText(wxQtConvertString(MimeData->text()));
         else
         {
-            QByteArray bytearray = MimeData->data( wxQtConvertString(format.GetMimeType()) ).data();
+            QByteArray bytearray = MimeData->data( wxQtConvertString(format.GetMimeType()) );
             data.SetData(format, bytearray.size(), bytearray.constData());
         }
 
