@@ -380,7 +380,7 @@ bool wxAuiFloatingFrame::isMouseDown()
     XQueryPointer(QX11Info::display(), QX11Info::appRootWindow(), &root, &child,
         &root_x, &root_y, &win_x, &win_y, &key_state);
 
-    return key_state == Button1Mask;
+    return key_state & Button1Mask;
 #else
     return wxGetMouseState().LeftIsDown();
 #endif
