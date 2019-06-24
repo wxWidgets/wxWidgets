@@ -331,6 +331,7 @@ public:
     void SetFontUnderlined(bool underlined) { m_fontUnderlined = underlined; m_flags |= wxTEXT_ATTR_FONT_UNDERLINE; }
     void SetFontUnderline(bool underlined, wxTextAttrUnderlineType type = wxTEXT_ATTR_UNDERLINE_SOLID, wxColour colour = *wxBLACK)
     {
+        m_flags |= type;
         m_fontUnderlined = underlined;
         m_fontUnderlinedType = type;
         m_colUnderline = colour;
@@ -412,7 +413,7 @@ public:
     bool HasFontPointSize() const { return HasFlag(wxTEXT_ATTR_FONT_POINT_SIZE); }
     bool HasFontPixelSize() const { return HasFlag(wxTEXT_ATTR_FONT_PIXEL_SIZE); }
     bool HasFontItalic() const { return HasFlag(wxTEXT_ATTR_FONT_ITALIC); }
-    bool HasFontUnderlined() const { return HasFlag(wxTEXT_ATTR_FONT_UNDERLINE); }
+    bool HasFontUnderlined() const { return m_fontUnderlined; }
     bool HasFontStrikethrough() const { return HasFlag(wxTEXT_ATTR_FONT_STRIKETHROUGH); }
     bool HasFontFaceName() const { return HasFlag(wxTEXT_ATTR_FONT_FACE); }
     bool HasFontEncoding() const { return HasFlag(wxTEXT_ATTR_FONT_ENCODING); }

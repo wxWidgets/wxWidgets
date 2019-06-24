@@ -176,6 +176,7 @@ void wxTextAttr::Init()
     m_textEffectFlags = wxTEXT_ATTR_EFFECT_NONE;
     m_outlineLevel = 0;
     m_bulletNumber = 0;
+    m_fontUnderlined = false;
 }
 
 // Copy

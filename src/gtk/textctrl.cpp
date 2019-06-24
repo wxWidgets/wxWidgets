@@ -124,19 +124,19 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
         }
     }
 
-    if( attr.HasFontUnderlinedWithEffect() )
+    if( attr.HasFontUnderlined() )
     {
         GtkTextTag *tag1;
         PangoUnderline pg_style;
-        if( !(attr.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_NONE || attr.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_SOLID ) )
+        if( !(attr.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_NONE || attr.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_SOLID ) )
         {
-            if( attr.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_NONE )
+            if( attr.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_NONE )
                 pg_style = PANGO_UNDERLINE_NONE;
-            if( attr.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_SOLID )
+            if( attr.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_SOLID )
                 pg_style = PANGO_UNDERLINE_SINGLE;
-            if( attr.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_DOUBLE )
+            if( attr.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_DOUBLE )
                 pg_style = PANGO_UNDERLINE_DOUBLE;
-            if( attr.GetUnderlinedType() == wxTEXT_ATTR_UNDERLINE_WAVE )
+            if( attr.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_WAVE )
                 pg_style = PANGO_UNDERLINE_ERROR;
         }
 
@@ -149,14 +149,25 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
                                               "underline-set", TRUE,
                                               "underline", pg_style,
                                               NULL );
-            if( gtk_check_version( 3, 16, 0 ) )
-                tag1 = gtk_text_buffer_create_tag( text_buffer, buf,
-                                                   "underline-rgba-set", TRUE,
-                                                   "underline-rgba", attr.GetUnderlineColour(),
-                                                   NULL );
         }
         gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
-        gtk_text_buffer_apply_tag (text_buffer, tag1, start, end);
+#ifdef __WXGTK3__
+        if( gtk_check_version( 3, 16, 0 ) )
+        {
+            const GdkColor *gdkColor = attr.GetUnderlineColour().GetColor();
+            GdkRGBA color_rgba = {
+                .red = CLAMP( (double) gdkColor->red / 65535.0,   0.0, 1.0 ),
+                .green = CLAMP( (double) gdkColor->green / 65535.0, 0.0, 1.0 ),
+                .blue  = CLAMP ((double) gdkColor->blue / 65535.0,  0.0, 1.0 ),
+                .alpha = 1.0,
+            };
+            tag1 = gtk_text_buffer_create_tag( text_buffer, buf,
+                                               "underline-rgba-set", TRUE,
+                                               "underline-rgba", color_rgba,
+                                               NULL );
+            gtk_text_buffer_apply_tag (text_buffer, tag1, start, end);
+        }
+#endif
     }
 
     if (attr.HasTextColour())
