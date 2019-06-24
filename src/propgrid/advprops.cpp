@@ -146,9 +146,9 @@ public:
         m_hasCapture = false;
         m_spins = 1;
 
-        Bind(wxEVT_LEFT_DOWN, &wxPGSpinButton::OnMouseEvent, this);
-        Bind(wxEVT_LEFT_UP, &wxPGSpinButton::OnMouseEvent, this);
-        Bind(wxEVT_MOTION, &wxPGSpinButton::OnMouseEvent, this);
+        Bind(wxEVT_LEFT_DOWN, &wxPGSpinButton::OnMouseLeftDown, this);
+        Bind(wxEVT_LEFT_UP, &wxPGSpinButton::OnMouseLeftUp, this);
+        Bind(wxEVT_MOTION, &wxPGSpinButton::OnMouseMove, this);
         Bind(wxEVT_MOUSE_CAPTURE_LOST, &wxPGSpinButton::OnMouseCaptureLost, this);
     }
 
@@ -200,44 +200,46 @@ private:
             SetCursor(wxNullCursor);
     }
 
-    void OnMouseEvent(wxMouseEvent& event)
+    void OnMouseLeftDown(wxMouseEvent& evt)
     {
-        if ( event.GetEventType() == wxEVT_LEFT_DOWN )
+        m_bLeftDown = true;
+        m_ptPosition = evt.GetPosition();
+        evt.Skip();
+    }
+
+    void OnMouseLeftUp(wxMouseEvent& evt)
+    {
+        Release();
+        m_bLeftDown = false;
+        evt.Skip();
+    }
+
+    void OnMouseMove(wxMouseEvent& evt)
+    {
+        if ( m_bLeftDown )
         {
-            m_bLeftDown = true;
-            m_ptPosition = event.GetPosition();
-        }
-        else if ( event.GetEventType() == wxEVT_LEFT_UP )
-        {
-            Release();
-            m_bLeftDown = false;
-        }
-        else if ( event.GetEventType() == wxEVT_MOTION )
-        {
-            if ( m_bLeftDown )
+            int dy = m_ptPosition.y - evt.GetPosition().y;
+            if ( dy )
             {
-                int dy = m_ptPosition.y - event.GetPosition().y;
-                if ( dy )
-                {
-                    Capture();
-                    m_ptPosition = event.GetPosition();
+                Capture();
+                m_ptPosition = evt.GetPosition();
 
-                    wxSpinEvent evtscroll( (dy >= 0) ? wxEVT_SCROLL_LINEUP :
-                                                       wxEVT_SCROLL_LINEDOWN,
-                                           GetId() );
-                    evtscroll.SetEventObject(this);
+                wxSpinEvent evtscroll( (dy >= 0) ? wxEVT_SCROLL_LINEUP :
+                                                    wxEVT_SCROLL_LINEDOWN,
+                                        GetId() );
+                evtscroll.SetEventObject(this);
 
-                    wxASSERT( m_spins == 1 );
+                wxASSERT( m_spins == 1 );
 
-                    m_spins = abs(dy);
-                    GetEventHandler()->ProcessEvent(evtscroll);
-                    m_spins = 1;
-                }
+                m_spins = abs(dy);
+                GetEventHandler()->ProcessEvent(evtscroll);
+                m_spins = 1;
             }
         }
 
-        event.Skip();
+        evt.Skip();
     }
+
     void OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
     {
         Release();
