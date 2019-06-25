@@ -483,8 +483,8 @@ bool wxIntProperty::DoValidation( const wxPGProperty* property,
                                   wxPGValidationInfo* pValidationInfo,
                                   int mode )
 {
-    wxLongLong llval(value);
-    return DoValidation(property, llval, pValidationInfo, mode);
+    return NumericValidation<wxLongLong_t>(property, value, pValidationInfo,
+                                           mode, LLONG_MIN, LLONG_MAX);
 }
 #endif // wxLongLong_t
 #endif // wxUSE_LONGLONG
@@ -727,8 +727,8 @@ bool wxUIntProperty::DoValidation(const wxPGProperty* property,
                                   wxPGValidationInfo* pValidationInfo,
                                   int mode )
 {
-    wxULongLong ullval(value);
-    return DoValidation(property, ullval, pValidationInfo, mode);
+    return NumericValidation<wxULongLong_t>(property, value, pValidationInfo,
+                                            mode, 0, ULLONG_MAX);
 }
 #endif // wxULongLong_t
 #endif // wxUSE_LONGLONG
