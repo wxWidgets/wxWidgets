@@ -26,7 +26,7 @@ wxString DataFormatIdToMimeType(wxDataFormatId formatId)
     switch ( formatId )
     {
         case wxDF_TEXT: return "text/plain";
-        case wxDF_BITMAP: return "image/bmp";
+        case wxDF_BITMAP: return "PNG";
         case wxDF_TIFF: return "image/tiff";
         case wxDF_WAVE: return "audio/x-wav";
         case wxDF_UNICODETEXT: return "text/plain";
