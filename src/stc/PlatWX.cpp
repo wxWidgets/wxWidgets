@@ -2356,7 +2356,7 @@ wxSTCListBoxVisualData::wxSTCListBoxVisualData(int d):m_desiredVisibleRows(d),
                         m_useDefaultTextColour(true),
                         m_useDefaultHighlightBgColour(true),
                         m_useDefaultHighlightTextColour(true),
-                        m_hasListCtrlAppearance(false),
+                        m_hasListCtrlAppearance(true),
                         m_useDefaultCurrentBgColour(true),
                         m_useDefaultCurrentTextColour(true)
 {
@@ -3161,18 +3161,6 @@ void ListBoxImpl::ClearRegisteredImages() {
 
 void ListBoxImpl::SetDoubleClickAction(CallBackAction action, void *data) {
     m_listBox->SetDoubleClickAction(action, data);
-}
-
-void ListBoxImpl::SetColours(const wxColour& background, const wxColour& text,
-                             const wxColour& hiliBg, const wxColour& hiliText)
-{
-    m_visualData->SetColours(background, text, hiliBg, hiliText);
-}
-
-void ListBoxImpl::UseListCtrlStyle(bool useListCtrl, const wxColour& currentBg,
-                                   const wxColour& currentText)
-{
-    m_visualData->UseListCtrlStyle(useListCtrl, currentBg, currentText);
 }
 
 

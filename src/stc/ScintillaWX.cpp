@@ -1399,24 +1399,6 @@ void ScintillaWX::DoRegisterImage(int type, const wxBitmap& bmp) {
     static_cast<ListBoxImpl*>(ac.lb)->RegisterImageHelper(type, bmp);
 }
 
-void ScintillaWX::SetListBoxColours(const wxColour& background,
-                                          const wxColour& text,
-                                          const wxColour& highlight,
-                                          const wxColour& highlightText)
-{
-    static_cast<ListBoxImpl*>(ac.lb)->SetColours(background, text,
-                                                  highlight, highlightText);
-}
-
-void ScintillaWX::UseListCtrlStyleForLists(bool useListCtrl,
-                                           const wxColour& currentBgColour,
-                                           const wxColour& currentTextColour)
-{
-    static_cast<ListBoxImpl*>(ac.lb)->UseListCtrlStyle(useListCtrl,
-                                                       currentBgColour,
-                                                       currentTextColour);
-}
-
 sptr_t ScintillaWX::DirectFunction(
     ScintillaWX* swx, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
     return swx->WndProc(iMessage, wParam, lParam);
