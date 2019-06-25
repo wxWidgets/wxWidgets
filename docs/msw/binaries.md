@@ -71,12 +71,14 @@ following:
     *   Check that you use "Multi-threaded \[Debug\] DLL" in the "Run-time
         library" option under "Code Generation" to ensure that your build uses
         the same CRT version as our binaries.
-*   In the linker options you only need to add `$``(wxwin)\lib\vc141_dll` (with
-    the compiler-version-dependent suffix, of course) to "Additional Library
-    Directories" under "Linker\\General" in the options. Thanks to the use of
-    MSVC-specific `setup.h` you don't need to list wxWidgets libraries manually,
-    i.e. you do **not** need to put anything in the list of "Additional
-    Dependencies".
+* In the linker options you only need to add `$``(wxwin)\lib\vc$``(PlatformToolsetVersion)_dll`
+  (the standard `PlatformToolsetVersion` macro expands into something like
+  `141`, depending on the toolset version being used, and you could also use
+  the version number directly if you prefer) to "Additional Library
+  Directories" under "Linker\\General" in the options. Thanks to the use of
+  MSVC-specific `setup.h` you don't need to list wxWidgets libraries manually,
+  i.e. you do **not** need to put anything in the list of "Additional
+  Dependencies".
 
 Now you should be able to build your project successfully, both in "Debug" and
 "Release" configurations. With MSVS 10 or newer it can also be done from the
