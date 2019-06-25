@@ -336,15 +336,33 @@ bool wxIntProperty::IntToValue( wxVariant& variant, int value, int WXUNUSED(argF
     return false;
 }
 
-//
+namespace {
+// This function by default doesn't modify the value.
+// For argument 'value' of type 'double' there is a specialized function (below).
+template<typename T>
+T GetRoundedValue(const wxPGProperty* prop, T value)
+{
+    wxUnusedVar(prop);
+    return value;
+}
+
+// Specialized function for floating-point values
+// takes into account required precision of the numbers
+// to avoid rounding and conversion errors.
+template<>
+double GetRoundedValue(const wxPGProperty* prop, double value)
+{
+    // Round value to the required precision.
+    wxVariant variant = value;
+    wxString strVal = prop->ValueToString(variant, wxPG_FULL_VALUE);
+    strVal.ToDouble(&value);
+    return value;
+}
+
 // Common validation code to be called in ValidateValue()
 // implementations.
-//
 // Note that 'value' is reference on purpose, so we can write
 // back to it when mode is wxPG_PROPERTY_VALIDATION_SATURATE or wxPG_PROPERTY_VALIDATION_WRAP.
-// For argument 'value' of type 'double' there is a specialized function (below).
-//
-namespace {
 template<typename T>
 bool NumericValidation( const wxPGProperty* property,
                         T& value,
@@ -357,16 +375,29 @@ bool NumericValidation( const wxPGProperty* property,
     bool minOk = false;
     bool maxOk = false;
 
+    // Round current value to the required precision, if applicable
+    value = GetRoundedValue<T>(property, value);
+
     variant = property->GetAttribute(wxPG_ATTR_MIN);
     if ( !variant.IsNull() )
     {
         minOk = variant.Convert(&min);
+    }
+    if ( minOk )
+    {
+        // Round minimal value to the required precision, if applicable
+        min = GetRoundedValue<T>(property, min);
     }
 
     variant = property->GetAttribute(wxPG_ATTR_MAX);
     if ( !variant.IsNull() )
     {
         maxOk = variant.Convert(&max);
+    }
+    if ( maxOk )
+    {
+        // Round maximal value to the required precision, if applicable
+        max = GetRoundedValue<T>(property, max);
     }
 
     if ( minOk )
@@ -416,115 +447,6 @@ bool NumericValidation( const wxPGProperty* property,
                 else
                 {
                     wxVariant vmin = WXVARIANT(min);
-                    wxString smin = property->ValueToString(vmin);
-                    msg = wxString::Format(
-                                _("Value must be between %s and %s."),
-                                smin, smax);
-                }
-                pValidationInfo->SetFailureMessage(msg);
-            }
-            else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
-                value = max;
-            else
-                value = min + (value - max);
-            return false;
-        }
-    }
-    return true;
-}
-
-// Template specialization for argument 'value' of type 'double'.
-// It takes into account required precision of the numbers
-// to avoid rounding and conversion errors.
-template<>
-bool NumericValidation( const wxPGProperty* property,
-                        double& value,
-                        wxPGValidationInfo* pValidationInfo,
-                        int mode, double defMin, double defMax)
-{
-    double min = defMin;
-    double max = defMax;
-    wxVariant variant;
-    bool minOk = false;
-    bool maxOk = false;
-
-    variant = property->GetAttribute(wxPG_ATTR_MIN);
-    if ( !variant.IsNull() )
-    {
-        minOk = variant.Convert(&min);
-    }
-
-    variant = property->GetAttribute(wxPG_ATTR_MAX);
-    if ( !variant.IsNull() )
-    {
-        maxOk = variant.Convert(&max);
-    }
-
-    if ( minOk || maxOk )
-    {
-        // Round current value to the required precision.
-        variant = value;
-        wxString strVal = property->ValueToString(variant, wxPG_FULL_VALUE);
-        strVal.ToDouble(&value);
-
-        // Round minimal value to the required precision.
-        variant = min;
-        strVal = property->ValueToString(variant, wxPG_FULL_VALUE);
-        strVal.ToDouble(&min);
-
-        // Round maximal value to the required precision.
-        variant = max;
-        strVal = property->ValueToString(variant, wxPG_FULL_VALUE);
-        strVal.ToDouble(&max);
-    }
-
-    if ( minOk )
-    {
-        if ( value < min )
-        {
-            if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
-            {
-                wxString msg;
-                wxVariant vmin = min;
-                wxString smin = property->ValueToString(vmin);
-                if ( !maxOk )
-                    msg = wxString::Format(
-                                _("Value must be %s or higher."),
-                                smin);
-                else
-                {
-                    wxVariant vmax = max;
-                    wxString smax = property->ValueToString(vmax);
-                    msg = wxString::Format(
-                                _("Value must be between %s and %s."),
-                                smin, smax);
-                }
-                pValidationInfo->SetFailureMessage(msg);
-            }
-            else if ( mode == wxPG_PROPERTY_VALIDATION_SATURATE )
-                value = min;
-            else
-                value = max - (min - value);
-            return false;
-        }
-    }
-
-    if ( maxOk )
-    {
-        if ( value > max )
-        {
-            if ( mode == wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE )
-            {
-                wxString msg;
-                wxVariant vmax = max;
-                wxString smax = property->ValueToString(vmax);
-                if ( !minOk )
-                    msg = wxString::Format(
-                                _("Value must be %s or less."),
-                                smax);
-                else
-                {
-                    wxVariant vmin = min;
                     wxString smin = property->ValueToString(vmin);
                     msg = wxString::Format(
                                 _("Value must be between %s and %s."),
