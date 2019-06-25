@@ -12,9 +12,6 @@
     #pragma hdrstop
 #endif
 
-#include <QPixmap>
-#include <QBuffer>
-
 #include "wx/dataobj.h"
 #include "wx/scopedarray.h"
 
@@ -26,7 +23,7 @@ wxString DataFormatIdToMimeType(wxDataFormatId formatId)
     switch ( formatId )
     {
         case wxDF_TEXT: return "text/plain";
-        case wxDF_BITMAP: return "PNG";
+        case wxDF_BITMAP: return "image/bmp";
         case wxDF_TIFF: return "image/tiff";
         case wxDF_WAVE: return "audio/x-wav";
         case wxDF_UNICODETEXT: return "text/plain";
@@ -156,54 +153,12 @@ bool wxDataObject::IsSupportedFormat(const wxDataFormat& format,
 //############################################################################
 
 wxBitmapDataObject::wxBitmapDataObject()
-    : m_imageBytes(new QByteArray())
 {
 }
 
 wxBitmapDataObject::wxBitmapDataObject( const wxBitmap &bitmap )
-    : wxBitmapDataObjectBase( bitmap ),
-    m_imageBytes(new QByteArray())
+    : wxBitmapDataObjectBase( bitmap )
 {
-    DoConvertToPng();
-}
-
-wxBitmapDataObject::~wxBitmapDataObject()
-{
-}
-
-void wxBitmapDataObject::SetBitmap(const wxBitmap &bitmap)
-{
-    wxBitmapDataObjectBase::SetBitmap(bitmap);
-
-    DoConvertToPng();
-}
-
-size_t wxBitmapDataObject::GetDataSize() const
-{
-    return m_imageBytes->size();
-}
-
-bool wxBitmapDataObject::GetDataHere(void *buf) const
-{
-    memcpy(buf, m_imageBytes->constData(), GetDataSize());
-    return true;
-}
-
-bool wxBitmapDataObject::SetData(const wxDataFormat &WXUNUSED(format), size_t len, const void *buf)
-{
-    m_imageBytes->resize(len);
-    memcpy(m_imageBytes->data(), buf, len);
-    QPixmap pix;
-    pix.loadFromData(*m_imageBytes);
-    m_bitmap = wxBitmap(pix);
-    return true;
-}
-
-void wxBitmapDataObject::DoConvertToPng()
-{
-    QBuffer buffer(m_imageBytes.get());
-    buffer.open(QIODevice::WriteOnly);
-    m_bitmap.GetHandle()->save(&buffer, "PNG");
 }
 
 //#############################################################################

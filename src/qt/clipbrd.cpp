@@ -14,13 +14,13 @@
 
 #include <QtWidgets/QApplication>
 #include <QtGui/QClipboard>
+#include <QtCore/QMimeData>
+#include <QPixmap>
 
 #include "wx/clipbrd.h"
 #include "wx/scopedarray.h"
 #include "wx/scopeguard.h"
 #include "wx/qt/private/converter.h"
-
-#include <QtCore/QMimeData>
 
 // ----------------------------------------------------------------------------
 // wxClipboard ctor/dtor
@@ -89,6 +89,14 @@ bool wxClipboard::IsOpened() const
 
 bool wxClipboard::AddData( wxDataObject *data )
 {
+    wxBitmapDataObjectBase* bitmap = dynamic_cast<wxBitmapDataObjectBase*>(data);
+    if (bitmap != NULL)
+    {
+        QtClipboard->setPixmap(*bitmap->GetBitmap().GetHandle());
+        delete data;
+        return true;
+    }
+
     QMimeData *MimeData = new QMimeData;
     const size_t count = data->GetFormatCount();
     wxDataFormatArray formats(count);
@@ -134,6 +142,17 @@ bool wxClipboard::GetData( wxDataObject& data )
 {
     wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
 
+    wxBitmapDataObjectBase* bitmap = dynamic_cast<wxBitmapDataObjectBase*>(&data);
+    if (bitmap != NULL)
+    {
+        QPixmap pix = QtClipboard->pixmap();
+        if (pix.isNull())
+            return false;
+
+        bitmap->SetBitmap(wxBitmap(pix));
+        return true;
+    }
+
     const QMimeData *MimeData = QtClipboard->mimeData( (QClipboard::Mode)Mode() );
     const size_t count = data.GetFormatCount(wxDataObject::Set);
     wxDataFormatArray formats(count);
@@ -170,6 +189,10 @@ void wxClipboard::Clear()
 bool wxClipboard::IsSupported( const wxDataFormat& format )
 {
     const QMimeData *data = QtClipboard->mimeData( (QClipboard::Mode)Mode() );
+    if (format.GetType() == wxDF_BITMAP)
+    {
+        return data->hasImage();
+    }
     return data->hasFormat(wxQtConvertString(format.GetMimeType()));
 }
 
