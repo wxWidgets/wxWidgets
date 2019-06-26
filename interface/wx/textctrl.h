@@ -220,7 +220,9 @@ enum wxTextAttrLineSpacing
 
 
 /**
-    Those values can be used with SetFontUnderlinedWithEffects
+    The values that can be used with SetFontUnderline
+
+	@since 3.1.3
 */
 enum wxTextAttrUnderlineType
 {
@@ -435,11 +437,15 @@ public:
 
     /**
         Returns the underline type, which is one of the @wxTextAttrUnderlineType values
+
+		@since 3.1.3
     */
     wxTextAttrUnderlineType GetUnderlinedType() const;
 
     /**
         Returns the underline color used
+
+		@since 3.1.3
     */
     const wxColour &GetUnderlineColour() const;
 
@@ -628,8 +634,10 @@ public:
     /**
         Returns @true if the attribute object specifies different underline types
         and color
+
+		@since 3.1.3
     */
-    bool HasFontUnderlinedWithEffect() const;
+    bool HasFontUnderline() const;
 
     /**
         Returns @true if the attribute object specifies font weight (bold, light or
@@ -836,8 +844,10 @@ public:
 
     /**
         Set the different underline type and the underline color
+
+		@since 3.1.3
     */
-    void SetFontUnderlinedWithEffects(bool underlined, wxTextAttrUnderlineType type = wxTEXT_ATTR_UNDERLINE_SOLID, wxColour colour = *wxBLACK);
+    void SetFontUnderline(bool underlined, wxTextAttrUnderlineType type = wxTEXT_ATTR_UNDERLINE_SOLID, wxColour colour = *wxBLACK);
 
     /**
         Sets the font weight.
