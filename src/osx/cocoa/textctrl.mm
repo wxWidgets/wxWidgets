@@ -1082,14 +1082,36 @@ void wxNSTextViewControl::SetStyle(long start,
     if ( start == -1 && end == -1 )
     {
         NSMutableDictionary* const
-            attrs = [NSMutableDictionary dictionaryWithCapacity:3];
+            attrs = [NSMutableDictionary dictionaryWithCapacity:5];
         if ( style.HasFont() )
             [attrs setValue:style.GetFont().OSXGetNSFont() forKey:NSFontAttributeName];
         if ( style.HasBackgroundColour() )
             [attrs setValue:style.GetBackgroundColour().OSXGetNSColor() forKey:NSBackgroundColorAttributeName];
         if ( style.HasTextColour() )
             [attrs setValue:style.GetTextColour().OSXGetNSColor() forKey:NSForegroundColorAttributeName];
+        if( style.GetUnderlineType() )
+        {
+            wxTextAttrUnderlineType underlineType = style.GetUnderlineType();
+            switch( underlineType )
+            {
+                case wxTEXT_ATTR_UNDERLINE_NONE:
+                    [attrs setObject:[NSNumber numberWithInt:( NSUnderlineStyleNone )] forKey:NSUnderlineStyleAttributeName];
+                    break;
 
+                case wxTEXT_ATTR_UNDERLINE_SOLID:
+                    [attrs setObject:[NSNumber numberWithInt:( NSUnderlineStyleSingle | NSUnderlineStyleSingle )] forKey:NSUnderlineStyleAttributeName];
+                    break;
+
+                case wxTEXT_ATTR_UNDERLINE_DOUBLE:
+                    [attrs setObject:[NSNumber numberWithInt:( NSUnderlineStyleSingle | NSUnderlineStyleDouble )] forKey:NSUnderlineStyleAttributeName];
+                    break;
+
+                case wxTEXT_ATTR_UNDERLINE_WAVE:
+                    [attrs setObject:[NSNumber numberWithInt:( NSUnderlineStyleSingle | NSUnderlinePatternDot )] forKey:NSUnderlineStyleAttributeName];
+                    break;
+            }
+            [attrs setValue:style.GetUnderlineColour().OSXGetNSColor() forKey:NSUnderlineColorAttributeName];
+        }
         [m_textView setTypingAttributes:attrs];
     }
     else // Set the attributes just for this range.
@@ -1105,6 +1127,26 @@ void wxNSTextViewControl::SetStyle(long start,
 
         if ( style.HasTextColour() )
             [storage addAttribute:NSForegroundColorAttributeName value:style.GetTextColour().OSXGetNSColor() range:range];
+
+        if( style.HasFontUnderlined() )
+        {
+            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+            if( style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_NONE )
+                [dict setObject:[NSNumber numberWithInt:(NSUnderlineStyleNone)] forKey:NSUnderlineStyleAttributeName];
+
+            if( style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_SOLID )
+                [dict setObject:[NSNumber numberWithInt:( NSUnderlineStyleSingle )] forKey:NSUnderlineStyleAttributeName];
+
+            if( style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_DOUBLE )
+                [dict setObject:[NSNumber numberWithInt:( NSUnderlineStyleDouble )] forKey:NSUnderlineStyleAttributeName];
+
+            if( style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_WAVE )
+                [dict setObject:[NSNumber numberWithInt:( NSUnderlinePatternDot )] forKey:NSUnderlineStyleAttributeName];
+            [dict setValue:style.GetUnderlineColour().OSXGetNSColor() forKey:NSUnderlineColorAttributeName];
+
+            [storage addAttributes:dict range:range];
+            [dict release];
+        }
     }
         
     if ( style.HasAlignment() )
