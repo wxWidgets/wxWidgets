@@ -333,7 +333,7 @@ public:
     {
         m_flags |= type;
         m_fontUnderlined = underlined;
-        m_fontUnderlinedType = type;
+        m_fontUnderlineType = type;
         m_colUnderline = colour;
     }
     void SetFontStrikethrough(bool strikethrough) { m_fontStrikethrough = strikethrough; m_flags |= wxTEXT_ATTR_FONT_STRIKETHROUGH; }
@@ -375,7 +375,7 @@ public:
     wxFontStyle GetFontStyle() const { return m_fontStyle; }
     wxFontWeight GetFontWeight() const { return m_fontWeight; }
     bool GetFontUnderlined() const { return m_fontUnderlined; }
-    wxTextAttrUnderlineType GetUnderlineType() const { return m_fontUnderlinedType; }
+    wxTextAttrUnderlineType GetUnderlineType() const { return m_fontUnderlineType; }
     const wxColour &GetUnderlineColour() const { return m_colUnderline; }
     bool GetFontStrikethrough() const { return m_fontStrikethrough; }
     const wxString& GetFontFaceName() const { return m_fontFaceName; }
@@ -526,7 +526,7 @@ private:
     wxFontWeight        m_fontWeight;
     wxFontFamily        m_fontFamily;
     bool                m_fontUnderlined;
-    wxTextAttrUnderlineType m_fontUnderlinedType;
+    wxTextAttrUnderlineType m_fontUnderlineType;
     wxColour            m_colUnderline;
     bool                m_fontStrikethrough;
     wxString            m_fontFaceName;
