@@ -2569,15 +2569,19 @@ dnl Check for lzma library
 dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_LIBLZMA" != "no"; then
-    AC_CHECK_HEADER(lzma.h,,,[])
+    dnl We shouldn't depend on the external liblzma if system libraries are
+    dnl explicitly disabled.
+    if test "$wxUSE_SYS_LIBS" != "no"; then
+        AC_CHECK_HEADER(lzma.h,,,[])
 
-    if test "$ac_cv_header_lzma_h" = "yes"; then
-        AC_CHECK_LIB(lzma, lzma_code,
-            [
-                LZMA_LINK="-llzma"
-                LIBS="$LZMA_LINK $LIBS"
-                AC_DEFINE(wxUSE_LIBLZMA)
-            ])
+        if test "$ac_cv_header_lzma_h" = "yes"; then
+            AC_CHECK_LIB(lzma, lzma_code,
+                [
+                    LZMA_LINK="-llzma"
+                    LIBS="$LZMA_LINK $LIBS"
+                    AC_DEFINE(wxUSE_LIBLZMA)
+                ])
+        fi
     fi
 
     if test -z "$LZMA_LINK"; then
