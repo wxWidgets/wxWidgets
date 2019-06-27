@@ -2867,13 +2867,13 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         case wxTEXT_ATTR_UNDERLINE_NONE:
             cf.bUnderlineType = CFU_UNDERLINENONE;
             break;
-		case wxTEXT_ATTR_UNDERLINE_SOLID:
+        case wxTEXT_ATTR_UNDERLINE_SOLID:
             cf.bUnderlineType = CFU_UNDERLINE;
             break;
-		case wxTEXT_ATTR_UNDERLINE_DOUBLE:
+        case wxTEXT_ATTR_UNDERLINE_DOUBLE:
             cf.bUnderlineType = CFU_UNDERLINEDOUBLE;
             break;
-		case wxTEXT_ATTR_UNDERLINE_WAVE:
+        case wxTEXT_ATTR_UNDERLINE_WAVE:
             cf.bUnderlineType = CFU_UNDERLINEWAVE;
             break;
     }
@@ -2881,7 +2881,7 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
 // The colours are coming from https://docs.microsoft.com/en-us/windows/desktop/api/tom/nf-tom-itextdocument2-geteffectcolor.
 // Not all values from wxTheColourDatabase are supported as can be seen from the code
 // Those are commented out currently
-    BYTE colour;
+    BYTE colour = 0;
     wxColour col = style.GetUnderlineColour();
     if( col == wxTheColourDatabase->Find( "BLACK" ) )
         colour = 0x01;
@@ -2911,8 +2911,8 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
 //        colour = 0x0D;
     else if( col == wxTheColourDatabase->Find( "GREY" ) )
         colour = 0x0E;
-    else if( col == wxTheColourDatabase->Find( "LIGHT GREY" ) )
-        colour = 0x0F;
+//    else if( col == wxTheColourDatabase->Find( "DARK GREY" ) )
+//        colour = 0x0F;
     else if( col == wxTheColourDatabase->Find( "LIGHT GREY" ) )
         colour = 0x0F;
     cf.bUnderlineColor = colour;
