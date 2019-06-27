@@ -357,6 +357,15 @@ void wxWindowQt::PostCreation(bool generic)
     // any way to create the window initially hidden with Qt).
     GetHandle()->setVisible(m_isShown);
 
+    m_qtWindow->setStyleSheet(
+        "*[no-border=\"true\"]{border: none;}\n"
+        "*[transparent-background=\"true\"]{background: transparent;}"
+    );
+
+    if ( GetWindowStyleFlag() & wxBORDER_NONE )
+    {
+        m_qtWindow->setProperty("no-border", true);
+    }
     wxWindowCreateEvent event(this);
     HandleWindowEvent(event);
 }
@@ -1038,12 +1047,14 @@ bool wxWindowQt::QtSetBackgroundStyle()
         {
             // wx paint handler will draw the invalidated region completely:
             widget->setAttribute(Qt::WA_OpaquePaintEvent);
+            widget->setProperty("transparent-background", false);
         }
         else if (m_backgroundStyle == wxBG_STYLE_TRANSPARENT)
         {
             widget->setAttribute(Qt::WA_TranslucentBackground);
-            // avoid a default background color (usually black):
-            widget->setStyleSheet("background:transparent;");
+            // avoid a default background color (usually black). This property
+            // is used a part of a selector in the widget's stylesheet
+            widget->setProperty("transparent-background", true);
         }
         else if (m_backgroundStyle == wxBG_STYLE_SYSTEM)
         {
@@ -1052,6 +1063,7 @@ bool wxWindowQt::QtSetBackgroundStyle()
             //widget->setAutoFillBackground(true);
             // use system colors for background (default in Qt)
             widget->setAttribute(Qt::WA_NoSystemBackground, false);
+            widget->setProperty("transparent-background", false);
         }
         else if (m_backgroundStyle == wxBG_STYLE_ERASE)
         {
@@ -1059,6 +1071,7 @@ bool wxWindowQt::QtSetBackgroundStyle()
             widget->setAttribute(Qt::WA_OpaquePaintEvent);
             // Qt should not clear the background (default):
             widget->setAutoFillBackground(false);
+            widget->setProperty("transparent-background", false);
         }
     }
     return true;
