@@ -1021,6 +1021,25 @@ Example:
 @endTable
 
 
+@subsubsection xrc_wxdataviewctrl wxDataViewCtrl
+
+No additional properties.
+
+
+@subsubsection xrc_wxdataviewlistctrl wxDataViewListCtrl
+
+No additional properties.
+
+
+@subsubsection xrc_wxdataviewtreectrl wxDataViewTreeCtrl
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{imagelist, @ref overview_xrcformat_type_imagelist,
+     Image list to use for the images (default: none).}
+@endTable
+
+
 @subsubsection xrc_wxdatepickerctrl wxDatePickerCtrl
 
 No additional properties.

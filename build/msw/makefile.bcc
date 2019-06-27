@@ -1224,6 +1224,7 @@ XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_xh_collpane.obj \
 	$(OBJS)\xrcdll_xh_combo.obj \
 	$(OBJS)\xrcdll_xh_comboctrl.obj \
+	$(OBJS)\xrcdll_xh_dataview.obj \
 	$(OBJS)\xrcdll_xh_datectrl.obj \
 	$(OBJS)\xrcdll_xh_dirpicker.obj \
 	$(OBJS)\xrcdll_xh_dlg.obj \
@@ -1301,6 +1302,7 @@ XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_xh_collpane.obj \
 	$(OBJS)\xrclib_xh_combo.obj \
 	$(OBJS)\xrclib_xh_comboctrl.obj \
+	$(OBJS)\xrclib_xh_dataview.obj \
 	$(OBJS)\xrclib_xh_datectrl.obj \
 	$(OBJS)\xrclib_xh_dirpicker.obj \
 	$(OBJS)\xrclib_xh_dlg.obj \
@@ -1694,6 +1696,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_xh_collpane.obj \
 	$(OBJS)\monodll_xh_combo.obj \
 	$(OBJS)\monodll_xh_comboctrl.obj \
+	$(OBJS)\monodll_xh_dataview.obj \
 	$(OBJS)\monodll_xh_datectrl.obj \
 	$(OBJS)\monodll_xh_dirpicker.obj \
 	$(OBJS)\monodll_xh_dlg.obj \
@@ -2525,6 +2528,7 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_xh_collpane.obj \
 	$(OBJS)\monolib_xh_combo.obj \
 	$(OBJS)\monolib_xh_comboctrl.obj \
+	$(OBJS)\monolib_xh_dataview.obj \
 	$(OBJS)\monolib_xh_datectrl.obj \
 	$(OBJS)\monolib_xh_dirpicker.obj \
 	$(OBJS)\monolib_xh_dlg.obj \
@@ -7292,6 +7296,9 @@ $(OBJS)\monodll_xh_combo.obj: ..\..\src\xrc\xh_combo.cpp
 $(OBJS)\monodll_xh_comboctrl.obj: ..\..\src\xrc\xh_comboctrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\xrc\xh_comboctrl.cpp
 
+$(OBJS)\monodll_xh_dataview.obj: ..\..\src\xrc\xh_dataview.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\xrc\xh_dataview.cpp
+
 $(OBJS)\monodll_xh_datectrl.obj: ..\..\src\xrc\xh_datectrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) ..\..\src\xrc\xh_datectrl.cpp
 
@@ -9837,6 +9844,9 @@ $(OBJS)\monolib_xh_combo.obj: ..\..\src\xrc\xh_combo.cpp
 
 $(OBJS)\monolib_xh_comboctrl.obj: ..\..\src\xrc\xh_comboctrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\xrc\xh_comboctrl.cpp
+
+$(OBJS)\monolib_xh_dataview.obj: ..\..\src\xrc\xh_dataview.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\xrc\xh_dataview.cpp
 
 $(OBJS)\monolib_xh_datectrl.obj: ..\..\src\xrc\xh_datectrl.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) ..\..\src\xrc\xh_datectrl.cpp
@@ -16084,6 +16094,9 @@ $(OBJS)\xrcdll_xh_combo.obj: ..\..\src\xrc\xh_combo.cpp
 $(OBJS)\xrcdll_xh_comboctrl.obj: ..\..\src\xrc\xh_comboctrl.cpp
 	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) ..\..\src\xrc\xh_comboctrl.cpp
 
+$(OBJS)\xrcdll_xh_dataview.obj: ..\..\src\xrc\xh_dataview.cpp
+	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) ..\..\src\xrc\xh_dataview.cpp
+
 $(OBJS)\xrcdll_xh_datectrl.obj: ..\..\src\xrc\xh_datectrl.cpp
 	$(CXX) -q -c -P -o$@ $(XRCDLL_CXXFLAGS) ..\..\src\xrc\xh_datectrl.cpp
 
@@ -16287,6 +16300,9 @@ $(OBJS)\xrclib_xh_combo.obj: ..\..\src\xrc\xh_combo.cpp
 
 $(OBJS)\xrclib_xh_comboctrl.obj: ..\..\src\xrc\xh_comboctrl.cpp
 	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) ..\..\src\xrc\xh_comboctrl.cpp
+
+$(OBJS)\xrclib_xh_dataview.obj: ..\..\src\xrc\xh_dataview.cpp
+	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) ..\..\src\xrc\xh_dataview.cpp
 
 $(OBJS)\xrclib_xh_datectrl.obj: ..\..\src\xrc\xh_datectrl.cpp
 	$(CXX) -q -c -P -o$@ $(XRCLIB_CXXFLAGS) ..\..\src\xrc\xh_datectrl.cpp

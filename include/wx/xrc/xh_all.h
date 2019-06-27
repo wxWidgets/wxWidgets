@@ -30,6 +30,7 @@
 #include "wx/xrc/xh_collpane.h"
 #include "wx/xrc/xh_combo.h"
 #include "wx/xrc/xh_comboctrl.h"
+#include "wx/xrc/xh_dataview.h"
 #include "wx/xrc/xh_datectrl.h"
 #include "wx/xrc/xh_dirpicker.h"
 #include "wx/xrc/xh_dlg.h"

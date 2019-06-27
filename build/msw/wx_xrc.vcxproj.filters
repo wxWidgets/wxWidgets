@@ -76,6 +76,9 @@
     <ClCompile Include="..\..\src\xrc\xh_comboctrl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\xrc\xh_dataview.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\xrc\xh_datectrl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -285,6 +288,9 @@
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\xrc\xh_comboctrl.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\wx\xrc\xh_dataview.h">
       <Filter>Common Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\wx\xrc\xh_datectrl.h">
