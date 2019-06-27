@@ -331,21 +331,6 @@ void wxWindowQt::PostCreation(bool generic)
     else
         SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 
-//    // Use custom Qt window flags (allow to turn on or off
-//    // the minimize/maximize/close buttons and title bar)
-//    Qt::WindowFlags qtFlags = GetHandle()->windowFlags();
-//
-//    qtFlags |= Qt::CustomizeWindowHint;
-//    qtFlags |= Qt::WindowTitleHint;
-//    qtFlags |= Qt::WindowSystemMenuHint;
-//    qtFlags |= Qt::WindowMinMaxButtonsHint;
-//    qtFlags |= Qt::WindowCloseButtonHint;
-//
-//    GetHandle()->setWindowFlags( qtFlags );
-//
-//    SetWindowStyleFlag( style );
-//
-
     // Set the default color so Paint Event default handler clears the DC:
     SetBackgroundColour(wxColour(GetHandle()->palette().background().color()));
     SetForegroundColour(wxColour(GetHandle()->palette().foreground().color()));
