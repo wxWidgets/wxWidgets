@@ -214,7 +214,7 @@
    compatibility.
  */
 #ifndef wxT
-    #if !wxUSE_UNICODE
+    #if !wxUSE_UNICODE_WCHAR
         #define wxT(x) x
     #else /* Unicode */
         /*
