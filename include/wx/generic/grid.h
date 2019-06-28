@@ -220,8 +220,8 @@ public:
     wxGridCellEditor();
 
     bool IsCreated() const { return m_control != NULL; }
-    wxControl* GetControl() const { return m_control; }
-    void SetControl(wxControl* control) { m_control = control; }
+    wxWindow* GetControl() const { return m_control; }
+    void SetControl(wxWindow* control) { m_control = control; }
 
     wxGridCellAttr* GetCellAttr() const { return m_attr; }
     void SetCellAttr(wxGridCellAttr* attr) { m_attr = attr; }
@@ -306,7 +306,7 @@ protected:
     virtual ~wxGridCellEditor();
 
     // the control we show on screen
-    wxControl*  m_control;
+    wxWindow*  m_control;
 
     // a temporary pointer to the attribute being edited
     wxGridCellAttr* m_attr;
@@ -2619,21 +2619,21 @@ public:
         }
 
     wxGridEditorCreatedEvent(int id, wxEventType type, wxObject* obj,
-                             int row, int col, wxControl* ctrl);
+                             int row, int col, wxWindow* ctrl);
 
     int GetRow()                        { return m_row; }
     int GetCol()                        { return m_col; }
-    wxControl* GetControl()             { return m_ctrl; }
+    wxWindow* GetControl()              { return m_ctrl; }
     void SetRow(int row)                { m_row = row; }
     void SetCol(int col)                { m_col = col; }
-    void SetControl(wxControl* ctrl)    { m_ctrl = ctrl; }
+    void SetControl(wxWindow* ctrl)     { m_ctrl = ctrl; }
 
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxGridEditorCreatedEvent(*this); }
 
 private:
     int m_row;
     int m_col;
-    wxControl* m_ctrl;
+    wxWindow* m_ctrl;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridEditorCreatedEvent);
 };

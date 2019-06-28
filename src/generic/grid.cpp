@@ -9333,7 +9333,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxGridEditorCreatedEvent, wxCommandEvent);
 
 wxGridEditorCreatedEvent::wxGridEditorCreatedEvent(int id, wxEventType type,
                                                    wxObject* obj, int row,
-                                                   int col, wxControl* ctrl)
+                                                   int col, wxWindow* ctrl)
     : wxCommandEvent(type, id)
 {
     SetEventObject(obj);
