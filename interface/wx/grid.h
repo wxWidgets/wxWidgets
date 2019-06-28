@@ -547,13 +547,25 @@ public:
     virtual wxString GetValue() const = 0;
 
     /**
-       Get the wxControl used by this editor.
+       Get the edit window used by this editor.
+    */
+    wxWindow* GetWindow() const;
+
+    /**
+       Set the wxWindow that will be used by this cell editor for editing the
+       value.
+    */
+    void SetWindow(wxWindow* window);
+
+    /**
+       Get the wxControl used by this editor. This function is obsolete,
+       please use GetWindow instead.
     */
     wxControl* GetControl() const;
 
     /**
        Set the wxControl that will be used by this cell editor for editing the
-       value.
+       value. This function is obsolete, please use SetWindow instead.
     */
     void SetControl(wxControl* control);
 
@@ -5285,7 +5297,7 @@ public:
     int GetCol();
 
     /**
-        Returns the edit control.
+        Returns the edit control. This function is obsolete, please use GetWindow instead.
     */
     wxControl* GetControl();
 
@@ -5295,12 +5307,17 @@ public:
     int GetRow();
 
     /**
+        Returns the edit window.
+    */
+    wxWindow* GetWindow();
+
+    /**
         Sets the column at which the event occurred.
     */
     void SetCol(int col);
 
     /**
-        Sets the edit control.
+        Sets the edit control. This function is obsolete, please use SetWindow instead.
     */
     void SetControl(wxControl* ctrl);
 
@@ -5308,6 +5325,11 @@ public:
         Sets the row at which the event occurred.
     */
     void SetRow(int row);
+
+    /**
+        Sets the edit window.
+    */
+    void SetWindow(wxWindow* window);
 };
 
 
