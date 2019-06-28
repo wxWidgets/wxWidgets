@@ -547,13 +547,38 @@ public:
     virtual wxString GetValue() const = 0;
 
     /**
+       Get the edit window used by this editor.
+
+       @since 3.1.3
+    */
+    wxWindow* GetWindow() const;
+
+    /**
+       Set the wxWindow that will be used by this cell editor for editing the
+       value.
+
+       @since 3.1.3
+    */
+    void SetWindow(wxWindow* window);
+
+    /**
        Get the wxControl used by this editor.
+
+       This function is preserved for compatibility, but GetWindow() should be
+       preferred in the new code as the associated window doesn't need to be of
+       a wxControl-derived class.
+
+       Note that if SetWindow() had been called with an object not deriving
+       from wxControl, this method will return @NULL.
     */
     wxControl* GetControl() const;
 
     /**
        Set the wxControl that will be used by this cell editor for editing the
        value.
+
+       This function is preserved for compatibility, but SetWindow() should be
+       preferred in the new code, see GetControl().
     */
     void SetControl(wxControl* control);
 
@@ -5286,6 +5311,13 @@ public:
 
     /**
         Returns the edit control.
+
+        This function is preserved for compatibility, but GetWindow() should be
+        preferred in the new code as the associated window doesn't need to be of
+        a wxControl-derived class.
+
+        Note that if SetWindow() had been called with an object not deriving
+        from wxControl, this method will return @NULL.
     */
     wxControl* GetControl();
 
@@ -5295,12 +5327,22 @@ public:
     int GetRow();
 
     /**
+        Returns the edit window.
+
+        @since 3.1.3
+    */
+    wxWindow* GetWindow();
+
+    /**
         Sets the column at which the event occurred.
     */
     void SetCol(int col);
 
     /**
         Sets the edit control.
+
+        This function is preserved for compatibility, but SetWindow() should be
+        preferred in the new code, see GetControl().
     */
     void SetControl(wxControl* ctrl);
 
@@ -5308,6 +5350,13 @@ public:
         Sets the row at which the event occurred.
     */
     void SetRow(int row);
+
+    /**
+        Sets the edit window.
+
+        @since 3.1.3
+    */
+    void SetWindow(wxWindow* window);
 };
 
 
