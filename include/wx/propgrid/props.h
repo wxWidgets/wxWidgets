@@ -212,6 +212,7 @@ public:
     virtual wxValidator* DoGetValidator() const wxOVERRIDE;
     virtual wxVariant AddSpinStepValue(long stepScale) const wxOVERRIDE;
 
+private:
     // Validation helpers.
 #if wxUSE_LONGLONG
     static bool DoValidation( const wxNumericProperty* property,
@@ -312,18 +313,19 @@ public:
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const wxOVERRIDE;
 
-    // Validation helper.
-    static bool DoValidation( const wxNumericProperty* property,
-                              double& value,
-                              wxPGValidationInfo* pValidationInfo,
-                              int mode =
-                                 wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE );
     static wxValidator* GetClassValidator();
     virtual wxValidator* DoGetValidator () const wxOVERRIDE;
     virtual wxVariant AddSpinStepValue(long stepScale) const wxOVERRIDE;
 
 protected:
     int m_precision;
+
+private:
+    // Validation helper.
+    static bool DoValidation(const wxNumericProperty* property,
+                             double& value,
+                             wxPGValidationInfo* pValidationInfo,
+                             int mode = wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE);
 };
 
 // -----------------------------------------------------------------------

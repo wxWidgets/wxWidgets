@@ -227,14 +227,6 @@ public:
     static wxValidator* GetClassValidator();
     virtual wxValidator* DoGetValidator() const;
     virtual wxVariant AddSpinStepValue(long stepScale) const;
-
-    /** Validation helper.
-    */
-    static bool DoValidation( const wxPGProperty* property,
-                              wxLongLong_t& value,
-                              wxPGValidationInfo* pValidationInfo,
-                              int mode =
-                                wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE );
 };
 
 
@@ -315,13 +307,6 @@ public:
     virtual bool ValidateValue( wxVariant& value,
                                 wxPGValidationInfo& validationInfo ) const;
 
-    /** Validation helper.
-    */
-    static bool DoValidation( const wxPGProperty* property,
-                              double& value,
-                              wxPGValidationInfo* pValidationInfo,
-                              int mode =
-                                 wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE );
     static wxValidator* GetClassValidator();
     virtual wxValidator* DoGetValidator () const;
     virtual wxVariant AddSpinStepValue(long stepScale) const;
