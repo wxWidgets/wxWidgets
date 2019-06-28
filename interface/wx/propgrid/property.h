@@ -54,11 +54,15 @@ struct wxPGPaintData
 */
 #define wxPG_ATTR_DEFAULT_VALUE           wxS("DefaultValue")
 
-/** Universal, @c int or @c double. Minimum value for numeric properties.
+/** Built-in attribute specific to wxNumericProperty and derived properties,
+    like wxIntProperty, wxUIntProperty, wxFloatProperty, @c int or @c double.
+    Minimum value for the property.
 */
 #define wxPG_ATTR_MIN                     wxS("Min")
 
-/** Universal, @c int or @c double. Maximum value for numeric properties.
+/** Built-in attribute specific to wxNumericProperty and derived properties,
+    like wxIntProperty, wxUIntProperty, wxFloatProperty, @c int or @c double.
+    Maximum value for the property.
 */
 #define wxPG_ATTR_MAX                     wxS("Max")
 
@@ -186,17 +190,23 @@ struct wxPGPaintData
 */
 #define wxPG_DATE_PICKER_STYLE              wxS("PickerStyle")
 
-/** SpinCtrl editor, @c int or @c double. How much number changes when button
-    is pressed (or up/down on keyboard).
+/** Built-in attribute specific to wxNumericProperty and derived properties,
+    like wxIntProperty, wxUIntProperty, wxFloatProperty, used by SpinCtrl editor,
+    @c int or @c double type. How much number changes when button is pressed
+    (or up/down on keyboard).
 */
 #define wxPG_ATTR_SPINCTRL_STEP             wxS("Step")
 
-/** SpinCtrl editor, @c bool. If @true, value wraps at Min/Max.
+/** Built-in attribute specific to wxNumericProperty and derived properties,
+    like wxIntProperty, wxUIntProperty, wxFloatProperty, used by SpinCtrl editor,
+    @c bool. If @true, value wraps at Min/Max.
 */
 #define wxPG_ATTR_SPINCTRL_WRAP             wxS("Wrap")
 
-/** SpinCtrl editor, @c bool. If @true, value can also by changed by moving
-    mouse when left mouse button is being pressed.
+/** Built-in attribute specific to wxNumericProperty and derived properties,
+    like wxIntProperty, wxUIntProperty, wxFloatProperty, used by SpinCtrl editor,
+    @c bool. If @true, value can also by changed by moving mouse when left
+    mouse button is being pressed.
 */
 #define wxPG_ATTR_SPINCTRL_MOTION           wxS("MotionSpin")
 
@@ -461,7 +471,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     @subsection wxIntProperty
 
-    Like wxStringProperty, but converts text to a signed long integer.
+    It derives from wxNumericProperty and displays value as a signed long integer.
     wxIntProperty seamlessly supports 64-bit integers (i.e. wxLongLong) on overlfow.
     To safely convert variant to integer, use code like this:
 
@@ -498,6 +508,9 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     Supported special attributes:
     - ::wxPG_ATTR_MIN, ::wxPG_ATTR_MAX to specify acceptable value range.
+    - ::wxPG_ATTR_SPINCTRL_STEP, ::wxPG_ATTR_SPINCTRL_WRAP,
+    ::wxPG_ATTR_SPINCTRL_MOTION: Sets SpinCtrl editor parameters.
+    @see @ref propgrid_property_attributes
 
     @subsection wxUIntProperty
 
@@ -517,6 +530,8 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     - ::wxPG_UINT_PREFIX: Defines displayed prefix. Possible values are
     ::wxPG_PREFIX_NONE, ::wxPG_PREFIX_0x and ::wxPG_PREFIX_DOLLAR_SIGN.
     Only ::wxPG_PREFIX_NONE works with decimal and octal numbers.
+    - ::wxPG_ATTR_SPINCTRL_STEP, ::wxPG_ATTR_SPINCTRL_WRAP,
+    ::wxPG_ATTR_SPINCTRL_MOTION: Sets SpinCtrl editor parameters.
     @see @ref propgrid_property_attributes
 
     @remarks
@@ -540,6 +555,8 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     - ::wxPG_FLOAT_PRECISION: Sets the (max) precision used when floating point
     value is rendered as text. The default -1 means shortest floating-point
     6-digit representation.
+    - ::wxPG_ATTR_SPINCTRL_STEP, ::wxPG_ATTR_SPINCTRL_WRAP,
+    ::wxPG_ATTR_SPINCTRL_MOTION: Sets SpinCtrl editor parameters.
     @see @ref propgrid_property_attributes
 
     @subsection wxBoolProperty

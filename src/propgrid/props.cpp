@@ -215,20 +215,68 @@ bool wxNumericPropertyValidator::Validate(wxWindow* parent)
 #endif // wxUSE_VALIDATORS
 
 // -----------------------------------------------------------------------
+// wxNumericProperty
+// -----------------------------------------------------------------------
+
+wxIMPLEMENT_ABSTRACT_CLASS(wxNumericProperty, wxPGProperty)
+
+wxNumericProperty::wxNumericProperty(const wxString& label, const wxString& name)
+    : wxPGProperty(label, name)
+    , m_spinMotion(false)
+    , m_spinStep(1L)
+    , m_spinWrap(false)
+{
+}
+
+wxNumericProperty::~wxNumericProperty()
+{
+}
+
+bool wxNumericProperty::DoSetAttribute(const wxString& name, wxVariant& value)
+{
+    if ( name == wxPG_ATTR_MIN )
+    {
+        m_minVal = value;
+        return true;
+    }
+    else if ( name == wxPG_ATTR_MAX )
+    {
+        m_maxVal = value;
+        return true;
+    }
+    else if ( name == wxPG_ATTR_SPINCTRL_MOTION )
+    {
+        m_spinMotion = value.GetBool();
+        return true;
+    }
+    else if ( name == wxPG_ATTR_SPINCTRL_STEP )
+    {
+        m_spinStep = value;
+        return true;
+    }
+    else if ( name == wxPG_ATTR_SPINCTRL_WRAP )
+    {
+        m_spinWrap = value.GetBool();
+        return true;
+    }
+    return wxPGProperty::DoSetAttribute(name, value);
+}
+
+// -----------------------------------------------------------------------
 // wxIntProperty
 // -----------------------------------------------------------------------
 
-wxPG_IMPLEMENT_PROPERTY_CLASS(wxIntProperty,wxPGProperty,TextCtrl)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxIntProperty,wxNumericProperty,TextCtrl)
 
 wxIntProperty::wxIntProperty( const wxString& label, const wxString& name,
-    long value ) : wxPGProperty(label,name)
+    long value ) : wxNumericProperty(label,name)
 {
     SetValue(value);
 }
 
 #if wxUSE_LONGLONG
 wxIntProperty::wxIntProperty( const wxString& label, const wxString& name,
-    const wxLongLong& value ) : wxPGProperty(label,name)
+    const wxLongLong& value ) : wxNumericProperty(label,name)
 {
     SetValue(wxVariant(value));
 }
@@ -364,7 +412,7 @@ double GetRoundedValue(const wxPGProperty* prop, double value)
 // Note that 'value' is reference on purpose, so we can write
 // back to it when mode is wxPG_PROPERTY_VALIDATION_SATURATE or wxPG_PROPERTY_VALIDATION_WRAP.
 template<typename T>
-bool NumericValidation( const wxPGProperty* property,
+bool NumericValidation( const wxNumericProperty* property,
                         T& value,
                         wxPGValidationInfo* pValidationInfo,
                         int mode, T defMin, T defMax)
@@ -378,7 +426,7 @@ bool NumericValidation( const wxPGProperty* property,
     // Round current value to the required precision, if applicable
     value = GetRoundedValue<T>(property, value);
 
-    variant = property->GetAttribute(wxPG_ATTR_MIN);
+    variant = property->GetMinVal();
     if ( !variant.IsNull() )
     {
         minOk = variant.Convert(&min);
@@ -389,7 +437,7 @@ bool NumericValidation( const wxPGProperty* property,
         min = GetRoundedValue<T>(property, min);
     }
 
-    variant = property->GetAttribute(wxPG_ATTR_MAX);
+    variant = property->GetMaxVal();
     if ( !variant.IsNull() )
     {
         maxOk = variant.Convert(&max);
@@ -466,7 +514,7 @@ bool NumericValidation( const wxPGProperty* property,
 } // namespace
 
 #if wxUSE_LONGLONG
-bool wxIntProperty::DoValidation( const wxPGProperty* property,
+bool wxIntProperty::DoValidation( const wxNumericProperty* property,
                                   wxLongLong& value,
                                   wxPGValidationInfo* pValidationInfo,
                                   int mode )
@@ -478,7 +526,7 @@ bool wxIntProperty::DoValidation( const wxPGProperty* property,
 }
 
 #if defined(wxLongLong_t)
-bool wxIntProperty::DoValidation( const wxPGProperty* property,
+bool wxIntProperty::DoValidation( const wxNumericProperty* property,
                                   wxLongLong_t& value,
                                   wxPGValidationInfo* pValidationInfo,
                                   int mode )
@@ -489,7 +537,7 @@ bool wxIntProperty::DoValidation( const wxPGProperty* property,
 #endif // wxLongLong_t
 #endif // wxUSE_LONGLONG
 
-bool wxIntProperty::DoValidation(const wxPGProperty* property,
+bool wxIntProperty::DoValidation(const wxNumericProperty* property,
                                  long& value,
                                  wxPGValidationInfo* pValidationInfo,
                                  int mode)
@@ -529,6 +577,37 @@ wxValidator* wxIntProperty::DoGetValidator() const
     return GetClassValidator();
 }
 
+wxVariant wxIntProperty::AddSpinStepValue(long stepScale) const
+{
+    int mode = m_spinWrap ? wxPG_PROPERTY_VALIDATION_WRAP
+        : wxPG_PROPERTY_VALIDATION_SATURATE;
+    wxVariant value = GetValue();
+    if ( value.GetType() == wxPG_VARIANT_TYPE_LONG )
+    {
+        long v = value.GetLong();
+        long step = m_spinStep.GetLong();
+        v += (step * stepScale);
+        DoValidation(this, v, NULL, mode);
+        value = v;
+    }
+#if wxUSE_LONGLONG
+    else if ( value.GetType() == wxPG_VARIANT_TYPE_LONGLONG )
+    {
+        wxLongLong v = value.GetLongLong();
+        wxLongLong step = m_spinStep.GetLongLong();
+        v += (step * stepScale);
+        DoValidation(this, v, NULL, mode);
+        value = v;
+    }
+#endif // wxUSE_LONGLONG
+    else
+    {
+        wxFAIL_MSG("Unknown value type");
+    }
+
+    return value;
+}
+
 // -----------------------------------------------------------------------
 // wxUIntProperty
 // -----------------------------------------------------------------------
@@ -546,7 +625,7 @@ enum
     wxPG_UINT_TEMPLATE_MAX
 };
 
-wxPG_IMPLEMENT_PROPERTY_CLASS(wxUIntProperty,wxPGProperty,TextCtrl)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxUIntProperty,wxNumericProperty,TextCtrl)
 
 void wxUIntProperty::Init()
 {
@@ -556,7 +635,7 @@ void wxUIntProperty::Init()
 }
 
 wxUIntProperty::wxUIntProperty( const wxString& label, const wxString& name,
-    unsigned long value ) : wxPGProperty(label,name)
+    unsigned long value ) : wxNumericProperty(label,name)
 {
     Init();
     SetValue((long)value);
@@ -564,7 +643,7 @@ wxUIntProperty::wxUIntProperty( const wxString& label, const wxString& name,
 
 #if wxUSE_LONGLONG
 wxUIntProperty::wxUIntProperty( const wxString& label, const wxString& name,
-    const wxULongLong& value ) : wxPGProperty(label,name)
+    const wxULongLong& value ) : wxNumericProperty(label,name)
 {
     Init();
     SetValue(wxVariant(value));
@@ -712,7 +791,7 @@ bool wxUIntProperty::IntToValue( wxVariant& variant, int number, int WXUNUSED(ar
 }
 
 #if wxUSE_LONGLONG
-bool wxUIntProperty::DoValidation(const wxPGProperty* property,
+bool wxUIntProperty::DoValidation(const wxNumericProperty* property,
                                   wxULongLong& value,
                                   wxPGValidationInfo* pValidationInfo,
                                   int mode )
@@ -722,7 +801,7 @@ bool wxUIntProperty::DoValidation(const wxPGProperty* property,
 }
 
 #if defined(wxULongLong_t)
-bool wxUIntProperty::DoValidation(const wxPGProperty* property,
+bool wxUIntProperty::DoValidation(const wxNumericProperty* property,
                                   wxULongLong_t& value,
                                   wxPGValidationInfo* pValidationInfo,
                                   int mode )
@@ -733,7 +812,7 @@ bool wxUIntProperty::DoValidation(const wxPGProperty* property,
 #endif // wxULongLong_t
 #endif // wxUSE_LONGLONG
 
-bool wxUIntProperty::DoValidation(const wxPGProperty* property,
+bool wxUIntProperty::DoValidation(const wxNumericProperty* property,
                                   long& value,
                                   wxPGValidationInfo* pValidationInfo,
                                   int mode)
@@ -794,19 +873,50 @@ bool wxUIntProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         m_prefix = (wxByte) value.GetLong();
         return true;
     }
-    return wxPGProperty::DoSetAttribute(name, value);
+    return wxNumericProperty::DoSetAttribute(name, value);
+}
+
+wxVariant wxUIntProperty::AddSpinStepValue(long stepScale) const
+{
+    int mode = m_spinWrap ? wxPG_PROPERTY_VALIDATION_WRAP
+                          : wxPG_PROPERTY_VALIDATION_SATURATE;
+    wxVariant value = GetValue();
+    if ( value.GetType() == wxPG_VARIANT_TYPE_LONG )
+    {
+        long v = value.GetLong();
+        long step = m_spinStep.GetLong();
+        v += (step * stepScale);
+        DoValidation(this, v, NULL, mode);
+        value = v;
+    }
+#if wxUSE_LONGLONG
+    else if ( value.GetType() == wxPG_VARIANT_TYPE_ULONGLONG )
+    {
+        wxULongLong v = value.GetULongLong();
+        wxULongLong step = m_spinStep.GetULongLong();
+        v += (step * stepScale);
+        DoValidation(this, v, NULL, mode);
+        value = v;
+    }
+#endif // wxUSE_LONGLONG
+    else
+    {
+        wxFAIL_MSG("Unknown value type");
+    }
+
+    return value;
 }
 
 // -----------------------------------------------------------------------
 // wxFloatProperty
 // -----------------------------------------------------------------------
 
-wxPG_IMPLEMENT_PROPERTY_CLASS(wxFloatProperty,wxPGProperty,TextCtrl)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxFloatProperty,wxNumericProperty,TextCtrl)
 
 wxFloatProperty::wxFloatProperty( const wxString& label,
                                             const wxString& name,
                                             double value )
-    : wxPGProperty(label,name)
+    : wxNumericProperty(label,name)
 {
     m_precision = -1;
     SetValue(value);
@@ -927,7 +1037,7 @@ bool wxFloatProperty::StringToValue( wxVariant& variant, const wxString& text, i
     return false;
 }
 
-bool wxFloatProperty::DoValidation( const wxPGProperty* property,
+bool wxFloatProperty::DoValidation( const wxNumericProperty* property,
                                     double& value,
                                     wxPGValidationInfo* pValidationInfo,
                                     int mode )
@@ -954,7 +1064,7 @@ bool wxFloatProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         m_precision = value.GetLong();
         return true;
     }
-    return wxPGProperty::DoSetAttribute(name, value);
+    return wxNumericProperty::DoSetAttribute(name, value);
 }
 
 wxValidator*
@@ -975,6 +1085,20 @@ wxFloatProperty::GetClassValidator()
 wxValidator* wxFloatProperty::DoGetValidator() const
 {
     return GetClassValidator();
+}
+
+wxVariant wxFloatProperty::AddSpinStepValue(long stepScale) const
+{
+    int mode = m_spinWrap ? wxPG_PROPERTY_VALIDATION_WRAP
+                          : wxPG_PROPERTY_VALIDATION_SATURATE;
+    wxVariant value = GetValue();
+    double v = value.GetDouble();
+    double step = m_spinStep.GetDouble();
+    v += (step * stepScale);
+    DoValidation(this, v, NULL, mode);
+    value = v;
+
+    return value;
 }
 
 // -----------------------------------------------------------------------

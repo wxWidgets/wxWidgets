@@ -257,38 +257,48 @@ wxPGSpinCtrlEditor::~wxPGSpinCtrlEditor()
 wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxPGProperty* property,
                                                    const wxPoint& pos, const wxSize& sz ) const
 {
-    const int margin = 1;
-
     wxSpinButton* wnd2;
+    wxSize tcSz;
 
+    wxNumericProperty* prop = wxDynamicCast(property, wxNumericProperty);
+    if ( prop )
+    {
+        const int margin = 1;
 #if IS_MOTION_SPIN_SUPPORTED
-    if ( property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_MOTION, 0) )
-    {
-        wnd2 = new wxPGSpinButton();
-    }
-    else
+        if ( prop->UseSpinMotion() )
+        {
+            wnd2 = new wxPGSpinButton();
+        }
+        else
 #endif
-    {
-        wnd2 = new wxSpinButton();
-    }
+        {
+            wnd2 = new wxSpinButton();
+        }
 
 #ifdef __WXMSW__
-    wnd2->Hide();
+        wnd2->Hide();
 #endif
-    wnd2->Create( propgrid->GetPanel(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_VERTICAL );
-    // Scale spin button to the required height (row height)
-    wxSize butSz = wnd2->GetBestSize();
+        wnd2->Create(propgrid->GetPanel(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_VERTICAL);
+        // Scale spin button to the required height (row height)
+        wxSize butSz = wnd2->GetBestSize();
 #ifdef __WXGTK3__
-    // Under GTK+ 3 spin button is always horizontal and cannot be downscaled
-    int butWidth = butSz.x;
+        // Under GTK+ 3 spin button is always horizontal and cannot be downscaled
+        int butWidth = butSz.x;
 #else
-    double sc = (double)sz.y / butSz.y;
-    int butWidth = wxMax(18, wxRound(sc*butSz.x));
+        double sc = (double)sz.y / butSz.y;
+        int butWidth = wxMax(18, wxRound(sc*butSz.x));
 #endif
-    wxSize tcSz(sz.x - butWidth - margin, sz.y);
-    wnd2->SetSize(pos.x + tcSz.x + margin, pos.y, butWidth, sz.y);
-    wnd2->SetRange( INT_MIN, INT_MAX );
-    wnd2->SetValue( 0 );
+        tcSz.Set(sz.x - butWidth - margin, sz.y);
+        wnd2->SetSize(pos.x + tcSz.x + margin, pos.y, butWidth, sz.y);
+        wnd2->SetRange(INT_MIN, INT_MAX);
+        wnd2->SetValue(0);
+    }
+    else
+    {
+        wxFAIL_MSG( "SpinCtrl editor can be assigned only to numeric property" );
+        tcSz.Set(sz.x, sz.y);
+        wnd2 = NULL;
+    }
 
     wxWindow* wnd1 = wxPGTextCtrlEditor::CreateControls(propgrid, property, pos, tcSz).m_primary;
 #if wxUSE_VALIDATORS
@@ -301,139 +311,63 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
 }
 
 // Control's events are redirected here
-bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
-                                  wxWindow* wnd, wxEvent& event ) const
+bool wxPGSpinCtrlEditor::OnEvent(wxPropertyGrid* propgrid, wxPGProperty* property,
+    wxWindow* wnd, wxEvent& event) const
 {
-    wxEventType evtType = event.GetEventType();
-    bool bigStep = false;
-
-    if ( evtType == wxEVT_KEY_DOWN )
+    wxNumericProperty* prop = wxDynamicCast(property, wxNumericProperty);
+    if ( prop )
     {
-        wxKeyEvent& keyEvent = (wxKeyEvent&)event;
-        int keycode;
-        keycode = keyEvent.GetKeyCode();
+        wxEventType evtType = event.GetEventType();
+        bool bigStep = false;
 
-        if ( keycode == WXK_UP )
-            evtType = wxEVT_SCROLL_LINEUP;
-        else if ( keycode == WXK_DOWN )
-            evtType = wxEVT_SCROLL_LINEDOWN;
-        else if ( keycode == WXK_PAGEUP )
+        if ( evtType == wxEVT_KEY_DOWN )
         {
-            evtType = wxEVT_SCROLL_LINEUP;
-            bigStep = true;
+            wxKeyEvent& keyEvent = (wxKeyEvent&)event;
+            int keycode;
+            keycode = keyEvent.GetKeyCode();
+
+            if ( keycode == WXK_UP )
+                evtType = wxEVT_SCROLL_LINEUP;
+            else if ( keycode == WXK_DOWN )
+                evtType = wxEVT_SCROLL_LINEDOWN;
+            else if ( keycode == WXK_PAGEUP )
+            {
+                evtType = wxEVT_SCROLL_LINEUP;
+                bigStep = true;
+            }
+            else if ( keycode == WXK_PAGEDOWN )
+            {
+                evtType = wxEVT_SCROLL_LINEDOWN;
+                bigStep = true;
+            }
         }
-        else if ( keycode == WXK_PAGEDOWN )
+
+        if ( evtType == wxEVT_SCROLL_LINEUP || evtType == wxEVT_SCROLL_LINEDOWN )
         {
-            evtType = wxEVT_SCROLL_LINEDOWN;
-            bigStep = true;
+            int spins = 1;
+#if IS_MOTION_SPIN_SUPPORTED
+            if ( prop->UseSpinMotion() )
+            {
+                wxPGSpinButton* spinButton =
+                    (wxPGSpinButton*)propgrid->GetEditorControlSecondary();
+
+                if ( spinButton )
+                    spins = spinButton->GetSpins();
+            }
+#endif
+
+            long stepScale = (evtType == wxEVT_SCROLL_LINEUP) ? 1L : -1L;
+            if ( bigStep )
+                stepScale *= 10L;
+            stepScale *= spins;
+
+            wxVariant v = prop->AddSpinStepValue(stepScale);
+            SetControlStringValue(prop, propgrid->GetEditorControl(), prop->ValueToString(v));
+            return true;
         }
     }
-
-    if ( evtType == wxEVT_SCROLL_LINEUP || evtType == wxEVT_SCROLL_LINEDOWN )
-    {
-        int spins = 1;
-    #if IS_MOTION_SPIN_SUPPORTED
-        if ( property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_MOTION, 0) )
-        {
-            wxPGSpinButton* spinButton =
-                (wxPGSpinButton*) propgrid->GetEditorControlSecondary();
-
-            if ( spinButton )
-                spins = spinButton->GetSpins();
-        }
-    #endif
-
-        wxString s;
-        // Can't use wnd since it might be clipper window
-        wxTextCtrl* tc = wxDynamicCast(propgrid->GetEditorControl(), wxTextCtrl);
-
-        if ( tc )
-            s = tc->GetValue();
-        else
-            s = property->GetValueAsString(wxPG_FULL_VALUE);
-
-        int mode = wxPG_PROPERTY_VALIDATION_SATURATE;
-
-        if ( property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_WRAP, 0) )
-            mode = wxPG_PROPERTY_VALIDATION_WRAP;
-
-        if ( property->GetValueType() == wxPG_VARIANT_TYPE_DOUBLE )
-        {
-            double v_d;
-            double step = property->GetAttributeAsDouble(wxPG_ATTR_SPINCTRL_STEP, 1.0);
-
-            // Try double
-            if ( s.ToDouble(&v_d) )
-            {
-                if ( bigStep )
-                    step *= 10.0;
-
-                step *= (double) spins;
-
-                if ( evtType == wxEVT_SCROLL_LINEUP ) v_d += step;
-                else v_d -= step;
-
-                // Min/Max check
-                wxFloatProperty::DoValidation(property, v_d, NULL, mode);
-
-                wxVariant v(v_d);
-                s = property->ValueToString(v, 0);
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            long step = property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_STEP, 1);
-#if defined(wxLongLong_t) && wxUSE_LONGLONG
-            wxLongLong_t v_ll;
-            // Try long long
-            if ( s.ToLongLong(&v_ll, 10) )
-#else
-            long v_ll;
-            // Try long
-            if ( s.ToLong(&v_ll, 10) )
-#endif
-            {
-                if ( bigStep )
-                    step *= 10;
-
-                step *= spins;
-
-                if ( evtType == wxEVT_SCROLL_LINEUP ) v_ll += step;
-                else v_ll -= step;
-
-                // Min/Max check
-                wxIntProperty::DoValidation(property, v_ll, NULL, mode);
-
-#if defined(wxLongLong_t) && wxUSE_LONGLONG
-                s = wxLongLong(v_ll).ToString();
-#else
-                s = wxString::Format(wxS("%ld"), v_ll);
-#endif
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        if ( tc )
-        {
-            int ip = tc->GetInsertionPoint();
-            int lp = tc->GetLastPosition();
-            tc->SetValue(s);
-            tc->SetInsertionPoint(ip+(tc->GetLastPosition()-lp));
-        }
-
-        return true;
-    }
-
-    return wxPGTextCtrlEditor::OnEvent(propgrid,property,wnd,event);
+    return wxPGTextCtrlEditor::OnEvent(propgrid, property, wnd, event);
 }
-
 #endif // wxUSE_SPINBTN
 
 

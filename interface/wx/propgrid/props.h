@@ -100,6 +100,68 @@ public:
     virtual bool Validate(wxWindow* parent);
 };
 
+/** @class wxNumericProperty
+    @ingroup classes
+
+    This is an abstract class which serves as a base class for numeric properties,
+    like wxIntProperty, wxUIntProperty, wxFloatProperty.
+
+    <b>Supported special attributes:</b>
+    - ::wxPG_ATTR_MIN, ::wxPG_ATTR_MAX: Specify acceptable value range.
+    - ::wxPG_ATTR_SPINCTRL_STEP: How much number changes when SpinCtrl editor
+    button is pressed (or up/down on keyboard).
+    - ::wxPG_ATTR_SPINCTRL_WRAP: Specify if value modified with SpinCtrl editor
+    wraps at Min/Max.
+    - ::wxPG_ATTR_SPINCTRL_MOTION: Specify if value can also by changed with
+    SpinCtrl editor by moving mouse when left mouse button is being pressed.
+*/
+class wxNumericProperty : public wxPGProperty
+{
+public:
+    virtual ~wxNumericProperty();
+
+    virtual bool DoSetAttribute(const wxString& name, wxVariant& value);
+
+    /**
+        Returns what would be the new value of the property after adding
+        SpinCtrl editor step to the current value. Current value range
+        and wrapping (if enabled) are taken into account.
+        This member has to be implemented in derived properties.
+
+        @param stepScale
+        SpinCtrl editor step is first multiplied by this factor and next
+        added to the current value.
+
+        @return
+        Value which property would have after adding SpinCtrl editor step.
+
+        @remark
+        Current property value is not changed.
+    */
+    virtual wxVariant AddSpinStepValue(long stepScale) const = 0;
+
+    /**
+        Return @true if value can be changed with SpinCtrl editor by moving
+        the mouse.
+    */
+    bool UseSpinMotion() const;
+
+    wxVariant GetMinVal() const;
+    wxVariant GetMaxVal() const;
+
+protected:
+    /**
+        Constructor is protected because wxNumericProperty is only a base
+        class for other numeric property classes.
+    */
+    wxNumericProperty(const wxString& label, const wxString& name);
+
+    wxVariant m_minVal;
+    wxVariant m_maxVal;
+    bool      m_spinMotion;
+    wxVariant m_spinStep;
+    bool      m_spinWrap;
+};
 
 
 /** @class wxIntProperty
@@ -141,9 +203,11 @@ public:
 
 
     <b>Supported special attributes:</b>
-    - ::wxPG_ATTR_MIN, ::wxPG_ATTR_MAX: Specify acceptable value range.
+    - ::wxPG_ATTR_MIN, ::wxPG_ATTR_MAX, ::wxPG_ATTR_SPINCTRL_STEP,
+    ::wxPG_ATTR_SPINCTRL_WRAP, ::wxPG_ATTR_SPINCTRL_MOTION:
+    like in wxNumericProperty.
 */
-class wxIntProperty : public wxPGProperty
+class wxIntProperty : public wxNumericProperty
 {
 public:
     wxIntProperty( const wxString& label = wxPG_LABEL,
@@ -165,6 +229,7 @@ public:
                              int argFlags = 0 ) const;
     static wxValidator* GetClassValidator();
     virtual wxValidator* DoGetValidator() const;
+    virtual wxVariant AddSpinStepValue(long stepScale) const;
 
     /** Validation helper.
     */
@@ -182,19 +247,21 @@ public:
     Seamlessly supports 64-bit integer (wxULongLong) on overflow.
 
     <b>Supported special attributes:</b>
-    - ::wxPG_ATTR_MIN, ::wxPG_ATTR_MAX: Specify acceptable value range.
     - ::wxPG_UINT_BASE: Define base. Valid constants are ::wxPG_BASE_OCT,
     ::wxPG_BASE_DEC, ::wxPG_BASE_HEX and ::wxPG_BASE_HEXL (lowercase characters).
     Arbitrary bases are <b>not</b> supported.
     - ::wxPG_UINT_PREFIX: Possible values are ::wxPG_PREFIX_NONE, ::wxPG_PREFIX_0x,
     and ::wxPG_PREFIX_DOLLAR_SIGN. Only ::wxPG_PREFIX_NONE works with Decimal
     and Octal numbers.
+    - ::wxPG_ATTR_MIN, ::wxPG_ATTR_MAX, ::wxPG_ATTR_SPINCTRL_STEP,
+    ::wxPG_ATTR_SPINCTRL_WRAP, ::wxPG_ATTR_SPINCTRL_MOTION:
+    like in wxNumericProperty.
 
     @remarks
     - For example how to use seamless 64-bit integer support, see wxIntProperty
     documentation (just use wxULongLong instead of wxLongLong).
 */
-class wxUIntProperty : public wxPGProperty
+class wxUIntProperty : public wxNumericProperty
 {
 public:
     wxUIntProperty( const wxString& label = wxPG_LABEL,
@@ -215,6 +282,8 @@ public:
     virtual bool IntToValue( wxVariant& variant,
                              int number,
                              int argFlags = 0 ) const;
+    virtual wxVariant AddSpinStepValue(long stepScale) const;
+
 protected:
     wxByte      m_base;
     wxByte      m_realBase; // translated to 8,16,etc.
@@ -229,8 +298,11 @@ protected:
     <b>Supported special attributes:</b>
     - ::wxPG_FLOAT_PRECISION: Sets the (max) precision used when floating point
     value is rendered as text. The default -1 means infinite precision.
+    - ::wxPG_ATTR_MIN, ::wxPG_ATTR_MAX, ::wxPG_ATTR_SPINCTRL_STEP,
+    ::wxPG_ATTR_SPINCTRL_WRAP, ::wxPG_ATTR_SPINCTRL_MOTION:
+    like in wxNumericProperty.
 */
-class wxFloatProperty : public wxPGProperty
+class wxFloatProperty : public wxNumericProperty
 {
 public:
     wxFloatProperty( const wxString& label = wxPG_LABEL,
@@ -255,6 +327,7 @@ public:
                                  wxPG_PROPERTY_VALIDATION_ERROR_MESSAGE );
     static wxValidator* GetClassValidator();
     virtual wxValidator* DoGetValidator () const;
+    virtual wxVariant AddSpinStepValue(long stepScale) const;
 
 protected:
     int m_precision;
