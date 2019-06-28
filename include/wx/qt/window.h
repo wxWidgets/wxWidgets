@@ -131,6 +131,9 @@ public:
     virtual bool SetTransparent(wxByte alpha) wxOVERRIDE;
     virtual bool CanSetTransparent() wxOVERRIDE { return true; }
 
+    virtual bool SetBackgroundColour(const wxColour& colour) wxOVERRIDE;
+    virtual bool SetForegroundColour(const wxColour& colour) wxOVERRIDE;
+
     QWidget *GetHandle() const wxOVERRIDE;
 
 #if wxUSE_DRAG_AND_DROP
