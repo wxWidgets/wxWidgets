@@ -1557,12 +1557,17 @@ bool wxWindowQt::QtHandleChangeEvent ( QWidget *handler, QEvent *event )
         return false;
 }
 
+// Returns true if the closing should be vetoed and false if the window should be closed.
 bool wxWindowQt::QtHandleCloseEvent ( QWidget *handler, QCloseEvent *WXUNUSED( event ) )
 {
     if ( GetHandle() != handler )
         return false;
 
-    return Close();
+    // This is required as Qt will still send out close events when the window is disabled.
+    if ( !IsEnabled() )
+        return true;
+
+    return !Close();
 }
 
 bool wxWindowQt::QtHandleContextMenuEvent ( QWidget *WXUNUSED( handler ), QContextMenuEvent *event )

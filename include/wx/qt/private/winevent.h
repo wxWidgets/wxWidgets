@@ -104,7 +104,7 @@ protected:
         if ( !this->GetHandler()->QtHandleCloseEvent(this, event) )
             Widget::closeEvent(event);
         else
-            event->accept();
+            event->ignore();
     }
 
     //wxContextMenuEvent
