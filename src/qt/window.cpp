@@ -1490,7 +1490,10 @@ bool wxWindowQt::QtHandleCloseEvent ( QWidget *handler, QCloseEvent *WXUNUSED( e
     if ( GetHandle() != handler )
         return false;
 
-    return Close();
+    if (!IsEnabled())
+        return true;
+
+    return !Close();
 }
 
 bool wxWindowQt::QtHandleContextMenuEvent ( QWidget *WXUNUSED( handler ), QContextMenuEvent *event )
