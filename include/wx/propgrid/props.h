@@ -166,9 +166,12 @@ public:
 
     virtual wxVariant AddSpinStepValue(long stepScale) const = 0;
 
-    wxVariant GetMinVal() const { return m_minVal; }
-    wxVariant GetMaxVal() const { return m_maxVal; }
     bool UseSpinMotion() const { return m_spinMotion; }
+
+    // Common validation code - for internal use.
+    template<typename T>
+    bool DoNumericValidation(T& value, wxPGValidationInfo* pValidationInfo,
+                             int mode, T defMin, T defMax) const;
 
 protected:
     wxNumericProperty(const wxString& label, const wxString& name);

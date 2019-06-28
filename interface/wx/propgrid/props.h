@@ -146,9 +146,6 @@ public:
     */
     bool UseSpinMotion() const;
 
-    wxVariant GetMinVal() const;
-    wxVariant GetMaxVal() const;
-
 protected:
     /**
         Constructor is protected because wxNumericProperty is only a base
