@@ -277,13 +277,6 @@ set(QT_HDR
     wx/generic/activityindicator.h
     ${QT_PLATFORM_HDR}
     wx/qt/treectrl.h
-    wx/qt/private/converter.h
-    wx/qt/private/winevent.h
-    wx/qt/private/timer.h
-    wx/qt/private/pointer.h
-    wx/qt/private/treeitemdelegate.h
-    wx/qt/private/treeitemfactory.h
-    wx/qt/private/utils.h
 )
 
 set(QT_SRC

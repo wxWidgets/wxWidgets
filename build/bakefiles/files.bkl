@@ -362,13 +362,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/dvrenderers.h
     $(QT_PLATFORM_HDR)
     wx/qt/treectrl.h
-    wx/qt/private/winevent.h
-    wx/qt/private/converter.h
-    wx/qt/private/treeitemdelegate.h
-    wx/qt/private/treeitemfactory.h
-    wx/qt/private/pointer.h
-    wx/qt/private/timer.h
-    wx/qt/private/utils.h
 </set>
 
 <set var="QT_SRC" hints="files">

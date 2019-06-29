@@ -3598,14 +3598,7 @@ COND_TOOLKIT_QT_GUI_HDR =  \
 	wx/qt/dataview.h \
 	wx/qt/dvrenderers.h \
 	$(QT_PLATFORM_HDR) \
-	wx/qt/treectrl.h \
-	wx/qt/private/winevent.h \
-	wx/qt/private/converter.h \
-	wx/qt/private/treeitemdelegate.h \
-	wx/qt/private/treeitemfactory.h \
-	wx/qt/private/pointer.h \
-	wx/qt/private/timer.h \
-	wx/qt/private/utils.h
+	wx/qt/treectrl.h
 @COND_TOOLKIT_QT@GUI_HDR = $(COND_TOOLKIT_QT_GUI_HDR)
 @COND_TOOLKIT_COCOA@MEDIA_PLATFORM_HDR = 
 @COND_TOOLKIT_GTK@MEDIA_PLATFORM_HDR = 
