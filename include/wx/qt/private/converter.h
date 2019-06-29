@@ -15,10 +15,12 @@
 
 #include "wx/kbdstate.h"
 #include "wx/gdicmn.h"
+#include "wx/colour.h"
 
 #include <QtCore/QRect>
 #include <QtCore/QSize>
 #include <QtCore/QString>
+#include <QtGui/QColor>
 
 // Rely on overloading and let the compiler pick the correct version, which makes
 // them easier to use then to write wxQtConvertQtRectToWxRect() or wxQtConvertWxRectToQtRect()
@@ -52,6 +54,16 @@ inline wxString wxQtConvertString( const QString &str )
 inline QString wxQtConvertString( const wxString &str )
 {
     return QString( str.utf8_str() );
+}
+
+inline wxColour wxQtConvertColour(const QColor &colour)
+{
+    return wxColour(colour.red(), colour.green(), colour.blue(), colour.alpha());
+}
+
+inline QColor wxQtConvertColour(const wxColour &colour)
+{
+    return QColor(colour.Red(), colour.Green(), colour.Blue(), colour.Alpha());
 }
 
 #if wxUSE_DATETIME

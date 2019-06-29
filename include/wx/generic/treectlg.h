@@ -360,7 +360,9 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxGenericTreeCtrl);
 };
 
-#if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
+// Also define wxTreeCtrl to be wxGenericTreeCtrl on all platforms without a
+// native version, i.e. all but MSW and Qt.
+#if !(defined(__WXMSW__) || defined(__WXQT__)) || defined(__WXUNIVERSAL__)
 /*
  * wxTreeCtrl has to be a real class or we have problems with
  * the run-time information.
@@ -383,7 +385,7 @@ public:
     {
     }
 };
-#endif // !__WXMSW__ || __WXUNIVERSAL__
+#endif // !(__WXMSW__ || __WXQT__) || __WXUNIVERSAL__
 
 #endif // wxUSE_TREECTRL
 
