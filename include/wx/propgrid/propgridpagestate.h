@@ -210,7 +210,7 @@ private:
 };
 
 template <typename PROPERTY, typename STATE>
-class WXDLLIMPEXP_PROPGRID wxPGIterator : public wxPropertyGridIteratorBase
+class wxPGIterator : public wxPropertyGridIteratorBase
 {
 public:
     wxPGIterator(STATE* state, int flags = wxPG_ITERATE_DEFAULT,
@@ -267,8 +267,8 @@ public:
 // Preferable way to iterate through contents of wxPropertyGrid,
 // wxPropertyGridManager, and wxPropertyGridPage.
 // See wxPropertyGridInterface::GetIterator() for more information about usage.
-typedef wxPGIterator<wxPGProperty, wxPropertyGridPageState> wxPropertyGridIterator;
-typedef wxPGIterator<const wxPGProperty, const wxPropertyGridPageState> wxPropertyGridConstIterator;
+typedef WXDLLIMPEXP_PROPGRID wxPGIterator<wxPGProperty, wxPropertyGridPageState> wxPropertyGridIterator;
+typedef WXDLLIMPEXP_PROPGRID wxPGIterator<const wxPGProperty, const wxPropertyGridPageState> wxPropertyGridConstIterator;
 
 // -----------------------------------------------------------------------
 
