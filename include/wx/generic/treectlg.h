@@ -360,7 +360,7 @@ private:
     wxDECLARE_NO_COPY_CLASS(wxGenericTreeCtrl);
 };
 
-#if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
+#if !defined(__WXMSW__) && ! defined(__WXQT__) || defined(__WXUNIVERSAL__)
 /*
  * wxTreeCtrl has to be a real class or we have problems with
  * the run-time information.

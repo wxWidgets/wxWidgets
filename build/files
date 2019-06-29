@@ -297,7 +297,17 @@ QT_HDR =
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
+    wx/qt/treectrl.h
     wx/qt/window.h
+    wx/qt/private/converter.h
+    wx/qt/private/winevent.h
+    wx/qt/private/winevent.h
+    wx/qt/private/converter.h
+    wx/qt/private/pointer.h
+    wx/qt/private/timer.h
+    wx/qt/private/treeitemdelegate.h
+    wx/qt/private/treeitemfactory.h
+    wx/qt/private/utils.h
 
 QT_SRC=
     $(QT_PLATFORM_SRC)
@@ -392,6 +402,7 @@ QT_SRC=
     src/qt/toolbar.cpp
     src/qt/tooltip.cpp
     src/qt/toplevel.cpp
+    src/qt/treectrl.cpp
     src/qt/uiaction.cpp
     src/qt/utils.cpp
     src/qt/window.cpp
