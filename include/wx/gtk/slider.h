@@ -9,8 +9,6 @@
 #ifndef _WX_GTK_SLIDER_H_
 #define _WX_GTK_SLIDER_H_
 
-#include "wx/gtk/private/wrapgtk.h"
-
 // ----------------------------------------------------------------------------
 // wxSlider
 // ----------------------------------------------------------------------------
@@ -58,12 +56,9 @@ public:
     virtual void SetThumbLength(int lenPixels) wxOVERRIDE;
     virtual int GetThumbLength() const wxOVERRIDE;
 
-#if GTK_CHECK_VERSION(2,16,0)
     virtual void ClearTicks() wxOVERRIDE;
     virtual void SetTick(int tickPos) wxOVERRIDE;
-    int GetTickFreq() const wxOVERRIDE 
-                        { return wx_is_at_least_gtk2(16) ? m_tickFreq : -1; }
-#endif
+    int GetTickFreq() const wxOVERRIDE;
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -82,9 +77,8 @@ protected:
     GtkWidget *m_minLabel,*m_maxLabel;
     bool m_blockScrollEvent;
 
-    // Note the following two members are not used in GTK+2 < 2.16.
+    // Note the following member is not used in GTK+2 < 2.16.
     int m_tickFreq;
-    GtkPositionType m_posTicks;
 
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
 
@@ -93,6 +87,9 @@ protected:
 
     // Platform-specific implementation of SetTickFreq
     virtual void DoSetTickFreq(int freq) wxOVERRIDE;
+
+private:
+    void Init();
 
     wxDECLARE_DYNAMIC_CLASS(wxSlider);
 };

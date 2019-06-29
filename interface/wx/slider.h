@@ -52,11 +52,11 @@
            Displays minimum, maximum and value labels (same as wxSL_VALUE_LABEL
            and wxSL_MIN_MAX_LABELS together).
     @style{wxSL_LEFT}
-           Displays ticks on the left and forces the slider to be vertical.
+           Displays ticks on the left and forces the slider to be vertical (Windows and GTK+ 3 only).
     @style{wxSL_RIGHT}
            Displays ticks on the right and forces the slider to be vertical.
     @style{wxSL_TOP}
-           Displays ticks on the top.
+           Displays ticks on the top (Windows and GTK+ 3 only).
     @style{wxSL_BOTTOM}
            Displays ticks on the bottom (this is the default).
     @style{wxSL_BOTH}
