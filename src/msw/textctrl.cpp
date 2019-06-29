@@ -81,6 +81,7 @@
 #endif
 
 // missing defines for MinGW build
+#define	CFM_UNDERLINETYPE			0x00800000		// Many displayed by 3.0 
 #define CFU_UNDERLINE					1
 #define CFU_UNDERLINEDOUBLE				3
 #define CFU_UNDERLINEWAVE				8
