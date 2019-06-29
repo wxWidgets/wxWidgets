@@ -37,10 +37,10 @@ public:
         m_actualParent(actualParent),
         m_moving(0)
     {
-        Bind(wxEVT_MOVE, &wxQtListTextCtrl::onMove, this);
+        Bind(wxEVT_MOVE, &wxQtListTextCtrl::OnMove, this);
     }
 
-    void onMove(wxMoveEvent &event)
+    void OnMove(wxMoveEvent &event)
     {
         // QWidget::move generates a QMoveEvent so we need to guard against
         // reentrant calls.
