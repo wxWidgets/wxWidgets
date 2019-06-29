@@ -80,6 +80,11 @@
     #define CFE_AUTOBACKCOLOR 0x04000000
 #endif
 
+// missing defines for MinGW build
+#define CFU_UNDERLINE					1
+#define CFU_UNDERLINEDOUBLE				3
+#define CFU_UNDERLINEWAVE				8
+
 #if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
 
 // dummy value used for m_dropTarget, different from any valid pointer value
