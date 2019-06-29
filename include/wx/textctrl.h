@@ -414,6 +414,7 @@ public:
     bool HasFontPixelSize() const { return HasFlag(wxTEXT_ATTR_FONT_PIXEL_SIZE); }
     bool HasFontItalic() const { return HasFlag(wxTEXT_ATTR_FONT_ITALIC); }
     bool HasFontUnderlined() const { return m_fontUnderlined; }
+	bool HasFontUnderline() const { return HasFlag( wxTEXT_ATTR_UNDERLINE_SOLID ) || HasFlag( wxTEXT_ATTR_UNDERLINE_DOUBLE ) || HasFlag( wxTEXT_ATTR_UNDERLINE_WAVE ); }
     bool HasFontStrikethrough() const { return HasFlag(wxTEXT_ATTR_FONT_STRIKETHROUGH); }
     bool HasFontFaceName() const { return HasFlag(wxTEXT_ATTR_FONT_FACE); }
     bool HasFontEncoding() const { return HasFlag(wxTEXT_ATTR_FONT_ENCODING); }

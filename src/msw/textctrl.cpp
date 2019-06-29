@@ -2816,7 +2816,6 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         // CHARFORMAT or CHARFORMAT2
         cf.cbSize = sizeof(cf);
     }
-    cf.dwMask |= CFM_UNDERLINETYPE;
     if ( style.HasFont() )
     {
         // VZ: CFM_CHARSET doesn't seem to do anything at all in RichEdit 2.0
@@ -2861,63 +2860,63 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
             cf.dwEffects |= CFE_STRIKEOUT;
         }
     }
-    wxTextAttrUnderlineType underlineType = style.GetUnderlineType();
-    switch( underlineType )
+    if( style.HasFontUnderline() )
     {
-        case wxTEXT_ATTR_UNDERLINE_NONE:
-            cf.bUnderlineType = CFU_UNDERLINENONE;
-            break;
-        case wxTEXT_ATTR_UNDERLINE_SOLID:
-            cf.bUnderlineType = CFU_UNDERLINE;
-            break;
-        case wxTEXT_ATTR_UNDERLINE_DOUBLE:
-            cf.bUnderlineType = CFU_UNDERLINEDOUBLE;
-            break;
-        case wxTEXT_ATTR_UNDERLINE_WAVE:
-            cf.bUnderlineType = CFU_UNDERLINEWAVE;
-            break;
-    }
+        cf.dwMask |= CFM_UNDERLINETYPE;
+        wxTextAttrUnderlineType underlineType = style.GetUnderlineType();
+        switch( underlineType )
+        {
+            case wxTEXT_ATTR_UNDERLINE_SOLID:
+                cf.bUnderlineType = CFU_UNDERLINE;
+                break;
+            case wxTEXT_ATTR_UNDERLINE_DOUBLE:
+                cf.bUnderlineType = CFU_UNDERLINEDOUBLE;
+                break;
+            case wxTEXT_ATTR_UNDERLINE_WAVE:
+                cf.bUnderlineType = CFU_UNDERLINEWAVE;
+                break;
+        }
 #if _RICHEDIT_VER >= 0x0800
 // The colours are coming from https://docs.microsoft.com/en-us/windows/desktop/api/tom/nf-tom-itextdocument2-geteffectcolor.
 // Not all values from wxTheColourDatabase are supported as can be seen from the code
 // Those are commented out currently
-    BYTE colour = 0;
-    wxColour col = style.GetUnderlineColour();
-    if( col == wxTheColourDatabase->Find( "BLACK" ) )
-        colour = 0x01;
-    else if( col == wxTheColourDatabase->Find( "BLUE" ) )
-        colour = 0x02;
-    else if( col == wxTheColourDatabase->Find( "CYAN" ) )
-        colour = 0x03;
-    else if( col == wxTheColourDatabase->Find( "GREEN" ) )
-        colour = 0x04;
-    else if( col == wxTheColourDatabase->Find( "MAGENTA" ) )
-        colour = 0x05;
-    else if( col == wxTheColourDatabase->Find( "RED" ) )
-        colour = 0x06;
-    else if( col == wxTheColourDatabase->Find( "YELLOW" ) )
-        colour = 0x07;
-    else if( col == wxTheColourDatabase->Find( "WHITE" ) )
-        colour = 0x08;
-//    else if( col == wxTheColourDatabase->Find( "NAVY" ) )
-//        colour = 0x09;
-//    else if( col == wxTheColourDatabase->Find( "TEAL" ) )
-//        colour = 0x0A;
-//    else if( col == wxTheColourDatabase->Find( "GREEN" ) )
-//        colour = 0x0B;
-//    else if( col == wxTheColourDatabase->Find( "PURPLE" ) )
-//        colour = 0x0C;
-//    else if( col == wxTheColourDatabase->Find( "MAROON" ) )
-//        colour = 0x0D;
-    else if( col == wxTheColourDatabase->Find( "GREY" ) )
-        colour = 0x0E;
-//    else if( col == wxTheColourDatabase->Find( "DARK GREY" ) )
-//        colour = 0x0F;
-    else if( col == wxTheColourDatabase->Find( "LIGHT GREY" ) )
-        colour = 0x0F;
-    cf.bUnderlineColor = colour;
+        BYTE colour = 0;
+        wxColour col = style.GetUnderlineColour();
+        if( col == wxTheColourDatabase->Find( "BLACK" ) )
+            colour = 0x01;
+        else if( col == wxTheColourDatabase->Find( "BLUE" ) )
+            colour = 0x02;
+        else if( col == wxTheColourDatabase->Find( "CYAN" ) )
+            colour = 0x03;
+        else if( col == wxTheColourDatabase->Find( "GREEN" ) )
+            colour = 0x04;
+        else if( col == wxTheColourDatabase->Find( "MAGENTA" ) )
+            colour = 0x05;
+        else if( col == wxTheColourDatabase->Find( "RED" ) )
+            colour = 0x06;
+        else if( col == wxTheColourDatabase->Find( "YELLOW" ) )
+            colour = 0x07;
+        else if( col == wxTheColourDatabase->Find( "WHITE" ) )
+            colour = 0x08;
+        else if( col == wxTheColourDatabase->Find( "wxNAVY" ) )
+            colour = 0x09;
+        else if( col == wxTheColourDatabase->Find( "wxTEAL" ) )
+            colour = 0x0A;
+        else if( col == wxTheColourDatabase->Find( "wxLIGHT GREEN" ) )
+            colour = 0x0B;
+        else if( col == wxTheColourDatabase->Find( "wxPURPLE" ) )
+            colour = 0x0C;
+        else if( col == wxTheColourDatabase->Find( "wxMAROON" ) )
+            colour = 0x0D;
+        else if( col == wxTheColourDatabase->Find( "GREY" ) )
+            colour = 0x0E;
+        else if( col == wxTheColourDatabase->Find( "wxDARK GREY" ) )
+            colour = 0x0F;
+        else if( col == wxTheColourDatabase->Find( "LIGHT GREY" ) )
+            colour = 0x0F;
+        cf.bUnderlineColor = colour;
 #endif
-
+    }
     if ( style.HasTextColour() )
     {
         cf.dwMask |= CFM_COLOR;
