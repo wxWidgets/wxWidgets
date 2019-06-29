@@ -311,16 +311,19 @@ void HeaderCtrlWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& evt)
 void HeaderCtrlWidgetsPage::OnResizing(wxHeaderCtrlEvent& evt)
 {
     wxLogMessage("Column %i resizing, width = %i", evt.GetColumn(), evt.GetWidth());
+    evt.Skip();
 }
 
 void HeaderCtrlWidgetsPage::OnBeginResize(wxHeaderCtrlEvent& evt)
 {
     wxLogMessage("Column %i resize began, width = %i", evt.GetColumn(), evt.GetWidth());
+    evt.Skip();
 }
 
 void HeaderCtrlWidgetsPage::OnEndResize(wxHeaderCtrlEvent& evt)
 {
     wxLogMessage("Column %i resize ended, width = %i", evt.GetColumn(), evt.GetWidth());
+    evt.Skip();
 }
 
 #endif // wxUSE_HEADERCTRL
