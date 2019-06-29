@@ -855,14 +855,8 @@ wxTreeItemId wxTreeCtrl::GetFirstChild(
     wxTreeItemIdValue& cookie
 ) const
 {
-    wxCHECK_MSG(item.IsOk(), wxTreeItemId(), "invalid tree item");
-
     cookie = 0;
-    QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-
-    return qTreeItem->childCount() > 0
-        ? wxQtConvertTreeItem(qTreeItem->child(0))
-        : wxTreeItemId();
+    return GetNextChild(item, cookie);
 }
 
 wxTreeItemId wxTreeCtrl::GetNextChild(
@@ -873,17 +867,17 @@ wxTreeItemId wxTreeCtrl::GetNextChild(
     wxCHECK_MSG(item.IsOk(), wxTreeItemId(), "invalid tree item");
 
     wxIntPtr currentIndex = reinterpret_cast<wxIntPtr>(cookie);
-    ++currentIndex;
 
     const QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
 
+    wxTreeItemId childItem;
     if ( currentIndex < qTreeItem->childCount() )
     {
+        childItem = wxQtConvertTreeItem(qTreeItem->child(currentIndex++));
         cookie = reinterpret_cast<wxTreeItemIdValue>(currentIndex);
-        return wxQtConvertTreeItem(qTreeItem->child(currentIndex));
     }
 
-    return wxTreeItemId();
+    return childItem;
 }
 
 wxTreeItemId wxTreeCtrl::GetLastChild(const wxTreeItemId& item) const
