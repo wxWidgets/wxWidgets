@@ -8,7 +8,7 @@ class WXDLLIMPEXP_STC wxCompletionItem
 {
 public:
     wxCompletionItem(const wxString& name, int icon, const wxString& doc = wxString(), wxClientData* data = NULL);
-    virtual ~wxCompletionItem();
+    ~wxCompletionItem();
 
     const wxString& GetName();
     int GetIcon();
