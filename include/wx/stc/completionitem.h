@@ -15,7 +15,7 @@ public:
     const wxString& GetDocumentation();
     wxClientData* GetClientObject();
 
-protected:
+private:
     wxString m_name;
     int m_icon;
     wxString m_doc;
