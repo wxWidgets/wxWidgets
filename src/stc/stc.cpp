@@ -5068,7 +5068,7 @@ void wxStyledTextCtrl::AutoCompShow(int lenEntered, const wxVector<wxCompletionI
     m_autocompList = list;
     //Create correct format for Scintilla
     wxString itemListString;
-    for(int i=0; i<m_autocompList.size(); i++)
+    for ( int i = 0; i < m_autocompList.size(); i++ )
     {
         const wxCompletionItem& cItem = m_autocompList[i];
         itemListString.Append(wxString::Format("%s?%d%c", cItem.GetName(), cItem.GetIcon(), AutoCompGetSeparator()));
