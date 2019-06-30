@@ -2234,6 +2234,31 @@ wxVariant& wxVariant::operator[] (size_t idx)
     return * (data->GetValue().Item(idx)->GetData());
 }
 
+wxVariant wxVariant::operator[] (const wxString& name) const
+{
+    wxArrayString arr;
+    for( size_t n = 0; n < GetCount(); ++n )
+    {
+        arr.Add( this[n].GetName() );
+    }
+    size_t index = arr.Index( name );
+    wxASSERT_MSG( (index != wxNOT_FOUND), wxT("Invalid index for array") );
+    return operator[]( index );
+}
+
+wxVariant& wxVariant::operator[] (const wxString& name)
+{
+    wxArrayString arr;
+    for( size_t n = 0; n < GetCount(); ++n )
+    {
+        arr.Add( this[n].GetName() );
+    }
+    size_t index = arr.Index( name );
+    wxASSERT_MSG( (index != wxNOT_FOUND), wxT("Invalid index for array") );
+    return operator[]( index );
+}
+
+
 // Return the number of elements in a list
 size_t wxVariant::GetCount() const
 {

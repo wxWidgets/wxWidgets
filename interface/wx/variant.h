@@ -278,6 +278,21 @@ public:
     wxVariant& operator [](size_t idx);
 
     /**
+        Returns the value based on the index name
+
+        @since 3.1.3
+    */
+    wxVariant operator [](const wxString &name) const;
+
+    /**
+        Returns a reference to the value based on the index name. This can be
+        used to change the value at this index.
+
+        @since 3.1.1
+    */
+    wxVariant& operator [](const wxString &name);
+
+    /**
         Appends a value to the list.
     */
     void Append(const wxVariant& value);

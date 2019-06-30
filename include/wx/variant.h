@@ -323,6 +323,8 @@ public:
     // Treat a list variant as an array
     wxVariant operator[] (size_t idx) const;
     wxVariant& operator[] (size_t idx) ;
+    wxVariant operator[] (const wxString& name) const;
+    wxVariant& operator[] (const wxString& name);
     wxVariantList& GetList() const ;
 
     // Return the number of elements in a list
