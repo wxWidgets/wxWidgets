@@ -5200,7 +5200,6 @@ public:
                              const wxColour& currentBgColour = wxNullColour,
                              const wxColour& currentTextColour = wxNullColour);
 
-    //Show autocompletion with a more intelligent way
     void AutoCompShow(int lenEntered, const wxVector<wxCompletionItem>& list);
 
     // The following methods are nearly equivalent to their similarly named

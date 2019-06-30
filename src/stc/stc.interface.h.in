@@ -410,9 +410,25 @@ public:
     void AutoCompUseListCtrl(bool useListCtrl = true,
                              const wxColour& currentBgColour = wxNullColour,
                              const wxColour& currentTextColour = wxNullColour);
-
     //@}
 
+    ///@member_group_name{Autocompletion, Autocompletion}
+    //@{
+    /**
+        Display a auto-completion list. 
+        This method provides more intelligent way to handle auto completion by allowing you to 
+        attach client object associated with completion item, as well as documentation of the 
+        that item. The client object of the selected item will be retrieved on the 
+        @c wxEVT_STC_AUTOCOMP_COMPLETED event using @link wxStyledTextEvent::GetClientObject()@endlink.
+
+        @param lenEntered
+            indicates how many characters before the caret should be used to provide context.
+        @param list
+            List of @link wxCompletionItem @endlink objects (autocompletion list). @see wxCompletionItem.
+        @since 3.1.3
+    */
+    void AutoCompShow(int lenEntered, const wxVector<wxCompletionItem>& list);
+    //@}
 
     // Raw versions
     // ----------------------------------------------
