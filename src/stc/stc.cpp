@@ -5070,7 +5070,7 @@ void wxStyledTextCtrl::AutoCompShow(int lenEntered, const wxVector<wxCompletionI
     wxString itemListString;
     for(int i=0; i<m_autocompList.size(); i++)
     {
-        wxCompletionItem cItem = m_autocompList[i];
+        const wxCompletionItem& cItem = m_autocompList[i];
         itemListString.Append(wxString::Format("%s?%d%c", cItem.GetName(), cItem.GetIcon(), AutoCompGetSeparator()));
     }
     SendMsg(SCI_AUTOCSHOW, lenEntered, (sptr_t)(const char*)wx2stc(itemListString));
