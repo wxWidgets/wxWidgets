@@ -7,13 +7,16 @@
 class WXDLLIMPEXP_STC wxCompletionItem
 {
 public:
-    wxCompletionItem(const wxString& name, int icon, const wxString& doc = wxString(), wxClientData* data = NULL);
-    ~wxCompletionItem();
+    wxCompletionItem(const wxString& name, int icon, const wxString& doc = wxString(), wxClientData* data = NULL)
+    : m_name(name), m_icon(icon), m_doc(doc), m_data(data)
+    {
+    }
+    ~wxCompletionItem(){}
 
-    const wxString& GetName();
-    int GetIcon();
-    const wxString& GetDocumentation();
-    wxClientData* GetClientObject();
+    const wxString& GetName(){ return m_name; }
+    int GetIcon(){ return m_icon; }
+    const wxString& GetDocumentation(){ return m_doc; }
+    wxClientData* GetClientObject(){ return m_data; }
 
 private:
     wxString m_name;
