@@ -40,7 +40,7 @@
 #include "wx/versioninfo.h"
 
 #include "wx/vector.h"
-#include "completionitem.h"
+#include "wx/stc/completionitem.h"
 
 #include "wx/textentry.h"
 #if wxUSE_TEXTCTRL
