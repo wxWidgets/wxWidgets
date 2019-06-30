@@ -519,7 +519,7 @@ void wxSlider::ClearTicks()
 void wxSlider::SetTick(int tickPos)
 {
 #if GTK_CHECK_VERSION(2,16,0)
-    if (wx_is_at_least_gtk2(16))
+    if ( wx_is_at_least_gtk2(16) )
     {
         GtkPositionType posTicks;
         long style = GetWindowStyle();
@@ -541,13 +541,15 @@ void wxSlider::SetTick(int tickPos)
 
         gtk_scale_add_mark(GTK_SCALE (m_scale), (double)tickPos, posTicks, NULL);
     }
+#else
+    wxUnusedVar(tickPos);
 #endif
 }
 
 void wxSlider::DoSetTickFreq(int freq)
 {
 #if GTK_CHECK_VERSION(2,16,0)
-    if (wx_is_at_least_gtk2(16))
+    if ( wx_is_at_least_gtk2(16) )
     {
         m_tickFreq = freq;
         gtk_scale_clear_marks(GTK_SCALE (m_scale));
@@ -555,6 +557,8 @@ void wxSlider::DoSetTickFreq(int freq)
         for (int i = GetMin() + freq; i < GetMax(); i += freq)
             SetTick(i);
     }
+#else
+    wxUnusedVar(freq);
 #endif
 }
 
