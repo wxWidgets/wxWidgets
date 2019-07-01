@@ -138,8 +138,6 @@ public:
                 this, &wxQTreeWidget::OnCurrentItemChanged);
         connect(this, &QTreeWidget::itemActivated,
                 this, &wxQTreeWidget::OnItemActivated);
-        connect(this, &QTreeWidget::itemClicked,
-                this, &wxQTreeWidget::OnItemClicked);
         connect(this, &QTreeWidget::itemCollapsed,
                 this, &wxQTreeWidget::OnItemCollapsed);
         connect(this, &QTreeWidget::itemExpanded,
@@ -158,6 +156,48 @@ public:
         //(perhaps because it's a compound widget) so we've disabled
         //wx paint and erase background events
         QTreeWidget::paintEvent(event);
+    }
+
+    virtual void mouseReleaseEvent(QMouseEvent * event) wxOVERRIDE
+    {
+        const QPoint qPos = event->pos();
+        QTreeWidgetItem *item = itemAt(qPos);
+        if (item != NULL)
+        {
+            const wxPoint pos(qPos.x(), qPos.y());
+            switch (event->button())
+            {
+                case Qt::RightButton:
+                {
+                    wxTreeEvent treeEvent(wxEVT_TREE_ITEM_RIGHT_CLICK,
+                        GetHandler(),
+                        wxQtConvertTreeItem(item));
+                    treeEvent.SetPoint(pos);
+                    EmitEvent(treeEvent);
+
+                    wxTreeEvent menuEvent(wxEVT_TREE_ITEM_MENU,
+                        GetHandler(),
+                        wxQtConvertTreeItem(item));
+                    menuEvent.SetPoint(pos);
+                    EmitEvent(menuEvent);
+
+                    break;
+                }
+                case Qt::MiddleButton:
+                {
+                    wxTreeEvent treeEvent(wxEVT_TREE_ITEM_MIDDLE_CLICK,
+                        GetHandler(),
+                        wxQtConvertTreeItem(item));
+                    treeEvent.SetPoint(pos);
+                    EmitEvent(treeEvent);
+                    break;
+                }
+                default:
+                    break;
+                }
+        }
+
+        return wxQtEventSignalHandler<QTreeWidget, wxTreeCtrl>::mouseReleaseEvent(event);
     }
 
     wxTextCtrl *GetEditControl()
@@ -338,22 +378,6 @@ private:
             wxQtConvertTreeItem(item)
         );
 
-        EmitEvent(event);
-    }
-
-    void OnItemClicked(QTreeWidgetItem *item)
-    {
-        wxMouseState mouseState = wxGetMouseState();
-
-        wxEventType eventType;
-        if ( mouseState.RightIsDown() )
-            eventType = wxEVT_TREE_ITEM_RIGHT_CLICK;
-        else if ( mouseState.MiddleIsDown() )
-            eventType = wxEVT_TREE_ITEM_MIDDLE_CLICK;
-        else
-            return;
-
-        wxTreeEvent event(eventType, GetHandler(), wxQtConvertTreeItem(item));
         EmitEvent(event);
     }
 
