@@ -162,10 +162,10 @@ public:
     {
         const QPoint qPos = event->pos();
         QTreeWidgetItem *item = itemAt(qPos);
-        if (item != NULL)
+        if ( item != NULL )
         {
             const wxPoint pos(qPos.x(), qPos.y());
-            switch (event->button())
+            switch ( event->button() )
             {
                 case Qt::RightButton:
                 {
