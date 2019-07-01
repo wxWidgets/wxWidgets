@@ -745,8 +745,9 @@ bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
     wxCHECK_MSG(item.IsOk(), false, "invalid tree item");
 
     const QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-    const QRect visualRect = m_qtTreeWidget->visualItemRect(qTreeItem);
-    return visualRect.isValid();
+    const QRect itemRect = m_qtTreeWidget->visualItemRect(qTreeItem);
+    const QRect clientRect = m_qtTreeWidget->rect();
+    return itemRect.isValid() && clientRect.contains(itemRect);
 }
 
 bool wxTreeCtrl::ItemHasChildren(const wxTreeItemId& item) const
