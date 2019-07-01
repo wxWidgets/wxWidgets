@@ -15,6 +15,9 @@
 
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QAbstractItemView>
+#include <QtGui/QFocusEvent>
 
 class wxQtComboBox : public wxQtEventSignalHandler< QComboBox, wxComboBox >
 {
@@ -252,6 +255,21 @@ void wxComboBox::Popup()
 void wxComboBox::Dismiss()
 {
     static_cast<QComboBox *>(GetHandle())->hidePopup();
+}
+
+bool wxComboBox::QtHandleFocusEvent(QWidget *handler, QFocusEvent *event)
+{
+    if (event->gotFocus())
+        return wxChoice::QtHandleFocusEvent(handler, event);
+
+    //QT treats the combobox and its drop-down as distinct widgets.
+    //So we don't generate a lose focus event if the combobox or
+    //its drop-down still have focus.
+    QWidget *widget = qApp->focusWidget();
+    if (widget == m_qtComboBox || widget == m_qtComboBox->view())
+        return false;
+
+    return wxChoice::QtHandleFocusEvent(handler, event);
 }
 
 void wxComboBox::Clear()
