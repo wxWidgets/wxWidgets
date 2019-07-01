@@ -222,7 +222,8 @@ protected:
             const wxImageList *imageList = GetHandler()->GetImageList();
             const wxBitmap bitmap = imageList->GetBitmap(imageIndex);
             const QRect rect = visualRect(index);
-            painter->drawPixmap(rect.topLeft(), *bitmap.GetHandle());
+            const int offset = (rect.height() / 2) - (bitmap.GetHeight() / 2);
+            painter->drawPixmap(rect.topLeft() + QPoint(0,offset), *bitmap.GetHandle());
         }
     }
 
