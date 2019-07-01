@@ -81,10 +81,21 @@
 #endif
 
 // missing defines for MinGW build
-#define	CFM_UNDERLINETYPE			0x00800000		// Many displayed by 3.0 
-#define CFU_UNDERLINE					1
-#define CFU_UNDERLINEDOUBLE				3
-#define CFU_UNDERLINEWAVE				8
+#ifndef CFM_UNDERLINETYPE
+#define CFM_UNDERLINETYPE               0x00800000
+#endif
+
+#ifndef CFU_UNDERLINE
+#define CFU_UNDERLINE                   1
+#endif
+
+#ifndef CFU_UNDERLINEDOUBLE
+#define CFU_UNDERLINEDOUBLE             3
+#endif
+
+#ifndef CFU_UNDERLINEWAVE
+#define CFU_UNDERLINEWAVE               8
+#endif
 
 #if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
 
@@ -2904,22 +2915,22 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
             colour = 0x07;
         else if( col == wxTheColourDatabase->Find( "WHITE" ) )
             colour = 0x08;
-        else if( col == wxTheColourDatabase->Find( "wxNAVY" ) )
+        else if( col == wxTheColourDatabase->Find( "WXNAVY" ) )
             colour = 0x09;
-        else if( col == wxTheColourDatabase->Find( "wxTEAL" ) )
+        else if( col == wxTheColourDatabase->Find( "WXTEAL" ) )
             colour = 0x0A;
-        else if( col == wxTheColourDatabase->Find( "wxLIGHT GREEN" ) )
+        else if( col == wxTheColourDatabase->Find( "WXLIGHT GREEN" ) )
             colour = 0x0B;
-        else if( col == wxTheColourDatabase->Find( "wxPURPLE" ) )
+        else if( col == wxTheColourDatabase->Find( "WXPURPLE" ) )
             colour = 0x0C;
-        else if( col == wxTheColourDatabase->Find( "wxMAROON" ) )
+        else if( col == wxTheColourDatabase->Find( "WXMAROON" ) )
             colour = 0x0D;
-        else if( col == wxTheColourDatabase->Find( "GREY" ) )
+        else if( col == wxTheColourDatabase->Find( "OLIVE" ) )
             colour = 0x0E;
         else if( col == wxTheColourDatabase->Find( "wxDARK GREY" ) )
             colour = 0x0F;
         else if( col == wxTheColourDatabase->Find( "LIGHT GREY" ) )
-            colour = 0x0F;
+            colour = 0x10;
         cf.bUnderlineColor = colour;
 #endif
     }

@@ -329,9 +329,9 @@ public:
     void SetFontWeight(wxFontWeight fontWeight) { m_fontWeight = fontWeight; m_flags |= wxTEXT_ATTR_FONT_WEIGHT; }
     void SetFontFaceName(const wxString& faceName) { m_fontFaceName = faceName; m_flags |= wxTEXT_ATTR_FONT_FACE; }
     void SetFontUnderlined(bool underlined) { m_fontUnderlined = underlined; m_flags |= wxTEXT_ATTR_FONT_UNDERLINE; }
-    void SetFontUnderline(bool underlined, wxTextAttrUnderlineType type = wxTEXT_ATTR_UNDERLINE_SOLID, wxColour colour = *wxBLACK)
+    void SetFontUnderline(bool underlined, wxTextAttrUnderlineType type = wxTEXT_ATTR_UNDERLINE_SOLID, const wxColour &colour = wxNullColour)
     {
-        m_flags |= type;
+        m_flags |= wxTEXT_ATTR_FONT_UNDERLINE;
         m_fontUnderlined = underlined;
         m_fontUnderlineType = type;
         m_colUnderline = colour;
