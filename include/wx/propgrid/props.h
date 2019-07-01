@@ -574,13 +574,23 @@ protected:
 };
 
 // -----------------------------------------------------------------------
-
-class WXDLLIMPEXP_PROPGRID
-    wxPGFileDialogAdapter : public wxPGEditorDialogAdapter
+class WXDLLIMPEXP_PROPGRID wxEditorDialogProperty : public wxPGProperty
 {
+    friend class wxPGDialogAdapter;
+    wxDECLARE_ABSTRACT_CLASS(wxDialogProperty);
+
 public:
-    virtual bool DoShowDialog( wxPropertyGrid* propGrid,
-                               wxPGProperty* property ) wxOVERRIDE;
+    virtual ~wxEditorDialogProperty();
+
+    virtual wxPGEditorDialogAdapter* GetEditorDialog() const wxOVERRIDE;
+
+protected:
+    wxEditorDialogProperty(const wxString& label, const wxString& name);
+
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) = 0;
+
+    wxString  m_dlgTitle;  // Title for a dialog
+    long      m_dlgStyle;  // Dialog style
 };
 
 // -----------------------------------------------------------------------
@@ -589,9 +599,8 @@ public:
 #define wxPG_PROP_SHOW_FULL_FILENAME  wxPG_PROP_CLASS_SPECIFIC_1
 
 // Like wxLongStringProperty, but the button triggers file selector instead.
-class WXDLLIMPEXP_PROPGRID wxFileProperty : public wxPGProperty
+class WXDLLIMPEXP_PROPGRID wxFileProperty : public wxEditorDialogProperty
 {
-    friend class wxPGFileDialogAdapter;
     WX_PG_DECLARE_PROPERTY_CLASS(wxFileProperty)
 public:
 
@@ -605,7 +614,6 @@ public:
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const wxOVERRIDE;
-    virtual wxPGEditorDialogAdapter* GetEditorDialog() const wxOVERRIDE;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
 
     static wxValidator* GetClassValidator();
@@ -615,36 +623,23 @@ public:
     wxFileName GetFileName() const;
 
 protected:
-    bool DisplayEditorDialog(wxPropertyGrid* propGrid, wxString& value);
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) wxOVERRIDE;
 
     wxString    m_wildcard;
     wxString    m_basePath; // If set, then show path relative to it
     wxString    m_initialPath; // If set, start the file dialog here
-    wxString    m_dlgTitle; // If set, used as title for file dialog
     int         m_indFilter; // index to the selected filter
-    long        m_dlgStyle;  // File dialog style
 };
 
 // -----------------------------------------------------------------------
 
-#define wxPG_PROP_NO_ESCAPE     wxPG_PROP_CLASS_SPECIFIC_1
 // Flag used in wxLongStringProperty to mark that edit button
 // should be enabled even in the read-only mode.
-#define wxPG_PROP_ACTIVE_BTN    wxPG_PROP_CLASS_SPECIFIC_3
-
-
-class WXDLLIMPEXP_PROPGRID
-    wxPGLongStringDialogAdapter : public wxPGEditorDialogAdapter
-{
-public:
-    virtual bool DoShowDialog( wxPropertyGrid* propGrid,
-                               wxPGProperty* property ) wxOVERRIDE;
-};
-
+#define wxPG_PROP_ACTIVE_BTN    wxPG_PROP_CLASS_SPECIFIC_1
 
 // Like wxStringProperty, but has a button that triggers a small text
 // editor dialog.
-class WXDLLIMPEXP_PROPGRID wxLongStringProperty : public wxPGProperty
+class WXDLLIMPEXP_PROPGRID wxLongStringProperty : public wxEditorDialogProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxLongStringProperty)
 public:
@@ -658,41 +653,32 @@ public:
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const wxOVERRIDE;
-    virtual bool OnEvent( wxPropertyGrid* propgrid,
-                          wxWindow* primary, wxEvent& event ) wxOVERRIDE;
-
-    // Shows string editor dialog. Value to be edited should be read from
-    // value, and if dialog is not cancelled, it should be stored back and true
-    // should be returned if that was the case.
-    virtual bool OnButtonClick( wxPropertyGrid* propgrid, wxString& value );
-
-    static bool DisplayEditorDialog( wxPGProperty* prop,
-                                     wxPropertyGrid* propGrid,
-                                     wxString& value );
 
 protected:
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) wxOVERRIDE;
 };
 
 // -----------------------------------------------------------------------
 
 
 // Like wxLongStringProperty, but the button triggers dir selector instead.
-class WXDLLIMPEXP_PROPGRID wxDirProperty : public wxLongStringProperty
+class WXDLLIMPEXP_PROPGRID wxDirProperty : public wxEditorDialogProperty
 {
-    wxDECLARE_DYNAMIC_CLASS(wxDirProperty);
+    WX_PG_DECLARE_PROPERTY_CLASS(wxDirProperty)
 public:
     wxDirProperty( const wxString& name = wxPG_LABEL,
                    const wxString& label = wxPG_LABEL,
                    const wxString& value = wxEmptyString );
     virtual ~wxDirProperty();
 
-    virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
+    virtual wxString ValueToString(wxVariant& value, int argFlags = 0) const wxOVERRIDE;
+    virtual bool StringToValue(wxVariant& variant, const wxString& text,
+                               int argFlags = 0) const wxOVERRIDE;
+    virtual bool DoSetAttribute(const wxString& name, wxVariant& value) wxOVERRIDE;
     virtual wxValidator* DoGetValidator() const wxOVERRIDE;
 
-    virtual bool OnButtonClick ( wxPropertyGrid* propGrid, wxString& value ) wxOVERRIDE;
-
 protected:
-    wxString    m_dlgMessage;
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) wxOVERRIDE;
 };
 
 // -----------------------------------------------------------------------

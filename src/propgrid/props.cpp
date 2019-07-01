@@ -1877,24 +1877,41 @@ bool wxFlagsProperty::DoSetAttribute( const wxString& name, wxVariant& value )
 // wxDirProperty
 // -----------------------------------------------------------------------
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxDirProperty, wxLongStringProperty);
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxDirProperty, wxEditorDialogProperty, TextCtrlAndButton)
 
 wxDirProperty::wxDirProperty( const wxString& name, const wxString& label, const wxString& value )
-  : wxLongStringProperty(name,label,value)
+    : wxEditorDialogProperty(name, label)
 {
-    m_flags |= wxPG_PROP_NO_ESCAPE;
     m_flags &= ~wxPG_PROP_ACTIVE_BTN; // Property button enabled only in not read-only mode.
+    SetValue(value);
 }
 
 wxDirProperty::~wxDirProperty() { }
+
+wxString wxDirProperty::ValueToString(wxVariant& value, int WXUNUSED(argFlags)) const
+{
+    return value;
+}
+
+bool wxDirProperty::StringToValue(wxVariant& variant, const wxString& text, int) const
+{
+    if ( variant != text )
+    {
+        variant = text;
+        return true;
+    }
+    return false;
+}
 
 wxValidator* wxDirProperty::DoGetValidator() const
 {
     return wxFileProperty::GetClassValidator();
 }
 
-bool wxDirProperty::OnButtonClick( wxPropertyGrid* propGrid, wxString& value )
+bool wxDirProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
 {
+    wxASSERT_MSG(value.IsType(wxS("string")), "Function called for incompatible property");
+
     // Update property value from editor, if necessary
     wxSize dlg_sz;
     wxPoint dlg_pos;
@@ -1907,19 +1924,12 @@ bool wxDirProperty::OnButtonClick( wxPropertyGrid* propGrid, wxString& value )
     else
     {
         dlg_sz.Set(300, 400);
-        dlg_pos = propGrid->GetGoodEditorDialogPosition(this, dlg_sz);
+        dlg_pos = pg->GetGoodEditorDialogPosition(this, dlg_sz);
     }
 
-    wxString dlgMessage(m_dlgMessage);
-    if ( dlgMessage.empty() )
-        dlgMessage = _("Choose a directory:");
-    wxDirDialog dlg( propGrid,
-                     dlgMessage,
-                     value,
-                     0,
-                     dlg_pos, dlg_sz
-                    );
-
+    wxDirDialog dlg(pg->GetPanel(),
+                    m_dlgTitle.empty() ? _("Choose a directory:") : m_dlgTitle,
+                    value.GetString(), m_dlgStyle, dlg_pos, dlg_sz);
     if ( dlg.ShowModal() == wxID_OK )
     {
         value = dlg.GetPath();
@@ -1928,47 +1938,81 @@ bool wxDirProperty::OnButtonClick( wxPropertyGrid* propGrid, wxString& value )
     return false;
 }
 
-bool wxDirProperty::DoSetAttribute( const wxString& name, wxVariant& value )
+bool wxDirProperty::DoSetAttribute(const wxString& name, wxVariant& value)
 {
     if ( name == wxPG_DIR_DIALOG_MESSAGE )
     {
-        m_dlgMessage = value.GetString();
+        m_dlgTitle = value.GetString();
         return true;
     }
-    return wxLongStringProperty::DoSetAttribute(name, value);
+    return wxEditorDialogProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------
-// wxPGFileDialogAdapter
+// wxPGDialogAdapter
 // -----------------------------------------------------------------------
 
-bool wxPGFileDialogAdapter::DoShowDialog( wxPropertyGrid* propGrid, wxPGProperty* property )
+class WXDLLIMPEXP_PROPGRID wxPGDialogAdapter : public wxPGEditorDialogAdapter
 {
-    wxFileProperty* prop = wxDynamicCast(property, wxFileProperty);
-    wxCHECK_MSG( prop, false, "Function called for incompatible property" );
-
-    wxString value = prop->GetValueAsString(0);
-    if ( prop->DisplayEditorDialog(propGrid, value) )
+public:
+    wxPGDialogAdapter() : wxPGEditorDialogAdapter()
     {
-        SetValue(value);
-        return true;
     }
 
-    return false;
+    virtual ~wxPGDialogAdapter()
+    {
+    }
+
+    virtual bool DoShowDialog(wxPropertyGrid* pg, wxPGProperty* prop) wxOVERRIDE
+    {
+        wxEditorDialogProperty* dlgProp = wxDynamicCast(prop, wxEditorDialogProperty);
+        wxCHECK_MSG(dlgProp, false, "Function called for incompatible property");
+
+        wxVariant val = pg->GetUncommittedPropertyValue();
+        if ( dlgProp->DisplayEditorDialog(pg, val) )
+        {
+            SetValue(val);
+            return true;
+        }
+
+        return false;
+    }
+};
+
+// -----------------------------------------------------------------------
+// wxDialogProperty
+// -----------------------------------------------------------------------
+
+wxIMPLEMENT_ABSTRACT_CLASS(wxEditorDialogProperty, wxPGProperty)
+
+wxEditorDialogProperty::wxEditorDialogProperty(const wxString& label, const wxString& name)
+    : wxPGProperty(label, name)
+    , m_dlgStyle(0)
+{
+}
+
+wxEditorDialogProperty::~wxEditorDialogProperty()
+{
+}
+
+wxPGEditorDialogAdapter* wxEditorDialogProperty::GetEditorDialog() const
+{
+    return new wxPGDialogAdapter();
 }
 
 // -----------------------------------------------------------------------
 // wxFileProperty
 // -----------------------------------------------------------------------
 
-wxPG_IMPLEMENT_PROPERTY_CLASS(wxFileProperty,wxPGProperty,TextCtrlAndButton)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxFileProperty,wxEditorDialogProperty,TextCtrlAndButton)
 
 wxFileProperty::wxFileProperty( const wxString& label, const wxString& name,
-    const wxString& value ) : wxPGProperty(label,name)
+                                const wxString& value )
+    : wxEditorDialogProperty(label, name)
 {
     m_flags |= wxPG_PROP_SHOW_FULL_FILENAME;
+    m_flags &= ~wxPG_PROP_ACTIVE_BTN; // Property button enabled only in not read-only mode.
     m_indFilter = -1;
-    m_dlgStyle = 0;
     m_wildcard = wxALL_FILES;
 
     SetValue(value);
@@ -2089,11 +2133,6 @@ wxString wxFileProperty::ValueToString( wxVariant& value,
     return filename.GetFullName();
 }
 
-wxPGEditorDialogAdapter* wxFileProperty::GetEditorDialog() const
-{
-    return new wxPGFileDialogAdapter();
-}
-
 bool wxFileProperty::StringToValue( wxVariant& variant, const wxString& text, int argFlags ) const
 {
     wxFileName filename = variant.GetString();
@@ -2155,21 +2194,24 @@ bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         m_dlgStyle = value.GetLong();
         return true;
     }
-    return wxPGProperty::DoSetAttribute(name, value);
+    return wxEditorDialogProperty::DoSetAttribute(name, value);
 }
 
-bool wxFileProperty::DisplayEditorDialog(wxPropertyGrid* propGrid, wxString& value)
+bool wxFileProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
 {
-    wxFileName filename = value;
+    wxASSERT_MSG(value.IsType(wxS("string")), "Function called for incompatible property");
+
+    wxString strVal = value.GetString();
+    wxFileName filename = strVal;
     wxString path = filename.GetPath();
 
     if ( path.empty() && !m_basePath.empty() )
         path = m_basePath;
 
-    wxFileDialog dlg(propGrid->GetPanel(),
+    wxFileDialog dlg(pg->GetPanel(),
         m_dlgTitle.empty() ? _("Choose a file") : m_dlgTitle,
         m_initialPath.empty() ? path : m_initialPath,
-        value,
+        strVal,
         m_wildcard.empty() ? wxALL_FILES : m_wildcard,
         m_dlgStyle,
         wxDefaultPosition);
@@ -2187,47 +2229,17 @@ bool wxFileProperty::DisplayEditorDialog(wxPropertyGrid* propGrid, wxString& val
 }
 
 // -----------------------------------------------------------------------
-// wxPGLongStringDialogAdapter
-// -----------------------------------------------------------------------
-
-bool wxPGLongStringDialogAdapter::DoShowDialog( wxPropertyGrid* propGrid, wxPGProperty* property )
-{
-    wxString val1 = property->GetValueAsString(0);
-    wxString val_orig = val1;
-
-    wxString value;
-    if ( !property->HasFlag(wxPG_PROP_NO_ESCAPE) )
-        wxPropertyGrid::ExpandEscapeSequences(value, val1);
-    else
-        value = wxString(val1);
-
-    // Run editor dialog.
-    if ( wxLongStringProperty::DisplayEditorDialog(property, propGrid, value) )
-    {
-        if ( !property->HasFlag(wxPG_PROP_NO_ESCAPE) )
-            wxPropertyGrid::CreateEscapeSequences(val1,value);
-        else
-            val1 = value;
-
-        if ( val1 != val_orig )
-        {
-            SetValue( val1 );
-            return true;
-        }
-    }
-    return false;
-}
-
-// -----------------------------------------------------------------------
 // wxLongStringProperty
 // -----------------------------------------------------------------------
 
-wxPG_IMPLEMENT_PROPERTY_CLASS(wxLongStringProperty,wxPGProperty,TextCtrlAndButton)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxLongStringProperty,wxEditorDialogProperty,TextCtrlAndButton)
 
 wxLongStringProperty::wxLongStringProperty( const wxString& label, const wxString& name,
-    const wxString& value ) : wxPGProperty(label,name)
+                                            const wxString& value )
+    : wxEditorDialogProperty(label, name)
 {
     m_flags |= wxPG_PROP_ACTIVE_BTN; // Property button always enabled.
+    m_dlgStyle = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxCLIP_CHILDREN;
     SetValue(value);
 }
 
@@ -2239,73 +2251,36 @@ wxString wxLongStringProperty::ValueToString( wxVariant& value,
     return value;
 }
 
-bool wxLongStringProperty::OnEvent( wxPropertyGrid* propGrid, wxWindow* WXUNUSED(primary),
-                                    wxEvent& event )
+bool wxLongStringProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
 {
-    if ( propGrid->IsMainButtonEvent(event) )
-    {
-        // Update the value
-        wxVariant useValue = propGrid->GetUncommittedPropertyValue();
+    wxASSERT_MSG(value.IsType(wxS("string")), "Function called for incompatible property");
 
-        wxString val1 = useValue.GetString();
-        wxString val_orig = val1;
-
-        wxString value;
-        if ( !(m_flags & wxPG_PROP_NO_ESCAPE) )
-            wxPropertyGrid::ExpandEscapeSequences(value,val1);
-        else
-            value = wxString(val1);
-
-        // Run editor dialog.
-        if ( OnButtonClick(propGrid,value) )
-        {
-            if ( !(m_flags & wxPG_PROP_NO_ESCAPE) )
-                wxPropertyGrid::CreateEscapeSequences(val1,value);
-            else
-                val1 = value;
-
-            if ( val1 != val_orig )
-            {
-                SetValueInEvent( val1 );
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-bool wxLongStringProperty::OnButtonClick( wxPropertyGrid* propGrid, wxString& value )
-{
-    return DisplayEditorDialog(this, propGrid, value);
-}
-
-bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGrid* propGrid, wxString& value )
-
-{
     // launch editor dialog
-    wxDialog* dlg = new wxDialog(propGrid, wxID_ANY, prop->GetLabel(), wxDefaultPosition, wxDefaultSize,
-                                 wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLIP_CHILDREN);
+    wxDialog* dlg = new wxDialog(pg->GetPanel(), wxID_ANY,
+                                 m_dlgTitle.empty() ? GetLabel() : m_dlgTitle,
+                                 wxDefaultPosition, wxDefaultSize, m_dlgStyle);
 
-    dlg->SetFont(propGrid->GetFont()); // To allow entering chars of the same set as the propGrid
+    dlg->SetFont(pg->GetFont()); // To allow entering chars of the same set as the propGrid
 
     // Multi-line text editor dialog.
     const int spacing = wxPropertyGrid::IsSmallScreen()? 4 : 8;
     wxBoxSizer* topsizer = new wxBoxSizer( wxVERTICAL );
     wxBoxSizer* rowsizer = new wxBoxSizer( wxHORIZONTAL );
     long edStyle = wxTE_MULTILINE;
-    if ( prop->HasFlag(wxPG_PROP_READONLY) )
+    if ( HasFlag(wxPG_PROP_READONLY) )
         edStyle |= wxTE_READONLY;
-    wxTextCtrl* ed = new wxTextCtrl(dlg,wxID_ANY,value,
+    wxString strVal;
+    wxPropertyGrid::ExpandEscapeSequences(strVal, value.GetString());
+    wxTextCtrl* ed = new wxTextCtrl(dlg,wxID_ANY,strVal,
         wxDefaultPosition,wxDefaultSize,edStyle);
-    int maxLen = prop->GetMaxLength();
-    if ( maxLen > 0 )
-        ed->SetMaxLength(maxLen);
+    if ( m_maxLen > 0 )
+        ed->SetMaxLength(m_maxLen);
 
     rowsizer->Add(ed, wxSizerFlags(1).Expand().Border(wxALL, spacing));
     topsizer->Add(rowsizer, wxSizerFlags(1).Expand());
 
     long btnSizerFlags = wxCANCEL;
-    if ( !prop->HasFlag(wxPG_PROP_READONLY) )
+    if ( !HasFlag(wxPG_PROP_READONLY) )
         btnSizerFlags |= wxOK;
     wxStdDialogButtonSizer* buttonSizer = dlg->CreateStdDialogButtonSizer(btnSizerFlags);
     topsizer->Add(buttonSizer, wxSizerFlags(0).Right().Border(wxBOTTOM|wxRIGHT, spacing));
@@ -2316,15 +2291,17 @@ bool wxLongStringProperty::DisplayEditorDialog( wxPGProperty* prop, wxPropertyGr
     if ( !wxPropertyGrid::IsSmallScreen())
     {
         dlg->SetSize(400,300);
-
-        dlg->Move( propGrid->GetGoodEditorDialogPosition(prop,dlg->GetSize()) );
+        dlg->Move( pg->GetGoodEditorDialogPosition(this,dlg->GetSize()) );
     }
 
     int res = dlg->ShowModal();
 
     if ( res == wxID_OK )
     {
-        value = ed->GetValue();
+        strVal = ed->GetValue();
+        wxString strValEscaped;
+        wxPropertyGrid::CreateEscapeSequences(strValEscaped, strVal);
+        value = strValEscaped;
         dlg->Destroy();
         return true;
     }
