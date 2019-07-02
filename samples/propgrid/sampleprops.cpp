@@ -126,28 +126,25 @@ wxVariant wxFontDataProperty::DoGetValue() const
     return m_value_wxFontData;
 }
 
-// Must re-create font dialog displayer.
-bool wxFontDataProperty::OnEvent( wxPropertyGrid* propgrid,
-                                  wxWindow* WXUNUSED(primary), wxEvent& event )
+bool wxFontDataProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
 {
-    if ( propgrid->IsMainButtonEvent(event) )
+    wxASSERT_MSG(value.IsType(wxS("wxFontData")), "Function called for incompatible property");
+
+    wxFontData fontData;
+    fontData << value;
+
+    fontData.SetInitialFont(fontData.GetChosenFont());
+
+    wxFontDialog dlg(pg->GetPanel(), fontData);
+    if ( !m_dlgTitle.empty() )
     {
-        wxVariant useValue = propgrid->GetUncommittedPropertyValue();
+        dlg.SetTitle(m_dlgTitle);
+    }
 
-        wxFontData fontData;
-        fontData << useValue;
-
-        fontData.SetInitialFont(fontData.GetChosenFont());
-
-        wxFontDialog dlg(propgrid, fontData);
-
-        if ( dlg.ShowModal() == wxID_OK )
-        {
-            wxVariant variant;
-            variant << dlg.GetFontData();
-            SetValueInEvent( variant );
-            return true;
-        }
+    if ( dlg.ShowModal() == wxID_OK )
+    {
+        value << dlg.GetFontData();
+        return true;
     }
     return false;
 }

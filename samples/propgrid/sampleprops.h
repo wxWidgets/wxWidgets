@@ -38,9 +38,10 @@ public:
                                     int childIndex,
                                     wxVariant& childValue ) const wxOVERRIDE;
     virtual void RefreshChildren() wxOVERRIDE;
-    virtual bool OnEvent( wxPropertyGrid* propgrid, wxWindow* primary, wxEvent& event ) wxOVERRIDE;
 
 protected:
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) wxOVERRIDE;
+
     // Value must be stored as variant - otherwise it will be
     // decreffed to oblivion on GetValue().
     wxVariant  m_value_wxFontData;
