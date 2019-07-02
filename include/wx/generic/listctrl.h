@@ -130,6 +130,7 @@ public:
     bool EndEditLabel(bool cancel);
 
     wxTextCtrl* GetEditControl() const;
+    bool IsVisible(long item);
     void Edit( long item ) { EditLabel(item); }
 
     bool EnsureVisible( long item );

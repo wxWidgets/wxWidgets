@@ -151,6 +151,17 @@ wxListItemData::wxListItemData(wxListMainWindow *owner)
         m_rect = new wxRect;
 }
 
+bool wxGenericListCtrl::IsVisible(long item)
+{
+    bool result = true;
+    wxRect itemRect, rect;
+    GetItemRect( item, itemRect );
+    rect = GetRect();
+    if( itemRect.y + itemRect.height <= 0 || itemRect.y + itemRect.height > rect.GetBottom() )
+        result = false;
+    return result;
+}
+
 void wxListItemData::SetItem( const wxListItem &info )
 {
     if ( info.m_mask & wxLIST_MASK_TEXT )
