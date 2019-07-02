@@ -157,7 +157,7 @@ bool wxGenericListCtrl::IsVisible(long item)
     wxRect itemRect, rect;
     GetItemRect( item, itemRect );
     rect = GetRect();
-    if( itemRect.y + itemRect.height <= 0 || itemRect.y + itemRect.height > rect.GetBottom() )
+    if( itemRect.y <= rect.y || itemRect.y + itemRect.height > rect.GetBottom() )
         result = false;
     return result;
 }
