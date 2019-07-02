@@ -62,6 +62,17 @@ public:
        Note that this object takes ownership of @a context and will delete it
        when it is destroyed or when SetGraphicsContext() is called with a
        different context object.
+
+       Also notice that @a context will continue using the same font, pen and
+       brush as before until SetFont(), SetPen() or SetBrush() is explicitly
+       called to change them. This means that the code can use this
+       wxDC-derived object to work using pens and brushes with alpha component,
+       for example (which normally isn't supported by wxDC API), but it also
+       means that the return values of GetFont(), GetPen() and GetBrush() won't
+       really correspond to the actually used objects because they simply can't
+       represent them anyhow. If you wish to avoid such discrepancy, you need
+       to call the setter methods to bring wxDC and wxGraphicsContext font, pen
+       and brush in sync with each other.
     */
     wxGCDC(wxGraphicsContext* context);
 
