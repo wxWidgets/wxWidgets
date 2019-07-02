@@ -55,6 +55,34 @@ bool wxStaticText::Create(wxWindow *parent,
     m_qtLabel->setBuddy( m_qtLabel );
     m_qtLabel->setTextInteractionFlags( Qt::NoTextInteraction );
 
+    Qt::AlignmentFlag qt_alignment = Qt::AlignAbsolute;
+
+    switch (style & wxALIGN_MASK)
+    {
+        case wxALIGN_RIGHT:
+            qt_alignment = Qt::AlignRight;
+            break;
+        case wxALIGN_LEFT:
+            qt_alignment = Qt::AlignLeft;
+            break;
+        case wxALIGN_CENTER:
+            qt_alignment = Qt::AlignCenter;
+            break;
+        case wxALIGN_CENTER_HORIZONTAL:
+            qt_alignment = Qt::AlignHCenter;
+            break;
+        case wxALIGN_CENTER_VERTICAL:
+            qt_alignment = Qt::AlignVCenter;
+            break;
+        case wxALIGN_BOTTOM:
+            qt_alignment = Qt::AlignBottom;
+            break;
+        default:
+            qt_alignment = Qt::AlignAbsolute;
+    }
+
+    m_qtLabel->setAlignment(qt_alignment);
+
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
