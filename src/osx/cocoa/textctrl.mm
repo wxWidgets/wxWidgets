@@ -1111,8 +1111,13 @@ void wxNSTextViewControl::SetStyle(long start,
                     break;
             }
             wxColour color = style.GetUnderlineColour();
-            if( color.IsOk() )
-                [attrs setValue:color.OSXGetNSColor() forKey:NSUnderlineColorAttributeName];
+            if( !color.IsOk() )
+            {
+                color = style.GetTextColour();
+                if( !color.IsOk() )
+                    color = *wxBLACK;
+            }
+            [attrs setValue:color.OSXGetNSColor() forKey:NSUnderlineColorAttributeName];
         }
         [m_textView setTypingAttributes:attrs];
     }
@@ -1145,8 +1150,13 @@ void wxNSTextViewControl::SetStyle(long start,
             if( style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_WAVE )
                 [dict setObject:[NSNumber numberWithInt:( NSUnderlinePatternDot )] forKey:NSUnderlineStyleAttributeName];
             wxColour color = style.GetUnderlineColour();
-            if( color.IsOk() )
-                [dict setValue:color.OSXGetNSColor() forKey:NSUnderlineColorAttributeName];
+            if( !color.IsOk() )
+            {
+                color = style.GetTextColour();
+                if( !color.IsOk() )
+                    color = *wxBLACK;
+            }
+            [dict setValue:color.OSXGetNSColor() forKey:NSUnderlineColorAttributeName];
 
             [storage addAttributes:dict range:range];
             [dict release];
