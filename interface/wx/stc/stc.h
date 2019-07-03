@@ -8044,6 +8044,7 @@ public:
     @link wxStyledTextEvent::GetKey GetKey@endlink,
     @link wxStyledTextEvent::GetPosition GetPosition@endlink,
     @link wxStyledTextEvent::GetString GetString@endlink,
+    @link wxStyledTextEvent::GetClientObject GetClientObject@endlink,
     @link wxStyledTextEvent::GetListCompletionMethod GetListCompletionMethod@endlink.
 
     @c wxEVT_STC_AUTOCOMP_SELECTION
