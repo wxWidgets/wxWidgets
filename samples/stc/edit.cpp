@@ -33,6 +33,7 @@
 //! wxWidgets headers
 #include "wx/file.h"     // raw file io support
 #include "wx/filename.h" // filename support
+#include "wx/stc/completionitem.h" // wxSTC autocompletion item
 
 //! application headers
 #include "defsext.h"     // additional definitions
@@ -509,6 +510,30 @@ void Edit::OnCharAdded (wxStyledTextEvent &event) {
                      "ifndef?0 include?0 line?0 pragma?0 undef?0";
         AutoCompShow(0,s);
     }
+    else
+    {
+        //Demonstrate New AutoCompShow method
+        //create the list
+        wxVector<wxCompletionItem> ccList;
+        wxString ccString = "asm auto bool break case catch char class const const_cast continue default delete do double dynamic_cast else enum explicit extern false float for friend goto if inline int long mutable namespace new operator private protected public register reinterpret_cast return short signed sizeof static static_cast struct switch template this throw true try typedef typeid typename union unsigned using using virtual void volatile wchar_t while";
+        wxArrayString ccArray = wxSplit(ccString, ' ');
+        for( int i = 0; i < ccArray.Count(); i++ )
+        {
+            wxCompletionItem cc(ccArray[i], 0);
+            ccList.push_back(cc);
+        }
+
+        //get Length to provide context
+        int currentPos = GetCurrentPos();
+        int wordStartPos = WordStartPosition(currentPos, true);
+
+        // Display the autocompletion list
+        int lenEntered = currentPos - wordStartPos;
+        //only display when typed word length is at most 4
+        if(lenEntered < 4){ 
+            AutoCompShow(lenEntered, ccList);
+        }
+    }    
 }
 
 void Edit::OnCallTipClick(wxStyledTextEvent &event)
