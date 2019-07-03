@@ -75,6 +75,8 @@ class GridFrame : public wxFrame
     void SelectCols( wxCommandEvent& );
     void SelectRowsOrCols( wxCommandEvent& );
 
+    void FreezeOrThaw( wxCommandEvent& );
+
     void DeselectCell(wxCommandEvent& event);
     void DeselectCol(wxCommandEvent& event);
     void DeselectRow(wxCommandEvent& event);
@@ -203,6 +205,8 @@ public:
         ID_SIZE_LABELS_COL,
         ID_SIZE_LABELS_ROW,
         ID_SIZE_GRID,
+
+        ID_FREEZE_OR_THAW,
 
         ID_SET_HIGHLIGHT_WIDTH,
         ID_SET_RO_HIGHLIGHT_WIDTH,
