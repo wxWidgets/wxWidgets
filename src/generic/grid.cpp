@@ -1,4 +1,4 @@
-﻿///////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 // Name:        src/generic/grid.cpp
 // Purpose:     wxGrid and related classes
 // Author:      Michael Bedward (based on code by Julian Smart, Robin Dunn)
@@ -6293,11 +6293,14 @@ void wxGrid::DrawAllGridWindowLines(wxDC& dc, const wxRegion & WXUNUSED(reg), wx
 
 void wxGrid::DrawAllGridLines()
 {
-    wxClientDC dc(m_gridWin);
-    PrepareDC(dc, m_gridWin);
-    
-    DrawAllGridWindowLines(dc, wxRegion(), m_gridWin);
-    
+    if ( m_gridWin )
+    {
+        wxClientDC dc(m_gridWin);
+        PrepareDC(dc, m_gridWin);
+
+        DrawAllGridWindowLines(dc, wxRegion(), m_gridWin);
+    }
+
     if ( m_frozenRowGridWin )
     {
         wxClientDC dc(m_frozenRowGridWin);
