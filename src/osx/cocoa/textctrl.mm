@@ -1110,7 +1110,9 @@ void wxNSTextViewControl::SetStyle(long start,
                     [attrs setObject:[NSNumber numberWithInt:( NSUnderlineStyleSingle | NSUnderlinePatternDot )] forKey:NSUnderlineStyleAttributeName];
                     break;
             }
-            [attrs setValue:style.GetUnderlineColour().OSXGetNSColor() forKey:NSUnderlineColorAttributeName];
+            wxColour color = style.GetUnderlineColour();
+            if( color.IsOk() )
+                [attrs setValue:color.OSXGetNSColor() forKey:NSUnderlineColorAttributeName];
         }
         [m_textView setTypingAttributes:attrs];
     }
