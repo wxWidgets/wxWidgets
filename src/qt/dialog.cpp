@@ -59,7 +59,14 @@ bool wxDialog::Create( wxWindow *parent, wxWindowID id,
     // all dialogs should have tab traversal enabled
     style |= wxTAB_TRAVERSAL;
 
-    m_qtWindow = new wxQtDialog( parent, this );
+    m_qtWindow = new wxQtDialog(parent, this);
+
+    if (!(GetExtraStyle() & wxDIALOG_EX_CONTEXTHELP))
+    {
+        Qt::WindowFlags qtFlags = m_qtWindow->windowFlags();
+        qtFlags &= ~Qt::WindowContextHelpButtonHint;
+        m_qtWindow->setWindowFlags(qtFlags);
+    }
 
     if ( !wxTopLevelWindow::Create( parent, id, title, pos, size, style, name ) )
         return false;
