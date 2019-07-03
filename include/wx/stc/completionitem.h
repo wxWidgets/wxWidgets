@@ -13,9 +13,9 @@ public:
     }
     ~wxCompletionItem(){}
 
-    const wxString& GetName(){ return m_name; }
-    int GetIcon(){ return m_icon; }
-    const wxString& GetDocumentation(){ return m_doc; }
+    const wxString& GetName() const { return m_name; }
+    int GetIcon() const { return m_icon; }
+    const wxString& GetDocumentation() const { return m_doc; }
     wxClientData* GetClientObject(){ return m_data; }
 
 private:
