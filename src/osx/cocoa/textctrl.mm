@@ -1144,7 +1144,9 @@ void wxNSTextViewControl::SetStyle(long start,
 
             if( style.GetUnderlineType() == wxTEXT_ATTR_UNDERLINE_WAVE )
                 [dict setObject:[NSNumber numberWithInt:( NSUnderlinePatternDot )] forKey:NSUnderlineStyleAttributeName];
-            [dict setValue:style.GetUnderlineColour().OSXGetNSColor() forKey:NSUnderlineColorAttributeName];
+            wxColour color = style.GetUnderlineColour();
+            if( color.IsOk() )
+                [dict setValue:color.OSXGetNSColor() forKey:NSUnderlineColorAttributeName];
 
             [storage addAttributes:dict range:range];
             [dict release];
