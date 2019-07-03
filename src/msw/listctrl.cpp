@@ -880,6 +880,25 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     return success;
 }
 
+// Check if the item is visible
+bool wxListCtrl::IsVisible(long item)
+{
+    if( wxGetWinVersion() >= wxWinVersion_Vista )
+        return ListView_IsItemVisible( GetHwnd(), item );
+    else
+    {
+//        return wxGenericListCtrl::IsVisible( item );
+        wxRect itemRect, rect;
+        GetItemRect( item, itemRect );
+        rect = GetRect();
+        if( itemRect.y + itemRect.height < 0 || itemRect.y + itemRect.height > rect.GetBottom() )
+            return false;
+                else
+            return true;
+        return true;
+    }
+}
+
 // Sets information about the item
 bool wxListCtrl::SetItem(wxListItem& info)
 {
