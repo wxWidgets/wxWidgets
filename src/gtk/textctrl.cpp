@@ -158,6 +158,13 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
 #ifdef __WXGTK3__
         if( gtk_check_version( 3, 16, 0 ) )
         {
+            wxColour color = attr.GetUnderlineColour();
+            if( !color.IsOk() )
+            {
+                color = attr.GetTextColour();
+                if( !color.IsOk() )
+                    color = *wxBLACK;
+            }
             const GdkColor *gdkColor = attr.GetUnderlineColour().GetColor();
             GdkRGBA color_rgba = {
                 .red = CLAMP( (double) gdkColor->red / 65535.0,   0.0, 1.0 ),
