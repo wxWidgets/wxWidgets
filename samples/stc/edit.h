@@ -106,6 +106,7 @@ public:
     void OnMarginClick (wxStyledTextEvent &event);
     void OnCharAdded  (wxStyledTextEvent &event);
     void OnCallTipClick(wxStyledTextEvent &event);
+    void OnAutoCompletionDone(wxStyledTextEvent &event);
 
     void OnKeyDown(wxKeyEvent &event);
 

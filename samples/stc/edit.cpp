@@ -133,6 +133,7 @@ wxBEGIN_EVENT_TABLE (Edit, wxStyledTextCtrl)
     EVT_STC_MARGINCLICK (wxID_ANY,     Edit::OnMarginClick)
     EVT_STC_CHARADDED (wxID_ANY,       Edit::OnCharAdded)
     EVT_STC_CALLTIP_CLICK(wxID_ANY,    Edit::OnCallTipClick)
+    EVT_STC_AUTOCOMP_COMPLETED(wxID_ANY,    Edit::OnAutoCompletionDone)
 
     EVT_KEY_DOWN( Edit::OnKeyDown )
 wxEND_EVENT_TABLE()
@@ -519,7 +520,7 @@ void Edit::OnCharAdded (wxStyledTextEvent &event) {
         wxArrayString ccArray = wxSplit(ccString, ' ');
         for( int i = 0; i < ccArray.Count(); i++ )
         {
-            wxCompletionItem cc(ccArray[i], 0);
+            wxCompletionItem cc(ccArray[i], 0, "", new wxStringClientData(ccArray[i]));
             ccList.push_back(cc);
         }
 
@@ -547,6 +548,17 @@ void Edit::OnCallTipClick(wxStyledTextEvent &event)
         // If position=2, the down arrow has been clicked. Show previous tip.
         m_calltipNo = m_calltipNo==1?3:(m_calltipNo-1);
         ShowCallTipAt(CallTipPosAtStart());
+    }
+}
+
+void Edit::OnAutoCompletionDone(wxStyledTextEvent &event)
+{
+    //simple demonstration on how to pass a string
+    //Pass your own Client Object depending on your requirements
+    wxStringClientData* data = dynamic_cast<wxStringClientData*>(event.GetClientObject());
+    if(data)
+    {
+        wxMessageBox(data->GetData());
     }
 }
 
