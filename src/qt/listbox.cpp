@@ -146,7 +146,7 @@ void wxListBox::DoCreate(wxWindow* parent, long style)
     }
     else if ( style & wxLB_EXTENDED )
     {
-        wxMISSING_IMPLEMENTATION( wxSTRINGIZE( wxLB_EXTENDED ));
+        m_qtListWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
     }
 }
 
