@@ -3586,7 +3586,7 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
     //
     // Try common button handling
-    if ( m_wndEditor2 && event.GetEventType() == wxEVT_BUTTON )
+    if ( IsMainButtonEvent(event) )
     {
         wxPGEditorDialogAdapter* adapter = selected->GetEditorDialog();
 
