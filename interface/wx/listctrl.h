@@ -1089,6 +1089,13 @@ public:
     void SetImageList(wxImageList* imageList, int which);
 
     /**
+        Check if the item is visible
+
+        @since 3.1.0
+    */
+    bool IsVisible(long item);
+
+    /**
         Sets the data of an item.
 
         Using the wxListItem's mask and state mask, you can change only selected
