@@ -383,7 +383,7 @@ void ScintillaBase::AutoCompleteCompleted(char ch, unsigned int completionMethod
 	scn.listType = listType;
 	Position firstPos = ac.posStart - ac.startLen;
 	scn.position = firstPos;
-	scn.lParam = firstPos;
+	scn.lParam = item;
 	scn.text = selected.c_str();
 	NotifyParent(scn);
 

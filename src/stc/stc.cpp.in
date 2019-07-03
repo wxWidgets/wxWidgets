@@ -1105,6 +1105,11 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         SetEventText(evt, scn.text, strlen(scn.text));
         evt.SetPosition(scn.lParam);
         evt.SetListCompletionMethod(scn.listCompletionMethod);
+        if( scn.lParam < m_autocompList.size() )
+        {
+            wxCompletionItem& cItem = m_autocompList[scn.lParam];
+            evt.SetClientObject(cItem.GetClientObject());
+        }
         break;
 
     case SCN_MARGINRIGHTCLICK:
