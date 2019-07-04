@@ -2679,16 +2679,15 @@ wxPGArrayStringEditorDialog::OnCustomNewAction(wxString* resString)
 // wxArrayStringProperty
 // -----------------------------------------------------------------------
 
-wxPG_IMPLEMENT_PROPERTY_CLASS(wxArrayStringProperty,  // Property name
-                              wxPGProperty,  // Property we inherit from
-                              TextCtrlAndButton)  // Initial editor
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxArrayStringProperty, wxEditorDialogProperty, TextCtrlAndButton)
 
 wxArrayStringProperty::wxArrayStringProperty( const wxString& label,
                                                         const wxString& name,
                                                         const wxArrayString& array )
-    : wxPGProperty(label,name)
+    : wxEditorDialogProperty(label,name)
     , m_delimiter(',')
 {
+    m_dlgStyle = wxAEDIALOG_STYLE;
     SetValue( array );
 }
 
@@ -2804,19 +2803,24 @@ bool wxArrayStringProperty::OnCustomStringEdit( wxWindow*, wxString& )
     return false;
 }
 
+#if WXWIN_COMPATIBILITY_3_0
+bool wxArrayStringProperty::OnButtonClick(wxPropertyGrid* WXUNUSED(propgrid),
+                                          wxWindow* WXUNUSED(primary),
+                                          const wxChar* WXUNUSED(cbt))
+{
+    return false;
+}
+#endif // WXWIN_COMPATIBILITY_3_0
+
 wxPGArrayEditorDialog* wxArrayStringProperty::CreateEditorDialog()
 {
     return new wxPGArrayStringEditorDialog();
 }
 
-bool wxArrayStringProperty::OnButtonClick( wxPropertyGrid* propGrid,
-                                           wxWindow* WXUNUSED(primaryCtrl),
-                                           const wxChar* cbt )
+bool wxArrayStringProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
 {
-    // Update the value
-    wxVariant useValue = propGrid->GetUncommittedPropertyValue();
-
-    if ( !propGrid->EditorValidate() )
+    wxASSERT_MSG(value.IsType(wxPG_VARIANT_TYPE_ARRSTRING), "Function called for incompatible property");
+    if ( !pg->EditorValidate() )
         return false;
 
     // Create editor dialog.
@@ -2829,14 +2833,15 @@ bool wxArrayStringProperty::OnButtonClick( wxPropertyGrid* propGrid,
     wxPGArrayStringEditorDialog* strEdDlg = wxDynamicCast(dlg, wxPGArrayStringEditorDialog);
 
     if ( strEdDlg )
-        strEdDlg->SetCustomButton(cbt, this);
+        strEdDlg->SetCustomButton(m_customBtnText, this);
 
-    dlg->SetDialogValue( useValue );
-    dlg->Create(propGrid, wxEmptyString, m_label);
+    dlg->SetDialogValue( value );
+    dlg->Create(pg->GetPanel(), wxEmptyString,
+                m_dlgTitle.empty() ? GetLabel() : m_dlgTitle, m_dlgStyle);
 
     if ( !wxPropertyGrid::IsSmallScreen() )
     {
-        dlg->Move( propGrid->GetGoodEditorDialogPosition(this,dlg->GetSize()) );
+        dlg->Move( pg->GetGoodEditorDialogPosition(this,dlg->GetSize()) );
     }
 
     bool retVal;
@@ -2849,18 +2854,18 @@ bool wxArrayStringProperty::OnButtonClick( wxPropertyGrid* propGrid,
 
         if ( res == wxID_OK && dlg->IsModified() )
         {
-            wxVariant value = dlg->GetDialogValue();
-            if ( !value.IsNull() )
+            wxVariant curValue = dlg->GetDialogValue();
+            if ( !curValue.IsNull() )
             {
-                wxArrayString actualValue = value.GetArrayString();
+                wxArrayString actualValue = curValue.GetArrayString();
                 wxString tempStr;
                 ConvertArrayToString(actualValue, &tempStr, m_delimiter);
             #if wxUSE_VALIDATORS
-                if ( dialogValidator.DoValidate(propGrid, validator,
+                if ( dialogValidator.DoValidate(pg, validator,
                                                 tempStr) )
             #endif
                 {
-                    SetValueInEvent( actualValue );
+                    value = actualValue;
                     retVal = true;
                     break;
                 }
@@ -2875,15 +2880,6 @@ bool wxArrayStringProperty::OnButtonClick( wxPropertyGrid* propGrid,
     delete dlg;
 
     return retVal;
-}
-
-bool wxArrayStringProperty::OnEvent( wxPropertyGrid* propGrid,
-                                     wxWindow* primary,
-                                     wxEvent& event )
-{
-    if ( propGrid->IsMainButtonEvent(event) )
-        return OnButtonClick(propGrid,primary,(const wxChar*) NULL);
-    return false;
 }
 
 bool wxArrayStringProperty::StringToValue( wxVariant& variant,
@@ -2925,7 +2921,7 @@ bool wxArrayStringProperty::DoSetAttribute( const wxString& name, wxVariant& val
         GenerateValueAsString();
         return true;
     }
-    return wxPGProperty::DoSetAttribute(name, value);
+    return wxEditorDialogProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------

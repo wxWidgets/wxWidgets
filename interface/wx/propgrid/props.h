@@ -708,7 +708,7 @@ protected:
     @ingroup classes
     Property that manages a list of strings.
 */
-class wxArrayStringProperty : public wxPGProperty
+class wxArrayStringProperty : public wxEditorDialogProperty
 {
 public:
     wxArrayStringProperty( const wxString& label = wxPG_LABEL,
@@ -721,26 +721,24 @@ public:
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const;
-    virtual bool OnEvent( wxPropertyGrid* propgrid,
-                          wxWindow* primary, wxEvent& event );
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 
-    // Implement in derived class for custom array-to-string conversion.
+    /**
+        Implement in derived class for custom array-to-string conversion.
+    */
     virtual void ConvertArrayToString(const wxArrayString& arr,
                                       wxString* pString,
                                       const wxUniChar& delimiter) const;
 
-    // Shows string editor dialog. Value to be edited should be read from
-    // value, and if dialog is not cancelled, it should be stored back and true
-    // should be returned if that was the case.
+    /**
+        Shows string editor dialog to edit the individual item. Value to be edited
+        should be read from @a value, and if dialog is not cancelled, it
+        should be stored back and @true should be returned if that was the case.
+    */
     virtual bool OnCustomStringEdit( wxWindow* parent, wxString& value );
 
-    // Helper.
-    virtual bool OnButtonClick( wxPropertyGrid* propgrid,
-                                wxWindow* primary,
-                                const wxChar* cbt );
-
-    // Creates wxPGArrayEditorDialog for string editing. Called in OnButtonClick.
+    /** Creates wxPGArrayEditorDialog for string editing.
+    */
     virtual wxPGArrayEditorDialog* CreateEditorDialog();
 
     enum ConversionFlags
@@ -750,20 +748,25 @@ public:
     };
 
     /**
-        Generates contents for string dst based on the contents of
-        wxArrayString src.
+        Generates contents for string @a dst based on the contents of
+        wxArrayString @a src.
     */
     static void ArrayStringToString( wxString& dst, const wxArrayString& src,
                                      wxUniChar delimiter, int flags );
 
 protected:
-    // Previously this was to be implemented in derived class for array-to-
-    // string conversion. Now you should implement ConvertValueToString()
-    // instead.
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value);
+
+    /**
+        Previously this was to be implemented in derived class for array-to-
+        string conversion. Now you should implement ConvertValueToString()
+        instead.
+    */
     virtual void GenerateValueAsString();
 
     wxString        m_display; // Cache for displayed text.
     wxUniChar       m_delimiter;
+    wxString        m_customBtnText;
 };
 
 

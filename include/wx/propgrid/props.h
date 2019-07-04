@@ -692,7 +692,7 @@ protected:
 // -----------------------------------------------------------------------
 
 // Property that manages a list of strings.
-class WXDLLIMPEXP_PROPGRID wxArrayStringProperty : public wxPGProperty
+class WXDLLIMPEXP_PROPGRID wxArrayStringProperty : public wxEditorDialogProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxArrayStringProperty)
 public:
@@ -706,8 +706,6 @@ public:
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const wxOVERRIDE;
-    virtual bool OnEvent( wxPropertyGrid* propgrid,
-                          wxWindow* primary, wxEvent& event ) wxOVERRIDE;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
 
     // Implement in derived class for custom array-to-string conversion.
@@ -720,10 +718,13 @@ public:
     // should be returned if that was the case.
     virtual bool OnCustomStringEdit( wxWindow* parent, wxString& value );
 
+#if WXWIN_COMPATIBILITY_3_0
     // Helper.
+    wxDEPRECATED_MSG("OnButtonClick() function is no longer used")
     virtual bool OnButtonClick( wxPropertyGrid* propgrid,
                                 wxWindow* primary,
                                 const wxChar* cbt );
+#endif // WXWIN_COMPATIBILITY_3_0
 
     // Creates wxPGArrayEditorDialog for string editing. Called in OnButtonClick.
     virtual wxPGArrayEditorDialog* CreateEditorDialog();
@@ -740,6 +741,8 @@ public:
                                      wxUniChar delimiter, int flags );
 
 protected:
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) wxOVERRIDE;
+
     // Previously this was to be implemented in derived class for array-to-
     // string conversion. Now you should implement ConvertValueToString()
     // instead.
@@ -747,6 +750,7 @@ protected:
 
     wxString        m_display; // Cache for displayed text.
     wxUniChar       m_delimiter;
+    wxString        m_customBtnText;
 };
 
 // -----------------------------------------------------------------------
@@ -761,8 +765,6 @@ public: \
               const wxString& name = wxPG_LABEL, \
               const wxArrayString& value = wxArrayString() ); \
     ~PROPNAME(); \
-    virtual bool OnEvent( wxPropertyGrid* propgrid, \
-                          wxWindow* primary, wxEvent& event ) wxOVERRIDE; \
     virtual bool OnCustomStringEdit( wxWindow* parent, wxString& value ) wxOVERRIDE; \
     virtual wxValidator* DoGetValidator() const wxOVERRIDE; \
 };
@@ -782,15 +784,9 @@ PROPNAME::PROPNAME( const wxString& label, \
 { \
     PROPNAME::GenerateValueAsString(); \
     m_delimiter = DELIMCHAR; \
+    m_customBtnText = CUSTBUTTXT; \
 } \
-PROPNAME::~PROPNAME() { } \
-bool PROPNAME::OnEvent( wxPropertyGrid* propgrid, \
-                        wxWindow* primary, wxEvent& event ) \
-{ \
-    if ( event.GetEventType() == wxEVT_BUTTON ) \
-        return OnButtonClick(propgrid,primary, CUSTBUTTXT); \
-    return false; \
-}
+PROPNAME::~PROPNAME() { }
 
 #define WX_PG_DECLARE_ARRAYSTRING_PROPERTY(PROPNAME) \
 WX_PG_DECLARE_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(PROPNAME)
