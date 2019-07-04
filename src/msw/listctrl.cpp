@@ -882,15 +882,7 @@ bool wxListCtrl::IsVisible(long item)
         return ListView_IsItemVisible( GetHwnd(), item );
     else
     {
-//        return wxGenericListCtrl::IsVisible( item );
-        wxRect itemRect, rect;
-        GetItemRect( item, itemRect );
-        rect = GetRect();
-        if( itemRect.y + itemRect.height < 0 || itemRect.y + itemRect.height > rect.GetBottom() )
-            return false;
-                else
-            return true;
-        return true;
+        return wxListCtrlBase::IsVisible( item );
     }
 }
 
