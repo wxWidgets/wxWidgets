@@ -153,13 +153,7 @@ wxListItemData::wxListItemData(wxListMainWindow *owner)
 
 bool wxGenericListCtrl::IsVisible(long item)
 {
-    bool result = true;
-    wxRect itemRect, rect;
-    GetItemRect( item, itemRect );
-    rect = GetRect();
-    if( itemRect.y <= rect.y || itemRect.y + itemRect.height > rect.GetBottom() )
-        result = false;
-    return result;
+    return wxListCtrlBase::IsVisible( item );
 }
 
 void wxListItemData::SetItem( const wxListItem &info )
