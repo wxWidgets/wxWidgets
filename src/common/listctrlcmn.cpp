@@ -291,4 +291,16 @@ wxItemAttr* wxListCtrlBase::OnGetItemColumnAttr(long item, long WXUNUSED(column)
     return OnGetItemAttr(item);
 }
 
+// Check if the item is visible
+bool wxListCtrlBase::IsVisible(long item)
+{
+    wxRect itemRect, rect;
+    GetItemRect( item, itemRect );
+    rect = GetRect();
+    if( itemRect.y + itemRect.height < 0 || itemRect.y + itemRect.height > rect.GetBottom() )
+        return false;
+    else
+        return true;
+}
+
 #endif // wxUSE_LISTCTRL
