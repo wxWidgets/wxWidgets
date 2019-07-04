@@ -824,6 +824,29 @@
     <ClInclude Include="..\..\include\wx\evtloopsrc.h" />
     <ClInclude Include="..\..\include\wx\lzmastream.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="wx_wxexpat.vcxproj">
+      <Project>{a1a8355b-0988-528e-9cc2-b971d6266669}</Project>
+    </ProjectReference>
+    <ProjectReference Include="wx_wxjpeg.vcxproj">
+      <Project>{6053cc38-cdee-584c-8bc8-4b000d800fc7}</Project>
+    </ProjectReference>
+    <ProjectReference Include="wx_wxpng.vcxproj">
+      <Project>{8acc122a-ca6a-5aa6-9c97-9cdd2e533db0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="wx_wxregex.vcxproj">
+      <Project>{56a4b526-bb81-5d01-aaa9-16d23bbb169d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="wx_wxscintilla.vcxproj">
+      <Project>{74827ebd-93dc-5110-ba95-3f2ab029b6b0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="wx_wxtiff.vcxproj">
+      <Project>{75596ce6-5ae7-55c9-b890-c07b0a657a83}</Project>
+    </ProjectReference>
+    <ProjectReference Include="wx_wxzlib.vcxproj">
+      <Project>{8b867186-a0b5-5479-b824-e176edd27c40}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

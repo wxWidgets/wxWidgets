@@ -492,6 +492,11 @@
     </CustomBuild>
     <ClInclude Include="..\..\include\wx\mediactrl.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="wx_core.vcxproj">
+      <Project>{6744dad8-9c70-574a-bff2-9f8dddb24a75}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

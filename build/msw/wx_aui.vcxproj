@@ -510,6 +510,14 @@
     <ClInclude Include="..\..\include\wx\aui\barartmsw.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_aui.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="wx_adv.vcxproj">
+      <Project>{24c45343-fd20-5c92-81c1-35a2ae841e79}</Project>
+    </ProjectReference>
+    <ProjectReference Include="wx_html.vcxproj">
+      <Project>{33cc42f9-7756-5587-863c-8d4461b7c5dd}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

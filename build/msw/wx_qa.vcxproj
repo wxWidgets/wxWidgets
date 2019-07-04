@@ -490,6 +490,14 @@
     </CustomBuild>
     <ClInclude Include="..\..\include\wx\debugrpt.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="wx_core.vcxproj">
+      <Project>{6744dad8-9c70-574a-bff2-9f8dddb24a75}</Project>
+    </ProjectReference>
+    <ProjectReference Include="wx_xml.vcxproj">
+      <Project>{3e6dca27-5fa3-53ec-bbd6-2d42294b7ae6}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
