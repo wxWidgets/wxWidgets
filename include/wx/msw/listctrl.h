@@ -187,7 +187,7 @@ public:
     bool SetItemData(long item, long data) { return SetItemPtrData(item, data); }
 
     // Gets the item rectangle
-    bool GetItemRect(long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const;
+    virtual bool GetItemRect(long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const;
 
     // Gets the subitem rectangle in report mode
     bool GetSubItemRect(long item, long subItem, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const;
