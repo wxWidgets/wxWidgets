@@ -273,8 +273,7 @@ wxVariant wxPointProperty::ChildChanged( wxVariant& thisValue,
 // Dirs Property
 // -----------------------------------------------------------------------
 
-WX_PG_IMPLEMENT_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(wxDirsProperty, ',',
-                                                    wxT("Browse")) // This literal has to be of wxChar* type
+WX_PG_IMPLEMENT_ARRAYSTRING_PROPERTY_WITH_VALIDATOR(wxDirsProperty, ',', "Browse")
 
 #if wxUSE_VALIDATORS
 
