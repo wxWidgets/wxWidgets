@@ -406,7 +406,7 @@ public:
     // is logging of messages from this component enabled at this level?
     //
     // usually always called with wxLOG_COMPONENT as second argument
-    static bool IsLevelEnabled(wxLogLevel level, wxString component)
+    static bool IsLevelEnabled(wxLogLevel level, const wxString& component)
     {
         return IsEnabled() && level <= GetComponentLevel(component);
     }
