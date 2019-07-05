@@ -884,7 +884,7 @@ bool wxListCtrl::GetItem(wxListItem& info) const
 bool wxListCtrl::IsVisible(long item)
 {
     if( wxGetWinVersion() >= wxWinVersion_Vista )
-        return ListView_IsItemVisible( GetHwnd(), item );
+        return ::SendMessage( GetHwnd(), LVM_ISITEMVISIBLE, (WPARAM) item, 0 );
     else
     {
         return wxListCtrlBase::IsVisible( item );
