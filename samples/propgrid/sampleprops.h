@@ -105,7 +105,7 @@ WX_PG_DECLARE_ARRAYSTRING_PROPERTY_WITH_VALIDATOR_WITH_DECL(wxDirsProperty, clas
 
 WX_PG_DECLARE_VARIANT_DATA(wxArrayDouble)
 
-class wxArrayDoubleProperty : public wxPGProperty
+class wxArrayDoubleProperty : public wxEditorDialogProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxArrayDoubleProperty)
 public:
@@ -121,7 +121,6 @@ public:
     virtual bool StringToValue( wxVariant& variant,
                                 const wxString& text,
                                 int argFlags = 0 ) const wxOVERRIDE;
-    virtual bool OnEvent( wxPropertyGrid* propgrid, wxWindow* primary, wxEvent& event ) wxOVERRIDE;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
 
     // Generates cache for displayed text
@@ -132,6 +131,8 @@ public:
                        wxPGValidationInfo& validationInfo) const wxOVERRIDE;
 
 protected:
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) wxOVERRIDE;
+
     wxString        m_display; // Stores cache for displayed text
     int             m_precision; // Used when formatting displayed string.
     wxChar          m_delimiter; // Delimiter between array entries.

@@ -481,18 +481,18 @@ bool operator == (const wxArrayDouble& a, const wxArrayDouble& b)
 WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ(wxArrayDouble)
 
 wxPG_IMPLEMENT_PROPERTY_CLASS(wxArrayDoubleProperty,
-                              wxPGProperty,
+                              wxEditorDialogProperty,
                               TextCtrlAndButton)
 
 
 wxArrayDoubleProperty::wxArrayDoubleProperty (const wxString& label,
                                                         const wxString& name,
                                                         const wxArrayDouble& array )
-    : wxPGProperty(label,name)
+    : wxEditorDialogProperty(label,name)
+    , m_precision(-1)
 {
-    m_precision = -1;
+    m_dlgStyle = wxAEDIALOG_STYLE;
 
-    //
     // Need to figure out delimiter needed for this locale
     // (i.e. can't use comma when comma acts as decimal point in float).
     wxChar use_delimiter = ',';
@@ -538,7 +538,6 @@ wxString wxArrayDoubleProperty::ValueToString( wxVariant& value,
 void wxArrayDoubleProperty::GenerateValueAsString( wxString& target, int prec, bool removeZeroes ) const
 {
     wxString between = ", ";
-    size_t i;
 
     between[0] = m_delimiter;
 
@@ -549,7 +548,7 @@ void wxArrayDoubleProperty::GenerateValueAsString( wxString& target, int prec, b
     if (removeZeroes)
         style = wxNumberFormatter::Style_NoTrailingZeroes;
 
-    for ( i=0; i<value.GetCount(); i++ )
+    for ( size_t i=0; i<value.GetCount(); i++ )
     {
         target += wxNumberFormatter::ToString(value[i], prec, style);
 
@@ -558,31 +557,25 @@ void wxArrayDoubleProperty::GenerateValueAsString( wxString& target, int prec, b
     }
 }
 
-bool wxArrayDoubleProperty::OnEvent( wxPropertyGrid* propgrid,
-                                     wxWindow* WXUNUSED(primary),
-                                     wxEvent& event)
+bool wxArrayDoubleProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
 {
-    if ( propgrid->IsMainButtonEvent(event) )
+    wxASSERT_MSG(value.IsType("wxArrayDouble"), "Function called for incompatible property");
+
+    wxArrayDouble& curValue = wxArrayDoubleRefFromVariant(value);
+
+    // Create editor dialog.
+    wxArrayDoubleEditorDialog dlg;
+    dlg.SetPrecision(m_precision);
+    dlg.Create(pg->GetPanel(), wxEmptyString,
+               m_dlgTitle.empty() ? GetLabel() : m_dlgTitle, curValue, m_dlgStyle);
+    dlg.Move( pg->GetGoodEditorDialogPosition(this,dlg.GetSize()) );
+
+    // Execute editor dialog
+    int res = dlg.ShowModal();
+    if ( res == wxID_OK && dlg.IsModified() )
     {
-        // Update the value in case of last minute changes
-        wxVariant useValue = propgrid->GetUncommittedPropertyValue();
-
-        wxArrayDouble& value = wxArrayDoubleRefFromVariant(useValue);
-
-        // Create editor dialog.
-        wxArrayDoubleEditorDialog dlg;
-        dlg.SetPrecision(m_precision);
-        dlg.Create( propgrid, wxEmptyString, m_label, value );
-        dlg.Move( propgrid->GetGoodEditorDialogPosition(this,dlg.GetSize()) );
-
-        // Execute editor dialog
-        int res = dlg.ShowModal();
-        if ( res == wxID_OK && dlg.IsModified() )
-        {
-            SetValueInEvent( WXVARIANT(dlg.GetArray()) );
-            return true;
-        }
-        return false;
+        value = WXVARIANT(dlg.GetArray());
+        return true;
     }
     return false;
 }
@@ -639,7 +632,7 @@ bool wxArrayDoubleProperty::DoSetAttribute( const wxString& name, wxVariant& val
         GenerateValueAsString( m_display, m_precision, true );
         return true;
     }
-    return wxPGProperty::DoSetAttribute(name, value);
+    return wxEditorDialogProperty::DoSetAttribute(name, value);
 }
 
 wxValidator* wxArrayDoubleProperty::DoGetValidator() const
