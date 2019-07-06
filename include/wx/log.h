@@ -160,9 +160,9 @@ public:
         // the message doesn't end up being logged and otherwise we'll fill it
         // just before logging it, which won't change it by much and definitely
         // less than a second resolution of the timestamp
-        , timestamp = 0
+        , timestamp(0)
 #if wxUSE_THREADS
-        , threadId = wxThread::GetCurrentId()
+        , threadId(wxThread::GetCurrentId())
 #endif // wxUSE_THREADS
         , m_data(NULL)
 
@@ -690,7 +690,7 @@ private:
 
     // We should prevent compiler to implicitly generate copy constructor/copy assignment (raw pointer fields)
     wxLog(const wxLog&);
-    operator= wxLog(const wxLog&);
+    wxLog& operator= (const wxLog&);
 };
 
 // ----------------------------------------------------------------------------
