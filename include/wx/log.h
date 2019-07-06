@@ -152,24 +152,21 @@ public:
                     int line_,
                     const char *func_,
                     const char *component_)
-    {
-        filename = filename_;
-        func = func_;
-        line = line_;
-        component = component_;
-
+        : filename(filename_)
+        , line(line_)
+        , func(func_)
+        , component(component_)
         // don't initialize the timestamp yet, we might not need it at all if
         // the message doesn't end up being logged and otherwise we'll fill it
         // just before logging it, which won't change it by much and definitely
         // less than a second resolution of the timestamp
-        timestamp = 0;
-
+        , timestamp = 0
 #if wxUSE_THREADS
-        threadId = wxThread::GetCurrentId();
+        , threadId = wxThread::GetCurrentId()
 #endif // wxUSE_THREADS
+        , m_data(NULL)
 
-        m_data = NULL;
-    }
+    {}
 
     // we need to define copy ctor and assignment operator because of m_data
     wxLogRecordInfo(const wxLogRecordInfo& other)
@@ -690,6 +687,10 @@ private:
 #if WXWIN_COMPATIBILITY_2_8
     static wxTraceMask ms_ulTraceMask;   // controls wxLogTrace behaviour
 #endif // WXWIN_COMPATIBILITY_2_8
+
+    // We should prevent compiler to implicitly generate copy constructor/copy assignment (raw pointer fields)
+    wxLog(const wxLog&);
+    operator= wxLog(const wxLog&);
 };
 
 // ----------------------------------------------------------------------------
@@ -801,7 +802,7 @@ private:
 class WXDLLIMPEXP_BASE wxLogChain : public wxLog
 {
 public:
-    wxLogChain(wxLog *logger);
+    explicit wxLogChain(wxLog *logger);
     virtual ~wxLogChain();
 
     // change the new log target
