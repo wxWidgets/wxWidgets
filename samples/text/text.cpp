@@ -1229,17 +1229,23 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_textrich->SetDefaultStyle(wxTextAttr(*wxBLUE, *wxWHITE));
     m_textrich->AppendText("And this should be in blue and the text you "
                            "type should be in blue as well.\n");
-    m_textrich->SetDefaultStyle( wxTextAttr() );
-    m_textrich->AppendText("And there is a ");
+    m_textrich->SetDefaultStyle(wxTextAttr());
     wxTextAttr attr = m_textrich->GetDefaultStyle();
-    attr.SetFontUnderline( /*true, */wxTEXT_ATTR_UNDERLINE_WAVE, *wxRED );
-    m_textrich->SetDefaultStyle( attr );
-    m_textrich->AppendText("mispeled ");
-    attr.SetFontUnderline( /*false, */wxTEXT_ATTR_UNDERLINE_NONE );
-    m_textrich->SetDefaultStyle( attr );
-    m_textrich->AppendText("word");
-    m_textrich->SetDefaultStyle(wxTextAttr(*wxBLUE, *wxWHITE));
-
+    attr.SetFontUnderlined(true);
+    m_textrich->SetDefaultStyle(attr);
+    m_textrich->AppendText("\nAnd there");
+    attr.SetFontUnderlined(false);
+    m_textrich->SetDefaultStyle(attr);
+    m_textrich->AppendText(" is a ");
+    attr.SetFontUnderlined(wxTEXT_ATTR_UNDERLINE_WAVE, *wxRED);
+    m_textrich->SetDefaultStyle(attr);
+    m_textrich->AppendText("mispeled");
+    attr.SetFontUnderlined(false);
+    m_textrich->SetDefaultStyle(attr);
+    m_textrich->AppendText(" word.");
+    attr.SetFontUnderlined(wxTEXT_ATTR_UNDERLINE_DOUBLE, *wxGREEN);
+    const long endPos = m_textrich->GetLastPosition();
+    m_textrich->SetStyle(endPos - 4, endPos - 2, attr);
 
     // lay out the controls
     wxBoxSizer *column1 = new wxBoxSizer(wxVERTICAL);

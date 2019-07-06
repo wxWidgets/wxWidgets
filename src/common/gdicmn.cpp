@@ -328,6 +328,7 @@ void wxColourDatabase::Initialize()
         {wxT("INDIAN RED"), 79, 47, 47},
         {wxT("KHAKI"), 159, 159, 95},
         {wxT("LIGHT BLUE"), 191, 216, 216},
+        {wxT("LIGHT GREEN"), 0, 128, 0},
         {wxT("LIGHT GREY"), 192, 192, 192},
         {wxT("LIGHT STEEL BLUE"), 143, 143, 188},
         {wxT("LIME GREEN"), 50, 204, 50},
@@ -347,6 +348,7 @@ void wxColourDatabase::Initialize()
         {wxT("MEDIUM VIOLET RED"), 219, 112, 147},
         {wxT("MIDNIGHT BLUE"), 47, 47, 79},
         {wxT("NAVY"), 35, 35, 142},
+        {wxT("OLIVE"), 128, 128, 0},
         {wxT("ORANGE"), 204, 50, 50},
         {wxT("ORANGE RED"), 255, 0, 127},
         {wxT("ORCHID"), 219, 112, 219},
@@ -363,6 +365,7 @@ void wxColourDatabase::Initialize()
         {wxT("SPRING GREEN"), 0, 255, 127},
         {wxT("STEEL BLUE"), 35, 107, 142},
         {wxT("TAN"), 219, 147, 112},
+        {wxT("TEAL"), 0, 128, 128},
         {wxT("THISTLE"), 216, 191, 216},
         {wxT("TURQUOISE"), 173, 234, 234},
         {wxT("VIOLET"), 79, 47, 79},
@@ -370,13 +373,7 @@ void wxColourDatabase::Initialize()
         {wxT("WHEAT"), 216, 216, 191},
         {wxT("WHITE"), 255, 255, 255},
         {wxT("YELLOW"), 255, 255, 0},
-        {wxT("YELLOW GREEN"), 153, 204, 50},
-        {wxT("wxNAVY"), 0, 0, 128},
-        {wxT("wxTEAL"), 0, 128, 128},
-        {wxT("wxLIGHT GREEN"), 0, 128, 0},
-        {wxT("wxPURPLE"), 128, 0, 128},
-        {wxT("wxMAROON"), 128, 0, 0},
-        {wxT("wxDARK GREY"), 128, 128, 128}
+        {wxT("YELLOW GREEN"), 153, 204, 50}
     };
 
     size_t n;

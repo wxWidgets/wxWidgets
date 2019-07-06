@@ -82,19 +82,23 @@
 
 // missing defines for MinGW build
 #ifndef CFM_UNDERLINETYPE
-#define CFM_UNDERLINETYPE               0x00800000
+    #define CFM_UNDERLINETYPE       0x00800000
+#endif
+
+#ifndef CFU_UNDERLINENONE
+    #define CFU_UNDERLINENONE       0
 #endif
 
 #ifndef CFU_UNDERLINE
-#define CFU_UNDERLINE                   1
+    #define CFU_UNDERLINE           1
 #endif
 
 #ifndef CFU_UNDERLINEDOUBLE
-#define CFU_UNDERLINEDOUBLE             3
+    #define CFU_UNDERLINEDOUBLE     3
 #endif
 
 #ifndef CFU_UNDERLINEWAVE
-#define CFU_UNDERLINEWAVE               8
+    #define CFU_UNDERLINEWAVE       8
 #endif
 
 #if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
@@ -2879,12 +2883,14 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         }
     }
 
-    if ( style.HasFontUnderline() )
+    if ( style.HasFontUnderlined() )
     {
         cf.dwMask |= CFM_UNDERLINETYPE;
-        wxTextAttrUnderlineType underlineType = style.GetUnderlineType();
-        switch ( underlineType )
+        switch ( style.GetUnderlineType() )
         {
+            case wxTEXT_ATTR_UNDERLINE_NONE:
+                cf.bUnderlineType = CFU_UNDERLINENONE;
+                break;
             case wxTEXT_ATTR_UNDERLINE_SOLID:
                 cf.bUnderlineType = CFU_UNDERLINE;
                 break;
@@ -2898,42 +2904,42 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
 
 #if _RICHEDIT_VER >= 0x0800
         // The colours are coming from https://docs.microsoft.com/en-us/windows/desktop/api/tom/nf-tom-itextdocument2-geteffectcolor.
-        // Not all values from wxTheColourDatabase are supported as can be seen from the code
-        // Those are commented out currently
         BYTE colour = 0;
         wxColour col = style.GetUnderlineColour();
-        if ( col == wxTheColourDatabase->Find( "BLACK" ) )
-            colour = 0x01;
-        else if ( col == wxTheColourDatabase->Find( "BLUE" ) )
-            colour = 0x02;
-        else if ( col == wxTheColourDatabase->Find( "CYAN" ) )
-            colour = 0x03;
-        else if ( col == wxTheColourDatabase->Find( "GREEN" ) )
-            colour = 0x04;
-        else if ( col == wxTheColourDatabase->Find( "MAGENTA" ) )
-            colour = 0x05;
-        else if ( col == wxTheColourDatabase->Find( "RED" ) )
-            colour = 0x06;
-        else if ( col == wxTheColourDatabase->Find( "YELLOW" ) )
-            colour = 0x07;
-        else if ( col == wxTheColourDatabase->Find( "WHITE" ) )
-            colour = 0x08;
-        else if ( col == wxTheColourDatabase->Find( "WXNAVY" ) )
-            colour = 0x09;
-        else if ( col == wxTheColourDatabase->Find( "WXTEAL" ) )
-            colour = 0x0A;
-        else if ( col == wxTheColourDatabase->Find( "WXLIGHT GREEN" ) )
-            colour = 0x0B;
-        else if ( col == wxTheColourDatabase->Find( "WXPURPLE" ) )
-            colour = 0x0C;
-        else if ( col == wxTheColourDatabase->Find( "WXMAROON" ) )
-            colour = 0x0D;
-        else if ( col == wxTheColourDatabase->Find( "OLIVE" ) )
-            colour = 0x0E;
-        else if ( col == wxTheColourDatabase->Find( "wxDARK GREY" ) )
-            colour = 0x0F;
-        else if ( col == wxTheColourDatabase->Find( "LIGHT GREY" ) )
-            colour = 0x10;
+        if ( col == wxNullColour )
+            colour = 0;
+        else if ( col == wxTheColourDatabase->Find("BLACK") )
+            colour = 1;
+        else if ( col == wxTheColourDatabase->Find("BLUE") )
+            colour = 2;
+        else if ( col == wxTheColourDatabase->Find("CYAN") )
+            colour = 3;
+        else if ( col == wxTheColourDatabase->Find("GREEN") )
+            colour = 4;
+        else if ( col == wxTheColourDatabase->Find("MAGENTA") )
+            colour = 5;
+        else if ( col == wxTheColourDatabase->Find("RED") )
+            colour = 6;
+        else if ( col == wxTheColourDatabase->Find("YELLOW") )
+            colour = 7;
+        else if ( col == wxTheColourDatabase->Find("WHITE") )
+            colour = 8;
+        else if ( col == wxColour(0, 0, 128) ) // navy
+            colour = 9;
+        else if ( col == wxTheColourDatabase->Find("TEAL") )
+            colour = 10;
+        else if ( col == wxTheColourDatabase->Find("LIGHT GREEN") )
+            colour = 11;
+        else if ( col == wxColour(128, 0, 128) ) // purple
+            colour = 12;
+        else if ( col == wxColour(128, 0, 0) ) // maroon
+            colour = 13;
+        else if ( col == wxTheColourDatabase->Find("OLIVE") )
+            colour = 14;
+        else if ( col == wxTheColourDatabase->Find("GREY") )
+            colour = 15;
+        else if ( col == wxTheColourDatabase->Find("LIGHT GREY") )
+            colour = 16;
         cf.bUnderlineColor = colour;
 #endif
     }
