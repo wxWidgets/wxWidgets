@@ -1091,7 +1091,7 @@ public:
     /**
         Check if the item is visible
 
-        @since 3.1.0
+        @since 3.1.3
     */
     bool IsVisible(long item);
 
