@@ -4027,6 +4027,8 @@ inline wxCStrData& wxCStrData::operator = (const wxCStrData& data)
     m_str = data.m_owned ? new wxString(*data.m_str) : data.m_str;
     m_offset = data.m_offset;
     m_owned = data.m_owned;
+    
+    return (*this);
 }
 
 inline wxCStrData::~wxCStrData()
