@@ -5376,6 +5376,12 @@ public:
     virtual long XYToPosition(long x, long y) const wxOVERRIDE
     {
         long pos = PositionFromLine((int)y);
+        if ( pos == -1 )
+            return -1;
+
+        if ( x >= LineLength(y) )
+            return -1;
+
         pos += x;
         return pos;
     }
@@ -5386,8 +5392,12 @@ public:
         if ( l == -1 )
             return false;
 
+        int lx = pos - PositionFromLine(l);
+        if ( lx >= LineLength(l) )
+            return false;
+
         if ( x )
-            *x = pos - PositionFromLine(l);
+            *x = lx;
 
         if ( y )
             *y = l;
