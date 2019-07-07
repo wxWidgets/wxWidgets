@@ -100,6 +100,11 @@ public:
 
        Note that this object takes ownership of @a context and will delete it when
        it is destroyed or when SetGraphicsContext() is called again.
+
+       Also, unlike the constructor taking wxGraphicsContext, this method will
+       reapply the current font, pen and brush, so that this object continues
+       to use them, if they had been changed before (which is never the case
+       when constructing wxGCDC directly from wxGraphicsContext).
     */
     void SetGraphicsContext(wxGraphicsContext* context);
 
