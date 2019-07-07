@@ -645,7 +645,7 @@ void wxFontProperty::OnSetValue()
 
     if ( !font.IsOk() )
     {
-        m_value << *wxNORMAL_FONT;
+        m_value = WXVARIANT(*wxNORMAL_FONT);
     }
 }
 
@@ -744,8 +744,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
         font.SetFamily( static_cast<wxFontFamily>(fam) );
     }
 
-    wxVariant newVariant;
-    newVariant << font;
+    wxVariant newVariant = WXVARIANT(font);
     return newVariant;
 }
 
@@ -1022,7 +1021,7 @@ void wxSystemColourProperty::OnSetValue()
     if ( m_value.IsType(wxS("wxColour*")) )
     {
         wxColour* pCol = wxStaticCast(m_value.GetWxObjectPtr(), wxColour);
-        m_value << *pCol;
+        m_value = WXVARIANT(*pCol);
     }
 
     wxColourPropertyValue val = GetVal(&m_value);
@@ -1638,9 +1637,7 @@ void wxColourProperty::Init( wxColour colour )
 {
     if ( !colour.IsOk() )
         colour = *wxWHITE;
-    wxVariant variant;
-    variant << colour;
-    m_value = variant;
+    m_value = WXVARIANT(colour);
     int ind = ColToInd(colour);
     if ( ind < 0 )
         ind = m_choices.GetCount() - 1;
@@ -1666,8 +1663,7 @@ wxColour wxColourProperty::GetColour( int index ) const
 
 wxVariant wxColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 {
-    wxVariant variant;
-    variant << v.m_colour;
+    wxVariant variant = WXVARIANT(v.m_colour);
     return variant;
 }
 

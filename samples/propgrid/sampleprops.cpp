@@ -155,7 +155,7 @@ void wxFontDataProperty::RefreshChildren()
     if ( GetChildCount() < 6 ) // Number is count of wxFontProperty's children + 1.
         return;
     wxFontData fontData; fontData << m_value_wxFontData;
-    wxVariant variant; variant << fontData.GetColour();
+    wxVariant variant = WXVARIANT(fontData.GetColour());
     Item(6)->SetValue( variant );
 }
 
