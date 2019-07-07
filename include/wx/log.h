@@ -690,6 +690,8 @@ private:
 #if WXWIN_COMPATIBILITY_2_8
     static wxTraceMask ms_ulTraceMask;   // controls wxLogTrace behaviour
 #endif // WXWIN_COMPATIBILITY_2_8
+
+    wxDECLARE_NO_COPY_CLASS(wxLog);
 };
 
 // ----------------------------------------------------------------------------
