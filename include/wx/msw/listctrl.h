@@ -155,7 +155,7 @@ public:
     bool GetItem(wxListItem& info) const;
 
     // Check if the item is visible
-    bool IsVisible(long item);
+    bool IsVisible(long item) wxOVERRIDE;
 
     // Sets information about the item
     bool SetItem(wxListItem& info);
@@ -187,7 +187,7 @@ public:
     bool SetItemData(long item, long data) { return SetItemPtrData(item, data); }
 
     // Gets the item rectangle
-    virtual bool GetItemRect(long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const;
+    bool GetItemRect(long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const wxOVERRIDE;
 
     // Gets the subitem rectangle in report mode
     bool GetSubItemRect(long item, long subItem, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const;

@@ -401,7 +401,7 @@ public:
     bool IsVirtual() const { return HasFlag(wxLC_VIRTUAL); }
 
     // Check if the item is visible
-    bool IsVisible(long item);
+    virtual bool IsVisible(long item);
 
     // Gets the item rectangle
     virtual bool GetItemRect(long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const = 0;
