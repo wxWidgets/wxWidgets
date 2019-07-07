@@ -146,6 +146,7 @@ public:
     inline wxCStrData(char *buf);
     inline wxCStrData(wchar_t *buf);
     inline wxCStrData(const wxCStrData& data);
+    inline wxCStrData& operator = (const wxCStrData& data);
 
     inline ~wxCStrData();
 
@@ -4019,6 +4020,15 @@ inline wxCStrData::wxCStrData(const wxCStrData& data)
       m_offset(data.m_offset),
       m_owned(data.m_owned)
 {
+}
+
+inline wxCStrData& wxCStrData::operator = (const wxCStrData& data)
+{
+    m_str = data.m_owned ? new wxString(*data.m_str) : data.m_str;
+    m_offset = data.m_offset;
+    m_owned = data.m_owned;
+    
+    return (*this);
 }
 
 inline wxCStrData::~wxCStrData()
