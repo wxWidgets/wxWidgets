@@ -5333,7 +5333,14 @@ public:
     // implement wxTextAreaBase pure virtual methods
     // ---------------------------------------------
 
-    virtual int GetLineLength(long lineNo) const wxOVERRIDE { return static_cast<int>(GetLineText(lineNo).length()); }
+    virtual int GetLineLength(long lineNo) const wxOVERRIDE
+    {
+        if ( lineNo < 0 || lineNo >= GetNumberOfLines() )
+            return -1;
+
+        return static_cast<int>(GetLineText(lineNo).length());
+    }
+
     virtual wxString GetLineText(long lineNo) const wxOVERRIDE
     {
         wxString text = GetLine(static_cast<int>(lineNo));

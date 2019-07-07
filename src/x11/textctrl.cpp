@@ -347,8 +347,8 @@ void wxTextCtrl::DoSetValue(const wxString& value, int flags)
 
 int wxTextCtrl::GetLineLength(long lineNo) const
 {
-    if (lineNo >= (long)m_lines.GetCount())
-        return 0;
+    if (lineNo < 0 || lineNo >= (long)m_lines.GetCount())
+        return -1;
 
     return m_lines[lineNo].m_text.Len();
 }

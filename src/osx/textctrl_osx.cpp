@@ -776,7 +776,7 @@ int wxTextWidgetImpl::GetLineLength(long lineNo) const
             count++;
     }
 
-    return 0 ;
+    return -1 ;
 }
 
 void wxTextWidgetImpl::SetJustification()

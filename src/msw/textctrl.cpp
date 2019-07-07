@@ -1803,6 +1803,9 @@ int wxTextCtrl::GetLineLength(long lineNo) const
 {
     long pos = XYToPosition(0, lineNo);
 
+    if ( pos == -1 )
+        return -1;
+
     return GetLengthOfLineContainingPos(pos);
 }
 
