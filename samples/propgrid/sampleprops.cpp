@@ -45,6 +45,13 @@ bool operator == (const wxFontData&, const wxFontData&)
     return false;
 }
 
+template<> inline wxVariant WXVARIANT(const wxFontData& value)
+{
+    wxVariant variant;
+    variant << value;
+    return variant;
+}
+
 // Custom version of wxFontProperty that also holds colour in the value.
 // Original version by Vladimir Vainer.
 
@@ -66,7 +73,7 @@ wxFontDataProperty::wxFontDataProperty( const wxString& label, const wxString& n
 
     // Set initial value - should be done in a simpler way like this
     // (instead of calling SetValue) in derived (wxObject) properties.
-    m_value_wxFontData << fontData;
+    m_value_wxFontData = WXVARIANT(fontData);
 
     // Add extra children.
     AddPrivateChild( new wxColourProperty("Colour", wxPG_LABEL,
@@ -95,9 +102,7 @@ void wxFontDataProperty::OnSetValue()
             {
                 fontData.SetColour(*wxBLACK);
             }
-            wxVariant variant;
-            variant << fontData;
-            m_value_wxFontData = variant;
+            m_value_wxFontData = WXVARIANT(fontData);
         }
         else
         {
@@ -143,7 +148,7 @@ bool wxFontDataProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& valu
 
     if ( dlg.ShowModal() == wxID_OK )
     {
-        value << dlg.GetFontData();
+        value = WXVARIANT(dlg.GetFontData());
         return true;
     }
     return false;
@@ -183,8 +188,7 @@ wxVariant wxFontDataProperty::ChildChanged( wxVariant& thisValue,
             fontData.SetChosenFont(font);
     }
 
-    wxVariant newVariant;
-    newVariant << fontData;
+    wxVariant newVariant = WXVARIANT(fontData);
     return newVariant;
 }
 
