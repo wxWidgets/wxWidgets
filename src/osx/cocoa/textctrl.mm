@@ -128,7 +128,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 
 @implementation wxTextEntryFormatter
 
-- (id)init 
+- (id)init
 {
     if ( self = [super init] )
     {
@@ -138,7 +138,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     return self;
 }
 
-- (void) setMaxLength:(int) maxlen 
+- (void) setMaxLength:(int) maxlen
 {
     maxLength = maxlen;
 }
@@ -155,13 +155,13 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     return [NSString stringWithString:anObject];
 }
 
-- (BOOL)getObjectValue:(id *)obj forString:(NSString *)string errorDescription:(NSString  **)error 
+- (BOOL)getObjectValue:(id *)obj forString:(NSString *)string errorDescription:(NSString  **)error
 {
     *obj = [NSString stringWithString:string];
     return YES;
 }
 
-- (BOOL)isPartialStringValid:(NSString **)partialStringPtr proposedSelectedRange:(NSRangePointer)proposedSelRangePtr 
+- (BOOL)isPartialStringValid:(NSString **)partialStringPtr proposedSelectedRange:(NSRangePointer)proposedSelRangePtr
               originalString:(NSString *)origString originalSelectedRange:(NSRange)origSelRange errorDescription:(NSString **)error
 {
     if ( maxLength > 0 )
@@ -226,9 +226,9 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 - (BOOL)control:(NSControl*)control textView:(NSTextView*)textView doCommandBySelector:(SEL)commandSelector
 {
     wxUnusedVar(textView);
-    
+
     BOOL handled = NO;
-    
+
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( control );
     if ( impl  )
     {
@@ -322,7 +322,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
             }
         }
     }
-    
+
     return handled;
 }
 
@@ -406,7 +406,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
     BOOL r = [super becomeFirstResponder];
     if ( impl != NULL && r )
         impl->DoNotifyFocusSet();
-    
+
     return r;
 }
 
@@ -653,11 +653,11 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
 {
     wxUnusedVar(textView);
     wxUnusedVar(control);
-    
+
     BOOL handled = NO;
 
     // send back key events wx' common code knows how to handle
-    
+
     wxWidgetCocoaImpl* impl = (wxWidgetCocoaImpl* ) wxWidgetImpl::FindFromWXWidget( self );
     if ( impl  )
     {
@@ -681,7 +681,7 @@ NSView* wxMacEditHelper::ms_viewCurrentlyEdited = nil;
             }
         }
     }
-    
+
     return handled;
 }
 
@@ -740,7 +740,7 @@ wxNSTextViewControl::wxNSTextViewControl( wxTextCtrl *wxPeer, WXWidget w, long s
     [tv setVerticallyResizable:YES];
     [tv setHorizontallyResizable:hasHScroll];
     [tv setAutoresizingMask:NSViewWidthSizable];
-    
+
     if ( hasHScroll )
     {
         [[tv textContainer] setContainerSize:NSMakeSize(MAX_WIDTH, MAX_WIDTH)];
@@ -1036,14 +1036,14 @@ void wxNSTextViewControl::SetFont( const wxFont & font , const wxColour& WXUNUSE
 bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
 {
     if (m_textView && position >=0)
-    {   
+    {
         NSFont* font = NULL;
         NSColor* bgcolor = NULL;
         NSColor* fgcolor = NULL;
         // NOTE: It appears that other platforms accept GetStyle with the position == length
         // but that NSTextStorage does not accept length as a valid position.
         // Therefore we return the default control style in that case.
-        if (position < (long) [[m_textView string] length]) 
+        if (position < (long) [[m_textView string] length])
         {
             NSTextStorage* storage = [m_textView textStorage];
             font = [storage attribute:NSFontAttributeName atIndex:position effectiveRange:NULL];
@@ -1057,13 +1057,13 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
             bgcolor = [attrs objectForKey:NSBackgroundColorAttributeName];
             fgcolor = [attrs objectForKey:NSForegroundColorAttributeName];
         }
-        
+
         if (font)
             style.SetFont(wxFont(font));
-        
+
         if (bgcolor)
             style.SetBackgroundColour(wxColour(bgcolor));
-            
+
         if (fgcolor)
             style.SetTextColour(wxColour(fgcolor));
         return true;
@@ -1161,7 +1161,7 @@ void wxNSTextViewControl::SetStyle(long start,
             [dict release];
         }
     }
-        
+
     if ( style.HasAlignment() )
     {
         switch ( style.GetAlignment() )
@@ -1565,7 +1565,7 @@ wxWidgetImplType* wxWidgetImpl::CreateTextControl( wxTextCtrl* wxpeer,
         {
             [v setAlignment:NSCenterTextAlignment];
         }
-                
+
         NSTextFieldCell* cell = [v cell];
         [cell setWraps:NO];
         [cell setScrollable:YES];
