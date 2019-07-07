@@ -680,6 +680,8 @@ public:
     // allocates a block of given size
     void Init(size_t size, unsigned flags = GMEM_MOVEABLE)
     {
+        if (m_hGlobal)
+            ::GlobalFree(m_hGlobal);
         m_hGlobal = ::GlobalAlloc(flags, size);
         if ( !m_hGlobal )
         {
