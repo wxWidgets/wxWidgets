@@ -82,7 +82,7 @@ public:
     wxUIntPtr GetItemData( long item ) const;
     bool SetItemPtrData(long item, wxUIntPtr data);
     bool SetItemData(long item, long data) { return SetItemPtrData(item, data); }
-    bool GetItemRect( long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS ) const;
+    bool GetItemRect( long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS ) const wxOVERRIDE;
     bool GetSubItemRect( long item, long subItem, wxRect& rect, int code = wxLIST_RECT_BOUNDS ) const;
     bool GetItemPosition( long item, wxPoint& pos ) const;
     bool SetItemPosition( long item, const wxPoint& pos ); // not supported in wxGLC
@@ -130,7 +130,6 @@ public:
     bool EndEditLabel(bool cancel);
 
     wxTextCtrl* GetEditControl() const;
-    bool IsVisible(long item);
     void Edit( long item ) { EditLabel(item); }
 
     bool EnsureVisible( long item );
