@@ -68,7 +68,7 @@
 #endif
 
 #ifndef LVM_ISITEMVISIBLE
-#define LVM_ISITEMVISIBLE (LVM_FIRST + 182)
+    #define LVM_ISITEMVISIBLE (LVM_FIRST + 182)
 #endif
 
 // ----------------------------------------------------------------------------
