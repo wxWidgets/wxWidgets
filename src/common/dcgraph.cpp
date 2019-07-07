@@ -126,8 +126,7 @@ wxGCDCImpl::wxGCDCImpl(wxDC *owner, wxGraphicsContext* context) :
 {
     CommonInit();
 
-    m_graphicContext = context;
-    m_ok = m_graphicContext != NULL;
+    DoInitContext(context);
 
     // We can't currently initialize m_font, m_pen and m_brush here as we don't
     // have any way of converting the corresponding wxGraphicsXXX objects to
@@ -146,13 +145,10 @@ wxGCDCImpl::wxGCDCImpl( wxDC *owner ) :
 void wxGCDCImpl::SetGraphicsContext( wxGraphicsContext* ctx )
 {
     delete m_graphicContext;
-    m_graphicContext = ctx;
-    if ( m_graphicContext )
+
+    if ( DoInitContext(ctx) )
     {
-        m_matrixOriginal = m_graphicContext->GetTransform();
-        m_ok = true;
-        // apply the stored transformations to the passed in context
-        ComputeScaleAndOrigin();
+        // Reapply our attributes to the context.
         m_graphicContext->SetFont( m_font , m_textForegroundColour );
         m_graphicContext->SetPen( m_pen );
         m_graphicContext->SetBrush( m_brush);
@@ -218,6 +214,21 @@ void wxGCDCImpl::Init(wxGraphicsContext* ctx)
     m_graphicContext = NULL;
     if (ctx)
         SetGraphicsContext(ctx);
+}
+
+bool wxGCDCImpl::DoInitContext(wxGraphicsContext* ctx)
+{
+    m_graphicContext = ctx;
+    m_ok = m_graphicContext != NULL;
+
+    if ( m_ok )
+    {
+        // apply the stored transformations to the passed in context
+        m_matrixOriginal = m_graphicContext->GetTransform();
+        ComputeScaleAndOrigin();
+    }
+
+    return m_ok;
 }
 
 wxGCDCImpl::~wxGCDCImpl()

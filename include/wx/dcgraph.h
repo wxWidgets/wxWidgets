@@ -242,6 +242,10 @@ private:
     // is assumed to be newly created.
     void Init(wxGraphicsContext*);
 
+    // This method initializes m_graphicContext, m_ok and m_matrixOriginal
+    // fields, returns true if the context was valid.
+    bool DoInitContext(wxGraphicsContext* ctx);
+
     wxDECLARE_CLASS(wxGCDCImpl);
     wxDECLARE_NO_COPY_CLASS(wxGCDCImpl);
 };
