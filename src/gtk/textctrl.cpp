@@ -568,18 +568,6 @@ gtk_textctrl_populate_popup( GtkEntry *WXUNUSED(entry), GtkMenu *menu, wxTextCtr
 }
 
 //-----------------------------------------------------------------------------
-//  "changed"
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static void
-gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
-{
-    win->GTKOnTextChanged();
-}
-}
-
-//-----------------------------------------------------------------------------
 //  "mark_set"
 //-----------------------------------------------------------------------------
 
@@ -768,16 +756,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     }
 
     // We want to be notified about text changes.
-    if (multi_line)
-    {
-        g_signal_connect (m_buffer, "changed",
-                          G_CALLBACK (gtk_text_changed_callback), this);
-    }
-    else
-    {
-        g_signal_connect (m_text, "changed",
-                          G_CALLBACK (gtk_text_changed_callback), this);
-    }
+    GTKConnectChangedSignal();
 
     // Catch to disable focus out handling
     g_signal_connect (m_text, "populate_popup",
@@ -1379,20 +1358,6 @@ void wxTextCtrl::GTKOnTextChanged()
 // ----------------------------------------------------------------------------
 // event handling
 // ----------------------------------------------------------------------------
-
-void wxTextCtrl::EnableTextChangedEvents(bool enable)
-{
-    if ( enable )
-    {
-        g_signal_handlers_unblock_by_func(GetTextObject(),
-            (gpointer)gtk_text_changed_callback, this);
-    }
-    else // disable events
-    {
-        g_signal_handlers_block_by_func(GetTextObject(),
-            (gpointer)gtk_text_changed_callback, this);
-    }
-}
 
 bool wxTextCtrl::IgnoreTextUpdate()
 {

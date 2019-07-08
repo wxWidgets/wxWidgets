@@ -76,6 +76,10 @@ protected:
     // And this one to connect "insert-text" signal.
     void GTKConnectInsertTextSignal(GtkEntry* entry);
 
+    // Finally this one connects to the "changed" signal on the object returned
+    // by GetTextObject().
+    void GTKConnectChangedSignal();
+
 
     virtual void DoSetValue(const wxString& value, int flags) wxOVERRIDE;
     virtual wxString DoGetValue() const wxOVERRIDE;
@@ -92,6 +96,12 @@ protected:
 
     static int GTKGetEntryTextLength(GtkEntry* entry);
 
+    // Block/unblock the corresponding GTK signal.
+    //
+    // Note that we make it protected in wxGTK as it is called from wxComboBox
+    // currently.
+    virtual void EnableTextChangedEvents(bool enable) wxOVERRIDE;
+
 private:
     // implement this to return the associated GtkEntry or another widget
     // implementing GtkEditable
@@ -99,6 +109,12 @@ private:
 
     // implement this to return the associated GtkEntry
     virtual GtkEntry *GetEntry() const = 0;
+
+    // This one exists in order to be overridden by wxTextCtrl which uses
+    // either GtkEditable or GtkTextBuffer depending on whether it is single-
+    // or multi-line.
+    virtual void *GetTextObject() const { return GetEntry(); }
+
 
     // Various auto-completion-related stuff, only used if any of AutoComplete()
     // methods are called.

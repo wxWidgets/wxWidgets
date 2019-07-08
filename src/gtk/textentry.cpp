@@ -57,8 +57,16 @@ static int GetEntryTextLength(GtkEntry* entry)
 // signal handlers implementation
 // ============================================================================
 
-// "insert_text" handler for GtkEntry
 extern "C" {
+
+// "changed" handler for GtkEntry
+static void
+wx_gtk_text_changed_callback(GtkWidget* WXUNUSED(widget), wxTextEntry* entry)
+{
+    entry->GTKOnTextChanged();
+}
+
+// "insert_text" handler for GtkEntry
 static void
 wx_gtk_insert_text_callback(GtkEditable *editable,
                             const gchar * new_text,
@@ -867,6 +875,31 @@ int wxTextEntry::GTKIMFilterKeypress(GdkEventKey* event) const
 #endif // GTK+ 2.22+
 
     return result;
+}
+
+// ----------------------------------------------------------------------------
+// signals and events
+// ----------------------------------------------------------------------------
+
+void wxTextEntry::EnableTextChangedEvents(bool enable)
+{
+    if ( enable )
+    {
+        g_signal_handlers_unblock_by_func(GetTextObject(),
+            (gpointer)wx_gtk_text_changed_callback, this);
+    }
+    else // disable events
+    {
+        g_signal_handlers_block_by_func(GetTextObject(),
+            (gpointer)wx_gtk_text_changed_callback, this);
+    }
+}
+
+void wxTextEntry::GTKConnectChangedSignal()
+{
+    g_signal_connect(GetTextObject(), "changed",
+                     G_CALLBACK(wx_gtk_text_changed_callback), this);
+
 }
 
 void wxTextEntry::GTKConnectInsertTextSignal(GtkEntry* entry)

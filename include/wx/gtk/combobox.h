@@ -151,7 +151,6 @@ private:
     // From wxTextEntry:
     virtual wxWindow *GetEditableWindow() wxOVERRIDE { return this; }
     virtual GtkEditable *GetEditable() const wxOVERRIDE;
-    virtual void EnableTextChangedEvents(bool enable) wxOVERRIDE;
 
     void Init();
 
