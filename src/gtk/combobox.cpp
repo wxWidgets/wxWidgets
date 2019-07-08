@@ -219,7 +219,7 @@ void wxComboBox::GTKCreateComboBoxWidget()
 
 GtkEditable *wxComboBox::GetEditable() const
 {
-    return GTK_EDITABLE(gtk_bin_get_child(GTK_BIN(m_widget)));
+    return GTK_EDITABLE(m_entry);
 }
 
 void wxComboBox::OnChar( wxKeyEvent &event )
