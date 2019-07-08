@@ -2185,11 +2185,7 @@ void wxPGMultiButton::Finalize( wxPropertyGrid* WXUNUSED(propGrid),
 
 int wxPGMultiButton::GenId( int itemid ) const
 {
-    if ( itemid < -1 )
-    {
-        itemid = wxID_ANY;
-    }
-    return itemid;
+    return itemid < -1 ? wxID_ANY : itemid;
 }
 
 #if wxUSE_BMPBUTTON
