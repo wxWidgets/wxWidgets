@@ -142,6 +142,8 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
+    void GTKOnTextChanged() wxOVERRIDE;
+
 protected:
     // overridden wxWindow virtual methods
     virtual wxSize DoGetBestSize() const wxOVERRIDE;

@@ -575,13 +575,7 @@ extern "C" {
 static void
 gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
-    if ( win->IgnoreTextUpdate() )
-        return;
-
-    if ( win->MarkDirtyOnChange() )
-        win->MarkDirty();
-
-    win->SendTextUpdatedEvent();
+    win->GTKOnTextChanged();
 }
 }
 
@@ -1369,6 +1363,17 @@ void wxTextCtrl::MarkDirty()
 void wxTextCtrl::DiscardEdits()
 {
     m_modified = false;
+}
+
+void wxTextCtrl::GTKOnTextChanged()
+{
+    if ( IgnoreTextUpdate() )
+        return;
+
+    if ( MarkDirtyOnChange() )
+        MarkDirty();
+
+    SendTextUpdatedEvent();
 }
 
 // ----------------------------------------------------------------------------
