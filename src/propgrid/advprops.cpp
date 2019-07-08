@@ -860,6 +860,12 @@ static const long gs_cp_es_syscolour_values[] = {
 
 IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
 
+template<> inline wxVariant WXVARIANT(const wxColourPropertyValue& value)
+{
+    wxVariant variant;
+    variant << value;
+    return variant;
+}
 
 // Class body is in advprops.h
 
@@ -874,7 +880,7 @@ void wxSystemColourProperty::Init( int type, const wxColour& colour )
 
     m_flags |= wxPG_PROP_STATIC_CHOICES; // Colour selection cannot be changed.
 
-    m_value << cpv;
+    m_value = WXVARIANT(cpv);
 
     OnSetValue();
 }
@@ -988,8 +994,7 @@ wxColourPropertyValue wxSystemColourProperty::GetVal( const wxVariant* pVariant 
 
 wxVariant wxSystemColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 {
-    wxVariant variant;
-    variant << v;
+    wxVariant variant = WXVARIANT(v);
     return variant;
 }
 
