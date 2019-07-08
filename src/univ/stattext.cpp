@@ -77,15 +77,15 @@ void wxStaticText::SetLabel(const wxString& str)
     m_labelOrig = str;
 
     // draw as real label the abbreviated version of it
-    DoSetLabel(GetEllipsizedLabel());
+    WXSetVisibleLabel(GetEllipsizedLabel());
 }
 
-void wxStaticText::DoSetLabel(const wxString& str)
+void wxStaticText::WXSetVisibleLabel(const wxString& str)
 {
     UnivDoSetLabel(str);
 }
 
-wxString wxStaticText::DoGetLabel() const
+wxString wxStaticText::WXGetVisibleLabel() const
 {
     return wxControl::GetLabel();
 }

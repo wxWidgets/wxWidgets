@@ -108,6 +108,16 @@ void EllipsizationTestCase::NormalCase()
                                     flagsToTest[f]
                                    );
 
+                    // Note that we must measure the width of the text that
+                    // will be rendered, and when mnemonics are used, this
+                    // means we have to remove them first.
+                    const wxString
+                        displayed = flagsToTest[f] & wxELLIPSIZE_FLAGS_PROCESS_MNEMONICS
+                                        ? wxControl::RemoveMnemonics(ret)
+                                        : ret;
+                    const int
+                        width = dc.GetMultiLineTextExtent(displayed).GetWidth();
+
                     WX_ASSERT_MESSAGE
                     (
                      (
@@ -115,10 +125,10 @@ void EllipsizationTestCase::NormalCase()
                         s, f, m,
                         str,
                         ret,
-                        dc.GetMultiLineTextExtent(ret).GetWidth(),
+                        width,
                         widthsToTest[w]
                      ),
-                     dc.GetMultiLineTextExtent(ret).GetWidth() <= widthsToTest[w]
+                     width <= widthsToTest[w]
                     );
                 }
             }

@@ -270,17 +270,23 @@ void wxStaticText::GTKWidgetDoSetMnemonic(GtkWidget* w)
 }
 
 
-// These functions should be used only when GTK+ < 2.6 by wxStaticTextBase::UpdateLabel()
+// These functions are not used as GTK supports ellipsization natively and we
+// never call the base class UpdateText() which uses them.
+//
+// Note that, unfortunately, we still need to define them because they still
+// exist, as pure virtuals, in the base class even in wxGTK to allow
+// wxGenericStaticText to override them.
 
-wxString wxStaticText::DoGetLabel() const
+wxString wxStaticText::WXGetVisibleLabel() const
 {
-    GtkLabel *label = GTK_LABEL(m_widget);
-    return wxGTK_CONV_BACK( gtk_label_get_text( label ) );
+    wxFAIL_MSG(wxS("Unreachable"));
+
+    return wxString();
 }
 
-void wxStaticText::DoSetLabel(const wxString& str)
+void wxStaticText::WXSetVisibleLabel(const wxString& WXUNUSED(str))
 {
-    GTKSetLabelForLabel(GTK_LABEL(m_widget), str);
+    wxFAIL_MSG(wxS("Unreachable"));
 }
 
 // static
