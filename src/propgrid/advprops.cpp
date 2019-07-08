@@ -744,8 +744,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
         font.SetFamily( static_cast<wxFontFamily>(fam) );
     }
 
-    wxVariant newVariant = WXVARIANT(font);
-    return newVariant;
+    return WXVARIANT(font);
 }
 
 /*
@@ -994,8 +993,7 @@ wxColourPropertyValue wxSystemColourProperty::GetVal( const wxVariant* pVariant 
 
 wxVariant wxSystemColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 {
-    wxVariant variant = WXVARIANT(v);
-    return variant;
+    return WXVARIANT(v);
 }
 
 int wxSystemColourProperty::ColToInd( const wxColour& colour ) const
@@ -1668,8 +1666,7 @@ wxColour wxColourProperty::GetColour( int index ) const
 
 wxVariant wxColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 {
-    wxVariant variant = WXVARIANT(v.m_colour);
-    return variant;
+    return WXVARIANT(v.m_colour);
 }
 
 // -----------------------------------------------------------------------
