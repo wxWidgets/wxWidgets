@@ -1158,7 +1158,7 @@ void wxTreeCtrl::Toggle(const wxTreeItemId& item)
     wxCHECK_RET(item.IsOk(), "invalid tree item");
 
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-    qTreeItem->setSelected(!qTreeItem->isSelected());
+    qTreeItem->setExpanded(!qTreeItem->isExpanded());
 }
 
 void wxTreeCtrl::Unselect()
