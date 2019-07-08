@@ -989,15 +989,8 @@ void TextWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 
 void TextWidgetsPage::OnText(wxCommandEvent& event)
 {
-    // small hack to suppress the very first message: by then the logging is
-    // not yet redirected and so initial setting of the text value results in
-    // an annoying message box
-    static bool s_firstTime = true;
-    if ( s_firstTime )
-    {
-        s_firstTime = false;
+    if ( !IsUsingLogWindow() )
         return;
-    }
 
     // Replace middle of long text with ellipsis just to avoid filling up the
     // log control with too much unnecessary stuff.
