@@ -132,11 +132,6 @@ if(DEFINED wxSETUP_HEADER_FILE_DEBUG)
     wx_string_append(wxSETUP_HEADER_PATH "$<$<CONFIG:Debug>:d>")
 endif()
 
-if(wxUSE_ON_FATAL_EXCEPTION AND MSVC AND (MSVC_VERSION GREATER 1800) )
-    # see include/wx/msw/seh.h for more details
-    add_compile_options("/EHa")
-endif()
-
 if(NOT wxBUILD_DEBUG_LEVEL STREQUAL "Default")
     add_compile_options("-DwxDEBUG_LEVEL=${wxBUILD_DEBUG_LEVEL}")
 endif()
