@@ -39,14 +39,6 @@
     #include "wx/msw/missing.h"
 #endif
 
-#if wxUSE_LISTCTRL
-    #include "wx/listctrl.h"
-#endif // wxUSE_LISTCTRL
-
-#if wxUSE_TREECTRL
-    #include "wx/treectrl.h"
-#endif // wxUSE_TREECTRL
-
 #include "wx/renderer.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/dc.h"          // for wxDCTemp
