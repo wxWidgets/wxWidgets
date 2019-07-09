@@ -11,6 +11,7 @@
 #define _WX_QT_PRIVATE_TREEITEM_DELEGATE_H
 
 #include <QtWidgets/QStyledItemDelegate>
+#include <QtWidgets/QToolTip>
 
 #include "wx/app.h"
 #include "wx/textctrl.h"
@@ -65,6 +66,28 @@ public:
     void AcceptModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
     {
         QStyledItemDelegate::setModelData(editor, model, index);
+    }
+
+    bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index)
+    {
+        if ( event->type() == QEvent::ToolTip )
+        {
+            const QRect &itemRect = view->visualRect(index);
+            const QSize &bestSize = sizeHint(option, index);
+            if ( itemRect.width() < bestSize.width() )
+            {
+                const QString &value = index.data(Qt::DisplayRole).toString();
+                QToolTip::showText(event->globalPos(), value, view);
+            }
+            else
+            {
+                QToolTip::hideText();
+            }
+
+            return true;
+        }
+
+        return QStyledItemDelegate::helpEvent(event, view, option, index);
     }
 
 private:
