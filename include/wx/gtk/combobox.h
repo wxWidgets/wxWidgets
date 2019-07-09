@@ -145,6 +145,10 @@ protected:
     virtual GtkEntry *GetEntry() const wxOVERRIDE
         { return m_entry; }
 
+    virtual int GTKIMFilterKeypress(GdkEventKey* event) const wxOVERRIDE
+        { return GTKEntryIMFilterKeypress(event); }
+
+
     GtkEntry*   m_entry;
 
 private:

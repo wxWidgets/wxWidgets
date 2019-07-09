@@ -91,8 +91,9 @@ protected:
     virtual bool DoAutoCompleteStrings(const wxArrayString& choices) wxOVERRIDE;
     virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) wxOVERRIDE;
 
-    // Override the base class method to use GtkEntry IM context.
-    virtual int GTKIMFilterKeypress(GdkEventKey* event) const;
+    // Call this from the overridden wxWindow::GTKIMFilterKeypress() to use
+    // GtkEntry IM context.
+    int GTKEntryIMFilterKeypress(GdkEventKey* event) const;
 
     static int GTKGetEntryTextLength(GtkEntry* entry);
 

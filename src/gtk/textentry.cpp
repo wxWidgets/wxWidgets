@@ -862,7 +862,7 @@ void wxTextEntry::ForceUpper()
 // IM handling
 // ----------------------------------------------------------------------------
 
-int wxTextEntry::GTKIMFilterKeypress(GdkEventKey* event) const
+int wxTextEntry::GTKEntryIMFilterKeypress(GdkEventKey* event) const
 {
     int result = false;
 #if GTK_CHECK_VERSION(2, 22, 0)
