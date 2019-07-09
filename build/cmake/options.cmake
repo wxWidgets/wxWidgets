@@ -26,8 +26,11 @@ mark_as_advanced(wxBUILD_CUSTOM_SETUP_HEADER_PATH)
 wx_option(wxBUILD_DEBUG_LEVEL "Debug Level" Default STRINGS Default 0 1 2)
 mark_as_advanced(wxBUILD_DEBUG_LEVEL)
 
-if(MSVC)
+if(MSVC OR CMAKE_COMPILER_IS_GNUCC)
     wx_option(wxBUILD_USE_STATIC_RUNTIME "Link using the static runtime library" OFF)
+endif()
+
+if(MSVC)
     wx_option(wxBUILD_MSVC_MULTIPROC "Enable multi-processor compilation for MSVC")
 else()
     # Other compilers support setting the C++ standard, present it an option to the user
