@@ -44,7 +44,7 @@ if(WIN32)
     set(wxBUILD_VENDOR "custom" CACHE STRING "Short string identifying your company (used in DLL name)")
 endif()
 
-wx_option(wxUSE_OPTIMISE "use preferred C/C++ compiler flags for release build" OFF)
+wx_option(wxUSE_OPTIMISE "use speed-optimised C/C++ compiler flags for release build" OFF)
 
 # STL options
 wx_option(wxUSE_STL "use standard C++ classes for everything" OFF)
