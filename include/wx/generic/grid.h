@@ -1112,6 +1112,11 @@ public:
                          const wxArrayString& lines,
                          long *width, long *height ) const;
 
+    void RefreshBlock(const wxGridCellCoords& topLeft,
+                      const wxGridCellCoords& bottomRight);
+
+    void RefreshBlock(int topRow, int leftCol,
+                      int bottomRow, int rightCol);
 
     // ------
     // Code that does a lot of grid modification can be enclosed

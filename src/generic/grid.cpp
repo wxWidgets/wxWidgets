@@ -4913,6 +4913,22 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
     }
 }
 
+void wxGrid::RefreshBlock(const wxGridCellCoords& topLeft,
+                          const wxGridCellCoords& bottomRight)
+{
+    RefreshBlock(topLeft.GetRow(), topLeft.GetCol(),
+                 bottomRight.GetRow(), bottomRight.GetCol());
+}
+
+void wxGrid::RefreshBlock(int topRow, int leftCol,
+                          int bottomRow, int rightCol)
+{
+    const wxRect rect = BlockToDeviceRect(wxGridCellCoords(topRow, leftCol),
+                                          wxGridCellCoords(bottomRow, rightCol));
+    if ( !rect.IsEmpty() )
+        m_gridWin->Refresh(false, &rect);
+}
+
 void wxGrid::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     if (m_targetWindow != this) // check whether initialisation has been done
@@ -5317,10 +5333,7 @@ wxGrid::UpdateBlockBeingSelected(int topRow, int leftCol,
     if ( m_selectedBlockTopLeft == wxGridNoCellCoords ||
          m_selectedBlockBottomRight == wxGridNoCellCoords )
     {
-        wxRect rect;
-        rect = BlockToDeviceRect( wxGridCellCoords ( topRow, leftCol ),
-                                  wxGridCellCoords ( bottomRow, rightCol ) );
-        m_gridWin->Refresh( false, &rect );
+        RefreshBlock(topRow, leftCol, bottomRow, rightCol);
     }
 
     // Now handle changing an existing selection area.
@@ -5330,13 +5343,6 @@ wxGrid::UpdateBlockBeingSelected(int topRow, int leftCol,
         // Compute two optimal update rectangles:
         // Either one rectangle is a real subset of the
         // other, or they are (almost) disjoint!
-        wxRect  rect[4];
-        bool    need_refresh[4];
-        need_refresh[0] =
-        need_refresh[1] =
-        need_refresh[2] =
-        need_refresh[3] = false;
-        int     i;
 
         // Store intermediate values
         wxCoord oldLeft = m_selectedBlockTopLeft.GetCol();
@@ -5358,46 +5364,29 @@ wxGrid::UpdateBlockBeingSelected(int topRow, int leftCol,
         {
             // Refresh the newly selected or deselected
             // area to the left of the old or new selection.
-            need_refresh[0] = true;
-            rect[0] = BlockToDeviceRect(
-                wxGridCellCoords( oldTop,  oldLeft ),
-                wxGridCellCoords( oldBottom, leftCol - 1 ) );
+            RefreshBlock(oldTop, oldLeft, oldBottom, leftCol - 1);
         }
 
         if ( oldTop < topRow )
         {
             // Refresh the newly selected or deselected
             // area above the old or new selection.
-            need_refresh[1] = true;
-            rect[1] = BlockToDeviceRect(
-                wxGridCellCoords( oldTop, leftCol ),
-                wxGridCellCoords( topRow - 1, rightCol ) );
+            RefreshBlock(oldTop, leftCol, topRow - 1, rightCol);
         }
 
         if ( oldRight > rightCol )
         {
             // Refresh the newly selected or deselected
             // area to the right of the old or new selection.
-            need_refresh[2] = true;
-            rect[2] = BlockToDeviceRect(
-                wxGridCellCoords( oldTop, rightCol + 1 ),
-                wxGridCellCoords( oldBottom, oldRight ) );
+            RefreshBlock(oldTop, rightCol + 1, oldBottom, oldRight);
         }
 
         if ( oldBottom > bottomRow )
         {
             // Refresh the newly selected or deselected
             // area below the old or new selection.
-            need_refresh[3] = true;
-            rect[3] = BlockToDeviceRect(
-                wxGridCellCoords( bottomRow + 1, leftCol ),
-                wxGridCellCoords( oldBottom, rightCol ) );
+            RefreshBlock(bottomRow + 1, leftCol, oldBottom, rightCol);
         }
-
-        // various Refresh() calls
-        for (i = 0; i < 4; i++ )
-            if ( need_refresh[i] && rect[i] != wxGridNoCellRect )
-                m_gridWin->Refresh( false, &(rect[i]) );
     }
 
     // change selection
@@ -9077,19 +9066,12 @@ wxArrayInt wxGrid::GetSelectedCols() const
 
 void wxGrid::ClearSelection()
 {
-    wxRect r1 = BlockToDeviceRect(m_selectedBlockTopLeft,
-                                  m_selectedBlockBottomRight);
-    wxRect r2 = BlockToDeviceRect(m_currentCellCoords,
-                                  m_selectedBlockCorner);
+    RefreshBlock(m_selectedBlockTopLeft, m_selectedBlockBottomRight);
+    RefreshBlock(m_currentCellCoords, m_selectedBlockCorner);
 
     m_selectedBlockTopLeft =
     m_selectedBlockBottomRight =
     m_selectedBlockCorner = wxGridNoCellCoords;
-
-    if ( !r1.IsEmpty() )
-        RefreshRect(r1, false);
-    if ( !r2.IsEmpty() )
-        RefreshRect(r2, false);
 
     if ( m_selection )
         m_selection->ClearSelection();
