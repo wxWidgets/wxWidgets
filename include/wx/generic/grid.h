@@ -1068,6 +1068,7 @@ public:
     void DrawAllGridLines( wxDC& dc, const wxRegion & reg );
     void DrawCell( wxDC& dc, const wxGridCellCoords& );
     void DrawHighlight(wxDC& dc, const wxGridCellCoordsArray& cells);
+    void UpdateGridWindows() const;
 
     // this function is called when the current cell highlight must be redrawn
     // and may be overridden by the user

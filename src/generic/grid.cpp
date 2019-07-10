@@ -4629,6 +4629,10 @@ void wxGrid::EnableDragColMove( bool enable )
     // order, whereas now you can always call ResetColPos() manually if needed
 }
 
+void wxGrid::UpdateGridWindows() const
+{
+    m_gridWin->Update();
+}
 
 //
 // ------ interaction with data model
