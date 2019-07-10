@@ -60,7 +60,7 @@ public:
 
     virtual QWidget *GetHandle() const wxOVERRIDE;
 
-    void QtSendEvent(wxEventType evtType, const QModelIndex &index, bool selected);
+    void QtSendEvent(wxEventType evtType, int rowIndex, bool selected);
 
 protected:
     virtual void DoSetFirstItem(int n) wxOVERRIDE;
