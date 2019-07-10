@@ -220,7 +220,7 @@ enum wxTextAttrLineSpacing
 
 
 /**
-    The values that can be used with SetFontUnderline
+    Underline types that can be used in wxTextAttr::SetFontUnderline().
 
     @since 3.1.3
 */
@@ -436,14 +436,14 @@ public:
     bool GetFontUnderlined() const;
 
     /**
-        Returns the underline type, which is one of the @wxTextAttrUnderlineType values
+        Returns the underline type, which is one of the @wxTextAttrUnderlineType values.
 
         @since 3.1.3
     */
-    wxTextAttrUnderlineType GetUnderlinedType() const;
+    wxTextAttrUnderlineType GetUnderlineType() const;
 
     /**
-        Returns the underline color used
+        Returns the underline color used. wxNullColour when the text colour is used.
 
         @since 3.1.3
     */
@@ -630,14 +630,6 @@ public:
         underlining.
     */
     bool HasFontUnderlined() const;
-
-    /**
-        Returns @true if the attribute object specifies different underline types
-        and color
-
-        @since 3.1.3
-    */
-    bool HasFontUnderline() const;
 
     /**
         Returns @true if the attribute object specifies font weight (bold, light or
@@ -838,16 +830,24 @@ public:
     void SetFontStyle(wxFontStyle fontStyle);
 
     /**
-        Sets the font underlining.
+        Sets the font underlining (solid line, using text colour).
     */
     void SetFontUnderlined(bool underlined);
 
     /**
-        Set the different underline type and the underline color
+        Sets the font underlining with a wxTextAttrUnderlineType and wxColour.
+        Specifying wxNullColour will use the text colour.
+
+        @note On wxMSW, wxTEXT_ATTR_UNDERLINE_DOUBLE is shown as wxTEXT_ATTR_UNDERLINE_SOLID. There is only a limited number of colours supported,
+        the RGB values are listed <a href="https://docs.microsoft.com/en-us/windows/win32/api/tom/nf-tom-itextdocument2-geteffectcolor">here</a>.
+
+        @note On wxGTK, underline colour is only supported by wxGTK3. GTK might overrule the colour of wxTEXT_ATTR_UNDERLINE_WAVE.
+
+        @note On wxOSX, wxTEXT_ATTR_UNDERLINE_WAVE is shown as a dotted line.
 
         @since 3.1.3
     */
-    void SetFontUnderline(wxTextAttrUnderlineType type = wxTEXT_ATTR_UNDERLINE_SOLID, wxColour colour = *wxBLACK);
+    void SetFontUnderlined(wxTextAttrUnderlineType type, const wxColour& colour = wxNullColour);
 
     /**
         Sets the font weight.
