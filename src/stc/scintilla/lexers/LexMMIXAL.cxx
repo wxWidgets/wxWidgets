@@ -103,7 +103,7 @@ static void ColouriseMMIXALDoc(Sci_PositionU startPos, Sci_Position length, int 
 				char s[100];
 				sc.GetCurrent(s, sizeof(s));
 				if (*s == ':') {	// ignore base prefix for match
-					memmove(s + 1, s, sizeof(s) - 1);
+					memmove(s, s + 1, sizeof(s) - 1);
 				}
 				if (special_register.InList(s)) {
 					sc.ChangeState(SCE_MMIXAL_REGISTER);
