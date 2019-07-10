@@ -157,6 +157,7 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLEGRIDSIZING, GridFrame::ToggleGridSizing )
     EVT_MENU( ID_TOGGLEGRIDDRAGCELL, GridFrame::ToggleGridDragCell )
     EVT_MENU( ID_COLNATIVEHEADER, GridFrame::SetNativeColHeader )
+    EVT_MENU( ID_COLNATIVELABELS, GridFrame::SetNativeColLabels )
     EVT_MENU( ID_COLDEFAULTHEADER, GridFrame::SetDefaultColHeader )
     EVT_MENU( ID_COLCUSTOMHEADER, GridFrame::SetCustomColHeader )
     EVT_MENU_RANGE( ID_TAB_STOP, ID_TAB_LEAVE, GridFrame::SetTabBehaviour )
@@ -343,6 +344,7 @@ GridFrame::GridFrame()
 
     colHeaderMenu->AppendRadioItem( ID_COLDEFAULTHEADER, "&Default" );
     colHeaderMenu->AppendRadioItem( ID_COLNATIVEHEADER, "&Native" );
+    colHeaderMenu->AppendRadioItem( ID_COLNATIVELABELS, "Native-&like" );
     colHeaderMenu->AppendRadioItem( ID_COLCUSTOMHEADER, "&Custom" );
 
     wxMenu *tabBehaviourMenu = new wxMenu;
@@ -704,6 +706,15 @@ void GridFrame::SetNativeColHeader( wxCommandEvent& WXUNUSED(ev) )
     CustomColumnHeadersProvider* provider =
         static_cast<CustomColumnHeadersProvider*>(grid->GetTable()->GetAttrProvider());
     provider->UseCustomColHeaders(false);
+    grid->UseNativeColHeader(true);
+}
+
+void GridFrame::SetNativeColLabels( wxCommandEvent& WXUNUSED(ev) )
+{
+    CustomColumnHeadersProvider* provider =
+        static_cast<CustomColumnHeadersProvider*>(grid->GetTable()->GetAttrProvider());
+    provider->UseCustomColHeaders(false);
+    grid->UseNativeColHeader(false);
     grid->SetUseNativeColLabels(true);
 }
 
@@ -712,6 +723,7 @@ void GridFrame::SetCustomColHeader( wxCommandEvent& WXUNUSED(ev) )
     CustomColumnHeadersProvider* provider =
         static_cast<CustomColumnHeadersProvider*>(grid->GetTable()->GetAttrProvider());
     provider->UseCustomColHeaders(true);
+    grid->UseNativeColHeader(false);
     grid->SetUseNativeColLabels(false);
 }
 
@@ -720,6 +732,7 @@ void GridFrame::SetDefaultColHeader( wxCommandEvent& WXUNUSED(ev) )
     CustomColumnHeadersProvider* provider =
         static_cast<CustomColumnHeadersProvider*>(grid->GetTable()->GetAttrProvider());
     provider->UseCustomColHeaders(false);
+    grid->UseNativeColHeader(false);
     grid->SetUseNativeColLabels(false);
 }
 
