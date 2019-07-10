@@ -21,6 +21,7 @@ public:
 private:
     void clicked( const QModelIndex &index );
     void doubleClicked( const QModelIndex &index );
+    void itemChanged(QListWidgetItem *item);
 };
 
 wxQtListWidget::wxQtListWidget( wxWindow *parent, wxListBox *handler )
@@ -28,22 +29,41 @@ wxQtListWidget::wxQtListWidget( wxWindow *parent, wxListBox *handler )
 {
     connect(this, &QListWidget::clicked, this, &wxQtListWidget::clicked);
     connect(this, &QListWidget::doubleClicked, this, &wxQtListWidget::doubleClicked);
+    connect(this, &QListWidget::itemChanged, this, &wxQtListWidget::itemChanged);
 }
 
 void wxQtListWidget::clicked(const QModelIndex &index )
 {
     wxListBox *handler = GetHandler();
     if ( handler )
-        handler->QtSendEvent(wxEVT_LISTBOX, index, true);
+        handler->QtSendEvent(wxEVT_LISTBOX, index.row(), true);
 }
 
 void wxQtListWidget::doubleClicked( const QModelIndex &index )
 {
     wxListBox *handler = GetHandler();
     if ( handler )
-        handler->QtSendEvent(wxEVT_LISTBOX_DCLICK, index, true);
+        handler->QtSendEvent(wxEVT_LISTBOX_DCLICK, index.row(), true);
 }
 
+void wxQtListWidget::itemChanged(QListWidgetItem *item)
+{
+    if (item->flags() & Qt::ItemIsUserCheckable)
+    {
+        wxListBox *handler = GetHandler();
+        if (handler)
+        {
+            QWidget *widgetHandle = handler->GetHandle();
+            QListWidget *listWidget = dynamic_cast<QListWidget*>(widgetHandle);
+
+            if (listWidget)
+            {
+                const int rowIndex = listWidget->row(item);
+                handler->QtSendEvent(wxEVT_CHECKLISTBOX, rowIndex, true);
+            }
+        }
+    }
+}
 
 wxListBox::wxListBox() :
     m_qtListWidget(NULL)
@@ -282,9 +302,9 @@ QWidget *wxListBox::GetHandle() const
     return m_qtListWidget;
 }
 
-void wxListBox::QtSendEvent(wxEventType evtType, const QModelIndex &index, bool selected)
+void wxListBox::QtSendEvent(wxEventType evtType, int rowIndex, bool selected)
 {
-    SendEvent(evtType, index.row(), selected);
+    SendEvent(evtType, rowIndex, selected);
 }
 
 QScrollArea *wxListBox::QtGetScrollBarsContainer() const
