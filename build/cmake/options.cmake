@@ -44,6 +44,8 @@ if(WIN32)
     set(wxBUILD_VENDOR "custom" CACHE STRING "Short string identifying your company (used in DLL name)")
 endif()
 
+wx_option(wxUSE_PEDANTIC_FLAGS, "use additional warning/error compiler flags" OFF)
+
 # STL options
 wx_option(wxUSE_STL "use standard C++ classes for everything" OFF)
 set(wxTHIRD_PARTY_LIBRARIES ${wxTHIRD_PARTY_LIBRARIES} wxUSE_STL "use C++ STL classes")
