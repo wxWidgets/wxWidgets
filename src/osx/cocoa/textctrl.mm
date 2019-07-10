@@ -1040,6 +1040,8 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
         NSFont* font = NULL;
         NSColor* bgcolor = NULL;
         NSColor* fgcolor = NULL;
+        NSNumber* ultype = NULL;
+        NSColor* ulcolor = NULL;
         // NOTE: It appears that other platforms accept GetStyle with the position == length
         // but that NSTextStorage does not accept length as a valid position.
         // Therefore we return the default control style in that case.
@@ -1049,6 +1051,8 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
             font = [storage attribute:NSFontAttributeName atIndex:position effectiveRange:NULL];
             bgcolor = [storage attribute:NSBackgroundColorAttributeName atIndex:position effectiveRange:NULL];
             fgcolor = [storage attribute:NSForegroundColorAttributeName atIndex:position effectiveRange:NULL];
+            ultype = [storage attribute:NSUnderlineStyleAttributeName atIndex:position effectiveRange:NULL];
+            ulcolor = [storage attribute:NSUnderlineColorAttributeName atIndex:position effectiveRange:NULL];
         }
         else
         {
@@ -1056,6 +1060,8 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
             font = [attrs objectForKey:NSFontAttributeName];
             bgcolor = [attrs objectForKey:NSBackgroundColorAttributeName];
             fgcolor = [attrs objectForKey:NSForegroundColorAttributeName];
+            ultype = [attrs objectForKey:NSUnderlineStyleAttributeName];
+            ulcolor = [attrs objectForKey:NSUnderlineColorAttributeName];
         }
 
         if (font)
@@ -1066,6 +1072,32 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
 
         if (fgcolor)
             style.SetTextColour(wxColour(fgcolor));
+
+        wxTextAttrUnderlineType underlineType = wxTEXT_ATTR_UNDERLINE_NONE;
+        if ( ultype )
+        {
+            NSInteger ulval = [ultype integerValue];
+            switch ( ulval )
+            {
+                case NSUnderlineStyleSingle:
+                    underlineType = wxTEXT_ATTR_UNDERLINE_SOLID;
+                    break;
+                case NSUnderlineStyleDouble:
+                    underlineType = wxTEXT_ATTR_UNDERLINE_DOUBLE;
+                    break;
+                case NSUnderlineStyleSingle | NSUnderlinePatternDot:
+                    underlineType = wxTEXT_ATTR_UNDERLINE_WAVE;
+                    break;
+            }
+        }
+
+        wxColour underlineColour = wxNullColour;
+        if ( ulcolor )
+            underlineColour = wxColour(ulcolor);
+
+        if ( underlineType != wxTEXT_ATTR_UNDERLINE_NONE )
+            style.SetFontUnderlined(underlineType, underlineColour);
+
         return true;
     }
 

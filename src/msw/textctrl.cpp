@@ -3259,6 +3259,61 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     }
 #endif // wxUSE_RICHEDIT2
 
+    wxTextAttrUnderlineType underlineType = wxTEXT_ATTR_UNDERLINE_NONE;
+    switch ( cf.bUnderlineType )
+    {
+        case CFU_UNDERLINE:
+            underlineType = wxTEXT_ATTR_UNDERLINE_SOLID;
+            break;
+        case CFU_UNDERLINEDOUBLE:
+            underlineType = wxTEXT_ATTR_UNDERLINE_DOUBLE;
+            break;
+        case CFU_UNDERLINEWAVE:
+            underlineType = wxTEXT_ATTR_UNDERLINE_WAVE;
+            break;
+    }
+
+    wxColour underlineColour = wxNullColour;
+#if _RICHEDIT_VER >= 0x0800
+    if ( cf.bUnderlineColor == 0 )
+        underlineColour = wxNullColour;
+    else if ( cf.bUnderlineColor == 1 )
+        underlineColour = wxTheColourDatabase->Find("BLACK");
+    else if ( cf.bUnderlineColor == 2 )
+        underlineColour = wxTheColourDatabase->Find("BLUE");
+    else if ( cf.bUnderlineColor == 3 )
+        underlineColour = wxTheColourDatabase->Find("CYAN");
+    else if ( cf.bUnderlineColor == 4 )
+        underlineColour = wxTheColourDatabase->Find("GREEN");
+    else if ( cf.bUnderlineColor == 5 )
+        underlineColour = wxTheColourDatabase->Find("MAGENTA");
+    else if ( cf.bUnderlineColor == 6 )
+        underlineColour = wxTheColourDatabase->Find("RED");
+    else if ( cf.bUnderlineColor == 7 )
+        underlineColour = wxTheColourDatabase->Find("YELLOW");
+    else if ( cf.bUnderlineColor == 8 )
+        underlineColour = wxTheColourDatabase->Find("WHITE");
+    else if ( cf.bUnderlineColor == 9 )
+        underlineColour = wxColour(0, 0, 128); // navy
+    else if ( cf.bUnderlineColor == 10 )
+        underlineColour = wxTheColourDatabase->Find("TEAL");
+    else if ( cf.bUnderlineColor == 11 )
+        underlineColour = wxTheColourDatabase->Find("LIGHT GREEN");
+    else if ( cf.bUnderlineColor == 12 )
+        underlineColour = wxColour(128, 0, 128); // purple
+    else if ( cf.bUnderlineColor == 13 )
+        underlineColour = wxColour(128, 0, 0); // maroon
+    else if ( cf.bUnderlineColor == 14 )
+        underlineColour = wxTheColourDatabase->Find("OLIVE");
+    else if ( cf.bUnderlineColor == 15 )
+        underlineColour = wxTheColourDatabase->Find("GREY");
+    else if ( cf.bUnderlineColor == 16 )
+        underlineColour = wxTheColourDatabase->Find("LIGHT GREY");
+#endif
+
+    if ( underlineType != wxTEXT_ATTR_UNDERLINE_NONE )
+        style.SetFontUnderlined(underlineType, underlineColour);
+
     // now get the paragraph formatting
     PARAFORMAT2 pf;
     wxZeroMemory(pf);

@@ -1912,8 +1912,45 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
         if ( font.SetNativeFontInfo(wxString(pangoFontString)) )
             style.SetFont(font);
 
-        if ( pattr->appearance.underline != PANGO_UNDERLINE_NONE )
-            style.SetFontUnderlined(true);
+        wxTextAttrUnderlineType underlineType = wxTEXT_ATTR_UNDERLINE_NONE;
+        switch ( pattr->appearance.underline )
+        {
+            case PANGO_UNDERLINE_SINGLE:
+                underlineType = wxTEXT_ATTR_UNDERLINE_SOLID;
+                break;
+            case PANGO_UNDERLINE_DOUBLE:
+                underlineType = wxTEXT_ATTR_UNDERLINE_DOUBLE;
+                break;
+            case PANGO_UNDERLINE_ERROR:
+                underlineType = wxTEXT_ATTR_UNDERLINE_WAVE;
+                break;
+        }
+
+        wxColour underlineColour = wxNullColour;
+#ifdef __WXGTK3__
+        GSList* tags = gtk_text_iter_get_tags(&positioni);
+        for ( GSList* tagp = tags; tagp != NULL; tagp = tagp->next )
+        {
+            GtkTextTag* tag = static_cast<GtkTextTag*>(tagp->data);
+            gboolean underlineSet = FALSE;
+            g_object_get(tag, "underline-rgba-set", &underlineSet, NULL);
+            if ( underlineSet )
+            {
+                GdkRGBA* gdkColour = NULL;
+                g_object_get(tag, "underline-rgba", &gdkColour, NULL);
+                if ( gdkColour )
+                    underlineColour = wxColour(*gdkColour);
+                gdk_rgba_free(gdkColour);
+                break;
+            }
+        }
+        if ( tags )
+            g_slist_free(tags);
+#endif
+
+        if ( underlineType != wxTEXT_ATTR_UNDERLINE_NONE )
+            style.SetFontUnderlined(underlineType, underlineColour);
+
         if ( pattr->appearance.strikethrough )
             style.SetFontStrikethrough(true);
 
