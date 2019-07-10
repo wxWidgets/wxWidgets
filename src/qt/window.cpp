@@ -350,6 +350,9 @@ void wxWindowQt::PostCreation(bool generic)
     wxWindowBase::SetBackgroundColour(wxColour(GetHandle()->palette().background().color()));
     wxWindowBase::SetForegroundColour(wxColour(GetHandle()->palette().foreground().color()));
 
+    m_qtWindow->setMinimumSize(QSize(std::max(m_minWidth, 0), std::max(m_minHeight, 0)));
+    m_qtWindow->setMaximumSize(QSize(m_maxWidth == -1 ? QWIDGETSIZE_MAX : m_maxWidth, m_maxHeight == -1 ? QWIDGETSIZE_MAX : m_maxHeight));
+ 
     GetHandle()->setFont( wxWindowBase::GetFont().GetHandle() );
 
     // The window might have been hidden before Create() and it needs to remain
@@ -1580,6 +1583,39 @@ void wxWindowQt::QtHandleShortcut ( int command )
 QWidget *wxWindowQt::GetHandle() const
 {
     return m_qtWindow;
+}
+
+void wxWindowQt::SetMinSize(const wxSize& minSize)
+{
+    wxWindowBase::SetMinSize(minSize);
+    const int width = minSize.GetWidth();
+    const int height = minSize.GetHeight();
+    QWidget* widget = GetHandle();
+    if ( widget != NULL )
+       widget->setMinimumSize(QSize(width == -1 ? 0 : width, height == -1 ? 0 : height));
+}
+
+void wxWindowQt::SetMaxSize(const wxSize& maxSize)
+{
+    wxWindowBase::SetMaxSize(maxSize);
+    const int width = maxSize.GetWidth();
+    const int height = maxSize.GetHeight();
+    QWidget* widget = GetHandle();
+    if ( widget != NULL )
+        widget->setMaximumSize(QSize(width == -1 ? QWIDGETSIZE_MAX : width, height == -1 ? QWIDGETSIZE_MAX : height));
+}
+
+void wxWindowQt::DoSetSizeHints(int minW, int minH,
+    int maxW, int maxH,
+    int incW, int incH)
+{
+    wxWindowBase::DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
+    QWidget *widget = GetHandle();
+    if ( widget != NULL )
+    {
+        widget->setMinimumSize(QSize(std::max(minW, 0), std::max(minH, 0)));
+        widget->setMaximumSize(QSize(maxW == -1 ? QWIDGETSIZE_MAX : maxW, maxH == -1 ? QWIDGETSIZE_MAX : maxH));
+    }
 }
 
 QScrollArea *wxWindowQt::QtGetScrollBarsContainer() const
