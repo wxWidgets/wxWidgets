@@ -50,6 +50,15 @@ if(wxBUILD_COMPATIBILITY VERSION_LESS 3.1)
     set(WXWIN_COMPATIBILITY_3_0 ON)
 endif()
 
+if(wxUSE_NO_RTTI)
+    if(MSVC)
+        set(RTTI_COMPILER_FLAGS "/GR-")
+    elseif(CMAKE_COMPILER_IS_GNUCC)
+        set(RTTI_COMPILER_FLAGS "-fno-rtti")
+    endif()
+    wx_string_append(CMAKE_CXX_FLAGS " -DwxNO_RTTI ${RTTI_COMPILER_FLAGS}")
+endif()
+
 # Build wxBUILD_FILE_ID used for config and setup path
 #TODO: build different id for WIN32
 set(wxBUILD_FILE_ID "${wxBUILD_TOOLKIT}${wxBUILD_WIDGETSET}-")
