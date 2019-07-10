@@ -15,6 +15,7 @@ typedef struct _GtkEditable GtkEditable;
 typedef struct _GtkEntry GtkEntry;
 
 class wxTextAutoCompleteData; // private class used only by wxTextEntry itself
+class wxTextCoalesceData;     // another private class
 
 // ----------------------------------------------------------------------------
 // wxTextEntry: roughly corresponds to GtkEditable
@@ -62,11 +63,15 @@ public:
     bool GTKEntryOnInsertText(const char* text);
     bool GTKIsUpperCase() const { return m_isUpperCase; }
 
-    // Called from "changed" signal handler for GtkEntry.
+    // Called from "changed" signal handler (or, possibly, slightly later, when
+    // coalescing several "changed" signals into a single event) for GtkEntry.
     //
     // By default just generates a wxEVT_TEXT, but overridden to do more things
     // in wxTextCtrl.
     virtual void GTKOnTextChanged() { SendTextUpdatedEvent(); }
+
+    // Helper functions only used internally.
+    wxTextCoalesceData* GTKGetCoalesceData() const { return m_coalesceData; }
 
 protected:
     // This method must be called from the derived class Create() to connect
@@ -94,6 +99,12 @@ protected:
     // Call this from the overridden wxWindow::GTKIMFilterKeypress() to use
     // GtkEntry IM context.
     int GTKEntryIMFilterKeypress(GdkEventKey* event) const;
+
+    // If GTKEntryIMFilterKeypress() is not called (as multiline wxTextCtrl
+    // uses its own IM), call this method instead to still notify wxTextEntry
+    // about the key press events in the given widget.
+    void GTKEntryOnKeypress(GtkWidget* widget) const;
+
 
     static int GTKGetEntryTextLength(GtkEntry* entry);
 
@@ -123,6 +134,10 @@ private:
 
     // It needs to call our GetEntry() method.
     friend class wxTextAutoCompleteData;
+
+    // Data used for coalescing "changed" events resulting from a single user
+    // action.
+    mutable wxTextCoalesceData* m_coalesceData;
 
     bool m_isUpperCase;
 };

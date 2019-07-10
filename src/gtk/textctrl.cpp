@@ -858,7 +858,11 @@ GtkEntry *wxTextCtrl::GetEntry() const
 int wxTextCtrl::GTKIMFilterKeypress(GdkEventKey* event) const
 {
     if (IsSingleLine())
-        return wxTextEntry::GTKIMFilterKeypress(event);
+        return GTKEntryIMFilterKeypress(event);
+
+    // When not calling GTKEntryIMFilterKeypress(), we need to notify the code
+    // in wxTextEntry about the key presses explicitly.
+    GTKEntryOnKeypress(m_text);
 
     int result = false;
 #if GTK_CHECK_VERSION(2, 22, 0)
