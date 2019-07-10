@@ -1179,6 +1179,9 @@ public:
     wxRect CellToRect( const wxGridCellCoords& coords ) const
         { return CellToRect( coords.GetRow(), coords.GetCol() ); }
 
+    const wxGridCellCoords& GetGridCursorCoords() const
+        { return m_currentCellCoords; }
+
     int  GetGridCursorRow() const { return m_currentCellCoords.GetRow(); }
     int  GetGridCursorCol() const { return m_currentCellCoords.GetCol(); }
 

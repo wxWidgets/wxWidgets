@@ -3828,12 +3828,27 @@ public:
     //@{
 
     /**
+        Returns the current grid cursor position.
+
+        If grid cursor doesn't have any valid position (e.g. if the grid is
+        completely empty and doesn't have any rows or columns), returns
+        @c wxGridNoCellCoords which has both row and columns set to @c -1.
+
+        @since 3.1.3
+     */
+    const wxGridCellCoords& GetGridCursorCoords() const;
+
+    /**
         Returns the current grid cell column position.
+
+        @see GetGridCursorCoords()
     */
     int GetGridCursorCol() const;
 
     /**
         Returns the current grid cell row position.
+
+        @see GetGridCursorCoords()
     */
     int GetGridCursorRow() const;
 
