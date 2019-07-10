@@ -1070,10 +1070,11 @@ void wxScrollHelperBase::HandleOnChildFocus(wxChildFocusEvent& event)
     if ( win == m_targetWindow )
         return; // nothing to do
 
-#if defined( __WXOSX__ ) && wxUSE_SCROLLBAR
-    if (wxDynamicCast(win, wxScrollBar))
+    if ( !ShouldScrollToChildOnFocus(win) )
+    {
+        // the window does not require to be scrolled into view
         return;
-#endif
+    }
 
     // Fixing ticket: https://trac.wxwidgets.org/ticket/9563
     // When a child inside a wxControlContainer receives a focus, the
