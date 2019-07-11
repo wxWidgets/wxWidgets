@@ -52,11 +52,11 @@ endif()
 
 if(wxUSE_NO_RTTI)
     if(MSVC)
-        set(RTTI_COMPILER_FLAGS "/GR-")
-    elseif(CMAKE_COMPILER_IS_GNUCC)
-        set(RTTI_COMPILER_FLAGS "-fno-rtti")
+        add_compile_options("/GR-")
+    elseif(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_CXX_COMPILER_ID}" MATCHES ".*Clang"))
+        add_compile_options("-fno-rtti")
     endif()
-    wx_string_append(CMAKE_CXX_FLAGS " -DwxNO_RTTI ${RTTI_COMPILER_FLAGS}")
+    add_definitions("-DwxNO_RTTI")
 endif()
 
 # Build wxBUILD_FILE_ID used for config and setup path
