@@ -976,7 +976,8 @@ public:
 
     - Generated when the text of the document has changed.
 
-    - This an older style event and should probably not be used in new code.
+    - This an older style event and should probably not be used in new code. Use
+    @c wxEVT_STC_MODIFIED instead.
 
     - Valid event functions: none.
 
