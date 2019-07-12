@@ -42,46 +42,46 @@ if(wxUSE_PEDANTIC_FLAGS)
     set(PEDANTIC_COMPILER_FLAGS "")
     if(MSVC)
         # treat warnings as errors
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " /we4715") # not all control paths return a value
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " /we4828") # disallow invalid characters
+        add_compile_options("/we4715") # not all control paths return a value
+        add_compile_options("/we4828") # disallow invalid characters
         # prinf-like functions: format mismatch
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " /we4473") # <function> : not enough arguments passed for format string 
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " /we4474") # <function> : too many arguments passed for format string 
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " /we4475") # <function> : length modifier <length> cannot be used with type field character <conversion-specifier> in format specifier 
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " /we4476") # <function> : unknown type field character <conversion-specifier> in format specifier 
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " /we4477") # <function> : format string <format-string> requires an argument of type <type>, but variadic argument <position> has type <type>
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " /we4478") # <function> : positional and non-positional placeholders cannot be mixed in the same format string 
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " /we4775") # nonstandard extension used in format string <format-string> of function <function> 
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " /we4776") # %<conversion-specifier> is not allowed in the format string of function <function>
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " /we4777") # <function> : format string <format-string> requires an argument of type <type>, but variadic argument <position> has type <type> 
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " /we4778") # <function> : unterminated format string <format-string>
+        add_compile_options("/we4473") # <function> : not enough arguments passed for format string 
+        add_compile_options("/we4474") # <function> : too many arguments passed for format string 
+        add_compile_options("/we4475") # <function> : length modifier <length> cannot be used with type field character <conversion-specifier> in format specifier 
+        add_compile_options("/we4476") # <function> : unknown type field character <conversion-specifier> in format specifier 
+        add_compile_options("/we4477") # <function> : format string <format-string> requires an argument of type <type>, but variadic argument <position> has type <type>
+        add_compile_options("/we4478") # <function> : positional and non-positional placeholders cannot be mixed in the same format string 
+        add_compile_options("/we4775") # nonstandard extension used in format string <format-string> of function <function> 
+        add_compile_options("/we4776") # %<conversion-specifier> is not allowed in the format string of function <function>
+        add_compile_options("/we4777") # <function> : format string <format-string> requires an argument of type <type>, but variadic argument <position> has type <type> 
+        add_compile_options("/we4778") # <function> : unterminated format string <format-string>
         # macro arg mismatch
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " /we4002") # too many actual parameters for macro 'identifier'
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " /we4003") # not enough actual parameters for macro 'identifier'
-    elseif(CMAKE_COMPILER_IS_GNUCC)
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Wall")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Wextra")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Wwrite-strings")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Wstack-usage=16384")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -fdiagnostics-show-option")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Wmissing-declarations")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Wredundant-decls")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Wcast-qual")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Wsuggest-attribute=noreturn")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Wsuggest-attribute=format")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Wunused-but-set-variable")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Wunused-but-set-parameter")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Wframe-larger-than=4096")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Werror=return-type")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Werror=pointer-arith")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Werror=unused-value")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Werror=sizeof-pointer-memaccess")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Werror=implicit-function-declaration")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Werror=missing-declarations")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Werror=missing-prototypes")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Werror=reorder")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Werror=overloaded-virtual")
-        wx_string_append(PEDANTIC_COMPILER_FLAGS " -Werror=stringop-overflow=")
+        add_compile_options("/we4002") # too many actual parameters for macro 'identifier'
+        add_compile_options("/we4003") # not enough actual parameters for macro 'identifier'
+    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        add_compile_options("-Wall")
+        add_compile_options("-Wextra")
+        add_compile_options("-Wwrite-strings")
+        add_compile_options("-Wstack-usage=16384")
+        add_compile_options("-fdiagnostics-show-option")
+        add_compile_options("-Wmissing-declarations")
+        add_compile_options("-Wredundant-decls")
+        add_compile_options("-Wcast-qual")
+        add_compile_options("-Wsuggest-attribute=noreturn")
+        add_compile_options("-Wsuggest-attribute=format")
+        add_compile_options("-Wunused-but-set-variable")
+        add_compile_options("-Wunused-but-set-parameter")
+        add_compile_options("-Wframe-larger-than=4096")
+        add_compile_options("-Werror=return-type")
+        add_compile_options("-Werror=pointer-arith")
+        add_compile_options("-Werror=unused-value")
+        add_compile_options("-Werror=sizeof-pointer-memaccess")
+        add_compile_options("-Werror=implicit-function-declaration")
+        add_compile_options("-Werror=missing-declarations")
+        add_compile_options("-Werror=missing-prototypes")
+        add_compile_options("-Werror=reorder")
+        add_compile_options("-Werror=overloaded-virtual")
+        add_compile_options("-Werror=stringop-overflow")
     endif()
     
     wx_string_append(CMAKE_CXX_FLAGS ${PEDANTIC_COMPILER_FLAGS})
