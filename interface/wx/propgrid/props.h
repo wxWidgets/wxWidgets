@@ -114,6 +114,8 @@ public:
     wraps at Min/Max.
     - ::wxPG_ATTR_SPINCTRL_MOTION: Specify if value can also by changed with
     SpinCtrl editor by moving mouse when left mouse button is being pressed.
+
+    @since 3.1.3
 */
 class wxNumericProperty : public wxPGProperty
 {
