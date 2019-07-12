@@ -18,6 +18,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/event.h"
+    #include "wx/timer.h"
 #endif // WX_PRECOMP
 
 // --------------------------------------------------------------------------
@@ -47,6 +48,9 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( EventCloneTestCase, "EventCloneTestCase" 
 
 void EventCloneTestCase::CheckAll()
 {
+    // Dummy timer needed just to create a wxTimerEvent.
+    wxTimer dummyTimer;
+
     // check if event classes implement Clone() correctly
     // NOTE: the check is done against _all_ event classes which are linked to
     //       the executable currently running, which are not necessarily all
@@ -61,20 +65,30 @@ void EventCloneTestCase::CheckAll()
              cn == "wxEvent" )
             continue;
 
-        const std::string
-            msg = std::string("Event class \"") +
-                  std::string(cn.c_str()) + "\"";
+        INFO("Event class \"" << cn << "\"");
 
-        CPPUNIT_ASSERT_MESSAGE( msg, ci->IsDynamic() );
+        wxEvent* test;
+        if ( ci->IsDynamic() )
+        {
+            test = wxDynamicCast(ci->CreateObject(),wxEvent);
+        }
+        else if ( cn == "wxTimerEvent" )
+        {
+            test = new wxTimerEvent(dummyTimer);
+        }
+        else
+        {
+            FAIL("Can't create objects of type " + cn);
+            continue;
+        }
 
-        wxEvent * const test = wxDynamicCast(ci->CreateObject(),wxEvent);
-        CPPUNIT_ASSERT_MESSAGE( msg, test );
+        REQUIRE( test );
 
         wxEvent * const cloned = test->Clone();
         delete test;
 
-        CPPUNIT_ASSERT_MESSAGE( msg, cloned );
-        CPPUNIT_ASSERT_MESSAGE( msg, cloned->GetClassInfo() == ci );
+        REQUIRE( cloned );
+        CHECK( cloned->GetClassInfo() == ci );
 
         delete cloned;
     }
