@@ -400,12 +400,6 @@ public:
     bool InReportView() const { return HasFlag(wxLC_REPORT); }
     bool IsVirtual() const { return HasFlag(wxLC_VIRTUAL); }
 
-    // Check if the item is visible
-    virtual bool IsVisible(long item);
-
-    // Gets the item rectangle
-    virtual bool GetItemRect(long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const = 0;
-
     // Enable or disable beep when incremental match doesn't find any item.
     // Only implemented in the generic version currently.
     virtual void EnableBellOnNoMatch(bool WXUNUSED(on) = true) { }
