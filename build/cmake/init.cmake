@@ -57,7 +57,7 @@ if(wxUSE_PEDANTIC_FLAGS)
         # macro arg mismatch
         add_compile_options("/we4002") # too many actual parameters for macro 'identifier'
         add_compile_options("/we4003") # not enough actual parameters for macro 'identifier'
-    elseif(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_CXX_COMPILER_ID}" MATCH "*Clang"))
+    elseif(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
         if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
             add_compile_options("-Wall")
             add_compile_options("-Wextra")
