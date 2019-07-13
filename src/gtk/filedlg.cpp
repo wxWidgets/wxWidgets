@@ -151,6 +151,20 @@ static void gtk_filedialog_update_preview_callback(GtkFileChooser *chooser,
 
 } // extern "C"
 
+extern "C"
+{
+static gboolean gtk_frame_map_callback( GtkFileChooser *file_chooser,
+                        GdkEvent * WXUNUSED(event),
+                        wxFileDialog *dlg )
+{
+    if( dlg->GetWindowStyle() & wxFD_SHOW_HIDDEN )
+        gtk_file_chooser_set_show_hidden( file_chooser, TRUE );
+    else
+        gtk_file_chooser_set_show_hidden( file_chooser, FALSE );
+    return FALSE;
+}
+}
+
 void wxFileDialog::AddChildGTK(wxWindowGTK* child)
 {
     // allow dialog to be resized smaller horizontally
@@ -275,7 +289,9 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     g_signal_connect (m_widget, "selection-changed",
         G_CALLBACK (gtk_filedialog_selchanged_callback), this);
 
-    // deal with extensions/filters
+    g_signal_connect (m_widget, "map_event",
+                      G_CALLBACK (gtk_frame_map_callback), this);
+     // deal with extensions/filters
     SetWildcard(wildCard);
 
     wxString defaultFileNameWithExt = defaultFileName;
