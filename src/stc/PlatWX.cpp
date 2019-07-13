@@ -2010,9 +2010,14 @@ PRectangle Window::GetMonitorRect(Point pt) {
         wxNonOwnedWindow::Create(parent, m_nativeWin);
         m_stc = wxDynamicCast(parent, wxStyledTextCtrl);
         m_isShown = false;
+        m_cursorSetByPopup = false;
+        m_prevCursor = wxSTC_CURSORNORMAL;
 
         Bind(wxEVT_ENTER_WINDOW, &wxSTCPopupBase::OnMouseEnter, this);
         Bind(wxEVT_LEAVE_WINDOW, &wxSTCPopupBase::OnMouseLeave, this);
+
+        if ( m_stc )
+            m_stc->Bind(wxEVT_DESTROY, &wxSTCPopupBase::OnParentDestroy, this);
     }
 
     wxSTCPopupBase::~wxSTCPopupBase()
@@ -2020,7 +2025,11 @@ PRectangle Window::GetMonitorRect(Point pt) {
         UnsubclassWin();
         CloseFloatingWindow(m_nativeWin);
 
-        SetSTCCursor(wxSTC_CURSORNORMAL);
+        if ( m_stc )
+        {
+            m_stc->Unbind(wxEVT_DESTROY, &wxSTCPopupBase::OnParentDestroy,this);
+            RestoreSTCCursor();
+        }
     }
 
     bool wxSTCPopupBase::Show(bool show)
@@ -2038,7 +2047,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
         else
         {
             HideFloatingWindow(m_nativeWin);
-            SetSTCCursor(wxSTC_CURSORNORMAL);
+            RestoreSTCCursor();
         }
 
         return true;
@@ -2056,7 +2065,20 @@ PRectangle Window::GetMonitorRect(Point pt) {
     void wxSTCPopupBase::SetSTCCursor(int cursor)
     {
         if ( m_stc )
+        {
+            m_cursorSetByPopup = true;
+            m_prevCursor = m_stc->GetSTCCursor();
             m_stc->SetSTCCursor(cursor);
+        }
+    }
+
+    void wxSTCPopupBase::RestoreSTCCursor()
+    {
+        if ( m_stc != NULL && m_cursorSetByPopup )
+            m_stc->SetSTCCursor(m_prevCursor);
+
+        m_cursorSetByPopup = false;
+        m_prevCursor = wxSTC_CURSORNORMAL;
     }
 
     void wxSTCPopupBase::OnMouseEnter(wxMouseEvent& WXUNUSED(event))
@@ -2066,7 +2088,12 @@ PRectangle Window::GetMonitorRect(Point pt) {
 
     void wxSTCPopupBase::OnMouseLeave(wxMouseEvent& WXUNUSED(event))
     {
-        SetSTCCursor(wxSTC_CURSORNORMAL);
+        RestoreSTCCursor();
+    }
+
+    void wxSTCPopupBase::OnParentDestroy(wxWindowDestroyEvent& WXUNUSED(event))
+    {
+        m_stc = NULL;
     }
 
 #elif wxUSE_POPUPWIN

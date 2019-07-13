@@ -81,12 +81,16 @@ public:
     protected:
         virtual void DoSetSize(int, int, int, int, int) wxOVERRIDE;
         void SetSTCCursor(int);
+        void RestoreSTCCursor();
         void OnMouseEnter(wxMouseEvent&);
         void OnMouseLeave(wxMouseEvent&);
+        void OnParentDestroy(wxWindowDestroyEvent& event);
 
     private:
         WX_NSWindow       m_nativeWin;
         wxStyledTextCtrl* m_stc;
+        bool              m_cursorSetByPopup;
+        int               m_prevCursor;
     };
 
 #elif wxUSE_POPUPWIN
