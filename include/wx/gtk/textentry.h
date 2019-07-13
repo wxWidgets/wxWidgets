@@ -86,6 +86,10 @@ protected:
 
     static int GTKGetEntryTextLength(GtkEntry* entry);
 
+    // Helper for wxTE_PROCESS_ENTER handling: activates the default button in
+    // the dialog containing this control if any.
+    bool ClickDefaultButtonIfPossible();
+
 private:
     // implement this to return the associated GtkEntry or another widget
     // implementing GtkEditable

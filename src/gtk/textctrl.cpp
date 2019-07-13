@@ -1693,6 +1693,12 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
             event.SetString(GetValue());
             if ( HandleWindowEvent(event) )
                 return;
+
+            // We disable built-in default button activation when
+            // wxTE_PROCESS_ENTER is used, but we still should activate it
+            // if the event wasn't handled, so do it from here.
+            if ( ClickDefaultButtonIfPossible() )
+                return;
         }
     }
 
