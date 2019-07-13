@@ -4734,6 +4734,11 @@ bool wxDataViewCtrl::Create(wxWindow *parent,
     return true;
 }
 
+GdkWindow* wxDataViewCtrl::GTKGetWindow(wxArrayGdkWindows& /* windows */) const
+{
+    return gtk_tree_view_get_bin_window(GTK_TREE_VIEW(m_treeview));
+}
+
 wxDataViewItem wxDataViewCtrl::GTKPathToItem(GtkTreePath *path) const
 {
     GtkTreeIter iter;
