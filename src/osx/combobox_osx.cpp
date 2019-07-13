@@ -260,7 +260,7 @@ void wxComboBox::OnChar(wxKeyEvent& event)
                 if (HandleWindowEvent(event))
                     return;
             }
-            else
+
             {
                 wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
                 if (tlw && tlw->GetDefaultItem())
