@@ -620,8 +620,7 @@ bool wxListCtrl::SetHeaderAttr(const wxItemAttr& attr)
 
             // We need to tell the header about its new font to let it compute
             // its new height.
-            ::SendMessage(hwndHdr, WM_SETFONT,
-                          (WPARAM)GetHfontOf(font), MAKELPARAM(TRUE, 0));
+            wxSetWindowFont(hwndHdr, font);
         }
 
         // Refreshing the listview makes it notice the change in height of its

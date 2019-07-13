@@ -827,11 +827,7 @@ bool wxWindowMSW::SetFont(const wxFont& font)
         // just been reset and in this case we need to change the font used by
         // the native window to the default for this class, i.e. exactly what
         // GetFont() returns
-        WXHANDLE hFont = GetFont().GetResourceHandle();
-
-        wxASSERT_MSG( hFont, wxT("should have valid font") );
-
-        ::SendMessage(hWnd, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
+        wxSetWindowFont(hWnd, GetFont());
     }
 
     return true;
@@ -7425,7 +7421,12 @@ static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win)
 
 #if !wxDIALOG_UNIT_COMPATIBILITY
     // and select the current font into it
-    HFONT hfont = GetHfontOf(win->GetFont());
+
+    // Note that it's important to extend the lifetime of the possibly
+    // temporary wxFont returned by GetFont() to ensure that its HFONT remains
+    // valid.
+    const wxFont& f(win->GetFont());
+    HFONT hfont = GetHfontOf(f);
     if ( hfont )
     {
         hfont = (HFONT)::SelectObject(hdc, hfont);

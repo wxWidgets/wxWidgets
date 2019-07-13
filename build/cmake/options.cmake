@@ -46,6 +46,7 @@ endif()
 
 wx_option(wxUSE_OPTIMISE "use speed-optimised C/C++ compiler flags for release build" OFF)
 wx_option(wxUSE_STRIPPED_RELEASE "remove debug symbols in release build" OFF)
+wx_option(wxUSE_NO_RTTI "disable RTTI support" OFF)
 
 # STL options
 wx_option(wxUSE_STL "use standard C++ classes for everything" OFF)

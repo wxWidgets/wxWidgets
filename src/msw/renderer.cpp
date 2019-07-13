@@ -552,7 +552,8 @@ int wxRendererMSW::GetHeaderButtonHeight(wxWindow * win)
         font = win->GetFont();
     if ( !font.IsOk() )
         wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-    ::SendMessage(hwndHeader, WM_SETFONT, (WPARAM)GetHfontOf(font), 0);
+
+    wxSetWindowFont(hwndHeader, font);
 
     // initialize the struct filled with the values by Header_Layout()
     RECT parentRect = { 0, 0, 100, 100 };

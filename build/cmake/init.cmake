@@ -79,6 +79,15 @@ if(wxBUILD_COMPATIBILITY VERSION_LESS 3.1)
     set(WXWIN_COMPATIBILITY_3_0 ON)
 endif()
 
+if(wxUSE_NO_RTTI)
+    if(MSVC)
+        add_compile_options("/GR-")
+    elseif(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
+        add_compile_options("-fno-rtti")
+    endif()
+    add_definitions("-DwxNO_RTTI")
+endif()
+
 # Build wxBUILD_FILE_ID used for config and setup path
 #TODO: build different id for WIN32
 set(wxBUILD_FILE_ID "${wxBUILD_TOOLKIT}${wxBUILD_WIDGETSET}-")
@@ -159,11 +168,6 @@ set(wxSETUP_HEADER_FILE ${wxSETUP_HEADER_PATH}/wx/setup.h)
 if(DEFINED wxSETUP_HEADER_FILE_DEBUG)
     # Append configuration specific suffix to setup header path
     wx_string_append(wxSETUP_HEADER_PATH "$<$<CONFIG:Debug>:d>")
-endif()
-
-if(wxUSE_ON_FATAL_EXCEPTION AND MSVC AND (MSVC_VERSION GREATER 1800) )
-    # see include/wx/msw/seh.h for more details
-    add_compile_options("/EHa")
 endif()
 
 if(NOT wxBUILD_DEBUG_LEVEL STREQUAL "Default")
