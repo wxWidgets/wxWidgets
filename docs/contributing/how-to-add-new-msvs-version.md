@@ -56,3 +56,9 @@ MSVS version:
 - Update `build/tools/msvs/officialbuild.bat` to support the new toolset version
   and also update `build/tools/msvs/buildall.bat` to call it with this new version
   (these files are used to build the official binaries for the releases).
+- If necessary, i.e. if the warning C4535 appears when compiling
+  `src/msw/main.cpp` with the new version, check that this warning is still
+  harmless, i.e. that catching Win32 exceptions still works correctly (this
+  can be tested with the "Crash" menu item in the except sample) and  update
+  the version check in `include/wx/msw/seh.h` to suppress this warning for the
+  new version too.
