@@ -1249,4 +1249,19 @@ void TextCtrlTestCase::XYToPositionSingleLine()
     }
 }
 
+TEST_CASE("wxTextCtrl::ProcessEnter", "[wxTextCtrl][enter]")
+{
+    struct TextCtrlCreator
+    {
+        static wxControl* Do(wxWindow* parent, int style)
+        {
+            return new wxTextCtrl(parent, wxID_ANY, wxString(),
+                                  wxDefaultPosition, wxDefaultSize,
+                                  style);
+        }
+    };
+
+    TestProcessEnter(&TextCtrlCreator::Do);
+}
+
 #endif //wxUSE_TEXTCTRL
