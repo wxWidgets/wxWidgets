@@ -22,6 +22,9 @@ class ListBoxImpl : public ListBox {
 private:
     wxSTCListBox*           m_listBox;
     wxSTCListBoxVisualData* m_visualData;
+    int*                    m_listType;
+    int*                    m_posStart;
+    int*                    m_startLen;
 
 public:
     ListBoxImpl();
@@ -49,6 +52,7 @@ public:
     virtual void ClearRegisteredImages() wxOVERRIDE;
     virtual void SetDoubleClickAction(CallBackAction, void *) wxOVERRIDE;
     virtual void SetList(const char* list, char separator, char typesep) wxOVERRIDE;
+            void SetListInfo(int*, int*, int*);
 };
 
 

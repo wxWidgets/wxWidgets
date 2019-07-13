@@ -816,6 +816,10 @@ public:
 
     @event{EVT_STC_AUTOCOMP_SELECTION(id, fn)}
         Process a @c wxEVT_STC_AUTOCOMP_SELECTION event.
+    @event{EVT_STC_AUTOCOMP_SELECTION_CHANGE(id, fn)}
+        Process a @c wxEVT_STC_AUTOCOMP_SELECTION_CHANGE event.
+        @since 3.1.3
+
     @event{EVT_STC_CALLTIP_CLICK(id, fn)}
         Process a @c wxEVT_STC_CALLTIP_CLICK event.
     @event{EVT_STC_CHANGE(id, fn)}
@@ -935,6 +939,27 @@ public:
     @link wxStyledTextEvent::GetPosition GetPosition@endlink,
     @link wxStyledTextEvent::GetString GetString@endlink,
     @link wxStyledTextEvent::GetListCompletionMethod GetListCompletionMethod@endlink.
+
+    @c wxEVT_STC_AUTOCOMP_SELECTION_CHANGE
+
+    - Generated when items are highlighted in an autocompletion or user list.
+
+    - @link wxStyledTextEvent::GetPosition GetPosition@endlink will return the
+    position at which the list is being shown.
+
+    - For a user list, @link wxStyledTextEvent::GetListType GetListType@endlink
+    will return the list type. The list type is a value input in to the
+    @link wxStyledTextCtrl::UserListShow wxStyledTextCtrl::UserListShow@endlink
+    method when a user list is created.
+
+    - For an autocompletion list,
+    @link wxStyledTextEvent::GetListType GetListType@endlink will always return
+    zero.
+
+    - Valid event functions:
+    @link wxStyledTextEvent::GetListType GetListType@endlink,
+    @link wxStyledTextEvent::GetPosition GetPosition@endlink,
+    @link wxStyledTextEvent::GetString GetString@endlink.
 
     @c wxEVT_STC_CALLTIP_CLICK
 
@@ -1428,7 +1453,8 @@ public:
         wxStyledTextCtrl::UserListShow @endlink method and can be used to
         distinguish lists if more than one is used.
 
-        This method is valid for @c wxEVT_STC_USERLISTSELECTION events.
+        This method is valid for @c wxEVT_STC_AUTOCOMP_SELECTION_CHANGE and
+        @c wxEVT_STC_USERLISTSELECTION events.
     */
     int  GetListType() const;
 
@@ -1576,6 +1602,7 @@ public:
         - @c wxEVT_STC_INDICATOR_RELEASE
         - @c wxEVT_STC_CALLTIP_CLICK
         - @c wxEVT_STC_AUTOCOMP_SELECTION
+        - @c wxEVT_STC_AUTOCOMP_SELECTION_CHANGE
         - @c wxEVT_STC_AUTOCOMP_COMPLETED
         - @c wxEVT_STC_MARGIN_RIGHT_CLICK
     */
@@ -1829,3 +1856,4 @@ const wxEventType wxEVT_STC_CLIPBOARD_COPY;
 const wxEventType wxEVT_STC_CLIPBOARD_PASTE;
 const wxEventType wxEVT_STC_AUTOCOMP_COMPLETED;
 const wxEventType wxEVT_STC_MARGIN_RIGHT_CLICK;
+const wxEventType wxEVT_STC_AUTOCOMP_SELECTION_CHANGE;

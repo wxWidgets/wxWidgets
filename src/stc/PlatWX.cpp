@@ -2562,7 +2562,7 @@ const wxColour& wxSTCListBoxVisualData::GetCurrentTextColour() const
 class wxSTCListBox : public wxSystemThemedControl<wxVListBox>
 {
 public:
-    wxSTCListBox(wxWindow*, wxSTCListBoxVisualData*, int);
+    wxSTCListBox(wxWindow*, wxSTCListBoxVisualData*, int, int, int*, int*);
 
     // wxWindow overrides
     virtual bool AcceptsFocus() const wxOVERRIDE;
@@ -2587,11 +2587,13 @@ public:
 protected:
     // Helpers
     void AppendHelper(const wxString& text, int type);
+    void SelectHelper(int i);
     void AccountForBitmap(int type, bool recalculateItemHeight);
     void RecalculateItemHeight();
     int TextBoxFromClientEdge() const;
 
     // Event handlers
+    void OnSelection(wxCommandEvent&);
     void OnDClick(wxCommandEvent&);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
     void OnMouseMotion(wxMouseEvent& event);
@@ -2614,6 +2616,9 @@ private:
     CallBackAction          m_doubleClickAction;
     void*                   m_doubleClickActionData;
     int                     m_aveCharWidth;
+    int                     m_listType;
+    int*                    m_posStart;
+    int*                    m_startLen;
 
     // These drawing parameters are computed or set externally.
     int m_borderSize;
@@ -2630,12 +2635,14 @@ private:
     int m_textExtraVerticalPadding;
 };
 
-wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v, int ht)
+wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v,
+                           int ht, int listType, int* posStart, int* startLen)
              :wxSystemThemedControl<wxVListBox>(),
               m_visualData(v), m_maxStrWidth(0), m_currentRow(wxNOT_FOUND),
               m_doubleClickAction(NULL), m_doubleClickActionData(NULL),
               m_aveCharWidth(8), m_textHeight(ht), m_itemHeight(ht),
-              m_textTopGap(0), m_imageAreaWidth(0), m_imageAreaHeight(0)
+              m_textTopGap(0), m_imageAreaWidth(0), m_imageAreaHeight(0),
+              m_listType(listType), m_posStart(posStart), m_startLen(startLen)
 {
     wxVListBox::Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                        wxBORDER_NONE);
@@ -2646,6 +2653,7 @@ wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v, int ht)
 
     SetBackgroundColour(m_visualData->GetBgColour());
 
+    Bind(wxEVT_LISTBOX, &wxSTCListBox::OnSelection, this);
     Bind(wxEVT_LISTBOX_DCLICK, &wxSTCListBox::OnDClick, this);
     Bind(wxEVT_SYS_COLOUR_CHANGED, &wxSTCListBox::OnSysColourChanged, this);
 
@@ -2759,6 +2767,7 @@ int wxSTCListBox::Length() const
 void wxSTCListBox::Select(int n)
 {
     SetSelection(n);
+    SelectHelper(n);
 }
 
 void wxSTCListBox::GetValue(int n, char *value, int len) const
@@ -2806,6 +2815,39 @@ void wxSTCListBox::AppendHelper(const wxString& text, int type)
     SetItemCount(m_labels.size());
 }
 
+void wxSTCListBox::SelectHelper(int i)
+{
+    // This method is used to trigger the wxEVT_STC_AUTOCOMP_SELECTION_CHANGE
+    // event. This event is generated directly here since the version of
+    // Scintilla currently used does not support it.
+
+    //If the Scintilla component is updated, it should be sufficient to:
+    // 1) change this method to use a callback to let Scintilla generate the
+    //    event.
+    // 2) remove the member variables m_listType, m_posStart, and m_startLen
+    //    from this and the ListBoxImpl class since they will no longer be
+    //    needed. The SetListInfo method can also be removed from ListBoxImpl.
+
+    wxStyledTextCtrl* stc = wxDynamicCast(GetGrandParent(), wxStyledTextCtrl);
+
+    if ( stc )
+    {
+        wxStyledTextEvent evt(wxEVT_STC_AUTOCOMP_SELECTION_CHANGE,stc->GetId());
+        evt.SetEventObject(stc);
+        evt.SetListType(m_listType);
+
+        if ( m_posStart != NULL && m_startLen != NULL )
+            evt.SetPosition(*m_posStart - *m_startLen);
+        else
+            evt.SetPosition(stc->AutoCompPosStart());
+
+        if ( 0 <= i && i < static_cast<int>(m_labels.size()) )
+            evt.SetString(m_labels[i]);
+
+        stc->ProcessWindowEvent(evt);
+    }
+}
+
 void wxSTCListBox::AccountForBitmap(int type, bool recalculateItemHeight)
 {
     const int oldHeight = m_imageAreaHeight;
@@ -2834,6 +2876,11 @@ void wxSTCListBox::RecalculateItemHeight()
 int wxSTCListBox::TextBoxFromClientEdge() const
 {
     return (m_imageAreaWidth == 0 ? 0 : m_imageAreaWidth + 2 * m_imagePadding);
+}
+
+void wxSTCListBox::OnSelection(wxCommandEvent& event)
+{
+    SelectHelper(event.GetSelection());
 }
 
 void wxSTCListBox::OnDClick(wxCommandEvent& WXUNUSED(event))
@@ -3002,7 +3049,8 @@ void wxSTCListBox::OnDrawBackground(wxDC &dc, const wxRect &rect,size_t n) const
 class wxSTCListBoxWin : public wxSTCPopupWindow
 {
 public:
-    wxSTCListBoxWin(wxWindow*, wxSTCListBox**, wxSTCListBoxVisualData*, int);
+    wxSTCListBoxWin(wxWindow*, wxSTCListBox**, wxSTCListBoxVisualData*,
+                    int, int, int*, int*);
 
 protected:
     void OnPaint(wxPaintEvent&);
@@ -3012,10 +3060,11 @@ private:
 };
 
 wxSTCListBoxWin::wxSTCListBoxWin(wxWindow* parent, wxSTCListBox** lb,
-                                 wxSTCListBoxVisualData* v, int h)
+                                 wxSTCListBoxVisualData* v, int h,
+                                 int t, int* p, int* l)
                 :wxSTCPopupWindow(parent)
 {
-    *lb = new wxSTCListBox(this, v, h);
+    *lb = new wxSTCListBox(this, v, h, t, p, l);
 
     // Use the background of this window to form a frame around the listbox
     // except on macos where the native Scintilla popup has no frame.
@@ -3049,7 +3098,8 @@ void wxSTCListBoxWin::OnPaint(wxPaintEvent& WXUNUSED(evt))
 //----------------------------------------------------------------------
 
 ListBoxImpl::ListBoxImpl()
-            :m_listBox(NULL), m_visualData(new wxSTCListBoxVisualData(5))
+            :m_listBox(NULL), m_visualData(new wxSTCListBoxVisualData(5)),
+             m_listType(NULL), m_posStart(NULL), m_startLen(NULL)
 {
 }
 
@@ -3068,7 +3118,8 @@ void ListBoxImpl::Create(Window &parent, int WXUNUSED(ctrlID),
                          bool WXUNUSED(unicodeMode_),
                          int WXUNUSED(technology_)) {
     wid = new wxSTCListBoxWin(GETWIN(parent.GetID()), &m_listBox, m_visualData,
-                              lineHeight_);
+                              lineHeight_, (m_listType?*m_listType:0),
+                              m_posStart, m_startLen);
 }
 
 
@@ -3161,6 +3212,13 @@ void ListBoxImpl::ClearRegisteredImages() {
 
 void ListBoxImpl::SetDoubleClickAction(CallBackAction action, void *data) {
     m_listBox->SetDoubleClickAction(action, data);
+}
+
+void ListBoxImpl::SetListInfo(int* listType, int* posStart, int* startLen)
+{
+    m_listType = listType;
+    m_posStart = posStart;
+    m_startLen = startLen;
 }
 
 
