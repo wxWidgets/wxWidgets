@@ -189,10 +189,20 @@ wxPaintDCImpl::wxPaintDCImpl( wxDC *owner )
 {
 }
 
+#if wxDEBUG_LEVEL
+static bool IsGLCanvas( wxWindow * window )
+{
+    // If the wx gl library isn't loaded then ciGLCanvas will be NULL.
+    static const wxClassInfo* const ciGLCanvas = wxClassInfo::FindClass("wxGLCanvas");
+    return ciGLCanvas && window->IsKindOf(ciGLCanvas);
+}
+#endif
+
 wxPaintDCImpl::wxPaintDCImpl( wxDC *owner, wxWindow *window ) :
     wxWindowDCImpl( owner, window )
 {
-    wxASSERT_MSG( window->MacGetCGContextRef() != NULL, wxT("using wxPaintDC without being in a native paint event") );
+    // With macOS 10.14, wxGLCanvas windows have a NULL CGContextRef.
+    wxASSERT_MSG( window->MacGetCGContextRef() != NULL || IsGLCanvas(window), wxT("using wxPaintDC without being in a native paint event") );
     wxPoint origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
     SetDeviceOrigin( origin.x, origin.y );
