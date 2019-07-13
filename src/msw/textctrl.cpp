@@ -2191,10 +2191,9 @@ wxTextCtrl::MSWHandleMessage(WXLRESULT *rc,
     if ( nMsg == WM_CHAR &&
             !processed &&
             HasFlag(wxTE_PROCESS_ENTER) &&
-            wParam == VK_RETURN &&
-            !wxIsAnyModifierDown() )
+            wParam == VK_RETURN )
     {
-        MSWClickButtonIfPossible(MSWGetDefaultButtonFor(this));
+        ClickDefaultButtonIfPossible();
 
         processed = true;
     }
