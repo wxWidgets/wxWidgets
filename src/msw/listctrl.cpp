@@ -882,14 +882,29 @@ bool wxListCtrl::GetItem(wxListItem& info) const
 // Check if the item is visible
 bool wxListCtrl::IsVisible(long item)
 {
-    if( wxGetWinVersion() >= wxWinVersion_Vista )
+    bool result = ::SendMessage( GetHwnd(), LVM_ISITEMVISIBLE, (WPARAM) item, 0 );
+    if( result )
     {
-        return ::SendMessage( GetHwnd(), LVM_ISITEMVISIBLE, (WPARAM) item, 0 );
+        HWND hwndHeader = (HWND) ::SendMessage( GetHwnd(), LVM_GETHEADER, 0, 0 );
+        wxRect itemRect;
+        RECT headerRect;
+		GetItemRect( item, itemRect );
+        wxPoint ptClickHeader;
+        ptClickHeader.x = itemRect.GetX();
+        ptClickHeader.y = itemRect.GetY() + itemRect.GetHeight();
+        if( Header_GetItemRect( hwndHeader, 0, &headerRect ) )
+        {
+            wxRect wxRectHeader( headerRect.left, headerRect.top, headerRect.right - headerRect.left, headerRect.bottom - headerRect.top );
+            if( ( ptClickHeader.x >= wxRectHeader.x ) && ( ptClickHeader.y >= wxRectHeader.y )
+                && ( ( ptClickHeader.y - wxRectHeader.y ) <= wxRectHeader.height )
+                && ( ( ptClickHeader.x - wxRectHeader.x ) < wxRectHeader.width ) )
+//            if( wxRectHeader.Contains( ptClickHeader ) )
+            {
+                result = false;
+            }
+        }
     }
-    else
-    {
-        return wxListCtrlBase::IsVisible( item );
-    }
+    return result;
 }
 
 // Sets information about the item
