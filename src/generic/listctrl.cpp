@@ -151,6 +151,26 @@ wxListItemData::wxListItemData(wxListMainWindow *owner)
         m_rect = new wxRect;
 }
 
+// Check if the item is visible
+bool wxGenericListCtrl::IsVisible(long item)
+{
+    wxRect itemRect, rect;
+    GetItemRect( item, itemRect );
+    rect = GetRect();
+    if( itemRect.y + itemRect.height <= 0 || itemRect.y + itemRect.height > rect.GetBottom() )
+        return false;
+    else
+    {
+        wxRect headerRect( 0, 0, rect.GetWidth(), 0 );
+        if( m_headerWin )
+            headerRect = m_headerWin->GetRect();
+        if( itemRect.Intersects( headerRect ) )
+            return false;
+        else
+            return true;
+    }
+}
+
 void wxListItemData::SetItem( const wxListItem &info )
 {
     if ( info.m_mask & wxLIST_MASK_TEXT )
