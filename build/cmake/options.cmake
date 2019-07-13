@@ -26,7 +26,7 @@ mark_as_advanced(wxBUILD_CUSTOM_SETUP_HEADER_PATH)
 wx_option(wxBUILD_DEBUG_LEVEL "Debug Level" Default STRINGS Default 0 1 2)
 mark_as_advanced(wxBUILD_DEBUG_LEVEL)
 
-if(MSVC OR CMAKE_COMPILER_IS_GNUCC)
+if(NOT APPLE)
     wx_option(wxBUILD_USE_STATIC_RUNTIME "Link using the static runtime library" OFF)
 endif()
 
