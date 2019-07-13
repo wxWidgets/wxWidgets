@@ -48,7 +48,8 @@ enum
     wxFD_FILE_MUST_EXIST   = 0x0010,
     wxFD_CHANGE_DIR        = 0x0080,
     wxFD_PREVIEW           = 0x0100,
-    wxFD_MULTIPLE          = 0x0200
+    wxFD_MULTIPLE          = 0x0200,
+    wxFD_SHOW_HIDDEN       = 0x0400
 };
 
 #define wxFD_DEFAULT_STYLE      wxFD_OPEN
