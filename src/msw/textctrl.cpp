@@ -2193,9 +2193,8 @@ wxTextCtrl::MSWHandleMessage(WXLRESULT *rc,
             HasFlag(wxTE_PROCESS_ENTER) &&
             wParam == VK_RETURN )
     {
-        ClickDefaultButtonIfPossible();
-
-        processed = true;
+        if ( ClickDefaultButtonIfPossible() )
+            processed = true;
     }
 
     switch ( nMsg )
