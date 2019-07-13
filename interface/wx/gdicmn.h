@@ -301,11 +301,17 @@ public:
     /**
         Returns @true if the given point is inside the rectangle (or on its
         boundary) and @false otherwise.
+        A point is within a rectangle if it lies on the left or top side or is
+        within all four sides.
+        A point on the right or bottom side is considered outside the rectangle.
     */
     bool Contains(int x, int y) const;
     /**
         Returns @true if the given point is inside the rectangle (or on its
         boundary) and @false otherwise.
+        A point is within a rectangle if it lies on the left or top side or is
+        within all four sides.
+        A point on the right or bottom side is considered outside the rectangle.
     */
     bool Contains(const wxPoint& pt) const;
     /**
