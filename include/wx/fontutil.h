@@ -161,8 +161,16 @@ public:
 
     void Free();
 
+    // Font Names in macOS and iOS:
+    // while GetFaceName from now on returns the unique and never localized PostScript name of the font
+    // there are other types of names that are useful
+    
+    // returns the font family name eg Helvetica Neue
     wxString GetFamilyName() const;
+    // returns the font style name eg Condensed Bold
     wxString GetStyleName() const;
+    // returns the font display name (for UI), might be localized, eg Helvetica Neue Condensed Bold
+    wxString GetDisplayName() const;
 
     static void UpdateNamesMap(const wxString& familyname, CTFontDescriptorRef descr);
     static void UpdateNamesMap(const wxString& familyname, CTFontRef font);
@@ -183,6 +191,8 @@ private:
 
     wxString      m_styleName;
     wxString      m_familyName;
+    wxString      m_faceName;
+    wxString      m_displayName;
 
     // native font description
     wxCFRef<CTFontDescriptorRef> m_descriptor;

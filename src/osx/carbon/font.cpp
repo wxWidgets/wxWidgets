@@ -768,6 +768,9 @@ void wxNativeFontInfo::Init(const wxNativeFontInfo& info)
 
     m_styleName = info.m_styleName;
     m_familyName = info.m_familyName;
+    m_faceName = info.m_faceName;
+    m_displayName = info.m_displayName;
+
 }
 
 void wxNativeFontInfo::InitFromFont(CTFontRef font)
@@ -813,6 +816,8 @@ void wxNativeFontInfo::InitFromFontDescriptor(CTFontDescriptorRef desc)
 
     wxCFTypeRef(CTFontDescriptorCopyAttribute(desc, kCTFontStyleNameAttribute)).GetValue(m_styleName);
     wxCFTypeRef(CTFontDescriptorCopyAttribute(desc, kCTFontFamilyNameAttribute)).GetValue(m_familyName);
+    wxCFTypeRef(CTFontDescriptorCopyAttribute(desc, kCTFontNameAttribute)).GetValue(m_faceName);
+    wxCFTypeRef(CTFontDescriptorCopyAttribute(desc, kCTFontDisplayNameAttribute)).GetValue(m_displayName);
 }
 
 void wxNativeFontInfo::Free()
@@ -1043,7 +1048,7 @@ wxString wxNativeFontInfo::GetFaceName() const
     wxLogTrace(TRACE_CTFONT,"StyleName: %s",style.c_str());
 #endif
 
-    return m_familyName;
+    return m_faceName;
 }
 
 wxFontFamily wxNativeFontInfo::GetFamily() const
