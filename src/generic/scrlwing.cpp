@@ -1553,12 +1553,11 @@ wxSize wxScrolledT_Helper::FilterBestSize(const wxWindow *win,
 
         wxSize minSize = win->GetMinSize();
 
-        wxWindow* window = const_cast<wxWindow*>(win);
         if ( ppuX > 0 )
-            best.x = minSize.x + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, window);
+            best.x = minSize.x + wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, win);
 
         if ( ppuY > 0 )
-            best.y = minSize.y + wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, window);
+            best.y = minSize.y + wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, win);
     }
 
     return best;
