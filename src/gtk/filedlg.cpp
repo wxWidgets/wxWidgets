@@ -157,10 +157,11 @@ static gboolean gtk_frame_map_callback( GtkFileChooser *file_chooser,
                         GdkEvent * WXUNUSED(event),
                         wxFileDialog *dlg )
 {
-    if ( dlg->GetWindowStyle() & wxFD_SHOW_HIDDEN )
+/*    if ( dlg->GetWindowStyle() & wxFD_SHOW_HIDDEN )
         gtk_file_chooser_set_show_hidden( file_chooser, TRUE );
     else
-        gtk_file_chooser_set_show_hidden( file_chooser, FALSE );
+        gtk_file_chooser_set_show_hidden( file_chooser, FALSE );*/
+    gtk_file_chooser_set_show_hidden(file_chooser, dlg->HasFlag(wxFD_SHOW_HIDDEN));
     return FALSE;
 }
 }
