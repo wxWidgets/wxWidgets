@@ -1005,7 +1005,11 @@ wxString wxNativeFontInfo::ToUserString() const
             break;
     }
 
+#ifndef __WXOSX__
     wxString face = GetFaceName();
+#else
+    wxString face = GetDisplayName();
+#endif
     if ( !face.empty() )
     {
         if (face.Contains(' ') || face.Contains(';') || face.Contains(','))
