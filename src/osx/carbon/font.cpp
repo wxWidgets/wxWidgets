@@ -1018,7 +1018,7 @@ wxString wxNativeFontInfo::GetDisplayName() const
     return m_displayName;
 }
 
-wxString wxNativeFontInfo::GetStyleName() const
+wxString wxNativeFontInfo::GetVariantName() const
 {
     return m_styleName;
 }

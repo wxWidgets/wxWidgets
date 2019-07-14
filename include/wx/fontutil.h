@@ -168,7 +168,7 @@ public:
     // returns the font family name eg Helvetica Neue
     wxString GetFamilyName() const;
     // returns the font style name eg Condensed Bold
-    wxString GetStyleName() const;
+    wxString GetVariantName() const;
     // returns the font display name (for UI), might be localized, eg Helvetica Neue Condensed Bold
     wxString GetDisplayName() const;
 
