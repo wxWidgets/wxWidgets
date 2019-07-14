@@ -7466,7 +7466,7 @@ public:
         @param value
             The value to replace the existing text with.
     */
-    virtual void Replace(long from, long to, const wxString& text);
+    virtual void Replace(long from, long to, const wxString& value);
 
     /**
         Sets the insertion point at the given position.
@@ -7599,7 +7599,7 @@ public:
         @return
             The length of the line, or -1 if @a lineNo was invalid.
     */
-    virtual int GetLineLength(long n) const;
+    virtual int GetLineLength(long lineNo) const;
 
     /**
         Returns the contents of a given line in the text control, not including
@@ -7611,7 +7611,7 @@ public:
         @return
             The contents of the line.
     */
-    virtual wxString GetLineText(long n) const;
+    virtual wxString GetLineText(long lineNo) const;
 
     /**
         Returns the number of lines in the text control buffer.
