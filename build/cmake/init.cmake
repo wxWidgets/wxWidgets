@@ -61,11 +61,11 @@ elseif(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_CXX_COMPILER_ID}
     
     if(wxUSE_STRIPPED_RELEASE)
         set(LD_STRIPPING_FLAG " -s")
+        wx_string_append(CMAKE_EXE_LINKER_FLAGS_RELEASE "${LD_STRIPPING_FLAG}")
+        wx_string_append(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${LD_STRIPPING_FLAG}")   
     else()
-        set(LD_STRIPPING_FLAG " -g")
+        add_compile_options("-g")
     endif()
-    wx_string_append(CMAKE_EXE_LINKER_FLAGS_RELEASE "${LD_STRIPPING_FLAG}")
-    wx_string_append(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${LD_STRIPPING_FLAG}")   
 endif()
 
 if(wxBUILD_MSVC_MULTIPROC)
