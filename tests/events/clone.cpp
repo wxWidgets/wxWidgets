@@ -21,32 +21,7 @@
     #include "wx/timer.h"
 #endif // WX_PRECOMP
 
-// --------------------------------------------------------------------------
-// test class
-// --------------------------------------------------------------------------
-
-class EventCloneTestCase : public CppUnit::TestCase
-{
-public:
-    EventCloneTestCase() {}
-
-private:
-    CPPUNIT_TEST_SUITE( EventCloneTestCase );
-        CPPUNIT_TEST( CheckAll );
-    CPPUNIT_TEST_SUITE_END();
-
-    void CheckAll();
-
-    wxDECLARE_NO_COPY_CLASS(EventCloneTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( EventCloneTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( EventCloneTestCase, "EventCloneTestCase" );
-
-void EventCloneTestCase::CheckAll()
+TEST_CASE("EventClone", "[wxEvent][clone]")
 {
     // Dummy timer needed just to create a wxTimerEvent.
     wxTimer dummyTimer;
