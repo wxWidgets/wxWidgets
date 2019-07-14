@@ -1013,6 +1013,11 @@ wxString wxNativeFontInfo::GetFamilyName() const
     return m_familyName;
 }
 
+wxString wxNativeFontInfo::GetDisplayName() const
+{
+    return m_displayName;
+}
+
 wxString wxNativeFontInfo::GetStyleName() const
 {
     return m_styleName;
