@@ -582,6 +582,23 @@ void wxWindowQt::DoGetTextExtent(const wxString& string, int *x, int *y, int *de
         *externalLeading = fontMetrics.lineSpacing();
 }
 
+QWidget *wxWindowQt::QtGetClientWidget() const
+{
+    QWidget *qtWidget = NULL;
+    if ( m_qtContainer != NULL )
+    {
+        qtWidget = m_qtContainer->viewport();
+    }
+
+    if ( qtWidget == NULL )
+    {
+        // We don't have scrollbars or the QScrollArea has no children
+        qtWidget = GetHandle();
+    }
+
+    return qtWidget;
+}
+
 /* Returns a scrollbar for the given orientation, or NULL if the scrollbar
  * has not been previously created and create is false */
 QScrollBar *wxWindowQt::QtGetScrollBar( int orientation ) const
@@ -957,7 +974,8 @@ void wxWindowQt::DoSetSize(int x, int y, int width, int height, int sizeFlags )
 
 void wxWindowQt::DoGetClientSize(int *width, int *height) const
 {
-    QRect geometry = GetHandle()->geometry();
+    QWidget *qtWidget = QtGetClientWidget();
+    const QRect geometry = qtWidget->geometry();
     if (width)  *width = geometry.width();
     if (height) *height = geometry.height();
 }
@@ -965,7 +983,7 @@ void wxWindowQt::DoGetClientSize(int *width, int *height) const
 
 void wxWindowQt::DoSetClientSize(int width, int height)
 {
-    QWidget *qtWidget = GetHandle();
+    QWidget *qtWidget = QtGetClientWidget();
     QRect geometry = qtWidget->geometry();
     geometry.setWidth( width );
     geometry.setHeight( height );
