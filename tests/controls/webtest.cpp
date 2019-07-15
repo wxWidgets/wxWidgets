@@ -69,39 +69,39 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
 
     SECTION("Title")
     {
-        CPPUNIT_ASSERT_EQUAL("", m_browser->GetCurrentTitle());
+        CHECK(m_browser->GetCurrentTitle() == "");
 
         //Test title after loading raw html
         m_browser->SetPage("<html><title>Title</title><body>Text</body></html>", "");
         ENSURE_LOADED;
-        CPPUNIT_ASSERT_EQUAL("Title", m_browser->GetCurrentTitle());
+        CHECK(m_browser->GetCurrentTitle() == "Title");
 
         //Test title after loading a url, we yield to let events process
         LoadUrl();
-        CPPUNIT_ASSERT_EQUAL("", m_browser->GetCurrentTitle());
+        CHECK(m_browser->GetCurrentTitle() == "");
     }
 
     SECTION("URL")
     {
-        CPPUNIT_ASSERT_EQUAL("about:blank", m_browser->GetCurrentURL());
+        CHECK(m_browser->GetCurrentURL() == "about:blank");
 
         //After first loading about:blank the next in the sequence is about:
         LoadUrl();
-        CPPUNIT_ASSERT_EQUAL("about:", m_browser->GetCurrentURL());
+        CHECK(m_browser->GetCurrentURL() == "about:");
     }
 
     SECTION("History")
     {
         LoadUrl(3);
 
-        CPPUNIT_ASSERT(m_browser->CanGoBack());
-        CPPUNIT_ASSERT(!m_browser->CanGoForward());
+        CHECK(m_browser->CanGoBack());
+        CHECK(!m_browser->CanGoForward());
 
         m_browser->GoBack();
         ENSURE_LOADED;
 
-        CPPUNIT_ASSERT(m_browser->CanGoBack());
-        CPPUNIT_ASSERT(m_browser->CanGoForward());
+        CHECK(m_browser->CanGoBack());
+        CHECK(m_browser->CanGoForward());
 
         m_browser->GoBack();
         ENSURE_LOADED;
@@ -109,8 +109,8 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         ENSURE_LOADED;
 
         //We should now be at the start of the history
-        CPPUNIT_ASSERT(!m_browser->CanGoBack());
-        CPPUNIT_ASSERT(m_browser->CanGoForward());
+        CHECK(!m_browser->CanGoBack());
+        CHECK(m_browser->CanGoForward());
     }
 
     SECTION("HistoryEnable")
@@ -118,13 +118,13 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         LoadUrl();
         m_browser->EnableHistory(false);
 
-        CPPUNIT_ASSERT(!m_browser->CanGoForward());
-        CPPUNIT_ASSERT(!m_browser->CanGoBack());
+        CHECK(!m_browser->CanGoForward());
+        CHECK(!m_browser->CanGoBack());
 
         LoadUrl();
 
-        CPPUNIT_ASSERT(!m_browser->CanGoForward());
-        CPPUNIT_ASSERT(!m_browser->CanGoBack());
+        CHECK(!m_browser->CanGoForward());
+        CHECK(!m_browser->CanGoBack());
     }
 
     SECTION("HistoryClear")
@@ -135,13 +135,13 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         m_browser->GoBack();
         ENSURE_LOADED;
 
-        CPPUNIT_ASSERT(m_browser->CanGoForward());
-        CPPUNIT_ASSERT(m_browser->CanGoBack());
+        CHECK(m_browser->CanGoForward());
+        CHECK(m_browser->CanGoBack());
 
         m_browser->ClearHistory();
 
-        CPPUNIT_ASSERT(!m_browser->CanGoForward());
-        CPPUNIT_ASSERT(!m_browser->CanGoBack());
+        CHECK(!m_browser->CanGoForward());
+        CHECK(!m_browser->CanGoBack());
     }
 
     SECTION("HistoryList")
@@ -150,39 +150,39 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         m_browser->GoBack();
         ENSURE_LOADED;
 
-        CPPUNIT_ASSERT_EQUAL(1, m_browser->GetBackwardHistory().size());
-        CPPUNIT_ASSERT_EQUAL(1, m_browser->GetForwardHistory().size());
+        CHECK(m_browser->GetBackwardHistory().size() == 1);
+        CHECK(m_browser->GetForwardHistory().size() == 1);
 
         m_browser->LoadHistoryItem(m_browser->GetForwardHistory()[0]);
         ENSURE_LOADED;
 
-        CPPUNIT_ASSERT(!m_browser->CanGoForward());
-        CPPUNIT_ASSERT_EQUAL(2, m_browser->GetBackwardHistory().size());
+        CHECK(!m_browser->CanGoForward());
+        CHECK(m_browser->GetBackwardHistory().size() == 2);
     }
 
     SECTION("Editable")
     {
-        CPPUNIT_ASSERT(!m_browser->IsEditable());
+        CHECK(!m_browser->IsEditable());
 
         m_browser->SetEditable(true);
 
-        CPPUNIT_ASSERT(m_browser->IsEditable());
+        CHECK(m_browser->IsEditable());
 
         m_browser->SetEditable(false);
 
-        CPPUNIT_ASSERT(!m_browser->IsEditable());
+        CHECK(!m_browser->IsEditable());
     }
 
     SECTION("Selection")
     {
         m_browser->SetPage("<html><body>Some <strong>strong</strong> text</body></html>", "");
         ENSURE_LOADED;
-        CPPUNIT_ASSERT(!m_browser->HasSelection());
+        CHECK(!m_browser->HasSelection());
 
         m_browser->SelectAll();
 
-        CPPUNIT_ASSERT(m_browser->HasSelection());
-        CPPUNIT_ASSERT_EQUAL("Some strong text", m_browser->GetSelectedText());
+        CHECK(m_browser->HasSelection());
+        CHECK(m_browser->GetSelectedText() == "Some strong text");
 
         // The web engine doesn't necessarily represent the HTML in the same way as
         // we used above, e.g. IE uses upper case for all the tags while WebKit
@@ -197,7 +197,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         );
 
         m_browser->ClearSelection();
-        CPPUNIT_ASSERT(!m_browser->HasSelection());
+        CHECK(!m_browser->HasSelection());
     }
 
     SECTION("Zoom")
@@ -205,10 +205,10 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         if(m_browser->CanSetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT))
         {
             m_browser->SetZoomType(wxWEBVIEW_ZOOM_TYPE_LAYOUT);
-            CPPUNIT_ASSERT_EQUAL(wxWEBVIEW_ZOOM_TYPE_LAYOUT, m_browser->GetZoomType());
+            CHECK(m_browser->GetZoomType() == wxWEBVIEW_ZOOM_TYPE_LAYOUT);
 
             m_browser->SetZoom(wxWEBVIEW_ZOOM_TINY);
-            CPPUNIT_ASSERT_EQUAL(wxWEBVIEW_ZOOM_TINY, m_browser->GetZoom());
+            CHECK(m_browser->GetZoom() == wxWEBVIEW_ZOOM_TINY);
         }
 
         //Reset the zoom level
@@ -217,10 +217,10 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
         if(m_browser->CanSetZoomType(wxWEBVIEW_ZOOM_TYPE_TEXT))
         {
             m_browser->SetZoomType(wxWEBVIEW_ZOOM_TYPE_TEXT);
-            CPPUNIT_ASSERT_EQUAL(wxWEBVIEW_ZOOM_TYPE_TEXT, m_browser->GetZoomType());
+            CHECK(m_browser->GetZoomType() == wxWEBVIEW_ZOOM_TYPE_TEXT);
 
             m_browser->SetZoom(wxWEBVIEW_ZOOM_TINY);
-            CPPUNIT_ASSERT_EQUAL(wxWEBVIEW_ZOOM_TINY, m_browser->GetZoom());
+            CHECK(m_browser->GetZoom() == wxWEBVIEW_ZOOM_TINY);
         }
     }
 
@@ -232,7 +232,7 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
 
         wxString result;
     #if wxUSE_WEBVIEW_IE
-        CPPUNIT_ASSERT(wxWebViewIE::MSWSetModernEmulationLevel());
+        CHECK(wxWebViewIE::MSWSetModernEmulationLevel());
 
         // Define a specialized scope guard ensuring that we reset the emulation
         // level to its default value even if any asserts below fail.
@@ -260,89 +260,89 @@ TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
             bool m_reset;
         } resetEmulationLevel;
 
-        CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();person.name = 'Bar'; \
+        CHECK(m_browser->RunScript("function f(){var person = new Object();person.name = 'Bar'; \
             person.lastName = 'Foo';return person;}f();", &result));
-        CPPUNIT_ASSERT_EQUAL("{\"name\":\"Bar\",\"lastName\":\"Foo\"}", result);
+        CHECK(result == "{\"name\":\"Bar\",\"lastName\":\"Foo\"}");
 
-        CPPUNIT_ASSERT(m_browser->RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result));
-        CPPUNIT_ASSERT_EQUAL("[\"foo\",\"bar\"]", result);
+        CHECK(m_browser->RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result));
+        CHECK(result == "[\"foo\",\"bar\"]");
 
-        CPPUNIT_ASSERT(m_browser->RunScript("function f(){var d = new Date('10/08/2017 21:30:40'); \
+        CHECK(m_browser->RunScript("function f(){var d = new Date('10/08/2017 21:30:40'); \
             var tzoffset = d.getTimezoneOffset() * 60000; return new Date(d.getTime() - tzoffset);}f();",
             &result));
-        CPPUNIT_ASSERT_EQUAL("\"2017-10-08T21:30:40.000Z\"", result);
+        CHECK(result == "\"2017-10-08T21:30:40.000Z\"");
 
-        CPPUNIT_ASSERT(resetEmulationLevel.DoReset());
+        CHECK(resetEmulationLevel.DoReset());
     #endif // wxUSE_WEBVIEW_IE
 
-        CPPUNIT_ASSERT(m_browser->RunScript("document.write(\"Hello World!\");"));
-        CPPUNIT_ASSERT_EQUAL("Hello World!", m_browser->GetPageText());
+        CHECK(m_browser->RunScript("document.write(\"Hello World!\");"));
+        CHECK(m_browser->GetPageText() == "Hello World!");
 
-        CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f('Hello World!');", &result));
-        CPPUNIT_ASSERT_EQUAL(_("Hello World!"), result);
+        CHECK(m_browser->RunScript("function f(a){return a;}f('Hello World!');", &result));
+        CHECK(result == _("Hello World!"));
 
-        CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f('a\\\'aa\\n\\rb\vb\\tb\\\\ccc\\\"ddd\\b\\fx');", &result));
-        CPPUNIT_ASSERT_EQUAL(_("a\'aa\n\rb\vb\tb\\ccc\"ddd\b\fx"), result);
+        CHECK(m_browser->RunScript("function f(a){return a;}f('a\\\'aa\\n\\rb\vb\\tb\\\\ccc\\\"ddd\\b\\fx');", &result));
+        CHECK(result == _("a\'aa\n\rb\vb\tb\\ccc\"ddd\b\fx"));
 
-        CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(123);", &result));
-        CPPUNIT_ASSERT_EQUAL(123, wxAtoi(result));
+        CHECK(m_browser->RunScript("function f(a){return a;}f(123);", &result));
+        CHECK(wxAtoi(result) == 123);
 
-        CPPUNIT_ASSERT(m_browser->
+        CHECK(m_browser->
             RunScript("function f(a){return a;}f(2.34);", &result));
         double value;
         result.ToDouble(&value);
-        CPPUNIT_ASSERT_EQUAL(2.34, value);
+        CHECK(value == 2.34);
 
-        CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(false);", &result));
-        CPPUNIT_ASSERT_EQUAL("false", result);
+        CHECK(m_browser->RunScript("function f(a){return a;}f(false);", &result));
+        CHECK(result == "false");
 
-        CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();person.name = 'Foo'; \
+        CHECK(m_browser->RunScript("function f(){var person = new Object();person.name = 'Foo'; \
             person.lastName = 'Bar';return person;}f();", &result));
-        CPPUNIT_ASSERT_EQUAL("{\"name\":\"Foo\",\"lastName\":\"Bar\"}", result);
+        CHECK(result == "{\"name\":\"Foo\",\"lastName\":\"Bar\"}");
 
-        CPPUNIT_ASSERT(m_browser->RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result));
-        CPPUNIT_ASSERT_EQUAL("[\"foo\",\"bar\"]", result);
+        CHECK(m_browser->RunScript("function f(){ return [\"foo\", \"bar\"]; }f();", &result));
+        CHECK(result == "[\"foo\",\"bar\"]");
 
-        CPPUNIT_ASSERT(m_browser->RunScript("function f(){var person = new Object();}f();", &result));
-        CPPUNIT_ASSERT_EQUAL("undefined", result);
+        CHECK(m_browser->RunScript("function f(){var person = new Object();}f();", &result));
+        CHECK(result == "undefined");
 
-        CPPUNIT_ASSERT(m_browser->RunScript("function f(){return null;}f();", &result));
-        CPPUNIT_ASSERT_EQUAL("null", result);
+        CHECK(m_browser->RunScript("function f(){return null;}f();", &result));
+        CHECK(result == "null");
 
         result = "";
-        CPPUNIT_ASSERT(!m_browser->RunScript("int main() { return 0; }", &result));
-        CPPUNIT_ASSERT(!result);
+        CHECK(!m_browser->RunScript("int main() { return 0; }", &result));
+        CHECK(!result);
 
-        CPPUNIT_ASSERT(m_browser->RunScript("function a() { return eval(\"function b() { \
+        CHECK(m_browser->RunScript("function a() { return eval(\"function b() { \
             return eval(\\\"function c() { return eval(\\\\\\\"function d() { \
             return \\\\\\\\\\\\\\\"test\\\\\\\\\\\\\\\"; } d();\\\\\\\"); } \
             c();\\\"); } b();\"); } a();", &result));
-        CPPUNIT_ASSERT_EQUAL("test", result);
+        CHECK(result == "test");
 
-        CPPUNIT_ASSERT(m_browser->RunScript("function f(a){return a;}f(\"This is a backslash: \\\\\");",
+        CHECK(m_browser->RunScript("function f(a){return a;}f(\"This is a backslash: \\\\\");",
             &result));
-        CPPUNIT_ASSERT_EQUAL("This is a backslash: \\", result);
+        CHECK(result == "This is a backslash: \\");
 
-        CPPUNIT_ASSERT(m_browser->RunScript("function f(){var d = new Date('10/08/2016 21:30:40'); \
+        CHECK(m_browser->RunScript("function f(){var d = new Date('10/08/2016 21:30:40'); \
             var tzoffset = d.getTimezoneOffset() * 60000; return new Date(d.getTime() - tzoffset);}f();",
             &result));
-        CPPUNIT_ASSERT_EQUAL("\"2016-10-08T21:30:40.000Z\"", result);
+        CHECK(result == "\"2016-10-08T21:30:40.000Z\"");
 
         // Check for errors too.
-        CPPUNIT_ASSERT(!m_browser->RunScript("syntax(error"));
-        CPPUNIT_ASSERT(!m_browser->RunScript("syntax(error", &result));
-        CPPUNIT_ASSERT(!m_browser->RunScript("x.y.z"));
+        CHECK(!m_browser->RunScript("syntax(error"));
+        CHECK(!m_browser->RunScript("syntax(error", &result));
+        CHECK(!m_browser->RunScript("x.y.z"));
     }
 
     SECTION("SetPage")
     {
         m_browser->SetPage("<html><body>text</body></html>", "");
         ENSURE_LOADED;
-        CPPUNIT_ASSERT_EQUAL("text", m_browser->GetPageText());
+        CHECK(m_browser->GetPageText() == "text");
 
         m_browser->SetPage("<html><body>other text</body></html>", "");
         ENSURE_LOADED;
-        CPPUNIT_ASSERT_EQUAL("other text", m_browser->GetPageText());
+        CHECK(m_browser->GetPageText() == "other text");
     }
 }
 
