@@ -2442,14 +2442,14 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     {
         // add space for vertical scrollbar
         if ( !(m_windowStyle & wxTE_NO_VSCROLL) )
-            wText += ::GetSystemMetrics(SM_CXVSCROLL);
+            wText += wxGetSystemMetrics(SM_CXVSCROLL, m_parent);
 
         if ( ylen <= 0 )
         {
             hText *= wxMax(wxMin(GetNumberOfLines(), 10), 2);
             // add space for horizontal scrollbar
             if ( m_windowStyle & wxHSCROLL )
-                hText += ::GetSystemMetrics(SM_CYHSCROLL);
+                hText += wxGetSystemMetrics(SM_CYHSCROLL, m_parent);
         }
     }
     // for single line control cy (height + external leading) is ok

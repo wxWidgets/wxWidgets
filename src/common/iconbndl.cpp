@@ -20,6 +20,7 @@
     #ifdef __WINDOWS__
         #include "wx/msw/wrapwin.h"
     #endif
+    #include "wx/app.h"
     #include "wx/settings.h"
     #include "wx/log.h"
     #include "wx/intl.h"
@@ -266,8 +267,9 @@ wxIcon wxIconBundle::GetIcon(const wxSize& size, int flags) const
             sysY = 0;
     if ( flags & FALLBACK_SYSTEM )
     {
-        sysX = wxSystemSettings::GetMetric(wxSYS_ICON_X);
-        sysY = wxSystemSettings::GetMetric(wxSYS_ICON_Y);
+        wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+        sysX = wxSystemSettings::GetMetric(wxSYS_ICON_X, win);
+        sysY = wxSystemSettings::GetMetric(wxSYS_ICON_Y, win);
     }
 
     // If size == wxDefaultSize, we use system default icon size by convention.

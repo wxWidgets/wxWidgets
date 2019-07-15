@@ -124,7 +124,7 @@ bool wxHeaderCtrl::Create(wxWindow *parent,
     // use 0 here but this starts to look ugly)
     if ( wxApp::GetComCtl32Version() >= 600 )
     {
-        (void)Header_SetBitmapMargin(GetHwnd(), ::GetSystemMetrics(SM_CXEDGE));
+        (void)Header_SetBitmapMargin(GetHwnd(), wxGetSystemMetrics(SM_CXEDGE, parent));
     }
 
     return true;

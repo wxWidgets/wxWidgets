@@ -581,11 +581,11 @@ wxSize wxToolBar::DoGetBestSize() const
     wxSize sizeBest;
     if ( IsVertical() )
     {
-        sizeBest.x = sizeTool.x + 2 * ::GetSystemMetrics(SM_CXBORDER);
+        sizeBest.x = sizeTool.x + 2 * wxGetSystemMetrics(SM_CXBORDER, this);
     }
     else
     {
-        sizeBest.y = sizeTool.y + 2 * ::GetSystemMetrics(SM_CYBORDER);
+        sizeBest.y = sizeTool.y + 2 * wxGetSystemMetrics(SM_CYBORDER, this);
     }
 
     wxToolBarToolsList::compatibility_iterator node;
@@ -634,11 +634,11 @@ wxSize wxToolBar::DoGetBestSize() const
     {
         if ( IsVertical() )
         {
-            sizeBest.x += 2 * ::GetSystemMetrics(SM_CXBORDER);
+            sizeBest.x += 2 * wxGetSystemMetrics(SM_CXBORDER, this);
         }
         else
         {
-            sizeBest.y += 2 * ::GetSystemMetrics(SM_CYBORDER);
+            sizeBest.y += 2 * wxGetSystemMetrics(SM_CYBORDER, this);
         }
     }
 
@@ -1247,7 +1247,7 @@ bool wxToolBar::Realize()
     {
         // We want just the usable height, so remove the space taken by the
         // border/divider.
-        height -= 2 * ::GetSystemMetrics(SM_CYBORDER);
+        height -= 2 * wxGetSystemMetrics(SM_CYBORDER, this);
     }
 
     // adjust the controls size to fit nicely in the toolbar and compute its

@@ -208,11 +208,11 @@ wxSize wxScrollBar::DoGetBestSize() const
 
     if ( IsVertical() )
     {
-        w = wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+        w = wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, m_parent);
     }
     else
     {
-        h = wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+        h = wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, m_parent);
     }
 
     return wxSize(w, h);
