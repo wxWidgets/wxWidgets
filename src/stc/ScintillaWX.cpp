@@ -293,6 +293,9 @@ void ScintillaWX::Initialise() {
     kmap.AssignCmdKey(SCK_UP, SCI_CTRL, SCI_DOCUMENTSTART);
     kmap.AssignCmdKey(SCK_DOWN, SCI_CTRL, SCI_DOCUMENTEND);
 #endif // __WXMAC__
+
+    static_cast<ListBoxImpl*>(ac.lb)->SetListInfo(&listType, &(ac.posStart),
+                                                  &(ac.startLen));
 }
 
 
@@ -1397,24 +1400,6 @@ void ScintillaWX::DoMarkerDefineBitmap(int markerNumber, const wxBitmap& bmp) {
 
 void ScintillaWX::DoRegisterImage(int type, const wxBitmap& bmp) {
     static_cast<ListBoxImpl*>(ac.lb)->RegisterImageHelper(type, bmp);
-}
-
-void ScintillaWX::SetListBoxColours(const wxColour& background,
-                                          const wxColour& text,
-                                          const wxColour& highlight,
-                                          const wxColour& highlightText)
-{
-    static_cast<ListBoxImpl*>(ac.lb)->SetColours(background, text,
-                                                  highlight, highlightText);
-}
-
-void ScintillaWX::UseListCtrlStyleForLists(bool useListCtrl,
-                                           const wxColour& currentBgColour,
-                                           const wxColour& currentTextColour)
-{
-    static_cast<ListBoxImpl*>(ac.lb)->UseListCtrlStyle(useListCtrl,
-                                                       currentBgColour,
-                                                       currentTextColour);
 }
 
 sptr_t ScintillaWX::DirectFunction(

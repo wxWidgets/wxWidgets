@@ -5187,16 +5187,6 @@ public:
     // Register an image for use in autocompletion lists.
     void RegisterImage(int type, const wxBitmap& bmp);
 
-    // Set the colours used to display the items in an autocompletion list.
-    void AutoCompSetColours(const wxColour& background, const wxColour& text,
-                            const wxColour& highlight,
-                            const wxColour& highlightText);
-
-    // Use a wxListCtrl to display autocompletion lists.
-    void AutoCompUseListCtrl(bool useListCtrl = true,
-                             const wxColour& currentBgColour = wxNullColour,
-                             const wxColour& currentTextColour = wxNullColour);
-
 
 
     // The following methods are nearly equivalent to their similarly named
@@ -5672,6 +5662,7 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_CLIPBOARD_COPY, wxStyledTex
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_CLIPBOARD_PASTE, wxStyledTextEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_AUTOCOMP_COMPLETED, wxStyledTextEvent );
 wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_MARGIN_RIGHT_CLICK, wxStyledTextEvent );
+wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_AUTOCOMP_SELECTION_CHANGE, wxStyledTextEvent );
 
 #else
     enum {
@@ -5713,7 +5704,8 @@ wxDECLARE_EXPORTED_EVENT( WXDLLIMPEXP_STC, wxEVT_STC_MARGIN_RIGHT_CLICK, wxStyle
         wxEVT_STC_CLIPBOARD_COPY,
         wxEVT_STC_CLIPBOARD_PASTE,
         wxEVT_STC_AUTOCOMP_COMPLETED,
-        wxEVT_STC_MARGIN_RIGHT_CLICK
+        wxEVT_STC_MARGIN_RIGHT_CLICK,
+        wxEVT_STC_AUTOCOMP_SELECTION_CHANGE
     };
 #endif
 
@@ -5760,7 +5752,7 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_CLIPBOARD_PASTE(id, fn)       wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CLIPBOARD_PASTE,       id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
 #define EVT_STC_AUTOCOMP_COMPLETED(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_COMPLETED,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
 #define EVT_STC_MARGIN_RIGHT_CLICK(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_MARGIN_RIGHT_CLICK,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
-
+#define EVT_STC_AUTOCOMP_SELECTION_CHANGE(id, fn)    wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_SELECTION_CHANGE,    id, wxID_ANY, wxStyledTextEventHandler( fn ), (wxObject *) NULL ),
 #endif
 
 #endif // wxUSE_STC
