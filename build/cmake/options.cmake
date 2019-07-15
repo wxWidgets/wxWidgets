@@ -45,7 +45,11 @@ if(WIN32)
 endif()
 
 wx_option(wxUSE_OPTIMISE "use speed-optimised C/C++ compiler flags for release build" OFF)
-wx_option(wxUSE_STRIPPED_RELEASE "remove debug symbols in release build" OFF)
+if(MSVC)
+    wx_option(wxUSE_STRIPPED_RELEASE "remove debug symbols in release build" OFF)
+else()
+    wx_option(wxUSE_STRIPPED_RELEASE "remove debug symbols in release build")
+endif()
 wx_option(wxUSE_NO_RTTI "disable RTTI support" OFF)
 
 # STL options
