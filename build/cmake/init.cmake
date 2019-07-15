@@ -36,7 +36,7 @@ if(MSVC)
               "Flags used by the CXX compiler during ${cfg_upper} builds." FORCE)
         endif()
     endforeach()
-    
+
     if(wxBUILD_MSVC_MULTIPROC)
         wx_string_append(CMAKE_C_FLAGS " /MP")
         wx_string_append(CMAKE_CXX_FLAGS " /MP")
@@ -44,7 +44,13 @@ if(MSVC)
 elseif(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
     if(wxBUILD_USE_STATIC_RUNTIME)
         if(MINGW)
-            set(STATIC_LINKER_FLAGS " -static -Wl,--exclude-libs=libgcc_eh.a -Wl,--exclude-libs=libpthread.a")
+            set(STATIC_LINKER_FLAGS " -static")
+            set(EXCLUDED_LIBS gcc_eh
+                              pthread
+            )
+            foreach(lib ${EXCLUDED_LIBS})
+                wx_string_append(STATIC_LINKER_FLAGS " -Wl,--exclude-libs=lib${lib}.a")
+            endforeach()
         else()
             set(STATIC_LINKER_FLAGS " -static-libgcc -static-libstdc++")
         endif()
