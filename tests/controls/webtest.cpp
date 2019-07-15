@@ -19,7 +19,6 @@
 #endif // WX_PRECOMP
 
 #include "testableframe.h"
-#include "wx/uiaction.h"
 #include "wx/webview.h"
 #include "asserthelper.h"
 #if wxUSE_WEBVIEW_IE
