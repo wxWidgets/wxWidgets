@@ -161,26 +161,18 @@ public:
 
     void Free();
 
-    // Font Names in macOS and iOS:
-    // while GetFaceName from now on returns the unique and never localized PostScript name of the font
-    // there are other types of names that are useful
-    
-    // returns the font family name eg Helvetica Neue
-    wxString GetFamilyName() const;
-    // returns the font style name eg Condensed Bold
-    wxString GetVariantName() const;
-    // returns the font display name (for UI), might be localized, eg Helvetica Neue Condensed Bold
-    wxString GetDisplayName() const;
-
-    static void UpdateNamesMap(const wxString& familyname, CTFontDescriptorRef descr);
-    static void UpdateNamesMap(const wxString& familyname, CTFontRef font);
+    // not all style attributes like condensed etc, are exposed in the public API methods
+    // for best fidelity PostScript names are useful, they are also used in the toString/fromString methods
+    wxString GetPostScriptName() const;
+    bool SetPostScriptName(const wxString& postScriptName);
 
     static CGFloat GetCTWeight( CTFontRef font );
     static CGFloat GetCTWeight( CTFontDescriptorRef font );
     static CGFloat GetCTSlant( CTFontDescriptorRef font );
 
-
     CTFontDescriptorRef GetCTFontDescriptor() const;
+    
+    void RealizeResource() const;
 private:
     // attributes for regenerating a CTFontDescriptor, stay close to native values
     // for better roundtrip fidelity
@@ -189,10 +181,8 @@ private:
     CGFloat       m_ctSize;
     wxFontFamily  m_family;
 
-    wxString      m_styleName;
     wxString      m_familyName;
-    wxString      m_faceName;
-    wxString      m_displayName;
+    wxString      m_postScriptName;
 
     // native font description
     wxCFRef<CTFontDescriptorRef> m_descriptor;
