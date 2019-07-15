@@ -2382,6 +2382,12 @@ private:
     void DoSetRowSize( int row, int height );
     void DoSetColSize( int col, int width );
 
+    // These methods can only be called when m_useNativeHeader is true and call
+    // SetColumnCount() and Set- or ResetColumnsOrder() as necessary on the
+    // native wxHeaderCtrl being used. Note that the first one already calls
+    // the second one, so it's never necessary to call both of them.
+    void SetNativeHeaderColCount();
+    void SetNativeHeaderColOrder();
 
     // these sets contain the indices of fixed, i.e. non-resizable
     // interactively, grid rows or columns and are NULL if there are no fixed

@@ -2438,7 +2438,7 @@ wxGrid::SetTable(wxGridTableBase *table,
         // Notice that this must be called after setting m_table as it uses it
         // indirectly, via wxGrid::GetColLabelValue().
         if ( m_useNativeHeader )
-            GetGridColHeader()->SetColumnCount(m_numCols);
+            SetNativeHeaderColCount();
 
         m_selection = new wxGridSelection( this, selmode );
         if (checkSelection)
@@ -4569,10 +4569,7 @@ void wxGrid::RefreshAfterColPosChange()
     // and make the changes visible
     if ( m_useNativeHeader )
     {
-        if ( m_colAt.empty() )
-            GetGridColHeader()->ResetColumnsOrder();
-        else
-            GetGridColHeader()->SetColumnsOrder(m_colAt);
+        SetNativeHeaderColOrder();
     }
     else
     {
@@ -5950,7 +5947,8 @@ void wxGrid::UseNativeColHeader(bool native)
     CreateColumnWindow();
 
     if ( m_useNativeHeader )
-        GetGridColHeader()->SetColumnCount(m_numCols);
+        SetNativeHeaderColCount();
+
     CalcWindowSizes();
 }
 
@@ -8492,6 +8490,25 @@ int  wxGrid::GetColMinimalAcceptableWidth() const
 int  wxGrid::GetRowMinimalAcceptableHeight() const
 {
     return m_minAcceptableRowHeight;
+}
+
+void wxGrid::SetNativeHeaderColCount()
+{
+    wxASSERT_MSG( m_useNativeHeader, "no column header window" );
+
+    GetGridColHeader()->SetColumnCount(m_numCols);
+
+    SetNativeHeaderColOrder();
+}
+
+void wxGrid::SetNativeHeaderColOrder()
+{
+    wxASSERT_MSG( m_useNativeHeader, "no column header window" );
+
+    if ( !m_colAt.empty() )
+        GetGridColHeader()->SetColumnsOrder(m_colAt);
+    else
+        GetGridColHeader()->ResetColumnsOrder();
 }
 
 // ----------------------------------------------------------------------------
