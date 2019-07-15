@@ -565,7 +565,6 @@ void wxTopLevelWindowGTK::Init()
     m_updateDecorSize = true;
     m_netFrameExtentsTimerId = 0;
     m_incWidth = m_incHeight = 0;
-    memset(&m_decorSize, 0, sizeof(m_decorSize));
 
     m_urgency_hint = -2;
 }
