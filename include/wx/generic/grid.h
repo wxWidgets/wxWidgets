@@ -1670,7 +1670,7 @@ public:
     // Accessors for component windows
     wxWindow* GetGridWindow() const            { return (wxWindow*)m_gridWin; }
     wxWindow* GetGridRowLabelWindow() const    { return (wxWindow*)m_rowLabelWin; }
-    wxWindow* GetGridColLabelWindow() const    { return m_colWindow; }
+    wxWindow* GetGridColLabelWindow() const    { return m_colLabelWin; }
     wxWindow* GetGridCornerLabelWindow() const { return (wxWindow*)m_cornerLabelWin; }
 
     // This one can only be called if we are using the native header window
@@ -1681,7 +1681,7 @@ public:
         // static_cast<> doesn't work without the full class declaration in
         // view and we prefer to avoid adding more compile-time dependencies
         // even at the cost of using reinterpret_cast<>
-        return reinterpret_cast<wxHeaderCtrl *>(m_colWindow);
+        return reinterpret_cast<wxHeaderCtrl *>(m_colLabelWin);
     }
 
     // Allow adjustment of scroll increment. The default is (15, 15).
@@ -1908,13 +1908,13 @@ protected:
     // the real type of the column window depends on m_useNativeHeader value:
     // if it is true, its dynamic type is wxHeaderCtrl, otherwise it is
     // wxGridColLabelWindow, use accessors below when the real type matters
-    wxWindow *m_colWindow;
+    wxWindow                *m_colLabelWin;
 
     wxGridColLabelWindow *GetColLabelWindow() const
     {
         wxASSERT_MSG( !m_useNativeHeader, "no column label window" );
 
-        return reinterpret_cast<wxGridColLabelWindow *>(m_colWindow);
+        return reinterpret_cast<wxGridColLabelWindow *>(m_colLabelWin);
     }
 
     wxGridTableBase          *m_table;

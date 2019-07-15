@@ -2322,8 +2322,8 @@ void wxGrid::Create()
     m_cornerLabelWin->SetOwnBackgroundColour(lbg);
     m_rowLabelWin->SetOwnForegroundColour(lfg);
     m_rowLabelWin->SetOwnBackgroundColour(lbg);
-    m_colWindow->SetOwnForegroundColour(lfg);
-    m_colWindow->SetOwnBackgroundColour(lbg);
+    m_colLabelWin->SetOwnForegroundColour(lfg);
+    m_colLabelWin->SetOwnBackgroundColour(lbg);
 
     m_gridWin->SetOwnForegroundColour(gfg);
     m_gridWin->SetOwnBackgroundColour(gbg);
@@ -2346,12 +2346,12 @@ void wxGrid::CreateColumnWindow()
 {
     if ( m_useNativeHeader )
     {
-        m_colWindow = new wxGridHeaderCtrl(this);
-        m_colLabelHeight = m_colWindow->GetBestSize().y;
+        m_colLabelWin = new wxGridHeaderCtrl(this);
+        m_colLabelHeight = m_colLabelWin->GetBestSize().y;
     }
     else // draw labels ourselves
     {
-        m_colWindow = new wxGridColLabelWindow(this);
+        m_colLabelWin = new wxGridColLabelWindow(this);
         m_colLabelHeight = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
     }
 }
@@ -2479,7 +2479,7 @@ void wxGrid::Init()
 
     m_cornerLabelWin = NULL;
     m_rowLabelWin = NULL;
-    m_colWindow = NULL;
+    m_colLabelWin = NULL;
     m_gridWin = NULL;
 
     m_table = NULL;
@@ -2754,8 +2754,8 @@ void wxGrid::CalcWindowSizes()
     if ( m_cornerLabelWin && m_cornerLabelWin->IsShown() )
         m_cornerLabelWin->SetSize( 0, 0, m_rowLabelWidth, m_colLabelHeight );
 
-    if ( m_colWindow && m_colWindow->IsShown() )
-        m_colWindow->SetSize( m_rowLabelWidth, 0, gw, m_colLabelHeight );
+    if ( m_colLabelWin && m_colLabelWin->IsShown() )
+        m_colLabelWin->SetSize( m_rowLabelWidth, 0, gw, m_colLabelHeight );
 
     if ( m_rowLabelWin && m_rowLabelWin->IsShown() )
         m_rowLabelWin->SetSize( 0, m_colLabelHeight, m_rowLabelWidth, gh );
@@ -2989,7 +2989,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             if ( !GetBatchCount() )
             {
                 CalcDimensions();
-                m_colWindow->Refresh();
+                m_colLabelWin->Refresh();
             }
         }
         result = true;
@@ -3047,7 +3047,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             if ( !GetBatchCount() )
             {
                 CalcDimensions();
-                m_colWindow->Refresh();
+                m_colLabelWin->Refresh();
             }
         }
         result = true;
@@ -3124,7 +3124,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             if ( !GetBatchCount() )
             {
                 CalcDimensions();
-                m_colWindow->Refresh();
+                m_colLabelWin->Refresh();
             }
         }
         result = true;
@@ -3510,7 +3510,7 @@ void wxGrid::UpdateColumnSortingIndicator(int col)
     if ( m_useNativeHeader )
         GetGridColHeader()->UpdateColumn(col);
     else if ( m_nativeColumnLabels )
-        m_colWindow->Refresh();
+        m_colLabelWin->Refresh();
     //else: sorting indicator display not yet implemented in grid version
 }
 
@@ -3795,7 +3795,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                     // the column didn't actually move anywhere
                     if ( col != -1 )
                         DoColHeaderClick(col);
-                    m_colWindow->Refresh();   // "unpress" the column
+                    m_colLabelWin->Refresh();   // "unpress" the column
                 }
                 else
                 {
@@ -3964,9 +3964,9 @@ void wxGrid::ChangeCursorMode(CursorMode mode,
 
     wxLogTrace(wxT("grid"),
                wxT("wxGrid cursor mode (mouse capture for %s): %s -> %s"),
-               win == m_colWindow ? wxT("colLabelWin")
-                                  : win ? wxT("rowLabelWin")
-                                        : wxT("gridWin"),
+               win == m_colLabelWin ? wxT("colLabelWin")
+                                    : win ? wxT("rowLabelWin")
+                                          : wxT("gridWin"),
                cursorModes[m_cursorMode], cursorModes[mode]);
 #endif // wxUSE_LOG_TRACE
 
@@ -4576,7 +4576,7 @@ void wxGrid::RefreshAfterColPosChange()
     }
     else
     {
-        m_colWindow->Refresh();
+        m_colLabelWin->Refresh();
     }
     m_gridWin->Refresh();
 }
@@ -4886,7 +4886,7 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
             if ( width_cell > 0 && height_label > 0 )
             {
                 wxRect anotherrect(x, rect_y, width_cell, height_label);
-                m_colWindow->Refresh(eraseb, &anotherrect);
+                m_colLabelWin->Refresh(eraseb, &anotherrect);
             }
 
             // Paint row labels part intersecting rect.
@@ -4906,7 +4906,7 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
         else
         {
             m_cornerLabelWin->Refresh(eraseb, NULL);
-            m_colWindow->Refresh(eraseb, NULL);
+            m_colLabelWin->Refresh(eraseb, NULL);
             m_rowLabelWin->Refresh(eraseb, NULL);
             m_gridWin->Refresh(eraseb, NULL);
         }
@@ -5944,7 +5944,7 @@ void wxGrid::UseNativeColHeader(bool native)
     if ( native == m_useNativeHeader )
         return;
 
-    delete m_colWindow;
+    delete m_colLabelWin;
     m_useNativeHeader = native;
 
     CreateColumnWindow();
@@ -6053,7 +6053,7 @@ void wxGrid::DrawColLabel(wxDC& dc, int col)
     {
         // It is reported that we need to erase the background to avoid display
         // artefacts, see #12055.
-        wxDCBrushChanger setBrush(dc, m_colWindow->GetBackgroundColour());
+        wxDCBrushChanger setBrush(dc, m_colLabelWin->GetBackgroundColour());
         dc.DrawRectangle(rect);
 
         rend.DrawBorder(*this, dc, rect);
@@ -6260,7 +6260,7 @@ void wxGrid::EndBatch()
         {
             CalcDimensions();
             m_rowLabelWin->Refresh();
-            m_colWindow->Refresh();
+            m_colLabelWin->Refresh();
             m_cornerLabelWin->Refresh();
             m_gridWin->Refresh();
         }
@@ -7216,12 +7216,12 @@ void wxGrid::SetColLabelSize( int height )
     {
         if ( height == 0 )
         {
-            m_colWindow->Show( false );
+            m_colLabelWin->Show( false );
             m_cornerLabelWin->Show( false );
         }
         else if ( m_colLabelHeight == 0 )
         {
-            m_colWindow->Show( true );
+            m_colLabelWin->Show( true );
             if ( m_rowLabelWidth > 0 )
                 m_cornerLabelWin->Show( true );
         }
@@ -7239,13 +7239,13 @@ void wxGrid::SetLabelBackgroundColour( const wxColour& colour )
     {
         m_labelBackgroundColour = colour;
         m_rowLabelWin->SetBackgroundColour( colour );
-        m_colWindow->SetBackgroundColour( colour );
+        m_colLabelWin->SetBackgroundColour( colour );
         m_cornerLabelWin->SetBackgroundColour( colour );
 
         if ( !GetBatchCount() )
         {
             m_rowLabelWin->Refresh();
-            m_colWindow->Refresh();
+            m_colLabelWin->Refresh();
             m_cornerLabelWin->Refresh();
         }
     }
@@ -7259,7 +7259,7 @@ void wxGrid::SetLabelTextColour( const wxColour& colour )
         if ( !GetBatchCount() )
         {
             m_rowLabelWin->Refresh();
-            m_colWindow->Refresh();
+            m_colLabelWin->Refresh();
         }
     }
 }
@@ -7270,7 +7270,7 @@ void wxGrid::SetLabelFont( const wxFont& font )
     if ( !GetBatchCount() )
     {
         m_rowLabelWin->Refresh();
-        m_colWindow->Refresh();
+        m_colLabelWin->Refresh();
     }
 }
 
@@ -7336,7 +7336,7 @@ void wxGrid::SetColLabelAlignment( int horiz, int vert )
 
     if ( !GetBatchCount() )
     {
-        m_colWindow->Refresh();
+        m_colLabelWin->Refresh();
     }
 }
 
@@ -7386,7 +7386,7 @@ void wxGrid::SetColLabelTextOrientation( int textOrientation )
         m_colLabelTextOrientation = textOrientation;
 
     if ( !GetBatchCount() )
-        m_colWindow->Refresh();
+        m_colLabelWin->Refresh();
 }
 
 void wxGrid::SetCornerLabelTextOrientation( int textOrientation )
@@ -8381,7 +8381,7 @@ void wxGrid::SetColSize( int col, int width )
     {
         long w, h;
         wxArrayString lines;
-        wxClientDC dc(m_colWindow);
+        wxClientDC dc(m_colLabelWin);
         dc.SetFont(GetLabelFont());
         StringToLines(GetColLabelValue(col), lines);
         if ( GetColLabelTextOrientation() == wxHORIZONTAL )
