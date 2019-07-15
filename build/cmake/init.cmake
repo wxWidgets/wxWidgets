@@ -64,7 +64,9 @@ elseif(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_CXX_COMPILER_ID}
         wx_string_append(CMAKE_EXE_LINKER_FLAGS_RELEASE "${LD_STRIPPING_FLAG}")
         wx_string_append(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${LD_STRIPPING_FLAG}")   
     else()
-        add_compile_options("-g")
+        set(COMPILER_DBGSYM_FLAG " -g")
+        wx_string_append(CMAKE_CXX_FLAGS_RELEASE "${COMPILER_DBGSYM_FLAG}")
+        wx_string_append(CMAKE_C_FLAGS_RELEASE "${COMPILER_DBGSYM_FLAG}")
     endif()
 endif()
 
