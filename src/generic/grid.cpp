@@ -2111,9 +2111,17 @@ void wxGrid::DoRenderBox( wxDC& dc, const int& style,
 
 void wxGridWindow::ScrollWindow( int dx, int dy, const wxRect *rect )
 {
-    wxWindow::ScrollWindow( dx, dy, rect );
-    m_owner->GetGridRowLabelWindow()->ScrollWindow( 0, dy, rect );
-    m_owner->GetGridColLabelWindow()->ScrollWindow( dx, 0, rect );
+    m_owner->ScrollWindow(dx, dy, rect);
+}
+
+void wxGrid::ScrollWindow( int dx, int dy, const wxRect *rect )
+{
+    // We must explicitly call wxWindow version to avoid infinite recursion as
+    // wxGridWindow::ScrollWindow() calls this method back.
+    m_gridWin->wxWindow::ScrollWindow( dx, dy, rect );
+
+    m_rowLabelWin->ScrollWindow( 0, dy, rect );
+    m_colLabelWin->ScrollWindow( dx, 0, rect );
 }
 
 void wxGridWindow::OnMouseEvent( wxMouseEvent& event )
