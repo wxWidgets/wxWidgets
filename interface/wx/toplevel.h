@@ -228,6 +228,12 @@ public:
     /**
         Iconizes or restores the window.
 
+        Note that in wxGTK the change to the window state is not immediate,
+        i.e. IsIconized() will typically return @false right after a call to
+        Iconize() and its return value will only change after the control flow
+        returns to the event loop and the notification about the window being
+        really iconized is received.
+
         @param iconize
             If @true, iconizes the window; if @false, shows and restores it.
 
@@ -284,6 +290,9 @@ public:
 
     /**
         Maximizes or restores the window.
+
+        Note that, just as with Iconize(), the change to the window state is
+        not immediate in at least wxGTK port.
 
         @param maximize
             If @true, maximizes the window, otherwise it restores it.
