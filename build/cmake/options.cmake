@@ -59,7 +59,9 @@ if(NOT WIN32)
 endif()
 
 wx_option(wxUSE_COMPILER_TLS "enable use of compiler TLS support")
-wx_option(wxUSE_VISIBILITY "use of ELF symbols visibility")
+if(NOT WIN32)
+    wx_option(wxUSE_VISIBILITY "use of ELF symbols visibility")
+endif()
 wx_option(wxUSE_UNSAFE_WXSTRING_CONV "provide unsafe implicit conversions in wxString to const char* or std::string")
 wx_option(wxUSE_REPRODUCIBLE_BUILD "enable reproducable build" OFF)
 
