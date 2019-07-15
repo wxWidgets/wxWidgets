@@ -224,6 +224,7 @@ private:
     QScrollBar *m_horzScrollBar; // owned by m_qtWindow when allocated
     QScrollBar *m_vertScrollBar; // owned by m_qtWindow when allocated
 
+    QWidget *QtGetClientWidget() const;
     QScrollBar *QtGetScrollBar( int orientation ) const;
     QScrollBar *QtSetScrollBar( int orientation, QScrollBar *scrollBar=NULL );
 
