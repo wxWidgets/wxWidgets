@@ -2707,6 +2707,12 @@ enum wxDataViewColumnFlags
 
     An instance of wxDataViewRenderer is used by this class to render its data.
 
+    @note In wxGTK, setting the width of the column doesn't happen immediately
+        when SetWidth() is called, but only slightly later and GetWidth() will
+        return the old width (0 initially) until this happens. If the column
+        widths are set before wxDataViewCtrl is initially shown, they will only
+        be effectively set when it becomes visible.
+
     @library{wxcore}
     @category{dvc}
 */
