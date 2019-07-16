@@ -166,7 +166,7 @@ void wxColourDialog::Init()
     gs_rectDialog.y = 0;
 }
 
-bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
+bool wxColourDialog::Create(wxWindow *parent, const wxColourData *data)
 {
     m_parent = parent;
     if (data)
