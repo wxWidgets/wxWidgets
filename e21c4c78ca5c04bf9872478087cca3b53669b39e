@@ -1,0 +1,1 @@
+All: Add wxFD_SHOW_HIDDEN flag to wxFileDialog (Igor Korot).
