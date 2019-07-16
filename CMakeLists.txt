@@ -23,9 +23,9 @@ if(APPLE AND NOT CMAKE_OSX_DEPLOYMENT_TARGET)
     set(CMAKE_OSX_DEPLOYMENT_TARGET 10.9 CACHE STRING "OS X Deployment Target")
 endif()
 
-project(wxWidgets)
-
 include(build/cmake/policies.cmake NO_POLICY_SCOPE)
+
+project(wxWidgets)
 
 # Initialize variables for quick access to wx root dir in sub dirs
 set(wxSOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
