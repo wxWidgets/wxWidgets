@@ -105,22 +105,24 @@ private:
     // empty string otherwise.
     virtual wxString NormalizeString(const wxString& s) const = 0;
 
-
     // Event handlers.
     void OnChar(wxKeyEvent& event);
+    void OnTextPaste(wxClipboardTextEvent& event);
     void OnKillFocus(wxFocusEvent& event);
-
 
     // Determine the current insertion point and text in the associated control.
     void GetCurrentValueAndInsertionPoint(wxString& val, int& pos) const;
 
+    // Simulates wxEVT_CHAR by inserting the specified char in the associated
+    // wxTextEntry.
+    void InsertChar(const wxChar ch) const;
 
+private:
     // Combination of wxVAL_NUM_XXX values.
     int m_style;
 
-
+private:
     wxDECLARE_EVENT_TABLE();
-
     wxDECLARE_NO_ASSIGN_CLASS(wxNumValidatorBase);
 };
 
@@ -320,6 +322,7 @@ private:
     // Minimal and maximal values accepted (inclusive).
     LongestValueType m_min, m_max;
 
+private:
     wxDECLARE_NO_ASSIGN_CLASS(wxIntegerValidatorBase);
 };
 
@@ -430,6 +433,7 @@ private:
     // Minimal and maximal values accepted (inclusive).
     LongestValueType m_min, m_max;
 
+private:
     wxDECLARE_NO_ASSIGN_CLASS(wxFloatingPointValidatorBase);
 };
 

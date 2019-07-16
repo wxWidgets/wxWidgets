@@ -27,6 +27,7 @@
   #include "wx/utils.h"
   #include "wx/msgdlg.h"
   #include "wx/intl.h"
+  #include "wx/clipbrd.h"
 #endif
 
 #include <ctype.h>
@@ -53,6 +54,29 @@ static bool wxIsNumeric(const wxString& val)
     return true;
 }
 
+namespace
+{
+wxString GetClipboardTextData()
+{
+    wxString strTxtData;
+
+    if (wxTheClipboard->Open())
+    {
+        if (wxTheClipboard->IsSupported(wxUSE_UNICODE ? wxDF_UNICODETEXT :
+                                        wxDF_TEXT))
+        {
+            wxTextDataObject txtDataObj;
+            wxTheClipboard->GetData(txtDataObj);
+            strTxtData = txtDataObj.GetText();
+        }
+
+        wxTheClipboard->Close();
+    }
+
+    return strTxtData;
+}
+} // Anonymous namespace
+
 // ----------------------------------------------------------------------------
 // wxTextValidator
 // ----------------------------------------------------------------------------
@@ -60,6 +84,7 @@ static bool wxIsNumeric(const wxString& val)
 wxIMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator);
 wxBEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
     EVT_CHAR(wxTextValidator::OnChar)
+    EVT_TEXT_PASTE(wxID_ANY, wxTextValidator::OnTextPaste)
 wxEND_EVENT_TABLE()
 
 wxTextValidator::wxTextValidator(long style, wxString *val)
@@ -307,6 +332,33 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
     event.Skip(false);
 }
 
+void wxTextValidator::OnTextPaste(wxClipboardTextEvent& WXUNUSED(event))
+{
+    wxString strTxtData = GetClipboardTextData();
+
+    // Here we simulate wxEVT_CHAR for each char of the clipboard text data.
+    for (wxString::const_iterator it = strTxtData.begin();
+         it != strTxtData.end(); it++)
+    {
+        // Check if this character is allowed in the current state.
+        wxString strValue;
+        int nPos;
+        GetCurrentValueAndInsertionPoint(strValue, nPos);
+
+        if (!IsCharOk(strValue, nPos, *it))
+        {
+            if (!wxValidator::IsSilent())
+            {
+                wxBell();
+            }
+        }
+        else
+        {
+            InsertChar(*it);
+        }
+    }
+}
+
 bool wxTextValidator::IsValidChar(const wxUniChar& c) const
 {
     if ( !m_validatorStyle ) // no filtering if HasFlag(wxFILTER_NONE)
@@ -371,6 +423,79 @@ bool wxTextValidator::ContainsExcludedCharacters(const wxString& str) const
     }
 
     return false;
+}
+
+// Check whether the specified character can be inserted in the control at the
+// given position in the string representing the current controls contents.
+bool wxTextValidator::IsCharOk(const wxString& WXUNUSED(strValue),
+                                 int WXUNUSED(nPos), const wxChar ch) const
+{
+    if (IsValid(ch).empty())
+    {
+        return true;
+    }
+
+    return false;
+}
+
+// Determine the current insertion point and text in the associated control.
+void wxTextValidator::GetCurrentValueAndInsertionPoint(wxString& strValue,
+                                                         int& nPos)
+{
+    const wxTextEntry *pTextEntry = GetTextEntry();
+
+    if (!pTextEntry)
+    {
+        return;
+    }
+
+    strValue = pTextEntry->GetValue();
+    nPos = pTextEntry->GetInsertionPoint();
+
+    long lSelFrom, lSelTo;
+    pTextEntry->GetSelection(&lSelFrom, &lSelTo);
+
+    const long lSelLen = lSelTo - lSelFrom;
+
+    if (lSelLen)
+    {
+        // Remove selected text because pressing a key would make it disappear.
+        strValue.erase(lSelFrom, lSelLen);
+
+        // And adjust the insertion point to have correct position in the new
+        // string.
+        if (nPos > lSelFrom)
+        {
+            if (nPos >= lSelTo)
+            {
+                nPos -= lSelLen;
+            }
+            else
+            {
+                nPos = lSelFrom;
+            }
+        }
+    }
+}
+
+// Simulates wxEVT_CHAR by inserting the specified char in the associated
+// wxTextEntry.
+void wxTextValidator::InsertChar(const wxChar ch)
+{
+    wxString strValue;
+    int nPos;
+    GetCurrentValueAndInsertionPoint(strValue, nPos);
+    strValue.insert(nPos, ch);
+
+    wxTextEntry *pTextEntry = GetTextEntry();
+
+    if (!pTextEntry)
+    {
+        return;
+    }
+
+    pTextEntry->ChangeValue(strValue);
+    pTextEntry->SetInsertionPoint(nPos + 1);
 }
 
 #endif
