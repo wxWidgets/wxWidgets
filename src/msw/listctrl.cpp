@@ -880,7 +880,7 @@ bool wxListCtrl::GetItem(wxListItem& info) const
 }
 
 // Check if the item is visible
-bool wxListCtrl::IsVisible(long item)
+bool wxListCtrl::IsVisible(long item) const
 {
     bool result = ::SendMessage( GetHwnd(), LVM_ISITEMVISIBLE, (WPARAM) item, 0 );
     if( result )
@@ -889,19 +889,10 @@ bool wxListCtrl::IsVisible(long item)
         wxRect itemRect;
         RECT headerRect;
 		GetItemRect( item, itemRect );
-        wxPoint ptClickHeader;
-        ptClickHeader.x = itemRect.GetX();
-        ptClickHeader.y = itemRect.GetY() + itemRect.GetHeight();
         if( Header_GetItemRect( hwndHeader, 0, &headerRect ) )
         {
-            wxRect wxRectHeader( headerRect.left, headerRect.top, headerRect.right - headerRect.left, headerRect.bottom - headerRect.top );
-            if( ( ptClickHeader.x >= wxRectHeader.x ) && ( ptClickHeader.y >= wxRectHeader.y )
-                && ( ( ptClickHeader.y - wxRectHeader.y ) <= wxRectHeader.height )
-                && ( ( ptClickHeader.x - wxRectHeader.x ) < wxRectHeader.width ) )
-//            if( wxRectHeader.Contains( ptClickHeader ) )
-            {
-                result = false;
-            }
+            wxRect wxRectHeader = wxRectFromRECT( headerRect );
+            result = itemRect.GetBottom() > wxRectHeader.GetBottom();
         }
     }
     return result;
