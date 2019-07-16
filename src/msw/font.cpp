@@ -402,13 +402,13 @@ void wxFontRefData::Free()
 // wxNativeFontInfo
 // ----------------------------------------------------------------------------
 
-wxNativeFontInfo::wxNativeFontInfo(const LOGFONT& lf_)
-    : lf(lf_)
+/* static */
+float wxNativeFontInfo::GetPointSizeFromLogFontHeight(int height)
 {
     // Determine the size in points using the primary screen DPI as we don't
     // have anything else here.
     const float ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
-    pointSize = 72.0f * abs(lf.lfHeight) / ppi;
+    return 72.0f * abs(height) / ppi;
 }
 
 void wxNativeFontInfo::Init()
@@ -535,8 +535,7 @@ void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
 
     // We don't have the right DPI to use here neither, but we need to update
     // the point size too, so fall back to the default.
-    const float ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
-    pointSize = 72.0f * pixelSize.GetHeight() / ppi;
+    pointSize = GetPointSizeFromLogFontHeight(lf.lfHeight);
 }
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
