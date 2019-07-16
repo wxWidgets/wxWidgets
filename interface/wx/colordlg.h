@@ -66,7 +66,7 @@ public:
 
         @see wxColourData
     */
-    wxColourDialog(wxWindow* parent, wxColourData* data = NULL);
+    wxColourDialog(wxWindow* parent, const wxColourData* data = NULL);
 
     /**
         Destructor.
@@ -76,7 +76,7 @@ public:
     /**
         Same as wxColourDialog().
     */
-    bool Create(wxWindow* parent, wxColourData* data = NULL);
+    bool Create(wxWindow* parent, const wxColourData* data = NULL);
 
     /**
         Returns the colour data associated with the colour dialog.
