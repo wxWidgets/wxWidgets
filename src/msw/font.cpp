@@ -658,11 +658,13 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     if ( !token.ToLong(&l) )
         return false;
 
+    bool setPointSizeFromHeight = false;
     switch ( l )
     {
         case 0:
-            // Fractional point size is not present in this version.
-            pointSize = 0.0f;
+            // Fractional point size is not present in this version, it will be
+            // set from lfHeight below in this case.
+            setPointSizeFromHeight = true;
             break;
 
         case 1:
@@ -685,6 +687,8 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     if ( !token.ToLong(&l) )
         return false;
     lf.lfHeight = l;
+    if ( setPointSizeFromHeight )
+        pointSize = GetPointSizeFromLogFontHeight(l);
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
