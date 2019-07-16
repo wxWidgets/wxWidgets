@@ -568,24 +568,6 @@ gtk_textctrl_populate_popup( GtkEntry *WXUNUSED(entry), GtkMenu *menu, wxTextCtr
 }
 
 //-----------------------------------------------------------------------------
-//  "changed"
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static void
-gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
-{
-    if ( win->IgnoreTextUpdate() )
-        return;
-
-    if ( win->MarkDirtyOnChange() )
-        win->MarkDirty();
-
-    win->SendTextUpdatedEvent();
-}
-}
-
-//-----------------------------------------------------------------------------
 //  "mark_set"
 //-----------------------------------------------------------------------------
 
@@ -774,16 +756,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     }
 
     // We want to be notified about text changes.
-    if (multi_line)
-    {
-        g_signal_connect (m_buffer, "changed",
-                          G_CALLBACK (gtk_text_changed_callback), this);
-    }
-    else
-    {
-        g_signal_connect (m_text, "changed",
-                          G_CALLBACK (gtk_text_changed_callback), this);
-    }
+    GTKConnectChangedSignal();
 
     // Catch to disable focus out handling
     g_signal_connect (m_text, "populate_popup",
@@ -885,7 +858,11 @@ GtkEntry *wxTextCtrl::GetEntry() const
 int wxTextCtrl::GTKIMFilterKeypress(GdkEventKey* event) const
 {
     if (IsSingleLine())
-        return wxTextEntry::GTKIMFilterKeypress(event);
+        return GTKEntryIMFilterKeypress(event);
+
+    // When not calling GTKEntryIMFilterKeypress(), we need to notify the code
+    // in wxTextEntry about the key presses explicitly.
+    GTKEntryOnKeypress(m_text);
 
     int result = false;
 #if GTK_CHECK_VERSION(2, 22, 0)
@@ -1371,23 +1348,20 @@ void wxTextCtrl::DiscardEdits()
     m_modified = false;
 }
 
+void wxTextCtrl::GTKOnTextChanged()
+{
+    if ( IgnoreTextUpdate() )
+        return;
+
+    if ( MarkDirtyOnChange() )
+        MarkDirty();
+
+    SendTextUpdatedEvent();
+}
+
 // ----------------------------------------------------------------------------
 // event handling
 // ----------------------------------------------------------------------------
-
-void wxTextCtrl::EnableTextChangedEvents(bool enable)
-{
-    if ( enable )
-    {
-        g_signal_handlers_unblock_by_func(GetTextObject(),
-            (gpointer)gtk_text_changed_callback, this);
-    }
-    else // disable events
-    {
-        g_signal_handlers_block_by_func(GetTextObject(),
-            (gpointer)gtk_text_changed_callback, this);
-    }
-}
 
 bool wxTextCtrl::IgnoreTextUpdate()
 {
