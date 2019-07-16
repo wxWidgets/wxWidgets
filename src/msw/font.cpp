@@ -402,13 +402,13 @@ void wxFontRefData::Free()
 // wxNativeFontInfo
 // ----------------------------------------------------------------------------
 
-wxNativeFontInfo::wxNativeFontInfo(const LOGFONT& lf_)
-    : lf(lf_)
+/* static */
+float wxNativeFontInfo::GetPointSizeFromLogFontHeight(int height)
 {
     // Determine the size in points using the primary screen DPI as we don't
     // have anything else here.
     const float ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
-    pointSize = 72.0f * abs(lf.lfHeight) / ppi;
+    return 72.0f * abs(height) / ppi;
 }
 
 void wxNativeFontInfo::Init()
@@ -535,8 +535,7 @@ void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
 
     // We don't have the right DPI to use here neither, but we need to update
     // the point size too, so fall back to the default.
-    const float ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
-    pointSize = 72.0f * pixelSize.GetHeight() / ppi;
+    pointSize = GetPointSizeFromLogFontHeight(lf.lfHeight);
 }
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
@@ -659,11 +658,13 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     if ( !token.ToLong(&l) )
         return false;
 
+    bool setPointSizeFromHeight = false;
     switch ( l )
     {
         case 0:
-            // Fractional point size is not present in this version.
-            pointSize = 0.0f;
+            // Fractional point size is not present in this version, it will be
+            // set from lfHeight below in this case.
+            setPointSizeFromHeight = true;
             break;
 
         case 1:
@@ -686,6 +687,8 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     if ( !token.ToLong(&l) )
         return false;
     lf.lfHeight = l;
+    if ( setPointSizeFromHeight )
+        pointSize = GetPointSizeFromLogFontHeight(l);
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
