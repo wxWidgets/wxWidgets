@@ -136,7 +136,7 @@ wxGenericColourDialog::wxGenericColourDialog()
 }
 
 wxGenericColourDialog::wxGenericColourDialog(wxWindow *parent,
-                                             wxColourData *data)
+                                             const wxColourData *data)
 {
     m_whichKind = 1;
     m_colourSelection = -1;
@@ -152,7 +152,7 @@ void wxGenericColourDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
     EndModal(wxID_CANCEL);
 }
 
-bool wxGenericColourDialog::Create(wxWindow *parent, wxColourData *data)
+bool wxGenericColourDialog::Create(wxWindow *parent, const wxColourData *data)
 {
     if ( !wxDialog::Create(GetParentForModalDialog(parent, 0), wxID_ANY,
                            _("Choose colour"),
