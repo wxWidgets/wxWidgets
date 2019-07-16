@@ -164,6 +164,9 @@ private:
     // size hint increments
     int m_incWidth, m_incHeight;
 
+    // position before it last changed
+    wxPoint m_lastPos;
+
     // is the frame currently iconized?
     bool m_isIconized;
 
