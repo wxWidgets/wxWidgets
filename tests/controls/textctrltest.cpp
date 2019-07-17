@@ -392,6 +392,13 @@ void TextCtrlTestCase::HitTestSingleLine()
             REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
             CHECK( pos > 3 );
         }
+
+        // Using negative coordinates works even under Xvfb, so test at least
+        // for this -- however this only works in wxGTK, not wxMSW.
+#ifdef __WXGTK__
+        REQUIRE( m_text->HitTest(wxPoint(-2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
+        CHECK( pos > 3 );
+#endif // __WXGTK__
     }
 #endif
 }
