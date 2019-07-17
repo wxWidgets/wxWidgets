@@ -24,6 +24,8 @@
 #include "wx/stc/stc.h"
 #include "wx/uiaction.h"
 
+#include "testwindow.h"
+
 #if defined(__WXOSX_COCOA__) || defined(__WXMSW__) || defined(__WXGTK__)
 
 class StcPopupWindowsTestCase
@@ -99,7 +101,7 @@ TEST_CASE_METHOD(StcPopupWindowsTestCase,
     if ( m_stc->AutoCompActive() )
         m_stc->AutoCompCancel();
 
-    CHECK( m_stc->HasFocus() );
+    CHECK_FOCUS_IS( m_stc );
     CHECK( m_focusAlwaysRetained );
 }
 
@@ -143,7 +145,7 @@ TEST_CASE_METHOD(StcPopupWindowsTestCase,
         m_stc->CallTipCancel();
 
     // Verify that clicking the call tip did not take focus from the STC.
-    CHECK( m_stc->HasFocus() );
+    CHECK_FOCUS_IS( m_stc );
     CHECK( m_focusAlwaysRetained );
 }
 

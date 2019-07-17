@@ -21,6 +21,8 @@
 
 #include "asserthelper.h"
 #include "testableframe.h"
+#include "testwindow.h"
+
 #include "wx/uiaction.h"
 #include "wx/caret.h"
 #include "wx/cshelp.h"
@@ -153,7 +155,7 @@ void WindowTestCase::FocusEvent()
     m_window->SetFocus();
 
     CPPUNIT_ASSERT(setfocus.WaitEvent(500));
-    CPPUNIT_ASSERT(m_window->HasFocus());
+    CHECK_FOCUS_IS( m_window );
 
     wxButton* button = new wxButton(wxTheApp->GetTopWindow(), wxID_ANY);
 
@@ -298,7 +300,7 @@ void WindowTestCase::Focus()
     if ( m_window->AcceptsFocus() )
     {
         m_window->SetFocus();
-        CPPUNIT_ASSERT(m_window->HasFocus());
+        CHECK_FOCUS_IS(m_window);
     }
 
     //Set the focus back to the main window
@@ -307,7 +309,7 @@ void WindowTestCase::Focus()
     if ( m_window->AcceptsFocusFromKeyboard() )
     {
         m_window->SetFocusFromKbd();
-        CPPUNIT_ASSERT(m_window->HasFocus());
+        CHECK_FOCUS_IS(m_window);
     }
 #endif
 }
