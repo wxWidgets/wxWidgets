@@ -47,7 +47,6 @@ bool wxStaticText::Create(wxWindow *parent,
             const wxString &name)
 {
     m_qtLabel = new wxQtStaticText( parent, this );
-    SetLabel(label);
 
     // Set the buddy to itself to get the mnemonic key but ensure that we don't have
     // any unwanted side effects, so disable the interaction:
@@ -64,7 +63,12 @@ bool wxStaticText::Create(wxWindow *parent,
     else
         m_qtLabel->setAlignment(Qt::AlignLeft);
 
-    return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
+    if ( !QtCreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
+        return false;
+
+    SetLabel(label);
+
+    return true;
 }
 
 void wxStaticText::SetLabel(const wxString& label)
