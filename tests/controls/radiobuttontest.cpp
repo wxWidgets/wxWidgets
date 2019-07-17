@@ -248,7 +248,15 @@ TEST_CASE("wxRadioButton::Focus", "[radiobutton][focus]")
     // And giving the focus to the panel shouldn't change radio button
     // selection.
     radioPanel->SetFocus();
+
+    // Under MSW, focus is always on the selected button, but in the other
+    // ports this is not necessarily the case, i.e. under wxGTK this check
+    // would fail because focus gets set to the first button -- even though the
+    // second one remains checked.
+#ifdef __WXMSW__
     CHECK_FOCUS_IS(radio2);
+#endif
+
     CHECK(!radio1->GetValue());
     CHECK(radio2->GetValue());
 }
