@@ -893,11 +893,11 @@ bool wxListCtrl::IsVisible(long item) const
         HWND hwndHeader = (HWND) ::SendMessage( GetHwnd(), LVM_GETHEADER, 0, 0 );
         wxRect itemRect;
         RECT headerRect;
-		GetItemRect( item, itemRect );
-        if( Header_GetItemRect( hwndHeader, 0, &headerRect ) )
+        if ( Header_GetItemRect(hwndHeader, 0, &headerRect ) )
         {
-            wxRect wxRectHeader = wxRectFromRECT( headerRect );
-            result = itemRect.GetBottom() > wxRectHeader.GetBottom();
+            GetItemRect( item, itemRect );
+            wxRect rectHeader = wxRectFromRECT( headerRect );
+            result = itemRect.GetBottom() > rectHeader.GetBottom();
         }
     }
     return result;

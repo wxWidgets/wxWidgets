@@ -1093,7 +1093,7 @@ public:
 
         @since 3.1.3
     */
-    bool IsVisible(long item);
+    bool IsVisible(long item) const;
 
     /**
         Sets the data of an item.

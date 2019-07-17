@@ -381,11 +381,11 @@ void MyFrame::OnToggleBell(wxCommandEvent& event)
 
 void MyFrame::OnCheckVisibility(wxCommandEvent& WXUNUSED(event))
 {
-    if( m_listCtrl->IsVisible( 2 ) )
+    if( m_listCtrl->IsVisible(2) )
         wxLogMessage( "Line 2 is visible" );
     else
         wxLogMessage( "Line 2 is not visible" );
-    if( m_listCtrl->IsVisible( 9 ) )
+    if( m_listCtrl->IsVisible(9) )
         wxLogMessage( "Line 9 is visible" );
     else
         wxLogMessage( "Line 9 is not visible" );
