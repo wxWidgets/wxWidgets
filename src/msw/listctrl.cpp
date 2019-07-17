@@ -322,22 +322,28 @@ void wxListCtrl::MSWSetExListStyles()
 {
     // we want to have some non default extended
     // styles because it's prettier (and also because wxGTK does it like this)
-    ::SendMessage
-    (
-        GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0,
+    int exStyle =
         LVS_EX_LABELTIP |
         LVS_EX_FULLROWSELECT |
         LVS_EX_SUBITEMIMAGES |
-        LVS_EX_DOUBLEBUFFER |
         // normally this should be governed by a style as it's probably not
         // always appropriate, but we don't have any free styles left and
         // it seems better to enable it by default than disable
-        LVS_EX_HEADERDRAGDROP
-    );
+        LVS_EX_HEADERDRAGDROP;
 
-    // As we use LVS_EX_DOUBLEBUFFER above, we don't need to erase our
-    // background and doing it only results in flicker.
-    SetBackgroundStyle(wxBG_STYLE_PAINT);
+    if ( wxApp::GetComCtl32Version() >= 600 )
+    {
+        // We must enable double buffering when using the system theme to avoid
+        // various display glitches and it should be harmless to just always do
+        // it when using comctl32.dll v6.
+        exStyle |= LVS_EX_DOUBLEBUFFER;
+
+        // When using LVS_EX_DOUBLEBUFFER, we don't need to erase our
+        // background and doing it only results in flicker.
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
+    }
+
+    ::SendMessage(GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0, exStyle);
 }
 
 WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
