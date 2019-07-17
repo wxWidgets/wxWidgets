@@ -47,7 +47,7 @@ bool wxStaticText::Create(wxWindow *parent,
             const wxString &name)
 {
     m_qtLabel = new wxQtStaticText( parent, this );
-    m_qtLabel->setText( wxQtConvertString( label ) );
+    SetLabel(label);
 
     // Set the buddy to itself to get the mnemonic key but ensure that we don't have
     // any unwanted side effects, so disable the interaction:
