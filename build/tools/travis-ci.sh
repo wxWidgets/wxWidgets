@@ -68,7 +68,7 @@ case $wxTOOLSET in
 
         if [ "$wxUSE_XVFB" = 1 ]; then
             echo 'Testing GUI using Xvfb...' && echo -en 'travis_fold:start:script.testing_gui\\r'
-            pushd tests && xvfb-run -a ./test_gui && popd
+            pushd tests && xvfb-run -a -s '-screen 0 1600x1200x24' ./test_gui && popd
             echo -en 'travis_fold:end:script.testing_gui\\r'
         fi
 
