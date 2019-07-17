@@ -66,8 +66,8 @@ case $wxTOOLSET in
         pushd tests && ./test && popd
         echo -en 'travis_fold:end:script.testing\\r'
 
-        if [ "$(uname -s)" = "Linux" ]; then
-            echo 'Testing GUI...' && echo -en 'travis_fold:start:script.testing_gui\\r'
+        if [ "$wxUSE_XVFB" = 1 ]; then
+            echo 'Testing GUI using Xvfb...' && echo -en 'travis_fold:start:script.testing_gui\\r'
             pushd tests && xvfb-run -a ./test_gui && popd
             echo -en 'travis_fold:end:script.testing_gui\\r'
         fi
