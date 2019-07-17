@@ -377,8 +377,21 @@ void TextCtrlTestCase::HitTestSingleLine()
         // wxGTK must be given an opportunity to lay the text out.
         wxYield();
 
-        REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
-        CHECK( pos > 3 );
+        // For some reason, this test consistently fails when running under
+        // Xvfb. Debugging shows that the text gets scrolled too far, instead
+        // of scrolling by ~156 characters, leaving the remaining 44 shown, in
+        // normal runs, it gets scrolled by all 200 characters, leaving nothing
+        // shown. It's not clear why does it happen, and there doesn't seem
+        // anything we can do about it.
+        if ( IsRunningUnderXVFB() )
+        {
+            WARN("Skipping test known to fail under Xvfb");
+        }
+        else
+        {
+            REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
+            CHECK( pos > 3 );
+        }
     }
 #endif
 }
