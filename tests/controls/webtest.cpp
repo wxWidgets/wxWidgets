@@ -64,6 +64,16 @@ protected:
 
 TEST_CASE_METHOD(WebViewTestCase, "WebView", "[wxWebView]")
 {
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
+    wxString value;
+    if ( !wxGetEnv("wxTEST_WEBVIEW_GTK2", &value) || value != "1" )
+    {
+        WARN("Skipping WebView tests known to fail with wxGTK 2, set "
+             "wxTEST_WEBVIEW_GTK2=1 to force running them.");
+        return;
+    }
+#endif
+
     m_browser -> Create(wxTheApp->GetTopWindow(), wxID_ANY);
     ENSURE_LOADED;
 
