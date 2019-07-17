@@ -154,23 +154,11 @@ wxListItemData::wxListItemData(wxListMainWindow *owner)
 // Check if the item is visible
 bool wxGenericListCtrl::IsVisible(long item) const
 {
-    wxRect itemRect, rect;
+    wxRect itemRect;
     GetItemRect( item, itemRect );
-    rect = GetClientRect();
-/*    if( itemRect.y + itemRect.height <= 0 || itemRect.GetTop() > rect.GetBottom() )
-        return false;
-    else
-    {
-        wxRect headerRect( 0, 0, rect.GetWidth(), 0 );
-        if( m_headerWin )
-            headerRect = m_headerWin->GetRect();
-        if( itemRect.Intersects( headerRect ) )
-            return false;
-        else
-            return true;
-    }*/
-    bool visible = rect.Intersects( itemRect );
-    if( visible && m_headerWin )
+    const wxRect clientRect = GetClientRect();
+    bool visible = clientRect.Intersects( itemRect );
+    if ( visible && m_headerWin )
     {
         wxRect headerRect = m_headerWin->GetClientRect();
         headerRect.height++;
