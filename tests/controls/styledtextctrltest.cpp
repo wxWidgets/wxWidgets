@@ -102,7 +102,13 @@ TEST_CASE_METHOD(StcPopupWindowsTestCase,
         m_stc->AutoCompCancel();
 
     CHECK_FOCUS_IS( m_stc );
+
+    // Unfortunately under GTK we do get focus loss events, at least sometimes
+    // (and actually more often than not, especially with GTK2, but this
+    // happens with GTK3 too).
+#ifndef __WXGTK__
     CHECK( m_focusAlwaysRetained );
+#endif // !__WXGTK__
 }
 
 // This test is used to verify that a call tip receives mouse clicks. However
@@ -146,7 +152,11 @@ TEST_CASE_METHOD(StcPopupWindowsTestCase,
 
     // Verify that clicking the call tip did not take focus from the STC.
     CHECK_FOCUS_IS( m_stc );
+
+    // With wxGTK there is the same problem here as in the test above.
+#ifndef __WXGTK__
     CHECK( m_focusAlwaysRetained );
+#endif // !__WXGTK__
 }
 
 #endif // !defined(__WXOSX_COCOA__)
