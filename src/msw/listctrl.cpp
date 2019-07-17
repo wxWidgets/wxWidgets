@@ -2755,10 +2755,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     switch ( nmhdr->code )
     {
         case HDN_ITEMCHANGING:
-            // Always let the default handling of this event take place,
-            // otherwise the selected items are not redrawn to correspond to
-            // the new column widths, see #18032.
-            return false;
+            // Always let the default handling of this event take place when
+            // using comctl32.dll v6, as otherwise the selected items are not
+            // redrawn to correspond to the new column widths, see #18032.
+            if ( wxApp::GetComCtl32Version() >= 600 )
+                return false;
+            break;
 
         case LVN_DELETEALLITEMS:
             // always return true to suppress all additional LVN_DELETEITEM
