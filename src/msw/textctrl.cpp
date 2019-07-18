@@ -2910,21 +2910,23 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
     if ( style.HasFontUnderlined() )
     {
         cf.dwMask |= CFM_UNDERLINETYPE;
+        BYTE underlineType = CFU_UNDERLINENONE;
         switch ( style.GetUnderlineType() )
         {
-            case wxTEXT_ATTR_UNDERLINE_NONE:
-                cf.bUnderlineType = CFU_UNDERLINENONE;
-                break;
             case wxTEXT_ATTR_UNDERLINE_SOLID:
-                cf.bUnderlineType = CFU_UNDERLINE;
+                underlineType = CFU_UNDERLINE;
                 break;
             case wxTEXT_ATTR_UNDERLINE_DOUBLE:
-                cf.bUnderlineType = CFU_UNDERLINEDOUBLE;
+                underlineType = CFU_UNDERLINEDOUBLE;
                 break;
-            case wxTEXT_ATTR_UNDERLINE_WAVE:
-                cf.bUnderlineType = CFU_UNDERLINEWAVE;
+            case wxTEXT_ATTR_UNDERLINE_SPECIAL:
+                underlineType = CFU_UNDERLINEWAVE;
+                break;
+            default:
+                underlineType = CFU_UNDERLINENONE;
                 break;
         }
+        cf.bUnderlineType = underlineType;
 
 #if _RICHEDIT_VER >= 0x0800
         BYTE colour = 0;
@@ -3266,7 +3268,10 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
             underlineType = wxTEXT_ATTR_UNDERLINE_DOUBLE;
             break;
         case CFU_UNDERLINEWAVE:
-            underlineType = wxTEXT_ATTR_UNDERLINE_WAVE;
+            underlineType = wxTEXT_ATTR_UNDERLINE_SPECIAL;
+            break;
+        default:
+            underlineType = wxTEXT_ATTR_UNDERLINE_NONE;
             break;
     }
 

@@ -275,7 +275,7 @@ enum wxTextAttrUnderlineType
      wxTEXT_ATTR_UNDERLINE_NONE,
      wxTEXT_ATTR_UNDERLINE_SOLID,
      wxTEXT_ATTR_UNDERLINE_DOUBLE,
-     wxTEXT_ATTR_UNDERLINE_WAVE
+     wxTEXT_ATTR_UNDERLINE_SPECIAL
 };
 
 // ----------------------------------------------------------------------------

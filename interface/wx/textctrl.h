@@ -229,7 +229,7 @@ enum wxTextAttrUnderlineType
      wxTEXT_ATTR_UNDERLINE_NONE,
      wxTEXT_ATTR_UNDERLINE_SOLID,
      wxTEXT_ATTR_UNDERLINE_DOUBLE,
-     wxTEXT_ATTR_UNDERLINE_WAVE
+     wxTEXT_ATTR_UNDERLINE_SPECIAL
 };
 
 /**
@@ -830,20 +830,29 @@ public:
     void SetFontStyle(wxFontStyle fontStyle);
 
     /**
-        Sets the font underlining (solid line, using text colour).
+        Sets the font underlining (solid line, text colour).
     */
     void SetFontUnderlined(bool underlined);
 
     /**
-        Sets the font underlining with a wxTextAttrUnderlineType and wxColour.
-        Specifying wxNullColour will use the text colour.
+        Sets the font underlining.
 
-        @note On wxMSW, wxTEXT_ATTR_UNDERLINE_DOUBLE is shown as wxTEXT_ATTR_UNDERLINE_SOLID. There is only a limited number of colours supported,
-        the RGB values are listed <a href="https://docs.microsoft.com/en-us/windows/win32/api/tom/nf-tom-itextdocument2-geteffectcolor">here</a>.
+        @param type Type of underline.
 
-        @note On wxGTK, underline colour is only supported by wxGTK3. GTK might overrule the colour of wxTEXT_ATTR_UNDERLINE_WAVE.
+        @param colour Colour to use for underlining, text colour is used by
+        default.
 
-        @note On wxOSX, wxTEXT_ATTR_UNDERLINE_WAVE is shown as a dotted line.
+        @note On wxMSW, wxTEXT_ATTR_UNDERLINE_DOUBLE is shown as
+        wxTEXT_ATTR_UNDERLINE_SOLID. There is only a limited number of colours
+        supported, the RGB values are listed
+        <a href="https://docs.microsoft.com/en-us/windows/win32/api/tom/nf-tom-itextdocument2-geteffectcolor">here</a>.
+        wxTEXT_ATTR_UNDERLINE_SPECIAL is shown as a waved line.
+
+        @note On wxGTK, underline colour is only supported by wxGTK3.
+        wxTEXT_ATTR_UNDERLINE_SPECIAL is shown as a waved line. GTK might
+        overrule the colour of wxTEXT_ATTR_UNDERLINE_SPECIAL.
+
+        @note On wxOSX, wxTEXT_ATTR_UNDERLINE_SPECIAL is shown as a dotted line.
 
         @since 3.1.3
     */

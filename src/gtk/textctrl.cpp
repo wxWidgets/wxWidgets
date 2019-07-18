@@ -126,20 +126,20 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
 
     if ( attr.HasFontUnderlined() )
     {
-        PangoUnderline pangoUnderlineStyle;
+        PangoUnderline pangoUnderlineStyle = PANGO_UNDERLINE_NONE;
         switch ( attr.GetUnderlineType() )
         {
-            case wxTEXT_ATTR_UNDERLINE_NONE:
-                pangoUnderlineStyle = PANGO_UNDERLINE_NONE;
-                break;
             case wxTEXT_ATTR_UNDERLINE_SOLID:
                 pangoUnderlineStyle = PANGO_UNDERLINE_SINGLE;
                 break;
             case wxTEXT_ATTR_UNDERLINE_DOUBLE:
                 pangoUnderlineStyle = PANGO_UNDERLINE_DOUBLE;
                 break;
-            case wxTEXT_ATTR_UNDERLINE_WAVE:
+            case wxTEXT_ATTR_UNDERLINE_SPECIAL:
                 pangoUnderlineStyle = PANGO_UNDERLINE_ERROR;
+                break;
+            default:
+                pangoUnderlineStyle = PANGO_UNDERLINE_NONE;
                 break;
         }
 
@@ -1922,7 +1922,10 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
                 underlineType = wxTEXT_ATTR_UNDERLINE_DOUBLE;
                 break;
             case PANGO_UNDERLINE_ERROR:
-                underlineType = wxTEXT_ATTR_UNDERLINE_WAVE;
+                underlineType = wxTEXT_ATTR_UNDERLINE_SPECIAL;
+                break;
+            default:
+                underlineType = wxTEXT_ATTR_UNDERLINE_NONE;
                 break;
         }
 

@@ -1086,12 +1086,15 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
                     underlineType = wxTEXT_ATTR_UNDERLINE_DOUBLE;
                     break;
                 case NSUnderlineStyleSingle | NSUnderlinePatternDot:
-                    underlineType = wxTEXT_ATTR_UNDERLINE_WAVE;
+                    underlineType = wxTEXT_ATTR_UNDERLINE_SPECIAL;
+                    break;
+                default:
+                    underlineType = wxTEXT_ATTR_UNDERLINE_NONE;
                     break;
             }
         }
 
-        wxColour underlineColour = wxNullColour;
+        wxColour underlineColour;
         if ( ulcolor )
             underlineColour = wxColour(ulcolor);
 
@@ -1123,24 +1126,23 @@ void wxNSTextViewControl::SetStyle(long start,
             [attrs setValue:style.GetTextColour().OSXGetNSColor() forKey:NSForegroundColorAttributeName];
         if ( style.HasFontUnderlined() )
         {
+            int underlineStyle = NSUnderlineStyleNone;
             switch ( style.GetUnderlineType() )
             {
-                case wxTEXT_ATTR_UNDERLINE_NONE:
-                    [attrs setObject:[NSNumber numberWithInt:( NSUnderlineStyleNone )] forKey:NSUnderlineStyleAttributeName];
-                    break;
-
                 case wxTEXT_ATTR_UNDERLINE_SOLID:
-                    [attrs setObject:[NSNumber numberWithInt:( NSUnderlineStyleSingle )] forKey:NSUnderlineStyleAttributeName];
+                    underlineStyle = NSUnderlineStyleSingle;
                     break;
-
                 case wxTEXT_ATTR_UNDERLINE_DOUBLE:
-                    [attrs setObject:[NSNumber numberWithInt:( NSUnderlineStyleDouble )] forKey:NSUnderlineStyleAttributeName];
+                    underlineStyle = NSUnderlineStyleDouble;
                     break;
-
-                case wxTEXT_ATTR_UNDERLINE_WAVE:
-                    [attrs setObject:[NSNumber numberWithInt:( NSUnderlineStyleSingle | NSUnderlinePatternDot )] forKey:NSUnderlineStyleAttributeName];
+                case wxTEXT_ATTR_UNDERLINE_SPECIAL:
+                    underlineStyle = NSUnderlineStyleSingle | NSUnderlinePatternDot;
+                    break;
+                default:
+                    underlineStyle = NSUnderlineStyleNone;
                     break;
             }
+            [attrs setObject:[NSNumber numberWithInt:( underlineStyle )] forKey:NSUnderlineStyleAttributeName];
             wxColour colour = style.GetUnderlineColour();
             if ( colour.IsOk() )
             {
@@ -1166,24 +1168,23 @@ void wxNSTextViewControl::SetStyle(long start,
         if( style.HasFontUnderlined() )
         {
             NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+            int underlineStyle = NSUnderlineStyleNone;
             switch ( style.GetUnderlineType() )
             {
-                case wxTEXT_ATTR_UNDERLINE_NONE:
-                    [dict setObject:[NSNumber numberWithInt:( NSUnderlineStyleNone )] forKey:NSUnderlineStyleAttributeName];
-                    break;
-
                 case wxTEXT_ATTR_UNDERLINE_SOLID:
-                    [dict setObject:[NSNumber numberWithInt:( NSUnderlineStyleSingle )] forKey:NSUnderlineStyleAttributeName];
+                    underlineStyle = NSUnderlineStyleSingle;
                     break;
-
                 case wxTEXT_ATTR_UNDERLINE_DOUBLE:
-                    [dict setObject:[NSNumber numberWithInt:( NSUnderlineStyleDouble )] forKey:NSUnderlineStyleAttributeName];
+                    underlineStyle = NSUnderlineStyleDouble;
                     break;
-
-                case wxTEXT_ATTR_UNDERLINE_WAVE:
-                    [dict setObject:[NSNumber numberWithInt:( NSUnderlineStyleSingle | NSUnderlinePatternDot )] forKey:NSUnderlineStyleAttributeName];
+                case wxTEXT_ATTR_UNDERLINE_SPECIAL:
+                    underlineStyle = NSUnderlineStyleSingle | NSUnderlinePatternDot;
+                    break;
+                default:
+                    underlineStyle = NSUnderlineStyleNone;
                     break;
             }
+            [dict setObject:[NSNumber numberWithInt:( underlineStyle )] forKey:NSUnderlineStyleAttributeName];
             wxColour colour = style.GetUnderlineColour();
             if ( colour.IsOk() )
             {

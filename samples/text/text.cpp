@@ -1237,7 +1237,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     attr.SetFontUnderlined(false);
     m_textrich->SetDefaultStyle(attr);
     m_textrich->AppendText(" is a ");
-    attr.SetFontUnderlined(wxTEXT_ATTR_UNDERLINE_WAVE, *wxRED);
+    attr.SetFontUnderlined(wxTEXT_ATTR_UNDERLINE_SPECIAL, *wxRED);
     m_textrich->SetDefaultStyle(attr);
     m_textrich->AppendText("mispeled");
     attr.SetFontUnderlined(false);
