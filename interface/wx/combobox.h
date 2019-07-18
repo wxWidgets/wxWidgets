@@ -38,8 +38,7 @@
            allows the user to choose from the list of options but doesn't allow
            to enter a value not present in the list.
     @style{wxCB_SORT}
-           Sorts the entries in the list alphabetically. Notice that this style
-           is not currently implemented in wxOSX.
+           Sorts the entries in the list alphabetically.
     @style{wxTE_PROCESS_ENTER}
            The control will generate the event @c wxEVT_TEXT_ENTER
            (otherwise pressing Enter key is either processed internally by the
