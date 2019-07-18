@@ -177,7 +177,7 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
                 "<img width=\"100\" height=\"500\" src=\"dummy\"/>"
                 "<div>%s</div>"
                 "<br/>"
-                "<img width=\"100\" height=\"400\" src=\"dummy\"/>",
+                "<img width=\"100\" height=\"500\" src=\"dummy\"/>",
                 text
             )
        );
@@ -190,7 +190,7 @@ TEST_CASE("wxHtmlPrintout::Pagination", "[html][print]")
                 "<img width=\"100\" height=\"500\" src=\"dummy\"/>"
                 "<div style=\"page-break-inside:avoid\">%s</div>"
                 "<br/>"
-                "<img width=\"100\" height=\"400\" src=\"dummy\"/>",
+                "<img width=\"100\" height=\"500\" src=\"dummy\"/>",
                 text
             )
        );
