@@ -347,7 +347,15 @@ public:
     virtual wxString ConvertToText(wxHtmlSelection *WXUNUSED(sel)) const
         { return wxEmptyString; }
 
+    // This method is useful for debugging, to customize it for particular cell
+    // type, override GetDescription() and not this function itself.
+    virtual wxString Dump(int indent = 0) const;
+
 protected:
+    // Return the description used by Dump().
+    virtual wxString GetDescription() const;
+
+
     // pointer to the next cell
     wxHtmlCell *m_Next;
     // pointer to parent cell
@@ -399,6 +407,8 @@ public:
     void SetPreviousWord(wxHtmlWordCell *cell);
 
 protected:
+    virtual wxString GetDescription() const wxOVERRIDE;
+
     virtual wxString GetAllAsText() const
         { return m_Word; }
     virtual wxString GetPartAsText(int begin, int end) const
@@ -524,6 +534,8 @@ public:
     // Call Layout at least once before using GetMaxTotalWidth()
     virtual int GetMaxTotalWidth() const wxOVERRIDE { return m_MaxTotalWidth; }
 
+    virtual wxString Dump(int indent = 0) const wxOVERRIDE;
+
 protected:
     void UpdateRenderingStatePre(wxHtmlRenderingInfo& info,
                                  wxHtmlCell *cell) const;
@@ -577,6 +589,8 @@ public:
     virtual void DrawInvisible(wxDC& dc, int x, int y,
                                wxHtmlRenderingInfo& info) wxOVERRIDE;
 
+    virtual wxString GetDescription() const wxOVERRIDE;
+
 protected:
     wxColour m_Colour;
     unsigned m_Flags;
@@ -601,6 +615,8 @@ public:
                       wxHtmlRenderingInfo& info) wxOVERRIDE;
     virtual void DrawInvisible(wxDC& dc, int x, int y,
                                wxHtmlRenderingInfo& info) wxOVERRIDE;
+
+    virtual wxString GetDescription() const wxOVERRIDE;
 
 protected:
     wxFont m_Font;
