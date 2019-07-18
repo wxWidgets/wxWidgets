@@ -2812,6 +2812,30 @@ bool wxTextCtrl::SetFont(const wxFont& font)
 // styling support for rich edit controls
 // ----------------------------------------------------------------------------
 
+#if _RICHEDIT_VER >= 0x0800
+static const wxColour gs_underlineColourMap[] =
+{
+    // The colours are coming from https://docs.microsoft.com/en-us/windows/desktop/api/tom/nf-tom-itextdocument2-geteffectcolor.
+    wxNullColour,            // text colour
+    wxColour(0,   0,   0  ), // black
+    wxColour(0,   0,   255), // blue
+    wxColour(0,   255, 255), // cyan
+    wxColour(0,   255, 0  ), // green
+    wxColour(255, 0,   255), // magenta
+    wxColour(255, 0,   0  ), // red
+    wxColour(255, 255, 0  ), // yellow
+    wxColour(255, 255, 255), // white
+    wxColour(0,   0,   128), // navy
+    wxColour(0,   128, 128), // teal
+    wxColour(0,   128, 0  ), // light green
+    wxColour(128, 0,   128), // purple
+    wxColour(128, 0,   0  ), // maroon
+    wxColour(128, 128, 0  ), // olive
+    wxColour(128, 128, 128), // grey
+    wxColour(192, 192, 192), // light grey
+};
+#endif
+
 bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
 {
     // initialize CHARFORMAT struct
@@ -2903,43 +2927,16 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         }
 
 #if _RICHEDIT_VER >= 0x0800
-        // The colours are coming from https://docs.microsoft.com/en-us/windows/desktop/api/tom/nf-tom-itextdocument2-geteffectcolor.
         BYTE colour = 0;
-        wxColour col = style.GetUnderlineColour();
-        if ( col == wxNullColour )
-            colour = 0;
-        else if ( col == wxTheColourDatabase->Find("BLACK") )
-            colour = 1;
-        else if ( col == wxTheColourDatabase->Find("BLUE") )
-            colour = 2;
-        else if ( col == wxTheColourDatabase->Find("CYAN") )
-            colour = 3;
-        else if ( col == wxTheColourDatabase->Find("GREEN") )
-            colour = 4;
-        else if ( col == wxTheColourDatabase->Find("MAGENTA") )
-            colour = 5;
-        else if ( col == wxTheColourDatabase->Find("RED") )
-            colour = 6;
-        else if ( col == wxTheColourDatabase->Find("YELLOW") )
-            colour = 7;
-        else if ( col == wxTheColourDatabase->Find("WHITE") )
-            colour = 8;
-        else if ( col == wxColour(0, 0, 128) ) // navy
-            colour = 9;
-        else if ( col == wxTheColourDatabase->Find("TEAL") )
-            colour = 10;
-        else if ( col == wxTheColourDatabase->Find("LIGHT GREEN") )
-            colour = 11;
-        else if ( col == wxColour(128, 0, 128) ) // purple
-            colour = 12;
-        else if ( col == wxColour(128, 0, 0) ) // maroon
-            colour = 13;
-        else if ( col == wxTheColourDatabase->Find("OLIVE") )
-            colour = 14;
-        else if ( col == wxTheColourDatabase->Find("GREY") )
-            colour = 15;
-        else if ( col == wxTheColourDatabase->Find("LIGHT GREY") )
-            colour = 16;
+        const wxColour& col = style.GetUnderlineColour();
+        for ( size_t c = 0; c < WXSIZEOF(gs_underlineColourMap); ++c )
+        {
+            if ( col == gs_underlineColourMap[c] )
+            {
+                colour = static_cast<BYTE>(c);
+                break;
+            }
+        }
         cf.bUnderlineColor = colour;
 #endif
     }
@@ -3273,42 +3270,10 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
             break;
     }
 
-    wxColour underlineColour = wxNullColour;
+    wxColour underlineColour;
 #if _RICHEDIT_VER >= 0x0800
-    if ( cf.bUnderlineColor == 0 )
-        underlineColour = wxNullColour;
-    else if ( cf.bUnderlineColor == 1 )
-        underlineColour = wxTheColourDatabase->Find("BLACK");
-    else if ( cf.bUnderlineColor == 2 )
-        underlineColour = wxTheColourDatabase->Find("BLUE");
-    else if ( cf.bUnderlineColor == 3 )
-        underlineColour = wxTheColourDatabase->Find("CYAN");
-    else if ( cf.bUnderlineColor == 4 )
-        underlineColour = wxTheColourDatabase->Find("GREEN");
-    else if ( cf.bUnderlineColor == 5 )
-        underlineColour = wxTheColourDatabase->Find("MAGENTA");
-    else if ( cf.bUnderlineColor == 6 )
-        underlineColour = wxTheColourDatabase->Find("RED");
-    else if ( cf.bUnderlineColor == 7 )
-        underlineColour = wxTheColourDatabase->Find("YELLOW");
-    else if ( cf.bUnderlineColor == 8 )
-        underlineColour = wxTheColourDatabase->Find("WHITE");
-    else if ( cf.bUnderlineColor == 9 )
-        underlineColour = wxColour(0, 0, 128); // navy
-    else if ( cf.bUnderlineColor == 10 )
-        underlineColour = wxTheColourDatabase->Find("TEAL");
-    else if ( cf.bUnderlineColor == 11 )
-        underlineColour = wxTheColourDatabase->Find("LIGHT GREEN");
-    else if ( cf.bUnderlineColor == 12 )
-        underlineColour = wxColour(128, 0, 128); // purple
-    else if ( cf.bUnderlineColor == 13 )
-        underlineColour = wxColour(128, 0, 0); // maroon
-    else if ( cf.bUnderlineColor == 14 )
-        underlineColour = wxTheColourDatabase->Find("OLIVE");
-    else if ( cf.bUnderlineColor == 15 )
-        underlineColour = wxTheColourDatabase->Find("GREY");
-    else if ( cf.bUnderlineColor == 16 )
-        underlineColour = wxTheColourDatabase->Find("LIGHT GREY");
+    if ( cf.bUnderlineColor < WXSIZEOF(gs_underlineColourMap) )
+        underlineColour = gs_underlineColourMap[cf.bUnderlineColor];
 #endif
 
     if ( underlineType != wxTEXT_ATTR_UNDERLINE_NONE )
