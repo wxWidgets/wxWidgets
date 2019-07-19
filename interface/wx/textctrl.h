@@ -1347,6 +1347,8 @@ public:
 
         @param pt
             The position of the point to check, in window device coordinates.
+            In wxGTK, and only there, the coordinates can be negative, but in
+            portable code only positive values should be used.
         @param pos
             Receives the position of the character at the given position. May
             be @NULL.

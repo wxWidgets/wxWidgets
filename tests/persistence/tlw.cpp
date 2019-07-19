@@ -112,16 +112,25 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistTLW", "[persist][tlw]")
         frame->Show();
 
 #ifdef __WXGTK__
-        wxStopWatch sw;
-        while ( !frame->IsIconized() )
+        // When using Xvfb, the frame will never get iconized, presumably
+        // because there is no WM, so don't even bother waiting or warning.
+        if ( IsRunningUnderXVFB() )
         {
-            wxYield();
-            if ( sw.Time() > 500 )
+            checkIconized = false;
+        }
+        else
+        {
+            wxStopWatch sw;
+            while ( !frame->IsIconized() )
             {
-                // 500ms should be enough for the window to end up iconized.
-                WARN("Frame wasn't iconized as expected");
-                checkIconized = false;
-                break;
+                wxYield();
+                if ( sw.Time() > 500 )
+                {
+                    // 500ms should be enough for the window to end up iconized.
+                    WARN("Frame wasn't iconized as expected");
+                    checkIconized = false;
+                    break;
+                }
             }
         }
 #endif // __WXGTK__
