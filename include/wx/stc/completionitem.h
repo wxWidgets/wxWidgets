@@ -17,6 +17,9 @@ public:
     int GetIcon() const { return m_icon; }
     const wxString& GetDocumentation() const { return m_doc; }
     wxClientData* GetClientObject(){ return m_data; }
+    
+    //Add ability to support sorting items using wxVectorSort<T>
+    bool operator<(const wxCompletionItem& rhs) const { return m_name.Cmp(rhs.GetName()) < 0; }
 
 private:
     wxString m_name;

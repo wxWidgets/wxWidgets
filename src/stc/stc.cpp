@@ -5066,6 +5066,7 @@ void wxStyledTextCtrl::AutoCompShow(int lenEntered, const wxVector<wxCompletionI
 {
     m_autocompList.clear();
     m_autocompList = list;
+    wxVectorSort(m_autocompList); //code completion list must be sorted
     //Create correct format for Scintilla
     wxString itemListString;
     for ( int i = 0; i < m_autocompList.size(); i++ )
