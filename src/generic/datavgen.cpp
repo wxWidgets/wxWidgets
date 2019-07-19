@@ -2573,17 +2573,17 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 // Calculate the indent first
                 indent = GetOwner()->GetIndent() * node->GetIndentLevel();
 
-                // We don't have any method to return the size of the expander
-                // button currently (TODO: add one to wxRendererNative), so
-                // just guesstimate it.
-                const int expWidth = 3*dc.GetCharWidth();
+                // Get expander size
+                wxSize expSize = wxRendererNative::Get().GetExpanderSize(this);
 
                 // draw expander if needed
                 if ( node->HasChildren() )
                 {
                     wxRect rect = cell_rect;
                     rect.x += indent;
-                    rect.width = expWidth;
+                    rect.y += (cell_rect.GetHeight() - expSize.GetHeight()) / 2; // center vertically
+                    rect.width = expSize.GetWidth();
+                    rect.height = expSize.GetHeight();
 
                     int flag = 0;
                     if ( m_underMouse == node )
@@ -2598,7 +2598,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                     wxRendererNative::Get().DrawTreeItemButton( this, dc, rect, flag);
                 }
 
-                indent += expWidth;
+                indent += expSize.GetWidth();
 
                 // force the expander column to left-center align
                 cell->SetAlignment( wxALIGN_CENTER_VERTICAL );

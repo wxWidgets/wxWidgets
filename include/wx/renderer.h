@@ -253,6 +253,9 @@ public:
     // Returns the default size of a check box.
     virtual wxSize GetCheckBoxSize(wxWindow *win) = 0;
 
+    // Returns the default size of a expander.
+    virtual wxSize GetExpanderSize(wxWindow *win) = 0;
+
     // draw blank button
     //
     // flags may use wxCONTROL_PRESSED, wxCONTROL_CURRENT and wxCONTROL_ISDEFAULT
@@ -478,6 +481,9 @@ public:
 
     virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE
         { return m_rendererNative.GetCheckBoxSize(win); }
+
+   virtual wxSize GetExpanderSize(wxWindow *win) wxOVERRIDE
+        { return m_rendererNative.GetExpanderSize(win); }
 
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,

@@ -273,6 +273,8 @@ public:
 
     virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE;
 
+    virtual wxSize GetExpanderSize(wxWindow *win) wxOVERRIDE;
+
     virtual void DrawGauge(wxWindow* win,
                            wxDC& dc,
                            const wxRect& rect,
@@ -848,6 +850,26 @@ wxSize wxRendererXP::GetCheckBoxSize(wxWindow* win)
         }
     }
     return m_rendererNative.GetCheckBoxSize(win);
+}
+
+wxSize wxRendererXP::GetExpanderSize(wxWindow* win)
+{
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
+    wxUxThemeHandle hTheme(win, L"TREEVIEW");
+    if ( hTheme )
+    {
+        if ( ::IsThemePartDefined(hTheme, TVP_GLYPH, 0) )
+        {
+            SIZE expSize;
+            if (::GetThemePartSize(hTheme, NULL, TVP_GLYPH, GLPS_CLOSED, NULL,
+                                   TS_DRAW, &expSize) == S_OK)
+                return wxSize(expSize.cx, expSize.cy);
+
+        }
+    }
+
+    return m_rendererNative.GetExpanderSize(win);
 }
 
 void

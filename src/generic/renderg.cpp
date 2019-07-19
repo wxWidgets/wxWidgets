@@ -108,6 +108,8 @@ public:
 
     virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE;
 
+    virtual wxSize GetExpanderSize(wxWindow *win) wxOVERRIDE;
+
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
@@ -713,6 +715,13 @@ wxRendererGeneric::DrawCheckBox(wxWindow *WXUNUSED(win),
 }
 
 wxSize wxRendererGeneric::GetCheckBoxSize(wxWindow *win)
+{
+    wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
+
+    return win->FromDIP(wxSize(16, 16));
+}
+
+wxSize wxRendererGeneric::GetExpanderSize(wxWindow *win)
 {
     wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
 

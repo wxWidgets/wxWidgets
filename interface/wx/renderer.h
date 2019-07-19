@@ -236,6 +236,8 @@ public:
 
     virtual wxSize GetCheckBoxSize(wxWindow *win);
 
+    virtual wxSize GetExpanderSize(wxWindow* win);
+
     virtual void DrawPushButton(wxWindow *win, wxDC& dc,
                                 const wxRect& rect, int flags = 0 );
 
@@ -557,6 +559,16 @@ public:
             the theme defining the checkbox size under some platforms.
     */
     virtual wxSize GetCheckBoxSize(wxWindow* win) = 0;
+
+    /**
+        Returns the size of the expander used in tree-like controls.
+
+        @param win A valid, i.e. non-null, window pointer which is used to get
+            the theme defining the expander size under some platforms.
+
+        @since 3.1.3
+     */
+    virtual wxSize GetExpanderSize(wxWindow* win) = 0;
 
     /**
         Returns the height of a header button, either a fixed platform height if
