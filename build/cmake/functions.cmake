@@ -98,11 +98,15 @@ function(wx_set_common_target_properties target_name)
         ARCHIVE_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
         RUNTIME_OUTPUT_DIRECTORY "${wxOUTPUT_DIR}${wxPLATFORM_LIB_DIR}"
         )
-    if(NOT wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
-        # Enable higher warnings for most compilers/IDEs
-        if(MSVC)
-            target_compile_options(${target_name} PRIVATE /W4)
+
+    if(MSVC)
+        if(wxCOMMON_TARGET_PROPS_DEFAULT_WARNINGS)
+            set(MSVC_WARNING_LEVEL "/W3")
+        else()
+            set(MSVC_WARNING_LEVEL "/W4")
         endif()
+        target_compile_options(${target_name} PRIVATE ${MSVC_WARNING_LEVEL})
+    else()
         # TODO: add warning flags for other compilers
     endif()
 
