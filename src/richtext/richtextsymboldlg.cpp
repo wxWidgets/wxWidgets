@@ -1129,7 +1129,6 @@ void wxSymbolListCtrl::OnKeyDown(wxKeyEvent& event)
 //            currentLine = currentLineNow;
             break;
 #endif
-#ifdef __WXMSW__
         case WXK_TAB:
             // Since we are using wxWANTS_CHARS we need to send navigation
             // events for the tabs on MSW
@@ -1141,7 +1140,6 @@ void wxSymbolListCtrl::OnKeyDown(wxKeyEvent& event)
                 GetParent()->GetEventHandler()->ProcessEvent(ne);
             }
             // fall through to default
-#endif
         default:
             event.Skip();
             return;
