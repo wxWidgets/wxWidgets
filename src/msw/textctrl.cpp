@@ -81,6 +81,27 @@
     #define CFE_AUTOBACKCOLOR 0x04000000
 #endif
 
+// missing defines for MinGW build
+#ifndef CFM_UNDERLINETYPE
+    #define CFM_UNDERLINETYPE       0x00800000
+#endif
+
+#ifndef CFU_UNDERLINENONE
+    #define CFU_UNDERLINENONE       0
+#endif
+
+#ifndef CFU_UNDERLINE
+    #define CFU_UNDERLINE           1
+#endif
+
+#ifndef CFU_UNDERLINEDOUBLE
+    #define CFU_UNDERLINEDOUBLE     3
+#endif
+
+#ifndef CFU_UNDERLINEWAVE
+    #define CFU_UNDERLINEWAVE       8
+#endif
+
 #if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
 
 // dummy value used for m_dropTarget, different from any valid pointer value
@@ -2795,6 +2816,30 @@ bool wxTextCtrl::SetFont(const wxFont& font)
 // styling support for rich edit controls
 // ----------------------------------------------------------------------------
 
+#if _RICHEDIT_VER >= 0x0800
+static const wxColour gs_underlineColourMap[] =
+{
+    // The colours are coming from https://docs.microsoft.com/en-us/windows/desktop/api/tom/nf-tom-itextdocument2-geteffectcolor.
+    wxNullColour,            // text colour
+    wxColour(0,   0,   0  ), // black
+    wxColour(0,   0,   255), // blue
+    wxColour(0,   255, 255), // cyan
+    wxColour(0,   255, 0  ), // green
+    wxColour(255, 0,   255), // magenta
+    wxColour(255, 0,   0  ), // red
+    wxColour(255, 255, 0  ), // yellow
+    wxColour(255, 255, 255), // white
+    wxColour(0,   0,   128), // navy
+    wxColour(0,   128, 128), // teal
+    wxColour(0,   128, 0  ), // light green
+    wxColour(128, 0,   128), // purple
+    wxColour(128, 0,   0  ), // maroon
+    wxColour(128, 128, 0  ), // olive
+    wxColour(128, 128, 128), // grey
+    wxColour(192, 192, 192), // light grey
+};
+#endif
+
 bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
 {
     // initialize CHARFORMAT struct
@@ -2863,6 +2908,42 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         {
             cf.dwEffects |= CFE_STRIKEOUT;
         }
+    }
+
+    if ( style.HasFontUnderlined() )
+    {
+        cf.dwMask |= CFM_UNDERLINETYPE;
+        BYTE underlineType = CFU_UNDERLINENONE;
+        switch ( style.GetUnderlineType() )
+        {
+            case wxTEXT_ATTR_UNDERLINE_SOLID:
+                underlineType = CFU_UNDERLINE;
+                break;
+            case wxTEXT_ATTR_UNDERLINE_DOUBLE:
+                underlineType = CFU_UNDERLINEDOUBLE;
+                break;
+            case wxTEXT_ATTR_UNDERLINE_SPECIAL:
+                underlineType = CFU_UNDERLINEWAVE;
+                break;
+            default:
+                underlineType = CFU_UNDERLINENONE;
+                break;
+        }
+        cf.bUnderlineType = underlineType;
+
+#if _RICHEDIT_VER >= 0x0800
+        BYTE colour = 0;
+        const wxColour& col = style.GetUnderlineColour();
+        for ( size_t c = 0; c < WXSIZEOF(gs_underlineColourMap); ++c )
+        {
+            if ( col == gs_underlineColourMap[c] )
+            {
+                colour = static_cast<BYTE>(c);
+                break;
+            }
+        }
+        cf.bUnderlineColor = colour;
+#endif
     }
 
     if ( style.HasTextColour() )
@@ -3028,7 +3109,7 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
     // even try to do anything if it's the only thing we want to change
     if ( m_verRichEdit == 1 && !style.HasFont() && !style.HasTextColour() &&
         !style.HasLeftIndent() && !style.HasRightIndent() && !style.HasAlignment() &&
-        !style.HasTabs() )
+        !style.HasTabs() && !style.GetFontUnderlined() )
     {
         // nothing to do: return true if there was really nothing to do and
         // false if we failed to set bg colour
@@ -3180,6 +3261,32 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
         }
     }
 #endif // wxUSE_RICHEDIT2
+
+    wxTextAttrUnderlineType underlineType = wxTEXT_ATTR_UNDERLINE_NONE;
+    switch ( cf.bUnderlineType )
+    {
+        case CFU_UNDERLINE:
+            underlineType = wxTEXT_ATTR_UNDERLINE_SOLID;
+            break;
+        case CFU_UNDERLINEDOUBLE:
+            underlineType = wxTEXT_ATTR_UNDERLINE_DOUBLE;
+            break;
+        case CFU_UNDERLINEWAVE:
+            underlineType = wxTEXT_ATTR_UNDERLINE_SPECIAL;
+            break;
+        default:
+            underlineType = wxTEXT_ATTR_UNDERLINE_NONE;
+            break;
+    }
+
+    wxColour underlineColour;
+#if _RICHEDIT_VER >= 0x0800
+    if ( cf.bUnderlineColor < WXSIZEOF(gs_underlineColourMap) )
+        underlineColour = gs_underlineColourMap[cf.bUnderlineColor];
+#endif
+
+    if ( underlineType != wxTEXT_ATTR_UNDERLINE_NONE )
+        style.SetFontUnderlined(underlineType, underlineColour);
 
     // now get the paragraph formatting
     PARAFORMAT2 pf;
