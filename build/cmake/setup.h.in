@@ -187,6 +187,11 @@
 
 #cmakedefine01 wxUSE_EXCEPTIONS
 
+#cmakedefine01 wxUSE_NO_RTTI
+#if wxUSE_NO_RTTI
+    #define wxNO_RTTI 1
+#endif
+
 #cmakedefine01 wxUSE_EXTENDED_RTTI
 
 #cmakedefine01 wxUSE_LOG

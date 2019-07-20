@@ -103,7 +103,6 @@ if(wxUSE_NO_RTTI)
     elseif(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang"))
         wx_string_append(CMAKE_CXX_FLAGS " -fno-rtti")
     endif()
-    add_definitions("-DwxNO_RTTI")
 endif()
 
 # Build wxBUILD_FILE_ID used for config and setup path
