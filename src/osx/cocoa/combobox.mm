@@ -270,9 +270,11 @@ void wxNSComboBoxControl::InsertItem(int pos, const wxString& item)
     };
     if ( m_wxPeer->HasFlag( wxCB_SORT ) )
     {
+        wxCFStringRef itemLabel( item );
+        NSString * const cocoaStr = itemLabel.AsNSString();
         NSArray *objectValues = m_comboBox.objectValues;
-        [m_comboBox insertItemWithObjectValue:wxCFStringRef( item , m_wxPeer->GetFont().GetEncoding() ).AsNSString()
-                atIndex: [objectValues indexOfObject: wxCFStringRef( item , m_wxPeer->GetFont().GetEncoding() ).AsNSString()
+        [m_comboBox insertItemWithObjectValue:cocoaStr
+                atIndex: [objectValues indexOfObject: cocoaStr
                                        inSortedRange: NSMakeRange(0, objectValues.count)
                                        options: NSBinarySearchingInsertionIndex
                                        usingComparator: comp]];
