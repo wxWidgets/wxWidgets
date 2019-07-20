@@ -1034,7 +1034,7 @@ void wxSymbolListCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 void wxSymbolListCtrl::DoHandleItemClick(int item, int WXUNUSED(flags))
 {
-//    if (m_current != item)
+    if (m_current != item)
     {
         m_current = item;
         Refresh();
