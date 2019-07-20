@@ -211,6 +211,16 @@
 //                      in your own code (1 if you do, 0 if you don't)
 #define wxUSE_EXCEPTIONS    1
 
+// Set wxUSE_NO_RTTI to 1 to disable RTTI. Affects at least wxAny class.
+//
+// Default is 0
+//
+// Recommended setting: 0
+#define wxUSE_NO_RTTI 0
+#if wxUSE_NO_RTTI
+    #define wxNO_RTTI wxUSE_NO_RTTI
+#endif
+
 // Set wxUSE_EXTENDED_RTTI to 1 to use extended RTTI
 //
 // Default is 0
