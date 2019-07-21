@@ -1111,13 +1111,17 @@ void wxNSTextViewControl::SetStyle(long start,
                                 long end,
                                 const wxTextAttr& style)
 {
+    NSMutableParagraphStyle *paragraphStyle;
+    NSTextStorage *storage;
+    NSRange range;
+    double indent = style.GetLeftIndent() * mm2pt / 10.0;
+    NSMutableDictionary *attrs;
     if ( !m_textView )
         return;
 
     if ( start == -1 && end == -1 )
     {
-        NSMutableDictionary* const
-            attrs = [NSMutableDictionary dictionaryWithCapacity:5];
+        attrs = [NSMutableDictionary dictionaryWithCapacity:4];
         if ( style.HasFont() )
             [attrs setValue:style.GetFont().OSXGetNSFont() forKey:NSFontAttributeName];
         if ( style.HasBackgroundColour() )
@@ -1149,13 +1153,22 @@ void wxNSTextViewControl::SetStyle(long start,
                 [attrs setValue:colour.OSXGetNSColor() forKey:NSUnderlineColorAttributeName];
             }
         }
+        if ( style.HasLeftIndent() )
+        {
+            storage = [m_textView textStorage];
+            NSInteger insPoint = [[[m_textView selectedRanges] objectAtIndex:0] rangeValue].location;
+            range = NSMakeRange( insPoint, storage.string.length - insPoint );
+        }
+        else
+            [m_textView setTypingAttributes: attrs];
+
         [m_textView setTypingAttributes:attrs];
     }
     else // Set the attributes just for this range.
     {
-        NSRange range = NSMakeRange(start, end-start);
+        range = NSMakeRange(start, end-start);
 
-        NSTextStorage* storage = [m_textView textStorage];
+        storage = [m_textView textStorage];
         if ( style.HasFont() )
             [storage addAttribute:NSFontAttributeName value:style.GetFont().OSXGetNSFont() range:range];
 
@@ -1193,6 +1206,12 @@ void wxNSTextViewControl::SetStyle(long start,
             [storage addAttributes:dict range:range];
             [dict release];
         }
+        if ( style.HasLeftIndent() )
+        {
+//            storage = [m_textView textStorage];
+//            NSInteger insPoint = [[[m_textView selectedRanges] objectAtIndex:0] rangeValue].location;
+//            range = NSMakeRange( insPoint, storage.string.length - insPoint );
+        }
     }
 
     if ( style.HasAlignment() )
@@ -1209,6 +1228,20 @@ void wxNSTextViewControl::SetStyle(long start,
                 [m_textView setAlignment:NSLeftTextAlignment];
                 break;
         }
+    }
+    if( style.HasLeftIndent() )
+    {
+        paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle setFirstLineHeadIndent: indent];
+        [paragraphStyle setHeadIndent: indent];
+        [storage addAttribute: NSParagraphStyleAttributeName value: paragraphStyle range: range];
+        if( /*start == -1 && end == -1*/range.length == 0 )
+        {
+            [attrs setValue: paragraphStyle forKey: NSParagraphStyleAttributeName];
+            [m_textView setDefaultParagraphStyle:paragraphStyle];
+            [m_textView setTypingAttributes: attrs];
+        }
+        [paragraphStyle release];
     }
 }
 
