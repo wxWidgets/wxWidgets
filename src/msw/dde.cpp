@@ -806,7 +806,7 @@ bool wxDDEConnection::DoAdvise(const wxString& item,
         case wxIPC_LOCALE:
             wxFAIL_MSG( "Unsupported IPC format for Advise()" );
             return false;
-    };
+    }
 
     bool ok = DdePostAdvise(DDEIdInst, topic_atom, item_atom) != 0;
     if ( !ok )

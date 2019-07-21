@@ -43,7 +43,7 @@ wxSplitterWindowXmlHandler::wxSplitterWindowXmlHandler() : wxXmlResourceHandler(
 
 wxObject *wxSplitterWindowXmlHandler::DoCreateResource()
 {
-    XRC_MAKE_INSTANCE(splitter, wxSplitterWindow);
+    XRC_MAKE_INSTANCE(splitter, wxSplitterWindow)
 
     splitter->Create(m_parentAsWindow,
                      GetID(),

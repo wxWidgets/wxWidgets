@@ -2042,7 +2042,7 @@ bool wxEventBlocker::ProcessEvent(wxEvent& event)
             return true;   // yes, it should: mark this event as processed
     }
 
-    return wxEvtHandler::ProcessEvent(event);;
+    return wxEvtHandler::ProcessEvent(event);
 }
 
 #endif // wxUSE_GUI
