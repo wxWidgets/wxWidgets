@@ -1882,8 +1882,10 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     else // have custom attributes
     {
 #ifdef __WXGTK3__
-        style.SetBackgroundColour(*pattr->appearance.rgba[0]);
-        style.SetTextColour(*pattr->appearance.rgba[1]);
+        if (GdkRGBA* rgba = pattr->appearance.rgba[0])
+            style.SetBackgroundColour(*rgba);
+        if (GdkRGBA* rgba = pattr->appearance.rgba[1])
+            style.SetTextColour(*rgba);
 #else
         style.SetBackgroundColour(pattr->appearance.bg_color);
         style.SetTextColour(pattr->appearance.fg_color);
