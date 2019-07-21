@@ -213,6 +213,8 @@ private:
 class WXDLLIMPEXP_BASE wxObjectEventFunctor : public wxEventFunctor
 {
 public:
+    virtual ~wxObjectEventFunctor();
+
     wxObjectEventFunctor(wxObjectEventFunction method, wxEvtHandler *handler)
         : m_handler( handler ), m_method( method )
         { }
