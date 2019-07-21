@@ -4750,8 +4750,9 @@ int wxGetSystemMetrics(int nIndex, const wxWindow* win)
 
         if ( s_pfnGetSystemMetricsForDpi )
         {
-            const int y = ::GetDeviceCaps(::GetDC(tlw->GetHWND()), LOGPIXELSY);
-            return s_pfnGetSystemMetricsForDpi(nIndex, (UINT)y);
+            WindowHDC hdc(tlw->GetHWND());
+            const int dpi = ::GetDeviceCaps(hdc, LOGPIXELSY);
+            return s_pfnGetSystemMetricsForDpi(nIndex, (UINT)dpi);
         }
     }
 #else
@@ -4782,8 +4783,9 @@ bool wxSystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWi
 
         if ( s_pfnSystemParametersInfoForDpi )
         {
-            const int y = ::GetDeviceCaps(::GetDC(tlw->GetHWND()), LOGPIXELSY);
-            if ( s_pfnSystemParametersInfoForDpi(uiAction, uiParam, pvParam, fWinIni, y) == TRUE )
+            WindowHDC hdc(tlw->GetHWND());
+            const int dpi = ::GetDeviceCaps(hdc, LOGPIXELSY);
+            if ( s_pfnSystemParametersInfoForDpi(uiAction, uiParam, pvParam, fWinIni, (UINT)dpi) == TRUE )
             {
                 return true;
             }
