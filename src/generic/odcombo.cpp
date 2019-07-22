@@ -233,11 +233,18 @@ void wxVListBoxComboPopup::DismissWithEvent()
 
 void wxVListBoxComboPopup::SendComboBoxEvent( int selection )
 {
+    // TODO: wxVListBox should be refactored to inherit from wxItemContainer
+    //       and then we would be able to just call SendSelectionChangedEvent()
+    //       (which, itself, should be moved down to wxItemContainer from
+    //       wxControlWithItemsBase) instead of duplicating its code.
+
     wxCommandEvent evt(wxEVT_COMBOBOX,m_combo->GetId());
 
     evt.SetEventObject(m_combo);
 
     evt.SetInt(selection);
+    if ( selection != wxNOT_FOUND )
+        evt.SetString(m_strings[selection]);
 
     // Set client data, if any
     if ( selection >= 0 && (int)m_clientDatas.size() > selection )
