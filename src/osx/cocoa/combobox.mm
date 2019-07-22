@@ -264,14 +264,14 @@ int wxNSComboBoxControl::GetNumberOfItems() const
 
 void wxNSComboBoxControl::InsertItem(int pos, const wxString& item)
 {
+    wxCFStringRef itemLabel( item, m_wxPeer->GetFont().GetEncoding() );
+    NSString * const cocoaStr = itemLabel.AsNSString();
     NSComparator comp = ^(id obj1, id obj2)
     {
         return [obj1 caseInsensitiveCompare: obj2];
     };
     if ( m_wxPeer->HasFlag( wxCB_SORT ) )
     {
-        wxCFStringRef itemLabel( item );
-        NSString * const cocoaStr = itemLabel.AsNSString();
         NSArray *objectValues = m_comboBox.objectValues;
         [m_comboBox insertItemWithObjectValue:cocoaStr
                 atIndex: [objectValues indexOfObject: cocoaStr
@@ -280,7 +280,7 @@ void wxNSComboBoxControl::InsertItem(int pos, const wxString& item)
                                        usingComparator: comp]];
     }
     else
-        [m_comboBox insertItemWithObjectValue:wxCFStringRef( item , m_wxPeer->GetFont().GetEncoding() ).AsNSString() atIndex:pos];
+        [m_comboBox insertItemWithObjectValue:cocoaStr atIndex:pos];
 }
 
 void wxNSComboBoxControl::RemoveItem(int pos)
