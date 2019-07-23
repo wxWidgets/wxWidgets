@@ -264,7 +264,23 @@ int wxNSComboBoxControl::GetNumberOfItems() const
 
 void wxNSComboBoxControl::InsertItem(int pos, const wxString& item)
 {
-    [m_comboBox insertItemWithObjectValue:wxCFStringRef( item , m_wxPeer->GetFont().GetEncoding() ).AsNSString() atIndex:pos];
+    wxCFStringRef itemLabel(  item, m_wxPeer->GetFont().GetEncoding() );
+    NSString* const cocoaStr = itemLabel.AsNSString();
+
+    if ( m_wxPeer->HasFlag(wxCB_SORT) )
+    {
+        NSArray* const objectValues = m_comboBox.objectValues;
+
+        pos = [objectValues indexOfObject: cocoaStr
+                            inSortedRange: NSMakeRange(0, objectValues.count)
+                            options: NSBinarySearchingInsertionIndex
+                            usingComparator: ^(id obj1, id obj2)
+                                {
+                                    return [obj1 caseInsensitiveCompare: obj2];
+                                }];
+    }
+
+    [m_comboBox insertItemWithObjectValue:cocoaStr atIndex:pos];
 }
 
 void wxNSComboBoxControl::RemoveItem(int pos)
