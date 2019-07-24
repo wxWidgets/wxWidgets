@@ -1231,6 +1231,8 @@ void wxNSTextViewControl::SetStyle(long start,
     }
     if( style.HasLeftIndent() )
     {
+        if( start == end )
+            range = NSMakeRange( start, start + 1 );
         paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setFirstLineHeadIndent: indent];
         [paragraphStyle setHeadIndent: indent];
