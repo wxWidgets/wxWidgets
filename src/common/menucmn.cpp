@@ -326,7 +326,7 @@ void wxMenuItemBase::SetHelp(const wxString& str)
 
 wxString wxMenuItemBase::GetLabelText(const wxString& text)
 {
-    return wxStripMenuCodes(text);
+    return wxStripMenuCodes(text, wxStrip_Menu);
 }
 
 #if WXWIN_COMPATIBILITY_2_8

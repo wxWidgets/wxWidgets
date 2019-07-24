@@ -682,14 +682,54 @@ void wxSetDisplayName(const wxString& displayName);
 */
 enum
 {
-    // strip '&' characters
+    /**
+        Strip '&' characters.
+
+        This flag removes all the ampersands before another character and
+        replaces double ampersands with a single one.
+     */
     wxStrip_Mnemonics = 1,
 
-    // strip everything after '\t'
+    /**
+        Strip everything after '\t'.
+
+        This flags removes everything following the last TAB character in the
+        string, if any.
+     */
     wxStrip_Accel = 2,
 
-    // strip everything (this is the default)
-    wxStrip_All = wxStrip_Mnemonics | wxStrip_Accel
+    /**
+        Strip everything looking like CJK mnemonic.
+
+        CJK (Chinese, Japanese, Korean) translations sometimes preserve the
+        original English accelerator or mnemonic in the translated string by
+        putting it after the translated string in parentheses, e.g. the string
+        "&File" could be translated as "<translation-of-word-file> (&F)".
+
+        This flag strips trailing "(&X)" from the string.
+
+        @since 3.1.3
+     */
+    wxStrip_CJKMnemonics = 4,
+
+    /**
+        Strip both mnemonics and accelerators.
+
+        This is the value used by wxStripMenuCodes() by default.
+
+        Note that, despite the name, this flag does @e not strip all, as it
+        doesn't include wxStrip_CJKMnemonics for compatibility.
+     */
+    wxStrip_All = wxStrip_Mnemonics | wxStrip_Accel,
+
+    /**
+        Strip everything from menu item labels.
+
+        This flag is used by wxWidgets internally and removes CJK mnemonics
+        from the labels too, in addition to the usual mnemonics and
+        accelerators. It is only suitable for use with the menu items.
+     */
+    wxStrip_Menu = wxStrip_All | wxStrip_CJKMnemonics
 };
 
 /**

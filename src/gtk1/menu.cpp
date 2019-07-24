@@ -756,9 +756,9 @@ void wxMenuItem::SetItemLabel( const wxString& string )
 
     // Some optimization to avoid flicker
     wxString oldLabel = m_text;
-    oldLabel = wxStripMenuCodes(oldLabel);
+    oldLabel = wxStripMenuCodes(oldLabel, wxStrip_Menu);
     oldLabel.Replace(wxT("_"), wxEmptyString);
-    wxString label1 = wxStripMenuCodes(str);
+    wxString label1 = wxStripMenuCodes(str, wxStrip_Menu);
     wxString oldhotkey = GetHotKey();    // Store the old hotkey in Ctrl-foo format
     wxCharBuffer oldbuf = wxGTK_CONV( GetGtkHotKey(*this) );  // and as <control>foo
 

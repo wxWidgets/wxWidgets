@@ -232,8 +232,8 @@ public :
     
     virtual NSMenu* MacCreateOrFindWindowMenu()
     {
-        NSString* nsWindowMenuTitle = wxNSStringWithWxString(wxStripMenuCodes(wxApp::s_macWindowMenuTitleName));
-        NSString* nsAlternateWindowMenuTitle = wxNSStringWithWxString(wxStripMenuCodes(_("&Window")));
+        NSString* nsWindowMenuTitle = wxNSStringWithWxString(wxStripMenuCodes(wxApp::s_macWindowMenuTitleName, wxStrip_Menu));
+        NSString* nsAlternateWindowMenuTitle = wxNSStringWithWxString(wxStripMenuCodes(_("&Window"), wxStrip_Menu));
 
         NSMenu* windowMenu = nil;
 

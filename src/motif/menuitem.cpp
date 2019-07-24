@@ -161,7 +161,7 @@ void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar,
     {
         // Id=-3 identifies a Title item.
         m_buttonWidget = (WXWidget) XtVaCreateManagedWidget
-            (wxStripMenuCodes(m_text),
+            (wxStripMenuCodes(m_text, wxStrip_Menu),
             xmLabelGadgetClass, (Widget) menu, NULL);
     }
     else if (!IsSeparator() && !m_subMenu)
@@ -174,7 +174,7 @@ void wxMenuItem::CreateItem (WXWidget menu, wxMenuBar * menuBar,
             txt = wxGetStockLabel(GetId(), wxSTOCK_WITH_ACCELERATOR|wxSTOCK_WITH_MNEMONIC);
         }
 
-        wxString strName = wxStripMenuCodes(txt);
+        wxString strName = wxStripMenuCodes(txt, wxStrip_Menu);
         if (IsCheckable())
         {
             m_buttonWidget = (WXWidget) XtVaCreateManagedWidget (strName,
@@ -302,7 +302,7 @@ void wxMenuItem::DestroyItem(bool full)
 void wxMenuItem::SetItemLabel(const wxString& label)
 {
     char mnem = wxFindMnemonic (label);
-    wxString label2 = wxStripMenuCodes(label);
+    wxString label2 = wxStripMenuCodes(label, wxStrip_Menu);
 
     m_text = label;
 

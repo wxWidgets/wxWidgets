@@ -365,8 +365,8 @@ void MenuTestCase::TranslatedMnemonics()
     wxString filemenu = m_frame->GetMenuBar()->GetMenuLabel(0);
     CPPUNIT_ASSERT_EQUAL
     (
-         wxStripMenuCodes(GetTranslatedString(trans, "&File")),
-         wxStripMenuCodes(GetTranslatedString(trans, filemenu))
+         wxStripMenuCodes(GetTranslatedString(trans, "&File"), wxStrip_Menu),
+         wxStripMenuCodes(GetTranslatedString(trans, filemenu), wxStrip_Menu)
     );
 
     // Test strings that have shortcuts. Duplicate non-mnemonic translations
@@ -374,21 +374,21 @@ void MenuTestCase::TranslatedMnemonics()
     CPPUNIT_ASSERT_EQUAL
     (
          GetTranslatedString(trans, "Edit"),
-         wxStripMenuCodes(GetTranslatedString(trans, "E&dit\tCtrl+E"))
+         wxStripMenuCodes(GetTranslatedString(trans, "E&dit\tCtrl+E"), wxStrip_Menu)
     );
 
     // "Vie&w" also has a space before the (&W)
     CPPUNIT_ASSERT_EQUAL
     (
          GetTranslatedString(trans, "View"),
-         wxStripMenuCodes(GetTranslatedString(trans, "Vie&w\tCtrl+V"))
+         wxStripMenuCodes(GetTranslatedString(trans, "Vie&w\tCtrl+V"), wxStrip_Menu)
     );
 
     // Test a 'normal' mnemonic too: the translation is "Preten&d"
     CPPUNIT_ASSERT_EQUAL
     (
          "Pretend",
-         wxStripMenuCodes(GetTranslatedString(trans, "B&ogus"))
+         wxStripMenuCodes(GetTranslatedString(trans, "B&ogus"), wxStrip_Menu)
     );
 }
 #endif // wxUSE_INTL
