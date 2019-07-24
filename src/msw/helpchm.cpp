@@ -113,7 +113,7 @@ bool wxCHMHelpController::DisplayContents()
     if (m_helpFile.IsEmpty())
         return false;
 
-    return CallHtmlHelp(HH_DISPLAY_TOPIC);
+    return CallHtmlHelp(HH_DISPLAY_TOC);
 }
 
 // Use topic or HTML filename
@@ -137,6 +137,12 @@ bool wxCHMHelpController::DisplaySection(int section)
 {
     if (m_helpFile.IsEmpty())
         return false;
+
+    // Treat -1 as a special context number that displays the index
+    if (section == -1)
+    {
+        return CallHtmlHelp(HH_DISPLAY_INDEX);
+    }
 
     return CallHtmlHelp(HH_HELP_CONTEXT, section);
 }
@@ -197,17 +203,34 @@ bool wxCHMHelpController::KeywordSearch(const wxString& k,
     if (m_helpFile.IsEmpty())
         return false;
 
-    HH_AKLINK link;
-    link.cbStruct =     sizeof(HH_AKLINK);
-    link.fReserved =    FALSE;
-    link.pszKeywords =  k.t_str();
-    link.pszUrl =       NULL;
-    link.pszMsgText =   NULL;
-    link.pszMsgTitle =  NULL;
-    link.pszWindow =    NULL;
-    link.fIndexOnFail = TRUE;
+    if (k.IsEmpty())
+    {
+        HH_FTS_QUERY oQuery;
+        oQuery.cbStruct = sizeof(HH_FTS_QUERY);
+        oQuery.fStemmedSearch = 0;
+        oQuery.fTitleOnly = 0;
+        oQuery.fUniCodeStrings = 0;
+        oQuery.iProximity = 0;
+        oQuery.pszSearchQuery = TEXT("");
+        oQuery.pszWindow = TEXT("");
+        oQuery.fExecute = 1;
 
-    return CallHtmlHelp(HH_KEYWORD_LOOKUP, &link);
+        return CallHtmlHelp(HH_DISPLAY_SEARCH, &oQuery);
+    }
+    else
+    {
+        HH_AKLINK link;
+        link.cbStruct =     sizeof(HH_AKLINK);
+        link.fReserved =    FALSE;
+        link.pszKeywords =  k.t_str();
+        link.pszUrl =       NULL;
+        link.pszMsgText =   NULL;
+        link.pszMsgTitle =  NULL;
+        link.pszWindow =    NULL;
+        link.fIndexOnFail = TRUE;
+
+        return CallHtmlHelp(HH_KEYWORD_LOOKUP, &link);
+    }
 }
 
 bool wxCHMHelpController::Quit()
