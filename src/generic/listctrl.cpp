@@ -161,6 +161,7 @@ bool wxGenericListCtrl::IsVisible(long item) const
     if ( visible && m_headerWin )
     {
         wxRect headerRect = m_headerWin->GetClientRect();
+        // take into account the +1 added in GetSubItemRect()
         headerRect.height++;
         visible = itemRect.GetBottom() > headerRect.GetBottom();
     }

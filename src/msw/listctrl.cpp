@@ -890,10 +890,10 @@ bool wxListCtrl::IsVisible(long item) const
     bool result = ::SendMessage( GetHwnd(), LVM_ISITEMVISIBLE, (WPARAM) item, 0 );
     if( result )
     {
-        HWND hwndHeader = (HWND) ::SendMessage( GetHwnd(), LVM_GETHEADER, 0, 0 );
+        HWND hwndHdr = ListView_GetHeader(GetHwnd());
         wxRect itemRect;
         RECT headerRect;
-        if ( Header_GetItemRect(hwndHeader, 0, &headerRect ) )
+        if ( Header_GetItemRect( hwndHdr, 0, &headerRect ) )
         {
             GetItemRect( item, itemRect );
             wxRect rectHeader = wxRectFromRECT( headerRect );
