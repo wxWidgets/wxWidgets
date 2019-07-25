@@ -220,6 +220,19 @@ enum wxTextAttrLineSpacing
 
 
 /**
+    Underline types that can be used in wxTextAttr::SetFontUnderline().
+
+    @since 3.1.3
+*/
+enum wxTextAttrUnderlineType
+{
+     wxTEXT_ATTR_UNDERLINE_NONE,
+     wxTEXT_ATTR_UNDERLINE_SOLID,
+     wxTEXT_ATTR_UNDERLINE_DOUBLE,
+     wxTEXT_ATTR_UNDERLINE_SPECIAL
+};
+
+/**
     Describes the possible return values of wxTextCtrl::HitTest().
 
     The element names correspond to the relationship between the point asked
@@ -421,6 +434,20 @@ public:
         Returns @true if the font is underlined.
     */
     bool GetFontUnderlined() const;
+
+    /**
+        Returns the underline type, which is one of the @wxTextAttrUnderlineType values.
+
+        @since 3.1.3
+    */
+    wxTextAttrUnderlineType GetUnderlineType() const;
+
+    /**
+        Returns the underline color used. wxNullColour when the text colour is used.
+
+        @since 3.1.3
+    */
+    const wxColour& GetUnderlineColour() const;
 
     /**
         Returns the font weight.
@@ -803,9 +830,33 @@ public:
     void SetFontStyle(wxFontStyle fontStyle);
 
     /**
-        Sets the font underlining.
+        Sets the font underlining (solid line, text colour).
     */
     void SetFontUnderlined(bool underlined);
+
+    /**
+        Sets the font underlining.
+
+        @param type Type of underline.
+
+        @param colour Colour to use for underlining, text colour is used by
+        default.
+
+        @note On wxMSW, wxTEXT_ATTR_UNDERLINE_DOUBLE is shown as
+        wxTEXT_ATTR_UNDERLINE_SOLID. There is only a limited number of colours
+        supported, the RGB values are listed
+        <a href="https://docs.microsoft.com/en-us/windows/win32/api/tom/nf-tom-itextdocument2-geteffectcolor">here</a>.
+        wxTEXT_ATTR_UNDERLINE_SPECIAL is shown as a waved line.
+
+        @note On wxGTK, underline colour is only supported by wxGTK3.
+        wxTEXT_ATTR_UNDERLINE_SPECIAL is shown as a waved line. GTK might
+        overrule the colour of wxTEXT_ATTR_UNDERLINE_SPECIAL.
+
+        @note On wxOSX, wxTEXT_ATTR_UNDERLINE_SPECIAL is shown as a dotted line.
+
+        @since 3.1.3
+    */
+    void SetFontUnderlined(wxTextAttrUnderlineType type, const wxColour& colour = wxNullColour);
 
     /**
         Sets the font weight.
@@ -1347,6 +1398,8 @@ public:
 
         @param pt
             The position of the point to check, in window device coordinates.
+            In wxGTK, and only there, the coordinates can be negative, but in
+            portable code only positive values should be used.
         @param pos
             Receives the position of the character at the given position. May
             be @NULL.

@@ -225,7 +225,7 @@ global scope as with the event tables), call its Bind<>() method like this:
 @code
 MyFrame::MyFrame(...)
 {
-      Bind(wxEVT_COMMAND_MENU_SELECTED, &MyFrame::OnExit, this, wxID_EXIT);
+      Bind(wxEVT_MENU, &MyFrame::OnExit, this, wxID_EXIT);
 }
 @endcode
 
@@ -324,7 +324,7 @@ MyFrameHandler myFrameHandler;
 
 MyFrame::MyFrame()
 {
-      Bind( wxEVT_COMMAND_MENU_SELECTED, &MyFrameHandler::OnFrameExit,
+      Bind( wxEVT_MENU, &MyFrameHandler::OnFrameExit,
               &myFrameHandler, wxID_EXIT );
 }
 @endcode
@@ -346,7 +346,7 @@ void HandleExit( wxCommandEvent & )
 
 MyFrame::MyFrame()
 {
-    Bind( wxEVT_COMMAND_MENU_SELECTED, &HandleExit, wxID_EXIT );
+    Bind( wxEVT_MENU, &HandleExit, wxID_EXIT );
 }
 @endcode
 
@@ -367,7 +367,7 @@ MyFunctor myFunctor;
 
 MyFrame::MyFrame()
 {
-    Bind( wxEVT_COMMAND_MENU_SELECTED, myFunctor, wxID_EXIT );
+    Bind( wxEVT_MENU, myFunctor, wxID_EXIT );
 }
 @endcode
 
@@ -377,7 +377,7 @@ separate functor class:
 @code
 MyFrame::MyFrame()
 {
-    Bind(wxEVT_COMMAND_MENU_SELECTED,
+    Bind(wxEVT_MENU,
          [](wxCommandEvent&) {
             // Do something useful
          },
@@ -407,7 +407,7 @@ MyFrame::MyFrame()
 {
     function< void ( wxCommandEvent & ) > exitHandler( bind( &MyHandler::OnExit, &myHandler, _1 ));
 
-    Bind( wxEVT_COMMAND_MENU_SELECTED, exitHandler, wxID_EXIT );
+    Bind( wxEVT_MENU, exitHandler, wxID_EXIT );
 }
 @endcode
 
@@ -428,7 +428,7 @@ MyFrame::MyFrame()
     function< void ( wxCommandEvent & ) > exitHandler(
             bind( &MyHandler::OnExit, &myHandler, EXIT_FAILURE, _1, "Bye" ));
 
-    Bind( wxEVT_COMMAND_MENU_SELECTED, exitHandler, wxID_EXIT );
+    Bind( wxEVT_MENU, exitHandler, wxID_EXIT );
 }
 @endcode
 

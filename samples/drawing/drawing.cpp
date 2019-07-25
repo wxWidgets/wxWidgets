@@ -631,7 +631,7 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_DOT_DASH) );
     dc.DrawLine( x+20, y+60, 100, y+60 );
 
-    dc.DrawText("Misc hatches", x + 150, y + 70);
+    dc.DrawText("Hatches", x + 150, y + 70);
     dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_BDIAGONAL_HATCH) );
     dc.DrawLine( x+20, y+70, 100, y+70 );
     dc.SetPen( wxPen( *wxBLACK, width, wxPENSTYLE_CROSSDIAG_HATCH) );
@@ -669,6 +669,26 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     ud.SetDashes( 6, dash1 );
     dc.SetPen( ud );
     dc.DrawLine( x+20, y+170, 100, y+170 );
+
+    wxPen penWithCap(*wxBLACK, width);
+    dc.SetPen(penWithCap);
+    dc.DrawText("Default cap", x+270, y+40);
+    dc.DrawLine( x+200, y+50, x+250, y+50);
+
+    penWithCap.SetCap(wxCAP_BUTT);
+    dc.SetPen(penWithCap);
+    dc.DrawText("Butt ", x+270, y+60);
+    dc.DrawLine( x+200, y+70, x+250, y+70);
+
+    penWithCap.SetCap(wxCAP_ROUND);
+    dc.SetPen(penWithCap);
+    dc.DrawText("Round cap", x+270, y+80);
+    dc.DrawLine( x+200, y+90, x+250, y+90);
+
+    penWithCap.SetCap(wxCAP_PROJECTING);
+    dc.SetPen(penWithCap);
+    dc.DrawText("Projecting cap", x+270, y+100);
+    dc.DrawLine( x+200, y+110, x+250, y+110);
 }
 
 void MyCanvas::DrawDefault(wxDC& dc)

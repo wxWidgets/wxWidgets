@@ -2010,9 +2010,14 @@ PRectangle Window::GetMonitorRect(Point pt) {
         wxNonOwnedWindow::Create(parent, m_nativeWin);
         m_stc = wxDynamicCast(parent, wxStyledTextCtrl);
         m_isShown = false;
+        m_cursorSetByPopup = false;
+        m_prevCursor = wxSTC_CURSORNORMAL;
 
         Bind(wxEVT_ENTER_WINDOW, &wxSTCPopupBase::OnMouseEnter, this);
         Bind(wxEVT_LEAVE_WINDOW, &wxSTCPopupBase::OnMouseLeave, this);
+
+        if ( m_stc )
+            m_stc->Bind(wxEVT_DESTROY, &wxSTCPopupBase::OnParentDestroy, this);
     }
 
     wxSTCPopupBase::~wxSTCPopupBase()
@@ -2020,7 +2025,11 @@ PRectangle Window::GetMonitorRect(Point pt) {
         UnsubclassWin();
         CloseFloatingWindow(m_nativeWin);
 
-        SetSTCCursor(wxSTC_CURSORNORMAL);
+        if ( m_stc )
+        {
+            m_stc->Unbind(wxEVT_DESTROY, &wxSTCPopupBase::OnParentDestroy,this);
+            RestoreSTCCursor();
+        }
     }
 
     bool wxSTCPopupBase::Show(bool show)
@@ -2038,7 +2047,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
         else
         {
             HideFloatingWindow(m_nativeWin);
-            SetSTCCursor(wxSTC_CURSORNORMAL);
+            RestoreSTCCursor();
         }
 
         return true;
@@ -2056,7 +2065,20 @@ PRectangle Window::GetMonitorRect(Point pt) {
     void wxSTCPopupBase::SetSTCCursor(int cursor)
     {
         if ( m_stc )
+        {
+            m_cursorSetByPopup = true;
+            m_prevCursor = m_stc->GetSTCCursor();
             m_stc->SetSTCCursor(cursor);
+        }
+    }
+
+    void wxSTCPopupBase::RestoreSTCCursor()
+    {
+        if ( m_stc != NULL && m_cursorSetByPopup )
+            m_stc->SetSTCCursor(m_prevCursor);
+
+        m_cursorSetByPopup = false;
+        m_prevCursor = wxSTC_CURSORNORMAL;
     }
 
     void wxSTCPopupBase::OnMouseEnter(wxMouseEvent& WXUNUSED(event))
@@ -2066,7 +2088,12 @@ PRectangle Window::GetMonitorRect(Point pt) {
 
     void wxSTCPopupBase::OnMouseLeave(wxMouseEvent& WXUNUSED(event))
     {
-        SetSTCCursor(wxSTC_CURSORNORMAL);
+        RestoreSTCCursor();
+    }
+
+    void wxSTCPopupBase::OnParentDestroy(wxWindowDestroyEvent& WXUNUSED(event))
+    {
+        m_stc = NULL;
     }
 
 #elif wxUSE_POPUPWIN
@@ -2328,6 +2355,12 @@ public:
     const wxColour& GetCurrentBgColour() const;
     const wxColour& GetCurrentTextColour() const;
 
+    // Data needed for SELECTION_CHANGE event
+    void SetSciListData(int*, int*, int*);
+    int GetListType() const;
+    int GetPosStart() const;
+    int GetStartLen() const;
+
 private:
     WX_DECLARE_HASH_MAP(int, wxBitmap, wxIntegerHash, wxIntegerEqual, ImgList);
 
@@ -2349,6 +2382,10 @@ private:
     wxColour m_currentTextColour;
     bool     m_useDefaultCurrentBgColour;
     bool     m_useDefaultCurrentTextColour;
+
+    int*     m_listType;
+    int*     m_posStart;
+    int*     m_startLen;
 };
 
 wxSTCListBoxVisualData::wxSTCListBoxVisualData(int d):m_desiredVisibleRows(d),
@@ -2356,9 +2393,10 @@ wxSTCListBoxVisualData::wxSTCListBoxVisualData(int d):m_desiredVisibleRows(d),
                         m_useDefaultTextColour(true),
                         m_useDefaultHighlightBgColour(true),
                         m_useDefaultHighlightTextColour(true),
-                        m_hasListCtrlAppearance(false),
+                        m_hasListCtrlAppearance(true),
                         m_useDefaultCurrentBgColour(true),
-                        m_useDefaultCurrentTextColour(true)
+                        m_useDefaultCurrentTextColour(true),
+                        m_listType(NULL), m_posStart(NULL), m_startLen(NULL)
 {
     ComputeColours();
 }
@@ -2557,6 +2595,28 @@ const wxColour& wxSTCListBoxVisualData::GetCurrentTextColour() const
     return m_currentTextColour;
 }
 
+void wxSTCListBoxVisualData::SetSciListData(int* type, int* pos, int* len)
+{
+    m_listType = type;
+    m_posStart = pos;
+    m_startLen = len;
+}
+
+int wxSTCListBoxVisualData::GetListType() const
+{
+    return (m_listType?*m_listType:0);
+}
+
+int wxSTCListBoxVisualData::GetPosStart() const
+{
+    return (m_posStart?*m_posStart:0);
+}
+
+int wxSTCListBoxVisualData::GetStartLen() const
+{
+    return (m_startLen?*m_startLen:0);
+}
+
 // The class is intended to look like a standard listbox (with an optional
 // icon). However, it needs to look like it has focus even when it doesn't.
 class wxSTCListBox : public wxSystemThemedControl<wxVListBox>
@@ -2587,11 +2647,13 @@ public:
 protected:
     // Helpers
     void AppendHelper(const wxString& text, int type);
+    void SelectHelper(int i);
     void AccountForBitmap(int type, bool recalculateItemHeight);
     void RecalculateItemHeight();
     int TextBoxFromClientEdge() const;
 
     // Event handlers
+    void OnSelection(wxCommandEvent&);
     void OnDClick(wxCommandEvent&);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
     void OnMouseMotion(wxMouseEvent& event);
@@ -2646,6 +2708,7 @@ wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v, int ht)
 
     SetBackgroundColour(m_visualData->GetBgColour());
 
+    Bind(wxEVT_LISTBOX, &wxSTCListBox::OnSelection, this);
     Bind(wxEVT_LISTBOX_DCLICK, &wxSTCListBox::OnDClick, this);
     Bind(wxEVT_SYS_COLOUR_CHANGED, &wxSTCListBox::OnSysColourChanged, this);
 
@@ -2718,7 +2781,7 @@ PRectangle wxSTCListBox::GetDesiredRect() const
 
     // Add space for a scrollbar if needed.
     if ( count > desiredVisibleRows )
-        maxw += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+        maxw += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, this);
 
     // Add borders.
     maxw += 2 * m_borderSize;
@@ -2759,6 +2822,7 @@ int wxSTCListBox::Length() const
 void wxSTCListBox::Select(int n)
 {
     SetSelection(n);
+    SelectHelper(n);
 }
 
 void wxSTCListBox::GetValue(int n, char *value, int len) const
@@ -2806,6 +2870,37 @@ void wxSTCListBox::AppendHelper(const wxString& text, int type)
     SetItemCount(m_labels.size());
 }
 
+void wxSTCListBox::SelectHelper(int i)
+{
+    // This method is used to trigger the wxEVT_STC_AUTOCOMP_SELECTION_CHANGE
+    // event. This event is generated directly here since the version of
+    // Scintilla currently used does not support it.
+
+    //If the Scintilla component is updated, it should be sufficient to:
+    // 1) Change this method to use a callback to let Scintilla generate the
+    //    event.
+    // 2) Remove the SELECTION_CHANGE event data from the wxSTCListBoxVisualData
+    //    class and the SetListInfo method from the ListBoxImpl class since they
+    //    will no longer be needed.
+
+    wxStyledTextCtrl* stc = wxDynamicCast(GetGrandParent(), wxStyledTextCtrl);
+
+    if ( stc )
+    {
+        wxStyledTextEvent evt(wxEVT_STC_AUTOCOMP_SELECTION_CHANGE,stc->GetId());
+        evt.SetEventObject(stc);
+        evt.SetListType(m_visualData->GetListType());
+
+        evt.SetPosition(m_visualData->GetPosStart() -
+                            m_visualData->GetStartLen());
+
+        if ( 0 <= i && i < static_cast<int>(m_labels.size()) )
+            evt.SetString(m_labels[i]);
+
+        stc->ProcessWindowEvent(evt);
+    }
+}
+
 void wxSTCListBox::AccountForBitmap(int type, bool recalculateItemHeight)
 {
     const int oldHeight = m_imageAreaHeight;
@@ -2834,6 +2929,11 @@ void wxSTCListBox::RecalculateItemHeight()
 int wxSTCListBox::TextBoxFromClientEdge() const
 {
     return (m_imageAreaWidth == 0 ? 0 : m_imageAreaWidth + 2 * m_imagePadding);
+}
+
+void wxSTCListBox::OnSelection(wxCommandEvent& event)
+{
+    SelectHelper(event.GetSelection());
 }
 
 void wxSTCListBox::OnDClick(wxCommandEvent& WXUNUSED(event))
@@ -3163,16 +3263,9 @@ void ListBoxImpl::SetDoubleClickAction(CallBackAction action, void *data) {
     m_listBox->SetDoubleClickAction(action, data);
 }
 
-void ListBoxImpl::SetColours(const wxColour& background, const wxColour& text,
-                             const wxColour& hiliBg, const wxColour& hiliText)
+void ListBoxImpl::SetListInfo(int* listType, int* posStart, int* startLen)
 {
-    m_visualData->SetColours(background, text, hiliBg, hiliText);
-}
-
-void ListBoxImpl::UseListCtrlStyle(bool useListCtrl, const wxColour& currentBg,
-                                   const wxColour& currentText)
-{
-    m_visualData->UseListCtrlStyle(useListCtrl, currentBg, currentText);
+    m_visualData->SetSciListData(listType,posStart,startLen);
 }
 
 

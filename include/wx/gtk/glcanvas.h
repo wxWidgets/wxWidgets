@@ -19,6 +19,7 @@
 
 class WXDLLIMPEXP_GL wxGLCanvas : public wxGLCanvasX11
 {
+    typedef wxGLCanvasX11 BaseType;
 public:
     wxGLCanvas(wxWindow *parent,
                const wxGLAttributes& dispAttrs,
@@ -109,13 +110,11 @@ public:
 #endif // WXWIN_COMPATIBILITY_2_8
 
     // implementation from now on
-    void OnInternalIdle() wxOVERRIDE;
+    virtual void GTKHandleRealized() wxOVERRIDE;
 
-    bool              m_exposed;
 #ifdef __WXGTK3__
-    cairo_t* m_cairoPaintContext;
+    wxSize m_size;
 #endif
-
 #if WXWIN_COMPATIBILITY_2_8
     wxGLContext      *m_sharedContext;
     wxGLCanvas       *m_sharedContextOf;

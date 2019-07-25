@@ -1236,7 +1236,7 @@ msgstr "Zeile hinzufügen"
 
 #: ../src/html/helpwnd.cpp:432
 msgid "Add current page to bookmarks"
-msgstr "Aktuelle HTML-Seite den Lesezeichen hinzufügen"
+msgstr "Aktuelle Seite zu Lesezeichen hinzufügen"
 
 #: ../src/generic/colrdlgg.cpp:366
 msgid "Add to custom colours"
@@ -3915,11 +3915,11 @@ msgstr "GetPropertyCollection aufgerufen ohne gültigen Collection getter"
 
 #: ../src/html/helpwnd.cpp:660
 msgid "Go back"
-msgstr "Vorherige HTML-Seite zeigen"
+msgstr "Zurück"
 
 #: ../src/html/helpwnd.cpp:661
 msgid "Go forward"
-msgstr "Nächste HTML-Seite zeigen"
+msgstr "Vorwärts"
 
 #: ../src/html/helpwnd.cpp:663
 msgid "Go one level up in document hierarchy"
@@ -5102,7 +5102,7 @@ msgstr "NeuerName"
 
 #: ../src/common/prntbase.cpp:1567 ../src/html/helpwnd.cpp:665
 msgid "Next page"
-msgstr "Nächste HTML-Seite zeigen"
+msgstr "Nächste Seite"
 
 #: ../include/wx/msgdlg.h:277 ../src/common/stockitem.cpp:177
 #: ../src/motif/msgdlg.cpp:196
@@ -6076,7 +6076,7 @@ msgstr "Gliederungspunkt entfernen"
 
 #: ../src/html/helpwnd.cpp:433
 msgid "Remove current page from bookmarks"
-msgstr "Aktuelle HTML-Seite aus Lesezeichen entfernen"
+msgstr "Aktuelle Seite aus Lesezeichen entfernen"
 
 #: ../src/common/rendcmn.cpp:194
 #, c-format

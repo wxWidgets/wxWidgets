@@ -481,6 +481,9 @@ void wxNonOwnedWindow::WindowWasPainted()
 
 void wxNonOwnedWindow::Update()
 {
+    if ( m_nowpeer == NULL )
+        return;
+
     if ( clock() - s_lastFlush > CLOCKS_PER_SEC / 30 )
     {
         s_lastFlush = clock();

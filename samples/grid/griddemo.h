@@ -39,6 +39,7 @@ class GridFrame : public wxFrame
     void ToggleGridSizing( wxCommandEvent& );
     void ToggleGridDragCell ( wxCommandEvent& );
     void SetNativeColHeader ( wxCommandEvent& );
+    void SetNativeColLabels ( wxCommandEvent& );
     void SetCustomColHeader( wxCommandEvent& );
     void SetDefaultColHeader( wxCommandEvent& );
     void SetTabBehaviour( wxCommandEvent& );
@@ -162,6 +163,7 @@ public:
         ID_CORNERLABELORIENTATION,
         ID_COLDEFAULTHEADER,
         ID_COLNATIVEHEADER,
+        ID_COLNATIVELABELS,
         ID_COLCUSTOMHEADER,
         ID_TAB_STOP,
         ID_TAB_WRAP,

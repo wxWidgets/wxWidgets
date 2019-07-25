@@ -177,6 +177,9 @@ builtinWindowClasses =
     | wxColourPickerCtrl
     | wxComboBox
     | wxComboCtrl
+    | wxDataViewCtrl
+    | wxDataViewListCtrl
+    | wxDataViewTreeCtrl
     | wxDatePickerCtrl
     | wxDialog
     | wxDirPickerCtrl
@@ -274,6 +277,9 @@ builtinClassesNames =
     | "wxColourPickerCtrl"
     | "wxComboBox"
     | "wxComboCtrl"
+    | "wxDataViewCtrl"
+    | "wxDataViewListCtrl"
+    | "wxDataViewTreeCtrl"
     | "wxDatePickerCtrl"
     | "wxDialog"
     | "wxDirPickerCtrl"
@@ -846,6 +852,31 @@ wxComboCtrl =
         stdObjectNodeAttributes &
         stdWindowProperties &
         [xrc:p="o"] element value {_, t_string }*
+    }
+
+
+wxDataViewCtrl =
+    element object {
+        attribute class { "wxDataViewCtrl" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties
+    }
+
+
+wxDataViewListCtrl =
+    element object {
+        attribute class { "wxDataViewListCtrl" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties
+    }
+
+
+wxDataViewTreeCtrl =
+    element object {
+        attribute class { "wxDataViewTreeCtrl" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element imagelist {_, t_imagelist }*
     }
 
 

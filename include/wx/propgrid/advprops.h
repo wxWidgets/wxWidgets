@@ -137,7 +137,7 @@ DECLARE_VARIANT_OBJECT_EXPORTED(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
 // -----------------------------------------------------------------------
 
 // Property representing wxFont.
-class WXDLLIMPEXP_PROPGRID wxFontProperty : public wxPGProperty
+class WXDLLIMPEXP_PROPGRID wxFontProperty : public wxEditorDialogProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxFontProperty)
 public:
@@ -148,14 +148,13 @@ public:
     virtual ~wxFontProperty();
     virtual void OnSetValue() wxOVERRIDE;
     virtual wxString ValueToString( wxVariant& value, int argFlags = 0 ) const wxOVERRIDE;
-    virtual bool OnEvent( wxPropertyGrid* propgrid,
-                          wxWindow* primary, wxEvent& event ) wxOVERRIDE;
     virtual wxVariant ChildChanged( wxVariant& thisValue,
                                     int childIndex,
                                     wxVariant& childValue ) const wxOVERRIDE;
     virtual void RefreshChildren() wxOVERRIDE;
 
 protected:
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) wxOVERRIDE;
 };
 
 // -----------------------------------------------------------------------
@@ -317,7 +316,7 @@ private:
 // Property that manages a value resulting from wxMultiChoiceDialog. Value is
 // array of strings. You can get value as array of choice values/indices by
 // calling wxMultiChoiceProperty::GetValueAsArrayInt().
-class WXDLLIMPEXP_PROPGRID wxMultiChoiceProperty : public wxPGProperty
+class WXDLLIMPEXP_PROPGRID wxMultiChoiceProperty : public wxEditorDialogProperty
 {
     WX_PG_DECLARE_PROPERTY_CLASS(wxMultiChoiceProperty)
 public:
@@ -342,8 +341,6 @@ public:
     virtual bool StringToValue(wxVariant& variant,
                                const wxString& text,
                                int argFlags = 0) const wxOVERRIDE;
-    virtual bool OnEvent( wxPropertyGrid* propgrid,
-                          wxWindow* primary, wxEvent& event ) wxOVERRIDE;
     virtual bool DoSetAttribute( const wxString& name, wxVariant& value ) wxOVERRIDE;
 
     wxArrayInt GetValueAsArrayInt() const
@@ -352,6 +349,7 @@ public:
     }
 
 protected:
+    virtual bool DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value) wxOVERRIDE;
 
     void GenerateValueAsString( wxVariant& value, wxString* target ) const;
 

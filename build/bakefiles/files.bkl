@@ -347,7 +347,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
-    <!-- wx/qt/treectrl.h -->
     wx/qt/window.h
     wx/generic/fdrepdlg.h
     wx/generic/filepickerg.h
@@ -362,6 +361,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/dataview.h
     wx/qt/dvrenderers.h
     $(QT_PLATFORM_HDR)
+    wx/qt/treectrl.h
 </set>
 
 <set var="QT_SRC" hints="files">
@@ -460,6 +460,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/utils.cpp
     src/qt/window.cpp
     $(QT_PLATFORM_SRC)
+    src/qt/treectrl.cpp
 </set>
 
 <set var="MEDIA_QT_SRC" hints="files">
@@ -3081,6 +3082,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_collpane.cpp
     src/xrc/xh_combo.cpp
     src/xrc/xh_comboctrl.cpp
+    src/xrc/xh_dataview.cpp
     src/xrc/xh_datectrl.cpp
     src/xrc/xh_dirpicker.cpp
     src/xrc/xh_dlg.cpp
@@ -3151,6 +3153,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_collpane.h
     wx/xrc/xh_combo.h
     wx/xrc/xh_comboctrl.h
+    wx/xrc/xh_dataview.h
     wx/xrc/xh_datectrl.h
     wx/xrc/xh_dirpicker.h
     wx/xrc/xh_dlg.h

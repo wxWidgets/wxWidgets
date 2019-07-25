@@ -460,7 +460,7 @@ public:
 
     wxWindow* GetButton( unsigned int i ) { return m_buttons[i]; }
     const wxWindow* GetButton( unsigned int i ) const
-        { return (const wxWindow*) m_buttons[i]; }
+        { return m_buttons[i]; }
 
     // Utility function to be used in event handlers.
     int GetButtonId( unsigned int i ) const { return GetButton(i)->GetId(); }

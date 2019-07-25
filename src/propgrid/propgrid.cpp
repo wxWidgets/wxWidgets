@@ -87,28 +87,12 @@
 #endif
 
 
-//#define wxPG_TEXT_INDENT                4 // For the wxComboControl
-//#define wxPG_ALLOW_CLIPPING             1 // If 1, GetUpdateRegion() in OnPaint event handler is not ignored
 #define wxPG_GUTTER_DIV                 3 // gutter is max(iconwidth/gutter_div,gutter_min)
 #define wxPG_GUTTER_MIN                 3 // gutter before and after image of [+] or [-]
 #define wxPG_YSPACING_MIN               1
 #define wxPG_DEFAULT_VSPACING           2 // This matches .NET propertygrid's value,
                                           // but causes normal combobox to spill out under MSW
-
-//#define wxPG_OPTIMAL_WIDTH              200 // Arbitrary
-
-//#define wxPG_MIN_SCROLLBAR_WIDTH        10 // Smallest scrollbar width on any platform
-                                           // Must be larger than largest control border
-                                           // width * 2.
-
-
 #define wxPG_DEFAULT_CURSOR             wxNullCursor
-
-
-//#define wxPG_NAT_CHOICE_BORDER_ANY   0
-
-//#define wxPG_HIDER_BUTTON_HEIGHT        25
-
 #define wxPG_PIXELS_PER_UNIT            m_lineHeight
 
 #ifdef wxPG_ICON_WIDTH
@@ -400,8 +384,6 @@ void wxPropertyGrid::Init1()
     m_iconWidth = wxPG_ICON_WIDTH;
 #endif
 
-    m_prevVY = -1;
-
     m_gutterWidth = wxPG_GUTTER_MIN;
     m_subgroup_extramargin = 10;
 
@@ -667,26 +649,22 @@ void wxPropertyGrid::SetWindowStyleFlag( long style )
             else
                 m_pState->m_itemsAdded = true;
         }
-    #if wxPG_SUPPORT_TOOLTIPS
+#if wxUSE_TOOLTIPS
         if ( !(old_style & wxPG_TOOLTIPS) && (style & wxPG_TOOLTIPS) )
         {
             //
             // Tooltips enabled
             //
-            /*
-            wxToolTip* tooltip = new wxToolTip ( wxEmptyString );
-            SetToolTip ( tooltip );
-            tooltip->SetDelay ( wxPG_TOOLTIP_DELAY );
-            */
+            //wxToolTip::SetDelay(wxPG_TOOLTIP_DELAY);
         }
         else if ( (old_style & wxPG_TOOLTIPS) && !(style & wxPG_TOOLTIPS) )
         {
             //
             // Tooltips disabled
             //
-            SetToolTip( NULL );
+            UnsetToolTip();
         }
-    #endif
+#endif // wxUSE_TOOLTIPS
     }
 
     wxControl::SetWindowStyleFlag ( style );
@@ -1733,8 +1711,8 @@ wxPoint wxPropertyGrid::GetGoodEditorDialogPosition( wxPGProperty* p,
 
     ImprovedClientToScreen( &x, &y );
 
-    int sw = wxSystemSettings::GetMetric( ::wxSYS_SCREEN_X );
-    int sh = wxSystemSettings::GetMetric( ::wxSYS_SCREEN_Y );
+    int sw = wxSystemSettings::GetMetric( ::wxSYS_SCREEN_X, this );
+    int sh = wxSystemSettings::GetMetric( ::wxSYS_SCREEN_Y, this );
 
     int new_x;
     int new_y;
@@ -2150,7 +2128,7 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
 
         if ( !p->HasFlag(wxPG_PROP_HIDDEN) )
         {
-            visPropArray.push_back((wxPGProperty*)p);
+            visPropArray.push_back(const_cast<wxPGProperty*>(p));
 
             if ( y > endScanBottomY )
                 break;
@@ -2657,8 +2635,6 @@ void wxPropertyGrid::Clear()
     m_pState->DoClear();
 
     m_propHover = NULL;
-
-    m_prevVY = 0;
 
     RecalculateVirtualSize();
 
@@ -3610,7 +3586,7 @@ bool wxPropertyGrid::HandleCustomEditorEvent( wxEvent &event )
 
     //
     // Try common button handling
-    if ( m_wndEditor2 && event.GetEventType() == wxEVT_BUTTON )
+    if ( IsMainButtonEvent(event) )
     {
         wxPGEditorDialogAdapter* adapter = selected->GetEditorDialog();
 
@@ -4337,7 +4313,7 @@ bool wxPropertyGrid::DoSelectProperty( wxPGProperty* p, unsigned int flags )
     }
     else
     {
-#if wxPG_SUPPORT_TOOLTIPS
+#if wxUSE_TOOLTIPS
         //
         // Show help as a tool tip on the editor control.
         //
@@ -5011,7 +4987,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
         int ih = m_lineHeight;
         int sy = y;
 
-    #if wxPG_SUPPORT_TOOLTIPS
+    #if wxUSE_TOOLTIPS
         wxPGProperty* prevHover = m_propHover;
         unsigned char prevSide = m_mouseSide;
     #endif
@@ -5032,7 +5008,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
             SendEvent( wxEVT_PG_HIGHLIGHTED, m_propHover );
         }
 
-    #if wxPG_SUPPORT_TOOLTIPS
+#if wxUSE_TOOLTIPS
         // Store which side we are on
         m_mouseSide = 0;
         if ( columnHit == 1 )
@@ -5100,7 +5076,7 @@ bool wxPropertyGrid::HandleMouseMove( int x, unsigned int y,
                 }
             }
         }
-    #endif
+#endif // wxUSE_TOOLTIPS
 
         if ( splitterHit == -1 ||
              !m_propHover ||

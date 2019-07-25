@@ -40,6 +40,7 @@
     #include "wx/wxcrtvararg.h"
 #endif
 
+#include "wx/fontutil.h"
 #include "wx/scopedptr.h"
 #include "wx/stack.h"
 #include "wx/sysopt.h"
@@ -78,6 +79,27 @@
 
 #ifndef CFE_AUTOBACKCOLOR
     #define CFE_AUTOBACKCOLOR 0x04000000
+#endif
+
+// missing defines for MinGW build
+#ifndef CFM_UNDERLINETYPE
+    #define CFM_UNDERLINETYPE       0x00800000
+#endif
+
+#ifndef CFU_UNDERLINENONE
+    #define CFU_UNDERLINENONE       0
+#endif
+
+#ifndef CFU_UNDERLINE
+    #define CFU_UNDERLINE           1
+#endif
+
+#ifndef CFU_UNDERLINEDOUBLE
+    #define CFU_UNDERLINEDOUBLE     3
+#endif
+
+#ifndef CFU_UNDERLINEWAVE
+    #define CFU_UNDERLINEWAVE       8
 #endif
 
 #if wxUSE_DRAG_AND_DROP && wxUSE_RICHEDIT
@@ -1803,6 +1825,9 @@ int wxTextCtrl::GetLineLength(long lineNo) const
 {
     long pos = XYToPosition(0, lineNo);
 
+    if ( pos == -1 )
+        return -1;
+
     return GetLengthOfLineContainingPos(pos);
 }
 
@@ -2438,14 +2463,14 @@ wxSize wxTextCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     {
         // add space for vertical scrollbar
         if ( !(m_windowStyle & wxTE_NO_VSCROLL) )
-            wText += ::GetSystemMetrics(SM_CXVSCROLL);
+            wText += wxGetSystemMetrics(SM_CXVSCROLL, m_parent);
 
         if ( ylen <= 0 )
         {
             hText *= wxMax(wxMin(GetNumberOfLines(), 10), 2);
             // add space for horizontal scrollbar
             if ( m_windowStyle & wxHSCROLL )
-                hText += ::GetSystemMetrics(SM_CYHSCROLL);
+                hText += wxGetSystemMetrics(SM_CYHSCROLL, m_parent);
         }
     }
     // for single line control cy (height + external leading) is ok
@@ -2791,6 +2816,30 @@ bool wxTextCtrl::SetFont(const wxFont& font)
 // styling support for rich edit controls
 // ----------------------------------------------------------------------------
 
+#if _RICHEDIT_VER >= 0x0800
+static const wxColour gs_underlineColourMap[] =
+{
+    // The colours are coming from https://docs.microsoft.com/en-us/windows/desktop/api/tom/nf-tom-itextdocument2-geteffectcolor.
+    wxNullColour,            // text colour
+    wxColour(0,   0,   0  ), // black
+    wxColour(0,   0,   255), // blue
+    wxColour(0,   255, 255), // cyan
+    wxColour(0,   255, 0  ), // green
+    wxColour(255, 0,   255), // magenta
+    wxColour(255, 0,   0  ), // red
+    wxColour(255, 255, 0  ), // yellow
+    wxColour(255, 255, 255), // white
+    wxColour(0,   0,   128), // navy
+    wxColour(0,   128, 128), // teal
+    wxColour(0,   128, 0  ), // light green
+    wxColour(128, 0,   128), // purple
+    wxColour(128, 0,   0  ), // maroon
+    wxColour(128, 128, 0  ), // olive
+    wxColour(128, 128, 128), // grey
+    wxColour(192, 192, 192), // light grey
+};
+#endif
+
 bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
 {
     // initialize CHARFORMAT struct
@@ -2826,14 +2875,13 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
                      CFM_ITALIC | CFM_BOLD | CFM_UNDERLINE | CFM_STRIKEOUT;
 
         // fill in data from LOGFONT but recalculate lfHeight because we need
-        // the real height in twips and not the negative number which
-        // wxFillLogFont() returns (this is correct in general and works with
+        // the real height in twips and not the negative number used inside
+        // LOGFONT returns (this is correct in general and works with
         // the Windows font mapper, but not here)
 
         wxFont font(style.GetFont());
 
-        LOGFONT lf;
-        wxFillLogFont(&lf, &font);
+        LOGFONT lf = font.GetNativeFontInfo()->lf;
         cf.yHeight = 20*font.GetPointSize(); // 1 pt = 20 twips
         cf.bCharSet = lf.lfCharSet;
         cf.bPitchAndFamily = lf.lfPitchAndFamily;
@@ -2860,6 +2908,42 @@ bool wxTextCtrl::MSWSetCharFormat(const wxTextAttr& style, long start, long end)
         {
             cf.dwEffects |= CFE_STRIKEOUT;
         }
+    }
+
+    if ( style.HasFontUnderlined() )
+    {
+        cf.dwMask |= CFM_UNDERLINETYPE;
+        BYTE underlineType = CFU_UNDERLINENONE;
+        switch ( style.GetUnderlineType() )
+        {
+            case wxTEXT_ATTR_UNDERLINE_SOLID:
+                underlineType = CFU_UNDERLINE;
+                break;
+            case wxTEXT_ATTR_UNDERLINE_DOUBLE:
+                underlineType = CFU_UNDERLINEDOUBLE;
+                break;
+            case wxTEXT_ATTR_UNDERLINE_SPECIAL:
+                underlineType = CFU_UNDERLINEWAVE;
+                break;
+            default:
+                underlineType = CFU_UNDERLINENONE;
+                break;
+        }
+        cf.bUnderlineType = underlineType;
+
+#if _RICHEDIT_VER >= 0x0800
+        BYTE colour = 0;
+        const wxColour& col = style.GetUnderlineColour();
+        for ( size_t c = 0; c < WXSIZEOF(gs_underlineColourMap); ++c )
+        {
+            if ( col == gs_underlineColourMap[c] )
+            {
+                colour = static_cast<BYTE>(c);
+                break;
+            }
+        }
+        cf.bUnderlineColor = colour;
+#endif
     }
 
     if ( style.HasTextColour() )
@@ -3025,7 +3109,7 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
     // even try to do anything if it's the only thing we want to change
     if ( m_verRichEdit == 1 && !style.HasFont() && !style.HasTextColour() &&
         !style.HasLeftIndent() && !style.HasRightIndent() && !style.HasAlignment() &&
-        !style.HasTabs() )
+        !style.HasTabs() && !style.GetFontUnderlined() )
     {
         // nothing to do: return true if there was really nothing to do and
         // false if we failed to set bg colour
@@ -3123,8 +3207,9 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     LOGFONT lf;
     // Convert the height from the units of 1/20th of the point in which
     // CHARFORMAT stores it to pixel-based units used by LOGFONT.
-    const wxCoord ppi = wxClientDC(this).GetPPI().y;
-    lf.lfHeight = -MulDiv(cf.yHeight/20, ppi, 72);
+    // Note that RichEdit seems to always use standard DPI of 96, even when the
+    // window is a monitor using a higher DPI.
+    lf.lfHeight = wxNativeFontInfo::GetLogFontHeightAtPPI(cf.yHeight/20.0f, 96);
     lf.lfWidth = 0;
     lf.lfCharSet = ANSI_CHARSET; // FIXME: how to get correct charset?
     lf.lfClipPrecision = 0;
@@ -3157,7 +3242,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     else
         lf.lfWeight = FW_NORMAL;
 
-    wxFont font = wxCreateFontFromLogFont(& lf);
+    wxFont font(lf);
     if (font.IsOk())
     {
         style.SetFont(font);
@@ -3176,6 +3261,32 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
         }
     }
 #endif // wxUSE_RICHEDIT2
+
+    wxTextAttrUnderlineType underlineType = wxTEXT_ATTR_UNDERLINE_NONE;
+    switch ( cf.bUnderlineType )
+    {
+        case CFU_UNDERLINE:
+            underlineType = wxTEXT_ATTR_UNDERLINE_SOLID;
+            break;
+        case CFU_UNDERLINEDOUBLE:
+            underlineType = wxTEXT_ATTR_UNDERLINE_DOUBLE;
+            break;
+        case CFU_UNDERLINEWAVE:
+            underlineType = wxTEXT_ATTR_UNDERLINE_SPECIAL;
+            break;
+        default:
+            underlineType = wxTEXT_ATTR_UNDERLINE_NONE;
+            break;
+    }
+
+    wxColour underlineColour;
+#if _RICHEDIT_VER >= 0x0800
+    if ( cf.bUnderlineColor < WXSIZEOF(gs_underlineColourMap) )
+        underlineColour = gs_underlineColourMap[cf.bUnderlineColor];
+#endif
+
+    if ( underlineType != wxTEXT_ATTR_UNDERLINE_NONE )
+        style.SetFontUnderlined(underlineType, underlineColour);
 
     // now get the paragraph formatting
     PARAFORMAT2 pf;

@@ -839,7 +839,7 @@ static GtkSettings *GetSettingsForWindowScreen(GdkWindow *window)
                   : gtk_settings_get_default();
 }
 
-static int GetBorderWidth(wxSystemMetric index, wxWindow* win)
+static int GetBorderWidth(wxSystemMetric index, const wxWindow* win)
 {
     if (win->m_wxwindow)
     {
@@ -912,7 +912,7 @@ static int GetScrollbarWidth()
     return width;
 }
 
-int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
+int wxSystemSettingsNative::GetMetric( wxSystemMetric index, const wxWindow* win )
 {
     GdkWindow *window = NULL;
     if (win)

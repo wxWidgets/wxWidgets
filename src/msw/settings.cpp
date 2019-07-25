@@ -26,6 +26,7 @@
 #include "wx/settings.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/gdicmn.h"
     #include "wx/module.h"
@@ -181,8 +182,9 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
             // for most (simple) controls, e.g. buttons and such but other
             // controls may prefer to use lfStatusFont or lfCaptionFont if it
             // is more appropriate for them
+            const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
             const wxNativeFontInfo
-                info(wxMSWImpl::GetNonClientMetrics().lfMessageFont);
+                info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont);
             gs_fontDefault = new wxFont(info);
         }
 
@@ -260,7 +262,7 @@ static const int gs_metricsMap[] =
 };
 
 // Get a system metric, e.g. scrollbar size
-int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(win))
+int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* win)
 {
     wxCHECK_MSG( index > 0 && (size_t)index < WXSIZEOF(gs_metricsMap), 0,
                  wxT("invalid metric") );
@@ -297,7 +299,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
         return -1;
     }
 
-    int rc = ::GetSystemMetrics(indexMSW);
+    int rc = wxGetSystemMetrics(indexMSW, win);
     if ( index == wxSYS_NETWORK_PRESENT )
     {
         // only the last bit is significant according to the MSDN
@@ -337,15 +339,17 @@ extern wxFont wxGetCCDefaultFont()
     // font which is also used for the icon titles and not the stock default
     // GUI font
     LOGFONT lf;
-    if ( ::SystemParametersInfo
+    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    if ( wxSystemParametersInfo
            (
                 SPI_GETICONTITLELOGFONT,
                 sizeof(lf),
                 &lf,
-                0
+                0,
+                win
            ) )
     {
-        return wxFont(wxCreateFontFromLogFont(&lf));
+        return wxFont(lf);
     }
     else
     {

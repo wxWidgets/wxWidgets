@@ -67,9 +67,9 @@ public:
 
     // implementation:
 #if WXWIN_COMPATIBILITY_3_0
-    wxDEPRECATED(virtual void SetHeight(int height));
-    wxDEPRECATED(virtual void SetWidth(int width));
-    wxDEPRECATED(virtual void SetDepth(int depth));
+    wxDEPRECATED(virtual void SetHeight(int height) wxOVERRIDE);
+    wxDEPRECATED(virtual void SetWidth(int width) wxOVERRIDE);
+    wxDEPRECATED(virtual void SetDepth(int depth) wxOVERRIDE);
 #endif
 
     void *GetRawData(wxPixelDataBase& data, int bpp);

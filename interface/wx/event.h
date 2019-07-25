@@ -4550,8 +4550,9 @@ public:
 
         This method can only be used with the @c OPEN and @c CLOSE events.
 
-        The returned value is never @NULL in the ports implementing this
-        function, which currently includes all the major ones.
+        Note that the returned value can be @NULL if the menu being opened
+        doesn't have a corresponding wxMenu, e.g. this happens when opening the
+        system menu in wxMSW port.
     */
     wxMenu* GetMenu() const;
 

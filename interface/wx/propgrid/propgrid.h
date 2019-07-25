@@ -470,60 +470,8 @@ typedef int (*wxPGSortCallback)(wxPropertyGrid* propGrid,
 
     @section propgrid_event_handling Event Handling
 
-    To process input from a property grid control, use these event handler macros
-    to direct input to member functions that take a wxPropertyGridEvent argument.
-
-    @beginEventEmissionTable{wxPropertyGridEvent}
-    @event{EVT_PG_SELECTED (id, func)}
-        Respond to @c wxEVT_PG_SELECTED event, generated when a property selection
-        has been changed, either by user action or by indirect program
-        function. For instance, collapsing a parent property programmatically
-        causes any selected child property to become unselected, and may
-        therefore cause this event to be generated.
-    @event{EVT_PG_CHANGED(id, func)}
-        Respond to @c wxEVT_PG_CHANGED event, generated when property value
-        has been changed by the user.
-    @event{EVT_PG_CHANGING(id, func)}
-        Respond to @c wxEVT_PG_CHANGING event, generated when property value
-        is about to be changed by user. Use wxPropertyGridEvent::GetValue()
-        to take a peek at the pending value, and wxPropertyGridEvent::Veto()
-        to prevent change from taking place, if necessary.
-    @event{EVT_PG_HIGHLIGHTED(id, func)}
-        Respond to @c wxEVT_PG_HIGHLIGHTED event, which occurs when mouse
-        moves over a property. Event's property is @NULL if hovered area does
-        not belong to any property.
-    @event{EVT_PG_RIGHT_CLICK(id, func)}
-        Respond to @c wxEVT_PG_RIGHT_CLICK event, which occurs when property is
-        clicked on with right mouse button.
-    @event{EVT_PG_DOUBLE_CLICK(id, func)}
-        Respond to @c wxEVT_PG_DOUBLE_CLICK event, which occurs when property is
-        double-clicked on with left mouse button.
-    @event{EVT_PG_ITEM_COLLAPSED(id, func)}
-        Respond to @c wxEVT_PG_ITEM_COLLAPSED event, generated when user collapses
-        a property or category.
-    @event{EVT_PG_ITEM_EXPANDED(id, func)}
-        Respond to @c wxEVT_PG_ITEM_EXPANDED event, generated when user expands
-        a property or category.
-    @event{EVT_PG_LABEL_EDIT_BEGIN(id, func)}
-        Respond to @c wxEVT_PG_LABEL_EDIT_BEGIN event, generated when user is
-        about to begin editing a property label. You can veto this event to
-        prevent the action.
-    @event{EVT_PG_LABEL_EDIT_ENDING(id, func)}
-        Respond to @c wxEVT_PG_LABEL_EDIT_ENDING event, generated when user is
-        about to end editing of a property label. You can veto this event to
-        prevent the action.
-    @event{EVT_PG_COL_BEGIN_DRAG(id, func)}
-        Respond to @c wxEVT_PG_COL_BEGIN_DRAG event, generated when user
-        starts resizing a column - can be vetoed.
-    @event{EVT_PG_COL_DRAGGING,(id, func)}
-        Respond to @c wxEVT_PG_COL_DRAGGING, event, generated when a
-        column resize by user is in progress. This event is also generated
-        when user double-clicks the splitter in order to recenter
-        it.
-    @event{EVT_PG_COL_END_DRAG(id, func)}
-        Respond to @c wxEVT_PG_COL_END_DRAG event, generated after column
-        resize by user has finished.
-    @endEventTable
+    Please see wxPropertyGridEvent for the documentation of all event types you
+    can use with wxPropertyGrid.
 
     @remarks
     Use Freeze() and Thaw() respectively to disable and enable drawing.
@@ -1022,9 +970,8 @@ public:
         @return returns @true if selection finished successfully. Usually only
         fails if current value in editor is not valid.
 
-        @remarks In wxPropertyGrid 1.4, this member function used to generate
-                 @c wxEVT_PG_SELECTED. In wxWidgets 2.9 and later, it no longer
-                 does that.
+        @remarks In wxWidgets 2.9 and later, this function no longer
+        sends @c wxEVT_PG_SELECTED.
 
         @remarks This clears any previous selection.
 
@@ -1326,6 +1273,60 @@ public:
 
     A property grid event holds information about events associated with
     wxPropertyGrid objects.
+    To process input from a property grid control, use these event handler macros
+    to direct input to member functions that take a wxPropertyGridEvent argument.
+
+    @beginEventEmissionTable{wxPropertyGridEvent}
+    @event{EVT_PG_SELECTED (id, func)}
+        Respond to @c wxEVT_PG_SELECTED event, generated when a property selection
+        has been changed, either by user action or by indirect program
+        function. For instance, collapsing a parent property programmatically
+        causes any selected child property to become unselected, and may
+        therefore cause this event to be generated.
+    @event{EVT_PG_CHANGED(id, func)}
+        Respond to @c wxEVT_PG_CHANGED event, generated when property value
+        has been changed by the user.
+    @event{EVT_PG_CHANGING(id, func)}
+        Respond to @c wxEVT_PG_CHANGING event, generated when property value
+        is about to be changed by user. Use wxPropertyGridEvent::GetValue()
+        to take a peek at the pending value, and wxPropertyGridEvent::Veto()
+        to prevent change from taking place, if necessary.
+    @event{EVT_PG_HIGHLIGHTED(id, func)}
+        Respond to @c wxEVT_PG_HIGHLIGHTED event, which occurs when mouse
+        moves over a property. Event's property is @NULL if hovered area does
+        not belong to any property.
+    @event{EVT_PG_RIGHT_CLICK(id, func)}
+        Respond to @c wxEVT_PG_RIGHT_CLICK event, which occurs when property is
+        clicked on with right mouse button.
+    @event{EVT_PG_DOUBLE_CLICK(id, func)}
+        Respond to @c wxEVT_PG_DOUBLE_CLICK event, which occurs when property is
+        double-clicked on with left mouse button.
+    @event{EVT_PG_ITEM_COLLAPSED(id, func)}
+        Respond to @c wxEVT_PG_ITEM_COLLAPSED event, generated when user collapses
+        a property or category.
+    @event{EVT_PG_ITEM_EXPANDED(id, func)}
+        Respond to @c wxEVT_PG_ITEM_EXPANDED event, generated when user expands
+        a property or category.
+    @event{EVT_PG_LABEL_EDIT_BEGIN(id, func)}
+        Respond to @c wxEVT_PG_LABEL_EDIT_BEGIN event, generated when user is
+        about to begin editing a property label. You can veto this event to
+        prevent the action.
+    @event{EVT_PG_LABEL_EDIT_ENDING(id, func)}
+        Respond to @c wxEVT_PG_LABEL_EDIT_ENDING event, generated when user is
+        about to end editing of a property label. You can veto this event to
+        prevent the action.
+    @event{EVT_PG_COL_BEGIN_DRAG(id, func)}
+        Respond to @c wxEVT_PG_COL_BEGIN_DRAG event, generated when user
+        starts resizing a column - can be vetoed.
+    @event{EVT_PG_COL_DRAGGING,(id, func)}
+        Respond to @c wxEVT_PG_COL_DRAGGING, event, generated when a
+        column resize by user is in progress. This event is also generated
+        when user double-clicks the splitter in order to recenter
+        it.
+    @event{EVT_PG_COL_END_DRAG(id, func)}
+        Respond to @c wxEVT_PG_COL_END_DRAG event, generated after column
+        resize by user has finished.
+    @endEventTable
 
     @library{wxpropgrid}
     @category{propgrid}

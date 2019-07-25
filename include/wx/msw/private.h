@@ -300,6 +300,11 @@ extern HICON wxBitmapToHICON(const wxBitmap& bmp);
 extern
 HCURSOR wxBitmapToHCURSOR(const wxBitmap& bmp, int hotSpotX, int hotSpotY);
 
+extern int wxGetSystemMetrics(int nIndex, const wxWindow* win);
+
+extern bool wxSystemParametersInfo(UINT uiAction, UINT uiParam,
+                                   PVOID pvParam, UINT fWinIni,
+                                   const wxWindow* win);
 
 #if wxUSE_OWNER_DRAWN
 
@@ -961,9 +966,13 @@ extern const wxCursor *wxGetGlobalCursor(); // from msw/cursor.cpp
 WXDLLIMPEXP_CORE void wxGetCursorPosMSW(POINT* pt);
 
 WXDLLIMPEXP_CORE void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font);
-WXDLLIMPEXP_CORE void wxFillLogFont(LOGFONT *logFont, const wxFont *font);
-WXDLLIMPEXP_CORE wxFont wxCreateFontFromLogFont(const LOGFONT *logFont);
 WXDLLIMPEXP_CORE wxFontEncoding wxGetFontEncFromCharSet(int charset);
+
+inline void wxSetWindowFont(HWND hwnd, const wxFont& font)
+{
+    ::SendMessage(hwnd, WM_SETFONT,
+                  (WPARAM)GetHfontOf(font), MAKELPARAM(TRUE, 0));
+}
 
 WXDLLIMPEXP_CORE void wxSliderEvent(WXHWND control, WXWORD wParam, WXWORD pos);
 WXDLLIMPEXP_CORE void wxScrollBarEvent(WXHWND hbar, WXWORD wParam, WXWORD pos);

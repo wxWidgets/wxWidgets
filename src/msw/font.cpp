@@ -152,6 +152,16 @@ public:
         return m_hFont != 0;
     }
 
+    int GetLogFontHeight() const
+    {
+        return m_nativeFontInfo.lf.lfHeight;
+    }
+
+    int GetLogFontHeightAtPPI(int ppi) const
+    {
+        return m_nativeFontInfo.GetLogFontHeightAtPPI(ppi);
+    }
+
     // ... and setters: notice that all of them invalidate the currently
     // allocated HFONT, if any, so that the next call to GetHFONT() recreates a
     // new one
@@ -221,6 +231,13 @@ public:
         Free();
 
         m_nativeFontInfo.SetEncoding(encoding);
+    }
+
+    void SetLogFontHeight(int height)
+    {
+        Free();
+
+        m_nativeFontInfo.lf.lfHeight = height;
     }
 
     const wxNativeFontInfo& GetNativeFontInfo() const
@@ -385,6 +402,15 @@ void wxFontRefData::Free()
 // wxNativeFontInfo
 // ----------------------------------------------------------------------------
 
+/* static */
+float wxNativeFontInfo::GetPointSizeFromLogFontHeight(int height)
+{
+    // Determine the size in points using the primary screen DPI as we don't
+    // have anything else here.
+    const float ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
+    return 72.0f * abs(height) / ppi;
+}
+
 void wxNativeFontInfo::Init()
 {
     wxZeroMemory(lf);
@@ -402,14 +428,7 @@ void wxNativeFontInfo::Init()
 
 float wxNativeFontInfo::GetFractionalPointSize() const
 {
-    if ( pointSize != 0.0f )
-        return pointSize;
-
-    // FIXME: using the screen here results in incorrect font size calculation
-    //        for printing!
-    const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
-
-    return (72.0*abs(lf.lfHeight)) / (double) ppInch;
+    return pointSize;
 }
 
 wxSize wxNativeFontInfo::GetPixelSize() const
@@ -490,17 +509,14 @@ wxFontEncoding wxNativeFontInfo::GetEncoding() const
     return wxGetFontEncFromCharSet(lf.lfCharSet);
 }
 
-void wxNativeFontInfo::SetFractionalPointSize(float pointsize)
+void wxNativeFontInfo::SetFractionalPointSize(float pointSizeNew)
 {
-    // Store it to be able to return it from GetFractionalPointSize() later
-    // exactly.
-    pointSize = pointsize;
+    // We don't have the correct DPI to use here, so use that of the
+    // primary screen.
+    const int ppi = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
+    lf.lfHeight = GetLogFontHeightAtPPI(pointSizeNew, ppi);
 
-    // FIXME: using the screen here results in incorrect font size calculation
-    //        for printing!
-    const int ppInch = ::GetDeviceCaps(ScreenHDC(), LOGPIXELSY);
-
-    lf.lfHeight = -wxRound(pointsize*((double)ppInch)/72.0);
+    pointSize = pointSizeNew;
 }
 
 void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
@@ -516,6 +532,10 @@ void wxNativeFontInfo::SetPixelSize(const wxSize& pixelSize)
     // versions by passing a negative value explicitly itself.
     lf.lfHeight = -abs(pixelSize.GetHeight());
     lf.lfWidth = pixelSize.GetWidth();
+
+    // We don't have the right DPI to use here neither, but we need to update
+    // the point size too, so fall back to the default.
+    pointSize = GetPointSizeFromLogFontHeight(lf.lfHeight);
 }
 
 void wxNativeFontInfo::SetStyle(wxFontStyle style)
@@ -638,11 +658,13 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     if ( !token.ToLong(&l) )
         return false;
 
+    bool setPointSizeFromHeight = false;
     switch ( l )
     {
         case 0:
-            // Fractional point size is not present in this version.
-            pointSize = 0.0f;
+            // Fractional point size is not present in this version, it will be
+            // set from lfHeight below in this case.
+            setPointSizeFromHeight = true;
             break;
 
         case 1:
@@ -665,6 +687,8 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     if ( !token.ToLong(&l) )
         return false;
     lf.lfHeight = l;
+    if ( setPointSizeFromHeight )
+        pointSize = GetPointSizeFromLogFontHeight(l);
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
@@ -855,7 +879,6 @@ void wxFont::SetFractionalPointSize(float pointSize)
 {
     AllocExclusive();
 
-    M_FONTDATA->Free();
     M_FONTDATA->SetFractionalPointSize(pointSize);
 }
 

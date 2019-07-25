@@ -443,6 +443,9 @@ int wxFileDialog::ShowModal()
 
     if ( HasFdFlag(wxFD_FILE_MUST_EXIST) )
         msw_flags |= OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+    if ( HasFlag(wxFD_SHOW_HIDDEN) )
+        msw_flags |= OFN_FORCESHOWHIDDEN;
     /*
         If the window has been moved the programmer is probably
         trying to center or position it.  Thus we set the callback

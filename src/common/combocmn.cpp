@@ -2276,7 +2276,7 @@ void wxComboCtrlBase::ShowPopup()
     int maxHeightPopup;
     wxSize ctrlSz = GetSize();
 
-    screenHeight = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y );
+    screenHeight = wxSystemSettings::GetMetric( wxSYS_SCREEN_Y, this );
     scrPos = GetScreenPosition();
 
     spaceAbove = scrPos.y;
@@ -2354,7 +2354,7 @@ void wxComboCtrlBase::ShowPopup()
     if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
         leftX -= ctrlSz.x;
 
-    int screenWidth = wxSystemSettings::GetMetric( wxSYS_SCREEN_X );
+    int screenWidth = wxSystemSettings::GetMetric( wxSYS_SCREEN_X, this );
 
     // If there is not enough horizontal space, anchor on the other side.
     // If there is no space even then, place the popup at x 0.

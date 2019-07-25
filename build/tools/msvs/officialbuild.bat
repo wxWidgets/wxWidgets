@@ -22,6 +22,23 @@ rem ========================================================
 
 set compvers="Unknown"
 
+if "%1" == "vc142" (
+  @echo Building for vc142 / vs2019
+  set comp=142
+  set compvers=vc142
+
+  if NOT "%VS160COMNTOOLS%" == "" (
+    call "%VS160COMNTOOLS%VsDevCmd.bat"
+  )
+  if "%VS160COMNTOOLS%" == "" (
+    call %curr_dir%\findvs 16.0 17.0
+
+    if errorlevel 1 (
+      @echo vswhere.exe must be in your path or a VS2019 developer command prompt must be used.
+      goto end
+    )
+  )
+)
 if "%1" == "vc141" (
   @echo Building for vc141 / vs2017
   set comp=141
@@ -79,6 +96,10 @@ if %compvers% == "vc90" (
 @echo ============================================================
 )
 
+rem Return to the build directory in case we have been moved elsewhere.
+
+cd %VSCMD_START_DIR%
+
 @echo Removing the existing destination so that a complete rebuild occurs.
 
 rmdir %compvers%_mswuddll /s /q
@@ -96,6 +117,7 @@ del %compvers%x86_Release.txt
 del %compvers%x64_Debug.txt
 del %compvers%x64_Release.txt
 
+if "%compvers%" == "vc142" call "%VS160COMNTOOLS%..\..\VC\Auxiliary\Build\vcvarsall.bat" x64
 if "%compvers%" == "vc141" call "%VS150COMNTOOLS%..\..\VC\Auxiliary\Build\vcvarsall.bat" x64
 if "%compvers%" == "vc140" call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" x64
 if "%compvers%" == "vc120" call "%VS120COMNTOOLS%..\..\VC\vcvarsall.bat" x86_amd64
@@ -130,6 +152,7 @@ nmake -f makefile.vc BUILD=debug SHARED=1 COMPILER_VERSION=%comp% OFFICIAL_BUILD
 
 if ERRORLEVEL 1 goto ERR_BUILD
 
+if "%compvers%" == "vc142" call "%VS160COMNTOOLS%..\..\VC\Auxiliary\Build\vcvarsall.bat" x86
 if "%compvers%" == "vc141" call "%VS150COMNTOOLS%..\..\VC\Auxiliary\Build\vcvarsall.bat" x86
 if "%compvers%" == "vc140" call "%VS140COMNTOOLS%..\..\VC\vcvarsall.bat" x86
 if "%compvers%" == "vc120" call "%VS120COMNTOOLS%..\..\VC\vcvarsall.bat" x86
@@ -191,6 +214,7 @@ goto End
 :VERSIONS
    @echo.
    @echo Compiler Version: One of -
+   @echo vc142
    @echo vc141
    @echo vc140
    @echo vc120

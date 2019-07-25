@@ -208,7 +208,6 @@ wxPropertyGridPageState::wxPropertyGridPageState()
     m_currentCategory = NULL;
     m_width = 0;
     m_virtualHeight = 0;
-    m_lastCaptionBottomnest = true;
     m_itemsAdded = false;
     m_anyModified = false;
     m_vhCalcPending = false;
@@ -313,7 +312,6 @@ void wxPropertyGridPageState::DoClear()
         m_dictName.clear();
 
         m_currentCategory = NULL;
-        m_lastCaptionBottomnest = true;
         m_itemsAdded = false;
 
         m_virtualHeight = 0;
@@ -521,56 +519,6 @@ void wxPropertyGridPageState::DoSetPropertyName( wxPGProperty* p,
 // wxPropertyGridPageState global operations
 // -----------------------------------------------------------------------
 
-// -----------------------------------------------------------------------
-// Item iteration macros
-//   NB: Nowadays only needed for alphabetic/categoric mode switching.
-// -----------------------------------------------------------------------
-
-//#define II_INVALID_I    0x00FFFFFF
-
-#define ITEM_ITERATION_VARIABLES \
-    wxPGProperty* parent; \
-    unsigned int i; \
-    unsigned int iMax;
-
-#define ITEM_ITERATION_INIT_FROM_THE_TOP \
-    parent = m_properties; \
-    i = 0;
-
-#if 0
-#define ITEM_ITERATION_INIT(startparent, startindex, state) \
-    parent = startparent; \
-    i = (unsigned int)startindex; \
-    if ( parent == NULL ) \
-    { \
-        parent = state->m_properties; \
-        i = 0; \
-    }
-#endif
-
-#define ITEM_ITERATION_LOOP_BEGIN \
-    do \
-    { \
-        iMax = parent->GetChildCount(); \
-        while ( i < iMax ) \
-        {  \
-            wxPGProperty* p = parent->Item(i);
-
-#define ITEM_ITERATION_LOOP_END \
-            if ( p->GetChildCount() ) \
-            { \
-                i = 0; \
-                parent = (wxPGProperty*)p; \
-                iMax = parent->GetChildCount(); \
-            } \
-            else \
-                i++; \
-        } \
-        i = parent->m_arrIndex + 1; \
-        parent = parent->m_parent; \
-    } \
-    while ( parent != NULL );
-
 bool wxPropertyGridPageState::EnableCategories( bool enable )
 {
     //
@@ -578,45 +526,18 @@ bool wxPropertyGridPageState::EnableCategories( bool enable )
     //     function, since it depends on m_arrIndexes,
     //     which, among other things, is being fixed here.
     //
-    ITEM_ITERATION_VARIABLES
 
     if ( enable )
     {
-        //
         // Enable categories
-        //
-
         if ( !IsInNonCatMode() )
             return false;
 
         m_properties = &m_regularArray;
-
-        // fix parents, indexes, and depths
-        ITEM_ITERATION_INIT_FROM_THE_TOP
-
-        ITEM_ITERATION_LOOP_BEGIN
-
-            p->m_arrIndex = i;
-
-            p->m_parent = parent;
-
-            // If parent was category, and this is not,
-            // then the depth stays the same.
-            if ( parent->IsCategory() &&
-                 !p->IsCategory() )
-                p->m_depth = parent->GetDepth();
-            else
-                p->m_depth = parent->GetDepth() + 1;
-
-        ITEM_ITERATION_LOOP_END
-
     }
     else
     {
-        //
         // Disable categories
-        //
-
         if ( IsInNonCatMode() )
             return false;
 
@@ -625,20 +546,50 @@ bool wxPropertyGridPageState::EnableCategories( bool enable )
             InitNonCatMode();
 
         m_properties = m_abcArray;
+    }
 
-        // fix parents, indexes, and depths
-        ITEM_ITERATION_INIT_FROM_THE_TOP
-
-        ITEM_ITERATION_LOOP_BEGIN
+    // fix parents, indexes, and depths
+    wxPGProperty* parent = m_properties;
+    unsigned int i = 0;
+    do
+    {
+        unsigned int iMax = parent->GetChildCount();
+        while ( i < iMax )
+        {
+            wxPGProperty* p = parent->Item(i);
 
             p->m_arrIndex = i;
-
             p->m_parent = parent;
+            if ( enable )
+            {
+                // If parent was category, and this is not,
+                // then the depth stays the same.
+                if ( parent->IsCategory() &&
+                    !p->IsCategory() )
+                    p->m_depth = parent->GetDepth();
+                else
+                    p->m_depth = parent->GetDepth() + 1;
+            }
+            else
+            {
+                p->m_depth = parent->GetDepth() + 1;
+            }
 
-            p->m_depth = parent->GetDepth() + 1;
+            if ( p->GetChildCount() > 0 )
+            {
+                i = 0;
+                parent = p;
+                iMax = parent->GetChildCount();
+            }
+            else
+            {
+                i++;
+            }
+        }
 
-        ITEM_ITERATION_LOOP_END
-    }
+        i = parent->GetIndexInParent() + 1;
+        parent = parent->GetParent();
+    } while ( parent != NULL );
 
     VirtualHeightChanged();
 
@@ -897,34 +848,19 @@ void wxPropertyGridPageState::DoSetSplitterPosition( int newXPos,
                                                      int splitterColumn,
                                                      int flags )
 {
-    wxPropertyGrid* pg = GetGrid();
-
     int adjust = newXPos - DoGetSplitterPosition(splitterColumn);
-
-    if ( !pg->HasVirtualWidth() )
-    {
-        // No virtual width
-        int otherColumn;
-        if ( adjust > 0 )
-        {
-            otherColumn = splitterColumn + 1;
-            if ( otherColumn == (int)m_colWidths.size() )
-                otherColumn = 0;
-            m_colWidths[splitterColumn] += adjust;
-            PropagateColSizeDec( otherColumn, adjust, 1 );
-        }
-        else if ( adjust < 0 )
-        {
-            otherColumn = splitterColumn + 1;
-            if ( otherColumn == (int)m_colWidths.size() )
-                otherColumn = 0;
-            m_colWidths[otherColumn] -= adjust;
-            PropagateColSizeDec( splitterColumn, -adjust, -1 );
-        }
-    }
-    else
+    int otherColumn = splitterColumn + 1;
+    if ( otherColumn == (int)m_colWidths.size() )
+        otherColumn = 0;
+    if ( adjust > 0 )
     {
         m_colWidths[splitterColumn] += adjust;
+        PropagateColSizeDec( otherColumn, adjust, 1 );
+    }
+    else if ( adjust < 0 )
+    {
+        m_colWidths[otherColumn] -= adjust;
+        PropagateColSizeDec( splitterColumn, -adjust, -1 );
     }
     // Actual adjustment can be different from demanded.
     newXPos = DoGetSplitterPosition(splitterColumn);
@@ -1506,7 +1442,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
     // Second pass for special entries
     for ( node = list.begin(); node != list.end(); ++node )
     {
-        wxVariant *current = (wxVariant*)*node;
+        wxVariant *current = const_cast<wxVariant*>(*node);
 
         // Make sure it is wxVariant.
         wxASSERT( current );
@@ -1569,7 +1505,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
     {
         for ( node = list.begin(); node != list.end(); ++node )
         {
-            wxVariant *current = (wxVariant*)*node;
+            wxVariant *current = const_cast<wxVariant*>(*node);
 
             const wxString& name = current->GetName();
             if ( !name.empty() )
@@ -1600,7 +1536,7 @@ void wxPropertyGridPageState::DoSetPropertyValues( const wxVariantList& list, wx
 
                                 for ( node2 = list2.begin(); node2 != list2.end(); ++node2 )
                                 {
-                                    wxVariant *attr = (wxVariant*)*node2;
+                                    wxVariant *attr = const_cast<wxVariant*>(*node2);
                                     foundProp->SetAttribute( attr->GetName(), *attr );
                                 }
                             }
@@ -1785,15 +1721,6 @@ wxPGProperty* wxPropertyGridPageState::DoInsert( wxPGProperty* parent, int index
         // Add to current mode
         if ( !property->IsCategory() )
             m_abcArray->DoAddChild( property, index, true );
-    }
-
-    // category stuff
-    if ( property->IsCategory() )
-    {
-        // This is a category caption item.
-
-        // Last caption is not the bottom one (this info required by append)
-        m_lastCaptionBottomnest = false;
     }
 
     // Only add name to hashmap if parent is root or category

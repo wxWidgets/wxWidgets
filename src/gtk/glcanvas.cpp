@@ -18,90 +18,26 @@
 #include "wx/gtk/private/wrapgtk.h"
 #include <gdk/gdkx.h>
 
-#if WXWIN_COMPATIBILITY_2_8
-
-//-----------------------------------------------------------------------------
-// "realize" from m_wxwindow: used to create m_glContext implicitly
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static void
-gtk_glwindow_realized_callback( GtkWidget *WXUNUSED(widget), wxGLCanvas *win )
-{
-    win->GTKInitImplicitContext();
-}
-}
-
-#endif // WXWIN_COMPATIBILITY_2_8
-
-//-----------------------------------------------------------------------------
-// "map" from m_wxwindow
-//-----------------------------------------------------------------------------
-
-#ifndef __WXGTK3__
-extern "C" {
-static void
-gtk_glwindow_map_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
-{
-    wxPaintEvent event( win->GetId() );
-    event.SetEventObject( win );
-    win->HandleWindowEvent( event );
-
-    win->m_exposed = false;
-    win->GetUpdateRegion().Clear();
-}
-}
-#endif
-
-//-----------------------------------------------------------------------------
-// "expose_event" of m_wxwindow
-//-----------------------------------------------------------------------------
-
-extern "C" {
 #ifdef __WXGTK3__
-static gboolean draw(GtkWidget*, cairo_t* cr, wxGLCanvas* win)
-{
-    win->m_exposed = true;
-    if (win->m_cairoPaintContext == NULL)
-    {
-        win->m_cairoPaintContext = cr;
-        cairo_reference(cr);
-    }
-    double x1, y1, x2, y2;
-    cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
-    win->GetUpdateRegion().Union(int(x1), int(y1), int(x2 - x1), int(y2 - y1));
-    return false;
-}
-#else
-static gboolean
-gtk_glwindow_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_event, wxGLCanvas *win )
-{
-    win->m_exposed = true;
-
-    win->GetUpdateRegion().Union( gdk_event->area.x,
-                                  gdk_event->area.y,
-                                  gdk_event->area.width,
-                                  gdk_event->area.height );
-    return false;
-}
-#endif
-}
-
-//-----------------------------------------------------------------------------
-// "size_allocate" of m_wxwindow
-//-----------------------------------------------------------------------------
-
 extern "C" {
-static void
-gtk_glcanvas_size_callback(GtkWidget *WXUNUSED(widget),
-                           GtkAllocation * WXUNUSED(alloc),
-                           wxGLCanvas *win)
+static gboolean draw(GtkWidget* widget, cairo_t* cr, wxGLCanvas* win)
 {
-    wxSizeEvent event( wxSize(win->m_width,win->m_height), win->GetId() );
-    event.SetEventObject( win );
-    win->HandleWindowEvent( event );
+    GtkAllocation a;
+    gtk_widget_get_allocation(widget, &a);
+    if (a.width > win->m_size.x || a.height > win->m_size.y)
+    {
+        // GLX buffers are apparently not reliably updated to the new size
+        // before the paint event occurs, resulting in newly exposed window
+        // areas sometimes not being painted at the end of a drag resize.
+        gdk_display_sync(gtk_widget_get_display(widget));
+    }
+    win->m_size.Set(a.width, a.height);
+
+    win->GTKSendPaintEvents(cr);
+    return false;
 }
 }
+#endif // __WXGTK3__
 
 //-----------------------------------------------------------------------------
 // emission hook for "parent-set"
@@ -273,11 +209,9 @@ bool wxGLCanvas::Create(wxWindow *parent,
 #endif // wxUSE_PALETTE
     wxUnusedVar(palette); // Unused when wxDEBUG_LEVEL==0
 
-    m_exposed = false;
-    m_noExpose = true;
     m_nativeSizeEvent = true;
 #ifdef __WXGTK3__
-    m_cairoPaintContext = NULL;
+    m_noExpose = true;
     m_backgroundStyle = wxBG_STYLE_PAINT;
 #endif
 
@@ -291,32 +225,11 @@ bool wxGLCanvas::Create(wxWindow *parent,
     g_signal_add_emission_hook(sig_id, 0, parent_set_hook, this, NULL);
 
     wxWindow::Create( parent, id, pos, size, style, name );
-
-    gtk_widget_set_double_buffered(m_wxwindow, false);
-
-#if WXWIN_COMPATIBILITY_2_8
-    g_signal_connect(m_wxwindow, "realize",       G_CALLBACK(gtk_glwindow_realized_callback), this);
-#endif // WXWIN_COMPATIBILITY_2_8
 #ifdef __WXGTK3__
     g_signal_connect(m_wxwindow, "draw", G_CALLBACK(draw), this);
-#else
-    g_signal_connect(m_wxwindow, "map",           G_CALLBACK(gtk_glwindow_map_callback),      this);
-    g_signal_connect(m_wxwindow, "expose_event",  G_CALLBACK(gtk_glwindow_expose_callback),   this);
 #endif
-    g_signal_connect(m_widget,   "size_allocate", G_CALLBACK(gtk_glcanvas_size_callback),     this);
 
-#if WXWIN_COMPATIBILITY_2_8
-    // if our parent window is already visible, we had been realized before we
-    // connected to the "realize" signal and hence our m_glContext hasn't been
-    // initialized yet and we have to do it now
-    if (gtk_widget_get_realized(m_wxwindow))
-        gtk_glwindow_realized_callback( m_wxwindow, this );
-#endif // WXWIN_COMPATIBILITY_2_8
-
-#ifndef __WXGTK3__
-    if (gtk_widget_get_mapped(m_wxwindow))
-        gtk_glwindow_map_callback( m_wxwindow, this );
-#endif
+    gtk_widget_set_double_buffered(m_wxwindow, false);
 
     return true;
 }
@@ -332,25 +245,14 @@ Window wxGLCanvas::GetXWindow() const
     return window ? GDK_WINDOW_XID(window) : 0;
 }
 
-void wxGLCanvas::OnInternalIdle()
+void wxGLCanvas::GTKHandleRealized()
 {
-    if (m_exposed)
-    {
-#ifdef __WXGTK3__
-        GTKSendPaintEvents(m_cairoPaintContext);
-        cairo_destroy(m_cairoPaintContext);
-        m_cairoPaintContext = NULL;
-#else
-        wxPaintEvent event( GetId() );
-        event.SetEventObject( this );
-        HandleWindowEvent( event );
+    BaseType::GTKHandleRealized();
+
+#if WXWIN_COMPATIBILITY_2_8
+    GTKInitImplicitContext();
 #endif
-
-        m_exposed = false;
-        GetUpdateRegion().Clear();
-    }
-
-    wxWindow::OnInternalIdle();
+    SendSizeEvent();
 }
 
 #if WXWIN_COMPATIBILITY_2_8

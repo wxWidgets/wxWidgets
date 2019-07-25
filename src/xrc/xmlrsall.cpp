@@ -86,6 +86,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_COMMANDLINKBUTTON
     AddHandler(new wxCommandLinkButtonXmlHandler);
 #endif
+#if wxUSE_DATAVIEWCTRL
+    AddHandler(new wxDataViewXmlHandler);
+#endif
 #if wxUSE_DATEPICKCTRL
     AddHandler(new wxDateCtrlXmlHandler);
 #endif

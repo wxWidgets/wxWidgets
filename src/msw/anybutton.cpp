@@ -404,7 +404,7 @@ wxSize wxMSWButton::GetFittingSize(wxWindow *win,
 
     // account for the shield UAC icon if we have it
     if ( flags & Size_AuthNeeded )
-        sizeBtn.x += wxSystemSettings::GetMetric(wxSYS_SMALLICON_X);
+        sizeBtn.x += wxSystemSettings::GetMetric(wxSYS_SMALLICON_X, win);
 
     return sizeBtn;
 }

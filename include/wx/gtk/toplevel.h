@@ -112,6 +112,14 @@ public:
     // size of WM decorations
     struct DecorSize
     {
+        DecorSize()
+        {
+            left =
+            right =
+            top =
+            bottom = 0;
+        }
+
         int left, right, top, bottom;
     };
     DecorSize m_decorSize;
@@ -155,6 +163,9 @@ private:
 
     // size hint increments
     int m_incWidth, m_incHeight;
+
+    // position before it last changed
+    wxPoint m_lastPos;
 
     // is the frame currently iconized?
     bool m_isIconized;

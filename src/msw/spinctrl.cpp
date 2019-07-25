@@ -564,8 +564,7 @@ bool wxSpinCtrl::SetFont(const wxFont& font)
         return false;
     }
 
-    WXHANDLE hFont = GetFont().GetResourceHandle();
-    (void)::SendMessage(GetBuddyHwnd(), WM_SETFONT, (WPARAM)hFont, TRUE);
+    wxSetWindowFont(GetBuddyHwnd(), GetFont());
 
     return true;
 }
@@ -738,6 +737,11 @@ wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
     // able to reuse its GetSizeFromTextSize() implementation.
     wxTextCtrl text;
     TempHWNDSetter set(&text, m_hwndBuddy);
+
+    // It's unnecessary to actually change the font used by the buddy control,
+    // but we do need to ensure that the helper wxTextCtrl wxFont matches what
+    // it is used as GetSizeFromTextSize() uses the current font.
+    text.wxWindowBase::SetFont(GetFont());
 
     // Increase the width to accommodate the button, which should fit inside
     // the text control while taking account of the overlap.

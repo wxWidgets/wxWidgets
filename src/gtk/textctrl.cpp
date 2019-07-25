@@ -124,6 +124,57 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
         }
     }
 
+    if ( attr.HasFontUnderlined() )
+    {
+        PangoUnderline pangoUnderlineStyle = PANGO_UNDERLINE_NONE;
+        switch ( attr.GetUnderlineType() )
+        {
+            case wxTEXT_ATTR_UNDERLINE_SOLID:
+                pangoUnderlineStyle = PANGO_UNDERLINE_SINGLE;
+                break;
+            case wxTEXT_ATTR_UNDERLINE_DOUBLE:
+                pangoUnderlineStyle = PANGO_UNDERLINE_DOUBLE;
+                break;
+            case wxTEXT_ATTR_UNDERLINE_SPECIAL:
+                pangoUnderlineStyle = PANGO_UNDERLINE_ERROR;
+                break;
+            default:
+                pangoUnderlineStyle = PANGO_UNDERLINE_NONE;
+                break;
+        }
+
+        g_snprintf(buf, sizeof(buf), "WXFONTUNDERLINESTYLE %u",
+                                     (unsigned)pangoUnderlineStyle);
+        tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
+                                         buf );
+        if (!tag)
+            tag = gtk_text_buffer_create_tag( text_buffer, buf,
+                                              "underline-set", TRUE,
+                                              "underline", pangoUnderlineStyle,
+                                              NULL );
+        gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
+
+#ifdef __WXGTK3__
+        if ( wx_is_at_least_gtk3(16) )
+        {
+            wxColour colour = attr.GetUnderlineColour();
+            if ( colour.IsOk() )
+            {
+                g_snprintf(buf, sizeof(buf), "WXFONTUNDERLINECOLOUR %u %u %u %u",
+                           colour.Red(), colour.Green(), colour.Blue(), colour.Alpha());
+                tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
+                                                 buf );
+                if (!tag)
+                    tag = gtk_text_buffer_create_tag( text_buffer, buf,
+                                                      "underline-rgba-set", TRUE,
+                                                      "underline-rgba", static_cast<const GdkRGBA*>(colour),
+                                                      NULL );
+                gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
+            }
+        }
+#endif
+    }
+
     if (attr.HasTextColour())
     {
         wxGtkTextRemoveTagsWithPrefix(text_buffer, "WXFORECOLOR", start, end);
@@ -568,24 +619,6 @@ gtk_textctrl_populate_popup( GtkEntry *WXUNUSED(entry), GtkMenu *menu, wxTextCtr
 }
 
 //-----------------------------------------------------------------------------
-//  "changed"
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static void
-gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
-{
-    if ( win->IgnoreTextUpdate() )
-        return;
-
-    if ( win->MarkDirtyOnChange() )
-        win->MarkDirty();
-
-    win->SendTextUpdatedEvent();
-}
-}
-
-//-----------------------------------------------------------------------------
 //  "mark_set"
 //-----------------------------------------------------------------------------
 
@@ -774,16 +807,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     }
 
     // We want to be notified about text changes.
-    if (multi_line)
-    {
-        g_signal_connect (m_buffer, "changed",
-                          G_CALLBACK (gtk_text_changed_callback), this);
-    }
-    else
-    {
-        g_signal_connect (m_text, "changed",
-                          G_CALLBACK (gtk_text_changed_callback), this);
-    }
+    GTKConnectChangedSignal();
 
     // Catch to disable focus out handling
     g_signal_connect (m_text, "populate_popup",
@@ -885,7 +909,11 @@ GtkEntry *wxTextCtrl::GetEntry() const
 int wxTextCtrl::GTKIMFilterKeypress(GdkEventKey* event) const
 {
     if (IsSingleLine())
-        return wxTextEntry::GTKIMFilterKeypress(event);
+        return GTKEntryIMFilterKeypress(event);
+
+    // When not calling GTKEntryIMFilterKeypress(), we need to notify the code
+    // in wxTextEntry about the key presses explicitly.
+    GTKEntryOnKeypress(m_text);
 
     int result = false;
 #if GTK_CHECK_VERSION(2, 22, 0)
@@ -1371,23 +1399,20 @@ void wxTextCtrl::DiscardEdits()
     m_modified = false;
 }
 
+void wxTextCtrl::GTKOnTextChanged()
+{
+    if ( IgnoreTextUpdate() )
+        return;
+
+    if ( MarkDirtyOnChange() )
+        MarkDirty();
+
+    SendTextUpdatedEvent();
+}
+
 // ----------------------------------------------------------------------------
 // event handling
 // ----------------------------------------------------------------------------
-
-void wxTextCtrl::EnableTextChangedEvents(bool enable)
-{
-    if ( enable )
-    {
-        g_signal_handlers_unblock_by_func(GetTextObject(),
-            (gpointer)gtk_text_changed_callback, this);
-    }
-    else // disable events
-    {
-        g_signal_handlers_block_by_func(GetTextObject(),
-            (gpointer)gtk_text_changed_callback, this);
-    }
-}
 
 bool wxTextCtrl::IgnoreTextUpdate()
 {
@@ -1477,7 +1502,17 @@ wxTextCtrl::HitTest(const wxPoint& pt, long *pos) const
         gtk_entry_get_layout_offsets(GTK_ENTRY(m_text), &ofsX, &ofsY);
 
         x -= ofsX;
+
+        // There is something really weird going on with vertical offset under
+        // GTK 3: normally it is just 0, because a single line control doesn't
+        // scroll vertically anyhow, but sometimes it can have big positive or
+        // negative values after scrolling horizontally, resulting in test
+        // failures in TextCtrlTestCase::HitTestSingleLine::Scrolled. So just
+        // ignore it completely, as, again, it shouldn't matter for single line
+        // text controls in any case, and so do not do this:
+#ifndef __WXGTK3__
         y -= ofsY;
+#endif // !__WXGTK3__
 
         // And scale the coordinates for Pango.
         x *= PANGO_SCALE;
@@ -1847,8 +1882,10 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     else // have custom attributes
     {
 #ifdef __WXGTK3__
-        style.SetBackgroundColour(*pattr->appearance.rgba[0]);
-        style.SetTextColour(*pattr->appearance.rgba[1]);
+        if (GdkRGBA* rgba = pattr->appearance.rgba[0])
+            style.SetBackgroundColour(*rgba);
+        if (GdkRGBA* rgba = pattr->appearance.rgba[1])
+            style.SetTextColour(*rgba);
 #else
         style.SetBackgroundColour(pattr->appearance.bg_color);
         style.SetTextColour(pattr->appearance.fg_color);
@@ -1861,8 +1898,48 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
         if ( font.SetNativeFontInfo(wxString(pangoFontString)) )
             style.SetFont(font);
 
-        if ( pattr->appearance.underline != PANGO_UNDERLINE_NONE )
-            style.SetFontUnderlined(true);
+        wxTextAttrUnderlineType underlineType = wxTEXT_ATTR_UNDERLINE_NONE;
+        switch ( pattr->appearance.underline )
+        {
+            case PANGO_UNDERLINE_SINGLE:
+                underlineType = wxTEXT_ATTR_UNDERLINE_SOLID;
+                break;
+            case PANGO_UNDERLINE_DOUBLE:
+                underlineType = wxTEXT_ATTR_UNDERLINE_DOUBLE;
+                break;
+            case PANGO_UNDERLINE_ERROR:
+                underlineType = wxTEXT_ATTR_UNDERLINE_SPECIAL;
+                break;
+            default:
+                underlineType = wxTEXT_ATTR_UNDERLINE_NONE;
+                break;
+        }
+
+        wxColour underlineColour = wxNullColour;
+#ifdef __WXGTK3__
+        GSList* tags = gtk_text_iter_get_tags(&positioni);
+        for ( GSList* tagp = tags; tagp != NULL; tagp = tagp->next )
+        {
+            GtkTextTag* tag = static_cast<GtkTextTag*>(tagp->data);
+            gboolean underlineSet = FALSE;
+            g_object_get(tag, "underline-rgba-set", &underlineSet, NULL);
+            if ( underlineSet )
+            {
+                GdkRGBA* gdkColour = NULL;
+                g_object_get(tag, "underline-rgba", &gdkColour, NULL);
+                if ( gdkColour )
+                    underlineColour = wxColour(*gdkColour);
+                gdk_rgba_free(gdkColour);
+                break;
+            }
+        }
+        if ( tags )
+            g_slist_free(tags);
+#endif
+
+        if ( underlineType != wxTEXT_ATTR_UNDERLINE_NONE )
+            style.SetFontUnderlined(underlineType, underlineColour);
+
         if ( pattr->appearance.strikethrough )
             style.SetFontStrikethrough(true);
 

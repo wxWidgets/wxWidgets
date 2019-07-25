@@ -547,13 +547,38 @@ public:
     virtual wxString GetValue() const = 0;
 
     /**
+       Get the edit window used by this editor.
+
+       @since 3.1.3
+    */
+    wxWindow* GetWindow() const;
+
+    /**
+       Set the wxWindow that will be used by this cell editor for editing the
+       value.
+
+       @since 3.1.3
+    */
+    void SetWindow(wxWindow* window);
+
+    /**
        Get the wxControl used by this editor.
+
+       This function is preserved for compatibility, but GetWindow() should be
+       preferred in the new code as the associated window doesn't need to be of
+       a wxControl-derived class.
+
+       Note that if SetWindow() had been called with an object not deriving
+       from wxControl, this method will return @NULL.
     */
     wxControl* GetControl() const;
 
     /**
        Set the wxControl that will be used by this cell editor for editing the
        value.
+
+       This function is preserved for compatibility, but SetWindow() should be
+       preferred in the new code, see GetControl().
     */
     void SetControl(wxControl* control);
 
@@ -2511,7 +2536,17 @@ public:
 
     /**
         Hides the column labels by calling SetColLabelSize() with a size of 0.
-        Show labels again by calling that method with a width greater than 0.
+
+        The labels can be shown again by calling SetColLabelSize() with a
+        height greater than 0.
+
+        Note that when the column labels are hidden, the grid won't have any
+        visible border on the top side, which may result in a less than ideal
+        appearance. Because of this, you may want to create the grid window
+        with a border style, such as @c wxBORDER_SIMPLE, when you don't plan to
+        show the column labels for it.
+
+        @see HideRowLabels()
     */
     void HideColLabels();
 
@@ -2520,6 +2555,9 @@ public:
 
         The labels can be shown again by calling SetRowLabelSize() with a width
         greater than 0.
+
+        See HideColLabels() for a note explaining why you may want to use a
+        border with a grid without the row labels.
     */
     void HideRowLabels();
 
@@ -5273,6 +5311,13 @@ public:
 
     /**
         Returns the edit control.
+
+        This function is preserved for compatibility, but GetWindow() should be
+        preferred in the new code as the associated window doesn't need to be of
+        a wxControl-derived class.
+
+        Note that if SetWindow() had been called with an object not deriving
+        from wxControl, this method will return @NULL.
     */
     wxControl* GetControl();
 
@@ -5282,12 +5327,22 @@ public:
     int GetRow();
 
     /**
+        Returns the edit window.
+
+        @since 3.1.3
+    */
+    wxWindow* GetWindow();
+
+    /**
         Sets the column at which the event occurred.
     */
     void SetCol(int col);
 
     /**
         Sets the edit control.
+
+        This function is preserved for compatibility, but SetWindow() should be
+        preferred in the new code, see GetControl().
     */
     void SetControl(wxControl* ctrl);
 
@@ -5295,6 +5350,13 @@ public:
         Sets the row at which the event occurred.
     */
     void SetRow(int row);
+
+    /**
+        Sets the edit window.
+
+        @since 3.1.3
+    */
+    void SetWindow(wxWindow* window);
 };
 
 

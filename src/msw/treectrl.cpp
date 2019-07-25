@@ -1724,6 +1724,7 @@ void wxTreeCtrl::DeleteAllItems()
     TreeItemUnlocker unlock_all;
 
     // invalidate all the items we store as they're going to become invalid
+    m_htEnsureVisibleOnThaw =
     m_htSelStart =
     m_htClickedItem = wxTreeItemId();
 
@@ -1995,6 +1996,16 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
 void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 {
     wxCHECK_RET( !IsHiddenRoot(item), wxT("can't show hidden root item") );
+
+    if ( IsFrozen() )
+    {
+        // We can't ensure that the item is visible if it involves scrolling
+        // while we're frozen, as we disable scrolling in this case. So just
+        // remember that item we were supposed to make visible and actually do
+        // it when the control is thawed.
+        m_htEnsureVisibleOnThaw = item;
+        return;
+    }
 
     // no error return
     (void)TreeView_EnsureVisible(GetHwnd(), HITEM(item));
@@ -3007,8 +3018,8 @@ wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                     int cx = abs(m_ptClick.x - x);
                     int cy = abs(m_ptClick.y - y);
 
-                    if ( cx > ::GetSystemMetrics(SM_CXDRAG) ||
-                            cy > ::GetSystemMetrics(SM_CYDRAG) )
+                    if ( cx > wxGetSystemMetrics(SM_CXDRAG, this) ||
+                            cy > wxGetSystemMetrics(SM_CYDRAG, this) )
                     {
                         NM_TREEVIEW tv;
                         wxZeroMemory(tv);
@@ -3953,6 +3964,13 @@ void wxTreeCtrl::DoThaw()
     wxMSWWinStyleUpdater(GetHwnd()).TurnOff(TVS_NOSCROLL);
 
     wxTreeCtrlBase::DoThaw();
+
+    if ( !IsFrozen() && m_htEnsureVisibleOnThaw.IsOk() )
+    {
+        // Really do the job of EnsureVisible() now that we can.
+        EnsureVisible(m_htEnsureVisibleOnThaw);
+        m_htEnsureVisibleOnThaw.Unset();
+    }
 }
 
 #endif // wxUSE_TREECTRL

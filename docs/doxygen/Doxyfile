@@ -534,7 +534,7 @@ SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------
 
 TAGFILES               =
-GENERATE_TAGFILE       =
+GENERATE_TAGFILE       = $(GENERATE_TAGFILE)
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = YES
 EXTERNAL_PAGES         = YES

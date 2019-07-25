@@ -55,15 +55,39 @@ bool wxStaticText::Create(wxWindow *parent,
     m_qtLabel->setBuddy( m_qtLabel );
     m_qtLabel->setTextInteractionFlags( Qt::NoTextInteraction );
 
+    // Translate the WX horizontal alignment flags to Qt alignment flags
+    // (notice that wxALIGN_LEFT is default and has the value of 0).
+    if ( style & wxALIGN_CENTER_HORIZONTAL )
+        m_qtLabel->setAlignment(Qt::AlignHCenter);
+    else if ((style & wxALIGN_MASK) == wxALIGN_RIGHT)
+        m_qtLabel->setAlignment(Qt::AlignRight);
+    else
+        m_qtLabel->setAlignment(Qt::AlignLeft);
+
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
 
 void wxStaticText::SetLabel(const wxString& label)
 {
+    // If the label doesn't really change, avoid flicker by not doing anything.
+    if ( label == m_labelOrig )
+        return;
+
+    // save the label in m_labelOrig with both the markup (if any) and
+    // the mnemonics characters (if any)
+    m_labelOrig = label;
+
+    WXSetVisibleLabel(GetEllipsizedLabel());
+
+    AutoResizeIfNecessary();
+}
+
+void wxStaticText::WXSetVisibleLabel(const wxString& label)
+{
     m_qtLabel->setText( wxQtConvertString( label ) );
 }
 
-wxString wxStaticText::GetLabel() const
+wxString wxStaticText::WXGetVisibleLabel() const
 {
     return wxQtConvertString( m_qtLabel->text() );
 }

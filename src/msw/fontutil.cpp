@@ -264,35 +264,3 @@ wxFontEncoding wxGetFontEncFromCharSet(int cs)
 
     return fontEncoding;
 }
-
-// ----------------------------------------------------------------------------
-// wxFont <-> LOGFONT conversion
-// ----------------------------------------------------------------------------
-
-void wxFillLogFont(LOGFONT *logFont, const wxFont *font)
-{
-    wxNativeFontInfo fi;
-
-    // maybe we already have LOGFONT for this font?
-    const wxNativeFontInfo *pFI = font->GetNativeFontInfo();
-    if ( !pFI )
-    {
-        // use wxNativeFontInfo methods to build a LOGFONT for this font
-        fi.InitFromFont(*font);
-
-        pFI = &fi;
-    }
-
-    // transfer all the data to LOGFONT
-    *logFont = pFI->lf;
-}
-
-wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)
-{
-    wxNativeFontInfo info;
-
-    info.lf = *logFont;
-
-    return wxFont(info);
-}
-

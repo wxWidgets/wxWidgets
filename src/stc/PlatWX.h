@@ -49,9 +49,7 @@ public:
     virtual void ClearRegisteredImages() wxOVERRIDE;
     virtual void SetDoubleClickAction(CallBackAction, void *) wxOVERRIDE;
     virtual void SetList(const char* list, char separator, char typesep) wxOVERRIDE;
-            void SetColours(const wxColour&, const wxColour&,
-                            const wxColour&, const wxColour&);
-            void UseListCtrlStyle(bool, const wxColour&, const wxColour&);
+            void SetListInfo(int*, int*, int*);
 };
 
 
@@ -80,12 +78,16 @@ public:
     protected:
         virtual void DoSetSize(int, int, int, int, int) wxOVERRIDE;
         void SetSTCCursor(int);
+        void RestoreSTCCursor();
         void OnMouseEnter(wxMouseEvent&);
         void OnMouseLeave(wxMouseEvent&);
+        void OnParentDestroy(wxWindowDestroyEvent& event);
 
     private:
         WX_NSWindow       m_nativeWin;
         wxStyledTextCtrl* m_stc;
+        bool              m_cursorSetByPopup;
+        int               m_prevCursor;
     };
 
 #elif wxUSE_POPUPWIN

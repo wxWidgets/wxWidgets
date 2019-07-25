@@ -248,13 +248,24 @@ public:
 
 
 /**
-    @class wxRect
+    Represents a rectangle with integer coordinates.
 
-    A class for manipulating rectangles.
+    @c x and @c y members specify the coordinates of the rectangle top-left
+    corner and @c width and @c height specify its width and height
+    respectively. The usual C++ semi-open interval convention is used: point
+    @c p lies inside the rectangle if and only if both conditions below are
+    satisfied:
+    @code
+        x <= p.x < x + width
+        y <= p.y < y + height
+    @endcode
 
-    Note that the x, y coordinates and the width and height stored inside a wxRect
-    object may be negative and that wxRect functions do not perform any check against
-    negative values.
+    In other words, the rectangle left and right boundaries are at @c x and @c
+    x+width-1 and its top and bottom boundaries are at @c y and @c y+height-1
+    respectively.
+
+    Note that the x and y coordinates may be negative, but width and height are
+    always strictly positive for non-empty rectangles.
 
     @library{wxcore}
     @category{data}
@@ -275,6 +286,9 @@ public:
     wxRect(int x, int y, int width, int height);
     /**
         Creates a wxRect object from top-left and bottom-right points.
+
+        The width of the rectangle will be @c bottomRight.x-topLeft.x+1 and the
+        height will be @c bottomRight.y-topLeft.y+1.
     */
     wxRect(const wxPoint& topLeft, const wxPoint& bottomRight);
     /**

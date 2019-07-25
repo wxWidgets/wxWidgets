@@ -111,6 +111,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(DeleteChildren)
     MENU_LINK(DeleteAll)
     MENU_LINK(Recreate)
+    MENU_LINK(FreezeThaw)
     MENU_LINK(ToggleImages)
     MENU_LINK(ToggleStates)
     MENU_LINK(ToggleBell)
@@ -261,6 +262,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     style_menu->AppendSeparator();
     style_menu->Append(TreeTest_ResetStyle, "&Reset to default\tF10");
 
+    tree_menu->AppendCheckItem(TreeTest_FreezeThaw, "&Freeze the tree");
     tree_menu->Append(TreeTest_Recreate, "&Recreate the tree");
     tree_menu->Append(TreeTest_CollapseAndReset, "C&ollapse and reset");
     tree_menu->AppendSeparator();
@@ -664,6 +666,16 @@ void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))
     m_treeCtrl->DeleteAllItems();
 }
 
+void MyFrame::OnFreezeThaw(wxCommandEvent& event)
+{
+    if ( event.IsChecked() )
+        m_treeCtrl->Freeze();
+    else
+        m_treeCtrl->Thaw();
+
+    wxLogMessage("The tree is %sfrozen", m_treeCtrl->IsFrozen() ? "" : "not ");
+}
+
 void MyFrame::OnRecreate(wxCommandEvent& event)
 {
     OnDeleteAll(event);
@@ -1055,7 +1067,7 @@ void MyTreeCtrl::CreateStateImageList(bool del)
     AssignStateImageList(states);
 }
 
-#if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
+#if USE_GENERIC_TREECTRL || (!defined(__WXMSW__) && !defined(__WXQT__))
 void MyTreeCtrl::CreateButtonsImageList(int size)
 {
     if ( size == -1 )

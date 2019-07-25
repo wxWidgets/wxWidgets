@@ -54,11 +54,15 @@ struct wxPGPaintData
 */
 #define wxPG_ATTR_DEFAULT_VALUE           wxS("DefaultValue")
 
-/** Universal, @c int or @c double. Minimum value for numeric properties.
+/** Built-in attribute specific to wxNumericProperty and derived properties,
+    like wxIntProperty, wxUIntProperty, wxFloatProperty, @c int or @c double.
+    Minimum value for the property.
 */
 #define wxPG_ATTR_MIN                     wxS("Min")
 
-/** Universal, @c int or @c double. Maximum value for numeric properties.
+/** Built-in attribute specific to wxNumericProperty and derived properties,
+    like wxIntProperty, wxUIntProperty, wxFloatProperty, @c int or @c double.
+    Maximum value for the property.
 */
 #define wxPG_ATTR_MAX                     wxS("Max")
 
@@ -186,17 +190,23 @@ struct wxPGPaintData
 */
 #define wxPG_DATE_PICKER_STYLE              wxS("PickerStyle")
 
-/** SpinCtrl editor, @c int or @c double. How much number changes when button
-    is pressed (or up/down on keyboard).
+/** Built-in attribute specific to wxNumericProperty and derived properties,
+    like wxIntProperty, wxUIntProperty, wxFloatProperty, used by SpinCtrl editor,
+    @c int or @c double type. How much number changes when button is pressed
+    (or up/down on keyboard).
 */
 #define wxPG_ATTR_SPINCTRL_STEP             wxS("Step")
 
-/** SpinCtrl editor, @c bool. If @true, value wraps at Min/Max.
+/** Built-in attribute specific to wxNumericProperty and derived properties,
+    like wxIntProperty, wxUIntProperty, wxFloatProperty, used by SpinCtrl editor,
+    @c bool. If @true, value wraps at Min/Max.
 */
 #define wxPG_ATTR_SPINCTRL_WRAP             wxS("Wrap")
 
-/** SpinCtrl editor, @c bool. If @true, value can also by changed by moving
-    mouse when left mouse button is being pressed.
+/** Built-in attribute specific to wxNumericProperty and derived properties,
+    like wxIntProperty, wxUIntProperty, wxFloatProperty, used by SpinCtrl editor,
+    @c bool. If @true, value can also by changed by moving mouse when left
+    mouse button is being pressed.
 */
 #define wxPG_ATTR_SPINCTRL_MOTION           wxS("MotionSpin")
 
@@ -401,8 +411,9 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 /**
     @class wxPGProperty
 
-    wxPGProperty is base class for all wxPropertyGrid properties. In
-    sections below we cover few related topics.
+    wxPGProperty is base class for all wxPropertyGrid properties and as such
+    it is not intended to be instantiated directly.
+    In sections below we cover few related topics.
 
     @li @ref pgproperty_properties
     @li @ref pgproperty_creating
@@ -460,7 +471,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     @subsection wxIntProperty
 
-    Like wxStringProperty, but converts text to a signed long integer.
+    It derives from wxNumericProperty and displays value as a signed long integer.
     wxIntProperty seamlessly supports 64-bit integers (i.e. wxLongLong) on overlfow.
     To safely convert variant to integer, use code like this:
 
@@ -497,6 +508,9 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     Supported special attributes:
     - ::wxPG_ATTR_MIN, ::wxPG_ATTR_MAX to specify acceptable value range.
+    - ::wxPG_ATTR_SPINCTRL_STEP, ::wxPG_ATTR_SPINCTRL_WRAP,
+    ::wxPG_ATTR_SPINCTRL_MOTION: Sets SpinCtrl editor parameters.
+    @see @ref propgrid_property_attributes
 
     @subsection wxUIntProperty
 
@@ -516,6 +530,8 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     - ::wxPG_UINT_PREFIX: Defines displayed prefix. Possible values are
     ::wxPG_PREFIX_NONE, ::wxPG_PREFIX_0x and ::wxPG_PREFIX_DOLLAR_SIGN.
     Only ::wxPG_PREFIX_NONE works with decimal and octal numbers.
+    - ::wxPG_ATTR_SPINCTRL_STEP, ::wxPG_ATTR_SPINCTRL_WRAP,
+    ::wxPG_ATTR_SPINCTRL_MOTION: Sets SpinCtrl editor parameters.
     @see @ref propgrid_property_attributes
 
     @remarks
@@ -539,6 +555,8 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     - ::wxPG_FLOAT_PRECISION: Sets the (max) precision used when floating point
     value is rendered as text. The default -1 means shortest floating-point
     6-digit representation.
+    - ::wxPG_ATTR_SPINCTRL_STEP, ::wxPG_ATTR_SPINCTRL_WRAP,
+    ::wxPG_ATTR_SPINCTRL_MOTION: Sets SpinCtrl editor parameters.
     @see @ref propgrid_property_attributes
 
     @subsection wxBoolProperty
@@ -847,37 +865,6 @@ class wxPGProperty : public wxObject
 {
 public:
     typedef wxUint32 FlagType;
-
-    /**
-        Default constructor.
-    */
-    wxPGProperty();
-
-    /**
-        Constructor.
-        Non-abstract property classes should have constructor of this style:
-
-        @code
-
-        MyProperty( const wxString& label, const wxString& name, const T& value )
-            : wxPGProperty(label, name)
-        {
-            // Generally recommended way to set the initial value
-            // (as it should work in pretty much 100% of cases).
-            wxVariant variant;
-            variant << value;
-            SetValue(variant);
-
-            // If has private child properties then create them here.
-            // For example:
-            //     AddPrivateChild( new wxStringProperty("Subprop 1",
-            //                                           wxPG_LABEL,
-            //                                           value.GetSubProp1()));
-        }
-
-        @endcode
-    */
-    wxPGProperty( const wxString& label, const wxString& name );
 
     /**
         Virtual destructor. It is customary for derived properties to implement this.
@@ -2080,6 +2067,40 @@ public:
     void*                       m_clientData;
 
 protected:
+
+    /**
+        Default constructor. It is protected because wxPGProperty is only
+        a base class for other property classes.
+    */
+    wxPGProperty();
+
+    /**
+        Constructor. It is protected because wxPGProperty is only a base
+        class for other property classes.
+        Non-abstract property classes should have constructor of this style:
+
+        @code
+
+        MyProperty( const wxString& label, const wxString& name, const T& value )
+            : wxPGProperty(label, name)
+        {
+            // Generally recommended way to set the initial value
+            // (as it should work in pretty much 100% of cases).
+            wxVariant variant;
+            variant << value;
+            SetValue(variant);
+
+            // If has private child properties then create them here.
+            // For example:
+            //     AddPrivateChild( new wxStringProperty("Subprop 1",
+            //                                           wxPG_LABEL,
+            //                                           value.GetSubProp1()));
+        }
+
+        @endcode
+    */
+    wxPGProperty( const wxString& label, const wxString& name );
+
     /**
         Sets property cell in fashion that reduces number of exclusive
         copies of cell data. Used when setting, for instance, same

@@ -193,8 +193,8 @@ void wxMessageDialog::ReplaceStaticWithEdit()
     // some space above and below it
     const int hText = (7*rectDisplay.height)/8 -
                       (
-                         2*::GetSystemMetrics(SM_CYFIXEDFRAME) +
-                         ::GetSystemMetrics(SM_CYCAPTION) +
+                         2*wxGetSystemMetrics(SM_CYFIXEDFRAME, this) +
+                         wxGetSystemMetrics(SM_CYCAPTION, this) +
                          5*GetCharHeight() // buttons + margins
                       );
     const int dh = (rc.bottom - rc.top) - hText; // vertical space we save
@@ -207,8 +207,8 @@ void wxMessageDialog::ReplaceStaticWithEdit()
     // NB: you would have thought that 2*SM_CXEDGE would be enough but it
     //     isn't, somehow, and the text control breaks lines differently from
     //     the static one so fudge by adding some extra space
-    const int dw = ::GetSystemMetrics(SM_CXVSCROLL) +
-                        4*::GetSystemMetrics(SM_CXEDGE);
+    const int dw = wxGetSystemMetrics(SM_CXVSCROLL, this) +
+                        4*wxGetSystemMetrics(SM_CXEDGE, this);
     rc.right += dw;
 
 
@@ -396,7 +396,8 @@ void wxMessageDialog::AdjustButtonLabels()
 /* static */
 wxFont wxMessageDialog::GetMessageFont()
 {
-    const NONCLIENTMETRICS& ncm = wxMSWImpl::GetNonClientMetrics();
+    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    const NONCLIENTMETRICS& ncm = wxMSWImpl::GetNonClientMetrics(win);
     return wxNativeFontInfo(ncm.lfMessageFont);
 }
 

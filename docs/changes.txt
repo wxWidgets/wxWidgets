@@ -120,6 +120,11 @@ Changes in behaviour which may result in build errors
   but must be explicitly selected (and libstdc++ must be installed in order
   to use it).
 
+- wxPGProperty ctors are not longer public since this class is intended to be
+  a base class and should not be instantiated directly.
+
+- wxIntProperty::DoValidation() and wxFloatProperty::DoValidation() are
+  no longer public since they are helpers intended for internal use only.
 
 3.1.3: (released 2019-??-??)
 ----------------------------

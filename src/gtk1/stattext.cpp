@@ -153,6 +153,25 @@ bool wxStaticText::SetForegroundColour(const wxColour& colour)
     return true;
 }
 
+// These functions are not used as GTK supports ellipsization natively and we
+// never call the base class UpdateText() which uses them.
+//
+// Note that, unfortunately, we still need to define them because they still
+// exist, as pure virtuals, in the base class even in wxGTK to allow
+// wxGenericStaticText to override them.
+
+wxString wxStaticText::WXGetVisibleLabel() const
+{
+    wxFAIL_MSG(wxS("Unreachable"));
+
+    return wxString();
+}
+
+void wxStaticText::WXSetVisibleLabel(const wxString& WXUNUSED(str))
+{
+    wxFAIL_MSG(wxS("Unreachable"));
+}
+
 // static
 wxVisualAttributes
 wxStaticText::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))

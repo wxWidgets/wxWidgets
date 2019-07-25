@@ -984,7 +984,7 @@ bool wxTopLevelWindowMSW::DoSelectAndSetIcon(const wxIconBundle& icons,
                                              int smY,
                                              int i)
 {
-    const wxSize size(::GetSystemMetrics(smX), ::GetSystemMetrics(smY));
+    const wxSize size(wxGetSystemMetrics(smX, this), wxGetSystemMetrics(smY, this));
 
     wxIcon icon = icons.GetIcon(size, wxIconBundle::FALLBACK_NEAREST_LARGER);
 

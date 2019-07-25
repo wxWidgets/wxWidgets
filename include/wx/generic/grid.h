@@ -220,8 +220,9 @@ public:
     wxGridCellEditor();
 
     bool IsCreated() const { return m_control != NULL; }
-    wxControl* GetControl() const { return m_control; }
-    void SetControl(wxControl* control) { m_control = control; }
+
+    wxWindow* GetWindow() const { return m_control; }
+    void SetWindow(wxWindow* window) { m_control = window; }
 
     wxGridCellAttr* GetCellAttr() const { return m_attr; }
     void SetCellAttr(wxGridCellAttr* attr) { m_attr = attr; }
@@ -301,12 +302,19 @@ public:
     // added GetValue so we can get the value which is in the control
     virtual wxString GetValue() const = 0;
 
+
+    // These functions exist only for backward compatibility, use Get and
+    // SetWindow() instead in the new code.
+    wxControl* GetControl() { return wxDynamicCast(m_control, wxControl); }
+    void SetControl(wxControl* control) { m_control = control; }
+
 protected:
     // the dtor is private because only DecRef() can delete us
     virtual ~wxGridCellEditor();
 
-    // the control we show on screen
-    wxControl*  m_control;
+    // the actual window we show on screen (this variable should actually be
+    // named m_window, but m_control is kept for backward compatibility)
+    wxWindow*  m_control;
 
     // a temporary pointer to the attribute being edited
     wxGridCellAttr* m_attr;
@@ -2615,25 +2623,30 @@ public:
         {
             m_row  = 0;
             m_col  = 0;
-            m_ctrl = NULL;
+            m_window = NULL;
         }
 
     wxGridEditorCreatedEvent(int id, wxEventType type, wxObject* obj,
-                             int row, int col, wxControl* ctrl);
+                             int row, int col, wxWindow* window);
 
     int GetRow()                        { return m_row; }
     int GetCol()                        { return m_col; }
-    wxControl* GetControl()             { return m_ctrl; }
+    wxWindow* GetWindow()               { return m_window; }
     void SetRow(int row)                { m_row = row; }
     void SetCol(int col)                { m_col = col; }
-    void SetControl(wxControl* ctrl)    { m_ctrl = ctrl; }
+    void SetWindow(wxWindow* window)    { m_window = window; }
+
+    // These functions exist only for backward compatibility, use Get and
+    // SetWindow() instead in the new code.
+    wxControl* GetControl()             { return wxDynamicCast(m_window, wxControl); }
+    void SetControl(wxControl* ctrl)    { m_window = ctrl; }
 
     virtual wxEvent *Clone() const wxOVERRIDE { return new wxGridEditorCreatedEvent(*this); }
 
 private:
     int m_row;
     int m_col;
-    wxControl* m_ctrl;
+    wxWindow* m_window;
 
     wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxGridEditorCreatedEvent);
 };

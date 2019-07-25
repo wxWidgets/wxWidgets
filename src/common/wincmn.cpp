@@ -804,7 +804,7 @@ double wxWindowBase::GetContentScaleFactor() const
 static int wxGetMetricOrDefault(wxSystemMetric what, const wxWindowBase* win)
 {
     int rc = wxSystemSettings::GetMetric(
-        what, static_cast<wxWindow*>(const_cast<wxWindowBase*>(win)));
+        what, static_cast<const wxWindow*>(win));
     if ( rc == -1 )
     {
         switch ( what )

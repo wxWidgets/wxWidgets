@@ -1448,7 +1448,7 @@ void wxPGProperty::SetValue( wxVariant value, wxVariant* pList, int flags )
             // GetPropertyByNameWH(). This optimizes for full list parsing.
             for ( node = list.begin(); node != list.end(); ++node )
             {
-                wxVariant& childValue = *((wxVariant*)*node);
+                wxVariant& childValue = *const_cast<wxVariant*>(*node);
                 wxPGProperty* child = GetPropertyByNameWH(childValue.GetName(), i);
                 if ( child )
                 {
@@ -1592,9 +1592,9 @@ wxVariant wxPGProperty::GetDefaultValue() const
             return wxVariant(wxArrayString());
 #if wxUSE_LONGLONG
         if ( valueType == wxPG_VARIANT_TYPE_LONGLONG )
-            return WXVARIANT(wxLongLong(0));
+            return wxVariant(wxLongLong(0));
         if ( valueType == wxPG_VARIANT_TYPE_ULONGLONG )
-            return WXVARIANT(wxULongLong(0));
+            return wxVariant(wxULongLong(0));
 #endif
         if ( valueType == wxS("wxColour") )
             return WXVARIANT(*wxBLACK);
@@ -2248,8 +2248,8 @@ void wxPGProperty::SetValueImage( wxBitmap& bmp )
 
 wxPGProperty* wxPGProperty::GetMainParent() const
 {
-    const wxPGProperty* curChild = this;
-    const wxPGProperty* curParent = m_parent;
+    wxPGProperty* curChild = const_cast<wxPGProperty*>(this);
+    wxPGProperty* curParent = m_parent;
 
     while ( !curParent->IsRoot() && !curParent->IsCategory() )
     {
@@ -2257,7 +2257,7 @@ wxPGProperty* wxPGProperty::GetMainParent() const
         curParent = curParent->m_parent;
     }
 
-    return (wxPGProperty*) curChild;
+    return curChild;
 }
 
 
@@ -2729,7 +2729,7 @@ bool wxPGProperty::AreAllChildrenSpecified( wxVariant* pendingList ) const
 
             for ( ; node != pList->end(); ++node )
             {
-                const wxVariant& item = *((const wxVariant*)*node);
+                const wxVariant& item = **node;
                 if ( item.GetName() == childName )
                 {
                     listValue = &item;
@@ -2753,7 +2753,7 @@ bool wxPGProperty::AreAllChildrenSpecified( wxVariant* pendingList ) const
             if ( listValue && listValue->IsType(wxPG_VARIANT_TYPE_LIST) )
                 childList = listValue;
 
-            if ( !child->AreAllChildrenSpecified((wxVariant*)childList) )
+            if ( !child->AreAllChildrenSpecified(const_cast<wxVariant*>(childList)) )
                 return false;
         }
     }

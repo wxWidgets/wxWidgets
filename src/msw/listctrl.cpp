@@ -322,22 +322,28 @@ void wxListCtrl::MSWSetExListStyles()
 {
     // we want to have some non default extended
     // styles because it's prettier (and also because wxGTK does it like this)
-    ::SendMessage
-    (
-        GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0,
+    int exStyle =
         LVS_EX_LABELTIP |
         LVS_EX_FULLROWSELECT |
         LVS_EX_SUBITEMIMAGES |
-        LVS_EX_DOUBLEBUFFER |
         // normally this should be governed by a style as it's probably not
         // always appropriate, but we don't have any free styles left and
         // it seems better to enable it by default than disable
-        LVS_EX_HEADERDRAGDROP
-    );
+        LVS_EX_HEADERDRAGDROP;
 
-    // As we use LVS_EX_DOUBLEBUFFER above, we don't need to erase our
-    // background and doing it only results in flicker.
-    SetBackgroundStyle(wxBG_STYLE_PAINT);
+    if ( wxApp::GetComCtl32Version() >= 600 )
+    {
+        // We must enable double buffering when using the system theme to avoid
+        // various display glitches and it should be harmless to just always do
+        // it when using comctl32.dll v6.
+        exStyle |= LVS_EX_DOUBLEBUFFER;
+
+        // When using LVS_EX_DOUBLEBUFFER, we don't need to erase our
+        // background and doing it only results in flicker.
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
+    }
+
+    ::SendMessage(GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0, exStyle);
 }
 
 WXDWORD wxListCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
@@ -620,8 +626,7 @@ bool wxListCtrl::SetHeaderAttr(const wxItemAttr& attr)
 
             // We need to tell the header about its new font to let it compute
             // its new height.
-            ::SendMessage(hwndHdr, WM_SETFONT,
-                          (WPARAM)GetHfontOf(font), MAKELPARAM(TRUE, 0));
+            wxSetWindowFont(hwndHdr, font);
         }
 
         // Refreshing the listview makes it notice the change in height of its
@@ -1487,9 +1492,9 @@ wxSize wxListCtrl::MSWGetBestViewRect(int x, int y) const
     const DWORD mswStyle = ::GetWindowLong(GetHwnd(), GWL_STYLE);
 
     if ( mswStyle & WS_HSCROLL )
-        size.y += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+        size.y += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, m_parent);
     if ( mswStyle & WS_VSCROLL )
-        size.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+        size.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, m_parent);
 
     // OTOH we have to subtract the size of our borders because the base class
     // public method already adds them, but ListView_ApproximateViewRect()
@@ -2750,10 +2755,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     switch ( nmhdr->code )
     {
         case HDN_ITEMCHANGING:
-            // Always let the default handling of this event take place,
-            // otherwise the selected items are not redrawn to correspond to
-            // the new column widths, see #18032.
-            return false;
+            // Always let the default handling of this event take place when
+            // using comctl32.dll v6, as otherwise the selected items are not
+            // redrawn to correspond to the new column widths, see #18032.
+            if ( wxApp::GetComCtl32Version() >= 600 )
+                return false;
+            break;
 
         case LVN_DELETEALLITEMS:
             // always return true to suppress all additional LVN_DELETEITEM

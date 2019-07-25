@@ -413,5 +413,9 @@
     #define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
 #endif
 
+#ifndef OFN_FORCESHOWHIDDEN
+    #define OFN_FORCESHOWHIDDEN          0x10000000
+#endif
+
 #endif
     // _WX_MISSING_H_

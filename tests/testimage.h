@@ -43,17 +43,50 @@ public:
         if ( other.GetHeight() != m_image.GetHeight() )
             return false;
 
-        return memcmp(other.GetData(), m_image.GetData(),
-                      other.GetWidth()*other.GetHeight()*3) == 0;
+        if ( memcmp(other.GetData(), m_image.GetData(),
+                    other.GetWidth()*other.GetHeight()*3) == 0 )
+            return true;
+
+        const unsigned char* d1 = m_image.GetData();
+        const unsigned char* d2 = other.GetData();
+        for ( int x = 0; x < m_image.GetWidth(); ++x )
+        {
+            for ( int y = 0; y < m_image.GetHeight(); ++y )
+            {
+                if ( *d1 != *d2 )
+                {
+                    m_diffDesc.Printf
+                               (
+                                    "first mismatch is at (%d, %d) which "
+                                    "has value 0x%06x instead of the "
+                                    "expected 0x%06x",
+                                    x, y, *d2, *d1
+                               );
+                    break;
+                }
+
+                ++d1;
+                ++d2;
+            }
+        }
+
+        return false;
     }
 
     std::string describe() const wxOVERRIDE
     {
-        return "has same RGB data as " + Catch::toString(m_image);
+        std::string desc = "doesn't have the same RGB data as " +
+                                Catch::toString(m_image);
+
+        if ( !m_diffDesc.empty() )
+            desc += + ": " + m_diffDesc.ToStdString(wxConvUTF8);
+
+        return desc;
     }
 
 private:
     const wxImage m_image;
+    mutable wxString m_diffDesc;
 };
 
 inline ImageRGBMatcher RGBSameAs(const wxImage& image)

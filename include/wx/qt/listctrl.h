@@ -10,7 +10,7 @@
 
 #include "wx/textctrl.h"
 
-class wxQtTreeWidget;
+class wxQtListTreeWidget;
 class QTreeWidgetItem;
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
@@ -282,7 +282,7 @@ protected:
                       m_ownsImageListSmall,
                       m_ownsImageListState;
 private:
-    wxQtTreeWidget *m_qtTreeWidget;
+    wxQtListTreeWidget *m_qtTreeWidget;
 
     wxDECLARE_DYNAMIC_CLASS( wxListCtrl );
 };

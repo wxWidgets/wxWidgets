@@ -80,6 +80,7 @@ public:
     virtual void Popup();
     virtual void Dismiss();
 
+    virtual bool QtHandleFocusEvent(QWidget *handler, QFocusEvent *event) wxOVERRIDE;
 protected:
 
     // From wxTextEntry:

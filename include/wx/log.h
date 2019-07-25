@@ -395,18 +395,13 @@ public:
 
     // return the effective log level for this component, falling back to
     // parent component and to the default global log level if necessary
-    //
-    // NB: component argument is passed by value and not const reference in an
-    //     attempt to encourage compiler to avoid an extra copy: as we modify
-    //     the component internally, we'd create one anyhow and like this it
-    //     can be avoided if the string is a temporary anyhow
-    static wxLogLevel GetComponentLevel(wxString component);
+    static wxLogLevel GetComponentLevel(const wxString& component);
 
 
     // is logging of messages from this component enabled at this level?
     //
     // usually always called with wxLOG_COMPONENT as second argument
-    static bool IsLevelEnabled(wxLogLevel level, wxString component)
+    static bool IsLevelEnabled(wxLogLevel level, const wxString& component)
     {
         return IsEnabled() && level <= GetComponentLevel(component);
     }
@@ -690,6 +685,8 @@ private:
 #if WXWIN_COMPATIBILITY_2_8
     static wxTraceMask ms_ulTraceMask;   // controls wxLogTrace behaviour
 #endif // WXWIN_COMPATIBILITY_2_8
+
+    wxDECLARE_NO_COPY_CLASS(wxLog);
 };
 
 // ----------------------------------------------------------------------------

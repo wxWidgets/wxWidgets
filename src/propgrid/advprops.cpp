@@ -142,13 +142,12 @@ class wxPGSpinButton : public wxSpinButton
 public:
     wxPGSpinButton() : wxSpinButton()
     {
-        m_bLeftDown = false;
         m_hasCapture = false;
         m_spins = 1;
 
-        Bind(wxEVT_LEFT_DOWN, &wxPGSpinButton::OnMouseEvent, this);
-        Bind(wxEVT_LEFT_UP, &wxPGSpinButton::OnMouseEvent, this);
-        Bind(wxEVT_MOTION, &wxPGSpinButton::OnMouseEvent, this);
+        Bind(wxEVT_LEFT_DOWN, &wxPGSpinButton::OnMouseLeftDown, this);
+        Bind(wxEVT_LEFT_UP, &wxPGSpinButton::OnMouseLeftUp, this);
+        Bind(wxEVT_MOTION, &wxPGSpinButton::OnMouseMove, this);
         Bind(wxEVT_MOUSE_CAPTURE_LOST, &wxPGSpinButton::OnMouseCaptureLost, this);
     }
 
@@ -167,8 +166,6 @@ private:
     // isn't anything there that can be reliably reused.
     int     m_spins;
 
-    bool    m_bLeftDown;
-
     // SpinButton seems to be a special for mouse capture, so we may need track
     // privately whether mouse is actually captured.
     bool    m_hasCapture;
@@ -185,8 +182,6 @@ private:
     }
     void Release()
     {
-        m_bLeftDown = false;
-
         if ( m_hasCapture )
         {
             ReleaseMouse();
@@ -200,44 +195,44 @@ private:
             SetCursor(wxNullCursor);
     }
 
-    void OnMouseEvent(wxMouseEvent& event)
+    void OnMouseLeftDown(wxMouseEvent& evt)
     {
-        if ( event.GetEventType() == wxEVT_LEFT_DOWN )
+        m_ptPosition = evt.GetPosition();
+        evt.Skip();
+    }
+
+    void OnMouseLeftUp(wxMouseEvent& evt)
+    {
+        Release();
+        evt.Skip();
+    }
+
+    void OnMouseMove(wxMouseEvent& evt)
+    {
+        if ( evt.LeftIsDown() )
         {
-            m_bLeftDown = true;
-            m_ptPosition = event.GetPosition();
-        }
-        else if ( event.GetEventType() == wxEVT_LEFT_UP )
-        {
-            Release();
-            m_bLeftDown = false;
-        }
-        else if ( event.GetEventType() == wxEVT_MOTION )
-        {
-            if ( m_bLeftDown )
+            int dy = m_ptPosition.y - evt.GetPosition().y;
+            if ( dy )
             {
-                int dy = m_ptPosition.y - event.GetPosition().y;
-                if ( dy )
-                {
-                    Capture();
-                    m_ptPosition = event.GetPosition();
+                Capture();
+                m_ptPosition = evt.GetPosition();
 
-                    wxSpinEvent evtscroll( (dy >= 0) ? wxEVT_SCROLL_LINEUP :
-                                                       wxEVT_SCROLL_LINEDOWN,
-                                           GetId() );
-                    evtscroll.SetEventObject(this);
+                wxSpinEvent evtscroll( (dy >= 0) ? wxEVT_SCROLL_LINEUP :
+                                                    wxEVT_SCROLL_LINEDOWN,
+                                        GetId() );
+                evtscroll.SetEventObject(this);
 
-                    wxASSERT( m_spins == 1 );
+                wxASSERT( m_spins == 1 );
 
-                    m_spins = abs(dy);
-                    GetEventHandler()->ProcessEvent(evtscroll);
-                    m_spins = 1;
-                }
+                m_spins = abs(dy);
+                GetEventHandler()->ProcessEvent(evtscroll);
+                m_spins = 1;
             }
         }
 
-        event.Skip();
+        evt.Skip();
     }
+
     void OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
     {
         Release();
@@ -262,38 +257,48 @@ wxPGSpinCtrlEditor::~wxPGSpinCtrlEditor()
 wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxPGProperty* property,
                                                    const wxPoint& pos, const wxSize& sz ) const
 {
-    const int margin = 1;
-
     wxSpinButton* wnd2;
+    wxSize tcSz;
 
+    wxNumericProperty* prop = wxDynamicCast(property, wxNumericProperty);
+    if ( prop )
+    {
+        const int margin = 1;
 #if IS_MOTION_SPIN_SUPPORTED
-    if ( property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_MOTION, 0) )
-    {
-        wnd2 = new wxPGSpinButton();
-    }
-    else
+        if ( prop->UseSpinMotion() )
+        {
+            wnd2 = new wxPGSpinButton();
+        }
+        else
 #endif
-    {
-        wnd2 = new wxSpinButton();
-    }
+        {
+            wnd2 = new wxSpinButton();
+        }
 
 #ifdef __WXMSW__
-    wnd2->Hide();
+        wnd2->Hide();
 #endif
-    wnd2->Create( propgrid->GetPanel(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_VERTICAL );
-    // Scale spin button to the required height (row height)
-    wxSize butSz = wnd2->GetBestSize();
+        wnd2->Create(propgrid->GetPanel(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_VERTICAL);
+        // Scale spin button to the required height (row height)
+        wxSize butSz = wnd2->GetBestSize();
 #ifdef __WXGTK3__
-    // Under GTK+ 3 spin button is always horizontal and cannot be downscaled
-    int butWidth = butSz.x;
+        // Under GTK+ 3 spin button is always horizontal and cannot be downscaled
+        int butWidth = butSz.x;
 #else
-    double sc = (double)sz.y / butSz.y;
-    int butWidth = wxMax(18, wxRound(sc*butSz.x));
+        double sc = (double)sz.y / butSz.y;
+        int butWidth = wxMax(18, wxRound(sc*butSz.x));
 #endif
-    wxSize tcSz(sz.x - butWidth - margin, sz.y);
-    wnd2->SetSize(pos.x + tcSz.x + margin, pos.y, butWidth, sz.y);
-    wnd2->SetRange( INT_MIN, INT_MAX );
-    wnd2->SetValue( 0 );
+        tcSz.Set(sz.x - butWidth - margin, sz.y);
+        wnd2->SetSize(pos.x + tcSz.x + margin, pos.y, butWidth, sz.y);
+        wnd2->SetRange(INT_MIN, INT_MAX);
+        wnd2->SetValue(0);
+    }
+    else
+    {
+        wxFAIL_MSG( "SpinCtrl editor can be assigned only to numeric property" );
+        tcSz.Set(sz.x, sz.y);
+        wnd2 = NULL;
+    }
 
     wxWindow* wnd1 = wxPGTextCtrlEditor::CreateControls(propgrid, property, pos, tcSz).m_primary;
 #if wxUSE_VALIDATORS
@@ -306,139 +311,63 @@ wxPGWindowList wxPGSpinCtrlEditor::CreateControls( wxPropertyGrid* propgrid, wxP
 }
 
 // Control's events are redirected here
-bool wxPGSpinCtrlEditor::OnEvent( wxPropertyGrid* propgrid, wxPGProperty* property,
-                                  wxWindow* wnd, wxEvent& event ) const
+bool wxPGSpinCtrlEditor::OnEvent(wxPropertyGrid* propgrid, wxPGProperty* property,
+    wxWindow* wnd, wxEvent& event) const
 {
-    wxEventType evtType = event.GetEventType();
-    bool bigStep = false;
-
-    if ( evtType == wxEVT_KEY_DOWN )
+    wxNumericProperty* prop = wxDynamicCast(property, wxNumericProperty);
+    if ( prop )
     {
-        wxKeyEvent& keyEvent = (wxKeyEvent&)event;
-        int keycode;
-        keycode = keyEvent.GetKeyCode();
+        wxEventType evtType = event.GetEventType();
+        bool bigStep = false;
 
-        if ( keycode == WXK_UP )
-            evtType = wxEVT_SCROLL_LINEUP;
-        else if ( keycode == WXK_DOWN )
-            evtType = wxEVT_SCROLL_LINEDOWN;
-        else if ( keycode == WXK_PAGEUP )
+        if ( evtType == wxEVT_KEY_DOWN )
         {
-            evtType = wxEVT_SCROLL_LINEUP;
-            bigStep = true;
+            wxKeyEvent& keyEvent = (wxKeyEvent&)event;
+            int keycode;
+            keycode = keyEvent.GetKeyCode();
+
+            if ( keycode == WXK_UP )
+                evtType = wxEVT_SCROLL_LINEUP;
+            else if ( keycode == WXK_DOWN )
+                evtType = wxEVT_SCROLL_LINEDOWN;
+            else if ( keycode == WXK_PAGEUP )
+            {
+                evtType = wxEVT_SCROLL_LINEUP;
+                bigStep = true;
+            }
+            else if ( keycode == WXK_PAGEDOWN )
+            {
+                evtType = wxEVT_SCROLL_LINEDOWN;
+                bigStep = true;
+            }
         }
-        else if ( keycode == WXK_PAGEDOWN )
+
+        if ( evtType == wxEVT_SCROLL_LINEUP || evtType == wxEVT_SCROLL_LINEDOWN )
         {
-            evtType = wxEVT_SCROLL_LINEDOWN;
-            bigStep = true;
+            int spins = 1;
+#if IS_MOTION_SPIN_SUPPORTED
+            if ( prop->UseSpinMotion() )
+            {
+                wxPGSpinButton* spinButton =
+                    (wxPGSpinButton*)propgrid->GetEditorControlSecondary();
+
+                if ( spinButton )
+                    spins = spinButton->GetSpins();
+            }
+#endif
+
+            long stepScale = (evtType == wxEVT_SCROLL_LINEUP) ? 1L : -1L;
+            if ( bigStep )
+                stepScale *= 10L;
+            stepScale *= spins;
+
+            wxVariant v = prop->AddSpinStepValue(stepScale);
+            SetControlStringValue(prop, propgrid->GetEditorControl(), prop->ValueToString(v));
+            return true;
         }
     }
-
-    if ( evtType == wxEVT_SCROLL_LINEUP || evtType == wxEVT_SCROLL_LINEDOWN )
-    {
-        int spins = 1;
-    #if IS_MOTION_SPIN_SUPPORTED
-        if ( property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_MOTION, 0) )
-        {
-            wxPGSpinButton* spinButton =
-                (wxPGSpinButton*) propgrid->GetEditorControlSecondary();
-
-            if ( spinButton )
-                spins = spinButton->GetSpins();
-        }
-    #endif
-
-        wxString s;
-        // Can't use wnd since it might be clipper window
-        wxTextCtrl* tc = wxDynamicCast(propgrid->GetEditorControl(), wxTextCtrl);
-
-        if ( tc )
-            s = tc->GetValue();
-        else
-            s = property->GetValueAsString(wxPG_FULL_VALUE);
-
-        int mode = wxPG_PROPERTY_VALIDATION_SATURATE;
-
-        if ( property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_WRAP, 0) )
-            mode = wxPG_PROPERTY_VALIDATION_WRAP;
-
-        if ( property->GetValueType() == wxPG_VARIANT_TYPE_DOUBLE )
-        {
-            double v_d;
-            double step = property->GetAttributeAsDouble(wxPG_ATTR_SPINCTRL_STEP, 1.0);
-
-            // Try double
-            if ( s.ToDouble(&v_d) )
-            {
-                if ( bigStep )
-                    step *= 10.0;
-
-                step *= (double) spins;
-
-                if ( evtType == wxEVT_SCROLL_LINEUP ) v_d += step;
-                else v_d -= step;
-
-                // Min/Max check
-                wxFloatProperty::DoValidation(property, v_d, NULL, mode);
-
-                wxVariant v(v_d);
-                s = property->ValueToString(v, 0);
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            long step = property->GetAttributeAsLong(wxPG_ATTR_SPINCTRL_STEP, 1);
-#if defined(wxLongLong_t) && wxUSE_LONGLONG
-            wxLongLong_t v_ll;
-            // Try long long
-            if ( s.ToLongLong(&v_ll, 10) )
-#else
-            long v_ll;
-            // Try long
-            if ( s.ToLong(&v_ll, 10) )
-#endif
-            {
-                if ( bigStep )
-                    step *= 10;
-
-                step *= spins;
-
-                if ( evtType == wxEVT_SCROLL_LINEUP ) v_ll += step;
-                else v_ll -= step;
-
-                // Min/Max check
-                wxIntProperty::DoValidation(property, v_ll, NULL, mode);
-
-#if defined(wxLongLong_t) && wxUSE_LONGLONG
-                s = wxLongLong(v_ll).ToString();
-#else
-                s = wxString::Format(wxS("%ld"), v_ll);
-#endif
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        if ( tc )
-        {
-            int ip = tc->GetInsertionPoint();
-            int lp = tc->GetLastPosition();
-            tc->SetValue(s);
-            tc->SetInsertionPoint(ip+(tc->GetLastPosition()-lp));
-        }
-
-        return true;
-    }
-
-    return wxPGTextCtrlEditor::OnEvent(propgrid,property,wnd,event);
+    return wxPGTextCtrlEditor::OnEvent(propgrid, property, wnd, event);
 }
-
 #endif // wxUSE_SPINBTN
 
 
@@ -647,12 +576,12 @@ static const long gs_fp_es_weight_values[] = {
 // Class body is in advprops.h
 
 
-wxPG_IMPLEMENT_PROPERTY_CLASS(wxFontProperty,wxPGProperty,TextCtrlAndButton)
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxFontProperty,wxEditorDialogProperty,TextCtrlAndButton)
 
 
 wxFontProperty::wxFontProperty( const wxString& label, const wxString& name,
                                 const wxFont& value )
-    : wxPGProperty(label,name)
+    : wxEditorDialogProperty(label,name)
 {
     SetValue(WXVARIANT(value));
 
@@ -716,44 +645,39 @@ void wxFontProperty::OnSetValue()
 
     if ( !font.IsOk() )
     {
-        m_value << *wxNORMAL_FONT;
+        m_value = WXVARIANT(*wxNORMAL_FONT);
     }
 }
 
 wxString wxFontProperty::ValueToString( wxVariant& value,
                                         int argFlags ) const
 {
-    return wxPGProperty::ValueToString(value, argFlags);
+    return wxEditorDialogProperty::ValueToString(value, argFlags);
 }
 
-bool wxFontProperty::OnEvent( wxPropertyGrid* propgrid, wxWindow* WXUNUSED(primary),
-                              wxEvent& event )
+bool wxFontProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
 {
-    if ( propgrid->IsMainButtonEvent(event) )
+    wxFont font;
+
+    wxASSERT_MSG(value.IsType(wxS("wxFont")), "Function called for incompatible property");
+    if ( value.IsType(wxS("wxFont")) )
+        font << value;
+
+    wxFontData data;
+    data.SetInitialFont(font);
+    data.SetColour(*wxBLACK);
+
+    wxFontDialog dlg(pg->GetPanel(), data);
+    if ( !m_dlgTitle.empty() )
     {
-        // Update value from last minute changes
-        wxVariant useValue = propgrid->GetUncommittedPropertyValue();
-
-        wxFontData data;
-        wxFont font;
-
-        if ( useValue.IsType(wxS("wxFont")) )
-            font << useValue;
-
-        data.SetInitialFont( font );
-        data.SetColour(*wxBLACK);
-
-        wxFontDialog dlg(propgrid, data);
-        if ( dlg.ShowModal() == wxID_OK )
-        {
-            propgrid->EditorsValueWasModified();
-
-            wxVariant variant;
-            variant << dlg.GetFontData().GetChosenFont();
-            SetValueInEvent( variant );
-            return true;
-        }
+        dlg.SetTitle(m_dlgTitle);
     }
+    if ( dlg.ShowModal() == wxID_OK )
+    {
+        value = WXVARIANT(dlg.GetFontData().GetChosenFont());
+        return true;
+    }
+
     return false;
 }
 
@@ -820,9 +744,7 @@ wxVariant wxFontProperty::ChildChanged( wxVariant& thisValue,
         font.SetFamily( static_cast<wxFontFamily>(fam) );
     }
 
-    wxVariant newVariant;
-    newVariant << font;
-    return newVariant;
+    return WXVARIANT(font);
 }
 
 /*
@@ -877,7 +799,6 @@ void wxFontProperty::OnCustomPaint(wxDC& dc,
 
 #include "wx/colordlg.h"
 
-//#define wx_cp_es_syscolours_len 25
 static const char* const gs_cp_es_syscolour_labels[] = {
     /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("AppWorkspace"),
     /* TRANSLATORS: Keyword of system colour */ wxTRANSLATE("ActiveBorder"),
@@ -938,6 +859,12 @@ static const long gs_cp_es_syscolour_values[] = {
 
 IMPLEMENT_VARIANT_OBJECT_EXPORTED_SHALLOWCMP(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
 
+template<> inline wxVariant WXVARIANT(const wxColourPropertyValue& value)
+{
+    wxVariant variant;
+    variant << value;
+    return variant;
+}
 
 // Class body is in advprops.h
 
@@ -952,7 +879,7 @@ void wxSystemColourProperty::Init( int type, const wxColour& colour )
 
     m_flags |= wxPG_PROP_STATIC_CHOICES; // Colour selection cannot be changed.
 
-    m_value << cpv;
+    m_value = WXVARIANT(cpv);
 
     OnSetValue();
 }
@@ -1066,9 +993,7 @@ wxColourPropertyValue wxSystemColourProperty::GetVal( const wxVariant* pVariant 
 
 wxVariant wxSystemColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 {
-    wxVariant variant;
-    variant << v;
-    return variant;
+    return WXVARIANT(v);
 }
 
 int wxSystemColourProperty::ColToInd( const wxColour& colour ) const
@@ -1099,7 +1024,7 @@ void wxSystemColourProperty::OnSetValue()
     if ( m_value.IsType(wxS("wxColour*")) )
     {
         wxColour* pCol = wxStaticCast(m_value.GetWxObjectPtr(), wxColour);
-        m_value << *pCol;
+        m_value = WXVARIANT(*pCol);
     }
 
     wxColourPropertyValue val = GetVal(&m_value);
@@ -1715,9 +1640,7 @@ void wxColourProperty::Init( wxColour colour )
 {
     if ( !colour.IsOk() )
         colour = *wxWHITE;
-    wxVariant variant;
-    variant << colour;
-    m_value = variant;
+    m_value = WXVARIANT(colour);
     int ind = ColToInd(colour);
     if ( ind < 0 )
         ind = m_choices.GetCount() - 1;
@@ -1743,9 +1666,7 @@ wxColour wxColourProperty::GetColour( int index ) const
 
 wxVariant wxColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 {
-    wxVariant variant;
-    variant << v.m_colour;
-    return variant;
+    return WXVARIANT(v.m_colour);
 }
 
 // -----------------------------------------------------------------------
@@ -1758,7 +1679,6 @@ wxVariant wxColourProperty::DoTranslateVal( wxColourPropertyValue& v ) const
 
 #define NUM_CURSORS 28
 
-//#define wx_cp_es_syscursors_len 28
 static const char* const gs_cp_es_syscursors_labels[NUM_CURSORS+1] = {
     /* TRANSLATORS: System cursor name */ wxTRANSLATE("Default"),
     /* TRANSLATORS: System cursor name */ wxTRANSLATE("Arrow"),
@@ -2025,15 +1945,16 @@ void wxImageFileProperty::OnCustomPaint( wxDC& dc,
 
 #include "wx/choicdlg.h"
 
-wxPG_IMPLEMENT_PROPERTY_CLASS(wxMultiChoiceProperty,wxPGProperty,
+wxPG_IMPLEMENT_PROPERTY_CLASS(wxMultiChoiceProperty,wxEditorDialogProperty,
                               TextCtrlAndButton)
 
 wxMultiChoiceProperty::wxMultiChoiceProperty( const wxString& label,
                                               const wxString& name,
                                               const wxPGChoices& choices,
                                               const wxArrayString& value)
-                                                : wxPGProperty(label,name)
+    : wxEditorDialogProperty(label,name)
 {
+    m_dlgStyle = wxCHOICEDLG_STYLE;
     m_userStringMode = 0;
     m_choices.Assign(choices);
     SetValue(value);
@@ -2043,8 +1964,9 @@ wxMultiChoiceProperty::wxMultiChoiceProperty( const wxString& label,
                                               const wxString& name,
                                               const wxArrayString& strings,
                                               const wxArrayString& value)
-                                                : wxPGProperty(label,name)
+    : wxEditorDialogProperty(label,name)
 {
+    m_dlgStyle = wxCHOICEDLG_STYLE;
     m_userStringMode = 0;
     m_choices.Set(strings);
     SetValue(value);
@@ -2053,8 +1975,9 @@ wxMultiChoiceProperty::wxMultiChoiceProperty( const wxString& label,
 wxMultiChoiceProperty::wxMultiChoiceProperty( const wxString& label,
                                               const wxString& name,
                                               const wxArrayString& value)
-                                                : wxPGProperty(label,name)
+: wxEditorDialogProperty(label,name)
 {
+    m_dlgStyle = wxCHOICEDLG_STYLE;
     m_userStringMode = 0;
     wxArrayString strings;
     m_choices.Set(strings);
@@ -2135,71 +2058,59 @@ wxArrayInt wxMultiChoiceProperty::GetValueAsIndices() const
     return selections;
 }
 
-bool wxMultiChoiceProperty::OnEvent( wxPropertyGrid* propgrid,
-                                     wxWindow* WXUNUSED(primary),
-                                     wxEvent& event )
+bool wxMultiChoiceProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
 {
-    if ( propgrid->IsMainButtonEvent(event) )
+    wxASSERT_MSG(value.IsType(wxPG_VARIANT_TYPE_ARRSTRING), "Function called for incompatible property");
+    if ( !m_choices.IsOk() )
     {
-        // Update the value
-        wxVariant useValue = propgrid->GetUncommittedPropertyValue();
+        return false;
+    }
 
-        wxArrayString labels = m_choices.GetLabels();
-        unsigned int choiceCount;
+    wxArrayString labels = m_choices.GetLabels();
+    unsigned int choiceCount = m_choices.GetCount();
 
-        if ( m_choices.IsOk() )
-            choiceCount = m_choices.GetCount();
-        else
-            choiceCount = 0;
+    // launch editor dialog
+    wxMultiChoiceDialog dlg( pg->GetPanel(),
+                             _("Make a selection:"),
+                             m_dlgTitle.empty() ? GetLabel() : m_dlgTitle,
+                             choiceCount,
+                             choiceCount?&labels[0]:NULL,
+                             m_dlgStyle );
 
-        // launch editor dialog
-        wxMultiChoiceDialog dlg( propgrid,
-                                 _("Make a selection:"),
-                                 m_label,
-                                 choiceCount,
-                                 choiceCount?&labels[0]:NULL,
-                                 wxCHOICEDLG_STYLE );
+    dlg.Move( pg->GetGoodEditorDialogPosition(this,dlg.GetSize()) );
 
-        dlg.Move( propgrid->GetGoodEditorDialogPosition(this,dlg.GetSize()) );
+    wxArrayString strings = value.GetArrayString();
+    wxArrayString extraStrings;
 
-        wxArrayString strings = useValue.GetArrayString();
-        wxArrayString extraStrings;
+    dlg.SetSelections(m_choices.GetIndicesForStrings(strings, &extraStrings));
 
-        dlg.SetSelections(m_choices.GetIndicesForStrings(strings, &extraStrings));
+    if ( dlg.ShowModal() == wxID_OK && choiceCount )
+    {
+        wxArrayInt arrInt = dlg.GetSelections();
 
-        if ( dlg.ShowModal() == wxID_OK && choiceCount )
+        // Strings that were not in list of choices
+        wxArrayString newValue;
+
+        // Translate string indices to strings
+
+        size_t n;
+        if ( m_userStringMode == 1 )
         {
-            wxArrayInt arrInt = dlg.GetSelections();
-
-            wxVariant variant;
-
-            // Strings that were not in list of choices
-            wxArrayString value;
-
-            // Translate string indices to strings
-
-            unsigned int n;
-            if ( m_userStringMode == 1 )
-            {
-                for (n=0;n<extraStrings.size();n++)
-                    value.push_back(extraStrings[n]);
-            }
-
-            for ( size_t i = 0; i < arrInt.size(); i++ )
-                value.Add(m_choices.GetLabel(arrInt.Item(i)));
-
-            if ( m_userStringMode == 2 )
-            {
-                for (n=0;n<extraStrings.size();n++)
-                    value.push_back(extraStrings[n]);
-            }
-
-            variant = WXVARIANT(value);
-
-            SetValueInEvent(variant);
-
-            return true;
+            for (n=0;n<extraStrings.size();n++)
+                newValue.push_back(extraStrings[n]);
         }
+
+        for ( size_t i = 0; i < arrInt.size(); i++ )
+            newValue.push_back(m_choices.GetLabel(arrInt[i]));
+
+        if ( m_userStringMode == 2 )
+        {
+            for (n=0;n<extraStrings.size();n++)
+                newValue.push_back(extraStrings[n]);
+        }
+
+        value = wxVariant(newValue);
+        return true;
     }
     return false;
 }
@@ -2213,7 +2124,7 @@ bool wxMultiChoiceProperty::StringToValue( wxVariant& variant, const wxString& t
             arr.Add(token);
     WX_PG_TOKENIZER2_END()
 
-    wxVariant v( WXVARIANT(arr) );
+    wxVariant v(arr);
     variant = v;
 
     return true;
@@ -2226,7 +2137,7 @@ bool wxMultiChoiceProperty::DoSetAttribute( const wxString& name, wxVariant& val
         m_userStringMode = (int)value.GetLong();
         return true;
     }
-    return wxPGProperty::DoSetAttribute(name, value);
+    return wxEditorDialogProperty::DoSetAttribute(name, value);
 }
 
 #endif // wxUSE_CHOICEDLG

@@ -546,7 +546,7 @@ public:
 
         @since 3.1.3
     */
-    bool MSWSetEmulationLevel(wxWebViewIE_EmulationLevel level = wxWEBVIEWIE_EMU_IE11);
+    static bool MSWSetEmulationLevel(wxWebViewIE_EmulationLevel level = wxWEBVIEWIE_EMU_IE11);
 
     /**
         @deprecated
@@ -562,7 +562,7 @@ public:
 
         @since 3.1.1
     */
-    bool MSWSetModernEmulationLevel(bool modernLevel = true);
+    static bool MSWSetModernEmulationLevel(bool modernLevel = true);
 
     /**
         Runs the given JavaScript code.

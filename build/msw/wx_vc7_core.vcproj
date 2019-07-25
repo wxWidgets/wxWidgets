@@ -2970,6 +2970,9 @@
 				RelativePath="..\..\include\wx\xrc\xh_comboctrl.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_dataview.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_datectrl.h">
 			</File>
 			<File

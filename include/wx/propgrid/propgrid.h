@@ -957,9 +957,6 @@ public:
     // Returns true if selection finished successfully. Usually only fails if
     // current value in editor is not valid.
     // This function clears any previous selection.
-    // In wxPropertyGrid 1.4, this member function used to generate
-    // wxEVT_PG_SELECTED. In wxWidgets 2.9 and later, it no longer
-    // does that.
     bool SelectProperty( wxPGPropArg id, bool focus = false );
 
     // Set entire new selection from given list of properties.
@@ -1165,7 +1162,7 @@ public:
 
     const wxPGCommonValue* GetCommonValue( unsigned int i ) const
     {
-        return (wxPGCommonValue*) m_commonValues[i];
+        return m_commonValues[i];
     }
 
     // Returns number of common values.
@@ -1500,12 +1497,6 @@ protected:
     // Current non-client width (needed when auto-centering).
     int                 m_ncWidth;
 
-    // Non-client width (auto-centering helper).
-    //int                 m_fWidth;
-
-    // Previously recorded scroll start position.
-    int                 m_prevVY;
-
     // The gutter spacing in front and back of the image.
     // This determines the amount of spacing in front of each item
     int                 m_gutterWidth;
@@ -1612,9 +1603,6 @@ protected:
 #else
     bool                m_editorFocused;
 #endif
-
-    // 1 if m_latsCaption is also the bottommost caption.
-    //unsigned char       m_lastCaptionBottomnest;
 
     unsigned char       m_vspacing;
 
@@ -2285,7 +2273,6 @@ protected:
     #undef wxPG_FL_MOUSE_CAPTURED
     #undef wxPG_FL_INITIALIZED
     #undef wxPG_FL_ACTIVATION_BY_CLICK
-    #undef wxPG_SUPPORT_TOOLTIPS
     #undef wxPG_ICON_WIDTH
     #undef wxPG_USE_RENDERER_NATIVE
 // Following are needed by the manager headers

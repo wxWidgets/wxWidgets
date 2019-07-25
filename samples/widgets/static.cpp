@@ -49,15 +49,6 @@
 // constants
 // ----------------------------------------------------------------------------
 
-// control ids
-enum
-{
-    StaticPage_Reset = wxID_HIGHEST,
-    StaticPage_BoxText,
-    StaticPage_LabelText,
-    StaticPage_LabelTextWithMarkup
-};
-
 // alignment radiobox values
 enum
 {
@@ -114,7 +105,7 @@ public:
 
 protected:
     // event handlers
-    void OnCheckOrRadioBox(wxCommandEvent& event);
+    void OnCheckEllipsize(wxCommandEvent& event);
 #ifdef wxHAS_WINDOW_LABEL_IN_STATIC_BOX
     void OnBoxCheckBox(wxCommandEvent& event);
 #endif // wxHAS_WINDOW_LABEL_IN_STATIC_BOX
@@ -176,25 +167,8 @@ protected:
 #endif // wxUSE_MARKUP
 
 private:
-    wxDECLARE_EVENT_TABLE();
     DECLARE_WIDGETS_PAGE(StaticWidgetsPage)
 };
-
-// ----------------------------------------------------------------------------
-// event tables
-// ----------------------------------------------------------------------------
-
-wxBEGIN_EVENT_TABLE(StaticWidgetsPage, WidgetsPage)
-    EVT_BUTTON(StaticPage_Reset, StaticWidgetsPage::OnButtonReset)
-    EVT_BUTTON(StaticPage_LabelText, StaticWidgetsPage::OnButtonLabelText)
-#if wxUSE_MARKUP
-    EVT_BUTTON(StaticPage_LabelTextWithMarkup, StaticWidgetsPage::OnButtonLabelWithMarkupText)
-#endif // wxUSE_MARKUP
-    EVT_BUTTON(StaticPage_BoxText, StaticWidgetsPage::OnButtonBoxText)
-
-    EVT_CHECKBOX(wxID_ANY, StaticWidgetsPage::OnCheckOrRadioBox)
-    EVT_RADIOBOX(wxID_ANY, StaticWidgetsPage::OnCheckOrRadioBox)
-wxEND_EVENT_TABLE()
 
 // ============================================================================
 // implementation
@@ -286,6 +260,8 @@ void StaticWidgetsPage::CreateContent()
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
 
     m_chkEllipsize = CreateCheckBoxAndAddToSizer(sizerLeft, "&Ellipsize");
+    m_chkEllipsize->Bind(wxEVT_CHECKBOX,
+                         &StaticWidgetsPage::OnCheckEllipsize, this);
 
     static const wxString ellipsizeMode[] =
     {
@@ -301,8 +277,9 @@ void StaticWidgetsPage::CreateContent()
 
     sizerLeft->Add(m_radioEllipsize, 0, wxGROW | wxALL, 5);
 
-    wxButton *btn = new wxButton(this, StaticPage_Reset, "&Reset");
-    sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
+    wxButton *b0 = new wxButton(this, wxID_ANY, "&Reset");
+    b0->Bind(wxEVT_BUTTON, &StaticWidgetsPage::OnButtonReset, this);
+    sizerLeft->Add(b0, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
     wxSizer *sizerMiddle = new wxStaticBoxSizer(wxVERTICAL, this,
@@ -346,8 +323,8 @@ void StaticWidgetsPage::CreateContent()
 #if wxUSE_MARKUP
     m_textLabelWithMarkup->SetValue("Another label, this time <b>decorated</b> "
                                     "with <u>markup</u>; here you need entities "
-                                    "for the symbols: &lt; &gt; &amp; &apos; &quot; "
-                                    " but you can still place &mnemonics...");
+                                    "for the symbols: &lt; &gt; &amp;&amp; &apos; &quot; "
+                                    " but you can still use &mnemonics too");
 #endif // wxUSE_MARKUP
 
     // right pane
@@ -573,12 +550,9 @@ void StaticWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
     CreateStatic();
 }
 
-void StaticWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)
+void StaticWidgetsPage::OnCheckEllipsize(wxCommandEvent& event)
 {
-    if (event.GetEventObject() == static_cast<wxObject*>(m_chkEllipsize))
-    {
-        m_radioEllipsize->Enable(event.IsChecked());
-    }
+    m_radioEllipsize->Enable(event.IsChecked());
 
     CreateStatic();
 }

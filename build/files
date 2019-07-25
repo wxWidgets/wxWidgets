@@ -297,6 +297,7 @@ QT_HDR =
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
+    wx/qt/treectrl.h
     wx/qt/window.h
 
 QT_SRC=
@@ -392,6 +393,7 @@ QT_SRC=
     src/qt/toolbar.cpp
     src/qt/tooltip.cpp
     src/qt/toplevel.cpp
+    src/qt/treectrl.cpp
     src/qt/uiaction.cpp
     src/qt/utils.cpp
     src/qt/window.cpp
@@ -2839,6 +2841,7 @@ XRC_SRC =
     src/xrc/xh_collpane.cpp
     src/xrc/xh_combo.cpp
     src/xrc/xh_comboctrl.cpp
+    src/xrc/xh_dataview.cpp
     src/xrc/xh_datectrl.cpp
     src/xrc/xh_dirpicker.cpp
     src/xrc/xh_dlg.cpp
@@ -2908,6 +2911,7 @@ XRC_HDR =
     wx/xrc/xh_collpane.h
     wx/xrc/xh_combo.h
     wx/xrc/xh_comboctrl.h
+    wx/xrc/xh_dataview.h
     wx/xrc/xh_datectrl.h
     wx/xrc/xh_dirpicker.h
     wx/xrc/xh_dlg.h

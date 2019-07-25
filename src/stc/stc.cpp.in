@@ -136,6 +136,7 @@ wxDEFINE_EVENT( wxEVT_STC_CLIPBOARD_COPY, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_CLIPBOARD_PASTE, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_COMPLETED, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_MARGIN_RIGHT_CLICK, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_SELECTION_CHANGE, wxStyledTextEvent );
 
 
 wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
@@ -571,22 +572,6 @@ void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber,
 void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp)
 {
     m_swx->DoRegisterImage(type, bmp);
-}
-
-void wxStyledTextCtrl::AutoCompSetColours(const wxColour& background,
-                                          const wxColour& text,
-                                          const wxColour& highlight,
-                                          const wxColour& highlightText)
-{
-    m_swx->SetListBoxColours(background, text, highlight, highlightText);
-}
-
-void wxStyledTextCtrl::AutoCompUseListCtrl(bool useListCtrl,
-                                           const wxColour& currentBgColour,
-                                           const wxColour& currentTextColour)
-{
-    m_swx->UseListCtrlStyleForLists(useListCtrl, currentBgColour,
-                                    currentTextColour);
 }
 
 

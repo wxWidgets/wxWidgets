@@ -1191,7 +1191,7 @@ void FormMain::PopulateWithExamples ()
     pg->Append( new wxIntProperty ( "SpinCtrl", wxPG_LABEL, 0L ) );
 
     pg->SetPropertyEditor( "SpinCtrl", wxPGEditor_SpinCtrl );
-    pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_MIN, -10L );  // Use constants instead of string
+    pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_MIN, -2L );  // Use constants instead of string
     pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_MAX, 16384L );   // for reduced binary size.
     pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_SPINCTRL_STEP, 2L );
     pg->SetPropertyAttribute( "SpinCtrl", wxPG_ATTR_SPINCTRL_MOTION, true );
