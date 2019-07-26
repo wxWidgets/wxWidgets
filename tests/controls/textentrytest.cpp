@@ -457,6 +457,12 @@ private:
 
 void TestProcessEnter(TextLikeControlCreator controlCreator)
 {
+    if ( !EnableUITests() )
+    {
+        WARN("Skipping wxTE_PROCESS_ENTER tests: wxUIActionSimulator use disabled");
+        return;
+    }
+
     SECTION("Without wxTE_PROCESS_ENTER")
     {
         TestDialog dlg(controlCreator, ProcessEnter_No);
