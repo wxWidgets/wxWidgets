@@ -168,6 +168,8 @@ public:
         If the bar is currently hidden, it will be shown. Otherwise its message
         will be updated in place.
 
+        Note that long messages will be shown as cut-off
+
         @param msg
             The text of the message.
         @param flags
