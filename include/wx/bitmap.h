@@ -97,6 +97,11 @@ class WXDLLIMPEXP_CORE wxBitmapHelpers
 public:
     // Create a new wxBitmap from the PNG data in the given buffer.
     static wxBitmap NewFromPNGData(const void* data, size_t size);
+
+#ifdef __VISUALC6__
+    // Work around compiler bug with incorrect wxBitmap size, see #18453.
+    char wxDummyVC6Fix;
+#endif // __VISUALC6__
 };
 
 
