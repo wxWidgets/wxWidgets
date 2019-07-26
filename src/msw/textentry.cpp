@@ -1036,4 +1036,15 @@ wxPoint wxTextEntry::DoGetMargins() const
     return wxPoint(left, top);
 }
 
+// ----------------------------------------------------------------------------
+// input handling
+// ----------------------------------------------------------------------------
+
+bool wxTextEntry::ClickDefaultButtonIfPossible()
+{
+    return !wxIsAnyModifierDown() &&
+                wxWindow::MSWClickButtonIfPossible(
+                    wxWindow::MSWGetDefaultButtonFor(GetEditableWindow()));
+}
+
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX

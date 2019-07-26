@@ -243,6 +243,9 @@ bool wxComboBox::MSWProcessEditSpecialKey(WXWPARAM vkey)
                     // beep if it gets it
                     return true;
                 }
+
+                if ( ClickDefaultButtonIfPossible() )
+                    return true;
             }
             break;
 
