@@ -210,7 +210,7 @@ private:
 };
 
 // A plain method functor for the untyped legacy event types:
-class WXDLLIMPEXP_BASE wxObjectEventFunctor : public wxEventFunctor
+class wxObjectEventFunctor : public wxEventFunctor
 {
 public:
     wxObjectEventFunctor(wxObjectEventFunction method, wxEvtHandler *handler)

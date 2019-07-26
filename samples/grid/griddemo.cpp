@@ -1703,7 +1703,7 @@ wxString BugsGridTable::GetTypeName(int WXUNUSED(row), int col)
     {
         case Col_Id:
         case Col_Priority:
-            return wxGRID_VALUE_NUMBER;;
+            return wxGRID_VALUE_NUMBER;
 
         case Col_Severity:
             // fall thorugh (TODO should be a list)
@@ -2501,7 +2501,7 @@ void GridFrame::OnRenderPaint( wxPaintEvent& event )
     canvas->PrepareDC( dc );
 
     if ( !m_gridBitmap.IsOk() )
-        return;;
+        return;
 
     wxMemoryDC memDc( m_gridBitmap );
 

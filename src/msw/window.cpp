@@ -5082,7 +5082,7 @@ wxColour wxWindowMSW::MSWGetThemeColour(const wchar_t *themeName,
                 break;
             default:
                 wxFAIL_MSG(wxT("unsupported theme colour"));
-        };
+        }
 
         wxUxThemeHandle hTheme((const wxWindow *)this, themeName);
         COLORREF col;
