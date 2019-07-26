@@ -189,6 +189,8 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_SELCOLS,  GridFrame::SelectCols )
     EVT_MENU( ID_SELROWSORCOLS,  GridFrame::SelectRowsOrCols )
 
+    EVT_MENU( ID_FREEZE_OR_THAW,  GridFrame::FreezeOrThaw )
+
     EVT_MENU( ID_SET_CELL_FG_COLOUR, GridFrame::SetCellFgColour )
     EVT_MENU( ID_SET_CELL_BG_COLOUR, GridFrame::SetCellBgColour )
 
@@ -369,6 +371,8 @@ GridFrame::GridFrame()
     editMenu->Append( ID_DELETECOL, "Delete selected co&ls" );
     editMenu->Append( ID_CLEARGRID, "Cl&ear grid cell contents" );
     editMenu->Append( ID_SETCORNERLABEL, "&Set corner label..." );
+
+    editMenu->AppendCheckItem( ID_FREEZE_OR_THAW, "Freeze up to cursor\tCtrl-F" );
 
     wxMenu *selectMenu = new wxMenu;
     selectMenu->Append( ID_SELECT_UNSELECT, "Add new cells to the selection",
@@ -573,10 +577,10 @@ GridFrame::GridFrame()
         "This takes two cells",
         "Another choice",
     };
-    grid->SetCellEditor(4, 0, new wxGridCellChoiceEditor(WXSIZEOF(choices), choices));
-    grid->SetCellSize(4, 0, 1, 2);
-    grid->SetCellValue(4, 0, choices[0]);
-    grid->SetCellOverflow(4, 0, false);
+    grid->SetCellEditor(4, 2, new wxGridCellChoiceEditor(WXSIZEOF(choices), choices));
+    grid->SetCellSize(4, 2, 1, 2);
+    grid->SetCellValue(4, 2, choices[0]);
+    grid->SetCellOverflow(4, 2, false);
 
     grid->SetCellSize(7, 1, 3, 4);
     grid->SetCellAlignment(7, 1, wxALIGN_CENTRE, wxALIGN_CENTRE);
@@ -1207,6 +1211,30 @@ void GridFrame::SelectCols( wxCommandEvent& WXUNUSED(ev) )
 void GridFrame::SelectRowsOrCols( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->SetSelectionMode( wxGrid::wxGridSelectRowsOrColumns );
+}
+
+void GridFrame::FreezeOrThaw(wxCommandEvent& ev)
+{
+    if ( ev.IsChecked() )
+    {
+        if ( !grid->FreezeTo(grid->GetGridCursorCoords()) )
+        {
+            wxLogMessage("Failed to freeze the grid.");
+            GetMenuBar()->Check(ID_FREEZE_OR_THAW, false);
+            return;
+        }
+
+        wxLogMessage("Grid is now frozen");
+    }
+    else
+    {
+        // This never fails.
+        grid->FreezeTo(0, 0);
+
+        wxLogMessage("Grid is now thawed");
+    }
+
+    GetMenuBar()->Enable( ID_TOGGLECOLMOVING, !grid->IsFrozen() );
 }
 
 void GridFrame::SetCellFgColour( wxCommandEvent& WXUNUSED(ev) )
