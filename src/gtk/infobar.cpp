@@ -196,7 +196,9 @@ void wxInfoBar::ShowMessage(const wxString& msg, int flags)
     if ( wxGTKImpl::ConvertMessageTypeFromWX(flags, &type) )
         gtk_info_bar_set_message_type(GTK_INFO_BAR(m_widget), type);
     gtk_label_set_text(GTK_LABEL(m_impl->m_label), wxGTK_CONV(msg));
-
+    gtk_label_set_line_wrap(GTK_LABEL(m_impl->m_label), TRUE );
+    if( gtk_check_version( 2, 10, 0 ) )
+        gtk_label_set_line_wrap_mode(GTK_LABEL(m_impl->m_label), PANGO_WRAP_WORD );
     if ( !IsShown() )
         Show();
 
