@@ -275,6 +275,7 @@ void wxInfoBarGeneric::AddButton(wxWindowID btnid, const wxString& label)
 #endif // __WXMAC__
 
     sizer->Add(button, wxSizerFlags().Centre().DoubleBorder());
+    sizer->Layout();
 }
 
 size_t wxInfoBarGeneric::GetButtonCount() const
