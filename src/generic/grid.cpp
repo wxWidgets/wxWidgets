@@ -7323,7 +7323,12 @@ wxRect wxGrid::CellToRect( int row, int col ) const
 
 wxGridWindow* wxGrid::CellToGridWindow( int row, int col ) const
 {
-    if ( row < m_numFrozenRows && GetColPos(col) < m_numFrozenCols )
+    // It may happen that we're called during grid creation, when the current
+    // cell still has invalid coordinates -- don't return (possibly null)
+    // frozen corner window in this case.
+    if ( row == -1 && col == -1 )
+        return m_gridWin;
+    else if ( row < m_numFrozenRows && GetColPos(col) < m_numFrozenCols )
         return m_frozenCornerGridWin;
     else if ( row < m_numFrozenRows )
         return m_frozenRowGridWin;
