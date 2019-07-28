@@ -18,7 +18,10 @@ enum wxXmlResourceFlags
 
     /** Prevent the XRC files from being reloaded from disk in case they have been modified there
         since being last loaded (may slightly speed up loading them). */
-    wxXRC_NO_RELOADING   = 4
+    wxXRC_NO_RELOADING   = 4,
+
+    /** Expand environment variables for paths in XRC (such as bitmaps or icons). */
+    wxXRC_USE_ENVVARS    = 8
 };
 
 

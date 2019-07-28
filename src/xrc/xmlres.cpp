@@ -44,6 +44,7 @@
 #include "wx/xml/xml.h"
 #include "wx/hashset.h"
 #include "wx/scopedptr.h"
+#include "wx/config.h"
 
 #include <limits.h>
 #include <locale.h>
@@ -1827,6 +1828,10 @@ wxBitmap wxXmlResourceHandlerImpl::GetBitmap(const wxXmlNode* node,
     /* ...or load the bitmap from file: */
     wxString name = GetParamValue(node);
     if (name.empty()) return wxNullBitmap;
+
+    if (m_handler->m_resource->GetFlags() & wxXRC_USE_ENVVARS)
+        name = wxExpandEnvVars(name);
+
 #if wxUSE_FILESYSTEM
     wxFSFile *fsfile = GetCurFileSystem().OpenFile(name, wxFS_READ | wxFS_SEEKABLE);
     if (fsfile == NULL)
@@ -1898,9 +1903,12 @@ wxIconBundle wxXmlResourceHandlerImpl::GetIconBundle(const wxString& param,
             return stockArt;
     }
 
-    const wxString name = GetParamValue(param);
+    wxString name = GetParamValue(param);
     if ( name.empty() )
         return wxNullIconBundle;
+
+    if (m_handler->m_resource->GetFlags() & wxXRC_USE_ENVVARS)
+        name = wxExpandEnvVars(name);
 
 #if wxUSE_FILESYSTEM
     wxFSFile *fsfile = GetCurFileSystem().OpenFile(name, wxFS_READ | wxFS_SEEKABLE);

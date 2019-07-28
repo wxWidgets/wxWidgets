@@ -34,6 +34,7 @@
 
 #include "wx/animate.h"
 #include "wx/scopedptr.h"
+#include "wx/config.h"
 
 // ============================================================================
 // implementation
@@ -42,9 +43,12 @@
 #if wxUSE_ANIMATIONCTRL
 wxAnimation* wxXmlResourceHandlerImpl::GetAnimation(const wxString& param)
 {
-    const wxString name = GetParamValue(param);
+    wxString name = GetParamValue(param);
     if ( name.empty() )
         return NULL;
+
+    if (m_handler->m_resource->GetFlags() & wxXRC_USE_ENVVARS)
+        name = wxExpandEnvVars(name);
 
     // load the animation from file
     wxScopedPtr<wxAnimation> ani(new wxAnimation);
