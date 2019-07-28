@@ -168,18 +168,18 @@ public:
 
     void Free();
 
-    wxString GetFamilyName() const;
-    wxString GetStyleName() const;
-
-    static void UpdateNamesMap(const wxString& familyname, CTFontDescriptorRef descr);
-    static void UpdateNamesMap(const wxString& familyname, CTFontRef font);
+    // not all style attributes like condensed etc, are exposed in the public API methods
+    // for best fidelity PostScript names are useful, they are also used in the toString/fromString methods
+    wxString GetPostScriptName() const;
+    bool SetPostScriptName(const wxString& postScriptName);
 
     static CGFloat GetCTWeight( CTFontRef font );
     static CGFloat GetCTWeight( CTFontDescriptorRef font );
     static CGFloat GetCTSlant( CTFontDescriptorRef font );
 
-
     CTFontDescriptorRef GetCTFontDescriptor() const;
+    
+    void RealizeResource() const;
 private:
     // attributes for regenerating a CTFontDescriptor, stay close to native values
     // for better roundtrip fidelity
@@ -188,8 +188,8 @@ private:
     CGFloat       m_ctSize;
     wxFontFamily  m_family;
 
-    wxString      m_styleName;
     wxString      m_familyName;
+    wxString      m_postScriptName;
 
     // native font description
     wxCFRef<CTFontDescriptorRef> m_descriptor;
