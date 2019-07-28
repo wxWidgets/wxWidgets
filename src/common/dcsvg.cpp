@@ -637,8 +637,8 @@ void wxSVGFileDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width
     NewGraphicsIfNeeded();
     wxString s;
 
-    s = wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%s\"%s"),
-                         x, y, width, height, NumStr(radius), wxGetBrushFill(m_brush));
+    s = wxString::Format(wxS("  <rect %sx=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%s\"%s"),
+                         wxGetPenPattern(m_pen), x, y, width, height, NumStr(radius), wxGetBrushFill(m_brush));
 
     s += wxS("/>\n");
     write(s);
@@ -660,7 +660,7 @@ void wxSVGFileDCImpl::DoDrawPolygon(int n, const wxPoint points[],
     else
         s += wxS("fill-rule:nonzero;");
 
-    s += wxS("\"") + wxGetBrushFill(m_brush) + wxS(" points=\"");
+    s += wxS("\" ") + wxGetPenPattern(m_pen) + wxGetBrushFill(m_brush) + wxS(" points=\"");
 
     for (int i = 0; i < n; i++)
     {
@@ -721,7 +721,8 @@ void wxSVGFileDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord
     int rw = width / 2;
 
     wxString s;
-    s = wxString::Format(wxS("  <ellipse cx=\"%d\" cy=\"%d\" rx=\"%d\" ry=\"%d\""), x + rw, y + rh, rw, rh);
+    s = wxString::Format(wxS("  <ellipse %scx=\"%d\" cy=\"%d\" rx=\"%d\" ry=\"%d\""),
+                         wxGetPenPattern(m_pen), x + rw, y + rh, rw, rh);
     s += wxS("/>\n");
 
     write(s);
@@ -773,8 +774,8 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
     if (x1 == x2 && y1 == y2)
     {
         // drawing full circle fails with default arc. Draw two half arcs instead.
-        s = wxString::Format(wxS("  <path d=\"M%d %d a%s %s 0 %d %d %s %s a%s %s 0 %d %d %s %s"),
-            x1, y1,
+        s = wxString::Format(wxS("  <path %sd=\"M%d %d a%s %s 0 %d %d %s %s a%s %s 0 %d %d %s %s"),
+            wxGetPenPattern(m_pen), x1, y1,
             NumStr(r1), NumStr(r2), fArc, fSweep, NumStr( r1 * 2), NumStr(0),
             NumStr(r1), NumStr(r2), fArc, fSweep, NumStr(-r1 * 2), NumStr(0));
     }
@@ -785,8 +786,9 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
         if (GetBrush().GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
             line = wxString::Format(wxS("L%d %d z"), xc, yc);
 
-        s = wxString::Format(wxS("  <path d=\"M%d %d A%s %s 0 %d %d %d %d %s"),
-            x1, y1, NumStr(r1), NumStr(r2), fArc, fSweep, x2, y2, line);
+        s = wxString::Format(wxS("  <path %sd=\"M%d %d A%s %s 0 %d %d %d %d %s"),
+            wxGetPenPattern(m_pen), x1, y1,
+            NumStr(r1), NumStr(r2), fArc, fSweep, x2, y2, line);
     }
 
     s += wxS("\"/>\n");
@@ -852,15 +854,15 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord
     {
         // Drawing full circle fails with default arc. Draw two half arcs instead.
         fArc = 1;
-        arcPath = wxString::Format(wxS("  <path d=\"M%s %s a%s %s 0 %d %d %s %s a%s %s 0 %d %d %s %s"),
-            NumStr(x), NumStr(y + ry),
+        arcPath = wxString::Format(wxS("  <path %sd=\"M%s %s a%s %s 0 %d %d %s %s a%s %s 0 %d %d %s %s"),
+            wxGetPenPattern(m_pen), NumStr(x), NumStr(y + ry),
             NumStr(rx), NumStr(ry), fArc, fSweep, NumStr( rx * 2), NumStr(0),
             NumStr(rx), NumStr(ry), fArc, fSweep, NumStr(-rx * 2), NumStr(0));
     }
     else
     {
-        arcPath = wxString::Format(wxS("  <path d=\"M%s %s A%s %s 0 %d %d %s %s"),
-            NumStr(xs), NumStr(ys),
+        arcPath = wxString::Format(wxS("  <path %sd=\"M%s %s A%s %s 0 %d %d %s %s"),
+            wxGetPenPattern(m_pen), NumStr(xs), NumStr(ys),
             NumStr(rx), NumStr(ry), fArc, fSweep, NumStr(xe), NumStr(ye));
     }
 
