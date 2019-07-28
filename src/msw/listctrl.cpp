@@ -67,6 +67,10 @@
     #define NO_ITEM (-1)
 #endif
 
+#ifndef LVM_ISITEMVISIBLE
+    #define LVM_ISITEMVISIBLE (LVM_FIRST + 182)
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -878,6 +882,25 @@ bool wxListCtrl::GetItem(wxListItem& info) const
         delete[] lvItem.pszText;
 
     return success;
+}
+
+// Check if the item is visible
+bool wxListCtrl::IsVisible(long item) const
+{
+    bool result = ::SendMessage( GetHwnd(), LVM_ISITEMVISIBLE, (WPARAM) item, 0 );
+    if( result )
+    {
+        HWND hwndHdr = ListView_GetHeader(GetHwnd());
+        wxRect itemRect;
+        RECT headerRect;
+        if ( Header_GetItemRect( hwndHdr, 0, &headerRect ) )
+        {
+            GetItemRect( item, itemRect );
+            wxRect rectHeader = wxRectFromRECT( headerRect );
+            result = itemRect.GetBottom() > rectHeader.GetBottom();
+        }
+    }
+    return result;
 }
 
 // Sets information about the item

@@ -154,6 +154,9 @@ public:
     // Gets information about the item
     bool GetItem(wxListItem& info) const;
 
+    // Check if the item is visible
+    bool IsVisible(long item) const wxOVERRIDE;
+
     // Sets information about the item
     bool SetItem(wxListItem& info);
 
