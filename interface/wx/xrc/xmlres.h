@@ -20,7 +20,11 @@ enum wxXmlResourceFlags
         since being last loaded (may slightly speed up loading them). */
     wxXRC_NO_RELOADING   = 4,
 
-    /** Expand environment variables for paths in XRC (such as bitmaps or icons). */
+    /**
+        Expand environment variables for paths in XRC (such as bitmaps or icons).
+
+        @since 3.1.3
+    */
     wxXRC_USE_ENVVARS    = 8
 };
 
@@ -739,6 +743,16 @@ protected:
         - calls wxGetTranslations (unless disabled in wxXmlResource)
     */
     wxString GetText(const wxString& param, bool translate = true);
+
+    /**
+        Gets a file path.
+    */
+    wxString GetFilePath(const wxString& param);
+
+    /**
+        Gets a file path.
+    */
+    wxString GetFilePath(const wxXmlNode* node);
 
     /**
         Check to see if a parameter exists.

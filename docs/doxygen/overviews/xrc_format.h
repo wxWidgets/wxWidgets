@@ -352,6 +352,8 @@ wxFileSystem URL) of the bitmap to use. For example:
 The value is interpreted as path relative to the location of XRC file where the
 reference occurs.
 
+Bitmap file paths can include environment variables that are expanded if wxXRC_USE_ENVVARS was passed to the wxXmlResource constructor.
+
 Alternatively, it is possible to specify the bitmap using wxArtProvider IDs.
 In this case, the property element has no textual value (filename) and instead
 has the @c stock_id XML attribute that contains stock art ID as accepted by

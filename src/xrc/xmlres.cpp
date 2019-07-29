@@ -1826,11 +1826,9 @@ wxBitmap wxXmlResourceHandlerImpl::GetBitmap(const wxXmlNode* node,
     }
 
     /* ...or load the bitmap from file: */
-    wxString name = GetParamValue(node);
-    if (name.empty()) return wxNullBitmap;
-
-    if (m_handler->m_resource->GetFlags() & wxXRC_USE_ENVVARS)
-        name = wxExpandEnvVars(name);
+    wxString name = GetFilePath(node);
+    if (name.empty())
+        return wxNullBitmap;
 
 #if wxUSE_FILESYSTEM
     wxFSFile *fsfile = GetCurFileSystem().OpenFile(name, wxFS_READ | wxFS_SEEKABLE);
@@ -1903,12 +1901,9 @@ wxIconBundle wxXmlResourceHandlerImpl::GetIconBundle(const wxString& param,
             return stockArt;
     }
 
-    wxString name = GetParamValue(param);
+    wxString name = GetFilePath(param);
     if ( name.empty() )
         return wxNullIconBundle;
-
-    if (m_handler->m_resource->GetFlags() & wxXRC_USE_ENVVARS)
-        name = wxExpandEnvVars(name);
 
 #if wxUSE_FILESYSTEM
     wxFSFile *fsfile = GetCurFileSystem().OpenFile(name, wxFS_READ | wxFS_SEEKABLE);
@@ -1988,6 +1983,21 @@ wxImageList *wxXmlResourceHandlerImpl::GetImageList(const wxString& param)
 
     m_handler->m_node = oldnode;
     return imagelist;
+}
+
+wxString wxXmlResourceHandlerImpl::GetFilePath(const wxString& param)
+{
+    return GetFilePath(GetParamNode(param));
+}
+
+wxString wxXmlResourceHandlerImpl::GetFilePath(const wxXmlNode* node)
+{
+    wxString path = GetParamValue(node);
+
+    if (m_handler->m_resource->GetFlags() & wxXRC_USE_ENVVARS)
+        path = wxExpandEnvVars(path);
+
+    return path;
 }
 
 wxXmlNode *wxXmlResourceHandlerImpl::GetParamNode(const wxString& param)

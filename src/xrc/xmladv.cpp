@@ -43,12 +43,9 @@
 #if wxUSE_ANIMATIONCTRL
 wxAnimation* wxXmlResourceHandlerImpl::GetAnimation(const wxString& param)
 {
-    wxString name = GetParamValue(param);
+    wxString name = GetFilePath(param);
     if ( name.empty() )
         return NULL;
-
-    if (m_handler->m_resource->GetFlags() & wxXRC_USE_ENVVARS)
-        name = wxExpandEnvVars(name);
 
     // load the animation from file
     wxScopedPtr<wxAnimation> ani(new wxAnimation);
