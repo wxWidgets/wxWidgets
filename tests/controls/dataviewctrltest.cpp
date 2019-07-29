@@ -262,4 +262,43 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     CHECK( rectRoot == wxRect() );
 }
 
+TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
+    "wxDVC::AppendTextColumn",
+    "[wxDataViewCtrl][column]")
+{
+    const wxSize size(200, 100);
+    const int firstColumnWidth = 50;
+
+    wxDataViewListCtrl* dvc =
+        new wxDataViewListCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
+
+    wxDataViewColumn* firstColumn =
+        dvc->AppendTextColumn(wxString(), wxDATAVIEW_CELL_INERT, firstColumnWidth);
+    wxDataViewColumn* lastColumn =
+        dvc->AppendTextColumn(wxString(), wxDATAVIEW_CELL_INERT);
+
+    // Set size after columns appending to extend size of the last column.
+    dvc->SetSize(size);
+    dvc->Layout();
+    dvc->Refresh();
+    dvc->Update();
+
+#ifdef __WXGTK__
+    // Let the native control have some events to lay itself out.
+    wxYield();
+#endif
+
+    // Check the width of the first column.
+    CHECK(firstColumn->GetWidth() == firstColumnWidth);
+
+    // Check that the last column was extended to fit client area.
+    const int lastColumnMaxWidth =
+        dvc->GetClientSize().GetWidth() - firstColumnWidth;
+    // In GTK and under Mac the width of the last column is less then
+    // a remaining client area.
+    const int lastColumnMinWidth = lastColumnMaxWidth - 10;
+    CHECK(lastColumn->GetWidth() <= lastColumnMaxWidth);
+    CHECK(lastColumn->GetWidth() >= lastColumnMinWidth);
+}
+
 #endif //wxUSE_DATAVIEWCTRL
