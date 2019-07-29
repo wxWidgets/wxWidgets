@@ -20,6 +20,9 @@
 
 #include "wx/app.h"
 #include "wx/dataview.h"
+#ifdef __WXGTK__
+    #include "wx/stopwatch.h"
+#endif // __WXGTK__
 
 #include "testableframe.h"
 #include "asserthelper.h"
@@ -67,6 +70,27 @@ public:
     }
 };
 
+class MultiColumnsDataViewCtrlTestCase
+{
+public:
+    MultiColumnsDataViewCtrlTestCase();
+    ~MultiColumnsDataViewCtrlTestCase();
+
+protected:
+    // the dataview control itself
+    wxDataViewListCtrl *m_dvc;
+
+    // constants
+    const wxSize m_size;
+    const int m_firstColumnWidth;
+
+    // and the columns
+    wxDataViewColumn* m_firstColumn;
+    wxDataViewColumn* m_lastColumn;
+
+    wxDECLARE_NO_COPY_CLASS(MultiColumnsDataViewCtrlTestCase);
+};
+
 // ----------------------------------------------------------------------------
 // test initialization
 // ----------------------------------------------------------------------------
@@ -91,6 +115,29 @@ DataViewCtrlTestCase::DataViewCtrlTestCase(long style)
 }
 
 DataViewCtrlTestCase::~DataViewCtrlTestCase()
+{
+    delete m_dvc;
+}
+
+MultiColumnsDataViewCtrlTestCase::MultiColumnsDataViewCtrlTestCase()
+    : m_size(200, 100),
+      m_firstColumnWidth(50)
+{
+    m_dvc = new wxDataViewListCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
+
+    m_firstColumn =
+        m_dvc->AppendTextColumn(wxString(), wxDATAVIEW_CELL_INERT, m_firstColumnWidth);
+    m_lastColumn =
+        m_dvc->AppendTextColumn(wxString(), wxDATAVIEW_CELL_INERT);
+
+    // Set size after columns appending to extend size of the last column.
+    m_dvc->SetSize(m_size);
+    m_dvc->Layout();
+    m_dvc->Refresh();
+    m_dvc->Update();
+}
+
+MultiColumnsDataViewCtrlTestCase::~MultiColumnsDataViewCtrlTestCase()
 {
     delete m_dvc;
 }
@@ -260,6 +307,37 @@ TEST_CASE_METHOD(SingleSelectDataViewCtrlTestCase,
     // scrolled off).
     const wxRect rectRoot = m_dvc->GetItemRect(m_root);
     CHECK( rectRoot == wxRect() );
+}
+
+TEST_CASE_METHOD(MultiColumnsDataViewCtrlTestCase,
+    "wxDVC::AppendTextColumn",
+    "[wxDataViewCtrl][column]")
+{
+#ifdef __WXGTK__
+    // Wait for the list control to be realized.
+    wxStopWatch sw;
+    while ( m_firstColumn->GetWidth() == 0 )
+    {
+        if ( sw.Time() > 500 )
+        {
+            WARN("Timed out waiting for wxDataViewListCtrl to be realized");
+            break;
+        }
+        wxYield();
+    }
+#endif
+
+    // Check the width of the first column.
+    CHECK( m_firstColumn->GetWidth() == m_firstColumnWidth );
+
+    // Check that the last column was extended to fit client area.
+    const int lastColumnMaxWidth =
+        m_dvc->GetClientSize().GetWidth() - m_firstColumnWidth;
+    // In GTK and under Mac the width of the last column is less then
+    // a remaining client area.
+    const int lastColumnMinWidth = lastColumnMaxWidth - 10;
+    CHECK( m_lastColumn->GetWidth() <= lastColumnMaxWidth );
+    CHECK( m_lastColumn->GetWidth() >= lastColumnMinWidth );
 }
 
 #endif //wxUSE_DATAVIEWCTRL
