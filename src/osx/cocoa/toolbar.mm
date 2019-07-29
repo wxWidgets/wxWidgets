@@ -1170,160 +1170,162 @@ void wxToolBar::DoLayout()
 
 bool wxToolBar::Realize()
 {
-    if ( !wxToolBarBase::Realize() )
-        return false;
+    if( dynamic_cast<wxFrame *>( GetParent() )->GetToolBar() )
+    {
+        if ( !wxToolBarBase::Realize() )
+            return false;
 
-    wxToolBarTool *tool;
-    wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
+        wxToolBarTool *tool;
+        wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
 
 #if wxOSX_USE_NATIVE_TOOLBAR
-    CFIndex currentPosition = 0;
-    bool insertAll = false;
+        CFIndex currentPosition = 0;
+        bool insertAll = false;
 
-    NSToolbar* refTB = (NSToolbar*)m_macToolbar;
-    wxFont f;
-    wxFontEncoding enc;
-    f = GetFont();
-    if ( f.IsOk() )
-        enc = f.GetEncoding();
-    else
-        enc = wxFont::GetDefaultEncoding();
+        NSToolbar* refTB = (NSToolbar*)m_macToolbar;
+        wxFont f;
+        wxFontEncoding enc;
+        f = GetFont();
+        if ( f.IsOk() )
+            enc = f.GetEncoding();
+        else
+            enc = wxFont::GetDefaultEncoding();
 
-    node = m_tools.GetFirst();
-    while ( node )
-    {
-        tool = (wxToolBarTool*) node->GetData();
-        if ( tool == NULL )
+        node = m_tools.GetFirst();
+        while ( node )
         {
-            node = node->GetNext();
-            continue;
-        }
-                
-        // install in native NSToolbar
-        if ( refTB )
-        {
-            NSToolbarItem* hiItemRef = tool->GetToolbarItemRef();
-            if ( hiItemRef != NULL )
+            tool = (wxToolBarTool*) node->GetData();
+            if ( tool == NULL )
             {
-                // since setting the help texts is non-virtual we have to update
-                // the strings now
-                wxCFStringRef sh( tool->GetShortHelp(), enc);
-                [hiItemRef setToolTip:sh.AsNSString()];
+                node = node->GetNext();
+                continue;
+            }
                 
-                if ( insertAll || (tool->GetIndex() != currentPosition) )
+            // install in native NSToolbar
+            if ( refTB )
+            {
+                NSToolbarItem* hiItemRef = tool->GetToolbarItemRef();
+                if ( hiItemRef != NULL )
                 {
-                    if ( !insertAll )
+                    // since setting the help texts is non-virtual we have to update
+                    // the strings now
+                    wxCFStringRef sh( tool->GetShortHelp(), enc);
+                    [hiItemRef setToolTip:sh.AsNSString()];
+                
+                    if ( insertAll || (tool->GetIndex() != currentPosition) )
                     {
-                        insertAll = true;
-                        
-                        // if this is the first tool that gets newly inserted or repositioned
-                        // first remove all 'old' tools from here to the right, because of this
-                        // all following tools will have to be reinserted (insertAll).
-                        for ( wxToolBarToolsList::compatibility_iterator node2 = m_tools.GetLast();
-                             node2 != node;
-                             node2 = node2->GetPrevious() )
+                        if ( !insertAll )
                         {
-                            wxToolBarTool *tool2 = (wxToolBarTool*) node2->GetData();
-                            
-                            const long idx = tool2->GetIndex();
-                            if ( idx != -1 )
+                            insertAll = true;
+    
+                            // if this is the first tool that gets newly inserted or repositioned
+                            // first remove all 'old' tools from here to the right, because of this
+                            // all following tools will have to be reinserted (insertAll).
+                            for ( wxToolBarToolsList::compatibility_iterator node2 = m_tools.GetLast();
+                                 node2 != node;
+                                 node2 = node2->GetPrevious() )
                             {
-                                [refTB removeItemAtIndex:idx];
-                                tool2->SetIndex(-1);
+                                wxToolBarTool *tool2 = (wxToolBarTool*) node2->GetData();
+                            
+                                const long idx = tool2->GetIndex();
+                                if ( idx != -1 )
+                                {
+                                    [refTB removeItemAtIndex:idx];
+                                    tool2->SetIndex(-1);
+                                }
                             }
                         }
-                    }
                     
-                    wxCFStringRef cfidentifier;
-                    NSString *nsItemId;
-                    if (tool->GetStyle() == wxTOOL_STYLE_SEPARATOR)
-                    {
-                        if ( tool->IsStretchable() )
-                            nsItemId = NSToolbarFlexibleSpaceItemIdentifier;
-                        else 
-                            nsItemId = NSToolbarSpaceItemIdentifier;
-                    }
-                    else
-                    {
-                        cfidentifier = wxCFStringRef(wxString::Format("%ld", (long)tool));
-                        nsItemId = cfidentifier.AsNSString();
-                    }
+                        wxCFStringRef cfidentifier;
+                        NSString *nsItemId;
+                        if (tool->GetStyle() == wxTOOL_STYLE_SEPARATOR)
+                        {
+                            if ( tool->IsStretchable() )
+                                nsItemId = NSToolbarFlexibleSpaceItemIdentifier;
+                            else
+                                nsItemId = NSToolbarSpaceItemIdentifier;
+                        }
+                        else
+                        {
+                            cfidentifier = wxCFStringRef(wxString::Format("%ld", (long)tool));
+                            nsItemId = cfidentifier.AsNSString();
+                        }
                     
-                    [refTB insertItemWithItemIdentifier:nsItemId atIndex:currentPosition];
-                    tool->SetIndex( currentPosition );
-                }
+                        [refTB insertItemWithItemIdentifier:nsItemId atIndex:currentPosition];
+                        tool->SetIndex( currentPosition );
+                    }
                 
-                currentPosition++;
+                    currentPosition++;
+                }
             }
+            node = node->GetNext();
         }
-        node = node->GetNext();
-    }
     
 #endif
     
-    DoLayout();
+        DoLayout();
     
-    // adjust radio items
+        // adjust radio items
         
-    bool lastIsRadio = false;
-    bool curIsRadio = false;
+        bool lastIsRadio = false;
+        bool curIsRadio = false;
     
-    node = m_tools.GetFirst();
-    while ( node )
-    {
-        tool = (wxToolBarTool*) node->GetData();
-        if ( tool == NULL )
+        node = m_tools.GetFirst();
+        while ( node )
         {
-            node = node->GetNext();
-            continue;
-        }
-            
-        // update radio button (and group) state
-        lastIsRadio = curIsRadio;
-        curIsRadio = ( tool->IsButton() && (tool->GetKind() == wxITEM_RADIO) );
-
-        if ( !curIsRadio )
-        {
-            if ( tool->IsToggled() )
-                DoToggleTool( tool, true );
-        }
-        else
-        {
-            if ( !lastIsRadio )
+            tool = (wxToolBarTool*) node->GetData();
+            if ( tool == NULL )
             {
-                if ( tool->Toggle( true ) )
-                {
-                    DoToggleTool( tool, true );
-                }
+                node = node->GetNext();
+                continue;
             }
-            else if ( tool->IsToggled() )
+            
+            // update radio button (and group) state
+            lastIsRadio = curIsRadio;
+            curIsRadio = ( tool->IsButton() && (tool->GetKind() == wxITEM_RADIO) );
+
+            if ( !curIsRadio )
             {
                 if ( tool->IsToggled() )
                     DoToggleTool( tool, true );
-
-                wxToolBarToolsList::compatibility_iterator  nodePrev = node->GetPrevious();
-                while ( nodePrev )
+            }
+            else
+            {
+                if ( !lastIsRadio )
                 {
-                    wxToolBarToolBase   *toggleTool = nodePrev->GetData();
-                    if ( (toggleTool == NULL) || !toggleTool->IsButton() || (toggleTool->GetKind() != wxITEM_RADIO) )
-                        break;
+                    if ( tool->Toggle( true ) )
+                    {
+                        DoToggleTool( tool, true );
+                    }
+                }
+                else if ( tool->IsToggled() )
+                {
+                    if ( tool->IsToggled() )
+                        DoToggleTool( tool, true );
 
-                    if ( toggleTool->Toggle( false ) )
-                        DoToggleTool( toggleTool, false );
+                    wxToolBarToolsList::compatibility_iterator  nodePrev = node->GetPrevious();
+                    while ( nodePrev )
+                    {
+                        wxToolBarToolBase   *toggleTool = nodePrev->GetData();
+                        if ( (toggleTool == NULL) || !toggleTool->IsButton() || (toggleTool->GetKind() != wxITEM_RADIO) )
+                            break;
 
-                    nodePrev = nodePrev->GetPrevious();
+                        if ( toggleTool->Toggle( false ) )
+                            DoToggleTool( toggleTool, false );
+
+                        nodePrev = nodePrev->GetPrevious();
+                    }
                 }
             }
+
+            node = node->GetNext();
         }
 
-        node = node->GetNext();
+        InvalidateBestSize();
+        SetInitialSize( wxSize(m_minWidth, m_minHeight));
+
+        SendSizeEventToParent();
     }
-
-    InvalidateBestSize();
-    SetInitialSize( wxSize(m_minWidth, m_minHeight));
-
-    SendSizeEventToParent();
-    
     return true;
 }
 

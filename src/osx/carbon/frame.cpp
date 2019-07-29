@@ -301,6 +301,7 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
 #if wxOSX_USE_NATIVE_TOOLBAR
     if ( toolbar )
         toolbar->MacInstallNativeToolbar( true ) ;
+    toolbar->Realize();
 #endif
 #endif
 }
