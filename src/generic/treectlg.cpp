@@ -1886,8 +1886,16 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
         m_dirty = true;
     }
 
-    event.SetEventType(wxEVT_TREE_ITEM_EXPANDED);
-    GetEventHandler()->ProcessEvent( event );
+    // Don't send EXPANDED event unconditionally: if this is an item for which
+    // SetItemHasChildren(true) had been called before, but no children have
+    // been added from the EXPANDING handler, we shouldn't consider the item to
+    // be really expanded.
+    wxTreeItemIdValue cookie;
+    if ( GetFirstChild(item, cookie).IsOk() )
+    {
+        event.SetEventType(wxEVT_TREE_ITEM_EXPANDED);
+        GetEventHandler()->ProcessEvent( event );
+    }
 }
 
 void wxGenericTreeCtrl::Collapse(const wxTreeItemId& itemId)
