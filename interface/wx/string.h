@@ -1711,6 +1711,14 @@ public:
     wxString substr(size_t nStart = 0, size_t nLen = npos) const;
     void swap(wxString& str);
 
+    bool starts_with(const wxString &str) const;
+    bool starts_with(const char *sz) const;
+    bool starts_with(const wchar_t *sz) const;
+
+    bool ends_with(const wxString &str) const;
+    bool ends_with(const char *sz) const;
+    bool ends_with(const wchar_t *sz) const;
+
     //@}
 
 
