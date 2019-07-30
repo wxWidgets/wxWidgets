@@ -1885,9 +1885,13 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
     {
         m_dirty = true;
     }
-
-    event.SetEventType(wxEVT_TREE_ITEM_EXPANDED);
-    GetEventHandler()->ProcessEvent( event );
+    wxTreeItemIdValue cookie;
+    wxTreeItemId child = GetFirstChild( item, cookie );
+    if( child && child.IsOk() )
+    {
+        event.SetEventType(wxEVT_TREE_ITEM_EXPANDED);
+        GetEventHandler()->ProcessEvent( event );
+    }
 }
 
 void wxGenericTreeCtrl::Collapse(const wxTreeItemId& itemId)
