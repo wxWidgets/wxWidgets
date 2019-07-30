@@ -136,6 +136,8 @@ INCOMPATIBLE CHANGES SINCE 3.1.2:
   were introduced by it. Thanks to Tomasz Słodkowicz and Dummy for reporting
   this and providing fixes for it.
 
+All:
+- Add C++20-style wxString::starts_with()/ends_with() functions (Lauri Nurmi).
 
 All (GUI):
 
