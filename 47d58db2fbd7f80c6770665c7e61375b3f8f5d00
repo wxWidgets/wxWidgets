@@ -1,0 +1,1 @@
+Add C++20-style wxString::starts_with()/ends_with() functions (Lauri Nurmi).
