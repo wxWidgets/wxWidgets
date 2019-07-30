@@ -264,3 +264,21 @@ wxFontEncoding wxGetFontEncFromCharSet(int cs)
 
     return fontEncoding;
 }
+
+// ----------------------------------------------------------------------------
+// Deprecated wxFont <-> LOGFONT conversion functions
+// ----------------------------------------------------------------------------
+
+#if WXWIN_COMPATIBILITY_3_0
+
+void wxFillLogFont(LOGFONT *logFont, const wxFont *font)
+{
+    *logFont = font->GetNativeFontInfo()->lf;
+}
+
+wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)
+{
+    return wxFont(wxNativeFontInfo(*logFont));
+}
+
+#endif // WXWIN_COMPATIBILITY_3_0
