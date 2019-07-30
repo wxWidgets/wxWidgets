@@ -96,6 +96,20 @@ public:
     virtual bool Save(wxOutputStream& os, const wxMBConv& conv = wxConvAuto());
 
     /**
+        Enables autosaving the info on program exit
+
+        @since 3.1.3
+    */
+    void EnableAutoSave();
+
+    /**
+        Disables autosaving the info on program exit
+
+        @since 3.1.3
+    */
+    void DisableAutoSave();
+
+    /**
         Allows setting the mode to be used for the config file creation. For example, to
         create a config file which is not readable by other users (useful if it stores
         some sensitive information, such as passwords), you could use @c SetUmask(0077).

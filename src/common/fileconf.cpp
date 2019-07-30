@@ -346,6 +346,7 @@ void wxFileConfig::Init()
     }
 
     m_isDirty = false;
+    m_autosave = true;
 }
 
 // constructor supports creation of wxFileConfig objects of any type
@@ -487,7 +488,8 @@ void wxFileConfig::CleanUp()
 
 wxFileConfig::~wxFileConfig()
 {
-    Flush();
+    if( m_autosave )
+        Flush();
 
     CleanUp();
 
