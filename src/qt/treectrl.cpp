@@ -1189,7 +1189,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
     }
 
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-    qTreeItem->setSelected(select);
+    m_qtTreeWidget->setCurrentItem(qTreeItem, 0, select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
 }
 
 void wxTreeCtrl::SelectChildren(const wxTreeItemId& parent)
