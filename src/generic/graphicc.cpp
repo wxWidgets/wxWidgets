@@ -720,6 +720,52 @@ void wxCairoPenBrushBaseData::Apply( wxGraphicsContext* context )
         cairo_set_source_rgba(ctext, m_red, m_green, m_blue, m_alpha);
 }
 
+void wxCairoPenBrushBaseData::AddGradientStops(const wxGraphicsGradientStops& stops)
+{
+    // loop over all the stops, they include the beginning and ending ones
+    const unsigned numStops = stops.GetCount();
+    for ( unsigned n = 0; n < numStops; n++ )
+    {
+        const wxGraphicsGradientStop stop = stops.Item(n);
+
+        const wxColour col = stop.GetColour();
+
+        cairo_pattern_add_color_stop_rgba
+        (
+            m_pattern,
+            stop.GetPosition(),
+            col.Red()/255.0,
+            col.Green()/255.0,
+            col.Blue()/255.0,
+            col.Alpha()/255.0
+        );
+    }
+
+    wxASSERT_MSG(cairo_pattern_status(m_pattern) == CAIRO_STATUS_SUCCESS,
+                 wxT("Couldn't create cairo pattern"));
+}
+
+void
+wxCairoPenBrushBaseData::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                                            wxDouble x2, wxDouble y2,
+                                            const wxGraphicsGradientStops& stops)
+{
+    m_pattern = cairo_pattern_create_linear(x1,y1,x2,y2);
+
+    AddGradientStops(stops);
+}
+
+void
+wxCairoPenBrushBaseData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                                            wxDouble xc, wxDouble yc,
+                                            wxDouble radius,
+                                            const wxGraphicsGradientStops& stops)
+{
+    m_pattern = cairo_pattern_create_radial(xo,yo,0.0,xc,yc,radius);
+
+    AddGradientStops(stops);
+}
+
 //-----------------------------------------------------------------------------
 // wxCairoPenData implementation
 //-----------------------------------------------------------------------------
@@ -923,52 +969,6 @@ wxCairoBrushData::wxCairoBrushData( wxGraphicsRenderer* renderer,
                 InitHatch(static_cast<wxHatchStyle>(brush.GetStyle()));
             break;
     }
-}
-
-void wxCairoPenBrushBaseData::AddGradientStops(const wxGraphicsGradientStops& stops)
-{
-    // loop over all the stops, they include the beginning and ending ones
-    const unsigned numStops = stops.GetCount();
-    for ( unsigned n = 0; n < numStops; n++ )
-    {
-        const wxGraphicsGradientStop stop = stops.Item(n);
-
-        const wxColour col = stop.GetColour();
-
-        cairo_pattern_add_color_stop_rgba
-        (
-            m_pattern,
-            stop.GetPosition(),
-            col.Red()/255.0,
-            col.Green()/255.0,
-            col.Blue()/255.0,
-            col.Alpha()/255.0
-        );
-    }
-
-    wxASSERT_MSG(cairo_pattern_status(m_pattern) == CAIRO_STATUS_SUCCESS,
-                 wxT("Couldn't create cairo pattern"));
-}
-
-void
-wxCairoPenBrushBaseData::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
-                                            wxDouble x2, wxDouble y2,
-                                            const wxGraphicsGradientStops& stops)
-{
-    m_pattern = cairo_pattern_create_linear(x1,y1,x2,y2);
-
-    AddGradientStops(stops);
-}
-
-void
-wxCairoPenBrushBaseData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                            wxDouble xc, wxDouble yc,
-                                            wxDouble radius,
-                                            const wxGraphicsGradientStops& stops)
-{
-    m_pattern = cairo_pattern_create_radial(xo,yo,0.0,xc,yc,radius);
-
-    AddGradientStops(stops);
 }
 
 void wxCairoBrushData::Init()
