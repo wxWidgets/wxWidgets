@@ -1644,6 +1644,15 @@ public:
     RadialGradient(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, 
                    wxDouble radius, const wxGraphicsGradientStops& stops);
 
+    wxColour GetColour() const;
+    wxBitmap GetStipple() const;
+    wxPenStyle GetStyle() const;
+    wxPenJoin GetJoin() const;
+    wxPenCap GetCap() const;
+    int GetDashes(wxDash **ptr);
+    int GetDashCount() const;
+    wxDash* GetDash() const;
+    bool IsTransparent() const;    
     wxDouble GetWidth() const;
     wxGradientType GetGradientType() const;
     wxDouble GetX1() const;
