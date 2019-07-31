@@ -71,7 +71,8 @@ enum wxCompositionMode
     wxCOMPOSITION_ADD /* R = S + D */
 };
 
-enum wxGradientType {
+enum wxGradientType
+{
     wxGRADIENT_NONE,
     wxGRADIENT_LINEAR,
     wxGRADIENT_RADIAL
