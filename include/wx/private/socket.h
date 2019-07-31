@@ -62,14 +62,7 @@
     #include <sys/time.h>   // for timeval
 #endif
 
-// 64 bit Cygwin can't use the standard struct timeval because it has long
-// fields, which are supposed to be 32 bits in Win64 API, but long is 64 bits
-// in 64 bit Cygwin, so we need to use its special __ms_timeval instead.
-#if defined(__CYGWIN__) && defined(__LP64__)
-    typedef __ms_timeval wxTimeVal_t;
-#else
-    typedef timeval wxTimeVal_t;
-#endif
+typedef timeval wxTimeVal_t;
 
 // these definitions are for MSW when we don't use configure, otherwise these
 // symbols are defined by configure
