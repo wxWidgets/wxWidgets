@@ -71,6 +71,13 @@ enum wxCompositionMode
     wxCOMPOSITION_ADD /* R = S + D */
 };
 
+enum wxGradientType {
+    wxGRADIENT_NONE,
+    wxGRADIENT_LINEAR,
+    wxGRADIENT_RADIAL
+};
+
+
 class WXDLLIMPEXP_FWD_CORE wxDC;
 class WXDLLIMPEXP_FWD_CORE wxWindowDC;
 class WXDLLIMPEXP_FWD_CORE wxMemoryDC;
@@ -91,6 +98,7 @@ class WXDLLIMPEXP_FWD_CORE wxGraphicsPen;
 class WXDLLIMPEXP_FWD_CORE wxGraphicsBrush;
 class WXDLLIMPEXP_FWD_CORE wxGraphicsFont;
 class WXDLLIMPEXP_FWD_CORE wxGraphicsBitmap;
+class wxGraphicsPenInfo; 
 
 /*
  * notes about the graphics context apis
@@ -133,33 +141,7 @@ protected:
     wxDECLARE_DYNAMIC_CLASS(wxGraphicsObject);
 };
 
-// ----------------------------------------------------------------------------
-// wxGraphicsPenInfo describes a wxGraphicsPen
-// ----------------------------------------------------------------------------
 
-class wxGraphicsPenInfo : public wxPenInfoBase<wxGraphicsPenInfo>
-{
-public:
-    explicit wxGraphicsPenInfo(const wxColour& colour = wxColour(),
-                               wxDouble width = 1.0,
-                               wxPenStyle style = wxPENSTYLE_SOLID)
-        : wxPenInfoBase<wxGraphicsPenInfo>(colour, style)
-    {
-        m_width = width;
-    }
-
-    // Setters
-
-    wxGraphicsPenInfo& Width(wxDouble width)
-        { m_width = width; return *this; }
-
-    // Accessors
-
-    wxDouble GetWidth() const { return m_width; }
-
-private:
-    wxDouble m_width;
-};
 
 class WXDLLIMPEXP_CORE wxGraphicsPen : public wxGraphicsObject
 {
@@ -448,6 +430,93 @@ private:
     // All the stops stored in ascending order of positions.
     wxVector<wxGraphicsGradientStop> m_stops;
 };
+
+// ----------------------------------------------------------------------------
+// wxGraphicsPenInfo describes a wxGraphicsPen
+// ----------------------------------------------------------------------------
+
+class wxGraphicsPenInfo : public wxPenInfoBase<wxGraphicsPenInfo>
+{
+public:
+    explicit wxGraphicsPenInfo(const wxColour& colour = wxColour(),
+                               wxDouble width = 1.0,
+                               wxPenStyle style = wxPENSTYLE_SOLID)
+        : wxPenInfoBase<wxGraphicsPenInfo>(colour, style)
+    {
+        m_width = width;
+        m_gradientType = wxGRADIENT_NONE;
+    }
+
+    // Setters
+
+    wxGraphicsPenInfo& Width(wxDouble width)
+        { m_width = width; return *this; }
+
+    wxGraphicsPenInfo& 
+    LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
+                   const wxColour& c1, const wxColour& c2)
+        { 
+            m_gradientType = wxGRADIENT_LINEAR;
+            m_x1 = x1; m_y1 = y1; m_x2 = x2; m_y2 = y2;
+            m_stops.SetStartColour(c1);
+            m_stops.SetEndColour(c2);
+            return *this; 
+        }                                      
+
+    wxGraphicsPenInfo& 
+    LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
+                   const wxGraphicsGradientStops& stops)
+        { 
+            m_gradientType = wxGRADIENT_LINEAR;
+            m_x1 = x1; m_y1 = y1; m_x2 = x2; m_y2 = y2;
+            m_stops = stops;
+            return *this; 
+        }
+
+    wxGraphicsPenInfo& 
+    RadialGradient(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius, 
+                   const wxColour& oColor, const wxColour& cColor)
+        { 
+            m_gradientType = wxGRADIENT_RADIAL;
+            m_x1 = xo; m_y1 = yo; m_x2 = xc; m_y2 = yc;
+            m_stops.SetStartColour(oColor);
+            m_stops.SetEndColour(cColor);
+            return *this; 
+        }                                      
+
+    wxGraphicsPenInfo& 
+    RadialGradient(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, 
+                   wxDouble radius, const wxGraphicsGradientStops& stops)
+        { 
+            m_gradientType = wxGRADIENT_RADIAL;
+            m_x1 = xo; m_y1 = yo; m_x2 = xc; m_y2 = yc;
+            m_stops = stops;
+            return *this; 
+        }
+
+    // Accessors
+
+    wxDouble GetWidth() const { return m_width; }
+    wxGradientType GetGradientType() const { return m_gradientType; }
+    wxDouble GetX1() const { return m_x1; }
+    wxDouble GetY1() const { return m_y1; }
+    wxDouble GetX2() const { return m_x2; }
+    wxDouble GetY2() const { return m_y2; }
+    wxDouble GetXO() const { return m_x1; }
+    wxDouble GetYO() const { return m_y1; }
+    wxDouble GetXC() const { return m_x2; }
+    wxDouble GetYC() const { return m_y2; }
+    wxDouble GetRadius() const { return m_radius; }
+    const wxGraphicsGradientStops& GetStops() const { return m_stops; }
+
+private:
+    wxDouble m_width;
+    wxGradientType m_gradientType;
+    wxDouble m_x1, m_y1, m_x2, m_y2; // also used for m_xo, m_yo, m_xc, m_yx
+    wxDouble m_radius;
+    wxGraphicsGradientStops m_stops;
+};
+
 
 class WXDLLIMPEXP_CORE wxGraphicsContext : public wxGraphicsObject
 {

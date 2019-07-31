@@ -305,6 +305,13 @@ enum wxCompositionMode
     wxCOMPOSITION_ADD  /**< @e R = @e S + @e D */
 };
 
+enum wxGradientType {
+    wxGRADIENT_NONE,
+    wxGRADIENT_LINEAR,
+    wxGRADIENT_RADIAL
+};
+
+
 /**
     Represents a bitmap.
 
@@ -1620,6 +1627,35 @@ public:
     wxGraphicsPenInfo& Join(wxPenJoin join);
 
     wxGraphicsPenInfo& Cap(wxPenCap cap);
+
+    wxGraphicsPenInfo& 
+    LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
+                   const wxColour& c1, const wxColour& c2);
+
+    wxGraphicsPenInfo& 
+    LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
+                   const wxGraphicsGradientStops& stops);
+
+    wxGraphicsPenInfo& 
+    RadialGradient(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius, 
+                   const wxColour& oColor, const wxColour& cColor);
+
+    wxGraphicsPenInfo& 
+    RadialGradient(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, 
+                   wxDouble radius, const wxGraphicsGradientStops& stops);
+
+    wxDouble GetWidth() const;
+    wxGradientType GetGradientType() const;
+    wxDouble GetX1() const;
+    wxDouble GetY1() const;
+    wxDouble GetX2() const;
+    wxDouble GetY2() const;
+    wxDouble GetXO() const;
+    wxDouble GetYO() const;
+    wxDouble GetXC() const;
+    wxDouble GetYC() const;
+    wxDouble GetRadius() const;
+    const wxGraphicsGradientStops& GetStops() const;
 };
 
 
