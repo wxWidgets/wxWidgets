@@ -458,7 +458,10 @@ public:
                    const wxColour& c1, const wxColour& c2)
         { 
             m_gradientType = wxGRADIENT_LINEAR;
-            m_x1 = x1; m_y1 = y1; m_x2 = x2; m_y2 = y2;
+            m_x1 = x1;
+            m_y1 = y1;
+            m_x2 = x2;
+            m_y2 = y2;
             m_stops.SetStartColour(c1);
             m_stops.SetEndColour(c2);
             return *this; 
