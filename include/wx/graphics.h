@@ -243,58 +243,58 @@ public:
     wxGraphicsPenInfo& 
     LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
                    const wxColour& c1, const wxColour& c2)
-        { 
-            m_gradientType = wxGRADIENT_LINEAR;
-            m_x1 = x1;
-            m_y1 = y1;
-            m_x2 = x2;
-            m_y2 = y2;
-            m_stops.SetStartColour(c1);
-            m_stops.SetEndColour(c2);
-            return *this; 
-        }                                      
+    { 
+        m_gradientType = wxGRADIENT_LINEAR;
+        m_x1 = x1;
+        m_y1 = y1;
+        m_x2 = x2;
+        m_y2 = y2;
+        m_stops.SetStartColour(c1);
+        m_stops.SetEndColour(c2);
+        return *this; 
+    }                                      
 
     wxGraphicsPenInfo& 
     LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
                    const wxGraphicsGradientStops& stops)
-        { 
-            m_gradientType = wxGRADIENT_LINEAR;
-            m_x1 = x1;
-            m_y1 = y1;
-            m_x2 = x2;
-            m_y2 = y2;
-            m_stops = stops;
-            return *this; 
-        }
+    { 
+        m_gradientType = wxGRADIENT_LINEAR;
+        m_x1 = x1;
+        m_y1 = y1;
+        m_x2 = x2;
+        m_y2 = y2;
+        m_stops = stops;
+        return *this; 
+    }
 
     wxGraphicsPenInfo& 
     RadialGradient(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius, 
                    const wxColour& oColor, const wxColour& cColor)
-        { 
-            m_gradientType = wxGRADIENT_RADIAL;
-            m_x1 = xo; 
-            m_y1 = yo; 
-            m_x2 = xc; 
-            m_y2 = yc;
-            m_radius = radius;
-            m_stops.SetStartColour(oColor);
-            m_stops.SetEndColour(cColor);
-            return *this; 
-        }                                      
+    { 
+        m_gradientType = wxGRADIENT_RADIAL;
+        m_x1 = xo; 
+        m_y1 = yo; 
+        m_x2 = xc; 
+        m_y2 = yc;
+        m_radius = radius;
+        m_stops.SetStartColour(oColor);
+        m_stops.SetEndColour(cColor);
+        return *this; 
+    }                                      
 
     wxGraphicsPenInfo& 
     RadialGradient(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, 
                    wxDouble radius, const wxGraphicsGradientStops& stops)
-        { 
-            m_gradientType = wxGRADIENT_RADIAL;
-            m_x1 = xo; 
-            m_y1 = yo; 
-            m_x2 = xc; 
-            m_y2 = yc;
-            m_radius = radius;
-            m_stops = stops;
-            return *this; 
-        }
+    { 
+        m_gradientType = wxGRADIENT_RADIAL;
+        m_x1 = xo; 
+        m_y1 = yo; 
+        m_x2 = xc; 
+        m_y2 = yc;
+        m_radius = radius;
+        m_stops = stops;
+        return *this; 
+    }
 
     // Accessors
 
