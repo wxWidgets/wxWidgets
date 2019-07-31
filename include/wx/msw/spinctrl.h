@@ -120,6 +120,8 @@ protected:
     virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
     virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
     virtual void DoGetClientSize(int *x, int *y) const wxOVERRIDE;
+    virtual void DoClientToScreen(int *x, int *y) const wxOVERRIDE;
+    virtual void DoScreenToClient(int *x, int *y) const wxOVERRIDE;
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip ) wxOVERRIDE;
 #endif // wxUSE_TOOLTIPS
