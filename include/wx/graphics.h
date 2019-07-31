@@ -479,6 +479,7 @@ public:
         { 
             m_gradientType = wxGRADIENT_RADIAL;
             m_x1 = xo; m_y1 = yo; m_x2 = xc; m_y2 = yc;
+            m_radius = radius;
             m_stops.SetStartColour(oColor);
             m_stops.SetEndColour(cColor);
             return *this; 
@@ -490,6 +491,7 @@ public:
         { 
             m_gradientType = wxGRADIENT_RADIAL;
             m_x1 = xo; m_y1 = yo; m_x2 = xc; m_y2 = yc;
+            m_radius = radius;
             m_stops = stops;
             return *this; 
         }

@@ -260,6 +260,13 @@ public:
 
     virtual void Apply( wxGraphicsContext* context );
 
+    void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+                                   wxDouble x2, wxDouble y2,
+                                   const wxGraphicsGradientStops& stops);
+    void CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+                                   wxDouble xc, wxDouble yc, wxDouble radius,
+                                   const wxGraphicsGradientStops& stops);
+
 protected:
     // Call this to use the given bitmap as stipple. Bitmap must be non-null
     // and valid.
@@ -268,6 +275,8 @@ protected:
     // Call this to use the given hatch style. Hatch style must be valid.
     void InitHatch(wxHatchStyle hatchStyle);
 
+    // common part of Create{Linear,Radial}GradientBrush()
+    void AddGradientStops(const wxGraphicsGradientStops& stops);
 
     double m_red;
     double m_green;
@@ -316,18 +325,8 @@ public:
     wxCairoBrushData( wxGraphicsRenderer* renderer );
     wxCairoBrushData( wxGraphicsRenderer* renderer, const wxBrush &brush );
 
-    void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
-                                   wxDouble x2, wxDouble y2,
-                                   const wxGraphicsGradientStops& stops);
-    void CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                   wxDouble xc, wxDouble yc, wxDouble radius,
-                                   const wxGraphicsGradientStops& stops);
-
 protected:
     void Init();
-
-    // common part of Create{Linear,Radial}GradientBrush()
-    void AddGradientStops(const wxGraphicsGradientStops& stops);
 };
 
 class wxCairoFontData : public wxGraphicsObjectRefData
@@ -732,6 +731,7 @@ wxCairoPenData::~wxCairoPenData()
 
 void wxCairoPenData::Init()
 {
+    m_pattern = NULL;
     m_lengths = NULL;
     m_userLengths = NULL;
     m_width = 0;
@@ -867,6 +867,20 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
         }
         break;
     }
+
+    if (info.GetGradientType() == wxGRADIENT_LINEAR)
+    {
+        CreateLinearGradientBrush(info.GetX1(), info.GetY1(),
+                                  info.GetX2(), info.GetY2(),
+                                  info.GetStops());
+    }
+    if (info.GetGradientType() == wxGRADIENT_RADIAL)
+    {
+        CreateRadialGradientBrush(info.GetXO(), info.GetYO(),
+                                  info.GetXC(), info.GetYC(),
+                                  info.GetRadius(),
+                                  info.GetStops());
+    }
 }
 
 void wxCairoPenData::Apply( wxGraphicsContext* context )
@@ -911,7 +925,7 @@ wxCairoBrushData::wxCairoBrushData( wxGraphicsRenderer* renderer,
     }
 }
 
-void wxCairoBrushData::AddGradientStops(const wxGraphicsGradientStops& stops)
+void wxCairoPenBrushBaseData::AddGradientStops(const wxGraphicsGradientStops& stops)
 {
     // loop over all the stops, they include the beginning and ending ones
     const unsigned numStops = stops.GetCount();
@@ -937,7 +951,7 @@ void wxCairoBrushData::AddGradientStops(const wxGraphicsGradientStops& stops)
 }
 
 void
-wxCairoBrushData::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
+wxCairoPenBrushBaseData::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                                             wxDouble x2, wxDouble y2,
                                             const wxGraphicsGradientStops& stops)
 {
@@ -947,7 +961,7 @@ wxCairoBrushData::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
 }
 
 void
-wxCairoBrushData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
+wxCairoPenBrushBaseData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                                             wxDouble xc, wxDouble yc,
                                             wxDouble radius,
                                             const wxGraphicsGradientStops& stops)
