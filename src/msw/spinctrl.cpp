@@ -846,4 +846,14 @@ void wxSpinCtrl::DoGetPosition(int *x, int *y) const
     *x = wxMin(xBuddy, xText);
 }
 
+void wxSpinCtrl::DoScreenToClient(int *x, int *y) const
+{
+    wxWindow::MSWDoScreenToClient(GetBuddyHwnd(), x, y);
+}
+
+void wxSpinCtrl::DoClientToScreen(int *x, int *y) const
+{
+    wxWindow::MSWDoClientToScreen(GetBuddyHwnd(), x, y);
+}
+
 #endif // wxUSE_SPINCTRL
