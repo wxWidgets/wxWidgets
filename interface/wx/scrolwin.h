@@ -581,6 +581,7 @@ public:
     */
     virtual bool SendAutoScrollEvents(wxScrollWinEvent& event) const;
 
+protected:
     /**
         This method can be overridden in a derived class to prevent scrolling
         the child window into view automatically when it gets focus.
@@ -593,9 +594,8 @@ public:
 
         @since 3.1.3
      */
-    virtual bool ShouldScrollToChildOnFocus(wxWindow* child)
+    virtual bool ShouldScrollToChildOnFocus(wxWindow* child);
 
-protected:
     /**
         Function which must be overridden to implement the size available for
         the scroll target for the given size of the main window.

@@ -571,7 +571,7 @@ public:
        Note that if SetWindow() had been called with an object not deriving
        from wxControl, this method will return @NULL.
     */
-    wxControl* GetControl() const;
+    wxControl* GetControl();
 
     /**
        Set the wxControl that will be used by this cell editor for editing the
