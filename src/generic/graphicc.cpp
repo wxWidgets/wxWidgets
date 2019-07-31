@@ -914,18 +914,23 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
         break;
     }
 
-    if (info.GetGradientType() == wxGRADIENT_LINEAR)
+    switch ( info.GetGradientType() )
     {
-        CreateLinearGradientBrush(info.GetX1(), info.GetY1(),
-                                  info.GetX2(), info.GetY2(),
-                                  info.GetStops());
-    }
-    if (info.GetGradientType() == wxGRADIENT_RADIAL)
-    {
-        CreateRadialGradientBrush(info.GetXO(), info.GetYO(),
-                                  info.GetXC(), info.GetYC(),
-                                  info.GetRadius(),
-                                  info.GetStops());
+    case wxGRADIENT_NONE:
+        break;
+
+    case wxGRADIENT_LINEAR:
+        CreateLinearGradientPattern(info.GetX1(), info.GetY1(),
+                                    info.GetX2(), info.GetY2(),
+                                    info.GetStops());
+        break;
+
+    case wxGRADIENT_RADIAL:
+        CreateRadialGradientPattern(info.GetXO(), info.GetYO(),
+                                    info.GetXC(), info.GetYC(),
+                                    info.GetRadius(),
+                                    info.GetStops());
+        break;
     }
 }
 
