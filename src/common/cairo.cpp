@@ -110,6 +110,8 @@
         (cairo_pattern_t *pattern, cairo_extend_t extend), (pattern, extend) ) \
     m( cairo_pattern_set_filter, \
         (cairo_pattern_t *pattern, cairo_filter_t filter), (pattern, filter) ) \
+    m( cairo_pattern_set_matrix, \
+        (cairo_pattern_t *pattern, const cairo_matrix_t *matrix), (pattern, matrix) ) \
     m( cairo_pop_group_to_source, \
         (cairo_t *cr), (cr) ) \
     m( cairo_push_group, \
