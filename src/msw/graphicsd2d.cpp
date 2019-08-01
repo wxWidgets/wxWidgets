@@ -2427,12 +2427,19 @@ public:
     struct LinearGradientInfo {
         const wxRect direction;
         const wxGraphicsGradientStops stops;
-        LinearGradientInfo(wxDouble& x1, wxDouble& y1, wxDouble& x2, wxDouble& y2, const wxGraphicsGradientStops& stops_)
-            : direction(x1, y1, x2, y2), stops(stops_) {}
+        const wxGraphicsMatrix matrix;
+        LinearGradientInfo(wxDouble& x1, wxDouble& y1, 
+                           wxDouble& x2, wxDouble& y2, 
+                           const wxGraphicsGradientStops& stops_,
+                           const wxGraphicsMatrix& matrix_)
+            : direction(x1, y1, x2, y2), stops(stops_), matrix(matrix_) {}
     };
 
-    wxD2DLinearGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1, wxDouble& x2, wxDouble& y2, const wxGraphicsGradientStops& stops)
-        : m_linearGradientInfo(x1, y1, x2, y2, stops) {}
+    wxD2DLinearGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1, 
+                                           wxDouble& x2, wxDouble& y2, 
+                                           const wxGraphicsGradientStops& stops,
+                                           const wxGraphicsMatrix& matrix)
+        : m_linearGradientInfo(x1, y1, x2, y2, stops, matrix) {}
 
 protected:
     void DoAcquireResource() wxOVERRIDE
@@ -2458,13 +2465,22 @@ public:
         const wxRect direction;
         const wxDouble radius;
         const wxGraphicsGradientStops stops;
+        const wxGraphicsMatrix matrix;
 
-        RadialGradientInfo(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, wxDouble r, const wxGraphicsGradientStops& stops_)
-            : direction(x1, y1, x2, y2), radius(r), stops(stops_) {}
+        RadialGradientInfo(wxDouble x1, wxDouble y1, 
+                           wxDouble x2, wxDouble y2, 
+                           wxDouble r, 
+                           const wxGraphicsGradientStops& stops_,
+                           const wxGraphicsMatrix& matrix_)
+            : direction(x1, y1, x2, y2), radius(r), stops(stops_), matrix(matrix_) {}
     };
 
-    wxD2DRadialGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1, wxDouble& x2, wxDouble& y2, wxDouble& r, const wxGraphicsGradientStops& stops)
-        : m_radialGradientInfo(x1, y1, x2, y2, r, stops) {}
+    wxD2DRadialGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1, 
+                                           wxDouble& x2, wxDouble& y2, 
+                                           wxDouble& r, 
+                                           const wxGraphicsGradientStops& stops,
+                                           const wxGraphicsMatrix& matrix)
+        : m_radialGradientInfo(x1, y1, x2, y2, r, stops, matrix) {}
 
 protected:
     void DoAcquireResource() wxOVERRIDE
@@ -2499,9 +2515,16 @@ public:
 
     wxD2DBrushData(wxGraphicsRenderer* renderer);
 
-    void CreateLinearGradientBrush(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, const wxGraphicsGradientStops& stops);
+    void CreateLinearGradientBrush(wxDouble x1, wxDouble y1, 
+                                   wxDouble x2, wxDouble y2, 
+                                   const wxGraphicsGradientStops& stops,
+                                   const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
 
-    void CreateRadialGradientBrush(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius, const wxGraphicsGradientStops& stops);
+    void CreateRadialGradientBrush(wxDouble xo, wxDouble yo, 
+                                   wxDouble xc, wxDouble yc, 
+                                   wxDouble radius, 
+                                   const wxGraphicsGradientStops& stops,
+                                   const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
 
     ID2D1Brush* GetBrush() const
     {
@@ -2546,18 +2569,20 @@ wxD2DBrushData::wxD2DBrushData(wxGraphicsRenderer* renderer)
 void wxD2DBrushData::CreateLinearGradientBrush(
     wxDouble x1, wxDouble y1,
     wxDouble x2, wxDouble y2,
-    const wxGraphicsGradientStops& stops)
+    const wxGraphicsGradientStops& stops,
+    const wxGraphicsMatrix& matrix)
 {
-    m_brushResourceHolder = new wxD2DLinearGradientBrushResourceHolder(x1, y1, x2, y2, stops);
+    m_brushResourceHolder = new wxD2DLinearGradientBrushResourceHolder(x1, y1, x2, y2, stops, matrix);
 }
 
 void wxD2DBrushData::CreateRadialGradientBrush(
     wxDouble xo, wxDouble yo,
     wxDouble xc, wxDouble yc,
     wxDouble radius,
-    const wxGraphicsGradientStops& stops)
+    const wxGraphicsGradientStops& stops,
+    const wxGraphicsMatrix& matrix)
 {
-    m_brushResourceHolder = new wxD2DRadialGradientBrushResourceHolder(xo, yo, xc, yc, radius, stops);
+    m_brushResourceHolder = new wxD2DRadialGradientBrushResourceHolder(xo, yo, xc, yc, radius, stops, matrix);
 }
 
 wxD2DBrushData* wxGetD2DBrushData(const wxGraphicsBrush& brush)
@@ -4558,13 +4583,15 @@ public :
     wxGraphicsBrush CreateLinearGradientBrush(
         wxDouble x1, wxDouble y1,
         wxDouble x2, wxDouble y2,
-        const wxGraphicsGradientStops& stops) wxOVERRIDE;
+        const wxGraphicsGradientStops& stops,
+        const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
 
     wxGraphicsBrush CreateRadialGradientBrush(
         wxDouble xo, wxDouble yo,
         wxDouble xc, wxDouble yc,
         wxDouble radius,
-        const wxGraphicsGradientStops& stops) wxOVERRIDE;
+        const wxGraphicsGradientStops& stops,
+        const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
 
     // create a native bitmap representation
     wxGraphicsBitmap CreateBitmap(const wxBitmap& bitmap) wxOVERRIDE;
@@ -4749,10 +4776,11 @@ wxGraphicsBrush wxD2DRenderer::CreateBrush(const wxBrush& brush)
 wxGraphicsBrush wxD2DRenderer::CreateLinearGradientBrush(
     wxDouble x1, wxDouble y1,
     wxDouble x2, wxDouble y2,
-    const wxGraphicsGradientStops& stops)
+    const wxGraphicsGradientStops& stops,
+    const wxGraphicsMatrix& matrix)
 {
     wxD2DBrushData* brushData = new wxD2DBrushData(this);
-    brushData->CreateLinearGradientBrush(x1, y1, x2, y2, stops);
+    brushData->CreateLinearGradientBrush(x1, y1, x2, y2, stops, matrix);
 
     wxGraphicsBrush brush;
     brush.SetRefData(brushData);
@@ -4764,10 +4792,11 @@ wxGraphicsBrush wxD2DRenderer::CreateRadialGradientBrush(
     wxDouble xo, wxDouble yo,
     wxDouble xc, wxDouble yc,
     wxDouble radius,
-    const wxGraphicsGradientStops& stops)
+    const wxGraphicsGradientStops& stops,
+    const wxGraphicsMatrix& matrix)
 {
     wxD2DBrushData* brushData = new wxD2DBrushData(this);
-    brushData->CreateRadialGradientBrush(xo, yo, xc, yc, radius, stops);
+    brushData->CreateRadialGradientBrush(xo, yo, xc, yc, radius, stops, matrix);
 
     wxGraphicsBrush brush;
     brush.SetRefData(brushData);
