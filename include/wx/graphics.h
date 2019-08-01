@@ -143,6 +143,137 @@ protected:
 };
 
 
+
+class WXDLLIMPEXP_CORE wxGraphicsPen : public wxGraphicsObject
+{
+public:
+    wxGraphicsPen() {}
+    virtual ~wxGraphicsPen() {}
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxGraphicsPen);
+};
+
+extern WXDLLIMPEXP_DATA_CORE(wxGraphicsPen) wxNullGraphicsPen;
+
+class WXDLLIMPEXP_CORE wxGraphicsBrush : public wxGraphicsObject
+{
+public:
+    wxGraphicsBrush() {}
+    virtual ~wxGraphicsBrush() {}
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxGraphicsBrush);
+};
+
+extern WXDLLIMPEXP_DATA_CORE(wxGraphicsBrush) wxNullGraphicsBrush;
+
+class WXDLLIMPEXP_CORE wxGraphicsFont : public wxGraphicsObject
+{
+public:
+    wxGraphicsFont() {}
+    virtual ~wxGraphicsFont() {}
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxGraphicsFont);
+};
+
+extern WXDLLIMPEXP_DATA_CORE(wxGraphicsFont) wxNullGraphicsFont;
+
+class WXDLLIMPEXP_CORE wxGraphicsBitmap : public wxGraphicsObject
+{
+public:
+    wxGraphicsBitmap() {}
+    virtual ~wxGraphicsBitmap() {}
+
+    // Convert bitmap to wxImage: this is more efficient than converting to
+    // wxBitmap first and then to wxImage and also works without X server
+    // connection under Unix that wxBitmap requires.
+#if wxUSE_IMAGE
+    wxImage ConvertToImage() const;
+#endif // wxUSE_IMAGE
+
+    void* GetNativeBitmap() const;
+
+    const wxGraphicsBitmapData* GetBitmapData() const
+    { return (const wxGraphicsBitmapData*) GetRefData(); }
+    wxGraphicsBitmapData* GetBitmapData()
+    { return (wxGraphicsBitmapData*) GetRefData(); }
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxGraphicsBitmap);
+};
+
+extern WXDLLIMPEXP_DATA_CORE(wxGraphicsBitmap) wxNullGraphicsBitmap;
+
+class WXDLLIMPEXP_CORE wxGraphicsMatrix : public wxGraphicsObject
+{
+public:
+    wxGraphicsMatrix() {}
+
+    virtual ~wxGraphicsMatrix() {}
+
+    // concatenates the matrix
+    virtual void Concat( const wxGraphicsMatrix *t );
+    void Concat( const wxGraphicsMatrix &t ) { Concat( &t ); }
+
+    // sets the matrix to the respective values
+    virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
+        wxDouble tx=0.0, wxDouble ty=0.0);
+
+    // gets the component valuess of the matrix
+    virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
+                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const;
+
+    // makes this the inverse matrix
+    virtual void Invert();
+
+    // returns true if the elements of the transformation matrix are equal ?
+    virtual bool IsEqual( const wxGraphicsMatrix* t) const;
+    bool IsEqual( const wxGraphicsMatrix& t) const { return IsEqual( &t ); }
+
+    // return true if this is the identity matrix
+    virtual bool IsIdentity() const;
+
+    //
+    // transformation
+    //
+
+    // add the translation to this matrix
+    virtual void Translate( wxDouble dx , wxDouble dy );
+
+    // add the scale to this matrix
+    virtual void Scale( wxDouble xScale , wxDouble yScale );
+
+    // add the rotation to this matrix (radians)
+    virtual void Rotate( wxDouble angle );
+
+    //
+    // apply the transforms
+    //
+
+    // applies that matrix to the point
+    virtual void TransformPoint( wxDouble *x, wxDouble *y ) const;
+
+    // applies the matrix except for translations
+    virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) const;
+
+    // returns the native representation
+    virtual void * GetNativeMatrix() const;
+
+    const wxGraphicsMatrixData* GetMatrixData() const
+    { return (const wxGraphicsMatrixData*) GetRefData(); }
+    wxGraphicsMatrixData* GetMatrixData()
+    { return (wxGraphicsMatrixData*) GetRefData(); }
+
+private:
+    wxDECLARE_DYNAMIC_CLASS(wxGraphicsMatrix);
+};
+
+extern WXDLLIMPEXP_DATA_CORE(wxGraphicsMatrix) wxNullGraphicsMatrix;
+
+// ----------------------------------------------------------------------------
+// wxGradientStop and wxGradientStops: Controls how colors are spread in 
+// a gradient
+// ----------------------------------------------------------------------------
+
 // Describes a single gradient stop.
 class wxGraphicsGradientStop
 {
@@ -330,130 +461,6 @@ private:
 };
 
 
-class WXDLLIMPEXP_CORE wxGraphicsPen : public wxGraphicsObject
-{
-public:
-    wxGraphicsPen() {}
-    virtual ~wxGraphicsPen() {}
-private:
-    wxDECLARE_DYNAMIC_CLASS(wxGraphicsPen);
-};
-
-extern WXDLLIMPEXP_DATA_CORE(wxGraphicsPen) wxNullGraphicsPen;
-
-class WXDLLIMPEXP_CORE wxGraphicsBrush : public wxGraphicsObject
-{
-public:
-    wxGraphicsBrush() {}
-    virtual ~wxGraphicsBrush() {}
-private:
-    wxDECLARE_DYNAMIC_CLASS(wxGraphicsBrush);
-};
-
-extern WXDLLIMPEXP_DATA_CORE(wxGraphicsBrush) wxNullGraphicsBrush;
-
-class WXDLLIMPEXP_CORE wxGraphicsFont : public wxGraphicsObject
-{
-public:
-    wxGraphicsFont() {}
-    virtual ~wxGraphicsFont() {}
-private:
-    wxDECLARE_DYNAMIC_CLASS(wxGraphicsFont);
-};
-
-extern WXDLLIMPEXP_DATA_CORE(wxGraphicsFont) wxNullGraphicsFont;
-
-class WXDLLIMPEXP_CORE wxGraphicsBitmap : public wxGraphicsObject
-{
-public:
-    wxGraphicsBitmap() {}
-    virtual ~wxGraphicsBitmap() {}
-
-    // Convert bitmap to wxImage: this is more efficient than converting to
-    // wxBitmap first and then to wxImage and also works without X server
-    // connection under Unix that wxBitmap requires.
-#if wxUSE_IMAGE
-    wxImage ConvertToImage() const;
-#endif // wxUSE_IMAGE
-
-    void* GetNativeBitmap() const;
-
-    const wxGraphicsBitmapData* GetBitmapData() const
-    { return (const wxGraphicsBitmapData*) GetRefData(); }
-    wxGraphicsBitmapData* GetBitmapData()
-    { return (wxGraphicsBitmapData*) GetRefData(); }
-
-private:
-    wxDECLARE_DYNAMIC_CLASS(wxGraphicsBitmap);
-};
-
-extern WXDLLIMPEXP_DATA_CORE(wxGraphicsBitmap) wxNullGraphicsBitmap;
-
-class WXDLLIMPEXP_CORE wxGraphicsMatrix : public wxGraphicsObject
-{
-public:
-    wxGraphicsMatrix() {}
-
-    virtual ~wxGraphicsMatrix() {}
-
-    // concatenates the matrix
-    virtual void Concat( const wxGraphicsMatrix *t );
-    void Concat( const wxGraphicsMatrix &t ) { Concat( &t ); }
-
-    // sets the matrix to the respective values
-    virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
-        wxDouble tx=0.0, wxDouble ty=0.0);
-
-    // gets the component valuess of the matrix
-    virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
-                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const;
-
-    // makes this the inverse matrix
-    virtual void Invert();
-
-    // returns true if the elements of the transformation matrix are equal ?
-    virtual bool IsEqual( const wxGraphicsMatrix* t) const;
-    bool IsEqual( const wxGraphicsMatrix& t) const { return IsEqual( &t ); }
-
-    // return true if this is the identity matrix
-    virtual bool IsIdentity() const;
-
-    //
-    // transformation
-    //
-
-    // add the translation to this matrix
-    virtual void Translate( wxDouble dx , wxDouble dy );
-
-    // add the scale to this matrix
-    virtual void Scale( wxDouble xScale , wxDouble yScale );
-
-    // add the rotation to this matrix (radians)
-    virtual void Rotate( wxDouble angle );
-
-    //
-    // apply the transforms
-    //
-
-    // applies that matrix to the point
-    virtual void TransformPoint( wxDouble *x, wxDouble *y ) const;
-
-    // applies the matrix except for translations
-    virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) const;
-
-    // returns the native representation
-    virtual void * GetNativeMatrix() const;
-
-    const wxGraphicsMatrixData* GetMatrixData() const
-    { return (const wxGraphicsMatrixData*) GetRefData(); }
-    wxGraphicsMatrixData* GetMatrixData()
-    { return (wxGraphicsMatrixData*) GetRefData(); }
-
-private:
-    wxDECLARE_DYNAMIC_CLASS(wxGraphicsMatrix);
-};
-
-extern WXDLLIMPEXP_DATA_CORE(wxGraphicsMatrix) wxNullGraphicsMatrix;
 
 class WXDLLIMPEXP_CORE wxGraphicsPath : public wxGraphicsObject
 {
