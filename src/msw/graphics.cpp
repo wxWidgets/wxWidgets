@@ -255,44 +255,30 @@ private:
     Matrix* m_matrix ;
 } ;
 
-class wxGDIPlusPenData : public wxGraphicsObjectRefData
+
+// Things that pens and brushes have in common
+class wxGDIPlusPenBrushBaseData : public wxGraphicsObjectRefData
 {
 public:
-    wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info );
-    ~wxGDIPlusPenData();
+    wxGDIPlusPenBrushBaseData(wxGraphicsRenderer* renderer);
+    ~wxGDIPlusPenBrushBaseData();
 
-    void Init();
-
-    virtual wxDouble GetWidth() { return m_width; }
-    virtual Pen* GetGDIPlusPen() { return m_pen; }
-
-protected :
-    Pen* m_pen;
-    Image* m_penImage;
-    Brush* m_penBrush;
-
-    wxDouble m_width;
-};
-
-class wxGDIPlusBrushData : public wxGraphicsObjectRefData
-{
-public:
-    wxGDIPlusBrushData( wxGraphicsRenderer* renderer );
-    wxGDIPlusBrushData( wxGraphicsRenderer* renderer, const wxBrush &brush );
-    ~wxGDIPlusBrushData ();
+    virtual void Init();
 
     void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                                    wxDouble x2, wxDouble y2,
-                                   const wxGraphicsGradientStops& stops);
+                                   const wxGraphicsGradientStops& stops,
+                                   const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
     void CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                                    wxDouble xc, wxDouble yc,
                                    wxDouble radius,
-                                   const wxGraphicsGradientStops& stops);
-
-    virtual Brush* GetGDIPlusBrush() { return m_brush; }
-
+                                   const wxGraphicsGradientStops& stops,
+                                   const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
 protected:
-    virtual void Init();
+    Brush* m_brush;
+    GraphicsPath* m_brushPath;
+    Image* m_image;
+
 
 private:
     // common part of Create{Linear,Radial}GradientBrush()
@@ -300,10 +286,35 @@ private:
     void SetGradientStops(T *brush,
                           const wxGraphicsGradientStops& stops,
                           bool reversed = false);
+};
 
-    Brush* m_brush;
-    Image* m_brushImage;
-    GraphicsPath* m_brushPath;
+
+class wxGDIPlusPenData : public wxGDIPlusPenBrushBaseData
+{
+public:
+    wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info );
+    ~wxGDIPlusPenData();
+
+    virtual void Init();
+
+    virtual wxDouble GetWidth() { return m_width; }
+    virtual Pen* GetGDIPlusPen() { return m_pen; }
+
+protected :
+    Pen* m_pen;
+    wxDouble m_width;
+};
+
+
+class wxGDIPlusBrushData : public wxGDIPlusPenBrushBaseData
+{
+public:
+    wxGDIPlusBrushData( wxGraphicsRenderer* renderer );
+    wxGDIPlusBrushData( wxGraphicsRenderer* renderer, const wxBrush &brush );
+    ~wxGDIPlusBrushData ();
+
+    virtual Brush* GetGDIPlusBrush() { return m_brush; }
+
 };
 
 class WXDLLIMPEXP_CORE wxGDIPlusBitmapData : public wxGraphicsBitmapData
@@ -624,13 +635,15 @@ public :
     virtual wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
-                              const wxGraphicsGradientStops& stops) wxOVERRIDE;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
 
     virtual wxGraphicsBrush
     CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                               wxDouble xc, wxDouble yc,
                               wxDouble radius,
-                              const wxGraphicsGradientStops& stops) wxOVERRIDE;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) wxOVERRIDE;
@@ -670,26 +683,151 @@ private :
 } ;
 
 //-----------------------------------------------------------------------------
+// wxGDIPlusPenBrushBaseData implementation
+//-----------------------------------------------------------------------------
+
+wxGDIPlusPenBrushBaseData::wxGDIPlusPenBrushBaseData(wxGraphicsRenderer* renderer)
+    : wxGraphicsObjectRefData(renderer)
+{
+    Init();
+}
+
+wxGDIPlusPenBrushBaseData::~wxGDIPlusPenBrushBaseData()
+{
+    delete m_brush;
+    delete m_brushPath;
+    delete m_image;
+}
+
+void wxGDIPlusPenBrushBaseData::Init()
+{
+    m_brush = NULL;
+    m_brushPath = NULL;
+    m_image = NULL;
+}
+
+template <typename T>
+void
+wxGDIPlusPenBrushBaseData::SetGradientStops(T *brush,
+        const wxGraphicsGradientStops& stops,
+        bool reversed)
+{
+    const unsigned numStops = stops.GetCount();
+    if ( numStops <= 2 )
+    {
+        // initial and final colours are set during the brush creation, nothing
+        // more to do
+        return;
+    }
+
+    wxVector<Color> colors(numStops);
+    wxVector<REAL> positions(numStops);
+
+    if ( reversed )
+    {
+        for ( unsigned i = 0; i < numStops; i++ )
+        {
+            wxGraphicsGradientStop stop = stops.Item(numStops - i - 1);
+
+            colors[i] = wxColourToColor(stop.GetColour());
+            positions[i] = 1.0 - stop.GetPosition();
+        }
+    }
+    else
+    {
+        for ( unsigned i = 0; i < numStops; i++ )
+        {
+            wxGraphicsGradientStop stop = stops.Item(i);
+
+            colors[i] = wxColourToColor(stop.GetColour());
+            positions[i] = stop.GetPosition();
+        }
+    }
+
+    brush->SetInterpolationColors(&colors[0], &positions[0], numStops);
+}
+
+void
+wxGDIPlusPenBrushBaseData::CreateLinearGradientBrush(
+    wxDouble x1, wxDouble y1,
+    wxDouble x2, wxDouble y2,
+    const wxGraphicsGradientStops& stops,
+    const wxGraphicsMatrix& WXUNUSED(matrix))
+{
+    LinearGradientBrush * const
+        brush = new LinearGradientBrush(PointF(x1, y1) , PointF(x2, y2),
+                                        wxColourToColor(stops.GetStartColour()),
+                                        wxColourToColor(stops.GetEndColour()));
+
+    // Tell the brush how to draw what's beyond the ends of the gradient
+    brush->SetWrapMode(WrapModeTileFlipXY);
+
+    // Apply the matrix
+    // This doesn't work as I expected it to. Comment-out for now...
+    // FIXME
+    // if (! matrix.IsNull())
+    // {
+    //     const Matrix* m = static_cast<const Matrix*>(matrix.GetNativeMatrix());
+    //     brush->SetTransform(m);
+    // }
+
+    SetGradientStops(brush, stops);
+    m_brush = brush;    
+}
+
+void
+wxGDIPlusPenBrushBaseData::CreateRadialGradientBrush(
+    wxDouble xo, wxDouble yo,
+    wxDouble xc, wxDouble yc,
+    wxDouble radius,
+    const wxGraphicsGradientStops& stops,
+    const wxGraphicsMatrix& WXUNUSED(matrix))
+{
+    m_brushPath = new GraphicsPath();
+    m_brushPath->AddEllipse( (REAL)(xc-radius), (REAL)(yc-radius),
+                             (REAL)(2*radius), (REAL)(2*radius));
+
+    PathGradientBrush * const brush = new PathGradientBrush(m_brushPath);
+    brush->SetCenterPoint(PointF(xo, yo));
+    brush->SetCenterColor(wxColourToColor(stops.GetStartColour()));
+
+    const Color col(wxColourToColor(stops.GetEndColour()));
+    int count = 1;
+    brush->SetSurroundColors(&col, &count);
+
+    // Apply the matrix
+    // This doesn't work as I expected it to. Comment-out for now...
+    // FIXME
+    // if (! matrix.IsNull())
+    // {
+    //     const Matrix* m = static_cast<const Matrix*>(matrix.GetNativeMatrix());
+    //     brush->SetTransform(m);
+    // }
+
+    // Because the GDI+ API draws radial gradients from outside towards the
+    // center we have to reverse the order of the gradient stops.
+    SetGradientStops(brush, stops, true);
+    m_brush = brush;
+}
+
+
+//-----------------------------------------------------------------------------
 // wxGDIPlusPen implementation
 //-----------------------------------------------------------------------------
 
 wxGDIPlusPenData::~wxGDIPlusPenData()
 {
     delete m_pen;
-    delete m_penImage;
-    delete m_penBrush;
 }
 
 void wxGDIPlusPenData::Init()
 {
     m_pen = NULL ;
-    m_penImage = NULL;
-    m_penBrush = NULL;
 }
 
 wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer,
                                     const wxGraphicsPenInfo &info )
-    : wxGraphicsObjectRefData(renderer)
+    : wxGDIPlusPenBrushBaseData(renderer)
 {
     Init();
     m_width = info.GetWidth();
@@ -786,15 +924,15 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer,
             wxBitmap bmp = info.GetStipple();
             if ( bmp.IsOk() )
             {
-                m_penImage = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),
+                m_image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),
 #if wxUSE_PALETTE
                     (HPALETTE)bmp.GetPalette()->GetHPALETTE()
 #else
                     NULL
 #endif
                 );
-                m_penBrush = new TextureBrush(m_penImage);
-                m_pen->SetBrush( m_penBrush );
+                m_brush = new TextureBrush(m_image);
+                m_pen->SetBrush( m_brush );
             }
 
         }
@@ -827,18 +965,43 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer,
             default:
                 style = HatchStyleHorizontal;
             }
-            m_penBrush = new HatchBrush
+            m_brush = new HatchBrush
                              (
                                 style,
                                 wxColourToColor(info.GetColour()),
                                 Color::Transparent
                              );
-            m_pen->SetBrush( m_penBrush );
+            m_pen->SetBrush( m_brush );
         }
         break;
     }
     if ( dashStyle != DashStyleSolid )
         m_pen->SetDashStyle(dashStyle);
+
+    switch (info.GetGradientType() )
+    {
+    case wxGRADIENT_NONE:
+        break;
+
+    case wxGRADIENT_LINEAR:
+        if (m_brush)
+            delete m_brush;
+        CreateLinearGradientBrush(info.GetX1(), info.GetY1(),
+                                  info.GetX2(), info.GetY2(),
+                                  info.GetStops());
+        m_pen->SetBrush(m_brush);
+        break;
+
+    case wxGRADIENT_RADIAL:
+        if (m_brush)
+            delete m_brush;
+        CreateRadialGradientBrush(info.GetXO(), info.GetYO(),
+                                  info.GetXC(), info.GetYC(),
+                                  info.GetRadius(),
+                                  info.GetStops());
+        m_pen->SetBrush(m_brush);
+        break;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -846,13 +1009,13 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer,
 //-----------------------------------------------------------------------------
 
 wxGDIPlusBrushData::wxGDIPlusBrushData( wxGraphicsRenderer* renderer )
-: wxGraphicsObjectRefData(renderer)
+: wxGDIPlusPenBrushBaseData(renderer)
 {
     Init();
 }
 
 wxGDIPlusBrushData::wxGDIPlusBrushData( wxGraphicsRenderer* renderer , const wxBrush &brush )
-: wxGraphicsObjectRefData(renderer)
+: wxGDIPlusPenBrushBaseData(renderer)
 {
     Init();
     if ( brush.GetStyle() == wxBRUSHSTYLE_SOLID)
@@ -897,112 +1060,23 @@ wxGDIPlusBrushData::wxGDIPlusBrushData( wxGraphicsRenderer* renderer , const wxB
         wxBitmap* bmp = brush.GetStipple();
         if ( bmp && bmp->IsOk() )
         {
-            wxDELETE( m_brushImage );
-            m_brushImage = Bitmap::FromHBITMAP((HBITMAP)bmp->GetHBITMAP(),
+            wxDELETE( m_image );
+            m_image = Bitmap::FromHBITMAP((HBITMAP)bmp->GetHBITMAP(),
 #if wxUSE_PALETTE
                 (HPALETTE)bmp->GetPalette()->GetHPALETTE()
 #else
                 NULL
 #endif
             );
-            m_brush = new TextureBrush(m_brushImage);
+            m_brush = new TextureBrush(m_image);
         }
     }
 }
 
 wxGDIPlusBrushData::~wxGDIPlusBrushData()
 {
-    delete m_brush;
-    delete m_brushImage;
-    delete m_brushPath;
-};
-
-void wxGDIPlusBrushData::Init()
-{
-    m_brush = NULL;
-    m_brushImage= NULL;
-    m_brushPath= NULL;
 }
 
-template <typename T>
-void
-wxGDIPlusBrushData::SetGradientStops(T *brush,
-        const wxGraphicsGradientStops& stops,
-        bool reversed)
-{
-    const unsigned numStops = stops.GetCount();
-    if ( numStops <= 2 )
-    {
-        // initial and final colours are set during the brush creation, nothing
-        // more to do
-        return;
-    }
-
-    wxVector<Color> colors(numStops);
-    wxVector<REAL> positions(numStops);
-
-    if ( reversed )
-    {
-        for ( unsigned i = 0; i < numStops; i++ )
-        {
-            wxGraphicsGradientStop stop = stops.Item(numStops - i - 1);
-
-            colors[i] = wxColourToColor(stop.GetColour());
-            positions[i] = 1.0 - stop.GetPosition();
-        }
-    }
-    else
-    {
-        for ( unsigned i = 0; i < numStops; i++ )
-        {
-            wxGraphicsGradientStop stop = stops.Item(i);
-
-            colors[i] = wxColourToColor(stop.GetColour());
-            positions[i] = stop.GetPosition();
-        }
-    }
-
-    brush->SetInterpolationColors(&colors[0], &positions[0], numStops);
-}
-
-void
-wxGDIPlusBrushData::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
-                                              wxDouble x2, wxDouble y2,
-                                              const wxGraphicsGradientStops& stops)
-{
-    LinearGradientBrush * const
-        brush = new LinearGradientBrush(PointF(x1, y1) , PointF(x2, y2),
-                                        wxColourToColor(stops.GetStartColour()),
-                                        wxColourToColor(stops.GetEndColour()));
-    brush->SetWrapMode(WrapModeTileFlipXY);
-    m_brush =  brush;
-
-    SetGradientStops(brush, stops);
-}
-
-void
-wxGDIPlusBrushData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                              wxDouble xc, wxDouble yc,
-                                              wxDouble radius,
-                                              const wxGraphicsGradientStops& stops)
-{
-    m_brushPath = new GraphicsPath();
-    m_brushPath->AddEllipse( (REAL)(xc-radius), (REAL)(yc-radius),
-                             (REAL)(2*radius), (REAL)(2*radius));
-
-    PathGradientBrush * const brush = new PathGradientBrush(m_brushPath);
-    m_brush = brush;
-    brush->SetCenterPoint(PointF(xo, yo));
-    brush->SetCenterColor(wxColourToColor(stops.GetStartColour()));
-
-    const Color col(wxColourToColor(stops.GetEndColour()));
-    int count = 1;
-    brush->SetSurroundColors(&col, &count);
-
-    // Because the GDI+ API draws radial gradients from outside towards the
-    // center we have to reverse the order of the gradient stops.
-    SetGradientStops(brush, stops, true);
-}
 
 //-----------------------------------------------------------------------------
 // Support for adding private fonts
@@ -2614,12 +2688,13 @@ wxGraphicsBrush wxGDIPlusRenderer::CreateBrush(const wxBrush& brush )
 wxGraphicsBrush
 wxGDIPlusRenderer::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                                              wxDouble x2, wxDouble y2,
-                                             const wxGraphicsGradientStops& stops)
+                                             const wxGraphicsGradientStops& stops,
+                                             const wxGraphicsMatrix& matrix)
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsBrush);
     wxGraphicsBrush p;
     wxGDIPlusBrushData* d = new wxGDIPlusBrushData( this );
-    d->CreateLinearGradientBrush(x1, y1, x2, y2, stops);
+    d->CreateLinearGradientBrush(x1, y1, x2, y2, stops, matrix);
     p.SetRefData(d);
     return p;
  }
@@ -2628,12 +2703,13 @@ wxGraphicsBrush
 wxGDIPlusRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                                              wxDouble xc, wxDouble yc,
                                              wxDouble radius,
-                                             const wxGraphicsGradientStops& stops)
+                                             const wxGraphicsGradientStops& stops,
+                                             const wxGraphicsMatrix& matrix)
 {
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsBrush);
     wxGraphicsBrush p;
     wxGDIPlusBrushData* d = new wxGDIPlusBrushData( this );
-    d->CreateRadialGradientBrush(xo,yo,xc,yc,radius,stops);
+    d->CreateRadialGradientBrush(xo,yo,xc,yc,radius,stops,matrix);
     p.SetRefData(d);
     return p;
 }
