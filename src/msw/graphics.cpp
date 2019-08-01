@@ -974,6 +974,7 @@ wxGDIPlusBrushData::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
         brush = new LinearGradientBrush(PointF(x1, y1) , PointF(x2, y2),
                                         wxColourToColor(stops.GetStartColour()),
                                         wxColourToColor(stops.GetEndColour()));
+    brush->SetWrapMode(WrapModeTileFlipXY);
     m_brush =  brush;
 
     SetGradientStops(brush, stops);
