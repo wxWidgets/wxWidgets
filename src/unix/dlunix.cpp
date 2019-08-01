@@ -110,8 +110,11 @@ wxDllType wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 }
 
 /* static */
-void wxDynamicLibrary::Unload(wxDllType handle)
+void wxDynamicLibrary::Unload(wxDllType handle, int flags)
 {
+    wxCHECK_RET( (flags | wxDL_QUIET) == wxDL_QUIET,
+                wxT("Unload() only supports the wxDL_QUIET flag") );
+
 #ifdef wxHAVE_DYNLIB_ERROR
     int rc =
 #endif
@@ -124,7 +127,10 @@ void wxDynamicLibrary::Unload(wxDllType handle)
 
 #if defined(USE_POSIX_DL_FUNCS) && defined(wxHAVE_DYNLIB_ERROR)
     if ( rc != 0 )
-        Error();
+    {
+        if ( !(flags & wxDL_QUIET) )
+            Error();
+    }
 #endif
 }
 

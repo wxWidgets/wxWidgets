@@ -69,6 +69,8 @@ bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
 {
     wxASSERT_MSG(m_handle == 0, wxT("Library already loaded."));
 
+    m_flags = flags;
+
     // add the proper extension for the DLL ourselves unless told not to
     wxString libname = libnameOrig;
     if ( !(flags & wxDL_VERBATIM) )
@@ -115,10 +117,12 @@ void *wxDynamicLibrary::GetSymbol(const wxString& name, bool *success) const
     if ( !symbol )
     {
 #ifdef wxHAVE_DYNLIB_ERROR
-        Error();
+        if ( !(m_flags & wxDL_QUIET) )
+            Error();
 #else
-        wxLogSysError(_("Couldn't find symbol '%s' in a dynamic library"),
-                      name.c_str());
+        if ( !(m_flags & wxDL_QUIET) )
+            wxLogSysError(_("Couldn't find symbol '%s' in a dynamic library"),
+                          name.c_str());
 #endif
     }
 

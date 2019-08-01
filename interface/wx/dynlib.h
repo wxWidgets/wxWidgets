@@ -99,7 +99,7 @@ enum wxPluginCategory
     @style{wxDL_DEFAULT}
            Default flags, same as wxDL_NOW currently.
     @style{wxDL_QUIET}
-           Don't log an error message if the library couldn't be loaded.
+           Don't log an error message if the library or symbol couldn't be (un)loaded.
     @endStyleTable
 
     @library{wxbase}
@@ -243,8 +243,10 @@ public:
         in memory during a longer period of time than the scope of the
         wxDynamicLibrary object. In this case you may call Detach() and store
         the handle somewhere and call this static method later to unload it.
+
+        @param flags The optional flag @c wxDL_QUIET suppresses logging errors.
     */
-    static void Unload(wxDllType handle);
+    static void Unload(wxDllType handle, int flags = 0);
 };
 
 

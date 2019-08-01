@@ -231,9 +231,9 @@ public:
     // return the platform standard DLL extension (with leading dot)
     static wxString GetDllExt(wxDynamicLibraryCategory cat = wxDL_LIBRARY);
 
-    wxDynamicLibrary() : m_handle(0) { }
+    wxDynamicLibrary() : m_handle(0), m_flags(wxDL_DEFAULT) { }
     wxDynamicLibrary(const wxString& libname, int flags = wxDL_DEFAULT)
-        : m_handle(0)
+        : m_handle(0), m_flags(flags)
     {
         Load(libname, flags);
     }
@@ -259,10 +259,17 @@ public:
     wxDllType Detach() { wxDllType h = m_handle; m_handle = 0; return h; }
 
     // unload the given library handle (presumably returned by Detach() before)
-    static void Unload(wxDllType handle);
+    static void Unload(wxDllType handle, int flags = 0);
 
     // unload the library, also done automatically in dtor
-    void Unload() { if ( IsLoaded() ) { Unload(m_handle); m_handle = 0; } }
+    void Unload()
+    {
+        if ( IsLoaded() )
+        {
+            Unload(m_handle, m_flags & wxDL_QUIET);
+            m_handle = 0;
+        }
+    }
 
     // Return the raw handle from dlopen and friends.
     wxDllType GetLibHandle() const { return m_handle; }
@@ -373,6 +380,9 @@ protected:
 
     // the handle to DLL or NULL
     wxDllType m_handle;
+
+    // flags given to the constructor
+    int m_flags;
 
     // no copy ctor/assignment operators (or we'd try to unload the library
     // twice)

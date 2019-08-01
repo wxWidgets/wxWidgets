@@ -164,11 +164,15 @@ wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 }
 
 /* static */
-void wxDynamicLibrary::Unload(wxDllType handle)
+void wxDynamicLibrary::Unload(wxDllType handle, int flags)
 {
+    wxCHECK_RET( (flags | wxDL_QUIET) == wxDL_QUIET,
+                wxT("Unload() only supports the wxDL_QUIET flag") );
+
     if ( !::FreeLibrary(handle) )
     {
-        wxLogSysError(_("Failed to unload shared library"));
+        if ( !(flags & wxDL_QUIET) )
+            wxLogSysError(_("Failed to unload shared library"));
     }
 }
 
