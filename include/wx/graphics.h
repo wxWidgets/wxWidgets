@@ -270,8 +270,8 @@ private:
 extern WXDLLIMPEXP_DATA_CORE(wxGraphicsMatrix) wxNullGraphicsMatrix;
 
 // ----------------------------------------------------------------------------
-// wxGradientStop and wxGradientStops: Controls how colors are spread in 
-// a gradient
+// wxGradientStop and wxGradientStops: Specify what intermediate colors are used
+// and how they are are spread out in a gradient
 // ----------------------------------------------------------------------------
 
 // Describes a single gradient stop.
@@ -454,7 +454,7 @@ public:
 private:
     wxDouble m_width;
     wxGradientType m_gradientType;
-    wxDouble m_x1, m_y1, m_x2, m_y2; // also used for m_xo, m_yo, m_xc, m_yx
+    wxDouble m_x1, m_y1, m_x2, m_y2; // also used for m_xo, m_yo, m_xc, m_yc
     wxDouble m_radius;
     wxGraphicsGradientStops m_stops;
     wxGraphicsMatrix m_matrix;
