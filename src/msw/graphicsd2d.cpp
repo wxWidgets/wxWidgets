@@ -2572,7 +2572,8 @@ void wxD2DBrushData::CreateLinearGradientBrush(
     const wxGraphicsGradientStops& stops,
     const wxGraphicsMatrix& matrix)
 {
-    m_brushResourceHolder = new wxD2DLinearGradientBrushResourceHolder(x1, y1, x2, y2, stops, matrix);
+    m_brushResourceHolder = new wxD2DLinearGradientBrushResourceHolder(
+        x1, y1, x2, y2, stops, matrix);
 }
 
 void wxD2DBrushData::CreateRadialGradientBrush(
@@ -2582,7 +2583,8 @@ void wxD2DBrushData::CreateRadialGradientBrush(
     const wxGraphicsGradientStops& stops,
     const wxGraphicsMatrix& matrix)
 {
-    m_brushResourceHolder = new wxD2DRadialGradientBrushResourceHolder(xo, yo, xc, yc, radius, stops, matrix);
+    m_brushResourceHolder = new wxD2DRadialGradientBrushResourceHolder(
+        xo, yo, xc, yc, radius, stops, matrix);
 }
 
 wxD2DBrushData* wxGetD2DBrushData(const wxGraphicsBrush& brush)
@@ -2690,8 +2692,33 @@ wxD2DPenData::wxD2DPenData(
         strokeBrush.SetStyle(wxBRUSHSTYLE_SOLID);
     }
 
-    m_stippleBrush = new wxD2DBrushData(renderer, strokeBrush);
+    switch ( m_penInfo.GetGradientType() )
+    {
+    case wxGRADIENT_NONE:
+        m_stippleBrush = new wxD2DBrushData(renderer, strokeBrush);
+        break;
+
+    case wxGRADIENT_LINEAR:
+        m_stippleBrush = new wxD2DBrushData(renderer);
+        m_stippleBrush->CreateLinearGradientBrush(
+                                m_penInfo.GetX1(), m_penInfo.GetY1(),
+                                m_penInfo.GetX2(), m_penInfo.GetY2(),
+                                m_penInfo.GetStops(),
+                                m_penInfo.GetMatrix());
+        break;
+
+    case wxGRADIENT_RADIAL:
+        m_stippleBrush = new wxD2DBrushData(renderer);
+        m_stippleBrush->CreateRadialGradientBrush(
+                                m_penInfo.GetXO(), m_penInfo.GetYO(),
+                                m_penInfo.GetXC(), m_penInfo.GetYC(),
+                                m_penInfo.GetRadius(),
+                                m_penInfo.GetStops(),
+                                m_penInfo.GetMatrix());
+        break;
+    }
 }
+
 
 void wxD2DPenData::CreateStrokeStyle(ID2D1Factory* const direct2dfactory)
 {
