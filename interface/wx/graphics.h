@@ -644,7 +644,8 @@ public:
     wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
-                              const wxColour& c1, const wxColour& c2) const;
+                              const wxColour& c1, const wxColour& c2,
+                              const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) const;
 
     /**
         @overload
@@ -652,7 +653,8 @@ public:
     wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
-                              const wxGraphicsGradientStops& stops) const;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) const;
 
     /**
         Creates a native brush with a radial gradient.
@@ -670,7 +672,8 @@ public:
                               wxDouble xc, wxDouble yc,
                               wxDouble radius,
                               const wxColour& oColor,
-                              const wxColour& cColor) const;
+                              const wxColour& cColor,
+                              const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) const;
 
     /**
         @overload
@@ -679,7 +682,8 @@ public:
     CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                               wxDouble xc, wxDouble yc,
                               wxDouble radius,
-                              const wxGraphicsGradientStops& stops) = 0;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) = 0;
 
     /**
         Sets the brush for filling paths.
@@ -1456,7 +1460,8 @@ public:
                                                       wxDouble y1,
                                                       wxDouble x2,
                                                       wxDouble y2,
-                                                      const wxGraphicsGradientStops& stops) = 0;
+                                                      const wxGraphicsGradientStops& stops,
+                                                      const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) = 0;
 
     /**
         Creates a native affine transformation matrix from the passed in
@@ -1488,7 +1493,8 @@ public:
     virtual wxGraphicsBrush CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                                                       wxDouble xc, wxDouble yc,
                                                       wxDouble radius,
-                                                      const wxGraphicsGradientStops& stops) = 0;
+                                                      const wxGraphicsGradientStops& stops,
+                                                      const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) = 0;
 
     /**
         Extracts a sub-bitmap from an existing bitmap.
@@ -1630,19 +1636,23 @@ public:
 
     wxGraphicsPenInfo& 
     LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
-                   const wxColour& c1, const wxColour& c2);
+                   const wxColour& c1, const wxColour& c2,
+                   const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
 
     wxGraphicsPenInfo& 
     LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
-                   const wxGraphicsGradientStops& stops);
+                   const wxGraphicsGradientStops& stops,
+                   const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
 
     wxGraphicsPenInfo& 
     RadialGradient(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius, 
-                   const wxColour& oColor, const wxColour& cColor);
+                   const wxColour& oColor, const wxColour& cColor,
+                   const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
 
     wxGraphicsPenInfo& 
     RadialGradient(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, 
-                   wxDouble radius, const wxGraphicsGradientStops& stops);
+                   wxDouble radius, const wxGraphicsGradientStops& stops,
+                   const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
 
     wxColour GetColour() const;
     wxBitmap GetStipple() const;

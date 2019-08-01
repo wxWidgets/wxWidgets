@@ -883,13 +883,15 @@ wxGraphicsBrush
 wxGraphicsContext::CreateLinearGradientBrush(
     wxDouble x1, wxDouble y1,
     wxDouble x2, wxDouble y2,
-    const wxColour& c1, const wxColour& c2) const
+    const wxColour& c1, const wxColour& c2,
+    const wxGraphicsMatrix& matrix) const
 {
     return GetRenderer()->CreateLinearGradientBrush
                           (
                             x1, y1,
                             x2, y2,
-                            wxGraphicsGradientStops(c1,c2)
+                            wxGraphicsGradientStops(c1,c2),
+                            matrix
                           );
 }
 
@@ -897,22 +899,15 @@ wxGraphicsBrush
 wxGraphicsContext::CreateLinearGradientBrush(
     wxDouble x1, wxDouble y1,
     wxDouble x2, wxDouble y2,
-    const wxGraphicsGradientStops& gradientStops) const
+    const wxGraphicsGradientStops& gradientStops,
+    const wxGraphicsMatrix& matrix) const
 {
-    return GetRenderer()->CreateLinearGradientBrush(x1,y1,x2,y2, gradientStops);
-}
-
-wxGraphicsBrush
-wxGraphicsContext::CreateRadialGradientBrush(
-        wxDouble xo, wxDouble yo,
-        wxDouble xc, wxDouble yc, wxDouble radius,
-        const wxColour &oColor, const wxColour &cColor) const
-{
-    return GetRenderer()->CreateRadialGradientBrush
+    return GetRenderer()->CreateLinearGradientBrush
                           (
-                            xo, yo,
-                            xc, yc, radius,
-                            wxGraphicsGradientStops(oColor, cColor)
+                            x1, y1,
+                            x2, y2, 
+                            gradientStops, 
+                            matrix
                           );
 }
 
@@ -920,13 +915,31 @@ wxGraphicsBrush
 wxGraphicsContext::CreateRadialGradientBrush(
         wxDouble xo, wxDouble yo,
         wxDouble xc, wxDouble yc, wxDouble radius,
-        const wxGraphicsGradientStops& gradientStops) const
+        const wxColour &oColor, const wxColour &cColor,
+        const wxGraphicsMatrix& matrix) const
 {
     return GetRenderer()->CreateRadialGradientBrush
                           (
                             xo, yo,
                             xc, yc, radius,
-                            gradientStops
+                            wxGraphicsGradientStops(oColor, cColor),
+                            matrix
+                          );
+}
+
+wxGraphicsBrush
+wxGraphicsContext::CreateRadialGradientBrush(
+        wxDouble xo, wxDouble yo,
+        wxDouble xc, wxDouble yc, wxDouble radius,
+        const wxGraphicsGradientStops& gradientStops,
+        const wxGraphicsMatrix& matrix) const
+{
+    return GetRenderer()->CreateRadialGradientBrush
+                          (
+                            xo, yo,
+                            xc, yc, radius,
+                            gradientStops,
+                            matrix
                           );
 }
 
