@@ -605,10 +605,12 @@ public:
     virtual void Apply( wxGraphicsContext* context );
     void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                                    wxDouble x2, wxDouble y2,
-                                   const wxGraphicsGradientStops& stops);
+                                   const wxGraphicsGradientStops& stops,
+                                   const wxGraphicsMatrix& matrix);
     void CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                                    wxDouble xc, wxDouble yc, wxDouble radius,
-                                   const wxGraphicsGradientStops& stops);
+                                   const wxGraphicsGradientStops& stops,
+                                   const wxGraphicsMatrix& matrix);
 
     virtual bool IsShading() { return m_isShading; }
     CGShadingRef GetShading() { return m_shading; }
@@ -669,7 +671,8 @@ wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData( wxGraphicsRenderer* rend
 void
 wxMacCoreGraphicsBrushData::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                                                       wxDouble x2, wxDouble y2,
-                                                      const wxGraphicsGradientStops& stops)
+                                                      const wxGraphicsGradientStops& stops,
+                                                      const wxGraphicsMatrix& matrix)
 {
     m_gradientFunction = CreateGradientFunction(stops);
     m_shading = CGShadingCreateAxial( wxMacGetGenericRGBColorSpace(), CGPointMake((CGFloat) x1, (CGFloat) y1),
@@ -681,7 +684,8 @@ void
 wxMacCoreGraphicsBrushData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                                                       wxDouble xc, wxDouble yc,
                                                       wxDouble radius,
-                                                      const wxGraphicsGradientStops& stops)
+                                                      const wxGraphicsGradientStops& stops,
+                                                      const wxGraphicsMatrix& matrix)
 {
     m_gradientFunction = CreateGradientFunction(stops);
     m_shading = CGShadingCreateRadial( wxMacGetGenericRGBColorSpace(), CGPointMake((CGFloat) xo,(CGFloat) yo), 0,
@@ -2667,13 +2671,15 @@ public :
     virtual wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
-                              const wxGraphicsGradientStops& stops) wxOVERRIDE;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix) wxOVERRIDE;
 
     virtual wxGraphicsBrush
     CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                               wxDouble xc, wxDouble yc,
                               wxDouble radius,
-                              const wxGraphicsGradientStops& stops) wxOVERRIDE;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix) wxOVERRIDE;
 
    // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) wxOVERRIDE ;
@@ -2924,11 +2930,12 @@ void wxMacCoreGraphicsRenderer::GetVersion(int *major, int *minor, int *micro) c
 wxGraphicsBrush
 wxMacCoreGraphicsRenderer::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                                                      wxDouble x2, wxDouble y2,
-                                                     const wxGraphicsGradientStops& stops)
+                                                     const wxGraphicsGradientStops& stops,
+                                                     const wxGraphicsMatrix& matrix)
 {
     wxGraphicsBrush p;
     wxMacCoreGraphicsBrushData* d = new wxMacCoreGraphicsBrushData( this );
-    d->CreateLinearGradientBrush(x1, y1, x2, y2, stops);
+    d->CreateLinearGradientBrush(x1, y1, x2, y2, stops, matrix);
     p.SetRefData(d);
     return p;
 }
@@ -2937,11 +2944,12 @@ wxGraphicsBrush
 wxMacCoreGraphicsRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
                                                      wxDouble xc, wxDouble yc,
                                                      wxDouble radius,
-                                                     const wxGraphicsGradientStops& stops)
+                                                     const wxGraphicsGradientStops& stops,
+                                                     const wxGraphicsMatrix& matrix)
 {
     wxGraphicsBrush p;
     wxMacCoreGraphicsBrushData* d = new wxMacCoreGraphicsBrushData( this );
-    d->CreateRadialGradientBrush(xo, yo, xc, yc, radius, stops);
+    d->CreateRadialGradientBrush(xo, yo, xc, yc, radius, stops, matrix);
     p.SetRefData(d);
     return p;
 }
