@@ -128,11 +128,38 @@ extern "C" int XCTmain(int argc, char **argv);
 @end
 
 //
-// dynamic class and method generation
+// dynamic class and method generation,
+// code for creating class and methods are from https://github.com/catchorg/Catch2/pull/454
 //
 
+/*
+ * Copyright (c) 2014 - 2015 Landon Fuller <landon@landonf.org>
+ * All rights reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following
+ * conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 /* Given a test case description, generate a valid Objective-C identifier. */
-NSString* normalize_identifier(NSString* description)
+NSString* normalizeIdentifier(NSString* description)
 {
     /* Split the description into individual components */
     NSArray* components = [description componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -170,7 +197,7 @@ NSString* normalize_identifier(NSString* description)
 NSString* constructClassName(const char* description)
 {
     //    const char* description = testInfo.name.c_str();
-    NSString* clsName = normalize_identifier([NSString stringWithUTF8String:description]);
+    NSString* clsName = normalizeIdentifier([NSString stringWithUTF8String:description]);
     
     /* If the class name is already in use, loop until we've got a unique name */
     if (NSClassFromString(clsName) != nil)
@@ -209,7 +236,7 @@ NSString* constructClassName(const char* description)
 SEL createSelectorForName(Class cls, const char* description)
 {
     /* Generate a valid selector for the description */
-    NSString* selectorName = normalize_identifier([NSString stringWithUTF8String:description]);
+    NSString* selectorName = normalizeIdentifier([NSString stringWithUTF8String:description]);
     
     /* If the selector is already in use, loop until we have a unique name */
     while (class_getInstanceMethod(cls, NSSelectorFromString(selectorName)) != NULL)
