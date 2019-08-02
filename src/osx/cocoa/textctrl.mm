@@ -1166,8 +1166,8 @@ void wxNSTextViewControl::SetStyle(long start,
     }
     else // Set the attributes just for this range.
     {
-        range = NSMakeRange(start, end-start);
-
+        NSRange range = NSMakeRange( start, end - start );
+        
         storage = [m_textView textStorage];
         if ( style.HasFont() )
             [storage addAttribute:NSFontAttributeName value:style.GetFont().OSXGetNSFont() range:range];
@@ -1231,8 +1231,12 @@ void wxNSTextViewControl::SetStyle(long start,
     }
     if( style.HasLeftIndent() )
     {
-        if( start == end )
+        if( start == end && start == 0 )
             range = NSMakeRange( start, start + 1 );
+        else if( start == end && start == m_textView.textStorage.string.length )
+            range = NSMakeRange( start - 1, 1 );
+        else
+            range = [[m_textView textStorage].string paragraphRangeForRange: NSMakeRange( start, 1 )];
         paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         [paragraphStyle setFirstLineHeadIndent: indent];
         [paragraphStyle setHeadIndent: indent];
