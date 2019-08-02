@@ -1241,6 +1241,16 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
     {
         return false;
     }
+    if( code == wxLIST_RECT_LABEL )
+    {
+        RECT rectIcon;
+        rectIcon.top = subItem;
+        rectIcon.left = LVIR_ICON;
+        if( !( ::SendMessageA(GetHwnd(), LVM_GETSUBITEMRECT, item, (LPARAM)&rectIcon) ) )
+            return false;
+		else
+            rectWin.left = rectIcon.right;
+    }
 
     wxCopyRECTToRect(rectWin, rect);
 
