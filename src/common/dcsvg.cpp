@@ -595,6 +595,12 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     // support SVG viewers that do not support the new tag
     style += wxS(" xml:space=\"preserve\"");
 
+    // The text in a wxDC is adjusted to the screen DPI, but text in a SVG file
+    // is DPI independent. Scale the text attribute with the wxDC scale factor
+    // so it will have the same size as in the wxDC.
+    wxScreenDC dc;
+    const double scale = dc.GetContentScaleFactor();
+
     // Draw all text line by line
     const wxArrayString lines = wxSplit(sText, '\n', '\0');
     for (size_t lineNum = 0; lineNum < lines.size(); lineNum++)
@@ -606,13 +612,17 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
         const int xx = x + wxRound(lineNum * dx) + (hh - desc) * sin(rad);
         const int yy = y + wxRound(lineNum * dy) + (hh - desc) * cos(rad);
 
+        const int tx = xx - (int)ceil(xx * scale);
+        const int ty = yy - (int)ceil(yy * scale);
+        const int len = (int)floor(ww / scale);
+
         const wxString transform = wxString::Format(
-            wxS("transform=\"rotate(%s %d %d)\""),
-            NumStr(-angle), xx, yy);
+            wxS("transform=\"rotate(%s %d %d) translate(%d %d) scale(%s)\""),
+            NumStr(-angle), xx, yy, tx, ty, NumStr(scale));
 
         s = wxString::Format(
             wxS("  <text x=\"%d\" y=\"%d\" textLength=\"%d\" %s %s>%s</text>\n"),
-            xx, yy, ww, style, transform,
+            xx, yy, len, style, transform,
 #if wxUSE_MARKUP
             wxMarkupParser::Quote(line)
 #else
