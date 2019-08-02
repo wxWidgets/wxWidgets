@@ -588,7 +588,11 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     style += wxString::Format(wxS("%s %s stroke-width:0; "),
                               wxBrushString(m_textForegroundColour),
                               wxPenString(m_textForegroundColour));
+    style += wxS("white-space: pre;");
     style += wxS("\"");
+
+    // this is deprecated in favour of "white-space: pre", keep it for now to
+    // support SVG viewers that do not support the new tag
     style += wxS(" xml:space=\"preserve\"");
 
     // Draw all text line by line
