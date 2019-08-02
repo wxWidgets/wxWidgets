@@ -282,6 +282,11 @@
 #        define _GNU_SOURCE
 #    endif
 
+#    if defined(__CYGWIN__)
+        /* Ensure visibility of Dl_info and pthread_setconcurrency declarations */
+#        define _GNU_SOURCE
+#    endif
+
     /* define __HPUX__ for HP-UX where standard macro is __hpux */
 #    if defined(__hpux) && !defined(__HPUX__)
 #        define __HPUX__
