@@ -2445,14 +2445,23 @@ protected:
     void DoAcquireResource() wxOVERRIDE
     {
         wxD2DGradientStopsHelper helper(m_linearGradientInfo.stops, GetContext());
+        ID2D1LinearGradientBrush  *linearGradientBrush;
 
         HRESULT hr = GetContext()->CreateLinearGradientBrush(
             D2D1::LinearGradientBrushProperties(
-            D2D1::Point2F(m_linearGradientInfo.direction.GetX(), m_linearGradientInfo.direction.GetY()),
-            D2D1::Point2F(m_linearGradientInfo.direction.GetWidth(), m_linearGradientInfo.direction.GetHeight())),
+                D2D1::Point2F(m_linearGradientInfo.direction.GetX(), m_linearGradientInfo.direction.GetY()),
+                D2D1::Point2F(m_linearGradientInfo.direction.GetWidth(), m_linearGradientInfo.direction.GetHeight())),
             helper.GetGradientStopCollection(),
-            &m_nativeResource);
+            &linearGradientBrush);
         wxCHECK_HRESULT_RET(hr);
+
+        if (! m_linearGradientInfo.matrix.IsNull())
+        {
+            D2D1::Matrix3x2F matrix = wxGetD2DMatrixData(m_linearGradientInfo.matrix)->GetMatrix3x2F();
+            matrix.Invert();
+            linearGradientBrush->SetTransform(matrix);
+        }
+        m_nativeResource = linearGradientBrush;
     }
 private:
     const LinearGradientInfo m_linearGradientInfo;
@@ -2486,18 +2495,27 @@ protected:
     void DoAcquireResource() wxOVERRIDE
     {
         wxD2DGradientStopsHelper helper(m_radialGradientInfo.stops, GetContext());
+        ID2D1RadialGradientBrush *radialGradientBrush;
 
         int xo = m_radialGradientInfo.direction.GetLeft() - m_radialGradientInfo.direction.GetWidth();
         int yo = m_radialGradientInfo.direction.GetTop() - m_radialGradientInfo.direction.GetHeight();
 
         HRESULT hr = GetContext()->CreateRadialGradientBrush(
             D2D1::RadialGradientBrushProperties(
-            D2D1::Point2F(m_radialGradientInfo.direction.GetLeft(), m_radialGradientInfo.direction.GetTop()),
-            D2D1::Point2F(xo, yo),
-            m_radialGradientInfo.radius, m_radialGradientInfo.radius),
+                D2D1::Point2F(m_radialGradientInfo.direction.GetLeft(), m_radialGradientInfo.direction.GetTop()),
+                D2D1::Point2F(xo, yo),
+                m_radialGradientInfo.radius, m_radialGradientInfo.radius),
             helper.GetGradientStopCollection(),
-            &m_nativeResource);
+            &radialGradientBrush);
         wxCHECK_HRESULT_RET(hr);
+
+        if (! m_radialGradientInfo.matrix.IsNull())
+        {
+            D2D1::Matrix3x2F matrix = wxGetD2DMatrixData(m_radialGradientInfo.matrix)->GetMatrix3x2F();
+            matrix.Invert();
+            radialGradientBrush->SetTransform(matrix);
+        }
+        m_nativeResource = radialGradientBrush;
     }
 
 private:
