@@ -244,6 +244,12 @@ public:
         return m_placeHolderImage;
     }
 
+    void select(QTreeWidgetItem* item, QItemSelectionModel::SelectionFlag selectionFlag)
+    {
+        const QModelIndex index = indexFromItem(item);
+        selectionModel()->select(index, selectionFlag);
+    }
+
 protected:
     virtual void drawRow(
         QPainter *painter,
@@ -1164,19 +1170,13 @@ void wxTreeCtrl::Toggle(const wxTreeItemId& item)
 void wxTreeCtrl::Unselect()
 {
     QTreeWidgetItem *current = m_qtTreeWidget->currentItem();
-
-    if ( current != NULL )
-        current->setSelected(false);
+    if (current != NULL)
+        m_qtTreeWidget->select(current, QItemSelectionModel::Deselect);
 }
 
 void wxTreeCtrl::UnselectAll()
 {
-    QList<QTreeWidgetItem *> selections = m_qtTreeWidget->selectedItems();
-    const size_t selectedCount = selections.size();
-    for ( size_t i = 0; i < selectedCount; ++i)
-    {
-        selections[i]->setSelected(false);
-    }
+    m_qtTreeWidget->selectionModel()->clearSelection();
 }
 
 void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
@@ -1189,7 +1189,15 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
     }
 
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
-    m_qtTreeWidget->setCurrentItem(qTreeItem, 0, select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
+
+    if (qTreeItem != NULL)
+    {
+        m_qtTreeWidget->select(qTreeItem, select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
+        if ( select && m_qtTreeWidget->selectionMode() == QTreeWidget::SingleSelection )
+        {
+            m_qtTreeWidget->setCurrentItem(qTreeItem);
+        }
+    }
 }
 
 void wxTreeCtrl::SelectChildren(const wxTreeItemId& parent)
@@ -1201,7 +1209,7 @@ void wxTreeCtrl::SelectChildren(const wxTreeItemId& parent)
 
     for ( int i = 0; i < childCount; ++i )
     {
-        qTreeItem->child(i)->setSelected(true);
+         m_qtTreeWidget->select(qTreeItem->child(i),  QItemSelectionModel::Select);
     }
 }
 
