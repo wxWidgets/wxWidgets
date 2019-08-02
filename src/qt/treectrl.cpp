@@ -489,6 +489,11 @@ private:
         EmitEvent(tree_event);
     }
 
+    virtual QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const wxOVERRIDE
+    {
+        return state() == DragSelectingState ? QItemSelectionModel::NoUpdate : QTreeWidget::selectionCommand(index, event);
+    }
+
     virtual void dropEvent(QDropEvent* event) wxOVERRIDE
     {
         endDrag(event->pos());
