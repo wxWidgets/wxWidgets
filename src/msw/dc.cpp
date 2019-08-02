@@ -2440,6 +2440,11 @@ wxSize wxMSWDCImpl::GetPPI() const
     return wxSize(x, y);
 }
 
+double wxMSWDCImpl::GetContentScaleFactor() const
+{
+    return GetPPI().y / 96.0;
+}
+
 // ----------------------------------------------------------------------------
 // DC caching
 // ----------------------------------------------------------------------------
