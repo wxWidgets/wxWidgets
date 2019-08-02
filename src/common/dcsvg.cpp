@@ -450,18 +450,6 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     CalcBoundingBox((wxCoord)(x + h * sin(rad)), (wxCoord)(y + h * cos(rad)));
     CalcBoundingBox((wxCoord)(x + h * sin(rad) + w * cos(rad)), (wxCoord)(y + h * cos(rad) - w * sin(rad)));
 
-    if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
-    {
-        // draw background first
-        // just like DoDrawRectangle except we pass the text color to it and set the border to a 1 pixel wide text background
-        s += wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" "), x, y, w, h);
-        s += wxS("style=\"") + wxBrushString(m_textBackgroundColour);
-        s += wxS("stroke-width:1; ") + wxPenString(m_textBackgroundColour);
-        s += wxString::Format(wxS("\" transform=\"rotate(%s %d %d)\"/>"), NumStr(-angle), x, y);
-        s += wxS("\n");
-        write(s);
-    }
-
     // Create text style string
     wxString fontweight;
     switch (m_font.GetWeight())
@@ -531,20 +519,42 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     const wxArrayString lines = wxSplit(sText, '\n', '\0');
     for (size_t lineNum = 0; lineNum < lines.size(); lineNum++)
     {
+        const int xRect = x + wxRound(lineNum * dx);
+        const int yRect = y + wxRound(lineNum * dy);
+
         // convert x,y to SVG text x,y (the coordinates of the text baseline)
         wxCoord ww, hh, desc;
         wxString const& line = lines[lineNum];
         DoGetTextExtent(line, &ww, &hh, &desc);
-        const int xx = x + wxRound(lineNum * dx) + (hh - desc) * sin(rad);
-        const int yy = y + wxRound(lineNum * dy) + (hh - desc) * cos(rad);
+        const int xText = xRect + (hh - desc) * sin(rad);
+        const int yText = yRect + (hh - desc) * cos(rad);
+
+        if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
+        {
+            // draw text background
+            const wxString rectStyle = wxString::Format(
+                wxS("style=\"%s %s stroke-width:1;\""),
+                wxBrushString(m_textBackgroundColour),
+                wxPenString(m_textBackgroundColour));
+
+            const wxString rectTransform = wxString::Format(
+                wxS("transform=\"rotate(%s %d %d)\""),
+                NumStr(-angle), xRect, yRect);
+
+            s = wxString::Format(
+                wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" %s %s/>\n"),
+                xRect, yRect, ww, hh, rectStyle, rectTransform);
+
+            write(s);
+        }
 
         const wxString transform = wxString::Format(
             wxS("transform=\"rotate(%s %d %d)\""),
-            NumStr(-angle), xx, yy);
+            NumStr(-angle), xText, yText);
 
         s = wxString::Format(
             wxS("  <text x=\"%d\" y=\"%d\" textLength=\"%d\" %s %s>%s</text>\n"),
-            xx, yy, ww, style, transform,
+            xText, yText, ww, style, transform,
 #if wxUSE_MARKUP
             wxMarkupParser::Quote(line)
 #else
