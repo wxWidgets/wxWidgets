@@ -535,11 +535,9 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     const double dx = heightLine * sin(rad);
     const double dy = heightLine * cos(rad);
 
-    // wxS("upper left") and wxS("upper right")
+    // Update bounding box: upper left, upper right, bottom left, bottom right
     CalcBoundingBox(x, y);
     CalcBoundingBox((wxCoord)(x + w * cos(rad)), (wxCoord)(y - h * sin(rad)));
-
-    // wxS("bottom left") and wxS("bottom right")
     CalcBoundingBox((wxCoord)(x + h * sin(rad)), (wxCoord)(y + h * cos(rad)));
     CalcBoundingBox((wxCoord)(x + h * sin(rad) + w * cos(rad)), (wxCoord)(y + h * cos(rad) - w * sin(rad)));
 
@@ -555,73 +553,68 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
         write(s);
     }
 
+    // Create text style string
+    wxString fontstyle;
+    switch (m_font.GetStyle())
+    {
+        case wxFONTSTYLE_MAX:
+            wxFAIL_MSG(wxS("invalid font style value"));
+            wxFALLTHROUGH;
+        case wxFONTSTYLE_NORMAL:
+            fontstyle = wxS("normal");
+            break;
+        case wxFONTSTYLE_ITALIC:
+            fontstyle = wxS("italic");
+            break;
+        case wxFONTSTYLE_SLANT:
+            fontstyle = wxS("oblique");
+            break;
+    }
+
+    wxString textDecoration;
+    if (m_font.GetUnderlined())
+        textDecoration += wxS(" underline");
+    if (m_font.GetStrikethrough())
+        textDecoration += wxS(" line-through");
+    if (textDecoration.IsEmpty())
+        textDecoration = wxS(" none");
+
+    wxString style = wxS("style=\"");
+    style += wxString::Format(wxS("font-family:%s; "), m_font.GetFaceName());
+    style += wxString::Format(wxS("font-weight:%d; "), m_font.GetWeight());
+    style += wxString::Format(wxS("font-style:%s; "), fontstyle);
+    style += wxString::Format(wxS("font-size:%dpt; "), m_font.GetPointSize());
+    style += wxString::Format(wxS("text-decoration:%s; "), textDecoration);
+    style += wxString::Format(wxS("%s %s stroke-width:0; "),
+                              wxBrushString(m_textForegroundColour),
+                              wxPenString(m_textForegroundColour));
+    style += wxS("\"");
+    style += wxS(" xml:space=\"preserve\"");
+
     // Draw all text line by line
     const wxArrayString lines = wxSplit(sText, '\n', '\0');
     for (size_t lineNum = 0; lineNum < lines.size(); lineNum++)
     {
         // convert x,y to SVG text x,y (the coordinates of the text baseline)
         wxCoord ww, hh, desc;
-        DoGetTextExtent(lines[lineNum], &ww, &hh, &desc);
-        int xx = x + wxRound(lineNum * dx) + (hh - desc) * sin(rad);
-        int yy = y + wxRound(lineNum * dy) + (hh - desc) * cos(rad);
+        wxString const& line = lines[lineNum];
+        DoGetTextExtent(line, &ww, &hh, &desc);
+        const int xx = x + wxRound(lineNum * dx) + (hh - desc) * sin(rad);
+        const int yy = y + wxRound(lineNum * dy) + (hh - desc) * cos(rad);
 
-        //now do the text itself
-        s += wxString::Format(wxS("  <text x=\"%d\" y=\"%d\" textLength=\"%d\" "), xx, yy, ww);
+        const wxString transform = wxString::Format(
+            wxS("transform=\"rotate(%s %d %d)\""),
+            NumStr(-angle), xx, yy);
 
-        wxString fontName(m_font.GetFaceName());
-        if (fontName.Len() > 0)
-            s += wxS("style=\"font-family:") + fontName + wxS("; ");
-        else
-            s += wxS("style=\" ");
-
-        wxString fontweight = wxString::Format(wxS("%d"), m_font.GetWeight());
-
-        s += wxS("font-weight:") + fontweight + wxS("; ");
-
-        wxString fontstyle;
-        switch (m_font.GetStyle())
-        {
-            case wxFONTSTYLE_MAX:
-                wxFAIL_MSG(wxS("invalid font style value"));
-                wxFALLTHROUGH;
-
-            case wxFONTSTYLE_NORMAL:
-                fontstyle = wxS("normal");
-                break;
-
-            case wxFONTSTYLE_ITALIC:
-                fontstyle = wxS("italic");
-                break;
-
-            case wxFONTSTYLE_SLANT:
-                fontstyle = wxS("oblique");
-                break;
-        }
-
-        wxASSERT_MSG(!fontstyle.empty(), wxS("unknown font style value"));
-
-        s += wxS("font-style:") + fontstyle + wxS("; ");
-
-        wxString textDecoration;
-        if (m_font.GetUnderlined())
-            textDecoration += wxS(" underline");
-        if (m_font.GetStrikethrough())
-            textDecoration += wxS(" line-through");
-        if (textDecoration.IsEmpty())
-            textDecoration = wxS(" none");
-
-        s += wxS("text-decoration:") + textDecoration + wxS("; ");
-
-        s += wxString::Format(wxS("font-size:%dpt; "), m_font.GetPointSize());
-        //text will be solid, unless alpha value isn't opaque in the foreground colour
-        s += wxBrushString(m_textForegroundColour) + wxPenString(m_textForegroundColour);
-        s += wxString::Format(wxS("stroke-width:0;\" transform=\"rotate(%s %d %d)\""), NumStr(-angle), xx, yy);
-        s += wxS(" xml:space=\"preserve\">");
+        s = wxString::Format(
+            wxS("  <text x=\"%d\" y=\"%d\" textLength=\"%d\" %s %s>%s</text>\n"),
+            xx, yy, ww, style, transform,
 #if wxUSE_MARKUP
-        s += wxMarkupParser::Quote(lines[lineNum]) + wxS("</text>\n");
+            wxMarkupParser::Quote(line)
 #else
-        s += lines[lineNum] + wxS("</text>\n");
+            line
 #endif
+        );
 
         write(s);
     }
