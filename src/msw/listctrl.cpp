@@ -103,9 +103,25 @@ namespace
 inline bool
 wxGetListCtrlSubItemRect(HWND hwnd, int item, int subitem, int flags, RECT& rect)
 {
+    int ret;
     rect.top = subitem;
     rect.left = flags;
-    return ::SendMessage(hwnd, LVM_GETSUBITEMRECT, item, (LPARAM)&rect) != 0;
+    if( flags == LVIR_BOUNDS || flags == LVIR_ICON )
+        ret = ::SendMessage(hwnd, LVM_GETSUBITEMRECT, item, (LPARAM)&rect);
+    else
+    {
+        RECT rectIcon;
+        rectIcon.top = subitem;
+        rectIcon.left = LVIR_ICON;
+        ret = ::SendMessage(hwnd, LVM_GETSUBITEMRECT, item, (LPARAM)&rect);
+        if( ret != 0 )
+        {
+            ret = ::SendMessageA(hwnd, LVM_GETSUBITEMRECT, item, (LPARAM)&rectIcon);
+            if( ret != 0 )
+                rect.left = rectIcon.left + rectIcon.right;
+        }
+    }
+    return ret != 0;
 }
 
 inline bool

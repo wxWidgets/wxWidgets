@@ -1229,13 +1229,6 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
 {
     long item;
 
-    if ( !wxGetKeyState(WXK_SHIFT) )
-    {
-        LogEvent(event, "OnListKeyDown");
-        event.Skip();
-        return;
-    }
-
     switch ( event.GetKeyCode() )
     {
         case 'C': // colorize
@@ -1311,10 +1304,14 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
                     wxLogError("Failed to retrieve rect of item %ld column %d", item, subItem + 1);
                     break;
                 }
-
-                wxLogMessage("Bounding rect of item %ld column %d is (%d, %d)-(%d, %d)",
-                             item, subItem + 1,
-                             r.x, r.y, r.x + r.width, r.y + r.height);
+                wxString message;
+                if( code == wxLIST_RECT_BOUNDS )
+                    message = wxString::Format( "Bounding rect of item %ld column %d is (%d, %d)-(%d, %d)", item, subItem + 1, r.x, r.y, r.x + r.width, r.y + r.height );
+                if( code == wxLIST_RECT_ICON )
+                    message = wxString::Format( "Bounding rect of item icon %ld column %d is (%d, %d)-(%d, %d)", item, subItem + 1, r.x, r.y, r.x + r.width, r.y + r.height );
+                if( code == wxLIST_RECT_LABEL )
+                    message = wxString::Format( "Bounding rect of item label %ld column %d is (%d, %d)-(%d, %d)", item, subItem + 1, r.x, r.y, r.x + r.width, r.y + r.height );
+                wxLogMessage( message );
             }
             break;
 
