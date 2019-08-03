@@ -2425,14 +2425,17 @@ class wxD2DLinearGradientBrushResourceHolder : public wxD2DResourceHolder<ID2D1L
 {
 public:
     struct LinearGradientInfo {
-        const wxRect direction;
+        const wxDouble x1;
+        const wxDouble y1;
+        const wxDouble x2;
+        const wxDouble y2;
         const wxGraphicsGradientStops stops;
         const wxGraphicsMatrix matrix;
-        LinearGradientInfo(wxDouble& x1, wxDouble& y1, 
-                           wxDouble& x2, wxDouble& y2, 
+        LinearGradientInfo(wxDouble& x1_, wxDouble& y1_, 
+                           wxDouble& x2_, wxDouble& y2_, 
                            const wxGraphicsGradientStops& stops_,
                            const wxGraphicsMatrix& matrix_)
-            : direction(x1, y1, x2, y2), stops(stops_), matrix(matrix_) {}
+            : x1(x1_), y1(y1_), x2(x2_), y2(y2_), stops(stops_), matrix(matrix_) {}
     };
 
     wxD2DLinearGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1, 
@@ -2449,8 +2452,8 @@ protected:
 
         HRESULT hr = GetContext()->CreateLinearGradientBrush(
             D2D1::LinearGradientBrushProperties(
-                D2D1::Point2F(m_linearGradientInfo.direction.GetX(), m_linearGradientInfo.direction.GetY()),
-                D2D1::Point2F(m_linearGradientInfo.direction.GetWidth(), m_linearGradientInfo.direction.GetHeight())),
+                D2D1::Point2F(m_linearGradientInfo.x1, m_linearGradientInfo.y1),
+                D2D1::Point2F(m_linearGradientInfo.x2, m_linearGradientInfo.y2)),
             helper.GetGradientStopCollection(),
             &linearGradientBrush);
         wxCHECK_HRESULT_RET(hr);
@@ -2471,17 +2474,20 @@ class wxD2DRadialGradientBrushResourceHolder : public wxD2DResourceHolder<ID2D1R
 {
 public:
     struct RadialGradientInfo {
-        const wxRect direction;
+        const wxDouble x1;
+        const wxDouble y1;
+        const wxDouble x2;
+        const wxDouble y2;
         const wxDouble radius;
         const wxGraphicsGradientStops stops;
         const wxGraphicsMatrix matrix;
 
-        RadialGradientInfo(wxDouble x1, wxDouble y1, 
-                           wxDouble x2, wxDouble y2, 
+        RadialGradientInfo(wxDouble x1_, wxDouble y1_, 
+                           wxDouble x2_, wxDouble y2_, 
                            wxDouble r, 
                            const wxGraphicsGradientStops& stops_,
                            const wxGraphicsMatrix& matrix_)
-            : direction(x1, y1, x2, y2), radius(r), stops(stops_), matrix(matrix_) {}
+            : x1(x1_), y1(y1_), x2(x2_), y2(y2_), radius(r), stops(stops_), matrix(matrix_) {}
     };
 
     wxD2DRadialGradientBrushResourceHolder(wxDouble& x1, wxDouble& y1, 
@@ -2497,12 +2503,13 @@ protected:
         wxD2DGradientStopsHelper helper(m_radialGradientInfo.stops, GetContext());
         ID2D1RadialGradientBrush *radialGradientBrush;
 
-        int xo = m_radialGradientInfo.direction.GetLeft() - m_radialGradientInfo.direction.GetWidth();
-        int yo = m_radialGradientInfo.direction.GetTop() - m_radialGradientInfo.direction.GetHeight();
+        // TODO: double check this. The other backends just use the passed in values for xo, yo
+        wxDouble xo = m_radialGradientInfo.x1 - m_radialGradientInfo.x2;
+        wxDouble yo = m_radialGradientInfo.y1 - m_radialGradientInfo.y2;
 
         HRESULT hr = GetContext()->CreateRadialGradientBrush(
             D2D1::RadialGradientBrushProperties(
-                D2D1::Point2F(m_radialGradientInfo.direction.GetLeft(), m_radialGradientInfo.direction.GetTop()),
+                D2D1::Point2F(m_radialGradientInfo.x1, m_radialGradientInfo.y1),
                 D2D1::Point2F(xo, yo),
                 m_radialGradientInfo.radius, m_radialGradientInfo.radius),
             helper.GetGradientStopCollection(),
