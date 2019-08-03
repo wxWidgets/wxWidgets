@@ -1243,7 +1243,7 @@ void FormMain::PopulateWithExamples ()
     pg->Append( prop );
 
     prop->SetAttribute(wxPG_FILE_WILDCARD,"Text Files (*.txt)|*.txt");
-    prop->SetAttribute(wxPG_FILE_DIALOG_TITLE,"Custom File Dialog Title");
+    prop->SetAttribute(wxPG_DIALOG_TITLE,"Custom File Dialog Title");
     prop->SetAttribute(wxPG_FILE_SHOW_FULL_PATH,false);
 
 #ifdef __WXMSW__
@@ -1359,8 +1359,8 @@ void FormMain::PopulateWithExamples ()
     // is allowed (naturally, in this case property cannot be accessed by name).
     pg->Append( new wxDirProperty( "DirProperty", wxPG_LABEL, ::wxGetUserHome()) );
     pg->SetPropertyAttribute( "DirProperty",
-                              wxPG_DIR_DIALOG_MESSAGE,
-                              "This is a custom dir dialog message" );
+                              wxPG_DIALOG_TITLE,
+                              "This is a custom dir dialog title" );
 
     // Add string property - first arg is label, second name, and third initial value
     pg->Append( new wxStringProperty ( "StringProperty", wxPG_LABEL ) );

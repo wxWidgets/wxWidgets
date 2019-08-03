@@ -129,6 +129,13 @@ struct wxPGPaintData
 */
 #define wxPG_UINT_PREFIX                    wxS("Prefix")
 
+/** Built-in attribute specific to wxEditorDialogProperty and derivatives,
+    wxString, default is empty. Sets a specific title for the editor dialog.
+
+    @since 3.1.3
+*/
+#define wxPG_DIALOG_TITLE                   wxS("DialogTitle")
+
 /** wxFileProperty and wxImageFileProperty specific built-in attribute,
     @c wxChar*, default is detected/varies. Sets the wildcard used in
     the triggered wxFileDialog. Format is the same.
@@ -152,11 +159,6 @@ struct wxPGPaintData
 */
 #define wxPG_FILE_INITIAL_PATH              wxS("InitialPath")
 
-/** Built-in attribute specific to wxFileProperty and derivatives, wxString,
-    default is empty. Sets a specific title for the dir dialog.
-*/
-#define wxPG_FILE_DIALOG_TITLE              wxS("DialogTitle")
-
 /** Built-in attribute specific to wxFileProperty and derivatives, @c long,
     default is 0. Sets a specific wxFileDialog style for the file dialog,
     e.g. ::wxFD_SAVE.
@@ -164,11 +166,6 @@ struct wxPGPaintData
     @since 2.9.4
 */
 #define wxPG_FILE_DIALOG_STYLE              wxS("DialogStyle")
-
-/** Built-in attribute specific to wxDirProperty, wxString, default is empty.
-    Sets a specific message for the dir dialog.
-*/
-#define wxPG_DIR_DIALOG_MESSAGE             wxS("DialogMessage")
 
 /**
     Built-in attribute to set wxArrayStringProperty's string delimiter
@@ -615,12 +612,15 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
         m_flags |= wxPG_PROP_NO_ESCAPE;
     @endcode
 
+    Supported special attributes:
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the text editor dialog.
+
     @subsection wxDirProperty
 
     Like wxLongStringProperty, but the button triggers dir selector instead.
 
     Supported special attributes:
-    - ::wxPG_DIR_DIALOG_MESSAGE: Sets specific message in the dir selector.
+    - ::wxPG_DIALOG_TITLE: Sets specific title for the dir selector.
     @see @ref propgrid_property_attributes
 
     @subsection wxFileProperty
@@ -630,6 +630,8 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     ::wxPG_FILE_WILDCARD attribute.
 
     Supported special attributes:
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the file dialog.
+    - ::wxPG_FILE_DIALOG_STYLE: Sets a specific wxFileDialog style for the file dialog.
     - ::wxPG_FILE_WILDCARD: Sets wildcard (see wxFileDialog for format details), "All
     files..." is default.
     - ::wxPG_FILE_SHOW_FULL_PATH: Default @true. When @false, only the file name is shown
@@ -637,8 +639,6 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     - ::wxPG_FILE_SHOW_RELATIVE_PATH: If set, then the filename is shown relative to the
     given path string.
     - ::wxPG_FILE_INITIAL_PATH: Sets the initial path of where to look for files.
-    - ::wxPG_FILE_DIALOG_TITLE: Sets a specific title for the dir dialog.
-    - ::wxPG_FILE_DIALOG_STYLE: Sets a specific wxFileDialog style for the file dialog.
     @see @ref propgrid_property_attributes
 
     @subsection wxEnumProperty
@@ -666,6 +666,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     Supported special attributes:
     - ::wxPG_ARRAY_DELIMITER: Sets string delimiter character.
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the editor dialog.
     Default is comma (',').
     @see @ref propgrid_property_attributes
 
@@ -702,6 +703,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     enter strings that are not in the list of choices. If this value is 1,
     user strings are preferably placed in front of valid choices. If value
     is 2, then those strings will placed behind valid choices.
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the editor dialog.
     @see @ref propgrid_property_attributes
 
     @subsection wxImageFileProperty
@@ -709,6 +711,18 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
     Property representing image file(name). Like wxFileProperty,
     but has thumbnail of the image in front of the filename
     and autogenerates wildcard from available image handlers.
+
+    Supported special attributes:
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the file dialog.
+    - ::wxPG_FILE_DIALOG_STYLE: Sets a specific wxFileDialog style for the file dialog.
+    - ::wxPG_FILE_WILDCARD: Sets wildcard (see wxFileDialog for format details), "All
+    files..." is default.
+    - ::wxPG_FILE_SHOW_FULL_PATH: Default @true. When @false, only the file name is shown
+    (i.e. drive and directory are hidden).
+    - ::wxPG_FILE_SHOW_RELATIVE_PATH: If set, then the filename is shown relative to the
+    given path string.
+    - ::wxPG_FILE_INITIAL_PATH: Sets the initial path of where to look for files.
+    @see @ref propgrid_property_attributes
 
     @subsection wxColourProperty
 
@@ -727,6 +741,9 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 
     Represents wxFont. Various sub-properties are used to edit individual
     subvalues.
+
+    Supported special attributes:
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the font dialog.
 
     @subsection wxSystemColourProperty
 

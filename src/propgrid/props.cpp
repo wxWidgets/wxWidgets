@@ -1938,6 +1938,7 @@ bool wxDirProperty::DisplayEditorDialog(wxPropertyGrid* pg, wxVariant& value)
     return false;
 }
 
+#if WXWIN_COMPATIBILITY_3_0
 bool wxDirProperty::DoSetAttribute(const wxString& name, wxVariant& value)
 {
     if ( name == wxPG_DIR_DIALOG_MESSAGE )
@@ -1947,6 +1948,7 @@ bool wxDirProperty::DoSetAttribute(const wxString& name, wxVariant& value)
     }
     return wxEditorDialogProperty::DoSetAttribute(name, value);
 }
+#endif // WXWIN_COMPATIBILITY_3_0
 
 // -----------------------------------------------------------------------
 // wxPGDialogAdapter
@@ -1998,6 +2000,16 @@ wxEditorDialogProperty::~wxEditorDialogProperty()
 wxPGEditorDialogAdapter* wxEditorDialogProperty::GetEditorDialog() const
 {
     return new wxPGDialogAdapter();
+}
+
+bool wxEditorDialogProperty::DoSetAttribute(const wxString& name, wxVariant& value)
+{
+    if ( name == wxPG_DIALOG_TITLE )
+    {
+        m_dlgTitle = value.GetString();
+        return true;
+    }
+    return wxPGProperty::DoSetAttribute(name, value);
 }
 
 // -----------------------------------------------------------------------
@@ -2184,11 +2196,13 @@ bool wxFileProperty::DoSetAttribute( const wxString& name, wxVariant& value )
         m_initialPath = value.GetString();
         return true;
     }
+#if WXWIN_COMPATIBILITY_3_0
     else if ( name == wxPG_FILE_DIALOG_TITLE )
     {
         m_dlgTitle = value.GetString();
         return true;
     }
+#endif // WXWIN_COMPATIBILITY_3_0
     else if ( name == wxPG_FILE_DIALOG_STYLE )
     {
         m_dlgStyle = value.GetLong();

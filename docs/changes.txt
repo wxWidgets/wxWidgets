@@ -146,6 +146,7 @@ All (GUI):
 - Allow changing tooltip text for button allowing to enter a new string
   in wxPGArrayEditorDialog.
 - Fix wxPropertyGrid issues with horizontal scrolling.
+- Add wxPG_DIALOG_TITLE wxPGProperty attribute.
 
 wxGTK:
 
