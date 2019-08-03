@@ -38,8 +38,6 @@ wxAcceleratorTable wxNullAcceleratorTable;
 // wxAcceleratorEntry implementation
 // ============================================================================
 
-wxGCC_WARNING_SUPPRESS(missing-field-initializers)
-
 static const struct wxKeyName
 {
     wxKeyCode code;
@@ -47,42 +45,42 @@ static const struct wxKeyName
     const char *display_name;
 } wxKeyNames[] =
 {
-    { WXK_DELETE,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Delete") },
-    { WXK_DELETE,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Del") },
+    { WXK_DELETE,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Delete"),        /*Display is the same as key name*/ 0 },
+    { WXK_DELETE,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Del"),           /*Display is the same as key name*/ 0 },
     { WXK_BACK,             /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Back"),          /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Backspace") },
-    { WXK_INSERT,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Insert") },
-    { WXK_INSERT,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Ins") },
-    { WXK_RETURN,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Enter") },
-    { WXK_RETURN,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Return") },
+    { WXK_INSERT,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Insert"),        /*Display is the same as key name*/ 0 },
+    { WXK_INSERT,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Ins"),           /*Display is the same as key name*/ 0 },
+    { WXK_RETURN,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Enter"),         /*Display is the same as key name*/ 0 },
+    { WXK_RETURN,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Return"),        /*Display is the same as key name*/ 0 },
     { WXK_PAGEUP,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("PageUp"),        /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Page Up") },
     { WXK_PAGEDOWN,         /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("PageDown"),      /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Page Down") },
-    { WXK_PAGEUP,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("PgUp") },
-    { WXK_PAGEDOWN,         /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("PgDn") },
+    { WXK_PAGEUP,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("PgUp"),          /*Display is the same as key name*/ 0 },
+    { WXK_PAGEDOWN,         /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("PgDn"),          /*Display is the same as key name*/ 0 },
     { WXK_LEFT,             /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Left"),          /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Left") },
     { WXK_RIGHT,            /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Right"),         /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Right") },
     { WXK_UP,               /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Up"),            /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Up") },
     { WXK_DOWN,             /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Down"),          /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Down") },
-    { WXK_HOME,             /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Home") },
-    { WXK_END,              /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("End") },
-    { WXK_SPACE,            /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Space") },
-    { WXK_TAB,              /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Tab") },
-    { WXK_ESCAPE,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Esc") },
-    { WXK_ESCAPE,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Escape") },
-    { WXK_CANCEL,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Cancel") },
-    { WXK_CLEAR,            /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Clear") },
-    { WXK_MENU,             /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Menu") },
-    { WXK_PAUSE,            /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Pause") },
-    { WXK_CAPITAL,          /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Capital") },
-    { WXK_SELECT,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Select") },
-    { WXK_PRINT,            /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Print") },
-    { WXK_EXECUTE,          /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Execute") },
-    { WXK_SNAPSHOT,         /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Snapshot") },
-    { WXK_HELP,             /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Help") },
-    { WXK_ADD,              /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Add") },
-    { WXK_SEPARATOR,        /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Separator") },
-    { WXK_SUBTRACT,         /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Subtract") },
-    { WXK_DECIMAL,          /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Decimal") },
-    { WXK_DIVIDE,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Divide") },
+    { WXK_HOME,             /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Home"),          /*Display is the same as key name*/ 0 },
+    { WXK_END,              /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("End"),           /*Display is the same as key name*/ 0 },
+    { WXK_SPACE,            /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Space"),         /*Display is the same as key name*/ 0 },
+    { WXK_TAB,              /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Tab"),           /*Display is the same as key name*/ 0 },
+    { WXK_ESCAPE,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Esc"),           /*Display is the same as key name*/ 0 },
+    { WXK_ESCAPE,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Escape"),        /*Display is the same as key name*/ 0 },
+    { WXK_CANCEL,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Cancel"),        /*Display is the same as key name*/ 0 },
+    { WXK_CLEAR,            /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Clear"),         /*Display is the same as key name*/ 0 },
+    { WXK_MENU,             /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Menu"),          /*Display is the same as key name*/ 0 },
+    { WXK_PAUSE,            /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Pause"),         /*Display is the same as key name*/ 0 },
+    { WXK_CAPITAL,          /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Capital"),       /*Display is the same as key name*/ 0 },
+    { WXK_SELECT,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Select"),        /*Display is the same as key name*/ 0 },
+    { WXK_PRINT,            /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Print"),         /*Display is the same as key name*/ 0 },
+    { WXK_EXECUTE,          /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Execute"),       /*Display is the same as key name*/ 0 },
+    { WXK_SNAPSHOT,         /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Snapshot"),      /*Display is the same as key name*/ 0 },
+    { WXK_HELP,             /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Help"),          /*Display is the same as key name*/ 0 },
+    { WXK_ADD,              /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Add"),           /*Display is the same as key name*/ 0 },
+    { WXK_SEPARATOR,        /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Separator"),     /*Display is the same as key name*/ 0 },
+    { WXK_SUBTRACT,         /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Subtract"),      /*Display is the same as key name*/ 0 },
+    { WXK_DECIMAL,          /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Decimal"),       /*Display is the same as key name*/ 0 },
+    { WXK_DIVIDE,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Divide"),        /*Display is the same as key name*/ 0 },
     { WXK_NUMLOCK,          /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Num_lock"),      /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Num Lock") },
     { WXK_SCROLL,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Scroll_lock"),   /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Scroll Lock") },
     { WXK_NUMPAD_SPACE,     /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("KP_Space"),      /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Num Space") },
@@ -95,8 +93,8 @@ static const struct wxKeyName
     { WXK_NUMPAD_DOWN,      /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("KP_Down"),       /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Num Down") },
     { WXK_NUMPAD_PAGEUP,    /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("KP_PageUp"),     /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Num Page Up") },
     { WXK_NUMPAD_PAGEDOWN,  /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("KP_PageDown"),   /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Num Page Down") },
-    { WXK_NUMPAD_PAGEUP,    /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("KP_Prior") },
-    { WXK_NUMPAD_PAGEDOWN,  /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("KP_Next") },
+    { WXK_NUMPAD_PAGEUP,    /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("KP_Prior"),      /*Display is the same as key name*/ 0 },
+    { WXK_NUMPAD_PAGEDOWN,  /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("KP_Next"),       /*Display is the same as key name*/ 0 },
     { WXK_NUMPAD_END,       /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("KP_End"),        /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Num End") },
     { WXK_NUMPAD_BEGIN,     /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("KP_Begin"),      /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Num Begin") },
     { WXK_NUMPAD_INSERT,    /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("KP_Insert"),     /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Num Insert") },
@@ -108,13 +106,12 @@ static const struct wxKeyName
     { WXK_NUMPAD_SUBTRACT,  /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("KP_Subtract"),   /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Num -") },
     { WXK_NUMPAD_DECIMAL,   /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("KP_Decimal"),    /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Num .") },
     { WXK_NUMPAD_DIVIDE,    /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("KP_Divide"),     /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Num /") },
-    { WXK_WINDOWS_LEFT,     /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Windows_Left") },
-    { WXK_WINDOWS_RIGHT,    /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Windows_Right") },
-    { WXK_WINDOWS_MENU,     /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Windows_Menu") },
-    { WXK_COMMAND,          /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Command") },
+    { WXK_WINDOWS_LEFT,     /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Windows_Left"),  /*Display is the same as key name*/ 0 },
+    { WXK_WINDOWS_RIGHT,    /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Windows_Right"), /*Display is the same as key name*/ 0 },
+    { WXK_WINDOWS_MENU,     /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Windows_Menu"),  /*Display is the same as key name*/ 0 },
+    { WXK_COMMAND,          /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Command"),       /*Display is the same as key name*/ 0 },
 };
 
-wxGCC_WARNING_RESTORE(missing-field-initializers)
 
 // return true if the 2 strings refer to the same accel
 //
@@ -253,7 +250,8 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
                 for ( size_t n = 0; n < WXSIZEOF(wxKeyNames); n++ )
                 {
                     const wxKeyName& kn = wxKeyNames[n];
-                    if ( CompareAccelString(current, kn.name) )
+                    if ( CompareAccelString(current, kn.name)
+                         || ( kn.display_name && CompareAccelString(current, kn.display_name) ) )
                     {
                         keyCode = kn.code;
                         break;
