@@ -43,6 +43,8 @@ environment:
 
 clone_depth: 50
 
+image: Previous Visual Studio 2017
+
 install: git submodule update --init
 
 init:
