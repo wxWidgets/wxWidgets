@@ -106,20 +106,15 @@ wxGetListCtrlSubItemRect(HWND hwnd, int item, int subitem, int flags, RECT& rect
     int ret;
     rect.top = subitem;
     rect.left = flags;
-    if( flags == LVIR_BOUNDS || flags == LVIR_ICON )
-        ret = ::SendMessage(hwnd, LVM_GETSUBITEMRECT, item, (LPARAM)&rect);
-    else
+    ret = ::SendMessage(hwnd, LVM_GETSUBITEMRECT, item, (LPARAM)&rect);
+    if( flags == LVIR_LABEL && ret != 0 )
     {
         RECT rectIcon;
         rectIcon.top = subitem;
         rectIcon.left = LVIR_ICON;
-        ret = ::SendMessage(hwnd, LVM_GETSUBITEMRECT, item, (LPARAM)&rect);
+        ret = ::SendMessageA(hwnd, LVM_GETSUBITEMRECT, item, (LPARAM)&rectIcon);
         if( ret != 0 )
-        {
-            ret = ::SendMessageA(hwnd, LVM_GETSUBITEMRECT, item, (LPARAM)&rectIcon);
-            if( ret != 0 )
-                rect.left = rectIcon.left + rectIcon.right;
-        }
+            rect.left = rectIcon.right;
     }
     return ret != 0;
 }
