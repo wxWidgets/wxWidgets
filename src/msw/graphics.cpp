@@ -752,7 +752,7 @@ wxGDIPlusPenBrushBaseData::CreateLinearGradientBrush(
     wxDouble x1, wxDouble y1,
     wxDouble x2, wxDouble y2,
     const wxGraphicsGradientStops& stops,
-    const wxGraphicsMatrix& WXUNUSED(matrix))
+    const wxGraphicsMatrix& matrix)
 {
     LinearGradientBrush * const
         brush = new LinearGradientBrush(PointF(x1, y1) , PointF(x2, y2),
@@ -762,14 +762,13 @@ wxGDIPlusPenBrushBaseData::CreateLinearGradientBrush(
     // Tell the brush how to draw what's beyond the ends of the gradient
     brush->SetWrapMode(WrapModeTileFlipXY);
 
-    // Apply the matrix
-    // This doesn't work as I expected it to. Comment-out for now...
-    // FIXME
-    // if (! matrix.IsNull())
-    // {
-    //     const Matrix* m = static_cast<const Matrix*>(matrix.GetNativeMatrix());
-    //     brush->SetTransform(m);
-    // }
+    // Apply the matrix if there is one
+    if (! matrix.IsNull())
+    {
+        Matrix* m = static_cast<Matrix*>(matrix.GetNativeMatrix());
+        m->Invert();
+        brush->MultiplyTransform(m);
+    }
 
     SetGradientStops(brush, stops);
     m_brush = brush;    
@@ -781,7 +780,7 @@ wxGDIPlusPenBrushBaseData::CreateRadialGradientBrush(
     wxDouble xc, wxDouble yc,
     wxDouble radius,
     const wxGraphicsGradientStops& stops,
-    const wxGraphicsMatrix& WXUNUSED(matrix))
+    const wxGraphicsMatrix& matrix)
 {
     m_brushPath = new GraphicsPath();
     m_brushPath->AddEllipse( (REAL)(xc-radius), (REAL)(yc-radius),
@@ -795,14 +794,16 @@ wxGDIPlusPenBrushBaseData::CreateRadialGradientBrush(
     int count = 1;
     brush->SetSurroundColors(&col, &count);
 
-    // Apply the matrix
-    // This doesn't work as I expected it to. Comment-out for now...
-    // FIXME
-    // if (! matrix.IsNull())
-    // {
-    //     const Matrix* m = static_cast<const Matrix*>(matrix.GetNativeMatrix());
-    //     brush->SetTransform(m);
-    // }
+    // TODO: There doesn't seem to be an equivallent for SetWrapMode, so
+    // the area outside of the gradient's radius is not getting painted. 
+
+    // Apply the matrix if there is one
+    if (! matrix.IsNull())
+    {
+        Matrix* m = static_cast<Matrix*>(matrix.GetNativeMatrix());
+        m->Invert();
+        brush->SetTransform(m);
+    }
 
     // Because the GDI+ API draws radial gradients from outside towards the
     // center we have to reverse the order of the gradient stops.
