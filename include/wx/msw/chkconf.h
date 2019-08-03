@@ -444,6 +444,14 @@
 #           define wxUSE_FSWATCHER 0
 #       endif
 #   endif
+#   if wxUSE_JOYSTICK
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxJoystick requires wxThread under MSW"
+#       else
+#           undef wxUSE_JOYSTICK
+#           define wxUSE_JOYSTICK 0
+#       endif
+#   endif
 #endif /* !wxUSE_THREADS */
 
 
