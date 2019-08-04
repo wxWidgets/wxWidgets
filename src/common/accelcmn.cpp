@@ -80,6 +80,7 @@ static const struct wxKeyName
     { WXK_SEPARATOR,        /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Separator"),     /*Display is the same as key name*/ 0 },
     { WXK_SUBTRACT,         /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Subtract"),      /*Display is the same as key name*/ 0 },
     { WXK_DECIMAL,          /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Decimal"),       /*Display is the same as key name*/ 0 },
+    { WXK_MULTIPLY,         /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Multiply"),      /*Display is the same as key name*/ 0 },
     { WXK_DIVIDE,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Divide"),        /*Display is the same as key name*/ 0 },
     { WXK_NUMLOCK,          /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Num_lock"),      /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Num Lock") },
     { WXK_SCROLL,           /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Scroll_lock"),   /*TRANSLATORS: Name of keyboard key*/ wxTRANSLATE("Scroll Lock") },
@@ -179,7 +180,8 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
     wxString current;
     for ( size_t n = (size_t)posTab; n < label.length(); n++ )
     {
-        if ( (label[n] == '+') || (label[n] == '-') )
+        bool skip = false;
+        if ( !skip && ( (label[n] == '+') || (label[n] == '-') ) )
         {
             if ( CompareAccelString(current, wxTRANSLATE("ctrl")) )
                 accelFlags |= wxACCEL_CTRL;
@@ -189,6 +191,16 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
                 accelFlags |= wxACCEL_SHIFT;
             else if ( CompareAccelString(current, wxTRANSLATE("rawctrl")) )
                 accelFlags |= wxACCEL_RAW_CTRL;
+            else if ( CompareAccelString(current, wxTRANSLATE("num ")) )
+            {
+                // This isn't really a modifier, but is part of the name of keys
+                // that have a =/- in them (e.g. num + and num -)
+                // So we want to skip the processing if we see it
+                skip = true;
+                current += label[n];
+
+                continue;
+            }
             else // not a recognized modifier name
             {
                 // we may have "Ctrl-+", for example, but we still want to
@@ -213,7 +225,8 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
         }
         else // not special character
         {
-            current += (wxChar) wxTolower(label[n]);
+            // Preserve case of the key (see comment below)
+            current += label[n];
         }
     }
 
@@ -244,7 +257,7 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
 
         default:
             keyCode = IsNumberedAccelKey(current, wxTRANSLATE("F"),
-                                         WXK_F1, 1, 12);
+                                         WXK_F1, 1, 24);
             if ( !keyCode )
             {
                 for ( size_t n = 0; n < WXSIZEOF(wxKeyNames); n++ )
@@ -259,6 +272,9 @@ wxAcceleratorEntry::ParseAccel(const wxString& text, int *flagsOut, int *keyOut)
                 }
             }
 
+            if ( !keyCode )
+                keyCode = IsNumberedAccelKey(current, wxTRANSLATE("KP_F"),
+                                             WXK_NUMPAD_F1, 1, 4);
             if ( !keyCode )
                 keyCode = IsNumberedAccelKey(current, wxTRANSLATE("KP_"),
                                              WXK_NUMPAD0, 0, 9);
@@ -338,9 +354,12 @@ wxString wxAcceleratorEntry::AsPossiblyLocalizedString(bool localized) const
 
     const int code = GetKeyCode();
 
-    if ( code >= WXK_F1 && code <= WXK_F12 )
+    if ( code >= WXK_F1 && code <= WXK_F24 )
         text << PossiblyLocalize(wxTRANSLATE("F"), localized)
              << code - WXK_F1 + 1;
+    else if ( code >= WXK_NUMPAD_F1 && code <= WXK_NUMPAD_F4 )
+        text << PossiblyLocalize(wxTRANSLATE("KP_F"), localized)
+             << code - WXK_NUMPAD_F1 + 1;
     else if ( code >= WXK_NUMPAD0 && code <= WXK_NUMPAD9 )
         text << PossiblyLocalize(wxTRANSLATE("KP_"), localized)
              << code - WXK_NUMPAD0;
