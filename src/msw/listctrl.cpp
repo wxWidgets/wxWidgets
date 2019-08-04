@@ -103,20 +103,9 @@ namespace
 inline bool
 wxGetListCtrlSubItemRect(HWND hwnd, int item, int subitem, int flags, RECT& rect)
 {
-    int ret;
     rect.top = subitem;
     rect.left = flags;
-    ret = ::SendMessage(hwnd, LVM_GETSUBITEMRECT, item, (LPARAM)&rect);
-    if( flags == LVIR_LABEL && ret != 0 )
-    {
-        RECT rectIcon;
-        rectIcon.top = subitem;
-        rectIcon.left = LVIR_ICON;
-        ret = ::SendMessageA(hwnd, LVM_GETSUBITEMRECT, item, (LPARAM)&rectIcon);
-        if( ret != 0 )
-            rect.left = rectIcon.right;
-    }
-    return ret != 0;
+    return ::SendMessage(hwnd, LVM_GETSUBITEMRECT, item, (LPARAM)&rect) != 0;
 }
 
 inline bool
@@ -1228,6 +1217,16 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
           ) )
     {
         return false;
+    }
+    if( code == wxLIST_RECT_LABEL )
+    {
+        RECT rectIcon;
+        rectIcon.top = subItem;
+        rectIcon.left = LVIR_ICON;
+        if( !( ::SendMessageA(GetHwnd(), LVM_GETSUBITEMRECT, item, (LPARAM)&rectIcon) ) )
+            return false;
+		else
+            rectWin.left = rectIcon.right;
     }
 
     wxCopyRECTToRect(rectWin, rect);

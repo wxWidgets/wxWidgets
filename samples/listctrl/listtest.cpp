@@ -1229,6 +1229,12 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
 {
     long item;
 
+    if ( !wxGetKeyState(WXK_SHIFT) )
+    {
+        LogEvent(event, "OnListKeyDown");
+        event.Skip();
+    }
+
     switch ( event.GetKeyCode() )
     {
         case 'C': // colorize
