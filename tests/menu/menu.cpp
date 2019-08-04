@@ -632,6 +632,10 @@ namespace
         { wxACCEL_SHIFT,  "Shift",  false },
         { wxACCEL_ALT,    "Alt",    false }
     };
+    /*
+     The keys marked as skip below are not supported as accelerator
+     keys on GTK.
+     */
     std::vector<key> specialKeys =
     {
         { WXK_F1,               "WXK_F1",               false },
@@ -670,7 +674,7 @@ namespace
         { WXK_END,              "WXK_END",              false },
         { WXK_RETURN,           "WXK_RETURN",           false },
         { WXK_BACK,             "WXK_BACK",             false },
-        { WXK_TAB,              "WXK_TAB",              false },
+        { WXK_TAB,              "WXK_TAB",              true },
         { WXK_ESCAPE,           "WXK_ESCAPE",           false },
         { WXK_SPACE,            "WXK_SPACE",            false },
         { WXK_MULTIPLY,         "WXK_MULTIPLY",         false },
@@ -690,7 +694,7 @@ namespace
         { WXK_SNAPSHOT,         "WXK_SNAPSHOT",         true },
         { WXK_HELP,             "WXK_HELP",             false },
         { WXK_NUMLOCK,          "WXK_NUMLOCK",          false },
-        { WXK_SCROLL,           "WXK_SCROLL",           false },
+        { WXK_SCROLL,           "WXK_SCROLL",           true },
         { WXK_NUMPAD_INSERT,    "WXK_NUMPAD_INSERT",    false },
         { WXK_NUMPAD_DELETE,    "WXK_NUMPAD_DELETE",    false },
         { WXK_NUMPAD_SPACE,     "WXK_NUMPAD_SPACE",     false },
