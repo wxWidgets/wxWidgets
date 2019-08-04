@@ -665,7 +665,7 @@ void wxMenuItem::SetGtkLabel()
     guint accel_key;
     GdkModifierType accel_mods;
     wxGetGtkAccel(this, &accel_key, &accel_mods);
-    if (accel_key)
+    if ( accel_key && gtk_accelerator_valid( accel_key, accel_mods ) )
     {
         gtk_widget_add_accelerator(
             m_menuItem, "activate", GetRootParentMenu(m_parentMenu)->m_accel,
@@ -673,7 +673,7 @@ void wxMenuItem::SetGtkLabel()
     }
     else
     {
-        // Remove the accelerator since it couldn't be made
+        // Remove the accelerator since it couldn't be made or is invalid
         m_text = m_text.BeforeFirst( wxT( '\t' ) );
     }
 #endif // wxUSE_ACCEL
