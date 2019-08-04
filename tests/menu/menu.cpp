@@ -746,10 +746,12 @@ TEST_CASE( "wxMenuItemAccelEntry", "[menu][accelentry]" )
 
     SECTION( "Modifier keys" )
     {
-        for( auto key : modKeys )
+        std::vector<key>::iterator k;
+
+        for( k = modKeys.begin(); k < modKeys.end(); k++ )
         {
-            INFO( wxString::Format( "Modifier: %s",  key.name ) );
-            wxAcceleratorEntry accelEntry( key.keycode, 'A' , wxID_ANY, item );
+            INFO( wxString::Format( "Modifier: %s",  k->name ) );
+            wxAcceleratorEntry accelEntry( k->keycode, 'A' , wxID_ANY, item );
             item->SetAccel( &accelEntry );
 
             wxString labelText = item->GetItemLabel();
@@ -761,19 +763,21 @@ TEST_CASE( "wxMenuItemAccelEntry", "[menu][accelentry]" )
 
     SECTION( "Special keys" )
     {
-        for( auto key : specialKeys )
+        std::vector<key>::iterator k;
+
+        for( k = specialKeys.begin(); k < specialKeys.end(); k++ )
         {
-            if( key.skip )
+            if( k->skip )
                 continue;
 
-            INFO( wxString::Format( "Keycode: %s",  key.name ) );
-            wxAcceleratorEntry accelEntry( wxACCEL_CTRL, key.keycode, wxID_ANY, item );
+            INFO( wxString::Format( "Keycode: %s",  k->name ) );
+            wxAcceleratorEntry accelEntry( wxACCEL_CTRL, k->keycode, wxID_ANY, item );
             item->SetAccel( &accelEntry );
 
             wxString labelText = item->GetItemLabel();
             INFO( wxString::Format( "Label text: %s", labelText ) );
 
-            verifyAccelAssigned( labelText, key.keycode );
+            verifyAccelAssigned( labelText, k->keycode );
         }
     }
 }
