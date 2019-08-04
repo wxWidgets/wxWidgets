@@ -671,6 +671,11 @@ void wxMenuItem::SetGtkLabel()
             m_menuItem, "activate", GetRootParentMenu(m_parentMenu)->m_accel,
             accel_key, accel_mods, GTK_ACCEL_VISIBLE);
     }
+    else
+    {
+        // Remove the accelerator since it couldn't be made
+        m_text = m_text.BeforeFirst( wxT( '\t' ) );
+    }
 #endif // wxUSE_ACCEL
 }
 
@@ -1066,7 +1071,7 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 // TODO: we should use gdk_keyval_name() (a.k.a.
                 //       XKeysymToString) here as well as hardcoding the keysym
                 //       names this might be not portable
-           case WXK_INSERT:
+            case WXK_INSERT:
                 hotkey << wxT("Insert" );
                 break;
             case WXK_DELETE:
@@ -1106,13 +1111,13 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 hotkey << wxT("Tab" );
                 break;
             case WXK_ESCAPE:
-                hotkey << wxT("Esc" );
+                hotkey << wxT("Escape" );
                 break;
             case WXK_SPACE:
                 hotkey << wxT("space" );
                 break;
             case WXK_MULTIPLY:
-                hotkey << wxT("Multiply" );
+                hotkey << wxT("multiply" );
                 break;
             case WXK_ADD:
                 hotkey << wxT("Add" );
