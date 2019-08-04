@@ -401,7 +401,7 @@ public:
     bool IsVirtual() const { return HasFlag(wxLC_VIRTUAL); }
 
     // Check if the item is visible
-    virtual bool IsVisible(long WXUNUSED(item)) const { return false; };
+    virtual bool IsVisible(long WXUNUSED(item)) const { return false; }
 
     // Enable or disable beep when incremental match doesn't find any item.
     // Only implemented in the generic version currently.

@@ -268,7 +268,7 @@ MyFrame::MyFrame(const wxString& title)
     menuList->AppendCheckItem(LIST_TOGGLE_HEADER, "Toggle &header\tCtrl-H");
     menuList->Check(LIST_TOGGLE_HEADER, true);
     menuList->AppendCheckItem(LIST_TOGGLE_BELL, "Toggle &bell on no match");
-    menuList->Append( LIST_CHECKVISIBILITY, "Check if line is visible" );
+    menuList->Append( LIST_CHECKVISIBILITY, "Check if lines 2 and 9 are visible" );
     menuList->AppendSeparator();
     menuList->AppendCheckItem(LIST_TOGGLE_CHECKBOXES,
                               "&Enable Checkboxes");
@@ -381,11 +381,11 @@ void MyFrame::OnToggleBell(wxCommandEvent& event)
 
 void MyFrame::OnCheckVisibility(wxCommandEvent& WXUNUSED(event))
 {
-    if( m_listCtrl->IsVisible(2) )
+    if ( m_listCtrl->IsVisible(2) )
         wxLogMessage( "Line 2 is visible" );
     else
         wxLogMessage( "Line 2 is not visible" );
-    if( m_listCtrl->IsVisible(9) )
+    if ( m_listCtrl->IsVisible(9) )
         wxLogMessage( "Line 9 is visible" );
     else
         wxLogMessage( "Line 9 is not visible" );

@@ -1089,7 +1089,7 @@ public:
     void SetImageList(wxImageList* imageList, int which);
 
     /**
-        Check if the item is visible
+        Check if the item is visible.
 
         @since 3.1.3
     */
