@@ -729,7 +729,6 @@ void wxMSWDCImpl::Clear()
             return;
     }
 
-    DWORD colour = ::GetBkColor(GetHdc());
     HBRUSH brush = GetHbrushOf( m_backgroundBrush );
     RECT rect;
     ::GetClipBox(GetHdc(), &rect);
