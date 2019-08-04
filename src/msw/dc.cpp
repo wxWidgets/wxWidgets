@@ -730,7 +730,7 @@ void wxMSWDCImpl::Clear()
     }
 
     DWORD colour = ::GetBkColor(GetHdc());
-    HBRUSH brush = ::CreateSolidBrush(colour);
+    HBRUSH brush = GetHbrushOf( m_backgroundBrush );
     RECT rect;
     ::GetClipBox(GetHdc(), &rect);
     // Inflate the box by 1 unit in each direction
