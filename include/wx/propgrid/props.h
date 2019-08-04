@@ -11,8 +11,6 @@
 #ifndef _WX_PROPGRID_PROPS_H_
 #define _WX_PROPGRID_PROPS_H_
 
-#include "wx/defs.h"
-
 #if wxUSE_PROPGRID
 
 // -----------------------------------------------------------------------
@@ -24,8 +22,6 @@ class wxPGArrayEditorDialog;
 #include "wx/filename.h"
 #include "wx/dialog.h"
 #include "wx/textctrl.h"
-#include "wx/button.h"
-#include "wx/listbox.h"
 #include "wx/valtext.h"
 
 // -----------------------------------------------------------------------

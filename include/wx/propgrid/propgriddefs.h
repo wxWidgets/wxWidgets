@@ -11,8 +11,6 @@
 #ifndef _WX_PROPGRID_PROPGRIDDEFS_H_
 #define _WX_PROPGRID_PROPGRIDDEFS_H_
 
-#include "wx/defs.h"
-
 #if wxUSE_PROPGRID
 
 #include "wx/dynarray.h"
@@ -22,7 +20,6 @@
 #include "wx/variant.h"
 #include "wx/any.h"
 #include "wx/longlong.h"
-#include "wx/clntdata.h"
 
 #if wxUSE_STD_CONTAINERS
 #include <numeric>

@@ -18,24 +18,8 @@
 #if wxUSE_PROPGRID
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
-    #include "wx/object.h"
-    #include "wx/hash.h"
-    #include "wx/string.h"
     #include "wx/log.h"
-    #include "wx/math.h"
-    #include "wx/event.h"
-    #include "wx/window.h"
-    #include "wx/panel.h"
-    #include "wx/dc.h"
-    #include "wx/dcmemory.h"
-    #include "wx/pen.h"
-    #include "wx/brush.h"
-    #include "wx/settings.h"
-    #include "wx/intl.h"
 #endif
-
-#include "wx/image.h"
 
 // This define is necessary to prevent macro clearing
 #define __wxPG_SOURCE_FILE__

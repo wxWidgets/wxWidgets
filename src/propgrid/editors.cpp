@@ -18,41 +18,12 @@
 #if wxUSE_PROPGRID
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
-    #include "wx/object.h"
-    #include "wx/hash.h"
-    #include "wx/string.h"
-    #include "wx/log.h"
-    #include "wx/event.h"
-    #include "wx/window.h"
-    #include "wx/panel.h"
-    #include "wx/dc.h"
-    #include "wx/dcclient.h"
-    #include "wx/dcmemory.h"
-    #include "wx/button.h"
-    #include "wx/pen.h"
-    #include "wx/brush.h"
-    #include "wx/cursor.h"
-    #include "wx/dialog.h"
     #include "wx/settings.h"
-    #include "wx/msgdlg.h"
-    #include "wx/choice.h"
-    #include "wx/stattext.h"
-    #include "wx/scrolwin.h"
-    #include "wx/dirdlg.h"
-    #include "wx/sizer.h"
-    #include "wx/textdlg.h"
-    #include "wx/filedlg.h"
-    #include "wx/statusbr.h"
-    #include "wx/intl.h"
-    #include "wx/frame.h"
+    #include "wx/textctrl.h"
 #endif
 
-
-#include "wx/timer.h"
 #include "wx/dcbuffer.h"
-#include "wx/bmpbuttn.h"
-
+#include "wx/odcombo.h"
 
 // This define is necessary to prevent macro clearing
 #define __wxPG_SOURCE_FILE__
@@ -73,8 +44,6 @@
 #endif
 
 #define wxPG_BUTTON_SIZEDEC                         0
-
-#include "wx/odcombo.h"
 
 // -----------------------------------------------------------------------
 

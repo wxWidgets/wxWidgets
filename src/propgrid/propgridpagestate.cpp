@@ -18,20 +18,12 @@
 #if wxUSE_PROPGRID
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
-    #include "wx/object.h"
-    #include "wx/hash.h"
-    #include "wx/string.h"
-    #include "wx/log.h"
+    #include "wx/bitmap.h"
+    #include "wx/dcclient.h"
     #include "wx/event.h"
-    #include "wx/window.h"
-    #include "wx/panel.h"
-    #include "wx/dc.h"
-    #include "wx/dcmemory.h"
-    #include "wx/pen.h"
-    #include "wx/brush.h"
-    #include "wx/intl.h"
-    #include "wx/stopwatch.h"
+    #include "wx/font.h"
+    #include "wx/log.h"
+    #include "wx/validate.h"
 #endif
 
 // This define is necessary to prevent macro clearing
@@ -39,7 +31,6 @@
 
 #include "wx/propgrid/propgridpagestate.h"
 #include "wx/propgrid/propgrid.h"
-#include "wx/propgrid/editors.h"
 
 #define wxPG_DEFAULT_SPLITTERX      110
 

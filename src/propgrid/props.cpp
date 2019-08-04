@@ -18,41 +18,16 @@
 #if wxUSE_PROPGRID
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
-    #include "wx/object.h"
-    #include "wx/hash.h"
-    #include "wx/string.h"
-    #include "wx/log.h"
-    #include "wx/event.h"
-    #include "wx/window.h"
-    #include "wx/panel.h"
-    #include "wx/dc.h"
-    #include "wx/dcclient.h"
-    #include "wx/dcmemory.h"
-    #include "wx/button.h"
-    #include "wx/bmpbuttn.h"
-    #include "wx/pen.h"
-    #include "wx/brush.h"
-    #include "wx/cursor.h"
-    #include "wx/dialog.h"
-    #include "wx/settings.h"
-    #include "wx/msgdlg.h"
-    #include "wx/choice.h"
-    #include "wx/stattext.h"
-    #include "wx/scrolwin.h"
     #include "wx/dirdlg.h"
-    #include "wx/combobox.h"
-    #include "wx/layout.h"
-    #include "wx/sizer.h"
-    #include "wx/textdlg.h"
     #include "wx/filedlg.h"
-    #include "wx/intl.h"
+    #include "wx/log.h"
+    #include "wx/sizer.h"
+    #include "wx/stattext.h"
 #endif
 
-#include "wx/filename.h"
+#include "wx/numformatter.h"
 
 #include "wx/propgrid/propgrid.h"
-#include "wx/numformatter.h"
 
 #include <float.h>
 #include <limits.h>

@@ -11,20 +11,9 @@
 #ifndef _WX_PROPGRID_MANAGER_H_
 #define _WX_PROPGRID_MANAGER_H_
 
-#include "wx/defs.h"
-
 #if wxUSE_PROPGRID
 
 #include "wx/propgrid/propgrid.h"
-
-#include "wx/dcclient.h"
-#include "wx/scrolwin.h"
-#include "wx/toolbar.h"
-#include "wx/stattext.h"
-#include "wx/button.h"
-#include "wx/textctrl.h"
-#include "wx/dialog.h"
-#include "wx/headerctrl.h"
 
 // -----------------------------------------------------------------------
 
@@ -161,10 +150,13 @@ private:
 
 // -----------------------------------------------------------------------
 
+#if wxUSE_TOOLBAR
+class wxToolBar;
+#endif
 #if wxUSE_HEADERCTRL
 class wxPGHeaderCtrl;
 #endif
-
+class wxStaticText;
 
 // wxPropertyGridManager is an efficient multi-page version of wxPropertyGrid,
 // which can optionally have toolbar for mode and page selection, and help

@@ -18,31 +18,17 @@
 #if wxUSE_PROPGRID
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
-    #include "wx/object.h"
-    #include "wx/hash.h"
-    #include "wx/string.h"
-    #include "wx/log.h"
-    #include "wx/event.h"
-    #include "wx/window.h"
-    #include "wx/panel.h"
-    #include "wx/dc.h"
-    #include "wx/pen.h"
-    #include "wx/brush.h"
-    #include "wx/cursor.h"
     #include "wx/settings.h"
+    #include "wx/stattext.h"
     #include "wx/textctrl.h"
-    #include "wx/sizer.h"
-    #include "wx/statusbr.h"
-    #include "wx/intl.h"
+    #include "wx/toolbar.h"
 #endif
 
 #include "wx/dcbuffer.h" // for wxALWAYS_NATIVE_DOUBLE_BUFFER
+#include "wx/headerctrl.h" // for wxPGHeaderCtrl
 
 // This define is necessary to prevent macro clearing
 #define __wxPG_SOURCE_FILE__
-
-#include "wx/propgrid/propgrid.h"
 
 #include "wx/propgrid/manager.h"
 

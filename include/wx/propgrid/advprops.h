@@ -11,8 +11,6 @@
 #ifndef _WX_PROPGRID_ADVPROPS_H_
 #define _WX_PROPGRID_ADVPROPS_H_
 
-#include "wx/defs.h"
-
 #if wxUSE_PROPGRID
 
 #include "wx/propgrid/props.h"
@@ -126,13 +124,6 @@ bool WXDLLIMPEXP_PROPGRID
 operator==(const wxColourPropertyValue&, const wxColourPropertyValue&);
 
 DECLARE_VARIANT_OBJECT_EXPORTED(wxColourPropertyValue, WXDLLIMPEXP_PROPGRID)
-
-// -----------------------------------------------------------------------
-// Declare part of custom colour property macro pairs.
-
-#if wxUSE_IMAGE
-    #include "wx/image.h"
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -282,6 +273,8 @@ class WXDLLIMPEXP_PROPGRID wxCursorProperty : public wxEnumProperty
 #if wxUSE_IMAGE
 
 WXDLLIMPEXP_PROPGRID const wxString& wxPGGetDefaultImageWildcard();
+class WXDLLIMPEXP_FWD_CORE wxBitmap;
+class WXDLLIMPEXP_FWD_CORE wxImage;
 
 // Property representing image file(name).
 class WXDLLIMPEXP_PROPGRID wxImageFileProperty : public wxFileProperty
