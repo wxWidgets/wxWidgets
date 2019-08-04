@@ -1310,14 +1310,15 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
                     wxLogError("Failed to retrieve rect of item %ld column %d", item, subItem + 1);
                     break;
                 }
-                wxString message;
+                wxString message = "Bounding rect of %s item %ld column %d is (%d, %d)-(%d, %d)";
+                wxString part;
                 if( code == wxLIST_RECT_BOUNDS )
-                    message = wxString::Format( "Bounding rect of item %ld column %d is (%d, %d)-(%d, %d)", item, subItem + 1, r.x, r.y, r.x + r.width, r.y + r.height );
+                    part = "subitem";
                 if( code == wxLIST_RECT_ICON )
-                    message = wxString::Format( "Bounding rect of item icon %ld column %d is (%d, %d)-(%d, %d)", item, subItem + 1, r.x, r.y, r.x + r.width, r.y + r.height );
+                    part = "icon";
                 if( code == wxLIST_RECT_LABEL )
-                    message = wxString::Format( "Bounding rect of item label %ld column %d is (%d, %d)-(%d, %d)", item, subItem + 1, r.x, r.y, r.x + r.width, r.y + r.height );
-                wxLogMessage( message );
+                    part = "label";
+                wxLogMessage( message, part, item, subItem + 1, r.x, r.y, r.x + r.width, r.y + r.height );
             }
             break;
 
