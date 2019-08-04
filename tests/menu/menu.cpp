@@ -693,12 +693,12 @@ namespace
         { WXK_EXECUTE,          "WXK_EXECUTE",          false },
         { WXK_SNAPSHOT,         "WXK_SNAPSHOT",         true },
         { WXK_HELP,             "WXK_HELP",             false },
-        { WXK_NUMLOCK,          "WXK_NUMLOCK",          false },
+        { WXK_NUMLOCK,          "WXK_NUMLOCK",          true },
         { WXK_SCROLL,           "WXK_SCROLL",           true },
         { WXK_NUMPAD_INSERT,    "WXK_NUMPAD_INSERT",    false },
         { WXK_NUMPAD_DELETE,    "WXK_NUMPAD_DELETE",    false },
         { WXK_NUMPAD_SPACE,     "WXK_NUMPAD_SPACE",     false },
-        { WXK_NUMPAD_TAB,       "WXK_NUMPAD_TAB",       false },
+        { WXK_NUMPAD_TAB,       "WXK_NUMPAD_TAB",       true },
         { WXK_NUMPAD_ENTER,     "WXK_NUMPAD_ENTER",     false },
         { WXK_NUMPAD_F1,        "WXK_NUMPAD_F1",        false },
         { WXK_NUMPAD_F2,        "WXK_NUMPAD_F2",        false },
@@ -730,8 +730,8 @@ namespace
         { WXK_NUMPAD7,          "WXK_NUMPAD7",          false },
         { WXK_NUMPAD8,          "WXK_NUMPAD8",          false },
         { WXK_NUMPAD9,          "WXK_NUMPAD9",          false },
-        { WXK_WINDOWS_LEFT,     "WXK_WINDOWS_LEFT",     false },
-        { WXK_WINDOWS_RIGHT,    "WXK_WINDOWS_RIGHT",    false },
+        { WXK_WINDOWS_LEFT,     "WXK_WINDOWS_LEFT",     true },
+        { WXK_WINDOWS_RIGHT,    "WXK_WINDOWS_RIGHT",    true },
         { WXK_WINDOWS_MENU,     "WXK_WINDOWS_MENU",     false },
         { WXK_COMMAND,          "WXK_COMMAND",          true }
     };
@@ -767,7 +767,7 @@ TEST_CASE( "wxMenuItemAccelEntry", "[menu][accelentry]" )
                 continue;
 
             INFO( wxString::Format( "Keycode: %s",  key.name ) );
-            wxAcceleratorEntry accelEntry( wxACCEL_NORMAL, key.keycode, wxID_ANY, item );
+            wxAcceleratorEntry accelEntry( wxACCEL_CTRL, key.keycode, wxID_ANY, item );
             item->SetAccel( &accelEntry );
 
             wxString labelText = item->GetItemLabel();
