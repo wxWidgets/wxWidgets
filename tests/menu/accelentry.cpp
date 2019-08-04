@@ -95,6 +95,6 @@ TEST_CASE( "wxAcceleratorEntry::StringTests", "[accelentry]" )
 
     SECTION( "Create from invalid string" )
     {
-            REQUIRE( !a.FromString("bloordyblop") );
+        REQUIRE( !a.FromString("bloordyblop") );
     }
 }
