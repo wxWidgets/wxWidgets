@@ -571,7 +571,7 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     style += wxString::Format(wxS("font-family:%s; "), m_font.GetFaceName());
     style += wxString::Format(wxS("font-weight:%d; "), m_font.GetWeight());
     style += wxString::Format(wxS("font-style:%s; "), fontstyle);
-    style += wxString::Format(wxS("font-size:%dpt; "), m_font.GetPointSize());
+    style += wxString::Format(wxS("font-size:%spt; "), NumStr(m_font.GetFractionalPointSize()));
     style += wxString::Format(wxS("text-decoration:%s; "), textDecoration);
     style += wxString::Format(wxS("%s %s stroke-width:0; "),
                               wxBrushString(m_textForegroundColour),
