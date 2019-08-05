@@ -729,16 +729,16 @@ void wxMSWDCImpl::Clear()
             return;
     }
 
-    DWORD colour = ::GetBkColor(GetHdc());
-    HBRUSH brush = ::CreateSolidBrush(colour);
+    if ( !m_backgroundBrush.IsOk() )
+        return;
+
     RECT rect;
     ::GetClipBox(GetHdc(), &rect);
     // Inflate the box by 1 unit in each direction
     // to compensate rounding errors if DC is the subject
     // of complex transformation (is e.g. rotated).
     ::InflateRect(&rect, 1, 1);
-    ::FillRect(GetHdc(), &rect, brush);
-    ::DeleteObject(brush);
+    ::FillRect(GetHdc(), &rect, GetHbrushOf(m_backgroundBrush));
 
     RealizeScaleAndOrigin();
 }
