@@ -26,8 +26,8 @@ namespace
 
 void CheckAccelEntry(const wxAcceleratorEntry& accel, int keycode, int flags)
 {
-    REQUIRE( keycode == accel.GetKeyCode() );
-    REQUIRE( flags == accel.GetFlags() );
+    CHECK( keycode == accel.GetKeyCode() );
+    CHECK( flags == accel.GetFlags() );
 }
 
 } // anonymous namespace
@@ -44,8 +44,8 @@ TEST_CASE( "wxAcceleratorEntry::Create", "[accelentry]" )
     {
         pa = wxAcceleratorEntry::Create("Foo\tCtrl+Z");
 
-        REQUIRE( pa );
-        REQUIRE( pa->IsOk() );
+        CHECK( pa );
+        CHECK( pa->IsOk() );
         CheckAccelEntry(*pa, 'Z', wxACCEL_CTRL);
     }
 
@@ -53,22 +53,22 @@ TEST_CASE( "wxAcceleratorEntry::Create", "[accelentry]" )
     {
         pa = wxAcceleratorEntry::Create("Shift-Q");
 
-        REQUIRE( !pa );
+        CHECK( !pa );
     }
 
     SECTION( "No accelerator key specified" )
     {
         pa = wxAcceleratorEntry::Create("bloordyblop");
 
-        REQUIRE( !pa );
+        CHECK( !pa );
     }
 
     SECTION( "Display name parsing" )
     {
         pa = wxAcceleratorEntry::Create("Test\tBackSpace");
 
-        REQUIRE( pa );
-        REQUIRE( pa->IsOk() );
+        CHECK( pa );
+        CHECK( pa->IsOk() );
         CheckAccelEntry(*pa, WXK_BACK, wxACCEL_NORMAL);
     }
 }
@@ -84,17 +84,17 @@ TEST_CASE( "wxAcceleratorEntry::StringTests", "[accelentry]" )
 
     SECTION( "Create string from key" )
     {
-        REQUIRE( "Alt+X" == a.ToString() );
+        CHECK( "Alt+X" == a.ToString() );
     }
 
     SECTION( "Create from valid string" )
     {
-        REQUIRE( a.FromString("Alt+Shift+F1") );
+        CHECK( a.FromString("Alt+Shift+F1") );
         CheckAccelEntry(a, WXK_F1, wxACCEL_ALT | wxACCEL_SHIFT);
     }
 
     SECTION( "Create from invalid string" )
     {
-        REQUIRE( !a.FromString("bloordyblop") );
+        CHECK( !a.FromString("bloordyblop") );
     }
 }

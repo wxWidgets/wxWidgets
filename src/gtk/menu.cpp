@@ -674,7 +674,7 @@ void wxMenuItem::SetGtkLabel()
     else
     {
         // Remove the accelerator since it couldn't be made or is invalid
-        m_text = m_text.BeforeFirst( wxT( '\t' ) );
+        m_text = m_text.BeforeFirst( wxS( '\t' ) );
     }
 #endif // wxUSE_ACCEL
 }
@@ -1059,25 +1059,25 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 hotkey << wxT("Delete" );
                 break;
             case WXK_UP:
-                if( flags )
+                if ( flags )
                     hotkey << wxT("Up" );
                 else
                     wxFAIL_MSG( wxT("The Up key must have modifiers to be an accelerator key") );
                 break;
             case WXK_DOWN:
-                if( flags )
+                if ( flags )
                     hotkey << wxT("Down" );
                 else
                     wxFAIL_MSG( wxT("The Down key must have modifiers to be an accelerator key") );
                 break;
             case WXK_LEFT:
-                if( flags )
+                if ( flags )
                     hotkey << wxT("Left" );
                 else
                     wxFAIL_MSG( wxT("The Left key must have modifiers to be an accelerator key") );
                 break;
             case WXK_RIGHT:
-                if( flags )
+                if ( flags )
                     hotkey << wxT("Right" );
                 else
                     wxFAIL_MSG( wxT("The Right key must have modifiers to be an accelerator key") );
@@ -1153,25 +1153,25 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 hotkey << wxT("KP_Home" );
                 break;
              case WXK_NUMPAD_UP:
-                if( flags )
+                if ( flags )
                     hotkey << wxT("KP_Up" );
                 else
                     wxFAIL_MSG( wxT("The KP_Up key must have modifiers to be an accelerator key") );
                 break;
             case WXK_NUMPAD_DOWN:
-                if( flags )
+                if ( flags )
                     hotkey << wxT("KP_Down" );
                 else
                     wxFAIL_MSG( wxT("The KP_Down key must have modifiers to be an accelerator key") );
                 break;
             case WXK_NUMPAD_LEFT:
-                if( flags )
+                if ( flags )
                     hotkey << wxT("KP_Left" );
                 else
                     wxFAIL_MSG( wxT("The KP_Left key must have modifiers to be an accelerator key") );
                 break;
             case WXK_NUMPAD_RIGHT:
-                if( flags )
+                if ( flags )
                     hotkey << wxT("KP_Right" );
                 else
                     wxFAIL_MSG( wxT("The KP_Right key must have modifiers to be an accelerator key") );
