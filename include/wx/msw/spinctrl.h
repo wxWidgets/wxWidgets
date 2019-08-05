@@ -65,6 +65,8 @@ public:
     virtual int GetBase() const;
     virtual bool SetBase(int base);
 
+    virtual void Refresh( bool eraseBackground = true,
+                          const wxRect *rect = (const wxRect *) NULL ) wxOVERRIDE;
 
     // implementation only from now on
     // -------------------------------

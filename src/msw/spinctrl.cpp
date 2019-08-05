@@ -404,6 +404,19 @@ wxSpinCtrl::~wxSpinCtrl()
     gs_spinForTextCtrl.erase(GetBuddyHwnd());
 }
 
+void wxSpinCtrl::Refresh(bool eraseBackground, const wxRect *rect)
+{
+    wxControl::Refresh(eraseBackground, rect);
+
+    UINT flags = RDW_INVALIDATE;
+    if ( eraseBackground )
+        flags |= RDW_ERASE;
+
+    // Don't bother computing the intersection of the given rectangle with the
+    // buddy control, just always refresh it entirely, as it's much simpler.
+    ::RedrawWindow(GetBuddyHwnd(), NULL, NULL, flags);
+}
+
 // ----------------------------------------------------------------------------
 // wxSpinCtrl-specific methods
 // ----------------------------------------------------------------------------
