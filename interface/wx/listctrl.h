@@ -1090,6 +1090,8 @@ public:
 
     /**
         Check if the item is visible.
+        An item is considered visible if at least one pixel of it is present
+        on the screen.
 
         @since 3.1.3
     */
