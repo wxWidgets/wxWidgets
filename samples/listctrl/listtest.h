@@ -117,7 +117,7 @@ protected:
     void OnSmallIconTextView(wxCommandEvent& event);
     void OnVirtualView(wxCommandEvent& event);
     void OnSmallVirtualView(wxCommandEvent& event);
-
+    void OnCheckVisibility(wxCommandEvent& event);
     void OnSetItemsCount(wxCommandEvent& event);
 
 
@@ -247,6 +247,6 @@ enum
 #ifdef __WXOSX__
     LIST_MAC_USE_GENERIC,
 #endif
-
+    LIST_CHECKVISIBILITY,
     LIST_CTRL                   = 1000
 };

@@ -151,6 +151,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_TOGGLE_LINES, MyFrame::OnToggleLines)
     EVT_MENU(LIST_TOGGLE_HEADER, MyFrame::OnToggleHeader)
     EVT_MENU(LIST_TOGGLE_BELL, MyFrame::OnToggleBell)
+    EVT_MENU(LIST_CHECKVISIBILITY, MyFrame::OnCheckVisibility)
 #ifdef __WXOSX__
     EVT_MENU(LIST_MAC_USE_GENERIC, MyFrame::OnToggleMacUseGeneric)
 #endif // __WXOSX__
@@ -267,6 +268,7 @@ MyFrame::MyFrame(const wxString& title)
     menuList->AppendCheckItem(LIST_TOGGLE_HEADER, "Toggle &header\tCtrl-H");
     menuList->Check(LIST_TOGGLE_HEADER, true);
     menuList->AppendCheckItem(LIST_TOGGLE_BELL, "Toggle &bell on no match");
+    menuList->Append( LIST_CHECKVISIBILITY, "Check if lines 2 and 9 are visible" );
     menuList->AppendSeparator();
     menuList->AppendCheckItem(LIST_TOGGLE_CHECKBOXES,
                               "&Enable Checkboxes");
@@ -375,6 +377,18 @@ void MyFrame::OnToggleHeader(wxCommandEvent& event)
 void MyFrame::OnToggleBell(wxCommandEvent& event)
 {
     m_listCtrl->EnableBellOnNoMatch(event.IsChecked());
+}
+
+void MyFrame::OnCheckVisibility(wxCommandEvent& WXUNUSED(event))
+{
+    if ( m_listCtrl->IsVisible(2) )
+        wxLogMessage( "Line 2 is visible" );
+    else
+        wxLogMessage( "Line 2 is not visible" );
+    if ( m_listCtrl->IsVisible(9) )
+        wxLogMessage( "Line 9 is visible" );
+    else
+        wxLogMessage( "Line 9 is not visible" );
 }
 
 #ifdef __WXOSX__
