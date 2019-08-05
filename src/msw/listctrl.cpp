@@ -1241,15 +1241,18 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
     {
         return false;
     }
-    if( code == wxLIST_RECT_LABEL )
+
+    // Although LVIR_LABEL exists, it returns the same results as LVIR_BOUNDS
+    // and not just the label rectangle as would be expected, so account for
+    // the icon ourselves in this case.
+    if ( code == wxLIST_RECT_LABEL )
     {
         RECT rectIcon;
-        rectIcon.top = subItem;
-        rectIcon.left = LVIR_ICON;
-        if( !( ::SendMessageA(GetHwnd(), LVM_GETSUBITEMRECT, item, (LPARAM)&rectIcon) ) )
+        if ( !wxGetListCtrlSubItemRect(GetHwnd(), item, subItem, LVIR_ICON,
+                                       rectIcon) )
             return false;
-		else
-            rectWin.left = rectIcon.right;
+
+        rectWin.left = rectIcon.right;
     }
 
     wxCopyRECTToRect(rectWin, rect);
