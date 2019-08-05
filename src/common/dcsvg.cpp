@@ -273,6 +273,25 @@ wxString wxCreateBrushFill(wxBrush& brush)
     return s;
 }
 
+void wxSetScaledScreenDCFont(wxScreenDC& sDC, const wxFont& font)
+{
+    sDC.SetFont(font);
+
+    const double scale = sDC.GetContentScaleFactor();
+    if (scale > 1) {
+        // wxScreenDC uses the DPI of the main screen to determine the text
+        // extent and character width/height. Because the SVG should be
+        // DPI-independent we want the text extent of the default (96) DPI.
+        //
+        // We can't just divide the returned sizes by the scale factor, because
+        // text does not scale linear (at least on Windows). Therefore, we scale
+        // the font size instead.
+        wxFont scaledFont = sDC.GetFont();
+        scaledFont.SetFractionalPointSize(scaledFont.GetFractionalPointSize() / scale);
+        sDC.SetFont(scaledFont);
+    }
+}
+
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -583,12 +602,6 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     // support SVG viewers that do not support the new tag
     style += wxS(" xml:space=\"preserve\"");
 
-    // The text in a wxDC is adjusted to the screen DPI, but text in a SVG file
-    // is DPI independent. Scale the text attribute with the wxDC scale factor
-    // so it will have the same size as in the wxDC.
-    wxScreenDC dc;
-    const double scale = dc.GetContentScaleFactor();
-
     // Draw all text line by line
     const wxArrayString lines = wxSplit(sText, '\n', '\0');
     for (size_t lineNum = 0; lineNum < lines.size(); lineNum++)
@@ -602,10 +615,6 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
         DoGetTextExtent(line, &ww, &hh, &desc);
         const int xText = xRect + (hh - desc) * sin(rad);
         const int yText = yRect + (hh - desc) * cos(rad);
-
-        const int tx = xText - (int)ceil(xText * scale);
-        const int ty = yText - (int)ceil(yText * scale);
-        const int len = (int)floor(ww / scale);
 
         if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
         {
@@ -627,12 +636,12 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
         }
 
         const wxString transform = wxString::Format(
-            wxS("transform=\"rotate(%s %d %d) translate(%d %d) scale(%s)\""),
-            NumStr(-angle), xText, yText, tx, ty, NumStr(scale));
+            wxS("transform=\"rotate(%s %d %d)\""),
+            NumStr(-angle), xText, yText);
 
         s = wxString::Format(
             wxS("  <text x=\"%d\" y=\"%d\" textLength=\"%d\" %s %s>%s</text>\n"),
-            xText, yText, len, style, transform,
+            xText, yText, ww, style, transform,
 #if wxUSE_MARKUP
             wxMarkupParser::Quote(line)
 #else
@@ -966,17 +975,15 @@ void wxSVGFileDCImpl::DestroyClippingRegion()
 void wxSVGFileDCImpl::DoGetTextExtent(const wxString& string, wxCoord *w, wxCoord *h, wxCoord *descent, wxCoord *externalLeading, const wxFont *font) const
 {
     wxScreenDC sDC;
+    wxSetScaledScreenDCFont(sDC, font ? *font : m_font);
 
-    sDC.SetFont(m_font);
-    if (font != NULL)
-        sDC.SetFont(*font);
     sDC.GetTextExtent(string, w, h, descent, externalLeading);
 }
 
 wxCoord wxSVGFileDCImpl::GetCharHeight() const
 {
     wxScreenDC sDC;
-    sDC.SetFont(m_font);
+    wxSetScaledScreenDCFont(sDC, m_font);
 
     return sDC.GetCharHeight();
 
@@ -985,7 +992,7 @@ wxCoord wxSVGFileDCImpl::GetCharHeight() const
 wxCoord wxSVGFileDCImpl::GetCharWidth() const
 {
     wxScreenDC sDC;
-    sDC.SetFont(m_font);
+    wxSetScaledScreenDCFont(sDC, m_font);
 
     return sDC.GetCharWidth();
 }
