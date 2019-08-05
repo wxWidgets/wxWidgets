@@ -404,6 +404,12 @@ wxSpinCtrl::~wxSpinCtrl()
     gs_spinForTextCtrl.erase(GetBuddyHwnd());
 }
 
+void wxSpinCtrl::Refresh(bool eraseBackground, const wxRect *rect)
+{
+    wxControl::Refresh(eraseBackground, rect); 
+    ::RedrawWindow(GetBuddyHwnd(), 0, 0, RDW_INVALIDATE | RDW_UPDATENOW);
+}
+
 // ----------------------------------------------------------------------------
 // wxSpinCtrl-specific methods
 // ----------------------------------------------------------------------------
