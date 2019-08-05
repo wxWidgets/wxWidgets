@@ -407,7 +407,10 @@ wxSpinCtrl::~wxSpinCtrl()
 void wxSpinCtrl::Refresh(bool eraseBackground, const wxRect *rect)
 {
     wxControl::Refresh(eraseBackground, rect); 
-    ::RedrawWindow(GetBuddyHwnd(), 0, 0, RDW_INVALIDATE | RDW_UPDATENOW);
+    if ( eraseBackground )
+        ::RedrawWindow(GetBuddyHwnd(), NULL, NULL, RDW_INVALIDATE | RDW_ERASE);
+    else
+        ::RedrawWindow(GetBuddyHwnd(), NULL, NULL, RDW_INVALIDATE);
 }
 
 // ----------------------------------------------------------------------------
