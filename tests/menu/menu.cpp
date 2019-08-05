@@ -625,7 +625,7 @@ namespace
         wxString name;
         bool     skip;
     };
-    std::vector<key> modKeys =
+    key modKeys[] =
     {
         { wxACCEL_NORMAL, "Normal", false },
         { wxACCEL_CTRL,   "Ctrl",   false },
@@ -636,7 +636,7 @@ namespace
      The keys marked as skip below are not supported as accelerator
      keys on GTK.
      */
-    std::vector<key> specialKeys =
+    key specialKeys[] =
     {
         { WXK_F1,               "WXK_F1",               false },
         { WXK_F2,               "WXK_F2",               false },
@@ -746,12 +746,12 @@ TEST_CASE( "wxMenuItemAccelEntry", "[menu][accelentry]" )
 
     SECTION( "Modifier keys" )
     {
-        std::vector<key>::iterator k;
-
-        for( k = modKeys.begin(); k < modKeys.end(); k++ )
+        for( int i = 0; i < WXSIZEOF(modKeys); i++ )
         {
-            INFO( wxString::Format( "Modifier: %s",  k->name ) );
-            wxAcceleratorEntry accelEntry( k->keycode, 'A' , wxID_ANY, item );
+            const key& k = modKeys[i];
+
+            INFO( wxString::Format( "Modifier: %s",  k.name ) );
+            wxAcceleratorEntry accelEntry( k.keycode, 'A' , wxID_ANY, item );
             item->SetAccel( &accelEntry );
 
             wxString labelText = item->GetItemLabel();
@@ -763,21 +763,21 @@ TEST_CASE( "wxMenuItemAccelEntry", "[menu][accelentry]" )
 
     SECTION( "Special keys" )
     {
-        std::vector<key>::iterator k;
-
-        for( k = specialKeys.begin(); k < specialKeys.end(); k++ )
+        for( int i = 0; i < WXSIZEOF(specialKeys); i++ )
         {
-            if( k->skip )
+            const key& k = specialKeys[i];
+
+            if( k.skip )
                 continue;
 
-            INFO( wxString::Format( "Keycode: %s",  k->name ) );
-            wxAcceleratorEntry accelEntry( wxACCEL_CTRL, k->keycode, wxID_ANY, item );
+            INFO( wxString::Format( "Keycode: %s",  k.name ) );
+            wxAcceleratorEntry accelEntry( wxACCEL_CTRL, k.keycode, wxID_ANY, item );
             item->SetAccel( &accelEntry );
 
             wxString labelText = item->GetItemLabel();
             INFO( wxString::Format( "Label text: %s", labelText ) );
 
-            verifyAccelAssigned( labelText, k->keycode );
+            verifyAccelAssigned( labelText, k.keycode );
         }
     }
 }
