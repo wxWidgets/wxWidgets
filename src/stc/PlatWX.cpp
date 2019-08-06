@@ -2224,7 +2224,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
 #endif // __WXOSX_COCOA__
 
 wxSTCPopupWindow::wxSTCPopupWindow(wxWindow* parent)
-                 :wxSTCPopupBase(parent), m_initialPosition(wxDefaultPosition)
+                 :wxSTCPopupBase(parent), m_lastKnownPosition(wxDefaultPosition)
 {
     #if !wxSTC_POPUP_IS_CUSTOM
         Bind(wxEVT_SET_FOCUS, &wxSTCPopupWindow::OnFocus, this);
@@ -2275,9 +2275,7 @@ bool wxSTCPopupWindow::AcceptsFocus() const
 
 void wxSTCPopupWindow::DoSetSize(int x, int y, int width, int height, int flags)
 {
-    if ( m_initialPosition == wxDefaultPosition
-            && x != wxDefaultCoord && y != wxDefaultCoord )
-        m_initialPosition = wxPoint(x, y);
+    m_lastKnownPosition = wxPoint(x, y);
 
     // convert coords to screen coords since we're a top-level window
     if (x != wxDefaultCoord)
@@ -2291,8 +2289,8 @@ void wxSTCPopupWindow::DoSetSize(int x, int y, int width, int height, int flags)
 
 void wxSTCPopupWindow::OnParentMove(wxMoveEvent& event)
 {
-    if ( m_initialPosition != wxDefaultPosition )
-        SetPosition(m_initialPosition);
+    if ( m_lastKnownPosition.IsFullySpecified() )
+        SetPosition(m_lastKnownPosition);
     event.Skip();
 }
 
