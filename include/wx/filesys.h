@@ -213,9 +213,6 @@ public:
     // remove all items from the m_Handlers list
     static void CleanUpHandlers();
 
-    // Returns the native path for a file URL
-    static wxFileName URLToFileName(const wxString& url);
-
     // Returns the file URL for a native path
     static wxString FileNameToURL(const wxFileName& filename);
 
