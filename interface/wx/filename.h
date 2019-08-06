@@ -1247,6 +1247,12 @@ public:
     bool SetPermissions(int permissions);
 
     /**
+        Converts URL into a well-formed filename.
+        The URL must use the @c file protocol.
+    */
+    static wxFileName URLToFileName(const wxString& url);
+
+    /**
         Sets the file creation and last access/modification times (any of the pointers
         may be @NULL).
 

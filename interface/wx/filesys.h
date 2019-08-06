@@ -173,11 +173,6 @@ public:
     wxFSFile* OpenFile(const wxString& location,
                        int flags = wxFS_READ);
 
-    /**
-        Converts URL into a well-formed filename.
-        The URL must use the @c file protocol.
-    */
-    static wxFileName URLToFileName(const wxString& url);
 };
 
 
