@@ -306,17 +306,16 @@ void TestGLCanvas::ResetProjectionMode()
     // or more than one wxGLContext in the application.
     SetCurrent(*m_glRC);
 
-    int w, h;
-    GetClientSize(&w, &h);
+    const wxSize ClientSize = GetClientSize() * GetContentScaleFactor();
 
     // It's up to the application code to update the OpenGL viewport settings.
     // In order to avoid extensive context switching, consider doing this in
     // OnPaint() rather than here, though.
-    glViewport(0, 0, (GLint) w, (GLint) h);
+    glViewport(0, 0, ClientSize.x, ClientSize.y);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0f, (GLfloat)w/h, 1.0, 100.0);
+    gluPerspective(45.0f, (GLfloat)ClientSize.x/ClientSize.y, 1.0, 100.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
