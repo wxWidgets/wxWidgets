@@ -124,6 +124,7 @@ public:
         return m_renderer == wxGraphicsRenderer::GetDefaultRenderer();
     }
     wxGraphicsRenderer* GetRenderer() const { return m_renderer; }
+    void EnableAntiAliasing(bool use) { m_useAntiAliasing = use; Refresh(); }
 #endif // wxUSE_GRAPHICS_CONTEXT
     void UseBuffer(bool use) { m_useBuffer = use; Refresh(); }
     void ShowBoundingBox(bool show) { m_showBBox = show; Refresh(); }
@@ -172,6 +173,7 @@ private:
     wxPoint      m_currentpoint;
 #if wxUSE_GRAPHICS_CONTEXT
     wxGraphicsRenderer* m_renderer;
+    bool         m_useAntiAliasing;
 #endif
     bool         m_useBuffer;
     bool         m_showBBox;
@@ -250,6 +252,15 @@ public:
     }
 #endif
 #endif // __WXMSW__
+    void OnAntiAliasing(wxCommandEvent& event)
+    {
+        m_canvas->EnableAntiAliasing(event.IsChecked());
+    }
+
+    void OnAntiAliasingUpdateUI(wxUpdateUIEvent& event)
+    {
+        event.Enable(m_canvas->GetRenderer() != NULL);
+    }
 #endif // wxUSE_GRAPHICS_CONTEXT
 
     void OnBuffer(wxCommandEvent& event);
@@ -335,6 +346,9 @@ enum
     File_BBox,
     File_Clip,
     File_Buffer,
+#if wxUSE_GRAPHICS_CONTEXT
+    File_AntiAliasing,
+#endif
     File_Copy,
     File_Save,
 
@@ -519,6 +533,7 @@ MyCanvas::MyCanvas(MyFrame *parent)
     m_rubberBand = false;
 #if wxUSE_GRAPHICS_CONTEXT
     m_renderer = NULL;
+    m_useAntiAliasing = true;
 #endif
     m_useBuffer = false;
     m_showBBox = false;
@@ -1822,6 +1837,8 @@ void MyCanvas::Draw(wxDC& pdc)
             return;
         }
 
+        context->SetAntialiasMode(m_useAntiAliasing ? wxANTIALIAS_DEFAULT : wxANTIALIAS_NONE);
+
         gdc.SetBackground(GetBackgroundColour());
         gdc.SetGraphicsContext(context);
     }
@@ -2094,6 +2111,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI (File_GC_Direct2D, MyFrame::OnGraphicContextDirect2DUpdateUI)
 #endif
 #endif // __WXMSW__
+    EVT_MENU      (File_AntiAliasing, MyFrame::OnAntiAliasing)
+    EVT_UPDATE_UI (File_AntiAliasing, MyFrame::OnAntiAliasingUpdateUI)
 #endif // wxUSE_GRAPHICS_CONTEXT
 
     EVT_MENU      (File_Buffer,   MyFrame::OnBuffer)
@@ -2157,6 +2176,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                               "Show extents used in drawing operations");
     menuFile->AppendCheckItem(File_Clip, "&Clip\tCtrl-C", "Clip/unclip drawing");
     menuFile->AppendCheckItem(File_Buffer, "&Use wx&BufferedPaintDC\tCtrl-Z", "Buffer painting");
+#if wxUSE_GRAPHICS_CONTEXT
+    menuFile->AppendCheckItem(File_AntiAliasing,
+                              "&Anti-Aliasing in wxGraphicContext\tCtrl-Shift-A",
+                              "Enable Anti-Aliasing in wxGraphicContext")
+            ->Check();
+#endif
     menuFile->AppendSeparator();
 #if wxUSE_METAFILE && defined(wxMETAFILE_IS_ENH)
     menuFile->Append(File_Copy, "Copy to clipboard");
