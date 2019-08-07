@@ -861,24 +861,6 @@ void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
     CalcBoundingBox(xc + r, yc + r);
 }
 
-void wxMSWDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1,
-                           wxCoord width, wxCoord height)
-{
-    wxCoord x2 = x1 + width,
-            y2 = y1 + height;
-
-    RECT rect;
-    rect.left   = x1;
-    rect.top    = y1;
-    rect.right  = x2;
-    rect.bottom = y2;
-
-    DrawFrameControl(GetHdc(), &rect, DFC_MENU, DFCS_MENUCHECK);
-
-    CalcBoundingBox(x1, y1);
-    CalcBoundingBox(x2, y2);
-}
-
 void wxMSWDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
 {
     COLORREF color = 0x00ffffff;
