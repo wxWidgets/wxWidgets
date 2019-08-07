@@ -475,6 +475,7 @@ void * wxMacCoreGraphicsMatrixData::GetNativeMatrix() const
 }
 
 
+
 // ----------------------------------------------------------------------------
 // Pen and Brush common data. Base class for information shared between pens and
 // brushes, basically just the things needed for gradient support.
@@ -587,8 +588,11 @@ wxMacCoreGraphicsPenBrushDataBase::CreateLinearGradientShading(
                                       CGPointMake((CGFloat) x2, (CGFloat) y2), 
                                       m_gradientFunction, true, true );
     m_isShading = true;
-    m_shadingMatrix = (wxMacCoreGraphicsMatrixData*)((wxMacCoreGraphicsMatrixData*)matrix.GetRefData())->Clone();
-    m_shadingMatrix->Invert();
+    if (! matrix.IsNull() )
+    {
+        m_shadingMatrix = (wxMacCoreGraphicsMatrixData*)((wxMacCoreGraphicsMatrixData*)matrix.GetRefData())->Clone();
+        m_shadingMatrix->Invert();
+    }
 }
 
 void
@@ -605,8 +609,11 @@ wxMacCoreGraphicsPenBrushDataBase::CreateRadialGradientShading(
                                        CGPointMake((CGFloat) xc, (CGFloat) yc), (CGFloat) radius, 
                                        m_gradientFunction, true, true );
     m_isShading = true;
-    m_shadingMatrix = (wxMacCoreGraphicsMatrixData*)((wxMacCoreGraphicsMatrixData*)matrix.GetRefData())->Clone();
-    m_shadingMatrix->Invert();
+    if (! matrix.IsNull() )
+    {
+        m_shadingMatrix = (wxMacCoreGraphicsMatrixData*)((wxMacCoreGraphicsMatrixData*)matrix.GetRefData())->Clone();
+        m_shadingMatrix->Invert();
+    }
 }
 
 void wxMacCoreGraphicsPenBrushDataBase::CalculateShadingValues(void *info, const CGFloat *in, CGFloat *out)
