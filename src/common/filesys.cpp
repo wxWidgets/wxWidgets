@@ -645,9 +645,6 @@ void wxFileSystem::CleanUpHandlers()
     WX_CLEAR_LIST(wxList, m_Handlers);
 }
 
-static const wxString g_unixPathString(wxT("/"));
-static const wxString g_nativePathString(wxFILE_SEP_PATH);
-
 // Escapes non-ASCII and others characters in file: URL to be valid URLs
 static wxString EscapeFileNameCharsInURL(const char *in)
 {
