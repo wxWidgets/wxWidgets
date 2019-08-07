@@ -87,7 +87,7 @@ extern "C"
 const double M_PI = 3.14159265358979;
 #endif
 
-//
+//-----------------------------------------------------------------------------
 // Pen, Brushes and Fonts
 //
 
@@ -117,6 +117,7 @@ CGColorRef wxMacCreateCGColor( const wxColour& col )
     return retval;
 }
 
+//-----------------------------------------------------------------------------
 // CGPattern wrapper class: always allocate on heap, never call destructor
 
 class wxMacCoreGraphicsPattern
@@ -732,9 +733,8 @@ void wxMacCoreGraphicsPenData::Apply( wxGraphicsContext* context )
     }
 }
 
-//
-// Brush
-//
+//-----------------------------------------------------------------------------
+// Brush data and supporting colour class
 
 // make sure we all use one class for all conversions from wx to native colour
 
@@ -864,9 +864,8 @@ void wxMacCoreGraphicsBrushData::Apply( wxGraphicsContext* context )
 }
 
 
-//
-// Font
-//
+//-----------------------------------------------------------------------------
+// Font data
 
 class wxMacCoreGraphicsFontData : public wxGraphicsObjectRefData
 {
@@ -913,6 +912,9 @@ wxMacCoreGraphicsFontData::~wxMacCoreGraphicsFontData()
 {
 }
 
+//-----------------------------------------------------------------------------
+// Bitmap data
+
 class wxMacCoreGraphicsBitmapData : public wxGraphicsBitmapData
 {
 public:
@@ -946,13 +948,8 @@ wxMacCoreGraphicsBitmapData::~wxMacCoreGraphicsBitmapData()
 }
 
 
-//
-// Graphics Matrix
-//
-
 //-----------------------------------------------------------------------------
-// wxMacCoreGraphicsMatrix declaration
-//-----------------------------------------------------------------------------
+// Graphics Matrix data
 
 class WXDLLIMPEXP_CORE wxMacCoreGraphicsMatrixData : public wxGraphicsMatrixData
 {
@@ -1013,9 +1010,6 @@ private :
     CGAffineTransform m_matrix;
 } ;
 
-//-----------------------------------------------------------------------------
-// wxMacCoreGraphicsMatrix implementation
-//-----------------------------------------------------------------------------
 
 wxMacCoreGraphicsMatrixData::wxMacCoreGraphicsMatrixData(wxGraphicsRenderer* renderer) : wxGraphicsMatrixData(renderer)
 {
@@ -1125,13 +1119,8 @@ void * wxMacCoreGraphicsMatrixData::GetNativeMatrix() const
     return (void*) &m_matrix;
 }
 
-//
-// Graphics Path
-//
-
 //-----------------------------------------------------------------------------
-// wxMacCoreGraphicsPath declaration
-//-----------------------------------------------------------------------------
+// Graphics Path data
 
 class WXDLLEXPORT wxMacCoreGraphicsPathData : public wxGraphicsPathData
 {
@@ -1200,9 +1189,6 @@ private :
     CGMutablePathRef m_path;
 };
 
-//-----------------------------------------------------------------------------
-// wxMacCoreGraphicsPath implementation
-//-----------------------------------------------------------------------------
 
 wxMacCoreGraphicsPathData::wxMacCoreGraphicsPathData( wxGraphicsRenderer* renderer, CGMutablePathRef path) : wxGraphicsPathData(renderer)
 {
@@ -1359,13 +1345,9 @@ bool wxMacCoreGraphicsPathData::Contains( wxDouble x, wxDouble y, wxPolygonFillM
     return CGPathContainsPoint( m_path, NULL, CGPointMake((CGFloat) x,(CGFloat) y), fillStyle == wxODDEVEN_RULE );
 }
 
-//
-// Graphics Context
-//
 
 //-----------------------------------------------------------------------------
-// wxMacCoreGraphicsContext declaration
-//-----------------------------------------------------------------------------
+// Graphics Context
 
 class WXDLLEXPORT wxMacCoreGraphicsContext : public wxGraphicsContext
 {
