@@ -303,9 +303,181 @@ protected :
     int         m_hatch;
 };
 
+//-----------------------------------------------------------------------------
+// Graphics Matrix data
+
+class WXDLLIMPEXP_CORE wxMacCoreGraphicsMatrixData : public wxGraphicsMatrixData
+{
+public :
+    wxMacCoreGraphicsMatrixData(wxGraphicsRenderer* renderer) ;
+
+    virtual ~wxMacCoreGraphicsMatrixData() ;
+
+    virtual wxGraphicsObjectRefData *Clone() const wxOVERRIDE ;
+
+    // concatenates the matrix
+    virtual void Concat( const wxGraphicsMatrixData *t ) wxOVERRIDE;
+
+    // sets the matrix to the respective values
+    virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
+        wxDouble tx=0.0, wxDouble ty=0.0) wxOVERRIDE;
+
+    // gets the component valuess of the matrix
+    virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
+                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const wxOVERRIDE;
+
+    // makes this the inverse matrix
+    virtual void Invert() wxOVERRIDE;
+
+    // returns true if the elements of the transformation matrix are equal ?
+    virtual bool IsEqual( const wxGraphicsMatrixData* t) const wxOVERRIDE ;
+
+    // return true if this is the identity matrix
+    virtual bool IsIdentity() const wxOVERRIDE;
+
+    //
+    // transformation
+    //
+
+    // add the translation to this matrix
+    virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
+
+    // add the scale to this matrix
+    virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
+
+    // add the rotation to this matrix (radians)
+    virtual void Rotate( wxDouble angle ) wxOVERRIDE;
+
+    //
+    // apply the transforms
+    //
+
+    // applies that matrix to the point
+    virtual void TransformPoint( wxDouble *x, wxDouble *y ) const wxOVERRIDE;
+
+    // applies the matrix except for translations
+    virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) const wxOVERRIDE;
+
+    // returns the native representation
+    virtual void * GetNativeMatrix() const wxOVERRIDE;
+
+private :
+    CGAffineTransform m_matrix;
+} ;
+
+
+wxMacCoreGraphicsMatrixData::wxMacCoreGraphicsMatrixData(wxGraphicsRenderer* renderer) : wxGraphicsMatrixData(renderer)
+{
+}
+
+wxMacCoreGraphicsMatrixData::~wxMacCoreGraphicsMatrixData()
+{
+}
+
+wxGraphicsObjectRefData *wxMacCoreGraphicsMatrixData::Clone() const
+{
+    wxMacCoreGraphicsMatrixData* m = new wxMacCoreGraphicsMatrixData(GetRenderer()) ;
+    m->m_matrix = m_matrix ;
+    return m;
+}
+
+// concatenates the matrix
+void wxMacCoreGraphicsMatrixData::Concat( const wxGraphicsMatrixData *t )
+{
+    m_matrix = CGAffineTransformConcat(*((CGAffineTransform*) t->GetNativeMatrix()), m_matrix );
+}
+
+// sets the matrix to the respective values
+void wxMacCoreGraphicsMatrixData::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d,
+    wxDouble tx, wxDouble ty)
+{
+    m_matrix = CGAffineTransformMake((CGFloat) a,(CGFloat) b,(CGFloat) c,(CGFloat) d,(CGFloat) tx,(CGFloat) ty);
+}
+
+// gets the component valuess of the matrix
+void wxMacCoreGraphicsMatrixData::Get(wxDouble* a, wxDouble* b,  wxDouble* c,
+                                      wxDouble* d, wxDouble* tx, wxDouble* ty) const
+{
+    if (a)  *a = m_matrix.a;
+    if (b)  *b = m_matrix.b;
+    if (c)  *c = m_matrix.c;
+    if (d)  *d = m_matrix.d;
+    if (tx) *tx= m_matrix.tx;
+    if (ty) *ty= m_matrix.ty;
+}
+
+// makes this the inverse matrix
+void wxMacCoreGraphicsMatrixData::Invert()
+{
+    m_matrix = CGAffineTransformInvert( m_matrix );
+}
+
+// returns true if the elements of the transformation matrix are equal ?
+bool wxMacCoreGraphicsMatrixData::IsEqual( const wxGraphicsMatrixData* t) const
+{
+    return CGAffineTransformEqualToTransform(m_matrix, *((CGAffineTransform*) t->GetNativeMatrix()));
+}
+
+// return true if this is the identity matrix
+bool wxMacCoreGraphicsMatrixData::IsIdentity() const
+{
+    return ( m_matrix.a == 1 && m_matrix.d == 1 &&
+        m_matrix.b == 0 && m_matrix.d == 0 && m_matrix.tx == 0 && m_matrix.ty == 0);
+}
+
+//
+// transformation
+//
+
+// add the translation to this matrix
+void wxMacCoreGraphicsMatrixData::Translate( wxDouble dx , wxDouble dy )
+{
+    m_matrix = CGAffineTransformTranslate( m_matrix, (CGFloat) dx, (CGFloat) dy);
+}
+
+// add the scale to this matrix
+void wxMacCoreGraphicsMatrixData::Scale( wxDouble xScale , wxDouble yScale )
+{
+    m_matrix = CGAffineTransformScale( m_matrix, (CGFloat) xScale, (CGFloat) yScale);
+}
+
+// add the rotation to this matrix (radians)
+void wxMacCoreGraphicsMatrixData::Rotate( wxDouble angle )
+{
+    m_matrix = CGAffineTransformRotate( m_matrix, (CGFloat) angle);
+}
+
+//
+// apply the transforms
+//
+
+// applies that matrix to the point
+void wxMacCoreGraphicsMatrixData::TransformPoint( wxDouble *x, wxDouble *y ) const
+{
+    CGPoint pt = CGPointApplyAffineTransform( CGPointMake((CGFloat) *x,(CGFloat) *y), m_matrix);
+
+    *x = pt.x;
+    *y = pt.y;
+}
+
+// applies the matrix except for translations
+void wxMacCoreGraphicsMatrixData::TransformDistance( wxDouble *dx, wxDouble *dy ) const
+{
+    CGSize sz = CGSizeApplyAffineTransform( CGSizeMake((CGFloat) *dx,(CGFloat) *dy) , m_matrix );
+    *dx = sz.width;
+    *dy = sz.height;
+}
+
+// returns the native representation
+void * wxMacCoreGraphicsMatrixData::GetNativeMatrix() const
+{
+    return (void*) &m_matrix;
+}
+
+
 // ----------------------------------------------------------------------------
-// Base class for information shared between pens and brushes, basically just
-// the things needed for gradient support.
+// Pen and Brush common data. Base class for information shared between pens and
+// brushes, basically just the things needed for gradient support.
 
 class wxMacCoreGraphicsPenBrushDataBase : public wxGraphicsObjectRefData
 {
@@ -324,7 +496,7 @@ public:
 
     virtual bool IsShading() { return m_isShading; }
     CGShadingRef GetShading() { return m_shading; }
-    wxGraphicsMatrix& GetMatrix() { return m_shadingMatrix; }
+    wxMacCoreGraphicsMatrixData* GetMatrix() { return m_shadingMatrix; }
 
 protected:
     void Init();
@@ -335,7 +507,7 @@ protected:
     bool m_isShading;
     CGFunctionRef m_gradientFunction;
     CGShadingRef m_shading;
-    wxGraphicsMatrix m_shadingMatrix; 
+    wxMacCoreGraphicsMatrixData* m_shadingMatrix; 
 
     // information about a single gradient component
     struct GradientComponent
@@ -386,8 +558,11 @@ wxMacCoreGraphicsPenBrushDataBase::~wxMacCoreGraphicsPenBrushDataBase()
     if ( m_shading )
         CGShadingRelease(m_shading);
 
-    if( m_gradientFunction )
+    if ( m_gradientFunction )
         CGFunctionRelease(m_gradientFunction);
+
+    if ( m_shadingMatrix )
+        delete m_shadingMatrix;
 }
 
 void
@@ -396,6 +571,7 @@ wxMacCoreGraphicsPenBrushDataBase::Init()
     m_gradientFunction = NULL;
     m_shading = NULL;
     m_isShading = false;
+    m_shadingMatrix = NULL;
 }
 
 void
@@ -411,7 +587,8 @@ wxMacCoreGraphicsPenBrushDataBase::CreateLinearGradientShading(
                                       CGPointMake((CGFloat) x2, (CGFloat) y2), 
                                       m_gradientFunction, true, true );
     m_isShading = true;
-    m_shadingMatrix = matrix;
+    m_shadingMatrix = (wxMacCoreGraphicsMatrixData*)((wxMacCoreGraphicsMatrixData*)matrix.GetRefData())->Clone();
+    m_shadingMatrix->Invert();
 }
 
 void
@@ -428,7 +605,8 @@ wxMacCoreGraphicsPenBrushDataBase::CreateRadialGradientShading(
                                        CGPointMake((CGFloat) xc, (CGFloat) yc), (CGFloat) radius, 
                                        m_gradientFunction, true, true );
     m_isShading = true;
-    m_shadingMatrix = matrix;
+    m_shadingMatrix = (wxMacCoreGraphicsMatrixData*)((wxMacCoreGraphicsMatrixData*)matrix.GetRefData())->Clone();
+    m_shadingMatrix->Invert();
 }
 
 void wxMacCoreGraphicsPenBrushDataBase::CalculateShadingValues(void *info, const CGFloat *in, CGFloat *out)
@@ -947,177 +1125,6 @@ wxMacCoreGraphicsBitmapData::~wxMacCoreGraphicsBitmapData()
     CGImageRelease( m_bitmap );
 }
 
-
-//-----------------------------------------------------------------------------
-// Graphics Matrix data
-
-class WXDLLIMPEXP_CORE wxMacCoreGraphicsMatrixData : public wxGraphicsMatrixData
-{
-public :
-    wxMacCoreGraphicsMatrixData(wxGraphicsRenderer* renderer) ;
-
-    virtual ~wxMacCoreGraphicsMatrixData() ;
-
-    virtual wxGraphicsObjectRefData *Clone() const wxOVERRIDE ;
-
-    // concatenates the matrix
-    virtual void Concat( const wxGraphicsMatrixData *t ) wxOVERRIDE;
-
-    // sets the matrix to the respective values
-    virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
-        wxDouble tx=0.0, wxDouble ty=0.0) wxOVERRIDE;
-
-    // gets the component valuess of the matrix
-    virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
-                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const wxOVERRIDE;
-
-    // makes this the inverse matrix
-    virtual void Invert() wxOVERRIDE;
-
-    // returns true if the elements of the transformation matrix are equal ?
-    virtual bool IsEqual( const wxGraphicsMatrixData* t) const wxOVERRIDE ;
-
-    // return true if this is the identity matrix
-    virtual bool IsIdentity() const wxOVERRIDE;
-
-    //
-    // transformation
-    //
-
-    // add the translation to this matrix
-    virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
-
-    // add the scale to this matrix
-    virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
-
-    // add the rotation to this matrix (radians)
-    virtual void Rotate( wxDouble angle ) wxOVERRIDE;
-
-    //
-    // apply the transforms
-    //
-
-    // applies that matrix to the point
-    virtual void TransformPoint( wxDouble *x, wxDouble *y ) const wxOVERRIDE;
-
-    // applies the matrix except for translations
-    virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) const wxOVERRIDE;
-
-    // returns the native representation
-    virtual void * GetNativeMatrix() const wxOVERRIDE;
-
-private :
-    CGAffineTransform m_matrix;
-} ;
-
-
-wxMacCoreGraphicsMatrixData::wxMacCoreGraphicsMatrixData(wxGraphicsRenderer* renderer) : wxGraphicsMatrixData(renderer)
-{
-}
-
-wxMacCoreGraphicsMatrixData::~wxMacCoreGraphicsMatrixData()
-{
-}
-
-wxGraphicsObjectRefData *wxMacCoreGraphicsMatrixData::Clone() const
-{
-    wxMacCoreGraphicsMatrixData* m = new wxMacCoreGraphicsMatrixData(GetRenderer()) ;
-    m->m_matrix = m_matrix ;
-    return m;
-}
-
-// concatenates the matrix
-void wxMacCoreGraphicsMatrixData::Concat( const wxGraphicsMatrixData *t )
-{
-    m_matrix = CGAffineTransformConcat(*((CGAffineTransform*) t->GetNativeMatrix()), m_matrix );
-}
-
-// sets the matrix to the respective values
-void wxMacCoreGraphicsMatrixData::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d,
-    wxDouble tx, wxDouble ty)
-{
-    m_matrix = CGAffineTransformMake((CGFloat) a,(CGFloat) b,(CGFloat) c,(CGFloat) d,(CGFloat) tx,(CGFloat) ty);
-}
-
-// gets the component valuess of the matrix
-void wxMacCoreGraphicsMatrixData::Get(wxDouble* a, wxDouble* b,  wxDouble* c,
-                                      wxDouble* d, wxDouble* tx, wxDouble* ty) const
-{
-    if (a)  *a = m_matrix.a;
-    if (b)  *b = m_matrix.b;
-    if (c)  *c = m_matrix.c;
-    if (d)  *d = m_matrix.d;
-    if (tx) *tx= m_matrix.tx;
-    if (ty) *ty= m_matrix.ty;
-}
-
-// makes this the inverse matrix
-void wxMacCoreGraphicsMatrixData::Invert()
-{
-    m_matrix = CGAffineTransformInvert( m_matrix );
-}
-
-// returns true if the elements of the transformation matrix are equal ?
-bool wxMacCoreGraphicsMatrixData::IsEqual( const wxGraphicsMatrixData* t) const
-{
-    return CGAffineTransformEqualToTransform(m_matrix, *((CGAffineTransform*) t->GetNativeMatrix()));
-}
-
-// return true if this is the identity matrix
-bool wxMacCoreGraphicsMatrixData::IsIdentity() const
-{
-    return ( m_matrix.a == 1 && m_matrix.d == 1 &&
-        m_matrix.b == 0 && m_matrix.d == 0 && m_matrix.tx == 0 && m_matrix.ty == 0);
-}
-
-//
-// transformation
-//
-
-// add the translation to this matrix
-void wxMacCoreGraphicsMatrixData::Translate( wxDouble dx , wxDouble dy )
-{
-    m_matrix = CGAffineTransformTranslate( m_matrix, (CGFloat) dx, (CGFloat) dy);
-}
-
-// add the scale to this matrix
-void wxMacCoreGraphicsMatrixData::Scale( wxDouble xScale , wxDouble yScale )
-{
-    m_matrix = CGAffineTransformScale( m_matrix, (CGFloat) xScale, (CGFloat) yScale);
-}
-
-// add the rotation to this matrix (radians)
-void wxMacCoreGraphicsMatrixData::Rotate( wxDouble angle )
-{
-    m_matrix = CGAffineTransformRotate( m_matrix, (CGFloat) angle);
-}
-
-//
-// apply the transforms
-//
-
-// applies that matrix to the point
-void wxMacCoreGraphicsMatrixData::TransformPoint( wxDouble *x, wxDouble *y ) const
-{
-    CGPoint pt = CGPointApplyAffineTransform( CGPointMake((CGFloat) *x,(CGFloat) *y), m_matrix);
-
-    *x = pt.x;
-    *y = pt.y;
-}
-
-// applies the matrix except for translations
-void wxMacCoreGraphicsMatrixData::TransformDistance( wxDouble *dx, wxDouble *dy ) const
-{
-    CGSize sz = CGSizeApplyAffineTransform( CGSizeMake((CGFloat) *dx,(CGFloat) *dy) , m_matrix );
-    *dx = sz.width;
-    *dy = sz.height;
-}
-
-// returns the native representation
-void * wxMacCoreGraphicsMatrixData::GetNativeMatrix() const
-{
-    return (void*) &m_matrix;
-}
 
 //-----------------------------------------------------------------------------
 // Graphics Path data
@@ -2115,11 +2122,10 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
         CGContextReplacePathWithStrokedPath(m_cgContext);
         CGContextClip( m_cgContext );
         // Apply the gradient's transform, if there is one.
-        if (! penData->GetMatrix().IsNull() )
+        if ( penData->GetMatrix() != NULL )
         {
-            wxGraphicsMatrix m = penData->GetMatrix();
-            m.Invert();
-            ConcatTransform(m);
+            wxMacCoreGraphicsMatrixData* m = penData->GetMatrix();
+            CGContextConcatCTM( m_cgContext, *(CGAffineTransform*) m->GetNativeMatrix());
         }
         CGContextDrawShading( m_cgContext, penData->GetShading() );
         CGContextRestoreGState( m_cgContext);
@@ -2208,11 +2214,10 @@ void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath &path , wxPolygonF
         CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
         CGContextClip( m_cgContext );
         // Apply the gradient's transform, if there is one.
-        if (! brushData->GetMatrix().IsNull() )
+        if ( brushData->GetMatrix() != NULL )
         {
-            wxGraphicsMatrix m = brushData->GetMatrix();
-            m.Invert();
-            ConcatTransform(m);
+            wxMacCoreGraphicsMatrixData* m = brushData->GetMatrix();
+            CGContextConcatCTM( m_cgContext, *(CGAffineTransform*) m->GetNativeMatrix());
         }
         CGContextDrawShading( m_cgContext, brushData->GetShading() );
         CGContextRestoreGState( m_cgContext);
