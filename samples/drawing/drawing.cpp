@@ -123,10 +123,6 @@ public:
     {   if ( !m_renderer ) return false;
         return m_renderer == wxGraphicsRenderer::GetDefaultRenderer();
     }
-    bool IsRendererName(const wxString& name) const
-    {   if ( !m_renderer ) return name.empty();
-        return m_renderer->GetName() == name;
-    }
     wxGraphicsRenderer* GetRenderer() const { return m_renderer; }
 #endif // wxUSE_GRAPHICS_CONTEXT
     void UseBuffer(bool use) { m_useBuffer = use; Refresh(); }
@@ -206,7 +202,7 @@ public:
 
     void OnGraphicContextNoneUpdateUI(wxUpdateUIEvent& event)
     {
-        event.Check(m_canvas->IsRendererName(wxEmptyString));
+        event.Check(m_canvas->GetRenderer() == NULL);
     }
 
     void OnGraphicContextDefault(wxCommandEvent& WXUNUSED(event))
@@ -227,7 +223,7 @@ public:
 
     void OnGraphicContextCairoUpdateUI(wxUpdateUIEvent& event)
     {
-        event.Check(m_canvas->IsRendererName("cairo"));
+        event.Check(m_canvas->GetRenderer() == wxGraphicsRenderer::GetCairoRenderer());
     }
 #endif // wxUSE_CAIRO
 #ifdef __WXMSW__
@@ -239,7 +235,7 @@ public:
 
     void OnGraphicContextGDIPlusUpdateUI(wxUpdateUIEvent& event)
     {
-        event.Check(m_canvas->IsRendererName("gdiplus"));
+        event.Check(m_canvas->GetRenderer() == wxGraphicsRenderer::GetGDIPlusRenderer());
     }
 #endif
 #if wxUSE_GRAPHICS_DIRECT2D
@@ -250,7 +246,7 @@ public:
 
     void OnGraphicContextDirect2DUpdateUI(wxUpdateUIEvent& event)
     {
-        event.Check(m_canvas->IsRendererName("direct2d"));
+        event.Check(m_canvas->GetRenderer() == wxGraphicsRenderer::GetDirect2DRenderer());
     }
 #endif
 #endif // __WXMSW__
@@ -2142,17 +2138,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     wxMenu *menuFile = new wxMenu;
 #if wxUSE_GRAPHICS_CONTEXT
-    menuFile->AppendCheckItem(File_GC_Default, "Use default wx&GraphicContext\tCtrl-Y");
-    m_menuItemUseDC = menuFile->AppendRadioItem(File_DC, "Use wx&DC\tShift-Ctrl-Y");
+    menuFile->AppendCheckItem(File_GC_Default, "Use default wx&GraphicContext\t1");
+    m_menuItemUseDC = menuFile->AppendRadioItem(File_DC, "Use wx&DC\t0");
 #if wxUSE_CAIRO
-    menuFile->AppendRadioItem(File_GC_Cairo, "Use &Cairo\tCtrl-O");
+    menuFile->AppendRadioItem(File_GC_Cairo, "Use &Cairo\t2");
 #endif // wxUSE_CAIRO
 #ifdef __WXMSW__
 #if wxUSE_GRAPHICS_GDIPLUS
-    menuFile->AppendRadioItem(File_GC_GDIPlus, "Use &GDI+\tCtrl-+");
+    menuFile->AppendRadioItem(File_GC_GDIPlus, "Use &GDI+\t3");
 #endif
 #if wxUSE_GRAPHICS_DIRECT2D
-    menuFile->AppendRadioItem(File_GC_Direct2D, "Use &Direct2D\tCtrl-2");
+    menuFile->AppendRadioItem(File_GC_Direct2D, "Use &Direct2D\t4");
 #endif
 #endif // __WXMSW__
 #endif // wxUSE_GRAPHICS_CONTEXT
