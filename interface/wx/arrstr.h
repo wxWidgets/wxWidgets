@@ -33,7 +33,7 @@
     array.Last().MakeUpper();
     @endcode
 
-    @note none of the methods of wxArrayString is virtual including its
+    @note None of the methods of wxArrayString is virtual including its
           destructor, so this class should not be used as a base class.
 
     Although this is not true strictly speaking, this class may be considered as
@@ -48,7 +48,7 @@
     @library{wxbase}
     @category{containers}
 
-    @see wxArray<T>, wxString, @ref overview_string
+    @see wxSortedArrayString, wxArray<T>, wxString, @ref overview_string
 */
 class wxArrayString : public wxArray
 {
@@ -132,17 +132,17 @@ public:
     size_t GetCount() const;
 
     /**
-        Search the element in the array, starting from the beginning if @a bFromEnd
-        is @false or from end otherwise. If @a bCase, comparison is case sensitive
+        Searches the array for @a str, starting from the beginning if @a bFromEnd
+        is @false or from the end otherwise. If @a bCase, comparison is case sensitive
         (default), otherwise the case is ignored.
 
         This function uses linear search for wxArrayString.
-        Returns index of the first item matched or @c wxNOT_FOUND if there is no match.
+        Returns the index of the first item matched or @c wxNOT_FOUND if there is no match.
     */
-    int Index(const wxString& sz, bool bCase = true, bool bFromEnd = false) const;
+    int Index(const wxString& str, bool bCase = true, bool bFromEnd = false) const;
 
     /**
-        Insert the given number of @a copies of the new element in the array before the
+        Inserts the given number of @a copies of @a str in the array before the
         position @a nIndex. Thus, for example, to insert the string in the beginning of
         the array you would write:
 
@@ -152,7 +152,7 @@ public:
 
         If @a nIndex is equal to GetCount() this function behaves as Add().
     */
-    void Insert(wxString lItem, size_t nIndex, size_t copies = 1);
+    void Insert(const wxString& str, size_t nIndex, size_t copies = 1);
 
     /**
         Returns @true if the array is empty, @false otherwise. This function returns the
@@ -257,7 +257,7 @@ public:
     bool operator ==(const wxArrayString& array) const;
 
     /**
-        Return the array element at position @a nIndex. An assert failure will
+        Returns the array element at position @a nIndex. An assert failure will
         result from an attempt to access an element beyond the end of array in
         debug mode, but no check is done in release mode.
 
@@ -271,7 +271,7 @@ public:
     @class wxSortedArrayString
 
     wxSortedArrayString is an efficient container for storing wxString objects
-    which always keeps the string in alphabetical order.
+    which always keeps the strings in alphabetical order.
 
     wxSortedArrayString uses binary search in its wxSortedArrayString::Index() method
     (instead of linear search for wxArrayString::Index()) which makes it much more
@@ -309,7 +309,7 @@ public:
         Conversion constructor.
 
         Constructs a sorted array with the same contents as the (possibly
-        unsorted) "array" argument.
+        unsorted) @a array argument.
     */
     wxSortedArrayString(const wxArrayString& array);
 
@@ -330,7 +330,7 @@ public:
         This function uses binary search for wxSortedArrayString, but it ignores
         the @a bCase and @a bFromEnd parameters.
     */
-    int Index(const wxString& sz, bool bCase = true,
+    int Index(const wxString& str, bool bCase = true,
               bool bFromEnd = false) const;
 
     /**
