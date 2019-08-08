@@ -2117,24 +2117,27 @@ PRectangle Window::GetMonitorRect(Point pt) {
         // Do not activate the window when it is shown.
         bool wxSTCPopupBase::Show(bool show)
         {
-            if ( !wxWindowBase::Show(show) )
-                return false;
-
             if ( show )
             {
-                HWND hWnd = reinterpret_cast<HWND>(GetHandle());
-                if ( GetName() == "wxSTCCallTip" )
-                    ::AnimateWindow(hWnd, 25, AW_BLEND);
-                else
-                    ::ShowWindow(hWnd, SW_SHOWNA );
+                // Check if the window is changing from hidden to shown.
+                bool changingVisibility = wxWindowBase::Show(true);
 
-                ::SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0,
-                               SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+                if ( changingVisibility )
+                {
+                    HWND hWnd = reinterpret_cast<HWND>(GetHandle());
+                    if ( GetName() == "wxSTCCallTip" )
+                        ::AnimateWindow(hWnd, 25, AW_BLEND);
+                    else
+                        ::ShowWindow(hWnd, SW_SHOWNA );
+
+                    ::SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0,
+                                   SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+                }
+
+                return changingVisibility;
             }
             else
-                wxPopupWindow::Show(false);
-
-            return true;
+                return wxPopupWindow::Show(false);
         }
 
         // Do not activate in response to mouse clicks on this window.
