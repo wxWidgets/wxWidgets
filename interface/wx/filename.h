@@ -1253,6 +1253,12 @@ public:
     static wxFileName URLToFileName(const wxString& url);
 
     /**
+        Converts URL into a well-formed filename.
+        The URL must use the @c file protocol.
+    */
+    static wxString FileNameToURL(const wxFileName& filename);
+
+    /**
         Sets the file creation and last access/modification times (any of the pointers
         may be @NULL).
 
