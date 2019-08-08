@@ -1250,11 +1250,11 @@ bool wxToolBar::Realize()
                             cfidentifier = wxCFStringRef(wxString::Format("%ld", (long)tool));
                             nsItemId = cfidentifier.AsNSString();
                         }
-                    
+
                         [refTB insertItemWithItemIdentifier:nsItemId atIndex:currentPosition];
                         tool->SetIndex( currentPosition );
                     }
-                
+
                     currentPosition++;
                 }
             }
@@ -1262,11 +1262,11 @@ bool wxToolBar::Realize()
         }
     
 #endif
-    
+
         DoLayout();
-    
+
         // adjust radio items
-        
+
         bool lastIsRadio = false;
         bool curIsRadio = false;
     
@@ -1279,7 +1279,7 @@ bool wxToolBar::Realize()
                 node = node->GetNext();
                 continue;
             }
-            
+
             // update radio button (and group) state
             lastIsRadio = curIsRadio;
             curIsRadio = ( tool->IsButton() && (tool->GetKind() == wxITEM_RADIO) );
