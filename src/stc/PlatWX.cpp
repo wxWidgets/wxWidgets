@@ -2701,7 +2701,7 @@ wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v, int ht)
               m_textTopGap(0), m_imageAreaWidth(0), m_imageAreaHeight(0)
 {
     wxVListBox::Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                       wxBORDER_NONE);
+                       wxBORDER_NONE, "AutoCompListBox");
 
     m_imagePadding             = FromDIP(1);
     m_textBoxToTextGap         = FromDIP(3);
