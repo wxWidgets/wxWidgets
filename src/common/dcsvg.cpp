@@ -275,8 +275,6 @@ wxString wxCreateBrushFill(wxBrush& brush)
 
 void wxSetScaledScreenDCFont(wxScreenDC& sDC, const wxFont& font)
 {
-    sDC.SetFont(font);
-
     const double scale = sDC.GetContentScaleFactor();
     if ( scale > 1 )
     {
@@ -287,9 +285,13 @@ void wxSetScaledScreenDCFont(wxScreenDC& sDC, const wxFont& font)
         // We can't just divide the returned sizes by the scale factor, because
         // text does not scale linear (at least on Windows). Therefore, we scale
         // the font size instead.
-        wxFont scaledFont = sDC.GetFont();
+        wxFont scaledFont = font;
         scaledFont.SetFractionalPointSize(scaledFont.GetFractionalPointSize() / scale);
         sDC.SetFont(scaledFont);
+    }
+    else
+    {
+        sDC.SetFont(font);
     }
 }
 
