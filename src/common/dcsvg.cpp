@@ -278,7 +278,8 @@ void wxSetScaledScreenDCFont(wxScreenDC& sDC, const wxFont& font)
     sDC.SetFont(font);
 
     const double scale = sDC.GetContentScaleFactor();
-    if (scale > 1) {
+    if ( scale > 1 )
+    {
         // wxScreenDC uses the DPI of the main screen to determine the text
         // extent and character width/height. Because the SVG should be
         // DPI-independent we want the text extent of the default (96) DPI.
