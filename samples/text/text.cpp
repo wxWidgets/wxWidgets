@@ -2009,7 +2009,11 @@ void RichTextFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
                 if (attr.GetFont().GetUnderlined())
                     msg += " UNDERLINED";
             }
-
+//            if( attr.HasLeftIndent() )
+            {
+                msg += ", left indent: ";
+                msg << attr.GetLeftIndent();
+            }
             SetStatusText(msg);
         }
 #endif // wxUSE_STATUSBAR

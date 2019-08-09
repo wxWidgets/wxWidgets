@@ -1042,6 +1042,7 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
         NSColor* fgcolor = NULL;
         NSNumber* ultype = NULL;
         NSColor* ulcolor = NULL;
+        CGFloat leftIndent = 0;
         // NOTE: It appears that other platforms accept GetStyle with the position == length
         // but that NSTextStorage does not accept length as a valid position.
         // Therefore we return the default control style in that case.
@@ -1053,6 +1054,11 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
             fgcolor = [storage attribute:NSForegroundColorAttributeName atIndex:position effectiveRange:NULL];
             ultype = [storage attribute:NSUnderlineStyleAttributeName atIndex:position effectiveRange:NULL];
             ulcolor = [storage attribute:NSUnderlineColorAttributeName atIndex:position effectiveRange:NULL];
+            NSDictionary *attrs;
+            NSRange effectiveRange;
+            attrs = [storage attributesAtIndex: position effectiveRange: NULL];
+            NSParagraphStyle *style = [attrs valueForKey: NSParagraphStyleAttributeName];
+            leftIndent = [style headIndent];
         }
         else
         {
@@ -1062,6 +1068,8 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
             fgcolor = [attrs objectForKey:NSForegroundColorAttributeName];
             ultype = [attrs objectForKey:NSUnderlineStyleAttributeName];
             ulcolor = [attrs objectForKey:NSUnderlineColorAttributeName];
+            NSParagraphStyle *style = [attrs valueForKey: NSParagraphStyleAttributeName];
+            leftIndent = [style headIndent];
         }
 
         if (font)
@@ -1100,6 +1108,9 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
 
         if ( underlineType != wxTEXT_ATTR_UNDERLINE_NONE )
             style.SetFontUnderlined(underlineType, underlineColour);
+
+        if( leftIndent > 0 )
+            style.SetLeftIndent( leftIndent * 10.0 * pt2mm );
 
         return true;
     }
@@ -1205,12 +1216,6 @@ void wxNSTextViewControl::SetStyle(long start,
             }
             [storage addAttributes:dict range:range];
             [dict release];
-        }
-        if ( style.HasLeftIndent() )
-        {
-//            storage = [m_textView textStorage];
-//            NSInteger insPoint = [[[m_textView selectedRanges] objectAtIndex:0] rangeValue].location;
-//            range = NSMakeRange( insPoint, storage.string.length - insPoint );
         }
     }
 
