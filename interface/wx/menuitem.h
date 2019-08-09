@@ -501,6 +501,27 @@ public:
         @c Shift+/ do not, so avoid using accelerators of this form in portable
         code.
 
+        @note In wxGTk, the left/right/up/down arrow keys do not work as
+        accelerator keys for a menu item unless a modifier key is used.
+        Additionally, the following keycodes are not supported as menu
+        accelerator keys:
+        - WXK_COMMAND/WXK_CONTROL
+        - WXK_SHIFT
+        - WXK_ALT
+        - WXK_SCROLL
+        - WXK_CAPITAL
+        - WXK_NUMLOCK
+        - WXK_NUMPAD_TAB
+        - WXK_TAB
+        - WXK_WINDOWS_LEFT
+        - WXK_WINDOWS_RIGHT
+        - WXK_ADD
+        - WXK_SEPARATOR
+        - WXK_SUBTRACT
+        - WXK_DECIMAL
+        - WXK_DIVIDE
+        - WXK_SNAPSHOT
+
         @see GetItemLabel(), GetItemLabelText()
     */
     virtual void SetItemLabel(const wxString& label);

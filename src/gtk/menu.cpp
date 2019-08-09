@@ -665,11 +665,16 @@ void wxMenuItem::SetGtkLabel()
     guint accel_key;
     GdkModifierType accel_mods;
     wxGetGtkAccel(this, &accel_key, &accel_mods);
-    if (accel_key)
+    if ( accel_key && gtk_accelerator_valid( accel_key, accel_mods ) )
     {
         gtk_widget_add_accelerator(
             m_menuItem, "activate", GetRootParentMenu(m_parentMenu)->m_accel,
             accel_key, accel_mods, GTK_ACCEL_VISIBLE);
+    }
+    else
+    {
+        // Remove the accelerator since it couldn't be made or is invalid
+        m_text = m_text.BeforeFirst( wxS( '\t' ) );
     }
 #endif // wxUSE_ACCEL
 }
@@ -1036,59 +1041,52 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
         int code = accel->GetKeyCode();
         switch ( code )
         {
-            case WXK_F1:
-            case WXK_F2:
-            case WXK_F3:
-            case WXK_F4:
-            case WXK_F5:
-            case WXK_F6:
-            case WXK_F7:
-            case WXK_F8:
-            case WXK_F9:
-            case WXK_F10:
-            case WXK_F11:
-            case WXK_F12:
-            case WXK_F13:
-            case WXK_F14:
-            case WXK_F15:
-            case WXK_F16:
-            case WXK_F17:
-            case WXK_F18:
-            case WXK_F19:
-            case WXK_F20:
-            case WXK_F21:
-            case WXK_F22:
-            case WXK_F23:
-            case WXK_F24:
+            case WXK_F1:  case WXK_F2:  case WXK_F3:  case WXK_F4:  case WXK_F5:
+            case WXK_F6:  case WXK_F7:  case WXK_F8:  case WXK_F9:  case WXK_F10:
+            case WXK_F11: case WXK_F12: case WXK_F13: case WXK_F14: case WXK_F15:
+            case WXK_F16: case WXK_F17: case WXK_F18: case WXK_F19: case WXK_F20:
+            case WXK_F21: case WXK_F22: case WXK_F23: case WXK_F24:
                 hotkey += wxString::Format(wxT("F%d"), code - WXK_F1 + 1);
                 break;
 
                 // TODO: we should use gdk_keyval_name() (a.k.a.
                 //       XKeysymToString) here as well as hardcoding the keysym
                 //       names this might be not portable
-           case WXK_INSERT:
+            case WXK_INSERT:
                 hotkey << wxT("Insert" );
                 break;
             case WXK_DELETE:
                 hotkey << wxT("Delete" );
                 break;
             case WXK_UP:
-                hotkey << wxT("Up" );
+                if ( flags )
+                    hotkey << wxT("Up" );
+                else
+                    wxFAIL_MSG( wxT("The Up key must have modifiers to be an accelerator key") );
                 break;
             case WXK_DOWN:
-                hotkey << wxT("Down" );
+                if ( flags )
+                    hotkey << wxT("Down" );
+                else
+                    wxFAIL_MSG( wxT("The Down key must have modifiers to be an accelerator key") );
+                break;
+            case WXK_LEFT:
+                if ( flags )
+                    hotkey << wxT("Left" );
+                else
+                    wxFAIL_MSG( wxT("The Left key must have modifiers to be an accelerator key") );
+                break;
+            case WXK_RIGHT:
+                if ( flags )
+                    hotkey << wxT("Right" );
+                else
+                    wxFAIL_MSG( wxT("The Right key must have modifiers to be an accelerator key") );
                 break;
             case WXK_PAGEUP:
                 hotkey << wxT("Page_Up" );
                 break;
             case WXK_PAGEDOWN:
                 hotkey << wxT("Page_Down" );
-                break;
-            case WXK_LEFT:
-                hotkey << wxT("Left" );
-                break;
-            case WXK_RIGHT:
-                hotkey << wxT("Right" );
                 break;
             case WXK_HOME:
                 hotkey << wxT("Home" );
@@ -1102,32 +1100,14 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
             case WXK_BACK:
                 hotkey << wxT("BackSpace" );
                 break;
-            case WXK_TAB:
-                hotkey << wxT("Tab" );
-                break;
             case WXK_ESCAPE:
-                hotkey << wxT("Esc" );
+                hotkey << wxT("Escape" );
                 break;
             case WXK_SPACE:
                 hotkey << wxT("space" );
                 break;
             case WXK_MULTIPLY:
-                hotkey << wxT("Multiply" );
-                break;
-            case WXK_ADD:
-                hotkey << wxT("Add" );
-                break;
-            case WXK_SEPARATOR:
-                hotkey << wxT("Separator" );
-                break;
-            case WXK_SUBTRACT:
-                hotkey << wxT("Subtract" );
-                break;
-            case WXK_DECIMAL:
-                hotkey << wxT("Decimal" );
-                break;
-            case WXK_DIVIDE:
-                hotkey << wxT("Divide" );
+                hotkey << wxT("multiply" );
                 break;
             case WXK_CANCEL:
                 hotkey << wxT("Cancel" );
@@ -1141,9 +1121,6 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
             case WXK_PAUSE:
                 hotkey << wxT("Pause" );
                 break;
-            case WXK_CAPITAL:
-                hotkey << wxT("Capital" );
-                break;
             case WXK_SELECT:
                 hotkey << wxT("Select" );
                 break;
@@ -1153,17 +1130,8 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
             case WXK_EXECUTE:
                 hotkey << wxT("Execute" );
                 break;
-            case WXK_SNAPSHOT:
-                hotkey << wxT("Snapshot" );
-                break;
             case WXK_HELP:
                 hotkey << wxT("Help" );
-                break;
-            case WXK_NUMLOCK:
-                hotkey << wxT("Num_Lock" );
-                break;
-            case WXK_SCROLL:
-                hotkey << wxT("Scroll_Lock" );
                 break;
             case WXK_NUMPAD_INSERT:
                 hotkey << wxT("KP_Insert" );
@@ -1173,9 +1141,6 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 break;
              case WXK_NUMPAD_SPACE:
                 hotkey << wxT("KP_Space" );
-                break;
-            case WXK_NUMPAD_TAB:
-                hotkey << wxT("KP_Tab" );
                 break;
             case WXK_NUMPAD_ENTER:
                 hotkey << wxT("KP_Enter" );
@@ -1187,17 +1152,29 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
             case WXK_NUMPAD_HOME:
                 hotkey << wxT("KP_Home" );
                 break;
-            case WXK_NUMPAD_LEFT:
-                hotkey << wxT("KP_Left" );
-                break;
              case WXK_NUMPAD_UP:
-                hotkey << wxT("KP_Up" );
-                break;
-            case WXK_NUMPAD_RIGHT:
-                hotkey << wxT("KP_Right" );
+                if ( flags )
+                    hotkey << wxT("KP_Up" );
+                else
+                    wxFAIL_MSG( wxT("The KP_Up key must have modifiers to be an accelerator key") );
                 break;
             case WXK_NUMPAD_DOWN:
-                hotkey << wxT("KP_Down" );
+                if ( flags )
+                    hotkey << wxT("KP_Down" );
+                else
+                    wxFAIL_MSG( wxT("The KP_Down key must have modifiers to be an accelerator key") );
+                break;
+            case WXK_NUMPAD_LEFT:
+                if ( flags )
+                    hotkey << wxT("KP_Left" );
+                else
+                    wxFAIL_MSG( wxT("The KP_Left key must have modifiers to be an accelerator key") );
+                break;
+            case WXK_NUMPAD_RIGHT:
+                if ( flags )
+                    hotkey << wxT("KP_Right" );
+                else
+                    wxFAIL_MSG( wxT("The KP_Right key must have modifiers to be an accelerator key") );
                 break;
             case WXK_NUMPAD_PAGEUP:
                 hotkey << wxT("KP_Page_Up" );
@@ -1234,32 +1211,58 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 break;
            case WXK_NUMPAD0: case WXK_NUMPAD1: case WXK_NUMPAD2:
            case WXK_NUMPAD3: case WXK_NUMPAD4: case WXK_NUMPAD5:
-           case WXK_NUMPAD6: case WXK_NUMPAD7: case WXK_NUMPAD8: case WXK_NUMPAD9:
+           case WXK_NUMPAD6: case WXK_NUMPAD7: case WXK_NUMPAD8:
+           case WXK_NUMPAD9:
                 hotkey += wxString::Format(wxT("KP_%d"), code - WXK_NUMPAD0);
-                break;
-            case WXK_WINDOWS_LEFT:
-                hotkey << wxT("Super_L" );
-                break;
-            case WXK_WINDOWS_RIGHT:
-                hotkey << wxT("Super_R" );
                 break;
             case WXK_WINDOWS_MENU:
                 hotkey << wxT("Menu" );
                 break;
-            case WXK_COMMAND:
-                hotkey << wxT("Command" );
+
+            /*
+             The following keycodes have been shown not to work as accelerator
+             keys on GTK (see https://trac.wxwidgets.org/ticket/10049)
+             and are not valid
+             (see gtkaccelgroup.c inside gtk_accelerator_valid())
+             */
+            case WXK_COMMAND:   // Same as WXK_CONTROL
+            case WXK_SHIFT:
+            case WXK_ALT:
+            case WXK_SCROLL:    // Scroll lock
+            case WXK_CAPITAL:   // Caps lock
+            case WXK_NUMLOCK:
+            case WXK_NUMPAD_TAB:
+            case WXK_TAB:
+            case WXK_WINDOWS_LEFT:
+            case WXK_WINDOWS_RIGHT:
+
+            /*
+             The following keycodes do not map clearly into a GTK keycode,
+             so they are not included in the accelerator mapping:
+             */
+            case WXK_ADD:
+            case WXK_SEPARATOR:
+            case WXK_SUBTRACT:
+            case WXK_DECIMAL:
+            case WXK_DIVIDE:
+            case WXK_SNAPSHOT:
+
+            /*
+             The following special codes do not map into GTK keycodes,
+             see gdk/keynames.txt
+             */
+            case WXK_SPECIAL1:  case WXK_SPECIAL2:  case WXK_SPECIAL3:
+            case WXK_SPECIAL4:  case WXK_SPECIAL5:  case WXK_SPECIAL6:
+            case WXK_SPECIAL7:  case WXK_SPECIAL8:  case WXK_SPECIAL9:
+            case WXK_SPECIAL10: case WXK_SPECIAL11: case WXK_SPECIAL12:
+            case WXK_SPECIAL13: case WXK_SPECIAL14: case WXK_SPECIAL15:
+            case WXK_SPECIAL16: case WXK_SPECIAL17: case WXK_SPECIAL18:
+            case WXK_SPECIAL19: case WXK_SPECIAL20:
+                wxFAIL_MSG( wxT("Unsupported keyboard accelerator key") );
                 break;
-          /* These probably wouldn't work as there is no SpecialX in gdk/keynames.txt
-            case WXK_SPECIAL1: case WXK_SPECIAL2: case WXK_SPECIAL3: case WXK_SPECIAL4:
-            case WXK_SPECIAL5: case WXK_SPECIAL6: case WXK_SPECIAL7: case WXK_SPECIAL8:
-            case WXK_SPECIAL9:  case WXK_SPECIAL10:  case WXK_SPECIAL11: case WXK_SPECIAL12:
-            case WXK_SPECIAL13: case WXK_SPECIAL14: case WXK_SPECIAL15: case WXK_SPECIAL16:
-            case WXK_SPECIAL17: case WXK_SPECIAL18: case WXK_SPECIAL19:  case WXK_SPECIAL20:
-                hotkey += wxString::Format(wxT("Special%d"), code - WXK_SPECIAL1 + 1);
-                break;
-          */
-                // if there are any other keys wxAcceleratorEntry::Create() may
-                // return, we should process them here
+
+            // if there are any other keys wxAcceleratorEntry::Create() may
+            // return, we should process them here
 
             default:
                 if ( code < 127 )
