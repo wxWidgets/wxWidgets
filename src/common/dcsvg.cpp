@@ -55,11 +55,12 @@ inline wxString NumStr(double f)
 
 // Return the colour representation as HTML-like "#rrggbb" string and also
 // returns its alpha as opacity number in 0..1 range.
-wxString Col2SVG(wxColour c, float *opacity)
+wxString Col2SVG(wxColour c, float *opacity = NULL)
 {
     if ( c.Alpha() != wxALPHA_OPAQUE )
     {
-        *opacity = c.Alpha()/255.;
+        if ( opacity )
+            *opacity = c.Alpha() / 255.0f;
 
         // Remove the alpha before using GetAsString(wxC2S_HTML_SYNTAX) as it
         // doesn't support colours with alpha channel.
@@ -67,7 +68,8 @@ wxString Col2SVG(wxColour c, float *opacity)
     }
     else // No alpha.
     {
-        *opacity = 1.;
+        if ( opacity )
+            *opacity = 1.;
     }
 
     return c.GetAsString(wxC2S_HTML_SYNTAX);
@@ -188,6 +190,43 @@ wxString wxGetPenPattern(wxPen& pen)
     return s;
 }
 
+wxString wxGetPenStyle(wxPen& pen)
+{
+    wxString penStyle;
+
+    penStyle += wxString::Format(wxS("stroke-width:%d;"), pen.GetWidth());
+
+    switch (pen.GetCap())
+    {
+        case wxCAP_PROJECTING:
+            penStyle += wxS(" stroke-linecap:square;");
+            break;
+        case wxCAP_BUTT:
+            penStyle += wxS(" stroke-linecap:butt;");
+            break;
+        case wxCAP_ROUND:
+        default:
+            penStyle += wxS(" stroke-linecap:round;");
+            break;
+    }
+
+    switch (pen.GetJoin())
+    {
+        case wxJOIN_BEVEL:
+            penStyle += wxS(" stroke-linejoin:bevel;");
+            break;
+        case wxJOIN_MITER:
+            penStyle += wxS(" stroke-linejoin:miter;");
+            break;
+        case wxJOIN_ROUND:
+        default:
+            penStyle += wxS(" stroke-linejoin:round;");
+            break;
+    }
+
+    return penStyle;
+}
+
 wxString wxGetBrushStyleName(wxBrush& brush)
 {
     wxString brushStyle;
@@ -231,7 +270,7 @@ wxString wxGetBrushFill(wxBrush& brush)
     wxString brushStyle = wxGetBrushStyleName(brush);
 
     if (!brushStyle.IsEmpty())
-        s = wxS("fill=\"url(#") + brushStyle + brush.GetColour().GetAsString(wxC2S_HTML_SYNTAX).substr(1) + wxS(")\"");
+        s = wxS("fill=\"url(#") + brushStyle + Col2SVG(brush.GetColour()).substr(1) + wxS(")\"");
 
     return s;
 }
@@ -265,7 +304,7 @@ wxString wxCreateBrushFill(wxBrush& brush)
                 break;
         }
 
-        wxString brushColourStr = brush.GetColour().GetAsString(wxC2S_HTML_SYNTAX);
+        wxString brushColourStr = Col2SVG(brush.GetColour());
 
         s += wxString::Format(wxS("  <pattern id=\"%s%s\" patternUnits=\"userSpaceOnUse\" width=\"8\" height=\"8\">\n"),
             patternName, brushColourStr.substr(1));
@@ -973,45 +1012,17 @@ void wxSVGFileDCImpl::NewGraphicsIfNeeded()
 
 void wxSVGFileDCImpl::DoStartNewGraphics()
 {
-    wxString s, sPenCap, sPenJoin, sLast;
+    wxString s;
 
-    switch ( m_pen.GetCap() )
-    {
-        case wxCAP_PROJECTING:
-            sPenCap = wxS("stroke-linecap:square;");
-            break;
-        case wxCAP_BUTT:
-            sPenCap = wxS("stroke-linecap:butt;");
-            break;
-        case wxCAP_ROUND:
-        default:
-            sPenCap = wxS("stroke-linecap:round;");
-    }
-
-    switch ( m_pen.GetJoin() )
-    {
-        case wxJOIN_BEVEL:
-            sPenJoin = wxS("stroke-linejoin:bevel;");
-            break;
-        case wxJOIN_MITER:
-            sPenJoin = wxS("stroke-linejoin:miter;");
-            break;
-        case wxJOIN_ROUND:
-        default:
-            sPenJoin = wxS("stroke-linejoin:round;");
-    }
-
-    sLast = wxString::Format(wxS("stroke-width:%d\" transform=\"translate(%s %s) scale(%s %s)\""),
-                             m_pen.GetWidth(),
-                             NumStr((m_deviceOriginX - m_logicalOriginX)* m_signX),
-                             NumStr((m_deviceOriginY - m_logicalOriginY)* m_signY),
-                             NumStr(m_scaleX * m_signX),
-                             NumStr(m_scaleY * m_signY));
-
-    s = wxString::Format(wxS("<g style=\"%s %s %s %s %s>\n"),
+    s = wxString::Format(wxS("<g style=\"%s %s %s\" transform=\"translate(%s %s) scale(%s %s)\">\n"),
+        wxGetPenStyle(m_pen),
         wxBrushString(m_brush.GetColour(), m_brush.GetStyle()),
         wxPenString(m_pen.GetColour(), m_pen.GetStyle()),
-        sPenCap, sPenJoin, sLast);
+        NumStr((m_deviceOriginX - m_logicalOriginX) * m_signX),
+        NumStr((m_deviceOriginY - m_logicalOriginY) * m_signY),
+        NumStr(m_scaleX * m_signX),
+        NumStr(m_scaleY * m_signY));
+
     write(s);
 }
 
