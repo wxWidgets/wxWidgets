@@ -462,6 +462,8 @@ wxSVGBitmapFileHandler::ProcessBitmap(const wxBitmap& bmp,
 // wxSVGFileDC (specialisations)
 // ----------------------------------------------------------
 
+wxIMPLEMENT_DYNAMIC_CLASS(wxSVGFileDC, wxDC);
+
 void wxSVGFileDC::SetBitmapHandler(wxSVGBitmapHandler* handler)
 {
     ((wxSVGFileDCImpl*)GetImpl())->SetBitmapHandler(handler);
@@ -476,7 +478,7 @@ void wxSVGFileDC::SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode)
 // wxSVGFileDCImpl
 // ----------------------------------------------------------
 
-wxIMPLEMENT_ABSTRACT_CLASS(wxSVGFileDCImpl, wxDC);
+wxIMPLEMENT_ABSTRACT_CLASS(wxSVGFileDCImpl, wxDCImpl);
 
 wxSVGFileDCImpl::wxSVGFileDCImpl(wxSVGFileDC *owner, const wxString &filename,
                                  int width, int height, double dpi, const wxString &title)
@@ -517,7 +519,11 @@ void wxSVGFileDCImpl::Init(const wxString &filename, int Width, int Height,
     ////////////////////code here
 
     m_bmp_handler.reset();
-    m_outfile.reset(new wxFileOutputStream(m_filename));
+
+    if ( m_filename.IsEmpty() )
+        m_outfile.reset();
+    else
+        m_outfile.reset(new wxFileOutputStream(m_filename));
 
     wxString s;
     s += wxS("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n");
@@ -1215,14 +1221,20 @@ void wxSVGFileDCImpl::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoor
     if ( !m_bmp_handler )
         m_bmp_handler.reset(new wxSVGBitmapFileHandler(m_filename));
 
+    m_OK = m_outfile && m_outfile->IsOk();
+    if (!m_OK)
+        return;
+
     m_bmp_handler->ProcessBitmap(bmp, x, y, *m_outfile);
+    m_OK = m_outfile->IsOk();
 }
 
 void wxSVGFileDCImpl::write(const wxString &s)
 {
-    m_OK = m_outfile->IsOk();
+    m_OK = m_outfile && m_outfile->IsOk();
     if (!m_OK)
         return;
+
     const wxCharBuffer buf = s.utf8_str();
     m_outfile->Write(buf, strlen((const char *)buf));
     m_OK = m_outfile->IsOk();

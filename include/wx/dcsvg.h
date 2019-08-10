@@ -277,6 +277,7 @@ private:
     size_t m_clipUniqueId;
 
     wxDECLARE_ABSTRACT_CLASS(wxSVGFileDCImpl);
+    wxDECLARE_NO_COPY_CLASS(wxSVGFileDCImpl);
 };
 
 
@@ -298,6 +299,14 @@ public:
     void SetBitmapHandler(wxSVGBitmapHandler* handler);
 
     void SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode);
+
+private:
+    wxSVGFileDC()
+        : wxDC(new wxSVGFileDCImpl(this, wxString()))
+    {
+    }
+
+    wxDECLARE_DYNAMIC_CLASS(wxSVGFileDC);
 };
 
 #endif // wxUSE_SVG
