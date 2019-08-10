@@ -668,15 +668,15 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     const wxArrayString lines = wxSplit(sText, '\n', '\0');
     for (size_t lineNum = 0; lineNum < lines.size(); lineNum++)
     {
-        const int xRect = x + wxRound(lineNum * dx);
-        const int yRect = y + wxRound(lineNum * dy);
+        const double xRect = x + lineNum * dx;
+        const double yRect = y + lineNum * dy;
 
         // convert x,y to SVG text x,y (the coordinates of the text baseline)
         wxCoord ww, hh, desc;
         wxString const& line = lines[lineNum];
         DoGetTextExtent(line, &ww, &hh, &desc);
-        const int xText = xRect + (hh - desc) * sin(rad);
-        const int yText = yRect + (hh - desc) * cos(rad);
+        const double xText = xRect + (hh - desc) * sin(rad);
+        const double yText = yRect + (hh - desc) * cos(rad);
 
         if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
         {
@@ -687,23 +687,23 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
                 wxStrokeString(m_textBackgroundColour));
 
             const wxString rectTransform = wxString::Format(
-                wxS("transform=\"rotate(%s %d %d)\""),
-                NumStr(-angle), xRect, yRect);
+                wxS("transform=\"rotate(%s %s %s)\""),
+                NumStr(-angle), NumStr(xRect), NumStr(yRect));
 
             s = wxString::Format(
-                wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" %s %s/>\n"),
-                xRect, yRect, ww, hh, rectStyle, rectTransform);
+                wxS("  <rect x=\"%s\" y=\"%s\" width=\"%d\" height=\"%d\" %s %s/>\n"),
+                NumStr(xRect), NumStr(yRect), ww, hh, rectStyle, rectTransform);
 
             write(s);
         }
 
         const wxString transform = wxString::Format(
-            wxS("transform=\"rotate(%s %d %d)\""),
-            NumStr(-angle), xText, yText);
+            wxS("transform=\"rotate(%s %s %s)\""),
+            NumStr(-angle), NumStr(xText), NumStr(yText));
 
         s = wxString::Format(
-            wxS("  <text x=\"%d\" y=\"%d\" textLength=\"%d\" %s %s>%s</text>\n"),
-            xText, yText, ww, style, transform,
+            wxS("  <text x=\"%s\" y=\"%s\" textLength=\"%d\" %s %s>%s</text>\n"),
+            NumStr(xText), NumStr(yText), ww, style, transform,
 #if wxUSE_MARKUP
             wxMarkupParser::Quote(line)
 #else
@@ -804,12 +804,12 @@ void wxSVGFileDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord
 {
     NewGraphicsIfNeeded();
 
-    int rh = height / 2;
-    int rw = width / 2;
+    const double rh = height / 2.0;
+    const double rw = width / 2.0;
 
     wxString s;
-    s = wxString::Format(wxS("  <ellipse cx=\"%d\" cy=\"%d\" rx=\"%d\" ry=\"%d\" %s"),
-        x + rw, y + rh, rw, rh, wxGetPenPattern(m_pen));
+    s = wxString::Format(wxS("  <ellipse cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\" %s"),
+        NumStr(x + rw), NumStr(y + rh), NumStr(rw), NumStr(rh), wxGetPenPattern(m_pen));
     s += wxS("/>\n");
 
     write(s);
