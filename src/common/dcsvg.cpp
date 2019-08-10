@@ -108,6 +108,7 @@ wxString wxBrushString(wxColour c, int style = wxBRUSHSTYLE_SOLID)
     switch ( style )
     {
         case wxBRUSHSTYLE_SOLID:
+        case wxBRUSHSTYLE_BDIAGONAL_HATCH:
         case wxBRUSHSTYLE_FDIAGONAL_HATCH:
         case wxBRUSHSTYLE_CROSSDIAG_HATCH:
         case wxBRUSHSTYLE_CROSS_HATCH:
@@ -233,6 +234,9 @@ wxString wxGetBrushStyleName(wxBrush& brush)
 
     switch (brush.GetStyle())
     {
+        case wxBRUSHSTYLE_BDIAGONAL_HATCH:
+            brushStyle = wxS("BdiagonalHatch");
+            break;
         case wxBRUSHSTYLE_FDIAGONAL_HATCH:
             brushStyle = wxS("FdiagonalHatch");
             break;
@@ -251,7 +255,6 @@ wxString wxGetBrushStyleName(wxBrush& brush)
         case wxBRUSHSTYLE_STIPPLE_MASK_OPAQUE:
         case wxBRUSHSTYLE_STIPPLE_MASK:
         case wxBRUSHSTYLE_STIPPLE:
-        case wxBRUSHSTYLE_BDIAGONAL_HATCH:
             wxASSERT_MSG(false, wxS("wxSVGFileDC::Requested Brush Fill not available"));
             break;
         case wxBRUSHSTYLE_SOLID:
@@ -285,6 +288,9 @@ wxString wxCreateBrushFill(wxBrush& brush)
         wxString pattern;
         switch (brush.GetStyle())
         {
+            case wxBRUSHSTYLE_BDIAGONAL_HATCH:
+                pattern = wxS("d=\"M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2\"");
+                break;
             case wxBRUSHSTYLE_FDIAGONAL_HATCH:
                 pattern = wxS("d=\"M7,-1 l2,2 M0,0 l8,8 M-1,7 l2,2\"");
                 break;
@@ -986,7 +992,12 @@ void wxSVGFileDCImpl::SetBrush(const wxBrush& brush)
     m_graphics_changed = true;
 
     wxString pattern = wxCreateBrushFill(m_brush);
-    write(pattern);
+    if ( !pattern.IsEmpty() )
+    {
+        NewGraphicsIfNeeded();
+
+        write(pattern);
+    }
 }
 
 void wxSVGFileDCImpl::SetPen(const wxPen& pen)
