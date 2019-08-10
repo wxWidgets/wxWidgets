@@ -11,15 +11,24 @@
 #ifndef _WX_DCSVG_H_
 #define _WX_DCSVG_H_
 
+#if wxUSE_SVG
+
 #include "wx/string.h"
 #include "wx/filename.h"
 #include "wx/dc.h"
-
-#if wxUSE_SVG
-
 #include "wx/scopedptr.h"
 
 #define wxSVGVersion wxT("v0101")
+
+enum wxSVGShapeRenderingMode
+{
+    wxSVG_SHAPE_RENDERING_AUTO = 0,
+    wxSVG_SHAPE_RENDERING_OPTIMIZE_SPEED,
+    wxSVG_SHAPE_RENDERING_CRISP_EDGES,
+    wxSVG_SHAPE_RENDERING_GEOMETRIC_PRECISION,
+
+    wxSVG_SHAPE_RENDERING_OPTIMISE_SPEED = wxSVG_SHAPE_RENDERING_OPTIMIZE_SPEED
+};
 
 class WXDLLIMPEXP_FWD_BASE wxFileOutputStream;
 
@@ -146,6 +155,8 @@ public:
 
     void SetBitmapHandler(wxSVGBitmapHandler* handler);
 
+    void SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode);
+
 private:
     virtual bool DoGetPixel(wxCoord, wxCoord, wxColour *) const wxOVERRIDE
     {
@@ -255,6 +266,7 @@ private:
     double              m_dpi;
     wxScopedPtr<wxFileOutputStream> m_outfile;
     wxScopedPtr<wxSVGBitmapHandler> m_bmp_handler; // class to handle bitmaps
+    wxSVGShapeRenderingMode m_renderingMode;
 
     // The clipping nesting level is incremented by every call to
     // SetClippingRegion() and reset when DestroyClippingRegion() is called.
@@ -284,6 +296,8 @@ public:
 
     // Use a custom bitmap handler: takes ownership of the handler.
     void SetBitmapHandler(wxSVGBitmapHandler* handler);
+
+    void SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode);
 };
 
 #endif // wxUSE_SVG

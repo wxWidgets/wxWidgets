@@ -281,7 +281,30 @@ wxString wxGetBrushFill(wxBrush const& brush)
     return s;
 }
 
-wxString wxCreateBrushFill(wxBrush& brush)
+wxString wxRenderMode(wxSVGShapeRenderingMode const& style)
+{
+    wxString mode;
+    switch (style) {
+        case wxSVG_SHAPE_RENDERING_OPTIMIZE_SPEED:
+            mode = wxS("optimizeSpeed");
+            break;
+        case wxSVG_SHAPE_RENDERING_CRISP_EDGES:
+            mode = wxS("crispEdges");
+            break;
+        case wxSVG_SHAPE_RENDERING_GEOMETRIC_PRECISION:
+            mode = wxS("geometricPrecision");
+            break;
+        case wxSVG_SHAPE_RENDERING_AUTO:
+        default:
+            mode = wxS("auto");
+            break;
+    }
+
+    wxString s = wxString::Format(wxS("shape-rendering=\"%s\""), mode);
+    return s;
+}
+
+wxString wxCreateBrushFill(wxBrush& brush, wxSVGShapeRenderingMode mode)
 {
     wxString s;
     wxString patternName = wxGetBrushStyleName(brush);
@@ -317,8 +340,8 @@ wxString wxCreateBrushFill(wxBrush& brush)
 
         s += wxString::Format(wxS("  <pattern id=\"%s%s\" patternUnits=\"userSpaceOnUse\" width=\"8\" height=\"8\">\n"),
             patternName, brushColourStr.substr(1));
-        s += wxString::Format(wxS("    <path style=\"stroke:%s;\" %s/>\n"),
-            brushColourStr, pattern);
+        s += wxString::Format(wxS("    <path style=\"stroke:%s;\" %s %s/>\n"),
+            brushColourStr, pattern, wxRenderMode(mode));
         s += wxS("  </pattern>\n");
     }
 
@@ -444,6 +467,11 @@ void wxSVGFileDC::SetBitmapHandler(wxSVGBitmapHandler* handler)
     ((wxSVGFileDCImpl*)GetImpl())->SetBitmapHandler(handler);
 }
 
+void wxSVGFileDC::SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode)
+{
+    ((wxSVGFileDCImpl*)GetImpl())->SetShapeRenderingMode(renderingMode);
+}
+
 // ----------------------------------------------------------
 // wxSVGFileDCImpl
 // ----------------------------------------------------------
@@ -483,6 +511,8 @@ void wxSVGFileDCImpl::Init(const wxString &filename, int Width, int Height,
 
     m_filename = filename;
     m_graphics_changed = true;
+
+    m_renderingMode = wxSVG_SHAPE_RENDERING_AUTO;
 
     ////////////////////code here
 
@@ -542,8 +572,8 @@ void wxSVGFileDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
     NewGraphicsIfNeeded();
 
     wxString s;
-    s = wxString::Format(wxS("  <path d=\"M%d %d L%d %d\" %s/>\n"),
-        x1, y1, x2, y2, wxGetPenPattern(m_pen));
+    s = wxString::Format(wxS("  <path d=\"M%d %d L%d %d\" %s %s/>\n"),
+        x1, y1, x2, y2, wxRenderMode(m_renderingMode), wxGetPenPattern(m_pen));
 
     write(s);
 
@@ -569,8 +599,8 @@ void wxSVGFileDCImpl::DoDrawLines(int n, const wxPoint points[], wxCoord xoffset
             CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
         }
 
-        s += wxString::Format(wxS("\" style=\"fill:none\" %s/>\n"),
-            wxGetPenPattern(m_pen));
+        s += wxString::Format(wxS("\" style=\"fill:none\" %s %s/>\n"),
+            wxRenderMode(m_renderingMode), wxGetPenPattern(m_pen));
 
         write(s);
     }
@@ -691,8 +721,9 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
                 NumStr(-angle), NumStr(xRect), NumStr(yRect));
 
             s = wxString::Format(
-                wxS("  <rect x=\"%s\" y=\"%s\" width=\"%d\" height=\"%d\" %s %s/>\n"),
-                NumStr(xRect), NumStr(yRect), ww, hh, rectStyle, rectTransform);
+                wxS("  <rect x=\"%s\" y=\"%s\" width=\"%d\" height=\"%d\" %s %s %s/>\n"),
+                NumStr(xRect), NumStr(yRect), ww, hh,
+                wxRenderMode(m_renderingMode), rectStyle, rectTransform);
 
             write(s);
         }
@@ -725,9 +756,9 @@ void wxSVGFileDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width
     NewGraphicsIfNeeded();
     wxString s;
 
-    s = wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%s\" %s %s/>\n"),
+    s = wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%s\" %s %s %s/>\n"),
         x, y, width, height, NumStr(radius),
-        wxGetPenPattern(m_pen), wxGetBrushFill(m_brush));
+        wxRenderMode(m_renderingMode), wxGetPenPattern(m_pen), wxGetBrushFill(m_brush));
 
     write(s);
 
@@ -751,8 +782,8 @@ void wxSVGFileDCImpl::DoDrawPolygon(int n, const wxPoint points[],
         CalcBoundingBox(points[i].x + xoffset, points[i].y + yoffset);
     }
 
-    s += wxString::Format(wxS("\" %s %s style=\"fill-rule:%s;\"/>\n"),
-        wxGetPenPattern(m_pen), wxGetBrushFill(m_brush),
+    s += wxString::Format(wxS("\" %s %s %s style=\"fill-rule:%s;\"/>\n"),
+        wxRenderMode(m_renderingMode), wxGetPenPattern(m_pen), wxGetBrushFill(m_brush),
         (fillStyle == wxODDEVEN_RULE) ? wxS("evenodd") : wxS("nonzero"));
 
     write(s);
@@ -808,8 +839,9 @@ void wxSVGFileDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord
     const double rw = width / 2.0;
 
     wxString s;
-    s = wxString::Format(wxS("  <ellipse cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\" %s"),
-        NumStr(x + rw), NumStr(y + rh), NumStr(rw), NumStr(rh), wxGetPenPattern(m_pen));
+    s = wxString::Format(wxS("  <ellipse cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\" %s %s"),
+        NumStr(x + rw), NumStr(y + rh), NumStr(rw), NumStr(rh),
+        wxRenderMode(m_renderingMode), wxGetPenPattern(m_pen));
     s += wxS("/>\n");
 
     write(s);
@@ -877,7 +909,8 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
             x1, y1, NumStr(r1), NumStr(r2), fArc, fSweep, x2, y2, line);
     }
 
-    s += wxString::Format(wxS("\" %s/>\n"), wxGetPenPattern(m_pen));
+    s += wxString::Format(wxS("\" %s %s/>\n"),
+        wxRenderMode(m_renderingMode), wxGetPenPattern(m_pen));
 
     write(s);
 }
@@ -962,16 +995,17 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord
         NewGraphicsIfNeeded();
 
         wxString arcFill = arcPath;
-        arcFill += wxString::Format(wxS(" L%s %s z\" %s/>\n"),
-            NumStr(xc), NumStr(yc), wxGetPenPattern(m_pen));
+        arcFill += wxString::Format(wxS(" L%s %s z\" %s %s/>\n"),
+            NumStr(xc), NumStr(yc),
+            wxRenderMode(m_renderingMode), wxGetPenPattern(m_pen));
         write(arcFill);
     }
 
     wxDCBrushChanger setTransp(*GetOwner(), *wxTRANSPARENT_BRUSH);
     NewGraphicsIfNeeded();
 
-    wxString arcLine = wxString::Format(wxS("%s\" %s/>\n"),
-        arcPath, wxGetPenPattern(m_pen));
+    wxString arcLine = wxString::Format(wxS("%s\" %s %s/>\n"),
+        arcPath, wxRenderMode(m_renderingMode), wxGetPenPattern(m_pen));
     write(arcLine);
 }
 
@@ -1078,13 +1112,18 @@ void wxSVGFileDCImpl::SetBitmapHandler(wxSVGBitmapHandler* handler)
     m_bmp_handler.reset(handler);
 }
 
+void wxSVGFileDCImpl::SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode)
+{
+    m_renderingMode = renderingMode;
+}
+
 void wxSVGFileDCImpl::SetBrush(const wxBrush& brush)
 {
     m_brush = brush;
 
     m_graphics_changed = true;
 
-    wxString pattern = wxCreateBrushFill(m_brush);
+    wxString pattern = wxCreateBrushFill(m_brush, m_renderingMode);
     if ( !pattern.IsEmpty() )
     {
         NewGraphicsIfNeeded();
