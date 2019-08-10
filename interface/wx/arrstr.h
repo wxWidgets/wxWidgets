@@ -143,8 +143,8 @@ public:
 
     /**
         Inserts the given number of @a copies of @a str in the array before the
-        position @a nIndex. Thus, for example, to insert the string in the beginning of
-        the array you would write:
+        array element at the position @a nIndex. Thus, for example, to insert
+        the string in the beginning of the array you would write:
 
         @code
         Insert("foo", 0);
