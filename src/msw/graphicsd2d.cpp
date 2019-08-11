@@ -1813,6 +1813,13 @@ void wxD2DPathData::AddPath(const wxGraphicsPathData* path)
 // closes the current sub-path
 void wxD2DPathData::CloseSubpath()
 {
+    // If we have a sub-path open by call to MoveToPoint(),
+    // which doesn't open a new figure by itself,
+    // we have to open a new figure now to get a required 1-point path.
+    if ( !m_figureOpened && m_currentPointSet )
+    {
+        EnsureFigureOpen(m_currentPoint);
+    }
     // Close sub-path and close the figure.
     if ( m_figureOpened )
     {
