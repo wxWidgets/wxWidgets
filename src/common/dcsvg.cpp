@@ -500,6 +500,8 @@ void wxSVGFileDCImpl::Init(const wxString &filename, int Width, int Height,
     m_clipUniqueId = 0;
     m_clipNestingLevel = 0;
 
+    m_gradientUniqueId = 0;
+
     m_mm_to_pix_x = dpi / 25.4;
     m_mm_to_pix_y = dpi / 25.4;
 
@@ -1013,6 +1015,86 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord
     wxString arcLine = wxString::Format(wxS("%s\" %s %s/>\n"),
         arcPath, wxRenderMode(m_renderingMode), wxGetPenPattern(m_pen));
     write(arcLine);
+}
+
+void wxSVGFileDCImpl::DoGradientFillLinear(const wxRect& rect,
+                                           const wxColour& initialColour,
+                                           const wxColour& destColour,
+                                           wxDirection nDirection)
+{
+    NewGraphicsIfNeeded();
+
+    float initOpacity;
+    float destOpacity;
+    wxString initCol = Col2SVG(initialColour, &initOpacity);
+    wxString destCol = Col2SVG(destColour, &destOpacity);
+
+    const int x1 = ((nDirection & wxLEFT) > 0) ? 100 : 0;
+    const int y1 = ((nDirection & wxUP) > 0) ? 100 : 0;
+    const int x2 = ((nDirection & wxRIGHT) > 0) ? 100 : 0;
+    const int y2 = ((nDirection & wxDOWN) > 0) ? 100 : 0;
+
+    wxString s;
+    s += wxS("  <defs>\n");
+    s += wxString::Format(wxS("    <linearGradient id=\"gradient%zu\" x1=\"%d%%\" y1=\"%d%%\" x2=\"%d%%\" y2=\"%d%%\">\n"),
+        m_gradientUniqueId, x1, y1, x2, y2);
+    s += wxString::Format(wxS("      <stop offset=\"0%%\" style=\"stop-color:%s; stop-opacity:%s\"/>\n"),
+        initCol, NumStr(initOpacity));
+    s += wxString::Format(wxS("      <stop offset=\"100%%\" style=\"stop-color:%s; stop-opacity:%s\"/>\n"),
+        destCol, NumStr(destOpacity));
+    s += wxS("    </linearGradient>\n");
+    s += wxS("  </defs>\n");
+
+    s += wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" fill=\"url(#gradient%zu)\" %s %s %s/>\n"),
+        rect.x, rect.y, rect.width, rect.height, m_gradientUniqueId,
+        wxRenderMode(m_renderingMode), wxGetPenPattern(m_pen), wxGetBrushFill(m_brush));
+
+    m_gradientUniqueId++;
+
+    write(s);
+
+    CalcBoundingBox(rect.x, rect.y);
+    CalcBoundingBox(rect.x + rect.width, rect.y + rect.height);
+}
+
+void wxSVGFileDCImpl::DoGradientFillConcentric(const wxRect& rect,
+                                               const wxColour& initialColour,
+                                               const wxColour& destColour,
+                                               const wxPoint& circleCenter)
+{
+    NewGraphicsIfNeeded();
+
+    float initOpacity;
+    float destOpacity;
+    wxString initCol = Col2SVG(initialColour, &initOpacity);
+    wxString destCol = Col2SVG(destColour, &destOpacity);
+
+    const double cx = circleCenter.x * 100.0 / rect.GetWidth();
+    const double cy = circleCenter.y * 100.0 / rect.GetHeight();
+    const double fx = cx;
+    const double fd = cy;
+
+    wxString s;
+    s += wxS("  <defs>\n");
+    s += wxString::Format(wxS("    <radialGradient id=\"gradient%zu\" cx=\"%s%%\" cy=\"%s%%\" fx=\"%s%%\" fy=\"%s%%\">\n"),
+        m_gradientUniqueId, NumStr(cx), NumStr(cy), NumStr(fx), NumStr(fd));
+    s += wxString::Format(wxS("      <stop offset=\"0%%\" style=\"stop-color:%s; stop-opacity:%s\" />\n"),
+        initCol, NumStr(initOpacity));
+    s += wxString::Format(wxS("      <stop offset=\"100%%\" style=\"stop-color:%s; stop-opacity:%s\" />\n"),
+        destCol, NumStr(destOpacity));
+    s += wxS("    </radialGradient>\n");
+    s += wxS("  </defs>\n");
+
+    s += wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" fill=\"url(#gradient%zu)\" %s %s %s/>\n"),
+        rect.x, rect.y, rect.width, rect.height, m_gradientUniqueId,
+        wxRenderMode(m_renderingMode), wxGetPenPattern(m_pen), wxGetBrushFill(m_brush));
+
+    m_gradientUniqueId++;
+
+    write(s);
+
+    CalcBoundingBox(rect.x, rect.y);
+    CalcBoundingBox(rect.x + rect.width, rect.y + rect.height);
 }
 
 void wxSVGFileDCImpl::DoSetClippingRegion(int x, int y, int width, int height)
