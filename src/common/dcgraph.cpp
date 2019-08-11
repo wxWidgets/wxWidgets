@@ -752,6 +752,9 @@ void wxGCDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
     if (!m_logicalFunctionSupported)
         return;
 
+    wxPen pointPen(m_pen.GetColour());
+    wxDCPenChanger penChanger(*GetOwner(), pointPen);
+
 #if defined(__WXMSW__) && wxUSE_GRAPHICS_GDIPLUS
     // single point path does not work with GDI+
     if (m_graphicContext->GetRenderer() == wxGraphicsRenderer::GetGDIPlusRenderer())
