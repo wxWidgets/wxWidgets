@@ -1143,6 +1143,16 @@ public :
 
     ~wxD2DPathData();
 
+    void SetFillMode(D2D1_FILL_MODE fillMode)
+    {
+        m_fillMode = fillMode;
+    }
+
+    D2D1_FILL_MODE GetFillMode() const
+    {
+        return m_fillMode;
+    }
+
     ID2D1PathGeometry* GetPathGeometry();
 
     // This closes the geometry sink, ensuring all the figures are stored inside
@@ -1202,7 +1212,7 @@ private:
 
     void EndFigure(D2D1_FIGURE_END figureEnd);
 
-    ID2D1Geometry* GetFullGeometry() const;
+    ID2D1Geometry* GetFullGeometry(D2D1_FILL_MODE fillMode) const;
 
     bool IsEmpty() const;
     bool IsStateSafeForFlush() const;
@@ -1238,6 +1248,8 @@ private :
     D2D1_POINT_2F m_figureLogStart;
 
     bool m_geometryWritable;
+
+    D2D1_FILL_MODE m_fillMode;
 };
 
 //-----------------------------------------------------------------------------
@@ -1253,7 +1265,8 @@ wxD2DPathData::wxD2DPathData(wxGraphicsRenderer* renderer, ID2D1Factory* d2dFact
     m_figureStart(D2D1::Point2F(0.0f, 0.0f)),
     m_figureLogStartSet(false),
     m_figureLogStart(D2D1::Point2F(0.0f, 0.0f)),
-    m_geometryWritable(true)
+    m_geometryWritable(true),
+    m_fillMode(D2D1_FILL_MODE_ALTERNATE)
 {
     m_direct2dfactory->CreatePathGeometry(&m_pathGeometry);
     // To properly initialize path geometry there is also
@@ -1419,7 +1432,7 @@ void wxD2DPathData::EndFigure(D2D1_FIGURE_END figureEnd)
     }
 }
 
-ID2D1Geometry* wxD2DPathData::GetFullGeometry() const
+ID2D1Geometry* wxD2DPathData::GetFullGeometry(D2D1_FILL_MODE fillMode) const
 {
     // Our final path geometry is represented by geometry group
     // which contains all transformed geometries plus current geometry.
@@ -1435,7 +1448,7 @@ ID2D1Geometry* wxD2DPathData::GetFullGeometry() const
 
     // And use this array as a source to create geometry group.
     m_combinedGeometry.reset();
-    HRESULT hr = m_direct2dfactory->CreateGeometryGroup(D2D1_FILL_MODE_ALTERNATE,
+    HRESULT hr = m_direct2dfactory->CreateGeometryGroup(fillMode,
                                   pGeometries, numGeometries+1, &m_combinedGeometry);
     wxFAILED_HRESULT_MSG(hr);
     delete []pGeometries;
@@ -1823,7 +1836,7 @@ void wxD2DPathData::CloseSubpath()
 
 void* wxD2DPathData::GetNativePath() const
 {
-    return GetFullGeometry();
+    return GetFullGeometry(GetFillMode());
 }
 
 void wxD2DPathData::Transform(const wxGraphicsMatrixData* matrix)
@@ -1913,7 +1926,7 @@ void wxD2DPathData::Transform(const wxGraphicsMatrixData* matrix)
 void wxD2DPathData::GetBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble *h) const
 {
     D2D1_RECT_F bounds;
-    ID2D1Geometry *curGeometry = GetFullGeometry();
+    ID2D1Geometry *curGeometry = GetFullGeometry(GetFillMode());
     HRESULT hr = curGeometry->GetBounds(D2D1::Matrix3x2F::Identity(), &bounds);
     wxCHECK_HRESULT_RET(hr);
     // Check if bounds are empty
@@ -1927,10 +1940,11 @@ void wxD2DPathData::GetBox(wxDouble* x, wxDouble* y, wxDouble* w, wxDouble *h) c
     if (h) *h = bounds.bottom - bounds.top;
 }
 
-bool wxD2DPathData::Contains(wxDouble x, wxDouble y, wxPolygonFillMode WXUNUSED(fillStyle)) const
+bool wxD2DPathData::Contains(wxDouble x, wxDouble y, wxPolygonFillMode fillStyle) const
 {
     BOOL result;
-    ID2D1Geometry *curGeometry = GetFullGeometry();
+    D2D1_FILL_MODE fillMode = (fillStyle == wxODDEVEN_RULE) ? D2D1_FILL_MODE_ALTERNATE : D2D1_FILL_MODE_WINDING;
+    ID2D1Geometry *curGeometry = GetFullGeometry(fillMode);
     curGeometry->FillContainsPoint(D2D1::Point2F(x, y), D2D1::Matrix3x2F::Identity(), &result);
     return result != FALSE;
 }
@@ -3932,7 +3946,7 @@ void wxD2DContext::StrokePath(const wxGraphicsPath& p)
     }
 }
 
-void wxD2DContext::FillPath(const wxGraphicsPath& p , wxPolygonFillMode WXUNUSED(fillStyle))
+void wxD2DContext::FillPath(const wxGraphicsPath& p , wxPolygonFillMode fillStyle)
 {
     if (m_composition == wxCOMPOSITION_DEST)
         return;
@@ -3941,6 +3955,7 @@ void wxD2DContext::FillPath(const wxGraphicsPath& p , wxPolygonFillMode WXUNUSED
     AdjustRenderTargetSize();
 
     wxD2DPathData* pathData = wxGetD2DPathData(p);
+    pathData->SetFillMode(fillStyle == wxODDEVEN_RULE ? D2D1_FILL_MODE_ALTERNATE : D2D1_FILL_MODE_WINDING);
     pathData->Flush();
 
     if (!m_brush.IsNull())
