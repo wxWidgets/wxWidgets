@@ -972,21 +972,23 @@ static const struct
     wxRasterOperationMode rop;
 } rasterOperations[] =
 {
+#ifndef __WXOSX__
     { "wxAND",          wxAND           },
     { "wxAND_INVERT",   wxAND_INVERT    },
     { "wxAND_REVERSE",  wxAND_REVERSE   },
-    { "wxCLEAR",        wxCLEAR         },
-    { "wxCOPY",         wxCOPY          },
     { "wxEQUIV",        wxEQUIV         },
     { "wxINVERT",       wxINVERT        },
     { "wxNAND",         wxNAND          },
-    { "wxNO_OP",        wxNO_OP         },
-    { "wxOR",           wxOR            },
     { "wxOR_INVERT",    wxOR_INVERT     },
     { "wxOR_REVERSE",   wxOR_REVERSE    },
     { "wxSET",          wxSET           },
     { "wxSRC_INVERT",   wxSRC_INVERT    },
-    { "wxXOR",          wxXOR           },
+#endif
+    { "wxCOPY",         wxCOPY          },
+    { "wxOR",           wxOR            },
+    { "wxCLEAR",        wxCLEAR         },
+    { "wxNO_OP",        wxNO_OP         },
+    { "wxXOR",          wxXOR           }
 };
 
 void MyCanvas::DrawImages(wxDC& dc, DrawMode mode)
