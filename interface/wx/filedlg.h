@@ -124,7 +124,7 @@ const char wxFileSelectorDefaultWildcardStr[];
     @style{wxFD_NO_FOLLOW}
            Directs the dialog to return the path and file name of the selected
            shortcut file, not its target as it does by default. Currently this
-           flag is only implemented in wxMSW and the non-dereferenced link path
+           flag is only implemented in wxMSW and OSX. The non-dereferenced link path
            is always returned, even without this flag, under Unix and so using
            it there doesn't do anything. This flag was added in wxWidgets
            3.1.0.
