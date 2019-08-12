@@ -24,6 +24,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/listctrl.h"
+#include "wx/imaglist.h"
 #include "listbasetest.h"
 #include "testableframe.h"
 #include "wx/uiaction.h"
@@ -48,6 +49,7 @@ private:
         CPPUNIT_TEST( EditLabel );
         WXUISIM_TEST( ColumnClick );
         WXUISIM_TEST( ColumnDrag );
+        WXUISIM_TEST( SubitemRect );
     CPPUNIT_TEST_SUITE_END();
 
     void EditLabel();
@@ -56,6 +58,7 @@ private:
     // here rather than in ListBaseTest
     void ColumnClick();
     void ColumnDrag();
+    void SubitemRect();
 #endif // wxUSE_UIACTIONSIMULATOR
 
     wxListCtrl *m_list;
@@ -151,6 +154,37 @@ void ListCtrlTestCase::ColumnClick()
 
     m_list->ClearAll();
 }
+
+void ListCtrlTestCase::SubitemRect()
+{
+    wxImageList *m_imageListNormal = new wxImageList(32, 32, true);
+#ifdef wxHAS_IMAGES_IN_RESOURCES
+    m_imageListNormal->Add( wxIcon( "sample", wxBITMAP_TYPE_ICO_RESOURCE ) );
+#else
+    m_imageListNormal->Add( wxIcon( "sample.xpm" ) );
+#endif
+    m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
+    m_list->InsertColumn(1, "Column 1", wxLIST_FORMAT_LEFT, 60);
+    m_list->InsertColumn(2, "Column 2", wxLIST_FORMAT_LEFT, 60);
+    for ( int i = 0; i < 3; i++ )
+    {
+        long tmp1 = m_list->InsertItem(i, wxString::Format("This is item %d", i), 0);
+        m_list->SetItemData(tmp1, i);
+        m_list->SetItem(tmp1, i, wxString::Format("Column 1 item %d", i));
+        m_list->SetItem(tmp1, i, wxString::Format("Column 2 item %d", i));
+    }
+    wxRect rectLabel, rectIcon, rectItem;
+    m_list->GetSubItemRect( 1, 1, rectItem, wxLIST_RECT_BOUNDS );
+    m_list->GetSubItemRect( 1, 1, rectIcon, wxLIST_RECT_ICON );
+    m_list->GetSubItemRect( 1, 1, rectLabel, wxLIST_RECT_LABEL );
+    CPPUNIT_ASSERT_EQUAL( rectItem.GetLeft(), rectIcon.GetLeft() );
+    CPPUNIT_ASSERT_EQUAL( rectLabel.GetLeft(), rectIcon.GetRight() + 1 );
+    m_list->GetSubItemRect( 1, 0, rectItem, wxLIST_RECT_BOUNDS );
+    m_list->GetSubItemRect( 1, 0, rectIcon, wxLIST_RECT_ICON );
+    m_list->GetSubItemRect( 1, 0, rectLabel, wxLIST_RECT_LABEL );
+    CPPUNIT_ASSERT_EQUAL( rectLabel.GetLeft(), rectIcon.GetRight() + 1 );
+}
+
 #endif // wxUSE_UIACTIONSIMULATOR
 
 #endif // wxUSE_LISTCTRL
