@@ -167,5 +167,23 @@ bool wxTextMeasure::DoGetPartialTextExtents(const wxString& text,
         return false;
     }
 
+    // The width of \t determined by GetTextExtentExPoint is 0. Determine the
+    // actual width using DoGetTextExtent and update the widths accordingly.
+    int offset = 0;
+    int tabWidth = 0;
+    int tabHeight = 0;
+    for ( unsigned i = 0; i < text.length(); ++i )
+    {
+        if ( text[i] == '\t' )
+        {
+            if ( tabWidth == 0 )
+            {
+                DoGetTextExtent("\t", &tabWidth, &tabHeight);
+            }
+            offset += tabWidth;
+        }
+        widths[i] += offset;
+    }
+
     return true;
 }
