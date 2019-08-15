@@ -87,6 +87,7 @@ const unsigned char wxIMAGE_ALPHA_OPAQUE = 0xff;
 class WXDLLIMPEXP_FWD_CORE wxImageHandler;
 class WXDLLIMPEXP_FWD_CORE wxImage;
 class WXDLLIMPEXP_FWD_CORE wxPalette;
+class WXDLLIMPEXP_FWD_CORE wxMemoryAllocator;
 
 //-----------------------------------------------------------------------------
 // wxVariant support
@@ -535,6 +536,9 @@ public:
     static HSVValue RGBtoHSV(const RGBValue& rgb);
     static RGBValue HSVtoRGB(const HSVValue& hsv);
 
+    static wxMemoryAllocator *GetDefaultAllocator();
+    wxMemoryAllocator *GetAllocator() const;
+    static void SetDefaultAllocator(wxMemoryAllocator *ma);
 #if WXWIN_COMPATIBILITY_2_8
     wxDEPRECATED_CONSTRUCTOR(
         wxImage(const wxString& name, long type, int index = -1)
@@ -598,6 +602,9 @@ public:
 protected:
     static wxList   sm_handlers;
 
+    // choose default allocator for pixel buffers.
+    static wxMemoryAllocator *sm_alloc;
+   
     // return the index of the point with the given coordinates or -1 if the
     // image is invalid of the coordinates are out of range
     //

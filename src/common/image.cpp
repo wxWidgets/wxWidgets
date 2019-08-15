@@ -30,6 +30,7 @@
 
 #include "wx/wfstream.h"
 #include "wx/xpmdecod.h"
+#include "wx/memoryallocator.h"
 
 // For memcpy
 #include <string.h>
@@ -98,6 +99,9 @@ public:
     wxArrayString   m_optionNames;
     wxArrayString   m_optionValues;
 
+    // record allocator in effect when this data was created.
+    wxMemoryAllocator *m_alloc;
+
     wxDECLARE_NO_COPY_CLASS(wxImageRefData);
 };
 
@@ -120,6 +124,7 @@ wxImageRefData::wxImageRefData()
     m_ok = false;
     m_static =
     m_staticAlpha = false;
+    m_alloc = wxImage::GetDefaultAllocator();
 
     m_loadFlags = sm_defaultLoadFlags;
 }
@@ -127,11 +132,12 @@ wxImageRefData::wxImageRefData()
 wxImageRefData::~wxImageRefData()
 {
     if ( !m_static )
-        free( m_data );
+        m_alloc->Free( m_data );
     if ( !m_staticAlpha )
-        free( m_alpha );
+        m_alloc->Free( m_alpha );
 }
 
+wxMemoryAllocator *wxImage::sm_alloc; // NULL by default
 
 //-----------------------------------------------------------------------------
 // wxImage
@@ -161,7 +167,7 @@ bool wxImage::Create( int width, int height, bool clear )
 
     m_refData = new wxImageRefData();
 
-    M_IMGDATA->m_data = (unsigned char *) malloc( width*height*3 );
+    M_IMGDATA->m_data = (unsigned char *) GetAllocator()->Alloc( width*height*3 );
     if (!M_IMGDATA->m_data)
     {
         UnRef();
@@ -247,11 +253,16 @@ wxObjectRefData* wxImage::CloneRefData(const wxObjectRefData* that) const
     unsigned size = unsigned(refData->m_width) * unsigned(refData->m_height);
     if (refData->m_alpha != NULL)
     {
-        refData_new->m_alpha = (unsigned char*)malloc(size);
-        memcpy(refData_new->m_alpha, refData->m_alpha, size);
+       // Note allocator might have changed from previous image to this image - careful.
+        refData_new->m_alpha = (unsigned char*)refData_new->m_alloc->Alloc(size);
+        if (refData_new->m_alpha) {
+           memcpy(refData_new->m_alpha, refData->m_alpha, size);
+        }
+        // else refData_new->m_alpha is NULL, because memory alloc failed. 
     }
     size *= 3;
-    refData_new->m_data = (unsigned char*)malloc(size);
+    refData_new->m_data = (unsigned char*)refData_new->m_alloc->Alloc(size);
+    // TODO m_data == NULL
     memcpy(refData_new->m_data, refData->m_data, size);
 #if wxUSE_PALETTE
     refData_new->m_palette = refData->m_palette;
@@ -2097,11 +2108,12 @@ void wxImage::SetAlpha( unsigned char *alpha, bool static_data )
 
     if ( !alpha )
     {
-        alpha = (unsigned char *)malloc(M_IMGDATA->m_width*M_IMGDATA->m_height);
+        alpha = (unsigned char*)GetAllocator()->Alloc(M_IMGDATA->m_width*M_IMGDATA->m_height);
+        // TODO alpha == NULL
     }
 
     if( !M_IMGDATA->m_staticAlpha )
-        free(M_IMGDATA->m_alpha);
+        GetAllocator()->Free(M_IMGDATA->m_alpha);
 
     M_IMGDATA->m_alpha = alpha;
     M_IMGDATA->m_staticAlpha = static_data;
@@ -2157,9 +2169,29 @@ void wxImage::ClearAlpha()
     AllocExclusive();
 
     if ( !M_IMGDATA->m_staticAlpha )
-        free( M_IMGDATA->m_alpha );
+        GetAllocator()->Free(M_IMGDATA->m_alpha);
 
     M_IMGDATA->m_alpha = NULL;
+}
+
+wxMemoryAllocator *wxImage::GetDefaultAllocator()
+{
+   // initialize static data member, if needed.
+   if (sm_alloc == NULL) sm_alloc = wxMallocAllocator::Get();
+   return sm_alloc;
+};
+
+void wxImage::SetDefaultAllocator(wxMemoryAllocator * ma)
+{
+   if (ma == NULL) sm_alloc = wxMallocAllocator::Get();
+   else sm_alloc = ma;
+}
+
+wxMemoryAllocator *wxImage::GetAllocator() const
+{
+   // if valid, return the allocator in effect when we were created.
+   if (m_refData) return M_IMGDATA->m_alloc;
+   return GetDefaultAllocator();
 }
 
 

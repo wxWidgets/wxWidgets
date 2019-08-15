@@ -888,6 +888,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/listctrlcmn.cpp
     src/common/markupparser.cpp
     src/common/matrix.cpp
+    src/common/memoryallocator.cpp
     src/common/menucmn.cpp
     src/common/modalhook.cpp
     src/common/mousemanager.cpp
@@ -1057,6 +1058,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/headerctrlg.h
     wx/generic/infobar.h
     wx/generic/logg.h
+    wx//memoryallocator.h
     wx/generic/msgdlgg.h
     wx/generic/numdlgg.h
     wx/generic/notebook.h

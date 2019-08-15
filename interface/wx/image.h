@@ -363,6 +363,28 @@ protected:
              since CallDoCanRead() will take care of restoring it later
     */
     virtual bool DoCanRead( wxInputStream& stream ) = 0;
+
+    /**
+        Set the default Allocator.
+
+        @since 3.1.3
+    */
+    static void SetDefaultAllocator(wxMemoryAllocator *ma);
+
+    /**
+        Get the default Allocator.
+
+        @since 3.1.3
+    */
+    static wxMemoryAllocator *GetDefaultAllocator();
+
+
+    /**
+        Get the Allocator.
+
+        @since 3.1.3
+    */
+    wxMemoryAllocator *GetAllocator() const;
 };
 
 
