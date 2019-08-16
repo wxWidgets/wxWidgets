@@ -3821,7 +3821,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\include\wx\\memoryallocator.h"
+				RelativePath="..\..\include\wx\memoryallocator.h"
 				>
 			</File>
 			<File

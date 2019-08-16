@@ -1297,7 +1297,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/dvrenderer.h
     wx/calctrl.h
     wx/propdlg.h
-    wx//memoryallocator.h
+    wx/memoryallocator.h
 </set>
 
 <!-- ====================================================================== -->

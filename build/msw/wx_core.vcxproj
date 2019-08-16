@@ -1503,7 +1503,7 @@
     <ClInclude Include="..\..\include\wx\richtooltip.h" />
     <ClInclude Include="..\..\include\wx\generic\gridsel.h" />
     <ClInclude Include="..\..\include\wx\dcbuffer.h" />
-    <ClInclude Include="..\..\include\wx\\memoryallocator.h" />
+    <ClInclude Include="..\..\include\wx\memoryallocator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

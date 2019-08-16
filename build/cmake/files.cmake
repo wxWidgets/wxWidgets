@@ -1201,7 +1201,7 @@ set(GUI_CMN_HDR
     wx/generic/splash.h
     wx/generic/calctrlg.h
     wx/generic/sashwin.h
-    wx//memoryallocator.h
+    wx/memoryallocator.h
 )
 
 set(UNIX_SRC

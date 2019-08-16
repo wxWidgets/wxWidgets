@@ -2490,7 +2490,7 @@
 				RelativePath="..\..\include\wx\mediactrl.h">
 			</File>
 			<File
-				RelativePath="..\..\include\wx\\memoryallocator.h">
+				RelativePath="..\..\include\wx\memoryallocator.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\menu.h">

@@ -1105,7 +1105,7 @@ GUI_CMN_HDR =
     wx/listctrl.h
     wx/matrix.h
     wx/mdi.h
-    wx//memoryallocator.h
+    wx/memoryallocator.h
     wx/menu.h
     wx/menuitem.h
     wx/metafile.h

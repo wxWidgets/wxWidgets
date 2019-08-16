@@ -37,7 +37,7 @@ public:
 };
 
 /**
-    This class represented memory management using C-way
+    This class implements memory management in a C-style
     with malloc()/free() pair
 
     @since 3.1.3
