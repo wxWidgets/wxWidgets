@@ -14,6 +14,8 @@
     #pragma hdrstop
 #endif
 
+#include <stdlib.h>
+#include <new>
 #include "wx/memoryallocator.h"
 
 //-----------------------------------------------------------------------------
