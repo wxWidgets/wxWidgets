@@ -2,8 +2,8 @@
 // Name:        src/common/memoryallocator.cpp
 // Purpose:     wxMemoryAllocator, wxMallocAllocator, wxNewAllocator
 // Author:      Aron Helser
-// RCS-ID:      $Id: $
-// Copyright:   (c) wxWidgets team
+// Created      
+// Copyright:   (c) 2019 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

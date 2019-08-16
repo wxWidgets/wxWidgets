@@ -11,8 +11,7 @@
     This is a little helper class that hides the difference between
     C++ operators new/delete and C way of memory management using
     malloc()/free(). It is currently being used in wxImage to do
-    memory management. Right now it has 3 direct descendants - 1
-    for C-way, 1 for C++-way and 1 that will not throw on allocation.
+    memory management.
 
     @since 3.1.1
 */
@@ -28,13 +27,13 @@ public:
         Default memory allocation function. This function may
         either return NULL or throw std::bad_alloc on error.
     */
-    void *Alloc(size_t size) = 0;
+    virtual void *Alloc(size_t size) = 0;
    
     /**
         Default memory allocation function. This function should not throw.
         It may be called with NULL pointer
     */
-    void Free(void *ptr) = 0;
+    virtual void Free(void *ptr) = 0;
 };
 
 /**
@@ -46,9 +45,9 @@ public:
 class wxMallocAllocator: public wxMemoryAllocator
 {
 public:
-    void *Alloc(size_t size);
+    virtual void *Alloc(size_t size);
    
-    void Free(void *ptr);
+    virtual void Free(void *ptr);
 
     // singleton accessor:
     static wxMemoryAllocator *Get();
@@ -68,9 +67,9 @@ class wxNewAllocator : public wxMemoryAllocator
 {
 public:
 
-    void *Alloc(size_t size);
+    virtual void *Alloc(size_t size);
 
-    void Free(void *ptr);
+    virtual void Free(void *ptr);
 
     static wxMemoryAllocator *Get();
 };

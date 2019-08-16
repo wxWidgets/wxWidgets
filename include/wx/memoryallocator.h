@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/memoryallocator.h
+// Name:        src/common/memoryallocator.cpp
 // Purpose:     wxMemoryAllocator, wxMallocAllocator, wxNewAllocator
 // Author:      Aron Helser
-// RCS-ID:      $Id: $
-// Copyright:   (c) wxWidgets team
+// Created      
+// Copyright:   (c) 2019 wxWidgets development team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -17,7 +17,7 @@
 // wxMemoryAllocator
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMemoryAllocator
+class WXDLLIMPEXP_CORE wxMemoryAllocator
 {
 public:
     virtual ~wxMemoryAllocator() { }
@@ -25,7 +25,7 @@ public:
     // may either return NULL or throw std::bad_alloc on error
     virtual void *Alloc(size_t size) = 0;
    
-    // should not throw, may be called with NULL pointer
+    // Will not throw, may be called with NULL pointer
     virtual void Free(void *ptr) = 0;
 };
 
@@ -34,16 +34,18 @@ public:
 // wxMallocAllocator
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMallocAllocator: public wxMemoryAllocator
+class WXDLLIMPEXP_CORE wxMallocAllocator: public wxMemoryAllocator
 {
 public:
     // Will return NULL on error
-    virtual void *Alloc(size_t size) {
+    virtual void *Alloc(size_t size) wxOVERRIDE
+	{
         return malloc(size);
     }
    
-    // should not throw, may be called with NULL pointer
-    virtual void Free(void *ptr) {
+    // Will not throw, may be called with NULL pointer
+    virtual void Free(void *ptr) wxOVERRIDE
+	{
         free(ptr);
     }
 
@@ -55,15 +57,15 @@ public:
 // wxNewAllocator
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxNewAllocator : public wxMemoryAllocator
+class WXDLLIMPEXP_CORE wxNewAllocator : public wxMemoryAllocator
 {
 public:
-    // will trigger std::set_new_handler() first, then throw std::bad_alloc on
-    // out-of-memory error
-    virtual void *Alloc(size_t size) {
+    virtual void *Alloc(size_t size) wxOVERRIDE
+	{
         return new char[size];
     }
-    virtual void Free(void *ptr) {
+    virtual void Free(void *ptr) wxOVERRIDE
+	{
         delete [] static_cast<char *>( ptr );
     }
     // singleton accessor:
@@ -74,15 +76,15 @@ public:
 // wxNewNothrowAllocator
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxNewNothrowAllocator : public wxMemoryAllocator
+class WXDLLIMPEXP_CORE wxNewNothrowAllocator : public wxMemoryAllocator
 {
 public:
-    // will trigger std::set_new_handler() first, then return NULL
-    // out-of-memory error
-    virtual void *Alloc(size_t size) {
+    virtual void *Alloc(size_t size) wxOVERRIDE
+	{
         return new (std::nothrow) char[size];
     }
-    virtual void Free(void *ptr) {
+    virtual void Free(void *ptr) wxOVERRIDE
+	{
         delete [] static_cast<char *>( ptr );
     }
     // singleton accessor:
