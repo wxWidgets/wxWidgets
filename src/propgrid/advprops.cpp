@@ -18,6 +18,7 @@
 #if wxUSE_PROPGRID
 
 #ifndef WX_PRECOMP
+    #include "wx/dc.h"
     #include "wx/settings.h"
     #include "wx/textctrl.h"
     #include "wx/wxcrtvararg.h"
