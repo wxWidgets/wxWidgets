@@ -571,6 +571,9 @@
 				RelativePath="..\..\src\common\matrix.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\common\memoryallocator.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\common\menucmn.cpp">
 			</File>
 			<File
@@ -2485,6 +2488,9 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\mediactrl.h">
+			</File>
+			<File
+				RelativePath="..\..\include\wx\\memoryallocator.h">
 			</File>
 			<File
 				RelativePath="..\..\include\wx\menu.h">

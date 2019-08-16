@@ -297,6 +297,9 @@
     <ClCompile Include="..\..\src\common\matrix.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\common\memoryallocator.cpp">
+      <Filter>Common Sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\common\menucmn.cpp">
       <Filter>Common Sources</Filter>
     </ClCompile>
@@ -1072,6 +1075,9 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\wx\\memoryallocator.h">
+      <Filter>Common Headers</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\wx\aboutdlg.h">
       <Filter>Common Headers</Filter>
     </ClInclude>

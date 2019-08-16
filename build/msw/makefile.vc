@@ -2447,7 +2447,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_editlbox.obj \
 	$(OBJS)\monodll_laywin.obj \
 	$(OBJS)\monodll_calctrlg.obj \
-	$(OBJS)\monodll_rowheightcache.obj
+	$(OBJS)\monodll_rowheightcache.obj \
+	$(OBJS)\monodll_memoryallocator.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_OBJECTS =  \
@@ -2773,7 +2774,8 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_editlbox.obj \
 	$(OBJS)\monodll_laywin.obj \
 	$(OBJS)\monodll_calctrlg.obj \
-	$(OBJS)\monodll_rowheightcache.obj
+	$(OBJS)\monodll_rowheightcache.obj \
+	$(OBJS)\monodll_memoryallocator.obj
 !endif
 !if "$(USE_STC)" == "1"
 ____MONOLIB_STC_SRC_FILENAMES_OBJECTS =  \
@@ -3285,7 +3287,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_editlbox.obj \
 	$(OBJS)\monolib_laywin.obj \
 	$(OBJS)\monolib_calctrlg.obj \
-	$(OBJS)\monolib_rowheightcache.obj
+	$(OBJS)\monolib_rowheightcache.obj \
+	$(OBJS)\monolib_memoryallocator.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_1_OBJECTS =  \
@@ -3611,7 +3614,8 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_editlbox.obj \
 	$(OBJS)\monolib_laywin.obj \
 	$(OBJS)\monolib_calctrlg.obj \
-	$(OBJS)\monolib_rowheightcache.obj
+	$(OBJS)\monolib_rowheightcache.obj \
+	$(OBJS)\monolib_memoryallocator.obj
 !endif
 !if "$(USE_STC)" == "1"
 ____MONOLIB_STC_SRC_FILENAMES_1_OBJECTS =  \
@@ -4057,7 +4061,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_editlbox.obj \
 	$(OBJS)\coredll_laywin.obj \
 	$(OBJS)\coredll_calctrlg.obj \
-	$(OBJS)\coredll_rowheightcache.obj
+	$(OBJS)\coredll_rowheightcache.obj \
+	$(OBJS)\coredll_memoryallocator.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_2_OBJECTS =  \
@@ -4383,7 +4388,8 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_editlbox.obj \
 	$(OBJS)\coredll_laywin.obj \
 	$(OBJS)\coredll_calctrlg.obj \
-	$(OBJS)\coredll_rowheightcache.obj
+	$(OBJS)\coredll_rowheightcache.obj \
+	$(OBJS)\coredll_memoryallocator.obj
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1"
 __corelib___depname = \
@@ -4735,7 +4741,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_editlbox.obj \
 	$(OBJS)\corelib_laywin.obj \
 	$(OBJS)\corelib_calctrlg.obj \
-	$(OBJS)\corelib_rowheightcache.obj
+	$(OBJS)\corelib_rowheightcache.obj \
+	$(OBJS)\corelib_memoryallocator.obj
 !endif
 !if "$(USE_GUI)" == "1" && "$(WXUNIV)" == "1"
 ____CORE_SRC_FILENAMES_3_OBJECTS =  \
@@ -5061,7 +5068,8 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_editlbox.obj \
 	$(OBJS)\corelib_laywin.obj \
 	$(OBJS)\corelib_calctrlg.obj \
-	$(OBJS)\corelib_rowheightcache.obj
+	$(OBJS)\corelib_rowheightcache.obj \
+	$(OBJS)\corelib_memoryallocator.obj
 !endif
 !if "$(SHARED)" == "1"
 ____wxcore_namedll_DEP = $(__coredll___depname)
@@ -9666,6 +9674,11 @@ $(OBJS)\monodll_rowheightcache.obj: ..\..\src\generic\rowheightcache.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\generic\rowheightcache.cpp
 !endif
 
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_memoryallocator.obj: ..\..\src\common\memoryallocator.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) ..\..\src\common\memoryallocator.cpp
+!endif
+
 $(OBJS)\monodll_version.res: ..\..\src\msw\version.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_6) /d _CRT_SECURE_NO_DEPRECATE=1 /d _CRT_NON_CONFORMING_SWPRINTFS=1 /d _SCL_SECURE_NO_WARNINGS=1 $(__NO_VC_CRTDBG_p_72)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66) $(__NDEBUG_DEFINE_p_65) $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65) $(__UNICODE_DEFINE_p_67) /i $(SETUPHDIR) /i ..\..\include $(____CAIRO_INCLUDEDIR_FILENAMES_4) /d WXBUILDING /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)$(WXCOMPILER)$(VENDORTAG)  /i ..\..\src\tiff\libtiff /i ..\..\src\jpeg /i ..\..\src\png /i ..\..\src\zlib /i ..\..\src\regex /i ..\..\src\expat\expat\lib /i ..\..\src\stc\scintilla\include /i ..\..\src\stc\scintilla\lexlib /i ..\..\src\stc\scintilla\src /d __WX__ /d SCI_LEXER /d NO_CXX11_REGEX /d LINK_LEXERS /d wxUSE_BASE=1 /d WXMAKINGDLL  ..\..\src\msw\version.rc
 
@@ -12215,6 +12228,11 @@ $(OBJS)\monolib_rowheightcache.obj: ..\..\src\generic\rowheightcache.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\generic\rowheightcache.cpp
 !endif
 
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_memoryallocator.obj: ..\..\src\common\memoryallocator.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) ..\..\src\common\memoryallocator.cpp
+!endif
+
 $(OBJS)\basedll_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(BASEDLL_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
@@ -14725,6 +14743,11 @@ $(OBJS)\coredll_rowheightcache.obj: ..\..\src\generic\rowheightcache.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\generic\rowheightcache.cpp
 !endif
 
+!if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_memoryallocator.obj: ..\..\src\common\memoryallocator.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) ..\..\src\common\memoryallocator.cpp
+!endif
+
 $(OBJS)\corelib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) /Ycwx/wxprec.h ..\..\src\common\dummy.cpp
 
@@ -16456,6 +16479,11 @@ $(OBJS)\corelib_calctrlg.obj: ..\..\src\generic\calctrlg.cpp
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_rowheightcache.obj: ..\..\src\generic\rowheightcache.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\generic\rowheightcache.cpp
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_memoryallocator.obj: ..\..\src\common\memoryallocator.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) ..\..\src\common\memoryallocator.cpp
 !endif
 
 $(OBJS)\advdll_dummy.obj: ..\..\src\common\dummy.cpp

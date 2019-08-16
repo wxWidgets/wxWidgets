@@ -912,6 +912,7 @@ set(GUI_CMN_SRC
     src/generic/editlbox.cpp
     src/generic/datavgen.cpp
     src/generic/rowheightcache.cpp
+    src/common/memoryallocator.cpp
 )
 
 set(GUI_CMN_HDR
@@ -1200,6 +1201,7 @@ set(GUI_CMN_HDR
     wx/generic/splash.h
     wx/generic/calctrlg.h
     wx/generic/sashwin.h
+    wx//memoryallocator.h
 )
 
 set(UNIX_SRC
