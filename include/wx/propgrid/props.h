@@ -11,13 +11,15 @@
 #ifndef _WX_PROPGRID_PROPS_H_
 #define _WX_PROPGRID_PROPS_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_PROPGRID
 
 // -----------------------------------------------------------------------
 
-class wxPGArrayEditorDialog;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGArrayEditorDialog;
 
-#include "wx/propgrid/editors.h"
+#include "wx/propgrid/property.h"
 
 #include "wx/filename.h"
 #include "wx/dialog.h"

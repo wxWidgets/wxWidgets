@@ -11,6 +11,8 @@
 #ifndef _WX_PROPGRID_MANAGER_H_
 #define _WX_PROPGRID_MANAGER_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_PROPGRID
 
 #include "wx/propgrid/propgrid.h"
@@ -151,12 +153,12 @@ private:
 // -----------------------------------------------------------------------
 
 #if wxUSE_TOOLBAR
-class wxToolBar;
+class WXDLLIMPEXP_FWD_CORE wxToolBar;
 #endif
 #if wxUSE_HEADERCTRL
 class wxPGHeaderCtrl;
 #endif
-class wxStaticText;
+class WXDLLIMPEXP_FWD_CORE wxStaticText;
 
 // wxPropertyGridManager is an efficient multi-page version of wxPropertyGrid,
 // which can optionally have toolbar for mode and page selection, and help

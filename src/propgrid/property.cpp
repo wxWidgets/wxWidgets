@@ -18,6 +18,7 @@
 #if wxUSE_PROPGRID
 
 #ifndef WX_PRECOMP
+    #include "wx/dc.h"
     #include "wx/log.h"
 #endif
 
@@ -27,6 +28,7 @@
 #include "wx/propgrid/propgrid.h"
 #include "wx/propgrid/property.h"
 #include "wx/propgrid/props.h"
+#include "wx/propgrid/editors.h"
 
 #if wxPG_USE_RENDERER_NATIVE
 #include "wx/renderer.h"

@@ -11,10 +11,10 @@
 #ifndef _WX_PROPGRID_PROPGRID_H_
 #define _WX_PROPGRID_PROPGRID_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_PROPGRID
 
-#include "wx/dc.h"
-#include "wx/control.h"
 #include "wx/scrolwin.h"
 #include "wx/recguard.h"
 #include "wx/time.h" // needed for wxMilliClock_t

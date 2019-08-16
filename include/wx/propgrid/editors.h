@@ -11,7 +11,11 @@
 #ifndef _WX_PROPGRID_EDITORS_H_
 #define _WX_PROPGRID_EDITORS_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_PROPGRID
+
+#include "wx/window.h"
 
 class WXDLLIMPEXP_FWD_PROPGRID wxPGCell;
 class WXDLLIMPEXP_FWD_PROPGRID wxPGProperty;

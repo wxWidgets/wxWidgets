@@ -11,15 +11,16 @@
 #ifndef _WX_PROPGRID_PROPGRIDDEFS_H_
 #define _WX_PROPGRID_PROPGRIDDEFS_H_
 
+#include "wx/defs.h"
+
 #if wxUSE_PROPGRID
 
-#include "wx/dynarray.h"
-#include "wx/vector.h"
-#include "wx/hashmap.h"
+#include "wx/colour.h"
 #include "wx/hashset.h"
-#include "wx/variant.h"
-#include "wx/any.h"
-#include "wx/longlong.h"
+
+class WXDLLIMPEXP_FWD_CORE wxPoint;
+class WXDLLIMPEXP_FWD_CORE wxSize;
+class WXDLLIMPEXP_FWD_CORE wxFont;
 
 #if wxUSE_STD_CONTAINERS
 #include <numeric>
@@ -193,22 +194,21 @@
 // -----------------------------------------------------------------------
 
 
-class wxPGEditor;
-class wxPGProperty;
-class wxPropertyCategory;
-class wxPGChoices;
-class wxPropertyGridPageState;
-class wxPGCell;
-class wxPGCellRenderer;
-class wxPGChoiceEntry;
-class wxPGPropArgCls;
-class wxPropertyGridInterface;
-class wxPropertyGrid;
-class wxPropertyGridEvent;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGEditor;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGProperty;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyCategory;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGChoices;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGridPageState;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGCell;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGCellRenderer;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGChoiceEntry;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGPropArgCls;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGridInterface;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGrid;
+class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGridEvent;
 class wxPropertyGridManager;
-class wxPGOwnerDrawnComboBox;
-class wxPGEditorDialogAdapter;
-class wxPGValidationInfo;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGEditorDialogAdapter;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGValidationInfo;
 
 
 // -----------------------------------------------------------------------

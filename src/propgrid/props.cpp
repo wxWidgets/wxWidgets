@@ -28,6 +28,7 @@
 #include "wx/numformatter.h"
 
 #include "wx/propgrid/propgrid.h"
+#include "wx/propgrid/editors.h"
 
 #include <float.h>
 #include <limits.h>
