@@ -549,6 +549,9 @@ public:
 #endif
 
 private:
+#if USES_GENERICTLW
+    void HideOnDeactivate();
+#endif // USES_GENERICTLW
     wxComboCtrlBase*    m_combo;
 
     wxDECLARE_EVENT_TABLE();
@@ -586,10 +589,22 @@ void wxComboPopupWindowEvtHandler::OnActivate( wxActivateEvent& event )
     if ( !event.GetActive() )
     {
         // Tell combo control that we are dismissed.
-        m_combo->HidePopup(true);
-
+#ifdef __WXMSW__
+        // We need to hide the popup but calling ::ShowWindow() directly from WM_ACTIVATE
+        // event handler causes some side effects like calling this handler again (Win 7)
+        // or setting the focus improperly (Win 10), so postpone it slightly.
+        // See wxPopupTransientWindow::MSWHandleMessage().
+        CallAfter(&wxComboPopupWindowEvtHandler::HideOnDeactivate);
+#else
+        HideOnDeactivate();
+#endif __WXMSW__ / !__WXMSW__
         event.Skip();
     }
+}
+
+void wxComboPopupWindowEvtHandler::HideOnDeactivate()
+{
+    m_combo->HidePopup(true);
 }
 #endif
 
