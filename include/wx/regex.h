@@ -63,6 +63,8 @@ enum
     wxRE_NOTEOL = 64
 };
 
+static const wxString s_strMetaChars = wxT("\\^$.|?*+()[]{}");
+
 // ----------------------------------------------------------------------------
 // wxRegEx: a regular expression
 // ----------------------------------------------------------------------------
@@ -141,6 +143,9 @@ public:
     // replace all occurrences: this is actually a synonym for Replace()
     int ReplaceAll(wxString *text, const wxString& replacement) const
         { return Replace(text, replacement, 0); }
+    
+    static wxString Escape(const wxString& str);
+    static wxString Unescape(const wxString& str);
 
     // dtor not virtual, don't derive from this class
     ~wxRegEx();
