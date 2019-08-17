@@ -713,8 +713,8 @@ wxString wxRegEx::Unescape(const wxString& str)
 
     for (wxString::const_iterator it = str.begin(); it != str.end(); ++it)
     {
-        if (*it == wxT('\\') && std::next(it) != str.end() &&
-            s_strMetaChars.find(*std::next(it)) != wxString::npos)
+        if (*it == wxT('\\') && (it + 1) != str.end() &&
+            s_strMetaChars.find(*(it + 1)) != wxString::npos)
         {
             ++it;
         }
