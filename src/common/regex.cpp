@@ -690,4 +690,39 @@ int wxRegEx::Replace(wxString *pattern,
     return m_impl->Replace(pattern, replacement, maxMatches);
 }
 
+wxString wxRegEx::Escape(const wxString& str)
+{
+    wxString strEscaped;
+
+    for (wxString::const_iterator it = str.begin(); it != str.end(); ++it)
+    {
+        if (s_strMetaChars.find(*it) != wxString::npos)
+        {
+            strEscaped += wxT('\\');
+        }
+
+        strEscaped += *it;
+    }
+
+    return strEscaped;
+}
+
+wxString wxRegEx::Unescape(const wxString& str)
+{
+    wxString strUnescaped;
+
+    for (wxString::const_iterator it = str.begin(); it != str.end(); ++it)
+    {
+        if (*it == wxT('\\') && std::next(it) != str.end() &&
+            s_strMetaChars.find(*std::next(it)) != wxString::npos)
+        {
+            ++it;
+        }
+
+        strUnescaped += *it;
+    }
+
+    return strUnescaped;
+}
+
 #endif // wxUSE_REGEX
