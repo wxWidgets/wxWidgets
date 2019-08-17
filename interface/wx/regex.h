@@ -250,5 +250,35 @@ public:
         Replace the first occurrence.
     */
     int ReplaceFirst(wxString* text, const wxString& replacement) const;
+
+    /**
+        Escapes any of the following \, ^, $, ., |, ?, *, +, (, ), [, ], { and } metacharacters
+        found in the passed string with a backslash.
+
+        @param str
+            A string that may contain metacharacters to escape.
+
+        @return A string with all metacharacters converted to their escaped form.
+
+        @note This is a static function, and there is no need to create an instance of wxRegEx to use it.
+
+        @since 3.1.3
+    */
+    static wxString Escape(const wxString& str);
+
+    /**
+        Unescapes, that is removing any preceding backslash in any of the following
+        \, ^, $, ., |, ?, *, +, (, ), [, ], { and } metacharacters found in the passed string.
+
+        @param str
+            A string that may contain escaped metacharacters to unescape.
+
+        @return A string with any escaped metacharacter converted to its unescaped form.
+
+        @note This is a static function, and there is no need to create an instance of wxRegEx to use it.
+
+        @since 3.1.3
+    */
+    static wxString Unescape(const wxString& str);
 };
 
