@@ -41,7 +41,6 @@
 #endif
 
 #include <regex.h>
-#include <iterator>
 
 // WXREGEX_USING_BUILTIN    defined when using the built-in regex lib
 // WXREGEX_USING_RE_SEARCH  defined when using re_search in the GNU regex lib
