@@ -29,6 +29,14 @@
 // ============================================================================
 // implementation
 // ============================================================================
+bool CocoaFileNameGetSensitivity()
+{
+    NSNumber *value = [NSNumber numberWithBool:TRUE];
+    NSURL *url = [NSURL URLWithString:@"file:///"];
+    BOOL result = [url getResourceValue: &value forKey: NSURLVolumeSupportsCaseSensitiveNamesKey error: nil];
+    if( result == YES )
+        return [value boolValue] == YES;
+}
 
 static wxString GetFMDirectory(
                                    NSSearchPathDirectory directory,

@@ -1806,6 +1806,9 @@ bool wxFileName::SameAs(const wxFileName& filepath, wxPathFormat format) const
 /* static */
 bool wxFileName::IsCaseSensitive( wxPathFormat format )
 {
+#ifdef __WXMAC__
+    return CocoaFileNameGetSensitivity();
+#endif
     // only Unix filenames are truly case-sensitive
     return GetFormat(format) == wxPATH_UNIX;
 }
