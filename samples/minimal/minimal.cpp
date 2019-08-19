@@ -32,7 +32,7 @@
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
-
+#include "wx/filename.h"
 // the application icon (under Windows it is in resources and even
 // though we could still include the XPM here it would be unused)
 #ifndef wxHAS_IMAGES_IN_RESOURCES
@@ -191,6 +191,8 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
+    if( wxFileName::IsCaseSensitive() )
+        wxMessageBox( "File system is case sensitive" );
     wxMessageBox(wxString::Format
                  (
                     "Welcome to %s!\n"
