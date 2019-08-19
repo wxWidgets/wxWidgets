@@ -90,6 +90,9 @@ public:
 
     virtual int GetCharHeight() const;
     virtual int GetCharWidth() const;
+#if defined __WXGTK3__
+    virtual double GetContentScaleFactor() const;
+#endif
 
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = true );

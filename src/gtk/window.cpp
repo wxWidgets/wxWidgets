@@ -3429,6 +3429,20 @@ void wxWindowGTK::DoGetTextExtent( const wxString& string,
     txm.GetTextExtent(string, x, y, descent, externalLeading);
 }
 
+#ifdef __WXGTK3__
+double wxWindowGTK::GetContentScaleFactor() const
+{
+    double scaleFactor = 1;
+#if GTK_CHECK_VERSION(3,10,0)
+    if (m_widget && gtk_check_version(3,10,0) == NULL)
+    {
+        scaleFactor = gtk_widget_get_scale_factor(m_widget);
+    }
+#endif
+    return scaleFactor;
+}
+#endif
+
 void wxWindowGTK::GTKDisableFocusOutEvent()
 {
     g_signal_handlers_block_by_func( m_focusWidget,
