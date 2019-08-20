@@ -553,6 +553,9 @@ protected:
     having a button triggering an editor dialog, like e.g. wxLongStringProperty,
     wxDirProperty, wxFileProperty.
 
+    <b>Supported special attributes:</b>
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the editor dialog.
+
     @since 3.1.3
 */
 class wxEditorDialogProperty : public wxPGProperty
@@ -561,6 +564,7 @@ public:
     virtual ~wxEditorDialogProperty();
 
     virtual wxPGEditorDialogAdapter* GetEditorDialog() const;
+    virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
 
 protected:
     /**
@@ -599,6 +603,9 @@ protected:
     Like wxLongStringProperty, but the button triggers file selector instead.
 
     <b>Supported special attributes:</b>
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the file dialog (since 3.1.3).
+    - ::wxPG_FILE_DIALOG_STYLE: Sets a specific wxFileDialog style for the file
+    dialog (since 2.9.4).
     - ::wxPG_FILE_WILDCARD: Sets wildcard (see wxFileDialog for format details),
     "All files..." is default.
     - ::wxPG_FILE_SHOW_FULL_PATH: Default @true. When @false, only the file name is
@@ -606,9 +613,6 @@ protected:
     - ::wxPG_FILE_SHOW_RELATIVE_PATH: If set, then the filename is shown relative
     to the given path string.
     - ::wxPG_FILE_INITIAL_PATH: Sets the initial path of where to look for files.
-    - ::wxPG_FILE_DIALOG_TITLE: Sets a specific title for the dir dialog.
-    - ::wxPG_FILE_DIALOG_STYLE: Sets a specific wxFileDialog style for the file
-    dialog (since 2.9.4).
 */
 class wxFileProperty : public wxEditorDialogProperty
 {
@@ -650,6 +654,9 @@ protected:
     @ingroup classes
     Like wxStringProperty, but has a button that triggers a small text
     editor dialog.
+
+    <b>Supported special attributes:</b>
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the text editor dialog (since 3.1.3).
 */
 class wxLongStringProperty : public wxEditorDialogProperty
 {
@@ -676,7 +683,7 @@ protected:
     instead.
 
     <b>Supported special attributes:</b>
-    - ::wxPG_DIR_DIALOG_MESSAGE: Sets specific message in the dir selector.
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the file dialog (since 3.1.3).
 */
 class wxDirProperty : public wxEditorDialogProperty
 {
@@ -689,7 +696,6 @@ public:
     virtual wxString ValueToString(wxVariant& value, int argFlags = 0) const;
     virtual bool StringToValue(wxVariant& variant, const wxString& text,
                                int argFlags = 0) const;
-    virtual bool DoSetAttribute( const wxString& name, wxVariant& value );
     virtual wxValidator* DoGetValidator() const;
 
 protected:
@@ -707,6 +713,10 @@ protected:
 /** @class wxArrayStringProperty
     @ingroup classes
     Property that manages a list of strings.
+
+    <b>Supported special attributes:</b>
+    - ::wxPG_ARRAY_DELIMITER: Sets string delimiter character.
+    - ::wxPG_DIALOG_TITLE: Sets a specific title for the editor dialog (since 3.1.3).
 */
 class wxArrayStringProperty : public wxEditorDialogProperty
 {

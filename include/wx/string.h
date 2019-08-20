@@ -3255,6 +3255,20 @@ public:
   size_t find_last_not_of(const wxScopedWCharBuffer& sz, size_t nStart, size_t n) const
     { return find_last_not_of(sz.data(), nStart, n); }
 
+  bool starts_with(const wxString &str) const
+    { return StartsWith(str); }
+  bool starts_with(const char *sz) const
+    { return StartsWith(sz); }
+  bool starts_with(const wchar_t *sz) const
+    { return StartsWith(sz); }
+
+  bool ends_with(const wxString &str) const
+    { return EndsWith(str); }
+  bool ends_with(const char *sz) const
+    { return EndsWith(sz); }
+  bool ends_with(const wchar_t *sz) const
+    { return EndsWith(sz); }
+
       // string += string
   wxString& operator+=(const wxString& s)
   {

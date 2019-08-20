@@ -247,6 +247,12 @@ private:
                               wxRect(wxPoint(x2, y), sizeCheck), m_flags);
         y += lineHeight + sizeCheck.y;
 
+        dc.DrawText("DrawCheckMark()", x1, y);
+        const wxSize sizeMark = renderer.GetCheckMarkSize(this);
+        renderer.DrawCheckMark(this, dc,
+                               wxRect(wxPoint(x2, y), sizeMark), m_flags);
+        y += lineHeight + sizeMark.y;
+
         dc.DrawText("DrawRadioBitmap()", x1, y);
         renderer.DrawRadioBitmap(this, dc,
                                  wxRect(wxPoint(x2, y), sizeCheck), m_flags);
@@ -259,9 +265,10 @@ private:
         y += lineHeight + sizeCollapse.y;
 
         dc.DrawText("DrawTreeItemButton()", x1, y);
+        const wxSize sizeExpand = renderer.GetExpanderSize(this);
         renderer.DrawTreeItemButton(this, dc,
-                                    wxRect(x2, y, 20, 20), m_flags);
-        y += lineHeight + 20;
+                                    wxRect(wxPoint(x2, y), sizeExpand), m_flags);
+        y += lineHeight + sizeExpand.y;
 
 #ifdef wxHAS_DRAW_TITLE_BAR_BITMAP
         dc.DrawText("DrawTitleBarBitmap()", x1, y);

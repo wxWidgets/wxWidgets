@@ -182,6 +182,9 @@ public:
   virtual bool Save(wxOutputStream& os, const wxMBConv& conv = wxConvAuto());
 #endif // wxUSE_STREAMS
 
+  void EnableAutoSave() { m_autosave = true; }
+  void DisableAutoSave() { m_autosave = false; }
+
 public:
   // functions to work with this list
   wxFileConfigLineList *LineListAppend(const wxString& str);
@@ -250,6 +253,7 @@ private:
 #endif // __UNIX__
 
   bool m_isDirty;                       // if true, we have unsaved changes
+  bool m_autosave;                      // if true, save changes on destruction
 
   wxDECLARE_NO_COPY_CLASS(wxFileConfig);
   wxDECLARE_ABSTRACT_CLASS(wxFileConfig);

@@ -874,7 +874,7 @@ wxString wxRichTextFontListBox::CreateHTML(const wxString& facename) const
 {
     wxString str = wxT("<font");
 
-    str << wxT(" size=\"+2\"");;
+    str << wxT(" size=\"+2\"");
 
     if (!facename.IsEmpty() && facename != _("(none)"))
         str << wxT(" face=\"") << facename << wxT("\"");

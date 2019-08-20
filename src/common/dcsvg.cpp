@@ -273,6 +273,28 @@ wxString wxCreateBrushFill(wxBrush& brush)
     return s;
 }
 
+void wxSetScaledScreenDCFont(wxScreenDC& sDC, const wxFont& font)
+{
+    const double scale = sDC.GetContentScaleFactor();
+    if ( scale > 1 )
+    {
+        // wxScreenDC uses the DPI of the main screen to determine the text
+        // extent and character width/height. Because the SVG should be
+        // DPI-independent we want the text extent of the default (96) DPI.
+        //
+        // We can't just divide the returned sizes by the scale factor, because
+        // text does not scale linear (at least on Windows). Therefore, we scale
+        // the font size instead.
+        wxFont scaledFont = font;
+        scaledFont.SetFractionalPointSize(scaledFont.GetFractionalPointSize() / scale);
+        sDC.SetFont(scaledFont);
+    }
+    else
+    {
+        sDC.SetFont(font);
+    }
+}
+
 } // anonymous namespace
 
 // ----------------------------------------------------------------------------
@@ -535,93 +557,100 @@ void wxSVGFileDCImpl::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoor
     const double dx = heightLine * sin(rad);
     const double dy = heightLine * cos(rad);
 
-    // wxS("upper left") and wxS("upper right")
+    // Update bounding box: upper left, upper right, bottom left, bottom right
     CalcBoundingBox(x, y);
     CalcBoundingBox((wxCoord)(x + w * cos(rad)), (wxCoord)(y - h * sin(rad)));
-
-    // wxS("bottom left") and wxS("bottom right")
     CalcBoundingBox((wxCoord)(x + h * sin(rad)), (wxCoord)(y + h * cos(rad)));
     CalcBoundingBox((wxCoord)(x + h * sin(rad) + w * cos(rad)), (wxCoord)(y + h * cos(rad) - w * sin(rad)));
 
-    if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
+    // Create text style string
+    wxString fontstyle;
+    switch (m_font.GetStyle())
     {
-        // draw background first
-        // just like DoDrawRectangle except we pass the text color to it and set the border to a 1 pixel wide text background
-        s += wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" "), x, y, w, h);
-        s += wxS("style=\"") + wxBrushString(m_textBackgroundColour);
-        s += wxS("stroke-width:1; ") + wxPenString(m_textBackgroundColour);
-        s += wxString::Format(wxS("\" transform=\"rotate(%s %d %d)\"/>"), NumStr(-angle), x, y);
-        s += wxS("\n");
-        write(s);
+        case wxFONTSTYLE_MAX:
+            wxFAIL_MSG(wxS("invalid font style value"));
+            wxFALLTHROUGH;
+        case wxFONTSTYLE_NORMAL:
+            fontstyle = wxS("normal");
+            break;
+        case wxFONTSTYLE_ITALIC:
+            fontstyle = wxS("italic");
+            break;
+        case wxFONTSTYLE_SLANT:
+            fontstyle = wxS("oblique");
+            break;
     }
+
+    wxString textDecoration;
+    if (m_font.GetUnderlined())
+        textDecoration += wxS(" underline");
+    if (m_font.GetStrikethrough())
+        textDecoration += wxS(" line-through");
+    if (textDecoration.IsEmpty())
+        textDecoration = wxS(" none");
+
+    wxString style = wxS("style=\"");
+    style += wxString::Format(wxS("font-family:%s; "), m_font.GetFaceName());
+    style += wxString::Format(wxS("font-weight:%d; "), m_font.GetWeight());
+    style += wxString::Format(wxS("font-style:%s; "), fontstyle);
+    style += wxString::Format(wxS("font-size:%spt; "), NumStr(m_font.GetFractionalPointSize()));
+    style += wxString::Format(wxS("text-decoration:%s; "), textDecoration);
+    style += wxString::Format(wxS("%s %s stroke-width:0; "),
+                              wxBrushString(m_textForegroundColour),
+                              wxPenString(m_textForegroundColour));
+    style += wxS("white-space: pre;");
+    style += wxS("\"");
+
+    // this is deprecated in favour of "white-space: pre", keep it for now to
+    // support SVG viewers that do not support the new tag
+    style += wxS(" xml:space=\"preserve\"");
 
     // Draw all text line by line
     const wxArrayString lines = wxSplit(sText, '\n', '\0');
     for (size_t lineNum = 0; lineNum < lines.size(); lineNum++)
     {
+        const int xRect = x + wxRound(lineNum * dx);
+        const int yRect = y + wxRound(lineNum * dy);
+
         // convert x,y to SVG text x,y (the coordinates of the text baseline)
         wxCoord ww, hh, desc;
-        DoGetTextExtent(lines[lineNum], &ww, &hh, &desc);
-        int xx = x + wxRound(lineNum * dx) + (hh - desc) * sin(rad);
-        int yy = y + wxRound(lineNum * dy) + (hh - desc) * cos(rad);
+        wxString const& line = lines[lineNum];
+        DoGetTextExtent(line, &ww, &hh, &desc);
+        const int xText = xRect + (hh - desc) * sin(rad);
+        const int yText = yRect + (hh - desc) * cos(rad);
 
-        //now do the text itself
-        s += wxString::Format(wxS("  <text x=\"%d\" y=\"%d\" textLength=\"%d\" "), xx, yy, ww);
-
-        wxString fontName(m_font.GetFaceName());
-        if (fontName.Len() > 0)
-            s += wxS("style=\"font-family:") + fontName + wxS("; ");
-        else
-            s += wxS("style=\" ");
-
-        wxString fontweight = wxString::Format(wxS("%d"), m_font.GetWeight());
-
-        s += wxS("font-weight:") + fontweight + wxS("; ");
-
-        wxString fontstyle;
-        switch (m_font.GetStyle())
+        if (m_backgroundMode == wxBRUSHSTYLE_SOLID)
         {
-            case wxFONTSTYLE_MAX:
-                wxFAIL_MSG(wxS("invalid font style value"));
-                wxFALLTHROUGH;
+            // draw text background
+            const wxString rectStyle = wxString::Format(
+                wxS("style=\"%s %s stroke-width:1;\""),
+                wxBrushString(m_textBackgroundColour),
+                wxPenString(m_textBackgroundColour));
 
-            case wxFONTSTYLE_NORMAL:
-                fontstyle = wxS("normal");
-                break;
+            const wxString rectTransform = wxString::Format(
+                wxS("transform=\"rotate(%s %d %d)\""),
+                NumStr(-angle), xRect, yRect);
 
-            case wxFONTSTYLE_ITALIC:
-                fontstyle = wxS("italic");
-                break;
+            s = wxString::Format(
+                wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" %s %s/>\n"),
+                xRect, yRect, ww, hh, rectStyle, rectTransform);
 
-            case wxFONTSTYLE_SLANT:
-                fontstyle = wxS("oblique");
-                break;
+            write(s);
         }
 
-        wxASSERT_MSG(!fontstyle.empty(), wxS("unknown font style value"));
+        const wxString transform = wxString::Format(
+            wxS("transform=\"rotate(%s %d %d)\""),
+            NumStr(-angle), xText, yText);
 
-        s += wxS("font-style:") + fontstyle + wxS("; ");
-
-        wxString textDecoration;
-        if (m_font.GetUnderlined())
-            textDecoration += wxS(" underline");
-        if (m_font.GetStrikethrough())
-            textDecoration += wxS(" line-through");
-        if (textDecoration.IsEmpty())
-            textDecoration = wxS(" none");
-
-        s += wxS("text-decoration:") + textDecoration + wxS("; ");
-
-        s += wxString::Format(wxS("font-size:%dpt; "), m_font.GetPointSize());
-        //text will be solid, unless alpha value isn't opaque in the foreground colour
-        s += wxBrushString(m_textForegroundColour) + wxPenString(m_textForegroundColour);
-        s += wxString::Format(wxS("stroke-width:0;\" transform=\"rotate(%s %d %d)\""), NumStr(-angle), xx, yy);
-        s += wxS(" xml:space=\"preserve\">");
+        s = wxString::Format(
+            wxS("  <text x=\"%d\" y=\"%d\" textLength=\"%d\" %s %s>%s</text>\n"),
+            xText, yText, ww, style, transform,
 #if wxUSE_MARKUP
-        s += wxMarkupParser::Quote(lines[lineNum]) + wxS("</text>\n");
+            wxMarkupParser::Quote(line)
 #else
-        s += lines[lineNum] + wxS("</text>\n");
+            line
 #endif
+        );
 
         write(s);
     }
@@ -637,8 +666,8 @@ void wxSVGFileDCImpl::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width
     NewGraphicsIfNeeded();
     wxString s;
 
-    s = wxString::Format(wxS("  <rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%s\"%s"),
-                         x, y, width, height, NumStr(radius), wxGetBrushFill(m_brush));
+    s = wxString::Format(wxS("  <rect %sx=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"%s\"%s"),
+                         wxGetPenPattern(m_pen), x, y, width, height, NumStr(radius), wxGetBrushFill(m_brush));
 
     s += wxS("/>\n");
     write(s);
@@ -660,7 +689,7 @@ void wxSVGFileDCImpl::DoDrawPolygon(int n, const wxPoint points[],
     else
         s += wxS("fill-rule:nonzero;");
 
-    s += wxS("\"") + wxGetBrushFill(m_brush) + wxS(" points=\"");
+    s += wxS("\" ") + wxGetPenPattern(m_pen) + wxGetBrushFill(m_brush) + wxS(" points=\"");
 
     for (int i = 0; i < n; i++)
     {
@@ -721,7 +750,8 @@ void wxSVGFileDCImpl::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord
     int rw = width / 2;
 
     wxString s;
-    s = wxString::Format(wxS("  <ellipse cx=\"%d\" cy=\"%d\" rx=\"%d\" ry=\"%d\""), x + rw, y + rh, rw, rh);
+    s = wxString::Format(wxS("  <ellipse %scx=\"%d\" cy=\"%d\" rx=\"%d\" ry=\"%d\""),
+                         wxGetPenPattern(m_pen), x + rw, y + rh, rw, rh);
     s += wxS("/>\n");
 
     write(s);
@@ -773,8 +803,8 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
     if (x1 == x2 && y1 == y2)
     {
         // drawing full circle fails with default arc. Draw two half arcs instead.
-        s = wxString::Format(wxS("  <path d=\"M%d %d a%s %s 0 %d %d %s %s a%s %s 0 %d %d %s %s"),
-            x1, y1,
+        s = wxString::Format(wxS("  <path %sd=\"M%d %d a%s %s 0 %d %d %s %s a%s %s 0 %d %d %s %s"),
+            wxGetPenPattern(m_pen), x1, y1,
             NumStr(r1), NumStr(r2), fArc, fSweep, NumStr( r1 * 2), NumStr(0),
             NumStr(r1), NumStr(r2), fArc, fSweep, NumStr(-r1 * 2), NumStr(0));
     }
@@ -785,8 +815,9 @@ void wxSVGFileDCImpl::DoDrawArc(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
         if (GetBrush().GetStyle() != wxBRUSHSTYLE_TRANSPARENT)
             line = wxString::Format(wxS("L%d %d z"), xc, yc);
 
-        s = wxString::Format(wxS("  <path d=\"M%d %d A%s %s 0 %d %d %d %d %s"),
-            x1, y1, NumStr(r1), NumStr(r2), fArc, fSweep, x2, y2, line);
+        s = wxString::Format(wxS("  <path %sd=\"M%d %d A%s %s 0 %d %d %d %d %s"),
+            wxGetPenPattern(m_pen), x1, y1,
+            NumStr(r1), NumStr(r2), fArc, fSweep, x2, y2, line);
     }
 
     s += wxS("\"/>\n");
@@ -852,15 +883,15 @@ void wxSVGFileDCImpl::DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord
     {
         // Drawing full circle fails with default arc. Draw two half arcs instead.
         fArc = 1;
-        arcPath = wxString::Format(wxS("  <path d=\"M%s %s a%s %s 0 %d %d %s %s a%s %s 0 %d %d %s %s"),
-            NumStr(x), NumStr(y + ry),
+        arcPath = wxString::Format(wxS("  <path %sd=\"M%s %s a%s %s 0 %d %d %s %s a%s %s 0 %d %d %s %s"),
+            wxGetPenPattern(m_pen), NumStr(x), NumStr(y + ry),
             NumStr(rx), NumStr(ry), fArc, fSweep, NumStr( rx * 2), NumStr(0),
             NumStr(rx), NumStr(ry), fArc, fSweep, NumStr(-rx * 2), NumStr(0));
     }
     else
     {
-        arcPath = wxString::Format(wxS("  <path d=\"M%s %s A%s %s 0 %d %d %s %s"),
-            NumStr(xs), NumStr(ys),
+        arcPath = wxString::Format(wxS("  <path %sd=\"M%s %s A%s %s 0 %d %d %s %s"),
+            wxGetPenPattern(m_pen), NumStr(xs), NumStr(ys),
             NumStr(rx), NumStr(ry), fArc, fSweep, NumStr(xe), NumStr(ye));
     }
 
@@ -947,17 +978,15 @@ void wxSVGFileDCImpl::DestroyClippingRegion()
 void wxSVGFileDCImpl::DoGetTextExtent(const wxString& string, wxCoord *w, wxCoord *h, wxCoord *descent, wxCoord *externalLeading, const wxFont *font) const
 {
     wxScreenDC sDC;
+    wxSetScaledScreenDCFont(sDC, font ? *font : m_font);
 
-    sDC.SetFont(m_font);
-    if (font != NULL)
-        sDC.SetFont(*font);
     sDC.GetTextExtent(string, w, h, descent, externalLeading);
 }
 
 wxCoord wxSVGFileDCImpl::GetCharHeight() const
 {
     wxScreenDC sDC;
-    sDC.SetFont(m_font);
+    wxSetScaledScreenDCFont(sDC, m_font);
 
     return sDC.GetCharHeight();
 
@@ -966,7 +995,7 @@ wxCoord wxSVGFileDCImpl::GetCharHeight() const
 wxCoord wxSVGFileDCImpl::GetCharWidth() const
 {
     wxScreenDC sDC;
-    sDC.SetFont(m_font);
+    wxSetScaledScreenDCFont(sDC, m_font);
 
     return sDC.GetCharWidth();
 }

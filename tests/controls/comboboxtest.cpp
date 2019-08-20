@@ -231,4 +231,22 @@ void ComboBoxTestCase::IsEmpty()
 #endif
 }
 
+TEST_CASE("wxComboBox::ProcessEnter", "[wxComboBox][enter]")
+{
+    struct ComboBoxCreator
+    {
+        static wxControl* Do(wxWindow* parent, int style)
+        {
+            const wxString choices[] = { "foo", "bar", "baz" };
+
+            return new wxComboBox(parent, wxID_ANY, wxString(),
+                                  wxDefaultPosition, wxDefaultSize,
+                                  WXSIZEOF(choices), choices,
+                                  style);
+        }
+    };
+
+    TestProcessEnter(&ComboBoxCreator::Do);
+}
+
 #endif //wxUSE_COMBOBOX

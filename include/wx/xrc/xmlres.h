@@ -76,7 +76,8 @@ enum wxXmlResourceFlags
 {
     wxXRC_USE_LOCALE     = 1,
     wxXRC_NO_SUBCLASSING = 2,
-    wxXRC_NO_RELOADING   = 4
+    wxXRC_NO_RELOADING   = 4,
+    wxXRC_USE_ENVVARS    = 8
 };
 
 // This class holds XML resources from one or more .xml files
@@ -95,6 +96,9 @@ public:
     //        wxXRC_NO_RELOADING
     //              don't check the modification time of the XRC files and
     //              reload them if they have changed on disk
+    //        wxXRC_USE_ENVVARS
+    //              expand environment variables for paths
+    //              (such as bitmaps or icons).
     wxXmlResource(int flags = wxXRC_USE_LOCALE,
                   const wxString& domain = wxEmptyString);
 
@@ -105,6 +109,12 @@ public:
     //        wxXRC_NO_SUBCLASSING
     //              subclass property of object nodes will be ignored
     //              (useful for previews in XRC editors)
+    //        wxXRC_NO_RELOADING
+    //              don't check the modification time of the XRC files and
+    //              reload them if they have changed on disk
+    //        wxXRC_USE_ENVVARS
+    //              expand environment variables for paths
+    //              (such as bitmaps or icons).
     wxXmlResource(const wxString& filemask, int flags = wxXRC_USE_LOCALE,
                   const wxString& domain = wxEmptyString);
 
@@ -279,7 +289,7 @@ public:
     // Sets the global resources object and returns a pointer to the previous one (may be NULL).
     static wxXmlResource *Set(wxXmlResource *res);
 
-    // Returns flags, which may be a bitlist of wxXRC_USE_LOCALE and wxXRC_NO_SUBCLASSING.
+    // Returns flags, which is a bitlist of wxXmlResourceFlags.
     int GetFlags() const { return m_flags; }
     // Set flags after construction.
     void SetFlags(int flags) { m_flags = flags; }
@@ -590,6 +600,10 @@ public:
 
     // Gets the value of a boolean attribute (only "0" and "1" are valid values)
     bool GetBoolAttr(const wxString& attr, bool defaultv) wxOVERRIDE;
+
+    // Gets a file path from the given node, expanding environment variables in
+    // it if wxXRC_USE_ENVVARS is in use.
+    wxString GetFilePath(const wxXmlNode* node);
 
     // Returns the window associated with the handler (may be NULL).
     wxWindow* GetParentAsWindow() const { return m_handler->GetParentAsWindow(); }

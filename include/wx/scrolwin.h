@@ -14,6 +14,10 @@
 #include "wx/control.h"
 #include "wx/panel.h"
 
+#ifdef  __WXOSX__
+    #include "wx/scrolbar.h"
+#endif
+
 class WXDLLIMPEXP_FWD_CORE wxScrollHelperEvtHandler;
 class WXDLLIMPEXP_FWD_BASE wxTimer;
 
@@ -303,6 +307,21 @@ protected:
         // wxASSERT_MSG( m_targetWindow == m_win, "must be overridden" );
 
         return size;
+    }
+
+    // Can be overridden to return false if the child window shouldn't be
+    // scrolled into view automatically when it gets focus, which is the
+    // default behaviour.
+    virtual bool ShouldScrollToChildOnFocus(wxWindow* child)
+    {
+#if defined(__WXOSX__) && wxUSE_SCROLLBAR
+        if ( wxDynamicCast(child, wxScrollBar) )
+            return false;
+#else
+        wxUnusedVar(child);
+#endif
+
+        return true;
     }
 
 

@@ -1857,7 +1857,7 @@ void wxGDIPlusContext::StrokeLines( size_t n, const wxPoint2DDouble *points)
    }
 }
 
-void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPolygonFillMode WXUNUSED(fillStyle) )
+void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPolygonFillMode fillStyle )
 {
    if (m_composition == wxCOMPOSITION_DEST)
         return;
@@ -1871,7 +1871,8 @@ void wxGDIPlusContext::DrawLines( size_t n, const wxPoint2DDouble *points, wxPol
 
     } // for (int i = 0; i < n; i++)
     if ( !m_brush.IsNull() )
-        m_context->FillPolygon( ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush() , cpoints , n ) ;
+        m_context->FillPolygon( ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush() , cpoints , n ,
+                                fillStyle == wxODDEVEN_RULE ? FillModeAlternate : FillModeWinding ) ;
     if ( !m_pen.IsNull() )
         m_context->DrawLines( ((wxGDIPlusPenData*)m_pen.GetGraphicsData())->GetGDIPlusPen() , cpoints , n ) ;
     delete[] cpoints;

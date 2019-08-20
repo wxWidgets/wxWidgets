@@ -69,11 +69,6 @@
 #define GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB   0x20B2
 #endif
 
-/* Typedef for the GL 3.0 context creation function */
-typedef GLXContext(*PFNGLXCREATECONTEXTATTRIBSARBPROC)
-    (Display * dpy, GLXFBConfig config, GLXContext share_context,
-    Bool direct, const int *attrib_list);
-
 #ifndef GLX_ARB_create_context
 #define GLX_ARB_create_context
 #define GLX_CONTEXT_MAJOR_VERSION_ARB      0x2091
@@ -81,6 +76,11 @@ typedef GLXContext(*PFNGLXCREATECONTEXTATTRIBSARBPROC)
 #define GLX_CONTEXT_FLAGS_ARB              0x2094
 #define GLX_CONTEXT_DEBUG_BIT_ARB          0x0001
 #define GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB 0x0002
+
+/* Typedef for the GL 3.0 context creation function */
+typedef GLXContext(*PFNGLXCREATECONTEXTATTRIBSARBPROC)
+    (Display * dpy, GLXFBConfig config, GLXContext share_context,
+    Bool direct, const int *attrib_list);
 #endif
 
 #ifndef GLX_ARB_create_context_profile

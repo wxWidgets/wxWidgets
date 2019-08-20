@@ -821,7 +821,7 @@ bool wxFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     }
 #endif // wxUSE_TASKBARBUTTON
 
-    return wxFrameBase::HandleCommand(id, cmd, control);;
+    return wxFrameBase::HandleCommand(id, cmd, control);
 }
 
 // ---------------------------------------------------------------------------

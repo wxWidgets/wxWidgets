@@ -47,6 +47,12 @@
 #    ifndef MAC_OS_X_VERSION_10_13
 #       define MAC_OS_X_VERSION_10_13 101300
 #    endif
+#    ifndef MAC_OS_X_VERSION_10_14
+#       define MAC_OS_X_VERSION_10_14 101400
+#    endif
+#    ifndef MAC_OS_X_VERSION_10_15
+#       define MAC_OS_X_VERSION_10_15 101500
+#    endif
 #    if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
 #        ifndef NSAppKitVersionNumber10_10
 #            define NSAppKitVersionNumber10_10 1343
@@ -279,6 +285,11 @@
 
 #    if defined(__INNOTEK_LIBC__)
         /* Ensure visibility of strnlen declaration */
+#        define _GNU_SOURCE
+#    endif
+
+#    if defined(__CYGWIN__)
+        /* Ensure visibility of Dl_info and pthread_setconcurrency declarations */
 #        define _GNU_SOURCE
 #    endif
 

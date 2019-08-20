@@ -67,6 +67,10 @@
     #define NO_ITEM (-1)
 #endif
 
+#ifndef LVM_ISITEMVISIBLE
+    #define LVM_ISITEMVISIBLE (LVM_FIRST + 182)
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
@@ -880,6 +884,25 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     return success;
 }
 
+// Check if the item is visible
+bool wxListCtrl::IsVisible(long item) const
+{
+    bool result = ::SendMessage( GetHwnd(), LVM_ISITEMVISIBLE, (WPARAM) item, 0 ) != 0;
+    if ( result )
+    {
+        HWND hwndHdr = ListView_GetHeader(GetHwnd());
+        wxRect itemRect;
+        RECT headerRect;
+        if ( Header_GetItemRect( hwndHdr, 0, &headerRect ) )
+        {
+            GetItemRect( item, itemRect );
+            wxRect rectHeader = wxRectFromRECT( headerRect );
+            result = itemRect.GetBottom() > rectHeader.GetBottom();
+        }
+    }
+    return result;
+}
+
 // Sets information about the item
 bool wxListCtrl::SetItem(wxListItem& info)
 {
@@ -1217,6 +1240,19 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
           ) )
     {
         return false;
+    }
+
+    // Although LVIR_LABEL exists, it returns the same results as LVIR_BOUNDS
+    // and not just the label rectangle as would be expected, so account for
+    // the icon ourselves in this case.
+    if ( code == wxLIST_RECT_LABEL )
+    {
+        RECT rectIcon;
+        if ( !wxGetListCtrlSubItemRect(GetHwnd(), item, subItem, LVIR_ICON,
+                                       rectIcon) )
+            return false;
+
+        rectWin.left = rectIcon.right;
     }
 
     wxCopyRECTToRect(rectWin, rect);

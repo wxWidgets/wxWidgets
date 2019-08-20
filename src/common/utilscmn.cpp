@@ -1177,7 +1177,7 @@ wxString wxStripMenuCodes(const wxString& in, int flags)
 
     // In some East Asian languages _("&File") translates as "<translation>(&F)"
     // Check for this first, otherwise fall through to the standard situation
-    if (flags & wxStrip_Mnemonics)
+    if ( flags & wxStrip_CJKMnemonics )
     {
         wxString label(in), accel;
         int pos = in.Find('\t');

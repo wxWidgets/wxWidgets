@@ -18,25 +18,13 @@
 #if wxUSE_PROPGRID
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
-    #include "wx/object.h"
-    #include "wx/hash.h"
-    #include "wx/string.h"
+    #include "wx/bitmap.h"
+    #include "wx/colour.h"
+    #include "wx/font.h"
     #include "wx/log.h"
-    #include "wx/event.h"
-    #include "wx/window.h"
-    #include "wx/panel.h"
-    #include "wx/dc.h"
-    #include "wx/dcmemory.h"
-    #include "wx/button.h"
-    #include "wx/pen.h"
-    #include "wx/brush.h"
-    #include "wx/settings.h"
-    #include "wx/sizer.h"
-    #include "wx/intl.h"
+    #include "wx/validate.h"
 #endif
 
-#include "wx/propgrid/property.h"
 #include "wx/propgrid/propgrid.h"
 
 // ----------------------------------------------------------------------------

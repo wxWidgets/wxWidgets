@@ -55,7 +55,7 @@ wxFrameXmlHandler::wxFrameXmlHandler() : wxXmlResourceHandler()
 
 wxObject *wxFrameXmlHandler::DoCreateResource()
 {
-    XRC_MAKE_INSTANCE(frame, wxFrame);
+    XRC_MAKE_INSTANCE(frame, wxFrame)
 
     frame->Create(m_parentAsWindow,
                   GetID(),

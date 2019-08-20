@@ -107,8 +107,9 @@ public:
     WXWindow GetX11Window() const { return m_x11window; }
 
     virtual void ComputeScaleAndOrigin();
-
+#if wxUSE_CAIRO
     virtual void* GetCairoContext() const wxOVERRIDE;
+#endif
 
 protected:
     // implementation

@@ -170,7 +170,7 @@ static void PixelsToHimetric(SIZEL &sz)
         logX = GetDeviceCaps(dc, LOGPIXELSX);
         logY = GetDeviceCaps(dc, LOGPIXELSY);
         ReleaseDC(NULL, dc);
-    };
+    }
 
 #define HIMETRIC_INCH   2540
 #define CONVERT(x, logpixels)   wxMulDivInt32(HIMETRIC_INCH, (x), (logpixels))

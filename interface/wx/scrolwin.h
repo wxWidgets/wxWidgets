@@ -581,8 +581,21 @@ public:
     */
     virtual bool SendAutoScrollEvents(wxScrollWinEvent& event) const;
 
-
 protected:
+    /**
+        This method can be overridden in a derived class to prevent scrolling
+        the child window into view automatically when it gets focus.
+
+        The default behaviour is to scroll this window to show its currently
+        focused child automatically, to ensure that the user can interact with
+        it. This is usually helpful, but can be undesirable for some windows,
+        in which case this method can be overridden to return @false for them
+        to prevent any scrolling from taking place when such windows get focus.
+
+        @since 3.1.3
+     */
+    virtual bool ShouldScrollToChildOnFocus(wxWindow* child);
+
     /**
         Function which must be overridden to implement the size available for
         the scroll target for the given size of the main window.

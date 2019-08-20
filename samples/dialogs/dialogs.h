@@ -391,6 +391,7 @@ public:
 
 #if wxUSE_INFOBAR
     void InfoBarSimple(wxCommandEvent& event);
+    void InfoBarSimpleWrapped(wxCommandEvent &event);
     void InfoBarAdvanced(wxCommandEvent& event);
 #endif // wxUSE_INFOBAR
 
@@ -598,6 +599,7 @@ enum
     DIALOGS_NUM_ENTRY,
     DIALOGS_LOG_DIALOG,
     DIALOGS_INFOBAR_SIMPLE,
+    DIALOGS_INFOBAR_SIMPLE_WRAPPED,
     DIALOGS_INFOBAR_ADVANCED,
     DIALOGS_MODAL,
     DIALOGS_MODELESS,

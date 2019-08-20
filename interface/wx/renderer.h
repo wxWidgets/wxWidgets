@@ -234,7 +234,12 @@ public:
     virtual void DrawCheckBox(wxWindow *win, wxDC& dc,
                               const wxRect& rect, int flags = 0 );
 
+    virtual void DrawCheckMark(wxWindow *win, wxDC& dc,
+                               const wxRect& rect, int flags = 0 );
+
     virtual wxSize GetCheckBoxSize(wxWindow *win);
+
+    virtual wxSize GetCheckMarkSize(wxWindow *win);
 
     virtual wxSize GetExpanderSize(wxWindow* win);
 
@@ -533,6 +538,17 @@ public:
                                     int flags = 0) = 0;
 
     /**
+        Draw a check mark.
+
+        @a flags may have the @c wxCONTROL_DISABLED bit set, see
+        @ref wxCONTROL_FLAGS.
+
+        @since 3.1.3
+    */
+    virtual void DrawCheckMark(wxWindow* win, wxDC& dc, const wxRect& rect,
+                               int flags = 0) = 0;
+
+    /**
         Return the currently used renderer.
     */
     static wxRendererNative& Get();
@@ -559,6 +575,16 @@ public:
             the theme defining the checkbox size under some platforms.
     */
     virtual wxSize GetCheckBoxSize(wxWindow* win) = 0;
+
+    /**
+        Returns the size of a check mark.
+
+        @param win A valid, i.e. non-null, window pointer which is used to get
+            the theme defining the checkmark size under some platforms.
+
+        @since 3.1.3
+    */
+    virtual wxSize GetCheckMarkSize(wxWindow* win) = 0;
 
     /**
         Returns the size of the expander used in tree-like controls.

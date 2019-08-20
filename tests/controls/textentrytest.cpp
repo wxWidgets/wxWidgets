@@ -10,8 +10,12 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/dialog.h"
     #include "wx/event.h"
+    #include "wx/sizer.h"
+    #include "wx/textctrl.h"
     #include "wx/textentry.h"
+    #include "wx/timer.h"
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
@@ -364,3 +368,128 @@ void TextEntryTestCase::UndoRedo()
         }
     }
 }
+
+#if wxUSE_UIACTIONSIMULATOR
+
+namespace
+{
+
+enum ProcessEnter
+{
+    ProcessEnter_No,
+    ProcessEnter_ButSkip,
+    ProcessEnter_WithoutSkipping
+};
+
+class TestDialog : public wxDialog
+{
+public:
+    explicit TestDialog(TextLikeControlCreator controlCreator,
+                        ProcessEnter processEnter)
+        : wxDialog(wxTheApp->GetTopWindow(), wxID_ANY, "Test dialog"),
+          m_control((*controlCreator)(this,
+                                      processEnter == ProcessEnter_No
+                                        ? 0
+                                        : wxTE_PROCESS_ENTER)),
+          m_processEnter(processEnter),
+          m_gotEnter(false)
+    {
+        // We can't always bind this handler because wx will helpfully
+        // complain if we bind it without using wxTE_PROCESS_ENTER.
+        if ( processEnter != ProcessEnter_No )
+            m_control->Bind(wxEVT_TEXT_ENTER, &TestDialog::OnTextEnter, this);
+
+        wxSizer* const sizer = new wxBoxSizer(wxVERTICAL);
+        sizer->Add(m_control, wxSizerFlags().Expand());
+        sizer->Add(CreateStdDialogButtonSizer(wxOK));
+        SetSizerAndFit(sizer);
+
+        CallAfter(&TestDialog::SimulateEnter);
+
+        m_timer.Bind(wxEVT_TIMER, &TestDialog::OnTimeOut, this);
+        m_timer.StartOnce(2000);
+    }
+
+    bool GotEnter() const { return m_gotEnter; }
+
+private:
+    void OnTextEnter(wxCommandEvent& e)
+    {
+        m_gotEnter = true;
+
+        switch ( m_processEnter )
+        {
+            case ProcessEnter_No:
+                FAIL("Shouldn't be getting wxEVT_TEXT_ENTER at all");
+                break;
+
+            case ProcessEnter_ButSkip:
+                e.Skip();
+                break;
+
+            case ProcessEnter_WithoutSkipping:
+                // Close the dialog with a different exit code than what
+                // pressing the OK button would have generated.
+                EndModal(wxID_APPLY);
+                break;
+        }
+    }
+
+    void OnTimeOut(wxTimerEvent&)
+    {
+        EndModal(wxID_CANCEL);
+    }
+
+    void SimulateEnter()
+    {
+        wxUIActionSimulator sim;
+        m_control->SetFocus();
+        sim.Char(WXK_RETURN);
+    }
+
+    wxControl* const m_control;
+    const ProcessEnter m_processEnter;
+    wxTimer m_timer;
+    bool m_gotEnter;
+};
+
+} // anonymous namespace
+
+void TestProcessEnter(TextLikeControlCreator controlCreator)
+{
+    if ( !EnableUITests() )
+    {
+        WARN("Skipping wxTE_PROCESS_ENTER tests: wxUIActionSimulator use disabled");
+        return;
+    }
+
+    SECTION("Without wxTE_PROCESS_ENTER")
+    {
+        TestDialog dlg(controlCreator, ProcessEnter_No);
+        REQUIRE( dlg.ShowModal() == wxID_OK );
+        CHECK( !dlg.GotEnter() );
+    }
+
+    SECTION("With wxTE_PROCESS_ENTER but skipping")
+    {
+        TestDialog dlgProcessEnter(controlCreator, ProcessEnter_ButSkip);
+        REQUIRE( dlgProcessEnter.ShowModal() == wxID_OK );
+        CHECK( dlgProcessEnter.GotEnter() );
+    }
+
+    SECTION("With wxTE_PROCESS_ENTER without skipping")
+    {
+        TestDialog dlgProcessEnter(controlCreator, ProcessEnter_WithoutSkipping);
+        REQUIRE( dlgProcessEnter.ShowModal() == wxID_APPLY );
+        CHECK( dlgProcessEnter.GotEnter() );
+    }
+}
+
+#else // !wxUSE_UIACTIONSIMULATOR
+
+void TestProcessEnter(TextLikeControlCreator WXUNUSED(controlCreator))
+{
+    WARN("Skipping wxTE_PROCESS_ENTER tests: wxUIActionSimulator not available");
+}
+
+#endif // wxUSE_UIACTIONSIMULATOR/!wxUSE_UIACTIONSIMULATOR

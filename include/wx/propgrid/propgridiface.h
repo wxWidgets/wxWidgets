@@ -326,7 +326,7 @@ public:
         // If 'id' refers to invalid property, then we will return dummy
         // attributes (i.e. root property's attributes, which contents should
         // should always be empty and of no consequence).
-        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(m_pState->DoGetRoot()->GetAttributes());
+        wxPG_PROP_ARG_CALL_PROLOG_RETVAL(m_pState->DoGetRoot()->GetAttributes())
         return p->GetAttributes();
     }
 

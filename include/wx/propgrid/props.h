@@ -17,15 +17,13 @@
 
 // -----------------------------------------------------------------------
 
-class wxPGArrayEditorDialog;
+class WXDLLIMPEXP_FWD_PROPGRID wxPGArrayEditorDialog;
 
-#include "wx/propgrid/editors.h"
+#include "wx/propgrid/property.h"
 
 #include "wx/filename.h"
 #include "wx/dialog.h"
 #include "wx/textctrl.h"
-#include "wx/button.h"
-#include "wx/listbox.h"
 #include "wx/valtext.h"
 
 // -----------------------------------------------------------------------
@@ -583,6 +581,7 @@ public:
     virtual ~wxEditorDialogProperty();
 
     virtual wxPGEditorDialogAdapter* GetEditorDialog() const wxOVERRIDE;
+    virtual bool DoSetAttribute(const wxString& name, wxVariant& value) wxOVERRIDE;
 
 protected:
     wxEditorDialogProperty(const wxString& label, const wxString& name);
@@ -674,7 +673,9 @@ public:
     virtual wxString ValueToString(wxVariant& value, int argFlags = 0) const wxOVERRIDE;
     virtual bool StringToValue(wxVariant& variant, const wxString& text,
                                int argFlags = 0) const wxOVERRIDE;
+#if WXWIN_COMPATIBILITY_3_0
     virtual bool DoSetAttribute(const wxString& name, wxVariant& value) wxOVERRIDE;
+#endif // WXWIN_COMPATIBILITY_3_0
     virtual wxValidator* DoGetValidator() const wxOVERRIDE;
 
 protected:

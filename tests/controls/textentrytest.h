@@ -75,4 +75,11 @@ private:
     wxDECLARE_NO_COPY_CLASS(TextEntryTestCase);
 };
 
+// Function to call to test that wxTE_PROCESS_ENTER is handled correctly for
+// the controls of the type created by the given creator function when they're
+// placed in a dialog with a default button.
+typedef wxControl* (*TextLikeControlCreator)(wxWindow* parent, int style);
+
+void TestProcessEnter(TextLikeControlCreator controlCreator);
+
 #endif // _WX_TESTS_CONTROLS_TEXTENTRYTEST_H_

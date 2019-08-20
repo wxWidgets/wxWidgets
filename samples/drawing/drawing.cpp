@@ -123,11 +123,8 @@ public:
     {   if ( !m_renderer ) return false;
         return m_renderer == wxGraphicsRenderer::GetDefaultRenderer();
     }
-    bool IsRendererName(const wxString& name) const
-    {   if ( !m_renderer ) return name.empty();
-        return m_renderer->GetName() == name;
-    }
     wxGraphicsRenderer* GetRenderer() const { return m_renderer; }
+    void EnableAntiAliasing(bool use) { m_useAntiAliasing = use; Refresh(); }
 #endif // wxUSE_GRAPHICS_CONTEXT
     void UseBuffer(bool use) { m_useBuffer = use; Refresh(); }
     void ShowBoundingBox(bool show) { m_showBBox = show; Refresh(); }
@@ -176,6 +173,7 @@ private:
     wxPoint      m_currentpoint;
 #if wxUSE_GRAPHICS_CONTEXT
     wxGraphicsRenderer* m_renderer;
+    bool         m_useAntiAliasing;
 #endif
     bool         m_useBuffer;
     bool         m_showBBox;
@@ -206,7 +204,7 @@ public:
 
     void OnGraphicContextNoneUpdateUI(wxUpdateUIEvent& event)
     {
-        event.Check(m_canvas->IsRendererName(wxEmptyString));
+        event.Check(m_canvas->GetRenderer() == NULL);
     }
 
     void OnGraphicContextDefault(wxCommandEvent& WXUNUSED(event))
@@ -227,7 +225,7 @@ public:
 
     void OnGraphicContextCairoUpdateUI(wxUpdateUIEvent& event)
     {
-        event.Check(m_canvas->IsRendererName("cairo"));
+        event.Check(m_canvas->GetRenderer() == wxGraphicsRenderer::GetCairoRenderer());
     }
 #endif // wxUSE_CAIRO
 #ifdef __WXMSW__
@@ -239,7 +237,7 @@ public:
 
     void OnGraphicContextGDIPlusUpdateUI(wxUpdateUIEvent& event)
     {
-        event.Check(m_canvas->IsRendererName("gdiplus"));
+        event.Check(m_canvas->GetRenderer() == wxGraphicsRenderer::GetGDIPlusRenderer());
     }
 #endif
 #if wxUSE_GRAPHICS_DIRECT2D
@@ -250,10 +248,19 @@ public:
 
     void OnGraphicContextDirect2DUpdateUI(wxUpdateUIEvent& event)
     {
-        event.Check(m_canvas->IsRendererName("direct2d"));
+        event.Check(m_canvas->GetRenderer() == wxGraphicsRenderer::GetDirect2DRenderer());
     }
 #endif
 #endif // __WXMSW__
+    void OnAntiAliasing(wxCommandEvent& event)
+    {
+        m_canvas->EnableAntiAliasing(event.IsChecked());
+    }
+
+    void OnAntiAliasingUpdateUI(wxUpdateUIEvent& event)
+    {
+        event.Enable(m_canvas->GetRenderer() != NULL);
+    }
 #endif // wxUSE_GRAPHICS_CONTEXT
 
     void OnBuffer(wxCommandEvent& event);
@@ -339,6 +346,9 @@ enum
     File_BBox,
     File_Clip,
     File_Buffer,
+#if wxUSE_GRAPHICS_CONTEXT
+    File_AntiAliasing,
+#endif
     File_Copy,
     File_Save,
 
@@ -523,6 +533,7 @@ MyCanvas::MyCanvas(MyFrame *parent)
     m_rubberBand = false;
 #if wxUSE_GRAPHICS_CONTEXT
     m_renderer = NULL;
+    m_useAntiAliasing = true;
 #endif
     m_useBuffer = false;
     m_showBBox = false;
@@ -1826,6 +1837,8 @@ void MyCanvas::Draw(wxDC& pdc)
             return;
         }
 
+        context->SetAntialiasMode(m_useAntiAliasing ? wxANTIALIAS_DEFAULT : wxANTIALIAS_NONE);
+
         gdc.SetBackground(GetBackgroundColour());
         gdc.SetGraphicsContext(context);
     }
@@ -2098,6 +2111,8 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI (File_GC_Direct2D, MyFrame::OnGraphicContextDirect2DUpdateUI)
 #endif
 #endif // __WXMSW__
+    EVT_MENU      (File_AntiAliasing, MyFrame::OnAntiAliasing)
+    EVT_UPDATE_UI (File_AntiAliasing, MyFrame::OnAntiAliasingUpdateUI)
 #endif // wxUSE_GRAPHICS_CONTEXT
 
     EVT_MENU      (File_Buffer,   MyFrame::OnBuffer)
@@ -2142,17 +2157,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     wxMenu *menuFile = new wxMenu;
 #if wxUSE_GRAPHICS_CONTEXT
-    menuFile->AppendCheckItem(File_GC_Default, "Use default wx&GraphicContext\tCtrl-Y");
-    m_menuItemUseDC = menuFile->AppendRadioItem(File_DC, "Use wx&DC\tShift-Ctrl-Y");
+    menuFile->AppendCheckItem(File_GC_Default, "Use default wx&GraphicContext\t1");
+    m_menuItemUseDC = menuFile->AppendRadioItem(File_DC, "Use wx&DC\t0");
 #if wxUSE_CAIRO
-    menuFile->AppendRadioItem(File_GC_Cairo, "Use &Cairo\tCtrl-O");
+    menuFile->AppendRadioItem(File_GC_Cairo, "Use &Cairo\t2");
 #endif // wxUSE_CAIRO
 #ifdef __WXMSW__
 #if wxUSE_GRAPHICS_GDIPLUS
-    menuFile->AppendRadioItem(File_GC_GDIPlus, "Use &GDI+\tCtrl-+");
+    menuFile->AppendRadioItem(File_GC_GDIPlus, "Use &GDI+\t3");
 #endif
 #if wxUSE_GRAPHICS_DIRECT2D
-    menuFile->AppendRadioItem(File_GC_Direct2D, "Use &Direct2D\tCtrl-2");
+    menuFile->AppendRadioItem(File_GC_Direct2D, "Use &Direct2D\t4");
 #endif
 #endif // __WXMSW__
 #endif // wxUSE_GRAPHICS_CONTEXT
@@ -2161,6 +2176,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                               "Show extents used in drawing operations");
     menuFile->AppendCheckItem(File_Clip, "&Clip\tCtrl-C", "Clip/unclip drawing");
     menuFile->AppendCheckItem(File_Buffer, "&Use wx&BufferedPaintDC\tCtrl-Z", "Buffer painting");
+#if wxUSE_GRAPHICS_CONTEXT
+    menuFile->AppendCheckItem(File_AntiAliasing,
+                              "&Anti-Aliasing in wxGraphicContext\tCtrl-Shift-A",
+                              "Enable Anti-Aliasing in wxGraphicContext")
+            ->Check();
+#endif
     menuFile->AppendSeparator();
 #if wxUSE_METAFILE && defined(wxMETAFILE_IS_ENH)
     menuFile->Append(File_Copy, "Copy to clipboard");

@@ -292,12 +292,12 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 // Returns -1 if none found.
 int wxMenuBar::FindMenuItem(const wxString& menuString, const wxString& itemString) const
 {
-    const wxString stripped = wxStripMenuCodes(menuString);
+    const wxString stripped = wxStripMenuCodes(menuString, wxStrip_Menu);
 
     size_t menuCount = GetMenuCount();
     for (size_t i = 0; i < menuCount; i++)
     {
-        if ( wxStripMenuCodes(m_titles[i]) == stripped )
+        if ( wxStripMenuCodes(m_titles[i], wxStrip_Menu) == stripped )
             return m_menus.Item(i)->GetData()->FindItem (itemString);
     }
     return wxNOT_FOUND;
@@ -347,7 +347,7 @@ bool wxMenuBar::CreateMenuBar(wxFrame* parent)
         wxString title(m_titles[i]);
         menu->SetButtonWidget(menu->CreateMenu (this, menuBarW, menu, i, title, true));
 
-        if (strcmp (wxStripMenuCodes(title), "Help") == 0)
+        if (strcmp (wxStripMenuCodes(title, wxStrip_Menu), "Help") == 0)
             XtVaSetValues ((Widget) menuBarW, XmNmenuHelpWidget, (Widget) menu->GetButtonWidget(), NULL);
 
         // tear off menu support
@@ -478,7 +478,7 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar,
         char mnem = wxFindMnemonic (title);
         menu = XmCreatePulldownMenu ((Widget) parent, wxMOTIF_STR("pulldown"), args, 3);
 
-        wxString title2(wxStripMenuCodes(title));
+        wxString title2(wxStripMenuCodes(title, wxStrip_Menu));
         wxXmString label_str(title2);
         buttonWidget = XtVaCreateManagedWidget(title2,
 #if wxUSE_GADGETS

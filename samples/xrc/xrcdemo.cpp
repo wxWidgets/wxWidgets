@@ -90,6 +90,10 @@ bool MyApp::OnInit()
     // wxXRC docs for details.
     wxXmlResource::Get()->InitAllHandlers();
 
+    // Allow using environment variables in the file paths in the resources,
+    // while keeping the default wxXRC_USE_LOCALE flag.
+    wxXmlResource::Get()->SetFlags(wxXRC_USE_LOCALE | wxXRC_USE_ENVVARS);
+
 #if wxUSE_RIBBON
     wxXmlResource::Get()->AddHandler(new wxRibbonXmlHandler);
 #endif

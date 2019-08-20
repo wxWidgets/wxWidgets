@@ -231,6 +231,12 @@ void wxComboBox::OnChar( wxKeyEvent &event )
                     // down list upon RETURN.
                     return;
                 }
+
+                // We disable built-in default button activation when
+                // wxTE_PROCESS_ENTER is used, but we still should activate it
+                // if the event wasn't handled, so do it from here.
+                if ( ClickDefaultButtonIfPossible() )
+                    return;
             }
             break;
     }

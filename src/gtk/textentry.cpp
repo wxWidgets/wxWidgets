@@ -1139,4 +1139,35 @@ wxString wxTextEntry::GetHint() const
 }
 #endif // __WXGTK3__
 
+bool wxTextEntry::ClickDefaultButtonIfPossible()
+{
+    GtkWidget* const widget = GTK_WIDGET(GetEntry());
+
+    // This does the same thing as gtk_entry_real_activate() in GTK itself.
+    //
+    // Note: in GTK 4 we should probably just use gtk_widget_activate_default().
+    GtkWidget* const toplevel = gtk_widget_get_toplevel(widget);
+    if ( GTK_IS_WINDOW (toplevel) )
+    {
+        GtkWindow* const window = GTK_WINDOW(toplevel);
+
+        if ( window )
+        {
+            GtkWidget* const default_widget = gtk_window_get_default_widget(window);
+            GtkWidget* const focus_widget = gtk_window_get_focus(window);
+
+            if ( widget != default_widget &&
+                    !(widget == focus_widget &&
+                        (!default_widget ||
+                            !gtk_widget_get_sensitive(default_widget))) )
+            {
+                if ( gtk_window_activate_default(window) )
+                    return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 #endif // wxUSE_TEXTCTRL || wxUSE_COMBOBOX

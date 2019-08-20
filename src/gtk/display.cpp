@@ -9,6 +9,9 @@
 #include "wx/wxprec.h"
 
 #include "wx/private/display.h"
+#if wxUSE_DISPLAY
+    #include "wx/window.h"
+#endif
 
 #include "wx/gtk/private/wrapgtk.h"
 #ifdef GDK_WINDOWING_X11
@@ -67,6 +70,7 @@ public:
     virtual wxDisplayImpl* CreateDisplay(unsigned n) wxOVERRIDE;
     virtual unsigned GetCount() wxOVERRIDE;
     virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
+    virtual int GetFromWindow(const wxWindow* win) wxOVERRIDE;
 };
 
 wxDisplayImpl* wxDisplayFactoryGTK::CreateDisplay(unsigned n)
@@ -87,6 +91,26 @@ int wxDisplayFactoryGTK::GetFromPoint(const wxPoint& pt)
     gdk_monitor_get_geometry(monitor, &rect);
     if (wxRect(rect.x, rect.y, rect.width, rect.height).Contains(pt))
     {
+        for (unsigned i = gdk_display_get_n_monitors(display); i--;)
+        {
+            if (gdk_display_get_monitor(display, i) == monitor)
+                return i;
+        }
+    }
+    return wxNOT_FOUND;
+}
+
+int wxDisplayFactoryGTK::GetFromWindow(const wxWindow* win)
+{
+    if (win && win->m_widget)
+    {
+        GdkDisplay* display = gtk_widget_get_display(win->m_widget);
+        GdkMonitor* monitor;
+        if (GdkWindow* window = gtk_widget_get_window(win->m_widget))
+            monitor = gdk_display_get_monitor_at_window(display, window);
+        else
+            monitor = gdk_display_get_primary_monitor(display);
+
         for (unsigned i = gdk_display_get_n_monitors(display); i--;)
         {
             if (gdk_display_get_monitor(display, i) == monitor)
@@ -251,6 +275,7 @@ public:
     virtual wxDisplayImpl* CreateDisplay(unsigned n) wxOVERRIDE;
     virtual unsigned GetCount() wxOVERRIDE;
     virtual int GetFromPoint(const wxPoint& pt) wxOVERRIDE;
+    virtual int GetFromWindow(const wxWindow* win) wxOVERRIDE;
 };
 
 wxGCC_WARNING_SUPPRESS(deprecated-declarations)
@@ -273,6 +298,20 @@ int wxDisplayFactoryGTK::GetFromPoint(const wxPoint& pt)
     gdk_screen_get_monitor_geometry(screen, monitor, &rect);
     if (!wxRect(rect.x, rect.y, rect.width, rect.height).Contains(pt))
         monitor = wxNOT_FOUND;
+    return monitor;
+}
+
+int wxDisplayFactoryGTK::GetFromWindow(const wxWindow* win)
+{
+    int monitor = wxNOT_FOUND;
+    if (win && win->m_widget)
+    {
+        GdkScreen* screen = gtk_widget_get_screen(win->m_widget);
+        if (GdkWindow* window = gtk_widget_get_window(win->m_widget))
+            monitor = gdk_screen_get_monitor_at_window(screen, window);
+        else
+            monitor = gdk_screen_get_primary_monitor(screen);
+    }
     return monitor;
 }
 #endif // wxUSE_DISPLAY

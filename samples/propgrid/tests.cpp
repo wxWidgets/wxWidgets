@@ -83,7 +83,7 @@ public:
                     return col;
                 }
                 return *wxWHITE;
-        };
+        }
         return wxColour();
     }
 

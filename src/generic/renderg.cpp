@@ -106,7 +106,14 @@ public:
                               const wxRect& rect,
                               int flags = 0) wxOVERRIDE;
 
+    virtual void DrawCheckMark(wxWindow *win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0) wxOVERRIDE;
+
     virtual wxSize GetCheckBoxSize(wxWindow *win) wxOVERRIDE;
+
+    virtual wxSize GetCheckMarkSize(wxWindow *win) wxOVERRIDE;
 
     virtual wxSize GetExpanderSize(wxWindow *win) wxOVERRIDE;
 
@@ -714,11 +721,26 @@ wxRendererGeneric::DrawCheckBox(wxWindow *WXUNUSED(win),
     }
 }
 
+void
+wxRendererGeneric::DrawCheckMark(wxWindow *WXUNUSED(win),
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int flags)
+{
+    dc.SetPen(*(flags & wxCONTROL_DISABLED ? wxGREY_PEN : wxBLACK_PEN));
+    dc.DrawCheckMark(rect);
+}
+
 wxSize wxRendererGeneric::GetCheckBoxSize(wxWindow *win)
 {
     wxCHECK_MSG( win, wxSize(0, 0), "Must have a valid window" );
 
     return win->FromDIP(wxSize(16, 16));
+}
+
+wxSize wxRendererGeneric::GetCheckMarkSize(wxWindow *win)
+{
+    return GetCheckBoxSize(win);
 }
 
 wxSize wxRendererGeneric::GetExpanderSize(wxWindow *win)

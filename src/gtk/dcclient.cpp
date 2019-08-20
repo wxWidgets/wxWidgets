@@ -1508,6 +1508,9 @@ void wxWindowDCImpl::Clear()
 
     if (!m_gdkwindow) return;
 
+    if (!m_backgroundBrush.IsOk() || m_backgroundBrush.GetStyle() == wxBRUSHSTYLE_TRANSPARENT)
+        return;
+
     int width,height;
     DoGetSize( &width, &height );
     gdk_draw_rectangle( m_gdkwindow, m_bgGC, TRUE, 0, 0, width, height );

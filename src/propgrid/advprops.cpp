@@ -18,33 +18,9 @@
 #if wxUSE_PROPGRID
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
-    #include "wx/object.h"
-    #include "wx/hash.h"
-    #include "wx/string.h"
-    #include "wx/log.h"
-    #include "wx/event.h"
-    #include "wx/window.h"
-    #include "wx/panel.h"
     #include "wx/dc.h"
-    #include "wx/dcclient.h"
-    #include "wx/button.h"
-    #include "wx/pen.h"
-    #include "wx/brush.h"
-    #include "wx/cursor.h"
-    #include "wx/dialog.h"
     #include "wx/settings.h"
-    #include "wx/msgdlg.h"
-    #include "wx/choice.h"
-    #include "wx/stattext.h"
     #include "wx/textctrl.h"
-    #include "wx/scrolwin.h"
-    #include "wx/dirdlg.h"
-    #include "wx/combobox.h"
-    #include "wx/sizer.h"
-    #include "wx/textdlg.h"
-    #include "wx/filedlg.h"
-    #include "wx/intl.h"
     #include "wx/wxcrtvararg.h"
 #endif
 
@@ -56,13 +32,7 @@
 
 #include "wx/propgrid/advprops.h"
 
-#ifdef __WXMSW__
-    #include "wx/msw/private.h"
-    #include "wx/msw/dc.h"
-#endif
-
 #include "wx/odcombo.h"
-#include "wx/numformatter.h"
 
 // Drawing ARGB on standard DC is supported by OSX and GTK3
 #if defined(__WXOSX__) || defined(__WXGTK3__)
@@ -75,7 +45,10 @@
 
 #if wxPG_USE_GC_FOR_ALPHA
 #include "wx/dcgraph.h"
+#ifndef WX_PRECOMP
+#include "wx/dcclient.h" // for wxDynamicCast purposes
 #include "wx/dcmemory.h" // for wxDynamicCast purposes
+#endif // WX_PRECOMP
 #if wxUSE_METAFILE
     #include "wx/metafile.h"  // for wxDynamicCast purposes
 #endif // wxUSE_METAFILE

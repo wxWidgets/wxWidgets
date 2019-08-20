@@ -992,9 +992,13 @@ public:
 
     @beginStyleTable
     @style{wxTE_PROCESS_ENTER}
-           The control will generate the event @c wxEVT_TEXT_ENTER
-           (otherwise pressing Enter key is either processed internally by the
-           control or used to activate the default button of the dialog, if any).
+           The control will generate the event @c wxEVT_TEXT_ENTER that can be
+           handled by the program. Otherwise, i.e. either if this style not
+           specified at all, or it is used, but there is no event handler for
+           this event or the event handler called wxEvent::Skip() to avoid
+           overriding the default handling, pressing Enter key is either
+           processed internally by the control or used to activate the default
+           button of the dialog, if any.
     @style{wxTE_PROCESS_TAB}
            Normally, TAB key is used for keyboard navigation and pressing it in
            a control switches focus to the next one. With this style, this

@@ -17,6 +17,8 @@
 
 #include "wx/propgrid/property.h"
 
+class WXDLLIMPEXP_FWD_CORE wxClientDC;
+
 // -----------------------------------------------------------------------
 
 // A return value from wxPropertyGrid::HitTest(),

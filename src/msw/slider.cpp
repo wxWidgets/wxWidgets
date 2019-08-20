@@ -119,7 +119,7 @@ bool wxSlider::Create(wxWindow *parent,
                 // no, choose default
                 style |= wxSL_BOTTOM | wxSL_HORIZONTAL;
             }
-    };
+    }
 
     wxASSERT_MSG( !(style & wxSL_VERTICAL) || !(style & wxSL_HORIZONTAL),
                     wxT("incompatible slider direction and orientation") );

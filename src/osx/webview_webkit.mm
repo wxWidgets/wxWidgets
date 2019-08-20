@@ -33,8 +33,10 @@
 #include <UIKit/UIWebView.h>
 #else
 #include <WebKit/WebKit.h>
-#include <WebKit/HIWebView.h>
-#include <WebKit/CarbonUtils.h>
+#if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_15
+  #include <WebKit/HIWebView.h>
+  #include <WebKit/CarbonUtils.h>
+#endif
 #endif
 #include <Foundation/NSURLError.h>
 
