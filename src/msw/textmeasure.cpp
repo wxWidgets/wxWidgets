@@ -172,9 +172,10 @@ bool wxTextMeasure::DoGetPartialTextExtents(const wxString& text,
     int offset = 0;
     int tabWidth = 0;
     int tabHeight = 0;
-    for ( unsigned i = 0; i < text.length(); ++i )
+    int* widthPtr = &widths[0];
+    for ( wxString::const_iterator i = text.begin(); i != text.end(); ++i )
     {
-        if ( text[i] == '\t' )
+        if ( *i == '\t' )
         {
             if ( tabWidth == 0 )
             {
@@ -182,7 +183,8 @@ bool wxTextMeasure::DoGetPartialTextExtents(const wxString& text,
             }
             offset += tabWidth;
         }
-        widths[i] += offset;
+
+        *widthPtr++ += offset;
     }
 
     return true;
