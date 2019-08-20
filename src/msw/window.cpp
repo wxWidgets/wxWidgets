@@ -58,7 +58,6 @@
     #include "wx/ownerdrw.h"
 #endif
 
-#include "wx/display.h"
 #include "wx/evtloop.h"
 #include "wx/hashmap.h"
 #include "wx/popupwin.h"
