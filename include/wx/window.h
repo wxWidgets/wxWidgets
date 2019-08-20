@@ -949,14 +949,16 @@ public:
     // translation between different units
     // -----------------------------------
 
+        // Get the DPI used by the given window or wxSize(0, 0) if unknown.
+    virtual wxSize GetDPI() const;
+
         // DPI-independent pixels, or DIPs, are pixel values for the standard
         // 96 DPI display, they are scaled to take the current resolution into
         // account (i.e. multiplied by the same factor as returned by
         // GetContentScaleFactor()) if necessary for the current platform.
         //
-        // Currently the conversion factor is the same for all windows but this
-        // will change with the monitor-specific resolution support in the
-        // future, so prefer using the non-static member functions.
+        // To support monitor-specific resolutions, prefer using the non-static
+        // member functions or use a valid (non-null) window pointer.
         //
         // Similarly, currently in practice the factor is the same in both
         // horizontal and vertical directions, but this could, in principle,
