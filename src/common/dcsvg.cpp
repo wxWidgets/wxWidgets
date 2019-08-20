@@ -620,7 +620,7 @@ void wxSVGFileDCImpl::DoDrawPoint(wxCoord x1, wxCoord y1)
 
     wxString s;
 
-    s = wxS("  <g style=\"stroke-linecap:round;\">\n  ");
+    s = wxS("  <g style=\"stroke-width:1; stroke-linecap:round;\">\n  ");
     write(s);
 
     DoDrawLine(x1, y1, x1, y1);
