@@ -70,6 +70,9 @@ Changes in behaviour not resulting in compilation errors
   return to the previous behaviour, you need to explicitly create controls of
   smaller size.
 
+- wxDC::DrawCheckMark() draws the same shape under all platforms now, use the
+  new wxRendererNative::DrawCheckMark() to draw MSW-specific themed check mark.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
