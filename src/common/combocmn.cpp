@@ -595,9 +595,9 @@ void wxComboPopupWindowEvtHandler::OnActivate( wxActivateEvent& event )
         // or setting the focus improperly (Win 10), so postpone it slightly.
         // See wxPopupTransientWindow::MSWHandleMessage().
         CallAfter(&wxComboPopupWindowEvtHandler::HideOnDeactivate);
-#else
+#else // !__WXMSW__
         HideOnDeactivate();
-#endif __WXMSW__ / !__WXMSW__
+#endif // __WXMSW__ / !__WXMSW__
         event.Skip();
     }
 }
