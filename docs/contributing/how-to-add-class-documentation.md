@@ -18,10 +18,10 @@ The documentation can then be added in form of Doxygen comments to
 the header file.
 
 You may also want to write a separate topic file,
-e.g. docs/doxygen/overviews/myclass.h, and add the entry to
-docs/doxygen/mainpages/topics.h.
+e.g. `docs/doxygen/overviews/myclass.h`, and add the entry to
+`docs/doxygen/mainpages/topics.h`.
 
-If applicable, also add an entry to one of the docs/doxygen/mainpages/cat_*.h
+If applicable, also add an entry to one of the `docs/doxygen/mainpages/cat_*.h`
 files.
 
 You can generate a first raw version of myclass.h simply taking its
@@ -287,9 +287,9 @@ there is a corresponding link anchor.
 The following conventions are used in wxWidgets doxygen comments:
 
  1. all "main" pages of the manual (those which are placed in
-   docs/doxygen/mainpages) have link anchors which begin with "page_"
+   docs/doxygen/mainpages) have link anchors which begin with `page_`
  2. all topic overviews (those which are placed in docs/doxygen/overviews) have
-   link anchors which begin with "overview_"
+   link anchors which begin with `overview_`
  3. all @section, @subsection, @subsubsection tags should have as link anchor
    name the name of the parent section plus a specific word separated with an
    underscore; e.g.:
