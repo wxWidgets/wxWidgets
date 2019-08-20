@@ -18,6 +18,9 @@
     #define WX_IS_MACOS_AVAILABLE(major, minor) \
         __builtin_available(macOS major ## . ## minor, *)
 
+    #define WX_IS_MACOS_AVAILABLE_FULL(major, minor, micro) \
+        __builtin_available(macOS major ## . ## minor ## . ## micro, *)
+
     // Note that we can't easily forward to API_AVAILABLE macro here, so go
     // directly to its expansion instead.
     #define WX_API_AVAILABLE_MACOS(major, minor) \
@@ -27,6 +30,9 @@
 
     #define WX_IS_MACOS_AVAILABLE(major, minor) \
         wxPlatformInfo::Get().CheckOSVersion(major, minor)
+
+    #define WX_IS_MACOS_AVAILABLE_FULL(major, minor, micro) \
+        wxPlatformInfo::Get().CheckOSVersion(major, minor, micro)
 
     #define WX_API_AVAILABLE_MACOS(major, minor)
 #endif
