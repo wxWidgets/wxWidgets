@@ -58,6 +58,10 @@ Important Dos and Don'ts
 
 DO:
 
+- use present tense verbs in 3rd person singular form to describe functions,
+  i.e. write "Returns the answer to life, universe and everything", rather than
+  the imperative mood used in Git commit message ("Return the answer ...").
+
 - Doxygen supports both commands in the form \command and @command;
   all wxWidgets documentation uses the @command form.
   Follow strictly this rule.
