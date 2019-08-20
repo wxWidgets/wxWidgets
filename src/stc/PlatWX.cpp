@@ -2117,24 +2117,27 @@ PRectangle Window::GetMonitorRect(Point pt) {
         // Do not activate the window when it is shown.
         bool wxSTCPopupBase::Show(bool show)
         {
-            if ( !wxWindowBase::Show(show) )
-                return false;
-
             if ( show )
             {
-                HWND hWnd = reinterpret_cast<HWND>(GetHandle());
-                if ( GetName() == "wxSTCCallTip" )
-                    ::AnimateWindow(hWnd, 25, AW_BLEND);
-                else
-                    ::ShowWindow(hWnd, SW_SHOWNA );
+                // Check if the window is changing from hidden to shown.
+                bool changingVisibility = wxWindowBase::Show(true);
 
-                ::SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0,
-                               SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+                if ( changingVisibility )
+                {
+                    HWND hWnd = reinterpret_cast<HWND>(GetHandle());
+                    if ( GetName() == "wxSTCCallTip" )
+                        ::AnimateWindow(hWnd, 25, AW_BLEND);
+                    else
+                        ::ShowWindow(hWnd, SW_SHOWNA );
+
+                    ::SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0,
+                                   SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+                }
+
+                return changingVisibility;
             }
             else
-                wxPopupWindow::Show(false);
-
-            return true;
+                return wxPopupWindow::Show(false);
         }
 
         // Do not activate in response to mouse clicks on this window.
@@ -2224,7 +2227,7 @@ PRectangle Window::GetMonitorRect(Point pt) {
 #endif // __WXOSX_COCOA__
 
 wxSTCPopupWindow::wxSTCPopupWindow(wxWindow* parent)
-                 :wxSTCPopupBase(parent), m_initialPosition(wxDefaultPosition)
+                 :wxSTCPopupBase(parent), m_lastKnownPosition(wxDefaultPosition)
 {
     #if !wxSTC_POPUP_IS_CUSTOM
         Bind(wxEVT_SET_FOCUS, &wxSTCPopupWindow::OnFocus, this);
@@ -2275,9 +2278,7 @@ bool wxSTCPopupWindow::AcceptsFocus() const
 
 void wxSTCPopupWindow::DoSetSize(int x, int y, int width, int height, int flags)
 {
-    if ( m_initialPosition == wxDefaultPosition
-            && x != wxDefaultCoord && y != wxDefaultCoord )
-        m_initialPosition = wxPoint(x, y);
+    m_lastKnownPosition = wxPoint(x, y);
 
     // convert coords to screen coords since we're a top-level window
     if (x != wxDefaultCoord)
@@ -2291,8 +2292,8 @@ void wxSTCPopupWindow::DoSetSize(int x, int y, int width, int height, int flags)
 
 void wxSTCPopupWindow::OnParentMove(wxMoveEvent& event)
 {
-    if ( m_initialPosition != wxDefaultPosition )
-        SetPosition(m_initialPosition);
+    if ( m_lastKnownPosition.IsFullySpecified() )
+        SetPosition(m_lastKnownPosition);
     event.Skip();
 }
 
@@ -2700,7 +2701,7 @@ wxSTCListBox::wxSTCListBox(wxWindow* parent, wxSTCListBoxVisualData* v, int ht)
               m_textTopGap(0), m_imageAreaWidth(0), m_imageAreaHeight(0)
 {
     wxVListBox::Create(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                       wxBORDER_NONE);
+                       wxBORDER_NONE, "AutoCompListBox");
 
     m_imagePadding             = FromDIP(1);
     m_textBoxToTextGap         = FromDIP(3);
