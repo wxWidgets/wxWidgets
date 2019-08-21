@@ -279,3 +279,4 @@ public:
     */
     static wxString Unescape(const wxString& str);
 };
+
