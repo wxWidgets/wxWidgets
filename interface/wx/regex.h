@@ -260,14 +260,14 @@ public:
 
         @return A string with all metacharacters converted to their escaped form.
 
-        @note This is a static function, and there is no need to create an instance of wxRegEx to use it.
-
         @since 3.1.3
+
+        @see Unescape()
     */
     static wxString Escape(const wxString& str);
 
     /**
-        Unescapes, that is removing any preceding backslash in any of the following
+        Unescapes, that is removes any preceding backslash in any of the following
         \, ^, $, ., |, ?, *, +, (, ), [, ], { and } metacharacters found in the passed string.
 
         @param str
@@ -275,10 +275,7 @@ public:
 
         @return A string with any escaped metacharacter converted to its unescaped form.
 
-        @note This is a static function, and there is no need to create an instance of wxRegEx to use it.
-
         @since 3.1.3
     */
     static wxString Unescape(const wxString& str);
 };
-

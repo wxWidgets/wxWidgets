@@ -690,9 +690,13 @@ int wxRegEx::Replace(wxString *pattern,
     return m_impl->Replace(pattern, replacement, maxMatches);
 }
 
+static const wxString s_strMetaChars = "\\^$.|?*+()[]{}";
+
 wxString wxRegEx::Escape(const wxString& str)
 {
     wxString strEscaped;
+
+    strEscaped.reserve(str.length() * 2);
 
     for (wxString::const_iterator it = str.begin(); it != str.end(); ++it)
     {
@@ -710,6 +714,8 @@ wxString wxRegEx::Escape(const wxString& str)
 wxString wxRegEx::Unescape(const wxString& str)
 {
     wxString strUnescaped;
+
+    strUnescaped.reserve(str.length());
 
     for (wxString::const_iterator it = str.begin(); it != str.end(); ++it)
     {
