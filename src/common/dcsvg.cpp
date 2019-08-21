@@ -630,11 +630,6 @@ void wxSVGFileDCImpl::DoDrawPoint(wxCoord x1, wxCoord y1)
     write(s);
 }
 
-void wxSVGFileDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1, wxCoord width, wxCoord height)
-{
-    wxDCImpl::DoDrawCheckMark(x1, y1, width, height);
-}
-
 void wxSVGFileDCImpl::DoDrawText(const wxString& text, wxCoord x1, wxCoord y1)
 {
     DoDrawRotatedText(text, x1, y1, 0.0);

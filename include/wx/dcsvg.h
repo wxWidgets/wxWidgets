@@ -177,8 +177,6 @@ private:
 
     virtual void DoDrawBitmap(const wxBitmap&, wxCoord, wxCoord, bool = false) wxOVERRIDE;
 
-    virtual void DoDrawCheckMark(wxCoord x, wxCoord y, wxCoord w, wxCoord h) wxOVERRIDE;
-
     virtual void DoDrawEllipse(wxCoord x, wxCoord y, wxCoord w, wxCoord h) wxOVERRIDE;
 
     virtual void DoDrawEllipticArc(wxCoord x, wxCoord y, wxCoord w, wxCoord h,
