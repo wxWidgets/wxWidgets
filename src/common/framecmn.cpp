@@ -465,7 +465,7 @@ void wxFrameBase::SetStatusBar(wxStatusBar *statBar)
     {
         PositionStatusBar();
 
-        DoLayout();
+        Layout();
     }
 }
 
@@ -597,19 +597,19 @@ void wxFrameBase::SetToolBar(wxToolBar *toolbar)
             m_frameToolBar = toolbar;
             PositionToolBar();
         }
-        //else: tricky: do not reset m_frameToolBar yet as otherwise DoLayout()
+        //else: tricky: do not reset m_frameToolBar yet as otherwise Layout()
         //      wouldn't recognize the (still existing) toolbar as one of our
         //      bars and wouldn't layout the single child of the frame correctly
 
 
-        // and this is even more tricky: we want DoLayout() to recognize the
+        // and this is even more tricky: we want Layout() to recognize the
         // old toolbar for the purpose of not counting it among our non-bar
         // children but we don't want to reserve any more space for it so we
         // temporarily hide it
         if ( m_frameToolBar )
             m_frameToolBar->Hide();
 
-        DoLayout();
+        Layout();
 
         if ( m_frameToolBar )
             m_frameToolBar->Show();
