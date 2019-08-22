@@ -1710,10 +1710,12 @@ bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
     // get cwd only once - small time saving
     wxString cwd = wxGetCwd();
 
-    // Normalize the paths but avoid changing the case or turning a shortcut
-    // into a file that it points to.
-    const int normFlags = wxPATH_NORM_ALL &
-                            ~(wxPATH_NORM_CASE | wxPATH_NORM_SHORTCUT);
+    // Normalize both paths to be absolute but avoid expanding environment
+    // variables in them, this could be unexpected.
+    const int normFlags = wxPATH_NORM_DOTS |
+                          wxPATH_NORM_TILDE |
+                          wxPATH_NORM_ABSOLUTE |
+                          wxPATH_NORM_LONG;
     Normalize(normFlags, cwd, format);
     fnBase.Normalize(normFlags, cwd, format);
 
