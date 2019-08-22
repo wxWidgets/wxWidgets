@@ -1428,8 +1428,12 @@ public:
     bool Alloc(size_t nLen);
 
     /**
-        Minimizes the string's memory. This can be useful after a call to
-        Alloc() if too much memory were preallocated.
+        Minimizes the string's memory.
+
+        This can be useful after a call to Alloc() if too much memory were
+        preallocated.
+
+        @return Always returns @true
     */
     bool Shrink();
 

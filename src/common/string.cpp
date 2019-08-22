@@ -555,7 +555,7 @@ bool wxString::Shrink()
 {
   wxString tmp(begin(), end());
   swap(tmp);
-  return tmp.length() == length();
+  return true;
 }
 
 // deprecated compatibility code:

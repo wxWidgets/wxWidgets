@@ -46,6 +46,8 @@
 #include "wx/tokenzr.h"
 #include "wx/mstream.h"
 #include "wx/image.h"
+#include "wx/vlbox.h"
+#include "wx/stack.h"
 #if wxUSE_FFILE
     #include "wx/ffile.h"
 #elif wxUSE_FILE
@@ -5251,29 +5253,89 @@ void wxStyledTextCtrl::OnContextMenu(wxContextMenuEvent& evt) {
 
 void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt)
 {
+    // The default action of this method is to call m_swx->DoMouseWheel.
+    // However, it might be necessary to do something else depending on whether
+    //     1) the mouse wheel captures for the STC,
+    //     2) the event's position is in the STC's rect, and
+    //     3) and an autocompletion list is currently being shown.
+    // This table summarizes when each action is needed.
+
+    // InRect | MouseWheelCaptures | Autocomp Active |      action
+    // -------+--------------------+-----------------+-------------------
+    //  true  |       true         |      true       | scroll ac list
+    //  true  |       true         |      false      | default
+    //  true  |       false        |      true       | scroll ac list
+    //  true  |       false        |      false      | default
+    //  false |       true         |      true       | scroll ac list
+    //  false |       true         |      false      | default
+    //  false |       false        |      true       | forward to parent
+    //  false |       false        |      false      | forward to parent
+
     // if the mouse wheel is not captured, test if the mouse
     // pointer is over the editor window and if not, don't
     // handle the message but pass it on.
-    if ( !GetMouseWheelCaptures() ) {
-        if ( !GetRect().Contains(evt.GetPosition()) ) {
-            wxWindow* parent = GetParent();
-            if (parent != NULL) {
-                wxMouseEvent newevt(evt);
-                newevt.SetPosition(
-                    parent->ScreenToClient(ClientToScreen(evt.GetPosition())));
-                parent->ProcessWindowEvent(newevt);
-            }
-            return;
+    if ( !GetMouseWheelCaptures() && !GetRect().Contains(evt.GetPosition()) )
+    {
+        wxWindow* parent = GetParent();
+        if ( parent != NULL )
+        {
+            wxMouseEvent newevt(evt);
+            newevt.SetPosition(
+                parent->ScreenToClient(ClientToScreen(evt.GetPosition())));
+            parent->ProcessWindowEvent(newevt);
         }
     }
+    else if ( AutoCompActive() )
+    {
+        // When the autocompletion popup is active, Scintilla uses the mouse
+        // wheel to scroll the autocomp list instead of the editor.
 
-    m_swx->DoMouseWheel(evt.GetWheelAxis(),
-                        evt.GetWheelRotation(),
-                        evt.GetWheelDelta(),
-                        evt.GetLinesPerAction(),
-                        evt.GetColumnsPerAction(),
-                        evt.ControlDown(),
-                        evt.IsPageScroll());
+        // First try to find the list. It will be a wxVListBox named
+        // "AutoCompListBox".
+        wxWindow* curWin  = this, *acListBox = NULL;
+        wxStack<wxWindow*> windows;
+        windows.push(curWin);
+
+        while ( !windows.empty() )
+        {
+            curWin = windows.top();
+            windows.pop();
+
+            if ( curWin->IsKindOf(wxCLASSINFO(wxVListBox)) &&
+                    curWin->GetName() == "AutoCompListBox")
+            {
+                acListBox = curWin;
+                break;
+            }
+
+            wxWindowList& children = curWin->GetChildren();
+            wxWindowList::iterator it;
+
+            for ( it = children.begin(); it!=children.end(); ++it )
+            {
+                windows.push(*it);
+            }
+        }
+
+        // Next if the list was found, send it a copy of this event.
+        if ( acListBox )
+        {
+            wxMouseEvent newevt(evt);
+            newevt.SetPosition(
+                acListBox->ScreenToClient(ClientToScreen(evt.GetPosition())));
+            acListBox->ProcessWindowEvent(newevt);
+        }
+    }
+    else
+    {
+        m_swx->DoMouseWheel(evt.GetWheelAxis(),
+                            evt.GetWheelRotation(),
+                            evt.GetWheelDelta(),
+                            evt.GetLinesPerAction(),
+                            evt.GetColumnsPerAction(),
+                            evt.ControlDown(),
+                            evt.IsPageScroll());
+    }
 }
 
 

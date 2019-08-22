@@ -33,6 +33,7 @@
 #endif
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 WXGLContext WXGLCreateContext( WXGLPixelFormat pixelFormat, WXGLContext shareContext )
 {
@@ -149,18 +150,6 @@ WXGLPixelFormat WXGLChoosePixelFormat(const int *GLAttrs,
         impl->doCommandBySelector(aSelector, self, _cmd);
 }
 
-// We intentionally don't call [super update], so suppress the warning about it.
-wxCLANG_WARNING_SUPPRESS(objc-missing-super-calls)
-
-- (void) update
-{
-    // Prevent the base class code from breaking resizing on macOS 10.14.5
-    // (this is not necessary on the older versions, but doesn't seem to do any
-    // harm there neither).
-}
-
-wxCLANG_WARNING_RESTORE(objc-missing-super-calls)
-
 @end
 
 bool wxGLCanvas::DoCreate(wxWindow *parent,
@@ -210,6 +199,14 @@ bool wxGLContext::SetCurrent(const wxGLCanvas& win) const
     [m_glContext update];
 
     [m_glContext makeCurrentContext];
+
+    // At least under macOS 10.14.5 we need to do this in order to update the
+    // context with the new size information after the window is resized.
+    if ( WX_IS_MACOS_AVAILABLE_FULL(10, 14, 5) )
+    {
+        NSOpenGLView *v = (NSOpenGLView *)win.GetHandle();
+        [v setOpenGLContext: m_glContext];
+    }
 
     return true;
 }

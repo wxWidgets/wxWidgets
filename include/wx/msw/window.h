@@ -99,6 +99,8 @@ public:
 
     virtual bool Reparent(wxWindowBase *newParent) wxOVERRIDE;
 
+    virtual wxSize GetDPI() const wxOVERRIDE;
+
     virtual void WarpPointer(int x, int y) wxOVERRIDE;
     virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
 

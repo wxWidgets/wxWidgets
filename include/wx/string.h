@@ -1350,6 +1350,8 @@ public:
   size_type capacity() const { return m_impl.capacity(); }
   void reserve(size_t sz) { m_impl.reserve(sz); }
 
+  void shrink_to_fit() { Shrink(); }
+
   void resize(size_t nSize, wxUniChar ch = wxT('\0'))
   {
     const size_t len = length();
