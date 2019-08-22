@@ -117,10 +117,14 @@ bool wxSlider::Create(wxWindow *parent,
     // other values
 #endif
     
-    if (style & wxSL_LABELS)
+    if (style & wxSL_MIN_MAX_LABELS)
     {
         m_macMinimumStatic = new wxStaticText( parent, wxID_ANY, wxEmptyString );
         m_macMaximumStatic = new wxStaticText( parent, wxID_ANY, wxEmptyString );
+    }
+
+    if (style & wxSL_VALUE_LABEL)
+    {
         m_macValueStatic = new wxStaticText( parent, wxID_ANY, wxEmptyString );
     }
 
