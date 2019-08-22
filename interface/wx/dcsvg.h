@@ -6,6 +6,23 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    SVG shape rendering mode.
+
+    These options represent the values defined in the SVG specification:
+    https://svgwg.org/svg2-draft/painting.html#ShapeRenderingProperty
+*/
+enum wxSVGShapeRenderingMode
+{
+    wxSVG_SHAPE_RENDERING_AUTO = 0,
+    wxSVG_SHAPE_RENDERING_OPTIMIZE_SPEED,
+    wxSVG_SHAPE_RENDERING_CRISP_EDGES,
+    wxSVG_SHAPE_RENDERING_GEOMETRIC_PRECISION,
+
+    wxSVG_SHAPE_RENDERING_OPTIMISE_SPEED = wxSVG_SHAPE_RENDERING_OPTIMIZE_SPEED
+};
+
+
+/**
     @class wxSVGFileDC
 
     A wxSVGFileDC is a device context onto which graphics and text can be
@@ -73,6 +90,17 @@ public:
         @since 3.1.0
     */
     void SetBitmapHandler(wxSVGBitmapHandler* handler);
+
+    /**
+        Set the shape rendering mode of the generated SVG.
+        All subsequent drawing calls will have this rendering mode set in the
+        SVG file.
+
+        The default mode is wxSVG_SHAPE_RENDERING_AUTO.
+
+        @since 3.1.3
+    */
+    void SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode);
 
     /**
         Sets the clipping region for this device context to the intersection of
