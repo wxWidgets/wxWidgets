@@ -708,6 +708,8 @@ wxString wxRegEx::Escape(const wxString& str)
         strEscaped += *it;
     }
 
+    strEscaped.Shrink();
+
     return strEscaped;
 }
 
@@ -727,6 +729,8 @@ wxString wxRegEx::Unescape(const wxString& str)
 
         strUnescaped += *it;
     }
+
+    strUnescaped.Shrink();
 
     return strUnescaped;
 }
