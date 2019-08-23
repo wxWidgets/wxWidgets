@@ -73,10 +73,6 @@ void wxValidator::SendEvent(wxEventType type, const wxString& errormsg)
     if ( !m_validatorWindow )
         return;
 
-    // Notice that for wxEVT_VALIDATE_ERROR event the errormsg may be empty,
-    // in which case, the generated event is sent as a notification to the event
-    // handler that the control's content is invalid.
-
     wxValidationStatusEvent event(type, m_validatorWindow);
     event.SetErrorMessage(errormsg);
 
