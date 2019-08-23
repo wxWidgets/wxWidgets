@@ -1249,12 +1249,17 @@ public:
     /**
         Converts URL into a well-formed filename.
         The URL must use the @c file protocol.
+
+        @since 3.1.3
     */
     static wxFileName URLToFileName(const wxString& url);
 
     /**
-        Converts URL into a well-formed filename.
-        The URL must use the @c file protocol.
+        Converts wxFileName into an URL.
+
+        @see URLToFileName(), wxFileName
+
+        @since 3.1.3
     */
     static wxString FileNameToURL(const wxFileName& filename);
 

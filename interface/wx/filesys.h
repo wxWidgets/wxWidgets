@@ -103,12 +103,6 @@ public:
     static wxString FileNameToURL(const wxFileName& filename);
 
     /**
-        Converts URL into a well-formed filename.
-        The URL must use the @c file protocol.
-    */
-    static wxFileName URLToFileName(const wxString& url);
-
-    /**
         Looks for the file with the given name @a file in a colon or semi-colon
         (depending on the current platform) separated list of directories in @a path.
 
@@ -179,6 +173,11 @@ public:
     wxFSFile* OpenFile(const wxString& location,
                        int flags = wxFS_READ);
 
+    /**
+        Converts URL into a well-formed filename.
+        The URL must use the @c file protocol.
+    */
+    static wxFileName URLToFileName(const wxString& url);
 };
 
 
