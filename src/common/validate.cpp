@@ -40,31 +40,31 @@ wxValidator::~wxValidator()
 
 bool wxValidator::ProcessEvent(wxEvent& event)
 {
-	// We want any custom handler (if any) to take precedence over
-	// the validator itself when handling wxEVT_VALIDATE_XXX events.
+    // We want any custom handler (if any) to take precedence over
+    // the validator itself when handling wxEVT_VALIDATE_XXX events.
 
     const wxEventType eventType = event.GetEventType();
     if ( eventType == wxEVT_VALIDATE_OK ||
          eventType == wxEVT_VALIDATE_ERROR )
     {
-    	// N.B. According to "How Events are Processed" documentation,
-    	//      step (2) says:
-    	//
-    	//   2. If the object is a wxWindow and has an associated validator,
-    	//      wxValidator gets a chance to process the event.
-    	//
-    	// It is clear that this will prevent any custom handling of
-    	// wxEVT_VALIDATE_XXX events, and (temporarily) removing the
-    	// validator solves the problem.
+        // N.B. According to "How Events are Processed" documentation,
+        //      step (2) says:
+        //
+        //   2. If the object is a wxWindow and has an associated validator,
+        //      wxValidator gets a chance to process the event.
+        //
+        // It is clear that this will prevent any custom handling of
+        // wxEVT_VALIDATE_XXX events, and (temporarily) removing the
+        // validator solves the problem.
 
-    	wxValidatorDisabler noValidation(m_validatorWindow);
+        wxValidatorDisabler noValidation(m_validatorWindow);
 
-    	if ( m_validatorWindow->ProcessWindowEvent(event) )
-    	{
-    		return true;
-    	}
+        if ( m_validatorWindow->ProcessWindowEvent(event) )
+        {
+            return true;
+        }
     }
-    
+
     return ProcessEventLocally(event);
 }
 
@@ -88,23 +88,23 @@ void wxValidator::SendEvent(wxEventType type, const wxString& errormsg)
 // ----------------------------------------------------------------------------
 wxValidatorDisabler::wxValidatorDisabler(wxWindow* win)
 {
-	m_validator = NULL;
+    m_validator = NULL;
 
-	if ( win )
-	{
-		m_validator = win->SetValidator(NULL);
-	}
+    if ( win )
+    {
+        m_validator = win->SetValidator(NULL);
+    }
 }
 
 wxValidatorDisabler::~wxValidatorDisabler()
 {
-	if ( m_validator )
-	{
-		wxWindow* const win = m_validator->GetWindow();
+    if ( m_validator )
+    {
+        wxWindow* const win = m_validator->GetWindow();
 
-		if ( win )
-			win->SetValidator(m_validator);
-	}
+        if ( win )
+            win->SetValidator(m_validator);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -122,7 +122,7 @@ wxValidationStatusEvent::wxValidationStatusEvent(wxEventType type, wxWindow *win
 
 wxWindow* wxValidationStatusEvent::GetWindow() const
 {
-	return static_cast<wxWindow*>(GetEventObject());
+    return static_cast<wxWindow*>(GetEventObject());
 }
 
 #else
