@@ -1807,6 +1807,17 @@ void wxWindowBase::SetValidator(const wxValidator& validator)
     if ( m_windowValidator )
         m_windowValidator->SetWindow(static_cast<wxWindow*>(this));
 }
+
+wxValidator* wxWindowBase::SetValidator(wxValidator* validator)
+{
+    wxValidator* oldValidator = m_windowValidator;
+
+    m_windowValidator = validator;
+    if ( m_windowValidator )
+        m_windowValidator->SetWindow(static_cast<wxWindow*>(this));
+
+    return oldValidator;
+}
 #endif // wxUSE_VALIDATORS
 
 // ----------------------------------------------------------------------------

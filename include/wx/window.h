@@ -911,6 +911,7 @@ public:
         // a window may have an associated validator which is used to control
         // user input
     virtual void SetValidator( const wxValidator &validator );
+    virtual wxValidator *SetValidator( wxValidator *validator );
     virtual wxValidator *GetValidator() { return m_windowValidator; }
 #endif // wxUSE_VALIDATORS
 
