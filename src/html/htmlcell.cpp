@@ -824,8 +824,9 @@ void wxHtmlContainerCell::Layout(int w)
             if (curLineWidth > m_MaxTotalWidth)
                 m_MaxTotalWidth = curLineWidth;
 
-            if (wxMax(cell->GetWidth(), cell->GetMaxTotalWidth()) > m_MaxTotalWidth)
+            if (cell->GetMaxTotalWidth() > m_MaxTotalWidth)
                 m_MaxTotalWidth = cell->GetMaxTotalWidth();
+
             curLineWidth = 0;
         }
         else
