@@ -60,6 +60,9 @@ static bool wxIsNumeric(const wxString& val)
 wxIMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator);
 wxBEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
     EVT_CHAR(wxTextValidator::OnChar)
+    EVT_KILL_FOCUS(wxTextValidator::OnKillFocus)
+
+    EVT_VALIDATE_ERROR(wxID_ANY, wxTextValidator::OnValidation)
 wxEND_EVENT_TABLE()
 
 wxTextValidator::wxTextValidator(long style, wxString *val)
@@ -141,13 +144,11 @@ bool wxTextValidator::Validate(wxWindow *parent)
 
     if ( !errormsg.empty() )
     {
-        m_validatorWindow->SetFocus();
-        wxMessageBox(errormsg, _("Validation conflict"),
-                     wxOK | wxICON_EXCLAMATION, parent);
-
+        SendErrorEvent(errormsg);
         return false;
     }
 
+    SendOkEvent();
     return true;
 }
 
@@ -305,6 +306,38 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
 
     // eat message
     event.Skip(false);
+}
+
+void wxTextValidator::OnKillFocus(wxFocusEvent& event)
+{
+    event.Skip();
+
+    wxTextEntry * const control = GetTextEntry();
+    if ( !control )
+        return;
+
+    if ( IsValid(control->GetValue()).empty() )
+    {
+        SendOkEvent();
+    }
+    else
+    {
+        // Notify for invalid input without showing any message box
+        // to avoid focus problems.
+        SendErrorEvent(wxString());
+    }
+}
+
+void wxTextValidator::OnValidation(wxValidationStatusEvent& event)
+{
+    const wxString& errormsg = event.GetErrorMessage();
+
+    if ( errormsg.empty() )
+        return;
+
+    m_validatorWindow->SetFocus();
+    wxMessageBox(errormsg, _("Validation conflict"),
+                 wxOK | wxICON_EXCLAMATION, NULL);
 }
 
 bool wxTextValidator::IsValidChar(const wxUniChar& c) const
