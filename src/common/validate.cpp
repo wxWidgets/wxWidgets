@@ -38,6 +38,51 @@ wxValidator::~wxValidator()
 {
 }
 
+bool wxValidator::ProcessEvent(wxEvent& event)
+{
+	// We want any custom handler (if any) to take precedence over
+	// the validator itself when handling wxEVT_VALIDATE_XXX events.
+
+    const wxEventType eventType = event.GetEventType();
+    if ( eventType == wxEVT_VALIDATE_OK ||
+         eventType == wxEVT_VALIDATE_ERROR )
+    {
+    	// N.B. According to "How Events are Processed" documentation,
+    	//      step (2) says:
+    	//
+    	//   2. If the object is a wxWindow and has an associated validator,
+    	//      wxValidator gets a chance to process the event.
+    	//
+    	// It is clear that this will prevent any custom handling of
+    	// wxEVT_VALIDATE_XXX events, and (temporarily) removing the
+    	// validator solves the problem.
+
+    	wxValidatorDisabler noValidation(m_validatorWindow);
+
+    	if ( m_validatorWindow->ProcessWindowEvent(event) )
+    	{
+    		return true;
+    	}
+    }
+    
+    return ProcessEventLocally(event);
+}
+
+void wxValidator::SendEvent(wxEventType type, const wxString& errormsg)
+{
+    if ( !m_validatorWindow )
+        return;
+
+    // Notice that for wxEVT_VALIDATE_ERROR event the errormsg may be empty,
+    // in which case, the generated event is sent as a notification to the event
+    // handler that the control's content is invalid.
+
+    wxValidationStatusEvent event(type, m_validatorWindow);
+    event.SetErrorMessage(errormsg);
+
+    m_validatorWindow->ProcessWindowEvent(event);
+}
+
 // ----------------------------------------------------------------------------
 // wxValidatorDisabler
 // ----------------------------------------------------------------------------
@@ -60,6 +105,24 @@ wxValidatorDisabler::~wxValidatorDisabler()
 		if ( win )
 			win->SetValidator(m_validator);
 	}
+}
+
+// ----------------------------------------------------------------------------
+// wxValidationStatusEvent
+// ----------------------------------------------------------------------------
+wxIMPLEMENT_DYNAMIC_CLASS(wxValidationStatusEvent, wxCommandEvent);
+wxDEFINE_EVENT(wxEVT_VALIDATE_OK, wxValidationStatusEvent);
+wxDEFINE_EVENT(wxEVT_VALIDATE_ERROR, wxValidationStatusEvent);
+
+wxValidationStatusEvent::wxValidationStatusEvent(wxEventType type, wxWindow *win)
+    : wxCommandEvent(type, win->GetId())
+{
+    SetEventObject(win);
+}
+
+wxWindow* wxValidationStatusEvent::GetWindow() const
+{
+	return static_cast<wxWindow*>(GetEventObject());
 }
 
 #else

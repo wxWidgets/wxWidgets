@@ -3446,7 +3446,7 @@ bool wxWindowBase::TryBefore(wxEvent& event)
     if ( event.GetEventObject() == this )
     {
         wxValidator * const validator = GetValidator();
-        if ( validator && validator->ProcessEventLocally(event) )
+        if ( validator && validator->ProcessEvent(event) )
         {
             return true;
         }

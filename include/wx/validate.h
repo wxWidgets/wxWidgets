@@ -20,6 +20,45 @@
 class WXDLLIMPEXP_FWD_CORE wxWindow;
 class WXDLLIMPEXP_FWD_CORE wxWindowBase;
 
+// ----------------------------------------------------------------------------
+// wxValidationStatusEvent
+// ----------------------------------------------------------------------------
+class WXDLLIMPEXP_CORE wxValidationStatusEvent : public wxCommandEvent
+{
+public:
+    wxValidationStatusEvent() {}
+    wxValidationStatusEvent(wxEventType type, wxWindow *win);
+
+    void SetErrorMessage(const wxString& errormsg) { SetString(errormsg); }
+    wxString GetErrorMessage() const { return GetString(); }
+
+    // Return the window associated with the validator generating the event.
+    wxWindow *GetWindow() const;
+
+    // default copy ctor and dtor are ok
+
+    virtual wxEvent *Clone() const wxOVERRIDE
+      { return new wxValidationStatusEvent(*this); }
+
+private:
+    wxDECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxValidationStatusEvent);
+};
+
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_VALIDATE_OK, wxValidationStatusEvent);
+wxDECLARE_EXPORTED_EVENT(WXDLLIMPEXP_CORE, wxEVT_VALIDATE_ERROR, wxValidationStatusEvent);
+
+typedef void (wxEvtHandler::*wxValidationStatusEventFunction)(wxValidationStatusEvent&);
+
+#define wxValidationStatusEventHandler(func) \
+    wxEVENT_HANDLER_CAST(wxValidationStatusEventFunction, func)
+
+#define EVT_VALIDATE_OK(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_VALIDATE_OK, id, wxValidationStatusEventHandler(fn))
+
+#define EVT_VALIDATE_ERROR(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_VALIDATE_ERROR, id, wxValidationStatusEventHandler(fn))
+
+
 /*
  A validator has up to three purposes:
 
@@ -86,6 +125,17 @@ public:
         ms_isSilent = doIt;
     )
 #endif
+
+    // Process the event. (might pop up error messages).
+    virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE;
+
+protected:
+    void SendEvent(wxEventType type, const wxString& errormsg = wxString());
+
+    void SendOkEvent() { SendEvent(wxEVT_VALIDATE_OK); }
+
+    void SendErrorEvent(const wxString& errormsg)
+      { SendEvent(wxEVT_VALIDATE_ERROR, errormsg); }
 
 protected:
     wxWindow *m_validatorWindow;
