@@ -1805,16 +1805,6 @@ void wxWindowMSW::DragAcceptFiles(bool accept)
 
 void wxWindowMSW::DoSetToolTip(wxToolTip *tooltip)
 {
-#if wxUSE_LISTCTRL
-    if( wxDynamicCast( this, wxListCtrl ) )
-    {
-        WXWORD extStyle = ::SendMessage( GetHwnd(), LVM_GETEXTENDEDLISTVIEWSTYLE, 0, 0 );
-        if( tooltip )
-            ::SendMessage( GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0, extStyle & ~LVS_EX_LABELTIP );
-        else
-            ::SendMessage( GetHwnd(), LVM_SETEXTENDEDLISTVIEWSTYLE, 0, extStyle | LVS_EX_LABELTIP );
-    }
-#endif
     wxWindowBase::DoSetToolTip(tooltip);
 
     if ( m_tooltip )
