@@ -292,8 +292,9 @@ wxString wxHtmlCell::GetDescription() const
 wxString wxHtmlCell::Dump(int indent) const
 {
     wxString s(' ', indent);
-    s += wxString::Format("%s at (%d, %d) %dx%d",
-                          GetDescription(), m_PosX, m_PosY, m_Width, m_Height);
+    s += wxString::Format("%s(%p) at (%d, %d) %dx%d",
+                          GetDescription(), this,
+                          m_PosX, m_PosY, GetMaxTotalWidth(), m_Height);
     if ( !m_id.empty() )
         s += wxString::Format(" [id=%s]", m_id);
 
