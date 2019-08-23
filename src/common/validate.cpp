@@ -37,6 +37,31 @@ wxValidator::wxValidator()
 wxValidator::~wxValidator()
 {
 }
+
+// ----------------------------------------------------------------------------
+// wxValidatorDisabler
+// ----------------------------------------------------------------------------
+wxValidatorDisabler::wxValidatorDisabler(wxWindow* win)
+{
+	m_validator = NULL;
+
+	if ( win )
+	{
+		m_validator = win->SetValidator(NULL);
+	}
+}
+
+wxValidatorDisabler::~wxValidatorDisabler()
+{
+	if ( m_validator )
+	{
+		wxWindow* const win = m_validator->GetWindow();
+
+		if ( win )
+			win->SetValidator(m_validator);
+	}
+}
+
 #else
 
 class WXDLLIMPEXP_CORE wxValidator { };

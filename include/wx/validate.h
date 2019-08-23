@@ -97,6 +97,22 @@ private:
     wxDECLARE_NO_ASSIGN_CLASS(wxValidator);
 };
 
+// a class which temporarily disables validations for the given window
+// in its ctor and enables them back in its dtor. this class does nothing
+// if window does not have a valid validator already.
+class WXDLLIMPEXP_CORE wxValidatorDisabler
+{
+public:
+    wxValidatorDisabler(wxWindow* win);
+
+    ~wxValidatorDisabler();
+
+private:
+    wxValidator* m_validator;
+
+    wxDECLARE_NO_COPY_CLASS(wxValidatorDisabler);
+};
+
 #define wxVALIDATOR_PARAM(val) val
 
 #else // !wxUSE_VALIDATORS
