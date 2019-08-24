@@ -46,9 +46,9 @@ public:
     void SetStyle(int style) { m_style = style; }
 
 
-    // Override base class method to not do anything but always return success:
-    // we don't need this as we do our validation on the fly here.
-    virtual bool Validate(wxWindow * WXUNUSED(parent)) wxOVERRIDE { return true; }
+    // Override base class method to not do anything but always return m_isValid:
+    // i.e. m_isValid stores the validation status done on the fly here.
+    virtual bool Validate(wxWindow * WXUNUSED(parent)) wxOVERRIDE { return m_isValid; }
 
     // Override base class method to check that the window is a text control or
     // combobox.
@@ -58,11 +58,13 @@ protected:
     wxNumValidatorBase(int style)
     {
         m_style = style;
+        m_isValid = true;
     }
 
     wxNumValidatorBase(const wxNumValidatorBase& other) : wxValidator(other)
     {
         m_style = other.m_style;
+        m_isValid = other.m_isValid;
     }
 
     bool HasFlag(wxNumValidatorStyle style) const
@@ -105,11 +107,14 @@ private:
     // empty string otherwise.
     virtual wxString NormalizeString(const wxString& s) const = 0;
 
+    // Return error message if newval does not represent a valid numeric value
+    // or value is out of range, return empty string otherwise.
+    virtual wxString IsValid(const wxString& newval) const = 0;
 
     // Event handlers.
     void OnChar(wxKeyEvent& event);
     void OnKillFocus(wxFocusEvent& event);
-
+    void OnValueChanged(wxCommandEvent& event);
 
     // Determine the current insertion point and text in the associated control.
     void GetCurrentValueAndInsertionPoint(wxString& val, int& pos) const;
@@ -118,6 +123,8 @@ private:
     // Combination of wxVAL_NUM_XXX values.
     int m_style;
 
+    // Validation status (always up-to-date).
+    bool m_isValid;
 
     wxDECLARE_EVENT_TABLE();
 
@@ -313,8 +320,9 @@ protected:
         return m_min <= value && value <= m_max;
     }
 
-    // Implement wxNumValidatorBase pure virtual method.
+    // Implement wxNumValidatorBase pure virtual methods.
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const wxOVERRIDE;
+    virtual wxString IsValid(const wxString& newval) const wxOVERRIDE;
 
 private:
     // Minimal and maximal values accepted (inclusive).
@@ -417,8 +425,9 @@ protected:
         return m_min <= value && value <= m_max;
     }
 
-    // Implement wxNumValidatorBase pure virtual method.
+    // Implement wxNumValidatorBase pure virtual methods.
     virtual bool IsCharOk(const wxString& val, int pos, wxChar ch) const wxOVERRIDE;
+    virtual wxString IsValid(const wxString& newval) const wxOVERRIDE;
 
 private:
     // Maximum number of decimals digits after the decimal separator.
