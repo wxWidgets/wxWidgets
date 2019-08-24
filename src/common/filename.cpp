@@ -2505,15 +2505,12 @@ bool wxFileName::SetPermissions(int permissions)
 // Returns the native path for a file URL
 wxFileName wxFileName::URLToFileName(const wxString& url)
 {
-    wxString path = url;
-
-    if ( path.Find(wxT("file://")) == 0 )
+    wxString path;
+    if ( !url.StartsWith(wxS("file://"), &path) &&
+            !url.StartsWith(wxS("file:"), &path) )
     {
-        path = path.Mid(7);
-    }
-    else if ( path.Find(wxT("file:")) == 0 )
-    {
-        path = path.Mid(5);
+        // Consider it's just the path without any schema.
+        path = url;
     }
 
     path = wxURI::Unescape(path);
@@ -2526,7 +2523,7 @@ wxFileName wxFileName::URLToFileName(const wxString& url)
     {
         path = path.Mid(1);
     }
-    else if ( (url.Find(wxT("file://")) == 0) &&
+    else if ( url.StartsWith(wxS("file://")) &&
               (path.Find(wxT('/')) != wxNOT_FOUND) &&
               (path.length() > 1) && (path[1u] != wxT(':')) )
     {
