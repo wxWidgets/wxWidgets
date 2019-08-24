@@ -250,5 +250,31 @@ public:
         Replace the first occurrence.
     */
     int ReplaceFirst(wxString* text, const wxString& replacement) const;
+
+    /**
+        Escapes any of the characters having special meaning for wxRegEx.
+
+        Currently the following characters are special: \\, ^, $, ., |, ?, *,
+        +, (, ), [, ], { and }. All occurrences of any of these characters in
+        the passed string are escaped, i.e. a backslash is inserted before
+        them, to remove their special meaning.
+
+        For example:
+        @code
+            wxString quoted = wxRegEx::QuoteMeta("foo.*bar");
+            assert( quoted == R"(foo\.\*bar)" );
+        @endcode
+
+        This function can be useful when using wxRegEx to search for a literal
+        string entered by user, for example.
+
+        @param str
+            A string that may contain metacharacters to escape.
+
+        @return A string with all metacharacters escaped.
+
+        @since 3.1.3
+    */
+    static wxString QuoteMeta(const wxString& str);
 };
 
