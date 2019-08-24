@@ -2502,9 +2502,6 @@ bool wxFileName::SetPermissions(int permissions)
     return wxChmod(GetFullPath(), permissions) == 0;
 }
 
-static const wxString g_unixPathString(wxT("/"));
-static const wxString g_nativePathString(wxFILE_SEP_PATH);
-
 // Returns the native path for a file URL
 wxFileName wxFileName::URLToFileName(const wxString& url)
 {
@@ -2537,7 +2534,7 @@ wxFileName wxFileName::URLToFileName(const wxString& url)
     }
 #endif
 
-    path.Replace(g_unixPathString, g_nativePathString);
+    path.Replace(wxS('/'), wxFILE_SEP_PATH);
 
     return wxFileName(path, wxPATH_NATIVE);
 }
@@ -2587,7 +2584,7 @@ wxString wxFileName::FileNameToURL(const wxFileName& filename)
     }
 #endif
 
-    url.Replace(g_nativePathString, g_unixPathString);
+    url.Replace(wxFILE_SEP_PATH, wxS('/'));
 
     // Do wxURI- and common practice-compatible escaping: encode the string
     // into UTF-8, then escape anything non-ASCII:
