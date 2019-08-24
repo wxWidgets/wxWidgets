@@ -1249,6 +1249,8 @@ public:
     /**
         Converts URL into a well-formed filename.
         The URL must use the @c file protocol.
+        If the URL does not use @c file protocol
+        wxFileName object may not be good or may not exist
 
         @since 3.1.3
     */
