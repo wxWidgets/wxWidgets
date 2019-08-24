@@ -388,7 +388,7 @@ protected:
     virtual int DoGetBestClientWidth(int height) const wxOVERRIDE
         { return MSWGetBestViewRect(-1, height).x; }
 #if wxUSE_TOOLTIPS
-    virtual void DoSetToolTip( wxToolTip *tip ) wxOVERRIDE;
+    virtual void DoSetToolTip(wxToolTip *tip) wxOVERRIDE;
 #endif // wxUSE_TOOLTIPS
 
     wxSize MSWGetBestViewRect(int x, int y) const;
@@ -430,7 +430,7 @@ private:
 
     // set the extended styles for the control (used by Create() and
     // UpdateStyle()), only should be called if InReportView()
-    void MSWSetExListStyles(wxToolTip *tip = NULL);
+    void MSWSetExListStyles();
 
     // initialize the (already created) m_textCtrl with the associated HWND
     void InitEditControl(WXHWND hWnd);

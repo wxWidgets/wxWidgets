@@ -318,7 +318,7 @@ bool wxListCtrl::Create(wxWindow *parent,
     return true;
 }
 
-void wxListCtrl::MSWSetExListStyles(wxToolTip *tip)
+void wxListCtrl::MSWSetExListStyles()
 {
     // we want to have some non default extended
     // styles because it's prettier (and also because wxGTK does it like this)
@@ -329,7 +329,7 @@ void wxListCtrl::MSWSetExListStyles(wxToolTip *tip)
         // always appropriate, but we don't have any free styles left and
         // it seems better to enable it by default than disable
         LVS_EX_HEADERDRAGDROP;
-    if( !tip )
+    if( !HasToolTips() )
         exStyle |= LVS_EX_LABELTIP;
 
     if ( wxApp::GetComCtl32Version() >= 600 )
@@ -3572,10 +3572,10 @@ static void wxConvertToMSWListCol(HWND hwndList,
 
 #if wxUSE_TOOLTIPS
 
-void wxListCtrl::DoSetToolTip( wxToolTip *tip )
+void wxListCtrl::DoSetToolTip(wxToolTip *tip)
 {
-    MSWSetExListStyles( tip );
-	wxWindow::DoSetToolTip( tip );
+    wxWindow::DoSetToolTip( tip );
+    MSWSetExListStyles();
 }
 
 #endif // wxUSE_TOOLTIPS
