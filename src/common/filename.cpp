@@ -2518,11 +2518,6 @@ wxFileName wxFileName::URLToFileName(const wxString& url)
     {
         path = path.Mid(5);
     }
-    // Remove preceding double slash on Mac Classic
-#if defined(__WXMAC__) && !defined(__UNIX__)
-    else if ( path.Find(wxT("//")) == 0 )
-        path = path.Mid(2);
-#endif
 
     path = wxURI::Unescape(path);
 
