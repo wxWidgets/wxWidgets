@@ -252,8 +252,8 @@ public:
     int ReplaceFirst(wxString* text, const wxString& replacement) const;
 
     /**
-        Escapes any of the following \, ^, $, ., |, ?, *, +, (, ), [, ], { and } metacharacters
-        found in the passed string with a backslash.
+        Escapes any of the following \, ^, $, ., |, ?, *, +, (, ), [, ], { and }
+        metacharacters in the passed string with a backslash.
 
         @param str
             A string that may contain metacharacters to escape.
@@ -261,22 +261,7 @@ public:
         @return A string with all metacharacters converted to their escaped form.
 
         @since 3.1.3
-
-        @see Unescape()
     */
-    static wxString Escape(const wxString& str);
-
-    /**
-        Unescapes, that is removes any preceding backslash in any of the following
-        \, ^, $, ., |, ?, *, +, (, ), [, ], { and } metacharacters found in the passed string.
-
-        @param str
-            A string that may contain escaped metacharacters to unescape.
-
-        @return A string with any escaped metacharacter converted to its unescaped form.
-
-        @since 3.1.3
-    */
-    static wxString Unescape(const wxString& str);
+    static wxString QuoteMeta(const wxString& str);
 };
 

@@ -692,7 +692,7 @@ int wxRegEx::Replace(wxString *pattern,
 
 static const wxString s_strMetaChars = "\\^$.|?*+()[]{}";
 
-wxString wxRegEx::Escape(const wxString& str)
+wxString wxRegEx::QuoteMeta(const wxString& str)
 {
     wxString strEscaped;
 
@@ -711,28 +711,6 @@ wxString wxRegEx::Escape(const wxString& str)
     strEscaped.Shrink();
 
     return strEscaped;
-}
-
-wxString wxRegEx::Unescape(const wxString& str)
-{
-    wxString strUnescaped;
-
-    strUnescaped.reserve(str.length());
-
-    for (wxString::const_iterator it = str.begin(); it != str.end(); ++it)
-    {
-        if (*it == wxT('\\') && (it + 1) != str.end() &&
-            s_strMetaChars.find(*(it + 1)) != wxString::npos)
-        {
-            ++it;
-        }
-
-        strUnescaped += *it;
-    }
-
-    strUnescaped.Shrink();
-
-    return strUnescaped;
 }
 
 #endif // wxUSE_REGEX
