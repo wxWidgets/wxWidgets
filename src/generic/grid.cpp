@@ -2829,10 +2829,10 @@ void wxGrid::CalcWindowSizes()
     int fgw = 0, fgh = 0;
 
     for ( int i = 0; i < m_numFrozenRows; i++ )
-        fgh += m_rowHeights[i];
+        fgh += GetRowHeight(i);
 
     for ( int i = 0; i < m_numFrozenCols; i++ )
-        fgw += m_colWidths[i];
+        fgw += GetColWidth(i);
 
     // the grid may be too small to have enough space for the labels yet, don't
     // size the windows to negative sizes in this case
@@ -4906,8 +4906,8 @@ bool wxGrid::FreezeTo(int row, int col)
         cw -= m_rowLabelWidth;
         ch -= m_colLabelHeight;
 
-        if ((row > 0 && m_rowBottoms[row - 1] >= ch) ||
-            (col > 0 && m_colRights[col - 1] >= cw))
+        if ((row > 0 && GetRowBottom(row - 1) >= ch) ||
+            (col > 0 && GetColRight(col - 1) >= cw))
             return false;
 
         // check all involved cells for merged ones
