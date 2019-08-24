@@ -3177,7 +3177,8 @@ void wxWidgetCocoaImpl::SetBackgroundColour( const wxColour &col )
             wxTopLevelWindow* toplevel = wxDynamicCast(peer,wxTopLevelWindow);
 
             if ( toplevel == NULL || toplevel->GetShape().IsEmpty() )
-                [targetView setBackgroundColor: col.OSXGetNSColor()];
+                [targetView setBackgroundColor:
+                        col.IsOk() ? col.OSXGetNSColor() : nil];
         }
     }
 }
