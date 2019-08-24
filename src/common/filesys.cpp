@@ -27,7 +27,6 @@
 #include "wx/mimetype.h"
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
-#include "wx/uri.h"
 #include "wx/private/fileback.h"
 #include "wx/utils.h"
 
