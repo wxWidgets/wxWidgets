@@ -1132,12 +1132,8 @@ static bool DoLaunchDefaultBrowserHelper(const wxString& url, int flags)
 
         if ( params.scheme == "file" )
         {
-            // TODO: extract URLToFileName() to some always compiled in
-            //       function
-#if wxUSE_FILESYSTEM
             // for same reason as above, remove the scheme from the URL
-            params.path = wxFileSystem::URLToFileName(url).GetFullPath();
-#endif // wxUSE_FILESYSTEM
+            params.path = wxFileName::URLToFileName(url).GetFullPath();
         }
     }
 
