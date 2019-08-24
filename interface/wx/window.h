@@ -3083,6 +3083,13 @@ public:
     virtual void SetValidator(const wxValidator& validator);
 
     /**
+        Sets the window validator to @a validator and returns the old one.
+        @note The programmer is responsible for deleting the returned pointer.
+        @since 3.1.3
+    */
+    virtual wxValidator* SetValidator(wxValidator* validator);
+
+    /**
         Transfers values from child controls to data areas specified by their
         validators. Returns @false if a transfer failed.
 
