@@ -193,8 +193,8 @@ bool wxAcceleratorEntry::ValidateKey(int flags, int keycode)
             if ( !flags )
             {
                 valid = false;
-                wxLogDebug( wxString::Format( wxT("Compatibility issue: %s key must have modifiers to be an accelerator key on GTK"),
-                                              keyname ) );
+                wxLogDebug( "Compatibility issue: %s key must have modifiers to be an accelerator key on GTK",
+                            keyname );
             }
             break;
 
@@ -238,8 +238,8 @@ bool wxAcceleratorEntry::ValidateKey(int flags, int keycode)
         case WXK_SPECIAL16: case WXK_SPECIAL17: case WXK_SPECIAL18:
         case WXK_SPECIAL19: case WXK_SPECIAL20:
             valid = false;
-            wxLogDebug( wxString::Format( wxT("Compatibility issue: %s is not supported as a keyboard accelerator key on GTK"),
-                                          keyname ) );
+            wxLogDebug( "Compatibility issue: %s is not supported as a keyboard accelerator key on GTK",
+                        keyname );
             break;
     }
 
