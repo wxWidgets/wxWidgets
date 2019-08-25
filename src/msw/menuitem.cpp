@@ -392,7 +392,15 @@ void MenuDrawData::Init()
 
         Offset = -12;
 
-        Font = wxFont(wxNativeFontInfo(metrics.lfMenuFont));
+        wxNativeFontInfo info(metrics.lfMenuFont);
+        // wxNativeFontInfo constructor calculates the pointSize using the
+        // main screen DPI. But lfHeight is based on the window DPI.
+        if ( window )
+        {
+            info.pointSize = wxNativeFontInfo::GetPointSizeAtPPI(
+                                 info.lf.lfHeight, window->GetDPI().y);
+        }
+        Font = wxFont(info);
 
         Theme = false;
     }
