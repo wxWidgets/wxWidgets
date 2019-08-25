@@ -3295,7 +3295,7 @@ public:
     @class wxDisplayChangedEvent
 
     A display changed event is sent to top-level windows when the display resolution has changed.
-    
+
     This event is currently emitted under Windows only.
 
     @beginEventTable{wxDisplayChangedEvent}
@@ -3309,7 +3309,7 @@ public:
     @category{events}
 
     @see wxDisplay
-*/ 
+*/
 
 class wxDisplayChangedEvent : public wxEvent
 {
@@ -4445,13 +4445,16 @@ public:
     wxMenuEvent(wxEventType type = wxEVT_NULL, int id = 0, wxMenu* menu = NULL);
 
     /**
-        Returns the menu which is being opened or closed.
-
-        This method can only be used with the @c OPEN and @c CLOSE events.
+        Returns the menu which is being opened or closed, or the menu containing
+        the highlighted item.
 
         Note that the returned value can be @NULL if the menu being opened
         doesn't have a corresponding wxMenu, e.g. this happens when opening the
         system menu in wxMSW port.
+
+        @remarks Since 3.1.3 this function can be used with @c OPEN, @c CLOSE
+        and @c HIGHLIGHT events. Before 3.1.3, this method can only be used
+        with the @c OPEN and @c CLOSE events.
     */
     wxMenu* GetMenu() const;
 
