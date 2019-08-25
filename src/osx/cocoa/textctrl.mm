@@ -1164,12 +1164,6 @@ void wxNSTextViewControl::SetStyle(long start,
                 [attrs setValue:colour.OSXGetNSColor() forKey:NSUnderlineColorAttributeName];
             }
         }
-        if ( style.HasLeftIndent() )
-        {
-            storage = [m_textView textStorage];
-            NSInteger insPoint = [[[m_textView selectedRanges] objectAtIndex:0] rangeValue].location;
-            range = NSMakeRange( insPoint, storage.string.length - insPoint );
-        }
 
         [m_textView setTypingAttributes:attrs];
     }
