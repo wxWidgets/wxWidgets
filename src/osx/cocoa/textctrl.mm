@@ -1054,7 +1054,7 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
             fgcolor = [storage attribute:NSForegroundColorAttributeName atIndex:position effectiveRange:NULL];
             ultype = [storage attribute:NSUnderlineStyleAttributeName atIndex:position effectiveRange:NULL];
             ulcolor = [storage attribute:NSUnderlineColorAttributeName atIndex:position effectiveRange:NULL];
-            NSDictionary *attrs;
+            NSDictionary *attrs = NULL;
             NSRange effectiveRange;
             attrs = [storage attributesAtIndex: position effectiveRange: NULL];
             NSParagraphStyle *style = [attrs valueForKey: NSParagraphStyleAttributeName];
@@ -1109,7 +1109,7 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
         if ( underlineType != wxTEXT_ATTR_UNDERLINE_NONE )
             style.SetFontUnderlined(underlineType, underlineColour);
 
-        if( leftIndent > 0 )
+        if ( leftIndent > 0 )
             style.SetLeftIndent( leftIndent * 10.0 * pt2mm );
 
         return true;
@@ -1132,7 +1132,7 @@ void wxNSTextViewControl::SetStyle(long start,
 
     if ( start == -1 && end == -1 )
     {
-        attrs = [NSMutableDictionary dictionaryWithCapacity:4];
+        attrs = [NSMutableDictionary dictionaryWithCapacity:5];
         if ( style.HasFont() )
             [attrs setValue:style.GetFont().OSXGetNSFont() forKey:NSFontAttributeName];
         if ( style.HasBackgroundColour() )
@@ -1170,14 +1170,13 @@ void wxNSTextViewControl::SetStyle(long start,
             NSInteger insPoint = [[[m_textView selectedRanges] objectAtIndex:0] rangeValue].location;
             range = NSMakeRange( insPoint, storage.string.length - insPoint );
         }
-        else
-            [m_textView setTypingAttributes: attrs];
 
         [m_textView setTypingAttributes:attrs];
     }
     else // Set the attributes just for this range.
     {
-        NSRange range = NSMakeRange( start, end - start );
+        attrs = [NSMutableDictionary dictionaryWithCapacity:5];
+        NSRange range = NSMakeRange( start, end-start );
         
         storage = [m_textView textStorage];
         if ( style.HasFont() )
@@ -1236,9 +1235,8 @@ void wxNSTextViewControl::SetStyle(long start,
     }
     if( style.HasLeftIndent() )
     {
-        if( start == end && start == 0 )
-            range = NSMakeRange( start, start + 1 );
-        else if( start == end && start == m_textView.textStorage.string.length )
+        // Need to handle this case as otherwise the code will reference out-of-bounds position
+        if( start == end && start == m_textView.textStorage.string.length )
             range = NSMakeRange( start - 1, 1 );
         else
             range = [[m_textView textStorage].string paragraphRangeForRange: NSMakeRange( start, 1 )];
@@ -1246,12 +1244,9 @@ void wxNSTextViewControl::SetStyle(long start,
         [paragraphStyle setFirstLineHeadIndent: indent];
         [paragraphStyle setHeadIndent: indent];
         [storage addAttribute: NSParagraphStyleAttributeName value: paragraphStyle range: range];
-        if( /*start == -1 && end == -1*/range.length == 0 )
-        {
-            [attrs setValue: paragraphStyle forKey: NSParagraphStyleAttributeName];
-            [m_textView setDefaultParagraphStyle:paragraphStyle];
-            [m_textView setTypingAttributes: attrs];
-        }
+        [attrs setValue: paragraphStyle forKey: NSParagraphStyleAttributeName];
+        [m_textView setDefaultParagraphStyle:paragraphStyle];
+        [m_textView setTypingAttributes: attrs];
         [paragraphStyle release];
     }
 }
