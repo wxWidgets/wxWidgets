@@ -1062,25 +1062,37 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 if ( flags )
                     hotkey << wxT("Up" );
                 else
-                    wxFAIL_MSG( wxT("The Up key must have modifiers to be an accelerator key") );
+                {
+                    wxLogDebug( wxT("The Up key must have modifiers to be an accelerator key") );
+                    hotkey.Clear();
+                }
                 break;
             case WXK_DOWN:
                 if ( flags )
                     hotkey << wxT("Down" );
                 else
-                    wxFAIL_MSG( wxT("The Down key must have modifiers to be an accelerator key") );
+                {
+                    wxLogDebug( wxT("The Down key must have modifiers to be an accelerator key") );
+                    hotkey.Clear();
+                }
                 break;
             case WXK_LEFT:
                 if ( flags )
                     hotkey << wxT("Left" );
                 else
-                    wxFAIL_MSG( wxT("The Left key must have modifiers to be an accelerator key") );
+                {
+                    wxLogDebug( wxT("The Left key must have modifiers to be an accelerator key") );
+                    hotkey.Clear();
+                }
                 break;
             case WXK_RIGHT:
                 if ( flags )
                     hotkey << wxT("Right" );
                 else
-                    wxFAIL_MSG( wxT("The Right key must have modifiers to be an accelerator key") );
+                {
+                    wxLogDebug( wxT("The Right key must have modifiers to be an accelerator key") );
+                    hotkey.Clear();
+                }
                 break;
             case WXK_PAGEUP:
                 hotkey << wxT("Page_Up" );
@@ -1156,25 +1168,37 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 if ( flags )
                     hotkey << wxT("KP_Up" );
                 else
-                    wxFAIL_MSG( wxT("The KP_Up key must have modifiers to be an accelerator key") );
+                {
+                    wxLogDebug( wxT("The KP_Up key must have modifiers to be an accelerator key") );
+                    hotkey.Clear();
+                }
                 break;
             case WXK_NUMPAD_DOWN:
                 if ( flags )
                     hotkey << wxT("KP_Down" );
                 else
-                    wxFAIL_MSG( wxT("The KP_Down key must have modifiers to be an accelerator key") );
+                {
+                    wxLogDebug( wxT("The KP_Down key must have modifiers to be an accelerator key") );
+                    hotkey.Clear();
+                }
                 break;
             case WXK_NUMPAD_LEFT:
                 if ( flags )
                     hotkey << wxT("KP_Left" );
                 else
-                    wxFAIL_MSG( wxT("The KP_Left key must have modifiers to be an accelerator key") );
+                {
+                    wxLogDebug( wxT("The KP_Left key must have modifiers to be an accelerator key") );
+                    hotkey.Clear();
+                }
                 break;
             case WXK_NUMPAD_RIGHT:
                 if ( flags )
                     hotkey << wxT("KP_Right" );
                 else
-                    wxFAIL_MSG( wxT("The KP_Right key must have modifiers to be an accelerator key") );
+                {
+                    wxLogDebug( wxT("The KP_Right key must have modifiers to be an accelerator key") );
+                    hotkey.Clear();
+                }
                 break;
             case WXK_NUMPAD_PAGEUP:
                 hotkey << wxT("KP_Page_Up" );
@@ -1258,7 +1282,9 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
             case WXK_SPECIAL13: case WXK_SPECIAL14: case WXK_SPECIAL15:
             case WXK_SPECIAL16: case WXK_SPECIAL17: case WXK_SPECIAL18:
             case WXK_SPECIAL19: case WXK_SPECIAL20:
-                wxFAIL_MSG( wxT("Unsupported keyboard accelerator key") );
+                wxLogDebug( wxString::Format( wxT("Unsupported keyboard accelerator key: %s"),
+                                              accel->ToString() ) );
+                hotkey.Clear();
                 break;
 
             // if there are any other keys wxAcceleratorEntry::Create() may
@@ -1276,7 +1302,9 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                     }
                 }
 
-                wxFAIL_MSG( wxT("unknown keyboard accel") );
+                wxLogDebug( wxString::Format( wxT("unknown keyboard accelerator key code: %i"),
+                                              code ) );
+                hotkey.Clear();
         }
 
         delete accel;
