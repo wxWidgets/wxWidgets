@@ -86,6 +86,9 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 WXDLLIMPEXP_CORE wxCharBuffer
 wxConvertToGTK(const wxString& s, wxFontEncoding enc)
 {
+    if (s.empty())
+        return wxCharBuffer("");
+
     wxWCharBuffer wbuf;
     if ( enc == wxFONTENCODING_SYSTEM || enc == wxFONTENCODING_DEFAULT )
     {
@@ -96,7 +99,7 @@ wxConvertToGTK(const wxString& s, wxFontEncoding enc)
         wbuf = wxCSConv(enc).cMB2WC(s.c_str());
     }
 
-    if ( !wbuf && !s.empty() )
+    if (wbuf.length() == 0)
     {
         // conversion failed, but we still want to show something to the user
         // even if it's going to be wrong it is better than nothing
