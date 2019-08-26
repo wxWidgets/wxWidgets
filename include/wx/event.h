@@ -2186,20 +2186,7 @@ public:
 
     // we do need to copy wxKeyEvent sometimes (in wxTreeCtrl code, for
     // example)
-    wxKeyEvent& operator=(const wxKeyEvent& evt)
-    {
-        if ( &evt != this )
-        {
-            wxEvent::operator=(evt);
-
-            // Borland C++ 5.82 doesn't compile an explicit call to an
-            // implicitly defined operator=() so need to do it this way:
-            *static_cast<wxKeyboardState *>(this) = evt;
-
-            DoAssignMembers(evt);
-        }
-        return *this;
-    }
+    wxKeyEvent& operator=(const wxKeyEvent& evt);
 
 public:
     // Do not use these fields directly, they are initialized on demand, so
