@@ -725,6 +725,8 @@ public :
     virtual bool CanRedo() const;
     virtual void Redo() ;
     virtual int GetNumberOfLines() const ;
+    virtual unsigned GetPhysicalLineCount() const ;
+    virtual unsigned GetLogicalLineCount() const ;
     virtual long XYToPosition(long x, long y) const;
     virtual bool PositionToXY(long pos, long *x, long *y) const ;
     virtual void ShowPosition(long pos) ;

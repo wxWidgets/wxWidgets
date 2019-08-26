@@ -113,6 +113,8 @@ public:
     virtual void ShowPosition(long pos) wxOVERRIDE;
     virtual void WriteText(const wxString& str) wxOVERRIDE ;
     virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle, bool ignoreBlack = true ) wxOVERRIDE;
+    virtual unsigned GetPhysicalLineCount() const;
+    virtual unsigned GetLogicalLineCount() const;
 
     virtual bool GetStyle(long position, wxTextAttr& style) wxOVERRIDE;
     virtual void SetStyle(long start, long end, const wxTextAttr& style) wxOVERRIDE;

@@ -997,6 +997,16 @@ bool wxTextAreaBase::SaveFile(const wxString& filename, int fileType)
     return DoSaveFile(filenameToUse, fileType);
 }
 
+unsigned wxTextAreaBase::GetPhysicalLineCount() const
+{
+    return 0;
+}
+
+unsigned wxTextAreaBase::GetLogicalLineCount() const
+{
+    return 0;
+}
+
 // ----------------------------------------------------------------------------
 // stream-like insertion operator
 // ----------------------------------------------------------------------------

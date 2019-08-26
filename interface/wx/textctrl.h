@@ -1372,6 +1372,26 @@ public:
     virtual int GetNumberOfLines() const;
 
     /**
+        Return number of physical lines in the text control buffer.
+
+        This number corresponds to the number hard carriage-return in
+        the text buffer.
+
+        @since 3.1.3
+    */
+    virtual unsigned GetPhysicalLineCount() const;
+
+    /*
+        Return number of logical lines in the text buffer.
+
+        This number corresponds to the number of soft carriage-return in
+        the text buffer.
+
+        @since 3.1.3
+    */
+    virtual unsigned GetLogicalLineCount() const;
+
+    /**
         Returns the style at this position in the text control.
 
         Not all platforms support this function.
