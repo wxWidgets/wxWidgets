@@ -74,6 +74,7 @@ private:
         NONGTK_TEST( LabelClick );
         NONGTK_TEST( SortClick );
         CPPUNIT_TEST( ColumnOrder );
+        WXUISIM_TEST( WindowAsEditorControl );
     CPPUNIT_TEST_SUITE_END();
 
     void CellEdit();
@@ -95,6 +96,7 @@ private:
     void CellFormatting();
     void Editable();
     void ReadOnly();
+    void WindowAsEditorControl();
     void PseudoTest_NativeHeader() { ms_nativeheader = true; }
     void PseudoTest_NativeLabels() { ms_nativeheader = false;
                                      ms_nativelabels = true; }
@@ -739,6 +741,68 @@ void GridTestCase::ReadOnly()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(0, created.GetCount());
+#endif
+}
+
+void GridTestCase::WindowAsEditorControl()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    // A very simple editor using a window not derived from wxControl as the
+    // editor.
+    class TestEditor : public wxGridCellEditor
+    {
+    public:
+        TestEditor() {}
+
+        void Create(wxWindow* parent,
+                    wxWindowID id,
+                    wxEvtHandler* evtHandler) wxOVERRIDE
+        {
+            SetWindow(new wxWindow(parent, id));
+            wxGridCellEditor::Create(parent, id, evtHandler);
+        }
+
+        void BeginEdit(int, int, wxGrid*) wxOVERRIDE {}
+
+        bool EndEdit(int, int, wxGrid const*, wxString const&,
+                     wxString* newval) wxOVERRIDE
+        {
+            *newval = GetValue();
+            return true;
+        }
+
+        void ApplyEdit(int row, int col, wxGrid* grid) wxOVERRIDE
+        {
+            grid->GetTable()->SetValue(row, col, GetValue());
+        }
+
+        void Reset() wxOVERRIDE {}
+
+        wxGridCellEditor* Clone() const wxOVERRIDE { return new TestEditor(); }
+
+        wxString GetValue() const wxOVERRIDE { return "value"; }
+
+        wxDECLARE_NO_COPY_CLASS(TestEditor);
+    };
+
+    wxGridCellAttr* attr = new wxGridCellAttr();
+    attr->SetRenderer(new wxGridCellStringRenderer());
+    attr->SetEditor(new TestEditor());
+    m_grid->SetAttr(1, 1, attr);
+
+    EventCounter created(m_grid, wxEVT_GRID_EDITOR_CREATED);
+
+    wxUIActionSimulator sim;
+
+    m_grid->SetFocus();
+    m_grid->SetGridCursor(1, 1);
+    m_grid->EnableCellEditControl();
+
+    sim.Char(WXK_RETURN);
+
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, created.GetCount());
 #endif
 }
 
