@@ -17,8 +17,6 @@
 
 #include "wx/propgrid/property.h"
 
-class WXDLLIMPEXP_FWD_CORE wxClientDC;
-
 // -----------------------------------------------------------------------
 
 // A return value from wxPropertyGrid::HitTest(),
@@ -471,12 +469,12 @@ public:
     // Returns minimal width for given column so that all images and texts
     // will fit entirely.
     // Used by SetSplitterLeft() and DoFitColumns().
-    int GetColumnFitWidth(wxClientDC& dc,
+    int GetColumnFitWidth(const wxDC& dc,
                           wxPGProperty* pwc,
                           unsigned int col,
                           bool subProps) const;
 
-    int GetColumnFullWidth(wxClientDC &dc, wxPGProperty *p, unsigned int col);
+    int GetColumnFullWidth(const wxDC& dc, wxPGProperty* p, unsigned int col);
 
     // Returns information about arbitrary position in the grid.
     // pt - Logical coordinates in the virtual grid space. Use
