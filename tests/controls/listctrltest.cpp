@@ -163,7 +163,7 @@ void ListCtrlTestCase::ColumnClick()
 void ListCtrlTestCase::SubitemRect()
 {
     wxImageList *m_imageListNormal = new wxImageList(32, 32, true);
-    m_imageListNormal->Add( wxArtProvider::GetBitmap(wxART_ERROR) );
+    m_imageListNormal->Add(wxArtProvider::GetBitmap(wxART_ERROR) );
     m_list->InsertColumn(0, "Column 0", wxLIST_FORMAT_LEFT, 60);
     m_list->InsertColumn(1, "Column 1", wxLIST_FORMAT_LEFT, 60);
     m_list->InsertColumn(2, "Column 2", wxLIST_FORMAT_LEFT, 60);
@@ -175,15 +175,15 @@ void ListCtrlTestCase::SubitemRect()
         m_list->SetItem(index, 2, wxString::Format("Column 2 item %d", i));
     }
     wxRect rectLabel, rectIcon, rectItem;
-    m_list->GetSubItemRect( 1, 1, rectItem, wxLIST_RECT_BOUNDS );
-    m_list->GetSubItemRect( 1, 1, rectIcon, wxLIST_RECT_ICON );
-    m_list->GetSubItemRect( 1, 1, rectLabel, wxLIST_RECT_LABEL );
-    CPPUNIT_ASSERT_EQUAL( rectItem.GetLeft(), rectIcon.GetLeft() );
-    CPPUNIT_ASSERT_EQUAL( rectLabel.GetLeft(), rectIcon.GetRight() + 1 );
-    m_list->GetSubItemRect( 1, 0, rectItem, wxLIST_RECT_BOUNDS );
-    m_list->GetSubItemRect( 1, 0, rectIcon, wxLIST_RECT_ICON );
-    m_list->GetSubItemRect( 1, 0, rectLabel, wxLIST_RECT_LABEL );
-    CPPUNIT_ASSERT_EQUAL( rectLabel.GetLeft(), rectIcon.GetRight() + 1 );
+    m_list->GetSubItemRect(1, 1, rectItem, wxLIST_RECT_BOUNDS);
+    m_list->GetSubItemRect(1, 1, rectIcon, wxLIST_RECT_ICON);
+    m_list->GetSubItemRect(1, 1, rectLabel, wxLIST_RECT_LABEL);
+    CPPUNIT_ASSERT_EQUAL(rectItem.GetLeft(), rectIcon.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(rectLabel.GetLeft(), rectIcon.GetRight() + 1);
+    m_list->GetSubItemRect(1, 0, rectItem, wxLIST_RECT_BOUNDS);
+    m_list->GetSubItemRect(1, 0, rectIcon, wxLIST_RECT_ICON);
+    m_list->GetSubItemRect(1, 0, rectLabel, wxLIST_RECT_LABEL);
+    CPPUNIT_ASSERT_EQUAL(rectLabel.GetLeft(), rectIcon.GetRight() + 1);
 }
 #endif
 #endif // wxUSE_UIACTIONSIMULATOR
