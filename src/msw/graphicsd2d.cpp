@@ -2510,7 +2510,6 @@ protected:
         wxD2DGradientStopsHelper helper(m_radialGradientInfo.stops, GetContext());
         ID2D1RadialGradientBrush *radialGradientBrush;
 
-        // TODO: double check this. The other backends just use the passed in values for xo, yo
         wxDouble xo = m_radialGradientInfo.x1 - m_radialGradientInfo.x2;
         wxDouble yo = m_radialGradientInfo.y1 - m_radialGradientInfo.y2;
 
