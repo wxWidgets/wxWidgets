@@ -2203,17 +2203,17 @@ int wxPropertyGrid::DoDrawItems( wxDC& dc,
         bool suppressMarginEdge = (GetWindowStyle() & wxPG_HIDE_MARGIN) &&
             (((GetWindowStyle() & wxBORDER_MASK) == wxBORDER_THEME) ||
             (((GetWindowStyle() & wxBORDER_MASK) == wxBORDER_NONE) && ((GetParent()->GetWindowStyle() & wxBORDER_MASK) == wxBORDER_THEME)));
-#else
-        bool suppressMarginEdge = false;
-#endif
-        if (!suppressMarginEdge)
-            dc.DrawLine( greyDepth, y, greyDepth, y2 );
-        else
+        if (suppressMarginEdge)
         {
             // Blank out the margin edge
             dc.SetPen(wxPen(GetBackgroundColour()));
             dc.DrawLine( greyDepth, y, greyDepth, y2 );
             dc.SetPen( linepen );
+        }
+        else
+#endif // __WXMSW__
+        {
+            dc.DrawLine(greyDepth, y, greyDepth, y2);
         }
 
         // Splitters
