@@ -83,6 +83,15 @@ static const int EXTRA_HEIGHT = 4;
 static const int EXTRA_BORDER_X = 2;
 static const int EXTRA_BORDER_Y = 2;
 
+#ifdef __WXGTK__
+    // This probably needs to be done
+    // on all platforms as the icons
+    // otherwise nearly touch the border
+    static const int ICON_OFFSET_X = 2;
+#else
+    static const int ICON_OFFSET_X = 0;
+#endif
+
 // offset for the header window
 static const int HEADER_OFFSET_X = 0;
 static const int HEADER_OFFSET_Y = 0;
@@ -802,14 +811,8 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
 
     ApplyAttributes(dc, rectHL, highlighted, current);
 
-    wxCoord x = rect.x + HEADER_OFFSET_X,
+    wxCoord x = rect.x + HEADER_OFFSET_X + ICON_OFFSET_X,
             yMid = rect.y + rect.height/2;
-#ifdef __WXGTK__
-    // This probably needs to be done
-    // on all platforms as the icons
-    // otherwise nearly touch the border
-    x += 2;
-#endif
 
     if ( m_owner->HasCheckBoxes() )
     {
