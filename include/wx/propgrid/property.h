@@ -452,13 +452,17 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 // -----------------------------------------------------------------------
 
 // Helpers to mark macros as deprecated
-#if defined(__clang__) || wxCHECK_GCC_VERSION(4, 5)
+#if (defined(__clang__) || wxCHECK_GCC_VERSION(4, 5)) && !defined(WXBUILDING)
 #define wxPG_STRINGIFY(X) #X
 #define wxPG_DEPRECATED_MACRO_VALUE(value, msg) \
         _Pragma(wxPG_STRINGIFY(GCC warning msg)) value
 #else
 #define wxPG_DEPRECATED_MACRO_VALUE(value, msg) value
 #endif // clang || GCC
+
+#if wxCHECK_VISUALC_VERSION(10) && !defined(WXBUILDING)
+#define wxPG_MUST_DEPRECATE_MACRO_NAME
+#endif
 
 // wxPGProperty::SetAttribute() and
 // wxPropertyGridInterface::SetPropertyAttribute() accept one of these as
@@ -553,7 +557,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 #define wxPG_FILE_INITIAL_PATH              wxS("InitialPath")
 
 #if WXWIN_COMPATIBILITY_3_0
-#if wxCHECK_VISUALC_VERSION(10)
+#ifdef wxPG_MUST_DEPRECATE_MACRO_NAME
 #pragma deprecated(wxPG_FILE_DIALOG_TITLE)
 #endif
 // Specific to wxFileProperty and derivatives, wxString, default is empty.
@@ -567,7 +571,7 @@ wxPG_PROP_CLASS_SPECIFIC_3          = 0x00400000
 #define wxPG_FILE_DIALOG_STYLE              wxS("DialogStyle")
 
 #if WXWIN_COMPATIBILITY_3_0
-#if wxCHECK_VISUALC_VERSION(10)
+#ifdef wxPG_MUST_DEPRECATE_MACRO_NAME
 #pragma deprecated(wxPG_DIR_DIALOG_MESSAGE)
 #endif
 // Specific to wxDirProperty, wxString, default is empty.
