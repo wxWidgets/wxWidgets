@@ -165,6 +165,9 @@ protected:
                                           int& x, int& y,
                                           int& w, int& h) const wxOVERRIDE;
 
+    // WM_DPICHANGED handler.
+    bool HandleDPIChange(const wxSize& newDPI, const wxRect& newRect);
+
     // This field contains the show command to use when showing the window the
     // next time and also indicates whether the window should be considered
     // being iconized or maximized (which may be different from whether it's
@@ -191,6 +194,14 @@ protected:
     wxWindowRef m_winLastFocused;
 
 private:
+    // Keep track of the DPI used in this window. So when per-monitor dpi
+    // awareness is enabled, both old and new DPI are known for
+    // wxDPIChangedEvent and wxWindow::MSWUpdateOnDPIChange.
+    wxSize m_activeDPI;
+
+    // This window supports handling per-monitor DPI awareness when the
+    // application manifest contains <dpiAwareness>PerMonitorV2</dpiAwareness>.
+    bool m_perMonitorDPIaware;
 
     // The system menu: initially NULL but can be set (once) by
     // MSWGetSystemMenu(). Owned by this window.

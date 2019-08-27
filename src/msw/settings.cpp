@@ -183,8 +183,17 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
             // controls may prefer to use lfStatusFont or lfCaptionFont if it
             // is more appropriate for them
             const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
-            const wxNativeFontInfo
+            wxNativeFontInfo
                 info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont);
+
+            // wxNativeFontInfo constructor calculates the pointSize using the
+            // main screen DPI. But lfHeight is based on the window DPI.
+            if ( win )
+            {
+                info.pointSize = wxNativeFontInfo::GetPointSizeAtPPI(
+                                     info.lf.lfHeight, win->GetDPI().y);
+            }
+
             gs_fontDefault = new wxFont(info);
         }
 

@@ -104,6 +104,9 @@ void wxTopLevelWindowMSW::Init()
     m_fsIsShowing = false;
 
     m_menuSystem = NULL;
+
+    m_activeDPI = wxDefaultSize;
+    m_perMonitorDPIaware = false;
 }
 
 WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
@@ -246,6 +249,26 @@ WXHWND wxTopLevelWindowMSW::MSWGetParent() const
     return (WXHWND)hwndParent;
 }
 
+bool wxTopLevelWindowMSW::HandleDPIChange(const wxSize& newDPI, const wxRect& newRect)
+{
+    if ( !m_perMonitorDPIaware )
+    {
+        return false;
+    }
+
+    if ( newDPI != m_activeDPI )
+    {
+        MSWUpdateOnDPIChange(m_activeDPI, newDPI);
+        m_activeDPI = newDPI;
+    }
+
+    SetSize(newRect);
+
+    Refresh();
+
+    return true;
+}
+
 WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     WXLRESULT rc = 0;
@@ -306,12 +329,64 @@ WXLRESULT wxTopLevelWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WX
 #endif // #ifndef __WXUNIVERSAL__
             }
             break;
+
+        case WM_DPICHANGED:
+            {
+                const RECT* const prcNewWindow =
+                                         reinterpret_cast<const RECT*>(lParam);
+
+                processed = HandleDPIChange(wxSize(LOWORD(wParam),
+                                                   HIWORD(wParam)),
+                                            wxRectFromRECT(*prcNewWindow));
+            }
+            break;
     }
 
     if ( !processed )
         rc = wxTopLevelWindowBase::MSWWindowProc(message, wParam, lParam);
 
     return rc;
+}
+
+namespace
+{
+
+static bool IsPerMonitorDPIAware(HWND hwnd)
+{
+    bool dpiAware = false;
+
+    // Determine if 'Per Monitor v2' DPI awareness is enabled in the
+    // applications manifest.
+#if wxUSE_DYNLIB_CLASS
+    #define WXDPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 ((WXDPI_AWARENESS_CONTEXT)-4)
+    typedef WXDPI_AWARENESS_CONTEXT(WINAPI * GetWindowDpiAwarenessContext_t)(HWND hwnd);
+    typedef BOOL(WINAPI * AreDpiAwarenessContextsEqual_t)(WXDPI_AWARENESS_CONTEXT dpiContextA, WXDPI_AWARENESS_CONTEXT dpiContextB);
+    static GetWindowDpiAwarenessContext_t s_pfnGetWindowDpiAwarenessContext = NULL;
+    static AreDpiAwarenessContextsEqual_t s_pfnAreDpiAwarenessContextsEqual = NULL;
+    static bool s_initDone = false;
+
+    if ( !s_initDone )
+    {
+        wxLoadedDLL dllUser32("user32.dll");
+        wxDL_INIT_FUNC(s_pfn, GetWindowDpiAwarenessContext, dllUser32);
+        wxDL_INIT_FUNC(s_pfn, AreDpiAwarenessContextsEqual, dllUser32);
+        s_initDone = true;
+    }
+
+    if ( s_pfnGetWindowDpiAwarenessContext && s_pfnAreDpiAwarenessContextsEqual )
+    {
+        WXDPI_AWARENESS_CONTEXT dpiAwarenessContext = s_pfnGetWindowDpiAwarenessContext(hwnd);
+
+        if ( s_pfnAreDpiAwarenessContextsEqual(dpiAwarenessContext, WXDPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2) == TRUE )
+        {
+            dpiAware = true;
+        }
+    }
+#endif // wxUSE_DYNLIB_CLASS
+
+    return dpiAware;
+}
+
 }
 
 bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
@@ -483,6 +558,10 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
     {
         EnableCloseButton(false);
     }
+
+    m_activeDPI = GetDPI();
+
+    m_perMonitorDPIaware = IsPerMonitorDPIAware(GetHwnd());
 
     // for standard dialogs the dialog manager generates WM_CHANGEUISTATE
     // itself but for custom windows we have to do it ourselves in order to
