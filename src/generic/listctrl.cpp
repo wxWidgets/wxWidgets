@@ -4466,7 +4466,7 @@ int wxListMainWindow::GetItemWidthWithImage(wxListItem * item)
     {
         int ix, iy;
         GetImageSize( item->GetImage(), ix, iy );
-        width += ix + 5;
+        width += ix + IMAGE_MARGIN_IN_REPORT_MODE;
     }
 
     if (!item->GetText().empty())
