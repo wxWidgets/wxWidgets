@@ -43,7 +43,7 @@ public:
 
     // Motif-specific.
     // Create/get a cursor for the current display
-    WXCursor GetEndXursor(WXDisplay* display) const;
+    WXCursor GetXCursor(WXDisplay* display) const;
 
 protected:
     virtual wxGDIRefData *CreateGDIRefData() const;
