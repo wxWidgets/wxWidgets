@@ -2420,8 +2420,9 @@ wxWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
     if ( flags & (MF_POPUP | MF_SEPARATOR) )
         item = wxID_NONE;
 
-    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item);
-    if ( wxMenu::ProcessMenuEvent(MSWFindMenuFromHMENU(hMenu), event, this) )
+    wxMenu* menu = MSWFindMenuFromHMENU(hMenu);
+    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item, menu);
+    if ( wxMenu::ProcessMenuEvent(menu, event, this) )
         return true;
 
     // by default, i.e. if the event wasn't handled above, clear the status bar

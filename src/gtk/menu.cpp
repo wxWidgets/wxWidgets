@@ -560,7 +560,7 @@ static void menuitem_select(GtkWidget*, wxMenuItem* item)
     if (!item->IsEnabled())
         return;
 
-    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item->GetId());
+    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item->GetId(), item->GetMenu());
     DoCommonMenuCallbackCode(item->GetMenu(), event);
 }
 }
@@ -575,7 +575,7 @@ static void menuitem_deselect(GtkWidget*, wxMenuItem* item)
     if (!item->IsEnabled())
         return;
 
-    wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, -1 );
+    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, -1, item->GetMenu());
     DoCommonMenuCallbackCode(item->GetMenu(), event);
 }
 }

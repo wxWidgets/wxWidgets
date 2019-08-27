@@ -645,7 +645,7 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
     if (!menu->IsEnabled(id))
         return;
 
-    wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, id );
+    wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, id, menu );
     event.SetEventObject( menu );
 
     wxEvtHandler* handler = menu->GetEventHandler();
@@ -673,7 +673,7 @@ static void gtk_menu_nolight_callback( GtkWidget *widget, wxMenu *menu )
     if (!menu->IsEnabled(id))
         return;
 
-    wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, -1 );
+    wxMenuEvent event( wxEVT_MENU_HIGHLIGHT, -1, menu );
     event.SetEventObject( menu );
 
     wxEvtHandler* handler = menu->GetEventHandler();

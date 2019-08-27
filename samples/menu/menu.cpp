@@ -1235,19 +1235,21 @@ void MyFrame::LogMenuOpenCloseOrHighlight(const wxMenuEvent& event, const wxStri
 
     if ( event.GetEventType() == wxEVT_MENU_HIGHLIGHT )
     {
-        msg << " (id=" << event.GetId() << ")";
+        msg << " (id=" << event.GetId() << " in ";
     }
-    else // wxEVT_MENU_{OPEN,CLOSE}
+    else
     {
-        wxMenu* const menu = event.GetMenu();
-        if ( menu )
-        {
-            msg << " (menu with title \"" << menu->GetTitle() << "\")";
-        }
-        else
-        {
-            msg << " (no menu)";
-        }
+        msg << " (";
+    }
+
+    wxMenu* const menu = event.GetMenu();
+    if ( menu )
+    {
+        msg << "menu with title \"" << menu->GetTitle() << "\")";
+    }
+    else
+    {
+        msg << "no menu provided)";
     }
 
     msg << ".";
