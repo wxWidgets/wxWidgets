@@ -747,31 +747,31 @@ void GridTestCase::ReadOnly()
 void GridTestCase::WindowAsEditorControl()
 {
 #if wxUSE_UIACTIONSIMULATOR
-    //The simple editor using wxWindow as a control
+    //A very simple editor using a window not derived from wxControl as the editor.
     class TestEditor : public wxGridCellEditor
     {
     public:
-        TestEditor() = default;
-        TestEditor(const TestEditor&) = delete;
-        TestEditor& operator=(TestEditor const&) = delete;
-        void Create(wxWindow* parent, wxWindowID id, wxEvtHandler* evtHandler) override
+        TestEditor() {}
+        void Create(wxWindow* parent, wxWindowID id, wxEvtHandler* evtHandler) wxOVERRIDE
         {
             SetWindow(new wxWindow(parent, id));
             wxGridCellEditor::Create(parent, id, evtHandler);
         }
-        void BeginEdit(int, int, wxGrid*) override {}
-        bool EndEdit(int, int, wxGrid const*, wxString const&, wxString* newval) override
+        void BeginEdit(int, int, wxGrid*) wxOVERRIDE {}
+        bool EndEdit(int, int, wxGrid const*, wxString const&, wxString* newval) wxOVERRIDE
         {
             *newval = GetValue();
             return true;
         }
-        void ApplyEdit(int row, int col, wxGrid* grid) override
+        void ApplyEdit(int row, int col, wxGrid* grid) wxOVERRIDE
         {
             grid->GetTable()->SetValue(row, col, GetValue());
         }
-        void Reset() override {}
-        wxGridCellEditor* Clone() const override { return new TestEditor(); }
-        wxString GetValue() const override { return "value"; }
+        void Reset() wxOVERRIDE {}
+        wxGridCellEditor* Clone() const wxOVERRIDE { return new TestEditor(); }
+        wxString GetValue() const wxOVERRIDE { return "value"; }
+
+        wxDECLARE_NO_COPY_CLASS(TestEditor);
     };
 
     wxGridCellAttr* attr = new wxGridCellAttr();
@@ -792,9 +792,6 @@ void GridTestCase::WindowAsEditorControl()
     wxYield();
 
     CPPUNIT_ASSERT_EQUAL(1, created.GetCount());
-
-    //Clean up
-    m_grid->SetAttr(1, 1, nullptr);
 #endif
 }
 
