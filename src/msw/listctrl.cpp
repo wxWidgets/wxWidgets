@@ -1248,19 +1248,6 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
         return false;
     }
 
-    // Although LVIR_LABEL exists, it returns the same results as LVIR_BOUNDS
-    // and not just the label rectangle as would be expected, so account for
-    // the icon ourselves in this case.
-    if ( code == wxLIST_RECT_LABEL )
-    {
-        RECT rectIcon;
-        if ( !wxGetListCtrlSubItemRect(GetHwnd(), item, subItem, LVIR_ICON,
-                                       rectIcon) )
-            return false;
-
-        rectWin.left = rectIcon.right;
-    }
-
     wxCopyRECTToRect(rectWin, rect);
 
     // there is no way to retrieve the first sub item bounding rectangle using
