@@ -162,6 +162,8 @@ protected:
 
     virtual WXHRGN MSWGetRegionWithoutChildren() wxOVERRIDE;
 
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
+
     // resolve ambiguity in base classes
     virtual wxBorder GetDefaultBorder() const wxOVERRIDE { return wxRadioBoxBase::GetDefaultBorder(); }
 
