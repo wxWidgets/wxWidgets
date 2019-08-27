@@ -1230,6 +1230,16 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
             break;
 
         case wxLIST_RECT_ICON:
+            // Only the first subitem can have an icon, so it doesn't make
+            // sense to query the native control for the other ones --
+            // especially because it returns a nonsensical non-empty icon
+            // rectangle for them.
+            if ( subItem > 0 )
+            {
+                rect = wxRect();
+                return true;
+            }
+
             codeWin = LVIR_ICON;
             break;
 
