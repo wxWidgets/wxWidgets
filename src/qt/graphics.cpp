@@ -1137,13 +1137,15 @@ public:
     virtual wxGraphicsBrush
         CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
         wxDouble x2, wxDouble y2,
-        const wxGraphicsGradientStops& stops) wxOVERRIDE;
+        const wxGraphicsGradientStops& stops,
+        const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
 
     virtual wxGraphicsBrush
         CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
         wxDouble xc, wxDouble yc,
         wxDouble radius,
-        const wxGraphicsGradientStops& stops) wxOVERRIDE;
+        const wxGraphicsGradientStops& stops,
+        const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
 
     // sets the font
     virtual wxGraphicsFont CreateFont(const wxFont& font,
@@ -1274,7 +1276,8 @@ wxGraphicsBrush wxQtGraphicsRenderer::CreateBrush(const wxBrush& brush)
 wxGraphicsBrush wxQtGraphicsRenderer::CreateLinearGradientBrush(
     wxDouble x1, wxDouble y1,
     wxDouble x2, wxDouble y2,
-    const wxGraphicsGradientStops& stops)
+    const wxGraphicsGradientStops& stops, 
+    const wxGraphicsMatrix& WXUNUSED(matrix))
 {
     wxGraphicsBrush p;
     wxQtBrushData* d = new wxQtBrushData(this);
@@ -1286,7 +1289,8 @@ wxGraphicsBrush wxQtGraphicsRenderer::CreateLinearGradientBrush(
 wxGraphicsBrush wxQtGraphicsRenderer::CreateRadialGradientBrush(
     wxDouble xo, wxDouble yo,
     wxDouble xc, wxDouble yc, wxDouble r,
-    const wxGraphicsGradientStops& stops)
+    const wxGraphicsGradientStops& stops, 
+    const wxGraphicsMatrix& WXUNUSED(matrix))
 {
     wxGraphicsBrush p;
     wxQtBrushData* d = new wxQtBrushData(this);
