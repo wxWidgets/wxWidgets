@@ -348,7 +348,7 @@ void MenuDrawData::Init()
 
         wxUxThemeFont themeFont;
         ::GetThemeSysFont(hTheme, TMT_MENUFONT, themeFont.GetPtr());
-        Font = wxFont(themeFont.GetLOGFONT());
+        Font = wxFont(wxNativeFontInfo(themeFont.GetLOGFONT(), window));
 
         Theme = true;
 
@@ -392,15 +392,7 @@ void MenuDrawData::Init()
 
         Offset = -12;
 
-        wxNativeFontInfo info(metrics.lfMenuFont);
-        // wxNativeFontInfo constructor calculates the pointSize using the
-        // main screen DPI. But lfHeight is based on the window DPI.
-        if ( window )
-        {
-            info.pointSize = wxNativeFontInfo::GetPointSizeAtPPI(
-                                 info.lf.lfHeight, window->GetDPI().y);
-        }
-        Font = wxFont(info);
+        Font = wxFont(wxNativeFontInfo(metrics.lfMenuFont, window));
 
         Theme = false;
     }

@@ -278,7 +278,7 @@ void wxFillLogFont(LOGFONT *logFont, const wxFont *font)
 
 wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)
 {
-    return wxFont(wxNativeFontInfo(*logFont));
+    return wxFont(wxNativeFontInfo(*logFont, NULL));
 }
 
 #endif // WXWIN_COMPATIBILITY_3_0

@@ -150,7 +150,7 @@ wxFont wxCreateFontFromStockObject(int index)
         LOGFONT lf;
         if ( ::GetObject(hFont, sizeof(LOGFONT), &lf) != 0 )
         {
-            wxNativeFontInfo info(lf);
+            wxNativeFontInfo info(lf, NULL);
             font.Create(info);
         }
         else
@@ -183,16 +183,8 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
             // controls may prefer to use lfStatusFont or lfCaptionFont if it
             // is more appropriate for them
             const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
-            wxNativeFontInfo
-                info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont);
-
-            // wxNativeFontInfo constructor calculates the pointSize using the
-            // main screen DPI. But lfHeight is based on the window DPI.
-            if ( win )
-            {
-                info.pointSize = wxNativeFontInfo::GetPointSizeAtPPI(
-                                     info.lf.lfHeight, win->GetDPI().y);
-            }
+            const wxNativeFontInfo
+                info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont, win);
 
             gs_fontDefault = new wxFont(info);
         }
@@ -358,7 +350,7 @@ extern wxFont wxGetCCDefaultFont()
                 win
            ) )
     {
-        return wxFont(lf);
+        return wxFont(wxNativeFontInfo(lf, win));
     }
     else
     {
