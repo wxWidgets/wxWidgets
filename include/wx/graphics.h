@@ -403,15 +403,16 @@ public:
     }
 
     wxGraphicsPenInfo& 
-    RadialGradient(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius, 
+    RadialGradient(wxDouble startX, wxDouble startY,
+                   wxDouble endX, wxDouble endY, wxDouble radius, 
                    const wxColour& oColor, const wxColour& cColor,
                    const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix)
     { 
         m_gradientType = wxGRADIENT_RADIAL;
-        m_x1 = xo;
-        m_y1 = yo; 
-        m_x2 = xc; 
-        m_y2 = yc;
+        m_x1 = startX;
+        m_y1 = startY; 
+        m_x2 = endX; 
+        m_y2 = endY;
         m_radius = radius;
         m_stops.SetStartColour(oColor);
         m_stops.SetEndColour(cColor);
@@ -420,15 +421,16 @@ public:
     }                                      
 
     wxGraphicsPenInfo& 
-    RadialGradient(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, 
+    RadialGradient(wxDouble startX, wxDouble startY,
+                   wxDouble endX, wxDouble endY, 
                    wxDouble radius, const wxGraphicsGradientStops& stops,
                    const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix)
     { 
         m_gradientType = wxGRADIENT_RADIAL;
-        m_x1 = xo; 
-        m_y1 = yo; 
-        m_x2 = xc; 
-        m_y2 = yc;
+        m_x1 = startX; 
+        m_y1 = startY; 
+        m_x2 = endX; 
+        m_y2 = endY;
         m_radius = radius;
         m_stops = stops;
         m_matrix = matrix;
@@ -443,10 +445,10 @@ public:
     wxDouble GetY1() const { return m_y1; }
     wxDouble GetX2() const { return m_x2; }
     wxDouble GetY2() const { return m_y2; }
-    wxDouble GetXO() const { return m_x1; }
-    wxDouble GetYO() const { return m_y1; }
-    wxDouble GetXC() const { return m_x2; }
-    wxDouble GetYC() const { return m_y2; }
+    wxDouble GetStartX() const { return m_x1; }
+    wxDouble GetStartY() const { return m_y1; }
+    wxDouble GetEndX() const { return m_x2; }
+    wxDouble GetEndY() const { return m_y2; }
     wxDouble GetRadius() const { return m_radius; }
     const wxGraphicsGradientStops& GetStops() const { return m_stops; }
     const wxGraphicsMatrix& GetMatrix() const { return m_matrix; }

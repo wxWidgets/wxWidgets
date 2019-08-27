@@ -996,8 +996,8 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer,
     case wxGRADIENT_RADIAL:
         if (m_brush)
             delete m_brush;
-        CreateRadialGradientBrush(info.GetXO(), info.GetYO(),
-                                  info.GetXC(), info.GetYC(),
+        CreateRadialGradientBrush(info.GetStartX(), info.GetStartY(),
+                                  info.GetEndX(), info.GetEndY(),
                                   info.GetRadius(),
                                   info.GetStops());
         m_pen->SetBrush(m_brush);

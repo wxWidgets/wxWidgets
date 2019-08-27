@@ -943,8 +943,8 @@ wxCairoPenData::wxCairoPenData( wxGraphicsRenderer* renderer, const wxGraphicsPe
         break;
 
     case wxGRADIENT_RADIAL:
-        CreateRadialGradientPattern(info.GetXO(), info.GetYO(),
-                                    info.GetXC(), info.GetYC(),
+        CreateRadialGradientPattern(info.GetStartX(), info.GetStartY(),
+                                    info.GetEndX(), info.GetEndY(),
                                     info.GetRadius(),
                                     info.GetStops(),
                                     info.GetMatrix());

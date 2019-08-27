@@ -1645,12 +1645,14 @@ public:
                    const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
 
     wxGraphicsPenInfo& 
-    RadialGradient(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius, 
+    RadialGradient(wxDouble startX, wxDouble startY,
+                   wxDouble endX, wxDouble endY, wxDouble radius, 
                    const wxColour& oColor, const wxColour& cColor,
                    const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
 
     wxGraphicsPenInfo& 
-    RadialGradient(wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, 
+    RadialGradient(wxDouble startX, wxDouble startY,
+                   wxDouble endX, wxDouble endY, 
                    wxDouble radius, const wxGraphicsGradientStops& stops,
                    const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
 
@@ -1669,10 +1671,10 @@ public:
     wxDouble GetY1() const;
     wxDouble GetX2() const;
     wxDouble GetY2() const;
-    wxDouble GetXO() const;
-    wxDouble GetYO() const;
-    wxDouble GetXC() const;
-    wxDouble GetYC() const;
+    wxDouble GetStartX() const;
+    wxDouble GetStartY() const;
+    wxDouble GetEndX() const;
+    wxDouble GetEndY() const;
     wxDouble GetRadius() const;
     const wxGraphicsGradientStops& GetStops() const;
 };

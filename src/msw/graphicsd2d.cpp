@@ -2741,8 +2741,8 @@ wxD2DPenData::wxD2DPenData(
     case wxGRADIENT_RADIAL:
         m_stippleBrush = new wxD2DBrushData(renderer);
         m_stippleBrush->CreateRadialGradientBrush(
-                                m_penInfo.GetXO(), m_penInfo.GetYO(),
-                                m_penInfo.GetXC(), m_penInfo.GetYC(),
+                                m_penInfo.GetStartX(), m_penInfo.GetStartY(),
+                                m_penInfo.GetEndX(), m_penInfo.GetEndY(),
                                 m_penInfo.GetRadius(),
                                 m_penInfo.GetStops(),
                                 m_penInfo.GetMatrix());

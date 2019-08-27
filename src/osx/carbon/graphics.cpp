@@ -870,8 +870,8 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
         break;
 
     case wxGRADIENT_RADIAL:
-        CreateRadialGradientShading(info.GetXO(), info.GetYO(),
-                                    info.GetXC(), info.GetYC(),
+        CreateRadialGradientShading(info.GetStartX(), info.GetStartY(),
+                                    info.GetEndX(), info.GetEndY(),
                                     info.GetRadius(),
                                     info.GetStops(),
                                     info.GetMatrix());
