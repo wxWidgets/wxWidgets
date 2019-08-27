@@ -3687,6 +3687,7 @@ void wxGrid::DoUpdateResizeColWidth(int w)
 {
     wxPoint pt(GetColLeft(m_dragRowOrCol) + w, 0);
 
+    pt = CalcGridWindowScrolledPosition(pt, m_gridWin);
     DrawGridDragLine(pt, wxGridColumnOperations(), m_gridWin);
 }
 
