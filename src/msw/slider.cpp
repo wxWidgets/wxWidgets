@@ -163,12 +163,16 @@ bool wxSlider::Create(wxWindow *parent,
 
             m_labels->Set(n, wnd, lblid);
         }
-        m_labels->SetFont(GetFont());
     }
 
     // now create the main control too
     if ( !MSWCreateControl(TRACKBAR_CLASS, wxEmptyString, pos, size) )
         return false;
+
+    if ( m_labels )
+    {
+        m_labels->SetFont(GetFont());
+    }
 
     // and initialize everything
     SetRange(minValue, maxValue);
@@ -182,6 +186,8 @@ bool wxSlider::Create(wxWindow *parent,
     {
         SetSize(size);
     }
+
+    Bind(wxEVT_DPI_CHANGED, &wxSlider::OnDPIChanged, this);
 
     return true;
 }
@@ -541,7 +547,7 @@ void wxSlider::DoMoveWindow(int x, int y, int width, int height)
 wxSize wxSlider::DoGetBestSize() const
 {
     // this value is arbitrary:
-    static const int length = FromDIP(100);
+    const int length = FromDIP(100);
     const int thumbSize = GetThumbLength();
     const int tickSize = FromDIP(TICK);
 
@@ -617,6 +623,27 @@ WXHBRUSH wxSlider::DoMSWControlColor(WXHDC pDC, wxColour colBg, WXHWND hWnd)
     }
 
     return hBrush;
+}
+
+void wxSlider::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxSliderBase::MSWUpdateFontOnDPIChange(newDPI);
+
+    if ( m_labels && m_font.IsOk() )
+    {
+        m_labels->SetFont(m_font);
+    }
+}
+
+void wxSlider::OnDPIChanged(wxDPIChangedEvent& event)
+{
+    int thumbLen = GetThumbLength();
+
+    const double scaleFactor = (double)event.GetNewDPI().x / event.GetOldDPI().x;
+    const double thumbLenScaled = thumbLen * scaleFactor;
+    thumbLen = (int)(scaleFactor > 1.0 ? ceil(thumbLenScaled) : floor(thumbLenScaled));
+
+    SetThumbLength(thumbLen);
 }
 
 // ----------------------------------------------------------------------------
