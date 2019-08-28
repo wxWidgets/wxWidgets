@@ -95,7 +95,7 @@ public:
     virtual wxString GetTitle() const wxOVERRIDE { return m_grid->GetColLabelValue(m_col); }
     virtual wxBitmap GetBitmap() const wxOVERRIDE { return wxNullBitmap; }
     virtual int GetWidth() const wxOVERRIDE { return m_grid->GetColSize(m_col); }
-    virtual int GetMinWidth() const wxOVERRIDE { return 0; }
+    virtual int GetMinWidth() const wxOVERRIDE { return m_grid->GetColMinimalAcceptableWidth(); }
     virtual wxAlignment GetAlignment() const wxOVERRIDE
     {
         int horz,
