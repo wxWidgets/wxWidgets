@@ -142,6 +142,8 @@ public:
     int ReplaceAll(wxString *text, const wxString& replacement) const
         { return Replace(text, replacement, 0); }
 
+    static wxString QuoteMeta(const wxString& str);
+
     // dtor not virtual, don't derive from this class
     ~wxRegEx();
 

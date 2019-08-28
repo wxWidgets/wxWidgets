@@ -968,7 +968,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
     wxCHECK_MSG(m_widget, false, "invalid frame");
 
 #ifdef GDK_WINDOWING_X11
-    bool deferShow = show && !m_isShown && m_deferShow;
+    bool deferShow = show && !m_isShown && !m_isIconized && m_deferShow;
     if (deferShow)
     {
         deferShow = m_deferShowAllowed &&

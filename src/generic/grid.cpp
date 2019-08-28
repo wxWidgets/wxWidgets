@@ -2774,7 +2774,7 @@ void wxGrid::CalcDimensions()
         // how big is the editor
         wxGridCellAttr* attr = GetCellAttr(r, c);
         wxGridCellEditor* editor = attr->GetEditor(this, r, c);
-        editor->GetControl()->GetSize(&w2, &h2);
+        editor->GetWindow()->GetSize(&w2, &h2);
         w2 += x;
         h2 += y;
         if ( w2 > w )
@@ -2829,10 +2829,10 @@ void wxGrid::CalcWindowSizes()
     int fgw = 0, fgh = 0;
 
     for ( int i = 0; i < m_numFrozenRows; i++ )
-        fgh += m_rowHeights[i];
+        fgh += GetRowHeight(i);
 
     for ( int i = 0; i < m_numFrozenCols; i++ )
-        fgw += m_colWidths[i];
+        fgw += GetColWidth(i);
 
     // the grid may be too small to have enough space for the labels yet, don't
     // size the windows to negative sizes in this case
@@ -4906,8 +4906,8 @@ bool wxGrid::FreezeTo(int row, int col)
         cw -= m_rowLabelWidth;
         ch -= m_colLabelHeight;
 
-        if ((row > 0 && m_rowBottoms[row - 1] >= ch) ||
-            (col > 0 && m_colRights[col - 1] >= cw))
+        if ((row > 0 && GetRowBottom(row - 1) >= ch) ||
+            (col > 0 && GetColRight(col - 1) >= cw))
             return false;
 
         // check all involved cells for merged ones
@@ -6877,7 +6877,7 @@ bool wxGrid::IsCellEditControlShown() const
         {
             if ( editor->IsCreated() )
             {
-                isShown = editor->GetControl()->IsShown();
+                isShown = editor->GetWindow()->IsShown();
             }
 
             editor->DecRef();
@@ -6959,13 +6959,13 @@ void wxGrid::ShowCellEditControl()
                                              this,
                                              row,
                                              col,
-                                             editor->GetControl());
+                                             editor->GetWindow());
                 GetEventHandler()->ProcessEvent(evt);
             }
-            else if ( editor->GetControl() &&
-                      editor->GetControl()->GetParent() != gridWindow )
+            else if ( editor->GetWindow() &&
+                      editor->GetWindow()->GetParent() != gridWindow )
             {
-                editor->GetControl()->Reparent(gridWindow);
+                editor->GetWindow()->Reparent(gridWindow);
             }
 
             // resize editor to overflow into righthand cells if allowed
@@ -7009,9 +7009,9 @@ void wxGrid::ShowCellEditControl()
             editor->SetCellAttr( attr );
             editor->SetSize( rect );
             if (nXMove != 0)
-                editor->GetControl()->Move(
-                    editor->GetControl()->GetPosition().x + nXMove,
-                    editor->GetControl()->GetPosition().y );
+                editor->GetWindow()->Move(
+                    editor->GetWindow()->GetPosition().x + nXMove,
+                    editor->GetWindow()->GetPosition().y );
             editor->Show( true, attr );
 
             // recalc dimensions in case we need to
@@ -7036,10 +7036,10 @@ void wxGrid::HideCellEditControl()
 
         wxGridCellAttr *attr = GetCellAttr(row, col);
         wxGridCellEditor *editor = attr->GetEditor(this, row, col);
-        const bool editorHadFocus = editor->GetControl()->HasFocus();
+        const bool editorHadFocus = editor->GetWindow()->HasFocus();
 
-        if ( editor->GetControl()->GetParent() != m_gridWin )
-            editor->GetControl()->Reparent(m_gridWin);
+        if ( editor->GetWindow()->GetParent() != m_gridWin )
+            editor->GetWindow()->Reparent(m_gridWin);
 
         editor->Show( false );
         editor->DecRef();

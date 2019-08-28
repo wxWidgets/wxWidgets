@@ -258,6 +258,11 @@ public:
         // values
     bool SetPermissions(int permissions);
 
+    // Returns the native path for a file URL
+    static wxFileName URLToFileName(const wxString& url);
+
+    // Returns the file URL for a native path
+    static wxString FileNameToURL(const wxFileName& filename);
 
     // time functions
 #if wxUSE_DATETIME

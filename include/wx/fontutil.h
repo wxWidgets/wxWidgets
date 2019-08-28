@@ -120,25 +120,17 @@ public:
 #elif defined(__WXMSW__)
     wxNativeFontInfo(const LOGFONT& lf_)
         : lf(lf_),
-          pointSize(GetPointSizeFromLogFontHeight(lf.lfHeight))
+          pointSize(GetPointSizeAtPPI(lf.lfHeight))
     {
     }
 
-    // MSW-specific: get point size from LOGFONT height using the default DPI.
-    static float GetPointSizeFromLogFontHeight(int height);
+    // MSW-specific: get point size from LOGFONT height using specified DPI,
+    // or screen DPI when 0.
+    static float GetPointSizeAtPPI(int lfHeight, int ppi = 0);
 
     // MSW-specific: get the height value in pixels using LOGFONT convention
     // (i.e. negative) corresponding to the given size in points and DPI.
-    static int GetLogFontHeightAtPPI(float size, int ppi)
-    {
-        return -wxRound(size * ppi / 72.0);
-    }
-
-    // And the same thing for the size of this font.
-    int GetLogFontHeightAtPPI(int ppi) const
-    {
-        return GetLogFontHeightAtPPI(pointSize, ppi);
-    }
+    static int GetLogFontHeightAtPPI(float size, int ppi);
 
     LOGFONT      lf;
 

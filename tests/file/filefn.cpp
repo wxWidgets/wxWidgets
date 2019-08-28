@@ -246,7 +246,7 @@ void FileFunctionsTestCase::DoFindFile(const wxString& filePath)
     // Check if file can be found (method 2).
     wxFileSystem fs;
     wxString furl = fs.FindFirst(filePath, wxFILE);
-    wxFileName fname = wxFileSystem::URLToFileName(furl);
+    wxFileName fname = wxFileName::URLToFileName(furl);
     foundFile = fname.GetFullPath();
     CPPUNIT_ASSERT_MESSAGE( msg, foundFile == filePath );
 
@@ -271,10 +271,10 @@ void FileFunctionsTestCase::FindFileNext()
     // Check using method 2.
     wxFileSystem fs;
     wxString furl = fs.FindFirst(fileMask, wxFILE);
-    fn1 = wxFileSystem::URLToFileName(furl);
+    fn1 = wxFileName::URLToFileName(furl);
     foundFile1 = fn1.GetFullPath();
     furl = fs.FindNext();
-    fn2 = wxFileSystem::URLToFileName(furl);
+    fn2 = wxFileName::URLToFileName(furl);
     foundFile2 = fn2.GetFullPath();
     // Full names must be different.
     CPPUNIT_ASSERT( fn1.GetFullPath() != fn2.GetFullPath() );

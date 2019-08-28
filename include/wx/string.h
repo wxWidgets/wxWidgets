@@ -1709,7 +1709,11 @@ public:
       { return FromUTF8Unchecked(utf8.c_str(), utf8.length()); }
 #endif
     const wxScopedCharBuffer utf8_str() const
-      { return wxMBConvUTF8().cWC2MB(wc_str()); }
+    {
+        if (empty())
+            return wxScopedCharBuffer::CreateNonOwned("", 0);
+        return wxMBConvUTF8().cWC2MB(wc_str());
+    }
 #endif
 
     const wxScopedCharBuffer ToUTF8() const { return utf8_str(); }

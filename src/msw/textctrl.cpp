@@ -2594,6 +2594,7 @@ void wxTextCtrl::OnRightUp(wxMouseEvent& eventMouse)
     wxContextMenuEvent eventMenu(wxEVT_CONTEXT_MENU,
                                  GetId(),
                                  ClientToScreen(eventMouse.GetPosition()));
+    eventMenu.SetEventObject(this);
 
     if ( !ProcessWindowEvent(eventMenu) )
         eventMouse.Skip();
