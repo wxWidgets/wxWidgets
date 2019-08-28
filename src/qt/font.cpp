@@ -563,7 +563,7 @@ void wxNativeFontInfo::SetFamily(wxFontFamily family)
 {
     m_qtFont.setStyleHint(ConvertFontFamily(family));
     // reset the face name to force qt to choose a new font
-    m_qtFont.setFamily("");
+    m_qtFont.setFamily(m_qtFont.defaultFamily());
 }
 
 void wxNativeFontInfo::SetEncoding(wxFontEncoding WXUNUSED(encoding))
