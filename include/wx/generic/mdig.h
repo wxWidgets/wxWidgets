@@ -199,7 +199,9 @@ protected:
     void Init();
 
 private:
+#if wxUSE_MENUS
     void OnMenuHighlight(wxMenuEvent& event);
+#endif // wxUSE_MENUS
     void OnClose(wxCloseEvent& event);
 
     wxDECLARE_DYNAMIC_CLASS(wxGenericMDIChildFrame);
