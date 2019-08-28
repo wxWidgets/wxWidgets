@@ -50,6 +50,8 @@ public:
     virtual int GetLineLength(long lineNo) const wxOVERRIDE;
     virtual wxString GetLineText(long lineNo) const wxOVERRIDE;
     virtual int GetNumberOfLines() const wxOVERRIDE;
+    virtual unsigned GetPhysicalLineCount() const wxOVERRIDE;
+    virtual unsigned GetLogicalLineCount() const wxOVERRIDE;
 
     virtual bool IsModified() const wxOVERRIDE;
     virtual bool IsEditable() const wxOVERRIDE;
