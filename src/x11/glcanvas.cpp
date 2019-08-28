@@ -101,9 +101,9 @@ bool wxGLCanvas::Create(wxWindow *parent,
     return true;
 }
 
-Window wxGLCanvas::GetXWindow() const
+unsigned long wxGLCanvas::GetXWindow() const
 {
-    return (Window)
+    return (unsigned long)
 #ifdef __WXMOTIF__
         GetClientXWindow();
 #else

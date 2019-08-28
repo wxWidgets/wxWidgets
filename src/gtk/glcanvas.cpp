@@ -50,7 +50,7 @@ parent_set_hook(GSignalInvocationHint*, guint, const GValue* param_values, void*
     wxGLCanvas* win = (wxGLCanvas*)data;
     if (g_value_peek_pointer(&param_values[0]) == win->m_wxwindow)
     {
-        const XVisualInfo* xvi = win->GetXVisualInfo();
+        const XVisualInfo* xvi = static_cast<XVisualInfo*>(win->GetXVisualInfo());
         GdkVisual* visual = gtk_widget_get_visual(win->m_wxwindow);
         if (GDK_VISUAL_XVISUAL(visual)->visualid != xvi->visualid)
         {
@@ -239,7 +239,7 @@ bool wxGLCanvas::SetBackgroundStyle(wxBackgroundStyle /* style */)
     return false;
 }
 
-Window wxGLCanvas::GetXWindow() const
+unsigned long wxGLCanvas::GetXWindow() const
 {
     GdkWindow* window = GTKGetDrawingWindow();
     return window ? GDK_WINDOW_XID(window) : 0;
