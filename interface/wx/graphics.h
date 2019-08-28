@@ -659,8 +659,8 @@ public:
     /**
         Creates a native brush with a radial gradient.
 
-        The brush originates at (@a xo, @a yc) and ends on a circle around
-        (@a xc, @a yc) with the given @a radius.
+        The brush originates at (@a startX, @a startY) and ends on a circle around
+        (@a endX, @a endY) with the given @a radius.
 
         The gradient may be specified either by its start and end colours @a
         oColor and @a cColor or by a full set of gradient @a stops.
@@ -668,8 +668,8 @@ public:
         The version taking wxGraphicsGradientStops is new in wxWidgets 2.9.1.
     */
     virtual wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc,
+    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                              wxDouble endX, wxDouble endY,
                               wxDouble radius,
                               const wxColour& oColor,
                               const wxColour& cColor,
@@ -679,8 +679,8 @@ public:
         @overload
     */
     virtual wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc,
+    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                              wxDouble endX, wxDouble endY,
                               wxDouble radius,
                               const wxGraphicsGradientStops& stops,
                               const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) = 0;
@@ -1490,8 +1490,8 @@ public:
         Stops support is new since wxWidgets 2.9.1, previously only the start
         and end colours could be specified.
     */
-    virtual wxGraphicsBrush CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                                      wxDouble xc, wxDouble yc,
+    virtual wxGraphicsBrush CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                                                      wxDouble endX, wxDouble endY,
                                                       wxDouble radius,
                                                       const wxGraphicsGradientStops& stops,
                                                       const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) = 0;

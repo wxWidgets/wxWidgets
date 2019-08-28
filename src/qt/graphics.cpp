@@ -91,12 +91,12 @@ public:
         m_brush = QBrush(gradient);
     }
 
-    void CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                   wxDouble xc, wxDouble yc,
+    void CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                                   wxDouble endX, wxDouble endY,
                                    wxDouble radius,
                                    const wxGraphicsGradientStops& stops)
     {
-        QRadialGradient gradient(QPointF(xc, yc), radius, QPointF(xo, yo));
+        QRadialGradient gradient(QPointF(endX, endY), radius, QPointF(startX, startY));
         SetStops(gradient, stops);
         m_brush = QBrush(gradient);
     }
@@ -1141,8 +1141,8 @@ public:
         const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
 
     virtual wxGraphicsBrush
-        CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-        wxDouble xc, wxDouble yc,
+        CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+        wxDouble endX, wxDouble endY,
         wxDouble radius,
         const wxGraphicsGradientStops& stops,
         const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
@@ -1287,14 +1287,14 @@ wxGraphicsBrush wxQtGraphicsRenderer::CreateLinearGradientBrush(
 }
 
 wxGraphicsBrush wxQtGraphicsRenderer::CreateRadialGradientBrush(
-    wxDouble xo, wxDouble yo,
-    wxDouble xc, wxDouble yc, wxDouble r,
+    wxDouble startX, wxDouble startY,
+    wxDouble endX, wxDouble endY, wxDouble r,
     const wxGraphicsGradientStops& stops, 
     const wxGraphicsMatrix& WXUNUSED(matrix))
 {
     wxGraphicsBrush p;
     wxQtBrushData* d = new wxQtBrushData(this);
-    d->CreateRadialGradientBrush(xo, yo, xc, yc, r, stops);
+    d->CreateRadialGradientBrush(startX, startY, endX, endY, r, stops);
     p.SetRefData(d);
     return p;
 }

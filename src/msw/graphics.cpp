@@ -269,8 +269,8 @@ public:
                                    wxDouble x2, wxDouble y2,
                                    const wxGraphicsGradientStops& stops,
                                    const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
-    void CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                   wxDouble xc, wxDouble yc,
+    void CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                                   wxDouble endX, wxDouble endY,
                                    wxDouble radius,
                                    const wxGraphicsGradientStops& stops,
                                    const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
@@ -639,8 +639,8 @@ public :
                               const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
 
     virtual wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc,
+    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                              wxDouble endX, wxDouble endY,
                               wxDouble radius,
                               const wxGraphicsGradientStops& stops,
                               const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
@@ -776,18 +776,18 @@ wxGDIPlusPenBrushBaseData::CreateLinearGradientBrush(
 
 void
 wxGDIPlusPenBrushBaseData::CreateRadialGradientBrush(
-    wxDouble xo, wxDouble yo,
-    wxDouble xc, wxDouble yc,
+    wxDouble startX, wxDouble startY,
+    wxDouble endX, wxDouble endY,
     wxDouble radius,
     const wxGraphicsGradientStops& stops,
     const wxGraphicsMatrix& matrix)
 {
     m_brushPath = new GraphicsPath();
-    m_brushPath->AddEllipse( (REAL)(xc-radius), (REAL)(yc-radius),
+    m_brushPath->AddEllipse( (REAL)(endX-radius), (REAL)(endY-radius),
                              (REAL)(2*radius), (REAL)(2*radius));
 
     PathGradientBrush * const brush = new PathGradientBrush(m_brushPath);
-    brush->SetCenterPoint(PointF(xo, yo));
+    brush->SetCenterPoint(PointF(startX, startY));
     brush->SetCenterColor(wxColourToColor(stops.GetStartColour()));
 
     const Color col(wxColourToColor(stops.GetEndColour()));
@@ -2701,8 +2701,8 @@ wxGDIPlusRenderer::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
  }
 
 wxGraphicsBrush
-wxGDIPlusRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                             wxDouble xc, wxDouble yc,
+wxGDIPlusRenderer::CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                                             wxDouble endX, wxDouble endY,
                                              wxDouble radius,
                                              const wxGraphicsGradientStops& stops,
                                              const wxGraphicsMatrix& matrix)
@@ -2710,7 +2710,7 @@ wxGDIPlusRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
     ENSURE_LOADED_OR_RETURN(wxNullGraphicsBrush);
     wxGraphicsBrush p;
     wxGDIPlusBrushData* d = new wxGDIPlusBrushData( this );
-    d->CreateRadialGradientBrush(xo,yo,xc,yc,radius,stops,matrix);
+    d->CreateRadialGradientBrush(startX,startY,endX,endY,radius,stops,matrix);
     p.SetRefData(d);
     return p;
 }

@@ -637,14 +637,14 @@ public:
     // on a circle around (xc,yc) with the given radius; the colours may be
     // specified by just the two extremes or the full array of gradient stops
     wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc, wxDouble radius,
+    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                              wxDouble endX, wxDouble endY, wxDouble radius,
                               const wxColour& oColor, const wxColour& cColor,
                               const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) const;
 
     wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc, wxDouble radius,
+    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                              wxDouble endX, wxDouble endY, wxDouble radius,
                               const wxGraphicsGradientStops& stops,
                               const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) const;
 
@@ -1026,8 +1026,8 @@ public:
                               const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) = 0;
 
     virtual wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc,
+    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                              wxDouble endX, wxDouble endY,
                               wxDouble radius,
                               const wxGraphicsGradientStops& stops,
                               const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) = 0;

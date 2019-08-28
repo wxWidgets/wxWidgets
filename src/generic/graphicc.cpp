@@ -264,8 +264,8 @@ public:
                                      wxDouble x2, wxDouble y2,
                                      const wxGraphicsGradientStops& stops,
                                      const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
-    void CreateRadialGradientPattern(wxDouble xo, wxDouble yo,
-                                     wxDouble xc, wxDouble yc, wxDouble radius,
+    void CreateRadialGradientPattern(wxDouble startX, wxDouble startY,
+                                     wxDouble endX, wxDouble endY, wxDouble radius,
                                      const wxGraphicsGradientStops& stops,
                                      const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
 
@@ -765,13 +765,13 @@ wxCairoPenBrushBaseData::CreateLinearGradientPattern(wxDouble x1, wxDouble y1,
 }
 
 void
-wxCairoPenBrushBaseData::CreateRadialGradientPattern(wxDouble xo, wxDouble yo,
-                                                     wxDouble xc, wxDouble yc,
+wxCairoPenBrushBaseData::CreateRadialGradientPattern(wxDouble startX, wxDouble startY,
+                                                     wxDouble endX, wxDouble endY,
                                                      wxDouble radius,
                                                      const wxGraphicsGradientStops& stops,
                                                      const wxGraphicsMatrix& matrix)
 {
-    m_pattern = cairo_pattern_create_radial(xo,yo,0.0,xc,yc,radius);
+    m_pattern = cairo_pattern_create_radial(startX,startY,0.0,endX,endY,radius);
 
     if (! matrix.IsNull())
     {
@@ -2997,8 +2997,8 @@ public :
                               const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
 
     virtual wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc,
+    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                              wxDouble endX, wxDouble endY,
                               wxDouble radius,
                               const wxGraphicsGradientStops& stops,
                               const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
@@ -3201,15 +3201,15 @@ wxCairoRenderer::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
 }
 
 wxGraphicsBrush
-wxCairoRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                           wxDouble xc, wxDouble yc, wxDouble r,
+wxCairoRenderer::CreateRadialGradientBrush(wxDouble startX, wxDouble startX,
+                                           wxDouble endX, wxDouble endY, wxDouble r,
                                            const wxGraphicsGradientStops& stops,
                                            const wxGraphicsMatrix& matrix)
 {
     wxGraphicsBrush p;
     ENSURE_LOADED_OR_RETURN(p);
     wxCairoBrushData* d = new wxCairoBrushData( this );
-    d->CreateRadialGradientPattern(xo, yo, xc, yc, r, stops, matrix);
+    d->CreateRadialGradientPattern(startX, startY, endX, endY, r, stops, matrix);
     p.SetRefData(d);
     return p;
 }
