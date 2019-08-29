@@ -359,6 +359,10 @@ wxWindowBase::wxWindowBase()
     m_isBeingDeleted = false;
 
     m_freezeCount = 0;
+
+    m_bAcceptsFocus = true;
+    m_bAcceptsFocusRecursively = true;
+    m_bAcceptsFocusFromKeyboard = true;
 }
 
 // common part of window creation process
