@@ -715,19 +715,31 @@ public:
         // overridden in the derived classes to simply return false if the
         // control can't have focus, while the latter are meant to be used by
         // this class clients and take into account the current window state
-    virtual bool AcceptsFocus() const { return true; }
+    virtual bool AcceptsFocus() const { return m_bAcceptsFocus; }
+
+    void SetAcceptsFocus(const bool& bAcceptsFocus) { m_bAcceptsFocus = bAcceptsFocus; }
+    bool GetAcceptsFocus() const { return m_bAcceptsFocus; }
 
         // can this window or one of its children accept focus?
         //
         // usually it's the same as AcceptsFocus() but is overridden for
         // container windows
-    virtual bool AcceptsFocusRecursively() const { return AcceptsFocus(); }
+    virtual bool AcceptsFocusRecursively() const { return m_bAcceptsFocusRecursively; }
+
+    void SetAcceptsFocusRecursively(const bool& bAcceptsFocusRecursively)
+        { m_bAcceptsFocusRecursively = bAcceptsFocusRecursively; }
+
+    bool GetAcceptsFocusRecursively() const { return m_bAcceptsFocusRecursively; }
 
         // can this window be given focus by keyboard navigation? if not, the
         // only way to give it focus (provided it accepts it at all) is to
         // click it
-    virtual bool AcceptsFocusFromKeyboard() const { return AcceptsFocus(); }
+    virtual bool AcceptsFocusFromKeyboard() const { return m_bAcceptsFocusFromKeyboard; }
 
+    void SetAcceptsFocusFromKeyboard(const bool& bAcceptsFocusFromKeyboard)
+        { m_bAcceptsFocusFromKeyboard = bAcceptsFocusFromKeyboard; }
+
+    bool GetAcceptsFocusFromKeyboard() const { return m_bAcceptsFocusFromKeyboard; }
 
         // Can this window be focused right now, in its current state? This
         // shouldn't be called at all if AcceptsFocus() returns false.
@@ -1919,6 +1931,9 @@ private:
     // (i.e. not being updated) if it is positive
     unsigned int m_freezeCount;
 
+    bool m_bAcceptsFocus;
+    bool m_bAcceptsFocusRecursively;
+    bool m_bAcceptsFocusFromKeyboard;
 
     wxDECLARE_ABSTRACT_CLASS(wxWindowBase);
     wxDECLARE_NO_COPY_CLASS(wxWindowBase);
