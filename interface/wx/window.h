@@ -488,6 +488,17 @@ public:
     virtual bool AcceptsFocusRecursively() const;
 
     /**
+        Disable giving focus to this window using the keyboard navigation keys.
+
+        Pressing @c TAB key will skip this window if this function was called
+        on it, but it will still be possible to focus it by clicking on it with
+        a pointing device.
+
+        @since 3.1.4
+     */
+    void DisableFocusFromKeyboard();
+
+    /**
      Can this window itself have focus?
     */
     bool IsFocusable() const;

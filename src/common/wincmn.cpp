@@ -320,6 +320,8 @@ wxWindowBase::wxWindowBase()
     m_containingSizer = NULL;
     m_autoLayout = false;
 
+    m_disableFocusFromKbd = true;
+
 #if wxUSE_DRAG_AND_DROP
     m_dropTarget = NULL;
 #endif // wxUSE_DRAG_AND_DROP

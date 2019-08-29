@@ -728,7 +728,11 @@ public:
         // can this window be given focus by keyboard navigation? if not, the
         // only way to give it focus (provided it accepts it at all) is to
         // click it
-    virtual bool AcceptsFocusFromKeyboard() const { return AcceptsFocus(); }
+    virtual bool AcceptsFocusFromKeyboard() const
+        { return !m_disableFocusFromKbd && AcceptsFocus(); }
+
+        // Disable any input focus from the keyboard
+    void DisableFocusFromKeyboard() { m_disableFocusFromKbd = true; }
 
 
         // Can this window be focused right now, in its current state? This
@@ -1733,6 +1737,9 @@ protected:
     bool                 m_inheritFgCol:1;
     bool                 m_inheritFont:1;
 
+    // flag disabling accepting focus from keyboard
+    bool                 m_disableFocusFromKbd:1;
+
     // window attributes
     long                 m_windowStyle,
                          m_exStyle;
@@ -1928,7 +1935,6 @@ private:
     // number of Freeze() calls minus the number of Thaw() calls: we're frozen
     // (i.e. not being updated) if it is positive
     unsigned int m_freezeCount;
-
 
     wxDECLARE_ABSTRACT_CLASS(wxWindowBase);
     wxDECLARE_NO_COPY_CLASS(wxWindowBase);
