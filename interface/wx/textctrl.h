@@ -1374,7 +1374,7 @@ public:
     /**
         Return number of physical lines in the text control buffer.
 
-        This number corresponds to the number hard carriage-return in
+        This number corresponds to the number of hard carriage-return in
         the text buffer.
 
         @since 3.1.3
@@ -1385,7 +1385,7 @@ public:
         Return number of logical lines in the text buffer.
 
         This number corresponds to the number of soft carriage-return in
-        the text buffer.
+        the text buffer (number of wrapped lines).
 
         @since 3.1.3
     */
