@@ -1500,6 +1500,17 @@ int wxTextCtrl::GetNumberOfLines() const
     return (int)::SendMessage(GetHwnd(), EM_GETLINECOUNT, 0, 0);
 }
 
+unsigned wxTextCtrl::GetPhysicalLineCount() const
+{
+    const wxString &value = DoGetValue();
+    return std::count(value.begin(), value.end(), '\n') + 1;
+}
+
+unsigned wxTextCtrl::GetLogicalLineCount() const
+{
+    return (int)::SendMessage(GetHwnd(), EM_GETLINECOUNT, 0, 0);
+}
+
 long wxTextCtrl::XYToPosition(long x, long y) const
 {
     // This gets the char index for the _beginning_ of this line
