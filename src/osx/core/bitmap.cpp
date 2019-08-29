@@ -1621,10 +1621,9 @@ bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
             unsigned char *destdata = destdatabase ;
             for ( int x = 0 ; x < m_width ; ++x, ++p )
             {
-                if ( ( p.Red() + p.Green() + p.Blue() ) > 0x10 )
-                    *destdata++ = 0xFF ;
-                else
-                    *destdata++ = 0x00 ;
+                int v = p.Red() + p.Green() + p.Blue();
+                wxASSERT_MSG( v == 0 || v == 3*0xFF, "Non-monochrome bitmap supplied" );
+                *destdata++ = v < (3 * 0xFF) / 2 ? 0xFF : 0;
             }
             p = rowStart;
             p.OffsetY(data, 1);
@@ -1698,7 +1697,7 @@ wxBitmap wxMask::GetBitmap() const
         {
             const unsigned char byte = *src;
             wxASSERT( byte == 0 || byte == 0xFF );
-            p.Red() = p.Green() = p.Blue() = byte;
+            p.Red() = p.Green() = p.Blue() = ~byte;
         }
         p = rowStart;
         p.OffsetY(data, 1);
