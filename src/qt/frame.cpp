@@ -53,7 +53,8 @@ wxFrame::~wxFrame()
 bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     const wxPoint& pos, const wxSize& size, long style, const wxString& name )
 {
-    m_qtWindow = new wxQtMainWindow( parent, this );
+    wxWindow *effectiveParent = style & wxFRAME_NO_TASKBAR ? parent : NULL;
+    m_qtWindow = new wxQtMainWindow(effectiveParent, this );
 
     // TODO: Could we use a wxPanel as the central widget? If so then we could
     // remove wxWindow::QtReparent.
@@ -135,8 +136,7 @@ void wxFrame::SetWindowStyleFlag( long style )
     wxWindow::SetWindowStyleFlag( style );
 
     QMainWindow *qtFrame = GetQMainWindow();
-    Qt::WindowFlags qtFlags = qtFrame->windowFlags();
-    qtFlags |= Qt::CustomizeWindowHint;
+    Qt::WindowFlags qtFlags = Qt::CustomizeWindowHint | (qtFrame->windowFlags() & Qt::WindowType_Mask);
 
     if ( HasFlag( wxFRAME_TOOL_WINDOW ) )
     {
