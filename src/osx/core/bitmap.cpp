@@ -1697,10 +1697,8 @@ wxBitmap wxMask::GetBitmap() const
         for (int x = 0; x < m_width; ++x, ++p, ++src)
         {
             const unsigned char byte = *src;
-            p.Alpha() = 0xff;
-            p.Red() = byte;
-            p.Green() = byte;
-            p.Blue() = byte;
+            wxASSERT( byte == 0 || byte == 0xFF );
+            p.Red() = p.Green() = p.Blue() = byte;
         }
         p = rowStart;
         p.OffsetY(data, 1);
