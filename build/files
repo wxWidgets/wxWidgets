@@ -759,6 +759,7 @@ GUI_CMN_SRC =
     src/common/dcbufcmn.cpp
     src/common/dcgraph.cpp
     src/common/dcsvg.cpp
+    src/common/desktopenvcmn.cpp
     src/common/dirctrlcmn.cpp
     src/common/dlgcmn.cpp
     src/common/dndcmn.cpp
@@ -987,6 +988,7 @@ GUI_CMN_HDR =
     wx/dcps.h
     wx/dcscreen.h
     wx/dcsvg.h
+    wx/desktopenv.h
     wx/dialog.h
     wx/dialup.h
     wx/dirctrl.h
@@ -1373,6 +1375,7 @@ GTK_SRC =
     src/gtk/combobox.cpp
     src/gtk/control.cpp
     src/gtk/dataview.cpp
+    src/gtk/desktopenv.cpp
     src/gtk/dialog.cpp
     src/gtk/dirdlg.cpp
     src/gtk/filedlg.cpp
@@ -1442,6 +1445,7 @@ GTK_HDR =
     wx/gtk/combobox.h
     wx/gtk/control.h
     wx/gtk/dataview.h
+    wx/gtk/desktopenv.h
     wx/gtk/dialog.h
     wx/gtk/dirdlg.h
     wx/gtk/dvrenderer.h
@@ -1995,6 +1999,7 @@ MSW_SRC =
     src/msw/datecontrols.cpp
     src/msw/datectrl.cpp
     src/msw/datetimectrl.cpp
+    src/msw/desktopenv.cpp
     src/msw/dialog.cpp
     src/msw/dirdlg.cpp
     src/msw/dragimag.cpp
@@ -2075,6 +2080,7 @@ MSW_HDR =
     wx/msw/dcmemory.h
     wx/msw/dcprint.h
     wx/msw/dcscreen.h
+    wx/msw/desktopenv.h
     wx/msw/dialog.h
     wx/msw/dib.h
     wx/msw/dirdlg.h
@@ -2387,6 +2393,7 @@ OSX_SHARED_HDR =
     wx/osx/dcmemory.h
     wx/osx/dcprint.h
     wx/osx/dcscreen.h
+    wx/osx/desktopenv.h
     wx/osx/dialog.h
     wx/osx/dirdlg.h
     wx/osx/dnd.h
@@ -2469,6 +2476,7 @@ OSX_COCOA_SRC =
     src/osx/cocoa/combobox.mm
     src/osx/cocoa/dataview.mm
     src/osx/cocoa/datetimectrl.mm
+    src/osx/cocoa/desktopenv.mm
     src/osx/cocoa/dialog.mm
     src/osx/cocoa/dirdlg.mm
     src/osx/cocoa/dnd.mm

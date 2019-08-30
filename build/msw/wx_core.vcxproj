@@ -481,6 +481,7 @@
     <ClCompile Include="..\..\src\common\dcbufcmn.cpp" />
     <ClCompile Include="..\..\src\common\dcgraph.cpp" />
     <ClCompile Include="..\..\src\common\dcsvg.cpp" />
+    <ClCompile Include="..\..\src\common\desktopenvcmn.cpp" />
     <ClCompile Include="..\..\src\common\dirctrlcmn.cpp" />
     <ClCompile Include="..\..\src\common\dlgcmn.cpp" />
     <ClCompile Include="..\..\src\common\dndcmn.cpp" />
@@ -602,6 +603,7 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)msw_%(Filename).obj</ObjectFileName>
     </ClCompile>
+    <ClCompile Include="..\..\src\msw\desktopenv.cpp" />
     <ClCompile Include="..\..\src\msw\graphicsd2d.cpp" />
     <ClCompile Include="..\..\src\msw\ole\access.cpp" />
     <ClCompile Include="..\..\src\msw\ole\activex.cpp" />
@@ -1086,8 +1088,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </CustomBuild>
+    <ClInclude Include="..\..\include\wx\desktopenv.h" />
     <ClInclude Include="..\..\include\wx\msw\accel.h" />
     <ClInclude Include="..\..\include\wx\msw\appprogress.h" />
+    <ClInclude Include="..\..\include\wx\msw\desktopenv.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\access.h" />
     <ClInclude Include="..\..\include\wx\msw\ole\activex.h" />
     <ClInclude Include="..\..\include\wx\msw\anybutton.h" />
