@@ -9,6 +9,7 @@
 /////////////////////////////////////////////////////////////////////////////
 #import <Foundation/NSArray.h>
 #import <Foundation/NSURL.h>
+#import <Foundation/NSFileManager.h>
 #import <AppKit/NSWorkspace.h>
 
 #include "wx/filefn.h"

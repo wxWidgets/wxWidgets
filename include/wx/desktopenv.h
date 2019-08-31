@@ -27,7 +27,7 @@ protected:
     #include "wx/msw/desktopenv.h"
 #elif defined(__WXGTK20__)
     #include "wx/gtk/desktopenv.h"
-#elif defined(__WXCOCOA__)
+#elif defined(__WXOSX__)
     #include "wx/osx/desktopenv.h"
 #endif
 

@@ -23,6 +23,7 @@
 #endif
 
 #include "wx/filefn.h"
+#include "wx/log.h"
 #include "wx/desktopenv.h"
 
 bool wxDesktopEnvBase::MoveFileToRecycleBin(const wxString &fileName)
@@ -30,7 +31,7 @@ bool wxDesktopEnvBase::MoveFileToRecycleBin(const wxString &fileName)
     bool result = true;
     if( !wxFileExists( fileName ) && !wxDirExists( fileName ) )
     {
-        wxLogSysError( _( "Failed to move the file '%s' to Recycle Bin" ), fileName.c_str() );
+        wxLogSysError( "Failed to move the file '%s' to Recycle Bin", fileName.c_str() );
         result = false;
     }
     return result;
