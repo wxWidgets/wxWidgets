@@ -15,7 +15,7 @@
 #include "wx/app.h"
 #include "wx/desktopenv.h"
 
-//#include "testableframe.h"
+#include <fstream>
 #include "wx/wfstream.h"
 #include "wx/uiaction.h"
 
@@ -58,6 +58,7 @@ void DesktopEnvTestCase::MoveToTrash()
 {
     char buf[DATABUFFER_SIZE];
     std::ofstream out( "ffileinstream.test", std::ofstream::out );
+    wxString currentDir = wxGetCwd() + "/";
 
     // Init the data buffer.
     for( size_t i = 0; i < DATABUFFER_SIZE; i++ )
@@ -67,11 +68,7 @@ void DesktopEnvTestCase::MoveToTrash()
         out << buf << std::endl;
     }
     out.close();
-#if defined( __WINDOWS__ )
-    CPPUNIT_ASSERT( m_env->MoveFileToRecycleBin( "C:\\wxWidgets\\tests\\ffileinstream.test" ) );
-#else
-    CPPUNIT_ASSERT( m_env->MoveFileToRecycleBin( "ffileinstream.test" ) );
-#endif
+    CPPUNIT_ASSERT( m_env->MoveFileToRecycleBin( currentDir + "ffileinstream.test" ) );
     wxMkdir( "TrashTest" );
     std::ofstream out1( "TrashTest/ffileinstream.test", std::ofstream::out );
 
@@ -83,11 +80,7 @@ void DesktopEnvTestCase::MoveToTrash()
         out1 << buf << std::endl;
     }
     out1.close();
-#if defined( __WINDOWS__ )
-    CPPUNIT_ASSERT( m_env->MoveFileToRecycleBin( "C:\\wxWidgets\\tests\\TrashTest" ) );
-#else
-    CPPUNIT_ASSERT( m_env->MoveFileToRecycleBin( "TrashTest" ) );
-#endif
+    CPPUNIT_ASSERT( m_env->MoveFileToRecycleBin( currentDir + "TrashTest" ) );
 }
 
 #endif
