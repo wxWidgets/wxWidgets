@@ -2967,6 +2967,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/gtk/bmpcbox.h \
 	wx/gtk/dataview.h \
 	wx/gtk/dvrenderer.h \
+	wx/gtk/desktopenv.h \
 	wx/generic/fontdlgg.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR =  \
@@ -3029,7 +3030,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR =  \
 	wx/gtk/calctrl.h \
 	wx/gtk/bmpcbox.h \
 	wx/gtk/dataview.h \
-	wx/gtk/dvrenderer.h
+	wx/gtk/dvrenderer.h \
+	wx/gtk/desktopenv.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_GUI_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_GUI_HDR =  \
 	wx/generic/fdrepdlg.h \
@@ -3091,7 +3093,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_GUI_HDR =  \
 	wx/gtk/calctrl.h \
 	wx/gtk/bmpcbox.h \
 	wx/gtk/dataview.h \
-	wx/gtk/dvrenderer.h
+	wx/gtk/dvrenderer.h \
+	wx/gtk/desktopenv.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@GUI_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_GUI_HDR)
 COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/generic/clrpickerg.h \
@@ -3271,6 +3274,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/datectrl.h \
 	wx/msw/calctrl.h \
 	wx/generic/activityindicator.h \
+	wx/msw/desktopenv.h \
 	wx/msw/checklst.h \
 	wx/msw/fdrepdlg.h \
 	wx/msw/fontdlg.h \
@@ -3395,6 +3399,7 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/appprogress.h \
 	wx/generic/icon.h \
 	wx/generic/imaglist.h \
+	wx/osx/desktopenv.h \
 	wx/osx/cocoa/chkconf.h \
 	wx/osx/cocoa/evtloop.h \
 	wx/osx/cocoa/private.h \
@@ -3504,6 +3509,7 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/osx/appprogress.h \
 	wx/generic/icon.h \
 	wx/generic/imaglist.h \
+	wx/osx/desktopenv.h \
 	wx/osx/iphone/chkconf.h \
 	wx/osx/iphone/evtloop.h \
 	wx/osx/iphone/private.h \
@@ -3956,6 +3962,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/generic/dvrenderer.h \
 	wx/calctrl.h \
 	wx/propdlg.h \
+	wx/desktopenv.h \
 	$(LOWLEVEL_HDR) \
 	$(GUI_CORE_HEADERS) \
 	wx/mediactrl.h \
@@ -4607,7 +4614,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_editlbox.o \
 	monodll_laywin.o \
 	monodll_calctrlg.o \
-	monodll_rowheightcache.o
+	monodll_rowheightcache.o \
+	monodll_desktopenvcmn.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS_1) \
@@ -4868,7 +4876,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_editlbox.o \
 	monodll_laywin.o \
 	monodll_calctrlg.o \
-	monodll_rowheightcache.o
+	monodll_rowheightcache.o \
+	monodll_desktopenvcmn.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_fontmgrcmn.o \
@@ -5309,6 +5318,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_gtk_dataview.o \
 	monodll_gtk_bmpcbox.o \
 	monodll_animate.o \
+	monodll_gtk_desktopenv.o \
 	monodll_fontdlgg.o \
 	monodll_generic_activityindicator.o \
 	monodll_gtk_eggtrayicon.o
@@ -5374,7 +5384,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS =  \
 	monodll_gtk_taskbar.o \
 	monodll_gtk_dataview.o \
 	monodll_gtk_bmpcbox.o \
-	monodll_animate.o
+	monodll_animate.o \
+	monodll_gtk_desktopenv.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS =  \
 	monodll_generic_accel.o \
@@ -5437,7 +5448,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS =  \
 	monodll_gtk_taskbar.o \
 	monodll_gtk_dataview.o \
 	monodll_gtk_bmpcbox.o \
-	monodll_animate.o
+	monodll_animate.o \
+	monodll_gtk_desktopenv.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_motif_accel.o \
@@ -5580,6 +5592,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_timectrl.o \
 	monodll_datecontrols.o \
 	monodll_generic_activityindicator.o \
+	monodll_msw_desktopenv.o \
 	monodll_msw_checklst.o \
 	monodll_msw_fdrepdlg.o \
 	monodll_msw_fontdlg.o
@@ -5640,7 +5653,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_taskbarcmn.o \
 	monodll_cocoa_activityindicator.o \
 	monodll_cocoa_statbmp.o \
-	monodll_core_display.o
+	monodll_core_display.o \
+	monodll_cocoa_desktopenv.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS =  \
 	$(__OSX_COMMON_SRC_OBJECTS) \
@@ -6593,7 +6607,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_editlbox.o \
 	monolib_laywin.o \
 	monolib_calctrlg.o \
-	monolib_rowheightcache.o
+	monolib_rowheightcache.o \
+	monolib_desktopenvcmn.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_3) \
@@ -6854,7 +6869,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_editlbox.o \
 	monolib_laywin.o \
 	monolib_calctrlg.o \
-	monolib_rowheightcache.o
+	monolib_rowheightcache.o \
+	monolib_desktopenvcmn.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_fontmgrcmn.o \
@@ -7295,6 +7311,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_dataview.o \
 	monolib_gtk_bmpcbox.o \
 	monolib_animate.o \
+	monolib_gtk_desktopenv.o \
 	monolib_fontdlgg.o \
 	monolib_generic_activityindicator.o \
 	monolib_gtk_eggtrayicon.o
@@ -7360,7 +7377,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_taskbar.o \
 	monolib_gtk_dataview.o \
 	monolib_gtk_bmpcbox.o \
-	monolib_animate.o
+	monolib_animate.o \
+	monolib_gtk_desktopenv.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_accel.o \
@@ -7423,7 +7441,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_1 =  \
 	monolib_gtk_taskbar.o \
 	monolib_gtk_dataview.o \
 	monolib_gtk_bmpcbox.o \
-	monolib_animate.o
+	monolib_animate.o \
+	monolib_gtk_desktopenv.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_motif_accel.o \
@@ -7566,6 +7585,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_timectrl.o \
 	monolib_datecontrols.o \
 	monolib_generic_activityindicator.o \
+	monolib_msw_desktopenv.o \
 	monolib_msw_checklst.o \
 	monolib_msw_fdrepdlg.o \
 	monolib_msw_fontdlg.o
@@ -7626,7 +7646,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_taskbarcmn.o \
 	monolib_cocoa_activityindicator.o \
 	monolib_cocoa_statbmp.o \
-	monolib_core_display.o
+	monolib_core_display.o \
+	monolib_cocoa_desktopenv.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_1 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_0) \
@@ -8726,7 +8747,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_editlbox.o \
 	coredll_laywin.o \
 	coredll_calctrlg.o \
-	coredll_rowheightcache.o
+	coredll_rowheightcache.o \
+	coredll_desktopenvcmn.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_5) \
@@ -8987,7 +9009,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_editlbox.o \
 	coredll_laywin.o \
 	coredll_calctrlg.o \
-	coredll_rowheightcache.o
+	coredll_rowheightcache.o \
+	coredll_desktopenvcmn.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_fontmgrcmn.o \
@@ -9428,6 +9451,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_dataview.o \
 	coredll_gtk_bmpcbox.o \
 	coredll_animate.o \
+	coredll_gtk_desktopenv.o \
 	coredll_fontdlgg.o \
 	coredll_generic_activityindicator.o \
 	coredll_gtk_eggtrayicon.o
@@ -9493,7 +9517,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_taskbar.o \
 	coredll_gtk_dataview.o \
 	coredll_gtk_bmpcbox.o \
-	coredll_animate.o
+	coredll_animate.o \
+	coredll_gtk_desktopenv.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_accel.o \
@@ -9556,7 +9581,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_2 =  \
 	coredll_gtk_taskbar.o \
 	coredll_gtk_dataview.o \
 	coredll_gtk_bmpcbox.o \
-	coredll_animate.o
+	coredll_animate.o \
+	coredll_gtk_desktopenv.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_motif_accel.o \
@@ -9699,6 +9725,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_timectrl.o \
 	coredll_datecontrols.o \
 	coredll_generic_activityindicator.o \
+	coredll_msw_desktopenv.o \
 	coredll_msw_checklst.o \
 	coredll_msw_fdrepdlg.o \
 	coredll_msw_fontdlg.o
@@ -9759,7 +9786,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_taskbarcmn.o \
 	coredll_cocoa_activityindicator.o \
 	coredll_cocoa_statbmp.o \
-	coredll_core_display.o
+	coredll_core_display.o \
+	coredll_cocoa_desktopenv.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_2 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_8) \
@@ -10448,7 +10476,8 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_editlbox.o \
 	corelib_laywin.o \
 	corelib_calctrlg.o \
-	corelib_rowheightcache.o
+	corelib_rowheightcache.o \
+	corelib_desktopenvcmn.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_7) \
@@ -10709,7 +10738,8 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_editlbox.o \
 	corelib_laywin.o \
 	corelib_calctrlg.o \
-	corelib_rowheightcache.o
+	corelib_rowheightcache.o \
+	corelib_desktopenvcmn.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3)
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_fontmgrcmn.o \
@@ -11150,6 +11180,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_dataview.o \
 	corelib_gtk_bmpcbox.o \
 	corelib_animate.o \
+	corelib_gtk_desktopenv.o \
 	corelib_fontdlgg.o \
 	corelib_generic_activityindicator.o \
 	corelib_gtk_eggtrayicon.o
@@ -11215,7 +11246,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_taskbar.o \
 	corelib_gtk_dataview.o \
 	corelib_gtk_bmpcbox.o \
-	corelib_animate.o
+	corelib_animate.o \
+	corelib_gtk_desktopenv.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_3@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_3___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_accel.o \
@@ -11278,7 +11310,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_3 =  \
 	corelib_gtk_taskbar.o \
 	corelib_gtk_dataview.o \
 	corelib_gtk_bmpcbox.o \
-	corelib_animate.o
+	corelib_animate.o \
+	corelib_gtk_desktopenv.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_4@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_4___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_motif_accel.o \
@@ -11421,6 +11454,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_timectrl.o \
 	corelib_datecontrols.o \
 	corelib_generic_activityindicator.o \
+	corelib_msw_desktopenv.o \
 	corelib_msw_checklst.o \
 	corelib_msw_fdrepdlg.o \
 	corelib_msw_fontdlg.o
@@ -11481,7 +11515,8 @@ COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_taskbarcmn.o \
 	corelib_cocoa_activityindicator.o \
 	corelib_cocoa_statbmp.o \
-	corelib_core_display.o
+	corelib_core_display.o \
+	corelib_cocoa_desktopenv.o
 @COND_TOOLKIT_OSX_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OSX_COCOA___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_OSX_IPHONE___GUI_SRC_OBJECTS_3 =  \
 	$(__OSX_COMMON_SRC_OBJECTS_9) \
@@ -16414,6 +16449,9 @@ monodll_timectrl.o: $(srcdir)/src/msw/timectrl.cpp $(MONODLL_ODEP)
 monodll_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/datecontrols.cpp
 
+monodll_msw_desktopenv.o: $(srcdir)/src/msw/desktopenv.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/desktopenv.cpp
+
 monodll_msw_checklst.o: $(srcdir)/src/msw/checklst.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
 
@@ -16575,6 +16613,9 @@ monodll_cocoa_statbmp.o: $(srcdir)/src/osx/cocoa/statbmp.mm $(MONODLL_ODEP)
 
 monodll_core_display.o: $(srcdir)/src/osx/core/display.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
+
+monodll_cocoa_desktopenv.o: $(srcdir)/src/osx/cocoa/desktopenv.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/desktopenv.mm
 
 monodll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
@@ -19696,6 +19737,15 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@monodll_gtk_desktopenv.o: $(srcdir)/src/gtk/desktopenv.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/desktopenv.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monodll_gtk_desktopenv.o: $(srcdir)/src/gtk/desktopenv.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/desktopenv.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_gtk_desktopenv.o: $(srcdir)/src/gtk/desktopenv.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/desktopenv.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monodll_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
@@ -20770,6 +20820,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_rowheightcache.o: $(srcdir)/src/generic/rowheightcache.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/rowheightcache.cpp
 
+@COND_USE_GUI_1@monodll_desktopenvcmn.o: $(srcdir)/src/common/desktopenvcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/desktopenvcmn.cpp
+
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monodll_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONODLL_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
 
@@ -21682,6 +21735,9 @@ monolib_timectrl.o: $(srcdir)/src/msw/timectrl.cpp $(MONOLIB_ODEP)
 monolib_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/datecontrols.cpp
 
+monolib_msw_desktopenv.o: $(srcdir)/src/msw/desktopenv.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/desktopenv.cpp
+
 monolib_msw_checklst.o: $(srcdir)/src/msw/checklst.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
 
@@ -21843,6 +21899,9 @@ monolib_cocoa_statbmp.o: $(srcdir)/src/osx/cocoa/statbmp.mm $(MONOLIB_ODEP)
 
 monolib_core_display.o: $(srcdir)/src/osx/core/display.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
+
+monolib_cocoa_desktopenv.o: $(srcdir)/src/osx/cocoa/desktopenv.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/desktopenv.mm
 
 monolib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
@@ -24964,6 +25023,15 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@monolib_gtk_desktopenv.o: $(srcdir)/src/gtk/desktopenv.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/desktopenv.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@monolib_gtk_desktopenv.o: $(srcdir)/src/gtk/desktopenv.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/desktopenv.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_gtk_desktopenv.o: $(srcdir)/src/gtk/desktopenv.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/desktopenv.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@monolib_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
@@ -26037,6 +26105,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_rowheightcache.o: $(srcdir)/src/generic/rowheightcache.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/rowheightcache.cpp
+
+@COND_USE_GUI_1@monolib_desktopenvcmn.o: $(srcdir)/src/common/desktopenvcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/desktopenvcmn.cpp
 
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@monolib_osx_cocoa_mediactrl.o: $(srcdir)/src/osx/cocoa/mediactrl.mm $(MONOLIB_ODEP)
 @COND_TOOLKIT_OSX_COCOA_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/mediactrl.mm
@@ -27610,6 +27681,9 @@ coredll_timectrl.o: $(srcdir)/src/msw/timectrl.cpp $(COREDLL_ODEP)
 coredll_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/datecontrols.cpp
 
+coredll_msw_desktopenv.o: $(srcdir)/src/msw/desktopenv.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/desktopenv.cpp
+
 coredll_msw_checklst.o: $(srcdir)/src/msw/checklst.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
 
@@ -27771,6 +27845,9 @@ coredll_cocoa_statbmp.o: $(srcdir)/src/osx/cocoa/statbmp.mm $(COREDLL_ODEP)
 
 coredll_core_display.o: $(srcdir)/src/osx/core/display.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
+
+coredll_cocoa_desktopenv.o: $(srcdir)/src/osx/cocoa/desktopenv.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/desktopenv.mm
 
 coredll_regiong.o: $(srcdir)/src/generic/regiong.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
@@ -30319,6 +30396,15 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_animate.o: $(srcdir)/src/gtk/animate.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@coredll_gtk_desktopenv.o: $(srcdir)/src/gtk/desktopenv.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/desktopenv.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@coredll_gtk_desktopenv.o: $(srcdir)/src/gtk/desktopenv.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/desktopenv.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_gtk_desktopenv.o: $(srcdir)/src/gtk/desktopenv.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/desktopenv.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@coredll_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
@@ -31393,6 +31479,9 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_rowheightcache.o: $(srcdir)/src/generic/rowheightcache.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/rowheightcache.cpp
 
+@COND_USE_GUI_1@coredll_desktopenvcmn.o: $(srcdir)/src/common/desktopenvcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/desktopenvcmn.cpp
+
 corelib_event.o: $(srcdir)/src/common/event.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/event.cpp
 
@@ -31867,6 +31956,9 @@ corelib_timectrl.o: $(srcdir)/src/msw/timectrl.cpp $(CORELIB_ODEP)
 corelib_datecontrols.o: $(srcdir)/src/msw/datecontrols.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/datecontrols.cpp
 
+corelib_msw_desktopenv.o: $(srcdir)/src/msw/desktopenv.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/desktopenv.cpp
+
 corelib_msw_checklst.o: $(srcdir)/src/msw/checklst.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/checklst.cpp
 
@@ -32028,6 +32120,9 @@ corelib_cocoa_statbmp.o: $(srcdir)/src/osx/cocoa/statbmp.mm $(CORELIB_ODEP)
 
 corelib_core_display.o: $(srcdir)/src/osx/core/display.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/osx/core/display.cpp
+
+corelib_cocoa_desktopenv.o: $(srcdir)/src/osx/cocoa/desktopenv.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_OBJCXXFLAGS) $(srcdir)/src/osx/cocoa/desktopenv.mm
 
 corelib_regiong.o: $(srcdir)/src/generic/regiong.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/regiong.cpp
@@ -34576,6 +34671,15 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_animate.o: $(srcdir)/src/gtk/animate.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@corelib_gtk_desktopenv.o: $(srcdir)/src/gtk/desktopenv.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_4_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/desktopenv.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@corelib_gtk_desktopenv.o: $(srcdir)/src/gtk/desktopenv.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_3_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/desktopenv.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_gtk_desktopenv.o: $(srcdir)/src/gtk/desktopenv.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/desktopenv.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@corelib_fontdlgg.o: $(srcdir)/src/generic/fontdlgg.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/fontdlgg.cpp
 
@@ -35649,6 +35753,9 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_rowheightcache.o: $(srcdir)/src/generic/rowheightcache.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/rowheightcache.cpp
+
+@COND_USE_GUI_1@corelib_desktopenvcmn.o: $(srcdir)/src/common/desktopenvcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/desktopenvcmn.cpp
 
 advdll_version_rc.o: $(srcdir)/src/msw/version.rc $(ADVDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)  --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_ADV

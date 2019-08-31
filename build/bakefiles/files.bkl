@@ -1008,6 +1008,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/laywin.cpp
     src/generic/calctrlg.cpp
     src/generic/rowheightcache.cpp
+    src/common/desktopenvcmn.cpp
 </set>
 <set var="GUI_CMN_HDR" hints="files">
     wx/affinematrix2dbase.h
@@ -1296,6 +1297,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/dvrenderer.h
     wx/calctrl.h
     wx/propdlg.h
+    wx/desktopenv.h
 </set>
 
 <!-- ====================================================================== -->
@@ -1517,6 +1519,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/dataview.cpp
     src/gtk/bmpcbox.cpp
     src/gtk/animate.cpp
+    src/gtk/desktopenv.cpp
 </set>
 <set var="GTK2_SRC" hints="files">
     $(GTK_SRC)
@@ -1586,6 +1589,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/bmpcbox.h
     wx/gtk/dataview.h
     wx/gtk/dvrenderer.h
+    wx/gtk/desktopenv.h
 </set>
 <set var="GTK2_HDR" hints="files">
     $(GTK_HDR)
@@ -2163,6 +2167,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/timectrl.cpp
     src/msw/datecontrols.cpp
     src/generic/activityindicator.cpp
+    src/msw/desktopenv.cpp
 </set>
 <set var="MSW_HDR" hints="files">
     wx/generic/clrpickerg.h
@@ -2270,6 +2275,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/datectrl.h
     wx/msw/calctrl.h
     wx/generic/activityindicator.h
+    wx/msw/desktopenv.h
 </set>
 <set var="MSW_RSC" hints="files">
     <!-- Resources must be installed together with headers: -->
@@ -2595,6 +2601,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/appprogress.h
     wx/generic/icon.h
     wx/generic/imaglist.h
+    wx/osx/desktopenv.h
 </set>
 
 <!-- ====================================================================== -->
@@ -2658,6 +2665,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/osx/cocoa/activityindicator.mm
     src/osx/cocoa/statbmp.mm
     src/osx/core/display.cpp
+    src/osx/cocoa/desktopenv.mm
 </set>
 <set var="OSX_COCOA_HDR" hints="files">
     wx/osx/cocoa/chkconf.h

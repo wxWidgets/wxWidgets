@@ -912,6 +912,7 @@ set(GUI_CMN_SRC
     src/generic/editlbox.cpp
     src/generic/datavgen.cpp
     src/generic/rowheightcache.cpp
+    src/common/desktopenvcmn.cpp
 )
 
 set(GUI_CMN_HDR
@@ -1200,6 +1201,7 @@ set(GUI_CMN_HDR
     wx/generic/splash.h
     wx/generic/calctrlg.h
     wx/generic/sashwin.h
+    wx/desktopenv.h
 )
 
 set(UNIX_SRC
@@ -1404,6 +1406,7 @@ set(GTK_SRC
     src/gtk/animate.cpp
     src/gtk/bmpcbox.cpp
     src/gtk/hyperlink.cpp
+    src/gtk/desktopenv.cpp
 )
 
 set(GTK2_SRC
@@ -1475,6 +1478,7 @@ set(GTK_HDR
     wx/gtk/taskbar.h
     wx/gtk/activityindicator.h
     wx/gtk/hyperlink.h
+    wx/gtk/desktopenv.h
 )
 
 set(GTK2_HDR
@@ -2051,6 +2055,7 @@ set(MSW_SRC
     src/msw/datetimectrl.cpp
     src/msw/hyperlink.cpp
     src/generic/activityindicator.cpp
+    src/msw/desktopenv.cpp
 )
 
 set(MSW_HDR
@@ -2159,6 +2164,7 @@ set(MSW_HDR
     wx/msw/timectrl.h
     wx/generic/animate.h
     wx/generic/activityindicator.h
+    wx/msw/desktopenv.h
 )
 
 set(MSW_RSC
@@ -2472,6 +2478,7 @@ set(OSX_SHARED_HDR
     wx/osx/appprogress.h
     wx/generic/icon.h
     wx/generic/imaglist.h
+    wx/osx/desktopenv.h
 )
 
 set(OSX_COCOA_SRC
@@ -2531,6 +2538,7 @@ set(OSX_COCOA_SRC
     src/osx/core/sound.cpp
     src/osx/cocoa/statbmp.mm
     src/osx/core/display.cpp
+    src/osx/cocoa/desktopenv.mm
 )
 
 set(OSX_COCOA_HDR

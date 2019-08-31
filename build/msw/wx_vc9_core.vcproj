@@ -882,6 +882,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\common\desktopenvcmn.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\common\dirctrlcmn.cpp"
 				>
 			</File>
@@ -1532,6 +1536,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\msw\dcscreen.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\msw\desktopenv.cpp"
 				>
 			</File>
 			<File
@@ -2483,6 +2491,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\msw\dcscreen.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\msw\desktopenv.h"
 				>
 			</File>
 			<File
@@ -3506,6 +3518,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\debugrpt.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\desktopenv.h"
 				>
 			</File>
 			<File
