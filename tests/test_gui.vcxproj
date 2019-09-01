@@ -522,6 +522,7 @@
     <ClCompile Include="events\keyboard.cpp" />
     <ClCompile Include="events\propagation.cpp" />
     <ClCompile Include="exec\exec.cpp" />
+    <ClCompile Include="file\desktopenv.cpp" />
     <ClCompile Include="font\fonttest.cpp" />
     <ClCompile Include="geometry\point.cpp" />
     <ClCompile Include="geometry\rect.cpp" />
