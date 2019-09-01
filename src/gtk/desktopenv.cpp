@@ -19,6 +19,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#include "wx/wx.h"
+
 #include "gio/gio.h"
 #include "wx/desktopenv.h"
 
