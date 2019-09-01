@@ -23,6 +23,10 @@
     #pragma hdrstop
 #endif
 
+#include "wx/wx.h"
+
+#include <shellapi.h> // needed for SHFILEOPSTRUCT
+#include "wx/log.h"
 #include "wx/desktopenv.h"
 
 // ============================================================================
@@ -39,7 +43,7 @@ bool wxDesktopEnv::MoveFileToRecycleBin(const wxString &fileName)
     if( wxDesktopEnvBase::MoveFileToRecycleBin( fileName ) )
     {
         SHFILEOPSTRUCT fileOp;
-        wxZeroMemory( fileOp );
+        ::ZeroMemory( &fileOp, sizeof( fileOp ) );
         fileOp.hwnd = NULL;
         fileOp.wFunc = FO_DELETE;
         wxString temp = fileName + '\0';
@@ -48,7 +52,7 @@ bool wxDesktopEnv::MoveFileToRecycleBin(const wxString &fileName)
         fileOp.fFlags = FOF_ALLOWUNDO | FOF_NOERRORUI | FOF_NOCONFIRMATION | FOF_SILENT;
         int res = SHFileOperation( &fileOp );
         if( res != 0 )
-           wxLogSysError( _ ( "Failed to move file '%s' to Recycle Bin" ), fileName );
+           wxLogSysError( "Failed to move file '%s' to Recycle Bin", fileName );
         else
             result = true;
     }
