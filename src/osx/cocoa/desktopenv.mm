@@ -30,12 +30,8 @@ bool wxDesktopEnv::MoveFileToRecycleBin(const wxString &fileName)
     wxString temp = "file:///" + fileName;
     NSURL *url = [NSURL URLWithString:wxCFStringRef( temp ).AsNSString()];
     NSArray *files = [NSArray arrayWithObject:url];
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1080
     BOOL result = [[NSFileManager defaultManager] trashItemAtURL:url resultingItemURL:nil error:nil];
     if( result == NO )
         ret = false;
-#else
-    OSStatus status = FSPathMoveObjectToTrashSync( fileName.c_str(), NULL, kFSFileOperationDefaultOptions );
-#endif
     return ret;
 }
