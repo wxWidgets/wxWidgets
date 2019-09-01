@@ -1202,23 +1202,30 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
 
         bool hasAlpha = false ;
 
+        wxImage img;
         if ( image.HasMask() )
         {
-            // takes precedence, don't mix with alpha info
+            // takes precedence
+            // Since we already use 32 bpp bitmap here, we can use alpha channel
+            // directly and there is no reason to keep a separate mask.
+            img = image.Copy();
+            img.InitAlpha();
         }
         else
         {
-            hasAlpha = image.HasAlpha() ;
+            img = image;
         }
+        wxASSERT( !img.HasMask() );
+        hasAlpha = img.HasAlpha() ;
 
         if ( hasAlpha )
             UseAlpha() ;
 
         unsigned char* destinationstart = (unsigned char*) GetBitmapData()->BeginRawAccess() ;
-        unsigned char* data = image.GetData();
+        const unsigned char* data = img.GetData();
         if ( destinationstart != NULL && data != NULL )
         {
-            const unsigned char *alpha = hasAlpha ? image.GetAlpha() : NULL ;
+            const unsigned char *alpha = hasAlpha ? img.GetAlpha() : NULL ;
             for (int y = 0; y < height; destinationstart += GetBitmapData()->GetBytesPerRow(), y++)
             {
                 unsigned char * destination = destinationstart;
@@ -1251,8 +1258,6 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
 
             GetBitmapData()->EndRawAccess() ;
         }
-        if ( image.HasMask() )
-            SetMask( new wxMask( *this , wxColour( image.GetMaskRed() , image.GetMaskGreen() , image.GetMaskBlue() ) ) ) ;
     }
 }
 
