@@ -4,7 +4,7 @@
 // Author:      Igor Korot
 // Modified by:
 // Created:     17/11/15
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 #import <Foundation/NSArray.h>

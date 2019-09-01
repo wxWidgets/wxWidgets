@@ -3,7 +3,7 @@
 // Purpose:     implementation of wxDesktopEnvBase
 // Author:      Igor Korot
 // Created:     2015-11-17
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

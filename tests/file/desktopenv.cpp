@@ -3,7 +3,7 @@
 // Purpose:     wxDesktopEnv unit test
 // Author:      Igor Korot
 // Created:     2015-11-17
-// Copyright:   
+// Copyright:   (C) wxWidgets team
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "testprec.h"
