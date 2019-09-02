@@ -437,10 +437,8 @@ private:
 
     void OnTreeScrolled(int)
     {
-        if ( GetEditControl() == NULL )
-            return;
-
-        closeEditor(GetEditControl()->GetHandle(), QAbstractItemDelegate::RevertModelCache);
+        if ( GetEditControl() != NULL )
+            closeEditor(GetEditControl()->GetHandle(), QAbstractItemDelegate::RevertModelCache);
     }
 
     void tryStartDrag(const QMouseEvent *event)
