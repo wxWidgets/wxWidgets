@@ -1497,9 +1497,9 @@ bool wxWindowQt::QtHandleContextMenuEvent ( QWidget *WXUNUSED( handler ), QConte
 {
     wxContextMenuEvent e( wxEVT_CONTEXT_MENU, GetId() );
     e.SetPosition(
-        event->reason() != QContextMenuEvent::Keyboard ?
-        wxQtConvertPoint( event->globalPos() ) :
-        wxDefaultPosition
+        event->reason() == QContextMenuEvent::Keyboard ?
+        wxDefaultPosition :
+        wxQtConvertPoint( event->globalPos() )
     );
     e.SetEventObject(this);
 
