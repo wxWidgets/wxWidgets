@@ -19,22 +19,28 @@ public:
     wxQtListWidget( wxWindow *parent, wxListBox *handler );
 
 private:
-    void clicked( const QModelIndex &index );
+    void OnCurrentItemChange(QListWidgetItem *current, QListWidgetItem *previous);
     void doubleClicked( const QModelIndex &index );
 };
 
 wxQtListWidget::wxQtListWidget( wxWindow *parent, wxListBox *handler )
     : wxQtEventSignalHandler< QListWidget, wxListBox >( parent, handler )
 {
-    connect(this, &QListWidget::clicked, this, &wxQtListWidget::clicked);
+    connect(this, &QListWidget::currentItemChanged, this, &wxQtListWidget::OnCurrentItemChange);
     connect(this, &QListWidget::doubleClicked, this, &wxQtListWidget::doubleClicked);
 }
 
-void wxQtListWidget::clicked(const QModelIndex &index )
+void wxQtListWidget::OnCurrentItemChange(QListWidgetItem *current, QListWidgetItem *)
 {
+    if ( !current )
+        return;
+
     wxListBox *handler = GetHandler();
     if ( handler )
+    {
+        const QModelIndex index = indexFromItem(current);
         handler->QtSendEvent(wxEVT_LISTBOX, index, true);
+    }
 }
 
 void wxQtListWidget::doubleClicked( const QModelIndex &index )
