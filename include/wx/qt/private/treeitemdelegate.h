@@ -73,7 +73,7 @@ public:
         if ( event->type() == QEvent::ToolTip )
         {
             const QRect &itemRect = view->visualRect(index);
-            const QSize bestSize = sizeHint(option, index);
+            const QSize &bestSize = sizeHint(option, index);
             if ( itemRect.width() < bestSize.width() )
             {
                 const QString &value = index.data(Qt::DisplayRole).toString();
