@@ -448,14 +448,14 @@ private:
 
         tree_event.SetPoint(wxQtConvertPoint(event->pos()));
 
-        // Vetoed unless explicitly accepted.
+        // Client must explicitly accept drag and drop. Vetoed by default.
         tree_event.Veto();
 
         EmitEvent(tree_event);
 
         if ( !tree_event.IsAllowed() )
         {
-            setState(DragSelectingState);
+            setState(NoState);
         }
     }
 
