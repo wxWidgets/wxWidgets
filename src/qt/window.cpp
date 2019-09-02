@@ -1491,7 +1491,8 @@ bool wxWindowQt::QtHandleCloseEvent ( QWidget *handler, QCloseEvent *WXUNUSED( e
     if ( GetHandle() != handler )
         return false;
 
-    if (!IsEnabled())
+    // This is required as Qt will still send out close events when the window is disabled.
+    if ( !IsEnabled() )
         return true;
 
     return !Close();
