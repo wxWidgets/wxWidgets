@@ -14,6 +14,7 @@
 #include "wx/qt/private/winevent.h"
 
 #include <QtWidgets/QTabWidget>
+#include <QtWidgets/QTabBar>
 
 class wxQtTabWidget : public wxQtEventSignalHandler< QTabWidget, wxNotebook >
 {
@@ -73,6 +74,11 @@ bool wxNotebook::Create(wxWindow *parent,
           const wxString& name)
 {
     m_qtTabWidget = new wxQtTabWidget( parent, this );
+
+    //Work around tab bar arrows drawing over tab headings https://bugreports.qt.io/browse/QTBUG-50866
+    const wxColor bg_color = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
+    const wxString css = "background: " + bg_color.GetAsString();
+    m_qtTabWidget->tabBar()->setStyleSheet(wxQtConvertString(css));
 
     return QtCreateControl( parent, id, pos, size, style, wxDefaultValidator, name );
 }
