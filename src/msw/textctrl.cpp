@@ -1508,7 +1508,7 @@ unsigned wxTextCtrl::GetPhysicalLineCount() const
 
 unsigned wxTextCtrl::GetLogicalLineCount() const
 {
-    return (int)::SendMessage(GetHwnd(), EM_GETLINECOUNT, 0, 0);
+    return GetNumberOfLines();
 }
 
 long wxTextCtrl::XYToPosition(long x, long y) const
