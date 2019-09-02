@@ -141,6 +141,11 @@ public:
         return m_editorFactory.GetEditControl();
     }
 
+    int GetHeaderHeight() const
+    {
+        return header() != NULL ? header()->height() : 0;
+    }
+
 private:
     void itemClicked(QTreeWidgetItem * item, int column);
     void itemActivated(QTreeWidgetItem * item, int column);
@@ -595,7 +600,7 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int WXUNUSED(code)) const
     if ( qitem != NULL )
     {
         rect = wxQtConvertRect( m_qtTreeWidget->visualItemRect(qitem) );
-        rect.Offset(0, m_qtTreeWidget->header()->height());
+        rect.Offset(0, m_qtTreeWidget->GetHeaderHeight());
         return true;
     }
     else
@@ -613,7 +618,7 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int WXUNU
                      wxT("invalid column index in GetSubItemRect") );
         QModelIndex qindex = m_qtTreeWidget->model()->index(item, subItem);
         rect = wxQtConvertRect( m_qtTreeWidget->visualRect(qindex) );
-        rect.Offset(0, m_qtTreeWidget->header()->height());
+        rect.Offset(0, m_qtTreeWidget->GetHeaderHeight());
         return true;
     }
     else
@@ -914,7 +919,7 @@ long wxListCtrl::HitTest(const wxPoint& point, int &flags, long* ptrSubItem) con
 {
     // Remove the header height as qt expects point relative to the table sub widget
     QPoint qPoint = wxQtConvertPoint(point);
-    qPoint.setY(qPoint.y() - m_qtTreeWidget->header()->height());
+    qPoint.setY(qPoint.y() - m_qtTreeWidget->GetHeaderHeight());
 
     QModelIndex index = m_qtTreeWidget->indexAt(qPoint);
     if ( index.isValid() )
