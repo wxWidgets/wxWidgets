@@ -1190,7 +1190,7 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
 
     QTreeWidgetItem *qTreeItem = wxQtConvertTreeItem(item);
 
-    if (qTreeItem != NULL)
+    if ( qTreeItem )
     {
         m_qtTreeWidget->select(qTreeItem, select ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
         if ( select && m_qtTreeWidget->selectionMode() == QTreeWidget::SingleSelection )
