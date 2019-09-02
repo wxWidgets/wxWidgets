@@ -23,8 +23,8 @@
 
 #include <QtWidgets/QTreeWidget>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QScrollBar>
 #include <QtGui/QPainter>
-#include <QScrollBar>
 
 namespace
 {
@@ -437,7 +437,7 @@ private:
 
     void OnTreeScrolled(int)
     {
-        if (GetEditControl() == NULL)
+        if ( GetEditControl() == NULL )
             return;
 
         closeEditor(GetEditControl()->GetHandle(), QAbstractItemDelegate::RevertModelCache);
