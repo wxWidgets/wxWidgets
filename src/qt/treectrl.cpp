@@ -24,6 +24,7 @@
 #include <QtWidgets/QTreeWidget>
 #include <QtWidgets/QHeaderView>
 #include <QtGui/QPainter>
+#include <QScrollBar>
 
 namespace
 {
@@ -142,6 +143,8 @@ public:
                 this, &wxQTreeWidget::OnItemCollapsed);
         connect(this, &QTreeWidget::itemExpanded,
                 this, &wxQTreeWidget::OnItemExpanded);
+        connect(verticalScrollBar(), &QScrollBar::valueChanged,
+                this, &wxQTreeWidget::OnTreeScrolled);
 
         setItemDelegate(&m_item_delegate);
         setDragEnabled(true);
@@ -430,6 +433,14 @@ private:
             wxQtConvertTreeItem(item)
         );
         EmitEvent(expandedEvent);
+    }
+
+    void OnTreeScrolled(int)
+    {
+        if (GetEditControl() == NULL)
+            return;
+
+        closeEditor(GetEditControl()->GetHandle(), QAbstractItemDelegate::RevertModelCache);
     }
 
     void tryStartDrag(const QMouseEvent *event)
