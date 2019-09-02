@@ -48,17 +48,17 @@ void wxQtListWidget::doubleClicked( const QModelIndex &index )
 
 void wxQtListWidget::itemChanged(QListWidgetItem *item)
 {
-    if (item->flags() & Qt::ItemIsUserCheckable)
+    if ( item->flags() & Qt::ItemIsUserCheckable )
     {
         wxListBox *handler = GetHandler();
-        if (handler)
+        if ( handler )
         {
             QWidget *widgetHandle = handler->GetHandle();
             QListWidget *listWidget = dynamic_cast<QListWidget*>(widgetHandle);
 
-            if (listWidget)
+            if ( listWidget )
             {
-                const int rowIndex = listWidget->row(item);
+                int rowIndex = listWidget->row(item);
                 handler->QtSendEvent(wxEVT_CHECKLISTBOX, rowIndex, true);
             }
         }
