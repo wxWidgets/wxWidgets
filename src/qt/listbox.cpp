@@ -38,7 +38,7 @@ void wxQtListWidget::OnCurrentItemChange(QListWidgetItem *current, QListWidgetIt
     wxListBox *handler = GetHandler();
     if ( handler )
     {
-        const QModelIndex index = indexFromItem(current);
+        const QModelIndex &index = indexFromItem(current);
         handler->QtSendEvent(wxEVT_LISTBOX, index, true);
     }
 }
