@@ -4,7 +4,7 @@
 // Author:      Igor Korot
 // Modified by:
 // Created:     17/11/15
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -43,7 +43,7 @@ bool wxDesktopEnv::MoveFileToRecycleBin(const wxString &fileName)
         if( !res || ( error && error->code == G_IO_ERROR_NOT_SUPPORTED ) )
            wxLogSysError( _( "Failed to move file '%s' to Recycle Bin" ), fileName.c_str() );
         else
-	    {
+        {
             result = true;
             g_object_unref( f );
         }

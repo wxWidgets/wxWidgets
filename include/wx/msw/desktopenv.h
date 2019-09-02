@@ -4,7 +4,7 @@
 // Author:      Igor Korot
 // Modified by:
 // Created:     17/11/2015
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
