@@ -164,7 +164,7 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
 wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 {
     QTabBar *tabBar = m_qtTabWidget->tabBar();
-    const QSize tabBarSize = tabBar->size();
+    const QSize &tabBarSize = tabBar->size();
     return wxSize(sizePage.GetWidth(),
         sizePage.GetHeight() + tabBarSize.height());
 }
