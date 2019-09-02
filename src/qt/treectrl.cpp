@@ -246,7 +246,7 @@ public:
 
     void select(QTreeWidgetItem* item, QItemSelectionModel::SelectionFlag selectionFlag)
     {
-        const QModelIndex index = indexFromItem(item);
+        const QModelIndex &index = indexFromItem(item);
         selectionModel()->select(index, selectionFlag);
     }
 
