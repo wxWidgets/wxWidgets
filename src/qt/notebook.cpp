@@ -9,6 +9,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/notebook.h"
+#include "wx/settings.h"
 #include "wx/qt/private/utils.h"
 #include "wx/qt/private/converter.h"
 #include "wx/qt/private/winevent.h"
