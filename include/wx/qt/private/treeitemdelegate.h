@@ -70,7 +70,7 @@ public:
 
     bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index)
     {
-        if ( event->type() == QEvent::ToolTip)
+        if ( event->type() == QEvent::ToolTip )
         {
             const QRect itemRect = view->visualRect(index);
             const QSize bestSize = sizeHint(option, index);
