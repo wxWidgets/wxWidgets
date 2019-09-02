@@ -76,7 +76,7 @@ public:
             const QSize bestSize = sizeHint(option, index);
             if ( itemRect.width() < bestSize.width() )
             {
-                QString value = index.data(Qt::DisplayRole).toString();
+                const QString &value = index.data(Qt::DisplayRole).toString();
                 QToolTip::showText(event->globalPos(), value, view);
             }
             else
