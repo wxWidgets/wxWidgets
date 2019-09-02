@@ -1170,7 +1170,7 @@ void wxTreeCtrl::Toggle(const wxTreeItemId& item)
 void wxTreeCtrl::Unselect()
 {
     QTreeWidgetItem *current = m_qtTreeWidget->currentItem();
-    if (current != NULL)
+    if ( current != NULL )
         m_qtTreeWidget->select(current, QItemSelectionModel::Deselect);
 }
 
