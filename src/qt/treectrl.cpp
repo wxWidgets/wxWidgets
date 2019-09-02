@@ -1209,7 +1209,7 @@ void wxTreeCtrl::SelectChildren(const wxTreeItemId& parent)
 
     for ( int i = 0; i < childCount; ++i )
     {
-         m_qtTreeWidget->select(qTreeItem->child(i),  QItemSelectionModel::Select);
+        m_qtTreeWidget->select(qTreeItem->child(i), QItemSelectionModel::Select);
     }
 }
 
