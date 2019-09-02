@@ -1260,10 +1260,12 @@ void wxNSTextViewControl::SetJustification()
 
 unsigned wxNSTextViewControl::GetPhysicalLineCount() const
 {
-    NSString *string = [m_textView string];
+    const NSString *string = [m_textView string];
     unsigned numberOfLines, index, stringLength = [string length];
-    for (index = 0, numberOfLines = 0; index < stringLength; numberOfLines++)
+    for(index = 0, numberOfLines = 0; index < stringLength; numberOfLines++)
+    {
         index = NSMaxRange([string lineRangeForRange:NSMakeRange(index, 0)]);
+    }
     return numberOfLines;
 }
 
