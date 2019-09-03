@@ -130,12 +130,22 @@ public:
 
     virtual void controlTextDidChange() wxOVERRIDE;
 
+    virtual bool CanUndo() const wxOVERRIDE;
+    virtual void Undo() wxOVERRIDE;
+    virtual bool CanRedo() const wxOVERRIDE;
+    virtual void Redo() wxOVERRIDE;
+    virtual void EmptyUndoBuffer() wxOVERRIDE;
+
+    virtual long GetScaleFactor() const wxOVERRIDE;
+    virtual void SetScaleFactor(long factorPct) wxOVERRIDE;
+
 protected:
     void DoUpdateTextStyle();
 
     NSScrollView* m_scrollView;
     NSTextView* m_textView;
     bool m_useCharWrapping;
+    NSUndoManager* m_undoManager;
 };
 
 class wxNSComboBoxControl : public wxNSTextFieldControl, public wxComboWidgetImpl

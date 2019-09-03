@@ -72,6 +72,11 @@ public:
     virtual bool CanUndo() const wxOVERRIDE;
     virtual bool CanRedo() const wxOVERRIDE;
 
+    virtual void EmptyUndoBuffer();
+
+    long GetScaleFactor() const;
+    void SetScaleFactor(long factorPct);
+
     // Insertion point
     virtual void SetInsertionPoint(long pos) wxOVERRIDE;
     virtual void SetInsertionPointEnd() wxOVERRIDE;

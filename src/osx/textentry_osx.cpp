@@ -179,7 +179,7 @@ void wxTextEntry::SetInsertionPointEnd()
 
 long wxTextEntry::GetInsertionPoint() const
 {
-    long begin, end ;
+    long begin = 0, end = 0;
     GetSelection( &begin , &end ) ;
 
     return begin ;
@@ -295,6 +295,27 @@ bool wxTextEntry::CanRedo() const
     wxCHECK_MSG( GetTextPeer(), false, "Must create the control first" );
 
     return GetTextPeer()->CanRedo() ;
+}
+
+void wxTextEntry::EmptyUndoBuffer()
+{
+    wxCHECK_RET( GetTextPeer(), "Must create the control first" );
+
+    return GetTextPeer()->EmptyUndoBuffer() ;
+}
+
+long wxTextEntry::GetScaleFactor() const
+{
+    wxCHECK_MSG( GetTextPeer(), 100, "Must create the control first" );
+
+    return GetTextPeer()->GetScaleFactor() ;
+}
+
+void wxTextEntry::SetScaleFactor(long factorPct)
+{
+    wxCHECK_RET( GetTextPeer(), "Must create the control first" );
+
+    GetTextPeer()->SetScaleFactor(factorPct) ;
 }
 
 wxTextWidgetImpl * wxTextEntry::GetTextPeer() const
