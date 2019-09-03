@@ -21,40 +21,20 @@
 
 #define DATABUFFER_SIZE     1024
 
-class DesktopEnvTestCase : public CppUnit::TestCase
+class DesktopEnvTestCase
 {
 public:
-    DesktopEnvTestCase();
-    ~DesktopEnvTestCase();
-private:
-    CPPUNIT_TEST_SUITE( DesktopEnvTestCase );
-    CPPUNIT_TEST( MoveToTrash );
-    CPPUNIT_TEST_SUITE_END();
+	DesktopEnvTestCase();
+	~DesktopEnvTestCase() { delete m_env; };
     void MoveToTrash();
     wxDesktopEnv *m_env;
-
-    wxDECLARE_NO_COPY_CLASS( DesktopEnvTestCase );
 };
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( DesktopEnvTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( DesktopEnvTestCase, "DesktopEnvTestCase" );
-
-#if wxUSE_UIACTIONSIMULATOR
 
 DesktopEnvTestCase::DesktopEnvTestCase()
 {
-    m_env = new wxDesktopEnv();
+    m_env = new wxDesktopEnv;
 }
-
-DesktopEnvTestCase::~DesktopEnvTestCase()
-{
-    delete m_env;
-}
-
-void DesktopEnvTestCase::MoveToTrash()
+TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
 {
     char buf[DATABUFFER_SIZE];
     std::ofstream out( "ffileinstream.test", std::ofstream::out );
@@ -68,7 +48,7 @@ void DesktopEnvTestCase::MoveToTrash()
         out << buf << std::endl;
     }
     out.close();
-    CPPUNIT_ASSERT( m_env->MoveFileToRecycleBin( currentDir + "ffileinstream.test" ) );
+    CHECK( m_env->MoveFileToRecycleBin( currentDir + "ffileinstream.test" ) );
     wxMkdir( "TrashTest" );
     std::ofstream out1( "TrashTest/ffileinstream.test", std::ofstream::out );
 
@@ -80,7 +60,6 @@ void DesktopEnvTestCase::MoveToTrash()
         out1 << buf << std::endl;
     }
     out1.close();
-    CPPUNIT_ASSERT( m_env->MoveFileToRecycleBin( currentDir + "TrashTest" ) );
+    CHECK( m_env->MoveFileToRecycleBin( currentDir + "TrashTest" ) );
 }
 
-#endif
