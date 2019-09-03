@@ -2123,7 +2123,7 @@ bool wxWindowBase::Validate()
 
         virtual bool OnDo(wxValidator* validator) wxOVERRIDE
         {
-            return validator->Validate(m_win);
+            return validator->ReportValidation(m_win);
         }
 
         virtual bool OnRecurse(wxWindow* child) wxOVERRIDE

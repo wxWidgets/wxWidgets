@@ -46,25 +46,22 @@ public:
     void SetStyle(int style) { m_style = style; }
 
 
-    // Override base class method to not do anything but always return m_isValid:
-    // i.e. m_isValid stores the validation status done on the fly here.
-    virtual bool Validate(wxWindow * WXUNUSED(parent)) wxOVERRIDE { return m_isValid; }
+    // Override base class method.
+    virtual bool Validate(wxWindow* parent) wxOVERRIDE;
 
-    // Override base class method to check that the window is a text control or
-    // combobox.
+    // Override base class method to check that the window does support
+    // this type of validators.
     virtual void SetWindow(wxWindow *win) wxOVERRIDE;
 
 protected:
     wxNumValidatorBase(int style)
     {
         m_style = style;
-        m_isValid = true;
     }
 
     wxNumValidatorBase(const wxNumValidatorBase& other) : wxValidator(other)
     {
         m_style = other.m_style;
-        m_isValid = other.m_isValid;
     }
 
     bool HasFlag(wxNumValidatorStyle style) const
@@ -115,6 +112,7 @@ private:
     void OnChar(wxKeyEvent& event);
     void OnKillFocus(wxFocusEvent& event);
     void OnValueChanged(wxCommandEvent& event);
+    void OnValidation(wxValidationStatusEvent& event);
 
     // Determine the current insertion point and text in the associated control.
     void GetCurrentValueAndInsertionPoint(wxString& val, int& pos) const;
@@ -123,8 +121,6 @@ private:
     // Combination of wxVAL_NUM_XXX values.
     int m_style;
 
-    // Validation status (always up-to-date).
-    bool m_isValid;
 
     wxDECLARE_EVENT_TABLE();
 

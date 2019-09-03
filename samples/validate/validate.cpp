@@ -91,7 +91,6 @@ bool MyComboBoxValidator::Validate(wxWindow *WXUNUSED(parent))
     if (m_var)
         *m_var = cb->GetValue();
 
-    SendOkEvent();
     return true;
 }
 
@@ -417,7 +416,7 @@ void MyDialog::OnValidation(wxValidationStatusEvent& event)
         // Make the control reflect the invalid state.
         win->SetBackgroundColour(wxColour("#f2bdcd")); // Orchid pink
 
-        if ( event.GetId() != VALIDATE_TEXT )
+        if ( event.GetId() == VALIDATE_COMBO )
         {
             // A wxRichToolTip can be used here to show the error message
             wxLogError(event.GetErrorMessage());

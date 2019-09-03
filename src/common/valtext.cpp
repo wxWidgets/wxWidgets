@@ -130,7 +130,7 @@ wxTextEntry *wxTextValidator::GetTextEntry()
 
 // Called when the value in the window must be validated.
 // This function can pop up an error message.
-bool wxTextValidator::Validate(wxWindow *parent)
+bool wxTextValidator::Validate(wxWindow *WXUNUSED(parent))
 {
     // If window is disabled, simply return
     if ( !m_validatorWindow->IsEnabled() )
@@ -148,7 +148,6 @@ bool wxTextValidator::Validate(wxWindow *parent)
         return false;
     }
 
-    SendOkEvent();
     return true;
 }
 
@@ -295,11 +294,17 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
 
     // we don't filter special keys and delete
     if (keyCode < WXK_SPACE || keyCode == WXK_DELETE)
+    {
+        SetValidationNeeded();
         return;
+    }
 
     // Filter out invalid characters
     if ( IsValidChar(static_cast<wxUniChar>(keyCode)) )
+    {
+        SetValidationNeeded();
         return;
+    }
 
     if ( !wxValidator::IsSilent() )
         wxBell();
@@ -312,28 +317,16 @@ void wxTextValidator::OnKillFocus(wxFocusEvent& event)
 {
     event.Skip();
 
-    wxTextEntry * const control = GetTextEntry();
-    if ( !control )
-        return;
-
-    if ( IsValid(control->GetValue()).empty() )
-    {
-        SendOkEvent();
-    }
-    else
-    {
-        // Notify for invalid input without showing any message box
-        // to avoid focus problems.
-        SendErrorEvent(wxString());
-    }
+    if ( !IsValidated() )
+        ReportValidation(m_validatorWindow, false);
 }
 
 void wxTextValidator::OnValidation(wxValidationStatusEvent& event)
 {
-    const wxString& errormsg = event.GetErrorMessage();
-
-    if ( errormsg.empty() )
+    if ( !event.CanPopup() )
         return;
+
+    const wxString& errormsg = event.GetErrorMessage();
 
     m_validatorWindow->SetFocus();
     wxMessageBox(errormsg, _("Validation conflict"),

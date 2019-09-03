@@ -32,6 +32,10 @@ public:
     void SetErrorMessage(const wxString& errormsg) { SetString(errormsg); }
     wxString GetErrorMessage() const { return GetString(); }
 
+    void SetCanPopup(bool canPopup) { SetInt(canPopup); }
+    bool CanPopup() const
+        { return !GetErrorMessage().empty() && GetInt() != 0; }
+
     // Return the window associated with the validator generating the event.
     wxWindow *GetWindow() const;
 
@@ -78,6 +82,7 @@ public:
     wxValidator(const wxValidator& other)
         : wxEvtHandler()
         , m_validatorWindow(other.m_validatorWindow)
+        , m_validationStatus(other.m_validationStatus)
     {
     }
     virtual ~wxValidator();
@@ -89,7 +94,16 @@ public:
     virtual wxObject *Clone() const
         { return NULL; }
     bool Copy(const wxValidator& val)
-        { m_validatorWindow = val.m_validatorWindow; return true; }
+    {
+        m_validatorWindow = val.m_validatorWindow;
+        m_validationStatus = val.m_validationStatus;
+        return true;
+    }
+
+    // Called when the value in the window must be validated.
+    // This function should be preferred over the direct call of Validate()
+    // because it ensures the proper generation of validation events.
+    bool ReportValidation(wxWindow *parent, bool canPopup = true);
 
     // Called when the value in the window must be validated.
     // This function can pop up an error message.
@@ -140,8 +154,26 @@ protected:
 protected:
     wxWindow *m_validatorWindow;
 
+    // Validation status setters/getters
+    bool IsOk() const
+        { return m_validationStatus == Validation_Ok; }
+    bool IsValidated() const
+        { return (m_validationStatus & Validation_Needed) == 0; }
+    void SetValidationNeeded()
+        { m_validationStatus |= Validation_Needed; }
+
 private:
     static bool ms_isSilent;
+
+    enum /*Validation status*/
+    {
+        Validation_Needed  = 0x1,
+        Validation_NoPopup = 0x2,
+        Validation_Ok      = 0x4,
+        Validation_Error   = 0x8
+    };
+
+    int m_validationStatus;
 
     wxDECLARE_DYNAMIC_CLASS(wxValidator);
     wxDECLARE_NO_ASSIGN_CLASS(wxValidator);

@@ -27,6 +27,7 @@
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
     #include "wx/combobox.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #include "wx/valnum.h"
@@ -39,6 +40,8 @@
 wxBEGIN_EVENT_TABLE(wxNumValidatorBase, wxValidator)
     EVT_CHAR(wxNumValidatorBase::OnChar)
     EVT_KILL_FOCUS(wxNumValidatorBase::OnKillFocus)
+
+    EVT_VALIDATE_ERROR(wxID_ANY, wxNumValidatorBase::OnValidation)
 wxEND_EVENT_TABLE()
 
 int wxNumValidatorBase::GetFormatFlags() const
@@ -58,7 +61,7 @@ void wxNumValidatorBase::SetWindow(wxWindow *win)
 
     if ( GetTextEntry() != NULL )
     {
-        m_validatorWindow->Bind(wxEVT_TEXT, &wxNumValidatorBase::OnValueChanged, this);
+        Bind(wxEVT_TEXT, &wxNumValidatorBase::OnValueChanged, this);
     }
     else
     {
@@ -155,6 +158,7 @@ void wxNumValidatorBase::OnChar(wxKeyEvent& event)
     if ( ch < WXK_SPACE || ch == WXK_DELETE )
     {
         // Allow ASCII control characters and Delete.
+        SetValidationNeeded();
         return;
     }
 
@@ -171,18 +175,39 @@ void wxNumValidatorBase::OnChar(wxKeyEvent& event)
         // Do not skip the event in this case, stop handling it here.
         event.Skip(false);
     }
+    else
+    {
+        SetValidationNeeded();
+    }
+}
+
+bool wxNumValidatorBase::Validate(wxWindow* WXUNUSED(parent))
+{
+    // If window is disabled, simply return
+    if ( !m_validatorWindow->IsEnabled() )
+        return true;
+
+    wxTextEntry * const text = GetTextEntry();
+    if ( !text )
+        return false;
+
+    const wxString& newval   = text->GetValue();
+    const wxString& errormsg = IsValid(newval);
+
+    if ( !errormsg.empty() )
+    {
+        SendErrorEvent(wxString::Format("%s: %s", errormsg, newval));
+        return false;
+    }
+
+    return true;
 }
 
 void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
 {
     event.Skip();
 
-    wxTextEntry * const control = GetTextEntry();
-    if ( !control )
-        return;
-
-    const wxString& valueNorm = NormalizeString(control->GetValue());
-    if ( control->GetValue() == valueNorm )
+    if ( IsValidated() )
     {
         // Don't do anything at all if the value doesn't really change, even if
         // the control optimizes away the calls to ChangeValue() which don't
@@ -190,6 +215,10 @@ void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
         // if we don't need to do anything.
         return;
     }
+
+    wxTextEntry * const control = GetTextEntry();
+    if ( !control )
+        return;
 
     // When we change the control value below, its "modified" status is reset
     // so we need to explicitly keep it marked as modified if it was so in the
@@ -200,38 +229,29 @@ void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
     wxTextCtrl * const text = wxDynamicCast(m_validatorWindow, wxTextCtrl);
     const bool wasModified = text ? text->IsModified() : false;
 
-    control->ChangeValue(valueNorm);
+    control->ChangeValue(NormalizeString(control->GetValue()));
 
     if ( wasModified )
         text->MarkDirty();
+
+    ReportValidation(m_validatorWindow, false);
 }
 
 void wxNumValidatorBase::OnValueChanged(wxCommandEvent& event)
 {
-    // Notice that an event is always sent in case the
-    // control transitions from invalid to valid state.
-
-    const wxString& newval   = event.GetString();
-    const wxString& errormsg = IsValid(newval);
-
-    if ( errormsg.empty() )
-    {
-        if ( !m_isValid )
-        {
-            m_isValid = true;
-            SendOkEvent();
-        }
-    }
-    else
-    {
-        m_isValid = false;
-
-        // Always send this event to ensure that the error message is
-        // properly updated to the new one.
-        SendErrorEvent(wxString::Format("%s: %s", errormsg, newval));
-    }
-
     event.Skip();
+}
+
+void wxNumValidatorBase::OnValidation(wxValidationStatusEvent& event)
+{
+    if ( !event.CanPopup() )
+        return;
+
+    const wxString& errormsg = event.GetErrorMessage();
+
+    m_validatorWindow->SetFocus();
+    wxMessageBox(errormsg, _("Validation conflict"),
+                 wxOK | wxICON_EXCLAMATION, NULL);
 }
 
 // ============================================================================

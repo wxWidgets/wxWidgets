@@ -32,10 +32,30 @@ bool wxValidator::ms_isSilent = false;
 wxValidator::wxValidator()
 {
   m_validatorWindow = NULL;
+  m_validationStatus = Validation_Needed;
 }
 
 wxValidator::~wxValidator()
 {
+}
+
+bool wxValidator::ReportValidation(wxWindow *parent, bool canPopup)
+{
+    if ( !canPopup )
+        m_validationStatus |= Validation_NoPopup;
+
+    if ( Validate(parent) )
+    {
+        SendOkEvent();
+        return true;
+    }
+
+    // m_validationStatus is correctly set to Validation_Error
+    // if an error event was already sent from Validate() above.
+    if ( m_validationStatus != Validation_Error )
+        SendErrorEvent(wxString());
+
+    return false;
 }
 
 bool wxValidator::ProcessEvent(wxEvent& event)
@@ -70,11 +90,25 @@ bool wxValidator::ProcessEvent(wxEvent& event)
 
 void wxValidator::SendEvent(wxEventType type, const wxString& errormsg)
 {
-    if ( !m_validatorWindow )
+    // The validation is done, only the events have to be sent.
+    m_validationStatus &= ~Validation_Needed;
+
+    if ( type == wxEVT_VALIDATE_OK && IsOk() )
+    {
+        // We don't send the 'Ok' event needlessly. i.e:
+        // the event need not be sent unless there was a
+        // previous validation error.
         return;
+    }
+
+    const bool canPopup = (m_validationStatus & Validation_NoPopup) == 0;
+
+    m_validationStatus = type == wxEVT_VALIDATE_ERROR ? Validation_Error
+                                                      : Validation_Ok;
 
     wxValidationStatusEvent event(type, m_validatorWindow);
     event.SetErrorMessage(errormsg);
+    event.SetCanPopup(canPopup);
 
     m_validatorWindow->ProcessWindowEvent(event);
 }
