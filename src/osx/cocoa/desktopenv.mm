@@ -32,6 +32,9 @@ bool wxDesktopEnv::MoveFileToRecycleBin(const wxString &fileName)
     NSArray *files = [NSArray arrayWithObject:url];
     BOOL result = [[NSFileManager defaultManager] trashItemAtURL:url resultingItemURL:nil error:nil];
     if( result == NO )
+    {
+        wxLogSysError( _( "Failed to move file '%s' to Recycle Bin" ), fileName );
         ret = false;
+    }
     return ret;
 }
