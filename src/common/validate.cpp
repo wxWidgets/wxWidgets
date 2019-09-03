@@ -89,7 +89,7 @@ bool wxValidator::ProcessEvent(wxEvent& event)
     return ProcessEventLocally(event);
 }
 
-void wxValidator::SendEvent(wxEventType type, const wxString& errormsg)
+void wxValidator::SendValidationEvent(wxEventType type, const wxString& errormsg)
 {
     // The validation is done, only the events have to be sent.
     m_validationStatus &= ~Validation_Needed;

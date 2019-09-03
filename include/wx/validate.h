@@ -147,12 +147,12 @@ public:
     virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE;
 
 protected:
-    void SendEvent(wxEventType type, const wxString& errormsg = wxString());
+    void SendValidationEvent(wxEventType type, const wxString& errormsg = wxString());
 
-    void SendOkEvent() { SendEvent(wxEVT_VALIDATE_OK); }
+    void SendOkEvent() { SendValidationEvent(wxEVT_VALIDATE_OK); }
 
     void SendErrorEvent(const wxString& errormsg)
-      { SendEvent(wxEVT_VALIDATE_ERROR, errormsg); }
+      { SendValidationEvent(wxEVT_VALIDATE_ERROR, errormsg); }
 
 protected:
     wxWindow *m_validatorWindow;
