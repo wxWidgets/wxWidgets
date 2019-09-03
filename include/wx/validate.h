@@ -147,8 +147,6 @@ public:
     virtual bool ProcessEvent(wxEvent& event) wxOVERRIDE;
 
 protected:
-    void SendValidationEvent(wxEventType type, const wxString& errormsg = wxString());
-
     void SendOkEvent() { SendValidationEvent(wxEVT_VALIDATE_OK); }
 
     void SendErrorEvent(const wxString& errormsg)
@@ -164,6 +162,10 @@ protected:
         { return (m_validationStatus & Validation_Needed) == 0; }
     void SetValidationNeeded()
         { m_validationStatus |= Validation_Needed; }
+
+    // Update m_validationStatus to either Validation_Ok or Validation_Error
+    // and send the corresponding event.
+    void SendValidationEvent(wxEventType type, const wxString& errormsg = wxString());
 
 private:
     static bool ms_isSilent;
