@@ -27,6 +27,7 @@
     *wxSVGFileDCImpl*SetAxisOrientation*;
     *wxSVGFileDCImpl*SetDeviceOrigin*;
     *wxSVGFileDCImpl*SetLogicalOrigin*;
+    *wxWindow*GetContentScaleFactor*;
 };
 
 # public symbols added in 3.0.4 (please keep in alphabetical order):
@@ -64,5 +65,8 @@
         # Explicitly mention this one as otherwise it would be caught by
         # wxDataViewRenderer*FinishEditing wildcard in 3.0.3 above.
         *wxDataViewRendererBase*FinishEditing*;
+        # This would otherwise match *wxWindow*GetContentScaleFactor*
+        # in 3.0.5 above.
+        *wxWindowBase*GetContentScaleFactor*;
         *;
 };
