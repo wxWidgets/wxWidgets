@@ -1522,6 +1522,9 @@ public:
     // reverse mapping currently
     int GetColPos(int idx) const
     {
+        if ( idx == wxNOT_FOUND )
+            return idx;
+
         if ( m_colAt.IsEmpty() )
             return idx;
 
