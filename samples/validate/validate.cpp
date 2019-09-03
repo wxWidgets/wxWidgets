@@ -153,6 +153,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
     EVT_MENU(VALIDATE_TEST_DIALOG, MyFrame::OnTestDialog)
     EVT_MENU(VALIDATE_TOGGLE_BELL, MyFrame::OnToggleBell)
+    EVT_MENU(VALIDATE_TOGGLE_INTERACTIVE, MyFrame::OnToggleInteractive)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int h)
@@ -169,6 +170,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString&title, int x, int y, int w, int 
 
     file_menu->Append(VALIDATE_TEST_DIALOG, "&Test dialog...\tCtrl-T", "Demonstrate validators");
     file_menu->AppendCheckItem(VALIDATE_TOGGLE_BELL, "&Bell on error", "Toggle bell on error");
+    file_menu->AppendCheckItem(VALIDATE_TOGGLE_INTERACTIVE, "&Interactive", "Validate interactively");
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, "E&xit");
 
@@ -232,6 +234,19 @@ void MyFrame::OnToggleBell(wxCommandEvent& event)
 {
     m_silent = !m_silent;
     wxValidator::SuppressBellOnError(m_silent);
+    event.Skip();
+}
+
+void MyFrame::OnToggleInteractive(wxCommandEvent& event)
+{
+    wxValidator::SetInteractive();
+
+    // Interactive validation, once enabled, has no way of
+    // disabling it again. so disable the menu item here.
+    wxMenuBar * const menu_bar = GetMenuBar();
+    if ( menu_bar )
+        menu_bar->Enable(VALIDATE_TOGGLE_INTERACTIVE, false);
+
     event.Skip();
 }
 

@@ -61,7 +61,8 @@ void wxNumValidatorBase::SetWindow(wxWindow *win)
 
     if ( GetTextEntry() != NULL )
     {
-        Bind(wxEVT_TEXT, &wxNumValidatorBase::OnValueChanged, this);
+        if ( IsInteractive() )
+            Bind(wxEVT_TEXT, &wxNumValidatorBase::OnValueChanged, this);
     }
     else
     {
@@ -240,6 +241,7 @@ void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
 void wxNumValidatorBase::OnValueChanged(wxCommandEvent& event)
 {
     event.Skip();
+    ReportValidation(m_validatorWindow, false);
 }
 
 void wxNumValidatorBase::OnValidation(wxValidationStatusEvent& event)

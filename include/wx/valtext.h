@@ -70,9 +70,14 @@ public:
     // Called to transfer data from the window
     virtual bool TransferFromWindow() wxOVERRIDE;
 
+    // Override base class method to check that the window does support
+    // this type of validators.
+    virtual void SetWindow(wxWindow *win) wxOVERRIDE;
+
     // Filter keystrokes
     void OnChar(wxKeyEvent& event);
     void OnKillFocus(wxFocusEvent& event);
+    void OnValueChanged(wxCommandEvent& event);
     void OnValidation(wxValidationStatusEvent& event);
 
     // ACCESSORS

@@ -97,6 +97,24 @@ bool wxTextValidator::Copy(const wxTextValidator& val)
     return true;
 }
 
+void wxTextValidator::SetWindow(wxWindow *win)
+{
+    wxValidator::SetWindow(win);
+
+    if ( GetTextEntry() != NULL )
+    {
+        if ( IsInteractive() )
+            Bind(wxEVT_TEXT, &wxTextValidator::OnValueChanged, this);
+    }
+    else
+    {
+        wxFAIL_MSG(
+            "wxTextValidator can only be used with wxTextCtrl, wxComboBox "
+            "or wxComboCtrl"
+        );
+    }
+}
+
 wxTextEntry *wxTextValidator::GetTextEntry()
 {
 #if wxUSE_TEXTCTRL
@@ -119,11 +137,6 @@ wxTextEntry *wxTextValidator::GetTextEntry()
         return (wxComboCtrl*)m_validatorWindow;
     }
 #endif
-
-    wxFAIL_MSG(
-        "wxTextValidator can only be used with wxTextCtrl, wxComboBox, "
-        "or wxComboCtrl"
-    );
 
     return NULL;
 }
@@ -319,6 +332,12 @@ void wxTextValidator::OnKillFocus(wxFocusEvent& event)
 
     if ( !IsValidated() )
         ReportValidation(m_validatorWindow, false);
+}
+
+void wxTextValidator::OnValueChanged(wxCommandEvent& event)
+{
+    event.Skip();
+    ReportValidation(m_validatorWindow, false);
 }
 
 void wxTextValidator::OnValidation(wxValidationStatusEvent& event)

@@ -28,6 +28,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxValidator, wxEvtHandler);
 // VZ: personally, I think true would be more appropriate - these bells are
 //     _annoying_
 bool wxValidator::ms_isSilent = false;
+bool wxValidator::ms_isInteractive = false;
 
 wxValidator::wxValidator()
 {

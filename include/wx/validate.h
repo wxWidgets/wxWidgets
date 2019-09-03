@@ -130,6 +130,9 @@ public:
     // test if beep is currently disabled
     static bool IsSilent() { return ms_isSilent; }
 
+    static bool IsInteractive() { return ms_isInteractive; }
+    static void SetInteractive() { ms_isInteractive = true; }
+
     // this function is deprecated because it handled its parameter
     // unnaturally: it disabled the bell when it was true, not false as could
     // be expected; use SuppressBellOnError() instead
@@ -164,6 +167,7 @@ protected:
 
 private:
     static bool ms_isSilent;
+    static bool ms_isInteractive;
 
     enum /*Validation status*/
     {
