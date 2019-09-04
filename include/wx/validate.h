@@ -163,6 +163,7 @@ protected:
     void SetValidationNeeded()
         { m_validationStatus |= Validation_Needed; }
 
+private:
     // Update m_validationStatus to either Validation_Ok or Validation_Error
     // and send the corresponding event.
     void SendValidationEvent(wxEventType type, const wxString& errormsg = wxString());
