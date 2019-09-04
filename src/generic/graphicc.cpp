@@ -3201,7 +3201,7 @@ wxCairoRenderer::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
 }
 
 wxGraphicsBrush
-wxCairoRenderer::CreateRadialGradientBrush(wxDouble startX, wxDouble startX,
+wxCairoRenderer::CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
                                            wxDouble endX, wxDouble endY, wxDouble r,
                                            const wxGraphicsGradientStops& stops,
                                            const wxGraphicsMatrix& matrix)
