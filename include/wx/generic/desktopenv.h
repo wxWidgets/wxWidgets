@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// Name:        wx/desktopenv.h
+// Name:        wx/generic/desktopenv.h
 // Purpose:     wxDesktopEnv class interface
 // Author:      Igor Korot
 // Modified by:
@@ -18,19 +18,9 @@ class WXDLLIMPEXP_CORE wxDesktopEnvBase
 public:
     wxDesktopEnvBase() { }
     virtual ~wxDesktopEnvBase() { }
-    virtual bool MoveFileToRecycleBin(const wxString &fileName);
+    virtual bool MoveFileToRecycleBin(const wxString &fileName) wxOVERRIDE;
 protected:
     wxDECLARE_NO_COPY_CLASS(wxDesktopEnvBase);
 };
-
-#if defined (__WXMSW__)
-    #include "wx/msw/desktopenv.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/desktopenv.h"
-#elif defined(__WXOSX__)
-    #include "wx/osx/desktopenv.h"
-#else
-    #include "wx/generic/desktopenv.h
-#endif
 
 #endif
