@@ -853,22 +853,21 @@ void GridTestCase::ResizeScrolledHeader()
 
 void GridTestCase::ColumnMinWidth()
 {
-    // TODO the test is works only under Windows unfortunately
+    // TODO this test currently works only under Windows unfortunately
 #if wxUSE_UIACTIONSIMULATOR && defined(__WXMSW__)
     int const startminwidth = m_grid->GetColMinimalAcceptableWidth();
     m_grid->SetColMinimalAcceptableWidth(startminwidth*2);
     int const newminwidth = m_grid->GetColMinimalAcceptableWidth();
     int const startwidth = m_grid->GetColSize(0);
-    int const newwidth = startwidth + 20;
 
     CPPUNIT_ASSERT(m_grid->GetColMinimalAcceptableWidth() < startwidth);
 
     wxRect rect = m_grid->CellToRect(0, 1);
     wxPoint point = m_grid->CalcScrolledPosition(rect.GetPosition());
     point = m_grid->ClientToScreen(point
-        + wxPoint(m_grid->GetRowLabelSize(),
-            m_grid->GetColLabelSize())
-        - wxPoint(0, 5));
+                                   + wxPoint(m_grid->GetRowLabelSize(),
+                                             m_grid->GetColLabelSize())
+                                   - wxPoint(0, 5));
 
     wxUIActionSimulator sim;
 
@@ -878,25 +877,15 @@ void GridTestCase::ColumnMinWidth()
     wxYield();
     sim.MouseDown();
     wxYield();
-    sim.MouseMove(point - wxPoint(startwidth - newminwidth, 0));
-    wxYield();
     sim.MouseMove(point - wxPoint(startwidth - startminwidth, 0));
     wxYield();
     sim.MouseUp();
-
-    // Drag again to resize to the `newwidth`.
-    wxYield();
-    sim.MouseMove(point - wxPoint(startwidth - newminwidth, 0));
-    wxYield();
-    sim.MouseDown();
-    wxYield();
-    sim.MouseMove(point - wxPoint(startwidth - newwidth, 0));
-    wxYield();
-    sim.MouseUp();
-
     wxYield();
 
-    CPPUNIT_ASSERT_EQUAL(newwidth, m_grid->GetColSize(0));
+    if ( ms_nativeheader )
+        CPPUNIT_ASSERT_EQUAL(startwidth, m_grid->GetColSize(0));
+    else
+        CPPUNIT_ASSERT_EQUAL(newminwidth, m_grid->GetColSize(0));
 #endif
 }
 
