@@ -179,11 +179,14 @@ public:
 
 
     /**
-        Returns the default size for the buttons. It is advised to make all the dialog
-        buttons of the same size and this function allows retrieving the (platform and
-        current font dependent size) which should be the best suited for this.
+        Returns the default size for the buttons. It is advised to make all the
+        dialog buttons of the same size and this function allows retrieving the
+        (platform, and current font dependent) size which should be the best
+        suited for this.
+        The optional wxWindow parameter allows to get a per-monitor DPI
+        specific size.
     */
-    static wxSize GetDefaultSize();
+    static wxSize GetDefaultSize(wxWindow* win = NULL);
 
     /**
         Returns the string label for the button.

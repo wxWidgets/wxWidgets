@@ -160,10 +160,8 @@ WXDWORD wxButton::MSWGetStyle(long style, WXDWORD *exstyle) const
 }
 
 /* static */
-wxSize wxButtonBase::GetDefaultSize()
+wxSize wxButtonBase::GetDefaultSize(wxWindow* win)
 {
-    wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
-
     static wxPrivate::DpiDependentValue<wxSize> s_sizeBtn;
 
     if ( s_sizeBtn.HasChanged(win) )
