@@ -42,6 +42,11 @@ wxValidator::~wxValidator()
 
 bool wxValidator::ReportValidation(wxWindow *parent, bool canPopup)
 {
+    // We do nothing if the window is already validated
+    // and in a valid state.
+    if ( IsOk() )
+        return true;
+
     if ( !canPopup )
         m_validationStatus |= Validation_NoPopup;
 
