@@ -1226,8 +1226,6 @@ bool wxNSTextViewControl::GetStyle(long position, wxTextAttr& style)
         if ( underlineType != wxTEXT_ATTR_UNDERLINE_NONE )
             style.SetFontUnderlined(underlineType, underlineColour);
 
-        style.SetFontUnderlined(underlineVal != NSUnderlineStyleNone);
-
         int textEffects = 0;
 
         // It's not obvious whether strikethrough is denoted
@@ -1342,7 +1340,7 @@ void wxNSTextViewControl::SetStyle(long start,
             // It's not obvious whether strikethrough is denoted
             // definitively by wxTEXT_ATTR_EFFECT_STRIKETHROUGH
             // or by wxTEXT_ATTR_FONT_STRIKETHROUGH, so handle both.
-            NSUnderlineStyle strikeThroughStyle = NSUnderlineStyleNone;
+            int strikeThroughStyle = NSUnderlineStyleNone; // should be type NSUnderlineStyle
             if ( style.HasTextEffects() )
             {
                 if ( textsEffects & wxTEXT_ATTR_EFFECT_STRIKETHROUGH )
@@ -1677,7 +1675,7 @@ void wxNSTextViewControl::SetScaleFactor(long factorPct)
     if ( GetScaleFactor() == factorPct )
         return;
 
-    factorPct = abs(factorPct);
+    factorPct = std::abs(factorPct);
     if ( factorPct == 0 )
         factorPct = 100;
 
