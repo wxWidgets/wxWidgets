@@ -13,8 +13,11 @@
 #import <AppKit/NSWorkspace.h>
 
 #include "wx/filefn.h"
+#include "wx/log.h"
 #include "wx/osx/core/cfstring.h"
 #include "wx/desktopenv.h"
+
+#include "wx/osx/private.h"
 
 wxDesktopEnv::wxDesktopEnv()
 {
