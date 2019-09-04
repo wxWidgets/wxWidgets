@@ -241,6 +241,7 @@ TEST_GUI_OBJECTS =  \
 	test_gui_keyboard.o \
 	test_gui_exec.o \
 	test_gui_fonttest.o \
+	test_gui_desktopenv.o \
 	test_gui_image.o \
 	test_gui_rawbmp.o \
 	test_gui_htmlparser.o \
@@ -1000,6 +1001,9 @@ test_gui_exec.o: $(srcdir)/exec/exec.cpp $(TEST_GUI_ODEP)
 
 test_gui_fonttest.o: $(srcdir)/font/fonttest.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/font/fonttest.cpp
+
+test_gui_desktopenv.o: $(srcdir)/file/desktopenv.cpp $(TEST_GUI_ODEP)
+	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/file/desktopenv.cpp
 
 test_gui_image.o: $(srcdir)/image/image.cpp $(TEST_GUI_ODEP)
 	$(CXXC) -c -o $@ $(TEST_GUI_CXXFLAGS) $(srcdir)/image/image.cpp

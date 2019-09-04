@@ -3,7 +3,7 @@
 // Purpose:     implementation of wxDesktopEnvBase
 // Author:      Igor Korot
 // Created:     2015-11-17
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -23,13 +23,14 @@
 #endif
 
 #include "wx/filefn.h"
+#include "wx/filename.h"
 #include "wx/log.h"
 #include "wx/desktopenv.h"
 
 bool wxDesktopEnvBase::MoveFileToRecycleBin(const wxString &fileName)
 {
     bool result = true;
-    if( !wxFileExists( fileName ) && !wxDirExists( fileName ) )
+    if( !wxFileExists( fileName ) && !wxDirExists( fileName ) && !wxFileName( fileName ).IsAbsolute() )
     {
         wxLogSysError( "Failed to move the file '%s' to Recycle Bin", fileName.c_str() );
         result = false;
