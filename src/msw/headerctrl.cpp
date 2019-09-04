@@ -108,10 +108,10 @@ public:
     virtual bool SetForegroundColour(const wxColour& colour) wxOVERRIDE;
     virtual bool SetFont(const wxFont& font) wxOVERRIDE;
 
-    // The implementation nof wxHeaderCtrlBase virtual functions
+    // The implementation of wxHeaderCtrlBase virtual functions
     void SetCount(unsigned int count);
     unsigned int GetCount() const;
-    void Update(unsigned int idx);
+    void UpdateHeader(unsigned int idx);
 
     void ScrollHorz(int dx);
 
@@ -383,7 +383,7 @@ void wxMSWHeaderCtrl::SetCount(unsigned int count)
     }
 }
 
-void wxMSWHeaderCtrl::Update(unsigned int idx)
+void wxMSWHeaderCtrl::UpdateHeader(unsigned int idx)
 {
     // the native control does provide Header_SetItem() but it's inconvenient
     // to use it because it sends HDN_ITEMCHANGING messages and we'd have to
@@ -1090,7 +1090,7 @@ void wxHeaderCtrl::DoSetCount(unsigned int count)
 
 void wxHeaderCtrl::DoUpdate(unsigned int idx)
 {
-    m_nativeControl->Update(idx);
+    m_nativeControl->UpdateHeader(idx);
 }
 
 void wxHeaderCtrl::DoSetColumnsOrder(const wxArrayInt& order)
