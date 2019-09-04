@@ -814,7 +814,7 @@ void GridTestCase::WindowAsEditorControl()
 
 void GridTestCase::ResizeScrolledHeader()
 {
-    // TODO the test is works only under Windows unfortunately
+    // TODO this test currently works only under Windows unfortunately
 #if wxUSE_UIACTIONSIMULATOR && defined(__WXMSW__)
     int const startwidth = m_grid->GetColSize(0);
     int const draglength = 100;
