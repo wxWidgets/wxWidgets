@@ -277,6 +277,7 @@ set(QT_HDR
     wx/generic/activityindicator.h
     ${QT_PLATFORM_HDR}
     wx/qt/treectrl.h
+    wx/generic/desktopenv.h
 )
 
 set(QT_SRC
@@ -376,6 +377,7 @@ set(QT_SRC
     src/qt/taskbar.cpp
     ${QT_PLATFORM_SRC}
     src/qt/treectrl.cpp
+    src/generic/desktopenv.cpp
 )
 
 set(MEDIA_QT_SRC
@@ -1747,6 +1749,7 @@ set(MOTIF_SRC
     src/generic/tabg.cpp
     src/generic/animateg.cpp
     src/generic/activityindicator.cpp
+    src/generic/desktopenv.cpp
 )
 
 set(MOTIF_HDR
@@ -1820,6 +1823,7 @@ set(MOTIF_HDR
     wx/motif/window.h
     wx/generic/animateanimate.h
     wx/generic/animate.h
+    wx/generic/desktopenv.h
 )
 
 set(X11_LOWLEVEL_SRC
@@ -1854,6 +1858,7 @@ set(X11_LOWLEVEL_SRC
     src/x11/utilsx.cpp
     src/x11/window.cpp
     src/unix/displayx11.cpp
+    src/generic/desktopenv.cpp
 )
 
 set(X11_LOWLEVEL_HDR
@@ -1888,6 +1893,7 @@ set(X11_LOWLEVEL_HDR
     wx/x11/textctrl.h
     wx/x11/toplevel.h
     wx/x11/window.h
+    wx/generic/desktopenv.h
 )
 
 set(MSW_LOWLEVEL_SRC
@@ -2246,6 +2252,7 @@ set(DFB_LOWLEVEL_SRC
     src/dfb/window.cpp
     src/dfb/wrapdfb.cpp
     src/generic/animateg.cpp
+    src/dfb/desktopenv.cpp
 )
 
 set(DFB_LOWLEVEL_HDR
@@ -2275,6 +2282,7 @@ set(DFB_LOWLEVEL_HDR
     wx/dfb/window.h
     wx/dfb/wrapdfb.h
     wx/generic/animate.h
+    wx/generic/desktopenv.h
 )
 
 set(OSX_LOWLEVEL_SRC
