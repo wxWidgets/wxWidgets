@@ -13,8 +13,11 @@
 #import <AppKit/NSWorkspace.h>
 
 #include "wx/filefn.h"
+#include "wx/log.h"
 #include "wx/osx/core/cfstring.h"
 #include "wx/desktopenv.h"
+
+#include "wx/osx/private.h"
 
 wxDesktopEnv::wxDesktopEnv()
 {
@@ -33,7 +36,10 @@ bool wxDesktopEnv::MoveFileToRecycleBin(const wxString &fileName)
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1080
     BOOL result = [[NSFileManager defaultManager] trashItemAtURL:url resultingItemURL:nil error:nil];
     if( result == NO )
+    {
+        wxLogSysError( _( "Failed to send file %s to Trash" ), fileName );
         ret = false;
+    }
 #else
     OSStatus status = FSPathMoveObjectToTrashSync( fileName.c_str(), NULL, kFSFileOperationDefaultOptions );
 #endif
