@@ -10,13 +10,15 @@
 #ifndef _WX_MSW_HEADERCTRL_H_
 #define _WX_MSW_HEADERCTRL_H_
 
+#include "wx/compositewin.h"
+
 class wxMSWHeaderCtrl;
 
 // ----------------------------------------------------------------------------
 // wxHeaderCtrl
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxHeaderCtrl : public wxHeaderCtrlBase
+class WXDLLIMPEXP_CORE wxHeaderCtrl : public wxCompositeWindow<wxHeaderCtrlBase>
 {
 public:
     wxHeaderCtrl()
@@ -43,13 +45,6 @@ public:
                 long style = wxHD_DEFAULT_STYLE,
                 const wxString& name = wxHeaderCtrlNameStr);
 
-    virtual ~wxHeaderCtrl();
-
-    // Override to implement colours support via custom drawing.
-    virtual bool SetBackgroundColour(const wxColour& colour) wxOVERRIDE;
-    virtual bool SetForegroundColour(const wxColour& colour) wxOVERRIDE;
-    virtual bool SetFont(const wxFont& font) wxOVERRIDE;
-
     // Window style handling.
     virtual void SetWindowStyleFlag(long style) wxOVERRIDE;
 
@@ -67,6 +62,9 @@ private:
 
     virtual void DoSetColumnsOrder(const wxArrayInt& order) wxOVERRIDE;
     virtual wxArrayInt DoGetColumnsOrder() const wxOVERRIDE;
+
+    // Pure virtual method inherited from wxCompositeWindow.
+    virtual wxWindowList GetCompositeWindowParts() const wxOVERRIDE;
 
     // Common part of all ctors.
     void Init();

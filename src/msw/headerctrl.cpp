@@ -1041,11 +1041,6 @@ bool wxHeaderCtrl::Create(wxWindow *parent,
     return true;
 }
 
-wxHeaderCtrl::~wxHeaderCtrl()
-{
-    delete m_nativeControl;
-}
-
 // ----------------------------------------------------------------------------
 // wxHeaderCtrl events
 // ----------------------------------------------------------------------------
@@ -1109,40 +1104,14 @@ wxArrayInt wxHeaderCtrl::DoGetColumnsOrder() const
 }
 
 // ----------------------------------------------------------------------------
-// wxHeaderCtrl appearance
+// wxHeaderCtrl composite window
 // ----------------------------------------------------------------------------
 
-bool wxHeaderCtrl::SetBackgroundColour(const wxColour& colour)
+wxWindowList wxHeaderCtrl::GetCompositeWindowParts() const
 {
-    if ( !wxHeaderCtrlBase::SetBackgroundColour(colour) )
-        return false;
-
-    if ( m_nativeControl != NULL )
-        return m_nativeControl->SetBackgroundColour(colour);
-
-    return true;
-}
-
-bool wxHeaderCtrl::SetForegroundColour(const wxColour& colour)
-{
-    if ( !wxHeaderCtrlBase::SetForegroundColour(colour) )
-        return false;
-
-    if ( m_nativeControl != NULL )
-        return m_nativeControl->SetForegroundColour(colour);
-
-    return true;
-}
-
-bool wxHeaderCtrl::SetFont(const wxFont& font)
-{
-    if ( !wxHeaderCtrlBase::SetFont(font) )
-        return false;
-
-    if ( m_nativeControl != NULL )
-        return m_nativeControl->SetFont(font);
-
-    return true;
+    wxWindowList parts;
+    parts.push_back(m_nativeControl);
+    return parts;
 }
 
 void wxHeaderCtrl::SetWindowStyleFlag(long style)
