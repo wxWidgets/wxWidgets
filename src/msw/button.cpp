@@ -162,12 +162,25 @@ WXDWORD wxButton::MSWGetStyle(long style, WXDWORD *exstyle) const
 /* static */
 wxSize wxButtonBase::GetDefaultSize()
 {
-    static wxSize s_sizeBtn;
+    wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
 
-    if ( s_sizeBtn.x == 0 )
+    static wxPrivate::DpiDependentValue<wxSize> s_sizeBtn;
+
+    if ( s_sizeBtn.HasChanged(win) )
     {
-        wxScreenDC dc;
-        dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+        wxSize base;
+        if ( win )
+        {
+            wxClientDC dc(win);
+            dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+            base = wxPrivate::GetAverageASCIILetterSize(dc);
+        }
+        else
+        {
+            wxScreenDC dc;
+            dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+            base = wxPrivate::GetAverageASCIILetterSize(dc);
+        }
 
         // The size of a standard button in the dialog units is 50x14,
         // translate this to pixels.
@@ -180,12 +193,11 @@ wxSize wxButtonBase::GetDefaultSize()
         //
         // NB: wxMulDivInt32() is used, because it correctly rounds the result
 
-        const wxSize base = wxPrivate::GetAverageASCIILetterSize(dc);
-        s_sizeBtn.x = wxMulDivInt32(50, base.x, 4);
-        s_sizeBtn.y = wxMulDivInt32(14, base.y, 8);
+        s_sizeBtn.SetAtNewDPI(wxSize(wxMulDivInt32(50, base.x, 4),
+                                     wxMulDivInt32(14, base.y, 8)));
     }
 
-    return s_sizeBtn;
+    return s_sizeBtn.Get();
 }
 
 // ----------------------------------------------------------------------------
