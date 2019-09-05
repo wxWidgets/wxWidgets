@@ -11,8 +11,8 @@
 # for example:
 #
 #   # public symbols added in release @WX_VERSION_TAG@.2 (please keep in alphabetical order):
-#   @WX_VERSION_TAG@.2 {
-#           *wxChoice*GetCurrentSelection*;
+#   @WX_VERSION_TAG@.2 extern "C++" {
+#           "wxChoice::GetCurrentSelection() const";
 #   };
 #
 # If a symbols should have been added in this way, but is forgotten then it
@@ -23,50 +23,54 @@
 
 # public symbols added in 3.0.5 (please keep in alphabetical order):
 @WX_VERSION_TAG@.5 {
-    *wxSVGFileDCImpl*DoDrawPolyPolygon*;
-    *wxSVGFileDCImpl*SetAxisOrientation*;
-    *wxSVGFileDCImpl*SetDeviceOrigin*;
-    *wxSVGFileDCImpl*SetLogicalOrigin*;
-    *wxWindow*GetContentScaleFactor*;
+    extern "C++" {
+        "wxSVGFileDCImpl::DoDrawPolyPolygon(int, int const*, wxPoint const*, int, int, wxPolygonFillMode)";
+        "wxSVGFileDCImpl::SetAxisOrientation(bool, bool)";
+        "wxSVGFileDCImpl::SetDeviceOrigin(int, int)";
+        "wxSVGFileDCImpl::SetLogicalOrigin(int, int)";
+        "wxWindow::GetContentScaleFactor() const";
+    };
 };
 
 # public symbols added in 3.0.4 (please keep in alphabetical order):
 @WX_VERSION_TAG@.4 {
-    *wxDirButton*DoApplyWidgetStyle*;
-    *wxFileButton*DoApplyWidgetStyle*;
-    *wxRibbonPage*ShowScrollButtons1*;
-    *wxWindow*GTKApplyCssStyle*;
+    extern "C++" {
+        "wxDirButton::DoApplyWidgetStyle(_GtkRcStyle*)";
+        "wxFileButton::DoApplyWidgetStyle(_GtkRcStyle*)";
+        "wxRibbonPage::ShowScrollButtons1()";
+        "wxWindow::GTKApplyCssStyle(char const*)";
+    };
 };
 
 # public symbols added in 3.0.3 (please keep in alphabetical order):
 @WX_VERSION_TAG@.3 {
-    *wxDataViewRenderer*FinishEditing*;
-    *wxFloatProperty*DoGetAttribute*;
+    extern "C++" {
+        "wxDataViewRenderer::FinishEditing()";
+        "wxFloatProperty::DoGetAttribute(wxString const&) const";
+    };
 };
 
 # public symbols added in 3.0.2 (please keep in alphabetical order):
 @WX_VERSION_TAG@.2 {
-	*wxGenericListCtrl*EndEditLabel*;
+    extern "C++" {
+        "wxGenericListCtrl::EndEditLabel(bool)";
+    };
 };
 
 
 # public symbols added in 3.0.1 (please keep in alphabetical order):
 @WX_VERSION_TAG@.1 {
-        *wxDataViewListCtrl*ClearColumns*;
-        *wxDataViewListStore*ClearColumns*;
-        *wxInfoBarGeneric*SetForegroundColour*;
-        *wxTDIChildFrame*DoMoveWindow*;
+    extern "C++" {
+        "wxDataViewListCtrl::ClearColumns()";
+        "wxDataViewListStore::ClearColumns()";
+        "wxInfoBarGeneric::SetForegroundColour(wxColour const&)";
+        "wxTDIChildFrame::DoMoveWindow(int, int, int, int)";
+    };
 };
 
 # symbols available since the beginning of this branch are only given
 # generic branch tag (don't remove this!):
 
 @WX_VERSION_TAG@ {
-        # Explicitly mention this one as otherwise it would be caught by
-        # wxDataViewRenderer*FinishEditing wildcard in 3.0.3 above.
-        *wxDataViewRendererBase*FinishEditing*;
-        # This would otherwise match *wxWindow*GetContentScaleFactor*
-        # in 3.0.5 above.
-        *wxWindowBase*GetContentScaleFactor*;
         *;
 };
