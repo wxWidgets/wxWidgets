@@ -27,7 +27,7 @@
 #include "wx/log.h"
 #include "wx/desktopenv.h"
 
-bool wxDesktopEnvBase::MoveFileToRecycleBin(const wxString &WXUNUSED(fileName))
+bool wxDesktopEnv::MoveFileToRecycleBin(const wxString &WXUNUSED(fileName))
 {
     return true;
 }

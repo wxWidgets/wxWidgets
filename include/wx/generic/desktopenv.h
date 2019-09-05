@@ -13,7 +13,7 @@
 
 #include "wx/defs.h"
 
-class WXDLLIMPEXP_CORE wxDesktopEnvBase
+class WXDLLIMPEXP_CORE wxDesktopEnv : public wxDesktopEnvBase
 {
 public:
     wxDesktopEnvBase() { }
