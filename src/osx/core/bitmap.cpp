@@ -1199,9 +1199,6 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
     if ( bitmapRefData->IsOk())
     {
         // Create picture
-
-        bool hasAlpha = false ;
-
         wxImage img;
         if ( image.HasMask() && !image.HasAlpha() )
         {
@@ -1217,7 +1214,7 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
         {
             img = image;
         }
-        hasAlpha = img.HasAlpha() ;
+        bool hasAlpha = img.HasAlpha() ;
 
         if ( hasAlpha )
             UseAlpha() ;
