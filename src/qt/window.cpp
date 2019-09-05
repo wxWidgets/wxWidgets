@@ -983,9 +983,10 @@ void wxWindowQt::DoSetToolTip( wxToolTip *tip )
 #if wxUSE_MENUS
 bool wxWindowQt::DoPopupMenu(wxMenu *menu, int x, int y)
 {
+    menu->UpdateUI();
     menu->GetHandle()->exec( GetHandle()->mapToGlobal( QPoint( x, y ) ) );
 
-    return ( true );
+    return true;
 }
 #endif // wxUSE_MENUS
 
