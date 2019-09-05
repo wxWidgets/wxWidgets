@@ -263,11 +263,11 @@ public:
     void CreateLinearGradientPattern(wxDouble x1, wxDouble y1,
                                      wxDouble x2, wxDouble y2,
                                      const wxGraphicsGradientStops& stops,
-                                     const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
+                                     const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
     void CreateRadialGradientPattern(wxDouble startX, wxDouble startY,
                                      wxDouble endX, wxDouble endY, wxDouble radius,
                                      const wxGraphicsGradientStops& stops,
-                                     const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
+                                     const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
 
 protected:
     // Call this to use the given bitmap as stipple. Bitmap must be non-null
@@ -755,7 +755,7 @@ wxCairoPenBrushBaseData::CreateLinearGradientPattern(wxDouble x1, wxDouble y1,
 {
     m_pattern = cairo_pattern_create_linear(x1,y1,x2,y2);
 
-    if (! matrix.IsNull())
+    if ( !matrix.IsNull() )
     {
         cairo_matrix_t m = *((cairo_matrix_t*) matrix.GetNativeMatrix());
         cairo_pattern_set_matrix(m_pattern, &m);
@@ -773,7 +773,7 @@ wxCairoPenBrushBaseData::CreateRadialGradientPattern(wxDouble startX, wxDouble s
 {
     m_pattern = cairo_pattern_create_radial(startX,startY,0.0,endX,endY,radius);
 
-    if (! matrix.IsNull())
+    if ( !matrix.IsNull() )
     {
         cairo_matrix_t m = *((cairo_matrix_t*) matrix.GetNativeMatrix());
         cairo_pattern_set_matrix(m_pattern, &m);
@@ -2994,14 +2994,14 @@ public :
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
                               const wxGraphicsGradientStops& stops,
-                              const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) wxOVERRIDE;
 
     virtual wxGraphicsBrush
     CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
                               wxDouble endX, wxDouble endY,
                               wxDouble radius,
                               const wxGraphicsGradientStops& stops,
-                              const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) wxOVERRIDE;
 
     // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) wxOVERRIDE ;

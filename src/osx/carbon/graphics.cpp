@@ -588,7 +588,7 @@ wxMacCoreGraphicsPenBrushDataBase::CreateLinearGradientShading(
                                       CGPointMake((CGFloat) x2, (CGFloat) y2), 
                                       m_gradientFunction, true, true );
     m_isShading = true;
-    if (! matrix.IsNull() )
+    if ( !matrix.IsNull() )
     {
         m_shadingMatrix = (wxMacCoreGraphicsMatrixData*)((wxMacCoreGraphicsMatrixData*)matrix.GetRefData())->Clone();
         m_shadingMatrix->Invert();
@@ -609,7 +609,7 @@ wxMacCoreGraphicsPenBrushDataBase::CreateRadialGradientShading(
                                        CGPointMake((CGFloat) endX, (CGFloat) endY), (CGFloat) radius, 
                                        m_gradientFunction, true, true );
     m_isShading = true;
-    if (! matrix.IsNull() )
+    if ( !matrix.IsNull() )
     {
         m_shadingMatrix = (wxMacCoreGraphicsMatrixData*)((wxMacCoreGraphicsMatrixData*)matrix.GetRefData())->Clone();
         m_shadingMatrix->Invert();

@@ -261,20 +261,21 @@ class wxGDIPlusPenBrushBaseData : public wxGraphicsObjectRefData
 {
 public:
     wxGDIPlusPenBrushBaseData(wxGraphicsRenderer* renderer);
-    ~wxGDIPlusPenBrushBaseData();
 
-    virtual void Init();
+    virtual void Init() wxOVERRIDE;
 
     void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                                    wxDouble x2, wxDouble y2,
                                    const wxGraphicsGradientStops& stops,
-                                   const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
+                                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
     void CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
                                    wxDouble endX, wxDouble endY,
                                    wxDouble radius,
                                    const wxGraphicsGradientStops& stops,
-                                   const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
+                                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
 protected:
+    virtual ~wxGDIPlusPenBrushBaseData();
+
     Brush* m_brush;
     GraphicsPath* m_brushPath;
     Image* m_image;
@@ -636,14 +637,14 @@ public :
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
                               const wxGraphicsGradientStops& stops,
-                              const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) wxOVERRIDE;
 
     virtual wxGraphicsBrush
     CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
                               wxDouble endX, wxDouble endY,
                               wxDouble radius,
                               const wxGraphicsGradientStops& stops,
-                              const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) wxOVERRIDE;
 
     // create a native bitmap representation
     virtual wxGraphicsBitmap CreateBitmap( const wxBitmap &bitmap ) wxOVERRIDE;
@@ -763,7 +764,7 @@ wxGDIPlusPenBrushBaseData::CreateLinearGradientBrush(
     brush->SetWrapMode(WrapModeTileFlipXY);
 
     // Apply the matrix if there is one
-    if (! matrix.IsNull())
+    if ( !matrix.IsNull() )
     {
         Matrix* m = static_cast<Matrix*>(matrix.GetNativeMatrix());
         m->Invert();
@@ -798,7 +799,7 @@ wxGDIPlusPenBrushBaseData::CreateRadialGradientBrush(
     // the area outside of the gradient's radius is not getting painted. 
 
     // Apply the matrix if there is one
-    if (! matrix.IsNull())
+    if ( !matrix.IsNull() )
     {
         Matrix* m = static_cast<Matrix*>(matrix.GetNativeMatrix());
         m->Invert();

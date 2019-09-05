@@ -271,7 +271,7 @@ extern WXDLLIMPEXP_DATA_CORE(wxGraphicsMatrix) wxNullGraphicsMatrix;
 
 // ----------------------------------------------------------------------------
 // wxGradientStop and wxGradientStops: Specify what intermediate colors are used
-// and how they are are spread out in a gradient
+// and how they are spread out in a gradient
 // ----------------------------------------------------------------------------
 
 // Describes a single gradient stop.
@@ -374,7 +374,7 @@ public:
     wxGraphicsPenInfo& 
     LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
                    const wxColour& c1, const wxColour& c2,
-                   const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix)
+                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix)
     { 
         m_gradientType = wxGRADIENT_LINEAR;
         m_x1 = x1;
@@ -390,7 +390,7 @@ public:
     wxGraphicsPenInfo& 
     LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
                    const wxGraphicsGradientStops& stops,
-                   const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix)
+                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix)
     { 
         m_gradientType = wxGRADIENT_LINEAR;
         m_x1 = x1;
@@ -406,7 +406,7 @@ public:
     RadialGradient(wxDouble startX, wxDouble startY,
                    wxDouble endX, wxDouble endY, wxDouble radius, 
                    const wxColour& oColor, const wxColour& cColor,
-                   const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix)
+                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix)
     { 
         m_gradientType = wxGRADIENT_RADIAL;
         m_x1 = startX;
@@ -424,7 +424,7 @@ public:
     RadialGradient(wxDouble startX, wxDouble startY,
                    wxDouble endX, wxDouble endY, 
                    wxDouble radius, const wxGraphicsGradientStops& stops,
-                   const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix)
+                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix)
     { 
         m_gradientType = wxGRADIENT_RADIAL;
         m_x1 = startX; 
@@ -626,12 +626,12 @@ public:
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
                               const wxColour& c1, const wxColour& c2,
-                              const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) const;
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) const;
     wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
                               const wxGraphicsGradientStops& stops,
-                              const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) const;
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) const;
 
     // sets the brush to a radial gradient originating at (xo,yc) and ending
     // on a circle around (xc,yc) with the given radius; the colours may be
@@ -640,13 +640,13 @@ public:
     CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
                               wxDouble endX, wxDouble endY, wxDouble radius,
                               const wxColour& oColor, const wxColour& cColor,
-                              const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) const;
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) const;
 
     wxGraphicsBrush
     CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
                               wxDouble endX, wxDouble endY, wxDouble radius,
                               const wxGraphicsGradientStops& stops,
-                              const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) const;
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) const;
 
     // creates a font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) const;
@@ -1023,14 +1023,14 @@ public:
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
                               const wxGraphicsGradientStops& stops,
-                              const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) = 0;
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) = 0;
 
     virtual wxGraphicsBrush
     CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
                               wxDouble endX, wxDouble endY,
                               wxDouble radius,
                               const wxGraphicsGradientStops& stops,
-                              const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) = 0;
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) = 0;
 
     // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) = 0;

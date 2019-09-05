@@ -2549,13 +2549,13 @@ public:
     void CreateLinearGradientBrush(wxDouble x1, wxDouble y1, 
                                    wxDouble x2, wxDouble y2, 
                                    const wxGraphicsGradientStops& stops,
-                                   const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
+                                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
 
     void CreateRadialGradientBrush(wxDouble startX, wxDouble startY, 
                                    wxDouble endX, wxDouble endY, 
                                    wxDouble radius, 
                                    const wxGraphicsGradientStops& stops,
-                                   const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix);
+                                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
 
     ID2D1Brush* GetBrush() const
     {
@@ -4642,14 +4642,14 @@ public :
         wxDouble x1, wxDouble y1,
         wxDouble x2, wxDouble y2,
         const wxGraphicsGradientStops& stops,
-        const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
+        const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) wxOVERRIDE;
 
     wxGraphicsBrush CreateRadialGradientBrush(
         wxDouble startX, wxDouble startY,
         wxDouble endX, wxDouble endY,
         wxDouble radius,
         const wxGraphicsGradientStops& stops,
-        const wxGraphicsMatrix& matrix=wxNullGraphicsMatrix) wxOVERRIDE;
+        const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) wxOVERRIDE;
 
     // create a native bitmap representation
     wxGraphicsBitmap CreateBitmap(const wxBitmap& bitmap) wxOVERRIDE;
