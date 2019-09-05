@@ -166,6 +166,21 @@ public:
     virtual bool CanUndo() const;
 
     /**
+        Delete the undo history.
+    */
+    virtual void EmptyUndoBuffer();
+
+    /**
+        Gets the scale (zoom/magnification) factor for the control, as a percentage; 100 is nominal.
+    */
+    virtual long GetScaleFactor() const;
+
+    /**
+        Sets the scale (zoom/magnification) factor for the control, as a percentage; 100 is nominal.
+    */
+    virtual void SetScaleFactor(long factorPct);
+
+    /**
         Sets the new text control value.
 
         It also marks the control as not-modified which means that IsModified()

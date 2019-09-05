@@ -81,7 +81,13 @@ public:
     virtual bool CanUndo() const = 0;
     virtual bool CanRedo() const = 0;
 
-    virtual void EmptyUndoBuffer() {} // = 0
+    virtual void EmptyUndoBuffer() { }
+
+    // zoom/magnification
+    // ---------
+
+    virtual long GetScaleFactor() const { return 100; }
+    virtual void SetScaleFactor(long WXUNUSED(factorPct)) { }
 
     // insertion point
     // ---------------
