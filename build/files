@@ -2210,6 +2210,7 @@ DFB_LOWLEVEL_SRC =
     src/generic/animateg.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
+    src/generic/desktopenv.cpp
     src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/generic/mask.cpp
@@ -2222,7 +2223,6 @@ DFB_LOWLEVEL_SRC =
     src/dfb/dcclient.cpp
     src/dfb/dcmemory.cpp
     src/dfb/dcscreen.cpp
-    src/dfb/desktopenv.cpp
     src/dfb/evtloop.cpp
     src/dfb/font.cpp
     src/dfb/fontenum.cpp

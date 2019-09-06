@@ -2252,7 +2252,7 @@ set(DFB_LOWLEVEL_SRC
     src/dfb/window.cpp
     src/dfb/wrapdfb.cpp
     src/generic/animateg.cpp
-    src/dfb/desktopenv.cpp
+    src/generic/desktopenv.cpp
 )
 
 set(DFB_LOWLEVEL_HDR
