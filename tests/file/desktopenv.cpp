@@ -22,7 +22,6 @@
 class DesktopEnvTestCase
 {
 public:
-	DesktopEnvTestCase() {};
     void MoveToTrash();
 };
 
