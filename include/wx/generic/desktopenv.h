@@ -8,8 +8,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DESKTOPENV_H_BASE_
-#define _WX_DESKTOPENV_H_BASE_
+#ifndef _WX_GENERIC_DESKTOPENV_H
+#define _WX_GENERIC_DESKTOPENV_H
 
 #include "wx/defs.h"
 
@@ -19,8 +19,6 @@ public:
     wxDesktopEnv() { }
     virtual ~wxDesktopEnv() { }
     virtual bool MoveFileToRecycleBin(const wxString &fileName) wxOVERRIDE;
-protected:
-    wxDECLARE_NO_COPY_CLASS(wxDesktopEnvBase);
 };
 
 #endif
