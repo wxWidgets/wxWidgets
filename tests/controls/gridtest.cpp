@@ -49,6 +49,7 @@ private:
     CPPUNIT_TEST_SUITE( GridTestCase );
         WXUISIM_TEST( CellEdit );
         NONGTK_TEST( CellClick );
+        NONGTK_TEST( ReorderedColumnsCellClick );
         NONGTK_TEST( CellSelect );
         NONGTK_TEST( LabelClick );
         NONGTK_TEST( SortClick );
@@ -83,6 +84,7 @@ private:
 
     void CellEdit();
     void CellClick();
+    void ReorderedColumnsCellClick();
     void CellSelect();
     void LabelClick();
     void SortClick();
@@ -229,6 +231,35 @@ void GridTestCase::CellClick()
 
     CPPUNIT_ASSERT_EQUAL(1, rclick.GetCount());
     CPPUNIT_ASSERT_EQUAL(1, rdclick.GetCount());
+#endif
+}
+
+void GridTestCase::ReorderedColumnsCellClick()
+{
+#if wxUSE_UIACTIONSIMULATOR
+    EventCounter click(m_grid, wxEVT_GRID_CELL_LEFT_CLICK);
+
+    wxUIActionSimulator sim;
+
+    wxArrayInt neworder;
+    neworder.push_back(1);
+    neworder.push_back(0);
+
+    m_grid->SetColumnsOrder(neworder);
+
+    wxRect rect = m_grid->CellToRect(0, 1);
+    wxPoint point = m_grid->CalcScrolledPosition(rect.GetPosition());
+    point = m_grid->ClientToScreen(point + wxPoint(m_grid->GetRowLabelSize(),
+        m_grid->GetColLabelSize())
+        + wxPoint(2, 2));
+
+    sim.MouseMove(point);
+    wxYield();
+
+    sim.MouseClick();
+    wxYield();
+
+    CPPUNIT_ASSERT_EQUAL(1, click.GetCount());
 #endif
 }
 
