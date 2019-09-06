@@ -27,6 +27,7 @@ public:
 
 TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
 {
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXOSX__)
     wxDesktopEnv env;
     char buf[DATABUFFER_SIZE];
     std::ofstream out( "ffileinstream.test", std::ofstream::out );
@@ -53,5 +54,6 @@ TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
     }
     out1.close();
     CHECK( env.MoveFileToRecycleBin( currentDir + "TrashTest" ) );
+#endif
 }
 
