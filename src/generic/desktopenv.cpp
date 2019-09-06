@@ -29,5 +29,6 @@
 
 bool wxDesktopEnv::MoveFileToRecycleBin(const wxString &WXUNUSED(fileName))
 {
-    return true;
+    wxFAIL_MSG( "Not implemented!" );
+    return false;
 }
