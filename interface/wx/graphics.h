@@ -647,7 +647,7 @@ public:
 
         The version taking wxGraphicsGradientStops is new in wxWidgets 2.9.1.
 
-        The @ matrix parameter was added in wxWidgets 3.1.3
+        The @a matrix parameter was added in wxWidgets 3.1.3
     */
     wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
