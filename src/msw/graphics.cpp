@@ -296,7 +296,7 @@ public:
     wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo &info );
     ~wxGDIPlusPenData();
 
-    virtual void Init();
+    virtual void Init() wxOVERRIDE;
 
     virtual wxDouble GetWidth() { return m_width; }
     virtual Pen* GetGDIPlusPen() { return m_pen; }
