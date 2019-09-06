@@ -1522,6 +1522,8 @@ public:
     // reverse mapping currently
     int GetColPos(int idx) const
     {
+        wxASSERT_MSG( idx != wxNOT_FOUND, "invalid column index" );
+
         if ( m_colAt.IsEmpty() )
             return idx;
 
