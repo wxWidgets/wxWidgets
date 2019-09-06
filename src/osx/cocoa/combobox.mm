@@ -348,6 +348,10 @@ wxWidgetImplType* wxWidgetImpl::CreateComboBox( wxComboBox* wxpeer,
     NSRect r = wxOSXGetFrameForControl( wxpeer, pos , size ) ;
     wxNSComboBox* v = [[wxNSComboBox alloc] initWithFrame:r];
     [v setNumberOfVisibleItems:13];
+    if (style & wxCB_SHOWALLITEMS)
+        [v setNumberOfVisibleItems:99];
+    //[v setHasVerticalScroller:YES];  // This doesn't seem to override the "Show scroll bars" System Pref.
+
     if (style & wxCB_READONLY)
         [v setEditable:NO];
     wxNSComboBoxControl* c = new wxNSComboBoxControl( wxpeer, v );

@@ -47,6 +47,8 @@
            overriding the default handling, pressing Enter key is either
            processed internally by the control or used to activate the default
            button of the dialog, if any.
+    @style{wxCB_SHOWALLITEMS}
+           Allows all items to be shown in the drop-down list. Mac only.
     @endStyleTable
 
     @beginEventEmissionTable{wxCommandEvent}
