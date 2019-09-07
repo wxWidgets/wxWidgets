@@ -34,6 +34,7 @@
 #endif
 
 class WXDLLIMPEXP_FWD_BASE wxArrayString;
+class WXDLLIMPEXP_FWD_CORE wxWindow;
 struct WXDLLIMPEXP_FWD_CORE wxNativeEncodingInfo;
 
 #if defined(_WX_X_FONTLIKE)
@@ -118,11 +119,16 @@ public:
     // set the XFLD
     void SetXFontName(const wxString& xFontName);
 #elif defined(__WXMSW__)
-    wxNativeFontInfo(const LOGFONT& lf_)
-        : lf(lf_),
-          pointSize(GetPointSizeAtPPI(lf.lfHeight))
-    {
-    }
+    // Preserve compatibility in the semi-public (i.e. private, but still
+    // unfortunately used by some existing code outside of the library) API
+    // by allowing to create wxNativeFontInfo from just LOGFONT, but ensure
+    // that we always specify the window, to use the correct DPI, when creating
+    // fonts inside the library itself.
+    wxNativeFontInfo(const LOGFONT& lf_, const wxWindow* win
+#ifndef WXBUILDING
+        = NULL
+#endif
+    );
 
     // MSW-specific: get point size from LOGFONT height using specified DPI,
     // or screen DPI when 0.

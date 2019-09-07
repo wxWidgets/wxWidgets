@@ -2921,7 +2921,7 @@ wxWindowBase::ToDIP(const wxSize& sz, const wxWindowBase* w)
 // using them.
 wxSize wxWindowBase::GetDlgUnitBase() const
 {
-    const wxWindowBase * const parent = wxGetTopLevelParent((wxWindow*)this);
+    const wxWindowBase* const parent = wxGetTopLevelParent((wxWindow*)this);
 
     wxCHECK_MSG( parent, wxDefaultSize, wxS("Must have TLW parent") );
 
@@ -2929,10 +2929,10 @@ wxSize wxWindowBase::GetDlgUnitBase() const
     {
         // Default GUI font is used. This is the most common case, so
         // cache the results.
-        static wxSize s_defFontSize;
-        if ( s_defFontSize.x == 0 )
-            s_defFontSize = wxPrivate::GetAverageASCIILetterSize(*parent);
-        return s_defFontSize;
+        static wxPrivate::DpiDependentValue<wxSize> s_defFontSize;
+        if ( s_defFontSize.HasChanged(parent) )
+            s_defFontSize.SetAtNewDPI(wxPrivate::GetAverageASCIILetterSize(*parent));
+        return s_defFontSize.Get();
     }
     else
     {

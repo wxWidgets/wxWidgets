@@ -28,15 +28,14 @@
 #include "wx/checkbox.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/brush.h"
     #include "wx/dcclient.h"
-    #include "wx/dcscreen.h"
     #include "wx/settings.h"
 #endif
 
 #include "wx/renderer.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private/button.h"
+#include "wx/private/window.h"
 #include "wx/msw/missing.h"
 
 // ============================================================================
@@ -98,16 +97,17 @@ WXDWORD wxCheckBox::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 wxSize wxCheckBox::DoGetBestClientSize() const
 {
-    static int s_checkSize = 0;
+    static wxPrivate::DpiDependentValue<wxCoord> s_checkSize;
 
-    if ( !s_checkSize )
+    if ( s_checkSize.HasChanged(this) )
     {
-        wxScreenDC dc;
+        wxClientDC dc(const_cast<wxCheckBox*>(this));
         dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
-        s_checkSize = dc.GetCharHeight();
+        s_checkSize.SetAtNewDPI(dc.GetCharHeight());
     }
 
+    wxCoord& checkSize = s_checkSize.Get();
     wxString str = wxGetWindowText(GetHWND());
 
     int wCheckbox, hCheckbox;
@@ -116,7 +116,7 @@ wxSize wxCheckBox::DoGetBestClientSize() const
         wxClientDC dc(const_cast<wxCheckBox *>(this));
         dc.SetFont(GetFont());
         dc.GetMultiLineTextExtent(GetLabelText(str), &wCheckbox, &hCheckbox);
-        wCheckbox += s_checkSize + GetCharWidth();
+        wCheckbox += checkSize + GetCharWidth();
 
         if ( ::GetWindowLong(GetHwnd(), GWL_STYLE) & BS_MULTILINE )
         {
@@ -128,16 +128,16 @@ wxSize wxCheckBox::DoGetBestClientSize() const
             // label appears on 3 lines, not 2, under Windows 2003 using
             // classic look and feel (although it works fine under Windows 7,
             // with or without themes).
-            wCheckbox += s_checkSize;
+            wCheckbox += checkSize;
         }
 
-        if ( hCheckbox < s_checkSize )
-            hCheckbox = s_checkSize;
+        if ( hCheckbox < checkSize )
+            hCheckbox = checkSize;
     }
     else
     {
-        wCheckbox = s_checkSize;
-        hCheckbox = s_checkSize;
+        wCheckbox = checkSize;
+        hCheckbox = checkSize;
     }
 
     return wxSize(wCheckbox, hCheckbox);

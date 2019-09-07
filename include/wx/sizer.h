@@ -120,13 +120,7 @@ public:
         // current DPI, do it once (and cache the result) in another function.
         #define wxNEEDS_BORDER_IN_PX
 
-        // We don't react to dynamic DPI changes, so we can cache the values of
-        // the border in on-screen pixels after computing it once. This
-        // could/should change in the future.
-        if ( !ms_defaultBorderInPx )
-            ms_defaultBorderInPx = DoGetDefaultBorderInPx();
-
-        return ms_defaultBorderInPx;
+        return DoGetDefaultBorderInPx();
     #endif
 #else
         return 0;
@@ -230,8 +224,6 @@ public:
 private:
 #ifdef wxNEEDS_BORDER_IN_PX
     static int DoGetDefaultBorderInPx();
-
-    static int ms_defaultBorderInPx;
 #endif // wxNEEDS_BORDER_IN_PX
 
     int m_proportion;
