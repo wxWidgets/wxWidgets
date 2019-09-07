@@ -110,6 +110,23 @@ public:
               closed while the busy info is shown.
     */
     wxBusyInfo(const wxString& msg, wxWindow* parent = NULL);
+    
+    /**
+        Update the information text.
+
+        The @a text string may contain markup as described in
+        wxControl::SetLabelMarkup().
+
+        @since 3.1.3
+    */
+    void UpdateText(const wxString& str);
+    
+    /**
+        Same as UpdateText() but doesn't interpret the string as containing markup.
+
+        @since 3.1.3
+    */ 
+    void UpdateLabel(const wxString& str);
 
     /**
         Hides and closes the window containing the information text.
