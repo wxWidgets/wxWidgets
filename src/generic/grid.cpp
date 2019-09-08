@@ -5021,9 +5021,6 @@ wxGrid::DoModifyLines(bool (wxGridTableBase::*funcModify)(size_t, size_t),
     if ( !m_table )
         return false;
 
-    if ( IsCellEditControlEnabled() )
-        DisableCellEditControl();
-
     return (m_table->*funcModify)(pos, num);
 
     // the table will have sent the results of the insert row
