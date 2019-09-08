@@ -54,6 +54,8 @@ TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
     }
     out1.close();
     CHECK( env.MoveFileToRecycleBin( currentDir + "TrashTest" ) );
+    // also trying non-existing file
+    CHECK( !env.MoveFileToRecycleBin( currentDir + "abc" ) );
 #endif
 }
 
