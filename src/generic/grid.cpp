@@ -6858,10 +6858,14 @@ void wxGrid::EnableCellEditControl( bool enable )
             SendEvent(wxEVT_GRID_EDITOR_HIDDEN);
 
             HideCellEditControl();
-            SaveEditControlValue();
 
-            // do it after HideCellEditControl()
-            m_cellEditCtrlEnabled = enable;
+            // do it after HideCellEditControl() but before invoking
+            // user-defined handlers invoked by DoSaveEditControlValue() to
+            // ensure that we don't enter infinite loop if any of them try to
+            // disable the edit control again.
+            m_cellEditCtrlEnabled = false;
+
+            DoSaveEditControlValue();
         }
     }
 }
@@ -7115,34 +7119,39 @@ void wxGrid::SaveEditControlValue()
 {
     if ( IsCellEditControlEnabled() )
     {
-        int row = m_currentCellCoords.GetRow();
-        int col = m_currentCellCoords.GetCol();
-
-        wxString oldval = GetCellValue(row, col);
-
-        wxGridCellAttr* attr = GetCellAttr(row, col);
-        wxGridCellEditor* editor = attr->GetEditor(this, row, col);
-
-        wxString newval;
-        bool changed = editor->EndEdit(row, col, this, oldval, &newval);
-
-        if ( changed && SendEvent(wxEVT_GRID_CELL_CHANGING, newval) != -1 )
-        {
-            editor->ApplyEdit(row, col, this);
-
-            // for compatibility reasons dating back to wx 2.8 when this event
-            // was called wxEVT_GRID_CELL_CHANGE and wxEVT_GRID_CELL_CHANGING
-            // didn't exist we allow vetoing this one too
-            if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == -1 )
-            {
-                // Event has been vetoed, set the data back.
-                SetCellValue(row, col, oldval);
-            }
-        }
-
-        editor->DecRef();
-        attr->DecRef();
+        DoSaveEditControlValue();
     }
+}
+
+void wxGrid::DoSaveEditControlValue()
+{
+    int row = m_currentCellCoords.GetRow();
+    int col = m_currentCellCoords.GetCol();
+
+    wxString oldval = GetCellValue(row, col);
+
+    wxGridCellAttr* attr = GetCellAttr(row, col);
+    wxGridCellEditor* editor = attr->GetEditor(this, row, col);
+
+    wxString newval;
+    bool changed = editor->EndEdit(row, col, this, oldval, &newval);
+
+    if ( changed && SendEvent(wxEVT_GRID_CELL_CHANGING, newval) != -1 )
+    {
+        editor->ApplyEdit(row, col, this);
+
+        // for compatibility reasons dating back to wx 2.8 when this event
+        // was called wxEVT_GRID_CELL_CHANGE and wxEVT_GRID_CELL_CHANGING
+        // didn't exist we allow vetoing this one too
+        if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == -1 )
+        {
+            // Event has been vetoed, set the data back.
+            SetCellValue(row, col, oldval);
+        }
+    }
+
+    editor->DecRef();
+    attr->DecRef();
 }
 
 void wxGrid::OnHideEditor(wxCommandEvent& WXUNUSED(event))
