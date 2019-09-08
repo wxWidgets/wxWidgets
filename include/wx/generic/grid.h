@@ -2478,6 +2478,10 @@ private:
     void SetNativeHeaderColCount();
     void SetNativeHeaderColOrder();
 
+    // Unlike the public SaveEditControlValue(), this method doesn't check if
+    // the edit control is shown, but just supposes that it is.
+    void DoSaveEditControlValue();
+
     // these sets contain the indices of fixed, i.e. non-resizable
     // interactively, grid rows or columns and are NULL if there are no fixed
     // elements (which is the default)
