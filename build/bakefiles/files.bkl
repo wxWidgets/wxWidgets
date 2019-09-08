@@ -2368,7 +2368,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/dfb/utils.cpp
     src/dfb/window.cpp
     src/dfb/wrapdfb.cpp
-    src/dfb/desktopenv.cpp
+    src/generic/desktopenv.cpp
 </set>
 <set var="DFB_LOWLEVEL_HDR" hints="files">
     wx/generic/animate.h
