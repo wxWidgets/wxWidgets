@@ -1274,7 +1274,8 @@ TEST_CASE("wxTextCtrl::ProcessEnter", "[wxTextCtrl][enter]")
     class TextCtrlCreator : public TextLikeControlCreator
     {
     public:
-        explicit TextCtrlCreator()
+        explicit TextCtrlCreator(int styleToAdd = 0)
+            : m_styleToAdd(styleToAdd)
         {
         }
 
@@ -1282,8 +1283,16 @@ TEST_CASE("wxTextCtrl::ProcessEnter", "[wxTextCtrl][enter]")
         {
             return new wxTextCtrl(parent, wxID_ANY, wxString(),
                                   wxDefaultPosition, wxDefaultSize,
-                                  style);
+                                  style | m_styleToAdd);
         }
+
+        virtual TextLikeControlCreator* CloneAsMultiLine() const wxOVERRIDE
+        {
+            return new TextCtrlCreator(wxTE_MULTILINE);
+        }
+
+    private:
+        int m_styleToAdd;
     };
 
     TestProcessEnter(TextCtrlCreator());

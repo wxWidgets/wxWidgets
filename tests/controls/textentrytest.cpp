@@ -21,6 +21,8 @@
 
 #include "textentrytest.h"
 #include "testableframe.h"
+
+#include "wx/scopedptr.h"
 #include "wx/uiaction.h"
 
 void TextEntryTestCase::SetValue()
@@ -434,6 +436,23 @@ private:
         }
     }
 
+    void OnText(wxCommandEvent& WXUNUSED(e))
+    {
+        // This should only happen for the multiline text controls.
+        switch ( m_processEnter )
+        {
+            case ProcessEnter_No:
+            case ProcessEnter_ButSkip:
+                // We consider that the text succeeded.
+                EndModal(wxID_OK);
+                break;
+
+            case ProcessEnter_WithoutSkipping:
+                FAIL("Shouldn't be getting wxEVT_TEXT if handled");
+                break;
+        }
+    }
+
     void OnTimeOut(wxTimerEvent&)
     {
         EndModal(wxID_CANCEL);
@@ -459,6 +478,7 @@ private:
 // style would fail with an assertion failure, due to wx helpfully complaining
 // about it.
 wxBEGIN_EVENT_TABLE(TestDialog, wxDialog)
+    EVT_TEXT(wxID_ANY, TestDialog::OnText)
     EVT_TEXT_ENTER(wxID_ANY, TestDialog::OnTextEnter)
 wxEND_EVENT_TABLE()
 
@@ -491,6 +511,42 @@ void TestProcessEnter(const TextLikeControlCreator& controlCreator)
         TestDialog dlgProcessEnter(controlCreator, ProcessEnter_WithoutSkipping);
         REQUIRE( dlgProcessEnter.ShowModal() == wxID_APPLY );
         CHECK( dlgProcessEnter.GotEnter() );
+    }
+
+    SECTION("Without wxTE_PROCESS_ENTER but with wxTE_MULTILINE")
+    {
+        wxScopedPtr<TextLikeControlCreator>
+            multiLineCreator(controlCreator.CloneAsMultiLine());
+        if ( !multiLineCreator )
+            return;
+
+        TestDialog dlg(*multiLineCreator, ProcessEnter_No);
+        REQUIRE( dlg.ShowModal() == wxID_OK );
+        CHECK( !dlg.GotEnter() );
+    }
+
+    SECTION("With wxTE_PROCESS_ENTER and wxTE_MULTILINE but skipping")
+    {
+        wxScopedPtr<TextLikeControlCreator>
+            multiLineCreator(controlCreator.CloneAsMultiLine());
+        if ( !multiLineCreator )
+            return;
+
+        TestDialog dlg(*multiLineCreator, ProcessEnter_ButSkip);
+        REQUIRE( dlg.ShowModal() == wxID_OK );
+        CHECK( dlg.GotEnter() );
+    }
+
+    SECTION("With wxTE_PROCESS_ENTER and wxTE_MULTILINE without skipping")
+    {
+        wxScopedPtr<TextLikeControlCreator>
+            multiLineCreator(controlCreator.CloneAsMultiLine());
+        if ( !multiLineCreator )
+            return;
+
+        TestDialog dlg(*multiLineCreator, ProcessEnter_WithoutSkipping);
+        REQUIRE( dlg.ShowModal() == wxID_APPLY );
+        CHECK( dlg.GotEnter() );
     }
 }
 
