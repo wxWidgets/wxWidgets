@@ -2641,6 +2641,14 @@ TestDefaultActionDialog::TestDefaultActionDialog( wxWindow *parent ) :
     grid_sizer->Add(new wxStaticText(this, wxID_ANY, "wxTextCtrl with wxTE_PROCESS_ENTER"),
                     wxSizerFlags().CentreVertical());
 
+    grid_sizer->Add(new wxTextCtrl(this, wxID_ANY,
+                                   "Enter here adds another line,\n"
+                                   "while Ctrl-Enter closes the dialog",
+                                   wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE),
+                    wxSizerFlags().Expand());
+    grid_sizer->Add(new wxStaticText(this, wxID_ANY, "wxTextCtrl without wxTE_PROCESS_ENTER"),
+                    wxSizerFlags().CentreVertical());
+
     grid_sizer->Add(new wxCheckBox(this, ID_DISABLE_OK, "Disable \"OK\""),
                     wxSizerFlags().CentreVertical());
     grid_sizer->Add(new wxCheckBox(this, ID_DISABLE_CANCEL, "Disable \"Cancel\""),
