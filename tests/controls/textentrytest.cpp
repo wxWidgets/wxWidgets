@@ -384,13 +384,17 @@ enum ProcessEnter
 class TestDialog : public wxDialog
 {
 public:
-    explicit TestDialog(TextLikeControlCreator controlCreator,
+    explicit TestDialog(const TextLikeControlCreator& controlCreator,
                         ProcessEnter processEnter)
         : wxDialog(wxTheApp->GetTopWindow(), wxID_ANY, "Test dialog"),
-          m_control((*controlCreator)(this,
-                                      processEnter == ProcessEnter_No
-                                        ? 0
-                                        : wxTE_PROCESS_ENTER)),
+          m_control
+          (
+              controlCreator.Create
+              (
+               this,
+               processEnter == ProcessEnter_No ? 0 : wxTE_PROCESS_ENTER
+              )
+          ),
           m_processEnter(processEnter),
           m_gotEnter(false)
     {
@@ -455,7 +459,7 @@ private:
 
 } // anonymous namespace
 
-void TestProcessEnter(TextLikeControlCreator controlCreator)
+void TestProcessEnter(const TextLikeControlCreator& controlCreator)
 {
     if ( !EnableUITests() )
     {
@@ -487,7 +491,7 @@ void TestProcessEnter(TextLikeControlCreator controlCreator)
 
 #else // !wxUSE_UIACTIONSIMULATOR
 
-void TestProcessEnter(TextLikeControlCreator WXUNUSED(controlCreator))
+void TestProcessEnter(const TextLikeControlCreator& WXUNUSED(controlCreator))
 {
     WARN("Skipping wxTE_PROCESS_ENTER tests: wxUIActionSimulator not available");
 }
