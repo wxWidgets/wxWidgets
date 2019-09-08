@@ -461,8 +461,10 @@ doesn't count as having handled the event and the search continues):
     </li>
 
     <li value="1">
-    If the object is a wxWindow and has an associated validator, wxValidator
-    gets a chance to process the event.
+    If the object is a wxWindow and has an associated validator,
+    and the event is not a validation event, i.e. wxEVT_VALIDATE_{OK,ERROR}
+    (in which case the object gets a chance to process the event first)
+    wxValidator gets a chance to process the event.
     </li>
 
     <li value="2">
