@@ -39,6 +39,33 @@ public:
     wxString GetErrorMessage() const;
 
     /**
+        If @param canPopup is false, this tells built-in validators to not
+        pop up any error message when processing the event.
+
+        Indeed, this is usefull and less intrusive if the error event is
+        generated from a wxEVT_KILL_FOCUS event handler, or interactively
+        if interactive validation is enabled.
+
+        @see CanPopup()
+    */
+    void SetCanPopup(bool canPopup);
+
+    /**
+        Tells validators whether or not they can display error messages.
+
+        @return false if either the error message is empty or a hint was
+        explicitly set by a call to SetCanPopup(false).
+
+        It's up to the caller to choose to display the error message if
+        it is not empty, even if this function returns false.
+
+        This function is always honored by the built-in validators.
+
+        @see SetCanPopup()
+    */
+    bool CanPopup() const;
+
+    /**
         Return the window associated with the validator generating the event.
     */
     wxWindow *GetWindow() const;
@@ -118,9 +145,31 @@ public:
     static void SuppressBellOnError(bool suppress = true);
 
     /**
-       Returns if the error sound is currently disabled.
+        Returns true if the error sound is currently disabled.
     */
     static bool IsSilent();
+
+    /**
+        Returns true if interactive validation is enabled.
+
+        Interactive validation, if enabled, means that validation is performed
+        as soon as a change is made to the control, and therefore, validation
+        errors are reported immediately if validation fails.
+
+        @since 3.1.3
+    */
+    static bool IsInteractive();
+
+    /**
+        Enable interactive validation.
+
+        @note Interactive validation, once enabled, cannot be disabled again,
+              and any validators created before the call to SetInteractive()
+              won't be interactive. This limitation may be removed in the future.
+
+        @since 3.1.3
+    */
+    static void SetInteractive();
 
     /**
         Associates a window with the validator.
