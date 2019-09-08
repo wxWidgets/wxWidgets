@@ -443,8 +443,10 @@ private:
         {
             case ProcessEnter_No:
             case ProcessEnter_ButSkip:
-                // We consider that the text succeeded.
-                EndModal(wxID_OK);
+                // We consider that the text succeeded, but in a different way,
+                // so use a different ID to be able to distinguish between this
+                // scenario and Enter activating the default button.
+                EndModal(wxID_CLOSE);
                 break;
 
             case ProcessEnter_WithoutSkipping:
@@ -521,7 +523,7 @@ void TestProcessEnter(const TextLikeControlCreator& controlCreator)
             return;
 
         TestDialog dlg(*multiLineCreator, ProcessEnter_No);
-        REQUIRE( dlg.ShowModal() == wxID_OK );
+        REQUIRE( dlg.ShowModal() == wxID_CLOSE );
         CHECK( !dlg.GotEnter() );
     }
 
@@ -533,7 +535,7 @@ void TestProcessEnter(const TextLikeControlCreator& controlCreator)
             return;
 
         TestDialog dlg(*multiLineCreator, ProcessEnter_ButSkip);
-        REQUIRE( dlg.ShowModal() == wxID_OK );
+        REQUIRE( dlg.ShowModal() == wxID_CLOSE );
         CHECK( dlg.GotEnter() );
     }
 

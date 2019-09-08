@@ -2216,7 +2216,7 @@ wxTextCtrl::MSWHandleMessage(WXLRESULT *rc,
             // Fix these problems by explicitly performing the default function of this
             // key (which would be done by MSWProcessMessage() if we didn't have
             // wxTE_PROCESS_ENTER) and preventing the default WndProc from getting it.
-            if ( !processed && wParam == VK_RETURN )
+            if ( !processed && wParam == VK_RETURN && IsSingleLine() )
             {
                 if ( ClickDefaultButtonIfPossible() )
                     processed = true;
