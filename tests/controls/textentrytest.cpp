@@ -398,11 +398,6 @@ public:
           m_processEnter(processEnter),
           m_gotEnter(false)
     {
-        // We can't always bind this handler because wx will helpfully
-        // complain if we bind it without using wxTE_PROCESS_ENTER.
-        if ( processEnter != ProcessEnter_No )
-            m_control->Bind(wxEVT_TEXT_ENTER, &TestDialog::OnTextEnter, this);
-
         wxSizer* const sizer = new wxBoxSizer(wxVERTICAL);
         sizer->Add(m_control, wxSizerFlags().Expand());
         sizer->Add(CreateStdDialogButtonSizer(wxOK));
@@ -455,7 +450,17 @@ private:
     const ProcessEnter m_processEnter;
     wxTimer m_timer;
     bool m_gotEnter;
+
+    wxDECLARE_EVENT_TABLE();
 };
+
+// Note that we must use event table macros here instead of Bind() because
+// binding wxEVT_TEXT_ENTER handler for a control without wxTE_PROCESS_ENTER
+// style would fail with an assertion failure, due to wx helpfully complaining
+// about it.
+wxBEGIN_EVENT_TABLE(TestDialog, wxDialog)
+    EVT_TEXT_ENTER(wxID_ANY, TestDialog::OnTextEnter)
+wxEND_EVENT_TABLE()
 
 } // anonymous namespace
 
