@@ -8677,6 +8677,7 @@ void wxGrid::SetRowAttr(int row, wxGridCellAttr *attr)
 
 void wxGrid::SetColAttr(int col, wxGridCellAttr *attr)
 {
+    DisableCellEditControl();
     if ( CanHaveAttributes() )
     {
         m_table->SetColAttr(attr, col);
