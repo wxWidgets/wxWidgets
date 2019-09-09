@@ -167,7 +167,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
     while ( n-- > 0 )
         m_qtComboBox->addItem( wxQtConvertString( *choices++ ));
-    m_qtComboBox->setEditText( wxQtConvertString( value ));
+    m_qtComboBox->setCurrentText( wxQtConvertString( value ));
 
     return QtCreateControl( parent, id, pos, size, style, validator, name );
 }
