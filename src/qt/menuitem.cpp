@@ -51,6 +51,17 @@ void wxMenuItem::SetItemLabel( const wxString &label )
 {
     wxMenuItemBase::SetItemLabel( label );
 
+    #if wxUSE_ACCEL
+    std::string label_str = label.ToStdString();
+    std::size_t found = label_str.find_last_of("\\t");
+
+    if(found != std::string::npos)
+    {
+        QString shortcut_key = QString::fromStdString( label_str.substr( found-1 ) );
+        m_qtAction->setShortcut( QKeySequence( shortcut_key ) );
+    }
+    #endif
+
     m_qtAction->setText( wxQtConvertString( label ));
 }
 
