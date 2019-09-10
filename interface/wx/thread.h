@@ -489,7 +489,7 @@ public:
 
         @since 2.9.2
 
-        @see OnKill()
+        @see OnKill(), OnExit()
     */
     virtual void OnDelete();
 
@@ -503,9 +503,24 @@ public:
 
         @since 2.9.2
 
-        @see OnDelete()
+        @see OnDelete(), OnExit()
     */
     virtual void OnKill();
+
+    /**
+        Callback called by Exit() before actually exiting the thread.
+        This function will not be called if the thread was @ref Kill() killed.
+
+        This function can be overridden by the derived class to perform some
+        specific task when the thread is exited. Notice that it will be
+        executed in the context of the thread that called Exit() and <b>not</b>
+        in this thread's context. 
+
+        @since 2.9.2 - private, 3.1.3 - protected
+
+        @see OnDelete(), OnKill()
+    */
+    virtual void OnExit();
 
     /**
         @deprecated
@@ -1371,19 +1386,6 @@ protected:
         OnExit() will be called just before exiting.
     */
     void Exit(ExitCode exitcode = 0);
-
-private:
-
-    /**
-        Called when the thread exits.
-
-        This function is called in the context of the thread associated with the
-        wxThread object, not in the context of the main thread.
-        This function will not be called if the thread was @ref Kill() killed.
-
-        This function should never be called directly.
-    */
-    virtual void OnExit();
 };
 
 
