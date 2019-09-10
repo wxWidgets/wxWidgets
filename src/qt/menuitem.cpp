@@ -51,6 +51,20 @@ void wxMenuItem::SetItemLabel( const wxString &label )
 {
     wxMenuItemBase::SetItemLabel( label );
 
+#if wxUSE_ACCEL
+    QString qlabel = wxQtConvertString( label );
+    int index = qlabel.lastIndexOf( QChar( '\t' ) );
+
+    if ( index != -1 )
+    {
+        QList<QKeySequence> shortcuts = m_qtAction->shortcuts();
+        QString shortcut_key = qlabel.remove( 0, index+1 );
+
+        shortcuts.append( QKeySequence( shortcut_key ) );
+        m_qtAction->setShortcuts( shortcuts );
+    }
+#endif // wxUSE_ACCEL
+
     m_qtAction->setText( wxQtConvertString( label ));
 }
 
