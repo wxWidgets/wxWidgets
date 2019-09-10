@@ -5287,18 +5287,10 @@ void wxGrid::RefreshBlock(int topRow, int leftCol,
         topRow = 0;
         leftCol = 0;
     }
-    else
-    {
-        wxASSERT( topRow != -1 || leftCol != -1 );
-    }
     if ( noBottomRight )
     {
         bottomRow = topRow;
         rightCol = leftCol;
-    }
-    else
-    {
-        wxASSERT( bottomRow != -1 || rightCol != -1 );
     }
 
     int row = topRow;
