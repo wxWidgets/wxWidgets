@@ -512,11 +512,11 @@ public:
         This function will not be called if the thread was @ref Kill() killed.
 
         This function can be overridden by the derived class to perform some
-        specific task when the thread is exited. Notice that it will be
-        executed in the context of the thread that called Exit() and <b>not</b>
-        in this thread's context. 
+        specific task when the thread is exited. The base class version does 
+        nothing and doesn't need to be called if this method is overridden.
 
-        @since 2.9.2 - private, 3.1.3 - protected
+        Note that this function is protected since wxWidgets 3.1.1, 
+        but previously existed as a private method since 2.9.2.
 
         @see OnDelete(), OnKill()
     */
