@@ -262,7 +262,7 @@ class wxGDIPlusPenBrushBaseData : public wxGraphicsObjectRefData
 public:
     wxGDIPlusPenBrushBaseData(wxGraphicsRenderer* renderer);
 
-    virtual void Init() wxOVERRIDE;
+    virtual void Init();
 
     void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                                    wxDouble x2, wxDouble y2,
