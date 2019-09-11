@@ -49,17 +49,60 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu, int id, const wxString& text,
 
 void wxMenuItem::SetItemLabel( const wxString &label )
 {
+    //std::cout << "wxMenuItem::SetItemLabel( " << label.ToStdString() << " )\n";
     wxMenuItemBase::SetItemLabel( label );
 
     #if wxUSE_ACCEL
+
+    QList<QKeySequence> shortcuts;
+
+    // Get appended shortcut
+
     std::string label_str = label.ToStdString();
-    std::size_t found = label_str.find_last_of("\\t");
+    std::size_t found = label_str.find_last_of("\t");
 
     if(found != std::string::npos)
     {
-        QString shortcut_key = QString::fromStdString( label_str.substr( found-1 ) );
-        m_qtAction->setShortcut( QKeySequence( shortcut_key ) );
+        QString shortcut_key = QString::fromStdString( label_str.substr( found+1 ) );
+        shortcuts.append(QKeySequence( shortcut_key ));
+        //std::cout << "Added t shortcut: " << shortcut_key.toStdString() << ".\n";
     }
+    else
+    {
+        //std::cout << "Did not find...\n";
+    }
+
+    // END
+
+    // Get Ampersand shortcut
+
+    std::size_t found_ampersand = label_str.find_first_of("&");
+
+    if(found_ampersand != std::string::npos)
+    {
+        std::string shortcut_std = label_str.substr(found_ampersand+1,1);
+        //std::cout << "found ampersand... position is: " << found_ampersand << "  next character is " << shortcut_std << "\n";
+        if(shortcut_std != "&")
+        {
+            //std::cout << "adding shortcut..." << shortcut_std << "\n";
+            QString shortcut_key = QString::fromStdString( shortcut_std );
+            shortcuts.append(QKeySequence( shortcut_key ));
+
+        }
+    }
+
+    // END
+
+    // Add them
+
+    if(!shortcuts.empty())
+    {
+        //std::cout << "Shortcuts are not empty!";
+         m_qtAction->setShortcuts( shortcuts );
+    }
+
+    //std::cout << "\n\n";
+
     #endif
 
     m_qtAction->setText( wxQtConvertString( label ));
