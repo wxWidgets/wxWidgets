@@ -1772,12 +1772,6 @@ void wxD2DPathData::AddPath(const wxGraphicsPathData* path)
     GeometryStateData curStateSrc;
     pathSrc->SaveGeometryState(curStateSrc);
 
-    // I think this assert is incorrect. We need to support paths where the end
-    // is not connected to the beginning. --Robin
-    // Raise warning if appended path has an open non-empty sub-path.
-    // wxASSERT_MSG( pathSrc->IsStateSafeForFlush(),
-    //     wxS("Sub-path in appended path should be closed prior to this operation") );
-
     // Close appended geometry.
     pathSrc->Flush();
 
@@ -1896,11 +1890,6 @@ void wxD2DPathData::Transform(const wxGraphicsMatrixData* matrix)
     // constraints this can be fully done only if open figure was empty.
     // So, Transform() can be safely called if path doesn't contain the open
     // sub-path or if open sub-path is empty.
-    
-    // I think this assert is incorrect. We need to support paths where the end
-    // is not connected to the beginning. --Robin
-    // wxASSERT_MSG( IsStateSafeForFlush(),
-    //         wxS("Consider closing sub-path before calling Transform()") );
     
     // Close current geometry.
     Flush();
