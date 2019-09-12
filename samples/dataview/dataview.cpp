@@ -118,6 +118,9 @@ private:
     void OnAddTreeItem(wxCommandEvent& event);
     void OnAddTreeContainerItem(wxCommandEvent& event);
 
+    void OnIndexListUseEnglish(wxCommandEvent&) { FillIndexList(Lang_English); }
+    void OnIndexListUseFrench(wxCommandEvent&) { FillIndexList(Lang_French); }
+
     void OnValueChanged( wxDataViewEvent &event );
 
     void OnActivated( wxDataViewEvent &event );
@@ -160,6 +163,11 @@ private:
     // helper used by both OnDeleteSelected() and OnDataViewChar()
     void DeleteSelectedItems();
 
+    // helper for the index list model fills the model with the weekday names
+    // in the specified language
+    enum Lang { Lang_English, Lang_French };
+    void FillIndexList(Lang lang);
+
 
     wxNotebook* m_notebook;
 
@@ -171,16 +179,18 @@ private:
         Page_ListStore,
         Page_TreeStore,
         Page_VarHeight,
+        Page_IndexList,
         Page_Max
     };
 
     wxDataViewCtrl* m_ctrl[Page_Max];
 
-    // the models associated with the first two DVC:
+    // Some of the models associated with the controls:
 
     wxObjectDataPtr<MyMusicTreeModel> m_music_model;
     wxObjectDataPtr<MyLongMusicTreeModel> m_long_music_model;
     wxObjectDataPtr<MyListModel> m_list_model;
+    wxObjectDataPtr<MyIndexListModel> m_index_list_model;
 
     // other data:
 
@@ -427,7 +437,11 @@ enum
     ID_DELETE_TREE_ITEM = 400,
     ID_DELETE_ALL_TREE_ITEMS = 401,
     ID_ADD_TREE_ITEM = 402,
-    ID_ADD_TREE_CONTAINER_ITEM = 403
+    ID_ADD_TREE_CONTAINER_ITEM = 403,
+
+    // Index list model page
+    ID_INDEX_LIST_USE_ENGLISH = 500,
+    ID_INDEX_LIST_USE_FRENCH
 };
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -473,6 +487,9 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON( ID_DELETE_ALL_TREE_ITEMS, MyFrame::OnDeleteAllTreeItems )
     EVT_BUTTON( ID_ADD_TREE_ITEM, MyFrame::OnAddTreeItem )
     EVT_BUTTON( ID_ADD_TREE_CONTAINER_ITEM, MyFrame::OnAddTreeContainerItem )
+
+    EVT_BUTTON( ID_INDEX_LIST_USE_ENGLISH, MyFrame::OnIndexListUseEnglish )
+    EVT_BUTTON( ID_INDEX_LIST_USE_FRENCH, MyFrame::OnIndexListUseFrench )
 
     EVT_DATAVIEW_ITEM_VALUE_CHANGED( ID_MUSIC_CTRL, MyFrame::OnValueChanged )
 
@@ -672,6 +689,24 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     fifthPanelSz->Add(m_ctrl[Page_VarHeight], 1, wxGROW | wxALL, 5);
     fifthPanel->SetSizerAndFit(fifthPanelSz);
 
+    // page showing the indexed list model
+    // -----------------------------------
+
+    wxPanel* sixthPanel = new wxPanel(m_notebook, wxID_ANY);
+
+    BuildDataViewCtrl(sixthPanel, Page_IndexList);
+
+    wxBoxSizer *button_sizer6 = new wxBoxSizer(wxHORIZONTAL);
+    button_sizer6->Add(new wxButton(sixthPanel, ID_INDEX_LIST_USE_ENGLISH, "&English"),
+                       wxSizerFlags().DoubleBorder());
+    button_sizer6->Add(new wxButton(sixthPanel, ID_INDEX_LIST_USE_FRENCH, "&French"),
+                       wxSizerFlags().DoubleBorder());
+
+    wxSizer *sixthPanelSz = new wxBoxSizer(wxVERTICAL);
+    sixthPanelSz->Add(m_ctrl[Page_IndexList], wxSizerFlags(1).Expand().Border());
+    sixthPanelSz->Add(button_sizer6);
+    sixthPanel->SetSizerAndFit(sixthPanelSz);
+
 
     // complete GUI
     // ------------
@@ -680,7 +715,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     m_notebook->AddPage(secondPanel, "MyListModel");
     m_notebook->AddPage(thirdPanel, "wxDataViewListCtrl");
     m_notebook->AddPage(fourthPanel, "wxDataViewTreeCtrl");
-    m_notebook->AddPage(fifthPanel, "wxDataViewTreeCtrl Variable line height");
+    m_notebook->AddPage(fifthPanel, "Variable line height");
+    m_notebook->AddPage(sixthPanel, "MyIndexListModel");
 
     wxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -927,6 +963,21 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
                     wxDATAVIEW_COL_RESIZABLE);
             column1->SetMinWidth(150); // this column can't be resized to be smaller
             m_ctrl[Page_VarHeight]->AppendColumn(column1);
+        }
+        break;
+
+    case Page_IndexList:
+        {
+            m_ctrl[Page_IndexList] = new wxDataViewCtrl(parent, wxID_ANY,
+                                                        wxDefaultPosition,
+                                                        wxDefaultSize,
+                                                        style);
+
+            m_index_list_model = new MyIndexListModel;
+            m_ctrl[Page_IndexList]->AssociateModel(m_index_list_model.get());
+            m_ctrl[Page_IndexList]->AppendTextColumn("String", 0);
+
+            FillIndexList(Lang_English);
         }
         break;
     }
@@ -1615,4 +1666,20 @@ void MyFrame::OnSortByFirstColumn(wxCommandEvent& event)
         col->SetSortOrder(true /* ascending */);
     else
         col->UnsetAsSortKey();
+}
+
+// ----------------------------------------------------------------------------
+// Index list model page
+// ----------------------------------------------------------------------------
+
+void MyFrame::FillIndexList(Lang lang)
+{
+    const int DAYS_PER_WEEK = 7;
+    const wxString weekdays[2][DAYS_PER_WEEK] =
+    {
+        { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" },
+        { "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim" },
+    };
+
+    m_index_list_model->Fill(wxArrayString(DAYS_PER_WEEK, weekdays[lang]));
 }
