@@ -120,6 +120,7 @@ private:
 
     void OnIndexListUseEnglish(wxCommandEvent&) { FillIndexList(Lang_English); }
     void OnIndexListUseFrench(wxCommandEvent&) { FillIndexList(Lang_French); }
+    void OnIndexListSelectionChanged(wxDataViewEvent& event);
 
     void OnValueChanged( wxDataViewEvent &event );
 
@@ -978,6 +979,10 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             m_ctrl[Page_IndexList]->AppendTextColumn("String", 0);
 
             FillIndexList(Lang_English);
+
+            m_ctrl[Page_IndexList]->Bind(wxEVT_DATAVIEW_SELECTION_CHANGED,
+                                         &MyFrame::OnIndexListSelectionChanged,
+                                         this);
         }
         break;
     }
@@ -1682,4 +1687,25 @@ void MyFrame::FillIndexList(Lang lang)
     };
 
     m_index_list_model->Fill(wxArrayString(DAYS_PER_WEEK, weekdays[lang]));
+}
+
+void MyFrame::OnIndexListSelectionChanged(wxDataViewEvent& event)
+{
+    // We don't expect any events during the control destruction.
+    wxASSERT( !m_ctrl[Page_IndexList]->IsBeingDeleted() );
+
+    wxString weekday;
+    wxDataViewItem item = event.GetItem();
+    if ( !item )
+    {
+        weekday = "[none]";
+    }
+    else
+    {
+        wxVariant val;
+        m_index_list_model->GetValue(val, item, 0);
+        weekday = val.GetString();
+    }
+
+    wxLogMessage("Selected week day: %s", weekday);
 }
