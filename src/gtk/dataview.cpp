@@ -1788,40 +1788,7 @@ bool wxGtkDataViewModelNotifier::AfterReset()
 
 bool wxGtkDataViewModelNotifier::Cleared()
 {
-    GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
-
-    // There is no call to tell the model that everything
-    // has been deleted so call row_deleted() for every
-    // child of root...
-
-    int count = m_internal->iter_n_children( NULL ); // number of children of root
-
-    GtkTreePath *path = gtk_tree_path_new_first();  // points to root
-
-    // It is important to avoid selection changed events being generated from
-    // here as they would reference the already deleted model items, which
-    // would result in crashes in any code attempting to handle these events.
-    m_internal->GtkDisableSelectionEvents();
-
-    // We also need to prevent wxGtkTreeCellDataFunc from using the model items
-    // not existing any longer, so change the model stamp to indicate that it
-    // temporarily can't be used.
-    const gint stampOrig = wxgtk_model->stamp;
-    wxgtk_model->stamp = 0;
-
-    int i;
-    for (i = 0; i < count; i++)
-        gtk_tree_model_row_deleted( GTK_TREE_MODEL(wxgtk_model), path );
-
-    gtk_tree_path_free( path );
-
-    wxgtk_model->stamp = stampOrig;
-
-    m_internal->Cleared();
-
-    m_internal->GtkEnableSelectionEvents();
-
-    return true;
+    return BeforeReset() && AfterReset();
 }
 
 // ---------------------------------------------------------
