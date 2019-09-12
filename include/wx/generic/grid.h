@@ -2309,6 +2309,9 @@ private:
     // common part of Clip{Horz,Vert}GridLines
     void DoClipGridLines(bool& var, bool clip);
 
+    // update m_currentCellCoords from Redimension function
+    void UpdateCurrentCellWhileRedim();
+
     // update the sorting indicator shown in the specified column (whose index
     // must be valid)
     //
