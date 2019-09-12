@@ -2309,6 +2309,10 @@ private:
     // common part of Clip{Horz,Vert}GridLines
     void DoClipGridLines(bool& var, bool clip);
 
+    // Redimension() helper: update m_currentCellCoords if necessary after a
+    // grid size change
+    void UpdateCurrentCellOnRedim();
+
     // update the sorting indicator shown in the specified column (whose index
     // must be valid)
     //

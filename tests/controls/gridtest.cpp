@@ -58,6 +58,7 @@ private:
         CPPUNIT_TEST( Cursor );
         CPPUNIT_TEST( Selection );
         CPPUNIT_TEST( AddRowCol );
+        CPPUNIT_TEST( DeleteAndAddRowCol );
         CPPUNIT_TEST( ColumnOrder );
         CPPUNIT_TEST( ColumnVisibility );
         CPPUNIT_TEST( LineFormatting );
@@ -75,6 +76,7 @@ private:
         CPPUNIT_TEST( ColumnOrder );
         WXUISIM_TEST( ResizeScrolledHeader );
         WXUISIM_TEST( ColumnMinWidth );
+        CPPUNIT_TEST( DeleteAndAddRowCol );
         CPPUNIT_TEST( PseudoTest_NativeLabels );
         NONGTK_TEST( LabelClick );
         NONGTK_TEST( SortClick );
@@ -93,6 +95,7 @@ private:
     void Cursor();
     void Selection();
     void AddRowCol();
+    void DeleteAndAddRowCol();
     void ColumnOrder();
     void ColumnVisibility();
     void LineFormatting();
@@ -538,6 +541,35 @@ void GridTestCase::AddRowCol()
 
     CPPUNIT_ASSERT_EQUAL(16, m_grid->GetNumberRows());
     CPPUNIT_ASSERT_EQUAL(7, m_grid->GetNumberCols());
+}
+
+void GridTestCase::DeleteAndAddRowCol()
+{
+    CPPUNIT_ASSERT_EQUAL(10, m_grid->GetNumberRows());
+    CPPUNIT_ASSERT_EQUAL(2, m_grid->GetNumberCols());
+
+    m_grid->DeleteRows(0, 10);
+    m_grid->DeleteCols(0, 2);
+
+    CPPUNIT_ASSERT_EQUAL(0, m_grid->GetNumberRows());
+    CPPUNIT_ASSERT_EQUAL(0, m_grid->GetNumberCols());
+
+    m_grid->AppendRows(5);
+    m_grid->AppendCols(3);
+
+    CPPUNIT_ASSERT_EQUAL(5, m_grid->GetNumberRows());
+    CPPUNIT_ASSERT_EQUAL(3, m_grid->GetNumberCols());
+
+    // The order of functions calls can be important
+    m_grid->DeleteCols(0, 3);
+    m_grid->DeleteRows(0, 5);
+
+    CPPUNIT_ASSERT_EQUAL(0, m_grid->GetNumberRows());
+    CPPUNIT_ASSERT_EQUAL(0, m_grid->GetNumberCols());
+
+    // Different functions calls order
+    m_grid->AppendCols(3);
+    m_grid->AppendRows(5);
 }
 
 void GridTestCase::ColumnOrder()

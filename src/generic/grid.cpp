@@ -2915,13 +2915,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 }
             }
 
-            if ( m_currentCellCoords == wxGridNoCellCoords )
-            {
-                // if we have just inserted cols into an empty grid the current
-                // cell will be undefined...
-                //
-                SetCurrentCell( 0, 0 );
-            }
+            UpdateCurrentCellOnRedim();
 
             if ( m_selection )
                 m_selection->UpdateRows( pos, numRows );
@@ -2960,13 +2954,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 }
             }
 
-            if ( m_currentCellCoords == wxGridNoCellCoords )
-            {
-                // if we have just inserted cols into an empty grid the current
-                // cell will be undefined...
-                //
-                SetCurrentCell( 0, 0 );
-            }
+            UpdateCurrentCellOnRedim();
 
             if ( !GetBatchCount() )
             {
@@ -2996,15 +2984,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 }
             }
 
-            if ( !m_numRows )
-            {
-                m_currentCellCoords = wxGridNoCellCoords;
-            }
-            else
-            {
-                if ( m_currentCellCoords.GetRow() >= m_numRows )
-                    m_currentCellCoords.Set( 0, 0 );
-            }
+            UpdateCurrentCellOnRedim();
 
             if ( m_selection )
                 m_selection->UpdateRows( pos, -((int)numRows) );
@@ -3080,13 +3060,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 }
             }
 
-            if ( m_currentCellCoords == wxGridNoCellCoords )
-            {
-                // if we have just inserted cols into an empty grid the current
-                // cell will be undefined...
-                //
-                SetCurrentCell( 0, 0 );
-            }
+            UpdateCurrentCellOnRedim();
 
             if ( m_selection )
                 m_selection->UpdateCols( pos, numCols );
@@ -3144,13 +3118,8 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             if ( m_useNativeHeader )
                 GetGridColHeader()->SetColumnCount(m_numCols);
 
-            if ( m_currentCellCoords == wxGridNoCellCoords )
-            {
-                // if we have just inserted cols into an empty grid the current
-                // cell will be undefined...
-                //
-                SetCurrentCell( 0, 0 );
-            }
+            UpdateCurrentCellOnRedim();
+
             if ( !GetBatchCount() )
             {
                 CalcDimensions();
@@ -3199,15 +3168,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 }
             }
 
-            if ( !m_numCols )
-            {
-                m_currentCellCoords = wxGridNoCellCoords;
-            }
-            else
-            {
-                if ( m_currentCellCoords.GetCol() >= m_numCols )
-                  m_currentCellCoords.Set( 0, 0 );
-            }
+            UpdateCurrentCellOnRedim();
 
             if ( m_selection )
                 m_selection->UpdateCols( pos, -((int)numCols) );
@@ -3618,6 +3579,41 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
         else if ( m_cursorMode != WXGRID_CURSOR_SELECT_CELL )
         {
             ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, rowLabelWin, false);
+        }
+    }
+}
+
+void wxGrid::UpdateCurrentCellOnRedim()
+{
+    if (m_currentCellCoords == wxGridNoCellCoords)
+    {
+        // We didn't have any valid selection before, which can only happen
+        // if the grid was empty.
+        // Check if this is still the case and ensure we do have valid
+        // selection if the grid is not empty any more.
+        if (m_numCols > 0 && m_numRows > 0)
+        {
+            SetCurrentCell(0, 0);
+        }
+    }
+    else
+    {
+        if (m_numCols == 0 || m_numRows == 0)
+        {
+            // We have to reset the selection, as it must either use validate
+            // coordinates otherwise, but there are no valid coordinates for
+            // the grid cells any more now that it is empty.
+            m_currentCellCoords = wxGridNoCellCoords;
+        }
+        else
+        {
+            int col = m_currentCellCoords.GetCol();
+            int row = m_currentCellCoords.GetRow();
+            if (col >= m_numCols)
+                col = m_numCols - 1;
+            if (row >= m_numRows)
+                row = m_numRows - 1;
+            SetCurrentCell(col, row);
         }
     }
 }
