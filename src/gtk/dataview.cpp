@@ -250,6 +250,11 @@ public:
     }
 
 
+    // Associate our model with the tree view or disassociate it from it
+    // without generating any selection changed events, unlike
+    // gtk_tree_view_set_model() that this function wraps.
+    void UseModel(bool use);
+
     // accessors
     wxDataViewModel* GetDataViewModel() { return m_wx_model; }
     const wxDataViewModel* GetDataViewModel() const { return m_wx_model; }
@@ -1865,20 +1870,16 @@ bool wxGtkDataViewModelNotifier::ValueChanged( const wxDataViewItem &item, unsig
 
 bool wxGtkDataViewModelNotifier::BeforeReset()
 {
-    GtkWidget *treeview = m_internal->GetOwner()->GtkGetTreeView();
-    gtk_tree_view_set_model( GTK_TREE_VIEW(treeview), NULL );
+    m_internal->UseModel(false);
 
     return true;
 }
 
 bool wxGtkDataViewModelNotifier::AfterReset()
 {
-    GtkWidget *treeview = m_internal->GetOwner()->GtkGetTreeView();
-    GtkWxTreeModel *wxgtk_model = m_internal->GetGtkModel();
-
     m_internal->Cleared();
 
-    gtk_tree_view_set_model( GTK_TREE_VIEW(treeview), GTK_TREE_MODEL(wxgtk_model) );
+    m_internal->UseModel(true);
 
     return true;
 }
@@ -3551,7 +3552,7 @@ wxDataViewCtrlInternal::wxDataViewCtrlInternal( wxDataViewCtrl *owner, wxDataVie
     if (!m_wx_model->IsVirtualListModel())
         InitTree();
 
-    gtk_tree_view_set_model( GTK_TREE_VIEW(m_owner->GtkGetTreeView()), GTK_TREE_MODEL(m_gtk_model) );
+    UseModel(true);
 }
 
 wxDataViewCtrlInternal::~wxDataViewCtrlInternal()
@@ -3559,13 +3560,25 @@ wxDataViewCtrlInternal::~wxDataViewCtrlInternal()
     m_wx_model->RemoveNotifier( m_notifier );
 
     // remove the model from the GtkTreeView before it gets destroyed
-    gtk_tree_view_set_model( GTK_TREE_VIEW( m_owner->GtkGetTreeView() ), NULL );
+    UseModel(false);
 
     g_object_unref( m_gtk_model );
 
     delete m_root;
     delete m_dragDataObject;
     delete m_dropDataObject;
+}
+
+void wxDataViewCtrlInternal::UseModel(bool use)
+{
+    // Avoid any selection changed events from gtk_tree_view_set_model() call
+    // below as they don't happen under the other platforms and can be
+    // unexpected with the possibly fatal consequences for the user-defined
+    // event handler.
+    wxDataViewCtrl::SelectionEventsSuppressor noSelection(m_owner);
+
+    gtk_tree_view_set_model( GTK_TREE_VIEW(m_owner->GtkGetTreeView()),
+                             use ? GTK_TREE_MODEL(m_gtk_model) : NULL );
 }
 
 void wxDataViewCtrlInternal::ScheduleRefresh()
