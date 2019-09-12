@@ -1242,10 +1242,31 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
 
     if ( bmp.HasAlpha() )
     {
-        MemoryHDC hdcMem;
-        SelectInHDC select(hdcMem, GetHbitmapOf(bmp));
+        // Make a copy in case we would neeed to remove its mask.
+        // If this will not be necessary, the copy is cheap as bitmaps are reference-counted.
+        wxBitmap curBmp(bmp);
 
-        if ( AlphaBlt(this, x, y, width, height, 0, 0, width, height, hdcMem, bmp) )
+        // For bitmap with both alpha channel and mask we have to apply mask on our own
+        // because MaskBlt() API doesn't work properly with 32 bpp RGBA bitmaps.
+        // To do so we will create a temporary bitmap with copy of RGB data and with alpha channel
+        // being a superposition of the original alpha values and the mask - for non-masked pixels
+        // alpha channel values will remain intact and for masked pixels they will be set to the transparent value.
+        if ( curBmp.GetMask() )
+        {
+            if ( useMask )
+            {
+                curBmp.MSWBlendMaskWithAlpha();
+            }
+            else
+            {
+                curBmp.SetMask(NULL);
+            }
+        }
+
+        MemoryHDC hdcMem;
+        SelectInHDC select(hdcMem, GetHbitmapOf(curBmp));
+
+        if ( AlphaBlt(this, x, y, width, height, 0, 0, width, height, hdcMem, curBmp) )
         {
             CalcBoundingBox(x, y);
             CalcBoundingBox(x + bmp.GetWidth(), y + bmp.GetHeight());
