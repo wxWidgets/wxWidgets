@@ -903,32 +903,32 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
         break;
 
     case Page_VarHeight:
-    {
-        m_ctrl[Page_VarHeight] =
-            new wxDataViewCtrl( parent, wxID_ANY, wxDefaultPosition,
-                                wxDefaultSize, style | wxDV_VARIABLE_LINE_HEIGHT );
+        {
+            m_ctrl[Page_VarHeight] =
+                new wxDataViewCtrl( parent, wxID_ANY, wxDefaultPosition,
+                                    wxDefaultSize, style | wxDV_VARIABLE_LINE_HEIGHT );
 
-        m_long_music_model = new MyLongMusicTreeModel;
-        m_ctrl[Page_VarHeight]->AssociateModel(m_long_music_model.get());
+            m_long_music_model = new MyLongMusicTreeModel;
+            m_ctrl[Page_VarHeight]->AssociateModel(m_long_music_model.get());
 
-        // column 0 of the view control:
-        MultiLineCustomRenderer *tr =
-            new MultiLineCustomRenderer();
-        wxDataViewColumn *column0 =
-            new wxDataViewColumn("title", tr, 0, 200, wxALIGN_LEFT,
-                wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_RESIZABLE);
-        m_ctrl[Page_VarHeight]->AppendColumn(column0);
+            // column 0 of the view control:
+            MultiLineCustomRenderer *tr =
+                new MultiLineCustomRenderer();
+            wxDataViewColumn *column0 =
+                new wxDataViewColumn("title", tr, 0, 200, wxALIGN_LEFT,
+                    wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_RESIZABLE);
+            m_ctrl[Page_VarHeight]->AppendColumn(column0);
 
-        // column 1 of the view control:
-        tr = new MultiLineCustomRenderer();
-        wxDataViewColumn *column1 =
-            new wxDataViewColumn("artist", tr, 1, 150, wxALIGN_LEFT,
-                wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE |
-                wxDATAVIEW_COL_RESIZABLE);
-        column1->SetMinWidth(150); // this column can't be resized to be smaller
-        m_ctrl[Page_VarHeight]->AppendColumn(column1);
-    }
-    break;
+            // column 1 of the view control:
+            tr = new MultiLineCustomRenderer();
+            wxDataViewColumn *column1 =
+                new wxDataViewColumn("artist", tr, 1, 150, wxALIGN_LEFT,
+                    wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE |
+                    wxDATAVIEW_COL_RESIZABLE);
+            column1->SetMinWidth(150); // this column can't be resized to be smaller
+            m_ctrl[Page_VarHeight]->AppendColumn(column1);
+        }
+        break;
     }
 }
 
