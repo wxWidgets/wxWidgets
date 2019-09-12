@@ -2310,7 +2310,7 @@ private:
     void DoClipGridLines(bool& var, bool clip);
 
     // update m_currentCellCoords from Redimension function
-    void UpdateCurrentCellWhileRedim();
+    void UpdateCurrentCellOnRedim();
 
     // update the sorting indicator shown in the specified column (whose index
     // must be valid)
