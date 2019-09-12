@@ -155,6 +155,9 @@ All (GUI):
   in wxPGArrayEditorDialog.
 - Fix wxPropertyGrid issues with horizontal scrolling.
 - Add wxPG_DIALOG_TITLE wxPGProperty attribute.
+- Add support for creating a wxGraphicsPen with a gradient.
+- Add support for applying a transformation matrix to a gradient.
+
 
 wxGTK:
 

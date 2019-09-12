@@ -1638,6 +1638,29 @@ void MyCanvas::DrawGradients(wxDC& dc)
         pth.GetBox(&boxX, &boxY, &boxWidth, &boxHeight);
         dc.CalcBoundingBox(wxRound(boxX), wxRound(boxY));
         dc.CalcBoundingBox(wxRound(boxX+boxWidth), wxRound(boxY+boxHeight));
+
+        gfr.Offset(0, gfr.height + 10);
+        dc.DrawText("Stroked path with a gradient pen", gfr.x, gfr.y);
+        gfr.Offset(0, TEXT_HEIGHT);
+
+        pth = gc->CreatePath();
+        pth.MoveToPoint(gfr.x + gfr.width/2, gfr.y);
+        pth.AddLineToPoint(gfr.x + gfr.width, gfr.y + gfr.height/2);
+        pth.AddLineToPoint(gfr.x + gfr.width/2, gfr.y + gfr.height);
+        pth.AddLineToPoint(gfr.x, gfr.y + gfr.height/2);
+        pth.CloseSubpath();
+
+        stops = wxGraphicsGradientStops(*wxRED, *wxBLUE);
+        stops.Add(wxColour(255,255,0), 0.33f);
+        stops.Add(*wxGREEN, 0.67f);
+
+        wxGraphicsPen pen = gc->CreatePen(
+            wxGraphicsPenInfo(wxColour(0,0,0)).Width(6).Join(wxJOIN_BEVEL).LinearGradient(
+                gfr.x + gfr.width/2, gfr.y, 
+                gfr.x + gfr.width/2, gfr.y + gfr.height,
+                stops));
+        gc->SetPen(pen);
+        gc->StrokePath(pth);
     }
 #endif // wxUSE_GRAPHICS_CONTEXT
 }
