@@ -120,6 +120,7 @@ private:
 
     void OnIndexListUseEnglish(wxCommandEvent&) { FillIndexList(Lang_English); }
     void OnIndexListUseFrench(wxCommandEvent&) { FillIndexList(Lang_French); }
+    void OnIndexListResetModel(wxCommandEvent& event);
     void OnIndexListSelectionChanged(wxDataViewEvent& event);
 
     void OnValueChanged( wxDataViewEvent &event );
@@ -442,7 +443,8 @@ enum
 
     // Index list model page
     ID_INDEX_LIST_USE_ENGLISH = 500,
-    ID_INDEX_LIST_USE_FRENCH
+    ID_INDEX_LIST_USE_FRENCH,
+    ID_INDEX_LIST_RESET_MODEL
 };
 
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -491,6 +493,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_BUTTON( ID_INDEX_LIST_USE_ENGLISH, MyFrame::OnIndexListUseEnglish )
     EVT_BUTTON( ID_INDEX_LIST_USE_FRENCH, MyFrame::OnIndexListUseFrench )
+    EVT_BUTTON( ID_INDEX_LIST_RESET_MODEL, MyFrame::OnIndexListResetModel )
 
     EVT_DATAVIEW_ITEM_VALUE_CHANGED( ID_MUSIC_CTRL, MyFrame::OnValueChanged )
 
@@ -701,6 +704,8 @@ MyFrame::MyFrame(wxFrame *frame, const wxString &title, int x, int y, int w, int
     button_sizer6->Add(new wxButton(sixthPanel, ID_INDEX_LIST_USE_ENGLISH, "&English"),
                        wxSizerFlags().DoubleBorder());
     button_sizer6->Add(new wxButton(sixthPanel, ID_INDEX_LIST_USE_FRENCH, "&French"),
+                       wxSizerFlags().DoubleBorder());
+    button_sizer6->Add(new wxButton(sixthPanel, ID_INDEX_LIST_RESET_MODEL, "Reset &model"),
                        wxSizerFlags().DoubleBorder());
 
     wxSizer *sixthPanelSz = new wxBoxSizer(wxVERTICAL);
@@ -1687,6 +1692,12 @@ void MyFrame::FillIndexList(Lang lang)
     };
 
     m_index_list_model->Fill(wxArrayString(DAYS_PER_WEEK, weekdays[lang]));
+}
+
+void MyFrame::OnIndexListResetModel(wxCommandEvent&)
+{
+    m_ctrl[Page_IndexList]->AssociateModel(NULL);
+    m_ctrl[Page_IndexList]->AssociateModel(m_index_list_model.get());
 }
 
 void MyFrame::OnIndexListSelectionChanged(wxDataViewEvent& event)
