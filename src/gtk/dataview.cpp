@@ -754,13 +754,6 @@ wxgtk_tree_model_get_path (GtkTreeModel *tree_model,
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (tree_model), NULL);
 
     GtkWxTreeModel *wxtree_model = GTK_WX_TREE_MODEL (tree_model);
-    if ( wxtree_model->stamp == 0 )
-    {
-        // The model is temporarily invalid and can't be used, see Cleared(),
-        // but we need to return some valid path from here -- just return an
-        // empty one.
-        return gtk_tree_path_new();
-    }
 
     g_return_val_if_fail (iter->stamp == wxtree_model->stamp, NULL);
 
@@ -798,9 +791,6 @@ wxgtk_tree_model_iter_next (GtkTreeModel  *tree_model,
                             GtkTreeIter   *iter)
 {
     GtkWxTreeModel *wxtree_model = (GtkWxTreeModel *) tree_model;
-
-    // This happens when clearing the view by calling .._set_model( NULL );
-    if (iter->stamp == 0) return FALSE;
 
     g_return_val_if_fail (GTK_IS_WX_TREE_MODEL (wxtree_model), FALSE);
     g_return_val_if_fail (wxtree_model->stamp == iter->stamp, FALSE);
@@ -3075,13 +3065,6 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *WXUNUSED(column),
 {
     g_return_if_fail (GTK_IS_WX_TREE_MODEL (model));
     GtkWxTreeModel *tree_model = (GtkWxTreeModel *) model;
-
-    if ( !tree_model->stamp )
-    {
-        // The model is temporarily invalid and can't be used, see the code in
-        // wxGtkDataViewModelNotifier::Cleared().
-        return;
-    }
 
     wxDataViewRenderer *cell = (wxDataViewRenderer*) data;
 
