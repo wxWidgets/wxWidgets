@@ -1259,6 +1259,53 @@ void wxBitmap::MSWUpdateAlpha()
 #endif // wxUSE_WXDIB/!wxUSE_WXDIB
 }
 
+void wxBitmap::MSWBlendMaskWithAlpha()
+{
+#if defined(wxHAS_RAW_BITMAP)
+    if ( !HasAlpha() || !GetMask() )
+        return;
+    // Update alpha channel by blending original alpha values with mask and then remove the mask.
+    // For non-masked pixels alpha channel values will remain intact and for masked pixels
+    // they will be set to the transparent value (0).
+    AllocExclusive();
+
+    {
+        wxBitmap bmpMask = GetMask()->GetBitmap();
+        wxNativePixelData maskData(bmpMask);
+        wxCHECK_RET(maskData, "No access to bitmap mask data");
+
+        wxAlphaPixelData bmpData(*this);
+        wxCHECK_RET(bmpData, "No access to bitmap data");
+
+        const int w = GetWidth();
+        const int h = GetHeight();
+
+        wxNativePixelData::Iterator maskRowStart(maskData);
+        wxAlphaPixelData::Iterator bmpRowStart(bmpData);
+        for ( int y = 0; y < h; y++ )
+        {
+            wxNativePixelData::Iterator pMask = maskRowStart;
+            wxAlphaPixelData::Iterator pBmp = bmpRowStart;
+            for ( int x = 0; x < w; x++, ++pBmp, ++pMask )
+            {
+                // Masked pixel is not drawn i.e. is transparent,
+                // non-masked pixel is untouched.
+                if ( pMask.Red() == 0 )
+                {
+                    pBmp.Red() = pBmp.Green() = pBmp.Blue() = 0; // pre-multiplied
+                    pBmp.Alpha() = wxALPHA_TRANSPARENT;
+                }
+            }
+            maskRowStart.OffsetY(maskData, 1);
+            bmpRowStart.OffsetY(bmpData, 1);
+        }
+    }
+    GetBitmapData()->SetMask((wxMask*)NULL);
+    wxASSERT(HasAlpha());
+    wxASSERT(!GetMask());
+#endif // wxHAS_RAW_BITMAP
+}
+
 // ----------------------------------------------------------------------------
 // wxBitmap setters
 // ----------------------------------------------------------------------------
