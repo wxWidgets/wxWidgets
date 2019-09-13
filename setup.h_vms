@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 31 January 2019                                                    *
+ * Date : 13 September 2019                                                  *
  *                                                                           *
  *****************************************************************************/
 
@@ -109,7 +109,7 @@ typedef pid_t GPid;
 #endif
 #endif
 
-#ifdef VMS_GTK2
+#if defined( VMS_GTK2 ) || defined( __WXX11__ ) 
 #define wxUSE_CAIRO 1
 #else
 #define wxUSE_CAIRO 0

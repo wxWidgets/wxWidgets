@@ -395,7 +395,10 @@ bool wxCairoInit()
     return wxCairo::Initialize();
 }
 
-#ifndef __WXGTK__
+// the following code will not make sense on OpenVMS : dynamically loading
+// of the cairo library is not possible, since on OpenVMS the library is
+// created as a static library.
+#if !( defined __WXGTK__ ) || defined( __VMS ) )
 extern "C"
 {
 
