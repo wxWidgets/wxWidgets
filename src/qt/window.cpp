@@ -193,6 +193,29 @@ static const char WINDOW_POINTER_PROPERTY_NAME[] = "wxWindowPointer";
     return const_cast< wxWindowQt * >( ( variant.value< const wxWindow * >() ));
 }
 
+/* static */ void wxWindowQt::SendSetCursorEvent(wxWindowQt* win, wxPoint posScreen)
+{
+    wxWindowQt* w = win;
+    while( true )
+    {
+        const wxPoint posClient = w->ScreenToClient(posScreen);
+        wxSetCursorEvent event(posClient.x, posClient.y);
+        event.SetEventObject(w);
+
+        const bool processedEvtSetCursor = w->ProcessWindowEvent(event);
+        if ( processedEvtSetCursor && event.HasCursor() )
+        {
+            win->SetCursor(event.GetCursor());
+            return;
+        }
+
+        w = w->GetParent();
+        if ( w == NULL )
+            break;
+    }
+    win->SetCursor(wxCursor(wxCURSOR_ARROW));
+}
+
 static wxWindowQt *s_capturedWindow = NULL;
 
 /* static */ wxWindowQt *wxWindowBase::DoFindFocus()
@@ -1460,6 +1483,8 @@ bool wxWindowQt::QtHandleMouseEvent ( QWidget *handler, QMouseEvent *event )
 
             ProcessWindowEvent( e );
         }
+
+        wxWindowQt::SendSetCursorEvent(this, wxQtConvertPoint( event->globalPos() ));
     }
 
     m_mouseInside = mouseInside;
