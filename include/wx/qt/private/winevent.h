@@ -61,6 +61,7 @@ public:
         QObject::connect( this, &QObject::destroyed, this,
                           &wxQtEventSignalHandler::HandleDestroyedSignal );
 
+        Widget::setMouseTracking(true);
     }
 
     void HandleDestroyedSignal()
