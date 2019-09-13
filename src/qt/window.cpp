@@ -322,8 +322,6 @@ void wxWindowQt::PostCreation(bool generic)
     }
     wxLogTrace(TRACE_QT_WINDOW, wxT("wxWindow::Create %s m_qtWindow=%p"), GetName(), m_qtWindow);
 
-    widget->setMouseTracking(true);
-
     // set the background style after creation (not before like in wxGTK)
     // (only for generic controls, to use qt defaults elsewere)
     if (generic)
