@@ -218,6 +218,7 @@ QT_HDR =
     wx/generic/caret.h
     wx/generic/clrpickerg.h
     wx/generic/collpaneg.h
+    wx/generic/desktopenv.h
     wx/generic/fdrepdlg.h
     wx/generic/filepickerg.h
     wx/generic/fontpickerg.h
@@ -308,6 +309,7 @@ QT_SRC=
     src/generic/caret.cpp
     src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
+    src/generic/desktopenv.cpp
     src/generic/fdrepdlg.cpp
     src/generic/filepickerg.cpp
     src/generic/fontpickerg.cpp
@@ -1733,6 +1735,7 @@ MOTIF_SRC =
     src/generic/clrpickerg.cpp
     src/generic/collpaneg.cpp
     src/generic/colrdlgg.cpp
+    src/generic/desktopenv.cpp
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/filepickerg.cpp
@@ -1753,6 +1756,7 @@ MOTIF_HDR =
     wx/generic/collpaneg.h
     wx/generic/colrdlgg.h
     wx/generic/ctrlsub.h
+    wx/generic/desktopenv.h
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
     wx/generic/filepickerg.h
@@ -1824,6 +1828,7 @@ MOTIF_HDR =
 X11_LOWLEVEL_SRC =
     $(XWIN_LOWLEVEL_SRC)
     src/unix/displayx11.cpp
+    src/generic/desktopenv.cpp
     src/generic/icon.cpp
     src/generic/textmeasure.cpp
     src/generic/timer.cpp
@@ -1856,6 +1861,7 @@ X11_LOWLEVEL_SRC =
 X11_LOWLEVEL_HDR =
     $(XWIN_LOWLEVEL_HDR)
     wx/generic/icon.h
+    wx/generic/desktopenv.h
     wx/x11/app.h
     wx/x11/bitmap.h
     wx/x11/brush.h
@@ -2204,6 +2210,7 @@ DFB_LOWLEVEL_SRC =
     src/generic/animateg.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
+    src/generic/desktopenv.cpp
     src/generic/icon.cpp
     src/generic/imaglist.cpp
     src/generic/mask.cpp
@@ -2233,6 +2240,7 @@ DFB_LOWLEVEL_HDR =
     wx/generic/animate.h
     wx/generic/caret.h
     wx/generic/colour.h
+    wx/generic/desktopenv.h
     wx/generic/icon.h
     wx/generic/imaglist.h
     wx/generic/mask.h

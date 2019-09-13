@@ -29,6 +29,8 @@ protected:
     #include "wx/gtk/desktopenv.h"
 #elif defined(__WXOSX__)
     #include "wx/osx/desktopenv.h"
+#else
+    #include "wx/generic/desktopenv.h"
 #endif
 
 #endif

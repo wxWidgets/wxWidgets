@@ -69,4 +69,3 @@ TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
     CHECK( !env.MoveToRecycleBin( currentDir + "abc" ) );
 #endif
 }
-

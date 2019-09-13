@@ -12,7 +12,7 @@
     or Recycle Bin. The call to this function is synchronous, which means that
     application will wait for the move to finish
  
-    This class is available @since 3.1.3
+    @since 3.1.3
 */
 class wxDesktopEnv
 {
@@ -27,5 +27,5 @@ public:
         
         @return true on success
     */
-    virtual bool MoveFileToRecycleBin(const wxString &fileName);
+    bool MoveFileToRecycleBin(const wxString &fileName);
 };

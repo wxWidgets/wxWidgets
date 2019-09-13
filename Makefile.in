@@ -2666,7 +2666,8 @@ COND_TOOLKIT_DFB_LOWLEVEL_HDR =  \
 	wx/dfb/region.h \
 	wx/dfb/toplevel.h \
 	wx/dfb/window.h \
-	wx/dfb/wrapdfb.h
+	wx/dfb/wrapdfb.h \
+	wx/generic/desktopenv.h
 @COND_TOOLKIT_DFB@LOWLEVEL_HDR = $(COND_TOOLKIT_DFB_LOWLEVEL_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION__LOWLEVEL_HDR =  \
 	wx/generic/caret.h \
@@ -2855,7 +2856,8 @@ COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 	wx/x11/reparent.h \
 	wx/x11/textctrl.h \
 	wx/x11/toplevel.h \
-	wx/x11/window.h
+	wx/x11/window.h \
+	wx/generic/desktopenv.h
 @COND_TOOLKIT_X11@LOWLEVEL_HDR = $(COND_TOOLKIT_X11_LOWLEVEL_HDR)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION__GUI_HDR =  \
 	wx/generic/clrpickerg.h \
@@ -3166,7 +3168,8 @@ COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/motif/toplevel.h \
 	wx/motif/window.h \
 	wx/generic/animate.h \
-	wx/generic/animateanimate.h
+	wx/generic/animateanimate.h \
+	wx/generic/desktopenv.h
 @COND_TOOLKIT_MOTIF@GUI_HDR = $(COND_TOOLKIT_MOTIF_GUI_HDR)
 COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/generic/clrpickerg.h \
@@ -3604,7 +3607,8 @@ COND_TOOLKIT_QT_GUI_HDR =  \
 	wx/qt/dataview.h \
 	wx/qt/dvrenderers.h \
 	$(QT_PLATFORM_HDR) \
-	wx/qt/treectrl.h
+	wx/qt/treectrl.h \
+	wx/generic/desktopenv.h
 @COND_TOOLKIT_QT@GUI_HDR = $(COND_TOOLKIT_QT_GUI_HDR)
 @COND_TOOLKIT_COCOA@MEDIA_PLATFORM_HDR = 
 @COND_TOOLKIT_GTK@MEDIA_PLATFORM_HDR = 
@@ -4908,7 +4912,8 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_dfb_toplevel.o \
 	monodll_dfb_utils.o \
 	monodll_dfb_window.o \
-	monodll_wrapdfb.o
+	monodll_wrapdfb.o \
+	monodll_generic_desktopenv.o
 @COND_TOOLKIT_DFB@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS =  \
 	monodll_generic_caret.o \
@@ -5204,7 +5209,8 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_x11_utils.o \
 	monodll_utilsx.o \
 	monodll_x11_window.o \
-	monodll_displayx11.o
+	monodll_displayx11.o \
+	monodll_generic_desktopenv.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS =  \
 	monodll_generic_accel.o \
@@ -5520,7 +5526,8 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_generic_statusbr.o \
 	monodll_tabg.o \
 	monodll_animateg.o \
-	monodll_generic_activityindicator.o
+	monodll_generic_activityindicator.o \
+	monodll_generic_desktopenv.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_clrpickerg.o \
@@ -5776,7 +5783,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS =  \
 	monodll_qt_utils.o \
 	monodll_qt_window.o \
 	$(__QT_PLATFORM_SRC_OBJECTS) \
-	monodll_qt_treectrl.o
+	monodll_qt_treectrl.o \
+	monodll_generic_desktopenv.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS)
 COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS =  \
 	monodll_comimpl.o \
@@ -5819,7 +5827,8 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_dfb_toplevel.o \
 	monodll_dfb_utils.o \
 	monodll_dfb_window.o \
-	monodll_wrapdfb.o
+	monodll_wrapdfb.o \
+	monodll_generic_desktopenv.o
 @COND_TOOLKIT_DFB@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_generic_caret.o \
@@ -6115,7 +6124,8 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_x11_utils.o \
 	monodll_utilsx.o \
 	monodll_x11_window.o \
-	monodll_displayx11.o
+	monodll_displayx11.o \
+	monodll_generic_desktopenv.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__UNIV_PLATFORM_SRC_OBJECTS \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monodll_animateg.o
@@ -6901,7 +6911,8 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_dfb_toplevel.o \
 	monolib_dfb_utils.o \
 	monolib_dfb_window.o \
-	monolib_wrapdfb.o
+	monolib_wrapdfb.o \
+	monolib_generic_desktopenv.o
 @COND_TOOLKIT_DFB@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_generic_caret.o \
@@ -7197,7 +7208,8 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_x11_utils.o \
 	monolib_utilsx.o \
 	monolib_x11_window.o \
-	monolib_displayx11.o
+	monolib_displayx11.o \
+	monolib_generic_desktopenv.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_accel.o \
@@ -7513,7 +7525,8 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_generic_statusbr.o \
 	monolib_tabg.o \
 	monolib_animateg.o \
-	monolib_generic_activityindicator.o
+	monolib_generic_activityindicator.o \
+	monolib_generic_desktopenv.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_clrpickerg.o \
@@ -7769,7 +7782,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1 =  \
 	monolib_qt_utils.o \
 	monolib_qt_window.o \
 	$(__QT_PLATFORM_SRC_OBJECTS_1) \
-	monolib_qt_treectrl.o
+	monolib_qt_treectrl.o \
+	monolib_generic_desktopenv.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1)
 COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_comimpl.o \
@@ -7812,7 +7826,8 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_dfb_toplevel.o \
 	monolib_dfb_utils.o \
 	monolib_dfb_window.o \
-	monolib_wrapdfb.o
+	monolib_wrapdfb.o \
+	monolib_generic_desktopenv.o
 @COND_TOOLKIT_DFB@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_generic_caret.o \
@@ -8108,7 +8123,8 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_x11_utils.o \
 	monolib_utilsx.o \
 	monolib_x11_window.o \
-	monolib_displayx11.o
+	monolib_displayx11.o \
+	monolib_generic_desktopenv.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__UNIV_PLATFORM_SRC_OBJECTS_1 \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monolib_animateg.o
@@ -9041,7 +9057,8 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_dfb_toplevel.o \
 	coredll_dfb_utils.o \
 	coredll_dfb_window.o \
-	coredll_wrapdfb.o
+	coredll_wrapdfb.o \
+	coredll_generic_desktopenv.o
 @COND_TOOLKIT_DFB@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_generic_caret.o \
@@ -9337,7 +9354,8 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_x11_utils.o \
 	coredll_utilsx.o \
 	coredll_x11_window.o \
-	coredll_displayx11.o
+	coredll_displayx11.o \
+	coredll_generic_desktopenv.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_4)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_accel.o \
@@ -9653,7 +9671,8 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_generic_statusbr.o \
 	coredll_tabg.o \
 	coredll_animateg.o \
-	coredll_generic_activityindicator.o
+	coredll_generic_activityindicator.o \
+	coredll_generic_desktopenv.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_clrpickerg.o \
@@ -9909,7 +9928,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2 =  \
 	coredll_qt_utils.o \
 	coredll_qt_window.o \
 	$(__QT_PLATFORM_SRC_OBJECTS_2) \
-	coredll_qt_treectrl.o
+	coredll_qt_treectrl.o \
+	coredll_generic_desktopenv.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2)
 COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_2 =  \
 	coredll_comimpl.o \
@@ -9952,7 +9972,8 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_dfb_toplevel.o \
 	coredll_dfb_utils.o \
 	coredll_dfb_window.o \
-	coredll_wrapdfb.o
+	coredll_wrapdfb.o \
+	coredll_generic_desktopenv.o
 @COND_TOOLKIT_DFB@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_generic_caret.o \
@@ -10248,7 +10269,8 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_x11_utils.o \
 	coredll_utilsx.o \
 	coredll_x11_window.o \
-	coredll_displayx11.o
+	coredll_displayx11.o \
+	coredll_generic_desktopenv.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_5)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__UNIV_PLATFORM_SRC_OBJECTS_2 \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= coredll_animateg.o
@@ -10770,7 +10792,8 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_dfb_toplevel.o \
 	corelib_dfb_utils.o \
 	corelib_dfb_window.o \
-	corelib_wrapdfb.o
+	corelib_wrapdfb.o \
+	corelib_generic_desktopenv.o
 @COND_TOOLKIT_DFB@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_generic_caret.o \
@@ -11066,7 +11089,8 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_x11_utils.o \
 	corelib_utilsx.o \
 	corelib_x11_window.o \
-	corelib_displayx11.o
+	corelib_displayx11.o \
+	corelib_generic_desktopenv.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_6)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_accel.o \
@@ -11382,7 +11406,8 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_generic_statusbr.o \
 	corelib_tabg.o \
 	corelib_animateg.o \
-	corelib_generic_activityindicator.o
+	corelib_generic_activityindicator.o \
+	corelib_generic_desktopenv.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_clrpickerg.o \
@@ -11638,7 +11663,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3 =  \
 	corelib_qt_utils.o \
 	corelib_qt_window.o \
 	$(__QT_PLATFORM_SRC_OBJECTS_3) \
-	corelib_qt_treectrl.o
+	corelib_qt_treectrl.o \
+	corelib_generic_desktopenv.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3)
 COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_3 =  \
 	corelib_comimpl.o \
@@ -11681,7 +11707,8 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_dfb_toplevel.o \
 	corelib_dfb_utils.o \
 	corelib_dfb_window.o \
-	corelib_wrapdfb.o
+	corelib_wrapdfb.o \
+	corelib_generic_desktopenv.o
 @COND_TOOLKIT_DFB@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7)
 COND_TOOLKIT_GTK_TOOLKIT_VERSION____LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_generic_caret.o \
@@ -11977,7 +12004,8 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_x11_utils.o \
 	corelib_utilsx.o \
 	corelib_x11_window.o \
-	corelib_displayx11.o
+	corelib_displayx11.o \
+	corelib_generic_desktopenv.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_7)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__UNIV_PLATFORM_SRC_OBJECTS_3 \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= corelib_animateg.o
@@ -18987,6 +19015,18 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_x11_window.o: $(srcdir)/src/x11/window.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/x11/window.cpp
 
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_generic_desktopenv.o: $(srcdir)/src/generic/desktopenv.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/desktopenv.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monodll_generic_desktopenv.o: $(srcdir)/src/generic/desktopenv.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/desktopenv.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monodll_generic_desktopenv.o: $(srcdir)/src/generic/desktopenv.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/desktopenv.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_generic_desktopenv.o: $(srcdir)/src/generic/desktopenv.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/desktopenv.cpp
+
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
 
@@ -24272,6 +24312,18 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_x11_window.o: $(srcdir)/src/x11/window.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/x11/window.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_generic_desktopenv.o: $(srcdir)/src/generic/desktopenv.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/desktopenv.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@monolib_generic_desktopenv.o: $(srcdir)/src/generic/desktopenv.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/desktopenv.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monolib_generic_desktopenv.o: $(srcdir)/src/generic/desktopenv.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/desktopenv.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_generic_desktopenv.o: $(srcdir)/src/generic/desktopenv.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/desktopenv.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
@@ -29646,6 +29698,18 @@ coredll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_x11_window.o: $(srcdir)/src/x11/window.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/x11/window.cpp
 
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_generic_desktopenv.o: $(srcdir)/src/generic/desktopenv.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/desktopenv.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@coredll_generic_desktopenv.o: $(srcdir)/src/generic/desktopenv.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/desktopenv.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@coredll_generic_desktopenv.o: $(srcdir)/src/generic/desktopenv.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/desktopenv.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_generic_desktopenv.o: $(srcdir)/src/generic/desktopenv.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/desktopenv.cpp
+
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
 
@@ -33920,6 +33984,18 @@ corelib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_x11_window.o: $(srcdir)/src/x11/window.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/x11/window.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_generic_desktopenv.o: $(srcdir)/src/generic/desktopenv.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/desktopenv.cpp
+
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@corelib_generic_desktopenv.o: $(srcdir)/src/generic/desktopenv.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_QT_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/desktopenv.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@corelib_generic_desktopenv.o: $(srcdir)/src/generic/desktopenv.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/desktopenv.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_generic_desktopenv.o: $(srcdir)/src/generic/desktopenv.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/desktopenv.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
