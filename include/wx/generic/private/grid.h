@@ -147,7 +147,6 @@ public:
                        wxID_ANY,
                        wxDefaultPosition,
                        wxDefaultSize,
-                       wxHD_ALLOW_HIDE |
                        (owner->CanDragColMove() ? wxHD_ALLOW_REORDER : 0))
     {
     }
