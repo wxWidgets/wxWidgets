@@ -756,6 +756,11 @@ public:
         @a code can be one of @c wxLIST_RECT_BOUNDS, @c wxLIST_RECT_ICON or
         @c wxLIST_RECT_LABEL.
 
+        Note that using @c wxLIST_RECT_ICON with any sub-item but the first one
+        isn't very useful as only the first sub-item can have an icon in
+        wxListCtrl. In this case, i.e. for @c subItem > 0, this function simply
+        returns an empty rectangle in @a rect.
+
         @since 2.7.0
     */
     bool GetSubItemRect(long item, long subItem, wxRect& rect,

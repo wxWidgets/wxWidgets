@@ -24,6 +24,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/listctrl.h"
+#include "wx/artprov.h"
+#include "wx/imaglist.h"
 #include "listbasetest.h"
 #include "testableframe.h"
 #include "wx/uiaction.h"
@@ -48,9 +50,11 @@ private:
         CPPUNIT_TEST( EditLabel );
         WXUISIM_TEST( ColumnClick );
         WXUISIM_TEST( ColumnDrag );
+        CPPUNIT_TEST( SubitemRect );
     CPPUNIT_TEST_SUITE_END();
 
     void EditLabel();
+    void SubitemRect();
 #if wxUSE_UIACTIONSIMULATOR
     // Column events are only supported in wxListCtrl currently so we test them
     // here rather than in ListBaseTest
@@ -91,6 +95,51 @@ void ListCtrlTestCase::EditLabel()
     m_list->InsertColumn(0, "Column 0");
     m_list->InsertItem(0, "foo");
     m_list->EditLabel(0);
+}
+
+void ListCtrlTestCase::SubitemRect()
+{
+    wxBitmap bmp = wxArtProvider::GetBitmap(wxART_ERROR);
+
+    wxImageList* const iml = new wxImageList(bmp.GetWidth(), bmp.GetHeight());
+    iml->Add(bmp);
+    m_list->AssignImageList(iml, wxIMAGE_LIST_SMALL);
+
+    m_list->InsertColumn(0, "Column 0");
+    m_list->InsertColumn(1, "Column 1");
+    m_list->InsertColumn(2, "Column 2");
+    for ( int i = 0; i < 3; i++ )
+    {
+        long index = m_list->InsertItem(i, wxString::Format("This is item %d", i), 0);
+        m_list->SetItem(index, 1, wxString::Format("Column 1 item %d", i));
+        m_list->SetItem(index, 2, wxString::Format("Column 2 item %d", i));
+    }
+
+    wxRect rectLabel, rectIcon, rectItem;
+
+    // First check a subitem with an icon: it should have a valid icon
+    // rectangle and the label rectangle should be adjacent to it.
+    m_list->GetSubItemRect(1, 0, rectItem, wxLIST_RECT_BOUNDS);
+    m_list->GetSubItemRect(1, 0, rectIcon, wxLIST_RECT_ICON);
+    m_list->GetSubItemRect(1, 0, rectLabel, wxLIST_RECT_LABEL);
+
+    CHECK(!rectIcon.IsEmpty());
+    // Note that we can't use "==" here, in the native MSW version there is a
+    // gap between the item rectangle and the icon one.
+    CHECK(rectIcon.GetLeft() >= rectItem.GetLeft());
+    CHECK(rectLabel.GetLeft() == rectIcon.GetRight() + 1);
+    CHECK(rectLabel.GetRight() == rectItem.GetRight());
+
+    // For a subitem without an icon, label rectangle is the same one as the
+    // entire item one and the icon rectangle should be empty.
+    m_list->GetSubItemRect(1, 1, rectItem, wxLIST_RECT_BOUNDS);
+    m_list->GetSubItemRect(1, 1, rectIcon, wxLIST_RECT_ICON);
+    m_list->GetSubItemRect(1, 1, rectLabel, wxLIST_RECT_LABEL);
+
+    CHECK(rectIcon.IsEmpty());
+    // Here we can't check for exact equality neither as there can be a margin.
+    CHECK(rectLabel.GetLeft() >= rectItem.GetLeft());
+    CHECK(rectLabel.GetRight() == rectItem.GetRight());
 }
 
 #if wxUSE_UIACTIONSIMULATOR

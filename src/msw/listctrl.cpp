@@ -1223,16 +1223,33 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
                  wxT("invalid item in GetSubItemRect") );
 
     int codeWin;
-    if ( code == wxLIST_RECT_BOUNDS )
-        codeWin = LVIR_BOUNDS;
-    else if ( code == wxLIST_RECT_ICON )
-        codeWin = LVIR_ICON;
-    else if ( code == wxLIST_RECT_LABEL )
-        codeWin = LVIR_LABEL;
-    else
+    switch ( code )
     {
-        wxFAIL_MSG( wxT("incorrect code in GetItemRect() / GetSubItemRect()") );
-        codeWin = LVIR_BOUNDS;
+        case wxLIST_RECT_BOUNDS:
+            codeWin = LVIR_BOUNDS;
+            break;
+
+        case wxLIST_RECT_ICON:
+            // Only the first subitem can have an icon, so it doesn't make
+            // sense to query the native control for the other ones --
+            // especially because it returns a nonsensical non-empty icon
+            // rectangle for them.
+            if ( subItem > 0 )
+            {
+                rect = wxRect();
+                return true;
+            }
+
+            codeWin = LVIR_ICON;
+            break;
+
+        case wxLIST_RECT_LABEL:
+            codeWin = LVIR_LABEL;
+            break;
+
+        default:
+            wxFAIL_MSG( wxT("incorrect code in GetItemRect() / GetSubItemRect()") );
+            return false;
     }
 
     RECT rectWin;
@@ -1246,19 +1263,6 @@ bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int code)
           ) )
     {
         return false;
-    }
-
-    // Although LVIR_LABEL exists, it returns the same results as LVIR_BOUNDS
-    // and not just the label rectangle as would be expected, so account for
-    // the icon ourselves in this case.
-    if ( code == wxLIST_RECT_LABEL )
-    {
-        RECT rectIcon;
-        if ( !wxGetListCtrlSubItemRect(GetHwnd(), item, subItem, LVIR_ICON,
-                                       rectIcon) )
-            return false;
-
-        rectWin.left = rectIcon.right;
     }
 
     wxCopyRECTToRect(rectWin, rect);
