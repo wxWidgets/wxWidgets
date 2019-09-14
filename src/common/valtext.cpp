@@ -33,6 +33,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "wx/clipbrd.h"
 #include "wx/combo.h"
 
 // ----------------------------------------------------------------------------
@@ -58,6 +59,7 @@ static bool wxIsNumeric(const wxString& val)
 // ----------------------------------------------------------------------------
 wxBEGIN_EVENT_TABLE(wxTextEntryValidator, wxValidator)
     EVT_KILL_FOCUS(wxTextEntryValidator::OnKillFocus)
+    EVT_TEXT_PASTE(wxID_ANY, wxTextEntryValidator::OnPasteText)
     EVT_VALIDATE_ERROR(wxID_ANY, wxTextEntryValidator::OnValidation)
 wxEND_EVENT_TABLE()
 
@@ -120,6 +122,48 @@ void wxTextEntryValidator::OnValueChanged(wxCommandEvent& event)
 
     event.Skip();
     ReportValidation(m_validatorWindow, false);
+}
+
+void wxTextEntryValidator::OnPasteText(wxClipboardTextEvent& event)
+{
+#if wxUSE_CLIPBOARD
+    wxTextEntry * const entry = GetTextEntry();
+    if ( !entry )
+        return;
+
+    wxClipboardLocker clipLock;
+    if ( !clipLock )
+        return;
+
+    wxTextDataObject data;
+
+    if ( wxTheClipboard->IsSupported(data.GetFormat())
+            && wxTheClipboard->GetData(data) )
+    {
+        wxString text = entry->GetValue();
+
+        long from, to;
+        entry->GetSelection(&from, &to);
+
+        if ( from != to )
+        {
+            // Replace selection with the pasted text.
+            text.replace(from, (to - from), data.GetText());
+        }
+        else
+        {
+            text.insert(entry->GetInsertionPoint(), data.GetText());
+        }
+
+        if ( IsValid(text).empty() )
+        {
+            // Accept the pasted text.
+            event.Skip();
+        }
+    }
+#else
+    event.Skip();
+#endif // wxUSE_CLIPBOARD
 }
 
 void wxTextEntryValidator::OnValidation(wxValidationStatusEvent& event)

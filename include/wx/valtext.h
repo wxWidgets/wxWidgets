@@ -70,6 +70,7 @@ protected:
     // Events handlers
     void OnKillFocus(wxFocusEvent& event);
     void OnValueChanged(wxCommandEvent& event);
+    void OnPasteText(wxClipboardTextEvent& event);
     void OnValidation(wxValidationStatusEvent& event);
 
     wxDECLARE_EVENT_TABLE();
