@@ -134,7 +134,7 @@ void wxAuiMSWToolBarArt::DrawButton(
             btnState = TS_HOTCHECKED;
         else if ( item.GetState() & wxAUI_BUTTON_STATE_CHECKED )
             btnState = TS_CHECKED;
-        else if ( item.GetState() & wxAUI_BUTTON_STATE_HOVER )
+        else if ( (item.GetState() & wxAUI_BUTTON_STATE_HOVER) || item.IsSticky() )
             btnState = TS_HOT;
         else
             btnState = TS_NORMAL;
@@ -259,7 +259,7 @@ void wxAuiMSWToolBarArt::DrawDropDownButton(
             btnState = TS_DISABLED;
         else if ( item.GetState() & wxAUI_BUTTON_STATE_PRESSED )
             btnState = TS_PRESSED;
-        else if ( item.GetState() & wxAUI_BUTTON_STATE_HOVER )
+        else if ( (item.GetState() & wxAUI_BUTTON_STATE_HOVER) || item.IsSticky() )
             btnState = TS_HOT;
         else
             btnState = TS_NORMAL;
