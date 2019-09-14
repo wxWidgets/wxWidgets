@@ -26,6 +26,39 @@
 #include "wx/qt/private/winevent.h"
 #include "wx/qt/private/treeitemfactory.h"
 
+namespace
+{
+
+Qt::AlignmentFlag wxQtConvertTextAlign(wxListColumnFormat align)
+{
+    switch (align)
+    {
+        case wxLIST_FORMAT_LEFT:
+            return Qt::AlignLeft;
+        case wxLIST_FORMAT_RIGHT:
+            return Qt::AlignRight;
+        case wxLIST_FORMAT_CENTRE:
+            return Qt::AlignCenter;
+    }
+    return Qt::AlignLeft;
+}
+
+wxListColumnFormat wxQtConvertAlignFlag(int align)
+{
+    switch (align)
+    {
+        case Qt::AlignLeft:
+            return wxLIST_FORMAT_LEFT;
+        case Qt::AlignRight:
+            return wxLIST_FORMAT_RIGHT;
+        case Qt::AlignCenter:
+            return wxLIST_FORMAT_CENTRE;
+    }
+    return wxLIST_FORMAT_LEFT;
+}
+
+} // anonymous namespace
+
 class wxQtListTreeWidget : public wxQtEventSignalHandler< QTreeWidget, wxListCtrl >
 {
 public:
@@ -103,35 +136,6 @@ void wxQtListTreeWidget::itemPressed(QTreeWidgetItem *qitem, int column)
 void wxQtListTreeWidget::itemActivated(QTreeWidgetItem *qitem, int column)
 {
     EmitListEvent(wxEVT_LIST_ITEM_ACTIVATED, qitem, column);
-}
-
-
-Qt::AlignmentFlag wxQtConvertTextAlign(wxListColumnFormat align)
-{
-    switch (align)
-    {
-        case wxLIST_FORMAT_LEFT:
-            return Qt::AlignLeft;
-        case wxLIST_FORMAT_RIGHT:
-            return Qt::AlignRight;
-        case wxLIST_FORMAT_CENTRE:
-            return Qt::AlignCenter;
-    }
-    return Qt::AlignLeft;
-}
-
-wxListColumnFormat wxQtConvertAlignFlag(int align)
-{
-    switch (align)
-    {
-        case Qt::AlignLeft:
-            return wxLIST_FORMAT_LEFT;
-        case Qt::AlignRight:
-            return wxLIST_FORMAT_RIGHT;
-        case Qt::AlignCenter:
-            return wxLIST_FORMAT_CENTRE;
-    }
-    return wxLIST_FORMAT_LEFT;
 }
 
 
