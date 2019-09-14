@@ -268,15 +268,12 @@ public:
             m_rows[row].m_checked =
                 static_cast<Qt::CheckState>(value.toUInt()) == Qt::Checked;
 
-            wxListItem listItem;
-            listItem.SetId(row);
-
-            const wxEventType eventType = m_rows[row].m_checked ?
-                wxEVT_LIST_ITEM_CHECKED : wxEVT_LIST_ITEM_UNCHECKED;
-
-            wxListEvent event(eventType, m_listCtrl->GetId());
-            event.SetEventObject(m_listCtrl);
-            event.SetItem(listItem);
+            wxListEvent event;
+            InitListEvent(event,
+                          m_listCtrl,
+                          m_rows[row].m_checked ? wxEVT_LIST_ITEM_CHECKED
+                                                : wxEVT_LIST_ITEM_UNCHECKED,
+                          index);
             m_listCtrl->HandleWindowEvent(event);
             return true;
         }
@@ -939,15 +936,13 @@ public:
             return;
 
         const wxString editedText = m_itemDelegate.GetEditControl()->GetLineText(0);
-        wxListItem listItem;
-        listItem.SetId(current_index.row());
-        listItem.SetColumn(current_index.column());
-        listItem.SetText(editedText);
 
-        wxListEvent event(wxEVT_LIST_END_LABEL_EDIT, GetHandler()->GetId());
-        event.SetEventObject(GetHandler());
-        event.SetItem(listItem);
-        event.SetIndex(listItem.GetId());
+        wxListEvent event;
+        InitListEvent(event,
+                      GetHandler(),
+                      wxEVT_LIST_END_LABEL_EDIT,
+                      current_index);
+        event.m_item.SetText(editedText);
 
         if (hint == QAbstractItemDelegate::RevertModelCache)
         {
@@ -1630,12 +1625,9 @@ bool wxListCtrl::DeleteItem(long item)
 
     m_model->removeRow(item, QModelIndex());
 
-    wxListItem listItem;
-    listItem.SetId(item);
-
-    wxListEvent event(wxEVT_LIST_DELETE_ITEM, GetId());
-    event.SetEventObject(this);
-    event.SetItem(listItem);
+    wxListEvent event;
+    InitListEvent(event, this, wxEVT_LIST_DELETE_ITEM);
+    event.m_item.SetId(item);
 
     HandleWindowEvent(event);
 
@@ -1649,8 +1641,9 @@ bool wxListCtrl::DeleteAllItems()
 
     m_model->removeRows(0, GetItemCount(), QModelIndex());
 
-    wxListEvent event(wxEVT_LIST_DELETE_ALL_ITEMS, GetId());
-    event.SetEventObject(this);
+    wxListEvent event;
+    InitListEvent(event, this, wxEVT_LIST_DELETE_ALL_ITEMS);
+
     HandleWindowEvent(event);
 
     return true;
@@ -1687,15 +1680,8 @@ wxTextCtrl* wxListCtrl::EditLabel(long item,
     const QModelIndex index = m_model->index(item, 0);
     m_qtTreeWidget->openPersistentEditor(index);
 
-    wxListItem listItem;
-    listItem.SetId(index.row());
-    listItem.SetColumn(index.column());
-
-    GetItem(listItem);
-
-    wxListEvent event(wxEVT_LIST_BEGIN_LABEL_EDIT, GetId());
-    event.SetEventObject(this);
-    event.SetItem(listItem);
+    wxListEvent event;
+    InitListEvent(event, this, wxEVT_LIST_BEGIN_LABEL_EDIT, index);
 
     // close the editor again if event is vetoed
     if (HandleWindowEvent(event) && !event.IsAllowed())
@@ -1768,12 +1754,9 @@ long wxListCtrl::InsertItem(const wxListItem& info)
 {
     const long index =  m_model->InsertItem(info);
 
-    wxListItem tmp = info;
-    tmp.SetId(index);
+    wxListEvent event;
+    InitListEvent(event, this, wxEVT_LIST_INSERT_ITEM);
 
-    wxListEvent event(wxEVT_LIST_INSERT_ITEM, GetId());
-    event.SetItem(tmp);
-    event.SetEventObject(this);
     HandleWindowEvent(event);
 
     return index;
