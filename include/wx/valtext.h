@@ -41,11 +41,45 @@ enum wxTextValidatorStyle
                   wxFILTER_DIGITS|wxFILTER_XDIGITS
 };
 
+ // ----------------------------------------------------------------------------
+// wxTextEntryValidator: common base class for wxTextValidator & wxNumValidator
+// ----------------------------------------------------------------------------
+class WXDLLIMPEXP_CORE wxTextEntryValidator : public wxValidator
+{
+public:
+    wxTextEntryValidator() {}
+    wxTextEntryValidator(const wxTextEntryValidator& other)
+        : wxValidator(other)
+    {}
+
+    virtual ~wxTextEntryValidator() {}
+
+    // Override base class method to check that the window does support
+    // this type of validators.
+    virtual void SetWindow(wxWindow *win) wxOVERRIDE;
+
+    // returns the error message if the contents of 'str' are invalid.
+    virtual wxString IsValid(const wxString& str) const = 0;
+
+protected:
+    // Get the text entry of the associated control. Normally shouldn't ever
+    // return NULL (and will assert if it does return it) but the caller should
+    // still test the return value for safety.
+    wxTextEntry *GetTextEntry() const;
+
+    // Events handlers
+    void OnKillFocus(wxFocusEvent& event);
+    void OnValueChanged(wxCommandEvent& event);
+    void OnValidation(wxValidationStatusEvent& event);
+
+    wxDECLARE_EVENT_TABLE();
+};
+
 // ----------------------------------------------------------------------------
 // wxTextValidator
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTextValidator: public wxValidator
+class WXDLLIMPEXP_CORE wxTextValidator: public wxTextEntryValidator
 {
 public:
     wxTextValidator(long style = wxFILTER_NONE, wxString *val = NULL);
@@ -70,21 +104,12 @@ public:
     // Called to transfer data from the window
     virtual bool TransferFromWindow() wxOVERRIDE;
 
-    // Override base class method to check that the window does support
-    // this type of validators.
-    virtual void SetWindow(wxWindow *win) wxOVERRIDE;
-
     // Filter keystrokes
     void OnChar(wxKeyEvent& event);
-    void OnKillFocus(wxFocusEvent& event);
-    void OnValueChanged(wxCommandEvent& event);
-    void OnValidation(wxValidationStatusEvent& event);
 
     // ACCESSORS
     inline long GetStyle() const { return m_validatorStyle; }
     void SetStyle(long style);
-
-    wxTextEntry *GetTextEntry();
 
     // strings & chars inclusions:
     // ---------------------------
@@ -116,8 +141,8 @@ public:
     // implementation only
     // --------------------
 
-    // returns the error message if the contents of 'str' are invalid
-    virtual wxString IsValid(const wxString& str) const;
+    // Override base class method.
+    virtual wxString IsValid(const wxString& str) const wxOVERRIDE;
 
 protected:
 

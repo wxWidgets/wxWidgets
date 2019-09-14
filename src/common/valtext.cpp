@@ -54,50 +54,14 @@ static bool wxIsNumeric(const wxString& val)
 }
 
 // ----------------------------------------------------------------------------
-// wxTextValidator
+// wxTextEntryValidator
 // ----------------------------------------------------------------------------
-
-wxIMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator);
-wxBEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
-    EVT_CHAR(wxTextValidator::OnChar)
-    EVT_KILL_FOCUS(wxTextValidator::OnKillFocus)
-
-    EVT_VALIDATE_ERROR(wxID_ANY, wxTextValidator::OnValidation)
+wxBEGIN_EVENT_TABLE(wxTextEntryValidator, wxValidator)
+    EVT_KILL_FOCUS(wxTextEntryValidator::OnKillFocus)
+    EVT_VALIDATE_ERROR(wxID_ANY, wxTextEntryValidator::OnValidation)
 wxEND_EVENT_TABLE()
 
-wxTextValidator::wxTextValidator(long style, wxString *val)
-{
-    m_stringValue = val;
-    SetStyle(style);
-}
-
-wxTextValidator::wxTextValidator(const wxTextValidator& val)
-    : wxValidator()
-{
-    Copy(val);
-}
-
-void wxTextValidator::SetStyle(long style)
-{
-    m_validatorStyle = style;
-}
-
-bool wxTextValidator::Copy(const wxTextValidator& val)
-{
-    wxValidator::Copy(val);
-
-    m_validatorStyle = val.m_validatorStyle;
-    m_stringValue    = val.m_stringValue;
-
-    m_charIncludes = val.m_charIncludes;
-    m_charExcludes = val.m_charExcludes;
-    m_includes     = val.m_includes;
-    m_excludes     = val.m_excludes;
-
-    return true;
-}
-
-void wxTextValidator::SetWindow(wxWindow *win)
+void wxTextEntryValidator::SetWindow(wxWindow *win)
 {
     wxValidator::SetWindow(win);
 
@@ -115,7 +79,7 @@ void wxTextValidator::SetWindow(wxWindow *win)
     }
 }
 
-wxTextEntry *wxTextValidator::GetTextEntry()
+wxTextEntry *wxTextEntryValidator::GetTextEntry() const
 {
 #if wxUSE_TEXTCTRL
     if (wxDynamicCast(m_validatorWindow, wxTextCtrl))
@@ -139,6 +103,76 @@ wxTextEntry *wxTextValidator::GetTextEntry()
 #endif
 
     return NULL;
+}
+
+void wxTextEntryValidator::OnKillFocus(wxFocusEvent& event)
+{
+    event.Skip();
+
+    if ( !IsValidated() )
+        ReportValidation(m_validatorWindow, false);
+}
+
+void wxTextEntryValidator::OnValueChanged(wxCommandEvent& event)
+{
+    // Notice that this event handler is only called for interactive
+    // validators. see wxTextEntryValidator::SetWindow() above.
+
+    event.Skip();
+    ReportValidation(m_validatorWindow, false);
+}
+
+void wxTextEntryValidator::OnValidation(wxValidationStatusEvent& event)
+{
+    if ( !event.CanPopup() )
+        return;
+
+    const wxString& errormsg = event.GetErrorMessage();
+
+    m_validatorWindow->SetFocus();
+    wxMessageBox(errormsg, _("Validation conflict"),
+                 wxOK | wxICON_EXCLAMATION, NULL);
+}
+
+// ----------------------------------------------------------------------------
+// wxTextValidator
+// ----------------------------------------------------------------------------
+
+wxIMPLEMENT_DYNAMIC_CLASS(wxTextValidator, wxValidator);
+wxBEGIN_EVENT_TABLE(wxTextValidator, wxTextEntryValidator)
+    EVT_CHAR(wxTextValidator::OnChar)
+wxEND_EVENT_TABLE()
+
+wxTextValidator::wxTextValidator(long style, wxString *val)
+{
+    m_stringValue = val;
+    SetStyle(style);
+}
+
+wxTextValidator::wxTextValidator(const wxTextValidator& val)
+    : wxTextEntryValidator()
+{
+    Copy(val);
+}
+
+void wxTextValidator::SetStyle(long style)
+{
+    m_validatorStyle = style;
+}
+
+bool wxTextValidator::Copy(const wxTextValidator& val)
+{
+    wxValidator::Copy(val);
+
+    m_validatorStyle = val.m_validatorStyle;
+    m_stringValue    = val.m_stringValue;
+
+    m_charIncludes = val.m_charIncludes;
+    m_charExcludes = val.m_charExcludes;
+    m_includes     = val.m_includes;
+    m_excludes     = val.m_excludes;
+
+    return true;
 }
 
 // Called when the value in the window must be validated.
@@ -324,32 +358,6 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
 
     // eat message
     event.Skip(false);
-}
-
-void wxTextValidator::OnKillFocus(wxFocusEvent& event)
-{
-    event.Skip();
-
-    if ( !IsValidated() )
-        ReportValidation(m_validatorWindow, false);
-}
-
-void wxTextValidator::OnValueChanged(wxCommandEvent& event)
-{
-    event.Skip();
-    ReportValidation(m_validatorWindow, false);
-}
-
-void wxTextValidator::OnValidation(wxValidationStatusEvent& event)
-{
-    if ( !event.CanPopup() )
-        return;
-
-    const wxString& errormsg = event.GetErrorMessage();
-
-    m_validatorWindow->SetFocus();
-    wxMessageBox(errormsg, _("Validation conflict"),
-                 wxOK | wxICON_EXCLAMATION, NULL);
 }
 
 bool wxTextValidator::IsValidChar(const wxUniChar& c) const

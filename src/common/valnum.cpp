@@ -37,11 +37,9 @@
 // wxNumValidatorBase implementation
 // ============================================================================
 
-wxBEGIN_EVENT_TABLE(wxNumValidatorBase, wxValidator)
+wxBEGIN_EVENT_TABLE(wxNumValidatorBase, wxTextEntryValidator)
     EVT_CHAR(wxNumValidatorBase::OnChar)
     EVT_KILL_FOCUS(wxNumValidatorBase::OnKillFocus)
-
-    EVT_VALIDATE_ERROR(wxID_ANY, wxNumValidatorBase::OnValidation)
 wxEND_EVENT_TABLE()
 
 int wxNumValidatorBase::GetFormatFlags() const
@@ -53,36 +51,6 @@ int wxNumValidatorBase::GetFormatFlags() const
         flags |= wxNumberFormatter::Style_NoTrailingZeroes;
 
     return flags;
-}
-
-void wxNumValidatorBase::SetWindow(wxWindow *win)
-{
-    wxValidator::SetWindow(win);
-
-    if ( GetTextEntry() != NULL )
-    {
-        if ( IsInteractive() )
-            Bind(wxEVT_TEXT, &wxNumValidatorBase::OnValueChanged, this);
-    }
-    else
-    {
-        wxFAIL_MSG("Can only be used with wxTextCtrl or wxComboBox");
-    }
-}
-
-wxTextEntry *wxNumValidatorBase::GetTextEntry() const
-{
-#if wxUSE_TEXTCTRL
-    if ( wxTextCtrl *text = wxDynamicCast(m_validatorWindow, wxTextCtrl) )
-        return text;
-#endif // wxUSE_TEXTCTRL
-
-#if wxUSE_COMBOBOX
-    if ( wxComboBox *combo = wxDynamicCast(m_validatorWindow, wxComboBox) )
-        return combo;
-#endif // wxUSE_COMBOBOX
-
-    return NULL;
 }
 
 void
@@ -234,26 +202,6 @@ void wxNumValidatorBase::OnKillFocus(wxFocusEvent& event)
 
     if ( wasModified )
         text->MarkDirty();
-
-    ReportValidation(m_validatorWindow, false);
-}
-
-void wxNumValidatorBase::OnValueChanged(wxCommandEvent& event)
-{
-    event.Skip();
-    ReportValidation(m_validatorWindow, false);
-}
-
-void wxNumValidatorBase::OnValidation(wxValidationStatusEvent& event)
-{
-    if ( !event.CanPopup() )
-        return;
-
-    const wxString& errormsg = event.GetErrorMessage();
-
-    m_validatorWindow->SetFocus();
-    wxMessageBox(errormsg, _("Validation conflict"),
-                 wxOK | wxICON_EXCLAMATION, NULL);
 }
 
 // ============================================================================
