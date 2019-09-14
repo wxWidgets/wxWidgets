@@ -188,12 +188,11 @@ void wxListCtrl::Init()
 
 wxListCtrl::~wxListCtrl()
 {
-
-    if (m_ownsImageListNormal)
+    if ( m_ownsImageListNormal )
         delete m_imageListNormal;
-    if (m_ownsImageListSmall)
+    if ( m_ownsImageListSmall )
         delete m_imageListSmall;
-    if (m_ownsImageListState)
+    if ( m_ownsImageListState )
         delete m_imageListState;
 }
 
@@ -399,7 +398,7 @@ long wxListCtrl::SetItem(long index, int col, const wxString& label, int imageId
     return SetItem(info);
 }
 
-int  wxListCtrl::GetItemState(long item, long stateMask) const
+int wxListCtrl::GetItemState(long item, long stateMask) const
 {
     wxListItem info;
 
@@ -407,7 +406,7 @@ int  wxListCtrl::GetItemState(long item, long stateMask) const
     info.m_stateMask = stateMask;
     info.m_itemId = item;
 
-    if (!GetItem(info))
+    if ( !GetItem(info) )
         return 0;
 
     return info.m_state;
