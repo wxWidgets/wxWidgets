@@ -27,7 +27,7 @@
 #include "wx/log.h"
 #include "wx/desktopenv.h"
 
-bool wxDesktopEnv::MoveToRecycleBin(const wxString &WXUNUSED(fileName))
+bool wxDesktopEnv::MoveToRecycleBin(wxString &WXUNUSED(fileName))
 {
     wxFAIL_MSG( "Not implemented!" );
     return false;
