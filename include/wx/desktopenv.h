@@ -18,7 +18,7 @@ class WXDLLIMPEXP_CORE wxDesktopEnvBase
 public:
     wxDesktopEnvBase() { }
     virtual ~wxDesktopEnvBase() { }
-    virtual bool MoveToRecycleBin(const wxString &fileName);
+    virtual bool MoveToRecycleBin(wxString &path);
 protected:
     wxDECLARE_NO_COPY_CLASS(wxDesktopEnvBase);
 };

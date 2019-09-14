@@ -41,7 +41,8 @@ TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
         out << buf << std::endl;
     }
     out.close();
-    CHECK( env.MoveToRecycleBin( currentDir + "ffileinstream.test" ) );
+    wxString testPath = currentDir + "ffileinstream.test";
+    CHECK( env.MoveToRecycleBin( testPath ) );
     std::ofstream out1( "../ffileinstream.test", std::ofstream::out );
 
     // Init the data buffer.
@@ -52,7 +53,8 @@ TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
         out << buf << std::endl;
     }
     out1.close();
-    CHECK( env.MoveToRecycleBin( "../ffileinstream.test" ) );
+    testPath = "../ffileinstream.test";
+    CHECK( env.MoveToRecycleBin( testPath ) );
     wxMkdir( "TrashTest" );
     std::ofstream out2( "TrashTest/ffileinstream.test", std::ofstream::out );
 
@@ -64,8 +66,11 @@ TEST_CASE_METHOD(DesktopEnvTestCase, "DesktopEnvTestCase::MoveToTrash")
         out1 << buf << std::endl;
     }
     out2.close();
-    CHECK( env.MoveToRecycleBin( currentDir + "TrashTest" ) );
+    testPath = currentDir + "TrashTest";
+    CHECK( env.MoveToRecycleBin( testPath ) );
     // also trying non-existing file
-    CHECK( !env.MoveToRecycleBin( currentDir + "abc" ) );
+    testPath = currentDir + "abc";
+    CHECK( !env.MoveToRecycleBin( testPath ) );
 #endif
 }
+

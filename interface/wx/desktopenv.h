@@ -23,9 +23,9 @@ public:
     wxDesktopEnv();
     
     /**
-        Moves the file to the Recycle Bin/Trash. The file name should be an absolute path
+        Moves the file to the Recycle Bin/Trash.
         
         @return true on success
     */
-    bool MoveFileToRecycleBin(const wxString &fileName);
+    bool MoveToRecycleBin(wxString &fileName);
 };

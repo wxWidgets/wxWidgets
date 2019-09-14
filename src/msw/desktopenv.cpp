@@ -26,6 +26,7 @@
 #include "wx/wx.h"
 
 #include <shellapi.h> // needed for SHFILEOPSTRUCT
+#include "wx/filename.h"
 #include "wx/log.h"
 #include "wx/desktopenv.h"
 
@@ -37,22 +38,22 @@ wxDesktopEnv::wxDesktopEnv() : wxDesktopEnvBase()
 {
 }
 
-bool wxDesktopEnv::MoveFileToRecycleBin(const wxString &fileName)
+bool wxDesktopEnv::MoveToRecycleBin(wxString &path)
 {
     bool result = false;
-    if( wxDesktopEnvBase::MoveFileToRecycleBin( fileName ) )
+    if( wxDesktopEnvBase::MoveToRecycleBin( path ) )
     {
         SHFILEOPSTRUCT fileOp;
         ::ZeroMemory( &fileOp, sizeof( fileOp ) );
         fileOp.hwnd = NULL;
         fileOp.wFunc = FO_DELETE;
-        wxString temp = fileName + '\0';
+        wxString temp = path + '\0';
         fileOp.pFrom = temp.c_str();
         fileOp.pTo = NULL;
         fileOp.fFlags = FOF_ALLOWUNDO | FOF_NOERRORUI | FOF_NOCONFIRMATION | FOF_SILENT;
         const int res = SHFileOperation( &fileOp );
         if( res != 0 )
-           wxLogSysError( _( "Failed to move file '%s' to Recycle Bin" ), fileName );
+           wxLogError( _( "Failed to move file '%s' to Recycle Bin" ), path );
         else
             result = true;
     }
