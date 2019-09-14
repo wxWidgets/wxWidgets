@@ -187,11 +187,16 @@ void wxFrame::SetWindowStyleFlag( long style )
     GetQMainWindow()->setWindowFlags(qtFlags);
 }
 
+QWidget* wxFrame::QtGetParentWidget() const
+{
+    return GetQMainWindow()->centralWidget();
+}
+
 void wxFrame::AddChild( wxWindowBase *child )
 {
     // Make sure all children are children of the central widget:
 
-    QtReparent( child->GetHandle(), GetQMainWindow()->centralWidget() );
+    QtReparent( child->GetHandle(), QtGetParentWidget() );
 
     wxFrameBase::AddChild( child );
 }

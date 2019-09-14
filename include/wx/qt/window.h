@@ -215,6 +215,12 @@ protected:
     virtual bool DoPopupMenu(wxMenu *menu, int x, int y) wxOVERRIDE;
 #endif // wxUSE_MENUS
 
+    // Return the parent to use for children being reparented to us: this is
+    // overridden in wxFrame to use its central widget rather than the frame
+    // itself.
+    virtual QWidget* QtGetParentWidget() const { return GetHandle(); }
+
+
     QWidget *m_qtWindow;
 
 private:

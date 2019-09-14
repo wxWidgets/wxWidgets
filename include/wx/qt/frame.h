@@ -57,6 +57,8 @@ public:
 protected:
     virtual void DoGetClientSize(int *width, int *height) const wxOVERRIDE;
 
+    virtual QWidget* QtGetParentWidget() const wxOVERRIDE;
+
 private:
     // Common part of all ctors.
     void Init()

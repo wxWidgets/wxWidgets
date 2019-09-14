@@ -437,7 +437,7 @@ bool wxWindowQt::Reparent( wxWindowBase *parent )
     if ( !wxWindowBase::Reparent( parent ))
         return false;
 
-    QtReparent( GetHandle(), parent->GetHandle() );
+    QtReparent( GetHandle(), static_cast<wxWindow*>(parent)->QtGetParentWidget() );
 
     return true;
 }
