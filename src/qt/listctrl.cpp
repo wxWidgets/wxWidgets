@@ -60,6 +60,27 @@ wxListColumnFormat wxQtConvertAlignFlag(int align)
     return wxLIST_FORMAT_LEFT;
 }
 
+void InitListEvent(wxListEvent& event,
+                   wxListCtrl* listctrl,
+                   wxEventType eventType,
+                   const QModelIndex& index = QModelIndex())
+{
+    event.SetEventObject(listctrl);
+    event.SetEventType(eventType);
+    event.SetId(listctrl->GetId());
+
+    if ( index.isValid() )
+    {
+        event.m_itemIndex = index.row();
+        event.m_col = index.column();
+        event.m_item.SetId(event.m_itemIndex);
+        event.m_item.SetMask(wxLIST_MASK_TEXT |
+                             wxLIST_MASK_IMAGE |
+                             wxLIST_MASK_DATA);
+        listctrl->GetItem(event.m_item);
+    }
+}
+
 } // anonymous namespace
 
 class wxQtStyledItemDelegate : public QStyledItemDelegate
@@ -992,15 +1013,7 @@ void wxQtListTreeWidget::EmitListEvent(wxEventType typ,
         // prepare the event
         // -----------------
         wxListEvent event;
-        event.SetEventType(typ);
-        event.SetId(handler->GetId());
-        event.m_itemIndex = index.row();
-        event.m_col = index.column();
-        event.m_item.SetId(event.m_itemIndex);
-        event.m_item.SetMask(wxLIST_MASK_TEXT |
-                             wxLIST_MASK_IMAGE |
-                             wxLIST_MASK_DATA);
-        handler->GetItem(event.m_item);
+        InitListEvent(event, handler, typ, index);
         EmitEvent(event);
     }
 }
