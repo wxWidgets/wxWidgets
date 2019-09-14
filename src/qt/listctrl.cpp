@@ -71,7 +71,9 @@ public:
     {
     }
 
-    QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem &WXUNUSED(option), const QModelIndex &index) const wxOVERRIDE
+    QWidget* createEditor(QWidget *parent,
+                          const QStyleOptionViewItem &WXUNUSED(option),
+                          const QModelIndex &index) const wxOVERRIDE
     {
         if (m_textCtrl != NULL)
             destroyEditor(m_textCtrl->GetHandle(), m_currentModelIndex);
@@ -82,7 +84,8 @@ public:
         return m_textCtrl->GetHandle();
     }
 
-    void destroyEditor(QWidget *WXUNUSED(editor), const QModelIndex &WXUNUSED(index)) const wxOVERRIDE
+    void destroyEditor(QWidget *WXUNUSED(editor),
+                       const QModelIndex &WXUNUSED(index)) const wxOVERRIDE
     {
         if (m_textCtrl != NULL)
         {
@@ -92,7 +95,9 @@ public:
         }
     }
 
-    void setModelData(QWidget *WXUNUSED(editor), QAbstractItemModel *WXUNUSED(model), const QModelIndex &WXUNUSED(index)) const wxOVERRIDE
+    void setModelData(QWidget *WXUNUSED(editor),
+                      QAbstractItemModel *WXUNUSED(model),
+                      const QModelIndex &WXUNUSED(index)) const wxOVERRIDE
     {
         // Don't set model data until wx has had a chance to send out events
     }
@@ -107,7 +112,9 @@ public:
         return m_currentModelIndex;
     }
 
-    void AcceptModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+    void AcceptModelData(QWidget *editor,
+                         QAbstractItemModel *model,
+                         const QModelIndex &index) const
     {
         QStyledItemDelegate::setModelData(editor, model, index);
     }
@@ -283,7 +290,8 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const wxOVERRIDE
     {
-        Qt::ItemFlags itemFlags = Qt::ItemIsSelectable | Qt::ItemNeverHasChildren;
+        Qt::ItemFlags
+            itemFlags = Qt::ItemIsSelectable | Qt::ItemNeverHasChildren;
 
         if ( m_listCtrl->HasFlag(wxLC_EDIT_LABELS) )
             itemFlags |= Qt::ItemIsEditable;
@@ -305,7 +313,9 @@ public:
         return true;
     }
 
-    bool removeColumns(int column, int count, const QModelIndex &parent) wxOVERRIDE
+    bool removeColumns(int column,
+                       int count,
+                       const QModelIndex &parent) wxOVERRIDE
     {
         if ( count == 0 )
             return true;
@@ -907,11 +917,11 @@ public:
         if (!current_index.isValid())
             return;
 
-        const wxString edited_text = m_itemDelegate.GetEditControl()->GetLineText(0);
+        const wxString editedText = m_itemDelegate.GetEditControl()->GetLineText(0);
         wxListItem listItem;
         listItem.SetId(current_index.row());
         listItem.SetColumn(current_index.column());
-        listItem.SetText(edited_text);
+        listItem.SetText(editedText);
 
         wxListEvent event(wxEVT_LIST_END_LABEL_EDIT, GetHandler()->GetId());
         event.SetEventObject(GetHandler());
@@ -931,8 +941,12 @@ public:
         }
 
         // wx doesn't have hints to edit next/previous item
-        if (hint == QAbstractItemDelegate::EditNextItem || hint == QAbstractItemDelegate::EditPreviousItem)
+        if ( hint == QAbstractItemDelegate::EditNextItem ||
+             hint == QAbstractItemDelegate::EditPreviousItem )
+        {
             hint = QAbstractItemDelegate::SubmitModelCache;
+        }
+
         QTreeView::closeEditor(editor, hint);
         closePersistentEditor(current_index);
     }
@@ -969,7 +983,8 @@ wxQtListTreeWidget::wxQtListTreeWidget( wxWindow *parent, wxListCtrl *handler )
     setEditTriggers(NoEditTriggers);
 }
 
-void wxQtListTreeWidget::EmitListEvent(wxEventType typ, const QModelIndex &index) const
+void wxQtListTreeWidget::EmitListEvent(wxEventType typ,
+                                       const QModelIndex &index) const
 {
     wxListCtrl *handler = GetHandler();
     if ( handler )
@@ -1299,7 +1314,10 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int WXUNUSED(code)) const
     return true;
 }
 
-bool wxListCtrl::GetSubItemRect(long item, long subItem, wxRect& rect, int WXUNUSED(code)) const
+bool wxListCtrl::GetSubItemRect(long item,
+                                long subItem,
+                                wxRect& rect,
+                                int WXUNUSED(code)) const
 {
     wxCHECK_MSG(item >= 0 && item < GetItemCount(),
         false, "invalid row index in GetSubItemRect");
@@ -1324,7 +1342,8 @@ bool wxListCtrl::GetItemPosition(long item, wxPoint& pos) const
     return true;
 }
 
-bool wxListCtrl::SetItemPosition(long WXUNUSED(item), const wxPoint& WXUNUSED(pos))
+bool wxListCtrl::SetItemPosition(long WXUNUSED(item),
+                                 const wxPoint& WXUNUSED(pos))
 {
     return false;
 }
@@ -1635,7 +1654,9 @@ bool wxListCtrl::DeleteColumn(int col)
 
 bool wxListCtrl::DeleteAllColumns()
 {
-    m_model->removeColumns(0, m_model->columnCount(QModelIndex()), QModelIndex());
+    m_model->removeColumns(0,
+                           m_model->columnCount(QModelIndex()),
+                           QModelIndex());
     return true;
 }
 
@@ -1645,9 +1666,11 @@ void wxListCtrl::ClearAll()
     DeleteAllItems();
 }
 
-wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* WXUNUSED(textControlClass))
+wxTextCtrl* wxListCtrl::EditLabel(long item,
+                                  wxClassInfo* WXUNUSED(textControlClass))
 {
-    // Open the editor first so that it's available when handling events as per wx standard
+    // Open the editor first so that it's available when handling events as per
+    // wx standard.
     const QModelIndex index = m_model->index(item, 0);
     m_qtTreeWidget->openPersistentEditor(index);
 
