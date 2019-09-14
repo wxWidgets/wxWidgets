@@ -709,6 +709,7 @@ public:
 
     virtual void SetVirtualItemCount(long WXUNUSED(count))
     {
+        wxFAIL_MSG("Shouldn't be called if wxLC_VIRTUAL is not used");
     }
 
 protected:
@@ -1798,7 +1799,6 @@ long wxListCtrl::DoInsertColumn(long col, const wxListItem& info)
 
 void wxListCtrl::SetItemCount(long count)
 {
-    wxASSERT(HasFlag(wxLC_VIRTUAL));
     m_model->SetVirtualItemCount(count);
 }
 
