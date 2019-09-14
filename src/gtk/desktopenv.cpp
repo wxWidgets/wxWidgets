@@ -41,7 +41,7 @@ bool wxDesktopEnv::MoveToRecycleBin(wxString &path)
         GFile *f = g_file_new_for_path( path.c_str() );
         gboolean res = g_file_trash( f, NULL, &error );
         if( !res || ( error && error->code == G_IO_ERROR_NOT_SUPPORTED ) )
-           wxLogError( _( "Failed to move file '%s' to Recycle Bin" ), fileName );
+           wxLogError( _( "Failed to move file '%s' to Recycle Bin" ), path );
         else
         {
             result = true;
