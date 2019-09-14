@@ -27,16 +27,16 @@ wxDesktopEnv::~wxDesktopEnv()
 {
 }
 
-bool wxDesktopEnv::MoveFileToRecycleBin(const wxString &fileName)
+bool wxDesktopEnv::MoveToRecycleBin(wxString &path)
 {
     bool ret = true;
-    wxString temp = "file:///" + fileName;
+    wxString temp = "file:///" + path;
     NSURL *url = [NSURL URLWithString:wxCFStringRef( temp ).AsNSString()];
     NSArray *files = [NSArray arrayWithObject:url];
     BOOL result = [[NSFileManager defaultManager] trashItemAtURL:url resultingItemURL:nil error:nil];
     if( result == NO )
     {
-        wxLogSysError( _( "Failed to move file '%s' to Recycle Bin" ), fileName );
+        wxLogError( _( "Failed to move file '%s' to Recycle Bin" ), fileName );
         ret = false;
     }
     return ret;

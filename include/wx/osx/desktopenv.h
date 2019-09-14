@@ -16,10 +16,7 @@ class WXDLLIMPEXP_CORE wxDesktopEnv : public wxDesktopEnvBase
 public:
     wxDesktopEnv();
     virtual ~wxDesktopEnv() wxOVERRIDE;
-    virtual bool MoveFileToRecycleBin(const wxString &fileName) wxOVERRIDE;
-private:
-    bool MoveDirectoryToTrash(const wxString &dirName);
-    bool MoveFileToTrash(const wxString &fileName);
+    virtual bool MoveToRecycleBin(wxString &fileName) wxOVERRIDE;
 };
 
 #endif

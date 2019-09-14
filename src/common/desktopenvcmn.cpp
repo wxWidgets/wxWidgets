@@ -27,12 +27,15 @@
 #include "wx/log.h"
 #include "wx/desktopenv.h"
 
-bool wxDesktopEnvBase::MoveFileToRecycleBin(const wxString &fileName)
+bool wxDesktopEnvBase::MoveToRecycleBin(wxString &path)
 {
     bool result = true;
-    if( !wxFileExists( fileName ) && !wxDirExists( fileName ) && !wxFileName( fileName ).IsAbsolute() )
+    wxFileName name = wxFileName( path );
+    name.MakeAbsolute();
+    path = name.GetFullPath();
+    if( !wxFileExists( path ) && !wxDirExists( path ) )
     {
-        wxLogSysError( "Failed to move the file '%s' to Recycle Bin", fileName.c_str() );
+        wxLogSysError( "Failed to move the file '%s' to Recycle Bin", path.c_str() );
         result = false;
     }
     return result;
