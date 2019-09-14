@@ -134,14 +134,15 @@ void wxFrame::SetWindowStyleFlag( long style )
 {
     wxWindow::SetWindowStyleFlag( style );
 
-    QMainWindow *qtFrame = GetQMainWindow();
-    Qt::WindowFlags qtFlags = qtFrame->windowFlags();
-    qtFlags |= Qt::CustomizeWindowHint;
+    Qt::WindowFlags qtFlags = Qt::CustomizeWindowHint;
 
     if ( HasFlag( wxFRAME_TOOL_WINDOW ) )
     {
-        qtFlags &= ~Qt::WindowType_Mask;
         qtFlags |= Qt::Tool;
+    }
+    else
+    {
+        qtFlags |= Qt::Window;
     }
 
     if ( HasFlag(wxCAPTION) )
@@ -183,8 +184,7 @@ void wxFrame::SetWindowStyleFlag( long style )
         qtFlags |= Qt::FramelessWindowHint;
     }
 
-    qtFrame->setWindowFlags(qtFlags);
-
+    GetQMainWindow()->setWindowFlags(qtFlags);
 }
 
 void wxFrame::AddChild( wxWindowBase *child )
