@@ -580,6 +580,7 @@ private:
         switch ( event.GetKeyCode() )
         {
             case WXK_RETURN:
+            case WXK_NUMPAD_ENTER:
                 if ( m_win->HasFlag(wxTE_PROCESS_ENTER) )
                     specialKey = true;
                 break;
