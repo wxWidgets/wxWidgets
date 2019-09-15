@@ -1170,6 +1170,9 @@ void wxToolBar::DoLayout()
 
 bool wxToolBar::Realize()
 {
+    wxFrame *frame = dynamic_cast<wxFrame *>( GetParent() );
+    if( frame && !frame->GetToolBar() )
+        return false;
     if ( !wxToolBarBase::Realize() )
         return false;
 
