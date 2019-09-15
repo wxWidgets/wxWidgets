@@ -1,0 +1,1 @@
+wxMSW: Fix input handling bugs in text controls with autocompleters.
