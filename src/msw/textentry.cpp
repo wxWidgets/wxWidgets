@@ -160,9 +160,12 @@ public:
         m_completer = completer;
     }
 
-    void UpdatePrefix(const wxString& prefix)
+    bool UpdatePrefix(const wxString& prefix)
     {
         CSLock lock(m_csRestart);
+
+        if ( prefix == m_prefix )
+            return false;
 
         // We simply store the prefix here and will really update during the
         // next call to our Next() method as we want to call Start() from the
@@ -170,6 +173,8 @@ public:
         // completions are generated.
         m_prefix = prefix;
         m_restart = TRUE;
+
+        return true;
     }
 
     virtual HRESULT STDMETHODCALLTYPE Next(ULONG celt,
@@ -557,18 +562,16 @@ private:
 
         const wxString prefix = m_entry->GetRange(0, from);
 
-        m_enumStrings->UpdatePrefix(prefix);
-
-        DoRefresh();
+        if ( m_enumStrings->UpdatePrefix(prefix) )
+            DoRefresh();
     }
 
     void OnAfterChar(wxKeyEvent& event)
     {
-        // Notice that we must not refresh the completions when the user
-        // presses Backspace as this would result in adding back the just
-        // erased character(s) because of ACO_AUTOAPPEND option we use.
-        if ( m_customCompleter && event.GetKeyCode() != WXK_BACK )
+        if ( m_customCompleter )
+        {
             UpdateStringsFromCustomCompleter();
+        }
 
         event.Skip();
     }
