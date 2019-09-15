@@ -2915,13 +2915,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 }
             }
 
-            if ( m_currentCellCoords == wxGridNoCellCoords )
-            {
-                // if we have just inserted cols into an empty grid the current
-                // cell will be undefined...
-                //
-                SetCurrentCell( 0, 0 );
-            }
+            UpdateCurrentCellOnRedim();
 
             if ( m_selection )
                 m_selection->UpdateRows( pos, numRows );
@@ -2960,13 +2954,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 }
             }
 
-            if ( m_currentCellCoords == wxGridNoCellCoords )
-            {
-                // if we have just inserted cols into an empty grid the current
-                // cell will be undefined...
-                //
-                SetCurrentCell( 0, 0 );
-            }
+            UpdateCurrentCellOnRedim();
 
             if ( !GetBatchCount() )
             {
@@ -2996,15 +2984,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 }
             }
 
-            if ( !m_numRows )
-            {
-                m_currentCellCoords = wxGridNoCellCoords;
-            }
-            else
-            {
-                if ( m_currentCellCoords.GetRow() >= m_numRows )
-                    m_currentCellCoords.Set( 0, 0 );
-            }
+            UpdateCurrentCellOnRedim();
 
             if ( m_selection )
                 m_selection->UpdateRows( pos, -((int)numRows) );
@@ -3080,13 +3060,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 }
             }
 
-            if ( m_currentCellCoords == wxGridNoCellCoords )
-            {
-                // if we have just inserted cols into an empty grid the current
-                // cell will be undefined...
-                //
-                SetCurrentCell( 0, 0 );
-            }
+            UpdateCurrentCellOnRedim();
 
             if ( m_selection )
                 m_selection->UpdateCols( pos, numCols );
@@ -3144,13 +3118,8 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
             if ( m_useNativeHeader )
                 GetGridColHeader()->SetColumnCount(m_numCols);
 
-            if ( m_currentCellCoords == wxGridNoCellCoords )
-            {
-                // if we have just inserted cols into an empty grid the current
-                // cell will be undefined...
-                //
-                SetCurrentCell( 0, 0 );
-            }
+            UpdateCurrentCellOnRedim();
+
             if ( !GetBatchCount() )
             {
                 CalcDimensions();
@@ -3199,15 +3168,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 }
             }
 
-            if ( !m_numCols )
-            {
-                m_currentCellCoords = wxGridNoCellCoords;
-            }
-            else
-            {
-                if ( m_currentCellCoords.GetCol() >= m_numCols )
-                  m_currentCellCoords.Set( 0, 0 );
-            }
+            UpdateCurrentCellOnRedim();
 
             if ( m_selection )
                 m_selection->UpdateCols( pos, -((int)numCols) );
@@ -3622,6 +3583,41 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event, wxGridRowLabelWindo
     }
 }
 
+void wxGrid::UpdateCurrentCellOnRedim()
+{
+    if (m_currentCellCoords == wxGridNoCellCoords)
+    {
+        // We didn't have any valid selection before, which can only happen
+        // if the grid was empty.
+        // Check if this is still the case and ensure we do have valid
+        // selection if the grid is not empty any more.
+        if (m_numCols > 0 && m_numRows > 0)
+        {
+            SetCurrentCell(0, 0);
+        }
+    }
+    else
+    {
+        if (m_numCols == 0 || m_numRows == 0)
+        {
+            // We have to reset the selection, as it must either use validate
+            // coordinates otherwise, but there are no valid coordinates for
+            // the grid cells any more now that it is empty.
+            m_currentCellCoords = wxGridNoCellCoords;
+        }
+        else
+        {
+            int col = m_currentCellCoords.GetCol();
+            int row = m_currentCellCoords.GetRow();
+            if (col >= m_numCols)
+                col = m_numCols - 1;
+            if (row >= m_numRows)
+                row = m_numRows - 1;
+            SetCurrentCell(col, row);
+        }
+    }
+}
+
 void wxGrid::UpdateColumnSortingIndicator(int col)
 {
     wxCHECK_RET( col != wxNOT_FOUND, "invalid column index" );
@@ -3687,6 +3683,7 @@ void wxGrid::DoUpdateResizeColWidth(int w)
 {
     wxPoint pt(GetColLeft(m_dragRowOrCol) + w, 0);
 
+    pt = CalcGridWindowScrolledPosition(pt, m_gridWin);
     DrawGridDragLine(pt, wxGridColumnOperations(), m_gridWin);
 }
 
@@ -5276,6 +5273,33 @@ void wxGrid::RefreshBlock(const wxGridCellCoords& topLeft,
 void wxGrid::RefreshBlock(int topRow, int leftCol,
                           int bottomRow, int rightCol)
 {
+    // Note that it is valid to call this function with wxGridNoCellCoords as
+    // either or even both arguments, but we can't have a mix of valid and
+    // invalid columns/rows for each corner coordinates.
+    const bool noTopLeft = topRow == -1 || leftCol == -1;
+    const bool noBottomRight = bottomRow == -1 || rightCol == -1;
+
+    if ( noTopLeft )
+    {
+        // So check that either both or none of the components are valid.
+        wxASSERT( topRow == -1 && leftCol == -1 );
+
+        // And specifying bottom right corner when the top left one is not
+        // specified doesn't make sense neither.
+        wxASSERT( noBottomRight );
+
+        return;
+    }
+
+    if ( noBottomRight )
+    {
+        wxASSERT( bottomRow == -1 && rightCol == -1 );
+
+        bottomRow = topRow;
+        rightCol = leftCol;
+    }
+
+
     int row = topRow;
     int col = leftCol;
 
@@ -6830,10 +6854,14 @@ void wxGrid::EnableCellEditControl( bool enable )
             SendEvent(wxEVT_GRID_EDITOR_HIDDEN);
 
             HideCellEditControl();
-            SaveEditControlValue();
 
-            // do it after HideCellEditControl()
-            m_cellEditCtrlEnabled = enable;
+            // do it after HideCellEditControl() but before invoking
+            // user-defined handlers invoked by DoSaveEditControlValue() to
+            // ensure that we don't enter infinite loop if any of them try to
+            // disable the edit control again.
+            m_cellEditCtrlEnabled = false;
+
+            DoSaveEditControlValue();
         }
     }
 }
@@ -7087,34 +7115,39 @@ void wxGrid::SaveEditControlValue()
 {
     if ( IsCellEditControlEnabled() )
     {
-        int row = m_currentCellCoords.GetRow();
-        int col = m_currentCellCoords.GetCol();
-
-        wxString oldval = GetCellValue(row, col);
-
-        wxGridCellAttr* attr = GetCellAttr(row, col);
-        wxGridCellEditor* editor = attr->GetEditor(this, row, col);
-
-        wxString newval;
-        bool changed = editor->EndEdit(row, col, this, oldval, &newval);
-
-        if ( changed && SendEvent(wxEVT_GRID_CELL_CHANGING, newval) != -1 )
-        {
-            editor->ApplyEdit(row, col, this);
-
-            // for compatibility reasons dating back to wx 2.8 when this event
-            // was called wxEVT_GRID_CELL_CHANGE and wxEVT_GRID_CELL_CHANGING
-            // didn't exist we allow vetoing this one too
-            if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == -1 )
-            {
-                // Event has been vetoed, set the data back.
-                SetCellValue(row, col, oldval);
-            }
-        }
-
-        editor->DecRef();
-        attr->DecRef();
+        DoSaveEditControlValue();
     }
+}
+
+void wxGrid::DoSaveEditControlValue()
+{
+    int row = m_currentCellCoords.GetRow();
+    int col = m_currentCellCoords.GetCol();
+
+    wxString oldval = GetCellValue(row, col);
+
+    wxGridCellAttr* attr = GetCellAttr(row, col);
+    wxGridCellEditor* editor = attr->GetEditor(this, row, col);
+
+    wxString newval;
+    bool changed = editor->EndEdit(row, col, this, oldval, &newval);
+
+    if ( changed && SendEvent(wxEVT_GRID_CELL_CHANGING, newval) != -1 )
+    {
+        editor->ApplyEdit(row, col, this);
+
+        // for compatibility reasons dating back to wx 2.8 when this event
+        // was called wxEVT_GRID_CELL_CHANGE and wxEVT_GRID_CELL_CHANGING
+        // didn't exist we allow vetoing this one too
+        if ( SendEvent(wxEVT_GRID_CELL_CHANGED, oldval) == -1 )
+        {
+            // Event has been vetoed, set the data back.
+            SetCellValue(row, col, oldval);
+        }
+    }
+
+    editor->DecRef();
+    attr->DecRef();
 }
 
 void wxGrid::OnHideEditor(wxCommandEvent& WXUNUSED(event))

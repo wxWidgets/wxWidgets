@@ -73,6 +73,11 @@ Changes in behaviour not resulting in compilation errors
 - wxDC::DrawCheckMark() draws the same shape under all platforms now, use the
   new wxRendererNative::DrawCheckMark() to draw MSW-specific themed check mark.
 
+- wxTE_PROCESS_ENTER must be used to receive wxEVT_TEXT_ENTER events from even
+  multiline wxTextCtrl, conforming to the documentation, but contrary to the
+  previous behaviour in wxMSW, when these events were always generated in this
+  case. Please add wxTE_PROCESS_ENTER style if you relied on the old behaviour.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
@@ -150,6 +155,9 @@ All (GUI):
   in wxPGArrayEditorDialog.
 - Fix wxPropertyGrid issues with horizontal scrolling.
 - Add wxPG_DIALOG_TITLE wxPGProperty attribute.
+- Add support for creating a wxGraphicsPen with a gradient.
+- Add support for applying a transformation matrix to a gradient.
+
 
 wxGTK:
 

@@ -63,7 +63,7 @@ public:
     // implement wxGLCanvasX11 methods
     // --------------------------------
 
-    virtual Window GetXWindow() const wxOVERRIDE;
+    virtual unsigned long GetXWindow() const wxOVERRIDE;
 
 
     // deprecated methods

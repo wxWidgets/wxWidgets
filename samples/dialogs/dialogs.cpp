@@ -2581,6 +2581,34 @@ wxBEGIN_EVENT_TABLE(TestDefaultActionDialog, wxDialog)
     EVT_TEXT_ENTER(wxID_ANY,                 TestDefaultActionDialog::OnTextEnter)
 wxEND_EVENT_TABLE()
 
+// TODO-C++11: We can't declare this class inside TestDefaultActionDialog
+//             itself when using C++98, so we have to do it here instead.
+namespace
+{
+
+// We have to define a new class in order to actually handle pressing
+// Enter, if we didn't do it, pressing it would still close the dialog.
+class EnterHandlingTextCtrl : public wxTextCtrl
+{
+public:
+    EnterHandlingTextCtrl(wxWindow* parent, int id, const wxString& value)
+        : wxTextCtrl(parent, id, value,
+                     wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER)
+    {
+        Bind(wxEVT_TEXT_ENTER, &EnterHandlingTextCtrl::OnEnter, this);
+
+        SetInitialSize(GetSizeFromTextSize(GetTextExtent(value).x));
+    }
+
+private:
+    void OnEnter(wxCommandEvent& WXUNUSED(event))
+    {
+        wxLogMessage("Enter pressed");
+    }
+};
+
+} // anonymous namespace
+
 TestDefaultActionDialog::TestDefaultActionDialog( wxWindow *parent ) :
   wxDialog( parent, -1, "Test default action" )
 {
@@ -2588,7 +2616,8 @@ TestDefaultActionDialog::TestDefaultActionDialog( wxWindow *parent ) :
 
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
 
-    wxFlexGridSizer *grid_sizer = new wxFlexGridSizer( 2, 5, 5 );
+    const int border = wxSizerFlags::GetDefaultBorder();
+    wxFlexGridSizer *grid_sizer = new wxFlexGridSizer(2, wxSize(border, border));
 
 #if wxUSE_LISTBOX
     wxListBox *listbox = new wxListBox( this, ID_LISTBOX );
@@ -2599,22 +2628,37 @@ TestDefaultActionDialog::TestDefaultActionDialog( wxWindow *parent ) :
     grid_sizer->Add( listbox );
 #endif // wxUSE_LISTBOX
 
-    grid_sizer->Add( new wxCheckBox( this, ID_CATCH_LISTBOX_DCLICK, "Catch DoubleClick from wxListBox" ), 0, wxALIGN_CENTRE_VERTICAL );
+    grid_sizer->Add(new wxCheckBox(this, ID_CATCH_LISTBOX_DCLICK, "Catch DoubleClick from wxListBox"),
+                    wxSizerFlags().CentreVertical());
 
-    grid_sizer->Add( new wxTextCtrl( this, -1, "", wxDefaultPosition, wxSize(80,-1), 0 ), 0, wxALIGN_CENTRE_VERTICAL );
-    grid_sizer->Add( new wxStaticText( this, -1, "wxTextCtrl without wxTE_PROCESS_ENTER" ), 0, wxALIGN_CENTRE_VERTICAL );
+    grid_sizer->Add(new wxTextCtrl(this, wxID_ANY, "Enter here closes the dialog"),
+                    wxSizerFlags().Expand().CentreVertical());
+    grid_sizer->Add(new wxStaticText(this, wxID_ANY, "wxTextCtrl without wxTE_PROCESS_ENTER"),
+                    wxSizerFlags().CentreVertical());
 
-    grid_sizer->Add( new wxTextCtrl( this, -1, "", wxDefaultPosition, wxSize(80,-1), wxTE_PROCESS_ENTER ), 0, wxALIGN_CENTRE_VERTICAL );
-    grid_sizer->Add( new wxStaticText( this, -1, "wxTextCtrl with wxTE_PROCESS_ENTER" ), 0, wxALIGN_CENTRE_VERTICAL );
+    grid_sizer->Add(new EnterHandlingTextCtrl(this, wxID_ANY, "Enter here is handled by the application"),
+                    wxSizerFlags().CentreVertical());
+    grid_sizer->Add(new wxStaticText(this, wxID_ANY, "wxTextCtrl with wxTE_PROCESS_ENTER"),
+                    wxSizerFlags().CentreVertical());
 
-    grid_sizer->Add( new wxCheckBox(this, ID_DISABLE_OK, "Disable \"OK\""), 0, wxALIGN_CENTRE_VERTICAL );
-    grid_sizer->Add( new wxCheckBox(this, ID_DISABLE_CANCEL, "Disable \"Cancel\""), 0, wxALIGN_CENTRE_VERTICAL );
+    grid_sizer->Add(new wxTextCtrl(this, wxID_ANY,
+                                   "Enter here adds another line,\n"
+                                   "while Ctrl-Enter closes the dialog",
+                                   wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE),
+                    wxSizerFlags().Expand());
+    grid_sizer->Add(new wxStaticText(this, wxID_ANY, "wxTextCtrl without wxTE_PROCESS_ENTER"),
+                    wxSizerFlags().CentreVertical());
 
-    main_sizer->Add( grid_sizer, 0, wxALL, 10 );
+    grid_sizer->Add(new wxCheckBox(this, ID_DISABLE_OK, "Disable \"OK\""),
+                    wxSizerFlags().CentreVertical());
+    grid_sizer->Add(new wxCheckBox(this, ID_DISABLE_CANCEL, "Disable \"Cancel\""),
+                    wxSizerFlags().CentreVertical());
+
+    main_sizer->Add(grid_sizer, wxSizerFlags().DoubleBorder());
 
     wxSizer *button_sizer = CreateSeparatedButtonSizer( wxOK|wxCANCEL );
     if ( button_sizer )
-        main_sizer->Add( button_sizer, 0, wxALL|wxGROW, 5 );
+        main_sizer->Add(button_sizer, wxSizerFlags().Expand().Border());
 
     SetSizerAndFit( main_sizer );
 }

@@ -28,11 +28,13 @@
     #include "wx/button.h"
     #include "wx/statbox.h"
     #include "wx/toplevel.h"
+    #include "wx/app.h"
 #endif // WX_PRECOMP
 
 #include "wx/display.h"
 #include "wx/vector.h"
 #include "wx/listimpl.cpp"
+#include "wx/private/window.h"
 
 
 //---------------------------------------------------------------------------
@@ -90,8 +92,6 @@ WX_DEFINE_EXPORTED_LIST( wxSizerItemList )
 
 #ifdef wxNEEDS_BORDER_IN_PX
 
-int wxSizerFlags::ms_defaultBorderInPx = 0;
-
 /* static */
 int wxSizerFlags::DoGetDefaultBorderInPx()
 {
@@ -103,11 +103,14 @@ int wxSizerFlags::DoGetDefaultBorderInPx()
     // between related and unrelated controls, as explained at the above URL,
     // but we don't have a way to specify this in our API currently.
     //
-    // We also have to use the DPI for the primary monitor here as we don't
-    // have any associated window, so this is wrong on systems using multiple
-    // monitors with different resolutions too -- but, again, without changes
+    // We also have to use the DPI for the monitor showing the top window here
+    // as we don't have any associated window -- but, again, without changes
     // in the API, there is nothing we can do about this.
-    return wxWindow::FromDIP(5, NULL);
+    const wxWindow* const win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    static wxPrivate::DpiDependentValue<int> s_defaultBorderInPx;
+    if ( s_defaultBorderInPx.HasChanged(win) )
+        s_defaultBorderInPx.SetAtNewDPI(wxWindow::FromDIP(5, win));
+    return s_defaultBorderInPx.Get();
 }
 
 #endif // wxNEEDS_BORDER_IN_PX

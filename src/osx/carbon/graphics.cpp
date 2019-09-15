@@ -87,7 +87,7 @@ extern "C"
 const double M_PI = 3.14159265358979;
 #endif
 
-//
+//-----------------------------------------------------------------------------
 // Pen, Brushes and Fonts
 //
 
@@ -117,6 +117,7 @@ CGColorRef wxMacCreateCGColor( const wxColour& col )
     return retval;
 }
 
+//-----------------------------------------------------------------------------
 // CGPattern wrapper class: always allocate on heap, never call destructor
 
 class wxMacCoreGraphicsPattern
@@ -302,17 +303,406 @@ protected :
     int         m_hatch;
 };
 
-class wxMacCoreGraphicsPenData : public wxGraphicsObjectRefData
+//-----------------------------------------------------------------------------
+// Graphics Matrix data
+
+class WXDLLIMPEXP_CORE wxMacCoreGraphicsMatrixData : public wxGraphicsMatrixData
+{
+public :
+    wxMacCoreGraphicsMatrixData(wxGraphicsRenderer* renderer) ;
+
+    virtual ~wxMacCoreGraphicsMatrixData() ;
+
+    virtual wxGraphicsObjectRefData *Clone() const wxOVERRIDE ;
+
+    // concatenates the matrix
+    virtual void Concat( const wxGraphicsMatrixData *t ) wxOVERRIDE;
+
+    // sets the matrix to the respective values
+    virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
+        wxDouble tx=0.0, wxDouble ty=0.0) wxOVERRIDE;
+
+    // gets the component valuess of the matrix
+    virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
+                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const wxOVERRIDE;
+
+    // makes this the inverse matrix
+    virtual void Invert() wxOVERRIDE;
+
+    // returns true if the elements of the transformation matrix are equal ?
+    virtual bool IsEqual( const wxGraphicsMatrixData* t) const wxOVERRIDE ;
+
+    // return true if this is the identity matrix
+    virtual bool IsIdentity() const wxOVERRIDE;
+
+    //
+    // transformation
+    //
+
+    // add the translation to this matrix
+    virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
+
+    // add the scale to this matrix
+    virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
+
+    // add the rotation to this matrix (radians)
+    virtual void Rotate( wxDouble angle ) wxOVERRIDE;
+
+    //
+    // apply the transforms
+    //
+
+    // applies that matrix to the point
+    virtual void TransformPoint( wxDouble *x, wxDouble *y ) const wxOVERRIDE;
+
+    // applies the matrix except for translations
+    virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) const wxOVERRIDE;
+
+    // returns the native representation
+    virtual void * GetNativeMatrix() const wxOVERRIDE;
+
+private :
+    CGAffineTransform m_matrix;
+} ;
+
+
+wxMacCoreGraphicsMatrixData::wxMacCoreGraphicsMatrixData(wxGraphicsRenderer* renderer) : wxGraphicsMatrixData(renderer)
+{
+}
+
+wxMacCoreGraphicsMatrixData::~wxMacCoreGraphicsMatrixData()
+{
+}
+
+wxGraphicsObjectRefData *wxMacCoreGraphicsMatrixData::Clone() const
+{
+    wxMacCoreGraphicsMatrixData* m = new wxMacCoreGraphicsMatrixData(GetRenderer()) ;
+    m->m_matrix = m_matrix ;
+    return m;
+}
+
+// concatenates the matrix
+void wxMacCoreGraphicsMatrixData::Concat( const wxGraphicsMatrixData *t )
+{
+    m_matrix = CGAffineTransformConcat(*((CGAffineTransform*) t->GetNativeMatrix()), m_matrix );
+}
+
+// sets the matrix to the respective values
+void wxMacCoreGraphicsMatrixData::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d,
+    wxDouble tx, wxDouble ty)
+{
+    m_matrix = CGAffineTransformMake((CGFloat) a,(CGFloat) b,(CGFloat) c,(CGFloat) d,(CGFloat) tx,(CGFloat) ty);
+}
+
+// gets the component valuess of the matrix
+void wxMacCoreGraphicsMatrixData::Get(wxDouble* a, wxDouble* b,  wxDouble* c,
+                                      wxDouble* d, wxDouble* tx, wxDouble* ty) const
+{
+    if (a)  *a = m_matrix.a;
+    if (b)  *b = m_matrix.b;
+    if (c)  *c = m_matrix.c;
+    if (d)  *d = m_matrix.d;
+    if (tx) *tx= m_matrix.tx;
+    if (ty) *ty= m_matrix.ty;
+}
+
+// makes this the inverse matrix
+void wxMacCoreGraphicsMatrixData::Invert()
+{
+    m_matrix = CGAffineTransformInvert( m_matrix );
+}
+
+// returns true if the elements of the transformation matrix are equal ?
+bool wxMacCoreGraphicsMatrixData::IsEqual( const wxGraphicsMatrixData* t) const
+{
+    return CGAffineTransformEqualToTransform(m_matrix, *((CGAffineTransform*) t->GetNativeMatrix()));
+}
+
+// return true if this is the identity matrix
+bool wxMacCoreGraphicsMatrixData::IsIdentity() const
+{
+    return ( m_matrix.a == 1 && m_matrix.d == 1 &&
+        m_matrix.b == 0 && m_matrix.d == 0 && m_matrix.tx == 0 && m_matrix.ty == 0);
+}
+
+//
+// transformation
+//
+
+// add the translation to this matrix
+void wxMacCoreGraphicsMatrixData::Translate( wxDouble dx , wxDouble dy )
+{
+    m_matrix = CGAffineTransformTranslate( m_matrix, (CGFloat) dx, (CGFloat) dy);
+}
+
+// add the scale to this matrix
+void wxMacCoreGraphicsMatrixData::Scale( wxDouble xScale , wxDouble yScale )
+{
+    m_matrix = CGAffineTransformScale( m_matrix, (CGFloat) xScale, (CGFloat) yScale);
+}
+
+// add the rotation to this matrix (radians)
+void wxMacCoreGraphicsMatrixData::Rotate( wxDouble angle )
+{
+    m_matrix = CGAffineTransformRotate( m_matrix, (CGFloat) angle);
+}
+
+//
+// apply the transforms
+//
+
+// applies that matrix to the point
+void wxMacCoreGraphicsMatrixData::TransformPoint( wxDouble *x, wxDouble *y ) const
+{
+    CGPoint pt = CGPointApplyAffineTransform( CGPointMake((CGFloat) *x,(CGFloat) *y), m_matrix);
+
+    *x = pt.x;
+    *y = pt.y;
+}
+
+// applies the matrix except for translations
+void wxMacCoreGraphicsMatrixData::TransformDistance( wxDouble *dx, wxDouble *dy ) const
+{
+    CGSize sz = CGSizeApplyAffineTransform( CGSizeMake((CGFloat) *dx,(CGFloat) *dy) , m_matrix );
+    *dx = sz.width;
+    *dy = sz.height;
+}
+
+// returns the native representation
+void * wxMacCoreGraphicsMatrixData::GetNativeMatrix() const
+{
+    return (void*) &m_matrix;
+}
+
+
+
+// ----------------------------------------------------------------------------
+// Pen and Brush common data. Base class for information shared between pens and
+// brushes, basically just the things needed for gradient support.
+
+class wxMacCoreGraphicsPenBrushDataBase : public wxGraphicsObjectRefData
+{
+public:
+    wxMacCoreGraphicsPenBrushDataBase(wxGraphicsRenderer* renderer);
+    ~wxMacCoreGraphicsPenBrushDataBase();
+
+    void CreateLinearGradientShading(wxDouble x1, wxDouble y1,
+                                     wxDouble x2, wxDouble y2,
+                                     const wxGraphicsGradientStops& stops,
+                                     const wxGraphicsMatrix& matrix);
+    void CreateRadialGradientShading(wxDouble startX, wxDouble startY,
+                                     wxDouble endX, wxDouble endY, wxDouble radius,
+                                     const wxGraphicsGradientStops& stops,
+                                     const wxGraphicsMatrix& matrix);
+
+    virtual bool IsShading() { return m_isShading; }
+    CGShadingRef GetShading() { return m_shading; }
+    wxMacCoreGraphicsMatrixData* GetMatrix() { return m_shadingMatrix; }
+
+protected:
+    void Init();
+
+    CGFunctionRef CreateGradientFunction(const wxGraphicsGradientStops& stops);
+    static void CalculateShadingValues (void *info, const CGFloat *in, CGFloat *out);
+
+    bool m_isShading;
+    CGFunctionRef m_gradientFunction;
+    CGShadingRef m_shading;
+    wxMacCoreGraphicsMatrixData* m_shadingMatrix; 
+
+    // information about a single gradient component
+    struct GradientComponent
+    {
+        CGFloat pos;
+        CGFloat red;
+        CGFloat green;
+        CGFloat blue;
+        CGFloat alpha;
+    };
+
+    // and information about all of them
+    struct GradientComponents
+    {
+        GradientComponents()
+        {
+            count = 0;
+            comps = NULL;
+        }
+
+        void Init(unsigned count_)
+        {
+            count = count_;
+            comps = new GradientComponent[count];
+        }
+
+        ~GradientComponents()
+        {
+            delete [] comps;
+        }
+
+        unsigned count;
+        GradientComponent *comps;
+    };
+
+    GradientComponents m_gradientComponents;
+};
+
+
+wxMacCoreGraphicsPenBrushDataBase::wxMacCoreGraphicsPenBrushDataBase(wxGraphicsRenderer* renderer)
+    : wxGraphicsObjectRefData(renderer)
+{
+    Init();
+}
+
+wxMacCoreGraphicsPenBrushDataBase::~wxMacCoreGraphicsPenBrushDataBase()
+{
+    if ( m_shading )
+        CGShadingRelease(m_shading);
+
+    if ( m_gradientFunction )
+        CGFunctionRelease(m_gradientFunction);
+
+    if ( m_shadingMatrix )
+        delete m_shadingMatrix;
+}
+
+void
+wxMacCoreGraphicsPenBrushDataBase::Init()
+{
+    m_gradientFunction = NULL;
+    m_shading = NULL;
+    m_isShading = false;
+    m_shadingMatrix = NULL;
+}
+
+void
+wxMacCoreGraphicsPenBrushDataBase::CreateLinearGradientShading(
+        wxDouble x1, wxDouble y1,
+        wxDouble x2, wxDouble y2,
+        const wxGraphicsGradientStops& stops,
+        const wxGraphicsMatrix& matrix)
+{
+    m_gradientFunction = CreateGradientFunction(stops);
+    m_shading = CGShadingCreateAxial( wxMacGetGenericRGBColorSpace(), 
+                                      CGPointMake((CGFloat) x1, (CGFloat) y1),
+                                      CGPointMake((CGFloat) x2, (CGFloat) y2), 
+                                      m_gradientFunction, true, true );
+    m_isShading = true;
+    if ( !matrix.IsNull() )
+    {
+        m_shadingMatrix = (wxMacCoreGraphicsMatrixData*)((wxMacCoreGraphicsMatrixData*)matrix.GetRefData())->Clone();
+        m_shadingMatrix->Invert();
+    }
+}
+
+void
+wxMacCoreGraphicsPenBrushDataBase::CreateRadialGradientShading(
+        wxDouble startX, wxDouble startY,
+        wxDouble endX, wxDouble endY,
+        wxDouble radius,
+        const wxGraphicsGradientStops& stops,
+        const wxGraphicsMatrix& matrix)
+{
+    m_gradientFunction = CreateGradientFunction(stops);
+    m_shading = CGShadingCreateRadial( wxMacGetGenericRGBColorSpace(), 
+                                       CGPointMake((CGFloat) startX, (CGFloat) startY), 0,
+                                       CGPointMake((CGFloat) endX, (CGFloat) endY), (CGFloat) radius, 
+                                       m_gradientFunction, true, true );
+    m_isShading = true;
+    if ( !matrix.IsNull() )
+    {
+        m_shadingMatrix = (wxMacCoreGraphicsMatrixData*)((wxMacCoreGraphicsMatrixData*)matrix.GetRefData())->Clone();
+        m_shadingMatrix->Invert();
+    }
+}
+
+void wxMacCoreGraphicsPenBrushDataBase::CalculateShadingValues(void *info, const CGFloat *in, CGFloat *out)
+{
+    const GradientComponents& stops = *(GradientComponents*) info ;
+
+    CGFloat f = *in;
+    if (f <= 0.0)
+    {
+        // Start
+        out[0] = stops.comps[0].red;
+        out[1] = stops.comps[0].green;
+        out[2] = stops.comps[0].blue;
+        out[3] = stops.comps[0].alpha;
+    }
+    else if (f >= 1.0)
+    {
+        // end
+        out[0] = stops.comps[stops.count - 1].red;
+        out[1] = stops.comps[stops.count - 1].green;
+        out[2] = stops.comps[stops.count - 1].blue;
+        out[3] = stops.comps[stops.count - 1].alpha;
+    }
+    else
+    {
+        // Find first component with position greater than f
+        unsigned i;
+        for ( i = 0; i < stops.count; i++ )
+        {
+            if (stops.comps[i].pos > f)
+                break;
+        }
+
+        // Interpolated between stops
+        CGFloat diff = (f - stops.comps[i-1].pos);
+        CGFloat range = (stops.comps[i].pos - stops.comps[i-1].pos);
+        CGFloat fact = diff / range;
+
+        out[0] = stops.comps[i - 1].red + (stops.comps[i].red - stops.comps[i - 1].red) * fact;
+        out[1] = stops.comps[i - 1].green + (stops.comps[i].green - stops.comps[i - 1].green) * fact;
+        out[2] = stops.comps[i - 1].blue + (stops.comps[i].blue - stops.comps[i - 1].blue) * fact;
+        out[3] = stops.comps[i - 1].alpha + (stops.comps[i].alpha - stops.comps[i - 1].alpha) * fact;
+    }
+}
+
+CGFunctionRef
+wxMacCoreGraphicsPenBrushDataBase::CreateGradientFunction(const wxGraphicsGradientStops& stops)
+{
+
+    static const CGFunctionCallbacks callbacks = { 0, &CalculateShadingValues, NULL };
+    static const CGFloat input_value_range [2] = { 0, 1 };
+    static const CGFloat output_value_ranges [8] = { 0, 1, 0, 1, 0, 1, 0, 1 };
+
+    m_gradientComponents.Init(stops.GetCount());
+    for ( unsigned i = 0; i < m_gradientComponents.count; i++ )
+    {
+        const wxGraphicsGradientStop stop = stops.Item(i);
+
+        m_gradientComponents.comps[i].pos = stop.GetPosition();
+
+        const wxColour col = stop.GetColour();
+        m_gradientComponents.comps[i].red = (CGFloat) (col.Red() / 255.0);
+        m_gradientComponents.comps[i].green = (CGFloat) (col.Green() / 255.0);
+        m_gradientComponents.comps[i].blue = (CGFloat) (col.Blue() / 255.0);
+        m_gradientComponents.comps[i].alpha = (CGFloat) (col.Alpha() / 255.0);
+    }
+
+    return CGFunctionCreate ( &m_gradientComponents,  1,
+                            input_value_range,
+                            4,
+                            output_value_ranges,
+                            &callbacks);
+}
+
+//-----------------------------------------------------------------------------
+// Pen data
+
+class wxMacCoreGraphicsPenData : public wxMacCoreGraphicsPenBrushDataBase
 {
 public:
     wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer, const wxGraphicsPenInfo& info );
     ~wxMacCoreGraphicsPenData();
 
-    void Init();
     virtual void Apply( wxGraphicsContext* context );
     virtual wxDouble GetWidth() { return m_width; }
 
 protected :
+    void Init();
+
     CGLineCap m_cap;
     wxCFRef<CGColorRef> m_color;
     wxCFRef<CGColorSpaceRef> m_colorSpace;
@@ -332,7 +722,7 @@ protected :
 
 wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer,
                                                     const wxGraphicsPenInfo& info )
-    : wxGraphicsObjectRefData( renderer )
+    : wxMacCoreGraphicsPenBrushDataBase( renderer )
 {
     Init();
 
@@ -457,7 +847,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
                 m_patternColorComponents[0] = (CGFloat) (info.GetColour().Red() / 255.0);
                 m_patternColorComponents[1] = (CGFloat) (info.GetColour().Green() / 255.0);
                 m_patternColorComponents[2] = (CGFloat) (info.GetColour().Blue() / 255.0);
-                m_patternColorComponents[3] =  (CGFloat) (info.GetColour().Alpha() / 255.0);
+                m_patternColorComponents[3] = (CGFloat) (info.GetColour().Alpha() / 255.0);
             }
             break;
     }
@@ -466,6 +856,28 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
         // force the line cap, otherwise we get artifacts (overlaps) and just solid lines
         m_cap = kCGLineCapButt;
     }
+
+    switch ( info.GetGradientType() )
+    {
+    case wxGRADIENT_NONE:
+        break;
+
+    case wxGRADIENT_LINEAR:
+        CreateLinearGradientShading(info.GetX1(), info.GetY1(),
+                                    info.GetX2(), info.GetY2(),
+                                    info.GetStops(),
+                                    info.GetMatrix());
+        break;
+
+    case wxGRADIENT_RADIAL:
+        CreateRadialGradientShading(info.GetStartX(), info.GetStartY(),
+                                    info.GetEndX(), info.GetEndY(),
+                                    info.GetRadius(),
+                                    info.GetStops(),
+                                    info.GetMatrix());
+        break;
+    }
+
 }
 
 wxMacCoreGraphicsPenData::~wxMacCoreGraphicsPenData()
@@ -506,9 +918,8 @@ void wxMacCoreGraphicsPenData::Apply( wxGraphicsContext* context )
     }
 }
 
-//
-// Brush
-//
+//-----------------------------------------------------------------------------
+// Brush data and supporting colour class
 
 // make sure we all use one class for all conversions from wx to native colour
 
@@ -595,7 +1006,7 @@ wxMacCoreGraphicsColour::wxMacCoreGraphicsColour( const wxBrush &brush )
     }
 }
 
-class wxMacCoreGraphicsBrushData : public wxGraphicsObjectRefData
+class wxMacCoreGraphicsBrushData : public wxMacCoreGraphicsPenBrushDataBase
 {
 public:
     wxMacCoreGraphicsBrushData( wxGraphicsRenderer* renderer );
@@ -603,113 +1014,24 @@ public:
     ~wxMacCoreGraphicsBrushData ();
 
     virtual void Apply( wxGraphicsContext* context );
-    void CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
-                                   wxDouble x2, wxDouble y2,
-                                   const wxGraphicsGradientStops& stops);
-    void CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                   wxDouble xc, wxDouble yc, wxDouble radius,
-                                   const wxGraphicsGradientStops& stops);
 
-    virtual bool IsShading() { return m_isShading; }
-    CGShadingRef GetShading() { return m_shading; }
 protected:
-    CGFunctionRef CreateGradientFunction(const wxGraphicsGradientStops& stops);
-
-    static void CalculateShadingValues (void *info, const CGFloat *in, CGFloat *out);
-    virtual void Init();
-
     wxMacCoreGraphicsColour m_cgColor;
-
-    bool m_isShading;
-    CGFunctionRef m_gradientFunction;
-    CGShadingRef m_shading;
-
-    // information about a single gradient component
-    struct GradientComponent
-    {
-        CGFloat pos;
-        CGFloat red;
-        CGFloat green;
-        CGFloat blue;
-        CGFloat alpha;
-    };
-
-    // and information about all of them
-    struct GradientComponents
-    {
-        GradientComponents()
-        {
-            count = 0;
-            comps = NULL;
-        }
-
-        void Init(unsigned count_)
-        {
-            count = count_;
-            comps = new GradientComponent[count];
-        }
-
-        ~GradientComponents()
-        {
-            delete [] comps;
-        }
-
-        unsigned count;
-        GradientComponent *comps;
-    };
-
-    GradientComponents m_gradientComponents;
 };
 
-wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData( wxGraphicsRenderer* renderer) : wxGraphicsObjectRefData( renderer )
+wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData( wxGraphicsRenderer* renderer) : 
+    wxMacCoreGraphicsPenBrushDataBase( renderer )
 {
-    Init();
 }
 
-void
-wxMacCoreGraphicsBrushData::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
-                                                      wxDouble x2, wxDouble y2,
-                                                      const wxGraphicsGradientStops& stops)
-{
-    m_gradientFunction = CreateGradientFunction(stops);
-    m_shading = CGShadingCreateAxial( wxMacGetGenericRGBColorSpace(), CGPointMake((CGFloat) x1, (CGFloat) y1),
-                                        CGPointMake((CGFloat) x2,(CGFloat) y2), m_gradientFunction, true, true ) ;
-    m_isShading = true ;
-}
-
-void
-wxMacCoreGraphicsBrushData::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                                      wxDouble xc, wxDouble yc,
-                                                      wxDouble radius,
-                                                      const wxGraphicsGradientStops& stops)
-{
-    m_gradientFunction = CreateGradientFunction(stops);
-    m_shading = CGShadingCreateRadial( wxMacGetGenericRGBColorSpace(), CGPointMake((CGFloat) xo,(CGFloat) yo), 0,
-                                        CGPointMake((CGFloat) xc,(CGFloat) yc), (CGFloat) radius, m_gradientFunction, true, true ) ;
-    m_isShading = true ;
-}
-
-wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData(wxGraphicsRenderer* renderer, const wxBrush &brush) : wxGraphicsObjectRefData( renderer ),
+wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData(wxGraphicsRenderer* renderer, const wxBrush &brush) : 
+    wxMacCoreGraphicsPenBrushDataBase( renderer ),
     m_cgColor( brush )
 {
-    Init();
-
 }
 
 wxMacCoreGraphicsBrushData::~wxMacCoreGraphicsBrushData()
 {
-    if ( m_shading )
-        CGShadingRelease(m_shading);
-
-    if( m_gradientFunction )
-        CGFunctionRelease(m_gradientFunction);
-}
-
-void wxMacCoreGraphicsBrushData::Init()
-{
-    m_gradientFunction = NULL;
-    m_shading = NULL;
-    m_isShading = false;
 }
 
 void wxMacCoreGraphicsBrushData::Apply( wxGraphicsContext* context )
@@ -726,81 +1048,9 @@ void wxMacCoreGraphicsBrushData::Apply( wxGraphicsContext* context )
     }
 }
 
-void wxMacCoreGraphicsBrushData::CalculateShadingValues (void *info, const CGFloat *in, CGFloat *out)
-{
-    const GradientComponents& stops = *(GradientComponents*) info ;
 
-    CGFloat f = *in;
-    if (f <= 0.0)
-    {
-        // Start
-        out[0] = stops.comps[0].red;
-        out[1] = stops.comps[0].green;
-        out[2] = stops.comps[0].blue;
-        out[3] = stops.comps[0].alpha;
-    }
-    else if (f >= 1.0)
-    {
-        // end
-        out[0] = stops.comps[stops.count - 1].red;
-        out[1] = stops.comps[stops.count - 1].green;
-        out[2] = stops.comps[stops.count - 1].blue;
-        out[3] = stops.comps[stops.count - 1].alpha;
-    }
-    else
-    {
-        // Find first component with position greater than f
-        unsigned i;
-        for ( i = 0; i < stops.count; i++ )
-        {
-            if (stops.comps[i].pos > f)
-                break;
-        }
-
-        // Interpolated between stops
-        CGFloat diff = (f - stops.comps[i-1].pos);
-        CGFloat range = (stops.comps[i].pos - stops.comps[i-1].pos);
-        CGFloat fact = diff / range;
-
-        out[0] = stops.comps[i - 1].red + (stops.comps[i].red - stops.comps[i - 1].red) * fact;
-        out[1] = stops.comps[i - 1].green + (stops.comps[i].green - stops.comps[i - 1].green) * fact;
-        out[2] = stops.comps[i - 1].blue + (stops.comps[i].blue - stops.comps[i - 1].blue) * fact;
-        out[3] = stops.comps[i - 1].alpha + (stops.comps[i].alpha - stops.comps[i - 1].alpha) * fact;
-    }
-}
-
-CGFunctionRef
-wxMacCoreGraphicsBrushData::CreateGradientFunction(const wxGraphicsGradientStops& stops)
-{
-
-    static const CGFunctionCallbacks callbacks = { 0, &CalculateShadingValues, NULL };
-    static const CGFloat input_value_range [2] = { 0, 1 };
-    static const CGFloat output_value_ranges [8] = { 0, 1, 0, 1, 0, 1, 0, 1 };
-
-    m_gradientComponents.Init(stops.GetCount());
-    for ( unsigned i = 0; i < m_gradientComponents.count; i++ )
-    {
-        const wxGraphicsGradientStop stop = stops.Item(i);
-
-        m_gradientComponents.comps[i].pos = stop.GetPosition();
-
-        const wxColour col = stop.GetColour();
-        m_gradientComponents.comps[i].red = (CGFloat) (col.Red() / 255.0);
-        m_gradientComponents.comps[i].green = (CGFloat) (col.Green() / 255.0);
-        m_gradientComponents.comps[i].blue = (CGFloat) (col.Blue() / 255.0);
-        m_gradientComponents.comps[i].alpha = (CGFloat) (col.Alpha() / 255.0);
-    }
-
-    return CGFunctionCreate ( &m_gradientComponents,  1,
-                            input_value_range,
-                            4,
-                            output_value_ranges,
-                            &callbacks);
-}
-
-//
-// Font
-//
+//-----------------------------------------------------------------------------
+// Font data
 
 class wxMacCoreGraphicsFontData : public wxGraphicsObjectRefData
 {
@@ -829,8 +1079,9 @@ private :
 #endif
 };
 
-wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col) : wxGraphicsObjectRefData( renderer )
-    , m_colour(col)
+wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col) 
+    : wxGraphicsObjectRefData( renderer ),
+      m_colour(col)
 {
     m_underlined = font.GetUnderlined();
     m_strikethrough = font.GetStrikethrough();
@@ -845,6 +1096,9 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
 wxMacCoreGraphicsFontData::~wxMacCoreGraphicsFontData()
 {
 }
+
+//-----------------------------------------------------------------------------
+// Bitmap data
 
 class wxMacCoreGraphicsBitmapData : public wxGraphicsBitmapData
 {
@@ -879,192 +1133,8 @@ wxMacCoreGraphicsBitmapData::~wxMacCoreGraphicsBitmapData()
 }
 
 
-//
-// Graphics Matrix
-//
-
 //-----------------------------------------------------------------------------
-// wxMacCoreGraphicsMatrix declaration
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxMacCoreGraphicsMatrixData : public wxGraphicsMatrixData
-{
-public :
-    wxMacCoreGraphicsMatrixData(wxGraphicsRenderer* renderer) ;
-
-    virtual ~wxMacCoreGraphicsMatrixData() ;
-
-    virtual wxGraphicsObjectRefData *Clone() const wxOVERRIDE ;
-
-    // concatenates the matrix
-    virtual void Concat( const wxGraphicsMatrixData *t ) wxOVERRIDE;
-
-    // sets the matrix to the respective values
-    virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
-        wxDouble tx=0.0, wxDouble ty=0.0) wxOVERRIDE;
-
-    // gets the component valuess of the matrix
-    virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
-                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const wxOVERRIDE;
-
-    // makes this the inverse matrix
-    virtual void Invert() wxOVERRIDE;
-
-    // returns true if the elements of the transformation matrix are equal ?
-    virtual bool IsEqual( const wxGraphicsMatrixData* t) const wxOVERRIDE ;
-
-    // return true if this is the identity matrix
-    virtual bool IsIdentity() const wxOVERRIDE;
-
-    //
-    // transformation
-    //
-
-    // add the translation to this matrix
-    virtual void Translate( wxDouble dx , wxDouble dy ) wxOVERRIDE;
-
-    // add the scale to this matrix
-    virtual void Scale( wxDouble xScale , wxDouble yScale ) wxOVERRIDE;
-
-    // add the rotation to this matrix (radians)
-    virtual void Rotate( wxDouble angle ) wxOVERRIDE;
-
-    //
-    // apply the transforms
-    //
-
-    // applies that matrix to the point
-    virtual void TransformPoint( wxDouble *x, wxDouble *y ) const wxOVERRIDE;
-
-    // applies the matrix except for translations
-    virtual void TransformDistance( wxDouble *dx, wxDouble *dy ) const wxOVERRIDE;
-
-    // returns the native representation
-    virtual void * GetNativeMatrix() const wxOVERRIDE;
-
-private :
-    CGAffineTransform m_matrix;
-} ;
-
-//-----------------------------------------------------------------------------
-// wxMacCoreGraphicsMatrix implementation
-//-----------------------------------------------------------------------------
-
-wxMacCoreGraphicsMatrixData::wxMacCoreGraphicsMatrixData(wxGraphicsRenderer* renderer) : wxGraphicsMatrixData(renderer)
-{
-}
-
-wxMacCoreGraphicsMatrixData::~wxMacCoreGraphicsMatrixData()
-{
-}
-
-wxGraphicsObjectRefData *wxMacCoreGraphicsMatrixData::Clone() const
-{
-    wxMacCoreGraphicsMatrixData* m = new wxMacCoreGraphicsMatrixData(GetRenderer()) ;
-    m->m_matrix = m_matrix ;
-    return m;
-}
-
-// concatenates the matrix
-void wxMacCoreGraphicsMatrixData::Concat( const wxGraphicsMatrixData *t )
-{
-    m_matrix = CGAffineTransformConcat(*((CGAffineTransform*) t->GetNativeMatrix()), m_matrix );
-}
-
-// sets the matrix to the respective values
-void wxMacCoreGraphicsMatrixData::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d,
-    wxDouble tx, wxDouble ty)
-{
-    m_matrix = CGAffineTransformMake((CGFloat) a,(CGFloat) b,(CGFloat) c,(CGFloat) d,(CGFloat) tx,(CGFloat) ty);
-}
-
-// gets the component valuess of the matrix
-void wxMacCoreGraphicsMatrixData::Get(wxDouble* a, wxDouble* b,  wxDouble* c,
-                                      wxDouble* d, wxDouble* tx, wxDouble* ty) const
-{
-    if (a)  *a = m_matrix.a;
-    if (b)  *b = m_matrix.b;
-    if (c)  *c = m_matrix.c;
-    if (d)  *d = m_matrix.d;
-    if (tx) *tx= m_matrix.tx;
-    if (ty) *ty= m_matrix.ty;
-}
-
-// makes this the inverse matrix
-void wxMacCoreGraphicsMatrixData::Invert()
-{
-    m_matrix = CGAffineTransformInvert( m_matrix );
-}
-
-// returns true if the elements of the transformation matrix are equal ?
-bool wxMacCoreGraphicsMatrixData::IsEqual( const wxGraphicsMatrixData* t) const
-{
-    return CGAffineTransformEqualToTransform(m_matrix, *((CGAffineTransform*) t->GetNativeMatrix()));
-}
-
-// return true if this is the identity matrix
-bool wxMacCoreGraphicsMatrixData::IsIdentity() const
-{
-    return ( m_matrix.a == 1 && m_matrix.d == 1 &&
-        m_matrix.b == 0 && m_matrix.d == 0 && m_matrix.tx == 0 && m_matrix.ty == 0);
-}
-
-//
-// transformation
-//
-
-// add the translation to this matrix
-void wxMacCoreGraphicsMatrixData::Translate( wxDouble dx , wxDouble dy )
-{
-    m_matrix = CGAffineTransformTranslate( m_matrix, (CGFloat) dx, (CGFloat) dy);
-}
-
-// add the scale to this matrix
-void wxMacCoreGraphicsMatrixData::Scale( wxDouble xScale , wxDouble yScale )
-{
-    m_matrix = CGAffineTransformScale( m_matrix, (CGFloat) xScale, (CGFloat) yScale);
-}
-
-// add the rotation to this matrix (radians)
-void wxMacCoreGraphicsMatrixData::Rotate( wxDouble angle )
-{
-    m_matrix = CGAffineTransformRotate( m_matrix, (CGFloat) angle);
-}
-
-//
-// apply the transforms
-//
-
-// applies that matrix to the point
-void wxMacCoreGraphicsMatrixData::TransformPoint( wxDouble *x, wxDouble *y ) const
-{
-    CGPoint pt = CGPointApplyAffineTransform( CGPointMake((CGFloat) *x,(CGFloat) *y), m_matrix);
-
-    *x = pt.x;
-    *y = pt.y;
-}
-
-// applies the matrix except for translations
-void wxMacCoreGraphicsMatrixData::TransformDistance( wxDouble *dx, wxDouble *dy ) const
-{
-    CGSize sz = CGSizeApplyAffineTransform( CGSizeMake((CGFloat) *dx,(CGFloat) *dy) , m_matrix );
-    *dx = sz.width;
-    *dy = sz.height;
-}
-
-// returns the native representation
-void * wxMacCoreGraphicsMatrixData::GetNativeMatrix() const
-{
-    return (void*) &m_matrix;
-}
-
-//
-// Graphics Path
-//
-
-//-----------------------------------------------------------------------------
-// wxMacCoreGraphicsPath declaration
-//-----------------------------------------------------------------------------
+// Graphics Path data
 
 class WXDLLEXPORT wxMacCoreGraphicsPathData : public wxGraphicsPathData
 {
@@ -1133,9 +1203,6 @@ private :
     CGMutablePathRef m_path;
 };
 
-//-----------------------------------------------------------------------------
-// wxMacCoreGraphicsPath implementation
-//-----------------------------------------------------------------------------
 
 wxMacCoreGraphicsPathData::wxMacCoreGraphicsPathData( wxGraphicsRenderer* renderer, CGMutablePathRef path) : wxGraphicsPathData(renderer)
 {
@@ -1292,13 +1359,9 @@ bool wxMacCoreGraphicsPathData::Contains( wxDouble x, wxDouble y, wxPolygonFillM
     return CGPathContainsPoint( m_path, NULL, CGPointMake((CGFloat) x,(CGFloat) y), fillStyle == wxODDEVEN_RULE );
 }
 
-//
-// Graphics Context
-//
 
 //-----------------------------------------------------------------------------
-// wxMacCoreGraphicsContext declaration
-//-----------------------------------------------------------------------------
+// Graphics Context
 
 class WXDLLEXPORT wxMacCoreGraphicsContext : public wxGraphicsContext
 {
@@ -1464,7 +1527,7 @@ private:
 // device context implementation
 //
 // more and more of the dc functionality should be implemented by calling
-// the appropricate wxMacCoreGraphicsContext, but we will have to do that step by step
+// the appropriate wxMacCoreGraphicsContext, but we will have to do that step by step
 // also coordinate conversions should be moved to native matrix ops
 //-----------------------------------------------------------------------------
 
@@ -2052,10 +2115,33 @@ void wxMacCoreGraphicsContext::StrokePath( const wxGraphicsPath &path )
         return;
 
     wxQuartzOffsetHelper helper( m_cgContext , ShouldOffset() );
+    wxMacCoreGraphicsPenData* penData = (wxMacCoreGraphicsPenData*)m_pen.GetRefData();
 
-    ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->Apply(this);
-    CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
-    CGContextStrokePath( m_cgContext );
+    penData->Apply(this);
+
+    if (penData->IsShading())
+    {
+        // To stroke with a gradient we first have to turn the path into a path
+        // that is essentially the outline of the original stroke, and then fill
+        // that path.
+        CGContextSaveGState( m_cgContext );
+        CGContextAddPath( m_cgContext, (CGPathRef)path.GetNativePath() );
+        CGContextReplacePathWithStrokedPath(m_cgContext);
+        CGContextClip( m_cgContext );
+        // Apply the gradient's transform, if there is one.
+        if ( penData->GetMatrix() != NULL )
+        {
+            wxMacCoreGraphicsMatrixData* m = penData->GetMatrix();
+            CGContextConcatCTM( m_cgContext, *(CGAffineTransform*) m->GetNativeMatrix());
+        }
+        CGContextDrawShading( m_cgContext, penData->GetShading() );
+        CGContextRestoreGState( m_cgContext);
+    }
+    else
+    {
+        CGContextAddPath( m_cgContext, (CGPathRef)path.GetNativePath() );
+        CGContextStrokePath( m_cgContext );        
+    }   
 
     CheckInvariants();
 }
@@ -2068,7 +2154,8 @@ void wxMacCoreGraphicsContext::DrawPath( const wxGraphicsPath &path , wxPolygonF
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    if ( !m_brush.IsNull() && ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
+    if ( (!m_brush.IsNull() && ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading()) ||
+         (!m_pen.IsNull() && ((wxMacCoreGraphicsPenData*)m_pen.GetRefData())->IsShading()) )
     {
         // when using shading, we cannot draw pen and brush at the same time
         // revert to the base implementation of first filling and then stroking
@@ -2126,12 +2213,20 @@ void wxMacCoreGraphicsContext::FillPath( const wxGraphicsPath &path , wxPolygonF
     if (m_composition == wxCOMPOSITION_DEST)
         return;
 
-    if ( ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->IsShading() )
+    wxMacCoreGraphicsBrushData* brushData = (wxMacCoreGraphicsBrushData*)m_brush.GetRefData();
+
+    if ( brushData->IsShading() )
     {
         CGContextSaveGState( m_cgContext );
         CGContextAddPath( m_cgContext , (CGPathRef) path.GetNativePath() );
         CGContextClip( m_cgContext );
-        CGContextDrawShading( m_cgContext, ((wxMacCoreGraphicsBrushData*)m_brush.GetRefData())->GetShading() );
+        // Apply the gradient's transform, if there is one.
+        if ( brushData->GetMatrix() != NULL )
+        {
+            wxMacCoreGraphicsMatrixData* m = brushData->GetMatrix();
+            CGContextConcatCTM( m_cgContext, *(CGAffineTransform*) m->GetNativeMatrix());
+        }
+        CGContextDrawShading( m_cgContext, brushData->GetShading() );
         CGContextRestoreGState( m_cgContext);
     }
     else
@@ -2667,13 +2762,15 @@ public :
     virtual wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
-                              const wxGraphicsGradientStops& stops) wxOVERRIDE;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix) wxOVERRIDE;
 
     virtual wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc,
+    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                              wxDouble endX, wxDouble endY,
                               wxDouble radius,
-                              const wxGraphicsGradientStops& stops) wxOVERRIDE;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix) wxOVERRIDE;
 
    // sets the font
     virtual wxGraphicsFont CreateFont( const wxFont &font , const wxColour &col = *wxBLACK ) wxOVERRIDE ;
@@ -2924,24 +3021,26 @@ void wxMacCoreGraphicsRenderer::GetVersion(int *major, int *minor, int *micro) c
 wxGraphicsBrush
 wxMacCoreGraphicsRenderer::CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                                                      wxDouble x2, wxDouble y2,
-                                                     const wxGraphicsGradientStops& stops)
+                                                     const wxGraphicsGradientStops& stops,
+                                                     const wxGraphicsMatrix& matrix)
 {
     wxGraphicsBrush p;
     wxMacCoreGraphicsBrushData* d = new wxMacCoreGraphicsBrushData( this );
-    d->CreateLinearGradientBrush(x1, y1, x2, y2, stops);
+    d->CreateLinearGradientShading(x1, y1, x2, y2, stops, matrix);
     p.SetRefData(d);
     return p;
 }
 
 wxGraphicsBrush
-wxMacCoreGraphicsRenderer::CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                                     wxDouble xc, wxDouble yc,
+wxMacCoreGraphicsRenderer::CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                                                     wxDouble endX, wxDouble endY,
                                                      wxDouble radius,
-                                                     const wxGraphicsGradientStops& stops)
+                                                     const wxGraphicsGradientStops& stops,
+                                                     const wxGraphicsMatrix& matrix)
 {
     wxGraphicsBrush p;
     wxMacCoreGraphicsBrushData* d = new wxMacCoreGraphicsBrushData( this );
-    d->CreateRadialGradientBrush(xo, yo, xc, yc, radius, stops);
+    d->CreateRadialGradientShading(startX, startY, endX, endY, radius, stops, matrix);
     p.SetRefData(d);
     return p;
 }

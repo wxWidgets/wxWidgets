@@ -82,15 +82,141 @@ private:
     }
 };
 
+// ----------------------------------------------------------------------------
+// wxMSWHeaderCtrl: the native header control
+// ----------------------------------------------------------------------------
+class wxMSWHeaderCtrl : public wxControl
+{
+public:
+    explicit wxMSWHeaderCtrl(wxHeaderCtrl& header) :
+        m_header(header)
+    {
+        Init();
+    }
+
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos,
+                const wxSize& size,
+                long style,
+                const wxString& name);
+
+    virtual ~wxMSWHeaderCtrl();
+
+    // Override to implement colours support via custom drawing.
+    virtual bool SetBackgroundColour(const wxColour& colour) wxOVERRIDE;
+    virtual bool SetForegroundColour(const wxColour& colour) wxOVERRIDE;
+    virtual bool SetFont(const wxFont& font) wxOVERRIDE;
+
+    // The implementation of wxHeaderCtrlBase virtual functions
+    void SetCount(unsigned int count);
+    unsigned int GetCount() const;
+    void UpdateHeader(unsigned int idx);
+
+    void ScrollHorz(int dx);
+
+    void SetColumnsOrder(const wxArrayInt& order);
+    wxArrayInt GetColumnsOrder() const;
+
+protected:
+    // override wxWindow methods which must be implemented by a new control
+    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+
+private:
+    // override MSW-specific methods needed for new control
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
+    virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
+
+    // common part of all ctors
+    void Init();
+
+    // wrapper around Header_InsertItem(): insert the item using information
+    // from the given column at the given index
+    void DoInsertItem(const wxHeaderColumn& col, unsigned int idx);
+
+    // get the number of currently visible items: this is also the total number
+    // of items contained in the native control
+    int GetShownColumnsCount() const;
+
+    // due to the discrepancy for the hidden columns which we know about but
+    // the native control does not, there can be a difference between the
+    // column indices we use and the ones used by the native control; these
+    // functions translate between them
+    //
+    // notice that MSWToNativeIdx() shouldn't be called for hidden columns and
+    // MSWFromNativeIdx() always returns an index of a visible column
+    int MSWToNativeIdx(int idx);
+    int MSWFromNativeIdx(int item);
+
+    // this is the same as above but for order, not index
+    int MSWToNativeOrder(int order);
+    int MSWFromNativeOrder(int order);
+
+    // get the event type corresponding to a click or double click event
+    // (depending on dblclk value) with the specified (using MSW convention)
+    // mouse button
+    wxEventType GetClickEventType(bool dblclk, int button);
+
+    // allocate m_customDraw if we need it or free it if it no longer is,
+    // return the pointer which can be used to update it if it's non-null
+    wxMSWHeaderCtrlCustomDraw* GetCustomDraw();
+
+
+    // the real wxHeaderCtrl control
+    wxHeaderCtrl &m_header;
+
+    // the number of columns in the control, including the hidden ones (not
+    // taken into account by the native control, see comment in DoGetCount())
+    unsigned int m_numColumns;
+
+    // this is a lookup table allowing us to check whether the column with the
+    // given index is currently shown in the native control, in which case the
+    // value of this array element with this index is 0, or hidden
+    //
+    // notice that this may be different from GetColumn(idx).IsHidden() and in
+    // fact we need this array precisely because it will be different from it
+    // in DoUpdate() when the column hidden flag gets toggled and we need it to
+    // handle this transition correctly
+    wxArrayInt m_isHidden;
+
+    // the order of our columns: this array contains the index of the column
+    // shown at the position n as the n-th element
+    //
+    // this is necessary only to handle the hidden columns: the native control
+    // doesn't know about them and so we can't use Header_GetOrderArray()
+    wxArrayInt m_colIndices;
+
+    // the image list: initially NULL, created on demand
+    wxImageList *m_imageList;
+
+    // the offset of the window used to emulate scrolling it
+    int m_scrollOffset;
+
+    // actual column we are dragging or -1 if not dragging anything
+    int m_colBeingDragged;
+
+    // a column is currently being resized
+    bool m_isColBeingResized;
+
+    // the custom draw helper: initially NULL, created on demand, use
+    // GetCustomDraw() to do it
+    wxMSWHeaderCtrlCustomDraw *m_customDraw;
+};
+
 // ============================================================================
-// wxHeaderCtrl implementation
+// wxMSWHeaderCtrl implementation
 // ============================================================================
 
+extern WXDLLIMPEXP_DATA_CORE(const char) wxMSWHeaderCtrlNameStr[] = "wxMSWHeaderCtrl";
+
 // ----------------------------------------------------------------------------
-// wxHeaderCtrl construction/destruction
+// wxMSWHeaderCtrl construction/destruction
 // ----------------------------------------------------------------------------
 
-void wxHeaderCtrl::Init()
+void wxMSWHeaderCtrl::Init()
 {
     m_numColumns = 0;
     m_imageList = NULL;
@@ -100,12 +226,12 @@ void wxHeaderCtrl::Init()
     m_customDraw = NULL;
 }
 
-bool wxHeaderCtrl::Create(wxWindow *parent,
-                          wxWindowID id,
-                          const wxPoint& pos,
-                          const wxSize& size,
-                          long style,
-                          const wxString& name)
+bool wxMSWHeaderCtrl::Create(wxWindow *parent,
+                             wxWindowID id,
+                             const wxPoint& pos,
+                             const wxSize& size,
+                             long style,
+                             const wxString& name)
 {
     // notice that we don't need InitCommonControlsEx(ICC_LISTVIEW_CLASSES)
     // here as we already call InitCommonControls() in wxApp initialization
@@ -130,7 +256,7 @@ bool wxHeaderCtrl::Create(wxWindow *parent,
     return true;
 }
 
-WXDWORD wxHeaderCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
+WXDWORD wxMSWHeaderCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
@@ -147,25 +273,25 @@ WXDWORD wxHeaderCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-wxHeaderCtrl::~wxHeaderCtrl()
+wxMSWHeaderCtrl::~wxMSWHeaderCtrl()
 {
     delete m_imageList;
     delete m_customDraw;
 }
 
 // ----------------------------------------------------------------------------
-// wxHeaderCtrl scrolling
+// wxMSWHeaderCtrl scrolling
 // ----------------------------------------------------------------------------
 
-void wxHeaderCtrl::DoSetSize(int x, int y,
-                             int w, int h,
-                             int sizeFlags)
+void wxMSWHeaderCtrl::DoSetSize(int x, int y,
+                                int w, int h,
+                                int sizeFlags)
 {
-    wxHeaderCtrlBase::DoSetSize(x + m_scrollOffset, y, w - m_scrollOffset, h,
-                                sizeFlags);
+    wxControl::DoSetSize(x + m_scrollOffset, y, w - m_scrollOffset, h,
+                         sizeFlags & wxSIZE_FORCE);
 }
 
-void wxHeaderCtrl::DoScrollHorz(int dx)
+void wxMSWHeaderCtrl::ScrollHorz(int dx)
 {
     // as the native control doesn't support offsetting its contents, we use a
     // hack here to make it appear correctly when the parent is scrolled:
@@ -175,18 +301,18 @@ void wxHeaderCtrl::DoScrollHorz(int dx)
     // for it (notice that dx is negative when scrolling to the right)
     m_scrollOffset += dx;
 
-    wxHeaderCtrlBase::DoSetSize(GetPosition().x + dx, -1,
-                                GetSize().x - dx, -1,
-                                wxSIZE_USE_EXISTING);
+    wxControl::DoSetSize(GetPosition().x + dx, -1,
+                         GetSize().x - dx, -1,
+                         wxSIZE_USE_EXISTING);
 }
 
 // ----------------------------------------------------------------------------
-// wxHeaderCtrl geometry calculation
+// wxMSWHeaderCtrl geometry calculation
 // ----------------------------------------------------------------------------
 
-wxSize wxHeaderCtrl::DoGetBestSize() const
+wxSize wxMSWHeaderCtrl::DoGetBestSize() const
 {
-    RECT rc = wxGetClientRect(GetHwndOf(GetParent()));
+    RECT rc = wxGetClientRect(GetHwndOf(m_header.GetParent()));
     WINDOWPOS wpos;
     HDLAYOUT layout = { &rc, &wpos };
     if ( !Header_Layout(GetHwnd(), &layout) )
@@ -199,10 +325,10 @@ wxSize wxHeaderCtrl::DoGetBestSize() const
 }
 
 // ----------------------------------------------------------------------------
-// wxHeaderCtrl columns managements
+// wxMSWHeaderCtrl columns managements
 // ----------------------------------------------------------------------------
 
-unsigned int wxHeaderCtrl::DoGetCount() const
+unsigned int wxMSWHeaderCtrl::GetCount() const
 {
     // we can't use Header_GetItemCount() here because it doesn't take the
     // hidden columns into account and we can't find the hidden columns after
@@ -211,7 +337,7 @@ unsigned int wxHeaderCtrl::DoGetCount() const
     return m_numColumns;
 }
 
-int wxHeaderCtrl::GetShownColumnsCount() const
+int wxMSWHeaderCtrl::GetShownColumnsCount() const
 {
     const int numItems = Header_GetItemCount(GetHwnd());
 
@@ -221,7 +347,7 @@ int wxHeaderCtrl::GetShownColumnsCount() const
     return numItems;
 }
 
-void wxHeaderCtrl::DoSetCount(unsigned int count)
+void wxMSWHeaderCtrl::SetCount(unsigned int count)
 {
     unsigned n;
 
@@ -236,14 +362,14 @@ void wxHeaderCtrl::DoSetCount(unsigned int count)
     }
 
     // update the column indices order array before changing m_numColumns
-    DoResizeColumnIndices(m_colIndices, count);
+    m_header.DoResizeColumnIndices(m_colIndices, count);
 
     // and add the new ones
     m_numColumns = count;
     m_isHidden.resize(m_numColumns);
     for ( n = 0; n < count; n++ )
     {
-        const wxHeaderColumn& col = GetColumn(n);
+        const wxHeaderColumn& col = m_header.GetColumn(n);
         if ( col.IsShown() )
         {
             m_isHidden[n] = false;
@@ -257,7 +383,7 @@ void wxHeaderCtrl::DoSetCount(unsigned int count)
     }
 }
 
-void wxHeaderCtrl::DoUpdate(unsigned int idx)
+void wxMSWHeaderCtrl::UpdateHeader(unsigned int idx)
 {
     // the native control does provide Header_SetItem() but it's inconvenient
     // to use it because it sends HDN_ITEMCHANGING messages and we'd have to
@@ -265,7 +391,7 @@ void wxHeaderCtrl::DoUpdate(unsigned int idx)
     // more complicated as we'd have to reset the old values as well as setting
     // the new ones -- so instead just recreate the column
 
-    const wxHeaderColumn& col = GetColumn(idx);
+    const wxHeaderColumn& col = m_header.GetColumn(idx);
     if ( col.IsHidden() )
     {
         // column is hidden now
@@ -296,7 +422,7 @@ void wxHeaderCtrl::DoUpdate(unsigned int idx)
     }
 }
 
-void wxHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
+void wxMSWHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
 {
     wxASSERT_MSG( !col.IsHidden(), "should only be called for shown columns" );
 
@@ -389,9 +515,9 @@ void wxHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
     // be implemented, it is per-control rather than per-column in the native
     // control. Enable resizing cursor if at least one column is resizeble.
     bool hasResizableColumns = false;
-    for ( unsigned n = 0; n < GetColumnCount(); n++ )
+    for ( unsigned n = 0; n < m_header.GetColumnCount(); n++ )
     {
-        const wxHeaderColumn& c = GetColumn(n);
+        const wxHeaderColumn& c = m_header.GetColumn(n);
         if (c.IsShown() && c.IsResizeable())
         {
             hasResizableColumns = true;
@@ -403,7 +529,7 @@ void wxHeaderCtrl::DoInsertItem(const wxHeaderColumn& col, unsigned int idx)
         .TurnOnOrOff(!hasResizableColumns, HDS_NOSIZING);
 }
 
-void wxHeaderCtrl::DoSetColumnsOrder(const wxArrayInt& order)
+void wxMSWHeaderCtrl::SetColumnsOrder(const wxArrayInt& order)
 {
     wxArrayInt orderShown;
     orderShown.reserve(m_numColumns);
@@ -411,7 +537,7 @@ void wxHeaderCtrl::DoSetColumnsOrder(const wxArrayInt& order)
     for ( unsigned n = 0; n < m_numColumns; n++ )
     {
         const int idx = order[n];
-        if ( GetColumn(idx).IsShown() )
+        if ( m_header.GetColumn(idx).IsShown() )
             orderShown.push_back(MSWToNativeIdx(idx));
     }
 
@@ -423,7 +549,7 @@ void wxHeaderCtrl::DoSetColumnsOrder(const wxArrayInt& order)
     m_colIndices = order;
 }
 
-wxArrayInt wxHeaderCtrl::DoGetColumnsOrder() const
+wxArrayInt wxMSWHeaderCtrl::GetColumnsOrder() const
 {
     // we don't use Header_GetOrderArray() here because it doesn't return
     // information about the hidden columns, instead we just save the columns
@@ -432,10 +558,10 @@ wxArrayInt wxHeaderCtrl::DoGetColumnsOrder() const
 }
 
 // ----------------------------------------------------------------------------
-// wxHeaderCtrl indexes and positions translation
+// wxMSWHeaderCtrl indexes and positions translation
 // ----------------------------------------------------------------------------
 
-int wxHeaderCtrl::MSWToNativeIdx(int idx)
+int wxMSWHeaderCtrl::MSWToNativeIdx(int idx)
 {
     // don't check for GetColumn(idx).IsShown() as it could have just became
     // false and we may be called from DoUpdate() to delete the old column
@@ -446,7 +572,7 @@ int wxHeaderCtrl::MSWToNativeIdx(int idx)
     int item = idx;
     for ( int i = 0; i < idx; i++ )
     {
-        if ( GetColumn(i).IsHidden() )
+        if ( m_header.GetColumn(i).IsHidden() )
             item--; // one less column the native control knows about
     }
 
@@ -455,7 +581,7 @@ int wxHeaderCtrl::MSWToNativeIdx(int idx)
     return item;
 }
 
-int wxHeaderCtrl::MSWFromNativeIdx(int item)
+int wxMSWHeaderCtrl::MSWFromNativeIdx(int item)
 {
     wxASSERT_MSG( item >= 0 && item < GetShownColumnsCount(),
                   "column index out of range" );
@@ -468,7 +594,7 @@ int wxHeaderCtrl::MSWFromNativeIdx(int item)
         if ( n > idx )
             break;
 
-        if ( GetColumn(n).IsHidden() )
+        if ( m_header.GetColumn(n).IsHidden() )
             idx++;
     }
 
@@ -477,7 +603,7 @@ int wxHeaderCtrl::MSWFromNativeIdx(int item)
     return idx;
 }
 
-int wxHeaderCtrl::MSWToNativeOrder(int pos)
+int wxMSWHeaderCtrl::MSWToNativeOrder(int pos)
 {
     wxASSERT_MSG( pos >= 0 && static_cast<unsigned>(pos) < m_numColumns,
                   "column position out of range" );
@@ -485,7 +611,7 @@ int wxHeaderCtrl::MSWToNativeOrder(int pos)
     int order = pos;
     for ( int n = 0; n < pos; n++ )
     {
-        if ( GetColumn(m_colIndices[n]).IsHidden() )
+        if ( m_header.GetColumn(m_colIndices[n]).IsHidden() )
             order--;
     }
 
@@ -494,7 +620,7 @@ int wxHeaderCtrl::MSWToNativeOrder(int pos)
     return order;
 }
 
-int wxHeaderCtrl::MSWFromNativeOrder(int order)
+int wxMSWHeaderCtrl::MSWFromNativeOrder(int order)
 {
     wxASSERT_MSG( order >= 0 && order < GetShownColumnsCount(),
                   "native column position out of range" );
@@ -505,7 +631,7 @@ int wxHeaderCtrl::MSWFromNativeOrder(int order)
         if ( n > pos )
             break;
 
-        if ( GetColumn(m_colIndices[n]).IsHidden() )
+        if ( m_header.GetColumn(m_colIndices[n]).IsHidden() )
             pos++;
     }
 
@@ -515,10 +641,10 @@ int wxHeaderCtrl::MSWFromNativeOrder(int order)
 }
 
 // ----------------------------------------------------------------------------
-// wxHeaderCtrl appearance
+// wxMSWHeaderCtrl appearance
 // ----------------------------------------------------------------------------
 
-wxMSWHeaderCtrlCustomDraw* wxHeaderCtrl::GetCustomDraw()
+wxMSWHeaderCtrlCustomDraw* wxMSWHeaderCtrl::GetCustomDraw()
 {
     // There is no need to make the control custom drawn just because it has a
     // custom font, the native control handles the font just fine on its own,
@@ -542,9 +668,9 @@ wxMSWHeaderCtrlCustomDraw* wxHeaderCtrl::GetCustomDraw()
     return m_customDraw;
 }
 
-bool wxHeaderCtrl::SetBackgroundColour(const wxColour& colour)
+bool wxMSWHeaderCtrl::SetBackgroundColour(const wxColour& colour)
 {
-    if ( !wxHeaderCtrlBase::SetBackgroundColour(colour) )
+    if ( !wxControl::SetBackgroundColour(colour) )
         return false;
 
     if ( wxMSWHeaderCtrlCustomDraw* customDraw = GetCustomDraw() )
@@ -555,9 +681,9 @@ bool wxHeaderCtrl::SetBackgroundColour(const wxColour& colour)
     return true;
 }
 
-bool wxHeaderCtrl::SetForegroundColour(const wxColour& colour)
+bool wxMSWHeaderCtrl::SetForegroundColour(const wxColour& colour)
 {
-    if ( !wxHeaderCtrlBase::SetForegroundColour(colour) )
+    if ( !wxControl::SetForegroundColour(colour) )
         return false;
 
     if ( wxMSWHeaderCtrlCustomDraw* customDraw = GetCustomDraw() )
@@ -568,9 +694,9 @@ bool wxHeaderCtrl::SetForegroundColour(const wxColour& colour)
     return true;
 }
 
-bool wxHeaderCtrl::SetFont(const wxFont& font)
+bool wxMSWHeaderCtrl::SetFont(const wxFont& font)
 {
-    if ( !wxHeaderCtrlBase::SetFont(font) )
+    if ( !wxControl::SetFont(font) )
         return false;
 
     if ( wxMSWHeaderCtrlCustomDraw* customDraw = GetCustomDraw() )
@@ -582,10 +708,10 @@ bool wxHeaderCtrl::SetFont(const wxFont& font)
 }
 
 // ----------------------------------------------------------------------------
-// wxHeaderCtrl events
+// wxMSWHeaderCtrl events
 // ----------------------------------------------------------------------------
 
-wxEventType wxHeaderCtrl::GetClickEventType(bool dblclk, int button)
+wxEventType wxMSWHeaderCtrl::GetClickEventType(bool dblclk, int button)
 {
     wxEventType evtType;
     switch ( button )
@@ -613,7 +739,7 @@ wxEventType wxHeaderCtrl::GetClickEventType(bool dblclk, int button)
     return evtType;
 }
 
-bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
+bool wxMSWHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
     NMHEADER * const nmhdr = (NMHEADER *)lParam;
 
@@ -683,7 +809,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         case HDN_BEGINTRACKW:
             // non-resizable columns can't be resized no matter what, don't
             // even generate any events for them
-            if ( !GetColumn(idx).IsResizeable() )
+            if ( !m_header.GetColumn(idx).IsResizeable() )
             {
                 veto = true;
                 break;
@@ -702,7 +828,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 evtType = wxEVT_HEADER_END_RESIZE;
 
                 // don't generate events with invalid width
-                const int minWidth = GetColumn(idx).GetMinWidth();
+                const int minWidth = m_header.GetColumn(idx).GetMinWidth();
                 if ( width < minWidth )
                     width = minWidth;
 
@@ -744,7 +870,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             {
                 // prevent the column from being shrunk beneath its min width
                 width = nmhdr->pitem->cxy;
-                if ( width < GetColumn(idx).GetMinWidth() )
+                if ( width < m_header.GetColumn(idx).GetMinWidth() )
                 {
                     // don't generate any events and prevent the change from
                     // happening
@@ -759,7 +885,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     evtType = wxEVT_HEADER_RESIZING;
                 }
                 // else
-                // Nnotification arriving after HDN_ENDTRACK is handled normally
+                // Notification arriving after HDN_ENDTRACK is handled normally
                 // by the control but EVT_HEADER_RESIZING event cannot be generated
                 // because EVT_HEADER_END_RESIZE finalizing the resizing has been
                 // already emitted.
@@ -786,7 +912,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
 
             // column must have the appropriate flag to be draggable
-            if ( !GetColumn(m_colBeingDragged).IsReorderable() )
+            if ( !m_header.GetColumn(m_colBeingDragged).IsReorderable() )
             {
                 veto = true;
                 break;
@@ -843,7 +969,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         if ( order != -1 )
             event.SetNewOrder(order);
 
-        const bool processed = GetEventHandler()->ProcessEvent(event);
+        const bool processed = m_header.GetEventHandler()->ProcessEvent(event);
 
         if ( processed && !event.IsAllowed() )
             veto = true;
@@ -854,7 +980,7 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // internal column indices array if this is allowed to go ahead as
             // the native control is going to reorder its columns now
             if ( evtType == wxEVT_HEADER_END_REORDER )
-                MoveColumnInOrderArray(m_colIndices, idx, order);
+                m_header.MoveColumnInOrderArray(m_colIndices, idx, order);
 
             if ( processed )
             {
@@ -874,7 +1000,136 @@ bool wxHeaderCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         return true;
     }
 
-    return wxHeaderCtrlBase::MSWOnNotify(idCtrl, lParam, result);
+    return wxControl::MSWOnNotify(idCtrl, lParam, result);
+}
+
+// ============================================================================
+// wxHeaderCtrl implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxHeaderCtrl construction/destruction
+// ----------------------------------------------------------------------------
+
+void wxHeaderCtrl::Init()
+{
+    m_nativeControl = NULL;
+}
+
+bool wxHeaderCtrl::Create(wxWindow *parent,
+                          wxWindowID id,
+                          const wxPoint& pos,
+                          const wxSize& size,
+                          long style,
+                          const wxString& name)
+{
+    long newStyle = style | wxCLIP_CHILDREN | wxTAB_TRAVERSAL;
+    if ( !wxWindow::Create(parent, id, pos, size, newStyle, name) )
+        return false;
+
+    m_nativeControl = new wxMSWHeaderCtrl(*this);
+    if ( !m_nativeControl->Create(this,
+                                  wxID_ANY,
+                                  wxDefaultPosition,
+                                  wxDefaultSize,
+                                  ApplyHeaderReorderFlagToStyle(wxNO_BORDER),
+                                  wxMSWHeaderCtrlNameStr) )
+        return false;
+
+    Bind(wxEVT_SIZE, &wxHeaderCtrl::OnSize, this);
+
+    return true;
+}
+
+// ----------------------------------------------------------------------------
+// wxHeaderCtrl events
+// ----------------------------------------------------------------------------
+
+void wxHeaderCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
+{
+    if (m_nativeControl != NULL) // check whether initialisation has been done
+    {
+        int cw, ch;
+        GetClientSize(&cw, &ch);
+
+        m_nativeControl->SetSize(0, 0, cw, ch);
+    }
+}
+
+// ----------------------------------------------------------------------------
+// wxHeaderCtrl scrolling
+// ----------------------------------------------------------------------------
+
+void wxHeaderCtrl::DoScrollHorz(int dx)
+{
+    m_nativeControl->ScrollHorz(dx);
+}
+
+// ----------------------------------------------------------------------------
+// wxHeaderCtrl geometry calculation
+// ----------------------------------------------------------------------------
+
+wxSize wxHeaderCtrl::DoGetBestSize() const
+{
+    return m_nativeControl->GetBestSize();
+}
+
+// ----------------------------------------------------------------------------
+// wxHeaderCtrl columns managements
+// ----------------------------------------------------------------------------
+
+unsigned int wxHeaderCtrl::DoGetCount() const
+{
+    return m_nativeControl->GetCount();
+}
+
+void wxHeaderCtrl::DoSetCount(unsigned int count)
+{
+    m_nativeControl->SetCount(count);
+}
+
+void wxHeaderCtrl::DoUpdate(unsigned int idx)
+{
+    m_nativeControl->UpdateHeader(idx);
+}
+
+void wxHeaderCtrl::DoSetColumnsOrder(const wxArrayInt& order)
+{
+    m_nativeControl->SetColumnsOrder(order);
+}
+
+wxArrayInt wxHeaderCtrl::DoGetColumnsOrder() const
+{
+    return m_nativeControl->GetColumnsOrder();
+}
+
+// ----------------------------------------------------------------------------
+// wxHeaderCtrl composite window
+// ----------------------------------------------------------------------------
+
+wxWindowList wxHeaderCtrl::GetCompositeWindowParts() const
+{
+    wxWindowList parts;
+    parts.push_back(m_nativeControl);
+    return parts;
+}
+
+void wxHeaderCtrl::SetWindowStyleFlag(long style)
+{
+    wxHeaderCtrlBase::SetWindowStyleFlag(style);
+
+    // Update the native control style.
+    long flags = m_nativeControl->GetWindowStyleFlag();
+    flags = ApplyHeaderReorderFlagToStyle(flags);
+    m_nativeControl->SetWindowStyleFlag(flags);
+}
+
+long wxHeaderCtrl::ApplyHeaderReorderFlagToStyle(long style)
+{
+    if ( HasFlag(wxHD_ALLOW_REORDER) )
+        return style | wxHD_ALLOW_REORDER;
+
+    return style & ~wxHD_ALLOW_REORDER;
 }
 
 #endif // wxHAS_GENERIC_HEADERCTRL

@@ -403,6 +403,11 @@ void wxFontRefData::Free()
 // wxNativeFontInfo
 // ----------------------------------------------------------------------------
 
+wxNativeFontInfo::wxNativeFontInfo(const LOGFONT& lf_, const wxWindow* win)
+    : lf(lf_),
+      pointSize(GetPointSizeAtPPI(lf.lfHeight, win ? win->GetDPI().y : 0))
+{ }
+
 /* static */
 float wxNativeFontInfo::GetPointSizeAtPPI(int lfHeight, int ppi)
 {

@@ -397,15 +397,8 @@ void wxMessageDialog::AdjustButtonLabels()
 wxFont wxMessageDialog::GetMessageFont()
 {
     const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
-    wxNativeFontInfo info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont);
-
-    // wxNativeFontInfo constructor calculates the pointSize using the
-    // main screen DPI. But lfHeight is based on the window DPI.
-    if ( win )
-    {
-        info.pointSize = wxNativeFontInfo::GetPointSizeAtPPI(
-                             info.lf.lfHeight, win->GetDPI().y);
-    }
+    const wxNativeFontInfo
+        info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont, win);
 
     return info;
 }

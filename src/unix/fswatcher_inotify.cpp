@@ -533,7 +533,7 @@ protected:
             }
 
             m_cookies.erase(it);
-            delete &inevt;
+            delete[] (char*)&inevt;
             it = m_cookies.begin();
         }
     }

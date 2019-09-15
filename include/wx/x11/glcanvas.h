@@ -57,7 +57,7 @@ public:
     // implement wxGLCanvasX11 methods
     // --------------------------------
 
-    virtual Window GetXWindow() const;
+    virtual unsigned long GetXWindow() const;
 
 protected:
     virtual int GetColourIndex(const wxColour& col);

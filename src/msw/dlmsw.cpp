@@ -166,7 +166,10 @@ wxDynamicLibrary::RawLoad(const wxString& libname, int flags)
 /* static */
 void wxDynamicLibrary::Unload(wxDllType handle)
 {
-    ::FreeLibrary(handle);
+    if ( !::FreeLibrary(handle) )
+    {
+        wxLogLastError(wxT("FreeLibrary"));
+    }
 }
 
 /* static */

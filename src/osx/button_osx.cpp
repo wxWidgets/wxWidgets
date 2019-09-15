@@ -137,7 +137,7 @@ bool wxButton::OSXHandleClicked( double WXUNUSED(timestampsec) )
 }
 
 /* static */
-wxSize wxButtonBase::GetDefaultSize()
+wxSize wxButtonBase::GetDefaultSize(wxWindow* WXUNUSED(win))
 {
     return wxAnyButton::GetDefaultSize();
 }

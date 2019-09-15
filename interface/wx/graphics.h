@@ -306,6 +306,19 @@ enum wxCompositionMode
 };
 
 /**
+   Used to indicate what kind of gradient is set in a wxGraphicsPenInfo
+   object.
+
+   @since 3.1.3
+ */
+enum wxGradientType {
+    wxGRADIENT_NONE,
+    wxGRADIENT_LINEAR,
+    wxGRADIENT_RADIAL
+};
+
+
+/**
     Represents a bitmap.
 
     The objects of this class are not created directly but only via
@@ -633,11 +646,14 @@ public:
         of gradient @a stops can be specified.
 
         The version taking wxGraphicsGradientStops is new in wxWidgets 2.9.1.
+
+        The @a matrix parameter was added in wxWidgets 3.1.3
     */
     wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
-                              const wxColour& c1, const wxColour& c2) const;
+                              const wxColour& c1, const wxColour& c2,
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) const;
 
     /**
         @overload
@@ -645,34 +661,39 @@ public:
     wxGraphicsBrush
     CreateLinearGradientBrush(wxDouble x1, wxDouble y1,
                               wxDouble x2, wxDouble y2,
-                              const wxGraphicsGradientStops& stops) const;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) const;
 
     /**
         Creates a native brush with a radial gradient.
 
-        The brush originates at (@a xo, @a yc) and ends on a circle around
-        (@a xc, @a yc) with the given @a radius.
+        The brush originates at (@a startX, @a startY) and ends on a circle around
+        (@a endX, @a endY) with the given @a radius.
 
         The gradient may be specified either by its start and end colours @a
         oColor and @a cColor or by a full set of gradient @a stops.
 
         The version taking wxGraphicsGradientStops is new in wxWidgets 2.9.1.
+
+        The ability to apply a transformation matrix to the gradient was added in 3.1.3
     */
     virtual wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc,
+    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                              wxDouble endX, wxDouble endY,
                               wxDouble radius,
                               const wxColour& oColor,
-                              const wxColour& cColor) const;
+                              const wxColour& cColor,
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) const;
 
     /**
         @overload
     */
     virtual wxGraphicsBrush
-    CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                              wxDouble xc, wxDouble yc,
+    CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                              wxDouble endX, wxDouble endY,
                               wxDouble radius,
-                              const wxGraphicsGradientStops& stops) = 0;
+                              const wxGraphicsGradientStops& stops,
+                              const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) = 0;
 
     /**
         Sets the brush for filling paths.
@@ -1444,12 +1465,16 @@ public:
 
         Stops support is new since wxWidgets 2.9.1, previously only the start
         and end colours could be specified.
+
+        The ability to apply a transformation matrix to the gradient was added in 3.1.3
+        
     */
     virtual wxGraphicsBrush CreateLinearGradientBrush(wxDouble x1,
                                                       wxDouble y1,
                                                       wxDouble x2,
                                                       wxDouble y2,
-                                                      const wxGraphicsGradientStops& stops) = 0;
+                                                      const wxGraphicsGradientStops& stops,
+                                                      const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) = 0;
 
     /**
         Creates a native affine transformation matrix from the passed in
@@ -1477,11 +1502,14 @@ public:
 
         Stops support is new since wxWidgets 2.9.1, previously only the start
         and end colours could be specified.
+
+        The ability to apply a transformation matrix to the gradient was added in 3.1.3
     */
-    virtual wxGraphicsBrush CreateRadialGradientBrush(wxDouble xo, wxDouble yo,
-                                                      wxDouble xc, wxDouble yc,
+    virtual wxGraphicsBrush CreateRadialGradientBrush(wxDouble startX, wxDouble startY,
+                                                      wxDouble endX, wxDouble endY,
                                                       wxDouble radius,
-                                                      const wxGraphicsGradientStops& stops) = 0;
+                                                      const wxGraphicsGradientStops& stops,
+                                                      const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix) = 0;
 
     /**
         Extracts a sub-bitmap from an existing bitmap.
@@ -1620,6 +1648,50 @@ public:
     wxGraphicsPenInfo& Join(wxPenJoin join);
 
     wxGraphicsPenInfo& Cap(wxPenCap cap);
+
+    wxGraphicsPenInfo& 
+    LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
+                   const wxColour& c1, const wxColour& c2,
+                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
+
+    wxGraphicsPenInfo& 
+    LinearGradient(wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
+                   const wxGraphicsGradientStops& stops,
+                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
+
+    wxGraphicsPenInfo& 
+    RadialGradient(wxDouble startX, wxDouble startY,
+                   wxDouble endX, wxDouble endY, wxDouble radius, 
+                   const wxColour& oColor, const wxColour& cColor,
+                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
+
+    wxGraphicsPenInfo& 
+    RadialGradient(wxDouble startX, wxDouble startY,
+                   wxDouble endX, wxDouble endY, 
+                   wxDouble radius, const wxGraphicsGradientStops& stops,
+                   const wxGraphicsMatrix& matrix = wxNullGraphicsMatrix);
+
+    wxColour GetColour() const;
+    wxBitmap GetStipple() const;
+    wxPenStyle GetStyle() const;
+    wxPenJoin GetJoin() const;
+    wxPenCap GetCap() const;
+    int GetDashes(wxDash **ptr);
+    int GetDashCount() const;
+    wxDash* GetDash() const;
+    bool IsTransparent() const;    
+    wxDouble GetWidth() const;
+    wxGradientType GetGradientType() const;
+    wxDouble GetX1() const;
+    wxDouble GetY1() const;
+    wxDouble GetX2() const;
+    wxDouble GetY2() const;
+    wxDouble GetStartX() const;
+    wxDouble GetStartY() const;
+    wxDouble GetEndX() const;
+    wxDouble GetEndY() const;
+    wxDouble GetRadius() const;
+    const wxGraphicsGradientStops& GetStops() const;
 };
 
 

@@ -113,18 +113,27 @@ struct wxPNGImageData
         ok = false;
     }
 
-    bool Alloc(png_uint_32 width, png_uint_32 height)
+    bool Alloc(png_uint_32 width, png_uint_32 height, unsigned char* buf)
     {
         lines = (unsigned char **)malloc(height * sizeof(unsigned char *));
         if ( !lines )
             return false;
 
-        const size_t w = width * size_t(4);
-        m_buf = static_cast<unsigned char*>(malloc(w * height));
-        if (!m_buf)
-            return false;
+        size_t w = width;
+        // if RGB data will be written directly to wxImage buffer
+        if (buf)
+            w *= 3;
+        else
+        {
+            // allocate intermediate RGBA buffer
+            w *= 4;
+            buf =
+            m_buf = static_cast<unsigned char*>(malloc(w * height));
+            if (!m_buf)
+                return false;
+        }
 
-        lines[0] = m_buf;
+        lines[0] = buf;
         for (png_uint_32 i = 1; i < height; i++)
             lines[i] = lines[i - 1] + w;
 
@@ -316,26 +325,21 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
     png_read_info( png_ptr, info_ptr );
     png_get_IHDR( png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, NULL, NULL, NULL );
 
-    if (color_type == PNG_COLOR_TYPE_PALETTE)
-        png_set_expand( png_ptr );
-
-    // Fix for Bug [ 439207 ] Monochrome PNG images come up black
-    if (bit_depth < 8)
-        png_set_expand( png_ptr );
-
+    png_set_expand(png_ptr);
     png_set_gray_to_rgb(png_ptr);
     png_set_strip_16( png_ptr );
     png_set_packing( png_ptr );
-    if (png_get_valid( png_ptr, info_ptr, PNG_INFO_tRNS))
-        png_set_expand( png_ptr );
-    png_set_filler( png_ptr, 0xff, PNG_FILLER_AFTER );
 
     image->Create((int)width, (int)height, (bool) false /* no need to init pixels */);
 
     if (!image->IsOk())
         return;
 
-    if ( !Alloc(width, height) )
+    const bool needCopy =
+        (color_type & PNG_COLOR_MASK_ALPHA) ||
+        png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS);
+
+    if (!Alloc(width, height, needCopy ? NULL : image->GetData()))
         return;
 
     png_read_image( png_ptr, lines );
@@ -409,7 +413,8 @@ wxPNGImageData::DoLoadPNGFile(wxImage* image, wxPNGInfoStruct& wxinfo)
 
 
     // loaded successfully, now init wxImage with this data
-    CopyDataFromPNG(image, lines, width, height);
+    if (needCopy)
+        CopyDataFromPNG(image, lines, width, height);
 
     // This will indicate to the caller that loading succeeded.
     ok = true;

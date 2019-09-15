@@ -2075,14 +2075,18 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     switch ( event.GetKeyCode() )
     {
         case WXK_RETURN:
+            // Single line controls only get this key code if they have
+            // wxTE_PROCESS_ENTER style, but multiline ones always get it
+            // because they need it for themselves. However we shouldn't
+            // generate wxEVT_TEXT_ENTER for the controls without this style,
+            // so test for it explicitly.
+            if ( HasFlag(wxTE_PROCESS_ENTER) )
             {
                 wxCommandEvent evt(wxEVT_TEXT_ENTER, m_windowId);
                 InitCommandEvent(evt);
                 evt.SetString(GetValue());
                 if ( HandleWindowEvent(evt) )
-                    if ( !HasFlag(wxTE_MULTILINE) )
-                        return;
-                    //else: multiline controls need Enter for themselves
+                    return;
             }
             break;
 
@@ -2212,7 +2216,7 @@ wxTextCtrl::MSWHandleMessage(WXLRESULT *rc,
             // Fix these problems by explicitly performing the default function of this
             // key (which would be done by MSWProcessMessage() if we didn't have
             // wxTE_PROCESS_ENTER) and preventing the default WndProc from getting it.
-            if ( !processed && wParam == VK_RETURN )
+            if ( !processed && wParam == VK_RETURN && IsSingleLine() )
             {
                 if ( ClickDefaultButtonIfPossible() )
                     processed = true;
@@ -3207,7 +3211,8 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     // CHARFORMAT stores it to pixel-based units used by LOGFONT.
     // Note that RichEdit seems to always use standard DPI of 96, even when the
     // window is a monitor using a higher DPI.
-    lf.lfHeight = wxNativeFontInfo::GetLogFontHeightAtPPI(cf.yHeight/20.0f, 96);
+    lf.lfHeight = wxNativeFontInfo::GetLogFontHeightAtPPI(cf.yHeight/20.0f,
+                                                          GetDPI().y);
     lf.lfWidth = 0;
     lf.lfCharSet = ANSI_CHARSET; // FIXME: how to get correct charset?
     lf.lfClipPrecision = 0;
@@ -3240,7 +3245,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     else
         lf.lfWeight = FW_NORMAL;
 
-    wxFont font(lf);
+    wxFont font(wxNativeFontInfo(lf, this));
     if (font.IsOk())
     {
         style.SetFont(font);

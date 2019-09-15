@@ -1199,26 +1199,31 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
     if ( bitmapRefData->IsOk())
     {
         // Create picture
-
-        bool hasAlpha = false ;
-
-        if ( image.HasMask() )
+        wxImage img;
+        if ( image.HasMask() && !image.HasAlpha() )
         {
-            // takes precedence, don't mix with alpha info
+            // takes precedence
+            // Since we already use 32 bpp bitmap here, we can use alpha channel
+            // directly and there is no reason to keep a separate mask.
+            img = image.Copy();
+            img.InitAlpha();
+
+            wxASSERT( !img.HasMask() );
         }
         else
         {
-            hasAlpha = image.HasAlpha() ;
+            img = image;
         }
+        bool hasAlpha = img.HasAlpha() ;
 
         if ( hasAlpha )
             UseAlpha() ;
 
         unsigned char* destinationstart = (unsigned char*) GetBitmapData()->BeginRawAccess() ;
-        unsigned char* data = image.GetData();
+        const unsigned char* data = img.GetData();
         if ( destinationstart != NULL && data != NULL )
         {
-            const unsigned char *alpha = hasAlpha ? image.GetAlpha() : NULL ;
+            const unsigned char *alpha = hasAlpha ? img.GetAlpha() : NULL ;
             for (int y = 0; y < height; destinationstart += GetBitmapData()->GetBytesPerRow(), y++)
             {
                 unsigned char * destination = destinationstart;
@@ -1251,8 +1256,8 @@ wxBitmap::wxBitmap(const wxImage& image, int depth, double scale)
 
             GetBitmapData()->EndRawAccess() ;
         }
-        if ( image.HasMask() )
-            SetMask( new wxMask( *this , wxColour( image.GetMaskRed() , image.GetMaskGreen() , image.GetMaskBlue() ) ) ) ;
+        if ( img.HasMask() )
+            SetMask(new wxMask(*this, wxColour(img.GetMaskRed(), img.GetMaskGreen(), img.GetMaskBlue())));
     }
 }
 
@@ -1621,10 +1626,9 @@ bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
             unsigned char *destdata = destdatabase ;
             for ( int x = 0 ; x < m_width ; ++x, ++p )
             {
-                if ( ( p.Red() + p.Green() + p.Blue() ) > 0x10 )
-                    *destdata++ = 0xFF ;
-                else
-                    *destdata++ = 0x00 ;
+                int v = p.Red() + p.Green() + p.Blue();
+                wxASSERT_MSG( v == 0 || v == 3*0xFF, "Non-monochrome bitmap supplied" );
+                *destdata++ = v < (3 * 0xFF) / 2 ? 0xFF : 0;
             }
             p = rowStart;
             p.OffsetY(data, 1);
@@ -1697,10 +1701,8 @@ wxBitmap wxMask::GetBitmap() const
         for (int x = 0; x < m_width; ++x, ++p, ++src)
         {
             const unsigned char byte = *src;
-            p.Alpha() = 0xff;
-            p.Red() = byte;
-            p.Green() = byte;
-            p.Blue() = byte;
+            wxASSERT( byte == 0 || byte == 0xFF );
+            p.Red() = p.Green() = p.Blue() = ~byte;
         }
         p = rowStart;
         p.OffsetY(data, 1);

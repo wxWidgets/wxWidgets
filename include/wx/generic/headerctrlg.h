@@ -176,6 +176,7 @@ private:
     // (its size is always m_numColumns)
     wxArrayInt m_colIndices;
 
+    bool m_wasSeparatorDClick;
 
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxHeaderCtrl);
