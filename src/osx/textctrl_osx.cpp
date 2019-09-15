@@ -336,7 +336,7 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 
 void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
 {
-    if ( event.GetModifiers() == wxMOD_CONTROL )
+    if ( event.ControlDown() )
     {
         switch( event.GetKeyCode() )
         {
@@ -354,6 +354,18 @@ void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
             case 'X':
                 if ( CanCut() )
                     Cut() ;
+                return;
+            case 'Z':
+                if ( !event.ShiftDown() )
+                {
+                    if ( CanUndo() )
+                        Undo() ;
+                    return;
+                }
+                // else fall through to Redo
+            case 'Y':
+                if ( CanRedo() )
+                    Redo() ;
                 return;
             default:
                 break;
@@ -679,6 +691,19 @@ bool wxTextWidgetImpl::CanRedo()  const
 }
 
 void wxTextWidgetImpl::Redo()
+{
+}
+
+void wxTextWidgetImpl::EmptyUndoBuffer()
+{
+}
+
+long wxTextWidgetImpl::GetScaleFactor() const
+{
+    return 100;
+}
+
+void wxTextWidgetImpl::SetScaleFactor(long WXUNUSED(factorPct))
 {
 }
 
