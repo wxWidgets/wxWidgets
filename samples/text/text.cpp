@@ -280,20 +280,27 @@ public:
 
     void OnGetPhysicalCount(wxCommandEvent &WXUNUSED(event))
     {
-        wxMessageBox( wxString::Format("Number of physical lines is %d", 
+        wxMessageBox(wxString::Format("Number of newline characters is %d", 
                                         m_panel->m_textrich->GetPhysicalLineCount()));
     }
 
     void OnGetLogicalCount(wxCommandEvent &WXUNUSED(event))
     {
-        wxMessageBox( wxString::Format("Number of logical lines is: %d", 
+        wxMessageBox(wxString::Format("Number of visible lines is: %d", 
                                         m_panel->m_textrich->GetLogicalLineCount()));
     }
 
     void OnGetLineCount(wxCommandEvent &WXUNUSED(event))
     {
-        wxMessageBox( wxString::Format("Number of lines is %d", 
-                                       m_panel->m_textrich->GetNumberOfLines()));
+        wxString message;
+#ifdef __WXMSW__
+        message = wxString::Format("Number of logical lines in the control is %d",
+                                   m_panel->m_textrich->GetNumberOfLines());
+#else
+        message = wxString::Format("Number of physical lines in the control is %d",
+                                   m_panel->m_textrich->GetNumberOfLines());
+#endif
+        wxMessageBox(message);
     }
 
 #if wxUSE_LOG
