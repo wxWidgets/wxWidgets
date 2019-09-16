@@ -239,14 +239,7 @@ void MyFrame::OnToggleBell(wxCommandEvent& event)
 
 void MyFrame::OnToggleInteractive(wxCommandEvent& event)
 {
-    wxValidator::SetInteractive();
-
-    // Interactive validation, once enabled, has no way of
-    // disabling it again. so disable the menu item here.
-    wxMenuBar * const menu_bar = GetMenuBar();
-    if ( menu_bar )
-        menu_bar->Enable(VALIDATE_TOGGLE_INTERACTIVE, false);
-
+    wxValidator::SetInteractive(!wxValidator::IsInteractive());
     event.Skip();
 }
 

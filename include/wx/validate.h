@@ -131,7 +131,7 @@ public:
     static bool IsSilent() { return ms_isSilent; }
 
     static bool IsInteractive() { return ms_isInteractive; }
-    static void SetInteractive() { ms_isInteractive = true; }
+    static void SetInteractive(bool interactive = true) { ms_isInteractive = interactive; }
 
     // this function is deprecated because it handled its parameter
     // unnaturally: it disabled the bell when it was true, not false as could
