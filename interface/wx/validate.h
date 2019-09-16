@@ -161,15 +161,11 @@ public:
     static bool IsInteractive();
 
     /**
-        Enable interactive validation.
-
-        @note Interactive validation, once enabled, cannot be disabled again,
-              and any validators created before the call to SetInteractive()
-              won't be interactive. This limitation may be removed in the future.
+        Toggle interactive validation.
 
         @since 3.1.3
     */
-    static void SetInteractive();
+    static void SetInteractive(bool interactive = true);
 
     /**
         Associates a window with the validator.
