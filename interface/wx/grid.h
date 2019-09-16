@@ -3708,6 +3708,11 @@ public:
     bool CanDragRowSize(int row) const;
 
     /**
+        Returns @true if columns can be hidden from the popup menu of the native header.
+    */
+    bool CanHideColumns() const;
+
+    /**
         Disable interactive resizing of the specified column.
 
         This method allows one to disable resizing of an individual column in a
@@ -3766,6 +3771,13 @@ public:
     void DisableDragRowSize();
 
     /**
+        Disables column hiding from the popup menu.
+
+        Equivalent to passing @false to EnableHidingColumns().
+    */
+    void DisableHidingColumns();
+
+    /**
         Enables or disables cell dragging with the mouse.
     */
     void EnableDragCell(bool enable = true);
@@ -3800,6 +3812,18 @@ public:
         @see DisableRowResize()
     */
     void EnableDragRowSize(bool enable = true);
+
+    /**
+        Enables or disables column hiding from the popup menu.
+
+        Note that currently the popup menu appers only for the native header
+        and if this method is called for the grid with default header it returns
+        @false without doing anything. Otherwise it returns @true to
+        indicate that it was successful.
+
+        @see UseNativeColHeader()
+    */
+    bool EnableHidingColumns(bool enable = true);
 
     /**
         Returns the column ID of the specified column position.
