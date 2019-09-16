@@ -40,6 +40,7 @@ private:
         CPPUNIT_TEST( TransferFloat );
         CPPUNIT_TEST( ZeroAsBlank );
         CPPUNIT_TEST( NoTrailingZeroes );
+        CPPUNIT_TEST( ClipboardTest );
         WXUISIM_TEST( Interactive );
     CPPUNIT_TEST_SUITE_END();
 
@@ -48,9 +49,12 @@ private:
     void TransferFloat();
     void ZeroAsBlank();
     void NoTrailingZeroes();
+    void ClipboardTest();
 #if wxUSE_UIACTIONSIMULATOR
     void Interactive();
 #endif // wxUSE_UIACTIONSIMULATOR
+
+    void OnValidation(wxValidationStatusEvent& WXUNUSED(event)) {}
 
     wxTextCtrl *m_text;
 
@@ -66,6 +70,9 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( NumValidatorTestCase, "NumValidatorTestCa
 void NumValidatorTestCase::setUp()
 {
     m_text = new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY);
+
+    // Suppress default processing of this event, which causes error messages to pop up.
+    m_text->Bind(wxEVT_VALIDATE_ERROR, &NumValidatorTestCase::OnValidation, this);
 }
 
 void NumValidatorTestCase::tearDown()
@@ -226,6 +233,54 @@ void NumValidatorTestCase::NoTrailingZeroes()
     CPPUNIT_ASSERT( val->TransferToWindow() );
     CPPUNIT_ASSERT( val->Validate(NULL) );
     CPPUNIT_ASSERT_EQUAL( "1.234", m_text->GetValue() );
+}
+
+void NumValidatorTestCase::ClipboardTest()
+{
+    int value = 9;
+    wxIntegerValidator<int> valInt(&value);
+    valInt.SetRange(0, 999);
+
+    m_text->SetValidator(valInt);
+
+    wxWindow * const parent = m_text->GetParent();
+    CPPUNIT_ASSERT( parent != NULL );
+
+    CPPUNIT_ASSERT( parent->TransferDataToWindow() );
+    CPPUNIT_ASSERT( parent->Validate() );
+    CPPUNIT_ASSERT_EQUAL( "9", m_text->GetValue() );
+
+    m_text->SelectAll();
+    m_text->Cut();
+
+    // The validator is created without wxNUM_VAL_ZERO_AS_BLANK
+    // therefore the validation should fail.
+    CPPUNIT_ASSERT( !parent->Validate() );
+    CPPUNIT_ASSERT_EQUAL( "", m_text->GetValue() );
+
+    m_text->Paste();
+    m_text->Paste();
+
+    CPPUNIT_ASSERT( parent->Validate() );
+    CPPUNIT_ASSERT_EQUAL( "99", m_text->GetValue() );
+
+    m_text->Paste();
+    m_text->Paste(); // Should not be allowed: 9999 is out-of-range.
+
+    CPPUNIT_ASSERT( parent->Validate() );
+    CPPUNIT_ASSERT_EQUAL( "999", m_text->GetValue() );
+
+    m_text->SetValue("-1");
+
+    CPPUNIT_ASSERT_EQUAL( "-1", m_text->GetValue() );
+    CPPUNIT_ASSERT( !parent->Validate() );
+
+    m_text->SelectAll();
+    m_text->Cut();
+    m_text->Paste(); // Should not be allowed: -1 is out-of-range.
+
+    CPPUNIT_ASSERT( !parent->Validate() );
+    CPPUNIT_ASSERT_EQUAL( "", m_text->GetValue() );
 }
 
 #if wxUSE_UIACTIONSIMULATOR
