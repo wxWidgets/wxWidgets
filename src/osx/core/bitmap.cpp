@@ -160,9 +160,11 @@ wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData &tocopy) : wxGDIRefData()
     Init();
     Create(tocopy.GetWidth(), tocopy.GetHeight(), tocopy.GetDepth(), tocopy.GetScaleFactor());
 
+    // Bitmap can have both mask and alpha channel so we have to copy both form the source.
     if (tocopy.m_bitmapMask)
         m_bitmapMask = new wxMask(*tocopy.m_bitmapMask);
-    else if (tocopy.HasAlpha())
+
+    if (tocopy.HasAlpha())
         UseAlpha(true);
 
     unsigned char* dest = (unsigned char*)GetRawAccess();
