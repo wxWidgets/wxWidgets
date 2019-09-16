@@ -3709,6 +3709,8 @@ public:
 
     /**
         Returns @true if columns can be hidden from the popup menu of the native header.
+
+        @since 3.1.3
     */
     bool CanHideColumns() const;
 
@@ -3774,6 +3776,8 @@ public:
         Disables column hiding from the popup menu.
 
         Equivalent to passing @false to EnableHidingColumns().
+
+        @since 3.1.3
     */
     void DisableHidingColumns();
 
@@ -3820,6 +3824,8 @@ public:
         and if this method is called for the grid with default header it returns
         @false without doing anything. Otherwise it returns @true to
         indicate that it was successful.
+
+        @since 3.1.3
 
         @see UseNativeColHeader()
     */

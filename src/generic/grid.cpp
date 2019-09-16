@@ -4835,13 +4835,7 @@ bool wxGrid::EnableHidingColumns(bool enable)
     if (m_canHideColumns == enable || !m_useNativeHeader)
         return false;
 
-    wxHeaderCtrl *header = GetGridColHeader();
-    long setFlags = header->GetWindowStyleFlag();
-
-    if (enable)
-        header->SetWindowStyleFlag(setFlags | wxHD_ALLOW_HIDE);
-    else
-        header->SetWindowStyleFlag(setFlags & ~wxHD_ALLOW_HIDE);
+    GetGridColHeader()->ToggleWindowStyle(wxHD_ALLOW_HIDE);
 
     m_canHideColumns = enable;
 
