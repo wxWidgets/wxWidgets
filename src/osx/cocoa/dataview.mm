@@ -568,6 +568,14 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxUnusedVar(outlineView);
 
+    if ( implementation->GetDataViewCtrl()->IsDeleting() )
+    {
+        // Note that returning "NO" here would result in currently expanded
+        // branches not being expanded any more, while returning "YES" doesn't
+        // seem to have any ill effects, even though this is clearly bogus.
+        return YES;
+    }
+
     wxCHECK_MSG( model, 0, "Valid model in data source does not exist." );
     return model->IsContainer(wxDataViewItemFromItem(item));
 }
@@ -597,6 +605,15 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxUnusedVar(outlineView);
 
+    // We ignore any calls to this function happening while items are being
+    // deleted, as they can (only?) come from -[NSTableView textDidEndEditing:]
+    // called from our own textDidEndEditing, which is called by
+    // -[NSOutlineView reloadItem:reloadChildren:], and if the item being
+    // edited is one of the items being deleted, then trying to use it would
+    // attempt to use already freed memory and crash.
+    if ( implementation->GetDataViewCtrl()->IsDeleting() )
+        return nil;
+
     wxCHECK_MSG( model, nil, "Valid model in data source does not exist." );
 
     wxDataViewColumn* const
@@ -622,6 +639,11 @@ outlineView:(NSOutlineView*)outlineView
     byItem:(id)item
 {
     wxUnusedVar(outlineView);
+
+    // See the comment in outlineView:objectValueForTableColumn:byItem: above:
+    // this function can also be called in the same circumstances.
+    if ( implementation->GetDataViewCtrl()->IsDeleting() )
+        return;
 
     wxDataViewColumn* const
         col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
@@ -1937,6 +1959,10 @@ outlineView:(NSOutlineView*)outlineView
 {
     // call method of superclass (otherwise editing does not work correctly -
     // the outline data source class is not informed about a change of data):
+    //
+    // Note that we really, really need to do this, as otherwise we would be
+    // left with an orphan text control -- even though doing this forces us to
+    // have the checks for IsDeleting() in several other methods of this class.
     [super textDidEndEditing:notification];
 
     // under OSX an event indicating the end of an editing session can be sent
