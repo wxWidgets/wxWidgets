@@ -2339,16 +2339,7 @@ bool wxCocoaDataViewControl::Reload()
     return true;
 }
 
-bool wxCocoaDataViewControl::Remove(const wxDataViewItem& parent, const wxDataViewItem& WXUNUSED(item))
-{
-    if (parent.IsOk())
-        [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
-    else
-        [m_OutlineView reloadData];
-    return true;
-}
-
-bool wxCocoaDataViewControl::Remove(const wxDataViewItem& parent, const wxDataViewItemArray& WXUNUSED(item))
+bool wxCocoaDataViewControl::Remove(const wxDataViewItem& parent)
 {
     if (parent.IsOk())
         [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];

@@ -68,8 +68,7 @@ public:
   virtual wxDataViewItem GetTopItem (void) const                                                     = 0; // get top-most visible item
   virtual bool         IsExpanded   (wxDataViewItem const& item) const                               = 0; // checks if the passed item is expanded in the native control
   virtual bool         Reload       (void)                                                           = 0; // clears the native control and reloads all data
-  virtual bool         Remove       (wxDataViewItem const& parent, wxDataViewItem const& item)       = 0; // removes an item from the native control
-  virtual bool         Remove       (wxDataViewItem const& parent, wxDataViewItemArray const& item)  = 0; // removes items from the native control
+  virtual bool         Remove       (wxDataViewItem const& parent)                                   = 0; // removes one or more items under the given parent from the native control
   virtual bool         Update       (wxDataViewColumn const* columnPtr)                              = 0; // updates the items in the passed column of the native control
   virtual bool         Update       (wxDataViewItem const& parent, wxDataViewItem const& item)       = 0; // updates the passed item in the native control
   virtual bool         Update       (wxDataViewItem const& parent, wxDataViewItemArray const& items) = 0; // updates the passed items in the native control
