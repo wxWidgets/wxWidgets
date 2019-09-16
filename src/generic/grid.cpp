@@ -2607,6 +2607,7 @@ void wxGrid::Init()
     m_gridFrozenBorderPenWidth = 2;
 
     m_canDragColMove = false;
+    m_canHideColumns = true;
 
     m_cursorMode  = WXGRID_CURSOR_SELECT_CELL;
     m_winCapture = NULL;
@@ -4826,6 +4827,18 @@ bool wxGrid::EnableDragColMove( bool enable )
     // right as it would mean there would be no way to "freeze" the current
     // columns order by disabling moving them after putting them in the desired
     // order, whereas now you can always call ResetColPos() manually if needed
+    return true;
+}
+
+bool wxGrid::EnableHidingColumns(bool enable)
+{
+    if ( m_canHideColumns == enable || !m_useNativeHeader )
+        return false;
+
+    GetGridColHeader()->ToggleWindowStyle(wxHD_ALLOW_HIDE);
+
+    m_canHideColumns = enable;
+
     return true;
 }
 

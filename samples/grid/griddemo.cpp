@@ -154,6 +154,7 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLEROWSIZING, GridFrame::ToggleRowSizing )
     EVT_MENU( ID_TOGGLECOLSIZING, GridFrame::ToggleColSizing )
     EVT_MENU( ID_TOGGLECOLMOVING, GridFrame::ToggleColMoving )
+    EVT_MENU( ID_TOGGLECOLHIDING, GridFrame::ToggleColHiding )
     EVT_MENU( ID_TOGGLEGRIDSIZING, GridFrame::ToggleGridSizing )
     EVT_MENU( ID_TOGGLEGRIDDRAGCELL, GridFrame::ToggleGridDragCell )
     EVT_MENU( ID_COLNATIVEHEADER, GridFrame::SetNativeColHeader )
@@ -298,6 +299,7 @@ GridFrame::GridFrame()
     viewMenu->AppendCheckItem(ID_TOGGLEROWSIZING, "Ro&w drag-resize");
     viewMenu->AppendCheckItem(ID_TOGGLECOLSIZING, "C&ol drag-resize");
     viewMenu->AppendCheckItem(ID_TOGGLECOLMOVING, "Col drag-&move");
+    viewMenu->AppendCheckItem(ID_TOGGLECOLHIDING, "Col hiding popup menu");
     viewMenu->AppendCheckItem(ID_TOGGLEGRIDSIZING, "&Grid drag-resize");
     viewMenu->AppendCheckItem(ID_TOGGLEGRIDDRAGCELL, "&Grid drag-cell");
     viewMenu->AppendCheckItem(ID_TOGGLEGRIDLINES, "&Grid Lines");
@@ -634,6 +636,7 @@ void GridFrame::SetDefaults()
     GetMenuBar()->Check( ID_TOGGLEROWSIZING, true );
     GetMenuBar()->Check( ID_TOGGLECOLSIZING, true );
     GetMenuBar()->Check( ID_TOGGLECOLMOVING, false );
+    GetMenuBar()->Check( ID_TOGGLECOLHIDING, true );
     GetMenuBar()->Check( ID_TOGGLEGRIDSIZING, true );
     GetMenuBar()->Check( ID_TOGGLEGRIDDRAGCELL, false );
     GetMenuBar()->Check( ID_TOGGLEGRIDLINES, true );
@@ -691,6 +694,15 @@ void GridFrame::ToggleColMoving( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->EnableDragColMove(
         GetMenuBar()->IsChecked( ID_TOGGLECOLMOVING ) );
+}
+
+void GridFrame::ToggleColHiding( wxCommandEvent& WXUNUSED(ev) )
+{
+    if ( !grid->EnableHidingColumns(
+        GetMenuBar()->IsChecked( ID_TOGGLECOLHIDING ) ) )
+    {
+        GetMenuBar()->Check( ID_TOGGLECOLHIDING, grid->CanHideColumns() );
+    }
 }
 
 void GridFrame::ToggleGridSizing( wxCommandEvent& WXUNUSED(ev) )
