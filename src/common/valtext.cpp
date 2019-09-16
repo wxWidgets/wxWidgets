@@ -69,8 +69,7 @@ void wxTextEntryValidator::SetWindow(wxWindow *win)
 
     if ( GetTextEntry() != NULL )
     {
-        if ( IsInteractive() )
-            Bind(wxEVT_TEXT, &wxTextValidator::OnValueChanged, this);
+        Bind(wxEVT_TEXT, &wxTextValidator::OnValueChanged, this);
     }
     else
     {
@@ -110,18 +109,22 @@ wxTextEntry *wxTextEntryValidator::GetTextEntry() const
 void wxTextEntryValidator::OnKillFocus(wxFocusEvent& event)
 {
     event.Skip();
-
-    if ( !IsValidated() )
-        ReportValidation(m_validatorWindow, false);
+    ReportValidation(m_validatorWindow, false);
 }
 
 void wxTextEntryValidator::OnValueChanged(wxCommandEvent& event)
 {
-    // Notice that this event handler is only called for interactive
-    // validators. see wxTextEntryValidator::SetWindow() above.
-
     event.Skip();
-    ReportValidation(m_validatorWindow, false);
+
+    // Note that wxTextEntry::ChangeValue() does not generate the wxEVT_TEXT
+    // event and therefore the programmer should knows that the control will
+    // not be validated again (if it was already valid) if he uses an invalid
+    // value to change the value of the control with the aforementioned function.
+    // though, it is hard to imagine any programmer would do that in practice.
+    SetValidationNeeded();
+
+    if ( IsInteractive() )
+        ReportValidation(m_validatorWindow, false);
 }
 
 void wxTextEntryValidator::OnPasteText(wxClipboardTextEvent& event)
@@ -386,14 +389,12 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
     // we don't filter special keys and delete
     if (keyCode < WXK_SPACE || keyCode == WXK_DELETE)
     {
-        SetValidationNeeded();
         return;
     }
 
     // Filter out invalid characters
     if ( IsValidChar(static_cast<wxUniChar>(keyCode)) )
     {
-        SetValidationNeeded();
         return;
     }
 

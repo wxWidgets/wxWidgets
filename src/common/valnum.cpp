@@ -127,7 +127,6 @@ void wxNumValidatorBase::OnChar(wxKeyEvent& event)
     if ( ch < WXK_SPACE || ch == WXK_DELETE )
     {
         // Allow ASCII control characters and Delete.
-        SetValidationNeeded();
         return;
     }
 
@@ -143,10 +142,6 @@ void wxNumValidatorBase::OnChar(wxKeyEvent& event)
 
         // Do not skip the event in this case, stop handling it here.
         event.Skip(false);
-    }
-    else
-    {
-        SetValidationNeeded();
     }
 }
 
