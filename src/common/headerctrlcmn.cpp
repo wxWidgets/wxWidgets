@@ -40,6 +40,7 @@ namespace
 // ----------------------------------------------------------------------------
 
 const unsigned int wxNO_COLUMN = static_cast<unsigned>(-1);
+const unsigned int wxID_COLUMNS_BASE = 1;
 
 // ----------------------------------------------------------------------------
 // wxHeaderColumnsRearrangeDialog: dialog for customizing our columns
@@ -284,7 +285,7 @@ void wxHeaderCtrlBase::AddColumnsItems(wxMenu& menu, int idColumnsBase)
         const wxHeaderColumn& col = GetColumn(n);
         menu.AppendCheckItem(idColumnsBase + n, col.GetTitle());
         if ( col.IsShown() )
-            menu.Check(n, true);
+            menu.Check(idColumnsBase + n, true);
     }
 }
 
@@ -295,15 +296,15 @@ bool wxHeaderCtrlBase::ShowColumnsMenu(const wxPoint& pt, const wxString& title)
     if ( !title.empty() )
         menu.SetTitle(title);
 
-    AddColumnsItems(menu);
+    AddColumnsItems(menu, wxID_COLUMNS_BASE);
 
     // ... and an extra one to show the customization dialog if the user is
     // allowed to reorder the columns too
-    const unsigned count = GetColumnCount();
+    const unsigned idCustomize = GetColumnCount() + wxID_COLUMNS_BASE;
     if ( HasFlag(wxHD_ALLOW_REORDER) )
     {
         menu.AppendSeparator();
-        menu.Append(count, _("&Customize..."));
+        menu.Append(idCustomize, _("&Customize..."));
     }
 
     // do show the menu and get the user selection
@@ -311,13 +312,14 @@ bool wxHeaderCtrlBase::ShowColumnsMenu(const wxPoint& pt, const wxString& title)
     if ( rc == wxID_NONE )
         return false;
 
-    if ( static_cast<unsigned>(rc) == count )
+    if ( static_cast<unsigned>(rc) == idCustomize )
     {
         return ShowCustomizeDialog();
     }
     else // a column selected from the menu
     {
-        UpdateColumnVisibility(rc, !GetColumn(rc).IsShown());
+        const int columnIndex = rc - wxID_COLUMNS_BASE;
+        UpdateColumnVisibility(columnIndex, !GetColumn(columnIndex).IsShown());
     }
 
     return true;
