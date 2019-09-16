@@ -1677,10 +1677,35 @@ outlineView:(NSOutlineView*)outlineView
     // and setDoubleAction: seems to be wrong as this action message is always
     // sent whether the cell is editable or not
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
+    wxDataViewModel * const model = dvc->GetModel();
 
     const wxDataViewItem item = wxDataViewItemFromItem([self itemAtRow:[self clickedRow]]);
+
+    const NSInteger col = [self clickedColumn];
+    wxDataViewColumn* const dvCol = implementation->GetColumn(col);
+
+    // Check if we need to activate a custom renderer first.
+    if ( wxDataViewCustomRenderer* const
+            renderer = wxDynamicCast(dvCol->GetRenderer(), wxDataViewCustomRenderer) )
+    {
+        if ( renderer->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE &&
+                model->IsEnabled(item, dvCol->GetModelColumn()) )
+        {
+            const wxRect rect = implementation->GetRectangle(item, dvCol);
+
+            wxMouseEvent mouseEvent(wxEVT_LEFT_DCLICK);
+            wxPoint pos = dvc->ScreenToClient(wxGetMousePosition());
+            pos -= rect.GetPosition();
+            mouseEvent.m_x = pos.x;
+            mouseEvent.m_y = pos.y;
+
+            renderer->ActivateCell(rect, model, item, col, &mouseEvent);
+        }
+    }
+
+    // And then send the ACTIVATED event in any case.
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_ACTIVATED, dvc, item);
-    event.SetColumn( [self clickedColumn] );
+    event.SetColumn(col);
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
