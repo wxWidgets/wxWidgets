@@ -170,13 +170,18 @@ public:
     virtual bool Validate(wxWindow* parent) wxOVERRIDE;
     virtual wxObject* Clone() const wxOVERRIDE { return new MyComboBoxValidator(*this); }
 
+    virtual void SetWindow(wxWindow *win) wxOVERRIDE;
+
     // Called to transfer data to the window
     virtual bool TransferToWindow() wxOVERRIDE;
 
     // Called to transfer data from the window
     virtual bool TransferFromWindow() wxOVERRIDE;
 
-protected:
+private:
+    // Validate the control each time the value has changed.
+    void OnValueChanged(wxCommandEvent& event);
+
     wxString* m_var;
 };
 

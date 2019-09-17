@@ -74,6 +74,13 @@ MyData::MyData()
 // MyComboBoxValidator
 // ----------------------------------------------------------------------------
 
+void MyComboBoxValidator::SetWindow(wxWindow *win)
+{
+    wxValidator::SetWindow(win);
+
+    Bind(wxEVT_COMBOBOX, &MyComboBoxValidator::OnValueChanged, this);
+}
+
 bool MyComboBoxValidator::Validate(wxWindow *WXUNUSED(parent))
 {
     wxASSERT(GetWindow()->IsKindOf(CLASSINFO(wxComboBox)));
@@ -124,6 +131,17 @@ bool MyComboBoxValidator::TransferFromWindow()
     }
 
     return true;
+}
+
+void MyComboBoxValidator::OnValueChanged(wxCommandEvent& WXUNUSED(event))
+{
+    // SetValidationNeeded() for validators is equivalent to
+    // MarkDirty() for wxTextCtrls.
+    SetValidationNeeded();
+
+    // @false is a hint to the validation event handler that it
+    // shouldn't pop up any error message.
+    ReportValidation(NULL, false);
 }
 
 // ----------------------------------------------------------------------------
@@ -427,7 +445,9 @@ void MyDialog::OnValidation(wxValidationStatusEvent& event)
         if ( event.GetId() == VALIDATE_COMBO )
         {
             // A wxRichToolTip can be used here to show the error message
-            wxLogError(event.GetErrorMessage());
+
+            if ( event.CanPopup() )
+                wxLogError(event.GetErrorMessage());
         }
         else
         {
