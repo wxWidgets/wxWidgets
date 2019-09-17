@@ -123,6 +123,11 @@ int wxHeaderCtrlBase::GetColumnTitleWidth(const wxHeaderColumn& col)
     return w;
 }
 
+int wxHeaderCtrlBase::GetColumnTitleWidth(unsigned int idx)
+{
+    return GetColumnTitleWidth(GetColumn(idx));
+}
+
 // ----------------------------------------------------------------------------
 // wxHeaderCtrlBase event handling
 // ----------------------------------------------------------------------------

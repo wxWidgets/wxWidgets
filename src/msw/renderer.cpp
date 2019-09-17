@@ -590,9 +590,9 @@ int wxRendererMSW::GetHeaderButtonHeight(wxWindow * win)
     return Header_Layout(hwndHeader, &hdl) ? wp.cy : DEFAULT_HEIGHT;
 }
 
-int wxRendererMSW::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
+int wxRendererMSW::GetHeaderButtonMargin(wxWindow *win)
 {
-    return 10;
+    return 6 * wxGetSystemMetrics(SM_CXEDGE, win);
 }
 
 // ============================================================================

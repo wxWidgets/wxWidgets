@@ -9379,14 +9379,25 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
     }
 
     // now also compare with the column label extent
-    wxCoord w, h;
+    wxCoord w = 0;
+    wxCoord h = 0;
     dc.SetFont( GetLabelFont() );
+
+    bool addMargin = true;
 
     if ( column )
     {
-        dc.GetMultiLineTextExtent( GetColLabelValue(colOrRow), &w, &h );
-        if ( GetColLabelTextOrientation() == wxVERTICAL )
-            w = h;
+        if (m_useNativeHeader)
+        {
+            w = GetGridColHeader()->GetColumnTitleWidth( colOrRow );
+            addMargin = false;
+        }
+        else
+        {
+            dc.GetMultiLineTextExtent( GetColLabelValue(colOrRow), &w, &h );
+            if ( GetColLabelTextOrientation() == wxVERTICAL )
+                w = h;
+        }
     }
     else
         dc.GetMultiLineTextExtent( GetRowLabelValue(colOrRow), &w, &h );
@@ -9403,11 +9414,14 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
     }
     else
     {
-        if ( column )
-            // leave some space around text
-            extentMax += 10;
-        else
-            extentMax += 6;
+        if ( addMargin )
+        {
+            if ( column )
+                // leave some space around text
+                extentMax += 10;
+            else
+                extentMax += 6;
+        }
     }
 
     if ( column )

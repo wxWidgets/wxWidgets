@@ -404,6 +404,13 @@ public:
      */
     int GetColumnTitleWidth(const wxHeaderColumn& col);
 
+    /**
+        Returns width needed for given column's title by the given column index.
+
+        @since 3.1.3
+     */
+    int GetColumnTitleWidth(unsigned int idx);
+
 protected:
     /**
         Method to be implemented by the derived classes to return the
