@@ -416,6 +416,7 @@ MyDialog::MyDialog( wxWindow *parent, const wxString& title,
     // Bind event handlers
     Bind(wxEVT_VALIDATE_OK, &MyDialog::OnValidation, this);
     Bind(wxEVT_VALIDATE_ERROR, &MyDialog::OnValidation, this);
+    Bind(wxEVT_UPDATE_UI, &MyDialog::OnUpdateUI, this);
 }
 
 void MyDialog::OnChangeValidator(wxCommandEvent& WXUNUSED(event))
@@ -434,11 +435,15 @@ void MyDialog::OnValidation(wxValidationStatusEvent& event)
 
     if ( event.GetEventType() == wxEVT_VALIDATE_OK )
     {
+        m_invalidWins.erase(win);
+
         // Restore the default properties.
         win->SetBackgroundColour(wxNullColour);
     }
     else if ( event.GetEventType() == wxEVT_VALIDATE_ERROR )
     {
+        m_invalidWins.insert(win);
+
         // Make the control reflect the invalid state.
         win->SetBackgroundColour(wxColour("#f2bdcd")); // Orchid pink
 
@@ -455,6 +460,14 @@ void MyDialog::OnValidation(wxValidationStatusEvent& event)
             event.Skip();
         }
     }
+}
+
+void MyDialog::OnUpdateUI(wxUpdateUIEvent& event)
+{
+    if ( event.GetId() == wxID_OK )
+        event.Enable(m_invalidWins.empty());
+    else
+        event.Skip();
 }
 
 // ----------------------------------------------------------------------------

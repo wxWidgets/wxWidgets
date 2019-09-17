@@ -13,6 +13,7 @@
 #include "wx/dialog.h"
 #include "wx/dynarray.h"
 #include "wx/frame.h"
+#include "wx/hashset.h"
 #include "wx/listbox.h"
 #include "wx/string.h"
 
@@ -41,6 +42,9 @@ private:
     wxDECLARE_EVENT_TABLE();
 };
 
+WX_DECLARE_HASH_SET(wxWindow*, wxPointerHash, wxPointerEqual,
+                    InvalidWindowsSet);
+
 class MyDialog : public wxDialog
 {
 public:
@@ -49,14 +53,19 @@ public:
             const wxSize& size = wxDefaultSize,
             const long style = wxDEFAULT_DIALOG_STYLE);
 
+private:
     void OnChangeValidator(wxCommandEvent& event);
     void OnValidation(wxValidationStatusEvent& event);
+    void OnUpdateUI(wxUpdateUIEvent& event);
 
+private:
     wxTextCtrl *m_text;
     wxComboBox *m_combobox;
 
     wxTextCtrl *m_numericTextInt;
     wxTextCtrl *m_numericTextDouble;
+
+    InvalidWindowsSet m_invalidWins;
 };
 
 // ----------------------------------------------------------------------------
