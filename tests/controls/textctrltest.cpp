@@ -23,6 +23,7 @@
     #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
+#include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
 #include "wx/uiaction.h"
 
@@ -1296,6 +1297,48 @@ TEST_CASE("wxTextCtrl::ProcessEnter", "[wxTextCtrl][enter]")
     };
 
     TestProcessEnter(TextCtrlCreator());
+}
+
+TEST_CASE("wxTextCtrl::GetBestSize", "[wxTextCtrl][best-size]")
+{
+    struct GetBestSizeFor
+    {
+        wxSize operator()(const wxString& text) const
+        {
+            wxScopedPtr<wxTextCtrl>
+                t(new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, text,
+                                 wxDefaultPosition, wxDefaultSize,
+                                 wxTE_MULTILINE));
+            return t->GetBestSize();
+        }
+    } getBestSizeFor;
+
+    wxString s;
+    const wxSize sizeEmpty = getBestSizeFor(s);
+
+    // Empty control should have some reasonable vertical size.
+    CHECK( sizeEmpty.y > 0 );
+
+    s += "1\n2\n3\n4\n5\n";
+    const wxSize sizeMedium = getBestSizeFor(s);
+
+    // Control with a few lines of text in it should be taller.
+    CHECK( sizeMedium.y > sizeEmpty.y );
+
+    s += "6\n7\n8\n9\n10\n";
+    const wxSize sizeLong = getBestSizeFor(s);
+
+    // And a control with many lines in it should be even more so.
+    CHECK( sizeLong.y > sizeMedium.y );
+
+    s += s;
+    s += s;
+    s += s;
+    const wxSize sizeVeryLong = getBestSizeFor(s);
+
+    // However there is a cutoff at 10 lines currently, so anything longer than
+    // that should still have the same best size.
+    CHECK( sizeVeryLong.y == sizeLong.y );
 }
 
 #endif //wxUSE_TEXTCTRL

@@ -817,6 +817,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
     if (!value.empty())
     {
         SetValue( value );
+        InvalidateBestSize();
     }
 
     if (style & wxTE_PASSWORD)
