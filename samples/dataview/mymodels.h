@@ -269,3 +269,38 @@ class MyListStoreDerivedModel : public wxDataViewListStore
 public:
     virtual bool IsEnabledByRow(unsigned int row, unsigned int col) const wxOVERRIDE;
 };
+
+// ----------------------------------------------------------------------------
+// MyIndexListModel
+// ----------------------------------------------------------------------------
+
+class MyIndexListModel : public wxDataViewIndexListModel
+{
+public:
+    MyIndexListModel() { }
+
+    void Fill(const wxArrayString& strings)
+    {
+        m_strings = strings;
+
+        Reset(m_strings.size());
+    }
+
+    // Implement base class pure virtual methods.
+    unsigned GetColumnCount() const wxOVERRIDE { return 1; }
+    wxString GetColumnType(unsigned) const wxOVERRIDE { return "string"; }
+    unsigned GetCount() const wxOVERRIDE { return m_strings.size(); }
+    void GetValueByRow(wxVariant& val, unsigned row, unsigned) const wxOVERRIDE
+    {
+        val = m_strings[row];
+    }
+    bool SetValueByRow(const wxVariant&, unsigned, unsigned) wxOVERRIDE
+    {
+        return false;
+    }
+
+private:
+    wxArrayString m_strings;
+
+    wxDECLARE_NO_COPY_CLASS(MyIndexListModel);
+};
