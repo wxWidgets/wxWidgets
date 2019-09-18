@@ -55,6 +55,8 @@ and then run it using the new DLLs.
     * Put a date on the release line in `docs/changes.txt`.
     * Update the date in the manual (`docs/doxygen/mainpages/manual.h`).
     * Update the release announcement post in `docs/publicity/announce.txt`.
+    * Update `docs/msw/binaries.md`: at least the version, but possibly also
+      the list of supported compilers.
 
 2. Commit the changes and tag the release using your GPG key:
 
