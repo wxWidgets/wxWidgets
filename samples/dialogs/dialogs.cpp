@@ -1502,7 +1502,10 @@ private:
 
     void OnUpdateLabelUI(wxUpdateUIEvent& event)
     {
-        wxFileDialog* const dialog = wxStaticCast(GetParent(), wxFileDialog);
+        // In this sample, the dialog may be either wxFileDialog itself, or
+        // wxGenericFileDialog, so we need to cast to the base class. In a
+        // typical application, we would cast to just wxFileDialog instead.
+        wxFileDialogBase* const dialog = wxStaticCast(GetParent(), wxFileDialogBase);
         const wxString fn = dialog->GetCurrentlySelectedFilename();
 
         wxString msg;
