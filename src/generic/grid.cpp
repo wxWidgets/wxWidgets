@@ -3614,7 +3614,7 @@ void wxGrid::UpdateCurrentCellOnRedim()
                 col = m_numCols - 1;
             if (row >= m_numRows)
                 row = m_numRows - 1;
-            SetCurrentCell(col, row);
+            SetCurrentCell(row, col);
         }
     }
 }
