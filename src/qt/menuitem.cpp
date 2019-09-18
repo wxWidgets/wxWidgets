@@ -43,18 +43,6 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu, int id, const wxString& text,
     : wxMenuItemBase( parentMenu, id, text, help, kind, subMenu )
 {
     m_qtAction = new wxQtAction( parentMenu, id, text, help, kind, subMenu, this );
-
-    #if wxUSE_ACCEL
-
-    QString qtext = wxQtConvertString( text );
-    int index = qtext.indexOf( QChar( '&' ) );
-
-    if( ( index != -1 ) && ( qtext[index+1] != QChar( '&' ) ) )
-    {
-        m_qtAction->setShortcut( QKeySequence( QChar( qtext[index+1] ) ) );
-    }
-
-    #endif
 }
 
 
