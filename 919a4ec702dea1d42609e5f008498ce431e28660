@@ -1,0 +1,1 @@
+All (GUI): Fix and unify drawing wxBitmap with both alpha channel and mask under all platforms.
