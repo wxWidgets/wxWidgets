@@ -2513,10 +2513,6 @@ public:
             corresponding event. Is @NULL otherwise (for keyboard activation).
             Mouse coordinates are adjusted to be relative to the cell.
 
-        @note Currently support for this method is not implemented in the
-            native macOS version of the control, i.e. it will be never called
-            there.
-
         @since 2.9.3
 
         @note Do not confuse this method with item activation in wxDataViewCtrl
