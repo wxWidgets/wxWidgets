@@ -171,7 +171,7 @@ If either of these are blank they are set to the default install location.
 
 To build binaries for a single compiler, open a command prompt (for Visual
 Studio 2008 only an SDK 6.1 developer's command prompt must be used),
-cd to the build\msw\tools\msvs folder and run the batch file 'buildofficial'
+cd to the build\tools\msvs folder and run the batch file 'officialbuild'
 with the vcXXX version number:
 
 Visual Studio 2008  vc90
