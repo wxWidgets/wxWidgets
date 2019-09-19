@@ -960,6 +960,13 @@ void wxBitmap::SetMask( wxMask *mask )
     AllocExclusive();
     delete M_BMPDATA->m_mask;
     M_BMPDATA->m_mask = mask;
+#ifndef __WXGTK3__
+    if (M_BMPDATA->m_pixbufMask)
+    {
+        g_object_unref(M_BMPDATA->m_pixbufMask);
+        M_BMPDATA->m_pixbufMask = NULL;
+    }
+#endif
 }
 
 bool wxBitmap::CopyFromIcon(const wxIcon& icon)
