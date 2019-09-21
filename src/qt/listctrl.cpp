@@ -978,6 +978,11 @@ public:
         QTreeView::paintEvent(event);
     }
 
+    int GetHeaderHeight() const
+    {
+        return header() != NULL ? header()->height() : 0;
+    }
+
 private:
     void itemClicked(const QModelIndex &index);
     void itemActivated(const QModelIndex &index);
@@ -1319,6 +1324,7 @@ bool wxListCtrl::GetItemRect(long item, wxRect& rect, int WXUNUSED(code)) const
     QRect first = m_qtTreeWidget->visualRect(m_model->index(item, 0));
     QRect last = m_qtTreeWidget->visualRect(m_model->index(item, columnCount-1));
     rect = wxQtConvertRect(first.united(last));
+    rect.Offset(0, m_qtTreeWidget->GetHeaderHeight());
 
     return true;
 }
@@ -1336,6 +1342,7 @@ bool wxListCtrl::GetSubItemRect(long item,
 
     const QModelIndex index = m_qtTreeWidget->model()->index(item, subItem);
     rect = wxQtConvertRect(m_qtTreeWidget->visualRect(index));
+    rect.Offset(0, m_qtTreeWidget->GetHeaderHeight());
     return true;
 }
 
@@ -1735,7 +1742,11 @@ long wxListCtrl::HitTest(
     long* ptrSubItem
 ) const
 {
-    QModelIndex index = m_qtTreeWidget->indexAt(wxQtConvertPoint(point));
+    // Remove the header height as qt expects point relative to the table sub widget
+    QPoint qPoint = wxQtConvertPoint(point);
+    qPoint.setY(qPoint.y() - m_qtTreeWidget->GetHeaderHeight());
+
+    QModelIndex index = m_qtTreeWidget->indexAt(qPoint);
     if ( index.isValid() )
     {
         flags = wxLIST_HITTEST_ONITEM;
