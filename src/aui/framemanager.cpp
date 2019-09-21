@@ -4160,21 +4160,15 @@ void wxAuiManager::OnLeftDown(wxMouseEvent& event)
                                       event.m_y - part->rect.y);
             m_frame->CaptureMouse();
         }
-#ifdef __WXMAC__
         else
         {
             event.Skip();
         }
-#endif
     }
-#ifdef __WXMAC__
     else
     {
         event.Skip();
     }
-#else
-    event.Skip();
-#endif
 }
 
 /// Ends a resize action, or for live update, resizes the sash
