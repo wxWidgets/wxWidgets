@@ -21,97 +21,66 @@
     #include "wx/window.h"
 #endif // WX_PRECOMP
 
+#include "wx/scopedptr.h"
+
 #include "asserthelper.h"
 
 // ----------------------------------------------------------------------------
-// test class
+// tests helpers
 // ----------------------------------------------------------------------------
 
-class SetSizeTestCase : public CppUnit::TestCase
+namespace
+{
+
+// Helper class overriding DoGetBestSize() for testing purposes.
+class MyWindow : public wxWindow
 {
 public:
-    SetSizeTestCase() { }
-
-    virtual void setUp() wxOVERRIDE;
-    virtual void tearDown() wxOVERRIDE;
-
-private:
-    CPPUNIT_TEST_SUITE( SetSizeTestCase );
-        CPPUNIT_TEST( SetSize );
-        CPPUNIT_TEST( SetSizeLessThanMinSize );
-        CPPUNIT_TEST( BestSize );
-    CPPUNIT_TEST_SUITE_END();
-
-    void SetSize();
-    void SetSizeLessThanMinSize();
-    void BestSize();
-
-    // Helper class overriding DoGetBestSize() for testing purposes.
-    class MyWindow : public wxWindow
+    MyWindow(wxWindow* parent)
+        : wxWindow(parent, wxID_ANY)
     {
-    public:
-        MyWindow(wxWindow* parent)
-            : wxWindow(parent, wxID_ANY)
-        {
-        }
+    }
 
-    protected:
-        virtual wxSize DoGetBestSize() const wxOVERRIDE { return wxSize(50, 250); }
-    };
-
-    wxWindow *m_win;
-
-    wxDECLARE_NO_COPY_CLASS(SetSizeTestCase);
+protected:
+    virtual wxSize DoGetBestSize() const wxOVERRIDE { return wxSize(50, 250); }
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( SetSizeTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( SetSizeTestCase, "SetSizeTestCase" );
-
-// ----------------------------------------------------------------------------
-// test initialization
-// ----------------------------------------------------------------------------
-
-void SetSizeTestCase::setUp()
-{
-    m_win = new MyWindow(wxTheApp->GetTopWindow());
-}
-
-void SetSizeTestCase::tearDown()
-{
-    delete m_win;
-    m_win = NULL;
-}
+} // anonymous namespace
 
 // ----------------------------------------------------------------------------
 // tests themselves
 // ----------------------------------------------------------------------------
 
-void SetSizeTestCase::SetSize()
+TEST_CASE("wxWindow::SetSize", "[window][size]")
 {
-    const wxSize size(127, 35);
-    m_win->SetSize(size);
-    CPPUNIT_ASSERT_EQUAL( size, m_win->GetSize() );
+    wxScopedPtr<wxWindow> w(new MyWindow(wxTheApp->GetTopWindow()));
+
+    SECTION("Simple")
+    {
+        const wxSize size(127, 35);
+        w->SetSize(size);
+        CHECK( size == w->GetSize() );
+    }
+
+    SECTION("With min size")
+    {
+        w->SetMinSize(wxSize(100, 100));
+
+        const wxSize size(200, 50);
+        w->SetSize(size);
+        CHECK( size == w->GetSize() );
+    }
 }
 
-void SetSizeTestCase::SetSizeLessThanMinSize()
+TEST_CASE("wxWindow::GetBestSize", "[window][size][best-size]")
 {
-    m_win->SetMinSize(wxSize(100, 100));
+    wxScopedPtr<wxWindow> w(new MyWindow(wxTheApp->GetTopWindow()));
 
-    const wxSize size(200, 50);
-    m_win->SetSize(size);
-    CPPUNIT_ASSERT_EQUAL( size, m_win->GetSize() );
-}
+    CHECK( wxSize(50, 250) == w->GetBestSize() );
 
-void SetSizeTestCase::BestSize()
-{
-    CPPUNIT_ASSERT_EQUAL( wxSize(50, 250), m_win->GetBestSize() );
+    w->SetMinSize(wxSize(100, 100));
+    CHECK( wxSize(100, 250) == w->GetBestSize() );
 
-    m_win->SetMinSize(wxSize(100, 100));
-    CPPUNIT_ASSERT_EQUAL( wxSize(100, 250), m_win->GetBestSize() );
-
-    m_win->SetMaxSize(wxSize(200, 200));
-    CPPUNIT_ASSERT_EQUAL( wxSize(100, 200), m_win->GetBestSize() );
+    w->SetMaxSize(wxSize(200, 200));
+    CHECK( wxSize(100, 200) == w->GetBestSize() );
 }
