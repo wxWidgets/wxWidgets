@@ -23,6 +23,8 @@
     #include "wx/window.h"
 #endif
 
+#include "wx/scopeguard.h"
+
 wxIMPLEMENT_DYNAMIC_CLASS(wxValidator, wxEvtHandler);
 
 // VZ: personally, I think true would be more appropriate - these bells are
@@ -66,24 +68,26 @@ bool wxValidator::ReportValidation(wxWindow *parent, bool canPopup)
 
 bool wxValidator::ProcessEvent(wxEvent& event)
 {
-    // We want any custom handler (if any) to take precedence over
-    // the validator itself when handling wxEVT_VALIDATE_XXX events.
+    if ( m_validationStatus & Validation_Skip )
+    {
+        // The validator window is given a chance to process the event first
+        // (i.e. wxEVT_VALIDATE_XXX events), so just return false.
+        // See wxWindowBase::TryBefore().
+        return false;
+    }
 
     const wxEventType eventType = event.GetEventType();
     if ( eventType == wxEVT_VALIDATE_OK ||
          eventType == wxEVT_VALIDATE_ERROR )
     {
-        // N.B. According to "How Events are Processed" documentation,
-        //      step (2) says:
-        //
-        //   2. If the object is a wxWindow and has an associated validator,
-        //      wxValidator gets a chance to process the event.
-        //
-        // It is clear that this will prevent any custom handling of
-        // wxEVT_VALIDATE_XXX events, and (temporarily) removing the
-        // validator solves the problem.
+        // We want any custom handler (if any) to take precedence over
+        // the validator itself when handling wxEVT_VALIDATE_XXX events.
 
-        wxValidatorDisabler noValidation(m_validatorWindow);
+        // Validation status should be restored on block exit.
+        const int status = m_validationStatus;
+        wxON_BLOCK_EXIT_SET(m_validationStatus, status);
+
+        m_validationStatus |= Validation_Skip;
 
         if ( m_validatorWindow->ProcessWindowEvent(event) )
         {

@@ -177,7 +177,11 @@ private:
         Validation_Needed  = 0x1,
         Validation_NoPopup = 0x2,
         Validation_Ok      = 0x4,
-        Validation_Error   = 0x8
+        Validation_Error   = 0x8,
+
+        // Special flag to bypass the validator when processing
+        // wxEVT_VALIDATE_XXX events. see ProcessEvent().
+        Validation_Skip    = 0x80000000
     };
 
     int m_validationStatus;
