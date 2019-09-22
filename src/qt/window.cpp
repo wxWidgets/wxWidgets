@@ -975,6 +975,8 @@ void wxWindowQt::DoSetSize(int x, int y, int width, int height, int sizeFlags )
 void wxWindowQt::DoGetClientSize(int *width, int *height) const
 {
     QWidget *qtWidget = QtGetClientWidget();
+    wxCHECK_RET( qtWidget, "window must be created" );
+
     const QRect geometry = qtWidget->geometry();
     if (width)  *width = geometry.width();
     if (height) *height = geometry.height();
@@ -984,6 +986,8 @@ void wxWindowQt::DoGetClientSize(int *width, int *height) const
 void wxWindowQt::DoSetClientSize(int width, int height)
 {
     QWidget *qtWidget = QtGetClientWidget();
+    wxCHECK_RET( qtWidget, "window must be created" );
+
     QRect geometry = qtWidget->geometry();
     geometry.setWidth( width );
     geometry.setHeight( height );
