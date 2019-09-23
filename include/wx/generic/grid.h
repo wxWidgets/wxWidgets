@@ -1947,7 +1947,6 @@ public:
 
 
     // override some base class functions
-    virtual bool Enable(bool enable = true) wxOVERRIDE;
     virtual wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE
         { return (wxWindow*)m_gridWin; }
     virtual void Fit() wxOVERRIDE;
@@ -1957,6 +1956,7 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual void DoEnable(bool enable) wxOVERRIDE;
 
     bool m_created;
 
