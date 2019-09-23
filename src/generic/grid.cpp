@@ -276,7 +276,7 @@ void wxGridHeaderLabelsRenderer::DrawLabel(const wxGrid& grid,
     // because this results in a better disabled appearance for the default
     // bold font used for the labels.
     wxColour colText;
-    if ( !grid.IsThisEnabled() )
+    if ( !grid.IsEnabled() )
     {
         colText = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNHIGHLIGHT);
         dc.SetTextForeground(colText);
