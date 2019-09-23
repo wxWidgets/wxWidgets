@@ -197,7 +197,6 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
     // Obtains the number of arguments for determining the size of
     // the CFArray used to hold them
     NSUInteger cfiCount = 0;
-//    NSArray *arguments;
     for (const char* const* argvcopy = argv; *argvcopy != NULL; ++argvcopy)
     {
         ++cfiCount;
