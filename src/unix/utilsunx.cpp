@@ -462,7 +462,7 @@ private:
 // ----------------------------------------------------------------------------
 
 #if defined(__DARWIN__) && !defined(__WXOSX_IPHONE__)
-extern bool wxCocoaLaunch(const char* const* argv, pid_t &pid);
+bool wxCocoaLaunch(const char* const* argv, pid_t &pid);
 #endif
 
 long wxExecute(const wxString& command, int flags, wxProcess *process,
