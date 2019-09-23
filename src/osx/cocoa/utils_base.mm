@@ -18,7 +18,7 @@
     #include "wx/app.h"
     #include "wx/datetime.h"
 #endif
-
+#include "wx/filename.h"
 #include "wx/apptrait.h"
 
 #include "wx/osx/private.h"
@@ -191,3 +191,96 @@ bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
     return true;
 }
 #endif // wxUSE_DATETIME
+
+bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
+{
+    // Obtains the number of arguments for determining the size of
+    // the CFArray used to hold them
+    NSUInteger cfiCount = 0;
+//    NSArray *arguments;
+    for (const char* const* argvcopy = argv; *argvcopy != NULL; ++argvcopy)
+    {
+        ++cfiCount;
+    }
+    
+    // If there is not a single argument then there is no application
+    // to launch
+    if(cfiCount == 0)
+    {
+        wxLogDebug(wxT("wxCocoaLaunch No file to launch!"));
+        return false ;
+    }
+    
+    // Path to bundle
+    wxString path = *argv++;
+    NSError *error = nil;
+    NSURL *url = [NSURL fileURLWithPath:wxCFStringRef(path).AsNSString() isDirectory:YES];
+    
+    // Check the URL validity
+    if( url == nil )
+    {
+        wxLogDebug(wxT("wxCocoaLaunch Can't open path: %s"), path.c_str());
+        return false ;
+    }
+    
+    // Loop through command line arguments to the bundle,
+    // turn them into CFURLs and then put them in cfaFiles
+    // For use to launch services call
+    NSMutableArray *params = [[NSMutableArray alloc] init];
+    for( ; *argv != NULL; ++argv )
+    {
+        // Check for '<' as this will ring true for
+        // CFURLCreateWithString but is generally not considered
+        // typical on mac but is usually passed here from wxExecute
+        if (wxStrcmp(*argv, wxT("<")) == 0)
+            continue;
+
+        NSURL *cfurlCurrentFile;
+        wxFileName argfn(*argv);     // Filename for path
+        wxString dir( *argv );
+        if(argfn.DirExists())
+        {
+            // First, try creating as a directory
+            cfurlCurrentFile = [NSURL fileURLWithPath:wxCFStringRef(dir).AsNSString() isDirectory:YES];
+        }
+        else if(argfn.FileExists())
+        {
+            // And if it isn't a directory try creating it
+            // as a regular file
+            cfurlCurrentFile = [NSURL fileURLWithPath:wxCFStringRef(dir).AsNSString() isDirectory:NO];
+        }
+        else
+        {
+            // Argument did not refer to
+            // an entry in the local filesystem,
+            // so try creating it through CFURLCreateWithString
+            cfurlCurrentFile = [NSURL URLWithString:wxCFStringRef(dir).AsNSString()];
+        }
+
+        // Continue in the loop if the CFURL could not be created
+        if(cfurlCurrentFile == nil)
+        {
+            wxLogDebug(
+                       wxT("wxCocoaLaunch Could not create NSURL for argument:%s"),
+                       *argv);
+            continue;
+        }
+        
+        // Add the valid CFURL to the argument array and then
+        // release it as the CFArray adds a ref count to it
+        [params addObject:cfurlCurrentFile];
+    }
+    NSWorkspace *ws = [NSWorkspace sharedWorkspace];
+    NSRunningApplication *app = [ws launchApplicationAtURL:url options:NSWorkspaceLaunchAsync
+                                             configuration:[NSDictionary dictionaryWithObject:params forKey:NSWorkspaceLaunchConfigurationArguments]
+                                             error:&error];
+    if( app != nil )
+        pid = [app processIdentifier];
+    else
+    {
+        wxString errorDesc = wxCFStringRef::AsString([error localizedDescription]);
+        wxLogDebug( wxString::Format( "wxCocoaLaunch failure: error is %s", errorDesc ) );
+        return false;
+    }
+    return true;
+}
