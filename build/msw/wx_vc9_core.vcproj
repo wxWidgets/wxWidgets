@@ -4517,6 +4517,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_infobar.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_listb.h"
 				>
 			</File>

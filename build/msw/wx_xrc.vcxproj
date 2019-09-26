@@ -486,6 +486,7 @@
     <ClCompile Include="..\..\src\xrc\xh_html.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_htmllbox.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_hyperlink.cpp" />
+    <ClCompile Include="..\..\src\xrc\xh_infobar.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_listb.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_listbk.cpp" />
     <ClCompile Include="..\..\src\xrc\xh_listc.cpp" />
@@ -585,6 +586,7 @@
     <ClInclude Include="..\..\include\wx\xrc\xh_html.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_htmllbox.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_hyperlink.h" />
+    <ClInclude Include="..\..\include\wx\xrc\xh_infobar.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_listb.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_listbk.h" />
     <ClInclude Include="..\..\include\wx\xrc\xh_listc.h" />

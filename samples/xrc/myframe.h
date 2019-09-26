@@ -52,6 +52,7 @@ private:
     void OnVariants(wxCommandEvent& event);
     void OnRecursiveLoad(wxCommandEvent& event);
     void OnAnimationCtrlPlay(wxCommandEvent& event);
+    void OnInfoBarShowMessage(wxCommandEvent& event);
 
     // Any class wishing to process wxWidgets events must use this macro
     wxDECLARE_EVENT_TABLE();
