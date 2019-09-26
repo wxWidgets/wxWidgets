@@ -1761,6 +1761,7 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_grid.o \
 	xrcdll_xh_html.o \
 	xrcdll_xh_hyperlink.o \
+	xrcdll_xh_infobar.o \
 	xrcdll_xh_listb.o \
 	xrcdll_xh_listbk.o \
 	xrcdll_xh_listc.o \
@@ -1836,6 +1837,7 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_grid.o \
 	xrclib_xh_html.o \
 	xrclib_xh_hyperlink.o \
+	xrclib_xh_infobar.o \
 	xrclib_xh_listb.o \
 	xrclib_xh_listbk.o \
 	xrclib_xh_listc.o \
@@ -4016,6 +4018,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_grid.h \
 	wx/xrc/xh_html.h \
 	wx/xrc/xh_hyperlink.h \
+	wx/xrc/xh_infobar.h \
 	wx/xrc/xh_listb.h \
 	wx/xrc/xh_listbk.h \
 	wx/xrc/xh_listc.h \
@@ -4323,6 +4326,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_grid.o \
 	monodll_xh_html.o \
 	monodll_xh_hyperlink.o \
+	monodll_xh_infobar.o \
 	monodll_xh_listb.o \
 	monodll_xh_listbk.o \
 	monodll_xh_listc.o \
@@ -6309,6 +6313,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_grid.o \
 	monolib_xh_html.o \
 	monolib_xh_hyperlink.o \
+	monolib_xh_infobar.o \
 	monolib_xh_listb.o \
 	monolib_xh_listbk.o \
 	monolib_xh_listc.o \
@@ -17218,6 +17223,9 @@ monodll_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(MONODLL_ODEP)
 monodll_xh_hyperlink.o: $(srcdir)/src/xrc/xh_hyperlink.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_hyperlink.cpp
 
+monodll_xh_infobar.o: $(srcdir)/src/xrc/xh_infobar.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_infobar.cpp
+
 monodll_xh_listb.o: $(srcdir)/src/xrc/xh_listb.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_listb.cpp
 
@@ -22485,6 +22493,9 @@ monolib_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(MONOLIB_ODEP)
 
 monolib_xh_hyperlink.o: $(srcdir)/src/xrc/xh_hyperlink.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_hyperlink.cpp
+
+monolib_xh_infobar.o: $(srcdir)/src/xrc/xh_infobar.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_infobar.cpp
 
 monolib_xh_listb.o: $(srcdir)/src/xrc/xh_listb.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_listb.cpp
@@ -36094,6 +36105,9 @@ xrcdll_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(XRCDLL_ODEP)
 xrcdll_xh_hyperlink.o: $(srcdir)/src/xrc/xh_hyperlink.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_hyperlink.cpp
 
+xrcdll_xh_infobar.o: $(srcdir)/src/xrc/xh_infobar.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_infobar.cpp
+
 xrcdll_xh_listb.o: $(srcdir)/src/xrc/xh_listb.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_listb.cpp
 
@@ -36297,6 +36311,9 @@ xrclib_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_hyperlink.o: $(srcdir)/src/xrc/xh_hyperlink.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_hyperlink.cpp
+
+xrclib_xh_infobar.o: $(srcdir)/src/xrc/xh_infobar.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_infobar.cpp
 
 xrclib_xh_listb.o: $(srcdir)/src/xrc/xh_listb.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_listb.cpp

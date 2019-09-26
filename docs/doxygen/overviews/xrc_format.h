@@ -392,6 +392,16 @@ Examples:
 @endcode
 
 
+@subsection overview_xrcformat_type_showeffect Show Effect
+
+One of the @ref wxShowEffect values.
+
+Example:
+@code
+<showeffect>wxSHOW_EFFECT_EXPAND</showeffect>
+@endcode
+
+
 @subsection overview_xrcformat_type_font Font
 
 XRC uses similar, but more flexible, abstract description of fonts to that
@@ -1219,6 +1229,36 @@ page.
 @row3col{url, @ref overview_xrcformat_type_url,
      URL to open when the link is clicked (default: empty).}
 @endTable
+
+
+@subsubsection xrc_wxinfobar wxInfoBar
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{showeffect, @ref overview_xrcformat_type_showeffect,
+     The effect to use when showing the bar.}
+@row3col{hideeffect, @ref overview_xrcformat_type_showeffect,
+     The effect to use when hiding the bar.}
+@row3col{effectduration, integer,
+     The duration of the animation used when showing or hiding the bar.}
+@row3col{button, object,
+     Add a button to be shown in the info bar (see wxInfoBar::AddButton);
+     this property is of class "button" has name (can be one of standard
+     button ID) and has optional label property.}
+@endTable
+
+Example:
+@code
+<object class="wxInfoBar">
+    <effectduration>1000</effectduration>
+    <showeffect>wxSHOW_EFFECT_EXPAND</showeffect>
+    <hideeffect>wxSHOW_EFFECT_SLIDE_TO_RIGHT</hideeffect>
+    <object class="button" name="wxID_UNDO"/>
+    <object class="button" name="wxID_REDO">
+        <label>Redo Custom Label</label>
+    </object>
+</object>
+@endcode
 
 
 @subsubsection xrc_wxlistbox wxListBox

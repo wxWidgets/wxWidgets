@@ -685,6 +685,7 @@
 		CDC0FF253B503BA19693D68D /* xh_propdlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 49BF55FA3427335097F99A2C /* xh_propdlg.cpp */; };
 		CE17002B5B7E375582747639 /* xh_choic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 89EC3C6F9AEF3F6DA7CEB3B3 /* xh_choic.cpp */; };
 		CE2C937117FE3AB599DD30B9 /* sound_osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A9B2316B32653DA0939A372D /* sound_osx.cpp */; };
+		EA10DA3199813E90B39C70D3 /* xh_infobar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C65E309F3A39598C043657 /* xh_infobar.cpp */; };
 		CEBAAB0C77983358A601BFFE /* jdmaster.c in Sources */ = {isa = PBXBuildFile; fileRef = ED19EF377E653F71B1876259 /* jdmaster.c */; };
 		CEC6430AEB6E3200BFA75D07 /* jfdctint.c in Sources */ = {isa = PBXBuildFile; fileRef = 90EC2A5B80EE3031BA4087B9 /* jfdctint.c */; };
 		CEE0D7A7D5D8323B9957A780 /* notifmsgg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 924AA3A156F834BCA1A57976 /* notifmsgg.cpp */; };
@@ -1556,6 +1557,7 @@
 		CD72950967F33809931D4968 /* LexAbaqus.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexAbaqus.cxx; path = ../../src/stc/scintilla/lexers/LexAbaqus.cxx; sourceTree = "<group>"; };
 		CDA232B9FFD33B7482E69B58 /* xh_tglbtn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_tglbtn.cpp; path = ../../src/xrc/xh_tglbtn.cpp; sourceTree = "<group>"; };
 		CDB4AB7CDABA3A54B4F8207B /* imaggif.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imaggif.cpp; path = ../../src/common/imaggif.cpp; sourceTree = "<group>"; };
+		45C65E309F3A39598C043657 /* xh_infobar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = xh_infobar.cpp; path = ../../src/xrc/xh_infobar.cpp; sourceTree = "<group>"; };
 		CF23AF3EFC5731B2A5BCF4A3 /* choicdgg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = choicdgg.cpp; path = ../../src/generic/choicdgg.cpp; sourceTree = "<group>"; };
 		CF4F4F5211933057824B5621 /* button_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = button_osx.cpp; path = ../../src/osx/button_osx.cpp; sourceTree = "<group>"; };
 		CF502E0E4D853CBBBEC885EF /* LexerSimple.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexerSimple.cxx; path = ../../src/stc/scintilla/lexlib/LexerSimple.cxx; sourceTree = "<group>"; };
@@ -2330,6 +2332,7 @@
 		60328E6EA3793DA990E18FC1 /* xrc */ = {
 			isa = PBXGroup;
 			children = (
+				45C65E309F3A39598C043657 /* xh_infobar.cpp */,
 				BB60FA0E3524391D8581AD7C /* xh_activityindicator.cpp */,
 				8C1E755F2408363288B2CE69 /* xh_animatctrl.cpp */,
 				3116006345D833509865FF7F /* xh_bannerwindow.cpp */,
@@ -3345,6 +3348,7 @@
 				F3AC352D6DAE3A12A5664768 /* styleparams.cpp in Sources */,
 				2A7640E4210334AC93366900 /* winpars.cpp in Sources */,
 				87AA9C5D887B3C31A2AFB49D /* htmllbox.cpp in Sources */,
+				EA10DA3199813E90B39C70D3 /* xh_infobar.cpp in Sources */,
 				8F949B9010863F66A58FFEF1 /* xh_activityindicator.cpp in Sources */,
 				FBE4DB30865D3177B3A9993B /* xh_animatctrl.cpp in Sources */,
 				702616D38A5B345D9CC87114 /* xh_bannerwindow.cpp in Sources */,

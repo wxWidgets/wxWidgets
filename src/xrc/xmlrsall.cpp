@@ -123,6 +123,9 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_HYPERLINKCTRL
     AddHandler( new wxHyperlinkCtrlXmlHandler);
 #endif
+#if wxUSE_INFOBAR
+    AddHandler(new wxInfoBarXmlHandler);
+#endif
 #if wxUSE_LISTBOOK
     AddHandler(new wxListbookXmlHandler);
 #endif

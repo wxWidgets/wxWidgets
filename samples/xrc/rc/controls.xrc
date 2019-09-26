@@ -548,6 +548,39 @@ lay them out using wxSizers, absolute positioning, everything you like!
                     </object>
                 </object>
                 <object class="choicebookpage">
+                    <label>wxInfoBar</label>
+                    <object class="wxPanel" name="infobarctrl">
+                        <object class="wxBoxSizer">
+                            <orient>wxVERTICAL</orient>
+
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTRE|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxButton" name="controls_infobar_button_message">
+                                    <label>Show Message</label>
+                                </object>
+                            </object>
+
+                            <object class="spacer">
+                                <option>1</option>
+                            </object>
+
+                            <object class="sizeritem">
+                                <flag>wxEXPAND</flag>
+                                <object class="wxInfoBar" name="controls_infobar">
+                                    <effectduration>1000</effectduration>
+                                    <showeffect>wxSHOW_EFFECT_EXPAND</showeffect>
+                                    <hideeffect>wxSHOW_EFFECT_SLIDE_TO_RIGHT</hideeffect>
+                                    <object class="button" name="wxID_UNDO"/>
+                                    <object class="button" name="wxID_REDO">
+                                        <label>Redo Custom Label</label>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+                <object class="choicebookpage">
                     <label>wxListBox</label>
                     <object class="wxPanel" name="listbox">
                         <object class="wxFlexGridSizer">
