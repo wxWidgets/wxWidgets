@@ -781,6 +781,8 @@ protected:
 
     wxDECLARE_NO_COPY_CLASS(wxTextCtrlBase);
     wxDECLARE_ABSTRACT_CLASS(wxTextCtrlBase);
+private:
+	virtual void SetLabel(const wxString &label) wxOVERRIDE { wxFAIL_MSG( "Label does not make sense for wxTextCtrl" ); };
 };
 
 // ----------------------------------------------------------------------------
