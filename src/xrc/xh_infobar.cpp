@@ -2,7 +2,7 @@
 // Name:        src/xrc/xh_infobar.cpp
 // Purpose:     XML resource handler for wxInfoBar
 // Author:      Ilya Sinitsyn
-// Created:     2019/09/25
+// Created:     2019-09-25
 // Copyright:   (c) 2019 TT-Solutions SARL
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ wxInfoBarXmlHandler::wxInfoBarXmlHandler()
 
 wxObject *wxInfoBarXmlHandler::DoCreateResource()
 {
-    if( m_class == wxT("wxInfoBar") )
+    if ( m_class == "wxInfoBar" )
     {
         XRC_MAKE_INSTANCE(control, wxInfoBar)
 
@@ -68,7 +68,7 @@ wxObject *wxInfoBarXmlHandler::DoCreateResource()
     }
     else
     {
-        // on the inside now.
+        // inside the element now,
         // handle buttons
 
         wxInfoBar * const infoBar = wxDynamicCast(m_parentAsWindow, wxInfoBar);

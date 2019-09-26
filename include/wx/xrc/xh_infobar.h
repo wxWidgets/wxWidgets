@@ -2,7 +2,7 @@
 // Name:        wx/xrc/xh_infobar.h
 // Purpose:     XML resource handler for wxInfoBar
 // Author:      Ilya Sinitsyn
-// Created:     2019/09/25
+// Created:     2019-09-25
 // Copyright:   (c) 2019 TT-Solutions SARL
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////

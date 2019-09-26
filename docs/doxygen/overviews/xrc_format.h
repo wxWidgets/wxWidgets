@@ -1236,15 +1236,17 @@ page.
 @beginTable
 @hdr3col{property, type, description}
 @row3col{showeffect, @ref overview_xrcformat_type_showeffect,
-     The effect to use when showing the bar.}
+     The effect to use when showing the bar (optional).}
 @row3col{hideeffect, @ref overview_xrcformat_type_showeffect,
-     The effect to use when hiding the bar.}
+     The effect to use when hiding the bar (optional).}
 @row3col{effectduration, integer,
-     The duration of the animation used when showing or hiding the bar.}
+     The duration of the animation used when showing or hiding the bar
+     (optional).}
 @row3col{button, object,
      Add a button to be shown in the info bar (see wxInfoBar::AddButton);
      this property is of class "button" has name (can be one of standard
-     button ID) and has optional label property.}
+     button ID) and has optional label property. If no buttons are added
+     to the info bar, the default "Close" button will be shown.}
 @endTable
 
 Example:
@@ -1259,6 +1261,8 @@ Example:
     </object>
 </object>
 @endcode
+
+@since 3.1.3
 
 
 @subsubsection xrc_wxlistbox wxListBox
