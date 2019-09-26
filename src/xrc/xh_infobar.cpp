@@ -88,7 +88,7 @@ bool wxInfoBarXmlHandler::CanHandle(wxXmlNode *node)
 
 wxShowEffect wxInfoBarXmlHandler::GetShowEffect(wxString const& param)
 {
-    if (!HasParam(param))
+    if ( !HasParam(param) )
         return wxSHOW_EFFECT_NONE;
 
     wxString const& value = GetParamValue(param);

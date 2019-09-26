@@ -418,7 +418,8 @@ void MyFrame::OnInfoBarShowMessage(wxCommandEvent& event)
 #if wxUSE_INFOBAR
     // get the pointers we need
     wxButton *btn = wxDynamicCast(event.GetEventObject(), wxButton);
-    if (!btn || !btn->GetParent()) return;
+    if ( !btn || !btn->GetParent() )
+        return;
 
     wxWindow *win = btn->GetParent();
     wxInfoBar *ctrl = XRCCTRL(*win, "controls_infobar", wxInfoBar);
