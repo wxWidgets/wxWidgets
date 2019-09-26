@@ -868,7 +868,7 @@
 		00DA3D3EEF5E305CA73A1871 /* region.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = region.cpp; path = ../../src/osx/carbon/region.cpp; sourceTree = "<group>"; };
 		0116581B77DF3A5D889B8D17 /* dndcmn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dndcmn.cpp; path = ../../src/common/dndcmn.cpp; sourceTree = "<group>"; };
 		01BA6D45FE4C381493EB4372 /* validate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = validate.cpp; path = ../../src/common/validate.cpp; sourceTree = "<group>"; };
-		027D2F04BE933ED6B9BA1518 /* imaglist.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imaglist.cpp; path = ../../src/osx/imaglist.cpp; sourceTree = "<group>"; };
+		027D2F04BE933ED6B9BA1518 /* imaglist.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imaglist.cpp; path = ../../src/generic/imaglist.cpp; sourceTree = "<group>"; };
 		029486D6A2EC3DE0902A6A24 /* jfdctfst.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jfdctfst.c; path = ../../src/jpeg/jfdctfst.c; sourceTree = "<group>"; };
 		02D2E8B5C89939CE90B99E2B /* archive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = archive.cpp; path = ../../src/common/archive.cpp; sourceTree = "<group>"; };
 		02D9332D5C5632E981936E29 /* jquant2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = jquant2.c; path = ../../src/jpeg/jquant2.c; sourceTree = "<group>"; };
