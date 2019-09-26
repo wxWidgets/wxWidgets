@@ -35,7 +35,7 @@ extern int wxOpenModalDialogsCount;
 static const int wxGTK_TITLE_ID = -3;
 
 #if wxUSE_ACCEL
-static void wxGetGtkAccel(const wxMenuItem*, guint*, GdkModifierType*);
+static bool wxGetGtkAccel(const wxMenuItem*, guint*, GdkModifierType*);
 #endif
 
 // Unity hack: under Ubuntu Unity the global menu bar is not affected by a
@@ -643,8 +643,7 @@ void wxMenuItem::SetItemLabel( const wxString& str )
         // remove old accelerator
         guint accel_key;
         GdkModifierType accel_mods;
-        wxGetGtkAccel(this, &accel_key, &accel_mods);
-        if (accel_key)
+        if ( wxGetGtkAccel(this, &accel_key, &accel_mods) )
         {
             gtk_widget_remove_accelerator(
                 m_menuItem, GetRootParentMenu(m_parentMenu)->m_accel, accel_key, accel_mods);
@@ -664,8 +663,7 @@ void wxMenuItem::SetGtkLabel()
 #if wxUSE_ACCEL
     guint accel_key;
     GdkModifierType accel_mods;
-    wxGetGtkAccel(this, &accel_key, &accel_mods);
-    if ( accel_key && gtk_accelerator_valid( accel_key, accel_mods ) )
+    if ( wxGetGtkAccel(this, &accel_key, &accel_mods) )
     {
         gtk_widget_add_accelerator(
             m_menuItem, "activate", GetRootParentMenu(m_parentMenu)->m_accel,
@@ -1038,6 +1036,18 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
         if ( flags & wxACCEL_SHIFT )
             hotkey += wxT("<shift>");
 
+        // Accelerator can be invalid for 2 different reasons from GTK point of
+        // view: either the key just can't be used as an accelerator at all
+        // (e.g. TAB), or it can only be used as an accelerator with modifiers.
+        // This variable can be set to one of the matching values in the switch
+        // below and is used to give the most fitting error message later.
+        enum Validity
+        {
+            Valid_Always,
+            Valid_Never,
+            Valid_WithModifiers
+        } validity = Valid_Always;
+
         int code = accel->GetKeyCode();
         switch ( code )
         {
@@ -1059,28 +1069,20 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 hotkey << wxT("Delete" );
                 break;
             case WXK_UP:
-                if ( flags )
-                    hotkey << wxT("Up" );
-                else
-                    hotkey.clear();
+                validity = Valid_WithModifiers;
+                hotkey << wxT("Up" );
                 break;
             case WXK_DOWN:
-                if ( flags )
-                    hotkey << wxT("Down" );
-                else
-                    hotkey.clear();
+                validity = Valid_WithModifiers;
+                hotkey << wxT("Down" );
                 break;
             case WXK_LEFT:
-                if ( flags )
-                    hotkey << wxT("Left" );
-                else
-                    hotkey.clear();
+                validity = Valid_WithModifiers;
+                hotkey << wxT("Left" );
                 break;
             case WXK_RIGHT:
-                if ( flags )
-                    hotkey << wxT("Right" );
-                else
-                    hotkey.clear();
+                validity = Valid_WithModifiers;
+                hotkey << wxT("Right" );
                 break;
             case WXK_PAGEUP:
                 hotkey << wxT("Page_Up" );
@@ -1153,28 +1155,20 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 hotkey << wxT("KP_Home" );
                 break;
              case WXK_NUMPAD_UP:
-                if ( flags )
-                    hotkey << wxT("KP_Up" );
-                else
-                    hotkey.clear();
+                validity = Valid_WithModifiers;
+                hotkey << wxT("KP_Up" );
                 break;
             case WXK_NUMPAD_DOWN:
-                if ( flags )
-                    hotkey << wxT("KP_Down" );
-                else
-                    hotkey.clear();
+                validity = Valid_WithModifiers;
+                hotkey << wxT("KP_Down" );
                 break;
             case WXK_NUMPAD_LEFT:
-                if ( flags )
-                    hotkey << wxT("KP_Left" );
-                else
-                    hotkey.clear();
+                validity = Valid_WithModifiers;
+                hotkey << wxT("KP_Left" );
                 break;
             case WXK_NUMPAD_RIGHT:
-                if ( flags )
-                    hotkey << wxT("KP_Right" );
-                else
-                    hotkey.clear();
+                validity = Valid_WithModifiers;
+                hotkey << wxT("KP_Right" );
                 break;
             case WXK_NUMPAD_PAGEUP:
                 hotkey << wxT("KP_Page_Up" );
@@ -1258,7 +1252,7 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
             case WXK_SPECIAL13: case WXK_SPECIAL14: case WXK_SPECIAL15:
             case WXK_SPECIAL16: case WXK_SPECIAL17: case WXK_SPECIAL18:
             case WXK_SPECIAL19: case WXK_SPECIAL20:
-                hotkey.clear();
+                validity = Valid_Never;
                 break;
 
             // if there are any other keys wxAcceleratorEntry::Create() may
@@ -1280,33 +1274,76 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 hotkey.clear();
         }
 
+        switch ( validity )
+        {
+            case Valid_Always:
+                break;
+
+            case Valid_Never:
+                wxLogDebug("\"%s\" is not supported as "
+                           "a keyboard accelerator with GTK",
+                           accel->ToString());
+                hotkey.clear();
+                break;
+
+            case Valid_WithModifiers:
+                if ( !flags )
+                {
+                    wxLogDebug("\"%s\" must use modifiers to be used as "
+                               "a keyboard accelerator with GTK",
+                               accel->ToString());
+                    hotkey.clear();
+                }
+                break;
+        }
+
         delete accel;
     }
 
     return hotkey;
 }
 
-static void
+static bool
 wxGetGtkAccel(const wxMenuItem* item, guint* accel_key, GdkModifierType* accel_mods)
 {
-    *accel_key = 0;
     const wxString string = GetGtkHotKey(*item);
     if (!string.empty())
+    {
         gtk_accelerator_parse(wxGTK_CONV_SYS(string), accel_key, accel_mods);
+
+        // Normally, we detect all the keys considered invalid by GTK in
+        // GetGtkHotKey(), but just in case GTK decides to add more invalid
+        // keys in the future versions, recheck once again using its function.
+        if ( gtk_accelerator_valid(*accel_key, *accel_mods) )
+            return true;
+
+        wxLogDebug("\"%s\" is not a valid keyboard accelerator "
+                   "for this GTK version",
+                   string);
+    }
 #ifndef __WXGTK4__
     else
     {
         wxGCC_WARNING_SUPPRESS(deprecated-declarations)
+
+        // Check if this is a stock item for which GTK defines a default
+        // accelerator.
         GtkStockItem stock_item;
         const char* stockid = wxGetStockGtkID(item->GetId());
-        if (stockid && gtk_stock_lookup(stockid, &stock_item))
+        if ( stockid &&
+                gtk_stock_lookup(stockid, &stock_item) &&
+                    stock_item.keyval )
         {
             *accel_key = stock_item.keyval;
             *accel_mods = stock_item.modifier;
+
+            return true;
         }
         wxGCC_WARNING_RESTORE()
     }
 #endif
+
+    return false;
 }
 #endif // wxUSE_ACCEL
 
