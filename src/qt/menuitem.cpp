@@ -25,6 +25,10 @@ public:
     wxQtAction( wxMenu *parent, int id, const wxString &text, const wxString &help,
         wxItemKind kind, wxMenu *subMenu, wxMenuItem *handler );
 
+    // Set the action shortcut to correspond to the accelerator specified by
+    // the given label.
+    void UpdateShortcutsFromLabel(const wxString& text);
+
 private:
     void onActionTriggered( bool checked );
 };
@@ -51,19 +55,7 @@ void wxMenuItem::SetItemLabel( const wxString &label )
 {
     wxMenuItemBase::SetItemLabel( label );
 
-#if wxUSE_ACCEL
-    QString qlabel = wxQtConvertString( label );
-    int index = qlabel.lastIndexOf( QChar( '\t' ) );
-
-    if ( index != -1 )
-    {
-        QList<QKeySequence> shortcuts = m_qtAction->shortcuts();
-        QString shortcut_key = qlabel.remove( 0, index+1 );
-
-        shortcuts.append( QKeySequence( shortcut_key ) );
-        m_qtAction->setShortcuts( shortcuts );
-    }
-#endif // wxUSE_ACCEL
+    m_qtAction->UpdateShortcutsFromLabel( label );
 
     m_qtAction->setText( wxQtConvertString( label ));
 }
@@ -175,8 +167,26 @@ wxQtAction::wxQtAction( wxMenu *parent, int id, const wxString &text, const wxSt
     }
 
     connect( this, &QAction::triggered, this, &wxQtAction::onActionTriggered );
+
+    UpdateShortcutsFromLabel( text );
 }
 
+void wxQtAction::UpdateShortcutsFromLabel(const wxString& text)
+{
+#if wxUSE_ACCEL
+    QString qlabel = wxQtConvertString( text );
+    int index = qlabel.lastIndexOf( QChar( '\t' ) );
+
+    if ( index != -1 )
+    {
+        QList<QKeySequence> shortcuts = m_qtAction->shortcuts();
+        QString shortcut_key = qlabel.remove( 0, index+1 );
+
+        shortcuts.append( QKeySequence( shortcut_key ) );
+        setShortcuts( shortcuts );
+    }
+#endif // wxUSE_ACCEL
+}
 
 void wxQtAction::onActionTriggered( bool checked )
 {
