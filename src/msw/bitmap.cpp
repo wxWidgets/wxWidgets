@@ -1259,6 +1259,53 @@ void wxBitmap::MSWUpdateAlpha()
 #endif // wxUSE_WXDIB/!wxUSE_WXDIB
 }
 
+void wxBitmap::MSWBlendMaskWithAlpha()
+{
+#if defined(wxHAS_RAW_BITMAP)
+    if ( !HasAlpha() || !GetMask() )
+        return;
+    // Update alpha channel by blending original alpha values with mask and then remove the mask.
+    // For non-masked pixels alpha channel values will remain intact and for masked pixels
+    // they will be set to the transparent value (0).
+    AllocExclusive();
+
+    {
+        wxBitmap bmpMask = GetMask()->GetBitmap();
+        wxNativePixelData maskData(bmpMask);
+        wxCHECK_RET(maskData, "No access to bitmap mask data");
+
+        wxAlphaPixelData bmpData(*this);
+        wxCHECK_RET(bmpData, "No access to bitmap data");
+
+        const int w = GetWidth();
+        const int h = GetHeight();
+
+        wxNativePixelData::Iterator maskRowStart(maskData);
+        wxAlphaPixelData::Iterator bmpRowStart(bmpData);
+        for ( int y = 0; y < h; y++ )
+        {
+            wxNativePixelData::Iterator pMask = maskRowStart;
+            wxAlphaPixelData::Iterator pBmp = bmpRowStart;
+            for ( int x = 0; x < w; x++, ++pBmp, ++pMask )
+            {
+                // Masked pixel is not drawn i.e. is transparent,
+                // non-masked pixel is untouched.
+                if ( pMask.Red() == 0 )
+                {
+                    pBmp.Red() = pBmp.Green() = pBmp.Blue() = 0; // pre-multiplied
+                    pBmp.Alpha() = wxALPHA_TRANSPARENT;
+                }
+            }
+            maskRowStart.OffsetY(maskData, 1);
+            bmpRowStart.OffsetY(bmpData, 1);
+        }
+    }
+    GetBitmapData()->SetMask((wxMask*)NULL);
+    wxASSERT(HasAlpha());
+    wxASSERT(!GetMask());
+#endif // wxHAS_RAW_BITMAP
+}
+
 // ----------------------------------------------------------------------------
 // wxBitmap setters
 // ----------------------------------------------------------------------------
@@ -1733,6 +1780,20 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
 
     if ( bmp.HasAlpha() )
     {
+        // Make a copy in case we would neeed to remove its mask.
+        // If this will not be necessary, the copy is cheap as bitmaps are reference-counted.
+        wxBitmap curBmp(bmp);
+
+        // For bitmap with both alpha channel and mask we have to apply mask on our own
+        // because 32 bpp icons don't work properly with mask bitmaps.
+        // To do so we will create a temporary bitmap with copy of RGB data and with alpha channel
+        // being a superposition of the original alpha values and the mask - for non-masked pixels
+        // alpha channel values will remain intact and for masked pixels they will be set to the transparent value.
+        if ( curBmp.GetMask() )
+        {
+            curBmp.MSWBlendMaskWithAlpha();
+        }
+
         HBITMAP hbmp;
 
 #if wxUSE_WXDIB && wxUSE_IMAGE
@@ -1741,17 +1802,17 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
         // a special DIB in such format to pass to it. This is inefficient but
         // better than creating an icon with wrong colours.
         AutoHBITMAP hbmpRelease;
-        hbmp = wxDIB(bmp.ConvertToImage(),
+        hbmp = wxDIB(curBmp.ConvertToImage(),
                      wxDIB::PixelFormat_NotPreMultiplied).Detach();
         hbmpRelease.Init(hbmp);
 #else // !(wxUSE_WXDIB && wxUSE_IMAGE)
-        hbmp = GetHbitmapOf(bmp);
+        hbmp = GetHbitmapOf(curBmp);
 #endif // wxUSE_WXDIB && wxUSE_IMAGE
 
         // Create an empty mask bitmap.
         // it doesn't seem to work if we mess with the mask at all.
         AutoHBITMAP
-            hMonoBitmap(CreateBitmap(bmp.GetWidth(),bmp.GetHeight(),1,1,NULL));
+            hMonoBitmap(CreateBitmap(curBmp.GetWidth(),curBmp.GetHeight(),1,1,NULL));
 
         ICONINFO iconInfo;
         wxZeroMemory(iconInfo);

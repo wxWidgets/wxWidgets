@@ -52,6 +52,7 @@
 #include "objrefdlg.h"
 // For functions to manipulate the corresponding controls.
 #include "wx/animate.h"
+#include "wx/infobar.h"
 #include "wx/treectrl.h"
 #include "wx/listctrl.h"
 
@@ -265,6 +266,12 @@ void MyFrame::OnControlsToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
              XRCID("controls_animation_button_play"));
 #endif
 
+#if wxUSE_INFOBAR
+    // Show the message on button click
+    dlg.Bind(wxEVT_BUTTON, &MyFrame::OnInfoBarShowMessage, this,
+        XRCID("controls_infobar_button_message"));
+#endif
+
     // All done. Show the dialog.
     dlg.ShowModal();
 }
@@ -404,4 +411,19 @@ void MyFrame::OnAboutToolOrMenuCommand(wxCommandEvent& WXUNUSED(event))
                 "Welcome to %s", wxVERSION_STRING);
 
     wxMessageBox(msg, _("About XML resources demo"), wxOK | wxICON_INFORMATION, this);
+}
+
+void MyFrame::OnInfoBarShowMessage(wxCommandEvent& event)
+{
+#if wxUSE_INFOBAR
+    // get the pointers we need
+    wxButton *btn = wxDynamicCast(event.GetEventObject(), wxButton);
+    if ( !btn || !btn->GetParent() )
+        return;
+
+    wxWindow *win = btn->GetParent();
+    wxInfoBar *ctrl = XRCCTRL(*win, "controls_infobar", wxInfoBar);
+    ctrl->ShowMessage("Message", wxICON_QUESTION);
+#endif
+
 }

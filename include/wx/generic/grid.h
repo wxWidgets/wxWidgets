@@ -1359,6 +1359,11 @@ public:
     void     DisableDragColMove() { EnableDragColMove( false ); }
     bool     CanDragColMove() const { return m_canDragColMove; }
 
+    // interactive column hiding (enabled by default, works only for native header)
+    bool     EnableHidingColumns( bool enable = true );
+    void     DisableHidingColumns() { EnableHidingColumns(false); }
+    bool     CanHideColumns() { return m_canHideColumns; }
+
     // interactive resizing of grid cells (enabled by default)
     void     EnableDragGridSize(bool enable = true);
     void     DisableDragGridSize() { EnableDragGridSize(false); }
@@ -1942,7 +1947,6 @@ public:
 
 
     // override some base class functions
-    virtual bool Enable(bool enable = true) wxOVERRIDE;
     virtual wxWindow *GetMainWindowOfCompositeControl() wxOVERRIDE
         { return (wxWindow*)m_gridWin; }
     virtual void Fit() wxOVERRIDE;
@@ -1952,6 +1956,7 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual void DoEnable(bool enable) wxOVERRIDE;
 
     bool m_created;
 
@@ -2172,6 +2177,7 @@ protected:
     bool    m_canDragRowSize;
     bool    m_canDragColSize;
     bool    m_canDragColMove;
+    bool    m_canHideColumns;
     bool    m_canDragGridSize;
     bool    m_canDragCell;
 

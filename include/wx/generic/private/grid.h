@@ -147,7 +147,7 @@ public:
                        wxID_ANY,
                        wxDefaultPosition,
                        wxDefaultSize,
-                       wxHD_ALLOW_HIDE |
+                       (owner->CanHideColumns() ? wxHD_ALLOW_HIDE : 0) |
                        (owner->CanDragColMove() ? wxHD_ALLOW_REORDER : 0))
     {
     }

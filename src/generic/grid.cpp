@@ -276,7 +276,7 @@ void wxGridHeaderLabelsRenderer::DrawLabel(const wxGrid& grid,
     // because this results in a better disabled appearance for the default
     // bold font used for the labels.
     wxColour colText;
-    if ( !grid.IsThisEnabled() )
+    if ( !grid.IsEnabled() )
     {
         colText = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNHIGHLIGHT);
         dc.SetTextForeground(colText);
@@ -2607,6 +2607,7 @@ void wxGrid::Init()
     m_gridFrozenBorderPenWidth = 2;
 
     m_canDragColMove = false;
+    m_canHideColumns = true;
 
     m_cursorMode  = WXGRID_CURSOR_SELECT_CELL;
     m_winCapture = NULL;
@@ -3613,7 +3614,7 @@ void wxGrid::UpdateCurrentCellOnRedim()
                 col = m_numCols - 1;
             if (row >= m_numRows)
                 row = m_numRows - 1;
-            SetCurrentCell(col, row);
+            SetCurrentCell(row, col);
         }
     }
 }
@@ -4826,6 +4827,18 @@ bool wxGrid::EnableDragColMove( bool enable )
     // right as it would mean there would be no way to "freeze" the current
     // columns order by disabling moving them after putting them in the desired
     // order, whereas now you can always call ResetColPos() manually if needed
+    return true;
+}
+
+bool wxGrid::EnableHidingColumns(bool enable)
+{
+    if ( m_canHideColumns == enable || !m_useNativeHeader )
+        return false;
+
+    GetGridColHeader()->ToggleWindowStyle(wxHD_ALLOW_HIDE);
+
+    m_canHideColumns = enable;
+
     return true;
 }
 
@@ -6804,15 +6817,11 @@ void wxGrid::ForceRefresh()
     EndBatch();
 }
 
-bool wxGrid::Enable(bool enable)
+void wxGrid::DoEnable(bool enable)
 {
-    if ( !wxScrolledWindow::Enable(enable) )
-        return false;
+    wxScrolledWindow::DoEnable(enable);
 
-    // redraw in the new state
-    m_gridWin->Refresh();
-
-    return true;
+    Refresh(false /* don't erase background */);
 }
 
 //
@@ -9371,12 +9380,29 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
 
     if ( column )
     {
-        dc.GetMultiLineTextExtent( GetColLabelValue(colOrRow), &w, &h );
-        if ( GetColLabelTextOrientation() == wxVERTICAL )
-            w = h;
+        if ( m_useNativeHeader )
+        {
+            w = GetGridColHeader()->GetColumnTitleWidth(colOrRow);
+            h = 0;
+        }
+        else
+        {
+            dc.GetMultiLineTextExtent( GetColLabelValue(colOrRow), &w, &h );
+            if ( GetColLabelTextOrientation() == wxVERTICAL )
+                w = h;
+
+            // leave some space around text
+            if ( w )
+                w += 10;
+        }
     }
     else
+    {
         dc.GetMultiLineTextExtent( GetRowLabelValue(colOrRow), &w, &h );
+
+        if ( h )
+            h += 6;
+    }
 
     extent = column ? w : h;
     if ( extent > extentMax )
@@ -9387,14 +9413,6 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
         // empty column - give default extent (notice that if extentMax is less
         // than default extent but != 0, it's OK)
         extentMax = column ? m_defaultColWidth : m_defaultRowHeight;
-    }
-    else
-    {
-        if ( column )
-            // leave some space around text
-            extentMax += 10;
-        else
-            extentMax += 6;
     }
 
     if ( column )

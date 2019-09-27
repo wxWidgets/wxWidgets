@@ -568,6 +568,14 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxUnusedVar(outlineView);
 
+    if ( implementation->GetDataViewCtrl()->IsDeleting() )
+    {
+        // Note that returning "NO" here would result in currently expanded
+        // branches not being expanded any more, while returning "YES" doesn't
+        // seem to have any ill effects, even though this is clearly bogus.
+        return YES;
+    }
+
     wxCHECK_MSG( model, 0, "Valid model in data source does not exist." );
     return model->IsContainer(wxDataViewItemFromItem(item));
 }
@@ -597,6 +605,15 @@ outlineView:(NSOutlineView*)outlineView
 {
     wxUnusedVar(outlineView);
 
+    // We ignore any calls to this function happening while items are being
+    // deleted, as they can (only?) come from -[NSTableView textDidEndEditing:]
+    // called from our own textDidEndEditing, which is called by
+    // -[NSOutlineView reloadItem:reloadChildren:], and if the item being
+    // edited is one of the items being deleted, then trying to use it would
+    // attempt to use already freed memory and crash.
+    if ( implementation->GetDataViewCtrl()->IsDeleting() )
+        return nil;
+
     wxCHECK_MSG( model, nil, "Valid model in data source does not exist." );
 
     wxDataViewColumn* const
@@ -622,6 +639,11 @@ outlineView:(NSOutlineView*)outlineView
     byItem:(id)item
 {
     wxUnusedVar(outlineView);
+
+    // See the comment in outlineView:objectValueForTableColumn:byItem: above:
+    // this function can also be called in the same circumstances.
+    if ( implementation->GetDataViewCtrl()->IsDeleting() )
+        return;
 
     wxDataViewColumn* const
         col([static_cast<wxDVCNSTableColumn*>(tableColumn) getColumnPointer]);
@@ -1655,10 +1677,35 @@ outlineView:(NSOutlineView*)outlineView
     // and setDoubleAction: seems to be wrong as this action message is always
     // sent whether the cell is editable or not
     wxDataViewCtrl* const dvc = implementation->GetDataViewCtrl();
+    wxDataViewModel * const model = dvc->GetModel();
 
     const wxDataViewItem item = wxDataViewItemFromItem([self itemAtRow:[self clickedRow]]);
+
+    const NSInteger col = [self clickedColumn];
+    wxDataViewColumn* const dvCol = implementation->GetColumn(col);
+
+    // Check if we need to activate a custom renderer first.
+    if ( wxDataViewCustomRenderer* const
+            renderer = wxDynamicCast(dvCol->GetRenderer(), wxDataViewCustomRenderer) )
+    {
+        if ( renderer->GetMode() == wxDATAVIEW_CELL_ACTIVATABLE &&
+                model->IsEnabled(item, dvCol->GetModelColumn()) )
+        {
+            const wxRect rect = implementation->GetRectangle(item, dvCol);
+
+            wxMouseEvent mouseEvent(wxEVT_LEFT_DCLICK);
+            wxPoint pos = dvc->ScreenToClient(wxGetMousePosition());
+            pos -= rect.GetPosition();
+            mouseEvent.m_x = pos.x;
+            mouseEvent.m_y = pos.y;
+
+            renderer->ActivateCell(rect, model, item, col, &mouseEvent);
+        }
+    }
+
+    // And then send the ACTIVATED event in any case.
     wxDataViewEvent event(wxEVT_DATAVIEW_ITEM_ACTIVATED, dvc, item);
-    event.SetColumn( [self clickedColumn] );
+    event.SetColumn(col);
     dvc->GetEventHandler()->ProcessEvent(event);
 }
 
@@ -1937,6 +1984,10 @@ outlineView:(NSOutlineView*)outlineView
 {
     // call method of superclass (otherwise editing does not work correctly -
     // the outline data source class is not informed about a change of data):
+    //
+    // Note that we really, really need to do this, as otherwise we would be
+    // left with an orphan text control -- even though doing this forces us to
+    // have the checks for IsDeleting() in several other methods of this class.
     [super textDidEndEditing:notification];
 
     // under OSX an event indicating the end of an editing session can be sent
@@ -2339,16 +2390,7 @@ bool wxCocoaDataViewControl::Reload()
     return true;
 }
 
-bool wxCocoaDataViewControl::Remove(const wxDataViewItem& parent, const wxDataViewItem& WXUNUSED(item))
-{
-    if (parent.IsOk())
-        [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];
-    else
-        [m_OutlineView reloadData];
-    return true;
-}
-
-bool wxCocoaDataViewControl::Remove(const wxDataViewItem& parent, const wxDataViewItemArray& WXUNUSED(item))
+bool wxCocoaDataViewControl::Remove(const wxDataViewItem& parent)
 {
     if (parent.IsOk())
         [m_OutlineView reloadItem:[m_DataSource getDataViewItemFromBuffer:parent] reloadChildren:YES];

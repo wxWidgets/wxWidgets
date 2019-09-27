@@ -850,8 +850,6 @@ void GridTestCase::WindowAsEditorControl()
         wxGridCellEditor* Clone() const wxOVERRIDE { return new TestEditor(); }
 
         wxString GetValue() const wxOVERRIDE { return "value"; }
-
-        wxDECLARE_NO_COPY_CLASS(TestEditor);
     };
 
     wxGridCellAttr* attr = new wxGridCellAttr();

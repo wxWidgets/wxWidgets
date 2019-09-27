@@ -590,9 +590,10 @@ int wxRendererMSW::GetHeaderButtonHeight(wxWindow * win)
     return Header_Layout(hwndHeader, &hdl) ? wp.cy : DEFAULT_HEIGHT;
 }
 
-int wxRendererMSW::GetHeaderButtonMargin(wxWindow *WXUNUSED(win))
+int wxRendererMSW::GetHeaderButtonMargin(wxWindow *win)
 {
-    return 10;
+    // The native control seems to use 3*SM_CXEDGE margins on each size.
+    return 6*wxGetSystemMetrics(SM_CXEDGE, win);
 }
 
 // ============================================================================

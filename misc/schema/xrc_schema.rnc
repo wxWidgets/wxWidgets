@@ -193,6 +193,7 @@ builtinWindowClasses =
     | wxGrid
     | wxHtmlWindow
     | wxHyperlinkCtrl
+    | wxInfoBar
     | wxListBox
     | wxListbook
     | wxListCtrl
@@ -293,6 +294,7 @@ builtinClassesNames =
     | "wxGrid"
     | "wxHtmlWindow"
     | "wxHyperlinkCtrl"
+    | "wxInfoBar"
     | "wxListBox"
     | "wxListbook"
     | "wxListCtrl"
@@ -444,6 +446,12 @@ t_unsigned   = xsd:nonNegativeInteger
 t_float      = xsd:float
 t_direction  = "wxLEFT" | "wxRIGHT" | "wxTOP" | "wxBOTTOM"
 t_style      = xsd:string { pattern = "(wx[A-Z0-9_]+)( *\| *(wx[A-Z0-9_]+))*" }
+t_showeffect = "wxSHOW_EFFECT_NONE" | "wxSHOW_EFFECT_ROLL_TO_LEFT" |
+               "wxSHOW_EFFECT_ROLL_TO_RIGHT" | "wxSHOW_EFFECT_ROLL_TO_TOP" |
+               "wxSHOW_EFFECT_ROLL_TO_BOTTOM" | "wxSHOW_EFFECT_SLIDE_TO_LEFT" |
+               "wxSHOW_EFFECT_SLIDE_TO_RIGHT" | "wxSHOW_EFFECT_SLIDE_TO_TOP" |
+               "wxSHOW_EFFECT_SLIDE_TO_BOTTOM" | "wxSHOW_EFFECT_BLEND" |
+               "wxSHOW_EFFECT_EXPAND"
 
 t_url        = string
 t_colour     = xsd:string { pattern = "#[0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z][0-9a-zA-Z]" } |
@@ -1017,6 +1025,23 @@ wxHyperlinkCtrl =
         stdWindowProperties &
         [xrc:p="important"] element label {_, t_text }* &
         [xrc:p="important"] element url   {_, t_url }*
+    }
+
+
+wxInfoBar =
+    element object {
+        attribute class { "wxInfoBar" } &
+        stdObjectNodeAttributes &
+        stdWindowProperties &
+        [xrc:p="o"] element effectduration {_, t_integer }* &
+        [xrc:p="o"] element showeffect     {_, t_showeffect }* &
+        [xrc:p="o"] element hideeffect     {_, t_showeffect }* &
+        element object {
+            attribute class { "button" } &
+            attribute name  { t_identifier }? &
+            platform &
+            [xrc:p="o"] element label {_, t_text }*
+        }*
     }
 
 

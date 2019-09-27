@@ -2075,6 +2075,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
     switch ( event.GetKeyCode() )
     {
         case WXK_RETURN:
+        case WXK_NUMPAD_ENTER:
             // Single line controls only get this key code if they have
             // wxTE_PROCESS_ENTER style, but multiline ones always get it
             // because they need it for themselves. However we shouldn't

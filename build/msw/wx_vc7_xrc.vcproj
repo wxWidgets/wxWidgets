@@ -513,6 +513,9 @@
 				RelativePath="..\..\include\wx\xrc\xh_hyperlink.h">
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_infobar.h">
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_listb.h">
 			</File>
 			<File
@@ -714,6 +717,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xrc\xh_hyperlink.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\xrc\xh_infobar.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\xrc\xh_listb.cpp">

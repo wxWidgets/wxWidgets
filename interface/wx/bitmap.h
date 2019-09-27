@@ -734,6 +734,10 @@ public:
 
         @remarks The bitmap object owns the mask once this has been called.
 
+        @note A mask can be set also for bitmap with an alpha channel but
+        doing so under wxMSW is not recommended because performance of drawing
+        such bitmap is not very good.
+
         @see GetMask(), wxMask
     */
     virtual void SetMask(wxMask* mask);
@@ -776,6 +780,10 @@ wxBitmap wxNullBitmap;
 
     When associated with a bitmap and drawn in a device context, the unmasked
     area of the bitmap will be drawn, and the masked area will not be drawn.
+
+    @note A mask can be associated also with a bitmap with an alpha channel
+    but drawing such bitmaps under wxMSW may be slow so using them should be
+    avoided if drawing performance is an important factor.
 
     @library{wxcore}
     @category{gdi}

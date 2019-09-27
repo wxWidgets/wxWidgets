@@ -53,9 +53,7 @@ public:
         , m_keyCode(keyCode)
         , m_command(cmd)
         , m_item(item)
-    {
-        ValidateKey(flags, keyCode);
-    }
+        { }
 
     // create accelerator corresponding to the specified string, return NULL if
     // string couldn't be parsed or a pointer to be deleted by the caller
@@ -63,8 +61,6 @@ public:
 
     void Set(int flags, int keyCode, int cmd, wxMenuItem *item = NULL)
     {
-        ValidateKey(flags, keyCode);
-
         m_flags = flags;
         m_keyCode = keyCode;
         m_command = cmd;
@@ -121,8 +117,6 @@ public:
 
 private:
     wxString AsPossiblyLocalizedString(bool localized) const;
-
-    static bool ValidateKey(int flags, int keycode);
 
     // common part of Create() and FromString()
     static bool ParseAccel(const wxString& str, int *flags, int *keycode);

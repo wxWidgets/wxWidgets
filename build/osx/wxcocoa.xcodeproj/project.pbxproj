@@ -2286,6 +2286,9 @@
 		CE32C5250F2834D4B81BE898 /* appprogress.mm in Sources */ = {isa = PBXBuildFile; fileRef = BD91A34971FB3D0299B894A5 /* appprogress.mm */; };
 		CE32C5250F2834D4B81BE899 /* appprogress.mm in Sources */ = {isa = PBXBuildFile; fileRef = BD91A34971FB3D0299B894A5 /* appprogress.mm */; };
 		CE32C5250F2834D4B81BE89A /* appprogress.mm in Sources */ = {isa = PBXBuildFile; fileRef = BD91A34971FB3D0299B894A5 /* appprogress.mm */; };
+		EA10DA3199813E90B39C70D3 /* xh_infobar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C65E309F3A39598C043657 /* xh_infobar.cpp */; };
+		EA10DA3199813E90B39C70D4 /* xh_infobar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C65E309F3A39598C043657 /* xh_infobar.cpp */; };
+		EA10DA3199813E90B39C70D5 /* xh_infobar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 45C65E309F3A39598C043657 /* xh_infobar.cpp */; };
 		CEBAAB0C77983358A601BFFE /* jdmaster.c in Sources */ = {isa = PBXBuildFile; fileRef = ED19EF377E653F71B1876259 /* jdmaster.c */; };
 		CEBAAB0C77983358A601BFFF /* jdmaster.c in Sources */ = {isa = PBXBuildFile; fileRef = ED19EF377E653F71B1876259 /* jdmaster.c */; };
 		CEBAAB0C77983358A601C000 /* jdmaster.c in Sources */ = {isa = PBXBuildFile; fileRef = ED19EF377E653F71B1876259 /* jdmaster.c */; };
@@ -4629,6 +4632,7 @@
 		CD72950967F33809931D4968 /* LexAbaqus.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexAbaqus.cxx; path = ../../src/stc/scintilla/lexers/LexAbaqus.cxx; sourceTree = "<group>"; };
 		CDA232B9FFD33B7482E69B58 /* xh_tglbtn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xh_tglbtn.cpp; path = ../../src/xrc/xh_tglbtn.cpp; sourceTree = "<group>"; };
 		CDB4AB7CDABA3A54B4F8207B /* imaggif.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = imaggif.cpp; path = ../../src/common/imaggif.cpp; sourceTree = "<group>"; };
+		45C65E309F3A39598C043657 /* xh_infobar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = xh_infobar.cpp; path = ../../src/xrc/xh_infobar.cpp; sourceTree = "<group>"; };
 		CF23AF3EFC5731B2A5BCF4A3 /* choicdgg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = choicdgg.cpp; path = ../../src/generic/choicdgg.cpp; sourceTree = "<group>"; };
 		CF4F4F5211933057824B5621 /* button_osx.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = button_osx.cpp; path = ../../src/osx/button_osx.cpp; sourceTree = "<group>"; };
 		CF502E0E4D853CBBBEC885EF /* LexerSimple.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LexerSimple.cxx; path = ../../src/stc/scintilla/lexlib/LexerSimple.cxx; sourceTree = "<group>"; };
@@ -5776,6 +5780,7 @@
 				93B77251C0E0382D9A8E113D /* xh_grid.cpp */,
 				889FFA9573A835F280A21CB4 /* xh_html.cpp */,
 				B4E4032CA9883CA4B25BE082 /* xh_hyperlink.cpp */,
+				45C65E309F3A39598C043657 /* xh_infobar.cpp */,
 				B4DCCF66D880330A9EE9B6B2 /* xh_listb.cpp */,
 				57EB0085AFB93BFC88AC6FFC /* xh_listbk.cpp */,
 				5F5D02D60DCA35358B2780C7 /* xh_listc.cpp */,
@@ -7943,6 +7948,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA10DA3199813E90B39C70D5 /* xh_infobar.cpp in Sources */,
 				8F949B9010863F66A58FFEF3 /* xh_activityindicator.cpp in Sources */,
 				FBE4DB30865D3177B3A9993D /* xh_animatctrl.cpp in Sources */,
 				702616D38A5B345D9CC87116 /* xh_bannerwindow.cpp in Sources */,
@@ -8151,6 +8157,7 @@
 				9FB1E1763EFA334CA0C07C4A /* tarstrm.cpp in Sources */,
 				2E4747E0736B30569ACD5423 /* textbuf.cpp in Sources */,
 				6167245C417A32179EC37D2E /* textfile.cpp in Sources */,
+				EA10DA3199813E90B39C70D4 /* xh_infobar.cpp in Sources */,
 				B20B7313102232A4B3E01ABB /* threadinfo.cpp in Sources */,
 				98AD7D0478BA36249B03C624 /* time.cpp in Sources */,
 				7FC3D17B3C853FE58841002E /* timercmn.cpp in Sources */,
@@ -9378,6 +9385,7 @@
 				9FB1E1763EFA334CA0C07C49 /* tarstrm.cpp in Sources */,
 				2E4747E0736B30569ACD5422 /* textbuf.cpp in Sources */,
 				6167245C417A32179EC37D2D /* textfile.cpp in Sources */,
+				EA10DA3199813E90B39C70D3 /* xh_infobar.cpp in Sources */,
 				B20B7313102232A4B3E01ABA /* threadinfo.cpp in Sources */,
 				98AD7D0478BA36249B03C623 /* time.cpp in Sources */,
 				7FC3D17B3C853FE58841002D /* timercmn.cpp in Sources */,

@@ -205,6 +205,9 @@ public:
     // values in its alpha channel.
     void MSWUpdateAlpha();
 
+    // Blend mask with alpha channel and remove the mask
+    void MSWBlendMaskWithAlpha();
+
 public:
 #if WXWIN_COMPATIBILITY_3_0
     wxDEPRECATED_INLINE(void SetHBITMAP(WXHBITMAP bmp), SetHandle((WXHANDLE)bmp); )
