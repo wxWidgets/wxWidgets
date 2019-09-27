@@ -11,7 +11,8 @@
 #include "wx/textctrl.h"
 
 class wxQtListTreeWidget;
-class QTreeWidgetItem;
+class wxQtListModel;
+class wxQtVirtualListModel;
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
@@ -159,6 +160,11 @@ public:
     // list or report view
     long GetTopItem() const;
 
+    virtual bool HasCheckBoxes() const wxOVERRIDE;
+    virtual bool EnableCheckBoxes(bool enable = true) wxOVERRIDE;
+    virtual bool IsItemChecked(long item) const wxOVERRIDE;
+    virtual void CheckItem(long item, bool check) wxOVERRIDE;
+
     // Add or remove a single window style
     void SetSingleStyle(long style, bool add = true);
 
@@ -273,16 +279,21 @@ protected:
     // Implement base class pure virtual methods.
     virtual long DoInsertColumn(long col, const wxListItem& info) wxOVERRIDE;
 
-    QTreeWidgetItem *QtGetItem(int id) const;
-
     wxImageList *     m_imageListNormal; // The image list for normal icons
     wxImageList *     m_imageListSmall;  // The image list for small icons
     wxImageList *     m_imageListState;  // The image list state icons (not implemented yet)
     bool              m_ownsImageListNormal,
                       m_ownsImageListSmall,
                       m_ownsImageListState;
+    bool              m_hasCheckBoxes;
+
 private:
+    // Allow access to OnGetItemXXX() method from the virtual model class.
+    friend class wxQtVirtualListModel;
+
+
     wxQtListTreeWidget *m_qtTreeWidget;
+    wxQtListModel *m_model;
 
     wxDECLARE_DYNAMIC_CLASS( wxListCtrl );
 };

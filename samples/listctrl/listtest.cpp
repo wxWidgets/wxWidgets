@@ -1543,7 +1543,8 @@ void MyListCtrl::OnContextMenu(wxContextMenuEvent& event)
         {
             point = ScreenToClient(point);
         }
-        ShowContextMenu(point);
+        int flags;
+        ShowContextMenu(point, HitTest(point, flags));
     }
     else
     {
@@ -1555,10 +1556,10 @@ void MyListCtrl::OnContextMenu(wxContextMenuEvent& event)
 }
 #endif
 
-void MyListCtrl::ShowContextMenu(const wxPoint& pos)
+void MyListCtrl::ShowContextMenu(const wxPoint& pos, long item)
 {
     wxMenu menu;
-
+    menu.Append(wxID_ANY, wxString::Format("Menu for item %ld", item));
     menu.Append(wxID_ABOUT, "&About");
     menu.AppendSeparator();
     menu.Append(wxID_EXIT, "E&xit");
