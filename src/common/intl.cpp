@@ -877,37 +877,34 @@ wxString wxLocale::GetSystemEncodingName()
 wxFontEncoding wxLocale::GetSystemEncoding()
 {
 #if defined(__WIN32__)
-    UINT codepage = ::GetACP();
+    const UINT codepage = ::GetACP();
 
-    // wxWidgets only knows about CP1250-1257, 874, 932, 936, 949, 950
-    if ( codepage >= 1250 && codepage <= 1257 )
+    switch ( codepage )
     {
-        return (wxFontEncoding)(wxFONTENCODING_CP1250 + codepage - 1250);
-    }
+        case 1250:
+        case 1251:
+        case 1252:
+        case 1253:
+        case 1254:
+        case 1255:
+        case 1256:
+        case 1257:
+            return (wxFontEncoding)(wxFONTENCODING_CP1250 + codepage - 1250);
 
-    if ( codepage == 874 )
-    {
-        return wxFONTENCODING_CP874;
-    }
+        case 874:
+            return wxFONTENCODING_CP874;
 
-    if ( codepage == 932 )
-    {
-        return wxFONTENCODING_CP932;
-    }
+        case 932:
+            return wxFONTENCODING_CP932;
 
-    if ( codepage == 936 )
-    {
-        return wxFONTENCODING_CP936;
-    }
+        case 936:
+            return wxFONTENCODING_CP936;
 
-    if ( codepage == 949 )
-    {
-        return wxFONTENCODING_CP949;
-    }
+        case 949:
+            return wxFONTENCODING_CP949;
 
-    if ( codepage == 950 )
-    {
-        return wxFONTENCODING_CP950;
+        case 950:
+            return wxFONTENCODING_CP950;
     }
 #elif defined(__WXMAC__)
     CFStringEncoding encoding = 0 ;
