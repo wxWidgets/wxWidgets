@@ -28,77 +28,26 @@
 #include "wx/cshelp.h"
 #include "wx/tooltip.h"
 
-class WindowTestCase : public CppUnit::TestCase
+class WindowTestCase
 {
 public:
-    WindowTestCase() { }
+    WindowTestCase()
+        : m_window(new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY))
+    {
+    }
 
-    void setUp() wxOVERRIDE;
-    void tearDown() wxOVERRIDE;
+    ~WindowTestCase()
+    {
+        wxTheApp->GetTopWindow()->DestroyChildren();
+    }
 
-private:
-    CPPUNIT_TEST_SUITE( WindowTestCase );
-        CPPUNIT_TEST( ShowHideEvent );
-        WXUISIM_TEST( KeyEvent );
-        CPPUNIT_TEST( FocusEvent );
-        CPPUNIT_TEST( Mouse );
-        CPPUNIT_TEST( Properties );
-#if wxUSE_TOOLTIPS
-        CPPUNIT_TEST( ToolTip );
-#endif // wxUSE_TOOLTIPS
-        CPPUNIT_TEST( Help );
-        CPPUNIT_TEST( Parent );
-        CPPUNIT_TEST( Siblings );
-        CPPUNIT_TEST( Children );
-        CPPUNIT_TEST( Focus );
-        CPPUNIT_TEST( Positioning );
-        CPPUNIT_TEST( PositioningBeyondShortLimit );
-        CPPUNIT_TEST( Show );
-        CPPUNIT_TEST( Enable );
-        CPPUNIT_TEST( FindWindowBy );
-    CPPUNIT_TEST_SUITE_END();
-
-    void ShowHideEvent();
-    void KeyEvent();
-    void FocusEvent();
-    void Mouse();
-    void Properties();
-#if wxUSE_TOOLTIPS
-    void ToolTip();
-#endif // wxUSE_TOOLTIPS
-    void Help();
-    void Parent();
-    void Siblings();
-    void Children();
-    void Focus();
-    void Positioning();
-    void PositioningBeyondShortLimit();
-    void Show();
-    void Enable();
-    void FindWindowBy();
-
-    wxWindow *m_window;
+protected:
+    wxWindow* const m_window;
 
     wxDECLARE_NO_COPY_CLASS(WindowTestCase);
 };
 
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( WindowTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( WindowTestCase, "WindowTestCase" );
-
-void WindowTestCase::setUp()
-{
-    m_window = new wxWindow(wxTheApp->GetTopWindow(), wxID_ANY);
-}
-
-void WindowTestCase::tearDown()
-{
-    wxTheApp->GetTopWindow()->DestroyChildren();
-}
-
-void WindowTestCase::ShowHideEvent()
+TEST_CASE_METHOD(WindowTestCase, "Window::ShowHideEvent", "[window]")
 {
 #if defined(__WXMSW__)
     EventCounter show(m_window, wxEVT_SHOW);
@@ -117,9 +66,12 @@ void WindowTestCase::ShowHideEvent()
 #endif // __WXMSW__
 }
 
-void WindowTestCase::KeyEvent()
+TEST_CASE_METHOD(WindowTestCase, "Window::KeyEvent", "[window]")
 {
 #if wxUSE_UIACTIONSIMULATOR
+    if ( !EnableUITests() )
+        return;
+
     EventCounter keydown(m_window, wxEVT_KEY_DOWN);
     EventCounter keyup(m_window, wxEVT_KEY_UP);
     EventCounter keychar(m_window, wxEVT_CHAR);
@@ -139,7 +91,7 @@ void WindowTestCase::KeyEvent()
 #endif
 }
 
-void WindowTestCase::FocusEvent()
+TEST_CASE_METHOD(WindowTestCase, "Window::FocusEvent", "[window]")
 {
 #ifndef __WXOSX__
     if ( IsAutomaticTest() )
@@ -167,7 +119,7 @@ void WindowTestCase::FocusEvent()
 #endif
 }
 
-void WindowTestCase::Mouse()
+TEST_CASE_METHOD(WindowTestCase, "Window::Mouse", "[window]")
 {
     wxCursor cursor(wxCURSOR_CHAR);
     m_window->SetCursor(cursor);
@@ -191,7 +143,7 @@ void WindowTestCase::Mouse()
     CPPUNIT_ASSERT(!m_window->HasCapture());
 }
 
-void WindowTestCase::Properties()
+TEST_CASE_METHOD(WindowTestCase, "Window::Properties", "[window]")
 {
     m_window->SetLabel("label");
 
@@ -210,7 +162,7 @@ void WindowTestCase::Properties()
 }
 
 #if wxUSE_TOOLTIPS
-void WindowTestCase::ToolTip()
+TEST_CASE_METHOD(WindowTestCase, "Window::ToolTip", "[window]")
 {
     CPPUNIT_ASSERT(!m_window->GetToolTip());
     CPPUNIT_ASSERT_EQUAL("", m_window->GetToolTipText());
@@ -233,7 +185,7 @@ void WindowTestCase::ToolTip()
 }
 #endif // wxUSE_TOOLTIPS
 
-void WindowTestCase::Help()
+TEST_CASE_METHOD(WindowTestCase, "Window::Help", "[window]")
 {
     wxHelpProvider::Set(new wxSimpleHelpProvider());
 
@@ -244,13 +196,13 @@ void WindowTestCase::Help()
     CPPUNIT_ASSERT_EQUAL("helptext", m_window->GetHelpText());
 }
 
-void WindowTestCase::Parent()
+TEST_CASE_METHOD(WindowTestCase, "Window::Parent", "[window]")
 {
     CPPUNIT_ASSERT_EQUAL(static_cast<wxWindow*>(NULL), m_window->GetGrandParent());
     CPPUNIT_ASSERT_EQUAL(wxTheApp->GetTopWindow(), m_window->GetParent());
 }
 
-void WindowTestCase::Siblings()
+TEST_CASE_METHOD(WindowTestCase, "Window::Siblings", "[window]")
 {
     CPPUNIT_ASSERT_EQUAL(static_cast<wxWindow*>(NULL), m_window->GetNextSibling());
     CPPUNIT_ASSERT_EQUAL(static_cast<wxWindow*>(NULL), m_window->GetPrevSibling());
@@ -266,7 +218,7 @@ void WindowTestCase::Siblings()
     wxDELETE(newwin);
 }
 
-void WindowTestCase::Children()
+TEST_CASE_METHOD(WindowTestCase, "Window::Children", "[window]")
 {
     CPPUNIT_ASSERT_EQUAL(0, m_window->GetChildren().GetCount());
 
@@ -292,7 +244,7 @@ void WindowTestCase::Children()
     CPPUNIT_ASSERT_EQUAL(0, m_window->GetChildren().GetCount());
 }
 
-void WindowTestCase::Focus()
+TEST_CASE_METHOD(WindowTestCase, "Window::Focus", "[window]")
 {
 #ifndef __WXOSX__
     CPPUNIT_ASSERT(!m_window->HasFocus());
@@ -314,7 +266,7 @@ void WindowTestCase::Focus()
 #endif
 }
 
-void WindowTestCase::Positioning()
+TEST_CASE_METHOD(WindowTestCase, "Window::Positioning", "[window]")
 {
     //Some basic tests for consistency
     int x, y;
@@ -332,7 +284,7 @@ void WindowTestCase::Positioning()
                          m_window->GetScreenRect().GetTopLeft());
 }
 
-void WindowTestCase::PositioningBeyondShortLimit()
+TEST_CASE_METHOD(WindowTestCase, "Window::PositioningBeyondShortLimit", "[window]")
 {
 #ifdef __WXMSW__
     //Positioning under MSW is limited to short relative coordinates
@@ -373,7 +325,7 @@ void WindowTestCase::PositioningBeyondShortLimit()
 #endif
 }
 
-void WindowTestCase::Show()
+TEST_CASE_METHOD(WindowTestCase, "Window::Show", "[window]")
 {
     CPPUNIT_ASSERT(m_window->IsShown());
 
@@ -398,7 +350,7 @@ void WindowTestCase::Show()
     CPPUNIT_ASSERT(!m_window->IsShown());
 }
 
-void WindowTestCase::Enable()
+TEST_CASE_METHOD(WindowTestCase, "Window::Enable", "[window]")
 {
     CPPUNIT_ASSERT(m_window->IsEnabled());
 
@@ -415,7 +367,7 @@ void WindowTestCase::Enable()
     CPPUNIT_ASSERT(!m_window->IsEnabled());
 }
 
-void WindowTestCase::FindWindowBy()
+TEST_CASE_METHOD(WindowTestCase, "Window::FindWindowBy", "[window]")
 {
     m_window->SetId(wxID_HIGHEST + 1);
     m_window->SetName("name");
