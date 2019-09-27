@@ -179,7 +179,7 @@ void wxQtAction::UpdateShortcutsFromLabel(const wxString& text)
 
     if ( index != -1 )
     {
-        QList<QKeySequence> shortcuts = m_qtAction->shortcuts();
+        QList<QKeySequence> shortcuts;
         QString shortcut_key = qlabel.remove( 0, index+1 );
 
         shortcuts.append( QKeySequence( shortcut_key ) );
