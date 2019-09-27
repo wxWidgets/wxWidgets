@@ -825,8 +825,16 @@ wxString wxLocale::GetSystemEncodingName()
 
 #if defined(__WIN32__)
     // FIXME: what is the error return value for GetACP()?
-    UINT codepage = ::GetACP();
-    encname.Printf(wxS("windows-%u"), codepage);
+    const UINT codepage = ::GetACP();
+    switch ( codepage )
+    {
+        case 65001:
+            encname = "UTF-8";
+            break;
+
+        default:
+            encname.Printf(wxS("windows-%u"), codepage);
+    }
 #elif defined(__WXMAC__)
     encname = wxCFStringRef::AsString(
                 CFStringGetNameOfEncoding(CFStringGetSystemEncoding())
@@ -909,6 +917,9 @@ wxFontEncoding wxLocale::GetSystemEncoding()
 
         case 950:
             return wxFONTENCODING_CP950;
+
+        case 65001:
+            return wxFONTENCODING_UTF8;
     }
 #elif defined(__WXMAC__)
     CFStringEncoding encoding = 0 ;
