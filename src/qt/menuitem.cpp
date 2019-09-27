@@ -177,9 +177,7 @@ void wxQtAction::UpdateShortcutsFromLabel(const wxString& text)
     const wxString accelStr = text.AfterFirst('\t');
     if ( !accelStr.empty() )
     {
-        QList<QKeySequence> shortcuts;
-        shortcuts.append( QKeySequence( wxQtConvertString(accelStr) ) );
-        setShortcuts( shortcuts );
+        setShortcut(  QKeySequence( wxQtConvertString(accelStr) ) );
     }
 #endif // wxUSE_ACCEL
 }
