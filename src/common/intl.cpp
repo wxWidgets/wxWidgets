@@ -889,6 +889,7 @@ wxFontEncoding wxLocale::GetSystemEncoding()
         case 1255:
         case 1256:
         case 1257:
+        case 1258:
             return (wxFontEncoding)(wxFONTENCODING_CP1250 + codepage - 1250);
 
         case 874:
