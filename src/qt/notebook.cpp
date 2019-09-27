@@ -14,6 +14,7 @@
 #include "wx/qt/private/winevent.h"
 
 #include <QtWidgets/QTabWidget>
+#include <QtWidgets/QTabBar>
 
 class wxQtTabWidget : public wxQtEventSignalHandler< QTabWidget, wxNotebook >
 {
@@ -162,7 +163,10 @@ bool wxNotebook::InsertPage(size_t n, wxWindow *page, const wxString& text,
 
 wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
 {
-    return sizePage;
+    QTabBar *tabBar = m_qtTabWidget->tabBar();
+    const QSize &tabBarSize = tabBar->size();
+    return wxSize(sizePage.GetWidth(),
+        sizePage.GetHeight() + tabBarSize.height());
 }
 
 bool wxNotebook::DeleteAllPages()
@@ -192,8 +196,8 @@ int wxNotebook::SetSelection(size_t page)
     int selOld = GetSelection();
 
     // change the QTabWidget selected page:
-    m_selection = page;
     m_qtTabWidget->setCurrentIndex( page );
+    m_selection = page;
 
     return selOld;
 }
