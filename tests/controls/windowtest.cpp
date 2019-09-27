@@ -26,6 +26,7 @@
 #include "wx/uiaction.h"
 #include "wx/caret.h"
 #include "wx/cshelp.h"
+#include "wx/scopedptr.h"
 #include "wx/tooltip.h"
 
 class WindowTestCase
@@ -378,4 +379,20 @@ TEST_CASE_METHOD(WindowTestCase, "Window::FindWindowBy", "[window]")
     CHECK( wxWindow::FindWindowById(wxID_HIGHEST + 3) == NULL );
     CHECK( wxWindow::FindWindowByName("noname") == NULL );
     CHECK( wxWindow::FindWindowByLabel("nolabel") == NULL );
+}
+
+TEST_CASE_METHOD(WindowTestCase, "Window::SizerErrors", "[window][sizer][error]")
+{
+    wxWindow* const child = new wxWindow(m_window, wxID_ANY);
+    wxScopedPtr<wxSizer> const sizer1(new wxBoxSizer(wxHORIZONTAL));
+    wxScopedPtr<wxSizer> const sizer2(new wxBoxSizer(wxHORIZONTAL));
+
+    REQUIRE_NOTHROW( sizer1->Add(child) );
+    CHECK_THROWS_AS( sizer1->Add(child), TestAssertFailure );
+    CHECK_THROWS_AS( sizer2->Add(child), TestAssertFailure );
+
+    CHECK_NOTHROW( sizer1->Detach(child) );
+    CHECK_NOTHROW( sizer2->Add(child) );
+
+    REQUIRE_NOTHROW( delete child );
 }

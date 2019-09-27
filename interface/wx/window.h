@@ -1493,9 +1493,14 @@ public:
     void SetClientSize(const wxRect& rect);
 
     /**
-        This normally does not need to be called by user code.
-        It is called when a window is added to a sizer, and is used so the window
-        can remove itself from the sizer when it is destroyed.
+        Used by wxSizer internally to notify the window about being managed by
+        the given sizer.
+
+        This method should not be called from outside the library, unless
+        you're implementing a custom sizer class -- and in the latter case you
+        must call this method with the pointer to the sizer itself whenever a
+        window is added to it and with @NULL argument when the window is
+        removed from it.
     */
     void SetContainingSizer(wxSizer* sizer);
 
