@@ -174,15 +174,11 @@ wxQtAction::wxQtAction( wxMenu *parent, int id, const wxString &text, const wxSt
 void wxQtAction::UpdateShortcutsFromLabel(const wxString& text)
 {
 #if wxUSE_ACCEL
-    QString qlabel = wxQtConvertString( text );
-    int index = qlabel.lastIndexOf( QChar( '\t' ) );
-
-    if ( index != -1 )
+    const wxString accelStr = text.AfterFirst('\t');
+    if ( !accelStr.empty() )
     {
         QList<QKeySequence> shortcuts;
-        QString shortcut_key = qlabel.remove( 0, index+1 );
-
-        shortcuts.append( QKeySequence( shortcut_key ) );
+        shortcuts.append( QKeySequence( wxQtConvertString(accelStr) ) );
         setShortcuts( shortcuts );
     }
 #endif // wxUSE_ACCEL
