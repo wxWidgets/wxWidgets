@@ -2290,6 +2290,21 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 event.m_col = nmHDR->iItem;
                 break;
 
+            case HDN_DIVIDERDBLCLICK:
+            {
+                NMHEADER *pHeader = (NMHEADER *) lParam;
+                // If the control is non-empty, the native control will
+                // autosize the column to its contents, however if it is empty,
+                // it just resets it to some default width, while we want to
+                // still autosize it in this case, to fit its label width.
+                if ( IsEmpty() )
+                {
+                    SetColumnWidth(pHeader->iItem, wxLIST_AUTOSIZE_USEHEADER);
+                    return true;
+                }
+            }
+            break;
+
             case NM_RCLICK:
                 {
                     POINT ptClick;
