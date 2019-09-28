@@ -320,6 +320,9 @@ bool wxListCtrl::Create(wxWindow *parent,
     if ( InReportView() )
         MSWSetExListStyles();
 
+    if ( HasFlag(wxLC_LIST) )
+        m_colCount = 1;
+
     return true;
 }
 
