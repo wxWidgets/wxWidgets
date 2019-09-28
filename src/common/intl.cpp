@@ -825,8 +825,16 @@ wxString wxLocale::GetSystemEncodingName()
 
 #if defined(__WIN32__)
     // FIXME: what is the error return value for GetACP()?
-    UINT codepage = ::GetACP();
-    encname.Printf(wxS("windows-%u"), codepage);
+    const UINT codepage = ::GetACP();
+    switch ( codepage )
+    {
+        case 65001:
+            encname = "UTF-8";
+            break;
+
+        default:
+            encname.Printf(wxS("windows-%u"), codepage);
+    }
 #elif defined(__WXMAC__)
     encname = wxCFStringRef::AsString(
                 CFStringGetNameOfEncoding(CFStringGetSystemEncoding())
@@ -877,37 +885,41 @@ wxString wxLocale::GetSystemEncodingName()
 wxFontEncoding wxLocale::GetSystemEncoding()
 {
 #if defined(__WIN32__)
-    UINT codepage = ::GetACP();
+    const UINT codepage = ::GetACP();
 
-    // wxWidgets only knows about CP1250-1257, 874, 932, 936, 949, 950
-    if ( codepage >= 1250 && codepage <= 1257 )
+    switch ( codepage )
     {
-        return (wxFontEncoding)(wxFONTENCODING_CP1250 + codepage - 1250);
-    }
+        case 1250:
+        case 1251:
+        case 1252:
+        case 1253:
+        case 1254:
+        case 1255:
+        case 1256:
+        case 1257:
+        case 1258:
+            return (wxFontEncoding)(wxFONTENCODING_CP1250 + codepage - 1250);
 
-    if ( codepage == 874 )
-    {
-        return wxFONTENCODING_CP874;
-    }
+        case 1361:
+            return wxFONTENCODING_CP1361;
 
-    if ( codepage == 932 )
-    {
-        return wxFONTENCODING_CP932;
-    }
+        case 874:
+            return wxFONTENCODING_CP874;
 
-    if ( codepage == 936 )
-    {
-        return wxFONTENCODING_CP936;
-    }
+        case 932:
+            return wxFONTENCODING_CP932;
 
-    if ( codepage == 949 )
-    {
-        return wxFONTENCODING_CP949;
-    }
+        case 936:
+            return wxFONTENCODING_CP936;
 
-    if ( codepage == 950 )
-    {
-        return wxFONTENCODING_CP950;
+        case 949:
+            return wxFONTENCODING_CP949;
+
+        case 950:
+            return wxFONTENCODING_CP950;
+
+        case 65001:
+            return wxFONTENCODING_UTF8;
     }
 #elif defined(__WXMAC__)
     CFStringEncoding encoding = 0 ;
