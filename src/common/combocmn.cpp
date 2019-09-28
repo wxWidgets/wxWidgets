@@ -1374,7 +1374,7 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
 
 wxSize wxComboCtrlBase::DoGetBestSize() const
 {
-    int width = m_text ? m_text->GetBestSize().x : 80;
+    int width = m_text ? m_text->GetBestSize().x : FromDIP(80);
 
     return GetSizeFromTextSize(width);
 }

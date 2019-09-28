@@ -307,7 +307,8 @@ bool MyApp::OnInit()
     // Create the main frame window
     MyFrame* frame = new MyFrame((wxFrame *) NULL, wxID_ANY,
                                  "wxToolBar Sample",
-                                  wxPoint(100, 100), wxSize(650, 350));
+                                  wxPoint(100, 100), wxDefaultSize);
+    frame->SetSize(frame->FromDIP(wxSize(650, 350)));
 
     frame->Show(true);
 
@@ -440,7 +441,7 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     // adding a combo to a vertical toolbar is not very smart
     if ( !toolBar->IsVertical() )
     {
-        wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, wxEmptyString, wxDefaultPosition, wxSize(100,-1) );
+        wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, wxEmptyString, wxDefaultPosition, FromDIP(wxSize(100,-1)) );
         combo->Append("This");
         combo->Append("is a");
         combo->Append("combobox with extremely, extremely, extremely, extremely long label");
@@ -891,7 +892,7 @@ void MyFrame::OnToggleSearch(wxCommandEvent& WXUNUSED(event))
     if ( !m_searchTool )
     {
         wxSearchCtrl * const srch = new wxSearchCtrl(tb, wxID_ANY, "needle");
-        srch->SetMinSize(wxSize(80, -1));
+        srch->SetMinSize(FromDIP(wxSize(80, -1)));
         m_searchTool = tb->AddControl(srch);
     }
     else // tool already exists

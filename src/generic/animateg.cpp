@@ -327,7 +327,7 @@ wxSize wxAnimationCtrl::DoGetBestSize() const
     if (m_animation.IsOk() && !this->HasFlag(wxAC_NO_AUTORESIZE))
         return m_animation.GetSize();
 
-    return wxSize(100, 100);
+    return FromDIP(wxSize(100, 100));
 }
 
 void wxAnimationCtrl::SetAnimation(const wxAnimation& animation)
