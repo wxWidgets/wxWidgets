@@ -2187,6 +2187,18 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 event.m_col = nmHDR->iItem;
                 break;
 
+            case HDN_DIVIDERDBLCLICK:
+            {
+                NMHEADER *pHeader = (NMHEADER *) lParam;
+                const int item = pHeader->iItem;
+                if( GetItemCount() == 0 )
+                {
+                    SetColumnWidth( item, wxLIST_AUTOSIZE_USEHEADER );
+                    return true;
+                }
+            }
+            break;
+
             case NM_RCLICK:
                 {
                     POINT ptClick;
