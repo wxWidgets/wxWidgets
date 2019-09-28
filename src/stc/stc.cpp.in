@@ -682,6 +682,27 @@ void wxStyledTextCtrl::AppendTextRaw(const char* text, int length)
     SendMsg(SCI_APPENDTEXT, length, (sptr_t)text);
 }
 
+void wxStyledTextCtrl::ReplaceSelectionRaw(const char* text)
+{
+    SendMsg(SCI_REPLACESEL, 0, reinterpret_cast<sptr_t>(text));
+}
+
+int wxStyledTextCtrl::ReplaceTargetRaw(const char* text, int length)
+{
+    if ( length == -1 )
+        length = strlen(text);
+
+    return SendMsg(SCI_REPLACETARGET, length, reinterpret_cast<sptr_t>(text));
+}
+
+int wxStyledTextCtrl::ReplaceTargetRERaw(const char* text, int length)
+{
+    if ( length == -1 )
+        length = strlen(text);
+
+    return SendMsg(SCI_REPLACETARGETRE, length, reinterpret_cast<sptr_t>(text));
+}
+
 #if WXWIN_COMPATIBILITY_3_0
 // Deprecated since Scintilla 3.7.2
 void wxStyledTextCtrl::UsePopUp(bool allowPopUp)
