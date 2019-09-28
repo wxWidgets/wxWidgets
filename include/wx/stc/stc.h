@@ -235,7 +235,6 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
 #define wxSTC_FIND_WORDSTART 0x00100000
 #define wxSTC_FIND_REGEXP 0x00200000
 #define wxSTC_FIND_POSIX 0x00400000
-#define wxSTC_FIND_CXX11REGEX 0x00800000
 #define wxSTC_FOLDLEVELBASE 0x400
 #define wxSTC_FOLDLEVELWHITEFLAG 0x1000
 #define wxSTC_FOLDLEVELHEADERFLAG 0x2000
@@ -2527,6 +2526,14 @@ class WXDLLIMPEXP_FWD_CORE wxScrollBar;
     "wxSTC_SCVS_NOWRAPLINESTART is deprecated. Use wxSTC_VS_NOWRAPLINESTART instead.")
 
 #endif // WXWIN_COMPATIBILITY_3_0
+
+// wxSTC is currently built without c++11 regex support, but the search flag
+// wxSTC_FIND_CXX11REGEX was included with wxSTC any way. gen_iface.py has since
+// been changed so that this flag will no longer be generated or documented,
+// but the flag is preserved here so that any code using the flag before
+// gen_iface.py was changed will not be broken.
+
+#define wxSTC_FIND_CXX11REGEX 0x00800000
 
 //----------------------------------------------------------------------
 // Commands that can be bound to keystrokes section {{{
@@ -5229,6 +5236,15 @@ public:
 
     // Append a string to the end of the document without changing the selection.
     void AppendTextRaw(const char* text, int length=-1);
+
+    // Replace the selected text with the argument text.
+    void ReplaceSelectionRaw(const char* text);
+
+    // Replace the target text with the argument text.
+    int ReplaceTargetRaw(const char* text, int length=-1);
+
+    // Replace the target text with the argument text after \d processing.
+    int ReplaceTargetRERaw(const char* text, int length=-1);
 
 #ifdef SWIG
     %pythoncode "_stc_utf8_methods.py"
