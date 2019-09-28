@@ -347,6 +347,15 @@ public:
     // Append a string to the end of the document without changing the selection.
     void AppendTextRaw(const char* text, int length=-1);
 
+    // Replace the selected text with the argument text.
+    void ReplaceSelectionRaw(const char* text);
+
+    // Replace the target text with the argument text.
+    int ReplaceTargetRaw(const char* text, int length=-1);
+
+    // Replace the target text with the argument text after \d processing.
+    int ReplaceTargetRERaw(const char* text, int length=-1);
+
 #ifdef SWIG
     %%pythoncode "_stc_utf8_methods.py"
 #endif
