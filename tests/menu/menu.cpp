@@ -145,36 +145,37 @@ void MenuTestCase::CreateFrame()
     wxMenu *subMenu = new wxMenu;
     wxMenu *subsubMenu = new wxMenu;
 
-    size_t itemcount = 0;
+    m_itemCount = 0;
 
-    PopulateMenu(subsubMenu, "Subsubmenu item ", itemcount);
-
-    // Store one of its IDs for later
-    m_subsubmenuItemId = MenuTestCase_First + itemcount - 2;
-
-    PopulateMenu(subMenu, "Submenu item ", itemcount);
+    PopulateMenu(subsubMenu, "Subsubmenu item ", m_itemCount);
 
     // Store one of its IDs for later
-    m_submenuItemId = MenuTestCase_First + itemcount - 2;
+    m_subsubmenuItemId = MenuTestCase_First + m_itemCount - 2;
+
+    PopulateMenu(subMenu, "Submenu item ", m_itemCount);
+
+    // Store one of its IDs for later
+    m_submenuItemId = MenuTestCase_First + m_itemCount - 2;
 
     subMenu->AppendSubMenu(subsubMenu, "Subsubmen&u", "Test a subsubmenu");
+    m_itemCount++;
 
     // Check GetTitle() returns the correct string _before_ appending to the bar
     fileMenu->SetTitle("&Foo\tCtrl-F");
     CPPUNIT_ASSERT_EQUAL( "&Foo\tCtrl-F", fileMenu->GetTitle() );
 
-    PopulateMenu(fileMenu, "Filemenu item ", itemcount);
+    PopulateMenu(fileMenu, "Filemenu item ", m_itemCount);
 
     fileMenu->Append(MenuTestCase_Foo, "&Foo\tCtrl-F", "Test item to be found");
+    m_itemCount++;
 
 
-    PopulateMenu(helpMenu, "Helpmenu item ", itemcount);
+    PopulateMenu(helpMenu, "Helpmenu item ", m_itemCount);
     helpMenu->Append(MenuTestCase_Bar, "Bar\tF1");
+    m_itemCount++;
     m_menuWithBar = helpMenu;
     helpMenu->AppendSubMenu(subMenu, "Sub&menu", "Test a submenu");
-
-    // +2 for "Foo" and "Bar", +2 for the 2 submenus
-    m_itemCount = itemcount + 4;
+    m_itemCount++;
 
     // Use an arraystring here, to help with future tests
     m_menuLabels.Add("&File");
