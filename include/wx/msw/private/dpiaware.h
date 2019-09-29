@@ -2,7 +2,7 @@
 // Name:        wx/msw/private/dpiaware.h
 // Purpose:     AutoSystemDpiAware class
 // Author:      Maarten Bent
-// Created:     10/6/2016
+// Created:     2016-10-06
 // Copyright:   (c) Maarten Bent
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -17,6 +17,9 @@
 #include "wx/dynlib.h"
 
 #if wxUSE_DYNLIB_CLASS
+
+namespace wxMSWImpl
+{
 
 // ----------------------------------------------------------------------------
 // Temporarily change the DPI Awareness context to System
@@ -68,5 +71,7 @@ private:
 class AutoSystemDpiAware { };
 
 #endif // wxUSE_DYNLIB_CLASS/!wxUSE_DYNLIB_CLASS
+
+} // namespace wxMSWImpl
 
 #endif // _WX_MSW_DPI_AWARE_H_

@@ -150,7 +150,7 @@ int wxFontDialog::ShowModal()
 
     chooseFontStruct.Flags = flags;
 
-    AutoSystemDpiAware dpiAwareness;
+    wxMSWImpl::AutoSystemDpiAware dpiAwareness;
 
     if ( ChooseFont(&chooseFontStruct) != 0 )
     {

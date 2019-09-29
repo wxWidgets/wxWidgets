@@ -217,7 +217,7 @@ int wxColourDialog::ShowModal()
     gs_activeDialog = this;
     wxON_BLOCK_EXIT_NULL(gs_activeDialog);
 
-    AutoSystemDpiAware dpiAwareness;
+    wxMSWImpl::AutoSystemDpiAware dpiAwareness;
 
     // do show the modal dialog
     if ( !::ChooseColor(&chooseColorStruct) )

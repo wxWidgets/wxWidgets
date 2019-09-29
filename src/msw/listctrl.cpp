@@ -457,7 +457,8 @@ void wxListCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
 void wxListCtrl::OnDPIChanged(wxDPIChangedEvent &event)
 {
     const int numCols = GetColumnCount();
-    for ( int i = 0; i < numCols; ++i ) {
+    for ( int i = 0; i < numCols; ++i )
+    {
         int width = GetColumnWidth(i);
         if ( width > 0 )
             width = width * event.GetNewDPI().x / event.GetOldDPI().x;
@@ -1003,7 +1004,8 @@ bool wxListCtrl::SetItem(wxListItem& info)
             else
                 data->attr = new wxItemAttr(attrNew);
 
-            if ( data->attr->HasFont() ) {
+            if ( data->attr->HasFont() )
+            {
                 wxFont f = data->attr->GetFont();
                 f.WXAdjustToPPI(GetDPI());
                 data->attr->SetFont(f);

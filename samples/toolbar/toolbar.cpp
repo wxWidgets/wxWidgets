@@ -308,7 +308,6 @@ bool MyApp::OnInit()
     MyFrame* frame = new MyFrame((wxFrame *) NULL, wxID_ANY,
                                  "wxToolBar Sample",
                                   wxPoint(100, 100), wxDefaultSize);
-    frame->SetSize(frame->FromDIP(wxSize(650, 350)));
 
     frame->Show(true);
 
@@ -653,6 +652,8 @@ MyFrame::MyFrame(wxFrame* parent,
         sizer->Add(m_extraToolBar, 0, wxEXPAND, 0);
 #endif
     sizer->Add(m_textWindow, 1, wxEXPAND, 0);
+
+    SetInitialSize(FromDIP(wxSize(650, 350)));
 }
 
 MyFrame::~MyFrame()

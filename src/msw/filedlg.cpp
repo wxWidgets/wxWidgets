@@ -378,9 +378,9 @@ static bool DoShowCommFileDialog(OPENFILENAME *of, long style, DWORD *err)
 {
     // Extra controls do not handle per-monitor DPI, fall back to system DPI
     // so entire file-dialog is resized.
-    wxScopedPtr<AutoSystemDpiAware> dpiAwareness;
+    wxScopedPtr<wxMSWImpl::AutoSystemDpiAware> dpiAwareness;
     if ( of->Flags & OFN_ENABLEHOOK )
-        dpiAwareness.reset(new AutoSystemDpiAware());
+        dpiAwareness.reset(new wxMSWImpl::AutoSystemDpiAware());
 
     if ( style & wxFD_SAVE ? GetSaveFileName(of) : GetOpenFileName(of) )
         return true;

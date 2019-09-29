@@ -1940,7 +1940,7 @@ void wxToolBar::OnDPIChanged(wxDPIChangedEvent& event)
         }
     }
 
-    // Use CallAfter because creating the toolbar directly does sometimes not
+    // Use CallAfter because creating the toolbar directly sometimes doesn't
     // work. E.g. when switching from 125% to 150%. All the sizes are set
     // correctly, but after all dpi events are handled, 5px of the toolbar are
     // gone and a dark-gray bar appears. After resizing the window, the gray
