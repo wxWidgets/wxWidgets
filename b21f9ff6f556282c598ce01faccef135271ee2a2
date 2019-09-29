@@ -1,0 +1,1 @@
+wxOSX: Fix fetching sub-bitmap from wxBitmap with mask
