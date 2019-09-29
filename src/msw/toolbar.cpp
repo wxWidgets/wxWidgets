@@ -39,6 +39,7 @@
     #include "wx/dcmemory.h"
     #include "wx/control.h"
     #include "wx/choice.h"
+    #include "wx/combobox.h"
     #include "wx/app.h"         // for GetComCtl32Version
     #include "wx/image.h"
     #include "wx/stattext.h"
