@@ -248,6 +248,7 @@ wxEND_EVENT_TABLE()
 wxBEGIN_EVENT_TABLE(wxSearchCtrl, wxSearchCtrlBase)
     EVT_SEARCH_CANCEL(wxID_ANY, wxSearchCtrl::OnCancelButton)
     EVT_SIZE(wxSearchCtrl::OnSize)
+    EVT_DPI_CHANGED(wxSearchCtrl::OnDPIChanged)
 wxEND_EVENT_TABLE()
 
 wxIMPLEMENT_DYNAMIC_CLASS(wxSearchCtrl, wxSearchCtrlBase);
@@ -1232,6 +1233,11 @@ void wxSearchCtrl::OnCancelButton( wxCommandEvent& event )
 void wxSearchCtrl::OnSize( wxSizeEvent& WXUNUSED(event) )
 {
     LayoutControls();
+}
+
+void wxSearchCtrl::OnDPIChanged(wxDPIChangedEvent &WXUNUSED(event))
+{
+    RecalcBitmaps();
 }
 
 #if wxUSE_MENUS

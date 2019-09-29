@@ -81,6 +81,8 @@ protected:
         ProcessCommand(event);
     }
 
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
+
     wxSize DoGetBestClientSize() const wxOVERRIDE;
 
     wxDECLARE_EVENT_TABLE();

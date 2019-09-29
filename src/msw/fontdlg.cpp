@@ -37,6 +37,7 @@
 #endif
 
 #include "wx/fontutil.h"
+#include "wx/msw/private/dpiaware.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -148,6 +149,8 @@ int wxFontDialog::ShowModal()
     }
 
     chooseFontStruct.Flags = flags;
+
+    wxMSWImpl::AutoSystemDpiAware dpiAwareness;
 
     if ( ChooseFont(&chooseFontStruct) != 0 )
     {

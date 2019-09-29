@@ -4830,7 +4830,7 @@ wxSize wxWindowMSW::GetDPI() const
 
     if ( !dpi.x || !dpi.y )
     {
-        WindowHDC hdc(GetHwnd());
+        WindowHDC hdc(hwnd);
         dpi.x = ::GetDeviceCaps(hdc, LOGPIXELSX);
         dpi.y = ::GetDeviceCaps(hdc, LOGPIXELSY);
     }

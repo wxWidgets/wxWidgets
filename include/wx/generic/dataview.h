@@ -316,6 +316,8 @@ protected:
 
     virtual void DoEnableSystemTheme(bool enable, wxWindow* window) wxOVERRIDE;
 
+    void OnDPIChanged(wxDPIChangedEvent& event);
+
 public:     // utility functions not part of the API
 
     // returns the "best" width for the idx-th column

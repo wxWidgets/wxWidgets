@@ -122,9 +122,9 @@ wxSize wxGauge::DoGetBestSize() const
     // the smaller one.
 
     if (HasFlag(wxGA_VERTICAL))
-        return ConvertDialogToPixels(wxSize(8, 107));
+        return ConvertDialogToPixels(FromDIP(wxSize(8, 107)));
     else
-        return ConvertDialogToPixels(wxSize(107, 8));
+        return ConvertDialogToPixels(FromDIP(wxSize(107, 8)));
 }
 
 // ----------------------------------------------------------------------------

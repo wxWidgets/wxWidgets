@@ -181,6 +181,8 @@ protected:
         return wxSize(w, h);
     }
 
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
+
     // free memory (common part of Clear() and dtor)
     void Free();
 
