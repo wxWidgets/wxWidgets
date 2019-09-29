@@ -1511,19 +1511,23 @@ void wxMask::RealizeNative()
 #endif
 }
 
-// Create a mask from a mono bitmap (copies the bitmap).
-
+// Construct a mask from a 8 bpp memory buffer
 bool wxMask::OSXCreate(const wxMemoryBuffer& data,int width , int height , int bytesPerRow)
 {
-    wxASSERT( data.GetDataLen() == (size_t)(height * bytesPerRow) ) ;
+    size_t dataLen = data.GetDataLen();
+    wxCHECK( dataLen == (size_t)(height * bytesPerRow), false );
+    const void* srcdata = data.GetData();
+    wxCHECK( srcdata, false );
 
     DoCreateMaskBitmap(width, height, bytesPerRow);
+    void* destdata = GetRawAccess();
+    wxCHECK( destdata, false );
 
-    RealizeNative() ;
-
-    return true ;
+    memcpy(destdata, srcdata, dataLen);
+    return true;
 }
 
+// Create a mask from a mono bitmap (copies the bitmap).
 bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
 {
     int m_width, m_height, m_bytesPerRow;

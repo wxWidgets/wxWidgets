@@ -66,7 +66,7 @@ public:
 
     WXHBITMAP GetHBITMAP() const ;
 
-    // implementation helper only : construct a mask from a 32 bit memory buffer
+    // implementation helper only : construct a mask from a 8 bpp memory buffer
     bool OSXCreate(const wxMemoryBuffer& buf, int width , int height , int bytesPerRow ) ;
 
 protected:
