@@ -145,3 +145,16 @@ void TimerEventTestCase::Multiple()
     CPPUNIT_ASSERT( numTicks > 1 );
 #endif // !(wxGTK Unicode)
 }
+
+#ifdef wxHAS_TIMER_SIMPLE
+
+TEST_CASE("Timer::Simple", "[timer]")
+{
+    wxEventLoop loop;
+
+    wxCallIn(50, [&loop]() { loop.Exit(); });
+
+    loop.Run();
+}
+
+#endif // wxHAS_TIMER_SIMPLE

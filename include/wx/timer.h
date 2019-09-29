@@ -120,6 +120,60 @@ protected:
 };
 
 // ----------------------------------------------------------------------------
+// wxTimerSimple: this class can be used directly, without inheriting from it
+// ----------------------------------------------------------------------------
+
+// This class could be implemented even without C++11 support, but it would be
+// less efficient (it'd have to copy the functor instead of moving it) and,
+// more importantly, it's only really useful when it can be used with lambdas,
+// so only define it when C++11 support is available.
+#if __cplusplus >= 201103 || wxCHECK_VISUALC_VERSION(12)
+
+#define wxHAS_TIMER_SIMPLE
+
+#include <utility>
+
+template <typename F>
+class wxTimerSimple final : public wxTimer
+{
+public:
+    explicit wxTimerSimple(F&& functor)
+        : m_functor(std::move(functor))
+    {
+    }
+
+    wxTimerSimple(const wxTimerSimple&) = delete;
+    wxTimerSimple& operator=(const wxTimerSimple&) = delete;
+
+    void Notify() override
+    {
+        m_functor();
+    }
+
+    void RunOnceAndSelfDestroy(int milliseconds)
+    {
+        m_selfDestroy = true;
+
+        StartOnce(milliseconds);
+    }
+
+private:
+    const F m_functor;
+
+    bool m_selfDestroy = false;
+};
+
+template <typename F>
+inline
+void wxCallIn(int milliseconds, F&& functor)
+{
+    const auto timer = new wxTimerSimple<F>(std::move(functor));
+    timer->RunOnceAndSelfDestroy(milliseconds);
+}
+
+#endif // C++11
+
+// ----------------------------------------------------------------------------
 // wxTimerRunner: starts the timer in its ctor, stops in the dtor
 // ----------------------------------------------------------------------------
 
