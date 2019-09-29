@@ -32,7 +32,7 @@ resized by the user -- and to do this you use wxSizer-derived classes, such as
 wxBoxSizer and wxFlexGridSizer, to layout everything correctly.
 
 Instances of wxDialog can also be used for controls and they have the advantage
-of not requiring a separate panel inside the,.
+of not requiring a separate panel inside them.
 
 Instead of creating a dialog box and populating it with items, it is possible
 to choose one of the convenient common dialog classes, such as wxMessageDialog
