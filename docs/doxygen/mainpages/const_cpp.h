@@ -226,7 +226,12 @@ vc140 <em>before</em> include @c wx/setup.h file, i.e. typically in the MSVS
 project options. Alternatively, you can predefine @c wxMSVC_VERSION_AUTO symbol
 (without any value), which means that the appropriate compiler version should
 be used automatically, e.g. "vc100" for VC 10 (MSVS 2010), "vc140" for VC 14
-(MSVS 2015) etc.
+(MSVS 2015) etc. Additionally, VC 14 is a special case as it has 3 minor
+versions: VC 14.0, 14.1 and 14.2, corresponding to MSVS 2015, 2017 and 2019;
+that are ABI-compatible with each other. Due to this, it can also be useful to
+reuse the single build of wxWidgets with all versions of the compiler and this
+is supported if @c wxMSVC_VERSION_ABI_COMPAT is defined: the compiler prefix
+"vc14x" is used in this case.
 
 If the makefiles have been used to build the libraries from source and the @c CFG
 variable has been set to specify a different output path for that particular
