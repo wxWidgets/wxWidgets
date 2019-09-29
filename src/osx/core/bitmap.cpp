@@ -936,6 +936,8 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
     double scale = GetScaleFactor();
     ret.CreateScaled( rect.width, rect.height, GetDepth(), scale );
     wxASSERT_MSG( ret.IsOk(), wxT("GetSubBitmap error") );
+    if ( HasAlpha() )
+        ret.UseAlpha() ;
 
     int destwidth = rect.width*scale ;
     int destheight = rect.height*scale ;
@@ -989,8 +991,6 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
         mask->OSXCreate( maskbuf , destwidth , destheight , rowBytes );
         ret.SetMask(mask) ;
     }
-    else if ( HasAlpha() )
-        ret.UseAlpha() ;
 
     return ret;
 }
