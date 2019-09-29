@@ -36,6 +36,7 @@ namespace
 enum
 {
     MenuTestCase_Foo = 10000,
+    MenuTestCase_SelectAll,
     MenuTestCase_Bar,
     MenuTestCase_First
 };
@@ -167,6 +168,9 @@ void MenuTestCase::CreateFrame()
     PopulateMenu(fileMenu, "Filemenu item ", m_itemCount);
 
     fileMenu->Append(MenuTestCase_Foo, "&Foo\tCtrl-F", "Test item to be found");
+    m_itemCount++;
+    fileMenu->Append(MenuTestCase_SelectAll, "Select &all\tCtrl-A",
+                     "Accelerator conflicting with wxTextCtrl");
     m_itemCount++;
 
 
@@ -548,6 +552,11 @@ public:
         return *m_event;
     }
 
+    bool GotEvent() const
+    {
+        return m_gotEvent;
+    }
+
 private:
     void OnMenu(wxCommandEvent& event)
     {
@@ -607,6 +616,24 @@ void MenuTestCase::Events()
                           wxString(src->GetClassInfo()->GetClassName()) );
     CPPUNIT_ASSERT_EQUAL( static_cast<wxObject*>(m_menuWithBar),
                           src );
+
+    // Invoke another accelerator, it should also work.
+    sim.Char('A', wxMOD_CONTROL);
+    wxYield();
+
+    const wxCommandEvent& ev2 = handler.GetEvent();
+    CHECK( ev2.GetId() == MenuTestCase_SelectAll );
+
+    // Now create a text control which uses the same accelerator for itself and
+    // check that when the text control has focus, the accelerator does _not_
+    // work.
+    wxTextCtrl* const text = new wxTextCtrl(m_frame, wxID_ANY, "Testing");
+    text->SetFocus();
+
+    sim.Char('A', wxMOD_CONTROL);
+    wxYield();
+
+    CHECK( !handler.GotEvent() );
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 
