@@ -1337,6 +1337,10 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
                                 event.GetPosition());
             }
         }
+        else if( event.LeftDClick() && hit_border && dynamic_cast<wxGenericListCtrl *>( GetParent() )->GetItemCount() == 0 )
+        {
+            dynamic_cast<wxGenericListCtrl *>( GetParent() )->SetColumnWidth( m_column, wxLIST_AUTOSIZE_USEHEADER );
+        }
         else if (event.Moving())
         {
             bool setCursor;
