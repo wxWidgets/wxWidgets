@@ -138,7 +138,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MenuTestCase, "MenuTestCase" );
 
 void MenuTestCase::CreateFrame()
 {
-    m_frame = new wxFrame(NULL, wxID_ANY, "test frame");
+    m_frame = new wxFrame(wxTheApp->GetTopWindow(), wxID_ANY, "test frame");
 
     wxMenu *fileMenu = new wxMenu;
     wxMenu *helpMenu = new wxMenu;
