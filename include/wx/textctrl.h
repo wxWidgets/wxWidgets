@@ -16,6 +16,7 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/defs.h"
+#include "wx/log.h"
 
 #if wxUSE_TEXTCTRL
 
@@ -783,7 +784,7 @@ protected:
     wxDECLARE_ABSTRACT_CLASS(wxTextCtrlBase);
 #if WXWIN_COMPATIBILITY_3_0
 private:
-	virtual void SetLabel(const wxString &label) wxOVERRIDE { wxLogDebug( "Label does not make sense for wxTextCtrl" ); };
+	virtual void SetLabel(const wxString &WXUNUSED(label)) wxOVERRIDE { wxLogDebug( "Label does not make sense for wxTextCtrl" ); };
 #endif
 };
 
