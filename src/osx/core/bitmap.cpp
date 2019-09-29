@@ -1530,12 +1530,12 @@ bool wxMask::OSXCreate(const wxMemoryBuffer& data,int width , int height , int b
 // Create a mask from a mono bitmap (copies the bitmap).
 bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
 {
-    int m_width, m_height, m_bytesPerRow;
-    m_width = bitmap.GetWidth() ;
-    m_height = bitmap.GetHeight() ;
+    int width, height, bytesPerRow;
+    width = bitmap.GetWidth() ;
+    height = bitmap.GetHeight() ;
 
-    DoCreateMaskBitmap(m_width, m_height);
-    m_bytesPerRow = GetBytesPerRow();
+    DoCreateMaskBitmap(width, height);
+    bytesPerRow = GetBytesPerRow();
 
     // pixel access needs a non-const bitmap currently
     wxBitmap bmp(bitmap);
@@ -1547,11 +1547,11 @@ bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
     wxASSERT( destdatabase != NULL ) ;
     if ( destdatabase != NULL)
     {
-        for ( int y = 0 ; y < m_height; ++y,  destdatabase += m_bytesPerRow )
+        for ( int y = 0 ; y < height; ++y,  destdatabase += bytesPerRow )
         {
             wxNativePixelData::Iterator rowStart = p;
             unsigned char *destdata = destdatabase ;
-            for ( int x = 0 ; x < m_width ; ++x, ++p )
+            for ( int x = 0 ; x < width ; ++x, ++p )
             {
                 int v = p.Red() + p.Green() + p.Blue();
                 wxASSERT_MSG( v == 0 || v == 3*0xFF, "Non-monochrome bitmap supplied" );
@@ -1567,13 +1567,13 @@ bool wxMask::InitFromMonoBitmap(const wxBitmap& bitmap)
 
 bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
 {
-    int m_width, m_height, m_bytesPerRow;
+    int width, height, bytesPerRow;
 
-    m_width = bitmap.GetWidth() ;
-    m_height = bitmap.GetHeight() ;
+    width = bitmap.GetWidth() ;
+    height = bitmap.GetHeight() ;
 
-    DoCreateMaskBitmap(m_width, m_height);
-    m_bytesPerRow = GetBytesPerRow();
+    DoCreateMaskBitmap(width, height);
+    bytesPerRow = GetBytesPerRow();
 
     // pixel access needs a non-const bitmap currently
     wxBitmap bmp(bitmap);
@@ -1585,11 +1585,11 @@ bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
     wxASSERT( destdatabase != NULL ) ;
     if ( destdatabase != NULL)
     {
-        for ( int y = 0 ; y < m_height; ++y,  destdatabase += m_bytesPerRow )
+        for ( int y = 0 ; y < height; ++y,  destdatabase += bytesPerRow )
         {
             wxNativePixelData::Iterator rowStart = p;
             unsigned char *destdata = destdatabase ;
-            for ( int x = 0 ; x < m_width ; ++x, ++p )
+            for ( int x = 0 ; x < width ; ++x, ++p )
             {
                 if ( wxColour( p.Red(), p.Green(), p.Blue() ) == colour )
                     *destdata++ = 0x0 ;
@@ -1608,24 +1608,24 @@ bool wxMask::InitFromColour(const wxBitmap& bitmap, const wxColour& colour)
 
 wxBitmap wxMask::GetBitmap() const
 {
-    int m_width, m_height, m_bytesPerRow;
-    m_width = GetWidth();
-    m_height = GetHeight();
-    m_bytesPerRow = GetBytesPerRow();
+    int width, height, bytesPerRow;
+    width = GetWidth();
+    height = GetHeight();
+    bytesPerRow = GetBytesPerRow();
 
 
-    wxBitmap bitmap(m_width, m_height, 32);
+    wxBitmap bitmap(width, height, 32);
     wxNativePixelData data(bitmap);
 
     wxNativePixelData::Iterator p(data);
 
     const unsigned char* srcbase = static_cast<unsigned char*>(GetRawAccess());
 
-    for (int y = 0; y < m_height; ++y, srcbase += m_bytesPerRow)
+    for (int y = 0; y < height; ++y, srcbase += bytesPerRow)
     {
         wxNativePixelData::Iterator rowStart = p;
         const unsigned char* src = srcbase;
-        for (int x = 0; x < m_width; ++x, ++p, ++src)
+        for (int x = 0; x < width; ++x, ++p, ++src)
         {
             const unsigned char byte = *src;
             wxASSERT( byte == 0 || byte == 0xFF );
