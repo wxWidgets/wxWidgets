@@ -213,7 +213,9 @@ enum
            All items were deleted.
            Processes a @c wxEVT_LIST_DELETE_ALL_ITEMS event type.
     @event{EVT_LIST_ITEM_SELECTED(id, func)}
-           The item has been selected.
+           The item has been selected. Notice that the mouse is captured by the
+           control itself when this event is generated, see @ref
+           overview_events_with_mouse_capture "event handling overview".
            Processes a @c wxEVT_LIST_ITEM_SELECTED event type.
     @event{EVT_LIST_ITEM_DESELECTED(id, func)}
            The item has been deselected.
@@ -1426,7 +1428,9 @@ protected:
     @event{EVT_LIST_DELETE_ALL_ITEMS(id, func)}
         Delete all items.
     @event{EVT_LIST_ITEM_SELECTED(id, func)}
-        The item has been selected.
+        The item has been selected. Notice that the mouse is captured by the
+        control itself when this event is generated, see @ref
+        overview_events_with_mouse_capture "event handling overview".
     @event{EVT_LIST_ITEM_DESELECTED(id, func)}
         The item has been deselected.
     @event{EVT_LIST_ITEM_ACTIVATED(id, func)}
