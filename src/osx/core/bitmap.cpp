@@ -41,6 +41,11 @@ CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffe
 // If raw bitmap data needs to be accessed, then even the NSImage has to be
 // rendered into a CGBitmapContextRef
 
+static inline bool IsCGImageAlphaFlag(CGImageAlphaInfo alphaInfo)
+{
+    return !(alphaInfo == kCGImageAlphaNone || alphaInfo == kCGImageAlphaNoneSkipFirst || alphaInfo == kCGImageAlphaNoneSkipLast);
+}
+
 class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
 {
     friend class WXDLLIMPEXP_FWD_CORE wxIcon;
@@ -238,14 +243,9 @@ bool wxBitmapRefData::Create(CGImageRef image, double scale)
         size_t bytesPerRow = GetBestBytesPerRow(width * 4);
 
         CGImageAlphaInfo alpha = CGImageGetAlphaInfo(image);
-        if (alpha == kCGImageAlphaNone || alpha == kCGImageAlphaNoneSkipFirst || alpha == kCGImageAlphaNoneSkipLast)
-        {
-            m_hBitmap = CGBitmapContextCreate(NULL, width, height, 8, bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaNoneSkipFirst);
-        }
-        else
-        {
-            m_hBitmap = CGBitmapContextCreate(NULL, width, height, 8, bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst);
-        }
+        bool hasAlpha = IsCGImageAlphaFlag(alpha);
+        m_hBitmap = CGBitmapContextCreate(NULL, width, height, 8, bytesPerRow, wxMacGetGenericRGBColorSpace(),
+                                          hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNoneSkipFirst);
         wxCHECK_MSG(m_hBitmap, false, wxT("Unable to create CGBitmapContext context"));
         CGRect rect = CGRectMake(0, 0, width, height);
         CGContextDrawImage(m_hBitmap, rect, image);
@@ -341,7 +341,7 @@ bool wxBitmapRefData::HasAlpha() const
     if ( m_hBitmap )
     {
         CGImageAlphaInfo alpha = CGBitmapContextGetAlphaInfo(m_hBitmap);
-        return !(alpha == kCGImageAlphaNone || alpha == kCGImageAlphaNoneSkipFirst || alpha == kCGImageAlphaNoneSkipLast);
+        return IsCGImageAlphaFlag(alpha);
     }
     else
     {
