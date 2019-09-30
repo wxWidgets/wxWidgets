@@ -1752,7 +1752,10 @@ void wxGenericTreeCtrl::ChildrenClosing(wxGenericTreeItem* item)
 
     if ( item != m_current && IsDescendantOf(item, m_current) )
     {
-        m_current->SetHilight( false );
+        // Don't leave the only selected item invisible, but do leave selected
+        // items selected if we can have many of them.
+        if ( !HasFlag(wxTR_MULTIPLE) )
+            m_current->SetHilight( false );
         m_current = NULL;
         m_select_me = item;
     }
