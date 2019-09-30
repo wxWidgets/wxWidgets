@@ -1284,6 +1284,9 @@ void wxGCDCImpl::Clear(void)
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::Clear - invalid DC") );
 
+    if ( m_backgroundBrush.IsTransparent() )
+        return;
+
     if ( m_backgroundBrush.IsOk() )
     {
         m_graphicContext->SetBrush( m_backgroundBrush );
