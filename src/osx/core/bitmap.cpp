@@ -246,10 +246,10 @@ bool wxBitmapRefData::Create(CGImageRef image, double scale)
         {
             m_hBitmap = CGBitmapContextCreate(NULL, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaPremultipliedFirst);
         }
+        wxCHECK_MSG(m_hBitmap, false, wxT("Unable to create CGBitmapContext context"));
         CGRect rect = CGRectMake(0, 0, m_width, m_height);
         CGContextDrawImage(m_hBitmap, rect, image);
 
-        wxASSERT_MSG(m_hBitmap, wxT("Unable to create CGBitmapContext context"));
         CGContextTranslateCTM(m_hBitmap, 0, m_height);
         CGContextScaleCTM(m_hBitmap, 1 * m_scaleFactor, -1 * m_scaleFactor);
     }
@@ -283,7 +283,7 @@ bool wxBitmapRefData::Create(int w, int h, int WXUNUSED(d), double logicalscale)
 
     size_t m_bytesPerRow = GetBestBytesPerRow(m_width * 4);
     m_hBitmap = CGBitmapContextCreate(NULL, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaNoneSkipFirst);
-    wxASSERT_MSG(m_hBitmap, wxT("Unable to create CGBitmapContext context"));
+    wxCHECK_MSG(m_hBitmap, false, wxT("Unable to create CGBitmapContext context"));
     CGContextTranslateCTM(m_hBitmap, 0, m_height);
     CGContextScaleCTM(m_hBitmap, 1 * GetScaleFactor(), -1 * GetScaleFactor());
 
@@ -372,8 +372,7 @@ void wxBitmapRefData::UseAlpha( bool use )
     CGContextRef hBitmap = CGBitmapContextCreate(NULL, GetWidth(), GetHeight(), 8, GetBytesPerRow(), wxMacGetGenericRGBColorSpace(), use ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNoneSkipFirst );
 
     memcpy(CGBitmapContextGetData(hBitmap),CGBitmapContextGetData(m_hBitmap),GetBytesPerRow()*GetHeight());
-
-    wxASSERT_MSG( hBitmap , wxT("Unable to create CGBitmapContext context") ) ;
+    wxCHECK_RET( hBitmap , wxT("Unable to create CGBitmapContext context") ) ;
     CGContextTranslateCTM( hBitmap, 0,  GetHeight() );
     CGContextScaleCTM( hBitmap, GetScaleFactor(), -GetScaleFactor() );
 
