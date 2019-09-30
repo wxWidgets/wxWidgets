@@ -336,7 +336,7 @@ int wxBitmapRefData::GetBytesPerRow() const
 
 bool wxBitmapRefData::HasAlpha() const
 {
-    wxCHECK_MSG( IsOk() , 0 , "Invalid Bitmap");
+    wxCHECK_MSG( IsOk() , false , "Invalid Bitmap");
 
     if ( m_hBitmap )
     {
