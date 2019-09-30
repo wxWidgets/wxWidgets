@@ -622,7 +622,7 @@ void MenuTestCase::Events()
     wxYield();
 
     const wxCommandEvent& ev2 = handler.GetEvent();
-    CHECK( ev2.GetId() == MenuTestCase_SelectAll );
+    CHECK( ev2.GetId() == static_cast<int>(MenuTestCase_SelectAll) );
 
     // Now create a text control which uses the same accelerator for itself and
     // check that when the text control has focus, the accelerator does _not_
