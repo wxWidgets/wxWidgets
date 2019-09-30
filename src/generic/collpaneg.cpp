@@ -84,8 +84,7 @@ bool wxGenericCollapsiblePane::Create(wxWindow *parent,
     m_pButton = new wxCollapsibleHeaderCtrl(this, wxID_ANY, label, wxPoint(0, 0),
                              wxDefaultSize);
 
-    // on other platforms we put the static line and the button horizontally
-    m_sz->Add(m_pButton, 0, wxLEFT|wxTOP|wxBOTTOM, GetBorder());
+    m_sz->Add(m_pButton, wxSizerFlags().Border(wxALL, GetBorder()));
 
     // FIXME: at least under wxGTK1 the background is black if we don't do
     //        this, no idea why...
