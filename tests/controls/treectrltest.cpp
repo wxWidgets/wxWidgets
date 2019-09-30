@@ -244,6 +244,15 @@ void TreeCtrlTestCase::SelectItemMulti()
     m_tree->UnselectItem(m_child1);
     CPPUNIT_ASSERT( !m_tree->IsSelected(m_child1) );
     CPPUNIT_ASSERT( m_tree->IsSelected(m_child2) );
+
+    // collapsing a branch with selected items should still leave them selected
+    m_tree->Expand(m_child1);
+    m_tree->SelectItem(m_grandchild);
+    CHECK( m_tree->IsSelected(m_grandchild) );
+    m_tree->Collapse(m_child1);
+    CHECK( m_tree->IsSelected(m_grandchild) );
+    m_tree->Expand(m_child1);
+    CHECK( m_tree->IsSelected(m_grandchild) );
 }
 
 void TreeCtrlTestCase::ItemClick()
