@@ -543,8 +543,6 @@ void wxGCDCImpl::SetBrush( const wxBrush &brush )
 void wxGCDCImpl::SetBackground( const wxBrush &brush )
 {
     m_backgroundBrush = brush;
-    if (!m_backgroundBrush.IsOk())
-        return;
 }
 
 void wxGCDCImpl::SetLogicalFunction( wxRasterOperationMode function )
