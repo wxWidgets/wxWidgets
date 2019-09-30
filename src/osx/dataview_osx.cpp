@@ -220,7 +220,15 @@ bool wxOSXDataViewModelNotifier::ValueChanged(wxDataViewItem const& item, unsign
 
 bool wxOSXDataViewModelNotifier::Cleared()
 {
-  return m_DataViewCtrlPtr->GetDataViewPeer()->Reload();
+  // As when individual items are deleted, we must ensure that we don't touch
+  // the model item possibly being edited, as it's not valid any more.
+  m_DataViewCtrlPtr->SetDeleting(true);
+
+  const bool rc = m_DataViewCtrlPtr->GetDataViewPeer()->Reload();
+
+  m_DataViewCtrlPtr->SetDeleting(false);
+
+  return rc;
 }
 
 void wxOSXDataViewModelNotifier::Resort()

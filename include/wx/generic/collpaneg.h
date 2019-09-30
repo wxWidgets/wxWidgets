@@ -73,7 +73,7 @@ public:
 
 protected:
     // overridden methods
-    virtual wxSize DoGetBestSize() const wxOVERRIDE;
+    virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 
     int GetBorder() const;
 

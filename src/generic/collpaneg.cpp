@@ -112,7 +112,7 @@ wxGenericCollapsiblePane::~wxGenericCollapsiblePane()
     wxDELETE(m_sz);
 }
 
-wxSize wxGenericCollapsiblePane::DoGetBestSize() const
+wxSize wxGenericCollapsiblePane::DoGetBestClientSize() const
 {
     // NB: do not use GetSize() but rather GetMinSize()
     wxSize sz = m_sz->GetMinSize();
