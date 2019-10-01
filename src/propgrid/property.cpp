@@ -2434,7 +2434,7 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
     else
         allChildrenSpecified = true;
 
-    unsigned int n = 0;
+    size_t n = 0;
     wxVariant childValue = list[n];
 
     //wxLogDebug(wxS(">> %s.AdaptListToValue()"),GetBaseName());
@@ -2460,7 +2460,7 @@ void wxPGProperty::AdaptListToValue( wxVariant& list, wxVariant* value ) const
             }
 
             n++;
-            if ( n == (unsigned int)list.GetCount() )
+            if ( n == list.GetCount() )
                 break;
             childValue = list[n];
         }
