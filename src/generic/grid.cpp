@@ -3874,13 +3874,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
         }
         else
         {
-            // adjust column width depending on label text
-            //
-            // TODO: generate RESIZING event, see #10754
-            if ( !SendGridSizeEvent(wxEVT_GRID_COL_AUTO_SIZE, -1, colEdge, event) )
-                AutoSizeColLabelSize( colEdge );
-
-            SendGridSizeEvent(wxEVT_GRID_COL_SIZE, -1, colEdge, event);
+            HandleColumnAutosize(colEdge, event);
 
             ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, colLabelWin);
             m_dragLastPos = -1;
@@ -4021,6 +4015,17 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
             // no default action at the moment
         }
     }
+}
+
+void wxGrid::HandleColumnAutosize(int col, const wxMouseEvent& event)
+{
+    // adjust column width depending on label text
+    //
+    // TODO: generate RESIZING event, see #10754
+    if ( !SendGridSizeEvent(wxEVT_GRID_COL_AUTO_SIZE, -1, col, event) )
+        AutoSizeColLabelSize(col);
+
+    SendGridSizeEvent(wxEVT_GRID_COL_SIZE, -1, col, event);
 }
 
 void wxGrid::CancelMouseCapture()

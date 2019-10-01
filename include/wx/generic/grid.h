@@ -2404,6 +2404,8 @@ private:
                                    wxGridColLabelWindow* colLabelWin);
     void ProcessCornerLabelMouseEvent(wxMouseEvent& event);
 
+    void HandleColumnAutosize(int col, const wxMouseEvent& event);
+
     void DoColHeaderClick(int col);
 
     void DoStartResizeCol(int col);

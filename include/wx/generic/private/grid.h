@@ -191,15 +191,9 @@ private:
     }
 
     // override to implement column auto sizing
-    virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle) wxOVERRIDE
+    virtual bool UpdateColumnWidthToFit(unsigned int idx, int WXUNUSED(widthTitle)) wxOVERRIDE
     {
-        if ( !GetOwner()->SendGridSizeEvent(wxEVT_GRID_COL_AUTO_SIZE, -1, idx,
-                                            GetDummyMouseEvent()) )
-        {
-            // TODO: currently grid doesn't support computing the column best width
-            //       from its contents so we just use the best label width as is
-            GetOwner()->SetColSize(idx, widthTitle);
-        }
+        GetOwner()->HandleColumnAutosize(idx, GetDummyMouseEvent());
 
         return true;
     }
