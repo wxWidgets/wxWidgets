@@ -570,7 +570,10 @@ public:
     /**
         Changes value of a property, as if from an editor. Use this instead of
         SetPropertyValue() if you need the value to run through validation
-        process, and also send the property change event.
+        process, and also send @c wxEVT_PG_CHANGED.
+
+        @remarks Since this function sends @c wxEVT_PG_CHANGED, it should not
+        be called from @c EVT_PG_CHANGED handler.
 
         @return Returns @true if value was successfully changed.
     */
