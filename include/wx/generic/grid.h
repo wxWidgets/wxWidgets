@@ -2282,6 +2282,7 @@ protected:
     friend class wxGridWindow;
     friend class wxGridHeaderRenderer;
 
+    friend class wxGridHeaderColumn;
     friend class wxGridHeaderCtrl;
 
 private:
