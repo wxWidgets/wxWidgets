@@ -1399,6 +1399,7 @@ void FormMain::PopulateWithExamples ()
     wxBitmap myTestBitmap(60, 15, 32);
     wxMemoryDC mdc;
     mdc.SelectObject(myTestBitmap);
+    mdc.SetBackground(*wxWHITE_BRUSH);
     mdc.Clear();
     mdc.SetPen(*wxBLACK);
     mdc.DrawLine(0, 0, 60, 15);
