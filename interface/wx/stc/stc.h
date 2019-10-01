@@ -191,7 +191,6 @@
 #define wxSTC_FIND_WORDSTART 0x00100000
 #define wxSTC_FIND_REGEXP 0x00200000
 #define wxSTC_FIND_POSIX 0x00400000
-#define wxSTC_FIND_CXX11REGEX 0x00800000
 #define wxSTC_FOLDLEVELBASE 0x400
 #define wxSTC_FOLDLEVELWHITEFLAG 0x1000
 #define wxSTC_FOLDLEVELHEADERFLAG 0x2000
@@ -7411,6 +7410,52 @@ public:
        Append a string to the end of the document without changing the selection.
     */
     void AppendTextRaw(const char* text, int length=-1);
+
+    /**
+       Replace the current selection with text. If there is no current
+       selection, text is inserted at the current caret position.
+
+        @param text
+            The null terminated string used for the replacement.
+
+       @since 3.1.3
+    */
+    void ReplaceSelectionRaw(const char* text);
+
+    /**
+       Replace the current target with text.
+
+       @return
+            The return value is the length of the replacement string.
+
+       @remarks
+            If length=-1, text must be null terminated.
+
+       @since 3.1.3
+    */
+    int ReplaceTargetRaw(const char* text, int length=-1);
+
+    /**
+       Replace the current target with text using regular expressions.
+
+       The replacement string will be formed from text with any occurrences '\1'
+       through '\9' replaced by tagged matches from the most recent regular
+       expression search. In addition, any occurrences of '\0' will be replaced
+       with all the matched text from the most recent search. After replacement,
+       the target range refers to the replacement text.
+
+       @return
+            The return value is the length of the replacement string.
+
+       @remarks
+            If length=-1, text must be null terminated.
+
+       @see
+            SearchInTarget()
+
+       @since 3.1.3
+    */
+    int ReplaceTargetRERaw(const char* text, int length=-1);
 
     //@}
 

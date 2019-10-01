@@ -240,6 +240,8 @@ protected:
     virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
 
 #if wxUSE_RICHEDIT
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
+
     // Apply the character-related parts of wxTextAttr to the given selection
     // or the entire control if start == end == -1.
     //

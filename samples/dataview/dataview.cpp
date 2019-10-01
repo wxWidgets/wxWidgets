@@ -763,7 +763,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             wxDataViewTextRenderer *tr =
                 new wxDataViewTextRenderer( "string", wxDATAVIEW_CELL_INERT );
             wxDataViewColumn *column0 =
-                new wxDataViewColumn( "title", tr, 0, 200, wxALIGN_LEFT,
+                new wxDataViewColumn( "title", tr, 0, FromDIP(200), wxALIGN_LEFT,
                                       wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_RESIZABLE );
             m_ctrl[Page_Music]->AppendColumn( column0 );
 #if 0
@@ -776,10 +776,10 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
 
             tr = new wxDataViewTextRenderer( "string", wxDATAVIEW_CELL_EDITABLE );
             wxDataViewColumn *column1 =
-                new wxDataViewColumn( "artist", tr, 1, 150, wxALIGN_LEFT,
+                new wxDataViewColumn( "artist", tr, 1, FromDIP(150), wxALIGN_LEFT,
                                       wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE |
                                       wxDATAVIEW_COL_RESIZABLE );
-            column1->SetMinWidth(150); // this column can't be resized to be smaller
+            column1->SetMinWidth(FromDIP(150)); // this column can't be resized to be smaller
             m_ctrl[Page_Music]->AppendColumn( column1 );
 
             // column 2 of the view control:
@@ -788,7 +788,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
                 new wxDataViewSpinRenderer( 0, 2010, wxDATAVIEW_CELL_EDITABLE,
                                             wxALIGN_RIGHT | wxALIGN_CENTRE_VERTICAL);
             wxDataViewColumn *column2 =
-                new wxDataViewColumn( "year", sr, 2, 60, wxALIGN_LEFT,
+                new wxDataViewColumn( "year", sr, 2, FromDIP(60), wxALIGN_LEFT,
                                       wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE );
             m_ctrl[Page_Music]->AppendColumn( column2 );
 
@@ -802,19 +802,19 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
                 new wxDataViewChoiceRenderer( choices, wxDATAVIEW_CELL_EDITABLE,
                                               wxALIGN_RIGHT | wxALIGN_CENTRE_VERTICAL);
             wxDataViewColumn *column3 =
-                new wxDataViewColumn( "rating", c, 3, 100, wxALIGN_LEFT,
+                new wxDataViewColumn( "rating", c, 3, FromDIP(100), wxALIGN_LEFT,
                                       wxDATAVIEW_COL_REORDERABLE | wxDATAVIEW_COL_RESIZABLE );
             m_ctrl[Page_Music]->AppendColumn( column3 );
 
             // column 4 of the view control:
 
-            m_ctrl[Page_Music]->AppendProgressColumn( "popularity", 4, wxDATAVIEW_CELL_INERT, 80 );
+            m_ctrl[Page_Music]->AppendProgressColumn( "popularity", 4, wxDATAVIEW_CELL_INERT, FromDIP(80) );
 
             // column 5 of the view control:
 
             MyCustomRenderer *cr = new MyCustomRenderer(wxDATAVIEW_CELL_ACTIVATABLE);
             wxDataViewColumn *column5 =
-                new wxDataViewColumn( "custom", cr, 5, -1, wxALIGN_LEFT,
+                new wxDataViewColumn( "custom", cr, 5, wxCOL_WIDTH_DEFAULT, wxALIGN_LEFT,
                                       wxDATAVIEW_COL_RESIZABLE );
             column5->SetBitmap(wxArtProvider::GetBitmap(wxART_INFORMATION, wxART_MENU));
             m_ctrl[Page_Music]->AppendColumn( column5 );
@@ -900,7 +900,7 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             lc->AppendColumn(colRadio, "bool");
 
             lc->AppendTextColumn( "Text" );
-            lc->AppendProgressColumn( "Progress" )->SetMinWidth(100);
+            lc->AppendProgressColumn( "Progress" )->SetMinWidth(FromDIP(100));
 
             wxVector<wxVariant> data;
             for (unsigned int i=0; i<10; i++)
@@ -957,17 +957,17 @@ void MyFrame::BuildDataViewCtrl(wxPanel* parent, unsigned int nPanel, unsigned l
             MultiLineCustomRenderer *tr =
                 new MultiLineCustomRenderer();
             wxDataViewColumn *column0 =
-                new wxDataViewColumn("title", tr, 0, 200, wxALIGN_LEFT,
+                new wxDataViewColumn("title", tr, 0, FromDIP(200), wxALIGN_LEFT,
                     wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_RESIZABLE);
             m_ctrl[Page_VarHeight]->AppendColumn(column0);
 
             // column 1 of the view control:
             tr = new MultiLineCustomRenderer();
             wxDataViewColumn *column1 =
-                new wxDataViewColumn("artist", tr, 1, 150, wxALIGN_LEFT,
+                new wxDataViewColumn("artist", tr, 1, FromDIP(150), wxALIGN_LEFT,
                     wxDATAVIEW_COL_SORTABLE | wxDATAVIEW_COL_REORDERABLE |
                     wxDATAVIEW_COL_RESIZABLE);
-            column1->SetMinWidth(150); // this column can't be resized to be smaller
+            column1->SetMinWidth(FromDIP(150)); // this column can't be resized to be smaller
             m_ctrl[Page_VarHeight]->AppendColumn(column1);
         }
         break;

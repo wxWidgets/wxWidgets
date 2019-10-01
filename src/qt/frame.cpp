@@ -134,14 +134,15 @@ void wxFrame::SetWindowStyleFlag( long style )
 {
     wxWindow::SetWindowStyleFlag( style );
 
-    QMainWindow *qtFrame = GetQMainWindow();
-    Qt::WindowFlags qtFlags = qtFrame->windowFlags();
-    qtFlags |= Qt::CustomizeWindowHint;
+    Qt::WindowFlags qtFlags = Qt::CustomizeWindowHint;
 
     if ( HasFlag( wxFRAME_TOOL_WINDOW ) )
     {
-        qtFlags &= ~Qt::WindowType_Mask;
         qtFlags |= Qt::Tool;
+    }
+    else
+    {
+        qtFlags |= Qt::Window;
     }
 
     if ( HasFlag(wxCAPTION) )
@@ -183,15 +184,19 @@ void wxFrame::SetWindowStyleFlag( long style )
         qtFlags |= Qt::FramelessWindowHint;
     }
 
-    qtFrame->setWindowFlags(qtFlags);
+    GetQMainWindow()->setWindowFlags(qtFlags);
+}
 
+QWidget* wxFrame::QtGetParentWidget() const
+{
+    return GetQMainWindow()->centralWidget();
 }
 
 void wxFrame::AddChild( wxWindowBase *child )
 {
     // Make sure all children are children of the central widget:
 
-    QtReparent( child->GetHandle(), GetQMainWindow()->centralWidget() );
+    QtReparent( child->GetHandle(), QtGetParentWidget() );
 
     wxFrameBase::AddChild( child );
 }
@@ -224,6 +229,19 @@ void wxFrame::DoGetClientSize(int *width, int *height) const
             *height -= qmb->geometry().height();
         }
     }
+}
+
+void wxFrame::DoSetClientSize(int width, int height)
+{
+    wxWindow::DoSetClientSize(width, height);
+
+    int adjustedWidth, adjustedHeight;
+    DoGetClientSize(&adjustedWidth, &adjustedHeight);
+
+    QWidget *centralWidget = GetQMainWindow()->centralWidget();
+    QRect geometry = centralWidget->geometry();
+    geometry.setSize(QSize(adjustedWidth, adjustedHeight));
+    centralWidget->setGeometry(geometry);
 }
 
 QMainWindow *wxFrame::GetQMainWindow() const

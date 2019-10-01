@@ -111,7 +111,8 @@ bool wxFFile::ReadAll(wxString *str, const wxMBConv& conv)
         return false;
     }
 
-    buf.data()[length] = 0;
+    // shrink the buffer to possibly shorter data as explained above:
+    buf.shrink(length);
 
     wxString strTmp(buf, conv);
     str->swap(strTmp);

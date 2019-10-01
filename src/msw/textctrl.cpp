@@ -2633,6 +2633,16 @@ wxMenu *wxTextCtrl::MSWCreateContextMenu()
     return m;
 }
 
+void wxTextCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    // Don't do anything for the rich edit controls, they (somehow?) update
+    // their appearance on their own and changing their HFONT, as the base
+    // class version does, would reset all the styles used by them when the DPI
+    // changes, which is unwanted.
+    if ( !IsRich() )
+        wxTextCtrlBase::MSWUpdateFontOnDPIChange(newDPI);
+}
+
 // ----------------------------------------------------------------------------
 // EN_LINK processing
 // ----------------------------------------------------------------------------

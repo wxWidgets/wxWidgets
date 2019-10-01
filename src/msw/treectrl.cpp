@@ -1253,7 +1253,9 @@ void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
         attr = it->second;
     }
 
-    attr->SetFont(font);
+    wxFont f = font;
+    f.WXAdjustToPPI(GetDPI());
+    attr->SetFont(f);
 
     // Reset the item's text to ensure that the bounding rect will be adjusted
     // for the new font.
@@ -2268,6 +2270,17 @@ bool wxTreeCtrl::MSWCommand(WXUINT cmd, WXWORD id_)
 
     // command processed
     return true;
+}
+
+void wxTreeCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxTreeCtrlBase::MSWUpdateFontOnDPIChange(newDPI);
+
+    for ( wxMapTreeAttr::const_iterator it = m_attrs.begin(); it != m_attrs.end(); ++it )
+    {
+        if ( it->second->HasFont() )
+            SetItemFont(it->first, it->second->GetFont());
+    }
 }
 
 bool wxTreeCtrl::MSWIsOnItem(unsigned flags) const

@@ -44,9 +44,16 @@
 // COMPILER_PREFIX=vcXX and in this case you may want to either predefine
 // wxMSVC_VERSION as "XX" or define wxMSVC_VERSION_AUTO to use the appropriate
 // version depending on the compiler used
+//
+// There is an additional complication with MSVC 14.0, 14.1 and 14.2 versions
+// (a.k.a. MSVS 2015, 2017 and 2019): as they're all ABI-compatible with each
+// other, it is convenient to use the same "vc14x" compiler prefix for all of
+// them, but this is not how wxMSVC_VERSION_AUTO behaves by default, so you
+// need to additionally define wxMSVC_VERSION_ABI_COMPAT to opt in into using
+// this "vc14x" prefix.
 #ifdef wxMSVC_VERSION
     #define wxCOMPILER_PREFIX wxCONCAT(vc, wxMSVC_VERSION)
-#elif defined(wxMSVC_VERSION_AUTO)
+#elif defined(wxMSVC_VERSION_AUTO) || defined(wxMSVC_VERSION_ABI_COMPAT)
     #if _MSC_VER == 1200
         #define wxCOMPILER_PREFIX vc60
     #elif _MSC_VER == 1300
@@ -63,12 +70,20 @@
         #define wxCOMPILER_PREFIX vc110
     #elif _MSC_VER == 1800
         #define wxCOMPILER_PREFIX vc120
-    #elif _MSC_VER == 1900
-        #define wxCOMPILER_PREFIX vc140
-    #elif _MSC_VER >= 1910 && _MSC_VER < 1920
-        #define wxCOMPILER_PREFIX vc141
-    #elif _MSC_VER >= 1920 && _MSC_VER < 2000
-        #define wxCOMPILER_PREFIX vc142
+    #elif _MSC_VER >= 1900 && _MSC_VER < 2000
+        #ifdef wxMSVC_VERSION_ABI_COMPAT
+            #define wxCOMPILER_PREFIX vc14x
+        #else
+            #if _MSC_VER < 1910
+                #define wxCOMPILER_PREFIX vc140
+            #elif _MSC_VER >= 1910 && _MSC_VER < 1920
+                #define wxCOMPILER_PREFIX vc141
+            #elif _MSC_VER >= 1920 && _MSC_VER < 2000
+                #define wxCOMPILER_PREFIX vc142
+            #else
+                #error "Unknown MSVC 14.x compiler version, please report to wx-dev."
+            #endif
+        #endif
     #else
         #error "Unknown MSVC compiler version, please report to wx-dev."
     #endif

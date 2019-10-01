@@ -865,6 +865,32 @@ If you use wxNewId() consistently in your application, you can be sure that
 your identifiers don't conflict accidentally.
 
 
+@subsection overview_events_with_mouse_capture Event Handlers and Mouse Capture
+
+Some events are generated in response to a user action performed using the
+mouse and, often, the mouse will be captured (see wxWindow::CaptureMouse()) by
+the window generating the event in this case. This happens when the user is
+dragging the mouse, i.e. for all events involving resizing something (e.g. @c
+EVT_SPLITTER_SASH_POS_CHANGING), but also, perhaps less obviously, when
+selecting items (e.g. @c EVT_LIST_ITEM_SELECTED).
+
+When the mouse is captured, the control sending events will continue receiving
+all mouse events, meaning that the event handler can't do anything relying on
+getting them in any other window. Most notably, simply showing a modal dialog
+won't work as expected, as the dialog won't receive any mouse input and appear
+unresponsive to the user.
+
+The best solution is to avoid showing modal dialogs from such event handlers
+entirely, as it can be jarring for the user to be interrupted in their workflow
+by a dialog suddenly popping up. However if it's really indispensable to show a
+dialog, you need to forcefully break the existing mouse capture by capturing
+(and then releasing, because you don't really need the capture) it yourself:
+@code
+    dialog.CaptureMouse();
+    dialog.ReleaseMouse();
+@endcode
+
+
 @subsection overview_events_custom_generic Generic Event Table Macros
 
 @beginTable

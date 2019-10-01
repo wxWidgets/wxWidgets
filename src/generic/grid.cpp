@@ -9378,11 +9378,16 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
     wxCoord w, h;
     dc.SetFont( GetLabelFont() );
 
+    bool addMargin = true;
+
     if ( column )
     {
         if ( m_useNativeHeader )
         {
             w = GetGridColHeader()->GetColumnTitleWidth(colOrRow);
+
+            // GetColumnTitleWidth already adds margins internally.
+            addMargin = false;
             h = 0;
         }
         else
@@ -9390,18 +9395,11 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
             dc.GetMultiLineTextExtent( GetColLabelValue(colOrRow), &w, &h );
             if ( GetColLabelTextOrientation() == wxVERTICAL )
                 w = h;
-
-            // leave some space around text
-            if ( w )
-                w += 10;
         }
     }
     else
     {
         dc.GetMultiLineTextExtent( GetRowLabelValue(colOrRow), &w, &h );
-
-        if ( h )
-            h += 6;
     }
 
     extent = column ? w : h;
@@ -9413,6 +9411,14 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
         // empty column - give default extent (notice that if extentMax is less
         // than default extent but != 0, it's OK)
         extentMax = column ? m_defaultColWidth : m_defaultRowHeight;
+    }
+    else if ( addMargin )
+    {
+        // leave some space around text
+        if ( column )
+            extentMax += 10;
+        else
+            extentMax += 6;
     }
 
     if ( column )

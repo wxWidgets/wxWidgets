@@ -124,6 +124,7 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
 private:
     // override MSW-specific methods needed for new control
@@ -322,6 +323,16 @@ wxSize wxMSWHeaderCtrl::DoGetBestSize() const
     }
 
     return wxSize(wxDefaultCoord, wpos.cy);
+}
+
+void wxMSWHeaderCtrl::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxControl::MSWUpdateFontOnDPIChange(newDPI);
+
+    if ( wxMSWHeaderCtrlCustomDraw * customDraw = GetCustomDraw() )
+    {
+        customDraw->m_attr.SetFont(m_font);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -701,7 +712,7 @@ bool wxMSWHeaderCtrl::SetFont(const wxFont& font)
 
     if ( wxMSWHeaderCtrlCustomDraw* customDraw = GetCustomDraw() )
     {
-        customDraw->m_attr.SetFont(font);
+        customDraw->m_attr.SetFont(m_font);
     }
 
     return true;
