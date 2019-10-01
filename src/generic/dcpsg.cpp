@@ -1643,7 +1643,7 @@ void wxPostScriptDCImpl::DoGetSizeMM(int *width, int *height) const
 }
 
 // Resolution in pixels per logical inch
-wxSize wxPostScriptDCImpl::GetPPI(void) const
+wxSize wxPostScriptDCImpl::GetPPI() const
 {
     return wxSize( DPI, DPI );
 }

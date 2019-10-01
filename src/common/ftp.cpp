@@ -732,7 +732,7 @@ public:
     {
     }
 
-    virtual ~wxOutputFTPStream(void)
+    virtual ~wxOutputFTPStream()
     {
         if ( IsOk() )
         {

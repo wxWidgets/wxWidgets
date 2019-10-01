@@ -29,7 +29,7 @@ public:
 
     // Operations
     bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxEmptyString) wxOVERRIDE;
-    bool RemoveIcon(void) wxOVERRIDE;
+    bool RemoveIcon() wxOVERRIDE;
     bool PopupMenu(wxMenu *menu) wxOVERRIDE;
 
     // MSW-specific class methods

@@ -1266,7 +1266,7 @@ bool wxGCDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& width
     return true;
 }
 
-wxCoord wxGCDCImpl::GetCharWidth(void) const
+wxCoord wxGCDCImpl::GetCharWidth() const
 {
     wxCoord width = 0;
     DoGetTextExtent( wxT("g") , &width , NULL , NULL , NULL , NULL );
@@ -1274,7 +1274,7 @@ wxCoord wxGCDCImpl::GetCharWidth(void) const
     return width;
 }
 
-wxCoord wxGCDCImpl::GetCharHeight(void) const
+wxCoord wxGCDCImpl::GetCharHeight() const
 {
     wxCoord height = 0;
     DoGetTextExtent( wxT("g") , NULL , &height , NULL , NULL , NULL );
@@ -1282,7 +1282,7 @@ wxCoord wxGCDCImpl::GetCharHeight(void) const
     return height;
 }
 
-void wxGCDCImpl::Clear(void)
+void wxGCDCImpl::Clear()
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::Clear - invalid DC") );
 
