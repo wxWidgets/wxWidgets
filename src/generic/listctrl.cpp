@@ -1337,9 +1337,13 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
                                 event.GetPosition());
             }
         }
-        else if( event.LeftDClick() && hit_border && dynamic_cast<wxGenericListCtrl *>( GetParent() )->GetItemCount() == 0 )
+        else if( event.LeftDClick() && hit_border )
         {
-            dynamic_cast<wxGenericListCtrl *>( GetParent() )->SetColumnWidth( m_column, wxLIST_AUTOSIZE_USEHEADER );
+            wxGenericListCtrl *ctrl = dynamic_cast<wxGenericListCtrl *>( GetParent() );
+            if( ctrl->GetItemCount() == 0 )
+                ctrl->SetColumnWidth( m_column, wxLIST_AUTOSIZE_USEHEADER );
+            else
+                ctrl->SetColumnWidth( m_column, wxLIST_AUTOSIZE );
         }
         else if (event.Moving())
         {
