@@ -417,6 +417,8 @@ void ComboboxWidgetsPage::Reset()
 
 void ComboboxWidgetsPage::CreateCombo()
 {
+    wxCHECK_RET( m_combobox, "No combo box exists" );
+
     int flags = GetAttrs().m_defaultFlags;
 
     if ( m_chkSort->GetValue() )
@@ -446,31 +448,27 @@ void ComboboxWidgetsPage::CreateCombo()
     }
 
     wxArrayString items;
-    if ( m_combobox )
-    {
-        unsigned int count = m_combobox->GetCount();
-        for ( unsigned int n = 0; n < count; n++ )
-        {
-            items.Add(m_combobox->GetString(n));
-        }
-
-        m_sizerCombo->Detach( m_combobox );
-        delete m_combobox;
-    }
-
-    m_combobox = new wxComboBox(this, ComboPage_Combo, wxEmptyString,
-                                wxDefaultPosition, wxDefaultSize,
-                                0, NULL,
-                                flags);
-
-    unsigned int count = items.GetCount();
+    unsigned int count = m_combobox->GetCount();
     for ( unsigned int n = 0; n < count; n++ )
     {
-        m_combobox->Append(items[n]);
+         items.Add(m_combobox->GetString(n));
     }
+    int selItem  = m_combobox->GetSelection();
 
-    m_sizerCombo->Add(m_combobox, 0, wxGROW | wxALL, 5);
+    wxComboBox* newCb = new wxComboBox(this, wxID_ANY, wxEmptyString,
+                                wxDefaultPosition, wxDefaultSize,
+                                items,
+                                flags);
+
+    if ( selItem != wxNOT_FOUND )
+        newCb->SetSelection(selItem);
+
+    m_sizerCombo->Replace(m_combobox, newCb);
     m_sizerCombo->Layout();
+
+    delete m_combobox;
+    m_combobox = newCb;
+    m_combobox->SetId(ComboPage_Combo);
 }
 
 // ----------------------------------------------------------------------------
