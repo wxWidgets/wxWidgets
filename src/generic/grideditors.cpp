@@ -703,6 +703,48 @@ void wxGridCellNumberEditor::Create(wxWindow* parent,
     }
 }
 
+void wxGridCellNumberEditor::SetSize(const wxRect& rectCell)
+{
+#if wxUSE_SPINCTRL
+    if ( HasRange() )
+    {
+        wxASSERT_MSG(m_control, "The wxSpinCtrl must be created first!");
+
+        wxSize size = Spin()->GetBestSize();
+
+        // Extend the control to fill the entire cell horizontally.
+        if ( size.x < rectCell.GetWidth() )
+            size.x = rectCell.GetWidth();
+
+        // Ensure it uses a reasonable height even if wxSpinCtrl::GetBestSize()
+        // didn't return anything useful.
+        if ( size.y <= 0 )
+            size.y = rectCell.GetHeight();
+
+        wxRect rectSpin(rectCell.GetPosition(), size);
+
+        // If possible, i.e. if we're not editing the topmost or leftmost cell,
+        // center the control rectangle in the cell.
+        if ( rectCell.GetTop() > 0 )
+        {
+            rectSpin.SetTop(rectCell.GetTop() -
+                            (rectSpin.GetHeight() - rectCell.GetHeight()) / 2);
+        }
+        if ( rectCell.GetLeft() > 0 )
+        {
+            rectSpin.SetLeft(rectCell.GetLeft() -
+                             (rectSpin.GetWidth() - rectCell.GetWidth()) / 2);
+        }
+
+        wxGridCellEditor::SetSize(rectSpin);
+    }
+    else
+#endif // wxUSE_SPINCTRL
+    {
+        wxGridCellTextEditor::SetSize(rectCell);
+    }
+}
+
 void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
 {
     // first get the value
