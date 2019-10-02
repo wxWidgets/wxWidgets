@@ -39,14 +39,14 @@ public:
  //
  // constructors / destructor
  //
-  virtual ~wxDataViewWidgetImpl(void)
+  virtual ~wxDataViewWidgetImpl()
   {
   }
 
  //
  // column related methods
  //
-  virtual bool              ClearColumns       (void)                                          = 0; // deletes all columns in the native control
+  virtual bool              ClearColumns()                                                     = 0; // deletes all columns in the native control
   virtual bool              DeleteColumn       (wxDataViewColumn* columnPtr)                   = 0; // deletes the column in the native control
   virtual void              DoSetExpanderColumn(wxDataViewColumn const* columnPtr)             = 0; // sets the disclosure column in the native control
   virtual wxDataViewColumn* GetColumn          (unsigned int pos) const                        = 0; // returns the column belonging to 'pos' in the native control
@@ -62,12 +62,12 @@ public:
   virtual bool         Add          (wxDataViewItem const& parent, wxDataViewItemArray const& itesm) = 0; // adds a items to the native control
   virtual void         Collapse     (wxDataViewItem const& item)                                     = 0; // collapses the passed item in the native control
   virtual void         EnsureVisible(wxDataViewItem const& item, wxDataViewColumn const* columnPtr)  = 0; // ensures that the passed item's value in the passed column is visible (column pointer can be NULL)
-  virtual unsigned int GetCount     (void) const                                                     = 0; // returns the number of items in the native control
-  virtual int          GetCountPerPage(void) const                                                   = 0; // get number of items that fit into a single page
+  virtual unsigned int GetCount() const                                                              = 0; // returns the number of items in the native control
+  virtual int          GetCountPerPage() const                                                       = 0; // get number of items that fit into a single page
   virtual wxRect       GetRectangle (wxDataViewItem const& item, wxDataViewColumn const* columnPtr)  = 0; // returns the rectangle that is used by the passed item and column in the native control
-  virtual wxDataViewItem GetTopItem (void) const                                                     = 0; // get top-most visible item
+  virtual wxDataViewItem GetTopItem() const                                                          = 0; // get top-most visible item
   virtual bool         IsExpanded   (wxDataViewItem const& item) const                               = 0; // checks if the passed item is expanded in the native control
-  virtual bool         Reload       (void)                                                           = 0; // clears the native control and reloads all data
+  virtual bool         Reload()                                                                      = 0; // clears the native control and reloads all data
   virtual bool         Remove       (wxDataViewItem const& parent)                                   = 0; // removes one or more items under the given parent from the native control
   virtual bool         Update       (wxDataViewColumn const* columnPtr)                              = 0; // updates the items in the passed column of the native control
   virtual bool         Update       (wxDataViewItem const& parent, wxDataViewItem const& item)       = 0; // updates the passed item in the native control
@@ -90,15 +90,15 @@ public:
   virtual int  GetSelections(wxDataViewItemArray& sel)   const = 0; // returns all selected items in the native control
   virtual bool IsSelected   (wxDataViewItem const& item) const = 0; // checks if the passed item is selected in the native control
   virtual void Select       (wxDataViewItem const& item)       = 0; // selects the passed item in the native control
-  virtual void SelectAll    (void)                             = 0; // selects all items in the native control
+  virtual void SelectAll()                                     = 0; // selects all items in the native control
   virtual void Unselect     (wxDataViewItem const& item)       = 0; // unselects the passed item in the native control
-  virtual void UnselectAll  (void)                             = 0; // unselects all items in the native control
+  virtual void UnselectAll()                                   = 0; // unselects all items in the native control
 
  //
  // sorting related methods
  //
-  virtual wxDataViewColumn* GetSortingColumn (void) const = 0; // returns the column that is primarily responsible for sorting in the native control
-  virtual void              Resort           (void)       = 0; // asks the native control to start a resorting process
+  virtual wxDataViewColumn* GetSortingColumn() const      = 0; // returns the column that is primarily responsible for sorting in the native control
+  virtual void              Resort()                      = 0; // asks the native control to start a resorting process
 
  //
  // other methods
@@ -109,7 +109,7 @@ public:
   virtual void HitTest     (wxPoint const& point, wxDataViewItem& item, wxDataViewColumn*& columnPtr) const = 0; // return the item and column pointer that contains with the passed point
   virtual void SetRowHeight(int height)                                                                     = 0; // sets the height of all rows
   virtual void SetRowHeight(wxDataViewItem const& item, unsigned int height)                                = 0; // sets the height of the row containg the passed item in the native control
-  virtual void OnSize      (void)                                                                           = 0; // updates the layout of the native control after a size event
+  virtual void OnSize()                                                                                     = 0; // updates the layout of the native control after a size event
   virtual void StartEditor( const wxDataViewItem & item, unsigned int column )                              = 0; // starts editing the passed in item and column
 };
 

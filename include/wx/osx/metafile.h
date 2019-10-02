@@ -40,7 +40,7 @@ class WXDLLIMPEXP_CORE wxMetafile : public wxGDIObject
 {
 public:
     wxMetafile(const wxString& file = wxEmptyString);
-    virtual ~wxMetafile(void);
+    virtual ~wxMetafile();
 
     // After this is called, the metafile cannot be used for anything
     // since it is now owned by the clipboard.
@@ -77,7 +77,7 @@ public:
     virtual wxMetafile *Close();
 
     // Implementation
-    wxMetafile *GetMetaFile(void) const { return m_metaFile; }
+    wxMetafile *GetMetaFile() const { return m_metaFile; }
     void SetMetaFile(wxMetafile *mf) { m_metaFile = mf; }
 
 protected:

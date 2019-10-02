@@ -320,7 +320,7 @@ bool wxPrinterDCImpl::StartDoc( const wxString& message )
     return m_ok ;
 }
 
-void wxPrinterDCImpl::EndDoc(void)
+void wxPrinterDCImpl::EndDoc()
 {
     if ( !m_ok )
         return ;
