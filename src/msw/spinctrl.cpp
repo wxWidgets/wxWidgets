@@ -29,6 +29,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/hashmap.h"
+    #include "wx/math.h"         // log
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/event.h"
     #include "wx/textctrl.h"
@@ -71,6 +72,24 @@ WX_DECLARE_HASH_MAP(HWND, wxSpinCtrl *,
                     SpinForTextCtrl);
 
 SpinForTextCtrl gs_spinForTextCtrl;
+
+// The helper function to determine the number of digits in the integer value.
+// Adds one for negative values.
+int GetDigitsCount(int value, int base)
+{
+    if ( value == 0 )
+        return 1;
+    int digits = 0;
+    if ( value < 0 )
+    {
+        ++digits;
+        value = -value;
+    }
+    const double logBase = log(static_cast<double>(value)) /
+                           log(static_cast<double>(base));
+    digits += static_cast<int>(logBase) + 1;
+    return digits;
+}
 
 } // anonymous namespace
 
@@ -352,32 +371,31 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // windows are created and the text one is set up as buddy because
     // UDM_SETBUDDY changes its size using some unknown algorithm, so setting
     // the sizes earlier is useless.
-    const int bestSpinWidth = wxSpinButton::DoGetBestSize().x;
-    const int effectiveSpinWidth = bestSpinWidth - GetOverlap();
+    wxSize bestSize = DoGetBestSize();
     wxSize sizeCtrl(size);
     if ( sizeCtrl.x <= 0 )
     {
-        // DEFAULT_ITEM_WIDTH is the default width for the text control
-        sizeCtrl.x = FromDIP(DEFAULT_ITEM_WIDTH) + effectiveSpinWidth;
+        sizeCtrl.x = bestSize.GetWidth();
     }
-    else if ( sizeCtrl.x <= effectiveSpinWidth )
+    else if ( sizeCtrl.x <= bestSize.GetWidth() )
     {
         wxLogDebug(wxS("wxSpinCtrl \"%s\": initial width %d is too small, ")
                    wxS("at least %d pixels needed."),
-                   name, size.x, effectiveSpinWidth);
+                   name, size.x, bestSize.GetWidth());
     }
 
     // adjust an invalid height for text control
     if ( sizeCtrl.y <= 0 )
     {
-        int cx, cy;
-        wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
-
-        sizeCtrl.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
+        sizeCtrl.y = bestSize.GetHeight();
     }
 
     // This will call our DoMoveWindow() and lay out the windows correctly.
     SetInitialSize(sizeCtrl);
+
+    // Fix the min width because SetInitialSize sets it to sizeCtrl, but the
+    // control can be thinner.
+    SetMinSize(GetBestSizeFromDigitsCount(1));
 
     (void)::ShowWindow(GetBuddyHwnd(), SW_SHOW);
 
@@ -438,6 +456,9 @@ bool wxSpinCtrl::SetBase(int base)
 {
     if ( !::SendMessage(GetHwnd(), UDM_SETBASE, base, 0) )
         return false;
+
+    // DoGetBestSize uses the base.
+    InvalidateBestSize();
 
     // Whether we need to be able enter "x" or not influences whether we should
     // use ES_NUMBER for the buddy control.
@@ -558,6 +579,8 @@ void wxSpinCtrl::SetRange(int minVal, int maxVal)
     }
 
     wxSpinButton::SetRange(minVal, maxVal);
+
+    InvalidateBestSize();
 
     UpdateBuddyStyle();
 }
@@ -746,9 +769,18 @@ int wxSpinCtrl::GetOverlap() const
     return wxGetWindowRect(m_hwndBuddy).right - wxGetWindowRect(GetHwnd()).left;
 }
 
+wxSize wxSpinCtrl::GetBestSizeFromDigitsCount(int digitsCount) const
+{
+    const wxString largestString('8', digitsCount);
+    return DoGetSizeFromTextSize(GetTextExtent(largestString).GetWidth());
+}
+
 wxSize wxSpinCtrl::DoGetBestSize() const
 {
-    return DoGetSizeFromTextSize(FromDIP(DEFAULT_ITEM_WIDTH));
+    const int base = GetBase();
+    const int digitsCount = wxMax(GetDigitsCount(GetMin(), base),
+                                  GetDigitsCount(GetMax(), base));
+    return GetBestSizeFromDigitsCount(digitsCount);
 }
 
 wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const

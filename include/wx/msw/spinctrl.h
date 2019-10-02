@@ -168,6 +168,9 @@ private:
     // (up-down control) and the text control (buddy window).
     int GetOverlap() const;
 
+    // Calculate the best size for the number with the given number of digits.
+    wxSize GetBestSizeFromDigitsCount(int digitsCount) const;
+
     wxDECLARE_DYNAMIC_CLASS(wxSpinCtrl);
     wxDECLARE_EVENT_TABLE();
     wxDECLARE_NO_COPY_CLASS(wxSpinCtrl);
