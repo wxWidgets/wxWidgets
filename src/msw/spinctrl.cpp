@@ -738,7 +738,7 @@ int wxSpinCtrl::GetOverlap() const
         // We can be called from GetSizeFromTextSize() before the window is
         // created and still need to return something reasonable in this case,
         // so return the overlap equal to the default border size.
-        return FromDIP(2);
+        return HasFlag(wxBORDER_NONE) ? 0 : FromDIP(2);
     }
 
     // The sign here is correct because the button is positioned inside its
