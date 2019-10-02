@@ -703,6 +703,40 @@ void wxGridCellNumberEditor::Create(wxWindow* parent,
     }
 }
 
+void wxGridCellNumberEditor::SetSize(const wxRect& r)
+{
+#if wxUSE_SPINCTRL
+    if ( HasRange() )
+    {
+        wxASSERT_MSG(m_control, "The wxSpinCtrl must be created first!");
+
+        const wxSize bestSize = Spin()->GetBestSize();
+        const int width = wxMax(r.GetWidth(), bestSize.GetWidth());
+        const int height = bestSize.GetHeight() > 0 ?
+                           bestSize.GetHeight() :
+                           r.GetHeight();
+
+        wxRect rect(r.GetLeft(), r.GetTop(), width, bestSize.GetHeight());
+
+        // If edit not the top most cell then align center.
+        if ( r.GetTop() > 0 )
+        {
+            rect.SetTop(r.GetTop() - (rect.GetHeight() - r.GetHeight()) / 2);
+        }
+        if ( r.GetLeft() > 0 )
+        {
+            rect.SetLeft(r.GetLeft() - (rect.GetWidth() - r.GetWidth()) / 2);
+        }
+
+        wxGridCellEditor::SetSize(rect);
+    }
+    else
+#endif // wxUSE_SPINCTRL
+    {
+        wxGridCellTextEditor::SetSize(r);
+    }
+}
+
 void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
 {
     // first get the value
