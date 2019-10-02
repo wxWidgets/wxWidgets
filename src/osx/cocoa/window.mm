@@ -2843,11 +2843,11 @@ bool wxWidgetCocoaImpl::ShowWithEffect(bool show,
     return ShowViewOrWindowWithEffect(m_wxPeer, show, effect, timeout);
 }
 
-// To avoid warnings about incompatible pointer types with macOS 10.12 SDK (and
-// maybe even earlier? This has changed at some time between 10.9 and 10.12),
+// To avoid warnings about incompatible pointer types with OS X 10.11 SDK (and
+// maybe even earlier? This has changed at some time between 10.9 and 10.11),
 // we need to constrain the comparison function arguments instead of just using
 // "id".
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_12 && __has_feature(objc_kindof)
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_11 && __has_feature(objc_kindof)
 typedef __kindof NSView* KindOfView;
 #else
 typedef id KindOfView;
