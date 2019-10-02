@@ -1738,7 +1738,8 @@ void wxWindowDCImpl::SetBackground( const wxBrush &brush )
 
     m_backgroundBrush = brush;
 
-    if (!m_backgroundBrush.IsOk()) return;
+    if (!m_backgroundBrush.IsOk())
+        m_backgroundBrush = *wxWHITE_BRUSH;
 
     if (!m_gdkwindow) return;
 
