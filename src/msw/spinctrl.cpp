@@ -348,39 +348,6 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     if (!m_hasFont)
         SetFont(GetDefaultAttributes().font);
 
-    // Finally deal with the size: notice that this can only be done now both
-    // windows are created and the text one is set up as buddy because
-    // UDM_SETBUDDY changes its size using some unknown algorithm, so setting
-    // the sizes earlier is useless.
-    const int bestSpinWidth = wxSpinButton::DoGetBestSize().x;
-    const int effectiveSpinWidth = bestSpinWidth - GetOverlap();
-    wxSize sizeCtrl(size);
-    if ( sizeCtrl.x <= 0 )
-    {
-        // DEFAULT_ITEM_WIDTH is the default width for the text control
-        sizeCtrl.x = FromDIP(DEFAULT_ITEM_WIDTH) + effectiveSpinWidth;
-    }
-    else if ( sizeCtrl.x <= effectiveSpinWidth )
-    {
-        wxLogDebug(wxS("wxSpinCtrl \"%s\": initial width %d is too small, ")
-                   wxS("at least %d pixels needed."),
-                   name, size.x, effectiveSpinWidth);
-    }
-
-    // adjust an invalid height for text control
-    if ( sizeCtrl.y <= 0 )
-    {
-        int cx, cy;
-        wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
-
-        sizeCtrl.y = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
-    }
-
-    // This will call our DoMoveWindow() and lay out the windows correctly.
-    SetInitialSize(sizeCtrl);
-
-    (void)::ShowWindow(GetBuddyHwnd(), SW_SHOW);
-
     // If the initial text value is actually a number, it overrides the
     // "initial" argument specified later.
     long initialFromText;
@@ -399,6 +366,22 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     if ( !value.empty() )
         SetValue(value);
     m_blockEvent = false;
+
+    // Finally deal with the size: notice that this can only be done now both
+    // windows are created and the text one is set up as buddy because
+    // UDM_SETBUDDY changes its size using some unknown algorithm, so setting
+    // the sizes earlier is useless. Do it after setting the range and the base
+    // because GetBestSize() uses them.
+    if ( size.x > 0 && size.x < GetBestSize().x )
+    {
+        wxLogDebug(wxS("wxSpinCtrl \"%s\": initial width %d is too small, ")
+                   wxS("at least %d pixels needed."),
+                   name, size.x, GetBestSize().x);
+    }
+
+    SetInitialSize(size);
+
+    (void)::ShowWindow(GetBuddyHwnd(), SW_SHOW);
 
     return true;
 }
@@ -439,9 +422,15 @@ bool wxSpinCtrl::SetBase(int base)
     if ( !::SendMessage(GetHwnd(), UDM_SETBASE, base, 0) )
         return false;
 
+    // DoGetBestSize uses the base.
+    InvalidateBestSize();
+
     // Whether we need to be able enter "x" or not influences whether we should
     // use ES_NUMBER for the buddy control.
     UpdateBuddyStyle();
+
+    // Update the displayed text after changing the base it uses.
+    SetValue(GetValue());
 
     return true;
 }
@@ -558,6 +547,8 @@ void wxSpinCtrl::SetRange(int minVal, int maxVal)
     }
 
     wxSpinButton::SetRange(minVal, maxVal);
+
+    InvalidateBestSize();
 
     UpdateBuddyStyle();
 }
@@ -748,7 +739,7 @@ int wxSpinCtrl::GetOverlap() const
 
 wxSize wxSpinCtrl::DoGetBestSize() const
 {
-    return DoGetSizeFromTextSize(FromDIP(DEFAULT_ITEM_WIDTH));
+    return wxPrivate::wxSpinCtrlGetBestSize(this, GetMin(), GetMax(), GetBase());
 }
 
 wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
