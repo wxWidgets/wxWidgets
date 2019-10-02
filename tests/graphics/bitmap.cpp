@@ -25,6 +25,8 @@
 #include "wx/graphics.h"
 #endif // wxUSE_GRAPHICS_CONTEXT
 
+#include "testimage.h"
+
 #define ASSERT_EQUAL_RGB(c, r, g, b) \
     CHECK( (int)r == (int)c.Red() ); \
     CHECK( (int)g == (int)c.Green() ); \
@@ -915,4 +917,118 @@ TEST_CASE("BitmapTestCase::SubBitmapAlphaWithMask", "[bitmap][subbitmap][alpha][
         ASSERT_EQUAL_RGB(p, maskClrBottomRight.Red(), maskClrBottomRight.Green(), maskClrBottomRight.Blue());
     }
 }
+
+namespace Catch
+{
+    template <>
+    struct StringMaker<wxBitmap>
+    {
+        static std::string convert(const wxBitmap& bmp)
+        {
+            return wxString::Format("bitmap of size %d*%d",
+                                    bmp.GetWidth(),
+                                    bmp.GetHeight()).ToStdString();
+        }
+    };
+}
+
+class BitmapColourMatcher : public Catch::MatcherBase<wxBitmap>
+{
+public:
+    explicit BitmapColourMatcher(const wxColour& col)
+        : m_col(col)
+    {
+    }
+
+    bool match(const wxBitmap& bmp) const wxOVERRIDE
+    {
+        const wxImage img(bmp.ConvertToImage());
+
+        const unsigned char* data = img.GetData();
+        for ( int y = 0; y < img.GetHeight(); ++y )
+        {
+            for ( int x = 0; x < img.GetWidth(); ++x, data += 3 )
+            {
+                if ( wxColour(data[0], data[1], data[2]) != m_col )
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    std::string describe() const wxOVERRIDE
+    {
+        return wxString::Format("doesn't have all %s pixels",
+                                m_col.GetAsString()).ToStdString();
+    }
+
+private:
+    const wxColour m_col;
+};
+
+inline BitmapColourMatcher AllPixelsAre(const wxColour& col)
+{
+    return BitmapColourMatcher(col);
+}
+
+TEST_CASE("DC::Clear", "[bitmap][dc]")
+{
+    // Just some arbitrary pixel data.
+    static unsigned char data[] =
+    {
+        0xff, 0, 0,
+        0, 0xff, 0,
+        0, 0, 0xff,
+        0x7f, 0, 0x7f
+    };
+
+    const wxImage img(2, 2, data, true /* don't take ownership of data */);
+
+    wxBitmap bmp(img);
+
+    SECTION("Clearing uses white by default")
+    {
+        {
+            wxMemoryDC dc(bmp);
+            dc.Clear();
+        }
+
+        CHECK_THAT(bmp, AllPixelsAre(*wxWHITE));
+    }
+
+    SECTION("Clearing with specified brush works as expected")
+    {
+        {
+            wxMemoryDC dc(bmp);
+            dc.SetBackground(*wxRED_BRUSH);
+            dc.Clear();
+        }
+        CHECK_THAT(bmp, AllPixelsAre(*wxRED));
+    }
+
+    SECTION("Clearing with transparent brush does nothing")
+    {
+        {
+            wxMemoryDC dc(bmp);
+            dc.SetBackground(*wxTRANSPARENT_BRUSH);
+            dc.Clear();
+        }
+
+        CHECK_THAT(bmp.ConvertToImage(), RGBSameAs(img));
+    }
+
+    SECTION("Clearing with invalid brush uses white too")
+    {
+        {
+            wxMemoryDC dc(bmp);
+            dc.SetBackground(*wxBLACK_BRUSH);
+            dc.SetBackground(wxBrush());
+            dc.Clear();
+        }
+
+        CHECK_THAT(bmp, AllPixelsAre(*wxWHITE));
+    }
+}
+
 #endif //wxHAS_RAW_BITMAP
