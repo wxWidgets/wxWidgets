@@ -14,6 +14,9 @@ public:
     wxBitmapDataObject();
     wxBitmapDataObject(const wxBitmap& bitmap);
 
+	void AddDataTo(QMimeData &mimeData) const wxOVERRIDE;
+	bool SetDataFrom(const QMimeData &mimeData) wxOVERRIDE;
+
 protected:
 
 private:

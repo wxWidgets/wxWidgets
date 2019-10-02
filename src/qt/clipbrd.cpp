@@ -15,7 +15,6 @@
 #include <QtWidgets/QApplication>
 #include <QtGui/QClipboard>
 #include <QtCore/QMimeData>
-#include <QPixmap>
 
 #include "wx/clipbrd.h"
 #include "wx/scopedarray.h"
@@ -89,37 +88,8 @@ bool wxClipboard::IsOpened() const
 
 bool wxClipboard::AddData( wxDataObject *data )
 {
-    wxBitmapDataObjectBase* bitmap = dynamic_cast<wxBitmapDataObjectBase*>(data);
-    if (bitmap != NULL)
-    {
-        QtClipboard->setPixmap(*bitmap->GetBitmap().GetHandle());
-        delete data;
-        return true;
-    }
-
-    QMimeData *MimeData = new QMimeData;
-    const size_t count = data->GetFormatCount();
-    wxDataFormatArray formats(count);
-    data->GetAllFormats(formats.get());
-
-    // how to add timestamp?
-
-    // Unfortunately I cannot find a way to use the qt clipboard with
-    // a callback to select the data type, so I must copy it all here
-
-    for ( size_t i = 0; i < count; i++ )
-    {
-        const wxDataFormat format(formats[i]);
-
-        int size = data->GetDataSize( format );
-        if ( !size )
-            continue;
-
-        QByteArray bytearray(size, 0);
-        data->GetDataHere(format, bytearray.data());
-        MimeData->setData(wxQtConvertString(format.GetMimeType()), bytearray);
-    }
-
+	QMimeData *MimeData = new QMimeData;
+	data->AddDataTo(*MimeData);
     delete data;
 
     QtClipboard->setMimeData(MimeData, (QClipboard::Mode)Mode());
@@ -142,43 +112,8 @@ bool wxClipboard::GetData( wxDataObject& data )
 {
     wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
 
-    wxBitmapDataObjectBase* bitmap = dynamic_cast<wxBitmapDataObjectBase*>(&data);
-    if (bitmap != NULL)
-    {
-        QPixmap pix = QtClipboard->pixmap();
-        if (pix.isNull())
-            return false;
-
-        bitmap->SetBitmap(wxBitmap(pix));
-        return true;
-    }
-
     const QMimeData *MimeData = QtClipboard->mimeData( (QClipboard::Mode)Mode() );
-    const size_t count = data.GetFormatCount(wxDataObject::Set);
-    wxDataFormatArray formats(count);
-    data.GetAllFormats(formats.get(), wxDataObject::Set);
-
-    for ( size_t i = 0; i < count; i++ )
-    {
-        const wxDataFormat format(formats[i]);
-
-        // is this format supported by clipboard ?
-        if( !MimeData->hasFormat(wxQtConvertString(format.GetMimeType())) )
-            continue;
-
-        wxTextDataObject *textdata = dynamic_cast<wxTextDataObject*>(&data);
-        if ( textdata )
-            textdata->SetText(wxQtConvertString(MimeData->text()));
-        else
-        {
-            QByteArray bytearray = MimeData->data( wxQtConvertString(format.GetMimeType()) );
-            data.SetData(format, bytearray.size(), bytearray.constData());
-        }
-
-        return true;
-    }
-
-    return false;
+	return data.SetDataFrom(*MimeData);
 }
 
 void wxClipboard::Clear()

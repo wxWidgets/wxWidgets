@@ -427,6 +427,10 @@ public:
 #endif // different wxTextDataObject implementations
 
 private:
+#if defined(__WXQT__)
+	void DoSetDataFrom(const class QMimeData &mimeData, const wxDataFormat &format) wxOVERRIDE;
+#endif
+
     wxString m_text;
 
     wxDECLARE_NO_COPY_CLASS(wxTextDataObject);
