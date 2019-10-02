@@ -683,10 +683,14 @@ void wxGridCellNumberEditor::Create(wxWindow* parent,
 #if wxUSE_SPINCTRL
     if ( HasRange() )
     {
+        long style = wxSP_ARROW_KEYS |
+                     wxTE_PROCESS_ENTER |
+                     wxTE_PROCESS_TAB;
+
         // create a spin ctrl
         m_control = new wxSpinCtrl(parent, wxID_ANY, wxEmptyString,
                                    wxDefaultPosition, wxDefaultSize,
-                                   wxSP_ARROW_KEYS,
+                                   style,
                                    m_min, m_max);
 
         wxGridCellEditor::Create(parent, id, evtHandler);
