@@ -88,8 +88,8 @@ bool wxClipboard::IsOpened() const
 
 bool wxClipboard::AddData( wxDataObject *data )
 {
-	QMimeData *MimeData = new QMimeData;
-	data->AddDataTo(*MimeData);
+    QMimeData *MimeData = new QMimeData;
+    data->QtAddDataTo(*MimeData);
     delete data;
 
     QtClipboard->setMimeData(MimeData, (QClipboard::Mode)Mode());
@@ -113,7 +113,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
 
     const QMimeData *MimeData = QtClipboard->mimeData( (QClipboard::Mode)Mode() );
-	return data.SetDataFrom(*MimeData);
+    return data.QtSetDataFrom(*MimeData);
 }
 
 void wxClipboard::Clear()

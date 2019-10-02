@@ -14,8 +14,10 @@ public:
     wxBitmapDataObject();
     wxBitmapDataObject(const wxBitmap& bitmap);
 
-	void AddDataTo(QMimeData &mimeData) const wxOVERRIDE;
-	bool SetDataFrom(const QMimeData &mimeData) wxOVERRIDE;
+    // Overridden to set image data directly, which Qt will write to clipboard in many formats
+    void QtAddDataTo(QMimeData &mimeData) const wxOVERRIDE;
+    // Overridden to retrieve image data from any format that Qt can read from clipboard
+    bool QtSetDataFrom(const QMimeData &mimeData) wxOVERRIDE;
 
 protected:
 
