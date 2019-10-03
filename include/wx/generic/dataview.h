@@ -69,10 +69,9 @@ public:
 
     virtual void SetWidth(int width) wxOVERRIDE
     {
-        // As a small optimization, use this method to avoid calling
-        // UpdateWidth() if the width didn't really change, even if we don't
-        // care about its return value.
-        (void)WXUpdateWidth(width);
+        // Call the actual update method, used for both automatic and "manual"
+        // width changes.
+        WXUpdateWidth(width);
 
         // Do remember the last explicitly set width: this is used to prevent
         // UpdateColumnSizes() from resizing the last column to be smaller than
@@ -133,10 +132,10 @@ public:
 
     // This method is specific to the generic implementation and is used only
     // by wxWidgets itself.
-    bool WXUpdateWidth(int width)
+    void WXUpdateWidth(int width)
     {
         if ( width == m_width )
-            return false;
+            return;
 
         // Normally we don't update it here as this method is called by
         // UpdateColumnSizes() which resizes the column automatically, and not
@@ -149,8 +148,6 @@ public:
 
         m_width = width;
         UpdateWidth();
-
-        return true;
     }
 
     int WXGetManuallySetWidth() const { return m_manuallySetWidth; }
