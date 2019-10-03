@@ -31,6 +31,7 @@
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
     #include "wx/settings.h"
     #include "wx/log.h"
     #include "wx/textctrl.h"
@@ -2265,6 +2266,7 @@ wxBEGIN_EVENT_TABLE( wxGrid, wxScrolledWindow )
     EVT_CHAR ( wxGrid::OnChar )
     EVT_ERASE_BACKGROUND( wxGrid::OnEraseBackground )
     EVT_COMMAND(wxID_ANY, wxEVT_GRID_HIDE_EDITOR, wxGrid::OnHideEditor )
+    EVT_SCROLLWIN( wxGrid::OnScroll )
 wxEND_EVENT_TABLE()
 
 bool wxGrid::Create(wxWindow *parent, wxWindowID id,
@@ -5598,6 +5600,14 @@ void wxGrid::OnEraseBackground(wxEraseEvent&)
 {
 }
 
+void wxGrid::OnScroll(wxScrollWinEvent& event)
+{
+    if ( GridLinesEnabled() )
+        RedrawGridLines();
+
+    event.Skip();
+}
+
 void wxGrid::DoGridProcessTab(wxKeyboardState& kbdState)
 {
     const bool isForwardTab = !kbdState.ShiftDown();
@@ -6400,6 +6410,48 @@ wxGrid::DoDrawGridLines(wxDC& dc,
                         int topRow, int leftCol,
                         int bottomRow, int rightCol)
 {
+    wxBitmap bmp(right, bottom);
+    wxMemoryDC dcMem(bmp);
+    PrepareDC(dcMem);
+
+    // horizontal grid line background
+    for ( int i = topRow; i < bottomRow; ++i )
+    {
+        int bot = GetRowBottom(i) - 1;
+
+        if ( bot > bottom )
+            break;
+
+        if ( bot >= top )
+        {
+            const wxPen& pen = GetRowGridLinePen(i);
+            dcMem.SetPen(wxPen(GetDefaultCellBackgroundColour(), pen.GetWidth()));
+            dcMem.DrawLine(left, bot, right, bot);
+        }
+    }
+
+    // vertical grid line background
+    for ( int colPos = leftCol; colPos < rightCol; ++colPos )
+    {
+        int i = GetColAt(colPos);
+
+        int colRight = GetColRight(i);
+#if defined(__WXGTK__) || defined(__WXQT__)
+        if ( GetLayoutDirection() != wxLayout_RightToLeft )
+#endif
+            colRight--;
+
+        if ( colRight > right )
+            break;
+
+        if ( colRight >= left )
+        {
+            const wxPen& pen = GetColGridLinePen(i);
+            dcMem.SetPen(wxPen(GetDefaultCellBackgroundColour(), pen.GetWidth()));
+            dcMem.DrawLine(colRight, top, colRight, bottom);
+        }
+    }
+
     // horizontal grid lines
     for ( int i = topRow; i < bottomRow; i++ )
     {
@@ -6410,8 +6462,10 @@ wxGrid::DoDrawGridLines(wxDC& dc,
 
         if ( bot >= top )
         {
-            dc.SetPen( GetRowGridLinePen(i) );
-            dc.DrawLine( left, bot, right, bot );
+            const wxPen& pen = GetRowGridLinePen(i);
+            dcMem.SetPen( pen );
+            dcMem.DrawLine( left, bot, right, bot );
+            dc.Blit( left, bot, right - left, pen.GetWidth(), &dcMem, left, bot );
         }
     }
 
@@ -6431,8 +6485,10 @@ wxGrid::DoDrawGridLines(wxDC& dc,
 
         if ( colRight >= left )
         {
-            dc.SetPen( GetColGridLinePen(i) );
-            dc.DrawLine( colRight, top, colRight, bottom );
+            const wxPen& pen = GetColGridLinePen(i);
+            dcMem.SetPen( pen );
+            dcMem.DrawLine( colRight, top, colRight, bottom );
+            dc.Blit( colRight, top, pen.GetWidth(), bottom - top, &dcMem, colRight, top );
         }
     }
 }
