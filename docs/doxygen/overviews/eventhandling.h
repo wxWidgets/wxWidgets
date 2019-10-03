@@ -702,11 +702,11 @@ private:
     const wxPoint m_pos;
 };
 
-// we define a single MY_PLOT_CLICKED event type associated with the class
+// we define a single EVT_MY_PLOT_CLICKED event type associated with the class
 // above but typically you are going to have more than one event type, e.g. you
-// could also have MY_PLOT_ZOOMED or MY_PLOT_PANNED &c -- in which case you
+// could also have EVT_MY_PLOT_ZOOMED or EVT_MY_PLOT_PANNED &c -- in which case you
 // would just add more similar lines here
-wxDEFINE_EVENT(MY_PLOT_CLICKED, MyPlotEvent);
+wxDEFINE_EVENT(EVT_MY_PLOT_CLICKED, MyPlotEvent);
 
 
 // if you want to support old compilers you need to use some ugly macros:
@@ -723,19 +723,19 @@ typedef void (wxEvtHandler::*MyPlotEventFunction)(MyPlotEvent&);
 // remember that you don't need this at all if you only use Bind<>() and that
 // you can replace MyPlotEventHandler(func) with just &func unless you use a
 // really old compiler
-#define MY_EVT_PLOT_CLICK(id, func) \
-    wx__DECLARE_EVT1(MY_PLOT_CLICKED, id, MyPlotEventHandler(func))
+#define EVT_MY_PLOT_CLICKED(id, func) \
+    wx__DECLARE_EVT1(EVT_MY_PLOT_CLICKED, id, MyPlotEventHandler(func))
 
 
 // example of code handling the event (you will use one of these methods, not
 // both, of course):
 wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_PLOT(ID_MY_WINDOW, MyFrame::OnPlot)
+    EVT_MY_PLOT_CLICKED(ID_MY_WINDOW, MyFrame::OnPlot)
 wxEND_EVENT_TABLE()
 
 MyFrame::MyFrame()
 {
-    Bind(MY_PLOT_CLICKED, &MyFrame::OnPlot, this, ID_MY_WINDOW);
+    Bind(EVT_MY_PLOT_CLICKED, &MyFrame::OnPlot, this, ID_MY_WINDOW);
 }
 
 void MyFrame::OnPlot(MyPlotEvent& event)
@@ -747,7 +747,7 @@ void MyFrame::OnPlot(MyPlotEvent& event)
 // example of code generating the event:
 void MyWindow::SendEvent()
 {
-    MyPlotEvent event(MY_PLOT_CLICKED, GetId(), wxPoint(...));
+    MyPlotEvent event(EVT_MY_PLOT_CLICKED, GetId(), wxPoint(...));
     event.SetEventObject(this);
     ProcessWindowEvent(event);
 }
