@@ -341,9 +341,20 @@ wxSize wxControl::GTKGetPreferredSize(GtkWidget* widget) const
 #ifdef __WXGTK3__
     int w, h;
     gtk_widget_get_size_request(widget, &w, &h);
+    // gtk_widget_get_preferred_size is not works correctly for the hidden contol.
+    // So workaround this case.
+    const bool hiddenAtStart = !gtk_widget_get_visible(widget);
+    if ( hiddenAtStart )
+    {
+        gtk_widget_show(widget);
+    }
     gtk_widget_set_size_request(widget, -1, -1);
     gtk_widget_get_preferred_size(widget, NULL, &req);
     gtk_widget_set_size_request(widget, w, h);
+    if ( hiddenAtStart )
+    {
+        gtk_widget_hide(widget);
+    }
 #else
     GTK_WIDGET_GET_CLASS(widget)->size_request(widget, &req);
 #endif

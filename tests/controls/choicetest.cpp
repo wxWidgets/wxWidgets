@@ -36,9 +36,11 @@ private:
     CPPUNIT_TEST_SUITE( ChoiceTestCase );
         wxITEM_CONTAINER_TESTS();
         CPPUNIT_TEST( Sort );
+        CPPUNIT_TEST( GetBestSize );
     CPPUNIT_TEST_SUITE_END();
 
     void Sort();
+    void GetBestSize();
 
     wxChoice* m_choice;
 
@@ -87,6 +89,35 @@ void ChoiceTestCase::Sort()
 
     CPPUNIT_ASSERT_EQUAL("a", m_choice->GetString(0));
 #endif
+}
+
+void ChoiceTestCase::GetBestSize()
+{
+    wxArrayString testitems;
+    testitems.Add("1");
+    testitems.Add("11");
+    m_choice->Append(testitems);
+
+    SECTION("Normal best size")
+    {
+        // nothing to do here
+    }
+
+    // Ensure that the hidden contol return a valid best size too.
+    SECTION("Hidden best size")
+    {
+        m_choice->Hide();
+    }
+
+    wxYield();
+
+    m_choice->InvalidateBestSize();
+    const wxSize bestSize = m_choice->GetBestSize();
+
+    CHECK(bestSize.GetWidth() > 30);
+    CHECK(bestSize.GetWidth() < 120);
+    CHECK(bestSize.GetHeight() > 15);
+    CHECK(bestSize.GetHeight() < 35);
 }
 
 #endif //wxUSE_CHOICE
