@@ -12,6 +12,7 @@
 #define griddemo_h
 
 class wxGrid;
+class MyGrid;
 
 class GridApp : public wxApp
 {
@@ -22,7 +23,7 @@ public:
 
 class GridFrame : public wxFrame
 {
-    wxGrid         *grid;
+    MyGrid         *grid;
 #if wxUSE_LOG
     wxTextCtrl     *logWin;
     wxLogTextCtrl  *logger;
@@ -60,6 +61,7 @@ class GridFrame : public wxFrame
     void SetCornerLabelVertAlignment( wxCommandEvent& );
     void ToggleCornerLabelOrientation( wxCommandEvent& );
     void SetGridLineColour( wxCommandEvent& );
+    void ToggleGridLineDotted( wxCommandEvent& );
 
     void SetCellFgColour(wxCommandEvent &);
     void SetCellBgColour(wxCommandEvent &);
@@ -174,6 +176,7 @@ public:
         ID_TAB_LEAVE,
         ID_TAB_CUSTOM,
         ID_GRIDLINECOLOUR,
+        ID_TOGGLEGRIDLINEDOTTED,
         ID_INSERTROW,
         ID_INSERTCOL,
         ID_DELETEROW,

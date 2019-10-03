@@ -122,6 +122,43 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// Custom grid class
+// ----------------------------------------------------------------------------
+
+class MyGrid : public wxGrid
+{
+public:
+    explicit MyGrid(wxWindow* parent)
+        : wxGrid(parent, wxID_ANY, wxPoint(0, 0), wxSize(400, 300))
+    {
+    }
+
+    void UseDottedPen(bool use)
+    {
+        if ( use )
+        {
+            // Use a custom pen.
+            m_penLines = wxPen(GetGridLineColour(), 1, wxPENSTYLE_DOT);
+            m_penLines.SetJoin(wxJOIN_BEVEL);
+        }
+        else // Reset the pen to use the default one.
+        {
+            m_penLines = wxPen();
+        }
+
+        Refresh();
+    }
+
+    virtual wxPen GetDefaultGridLinePen() wxOVERRIDE
+    {
+        return m_penLines.IsOk() ? m_penLines : wxGrid::GetDefaultGridLinePen();
+    }
+
+private:
+    wxPen m_penLines;
+};
+
+// ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
 
@@ -178,6 +215,7 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_CORNERLABELVERTALIGN, GridFrame::SetCornerLabelVertAlignment )
     EVT_MENU( ID_CORNERLABELORIENTATION, GridFrame::ToggleCornerLabelOrientation )
     EVT_MENU( ID_GRIDLINECOLOUR, GridFrame::SetGridLineColour )
+    EVT_MENU( ID_TOGGLEGRIDLINEDOTTED, GridFrame::ToggleGridLineDotted )
     EVT_MENU( ID_INSERTROW, GridFrame::InsertRow )
     EVT_MENU( ID_INSERTCOL, GridFrame::InsertCol )
     EVT_MENU( ID_DELETEROW, GridFrame::DeleteSelectedRows )
@@ -363,6 +401,7 @@ GridFrame::GridFrame()
     colMenu->Append( ID_SETLABELTEXTCOLOUR, "Set label &text colour..." );
     colMenu->Append( ID_SETLABEL_FONT, "Set label fo&nt..." );
     colMenu->Append( ID_GRIDLINECOLOUR, "&Grid line colour..." );
+    colMenu->AppendCheckItem( ID_TOGGLEGRIDLINEDOTTED, "Use &dotted grid lines" );
     colMenu->Append( ID_SET_CELL_FG_COLOUR, "Set cell &foreground colour..." );
     colMenu->Append( ID_SET_CELL_BG_COLOUR, "Set cell &background colour..." );
 
@@ -427,10 +466,7 @@ GridFrame::GridFrame()
 
     m_addToSel = false;
 
-    grid = new wxGrid( this,
-                       wxID_ANY,
-                       wxPoint( 0, 0 ),
-                       wxSize( 400, 300 ) );
+    grid = new MyGrid(this);
 
 
 #if wxUSE_LOG
@@ -1051,9 +1087,16 @@ void GridFrame::SetGridLineColour( wxCommandEvent& WXUNUSED(ev) )
         wxColour colour = retData.GetColour();
 
         grid->SetGridLineColour( colour );
+
+        grid->UseDottedPen(GetMenuBar()->IsChecked(ID_TOGGLEGRIDLINEDOTTED));
     }
 }
 
+
+void GridFrame::ToggleGridLineDotted(wxCommandEvent& event)
+{
+    grid->UseDottedPen(event.IsChecked());
+}
 
 void GridFrame::InsertRow( wxCommandEvent& WXUNUSED(ev) )
 {
