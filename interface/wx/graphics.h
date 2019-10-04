@@ -1116,7 +1116,7 @@ public:
     /**
        Returns the resolution of the graphics context in device points per inch.
     */
-    virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY);
+    virtual void GetDPI( wxDouble* dpiX, wxDouble* dpiY) const;
 
     /**
         Returns the associated window if any.
@@ -1459,6 +1459,17 @@ public:
                                       int flags = wxFONTFLAG_DEFAULT,
                                       const wxColour& col = *wxBLACK) = 0;
 
+    /**
+        Creates a native graphics font from a wxFont and a text colour.
+
+        The specified DPI is used to convert the (fractional) wxFont point-size
+        to a fractional pixel-size.
+
+        @since 3.1.3
+    */
+    virtual wxGraphicsFont CreateFontAtDPI(const wxFont& font,
+                                           const wxRealPoint& dpi,
+                                           const wxColour& col = *wxBLACK) = 0;
 
     /**
         Creates a native brush with a linear gradient.

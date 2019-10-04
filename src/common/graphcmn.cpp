@@ -619,7 +619,7 @@ wxDouble wxGraphicsContext::GetAlpha() const
 }
 #endif
 
-void wxGraphicsContext::GetDPI( wxDouble* dpiX, wxDouble* dpiY)
+void wxGraphicsContext::GetDPI( wxDouble* dpiX, wxDouble* dpiY) const
 {
     if ( m_window )
     {
@@ -944,7 +944,9 @@ wxGraphicsContext::CreateRadialGradientBrush(
 
 wxGraphicsFont wxGraphicsContext::CreateFont( const wxFont &font , const wxColour &col ) const
 {
-    return GetRenderer()->CreateFont(font,col);
+    wxRealPoint dpi;
+    GetDPI(&dpi.x, &dpi.y);
+    return GetRenderer()->CreateFontAtDPI(font, dpi, col);
 }
 
 wxGraphicsFont

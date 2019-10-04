@@ -342,6 +342,7 @@ class wxGDIPlusFontData : public wxGraphicsObjectRefData
 public:
     wxGDIPlusFontData( wxGraphicsRenderer* renderer,
                        const wxFont &font,
+                       const wxRealPoint& dpi,
                        const wxColour& col );
     wxGDIPlusFontData(wxGraphicsRenderer* renderer,
                       const wxString& name,
@@ -660,6 +661,10 @@ public :
                                       const wxString& facename,
                                       int flags = wxFONTFLAG_DEFAULT,
                                       const wxColour& col = *wxBLACK) wxOVERRIDE;
+
+    virtual wxGraphicsFont CreateFontAtDPI(const wxFont& font,
+                                           const wxRealPoint& dpi,
+                                           const wxColour& col) wxOVERRIDE;
 
     // create a graphics bitmap from a native bitmap
     virtual wxGraphicsBitmap CreateBitmapFromNativeBitmap( void* bitmap ) wxOVERRIDE;
@@ -1144,6 +1149,7 @@ wxGDIPlusFontData::Init(const wxString& name,
 
 wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
                                       const wxFont &font,
+                                      const wxRealPoint& dpi,
                                       const wxColour& col )
     : wxGraphicsObjectRefData( renderer )
 {
@@ -1157,7 +1163,11 @@ wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
     if ( font.GetWeight() == wxFONTWEIGHT_BOLD )
         style |= FontStyleBold;
 
-    Init(font.GetFaceName(), (REAL)(font.GetPixelSize().GetHeight()), style, col);
+    REAL fontSize = (REAL)(!dpi.y
+        ? font.GetPixelSize().GetHeight()
+        : (font.GetFractionalPointSize() * dpi.y / 72.0f));
+
+    Init(font.GetFaceName(), fontSize, style, col);
 }
 
 wxGDIPlusFontData::wxGDIPlusFontData(wxGraphicsRenderer* renderer,
@@ -2720,15 +2730,7 @@ wxGraphicsFont
 wxGDIPlusRenderer::CreateFont( const wxFont &font,
                                const wxColour &col )
 {
-    ENSURE_LOADED_OR_RETURN(wxNullGraphicsFont);
-    if ( font.IsOk() )
-    {
-        wxGraphicsFont p;
-        p.SetRefData(new wxGDIPlusFontData( this, font, col ));
-        return p;
-    }
-    else
-        return wxNullGraphicsFont;
+    return CreateFontAtDPI(font, wxRealPoint(), col);
 }
 
 wxGraphicsFont
@@ -2754,6 +2756,22 @@ wxGDIPlusRenderer::CreateFont(double sizeInPixels,
     wxGraphicsFont f;
     f.SetRefData(new wxGDIPlusFontData(this, facename, sizeInPixels, style, col));
     return f;
+}
+
+wxGraphicsFont
+wxGDIPlusRenderer::CreateFontAtDPI(const wxFont& font,
+                                   const wxRealPoint& dpi,
+                                   const wxColour& col)
+{
+    ENSURE_LOADED_OR_RETURN(wxNullGraphicsFont);
+    if ( font.IsOk() )
+    {
+        wxGraphicsFont p;
+        p.SetRefData(new wxGDIPlusFontData( this, font, dpi, col ));
+        return p;
+    }
+    else
+        return wxNullGraphicsFont;
 }
 
 wxGraphicsBitmap wxGDIPlusRenderer::CreateBitmap( const wxBitmap &bitmap )
