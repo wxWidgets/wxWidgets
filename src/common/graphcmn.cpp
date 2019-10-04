@@ -948,12 +948,12 @@ wxGraphicsFont wxGraphicsContext::CreateFont( const wxFont &font , const wxColou
 }
 
 wxGraphicsFont
-wxGraphicsContext::CreateFont(double size,
+wxGraphicsContext::CreateFont(double sizeInPixels,
                               const wxString& facename,
                               int flags,
                               const wxColour& col) const
 {
-    return GetRenderer()->CreateFont(size, facename, flags, col);
+    return GetRenderer()->CreateFont(sizeInPixels, facename, flags, col);
 }
 
 wxGraphicsBitmap wxGraphicsContext::CreateBitmap( const wxBitmap& bmp ) const

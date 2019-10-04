@@ -345,14 +345,14 @@ public:
                        const wxColour& col );
     wxGDIPlusFontData(wxGraphicsRenderer* renderer,
                       const wxString& name,
-                      REAL size,
+                      REAL sizeInPixels,
                       int style,
                       const wxColour& col);
 
     // This ctor takes ownership of the brush.
     wxGDIPlusFontData(wxGraphicsRenderer* renderer,
                       const wxString& name,
-                      REAL size,
+                      REAL sizeInPixels,
                       int style,
                       Brush* textBrush);
 
@@ -365,17 +365,17 @@ private :
     // Common part of all ctors, flags here is a combination of values of
     // FontStyle GDI+ enum.
     void Init(const wxString& name,
-              REAL size,
+              REAL sizeInPixels,
               int style,
               Brush* textBrush);
 
     // Common part of ctors taking wxColour.
     void Init(const wxString& name,
-              REAL size,
+              REAL sizeInPixels,
               int style,
               const wxColour& col)
     {
-        Init(name, size, style, new SolidBrush(wxColourToColor(col)));
+        Init(name, sizeInPixels, style, new SolidBrush(wxColourToColor(col)));
     }
 
     Brush* m_textBrush;
@@ -656,7 +656,7 @@ public :
     virtual wxGraphicsFont CreateFont( const wxFont& font,
                                        const wxColour& col) wxOVERRIDE;
 
-    virtual wxGraphicsFont CreateFont(double size,
+    virtual wxGraphicsFont CreateFont(double sizeInPixels,
                                       const wxString& facename,
                                       int flags = wxFONTFLAG_DEFAULT,
                                       const wxColour& col = *wxBLACK) wxOVERRIDE;
@@ -1105,7 +1105,7 @@ extern const wxArrayString& wxGetPrivateFontFileNames();
 
 void
 wxGDIPlusFontData::Init(const wxString& name,
-                        REAL size,
+                        REAL sizeInPixels,
                         int style,
                         Brush* textBrush)
 {
@@ -1127,7 +1127,7 @@ wxGDIPlusFontData::Init(const wxString& name,
             int rc = gs_pFontFamily[j].GetFamilyName(familyName);
             if ( rc == 0 && name == familyName )
             {
-                m_font = new Font(&gs_pFontFamily[j], size, style, UnitPoint);
+                m_font = new Font(&gs_pFontFamily[j], sizeInPixels, style, UnitPixel);
                 break;
             }
         }
@@ -1136,7 +1136,7 @@ wxGDIPlusFontData::Init(const wxString& name,
     if ( !m_font )
 #endif // wxUSE_PRIVATE_FONTS
     {
-        m_font = new Font(name.wc_str(), size, style, UnitPoint);
+        m_font = new Font(name.wc_str(), sizeInPixels, style, UnitPixel);
     }
 
     m_textBrush = textBrush;
@@ -1157,27 +1157,27 @@ wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer,
     if ( font.GetWeight() == wxFONTWEIGHT_BOLD )
         style |= FontStyleBold;
 
-    Init(font.GetFaceName(), font.GetFractionalPointSize(), style, col);
+    Init(font.GetFaceName(), (REAL)(font.GetPixelSize().GetHeight()), style, col);
 }
 
 wxGDIPlusFontData::wxGDIPlusFontData(wxGraphicsRenderer* renderer,
                                      const wxString& name,
-                                     REAL size,
+                                     REAL sizeInPixels,
                                      int style,
                                      const wxColour& col) :
     wxGraphicsObjectRefData(renderer)
 {
-    Init(name, size, style, col);
+    Init(name, sizeInPixels, style, col);
 }
 
 wxGDIPlusFontData::wxGDIPlusFontData(wxGraphicsRenderer* renderer,
                                      const wxString& name,
-                                     REAL size,
+                                     REAL sizeInPixels,
                                      int style,
                                      Brush* brush)
     : wxGraphicsObjectRefData(renderer)
 {
-    Init(name, size, style, brush);
+    Init(name, sizeInPixels, style, brush);
 }
 
 wxGDIPlusFontData::~wxGDIPlusFontData()
@@ -2732,7 +2732,7 @@ wxGDIPlusRenderer::CreateFont( const wxFont &font,
 }
 
 wxGraphicsFont
-wxGDIPlusRenderer::CreateFont(double size,
+wxGDIPlusRenderer::CreateFont(double sizeInPixels,
                               const wxString& facename,
                               int flags,
                               const wxColour& col)
@@ -2752,7 +2752,7 @@ wxGDIPlusRenderer::CreateFont(double size,
 
 
     wxGraphicsFont f;
-    f.SetRefData(new wxGDIPlusFontData(this, facename, size, style, col));
+    f.SetRefData(new wxGDIPlusFontData(this, facename, sizeInPixels, style, col));
     return f;
 }
 

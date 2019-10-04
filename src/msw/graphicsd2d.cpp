@@ -2876,9 +2876,7 @@ wxD2DFontData::wxD2DFontData(wxGraphicsRenderer* renderer, const wxFont& font, c
         m_font->GetWeight(),
         m_font->GetStyle(),
         m_font->GetStretch(),
-        // We need to use DIP units for the font size, with 1dip = 1/96in,
-        // while wxFont uses points with 1pt = 1/72in.
-        font.GetFractionalPointSize()*96/72,
+        (FLOAT)(font.GetPixelSize().GetHeight()),
         L"en-us",
         &m_textFormat);
 
@@ -4651,7 +4649,7 @@ public :
     wxGraphicsFont CreateFont(const wxFont& font, const wxColour& col) wxOVERRIDE;
 
     wxGraphicsFont CreateFont(
-        double size, const wxString& facename,
+        double sizeInPixels, const wxString& facename,
         int flags = wxFONTFLAG_DEFAULT,
         const wxColour& col = *wxBLACK) wxOVERRIDE;
 
@@ -4904,12 +4902,12 @@ wxGraphicsFont wxD2DRenderer::CreateFont(const wxFont& font, const wxColour& col
 }
 
 wxGraphicsFont wxD2DRenderer::CreateFont(
-    double size, const wxString& facename,
+    double sizeInPixels, const wxString& facename,
     int flags,
     const wxColour& col)
 {
     return CreateFont(
-        wxFontInfo(size).AllFlags(flags).FaceName(facename),
+        wxFontInfo(wxSize(sizeInPixels, sizeInPixels)).AllFlags(flags).FaceName(facename),
         col);
 }
 
