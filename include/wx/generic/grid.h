@@ -1362,7 +1362,7 @@ public:
     // interactive column hiding (enabled by default, works only for native header)
     bool     EnableHidingColumns( bool enable = true );
     void     DisableHidingColumns() { EnableHidingColumns(false); }
-    bool     CanHideColumns() { return m_canHideColumns; }
+    bool     CanHideColumns() const { return m_canHideColumns; }
 
     // interactive resizing of grid cells (enabled by default)
     void     EnableDragGridSize(bool enable = true);
