@@ -729,8 +729,23 @@ void wxMSWDCImpl::Clear()
             return;
     }
 
+    HBRUSH hbr;
     if ( !m_backgroundBrush.IsOk() )
+    {
+        // By default, use the stock white brush for compatibility with the
+        // previous wx versions.
+        hbr = WHITE_BRUSH;
+    }
+    else if ( !m_backgroundBrush.IsTransparent() )
+    {
+        hbr = GetHbrushOf(m_backgroundBrush);
+    }
+    else // Using transparent background brush.
+    {
+        // Clearing with transparent brush doesn't do anything, just as drawing
+        // with transparent pen doesn't.
         return;
+    }
 
     RECT rect;
     ::GetClipBox(GetHdc(), &rect);
@@ -738,7 +753,7 @@ void wxMSWDCImpl::Clear()
     // to compensate rounding errors if DC is the subject
     // of complex transformation (is e.g. rotated).
     ::InflateRect(&rect, 1, 1);
-    ::FillRect(GetHdc(), &rect, GetHbrushOf(m_backgroundBrush));
+    ::FillRect(GetHdc(), &rect, hbr);
 
     RealizeScaleAndOrigin();
 }

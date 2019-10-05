@@ -2054,7 +2054,6 @@ bool wxPrintPreviewBase::RenderPageIntoBitmap(wxBitmap& bmp, int pageNum)
 {
     wxMemoryDC memoryDC;
     memoryDC.SelectObject(bmp);
-    memoryDC.SetBackground(*wxWHITE_BRUSH);
     memoryDC.Clear();
 
     return RenderPageIntoDC(memoryDC, pageNum);

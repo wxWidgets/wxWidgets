@@ -543,8 +543,6 @@ void wxGCDCImpl::SetBrush( const wxBrush &brush )
 void wxGCDCImpl::SetBackground( const wxBrush &brush )
 {
     m_backgroundBrush = brush;
-    if (!m_backgroundBrush.IsOk())
-        return;
 }
 
 void wxGCDCImpl::SetLogicalFunction( wxRasterOperationMode function )
@@ -1286,28 +1284,23 @@ void wxGCDCImpl::Clear()
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::Clear - invalid DC") );
 
-    if ( m_backgroundBrush.IsOk() )
-    {
-        m_graphicContext->SetBrush( m_backgroundBrush );
-        wxPen p = *wxTRANSPARENT_PEN;
-        m_graphicContext->SetPen( p );
-        wxCompositionMode formerMode = m_graphicContext->GetCompositionMode();
-        m_graphicContext->SetCompositionMode(wxCOMPOSITION_SOURCE);
+    if ( m_backgroundBrush.IsTransparent() )
+        return;
 
-        double x, y, w, h;
-        m_graphicContext->GetClipBox(&x, &y, &w, &h);
-        m_graphicContext->DrawRectangle(x, y, w, h);
+    m_graphicContext->SetBrush( m_backgroundBrush.IsOk() ? m_backgroundBrush
+                                                         : *wxWHITE_BRUSH );
+    wxPen p = *wxTRANSPARENT_PEN;
+    m_graphicContext->SetPen( p );
+    wxCompositionMode formerMode = m_graphicContext->GetCompositionMode();
+    m_graphicContext->SetCompositionMode(wxCOMPOSITION_SOURCE);
 
-        m_graphicContext->SetCompositionMode(formerMode);
-        m_graphicContext->SetPen( m_pen );
-        m_graphicContext->SetBrush( m_brush );
-    }
-    else
-    {
-        double x, y, w, h;
-        m_graphicContext->GetClipBox(&x, &y, &w, &h);
-        m_graphicContext->ClearRectangle(x, y, w, h);
-    }
+    double x, y, w, h;
+    m_graphicContext->GetClipBox(&x, &y, &w, &h);
+    m_graphicContext->DrawRectangle(x, y, w, h);
+
+    m_graphicContext->SetCompositionMode(formerMode);
+    m_graphicContext->SetPen( m_pen );
+    m_graphicContext->SetBrush( m_brush );
 }
 
 void wxGCDCImpl::DoGetSize(int *width, int *height) const
