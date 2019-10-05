@@ -36,6 +36,7 @@ namespace
 enum
 {
     MenuTestCase_Foo = 10000,
+    MenuTestCase_SelectAll,
     MenuTestCase_Bar,
     MenuTestCase_First
 };
@@ -138,43 +139,47 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MenuTestCase, "MenuTestCase" );
 
 void MenuTestCase::CreateFrame()
 {
-    m_frame = new wxFrame(NULL, wxID_ANY, "test frame");
+    m_frame = new wxFrame(wxTheApp->GetTopWindow(), wxID_ANY, "test frame");
 
     wxMenu *fileMenu = new wxMenu;
     wxMenu *helpMenu = new wxMenu;
     wxMenu *subMenu = new wxMenu;
     wxMenu *subsubMenu = new wxMenu;
 
-    size_t itemcount = 0;
+    m_itemCount = 0;
 
-    PopulateMenu(subsubMenu, "Subsubmenu item ", itemcount);
-
-    // Store one of its IDs for later
-    m_subsubmenuItemId = MenuTestCase_First + itemcount - 2;
-
-    PopulateMenu(subMenu, "Submenu item ", itemcount);
+    PopulateMenu(subsubMenu, "Subsubmenu item ", m_itemCount);
 
     // Store one of its IDs for later
-    m_submenuItemId = MenuTestCase_First + itemcount - 2;
+    m_subsubmenuItemId = MenuTestCase_First + m_itemCount - 2;
+
+    PopulateMenu(subMenu, "Submenu item ", m_itemCount);
+
+    // Store one of its IDs for later
+    m_submenuItemId = MenuTestCase_First + m_itemCount - 2;
 
     subMenu->AppendSubMenu(subsubMenu, "Subsubmen&u", "Test a subsubmenu");
+    m_itemCount++;
 
     // Check GetTitle() returns the correct string _before_ appending to the bar
     fileMenu->SetTitle("&Foo\tCtrl-F");
     CPPUNIT_ASSERT_EQUAL( "&Foo\tCtrl-F", fileMenu->GetTitle() );
 
-    PopulateMenu(fileMenu, "Filemenu item ", itemcount);
+    PopulateMenu(fileMenu, "Filemenu item ", m_itemCount);
 
     fileMenu->Append(MenuTestCase_Foo, "&Foo\tCtrl-F", "Test item to be found");
+    m_itemCount++;
+    fileMenu->Append(MenuTestCase_SelectAll, "Select &all\tCtrl-A",
+                     "Accelerator conflicting with wxTextCtrl");
+    m_itemCount++;
 
 
-    PopulateMenu(helpMenu, "Helpmenu item ", itemcount);
+    PopulateMenu(helpMenu, "Helpmenu item ", m_itemCount);
     helpMenu->Append(MenuTestCase_Bar, "Bar\tF1");
+    m_itemCount++;
     m_menuWithBar = helpMenu;
     helpMenu->AppendSubMenu(subMenu, "Sub&menu", "Test a submenu");
-
-    // +2 for "Foo" and "Bar", +2 for the 2 submenus
-    m_itemCount = itemcount + 4;
+    m_itemCount++;
 
     // Use an arraystring here, to help with future tests
     m_menuLabels.Add("&File");
@@ -547,6 +552,11 @@ public:
         return *m_event;
     }
 
+    bool GotEvent() const
+    {
+        return m_gotEvent;
+    }
+
 private:
     void OnMenu(wxCommandEvent& event)
     {
@@ -606,6 +616,24 @@ void MenuTestCase::Events()
                           wxString(src->GetClassInfo()->GetClassName()) );
     CPPUNIT_ASSERT_EQUAL( static_cast<wxObject*>(m_menuWithBar),
                           src );
+
+    // Invoke another accelerator, it should also work.
+    sim.Char('A', wxMOD_CONTROL);
+    wxYield();
+
+    const wxCommandEvent& ev2 = handler.GetEvent();
+    CHECK( ev2.GetId() == static_cast<int>(MenuTestCase_SelectAll) );
+
+    // Now create a text control which uses the same accelerator for itself and
+    // check that when the text control has focus, the accelerator does _not_
+    // work.
+    wxTextCtrl* const text = new wxTextCtrl(m_frame, wxID_ANY, "Testing");
+    text->SetFocus();
+
+    sim.Char('A', wxMOD_CONTROL);
+    wxYield();
+
+    CHECK( !handler.GotEvent() );
 #endif // wxUSE_UIACTIONSIMULATOR
 }
 

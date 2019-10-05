@@ -2048,6 +2048,7 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
                     {
                         switch ( vkey )
                         {
+                            case 'A':
                             case 'C':
                             case 'V':
                             case 'X':
