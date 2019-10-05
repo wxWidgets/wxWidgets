@@ -65,7 +65,12 @@ wxColour
 wxDefaultHtmlRenderingStyle::
 GetSelectedTextBgColour(const wxColour& WXUNUSED(clr))
 {
-    return wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+    // By default we use the fixed standard selection colour, but if we're
+    // associated with a window use the colour appropriate for the window
+    // state, i.e. grey out selection when it's not in focus.
+
+    return wxSystemSettings::GetColour(!m_wnd || m_wnd->HasFocus() ?
+        wxSYS_COLOUR_HIGHLIGHT : wxSYS_COLOUR_BTNSHADOW);
 }
 
 
@@ -216,16 +221,21 @@ wxHtmlCell *wxHtmlCell::FindCellByPos(wxCoord x, wxCoord y,
 }
 
 
-wxPoint wxHtmlCell::GetAbsPos(wxHtmlCell *rootCell) const
+wxPoint wxHtmlCell::GetAbsPos(const wxHtmlCell *rootCell) const
 {
     wxPoint p(m_PosX, m_PosY);
-    for (wxHtmlCell *parent = m_Parent; parent && parent != rootCell;
+    for (const wxHtmlCell *parent = m_Parent; parent && parent != rootCell;
          parent = parent->m_Parent)
     {
         p.x += parent->m_PosX;
         p.y += parent->m_PosY;
     }
     return p;
+}
+
+wxRect wxHtmlCell::GetRect(const wxHtmlCell* rootCell) const
+{
+    return wxRect(GetAbsPos(rootCell), wxSize(m_Width, m_Height));
 }
 
 wxHtmlCell *wxHtmlCell::GetRootCell() const
@@ -333,7 +343,8 @@ void wxHtmlWordCell::SetPreviousWord(wxHtmlWordCell *cell)
 // where s2 and s3 start:
 void wxHtmlWordCell::Split(const wxDC& dc,
                            const wxPoint& selFrom, const wxPoint& selTo,
-                           unsigned& pos1, unsigned& pos2) const
+                           unsigned& pos1, unsigned& pos2,
+                           unsigned& ext1, unsigned& ext2) const
 {
     wxPoint pt1 = (selFrom == wxDefaultPosition) ?
                    wxDefaultPosition : selFrom - GetAbsPos();
@@ -390,21 +401,30 @@ void wxHtmlWordCell::Split(const wxDC& dc,
     pos2 = j;
 
     wxASSERT( pos2 >= pos1 );
+
+    ext1 = pos1 == 0 ? 0 : (pos1 < widths.size() ? widths[pos1-1] : widths.Last());
+    ext2 = pos2 == 0 ? 0 : (pos2 < widths.size() ? widths[pos2-1] : widths.Last());
 }
 
 void wxHtmlWordCell::SetSelectionPrivPos(const wxDC& dc, wxHtmlSelection *s) const
 {
-    unsigned p1, p2;
+    unsigned p1, p2, ext1, ext2;
 
     Split(dc,
           this == s->GetFromCell() ? s->GetFromPos() : wxDefaultPosition,
           this == s->GetToCell() ? s->GetToPos() : wxDefaultPosition,
-          p1, p2);
+          p1, p2, ext1, ext2);
 
     if ( this == s->GetFromCell() )
-        s->SetFromCharacterPos (p1); // selection starts here
+    {
+        s->SetFromCharacterPos(p1); // selection starts here
+        s->SetExtentBeforeSelection(ext1);
+    }
     if ( this == s->GetToCell() )
-        s->SetToCharacterPos (p2); // selection ends here
+    {
+        s->SetToCharacterPos(p2); // selection ends here
+        s->SetExtentBeforeSelectionEnd(ext2);
+    }
 }
 
 
@@ -449,7 +469,6 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
         // Selection changing, we must draw the word piecewise:
         wxHtmlSelection *s = info.GetSelection();
         wxString txt;
-        int w, h;
         int ofs = 0;
 
         // NB: this is quite a hack: in order to compute selection boundaries
@@ -469,8 +488,7 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
         {
             txt = m_Word.Mid(0, part1);
             dc.DrawText(txt, x + m_PosX, y + m_PosY);
-            dc.GetTextExtent(txt, &w, &h);
-            ofs += w;
+            ofs += s->GetExtentBeforeSelection();
         }
 
         SwitchSelState(dc, info, true);
@@ -480,11 +498,9 @@ void wxHtmlWordCell::Draw(wxDC& dc, int x, int y,
 
         if ( (size_t)part2 < m_Word.length() )
         {
-            dc.GetTextExtent(txt, &w, &h);
-            ofs += w;
             SwitchSelState(dc, info, false);
             txt = m_Word.Mid(part2);
-            dc.DrawText(txt, ofs + x + m_PosX, y + m_PosY);
+            dc.DrawText(txt, x + m_PosX + s->GetExtentBeforeSelectionEnd(), y + m_PosY);
         }
         else
             drawSelectionAfterCell = true;
