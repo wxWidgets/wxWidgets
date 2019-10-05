@@ -1243,11 +1243,11 @@ GdkPixbuf* wxBitmap::GetPixbufNoMask() const
 }
 
 // helper to set up a simulated depth 1 surface
-static void SetSourceSurface1(const wxBitmapRefData* bmpData, cairo_t* cr, int x, int y, const wxColour* fg, const wxColour* bg)
+static void SetSourceSurface1(const GdkPixbuf* pixbufNoMask, cairo_t* cr,
+                              int x, int y, int w, int h,
+                              const wxColour* fg, const wxColour* bg)
 {
-    GdkPixbuf* pixbuf = gdk_pixbuf_copy(bmpData->m_pixbufNoMask);
-    const int w = bmpData->m_width;
-    const int h = bmpData->m_height;
+    GdkPixbuf* pixbuf = gdk_pixbuf_copy(pixbufNoMask);
     const int stride = gdk_pixbuf_get_rowstride(pixbuf);
     const int channels = gdk_pixbuf_get_n_channels(pixbuf);
     guchar* dst = gdk_pixbuf_get_pixels(pixbuf);
@@ -1294,12 +1294,15 @@ void wxBitmap::SetSourceSurface(cairo_t* cr, int x, int y, const wxColour* fg, c
         cairo_set_source_surface(cr, bmpData->m_surface, x, y);
         return;
     }
-    wxCHECK_RET(bmpData->m_pixbufNoMask, "no bitmap data");
     if (bmpData->m_bpp == 1)
-        SetSourceSurface1(bmpData, cr, x, y, fg, bg);
+    {
+        SetSourceSurface1(GetPixbufNoMask(), cr,
+                          x, y, bmpData->m_width, bmpData->m_height,
+                          fg, bg);
+    }
     else
     {
-        gdk_cairo_set_source_pixbuf(cr, bmpData->m_pixbufNoMask, x, y);
+        gdk_cairo_set_source_pixbuf(cr, GetPixbufNoMask(), x, y);
         cairo_pattern_get_surface(cairo_get_source(cr), &bmpData->m_surface);
         cairo_surface_reference(bmpData->m_surface);
     }
