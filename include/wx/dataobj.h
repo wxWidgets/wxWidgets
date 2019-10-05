@@ -427,6 +427,11 @@ public:
 #endif // different wxTextDataObject implementations
 
 private:
+#if defined(__WXQT__)
+    // Overridden to set text directly instead of extracting byte array
+    void QtSetDataSingleFormat(const class QMimeData &mimeData, const wxDataFormat &format) wxOVERRIDE;
+#endif
+
     wxString m_text;
 
     wxDECLARE_NO_COPY_CLASS(wxTextDataObject);
