@@ -165,6 +165,7 @@ int wxGetTimeZone()
     // problem if we do it twice due to a race condition, as it's idempotent
     // anyhow, so don't bother with any locks here.
     static bool s_tzSet = (_tzset(), true);
+    wxUnusedVar(s_tzSet);
 
     // Starting with VC++ 8 timezone variable is deprecated and is not even
     // available in some standard library version so use the new function for
@@ -179,6 +180,7 @@ int wxGetTimeZone()
 #else // Use some kind of time zone variable.
     // In any case we must initialize the time zone before using it.
     static bool s_tzSet = (tzset(), true);
+    wxUnusedVar(s_tzSet);
 
     #if defined(WX_TIMEZONE) // If WX_TIMEZONE was defined by configure, use it.
         return WX_TIMEZONE;
