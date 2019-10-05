@@ -162,7 +162,7 @@ enum wxPosixPermissions
             inline long long wxFtell(FILE* fp)
             {
                 fpos_t pos;
-                return fgetpos(fp, &pos) == 0 ? pos : -1LL;
+                return fgetpos(fp, &pos) == 0 ? pos : static_cast<fpos_t>(-1LL);
             }
         #else
             #define wxFtell ftello64
