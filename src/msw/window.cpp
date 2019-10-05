@@ -1023,9 +1023,17 @@ void wxWindowMSW::MSWUpdateUIState(int action, int state)
 
 void wxWindowMSW::WXSetPendingFocus(wxWindow* win)
 {
+    wxWindow * const focus = FindFocus();
+
     for ( wxWindow* parent = this; parent; parent = parent->GetParent() )
     {
-        parent->WXDoUpdatePendingFocus(win);
+        // We shouldn't overwrite the pending focus if the window has the focus
+        // currently, as this would make its state inconsistent. And this would
+        // be useless anyhow, as we only remember pending focus in order to
+        // restore it properly when the window gets the focus back -- which is
+        // unnecessary if it has the focus already.
+        if ( !parent->IsDescendant(focus) )
+            parent->WXDoUpdatePendingFocus(win);
 
         if ( parent->IsTopLevel() )
             break;
