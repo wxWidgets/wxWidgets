@@ -41,16 +41,24 @@
     #include "wx/msw/msvcrt.h"
 
     #ifdef wxCrtSetDbgFlag
-        static struct EnableMemLeakChecking
+        static struct EnableMemoryChecking
         {
-            EnableMemLeakChecking()
+            EnableMemoryChecking()
             {
-                // check for memory leaks on program exit (another useful flag
-                // is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free deallocated
-                // memory which may be used to simulate low-memory condition)
+                // more extreme memory checking for extended-debug builds
+            #if wxDEBUG_LEVEL > 2
+                /* _CRTDBG_LEAK_CHECK_DF checks for memory leaks on program exit.
+                   _CRTDBG_DELAY_FREE_MEM_DF causes memory to not be freed
+                   and may be used to simulate low-memory conditions.
+                   _CRTDBG_CHECK_ALWAYS_DF causes _CrtCheckMemory()
+                   to be called on every allocation to help catch errors.*/
+                wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF|_CRTDBG_DELAY_FREE_MEM_DF|_CRTDBG_CHECK_ALWAYS_DF);
+            #else
+                // check for memory leaks on program exit
                 wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
+            #endif
             }
-        } gs_enableLeakChecks;
+        } gs_enableMemoryChecks;
     #endif // wxCrtSetDbgFlag
 #endif // __WINDOWS__
 
