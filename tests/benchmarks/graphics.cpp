@@ -409,23 +409,65 @@ private:
         fflush(stdout);
 
         wxStopWatch sw;
-        int x = 0,
-            y = 0;
+        int x0 = 0,
+            y0 = 0;
         for ( int n = 0; n < opts.numIters; n++ )
         {
             int x1 = rand() % opts.width,
                 y1 = rand() % opts.height;
 
-            dc.DrawLine(x, y, x1, y1);
+            dc.DrawLine(x0, y0, x1, y1);
 
-            x = x1;
-            y = y1;
+            x0 = x1;
+            y0 = y1;
         }
 
         const long t = sw.Time();
 
         wxPrintf("%ld lines done in %ldms = %gus/line\n",
                  opts.numIters, t, (1000. * t)/opts.numIters);
+
+        // Horizontal lines
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        sw.Start();
+        x0 = 0;
+        for ( int n = 0; n < opts.numIters; n++ )
+        {
+            int x1 = rand() % opts.width;
+            int y = rand() % opts.height;
+
+            dc.DrawLine(x0, y, x1, y);
+
+            x0 = x1;
+        }
+
+        const long t2 = sw.Time();
+
+        wxPrintf("%ld horizontal lines done in %ldms = %gus/line\n",
+            opts.numIters, t2, (1000. * t2) / opts.numIters);
+
+        // Vertical lines
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        sw.Start();
+        y0 = 0;
+        for ( int n = 0; n < opts.numIters; n++ )
+        {
+            int x = rand() % opts.width;
+            int y1 = rand() % opts.height;
+
+            dc.DrawLine(x, y0, x, y1);
+
+            y0 = y1;
+        }
+
+        const long t3 = sw.Time();
+
+        wxPrintf("%ld vertical lines done in %ldms = %gus/line\n",
+            opts.numIters, t3, (1000. * t3) / opts.numIters);
     }
 
 
