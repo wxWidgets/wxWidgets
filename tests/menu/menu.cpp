@@ -776,7 +776,7 @@ TEST_CASE( "wxMenuItemAccelEntry", "[menu][accelentry]" )
 
     SECTION( "Modifier keys" )
     {
-        for ( int i = 0; i < WXSIZEOF(modKeys); i++ )
+        for ( unsigned i = 0; i < WXSIZEOF(modKeys); i++ )
         {
             const key& k = modKeys[i];
 
@@ -793,7 +793,7 @@ TEST_CASE( "wxMenuItemAccelEntry", "[menu][accelentry]" )
 
     SECTION( "Special keys" )
     {
-        for ( int i = 0; i < WXSIZEOF(specialKeys); i++ )
+        for ( unsigned i = 0; i < WXSIZEOF(specialKeys); i++ )
         {
             const key& k = specialKeys[i];
 
