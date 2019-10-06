@@ -1701,4 +1701,34 @@ TEST_CASE("wxDateTime-BST-bugs", "[datetime][dst][BST][.]")
     }
 }
 
+TEST_CASE("wxDateTime::UNow", "[datetime][now][unow]")
+{
+    const wxDateTime now = wxDateTime::Now();
+    const wxDateTime unow = wxDateTime::UNow();
+
+    CHECK( now.GetYear() == unow.GetYear() );
+    CHECK( now.GetMonth() == unow.GetMonth() );
+    CHECK( now.GetDay() == unow.GetDay() );
+    CHECK( now.GetHour() == unow.GetHour() );
+    CHECK( now.GetMinute() == unow.GetMinute() );
+    CHECK( now.GetSecond() == unow.GetSecond() );
+
+    CHECK( now.GetMillisecond() == 0 );
+
+    // Just checking unow.GetMillisecond() == 0 would fail once per 1000 test
+    // runs on average, which is certainly not a lot, but still try to avoid
+    // such spurious failures.
+    bool gotMS = false;
+    for ( int i = 0; i < 3; ++i )
+    {
+        if ( wxDateTime::UNow().GetMillisecond() != 0 )
+        {
+            gotMS = true;
+            break;
+        }
+    }
+
+    CHECK( gotMS );
+}
+
 #endif // wxUSE_DATETIME
