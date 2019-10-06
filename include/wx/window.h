@@ -728,6 +728,9 @@ public:
         // click it
     virtual bool AcceptsFocusFromKeyboard() const { return AcceptsFocus() && m_acceptsFocusFromKeyboard; }
 
+        // Disable any input focus from the keyboard
+    void DisableFocusFromKeyboard() { m_acceptsFocusFromKeyboard = false; }
+
 
         // Can this window be focused right now, in its current state? This
         // shouldn't be called at all if AcceptsFocus() returns false.
