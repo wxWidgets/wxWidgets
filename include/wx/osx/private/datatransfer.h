@@ -13,6 +13,8 @@
 #include "wx/osx/private.h"
 #include "wx/osx/dataform.h"
 
+class WXDLLIMPEXP_FWD_CORE wxDataObject;
+
 class WXDLLIMPEXP_CORE wxOSXDataSourceItem
 {
 public:
