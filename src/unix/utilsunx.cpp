@@ -588,12 +588,11 @@ long wxExecute(const char* const* argv, int flags, wxProcess* process,
     pid_t pid;
 #if defined(__DARWIN__) && !defined(__WXOSX_IPHONE__)
     pid = -1;
-    // wxMacLaunch() only executes app bundles and only does it asynchronously.
+    // wxCocoaLaunch() only executes app bundles and only does it asynchronously.
     // It returns false if the target is not an app bundle, thus falling
     // through to the regular code for non app bundles.
     if ( !(flags & wxEXEC_SYNC) && wxCocoaLaunch(argv, pid) )
     {
-        // we don't have any PID to return so just make up something non null
         return pid;
     }
 #endif // __DARWIN__

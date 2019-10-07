@@ -194,17 +194,9 @@ bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
 
 bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
 {
-    // Obtains the number of arguments for determining the size of
-    // the CFArray used to hold them
-    NSUInteger cfiCount = 0;
-    for (const char* const* argvcopy = argv; *argvcopy != NULL; ++argvcopy)
-    {
-        ++cfiCount;
-    }
-    
     // If there is not a single argument then there is no application
     // to launch
-    if(cfiCount == 0)
+    if(!argv)
     {
         wxLogDebug(wxT("wxCocoaLaunch No file to launch!"));
         return false ;
@@ -228,12 +220,6 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
     NSMutableArray *params = [[NSMutableArray alloc] init];
     for( ; *argv != NULL; ++argv )
     {
-        // Check for '<' as this will ring true for
-        // CFURLCreateWithString but is generally not considered
-        // typical on mac but is usually passed here from wxExecute
-        if (wxStrcmp(*argv, wxT("<")) == 0)
-            continue;
-
         NSURL *cfurlCurrentFile;
         wxFileName argfn(*argv);     // Filename for path
         wxString dir( *argv );
@@ -273,12 +259,14 @@ bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
     NSRunningApplication *app = [ws launchApplicationAtURL:url options:NSWorkspaceLaunchAsync
                                              configuration:[NSDictionary dictionaryWithObject:params forKey:NSWorkspaceLaunchConfigurationArguments]
                                              error:&error];
+    [params release];
+    
     if( app != nil )
         pid = [app processIdentifier];
     else
     {
         wxString errorDesc = wxCFStringRef::AsString([error localizedDescription]);
-        wxLogDebug( wxString::Format( "wxCocoaLaunch failure: error is %s", errorDesc ) );
+        wxLogDebug( "wxCocoaLaunch failure: error is %s", errorDesc );
         return false;
     }
     return true;
