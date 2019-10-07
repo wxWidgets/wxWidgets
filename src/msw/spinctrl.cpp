@@ -29,7 +29,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/hashmap.h"
-    #include "wx/math.h"         // log
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/event.h"
     #include "wx/textctrl.h"
@@ -72,24 +71,6 @@ WX_DECLARE_HASH_MAP(HWND, wxSpinCtrl *,
                     SpinForTextCtrl);
 
 SpinForTextCtrl gs_spinForTextCtrl;
-
-// The helper function to determine the number of digits in the integer value.
-// Adds one for negative values.
-int GetDigitsCount(int value, int base)
-{
-    if ( value == 0 )
-        return 1;
-    int digits = 0;
-    if ( value < 0 )
-    {
-        ++digits;
-        value = -value;
-    }
-    const double logBase = log(static_cast<double>(value)) /
-                           log(static_cast<double>(base));
-    digits += static_cast<int>(logBase) + 1;
-    return digits;
-}
 
 } // anonymous namespace
 
@@ -395,7 +376,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     // Fix the min width because SetInitialSize sets it to sizeCtrl, but the
     // control can be thinner.
-    SetMinSize(GetBestSizeFromDigitsCount(1));
+    SetMinSize(GetSizeFromText("9"));
 
     (void)::ShowWindow(GetBuddyHwnd(), SW_SHOW);
 
@@ -463,6 +444,9 @@ bool wxSpinCtrl::SetBase(int base)
     // Whether we need to be able enter "x" or not influences whether we should
     // use ES_NUMBER for the buddy control.
     UpdateBuddyStyle();
+
+    // Update the control text.
+    SetValue(GetValue());
 
     return true;
 }
@@ -769,18 +753,17 @@ int wxSpinCtrl::GetOverlap() const
     return wxGetWindowRect(m_hwndBuddy).right - wxGetWindowRect(GetHwnd()).left;
 }
 
-wxSize wxSpinCtrl::GetBestSizeFromDigitsCount(int digitsCount) const
-{
-    const wxString largestString('8', digitsCount);
-    return DoGetSizeFromTextSize(GetTextExtent(largestString).GetWidth());
-}
-
 wxSize wxSpinCtrl::DoGetBestSize() const
 {
-    const int base = GetBase();
-    const int digitsCount = wxMax(GetDigitsCount(GetMin(), base),
-                                  GetDigitsCount(GetMax(), base));
-    return GetBestSizeFromDigitsCount(digitsCount);
+    const int minVal = GetMin();
+    const int maxVal = GetMax();
+    const char* formatString = GetBase() == 16 ?
+                               (maxVal < 0x10000 ? "0x%04lx" : "0x%08lx") :
+                               "%d";
+    const int lenMin = wxString::Format(formatString, minVal).length();
+    const int lenMax = wxString::Format(formatString, maxVal).length();
+    const wxString largestString('8', wxMax(lenMin, lenMax));
+    return GetSizeFromText(largestString);
 }
 
 wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
