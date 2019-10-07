@@ -266,6 +266,12 @@ public:
     {
         return m_container.HasTransparentBackground();
     }
+
+    WXDLLIMPEXP_INLINE_CORE
+    virtual void WXDoUpdatePendingFocus(wxWindow* win) wxOVERRIDE
+    {
+        return m_container.SetLastFocus(win);
+    }
 #endif // __WXMSW__
 
 protected:

@@ -158,6 +158,7 @@ wxPenRefData::wxPenRefData()
 
 wxPenRefData::wxPenRefData(const wxPenRefData& data)
              :wxGDIRefData()
+    , m_colour(data.m_colour)
 {
     m_style = data.m_style;
     m_width = data.m_width;
@@ -165,11 +166,12 @@ wxPenRefData::wxPenRefData(const wxPenRefData& data)
     m_cap = data.m_cap;
     m_nbDash = data.m_nbDash;
     m_dash = data.m_dash;
-    m_colour = data.m_colour;
     m_hPen = 0;
 }
 
 wxPenRefData::wxPenRefData(const wxPenInfo& info)
+    : m_stipple(info.GetStipple())
+    , m_colour(info.GetColour())
 {
     Init();
 
@@ -177,9 +179,7 @@ wxPenRefData::wxPenRefData(const wxPenInfo& info)
     m_width = info.GetWidth();
     m_join = info.GetJoin();
     m_cap = info.GetCap();
-    m_stipple = info.GetStipple();
     m_nbDash = info.GetDashes(&m_dash);
-    m_colour = info.GetColour();
 }
 
 wxPenRefData::~wxPenRefData()

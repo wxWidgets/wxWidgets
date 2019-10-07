@@ -310,7 +310,7 @@ void wxSocketImplMSW::DoClose()
 {
     wxSocketManager::Get()->Uninstall_Callback(this);
 
-    closesocket(m_fd);
+    wxCloseSocket(m_fd);
 }
 
 wxSocketError wxSocketImplMSW::GetLastError() const

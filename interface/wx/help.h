@@ -100,6 +100,7 @@ public:
         If the help viewer is not running, runs it and displays the given section.
 
         - @e WinHelp, MS HTML Help @a sectionNo is a context id.
+        - @e MS HTML Help: Pass -1 in @a sectionNo to display the index.
         - @e External HTML help: wxExtHelpController implements @a sectionNo as
           an id in a map file, which is of the form:
         - @e wxHtmlHelpController: @a sectionNo is an identifier as specified in
@@ -161,6 +162,7 @@ public:
 
         - @e WinHelp, MS HTML Help:
           If more than one match is found, the first topic is displayed.
+        - @e MS HTML Help: Pass an empty string to display the search page.
         - @e External HTML help, simple wxHTML help:
           If more than one match is found, a choice of topics is displayed.
         - @e wxHtmlHelpController: see wxHtmlHelpController::KeywordSearch.

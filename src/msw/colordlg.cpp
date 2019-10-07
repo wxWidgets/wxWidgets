@@ -37,7 +37,10 @@
     #include "wx/math.h"
 #endif
 
+#include "wx/scopeguard.h"
+
 #include "wx/msw/private.h"
+#include "wx/msw/private/dpiaware.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -51,6 +54,9 @@
 // and "Define Custom Colors" extension not shown
 static wxRect gs_rectDialog(0, 0, 222, 324);
 
+// The dialog currently being shown or null.
+static wxColourDialog* gs_activeDialog = NULL;
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -61,6 +67,53 @@ wxIMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog);
 // implementation
 // ============================================================================
 
+#ifndef COLORBOXES
+    #define COLORBOXES 64
+#endif
+
+// Undocumented property storing the COLORINFO struct in the standard dialog.
+#ifndef COLORPROP
+    #define COLORPROP (LPCTSTR) 0xA000L
+#endif
+
+namespace
+{
+
+// The private and undocumented Windows structure used by the standard dialog.
+// See https://social.msdn.microsoft.com/Forums/en-US/c5fcfd9f-6b27-4848-bb9d-94bec105eabd/get-the-current-clicked-color-from-choosecolor-dialog?forum=windowsgeneraldevelopmentissues
+struct COLORINFO
+{
+    UINT           ApiType;
+    LPCHOOSECOLOR  pCC;
+    HANDLE         hLocal;
+    HANDLE         hDialog;
+    HPALETTE       hPal;
+    DWORD          currentRGB;
+    WORD           currentHue;
+    WORD           currentSat;
+    WORD           currentLum;
+    WORD           nHueWidth;
+    WORD           nSatHeight;
+    WORD           nLumHeight;
+    WORD           nCurMix;
+    WORD           nCurDsp;
+    WORD           nCurBox;
+    WORD           nHuePos;
+    WORD           nSatPos;
+    WORD           nLumPos;
+    RECT           rOriginal;
+    RECT           rRainbow;
+    RECT           rLumScroll;
+    RECT           rLumPaint;
+    RECT           rCurrentColor;
+    RECT           rNearestPure;
+    RECT           rColorSamples;
+    BOOL           bFoldOut;
+    DWORD          rgbBoxColor[COLORBOXES];
+};
+
+} // anonymous namespace
+
 // ----------------------------------------------------------------------------
 // colour dialog hook proc
 // ----------------------------------------------------------------------------
@@ -69,19 +122,30 @@ UINT_PTR CALLBACK
 wxColourDialogHookProc(HWND hwnd,
                        UINT uiMsg,
                        WPARAM WXUNUSED(wParam),
-                       LPARAM lParam)
+                       LPARAM WXUNUSED(lParam))
 {
-    if ( uiMsg == WM_INITDIALOG )
+    switch ( uiMsg )
     {
-        CHOOSECOLOR *pCC = (CHOOSECOLOR *)lParam;
-        wxColourDialog * const
-            dialog = reinterpret_cast<wxColourDialog *>(pCC->lCustData);
+        case WM_INITDIALOG:
+            {
+                const wxString title = gs_activeDialog->GetTitle();
+                if ( !title.empty() )
+                    ::SetWindowText(hwnd, title.t_str());
 
-        const wxString title = dialog->GetTitle();
-        if ( !title.empty() )
-            ::SetWindowText(hwnd, title.t_str());
+                gs_activeDialog->MSWOnInitDone((WXHWND)hwnd);
+            }
+            break;
 
-        dialog->MSWOnInitDone((WXHWND)hwnd);
+        default:
+            // Check if the currently selected colour changed.
+            //
+            // Doing it for all messages might be an overkill, we probably
+            // could only do it for keyboard/mouse ones.
+            if ( const COLORINFO* pCI = (COLORINFO*)::GetProp(hwnd, COLORPROP) )
+            {
+                gs_activeDialog->MSWCheckIfCurrentChanged(pCI->currentRGB);
+            }
+            break;
     }
 
     return 0;
@@ -103,7 +167,7 @@ void wxColourDialog::Init()
     gs_rectDialog.y = 0;
 }
 
-bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
+bool wxColourDialog::Create(wxWindow *parent, const wxColourData *data)
 {
     m_parent = parent;
     if (data)
@@ -135,9 +199,11 @@ int wxColourDialog::ShowModal()
             custColours[i] = RGB(255,255,255);
     }
 
+    m_currentCol = wxColourToRGB(m_colourData.GetColour());
+
     chooseColorStruct.lStructSize = sizeof(CHOOSECOLOR);
     chooseColorStruct.hwndOwner = hWndParent;
-    chooseColorStruct.rgbResult = wxColourToRGB(m_colourData.GetColour());
+    chooseColorStruct.rgbResult = m_currentCol;
     chooseColorStruct.lpCustColors = custColours;
 
     chooseColorStruct.Flags = CC_RGBINIT | CC_ENABLEHOOK;
@@ -146,6 +212,12 @@ int wxColourDialog::ShowModal()
 
     if ( m_colourData.GetChooseFull() )
         chooseColorStruct.Flags |= CC_FULLOPEN;
+
+    // Set the global pointer for the duration of the modal dialog life-time.
+    gs_activeDialog = this;
+    wxON_BLOCK_EXIT_NULL(gs_activeDialog);
+
+    wxMSWImpl::AutoSystemDpiAware dpiAwareness;
 
     // do show the modal dialog
     if ( !::ChooseColor(&chooseColorStruct) )
@@ -255,7 +327,7 @@ void wxColourDialog::DoGetClientSize(int *width, int *height) const
 void wxColourDialog::MSWOnInitDone(WXHWND hDlg)
 {
     // set HWND so that our DoMoveWindow() works correctly
-    SetHWND(hDlg);
+    TempHWNDSetter set(this, hDlg);
 
     if ( m_centreDir )
     {
@@ -272,9 +344,17 @@ void wxColourDialog::MSWOnInitDone(WXHWND hDlg)
     {
         SetPosition(GetPosition());
     }
+}
 
-    // we shouldn't destroy hDlg, so disassociate from it
-    SetHWND(NULL);
+void wxColourDialog::MSWCheckIfCurrentChanged(WXCOLORREF currentCol)
+{
+    if ( currentCol == m_currentCol )
+        return;
+
+    m_currentCol = currentCol;
+
+    wxColourDialogEvent event(wxEVT_COLOUR_CHANGED, this, wxRGBToColour(currentCol));
+    ProcessWindowEvent(event);
 }
 
 #endif // wxUSE_COLOURDLG

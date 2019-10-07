@@ -1842,11 +1842,10 @@ void wxThreadModule::OnExit()
 {
     wxASSERT_MSG( wxThread::IsMain(), wxT("only main thread can be here") );
 
-    // are there any threads left which are being deleted right now?
-    size_t nThreadsBeingDeleted;
-
     {
         wxMutexLocker lock( *gs_mutexDeleteThread );
+        // are there any threads left which are being deleted right now?
+        size_t nThreadsBeingDeleted;
         nThreadsBeingDeleted = gs_nThreadsBeingDeleted;
 
         if ( nThreadsBeingDeleted > 0 )

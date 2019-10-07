@@ -326,7 +326,7 @@ void wxMenuItemBase::SetHelp(const wxString& str)
 
 wxString wxMenuItemBase::GetLabelText(const wxString& text)
 {
-    return wxStripMenuCodes(text);
+    return wxStripMenuCodes(text, wxStrip_Menu);
 }
 
 #if WXWIN_COMPATIBILITY_2_8
@@ -1087,10 +1087,10 @@ wxString wxMenuBarBase::GetHelpString(int itemid) const
 
 void wxMenuBarBase::UpdateMenus()
 {
-    wxMenu* menu;
     int nCount = GetMenuCount();
     for (int n = 0; n < nCount; n++)
     {
+        wxMenu* menu;
         menu = GetMenu( n );
         if (menu != NULL)
             menu->UpdateUI();

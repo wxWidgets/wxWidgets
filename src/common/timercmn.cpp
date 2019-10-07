@@ -38,7 +38,9 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-wxIMPLEMENT_DYNAMIC_CLASS(wxTimerEvent, wxEvent);
+// This class is not really abstract, but this macro has to be used because it
+// doesn't have a default ctor.
+wxIMPLEMENT_ABSTRACT_CLASS(wxTimerEvent, wxEvent);
 
 wxDEFINE_EVENT(wxEVT_TIMER, wxTimerEvent);
 

@@ -1428,8 +1428,12 @@ public:
     bool Alloc(size_t nLen);
 
     /**
-        Minimizes the string's memory. This can be useful after a call to
-        Alloc() if too much memory were preallocated.
+        Minimizes the string's memory.
+
+        This can be useful after a call to Alloc() if too much memory were
+        preallocated.
+
+        @return Always returns @true
     */
     bool Shrink();
 
@@ -1710,6 +1714,14 @@ public:
     size_type size() const;
     wxString substr(size_t nStart = 0, size_t nLen = npos) const;
     void swap(wxString& str);
+
+    bool starts_with(const wxString &str) const;
+    bool starts_with(const char *sz) const;
+    bool starts_with(const wchar_t *sz) const;
+
+    bool ends_with(const wxString &str) const;
+    bool ends_with(const char *sz) const;
+    bool ends_with(const wchar_t *sz) const;
 
     //@}
 

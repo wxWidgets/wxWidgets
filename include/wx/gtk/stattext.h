@@ -49,8 +49,8 @@ protected:
 
     virtual wxSize DoGetBestSize() const wxOVERRIDE;
 
-    virtual wxString DoGetLabel() const wxOVERRIDE;
-    virtual void DoSetLabel(const wxString& str) wxOVERRIDE;
+    virtual wxString WXGetVisibleLabel() const wxOVERRIDE;
+    virtual void WXSetVisibleLabel(const wxString& str) wxOVERRIDE;
 #if wxUSE_MARKUP
     virtual bool DoSetLabelMarkup(const wxString& markup) wxOVERRIDE;
 #endif // wxUSE_MARKUP

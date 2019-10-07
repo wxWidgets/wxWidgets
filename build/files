@@ -297,6 +297,7 @@ QT_HDR =
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
+    wx/qt/treectrl.h
     wx/qt/window.h
 
 QT_SRC=
@@ -392,6 +393,7 @@ QT_SRC=
     src/qt/toolbar.cpp
     src/qt/tooltip.cpp
     src/qt/toplevel.cpp
+    src/qt/treectrl.cpp
     src/qt/uiaction.cpp
     src/qt/utils.cpp
     src/qt/window.cpp
@@ -2396,7 +2398,6 @@ OSX_SHARED_HDR =
     wx/osx/frame.h
     wx/osx/gauge.h
     wx/osx/listbox.h
-    wx/osx/listctrl.h
     wx/osx/mdi.h
     wx/osx/menu.h
     wx/osx/menuitem.h
@@ -2840,6 +2841,7 @@ XRC_SRC =
     src/xrc/xh_collpane.cpp
     src/xrc/xh_combo.cpp
     src/xrc/xh_comboctrl.cpp
+    src/xrc/xh_dataview.cpp
     src/xrc/xh_datectrl.cpp
     src/xrc/xh_dirpicker.cpp
     src/xrc/xh_dlg.cpp
@@ -2853,6 +2855,7 @@ XRC_SRC =
     src/xrc/xh_grid.cpp
     src/xrc/xh_html.cpp
     src/xrc/xh_hyperlink.cpp
+    src/xrc/xh_infobar.cpp
     src/xrc/xh_listb.cpp
     src/xrc/xh_listbk.cpp
     src/xrc/xh_listc.cpp
@@ -2909,6 +2912,7 @@ XRC_HDR =
     wx/xrc/xh_collpane.h
     wx/xrc/xh_combo.h
     wx/xrc/xh_comboctrl.h
+    wx/xrc/xh_dataview.h
     wx/xrc/xh_datectrl.h
     wx/xrc/xh_dirpicker.h
     wx/xrc/xh_dlg.h
@@ -2923,6 +2927,7 @@ XRC_HDR =
     wx/xrc/xh_grid.h
     wx/xrc/xh_html.h
     wx/xrc/xh_hyperlink.h
+    wx/xrc/xh_infobar.h
     wx/xrc/xh_listb.h
     wx/xrc/xh_listbk.h
     wx/xrc/xh_listc.h
@@ -3129,10 +3134,15 @@ RICHTEXT_HDR =
 
 # wxSTC
 
-STC_SRC =
+STC_CMN_SRC =
     src/stc/stc.cpp
     src/stc/PlatWX.cpp
     src/stc/ScintillaWX.cpp
 
-STC_HDR =
+STC_CMN_HDR =
     wx/stc/stc.h
+
+STC_OSX_COCOA_SRC =
+    src/stc/PlatWXcocoa.mm
+STC_OSX_COCOA_HDR =
+

@@ -1350,6 +1350,8 @@ public:
   size_type capacity() const { return m_impl.capacity(); }
   void reserve(size_t sz) { m_impl.reserve(sz); }
 
+  void shrink_to_fit() { Shrink(); }
+
   void resize(size_t nSize, wxUniChar ch = wxT('\0'))
   {
     const size_t len = length();
@@ -1707,7 +1709,11 @@ public:
       { return FromUTF8Unchecked(utf8.c_str(), utf8.length()); }
 #endif
     const wxScopedCharBuffer utf8_str() const
-      { return wxMBConvUTF8().cWC2MB(wc_str()); }
+    {
+        if (empty())
+            return wxScopedCharBuffer::CreateNonOwned("", 0);
+        return wxMBConvUTF8().cWC2MB(wc_str());
+    }
 #endif
 
     const wxScopedCharBuffer ToUTF8() const { return utf8_str(); }
@@ -3255,6 +3261,20 @@ public:
   size_t find_last_not_of(const wxScopedWCharBuffer& sz, size_t nStart, size_t n) const
     { return find_last_not_of(sz.data(), nStart, n); }
 
+  bool starts_with(const wxString &str) const
+    { return StartsWith(str); }
+  bool starts_with(const char *sz) const
+    { return StartsWith(sz); }
+  bool starts_with(const wchar_t *sz) const
+    { return StartsWith(sz); }
+
+  bool ends_with(const wxString &str) const
+    { return EndsWith(str); }
+  bool ends_with(const char *sz) const
+    { return EndsWith(sz); }
+  bool ends_with(const wchar_t *sz) const
+    { return EndsWith(sz); }
+
       // string += string
   wxString& operator+=(const wxString& s)
   {
@@ -3977,32 +3997,6 @@ namespace std
 } // namespace std
 
 #endif // wxUSE_STD_STRING
-
-#endif // C++11
-
-// Specialize std::iter_swap in C++11 to make std::reverse() work with wxString
-// iterators: unlike in C++98, where iter_swap() is required to deal with the
-// iterator::reference being different from "iterator::value_type&", in C++11
-// iter_swap() just calls swap() by default and this doesn't work for us as
-// wxUniCharRef is not the same as "wxUniChar&".
-//
-// Unfortunately currently iter_swap() can't be specialized when using libc++,
-// see https://llvm.org/bugs/show_bug.cgi?id=28559
-#if (__cplusplus >= 201103L) && !defined(_LIBCPP_VERSION)
-
-namespace std
-{
-    template <>
-    inline void
-    iter_swap<wxString::iterator>(wxString::iterator i1, wxString::iterator i2)
-    {
-        // We don't check for i1 == i2, this won't happen in normal use, so
-        // don't pessimize the common code to account for it.
-        wxUniChar tmp = *i1;
-        *i1 = *i2;
-        *i2 = tmp;
-    }
-} // namespace std
 
 #endif // C++11
 

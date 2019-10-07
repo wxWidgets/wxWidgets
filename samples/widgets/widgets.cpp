@@ -139,6 +139,13 @@ const wxChar *WidgetsCategories[MAX_PAGES] = {
 class WidgetsApp : public wxApp
 {
 public:
+    WidgetsApp()
+    {
+#if USE_LOG
+        m_logTarget = NULL;
+#endif // USE_LOG
+    }
+
     // override base class virtuals
     // ----------------------------
 
@@ -146,7 +153,19 @@ public:
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit() wxOVERRIDE;
+
+    // real implementation of WidgetsPage method with the same name
+    bool IsUsingLogWindow() const;
+
+private:
+#if USE_LOG
+    wxLog* m_logTarget;
+#endif // USE_LOG
+
+    wxDECLARE_NO_COPY_CLASS(WidgetsApp);
 };
+
+wxDECLARE_APP(WidgetsApp); // This provides a convenient wxGetApp() accessor.
 
 // Define a new frame type: this is going to be our main frame
 class WidgetsFrame : public wxFrame
@@ -375,7 +394,20 @@ bool WidgetsApp::OnInit()
     wxFrame *frame = new WidgetsFrame(title + " widgets demo");
     frame->Show();
 
+#if USE_LOG
+    m_logTarget = wxLog::GetActiveTarget();
+#endif // USE_LOG
+
     return true;
+}
+
+bool WidgetsApp::IsUsingLogWindow() const
+{
+#if USE_LOG
+    return wxLog::GetActiveTarget() == m_logTarget;
+#else // !USE_LOG
+    return false;
+#endif // USE_LOG
 }
 
 // ----------------------------------------------------------------------------
@@ -1200,8 +1232,13 @@ void WidgetsFrame::OnSetHint(wxCommandEvent& WXUNUSED(event))
 
 void WidgetsFrame::OnWidgetFocus(wxFocusEvent& event)
 {
-    wxLogMessage("Widgets %s focus",
-                 event.GetEventType() == wxEVT_SET_FOCUS ? "got" : "lost");
+    // Don't show annoying message boxes when starting or closing the sample,
+    // only log these events in our own logger.
+    if ( wxGetApp().IsUsingLogWindow() )
+    {
+        wxLogMessage("Widgets %s focus",
+                     event.GetEventType() == wxEVT_SET_FOCUS ? "got" : "lost");
+    }
 
     event.Skip();
 }
@@ -1383,4 +1420,10 @@ wxCheckBox *WidgetsPage::CreateCheckBoxAndAddToSizer(wxSizer *sizer,
     sizer->AddSpacer(2);
 
     return checkbox;
+}
+
+/* static */
+bool WidgetsPage::IsUsingLogWindow()
+{
+    return wxGetApp().IsUsingLogWindow();
 }

@@ -678,7 +678,7 @@ bool wxVariant::GetBool() const
     else
     {
         wxFAIL_MSG(wxT("Could not convert to a bool"));
-        return 0;
+        return false;
     }
 }
 

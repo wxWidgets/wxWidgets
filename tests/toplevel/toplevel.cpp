@@ -72,7 +72,11 @@ static void TopLevelWindowShowTest(wxTopLevelWindow* tlw)
     tlw->Show(true);
     countActivate.WaitEvent();
 
-    CHECK(tlw->IsActive());
+    // TLWs never become active when running under Xvfb, presumably because
+    // there is no WM there.
+    if ( !IsRunningUnderXVFB() )
+        CHECK(tlw->IsActive());
+
     CHECK(tlw->IsShown());
 
     tlw->Hide();

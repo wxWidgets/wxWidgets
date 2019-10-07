@@ -3,7 +3,7 @@
 // Purpose:     wxDateTime unit test
 // Author:      Vadim Zeitlin
 // Created:     2004-06-23 (extracted from samples/console/console.cpp)
-// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2004 Vadim Zeitlin <vadim@wxwidgets.org>
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -1699,6 +1699,36 @@ TEST_CASE("wxDateTime-BST-bugs", "[datetime][dst][BST][.]")
         CHECK( dt.Format("%Y-%m-%d %H:%M:%S", wxDateTime::Local ) == "2015-10-22 11:10:10" );
         CHECK( dt.Format("%Y-%m-%d %H:%M:%S", wxDateTime::UTC   ) == "2015-10-22 10:10:10" );
     }
+}
+
+TEST_CASE("wxDateTime::UNow", "[datetime][now][unow]")
+{
+    const wxDateTime now = wxDateTime::Now();
+    const wxDateTime unow = wxDateTime::UNow();
+
+    CHECK( now.GetYear() == unow.GetYear() );
+    CHECK( now.GetMonth() == unow.GetMonth() );
+    CHECK( now.GetDay() == unow.GetDay() );
+    CHECK( now.GetHour() == unow.GetHour() );
+    CHECK( now.GetMinute() == unow.GetMinute() );
+    CHECK( now.GetSecond() == unow.GetSecond() );
+
+    CHECK( now.GetMillisecond() == 0 );
+
+    // Just checking unow.GetMillisecond() == 0 would fail once per 1000 test
+    // runs on average, which is certainly not a lot, but still try to avoid
+    // such spurious failures.
+    bool gotMS = false;
+    for ( int i = 0; i < 3; ++i )
+    {
+        if ( wxDateTime::UNow().GetMillisecond() != 0 )
+        {
+            gotMS = true;
+            break;
+        }
+    }
+
+    CHECK( gotMS );
 }
 
 #endif // wxUSE_DATETIME

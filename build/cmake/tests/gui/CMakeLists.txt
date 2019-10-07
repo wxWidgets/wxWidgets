@@ -63,6 +63,7 @@ set(TEST_GUI_SRC
     controls/slidertest.cpp
     controls/spinctrldbltest.cpp
     controls/spinctrltest.cpp
+    controls/styledtextctrltest.cpp
     controls/textctrltest.cpp
     controls/textentrytest.cpp
     controls/togglebuttontest.cpp
@@ -170,6 +171,9 @@ wx_add_test(test_gui ${TEST_GUI_SRC}
 wx_exe_link_libraries(test_gui core)
 if(wxUSE_RICHTEXT)
     wx_exe_link_libraries(test_gui richtext)
+endif()
+if(wxUSE_STC)
+    wx_exe_link_libraries(test_gui stc)
 endif()
 if(wxUSE_MEDIACTRL)
     wx_exe_link_libraries(test_gui media)

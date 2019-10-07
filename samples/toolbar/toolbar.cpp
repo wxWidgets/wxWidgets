@@ -307,7 +307,7 @@ bool MyApp::OnInit()
     // Create the main frame window
     MyFrame* frame = new MyFrame((wxFrame *) NULL, wxID_ANY,
                                  "wxToolBar Sample",
-                                  wxPoint(100, 100), wxSize(650, 350));
+                                  wxPoint(100, 100), wxDefaultSize);
 
     frame->Show(true);
 
@@ -350,7 +350,7 @@ void MyFrame::RecreateToolbar()
             style |= wxTB_RIGHT;
             break;
         case TOOLBAR_BOTTOM:
-        style |= wxTB_BOTTOM;
+            style |= wxTB_BOTTOM;
         break;
     }
 
@@ -440,10 +440,10 @@ void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
     // adding a combo to a vertical toolbar is not very smart
     if ( !toolBar->IsVertical() )
     {
-        wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, wxEmptyString, wxDefaultPosition, wxSize(100,-1) );
+        wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, wxEmptyString, wxDefaultPosition, FromDIP(wxSize(100,-1)) );
         combo->Append("This");
         combo->Append("is a");
-        combo->Append("combobox");
+        combo->Append("combobox with extremely, extremely, extremely, extremely long label");
         combo->Append("in a");
         combo->Append("toolbar");
         toolBar->AddControl(combo, "Combo Label");
@@ -574,16 +574,16 @@ MyFrame::MyFrame(wxFrame* parent,
 
     tbarMenu->AppendSeparator();
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_TOP_ORIENTATION,
-                              "Set toolbar at the top of the window",
+                              "Set toolbar at the top of the window\tCtrl-Up",
                               "Set toolbar at the top of the window");
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_LEFT_ORIENTATION,
-                              "Set toolbar at the left of the window",
+                              "Set toolbar at the left of the window\tCtrl-Left",
                               "Set toolbar at the left of the window");
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_BOTTOM_ORIENTATION,
-                              "Set toolbar at the bottom of the window",
+                              "Set toolbar at the bottom of the window\tCtrl-Down",
                               "Set toolbar at the bottom of the window");
     tbarMenu->AppendRadioItem(IDM_TOOLBAR_RIGHT_ORIENTATION,
-                              "Set toolbar at the right edge of the window",
+                              "Set toolbar at the right edge of the window\tCtrl-Right",
                               "Set toolbar at the right edge of the window");
     tbarMenu->AppendSeparator();
 
@@ -652,6 +652,8 @@ MyFrame::MyFrame(wxFrame* parent,
         sizer->Add(m_extraToolBar, 0, wxEXPAND, 0);
 #endif
     sizer->Add(m_textWindow, 1, wxEXPAND, 0);
+
+    SetInitialSize(FromDIP(wxSize(650, 350)));
 }
 
 MyFrame::~MyFrame()
@@ -891,7 +893,7 @@ void MyFrame::OnToggleSearch(wxCommandEvent& WXUNUSED(event))
     if ( !m_searchTool )
     {
         wxSearchCtrl * const srch = new wxSearchCtrl(tb, wxID_ANY, "needle");
-        srch->SetMinSize(wxSize(80, -1));
+        srch->SetMinSize(FromDIP(wxSize(80, -1)));
         m_searchTool = tb->AddControl(srch);
     }
     else // tool already exists

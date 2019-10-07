@@ -111,7 +111,8 @@ bool wxFFile::ReadAll(wxString *str, const wxMBConv& conv)
         return false;
     }
 
-    buf.data()[length] = 0;
+    // shrink the buffer to possibly shorter data as explained above:
+    buf.shrink(length);
 
     wxString strTmp(buf, conv);
     str->swap(strTmp);
@@ -263,11 +264,11 @@ wxFileOffset wxFFile::Length() const
     wxCHECK_MSG( IsOpened(), wxInvalidOffset,
                  wxT("wxFFile::Length(): file is closed!") );
 
-    wxFFile& self = *const_cast<wxFFile *>(this);
-
     wxFileOffset posOld = Tell();
     if ( posOld != wxInvalidOffset )
     {
+        wxFFile& self = *const_cast<wxFFile*>(this);
+
         if ( self.SeekEnd() )
         {
             wxFileOffset len = Tell();

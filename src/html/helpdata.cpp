@@ -732,10 +732,10 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
     if (!has_non_ascii)
     {
       wxFileSystem fsys;
-      wxFSFile *f;
       // 1. try to open given file:
       for (i = 0; i < cnt; i++)
       {
+        wxFSFile *f;
         f = fsys.OpenFile(m_bookRecords[i].GetFullPath(x));
         if (f)
         {

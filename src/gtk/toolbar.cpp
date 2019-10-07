@@ -181,7 +181,31 @@ image_expose_event(GtkWidget* widget, GdkEventExpose*, wxToolBarTool* tool)
 #endif
 {
 #ifdef __WXGTK3__
-    const wxBitmap& bitmap = tool->GetBitmap();
+    wxBitmap bitmap(tool->GetNormalBitmap());
+    if (!tool->IsEnabled())
+    {
+        wxBitmap disabled(tool->GetDisabledBitmap());
+        // if no disabled bitmap and normal bitmap is scaled
+        if (!disabled.IsOk() && bitmap.IsOk() && bitmap.GetScaleFactor() > 1)
+        {
+            // make scaled disabled bitmap from normal one
+
+            disabled.CreateScaled(bitmap.GetScaledHeight(), bitmap.GetScaledWidth(),
+                32, bitmap.GetScaleFactor());
+            cairo_t* cr2 = disabled.CairoCreate();
+            // clear to transparent
+            cairo_set_operator(cr2, CAIRO_OPERATOR_SOURCE);
+            cairo_set_source_rgba(cr2, 0, 0, 0, 0);
+            cairo_paint(cr2);
+            // draw in normal bitmap
+            bitmap.Draw(cr2, 0, 0);
+            // create disabled appearance, this seems to be how GTK does it
+            cairo_set_source_rgba(cr2, 0, 0, 0, 0);
+            cairo_paint_with_alpha(cr2, 0.5);
+            cairo_destroy(cr2);
+        }
+        bitmap = disabled;
+    }
     if (!bitmap.IsOk() || (tool->IsEnabled() && bitmap.GetScaleFactor() <= 1))
         return false;
 #else
@@ -276,11 +300,10 @@ void wxToolBarTool::SetImage()
 #ifdef __WXGTK3__
     if (bitmap.GetScaleFactor() > 1)
     {
-        // Use a scaled pixbuf with the correct logical size. It will be used
-        // for the disabled state if no disabled bitmap is specifed, otherwise
-        // the original will be used by our "draw" signal handler.
-        GdkPixbuf* pixbuf = gdk_pixbuf_scale_simple(bitmap.GetPixbuf(),
-            bitmap.GetScaledWidth(), bitmap.GetScaledHeight(), GDK_INTERP_BILINEAR);
+        // Use a placeholder pixbuf with the correct size.
+        // The original will be used by our "draw" signal handler.
+        GdkPixbuf* pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, false, 8,
+            bitmap.GetScaledWidth(), bitmap.GetScaledHeight());
         gtk_image_set_from_pixbuf(GTK_IMAGE(image), pixbuf);
         g_object_unref(pixbuf);
     }

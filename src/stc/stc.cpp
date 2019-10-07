@@ -46,6 +46,8 @@
 #include "wx/tokenzr.h"
 #include "wx/mstream.h"
 #include "wx/image.h"
+#include "wx/vlbox.h"
+#include "wx/stack.h"
 #if wxUSE_FFILE
     #include "wx/ffile.h"
 #elif wxUSE_FILE
@@ -136,6 +138,7 @@ wxDEFINE_EVENT( wxEVT_STC_CLIPBOARD_COPY, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_CLIPBOARD_PASTE, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_COMPLETED, wxStyledTextEvent );
 wxDEFINE_EVENT( wxEVT_STC_MARGIN_RIGHT_CLICK, wxStyledTextEvent );
+wxDEFINE_EVENT( wxEVT_STC_AUTOCOMP_SELECTION_CHANGE, wxStyledTextEvent );
 
 
 wxBEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
@@ -662,19 +665,8 @@ int wxStyledTextCtrl::MarkerPrevious(int lineStart, int markerMask)
 }
 
 // Define a marker from a bitmap
-void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp) {
-        // convert bmp to a xpm in a string
-        wxMemoryOutputStream strm;
-        wxImage img = bmp.ConvertToImage();
-        if (img.HasAlpha())
-            img.ConvertAlphaToMask();
-        img.SaveFile(strm, wxBITMAP_TYPE_XPM);
-        size_t len = strm.GetSize();
-        char* buff = new char[len+1];
-        strm.CopyTo(buff, len);
-        buff[len] = 0;
-        SendMsg(SCI_MARKERDEFINEPIXMAP, markerNumber, (sptr_t)buff);
-        delete [] buff;
+void wxStyledTextCtrl::MarkerDefinePixmap(int markerNumber, const char* const* xpmData) {
+        SendMsg(SCI_MARKERDEFINEPIXMAP, markerNumber, (sptr_t)xpmData);
 }
 
 // Add a set of markers to a line.
@@ -1464,19 +1456,8 @@ bool wxStyledTextCtrl::AutoCompGetDropRestOfWord() const
 }
 
 // Register an image for use in autocompletion lists.
-void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp) {
-        // convert bmp to a xpm in a string
-        wxMemoryOutputStream strm;
-        wxImage img = bmp.ConvertToImage();
-        if (img.HasAlpha())
-            img.ConvertAlphaToMask();
-        img.SaveFile(strm, wxBITMAP_TYPE_XPM);
-        size_t len = strm.GetSize();
-        char* buff = new char[len+1];
-        strm.CopyTo(buff, len);
-        buff[len] = 0;
-        SendMsg(SCI_REGISTERIMAGE, type, (sptr_t)buff);
-        delete [] buff;
+void wxStyledTextCtrl::RegisterImage(int type, const char* const* xpmData) {
+        SendMsg(SCI_REGISTERIMAGE, type, (sptr_t)xpmData);
 }
 
 // Clear all the registered images.
@@ -2384,7 +2365,7 @@ void wxStyledTextCtrl::SetWrapVisualFlags(int wrapVisualFlags)
     SendMsg(SCI_SETWRAPVISUALFLAGS, wrapVisualFlags, 0);
 }
 
-// Retrive the display mode of visual flags for wrapped lines.
+// Retrieve the display mode of visual flags for wrapped lines.
 int wxStyledTextCtrl::GetWrapVisualFlags() const
 {
     return SendMsg(SCI_GETWRAPVISUALFLAGS, 0, 0);
@@ -2396,7 +2377,7 @@ void wxStyledTextCtrl::SetWrapVisualFlagsLocation(int wrapVisualFlagsLocation)
     SendMsg(SCI_SETWRAPVISUALFLAGSLOCATION, wrapVisualFlagsLocation, 0);
 }
 
-// Retrive the location of visual flags for wrapped lines.
+// Retrieve the location of visual flags for wrapped lines.
 int wxStyledTextCtrl::GetWrapVisualFlagsLocation() const
 {
     return SendMsg(SCI_GETWRAPVISUALFLAGSLOCATION, 0, 0);
@@ -2408,7 +2389,7 @@ void wxStyledTextCtrl::SetWrapStartIndent(int indent)
     SendMsg(SCI_SETWRAPSTARTINDENT, indent, 0);
 }
 
-// Retrive the start indent for wrapped lines.
+// Retrieve the start indent for wrapped lines.
 int wxStyledTextCtrl::GetWrapStartIndent() const
 {
     return SendMsg(SCI_GETWRAPSTARTINDENT, 0, 0);
@@ -5058,6 +5039,16 @@ void wxStyledTextCtrl::AnnotationClearLine(int line) {
     SendMsg(SCI_ANNOTATIONSETTEXT, line, (sptr_t)NULL);
 }
 
+void wxStyledTextCtrl::MarkerDefineBitmap(int markerNumber,
+                                          const wxBitmap& bmp) {
+    m_swx->DoMarkerDefineBitmap(markerNumber, bmp);
+}
+
+void wxStyledTextCtrl::RegisterImage(int type, const wxBitmap& bmp)
+{
+    m_swx->DoRegisterImage(type, bmp);
+}
+
 
 
 
@@ -5164,6 +5155,27 @@ void wxStyledTextCtrl::AppendTextRaw(const char* text, int length)
     SendMsg(SCI_APPENDTEXT, length, (sptr_t)text);
 }
 
+void wxStyledTextCtrl::ReplaceSelectionRaw(const char* text)
+{
+    SendMsg(SCI_REPLACESEL, 0, reinterpret_cast<sptr_t>(text));
+}
+
+int wxStyledTextCtrl::ReplaceTargetRaw(const char* text, int length)
+{
+    if ( length == -1 )
+        length = strlen(text);
+
+    return SendMsg(SCI_REPLACETARGET, length, reinterpret_cast<sptr_t>(text));
+}
+
+int wxStyledTextCtrl::ReplaceTargetRERaw(const char* text, int length)
+{
+    if ( length == -1 )
+        length = strlen(text);
+
+    return SendMsg(SCI_REPLACETARGETRE, length, reinterpret_cast<sptr_t>(text));
+}
+
 #if WXWIN_COMPATIBILITY_3_0
 // Deprecated since Scintilla 3.7.2
 void wxStyledTextCtrl::UsePopUp(bool allowPopUp)
@@ -5262,29 +5274,89 @@ void wxStyledTextCtrl::OnContextMenu(wxContextMenuEvent& evt) {
 
 void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt)
 {
+    // The default action of this method is to call m_swx->DoMouseWheel.
+    // However, it might be necessary to do something else depending on whether
+    //     1) the mouse wheel captures for the STC,
+    //     2) the event's position is in the STC's rect, and
+    //     3) and an autocompletion list is currently being shown.
+    // This table summarizes when each action is needed.
+
+    // InRect | MouseWheelCaptures | Autocomp Active |      action
+    // -------+--------------------+-----------------+-------------------
+    //  true  |       true         |      true       | scroll ac list
+    //  true  |       true         |      false      | default
+    //  true  |       false        |      true       | scroll ac list
+    //  true  |       false        |      false      | default
+    //  false |       true         |      true       | scroll ac list
+    //  false |       true         |      false      | default
+    //  false |       false        |      true       | forward to parent
+    //  false |       false        |      false      | forward to parent
+
     // if the mouse wheel is not captured, test if the mouse
     // pointer is over the editor window and if not, don't
     // handle the message but pass it on.
-    if ( !GetMouseWheelCaptures() ) {
-        if ( !GetRect().Contains(evt.GetPosition()) ) {
-            wxWindow* parent = GetParent();
-            if (parent != NULL) {
-                wxMouseEvent newevt(evt);
-                newevt.SetPosition(
-                    parent->ScreenToClient(ClientToScreen(evt.GetPosition())));
-                parent->ProcessWindowEvent(newevt);
-            }
-            return;
+    if ( !GetMouseWheelCaptures() && !GetRect().Contains(evt.GetPosition()) )
+    {
+        wxWindow* parent = GetParent();
+        if ( parent != NULL )
+        {
+            wxMouseEvent newevt(evt);
+            newevt.SetPosition(
+                parent->ScreenToClient(ClientToScreen(evt.GetPosition())));
+            parent->ProcessWindowEvent(newevt);
         }
     }
+    else if ( AutoCompActive() )
+    {
+        // When the autocompletion popup is active, Scintilla uses the mouse
+        // wheel to scroll the autocomp list instead of the editor.
 
-    m_swx->DoMouseWheel(evt.GetWheelAxis(),
-                        evt.GetWheelRotation(),
-                        evt.GetWheelDelta(),
-                        evt.GetLinesPerAction(),
-                        evt.GetColumnsPerAction(),
-                        evt.ControlDown(),
-                        evt.IsPageScroll());
+        // First try to find the list. It will be a wxVListBox named
+        // "AutoCompListBox".
+        wxWindow* curWin  = this, *acListBox = NULL;
+        wxStack<wxWindow*> windows;
+        windows.push(curWin);
+
+        while ( !windows.empty() )
+        {
+            curWin = windows.top();
+            windows.pop();
+
+            if ( curWin->IsKindOf(wxCLASSINFO(wxVListBox)) &&
+                    curWin->GetName() == "AutoCompListBox")
+            {
+                acListBox = curWin;
+                break;
+            }
+
+            wxWindowList& children = curWin->GetChildren();
+            wxWindowList::iterator it;
+
+            for ( it = children.begin(); it!=children.end(); ++it )
+            {
+                windows.push(*it);
+            }
+        }
+
+        // Next if the list was found, send it a copy of this event.
+        if ( acListBox )
+        {
+            wxMouseEvent newevt(evt);
+            newevt.SetPosition(
+                acListBox->ScreenToClient(ClientToScreen(evt.GetPosition())));
+            acListBox->ProcessWindowEvent(newevt);
+        }
+    }
+    else
+    {
+        m_swx->DoMouseWheel(evt.GetWheelAxis(),
+                            evt.GetWheelRotation(),
+                            evt.GetWheelDelta(),
+                            evt.GetLinesPerAction(),
+                            evt.GetColumnsPerAction(),
+                            evt.ControlDown(),
+                            evt.IsPageScroll());
+    }
 }
 
 

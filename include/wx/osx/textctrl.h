@@ -99,7 +99,6 @@ public:
     // --------------
     virtual void Command(wxCommandEvent& event) wxOVERRIDE;
 
-    virtual bool AcceptsFocus() const wxOVERRIDE;
     virtual void SetWindowStyleFlag(long style) wxOVERRIDE;
 
     // callbacks

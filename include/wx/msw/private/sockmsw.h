@@ -34,6 +34,8 @@
     #define wxIoctlSocketArg_t u_long
 #endif
 
+#define wxCloseSocket closesocket
+
 // ----------------------------------------------------------------------------
 // MSW-specific socket implementation
 // ----------------------------------------------------------------------------

@@ -104,6 +104,7 @@ protected:
     WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const wxOVERRIDE;
     virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item) wxOVERRIDE;
     virtual bool MSWOnMeasure(WXMEASUREITEMSTRUCT *item) wxOVERRIDE;
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
     // Event handlers
     void OnSize(wxSizeEvent& event);

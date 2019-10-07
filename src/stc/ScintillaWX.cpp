@@ -33,6 +33,9 @@
 #include "wx/dataobj.h"
 #include "wx/clipbrd.h"
 #include "wx/dnd.h"
+#include "wx/image.h"
+#include "wx/scopedarray.h"
+#include "wx/dcbuffer.h"
 
 #if !wxUSE_STD_CONTAINERS && !wxUSE_STD_IOSTREAM && !wxUSE_STD_STRING
     #include "wx/beforestd.h"
@@ -49,6 +52,9 @@
 #ifdef __WXMSW__
     // GetHwndOf()
     #include "wx/msw/private.h"
+#endif
+#ifdef __WXGTK20__
+    #include <gdk/gdk.h>
 #endif
 
 //----------------------------------------------------------------------
@@ -90,62 +96,42 @@ void  wxSTCDropTarget::OnLeave() {
 #endif // wxUSE_DRAG_AND_DROP
 
 
-#if wxUSE_POPUPWIN
-#include "wx/popupwin.h"
-#define wxSTCCallTipBase wxPopupWindow
-#else
-#include "wx/frame.h"
-#define wxSTCCallTipBase wxFrame
-#endif
-
-#include "wx/dcbuffer.h"
-
-class wxSTCCallTip : public wxSTCCallTipBase {
+class wxSTCCallTip : public wxSTCPopupWindow {
 public:
     wxSTCCallTip(wxWindow* parent, CallTip* ct, ScintillaWX* swx) :
-#if wxUSE_POPUPWIN
-        wxSTCCallTipBase(parent, wxBORDER_NONE),
-#else
-        wxSTCCallTipBase(parent, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-                         wxFRAME_NO_TASKBAR
-                         | wxFRAME_FLOAT_ON_PARENT
-                         | wxBORDER_NONE
-#ifdef __WXMAC__
-                         | wxPOPUP_WINDOW
-#endif
-            ),
-#endif
-          m_ct(ct), m_swx(swx), m_cx(wxDefaultCoord), m_cy(wxDefaultCoord)
-        {
-            SetBackgroundStyle(wxBG_STYLE_PAINT);
-            SetName("wxSTCCallTip");
-        }
+        wxSTCPopupWindow(parent), m_ct(ct), m_swx(swx)
+    {
+        Bind(wxEVT_LEFT_DOWN, &wxSTCCallTip::OnLeftDown, this);
+        Bind(wxEVT_SIZE, &wxSTCCallTip::OnSize, this);
+        Bind(wxEVT_PAINT, &wxSTCCallTip::OnPaint, this);
 
-    ~wxSTCCallTip() {
-#if wxUSE_POPUPWIN && defined(__WXGTK__)
-        wxRect rect = GetRect();
-        rect.x = m_cx;
-        rect.y = m_cy;
-        GetParent()->Refresh(false, &rect);
+#ifdef __WXMSW__
+        Bind(wxEVT_ERASE_BACKGROUND, &wxSTCCallTip::OnEraseBackground, this);
+        SetBackgroundStyle(wxBG_STYLE_ERASE);
+#else
+        SetBackgroundStyle(wxBG_STYLE_PAINT);
 #endif
+
+        SetName("wxSTCCallTip");
     }
 
-    bool AcceptsFocus() const wxOVERRIDE { return false; }
-
-    void OnPaint(wxPaintEvent& WXUNUSED(evt))
+    void DrawBack(const wxSize& size)
     {
-        wxAutoBufferedPaintDC dc(this);
+        m_back = wxBitmap(size);
+        wxMemoryDC mem(m_back);
         Surface* surfaceWindow = Surface::Allocate(m_swx->technology);
-        surfaceWindow->Init(&dc, m_ct->wDraw.GetID());
+        surfaceWindow->Init(&mem, m_ct->wDraw.GetID());
         m_ct->PaintCT(surfaceWindow);
         surfaceWindow->Release();
         delete surfaceWindow;
     }
 
-    void OnFocus(wxFocusEvent& event)
+    virtual void Refresh(bool eraseBg=true, const wxRect *rect=NULL) wxOVERRIDE
     {
-        GetParent()->SetFocus();
-        event.Skip();
+        if ( rect == NULL )
+            DrawBack(GetSize());
+
+        wxSTCPopupWindow::Refresh(eraseBg, rect);
     }
 
     void OnLeftDown(wxMouseEvent& event)
@@ -156,57 +142,44 @@ public:
         m_swx->CallTipClick();
     }
 
-    virtual void DoSetSize(int x, int y,
-                           int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) wxOVERRIDE
+    void OnSize(wxSizeEvent& event)
     {
-        // convert coords to screen coords since we're a top-level window
-        if (x != wxDefaultCoord) {
-            m_cx = x;
-            GetParent()->ClientToScreen(&x, NULL);
-        }
-        if (y != wxDefaultCoord) {
-            m_cy = y;
-            GetParent()->ClientToScreen(NULL, &y);
-        }
-        wxSTCCallTipBase::DoSetSize(x, y, width, height, sizeFlags);
+        DrawBack(event.GetSize());
+        event.Skip();
     }
 
-#if wxUSE_POPUPWIN
+#ifdef __WXMSW__
+
+    void OnPaint(wxPaintEvent& WXUNUSED(evt))
+    {
+        wxRect upd = GetUpdateClientRect();
+        wxMemoryDC mem(m_back);
+        wxPaintDC dc(this);
+
+        dc.Blit(upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight(), &mem,
+                upd.GetX(), upd.GetY());
+    }
+
+    void OnEraseBackground(wxEraseEvent& event)
+    {
+        event.GetDC()->DrawBitmap(m_back, 0, 0);
+    }
+
 #else
-    virtual bool Show( bool show = true )
-    {
-        // Although we're a frame, we always want the parent to be active, so
-        // raise it whenever we get shown.
-        bool rv = wxSTCCallTipBase::Show(show);
-        if (rv && show)
-        {
-            wxTopLevelWindow *frame = wxDynamicCast(
-                wxGetTopLevelParent(GetParent()), wxTopLevelWindow);
-            if (frame)
-                frame->Raise();
-        }
-        return rv;
-    }
-#endif
 
-    wxPoint GetMyPosition()
+    void OnPaint(wxPaintEvent& WXUNUSED(evt))
     {
-        return wxPoint(m_cx, m_cy);
+        wxAutoBufferedPaintDC dc(this);
+        dc.DrawBitmap(m_back, 0, 0);
     }
+
+#endif // __WXMSW__
 
 private:
     CallTip*      m_ct;
     ScintillaWX*  m_swx;
-    int           m_cx, m_cy;
-    wxDECLARE_EVENT_TABLE();
+    wxBitmap      m_back;
 };
-
-wxBEGIN_EVENT_TABLE(wxSTCCallTip, wxSTCCallTipBase)
-    EVT_PAINT(wxSTCCallTip::OnPaint)
-    EVT_SET_FOCUS(wxSTCCallTip::OnFocus)
-    EVT_LEFT_DOWN(wxSTCCallTip::OnLeftDown)
-wxEND_EVENT_TABLE()
 
 
 //----------------------------------------------------------------------
@@ -320,6 +293,9 @@ void ScintillaWX::Initialise() {
     kmap.AssignCmdKey(SCK_UP, SCI_CTRL, SCI_DOCUMENTSTART);
     kmap.AssignCmdKey(SCK_DOWN, SCI_CTRL, SCI_DOCUMENTEND);
 #endif // __WXMAC__
+
+    static_cast<ListBoxImpl*>(ac.lb)->SetListInfo(&listType, &(ac.posStart),
+                                                  &(ac.startLen));
 }
 
 
@@ -422,7 +398,7 @@ bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
 
     int vertEnd = nMax+1;
     if (!verticalScrollBarVisible)
-        vertEnd = 0;
+        nPage = vertEnd + 1;
 
     // Check the vertical scrollbar
     if (stc->m_vScrollBar == NULL) {  // Use built-in scrollbar
@@ -450,15 +426,15 @@ bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
     int horizEnd = scrollWidth;
     if (horizEnd < 0)
         horizEnd = 0;
+    int pageWidth = static_cast<int>(rcText.Width());
     if (!horizontalScrollBarVisible || Wrapping())
-        horizEnd = 0;
-    int pageWidth = wxRound(rcText.Width());
+        pageWidth = horizEnd + 1;
 
     if (stc->m_hScrollBar == NULL) {  // Use built-in scrollbar
         int sbMax    = stc->GetScrollRange(wxHORIZONTAL);
         int sbThumb  = stc->GetScrollThumb(wxHORIZONTAL);
         int sbPos    = stc->GetScrollPos(wxHORIZONTAL);
-        if ((sbMax != horizEnd) || (sbThumb != pageWidth) || (sbPos != 0)) {
+        if ((sbMax != horizEnd) || (sbThumb != pageWidth)) {
             stc->SetScrollbar(wxHORIZONTAL, sbPos, pageWidth, horizEnd);
             modified = true;
             if (scrollWidth < pageWidth) {
@@ -470,7 +446,7 @@ bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
         int sbMax    = stc->m_hScrollBar->GetRange();
         int sbThumb  = stc->m_hScrollBar->GetPageSize();
         int sbPos    = stc->m_hScrollBar->GetThumbPosition();
-        if ((sbMax != horizEnd) || (sbThumb != pageWidth) || (sbPos != 0)) {
+        if ((sbMax != horizEnd) || (sbThumb != pageWidth)) {
             stc->m_hScrollBar->SetScrollbar(sbPos, pageWidth, horizEnd, pageWidth);
             modified = true;
             if (scrollWidth < pageWidth) {
@@ -899,10 +875,10 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
         // repaint the whole window.
         stc->Refresh(false);
 
-#if defined(__WXOSX__)
-        // On Mac we also need to finish the current paint to make sure that
-        // everything is on the screen that needs to be there between now and
-        // when the next paint event arrives.
+#if wxALWAYS_NATIVE_DOUBLE_BUFFER
+        // On systems using double buffering, we also need to finish the
+        // current paint to make sure that everything is on the screen that
+        // needs to be there between now and when the next paint event arrives.
         FullPaintDC(dc);
 #endif
     }
@@ -1124,13 +1100,6 @@ void ScintillaWX::DoAddChar(int key) {
 int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
 {
     int key = evt.GetKeyCode();
-    if (key == WXK_NONE) {
-        // This is a Unicode character not representable in Latin-1 or some key
-        // without key code at all (e.g. dead key or VK_PROCESSKEY under MSW).
-        if ( consumed )
-            *consumed = false;
-        return 0;
-    }
 
     if (evt.RawControlDown() && key >= 1 && key <= 26 && key != WXK_BACK)
         key += 'A' - 1;
@@ -1171,6 +1140,52 @@ int  ScintillaWX::DoKeyDown(const wxKeyEvent& evt, bool* consumed)
     case WXK_ALT:               key = 0; break;
     case WXK_SHIFT:             key = 0; break;
     case WXK_MENU:              key = SCK_MENU; break;
+    case WXK_NONE:
+#ifdef __WXGTK20__
+        if (evt.RawControlDown())
+        {
+            // To allow Ctrl-key shortcuts to work with non-Latin keyboard layouts,
+            // look for any available layout that would produce an ASCII letter for
+            // the given hardware keycode
+            const unsigned keycode = evt.GetRawKeyFlags();
+            GdkKeymap* keymap = gdk_keymap_get_for_display(gdk_display_get_default());
+            GdkKeymapKey keymapKey = { keycode, 0, 1 };
+            do {
+                const unsigned keyval = gdk_keymap_lookup_key(keymap, &keymapKey);
+                if (keyval >= 'A' && keyval <= 'Z')
+                {
+                    key = keyval;
+                    break;
+                }
+                keymapKey.group++;
+            } while (keymapKey.group < 4);
+            if (key == WXK_NONE)
+            {
+                // There may be no keyboard layouts with Latin keys available,
+                // fall back to a hard-coded mapping for the common pc105
+                static const char keycodeToKeyval[] = {
+                      0,   0,   0,   0,   0,   0,   0,   0,
+                      0,   0,   0,   0,   0,   0,   0,   0,
+                      0,   0,   0,   0,   0,   0,   0,   0,
+                    'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I',
+                    'O', 'P',   0,   0,   0,   0, 'A', 'S',
+                    'D', 'F', 'G', 'H', 'J', 'K', 'L',   0,
+                      0,   0,   0,   0, 'Z', 'X', 'C', 'V',
+                    'B', 'N', 'M'
+                };
+                if (keycode < sizeof(keycodeToKeyval))
+                    key = keycodeToKeyval[keycode];
+            }
+        }
+        if (key == WXK_NONE)
+#endif
+        {
+            // This is a Unicode character not representable in Latin-1 or some key
+            // without key code at all (e.g. dead key or VK_PROCESSKEY under MSW).
+            if (consumed)
+                *consumed = false;
+            return 0;
+        }
     }
 
     int rv = KeyDownWithModifiers
@@ -1334,6 +1349,57 @@ void ScintillaWX::SetUseAntiAliasing(bool useAA) {
 
 bool ScintillaWX::GetUseAntiAliasing() {
     return vs.extraFontFlag != 0;
+}
+
+void ScintillaWX::DoMarkerDefineBitmap(int markerNumber, const wxBitmap& bmp) {
+    if ( 0 <= markerNumber && markerNumber <= MARKER_MAX) {
+        // Build an RGBA buffer from bmp.
+        const int totalPixels = bmp.GetWidth() * bmp.GetHeight();
+        wxScopedArray<unsigned char> rgba(4*bmp.GetWidth()*bmp.GetHeight());
+        wxImage img = bmp.ConvertToImage();
+        int curRGBALoc = 0, curDataLoc = 0, curAlphaLoc = 0;
+
+        if ( img.HasMask() ) {
+            for ( int y = 0; y < bmp.GetHeight(); ++y ) {
+                for ( int x = 0 ; x < bmp.GetWidth(); ++x ) {
+                    rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                    rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                    rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                    rgba[curRGBALoc++] = img.IsTransparent(x,y)
+                        ? wxALPHA_TRANSPARENT : wxALPHA_OPAQUE ;
+                }
+            }
+        }
+        else if ( img.HasAlpha() ) {
+            for ( int i = 0; i < totalPixels; ++i ) {
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetAlpha()[curAlphaLoc++];
+            }
+        }
+        else {
+            for ( int i = 0; i < totalPixels; ++i ) {
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = img.GetData()[curDataLoc++];
+                rgba[curRGBALoc++] = wxALPHA_OPAQUE ;
+            }
+        }
+
+        // Now follow the same procedure used for handling the
+        // SCI_MARKERDEFINERGBAIMAGE message, except use the bitmap's width and
+        // height instead of the values stored in sizeRGBAImage.
+        Point bitmapSize = Point::FromInts(bmp.GetWidth(), bmp.GetHeight());
+        vs.markers[markerNumber].SetRGBAImage(bitmapSize, 1.0f, rgba.get());
+        vs.CalcLargestMarkerHeight();
+    }
+    InvalidateStyleData();
+    RedrawSelMargin();
+}
+
+void ScintillaWX::DoRegisterImage(int type, const wxBitmap& bmp) {
+    static_cast<ListBoxImpl*>(ac.lb)->RegisterImageHelper(type, bmp);
 }
 
 sptr_t ScintillaWX::DirectFunction(

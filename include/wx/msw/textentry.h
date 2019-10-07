@@ -3,7 +3,7 @@
 // Purpose:     wxMSW-specific wxTextEntry implementation
 // Author:      Vadim Zeitlin
 // Created:     2007-09-26
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -80,6 +80,10 @@ protected:
 #endif // wxUSE_DYNLIB_CLASS
     virtual bool DoAutoCompleteCustom(wxTextCompleter *completer) wxOVERRIDE;
 #endif // wxUSE_OLE
+
+    // Helper for wxTE_PROCESS_ENTER handling: activates the default button in
+    // the dialog containing this control if any.
+    bool ClickDefaultButtonIfPossible();
 
 private:
     // implement this to return the HWND of the EDIT control

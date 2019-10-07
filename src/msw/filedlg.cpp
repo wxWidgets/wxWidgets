@@ -47,6 +47,7 @@
 #include "wx/scopeguard.h"
 #include "wx/tokenzr.h"
 #include "wx/modalhook.h"
+#include "wx/msw/private/dpiaware.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -185,6 +186,14 @@ wxFileDialogHookFunction(HWND      hDlg,
                         case CDN_SELCHANGE:
                             dialog->MSWOnSelChange((WXHWND)hDlg);
                             break;
+
+                        case CDN_TYPECHANGE:
+                            dialog->MSWOnTypeChange
+                                    (
+                                        (WXHWND)hDlg,
+                                        pNotifyCode->lpOFN->nFilterIndex
+                                    );
+                            break;
                     }
                 }
             }
@@ -312,7 +321,7 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
     HWND hFileDlg = ::GetParent((HWND)hDlg);
 
     // set HWND so that our DoMoveWindow() works correctly
-    SetHWND((WXHWND)hFileDlg);
+    TempHWNDSetter set(this, (WXHWND)hFileDlg);
 
     if ( m_centreDir )
     {
@@ -333,9 +342,6 @@ void wxFileDialog::MSWOnInitDone(WXHWND hDlg)
     // Call selection change handler so that update handler will be
     // called once with no selection.
     MSWOnSelChange(hDlg);
-
-    // we shouldn't destroy this HWND
-    SetHWND(NULL);
 }
 
 void wxFileDialog::MSWOnSelChange(WXHWND hDlg)
@@ -353,12 +359,29 @@ void wxFileDialog::MSWOnSelChange(WXHWND hDlg)
         m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
 }
 
+void wxFileDialog::MSWOnTypeChange(WXHWND WXUNUSED(hDlg), int nFilterIndex)
+{
+    // Filter indices are 1-based, while we want to use 0-based index, as
+    // usual. However the input index can apparently also be 0 in some
+    // circumstances, so take care before decrementing it.
+    m_currentlySelectedFilterIndex = nFilterIndex ? nFilterIndex - 1 : 0;
+
+    if ( m_extraControl )
+        m_extraControl->UpdateWindowUI(wxUPDATE_UI_RECURSE);
+}
+
 // helper used below in ShowCommFileDialog(): style is used to determine
 // whether to show the "Save file" dialog (if it contains wxFD_SAVE bit) or
 // "Open file" one; returns true on success or false on failure in which case
 // err is filled with the CDERR_XXX constant
 static bool DoShowCommFileDialog(OPENFILENAME *of, long style, DWORD *err)
 {
+    // Extra controls do not handle per-monitor DPI, fall back to system DPI
+    // so entire file-dialog is resized.
+    wxScopedPtr<wxMSWImpl::AutoSystemDpiAware> dpiAwareness;
+    if ( of->Flags & OFN_ENABLEHOOK )
+        dpiAwareness.reset(new wxMSWImpl::AutoSystemDpiAware());
+
     if ( style & wxFD_SAVE ? GetSaveFileName(of) : GetOpenFileName(of) )
         return true;
 
@@ -402,11 +425,9 @@ static bool ShowCommFileDialog(OPENFILENAME *of, long style)
 
 void wxFileDialog::MSWOnInitDialogHook(WXHWND hwnd)
 {
-   SetHWND(hwnd);
+    TempHWNDSetter set(this, hwnd);
 
-   CreateExtraControl();
-
-   SetHWND(NULL);
+    CreateExtraControl();
 }
 
 int wxFileDialog::ShowModal()
@@ -429,6 +450,9 @@ int wxFileDialog::ShowModal()
 
     if ( HasFdFlag(wxFD_FILE_MUST_EXIST) )
         msw_flags |= OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+    if ( HasFlag(wxFD_SHOW_HIDDEN) )
+        msw_flags |= OFN_FORCESHOWHIDDEN;
     /*
         If the window has been moved the programmer is probably
         trying to center or position it.  Thus we set the callback
@@ -571,6 +595,7 @@ int wxFileDialog::ShowModal()
 
     of.lpstrFilter  = filterBuffer.t_str();
     of.nFilterIndex = m_filterIndex + 1;
+    m_currentlySelectedFilterIndex = m_filterIndex;
 
     //=== Setting defaultFileName >>=========================================
 

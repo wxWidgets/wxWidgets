@@ -66,3 +66,36 @@ void wxSystemSettings::SetScreenType( wxSystemScreenType screen )
 {
     ms_screen = screen;
 }
+
+// ----------------------------------------------------------------------------
+// Trivial wxSystemAppearance implementation
+// ----------------------------------------------------------------------------
+
+#if !defined(__WXOSX__)
+
+wxString wxSystemAppearance::GetName() const
+{
+    return wxString();
+}
+
+bool wxSystemAppearance::IsDark() const
+{
+    return IsUsingDarkBackground();
+}
+
+#endif // !__WXOSX__
+
+bool wxSystemAppearance::IsUsingDarkBackground() const
+{
+    const wxColour bg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+    const wxColour fg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+
+    // The threshold here is rather arbitrary, but it seems that using just
+    // inequality would be wrong as it could result in false positivies.
+    return fg.GetLuminance() - bg.GetLuminance() > 0.2;
+}
+
+wxSystemAppearance wxSystemSettingsNative::GetAppearance()
+{
+    return wxSystemAppearance();
+}

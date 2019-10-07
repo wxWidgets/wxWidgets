@@ -68,6 +68,7 @@ HOST_SUFFIX = @HOST_SUFFIX@
 DYLIB_RPATH_INSTALL = @DYLIB_RPATH_INSTALL@
 DYLIB_RPATH_POSTLINK = @DYLIB_RPATH_POSTLINK@
 wx_top_builddir = @wx_top_builddir@
+wxCFLAGS_C99 = @wxCFLAGS_C99@
 
 ### Variables: ###
 
@@ -211,7 +212,7 @@ WXTIFF_OBJECTS =  \
 	wxtiff_tif_zip.o \
 	wxtiff_tif_zstd.o
 WXEXPAT_CFLAGS = -DNDEBUG -I./src/expat/expat -DHAVE_EXPAT_CONFIG_H \
-	$(____SHARED) $(CPPFLAGS) $(CFLAGS)
+	$(____SHARED) $(wxCFLAGS_C99) $(CPPFLAGS) $(CFLAGS)
 WXEXPAT_OBJECTS =  \
 	wxexpat_xmlparse.o \
 	wxexpat_xmlrole.o \
@@ -1746,6 +1747,7 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_collpane.o \
 	xrcdll_xh_combo.o \
 	xrcdll_xh_comboctrl.o \
+	xrcdll_xh_dataview.o \
 	xrcdll_xh_datectrl.o \
 	xrcdll_xh_dirpicker.o \
 	xrcdll_xh_dlg.o \
@@ -1759,6 +1761,7 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_grid.o \
 	xrcdll_xh_html.o \
 	xrcdll_xh_hyperlink.o \
+	xrcdll_xh_infobar.o \
 	xrcdll_xh_listb.o \
 	xrcdll_xh_listbk.o \
 	xrcdll_xh_listc.o \
@@ -1820,6 +1823,7 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_collpane.o \
 	xrclib_xh_combo.o \
 	xrclib_xh_comboctrl.o \
+	xrclib_xh_dataview.o \
 	xrclib_xh_datectrl.o \
 	xrclib_xh_dirpicker.o \
 	xrclib_xh_dlg.o \
@@ -1833,6 +1837,7 @@ XRCLIB_OBJECTS =  \
 	xrclib_xh_grid.o \
 	xrclib_xh_html.o \
 	xrclib_xh_hyperlink.o \
+	xrclib_xh_infobar.o \
 	xrclib_xh_listb.o \
 	xrclib_xh_listbk.o \
 	xrclib_xh_listc.o \
@@ -2026,11 +2031,22 @@ STCDLL_CXXFLAGS = $(__stcdll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX \
 	-DLINK_LEXERS -DWXUSINGDLL -DWXMAKINGDLL_STC $(PIC_FLAG) $(CXXWARNINGS) \
 	$(CPPFLAGS) $(CXXFLAGS)
+STCDLL_OBJCXXFLAGS = $(__stcdll_PCH_INC) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -DWXBUILDING $(__INC_TIFF_BUILD_p) \
+	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-I$(top_srcdir)/src/stc/scintilla/include \
+	-I$(top_srcdir)/src/stc/scintilla/lexlib \
+	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX \
+	-DLINK_LEXERS -DWXUSINGDLL -DWXMAKINGDLL_STC $(PIC_FLAG) $(CPPFLAGS) \
+	$(OBJCXXFLAGS)
 STCDLL_OBJECTS =  \
 	$(__stcdll___win32rc) \
 	stcdll_stc.o \
 	stcdll_PlatWX.o \
-	stcdll_ScintillaWX.o
+	stcdll_ScintillaWX.o \
+	$(__STC_PLATFORM_SRC_OBJECTS_2)
 STCDLL_ODEP =  $(_____pch_wxprec_stcdll_wx_wxprec_h_gch___depname)
 STCLIB_CXXFLAGS = $(__stclib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -2040,10 +2056,20 @@ STCLIB_CXXFLAGS = $(__stclib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/src/stc/scintilla/lexlib \
 	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX \
 	-DLINK_LEXERS $(CXXWARNINGS) $(CPPFLAGS) $(CXXFLAGS)
+STCLIB_OBJCXXFLAGS = $(__stclib_PCH_INC) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) \
+	$(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) -DWXBUILDING $(__INC_TIFF_BUILD_p) \
+	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) \
+	-I$(top_srcdir)/src/stc/scintilla/include \
+	-I$(top_srcdir)/src/stc/scintilla/lexlib \
+	-I$(top_srcdir)/src/stc/scintilla/src -D__WX__ -DSCI_LEXER -DNO_CXX11_REGEX \
+	-DLINK_LEXERS $(CPPFLAGS) $(OBJCXXFLAGS)
 STCLIB_OBJECTS =  \
 	stclib_stc.o \
 	stclib_PlatWX.o \
-	stclib_ScintillaWX.o
+	stclib_ScintillaWX.o \
+	$(__STC_PLATFORM_SRC_OBJECTS_3)
 STCLIB_ODEP =  $(_____pch_wxprec_stclib_wx_wxprec_h_gch___depname)
 GLDLL_CXXFLAGS = $(__gldll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
@@ -3319,7 +3345,6 @@ COND_TOOLKIT_OSX_COCOA_GUI_HDR =  \
 	wx/osx/frame.h \
 	wx/osx/gauge.h \
 	wx/osx/listbox.h \
-	wx/osx/listctrl.h \
 	wx/osx/mdi.h \
 	wx/osx/menu.h \
 	wx/osx/menuitem.h \
@@ -3429,7 +3454,6 @@ COND_TOOLKIT_OSX_IPHONE_GUI_HDR =  \
 	wx/osx/frame.h \
 	wx/osx/gauge.h \
 	wx/osx/listbox.h \
-	wx/osx/listctrl.h \
 	wx/osx/mdi.h \
 	wx/osx/menu.h \
 	wx/osx/menuitem.h \
@@ -3575,7 +3599,8 @@ COND_TOOLKIT_QT_GUI_HDR =  \
 	wx/generic/activityindicator.h \
 	wx/qt/dataview.h \
 	wx/qt/dvrenderers.h \
-	$(QT_PLATFORM_HDR)
+	$(QT_PLATFORM_HDR) \
+	wx/qt/treectrl.h
 @COND_TOOLKIT_QT@GUI_HDR = $(COND_TOOLKIT_QT_GUI_HDR)
 @COND_TOOLKIT_COCOA@MEDIA_PLATFORM_HDR = 
 @COND_TOOLKIT_GTK@MEDIA_PLATFORM_HDR = 
@@ -3978,6 +4003,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_collpane.h \
 	wx/xrc/xh_combo.h \
 	wx/xrc/xh_comboctrl.h \
+	wx/xrc/xh_dataview.h \
 	wx/xrc/xh_datectrl.h \
 	wx/xrc/xh_dirpicker.h \
 	wx/xrc/xh_dlg.h \
@@ -3992,6 +4018,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/xrc/xh_grid.h \
 	wx/xrc/xh_html.h \
 	wx/xrc/xh_hyperlink.h \
+	wx/xrc/xh_infobar.h \
 	wx/xrc/xh_listb.h \
 	wx/xrc/xh_listbk.h \
 	wx/xrc/xh_listc.h \
@@ -4285,6 +4312,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_collpane.o \
 	monodll_xh_combo.o \
 	monodll_xh_comboctrl.o \
+	monodll_xh_dataview.o \
 	monodll_xh_datectrl.o \
 	monodll_xh_dirpicker.o \
 	monodll_xh_dlg.o \
@@ -4298,6 +4326,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_xh_grid.o \
 	monodll_xh_html.o \
 	monodll_xh_hyperlink.o \
+	monodll_xh_infobar.o \
 	monodll_xh_listb.o \
 	monodll_xh_listbk.o \
 	monodll_xh_listc.o \
@@ -5542,7 +5571,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msw_textctrl.o \
 	monodll_msw_textentry.o \
 	monodll_msw_tglbtn.o \
-	monodll_treectrl.o \
+	monodll_msw_treectrl.o \
 	monodll_systhemectrl.o \
 	monodll_customdraw.o \
 	monodll_animateg.o \
@@ -5736,7 +5765,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS =  \
 	monodll_qt_uiaction.o \
 	monodll_qt_utils.o \
 	monodll_qt_window.o \
-	$(__QT_PLATFORM_SRC_OBJECTS)
+	$(__QT_PLATFORM_SRC_OBJECTS) \
+	monodll_qt_treectrl.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS)
 COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS =  \
 	monodll_comimpl.o \
@@ -6111,8 +6141,13 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monodll_tabartgtk.o
 @COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_MSW@	monodll_tabartmsw.o monodll_barartmsw.o
-@COND_USE_STC_1@__MONOLIB_STC_SRC_OBJECTS = monodll_stc.o \
-@COND_USE_STC_1@	monodll_PlatWX.o monodll_ScintillaWX.o
+COND_USE_STC_1___MONOLIB_STC_SRC_OBJECTS =  \
+	monodll_stc.o \
+	monodll_PlatWX.o \
+	monodll_ScintillaWX.o \
+	$(__STC_PLATFORM_SRC_OBJECTS)
+@COND_USE_STC_1@__MONOLIB_STC_SRC_OBJECTS = $(COND_USE_STC_1___MONOLIB_STC_SRC_OBJECTS)
+@COND_TOOLKIT_OSX_COCOA@__STC_PLATFORM_SRC_OBJECTS = monodll_PlatWXcocoa.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_SRC_OBJECTS \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= monodll_sound_sdl.o
 @COND_PLATFORM_WIN32_1@__monodll___win32rc = monodll_version_rc.o
@@ -6264,6 +6299,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_collpane.o \
 	monolib_xh_combo.o \
 	monolib_xh_comboctrl.o \
+	monolib_xh_dataview.o \
 	monolib_xh_datectrl.o \
 	monolib_xh_dirpicker.o \
 	monolib_xh_dlg.o \
@@ -6277,6 +6313,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_xh_grid.o \
 	monolib_xh_html.o \
 	monolib_xh_hyperlink.o \
+	monolib_xh_infobar.o \
 	monolib_xh_listb.o \
 	monolib_xh_listbk.o \
 	monolib_xh_listc.o \
@@ -7521,7 +7558,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msw_textctrl.o \
 	monolib_msw_textentry.o \
 	monolib_msw_tglbtn.o \
-	monolib_treectrl.o \
+	monolib_msw_treectrl.o \
 	monolib_systhemectrl.o \
 	monolib_customdraw.o \
 	monolib_animateg.o \
@@ -7715,7 +7752,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1 =  \
 	monolib_qt_uiaction.o \
 	monolib_qt_utils.o \
 	monolib_qt_window.o \
-	$(__QT_PLATFORM_SRC_OBJECTS_1)
+	$(__QT_PLATFORM_SRC_OBJECTS_1) \
+	monolib_qt_treectrl.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_1)
 COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_comimpl.o \
@@ -8090,8 +8128,14 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= monolib_tabartgtk.o
 @COND_TOOLKIT_MSW@__AUI_PLATFORM_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_MSW@	monolib_tabartmsw.o monolib_barartmsw.o
-@COND_USE_STC_1@__MONOLIB_STC_SRC_OBJECTS_1 = monolib_stc.o \
-@COND_USE_STC_1@	monolib_PlatWX.o monolib_ScintillaWX.o
+COND_USE_STC_1___MONOLIB_STC_SRC_OBJECTS_1 =  \
+	monolib_stc.o \
+	monolib_PlatWX.o \
+	monolib_ScintillaWX.o \
+	$(__STC_PLATFORM_SRC_OBJECTS_1)
+@COND_USE_STC_1@__MONOLIB_STC_SRC_OBJECTS_1 = $(COND_USE_STC_1___MONOLIB_STC_SRC_OBJECTS_1)
+@COND_TOOLKIT_OSX_COCOA@__STC_PLATFORM_SRC_OBJECTS_1 \
+@COND_TOOLKIT_OSX_COCOA@	= monolib_PlatWXcocoa.o
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@__PLUGIN_SRC_OBJECTS_1 \
 @COND_PLATFORM_UNIX_1_USE_PLUGINS_0@	= monolib_sound_sdl.o
 COND_MONOLITHIC_0_SHARED_1___basedll___depname = \
@@ -9647,7 +9691,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msw_textctrl.o \
 	coredll_msw_textentry.o \
 	coredll_msw_tglbtn.o \
-	coredll_treectrl.o \
+	coredll_msw_treectrl.o \
 	coredll_systhemectrl.o \
 	coredll_customdraw.o \
 	coredll_animateg.o \
@@ -9841,7 +9885,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2 =  \
 	coredll_qt_uiaction.o \
 	coredll_qt_utils.o \
 	coredll_qt_window.o \
-	$(__QT_PLATFORM_SRC_OBJECTS_2)
+	$(__QT_PLATFORM_SRC_OBJECTS_2) \
+	coredll_qt_treectrl.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_2)
 COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_2 =  \
 	coredll_comimpl.o \
@@ -11368,7 +11413,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msw_textctrl.o \
 	corelib_msw_textentry.o \
 	corelib_msw_tglbtn.o \
-	corelib_treectrl.o \
+	corelib_msw_treectrl.o \
 	corelib_systhemectrl.o \
 	corelib_customdraw.o \
 	corelib_animateg.o \
@@ -11562,7 +11607,8 @@ COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3 =  \
 	corelib_qt_uiaction.o \
 	corelib_qt_utils.o \
 	corelib_qt_window.o \
-	$(__QT_PLATFORM_SRC_OBJECTS_3)
+	$(__QT_PLATFORM_SRC_OBJECTS_3) \
+	corelib_qt_treectrl.o
 @COND_TOOLKIT_QT@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_QT___GUI_SRC_OBJECTS_3)
 COND_PLATFORM_WIN32_1___QT_PLATFORM_SRC_OBJECTS_3 =  \
 	corelib_comimpl.o \
@@ -12954,6 +13000,7 @@ COND_USE_SOVERSOLARIS_1___stcdll___so_symlinks_uninst_cmd = rm -f \
 	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOVERSOLARIS_1@__stcdll___so_symlinks_uninst_cmd = $(COND_USE_SOVERSOLARIS_1___stcdll___so_symlinks_uninst_cmd)
 @COND_PLATFORM_WIN32_1@__stcdll___win32rc = stcdll_version_rc.o
+@COND_TOOLKIT_OSX_COCOA@__STC_PLATFORM_SRC_OBJECTS_2 = stcdll_PlatWXcocoa.o
 COND_MONOLITHIC_0_SHARED_0_USE_STC_1___stclib___depname = \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_stc-$(WX_RELEASE)$(HOST_SUFFIX)$(LIBEXT)
 @COND_MONOLITHIC_0_SHARED_0_USE_STC_1@__stclib___depname = $(COND_MONOLITHIC_0_SHARED_0_USE_STC_1___stclib___depname)
@@ -12966,6 +13013,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_STC_1___stclib___depname = \
 @COND_ICC_PCH_1@	./.pch/wxprec_stclib/wx/wxprec.h.gch
 @COND_USE_PCH_1@_____pch_wxprec_stclib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= ./.pch/wxprec_stclib/wx/wxprec.h.gch
+@COND_TOOLKIT_OSX_COCOA@__STC_PLATFORM_SRC_OBJECTS_3 = stclib_PlatWXcocoa.o
 @COND_SHARED_1@____wxstc_namedll_DEP = $(__stcdll___depname)
 @COND_SHARED_0@____wxstc_namelib_DEP = $(__stclib___depname)
 COND_SHARED_1_USE_GUI_1_USE_OPENGL_1___gldll___depname = \
@@ -16338,7 +16386,7 @@ monodll_msw_textentry.o: $(srcdir)/src/msw/textentry.cpp $(MONODLL_ODEP)
 monodll_msw_tglbtn.o: $(srcdir)/src/msw/tglbtn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/tglbtn.cpp
 
-monodll_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(MONODLL_ODEP)
+monodll_msw_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/treectrl.cpp
 
 monodll_systhemectrl.o: $(srcdir)/src/msw/systhemectrl.cpp $(MONODLL_ODEP)
@@ -16833,6 +16881,9 @@ monodll_qt_window.o: $(srcdir)/src/qt/window.cpp $(MONODLL_ODEP)
 monodll_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
 
+monodll_qt_treectrl.o: $(srcdir)/src/qt/treectrl.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/qt/treectrl.cpp
+
 monodll_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
 
@@ -17130,6 +17181,9 @@ monodll_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(MONODLL_ODEP)
 monodll_xh_comboctrl.o: $(srcdir)/src/xrc/xh_comboctrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_comboctrl.cpp
 
+monodll_xh_dataview.o: $(srcdir)/src/xrc/xh_dataview.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_dataview.cpp
+
 monodll_xh_datectrl.o: $(srcdir)/src/xrc/xh_datectrl.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_datectrl.cpp
 
@@ -17168,6 +17222,9 @@ monodll_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(MONODLL_ODEP)
 
 monodll_xh_hyperlink.o: $(srcdir)/src/xrc/xh_hyperlink.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_hyperlink.cpp
+
+monodll_xh_infobar.o: $(srcdir)/src/xrc/xh_infobar.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_infobar.cpp
 
 monodll_xh_listb.o: $(srcdir)/src/xrc/xh_listb.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xrc/xh_listb.cpp
@@ -17414,6 +17471,9 @@ monodll_PlatWX.o: $(srcdir)/src/stc/PlatWX.cpp $(MONODLL_ODEP)
 
 monodll_ScintillaWX.o: $(srcdir)/src/stc/ScintillaWX.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/stc/ScintillaWX.cpp
+
+monodll_PlatWXcocoa.o: $(srcdir)/src/stc/PlatWXcocoa.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_OBJCXXFLAGS) $(srcdir)/src/stc/PlatWXcocoa.mm
 
 monodll_xml.o: $(srcdir)/src/xml/xml.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/xml/xml.cpp
@@ -21597,7 +21657,7 @@ monolib_msw_textentry.o: $(srcdir)/src/msw/textentry.cpp $(MONOLIB_ODEP)
 monolib_msw_tglbtn.o: $(srcdir)/src/msw/tglbtn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/tglbtn.cpp
 
-monolib_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(MONOLIB_ODEP)
+monolib_msw_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/treectrl.cpp
 
 monolib_systhemectrl.o: $(srcdir)/src/msw/systhemectrl.cpp $(MONOLIB_ODEP)
@@ -22092,6 +22152,9 @@ monolib_qt_window.o: $(srcdir)/src/qt/window.cpp $(MONOLIB_ODEP)
 monolib_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
 
+monolib_qt_treectrl.o: $(srcdir)/src/qt/treectrl.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/qt/treectrl.cpp
+
 monolib_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
 
@@ -22389,6 +22452,9 @@ monolib_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(MONOLIB_ODEP)
 monolib_xh_comboctrl.o: $(srcdir)/src/xrc/xh_comboctrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_comboctrl.cpp
 
+monolib_xh_dataview.o: $(srcdir)/src/xrc/xh_dataview.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_dataview.cpp
+
 monolib_xh_datectrl.o: $(srcdir)/src/xrc/xh_datectrl.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_datectrl.cpp
 
@@ -22427,6 +22493,9 @@ monolib_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(MONOLIB_ODEP)
 
 monolib_xh_hyperlink.o: $(srcdir)/src/xrc/xh_hyperlink.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_hyperlink.cpp
+
+monolib_xh_infobar.o: $(srcdir)/src/xrc/xh_infobar.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_infobar.cpp
 
 monolib_xh_listb.o: $(srcdir)/src/xrc/xh_listb.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_listb.cpp
@@ -22673,6 +22742,9 @@ monolib_PlatWX.o: $(srcdir)/src/stc/PlatWX.cpp $(MONOLIB_ODEP)
 
 monolib_ScintillaWX.o: $(srcdir)/src/stc/ScintillaWX.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/stc/ScintillaWX.cpp
+
+monolib_PlatWXcocoa.o: $(srcdir)/src/stc/PlatWXcocoa.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_OBJCXXFLAGS) $(srcdir)/src/stc/PlatWXcocoa.mm
 
 monolib_xml.o: $(srcdir)/src/xml/xml.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/xml/xml.cpp
@@ -27516,7 +27588,7 @@ coredll_msw_textentry.o: $(srcdir)/src/msw/textentry.cpp $(COREDLL_ODEP)
 coredll_msw_tglbtn.o: $(srcdir)/src/msw/tglbtn.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/tglbtn.cpp
 
-coredll_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(COREDLL_ODEP)
+coredll_msw_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/treectrl.cpp
 
 coredll_systhemectrl.o: $(srcdir)/src/msw/systhemectrl.cpp $(COREDLL_ODEP)
@@ -28010,6 +28082,9 @@ coredll_qt_window.o: $(srcdir)/src/qt/window.cpp $(COREDLL_ODEP)
 
 coredll_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
+
+coredll_qt_treectrl.o: $(srcdir)/src/qt/treectrl.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/qt/treectrl.cpp
 
 coredll_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
@@ -31770,7 +31845,7 @@ corelib_msw_textentry.o: $(srcdir)/src/msw/textentry.cpp $(CORELIB_ODEP)
 corelib_msw_tglbtn.o: $(srcdir)/src/msw/tglbtn.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/tglbtn.cpp
 
-corelib_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(CORELIB_ODEP)
+corelib_msw_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/treectrl.cpp
 
 corelib_systhemectrl.o: $(srcdir)/src/msw/systhemectrl.cpp $(CORELIB_ODEP)
@@ -32264,6 +32339,9 @@ corelib_qt_window.o: $(srcdir)/src/qt/window.cpp $(CORELIB_ODEP)
 
 corelib_qt_graphics.o: $(srcdir)/src/qt/graphics.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/graphics.cpp
+
+corelib_qt_treectrl.o: $(srcdir)/src/qt/treectrl.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/qt/treectrl.cpp
 
 corelib_univ_anybutton.o: $(srcdir)/src/univ/anybutton.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/univ/anybutton.cpp
@@ -35985,6 +36063,9 @@ xrcdll_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(XRCDLL_ODEP)
 xrcdll_xh_comboctrl.o: $(srcdir)/src/xrc/xh_comboctrl.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_comboctrl.cpp
 
+xrcdll_xh_dataview.o: $(srcdir)/src/xrc/xh_dataview.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_dataview.cpp
+
 xrcdll_xh_datectrl.o: $(srcdir)/src/xrc/xh_datectrl.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_datectrl.cpp
 
@@ -36023,6 +36104,9 @@ xrcdll_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(XRCDLL_ODEP)
 
 xrcdll_xh_hyperlink.o: $(srcdir)/src/xrc/xh_hyperlink.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_hyperlink.cpp
+
+xrcdll_xh_infobar.o: $(srcdir)/src/xrc/xh_infobar.cpp $(XRCDLL_ODEP)
+	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_infobar.cpp
 
 xrcdll_xh_listb.o: $(srcdir)/src/xrc/xh_listb.cpp $(XRCDLL_ODEP)
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $(srcdir)/src/xrc/xh_listb.cpp
@@ -36186,6 +36270,9 @@ xrclib_xh_combo.o: $(srcdir)/src/xrc/xh_combo.cpp $(XRCLIB_ODEP)
 xrclib_xh_comboctrl.o: $(srcdir)/src/xrc/xh_comboctrl.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_comboctrl.cpp
 
+xrclib_xh_dataview.o: $(srcdir)/src/xrc/xh_dataview.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_dataview.cpp
+
 xrclib_xh_datectrl.o: $(srcdir)/src/xrc/xh_datectrl.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_datectrl.cpp
 
@@ -36224,6 +36311,9 @@ xrclib_xh_html.o: $(srcdir)/src/xrc/xh_html.cpp $(XRCLIB_ODEP)
 
 xrclib_xh_hyperlink.o: $(srcdir)/src/xrc/xh_hyperlink.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_hyperlink.cpp
+
+xrclib_xh_infobar.o: $(srcdir)/src/xrc/xh_infobar.cpp $(XRCLIB_ODEP)
+	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_infobar.cpp
 
 xrclib_xh_listb.o: $(srcdir)/src/xrc/xh_listb.cpp $(XRCLIB_ODEP)
 	$(CXXC) -c -o $@ $(XRCLIB_CXXFLAGS) $(srcdir)/src/xrc/xh_listb.cpp
@@ -36612,6 +36702,9 @@ stcdll_PlatWX.o: $(srcdir)/src/stc/PlatWX.cpp $(STCDLL_ODEP)
 stcdll_ScintillaWX.o: $(srcdir)/src/stc/ScintillaWX.cpp $(STCDLL_ODEP)
 	$(CXXC) -c -o $@ $(STCDLL_CXXFLAGS) $(srcdir)/src/stc/ScintillaWX.cpp
 
+stcdll_PlatWXcocoa.o: $(srcdir)/src/stc/PlatWXcocoa.mm $(STCDLL_ODEP)
+	$(CXXC) -c -o $@ $(STCDLL_OBJCXXFLAGS) $(srcdir)/src/stc/PlatWXcocoa.mm
+
 stclib_stc.o: $(srcdir)/src/stc/stc.cpp $(STCLIB_ODEP)
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/src/stc/stc.cpp
 
@@ -36620,6 +36713,9 @@ stclib_PlatWX.o: $(srcdir)/src/stc/PlatWX.cpp $(STCLIB_ODEP)
 
 stclib_ScintillaWX.o: $(srcdir)/src/stc/ScintillaWX.cpp $(STCLIB_ODEP)
 	$(CXXC) -c -o $@ $(STCLIB_CXXFLAGS) $(srcdir)/src/stc/ScintillaWX.cpp
+
+stclib_PlatWXcocoa.o: $(srcdir)/src/stc/PlatWXcocoa.mm $(STCLIB_ODEP)
+	$(CXXC) -c -o $@ $(STCLIB_OBJCXXFLAGS) $(srcdir)/src/stc/PlatWXcocoa.mm
 
 gldll_version_rc.o: $(srcdir)/src/msw/version.rc $(GLDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_67) $(__DEBUG_DEFINE_p_66)  $(__EXCEPTIONS_DEFINE_p_65) $(__RTTI_DEFINE_p_65) $(__THREAD_DEFINE_p_65)  --define WXBUILDING --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_BUILD_p_66) $(__INC_TIFF_p_66) $(__INC_JPEG_p_66) $(__INC_PNG_p_65) $(__INC_ZLIB_p_67) $(__INC_REGEX_p_65) $(__INC_EXPAT_p_65) --define WXUSINGDLL --define WXMAKINGDLL_GL

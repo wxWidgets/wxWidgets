@@ -47,8 +47,8 @@ protected:
                            int sizeFlags = wxSIZE_AUTO) wxOVERRIDE;
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 
-    virtual wxString DoGetLabel() const wxOVERRIDE;
-    virtual void DoSetLabel(const wxString& str) wxOVERRIDE;
+    virtual wxString WXGetVisibleLabel() const wxOVERRIDE;
+    virtual void WXSetVisibleLabel(const wxString& str) wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticText);
 };

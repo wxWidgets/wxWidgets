@@ -49,6 +49,26 @@ public:
     virtual wxMBConv* Clone() const = 0;
 
     /**
+        This function must be overridden in the derived classes to return the
+        maximum length, in bytes, of a single Unicode character representation
+        in this encoding.
+
+        As a consequence, the conversion object must be able to decode any
+        valid sequence of bytes in the corresponding encoding if it's at least
+        that many bytes long, but may fail if it is shorter. For example, for
+        UTF-8 the maximum character length is 4, as 3 bytes or less may be
+        insufficient to represent a Unicode character in UTF-8, but 4 are
+        always enough.
+
+        For compatibility reasons, this method is not pure virtual and returns
+        1 by default in the base class, however it should be always overridden
+        in the derived classes.
+
+        @since 3.1.3
+     */
+    virtual size_t GetMaxCharLen() const;
+
+    /**
         This function returns 1 for most of the multibyte encodings in which the
         string is terminated by a single @c NUL, 2 for UTF-16 and 4 for UTF-32 for
         which the string is terminated with 2 and 4 @c NUL characters respectively.

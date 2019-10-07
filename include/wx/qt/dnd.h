@@ -46,7 +46,7 @@ public:
                  const wxCursor &move = wxNullCursor,
                  const wxCursor &none = wxNullCursor);
 
-    virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly);
+    virtual wxDragResult DoDragDrop(int flags = wxDrag_CopyOnly) wxOVERRIDE;
 
 private:
     wxWindow* m_parentWindow;

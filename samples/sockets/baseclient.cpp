@@ -27,7 +27,7 @@
 #include "wx/thread.h"
 
 const wxEventType wxEVT_WORKER = wxNewEventType();
-#define EVT_WORKER(func) DECLARE_EVENT_TABLE_ENTRY( wxEVT_WORKER, -1, -1, (wxObjectEventFunction) (wxEventFunction) (WorkerEventFunction) & func, (wxObject *) NULL ),
+#define EVT_WORKER(func) wxDECLARE_EVENT_TABLE_ENTRY( wxEVT_WORKER, -1, -1, (wxObjectEventFunction) (wxEventFunction) (WorkerEventFunction) & func, (wxObject *) NULL ),
 
 const int timeout_val = 1000;
 
@@ -218,13 +218,13 @@ Client::OnCmdLineParsed(wxCmdLineParser& pParser)
         if (!file.IsOpened()) {
             wxLogError("Cannot open file %s",fname);
             return false;
-        };
+        }
         if (!file.ReadAll(&m_message)) {
             wxLogError("Cannot read content of file %s",fname);
             return false;
-        };
+        }
         m_sendType = SEND_MESSAGE;
-    };
+    }
 
     if (pParser.Found("s",&m_stressWorkers))
         m_sendType = STRESS_TEST;
@@ -440,7 +440,7 @@ Client::OnWorkerEvent(WorkerEvent& pEvent) {
             m_statDone++;
             m_statDisconnecting--;
         break;
-    };
+    }
 
     if (pEvent.isFailed() || pEvent.m_eventType == WorkerEvent::DONE)
     {
@@ -719,7 +719,7 @@ wxThread::ExitCode ThreadWorker::Entry()
         etype = WorkerEvent::DISCONNECTING;
         WorkerEvent e(this,etype);
         wxGetApp().AddPendingEvent(e);
-    };
+    }
     m_clientSocket->Close();
     m_clientSocket->Destroy();
     m_clientSocket = NULL;

@@ -23,6 +23,8 @@
 
 #include "wx/private/fdiomanager.h"
 
+#define wxCloseSocket close
+
 class wxSocketImplUnix : public wxSocketImpl,
                          public wxFDIOHandler
 {
@@ -64,7 +66,7 @@ private:
     {
         DisableEvents();
 
-        close(m_fd);
+        wxCloseSocket(m_fd);
     }
 
     virtual void UnblockAndRegisterWithEventLoop() wxOVERRIDE

@@ -72,14 +72,14 @@ public:
     virtual bool IsItemEnabled(unsigned int n) const wxOVERRIDE;
     virtual bool IsItemShown(unsigned int n) const wxOVERRIDE;
 
-    virtual unsigned int GetCount() const;
-    virtual wxString GetString(unsigned int n) const;
-    virtual void SetString(unsigned int n, const wxString& s);
+    virtual unsigned int GetCount() const wxOVERRIDE;
+    virtual wxString GetString(unsigned int n) const wxOVERRIDE;
+    virtual void SetString(unsigned int n, const wxString& s) wxOVERRIDE;
 
-    virtual void SetSelection(int n);
-    virtual int GetSelection() const;
+    virtual void SetSelection(int n) wxOVERRIDE;
+    virtual int GetSelection() const wxOVERRIDE;
 
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
 private:
     // The 'visual' group box:

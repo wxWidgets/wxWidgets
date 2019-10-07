@@ -159,6 +159,12 @@ public:
     // compute column title width
     int GetColumnTitleWidth(const wxHeaderColumn& col);
 
+    // compute column title width for the column with the given index
+    int GetColumnTitleWidth(unsigned int idx)
+    {
+        return GetColumnTitleWidth(GetColumn(idx));
+    }
+
     // implementation only from now on
     // -------------------------------
 

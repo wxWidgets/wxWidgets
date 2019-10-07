@@ -58,8 +58,8 @@ protected:
     // draw the control
     virtual void DoDraw(wxControlRenderer *renderer) wxOVERRIDE;
 
-    virtual void DoSetLabel(const wxString& str) wxOVERRIDE;
-    virtual wxString DoGetLabel() const wxOVERRIDE;
+    virtual void WXSetVisibleLabel(const wxString& str) wxOVERRIDE;
+    virtual wxString WXGetVisibleLabel() const wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxStaticText);
 };

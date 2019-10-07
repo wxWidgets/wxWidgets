@@ -36,9 +36,11 @@ class GridFrame : public wxFrame
     void ToggleRowSizing( wxCommandEvent& );
     void ToggleColSizing( wxCommandEvent& );
     void ToggleColMoving( wxCommandEvent& );
+    void ToggleColHiding( wxCommandEvent& );
     void ToggleGridSizing( wxCommandEvent& );
     void ToggleGridDragCell ( wxCommandEvent& );
     void SetNativeColHeader ( wxCommandEvent& );
+    void SetNativeColLabels ( wxCommandEvent& );
     void SetCustomColHeader( wxCommandEvent& );
     void SetDefaultColHeader( wxCommandEvent& );
     void SetTabBehaviour( wxCommandEvent& );
@@ -73,6 +75,8 @@ class GridFrame : public wxFrame
     void SelectRows( wxCommandEvent& );
     void SelectCols( wxCommandEvent& );
     void SelectRowsOrCols( wxCommandEvent& );
+
+    void FreezeOrThaw( wxCommandEvent& );
 
     void DeselectCell(wxCommandEvent& event);
     void DeselectCol(wxCommandEvent& event);
@@ -137,6 +141,7 @@ public:
         ID_TOGGLEROWSIZING,
         ID_TOGGLECOLSIZING,
         ID_TOGGLECOLMOVING,
+        ID_TOGGLECOLHIDING,
         ID_TOGGLEGRIDSIZING,
         ID_TOGGLEGRIDDRAGCELL,
         ID_TOGGLEGRIDLINES,
@@ -162,6 +167,7 @@ public:
         ID_CORNERLABELORIENTATION,
         ID_COLDEFAULTHEADER,
         ID_COLNATIVEHEADER,
+        ID_COLNATIVELABELS,
         ID_COLCUSTOMHEADER,
         ID_TAB_STOP,
         ID_TAB_WRAP,
@@ -201,6 +207,8 @@ public:
         ID_SIZE_LABELS_COL,
         ID_SIZE_LABELS_ROW,
         ID_SIZE_GRID,
+
+        ID_FREEZE_OR_THAW,
 
         ID_SET_HIGHLIGHT_WIDTH,
         ID_SET_RO_HIGHLIGHT_WIDTH,

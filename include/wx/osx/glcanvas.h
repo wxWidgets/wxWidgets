@@ -43,7 +43,7 @@ public:
                 const wxGLContextAttrs *ctxAttrs = NULL);
     virtual ~wxGLContext();
 
-    virtual bool SetCurrent(const wxGLCanvas& win) const;
+    virtual bool SetCurrent(const wxGLCanvas& win) const wxOVERRIDE;
 
     // Mac-specific
     WXGLContext GetWXGLContext() const { return m_glContext; }

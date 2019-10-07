@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     13.07.01
 // Copyright:   (c) 2000 Karsten Ballueder <ballueder@gmx.net>
-//                  2001 Vadim Zeitlin <vadim@wxwindows.org>
+//                  2001 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -688,6 +688,31 @@ int wxRegEx::Replace(wxString *pattern,
     wxCHECK_MSG( IsValid(), wxNOT_FOUND, wxT("must successfully Compile() first") );
 
     return m_impl->Replace(pattern, replacement, maxMatches);
+}
+
+wxString wxRegEx::QuoteMeta(const wxString& str)
+{
+    static const wxString s_strMetaChars = wxS("\\^$.|?*+()[]{}");
+
+    wxString strEscaped;
+
+    // This is the maximal possible length of the resulting string, if every
+    // character were escaped.
+    strEscaped.reserve(str.length() * 2);
+
+    for ( wxString::const_iterator it = str.begin(); it != str.end(); ++it )
+    {
+        if ( s_strMetaChars.find(*it) != wxString::npos )
+        {
+            strEscaped += wxS('\\');
+        }
+
+        strEscaped += *it;
+    }
+
+    strEscaped.shrink_to_fit();
+
+    return strEscaped;
 }
 
 #endif // wxUSE_REGEX

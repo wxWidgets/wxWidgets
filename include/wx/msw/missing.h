@@ -23,7 +23,11 @@
 #endif
 
 #ifndef WM_PRINTCLIENT
-    #define WM_PRINTCLIENT 0x318
+    #define WM_PRINTCLIENT      0x0318
+#endif
+
+#ifndef WM_DPICHANGED
+    #define WM_DPICHANGED       0x02E0
 #endif
 
 #ifndef DT_HIDEPREFIX
@@ -411,6 +415,10 @@
 
 #ifndef INVALID_FILE_ATTRIBUTES
     #define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
+#endif
+
+#ifndef OFN_FORCESHOWHIDDEN
+    #define OFN_FORCESHOWHIDDEN          0x10000000
 #endif
 
 #endif

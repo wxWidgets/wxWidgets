@@ -729,16 +729,31 @@ void wxMSWDCImpl::Clear()
             return;
     }
 
-    DWORD colour = ::GetBkColor(GetHdc());
-    HBRUSH brush = ::CreateSolidBrush(colour);
+    HBRUSH hbr;
+    if ( !m_backgroundBrush.IsOk() )
+    {
+        // By default, use the stock white brush for compatibility with the
+        // previous wx versions.
+        hbr = WHITE_BRUSH;
+    }
+    else if ( !m_backgroundBrush.IsTransparent() )
+    {
+        hbr = GetHbrushOf(m_backgroundBrush);
+    }
+    else // Using transparent background brush.
+    {
+        // Clearing with transparent brush doesn't do anything, just as drawing
+        // with transparent pen doesn't.
+        return;
+    }
+
     RECT rect;
     ::GetClipBox(GetHdc(), &rect);
     // Inflate the box by 1 unit in each direction
     // to compensate rounding errors if DC is the subject
     // of complex transformation (is e.g. rotated).
     ::InflateRect(&rect, 1, 1);
-    ::FillRect(GetHdc(), &rect, brush);
-    ::DeleteObject(brush);
+    ::FillRect(GetHdc(), &rect, hbr);
 
     RealizeScaleAndOrigin();
 }
@@ -859,24 +874,6 @@ void wxMSWDCImpl::DoDrawArc(wxCoord x1, wxCoord y1,
 
     CalcBoundingBox(xc - r, yc - r);
     CalcBoundingBox(xc + r, yc + r);
-}
-
-void wxMSWDCImpl::DoDrawCheckMark(wxCoord x1, wxCoord y1,
-                           wxCoord width, wxCoord height)
-{
-    wxCoord x2 = x1 + width,
-            y2 = y1 + height;
-
-    RECT rect;
-    rect.left   = x1;
-    rect.top    = y1;
-    rect.right  = x2;
-    rect.bottom = y2;
-
-    DrawFrameControl(GetHdc(), &rect, DFC_MENU, DFCS_MENUCHECK);
-
-    CalcBoundingBox(x1, y1);
-    CalcBoundingBox(x2, y2);
 }
 
 void wxMSWDCImpl::DoDrawPoint(wxCoord x, wxCoord y)
@@ -1104,7 +1101,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     const size_t n_bezier_points = n_points * 3 + 1;
     POINT *lppt = new POINT[n_bezier_points];
     size_t bezier_pos = 0;
-    wxCoord x1, y1, x2, y2, cx1, cy1, cx4, cy4;
+    wxCoord x1, y1, x2, y2, cx1, cy1;
 
     wxPointList::compatibility_iterator node = points->GetFirst();
     wxPoint *p = node->GetData();
@@ -1135,6 +1132,7 @@ void wxMSWDCImpl::DoDrawSpline(const wxPointList *points)
     while ((node = node->GetNext()))
 #endif // !wxUSE_STD_CONTAINERS
     {
+        int cx4, cy4;
         p = (wxPoint *)node->GetData();
         x1 = x2;
         y1 = y2;
@@ -1259,10 +1257,31 @@ void wxMSWDCImpl::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool 
 
     if ( bmp.HasAlpha() )
     {
-        MemoryHDC hdcMem;
-        SelectInHDC select(hdcMem, GetHbitmapOf(bmp));
+        // Make a copy in case we would neeed to remove its mask.
+        // If this will not be necessary, the copy is cheap as bitmaps are reference-counted.
+        wxBitmap curBmp(bmp);
 
-        if ( AlphaBlt(this, x, y, width, height, 0, 0, width, height, hdcMem, bmp) )
+        // For bitmap with both alpha channel and mask we have to apply mask on our own
+        // because MaskBlt() API doesn't work properly with 32 bpp RGBA bitmaps.
+        // To do so we will create a temporary bitmap with copy of RGB data and with alpha channel
+        // being a superposition of the original alpha values and the mask - for non-masked pixels
+        // alpha channel values will remain intact and for masked pixels they will be set to the transparent value.
+        if ( curBmp.GetMask() )
+        {
+            if ( useMask )
+            {
+                curBmp.MSWBlendMaskWithAlpha();
+            }
+            else
+            {
+                curBmp.SetMask(NULL);
+            }
+        }
+
+        MemoryHDC hdcMem;
+        SelectInHDC select(hdcMem, GetHbitmapOf(curBmp));
+
+        if ( AlphaBlt(this, x, y, width, height, 0, 0, width, height, hdcMem, curBmp) )
         {
             CalcBoundingBox(x, y);
             CalcBoundingBox(x + bmp.GetWidth(), y + bmp.GetHeight());
@@ -2437,6 +2456,11 @@ wxSize wxMSWDCImpl::GetPPI() const
     int y = ::GetDeviceCaps(GetHdc(), LOGPIXELSY);
 
     return wxSize(x, y);
+}
+
+double wxMSWDCImpl::GetContentScaleFactor() const
+{
+    return GetPPI().y / 96.0;
 }
 
 // ----------------------------------------------------------------------------

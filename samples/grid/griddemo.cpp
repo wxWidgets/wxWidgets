@@ -154,9 +154,11 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLEROWSIZING, GridFrame::ToggleRowSizing )
     EVT_MENU( ID_TOGGLECOLSIZING, GridFrame::ToggleColSizing )
     EVT_MENU( ID_TOGGLECOLMOVING, GridFrame::ToggleColMoving )
+    EVT_MENU( ID_TOGGLECOLHIDING, GridFrame::ToggleColHiding )
     EVT_MENU( ID_TOGGLEGRIDSIZING, GridFrame::ToggleGridSizing )
     EVT_MENU( ID_TOGGLEGRIDDRAGCELL, GridFrame::ToggleGridDragCell )
     EVT_MENU( ID_COLNATIVEHEADER, GridFrame::SetNativeColHeader )
+    EVT_MENU( ID_COLNATIVELABELS, GridFrame::SetNativeColLabels )
     EVT_MENU( ID_COLDEFAULTHEADER, GridFrame::SetDefaultColHeader )
     EVT_MENU( ID_COLCUSTOMHEADER, GridFrame::SetCustomColHeader )
     EVT_MENU_RANGE( ID_TAB_STOP, ID_TAB_LEAVE, GridFrame::SetTabBehaviour )
@@ -187,6 +189,8 @@ wxBEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_SELROWS,  GridFrame::SelectRows )
     EVT_MENU( ID_SELCOLS,  GridFrame::SelectCols )
     EVT_MENU( ID_SELROWSORCOLS,  GridFrame::SelectRowsOrCols )
+
+    EVT_MENU( ID_FREEZE_OR_THAW,  GridFrame::FreezeOrThaw )
 
     EVT_MENU( ID_SET_CELL_FG_COLOUR, GridFrame::SetCellFgColour )
     EVT_MENU( ID_SET_CELL_BG_COLOUR, GridFrame::SetCellBgColour )
@@ -295,6 +299,7 @@ GridFrame::GridFrame()
     viewMenu->AppendCheckItem(ID_TOGGLEROWSIZING, "Ro&w drag-resize");
     viewMenu->AppendCheckItem(ID_TOGGLECOLSIZING, "C&ol drag-resize");
     viewMenu->AppendCheckItem(ID_TOGGLECOLMOVING, "Col drag-&move");
+    viewMenu->AppendCheckItem(ID_TOGGLECOLHIDING, "Col hiding popup menu");
     viewMenu->AppendCheckItem(ID_TOGGLEGRIDSIZING, "&Grid drag-resize");
     viewMenu->AppendCheckItem(ID_TOGGLEGRIDDRAGCELL, "&Grid drag-cell");
     viewMenu->AppendCheckItem(ID_TOGGLEGRIDLINES, "&Grid Lines");
@@ -343,6 +348,7 @@ GridFrame::GridFrame()
 
     colHeaderMenu->AppendRadioItem( ID_COLDEFAULTHEADER, "&Default" );
     colHeaderMenu->AppendRadioItem( ID_COLNATIVEHEADER, "&Native" );
+    colHeaderMenu->AppendRadioItem( ID_COLNATIVELABELS, "Native-&like" );
     colHeaderMenu->AppendRadioItem( ID_COLCUSTOMHEADER, "&Custom" );
 
     wxMenu *tabBehaviourMenu = new wxMenu;
@@ -367,6 +373,8 @@ GridFrame::GridFrame()
     editMenu->Append( ID_DELETECOL, "Delete selected co&ls" );
     editMenu->Append( ID_CLEARGRID, "Cl&ear grid cell contents" );
     editMenu->Append( ID_SETCORNERLABEL, "&Set corner label..." );
+
+    editMenu->AppendCheckItem( ID_FREEZE_OR_THAW, "Freeze up to cursor\tCtrl-F" );
 
     wxMenu *selectMenu = new wxMenu;
     selectMenu->Append( ID_SELECT_UNSELECT, "Add new cells to the selection",
@@ -571,10 +579,10 @@ GridFrame::GridFrame()
         "This takes two cells",
         "Another choice",
     };
-    grid->SetCellEditor(4, 0, new wxGridCellChoiceEditor(WXSIZEOF(choices), choices));
-    grid->SetCellSize(4, 0, 1, 2);
-    grid->SetCellValue(4, 0, choices[0]);
-    grid->SetCellOverflow(4, 0, false);
+    grid->SetCellEditor(4, 2, new wxGridCellChoiceEditor(WXSIZEOF(choices), choices));
+    grid->SetCellSize(4, 2, 1, 2);
+    grid->SetCellValue(4, 2, choices[0]);
+    grid->SetCellOverflow(4, 2, false);
 
     grid->SetCellSize(7, 1, 3, 4);
     grid->SetCellAlignment(7, 1, wxALIGN_CENTRE, wxALIGN_CENTRE);
@@ -628,6 +636,7 @@ void GridFrame::SetDefaults()
     GetMenuBar()->Check( ID_TOGGLEROWSIZING, true );
     GetMenuBar()->Check( ID_TOGGLECOLSIZING, true );
     GetMenuBar()->Check( ID_TOGGLECOLMOVING, false );
+    GetMenuBar()->Check( ID_TOGGLECOLHIDING, true );
     GetMenuBar()->Check( ID_TOGGLEGRIDSIZING, true );
     GetMenuBar()->Check( ID_TOGGLEGRIDDRAGCELL, false );
     GetMenuBar()->Check( ID_TOGGLEGRIDLINES, true );
@@ -687,6 +696,15 @@ void GridFrame::ToggleColMoving( wxCommandEvent& WXUNUSED(ev) )
         GetMenuBar()->IsChecked( ID_TOGGLECOLMOVING ) );
 }
 
+void GridFrame::ToggleColHiding( wxCommandEvent& WXUNUSED(ev) )
+{
+    if ( !grid->EnableHidingColumns(
+        GetMenuBar()->IsChecked( ID_TOGGLECOLHIDING ) ) )
+    {
+        GetMenuBar()->Check( ID_TOGGLECOLHIDING, grid->CanHideColumns() );
+    }
+}
+
 void GridFrame::ToggleGridSizing( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->EnableDragGridSize(
@@ -704,6 +722,15 @@ void GridFrame::SetNativeColHeader( wxCommandEvent& WXUNUSED(ev) )
     CustomColumnHeadersProvider* provider =
         static_cast<CustomColumnHeadersProvider*>(grid->GetTable()->GetAttrProvider());
     provider->UseCustomColHeaders(false);
+    grid->UseNativeColHeader(true);
+}
+
+void GridFrame::SetNativeColLabels( wxCommandEvent& WXUNUSED(ev) )
+{
+    CustomColumnHeadersProvider* provider =
+        static_cast<CustomColumnHeadersProvider*>(grid->GetTable()->GetAttrProvider());
+    provider->UseCustomColHeaders(false);
+    grid->UseNativeColHeader(false);
     grid->SetUseNativeColLabels(true);
 }
 
@@ -712,6 +739,7 @@ void GridFrame::SetCustomColHeader( wxCommandEvent& WXUNUSED(ev) )
     CustomColumnHeadersProvider* provider =
         static_cast<CustomColumnHeadersProvider*>(grid->GetTable()->GetAttrProvider());
     provider->UseCustomColHeaders(true);
+    grid->UseNativeColHeader(false);
     grid->SetUseNativeColLabels(false);
 }
 
@@ -720,6 +748,7 @@ void GridFrame::SetDefaultColHeader( wxCommandEvent& WXUNUSED(ev) )
     CustomColumnHeadersProvider* provider =
         static_cast<CustomColumnHeadersProvider*>(grid->GetTable()->GetAttrProvider());
     provider->UseCustomColHeaders(false);
+    grid->UseNativeColHeader(false);
     grid->SetUseNativeColLabels(false);
 }
 
@@ -1196,6 +1225,30 @@ void GridFrame::SelectRowsOrCols( wxCommandEvent& WXUNUSED(ev) )
     grid->SetSelectionMode( wxGrid::wxGridSelectRowsOrColumns );
 }
 
+void GridFrame::FreezeOrThaw(wxCommandEvent& ev)
+{
+    if ( ev.IsChecked() )
+    {
+        if ( !grid->FreezeTo(grid->GetGridCursorCoords()) )
+        {
+            wxLogMessage("Failed to freeze the grid.");
+            GetMenuBar()->Check(ID_FREEZE_OR_THAW, false);
+            return;
+        }
+
+        wxLogMessage("Grid is now frozen");
+    }
+    else
+    {
+        // This never fails.
+        grid->FreezeTo(0, 0);
+
+        wxLogMessage("Grid is now thawed");
+    }
+
+    GetMenuBar()->Enable( ID_TOGGLECOLMOVING, !grid->IsFrozen() );
+}
+
 void GridFrame::SetCellFgColour( wxCommandEvent& WXUNUSED(ev) )
 {
     wxColour col = wxGetColourFromUser(this);
@@ -1662,7 +1715,7 @@ wxString BugsGridTable::GetTypeName(int WXUNUSED(row), int col)
     {
         case Col_Id:
         case Col_Priority:
-            return wxGRID_VALUE_NUMBER;;
+            return wxGRID_VALUE_NUMBER;
 
         case Col_Severity:
             // fall thorugh (TODO should be a list)
@@ -2460,7 +2513,7 @@ void GridFrame::OnRenderPaint( wxPaintEvent& event )
     canvas->PrepareDC( dc );
 
     if ( !m_gridBitmap.IsOk() )
-        return;;
+        return;
 
     wxMemoryDC memDc( m_gridBitmap );
 

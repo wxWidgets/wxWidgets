@@ -33,8 +33,8 @@ public:
 
     static bool IsTDI() { return false; }
 
-    virtual void ActivateNext();
-    virtual void ActivatePrevious();
+    virtual void ActivateNext() wxOVERRIDE;
+    virtual void ActivatePrevious() wxOVERRIDE;
 
 protected:
 
@@ -64,7 +64,7 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    virtual void Activate();
+    virtual void Activate() wxOVERRIDE;
 
     wxDECLARE_DYNAMIC_CLASS(wxMDIChildFrame);
 };
@@ -76,7 +76,7 @@ class WXDLLIMPEXP_CORE wxMDIClientWindow : public wxMDIClientWindowBase
 public:
     wxMDIClientWindow();
 
-    virtual bool CreateClient(wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL);
+    virtual bool CreateClient(wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL) wxOVERRIDE;
     wxDECLARE_DYNAMIC_CLASS(wxMDIClientWindow);
 };
 

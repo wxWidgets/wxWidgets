@@ -29,11 +29,11 @@
 
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
-    #include "wx/dcscreen.h"
-    #include "wx/toplevel.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/private/window.h"
 #include "wx/renderer.h"
 #include "wx/msw/uxtheme.h"
 
@@ -103,23 +103,14 @@ void wxRadioButton::SetValue(bool value)
     // reselected automatically, if a parent window loses the focus and regains
     // it.
     wxWindow * const focus = FindFocus();
-    wxTopLevelWindow * const
-        tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
-    wxCHECK_RET( tlw, wxT("radio button outside of TLW?") );
-    wxWindow * const focusInTLW = tlw->GetLastFocus();
 
     const wxWindowList& siblings = GetParent()->GetChildren();
     wxWindowList::compatibility_iterator nodeThis = siblings.Find(this);
     wxCHECK_RET( nodeThis, wxT("radio button not a child of its parent?") );
 
-    // this will be set to true in the code below if the focus is in our TLW
-    // and belongs to one of the other buttons in the same group
+    // this will be set to true in the code below if the focus belongs to one
+    // of the other buttons in the same group
     bool shouldSetFocus = false;
-
-    // this will be set to true if the focus is outside of our TLW currently
-    // but the remembered focus of this TLW is one of the other buttons in the
-    // same group
-    bool shouldSetTLWFocus = false;
 
     // if it's not the first item of the group ...
     if ( !HasFlag(wxRB_GROUP) )
@@ -146,8 +137,6 @@ void wxRadioButton::SetValue(bool value)
 
             if ( btn == focus )
                 shouldSetFocus = true;
-            else if ( btn == focusInTLW )
-                shouldSetTLWFocus = true;
 
             btn->SetValue(false);
 
@@ -179,16 +168,25 @@ void wxRadioButton::SetValue(bool value)
 
         if ( btn == focus )
             shouldSetFocus = true;
-        else if ( btn == focusInTLW )
-            shouldSetTLWFocus = true;
 
         btn->SetValue(false);
     }
 
     if ( shouldSetFocus )
+    {
+        // Change focus immediately, we can't do anything else in this case as
+        // leaving it to the other radio button would put it in an impossible
+        // state: a radio button can't have focus and be unchecked.
         SetFocus();
-    else if ( shouldSetTLWFocus )
-        tlw->SetLastFocus(this);
+    }
+    else
+    {
+        // Don't change focus right now, this could be unexpected, but do
+        // ensure that when our parent regains focus, it goes to this button
+        // and not another one, which would result in this one losing its
+        // checked status.
+        GetParent()->WXSetPendingFocus(this);
+    }
 }
 
 bool wxRadioButton::GetValue() const
@@ -240,31 +238,32 @@ bool wxRadioButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 
 wxSize wxRadioButton::DoGetBestSize() const
 {
-    static int s_radioSize = 0;
+    static wxPrivate::DpiDependentValue<wxCoord> s_radioSize;
 
-    if ( !s_radioSize )
+    if ( s_radioSize.HasChanged(this) )
     {
-        wxScreenDC dc;
+        wxClientDC dc(const_cast<wxRadioButton*>(this));
         dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
-        s_radioSize = dc.GetCharHeight();
+        s_radioSize.SetAtNewDPI(dc.GetCharHeight());
     }
 
+    wxCoord& radioSize = s_radioSize.Get();
     wxString str = GetLabel();
 
     int wRadio, hRadio;
     if ( !str.empty() )
     {
         GetTextExtent(GetLabelText(str), &wRadio, &hRadio);
-        wRadio += s_radioSize + GetCharWidth();
+        wRadio += radioSize + GetCharWidth();
 
-        if ( hRadio < s_radioSize )
-            hRadio = s_radioSize;
+        if ( hRadio < radioSize )
+            hRadio = radioSize;
     }
     else
     {
-        wRadio = s_radioSize;
-        hRadio = s_radioSize;
+        wRadio = radioSize;
+        hRadio = radioSize;
     }
 
     return wxSize(wRadio, hRadio);

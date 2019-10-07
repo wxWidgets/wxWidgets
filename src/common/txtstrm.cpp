@@ -108,7 +108,7 @@ wxChar wxTextInputStream::GetChar()
             // actually read the next character
             m_lastBytes[inlen] = m_input.GetC();
 
-            if(m_input.LastRead() <= 0)
+            if (m_input.LastRead() == 0)
                 return 0;
 
             m_validEnd++;
@@ -303,11 +303,23 @@ wxString wxTextInputStream::ReadLine()
 {
     wxString line;
 
-    while ( !m_input.Eof() )
+    for ( ;; )
     {
         wxChar c = GetChar();
-        if (!c)
+        if ( m_input.Eof() )
             break;
+
+        if (!c)
+        {
+            // If we failed to get a character and the stream is not at EOF, it
+            // can only mean that decoding the stream contents using our
+            // conversion object failed. In this case, we must signal an error
+            // at the stream level, as otherwise the code using this function
+            // would never know that something went wrong and would continue
+            // calling it again and again, resulting in an infinite loop.
+            m_input.Reset(wxSTREAM_READ_ERROR);
+            break;
+        }
 
         if (EatEOL(c))
             break;
@@ -358,7 +370,7 @@ wxTextInputStream& wxTextInputStream::operator>>(wxString& word)
 wxTextInputStream& wxTextInputStream::operator>>(char& c)
 {
     c = m_input.GetC();
-    if(m_input.LastRead() <= 0) c = 0;
+    if (m_input.LastRead() == 0) c = 0;
 
     if (EatEOL(c))
         c = '\n';

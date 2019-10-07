@@ -117,6 +117,11 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
 
     result.clear();
 
+    // Although we're supposed to get 7-bit ASCII from the server, some FTP
+    // servers are known to send 8-bit data, so we try to decode it in
+    // any way that works as this is more useful than just throwing it away.
+    wxWhateverWorksConv conv;
+
     wxCharBuffer buf(LINE_BUF);
     char *pBuf = buf.data();
     while ( sock->WaitForRead() )
@@ -168,7 +173,7 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *sock, wxString& result)
             return wxPROTO_NETERR;
 
         pBuf[nRead] = '\0';
-        result += wxString::FromAscii(pBuf);
+        result += conv.cMB2WX(pBuf);
 
         if ( eol )
         {

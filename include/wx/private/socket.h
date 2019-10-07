@@ -65,7 +65,7 @@
 // 64 bit Cygwin can't use the standard struct timeval because it has long
 // fields, which are supposed to be 32 bits in Win64 API, but long is 64 bits
 // in 64 bit Cygwin, so we need to use its special __ms_timeval instead.
-#if defined(__CYGWIN__) && defined(__LP64__)
+#if defined(__CYGWIN__) && defined(__LP64__) && defined(__WINDOWS__)
     typedef __ms_timeval wxTimeVal_t;
 #else
     typedef timeval wxTimeVal_t;

@@ -6,6 +6,23 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+    SVG shape rendering mode.
+
+    These options represent the values defined in the SVG specification:
+    https://svgwg.org/svg2-draft/painting.html#ShapeRenderingProperty
+*/
+enum wxSVGShapeRenderingMode
+{
+    wxSVG_SHAPE_RENDERING_AUTO = 0,
+    wxSVG_SHAPE_RENDERING_OPTIMIZE_SPEED,
+    wxSVG_SHAPE_RENDERING_CRISP_EDGES,
+    wxSVG_SHAPE_RENDERING_GEOMETRIC_PRECISION,
+
+    wxSVG_SHAPE_RENDERING_OPTIMISE_SPEED = wxSVG_SHAPE_RENDERING_OPTIMIZE_SPEED
+};
+
+
+/**
     @class wxSVGFileDC
 
     A wxSVGFileDC is a device context onto which graphics and text can be
@@ -28,8 +45,9 @@
     as the SVG file, however it is possible to change this behaviour by
     replacing the built in bitmap handler using wxSVGFileDC::SetBitmapHandler().
 
-    A more substantial SVG library (for reading and writing) is available at
-    the wxArt2D website <http://wxart2d.sourceforge.net/>.
+    More substantial SVG libraries (for reading and writing) are available at
+    <a href="http://wxart2d.sourceforge.net/" target="_blank">wxArt2D</a> and
+    <a href="http://wxsvg.sourceforge.net/" target="_blank">wxSVG</a>.
 
     @library{wxcore}
     @category{dc}
@@ -39,27 +57,12 @@ class wxSVGFileDC : public wxDC
 {
 public:
     /**
-        Initializes a wxSVGFileDC with the given @a f filename with the given
-        @a Width and @a Height at @a dpi resolution, and an optional @a title.
+        Initializes a wxSVGFileDC with the given @a filename, @a width and
+        @a height at @a dpi resolution, and an optional @a title.
         The title provides a readable name for the SVG document.
     */
     wxSVGFileDC(const wxString& filename, int width = 320, int height = 240,
                 double dpi = 72, const wxString& title = wxString());
-
-    /**
-        Destructor.
-    */
-    virtual ~wxSVGFileDC();
-
-    /**
-        Does nothing.
-    */
-    void EndDoc();
-
-    /**
-        Does nothing.
-    */
-    void EndPage();
 
     /**
         Draws a rectangle the size of the SVG using the wxDC::SetBackground() brush.
@@ -89,10 +92,15 @@ public:
     void SetBitmapHandler(wxSVGBitmapHandler* handler);
 
     /**
-        Does the same as wxDC::SetLogicalFunction(), except that only wxCOPY is
-        available. Trying to set one of the other values will fail.
+        Set the shape rendering mode of the generated SVG.
+        All subsequent drawing calls will have this rendering mode set in the
+        SVG file.
+
+        The default mode is wxSVG_SHAPE_RENDERING_AUTO.
+
+        @since 3.1.3
     */
-    void SetLogicalFunction(wxRasterOperationMode function);
+    void SetShapeRenderingMode(wxSVGShapeRenderingMode renderingMode);
 
     /**
         Sets the clipping region for this device context to the intersection of
@@ -106,24 +114,6 @@ public:
                            wxCoord height);
 
     /**
-        This is an overloaded member function, provided for convenience. It differs from the
-        above function only in what argument(s) it accepts.
-    */
-    void SetClippingRegion(const wxPoint& pt, const wxSize& sz);
-
-    /**
-        This is an overloaded member function, provided for convenience. It differs from the
-        above function only in what argument(s) it accepts.
-    */
-    void SetClippingRegion(const wxRect& rect);
-
-    /**
-        This function is not implemented in this DC class.
-        It could be implemented in future if a GetPoints() function were made available on wxRegion.
-    */
-    void SetClippingRegion(const wxRegion& region);
-
-    /**
         Destroys the current clipping region so that none of the DC is clipped.
         Since intersections arising from sequential calls to SetClippingRegion are represented
         with nested SVG group elements (\<g\>), all such groups are closed when
@@ -133,15 +123,20 @@ public:
 
     //@{
     /**
-        Functions not implemented in this DC class.
+        Function not implemented in this DC class.
     */
     void CrossHair(wxCoord x, wxCoord y);
     bool FloodFill(wxCoord x, wxCoord y, const wxColour& colour,
                    wxFloodFillStyle style = wxFLOOD_SURFACE);
-    void GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *width, wxCoord *height) const;
     bool GetPixel(wxCoord x, wxCoord y, wxColour* colour) const;
     void SetPalette(const wxPalette& palette);
+    int GetDepth() const;
+    void SetLogicalFunction(wxRasterOperationMode function);
+    wxRasterOperationMode GetLogicalFunction() const;
     bool StartDoc(const wxString& message);
+    void EndDoc();
+    void StartPage();
+    void EndPage();
     //@}
 };
 
@@ -203,9 +198,17 @@ public:
 };
 
 /**
-    Handler saving a bitmap to an external file and linking to it from the SVG.
+    Handler saving bitmaps to external PNG files and linking to it from the
+    SVG.
 
-    This handler is used by default by wxSVGFileDC.
+    This handler is used by default by wxSVGFileDC. PNG files are created in
+    the same folder as the SVG file and are named using the SVG filename
+    appended with ``_image#.png``.
+
+    When using wxSVGFileDC::SetBitmapHandler() to set this handler with the
+    default constructor, the PNG files are created in the runtime location of
+    the application. The save location can be customized by using the
+    wxSVGBitmapFileHandler(const wxFileName&) constructor.
 
     @see wxSVGFileDC::SetBitmapHandler().
 
@@ -217,6 +220,17 @@ public:
 class wxSVGBitmapFileHandler : public wxSVGBitmapHandler
 {
 public:
+    /**
+        Create a wxSVGBitmapFileHandler and specify the location where the file
+        will be saved.
+
+        @param path The path of the save location. If @a path contains a
+        filename, the autogenerated filename will be appended to this name.
+
+        @since 3.1.3
+    */
+    wxSVGBitmapFileHandler(const wxFileName& path);
+
     virtual bool ProcessBitmap(const wxBitmap& bitmap,
                                wxCoord x, wxCoord y,
                                wxOutputStream& stream) const;

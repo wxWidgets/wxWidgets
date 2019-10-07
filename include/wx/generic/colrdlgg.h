@@ -37,10 +37,10 @@ class WXDLLIMPEXP_CORE wxGenericColourDialog : public wxDialog
 public:
     wxGenericColourDialog();
     wxGenericColourDialog(wxWindow *parent,
-                          wxColourData *data = NULL);
+                          const wxColourData *data = NULL);
     virtual ~wxGenericColourDialog();
 
-    bool Create(wxWindow *parent, wxColourData *data = NULL);
+    bool Create(wxWindow *parent, const wxColourData *data = NULL);
 
     wxColourData &GetColourData() { return m_colourData; }
 

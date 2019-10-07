@@ -23,6 +23,7 @@
     #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
+#include "wx/scopedptr.h"
 #include "wx/scopeguard.h"
 #include "wx/uiaction.h"
 
@@ -377,8 +378,28 @@ void TextCtrlTestCase::HitTestSingleLine()
         // wxGTK must be given an opportunity to lay the text out.
         wxYield();
 
-        REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
+        // For some reason, this test consistently fails when running under
+        // Xvfb. Debugging shows that the text gets scrolled too far, instead
+        // of scrolling by ~156 characters, leaving the remaining 44 shown, in
+        // normal runs, it gets scrolled by all 200 characters, leaving nothing
+        // shown. It's not clear why does it happen, and there doesn't seem
+        // anything we can do about it.
+        if ( IsRunningUnderXVFB() )
+        {
+            WARN("Skipping test known to fail under Xvfb");
+        }
+        else
+        {
+            REQUIRE( m_text->HitTest(wxPoint(2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
+            CHECK( pos > 3 );
+        }
+
+        // Using negative coordinates works even under Xvfb, so test at least
+        // for this -- however this only works in wxGTK, not wxMSW.
+#ifdef __WXGTK__
+        REQUIRE( m_text->HitTest(wxPoint(-2*sizeChar.x, yMid), &pos) == wxTE_HT_ON_TEXT );
         CHECK( pos > 3 );
+#endif // __WXGTK__
     }
 #endif
 }
@@ -1247,6 +1268,77 @@ void TextCtrlTestCase::XYToPositionSingleLine()
         p2 = m_text->XYToPosition(x, 1);
         CPPUNIT_ASSERT_EQUAL( -1, p2 );
     }
+}
+
+TEST_CASE("wxTextCtrl::ProcessEnter", "[wxTextCtrl][enter]")
+{
+    class TextCtrlCreator : public TextLikeControlCreator
+    {
+    public:
+        explicit TextCtrlCreator(int styleToAdd = 0)
+            : m_styleToAdd(styleToAdd)
+        {
+        }
+
+        virtual wxControl* Create(wxWindow* parent, int style) const wxOVERRIDE
+        {
+            return new wxTextCtrl(parent, wxID_ANY, wxString(),
+                                  wxDefaultPosition, wxDefaultSize,
+                                  style | m_styleToAdd);
+        }
+
+        virtual TextLikeControlCreator* CloneAsMultiLine() const wxOVERRIDE
+        {
+            return new TextCtrlCreator(wxTE_MULTILINE);
+        }
+
+    private:
+        int m_styleToAdd;
+    };
+
+    TestProcessEnter(TextCtrlCreator());
+}
+
+TEST_CASE("wxTextCtrl::GetBestSize", "[wxTextCtrl][best-size]")
+{
+    struct GetBestSizeFor
+    {
+        wxSize operator()(const wxString& text) const
+        {
+            wxScopedPtr<wxTextCtrl>
+                t(new wxTextCtrl(wxTheApp->GetTopWindow(), wxID_ANY, text,
+                                 wxDefaultPosition, wxDefaultSize,
+                                 wxTE_MULTILINE));
+            return t->GetBestSize();
+        }
+    } getBestSizeFor;
+
+    wxString s;
+    const wxSize sizeEmpty = getBestSizeFor(s);
+
+    // Empty control should have some reasonable vertical size.
+    CHECK( sizeEmpty.y > 0 );
+
+    s += "1\n2\n3\n4\n5\n";
+    const wxSize sizeMedium = getBestSizeFor(s);
+
+    // Control with a few lines of text in it should be taller.
+    CHECK( sizeMedium.y > sizeEmpty.y );
+
+    s += "6\n7\n8\n9\n10\n";
+    const wxSize sizeLong = getBestSizeFor(s);
+
+    // And a control with many lines in it should be even more so.
+    CHECK( sizeLong.y > sizeMedium.y );
+
+    s += s;
+    s += s;
+    s += s;
+    const wxSize sizeVeryLong = getBestSizeFor(s);
+
+    // However there is a cutoff at 10 lines currently, so anything longer than
+    // that should still have the same best size.
+    CHECK( sizeVeryLong.y == sizeLong.y );
 }
 
 #endif //wxUSE_TEXTCTRL

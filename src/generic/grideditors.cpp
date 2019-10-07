@@ -1750,6 +1750,15 @@ struct wxGridCellDateEditorKeyHandler
     }
 
     wxGridCellEditorEvtHandler* m_handler;
+
+#ifdef wxNO_RTTI
+    // wxEventFunctorFunction used when an object of this class is passed to
+    // Bind() must have a default ctor when using wx RTTI implementation (see
+    // see the comment before WX_DECLARE_TYPEINFO_INLINE() in wx/typeinfo.h)
+    // and this, in turn, requires a default ctor of this class -- which will
+    // never be actually used, but must nevertheless exist.
+    wxGridCellDateEditorKeyHandler() : m_handler(NULL) { }
+#endif // wxNO_RTTI
 };
 #endif // __WXGTK__
 

@@ -47,6 +47,12 @@
 #    ifndef MAC_OS_X_VERSION_10_13
 #       define MAC_OS_X_VERSION_10_13 101300
 #    endif
+#    ifndef MAC_OS_X_VERSION_10_14
+#       define MAC_OS_X_VERSION_10_14 101400
+#    endif
+#    ifndef MAC_OS_X_VERSION_10_15
+#       define MAC_OS_X_VERSION_10_15 101500
+#    endif
 #    if MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_13
 #        ifndef NSAppKitVersionNumber10_10
 #            define NSAppKitVersionNumber10_10 1343
@@ -279,6 +285,11 @@
 
 #    if defined(__INNOTEK_LIBC__)
         /* Ensure visibility of strnlen declaration */
+#        define _GNU_SOURCE
+#    endif
+
+#    if defined(__CYGWIN__)
+        /* Ensure visibility of Dl_info and pthread_setconcurrency declarations */
 #        define _GNU_SOURCE
 #    endif
 
@@ -611,7 +622,11 @@
         Only 4.3 defines __GXX_RTTI by default so its absence is not an
         indication of disabled RTTI with the previous versions.
      */
-#   if wxCHECK_GCC_VERSION(4, 3)
+#   if defined(__clang__)
+#       if !__has_feature(cxx_rtti)
+#           define wxNO_RTTI
+#       endif
+#   elif wxCHECK_GCC_VERSION(4, 3)
 #       ifndef __GXX_RTTI
 #           define wxNO_RTTI
 #       endif

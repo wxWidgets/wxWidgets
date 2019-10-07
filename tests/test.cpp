@@ -406,6 +406,18 @@ extern bool IsAutomaticTest()
     return s_isAutomatic == 1;
 }
 
+extern bool IsRunningUnderXVFB()
+{
+    static int s_isRunningUnderXVFB = -1;
+    if ( s_isRunningUnderXVFB == -1 )
+    {
+        wxString value;
+        s_isRunningUnderXVFB = wxGetEnv("wxUSE_XVFB", &value) && value == "1";
+    }
+
+    return s_isRunningUnderXVFB == 1;
+}
+
 #if wxUSE_GUI
 
 bool EnableUITests()

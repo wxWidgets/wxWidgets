@@ -136,12 +136,21 @@ public:
         Default implementation  sets foreground colour, background colour,
         font, plus text for wxTextCtrl and wxComboCtrl.
 
+        @param pg
+            Property grid to which the edited property belongs.
+
+        @param property
+            Edited property to which the editor control belongs.
+
+        @param ctrl
+            Editor control.
+
         @param appearance
             New appearance to be applied.
 
         @param oldAppearance
-            Previously applied appearance.  Used to detect which control
-            attributes need to be changed (e.g. so we onlychange background
+            Previously applied appearance. Used to detect which control
+            attributes need to be changed (e.g. so we only change background
             colour if really needed).
 
         @param unspecified

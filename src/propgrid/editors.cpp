@@ -18,41 +18,12 @@
 #if wxUSE_PROPGRID
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
-    #include "wx/object.h"
-    #include "wx/hash.h"
-    #include "wx/string.h"
-    #include "wx/log.h"
-    #include "wx/event.h"
-    #include "wx/window.h"
-    #include "wx/panel.h"
-    #include "wx/dc.h"
-    #include "wx/dcclient.h"
-    #include "wx/dcmemory.h"
-    #include "wx/button.h"
-    #include "wx/pen.h"
-    #include "wx/brush.h"
-    #include "wx/cursor.h"
-    #include "wx/dialog.h"
     #include "wx/settings.h"
-    #include "wx/msgdlg.h"
-    #include "wx/choice.h"
-    #include "wx/stattext.h"
-    #include "wx/scrolwin.h"
-    #include "wx/dirdlg.h"
-    #include "wx/sizer.h"
-    #include "wx/textdlg.h"
-    #include "wx/filedlg.h"
-    #include "wx/statusbr.h"
-    #include "wx/intl.h"
-    #include "wx/frame.h"
+    #include "wx/textctrl.h"
 #endif
 
-
-#include "wx/timer.h"
 #include "wx/dcbuffer.h"
-#include "wx/bmpbuttn.h"
-
+#include "wx/odcombo.h"
 
 // This define is necessary to prevent macro clearing
 #define __wxPG_SOURCE_FILE__
@@ -73,8 +44,6 @@
 #endif
 
 #define wxPG_BUTTON_SIZEDEC                         0
-
-#include "wx/odcombo.h"
 
 // -----------------------------------------------------------------------
 
@@ -520,12 +489,9 @@ class wxPGDoubleClickProcessor : public wxEvtHandler
 {
 public:
 
-    wxPGDoubleClickProcessor( wxOwnerDrawnComboBox* combo, wxPGProperty* property )
+    wxPGDoubleClickProcessor( wxOwnerDrawnComboBox* combo, wxBoolProperty* property )
         : wxEvtHandler()
     {
-        wxASSERT_MSG( wxDynamicCast(property, wxBoolProperty),
-           wxS("Double-click processor should be used only with wxBoolProperty") );
-
         m_timeLastMouseUp = 0;
         m_combo = combo;
         m_property = property;
@@ -589,7 +555,7 @@ protected:
 private:
     wxMilliClock_t              m_timeLastMouseUp;
     wxOwnerDrawnComboBox*       m_combo;
-    wxPGProperty*               m_property;  // Selected property
+    wxBoolProperty*             m_property;  // Selected property
     bool                        m_downReceived;
 
     wxDECLARE_EVENT_TABLE();
@@ -610,7 +576,6 @@ public:
         : wxOwnerDrawnComboBox()
     {
         m_dclickProcessor = NULL;
-        m_sizeEventCalled = false;
     }
 
     ~wxPGComboBox()
@@ -647,9 +612,10 @@ public:
         // only for wxBoolProperty.
         m_selProp = GetGrid()->GetSelection();
         wxASSERT(m_selProp);
-        if (wxDynamicCast(m_selProp, wxBoolProperty))
+        wxBoolProperty* boolProp = wxDynamicCast(m_selProp, wxBoolProperty);
+        if ( boolProp )
         {
-            m_dclickProcessor = new wxPGDoubleClickProcessor(this, m_selProp);
+            m_dclickProcessor = new wxPGDoubleClickProcessor(this, boolProp);
             PushEventHandler(m_dclickProcessor);
         }
 
@@ -734,7 +700,6 @@ public:
 
 private:
     wxPGDoubleClickProcessor*   m_dclickProcessor;
-    bool                        m_sizeEventCalled;
     wxPGProperty*               m_selProp;
 };
 
@@ -781,7 +746,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
 
     const wxBitmap* itemBitmap = NULL;
 
-    if ( item >= 0 && choices.IsOk() && choices.Item(item).GetBitmap().IsOk() && comValIndex == -1 )
+    if ( choices.IsOk() && choices.Item(item).GetBitmap().IsOk() && comValIndex == -1 )
         itemBitmap = &choices.Item(item).GetBitmap();
 
     //
@@ -853,7 +818,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         // image will not appear on the control row (it may be too
         // large to fit, for instance). Also do not draw custom image
         // if no choice was selected.
-        if ( !p->HasFlag(wxPG_PROP_CUSTOMIMAGE) || item < 0 )
+        if ( !p->HasFlag(wxPG_PROP_CUSTOMIMAGE) )
             useCustomPaintProcedure = false;
     }
     else
@@ -897,13 +862,9 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
             renderer->Render( dc, r, this, p, m_selColumn, comValIndex, renderFlags );
             return;
         }
-        else if ( item >= 0 )
-        {
-            p->OnCustomPaint( dc, r, paintdata );
-        }
         else
         {
-            dc.DrawRectangle( r );
+            p->OnCustomPaint( dc, r, paintdata );
         }
 
         pt.x += paintdata.m_drawnWidth + wxCC_CUSTOM_IMAGE_MARGIN2 - 1;
@@ -915,10 +876,7 @@ void wxPropertyGrid::OnComboItemPaint( const wxPGComboBox* pCb,
         //       sure if it is needed, but seems to not cause any harm.
         pt.x -= 1;
 
-        if ( item < 0 && (flags & wxODCB_PAINTING_CONTROL) )
-            item = pCb->GetSelection();
-
-        if ( choices.IsOk() && item >= 0 && comValIndex < 0 )
+        if ( choices.IsOk() && comValIndex < 0 )
         {
             // This aligns bitmap horizontally so that it is
             // on the same position as bitmap drawn for static content
@@ -2196,11 +2154,7 @@ void wxPGMultiButton::Finalize( wxPropertyGrid* WXUNUSED(propGrid),
 
 int wxPGMultiButton::GenId( int itemid ) const
 {
-    if ( itemid < -1 )
-    {
-        itemid = wxID_ANY;
-    }
-    return itemid;
+    return itemid < -1 ? wxID_ANY : itemid;
 }
 
 #if wxUSE_BMPBUTTON

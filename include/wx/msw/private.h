@@ -300,6 +300,11 @@ extern HICON wxBitmapToHICON(const wxBitmap& bmp);
 extern
 HCURSOR wxBitmapToHCURSOR(const wxBitmap& bmp, int hotSpotX, int hotSpotY);
 
+extern int wxGetSystemMetrics(int nIndex, const wxWindow* win);
+
+extern bool wxSystemParametersInfo(UINT uiAction, UINT uiParam,
+                                   PVOID pvParam, UINT fWinIni,
+                                   const wxWindow* win);
 
 #if wxUSE_OWNER_DRAWN
 
@@ -373,6 +378,37 @@ inline RECT wxGetClientRect(HWND hwnd)
 // ---------------------------------------------------------------------------
 // small helper classes
 // ---------------------------------------------------------------------------
+
+// This class can only be used with wxMSW wxWindow, as it doesn't have
+// {Set,Get}HWND() methods in the other ports, but this file is currently
+// included for wxQt/MSW too. It's not clear whether it should be, really, but
+// for now allow it to compile in this port too.
+#ifdef __WXMSW__
+
+// Temporarily assign the given HWND to the window in ctor and unset it back to
+// the original value (usually 0) in dtor.
+class TempHWNDSetter
+{
+public:
+    TempHWNDSetter(wxWindow* win, WXHWND hWnd)
+        : m_win(win), m_hWndOrig(m_win->GetHWND())
+    {
+        m_win->SetHWND(hWnd);
+    }
+
+    ~TempHWNDSetter()
+    {
+        m_win->SetHWND(m_hWndOrig);
+    }
+
+private:
+    wxWindow* const m_win;
+    WXHWND const m_hWndOrig;
+
+    wxDECLARE_NO_COPY_CLASS(TempHWNDSetter);
+};
+
+#endif // __WXMSW__
 
 // create an instance of this class and use it as the HDC for screen, will
 // automatically release the DC going out of scope
@@ -929,10 +965,21 @@ extern const wxCursor *wxGetGlobalCursor(); // from msw/cursor.cpp
 // GetCursorPos can fail without populating the POINT. This falls back to GetMessagePos.
 WXDLLIMPEXP_CORE void wxGetCursorPosMSW(POINT* pt);
 
-WXDLLIMPEXP_CORE void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font);
+#if WXWIN_COMPATIBILITY_3_0
+wxDEPRECATED_MSG("Use wxNativeFontInfo::lf directly instead of this private function")
 WXDLLIMPEXP_CORE void wxFillLogFont(LOGFONT *logFont, const wxFont *font);
+wxDEPRECATED_MSG("Use wxNativeFontInfo(LOGFONT) ctor instead of this private function")
 WXDLLIMPEXP_CORE wxFont wxCreateFontFromLogFont(const LOGFONT *logFont);
+#endif // WXWIN_COMPATIBILITY_3_0
+
+WXDLLIMPEXP_CORE void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font);
 WXDLLIMPEXP_CORE wxFontEncoding wxGetFontEncFromCharSet(int charset);
+
+inline void wxSetWindowFont(HWND hwnd, const wxFont& font)
+{
+    ::SendMessage(hwnd, WM_SETFONT,
+                  (WPARAM)GetHfontOf(font), MAKELPARAM(TRUE, 0));
+}
 
 WXDLLIMPEXP_CORE void wxSliderEvent(WXHWND control, WXWORD wParam, WXWORD pos);
 WXDLLIMPEXP_CORE void wxScrollBarEvent(WXHWND hbar, WXWORD wParam, WXWORD pos);

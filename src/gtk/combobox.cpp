@@ -27,14 +27,6 @@
 // ----------------------------------------------------------------------------
 
 extern "C" {
-static void
-gtkcombobox_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
-{
-    wxCommandEvent event( wxEVT_TEXT, combo->GetId() );
-    event.SetString( combo->GetValue() );
-    event.SetEventObject( combo );
-    combo->HandleWindowEvent( event );
-}
 
 static void
 gtkcombobox_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
@@ -185,9 +177,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
             gtk_entry_set_text( entry, wxGTK_CONV(value) );
         }
 
-        g_signal_connect_after (entry, "changed",
-                                G_CALLBACK (gtkcombobox_text_changed_callback), this);
-
+        GTKConnectChangedSignal();
         GTKConnectInsertTextSignal(entry);
         GTKConnectClipboardSignals(GTK_WIDGET(entry));
     }
@@ -219,7 +209,7 @@ void wxComboBox::GTKCreateComboBoxWidget()
 
 GtkEditable *wxComboBox::GetEditable() const
 {
-    return GTK_EDITABLE(gtk_bin_get_child(GTK_BIN(m_widget)));
+    return GTK_EDITABLE(m_entry);
 }
 
 void wxComboBox::OnChar( wxKeyEvent &event )
@@ -241,28 +231,17 @@ void wxComboBox::OnChar( wxKeyEvent &event )
                     // down list upon RETURN.
                     return;
                 }
+
+                // We disable built-in default button activation when
+                // wxTE_PROCESS_ENTER is used, but we still should activate it
+                // if the event wasn't handled, so do it from here.
+                if ( ClickDefaultButtonIfPossible() )
+                    return;
             }
             break;
     }
 
     event.Skip();
-}
-
-void wxComboBox::EnableTextChangedEvents(bool enable)
-{
-    if ( !GetEntry() )
-        return;
-
-    if ( enable )
-    {
-        g_signal_handlers_unblock_by_func(gtk_bin_get_child(GTK_BIN(m_widget)),
-            (gpointer)gtkcombobox_text_changed_callback, this);
-    }
-    else // disable
-    {
-        g_signal_handlers_block_by_func(gtk_bin_get_child(GTK_BIN(m_widget)),
-            (gpointer)gtkcombobox_text_changed_callback, this);
-    }
 }
 
 void wxComboBox::GTKDisableEvents()

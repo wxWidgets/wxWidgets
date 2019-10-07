@@ -1571,12 +1571,13 @@ void wxAuiToolBar::ToggleTool(int tool_id, bool state)
     {
         if (tool->m_kind == wxITEM_RADIO)
         {
-            int i, idx, count;
+            int idx, count;
             idx = GetToolIndex(tool_id);
             count = (int)m_items.GetCount();
 
             if (idx >= 0 && idx < count)
             {
+                int i;
                 for (i = idx + 1; i < count; ++i)
                 {
                     if (m_items[i].m_kind != wxITEM_RADIO)

@@ -208,7 +208,6 @@ public:
 class wxTimerEvent : public wxEvent
 {
 public:
-    wxTimerEvent();
     wxTimerEvent(wxTimer& timer);
 
     /**

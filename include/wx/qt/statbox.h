@@ -29,9 +29,9 @@ public:
                 long style = 0,
                 const wxString& name = wxStaticBoxNameStr);
 
-    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const;
+    virtual void GetBordersForSizer(int *borderTop, int *borderOther) const wxOVERRIDE;
 
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
     virtual void SetLabel(const wxString& label) wxOVERRIDE;
     virtual wxString GetLabel() const wxOVERRIDE;

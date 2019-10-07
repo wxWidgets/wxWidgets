@@ -343,13 +343,12 @@ public:
         wxSize clientSize = GetClientSize();
 
         wxCoord y = 0;
-        wxCoord x = 0;
         for ( size_t row = rowFirst; row < rowLast; row++ )
         {
             wxCoord rowHeight = OnGetRowHeight(row);
             dc.DrawLine(0, y, clientSize.GetWidth(), y);
 
-            x = 0;
+            wxCoord x = 0;
             for ( size_t col = columnFirst; col < columnLast; col++ )
             {
                 wxCoord colWidth = OnGetColumnWidth(col);

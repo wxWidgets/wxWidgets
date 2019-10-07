@@ -1038,7 +1038,7 @@ public:
     */
     void SetNegativeButton(wxButton* button);
 
-    virtual void RecalcSizes();
+    virtual void RepositionChildren(const wxSize& minSize);
     virtual wxSize CalcMin();
 };
 
@@ -1713,7 +1713,7 @@ public:
     */
     const wxArrayInt& GetColWidths() const;
 
-    virtual void RecalcSizes();
+    virtual void RepositionChildren(const wxSize& minSize);
     virtual wxSize CalcMin();
 
 };
@@ -1840,7 +1840,7 @@ public:
     void SetVGap(int gap);
 
     virtual wxSize CalcMin();
-    virtual void RecalcSizes();
+    virtual void RepositionChildren(const wxSize& minSize);
 };
 
 
@@ -1903,7 +1903,7 @@ public:
     wxStaticBox* GetStaticBox() const;
 
     virtual wxSize CalcMin();
-    virtual void RecalcSizes();
+    virtual void RepositionChildren(const wxSize& minSize);
 };
 
 
@@ -1968,12 +1968,15 @@ public:
     void SetOrientation(int orient);
 
     /**
-        Implements the calculation of a box sizer's dimensions and then sets
-        the size of its children (calling wxWindow::SetSize if the child is a window).
+        Method which must be overridden in the derived sizer classes.
 
-        It is used internally only and must not be called by the user
-        (call Layout() if you want to resize). Documented for information.
+        The implementation should reposition the children using the current
+        total size available to the sizer (@c m_size) and the size computed by
+        the last call to CalcMin().
+
+        @since 3.1.3, before this version RecalcSizes() method not taking any
+            arguments had to be overridden in the derived classes instead.
     */
-    virtual void RecalcSizes();
+    virtual void RepositionChildren(const wxSize& minSize);
 };
 

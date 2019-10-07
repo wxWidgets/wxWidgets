@@ -305,14 +305,14 @@ void myOGLShaders::AddCode(const GLchar* shaString, GLenum shaType)
     m_shaCode.push_back(sv);
 }
 
-void myOGLShaders::AddAttrib(std::string name)
+void myOGLShaders::AddAttrib(const std::string& name)
 {
     shaVars sv = {0, name}; //We will set the location later
     m_shaAttrib.push_back(sv);
     // We don't check the max number of attribute locations (usually 16)
 }
 
-void myOGLShaders::AddUnif(std::string name)
+void myOGLShaders::AddUnif(const std::string& name)
 {
     shaVars sv = {0, name};
     m_shaUnif.push_back(sv);
@@ -333,7 +333,7 @@ void myOGLShaders::SetAttribLocations()
     }
 }
 
-GLuint myOGLShaders::GetAttribLoc(std::string name)
+GLuint myOGLShaders::GetAttribLoc(const std::string& name)
 {
     for (shaVars_v::iterator it = m_shaAttrib.begin(); it != m_shaAttrib.end(); ++it)
     {
@@ -362,7 +362,7 @@ bool myOGLShaders::AskUnifLocations()
     return true;
 }
 
-GLuint myOGLShaders::GetUnifLoc(std::string name)
+GLuint myOGLShaders::GetUnifLoc(const std::string& name)
 {
     for (shaVars_v::iterator it = m_shaUnif.begin(); it != m_shaUnif.end(); ++it)
     {

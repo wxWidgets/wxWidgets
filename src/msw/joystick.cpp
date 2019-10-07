@@ -116,7 +116,7 @@ void* wxJoystickThread::Entry()
         joyGetPos(m_joystick, &m_joyInfo);
         m_buttons = m_joyInfo.wButtons;
         UINT delta = m_buttons ^ m_lastJoyInfo.wButtons;
-        UINT deltaUp = delta & !m_buttons;
+        UINT deltaUp = delta & ~m_buttons;
         UINT deltaDown = delta & m_buttons;
 
         // Use count trailing zeros to determine which button changed.
@@ -261,7 +261,7 @@ int wxJoystick::GetButtonState() const
 
 bool wxJoystick::GetButtonState(unsigned id) const
 {
-    if (id > sizeof(int) * 8)
+    if (id >= sizeof(int) * 8)
         return false;
 
     return (GetButtonState() & (1 << id)) != 0;

@@ -159,6 +159,7 @@ wxBEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif // wxUSE_LOG_DIALOG
 #if wxUSE_INFOBAR
     EVT_MENU(DIALOGS_INFOBAR_SIMPLE,                MyFrame::InfoBarSimple)
+    EVT_MENU(DIALOGS_INFOBAR_SIMPLE_WRAPPED,        MyFrame::InfoBarSimpleWrapped)
     EVT_MENU(DIALOGS_INFOBAR_ADVANCED,              MyFrame::InfoBarAdvanced)
 #endif // wxUSE_INFOBAR
 
@@ -530,6 +531,7 @@ bool MyApp::OnInit()
 
     #if wxUSE_INFOBAR
        info_menu->Append(DIALOGS_INFOBAR_SIMPLE, "Simple &info bar\tCtrl-I");
+       info_menu->Append(DIALOGS_INFOBAR_SIMPLE_WRAPPED, "Simple info bar with wrapped text");
        info_menu->Append(DIALOGS_INFOBAR_ADVANCED, "&Advanced info bar\tShift-Ctrl-I");
     #endif // wxUSE_INFOBAR
 
@@ -734,20 +736,35 @@ MyFrame::~MyFrame()
 
 #if wxUSE_COLOURDLG
 
+void MyFrame::DoApplyColour(const wxColour& colour)
+{
+    if ( colour == m_canvas->GetBackgroundColour() )
+        return;
+
+    m_canvas->SetBackgroundColour(colour);
+    m_canvas->ClearBackground();
+    m_canvas->Refresh();
+}
+
+void MyFrame::OnColourChanged(wxColourDialogEvent& event)
+{
+    DoApplyColour(event.GetColour());
+}
+
 void MyFrame::ChooseColour(wxCommandEvent& event)
 {
     m_clrData.SetColour(m_canvas->GetBackgroundColour());
     m_clrData.SetChooseAlpha(event.GetId() == DIALOGS_CHOOSE_COLOUR_ALPHA);
 
     wxColourDialog dialog(this, &m_clrData);
+    dialog.Bind(wxEVT_COLOUR_CHANGED, &MyFrame::OnColourChanged, this);
     dialog.SetTitle("Please choose the background colour");
     if ( dialog.ShowModal() == wxID_OK )
     {
         m_clrData = dialog.GetColourData();
-        m_canvas->SetBackgroundColour(m_clrData.GetColour());
-        m_canvas->ClearBackground();
-        m_canvas->Refresh();
     }
+
+    DoApplyColour(m_clrData.GetColour());
 }
 
 void MyFrame::GetColour(wxCommandEvent& WXUNUSED(event))
@@ -873,6 +890,11 @@ void MyFrame::InfoBarSimple(wxCommandEvent& WXUNUSED(event))
                      (
                       wxString::Format("Message #%d in the info bar.", ++s_count)
                      );
+}
+
+void MyFrame::InfoBarSimpleWrapped(wxCommandEvent &WXUNUSED(event))
+{
+    m_infoBarSimple->ShowMessage( "This is very very long message to try the label wrapping on the info bar" );
 }
 
 void MyFrame::InfoBarAdvanced(wxCommandEvent& WXUNUSED(event))
@@ -1480,7 +1502,10 @@ private:
 
     void OnUpdateLabelUI(wxUpdateUIEvent& event)
     {
-        wxFileDialog* const dialog = wxStaticCast(GetParent(), wxFileDialog);
+        // In this sample, the dialog may be either wxFileDialog itself, or
+        // wxGenericFileDialog, so we need to cast to the base class. In a
+        // typical application, we would cast to just wxFileDialog instead.
+        wxFileDialogBase* const dialog = wxStaticCast(GetParent(), wxFileDialogBase);
         const wxString fn = dialog->GetCurrentlySelectedFilename();
 
         wxString msg;
@@ -1493,7 +1518,13 @@ private:
         else
             msg = "Something else";
 
-        event.SetText(msg + " selected");
+        msg += " selected";
+
+        const int filter = dialog->GetCurrentlySelectedFilterIndex();
+        if ( filter != wxNOT_FOUND )
+            msg += wxString::Format(" (filter=%d)", filter);
+
+        event.SetText(msg);
     }
 
     wxString m_str;
@@ -1530,7 +1561,7 @@ MyExtraPanel::MyExtraPanel(wxWindow *parent)
     sizerTop->AddSpacer(5);
     sizerTop->Add(m_btn, wxSizerFlags().Centre().Border());
     sizerTop->AddSpacer(5);
-    sizerTop->Add(m_label, wxSizerFlags().Centre().Border());
+    sizerTop->Add(m_label, wxSizerFlags(1).Centre().Border());
 
     SetSizerAndFit(sizerTop);
 }
@@ -1549,11 +1580,12 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
                     "Testing open file dialog",
                     wxEmptyString,
                     wxEmptyString,
-#ifdef __WXMOTIF__
-                    "C++ files (*.cpp)|*.cpp"
-#else
-                    "C++ files (*.cpp;*.h)|*.cpp;*.h"
-#endif
+                    wxString::Format
+                    (
+                        "All files (%s)|%s|C++ files (*.cpp;*.h)|*.cpp;*.h",
+                        wxFileSelectorDefaultWildcardStr,
+                        wxFileSelectorDefaultWildcardStr
+                    )
                  );
 
     dialog.SetExtraControlCreator(&createMyExtraPanel);
@@ -1594,7 +1626,7 @@ void MyFrame::FileOpen2(wxCommandEvent& WXUNUSED(event) )
                                         wxFileSelectorDefaultWildcardStr,
                                         wxFileSelectorDefaultWildcardStr
                                     ),
-                                    wxFD_OPEN|wxFD_CHANGE_DIR|wxFD_PREVIEW|wxFD_NO_FOLLOW,
+                                    wxFD_OPEN|wxFD_CHANGE_DIR|wxFD_PREVIEW|wxFD_NO_FOLLOW|wxFD_SHOW_HIDDEN,
                                     this
                                    );
 
@@ -2552,6 +2584,34 @@ wxBEGIN_EVENT_TABLE(TestDefaultActionDialog, wxDialog)
     EVT_TEXT_ENTER(wxID_ANY,                 TestDefaultActionDialog::OnTextEnter)
 wxEND_EVENT_TABLE()
 
+// TODO-C++11: We can't declare this class inside TestDefaultActionDialog
+//             itself when using C++98, so we have to do it here instead.
+namespace
+{
+
+// We have to define a new class in order to actually handle pressing
+// Enter, if we didn't do it, pressing it would still close the dialog.
+class EnterHandlingTextCtrl : public wxTextCtrl
+{
+public:
+    EnterHandlingTextCtrl(wxWindow* parent, int id, const wxString& value)
+        : wxTextCtrl(parent, id, value,
+                     wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER)
+    {
+        Bind(wxEVT_TEXT_ENTER, &EnterHandlingTextCtrl::OnEnter, this);
+
+        SetInitialSize(GetSizeFromTextSize(GetTextExtent(value).x));
+    }
+
+private:
+    void OnEnter(wxCommandEvent& WXUNUSED(event))
+    {
+        wxLogMessage("Enter pressed");
+    }
+};
+
+} // anonymous namespace
+
 TestDefaultActionDialog::TestDefaultActionDialog( wxWindow *parent ) :
   wxDialog( parent, -1, "Test default action" )
 {
@@ -2559,7 +2619,8 @@ TestDefaultActionDialog::TestDefaultActionDialog( wxWindow *parent ) :
 
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
 
-    wxFlexGridSizer *grid_sizer = new wxFlexGridSizer( 2, 5, 5 );
+    const int border = wxSizerFlags::GetDefaultBorder();
+    wxFlexGridSizer *grid_sizer = new wxFlexGridSizer(2, wxSize(border, border));
 
 #if wxUSE_LISTBOX
     wxListBox *listbox = new wxListBox( this, ID_LISTBOX );
@@ -2570,22 +2631,37 @@ TestDefaultActionDialog::TestDefaultActionDialog( wxWindow *parent ) :
     grid_sizer->Add( listbox );
 #endif // wxUSE_LISTBOX
 
-    grid_sizer->Add( new wxCheckBox( this, ID_CATCH_LISTBOX_DCLICK, "Catch DoubleClick from wxListBox" ), 0, wxALIGN_CENTRE_VERTICAL );
+    grid_sizer->Add(new wxCheckBox(this, ID_CATCH_LISTBOX_DCLICK, "Catch DoubleClick from wxListBox"),
+                    wxSizerFlags().CentreVertical());
 
-    grid_sizer->Add( new wxTextCtrl( this, -1, "", wxDefaultPosition, wxSize(80,-1), 0 ), 0, wxALIGN_CENTRE_VERTICAL );
-    grid_sizer->Add( new wxStaticText( this, -1, "wxTextCtrl without wxTE_PROCESS_ENTER" ), 0, wxALIGN_CENTRE_VERTICAL );
+    grid_sizer->Add(new wxTextCtrl(this, wxID_ANY, "Enter here closes the dialog"),
+                    wxSizerFlags().Expand().CentreVertical());
+    grid_sizer->Add(new wxStaticText(this, wxID_ANY, "wxTextCtrl without wxTE_PROCESS_ENTER"),
+                    wxSizerFlags().CentreVertical());
 
-    grid_sizer->Add( new wxTextCtrl( this, -1, "", wxDefaultPosition, wxSize(80,-1), wxTE_PROCESS_ENTER ), 0, wxALIGN_CENTRE_VERTICAL );
-    grid_sizer->Add( new wxStaticText( this, -1, "wxTextCtrl with wxTE_PROCESS_ENTER" ), 0, wxALIGN_CENTRE_VERTICAL );
+    grid_sizer->Add(new EnterHandlingTextCtrl(this, wxID_ANY, "Enter here is handled by the application"),
+                    wxSizerFlags().CentreVertical());
+    grid_sizer->Add(new wxStaticText(this, wxID_ANY, "wxTextCtrl with wxTE_PROCESS_ENTER"),
+                    wxSizerFlags().CentreVertical());
 
-    grid_sizer->Add( new wxCheckBox(this, ID_DISABLE_OK, "Disable \"OK\""), 0, wxALIGN_CENTRE_VERTICAL );
-    grid_sizer->Add( new wxCheckBox(this, ID_DISABLE_CANCEL, "Disable \"Cancel\""), 0, wxALIGN_CENTRE_VERTICAL );
+    grid_sizer->Add(new wxTextCtrl(this, wxID_ANY,
+                                   "Enter here adds another line,\n"
+                                   "while Ctrl-Enter closes the dialog",
+                                   wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE),
+                    wxSizerFlags().Expand());
+    grid_sizer->Add(new wxStaticText(this, wxID_ANY, "wxTextCtrl without wxTE_PROCESS_ENTER"),
+                    wxSizerFlags().CentreVertical());
 
-    main_sizer->Add( grid_sizer, 0, wxALL, 10 );
+    grid_sizer->Add(new wxCheckBox(this, ID_DISABLE_OK, "Disable \"OK\""),
+                    wxSizerFlags().CentreVertical());
+    grid_sizer->Add(new wxCheckBox(this, ID_DISABLE_CANCEL, "Disable \"Cancel\""),
+                    wxSizerFlags().CentreVertical());
+
+    main_sizer->Add(grid_sizer, wxSizerFlags().DoubleBorder());
 
     wxSizer *button_sizer = CreateSeparatedButtonSizer( wxOK|wxCANCEL );
     if ( button_sizer )
-        main_sizer->Add( button_sizer, 0, wxALL|wxGROW, 5 );
+        main_sizer->Add(button_sizer, wxSizerFlags().Expand().Border());
 
     SetSizerAndFit( main_sizer );
 }
@@ -3393,14 +3469,11 @@ SettingsDialog::SettingsDialog(wxWindow* win, SettingsData& settingsData, int di
         m_imageList = NULL;
 
     Create(win, wxID_ANY, "Preferences", wxDefaultPosition, wxDefaultSize,
-        wxDEFAULT_DIALOG_STYLE| (int)wxPlatform::IfNot(wxOS_WINDOWS_CE, resizeBorder)
-    );
+           wxDEFAULT_DIALOG_STYLE | resizeBorder);
 
     // If using a toolbook, also follow Mac style and don't create buttons
     if (!useToolBook)
-        CreateButtons(wxOK | wxCANCEL |
-                        (int)wxPlatform::IfNot(wxOS_WINDOWS_CE, wxHELP)
-    );
+        CreateButtons(wxOK | wxCANCEL | wxHELP);
 
     wxBookCtrlBase* notebook = GetBookCtrl();
     notebook->SetImageList(m_imageList);
@@ -3444,7 +3517,7 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
 
 #if wxUSE_SPINCTRL
     wxSpinCtrl* spinCtrl12 = new wxSpinCtrl(panel, ID_AUTO_SAVE_MINS, wxEmptyString,
-        wxDefaultPosition, wxSize(40, wxDefaultCoord), wxSP_ARROW_KEYS, 1, 60, 1);
+        wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 60, 1);
     spinCtrl12->SetValidator(wxGenericValidator(&m_settingsData.m_autoSaveInterval));
 #endif
 
@@ -3515,8 +3588,7 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
     wxStaticBox* staticBox1 = new wxStaticBox(panel, wxID_ANY, "Tile font size:");
     wxBoxSizer* itemSizer5 = new wxStaticBoxSizer( staticBox1, wxHORIZONTAL );
 
-    wxSpinCtrl* spinCtrl = new wxSpinCtrl(panel, ID_FONT_SIZE, wxEmptyString, wxDefaultPosition,
-        wxSize(80, wxDefaultCoord));
+    wxSpinCtrl* spinCtrl = new wxSpinCtrl(panel, ID_FONT_SIZE, wxEmptyString);
     spinCtrl->SetValidator(wxGenericValidator(&m_settingsData.m_titleFontSize));
     itemSizer5->Add(spinCtrl, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 

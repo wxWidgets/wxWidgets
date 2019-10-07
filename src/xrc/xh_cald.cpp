@@ -43,7 +43,7 @@ wxCalendarCtrlXmlHandler::wxCalendarCtrlXmlHandler()
 
 wxObject *wxCalendarCtrlXmlHandler::DoCreateResource()
 {
-    XRC_MAKE_INSTANCE(calendar, wxCalendarCtrl);
+    XRC_MAKE_INSTANCE(calendar, wxCalendarCtrl)
 
     calendar->Create(m_parentAsWindow,
                      GetID(),

@@ -299,7 +299,6 @@ void wxControlWithItemsBase::SendSelectionChangedEvent(wxEventType eventType)
 
     wxCommandEvent event(eventType, m_windowId);
     event.SetInt(n);
-    event.SetEventObject(this);
     event.SetString(GetStringSelection());
     InitCommandEventWithItems(event, n);
 

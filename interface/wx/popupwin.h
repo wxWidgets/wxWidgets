@@ -5,6 +5,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#define wxPU_CONTAINS_CONTROLS     0x0001
+
 /**
     @class wxPopupWindow
 

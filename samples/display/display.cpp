@@ -81,6 +81,9 @@ public:
     void OnLeftClick(wxMouseEvent& event);
 
 private:
+    // Fill m_book with the information about all the displays.
+    void PopuplateWithDisplayInfo();
+
 #if wxUSE_DISPLAY
     // convert video mode to textual description
     wxString VideoModeToText(const wxVideoMode& mode);
@@ -233,6 +236,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
 
     // create child controls
     m_book = new wxBookCtrl(this, wxID_ANY);
+    PopuplateWithDisplayInfo();
+}
+
+void MyFrame::PopuplateWithDisplayInfo()
+{
     const size_t countDpy = wxDisplay::GetCount();
     for ( size_t nDpy = 0; nDpy < countDpy; nDpy++ )
     {
@@ -426,16 +434,8 @@ void MyFrame::OnLeftClick(wxMouseEvent& event)
 
 void MyFrame::OnDisplayChanged(wxDisplayChangedEvent& event)
 {
-    // update the current mode text
-    for ( size_t n = 0; n < m_book->GetPageCount(); n++ )
-    {
-        wxStaticText *label = wxDynamicCast(m_book->GetPage(n)->
-                                                FindWindow(Display_CurrentMode),
-                                            wxStaticText);
-        if ( label )
-            label->SetLabel(VideoModeToText(wxDisplay(n).GetCurrentMode()));
-    }
-
+    m_book->DeleteAllPages();
+    PopuplateWithDisplayInfo();
 
     wxLogStatus(this, "Display resolution was changed.");
 

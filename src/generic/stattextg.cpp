@@ -100,7 +100,7 @@ wxSize wxGenericStaticText::DoGetBestClientSize() const
 void wxGenericStaticText::SetLabel(const wxString& label)
 {
     wxControl::SetLabel(label);
-    DoSetLabel(GetEllipsizedLabel());
+    WXSetVisibleLabel(GetEllipsizedLabel());
 
     AutoResizeIfNecessary();
 
@@ -115,7 +115,7 @@ void wxGenericStaticText::SetLabel(const wxString& label)
     Refresh();
 }
 
-void wxGenericStaticText::DoSetLabel(const wxString& label)
+void wxGenericStaticText::WXSetVisibleLabel(const wxString& label)
 {
     m_mnemonic = FindAccelIndex(label, &m_label);
 }

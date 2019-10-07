@@ -58,7 +58,6 @@
     #include "wx/ownerdrw.h"
 #endif
 
-#include "wx/display.h"
 #include "wx/evtloop.h"
 #include "wx/hashmap.h"
 #include "wx/popupwin.h"
@@ -827,11 +826,7 @@ bool wxWindowMSW::SetFont(const wxFont& font)
         // just been reset and in this case we need to change the font used by
         // the native window to the default for this class, i.e. exactly what
         // GetFont() returns
-        WXHANDLE hFont = GetFont().GetResourceHandle();
-
-        wxASSERT_MSG( hFont, wxT("should have valid font") );
-
-        ::SendMessage(hWnd, WM_SETFONT, (WPARAM)hFont, MAKELPARAM(TRUE, 0));
+        wxSetWindowFont(hWnd, GetFont());
     }
 
     return true;
@@ -1024,6 +1019,17 @@ void wxWindowMSW::MSWUpdateUIState(int action, int state)
     // we send WM_CHANGEUISTATE so if nothing needs changing then the system
     // won't send WM_UPDATEUISTATE
     ::SendMessage(GetHwnd(), WM_CHANGEUISTATE, MAKEWPARAM(action, state), 0);
+}
+
+void wxWindowMSW::WXSetPendingFocus(wxWindow* win)
+{
+    for ( wxWindow* parent = this; parent; parent = parent->GetParent() )
+    {
+        parent->WXDoUpdatePendingFocus(win);
+
+        if ( parent->IsTopLevel() )
+            break;
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -1944,7 +1950,8 @@ void wxWindowMSW::DoGetPosition(int *x, int *y) const
         *y = pos.y;
 }
 
-void wxWindowMSW::DoScreenToClient(int *x, int *y) const
+/* static */
+void wxWindowMSW::MSWDoScreenToClient(WXHWND hWnd, int *x, int *y)
 {
     POINT pt;
     if ( x )
@@ -1952,7 +1959,7 @@ void wxWindowMSW::DoScreenToClient(int *x, int *y) const
     if ( y )
         pt.y = *y;
 
-    ::ScreenToClient(GetHwnd(), &pt);
+    ::ScreenToClient(hWnd, &pt);
 
     if ( x )
         *x = pt.x;
@@ -1960,7 +1967,8 @@ void wxWindowMSW::DoScreenToClient(int *x, int *y) const
         *y = pt.y;
 }
 
-void wxWindowMSW::DoClientToScreen(int *x, int *y) const
+/* static */
+void wxWindowMSW::MSWDoClientToScreen(WXHWND hWnd, int *x, int *y)
 {
     POINT pt;
     if ( x )
@@ -1968,12 +1976,22 @@ void wxWindowMSW::DoClientToScreen(int *x, int *y) const
     if ( y )
         pt.y = *y;
 
-    ::ClientToScreen(GetHwnd(), &pt);
+    ::ClientToScreen(hWnd, &pt);
 
     if ( x )
         *x = pt.x;
     if ( y )
         *y = pt.y;
+}
+
+void wxWindowMSW::DoScreenToClient(int *x, int *y) const
+{
+    MSWDoScreenToClient(GetHwnd(), x, y);
+}
+
+void wxWindowMSW::DoClientToScreen(int *x, int *y) const
+{
+    MSWDoClientToScreen(GetHwnd(), x, y);
 }
 
 bool
@@ -2402,8 +2420,9 @@ wxWindowMSW::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
     if ( flags & (MF_POPUP | MF_SEPARATOR) )
         item = wxID_NONE;
 
-    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item);
-    if ( wxMenu::ProcessMenuEvent(MSWFindMenuFromHMENU(hMenu), event, this) )
+    wxMenu* menu = MSWFindMenuFromHMENU(hMenu);
+    wxMenuEvent event(wxEVT_MENU_HIGHLIGHT, item, menu);
+    if ( wxMenu::ProcessMenuEvent(menu, event, this) )
         return true;
 
     // by default, i.e. if the event wasn't handled above, clear the status bar
@@ -4695,6 +4714,190 @@ wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 }
 
 // ---------------------------------------------------------------------------
+// DPI
+// ---------------------------------------------------------------------------
+
+namespace
+{
+
+static wxSize GetWindowDPI(HWND hwnd)
+{
+#if wxUSE_DYNLIB_CLASS
+    typedef UINT (WINAPI *GetDpiForWindow_t)(HWND hwnd);
+    static GetDpiForWindow_t s_pfnGetDpiForWindow = NULL;
+    static bool s_initDone = false;
+
+    if ( !s_initDone )
+    {
+        wxLoadedDLL dllUser32("user32.dll");
+        wxDL_INIT_FUNC(s_pfn, GetDpiForWindow, dllUser32);
+        s_initDone = true;
+    }
+
+    if ( s_pfnGetDpiForWindow )
+    {
+        const int dpi = static_cast<int>(s_pfnGetDpiForWindow(hwnd));
+        return wxSize(dpi, dpi);
+    }
+#endif // wxUSE_DYNLIB_CLASS
+
+    return wxSize();
+}
+
+}
+
+/*extern*/
+int wxGetSystemMetrics(int nIndex, const wxWindow* win)
+{
+#if wxUSE_DYNLIB_CLASS
+    const wxWindow* window = (!win && wxTheApp) ? wxTheApp->GetTopWindow() : win;
+
+    if ( window )
+    {
+        typedef int (WINAPI * GetSystemMetricsForDpi_t)(int nIndex, UINT dpi);
+        static GetSystemMetricsForDpi_t s_pfnGetSystemMetricsForDpi = NULL;
+        static bool s_initDone = false;
+
+        if ( !s_initDone )
+        {
+            wxLoadedDLL dllUser32("user32.dll");
+            wxDL_INIT_FUNC(s_pfn, GetSystemMetricsForDpi, dllUser32);
+            s_initDone = true;
+        }
+
+        if ( s_pfnGetSystemMetricsForDpi )
+        {
+            const int dpi = window->GetDPI().y;
+            return s_pfnGetSystemMetricsForDpi(nIndex, (UINT)dpi);
+        }
+    }
+#else
+    wxUnusedVar(win);
+#endif // wxUSE_DYNLIB_CLASS
+
+    return ::GetSystemMetrics(nIndex);
+}
+
+/*extern*/
+bool wxSystemParametersInfo(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, const wxWindow* win)
+{
+#if wxUSE_DYNLIB_CLASS
+    const wxWindow* window = (!win && wxTheApp) ? wxTheApp->GetTopWindow() : win;
+
+    if ( window )
+    {
+        typedef int (WINAPI * SystemParametersInfoForDpi_t)(UINT uiAction, UINT uiParam, PVOID pvParam, UINT fWinIni, UINT dpi);
+        static SystemParametersInfoForDpi_t s_pfnSystemParametersInfoForDpi = NULL;
+        static bool s_initDone = false;
+
+        if ( !s_initDone )
+        {
+            wxLoadedDLL dllUser32("user32.dll");
+            wxDL_INIT_FUNC(s_pfn, SystemParametersInfoForDpi, dllUser32);
+            s_initDone = true;
+        }
+
+        if ( s_pfnSystemParametersInfoForDpi )
+        {
+            const int dpi = window->GetDPI().y;
+            if ( s_pfnSystemParametersInfoForDpi(uiAction, uiParam, pvParam, fWinIni, (UINT)dpi) == TRUE )
+            {
+                return true;
+            }
+        }
+    }
+#else
+    wxUnusedVar(win);
+#endif // wxUSE_DYNLIB_CLASS
+
+    return ::SystemParametersInfo(uiAction, uiParam, pvParam, fWinIni) == TRUE;
+}
+
+wxSize wxWindowMSW::GetDPI() const
+{
+    HWND hwnd = GetHwnd();
+
+    if ( hwnd == NULL )
+    {
+        const wxWindow* topWin = wxGetTopLevelParent(const_cast<wxWindow*>(this));
+        if ( topWin )
+        {
+            hwnd = GetHwndOf(topWin);
+        }
+    }
+
+    wxSize dpi = GetWindowDPI(hwnd);
+
+    if ( !dpi.x || !dpi.y )
+    {
+        WindowHDC hdc(hwnd);
+        dpi.x = ::GetDeviceCaps(hdc, LOGPIXELSX);
+        dpi.y = ::GetDeviceCaps(hdc, LOGPIXELSY);
+    }
+
+    return dpi;
+}
+
+void wxWindowMSW::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    if ( m_font.IsOk() )
+    {
+        m_font.WXAdjustToPPI(newDPI);
+
+        // WXAdjustToPPI() changes the HFONT, so reassociate it with the window.
+        wxSetWindowFont(GetHwnd(), m_font);
+    }
+}
+
+// Helper function to update the given coordinate by the scaling factor if it
+// is set, i.e. different from wxDefaultCoord.
+static void ScaleCoordIfSet(int& coord, float scaleFactor)
+{
+    if ( coord != wxDefaultCoord )
+    {
+        const float coordScaled = coord * scaleFactor;
+        coord = scaleFactor > 1.0 ? ceil(coordScaled) : floor(coordScaled);
+    }
+}
+
+void
+wxWindowMSW::MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI)
+{
+    // update min and max size if necessary
+    const float scaleFactor = (float)newDPI.y / oldDPI.y;
+
+    ScaleCoordIfSet(m_minHeight, scaleFactor);
+    ScaleCoordIfSet(m_minWidth, scaleFactor);
+    ScaleCoordIfSet(m_maxHeight, scaleFactor);
+    ScaleCoordIfSet(m_maxWidth, scaleFactor);
+
+    InvalidateBestSize();
+
+    // update font if necessary
+    MSWUpdateFontOnDPIChange(newDPI);
+
+    // update children
+    wxWindowList::compatibility_iterator current = GetChildren().GetFirst();
+    while ( current )
+    {
+        wxWindow *childWin = current->GetData();
+        // Update all children, except other top-level windows.
+        // These could be on a different monitor and will get their own
+        // dpi-changed event.
+        if ( childWin && !childWin->IsTopLevel() )
+        {
+            childWin->MSWUpdateOnDPIChange(oldDPI, newDPI);
+        }
+
+        current = current->GetNext();
+    }
+
+    wxDPIChangedEvent event(oldDPI, newDPI);
+    event.SetEventObject(this);
+    HandleWindowEvent(event);
+}
+
+// ---------------------------------------------------------------------------
 // colours and palettes
 // ---------------------------------------------------------------------------
 
@@ -4712,8 +4915,6 @@ bool wxWindowMSW::HandleSysColorChange()
 
 bool wxWindowMSW::HandleDisplayChange()
 {
-    wxDisplay::InvalidateCache();
-
     wxDisplayChangedEvent event;
     event.SetEventObject(this);
 
@@ -4980,7 +5181,7 @@ wxColour wxWindowMSW::MSWGetThemeColour(const wchar_t *themeName,
                 break;
             default:
                 wxFAIL_MSG(wxT("unsupported theme colour"));
-        };
+        }
 
         wxUxThemeHandle hTheme((const wxWindow *)this, themeName);
         COLORREF col;
@@ -7416,7 +7617,12 @@ static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win)
 
 #if !wxDIALOG_UNIT_COMPATIBILITY
     // and select the current font into it
-    HFONT hfont = GetHfontOf(win->GetFont());
+
+    // Note that it's important to extend the lifetime of the possibly
+    // temporary wxFont returned by GetFont() to ensure that its HFONT remains
+    // valid.
+    const wxFont& f(win->GetFont());
+    HFONT hfont = GetHfontOf(f);
     if ( hfont )
     {
         hfont = (HFONT)::SelectObject(hdc, hfont);
@@ -7500,6 +7706,21 @@ bool wxWindowMSW::RegisterHotKey(int hotkeyId, int modifiers, int keycode)
         win_modifiers |= MOD_CONTROL;
     if ( modifiers & wxMOD_WIN )
         win_modifiers |= MOD_WIN;
+
+    // Special compatibility hack: the initial version of this function didn't
+    // use wxMSWKeyboard::WXToVK() at all, which was wrong as the user code is
+    // expected to use WXK_XXX constants and not VK_XXX ones, but as people had
+    // no choice but to use the latter with the previous version of wxWidgets,
+    // now we have to continue accepting VK_XXX here too. So we assume that the
+    // argument is a VK constant and not a WXK one if it looks like this should
+    // be the case based on its value. It helps that all of WXK constants
+    // before WXK_START have the same value as the corresponding VK constants,
+    // with the only exception of WXK_DELETE which is equal to VK_F16 -- and we
+    // consider that the latter is unlikely to be used.
+    if ( keycode >= WXK_START || keycode == WXK_DELETE )
+        keycode = wxMSWKeyboard::WXToVK(keycode);
+    //else: leave it unchanged because it looks like it's a VK constant (which
+    //      includes ASCII digits and upper case letters)
 
     if ( !::RegisterHotKey(GetHwnd(), hotkeyId, win_modifiers, keycode) )
     {

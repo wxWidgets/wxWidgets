@@ -20,73 +20,81 @@
 #endif // WX_PRECOMP
 
 #include "wx/accel.h"
-#include "wx/scopedptr.h"
-
-class AccelEntryTestCase : public CppUnit::TestCase
-{
-public:
-    AccelEntryTestCase() {}
-
-private:
-    CPPUNIT_TEST_SUITE( AccelEntryTestCase );
-        CPPUNIT_TEST( Create );
-        CPPUNIT_TEST( ToFromString );
-    CPPUNIT_TEST_SUITE_END();
-
-    void Create();
-    void ToFromString();
-
-    wxDECLARE_NO_COPY_CLASS(AccelEntryTestCase);
-};
-
-// register in the unnamed registry so that these tests are run by default
-CPPUNIT_TEST_SUITE_REGISTRATION( AccelEntryTestCase );
-
-// also include in its own registry so that these tests can be run alone
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( AccelEntryTestCase, "AccelEntryTestCase" );
 
 namespace
 {
 
 void CheckAccelEntry(const wxAcceleratorEntry& accel, int keycode, int flags)
 {
-    CPPUNIT_ASSERT_EQUAL( keycode, accel.GetKeyCode() );
-    CPPUNIT_ASSERT_EQUAL( flags, accel.GetFlags() );
+    CHECK( keycode == accel.GetKeyCode() );
+    CHECK( flags == accel.GetFlags() );
 }
 
 } // anonymous namespace
 
-void AccelEntryTestCase::Create()
+
+/*
+ * Test the creation of accelerator keys using the Create function
+ */
+TEST_CASE( "wxAcceleratorEntry::Create", "[accelentry]" )
 {
-    wxScopedPtr<wxAcceleratorEntry>
-        pa(wxAcceleratorEntry::Create("Foo\tCtrl+Z"));
-    CPPUNIT_ASSERT( pa );
-    CPPUNIT_ASSERT( pa->IsOk() );
+    wxAcceleratorEntry* pa;
 
-    CheckAccelEntry(*pa, 'Z', wxACCEL_CTRL);
+    SECTION( "Correct behavior" )
+    {
+        pa = wxAcceleratorEntry::Create("Foo\tCtrl+Z");
 
+        CHECK( pa );
+        CHECK( pa->IsOk() );
+        CheckAccelEntry(*pa, 'Z', wxACCEL_CTRL);
+    }
 
-    // There must be a TAB in the string passed to Create()
-    pa.reset(wxAcceleratorEntry::Create("Shift-Q"));
-    CPPUNIT_ASSERT( !pa );
+    SECTION( "Tab missing" )
+    {
+        pa = wxAcceleratorEntry::Create("Shift-Q");
 
-    pa.reset(wxAcceleratorEntry::Create("Bar\tShift-Q"));
-    CPPUNIT_ASSERT( pa );
-    CPPUNIT_ASSERT( pa->IsOk() );
-    CheckAccelEntry(*pa, 'Q', wxACCEL_SHIFT);
+        CHECK( !pa );
+    }
 
+    SECTION( "No accelerator key specified" )
+    {
+        pa = wxAcceleratorEntry::Create("bloordyblop");
 
-    pa.reset(wxAcceleratorEntry::Create("bloordyblop"));
-    CPPUNIT_ASSERT( !pa );
+        CHECK( !pa );
+    }
+
+    SECTION( "Display name parsing" )
+    {
+        pa = wxAcceleratorEntry::Create("Test\tBackSpace");
+
+        CHECK( pa );
+        CHECK( pa->IsOk() );
+        CheckAccelEntry(*pa, WXK_BACK, wxACCEL_NORMAL);
+    }
 }
 
-void AccelEntryTestCase::ToFromString()
+
+/*
+ * Test the creation of accelerator keys from strings and also the
+ * creation of strings from an accelerator key
+ */
+TEST_CASE( "wxAcceleratorEntry::StringTests", "[accelentry]" )
 {
     wxAcceleratorEntry a(wxACCEL_ALT, 'X');
-    CPPUNIT_ASSERT_EQUAL( "Alt+X", a.ToString() );
 
-    CPPUNIT_ASSERT( a.FromString("Alt+Shift+F1") );
-    CheckAccelEntry(a, WXK_F1, wxACCEL_ALT | wxACCEL_SHIFT);
+    SECTION( "Create string from key" )
+    {
+        CHECK( "Alt+X" == a.ToString() );
+    }
 
-    CPPUNIT_ASSERT( !a.FromString("bloordyblop") );
+    SECTION( "Create from valid string" )
+    {
+        CHECK( a.FromString("Alt+Shift+F1") );
+        CheckAccelEntry(a, WXK_F1, wxACCEL_ALT | wxACCEL_SHIFT);
+    }
+
+    SECTION( "Create from invalid string" )
+    {
+        CHECK( !a.FromString("bloordyblop") );
+    }
 }

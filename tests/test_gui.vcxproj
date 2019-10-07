@@ -143,7 +143,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>testprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\testprec_test_gui.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)\test_gui.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -154,7 +153,7 @@
       <AdditionalIncludeDirectories>..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\include;..\3rdparty\catch\include;.;.\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxmsw$(wxShortVersionString)ud_webview.lib;wxmsw$(wxShortVersionString)ud_richtext.lib;wxmsw$(wxShortVersionString)ud_aui.lib;wxmsw$(wxShortVersionString)ud_media.lib;wxmsw$(wxShortVersionString)ud_xrc.lib;wxbase$(wxShortVersionString)ud_xml.lib;wxmsw$(wxShortVersionString)ud_html.lib;wxmsw$(wxShortVersionString)ud_core.lib;wxbase$(wxShortVersionString)ud_net.lib;wxbase$(wxShortVersionString)ud.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wxmsw$(wxShortVersionString)ud_webview.lib;wxmsw$(wxShortVersionString)ud_richtext.lib;wxmsw$(wxShortVersionString)ud_stc.lib;wxmsw$(wxShortVersionString)ud_aui.lib;wxmsw$(wxShortVersionString)ud_media.lib;wxmsw$(wxShortVersionString)ud_xrc.lib;wxbase$(wxShortVersionString)ud_xml.lib;wxmsw$(wxShortVersionString)ud_html.lib;wxmsw$(wxShortVersionString)ud_core.lib;wxbase$(wxShortVersionString)ud_net.lib;wxbase$(wxShortVersionString)ud.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -182,7 +181,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>testprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\testprec_test_gui.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)\test_gui.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -193,7 +191,7 @@
       <AdditionalIncludeDirectories>..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\include;..\3rdparty\catch\include;.;.\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxmsw$(wxShortVersionString)u_webview.lib;wxmsw$(wxShortVersionString)u_richtext.lib;wxmsw$(wxShortVersionString)u_aui.lib;wxmsw$(wxShortVersionString)u_media.lib;wxmsw$(wxShortVersionString)u_xrc.lib;wxbase$(wxShortVersionString)u_xml.lib;wxmsw$(wxShortVersionString)u_html.lib;wxmsw$(wxShortVersionString)u_core.lib;wxbase$(wxShortVersionString)u_net.lib;wxbase$(wxShortVersionString)u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wxmsw$(wxShortVersionString)u_webview.lib;wxmsw$(wxShortVersionString)u_richtext.lib;wxmsw$(wxShortVersionString)u_stc.lib;wxmsw$(wxShortVersionString)u_aui.lib;wxmsw$(wxShortVersionString)u_media.lib;wxmsw$(wxShortVersionString)u_xrc.lib;wxbase$(wxShortVersionString)u_xml.lib;wxmsw$(wxShortVersionString)u_html.lib;wxmsw$(wxShortVersionString)u_core.lib;wxbase$(wxShortVersionString)u_net.lib;wxbase$(wxShortVersionString)u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -225,7 +223,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>testprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\testprec_test_gui.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)\test_gui.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -236,7 +233,7 @@
       <AdditionalIncludeDirectories>..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\include;..\3rdparty\catch\include;.;.\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxmsw$(wxShortVersionString)ud_webview.lib;wxmsw$(wxShortVersionString)ud_richtext.lib;wxmsw$(wxShortVersionString)ud_aui.lib;wxmsw$(wxShortVersionString)ud_media.lib;wxmsw$(wxShortVersionString)ud_xrc.lib;wxbase$(wxShortVersionString)ud_xml.lib;wxmsw$(wxShortVersionString)ud_html.lib;wxmsw$(wxShortVersionString)ud_core.lib;wxbase$(wxShortVersionString)ud_net.lib;wxbase$(wxShortVersionString)ud.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wxmsw$(wxShortVersionString)ud_webview.lib;wxmsw$(wxShortVersionString)ud_richtext.lib;wxmsw$(wxShortVersionString)ud_stc.lib;wxmsw$(wxShortVersionString)ud_aui.lib;wxmsw$(wxShortVersionString)ud_media.lib;wxmsw$(wxShortVersionString)ud_xrc.lib;wxbase$(wxShortVersionString)ud_xml.lib;wxmsw$(wxShortVersionString)ud_html.lib;wxmsw$(wxShortVersionString)ud_core.lib;wxbase$(wxShortVersionString)ud_net.lib;wxbase$(wxShortVersionString)ud.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -264,7 +261,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>testprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\testprec_test_gui.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)\test_gui.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -275,7 +271,7 @@
       <AdditionalIncludeDirectories>..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\include;..\3rdparty\catch\include;.;.\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxmsw$(wxShortVersionString)u_webview.lib;wxmsw$(wxShortVersionString)u_richtext.lib;wxmsw$(wxShortVersionString)u_aui.lib;wxmsw$(wxShortVersionString)u_media.lib;wxmsw$(wxShortVersionString)u_xrc.lib;wxbase$(wxShortVersionString)u_xml.lib;wxmsw$(wxShortVersionString)u_html.lib;wxmsw$(wxShortVersionString)u_core.lib;wxbase$(wxShortVersionString)u_net.lib;wxbase$(wxShortVersionString)u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wxmsw$(wxShortVersionString)u_webview.lib;wxmsw$(wxShortVersionString)u_richtext.lib;wxmsw$(wxShortVersionString)u_stc.lib;wxmsw$(wxShortVersionString)u_aui.lib;wxmsw$(wxShortVersionString)u_media.lib;wxmsw$(wxShortVersionString)u_xrc.lib;wxbase$(wxShortVersionString)u_xml.lib;wxmsw$(wxShortVersionString)u_html.lib;wxmsw$(wxShortVersionString)u_core.lib;wxbase$(wxShortVersionString)u_net.lib;wxbase$(wxShortVersionString)u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -307,7 +303,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>testprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\testprec_test_gui.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)\test_gui.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -318,7 +313,7 @@
       <AdditionalIncludeDirectories>..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\include;..\3rdparty\catch\include;.;.\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxmsw$(wxShortVersionString)ud_webview.lib;wxmsw$(wxShortVersionString)ud_richtext.lib;wxmsw$(wxShortVersionString)ud_aui.lib;wxmsw$(wxShortVersionString)ud_media.lib;wxmsw$(wxShortVersionString)ud_xrc.lib;wxbase$(wxShortVersionString)ud_xml.lib;wxmsw$(wxShortVersionString)ud_html.lib;wxmsw$(wxShortVersionString)ud_core.lib;wxbase$(wxShortVersionString)ud_net.lib;wxbase$(wxShortVersionString)ud.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wxmsw$(wxShortVersionString)ud_webview.lib;wxmsw$(wxShortVersionString)ud_richtext.lib;wxmsw$(wxShortVersionString)ud_stc.lib;wxmsw$(wxShortVersionString)ud_aui.lib;wxmsw$(wxShortVersionString)ud_media.lib;wxmsw$(wxShortVersionString)ud_xrc.lib;wxbase$(wxShortVersionString)ud_xml.lib;wxmsw$(wxShortVersionString)ud_html.lib;wxmsw$(wxShortVersionString)ud_core.lib;wxbase$(wxShortVersionString)ud_net.lib;wxbase$(wxShortVersionString)ud.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -346,7 +341,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>testprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\testprec_test_gui.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)\test_gui.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -357,7 +351,7 @@
       <AdditionalIncludeDirectories>..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\include;..\3rdparty\catch\include;.;.\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxmsw$(wxShortVersionString)u_webview.lib;wxmsw$(wxShortVersionString)u_richtext.lib;wxmsw$(wxShortVersionString)u_aui.lib;wxmsw$(wxShortVersionString)u_media.lib;wxmsw$(wxShortVersionString)u_xrc.lib;wxbase$(wxShortVersionString)u_xml.lib;wxmsw$(wxShortVersionString)u_html.lib;wxmsw$(wxShortVersionString)u_core.lib;wxbase$(wxShortVersionString)u_net.lib;wxbase$(wxShortVersionString)u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wxmsw$(wxShortVersionString)u_webview.lib;wxmsw$(wxShortVersionString)u_richtext.lib;wxmsw$(wxShortVersionString)u_stc.lib;wxmsw$(wxShortVersionString)u_aui.lib;wxmsw$(wxShortVersionString)u_media.lib;wxmsw$(wxShortVersionString)u_xrc.lib;wxbase$(wxShortVersionString)u_xml.lib;wxmsw$(wxShortVersionString)u_html.lib;wxmsw$(wxShortVersionString)u_core.lib;wxbase$(wxShortVersionString)u_net.lib;wxbase$(wxShortVersionString)u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -389,7 +383,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>testprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\testprec_test_gui.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)\test_gui.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -400,7 +393,7 @@
       <AdditionalIncludeDirectories>..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\include;..\3rdparty\catch\include;.;.\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxmsw$(wxShortVersionString)ud_webview.lib;wxmsw$(wxShortVersionString)ud_richtext.lib;wxmsw$(wxShortVersionString)ud_aui.lib;wxmsw$(wxShortVersionString)ud_media.lib;wxmsw$(wxShortVersionString)ud_xrc.lib;wxbase$(wxShortVersionString)ud_xml.lib;wxmsw$(wxShortVersionString)ud_html.lib;wxmsw$(wxShortVersionString)ud_core.lib;wxbase$(wxShortVersionString)ud_net.lib;wxbase$(wxShortVersionString)ud.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wxmsw$(wxShortVersionString)ud_webview.lib;wxmsw$(wxShortVersionString)ud_richtext.lib;wxmsw$(wxShortVersionString)ud_stc.lib;wxmsw$(wxShortVersionString)ud_aui.lib;wxmsw$(wxShortVersionString)ud_media.lib;wxmsw$(wxShortVersionString)ud_xrc.lib;wxbase$(wxShortVersionString)ud_xml.lib;wxmsw$(wxShortVersionString)ud_html.lib;wxmsw$(wxShortVersionString)ud_core.lib;wxbase$(wxShortVersionString)ud_net.lib;wxbase$(wxShortVersionString)ud.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -428,7 +421,6 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>testprec.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\testprec_test_gui.pch</PrecompiledHeaderOutputFile>
-      <ProgramDataBaseFileName>$(OutDir)\test_gui.pdb</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -439,7 +431,7 @@
       <AdditionalIncludeDirectories>..\lib\$(wxOutDirName)\$(wxIncSubDir);.\..\include;..\3rdparty\catch\include;.;.\..\samples;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>wxmsw$(wxShortVersionString)u_webview.lib;wxmsw$(wxShortVersionString)u_richtext.lib;wxmsw$(wxShortVersionString)u_aui.lib;wxmsw$(wxShortVersionString)u_media.lib;wxmsw$(wxShortVersionString)u_xrc.lib;wxbase$(wxShortVersionString)u_xml.lib;wxmsw$(wxShortVersionString)u_html.lib;wxmsw$(wxShortVersionString)u_core.lib;wxbase$(wxShortVersionString)u_net.lib;wxbase$(wxShortVersionString)u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wxmsw$(wxShortVersionString)u_webview.lib;wxmsw$(wxShortVersionString)u_richtext.lib;wxmsw$(wxShortVersionString)u_stc.lib;wxmsw$(wxShortVersionString)u_aui.lib;wxmsw$(wxShortVersionString)u_media.lib;wxmsw$(wxShortVersionString)u_xrc.lib;wxbase$(wxShortVersionString)u_xml.lib;wxmsw$(wxShortVersionString)u_html.lib;wxmsw$(wxShortVersionString)u_core.lib;wxbase$(wxShortVersionString)u_net.lib;wxbase$(wxShortVersionString)u.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;kernel32.lib;user32.lib;gdi32.lib;comdlg32.lib;winspool.lib;winmm.lib;shell32.lib;comctl32.lib;ole32.lib;oleaut32.lib;uuid.lib;rpcrt4.lib;advapi32.lib;wsock32.lib;wininet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\lib\$(wxOutDirName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -496,6 +488,7 @@
     <ClCompile Include="controls\slidertest.cpp" />
     <ClCompile Include="controls\spinctrldbltest.cpp" />
     <ClCompile Include="controls\spinctrltest.cpp" />
+    <ClCompile Include="controls\styledtextctrltest.cpp" />
     <ClCompile Include="controls\textctrltest.cpp" />
     <ClCompile Include="controls\textentrytest.cpp" />
     <ClCompile Include="controls\togglebuttontest.cpp" />

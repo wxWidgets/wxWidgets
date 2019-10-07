@@ -352,6 +352,9 @@ wxFileSystem URL) of the bitmap to use. For example:
 The value is interpreted as path relative to the location of XRC file where the
 reference occurs.
 
+Bitmap file paths can include environment variables that are expanded if
+wxXRC_USE_ENVVARS was passed to the wxXmlResource constructor.
+
 Alternatively, it is possible to specify the bitmap using wxArtProvider IDs.
 In this case, the property element has no textual value (filename) and instead
 has the @c stock_id XML attribute that contains stock art ID as accepted by
@@ -386,6 +389,16 @@ Examples:
 @code
 <style>wxCAPTION|wxSYSTEM_MENU | wxRESIZE_BORDER</style>
 <exstyle>wxDIALOG_EX_CONTEXTHELP</exstyle>
+@endcode
+
+
+@subsection overview_xrcformat_type_showeffect Show Effect
+
+One of the @ref wxShowEffect values.
+
+Example:
+@code
+<showeffect>wxSHOW_EFFECT_EXPAND</showeffect>
 @endcode
 
 
@@ -1021,6 +1034,25 @@ Example:
 @endTable
 
 
+@subsubsection xrc_wxdataviewctrl wxDataViewCtrl
+
+No additional properties.
+
+
+@subsubsection xrc_wxdataviewlistctrl wxDataViewListCtrl
+
+No additional properties.
+
+
+@subsubsection xrc_wxdataviewtreectrl wxDataViewTreeCtrl
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{imagelist, @ref overview_xrcformat_type_imagelist,
+     Image list to use for the images (default: none).}
+@endTable
+
+
 @subsubsection xrc_wxdatepickerctrl wxDatePickerCtrl
 
 No additional properties.
@@ -1197,6 +1229,40 @@ page.
 @row3col{url, @ref overview_xrcformat_type_url,
      URL to open when the link is clicked (default: empty).}
 @endTable
+
+
+@subsubsection xrc_wxinfobar wxInfoBar
+
+@beginTable
+@hdr3col{property, type, description}
+@row3col{showeffect, @ref overview_xrcformat_type_showeffect,
+     The effect to use when showing the bar (optional).}
+@row3col{hideeffect, @ref overview_xrcformat_type_showeffect,
+     The effect to use when hiding the bar (optional).}
+@row3col{effectduration, integer,
+     The duration of the animation used when showing or hiding the bar
+     (optional).}
+@row3col{button, object,
+     Add a button to be shown in the info bar (see wxInfoBar::AddButton);
+     this property is of class "button" has name (can be one of standard
+     button ID) and has optional label property. If no buttons are added
+     to the info bar, the default "Close" button will be shown.}
+@endTable
+
+Example:
+@code
+<object class="wxInfoBar">
+    <effectduration>1000</effectduration>
+    <showeffect>wxSHOW_EFFECT_EXPAND</showeffect>
+    <hideeffect>wxSHOW_EFFECT_SLIDE_TO_RIGHT</hideeffect>
+    <object class="button" name="wxID_UNDO"/>
+    <object class="button" name="wxID_REDO">
+        <label>Redo Custom Label</label>
+    </object>
+</object>
+@endcode
+
+@since 3.1.3
 
 
 @subsubsection xrc_wxlistbox wxListBox

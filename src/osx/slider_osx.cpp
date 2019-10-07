@@ -117,10 +117,14 @@ bool wxSlider::Create(wxWindow *parent,
     // other values
 #endif
     
-    if (style & wxSL_LABELS)
+    if (style & wxSL_MIN_MAX_LABELS)
     {
         m_macMinimumStatic = new wxStaticText( parent, wxID_ANY, wxEmptyString );
         m_macMaximumStatic = new wxStaticText( parent, wxID_ANY, wxEmptyString );
+    }
+
+    if (style & wxSL_VALUE_LABEL)
+    {
         m_macValueStatic = new wxStaticText( parent, wxID_ANY, wxEmptyString );
     }
 
@@ -397,9 +401,7 @@ wxSize wxSlider::DoGetBestSize() const
 
 void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
 {
-    int yborder = 0;
     int minValWidth, maxValWidth, textheight;
-    int sliderBreadth;
     int width = w;
 
     if (GetWindowStyle() & wxSL_LABELS)
@@ -444,9 +446,11 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
 
         GetTextExtent(text, &valValWidth, &ht);
 
+        int yborder;
         yborder = textheight + wxSLIDER_BORDERTEXT;
 
         // Get slider breadth
+        int sliderBreadth;
         if (GetWindowStyle() & wxSL_AUTOTICKS)
             sliderBreadth = wxSLIDER_DIMENSIONACROSS_WITHTICKMARKS;
         else
@@ -498,11 +502,6 @@ void wxSlider::DoSetSize(int x, int y, int w, int h, int sizeFlags)
     wxControl::DoSetSize( x, y, w, h, sizeFlags );
 
     m_minWidth = minWidth;
-}
-
-void wxSlider::DoMoveWindow(int x, int y, int width, int height)
-{
-    wxControl::DoMoveWindow( x, y, width, height );
 }
 
 // Common processing to invert slider values based on wxSL_INVERSE

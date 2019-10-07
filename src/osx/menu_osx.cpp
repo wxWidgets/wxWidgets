@@ -64,7 +64,7 @@ void wxMenu::Init()
     m_noEventsMode = false;
     m_radioData = NULL;
 
-    m_peer = wxMenuImpl::Create( this, wxStripMenuCodes(m_title) );
+    m_peer = wxMenuImpl::Create( this, wxStripMenuCodes(m_title, wxStrip_Menu) );
 
 
     // if we have a title, insert it in the beginning of the menu
@@ -221,7 +221,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 void wxMenu::SetTitle(const wxString& label)
 {
     m_title = label ;
-    GetPeer()->SetTitle( wxStripMenuCodes( label ) );
+    GetPeer()->SetTitle( wxStripMenuCodes( label, wxStrip_Menu ) );
 }
 
 bool wxMenu::ProcessCommand(wxCommandEvent & event)
@@ -697,16 +697,6 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
     menu->SetTitle(title);
 
     return true;
-}
-
-void wxMenuBar::Detach()
-{
-    wxMenuBarBase::Detach() ;
-}
-
-void wxMenuBar::Attach(wxFrame *frame)
-{
-    wxMenuBarBase::Attach( frame ) ;
 }
 
 void wxMenuBar::DoGetPosition(int *x, int *y) const

@@ -110,6 +110,8 @@ wxMessageDialog::wxMessageDialog( wxWindow *parent, const wxString& message,
         dlg->setWindowModality( Qt::ApplicationModal );
 
     PostCreation();
+
+    Centre(wxBOTH | wxCENTER_FRAME);
 }
 
 wxIMPLEMENT_CLASS(wxMessageDialog,wxDialog);

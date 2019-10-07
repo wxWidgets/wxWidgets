@@ -23,8 +23,6 @@
     #include "wx/window.h"
 #endif
 
-const wxValidator wxDefaultValidator;
-
 wxIMPLEMENT_DYNAMIC_CLASS(wxValidator, wxEvtHandler);
 
 // VZ: personally, I think true would be more appropriate - these bells are
@@ -39,6 +37,10 @@ wxValidator::wxValidator()
 wxValidator::~wxValidator()
 {
 }
+#else
 
-#endif
-  // wxUSE_VALIDATORS
+class WXDLLIMPEXP_CORE wxValidator { };
+
+#endif // wxUSE_VALIDATORS
+
+const wxValidator wxDefaultValidator;

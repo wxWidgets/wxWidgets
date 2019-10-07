@@ -667,9 +667,6 @@ void wxRichToolTipGenericImpl::SetTitleFont(const wxFont& font)
 
 void wxRichToolTipGenericImpl::ShowFor(wxWindow* win, const wxRect* rect)
 {
-    // Set the focus to the window the tooltip refers to to make it look active.
-    win->SetFocus();
-
     wxRichToolTipPopup* const popup = new wxRichToolTipPopup
                                           (
                                             win,

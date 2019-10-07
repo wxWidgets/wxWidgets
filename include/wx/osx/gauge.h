@@ -39,11 +39,11 @@ class WXDLLIMPEXP_CORE wxGauge: public wxGaugeBase
            const wxString& name = wxGaugeNameStr);
 
     // set gauge range/value
-    virtual void SetRange(int range);
-    virtual void SetValue(int pos);
-    virtual int  GetValue() const ;
+    virtual void SetRange(int range) wxOVERRIDE;
+    virtual void SetValue(int pos) wxOVERRIDE;
+    virtual int  GetValue() const  wxOVERRIDE;
 
-    void Pulse();
+    void Pulse() wxOVERRIDE;
 
  protected:
     wxDECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge);

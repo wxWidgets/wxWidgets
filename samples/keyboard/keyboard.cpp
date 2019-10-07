@@ -34,6 +34,11 @@ enum
     IDInputEntry,
     IDInputText,
 
+#if wxUSE_HOTKEY
+    HotKeyRegister,
+    HotKeyUnregister,
+#endif // wxUSE_HOTKEY
+
     TestAccelA,
     TestAccelCtrlA,
     TestAccelEsc
@@ -58,6 +63,33 @@ private:
         { m_logText->AppendText("Test accelerator \"Ctrl-A\" used.\n"); }
     void OnTestAccelEsc(wxCommandEvent& WXUNUSED(event))
         { m_logText->AppendText("Test accelerator \"Esc\" used.\n"); }
+
+#if wxUSE_HOTKEY
+    void OnRegisterHotKey(wxCommandEvent& WXUNUSED(event))
+    {
+        if ( RegisterHotKey(0, wxMOD_ALT | wxMOD_SHIFT, WXK_HOME) )
+        {
+            m_logText->AppendText("Try pressing Alt-Shift-Home anywhere now.\n");
+        }
+        else
+        {
+            m_logText->AppendText("Failed to register hot key.\n");
+        }
+    }
+
+    void OnUnregisterHotKey(wxCommandEvent& WXUNUSED(event))
+    {
+        if ( !UnregisterHotKey(0) )
+        {
+            m_logText->AppendText("Failed to unregister hot key.\n");
+        }
+    }
+
+    void OnHotkey(wxKeyEvent& event)
+    {
+        LogEvent("Hot key", event);
+    }
+#endif // wxUSE_HOTKEY
 
     void OnClear(wxCommandEvent& WXUNUSED(event)) { m_logText->Clear(); }
     void OnSkipDown(wxCommandEvent& event) { m_skipDown = event.IsChecked(); }
@@ -186,6 +218,14 @@ MyFrame::MyFrame(const wxString& title)
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(menuFile, "&File");
+
+#if wxUSE_HOTKEY
+    wxMenu* menuHotkey = new wxMenu;
+    menuHotkey->Append(HotKeyRegister, "&Register hot key");
+    menuHotkey->Append(HotKeyUnregister, "&Unregister hot key");
+    menuBar->Append(menuHotkey, "Hot&key");
+#endif // wxUSE_HOTKEY
+
     menuBar->Append(menuHelp, "&Help");
 
     // ... and attach this menu bar to the frame
@@ -232,6 +272,11 @@ MyFrame::MyFrame(const wxString& title)
     Bind(wxEVT_MENU, &MyFrame::OnTestAccelA, this, TestAccelA);
     Bind(wxEVT_MENU, &MyFrame::OnTestAccelCtrlA, this, TestAccelCtrlA);
     Bind(wxEVT_MENU, &MyFrame::OnTestAccelEsc, this, TestAccelEsc);
+#if wxUSE_HOTKEY
+    Bind(wxEVT_MENU, &MyFrame::OnRegisterHotKey, this, HotKeyRegister);
+    Bind(wxEVT_MENU, &MyFrame::OnUnregisterHotKey, this, HotKeyUnregister);
+    Bind(wxEVT_HOTKEY, &MyFrame::OnHotkey, this);
+#endif // wxUSE_HOTKEY
 
     // notice that we don't connect OnCharHook() to the input window, unlike
     // the usual key events this one is propagated upwards

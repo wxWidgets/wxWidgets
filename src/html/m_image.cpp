@@ -310,6 +310,12 @@ public:
 
     virtual void Layout(int w) wxOVERRIDE;
 
+    virtual wxString GetDescription() const wxOVERRIDE
+    {
+        return wxString::Format("wxHtmlImageCell with bitmap of size %d*%d",
+                                m_bmpW, m_bmpH);
+    }
+
 private:
     wxBitmap           *m_bitmap;
     int                 m_align;

@@ -232,8 +232,8 @@ public :
     
     virtual NSMenu* MacCreateOrFindWindowMenu()
     {
-        NSString* nsWindowMenuTitle = wxNSStringWithWxString(wxStripMenuCodes(wxApp::s_macWindowMenuTitleName));
-        NSString* nsAlternateWindowMenuTitle = wxNSStringWithWxString(wxStripMenuCodes(_("&Window")));
+        NSString* nsWindowMenuTitle = wxNSStringWithWxString(wxStripMenuCodes(wxApp::s_macWindowMenuTitleName, wxStrip_Menu));
+        NSString* nsAlternateWindowMenuTitle = wxNSStringWithWxString(wxStripMenuCodes(_("&Window"), wxStrip_Menu));
 
         NSMenu* windowMenu = nil;
 
@@ -254,6 +254,7 @@ public :
             [windowMenuItem setSubmenu:windowMenu];
             [windowMenu release];
             [m_osxMenu addItem:windowMenuItem];
+            [windowMenuItem release];
         }
         return windowMenu;
     }
@@ -361,8 +362,11 @@ public :
         [m_osxMenu setAutoenablesItems:NO];
         
         wxMenu* menu = GetWXPeer();
-        for ( auto item : menu->GetMenuItems() )
+        for ( wxMenuItemList::compatibility_iterator node = menu->GetMenuItems().GetFirst();
+              node;
+              node = node->GetNext() )
         {
+            const wxMenuItem* const item = node->GetData();
             if ( item->IsSubMenu() )
             {
                 wxMenuCocoaImpl* subimpl = dynamic_cast<wxMenuCocoaImpl*>(item->GetSubMenu()->GetPeer());

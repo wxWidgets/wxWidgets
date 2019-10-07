@@ -28,7 +28,7 @@ wxApp::~wxApp()
     // Delete command line arguments
     for ( int i = 0; i < m_qtArgc; ++i )
     {
-        delete m_qtArgv[i];
+        free(m_qtArgv[i]);
     }
 }
 

@@ -1527,7 +1527,7 @@ public:
     static bool IsWestEuropeanCountry(Country country = Country_Default);
 
     /**
-        Returns the object corresponding to the current time.
+        Returns the object corresponding to the current time in local time zone.
 
         Example:
 
@@ -1572,11 +1572,11 @@ public:
     static wxDateTime Today();
 
     /**
-        Returns the object corresponding to the current UTC time including the
+        Returns the object corresponding to the current time including the
         milliseconds.
 
-        Notice that unlike Now(), this method creates a wxDateTime object
-        corresponding to UTC, not local, time.
+        Like Now(), this method creates the wxDateTime object corresponding to
+        the current moment in local time.
 
         @see Now(), wxGetUTCTimeMillis()
     */

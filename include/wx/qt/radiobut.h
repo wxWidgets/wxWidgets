@@ -35,7 +35,7 @@ public:
     virtual void SetValue(bool value);
     virtual bool GetValue() const;
 
-    virtual QWidget *GetHandle() const;
+    virtual QWidget *GetHandle() const wxOVERRIDE;
 
 private:
     QRadioButton *m_qtRadioButton;

@@ -137,16 +137,16 @@ public:
 ////@begin wxSymbolPickerDialog member function declarations
 
     wxString GetFontName() const { return m_fontName ; }
-    void SetFontName(wxString value) { m_fontName = value ; }
+    void SetFontName(const wxString& value) { m_fontName = value; }
 
     bool GetFromUnicode() const { return m_fromUnicode ; }
     void SetFromUnicode(bool value) { m_fromUnicode = value ; }
 
     wxString GetNormalTextFontName() const { return m_normalTextFontName ; }
-    void SetNormalTextFontName(wxString value) { m_normalTextFontName = value ; }
+    void SetNormalTextFontName(const wxString& value) { m_normalTextFontName = value; }
 
     wxString GetSymbol() const { return m_symbol ; }
-    void SetSymbol(wxString value) { m_symbol = value ; }
+    void SetSymbol(const wxString& value) { m_symbol = value; }
 
     /// Retrieves bitmap resources
     wxBitmap GetBitmapResource( const wxString& name );

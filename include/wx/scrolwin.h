@@ -11,7 +11,12 @@
 #ifndef _WX_SCROLWIN_H_BASE_
 #define _WX_SCROLWIN_H_BASE_
 
+#include "wx/control.h"
 #include "wx/panel.h"
+
+#ifdef  __WXOSX__
+    #include "wx/scrolbar.h"
+#endif
 
 class WXDLLIMPEXP_FWD_CORE wxScrollHelperEvtHandler;
 class WXDLLIMPEXP_FWD_BASE wxTimer;
@@ -304,6 +309,21 @@ protected:
         return size;
     }
 
+    // Can be overridden to return false if the child window shouldn't be
+    // scrolled into view automatically when it gets focus, which is the
+    // default behaviour.
+    virtual bool ShouldScrollToChildOnFocus(wxWindow* child)
+    {
+#if defined(__WXOSX__) && wxUSE_SCROLLBAR
+        if ( wxDynamicCast(child, wxScrollBar) )
+            return false;
+#else
+        wxUnusedVar(child);
+#endif
+
+        return true;
+    }
+
 
     double                m_scaleX;
     double                m_scaleY;
@@ -379,6 +399,28 @@ struct WXDLLIMPEXP_CORE wxScrolledT_Helper
 // but wxScrolledWindow includes wxControlContainer functionality and that's
 // not always desirable.
 template<class T>
+bool wxCreateScrolled(T* self,
+                      wxWindow *parent, wxWindowID winid,
+                      const wxPoint& pos, const wxSize& size,
+                      long style, const wxString& name)
+{
+    return self->Create(parent, winid, pos, size, style, name);
+}
+
+#if wxUSE_CONTROLS
+// For wxControl we have to provide overloaded wxCreateScrolled()
+// because wxControl::Create() has 7 parameters and therefore base
+// template expecting 6-parameter T::Create() cannot be used.
+inline bool wxCreateScrolled(wxControl* self,
+                     wxWindow *parent, wxWindowID winid,
+                     const wxPoint& pos, const wxSize& size,
+                     long style, const wxString& name)
+{
+     return self->Create(parent, winid, pos, size, style, wxDefaultValidator, name);
+}
+#endif // wxUSE_CONTROLS
+
+template<class T>
 class wxScrolled : public T,
                    public wxScrollHelper,
                    private wxScrolledT_Helper
@@ -415,7 +457,7 @@ public:
         if ( !(style & (wxHSCROLL | wxVSCROLL)) )
             style |= wxHSCROLL | wxVSCROLL;
 
-        return T::Create(parent, winid, pos, size, style, name);
+        return wxCreateScrolled((T*)this, parent, winid, pos, size, style, name);
     }
 
 #ifdef __WXMSW__

@@ -212,7 +212,7 @@ wxString wxGetStockLabel(wxWindowID id, long flags)
         default:
             wxFAIL_MSG( wxT("invalid stock item ID") );
             break;
-    };
+    }
 
     #undef STOCKITEM
 
@@ -314,7 +314,7 @@ wxAcceleratorEntry wxGetStockAccelerator(wxWindowID id)
             // there's no stock accelerator for that.
             ret.Set(0, 0, id);
             break;
-    };
+    }
 
     #undef STOCKITEM
 

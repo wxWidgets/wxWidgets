@@ -2737,7 +2737,7 @@ long wxRichTextCtrl::FindNextWordPosition(int direction) const
 
             if (text.empty()) // End of paragraph, or maybe an image
                 return wxMax(-1, i - 1);
-            else if (wxRichTextCtrlIsWhitespace(text) || text.empty())
+            else if (wxRichTextCtrlIsWhitespace(text))
                 i += direction;
             else
             {
@@ -3808,7 +3808,7 @@ void wxRichTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 
 wxSize wxRichTextCtrl::DoGetBestSize() const
 {
-    return wxSize(10, 10);
+    return FromDIP(wxSize(10, 10));
 }
 
 // ----------------------------------------------------------------------------
@@ -5407,10 +5407,7 @@ void wxRichTextCaret::DoSize()
     {
         m_countVisible = 0;
         DoHide();
-    }
 
-    if (countVisible > 0)
-    {
         m_countVisible = countVisible;
         DoShow();
     }

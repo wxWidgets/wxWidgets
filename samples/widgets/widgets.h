@@ -155,6 +155,10 @@ public:
     // the default attributes for the widget
     static WidgetAttributes& GetAttrs();
 
+    // return true if we're showing logs in the log window (always the case
+    // except during startup and shutdown)
+    static bool IsUsingLogWindow();
+
 protected:
     // several helper functions for page creation
 

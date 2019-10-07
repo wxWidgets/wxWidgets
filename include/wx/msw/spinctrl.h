@@ -65,6 +65,8 @@ public:
     virtual int GetBase() const;
     virtual bool SetBase(int base);
 
+    virtual void Refresh( bool eraseBackground = true,
+                          const wxRect *rect = (const wxRect *) NULL ) wxOVERRIDE;
 
     // implementation only from now on
     // -------------------------------
@@ -120,6 +122,8 @@ protected:
     virtual wxSize DoGetSizeFromTextSize(int xlen, int ylen = -1) const wxOVERRIDE;
     virtual void DoGetSize(int *width, int *height) const wxOVERRIDE;
     virtual void DoGetClientSize(int *x, int *y) const wxOVERRIDE;
+    virtual void DoClientToScreen(int *x, int *y) const wxOVERRIDE;
+    virtual void DoScreenToClient(int *x, int *y) const wxOVERRIDE;
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip ) wxOVERRIDE;
 #endif // wxUSE_TOOLTIPS
@@ -127,6 +131,7 @@ protected:
     virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result) wxOVERRIDE;
     virtual bool MSWOnScroll(int orientation, WXWORD wParam,
                              WXWORD pos, WXHWND control) wxOVERRIDE;
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI) wxOVERRIDE;
 
     // handle processing of special keys
     void OnChar(wxKeyEvent& event);

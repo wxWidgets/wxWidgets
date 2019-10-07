@@ -20,6 +20,10 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dataview.h"
+
+    #ifdef __WXGTK__
+        #include "wx/stopwatch.h"
+    #endif // __WXGTK__
 #endif // WX_PRECOMP
 
 #include "wx/persist/dataview.h"
@@ -84,6 +88,25 @@ static wxDataViewCtrl* CreatePersistenceTestDVC()
     return list;
 }
 
+void GTKWaitRealized(wxDataViewCtrl* list)
+{
+#ifdef __WXGTK__
+    wxStopWatch sw;
+    while ( list->GetColumn(0)->GetWidth() == 0 )
+    {
+        if ( sw.Time() > 500 )
+        {
+            WARN("Timed out waiting for wxDataViewCtrl to be realized");
+            break;
+        }
+
+        wxYield();
+    }
+#else // !__WXGTK__
+    wxUnusedVar(list);
+#endif // __WXGTK__/!__WXGTK__
+}
+
 // --------------------------------------------------------------------------
 // tests themselves
 // --------------------------------------------------------------------------
@@ -101,6 +124,10 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistDVC", "[persist][wxDataViewCtrl]")
         list->GetColumn(1)->SetSortOrder(false);
 
         CHECK(wxPersistenceManager::Get().Register(list));
+
+        // We need to wait until the window is fully realized and the column
+        // widths are actually set.
+        GTKWaitRealized(list);
 
         // Deleting the control itself doesn't allow it to save its state as
         // the wxEVT_DESTROY handler is called too late, so delete its parent
@@ -129,6 +156,10 @@ TEST_CASE_METHOD(PersistenceTests, "wxPersistDVC", "[persist][wxDataViewCtrl]")
 
         // Test that the object was registered and restored.
         CHECK(wxPersistenceManager::Get().RegisterAndRestore(list));
+
+        // Similar to above, we need to wait until it's realized after
+        // restoring the widths.
+        GTKWaitRealized(list);
 
         // Test that the correct values were restored.
         CHECK(150 == list->GetColumn(0)->GetWidth());

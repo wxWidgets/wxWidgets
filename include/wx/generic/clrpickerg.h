@@ -15,6 +15,8 @@
 #include "wx/bmpbuttn.h"
 #include "wx/colourdata.h"
 
+class wxColourDialogEvent;
+
 //-----------------------------------------------------------------------------
 // wxGenericColourButton: a button which brings up a wxColourDialog
 //-----------------------------------------------------------------------------
@@ -75,6 +77,8 @@ protected:
     static wxColourData ms_data;
 
 private:
+    void OnColourChanged(wxColourDialogEvent& event);
+
     wxDECLARE_DYNAMIC_CLASS(wxGenericColourButton);
 };
 

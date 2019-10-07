@@ -18,7 +18,7 @@
     #include "wx/app.h"
     #include "wx/datetime.h"
 #endif
-
+#include "wx/filename.h"
 #include "wx/apptrait.h"
 
 #include "wx/osx/private.h"
@@ -32,6 +32,13 @@
 wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
 {
 #ifdef wxHAS_NSPROCESSINFO
+    // Note: we don't use WX_IS_MACOS_AVAILABLE() here because these properties
+    // are only officially supported since 10.10, but are actually available
+    // under 10.9 too, so we prefer to check for them explicitly and suppress
+    // the warnings that using without a __builtin_available() check around
+    // them generates.
+    wxCLANG_WARNING_SUPPRESS(unguarded-availability)
+
     if ([NSProcessInfo instancesRespondToSelector:@selector(operatingSystemVersion)])
     {
         NSOperatingSystemVersion osVer = [NSProcessInfo processInfo].operatingSystemVersion;
@@ -45,6 +52,9 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin, int *verMicro)
         if ( verMicro != NULL )
             *verMicro = osVer.patchVersion;
     }
+
+    wxCLANG_WARNING_RESTORE(unguarded-availability)
+
     else
 #endif
     {
@@ -79,6 +89,10 @@ wxGCC_WARNING_RESTORE()
 bool wxCheckOsVersion(int majorVsn, int minorVsn, int microVsn)
 {
 #ifdef wxHAS_NSPROCESSINFO
+    // As above, this API is effectively available earlier than its
+    // availability attribute indicates, so check for it manually.
+    wxCLANG_WARNING_SUPPRESS(unguarded-availability)
+
     if ([NSProcessInfo instancesRespondToSelector:@selector(isOperatingSystemAtLeastVersion:)])
     {
         NSOperatingSystemVersion osVer;
@@ -88,6 +102,9 @@ bool wxCheckOsVersion(int majorVsn, int minorVsn, int microVsn)
 
         return [[NSProcessInfo processInfo] isOperatingSystemAtLeastVersion:osVer] != NO;
     }
+
+    wxCLANG_WARNING_RESTORE(unguarded-availability)
+
     else
 #endif
     {
@@ -174,3 +191,83 @@ bool wxDateTime::GetFirstWeekDay(wxDateTime::WeekDay *firstDay)
     return true;
 }
 #endif // wxUSE_DATETIME
+
+bool wxCocoaLaunch(const char* const* argv, pid_t &pid)
+{
+    // If there is not a single argument then there is no application
+    // to launch
+    if(!argv)
+    {
+        wxLogDebug(wxT("wxCocoaLaunch No file to launch!"));
+        return false ;
+    }
+    
+    // Path to bundle
+    wxString path = *argv++;
+    NSError *error = nil;
+    NSURL *url = [NSURL fileURLWithPath:wxCFStringRef(path).AsNSString() isDirectory:YES];
+    
+    // Check the URL validity
+    if( url == nil )
+    {
+        wxLogDebug(wxT("wxCocoaLaunch Can't open path: %s"), path.c_str());
+        return false ;
+    }
+    
+    // Loop through command line arguments to the bundle,
+    // turn them into CFURLs and then put them in cfaFiles
+    // For use to launch services call
+    NSMutableArray *params = [[NSMutableArray alloc] init];
+    for( ; *argv != NULL; ++argv )
+    {
+        NSURL *cfurlCurrentFile;
+        wxFileName argfn(*argv);     // Filename for path
+        wxString dir( *argv );
+        if(argfn.DirExists())
+        {
+            // First, try creating as a directory
+            cfurlCurrentFile = [NSURL fileURLWithPath:wxCFStringRef(dir).AsNSString() isDirectory:YES];
+        }
+        else if(argfn.FileExists())
+        {
+            // And if it isn't a directory try creating it
+            // as a regular file
+            cfurlCurrentFile = [NSURL fileURLWithPath:wxCFStringRef(dir).AsNSString() isDirectory:NO];
+        }
+        else
+        {
+            // Argument did not refer to
+            // an entry in the local filesystem,
+            // so try creating it through CFURLCreateWithString
+            cfurlCurrentFile = [NSURL URLWithString:wxCFStringRef(dir).AsNSString()];
+        }
+
+        // Continue in the loop if the CFURL could not be created
+        if(cfurlCurrentFile == nil)
+        {
+            wxLogDebug(
+                       wxT("wxCocoaLaunch Could not create NSURL for argument:%s"),
+                       *argv);
+            continue;
+        }
+        
+        // Add the valid CFURL to the argument array and then
+        // release it as the CFArray adds a ref count to it
+        [params addObject:cfurlCurrentFile];
+    }
+    NSWorkspace *ws = [NSWorkspace sharedWorkspace];
+    NSRunningApplication *app = [ws launchApplicationAtURL:url options:NSWorkspaceLaunchAsync
+                                             configuration:[NSDictionary dictionaryWithObject:params forKey:NSWorkspaceLaunchConfigurationArguments]
+                                             error:&error];
+    [params release];
+    
+    if( app != nil )
+        pid = [app processIdentifier];
+    else
+    {
+        wxString errorDesc = wxCFStringRef::AsString([error localizedDescription]);
+        wxLogDebug( "wxCocoaLaunch failure: error is %s", errorDesc );
+        return false;
+    }
+    return true;
+}

@@ -133,15 +133,13 @@ bool CheckDocTypeMatchesExt( CFDictionaryRef docType, CFStringRef requiredExt )
 // if a match is found, or null otherwise
 CFDictionaryRef GetDocTypeForExt( CFTypeRef docTypeData, CFStringRef requiredExt )
 {
-    CFDictionaryRef docType;
-    CFArrayRef docTypes;
-    CFTypeRef item;
-
     if( !docTypeData )
         return NULL;
 
     if( CFGetTypeID( docTypeData ) == CFArrayGetTypeID() )
     {
+        CFTypeRef item;
+        CFArrayRef docTypes;
         docTypes = reinterpret_cast< CFArrayRef >( docTypeData );
 
         for( CFIndex i = 0, n = CFArrayGetCount( docTypes ); i < n; i++ )
@@ -150,6 +148,7 @@ CFDictionaryRef GetDocTypeForExt( CFTypeRef docTypeData, CFStringRef requiredExt
 
             if( CFGetTypeID( item ) == CFDictionaryGetTypeID() )
             {
+                CFDictionaryRef docType;
                 docType = reinterpret_cast< CFDictionaryRef >( item );
 
                 if( CheckDocTypeMatchesExt( docType, requiredExt ) )

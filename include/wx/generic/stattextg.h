@@ -54,8 +54,8 @@ public:
 protected:
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
 
-    virtual wxString DoGetLabel() const wxOVERRIDE { return m_label; }
-    virtual void DoSetLabel(const wxString& label) wxOVERRIDE;
+    virtual wxString WXGetVisibleLabel() const wxOVERRIDE { return m_label; }
+    virtual void WXSetVisibleLabel(const wxString& label) wxOVERRIDE;
 
     void DoSetSize(int x, int y, int width, int height, int sizeFlags) wxOVERRIDE;
 

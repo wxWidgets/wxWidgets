@@ -3,7 +3,7 @@
 // Purpose:     wxDateTimePickerCtrl for Windows.
 // Author:      Vadim Zeitlin
 // Created:     2011-09-22 (extracted from wx/msw/datectrl.h).
-// Copyright:   (c) 2005-2011 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2005-2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

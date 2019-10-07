@@ -404,7 +404,7 @@ wxSize wxMSWButton::GetFittingSize(wxWindow *win,
 
     // account for the shield UAC icon if we have it
     if ( flags & Size_AuthNeeded )
-        sizeBtn.x += wxSystemSettings::GetMetric(wxSYS_SMALLICON_X);
+        sizeBtn.x += wxSystemSettings::GetMetric(wxSYS_SMALLICON_X, win);
 
     return sizeBtn;
 }
@@ -431,7 +431,7 @@ wxSize wxMSWButton::IncreaseToStdSizeAndCache(wxControl *btn, const wxSize& size
         //
         // Note that we intentionally don't use GetDefaultSize() here, because
         // it's inexact -- dialog units depend on this dialog's font.
-        const wxSize sizeDef = btn->ConvertDialogToPixels(wxSize(50, 14));
+        const wxSize sizeDef = btn->ConvertDialogToPixels(btn->FromDIP(wxSize(50, 14)));
 
         sizeBtn.IncTo(sizeDef);
     }
@@ -1156,31 +1156,16 @@ void DrawXPBackground(wxAnyButton *button, HDC hdc, RECT& rectBtn, UINT state)
     ::GetThemeMargins(theme, hdc, BP_PUSHBUTTON, iState,
                             TMT_CONTENTMARGINS, &rectBtn, &margins);
     ::InflateRect(&rectBtn, -margins.cxLeftWidth, -margins.cyTopHeight);
-    ::InflateRect(&rectBtn, -XP_BUTTON_EXTRA_MARGIN, -XP_BUTTON_EXTRA_MARGIN);
 
     if ( button->UseBgCol() && iState != PBS_HOT )
     {
         COLORREF colBg = wxColourToRGB(button->GetBackgroundColour());
         AutoHBRUSH hbrushBackground(colBg);
 
-        // don't overwrite the focus rect
-        RECT rectClient;
-        ::CopyRect(&rectClient, &rectBtn);
-        ::InflateRect(&rectClient, -1, -1);
-
-        if ( wxGetWinVersion() >= wxWinVersion_10 )
-        {
-            // buttons have flat appearance so we can fully color them
-            // even outside the "safe" rectangle
-            SelectInHDC brush(hdc, hbrushBackground);
-            COLORREF colTheme = GetPixel(hdc, rectClient.left, rectClient.top);
-            ExtFloodFill(hdc, rectClient.left, rectClient.top, colTheme, FLOODFILLSURFACE);
-        }
-        else
-        {
-            FillRect(hdc, &rectClient, hbrushBackground);
-        }
+        FillRect(hdc, &rectBtn, hbrushBackground);
     }
+
+    ::InflateRect(&rectBtn, -XP_BUTTON_EXTRA_MARGIN, -XP_BUTTON_EXTRA_MARGIN);
 }
 #endif // wxUSE_UXTHEME
 

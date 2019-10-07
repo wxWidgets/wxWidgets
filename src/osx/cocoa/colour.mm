@@ -12,6 +12,7 @@
 #include "wx/colour.h"
 
 #include "wx/osx/private.h"
+#include "wx/osx/private/available.h"
 
 class wxNSColorRefData : public wxColourRefData
 {
@@ -104,7 +105,7 @@ bool wxNSColorRefData::IsSolid() const
 CGColorRef wxNSColorRefData::GetCGColor() const
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_8
-    if (wxPlatformInfo::Get().CheckOSVersion(10, 8)) {
+    if ( WX_IS_MACOS_AVAILABLE(10, 8) ) {
         wxOSXEffectiveAppearanceSetter helper;
         return [m_nsColour CGColor];
     }

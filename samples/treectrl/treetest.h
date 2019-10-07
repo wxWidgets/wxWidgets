@@ -215,6 +215,7 @@ public:
     void OnDeleteChildren(wxCommandEvent& event);
     void OnDeleteAll(wxCommandEvent& event);
 
+    void OnFreezeThaw(wxCommandEvent& event);
     void OnRecreate(wxCommandEvent& event);
     void OnToggleButtons(wxCommandEvent& event);
     void OnToggleImages(wxCommandEvent& event);
@@ -335,6 +336,7 @@ enum
     TreeTest_Delete,
     TreeTest_DeleteChildren,
     TreeTest_DeleteAll,
+    TreeTest_FreezeThaw,
     TreeTest_Recreate,
     TreeTest_ToggleImages,
     TreeTest_ToggleStates,

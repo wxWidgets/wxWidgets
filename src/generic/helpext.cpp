@@ -349,9 +349,9 @@ bool wxExtHelpController::DisplaySection(int sectionNo)
 
     wxBusyCursor b; // display a busy cursor
     wxList::compatibility_iterator node = m_MapList->GetFirst();
-    wxExtHelpMapEntry *entry;
     while (node)
     {
+        wxExtHelpMapEntry* entry;
         entry = (wxExtHelpMapEntry *)node->GetData();
         if (entry->entryid == sectionNo)
             return DisplayHelp(entry->url);

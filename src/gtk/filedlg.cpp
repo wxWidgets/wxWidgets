@@ -275,7 +275,7 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
     g_signal_connect (m_widget, "selection-changed",
         G_CALLBACK (gtk_filedialog_selchanged_callback), this);
 
-    // deal with extensions/filters
+     // deal with extensions/filters
     SetWildcard(wildCard);
 
     wxString defaultFileNameWithExt = defaultFileName;
@@ -349,6 +349,9 @@ bool wxFileDialog::Create(wxWindow *parent, const wxString& message,
                          G_CALLBACK(gtk_filedialog_update_preview_callback),
                          previewImage);
     }
+
+    gtk_file_chooser_set_show_hidden(file_chooser,
+                                     style & wxFD_SHOW_HIDDEN ? TRUE : FALSE);
 
     return true;
 }

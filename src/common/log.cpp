@@ -603,9 +603,12 @@ void wxLog::SetComponentLevel(const wxString& component, wxLogLevel level)
 }
 
 /* static */
-wxLogLevel wxLog::GetComponentLevel(wxString component)
+wxLogLevel wxLog::GetComponentLevel(const wxString& componentOrig)
 {
     wxCRIT_SECT_LOCKER(lock, GetLevelsCS());
+
+    // Make a copy before modifying it in the loop.
+    wxString component = componentOrig;
 
     const wxStringToNumHashMap& componentLevels = GetComponentLevels();
     while ( !component.empty() )
@@ -1066,7 +1069,8 @@ static const wxChar* GetSysErrorMsg(wxChar* szBuf, size_t sizeBuf, unsigned long
     LPVOID lpMsgBuf;
     if ( ::FormatMessage
          (
-            FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+            FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
+            FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL,
             nErrCode,
             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
@@ -1075,9 +1079,11 @@ static const wxChar* GetSysErrorMsg(wxChar* szBuf, size_t sizeBuf, unsigned long
             NULL
          ) == 0 )
     {
+        wxLogDebug(wxS("FormatMessage failed with error 0x%lx in %s"),
+            GetLastError(), __WXFUNCTION__ ? __WXFUNCTION__ : "");
         // if this happens, something is seriously wrong, so don't use _() here
         // for safety
-        wxSprintf(szBuf, wxS("unknown error %lx"), nErrCode);
+        wxSprintf(szBuf, wxS("unknown error 0x%lx"), nErrCode);
         return szBuf;
     }
 

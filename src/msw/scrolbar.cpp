@@ -44,7 +44,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     return true;
 }
 
-wxScrollBar::~wxScrollBar(void)
+wxScrollBar::~wxScrollBar()
 {
 }
 
@@ -153,7 +153,7 @@ void wxScrollBar::SetThumbPosition(int viewStart)
     ::SetScrollInfo((HWND) GetHWND(), SB_CTL, &info, TRUE);
 }
 
-int wxScrollBar::GetThumbPosition(void) const
+int wxScrollBar::GetThumbPosition() const
 {
     WinStruct<SCROLLINFO> scrollInfo;
     scrollInfo.fMask = SIF_POS;
@@ -208,11 +208,11 @@ wxSize wxScrollBar::DoGetBestSize() const
 
     if ( IsVertical() )
     {
-        w = wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+        w = wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, m_parent);
     }
     else
     {
-        h = wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+        h = wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y, m_parent);
     }
 
     return wxSize(w, h);

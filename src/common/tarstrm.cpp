@@ -1338,9 +1338,9 @@ wxString wxTarOutputStream::PaxHeaderPath(const wxString& format,
     ret.reserve(format.length() + path.length() + 16);
 
     size_t begin = 0;
-    size_t end;
 
     for (;;) {
+        size_t end;
         end = format.find('%', begin);
         if (end == wxString::npos || end + 1 >= format.length())
             break;

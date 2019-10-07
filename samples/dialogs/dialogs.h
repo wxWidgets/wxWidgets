@@ -391,6 +391,7 @@ public:
 
 #if wxUSE_INFOBAR
     void InfoBarSimple(wxCommandEvent& event);
+    void InfoBarSimpleWrapped(wxCommandEvent &event);
     void InfoBarAdvanced(wxCommandEvent& event);
 #endif // wxUSE_INFOBAR
 
@@ -506,6 +507,11 @@ public:
     void OnExit(wxCommandEvent& event);
 
 private:
+#if wxUSE_COLOURDLG
+    void OnColourChanged(wxColourDialogEvent& event);
+    void DoApplyColour(const wxColour& colour);
+#endif // wxUSE_COLOURDLG
+
 #if wxUSE_DIRDLG
     void DoDirChoose(int style);
 #endif // wxUSE_DIRDLG
@@ -593,6 +599,7 @@ enum
     DIALOGS_NUM_ENTRY,
     DIALOGS_LOG_DIALOG,
     DIALOGS_INFOBAR_SIMPLE,
+    DIALOGS_INFOBAR_SIMPLE_WRAPPED,
     DIALOGS_INFOBAR_ADVANCED,
     DIALOGS_MODAL,
     DIALOGS_MODELESS,

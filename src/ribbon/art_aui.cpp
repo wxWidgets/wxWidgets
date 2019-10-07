@@ -255,6 +255,8 @@ void wxRibbonAUIArtProvider::SetColourScheme(
 #else
     m_tab_label_colour = LikePrimary(0.1);
 #endif
+    m_tab_active_label_colour = m_tab_label_colour;
+    m_tab_hover_label_colour = m_tab_label_colour;
     m_tab_hover_background_top_colour =  primary_hsl.ToRGB();
 #ifdef __WXMAC__
     if ( wxPlatformInfo::Get().CheckOSVersion(10, 10 ) )
@@ -470,7 +472,19 @@ void wxRibbonAUIArtProvider::DrawTab(wxDC& dc,
         wxString label = tab.page->GetLabel();
         if(!label.IsEmpty())
         {
-            dc.SetTextForeground(m_tab_label_colour);
+            if (tab.active)
+            {
+                dc.SetTextForeground(m_tab_active_label_colour);
+            }
+            else if (tab.hovered)
+            {
+                dc.SetTextForeground(m_tab_hover_label_colour);
+            }
+            else
+            {
+                dc.SetTextForeground(m_tab_label_colour);
+            }
+
             dc.SetBackgroundMode(wxBRUSHSTYLE_TRANSPARENT);
 
             int offset = 0;

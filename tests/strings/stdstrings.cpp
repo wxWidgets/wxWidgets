@@ -43,6 +43,7 @@ private:
         CPPUNIT_TEST( StdFind );
         CPPUNIT_TEST( StdFindFirst );
         CPPUNIT_TEST( StdFindLast );
+        CPPUNIT_TEST( StdStartsEndsWith );
         CPPUNIT_TEST( StdInsert );
         CPPUNIT_TEST( StdReplace );
         CPPUNIT_TEST( StdRFind );
@@ -65,6 +66,7 @@ private:
     void StdFind();
     void StdFindFirst();
     void StdFindLast();
+    void StdStartsEndsWith();
     void StdInsert();
     void StdReplace();
     void StdRFind();
@@ -396,6 +398,28 @@ void StdStringTestCase::StdFindLast()
     CPPUNIT_ASSERT( s1.find_last_of(wxT("a"), 18) == 18u );
 }
 
+void StdStringTestCase::StdStartsEndsWith()
+{
+    const wxString s(wxT("Hello, world!"));
+    CPPUNIT_ASSERT_EQUAL( true, s.starts_with(wxT("Hello")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.starts_with(wxT("Hello, ")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.starts_with(wxT("Hello, world!")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.starts_with(wxT("Hello, world!!!")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.starts_with(wxT("")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.starts_with(wxT("Goodbye")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.starts_with(wxT("Hi")) );
+
+    CPPUNIT_ASSERT_EQUAL( true, s.ends_with(wxT("Hello, world!")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.ends_with(wxT("world!")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.ends_with(wxT("Hello")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.ends_with(wxT("!")) );
+    CPPUNIT_ASSERT_EQUAL( true, s.ends_with(wxT("")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.ends_with(wxT("very long string")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.ends_with(wxT("?")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.ends_with(wxT("Hello, world")) );
+    CPPUNIT_ASSERT_EQUAL( false, s.ends_with(wxT("Gello, world!")) );
+}
+
 void StdStringTestCase::StdInsert()
 {
     wxString s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
@@ -626,13 +650,7 @@ void StdStringTestCase::StdConversion()
 
 void StdStringTestCase::StdAlgo()
 {
-    // Unfortunately this currently doesn't work with libc++ in C++11 mode, see
-    // comment near iter_swap() definition in wx/string.h.
-#if __cplusplus < 201103L || !defined(_LIBCPP_VERSION)
     wxString s("AB");
     std::reverse(s.begin(), s.end());
     CPPUNIT_ASSERT_EQUAL( "BA", s );
-#else
-    wxLogWarning("Skipping std::reverse() test broken with C++11/libc++");
-#endif
 }

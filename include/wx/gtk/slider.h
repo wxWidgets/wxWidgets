@@ -56,6 +56,10 @@ public:
     virtual void SetThumbLength(int lenPixels) wxOVERRIDE;
     virtual int GetThumbLength() const wxOVERRIDE;
 
+    virtual void ClearTicks() wxOVERRIDE;
+    virtual void SetTick(int tickPos) wxOVERRIDE;
+    int GetTickFreq() const wxOVERRIDE;
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
@@ -73,10 +77,19 @@ protected:
     GtkWidget *m_minLabel,*m_maxLabel;
     bool m_blockScrollEvent;
 
+    // Note the following member is not used in GTK+2 < 2.16.
+    int m_tickFreq;
+
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const wxOVERRIDE;
 
     // set the slider value unconditionally
     void GTKSetValue(int value);
+
+    // Platform-specific implementation of SetTickFreq
+    virtual void DoSetTickFreq(int freq) wxOVERRIDE;
+
+private:
+    void Init();
 
     wxDECLARE_DYNAMIC_CLASS(wxSlider);
 };

@@ -65,6 +65,19 @@ Changes in behaviour not resulting in compilation errors
 - wxGTK wxNotebook::AddPage() doesn't generate any events any more for the
   first page being added, for consistency with the other ports.
 
+- wxMSW wxToolBar height now adapts to the height of embedded controls, making
+  the toolbar taller if necessary, rather than making the controls smaller. To
+  return to the previous behaviour, you need to explicitly create controls of
+  smaller size.
+
+- wxDC::DrawCheckMark() draws the same shape under all platforms now, use the
+  new wxRendererNative::DrawCheckMark() to draw MSW-specific themed check mark.
+
+- wxTE_PROCESS_ENTER must be used to receive wxEVT_TEXT_ENTER events from even
+  multiline wxTextCtrl, conforming to the documentation, but contrary to the
+  previous behaviour in wxMSW, when these events were always generated in this
+  case. Please add wxTE_PROCESS_ENTER style if you relied on the old behaviour.
+
 
 Changes in behaviour which may result in build errors
 -----------------------------------------------------
@@ -115,6 +128,11 @@ Changes in behaviour which may result in build errors
   but must be explicitly selected (and libstdc++ must be installed in order
   to use it).
 
+- wxPGProperty ctors are not longer public since this class is intended to be
+  a base class and should not be instantiated directly.
+
+- wxIntProperty::DoValidation() and wxFloatProperty::DoValidation() are
+  no longer public since they are helpers intended for internal use only.
 
 3.1.3: (released 2019-??-??)
 ----------------------------
@@ -136,6 +154,10 @@ All (GUI):
 - Allow changing tooltip text for button allowing to enter a new string
   in wxPGArrayEditorDialog.
 - Fix wxPropertyGrid issues with horizontal scrolling.
+- Add wxPG_DIALOG_TITLE wxPGProperty attribute.
+- Add support for creating a wxGraphicsPen with a gradient.
+- Add support for applying a transformation matrix to a gradient.
+
 
 wxGTK:
 

@@ -4,7 +4,7 @@
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     31.05.03
-// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -159,7 +159,9 @@ private:
 class wxHtmlListBoxStyle : public wxDefaultHtmlRenderingStyle
 {
 public:
-    wxHtmlListBoxStyle(const wxHtmlListBox& hlbox) : m_hlbox(hlbox) { }
+    wxHtmlListBoxStyle(const wxHtmlListBox& hlbox)
+        : wxDefaultHtmlRenderingStyle(&hlbox), m_hlbox(hlbox)
+    { }
 
     virtual wxColour GetSelectedTextColour(const wxColour& colFg) wxOVERRIDE
     {

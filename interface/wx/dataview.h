@@ -52,6 +52,10 @@
     - wxDataViewModel::ItemsDeleted,
     - wxDataViewModel::ItemsChanged.
 
+    Note that Cleared() can be called for all changes involving many, or all,
+    of the model items and not only for deleting all of them (i.e. clearing the
+    model).
+
     This class maintains a list of wxDataViewModelNotifier which link this class
     to the specific implementations on the supported platforms so that e.g. calling
     wxDataViewModel::ValueChanged on this model will just call
@@ -129,8 +133,16 @@ public:
                      unsigned int col);
 
     /**
-        Called to inform the model that all data has been cleared.
-        The control will reread the data from the model again.
+        Called to inform the model that all of its data has been changed.
+
+        This method should be called if so many of the model items have
+        changed, that the control should just reread all of them, repopulating
+        itself entirely.
+
+        Note that, contrary to the name of the method, it doesn't necessarily
+        indicate that model has become empty -- although this is the right
+        method to call, rather than ItemsDeleted(), if it was indeed cleared,
+        which explains the origin of its name.
     */
     bool Cleared();
 
@@ -2501,10 +2513,6 @@ public:
             corresponding event. Is @NULL otherwise (for keyboard activation).
             Mouse coordinates are adjusted to be relative to the cell.
 
-        @note Currently support for this method is not implemented in the
-            native macOS version of the control, i.e. it will be never called
-            there.
-
         @since 2.9.3
 
         @note Do not confuse this method with item activation in wxDataViewCtrl
@@ -2706,6 +2714,12 @@ enum wxDataViewColumnFlags
     wxDataViewCtrl has been associated.
 
     An instance of wxDataViewRenderer is used by this class to render its data.
+
+    @note In wxGTK, setting the width of the column doesn't happen immediately
+        when SetWidth() is called, but only slightly later and GetWidth() will
+        return the old width (0 initially) until this happens. If the column
+        widths are set before wxDataViewCtrl is initially shown, they will only
+        be effectively set when it becomes visible.
 
     @library{wxcore}
     @category{dvc}

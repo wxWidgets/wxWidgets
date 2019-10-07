@@ -30,6 +30,8 @@
 
     On Windows, the track bar control is used.
 
+    On GTK+, tick marks are only available for version 2.16 and later.
+
     Slider generates the same events as wxScrollBar but in practice the most
     convenient way to process wxSlider updates is by handling the
     slider-specific @c wxEVT_SLIDER event which carries wxCommandEvent
@@ -41,7 +43,7 @@
     @style{wxSL_VERTICAL}
            Displays the slider vertically.
     @style{wxSL_AUTOTICKS}
-           Displays tick marks. Windows only.
+           Displays tick marks (Windows, GTK+ 2.16 and later).
     @style{wxSL_MIN_MAX_LABELS}
            Displays minimum, maximum labels (new since wxWidgets 2.9.1).
     @style{wxSL_VALUE_LABEL}
@@ -50,11 +52,11 @@
            Displays minimum, maximum and value labels (same as wxSL_VALUE_LABEL
            and wxSL_MIN_MAX_LABELS together).
     @style{wxSL_LEFT}
-           Displays ticks on the left and forces the slider to be vertical.
+           Displays ticks on the left and forces the slider to be vertical (Windows and GTK+ 3 only).
     @style{wxSL_RIGHT}
            Displays ticks on the right and forces the slider to be vertical.
     @style{wxSL_TOP}
-           Displays ticks on the top.
+           Displays ticks on the top (Windows and GTK+ 3 only).
     @style{wxSL_BOTTOM}
            Displays ticks on the bottom (this is the default).
     @style{wxSL_BOTH}
@@ -67,11 +69,11 @@
     @endStyleTable
 
     Notice that @c wxSL_LEFT, @c wxSL_TOP, @c wxSL_RIGHT and @c wxSL_BOTTOM
-    specify the position of the slider ticks in MSW implementation and that the
-    slider labels, if any, are positioned on the opposite side. So, to have a
-    label on the left side of a vertical slider, @b wxSL_RIGHT must be used (or
-    none of these styles at all should be specified as left and top are default
-    positions for the vertical and horizontal sliders respectively).
+    specify the position of the slider ticks and that the slider labels, if any,
+    are positioned on the opposite side. So, to have a label on the left side of
+    a vertical slider, @b wxSL_RIGHT must be used (or none of these styles at all
+    should be specified as left and top are default positions for the vertical
+    and horizontal sliders respectively).
 
     @beginEventEmissionTable{wxScrollEvent}
     You can use EVT_COMMAND_SCROLL... macros with window IDs for when intercepting
@@ -206,7 +208,7 @@ public:
     /**
         Clears the ticks.
 
-        @onlyfor{wxmsw}
+        @onlyfor{wxmsw,wxgtk}
     */
     virtual void ClearTicks();
 
@@ -278,7 +280,7 @@ public:
     /**
         Returns the tick frequency.
 
-        @onlyfor{wxmsw}
+        @onlyfor{wxmsw,wxgtk}
 
         @see SetTickFreq()
     */
@@ -372,7 +374,7 @@ public:
         @param tickPos
             The tick position.
 
-        @onlyfor{wxmsw}
+        @onlyfor{wxmsw,wxgtk}
 
         @see SetTickFreq()
     */
@@ -385,11 +387,11 @@ public:
             Frequency. For example, if the frequency is set to two, a tick mark is
             displayed for every other increment in the slider's range.
 
-        @onlyfor{wxmsw}
+        @onlyfor{wxmsw,wxgtk}
 
         @see GetTickFreq()
     */
-    virtual void SetTickFreq(int n);
+    virtual void SetTickFreq(int freq);
 
     /**
         Sets the slider position.

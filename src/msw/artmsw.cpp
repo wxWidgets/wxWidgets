@@ -20,6 +20,11 @@
 #endif
 
 #include "wx/artprov.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif
+
 #include "wx/image.h"
 #include "wx/dynlib.h"
 #include "wx/volume.h"
@@ -324,32 +329,33 @@ wxBitmap wxWindowsArtProvider::CreateBitmap(const wxArtID& id,
 /*static*/
 wxSize wxArtProvider::GetNativeSizeHint(const wxArtClient& client)
 {
+    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
     if ( client == wxART_TOOLBAR )
     {
-        return wxWindow::FromDIP(wxSize(24, 24), NULL);
+        return wxWindow::FromDIP(wxSize(24, 24), win);
     }
     else if ( client == wxART_MENU )
     {
-        return wxWindow::FromDIP(wxSize(16, 16), NULL);
+        return wxWindow::FromDIP(wxSize(16, 16), win);
     }
     else if ( client == wxART_FRAME_ICON )
     {
-        return wxSize(::GetSystemMetrics(SM_CXSMICON),
-                      ::GetSystemMetrics(SM_CYSMICON));
+        return wxSize(wxGetSystemMetrics(SM_CXSMICON, win),
+                      wxGetSystemMetrics(SM_CYSMICON, win));
     }
     else if ( client == wxART_CMN_DIALOG ||
               client == wxART_MESSAGE_BOX )
     {
-        return wxSize(::GetSystemMetrics(SM_CXICON),
-                      ::GetSystemMetrics(SM_CYICON));
+        return wxSize(wxGetSystemMetrics(SM_CXICON, win),
+                      wxGetSystemMetrics(SM_CYICON, win));
     }
     else if (client == wxART_BUTTON)
     {
-        return wxWindow::FromDIP(wxSize(16, 16), NULL);
+        return wxWindow::FromDIP(wxSize(16, 16), win);
     }
     else if (client == wxART_LIST)
     {
-        return wxWindow::FromDIP(wxSize(16, 16), NULL);
+        return wxWindow::FromDIP(wxSize(16, 16), win);
     }
 
     return wxDefaultSize;

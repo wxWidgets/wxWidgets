@@ -91,8 +91,6 @@ public:
     virtual ~wxListBox();
 
     // implement base class pure virtuals
-    virtual void Refresh(bool eraseBack = true, const wxRect *rect = NULL) wxOVERRIDE;
-
     virtual unsigned int GetCount() const wxOVERRIDE;
     virtual wxString GetString(unsigned int n) const wxOVERRIDE;
     virtual void SetString(unsigned int n, const wxString& s) wxOVERRIDE;

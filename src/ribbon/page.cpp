@@ -1008,7 +1008,6 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
 {
     while(minimum_amount > 0)
     {
-        int largest_size = 0;
         wxRibbonPanel* largest_panel = NULL;
         wxSize* largest_panel_size = NULL;
         wxSize* panel_size = m_size_calc_array;
@@ -1032,6 +1031,7 @@ bool wxRibbonPage::CollapsePanels(wxOrientation direction, int minimum_amount)
         }
         else
         {
+            int largest_size = 0;
             for(wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
                       node;
                       node = node->GetNext(), ++panel_size )

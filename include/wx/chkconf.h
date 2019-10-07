@@ -2373,7 +2373,26 @@
 #           define wxUSE_LONLONG 1
 #       endif
 #   endif
+#   if !wxUSE_VARIANT
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxRichTextCtrl requires wxUSE_VARIANT"
+#       else
+#           undef wxUSE_VARIANT
+#           define wxUSE_VARIANT 1
+#       endif
+#   endif
 #endif /* wxUSE_RICHTEXT */
+
+#if wxUSE_PROPGRID
+#   if !wxUSE_VARIANT
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxPropertyGrid requires wxUSE_VARIANT"
+#       else
+#           undef wxUSE_VARIANT
+#           define wxUSE_VARIANT 1
+#       endif
+#   endif
+#endif /* wxUSE_PROPGRID */
 
 #endif /* wxUSE_GUI */
 

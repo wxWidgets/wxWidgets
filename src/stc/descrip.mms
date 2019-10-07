@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 21 February 2017                                                    *
+# Date : 16 September 2019                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -66,15 +66,19 @@ all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
 .ifdef __WXMOTIF__
 	library [--.lib]libwx_motif.olb $(OBJECTS)
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
 .else
 .ifdef __WXGTK__
 	library [--.lib]libwx_gtk.olb $(OBJECTS)
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk.olb [.CXX_REPOSITORY]*.obj
 .else
 .ifdef __WXGTK2__
 	library [--.lib]libwx_gtk2.olb $(OBJECTS)
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_gtk2.olb [.CXX_REPOSITORY]*.obj
 .else
 .ifdef __WXX11__
 	library [--.lib]libwx_x11_univ.olb $(OBJECTS)
+	If f$getsyi("HW_MODEL") .le. 2048 then library [--.lib]libwx_x11_univ.olb [.CXX_REPOSITORY]*.obj
 .endif
 .endif
 .endif

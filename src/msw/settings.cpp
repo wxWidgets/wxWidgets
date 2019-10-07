@@ -26,6 +26,7 @@
 #include "wx/settings.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/utils.h"
     #include "wx/gdicmn.h"
     #include "wx/module.h"
@@ -149,7 +150,7 @@ wxFont wxCreateFontFromStockObject(int index)
         LOGFONT lf;
         if ( ::GetObject(hFont, sizeof(LOGFONT), &lf) != 0 )
         {
-            wxNativeFontInfo info(lf);
+            wxNativeFontInfo info(lf, NULL);
             font.Create(info);
         }
         else
@@ -181,8 +182,10 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
             // for most (simple) controls, e.g. buttons and such but other
             // controls may prefer to use lfStatusFont or lfCaptionFont if it
             // is more appropriate for them
+            const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
             const wxNativeFontInfo
-                info(wxMSWImpl::GetNonClientMetrics().lfMessageFont);
+                info(wxMSWImpl::GetNonClientMetrics(win).lfMessageFont, win);
+
             gs_fontDefault = new wxFont(info);
         }
 
@@ -253,11 +256,14 @@ static const int gs_metricsMap[] =
     SM_PENWINDOWS,
     SM_SHOWSOUNDS,
     SM_SWAPBUTTON,
-    -1   // wxSYS_DCLICK_MSEC - not available as system metric
+    -1,   // wxSYS_DCLICK_MSEC - not available as system metric
+    -1,   // wxSYS_CARET_ON_MSEC - not available as system metric
+    -1,   // wxSYS_CARET_OFF_MSEC - not available as system metric
+    -1    // wxSYS_CARET_TIMEOUT_MSEC - not available as system metric
 };
 
 // Get a system metric, e.g. scrollbar size
-int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(win))
+int wxSystemSettingsNative::GetMetric(wxSystemMetric index, const wxWindow* win)
 {
     wxCHECK_MSG( index > 0 && (size_t)index < WXSIZEOF(gs_metricsMap), 0,
                  wxT("invalid metric") );
@@ -268,6 +274,25 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
         return ::GetDoubleClickTime();
     }
 
+    // return the caret blink time for both
+    // wxSYS_CARET_ON_MSEC and wxSYS_CARET_OFF_MSEC
+    if ( index == wxSYS_CARET_ON_MSEC || index == wxSYS_CARET_OFF_MSEC )
+    {
+        const UINT blinkTime = ::GetCaretBlinkTime();
+
+        if ( blinkTime == 0 ) // error
+        {
+            return -1;
+        }
+        
+        if ( blinkTime == INFINITE ) // caret does not blink
+        {
+            return 0;
+        }
+
+        return blinkTime;
+    }
+
     int indexMSW = gs_metricsMap[index];
     if ( indexMSW == -1 )
     {
@@ -275,7 +300,7 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(w
         return -1;
     }
 
-    int rc = ::GetSystemMetrics(indexMSW);
+    int rc = wxGetSystemMetrics(indexMSW, win);
     if ( index == wxSYS_NETWORK_PRESENT )
     {
         // only the last bit is significant according to the MSDN
@@ -315,15 +340,17 @@ extern wxFont wxGetCCDefaultFont()
     // font which is also used for the icon titles and not the stock default
     // GUI font
     LOGFONT lf;
-    if ( ::SystemParametersInfo
+    const wxWindow* win = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
+    if ( wxSystemParametersInfo
            (
                 SPI_GETICONTITLELOGFONT,
                 sizeof(lf),
                 &lf,
-                0
+                0,
+                win
            ) )
     {
-        return wxFont(wxCreateFontFromLogFont(&lf));
+        return wxFont(wxNativeFontInfo(lf, win));
     }
     else
     {

@@ -126,10 +126,10 @@ private:
     int m_modeOld;
 };
 
-inline bool IsGreaterThanStdSize(const wxBitmap& bmp)
+inline bool IsGreaterThanStdSize(const wxBitmap& bmp, const wxWindow* win)
 {
-    return bmp.GetWidth() > ::GetSystemMetrics(SM_CXMENUCHECK) ||
-            bmp.GetHeight() > ::GetSystemMetrics(SM_CYMENUCHECK);
+    return bmp.GetWidth() > wxGetSystemMetrics(SM_CXMENUCHECK, win) ||
+            bmp.GetHeight() > wxGetSystemMetrics(SM_CYMENUCHECK, win);
 }
 
 } // anonymous namespace
@@ -306,9 +306,9 @@ MenuDrawData* MenuDrawData::ms_instance = NULL;
 void MenuDrawData::Init()
 {
 #if wxUSE_UXTHEME
+    const wxWindow* window = wxTheApp ? wxTheApp->GetTopWindow() : NULL;
     if ( IsUxThemeActive() )
     {
-        wxWindow* window = static_cast<wxApp*>(wxApp::GetInstance())->GetTopWindow();
         wxUxThemeHandle hTheme(window, L"MENU");
 
         ::GetThemeMargins(hTheme, NULL, MENU_POPUPITEM, 0,
@@ -348,7 +348,7 @@ void MenuDrawData::Init()
 
         wxUxThemeFont themeFont;
         ::GetThemeSysFont(hTheme, TMT_MENUFONT, themeFont.GetPtr());
-        Font = wxFont(themeFont.GetLOGFONT());
+        Font = wxFont(wxNativeFontInfo(themeFont.GetLOGFONT(), window));
 
         Theme = true;
 
@@ -363,15 +363,15 @@ void MenuDrawData::Init()
     else
 #endif // wxUSE_UXTHEME
     {
-        const NONCLIENTMETRICS& metrics = wxMSWImpl::GetNonClientMetrics();
+        const NONCLIENTMETRICS& metrics = wxMSWImpl::GetNonClientMetrics(window);
 
         CheckMargin.cxLeftWidth =
-        CheckMargin.cxRightWidth  = ::GetSystemMetrics(SM_CXEDGE);
+        CheckMargin.cxRightWidth  = wxGetSystemMetrics(SM_CXEDGE, window);
         CheckMargin.cyTopHeight =
-        CheckMargin.cyBottomHeight = ::GetSystemMetrics(SM_CYEDGE);
+        CheckMargin.cyBottomHeight = wxGetSystemMetrics(SM_CYEDGE, window);
 
-        CheckSize.cx = ::GetSystemMetrics(SM_CXMENUCHECK);
-        CheckSize.cy = ::GetSystemMetrics(SM_CYMENUCHECK);
+        CheckSize.cx = wxGetSystemMetrics(SM_CXMENUCHECK, window);
+        CheckSize.cy = wxGetSystemMetrics(SM_CYMENUCHECK, window);
 
         ArrowSize = CheckSize;
 
@@ -392,7 +392,7 @@ void MenuDrawData::Init()
 
         Offset = -12;
 
-        Font = wxFont(wxNativeFontInfo(metrics.lfMenuFont));
+        Font = wxFont(wxNativeFontInfo(metrics.lfMenuFont, window));
 
         Theme = false;
     }
@@ -787,11 +787,11 @@ bool wxMenuItem::OnMeasureItem(size_t *width, size_t *height)
 
     if ( IsOwnerDrawn() )
     {
-        *width  = data->ItemMargin.GetTotalX();
-        *height = data->ItemMargin.GetTotalY();
-
         if ( IsSeparator() )
         {
+            *width  = data->ItemMargin.GetTotalX();
+            *height = data->ItemMargin.GetTotalY();
+
             *width  += data->SeparatorSize.cx
                      + data->SeparatorMargin.GetTotalX();
             *height += data->SeparatorSize.cy
@@ -1293,8 +1293,9 @@ bool wxMenuItem::MSWMustUseOwnerDrawn()
         const wxBitmap& bmpUnchecked = GetBitmap(false),
                         bmpChecked   = GetBitmap(true);
 
-        if ( (bmpUnchecked.IsOk() && IsGreaterThanStdSize(bmpUnchecked)) ||
-                (bmpChecked.IsOk()   && IsGreaterThanStdSize(bmpChecked)) ||
+        const wxWindow* win = m_parentMenu ? m_parentMenu->GetWindow() : NULL;
+        if ( (bmpUnchecked.IsOk() && IsGreaterThanStdSize(bmpUnchecked, win)) ||
+                (bmpChecked.IsOk()   && IsGreaterThanStdSize(bmpChecked, win)) ||
                 (bmpChecked.IsOk() && IsCheckable()) )
         {
             mustUseOwnerDrawn = true;

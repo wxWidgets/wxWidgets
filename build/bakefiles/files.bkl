@@ -347,7 +347,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/toolbar.h
     wx/qt/tooltip.h
     wx/qt/toplevel.h
-    <!-- wx/qt/treectrl.h -->
     wx/qt/window.h
     wx/generic/fdrepdlg.h
     wx/generic/filepickerg.h
@@ -362,6 +361,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/qt/dataview.h
     wx/qt/dvrenderers.h
     $(QT_PLATFORM_HDR)
+    wx/qt/treectrl.h
 </set>
 
 <set var="QT_SRC" hints="files">
@@ -460,6 +460,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/qt/utils.cpp
     src/qt/window.cpp
     $(QT_PLATFORM_SRC)
+    src/qt/treectrl.cpp
 </set>
 
 <set var="MEDIA_QT_SRC" hints="files">
@@ -2541,7 +2542,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/osx/frame.h
     wx/osx/gauge.h
     wx/osx/listbox.h
-    wx/osx/listctrl.h
     wx/osx/mdi.h
     wx/osx/menu.h
     wx/osx/menuitem.h
@@ -3082,6 +3082,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_collpane.cpp
     src/xrc/xh_combo.cpp
     src/xrc/xh_comboctrl.cpp
+    src/xrc/xh_dataview.cpp
     src/xrc/xh_datectrl.cpp
     src/xrc/xh_dirpicker.cpp
     src/xrc/xh_dlg.cpp
@@ -3095,6 +3096,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/xrc/xh_grid.cpp
     src/xrc/xh_html.cpp
     src/xrc/xh_hyperlink.cpp
+    src/xrc/xh_infobar.cpp
     src/xrc/xh_listb.cpp
     src/xrc/xh_listbk.cpp
     src/xrc/xh_listc.cpp
@@ -3152,6 +3154,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_collpane.h
     wx/xrc/xh_combo.h
     wx/xrc/xh_comboctrl.h
+    wx/xrc/xh_dataview.h
     wx/xrc/xh_datectrl.h
     wx/xrc/xh_dirpicker.h
     wx/xrc/xh_dlg.h
@@ -3166,6 +3169,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/xrc/xh_grid.h
     wx/xrc/xh_html.h
     wx/xrc/xh_hyperlink.h
+    wx/xrc/xh_infobar.h
     wx/xrc/xh_listb.h
     wx/xrc/xh_listbk.h
     wx/xrc/xh_listc.h
@@ -3459,14 +3463,21 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                                wxSTC                                   -->
 <!-- ====================================================================== -->
 
-<set var="STC_SRC" hints="files">
+<set var="STC_CMN_SRC" hints="files">
     src/stc/stc.cpp
     src/stc/PlatWX.cpp
     src/stc/ScintillaWX.cpp
 </set>
 
-<set var="STC_HDR" hints="files">
+<set var="STC_CMN_HDR" hints="files">
     wx/stc/stc.h
+</set>
+
+<set var="STC_OSX_COCOA_SRC" hints="files">
+    src/stc/PlatWXcocoa.mm
+</set>
+
+<set var="STC_OSX_COCOA_HDR" hints="files">
 </set>
 
 <!-- ====================================================================== -->
@@ -3649,6 +3660,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     </set>
     <set var="MEDIA_SRC">$(MEDIA_CMN_SRC) $(MEDIA_PLATFORM_SRC)</set>
     <set var="MEDIA_HDR">$(MEDIA_CMN_HDR) $(MEDIA_PLATFORM_HDR)</set>
+
+    <!-- wxSTC files: -->
+    <set var="STC_PLATFORM_SRC" hints="files">
+        <if cond="TOOLKIT=='OSX_COCOA'">$(STC_OSX_COCOA_SRC)</if>
+    </set>
+    <set var="STC_PLATFORM_HDR" hints="files">
+        <if cond="TOOLKIT=='OSX_COCOA'">$(STC_OSX_COCOA_HDR)</if>
+    </set>
+    <set var="STC_SRC">$(STC_CMN_SRC) $(STC_PLATFORM_SRC)</set>
+    <set var="STC_HDR">$(STC_CMN_HDR) $(STC_PLATFORM_HDR)</set>
 
 
     <set var="GUI_CORE_HEADERS" hints="files">

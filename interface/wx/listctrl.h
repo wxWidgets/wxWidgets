@@ -213,7 +213,9 @@ enum
            All items were deleted.
            Processes a @c wxEVT_LIST_DELETE_ALL_ITEMS event type.
     @event{EVT_LIST_ITEM_SELECTED(id, func)}
-           The item has been selected.
+           The item has been selected. Notice that the mouse is captured by the
+           control itself when this event is generated, see @ref
+           overview_events_with_mouse_capture "event handling overview".
            Processes a @c wxEVT_LIST_ITEM_SELECTED event type.
     @event{EVT_LIST_ITEM_DESELECTED(id, func)}
            The item has been deselected.
@@ -756,6 +758,11 @@ public:
         @a code can be one of @c wxLIST_RECT_BOUNDS, @c wxLIST_RECT_ICON or
         @c wxLIST_RECT_LABEL.
 
+        Note that using @c wxLIST_RECT_ICON with any sub-item but the first one
+        isn't very useful as only the first sub-item can have an icon in
+        wxListCtrl. In this case, i.e. for @c subItem > 0, this function simply
+        returns an empty rectangle in @a rect.
+
         @since 2.7.0
     */
     bool GetSubItemRect(long item, long subItem, wxRect& rect,
@@ -849,8 +856,8 @@ public:
     /**
         For report view mode (only), inserts a column.
 
-        For more details, see SetItem(). Also see InsertColumn(long, const
-        wxString&, int, int) overload for a usually more convenient
+        For more details, see SetItem(). Also see InsertColumn(long, const wxString&, int, int)
+        overload for a usually more convenient
         alternative to this method and the description of how the item width
         is interpreted by this method.
     */
@@ -863,7 +870,7 @@ public:
         given position specifying its most common attributes.
 
         Notice that to set the image for the column you need to use
-        Insert(long, const wxListItem&) overload and specify ::wxLIST_MASK_IMAGE
+        InsertColumn(long, const wxListItem&) overload and specify ::wxLIST_MASK_IMAGE
         in the item mask.
 
         @param col
@@ -1089,6 +1096,16 @@ public:
     void SetImageList(wxImageList* imageList, int which);
 
     /**
+        Check if the item is visible.
+
+        An item is considered visible if at least one pixel of it is present
+        on the screen.
+
+        @since 3.1.3
+    */
+    bool IsVisible(long item) const;
+
+    /**
         Sets the data of an item.
 
         Using the wxListItem's mask and state mask, you can change only selected
@@ -1271,6 +1288,13 @@ public:
         @param enable If @true, enable checkboxes, otherwise disable checkboxes.
         @return @true if checkboxes are supported, @false otherwise.
 
+        In a list control with wxLC_VIRTUAL style you have to keep track of the
+        checkbox state. When a checkbox is clicked (EVT_LIST_ITEM_CHECKED
+        or EVT_LIST_ITEM_UNCHECKED) you have to update the state and refresh
+        the item yourself.
+
+        @see OnGetItemIsChecked() RefreshItem()
+
         @since 3.1.0
     */
     bool EnableCheckBoxes(bool enable = true);
@@ -1312,7 +1336,7 @@ protected:
         The base class version always returns @NULL.
 
         @see OnGetItemImage(), OnGetItemColumnImage(), OnGetItemText(),
-             OnGetItemColumnAttr()
+             OnGetItemColumnAttr(), OnGetItemIsChecked()
     */
     virtual wxItemAttr* OnGetItemAttr(long item) const;
 
@@ -1370,6 +1394,17 @@ protected:
         @see SetItemCount(), OnGetItemImage(), OnGetItemColumnImage(), OnGetItemAttr()
     */
     virtual wxString OnGetItemText(long item, long column) const;
+
+    /**
+        This function @b must be overridden in the derived class for a control with
+        @c wxLC_VIRTUAL style that uses checkboxes. It should return whether the
+        checkbox of the specified @c item is checked.
+
+        @see EnableCheckBoxes(), OnGetItemText()
+
+        @since 3.1.2
+    */
+    virtual bool OnGetItemIsChecked(long item) const;
 };
 
 
@@ -1393,7 +1428,9 @@ protected:
     @event{EVT_LIST_DELETE_ALL_ITEMS(id, func)}
         Delete all items.
     @event{EVT_LIST_ITEM_SELECTED(id, func)}
-        The item has been selected.
+        The item has been selected. Notice that the mouse is captured by the
+        control itself when this event is generated, see @ref
+        overview_events_with_mouse_capture "event handling overview".
     @event{EVT_LIST_ITEM_DESELECTED(id, func)}
         The item has been deselected.
     @event{EVT_LIST_ITEM_ACTIVATED(id, func)}

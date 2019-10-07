@@ -120,6 +120,8 @@ public:
 
     virtual bool IsFixedWidth() const wxOVERRIDE;
 
+    virtual void WXAdjustToPPI(const wxSize& ppi) wxOVERRIDE;
+
     wxDEPRECATED_MSG("use wxFONT{FAMILY,STYLE,WEIGHT}_XXX constants ie: wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD")
     wxFont(int size,
            int family,

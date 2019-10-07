@@ -56,7 +56,7 @@ myVec3 MyCross(const myVec3& v1, const myVec3& v2);
 double MyDistance(const myVec3& v1, const myVec3& v2);
 
 // Angle between two normalized vectors, in radians
-double AngleBetween(myVec3 v1, myVec3 v2);
+double AngleBetween(const myVec3& v1, const myVec3& v2);
 
 // Matrix 4x4 by 4x1 multiplication
 myVec4 MyMatMul4x1(const double *m1, const myVec4& v);

@@ -1155,7 +1155,7 @@ void wxWindowDCImpl::DoDrawBitmap( const wxBitmap &bitmap,
         }
     }
     else if (hasAlpha || pixmap == NULL)
-        pixbuf = bitmap.GetPixbuf();
+        pixbuf = useMask ? bitmap.GetPixbuf() : bitmap.GetPixbufNoMask();
 
     if (isScaled)
     {
@@ -1508,6 +1508,9 @@ void wxWindowDCImpl::Clear()
 
     if (!m_gdkwindow) return;
 
+    if (m_backgroundBrush.IsTransparent())
+        return;
+
     int width,height;
     DoGetSize( &width, &height );
     gdk_draw_rectangle( m_gdkwindow, m_bgGC, TRUE, 0, 0, width, height );
@@ -1735,7 +1738,8 @@ void wxWindowDCImpl::SetBackground( const wxBrush &brush )
 
     m_backgroundBrush = brush;
 
-    if (!m_backgroundBrush.IsOk()) return;
+    if (!m_backgroundBrush.IsOk())
+        m_backgroundBrush = *wxWHITE_BRUSH;
 
     if (!m_gdkwindow) return;
 

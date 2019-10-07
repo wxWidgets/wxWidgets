@@ -154,6 +154,10 @@ public:
     bool Ok() const { return IsOk(); }
 #endif
 
+    // Return the perceived brightness of the colour, with 0 for black and 1
+    // for white.
+    double GetLuminance() const;
+
     // manipulation
     // ------------
 

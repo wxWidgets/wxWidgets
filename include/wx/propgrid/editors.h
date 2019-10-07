@@ -15,6 +15,8 @@
 
 #if wxUSE_PROPGRID
 
+#include "wx/window.h"
+
 class WXDLLIMPEXP_FWD_PROPGRID wxPGCell;
 class WXDLLIMPEXP_FWD_PROPGRID wxPGProperty;
 class WXDLLIMPEXP_FWD_PROPGRID wxPropertyGrid;
@@ -428,7 +430,7 @@ public:
     virtual bool DoShowDialog( wxPropertyGrid* propGrid,
                                wxPGProperty* property ) = 0;
 
-    void SetValue( wxVariant value )
+    void SetValue( const wxVariant& value )
     {
         m_value = value;
     }
@@ -460,7 +462,7 @@ public:
 
     wxWindow* GetButton( unsigned int i ) { return m_buttons[i]; }
     const wxWindow* GetButton( unsigned int i ) const
-        { return (const wxWindow*) m_buttons[i]; }
+        { return m_buttons[i]; }
 
     // Utility function to be used in event handlers.
     int GetButtonId( unsigned int i ) const { return GetButton(i)->GetId(); }

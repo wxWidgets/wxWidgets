@@ -305,7 +305,7 @@ void MyFrame::OnWaitForAccept(wxCommandEvent& WXUNUSED(event))
 {
     TestLogger logtest("WaitForAccept() test");
 
-    wxBusyInfo("Waiting for connection for 10 seconds...", this);
+    wxBusyInfo info("Waiting for connection for 10 seconds...", this);
     if ( m_server->WaitForAccept(10) )
         wxLogMessage("Accepted client connection.");
     else

@@ -3,7 +3,7 @@
 // Purpose:     declaration of wxGUIEventLoop for wxOSX/Cocoa
 // Author:      Vadim Zeitlin
 // Created:     2008-12-28
-// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2006 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -20,18 +20,18 @@ public:
 
     void EndModalSession();
 
-    virtual void WakeUp();
+    virtual void WakeUp() wxOVERRIDE;
 
     void OSXUseLowLevelWakeup(bool useIt)
         { m_osxLowLevelWakeUp = useIt ; }
 
 protected:
-    virtual int DoDispatchTimeout(unsigned long timeout);
+    virtual int DoDispatchTimeout(unsigned long timeout) wxOVERRIDE;
 
-    virtual void OSXDoRun();
-    virtual void OSXDoStop();
+    virtual void OSXDoRun() wxOVERRIDE;
+    virtual void OSXDoStop() wxOVERRIDE;
 
-    virtual CFRunLoopRef CFGetCurrentRunLoop() const;
+    virtual CFRunLoopRef CFGetCurrentRunLoop() const wxOVERRIDE;
 
     void* m_modalSession;
 

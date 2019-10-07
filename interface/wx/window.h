@@ -1493,9 +1493,14 @@ public:
     void SetClientSize(const wxRect& rect);
 
     /**
-        This normally does not need to be called by user code.
-        It is called when a window is added to a sizer, and is used so the window
-        can remove itself from the sizer when it is destroyed.
+        Used by wxSizer internally to notify the window about being managed by
+        the given sizer.
+
+        This method should not be called from outside the library, unless
+        you're implementing a custom sizer class -- and in the latter case you
+        must call this method with the pointer to the sizer itself whenever a
+        window is added to it and with @NULL argument when the window is
+        removed from it.
     */
     void SetContainingSizer(wxSizer* sizer);
 
@@ -2035,6 +2040,20 @@ public:
         version can be used without having to create an object first.
     */
     virtual wxVisualAttributes GetDefaultAttributes() const;
+
+    /**
+        Return the DPI of the display used by this window.
+
+        The returned value can be different for different windows on systems
+        with support for per-monitor DPI values, such as Microsoft Windows 10.
+
+        If the DPI is not available, returns @c wxSize(0,0) object.
+
+        @see wxDisplay::GetPPI(), wxDPIChangedEvent
+
+        @since 3.1.3
+     */
+    virtual wxSize GetDPI() const;
 
     /**
         Returns the font for this window.
@@ -3431,15 +3450,20 @@ public:
     void SetConstraints(wxLayoutConstraints* constraints);
 
     /**
-        Invokes the constraint-based layout algorithm or the sizer-based algorithm
-        for this window.
+        Lays out the children of this window using the associated sizer.
 
-        This function does not get called automatically when the window is resized
-        because lots of windows deriving from wxWindow does not need this functionality.
-        If you want to have Layout() called automatically, you should derive
-        from wxPanel (see wxPanel::Layout).
+        If a sizer hadn't been associated with this window (see SetSizer()),
+        this function doesn't do anything, unless this is a top level window
+        (see wxTopLevelWindow::Layout()).
+
+        Note that this method is called automatically when the window size
+        changes if it has the associated sizer (or if SetAutoLayout() with
+        @true argument had been explicitly called), ensuring that it is always
+        laid out correctly.
 
         @see @ref overview_windowsizing
+
+        @returns Always returns @true, the return value is not useful.
     */
     virtual bool Layout();
 
@@ -3758,7 +3782,8 @@ public:
             or wxMOD_WIN specifying the modifier keys that have to be pressed along
             with the key.
         @param virtualKeyCode
-            The virtual key code of the hotkey.
+            The key code of the hotkey, e.g. an ASCII character such as @c 'K'
+            or one of elements of wxKeyCode enum.
 
         @return @true if the hotkey was registered successfully. @false if some
                  other application already registered a hotkey with this

@@ -444,7 +444,7 @@ static gboolean expose_event(GtkWidget*, GdkEventExpose* gdk_event, wxWindow* wi
 extern "C" {
 static gboolean
 #ifdef __WXGTK3__
-draw_border(GtkWidget*, cairo_t* cr, wxWindow* win)
+draw_border(GtkWidget* widget, cairo_t* cr, wxWindow* win)
 #else
 draw_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
 #endif
@@ -461,10 +461,20 @@ draw_border(GtkWidget* widget, GdkEventExpose* gdk_event, wxWindow* win)
 
     GtkAllocation alloc;
     gtk_widget_get_allocation(win->m_wxwindow, &alloc);
-    const int x = alloc.x;
-    const int y = alloc.y;
+    int x = alloc.x;
+    int y = alloc.y;
     const int w = alloc.width;
     const int h = alloc.height;
+#ifdef __WXGTK3__
+    if (!gtk_widget_get_has_window(widget))
+    {
+        // cairo_t origin is set to widget's origin, need to adjust
+        // coordinates for child when they are not relative to parent
+        gtk_widget_get_allocation(widget, &alloc);
+        x -= alloc.x;
+        y -= alloc.y;
+    }
+#endif
 
     if (w <= 0 || h <= 0)
         return false;
@@ -2271,7 +2281,6 @@ size_allocate(GtkWidget* WXUNUSED_IN_GTK2(widget), GtkAllocation* alloc, wxWindo
         // so always get size from m_widget->allocation
         win->m_width  = a.width;
         win->m_height = a.height;
-        if (!win->m_nativeSizeEvent)
         {
             wxSizeEvent event(win->GetSize(), win->GetId());
             event.SetEventObject(win);
@@ -3666,6 +3675,7 @@ void wxWindowGTK::ConnectWidget( GtkWidget *widget )
         // priority slightly higher than GDK_PRIORITY_EVENTS
         g_source_set_priority(source, GDK_PRIORITY_EVENTS - 1);
         g_source_attach(source, NULL);
+        g_source_unref(source);
     }
 
     g_signal_connect (widget, "key_press_event",
@@ -4768,25 +4778,25 @@ void wxWindowGTK::RealizeTabOrder()
                 {
                     if ( focusableFromKeyboard )
                     {
-                        // wxComboBox et al. needs to focus on on a different
-                        // widget than m_widget, so if the main widget isn't
-                        // focusable try the connect widget
+                        // We may need to focus on the connect widget if the
+                        // main one isn't focusable, but note that we still use
+                        // the main widget if neither it nor connect widget is
+                        // focusable, without this using a wxStaticText before
+                        // wxChoice wouldn't work at all, for example.
                         GtkWidget* w = win->m_widget;
                         if ( !gtk_widget_get_can_focus(w) )
                         {
-                            w = win->GetConnectWidget();
-                            if ( !gtk_widget_get_can_focus(w) )
-                                w = NULL;
+                            GtkWidget* const cw = win->GetConnectWidget();
+                            if ( cw != w && gtk_widget_get_can_focus(cw) )
+                                w = cw;
                         }
 
-                        if ( w )
-                        {
-                            mnemonicWindow->GTKWidgetDoSetMnemonic(w);
-                            mnemonicWindow = NULL;
-                        }
+                        mnemonicWindow->GTKWidgetDoSetMnemonic(w);
+                        mnemonicWindow = NULL;
                     }
                 }
-                else if ( win->GTKWidgetNeedsMnemonic() )
+
+                if ( win->GTKWidgetNeedsMnemonic() )
                 {
                     mnemonicWindow = win;
                 }
@@ -5633,6 +5643,8 @@ bool wxWindowGTK::IsTransparentBackgroundSupported(wxString* reason) const
 GdkWindow* wxWindowGTK::GTKFindWindow(GtkWidget* widget)
 {
     GdkWindow* window = gtk_widget_get_window(widget);
+    if (window == NULL)
+        return NULL;
     for (const GList* p = gdk_window_peek_children(window); p; p = p->next)
     {
         window = GDK_WINDOW(p->data);
@@ -5647,6 +5659,8 @@ GdkWindow* wxWindowGTK::GTKFindWindow(GtkWidget* widget)
 void wxWindowGTK::GTKFindWindow(GtkWidget* widget, wxArrayGdkWindows& windows)
 {
     GdkWindow* window = gtk_widget_get_window(widget);
+    if (window == NULL)
+        return;
     for (const GList* p = gdk_window_peek_children(window); p; p = p->next)
     {
         window = GDK_WINDOW(p->data);

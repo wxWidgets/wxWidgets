@@ -3,7 +3,7 @@
 // Purpose:     interface of wxTextCompleter
 // Author:      Vadim Zeitlin
 // Created:     2011-04-13
-// Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2011 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 

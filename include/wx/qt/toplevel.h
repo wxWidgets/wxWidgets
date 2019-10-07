@@ -30,21 +30,21 @@ public:
                 const wxString& name = wxFrameNameStr);
 
     virtual bool Show(bool show = true) wxOVERRIDE;
-    virtual void Maximize(bool maximize = true);
-    virtual void Restore();
-    virtual void Iconize(bool iconize = true);
-    virtual bool IsMaximized() const;
-    virtual bool IsIconized() const;
+    virtual void Maximize(bool maximize = true) wxOVERRIDE;
+    virtual void Restore() wxOVERRIDE;
+    virtual void Iconize(bool iconize = true) wxOVERRIDE;
+    virtual bool IsMaximized() const wxOVERRIDE;
+    virtual bool IsIconized() const wxOVERRIDE;
 
-    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
-    virtual bool IsFullScreen() const;
-    virtual void SetTitle(const wxString& title);
-    virtual wxString GetTitle() const;
-    virtual void SetIcons(const wxIconBundle& icons);
+    virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) wxOVERRIDE;
+    virtual bool IsFullScreen() const wxOVERRIDE;
+    virtual void SetTitle(const wxString& title) wxOVERRIDE;
+    virtual wxString GetTitle() const wxOVERRIDE;
+    virtual void SetIcons(const wxIconBundle& icons) wxOVERRIDE;
 
     // Styles
-    virtual void SetWindowStyleFlag( long style );
-    virtual long GetWindowStyleFlag() const;
+    virtual void SetWindowStyleFlag( long style ) wxOVERRIDE;
+    virtual long GetWindowStyleFlag() const wxOVERRIDE;
 };
 
 #endif // _WX_QT_TOPLEVEL_H_

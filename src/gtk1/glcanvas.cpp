@@ -246,7 +246,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
     if ( !InitVisual(dispAttrs) )
         return false;
 
-    GdkVisual *visual = gdkx_visual_get( GetXVisualInfo()->visualid );
+    GdkVisual *visual = gdkx_visual_get(static_cast<XVisualInfo*>(GetXVisualInfo())->visualid);
     GdkColormap *colormap = gdk_colormap_new( visual, TRUE );
 
     gtk_widget_push_colormap( colormap );
@@ -292,7 +292,7 @@ bool wxGLCanvas::Create(wxWindow *parent,
     return true;
 }
 
-Window wxGLCanvas::GetXWindow() const
+unsigned long wxGLCanvas::GetXWindow() const
 {
     GdkWindow *window = GTK_PIZZA(m_wxwindow)->bin_window;
     return window ? GDK_WINDOW_XWINDOW(window) : 0;

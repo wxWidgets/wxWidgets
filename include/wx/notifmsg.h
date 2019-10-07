@@ -3,7 +3,7 @@
 // Purpose:     class allowing to show notification messages to the user
 // Author:      Vadim Zeitlin
 // Created:     2007-11-19
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

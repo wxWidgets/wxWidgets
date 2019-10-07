@@ -26,7 +26,7 @@
 
 class WXDLLIMPEXP_FWD_CORE wxImageList;
 
-#if !defined(__WXMSW__) || defined(__WXUNIVERSAL__)
+#if !defined(__WXMSW__) && !defined(__WXQT__) || defined(__WXUNIVERSAL__)
     #define wxHAS_GENERIC_TREECTRL
 #endif
 
@@ -465,6 +465,8 @@ private:
     #include "wx/generic/treectlg.h"
 #elif defined(__WXMSW__)
     #include "wx/msw/treectrl.h"
+#elif defined(__WXQT__)
+    #include "wx/qt/treectrl.h"
 #else
     #error "unknown native wxTreeCtrl implementation"
 #endif

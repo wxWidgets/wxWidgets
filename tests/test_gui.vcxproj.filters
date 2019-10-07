@@ -239,6 +239,9 @@
     <ClCompile Include="controls\spinctrltest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="controls\styledtextctrltest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

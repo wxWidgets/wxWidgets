@@ -105,8 +105,12 @@ public:
     // stc
     void OnMarginClick (wxStyledTextEvent &event);
     void OnCharAdded  (wxStyledTextEvent &event);
+    void OnCallTipClick(wxStyledTextEvent &event);
 
     void OnKeyDown(wxKeyEvent &event);
+
+    // call tips
+    void ShowCallTipAt(int position);
 
     //! language/lexer
     wxString DeterminePrefs (const wxString &filename);
@@ -136,6 +140,9 @@ private:
     int m_FoldingID;
     int m_FoldingMargin;
     int m_DividerID;
+
+    // call tip data
+    int m_calltipNo;
 
     wxDECLARE_EVENT_TABLE();
 };

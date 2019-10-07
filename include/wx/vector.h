@@ -41,12 +41,21 @@ inline void wxVectorSort(wxVector<T>& v)
 
 // wxQsort is declared in wx/utils.h, but can't include that file here,
 // it indirectly includes this file. Just lovely...
+//
+// Moreover, just declaring it here unconditionally results in gcc
+// -Wredundant-decls warning, so use a preprocessor guard to avoid this.
+#ifndef wxQSORT_DECLARED
+
+#define wxQSORT_DECLARED
+
 typedef int (*wxSortCallback)(const void* pItem1,
                               const void* pItem2,
                               const void* user_data);
 WXDLLIMPEXP_BASE void wxQsort(void* pbase, size_t total_elems,
                               size_t size, wxSortCallback cmp,
                               const void* user_data);
+
+#endif // !wxQSORT_DECLARED
 
 namespace wxPrivate
 {

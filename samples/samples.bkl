@@ -102,7 +102,6 @@
         other ones.
      -->
     <if cond="FORMAT[:3] == 'msv'">
-        <subproject id="flash" template="optsub"/>
         <subproject id="mfc" template="optsub"/>
     </if>
     <subproject id="memcheck" template="optsub"/>

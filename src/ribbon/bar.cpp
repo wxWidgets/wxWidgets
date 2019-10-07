@@ -672,7 +672,7 @@ void wxRibbonBar::RecalculateTabSizes()
                         continue;
                     if(info->small_must_have_separator_width * (int)(numtabs - i) <= width)
                     {
-                        info->rect.width = info->small_must_have_separator_width;;
+                        info->rect.width = info->small_must_have_separator_width;
                     }
                     else
                     {
@@ -1258,7 +1258,7 @@ wxSize wxRibbonBar::DoGetBestSize() const
 
 void wxRibbonBar::HitTestRibbonButton(const wxRect& rect, const wxPoint& position, bool &hover_flag)
 {
-    bool hovered = false, toggle_button_hovered = false;
+    bool hovered = false;
     if(position.x >= 0 && position.y >= 0)
     {
         wxSize size = GetSize();
@@ -1269,6 +1269,7 @@ void wxRibbonBar::HitTestRibbonButton(const wxRect& rect, const wxPoint& positio
     }
     if(hovered)
     {
+        bool toggle_button_hovered;
         toggle_button_hovered = rect.Contains(position);
 
         if ( hovered != m_bar_hovered || toggle_button_hovered != hover_flag )

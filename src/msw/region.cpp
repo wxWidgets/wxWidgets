@@ -359,6 +359,9 @@ wxRegionIterator::wxRegionIterator(const wxRegion& region)
 
 wxRegionIterator& wxRegionIterator::operator=(const wxRegionIterator& ri)
 {
+    if (this == &ri)
+        return *this;
+
     delete [] m_rects;
 
     m_current = ri.m_current;

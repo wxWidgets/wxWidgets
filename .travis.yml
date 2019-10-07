@@ -9,17 +9,18 @@ matrix:
     include:
         - dist: precise
           compiler: gcc
+          env: wxUSE_XVFB=1
         - dist: trusty
           compiler: gcc
         - dist: trusty
           compiler: gcc
-          env: wxCONFIGURE_FLAGS="--enable-utf8 --enable-utf8only --enable-monolithic"
+          env: wxCONFIGURE_FLAGS="--enable-utf8 --enable-utf8only --enable-monolithic" wxUSE_XVFB=1
         - dist: trusty
           compiler: gcc
-          env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11"
+          env: wxGTK_VERSION=3 wxCONFIGURE_FLAGS="--enable-cxx11 --enable-stl" wxMAKEFILE_FLAGS="CXXFLAGS=-std=c++11" wxUSE_XVFB=1
         - dist: trusty
           compiler: clang
-          env: wxCONFIGURE_FLAGS="--disable-shared --disable-sys-libs --disable-webview"
+          env: wxCONFIGURE_FLAGS="--disable-shared --disable-sys-libs --disable-webview" wxUSE_XVFB=1
         - dist: trusty
           compiler: gcc
           env: wxTOOLSET=cmake wxCMAKE_GENERATOR="Unix Makefiles"

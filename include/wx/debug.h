@@ -282,7 +282,10 @@ extern WXDLLIMPEXP_BASE void wxOnAssert(const char *file,
     // the need for the ugly global flag.
     #define wxASSERT_MSG_AT(cond, msg, file, line, func)                      \
         wxSTATEMENT_MACRO_BEGIN                                               \
-            if ( wxTheAssertHandler && !(cond) &&                             \
+            if ( cond )                                                       \
+            {                                                                 \
+            }                                                                 \
+            else if ( wxTheAssertHandler &&                                   \
                     (wxOnAssert(file, line, func, #cond, msg),                \
                      wxTrapInAssert) )                                        \
             {                                                                 \

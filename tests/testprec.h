@@ -121,6 +121,8 @@ extern bool IsNetworkAvailable();
 
 extern bool IsAutomaticTest();
 
+extern bool IsRunningUnderXVFB();
+
 // Helper class setting the locale to the given one for its lifetime.
 class LocaleSetter
 {

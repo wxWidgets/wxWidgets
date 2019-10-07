@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 29 June 2017                                                        *
+# Date : 13 September 2019                                                   *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -235,7 +235,7 @@ OBJECTS_X11=accesscmn.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
 	dynload.obj,effects.obj,fddlgcmn.obj,fs_mem.obj,\
 	gbsizer.obj,geometry.obj,matrix.obj,radiocmn.obj,\
 	taskbarcmn.obj,xti.obj,xtistrm.obj,xtixml.obj,\
-	combocmn.obj
+	combocmn.obj,cairo.obj
 
 
 OBJECTS_GTK2=fontutilcmn.obj,cairo.obj

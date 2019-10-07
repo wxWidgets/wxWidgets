@@ -105,7 +105,7 @@ public:
         (e.g. on some systems automatically hidden notifications can't be
         hidden manually).
     */
-    virtual bool Close();
+    bool Close();
 
     /**
         This parameter can be currently used to specify the icon to show in the
@@ -167,7 +167,7 @@ public:
 
         @return @false if an error occurred.
     */
-    virtual bool Show(int timeout = Timeout_Auto);
+    bool Show(int timeout = Timeout_Auto);
 
     /**
         If the application already uses a wxTaskBarIcon, it should be connected

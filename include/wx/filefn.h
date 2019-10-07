@@ -162,7 +162,21 @@ enum wxPosixPermissions
             inline long long wxFtell(FILE* fp)
             {
                 fpos_t pos;
-                return fgetpos(fp, &pos) == 0 ? pos : -1LL;
+                if ( fgetpos(fp, &pos) != 0 )
+                    return -1LL;
+
+                // Unfortunately our interface assumes that the file position
+                // is representable as "long long", so we have to get it from
+                // fpos_t, even though it's an opaque type. And its exact
+                // representation has changed in MinGW, so we have to test for
+                // mingwrt version.
+                #if wxCHECK_MINGW32_VERSION(5, 2)
+                    // In 5.2.2 it's a union with a __value field.
+                    return pos.__value;
+                #else
+                    // Up to 5.1.1 it was a simple typedef.
+                    return pos;
+                #endif
             }
         #else
             #define wxFtell ftello64

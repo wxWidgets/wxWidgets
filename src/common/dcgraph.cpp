@@ -124,7 +124,16 @@ wxIMPLEMENT_ABSTRACT_CLASS(wxGCDCImpl, wxDCImpl);
 wxGCDCImpl::wxGCDCImpl(wxDC *owner, wxGraphicsContext* context) :
     wxDCImpl(owner)
 {
-    Init(context);
+    CommonInit();
+
+    DoInitContext(context);
+
+    // We can't currently initialize m_font, m_pen and m_brush here as we don't
+    // have any way of converting the corresponding wxGraphicsXXX objects to
+    // plain wxXXX ones. This is obviously not ideal as it means that GetXXX()
+    // won't return the actual object being used, but is better than the only
+    // alternative which is overwriting the objects currently used in the
+    // graphics context with the defaults.
 }
 
 wxGCDCImpl::wxGCDCImpl( wxDC *owner ) :
@@ -136,13 +145,10 @@ wxGCDCImpl::wxGCDCImpl( wxDC *owner ) :
 void wxGCDCImpl::SetGraphicsContext( wxGraphicsContext* ctx )
 {
     delete m_graphicContext;
-    m_graphicContext = ctx;
-    if ( m_graphicContext )
+
+    if ( DoInitContext(ctx) )
     {
-        m_matrixOriginal = m_graphicContext->GetTransform();
-        m_ok = true;
-        // apply the stored transformations to the passed in context
-        ComputeScaleAndOrigin();
+        // Reapply our attributes to the context.
         m_graphicContext->SetFont( m_font , m_textForegroundColour );
         m_graphicContext->SetPen( m_pen );
         m_graphicContext->SetBrush( m_brush);
@@ -185,24 +191,44 @@ wxGCDCImpl::wxGCDCImpl(wxDC* owner, int)
     Init(NULL);
 }
 
-void wxGCDCImpl::Init(wxGraphicsContext* ctx)
+void wxGCDCImpl::CommonInit()
 {
-    m_ok = false;
-    m_colour = true;
     m_mm_to_pix_x = mm2pt;
     m_mm_to_pix_y = mm2pt;
+
+    m_isClipBoxValid = false;
+
+    m_logicalFunctionSupported = true;
+}
+
+void wxGCDCImpl::Init(wxGraphicsContext* ctx)
+{
+    CommonInit();
+
+    m_ok = false;
 
     m_pen = *wxBLACK_PEN;
     m_font = *wxNORMAL_FONT;
     m_brush = *wxWHITE_BRUSH;
 
-    m_isClipBoxValid = false;
-
     m_graphicContext = NULL;
     if (ctx)
         SetGraphicsContext(ctx);
+}
 
-    m_logicalFunctionSupported = true;
+bool wxGCDCImpl::DoInitContext(wxGraphicsContext* ctx)
+{
+    m_graphicContext = ctx;
+    m_ok = m_graphicContext != NULL;
+
+    if ( m_ok )
+    {
+        // apply the stored transformations to the passed in context
+        m_matrixOriginal = m_graphicContext->GetTransform();
+        ComputeScaleAndOrigin();
+    }
+
+    return m_ok;
 }
 
 wxGCDCImpl::~wxGCDCImpl()
@@ -517,8 +543,6 @@ void wxGCDCImpl::SetBrush( const wxBrush &brush )
 void wxGCDCImpl::SetBackground( const wxBrush &brush )
 {
     m_backgroundBrush = brush;
-    if (!m_backgroundBrush.IsOk())
-        return;
 }
 
 void wxGCDCImpl::SetLogicalFunction( wxRasterOperationMode function )
@@ -726,6 +750,9 @@ void wxGCDCImpl::DoDrawPoint( wxCoord x, wxCoord y )
     if (!m_logicalFunctionSupported)
         return;
 
+    wxPen pointPen(m_pen.GetColour());
+    wxDCPenChanger penChanger(*GetOwner(), pointPen);
+
 #if defined(__WXMSW__) && wxUSE_GRAPHICS_GDIPLUS
     // single point path does not work with GDI+
     if (m_graphicContext->GetRenderer() == wxGraphicsRenderer::GetGDIPlusRenderer())
@@ -832,9 +859,6 @@ void wxGCDCImpl::DoDrawSpline(const wxPointList *points)
         wxCoord cy4 = (y1 + y2) / 2;
 
         path.AddQuadCurveToPoint(x1 , y1 ,cx4 , cy4 );
-
-        cx1 = cx4;
-        cy1 = cy4;
     }
 
     path.AddLineToPoint( x2 , y2 );
@@ -1240,7 +1264,7 @@ bool wxGCDCImpl::DoGetPartialTextExtents(const wxString& text, wxArrayInt& width
     return true;
 }
 
-wxCoord wxGCDCImpl::GetCharWidth(void) const
+wxCoord wxGCDCImpl::GetCharWidth() const
 {
     wxCoord width = 0;
     DoGetTextExtent( wxT("g") , &width , NULL , NULL , NULL , NULL );
@@ -1248,7 +1272,7 @@ wxCoord wxGCDCImpl::GetCharWidth(void) const
     return width;
 }
 
-wxCoord wxGCDCImpl::GetCharHeight(void) const
+wxCoord wxGCDCImpl::GetCharHeight() const
 {
     wxCoord height = 0;
     DoGetTextExtent( wxT("g") , NULL , &height , NULL , NULL , NULL );
@@ -1256,32 +1280,27 @@ wxCoord wxGCDCImpl::GetCharHeight(void) const
     return height;
 }
 
-void wxGCDCImpl::Clear(void)
+void wxGCDCImpl::Clear()
 {
     wxCHECK_RET( IsOk(), wxT("wxGCDC(cg)::Clear - invalid DC") );
 
-    if ( m_backgroundBrush.IsOk() )
-    {
-        m_graphicContext->SetBrush( m_backgroundBrush );
-        wxPen p = *wxTRANSPARENT_PEN;
-        m_graphicContext->SetPen( p );
-        wxCompositionMode formerMode = m_graphicContext->GetCompositionMode();
-        m_graphicContext->SetCompositionMode(wxCOMPOSITION_SOURCE);
+    if ( m_backgroundBrush.IsTransparent() )
+        return;
 
-        double x, y, w, h;
-        m_graphicContext->GetClipBox(&x, &y, &w, &h);
-        m_graphicContext->DrawRectangle(x, y, w, h);
+    m_graphicContext->SetBrush( m_backgroundBrush.IsOk() ? m_backgroundBrush
+                                                         : *wxWHITE_BRUSH );
+    wxPen p = *wxTRANSPARENT_PEN;
+    m_graphicContext->SetPen( p );
+    wxCompositionMode formerMode = m_graphicContext->GetCompositionMode();
+    m_graphicContext->SetCompositionMode(wxCOMPOSITION_SOURCE);
 
-        m_graphicContext->SetCompositionMode(formerMode);
-        m_graphicContext->SetPen( m_pen );
-        m_graphicContext->SetBrush( m_brush );
-    }
-    else
-    {
-        double x, y, w, h;
-        m_graphicContext->GetClipBox(&x, &y, &w, &h);
-        m_graphicContext->ClearRectangle(x, y, w, h);
-    }
+    double x, y, w, h;
+    m_graphicContext->GetClipBox(&x, &y, &w, &h);
+    m_graphicContext->DrawRectangle(x, y, w, h);
+
+    m_graphicContext->SetCompositionMode(formerMode);
+    m_graphicContext->SetPen( m_pen );
+    m_graphicContext->SetBrush( m_brush );
 }
 
 void wxGCDCImpl::DoGetSize(int *width, int *height) const

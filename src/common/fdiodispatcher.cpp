@@ -3,7 +3,7 @@
 // Purpose:     Implementation of common wxFDIODispatcher methods
 // Author:      Vadim Zeitlin
 // Created:     2007-05-13
-// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwindows.org>
+// Copyright:   (c) 2007 Vadim Zeitlin <vadim@wxwidgets.org>
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 

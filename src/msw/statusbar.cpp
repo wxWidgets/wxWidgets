@@ -166,7 +166,8 @@ bool wxStatusBar::SetFont(const wxFont& font)
     if (!wxWindow::SetFont(font))
         return false;
 
-    if (m_pDC) m_pDC->SetFont(font);
+    if ( m_pDC )
+        m_pDC->SetFont(m_font);
     return true;
 }
 
@@ -254,6 +255,14 @@ void wxStatusBar::MSWUpdateFieldsWidths()
     }
 
     delete [] pWidths;
+}
+
+void wxStatusBar::MSWUpdateFontOnDPIChange(const wxSize& newDPI)
+{
+    wxStatusBarBase::MSWUpdateFontOnDPIChange(newDPI);
+
+    if ( m_pDC && m_font.IsOk() )
+        m_pDC->SetFont(m_font);
 }
 
 void wxStatusBar::DoUpdateStatusText(int nField)

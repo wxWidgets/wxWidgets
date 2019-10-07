@@ -33,11 +33,11 @@ public:
     virtual ~wxMacPrintDialog();
 
     bool Create(wxWindow *parent, wxPrintDialogData* data = NULL);
-    virtual int ShowModal();
+    virtual int ShowModal() wxOVERRIDE;
 
-    virtual wxPrintDialogData& GetPrintDialogData() { return m_printDialogData; }
-    virtual wxPrintData& GetPrintData() { return m_printDialogData.GetPrintData(); }
-    virtual wxDC *GetPrintDC();
+    virtual wxPrintDialogData& GetPrintDialogData() wxOVERRIDE { return m_printDialogData; }
+    virtual wxPrintData& GetPrintData() wxOVERRIDE { return m_printDialogData.GetPrintData(); }
+    virtual wxDC *GetPrintDC() wxOVERRIDE;
 
 private:
     wxPrintDialogData   m_printDialogData;
@@ -60,10 +60,10 @@ public:
     wxMacPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = NULL);
     virtual ~wxMacPageSetupDialog();
 
-    virtual wxPageSetupDialogData& GetPageSetupDialogData();
+    virtual wxPageSetupDialogData& GetPageSetupDialogData() wxOVERRIDE;
 
     bool Create(wxWindow *parent, wxPageSetupDialogData *data = NULL);
-    virtual int ShowModal();
+    virtual int ShowModal() wxOVERRIDE;
 
 private:
     wxPageSetupDialogData   m_pageSetupData;
@@ -86,7 +86,7 @@ class WXDLLIMPEXP_CORE wxMacPageMarginsDialog : public wxDialog
 public:
     wxMacPageMarginsDialog(wxFrame* parent, wxPageSetupDialogData* data);
     bool TransferToWindow();
-    bool TransferDataFromWindow();
+    bool TransferDataFromWindow() wxOVERRIDE;
 
     virtual wxPageSetupDialogData& GetPageSetupDialogData() { return *m_pageSetupDialogData; }
 

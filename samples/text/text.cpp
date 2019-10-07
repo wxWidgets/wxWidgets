@@ -1228,8 +1228,24 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_textrich->AppendText("This text should be cyan on blue\n");
     m_textrich->SetDefaultStyle(wxTextAttr(*wxBLUE, *wxWHITE));
     m_textrich->AppendText("And this should be in blue and the text you "
-                           "type should be in blue as well");
-
+                           "type should be in blue as well.\n");
+    m_textrich->SetDefaultStyle(wxTextAttr());
+    wxTextAttr attr = m_textrich->GetDefaultStyle();
+    attr.SetFontUnderlined(true);
+    m_textrich->SetDefaultStyle(attr);
+    m_textrich->AppendText("\nAnd there");
+    attr.SetFontUnderlined(false);
+    m_textrich->SetDefaultStyle(attr);
+    m_textrich->AppendText(" is a ");
+    attr.SetFontUnderlined(wxTEXT_ATTR_UNDERLINE_SPECIAL, *wxRED);
+    m_textrich->SetDefaultStyle(attr);
+    m_textrich->AppendText("mispeled");
+    attr.SetFontUnderlined(false);
+    m_textrich->SetDefaultStyle(attr);
+    m_textrich->AppendText(" word.");
+    attr.SetFontUnderlined(wxTEXT_ATTR_UNDERLINE_DOUBLE, *wxGREEN);
+    const long endPos = m_textrich->GetLastPosition();
+    m_textrich->SetStyle(endPos - 4, endPos - 2, attr);
 
     // lay out the controls
     wxBoxSizer *column1 = new wxBoxSizer(wxVERTICAL);

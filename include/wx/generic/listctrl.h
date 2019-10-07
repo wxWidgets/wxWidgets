@@ -130,6 +130,7 @@ public:
     bool EndEditLabel(bool cancel);
 
     wxTextCtrl* GetEditControl() const;
+    bool IsVisible(long item) const wxOVERRIDE;
     void Edit( long item ) { EditLabel(item); }
 
     bool EnsureVisible( long item );
@@ -212,17 +213,6 @@ protected:
 
 
     virtual wxSize DoGetBestClientSize() const wxOVERRIDE;
-
-    // return the text for the given column of the given item
-    virtual wxString OnGetItemText(long item, long column) const;
-
-    // return the icon for the given item. In report view, OnGetItemImage will
-    // only be called for the first column. See OnGetItemColumnImage for
-    // details.
-    virtual int OnGetItemImage(long item) const;
-
-    // return the icon for the given item and column.
-    virtual int OnGetItemColumnImage(long item, long column) const;
 
     // it calls our OnGetXXX() functions
     friend class WXDLLIMPEXP_FWD_CORE wxListMainWindow;

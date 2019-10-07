@@ -29,6 +29,7 @@
 #ifndef WX_PRECOMP
     #include "wx/button.h"
     #include "wx/checkbox.h"
+    #include "wx/log.h"
     #include "wx/radiobox.h"
     #include "wx/sizer.h"
     #include "wx/statbox.h"
@@ -68,6 +69,9 @@ protected:
     void OnStyleCheckOrRadioBox(wxCommandEvent& evt);
     void OnResetButton(wxCommandEvent& evt);
     void OnUpdateUIResetButton(wxUpdateUIEvent& evt);
+    void OnResizing(wxHeaderCtrlEvent& evt);
+    void OnBeginResize(wxHeaderCtrlEvent& evt);
+    void OnEndResize(wxHeaderCtrlEvent& evt);
 
     // reset the header style
     void ResetHeaderStyle();
@@ -181,6 +185,10 @@ void HeaderCtrlWidgetsPage::CreateContent()
     }
     btnReset->Bind(wxEVT_BUTTON, &HeaderCtrlWidgetsPage::OnResetButton, this);
     btnReset->Bind(wxEVT_UPDATE_UI, &HeaderCtrlWidgetsPage::OnUpdateUIResetButton, this);
+
+    m_header->Bind(wxEVT_HEADER_RESIZING, &HeaderCtrlWidgetsPage::OnResizing, this);
+    m_header->Bind(wxEVT_HEADER_BEGIN_RESIZE, &HeaderCtrlWidgetsPage::OnBeginResize, this);
+    m_header->Bind(wxEVT_HEADER_END_RESIZE, &HeaderCtrlWidgetsPage::OnEndResize, this);
 }
 
 void HeaderCtrlWidgetsPage::RecreateWidget()
@@ -298,6 +306,24 @@ void HeaderCtrlWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& evt)
                  || m_colSettings[i].rbAlignments->GetSelection() != COL_ALIGNMENT_INDEX_DEFAULT;
     }
     evt.Enable(enable);
+}
+
+void HeaderCtrlWidgetsPage::OnResizing(wxHeaderCtrlEvent& evt)
+{
+    wxLogMessage("Column %i resizing, width = %i", evt.GetColumn(), evt.GetWidth());
+    evt.Skip();
+}
+
+void HeaderCtrlWidgetsPage::OnBeginResize(wxHeaderCtrlEvent& evt)
+{
+    wxLogMessage("Column %i resize began, width = %i", evt.GetColumn(), evt.GetWidth());
+    evt.Skip();
+}
+
+void HeaderCtrlWidgetsPage::OnEndResize(wxHeaderCtrlEvent& evt)
+{
+    wxLogMessage("Column %i resize ended, width = %i", evt.GetColumn(), evt.GetWidth());
+    evt.Skip();
 }
 
 #endif // wxUSE_HEADERCTRL

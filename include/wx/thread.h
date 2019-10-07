@@ -622,15 +622,15 @@ protected:
     // in the context of the thread that called Kill().
     virtual void OnKill() {}
 
+    // called when the thread exits - in the context of this thread
+    //
+    // NB: this function will not be called if the thread is Kill()ed
+    virtual void OnExit() {}
+
 private:
     // no copy ctor/assignment operator
     wxThread(const wxThread&);
     wxThread& operator=(const wxThread&);
-
-    // called when the thread exits - in the context of this thread
-    //
-    // NB: this function will not be called if the thread is Kill()ed
-    virtual void OnExit() { }
 
     friend class wxThreadInternal;
     friend class wxThreadModule;

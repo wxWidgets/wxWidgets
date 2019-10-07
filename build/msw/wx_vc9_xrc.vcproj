@@ -1122,6 +1122,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\include\wx\xrc\xh_dataview.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\include\wx\xrc\xh_datectrl.h"
 				>
 			</File>
@@ -1175,6 +1179,10 @@
 			</File>
 			<File
 				RelativePath="..\..\include\wx\xrc\xh_hyperlink.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\include\wx\xrc\xh_infobar.h"
 				>
 			</File>
 			<File
@@ -1388,6 +1396,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\xrc\xh_dataview.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\xrc\xh_datectrl.cpp"
 				>
 			</File>
@@ -1441,6 +1453,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xrc\xh_hyperlink.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\xrc\xh_infobar.cpp"
 				>
 			</File>
 			<File

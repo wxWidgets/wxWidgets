@@ -1193,8 +1193,8 @@ bool wxThread::IsPaused() const
 class wxThreadModule : public wxModule
 {
 public:
-    virtual bool OnInit();
-    virtual void OnExit();
+    virtual bool OnInit() wxOVERRIDE;
+    virtual void OnExit() wxOVERRIDE;
 
 private:
     wxDECLARE_DYNAMIC_CLASS(wxThreadModule);

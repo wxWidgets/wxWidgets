@@ -74,8 +74,11 @@ public:
 
     void OnRightClick(wxMouseEvent& event);
 
+    virtual void CheckItem(long item, bool check) wxOVERRIDE;
+    virtual bool IsItemChecked(long item) const wxOVERRIDE;
+
 private:
-    void ShowContextMenu(const wxPoint& pos);
+    void ShowContextMenu(const wxPoint& pos, long item);
     wxLog *m_logOld;
     void SetColumnImage(int col, int image);
 
@@ -83,11 +86,14 @@ private:
     void LogColEvent(const wxListEvent& event, const wxString& eventName);
 
     virtual wxString OnGetItemText(long item, long column) const wxOVERRIDE;
+    virtual bool OnGetItemIsChecked(long item) const wxOVERRIDE;
     virtual int OnGetItemColumnImage(long item, long column) const wxOVERRIDE;
     virtual wxItemAttr *OnGetItemAttr(long item) const wxOVERRIDE;
 
     long m_updated;
 
+    // checked boxes in virtual list
+    wxSelectionStore m_checked;
 
     wxDECLARE_NO_COPY_CLASS(MyListCtrl);
     wxDECLARE_EVENT_TABLE();
@@ -111,7 +117,7 @@ protected:
     void OnSmallIconTextView(wxCommandEvent& event);
     void OnVirtualView(wxCommandEvent& event);
     void OnSmallVirtualView(wxCommandEvent& event);
-
+    void OnCheckVisibility(wxCommandEvent& event);
     void OnSetItemsCount(wxCommandEvent& event);
 
 
@@ -241,6 +247,6 @@ enum
 #ifdef __WXOSX__
     LIST_MAC_USE_GENERIC,
 #endif
-
+    LIST_CHECKVISIBILITY,
     LIST_CTRL                   = 1000
 };

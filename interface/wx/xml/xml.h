@@ -715,7 +715,7 @@ public:
         Loads the given filename using the given encoding. See Load().
     */
     wxXmlDocument(const wxString& filename,
-                  const wxString& encoding = "UTF-8"));
+                  const wxString& encoding = "UTF-8");
 
     /**
         Loads the XML document from given stream using the given encoding. See Load().

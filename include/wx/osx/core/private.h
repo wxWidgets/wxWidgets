@@ -109,7 +109,7 @@ WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithCFData( CFDataRe
 WXDLLIMPEXP_CORE CGDataConsumerRef wxMacCGDataConsumerCreateWithCFData( CFMutableDataRef data );
 WXDLLIMPEXP_CORE CGDataProviderRef wxMacCGDataProviderCreateWithMemoryBuffer( const wxMemoryBuffer& buf );
 
-WXDLLIMPEXP_CORE CGColorSpaceRef wxMacGetGenericRGBColorSpace(void);
+WXDLLIMPEXP_CORE CGColorSpaceRef wxMacGetGenericRGBColorSpace();
 
 WXDLLIMPEXP_CORE double wxOSXGetMainScreenContentScaleFactor();
 
@@ -1014,6 +1014,83 @@ void wxMacCocoaRelease( void* obj );
 void wxMacCocoaAutorelease( void* obj );
 void* wxMacCocoaRetain( void* obj );
 
+// shared_ptr like API for NSObject and subclasses
+template <class T>
+class wxNSObjRef
+{
+public:
+    typedef T element_type;
+
+    wxNSObjRef()
+        : m_ptr(NULL)
+    {
+    }
+
+    wxNSObjRef( T p )
+        : m_ptr(p)
+    {
+    }
+
+    wxNSObjRef( const wxNSObjRef& otherRef )
+        : m_ptr(wxMacCocoaRetain(otherRef.m_ptr))
+    {
+    }
+
+    wxNSObjRef& operator=( const wxNSObjRef& otherRef )
+    {
+        if (this != &otherRef)
+        {
+            wxMacCocoaRetain(otherRef.m_ptr);
+            wxMacCocoaRelease(m_ptr);
+            m_ptr = otherRef.m_ptr;
+        }
+        return *this;
+    }
+    
+    wxNSObjRef& operator=( T ptr )
+    {
+        if (get() != ptr)
+        {
+            wxMacCocoaRetain(ptr);
+            wxMacCocoaRelease(m_ptr);
+            m_ptr = ptr;
+        }
+        return *this;
+    }
+
+
+    T get() const
+    {
+        return m_ptr;
+    }
+
+    operator T() const
+    {
+        return m_ptr;
+    }
+
+    T operator->() const
+    {
+        return m_ptr;
+    }
+
+    void reset( T p = NULL )
+    {
+        wxMacCocoaRelease(m_ptr);
+        m_ptr = p; // Automatic conversion should occur
+    }
+
+    // Release the pointer, i.e. give up its ownership.
+    T release()
+    {
+        T p = m_ptr;
+        m_ptr = NULL;
+        return p;
+    }
+
+protected:
+    T m_ptr;
+};
 
 #endif
     // _WX_PRIVATE_CORE_H_

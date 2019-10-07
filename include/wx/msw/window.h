@@ -99,6 +99,8 @@ public:
 
     virtual bool Reparent(wxWindowBase *newParent) wxOVERRIDE;
 
+    virtual wxSize GetDPI() const wxOVERRIDE;
+
     virtual void WarpPointer(int x, int y) wxOVERRIDE;
     virtual bool EnableTouchEvents(int eventsMask) wxOVERRIDE;
 
@@ -576,7 +578,25 @@ public:
     // Return true if the button was clicked, false otherwise.
     static bool MSWClickButtonIfPossible(wxButton* btn);
 
+    // This method is used for handling wxRadioButton-related complications,
+    // see wxRadioButton::SetValue(). It calls WXDoUpdatePendingFocus() for
+    // this window and all its parents up to the enclosing TLW, recursively.
+    void WXSetPendingFocus(wxWindow* win);
+
+    // Should be overridden by all classes storing the "last focused" window.
+    virtual void WXDoUpdatePendingFocus(wxWindow* WXUNUSED(win)) {}
+
+    // Called from WM_DPICHANGED handler for all windows to let them update
+    // any sizes and fonts used internally when the DPI changes and generate
+    // wxDPIChangedEvent to let the user code do the same thing as well.
+    void MSWUpdateOnDPIChange(const wxSize& oldDPI, const wxSize& newDPI);
+
 protected:
+    // Called from MSWUpdateOnDPIChange() specifically to update the control
+    // font, as this may need to be done differently for some specific native
+    // controls. The default version updates m_font of this window.
+    virtual void MSWUpdateFontOnDPIChange(const wxSize& newDPI);
+
     // this allows you to implement standard control borders without
     // repeating the code in different classes that are not derived from
     // wxControl
@@ -613,6 +633,8 @@ protected:
                                  int *descent = NULL,
                                  int *externalLeading = NULL,
                                  const wxFont *font = NULL) const wxOVERRIDE;
+    static void MSWDoClientToScreen( WXHWND hWnd, int *x, int *y );
+    static void MSWDoScreenToClient( WXHWND hWnd, int *x, int *y );
     virtual void DoClientToScreen( int *x, int *y ) const wxOVERRIDE;
     virtual void DoScreenToClient( int *x, int *y ) const wxOVERRIDE;
     virtual void DoGetPosition( int *x, int *y ) const wxOVERRIDE;
