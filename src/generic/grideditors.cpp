@@ -707,37 +707,45 @@ void wxGridCellNumberEditor::Create(wxWindow* parent,
     }
 }
 
-void wxGridCellNumberEditor::SetSize(const wxRect& r)
+void wxGridCellNumberEditor::SetSize(const wxRect& rectCell)
 {
 #if wxUSE_SPINCTRL
     if ( HasRange() )
     {
         wxASSERT_MSG(m_control, "The wxSpinCtrl must be created first!");
 
-        const wxSize bestSize = Spin()->GetBestSize();
-        const int width = wxMax(r.GetWidth(), bestSize.GetWidth());
-        const int height = bestSize.GetHeight() > 0 ?
-                           bestSize.GetHeight() :
-                           r.GetHeight();
+        wxSize size = Spin()->GetBestSize();
 
-        wxRect rect(r.GetLeft(), r.GetTop(), width, bestSize.GetHeight());
+        // Extend the control to fill the entire cell horizontally.
+        if ( size.x < rectCell.GetWidth() )
+            size.x = rectCell.GetWidth();
 
-        // If edit not the top most cell then align center.
-        if ( r.GetTop() > 0 )
+        // Ensure it uses a reasonable height even if wxSpinCtrl::GetBestSize()
+        // didn't return anything useful.
+        if ( size.y <= 0 )
+            size.y = rectCell.GetHeight();
+
+        wxRect rectSpin(rectCell.GetPosition(), size);
+
+        // If possible, i.e. if we're not editing the topmost or leftmost cell,
+        // center the control rectangle in the cell.
+        if ( rectCell.GetTop() > 0 )
         {
-            rect.SetTop(r.GetTop() - (rect.GetHeight() - r.GetHeight()) / 2);
+            rectSpin.SetTop(rectCell.GetTop() -
+                            (rectSpin.GetHeight() - rectCell.GetHeight()) / 2);
         }
-        if ( r.GetLeft() > 0 )
+        if ( rectCell.GetLeft() > 0 )
         {
-            rect.SetLeft(r.GetLeft() - (rect.GetWidth() - r.GetWidth()) / 2);
+            rectSpin.SetLeft(rectCell.GetLeft() -
+                             (rectSpin.GetWidth() - rectCell.GetWidth()) / 2);
         }
 
-        wxGridCellEditor::SetSize(rect);
+        wxGridCellEditor::SetSize(rectSpin);
     }
     else
 #endif // wxUSE_SPINCTRL
     {
-        wxGridCellTextEditor::SetSize(r);
+        wxGridCellTextEditor::SetSize(rectCell);
     }
 }
 
