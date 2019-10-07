@@ -115,6 +115,11 @@ public:
     wxSize GetSizeFromTextSize(const wxSize& tsize) const
         { return DoGetSizeFromTextSize(tsize.x, tsize.y); }
 
+    wxSize GetSizeFromText(const wxString& text) const
+    {
+        return GetSizeFromTextSize(GetTextExtent(text).GetWidth());
+    }
+
 
     // static utilities for mnemonics char (&) handling
     // ------------------------------------------------
