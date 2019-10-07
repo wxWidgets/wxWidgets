@@ -145,6 +145,10 @@ bool wxSpinCtrlGTKBase::Create(wxWindow *parent, wxWindowID id,
 
     PostCreation(size);
 
+    // Fix the min width because PostCreation sets it to `size`, but the
+    // control can be thinner.
+    SetMinSize(GetSizeFromText("9"));
+
     if (!value.empty())
     {
         SetValue(value);
@@ -267,6 +271,8 @@ void wxSpinCtrlGTKBase::DoSetRange(double minVal, double maxVal)
 
     wxSpinCtrlEventDisabler disable(this);
     gtk_spin_button_set_range( GTK_SPIN_BUTTON(m_widget), minVal, maxVal);
+
+    InvalidateBestSize();
 }
 
 void wxSpinCtrlGTKBase::DoSetIncrement(double inc)
@@ -354,15 +360,17 @@ GdkWindow *wxSpinCtrlGTKBase::GTKGetWindow(wxArrayGdkWindows& windows) const
 wxSize wxSpinCtrlGTKBase::DoGetBestSize() const
 {
     const int minVal = static_cast<int>(DoGetMin());
-    const int lenMin = wxString::Format("%d", minVal).length();
-
     const int maxVal = static_cast<int>(DoGetMax());
-    const int lenMax = wxString::Format("%d", maxVal).length();
+
+    const int lenMin = (GetBase() == 16 ?
+                       wxPrivate::wxSpinCtrlFormatAsHex(minVal, maxVal) :
+                       wxString::Format("%d", minVal)).length();
+    const int lenMax = (GetBase() == 16 ?
+                       wxPrivate::wxSpinCtrlFormatAsHex(maxVal, maxVal) :
+                       wxString::Format("%d", maxVal)).length();
 
     wxString longestText(wxMax(lenMin, lenMax), '9');
-    if ( minVal < 0 )
-        longestText.insert(0, "-");
-    return DoGetSizeFromTextSize(GetTextExtent(longestText).x, -1);
+    return GetSizeFromText(longestText);
 }
 
 wxSize wxSpinCtrlGTKBase::DoGetSizeFromTextSize(int xlen, int ylen) const
@@ -476,6 +484,10 @@ bool wxSpinCtrl::SetBase(int base)
                                              (gpointer)wx_gtk_spin_output,
                                              this);
     }
+
+    SetValue(GetValue());
+
+    InvalidateBestSize();
 
     return true;
 }
