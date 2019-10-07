@@ -95,7 +95,7 @@ public:
     virtual wxString GetTitle() const wxOVERRIDE { return m_grid->GetColLabelValue(m_col); }
     virtual wxBitmap GetBitmap() const wxOVERRIDE { return wxNullBitmap; }
     virtual int GetWidth() const wxOVERRIDE { return m_grid->GetColSize(m_col); }
-    virtual int GetMinWidth() const wxOVERRIDE { return m_grid->GetColMinimalAcceptableWidth(); }
+    virtual int GetMinWidth() const wxOVERRIDE { return m_grid->GetColMinimalWidth(m_col); }
     virtual wxAlignment GetAlignment() const wxOVERRIDE
     {
         int horz,
@@ -191,11 +191,9 @@ private:
     }
 
     // override to implement column auto sizing
-    virtual bool UpdateColumnWidthToFit(unsigned int idx, int widthTitle) wxOVERRIDE
+    virtual bool UpdateColumnWidthToFit(unsigned int idx, int WXUNUSED(widthTitle)) wxOVERRIDE
     {
-        // TODO: currently grid doesn't support computing the column best width
-        //       from its contents so we just use the best label width as is
-        GetOwner()->SetColSize(idx, widthTitle);
+        GetOwner()->HandleColumnAutosize(idx, GetDummyMouseEvent());
 
         return true;
     }

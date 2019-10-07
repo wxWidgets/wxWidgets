@@ -3874,13 +3874,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event, wxGridColLabelWindo
         }
         else
         {
-            // adjust column width depending on label text
-            //
-            // TODO: generate RESIZING event, see #10754
-            if ( !SendGridSizeEvent(wxEVT_GRID_COL_AUTO_SIZE, -1, colEdge, event) )
-                AutoSizeColLabelSize( colEdge );
-
-            SendGridSizeEvent(wxEVT_GRID_COL_SIZE, -1, colEdge, event);
+            HandleColumnAutosize(colEdge, event);
 
             ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, colLabelWin);
             m_dragLastPos = -1;
@@ -4021,6 +4015,17 @@ void wxGrid::ProcessCornerLabelMouseEvent( wxMouseEvent& event )
             // no default action at the moment
         }
     }
+}
+
+void wxGrid::HandleColumnAutosize(int col, const wxMouseEvent& event)
+{
+    // adjust column width depending on label text
+    //
+    // TODO: generate RESIZING event, see #10754
+    if ( !SendGridSizeEvent(wxEVT_GRID_COL_AUTO_SIZE, -1, col, event) )
+        AutoSizeColLabelSize(col);
+
+    SendGridSizeEvent(wxEVT_GRID_COL_SIZE, -1, col, event);
 }
 
 void wxGrid::CancelMouseCapture()
@@ -9128,16 +9133,23 @@ void wxGrid::SetColSize( int col, int width )
     // show the column back using its old size.
     if ( width == -1 && GetColWidth(col) != 0 )
     {
-        long w, h;
-        wxArrayString lines;
-        wxClientDC dc(m_colLabelWin);
-        dc.SetFont(GetLabelFont());
-        StringToLines(GetColLabelValue(col), lines);
-        if ( GetColLabelTextOrientation() == wxHORIZONTAL )
-            GetTextBoxSize( dc, lines, &w, &h );
+        if ( m_useNativeHeader )
+        {
+            width = GetGridColHeader()->GetColumnTitleWidth(col);
+        }
         else
-            GetTextBoxSize( dc, lines, &h, &w );
-        width = w + 6;
+        {
+            long w, h;
+            wxArrayString lines;
+            wxClientDC dc(m_colLabelWin);
+            dc.SetFont(GetLabelFont());
+            StringToLines(GetColLabelValue(col), lines);
+            if ( GetColLabelTextOrientation() == wxHORIZONTAL )
+                GetTextBoxSize( dc, lines, &w, &h );
+            else
+                GetTextBoxSize( dc, lines, &h, &w );
+            width = w + 6;
+        }
 
         // Check that it is not less than the minimal width and do use the
         // possibly greater than minimal-acceptable-width minimal-width itself

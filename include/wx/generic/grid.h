@@ -2282,6 +2282,7 @@ protected:
     friend class wxGridWindow;
     friend class wxGridHeaderRenderer;
 
+    friend class wxGridHeaderColumn;
     friend class wxGridHeaderCtrl;
 
 private:
@@ -2403,6 +2404,8 @@ private:
     void ProcessColLabelMouseEvent(wxMouseEvent& event,
                                    wxGridColLabelWindow* colLabelWin);
     void ProcessCornerLabelMouseEvent(wxMouseEvent& event);
+
+    void HandleColumnAutosize(int col, const wxMouseEvent& event);
 
     void DoColHeaderClick(int col);
 
