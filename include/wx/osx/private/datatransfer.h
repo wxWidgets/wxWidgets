@@ -11,6 +11,7 @@
 #define _WX_OSX_PRIVATE_DATATRANSFER_H_
 
 #include "wx/osx/private.h"
+#include "wx/osx/dataform.h"
 
 class WXDLLIMPEXP_CORE wxOSXDataSourceItem
 {
