@@ -141,7 +141,7 @@ public:
     wxSize GetSizeFromTextSize(const wxSize& tsize) const;
 
     /**
-        Determine the size needed by the control to leave the given text.
+        Determine the minimum size needed by the control to display the given text.
 
         The helper function that uses combination of GetSizeFromTextSize() and
         GetTextExtent() which used together pretty often:
