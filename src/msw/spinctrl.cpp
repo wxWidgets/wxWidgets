@@ -348,10 +348,30 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     if (!m_hasFont)
         SetFont(GetDefaultAttributes().font);
 
+    // If the initial text value is actually a number, it overrides the
+    // "initial" argument specified later.
+    long initialFromText;
+    if ( value.ToLong(&initialFromText) )
+        initial = initialFromText;
+
+    // Set the range in the native control: notice that we must do it before
+    // calling SetValue() to use the correct validity checks for the initial
+    // value.
+    SetRange(min, max);
+    SetValue(initial);
+
+    // Also set the text part of the control if it was specified independently
+    // but don't generate an event for this, it would be unexpected.
+    m_blockEvent = true;
+    if ( !value.empty() )
+        SetValue(value);
+    m_blockEvent = false;
+
     // Finally deal with the size: notice that this can only be done now both
     // windows are created and the text one is set up as buddy because
     // UDM_SETBUDDY changes its size using some unknown algorithm, so setting
-    // the sizes earlier is useless.
+    // the sizes earlier is useless. Do it after setting the range and the base
+    // because DoGetBestSize() uses them.
     wxSize bestSize = DoGetBestSize();
     wxSize sizeCtrl(size);
     if ( sizeCtrl.x <= 0 )
@@ -374,30 +394,10 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // This will call our DoMoveWindow() and lay out the windows correctly.
     SetInitialSize(sizeCtrl);
 
-    // Fix the min width because SetInitialSize sets it to sizeCtrl, but the
-    // control can be thinner.
-    SetMinSize(GetSizeFromText("9"));
+    // Fix the min size.
+    SetMinSize(size);
 
     (void)::ShowWindow(GetBuddyHwnd(), SW_SHOW);
-
-    // If the initial text value is actually a number, it overrides the
-    // "initial" argument specified later.
-    long initialFromText;
-    if ( value.ToLong(&initialFromText) )
-        initial = initialFromText;
-
-    // Set the range in the native control: notice that we must do it before
-    // calling SetValue() to use the correct validity checks for the initial
-    // value.
-    SetRange(min, max);
-    SetValue(initial);
-
-    // Also set the text part of the control if it was specified independently
-    // but don't generate an event for this, it would be unexpected.
-    m_blockEvent = true;
-    if ( !value.empty() )
-        SetValue(value);
-    m_blockEvent = false;
 
     return true;
 }
@@ -445,7 +445,7 @@ bool wxSpinCtrl::SetBase(int base)
     // use ES_NUMBER for the buddy control.
     UpdateBuddyStyle();
 
-    // Update the control text.
+    // Update the displayed text after changing the base it uses.
     SetValue(GetValue());
 
     return true;
@@ -755,15 +755,7 @@ int wxSpinCtrl::GetOverlap() const
 
 wxSize wxSpinCtrl::DoGetBestSize() const
 {
-    const int minVal = GetMin();
-    const int maxVal = GetMax();
-    const char* formatString = GetBase() == 16 ?
-                               (maxVal < 0x10000 ? "0x%04lx" : "0x%08lx") :
-                               "%d";
-    const int lenMin = wxString::Format(formatString, minVal).length();
-    const int lenMax = wxString::Format(formatString, maxVal).length();
-    const wxString largestString('8', wxMax(lenMin, lenMax));
-    return GetSizeFromText(largestString);
+    return wxPrivate::wxSpinCtrlGetBestSize(this, GetMin(), GetMax(), GetBase());
 }
 
 wxSize wxSpinCtrl::DoGetSizeFromTextSize(int xlen, int ylen) const
