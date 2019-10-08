@@ -371,12 +371,12 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // windows are created and the text one is set up as buddy because
     // UDM_SETBUDDY changes its size using some unknown algorithm, so setting
     // the sizes earlier is useless. Do it after setting the range and the base
-    // because DoGetBestSize() uses them.
-    if ( size.x > 0 && size.x < DoGetBestSize().x )
+    // because GetBestSize() uses them.
+    if ( size.x > 0 && size.x < GetBestSize().x )
     {
         wxLogDebug(wxS("wxSpinCtrl \"%s\": initial width %d is too small, ")
                    wxS("at least %d pixels needed."),
-                   name, size.x, DoGetBestSize().x);
+                   name, size.x, GetBestSize().x);
     }
 
     SetInitialSize(size);
