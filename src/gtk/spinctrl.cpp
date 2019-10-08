@@ -145,10 +145,6 @@ bool wxSpinCtrlGTKBase::Create(wxWindow *parent, wxWindowID id,
 
     PostCreation(size);
 
-    // Fix the min width because PostCreation sets it to `size`, but the
-    // control can be thinner.
-    SetMinSize(GetSizeFromText("9"));
-
     if (!value.empty())
     {
         SetValue(value);
@@ -361,16 +357,7 @@ wxSize wxSpinCtrlGTKBase::DoGetBestSize() const
 {
     const int minVal = static_cast<int>(DoGetMin());
     const int maxVal = static_cast<int>(DoGetMax());
-
-    const int lenMin = (GetBase() == 16 ?
-                       wxPrivate::wxSpinCtrlFormatAsHex(minVal, maxVal) :
-                       wxString::Format("%d", minVal)).length();
-    const int lenMax = (GetBase() == 16 ?
-                       wxPrivate::wxSpinCtrlFormatAsHex(maxVal, maxVal) :
-                       wxString::Format("%d", maxVal)).length();
-
-    wxString longestText(wxMax(lenMin, lenMax), '9');
-    return GetSizeFromText(longestText);
+    return wxPrivate::wxSpinCtrlGetBestSize(this, minVal, maxVal, GetBase());
 }
 
 wxSize wxSpinCtrlGTKBase::DoGetSizeFromTextSize(int xlen, int ylen) const
@@ -485,9 +472,10 @@ bool wxSpinCtrl::SetBase(int base)
                                              this);
     }
 
-    SetValue(GetValue());
-
     InvalidateBestSize();
+
+    // Update the displayed text after changing the base it uses.
+    SetValue(GetValue());
 
     return true;
 }
