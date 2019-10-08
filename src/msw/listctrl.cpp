@@ -3656,29 +3656,31 @@ static void wxConvertToMSWListCol(HWND hwndList,
     {
         lvCol.mask |= LVCF_IMAGE;
 
+        // as we're going to overwrite the format field, get its
+        // current value first -- unless we want to overwrite it anyhow
+        if ( !(lvCol.mask & LVCF_FMT) )
+        {
+            LV_COLUMN lvColOld;
+            wxZeroMemory(lvColOld);
+            lvColOld.mask = LVCF_FMT;
+            if ( ListView_GetColumn(hwndList, col, &lvColOld) )
+            {
+                lvCol.fmt = lvColOld.fmt;
+            }
+
+            lvCol.mask |= LVCF_FMT;
+        }
+
         // we use LVCFMT_BITMAP_ON_RIGHT because the images on the right
         // seem to be generally nicer than on the left and the generic
         // version only draws them on the right (we don't have a flag to
         // specify the image location anyhow)
+        const int fmtImage = LVCFMT_BITMAP_ON_RIGHT | LVCFMT_COL_HAS_IMAGES;
+
         if ( item.m_image != -1 )
-        {
-            // as we're going to overwrite the format field, get its
-            // current value first -- unless we want to overwrite it anyhow
-            if ( !(lvCol.mask & LVCF_FMT) )
-            {
-                LV_COLUMN lvColOld;
-                wxZeroMemory(lvColOld);
-                lvColOld.mask = LVCF_FMT;
-                if ( ListView_GetColumn(hwndList, col, &lvColOld) )
-                {
-                    lvCol.fmt = lvColOld.fmt;
-                }
-
-                lvCol.mask |= LVCF_FMT;
-            }
-
-            lvCol.fmt |= LVCFMT_BITMAP_ON_RIGHT | LVCFMT_COL_HAS_IMAGES;
-        }
+            lvCol.fmt |= fmtImage;
+        else // remove any existing image
+            lvCol.fmt &= ~fmtImage;
 
         lvCol.iImage = item.m_image;
     }
