@@ -373,16 +373,11 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // the sizes earlier is useless. Do it after setting the range and the base
     // because DoGetBestSize() uses them.
     wxSize bestSize = DoGetBestSize();
-    wxSize sizeCtrl(size);
-    if ( sizeCtrl.x <= 0 )
-    {
-        sizeCtrl.x = bestSize.GetWidth();
-    }
-    else if ( sizeCtrl.x <= bestSize.GetWidth() )
+    if ( size.x > 0 && size.x < bestSize.x )
     {
         wxLogDebug(wxS("wxSpinCtrl \"%s\": initial width %d is too small, ")
                    wxS("at least %d pixels needed."),
-                   name, size.x, bestSize.GetWidth());
+                   name, size.x, bestSize.x);
     }
 
     SetInitialSize(size);
