@@ -385,17 +385,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
                    name, size.x, bestSize.GetWidth());
     }
 
-    // adjust an invalid height for text control
-    if ( sizeCtrl.y <= 0 )
-    {
-        sizeCtrl.y = bestSize.GetHeight();
-    }
-
-    // This will call our DoMoveWindow() and lay out the windows correctly.
-    SetInitialSize(sizeCtrl);
-
-    // Fix the min size.
-    SetMinSize(size);
+    SetInitialSize(size);
 
     (void)::ShowWindow(GetBuddyHwnd(), SW_SHOW);
 
