@@ -7136,8 +7136,10 @@ if test "$wxUSE_HTML" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html html/about html/help html/helpview html/printing html/test html/virtual html/widget html/zip htlbox"
 fi
 if test "$wxUSE_WEBKIT" = "yes"; then
-    dnl This is only supported under Mac.
-    if test "$wxUSE_MAC" != 1 -a "$USE_DARWIN" != 1; then
+    if test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
+        AC_DEFINE(wxUSE_WEBKIT)
+        WEBKIT_LINK="-framework WebKit"
+    else
         wxUSE_WEBKIT=no
     fi
     if test "$wxUSE_WEBKIT" = "yes"; then
@@ -7275,6 +7277,10 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
                                     AC_MSG_WARN([webkitgtk not found.])
                                   ])
             fi
+        elif test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
+            dnl Under Mac we always have the libraries
+            USE_WEBVIEW_WEBKIT=1
+            WEBKIT_LINK="-framework WebKit"
         fi
     fi
 
