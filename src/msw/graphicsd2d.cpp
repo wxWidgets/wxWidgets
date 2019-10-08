@@ -4576,10 +4576,25 @@ void wxD2DContext::Flush()
 
 void wxD2DContext::GetDPI(wxDouble* dpiX, wxDouble* dpiY) const
 {
-    FLOAT x, y;
-    GetRenderTarget()->GetDpi(&x, &y);
-    if (dpiX != NULL) *dpiX = x;
-    if (dpiY != NULL) *dpiY = y;
+    if ( GetWindow() )
+    {
+        const wxSize dpi = GetWindow()->GetDPI();
+
+        if ( dpiX )
+            *dpiX = dpi.x;
+        if ( dpiY )
+            *dpiY = dpi.y;
+    }
+    else
+    {
+        FLOAT x, y;
+        GetRenderTarget()->GetDpi(&x, &y);
+
+        if ( dpiX )
+            *dpiX = x;
+        if ( dpiY )
+            *dpiY = y;
+    }
 }
 
 //-----------------------------------------------------------------------------

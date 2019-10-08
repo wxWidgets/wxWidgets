@@ -458,6 +458,7 @@ public:
     virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const wxOVERRIDE;
     virtual bool ShouldOffset() const wxOVERRIDE;
     virtual void GetSize( wxDouble* width, wxDouble *height );
+    virtual void GetDPI(wxDouble* dpiX, wxDouble* dpiY) const wxOVERRIDE;
 
     Graphics* GetGraphics() const { return m_context; }
 
@@ -2395,6 +2396,26 @@ void wxGDIPlusContext::GetSize( wxDouble* width, wxDouble *height )
 {
     *width = m_width;
     *height = m_height;
+}
+
+void wxGDIPlusContext::GetDPI(wxDouble* dpiX, wxDouble* dpiY) const
+{
+    if ( GetWindow() )
+    {
+        const wxSize dpi = GetWindow()->GetDPI();
+
+        if ( dpiX )
+            *dpiX = dpi.x;
+        if ( dpiY )
+            *dpiY = dpi.y;
+    }
+    else
+    {
+        if ( dpiX )
+            *dpiX = GetGraphics()->GetDpiX();
+        if ( dpiY )
+            *dpiY = GetGraphics()->GetDpiY();
+    }
 }
 
 //-----------------------------------------------------------------------------
