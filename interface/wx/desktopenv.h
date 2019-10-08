@@ -10,9 +10,9 @@
 /**
     @class wxDesktopEnv
  
-    wxDesktopEnv contains the function for moving the files/folder to Trash
+    wxDesktopEnv contains the function for moving the file/folder to Trash
     or Recycle Bin. The call to this function is synchronous, which means that
-    application will wait for the move to finish
+    application will wait for the move to finish.
  
     @since 3.1.3
 */
@@ -25,9 +25,9 @@ public:
     wxDesktopEnv();
     
     /**
-        Moves the file to the Recycle Bin/Trash.
+        Moves the file/folder to the Recycle Bin/Trash.
         
-        @return true on success
+        @returns true on success
     */
     bool MoveToRecycleBin(wxString &fileName);
 };
