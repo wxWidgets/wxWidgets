@@ -2,8 +2,9 @@
 // Name:        tests/file/desktopenv.cpp
 // Purpose:     wxDesktopEnv unit test
 // Author:      Igor Korot
-// Created:     2015-11-17
-// Copyright:   (C) wxWidgets team
+// Created:     2019-10-07
+// Copyright:   (c) 2019 wxWidgets development team
+// License:     wxWidgets license
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "testprec.h"
