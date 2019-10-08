@@ -1,11 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/osx/cocoa/desktopenv.cpp
+// Name:        src/osx/cocoa/desktopenv.mm
 // Purpose:     wxDesktopEnv
 // Author:      Igor Korot
-// Modified by:
-// Created:     17/11/15
-// Copyright:   (c) wxWidgets team
-// Licence:     wxWindows licence
+// Created:     2019-10-07
+// Copyright:   (c) 2019 wxWidgets development team
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 #import <Foundation/NSArray.h>
 #import <Foundation/NSURL.h>

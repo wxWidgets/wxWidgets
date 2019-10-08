@@ -1,8 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        desktopenv.h
-// Purpose:     interface of wxDesktopEnv
-// Author:      wxWidgets team
-// Licence:     wxWindows licence
+// Purpose:     wxDesktopEnv class interface
+// Author:      Igor Korot
+// Created      2019-10-07
+// Copyright:   (c) 2019 wxWidgets development team
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 /**

@@ -1,11 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/desktopenv.h
-// Purpose:     wxDesktopEnv class
+// Purpose:     wxDesktopEnv class interface
 // Author:      Igor Korot
-// Modified by:
-// Created:     17/11/2015
-// Copyright:   (c) wxWidgets team
-// Licence:     wxWindows licence
+// Created:     2019-10-07
+// Copyright:   (c) 2019 wxWidgets development team
+// Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_MSW_DESKTOPENV_H_

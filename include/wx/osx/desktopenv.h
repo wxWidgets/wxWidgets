@@ -2,10 +2,9 @@
 // Name:        wx/osx/desktopenv.h
 // Purpose:     wxDesktopEnv class interface
 // Author:      Igor Korot
-// Modified by:
-// Created:     17.11.15
-// Copyright:   (c) wxWidgets team
-// Licence:     wxWindows licence
+// Created:     2019-10-07
+// Copyright:   (c) 2019 wxWidgets development team
+// Licence:     wxWidgets licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_OSX_DESKTOPENV_H_
