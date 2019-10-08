@@ -13,6 +13,7 @@
 #if wxUSE_DRAG_AND_DROP
 
 #include "wx/dnd.h"
+#include "wx/scopedarray.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -73,8 +74,8 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
         if ( data )
         {
             size_t formatcount = data->GetFormatCount();
-            wxDataFormat *array = new wxDataFormat[formatcount];
-            data->GetAllFormats( array );
+            wxScopedArray<wxDataFormat> array(formatcount);
+            data->GetAllFormats( array.get() );
             for (size_t i = 0; !supported && i < formatcount; i++)
             {
                 wxDataFormat format = array[i];
@@ -84,14 +85,12 @@ bool wxDropTarget::CurrentDragHasSupportedFormat()
                     break;
                 }
             }
-
-            delete [] array;
         }
     }
 
     if ( !supported )
     {
-        supported = m_dataObject->HasDataInPasteboard( m_currentDragPasteboard );
+        supported = m_dataObject->CanReadFromSource( m_currentDragPasteboard );
     }
 
     return supported;
@@ -113,8 +112,8 @@ bool wxDropTarget::GetData()
         if (data != NULL)
         {
             size_t formatcount = data->GetFormatCount();
-            wxDataFormat *array = new wxDataFormat[formatcount];
-            data->GetAllFormats( array );
+            wxScopedArray<wxDataFormat> array(formatcount);
+            data->GetAllFormats( array.get() );
             for (size_t i = 0; !transferred && i < formatcount; i++)
             {
                 wxDataFormat format = array[i];
@@ -135,14 +134,12 @@ bool wxDropTarget::GetData()
                     }
                 }
             }
-
-            delete [] array;
         }
     }
 
     if ( !transferred )
     {
-        transferred = m_dataObject->GetFromPasteboard( m_currentDragPasteboard );
+        transferred = m_dataObject->ReadFromSource(m_currentDragPasteboard);
     }
 
     return transferred;

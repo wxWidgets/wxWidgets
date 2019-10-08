@@ -2790,7 +2790,7 @@ typedef WX_UIImage WXImage;
 typedef WX_EAGLContext WXGLContext;
 typedef WX_NSString WXGLPixelFormat;
 typedef WX_UIWebView OSXWebViewPtr;
-typedef WX_UIPasteboard OSXPasteboard;
+typedef WX_UIPasteboard WXOSXPasteboard;
 
 #endif
 
