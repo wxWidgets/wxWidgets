@@ -3660,9 +3660,6 @@ static void wxConvertToMSWListCol(HWND hwndList,
         // seem to be generally nicer than on the left and the generic
         // version only draws them on the right (we don't have a flag to
         // specify the image location anyhow)
-        //
-        // we don't use LVCFMT_COL_HAS_IMAGES because it doesn't seem to
-        // make any difference in my tests -- but maybe we should?
         if ( item.m_image != -1 )
         {
             // as we're going to overwrite the format field, get its
@@ -3680,7 +3677,7 @@ static void wxConvertToMSWListCol(HWND hwndList,
                 lvCol.mask |= LVCF_FMT;
             }
 
-            lvCol.fmt |= LVCFMT_BITMAP_ON_RIGHT | LVCFMT_IMAGE;
+            lvCol.fmt |= LVCFMT_BITMAP_ON_RIGHT | LVCFMT_COL_HAS_IMAGES;
         }
 
         lvCol.iImage = item.m_image;
