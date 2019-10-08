@@ -2154,21 +2154,37 @@ void wxTextCtrl::OnKeyDown(wxKeyEvent& event)
     // from working. So we work around it by intercepting these shortcuts
     // ourselves and emitting clipboard events (which richedit will handle,
     // so everything works as before, including pasting of rich text):
-    if ( event.GetModifiers() == wxMOD_CONTROL && IsRich() )
+    if ( IsRich() )
     {
-        switch ( event.GetKeyCode() )
+        if ( event.GetModifiers() == wxMOD_CONTROL )
         {
-            case 'C':
-                Copy();
-                return;
-            case 'X':
-                Cut();
-                return;
-            case 'V':
-                Paste();
-                return;
-            default:
-                break;
+            switch ( event.GetKeyCode() )
+            {
+                case 'C':
+                case WXK_INSERT:
+                    Copy();
+                    return;
+                case 'X':
+                    Cut();
+                    return;
+                case 'V':
+                    Paste();
+                    return;
+                default:
+                    break;
+            }
+        }
+        else if ( event.GetModifiers() == wxMOD_SHIFT )
+        {
+            switch ( event.GetKeyCode() )
+            {
+                case WXK_INSERT:
+                    Paste();
+                    return;
+                case WXK_DELETE:
+                    Cut();
+                    return;
+            }
         }
     }
 
