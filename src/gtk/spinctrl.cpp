@@ -267,6 +267,8 @@ void wxSpinCtrlGTKBase::DoSetRange(double minVal, double maxVal)
 
     wxSpinCtrlEventDisabler disable(this);
     gtk_spin_button_set_range( GTK_SPIN_BUTTON(m_widget), minVal, maxVal);
+
+    InvalidateBestSize();
 }
 
 void wxSpinCtrlGTKBase::DoSetIncrement(double inc)
@@ -354,15 +356,8 @@ GdkWindow *wxSpinCtrlGTKBase::GTKGetWindow(wxArrayGdkWindows& windows) const
 wxSize wxSpinCtrlGTKBase::DoGetBestSize() const
 {
     const int minVal = static_cast<int>(DoGetMin());
-    const int lenMin = wxString::Format("%d", minVal).length();
-
     const int maxVal = static_cast<int>(DoGetMax());
-    const int lenMax = wxString::Format("%d", maxVal).length();
-
-    wxString longestText(wxMax(lenMin, lenMax), '9');
-    if ( minVal < 0 )
-        longestText.insert(0, "-");
-    return DoGetSizeFromTextSize(GetTextExtent(longestText).x, -1);
+    return wxPrivate::wxSpinCtrlGetBestSize(this, minVal, maxVal, GetBase());
 }
 
 wxSize wxSpinCtrlGTKBase::DoGetSizeFromTextSize(int xlen, int ylen) const
@@ -476,6 +471,11 @@ bool wxSpinCtrl::SetBase(int base)
                                              (gpointer)wx_gtk_spin_output,
                                              this);
     }
+
+    InvalidateBestSize();
+
+    // Update the displayed text after changing the base it uses.
+    SetValue(GetValue());
 
     return true;
 }
