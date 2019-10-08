@@ -96,7 +96,7 @@ wxHtmlCell::~wxHtmlCell()
     delete m_Link;
 }
 
-// Update the descent value when whe are in a <sub> or <sup>.
+// Update the descent value when we are in a <sub> or <sup>.
 // prevbase is the parent base
 void wxHtmlCell::SetScriptMode(wxHtmlScriptMode mode, long previousBase)
 {

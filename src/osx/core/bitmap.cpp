@@ -401,7 +401,7 @@ void *wxBitmapRefData::BeginRawAccess()
 
 #if wxOSX_USE_ICONREF
     wxASSERT_MSG( m_iconRef == NULL ,
-                 wxT("Currently, modifing bitmaps that are used in controls already is not supported") ) ;
+                 wxT("Currently, modifying bitmaps that are used in controls already is not supported") ) ;
 #endif
 
     ++m_rawAccessCount ;
