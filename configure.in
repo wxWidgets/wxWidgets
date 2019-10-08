@@ -7136,24 +7136,8 @@ if test "$wxUSE_HTML" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html html/about html/help html/helpview html/printing html/test html/virtual html/widget html/zip htlbox"
 fi
 if test "$wxUSE_WEBKIT" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
-        old_CPPFLAGS="$CPPFLAGS"
-        CPPFLAGS="-x objective-c++ $CPPFLAGS"
-        AC_CHECK_HEADER([WebKit/HIWebView.h],
-                        [
-                           AC_DEFINE(wxUSE_WEBKIT)
-                           WEBKIT_LINK="-framework WebKit"
-                        ],
-                        [
-                           AC_MSG_WARN([WebKit headers not found; disabling wxWebKit])
-                           wxUSE_WEBKIT=no
-                        ],
-                        [
-                           #include <Carbon/Carbon.h>
-                           #include <WebKit/WebKit.h>
-                        ])
-        CPPFLAGS="$old_CPPFLAGS"
-    else
+    dnl This is only supported under Mac.
+    if test "$wxUSE_MAC" != 1 -a "$USE_DARWIN" != 1; then
         wxUSE_WEBKIT=no
     fi
     if test "$wxUSE_WEBKIT" = "yes"; then
@@ -7291,24 +7275,6 @@ if test "$wxUSE_WEBVIEW" = "yes"; then
                                     AC_MSG_WARN([webkitgtk not found.])
                                   ])
             fi
-        elif test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
-            dnl Under Mac we always have the libraries but check for the
-            dnl headers
-            old_CPPFLAGS="$CPPFLAGS"
-            CPPFLAGS="-x objective-c++ $CPPFLAGS"
-            AC_CHECK_HEADER([WebKit/HIWebView.h],
-                            [
-                                USE_WEBVIEW_WEBKIT=1
-                                WEBKIT_LINK="-framework WebKit"
-                            ],
-                            [
-                                AC_MSG_WARN([WebKit headers not found])
-                            ],
-                            [
-                                #include <Carbon/Carbon.h>
-                                #include <WebKit/WebKit.h>
-                            ])
-            CPPFLAGS="$old_CPPFLAGS"
         fi
     fi
 

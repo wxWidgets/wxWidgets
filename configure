@@ -1026,6 +1026,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -1449,6 +1450,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1701,6 +1703,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1838,7 +1849,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1991,6 +2002,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -36324,31 +36336,7 @@ if test "$wxUSE_HTML" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html html/about html/help html/helpview html/printing html/test html/virtual html/widget html/zip htlbox"
 fi
 if test "$wxUSE_WEBKIT" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
-        old_CPPFLAGS="$CPPFLAGS"
-        CPPFLAGS="-x objective-c++ $CPPFLAGS"
-        ac_fn_c_check_header_compile "$LINENO" "WebKit/HIWebView.h" "ac_cv_header_WebKit_HIWebView_h" "
-                           #include <Carbon/Carbon.h>
-                           #include <WebKit/WebKit.h>
-
-"
-if test "x$ac_cv_header_WebKit_HIWebView_h" = xyes; then :
-
-                           $as_echo "#define wxUSE_WEBKIT 1" >>confdefs.h
-
-                           WEBKIT_LINK="-framework WebKit"
-
-else
-
-                           { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: WebKit headers not found; disabling wxWebKit" >&5
-$as_echo "$as_me: WARNING: WebKit headers not found; disabling wxWebKit" >&2;}
-                           wxUSE_WEBKIT=no
-
-fi
-
-
-        CPPFLAGS="$old_CPPFLAGS"
-    else
+        if test "$wxUSE_MAC" != 1 -a "$USE_DARWIN" != 1; then
         wxUSE_WEBKIT=no
     fi
     if test "$wxUSE_WEBKIT" = "yes"; then
@@ -36675,28 +36663,6 @@ $as_echo "yes" >&6; }
 
 fi
             fi
-        elif test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
-                                    old_CPPFLAGS="$CPPFLAGS"
-            CPPFLAGS="-x objective-c++ $CPPFLAGS"
-            ac_fn_c_check_header_compile "$LINENO" "WebKit/HIWebView.h" "ac_cv_header_WebKit_HIWebView_h" "
-                                #include <Carbon/Carbon.h>
-                                #include <WebKit/WebKit.h>
-
-"
-if test "x$ac_cv_header_WebKit_HIWebView_h" = xyes; then :
-
-                                USE_WEBVIEW_WEBKIT=1
-                                WEBKIT_LINK="-framework WebKit"
-
-else
-
-                                { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: WebKit headers not found" >&5
-$as_echo "$as_me: WARNING: WebKit headers not found" >&2;}
-
-fi
-
-
-            CPPFLAGS="$old_CPPFLAGS"
         fi
     fi
 
