@@ -7088,7 +7088,7 @@ void wxGrid::HideCellEditControl()
 
         wxGridCellAttr *attr = GetCellAttr(row, col);
         wxGridCellEditor *editor = attr->GetEditor(this, row, col);
-        const bool editorHadFocus = editor->GetWindow()->HasFocus();
+        const bool editorHadFocus = editor->GetWindow()->IsDescendant(FindFocus());
 
         if ( editor->GetWindow()->GetParent() != m_gridWin )
             editor->GetWindow()->Reparent(m_gridWin);
