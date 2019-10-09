@@ -536,40 +536,7 @@ class wxGDIPlusPrintingContext : public wxGDIPlusContext
 public:
     wxGDIPlusPrintingContext( wxGraphicsRenderer* renderer, const wxDC& dc );
 
-    // Override to scale the font proportionally to the DPI.
-    virtual void SetFont(const wxGraphicsFont& font) wxOVERRIDE
-    {
-        // The casts here are safe because we're only supposed to be passed
-        // fonts created by this renderer.
-        Font* const f = static_cast<wxGDIPlusFontData*>(font.GetRefData())->GetGDIPlusFont();
-        Brush* const b = static_cast<wxGDIPlusFontData*>(font.GetRefData())->GetGDIPlusBrush();
-
-        // To scale the font, we need to create a new one which means
-        // retrieving all the parameters originally used to create the font.
-        FontFamily ffamily;
-        f->GetFamily(&ffamily);
-
-        WCHAR familyName[LF_FACESIZE];
-        ffamily.GetFamilyName(familyName);
-
-        wxGraphicsFont fontScaled;
-        fontScaled.SetRefData(new wxGDIPlusFontData
-                                  (
-                                    GetRenderer(),
-                                    familyName,
-                                    f->GetSize() / m_fontScaleRatio,
-                                    f->GetStyle(),
-                                    b->Clone()
-                                  ));
-        wxGDIPlusContext::SetFont(fontScaled);
-    }
-
-private:
-    // This is logically const ratio between this context DPI and the standard
-    // one which is used for scaling the fonts used with this context: without
-    // this, the fonts wouldn't have the correct size, even though we
-    // explicitly create them using UnitPoint units.
-    wxDouble m_fontScaleRatio;
+    void GetDPI(wxDouble* dpiX, wxDouble* dpiY) const wxOVERRIDE;
 };
 
 //-----------------------------------------------------------------------------
@@ -2438,10 +2405,16 @@ wxGDIPlusPrintingContext::wxGDIPlusPrintingContext( wxGraphicsRenderer* renderer
     // wxEnhMetaFileDC).
     REAL dpiRatio = 100.0 / context->GetDpiY();
     context->SetPageScale(dpiRatio);
+}
 
-    // We use this modifier when measuring fonts. It is needed because the
-    // page scale is modified above.
-    m_fontScaleRatio = context->GetDpiY() / 96.0;
+void wxGDIPlusPrintingContext::GetDPI(wxDouble* dpiX, wxDouble* dpiY) const
+{
+    // override to use same scaling as wxWindowsPrintPreview::DetermineScaling
+    ScreenHDC hdc;
+    if ( dpiX )
+        *dpiX = ::GetDeviceCaps(hdc, LOGPIXELSX);
+    if ( dpiY )
+        *dpiY = ::GetDeviceCaps(hdc, LOGPIXELSY);
 }
 
 //-----------------------------------------------------------------------------
