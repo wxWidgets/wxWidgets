@@ -6996,12 +6996,22 @@ void wxGrid::ShowCellEditControl()
                 editor->Create(gridWindow, wxID_ANY,
                                new wxGridCellEditorEvtHandler(this, editor));
 
+                // Ensure the editor window has wxWANTS_CHARS flag, so that it
+                // gets Tab, Enter and Esc keys, which need to be processed
+                // specially by wxGridCellEditorEvtHandler.
+                wxWindow* const editorWindow = editor->GetWindow();
+                if ( editorWindow )
+                {
+                    editorWindow->SetWindowStyle(editorWindow->GetWindowStyle()
+                                                    | wxWANTS_CHARS);
+                }
+
                 wxGridEditorCreatedEvent evt(GetId(),
                                              wxEVT_GRID_EDITOR_CREATED,
                                              this,
                                              row,
                                              col,
-                                             editor->GetWindow());
+                                             editorWindow);
                 GetEventHandler()->ProcessEvent(evt);
             }
             else if ( editor->GetWindow() &&
