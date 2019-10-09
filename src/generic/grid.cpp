@@ -6996,6 +6996,10 @@ void wxGrid::ShowCellEditControl()
                 editor->Create(gridWindow, wxID_ANY,
                                new wxGridCellEditorEvtHandler(this, editor));
 
+                // Add wxWANTS_CHARS flag to allow editor controls process Tab, Enter and Esc keys
+                wxWindow* editorWindow = editor->GetWindow();
+                editorWindow->SetWindowStyle(editorWindow->GetWindowStyle() | wxWANTS_CHARS);
+
                 wxGridEditorCreatedEvent evt(GetId(),
                                              wxEVT_GRID_EDITOR_CREATED,
                                              this,
