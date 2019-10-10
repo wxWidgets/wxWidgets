@@ -468,6 +468,23 @@ private:
 
         wxPrintf("%ld vertical lines done in %ldms = %gus/line\n",
             opts.numIters, t3, (1000. * t3) / opts.numIters);
+
+        // Cross hair
+        wxPrintf("Benchmarking %s: ", msg);
+        fflush(stdout);
+
+        sw.Start();
+        for ( int n = 0; n < opts.numIters; n++ )
+        {
+            x0 = rand() % opts.width;
+            y0 = rand() % opts.height;
+
+            dc.CrossHair(x0, y0);
+        }
+        const long t4 = sw.Time();
+
+        wxPrintf("%ld cross hairs done in %ldms = %gus/line\n",
+            opts.numIters, t4, (1000. * t4) / (2*opts.numIters));
     }
 
 
