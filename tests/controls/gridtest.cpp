@@ -976,7 +976,7 @@ void GridTestCase::AutoSizeColumn()
 
     wxGridCellAttr *attr = m_grid->GetOrCreateCellAttr(0, 0);
     wxGridCellRenderer *renderer = attr->GetRenderer(m_grid, 0, 0);
-    REQUIRE(renderer != nullptr);
+    REQUIRE(renderer != NULL);
 
     wxClientDC dcCell(m_grid->GetGridWindow());
 
