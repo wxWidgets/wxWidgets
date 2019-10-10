@@ -241,12 +241,14 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
 #endif
 
 #ifdef __WXMSW__
-    // Set zoom for DPI
-    double baseDPI = ::GetDeviceCaps(WindowHDC(parent->GetHWND()), LOGPIXELSY);
-    double activeDPI = parent->GetDPI().y;
+    // Set initial zoom for active DPI
+    const HDC hdc = ::GetDC(parent->GetHWND());
+    const int baseDPI = ::GetDeviceCaps(hdc, LOGPIXELSY);
+    const int activeDPI = parent->GetDPI().y;
+    ::ReleaseDC(parent->GetHWND(), hdc);
 
-    int ptSizeOld = StyleGetSize(wxSTC_STYLE_DEFAULT);
-    int ptSizeNew = (int)wxMulDivInt32(ptSizeOld, activeDPI, baseDPI);
+    const int ptSizeOld = StyleGetSize(wxSTC_STYLE_DEFAULT);
+    const int ptSizeNew = (int)wxMulDivInt32(ptSizeOld, activeDPI, baseDPI);
     SetZoom(GetZoom() + (ptSizeNew - ptSizeOld));
 #endif
 
