@@ -954,15 +954,10 @@ static const wxString _fs_windowstyle_labels[] = {
     "wxTRANSPARENT_WINDOW",
     "wxTAB_TRAVERSAL",
     "wxWANTS_CHARS",
-#if wxNO_FULL_REPAINT_ON_RESIZE
-    "wxNO_FULL_REPAINT_ON_RESIZE",
-#endif
     "wxVSCROLL",
     "wxALWAYS_SHOW_SB",
     "wxCLIP_CHILDREN",
-#if wxFULL_REPAINT_ON_RESIZE
     "wxFULL_REPAINT_ON_RESIZE",
-#endif
     };
 
 static const long _fs_windowstyle_values[] = {
@@ -974,15 +969,10 @@ static const long _fs_windowstyle_values[] = {
     wxTRANSPARENT_WINDOW,
     wxTAB_TRAVERSAL,
     wxWANTS_CHARS,
-#if wxNO_FULL_REPAINT_ON_RESIZE
-    wxNO_FULL_REPAINT_ON_RESIZE,
-#endif
     wxVSCROLL,
     wxALWAYS_SHOW_SB,
     wxCLIP_CHILDREN,
-#if wxFULL_REPAINT_ON_RESIZE
     wxFULL_REPAINT_ON_RESIZE
-#endif
 };
 
 static const wxString _fs_framestyle_labels[] = {
@@ -1982,7 +1972,7 @@ void FormMain::CreateGrid( int style, int extraStyle )
 FormMain::FormMain(const wxString& title, const wxPoint& pos, const wxSize& size) :
            wxFrame((wxFrame *)NULL, -1, title, pos, size,
                (wxMINIMIZE_BOX|wxMAXIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCAPTION|
-                wxTAB_TRAVERSAL|wxCLOSE_BOX|wxNO_FULL_REPAINT_ON_RESIZE) )
+                wxTAB_TRAVERSAL|wxCLOSE_BOX) )
 {
     SetIcon(wxICON(sample));
 

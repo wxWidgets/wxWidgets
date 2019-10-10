@@ -1311,7 +1311,6 @@ WidgetsPage::WidgetsPage(WidgetsBookCtrl *book,
                          const char *const icon[])
            : wxPanel(book, wxID_ANY,
                      wxDefaultPosition, wxDefaultSize,
-                     wxNO_FULL_REPAINT_ON_RESIZE |
                      wxCLIP_CHILDREN |
                      wxTAB_TRAVERSAL)
 {
