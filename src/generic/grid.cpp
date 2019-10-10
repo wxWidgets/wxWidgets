@@ -9400,47 +9400,65 @@ wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
     wxCoord w, h;
     dc.SetFont( GetLabelFont() );
 
+    bool noContent = (extentMax == 0);
     bool addMargin = true;
 
     if ( column )
     {
         if ( m_useNativeHeader )
         {
-            w = GetGridColHeader()->GetColumnTitleWidth(colOrRow);
+            wxHeaderCtrl* header = GetGridColHeader();
+            w = header->GetColumnTitleWidth(colOrRow);
 
             // GetColumnTitleWidth already adds margins internally.
             addMargin = false;
             h = 0;
+
+            // GetColumnTitleWidth uses GetTextExtent and not
+            // GetMultiLineTextExtent so use the same funtion.
+            if ( header->GetTextExtent(GetColLabelValue(colOrRow)).x > 0 )
+                noContent = false;
         }
         else
         {
             dc.GetMultiLineTextExtent( GetColLabelValue(colOrRow), &w, &h );
             if ( GetColLabelTextOrientation() == wxVERTICAL )
                 w = h;
+
+            noContent = noContent && (w == 0);
         }
     }
     else
     {
         dc.GetMultiLineTextExtent( GetRowLabelValue(colOrRow), &w, &h );
+        noContent = noContent && (h == 0);
     }
 
-    extent = column ? w : h;
-    if ( extent > extentMax )
-        extentMax = extent;
-
-    if ( !extentMax )
+    if ( noContent )
     {
         // empty column - give default extent (notice that if extentMax is less
         // than default extent but != 0, it's OK)
         extentMax = column ? m_defaultColWidth : m_defaultRowHeight;
     }
-    else if ( addMargin )
+    else
     {
-        // leave some space around text
-        if ( column )
-            extentMax += 10;
-        else
-            extentMax += 6;
+        const int margin = column ? 10 : 6;
+
+        // The current extentMax is the max extent of columns/rows values
+        // so always add margin.
+        extentMax += margin;
+
+        // The current extent is the extent of the column/row title.
+        extent = column ? w : h;
+
+        // Add the margin to the current extent only if needed.
+        if ( addMargin )
+            extent += margin;
+
+        // Find out the final max extent when the margin affected to the max extent
+        // and the current extent.
+        if ( extent > extentMax )
+            extentMax = extent;
     }
 
     if ( column )

@@ -505,7 +505,6 @@ void wxPropertyGridManager::Init1()
 
 // These flags are always used in wxPropertyGrid integrated in wxPropertyGridManager.
 #define wxPG_MAN_PROPGRID_FORCED_FLAGS (  wxBORDER_THEME | \
-                                          wxNO_FULL_REPAINT_ON_RESIZE| \
                                           wxCLIP_CHILDREN)
 
 // Which flags can be passed to underlying wxPropertyGrid.
