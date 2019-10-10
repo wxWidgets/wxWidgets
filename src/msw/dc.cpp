@@ -803,16 +803,18 @@ bool wxMSWDCImpl::DoGetPixel(wxCoord x, wxCoord y, wxColour *col) const
 
 void wxMSWDCImpl::DoCrossHair(wxCoord x, wxCoord y)
 {
-    wxCoord x1 = x-VIEWPORT_EXTENT;
-    wxCoord y1 = y-VIEWPORT_EXTENT;
-    wxCoord x2 = x+VIEWPORT_EXTENT;
-    wxCoord y2 = y+VIEWPORT_EXTENT;
+    RECT rect;
+    ::GetClipBox(GetHdc(), &rect);
+    // Inflate the box by 1 unit in each direction
+    // to compensate rounding errors if DC is the subject
+    // of complex transformation (is e.g. rotated).
+    ::InflateRect(&rect, 1, 1);
 
-    wxDrawLine(GetHdc(), XLOG2DEV(x1), YLOG2DEV(y), XLOG2DEV(x2), YLOG2DEV(y));
-    wxDrawLine(GetHdc(), XLOG2DEV(x), YLOG2DEV(y1), XLOG2DEV(x), YLOG2DEV(y2));
+    wxDrawLine(GetHdc(), XLOG2DEV(rect.left), YLOG2DEV(y), XLOG2DEV(rect.right), YLOG2DEV(y));
+    wxDrawLine(GetHdc(), XLOG2DEV(x), XLOG2DEV(rect.top), XLOG2DEV(x), XLOG2DEV(rect.bottom));
 
-    CalcBoundingBox(x1, y1);
-    CalcBoundingBox(x2, y2);
+    CalcBoundingBox(rect.left, rect.top);
+    CalcBoundingBox(rect.right, rect.bottom);
 }
 
 void wxMSWDCImpl::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
