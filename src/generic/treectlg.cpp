@@ -988,16 +988,6 @@ bool wxGenericTreeCtrl::Create(wxWindow *parent,
                                const wxValidator& validator,
                                const wxString& name )
 {
-#ifdef __WXMAC__
-    if (style & wxTR_HAS_BUTTONS)
-        style |= wxTR_NO_LINES;
-#endif // __WXMAC__
-
-#ifdef __WXGTK20__
-    if (style & wxTR_HAS_BUTTONS)
-        style |= wxTR_NO_LINES;
-#endif
-
     if ( !wxControl::Create( parent, id, pos, size,
                              style|wxHSCROLL|wxVSCROLL|wxWANTS_CHARS,
                              validator,
