@@ -1,0 +1,1 @@
+wxMSW: Fix pasting very long strings into wxTextCtrl.
