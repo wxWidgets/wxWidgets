@@ -140,6 +140,7 @@ protected:
     };
 
     void DrawTestLines( int x, int y, int width, wxDC &dc );
+    void DrawCrossHair(int x, int y, int width, int heigth, wxDC &dc);
     void DrawTestPoly(wxDC& dc);
     void DrawTestBrushes(wxDC& dc);
     void DrawText(wxDC& dc);
@@ -700,6 +701,15 @@ void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
     dc.SetPen(penWithCap);
     dc.DrawText("Projecting cap", x+270, y+100);
     dc.DrawLine( x+200, y+110, x+250, y+110);
+}
+
+void MyCanvas::DrawCrossHair(int x, int y, int width, int heigth, wxDC &dc)
+{
+    dc.DrawText("Cross hair", x + 10, y + 10);
+    dc.SetClippingRegion(x, y, width, heigth);
+    dc.SetPen(wxPen(*wxBLUE, 2));
+    dc.CrossHair(x + width / 2, y + heigth / 2);
+    dc.DestroyClippingRegion();
 }
 
 void MyCanvas::DrawDefault(wxDC& dc)
@@ -1933,6 +1943,7 @@ void MyCanvas::Draw(wxDC& pdc)
             DrawTestLines( 0, 320, 1, dc );
             DrawTestLines( 0, 540, 2, dc );
             DrawTestLines( 0, 760, 6, dc );
+            DrawCrossHair( 0, 0, 400, 90, dc);
             break;
 
         case File_ShowBrushes:
