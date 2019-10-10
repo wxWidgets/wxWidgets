@@ -60,6 +60,8 @@ public:
 
     virtual void GetSelection(long *from, long *to) const wxOVERRIDE;
 
+    virtual void Paste() wxOVERRIDE;
+
     virtual void Redo() wxOVERRIDE;
     virtual bool CanRedo() const wxOVERRIDE;
 
@@ -291,6 +293,11 @@ private:
     // Returns true if we increased the limit to allow entering more text,
     // false if we hit the limit set by SetMaxLength() and so didn't change it.
     bool AdjustSpaceLimit();
+
+    // Called before pasting to ensure that the limit is at big enough to allow
+    // pasting the entire text on the clipboard.
+    void AdjustMaxLengthBeforePaste();
+
 
     wxMenu* m_privateContextMenu;
 
