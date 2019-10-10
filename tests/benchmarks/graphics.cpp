@@ -51,6 +51,7 @@ struct GraphicsBenchmarkOptions
     {
         mapMode = 0;
         penWidth = 0;
+        penStyle = wxPENSTYLE_INVALID;
 
         width = 800;
         height = 600;
@@ -81,6 +82,8 @@ struct GraphicsBenchmarkOptions
          width,
          height,
          numIters;
+
+    wxPenStyle penStyle;
 
     bool testBitmaps,
          testImages,
@@ -395,15 +398,28 @@ private:
         BenchmarkEllipses(msg, dc);
     }
 
+    void SetupDC(wxDC& dc)
+    {
+        if ( opts.mapMode != 0 )
+            dc.SetMapMode((wxMappingMode)opts.mapMode);
+        if ( opts.penWidth != 0 )
+            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+        if ( opts.penStyle != wxPENSTYLE_INVALID )
+        {
+            wxPen pen = dc.GetPen();
+            if ( !pen.IsOk() )
+                pen = wxPen(*wxWHITE, 1);
+            pen.SetStyle(opts.penStyle);
+            dc.SetPen(pen);
+        }
+    }
+
     void BenchmarkLines(const wxString& msg, wxDC& dc)
     {
         if ( !opts.testLines )
             return;
 
-        if ( opts.mapMode != 0 )
-            dc.SetMapMode((wxMappingMode)opts.mapMode);
-        if ( opts.penWidth != 0 )
-            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+        SetupDC(dc);
 
         wxPrintf("Benchmarking %s: ", msg);
         fflush(stdout);
@@ -493,10 +509,7 @@ private:
         if ( !opts.testRectangles )
             return;
 
-        if ( opts.mapMode != 0 )
-            dc.SetMapMode((wxMappingMode)opts.mapMode);
-        if ( opts.penWidth != 0 )
-            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+        SetupDC(dc);
 
         dc.SetBrush( *wxRED_BRUSH );
 
@@ -523,10 +536,7 @@ private:
         if ( !opts.testRectangles )
             return;
 
-        if ( opts.mapMode != 0 )
-            dc.SetMapMode((wxMappingMode)opts.mapMode);
-        if ( opts.penWidth != 0 )
-            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+        SetupDC(dc);
 
         dc.SetBrush( *wxCYAN_BRUSH );
 
@@ -553,10 +563,7 @@ private:
         if ( !opts.testCircles )
             return;
 
-        if ( opts.mapMode != 0 )
-            dc.SetMapMode((wxMappingMode)opts.mapMode);
-        if ( opts.penWidth != 0 )
-            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+        SetupDC(dc);
 
         dc.SetBrush( *wxGREEN_BRUSH );
 
@@ -583,10 +590,7 @@ private:
         if ( !opts.testEllipses )
             return;
 
-        if ( opts.mapMode != 0 )
-            dc.SetMapMode((wxMappingMode)opts.mapMode);
-        if ( opts.penWidth != 0 )
-            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+        SetupDC(dc);
 
         dc.SetBrush( *wxBLUE_BRUSH );
 
@@ -613,10 +617,7 @@ private:
         if ( !opts.testBitmaps )
             return;
 
-        if ( opts.mapMode != 0 )
-            dc.SetMapMode((wxMappingMode)opts.mapMode);
-        if ( opts.penWidth != 0 )
-            dc.SetPen(wxPen(*wxWHITE, opts.penWidth));
+        SetupDC(dc);
 
         wxPrintf("Benchmarking %s: ", msg);
         fflush(stdout);
@@ -795,6 +796,7 @@ public:
 #endif // wxUSE_GLCANVAS
             { wxCMD_LINE_OPTION, "m", "map-mode", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "p", "pen-width", "", wxCMD_LINE_VAL_NUMBER },
+            { wxCMD_LINE_OPTION, "s", "pen-style", "solid | dot | long_dash | short_dash", wxCMD_LINE_VAL_STRING },
             { wxCMD_LINE_OPTION, "w", "width", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "h", "height", "", wxCMD_LINE_VAL_NUMBER },
             { wxCMD_LINE_OPTION, "I", "images", "", wxCMD_LINE_VAL_NUMBER },
@@ -815,6 +817,34 @@ public:
             return false;
         if ( parser.Found("p", &opts.penWidth) && opts.penWidth < 1 )
             return false;
+        wxString penStyle;
+        if ( parser.Found("pen-style", &penStyle) )
+        {
+            if ( !penStyle.empty() )
+            {
+                if ( penStyle == wxS("solid") )
+                {
+                    opts.penStyle = wxPENSTYLE_SOLID;
+                }
+                else if ( penStyle == wxS("dot") )
+                {
+                    opts.penStyle = wxPENSTYLE_DOT;
+                }
+                else if ( penStyle == wxS("long_dash") )
+                {
+                    opts.penStyle = wxPENSTYLE_LONG_DASH;
+                }
+                else if ( penStyle == wxS("short_dash") )
+                {
+                    opts.penStyle = wxPENSTYLE_SHORT_DASH;
+                }
+                else
+                {
+                    wxLogError(wxS("Unsupported pen style."));
+                    return false;
+                }
+            }
+        }
         if ( parser.Found("w", &opts.width) && opts.width < 1 )
             return false;
         if ( parser.Found("h", &opts.height) && opts.height < 1 )
