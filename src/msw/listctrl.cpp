@@ -466,6 +466,17 @@ void wxListCtrl::OnDPIChanged(wxDPIChangedEvent &event)
     }
 }
 
+bool wxListCtrl::IsDoubleBuffered() const
+{
+    // LVS_EX_DOUBLEBUFFER is turned on for comctl32 v6+.
+    return wxApp::GetComCtl32Version() >= 600;
+}
+
+void wxListCtrl::SetDoubleBuffered(bool WXUNUSED(on))
+{
+    // Nothing to do, it's always enabled if supported.
+}
+
 #if WXWIN_COMPATIBILITY_3_0
 // Deprecated
 void wxListCtrl::UpdateStyle()

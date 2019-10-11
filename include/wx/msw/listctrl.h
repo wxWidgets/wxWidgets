@@ -360,6 +360,11 @@ public:
     // Necessary for drawing hrules and vrules, if specified
     void OnPaint(wxPaintEvent& event);
 
+    // Override SetDoubleBuffered() to do nothing, its implementation in the
+    // base class is incompatible with the double buffering done by this native
+    // control.
+    virtual bool IsDoubleBuffered() const;
+    virtual void SetDoubleBuffered(bool on);
 
     virtual bool ShouldInheritColours() const wxOVERRIDE { return false; }
 
