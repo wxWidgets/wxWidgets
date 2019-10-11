@@ -346,9 +346,8 @@ wxBEGIN_EVENT_TABLE(MyChild, wxMDIChildFrame)
   EVT_MENU(SASHTEST_CHILD_QUIT, MyChild::OnQuit)
 wxEND_EVENT_TABLE()
 
-MyChild::MyChild(wxMDIParentFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size,
-const long style):
-  wxMDIChildFrame(parent, wxID_ANY, title, pos, size, style)
+MyChild::MyChild(wxMDIParentFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size):
+  wxMDIChildFrame(parent, wxID_ANY, title, pos, size)
 {
   canvas = NULL;
   my_children.Append(this);

@@ -214,7 +214,7 @@ wxEND_EVENT_TABLE()
 // My frame constructor
 MyFrame::MyFrame()
        : wxFrame(NULL, wxID_ANY, "wxSplitterWindow sample",
-                 wxDefaultPosition, wxSize(420, 300));
+                 wxDefaultPosition, wxSize(420, 300))
 {
     SetIcon(wxICON(sample));
 
