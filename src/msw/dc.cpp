@@ -811,7 +811,7 @@ void wxMSWDCImpl::DoCrossHair(wxCoord x, wxCoord y)
     ::InflateRect(&rect, 1, 1);
 
     wxDrawLine(GetHdc(), XLOG2DEV(rect.left), YLOG2DEV(y), XLOG2DEV(rect.right), YLOG2DEV(y));
-    wxDrawLine(GetHdc(), XLOG2DEV(x), XLOG2DEV(rect.top), XLOG2DEV(x), XLOG2DEV(rect.bottom));
+    wxDrawLine(GetHdc(), XLOG2DEV(x), YLOG2DEV(rect.top), XLOG2DEV(x), YLOG2DEV(rect.bottom));
 
     CalcBoundingBox(rect.left, rect.top);
     CalcBoundingBox(rect.right, rect.bottom);
