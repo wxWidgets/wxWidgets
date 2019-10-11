@@ -643,7 +643,7 @@ int wxAuiGenericTabArt::GetBorderWidth(wxWindow* wnd)
     wxAuiManager* mgr = wxAuiManager::GetManager(wnd);
     if (mgr)
     {
-       wxAuiDockArt*  art = mgr->GetArtProvider();
+        wxAuiDockArt* art = mgr->GetArtProvider();
         if (art)
             return art->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE);
     }
@@ -676,8 +676,10 @@ wxSize wxAuiGenericTabArt::GetTabSize(wxDC& dc,
 
     // if the close button is showing, add space for it
     if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
+    {
         // increase by button size plus the padding
         tab_width += wnd->FromDIP(16) + wnd->FromDIP(3);
+    }
 
     // if there's a bitmap, add space for it
     if (bitmap.IsOk())
