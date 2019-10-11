@@ -72,6 +72,8 @@ private:
 wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
                              const wxColour& color);
 
+wxBitmap wxAuiScaleBitmap(const wxBitmap& bmp, double scale);
+
 wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size);
 
 static void DrawButtons(wxDC& dc,
@@ -224,9 +226,9 @@ void wxAuiGenericTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
     int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - wxWindow::FromDIP(4, NULL);
 
     if (m_flags & wxAUI_NB_CLOSE_BUTTON)
-        tot_width -= m_activeCloseBmp.GetScaledWidth();
+        tot_width -= m_activeCloseBmp.GetWidth();
     if (m_flags & wxAUI_NB_WINDOWLIST_BUTTON)
-        tot_width -= m_activeWindowListBmp.GetScaledWidth();
+        tot_width -= m_activeWindowListBmp.GetWidth();
 
     if (tab_count > 0)
     {
@@ -559,14 +561,7 @@ void wxAuiGenericTabArt::DrawTab(wxDC& dc,
             bmp = m_activeCloseBmp;
         }
 
-#if wxUSE_IMAGE
-        if (wnd->FromDIP(1) > 1.0 && (bmp.GetWidth() == 16 || bmp.GetHeight() == 16))
-        {
-            wxImage img = bmp.ConvertToImage();
-            img.Rescale(wnd->FromDIP(16), wnd->FromDIP(16), wxIMAGE_QUALITY_BOX_AVERAGE);
-            bmp = img;
-        }
-#endif // wxUSE_IMAGE
+        bmp = wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
 
         int offsetY = tab_y-1;
         if (m_flags & wxAUI_NB_BOTTOM)
@@ -748,14 +743,7 @@ void wxAuiGenericTabArt::DrawButton(wxDC& dc,
     if (!bmp.IsOk())
         return;
 
-#if wxUSE_IMAGE
-    if (wnd->FromDIP(1) > 1.0 && (bmp.GetWidth() == 16 || bmp.GetHeight() == 16))
-    {
-        wxImage img = bmp.ConvertToImage();
-        img.Rescale(wnd->FromDIP(16), wnd->FromDIP(16), wxIMAGE_QUALITY_BOX_AVERAGE);
-        bmp = img;
-    }
-#endif // wxUSE_IMAGE
+    bmp = wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
 
     rect = in_rect;
 
@@ -955,9 +943,9 @@ void wxAuiSimpleTabArt::SetSizingInfo(const wxSize& tab_ctrl_size,
     int tot_width = (int)tab_ctrl_size.x - GetIndentSize() - wxWindow::FromDIP(4, NULL);
 
     if (m_flags & wxAUI_NB_CLOSE_BUTTON)
-        tot_width -= m_activeCloseBmp.GetScaledWidth();
+        tot_width -= m_activeCloseBmp.GetWidth();
     if (m_flags & wxAUI_NB_WINDOWLIST_BUTTON)
-        tot_width -= m_activeWindowListBmp.GetScaledWidth();
+        tot_width -= m_activeWindowListBmp.GetWidth();
 
     if (tab_count > 0)
     {
@@ -1119,14 +1107,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
         else
             bmp = m_disabledCloseBmp;
 
-#if wxUSE_IMAGE
-        if (wnd->FromDIP(1) > 1.0 && (bmp.GetWidth() == 16 || bmp.GetHeight() == 16))
-        {
-            wxImage img = bmp.ConvertToImage();
-            img.Rescale(wnd->FromDIP(16), wnd->FromDIP(16), wxIMAGE_QUALITY_BOX_AVERAGE);
-            bmp = img;
-        }
-#endif // wxUSE_IMAGE
+        bmp = wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
 
         wxRect rect(tab_x + tab_width - bmp.GetWidth() - 1,
                     tab_y + (tab_height/2) - (bmp.GetHeight()/2) + 1,
@@ -1266,14 +1247,7 @@ void wxAuiSimpleTabArt::DrawButton(wxDC& dc,
     if (!bmp.IsOk())
         return;
 
-#if wxUSE_IMAGE
-    if (wnd->FromDIP(1) > 1.0 && (bmp.GetWidth() == 16 || bmp.GetHeight() == 16))
-    {
-        wxImage img = bmp.ConvertToImage();
-        img.Rescale(wnd->FromDIP(16), wnd->FromDIP(16), wxIMAGE_QUALITY_BOX_AVERAGE);
-        bmp = img;
-    }
-#endif // wxUSE_IMAGE
+    bmp = wxAuiScaleBitmap(bmp, wnd->GetContentScaleFactor());
 
     rect = in_rect;
 

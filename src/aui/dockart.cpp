@@ -55,6 +55,7 @@
 #endif
 #endif
 
+#include <math.h>
 
 // -- wxAuiDefaultDockArt class implementation --
 
@@ -88,6 +89,22 @@ wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
     return wxBitmap(img);
 }
 
+// wxAuiScaleBitmap is a utility function that scales a TabArt bitmap
+wxBitmap wxAuiScaleBitmap(const wxBitmap& bmp, double scale)
+{
+#if wxUSE_IMAGE
+    // scale to a close round number to improve quality
+    scale = floor(scale + 0.25);
+    if (scale > 1.0 && !(bmp.GetScaleFactor() > 1.0))
+    {
+        wxImage img = bmp.ConvertToImage();
+        img.Rescale(bmp.GetWidth()*scale, bmp.GetHeight()*scale,
+            wxIMAGE_QUALITY_BOX_AVERAGE);
+        return wxBitmap(img);
+    }
+#endif // wxUSE_IMAGE
+    return bmp;
+}
 
 static void DrawGradientRectangle(wxDC& dc,
                                   const wxRect& rect,
